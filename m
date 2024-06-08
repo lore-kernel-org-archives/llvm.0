@@ -1,187 +1,216 @@
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2049.outbound.protection.outlook.com [40.107.237.49])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D74D46558
-	for <llvm@lists.linux.dev>; Fri,  7 Jun 2024 22:23:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.237.49
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717799011; cv=fail; b=lyi+yYhKmvt3hDkEJPDy+BNlARzhvtSosxTXBUEWKuIGxFn0KuMwMxS25RsRC2F45hFdyYJGGH39ClwMc6jX1mhLr3pAIFtQulira3SFcV8XKNIEwlI7K+ei4NgakRWfxLkpjMJRuEXK1OJYoPiVayDrhkEDnd1hSqw5Qy2PAAA=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717799011; c=relaxed/simple;
-	bh=Sbmll9+qAjdrNPRjrpAl0I2Z8ln8LKF67udN3txIwcc=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=utzm1SeLZCfYYkc+T9Yx0CZGX7TjrgOKsIcaRHFlQCDH9k0s9yQvbxdPdajN/0LK1FNJq64ltR4RK/1i9w2ikgjao7Diihmt93o7YZ8KrtuhiMKxKLT4yqelSpIi7aXHqmoz8m1Tjf6OkLbrUHnTUEv/1Ar0S5zeMj1RoSWustA=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=tkg1FErc; arc=fail smtp.client-ip=40.107.237.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 991E281E;
+	Sat,  8 Jun 2024 00:36:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1717807021; cv=none; b=F0i3AW8H9B95vTK76oZuC7zg5Het9BTbhxCRApKHCDajNo8iB+ujXMKwD62jYL6/rscvBL93UsxPTu2uwfrbMxeS4JPrxRD8iq0qEq2QiBJawCXPsQf7BHfgcUdUSNOWASy3UL19MqRYrt30icq8B4EP2IzmUvHeca+8W/lbRlo=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1717807021; c=relaxed/simple;
+	bh=4TVl3/W8Bs7GE+ZjnU7KKaGwODpaBriK/Vy8m8LnVH8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=G6lu3q1ChjdvmEbn1G4RbUCkj2OKGwQkH19GAWxau5MRXvUSjUWxQOqu3XJBze9Runt4hwZ+Njow+MMfMpfDRqGAHyvXi0x9dTMw4qD6jjkg8iyODFGj0PsndmeF3avBinIEhhgd8Gfso7D0K9UmfklmypndxDrRl4c1pZNQqq0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=YuWcDoib; arc=none smtp.client-ip=198.175.65.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="tkg1FErc"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=kpX8TXTVqjg7wAiwhFxKQ6p+tl2n/+Ct7wHdVpNDs0BwYBpfKyQren9t7lQyr9dH59mnhErenj3nQwGQz6FA4N2Th5/pLDqxVRfqj1ibgXh6UXLavmtWLm6CarRjjp7Zv8Sp7n5oVlq9t9JyTQNLdY/gwunnIFFwpDAZe9/+Dk9ZLe/kZGVb43xiZV7Zk/1KAUEyyfwkWi5PPqaPXXMsMegchehzJ9Jcx5NC+WgaHU3U8EbZja6imW8jkQMf9LhAezdpvbGluvMZQcR1uYmA1Afint3gYj9CQT9jtgKaF4T0ej/NDz1RfkzPmYOhiulq+1GsI9BNzjKea8nOHWtIdA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=ffxxUmOl1qnu0YnFTRASpyfarCuN9RBn0Wjuir1F72E=;
- b=lSyo3cN6V2hR1dJSV1JXnT23t4IoPDZQowFXgcfRYldP0bweMtopdbA96pXD/pss+p4EhnZlD3qDWWQmkV/1mpYpHq/aeN2YSsgHvV7pUbC37hpn/VtNTkbZEsTCHxliYTfxnZj2MR8IKuZ3+Nr5q3Xfh0OQqRursqD6ThRT0K8RIGMiAMMS8BHEDcSAXu51v7Xi7jBhGPORoF3PKQUYTE/W7rDx+oZYs5RbIwpKRwzsMgYVBeBeG1tY9/0BsGMSe9BY81lld9ifZh0CVPRxulz2LT92RwKm8NMJfO+pDR/u7wHMg272oLmNV0+065Qmlnd+afq7uBLy86gGh4Azng==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.160) smtp.rcpttodomain=kernel.org smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ffxxUmOl1qnu0YnFTRASpyfarCuN9RBn0Wjuir1F72E=;
- b=tkg1FErc1Zh7ONWgFdmUeN2YOgEMGNuFe+XgZYjNN+OCsEddPP39EVrs/OkBWbMSRl13G/qJhsJXsA5XY29IZDd+riV1PtOuMtj59iZ6qX7helUBKyrj6Qc9dJSaLZjdVIE49qv7zWbQbOhKakFaoti0iGbNBKhImUBIqwp3iKvDoCr8QADm0ZFtrzcE2kIbP6cSGQ7Z/CfWslqktyzWC18jfvMNA4fKXh86PRhEjoMxrzA5HQ7o541bYYj1v2fJYB/spLtt+hqDec3KuoAdAq2m0ivlrwILU4q7TAIa2KeY125mcXDMGnINBBDYn/RI0scuD6Y6YAinEOMPz5tv1g==
-Received: from BYAPR05CA0072.namprd05.prod.outlook.com (2603:10b6:a03:74::49)
- by MW5PR12MB5651.namprd12.prod.outlook.com (2603:10b6:303:19f::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7633.22; Fri, 7 Jun
- 2024 22:23:24 +0000
-Received: from SJ1PEPF00002314.namprd03.prod.outlook.com
- (2603:10b6:a03:74:cafe::b5) by BYAPR05CA0072.outlook.office365.com
- (2603:10b6:a03:74::49) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7677.14 via Frontend
- Transport; Fri, 7 Jun 2024 22:23:24 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.160) by
- SJ1PEPF00002314.mail.protection.outlook.com (10.167.242.168) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.7633.15 via Frontend Transport; Fri, 7 Jun 2024 22:23:24 +0000
-Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
- (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.4; Fri, 7 Jun 2024
- 15:23:12 -0700
-Received: from [10.110.48.28] (10.126.230.35) by rnnvmail201.nvidia.com
- (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.4; Fri, 7 Jun 2024
- 15:23:12 -0700
-Message-ID: <46d5479f-644d-4b38-8643-a4dd1fa221d6@nvidia.com>
-Date: Fri, 7 Jun 2024 15:23:11 -0700
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="YuWcDoib"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1717807019; x=1749343019;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=4TVl3/W8Bs7GE+ZjnU7KKaGwODpaBriK/Vy8m8LnVH8=;
+  b=YuWcDoibHB6aMJyI2NBN0DOAbD8hdl2SYW3Xs1LSgwWi18iz2EtbDwLz
+   9foSwGApmgx15FaTrcBxwjOpP1ydMKuGVDUCWpMZIqoAnk+aK/IPlWXhf
+   eypb2OoYN8T2+nEGUGFTFcw383TWWuyn2Xpf2TMdFye+ykvDG9va7utrd
+   uGmiqluSrBRgYM0UIZ3peivle/vrmmqbQ1p1JkdS6dCQ8mKmnr+vHZln5
+   M4zP/wMlRrq2REsNFse8wZiClwWB1RS8xvr9a1BcYrokJK8cuK8le7YEX
+   Y5BZcdoo4+eMJbcQ7wpOZyNqCZi5/kI7gRbmt9CfT2ud2QXvt5jgG4ZDI
+   A==;
+X-CSE-ConnectionGUID: HivYe7YxSReQA3cU6e2ZtA==
+X-CSE-MsgGUID: jquW9fBXTp2+h4iPKsMYeA==
+X-IronPort-AV: E=McAfee;i="6600,9927,11096"; a="14682603"
+X-IronPort-AV: E=Sophos;i="6.08,221,1712646000"; 
+   d="scan'208";a="14682603"
+Received: from orviesa006.jf.intel.com ([10.64.159.146])
+  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jun 2024 17:36:58 -0700
+X-CSE-ConnectionGUID: cz/fKR/cRVuKvaHJaU7yqg==
+X-CSE-MsgGUID: k+Lrm3RWTC2j/8SY683HIQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.08,221,1712646000"; 
+   d="scan'208";a="38926071"
+Received: from lkp-server01.sh.intel.com (HELO 472b94a103a1) ([10.239.97.150])
+  by orviesa006.jf.intel.com with ESMTP; 07 Jun 2024 17:36:55 -0700
+Received: from kbuild by 472b94a103a1 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1sFk4i-0000lU-0o;
+	Sat, 08 Jun 2024 00:36:52 +0000
+Date: Sat, 8 Jun 2024 08:36:35 +0800
+From: kernel test robot <lkp@intel.com>
+To: Pierre-Eric Pelloux-Prayer <pierre-eric.pelloux-prayer@amd.com>,
+	alexander.deucher@amd.com, christian.koenig@amd.com,
+	ltuikov89@gmail.com, matthew.brost@intel.com,
+	maarten.lankhorst@linux.intel.com, mripard@kernel.org,
+	tzimmermann@suse.de, airlied@gmail.com, daniel@ffwll.ch,
+	dri-devel@lists.freedesktop.org, ville.syrjala@linux.intel.com,
+	rostedt@goodmis.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Pierre-Eric Pelloux-Prayer <pierre-eric.pelloux-prayer@amd.com>
+Subject: Re: [PATCH v3 1/4] drm/sched: store the drm_device instead of the
+ device
+Message-ID: <202406080802.ExIh6NC2-lkp@intel.com>
+References: <20240606130629.214827-2-pierre-eric.pelloux-prayer@amd.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 5/7] selftests/x86: avoid -no-pie warnings from clang
- during compilation
-To: Shuah Khan <shuah@kernel.org>
-CC: angquan yu <angquan21@gmail.com>, "Kirill A . Shutemov"
-	<kirill.shutemov@linux.intel.com>, Ingo Molnar <mingo@kernel.org>, Binbin Wu
-	<binbin.wu@linux.intel.com>, Alexey Dobriyan <adobriyan@gmail.com>, "Rick
- Edgecombe" <rick.p.edgecombe@intel.com>, Sohil Mehta <sohil.mehta@intel.com>,
-	Yu-cheng Yu <yu-cheng.yu@intel.com>, Dave Hansen
-	<dave.hansen@linux.intel.com>, Muhammad Usama Anjum
-	<usama.anjum@collabora.com>, Valentin Obst <kernel@valentinobst.de>,
-	<linux-kselftest@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
-	<llvm@lists.linux.dev>, <x86@kernel.org>
-References: <20240531193838.108454-1-jhubbard@nvidia.com>
- <20240531193838.108454-6-jhubbard@nvidia.com>
-Content-Language: en-US
-From: John Hubbard <jhubbard@nvidia.com>
-In-Reply-To: <20240531193838.108454-6-jhubbard@nvidia.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: rnnvmail201.nvidia.com (10.129.68.8) To
- rnnvmail201.nvidia.com (10.129.68.8)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SJ1PEPF00002314:EE_|MW5PR12MB5651:EE_
-X-MS-Office365-Filtering-Correlation-Id: c1bcd039-5d95-46e7-fa55-08dc87407245
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230031|7416005|36860700004|376005|1800799015|82310400017;
-X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?S0FHZlpMZ1VjZExiK2VQYnkzSjl0MUxZVWx3T3FkUjY5TkxSek40WGFyNlV0?=
- =?utf-8?B?T1JWVkZHVXRTVWUremQrcmNpQk5tYXZ1NEpjSnVkV0lhbngzTnAwQkpvNFJJ?=
- =?utf-8?B?OUNvb2wwZ3dxVDRubG5WTk5zckJFQWZSbjJQSXpPSFFheUF4bVBNbHBhVEx4?=
- =?utf-8?B?VU1qZHEzQXZlckVpYVRiZG8xTU4wcWNsZjR6RjlVV2ZaZjBOZmIyVzVkWW1j?=
- =?utf-8?B?SURFaHBFdUZHWGxPL2ExajVSRTVoRnYvY2laeXhRUVBjZ1E3R1VEMXNnQUVN?=
- =?utf-8?B?L0xuM0dKYjBmakdvRGRTYUpzTmszWW5rb2pUZVpUWHRLWm9Gc0xOUUlBUFVO?=
- =?utf-8?B?R2V6OFU2cjFmTGtVYWpsZTJtNXNvVFlycjhxSG95dWljdGs2eWduTTg3VGZu?=
- =?utf-8?B?K08vN3MrYTBrQzdQeGNrajI5dVEwa2dsZnd2dDFqa2YwMGsxNkJSSHVtUnht?=
- =?utf-8?B?ZHpVb0pHaC9LeFdzelNBQjVyM1gzUHprRmp2Q1ptL0Y0YTV3Zlg2VXZXWS9k?=
- =?utf-8?B?UHFDb0FQUVkyR096TFVkK0N3UGlIKzNsRXl5eEEwSzY5Y09MUEw2bEhxU2dl?=
- =?utf-8?B?SHRSZjB1RWJZQ3R2bmMvTnkycU1PVm51aVBEdkxzelpNeEVNMTFId1ZJUU42?=
- =?utf-8?B?VHJONkxzMEcvNVRoamNLVGhwVEs5SkI2RG4yVWFaRC9vYUdHYmVta25RVk40?=
- =?utf-8?B?MXpPVXFZbUNWckdXZlZqWm1DL0ozTU8vWUlKdDk4b0NGUkx0SnZteUZkMXgr?=
- =?utf-8?B?VDRqM2dIT2QvMDVrdEVpSXVUS1YvM2M2S3BQUFJSc012YWo5Z0MvcWl3Vllp?=
- =?utf-8?B?aGxEeGhrK3JKUTJ5eHhOT05ta3EzRmpsSXZ5YXVxV0JtUVJwdjNvd28rOWdH?=
- =?utf-8?B?cTlmN1lEVTNITUFlbzVWOXc1Z0RoRjZ4K3lvRDVaNnEyRFlBNGNsek1tQjZy?=
- =?utf-8?B?eXZWOGxHR2lwbGJkTFhvczFoWGc1c3dXbGdJNXBBUEs5Um5ZSmxxWVVYUDFo?=
- =?utf-8?B?UHdTZWltSHcwQXBuRC90cDFCOUc3a1k2c2pRdVBVZXpDeUJXcmFMbHJ3bUpx?=
- =?utf-8?B?YVlJeG5hVm1pV2Y0akhmWFBkV0dRVUVKMkpSQitMWmlEb21KODF1NVdua1hU?=
- =?utf-8?B?bkJXdTk5VTN0UEdIdTVybCtVR2FhZmtJd01Vc3ExTmgwVlBsSHFmZFo4QThI?=
- =?utf-8?B?RGpmbHgrNnZsLytWeFZXQWdNdnM5bk9tTXkxOGMwRG1nN08xK0FQT1R6UXpI?=
- =?utf-8?B?SzNBbElKUElFaFBKbjRDakp3WjJVRFlCNWd2T0NiQ2hLR0ZlWENkV2JKQk5k?=
- =?utf-8?B?d2hwUHdUY3hyTVd6TlFYTzZWWWZNVFExS2hjTWlZNWM5Y01nSTNDV0Y5ditP?=
- =?utf-8?B?ZHNvL3BIbnBmWW5YMThMRmIyVVlFSkVCRzE5TGVSN01aVkRGbE1Kd2JXQTgr?=
- =?utf-8?B?TVBjMlZta0pLenZmcitEVTZicHByMDY5RnQ5eWJxMW1xT3hENmx3MUdLcFBn?=
- =?utf-8?B?MGxMaWZqTUxBYzRpcHFmREd4N2J4bmRENzlaUS9GVDhSd3RwcnRnN1YrZ2g3?=
- =?utf-8?B?blRWK2VJUFlUcUM1Nkh4QnJ5c1NVVkdnbncyTXlYb2d3NDJjMFQ0enR4d2h1?=
- =?utf-8?B?L3lYdnpmOEhsSmQ4YyswdllpWEI3ZHkvYW41aXh6Rk9qUmJWOW9RNXlpbGQ0?=
- =?utf-8?B?NFY1blRybDJ5ODgvTEpxaGZZREJydWFhVExRN2FzUTdUSy9OQm5XZU4remFB?=
- =?utf-8?B?TDlnWGFpdEQ3VTYxOTBSL0Y4MEFNaU84S05DR1V3eXpTNjBJRk5sczNHeWgy?=
- =?utf-8?B?U0xYSi93TmF4RlNSUzJGMEhGRTFFdER0QUVhbGNlbzdaY0k0YTdTSFNVYWNQ?=
- =?utf-8?B?V3I4VnRXWkxGdU1jN1BZODlGQ0RuS3NWUVJDckowSitUQkE9PQ==?=
-X-Forefront-Antispam-Report:
-	CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230031)(7416005)(36860700004)(376005)(1800799015)(82310400017);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Jun 2024 22:23:24.3675
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: c1bcd039-5d95-46e7-fa55-08dc87407245
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	SJ1PEPF00002314.namprd03.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW5PR12MB5651
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240606130629.214827-2-pierre-eric.pelloux-prayer@amd.com>
 
-On 5/31/24 12:38 PM, John Hubbard wrote:
-...
-> diff --git a/tools/testing/selftests/x86/Makefile b/tools/testing/selftests/x86/Makefile
-> index d0bb32bd5538..5c8757a25998 100644
-> --- a/tools/testing/selftests/x86/Makefile
-> +++ b/tools/testing/selftests/x86/Makefile
-> @@ -40,6 +40,13 @@ CFLAGS := -O2 -g -std=gnu99 -pthread -Wall $(KHDR_INCLUDES)
->   # call32_from_64 in thunks.S uses absolute addresses.
->   ifeq ($(CAN_BUILD_WITH_NOPIE),1)
->   CFLAGS += -no-pie
-> +
-> +ifneq ($(LLVM),)
-> +# clang only wants to see -no-pie during linking. Here, we don't have a separate
-> +# linking stage, so a compiler warning is unavoidable without (wastefully)
-> +# restructuring the Makefile. Avoid this by simply disabling that warning.
-> +CFLAGS += -Wno-unused-command-line-argument
-> +endif
->   endif
->   
->   define gen-target-rule-32
+Hi Pierre-Eric,
 
-This actually can be improved slightly, as per our latest tentative
-decision about how to handle both LLVM=1 and CC=clang cases [1].
+kernel test robot noticed the following build errors:
 
-If this series goes via Shuah's next tree, then I can put the
-CC_IS_CLANG fix from [1] on top of previous patches, that will work
-nicely.
+[auto build test ERROR on linus/master]
+[also build test ERROR on v6.10-rc2 next-20240607]
+[cannot apply to drm-xe/drm-xe-next]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-In other words, I think we can use this series as-is, and let the
-CC_IS_CLANG fix proceed just after that. Because it gets better a piece
-at a time: first we get rid of the warning for most cases, then we get
-rid of it for the odd "make CC=clang" case as well.
+url:    https://github.com/intel-lab-lkp/linux/commits/Pierre-Eric-Pelloux-Prayer/drm-sched-store-the-drm_device-instead-of-the-device/20240606-211050
+base:   linus/master
+patch link:    https://lore.kernel.org/r/20240606130629.214827-2-pierre-eric.pelloux-prayer%40amd.com
+patch subject: [PATCH v3 1/4] drm/sched: store the drm_device instead of the device
+config: arm64-allmodconfig (https://download.01.org/0day-ci/archive/20240608/202406080802.ExIh6NC2-lkp@intel.com/config)
+compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project d7d2d4f53fc79b4b58e8d8d08151b577c3699d4a)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240608/202406080802.ExIh6NC2-lkp@intel.com/reproduce)
 
-[1] https://lore.kernel.org/6b32399f-d9c6-4df5-b1e5-755ef4acf25d@nvidia.com
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202406080802.ExIh6NC2-lkp@intel.com/
 
-thanks,
+All errors (new ones prefixed by >>):
+
+   In file included from drivers/gpu/drm/imagination/pvr_queue.c:8:
+   In file included from drivers/gpu/drm/imagination/pvr_context.h:17:
+   In file included from drivers/gpu/drm/imagination/pvr_device.h:9:
+   In file included from drivers/gpu/drm/imagination/pvr_fw.h:8:
+   In file included from drivers/gpu/drm/imagination/pvr_fw_trace.h:7:
+   In file included from include/drm/drm_file.h:39:
+   In file included from include/drm/drm_prime.h:37:
+   In file included from include/linux/scatterlist.h:8:
+   In file included from include/linux/mm.h:2253:
+   include/linux/vmstat.h:500:43: error: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Werror,-Wenum-enum-conversion]
+     500 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     501 |                            item];
+         |                            ~~~~
+   include/linux/vmstat.h:507:43: error: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Werror,-Wenum-enum-conversion]
+     507 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     508 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/vmstat.h:514:36: error: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Werror,-Wenum-enum-conversion]
+     514 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+   include/linux/vmstat.h:519:43: error: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Werror,-Wenum-enum-conversion]
+     519 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     520 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/vmstat.h:528:43: error: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Werror,-Wenum-enum-conversion]
+     528 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     529 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+>> drivers/gpu/drm/imagination/pvr_queue.c:807:10: error: incompatible pointer types passing 'struct drm_device *' to parameter of type 'const struct device *' [-Werror,-Wincompatible-pointer-types]
+     807 |         dev_err(sched->dev, "Job timeout\n");
+         |                 ^~~~~~~~~~
+   include/linux/dev_printk.h:154:44: note: expanded from macro 'dev_err'
+     154 |         dev_printk_index_wrap(_dev_err, KERN_ERR, dev, dev_fmt(fmt), ##__VA_ARGS__)
+         |                                                   ^~~
+   include/linux/dev_printk.h:110:11: note: expanded from macro 'dev_printk_index_wrap'
+     110 |                 _p_func(dev, fmt, ##__VA_ARGS__);                       \
+         |                         ^~~
+   include/linux/dev_printk.h:50:36: note: passing argument to parameter 'dev' here
+      50 | void _dev_err(const struct device *dev, const char *fmt, ...);
+         |                                    ^
+   6 errors generated.
+
+
+vim +807 drivers/gpu/drm/imagination/pvr_queue.c
+
+eaf01ee5ba28b9 Sarah Walker 2023-11-22  787  
+eaf01ee5ba28b9 Sarah Walker 2023-11-22  788  /**
+eaf01ee5ba28b9 Sarah Walker 2023-11-22  789   * pvr_queue_timedout_job() - Handle a job timeout event.
+eaf01ee5ba28b9 Sarah Walker 2023-11-22  790   * @s_job: The job this timeout occurred on.
+eaf01ee5ba28b9 Sarah Walker 2023-11-22  791   *
+eaf01ee5ba28b9 Sarah Walker 2023-11-22  792   * FIXME: We don't do anything here to unblock the situation, we just stop+start
+eaf01ee5ba28b9 Sarah Walker 2023-11-22  793   * the scheduler, and re-assign parent fences in the middle.
+eaf01ee5ba28b9 Sarah Walker 2023-11-22  794   *
+eaf01ee5ba28b9 Sarah Walker 2023-11-22  795   * Return:
+eaf01ee5ba28b9 Sarah Walker 2023-11-22  796   *  * DRM_GPU_SCHED_STAT_NOMINAL.
+eaf01ee5ba28b9 Sarah Walker 2023-11-22  797   */
+eaf01ee5ba28b9 Sarah Walker 2023-11-22  798  static enum drm_gpu_sched_stat
+eaf01ee5ba28b9 Sarah Walker 2023-11-22  799  pvr_queue_timedout_job(struct drm_sched_job *s_job)
+eaf01ee5ba28b9 Sarah Walker 2023-11-22  800  {
+eaf01ee5ba28b9 Sarah Walker 2023-11-22  801  	struct drm_gpu_scheduler *sched = s_job->sched;
+eaf01ee5ba28b9 Sarah Walker 2023-11-22  802  	struct pvr_queue *queue = container_of(sched, struct pvr_queue, scheduler);
+eaf01ee5ba28b9 Sarah Walker 2023-11-22  803  	struct pvr_device *pvr_dev = queue->ctx->pvr_dev;
+eaf01ee5ba28b9 Sarah Walker 2023-11-22  804  	struct pvr_job *job;
+eaf01ee5ba28b9 Sarah Walker 2023-11-22  805  	u32 job_count = 0;
+eaf01ee5ba28b9 Sarah Walker 2023-11-22  806  
+eaf01ee5ba28b9 Sarah Walker 2023-11-22 @807  	dev_err(sched->dev, "Job timeout\n");
+eaf01ee5ba28b9 Sarah Walker 2023-11-22  808  
+eaf01ee5ba28b9 Sarah Walker 2023-11-22  809  	/* Before we stop the scheduler, make sure the queue is out of any list, so
+eaf01ee5ba28b9 Sarah Walker 2023-11-22  810  	 * any call to pvr_queue_update_active_state_locked() that might happen
+eaf01ee5ba28b9 Sarah Walker 2023-11-22  811  	 * until the scheduler is really stopped doesn't end up re-inserting the
+eaf01ee5ba28b9 Sarah Walker 2023-11-22  812  	 * queue in the active list. This would cause
+eaf01ee5ba28b9 Sarah Walker 2023-11-22  813  	 * pvr_queue_signal_done_fences() and drm_sched_stop() to race with each
+eaf01ee5ba28b9 Sarah Walker 2023-11-22  814  	 * other when accessing the pending_list, since drm_sched_stop() doesn't
+eaf01ee5ba28b9 Sarah Walker 2023-11-22  815  	 * grab the job_list_lock when modifying the list (it's assuming the
+eaf01ee5ba28b9 Sarah Walker 2023-11-22  816  	 * only other accessor is the scheduler, and it's safe to not grab the
+eaf01ee5ba28b9 Sarah Walker 2023-11-22  817  	 * lock since it's stopped).
+eaf01ee5ba28b9 Sarah Walker 2023-11-22  818  	 */
+eaf01ee5ba28b9 Sarah Walker 2023-11-22  819  	mutex_lock(&pvr_dev->queues.lock);
+eaf01ee5ba28b9 Sarah Walker 2023-11-22  820  	list_del_init(&queue->node);
+eaf01ee5ba28b9 Sarah Walker 2023-11-22  821  	mutex_unlock(&pvr_dev->queues.lock);
+eaf01ee5ba28b9 Sarah Walker 2023-11-22  822  
+eaf01ee5ba28b9 Sarah Walker 2023-11-22  823  	drm_sched_stop(sched, s_job);
+eaf01ee5ba28b9 Sarah Walker 2023-11-22  824  
+eaf01ee5ba28b9 Sarah Walker 2023-11-22  825  	/* Re-assign job parent fences. */
+eaf01ee5ba28b9 Sarah Walker 2023-11-22  826  	list_for_each_entry(job, &sched->pending_list, base.list) {
+eaf01ee5ba28b9 Sarah Walker 2023-11-22  827  		job->base.s_fence->parent = dma_fence_get(job->done_fence);
+eaf01ee5ba28b9 Sarah Walker 2023-11-22  828  		job_count++;
+eaf01ee5ba28b9 Sarah Walker 2023-11-22  829  	}
+eaf01ee5ba28b9 Sarah Walker 2023-11-22  830  	WARN_ON(atomic_read(&queue->in_flight_job_count) != job_count);
+eaf01ee5ba28b9 Sarah Walker 2023-11-22  831  
+eaf01ee5ba28b9 Sarah Walker 2023-11-22  832  	/* Re-insert the queue in the proper list, and kick a queue processing
+eaf01ee5ba28b9 Sarah Walker 2023-11-22  833  	 * operation if there were jobs pending.
+eaf01ee5ba28b9 Sarah Walker 2023-11-22  834  	 */
+eaf01ee5ba28b9 Sarah Walker 2023-11-22  835  	mutex_lock(&pvr_dev->queues.lock);
+eaf01ee5ba28b9 Sarah Walker 2023-11-22  836  	if (!job_count) {
+eaf01ee5ba28b9 Sarah Walker 2023-11-22  837  		list_move_tail(&queue->node, &pvr_dev->queues.idle);
+eaf01ee5ba28b9 Sarah Walker 2023-11-22  838  	} else {
+eaf01ee5ba28b9 Sarah Walker 2023-11-22  839  		atomic_set(&queue->in_flight_job_count, job_count);
+eaf01ee5ba28b9 Sarah Walker 2023-11-22  840  		list_move_tail(&queue->node, &pvr_dev->queues.active);
+eaf01ee5ba28b9 Sarah Walker 2023-11-22  841  		pvr_queue_process(queue);
+eaf01ee5ba28b9 Sarah Walker 2023-11-22  842  	}
+eaf01ee5ba28b9 Sarah Walker 2023-11-22  843  	mutex_unlock(&pvr_dev->queues.lock);
+eaf01ee5ba28b9 Sarah Walker 2023-11-22  844  
+eaf01ee5ba28b9 Sarah Walker 2023-11-22  845  	drm_sched_start(sched, true);
+eaf01ee5ba28b9 Sarah Walker 2023-11-22  846  
+eaf01ee5ba28b9 Sarah Walker 2023-11-22  847  	return DRM_GPU_SCHED_STAT_NOMINAL;
+eaf01ee5ba28b9 Sarah Walker 2023-11-22  848  }
+eaf01ee5ba28b9 Sarah Walker 2023-11-22  849  
+
 -- 
-John Hubbard
-NVIDIA
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
