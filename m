@@ -1,256 +1,242 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C75FAA2D;
-	Sun,  9 Jun 2024 00:14:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 581B82595;
+	Sun,  9 Jun 2024 01:35:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717892083; cv=none; b=I/rQmwToIWoPYR0w6B+heXHFEZe7rdylWQ3Ip5+xmMpu1cWIqM9ABwU+eh0Ne9Rr+LOr9O1X75by3nrX9OjAfBoyI5jiqw9syja9gNt0RwALekk4/vGJdB0qDbwABJa/p23FE+5ooWLewLtT+jXeaYeZUBQlj13WPiSKEIgnou4=
+	t=1717896940; cv=none; b=fs2bogMo7SKga35F0YvqnqZ8b+Zqzr5KtwR3rHOjDVbew49w3aM3NEvOTHJvUdYugkLFczRWuUq+rWyGkwiJ7fL+/s7zybFhn/33ZinbE6HFpfJxRx/a/I+C4RadII17Vq404dy31WqCBWaR+FA1MFEW9mDYf1AqsOLHjEPdgIY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717892083; c=relaxed/simple;
-	bh=Or1KHkEWqdpHZIaxIWZyYW6KKd+skJI2oKoCcFTxOCA=;
+	s=arc-20240116; t=1717896940; c=relaxed/simple;
+	bh=DMvFBSCclGe2zN/4KdXHnbj5rpmr3RmLmk2n2pwo6yo=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=kLDMQSOUYhS3S/whwNAAkuHGFsARKw7VCWjFvgF3QWYYPRQJl1plRurcpTypco25NPqWzC/+rXMFrshqBrOAF5FdoSZXP53nqtZCM1p/yrHv62aay3/eSFlHYhtviRmRtBCRCn7QLbCQI3d2MELyJTC1qB4UJuNAF5fdGFbCM9g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=djbSwd4y; arc=none smtp.client-ip=198.175.65.16
+	 Content-Type:Content-Disposition:In-Reply-To; b=UAmKt8szHflLgF4d3LYFc1RJo5zpMag1ygRIHUhK7goAiCqCtzFZukzxxA67APBVtd6H2AQkSWNWHbndalChguR0gEct9ONaVJfQnmLnbdWHEzostO6DxzlvcpJycN6shvLf9KvN1iGiGQHpFemoGK9FceVkP+Qdk9jEqxCjgi8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=FejLDnfM; arc=none smtp.client-ip=198.175.65.11
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="djbSwd4y"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="FejLDnfM"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1717892081; x=1749428081;
+  t=1717896938; x=1749432938;
   h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Or1KHkEWqdpHZIaxIWZyYW6KKd+skJI2oKoCcFTxOCA=;
-  b=djbSwd4yDwquy9EUc9j9Y6FR/B9+x54OsPw9ln4aSH7q2ioEfQv3xPER
-   2hg0nlYYol6jVJhIVghN+hdQ7h9xglBsUj5j3eSK92Yy1XQMgXf/U133u
-   yAzYBW25Q00UzK1YEaQkk1h8li3DuezrsGgRSWYA9l8ubTCch1hoIXGMz
-   PZRlWwCq4jzsDAHuRZlm8Lo8Dv+xZ4F/R5H0wAjMOK90Eh8Tmm9sSlmDN
-   bl8TmaqAQafGvN4EYBcq5PQ9XplgO7qvIAJ/CxPPTF4hAdGW3EN7uUdAN
-   M7VjOQojIHuOTpSyx/3IpM0p4k4ER8/9l8mGmdgWU+/c7EUKMDMyB5nCc
-   w==;
-X-CSE-ConnectionGUID: BZX0K/yxSFu83az5e7gF5g==
-X-CSE-MsgGUID: 7sFGl3MvR2u0XTSUXnjVVw==
-X-IronPort-AV: E=McAfee;i="6600,9927,11097"; a="14722126"
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=DMvFBSCclGe2zN/4KdXHnbj5rpmr3RmLmk2n2pwo6yo=;
+  b=FejLDnfMIDuFS8zYNuyJzzI0vMPlTbuTZOFRC556uWLo46oMwHWXgo/y
+   cc5LsBJuAafkP/92TMQHWaATHjZyH/laUaqIEUk+9mK5+34YNWRFtBMjN
+   mEePdIvwYSgR8qKWUFp+jZ5sUg82h1eIYvqrj4jeqEz6DHr4RaBGbUvS5
+   //+wqvIoDnxATYkQmT0XIVSMWU9eE+rM87+u/P3VmVFVY/jCBNZioohos
+   oeg8SU5GJ01v2IibE92DrM4q4Tyr1ZNxqJorA2l1KrpYhNnqoLvlaeQg3
+   /45+fgSiY5nx3AiSQL7CcjdEWQq4NznRGSKF+k4D+o984/uT/UzI77j+I
+   Q==;
+X-CSE-ConnectionGUID: FTuJqKd5QpWXkoqx2Dx7lw==
+X-CSE-MsgGUID: fJUzhXfMQmyplGTsGtfoEg==
+X-IronPort-AV: E=McAfee;i="6600,9927,11097"; a="25162524"
 X-IronPort-AV: E=Sophos;i="6.08,224,1712646000"; 
-   d="scan'208";a="14722126"
-Received: from fmviesa004.fm.intel.com ([10.60.135.144])
-  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jun 2024 17:14:40 -0700
-X-CSE-ConnectionGUID: B7/qBjeyQWGxhRv8T0mQgg==
-X-CSE-MsgGUID: rEbZHrH9QTCeGZsp1DFrIA==
+   d="scan'208";a="25162524"
+Received: from fmviesa005.fm.intel.com ([10.60.135.145])
+  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jun 2024 18:35:37 -0700
+X-CSE-ConnectionGUID: N6Q+zVnWTBmquFOcspz/3g==
+X-CSE-MsgGUID: qncGVvD5RG+TTGl2Z7om7Q==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.08,224,1712646000"; 
-   d="scan'208";a="43239393"
+   d="scan'208";a="43129213"
 Received: from lkp-server01.sh.intel.com (HELO 8967fbab76b3) ([10.239.97.150])
-  by fmviesa004.fm.intel.com with ESMTP; 08 Jun 2024 17:14:34 -0700
+  by fmviesa005.fm.intel.com with ESMTP; 08 Jun 2024 18:35:35 -0700
 Received: from kbuild by 8967fbab76b3 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1sG6Cd-0000fm-15;
-	Sun, 09 Jun 2024 00:14:31 +0000
-Date: Sun, 9 Jun 2024 08:13:33 +0800
+	id 1sG7T3-0000jZ-1R;
+	Sun, 09 Jun 2024 01:35:33 +0000
+Date: Sun, 9 Jun 2024 09:35:21 +0800
 From: kernel test robot <lkp@intel.com>
-To: Daniel Xu <dxu@dxuuu.xyz>, rostedt@goodmis.org, martin.lau@linux.dev,
-	shuah@kernel.org, song@kernel.org, mhiramat@kernel.org,
-	ast@kernel.org, andrii@kernel.org, pabeni@redhat.com,
-	ebiggers@kernel.org, tytso@mit.edu, vadim.fedorenko@linux.dev,
-	eddyz87@gmail.com, davem@davemloft.net, edumazet@google.com,
-	daniel@iogearbox.net, hawk@kernel.org, kuba@kernel.org,
-	john.fastabend@gmail.com, olsajiri@gmail.com, quentin@isovalent.com,
-	alan.maguire@oracle.com, acme@kernel.org
+To: =?iso-8859-1?Q?Jos=E9?= Roberto de Souza <jose.souza@intel.com>,
+	linux-kernel@vger.kernel.org, intel-xe@lists.freedesktop.org
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	yonghong.song@linux.dev, kpsingh@kernel.org, sdf@google.com,
-	haoluo@google.com, jolsa@kernel.org, mathieu.desnoyers@efficios.com,
-	mykolal@fb.com, fsverity@lists.linux.dev
-Subject: Re: [PATCH bpf-next v4 09/12] bpf: treewide: Align kfunc signatures
- to prog point-of-view
-Message-ID: <202406090852.FB1i4svo-lkp@intel.com>
-References: <677377439845fcb9135151d1dac1102ed3d6c924.1717881178.git.dxu@dxuuu.xyz>
+	Rodrigo Vivi <rodrigo.vivi@intel.com>,
+	Mukesh Ojha <quic_mojha@quicinc.com>,
+	Johannes Berg <johannes@sipsolutions.net>,
+	Jonathan Cavitt <jonathan.cavitt@intel.com>,
+	=?iso-8859-1?Q?Jos=E9?= Roberto de Souza <jose.souza@intel.com>
+Subject: Re: [PATCH v4 1/2] devcoredump: Add dev_coredumpm_timeout()
+Message-ID: <202406090921.cxfWJ8P1-lkp@intel.com>
+References: <20240607193220.229760-1-jose.souza@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <677377439845fcb9135151d1dac1102ed3d6c924.1717881178.git.dxu@dxuuu.xyz>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20240607193220.229760-1-jose.souza@intel.com>
 
-Hi Daniel,
+Hi José,
 
 kernel test robot noticed the following build warnings:
 
-[auto build test WARNING on bpf-next/master]
+[auto build test WARNING on drm-xe/drm-xe-next]
+[also build test WARNING on wireless/main linus/master v6.10-rc2 next-20240607]
+[cannot apply to driver-core/driver-core-testing driver-core/driver-core-next driver-core/driver-core-linus wireless-next/main]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Daniel-Xu/kbuild-bpf-Tell-pahole-to-DECL_TAG-kfuncs/20240609-052326
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git master
-patch link:    https://lore.kernel.org/r/677377439845fcb9135151d1dac1102ed3d6c924.1717881178.git.dxu%40dxuuu.xyz
-patch subject: [PATCH bpf-next v4 09/12] bpf: treewide: Align kfunc signatures to prog point-of-view
-config: riscv-defconfig (https://download.01.org/0day-ci/archive/20240609/202406090852.FB1i4svo-lkp@intel.com/config)
+url:    https://github.com/intel-lab-lkp/linux/commits/Jos-Roberto-de-Souza/drm-xe-Increase-devcoredump-timeout/20240608-033441
+base:   https://gitlab.freedesktop.org/drm/xe/kernel.git drm-xe-next
+patch link:    https://lore.kernel.org/r/20240607193220.229760-1-jose.souza%40intel.com
+patch subject: [PATCH v4 1/2] devcoredump: Add dev_coredumpm_timeout()
+config: hexagon-allyesconfig (https://download.01.org/0day-ci/archive/20240609/202406090921.cxfWJ8P1-lkp@intel.com/config)
 compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project d7d2d4f53fc79b4b58e8d8d08151b577c3699d4a)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240609/202406090852.FB1i4svo-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240609/202406090921.cxfWJ8P1-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202406090852.FB1i4svo-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202406090921.cxfWJ8P1-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
->> kernel/bpf/helpers.c:2464: warning: Function parameter or struct member 'p' not described in 'bpf_dynptr_slice'
->> kernel/bpf/helpers.c:2464: warning: Excess function parameter 'ptr' description in 'bpf_dynptr_slice'
->> kernel/bpf/helpers.c:2549: warning: Function parameter or struct member 'p' not described in 'bpf_dynptr_slice_rdwr'
->> kernel/bpf/helpers.c:2549: warning: Excess function parameter 'ptr' description in 'bpf_dynptr_slice_rdwr'
+   In file included from drivers/bluetooth/hci_qca.c:23:
+   In file included from include/linux/devcoredump.h:12:
+   In file included from include/linux/scatterlist.h:8:
+   In file included from include/linux/mm.h:2210:
+   include/linux/vmstat.h:522:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     522 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+   In file included from drivers/bluetooth/hci_qca.c:23:
+   In file included from include/linux/devcoredump.h:12:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/hexagon/include/asm/io.h:328:
+   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     547 |         val = __raw_readb(PCI_IOBASE + addr);
+         |                           ~~~~~~~~~~ ^
+   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     560 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
+      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
+         |                                                   ^
+   In file included from drivers/bluetooth/hci_qca.c:23:
+   In file included from include/linux/devcoredump.h:12:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/hexagon/include/asm/io.h:328:
+   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     573 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
+      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
+         |                                                   ^
+   In file included from drivers/bluetooth/hci_qca.c:23:
+   In file included from include/linux/devcoredump.h:12:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/hexagon/include/asm/io.h:328:
+   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     584 |         __raw_writeb(value, PCI_IOBASE + addr);
+         |                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     594 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     604 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   In file included from drivers/bluetooth/hci_qca.c:37:
+   In file included from include/net/bluetooth/hci_core.h:36:
+>> include/net/bluetooth/coredump.h:9:9: warning: 'DEVCOREDUMP_TIMEOUT' macro redefined [-Wmacro-redefined]
+       9 | #define DEVCOREDUMP_TIMEOUT     msecs_to_jiffies(10000) /* 10 sec */
+         |         ^
+   include/linux/devcoredump.h:16:9: note: previous definition is here
+      16 | #define DEVCOREDUMP_TIMEOUT     (HZ * 60 * 5)
+         |         ^
+   8 warnings generated.
+--
+   In file included from drivers/bluetooth/btmrvl_sdio.c:10:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:13:
+   In file included from include/linux/cgroup.h:26:
+   In file included from include/linux/kernel_stat.h:9:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:328:
+   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     547 |         val = __raw_readb(PCI_IOBASE + addr);
+         |                           ~~~~~~~~~~ ^
+   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     560 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
+      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
+         |                                                   ^
+   In file included from drivers/bluetooth/btmrvl_sdio.c:10:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:13:
+   In file included from include/linux/cgroup.h:26:
+   In file included from include/linux/kernel_stat.h:9:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:328:
+   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     573 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
+      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
+         |                                                   ^
+   In file included from drivers/bluetooth/btmrvl_sdio.c:10:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:13:
+   In file included from include/linux/cgroup.h:26:
+   In file included from include/linux/kernel_stat.h:9:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:328:
+   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     584 |         __raw_writeb(value, PCI_IOBASE + addr);
+         |                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     594 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     604 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   In file included from drivers/bluetooth/btmrvl_sdio.c:10:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:21:
+   In file included from include/linux/mm.h:2210:
+   include/linux/vmstat.h:522:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     522 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+   In file included from drivers/bluetooth/btmrvl_sdio.c:18:
+   In file included from include/net/bluetooth/hci_core.h:36:
+>> include/net/bluetooth/coredump.h:9:9: warning: 'DEVCOREDUMP_TIMEOUT' macro redefined [-Wmacro-redefined]
+       9 | #define DEVCOREDUMP_TIMEOUT     msecs_to_jiffies(10000) /* 10 sec */
+         |         ^
+   include/linux/devcoredump.h:16:9: note: previous definition is here
+      16 | #define DEVCOREDUMP_TIMEOUT     (HZ * 60 * 5)
+         |         ^
+   8 warnings generated.
 
 
-vim +2464 kernel/bpf/helpers.c
+vim +/DEVCOREDUMP_TIMEOUT +9 include/net/bluetooth/coredump.h
 
-3f0e6f2b41d35d David Vernet       2022-11-22  2433  
-66e3a13e7c2c44 Joanne Koong       2023-03-01  2434  /**
-7ce60b110eece1 David Vernet       2023-03-01  2435   * bpf_dynptr_slice() - Obtain a read-only pointer to the dynptr data.
-7ce60b110eece1 David Vernet       2023-03-01  2436   * @ptr: The dynptr whose data slice to retrieve
-7ce60b110eece1 David Vernet       2023-03-01  2437   * @offset: Offset into the dynptr
-3bda08b63670c3 Daniel Rosenberg   2023-05-05  2438   * @buffer__opt: User-provided buffer to copy contents into.  May be NULL
-3bda08b63670c3 Daniel Rosenberg   2023-05-05  2439   * @buffer__szk: Size (in bytes) of the buffer if present. This is the
-3bda08b63670c3 Daniel Rosenberg   2023-05-05  2440   *               length of the requested slice. This must be a constant.
-66e3a13e7c2c44 Joanne Koong       2023-03-01  2441   *
-66e3a13e7c2c44 Joanne Koong       2023-03-01  2442   * For non-skb and non-xdp type dynptrs, there is no difference between
-66e3a13e7c2c44 Joanne Koong       2023-03-01  2443   * bpf_dynptr_slice and bpf_dynptr_data.
-66e3a13e7c2c44 Joanne Koong       2023-03-01  2444   *
-3bda08b63670c3 Daniel Rosenberg   2023-05-05  2445   *  If buffer__opt is NULL, the call will fail if buffer_opt was needed.
-3bda08b63670c3 Daniel Rosenberg   2023-05-05  2446   *
-66e3a13e7c2c44 Joanne Koong       2023-03-01  2447   * If the intention is to write to the data slice, please use
-66e3a13e7c2c44 Joanne Koong       2023-03-01  2448   * bpf_dynptr_slice_rdwr.
-66e3a13e7c2c44 Joanne Koong       2023-03-01  2449   *
-66e3a13e7c2c44 Joanne Koong       2023-03-01  2450   * The user must check that the returned pointer is not null before using it.
-66e3a13e7c2c44 Joanne Koong       2023-03-01  2451   *
-66e3a13e7c2c44 Joanne Koong       2023-03-01  2452   * Please note that in the case of skb and xdp dynptrs, bpf_dynptr_slice
-66e3a13e7c2c44 Joanne Koong       2023-03-01  2453   * does not change the underlying packet data pointers, so a call to
-66e3a13e7c2c44 Joanne Koong       2023-03-01  2454   * bpf_dynptr_slice will not invalidate any ctx->data/data_end pointers in
-66e3a13e7c2c44 Joanne Koong       2023-03-01  2455   * the bpf program.
-66e3a13e7c2c44 Joanne Koong       2023-03-01  2456   *
-7ce60b110eece1 David Vernet       2023-03-01  2457   * Return: NULL if the call failed (eg invalid dynptr), pointer to a read-only
-66e3a13e7c2c44 Joanne Koong       2023-03-01  2458   * data slice (can be either direct pointer to the data or a pointer to the user
-66e3a13e7c2c44 Joanne Koong       2023-03-01  2459   * provided buffer, with its contents containing the data, if unable to obtain
-66e3a13e7c2c44 Joanne Koong       2023-03-01  2460   * direct pointer)
-66e3a13e7c2c44 Joanne Koong       2023-03-01  2461   */
-ec3b75c0e6eb53 Daniel Xu          2024-06-08  2462  __bpf_kfunc void *bpf_dynptr_slice(const struct bpf_dynptr *p, u32 offset,
-3bda08b63670c3 Daniel Rosenberg   2023-05-05  2463  				   void *buffer__opt, u32 buffer__szk)
-66e3a13e7c2c44 Joanne Koong       2023-03-01 @2464  {
-ec3b75c0e6eb53 Daniel Xu          2024-06-08  2465  	const struct bpf_dynptr_kern *ptr = (struct bpf_dynptr_kern *)p;
-66e3a13e7c2c44 Joanne Koong       2023-03-01  2466  	enum bpf_dynptr_type type;
-66e3a13e7c2c44 Joanne Koong       2023-03-01  2467  	u32 len = buffer__szk;
-66e3a13e7c2c44 Joanne Koong       2023-03-01  2468  	int err;
-66e3a13e7c2c44 Joanne Koong       2023-03-01  2469  
-66e3a13e7c2c44 Joanne Koong       2023-03-01  2470  	if (!ptr->data)
-c45eac537bd8b4 Joanne Koong       2023-03-01  2471  		return NULL;
-66e3a13e7c2c44 Joanne Koong       2023-03-01  2472  
-66e3a13e7c2c44 Joanne Koong       2023-03-01  2473  	err = bpf_dynptr_check_off_len(ptr, offset, len);
-66e3a13e7c2c44 Joanne Koong       2023-03-01  2474  	if (err)
-c45eac537bd8b4 Joanne Koong       2023-03-01  2475  		return NULL;
-66e3a13e7c2c44 Joanne Koong       2023-03-01  2476  
-66e3a13e7c2c44 Joanne Koong       2023-03-01  2477  	type = bpf_dynptr_get_type(ptr);
-66e3a13e7c2c44 Joanne Koong       2023-03-01  2478  
-66e3a13e7c2c44 Joanne Koong       2023-03-01  2479  	switch (type) {
-66e3a13e7c2c44 Joanne Koong       2023-03-01  2480  	case BPF_DYNPTR_TYPE_LOCAL:
-66e3a13e7c2c44 Joanne Koong       2023-03-01  2481  	case BPF_DYNPTR_TYPE_RINGBUF:
-66e3a13e7c2c44 Joanne Koong       2023-03-01  2482  		return ptr->data + ptr->offset + offset;
-66e3a13e7c2c44 Joanne Koong       2023-03-01  2483  	case BPF_DYNPTR_TYPE_SKB:
-6f5a630d7c57cd Alexei Starovoitov 2023-07-18  2484  		if (buffer__opt)
-3bda08b63670c3 Daniel Rosenberg   2023-05-05  2485  			return skb_header_pointer(ptr->data, ptr->offset + offset, len, buffer__opt);
-6f5a630d7c57cd Alexei Starovoitov 2023-07-18  2486  		else
-6f5a630d7c57cd Alexei Starovoitov 2023-07-18  2487  			return skb_pointer_if_linear(ptr->data, ptr->offset + offset, len);
-66e3a13e7c2c44 Joanne Koong       2023-03-01  2488  	case BPF_DYNPTR_TYPE_XDP:
-66e3a13e7c2c44 Joanne Koong       2023-03-01  2489  	{
-66e3a13e7c2c44 Joanne Koong       2023-03-01  2490  		void *xdp_ptr = bpf_xdp_pointer(ptr->data, ptr->offset + offset, len);
-5426700e6841bf Kui-Feng Lee       2023-08-03  2491  		if (!IS_ERR_OR_NULL(xdp_ptr))
-66e3a13e7c2c44 Joanne Koong       2023-03-01  2492  			return xdp_ptr;
-66e3a13e7c2c44 Joanne Koong       2023-03-01  2493  
-3bda08b63670c3 Daniel Rosenberg   2023-05-05  2494  		if (!buffer__opt)
-3bda08b63670c3 Daniel Rosenberg   2023-05-05  2495  			return NULL;
-3bda08b63670c3 Daniel Rosenberg   2023-05-05  2496  		bpf_xdp_copy_buf(ptr->data, ptr->offset + offset, buffer__opt, len, false);
-3bda08b63670c3 Daniel Rosenberg   2023-05-05  2497  		return buffer__opt;
-66e3a13e7c2c44 Joanne Koong       2023-03-01  2498  	}
-66e3a13e7c2c44 Joanne Koong       2023-03-01  2499  	default:
-66e3a13e7c2c44 Joanne Koong       2023-03-01  2500  		WARN_ONCE(true, "unknown dynptr type %d\n", type);
-c45eac537bd8b4 Joanne Koong       2023-03-01  2501  		return NULL;
-66e3a13e7c2c44 Joanne Koong       2023-03-01  2502  	}
-66e3a13e7c2c44 Joanne Koong       2023-03-01  2503  }
-66e3a13e7c2c44 Joanne Koong       2023-03-01  2504  
-66e3a13e7c2c44 Joanne Koong       2023-03-01  2505  /**
-7ce60b110eece1 David Vernet       2023-03-01  2506   * bpf_dynptr_slice_rdwr() - Obtain a writable pointer to the dynptr data.
-7ce60b110eece1 David Vernet       2023-03-01  2507   * @ptr: The dynptr whose data slice to retrieve
-7ce60b110eece1 David Vernet       2023-03-01  2508   * @offset: Offset into the dynptr
-3bda08b63670c3 Daniel Rosenberg   2023-05-05  2509   * @buffer__opt: User-provided buffer to copy contents into. May be NULL
-3bda08b63670c3 Daniel Rosenberg   2023-05-05  2510   * @buffer__szk: Size (in bytes) of the buffer if present. This is the
-3bda08b63670c3 Daniel Rosenberg   2023-05-05  2511   *               length of the requested slice. This must be a constant.
-66e3a13e7c2c44 Joanne Koong       2023-03-01  2512   *
-66e3a13e7c2c44 Joanne Koong       2023-03-01  2513   * For non-skb and non-xdp type dynptrs, there is no difference between
-66e3a13e7c2c44 Joanne Koong       2023-03-01  2514   * bpf_dynptr_slice and bpf_dynptr_data.
-66e3a13e7c2c44 Joanne Koong       2023-03-01  2515   *
-3bda08b63670c3 Daniel Rosenberg   2023-05-05  2516   * If buffer__opt is NULL, the call will fail if buffer_opt was needed.
-3bda08b63670c3 Daniel Rosenberg   2023-05-05  2517   *
-66e3a13e7c2c44 Joanne Koong       2023-03-01  2518   * The returned pointer is writable and may point to either directly the dynptr
-66e3a13e7c2c44 Joanne Koong       2023-03-01  2519   * data at the requested offset or to the buffer if unable to obtain a direct
-66e3a13e7c2c44 Joanne Koong       2023-03-01  2520   * data pointer to (example: the requested slice is to the paged area of an skb
-66e3a13e7c2c44 Joanne Koong       2023-03-01  2521   * packet). In the case where the returned pointer is to the buffer, the user
-66e3a13e7c2c44 Joanne Koong       2023-03-01  2522   * is responsible for persisting writes through calling bpf_dynptr_write(). This
-66e3a13e7c2c44 Joanne Koong       2023-03-01  2523   * usually looks something like this pattern:
-66e3a13e7c2c44 Joanne Koong       2023-03-01  2524   *
-66e3a13e7c2c44 Joanne Koong       2023-03-01  2525   * struct eth_hdr *eth = bpf_dynptr_slice_rdwr(&dynptr, 0, buffer, sizeof(buffer));
-66e3a13e7c2c44 Joanne Koong       2023-03-01  2526   * if (!eth)
-66e3a13e7c2c44 Joanne Koong       2023-03-01  2527   *	return TC_ACT_SHOT;
-66e3a13e7c2c44 Joanne Koong       2023-03-01  2528   *
-66e3a13e7c2c44 Joanne Koong       2023-03-01  2529   * // mutate eth header //
-66e3a13e7c2c44 Joanne Koong       2023-03-01  2530   *
-66e3a13e7c2c44 Joanne Koong       2023-03-01  2531   * if (eth == buffer)
-66e3a13e7c2c44 Joanne Koong       2023-03-01  2532   *	bpf_dynptr_write(&ptr, 0, buffer, sizeof(buffer), 0);
-66e3a13e7c2c44 Joanne Koong       2023-03-01  2533   *
-66e3a13e7c2c44 Joanne Koong       2023-03-01  2534   * Please note that, as in the example above, the user must check that the
-66e3a13e7c2c44 Joanne Koong       2023-03-01  2535   * returned pointer is not null before using it.
-66e3a13e7c2c44 Joanne Koong       2023-03-01  2536   *
-66e3a13e7c2c44 Joanne Koong       2023-03-01  2537   * Please also note that in the case of skb and xdp dynptrs, bpf_dynptr_slice_rdwr
-66e3a13e7c2c44 Joanne Koong       2023-03-01  2538   * does not change the underlying packet data pointers, so a call to
-66e3a13e7c2c44 Joanne Koong       2023-03-01  2539   * bpf_dynptr_slice_rdwr will not invalidate any ctx->data/data_end pointers in
-66e3a13e7c2c44 Joanne Koong       2023-03-01  2540   * the bpf program.
-66e3a13e7c2c44 Joanne Koong       2023-03-01  2541   *
-7ce60b110eece1 David Vernet       2023-03-01  2542   * Return: NULL if the call failed (eg invalid dynptr), pointer to a
-66e3a13e7c2c44 Joanne Koong       2023-03-01  2543   * data slice (can be either direct pointer to the data or a pointer to the user
-66e3a13e7c2c44 Joanne Koong       2023-03-01  2544   * provided buffer, with its contents containing the data, if unable to obtain
-66e3a13e7c2c44 Joanne Koong       2023-03-01  2545   * direct pointer)
-66e3a13e7c2c44 Joanne Koong       2023-03-01  2546   */
-ec3b75c0e6eb53 Daniel Xu          2024-06-08  2547  __bpf_kfunc void *bpf_dynptr_slice_rdwr(const struct bpf_dynptr *p, u32 offset,
-3bda08b63670c3 Daniel Rosenberg   2023-05-05  2548  					void *buffer__opt, u32 buffer__szk)
-66e3a13e7c2c44 Joanne Koong       2023-03-01 @2549  {
-ec3b75c0e6eb53 Daniel Xu          2024-06-08  2550  	const struct bpf_dynptr_kern *ptr = (struct bpf_dynptr_kern *)p;
-ec3b75c0e6eb53 Daniel Xu          2024-06-08  2551  
-540ccf96ddbc17 Joanne Koong       2023-04-20  2552  	if (!ptr->data || __bpf_dynptr_is_rdonly(ptr))
-c45eac537bd8b4 Joanne Koong       2023-03-01  2553  		return NULL;
-66e3a13e7c2c44 Joanne Koong       2023-03-01  2554  
-66e3a13e7c2c44 Joanne Koong       2023-03-01  2555  	/* bpf_dynptr_slice_rdwr is the same logic as bpf_dynptr_slice.
-66e3a13e7c2c44 Joanne Koong       2023-03-01  2556  	 *
-66e3a13e7c2c44 Joanne Koong       2023-03-01  2557  	 * For skb-type dynptrs, it is safe to write into the returned pointer
-a7de265cb2d849 Rafael Passos      2024-04-17  2558  	 * if the bpf program allows skb data writes. There are two possibilities
-66e3a13e7c2c44 Joanne Koong       2023-03-01  2559  	 * that may occur when calling bpf_dynptr_slice_rdwr:
-66e3a13e7c2c44 Joanne Koong       2023-03-01  2560  	 *
-66e3a13e7c2c44 Joanne Koong       2023-03-01  2561  	 * 1) The requested slice is in the head of the skb. In this case, the
-66e3a13e7c2c44 Joanne Koong       2023-03-01  2562  	 * returned pointer is directly to skb data, and if the skb is cloned, the
-66e3a13e7c2c44 Joanne Koong       2023-03-01  2563  	 * verifier will have uncloned it (see bpf_unclone_prologue()) already.
-66e3a13e7c2c44 Joanne Koong       2023-03-01  2564  	 * The pointer can be directly written into.
-66e3a13e7c2c44 Joanne Koong       2023-03-01  2565  	 *
-66e3a13e7c2c44 Joanne Koong       2023-03-01  2566  	 * 2) Some portion of the requested slice is in the paged buffer area.
-66e3a13e7c2c44 Joanne Koong       2023-03-01  2567  	 * In this case, the requested data will be copied out into the buffer
-66e3a13e7c2c44 Joanne Koong       2023-03-01  2568  	 * and the returned pointer will be a pointer to the buffer. The skb
-66e3a13e7c2c44 Joanne Koong       2023-03-01  2569  	 * will not be pulled. To persist the write, the user will need to call
-66e3a13e7c2c44 Joanne Koong       2023-03-01  2570  	 * bpf_dynptr_write(), which will pull the skb and commit the write.
-66e3a13e7c2c44 Joanne Koong       2023-03-01  2571  	 *
-66e3a13e7c2c44 Joanne Koong       2023-03-01  2572  	 * Similarly for xdp programs, if the requested slice is not across xdp
-66e3a13e7c2c44 Joanne Koong       2023-03-01  2573  	 * fragments, then a direct pointer will be returned, otherwise the data
-66e3a13e7c2c44 Joanne Koong       2023-03-01  2574  	 * will be copied out into the buffer and the user will need to call
-66e3a13e7c2c44 Joanne Koong       2023-03-01  2575  	 * bpf_dynptr_write() to commit changes.
-66e3a13e7c2c44 Joanne Koong       2023-03-01  2576  	 */
-ec3b75c0e6eb53 Daniel Xu          2024-06-08  2577  	return bpf_dynptr_slice(p, offset, buffer__opt, buffer__szk);
-66e3a13e7c2c44 Joanne Koong       2023-03-01  2578  }
-66e3a13e7c2c44 Joanne Koong       2023-03-01  2579  
+9695ef876fd122 Abhishek Pandit-Subedi 2023-03-30   8  
+9695ef876fd122 Abhishek Pandit-Subedi 2023-03-30  @9  #define DEVCOREDUMP_TIMEOUT	msecs_to_jiffies(10000)	/* 10 sec */
+9695ef876fd122 Abhishek Pandit-Subedi 2023-03-30  10  
 
 -- 
 0-DAY CI Kernel Test Service
