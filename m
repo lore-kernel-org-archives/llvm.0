@@ -1,218 +1,141 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f51.google.com (mail-ej1-f51.google.com [209.85.218.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 058E018EB0;
-	Sun,  9 Jun 2024 22:34:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25647179AE
+	for <llvm@lists.linux.dev>; Sun,  9 Jun 2024 23:37:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717972483; cv=none; b=QA3+A5b546CmPiSSnBmMj54+tfY9121oMLO4/mOJY/ru2eHbzIwoj3bP0PP/BkUhy1T3ZEraMHoGAUQxsTbYeFpL6dDLShSC6WfR7CHPJkcm0DIpcs6P9ANAw9XgJbkqbALz9eE+x60qHabN2y6C/hNJMOImtm0ATku+sj4peNk=
+	t=1717976270; cv=none; b=uySEWf1TTwyTK4r8m9/J3zRhY5QObmouI5MSmndxzSDWCBaDqSx8bi/ohBo7X5q6w280L4oSVGKt5UFcIiXr25WGRvOoaDcHrMupacWgcEFk/B3y7URQhT1VsEuUWhM6dnmE8dzx8yR0CV0yryql7uqCihtKTVQ4lTRey2+qfU8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717972483; c=relaxed/simple;
-	bh=7POtHIFBnIfQvUggHgsCUgRA8D1KL4yajWsmoQaTe9k=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=BCk5OS2SHX6QNXpIXhfKgJDLKl/ub5VqQsupdyX4ZvaFuR9p2MmOYB3uwX2z6K2Qf/Tg1zJFcJ22yyvEoBXqqwF3jkitMeEqi+T7PW4/pO3ESfHj59mqRSxzsDv8tP8/TA7O2KEddqA9i/A1a65sS7GOFpSDzM/KDVWyUuoTx1g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Bwj1EMnu; arc=none smtp.client-ip=192.198.163.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1717976270; c=relaxed/simple;
+	bh=o+c92v7lPvwcZ08VgODfBDGvKxRb3xK7CA8hOGrsZxg=;
+	h=From:Date:To:Message-ID:Subject:MIME-Version:Content-Type; b=TY5Sa6cmh/Dt6kLLYl1kA2tRzwSHoUCYPyiFp58DW5Q/BKRdfYs/Jez37xZAWO3sEhMiY8NviMwbpoLUcfXQqeJ4or8syeN4oYjma9RWMb2MH51z7i0MckpUeIkKcAeZUu5mGurs4GFE6zUm+k536dWnHBY17+H7q+EMXTFjVk4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=I16+48Xi; arc=none smtp.client-ip=209.85.218.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Bwj1EMnu"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1717972481; x=1749508481;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=7POtHIFBnIfQvUggHgsCUgRA8D1KL4yajWsmoQaTe9k=;
-  b=Bwj1EMnujoVnMIOHsZqXcqyQCvmbW3rbi919qut6P8dT1GiKhGdOQQrO
-   ybc4K/iBXuEyKBv1K/jTSmFICmH/2tbdOyM70i367C5dLqjIFwNbGOanR
-   M0P8rFhhUkiUeVNEChGCa1X5iUGf+CUDYvlViavn7o36C02Z8evW1IJn/
-   WVwrGJ+JV4eIui+avKvqg7ZOehBuLTcu2pAG+xtko4zeNmIvpmYhLz8R7
-   I4yTygOHJJlt8SVwlUYAtFnqp0whSpE1TRjJ0nveYNnlANr2Dl8DjwH3R
-   fdM0jJ/9ItJZDG/R03oszbDh79xGTxGLEG/GaGhnW3MHozhaK3p4AKFtB
-   Q==;
-X-CSE-ConnectionGUID: mYGidX/NRsmFrzTt4CtZQA==
-X-CSE-MsgGUID: YjPoB+6rQ56/UTGUP+68fw==
-X-IronPort-AV: E=McAfee;i="6600,9927,11098"; a="14803228"
-X-IronPort-AV: E=Sophos;i="6.08,226,1712646000"; 
-   d="scan'208";a="14803228"
-Received: from fmviesa003.fm.intel.com ([10.60.135.143])
-  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jun 2024 15:34:40 -0700
-X-CSE-ConnectionGUID: RfCIc2f5TkCYoaPUy7JXMw==
-X-CSE-MsgGUID: 4VQrmob1R6GwaE0Sbl6IBQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.08,226,1712646000"; 
-   d="scan'208";a="43314180"
-Received: from lkp-server01.sh.intel.com (HELO 8967fbab76b3) ([10.239.97.150])
-  by fmviesa003.fm.intel.com with ESMTP; 09 Jun 2024 15:34:37 -0700
-Received: from kbuild by 8967fbab76b3 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1sGR7T-0001eE-0g;
-	Sun, 09 Jun 2024 22:34:35 +0000
-Date: Mon, 10 Jun 2024 06:33:44 +0800
-From: kernel test robot <lkp@intel.com>
-To: Richard chien <m8809301@gmail.com>, davem@davemloft.net,
-	edumazet@google.com, kuba@kernel.org, pabeni@redhat.com
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	jesse.brandeburg@intel.com, anthony.l.nguyen@intel.com,
-	intel-wired-lan@lists.osuosl.org, netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org, Richard chien <richard.chien@hpe.com>
-Subject: Re: [PATCH] ixgbe: Add support for firmware update
-Message-ID: <202406100635.nORK1Xs0-lkp@intel.com>
-References: <20240609085735.6253-1-richard.chien@hpe.com>
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="I16+48Xi"
+Received: by mail-ej1-f51.google.com with SMTP id a640c23a62f3a-a626919d19dso872145566b.0
+        for <llvm@lists.linux.dev>; Sun, 09 Jun 2024 16:37:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1717976266; x=1718581066; darn=lists.linux.dev;
+        h=list-id:mime-version:subject:message-id:to:reply-to:date:from:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=w/AgbyKZLcP1UVl8LAAKZHexQuM0DHUBRkdz2ui0PTA=;
+        b=I16+48XisDyJzqyZZr4N6EZp+WylxKBQZI/Q95E18B7YBob37f2w7jsFUVkmIVcD6i
+         Ekao1bXWM1k0ipEutpjYmKJ6wnMkDJeZoyBJufinCj8mBQxAWW1/oHJrbwCqQkMtNm0s
+         QQymHTUX+kKan2bXlWVkDoUT3xhWSY22zpQDADClgWVk+tEQ2XYK7tHjrQHO7zwjUmTd
+         W03YFWVuBhcreSONfvjKMUaS26aY80RhLEt9qopSYFoncqlW6D4Jz7WUwkl40FeahD0u
+         HecHONkok9HSL0TiiER1uo4IoHoIMZR5P5zsmfb5aou3cGKMryjFKFfxP00E1yo9fUVQ
+         ktjQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1717976266; x=1718581066;
+        h=list-id:mime-version:subject:message-id:to:reply-to:date:from
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=w/AgbyKZLcP1UVl8LAAKZHexQuM0DHUBRkdz2ui0PTA=;
+        b=spaDhtkEgK8HXKFio3fnrD6e7MsqCEsGIIsj5CNXvm2jKP/VQccCQHxtSnVRF8vaNB
+         /tTN8TwvOYhMkZwstV6O3oSLcXKKyvIGxZPM+clyEl2igi+WwvQZsowEi0hqabkQM7YP
+         tng601qg+njc0KPUOK0vsvMu0KKnfPijLVfMKDqnVFpjo0Dur9AKpVfmaIAtAVh9O9Zg
+         OkrzF/8R/j47sfttSzGyxfNyj2zePhQaSR6d6Rd4HjxpPYPjAeAoRynhXEZaxrX+LNfS
+         kkSjrbunlLM63270/Cixo25Pt0/kwky6IlLuAyr9ETXU6FatBPh+2UjJXZTDFaZantro
+         efVQ==
+X-Gm-Message-State: AOJu0Yz4MZSYVH4/cKR27vs4bbIxEEEEcbDnFC9UjeyN/QN1L8kF2wnT
+	/+rDenoNnGYqsTTufZWOrl9UZyocfMTKzFl70U+ghHQHPUEnnEFC/1lryPJzJMhqnf7+Za05zT6
+	L
+X-Google-Smtp-Source: AGHT+IH410EIHn3YbEDTeVH+aRks7LmvLkO+gfgsjknwjSIbZ2rkst40LYtHAiFyflMabUxPAw8mvg==
+X-Received: by 2002:a17:906:fca9:b0:a6e:ab8b:aff4 with SMTP id a640c23a62f3a-a6eab8bb0c7mr449852866b.13.1717976266353;
+        Sun, 09 Jun 2024 16:37:46 -0700 (PDT)
+Received: from jenkins.jenkins (ci.linaro.org. [88.99.136.175])
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-57aadcbf568sm6411423a12.0.2024.06.09.16.37.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 09 Jun 2024 16:37:45 -0700 (PDT)
+From: ci_notify@linaro.org
+X-Google-Original-From: linaro-infrastructure-errors@lists.linaro.org
+Date: Sun, 9 Jun 2024 23:37:45 +0000 (UTC)
+Reply-To: linaro-toolchain@lists.linaro.org
+To: llvm@lists.linux.dev
+Message-ID: <944395997.80401.1717976265852@jenkins.jenkins>
+Subject: [Linaro-TCWG-CI] llvmorg-19-init-12271-g29189738b832: Failure on
+ aarch64
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240609085735.6253-1-richard.chien@hpe.com>
+Content-Type: multipart/mixed; 
+	boundary="----=_Part_80400_2094123120.1717976265179"
+X-Jenkins-Job: TCWG Build tcwg_kernel/llvm-master-aarch64-lts-allmodconfig
+X-Jenkins-Result: SUCCESS
 
-Hi Richard,
+------=_Part_80400_2094123120.1717976265179
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-kernel test robot noticed the following build warnings:
+Dear contributor, our automatic CI has detected problems related to your patch(es).  Please find some details below.  If you have any questions, please follow up on linaro-toolchain@lists.linaro.org mailing list, Libera's #linaro-tcwg channel, or ping your favourite Linaro toolchain developer on the usual project channel.
 
-[auto build test WARNING on tnguy-net-queue/dev-queue]
-[also build test WARNING on linus/master v6.10-rc3 next-20240607]
-[cannot apply to tnguy-next-queue/dev-queue]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+We appreciate that it might be difficult to find the necessary logs or reproduce the issue locally. If you can't get what you need from our CI within minutes, let us know and we will be happy to help.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Richard-chien/ixgbe-Add-support-for-firmware-update/20240609-170239
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/tnguy/net-queue.git dev-queue
-patch link:    https://lore.kernel.org/r/20240609085735.6253-1-richard.chien%40hpe.com
-patch subject: [PATCH] ixgbe: Add support for firmware update
-config: x86_64-rhel-8.3-rust (https://download.01.org/0day-ci/archive/20240610/202406100635.nORK1Xs0-lkp@intel.com/config)
-compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240610/202406100635.nORK1Xs0-lkp@intel.com/reproduce)
+We track this report status in https://linaro.atlassian.net/browse/LLVM-1233 , please let us know if you are looking at the problem and/or when you have a fix.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202406100635.nORK1Xs0-lkp@intel.com/
+In CI config tcwg_kernel/llvm-master-aarch64-lts-allmodconfig after:
 
-All warnings (new ones prefixed by >>):
+  | commit llvmorg-19-init-12271-g29189738b832
+  | Author: Dan Liew <dan@su-root.co.uk>
+  | Date:   Thu May 23 18:35:24 2024 -0700
+  | 
+  |     Reland #90786 ([BoundsSafety] Allow 'counted_by' attribute on pointers in structs in C) (#93121)
+  |     
+  |     [BoundsSafety] Reland #93121 Allow 'counted_by' attribute on pointers in structs in C (#93121)
+  |     
+  |     Fixes #92687.
+  |     
+  |     Previously the attribute was only allowed on flexible array members.
+  | ... 130 lines of the commit log omitted.
 
->> drivers/net/ethernet/intel/ixgbe/ixgbe_ethtool.c:1104:9: warning: unannotated fall-through between switch labels [-Wimplicit-fallthrough]
-    1104 |         default:
-         |         ^
-   drivers/net/ethernet/intel/ixgbe/ixgbe_ethtool.c:1104:9: note: insert 'break;' to avoid fall-through
-    1104 |         default:
-         |         ^
-         |         break; 
-   1 warning generated.
+Results changed to
+# reset_artifacts:
+-10
+# build_abe binutils:
+-9
+# build_kernel_llvm:
+-5
+# build_abe qemu:
+-2
+# linux_n_obj:
+24458
 
+From
+# reset_artifacts:
+-10
+# build_abe binutils:
+-9
+# build_kernel_llvm:
+-5
+# build_abe qemu:
+-2
+# linux_n_obj:
+33831
+# linux build successful:
+all
 
-vim +1104 drivers/net/ethernet/intel/ixgbe/ixgbe_ethtool.c
+The configuration of this build is:
+CI config tcwg_kernel/llvm-master-aarch64-lts-allmodconfig
 
-  1005	
-  1006	static int ixgbe_nvmupd_validate_offset(struct ixgbe_adapter *adapter,
-  1007	                                        u32 offset)
-  1008	{
-  1009	        struct net_device *netdev = adapter->netdev;
-  1010	
-  1011	        switch (offset) {
-  1012	        case IXGBE_STATUS:
-  1013	        case IXGBE_ESDP:
-  1014	        case IXGBE_MSCA:
-  1015	        case IXGBE_MSRWD:
-  1016	        case IXGBE_EEC_8259X:
-  1017	        case IXGBE_FLA_8259X:
-  1018	        case IXGBE_FLOP:
-  1019	        case IXGBE_SWSM_8259X:
-  1020	        case IXGBE_FWSM_8259X:
-  1021	        case IXGBE_FACTPS_8259X:
-  1022	        case IXGBE_GSSR:
-  1023	        case IXGBE_HICR:
-  1024	        case IXGBE_FWSTS:
-  1025	                return 0;
-  1026	        default:
-  1027	                if ((offset >= IXGBE_MAVTV(0) && offset <= IXGBE_MAVTV(7)) ||
-  1028	                    (offset >= IXGBE_RAL(0) && offset <= IXGBE_RAH(15)))
-  1029	                        return 0;
-  1030	        }
-  1031	
-  1032	        switch (adapter->hw.mac.type) {
-  1033	        case ixgbe_mac_82599EB:
-  1034	                switch (offset) {
-  1035	                case IXGBE_AUTOC:
-  1036	                case IXGBE_EERD:
-  1037	                case IXGBE_BARCTRL:
-  1038	                        return 0;
-  1039	                default:
-  1040	                        if (offset >= 0x00020000 &&
-  1041	                            offset <= ixgbe_get_eeprom_len(netdev))
-  1042	                                return 0;
-  1043	                }
-  1044	                break;
-  1045	        case ixgbe_mac_X540:
-  1046	                switch (offset) {
-  1047	                case IXGBE_EERD:
-  1048	                case IXGBE_EEWR:
-  1049	                case IXGBE_SRAMREL:
-  1050	                case IXGBE_BARCTRL:
-  1051	                        return 0;
-  1052	                default:
-  1053	                        if ((offset >= 0x00020000 &&
-  1054	                             offset <= ixgbe_get_eeprom_len(netdev)))
-  1055	                                return 0;
-  1056	                }
-  1057	                break;
-  1058	        case ixgbe_mac_X550:
-  1059	                switch (offset) {
-  1060	                case IXGBE_EEWR:
-  1061	                case IXGBE_SRAMREL:
-  1062	                case IXGBE_PHYCTL_82599:
-  1063	                case IXGBE_FWRESETCNT:
-  1064	                        return 0;
-  1065	                default:
-  1066	                        if (offset >= IXGBE_FLEX_MNG_PTR(0) &&
-  1067	                            offset <= IXGBE_FLEX_MNG_PTR(447))
-  1068	                                return 0;
-  1069	                }
-  1070	                break;
-  1071	        case ixgbe_mac_X550EM_x:
-  1072	                switch (offset) {
-  1073	                case IXGBE_PHYCTL_82599:
-  1074	                case IXGBE_NW_MNG_IF_SEL:
-  1075	                case IXGBE_FWRESETCNT:
-  1076	                case IXGBE_I2CCTL_X550:
-  1077	                        return 0;
-  1078	                default:
-  1079	                        if ((offset >= IXGBE_FLEX_MNG_PTR(0) &&
-  1080	                             offset <= IXGBE_FLEX_MNG_PTR(447)) ||
-  1081	                            (offset >= IXGBE_FUSES0_GROUP(0) &&
-  1082	                             offset <= IXGBE_FUSES0_GROUP(7)))
-  1083	                                return 0;
-  1084	                }
-  1085	                break;
-  1086	        case ixgbe_mac_x550em_a:
-  1087	                switch (offset) {
-  1088	                case IXGBE_PHYCTL_82599:
-  1089	                case IXGBE_NW_MNG_IF_SEL:
-  1090	                case IXGBE_FWRESETCNT:
-  1091	                case IXGBE_I2CCTL_X550:
-  1092	                case IXGBE_FLA_X550EM_a:
-  1093	                case IXGBE_SWSM_X550EM_a:
-  1094	                case IXGBE_FWSM_X550EM_a:
-  1095	                case IXGBE_SWFW_SYNC_X550EM_a:
-  1096	                case IXGBE_FACTPS_X550EM_a:
-  1097	                case IXGBE_EEC_X550EM_a:
-  1098	                        return 0;
-  1099	                default:
-  1100	                        if (offset >= IXGBE_FLEX_MNG_PTR(0) &&
-  1101	                            offset <= IXGBE_FLEX_MNG_PTR(447))
-  1102	                                return 0;
-  1103	                }
-> 1104	        default:
-  1105	                break;
-  1106	        }
-  1107	
-  1108	        return -ENOTTY;
-  1109	}
-  1110	
+-----------------8<--------------------------8<--------------------------8<--------------------------
+The information below can be used to reproduce a debug environment:
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Current build   : https://ci.linaro.org/job/tcwg_kernel--llvm-master-aarch64-lts-allmodconfig-build/174/artifact/artifacts
+Reference build : https://ci.linaro.org/job/tcwg_kernel--llvm-master-aarch64-lts-allmodconfig-build/173/artifact/artifacts
+
+Reproduce last good and first bad builds: https://git-us.linaro.org/toolchain/ci/interesting-commits.git/plain/llvm/sha1/29189738b832b111b905fcc037a287eeeb0aab2c/tcwg_kernel/llvm-master-aarch64-lts-allmodconfig/reproduction_instructions.txt
+
+Full commit : https://github.com/llvm/llvm-project/commit/29189738b832b111b905fcc037a287eeeb0aab2c
+
+List of configurations that regressed due to this commit :
+* tcwg_kernel
+** llvm-master-aarch64-lts-allmodconfig
+*** Failure
+*** https://git-us.linaro.org/toolchain/ci/interesting-commits.git/plain/llvm/sha1/29189738b832b111b905fcc037a287eeeb0aab2c/tcwg_kernel/llvm-master-aarch64-lts-allmodconfig/details.txt
+*** https://ci.linaro.org/job/tcwg_kernel--llvm-master-aarch64-lts-allmodconfig-build/174/artifact/artifacts
+------=_Part_80400_2094123120.1717976265179--
