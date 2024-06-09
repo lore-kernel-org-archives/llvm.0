@@ -1,61 +1,63 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B7838B65E;
-	Sun,  9 Jun 2024 08:44:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 808A51CAAF;
+	Sun,  9 Jun 2024 09:35:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717922642; cv=none; b=AN0PpM9rWJAwJ2fOZ+ekh19fLFxAUmpkYsX7hIQWKCNiUt8HOzCLhN+bqp1kGve0Y3MVGTujhvCuXn2ewpv+eWTGBluzcAUqBr3XNIcoA2TMqsyGY0Y76zkWT43D2Db4tjR4n04hSB9yMW9LiEUU5nfbs+lmROMK0hWs1QKDRjQ=
+	t=1717925708; cv=none; b=m9v0zMkLdQzTMEBGD0ZyMO1UxHIu4DhViaiWhaWfoA9fLkUkw7K+Wv7qKXaf2knCOEaYy1+EH8igGiBYIxVNDXBUrjiFOUsZ/bhB44Uc96U9jElYwD42XtvNU53iOxwISfaBc46u7i52BllIiHiPGgz0el7s1DlQcVVAstCqHoc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717922642; c=relaxed/simple;
-	bh=P3jgUiSm8qQBKqNO6sXYWOj6I4UDr2lE/NmkgVYUaIA=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=sTKrOJyee+sI6xG41ygD6n4pOec8CBbUmUQDzXLmZCvjqA0YW5OdeilUchlbfjajcRtN+KWbsI0pz3rYdp/eQ4PRWVEQAL+o5/WYEumUKLK8+RVxsTB6ZGAo6SVlvF+objr0CR150ptn9Jy8oaKnTc72GtSMlnTUOmy/sBzglKw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Iq56qmQq; arc=none smtp.client-ip=192.198.163.19
+	s=arc-20240116; t=1717925708; c=relaxed/simple;
+	bh=35HB9QseAABPQZZ1Ei04agmTzxCxTEexIjzwe6OuI9I=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=GeSXqCRYLMEcevwyiL4jk8ui5kUe5VhNKrfGh6SMdydfc8yCr95MISS4RA63yOkt/Yv6t9ilOCECBWVMDEfYgZ7CIvirQ9M02i5/ffBDemlkC8a7fQ5o4NOYujkrXn3RXFmGjmflJ1o2/jzVwq5othczktEp/oQO1YvzrWZxSqA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=l3++ka2N; arc=none smtp.client-ip=198.175.65.19
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Iq56qmQq"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="l3++ka2N"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1717922641; x=1749458641;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=P3jgUiSm8qQBKqNO6sXYWOj6I4UDr2lE/NmkgVYUaIA=;
-  b=Iq56qmQq5tFG3BgQl/9028/r8DeS8I1XRhHgyMDNgjzq1UdZ7FsXsvui
-   npuQkrWB4ezooxr2jPqk5ISeoW9UjjbP6ayNjO+h8UKIKlJs/fk6+kBSF
-   ozt8dl70Yd/QRv4RJtDmggG9q11fMw09df05gvAnDKUGrD7JiP4AAwfxD
-   u0S6N8Lu3CQ3tSUapF/LtJ9mr6ZzqmblADhFvEVBQt6I3oPuS4SfNNtJb
-   LKe5l+8OD1+bRXrrEiEA2dThVZjK1hwTdwfJb4MT/KryEhL+eGfM4zueX
-   Tx8arR+yAgUy5J9E8XQrn6wiWgbRpcwEmo36XMpPJO3hFdd8AtkAzNGtr
+  t=1717925705; x=1749461705;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=35HB9QseAABPQZZ1Ei04agmTzxCxTEexIjzwe6OuI9I=;
+  b=l3++ka2NbMB8OfW6dsgwImk/4ef4vBqzjSTxh1ia0ZkaOW4PIfo2YypM
+   jLpRxgQadt7/SOL3T87fQATZORFfOxNw3LuFsA1KBvjpYFH9xBg5UaOad
+   H5Q35szuu8UXb5lVO3BTiudJQqZb0ubHLWvrrWhsThDmMWaYFgS0URCxh
+   c+bQWbAgJTJazUfg3j1ARvxlfs4l+8OcNmE1wS5VwYyj653VfX3qmIVg2
+   tOrJ48qd3YEE9XO8pTK7mJP0i+iGCC9qjacut97bueZwbdCAehBO/4o+p
+   uf95EHbyDpLYkkpLuxuetbjZgcPZLOQj/YywJSHRpSj97DC7HudwIi2TH
    g==;
-X-CSE-ConnectionGUID: jXIMA3xARROJCtJ4P61yfg==
-X-CSE-MsgGUID: 95Fnets8QEWHdEbIcV/e+A==
-X-IronPort-AV: E=McAfee;i="6600,9927,11097"; a="14399831"
+X-CSE-ConnectionGUID: BG1jPH0aT/6YldOzhZQSjQ==
+X-CSE-MsgGUID: Xu7ZIQYsSta2AAcXF1Jm+A==
+X-IronPort-AV: E=McAfee;i="6600,9927,11097"; a="14430818"
 X-IronPort-AV: E=Sophos;i="6.08,225,1712646000"; 
-   d="scan'208";a="14399831"
-Received: from orviesa008.jf.intel.com ([10.64.159.148])
-  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jun 2024 01:44:00 -0700
-X-CSE-ConnectionGUID: Jhfs3dedSbKqqo8je3dJuA==
-X-CSE-MsgGUID: 3spXNCV2SVm9yu13iV1CKQ==
+   d="scan'208";a="14430818"
+Received: from orviesa010.jf.intel.com ([10.64.159.150])
+  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jun 2024 02:35:05 -0700
+X-CSE-ConnectionGUID: dulLMCoETJOP13ON8moxgw==
+X-CSE-MsgGUID: lQoiCW+fQ+KU4iTrkFyWDg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.08,225,1712646000"; 
-   d="scan'208";a="39318986"
+   d="scan'208";a="38695818"
 Received: from lkp-server01.sh.intel.com (HELO 8967fbab76b3) ([10.239.97.150])
-  by orviesa008.jf.intel.com with ESMTP; 09 Jun 2024 01:43:59 -0700
+  by orviesa010.jf.intel.com with ESMTP; 09 Jun 2024 02:35:02 -0700
 Received: from kbuild by 8967fbab76b3 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1sGE9c-00010Y-0k;
-	Sun, 09 Jun 2024 08:43:56 +0000
-Date: Sun, 9 Jun 2024 16:43:06 +0800
+	id 1sGEx1-00013q-2H;
+	Sun, 09 Jun 2024 09:34:59 +0000
+Date: Sun, 9 Jun 2024 17:34:46 +0800
 From: kernel test robot <lkp@intel.com>
-To: Kent Overstreet <kent.overstreet@linux.dev>
+To: Paul Handrigan <paulha@opensource.cirrus.com>, broonie@kernel.org,
+	lgirdwood@gmail.com, linux-sound@vger.kernel.org,
+	patches@opensource.cirrus.com, robh@kernel.org, krzk+dt@kernel.org,
+	conor+dt@kernel.org, devicetree@vger.kernel.org
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Kent Overstreet <kent.overstreet@linux.dev>
-Subject: [bcachefs:bcachefs-testing 46/97]
- fs/bcachefs/alloc_foreground.c:1709:38: error: call to undeclared function
- 'bch2_fs_usage_read_one'; ISO C99 and later do not support implicit function
- declarations
-Message-ID: <202406091631.AlBzaflH-lkp@intel.com>
+	Paul Handrigan <paulha@opensource.cirrus.com>
+Subject: Re: [PATCH 2/2] ASoC: cs530x: Support for cs530x ADCs
+Message-ID: <202406091719.QkkX833g-lkp@intel.com>
+References: <20240607202708.335752-3-paulha@opensource.cirrus.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -64,30 +66,41 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20240607202708.335752-3-paulha@opensource.cirrus.com>
 
-tree:   https://evilpiepirate.org/git/bcachefs.git bcachefs-testing
-head:   e514088a9cf20c9729c12fb6cf92de291fb7cca6
-commit: da76cae296ca4407c458a0ffc9a746627e16304d [46/97] bcachefs: Delete journal-buf-sharded old style accounting
-config: s390-defconfig (https://download.01.org/0day-ci/archive/20240609/202406091631.AlBzaflH-lkp@intel.com/config)
+Hi Paul,
+
+kernel test robot noticed the following build warnings:
+
+[auto build test WARNING on broonie-sound/for-next]
+[also build test WARNING on linus/master v6.10-rc2 next-20240607]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Paul-Handrigan/ASoC-dt-bindings-cirrus-cs530x-Add-initial-DT-binding/20240608-042903
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
+patch link:    https://lore.kernel.org/r/20240607202708.335752-3-paulha%40opensource.cirrus.com
+patch subject: [PATCH 2/2] ASoC: cs530x: Support for cs530x ADCs
+config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20240609/202406091719.QkkX833g-lkp@intel.com/config)
 compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project d7d2d4f53fc79b4b58e8d8d08151b577c3699d4a)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240609/202406091631.AlBzaflH-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240609/202406091719.QkkX833g-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202406091631.AlBzaflH-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202406091719.QkkX833g-lkp@intel.com/
 
-Note: the bcachefs/bcachefs-testing HEAD e514088a9cf20c9729c12fb6cf92de291fb7cca6 builds fine.
-      It only hurts bisectability.
+All warnings (new ones prefixed by >>):
 
-All errors (new ones prefixed by >>):
-
-   In file included from fs/bcachefs/alloc_foreground.c:14:
-   In file included from fs/bcachefs/bcachefs.h:188:
-   In file included from include/linux/bio.h:10:
-   In file included from include/linux/blk_types.h:10:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:10:
+   In file included from sound/soc/codecs/cs530x-i2c.c:8:
+   In file included from include/linux/device.h:32:
+   In file included from include/linux/device/driver.h:21:
+   In file included from include/linux/module.h:19:
+   In file included from include/linux/elf.h:6:
+   In file included from arch/s390/include/asm/elf.h:173:
+   In file included from arch/s390/include/asm/mmu_context.h:11:
+   In file included from arch/s390/include/asm/pgalloc.h:18:
    In file included from include/linux/mm.h:2253:
    include/linux/vmstat.h:500:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
      500 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
@@ -112,92 +125,117 @@ All errors (new ones prefixed by >>):
          |                            ~~~~~~~~~~~~~~~~~~~~~ ^
      529 |                            NR_VM_NUMA_EVENT_ITEMS +
          |                            ~~~~~~~~~~~~~~~~~~~~~~
->> fs/bcachefs/alloc_foreground.c:1709:38: error: call to undeclared function 'bch2_fs_usage_read_one'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-    1709 |         prt_printf(out, "hidden\t%llu\n",                       bch2_fs_usage_read_one(c, &c->usage_base->b.hidden));
-         |                                                                 ^
-   fs/bcachefs/alloc_foreground.c:1709:38: note: did you mean 'bch2_fs_usage_read_short'?
-   fs/bcachefs/buckets.h:299:1: note: 'bch2_fs_usage_read_short' declared here
-     299 | bch2_fs_usage_read_short(struct bch_fs *);
-         | ^
->> fs/bcachefs/alloc_foreground.c:1709:68: error: no member named 'usage_base' in 'struct bch_fs'
-    1709 |         prt_printf(out, "hidden\t%llu\n",                       bch2_fs_usage_read_one(c, &c->usage_base->b.hidden));
-         |                                                                                            ~  ^
-   fs/bcachefs/util.h:192:54: note: expanded from macro 'prt_printf'
-     192 | #define prt_printf(_out, ...)           bch2_prt_printf(_out, __VA_ARGS__)
-         |                                                               ^~~~~~~~~~~
-   fs/bcachefs/alloc_foreground.c:1710:67: error: no member named 'usage_base' in 'struct bch_fs'
-    1710 |         prt_printf(out, "btree\t%llu\n",                        bch2_fs_usage_read_one(c, &c->usage_base->b.btree));
-         |                                                                                            ~  ^
-   fs/bcachefs/util.h:192:54: note: expanded from macro 'prt_printf'
-     192 | #define prt_printf(_out, ...)           bch2_prt_printf(_out, __VA_ARGS__)
-         |                                                               ^~~~~~~~~~~
-   fs/bcachefs/alloc_foreground.c:1711:67: error: no member named 'usage_base' in 'struct bch_fs'
-    1711 |         prt_printf(out, "data\t%llu\n",                         bch2_fs_usage_read_one(c, &c->usage_base->b.data));
-         |                                                                                            ~  ^
-   fs/bcachefs/util.h:192:54: note: expanded from macro 'prt_printf'
-     192 | #define prt_printf(_out, ...)           bch2_prt_printf(_out, __VA_ARGS__)
-         |                                                               ^~~~~~~~~~~
-   fs/bcachefs/alloc_foreground.c:1712:68: error: no member named 'usage_base' in 'struct bch_fs'
-    1712 |         prt_printf(out, "cached\t%llu\n",                       bch2_fs_usage_read_one(c, &c->usage_base->b.cached));
-         |                                                                                            ~  ^
-   fs/bcachefs/util.h:192:54: note: expanded from macro 'prt_printf'
-     192 | #define prt_printf(_out, ...)           bch2_prt_printf(_out, __VA_ARGS__)
-         |                                                               ^~~~~~~~~~~
-   fs/bcachefs/alloc_foreground.c:1713:70: error: no member named 'usage_base' in 'struct bch_fs'
-    1713 |         prt_printf(out, "reserved\t%llu\n",                     bch2_fs_usage_read_one(c, &c->usage_base->b.reserved));
-         |                                                                                            ~  ^
-   fs/bcachefs/util.h:192:54: note: expanded from macro 'prt_printf'
-     192 | #define prt_printf(_out, ...)           bch2_prt_printf(_out, __VA_ARGS__)
-         |                                                               ^~~~~~~~~~~
-   fs/bcachefs/alloc_foreground.c:1715:71: error: no member named 'usage_base' in 'struct bch_fs'
-    1715 |         prt_printf(out, "nr_inodes\t%llu\n",                    bch2_fs_usage_read_one(c, &c->usage_base->b.nr_inodes));
-         |                                                                                            ~  ^
-   fs/bcachefs/util.h:192:54: note: expanded from macro 'prt_printf'
-     192 | #define prt_printf(_out, ...)           bch2_prt_printf(_out, __VA_ARGS__)
-         |                                                               ^~~~~~~~~~~
-   5 warnings and 7 errors generated.
+   In file included from sound/soc/codecs/cs530x-i2c.c:11:
+   In file included from include/linux/regmap.h:20:
+   In file included from include/linux/iopoll.h:14:
+   In file included from include/linux/io.h:14:
+   In file included from arch/s390/include/asm/io.h:93:
+   include/asm-generic/io.h:548:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     548 |         val = __raw_readb(PCI_IOBASE + addr);
+         |                           ~~~~~~~~~~ ^
+   include/asm-generic/io.h:561:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     561 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
+      37 | #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
+         |                                                           ^
+   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
+     102 | #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
+         |                                                      ^
+   In file included from sound/soc/codecs/cs530x-i2c.c:11:
+   In file included from include/linux/regmap.h:20:
+   In file included from include/linux/iopoll.h:14:
+   In file included from include/linux/io.h:14:
+   In file included from arch/s390/include/asm/io.h:93:
+   include/asm-generic/io.h:574:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     574 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
+      35 | #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
+         |                                                           ^
+   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
+     115 | #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
+         |                                                      ^
+   In file included from sound/soc/codecs/cs530x-i2c.c:11:
+   In file included from include/linux/regmap.h:20:
+   In file included from include/linux/iopoll.h:14:
+   In file included from include/linux/io.h:14:
+   In file included from arch/s390/include/asm/io.h:93:
+   include/asm-generic/io.h:585:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     585 |         __raw_writeb(value, PCI_IOBASE + addr);
+         |                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:595:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     595 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:605:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     605 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:693:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     693 |         readsb(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:701:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     701 |         readsw(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:709:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     709 |         readsl(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:718:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     718 |         writesb(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+   include/asm-generic/io.h:727:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     727 |         writesw(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+   include/asm-generic/io.h:736:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     736 |         writesl(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+>> sound/soc/codecs/cs530x-i2c.c:64:21: warning: cast to smaller integer type 'enum cs530x_type' from 'const void *' [-Wvoid-pointer-to-enum-cast]
+      64 |                 cs530x->devtype = (enum cs530x_type)match->data;
+         |                                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   18 warnings generated.
 
 
-vim +/bch2_fs_usage_read_one +1709 fs/bcachefs/alloc_foreground.c
+vim +64 sound/soc/codecs/cs530x-i2c.c
 
-e98786ea855cb2 Kent Overstreet 2024-05-03  1696  
-e98786ea855cb2 Kent Overstreet 2024-05-03  1697  void bch2_fs_alloc_debug_to_text(struct printbuf *out, struct bch_fs *c)
-e98786ea855cb2 Kent Overstreet 2024-05-03  1698  {
-e98786ea855cb2 Kent Overstreet 2024-05-03  1699  	unsigned nr[BCH_DATA_NR];
-e98786ea855cb2 Kent Overstreet 2024-05-03  1700  
-e98786ea855cb2 Kent Overstreet 2024-05-03  1701  	memset(nr, 0, sizeof(nr));
-e98786ea855cb2 Kent Overstreet 2024-05-03  1702  
-e98786ea855cb2 Kent Overstreet 2024-05-03  1703  	for (unsigned i = 0; i < ARRAY_SIZE(c->open_buckets); i++)
-e98786ea855cb2 Kent Overstreet 2024-05-03  1704  		nr[c->open_buckets[i].data_type]++;
-e98786ea855cb2 Kent Overstreet 2024-05-03  1705  
-e98786ea855cb2 Kent Overstreet 2024-05-03  1706  	printbuf_tabstop_push(out, 24);
-e98786ea855cb2 Kent Overstreet 2024-05-03  1707  
-e98786ea855cb2 Kent Overstreet 2024-05-03  1708  	percpu_down_read(&c->mark_lock);
-e98786ea855cb2 Kent Overstreet 2024-05-03 @1709  	prt_printf(out, "hidden\t%llu\n",			bch2_fs_usage_read_one(c, &c->usage_base->b.hidden));
-e98786ea855cb2 Kent Overstreet 2024-05-03  1710  	prt_printf(out, "btree\t%llu\n",			bch2_fs_usage_read_one(c, &c->usage_base->b.btree));
-e98786ea855cb2 Kent Overstreet 2024-05-03  1711  	prt_printf(out, "data\t%llu\n",				bch2_fs_usage_read_one(c, &c->usage_base->b.data));
-e98786ea855cb2 Kent Overstreet 2024-05-03  1712  	prt_printf(out, "cached\t%llu\n",			bch2_fs_usage_read_one(c, &c->usage_base->b.cached));
-e98786ea855cb2 Kent Overstreet 2024-05-03  1713  	prt_printf(out, "reserved\t%llu\n",			bch2_fs_usage_read_one(c, &c->usage_base->b.reserved));
-e98786ea855cb2 Kent Overstreet 2024-05-03  1714  	prt_printf(out, "online_reserved\t%llu\n",		percpu_u64_get(c->online_reserved));
-e98786ea855cb2 Kent Overstreet 2024-05-03  1715  	prt_printf(out, "nr_inodes\t%llu\n",			bch2_fs_usage_read_one(c, &c->usage_base->b.nr_inodes));
-e98786ea855cb2 Kent Overstreet 2024-05-03  1716  	percpu_up_read(&c->mark_lock);
-e98786ea855cb2 Kent Overstreet 2024-05-03  1717  
-e98786ea855cb2 Kent Overstreet 2024-05-03  1718  	prt_newline(out);
-e98786ea855cb2 Kent Overstreet 2024-05-03  1719  	prt_printf(out, "freelist_wait\t%s\n",			c->freelist_wait.list.first ? "waiting" : "empty");
-e98786ea855cb2 Kent Overstreet 2024-05-03  1720  	prt_printf(out, "open buckets allocated\t%i\n",		OPEN_BUCKETS_COUNT - c->open_buckets_nr_free);
-e98786ea855cb2 Kent Overstreet 2024-05-03  1721  	prt_printf(out, "open buckets total\t%u\n",		OPEN_BUCKETS_COUNT);
-e98786ea855cb2 Kent Overstreet 2024-05-03  1722  	prt_printf(out, "open_buckets_wait\t%s\n",		c->open_buckets_wait.list.first ? "waiting" : "empty");
-e98786ea855cb2 Kent Overstreet 2024-05-03  1723  	prt_printf(out, "open_buckets_btree\t%u\n",		nr[BCH_DATA_btree]);
-e98786ea855cb2 Kent Overstreet 2024-05-03  1724  	prt_printf(out, "open_buckets_user\t%u\n",		nr[BCH_DATA_user]);
-e98786ea855cb2 Kent Overstreet 2024-05-03  1725  	prt_printf(out, "btree reserve cache\t%u\n",		c->btree_reserve_cache_nr);
-e98786ea855cb2 Kent Overstreet 2024-05-03  1726  }
-e98786ea855cb2 Kent Overstreet 2024-05-03  1727  
-
-:::::: The code at line 1709 was first introduced by commit
-:::::: e98786ea855cb28176e27ffce23fb163a36ed32e bcachefs: bch2_print_allocator_stuck()
-
-:::::: TO: Kent Overstreet <kent.overstreet@linux.dev>
-:::::: CC: Kent Overstreet <kent.overstreet@linux.dev>
+    37	
+    38	static int cs530x_i2c_probe(struct i2c_client *client)
+    39	{
+    40		struct cs530x_priv *cs530x;
+    41		int ret;
+    42	
+    43		cs530x = devm_kzalloc(&client->dev, sizeof(struct cs530x_priv),
+    44				       GFP_KERNEL);
+    45		if (!cs530x)
+    46			return -ENOMEM;
+    47	
+    48		i2c_set_clientdata(client, cs530x);
+    49	
+    50		cs530x->regmap = devm_regmap_init_i2c(client, &cs530x_regmap);
+    51		if (IS_ERR(cs530x->regmap)) {
+    52			ret = PTR_ERR(cs530x->regmap);
+    53			dev_err(&client->dev, "Failed to allocate register map: %d\n",
+    54				ret);
+    55			return ret;
+    56		}
+    57	
+    58		if (client->dev.of_node) {
+    59			const struct of_device_id *match;
+    60	
+    61			match = of_match_node(cs530x_of_match, client->dev.of_node);
+    62			if (match == NULL)
+    63				return -EINVAL;
+  > 64			cs530x->devtype = (enum cs530x_type)match->data;
+    65		} else {
+    66			const struct i2c_device_id *id =
+    67				i2c_match_id(cs530x_i2c_id, client);
+    68	
+    69			cs530x->devtype = id->driver_data;
+    70		}
+    71	
+    72		cs530x->dev = &client->dev;
+    73	
+    74		return cs530x_probe(cs530x);
+    75	}
+    76	
 
 -- 
 0-DAY CI Kernel Test Service
