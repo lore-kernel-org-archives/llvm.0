@@ -1,66 +1,69 @@
-Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3375F770E1;
-	Mon, 10 Jun 2024 10:07:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E2CE824BD;
+	Mon, 10 Jun 2024 13:22:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718014027; cv=none; b=A04wCXJyiJnxrMIAl38+Op4yh7DF62CvZV3gQ1iCC3BJT1cCsw6ykIQKCUON5hy3WJDyHDiiyCJw6j7RScnYZLUfwMuN9MPOJTY5VrWS0z4OS+ClANB/awV+Ox6zIbuXMtnVOZQ2UlaDtXNc07l8g3zyl72YxInbMR1eqvx/9GE=
+	t=1718025775; cv=none; b=WnEKbNgWMoM9uyj/c3m+mDRX47C0dn/o1lzBbJGs+6DOI5h4AeiH5mqvO/L0cqaWyIvRIPuSjJFZX8LzEky0yd1knpmhYJphdrXbMnvUU8YBGsDTobCt0gJ6bEYYwg7Ah+AGu5jgGwJxYmFpGX06VTEakaxdo0YD9/OrM4//nt0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718014027; c=relaxed/simple;
-	bh=9r2h/gDx9bml6PDQTuEJkHHD0nrZQKtzsCZEmunU1GU=;
+	s=arc-20240116; t=1718025775; c=relaxed/simple;
+	bh=NepeI8ob9FXfvNHO4LXDjbHQpKCdIwqnMC08bVFhulo=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=doyo8dJChCfeHaGIlQw3GdttGIUBE+LhEhEt8AwQnOtZxZvbHjteZQfYqJOeSQNfqqo481m1kF7HFhu9YPy3nPwJxEzG0bcW0wjdDyHQNtliAomdjkWXJH4obCz3iJqoI+QOGjPoac2fb7qyF+ZibxiHZonNHxIqVxO7wcuMe10=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=aAdP8E17; arc=none smtp.client-ip=90.155.50.34
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
+	 Content-Type:Content-Disposition:In-Reply-To; b=VPG9/SWMU/xeBRg2XpyT/l8yFgayPWPH/lyVtuqkPtQVCeZSgEJv/080Ek4BLFhi2CTP/RAd39cvAkqq+B9SrVjHDwt6scJBKIdtvDjQ2/TyhQbIr+IpTpbYI1O9btI06CjA2wZ6Vq6/Oh2kKzN3nRzQeS6ivKCQuOFEHKWswWQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=RghWsiHj; arc=none smtp.client-ip=198.175.65.19
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="aAdP8E17"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=auYCcPsADBP4sRimitJGpg2Zp3/5ESPayXwf7a7EFHk=; b=aAdP8E17Yc/QBnc4hBDUh91z64
-	8zXlWfn5Tz9PpHMBvCFEVFKNaCA3uNh8bHlptQz5QSo1HrJJMGVgJj5n7Bo2g8TNz/yFw7Q6u9/rK
-	9L/QDYKODcfudXII48jA1Uux8MufMCwQnUGtdRB297/NwhudPPTjfx/9nvoW+G0XKGaLF3RKc3uWe
-	6n4UAKWEZXZBENvuHSorHJsKr/fcZhO/ZQcV14FKCnQerK7gIgt2Es+Bl2Wsz2eK6V4GUreEJQvc9
-	LXXTP0UsGQv7sOiUZ80SgFBL+0V0d+vQL9uWBgTGe4YfldKxtQj9XJLWF2C3Rbk2UaUatEj5dzYFu
-	VEUyEiLw==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-	by casper.infradead.org with esmtpsa (Exim 4.97.1 #2 (Red Hat Linux))
-	id 1sGbvK-00000008spW-12YQ;
-	Mon, 10 Jun 2024 10:06:46 +0000
-Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
-	id 8153D300439; Mon, 10 Jun 2024 12:06:45 +0200 (CEST)
-Date: Mon, 10 Jun 2024 12:06:45 +0200
-From: Peter Zijlstra <peterz@infradead.org>
-To: Erick Archer <erick.archer@outlook.com>
-Cc: Andrew Morton <akpm@linux-foundation.org>,
-	Ingo Molnar <mingo@redhat.com>,
-	Arnaldo Carvalho de Melo <acme@kernel.org>,
-	Namhyung Kim <namhyung@kernel.org>,
-	Mark Rutland <mark.rutland@arm.com>,
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-	Jiri Olsa <jolsa@kernel.org>, Ian Rogers <irogers@google.com>,
-	Adrian Hunter <adrian.hunter@intel.com>,
-	"Liang, Kan" <kan.liang@linux.intel.com>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	"H. Peter Anvin" <hpa@zytor.com>, Kees Cook <keescook@chromium.org>,
-	"Gustavo A. R. Silva" <gustavoars@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-	Matthew Wilcox <mawilcox@microsoft.com>, x86@kernel.org,
-	linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-hardening@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH v4 0/3] Hardening perf subsystem
-Message-ID: <20240610100645.GS40213@noisy.programming.kicks-ass.net>
-References: <AS8PR02MB7237F5BFDAA793E15692B3998BFD2@AS8PR02MB7237.eurprd02.prod.outlook.com>
- <AS8PR02MB72373C2D08910FBE5FA27BE48BC42@AS8PR02MB7237.eurprd02.prod.outlook.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="RghWsiHj"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1718025773; x=1749561773;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=NepeI8ob9FXfvNHO4LXDjbHQpKCdIwqnMC08bVFhulo=;
+  b=RghWsiHjbKdtUb/UEO9Q7lAJrwav/YbHeFakvLaKBYf6ja3v0mr/gqoQ
+   iiALqBY7fD12/HtVOAOq73HFAQcfBSH16vQxst62T6RyOp7o223Pp7L0/
+   tfcRlhrlX/1Dp1HkroNaziUJA4aUniDs29oXiaEij5V5kfbijAiNvUlBi
+   IM+M2dtQRBf/rWS7iCoCpCvteI9JW9KXsZcPI9lm6yS1hjNN1J/VwG+Lo
+   6Igpz8WFsRDf/XsEYB8h1WPtjUCih+HnEbNtyUXa6m7POzYKOESAhHhmI
+   GzHWKtxHfdeHXXo24uumBMlW2aBO8g5K7ORMRXqFl/KGl4YNNTWcUtBjZ
+   Q==;
+X-CSE-ConnectionGUID: 20GKQHmkRt6WndkWpgSbrQ==
+X-CSE-MsgGUID: mZHSLLXgRvuI5Tv3OKzoqg==
+X-IronPort-AV: E=McAfee;i="6600,9927,11099"; a="14514973"
+X-IronPort-AV: E=Sophos;i="6.08,227,1712646000"; 
+   d="scan'208";a="14514973"
+Received: from fmviesa008.fm.intel.com ([10.60.135.148])
+  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jun 2024 06:17:44 -0700
+X-CSE-ConnectionGUID: vVswg6JuRhizRL9I0CY4iA==
+X-CSE-MsgGUID: aMrqn/CUTJmFElQblBKmqQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.08,227,1712646000"; 
+   d="scan'208";a="39056580"
+Received: from lkp-server01.sh.intel.com (HELO 8967fbab76b3) ([10.239.97.150])
+  by fmviesa008.fm.intel.com with ESMTP; 10 Jun 2024 06:17:39 -0700
+Received: from kbuild by 8967fbab76b3 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1sGeu1-0002A7-0g;
+	Mon, 10 Jun 2024 13:17:37 +0000
+Date: Mon, 10 Jun 2024 21:17:16 +0800
+From: kernel test robot <lkp@intel.com>
+To: Adam Skladowski <a39.skl@gmail.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	phone-devel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht,
+	Adam Skladowski <a39.skl@gmail.com>, Andy Gross <agross@kernel.org>,
+	Bjorn Andersson <andersson@kernel.org>,
+	Konrad Dybcio <konrad.dybcio@linaro.org>,
+	Georgi Djakov <djakov@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>, linux-arm-msm@vger.kernel.org,
+	linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 6/7] interconnect: qcom: qcs404: Add regmaps and more bus
+ descriptions
+Message-ID: <202406102141.1kH3LXFy-lkp@intel.com>
+References: <20240609182112.13032-7-a39.skl@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -69,77 +72,66 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <AS8PR02MB72373C2D08910FBE5FA27BE48BC42@AS8PR02MB7237.eurprd02.prod.outlook.com>
+In-Reply-To: <20240609182112.13032-7-a39.skl@gmail.com>
 
-On Sat, Jun 08, 2024 at 10:50:44AM +0200, Erick Archer wrote:
-> Hi Andrew,
-> 
-> On Sat, Jun 01, 2024 at 06:56:15PM +0200, Erick Archer wrote:
-> > Hi everyone,
-> > 
-> > This is an effort to get rid of all multiplications from allocation
-> > functions in order to prevent integer overflows [1][2].
-> > 
-> > In the first patch, the "struct amd_uncore_ctx" can be refactored to
-> > use a flex array for the "events" member. This way, the allocation/
-> > freeing of the memory can be simplified. Then, the struct_size()
-> > helper can be used to do the arithmetic calculation for the memory
-> > to be allocated.
-> > 
-> > In the second patch, as the "struct intel_uncore_box" ends in a
-> > flexible array, the preferred way in the kernel is to use the
-> > struct_size() helper to do the arithmetic instead of the calculation
-> > "size + count * size" in the kzalloc_node() function.
-> > 
-> > In the third patch, as the "struct perf_buffer" also ends in a
-> > flexible array, the preferred way in the kernel is to use the
-> > struct_size() helper to do the arithmetic instead of the calculation
-> > "size + count * size" in the kzalloc_node() functions. At the same
-> > time, prepare for the coming implementation by GCC and Clang of the
-> > __counted_by attribute.
-> > 
-> > This time, I have decided to send these three patches in the same serie
-> > since all of them has been rejected by the maintainers. I have used
-> > the v4 tag since it is the latest iteration in one of the patches.
-> > 
-> > The reason these patches were rejected is that Peter Zijlstra detest
-> > the struct_size() helper [3][4]. However, Kees Cook and I consider that
-> > the use of this helper improves readability. But we can all say that it
-> > is a matter of preference.
-> > 
-> > Anyway, leaving aside personal preferences, these patches has the
-> > following pros:
-> > 
-> > - Code robustness improvement (__counted_by coverage).
-> > - Code robustness improvement (use of struct_size() to do calculations
-> >   on memory allocator functions).
-> > - Fewer lines of code.
-> > - Follow the recommendations made in "Deprecated Interfaces, Language
-> >   Features, Attributes, and Conventions" [5] as the preferred method
-> >   of doing things in the kernel.
-> > - Widely used in the kernel.
-> > - Widely accepted in the kernel.
-> > 
-> > There are also patches in this subsystem that use the struct_size()
-> > helper:
-> > 
-> > 6566f907bf31 ("Convert intel uncore to struct_size") by Matthew Wilcox
-> > dfbc411e0a5e ("perf/x86/rapl: Prefer struct_size() over open coded arithmetic") by me
-> > 
-> > Therefore, I would like these patches to be applied this time.
-> 
-> This is my last attemp to get these patches applied. I have decided to
-> send this mail to try to unjam this situation. I have folowed all the
-> reviewers comments and have no response from the maintainers other than
-> "I detest the struct_size() helper".
-> 
-> Therefore, I would like to know your opinion and that of other people
-> about these patches. If the final consensus is that the code has no real
-> benefit, I will stop insisting on it ;)
+Hi Adam,
 
-Seriously, I've got plenty patches to look at that actually do
-something. This falls well within the 'random changes for changes sake'
-and goes waaaaay down the priority list.
+kernel test robot noticed the following build errors:
 
-If you're addressing an actual issue, state so. Otherwise, go play
-somewhere else.
+[auto build test ERROR on robh/for-next]
+[also build test ERROR on linus/master v6.10-rc3 next-20240607]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Adam-Skladowski/dt-bindings-interconnect-Add-Qualcomm-MSM8976-DT-bindings/20240610-022416
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
+patch link:    https://lore.kernel.org/r/20240609182112.13032-7-a39.skl%40gmail.com
+patch subject: [PATCH 6/7] interconnect: qcom: qcs404: Add regmaps and more bus descriptions
+config: arm64-allmodconfig (https://download.01.org/0day-ci/archive/20240610/202406102141.1kH3LXFy-lkp@intel.com/config)
+compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project 4403cdbaf01379de96f8d0d6ea4f51a085e37766)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240610/202406102141.1kH3LXFy-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202406102141.1kH3LXFy-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> drivers/interconnect/qcom/qcs404.c:1070:35: error: variable has incomplete type 'const struct regmap_config'
+    1070 | static const struct regmap_config qcs404_bimc_regmap_config = {
+         |                                   ^
+   drivers/interconnect/qcom/icc-rpm.h:136:15: note: forward declaration of 'struct regmap_config'
+     136 |         const struct regmap_config *regmap_cfg;
+         |                      ^
+   drivers/interconnect/qcom/qcs404.c:1137:35: error: variable has incomplete type 'const struct regmap_config'
+    1137 | static const struct regmap_config qcs404_pcnoc_regmap_config = {
+         |                                   ^
+   drivers/interconnect/qcom/icc-rpm.h:136:15: note: forward declaration of 'struct regmap_config'
+     136 |         const struct regmap_config *regmap_cfg;
+         |                      ^
+   drivers/interconnect/qcom/qcs404.c:1178:35: error: variable has incomplete type 'const struct regmap_config'
+    1178 | static const struct regmap_config qcs404_snoc_regmap_config = {
+         |                                   ^
+   drivers/interconnect/qcom/icc-rpm.h:136:15: note: forward declaration of 'struct regmap_config'
+     136 |         const struct regmap_config *regmap_cfg;
+         |                      ^
+   3 errors generated.
+
+
+vim +1070 drivers/interconnect/qcom/qcs404.c
+
+  1069	
+> 1070	static const struct regmap_config qcs404_bimc_regmap_config = {
+  1071		.reg_bits = 32,
+  1072		.reg_stride = 4,
+  1073		.val_bits = 32,
+  1074		.max_register = 0x80000,
+  1075		.fast_io = true,
+  1076	};
+  1077	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
