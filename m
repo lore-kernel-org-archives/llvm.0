@@ -1,147 +1,190 @@
-Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f42.google.com (mail-pj1-f42.google.com [209.85.216.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E5BE214F9CA;
-	Mon, 10 Jun 2024 20:06:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.92.199
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4657252F7A
+	for <llvm@lists.linux.dev>; Mon, 10 Jun 2024 21:06:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718049969; cv=none; b=rmXfymatjVuwwqTb/kYJW78uYdoP424QOZ0NOsNNjt+VHVgkC+X97YIsYbu7aR2okrP4IbPJJssDVVz6byVY60NWyejRivH9XGfH9/0+OeM5vYoMYlblYgdSq1uwyS9WxlY8p6zsY7KtGgGTSlg43+RQN/38YQ659zAnFKwwjjk=
+	t=1718053621; cv=none; b=RuZpqT4XCEwn6uQxfyuwMM0LZgSBbg3H1Hrtr2xYirR4l9ZZKaYUehX6clg01KiVOcZ7WWdd2QquqE56CC2eZwoiry2j6MdL/KmKXTQdfBKnbLJ1doPGz0c5A5UFskjLG7oNTXWdiPMMj4C/CKUGMa7GX/aKLFBPQEhvpCelYiA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718049969; c=relaxed/simple;
-	bh=zbr0m3jaUR9OElayeL3+Puu8aP5BQ6bEGe0ASP77bQE=;
+	s=arc-20240116; t=1718053621; c=relaxed/simple;
+	bh=8kNEcLqnjSBSzmYInfsSoqzXQrLkZOIpu19v13Wpwyw=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=tqknMBg5lMy5z9G7c5WIMkgSLzoFrreqdoRoDCjfghHDECqq76VuWf9oFQiA8t+VeJwNSHELOj57VyDOXHJGPvQ+sw2ntTWkQaykXiHjJfqgG2IvSBBcdO7AleaVcCCKTAqvTb3lOc19wSy9O/SG1ileBxKoSTGkhDEAkVadaho=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=iOmHeJ0J; arc=none smtp.client-ip=90.155.92.199
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
+	 Content-Type:Content-Disposition:In-Reply-To; b=klInP4nRVmlQXjBjc9JTQQQmrvq+ymPgp7LP0GV7+7+2aRRl+NYAa2nMMZPvX63e38NyDQ3xbXGAQY4CHp+bDNa1vx+UKWKpfLXb+Wb5B3EvsTRW8F4OGeqOHO+gJn31H3blh9n5NAOeFfhwaJUW4Ce0vPpxp6SF1uRW6q/a9xw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=GR6AMxr8; arc=none smtp.client-ip=209.85.216.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="iOmHeJ0J"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=fYZ++efrlLdLgl5+5kduErcCwGNkwJxHYJIyw8lDqdM=; b=iOmHeJ0Jsu8Eo6JoXABlbGd0I0
-	bJe+wGiDRyomn+cVqKpgC3q8gDZQQub9Loev8/dZ/XdSZ+MBoea7mS17HbhdVpAlBZE84aGr2xXHw
-	zUvtSHQrQOuBekbu1pUQ743nu1a/ALB8evE0HROV8wKgT2CQleyGaXzXwH6znHymn/CI6yriPHJXW
-	NAuK3OSAKk9PV2kgr1QR6xuuN3pg71/ZDghzKeRvrOb3msh7K+Dm2jYth7NwdfaksTpGj6nq7hbvA
-	4z0ebh713bwfrGtq1LrUWVF3tox2dTC2r25lq4knpgIehmS4xdVoo6fWbRKH5ffXgHhmdURj3I85d
-	0fyzIu6A==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-	by desiato.infradead.org with esmtpsa (Exim 4.97.1 #2 (Red Hat Linux))
-	id 1sGlGw-00000001dwA-2wkK;
-	Mon, 10 Jun 2024 20:05:52 +0000
-Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
-	id F156A300439; Mon, 10 Jun 2024 22:05:44 +0200 (CEST)
-Date: Mon, 10 Jun 2024 22:05:44 +0200
-From: Peter Zijlstra <peterz@infradead.org>
-To: Kees Cook <kees@kernel.org>
-Cc: Erick Archer <erick.archer@outlook.com>, Ingo Molnar <mingo@redhat.com>,
-	Arnaldo Carvalho de Melo <acme@kernel.org>,
-	Namhyung Kim <namhyung@kernel.org>,
-	Mark Rutland <mark.rutland@arm.com>,
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-	Jiri Olsa <jolsa@kernel.org>, Ian Rogers <irogers@google.com>,
-	Adrian Hunter <adrian.hunter@intel.com>,
-	"Liang, Kan" <kan.liang@linux.intel.com>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	"H. Peter Anvin" <hpa@zytor.com>,
-	"Gustavo A. R. Silva" <gustavoars@kernel.org>,
+	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="GR6AMxr8"
+Received: by mail-pj1-f42.google.com with SMTP id 98e67ed59e1d1-2c2fe7f07c4so1507625a91.2
+        for <llvm@lists.linux.dev>; Mon, 10 Jun 2024 14:06:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1718053617; x=1718658417; darn=lists.linux.dev;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=8kNEcLqnjSBSzmYInfsSoqzXQrLkZOIpu19v13Wpwyw=;
+        b=GR6AMxr8wjtuQQdAqd/Cc2sR3d3nqj075j6sQyerLeSO7wyNxG+Wm0dbWRRYdoeWpJ
+         5EvSvwrY6nbCRyErZq5aGzt2r6j93VLpkhPpY5rpjADcZqs6sHWNbIgfWWw6AzA9rJUE
+         8PBqweaFWDEv7tQmsVuFv3tlntIkFlBTwCdO4n26Jmcxab1tSvWDCtJmKb8e6o0erckX
+         WYJnLGeSI4CkXtFJhAzekd6uo4lfUPKvyCD3MJdt7tZXkoH7PCI4gepBxsdz4FuKz/vj
+         4VlJeXKiHpEpCKB99j3cJ86hvFkW+20uPnY1nMbuLxo3fO0b6Nv8hK+f1VG47j9zqOhw
+         s6KA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1718053617; x=1718658417;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=8kNEcLqnjSBSzmYInfsSoqzXQrLkZOIpu19v13Wpwyw=;
+        b=J+415mW95VPt8X4yVhfwMACHcNN2IigCzzOpScqXRgtQaZqf4FPkanFjNFpmYXvuT6
+         kOWWFXpUVBX55thx3pu7yk0FAyC1a8i2nyjN01CT8ho/fHz5HF1AFgcb63fEVhDu5MZf
+         rLrNylPMFlXg0tsws4JQdWgHToUH1wVtHe0kK8QlxgwsMdR1OS0nQLonMNdgj+LdGObM
+         otICJzJ52N2u2YKZTX84ng3R28NyChXadCmAMTa0OmwJ0K389Pwm5m35augk9c6r5z3G
+         TKYvJ8L5dYDnR+jHYT04rz+54sFtlYKhsDNAdXTXcSWACm2O8MyIWbdPzcK6OnJWPX8r
+         DCmA==
+X-Forwarded-Encrypted: i=1; AJvYcCW+EPFakkKz/yugeP/N+X83QSqYArn1h8IDgJSx5ylQlmCsdtQVHyM4xaHR2cTeU+13kPfuPwfMvrSGk0BXpol0oW/BuA==
+X-Gm-Message-State: AOJu0YzKOTGZhvjo5YGB5MhBaK3weboAbgdvDiWmZaHU9TOtMbon3Lpn
+	fZjYYsimet5sVUABFcTqJMIrtdbloY75VZRDZLD7zyHJDGdEPuBZ5vLCbZhJAKU=
+X-Google-Smtp-Source: AGHT+IG9/ui2Pdbq/gGpEHhO3Ddv6VFSpBlRz6d5Y0Sa0RbJWoDbM2M3qtgVqvq/pgFE/wY0HE4mJA==
+X-Received: by 2002:a17:90a:d397:b0:2bd:ef6b:c33b with SMTP id 98e67ed59e1d1-2c2bc7b4c69mr11530609a91.0.1718053617512;
+        Mon, 10 Jun 2024 14:06:57 -0700 (PDT)
+Received: from debug.ba.rivosinc.com ([64.71.180.162])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2c2d7814f45sm5746125a91.5.2024.06.10.14.06.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 10 Jun 2024 14:06:57 -0700 (PDT)
+Date: Mon, 10 Jun 2024 14:06:50 -0700
+From: Deepak Gupta <debug@rivosinc.com>
+To: =?iso-8859-1?Q?Cl=E9ment_L=E9ger?= <cleger@rivosinc.com>
+Cc: Conor Dooley <conor.dooley@microchip.com>,
+	Conor Dooley <conor@kernel.org>, Alexandre Ghiti <alex@ghiti.fr>,
+	Jesse Taube <jesse@rivosinc.com>, linux-riscv@lists.infradead.org,
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+	Alexandre Ghiti <alexghiti@rivosinc.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>,
+	=?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn@rivosinc.com>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
 	Nathan Chancellor <nathan@kernel.org>,
 	Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-	Matthew Wilcox <mawilcox@microsoft.com>, x86@kernel.org,
-	linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-hardening@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH v4 0/3] Hardening perf subsystem
-Message-ID: <20240610200544.GY8774@noisy.programming.kicks-ass.net>
-References: <AS8PR02MB7237F5BFDAA793E15692B3998BFD2@AS8PR02MB7237.eurprd02.prod.outlook.com>
- <202406101010.E1C77AE9D@keescook>
+	Masahiro Yamada <masahiroy@kernel.org>,
+	Atish Patra <atishp@rivosinc.com>
+Subject: Re: [PATCH v0] RISC-V: Use Zkr to seed KASLR base address
+Message-ID: <Zmdq6kszPBxAvLdD@debug.ba.rivosinc.com>
+References: <20240531162327.2436962-1-jesse@rivosinc.com>
+ <20240531-uselessly-spied-262ecf44e694@spud>
+ <b199fde6-c24e-4c18-9c38-fdc923294551@ghiti.fr>
+ <20240603-stinking-roster-cfad46696ae5@spud>
+ <ZmNWmxak9Rc80Kpb@debug.ba.rivosinc.com>
+ <c288f739-2a1a-4fd7-884b-12e360a33142@rivosinc.com>
+ <20240610-qualm-chalice-72d0cc743658@wendy>
+ <01547275-8c8c-43cf-9da0-64825c234707@rivosinc.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1; format=flowed
 Content-Disposition: inline
-In-Reply-To: <202406101010.E1C77AE9D@keescook>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <01547275-8c8c-43cf-9da0-64825c234707@rivosinc.com>
 
-On Mon, Jun 10, 2024 at 10:28:52AM -0700, Kees Cook wrote:
-> On Sat, Jun 01, 2024 at 06:56:15PM +0200, Erick Archer wrote:
-> > Hi everyone,
-> > 
-> > This is an effort to get rid of all multiplications from allocation
-> > functions in order to prevent integer overflows [1][2].
-> 
-> I didn't actually see these 3 patches in this thread nor via lore.
+On Mon, Jun 10, 2024 at 11:16:42AM +0200, Clément Léger wrote:
+>
+>
+>On 10/06/2024 11:02, Conor Dooley wrote:
+>> On Mon, Jun 10, 2024 at 10:33:34AM +0200, Clément Léger wrote:
+>>>
+>>>
+>>> On 07/06/2024 20:51, Deepak Gupta wrote:
+>>>> On Mon, Jun 03, 2024 at 01:47:40PM +0100, Conor Dooley wrote:
+>>>>> On Mon, Jun 03, 2024 at 11:14:49AM +0200, Alexandre Ghiti wrote:
+>>>>>> Hi Conor,
+>>>>>>
+>>>>>> On 31/05/2024 19:31, Conor Dooley wrote:
+>>>>>>> On Fri, May 31, 2024 at 12:23:27PM -0400, Jesse Taube wrote:
+>>>>>>>> Dectect the Zkr extension and use it to seed the kernel base
+>>>>>> address.
+>>>>>>>>
+>>>>>>>> Detection of the extension can not be done in the typical
+>>>>>> fashion, as
+>>>>>>>> this is very early in the boot process. Instead, add a trap handler
+>>>>>>>> and run it to see if the extension is present.
+>>>>>>> You can't rely on the lack of a trap meaning that Zkr is present
+>>>>>> unless
+>>>>>>> you know that the platform implements Ssstrict. The CSR with that
+>>>>>> number
+>>>>>>> could do anything if not Ssstrict compliant, so this approach gets a
+>>>>>>> nak from me. Unfortunately, Ssstrict doesn't provide a way to detect
+>>>>>>> it, so you're stuck with getting that information from firmware.
+>>>>>>
+>>>>>>
+>>>>>> FYI, this patch is my idea, so I'm the one to blame here :)
+>>>>>>
+>>>>>>
+>>>>>>>
+>>>>>>> For DT systems, you can actually parse the DT in the pi, we do it
+>>>>>> to get
+>>>>>>> the kaslr seed if present, so you can actually check for Zkr. With
+>>>>>> ACPI
+>>>>>>> I have no idea how you can get that information, I amn't an ACPI-ist.
+>>>>>>
+>>>>>>
+>>>>>> I took a look at how to access ACPI tables this early when
+>>>>>> implementing the
+>>>>>> Zabha/Zacas patches, but it seems not possible.
+>>>>>>
+>>>>>> But I'll look into this more, this is not the first time we need the
+>>>>>> extensions list very early and since we have no way to detect the
+>>>>>> presence
+>>>>>> of an extension at runtime, something needs to be done.
+>>>>>
+>>>>> Aye, having remembered that reading CSR_SEED could have side-effects on a
+>>>>> system with non-conforming extensions, it'd be good to see if we can
+>>>>> actually do this via detection on ACPI - especially for some other
+>>>>> extensions that we may need to turn on very early (I forget which ones we
+>>>>> talked about this before for). I didn't arm64 do anything with ACPI in
+>>>>> the
+>>>>> pi code, is the code arch/x86/boot/compressed run at an equivilent-ish
+>>>>> point
+>>>>> in boot?
+>>>>
+>>>> cc: +Clement and Atish
+>>>>
+>>>> I don't know all the details but on first glance it seems like instead
+>>>> of ACPI,
+>>>> may be FWFT is a better place for discovery ?
+>>>> https://lists.riscv.org/g/tech-prs/topic/patch_v12_add_firmware/106479571
+>>>
+>>> IMHO, doing discovery in FWFT is not the goal of this extension. I think
+>>> the "real" solution would be to wait for the unified discovery task
+>>> group to come up with something for that (which is their goal I think) [1]
 
-He managed to break threading between 0/n and the rest.
+Yeah I understand the conundrum here.
 
-> > In the first patch, the "struct amd_uncore_ctx" can be refactored to
-> > use a flex array for the "events" member. This way, the allocation/
-> > freeing of the memory can be simplified. Then, the struct_size()
-> > helper can be used to do the arithmetic calculation for the memory
-> > to be allocated.
-> 
-> I like this patch because it reduces the allocation from 2 to 1. This
-> isn't what Peter might see as "churn": this is an improvement in resource
-> utilization.
+>>
+>> I'm curious to see how that works out. The proposal documents an m-mode
+>> csr, so we'd have to smuggle the information to s-mode somehow...
+>
+>Ahem, yeah, I spoke a bit too fast. Looked at the proposal and the
+>mconfigptr CSR will be accessible by M-mode only so I guess we will have
+>to find another way...
 
-But then he went and used that struct_size() abomination :/
+That's not the only problem. Even if you get mconfigptr access, parsing the format
+is another thing that has to be done. This is early in boot. Although its strictly (pun
+intended) not a firmware feature extension, I think it's much easier to ask underlying
+firmware if platform is `Sstrict`. or may be expose something like below
 
-> I prefer this style, as it makes things unambiguous ("this will never
-> wrap around") without having to check the associated types and doesn't make
-> the resulting binary code different in the "can never overflow" case.
-> 
-> In this particular case:
-> 
-> int size = sizeof(*box) + numshared * sizeof(struct intel_uncore_extra_reg);
-> 
-> "int numshared" comes from struct intel_uncore_type::num_shared_regs,
-> which is:
-> 
->         unsigned num_shared_regs:8;
-> 
-> And the struct sizes are:
-> 
-> $ pahole -C intel_uncore_box gcc-boot/vmlinux | grep size:
->         /* size: 488, cachelines: 8, members: 19 */
-> $ pahole -C intel_uncore_extra_reg gcc-boot/vmlinux | grep size:
->         /* size: 96, cachelines: 2, members: 5 */
-> 
-> So we have:
-> 
-> s32 size = 488 + u8 * 96
-> 
-> Max size here is 24968 so it can never overflow an s32, so I can see
-> why Peter views this as "churn".
-> 
-> I still think the patch is a coding style improvement, but okay.
+`ENABLE_SSTRICT`.
+Platforms which support `Sstrict` can return success for this while platforms which don't
+have `Sstrict` can return error code (not supported or not implemented).
+This way its not feature discovery.
 
-I really detest this thing because it makes what was trivially readable
-into something opaque. Get me that type qualifier that traps on overflow
-and write plain C. All this __builtin_overflow garbage is just that,
-unreadable nonsense.
+It seems like arm64 parses fdt and it reads certain CSRs too
+(`arch/arm64/kernel/pi/kaslr_early.c`). Although it doesn't look like it has to do any
+discovery for them.
 
-> This provides __counted_by coverage, and I think this is important to
-> gain in ever place we can. Given that this is part of a ring buffer
-> implementation that is arbitrarily sized, this is exactly the kind of
-> place I'd like to see __counted_by used. This is a runtime robustness
-> improvement, so I don't see this a "churn" at all.
-
-Again, mixed in with that other crap. Anyway, remind me wth this
-__counted_by thing actually does?
-
-> Peter, for patches 1 and 3, if you'd prefer not to carry them, I could
-> put them in the hardening tree to keep them out of your way. It seems
-> clear you don't want patch 2 at all.
-
-I prefer to not have struct_size() anywhere at all. Please just write
-readable code.
-
-Again, if you really care about that overflow muck, get a useable C type
-qualifier or something so we can write readable code.
+>
+>>
+>>> Link: https://github.com/riscv/configuration-structure [1]
+>>
