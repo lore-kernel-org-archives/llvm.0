@@ -1,162 +1,163 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F090545009;
-	Mon, 10 Jun 2024 21:46:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3053612F5B6;
+	Mon, 10 Jun 2024 21:56:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718055970; cv=none; b=EqAIOky/9FH0Cow8qsCtcE4UgSLtsF5aA3wik7HdACBIsr68obxEpAtx6mnNVsJeJ8TP6ST+4dl/XG7bsz2TLEuAjh8lpG5MNmB1fSkeuW5MuA8MN8T2Nb4lLGzzCPbzMsn5zntL17Yqs9maBJ7ZDFy1xVwtHaVQhr5FMMolFmk=
+	t=1718056602; cv=none; b=EoQHNGAHr7XKY3TeF9cvb884npOUufYvj+CxvU0ZaPUN101L1ZnFTanxJmnfP0FIpA0yQK5a+8y3KKKyXauaFNAa62KRfV2YmCwoBSBP0+iBFj2lFutedtMC3D1N7cGfFTtbU7PoqDjw+e5CUKHSXGQjyZU+A7yx8tV2p3KIYug=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718055970; c=relaxed/simple;
-	bh=ThcS+7P7h43Cs6kE0W/MurQBHRtUWuN38hGsgvTeJrQ=;
+	s=arc-20240116; t=1718056602; c=relaxed/simple;
+	bh=KoFsY2QSqRbBiXfDzmXBOyy6f22jp0uRonBy4MZFEPs=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ilva4TiwfZjec6GvlkvB/S9hyeDW6KGL+A1PLq5UoyMZ6bgJcQfqQqH6cMPJRd5vqS9u6D8dSulPNYeH44I343NjvwjUiLDeQPRYu+moPoOWCjX1EC5RZ8RY1LMnJPs0j4j6NgQxjvGyznf4qVRSa/sxx3EHmunENsw2egPLSNQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UFE1krJM; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=k6Fgb64T5kCb06EKgmZDHWnFYy+0giAjmEsPxhiz6lk2xvf3hBmJ+3bCujffpnd7GRRUv6OpXU7EVtgAJBvatVe2dMe/YQUQ65ioJTaXFdNaO6hho7XIT6tJm3AFKdv6yevfGxDq8auVy1Ra67aF54LBdPG0kJ2dynrczXUsFk8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ILZonLi4; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UFE1krJM"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 76623C2BBFC;
-	Mon, 10 Jun 2024 21:46:09 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ILZonLi4"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 10E41C2BBFC;
+	Mon, 10 Jun 2024 21:56:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1718055969;
-	bh=ThcS+7P7h43Cs6kE0W/MurQBHRtUWuN38hGsgvTeJrQ=;
+	s=k20201202; t=1718056601;
+	bh=KoFsY2QSqRbBiXfDzmXBOyy6f22jp0uRonBy4MZFEPs=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=UFE1krJM0gYQdya4A6dlMkelUJgQvYjswI3DqHAkHfxQLj2YsW/TJ99buQ0eeC7RL
-	 w7r4uYZClJnCXW6EE8IwF719t9HHQbuGy7QMfpXhs8PEBU8K5V4ZZyJ0+Xz2rWFxFs
-	 /rcUFsBmBUp0CIwiwKjETFKbHsZIqN7ceA3nQMB4X9mbP8EqiaTlmiZswrpkwJP5tx
-	 Zbgj37U/tS5h27dxi/uS0c/JVdqLqbRAsrmorev6YRndfY9xlwrynMuENgzgZ/cMX1
-	 iVz53DxfpTwR6iipAjaG0YEYcxEaaVOC4lNmTAzdVccM0lnSZkVP8/Hl94/sWU+iEg
-	 8U7ZuU1rd5HKA==
-Date: Mon, 10 Jun 2024 14:46:09 -0700
-From: Kees Cook <kees@kernel.org>
-To: Peter Zijlstra <peterz@infradead.org>
-Cc: Erick Archer <erick.archer@outlook.com>, Ingo Molnar <mingo@redhat.com>,
-	Arnaldo Carvalho de Melo <acme@kernel.org>,
-	Namhyung Kim <namhyung@kernel.org>,
-	Mark Rutland <mark.rutland@arm.com>,
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-	Jiri Olsa <jolsa@kernel.org>, Ian Rogers <irogers@google.com>,
-	Adrian Hunter <adrian.hunter@intel.com>,
-	"Liang, Kan" <kan.liang@linux.intel.com>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	"H. Peter Anvin" <hpa@zytor.com>,
-	"Gustavo A. R. Silva" <gustavoars@kernel.org>,
+	b=ILZonLi4KYvvONkwpufTrioY+XFWyVKpzIZHgquP+P20woB+3RxuhH9AkzOkzEyPc
+	 uTW/hkuY+AzkUu06YGBpDZbJGiglOn3VeOfqIKQ8FyVIUXyERAOPc3n+9DidVLTO9s
+	 2aqx4PxwMGnnSdBd2RvJhEjPXahAigoBZior1fuhL2L7ppPcnz/iy3gs0cuc6Cfhcb
+	 gB3ngKFf3TCnVsnbUMTtItPYlTjieGCXMSo59GMdJX/KTLv9Wj8ETcQjSc6ITifhWx
+	 ACDwjW8WMqAdfrbVwvAk0RuHbv+/oPVaaCpygkbgkipXus/BtmPumlmZVGQb6k5y9b
+	 pyycPHtwSIiHg==
+Date: Mon, 10 Jun 2024 22:56:35 +0100
+From: Conor Dooley <conor@kernel.org>
+To: Deepak Gupta <debug@rivosinc.com>
+Cc: =?iso-8859-1?Q?Cl=E9ment_L=E9ger?= <cleger@rivosinc.com>,
+	Conor Dooley <conor.dooley@microchip.com>,
+	Alexandre Ghiti <alex@ghiti.fr>, Jesse Taube <jesse@rivosinc.com>,
+	linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev, Alexandre Ghiti <alexghiti@rivosinc.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>,
+	=?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn@rivosinc.com>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
 	Nathan Chancellor <nathan@kernel.org>,
 	Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-	Matthew Wilcox <mawilcox@microsoft.com>, x86@kernel.org,
-	linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-hardening@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH v4 0/3] Hardening perf subsystem
-Message-ID: <202406101438.BC43514F@keescook>
-References: <AS8PR02MB7237F5BFDAA793E15692B3998BFD2@AS8PR02MB7237.eurprd02.prod.outlook.com>
- <202406101010.E1C77AE9D@keescook>
- <20240610200544.GY8774@noisy.programming.kicks-ass.net>
+	Masahiro Yamada <masahiroy@kernel.org>,
+	Atish Patra <atishp@rivosinc.com>
+Subject: Re: [PATCH v0] RISC-V: Use Zkr to seed KASLR base address
+Message-ID: <20240610-earplugs-anybody-ebd04a5fa777@spud>
+References: <20240531162327.2436962-1-jesse@rivosinc.com>
+ <20240531-uselessly-spied-262ecf44e694@spud>
+ <b199fde6-c24e-4c18-9c38-fdc923294551@ghiti.fr>
+ <20240603-stinking-roster-cfad46696ae5@spud>
+ <ZmNWmxak9Rc80Kpb@debug.ba.rivosinc.com>
+ <c288f739-2a1a-4fd7-884b-12e360a33142@rivosinc.com>
+ <20240610-qualm-chalice-72d0cc743658@wendy>
+ <01547275-8c8c-43cf-9da0-64825c234707@rivosinc.com>
+ <Zmdq6kszPBxAvLdD@debug.ba.rivosinc.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha256;
+	protocol="application/pgp-signature"; boundary="mWdS1ikOOxMEfGUM"
 Content-Disposition: inline
-In-Reply-To: <20240610200544.GY8774@noisy.programming.kicks-ass.net>
+In-Reply-To: <Zmdq6kszPBxAvLdD@debug.ba.rivosinc.com>
 
-On Mon, Jun 10, 2024 at 10:05:44PM +0200, Peter Zijlstra wrote:
-> On Mon, Jun 10, 2024 at 10:28:52AM -0700, Kees Cook wrote:
-> > On Sat, Jun 01, 2024 at 06:56:15PM +0200, Erick Archer wrote:
-> > > Hi everyone,
-> > > 
-> > > This is an effort to get rid of all multiplications from allocation
-> > > functions in order to prevent integer overflows [1][2].
-> > 
-> > I didn't actually see these 3 patches in this thread nor via lore.
-> 
-> He managed to break threading between 0/n and the rest.
-> 
-> > > In the first patch, the "struct amd_uncore_ctx" can be refactored to
-> > > use a flex array for the "events" member. This way, the allocation/
-> > > freeing of the memory can be simplified. Then, the struct_size()
-> > > helper can be used to do the arithmetic calculation for the memory
-> > > to be allocated.
-> > 
-> > I like this patch because it reduces the allocation from 2 to 1. This
-> > isn't what Peter might see as "churn": this is an improvement in resource
-> > utilization.
-> 
-> But then he went and used that struct_size() abomination :/
-> 
-> > I prefer this style, as it makes things unambiguous ("this will never
-> > wrap around") without having to check the associated types and doesn't make
-> > the resulting binary code different in the "can never overflow" case.
-> > 
-> > In this particular case:
-> > 
-> > int size = sizeof(*box) + numshared * sizeof(struct intel_uncore_extra_reg);
-> > 
-> > "int numshared" comes from struct intel_uncore_type::num_shared_regs,
-> > which is:
-> > 
-> >         unsigned num_shared_regs:8;
-> > 
-> > And the struct sizes are:
-> > 
-> > $ pahole -C intel_uncore_box gcc-boot/vmlinux | grep size:
-> >         /* size: 488, cachelines: 8, members: 19 */
-> > $ pahole -C intel_uncore_extra_reg gcc-boot/vmlinux | grep size:
-> >         /* size: 96, cachelines: 2, members: 5 */
-> > 
-> > So we have:
-> > 
-> > s32 size = 488 + u8 * 96
-> > 
-> > Max size here is 24968 so it can never overflow an s32, so I can see
-> > why Peter views this as "churn".
-> > 
-> > I still think the patch is a coding style improvement, but okay.
-> 
-> I really detest this thing because it makes what was trivially readable
-> into something opaque. Get me that type qualifier that traps on overflow
-> and write plain C. All this __builtin_overflow garbage is just that,
-> unreadable nonsense.
 
-It's more readable than container_of(), IMO. "give me the struct size
-for variable VAR, which has a flexible array MEMBER, when we have COUNT
-many of them": struct_size(VAR, MEMBER, COUNT). It's more readable, more
-robust, and provides saturation in the face of potential wrap-around.
+--mWdS1ikOOxMEfGUM
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> > This provides __counted_by coverage, and I think this is important to
-> > gain in ever place we can. Given that this is part of a ring buffer
-> > implementation that is arbitrarily sized, this is exactly the kind of
-> > place I'd like to see __counted_by used. This is a runtime robustness
-> > improvement, so I don't see this a "churn" at all.
-> 
-> Again, mixed in with that other crap. Anyway, remind me wth this
-> __counted_by thing actually does?
+On Mon, Jun 10, 2024 at 02:06:50PM -0700, Deepak Gupta wrote:
+> On Mon, Jun 10, 2024 at 11:16:42AM +0200, Cl=E9ment L=E9ger wrote:
+> > On 10/06/2024 11:02, Conor Dooley wrote:
+> > > On Mon, Jun 10, 2024 at 10:33:34AM +0200, Cl=E9ment L=E9ger wrote:
+> > > > On 07/06/2024 20:51, Deepak Gupta wrote:
+> > > > > On Mon, Jun 03, 2024 at 01:47:40PM +0100, Conor Dooley wrote:
+> > > > > > On Mon, Jun 03, 2024 at 11:14:49AM +0200, Alexandre Ghiti wrote:
+> > > > > I don't know all the details but on first glance it seems like in=
+stead
+> > > > > of ACPI,
+> > > > > may be FWFT is a better place for discovery ?
+> > > > > https://lists.riscv.org/g/tech-prs/topic/patch_v12_add_firmware/1=
+06479571
+> > > >=20
+> > > > IMHO, doing discovery in FWFT is not the goal of this extension. I =
+think
+> > > > the "real" solution would be to wait for the unified discovery task
+> > > > group to come up with something for that (which is their goal I thi=
+nk) [1]
+>=20
+> Yeah I understand the conundrum here.
+>=20
+> > >=20
+> > > I'm curious to see how that works out. The proposal documents an m-mo=
+de
+> > > csr, so we'd have to smuggle the information to s-mode somehow...
+> >=20
+> > Ahem, yeah, I spoke a bit too fast. Looked at the proposal and the
+> > mconfigptr CSR will be accessible by M-mode only so I guess we will have
+> > to find another way...
+>=20
+> That's not the only problem. Even if you get mconfigptr access, parsing t=
+he format
+> is another thing that has to be done. This is early in boot. Although its=
+ strictly (pun
+> intended) not a firmware feature extension, I think it's much easier to a=
+sk underlying
+> firmware if platform is `Sstrict`. or may be expose something like below
+>=20
+> `ENABLE_SSTRICT`.
+> Platforms which support `Sstrict` can return success for this while platf=
+orms which don't
+> have `Sstrict` can return error code (not supported or not implemented).
+> This way its not feature discovery.
 
-It provides annotation for the compiler to perform run-time bounds
-checking on dynamically sized arrays. i.e. CONFIG_FORTIFY_SOURCE and
-CONFIG_UBSAN_BOUNDS can actually reason about annotated flexible arrays
-instead of just saying "oh no a flexible array, I give up".
+I mean, it's feature discovery in all but name. You're calling it
+enable, but the behaviour you describe is feature discovery - not that I
+am against this being feature discovery since it gets us out of an
+annoying bind.
 
-> > Peter, for patches 1 and 3, if you'd prefer not to carry them, I could
-> > put them in the hardening tree to keep them out of your way. It seems
-> > clear you don't want patch 2 at all.
-> 
-> I prefer to not have struct_size() anywhere at all. Please just write
-> readable code.
+I forget which extension Alex and I discussed previously, but there's
+some mm-related things that you're gonna have to probe super early and=20
+we need to figure out if we can get that info from ACPI or not. I know
+we discussed it w.r.t. one of the T-Head vendor extensions, but I think
+another standard one got mentioned too.
 
-That ship has sailed, and it has been keeping things at bay for a while
-now. As we make progress on making the compiler able to do this more
-naturally, we can work on replacing struct_size(), but it's in use
-globally and it's useful both for catching runtime mistakes and for
-catching compile-time mistakes (the flexible array has to match the
-variable's struct).
+> It seems like arm64 parses fdt and it reads certain CSRs too
+> (`arch/arm64/kernel/pi/kaslr_early.c`). Although it doesn't look like it =
+has to do any
+> discovery for them.
 
--Kees
+A decree from the Palmer that we don't support things that do not conform
+in this manner would allow us to do what arm64 does. I brought this up
+originally because it's been discussed before that we cannot rely on
+conformance because we want to support people's platforms, whether they
+comply or not. I'd be wary of making this an exception now, and then
+later on someone makes a platform we want to support that doesn't
+conform and hey presto, we regress KASLR support - even if I think it is
+pretty unlikely that someone is going to repurpose the Zkr CSRs.
 
--- 
-Kees Cook
+One of the problems with only supporting conforming platforms is that
+the definition of conforming changes over time! This has happened with
+the Andes PMU for example, which I believe uses an interrupt number that
+was later co-opted by AIA spec. That conformed at the time, but doesn't
+anymore - do they get to mark themselves as Sstrict?
+
+Maybe we can do this on a case-by-case basis, but it's up to Palmer
+whether or not we can do that.
+
+--mWdS1ikOOxMEfGUM
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZmd2kwAKCRB4tDGHoIJi
+0jiYAQCTudtf2cIt7L8o1XdE+wFCII3X2/gtf2RZ78X2JJF0SQD9H3PFBbLUuQ+e
+xhlLbZGztObPUHowGMnO5LqjIaJCbwc=
+=Dq40
+-----END PGP SIGNATURE-----
+
+--mWdS1ikOOxMEfGUM--
