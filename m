@@ -1,137 +1,101 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
+Received: from mx0b-001ae601.pphosted.com (mx0a-001ae601.pphosted.com [67.231.149.25])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A513839E3;
-	Mon, 10 Jun 2024 13:29:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD9BD13C819;
+	Mon, 10 Jun 2024 15:19:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=67.231.149.25
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718026188; cv=none; b=I1udkzrYv7huymmOcRlOGW+CcXG9sIcn3tR/Bx8CJMUuPqtOBYD/6y/44MXkTM8IfQX6LwVGsil6m7+hpROB8t9lYSlXqv6VTFp2Y7AFMGl3PpMS0XpwHYrSbtRk4RYDc/86uZxwzEih1CtGCLiXxd1Txsj8BXpmHn4pMWoaoHc=
+	t=1718032785; cv=none; b=ALHUQ+Mcan6M2Jc9EeCB4aMc3yoyNZ7dsU0+/gpBLwD6r8EF53zG/kVLjfAPOnMs70/F6+lQh30r64AepU6PblqAgnyth7A5stGq1ZzXibwsgUIY5gyIjZr23Gp6zBa7jeLnKVyLU8OTz+9klvs7rVHmZjS2YrPX5PtlXvFA4G0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718026188; c=relaxed/simple;
-	bh=PcgO3/CLX7JMznu36bb05DGuLfKp26palcGfsljMnik=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=rY0ZXgs9AyuiRtwKEQAY8cDXqhMA58AeSFQ6S/tdJBGwDLRgfEm6WWCm1VNJVyR4Eatgkv3CXREFsZFMYYzlesGfSWujEHaw4v8B0x79Cp+oM9ZnDQgksWFjbV5k5qSrge02HmRKovMrmg5gh4ELqK3D1MSpar8mDC+u93p5Cv4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=VyQ5eihP; arc=none smtp.client-ip=192.198.163.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1718032785; c=relaxed/simple;
+	bh=jQ6iraW9wZ/32s77kH/CLkpMkRpj08dMpTRjYPO83Wg=;
+	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=m3WQ2U0ArXB1WXFMgqQIpyOLJp5+B0KPBj5fUcm4th3d2FTbqUn+JHIoLRQaqpmFhgKSttOVOlaJLxR30CgQh3R9u6PkAe0bhVdhdYUntuXF2ptNtNs9mijQ70buVUNqiGHo0nQR266J9+7L8C048g8sYekOFkbM2fnTMhYXKU0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=opensource.cirrus.com; spf=pass smtp.mailfrom=opensource.cirrus.com; dkim=pass (2048-bit key) header.d=cirrus.com header.i=@cirrus.com header.b=IOoTGm1q; arc=none smtp.client-ip=67.231.149.25
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=opensource.cirrus.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=opensource.cirrus.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="VyQ5eihP"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1718026187; x=1749562187;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=PcgO3/CLX7JMznu36bb05DGuLfKp26palcGfsljMnik=;
-  b=VyQ5eihPfO8XtMF3mgZ28yp2QxB+j3ssHgc6kLDCh3z3QXQvywrzi0T5
-   6UcCVGuiDc0V7xHl+d1sxu0YLpM5ZKrtaij4F6siIHBoCApaOkb0OdvDe
-   HIhcHE/Dp7XUHUr3nIzpV0RJYfuXlk+Y0oEys78UxkXFdVVPIUQckCT/P
-   oN8NgmN5k7p1hDFt8ZJdpOqfNdfUpVg69uNbqJB7zHHW4ZlshCJs2pFhJ
-   zHEqgOtTwNIvTcqzs/uV5v7nOme0mB3/aFqF3G4Wk654PeuqP7H1Lrv2I
-   d0EsfGNyA4/dZ4gfxzdy1nydtJeizzQrINsK7kMMrrlLzwuIS9Wefctel
-   Q==;
-X-CSE-ConnectionGUID: hfTP3uusQpSzXUuOZ08yTw==
-X-CSE-MsgGUID: L2ZGS0RTQzGVzM9/nd/Iew==
-X-IronPort-AV: E=McAfee;i="6600,9927,11099"; a="26086716"
-X-IronPort-AV: E=Sophos;i="6.08,227,1712646000"; 
-   d="scan'208";a="26086716"
-Received: from orviesa009.jf.intel.com ([10.64.159.149])
-  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jun 2024 06:29:46 -0700
-X-CSE-ConnectionGUID: jKjsSu80QcKYwy8s0zgt5g==
-X-CSE-MsgGUID: uWAI+xcGS0WT2wud6btUtQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.08,227,1712646000"; 
-   d="scan'208";a="39151398"
-Received: from lkp-server01.sh.intel.com (HELO 8967fbab76b3) ([10.239.97.150])
-  by orviesa009.jf.intel.com with ESMTP; 10 Jun 2024 06:29:39 -0700
-Received: from kbuild by 8967fbab76b3 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1sGf5d-0002AX-1V;
-	Mon, 10 Jun 2024 13:29:37 +0000
-Date: Mon, 10 Jun 2024 21:28:39 +0800
-From: kernel test robot <lkp@intel.com>
-To: Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
-	Matti Vaittinen <mazziesaccount@gmail.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Jonathan Cameron <jic23@kernel.org>,
-	Lars-Peter Clausen <lars@metafoo.de>, linux-iio@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/2] iio: bu27034: Add a read only HWARDWAREGAIN
-Message-ID: <202406102113.7w2Td20S-lkp@intel.com>
-References: <5e88c7b7b0389c6c011f15e05e065791f7561cf5.1718013518.git.mazziesaccount@gmail.com>
+	dkim=pass (2048-bit key) header.d=cirrus.com header.i=@cirrus.com header.b="IOoTGm1q"
+Received: from pps.filterd (m0077473.ppops.net [127.0.0.1])
+	by mx0a-001ae601.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 45AEOOUx020276;
+	Mon, 10 Jun 2024 10:19:35 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=cc
+	:content-type:date:from:in-reply-to:message-id:mime-version
+	:references:subject:to; s=PODMain02222019; bh=VuIFm0hFHHWeDLcAy+
+	luhI4ftuGgKwb0lS6iv6cXHXY=; b=IOoTGm1qU2LdLM0EJTiWo8OvLinnX008V7
+	YIAeDw//ZuwjA5n+CW+uVYPhthyrr5kew+fVKObQuU3v2SJYsV7EttnoA5+1Hw/l
+	U8+yKPhUYEmBXQE6gy0fmnkO86EOHJlYo93syd4MLT7AlLbxKERkK8PGN0GvXEbE
+	5GrNVMHzU765s13fQ4w6tRvXW4yrj1BWB2ANEAvTAPTT47wSTWkITbt6pBiaDxK/
+	03MkoAaqt4Hl8a2CECIrvdDXezd7BexBcGkiGKk2GCU0/9IuXLvQO0T5KpfQ++Yz
+	QmwjTiI6Ms/tIGXjDFaDXYOEjCv3g8m2xc/wAe9rsaOVT4679CDw==
+Received: from ediex01.ad.cirrus.com ([84.19.233.68])
+	by mx0a-001ae601.pphosted.com (PPS) with ESMTPS id 3ymmq09ncf-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 10 Jun 2024 10:19:35 -0500 (CDT)
+Received: from ediex02.ad.cirrus.com (198.61.84.81) by ediex01.ad.cirrus.com
+ (198.61.84.80) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Mon, 10 Jun
+ 2024 16:19:33 +0100
+Received: from ediswmail9.ad.cirrus.com (198.61.86.93) by
+ anon-ediex02.ad.cirrus.com (198.61.84.81) with Microsoft SMTP Server id
+ 15.2.1544.9 via Frontend Transport; Mon, 10 Jun 2024 16:19:33 +0100
+Received: from opensource.cirrus.com (ediswmail9.ad.cirrus.com [198.61.86.93])
+	by ediswmail9.ad.cirrus.com (Postfix) with ESMTPS id E99DF820249;
+	Mon, 10 Jun 2024 15:19:32 +0000 (UTC)
+Date: Mon, 10 Jun 2024 15:19:31 +0000
+From: Charles Keepax <ckeepax@opensource.cirrus.com>
+To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+CC: Chanwoo Choi <cw00.choi@samsung.com>,
+        Krzysztof Kozlowski
+	<krzk@kernel.org>, Lee Jones <lee@kernel.org>,
+        Shawn Guo
+	<shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        "Pengutronix
+ Kernel Team" <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers
+	<ndesaulniers@google.com>,
+        Bill Wendling <morbo@google.com>,
+        Justin Stitt
+	<justinstitt@google.com>, <linux-kernel@vger.kernel.org>,
+        <imx@lists.linux.dev>, <linux-arm-kernel@lists.infradead.org>,
+        <patches@opensource.cirrus.com>, <llvm@lists.linux.dev>
+Subject: Re: [PATCH 3/3] mfd: wm8994: Fix Wvoid-pointer-to-enum-cast warning
+ (again)
+Message-ID: <ZmcZg+c0iOZtjqjr@opensource.cirrus.com>
+References: <20240606143648.152668-1-krzysztof.kozlowski@linaro.org>
+ <20240606143648.152668-3-krzysztof.kozlowski@linaro.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <5e88c7b7b0389c6c011f15e05e065791f7561cf5.1718013518.git.mazziesaccount@gmail.com>
+In-Reply-To: <20240606143648.152668-3-krzysztof.kozlowski@linaro.org>
+X-Proofpoint-GUID: D6D9nm4QIDDFz72zwe_qm_GuO0SYswrl
+X-Proofpoint-ORIG-GUID: D6D9nm4QIDDFz72zwe_qm_GuO0SYswrl
+X-Proofpoint-Spam-Reason: safe
 
-Hi Matti,
+On Thu, Jun 06, 2024 at 04:36:48PM +0200, Krzysztof Kozlowski wrote:
+> 'type' is an enum, thus cast of pointer on 64-bit compile test with
+> clang and W=1 causes:
+> 
+>   wm8994-core.c:625:17: error: cast to smaller integer type 'enum wm8994_type' from 'const void *' [-Werror,-Wvoid-pointer-to-enum-cast]
+> 
+> Year ago this was solved, although LKML discussion suggested warning is
+> not suitable for kernel.  Nothing changed in this regard for a year, so
+> assume the warning will stay and we want to have warnings-free builds.
+> 
+> Link: https://lore.kernel.org/all/20230814160457.GA2836@dev-arch.thelio-3990X/
+> Link: https://lore.kernel.org/all/20230810095849.123321-1-krzysztof.kozlowski@linaro.org/
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> ---
 
-kernel test robot noticed the following build warnings:
+Reviewed-by: Charles Keepax <ckeepax@opensource.cirrus.com>
 
-[auto build test WARNING on 1613e604df0cd359cf2a7fbd9be7a0bcfacfabd0]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Matti-Vaittinen/bu27034-ROHM-BU27034NUC-to-BU27034ANUC/20240610-180426
-base:   1613e604df0cd359cf2a7fbd9be7a0bcfacfabd0
-patch link:    https://lore.kernel.org/r/5e88c7b7b0389c6c011f15e05e065791f7561cf5.1718013518.git.mazziesaccount%40gmail.com
-patch subject: [PATCH 2/2] iio: bu27034: Add a read only HWARDWAREGAIN
-config: i386-buildonly-randconfig-004-20240610 (https://download.01.org/0day-ci/archive/20240610/202406102113.7w2Td20S-lkp@intel.com/config)
-compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240610/202406102113.7w2Td20S-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202406102113.7w2Td20S-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> drivers/iio/light/rohm-bu27034.c:1057:2: warning: unannotated fall-through between switch labels [-Wimplicit-fallthrough]
-    1057 |         default:
-         |         ^
-   drivers/iio/light/rohm-bu27034.c:1057:2: note: insert '__attribute__((fallthrough));' to silence this warning
-    1057 |         default:
-         |         ^
-         |         __attribute__((fallthrough)); 
-   drivers/iio/light/rohm-bu27034.c:1057:2: note: insert 'break;' to avoid fall-through
-    1057 |         default:
-         |         ^
-         |         break; 
-   1 warning generated.
-
-Kconfig warnings: (for reference only)
-   WARNING: unmet direct dependencies detected for REGMAP_SPI
-   Depends on [n]: SPI [=n]
-   Selected by [y]:
-   - AD9739A [=y] && IIO [=y] && (SPI [=n] || COMPILE_TEST [=y])
-
-
-vim +1057 drivers/iio/light/rohm-bu27034.c
-
-e52afbd61039e2 Matti Vaittinen 2023-03-31  1042  
-d47b9b84292706 Matti Vaittinen 2023-06-13  1043  static int bu27034_write_raw_get_fmt(struct iio_dev *indio_dev,
-d47b9b84292706 Matti Vaittinen 2023-06-13  1044  				     struct iio_chan_spec const *chan,
-d47b9b84292706 Matti Vaittinen 2023-06-13  1045  				     long mask)
-d47b9b84292706 Matti Vaittinen 2023-06-13  1046  {
-6196c88810e86d Matti Vaittinen 2024-06-10  1047  	struct bu27034_data *data = iio_priv(indio_dev);
-d47b9b84292706 Matti Vaittinen 2023-06-13  1048  
-d47b9b84292706 Matti Vaittinen 2023-06-13  1049  	switch (mask) {
-d47b9b84292706 Matti Vaittinen 2023-06-13  1050  	case IIO_CHAN_INFO_SCALE:
-d47b9b84292706 Matti Vaittinen 2023-06-13  1051  		return IIO_VAL_INT_PLUS_NANO;
-d47b9b84292706 Matti Vaittinen 2023-06-13  1052  	case IIO_CHAN_INFO_INT_TIME:
-d47b9b84292706 Matti Vaittinen 2023-06-13  1053  		return IIO_VAL_INT_PLUS_MICRO;
-6196c88810e86d Matti Vaittinen 2024-06-10  1054  	case IIO_CHAN_INFO_HARDWAREGAIN:
-6196c88810e86d Matti Vaittinen 2024-06-10  1055  		dev_dbg(data->dev,
-6196c88810e86d Matti Vaittinen 2024-06-10  1056  			"HARDWAREGAIN is read-only, use scale to set\n");
-d47b9b84292706 Matti Vaittinen 2023-06-13 @1057  	default:
-d47b9b84292706 Matti Vaittinen 2023-06-13  1058  		return -EINVAL;
-d47b9b84292706 Matti Vaittinen 2023-06-13  1059  	}
-d47b9b84292706 Matti Vaittinen 2023-06-13  1060  }
-d47b9b84292706 Matti Vaittinen 2023-06-13  1061  
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Thanks,
+Charles
