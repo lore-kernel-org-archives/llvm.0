@@ -1,168 +1,207 @@
-Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com [209.85.128.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8448422EFB
-	for <llvm@lists.linux.dev>; Mon, 10 Jun 2024 09:16:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9FE6642AA1;
+	Mon, 10 Jun 2024 09:54:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718011007; cv=none; b=RB2l2ZZPU8EB5NHAIb3WfBo4Da4XW6bNWM26zPmVigYQzD17TfALgz5Z6ifdbyV7JXcDxITV+KXahQwwCWctv3qwWcWnIHEXVfOdJufqFBCSzyqYev1z6qiXT0cD8jDqs36+O0UqUhFS9sS/VE6Lako867smONtMOE0+iz6zwPA=
+	t=1718013278; cv=none; b=D/3E8mTxEJ5oD/wgNhrEuIHQXBZ3T2upErfkUHPnaYrGrfXNRiiNSnBQvJkkbZBoR0BLPh+kvj86rXvWEoy0lbU3iQgo3VZY/bEBgUZmObwrjgxSr63caPC8TN6/SDX0pUl0ZdZeyR0XYs+CTRW2R6JrzWnppEtIZF/YotNS+ck=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718011007; c=relaxed/simple;
-	bh=5ZritVEKpTmb37N4onm9Q3hT939Xub573VOpcr7ZyWA=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=AtDeacz7EfxKftpB/s7T01Yb5j9sivG9KylSRMjrwZn7ufx+NONp08m9EWhHFRhn6Knf3re/CWplRO/uqVR4RRIeTT9yhW5lK3x3p2tq+MSiryEgC5dUVTZy+kb4A8hmrGN/MX+OjLosWUPYTxqNMFiOYU6AivPJ0nUR82lXW+U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=PLA/Rqtd; arc=none smtp.client-ip=209.85.128.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
+	s=arc-20240116; t=1718013278; c=relaxed/simple;
+	bh=yGdh2DgY5dbRPihxx4eSyhu1F2/ygbWCIoyyX/MAbWQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=YmQtaPnXQEM2h0G3P2jo6lbAf2NFVxVpiC6RAyEsPKjJkelCIOOO5x8Un1RWUkJuxmL36OFl18e5f4uZKndlVtfCp/R3O9DxKRy2US8/7C9JLb4cMwJl74LypTShi+o0n4c1aBOng/iT14NagjdmBU5NO826FiRusxDmIg3ijLs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Lvv6SsuB; arc=none smtp.client-ip=198.175.65.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="PLA/Rqtd"
-Received: by mail-wm1-f52.google.com with SMTP id 5b1f17b1804b1-4217fd95c78so1447935e9.3
-        for <llvm@lists.linux.dev>; Mon, 10 Jun 2024 02:16:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1718011004; x=1718615804; darn=lists.linux.dev;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=5lrielQGYIMguUfiUX6UfwLtR5TJhNk4+xdvkzMalag=;
-        b=PLA/RqtdCk10Xbdb6MX29u4XT+kyIE/bDl2BK/SY/UXwFo51YCOzwO4A9he+L+yogZ
-         /i2Ie9RACjWrQYx3NWK1+JcqTs82ttSRp9j/0oB1bRfRCLo+OGXuMgGpLUMKlQP8cgF/
-         MqMtCSj7vLffj0dVPJRRiOvRav3piMJ85dbHiiAOiJNFwhASzIdv2xyqhEm8O/pek7QY
-         YutWET72DceTjg29JeDmX6HvkQUXiPa7YBgVj3rkZdIeKhaFzMJWqDWM7xGC70dGBwra
-         V3XNSC0G22Xr0n/6HQsuZNsHWxezBT/6XF+0nLn9+gdWpfrruGn4I+szxAgufOcOBKjD
-         FIeQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1718011004; x=1718615804;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=5lrielQGYIMguUfiUX6UfwLtR5TJhNk4+xdvkzMalag=;
-        b=G6DNbcofvH66C+2OGqle8nAmNoCQN0Z8epx+okXzE5+PPU8DSYqg5o9k9hLJRBYqGm
-         BsO2bdgr1IFxfOf7OT/GmiLWKbyppYKtbLPVdmKT5U5QK7Ofr7FB8tp/dKGZumZDCqYe
-         JJhus0ZtNDXsGsgU/wynj/bUdobEK2hdToRk+1b0rK+HIs3mNmp/CPCYLSlST9QJCCz+
-         onRicRENHzFYNuRiS+Kjy4nTQE9vEJ7Mx1O+XMYzN990rxU3KfqChA30DublZbex9Js7
-         VtFoLIrKRVeInmPXwofwSQxppqUPtOLXpDiKNDKrXBMOh+Mf7EWBXbDMZKVk2Qovhj0l
-         GgCA==
-X-Forwarded-Encrypted: i=1; AJvYcCV0YS4AzkuMjYt2BB8zV4EZZcuEX/Ds0k+E7HF181CKgGdAwhk7xwDldIzlCEBdLNW4U1UoRyx8uSk/V9v7xuZ3tcfieQ==
-X-Gm-Message-State: AOJu0YyYBvVcLZMgzNotfVdQrSEHz/XV7ZCJRsvagMTh9EQWXYs5OtCk
-	bvk8Hwh7bH46lMT0Ti6pc8PVjThmTujpnyegoI8+Tgx92XnCXA9hakSl5TKrL2Q=
-X-Google-Smtp-Source: AGHT+IHOEGwCc48/FhlHvQJiZSBZyz2Sx26g7eIgkgXL5GnyBIbBYEgnIb2Y1H9ad2f8qgYy/NlUTw==
-X-Received: by 2002:a05:600c:4705:b0:421:2c02:9779 with SMTP id 5b1f17b1804b1-42164a51ef1mr68372565e9.4.1718011003803;
-        Mon, 10 Jun 2024 02:16:43 -0700 (PDT)
-Received: from ?IPV6:2a01:e0a:999:a3a0:deb:d879:7179:d010? ([2a01:e0a:999:a3a0:deb:d879:7179:d010])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-35f1e92dde6sm3857924f8f.41.2024.06.10.02.16.42
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 10 Jun 2024 02:16:42 -0700 (PDT)
-Message-ID: <01547275-8c8c-43cf-9da0-64825c234707@rivosinc.com>
-Date: Mon, 10 Jun 2024 11:16:42 +0200
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Lvv6SsuB"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1718013277; x=1749549277;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=yGdh2DgY5dbRPihxx4eSyhu1F2/ygbWCIoyyX/MAbWQ=;
+  b=Lvv6SsuBZLDJxt5QH4sOELzuxQOCpDSw1YxfaK1Xou/JS3G4Ptw0wqjc
+   AvVC6IFtktY2qwj7YgyyBN8I2ASru8MUk4IxOlG7b49OHivmBzLYesN+J
+   deaWslLhHm5+Yd6pl439VqALMFtINn3ORYZdRdpke3UQdYx67Z2moGSJZ
+   4JeP+aPmAue2Mkx47H6fPISNEPIi7dKNBYKfsRBVVbSIYhvc72zz/rZ4G
+   Jo4kRlirNpKaT/t9AVwNlyafpRaROEhCAWgOg7K/IxgeoAW8PUyPVDOm7
+   v3xqMrh/aLvDEr47wawojjFg3JFz82ESg7kKU8IEBIlQbZ+nkvviHYpER
+   g==;
+X-CSE-ConnectionGUID: I86N2v/rSuyIAKHOL+wGCg==
+X-CSE-MsgGUID: lpN3RWCKQ1GeJKWg+c7YlA==
+X-IronPort-AV: E=McAfee;i="6600,9927,11098"; a="14818099"
+X-IronPort-AV: E=Sophos;i="6.08,227,1712646000"; 
+   d="scan'208";a="14818099"
+Received: from fmviesa009.fm.intel.com ([10.60.135.149])
+  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jun 2024 02:54:36 -0700
+X-CSE-ConnectionGUID: epjzt1QBSXWXDm/6gQpdhA==
+X-CSE-MsgGUID: E+67wbjFTGe7ZAIo23ieyQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.08,227,1712646000"; 
+   d="scan'208";a="39129952"
+Received: from lkp-server01.sh.intel.com (HELO 8967fbab76b3) ([10.239.97.150])
+  by fmviesa009.fm.intel.com with ESMTP; 10 Jun 2024 02:54:33 -0700
+Received: from kbuild by 8967fbab76b3 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1sGbjT-00022n-1H;
+	Mon, 10 Jun 2024 09:54:31 +0000
+Date: Mon, 10 Jun 2024 17:53:44 +0800
+From: kernel test robot <lkp@intel.com>
+To: Abhinav Jain <jain.abhinav177@gmail.com>, jgross@suse.com,
+	sstabellini@kernel.org, oleksandr_tyshchenko@epam.com,
+	xen-devel@lists.xenproject.org, linux-kernel@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	skhan@linuxfoundation.org, javier.carrasco.cruz@gmail.com,
+	jain.abhinav177@gmail.com
+Subject: Re: [PATCH] xen: xen-pciback: Export a bridge and all its children
+ as per TODO
+Message-ID: <202406101933.49pM50Ii-lkp@intel.com>
+References: <20240609184410.53500-1-jain.abhinav177@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v0] RISC-V: Use Zkr to seed KASLR base address
-To: Conor Dooley <conor.dooley@microchip.com>
-Cc: Deepak Gupta <debug@rivosinc.com>, Conor Dooley <conor@kernel.org>,
- Alexandre Ghiti <alex@ghiti.fr>, Jesse Taube <jesse@rivosinc.com>,
- linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
- llvm@lists.linux.dev, Alexandre Ghiti <alexghiti@rivosinc.com>,
- Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>,
- =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@rivosinc.com>,
- Paul Walmsley <paul.walmsley@sifive.com>,
- Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <ndesaulniers@google.com>,
- Masahiro Yamada <masahiroy@kernel.org>, Atish Patra <atishp@rivosinc.com>
-References: <20240531162327.2436962-1-jesse@rivosinc.com>
- <20240531-uselessly-spied-262ecf44e694@spud>
- <b199fde6-c24e-4c18-9c38-fdc923294551@ghiti.fr>
- <20240603-stinking-roster-cfad46696ae5@spud>
- <ZmNWmxak9Rc80Kpb@debug.ba.rivosinc.com>
- <c288f739-2a1a-4fd7-884b-12e360a33142@rivosinc.com>
- <20240610-qualm-chalice-72d0cc743658@wendy>
-Content-Language: en-US
-From: =?UTF-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <cleger@rivosinc.com>
-In-Reply-To: <20240610-qualm-chalice-72d0cc743658@wendy>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240609184410.53500-1-jain.abhinav177@gmail.com>
+
+Hi Abhinav,
+
+kernel test robot noticed the following build warnings:
+
+[auto build test WARNING on xen-tip/linux-next]
+[also build test WARNING on linus/master v6.10-rc3 next-20240607]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Abhinav-Jain/xen-xen-pciback-Export-a-bridge-and-all-its-children-as-per-TODO/20240610-024623
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/xen/tip.git linux-next
+patch link:    https://lore.kernel.org/r/20240609184410.53500-1-jain.abhinav177%40gmail.com
+patch subject: [PATCH] xen: xen-pciback: Export a bridge and all its children as per TODO
+config: x86_64-randconfig-006-20240610 (https://download.01.org/0day-ci/archive/20240610/202406101933.49pM50Ii-lkp@intel.com/config)
+compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240610/202406101933.49pM50Ii-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202406101933.49pM50Ii-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/xen/xen-pciback/xenbus.c:262:21: warning: use of logical '&&' with constant operand [-Wconstant-logical-operand]
+     262 |         if ((dev->hdr_type && PCI_HEADER_TYPE_MASK) == PCI_HEADER_TYPE_BRIDGE) {
+         |                            ^  ~~~~~~~~~~~~~~~~~~~~
+   drivers/xen/xen-pciback/xenbus.c:262:21: note: use '&' for a bitwise operation
+     262 |         if ((dev->hdr_type && PCI_HEADER_TYPE_MASK) == PCI_HEADER_TYPE_BRIDGE) {
+         |                            ^~
+         |                            &
+   drivers/xen/xen-pciback/xenbus.c:262:21: note: remove constant to silence this warning
+     262 |         if ((dev->hdr_type && PCI_HEADER_TYPE_MASK) == PCI_HEADER_TYPE_BRIDGE) {
+         |                            ^~~~~~~~~~~~~~~~~~~~~~~
+   drivers/xen/xen-pciback/xenbus.c:270:12: error: no member named 'domain' in 'struct pci_dev'
+     270 |                                 child->domain, child->bus->number,
+         |                                 ~~~~~  ^
+   include/linux/dev_printk.h:163:47: note: expanded from macro 'dev_dbg'
+     163 |                 dev_printk(KERN_DEBUG, dev, dev_fmt(fmt), ##__VA_ARGS__); \
+         |                                                             ^~~~~~~~~~~
+   include/linux/dev_printk.h:129:34: note: expanded from macro 'dev_printk'
+     129 |                 _dev_printk(level, dev, fmt, ##__VA_ARGS__);            \
+         |                                                ^~~~~~~~~~~
+   drivers/xen/xen-pciback/xenbus.c:275:20: error: no member named 'domain' in 'struct pci_dev'
+     275 |                                                       child->domain,
+         |                                                       ~~~~~  ^
+   drivers/xen/xen-pciback/xenbus.c:284:13: error: no member named 'domain' in 'struct pci_dev'
+     284 |                                         child->domain,
+         |                                         ~~~~~  ^
+   include/linux/dev_printk.h:144:65: note: expanded from macro 'dev_err'
+     144 |         dev_printk_index_wrap(_dev_err, KERN_ERR, dev, dev_fmt(fmt), ##__VA_ARGS__)
+         |                                                                        ^~~~~~~~~~~
+   include/linux/dev_printk.h:110:23: note: expanded from macro 'dev_printk_index_wrap'
+     110 |                 _p_func(dev, fmt, ##__VA_ARGS__);                       \
+         |                                     ^~~~~~~~~~~
+   1 warning and 3 errors generated.
 
 
+vim +262 drivers/xen/xen-pciback/xenbus.c
 
-On 10/06/2024 11:02, Conor Dooley wrote:
-> On Mon, Jun 10, 2024 at 10:33:34AM +0200, Clément Léger wrote:
->>
->>
->> On 07/06/2024 20:51, Deepak Gupta wrote:
->>> On Mon, Jun 03, 2024 at 01:47:40PM +0100, Conor Dooley wrote:
->>>> On Mon, Jun 03, 2024 at 11:14:49AM +0200, Alexandre Ghiti wrote:
->>>>> Hi Conor,
->>>>>
->>>>> On 31/05/2024 19:31, Conor Dooley wrote:
->>>>>> On Fri, May 31, 2024 at 12:23:27PM -0400, Jesse Taube wrote:
->>>>>>> Dectect the Zkr extension and use it to seed the kernel base
->>>>> address.
->>>>>>>
->>>>>>> Detection of the extension can not be done in the typical
->>>>> fashion, as
->>>>>>> this is very early in the boot process. Instead, add a trap handler
->>>>>>> and run it to see if the extension is present.
->>>>>> You can't rely on the lack of a trap meaning that Zkr is present
->>>>> unless
->>>>>> you know that the platform implements Ssstrict. The CSR with that
->>>>> number
->>>>>> could do anything if not Ssstrict compliant, so this approach gets a
->>>>>> nak from me. Unfortunately, Ssstrict doesn't provide a way to detect
->>>>>> it, so you're stuck with getting that information from firmware.
->>>>>
->>>>>
->>>>> FYI, this patch is my idea, so I'm the one to blame here :)
->>>>>
->>>>>
->>>>>>
->>>>>> For DT systems, you can actually parse the DT in the pi, we do it
->>>>> to get
->>>>>> the kaslr seed if present, so you can actually check for Zkr. With
->>>>> ACPI
->>>>>> I have no idea how you can get that information, I amn't an ACPI-ist.
->>>>>
->>>>>
->>>>> I took a look at how to access ACPI tables this early when
->>>>> implementing the
->>>>> Zabha/Zacas patches, but it seems not possible.
->>>>>
->>>>> But I'll look into this more, this is not the first time we need the
->>>>> extensions list very early and since we have no way to detect the
->>>>> presence
->>>>> of an extension at runtime, something needs to be done.
->>>>
->>>> Aye, having remembered that reading CSR_SEED could have side-effects on a
->>>> system with non-conforming extensions, it'd be good to see if we can
->>>> actually do this via detection on ACPI - especially for some other
->>>> extensions that we may need to turn on very early (I forget which ones we
->>>> talked about this before for). I didn't arm64 do anything with ACPI in
->>>> the
->>>> pi code, is the code arch/x86/boot/compressed run at an equivilent-ish
->>>> point
->>>> in boot?
->>>
->>> cc: +Clement and Atish
->>>
->>> I don't know all the details but on first glance it seems like instead
->>> of ACPI,
->>> may be FWFT is a better place for discovery ?
->>> https://lists.riscv.org/g/tech-prs/topic/patch_v12_add_firmware/106479571
->>
->> IMHO, doing discovery in FWFT is not the goal of this extension. I think
->> the "real" solution would be to wait for the unified discovery task
->> group to come up with something for that (which is their goal I think) [1]
-> 
-> I'm curious to see how that works out. The proposal documents an m-mode
-> csr, so we'd have to smuggle the information to s-mode somehow...
+   225	
+   226	static int xen_pcibk_export_device(struct xen_pcibk_device *pdev,
+   227					 int domain, int bus, int slot, int func,
+   228					 int devid)
+   229	{
+   230		struct pci_dev *dev;
+   231		int err = 0;
+   232	
+   233		dev_dbg(&pdev->xdev->dev, "exporting dom %x bus %x slot %x func %x\n",
+   234			domain, bus, slot, func);
+   235	
+   236		dev = pcistub_get_pci_dev_by_slot(pdev, domain, bus, slot, func);
+   237		if (!dev) {
+   238			err = -EINVAL;
+   239			xenbus_dev_fatal(pdev->xdev, err,
+   240					 "Couldn't locate PCI device "
+   241					 "(%04x:%02x:%02x.%d)! "
+   242					 "perhaps already in-use?",
+   243					 domain, bus, slot, func);
+   244			goto out;
+   245		}
+   246	
+   247		err = xen_pcibk_add_pci_dev(pdev, dev, devid,
+   248					    xen_pcibk_publish_pci_dev);
+   249		if (err)
+   250			goto out;
+   251	
+   252		dev_info(&dev->dev, "registering for %d\n", pdev->xdev->otherend_id);
+   253		if (xen_register_device_domain_owner(dev,
+   254						     pdev->xdev->otherend_id) != 0) {
+   255			dev_err(&dev->dev, "Stealing ownership from dom%d.\n",
+   256				xen_find_device_domain_owner(dev));
+   257			xen_unregister_device_domain_owner(dev);
+   258			xen_register_device_domain_owner(dev, pdev->xdev->otherend_id);
+   259		}
+   260	
+   261		/* Check if the device is a bridge and export all its children */
+ > 262		if ((dev->hdr_type && PCI_HEADER_TYPE_MASK) == PCI_HEADER_TYPE_BRIDGE) {
+   263			struct pci_dev *child = NULL;
+   264	
+   265			/* Iterate over all the devices in this bridge */
+   266			list_for_each_entry(child, &dev->subordinate->devices,
+   267					bus_list) {
+   268				dev_dbg(&pdev->xdev->dev,
+   269					"exporting child device %04x:%02x:%02x.%d\n",
+   270					child->domain, child->bus->number,
+   271					PCI_SLOT(child->devfn),
+   272					PCI_FUNC(child->devfn));
+   273	
+   274				err = xen_pcibk_export_device(pdev,
+   275							      child->domain,
+   276							      child->bus->number,
+   277							      PCI_SLOT(child->devfn),
+   278							      PCI_FUNC(child->devfn),
+   279							      devid);
+   280				if (err) {
+   281					dev_err(&pdev->xdev->dev,
+   282						"failed to export child device : "
+   283						"%04x:%02x:%02x.%d\n",
+   284						child->domain,
+   285						child->bus->number,
+   286						PCI_SLOT(child->devfn),
+   287						PCI_FUNC(child->devfn));
+   288					goto out;
+   289				}
+   290			}
+   291		}
+   292	out:
+   293		return err;
+   294	}
+   295	
 
-Ahem, yeah, I spoke a bit too fast. Looked at the proposal and the
-mconfigptr CSR will be accessible by M-mode only so I guess we will have
-to find another way...
-
-> 
->> Link: https://github.com/riscv/configuration-structure [1]
-> 
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
