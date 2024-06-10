@@ -1,63 +1,58 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B3914A953;
-	Mon, 10 Jun 2024 15:29:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C7271145FEF;
+	Mon, 10 Jun 2024 17:28:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718033389; cv=none; b=preeJVsxwZXgZa7nSux08LZUJGJWc8Nt2aRYOUkPuTWXSPCijunh8HHo/ZFz7Vo1ZPjHK2it9o5c63MNGRoL+XJ21Qr52VkuLGOnDdyakpRwVnL2yx+aaagVDN12QRb4XsP4K9drEi2h5mIcaTByZIgz0/99C79y7M0kDrGMGic=
+	t=1718040533; cv=none; b=aohNyqK1Xy37WfTp00oCeRsml1JLSme8FiGO5XBDBjfOYcAsUQZStPJIrPDhL2T02zJtN5d+ED8EXyxGPPq2QDk2d6QjUpO9a4Zt09ehNEK0EC7hRoyadSFANzixoBtY/A1pi/cc/blfiZwMjyHvPtOI5V9ql1idTJazEBwWBik=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718033389; c=relaxed/simple;
-	bh=2cYIhjK3LKBBSwrb0AXwqoDXXNmiC/tJXjswEtFgv+o=;
+	s=arc-20240116; t=1718040533; c=relaxed/simple;
+	bh=hsXdp2QwbthzBhOSFd6YbbgLNTqyXSDvwcDh62NNNiI=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=WS95X5xETjHPe18D00jTpnQ1kYg+xUM9VSRZA9y9Nv+NUSWYvhoFPl/rlf6ff2tXob9YpnEg5brQb0gosC1HWoaqX+Yxl8HTaAmmCKXxINK+G7KoGia8YBByOuRISJcJzwffSlatVXCQxU8r02HD/X2f5zeNr6yeyfHX39fb5tE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=SWO3MZKu; arc=none smtp.client-ip=198.175.65.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=uNpc9Vhw66yefjY3JIvi0ZZ5Q3xqfmTSvDagfbYrAFQVXC/utjgbhH54e0Jckhg1qa0Ev7uqIzK9lSBxmwMZk/1pAsosZJl6w4tMC52WivIwr8LxU/2hY6RBMnTmBJQCrP5TTPNFDxpfaIOG4y8owxz46XQWeiCz/TmADJSZPKc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aNpdFrgy; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="SWO3MZKu"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1718033387; x=1749569387;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=2cYIhjK3LKBBSwrb0AXwqoDXXNmiC/tJXjswEtFgv+o=;
-  b=SWO3MZKuFICs7xCZ0+E6J+jSqkBs86o2aCxEpcdWrIiW0FyVoAzxB6WB
-   gcW9QIMDNoL7EFs5fltjy0uFX8JG6uUfZ5kDUpjePUwo2FF02EtnBKFl7
-   56mtKW7vlRdpcMlwWV2g03xMyRDW9dJG7cErqFyCd3Z51rRdvEt/MLuFw
-   sLx55cdfx2ilQm0o1c3UVcbTcRxt22fGCrfIgI5/h3/C+OMcp0oBgJLTP
-   G1+k3nfJhoPavKKebXK6cUj9RD8Gzx1s91DZYrLk1XTThsLKVgtMmc9DT
-   3d9SDItN9pwInGckaa+frJoL2of9ovFDHZKqgsGiBWgFGX+2+ekRQj7AM
-   g==;
-X-CSE-ConnectionGUID: eNWWBBnmTMm0Us3LG5Gxfw==
-X-CSE-MsgGUID: tU+5MYBqRFiRJEYKwjpPBg==
-X-IronPort-AV: E=McAfee;i="6600,9927,11099"; a="14531195"
-X-IronPort-AV: E=Sophos;i="6.08,227,1712646000"; 
-   d="scan'208";a="14531195"
-Received: from fmviesa006.fm.intel.com ([10.60.135.146])
-  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jun 2024 08:29:47 -0700
-X-CSE-ConnectionGUID: eyHY1jcsSbu69rR9xA27BA==
-X-CSE-MsgGUID: UOSLG/UcTOe7feqUXI1LZQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.08,227,1712646000"; 
-   d="scan'208";a="39020444"
-Received: from lkp-server01.sh.intel.com (HELO 8967fbab76b3) ([10.239.97.150])
-  by fmviesa006.fm.intel.com with ESMTP; 10 Jun 2024 08:29:45 -0700
-Received: from kbuild by 8967fbab76b3 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1sGgxq-0002Fd-2r;
-	Mon, 10 Jun 2024 15:29:42 +0000
-Date: Mon, 10 Jun 2024 23:28:53 +0800
-From: kernel test robot <lkp@intel.com>
-To: Maxime Ripard <mripard@kernel.org>, dri-devel@lists.freedesktop.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-	Thomas Zimmermann <tzimmermann@suse.de>,
-	Maxime Ripard <mripard@kernel.org>,
-	Jani Nikula <jani.nikula@linux.intel.com>
-Subject: Re: [PATCH] drm/connector: hdmi: Fix kerneldoc warnings
-Message-ID: <202406102334.csOl5G2p-lkp@intel.com>
-References: <20240610111200.428224-1-mripard@kernel.org>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aNpdFrgy"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 52D87C2BBFC;
+	Mon, 10 Jun 2024 17:28:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1718040533;
+	bh=hsXdp2QwbthzBhOSFd6YbbgLNTqyXSDvwcDh62NNNiI=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=aNpdFrgy5Zza1DDVY23kZJNbw/0JA56+1KNloDqPZnNNfPbTnlj+hn4pOK4Czyakl
+	 /mOUHYorQi9awPhEnKK70KmfiZViAMbYcH7p/uuDpVqq+RsHyylTJp1EIZDPGb4n7M
+	 L2UZeq/Vv0BDdJwq9PsThFKWQX7c9U0hzvbtX8AoIMUEMKXqHuyfx82Ltmhb2ql5Qw
+	 rwP7azFkzipdwQanc/NhpRb7JaqUFsQhRjsVZiYPXxzQoRmJZFC732CmFuKeuubuI5
+	 zdBKP4p1y+1aWACQ75TI5Ta2ITCt4yWds0rtsqyvm+HYlZedAG8K5ODb1zqGI6Z5hy
+	 MY6Yi5AEWDmng==
+Date: Mon, 10 Jun 2024 10:28:52 -0700
+From: Kees Cook <kees@kernel.org>
+To: Erick Archer <erick.archer@outlook.com>
+Cc: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>,
+	Arnaldo Carvalho de Melo <acme@kernel.org>,
+	Namhyung Kim <namhyung@kernel.org>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+	Jiri Olsa <jolsa@kernel.org>, Ian Rogers <irogers@google.com>,
+	Adrian Hunter <adrian.hunter@intel.com>,
+	"Liang, Kan" <kan.liang@linux.intel.com>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	"H. Peter Anvin" <hpa@zytor.com>,
+	"Gustavo A. R. Silva" <gustavoars@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+	Matthew Wilcox <mawilcox@microsoft.com>, x86@kernel.org,
+	linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-hardening@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH v4 0/3] Hardening perf subsystem
+Message-ID: <202406101010.E1C77AE9D@keescook>
+References: <AS8PR02MB7237F5BFDAA793E15692B3998BFD2@AS8PR02MB7237.eurprd02.prod.outlook.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -66,289 +61,88 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240610111200.428224-1-mripard@kernel.org>
+In-Reply-To: <AS8PR02MB7237F5BFDAA793E15692B3998BFD2@AS8PR02MB7237.eurprd02.prod.outlook.com>
 
-Hi Maxime,
+On Sat, Jun 01, 2024 at 06:56:15PM +0200, Erick Archer wrote:
+> Hi everyone,
+> 
+> This is an effort to get rid of all multiplications from allocation
+> functions in order to prevent integer overflows [1][2].
 
-kernel test robot noticed the following build errors:
+I didn't actually see these 3 patches in this thread nor via lore.
 
-[auto build test ERROR on drm-misc/drm-misc-next]
-[also build test ERROR on drm-tip/drm-tip]
-[cannot apply to linus/master v6.10-rc3 next-20240607]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+> In the first patch, the "struct amd_uncore_ctx" can be refactored to
+> use a flex array for the "events" member. This way, the allocation/
+> freeing of the memory can be simplified. Then, the struct_size()
+> helper can be used to do the arithmetic calculation for the memory
+> to be allocated.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Maxime-Ripard/drm-connector-hdmi-Fix-kerneldoc-warnings/20240610-191427
-base:   git://anongit.freedesktop.org/drm/drm-misc drm-misc-next
-patch link:    https://lore.kernel.org/r/20240610111200.428224-1-mripard%40kernel.org
-patch subject: [PATCH] drm/connector: hdmi: Fix kerneldoc warnings
-config: riscv-defconfig (https://download.01.org/0day-ci/archive/20240610/202406102334.csOl5G2p-lkp@intel.com/config)
-compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project 4403cdbaf01379de96f8d0d6ea4f51a085e37766)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240610/202406102334.csOl5G2p-lkp@intel.com/reproduce)
+I like this patch because it reduces the allocation from 2 to 1. This
+isn't what Peter might see as "churn": this is an improvement in resource
+utilization.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202406102334.csOl5G2p-lkp@intel.com/
+I think it's here:
+https://lore.kernel.org/linux-hardening/AS8PR02MB7237E4848B44A5226BD3551C8BE02@AS8PR02MB7237.eurprd02.prod.outlook.com/
 
-All errors (new ones prefixed by >>):
+> In the second patch, as the "struct intel_uncore_box" ends in a
+> flexible array, the preferred way in the kernel is to use the
+> struct_size() helper to do the arithmetic instead of the calculation
+> "size + count * size" in the kzalloc_node() function.
 
-   In file included from drivers/gpu/drm/radeon/radeon_drv.c:36:
-   In file included from include/linux/vga_switcheroo.h:34:
-   In file included from include/linux/fb.h:5:
-   In file included from include/uapi/linux/fb.h:6:
-   In file included from include/linux/i2c.h:19:
-   In file included from include/linux/regulator/consumer.h:35:
-   In file included from include/linux/suspend.h:5:
-   In file included from include/linux/swap.h:9:
-   In file included from include/linux/memcontrol.h:13:
-   In file included from include/linux/cgroup.h:26:
-   In file included from include/linux/kernel_stat.h:9:
-   In file included from include/linux/interrupt.h:21:
-   In file included from arch/riscv/include/asm/sections.h:9:
-   In file included from include/linux/mm.h:2253:
-   include/linux/vmstat.h:514:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     514 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
-   In file included from drivers/gpu/drm/radeon/radeon_drv.c:46:
-   In file included from include/drm/drm_probe_helper.h:6:
-   In file included from include/drm/drm_modes.h:33:
->> include/drm/drm_connector.h:992:2: error: expected ';' after struct
-     992 | }
-         |  ^
-         |  ;
-   drivers/gpu/drm/radeon/radeon_drv.c:251:2: warning: bitwise operation between different enumeration types ('enum radeon_family' and 'enum radeon_chip_flags') [-Wenum-enum-conversion]
-     251 |         radeon_PCI_IDS
-         |         ^~~~~~~~~~~~~~
-   include/drm/drm_pciids.h:3:60: note: expanded from macro 'radeon_PCI_IDS'
-       3 |         {0x1002, 0x1304, PCI_ANY_ID, PCI_ANY_ID, 0, 0, CHIP_KAVERI|RADEON_IS_MOBILITY|RADEON_NEW_MEMMAP|RADEON_IS_IGP}, \
-         |                                                        ~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~
-   drivers/gpu/drm/radeon/radeon_drv.c:251:2: warning: bitwise operation between different enumeration types ('enum radeon_family' and 'enum radeon_chip_flags') [-Wenum-enum-conversion]
-     251 |         radeon_PCI_IDS
-         |         ^~~~~~~~~~~~~~
-   include/drm/drm_pciids.h:4:60: note: expanded from macro 'radeon_PCI_IDS'
-       4 |         {0x1002, 0x1305, PCI_ANY_ID, PCI_ANY_ID, 0, 0, CHIP_KAVERI|RADEON_NEW_MEMMAP|RADEON_IS_IGP}, \
-         |                                                        ~~~~~~~~~~~^~~~~~~~~~~~~~~~~~
-   drivers/gpu/drm/radeon/radeon_drv.c:251:2: warning: bitwise operation between different enumeration types ('enum radeon_family' and 'enum radeon_chip_flags') [-Wenum-enum-conversion]
-     251 |         radeon_PCI_IDS
-         |         ^~~~~~~~~~~~~~
-   include/drm/drm_pciids.h:5:60: note: expanded from macro 'radeon_PCI_IDS'
-       5 |         {0x1002, 0x1306, PCI_ANY_ID, PCI_ANY_ID, 0, 0, CHIP_KAVERI|RADEON_IS_MOBILITY|RADEON_NEW_MEMMAP|RADEON_IS_IGP}, \
-         |                                                        ~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~
-   drivers/gpu/drm/radeon/radeon_drv.c:251:2: warning: bitwise operation between different enumeration types ('enum radeon_family' and 'enum radeon_chip_flags') [-Wenum-enum-conversion]
-     251 |         radeon_PCI_IDS
-         |         ^~~~~~~~~~~~~~
-   include/drm/drm_pciids.h:6:60: note: expanded from macro 'radeon_PCI_IDS'
-       6 |         {0x1002, 0x1307, PCI_ANY_ID, PCI_ANY_ID, 0, 0, CHIP_KAVERI|RADEON_NEW_MEMMAP|RADEON_IS_IGP}, \
-         |                                                        ~~~~~~~~~~~^~~~~~~~~~~~~~~~~~
-   drivers/gpu/drm/radeon/radeon_drv.c:251:2: warning: bitwise operation between different enumeration types ('enum radeon_family' and 'enum radeon_chip_flags') [-Wenum-enum-conversion]
-     251 |         radeon_PCI_IDS
-         |         ^~~~~~~~~~~~~~
-   include/drm/drm_pciids.h:7:60: note: expanded from macro 'radeon_PCI_IDS'
-       7 |         {0x1002, 0x1309, PCI_ANY_ID, PCI_ANY_ID, 0, 0, CHIP_KAVERI|RADEON_IS_MOBILITY|RADEON_NEW_MEMMAP|RADEON_IS_IGP}, \
-         |                                                        ~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~
-   drivers/gpu/drm/radeon/radeon_drv.c:251:2: warning: bitwise operation between different enumeration types ('enum radeon_family' and 'enum radeon_chip_flags') [-Wenum-enum-conversion]
-     251 |         radeon_PCI_IDS
-         |         ^~~~~~~~~~~~~~
-   include/drm/drm_pciids.h:8:60: note: expanded from macro 'radeon_PCI_IDS'
-       8 |         {0x1002, 0x130A, PCI_ANY_ID, PCI_ANY_ID, 0, 0, CHIP_KAVERI|RADEON_IS_MOBILITY|RADEON_NEW_MEMMAP|RADEON_IS_IGP}, \
-         |                                                        ~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~
-   drivers/gpu/drm/radeon/radeon_drv.c:251:2: warning: bitwise operation between different enumeration types ('enum radeon_family' and 'enum radeon_chip_flags') [-Wenum-enum-conversion]
-     251 |         radeon_PCI_IDS
-         |         ^~~~~~~~~~~~~~
-   include/drm/drm_pciids.h:9:60: note: expanded from macro 'radeon_PCI_IDS'
-       9 |         {0x1002, 0x130B, PCI_ANY_ID, PCI_ANY_ID, 0, 0, CHIP_KAVERI|RADEON_IS_MOBILITY|RADEON_NEW_MEMMAP|RADEON_IS_IGP}, \
-         |                                                        ~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~
-   drivers/gpu/drm/radeon/radeon_drv.c:251:2: warning: bitwise operation between different enumeration types ('enum radeon_family' and 'enum radeon_chip_flags') [-Wenum-enum-conversion]
-     251 |         radeon_PCI_IDS
-         |         ^~~~~~~~~~~~~~
-   include/drm/drm_pciids.h:10:60: note: expanded from macro 'radeon_PCI_IDS'
-      10 |         {0x1002, 0x130C, PCI_ANY_ID, PCI_ANY_ID, 0, 0, CHIP_KAVERI|RADEON_IS_MOBILITY|RADEON_NEW_MEMMAP|RADEON_IS_IGP}, \
-         |                                                        ~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~
-   drivers/gpu/drm/radeon/radeon_drv.c:251:2: warning: bitwise operation between different enumeration types ('enum radeon_family' and 'enum radeon_chip_flags') [-Wenum-enum-conversion]
-     251 |         radeon_PCI_IDS
-         |         ^~~~~~~~~~~~~~
-   include/drm/drm_pciids.h:11:60: note: expanded from macro 'radeon_PCI_IDS'
-      11 |         {0x1002, 0x130D, PCI_ANY_ID, PCI_ANY_ID, 0, 0, CHIP_KAVERI|RADEON_IS_MOBILITY|RADEON_NEW_MEMMAP|RADEON_IS_IGP}, \
-         |                                                        ~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~
-   drivers/gpu/drm/radeon/radeon_drv.c:251:2: warning: bitwise operation between different enumeration types ('enum radeon_family' and 'enum radeon_chip_flags') [-Wenum-enum-conversion]
-     251 |         radeon_PCI_IDS
-         |         ^~~~~~~~~~~~~~
-   include/drm/drm_pciids.h:12:60: note: expanded from macro 'radeon_PCI_IDS'
-      12 |         {0x1002, 0x130E, PCI_ANY_ID, PCI_ANY_ID, 0, 0, CHIP_KAVERI|RADEON_IS_MOBILITY|RADEON_NEW_MEMMAP|RADEON_IS_IGP}, \
-         |                                                        ~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~
-   drivers/gpu/drm/radeon/radeon_drv.c:251:2: warning: bitwise operation between different enumeration types ('enum radeon_family' and 'enum radeon_chip_flags') [-Wenum-enum-conversion]
-     251 |         radeon_PCI_IDS
-         |         ^~~~~~~~~~~~~~
-   include/drm/drm_pciids.h:13:60: note: expanded from macro 'radeon_PCI_IDS'
-      13 |         {0x1002, 0x130F, PCI_ANY_ID, PCI_ANY_ID, 0, 0, CHIP_KAVERI|RADEON_NEW_MEMMAP|RADEON_IS_IGP}, \
-         |                                                        ~~~~~~~~~~~^~~~~~~~~~~~~~~~~~
-   drivers/gpu/drm/radeon/radeon_drv.c:251:2: warning: bitwise operation between different enumeration types ('enum radeon_family' and 'enum radeon_chip_flags') [-Wenum-enum-conversion]
-     251 |         radeon_PCI_IDS
-         |         ^~~~~~~~~~~~~~
-   include/drm/drm_pciids.h:14:60: note: expanded from macro 'radeon_PCI_IDS'
-      14 |         {0x1002, 0x1310, PCI_ANY_ID, PCI_ANY_ID, 0, 0, CHIP_KAVERI|RADEON_NEW_MEMMAP|RADEON_IS_IGP}, \
-         |                                                        ~~~~~~~~~~~^~~~~~~~~~~~~~~~~~
-   drivers/gpu/drm/radeon/radeon_drv.c:251:2: warning: bitwise operation between different enumeration types ('enum radeon_family' and 'enum radeon_chip_flags') [-Wenum-enum-conversion]
-     251 |         radeon_PCI_IDS
-         |         ^~~~~~~~~~~~~~
-   include/drm/drm_pciids.h:15:60: note: expanded from macro 'radeon_PCI_IDS'
-      15 |         {0x1002, 0x1311, PCI_ANY_ID, PCI_ANY_ID, 0, 0, CHIP_KAVERI|RADEON_NEW_MEMMAP|RADEON_IS_IGP}, \
-         |                                                        ~~~~~~~~~~~^~~~~~~~~~~~~~~~~~
-   drivers/gpu/drm/radeon/radeon_drv.c:251:2: warning: bitwise operation between different enumeration types ('enum radeon_family' and 'enum radeon_chip_flags') [-Wenum-enum-conversion]
-     251 |         radeon_PCI_IDS
-         |         ^~~~~~~~~~~~~~
-   include/drm/drm_pciids.h:16:60: note: expanded from macro 'radeon_PCI_IDS'
-      16 |         {0x1002, 0x1312, PCI_ANY_ID, PCI_ANY_ID, 0, 0, CHIP_KAVERI|RADEON_NEW_MEMMAP|RADEON_IS_IGP}, \
-         |                                                        ~~~~~~~~~~~^~~~~~~~~~~~~~~~~~
-   drivers/gpu/drm/radeon/radeon_drv.c:251:2: warning: bitwise operation between different enumeration types ('enum radeon_family' and 'enum radeon_chip_flags') [-Wenum-enum-conversion]
-     251 |         radeon_PCI_IDS
-         |         ^~~~~~~~~~~~~~
-   include/drm/drm_pciids.h:17:60: note: expanded from macro 'radeon_PCI_IDS'
-      17 |         {0x1002, 0x1313, PCI_ANY_ID, PCI_ANY_ID, 0, 0, CHIP_KAVERI|RADEON_NEW_MEMMAP|RADEON_IS_IGP}, \
-         |                                                        ~~~~~~~~~~~^~~~~~~~~~~~~~~~~~
-   drivers/gpu/drm/radeon/radeon_drv.c:251:2: warning: bitwise operation between different enumeration types ('enum radeon_family' and 'enum radeon_chip_flags') [-Wenum-enum-conversion]
-     251 |         radeon_PCI_IDS
-         |         ^~~~~~~~~~~~~~
-   include/drm/drm_pciids.h:18:60: note: expanded from macro 'radeon_PCI_IDS'
-      18 |         {0x1002, 0x1315, PCI_ANY_ID, PCI_ANY_ID, 0, 0, CHIP_KAVERI|RADEON_NEW_MEMMAP|RADEON_IS_IGP}, \
-         |                                                        ~~~~~~~~~~~^~~~~~~~~~~~~~~~~~
-   drivers/gpu/drm/radeon/radeon_drv.c:251:2: warning: bitwise operation between different enumeration types ('enum radeon_family' and 'enum radeon_chip_flags') [-Wenum-enum-conversion]
---
-   In file included from drivers/gpu/drm/radeon/radeon_device.c:30:
-   In file included from include/linux/efi.h:20:
-   In file included from include/linux/rtc.h:17:
-   In file included from include/linux/interrupt.h:21:
-   In file included from arch/riscv/include/asm/sections.h:9:
-   In file included from include/linux/mm.h:2253:
-   include/linux/vmstat.h:514:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     514 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
-   In file included from drivers/gpu/drm/radeon/radeon_device.c:42:
-   In file included from include/drm/drm_probe_helper.h:6:
-   In file included from include/drm/drm_modes.h:33:
->> include/drm/drm_connector.h:992:2: error: expected ';' after struct
-     992 | }
-         |  ^
-         |  ;
-   In file included from drivers/gpu/drm/radeon/radeon_device.c:48:
-   In file included from drivers/gpu/drm/radeon/atom.h:165:
-   In file included from drivers/gpu/drm/radeon/atombios.h:7980:
-   drivers/gpu/drm/radeon/pptable.h:442:5: warning: 'counted_by' should not be applied to an array with element of unknown size because 'ATOM_PPLIB_STATE_V2' (aka 'struct _ATOM_PPLIB_STATE_V2') is a struct type with a flexible array member. This will be an error in a future compiler version [-Wbounds-safety-counted-by-elt-type-unknown-size]
-     442 |     ATOM_PPLIB_STATE_V2 states[] __counted_by(ucNumEntries);
-         |     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   2 warnings and 1 error generated.
---
-   In file included from drivers/gpu/drm/radeon/radeon_asic.c:30:
-   In file included from include/linux/pci.h:38:
-   In file included from include/linux/interrupt.h:21:
-   In file included from arch/riscv/include/asm/sections.h:9:
-   In file included from include/linux/mm.h:2253:
-   include/linux/vmstat.h:514:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     514 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
-   In file included from drivers/gpu/drm/radeon/radeon_asic.c:35:
-   In file included from drivers/gpu/drm/radeon/atom.h:165:
-   In file included from drivers/gpu/drm/radeon/atombios.h:7980:
-   drivers/gpu/drm/radeon/pptable.h:442:5: warning: 'counted_by' should not be applied to an array with element of unknown size because 'ATOM_PPLIB_STATE_V2' (aka 'struct _ATOM_PPLIB_STATE_V2') is a struct type with a flexible array member. This will be an error in a future compiler version [-Wbounds-safety-counted-by-elt-type-unknown-size]
-     442 |     ATOM_PPLIB_STATE_V2 states[] __counted_by(ucNumEntries);
-         |     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   In file included from drivers/gpu/drm/radeon/radeon_asic.c:36:
-   In file included from drivers/gpu/drm/radeon/radeon.h:85:
-   In file included from drivers/gpu/drm/radeon/radeon_mode.h:33:
-   In file included from include/drm/display/drm_dp_helper.h:30:
->> include/drm/drm_connector.h:992:2: error: expected ';' after struct
-     992 | }
-         |  ^
-         |  ;
-   2 warnings and 1 error generated.
---
-   In file included from drivers/gpu/drm/radeon/radeon_kms.c:29:
-   In file included from include/linux/pci.h:38:
-   In file included from include/linux/interrupt.h:21:
-   In file included from arch/riscv/include/asm/sections.h:9:
-   In file included from include/linux/mm.h:2253:
-   include/linux/vmstat.h:514:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     514 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
-   In file included from drivers/gpu/drm/radeon/radeon_kms.c:39:
-   In file included from drivers/gpu/drm/radeon/radeon.h:85:
-   In file included from drivers/gpu/drm/radeon/radeon_mode.h:33:
-   In file included from include/drm/display/drm_dp_helper.h:30:
->> include/drm/drm_connector.h:992:2: error: expected ';' after struct
-     992 | }
-         |  ^
-         |  ;
-   1 warning and 1 error generated.
+This is
+https://lore.kernel.org/linux-hardening/AS8PR02MB7237F4D39BF6AA0FF40E91638B392@AS8PR02MB7237.eurprd02.prod.outlook.com/
+
+I prefer this style, as it makes things unambiguous ("this will never
+wrap around") without having to check the associated types and doesn't make
+the resulting binary code different in the "can never overflow" case.
+
+In this particular case:
+
+int size = sizeof(*box) + numshared * sizeof(struct intel_uncore_extra_reg);
+
+"int numshared" comes from struct intel_uncore_type::num_shared_regs,
+which is:
+
+        unsigned num_shared_regs:8;
+
+And the struct sizes are:
+
+$ pahole -C intel_uncore_box gcc-boot/vmlinux | grep size:
+        /* size: 488, cachelines: 8, members: 19 */
+$ pahole -C intel_uncore_extra_reg gcc-boot/vmlinux | grep size:
+        /* size: 96, cachelines: 2, members: 5 */
+
+So we have:
+
+s32 size = 488 + u8 * 96
+
+Max size here is 24968 so it can never overflow an s32, so I can see
+why Peter views this as "churn".
+
+I still think the patch is a coding style improvement, but okay.
+
+> In the third patch, as the "struct perf_buffer" also ends in a
+> flexible array, the preferred way in the kernel is to use the
+> struct_size() helper to do the arithmetic instead of the calculation
+> "size + count * size" in the kzalloc_node() functions. At the same
+> time, prepare for the coming implementation by GCC and Clang of the
+> __counted_by attribute.
+
+This is
+https://lore.kernel.org/linux-hardening/AS8PR02MB72379B4807F3951A1B926BA58BE02@AS8PR02MB7237.eurprd02.prod.outlook.com/
+
+This provides __counted_by coverage, and I think this is important to
+gain in ever place we can. Given that this is part of a ring buffer
+implementation that is arbitrarily sized, this is exactly the kind of
+place I'd like to see __counted_by used. This is a runtime robustness
+improvement, so I don't see this a "churn" at all.
 
 
-vim +992 include/drm/drm_connector.h
+Peter, for patches 1 and 3, if you'd prefer not to carry them, I could
+put them in the hardening tree to keep them out of your way. It seems
+clear you don't want patch 2 at all.
 
-   931	
-   932	/*
-   933	 * struct drm_connector_hdmi_state - HDMI state container
-   934	 */
-   935	struct drm_connector_hdmi_state {
-   936		/**
-   937		 * @broadcast_rgb: Connector property to pass the
-   938		 * Broadcast RGB selection value.
-   939		 */
-   940		enum drm_hdmi_broadcast_rgb broadcast_rgb;
-   941	
-   942		/**
-   943		 * @infoframes: HDMI Infoframes matching that state
-   944		 */
-   945		struct {
-   946			/**
-   947			 * @avi: AVI Infoframes structure matching our
-   948			 * state.
-   949			 */
-   950			struct drm_connector_hdmi_infoframe avi;
-   951	
-   952			/**
-   953			 * @hdr_drm: DRM (Dynamic Range and Mastering)
-   954			 * Infoframes structure matching our state.
-   955			 */
-   956			struct drm_connector_hdmi_infoframe hdr_drm;
-   957	
-   958			/**
-   959			 * @spd: SPD Infoframes structure matching our
-   960			 * state.
-   961			 */
-   962			struct drm_connector_hdmi_infoframe spd;
-   963	
-   964			/**
-   965			 * @vendor: HDMI Vendor Infoframes structure
-   966			 * matching our state.
-   967			 */
-   968			struct drm_connector_hdmi_infoframe hdmi;
-   969		} infoframes;
-   970	
-   971		/**
-   972		 * @is_limited_range: Is the output supposed to use a limited
-   973		 * RGB Quantization Range or not?
-   974		 */
-   975		bool is_limited_range;
-   976	
-   977		/**
-   978		 * @output_bpc: Bits per color channel to output.
-   979		 */
-   980		unsigned int output_bpc;
-   981	
-   982		/**
-   983		 * @output_format: Pixel format to output in.
-   984		 */
-   985		enum hdmi_colorspace output_format;
-   986	
-   987		/**
-   988		 * @tmds_char_rate: TMDS Character Rate, in Hz.
-   989		 */
-   990		unsigned long long tmds_char_rate;
-   991	
- > 992	}
-   993	
+-Kees
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Kees Cook
