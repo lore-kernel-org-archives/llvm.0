@@ -1,60 +1,58 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0D352A1C0;
-	Tue, 11 Jun 2024 03:34:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6299364B;
+	Tue, 11 Jun 2024 03:46:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718076846; cv=none; b=o4zOGfNW9Lb6O2zPgxObI8Iu1on1g6pjEoZNWQrvHcy63R3DZ953YAVvo72l44dETPFdh995okDusAY5fvppmeqN+HyYMGEym57fawiRRff5cxpSRYMtbePxRktgnSs9Ut2uu435SNlawqVMOz1DNSEyaAeo/Y3NTcv7kxBJUQw=
+	t=1718077570; cv=none; b=gk73cJ9P/2m27tEPwvRolUiI/cCSGw2mEYsM2xGL4PQLbBoONNt1SRV6FLWAy/swIkHDepoimjTCMcfiNvAQDlxgXxIBNKui+TJ6XP1kEKvyzUQtF51FK2e/ZDiU4oM1bTB79Nv7O86fcur9Uzug/owej7zCg3eEJ3OcgxBeb6k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718076846; c=relaxed/simple;
-	bh=vbHfMNDunoQCkHA6O0Fnf1moTYcmFOJUbk22RPVN4lY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=undKEtM7U1qpAAxojpVDxXKZ7LnSvJNs7Dv4y+0Tqh5kZtWbdQWb+BV2oiGQK+2/dMXahC4GiA+fY0onMwexUlL/Prp8pu6eYd47gP661Y91BiwU2fUVBlyOjHo7PqXqaIZACl0sjG/Xyp7a8cLdOl/iGgQzQOxUEbxbzgjnXTs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=dz+uKVl3; arc=none smtp.client-ip=198.175.65.10
+	s=arc-20240116; t=1718077570; c=relaxed/simple;
+	bh=98URkCeryqyl7PILu+inE+fjnACYtF+d/8/rR9ZcppE=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=dBeRdmCi7zcHxVYzMo+cz/YoiCd+gaTTolqQOKkFNI1u5X3ILUVaRGoVLbaDeWB7aimdgPrdUrpZXHoVlQqAQyQMJVjq7ciXUtTn+5aKxDzuc+PakJXKn/+J+YgikNM0r8yv1EXr1janLz5+o8bR1IHbOKA7a+H9zmHEehRBxZw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=brUyQs5c; arc=none smtp.client-ip=198.175.65.12
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="dz+uKVl3"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="brUyQs5c"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1718076845; x=1749612845;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=vbHfMNDunoQCkHA6O0Fnf1moTYcmFOJUbk22RPVN4lY=;
-  b=dz+uKVl38k11DNhFA14vbsWay88qLBB406y8tb6cuzZeVD9P1zrQK5cC
-   +z4PjW99rUB3OY6ztWO5qplQee7xvOazmW/0iz0vJMDdKlft4RZvoYuol
-   X8jXiHLO99H4yLULSwWJsKCEAETrAxKGMIwUoBI0iUkiaiX4R+DtF5Z0n
-   NfAwhA9L779JEvPse7iUEkNGOMZpNRDnMijUtfUmjug/BYjt3IHsbkNxF
-   f8HnHFCUjY2Il0Z+RZvqA0f9DeB8fKlATPPKEixe0zlBfB9pDk2Ft2wXB
-   fdhft0T9d0VQ7mjOT+OlpAeIwtfjD2Tx9DQ3E3afIBRsLBFs2OwvVjnt6
+  t=1718077567; x=1749613567;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=98URkCeryqyl7PILu+inE+fjnACYtF+d/8/rR9ZcppE=;
+  b=brUyQs5c7h2soXFbpXavuvOmtQL5rTgIt8ZUnLKl1UvaPXMJuQO5yTM/
+   xB9guVNgBKK2Jcx08cjJdHD3unaR/rixtQo0JG12du5fhmaHHs9DNNw4v
+   tHkxLNkds74V2Ng4KHLojUWGTpf5kpmMaPhtBMjwGI2AqxjnWHCQzNsby
+   +tO24fsfCvhyfS/roqlYrZ0o1t9U+mLOHi99kNtlz+LLylK4oupeSHgdR
+   wmHd9+CqM19CxSUYI8pDPoI2aOPJLrKEku6NE20HTYWWhP3gszXwVgj0s
+   92um9vBwctQ7cVtlfOUvYYOhhYYktxV3jKCTqMKMYDohOxHDq9nxM0E75
    A==;
-X-CSE-ConnectionGUID: wnX38O01SDWHuZla5C7wzQ==
-X-CSE-MsgGUID: OWDLV0nmRUiM8biIi6MHVA==
-X-IronPort-AV: E=McAfee;i="6600,9927,11099"; a="32250814"
+X-CSE-ConnectionGUID: CnCnVsDoTqeYizJSyBiELw==
+X-CSE-MsgGUID: 2GGIjgiPThWSxSAD2JU34w==
+X-IronPort-AV: E=McAfee;i="6600,9927,11099"; a="26180253"
 X-IronPort-AV: E=Sophos;i="6.08,227,1712646000"; 
-   d="scan'208";a="32250814"
-Received: from orviesa007.jf.intel.com ([10.64.159.147])
-  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jun 2024 20:34:05 -0700
-X-CSE-ConnectionGUID: s3o/aRT2TNukIv11e34OqA==
-X-CSE-MsgGUID: X5a+NF7USOCNqCbV/KjLtw==
+   d="scan'208";a="26180253"
+Received: from fmviesa004.fm.intel.com ([10.60.135.144])
+  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jun 2024 20:46:07 -0700
+X-CSE-ConnectionGUID: 3LoKLCOISf+pF56dICFeww==
+X-CSE-MsgGUID: Nmgbo9+uSwudMznKYnv0dQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.08,227,1712646000"; 
-   d="scan'208";a="39953052"
+   d="scan'208";a="43853026"
 Received: from lkp-server01.sh.intel.com (HELO 8967fbab76b3) ([10.239.97.150])
-  by orviesa007.jf.intel.com with ESMTP; 10 Jun 2024 20:34:03 -0700
+  by fmviesa004.fm.intel.com with ESMTP; 10 Jun 2024 20:46:04 -0700
 Received: from kbuild by 8967fbab76b3 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1sGsGm-0002lZ-28;
-	Tue, 11 Jun 2024 03:34:00 +0000
-Date: Tue, 11 Jun 2024 11:33:04 +0800
+	id 1sGsSQ-0002ma-1f;
+	Tue, 11 Jun 2024 03:46:02 +0000
+Date: Tue, 11 Jun 2024 11:45:30 +0800
 From: kernel test robot <lkp@intel.com>
-To: Niklas =?iso-8859-1?Q?S=F6derlund?= <niklas.soderlund+renesas@ragnatech.se>
+To: Jeff Layton <jlayton@kernel.org>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [net-next,v6] net: ethernet: rtsn: Add support for Renesas
- Ethernet-TSN
-Message-ID: <202406111130.CCbMJGDt-lkp@intel.com>
-References: <20240610135935.2519155-1-niklas.soderlund+renesas@ragnatech.se>
+Subject: [jlayton:mgtime 5/11] fs/inode.c:2125:7: warning: variable 'now_ts'
+ is used uninitialized whenever 'if' condition is false
+Message-ID: <202406111158.hCpXK8pe-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -63,68 +61,62 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240610135935.2519155-1-niklas.soderlund+renesas@ragnatech.se>
 
-Hi Niklas,
-
-kernel test robot noticed the following build warnings:
-
-[auto build test WARNING on linus/master]
-[also build test WARNING on v6.10-rc3 next-20240607]
-[cannot apply to horms-ipvs/master]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Niklas-S-derlund/net-ethernet-rtsn-Add-support-for-Renesas-Ethernet-TSN/20240610-220814
-base:   linus/master
-patch link:    https://lore.kernel.org/r/20240610135935.2519155-1-niklas.soderlund%2Brenesas%40ragnatech.se
-patch subject: [net-next,v6] net: ethernet: rtsn: Add support for Renesas Ethernet-TSN
-config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20240611/202406111130.CCbMJGDt-lkp@intel.com/config)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jlayton/linux.git mgtime
+head:   be51a9b4d34b1383cf39064988562665bed1b954
+commit: 59dbbd533f4e5bd18ca3815ecd51390099914928 [5/11] SQUASH: rework the floor
+config: s390-allnoconfig (https://download.01.org/0day-ci/archive/20240611/202406111158.hCpXK8pe-lkp@intel.com/config)
 compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project 4403cdbaf01379de96f8d0d6ea4f51a085e37766)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240611/202406111130.CCbMJGDt-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240611/202406111158.hCpXK8pe-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202406111130.CCbMJGDt-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202406111158.hCpXK8pe-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
-   In file included from drivers/net/ethernet/renesas/rtsn.c:10:
-   In file included from include/linux/dma-mapping.h:11:
-   In file included from include/linux/scatterlist.h:8:
+   In file included from fs/inode.c:9:
    In file included from include/linux/mm.h:2253:
    include/linux/vmstat.h:514:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
      514 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
          |                               ~~~~~~~~~~~ ^ ~~~
-   In file included from drivers/net/ethernet/renesas/rtsn.c:10:
-   In file included from include/linux/dma-mapping.h:11:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/hexagon/include/asm/io.h:328:
+   In file included from fs/inode.c:15:
+   In file included from include/linux/memblock.h:13:
+   In file included from arch/s390/include/asm/dma.h:5:
+   In file included from include/linux/io.h:14:
+   In file included from arch/s390/include/asm/io.h:93:
    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
      548 |         val = __raw_readb(PCI_IOBASE + addr);
          |                           ~~~~~~~~~~ ^
    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
      561 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
          |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
-      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-         |                                                   ^
-   In file included from drivers/net/ethernet/renesas/rtsn.c:10:
-   In file included from include/linux/dma-mapping.h:11:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/hexagon/include/asm/io.h:328:
+   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
+      37 | #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
+         |                                                           ^
+   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
+     102 | #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
+         |                                                      ^
+   In file included from fs/inode.c:15:
+   In file included from include/linux/memblock.h:13:
+   In file included from arch/s390/include/asm/dma.h:5:
+   In file included from include/linux/io.h:14:
+   In file included from arch/s390/include/asm/io.h:93:
    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
      574 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
          |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
-      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
-         |                                                   ^
-   In file included from drivers/net/ethernet/renesas/rtsn.c:10:
-   In file included from include/linux/dma-mapping.h:11:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/hexagon/include/asm/io.h:328:
+   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
+      35 | #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
+         |                                                           ^
+   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
+     115 | #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
+         |                                                      ^
+   In file included from fs/inode.c:15:
+   In file included from include/linux/memblock.h:13:
+   In file included from arch/s390/include/asm/dma.h:5:
+   In file included from include/linux/io.h:14:
+   In file included from arch/s390/include/asm/io.h:93:
    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
      585 |         __raw_writeb(value, PCI_IOBASE + addr);
          |                             ~~~~~~~~~~ ^
@@ -134,47 +126,102 @@ All warnings (new ones prefixed by >>):
    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
      605 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
          |                                                       ~~~~~~~~~~ ^
->> drivers/net/ethernet/renesas/rtsn.c:913:5: warning: variable 'iface' is uninitialized when used here [-Wuninitialized]
-     913 |                                 iface);
-         |                                 ^~~~~
-   drivers/net/ethernet/renesas/rtsn.c:904:2: note: variable 'iface' is declared here
-     904 |         phy_interface_t iface;
+   include/asm-generic/io.h:693:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     693 |         readsb(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:701:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     701 |         readsw(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:709:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     709 |         readsl(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:718:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     718 |         writesb(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+   include/asm-generic/io.h:727:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     727 |         writesw(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+   include/asm-generic/io.h:736:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     736 |         writesl(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+>> fs/inode.c:2125:7: warning: variable 'now_ts' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
+    2125 |                 if ((now | I_CTIME_QUERIED) == ctime) {
+         |                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   fs/inode.c:2131:28: note: uninitialized use occurs here
+    2131 |         return timestamp_truncate(now_ts, inode);
+         |                                   ^~~~~~
+   fs/inode.c:2125:3: note: remove the 'if' if its condition is always true
+    2125 |                 if ((now | I_CTIME_QUERIED) == ctime) {
+         |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   fs/inode.c:2120:6: warning: variable 'now_ts' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
+    2120 |         if (ctime & I_CTIME_QUERIED) {
+         |             ^~~~~~~~~~~~~~~~~~~~~~~
+   fs/inode.c:2131:28: note: uninitialized use occurs here
+    2131 |         return timestamp_truncate(now_ts, inode);
+         |                                   ^~~~~~
+   fs/inode.c:2120:2: note: remove the 'if' if its condition is always true
+    2120 |         if (ctime & I_CTIME_QUERIED) {
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>> fs/inode.c:2115:6: warning: variable 'now_ts' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
+    2115 |         if (!is_mgtime(inode))
+         |             ^~~~~~~~~~~~~~~~~
+   fs/inode.c:2131:28: note: uninitialized use occurs here
+    2131 |         return timestamp_truncate(now_ts, inode);
+         |                                   ^~~~~~
+   fs/inode.c:2115:2: note: remove the 'if' if its condition is always false
+    2115 |         if (!is_mgtime(inode))
+         |         ^~~~~~~~~~~~~~~~~~~~~~
+    2116 |                 goto out;
+         |                 ~~~~~~~~
+   fs/inode.c:2111:2: note: variable 'now_ts' is declared here
+    2111 |         struct timespec64 now_ts;
          |         ^
-   8 warnings generated.
+   16 warnings generated.
 
 
-vim +/iface +913 drivers/net/ethernet/renesas/rtsn.c
+vim +2125 fs/inode.c
 
-   898	
-   899	static int rtsn_phy_init(struct rtsn_private *priv)
-   900	{
-   901		struct device_node *np = priv->ndev->dev.parent->of_node;
-   902		struct phy_device *phydev;
-   903		struct device_node *phy;
-   904		phy_interface_t iface;
-   905	
-   906		priv->link = 0;
-   907	
-   908		phy = of_parse_phandle(np, "phy-handle", 0);
-   909		if (!phy)
-   910			return -ENOENT;
-   911	
-   912		phydev = of_phy_connect(priv->ndev, phy, rtsn_adjust_link, 0,
- > 913					iface);
-   914		of_node_put(phy);
-   915		if (!phydev)
-   916			return -ENOENT;
-   917	
-   918		/* Only support full-duplex mode */
-   919		phy_remove_link_mode(phydev, ETHTOOL_LINK_MODE_10baseT_Half_BIT);
-   920		phy_remove_link_mode(phydev, ETHTOOL_LINK_MODE_100baseT_Half_BIT);
-   921		phy_remove_link_mode(phydev, ETHTOOL_LINK_MODE_1000baseT_Half_BIT);
-   922	
-   923		phy_attached_info(phydev);
-   924	
-   925		return 0;
-   926	}
-   927	
+59dbbd533f4e5b Jeff Layton 2024-06-10  2100  
+dc882b7e9784e0 Jeff Layton 2023-08-07  2101  /**
+59dbbd533f4e5b Jeff Layton 2024-06-10  2102   * current_time - Return FS time (possibly fine-grained)
+dc882b7e9784e0 Jeff Layton 2023-08-07  2103   * @inode: inode.
+dc882b7e9784e0 Jeff Layton 2023-08-07  2104   *
+dc882b7e9784e0 Jeff Layton 2023-08-07  2105   * Return the current time truncated to the time granularity supported by
+dc882b7e9784e0 Jeff Layton 2023-08-07  2106   * the fs, as suitable for a ctime/mtime change. If the ctime is flagged
+dc882b7e9784e0 Jeff Layton 2023-08-07  2107   * as having been QUERIED, get a fine-grained timestamp.
+dc882b7e9784e0 Jeff Layton 2023-08-07  2108   */
+59dbbd533f4e5b Jeff Layton 2024-06-10  2109  struct timespec64 current_time(struct inode *inode)
+dc882b7e9784e0 Jeff Layton 2023-08-07  2110  {
+dc882b7e9784e0 Jeff Layton 2023-08-07  2111  	struct timespec64 now_ts;
+59dbbd533f4e5b Jeff Layton 2024-06-10  2112  	ktime_t ctime, floor = READ_ONCE(ctime_floor);
+59dbbd533f4e5b Jeff Layton 2024-06-10  2113  	ktime_t now = coarse_ctime(floor);
+dc882b7e9784e0 Jeff Layton 2023-08-07  2114  
+dc882b7e9784e0 Jeff Layton 2023-08-07 @2115  	if (!is_mgtime(inode))
+dc882b7e9784e0 Jeff Layton 2023-08-07  2116  		goto out;
+dc882b7e9784e0 Jeff Layton 2023-08-07  2117  
+dc882b7e9784e0 Jeff Layton 2023-08-07  2118  	/* If nothing has queried it, then coarse time is fine */
+dc882b7e9784e0 Jeff Layton 2023-08-07  2119  	ctime = smp_load_acquire(&inode->__i_ctime);
+dc882b7e9784e0 Jeff Layton 2023-08-07  2120  	if (ctime & I_CTIME_QUERIED) {
+dc882b7e9784e0 Jeff Layton 2023-08-07  2121  		/*
+dc882b7e9784e0 Jeff Layton 2023-08-07  2122  		 * If there is no apparent change, then
+dc882b7e9784e0 Jeff Layton 2023-08-07  2123  		 * get a fine-grained timestamp.
+dc882b7e9784e0 Jeff Layton 2023-08-07  2124  		 */
+dc882b7e9784e0 Jeff Layton 2023-08-07 @2125  		if ((now | I_CTIME_QUERIED) == ctime) {
+dc882b7e9784e0 Jeff Layton 2023-08-07  2126  			ktime_get_real_ts64(&now_ts);
+dc882b7e9784e0 Jeff Layton 2023-08-07  2127  			now_ts.tv_nsec &= ~I_CTIME_QUERIED;
+dc882b7e9784e0 Jeff Layton 2023-08-07  2128  		}
+dc882b7e9784e0 Jeff Layton 2023-08-07  2129  	}
+dc882b7e9784e0 Jeff Layton 2023-08-07  2130  out:
+dc882b7e9784e0 Jeff Layton 2023-08-07  2131  	return timestamp_truncate(now_ts, inode);
+dc882b7e9784e0 Jeff Layton 2023-08-07  2132  }
+59dbbd533f4e5b Jeff Layton 2024-06-10  2133  EXPORT_SYMBOL(current_time);
+dc882b7e9784e0 Jeff Layton 2023-08-07  2134  
+
+:::::: The code at line 2125 was first introduced by commit
+:::::: dc882b7e9784e0ce8e003df1aa87468dcdc7da73 fs: add infrastructure for multigrain timestamps
+
+:::::: TO: Jeff Layton <jlayton@kernel.org>
+:::::: CC: Jeff Layton <jlayton@kernel.org>
 
 -- 
 0-DAY CI Kernel Test Service
