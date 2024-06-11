@@ -1,68 +1,76 @@
-Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
+Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5CC8984E18
-	for <llvm@lists.linux.dev>; Tue, 11 Jun 2024 18:30:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 29F047350E
+	for <llvm@lists.linux.dev>; Tue, 11 Jun 2024 20:26:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718130609; cv=none; b=uH6wm12DXR1rOKZjwVJvC+xyWzOFVB21ddbK6vIQlMm2bwSGVoq8VVs0Fjd1i8UwCGNFGDK+DnqnVMjOrF/1S0FQSjd9Jotv8axoczdz//7zB3XRnGK1bPEd706sGRh2zjhNj04D39+RBjemaMmtUahhp8W0Et1RyBmaTKPjyiI=
+	t=1718137573; cv=none; b=eZBSyFGHiyGYvNwFrX2sSB4wp/vxJXS1dn/5vZ4szE0pVOAX+vxr8keE+ry1lRQ68inZyjCBwnt/Jzkx/VOzylSYra54nfSDtnIo0pQM6zpDviOzJBXrf4e79I3ZsyFmE/T6g7iRHazT0FHi1d1k/bfH4AZLU54Tp2NBMY3mEVs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718130609; c=relaxed/simple;
-	bh=vmJlB5Vx85oOAvr/aM38OCLvx/FPwgawAx4TV4XmcSI=;
+	s=arc-20240116; t=1718137573; c=relaxed/simple;
+	bh=JMTFgY1cI+CthfUehxwtujjdODCqPHwELag77EPhroQ=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=OZcCrqwlXNX71AOrDHzEoNin9aFoc6t1+7r5ofoK8yMkBJFA/H74oyPOMmgz5kQBdv54UqI2YyvKSWur2qzZUI/knCzZPrUjUDQP7Y6RTXn7d97BDouRW4wkQI/8wIA/b1Ky/feiSpWkeGtuaCVJmOlbUW49bj2MxGPya0vDLN0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=m+vIL19g; arc=none smtp.client-ip=209.85.214.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=gaZTu3fS7zdTfGRg6dezi6uxPAv2q28BD1qwFB35c4LSMf739GoMfTWD2pz+5APOp1O/eU877L3R3JfXfdVQ6x0XnQuTOHamq7P1RLURRBOB66qMTwRve75lwkrJMhGZBQ/E9GY6u4HkMNeiptr3xGI5SnpcRU+pqALCHGpdfT4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=buESSEkY; arc=none smtp.client-ip=209.85.214.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="m+vIL19g"
-Received: by mail-pl1-f175.google.com with SMTP id d9443c01a7336-1f70131063cso11780995ad.2
-        for <llvm@lists.linux.dev>; Tue, 11 Jun 2024 11:30:08 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="buESSEkY"
+Received: by mail-pl1-f172.google.com with SMTP id d9443c01a7336-1f44b594deeso51305355ad.2
+        for <llvm@lists.linux.dev>; Tue, 11 Jun 2024 13:26:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1718130608; x=1718735408; darn=lists.linux.dev;
+        d=gmail.com; s=20230601; t=1718137571; x=1718742371; darn=lists.linux.dev;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=XE4BOZRZpuQSDr/bb7Z6GCdUYJnxu9albyuBquTmaIo=;
-        b=m+vIL19gdviOs5qDCNzVbxgVe28JoJiWKTtVZI+9RH1SpBwqVDIlwMEBbzw8GPK8Na
-         DZJUV1E8lzGxNAaaZkBlPy0aPZPOnt6wDDXMyk5qvETfQQfVR8wWVVYhB5VTHelaAl53
-         bxK2jgpJELD4yHfei3GvftEVE8HZ3IqFjvd8bQKudp0XTorTtkgq7WD5sIW9yzSBUBmj
-         mDQTVNOlBHaayUQrAVt/tiCmgZAjRGVUPxgO3hZHiYw//L2goH/Y98NIU2ynwzcPuIPP
-         kN4/SvbZPGKHBqN/FX53YcDpH22O52DT6AepoB7Ewd9xDn6WA0kvJPagWWTq1KJe3KwI
-         JYqA==
+        bh=LiuNTA4whcExw8Dugs1FyNFiaWA9GU3jWb1r5NfBRAE=;
+        b=buESSEkYbU6Em4qiPxwxEuccFSQzkZeViMA6wiZtXt2SJyoR/iSsa+vWzKvdTZia1k
+         Q1hwAndtb/1/bdTYg5ft7Ia5IleDzpIFO6RFGqd9nqE66vrwzSaAr3BB5zbVFN19fyO/
+         kmrti0vOKAGsf97QyeF04TUbtRRzXLsouvIczIg7smURMWHieUguaBlj4RSsep/fs/PK
+         S1BEwz6rGG7RcjtFQbb6zJ2CvmAWmSneungP5zerB0TK18qSIVXIZ0nFcPgwDBNqF9Sf
+         BSYTUWefB0cmJ8GeItJpobKGvSgxu1zc7dMYPI5dswO3/zomhdjvkkqcfna+NLZ6agLE
+         R5NQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1718130608; x=1718735408;
+        d=1e100.net; s=20230601; t=1718137571; x=1718742371;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=XE4BOZRZpuQSDr/bb7Z6GCdUYJnxu9albyuBquTmaIo=;
-        b=d9KqRoW5aEltKarcxH2gMuVSy8yPk3MbEBcteAwbHU/NFamTldtkhtitHYPb7T+isR
-         ZDDRMZco19cDyUufhqvGFev3LC6SdKermzpghPQ6jijibPK8tFKiDJOI1Zy//pqZw3U2
-         RyTzh3QcjCWop/LGSpjfEgVGFwNrnToawf3lDGAH/PGeIJORXPF3tCXOBtEuBEs2FO+q
-         5flIHYZgHDEus0VQBNrv3q6AUhdBpnIFS2zflhk0ShEK/dUnvGKLzyf9iFQw7Ooqj/7d
-         xI/uKtUSJBObuHd3IUNvZv2b+luf61toZNRFBKQlwjNXsBcPZ07iCy+dY3+V3qcpPvIv
-         8WDw==
-X-Forwarded-Encrypted: i=1; AJvYcCW7oZcVasZSsj7yZOhwXBea8Zy13jX/nwJtMmOuo3tMDVAo1zycwFyflQV+laEw4CeFv5ETappmPdCAMSbr+7KyjqW1lw==
-X-Gm-Message-State: AOJu0Yweq7OzdOOf/JSAc2cvGCY/j5Zm+JChVl5UDPhbx7xj4MRiSze8
-	QEp1vegT6I60lEbiRH+9ZTB93G/wTnx2H7fDmrVnGz/AEhJauxq25sCcJvsJ3Q==
-X-Google-Smtp-Source: AGHT+IEUxjBQ03FSwMcOa7Q1C9oBhVDpqO23pvs6QZZKLHfe2UWqfYR6fTAzVkLY2GOOR2DFyw1XZA==
-X-Received: by 2002:a17:902:f54d:b0:1f7:340e:71ac with SMTP id d9443c01a7336-1f7340e7491mr23223975ad.50.1718130604876;
-        Tue, 11 Jun 2024 11:30:04 -0700 (PDT)
-Received: from google.com (226.75.127.34.bc.googleusercontent.com. [34.127.75.226])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1f72110e4b5sm30490685ad.125.2024.06.11.11.30.04
+        bh=LiuNTA4whcExw8Dugs1FyNFiaWA9GU3jWb1r5NfBRAE=;
+        b=fHf+QLmlX+fuxA1BVAmqA3AetDz+86aGrxCLh3oA+QCQBIvorGXPo1rgaoMG5VmPA9
+         MPke9s3cVX84OyzSwPNMTPJvt12bVVkcP2NUuJG8NVdKVE1BXRAX6K8dj5kK7YcqOg70
+         pFzZE9RYkw15iZtsuqCKTRp5PWoII1+iyoqFpaA1whUZ6KwWDo2AeGPHb/Lwrb8TXcLX
+         SBji8l1Oi9dh1BpeseA9q5PvmtX7AAjntR3RRuCq8RqsY4AQ95uC4k5vCwlnSlGHcNb+
+         A9pVT+yYC07P6Sv1a/01K7hWY090ZUIVf4JRBBiMQVNkde4iZks4igDChuShxU79a+X5
+         aFRg==
+X-Forwarded-Encrypted: i=1; AJvYcCUTuVAW8+Ia/Sptq09je64JEbgbv0mhwe4OmcRd48txce2JMZAaNJ2+7L8Q8evtPemQeOWMyGE2ePYasTjsoDBzIYfoGA==
+X-Gm-Message-State: AOJu0YxCn/D7K3tm471dKHH4t6PJMI2Bh6af2INGXnGruqOMMule2p+l
+	w0tjeUQjgUUsk97MyyZLWx0ITkz+CHBl9OkghLNIPbpf7yeb1vLF
+X-Google-Smtp-Source: AGHT+IHRUebSOuRjYylz+iYw16FfFlE7lh1Z9+3AMBtz4Z/gYW5lDsZSM5550YCv4ScVk5JKJrZ6mQ==
+X-Received: by 2002:a17:903:1212:b0:1f6:6dc9:615c with SMTP id d9443c01a7336-1f6d02f4e65mr152389785ad.35.1718137571295;
+        Tue, 11 Jun 2024 13:26:11 -0700 (PDT)
+Received: from Gatlins-MacBook-Pro.local ([131.252.49.243])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1f72d450697sm20488005ad.168.2024.06.11.13.26.10
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 11 Jun 2024 11:30:04 -0700 (PDT)
-Date: Tue, 11 Jun 2024 18:30:00 +0000
-From: Carlos Llamas <cmllamas@google.com>
-To: John Hubbard <jhubbard@nvidia.com>
-Cc: Shuah Khan <shuah@kernel.org>, Mark Brown <broonie@kernel.org>,
-	Vincenzo Frascino <vincenzo.frascino@arm.com>,
-	Colin Ian King <colin.i.king@gmail.com>,
-	Valentin Obst <kernel@valentinobst.de>,
-	linux-kselftest@vger.kernel.org,
-	LKML <linux-kernel@vger.kernel.org>, llvm@lists.linux.dev
-Subject: Re: [PATCH v2] selftests/vDSO: fix clang build errors and warnings
-Message-ID: <ZmiXqOHYaLLX557z@google.com>
-References: <20240527211622.290635-1-jhubbard@nvidia.com>
+        Tue, 11 Jun 2024 13:26:10 -0700 (PDT)
+Date: Tue, 11 Jun 2024 13:26:09 -0700
+From: Gatlin Newhouse <gatlin.newhouse@gmail.com>
+To: Thomas Gleixner <tglx@linutronix.de>
+Cc: Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>, 
+	Kees Cook <keescook@chromium.org>, Marco Elver <elver@google.com>, 
+	Andrey Konovalov <andreyknvl@gmail.com>, Andrey Ryabinin <ryabinin.a.a@gmail.com>, 
+	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
+	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
+	Andrew Morton <akpm@linux-foundation.org>, Rick Edgecombe <rick.p.edgecombe@intel.com>, 
+	Baoquan He <bhe@redhat.com>, Changbin Du <changbin.du@huawei.com>, 
+	Pengfei Xu <pengfei.xu@intel.com>, Josh Poimboeuf <jpoimboe@kernel.org>, Xin Li <xin3.li@intel.com>, 
+	Jason Gunthorpe <jgg@ziepe.ca>, Tina Zhang <tina.zhang@intel.com>, 
+	Uros Bizjak <ubizjak@gmail.com>, "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>, 
+	linux-kernel@vger.kernel.org, kasan-dev@googlegroups.com, linux-hardening@vger.kernel.org, 
+	llvm@lists.linux.dev
+Subject: Re: [PATCH v2] x86/traps: Enable UBSAN traps on x86
+Message-ID: <7bthvkp3kitmmxwdywyeyexajedlxxf6rqx4zxwco6bzuyx5eq@ihpax3jffuz6>
+References: <20240601031019.3708758-1-gatlin.newhouse@gmail.com>
+ <878qzm6m2m.ffs@tglx>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -71,58 +79,203 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240527211622.290635-1-jhubbard@nvidia.com>
+In-Reply-To: <878qzm6m2m.ffs@tglx>
 
-On Mon, May 27, 2024 at 02:16:22PM -0700, John Hubbard wrote:
-> When building with clang, via:
+On Mon, Jun 03, 2024 at 06:13:53PM UTC, Thomas Gleixner wrote:
+> On Sat, Jun 01 2024 at 03:10, Gatlin Newhouse wrote:
 > 
->     make LLVM=1 -C tools/testing/selftests
+> > Bring x86 to parity with arm64, similar to commit 25b84002afb9
+> > ("arm64: Support Clang UBSAN trap codes for better reporting").
+> > Enable the output of UBSAN type information on x86 architectures
+> > compiled with clang when CONFIG_UBSAN_TRAP=y. Currently ARM
+> > architectures output which specific sanitizer caused the trap,
+> > via the encoded data in the trap instruction. Clang on x86
+> > currently encodes the same data in ud1 instructions but the x86
+> > handle_bug() and is_valid_bugaddr() functions currently only look
+> > at ud2s.
 > 
-> ...there are several warnings, and an error. This fixes all of those and
-> allows these tests to run and pass.
+> Please structure your change log properly instead of one paragraph of
+> unstructured word salad. See:
+> 
+>   https://www.kernel.org/doc/html/latest/process/maintainer-tip.html#changelog
+>   
+> > +/*
+> > + * Check for UD1, UD2, with or without Address Size Override Prefixes instructions.
+> > + */
+> >  __always_inline int is_valid_bugaddr(unsigned long addr)
+> >  {
+> >  	if (addr < TASK_SIZE_MAX)
+> > @@ -88,7 +92,13 @@ __always_inline int is_valid_bugaddr(unsigned long addr)
+> >  	 * We got #UD, if the text isn't readable we'd have gotten
+> >  	 * a different exception.
+> >  	 */
+> > -	return *(unsigned short *)addr == INSN_UD2;
+> > +	if (*(u16 *)addr == INSN_UD2)
+> > +		return INSN_UD2;
+> > +	if (*(u16 *)addr == INSN_UD1)
+> > +		return INSN_UD1;
+> > +	if (*(u8 *)addr == INSN_ASOP && *(u16 *)(addr + 1) == INSN_UD1)
+> 
+> 	s/1/LEN_ASOP/ ?
+> 
+> > +		return INSN_ASOP;
+> > +	return 0;
+> 
+> I'm not really a fan of the reuse of the INSN defines here. Especially
+> not about INSN_ASOP. Also 0 is just lame.
+> 
+> Neither does the function name make sense anymore. is_valid_bugaddr() is
+> clearly telling that it's a boolean check (despite the return value
+> being int for hysterical raisins). But now you turn it into a
+> non-boolean integer which returns a instruction encoding. That's
+> hideous. Programming should result in obvious code and that should be
+> pretty obvious to people who create tools to validate code.
+> 
+> Also all UBSAN cares about is the actual failure type and not the
+> instruction itself:
+> 
+> #define INSN_UD_MASK		0xFFFF
+> #define INSN_ASOP_MASK		0x00FF
+> 
+> #define BUG_UD_NONE		0xFFFF
+> #define BUG_UD2			0xFFFE
+> 
+> __always_inline u16 get_ud_type(unsigned long addr)
+> {
+> 	u16 insn;
+> 
+> 	if (addr < TASK_SIZE_MAX)
+>         	return BUD_UD_NONE;
+> 
+>         insn = *(u16 *)addr;
+>         if ((insn & INSN_UD_MASK) == INSN_UD2)
+>         	return BUG_UD2;
+> 
+> 	if ((insn & INSN_ASOP_MASK) == INSN_ASOP)
+>         	insn = *(u16 *)(++addr);
+> 
+> 	// UBSAN encodes the failure type in the two bytes after UD1
+>         if ((insn & INSN_UD_MASK) == INSN_UD1)
+>         	return *(u16 *)(addr + LEN_UD1);
+> 
+> 	return BUG_UD_NONE;
+> }
+> 
+> No?
 
-It might be best to split the 4 _different_ fixes into separate patches.
+Thanks for the feedback.
+
+It seems that is_valid_bugaddr() needs to be implemented on all architectures
+and the function get_ud_type() replaces it here. So how should the patch handle
+is_valid_bugaddr()? Should the function remain as-is in traps.c despite no
+longer being used?
 
 > 
-> 1. Fix linker error (undefined reference to memcpy) by providing a local
->    version of memcpy.
+> >  static nokprobe_inline int
+> > @@ -216,6 +226,7 @@ static inline void handle_invalid_op(struct pt_regs *regs)
+> >  static noinstr bool handle_bug(struct pt_regs *regs)
+> >  {
+> >  	bool handled = false;
+> > +	int insn;
+> >  
+> >  	/*
+> >  	 * Normally @regs are unpoisoned by irqentry_enter(), but handle_bug()
+> > @@ -223,7 +234,8 @@ static noinstr bool handle_bug(struct pt_regs *regs)
+> >  	 * irqentry_enter().
+> >  	 */
+> >  	kmsan_unpoison_entry_regs(regs);
+> > -	if (!is_valid_bugaddr(regs->ip))
+> > +	insn = is_valid_bugaddr(regs->ip);
+> > +	if (insn == 0)
 > 
-> 2. clang complains about using this form:
+> Sigh.
 > 
->     if (g = h & 0xf0000000)
+> But with the above sanitized (pun intended) this becomes obvious by
+> itself:
 > 
-> ...so factor out the assignment into a separate step.
-
-There has been multiple attempts to fix this. I can see these two:
-https://lore.kernel.org/all/20211206102931.1433871-1-anders.roxell@linaro.org/
-https://lore.kernel.org/all/20240501002150.1370861-1-edliaw@google.com/
-
-... I guess we somehow missed those?
-
+>         ud_type = get_ud_type(regs->ip);
+>         if (ud_type == BUG_UD_NONE)
+>         	return false;
 > 
-> 3. The code is passing a signed const char* to elf_hash(), which expects
->    a const unsigned char *. There are several callers, so fix this at
->    the source by allowing the function to accept a signed argument, and
->    then converting to unsigned operations, once inside the function.
+> See?
 > 
-
-There is also a v4 fix for this item that was sent out here:
-https://lore.kernel.org/all/20240506181951.1804451-1-edliaw@google.com/
-
-> 4. clang doesn't have __attribute__((externally_visible)) and generates
->    a warning to that effect. Fortunately, gcc 12 and gcc 13 do not seem
->    to require that attribute in order to build, run and pass tests here,
->    so remove it.
+> >  		return handled;
+> >  
+> >  	/*
+> > @@ -236,10 +248,15 @@ static noinstr bool handle_bug(struct pt_regs *regs)
+> >  	 */
+> >  	if (regs->flags & X86_EFLAGS_IF)
+> >  		raw_local_irq_enable();
+> > -	if (report_bug(regs->ip, regs) == BUG_TRAP_TYPE_WARN ||
+> > -	    handle_cfi_failure(regs) == BUG_TRAP_TYPE_WARN) {
+> > -		regs->ip += LEN_UD2;
+> > -		handled = true;
+> > +
+> > +	if (insn == INSN_UD2) {
+> > +		if (report_bug(regs->ip, regs) == BUG_TRAP_TYPE_WARN ||
+> > +		handle_cfi_failure(regs) == BUG_TRAP_TYPE_WARN) {
 > 
-> [1] https://lore.kernel.org/all/20240329-selftests-libmk-llvm-rfc-v1-1-2f9ed7d1c49f@valentinobst.de/
-
-What is this about? Left over from v1 maybe?
-
+> Please indent the second condition properly:
 > 
-> Signed-off-by: John Hubbard <jhubbard@nvidia.com>
-> ---
-
-I would prefer to pick up the fixes from folks who sent out the patches
-first but I'm fine either way.
-
-Reviewed-by: Carlos Llamas <cmllamas@google.com>
+>        if (a ||
+>            b) {
+> 
+> I know you just added another tab, but when touching code, then please
+> do it right.
+> 
+> > +			regs->ip += LEN_UD2;
+> > +			handled = true;
+> 
+> > +/*
+> > + * Checks for the information embedded in the UD1 trap instruction
+> > + * for the UB Sanitizer in order to pass along debugging output.
+> > + */
+> > +void handle_ubsan_failure(struct pt_regs *regs, int insn)
+> > +{
+> > +	u32 type = 0;
+> 
+> Pointless initialization.
+> 
+> > +	if (insn == INSN_ASOP) {
+> > +		type = (*(u16 *)(regs->ip + LEN_ASOP + LEN_UD1));
+> > +		if ((type & 0xFF) == 0x40)
+> 
+> No magic constants please. What does 0x40 mean?
+> 
+> > +			type = (type >> 8) & 0xFF;
+> 
+> That mask is pointless as u16 is zero extended when assigned to u32, but
+> why not using u16 in the first place to make it clear?
+> 
+> > +	} else {
+> > +		type = (*(u16 *)(regs->ip + LEN_UD1));
+> > +		if ((type & 0xFF) == 0x40)
+> > +			type = (type >> 8) & 0xFF;
+> > +	}
+> 
+> Copy & pasta rules!
+> 
+> 	unsigned long addr = regs->ip + LEN_UD1;
+> 	u16 type;
+> 
+>         type = insn == INSN_UD1 ? *(u16 *)addr : *(u16 *)(addr + LEN_ASOP);
+> 
+> 	if ((type & 0xFF) == UBSAN_MAGICALLY_USE_2ND_BYTE)
+> 		type >>= 8;
+> 	pr_crit("%s\n", report_ubsan_failure(regs, type));
+> 
+> I don't see the point for printing regs->ip as this is followed by a
+> stack trace anyway, but I don't have a strong opinion about it either.
+> 
+> Though with the above get_ud_type() variant this becomes even simpler:
+> 
+> void handle_ubsan_failure(struct pt_regs *regs, u16 type)
+> {
+> 	if ((type & 0xFF) == UBSAN_MAGICALLY_USE_2ND_BYTE)
+> 		type >>= 8;
+> 	pr_crit("%s\n", report_ubsan_failure(regs, type));
+> }
+> 
+> Thanks,
+> 
+>         tglx
