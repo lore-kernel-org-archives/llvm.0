@@ -1,67 +1,60 @@
-Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C6845172798;
-	Tue, 11 Jun 2024 07:56:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.92.199
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3EBDC174EEB;
+	Tue, 11 Jun 2024 08:59:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718092573; cv=none; b=NQcxr0hRBnvxMsVjCe0C0U/jJqoDuBpo1CNKsykKBPEZq6H75yJqEvbMf5oP7yH2MmFmLTFlCykGfwdXjE2TI090qoedvgikZ4P9dshQrFlhD248kjbpqecw4f1XZ3FhZt+IpWVHkEM8FflgI2QLJ8z23W+jW3q5CKrRgJvP27E=
+	t=1718096352; cv=none; b=Prw1fd0cCbVYOS9rJKsB8+0wZBPotNRFPneJaLZcIj7UPOYcvfTCTE1NyN0d2EtX+XCY0CjUTsLF6G47YE7QusRsM/yV3ExHKOdgRnB04qPRf7Lxp54H/tPf7ptsgEFOdgD6FnaXNfOGmVcfsajGvCna6aAein2T9yXIoyi8XX0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718092573; c=relaxed/simple;
-	bh=onq0LibBzl0SGv/vrIqLQZvTBuzX3tSL82kn87S2vEo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=uS2gB6dh2frFZcYSGnXuBLaaNxksjYhUKbmOfB9vedsaJMp3Nrt/N+KmITgT5N3DCLcwFKPMkrG/04zY4tKiJzFx57zyuPcwRFSwMrVvsJuNqhndUgirwozS3LNfZXzKKCjyFat6sCXjL3pChDd77F1eke9bk7qzXcySp9+aZPc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=VhDrpQ49; arc=none smtp.client-ip=90.155.92.199
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
+	s=arc-20240116; t=1718096352; c=relaxed/simple;
+	bh=HYqgkl04zqLdbPcuqAZMYldfDQQSBLgVFDNzDgBP8Ag=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=OBIjBw6I87iYbawUGYEXsE52AWDFj5kleAeSI9SKsnE9rZlVOI7DWcwbTf7Hq0FEkOVCFtJuRK0tJNJ5KmzpvtIdStieVvx3JxkPLpnMSslVsgk2Z7nYogun0SIxHTqu+r6wywn2DS/co5xlKgybWdOhW0XC8RTC1fF80dq/VM8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=XBxpsiXP; arc=none smtp.client-ip=192.198.163.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="VhDrpQ49"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=TLcNdhigD/3gcWPOQBhYy4GWZxU41lowHmx6XYIrLQ4=; b=VhDrpQ497BR5J+mZwqbqb2QNiG
-	RcHgVBpOq5EAJwvUz/EReo6oK6UA5f12P17TmmGsRaAHxhlN/3GDLIhdsq3B5kmzjCuvqhYgyXb9G
-	7cMJIFsf1EP8QT/NXRGPQWz4k4s2nLmcqoWtP8M6izp18ePXgtf+LK8yjU/C/DMOwrbn4rp4lHBk8
-	n6EWE4PsglyTkXrf37/GTq4Ju9pkpAe9RHsn1LyZyh86vB/UuwhkTz2NUeDZs9YDqlmF099O2bms2
-	zG+WjYEspDBieVr0aMg3BSVawImYV6141ckdskT9Jd2/gXQi7t6sNrff6Sfw5JH+SfoJzeJuWXNN/
-	v21YQxNQ==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-	by desiato.infradead.org with esmtpsa (Exim 4.97.1 #2 (Red Hat Linux))
-	id 1sGwM0-000000020Of-1xlj;
-	Tue, 11 Jun 2024 07:55:47 +0000
-Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
-	id 1B99F302792; Tue, 11 Jun 2024 09:55:43 +0200 (CEST)
-Date: Tue, 11 Jun 2024 09:55:42 +0200
-From: Peter Zijlstra <peterz@infradead.org>
-To: Kees Cook <kees@kernel.org>
-Cc: Erick Archer <erick.archer@outlook.com>, Ingo Molnar <mingo@redhat.com>,
-	Arnaldo Carvalho de Melo <acme@kernel.org>,
-	Namhyung Kim <namhyung@kernel.org>,
-	Mark Rutland <mark.rutland@arm.com>,
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-	Jiri Olsa <jolsa@kernel.org>, Ian Rogers <irogers@google.com>,
-	Adrian Hunter <adrian.hunter@intel.com>,
-	"Liang, Kan" <kan.liang@linux.intel.com>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	"H. Peter Anvin" <hpa@zytor.com>,
-	"Gustavo A. R. Silva" <gustavoars@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-	Matthew Wilcox <mawilcox@microsoft.com>, x86@kernel.org,
-	linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-hardening@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH v4 0/3] Hardening perf subsystem
-Message-ID: <20240611075542.GD8774@noisy.programming.kicks-ass.net>
-References: <AS8PR02MB7237F5BFDAA793E15692B3998BFD2@AS8PR02MB7237.eurprd02.prod.outlook.com>
- <202406101010.E1C77AE9D@keescook>
- <20240610200544.GY8774@noisy.programming.kicks-ass.net>
- <202406101438.BC43514F@keescook>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="XBxpsiXP"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1718096350; x=1749632350;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=HYqgkl04zqLdbPcuqAZMYldfDQQSBLgVFDNzDgBP8Ag=;
+  b=XBxpsiXPV31KVB7EjRN7UWyvqqR5WQHk6sepVyJMOiMd5k2vJyAqL+hx
+   Ypbz2a0/6mvqfm4OsFcPNDET4zYd39yjBMXw8gR3iuYJIc2bmr88TDdVg
+   UUTIOAyKlFGsZw4QvoFOlbH7IQ7DZigb3X2YMlR1TlC0ZcKirso4RNC4M
+   Ke24K6FjnNIbNJqF/7ZX/3z2m8O1Oxhy7AhI98vTJDfZ6ml2hu3WKImds
+   1Uk5qAs1Gzs/gHFlMciMlPTia5FVH1BQMYbYzV9+tUe45jJaQYOMEUjKP
+   1cyUyAwrAxJcjd2be9tL2WTOK77j2FIPhThnM0GIFWwKx6x50cTMj6gud
+   Q==;
+X-CSE-ConnectionGUID: vfkugvNhRIibyDUQx08rCg==
+X-CSE-MsgGUID: Dw7irCnEQO6q98g/iQ95gg==
+X-IronPort-AV: E=McAfee;i="6600,9927,11099"; a="40194329"
+X-IronPort-AV: E=Sophos;i="6.08,229,1712646000"; 
+   d="scan'208";a="40194329"
+Received: from orviesa002.jf.intel.com ([10.64.159.142])
+  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jun 2024 01:59:09 -0700
+X-CSE-ConnectionGUID: WmVQdflITz+at+cdjYnIuw==
+X-CSE-MsgGUID: 62seSpLyTEa8T/F7jia7XA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.08,229,1712646000"; 
+   d="scan'208";a="70152225"
+Received: from lkp-server01.sh.intel.com (HELO 628d7d8b9fc6) ([10.239.97.150])
+  by orviesa002.jf.intel.com with ESMTP; 11 Jun 2024 01:59:08 -0700
+Received: from kbuild by 628d7d8b9fc6 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1sGxLO-0000Fa-05;
+	Tue, 11 Jun 2024 08:59:06 +0000
+Date: Tue, 11 Jun 2024 16:59:02 +0800
+From: kernel test robot <lkp@intel.com>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	devel@driverdev.osuosl.org
+Subject: [driver-core:const_driver 8/8] drivers/s390/cio/device.c:64:21:
+ error: initializing 'struct ccw_driver *' with an expression of type 'const
+ struct ccw_driver *' discards qualifiers
+Message-ID: <202406111607.3OiraQK0-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -70,96 +63,132 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <202406101438.BC43514F@keescook>
 
-On Mon, Jun 10, 2024 at 02:46:09PM -0700, Kees Cook wrote:
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/driver-core.git const_driver
+head:   8e41ff96c9c6e36d7f4887ad6f6224fcd889ac38
+commit: 8e41ff96c9c6e36d7f4887ad6f6224fcd889ac38 [8/8] driver core: have match() callback in struct bus_type take a const *
+config: s390-allnoconfig (https://download.01.org/0day-ci/archive/20240611/202406111607.3OiraQK0-lkp@intel.com/config)
+compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project 4403cdbaf01379de96f8d0d6ea4f51a085e37766)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240611/202406111607.3OiraQK0-lkp@intel.com/reproduce)
 
-> > I really detest this thing because it makes what was trivially readable
-> > into something opaque. Get me that type qualifier that traps on overflow
-> > and write plain C. All this __builtin_overflow garbage is just that,
-> > unreadable nonsense.
-> 
-> It's more readable than container_of(), 
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202406111607.3OiraQK0-lkp@intel.com/
 
-Yeah, no. container_of() is absolutely trivial and very readable.
-container_of_const() a lot less so.
+All errors (new ones prefixed by >>):
 
-(one static_assert() removed)
+   In file included from drivers/s390/cio/device.c:21:
+   In file included from include/linux/device.h:32:
+   In file included from include/linux/device/driver.h:21:
+   In file included from include/linux/module.h:19:
+   In file included from include/linux/elf.h:6:
+   In file included from arch/s390/include/asm/elf.h:173:
+   In file included from arch/s390/include/asm/mmu_context.h:11:
+   In file included from arch/s390/include/asm/pgalloc.h:18:
+   In file included from include/linux/mm.h:2253:
+   include/linux/vmstat.h:514:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     514 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+   In file included from drivers/s390/cio/device.c:27:
+   In file included from include/linux/dma-mapping.h:11:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/s390/include/asm/io.h:93:
+   include/asm-generic/io.h:548:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     548 |         val = __raw_readb(PCI_IOBASE + addr);
+         |                           ~~~~~~~~~~ ^
+   include/asm-generic/io.h:561:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     561 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
+      37 | #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
+         |                                                           ^
+   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
+     102 | #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
+         |                                                      ^
+   In file included from drivers/s390/cio/device.c:27:
+   In file included from include/linux/dma-mapping.h:11:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/s390/include/asm/io.h:93:
+   include/asm-generic/io.h:574:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     574 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
+      35 | #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
+         |                                                           ^
+   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
+     115 | #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
+         |                                                      ^
+   In file included from drivers/s390/cio/device.c:27:
+   In file included from include/linux/dma-mapping.h:11:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/s390/include/asm/io.h:93:
+   include/asm-generic/io.h:585:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     585 |         __raw_writeb(value, PCI_IOBASE + addr);
+         |                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:595:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     595 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:605:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     605 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:693:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     693 |         readsb(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:701:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     701 |         readsw(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:709:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     709 |         readsl(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:718:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     718 |         writesb(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+   include/asm-generic/io.h:727:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     727 |         writesw(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+   include/asm-generic/io.h:736:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     736 |         writesl(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+>> drivers/s390/cio/device.c:64:21: error: initializing 'struct ccw_driver *' with an expression of type 'const struct ccw_driver *' discards qualifiers [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
+      64 |         struct ccw_driver *cdrv = to_ccwdrv(drv);
+         |                            ^      ~~~~~~~~~~~~~~
+   13 warnings and 1 error generated.
 
-#define container_of(ptr, type, member) ({                              \
-        void *__mptr = (void *)(ptr);                                   \
-        ((type *)(__mptr - offsetof(type, member))); })
 
-Which is very clear indeed in what it does. Compare with:
+vim +64 drivers/s390/cio/device.c
 
-#define struct_size(p, member, count)                                   \
-        __builtin_choose_expr(__is_constexpr(count),                    \
-                sizeof(*(p)) + flex_array_size(p, member, count),       \
-                size_add(sizeof(*(p)), flex_array_size(p, member, count)))
+^1da177e4c3f41 Linus Torvalds     2005-04-16  55  
+^1da177e4c3f41 Linus Torvalds     2005-04-16  56  /* The Linux driver model distinguishes between a bus type and
+^1da177e4c3f41 Linus Torvalds     2005-04-16  57   * the bus itself. Of course we only have one channel
+^1da177e4c3f41 Linus Torvalds     2005-04-16  58   * subsystem driver and one channel system per machine, but
+^1da177e4c3f41 Linus Torvalds     2005-04-16  59   * we still use the abstraction. T.R. says it's a good idea. */
+^1da177e4c3f41 Linus Torvalds     2005-04-16  60  static int
+8e41ff96c9c6e3 Greg Kroah-Hartman 2024-06-10  61  ccw_bus_match (struct device * dev, const struct device_driver * drv)
+^1da177e4c3f41 Linus Torvalds     2005-04-16  62  {
+^1da177e4c3f41 Linus Torvalds     2005-04-16  63  	struct ccw_device *cdev = to_ccwdev(dev);
+^1da177e4c3f41 Linus Torvalds     2005-04-16 @64  	struct ccw_driver *cdrv = to_ccwdrv(drv);
+^1da177e4c3f41 Linus Torvalds     2005-04-16  65  	const struct ccw_device_id *ids = cdrv->ids, *found;
+^1da177e4c3f41 Linus Torvalds     2005-04-16  66  
+^1da177e4c3f41 Linus Torvalds     2005-04-16  67  	if (!ids)
+^1da177e4c3f41 Linus Torvalds     2005-04-16  68  		return 0;
+^1da177e4c3f41 Linus Torvalds     2005-04-16  69  
+^1da177e4c3f41 Linus Torvalds     2005-04-16  70  	found = ccw_device_id_match(ids, &cdev->id);
+^1da177e4c3f41 Linus Torvalds     2005-04-16  71  	if (!found)
+^1da177e4c3f41 Linus Torvalds     2005-04-16  72  		return 0;
+^1da177e4c3f41 Linus Torvalds     2005-04-16  73  
+^1da177e4c3f41 Linus Torvalds     2005-04-16  74  	cdev->id.driver_info = found->driver_info;
+^1da177e4c3f41 Linus Torvalds     2005-04-16  75  
+^1da177e4c3f41 Linus Torvalds     2005-04-16  76  	return 1;
+^1da177e4c3f41 Linus Torvalds     2005-04-16  77  }
+^1da177e4c3f41 Linus Torvalds     2005-04-16  78  
 
-And I still have no idea :-(
+:::::: The code at line 64 was first introduced by commit
+:::::: 1da177e4c3f41524e886b7f1b8a0c1fc7321cac2 Linux-2.6.12-rc2
 
-> IMO. "give me the struct size
-> for variable VAR, which has a flexible array MEMBER, when we have COUNT
-> many of them": struct_size(VAR, MEMBER, COUNT). It's more readable, more
-> robust, and provides saturation in the face of potential wrap-around.
+:::::: TO: Linus Torvalds <torvalds@ppc970.osdl.org>
+:::::: CC: Linus Torvalds <torvalds@ppc970.osdl.org>
 
-I'm sure you know what it does. Thing is, I don't care because I can
-trivially write it myself and not have to care and I'll have forgotten
-all about it the moment I sent this email.
-
-It just doesn't make sense to wrap something as utterly trivial as:
-
-	size = sizeof(*p) + num*sizeof(p->foo);
-
-We're going to have to agree to disagree on this.
-
-Note how I naturally get the order wrong?
-
-[[ There is the whole FMA angle to this, that is, fundamentally this is a
-multiply-accumulate, but the problem there is the same that I noted,
-there is no fixed order, a+b*c and a*b+c are both very common
-definitions -- although I lean towards the latter being the correct one,
-given the order in the naming. I suppose this is a long winded way of
-saying that:
-
-#define struct_size(p, member, num) \
-	mult_add_no_overflow(num, sizeof(p->member), sizeof(*p))
-
-would be *FAR* more readable. And then I still think struct_size() is
-less readable than its expansion. ]]
-
-> > > This provides __counted_by coverage, and I think this is important to
-> > > gain in ever place we can. Given that this is part of a ring buffer
-> > > implementation that is arbitrarily sized, this is exactly the kind of
-> > > place I'd like to see __counted_by used. This is a runtime robustness
-> > > improvement, so I don't see this a "churn" at all.
-> > 
-> > Again, mixed in with that other crap. Anyway, remind me wth this
-> > __counted_by thing actually does?
-> 
-> It provides annotation for the compiler to perform run-time bounds
-> checking on dynamically sized arrays. i.e. CONFIG_FORTIFY_SOURCE and
-> CONFIG_UBSAN_BOUNDS can actually reason about annotated flexible arrays
-> instead of just saying "oh no a flexible array, I give up".
-
-Some day I'll have to look at this FORTIFY_SOURCE and see what it
-actually does I suppose :/
-
-> > > Peter, for patches 1 and 3, if you'd prefer not to carry them, I could
-> > > put them in the hardening tree to keep them out of your way. It seems
-> > > clear you don't want patch 2 at all.
-> > 
-> > I prefer to not have struct_size() anywhere at all. Please just write
-> > readable code.
-> 
-> That ship has sailed, and it has been keeping things at bay for a while
-> now. As we make progress on making the compiler able to do this more
-> naturally, we can work on replacing struct_size(), but it's in use
-> globally and it's useful both for catching runtime mistakes and for
-> catching compile-time mistakes (the flexible array has to match the
-> variable's struct).
-
-I coulnd't quickly find a single instance in the code I care about. So
-nothing is sailing afaict.
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
