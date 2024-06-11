@@ -1,279 +1,172 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f171.google.com (mail-pf1-f171.google.com [209.85.210.171])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE8F017C7D5;
-	Tue, 11 Jun 2024 14:33:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B1EBC28E37
+	for <llvm@lists.linux.dev>; Tue, 11 Jun 2024 15:32:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718116428; cv=none; b=tZMdvt7aBHW0lPLD7TTUuwhCs+vbca/qpm/y8eQ8iXgh6Alf0+sgQ8x7XKAuq9TTmD6gPutuXJlSZdkIbg61O50KrPq7pmZ/XeEBwTzXmRTJJu+wkTY8O5qVHIby2vG967RjEiqOvCpTgKAcYDH9WlR1KnVNB916qV9sTZxCpM0=
+	t=1718119935; cv=none; b=rcGwi32CWd5meh31CtTuTE3nBHq7m3todiMIB+6kbqTggkwwRHGLlAFJC1NRktcxF2nP8nOEuBXbEvHEx5VrSlOkl0oOD6xPxRyKzqW9/N34IhCpdEttAtL88iZtAaI2tn577UOhZYu12uxn7i08wl0I0crf3L18COZSftMSvS8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718116428; c=relaxed/simple;
-	bh=fRkXAGv1OWc7jUB5rnyl+rqBuJx/lAr1pj4eTVguxfE=;
+	s=arc-20240116; t=1718119935; c=relaxed/simple;
+	bh=Vn7Kc4x7zOZjOguyNFwvnJrV+uFfVWZrPr9+iUiJQvs=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=fTgkzA/k1fkCL6a/M3gGvmQcS3pA9XD3UmOTobM/1K4GvlQXeUzeNv1HJxoEYRV7lL6Ty2bziMCvIZvaL1FJKBq1oWQcBGB2jZylWSYHu1IOiHv66G7ObzfCxExRkfmfQKwBLXMfUXggpBhnzGCeQcSVTK00N0XUVfwZydE2lT4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=WzolBbQ9; arc=none smtp.client-ip=198.175.65.17
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=Z2U4ril7hztSze2ORufEVVnmQavh0C24C78z3YDqr2+t/zec0ZVWCUJ+EpD95sen4KAGBUNlWWDHY7Z+FuLQPUo9OeXnHX3hMPuX1q9G6ByWiyyTMiiE7h/v/DapGPAqoQ2p/aj2FYcIHgEsU75RVt+rdVzQv/ZQgEXxBmHj63I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=guiaPH6c; arc=none smtp.client-ip=209.85.210.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="WzolBbQ9"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1718116427; x=1749652427;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=fRkXAGv1OWc7jUB5rnyl+rqBuJx/lAr1pj4eTVguxfE=;
-  b=WzolBbQ9nFXa/e6YObIrA/tngptPQe/iwYLapfEWzz5SQ4uA33zznqzq
-   3akps0Ka2vswq5yNxyx9eFHPHn5o7NVTRiANk6IqGjjM497KU4WLB+3aw
-   xkOJ9NYZ9KOgqjSuB5RBmC3N/2irF8MnJrgFF5BXFU73+NJeNUUWFIzIF
-   1t6a2olVwlWWMqbKWNI5tpIfWHeRC/p92SFcgpw6N0HTI/SnZnT2zDsDE
-   CPHP4PXEzNREuhtC29T88kIUY2OKkSlriCC8GblIdAytWsE8eSf04ArHu
-   IT99DWJKvjvjBNQ0yYMezIkjcauSlxQrSt5KMetAdFzhrRtTCj8AvOJt3
-   w==;
-X-CSE-ConnectionGUID: Om166ngoQgyIkoOCrZu5Bw==
-X-CSE-MsgGUID: BBk5NA0sReilEkNKJowz1g==
-X-IronPort-AV: E=McAfee;i="6600,9927,11099"; a="14956344"
-X-IronPort-AV: E=Sophos;i="6.08,230,1712646000"; 
-   d="scan'208";a="14956344"
-Received: from orviesa007.jf.intel.com ([10.64.159.147])
-  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jun 2024 07:33:38 -0700
-X-CSE-ConnectionGUID: UsKn0De5SQaNK0MMUDwhVQ==
-X-CSE-MsgGUID: hfbLQQz9T2uSLGzlc+LUVA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.08,230,1712646000"; 
-   d="scan'208";a="40162293"
-Received: from lkp-server01.sh.intel.com (HELO 628d7d8b9fc6) ([10.239.97.150])
-  by orviesa007.jf.intel.com with ESMTP; 11 Jun 2024 07:33:34 -0700
-Received: from kbuild by 628d7d8b9fc6 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1sH2Z2-0000XO-0L;
-	Tue, 11 Jun 2024 14:33:32 +0000
-Date: Tue, 11 Jun 2024 22:32:46 +0800
-From: kernel test robot <lkp@intel.com>
-To: "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
-	Serge Semin <fancer.lancer@gmail.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Alexandre Torgue <alexandre.torgue@foss.st.com>,
-	Andrew Halaney <ahalaney@redhat.com>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Jose Abreu <joabreu@synopsys.com>,
-	linux-arm-kernel@lists.infradead.org,
-	linux-stm32@st-md-mailman.stormreply.com,
-	Maxime Coquelin <mcoquelin.stm32@gmail.com>, netdev@vger.kernel.org,
-	Paolo Abeni <pabeni@redhat.com>,
-	Romain Gantois <romain.gantois@bootlin.com>
-Subject: Re: [PATCH net-next 2/5] net: stmmac: dwmac-intel: provide a
- select_pcs() implementation
-Message-ID: <202406112254.uL3WgEt1-lkp@intel.com>
-References: <E1sGgCN-00Fact-0x@rmk-PC.armlinux.org.uk>
+	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="guiaPH6c"
+Received: by mail-pf1-f171.google.com with SMTP id d2e1a72fcca58-7023b6d810bso4568613b3a.3
+        for <llvm@lists.linux.dev>; Tue, 11 Jun 2024 08:32:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1718119933; x=1718724733; darn=lists.linux.dev;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=Vn7Kc4x7zOZjOguyNFwvnJrV+uFfVWZrPr9+iUiJQvs=;
+        b=guiaPH6coCXcRgt0XirqFHxp1L+biepfmthgkE2vp+FowE6xIaLxYkjHzkoEy4xGYQ
+         DfUXQrZJiRRBd7HCt8WpSHYeKQwf6Ire0fSyorhPSageq4vf0HtGZ86x7lDv/iKEKGTJ
+         ptuB3MT0O3oQlbavbP6JCYOTehO6OGgs7A8geYpzCjCmH9msYhuV1QmLij8Njv5hjk1F
+         t5mGxRCSSVV2WjPiu5VhcwMqKQLioNfKgQ7X7s+VDuYKvqf5H5Mwaz/+05I+0cwDV06T
+         t3K34N63u7izNXL0As84J9iBeD4f37b01sVUEsDt1x+yVr9Ug83We3XJpejK/1HrD7qC
+         E6jg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1718119933; x=1718724733;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Vn7Kc4x7zOZjOguyNFwvnJrV+uFfVWZrPr9+iUiJQvs=;
+        b=E3riHrEQJHUTgdYvTyjOmWxnNWLRseEomUgILE2ZochoD5aRFFg/f1thuYsIJwMymI
+         VQAhnBZ6phq62/NDk09d14jWuEQHgYxuA+rmCxt/hL+jNXIfb/29binCAYzpyy+SZ1v1
+         sRdXRAEXOxzKK4GS4RrXDmuq+35NXuM+x2uy+XQjMk+eBsXh/Zh1ODTkcvHSANEIc6t0
+         w1qZEGaaJs+PG/SLTg3zHKDrS951DDk/2OipuXAu7plzWiCFFiA4LA4DzVPJjumQ8A3j
+         svpi1Q2nsWvUFzvnZh9in5FEJPgLfXXuxOVbkrhN561nZR4f+iZ4S1Yn6CMtx+Jg/8Yh
+         fVCA==
+X-Forwarded-Encrypted: i=1; AJvYcCXUHSpzhKFuqHviEvq1z2Pa8HJ6daFTcm5eXosq+bqJOf3WyK9+mZnhhIrP5V4zZqOCOp5TicJdTi+5JZC0QD50qz/kyw==
+X-Gm-Message-State: AOJu0YyerZ9qLqRIPxUBLDrrzBJdED/W5dQ/wr0XSI1GRE5MhY015j4i
+	CD83MO1NTV68vuWccs3rScXt0DwUudaRZ9JnaqhVsgcqiYXQhbl6D2ViOIKd9Us=
+X-Google-Smtp-Source: AGHT+IF8rG5/mjujMehriFq+KOF4rVuXuWFdDgw6V0TBjJ1ZIkoAFk5Q1ybFIIs3W8YsWs7KBpcR4g==
+X-Received: by 2002:a05:6a20:9190:b0:1b7:d72e:9e5e with SMTP id adf61e73a8af0-1b7d72ea074mr4679110637.37.1718119932775;
+        Tue, 11 Jun 2024 08:32:12 -0700 (PDT)
+Received: from debug.ba.rivosinc.com ([64.71.180.162])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-6e668a494c4sm4998087a12.22.2024.06.11.08.32.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 11 Jun 2024 08:32:12 -0700 (PDT)
+Date: Tue, 11 Jun 2024 08:32:10 -0700
+From: Deepak Gupta <debug@rivosinc.com>
+To: Conor Dooley <conor@kernel.org>
+Cc: =?iso-8859-1?Q?Cl=E9ment_L=E9ger?= <cleger@rivosinc.com>,
+	Conor Dooley <conor.dooley@microchip.com>,
+	Alexandre Ghiti <alex@ghiti.fr>, Jesse Taube <jesse@rivosinc.com>,
+	linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev, Alexandre Ghiti <alexghiti@rivosinc.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>,
+	=?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn@rivosinc.com>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Masahiro Yamada <masahiroy@kernel.org>,
+	Atish Patra <atishp@rivosinc.com>
+Subject: Re: [PATCH v0] RISC-V: Use Zkr to seed KASLR base address
+Message-ID: <Zmht+h75GgxP3ocz@debug.ba.rivosinc.com>
+References: <20240531162327.2436962-1-jesse@rivosinc.com>
+ <20240531-uselessly-spied-262ecf44e694@spud>
+ <b199fde6-c24e-4c18-9c38-fdc923294551@ghiti.fr>
+ <20240603-stinking-roster-cfad46696ae5@spud>
+ <ZmNWmxak9Rc80Kpb@debug.ba.rivosinc.com>
+ <c288f739-2a1a-4fd7-884b-12e360a33142@rivosinc.com>
+ <20240610-qualm-chalice-72d0cc743658@wendy>
+ <01547275-8c8c-43cf-9da0-64825c234707@rivosinc.com>
+ <Zmdq6kszPBxAvLdD@debug.ba.rivosinc.com>
+ <20240610-earplugs-anybody-ebd04a5fa777@spud>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1; format=flowed
 Content-Disposition: inline
-In-Reply-To: <E1sGgCN-00Fact-0x@rmk-PC.armlinux.org.uk>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20240610-earplugs-anybody-ebd04a5fa777@spud>
 
-Hi Russell,
+On Mon, Jun 10, 2024 at 10:56:35PM +0100, Conor Dooley wrote:
+>On Mon, Jun 10, 2024 at 02:06:50PM -0700, Deepak Gupta wrote:
+>> On Mon, Jun 10, 2024 at 11:16:42AM +0200, Clément Léger wrote:
+>> > On 10/06/2024 11:02, Conor Dooley wrote:
+>> > > On Mon, Jun 10, 2024 at 10:33:34AM +0200, Clément Léger wrote:
+>> > > > On 07/06/2024 20:51, Deepak Gupta wrote:
+>> > > > > On Mon, Jun 03, 2024 at 01:47:40PM +0100, Conor Dooley wrote:
+>> > > > > > On Mon, Jun 03, 2024 at 11:14:49AM +0200, Alexandre Ghiti wrote:
+>> > > > > I don't know all the details but on first glance it seems like instead
+>> > > > > of ACPI,
+>> > > > > may be FWFT is a better place for discovery ?
+>> > > > > https://lists.riscv.org/g/tech-prs/topic/patch_v12_add_firmware/106479571
+>> > > >
+>> > > > IMHO, doing discovery in FWFT is not the goal of this extension. I think
+>> > > > the "real" solution would be to wait for the unified discovery task
+>> > > > group to come up with something for that (which is their goal I think) [1]
+>>
+>> Yeah I understand the conundrum here.
+>>
+>> > >
+>> > > I'm curious to see how that works out. The proposal documents an m-mode
+>> > > csr, so we'd have to smuggle the information to s-mode somehow...
+>> >
+>> > Ahem, yeah, I spoke a bit too fast. Looked at the proposal and the
+>> > mconfigptr CSR will be accessible by M-mode only so I guess we will have
+>> > to find another way...
+>>
+>> That's not the only problem. Even if you get mconfigptr access, parsing the format
+>> is another thing that has to be done. This is early in boot. Although its strictly (pun
+>> intended) not a firmware feature extension, I think it's much easier to ask underlying
+>> firmware if platform is `Sstrict`. or may be expose something like below
+>>
+>> `ENABLE_SSTRICT`.
+>> Platforms which support `Sstrict` can return success for this while platforms which don't
+>> have `Sstrict` can return error code (not supported or not implemented).
+>> This way its not feature discovery.
+>
+>I mean, it's feature discovery in all but name. You're calling it
+>enable, but the behaviour you describe is feature discovery - not that I
+>am against this being feature discovery since it gets us out of an
+>annoying bind.
 
-kernel test robot noticed the following build errors:
+Yes I know it's cheating but at least for this case, it seems like easy solution which
+doesn't break anything. Neither I see it creating any future problems (except FWFT becoming
+to look like discovery mechanism :-) and Clement/Atish hating me for that)
 
-[auto build test ERROR on net-next/main]
+Another solution to this could be introducing a riscv config `CONFIG_RISCV_SSTRICT`.
+By default always select `CONFIG_RISCV_SSTRICT` and any platform owner who are not
+sstrict, they can build their own.
+I expect distro (ubuntu, red hat, etc) would want by default `CONFIG_RISCV_SSTRICT`.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Russell-King-Oracle/net-stmmac-add-select_pcs-platform-method/20240611-024301
-base:   net-next/main
-patch link:    https://lore.kernel.org/r/E1sGgCN-00Fact-0x%40rmk-PC.armlinux.org.uk
-patch subject: [PATCH net-next 2/5] net: stmmac: dwmac-intel: provide a select_pcs() implementation
-config: x86_64-kexec (https://download.01.org/0day-ci/archive/20240611/202406112254.uL3WgEt1-lkp@intel.com/config)
-compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240611/202406112254.uL3WgEt1-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202406112254.uL3WgEt1-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> drivers/net/ethernet/stmicro/stmmac/dwmac-intel.c:600:43: error: expected ';' after expression
-     600 |                 plat->select_pcs = intel_mgbe_select_pcs,
-         |                                                         ^
-         |                                                         ;
-   1 error generated.
-
-
-vim +600 drivers/net/ethernet/stmicro/stmmac/dwmac-intel.c
-
-   455	
-   456	static int intel_mgbe_common_data(struct pci_dev *pdev,
-   457					  struct plat_stmmacenet_data *plat)
-   458	{
-   459		struct fwnode_handle *fwnode;
-   460		char clk_name[20];
-   461		int ret;
-   462		int i;
-   463	
-   464		plat->pdev = pdev;
-   465		plat->phy_addr = -1;
-   466		plat->clk_csr = 5;
-   467		plat->has_gmac = 0;
-   468		plat->has_gmac4 = 1;
-   469		plat->force_sf_dma_mode = 0;
-   470		plat->flags |= (STMMAC_FLAG_TSO_EN | STMMAC_FLAG_SPH_DISABLE);
-   471	
-   472		/* Multiplying factor to the clk_eee_i clock time
-   473		 * period to make it closer to 100 ns. This value
-   474		 * should be programmed such that the clk_eee_time_period *
-   475		 * (MULT_FACT_100NS + 1) should be within 80 ns to 120 ns
-   476		 * clk_eee frequency is 19.2Mhz
-   477		 * clk_eee_time_period is 52ns
-   478		 * 52ns * (1 + 1) = 104ns
-   479		 * MULT_FACT_100NS = 1
-   480		 */
-   481		plat->mult_fact_100ns = 1;
-   482	
-   483		plat->rx_sched_algorithm = MTL_RX_ALGORITHM_SP;
-   484	
-   485		for (i = 0; i < plat->rx_queues_to_use; i++) {
-   486			plat->rx_queues_cfg[i].mode_to_use = MTL_QUEUE_DCB;
-   487			plat->rx_queues_cfg[i].chan = i;
-   488	
-   489			/* Disable Priority config by default */
-   490			plat->rx_queues_cfg[i].use_prio = false;
-   491	
-   492			/* Disable RX queues routing by default */
-   493			plat->rx_queues_cfg[i].pkt_route = 0x0;
-   494		}
-   495	
-   496		for (i = 0; i < plat->tx_queues_to_use; i++) {
-   497			plat->tx_queues_cfg[i].mode_to_use = MTL_QUEUE_DCB;
-   498	
-   499			/* Disable Priority config by default */
-   500			plat->tx_queues_cfg[i].use_prio = false;
-   501			/* Default TX Q0 to use TSO and rest TXQ for TBS */
-   502			if (i > 0)
-   503				plat->tx_queues_cfg[i].tbs_en = 1;
-   504		}
-   505	
-   506		/* FIFO size is 4096 bytes for 1 tx/rx queue */
-   507		plat->tx_fifo_size = plat->tx_queues_to_use * 4096;
-   508		plat->rx_fifo_size = plat->rx_queues_to_use * 4096;
-   509	
-   510		plat->tx_sched_algorithm = MTL_TX_ALGORITHM_WRR;
-   511		plat->tx_queues_cfg[0].weight = 0x09;
-   512		plat->tx_queues_cfg[1].weight = 0x0A;
-   513		plat->tx_queues_cfg[2].weight = 0x0B;
-   514		plat->tx_queues_cfg[3].weight = 0x0C;
-   515		plat->tx_queues_cfg[4].weight = 0x0D;
-   516		plat->tx_queues_cfg[5].weight = 0x0E;
-   517		plat->tx_queues_cfg[6].weight = 0x0F;
-   518		plat->tx_queues_cfg[7].weight = 0x10;
-   519	
-   520		plat->dma_cfg->pbl = 32;
-   521		plat->dma_cfg->pblx8 = true;
-   522		plat->dma_cfg->fixed_burst = 0;
-   523		plat->dma_cfg->mixed_burst = 0;
-   524		plat->dma_cfg->aal = 0;
-   525		plat->dma_cfg->dche = true;
-   526	
-   527		plat->axi = devm_kzalloc(&pdev->dev, sizeof(*plat->axi),
-   528					 GFP_KERNEL);
-   529		if (!plat->axi)
-   530			return -ENOMEM;
-   531	
-   532		plat->axi->axi_lpi_en = 0;
-   533		plat->axi->axi_xit_frm = 0;
-   534		plat->axi->axi_wr_osr_lmt = 1;
-   535		plat->axi->axi_rd_osr_lmt = 1;
-   536		plat->axi->axi_blen[0] = 4;
-   537		plat->axi->axi_blen[1] = 8;
-   538		plat->axi->axi_blen[2] = 16;
-   539	
-   540		plat->ptp_max_adj = plat->clk_ptp_rate;
-   541		plat->eee_usecs_rate = plat->clk_ptp_rate;
-   542	
-   543		/* Set system clock */
-   544		sprintf(clk_name, "%s-%s", "stmmac", pci_name(pdev));
-   545	
-   546		plat->stmmac_clk = clk_register_fixed_rate(&pdev->dev,
-   547							   clk_name, NULL, 0,
-   548							   plat->clk_ptp_rate);
-   549	
-   550		if (IS_ERR(plat->stmmac_clk)) {
-   551			dev_warn(&pdev->dev, "Fail to register stmmac-clk\n");
-   552			plat->stmmac_clk = NULL;
-   553		}
-   554	
-   555		ret = clk_prepare_enable(plat->stmmac_clk);
-   556		if (ret) {
-   557			clk_unregister_fixed_rate(plat->stmmac_clk);
-   558			return ret;
-   559		}
-   560	
-   561		plat->ptp_clk_freq_config = intel_mgbe_ptp_clk_freq_config;
-   562	
-   563		/* Set default value for multicast hash bins */
-   564		plat->multicast_filter_bins = HASH_TABLE_SIZE;
-   565	
-   566		/* Set default value for unicast filter entries */
-   567		plat->unicast_filter_entries = 1;
-   568	
-   569		/* Set the maxmtu to a default of JUMBO_LEN */
-   570		plat->maxmtu = JUMBO_LEN;
-   571	
-   572		plat->flags |= STMMAC_FLAG_VLAN_FAIL_Q_EN;
-   573	
-   574		/* Use the last Rx queue */
-   575		plat->vlan_fail_q = plat->rx_queues_to_use - 1;
-   576	
-   577		/* For fixed-link setup, we allow phy-mode setting */
-   578		fwnode = dev_fwnode(&pdev->dev);
-   579		if (fwnode) {
-   580			int phy_mode;
-   581	
-   582			/* "phy-mode" setting is optional. If it is set,
-   583			 *  we allow either sgmii or 1000base-x for now.
-   584			 */
-   585			phy_mode = fwnode_get_phy_mode(fwnode);
-   586			if (phy_mode >= 0) {
-   587				if (phy_mode == PHY_INTERFACE_MODE_SGMII ||
-   588				    phy_mode == PHY_INTERFACE_MODE_1000BASEX)
-   589					plat->phy_interface = phy_mode;
-   590				else
-   591					dev_warn(&pdev->dev, "Invalid phy-mode\n");
-   592			}
-   593		}
-   594	
-   595		/* Intel mgbe SGMII interface uses pcs-xcps */
-   596		if (plat->phy_interface == PHY_INTERFACE_MODE_SGMII ||
-   597		    plat->phy_interface == PHY_INTERFACE_MODE_1000BASEX) {
-   598			plat->mdio_bus_data->has_xpcs = true;
-   599			plat->mdio_bus_data->default_an_inband = true;
- > 600			plat->select_pcs = intel_mgbe_select_pcs,
-   601		}
-   602	
-   603		/* Ensure mdio bus scan skips intel serdes and pcs-xpcs */
-   604		plat->mdio_bus_data->phy_mask = 1 << INTEL_MGBE_ADHOC_ADDR;
-   605		plat->mdio_bus_data->phy_mask |= 1 << INTEL_MGBE_XPCS_ADDR;
-   606	
-   607		plat->int_snapshot_num = AUX_SNAPSHOT1;
-   608	
-   609		plat->crosststamp = intel_crosststamp;
-   610		plat->flags &= ~STMMAC_FLAG_INT_SNAPSHOT_EN;
-   611	
-   612		/* Setup MSI vector offset specific to Intel mGbE controller */
-   613		plat->msi_mac_vec = 29;
-   614		plat->msi_lpi_vec = 28;
-   615		plat->msi_sfty_ce_vec = 27;
-   616		plat->msi_sfty_ue_vec = 26;
-   617		plat->msi_rx_base_vec = 0;
-   618		plat->msi_tx_base_vec = 1;
-   619	
-   620		return 0;
-   621	}
-   622	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+>
+>I forget which extension Alex and I discussed previously, but there's
+>some mm-related things that you're gonna have to probe super early and
+>we need to figure out if we can get that info from ACPI or not. I know
+>we discussed it w.r.t. one of the T-Head vendor extensions, but I think
+>another standard one got mentioned too.
+>
+>> It seems like arm64 parses fdt and it reads certain CSRs too
+>> (`arch/arm64/kernel/pi/kaslr_early.c`). Although it doesn't look like it has to do any
+>> discovery for them.
+>
+>A decree from the Palmer that we don't support things that do not conform
+>in this manner would allow us to do what arm64 does. I brought this up
+>originally because it's been discussed before that we cannot rely on
+>conformance because we want to support people's platforms, whether they
+>comply or not. I'd be wary of making this an exception now, and then
+>later on someone makes a platform we want to support that doesn't
+>conform and hey presto, we regress KASLR support - even if I think it is
+>pretty unlikely that someone is going to repurpose the Zkr CSRs.
+>
+>One of the problems with only supporting conforming platforms is that
+>the definition of conforming changes over time! This has happened with
+>the Andes PMU for example, which I believe uses an interrupt number that
+>was later co-opted by AIA spec. That conformed at the time, but doesn't
+>anymore - do they get to mark themselves as Sstrict?
+>
+>Maybe we can do this on a case-by-case basis, but it's up to Palmer
+>whether or not we can do that.
