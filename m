@@ -1,52 +1,64 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6006147F5D;
-	Tue, 11 Jun 2024 17:26:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 839086EB51;
+	Tue, 11 Jun 2024 17:56:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718126765; cv=none; b=kfKeGubXX9dkkvYUewMu6qZW943Zv3HTcyf5Keap1xAx6oumHzdP8LcLCXUR6xe6oVtKhkSSjZ40YbeFVcuqzE/lmwx4Ayth8ESP04g0gXnaOgNhcsHAHjOONV9+OKFg7JHyzmKBb8CcKCGtWuVCjVZfXFr9kUz0WCCHrbhcr9o=
+	t=1718128616; cv=none; b=pnqbmYRo6Kd8wnDCQ4Em50rm4aTwJBkekErYu0CoV4cy4Wf69IphLJ6+7GaJL2uAYSfzN4iY3gg9EUHUZceISxkKVc+LCF4xqK2M0obsapIxNE4/IEvean0i3Art5dia7IK6PQ0KNTFKjl5ANi0t1OGiukK6EBbNPengft51F88=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718126765; c=relaxed/simple;
-	bh=SQVKiWoMEQlGJzZl2xfryE32TSjR7fWPakYa+xG+jOQ=;
+	s=arc-20240116; t=1718128616; c=relaxed/simple;
+	bh=8TvM/bRqUyTMkSqiC81inFb7tpuM7L3+iH0VcxVDbz8=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=c1dG7UpfJDzgAT01vG4M47RuSnTlUpkHxeYpayHXFxdfwUQxl4Sifji/1W8lafjk8PR5v9cJsMsaIXBpiTTjauhu1qdxNlUOWit9q8kDl96kc9VZAbFfBtNHIPbrQMABripC1omNPqmZazJIzBpJ39l+nsN53PDBX6fD2v//QO4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=c2suFtL5; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=Fgzu0IqEWL4Ogf8zPS3GAM7oqhfRgHUBOsVYtwMebp6EkUfr3sCPgndLOL8i2+0VjrWZyft2Hx5GmADwIzbrkytu1BO2rufMpPAIRiTR2eljnyeETvaed5+XJ2dPoQ6YjrNhy11G184MWIUnIvBAsUMagZO1XWBzwR3cKefvOho=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=jnhoOvfJ; arc=none smtp.client-ip=198.175.65.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="c2suFtL5"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CECECC2BD10;
-	Tue, 11 Jun 2024 17:26:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1718126764;
-	bh=SQVKiWoMEQlGJzZl2xfryE32TSjR7fWPakYa+xG+jOQ=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=c2suFtL5Vem76e++QV+lrZeQ7MGiZxVNYh58xkSQi2PPsLfzgMS+DIViYpPHwQIIF
-	 OQsYe+Y8zKrquo+xzNMcQu6lXzyiUATsppSouXRBdVURX2p/4tkeyTY8YA3VjNSpRq
-	 F64+77bYB6rnQpQt6afrIzUOf6dOR6B4sXGhn7UVKtUTB8MLQAEFpwkuEtLMEi5GDu
-	 HRy6oaJUJJdwjklzdWv+LgNpsX8DPiNzS9u2kLYOXfEPTvmV8CzRmlgvdhLcfUbiza
-	 CAmlUqVumeZrj5/6o682Y84/8n7jfxQeLepnQGIcQ1Xm+1hE6nkCG3V6dye3Leykmi
-	 1MBzCTM49UwkA==
-Date: Tue, 11 Jun 2024 10:26:02 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Umang Jain <umang.jain@ideasonboard.com>
-Cc: Mauro Carvalho Chehab <mchehab@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
-	Pengutronix Kernel Team <kernel@pengutronix.de>,
-	Fabio Estevam <festevam@gmail.com>,
-	NXP Linux Team <linux-imx@nxp.com>,
-	Sakari Ailus <sakari.ailus@linux.intel.com>,
-	Kieran Bingham <kieran.bingham@ideasonboard.com>,
-	Rob Herring <robh+dt@kernel.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Sascha Hauer <s.hauer@pengutronix.de>,
-	Andy Shevchenko <andy.shevchenko@gmail.com>,
-	linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: Re: [PATCH v4 2/2] media: i2c: Add imx283 camera sensor driver
-Message-ID: <20240611172602.GA2226028@thelio-3990X>
-References: <20240402-kernel-name-extraversion-v4-0-fb776893e4ec@ideasonboard.com>
- <20240402-kernel-name-extraversion-v4-2-fb776893e4ec@ideasonboard.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="jnhoOvfJ"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1718128614; x=1749664614;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=8TvM/bRqUyTMkSqiC81inFb7tpuM7L3+iH0VcxVDbz8=;
+  b=jnhoOvfJL3AkK9Mp6rxNkJMsZABKiAFaSz6s5fpAUlpNSNVJyi1X+swX
+   clwdyLCQ8hb2KrvNMiK4AjygvM2siQ6CK+l0yuBg2JuNYoqlCD8m+j+GG
+   PnDbCJYSzbtpt1a3UJVkRIIIh/2lwyw/G/1vyyq997YMebYIEsrhQDmmB
+   635Qfm0k49dC+/KQcqXBE/iaY+eL/iHgE0oj1BvB0CyapLr49R9P7+iMg
+   ueej19DtfkIi67OEgA4fzQXfLwFC3xmSMpR3Vz6Xy0vYbgtlnGnrkz+4u
+   oDiIbOaj+EbekNg5q6PD2ebLpzgde877P3yESIj5XkOsaFWUm7oMSuswb
+   Q==;
+X-CSE-ConnectionGUID: 0s0WZL3DQFeskDk59KMoBQ==
+X-CSE-MsgGUID: 5HnlqB+ITBqqaqImoZ4WCA==
+X-IronPort-AV: E=McAfee;i="6600,9927,11100"; a="32343812"
+X-IronPort-AV: E=Sophos;i="6.08,230,1712646000"; 
+   d="scan'208";a="32343812"
+Received: from fmviesa007.fm.intel.com ([10.60.135.147])
+  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jun 2024 10:56:54 -0700
+X-CSE-ConnectionGUID: aKk0EH9DSE+dspHKScPDOA==
+X-CSE-MsgGUID: 1je4VS79Q4KtZ0FDWUMtrA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.08,230,1712646000"; 
+   d="scan'208";a="39378009"
+Received: from lkp-server01.sh.intel.com (HELO 628d7d8b9fc6) ([10.239.97.150])
+  by fmviesa007.fm.intel.com with ESMTP; 11 Jun 2024 10:56:51 -0700
+Received: from kbuild by 628d7d8b9fc6 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1sH5jk-0000jm-1K;
+	Tue, 11 Jun 2024 17:56:48 +0000
+Date: Wed, 12 Jun 2024 01:56:37 +0800
+From: kernel test robot <lkp@intel.com>
+To: Karan Tilak Kumar <kartilak@cisco.com>, sebaddel@cisco.com
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, arulponn@cisco.com,
+	djhawar@cisco.com, gcboffa@cisco.com, mkai2@cisco.com,
+	satishkh@cisco.com, jejb@linux.ibm.com, martin.petersen@oracle.com,
+	linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Karan Tilak Kumar <kartilak@cisco.com>
+Subject: Re: [PATCH 04/14] scsi: fnic: Add support for target based solicited
+ requests and responses
+Message-ID: <202406120146.xchlZbqX-lkp@intel.com>
+References: <20240610215100.673158-5-kartilak@cisco.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -55,107 +67,155 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240402-kernel-name-extraversion-v4-2-fb776893e4ec@ideasonboard.com>
+In-Reply-To: <20240610215100.673158-5-kartilak@cisco.com>
 
-Hi Umang,
+Hi Karan,
 
-On Tue, Apr 02, 2024 at 03:37:51PM +0530, Umang Jain wrote:
-> From: Kieran Bingham <kieran.bingham@ideasonboard.com>
-> 
-> Add a v4l2 subdevice driver for the Sony IMX283 image sensor.
-> 
-> The IMX283 is a 20MP Diagonal 15.86 mm (Type 1) CMOS Image Sensor with
-> Square Pixel for Color Cameras.
-> 
-> The following features are supported:
-> - Manual exposure an gain control support
-> - vblank/hblank/link freq control support
-> - Test pattern support control
-> - Arbitrary horizontal and vertical cropping
-> - Supported resolution:
->   - 5472x3648 @ 20fps (SRGGB12)
->   - 5472x3648 @ 25fps (SRGGB10)
->   - 2736x1824 @ 50fps (SRGGB12)
-> 
-> Signed-off-by: Kieran Bingham <kieran.bingham@ideasonboard.com>
-> Signed-off-by: Umang Jain <umang.jain@ideasonboard.com>
+kernel test robot noticed the following build warnings:
 
-This change is now in -next as commit ccb4eb4496fa ("media: i2c: Add
-imx283 camera sensor driver").
+[auto build test WARNING on mkp-scsi/for-next]
+[also build test WARNING on jejb-scsi/for-next linus/master v6.10-rc3 next-20240611]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-> +++ b/drivers/media/i2c/imx283.c
-...
-> +/* IMX283 native and active pixel array size. */
-> +static const struct v4l2_rect imx283_native_area = {
-> +	.top = 0,
-> +	.left = 0,
-> +	.width = 5592,
-> +	.height = 3710,
-> +};
-> +
-> +static const struct v4l2_rect imx283_active_area = {
-> +	.top = 40,
-> +	.left = 108,
-> +	.width = 5472,
-> +	.height = 3648,
-> +};
-...
-> +#define CENTERED_RECTANGLE(rect, _width, _height)			\
-> +	{								\
-> +		.left = rect.left + ((rect.width - (_width)) / 2),	\
-> +		.top = rect.top + ((rect.height - (_height)) / 2),	\
-> +		.width = (_width),					\
-> +		.height = (_height),					\
-> +	}
-...
-> +		.crop = CENTERED_RECTANGLE(imx283_active_area, 5472, 3648),
+url:    https://github.com/intel-lab-lkp/linux/commits/Karan-Tilak-Kumar/scsi-fnic-Replace-shost_printk-with-pr_info-pr_err/20240611-060227
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/mkp/scsi.git for-next
+patch link:    https://lore.kernel.org/r/20240610215100.673158-5-kartilak%40cisco.com
+patch subject: [PATCH 04/14] scsi: fnic: Add support for target based solicited requests and responses
+config: x86_64-kexec (https://download.01.org/0day-ci/archive/20240612/202406120146.xchlZbqX-lkp@intel.com/config)
+compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240612/202406120146.xchlZbqX-lkp@intel.com/reproduce)
 
-This construct does not work with GCC prior to 7 and Clang prior to 17
-(where certain const structures and variables will be considered
-constant expressions for the sake of initializers and such), resulting
-in:
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202406120146.xchlZbqX-lkp@intel.com/
 
-  drivers/media/i2c/imx283.c:443:30: error: initializer element is not constant
-     .crop = CENTERED_RECTANGLE(imx283_active_area, 5472, 3648),
-                                ^
-  drivers/media/i2c/imx283.c:412:11: note: in definition of macro 'CENTERED_RECTANGLE'
-     .left = rect.left + ((rect.width - (_width)) / 2), \
-             ^~~~
-  drivers/media/i2c/imx283.c:443:30: note: (near initialization for 'supported_modes_12bit[0].crop.left')
-     .crop = CENTERED_RECTANGLE(imx283_active_area, 5472, 3648),
-                                ^
-  drivers/media/i2c/imx283.c:412:11: note: in definition of macro 'CENTERED_RECTANGLE'
-     .left = rect.left + ((rect.width - (_width)) / 2), \
-             ^~~~
-  drivers/media/i2c/imx283.c:443:30: error: initializer element is not constant
-     .crop = CENTERED_RECTANGLE(imx283_active_area, 5472, 3648),
-                                ^
-  drivers/media/i2c/imx283.c:413:10: note: in definition of macro 'CENTERED_RECTANGLE'
-     .top = rect.top + ((rect.height - (_height)) / 2), \
-            ^~~~
-  drivers/media/i2c/imx283.c:443:30: note: (near initialization for 'supported_modes_12bit[0].crop.top')
-     .crop = CENTERED_RECTANGLE(imx283_active_area, 5472, 3648),
-                                ^
-  drivers/media/i2c/imx283.c:413:10: note: in definition of macro 'CENTERED_RECTANGLE'
-     .top = rect.top + ((rect.height - (_height)) / 2), \
-            ^~~~
+All warnings (new ones prefixed by >>):
 
-  drivers/media/i2c/imx283.c:443:30: error: initializer element is not a compile-time constant
-                  .crop = CENTERED_RECTANGLE(imx283_active_area, 5472, 3648),
-                          ~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  drivers/media/i2c/imx283.c:412:11: note: expanded from macro 'CENTERED_RECTANGLE'
-                  .left = rect.left + ((rect.width - (_width)) / 2),      \
-                          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  drivers/media/i2c/imx283.c:492:30: error: initializer element is not a compile-time constant
-                  .crop = CENTERED_RECTANGLE(imx283_active_area, 5472, 3648),
-                          ~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  drivers/media/i2c/imx283.c:412:11: note: expanded from macro 'CENTERED_RECTANGLE'
-                  .left = rect.left + ((rect.width - (_width)) / 2),      \
-                          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  2 errors generated.
+>> drivers/scsi/fnic/fdls_disc.c:1926:29: warning: variable 'gpn_ft_tgt_rem' set but not used [-Wunused-but-set-variable]
+    1926 |         struct fc_gpn_ft_rsp_iu_s *gpn_ft_tgt_rem;
+         |                                    ^
+   drivers/scsi/fnic/fdls_disc.c:2208:26: warning: variable 'els_rjt' set but not used [-Wunused-but-set-variable]
+    2208 |         struct fc_els_reject_s *els_rjt;
+         |                                 ^
+   drivers/scsi/fnic/fdls_disc.c:2890:11: warning: variable 's_id' set but not used [-Wunused-but-set-variable]
+    2890 |         uint32_t s_id = 0;
+         |                  ^
+   drivers/scsi/fnic/fdls_disc.c:2891:11: warning: variable 'd_id' set but not used [-Wunused-but-set-variable]
+    2891 |         uint32_t d_id = 0;
+         |                  ^
+   drivers/scsi/fnic/fdls_disc.c:1286:13: warning: unused function 'fnic_fdls_start_flogi' [-Wunused-function]
+    1286 | static void fnic_fdls_start_flogi(struct fnic_iport_s *iport)
+         |             ^~~~~~~~~~~~~~~~~~~~~
+   5 warnings generated.
 
-with these compiler versions. Usually, the values are just refactored
-with #define macros.
 
-Cheers,
-Nathan
+vim +/gpn_ft_tgt_rem +1926 drivers/scsi/fnic/fdls_disc.c
+
+  1920	
+  1921	static void
+  1922	fdls_process_gpn_ft_tgt_list(struct fnic_iport_s *iport,
+  1923								 struct fc_hdr_s *fchdr, int len)
+  1924	{
+  1925		struct fc_gpn_ft_rsp_iu_s *gpn_ft_tgt;
+> 1926		struct fc_gpn_ft_rsp_iu_s *gpn_ft_tgt_rem;
+  1927		struct fnic_tport_s *tport, *next;
+  1928		uint32_t fcid;
+  1929		uint64_t wwpn;
+  1930		int rem_len = len;
+  1931		u32 old_link_down_cnt = iport->fnic->link_down_cnt;
+  1932		struct fnic *fnic = iport->fnic;
+  1933	
+  1934		FNIC_FCS_DBG(KERN_INFO, fnic->lport->host, fnic->fnic_num,
+  1935					 "0x%x: FDLS process GPN_FT tgt list", iport->fcid);
+  1936	
+  1937		gpn_ft_tgt =
+  1938			(struct fc_gpn_ft_rsp_iu_s *) ((uint8_t *) fchdr +
+  1939									   sizeof(struct fc_hdr_s)
+  1940									   + sizeof(struct fc_ct_hdr_s));
+  1941		gpn_ft_tgt_rem = gpn_ft_tgt;
+  1942		len -= sizeof(struct fc_hdr_s) + sizeof(struct fc_ct_hdr_s);
+  1943	
+  1944		while (rem_len > 0) {
+  1945	
+  1946			fcid = ntoh24(gpn_ft_tgt->fcid);
+  1947			wwpn = ntohll(gpn_ft_tgt->wwpn);
+  1948	
+  1949			FNIC_FCS_DBG(KERN_INFO, fnic->lport->host, fnic->fnic_num,
+  1950					 "tport: 0x%x: ctrl:0x%x", fcid, gpn_ft_tgt->ctrl);
+  1951	
+  1952			if (fcid == iport->fcid) {
+  1953				if (gpn_ft_tgt->ctrl & FNIC_FC_GPN_LAST_ENTRY)
+  1954					break;
+  1955				gpn_ft_tgt++;
+  1956				rem_len -= sizeof(struct fc_gpn_ft_rsp_iu_s);
+  1957				continue;
+  1958			}
+  1959	
+  1960			tport = fnic_find_tport_by_wwpn(iport, wwpn);
+  1961			if (!tport) {
+  1962				/*
+  1963				 * New port registered with the switch or first time query
+  1964				 */
+  1965				tport = fdls_create_tport(iport, fcid, wwpn);
+  1966				if (!tport)
+  1967					return;
+  1968			}
+  1969			/*
+  1970			 * check if this was an existing tport with same fcid
+  1971			 * but whose wwpn has changed now ,then remove it and
+  1972			 * create a new one
+  1973			 */
+  1974			if (tport->fcid != fcid) {
+  1975				fdls_delete_tport(iport, tport);
+  1976				tport = fdls_create_tport(iport, fcid, wwpn);
+  1977				if (!tport)
+  1978					return;
+  1979			}
+  1980	
+  1981			/*
+  1982			 * If this GPN_FT rsp is after RSCN then mark the tports which
+  1983			 * matches with the new GPN_FT list, if some tport is not
+  1984			 * found in GPN_FT we went to delete that tport later.
+  1985			 */
+  1986			if (fdls_get_state((&iport->fabric)) == FDLS_STATE_RSCN_GPN_FT)
+  1987				tport->flags |= FNIC_FDLS_TPORT_IN_GPN_FT_LIST;
+  1988	
+  1989			if (gpn_ft_tgt->ctrl & FNIC_FC_GPN_LAST_ENTRY)
+  1990				break;
+  1991	
+  1992			gpn_ft_tgt++;
+  1993			rem_len -= sizeof(struct fc_gpn_ft_rsp_iu_s);
+  1994		}
+  1995		if (rem_len <= 0) {
+  1996			FNIC_FCS_DBG(KERN_INFO, fnic->lport->host, fnic->fnic_num,
+  1997				 "GPN_FT response: malformed/corrupt frame rxlen: %d remlen: %d",
+  1998				 len, rem_len);
+  1999		}
+  2000	
+  2001		/*remove those ports which was not listed in GPN_FT */
+  2002		if (fdls_get_state((&iport->fabric)) == FDLS_STATE_RSCN_GPN_FT) {
+  2003			list_for_each_entry_safe(tport, next, &iport->tport_list, links) {
+  2004	
+  2005				if (!(tport->flags & FNIC_FDLS_TPORT_IN_GPN_FT_LIST)) {
+  2006					FNIC_FCS_DBG(KERN_INFO, fnic->lport->host, fnic->fnic_num,
+  2007						 "Remove port: 0x%x not found in GPN_FT list",
+  2008						 tport->fcid);
+  2009					fdls_delete_tport(iport, tport);
+  2010				} else {
+  2011					tport->flags &= ~FNIC_FDLS_TPORT_IN_GPN_FT_LIST;
+  2012				}
+  2013				if ((old_link_down_cnt != iport->fnic->link_down_cnt)
+  2014					|| (iport->state != FNIC_IPORT_STATE_READY)) {
+  2015					return;
+  2016				}
+  2017			}
+  2018		}
+  2019	}
+  2020	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
