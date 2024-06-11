@@ -1,172 +1,243 @@
-Received: from mail-pf1-f171.google.com (mail-pf1-f171.google.com [209.85.210.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B1EBC28E37
-	for <llvm@lists.linux.dev>; Tue, 11 Jun 2024 15:32:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 66A7C3A1DB;
+	Tue, 11 Jun 2024 16:12:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718119935; cv=none; b=rcGwi32CWd5meh31CtTuTE3nBHq7m3todiMIB+6kbqTggkwwRHGLlAFJC1NRktcxF2nP8nOEuBXbEvHEx5VrSlOkl0oOD6xPxRyKzqW9/N34IhCpdEttAtL88iZtAaI2tn577UOhZYu12uxn7i08wl0I0crf3L18COZSftMSvS8=
+	t=1718122373; cv=none; b=DtgcVQZq+J52yXGSz/3gA2DNl0L6qXWA08EX6iA/d2uHZB7C804AuMY+qOJuxJdyj4USP9KTcw9P9DU8A0j2uUX0WqBnwA1izoYNEBbDUd9Trl0MG0ELJkjl+sesBL4y2Vtr6H0kAvmunxSalnelR3iBtJGQDWsk28wrBCymaiQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718119935; c=relaxed/simple;
-	bh=Vn7Kc4x7zOZjOguyNFwvnJrV+uFfVWZrPr9+iUiJQvs=;
+	s=arc-20240116; t=1718122373; c=relaxed/simple;
+	bh=aPD5BY/1I90SQGbcQ68RrIeaNtfo2nOIAdiK3DWiy+U=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Z2U4ril7hztSze2ORufEVVnmQavh0C24C78z3YDqr2+t/zec0ZVWCUJ+EpD95sen4KAGBUNlWWDHY7Z+FuLQPUo9OeXnHX3hMPuX1q9G6ByWiyyTMiiE7h/v/DapGPAqoQ2p/aj2FYcIHgEsU75RVt+rdVzQv/ZQgEXxBmHj63I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=guiaPH6c; arc=none smtp.client-ip=209.85.210.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=cUfJGRIXeV3Csv1DR2FRNWQYWlP54GbVmapjxcvof/V5v2j+EWxa167vqHIEpxmxpDDxakXH8Z+T1aZI6JtE1dKxAwIW2yUZ7nSWN2eOFOFgG7naHffD8QegJXhYcOy5fLRFU/Jj7+dUo6nNrDHfh8rAn+cNds5yXly9hH9MKKY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=dhXcPV19; arc=none smtp.client-ip=198.175.65.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="guiaPH6c"
-Received: by mail-pf1-f171.google.com with SMTP id d2e1a72fcca58-7023b6d810bso4568613b3a.3
-        for <llvm@lists.linux.dev>; Tue, 11 Jun 2024 08:32:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1718119933; x=1718724733; darn=lists.linux.dev;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=Vn7Kc4x7zOZjOguyNFwvnJrV+uFfVWZrPr9+iUiJQvs=;
-        b=guiaPH6coCXcRgt0XirqFHxp1L+biepfmthgkE2vp+FowE6xIaLxYkjHzkoEy4xGYQ
-         DfUXQrZJiRRBd7HCt8WpSHYeKQwf6Ire0fSyorhPSageq4vf0HtGZ86x7lDv/iKEKGTJ
-         ptuB3MT0O3oQlbavbP6JCYOTehO6OGgs7A8geYpzCjCmH9msYhuV1QmLij8Njv5hjk1F
-         t5mGxRCSSVV2WjPiu5VhcwMqKQLioNfKgQ7X7s+VDuYKvqf5H5Mwaz/+05I+0cwDV06T
-         t3K34N63u7izNXL0As84J9iBeD4f37b01sVUEsDt1x+yVr9Ug83We3XJpejK/1HrD7qC
-         E6jg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1718119933; x=1718724733;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Vn7Kc4x7zOZjOguyNFwvnJrV+uFfVWZrPr9+iUiJQvs=;
-        b=E3riHrEQJHUTgdYvTyjOmWxnNWLRseEomUgILE2ZochoD5aRFFg/f1thuYsIJwMymI
-         VQAhnBZ6phq62/NDk09d14jWuEQHgYxuA+rmCxt/hL+jNXIfb/29binCAYzpyy+SZ1v1
-         sRdXRAEXOxzKK4GS4RrXDmuq+35NXuM+x2uy+XQjMk+eBsXh/Zh1ODTkcvHSANEIc6t0
-         w1qZEGaaJs+PG/SLTg3zHKDrS951DDk/2OipuXAu7plzWiCFFiA4LA4DzVPJjumQ8A3j
-         svpi1Q2nsWvUFzvnZh9in5FEJPgLfXXuxOVbkrhN561nZR4f+iZ4S1Yn6CMtx+Jg/8Yh
-         fVCA==
-X-Forwarded-Encrypted: i=1; AJvYcCXUHSpzhKFuqHviEvq1z2Pa8HJ6daFTcm5eXosq+bqJOf3WyK9+mZnhhIrP5V4zZqOCOp5TicJdTi+5JZC0QD50qz/kyw==
-X-Gm-Message-State: AOJu0YyerZ9qLqRIPxUBLDrrzBJdED/W5dQ/wr0XSI1GRE5MhY015j4i
-	CD83MO1NTV68vuWccs3rScXt0DwUudaRZ9JnaqhVsgcqiYXQhbl6D2ViOIKd9Us=
-X-Google-Smtp-Source: AGHT+IF8rG5/mjujMehriFq+KOF4rVuXuWFdDgw6V0TBjJ1ZIkoAFk5Q1ybFIIs3W8YsWs7KBpcR4g==
-X-Received: by 2002:a05:6a20:9190:b0:1b7:d72e:9e5e with SMTP id adf61e73a8af0-1b7d72ea074mr4679110637.37.1718119932775;
-        Tue, 11 Jun 2024 08:32:12 -0700 (PDT)
-Received: from debug.ba.rivosinc.com ([64.71.180.162])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-6e668a494c4sm4998087a12.22.2024.06.11.08.32.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 11 Jun 2024 08:32:12 -0700 (PDT)
-Date: Tue, 11 Jun 2024 08:32:10 -0700
-From: Deepak Gupta <debug@rivosinc.com>
-To: Conor Dooley <conor@kernel.org>
-Cc: =?iso-8859-1?Q?Cl=E9ment_L=E9ger?= <cleger@rivosinc.com>,
-	Conor Dooley <conor.dooley@microchip.com>,
-	Alexandre Ghiti <alex@ghiti.fr>, Jesse Taube <jesse@rivosinc.com>,
-	linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev, Alexandre Ghiti <alexghiti@rivosinc.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>,
-	=?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn@rivosinc.com>,
-	Paul Walmsley <paul.walmsley@sifive.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Masahiro Yamada <masahiroy@kernel.org>,
-	Atish Patra <atishp@rivosinc.com>
-Subject: Re: [PATCH v0] RISC-V: Use Zkr to seed KASLR base address
-Message-ID: <Zmht+h75GgxP3ocz@debug.ba.rivosinc.com>
-References: <20240531162327.2436962-1-jesse@rivosinc.com>
- <20240531-uselessly-spied-262ecf44e694@spud>
- <b199fde6-c24e-4c18-9c38-fdc923294551@ghiti.fr>
- <20240603-stinking-roster-cfad46696ae5@spud>
- <ZmNWmxak9Rc80Kpb@debug.ba.rivosinc.com>
- <c288f739-2a1a-4fd7-884b-12e360a33142@rivosinc.com>
- <20240610-qualm-chalice-72d0cc743658@wendy>
- <01547275-8c8c-43cf-9da0-64825c234707@rivosinc.com>
- <Zmdq6kszPBxAvLdD@debug.ba.rivosinc.com>
- <20240610-earplugs-anybody-ebd04a5fa777@spud>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="dhXcPV19"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1718122371; x=1749658371;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=aPD5BY/1I90SQGbcQ68RrIeaNtfo2nOIAdiK3DWiy+U=;
+  b=dhXcPV19RwmgjtuEiNftd4FARCQM/m6J0Yexho6aRLktTyPYuUGGlevg
+   MAtfrXXIIVsNS5d7U7DjyEuTbbvvjrdWY+YVgxWw58I/5TWYNJJvx7udf
+   IzBNry77z+LLRq6kAiDf9HH7oZl8EafGuoC5VXT4f58s2cTtkBgl+Mm4b
+   Ls4PCnAwCzetDxVpYOhhVaCr/suGvjJkd/IyJRr28dRe0j4SPh/el4ftZ
+   r2Ys0h7QOfN9KVL+IhGMTsisU7iAMoYeQuGjqc1iBb3dl7Q5z0bfKDSVd
+   OWtr7wzyHmHOUaXOgW4QkROfm+KFtUbCEN4JcsgwdkFloeaqdiMr8o1m3
+   g==;
+X-CSE-ConnectionGUID: 2lQmpiLBTNiL3h3s//tqeA==
+X-CSE-MsgGUID: W3ozwUXfSmivdnmIIRXGGQ==
+X-IronPort-AV: E=McAfee;i="6600,9927,11100"; a="18673550"
+X-IronPort-AV: E=Sophos;i="6.08,230,1712646000"; 
+   d="scan'208";a="18673550"
+Received: from fmviesa003.fm.intel.com ([10.60.135.143])
+  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jun 2024 09:12:49 -0700
+X-CSE-ConnectionGUID: P3LRiBSUS0y2lK76H7d94g==
+X-CSE-MsgGUID: 7XtO6liXQha1Hl60rbxGeQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.08,230,1712646000"; 
+   d="scan'208";a="43888609"
+Received: from lkp-server01.sh.intel.com (HELO 628d7d8b9fc6) ([10.239.97.150])
+  by fmviesa003.fm.intel.com with ESMTP; 11 Jun 2024 09:12:46 -0700
+Received: from kbuild by 628d7d8b9fc6 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1sH472-0000eA-0H;
+	Tue, 11 Jun 2024 16:12:44 +0000
+Date: Wed, 12 Jun 2024 00:12:27 +0800
+From: kernel test robot <lkp@intel.com>
+To: Karan Tilak Kumar <kartilak@cisco.com>, sebaddel@cisco.com
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, arulponn@cisco.com,
+	djhawar@cisco.com, gcboffa@cisco.com, mkai2@cisco.com,
+	satishkh@cisco.com, jejb@linux.ibm.com, martin.petersen@oracle.com,
+	linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Karan Tilak Kumar <kartilak@cisco.com>
+Subject: Re: [PATCH 03/14] scsi: fnic: Add support for fabric based solicited
+ requests and responses
+Message-ID: <202406112309.8GiDUvIM-lkp@intel.com>
+References: <20240610215100.673158-4-kartilak@cisco.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1; format=flowed
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20240610-earplugs-anybody-ebd04a5fa777@spud>
+In-Reply-To: <20240610215100.673158-4-kartilak@cisco.com>
 
-On Mon, Jun 10, 2024 at 10:56:35PM +0100, Conor Dooley wrote:
->On Mon, Jun 10, 2024 at 02:06:50PM -0700, Deepak Gupta wrote:
->> On Mon, Jun 10, 2024 at 11:16:42AM +0200, Clément Léger wrote:
->> > On 10/06/2024 11:02, Conor Dooley wrote:
->> > > On Mon, Jun 10, 2024 at 10:33:34AM +0200, Clément Léger wrote:
->> > > > On 07/06/2024 20:51, Deepak Gupta wrote:
->> > > > > On Mon, Jun 03, 2024 at 01:47:40PM +0100, Conor Dooley wrote:
->> > > > > > On Mon, Jun 03, 2024 at 11:14:49AM +0200, Alexandre Ghiti wrote:
->> > > > > I don't know all the details but on first glance it seems like instead
->> > > > > of ACPI,
->> > > > > may be FWFT is a better place for discovery ?
->> > > > > https://lists.riscv.org/g/tech-prs/topic/patch_v12_add_firmware/106479571
->> > > >
->> > > > IMHO, doing discovery in FWFT is not the goal of this extension. I think
->> > > > the "real" solution would be to wait for the unified discovery task
->> > > > group to come up with something for that (which is their goal I think) [1]
->>
->> Yeah I understand the conundrum here.
->>
->> > >
->> > > I'm curious to see how that works out. The proposal documents an m-mode
->> > > csr, so we'd have to smuggle the information to s-mode somehow...
->> >
->> > Ahem, yeah, I spoke a bit too fast. Looked at the proposal and the
->> > mconfigptr CSR will be accessible by M-mode only so I guess we will have
->> > to find another way...
->>
->> That's not the only problem. Even if you get mconfigptr access, parsing the format
->> is another thing that has to be done. This is early in boot. Although its strictly (pun
->> intended) not a firmware feature extension, I think it's much easier to ask underlying
->> firmware if platform is `Sstrict`. or may be expose something like below
->>
->> `ENABLE_SSTRICT`.
->> Platforms which support `Sstrict` can return success for this while platforms which don't
->> have `Sstrict` can return error code (not supported or not implemented).
->> This way its not feature discovery.
->
->I mean, it's feature discovery in all but name. You're calling it
->enable, but the behaviour you describe is feature discovery - not that I
->am against this being feature discovery since it gets us out of an
->annoying bind.
+Hi Karan,
 
-Yes I know it's cheating but at least for this case, it seems like easy solution which
-doesn't break anything. Neither I see it creating any future problems (except FWFT becoming
-to look like discovery mechanism :-) and Clement/Atish hating me for that)
+kernel test robot noticed the following build warnings:
 
-Another solution to this could be introducing a riscv config `CONFIG_RISCV_SSTRICT`.
-By default always select `CONFIG_RISCV_SSTRICT` and any platform owner who are not
-sstrict, they can build their own.
-I expect distro (ubuntu, red hat, etc) would want by default `CONFIG_RISCV_SSTRICT`.
+[auto build test WARNING on mkp-scsi/for-next]
+[also build test WARNING on jejb-scsi/for-next linus/master v6.10-rc3 next-20240611]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
->
->I forget which extension Alex and I discussed previously, but there's
->some mm-related things that you're gonna have to probe super early and
->we need to figure out if we can get that info from ACPI or not. I know
->we discussed it w.r.t. one of the T-Head vendor extensions, but I think
->another standard one got mentioned too.
->
->> It seems like arm64 parses fdt and it reads certain CSRs too
->> (`arch/arm64/kernel/pi/kaslr_early.c`). Although it doesn't look like it has to do any
->> discovery for them.
->
->A decree from the Palmer that we don't support things that do not conform
->in this manner would allow us to do what arm64 does. I brought this up
->originally because it's been discussed before that we cannot rely on
->conformance because we want to support people's platforms, whether they
->comply or not. I'd be wary of making this an exception now, and then
->later on someone makes a platform we want to support that doesn't
->conform and hey presto, we regress KASLR support - even if I think it is
->pretty unlikely that someone is going to repurpose the Zkr CSRs.
->
->One of the problems with only supporting conforming platforms is that
->the definition of conforming changes over time! This has happened with
->the Andes PMU for example, which I believe uses an interrupt number that
->was later co-opted by AIA spec. That conformed at the time, but doesn't
->anymore - do they get to mark themselves as Sstrict?
->
->Maybe we can do this on a case-by-case basis, but it's up to Palmer
->whether or not we can do that.
+url:    https://github.com/intel-lab-lkp/linux/commits/Karan-Tilak-Kumar/scsi-fnic-Replace-shost_printk-with-pr_info-pr_err/20240611-060227
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/mkp/scsi.git for-next
+patch link:    https://lore.kernel.org/r/20240610215100.673158-4-kartilak%40cisco.com
+patch subject: [PATCH 03/14] scsi: fnic: Add support for fabric based solicited requests and responses
+config: x86_64-kexec (https://download.01.org/0day-ci/archive/20240611/202406112309.8GiDUvIM-lkp@intel.com/config)
+compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240611/202406112309.8GiDUvIM-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202406112309.8GiDUvIM-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+   drivers/scsi/fnic/fdls_disc.c:894:10: warning: variable 'reason_code' set but not used [-Wunused-but-set-variable]
+     894 |         uint8_t reason_code;
+         |                 ^
+>> drivers/scsi/fnic/fdls_disc.c:1009:26: warning: variable 'els_rjt' set but not used [-Wunused-but-set-variable]
+    1009 |         struct fc_els_reject_s *els_rjt;
+         |                                 ^
+>> drivers/scsi/fnic/fdls_disc.c:1520:11: warning: variable 's_id' set but not used [-Wunused-but-set-variable]
+    1520 |         uint32_t s_id = 0;
+         |                  ^
+>> drivers/scsi/fnic/fdls_disc.c:1521:11: warning: variable 'd_id' set but not used [-Wunused-but-set-variable]
+    1521 |         uint32_t d_id = 0;
+         |                  ^
+   drivers/scsi/fnic/fdls_disc.c:627:13: warning: unused function 'fnic_fdls_start_flogi' [-Wunused-function]
+     627 | static void fnic_fdls_start_flogi(struct fnic_iport_s *iport)
+         |             ^~~~~~~~~~~~~~~~~~~~~
+   5 warnings generated.
+
+
+vim +/els_rjt +1009 drivers/scsi/fnic/fdls_disc.c
+
+  1000	
+  1001	static void
+  1002	fdls_process_flogi_rsp(struct fnic_iport_s *iport, struct fc_hdr_s *fchdr,
+  1003						   void *rx_frame)
+  1004	{
+  1005		struct fnic_fdls_fabric_s *fabric = &iport->fabric;
+  1006		struct fc_els_s *flogi_rsp = (struct fc_els_s *) fchdr;
+  1007		uint8_t *fcid;
+  1008		int rdf_size;
+> 1009		struct fc_els_reject_s *els_rjt;
+  1010		uint8_t fcmac[6] = { 0x0E, 0XFC, 0x00, 0x00, 0x00, 0x00 };
+  1011		struct fnic *fnic = iport->fnic;
+  1012	
+  1013		FNIC_FCS_DBG(KERN_INFO, fnic->lport->host, fnic->fnic_num,
+  1014					 "0x%x: FDLS processing FLOGI response", iport->fcid);
+  1015	
+  1016		if (fdls_get_state(fabric) != FDLS_STATE_FABRIC_FLOGI) {
+  1017			FNIC_FCS_DBG(KERN_INFO, fnic->lport->host, fnic->fnic_num,
+  1018						 "FLOGI response received in state (%d). Dropping frame",
+  1019						 fdls_get_state(fabric));
+  1020			return;
+  1021		}
+  1022	
+  1023		switch (flogi_rsp->command) {
+  1024		case FC_LS_ACC:
+  1025			if (iport->fabric.timer_pending) {
+  1026				FNIC_FCS_DBG(KERN_INFO, fnic->lport->host, fnic->fnic_num,
+  1027							 "iport fcid: 0x%x Canceling fabric disc timer\n",
+  1028							 iport->fcid);
+  1029				fnic_del_fabric_timer_sync();
+  1030			}
+  1031	
+  1032			iport->fabric.timer_pending = 0;
+  1033			iport->fabric.retry_counter = 0;
+  1034			fcid = FNIC_GET_D_ID(fchdr);
+  1035			iport->fcid = ntoh24(fcid);
+  1036			FNIC_FCS_DBG(KERN_INFO, fnic->lport->host, fnic->fnic_num,
+  1037						 "0x%x: FLOGI response accepted", iport->fcid);
+  1038	
+  1039			/* Learn the Service Params */
+  1040			rdf_size = ntohs(flogi_rsp->u.csp_flogi.b2b_rdf_size);
+  1041			if ((rdf_size >= FNIC_MIN_DATA_FIELD_SIZE)
+  1042				&& (rdf_size < FNIC_FC_MAX_PAYLOAD_LEN))
+  1043				iport->max_payload_size = MIN(rdf_size,
+  1044									  iport->max_payload_size);
+  1045	
+  1046			FNIC_FCS_DBG(KERN_INFO, fnic->lport->host, fnic->fnic_num,
+  1047						 "max_payload_size from fabric: %d set: %d", rdf_size,
+  1048						 iport->max_payload_size);
+  1049	
+  1050			iport->r_a_tov = ntohl(flogi_rsp->u.csp_flogi.r_a_tov);
+  1051			iport->e_d_tov = ntohl(flogi_rsp->u.csp_flogi.e_d_tov);
+  1052	
+  1053			if (flogi_rsp->u.csp_flogi.features & FNIC_FC_EDTOV_NSEC)
+  1054				iport->e_d_tov = iport->e_d_tov / FNIC_NSEC_TO_MSEC;
+  1055	
+  1056			FNIC_FCS_DBG(KERN_INFO, fnic->lport->host, fnic->fnic_num,
+  1057						 "From fabric: R_A_TOV: %d E_D_TOV: %d",
+  1058						 iport->r_a_tov, iport->e_d_tov);
+  1059	
+  1060			if (IS_FNIC_FCP_INITIATOR(fnic)) {
+  1061				fc_host_fabric_name(iport->fnic->lport->host) =
+  1062					get_unaligned_be64(&flogi_rsp->node_name);
+  1063				fc_host_port_id(iport->fnic->lport->host) = iport->fcid;
+  1064			}
+  1065	
+  1066			fnic_fdls_learn_fcoe_macs(iport, rx_frame, fcid);
+  1067	
+  1068			memcpy(&fcmac[3], fcid, 3);
+  1069			FNIC_FCS_DBG(KERN_INFO, fnic->lport->host, fnic->fnic_num,
+  1070				 "Adding vNIC device MAC addr: %02x:%02x:%02x:%02x:%02x:%02x",
+  1071				 fcmac[0], fcmac[1], fcmac[2], fcmac[3], fcmac[4],
+  1072				 fcmac[5]);
+  1073			vnic_dev_add_addr(iport->fnic->vdev, fcmac);
+  1074	
+  1075			if (fdls_get_state(fabric) == FDLS_STATE_FABRIC_FLOGI) {
+  1076				fnic_fdls_start_plogi(iport);
+  1077				FNIC_FCS_DBG(KERN_INFO, fnic->lport->host, fnic->fnic_num,
+  1078							 "FLOGI response received. Starting PLOGI");
+  1079			} else {
+  1080				/* From FDLS_STATE_FABRIC_FLOGI state fabric can only go to
+  1081				 * FDLS_STATE_LINKDOWN
+  1082				 * state, hence we don't have to worry about undoing:
+  1083				 * the fnic_fdls_register_portid and vnic_dev_add_addr
+  1084				 */
+  1085				FNIC_FCS_DBG(KERN_INFO, fnic->lport->host, fnic->fnic_num,
+  1086					 "FLOGI response received in state (%d). Dropping frame",
+  1087					 fdls_get_state(fabric));
+  1088			}
+  1089			break;
+  1090	
+  1091		case FC_LS_REJ:
+  1092			els_rjt = (struct fc_els_reject_s *) fchdr;
+  1093			if (fabric->retry_counter < iport->max_flogi_retries) {
+  1094				FNIC_FCS_DBG(KERN_INFO, fnic->lport->host, fnic->fnic_num,
+  1095					 "FLOGI returned FC_LS_REJ BUSY. Retry from timer routine %p",
+  1096					 iport);
+  1097	
+  1098				/* Retry Flogi again from the timer routine. */
+  1099				fabric->flags |= FNIC_FDLS_RETRY_FRAME;
+  1100	
+  1101			} else {
+  1102				FNIC_FCS_DBG(KERN_INFO, fnic->lport->host, fnic->fnic_num,
+  1103						 "FLOGI returned FC_LS_REJ. Halting discovery %p", iport);
+  1104				if (iport->fabric.timer_pending) {
+  1105					FNIC_FCS_DBG(KERN_INFO, fnic->lport->host, fnic->fnic_num,
+  1106								 "iport 0x%p Canceling fabric disc timer\n",
+  1107								 iport);
+  1108					fnic_del_fabric_timer_sync();
+  1109				}
+  1110				fabric->timer_pending = 0;
+  1111				fabric->retry_counter = 0;
+  1112			}
+  1113			break;
+  1114	
+  1115		default:
+  1116			FNIC_FCS_DBG(KERN_INFO, fnic->lport->host, fnic->fnic_num,
+  1117						 "FLOGI response not accepted: 0x%x",
+  1118						 flogi_rsp->command);
+  1119			break;
+  1120		}
+  1121	}
+  1122	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
