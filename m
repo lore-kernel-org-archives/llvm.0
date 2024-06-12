@@ -1,58 +1,59 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5860316EC1B;
-	Wed, 12 Jun 2024 11:09:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B98B15624C;
+	Wed, 12 Jun 2024 11:32:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718190590; cv=none; b=V8s+GmemwDrcp0fp71bVLEgz5UnKf/bDNplXcj3b6NvpbnEpOLpl5ZqS4YH6nPZVCc0RxUzE88jkT/KhJgD1pJxHPApXdwDASxxym8voN5usEkPYT6RdGdmNuwqVvyG4Mq05CHvgPkQe1SNUCIfZY82Mk0MRUIGewgPTwRU7ZwI=
+	t=1718191973; cv=none; b=JjGrhxkX/kJe5dHpz/Mzg5vslvOHoPAvOZA5dZ7pnN5TBfEjFBXSIbLobIDNhMo9cd9ZsKE82512caO17p2PDFdY3Iqc30eHVkStgV/21xd1VXpGf5Yeamhb0LKr2Ukj7/4iBkNB80xVRhFB7TgGA9jud3r4pB//YITHiwEbGSM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718190590; c=relaxed/simple;
-	bh=dVwQhRZncdbCz1mPIMPq63+uoub1yS6pwN7KvWwRksk=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=unZUBkJ3654Vz5HCfESDpuGVfogzFGirtwF5qsKVQolFA9n2tDssK/8rg8vT9W5kISJBTuar6apGdZyki1yD1mDHzrEOoqvCskDxk36cz0qvGrnXUHpIEkN7uIs84bOlEniMbkb904jwmMWGimUpJ6cem2J+cSDORE7kxD/u2BE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=YgiuSoIr; arc=none smtp.client-ip=192.198.163.18
+	s=arc-20240116; t=1718191973; c=relaxed/simple;
+	bh=ynq7JZEcu4dCn5nBDJ2/hiUKsuF+17am3ds3FvNCRQ8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=joQtW57mduFD5sq2ofqeFwK9EtuXL8T6jB4dnVyvsac8rz9qWbLkFPbdd8i3Rjq3roiL1NxrIlgMYUixo3A0xoT5m6BQ2TDJW7QPKwT3l7xp4gvDTxhA1csNATCXi//O8q+P1uv6caxXrh09gdhrCiZ94tfVjAa8J3GntL12M/k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=MHgYv12S; arc=none smtp.client-ip=198.175.65.13
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="YgiuSoIr"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="MHgYv12S"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1718190588; x=1749726588;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=dVwQhRZncdbCz1mPIMPq63+uoub1yS6pwN7KvWwRksk=;
-  b=YgiuSoIrMjWnKA96tVfa1vyyA4/5vUCDGB/B1KEwDj1rnfMy4NCi2//c
-   miG/yfOJepICI1uu/FMZaC0oqR/SOdxsl9pwc0RNnzN8xtm8e5tOypcls
-   0r5vctAYNShG93CwJBfprTyLvMXy9cZzwUpSvV9MFlAYRMfLUASTCOHPW
-   mMDNfjSur5VWYhzvP9j2PaBay4xLv7otKgtO3W8V8W3L6ceuW3MAkLATo
-   L6X94+75wUjmugSyuzSq7KKTKfoR96czXLH94A2hS2Y1UaSRIlM96vLwz
-   yyPM7CKfE3IIEP7DOXY4BGylwUV0EYltkV+wzGwPNGDO7aI/HAJhr8ckw
+  t=1718191972; x=1749727972;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=ynq7JZEcu4dCn5nBDJ2/hiUKsuF+17am3ds3FvNCRQ8=;
+  b=MHgYv12SwogRKZkwvsuhDbbDLTzfsdP+cm7TEHqrBBdvIoo/82EEHts/
+   Tl+LH1ItwJhwXag6AQ0Uk/r7B9OhQ3UR/iDmGwe/qUZSXyh8uGoh2rKF2
+   nc3kpYSiaTj7z79H0nF23W6pQ6tCOqfN8UEeAIquptBad+XmDGq6SmJoA
+   Jv6Ch3krOqjWZYVcnMRIzSw2yCoaVpOgyELKz4LrtvZEBqvaT8qH0yFzU
+   U7UjOApm4qZzlh9kRbcJLZCtddSEOft8uinzZ68g33ZaHQeCrT+tvtnxH
+   nnba8SrWfObjyGJmczDofD5Ah0pQkh0cFjq45zGeK3P+iculpZO+bVIvd
    w==;
-X-CSE-ConnectionGUID: NYafXeOcTWeoedqmqT5phw==
-X-CSE-MsgGUID: szl3wdnBRNyw3exZoOMd6w==
-X-IronPort-AV: E=McAfee;i="6600,9927,11100"; a="14670206"
+X-CSE-ConnectionGUID: gvvSRfcoRWazskfGTqhMZQ==
+X-CSE-MsgGUID: zj2irvSZRq+M2kXM5w9OSw==
+X-IronPort-AV: E=McAfee;i="6600,9927,11100"; a="26066863"
 X-IronPort-AV: E=Sophos;i="6.08,233,1712646000"; 
-   d="scan'208";a="14670206"
-Received: from orviesa003.jf.intel.com ([10.64.159.143])
-  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jun 2024 04:09:47 -0700
-X-CSE-ConnectionGUID: f7+RFQMnQtOSxsa2WGHZGQ==
-X-CSE-MsgGUID: xTNzlCuTQ2u8Qt9GBvjWDQ==
+   d="scan'208";a="26066863"
+Received: from orviesa002.jf.intel.com ([10.64.159.142])
+  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jun 2024 04:32:49 -0700
+X-CSE-ConnectionGUID: QB8JRPOiReKFJyxZg8NW7A==
+X-CSE-MsgGUID: 5XM8o6sFQaO9s/Rsx3yTaA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.08,233,1712646000"; 
-   d="scan'208";a="44672954"
+   d="scan'208";a="70567021"
 Received: from lkp-server01.sh.intel.com (HELO 628d7d8b9fc6) ([10.239.97.150])
-  by orviesa003.jf.intel.com with ESMTP; 12 Jun 2024 04:09:46 -0700
+  by orviesa002.jf.intel.com with ESMTP; 12 Jun 2024 04:32:47 -0700
 Received: from kbuild by 628d7d8b9fc6 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1sHLrM-0001Tq-1J;
-	Wed, 12 Jun 2024 11:09:44 +0000
-Date: Wed, 12 Jun 2024 19:09:04 +0800
+	id 1sHMDd-0001V4-0n;
+	Wed, 12 Jun 2024 11:32:45 +0000
+Date: Wed, 12 Jun 2024 19:32:03 +0800
 From: kernel test robot <lkp@intel.com>
-To: "Steven Rostedt (Google)" <rostedt@goodmis.org>
+To: Danilo Krummrich <dakr@redhat.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [trace:ring-buffer/core 4/13] kernel/trace/trace.c:9223:7: error: no
- member named 'mapped' in 'struct trace_array'
-Message-ID: <202406122139.4xJvw4xX-lkp@intel.com>
+Subject: Re: [PATCH v2 2/2] rust: add firmware abstractions
+Message-ID: <202406121959.hSkfmD0s-lkp@intel.com>
+References: <20240610180318.72152-3-dakr@redhat.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -61,68 +62,45 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20240610180318.72152-3-dakr@redhat.com>
 
-tree:   git://git.kernel.org/pub/scm/linux/kernel/git/trace/linux-trace ring-buffer/core
-head:   640e052ba42d577a7f57052dbee714cf470dd145
-commit: 2d92e3b77ffb2126371f522471f42720c40fe4e8 [4/13] tracing: Implement creating an instance based on a given memory region
-config: x86_64-kexec (https://download.01.org/0day-ci/archive/20240612/202406122139.4xJvw4xX-lkp@intel.com/config)
+Hi Danilo,
+
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on 1613e604df0cd359cf2a7fbd9be7a0bcfacfabd0]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Danilo-Krummrich/rust-add-abstraction-for-struct-device/20240611-020558
+base:   1613e604df0cd359cf2a7fbd9be7a0bcfacfabd0
+patch link:    https://lore.kernel.org/r/20240610180318.72152-3-dakr%40redhat.com
+patch subject: [PATCH v2 2/2] rust: add firmware abstractions
+config: x86_64-randconfig-012-20240612 (https://download.01.org/0day-ci/archive/20240612/202406121959.hSkfmD0s-lkp@intel.com/config)
 compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240612/202406122139.4xJvw4xX-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240612/202406121959.hSkfmD0s-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202406122139.4xJvw4xX-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202406121959.hSkfmD0s-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> kernel/trace/trace.c:9223:7: error: no member named 'mapped' in 'struct trace_array'
-    9223 |                 tr->mapped++;
-         |                 ~~  ^
-   1 error generated.
-
-
-vim +9223 kernel/trace/trace.c
-
-  9205	
-  9206	static int
-  9207	allocate_trace_buffer(struct trace_array *tr, struct array_buffer *buf, int size)
-  9208	{
-  9209		enum ring_buffer_flags rb_flags;
-  9210	
-  9211		rb_flags = tr->trace_flags & TRACE_ITER_OVERWRITE ? RB_FL_OVERWRITE : 0;
-  9212	
-  9213		buf->tr = tr;
-  9214	
-  9215		if (tr->range_addr_start && tr->range_addr_size) {
-  9216			buf->buffer = ring_buffer_alloc_range(size, rb_flags, 0,
-  9217							      tr->range_addr_start,
-  9218							      tr->range_addr_size);
-  9219			/*
-  9220			 * This is basically the same as a mapped buffer,
-  9221			 * with the same restrictions.
-  9222			 */
-> 9223			tr->mapped++;
-  9224		} else {
-  9225			buf->buffer = ring_buffer_alloc(size, rb_flags);
-  9226		}
-  9227		if (!buf->buffer)
-  9228			return -ENOMEM;
-  9229	
-  9230		buf->data = alloc_percpu(struct trace_array_cpu);
-  9231		if (!buf->data) {
-  9232			ring_buffer_free(buf->buffer);
-  9233			buf->buffer = NULL;
-  9234			return -ENOMEM;
-  9235		}
-  9236	
-  9237		/* Allocate the first page for all buffers */
-  9238		set_buffer_entries(&tr->array_buffer,
-  9239				   ring_buffer_size(tr->array_buffer.buffer, 0));
-  9240	
-  9241		return 0;
-  9242	}
-  9243	
+>> error[E0277]: the `?` operator can only be used in a function that returns `Result` or `Option` (or another type that implements `FromResidual`)
+   --> rust/doctests_kernel_generated.rs:373:65
+   |
+   370 | fn main() { #[allow(non_snake_case)] fn _doctest_main__kbuild_src_consumer_rust_kernel_firmware_rs_27_0() {
+   |                                      -------------------------------------------------------------------- this function should return `Result` or `Option` to accept `?`
+   ...
+   373 | let fw = Firmware::request("path/to/firmware.bin", dev.as_ref())?;
+   |                                                                 ^ cannot use the `?` operator in a function that returns `()`
+   |
+>> = help: the trait `FromResidual<core::result::Result<Infallible, rust_doctest_kernel_build_assert_rs_0::kernel::error::Error>>` is not implemented for `()`
+--
+>> error[E0425]: cannot find function `driver_load_firmware` in this scope
+   --> rust/doctests_kernel_generated.rs:374:1
+   |
+   374 | driver_load_firmware(fw.data());
+   | ^^^^^^^^^^^^^^^^^^^^ not found in this scope
 
 -- 
 0-DAY CI Kernel Test Service
