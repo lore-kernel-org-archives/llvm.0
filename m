@@ -1,192 +1,98 @@
-Received: from GBR01-LO4-obe.outbound.protection.outlook.com (mail-lo4gbr01on2124.outbound.protection.outlook.com [40.107.122.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oi1-f181.google.com (mail-oi1-f181.google.com [209.85.167.181])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8397F180A69
-	for <llvm@lists.linux.dev>; Wed, 12 Jun 2024 16:26:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.122.124
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718209598; cv=fail; b=m6Q6JVUkBLFYzYBrt1T2bmmizgmKkW8xN/m0F3I8cGJjNet3xmQMe2/fhqSVjGgKL81GjDCmdMNTBof8r1sni/hM4AWNooYwBBJvbpt/hHEOQ8xBcvUlgRuedlStQVHxrOxN2F79LwhIs3HDXmlxD/pXHwbeszlFemkkFF4+6G0=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718209598; c=relaxed/simple;
-	bh=MBFu4J9+OxZubq8gfcMp9FsYuDVq9pnlAH0AAvK8mPo=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=dS7zRLUqJbmULQAtDAGxnKQkK/NGqbJyFwk9Zqfiz/0ujkkhrwDgsEz0L+X2vzUs0D1tgZVX7ZpSCeCX4bfCf9x1go1vqhLsYgulV/bixvLBlbB0scm4ht6Rp3WkuI2HgP+qOee7YuzVpCv6nXBhwKBgZYtMh+vPgzPDhtrcg2Y=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=garyguo.net; spf=pass smtp.mailfrom=garyguo.net; dkim=pass (1024-bit key) header.d=garyguo.net header.i=@garyguo.net header.b=auijZpC8; arc=fail smtp.client-ip=40.107.122.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=garyguo.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=garyguo.net
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE91E181D07
+	for <llvm@lists.linux.dev>; Wed, 12 Jun 2024 17:00:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.181
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1718211634; cv=none; b=e4SiPge65t6WNiQ5p2f976HHkLE2gN5GRe7c2Aah1ejPIV9nUEdTmxxcjiG4SW1DYA9gak53jUeApqCvHeSnzCOSEHuYgVFmaL1QK7uFvF7X0eptNfJt50MJ5wV3XFq7nAF11/KMQprAPTRTTfBrwbRdicJC+8HYV34UeHunSWA=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1718211634; c=relaxed/simple;
+	bh=0RiU+QCieclrnIr84BvXghMGrcrPqnrFcb4cZOw1/n4=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=Wgwqa4P7UorJQCKisBQfmF+fGkNf2YPViGkqgyKLmUyZdBzm3aL62eJ4tAZVcyDFWH31UMvtGtrU9aR9A4nViQO2JOikN9aTSMZau4+1sQNpNDZ10jrSoG8HarYfDJYvRGFGvpXWg5FaK/dfznmDFgYt+Ot6D8MMnAylCYVng/c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk; spf=pass smtp.mailfrom=kernel.dk; dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b=U0/vgjCL; arc=none smtp.client-ip=209.85.167.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel.dk
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=garyguo.net header.i=@garyguo.net header.b="auijZpC8"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=JeO9Vss6Cu8VBT9X8iFsrZs7ua6lRlNvVfJh6XGICbOy7OqMmjd3XQoOS6LzLy50gyJuVgwjADrTYlBGHqz+QDued646sITNsX1YYKI8xJEsM03A70HApNn5XYu2rvuoajwZxqB/fbCISveEeeQbCr94/yalZsq+HM1tvpm4G0flygNXTPtibEMsmQWigpN+V6IvskVEU/wuu+02Hn7nYSBvN5gXMPCMNs2lcT0CjbjwnzI8ThzqPhnsH7hVlFk7+UhX1jGJvmssMpNNZXmK8PRaZScW/sIk4oSKkbfYtB3dCtuoTw/Hlp9DfvRbQ+mtPhV6HqusAcjkmALsQjQaag==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=MBFu4J9+OxZubq8gfcMp9FsYuDVq9pnlAH0AAvK8mPo=;
- b=IIg/mkPnP3Ev5ippvQw3GgluKQuy8+oNtw8d3srhMxdI+dq7N68nVT21CV2L6Kxf+lUkF0jY7NkVBcg24uUSaYmNYqr+WuXY5NOCP9yMVOofDyY959Qn2tTk8acYPzuGpJuF3gHBd2tUdyiXaWjfu04JkhymTZG2S9YCm8IlqWPuN1XGPHGjpTobLTixiKBLFPgO2O1oZ41gwuZogCPZVZLcql5tyq8iHFeZ5810fuTAyQfAFu/cR0SvqrIz02JJC1T2rM3wWcmPiY99Ry4SyX3+GjglWixIHJbxKjDyr53VlQYf/ZNvcu6jW8SCv6rEi8FI+6wOzfKp1ZOzGn8d2g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=garyguo.net; dmarc=pass action=none header.from=garyguo.net;
- dkim=pass header.d=garyguo.net; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=garyguo.net;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=MBFu4J9+OxZubq8gfcMp9FsYuDVq9pnlAH0AAvK8mPo=;
- b=auijZpC8OYH4l7GyQIVDUTpd8zSaw5+mSHC85BNumInsu86oTdYZftitWQ+28UNtXrMB7rNkY9y7gP4Lc5oeuvGmXvG1og4K+QLO8Ve2cWubdVIKQ3bwjivOSl8ssyN/grQh4CBiKK93cGUMacyeQK6h/+5yhkMik1qGrUgi4KY=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=garyguo.net;
-Received: from LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM (2603:10a6:600:253::10)
- by CWLP265MB5866.GBRP265.PROD.OUTLOOK.COM (2603:10a6:400:1a3::5) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7677.20; Wed, 12 Jun
- 2024 16:26:25 +0000
-Received: from LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM
- ([fe80::1818:a2bf:38a7:a1e7]) by LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM
- ([fe80::1818:a2bf:38a7:a1e7%5]) with mapi id 15.20.7677.019; Wed, 12 Jun 2024
- 16:26:25 +0000
-Date: Wed, 12 Jun 2024 17:26:22 +0100
-From: Gary Guo <gary@garyguo.net>
-To: Matthew Maurer <mmaurer@google.com>
-Cc: Masahiro Yamada <masahiroy@kernel.org>, Nathan Chancellor
- <nathan@kernel.org>, Nicolas Schier <nicolas@fjasle.eu>, Andrew Morton
- <akpm@linux-foundation.org>, Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor
- <alex.gaynor@gmail.com>, Wedson Almeida Filho <wedsonaf@gmail.com>, Boqun
- Feng <boqun.feng@gmail.com>, =?UTF-8?B?QmrDtnJu?= Roy Baron
- <bjorn3_gh@protonmail.com>, Benno Lossin <benno.lossin@proton.me>, Andreas
- Hindborg <a.hindborg@samsung.com>, Alice Ryhl <aliceryhl@google.com>, Nick
- Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>,
- Justin Stitt <justinstitt@google.com>, linux-kbuild@vger.kernel.org,
- linux-kernel@vger.kernel.org, rust-for-linux@vger.kernel.org,
- llvm@lists.linux.dev
-Subject: Re: [RFC PATCH 2/2] kbuild: rust: provide an option to inline C
- helpers into Rust
-Message-ID: <20240612172623.5876d0ad@eugeo>
-In-Reply-To: <CAGSQo02_siEiS07H+7MCi_T2REGoyF6FFuGHVmiUFi4EocLizQ@mail.gmail.com>
-References: <20240529202817.3641974-1-gary@garyguo.net>
-	<20240529202817.3641974-3-gary@garyguo.net>
-	<CAGSQo02_siEiS07H+7MCi_T2REGoyF6FFuGHVmiUFi4EocLizQ@mail.gmail.com>
-X-Mailer: Claws Mail 4.2.0 (GTK 3.24.41; x86_64-pc-linux-gnu)
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: LNXP265CA0009.GBRP265.PROD.OUTLOOK.COM
- (2603:10a6:600:5e::21) To LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM
- (2603:10a6:600:253::10)
+	dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b="U0/vgjCL"
+Received: by mail-oi1-f181.google.com with SMTP id 5614622812f47-3d226c5a0bcso147773b6e.1
+        for <llvm@lists.linux.dev>; Wed, 12 Jun 2024 10:00:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20230601.gappssmtp.com; s=20230601; t=1718211632; x=1718816432; darn=lists.linux.dev;
+        h=content-transfer-encoding:mime-version:date:message-id:subject
+         :references:in-reply-to:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=HX1VkR6HGzBOeMhfoel7DGB+ycEt/TVIYXsNONOxVDM=;
+        b=U0/vgjCL94tDmn3AZJH5NBUdIg6oCaxV697wyR1xSJYyy+LbGph5pvrOna0VEkauq4
+         QG4kkYI6a//0rnEJic2sxNWhwJPhNhI4vW0hy8GGZAwOgsk8yj+MJszdl89yDBBtV7oa
+         yvA+49igjNyUKYFcSZEuBZRJCiLEkJNnewHkhAWYqPFB3+vkImPe5SiQKlmNshai9b3+
+         sXcMAbQ93f5+zBIo9/EA7czv/7tcIs/KPrPlBv9BwZsN0um4mU7vho1qOvq0QW2Kz5UX
+         G8FcD5WpZAojnDFwoDEr43WdUWAtpO1m/RgESmECwxDvamsn8717Q3YenHPB9rVfAWdG
+         Ky+g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1718211632; x=1718816432;
+        h=content-transfer-encoding:mime-version:date:message-id:subject
+         :references:in-reply-to:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=HX1VkR6HGzBOeMhfoel7DGB+ycEt/TVIYXsNONOxVDM=;
+        b=mMYPWHgHoqvpNmMiD9CW441EECzaeV0xLYh0Qr1KYGHLq5IgLaGHjid7k9En+EFE/b
+         xW4/eGjQWXWv5LHTT/8RDQqZSf0xky7aca85ZEaslsbPKwBwx6rFgXzOmUAkqUL2WGzy
+         cwtvLv1QjO64CLqxk2C3fM81iF76JgG0enEawV9HHlLejWA9mKwWlkA27w3vX03B8DFF
+         gtJDL0BqGRm9G7m6FJGrR0mTbYMD9NnCU2/xEoLRHPTz2dvshxdbQRBkgLTN96uXRrKq
+         ay8wnuFpsycyX9TyJ+y5CPWCl0vBSZyB5WaEZ0xqBHh37udi+5z+vSYLB7Q2Y05xVVr3
+         GBDA==
+X-Forwarded-Encrypted: i=1; AJvYcCWTbeAXyQNu1HU2ELYOyTNSL4W3nanr15v31eN/55wEheurclmIoe+c4tQAGa6uGxDOKIfm@lists.linux.dev
+X-Gm-Message-State: AOJu0Yw4A/EIG+6r2mBZ/Tms9VlfLflF4+k71qSpfpON2jTcUX16CJ8S
+	dfsiMhKV/Oj8SKiwF5YpMYZJ6oOY0MQcXwEkm1MsqNOTOKXu2e+XypvfLlDZgho=
+X-Google-Smtp-Source: AGHT+IFNFp9TcnPZQaeA8NtDjUBmrJZ05f290B/K9cvyX+mSyJGaTh5/YirVQhuU1UkR25e/+wUMnA==
+X-Received: by 2002:a05:6808:1520:b0:3d2:1b8a:be6f with SMTP id 5614622812f47-3d23e1841d5mr2784962b6e.4.1718211628771;
+        Wed, 12 Jun 2024 10:00:28 -0700 (PDT)
+Received: from [127.0.0.1] ([96.43.243.2])
+        by smtp.gmail.com with ESMTPSA id 5614622812f47-3d242affa88sm115841b6e.1.2024.06.12.10.00.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 12 Jun 2024 10:00:28 -0700 (PDT)
+From: Jens Axboe <axboe@kernel.dk>
+To: jonathan.derrick@linux.dev, nathan@kernel.org, ndesaulniers@google.com, 
+ morbo@google.com, justinstitt@google.com, Su Hui <suhui@nfschina.com>
+Cc: jarkko@kernel.org, gjoyce@linux.vnet.ibm.com, 
+ linux-block@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ llvm@lists.linux.dev, kernel-janitors@vger.kernel.org
+In-Reply-To: <20240611073659.429582-1-suhui@nfschina.com>
+References: <20240611073659.429582-1-suhui@nfschina.com>
+Subject: Re: [PATCH] block: sed-opal: avoid possible wrong address
+ reference in read_sed_opal_key()
+Message-Id: <171821162747.49689.15711924368254843874.b4-ty@kernel.dk>
+Date: Wed, 12 Jun 2024 11:00:27 -0600
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: LO2P265MB5183:EE_|CWLP265MB5866:EE_
-X-MS-Office365-Filtering-Correlation-Id: 5667fda9-ab82-4b94-405f-08dc8afc6756
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230034|7416008|366010|376008|1800799018;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?U9FJoHf6T0Lq4y2n1LMbx0/wXY0fKwf1lp6zHvINIhY4UQTyKqrUwKkohJoi?=
- =?us-ascii?Q?XqK2D7GH6n1NdYdJFTFk5eZJUYMIE4g+irH611foKOLSoMEZqn/+4nyvmQQN?=
- =?us-ascii?Q?D5HmGGP3qJ6cPYj1223Li4mArPx2zIuNubFKnTF1JF6wGlH4m3QKdmuG4rnH?=
- =?us-ascii?Q?ouAS/Ah5xsajeYac+C32ZNImKwENGRxC/pQSpwiXcyb+DQ5Ggv33S/4D6UvK?=
- =?us-ascii?Q?GuHjepb6LYAXBwKoKVu+3KyEnA9x3h71nglJiOlDxbqGZ8uredwPLml9po14?=
- =?us-ascii?Q?Fhold2TjSQCRpN40BGhww+HA5EgAANGPg+kNcL7B/lpMXchAIlkU15WvzS41?=
- =?us-ascii?Q?Zm/f/rAUFcMmPWinS2bahkRZjaKvIR1zCrWVKFBWQ7UtSXdObz4dsNJq7rU6?=
- =?us-ascii?Q?MSfX3up7EVybOAJxvsLKYyG8RYu9HU8TWiWE/Kx/unEaGBB9Y64E44lr5/4E?=
- =?us-ascii?Q?FU8/FcgDBgNjTr30e2rh5aPJRuW6mwvtmF0vB3bZfESKiyneoafjXEYJs+pf?=
- =?us-ascii?Q?kzbcsTfHvAFE05jar2sRhflHSY+vsO9GplknE8fwHNUXEyjxjgvfP7Yx9LNo?=
- =?us-ascii?Q?huxZ79OmxWTwPvbQIfOovdgLGTHxfdmB3ofzZrEH0hFSmqc1fTTUi7kr+d4t?=
- =?us-ascii?Q?A8Xu5/gF8n2UG/tqgzl9OfoLm2TlOLCGzqsx1uOKlnRc5zSAF1ZEZ0i4YXvJ?=
- =?us-ascii?Q?s3+pqynG+uEcyFzIUOrPPp7WtgqDNRF03sTy42o169YizSBUnXc/j+gy7zGd?=
- =?us-ascii?Q?DNFM7egojSz9tbKAilz5W9yArQszhKe+UBm2uaWJJy4BD0MyWLvfHsU5afY6?=
- =?us-ascii?Q?OTHCfARgRjAzifftEGZHExeStbV0tMCnC207CtCAXQqfqYK1NB83ROnyOuX6?=
- =?us-ascii?Q?BJeqssApBIDPeEQS4c0/7yyATbiWRxG8kSaJQb/q1rUkEt+qHBCzYABhxkx2?=
- =?us-ascii?Q?bValPs9CWN5syoLtGygndAwCpfWRZxGVwUM0xkSNwEyQ4L4u7CqKpIImR+4f?=
- =?us-ascii?Q?SdGoUwkGCOwEqbBfO55t6g79AgDM4XrFGW9Hz2oS5QOWWE9uiWJ3qERIGTDe?=
- =?us-ascii?Q?MvxV9e4MsnFfo/tYDWhSkZPBLNKR5PJRnIjM8twYFn5utoTaqn69BkgGXZ7l?=
- =?us-ascii?Q?QxgWMC35RQehf1VfEmFtoAL3C/HGBeS/q/KfvQXA3lZWCSqC6vD5YX0ptoSD?=
- =?us-ascii?Q?v8OJEtwAnjwpUm0yCef2gbYmxDstAZdCD8RjaIAALcTQq1xi58RrDKTlwj8j?=
- =?us-ascii?Q?azUNNdDDrQ5NhW94RndpHNa232MIbaZ8aSEIXOyUD0W6/N2J1wSo8mDpbjHT?=
- =?us-ascii?Q?ZexZGn5PT9fylWFe8SjhxNW/?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230034)(7416008)(366010)(376008)(1800799018);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?G00p+Ka9p+5WUlHg25Or4f2qraxx2Tzxowxct3+RoKjGAnuoZ5jgtjnf5OI8?=
- =?us-ascii?Q?YyRRG+coZxVllxWUhtSR/MLT/uiDwGz1GHgc8lIE9OiW552sfsHTyECJ157B?=
- =?us-ascii?Q?cdAuS0bfCuFifnoul+c2WspK4T4djIWdXzCgSTUusAr+PgFpV4K+9vdZbniv?=
- =?us-ascii?Q?fnL1xkd7LhdeVmUgFg5RQrAO+awZJ9u0UeDgivcqqGSeuvtng2BVxkhzUZA2?=
- =?us-ascii?Q?BbW+/Ki32LWn9cWfG7PoOhYpIi8DItQ3tF6ThVgm2hifwTxMirqBMjQpKesu?=
- =?us-ascii?Q?OXOjMTjxUlCkr82K4oInn0A3XRprndMfTCubFZRD2PrTRMRJgEo2vNB9+dvt?=
- =?us-ascii?Q?066BlM1xxqaRfndeVzU5rYTGz2R81QS+U6walZZ+16pvSdCkZjRBOqQx7BVB?=
- =?us-ascii?Q?+2DRPnXaDTYNld2gM3J9OFJ5GByH54SrHsrB5knoxBpkoFJu5kn3C3Glmqqp?=
- =?us-ascii?Q?VOzdw11lA/uQ+izCh93q/I1kF0GjrvfCm6o1EjUFUWBs3+W5Dt/1fZ/6apfX?=
- =?us-ascii?Q?FyxvkRPaDtoDNqjP0PThWWRWeKlzbBocxZTPhzRiFKNvAGWuYe9NXBnfJPgk?=
- =?us-ascii?Q?30BdtJMtNwxouhzhrVnyVP6IIhjLgZxk5I4yoblxY+JQS81ho+k9p9XAcf6u?=
- =?us-ascii?Q?ZDLMSgUdU0nUHdHyHpF5NAat2H30tiXBvp1gu1/93gkQEPwf4Xk8HwZ9W8nE?=
- =?us-ascii?Q?S3y8mCRnGucv17YdKNBMWakS7eq1O1hrKAY0+miYW+0xaVof6VUm7hBLMj3G?=
- =?us-ascii?Q?z34erQ553iKvtiYLC1Z8RzAI71gcq2Ll42SSh/38qGU6qKZxs+btZZ1nroJq?=
- =?us-ascii?Q?29QuKLshjkW0tSsdD6XHPXay5Gtvh08VDT8KpAbwFNy6spiCNfhoyburU5dp?=
- =?us-ascii?Q?9fwn2rSCPXK/Mqgb+QsK2pITzv+0giH9bBFxanP7KVUns7kJhUzCdkeY90Zu?=
- =?us-ascii?Q?TCn9YnafJzvj+pP3PqI5e4TIc4DO3VZvuTE9YAKkStsMLil+fs9tqp6/XXfs?=
- =?us-ascii?Q?KGN9dLc2qwdn90/vdf/Ay01OFH62oqyIFb83HCOU0B/BO3K57yDMnO6CeR87?=
- =?us-ascii?Q?o16jwzoFB9JD+qT2DWrYJU+oU5Hs24Y0LgukwI4NfHNcH3/dHPZ5PU5sm5hO?=
- =?us-ascii?Q?j0LISiG/aEloO5x8nSVaqReRIawb57hNVTdUBPFu7sKKVsuVv2+WEd8cLDlH?=
- =?us-ascii?Q?Wz5C83FKyHozA7v2N2fb+RBkghx0LpYxfSs/bfxXMr2Kmstw2QRj1j2D+LYI?=
- =?us-ascii?Q?9UfVleDZSng18Kgsb5BGSnZfQv8Qe+VWg64iykl1G4+5VVY/eYOowCWeMonw?=
- =?us-ascii?Q?R7NJhNlz6uVebYtOUEXtezw0z506CK3h46ZCQ+3DsSF6vd/Y8LTxS26EyZ18?=
- =?us-ascii?Q?DLu5r58q4OVhNNUg99kEcv08FwPwRnm14RaC8rtjQpVGxwdFEbpAvbzZ/H3q?=
- =?us-ascii?Q?+wkTlrfKe2JbhL7+uPfr7Sa5ZizdaX1HjTle6eXVm7zC4lsPTpKrxGKkEoN+?=
- =?us-ascii?Q?0+k9qnr5lXojy0Ky3FuFuaPdMj2BllbmWa4ZTV+V+onYVymx2g7hn5evpzV2?=
- =?us-ascii?Q?MkKAoazXsgNI6EXq57L7d26l63qZGsNjTCFfFgcO?=
-X-OriginatorOrg: garyguo.net
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5667fda9-ab82-4b94-405f-08dc8afc6756
-X-MS-Exchange-CrossTenant-AuthSource: LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Jun 2024 16:26:25.1134
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: bbc898ad-b10f-4e10-8552-d9377b823d45
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 2sJlvZX0YWrcnTREky5JpAXWfm+Uz5bDEWiQntfEnJ1duUNmQ6rHl0Lb3R+OsJJPYJmUUmR9L7+ZOT9wRxuHAw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CWLP265MB5866
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.12.5-dev-2aabd
 
-On Fri, 7 Jun 2024 07:40:45 -0700
-Matthew Maurer <mmaurer@google.com> wrote:
 
-> The LLVM `.ll` textual bitcode representation may change from version
-> to version, which makes using `sed` to edit it potentially fragile.
-> Would it be possible to attach similar attributes without this? (Or
-> other attributes that can accomplish something similar, see the second
-> part.)
+On Tue, 11 Jun 2024 15:37:00 +0800, Su Hui wrote:
+> Clang static checker (scan-build) warning:
+> block/sed-opal.c:line 317, column 3
+> Value stored to 'ret' is never read.
+> 
+> Fix this problem by returning the error code when keyring_search() failed.
+> Otherwise, 'key' will have a wrong value when 'kerf' stores the error code.
+> 
+> [...]
 
-I agree that text editing is fragile and should be avoided, but I'm not
-aware of a way to achieve this without text editing.
+Applied, thanks!
 
-> Would it be possible to use a Rust-only-LTO (actual LTO) flag rather
-> than a `llvm-link`? It seems likely that someone that wants to use a
-> synced `clang` and `rustc` to allow helpers to be inlined would be
-> unlikely to object to thin LTO of Rust. This would avoid introducing a
-> new tool.
+[1/1] block: sed-opal: avoid possible wrong address reference in read_sed_opal_key()
+      commit: 9b1ebce6a1fded90d4a1c6c57dc6262dac4c4c14
 
-There's no way for rustc to actually perform the LTO, since the crate
-type that we use is rlib rather than staticlibs or cdylibs, Rust does
-not take care of the linking.
+Best regards,
+-- 
+Jens Axboe
 
-> As one possible route around editing the `.ll` file, we could consider
-> *not* hiding these symbols, just marking them as "good idea to inline
-> if possible", and then masking any symbol that ends up in the final
-> `.o` via `objcopy --localize-symbol=blah`. If we're doing full-kernel
-> LTO rather than rust-only LTO, we'd need to use `llvm-objcopy`
-> instead, but the same process would follow - a postprocessing step on
-> the final crate object that localizes the symbol, with LTO giving the
-> compiler the option (but not requirement) to inline these functions if
-> it seems like a good idea.
-
-This was one of the approach that I considered, but IIUC objcopy
-require you to supply it a list of exact-match symbols rather than
-patterns, so we have to get all helper symbols and then feed it to
-objcopy. I really want to avoid having a script or host program to do
-this step.
-
-Best,
-Gary
 
 
