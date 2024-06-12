@@ -1,59 +1,69 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0DF196F2F2;
-	Wed, 12 Jun 2024 18:42:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A422D625;
+	Wed, 12 Jun 2024 18:45:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718217721; cv=none; b=NStOJrDJcuJ8slczbt5QfWcAgfBNXkLmdivvg6wsXx2dIFi2dl1fINlJaLKiqwdc5g5KHQ1f6z6O6NRDYWzBXhy2UKNyeydNC+yjaCu3CPw2LiAVj4cVvbl2kJ5w8YUGuBed/+bm0Wel4C6Ke3U/tSG7Pl31KvkBA23rUfZy9o8=
+	t=1718217914; cv=none; b=BfxViW79TfuhJ7+JpY7SFZ/MjF7n7SzhLJKmcdGTfmaeHI3Eb3laS3E+pqaJnucghO5eVUFc1DtdEMyGkuQGGcnW2b3FhWlH7V4xgTvURN1dPqmmM1U+xszbqmqYP6gdC2eUoUrKXu1NJBrHC9aUX0Kr/x6Fwa5G3Gj97bYiu+Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718217721; c=relaxed/simple;
-	bh=mAIdBktGBsJfF8zgxDtzpPy0UqBsNJgXgpFV2sbScFI=;
+	s=arc-20240116; t=1718217914; c=relaxed/simple;
+	bh=XwaC2sMvqlChtzdhaOcsngo4tLTQfibpe6co8NUeT9Y=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=NRdsOkRgxdg/Ch5NK7hJoTVaurLSmJUicLP9OAg1sdWu1qmDzeXMhS5mFj6B3dFIoniA2K7Wi26YPtSRLm/ldgZvkWyk53oJslHX7m/7tTEOdCuT/cgMM/IEU9n+Q2rAFLnDNqCYcmEgxwFn2aFqSZr0//FwDMvsWjmJvJA3bHU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FU4Pmgqd; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=rUpMqAMbhTBLR21+5VhoJsEU/Xm9NL+pG8hH3kUxfVedpg2B+nBXV0FMUXdXaMOwgWnxDQUxVHSU0fH9LsZofyvc5DGs6lqyISyI6d2aCqTkeXSBFU8l8vOmTL5cCgGB/BmndoKs06nx95BUB+wbmhkilsN9dNwE00OXBhvAmk4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=nbVw++sh; arc=none smtp.client-ip=198.175.65.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FU4Pmgqd"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8C059C32786;
-	Wed, 12 Jun 2024 18:42:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1718217720;
-	bh=mAIdBktGBsJfF8zgxDtzpPy0UqBsNJgXgpFV2sbScFI=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=FU4PmgqdWvYqgfewU/OGEo4njYGh15AbSaztNNgZgaKDoOJyIe89t6a9VdxgK7G5i
-	 lr0HflK89pgZpHcZXCgNSVx7vPuGhFiO6IbMdt27yUpdqVJjbe0xdsOynqXRo1gNiF
-	 wcreD5n3XV0HtOeaT/1leJ4xDJzwR426ok4crPgso5y56yAo5nuvQ/BR8OnnxBhS9c
-	 LSGRkYMnW2403gAUIjm5XqOZDGIj8gPthOiJRUETY0GO5bSxCnsEbfVhJoPPOZ8tXS
-	 zHVI/JzaJZmnLvHzts71QRNENmFI2vhhos1MBZtXsY0wjwDjHPx7kSNR650oXchqC5
-	 m01K2Ta0nJwoQ==
-Date: Wed, 12 Jun 2024 11:42:00 -0700
-From: Kees Cook <kees@kernel.org>
-To: Thomas Gleixner <tglx@linutronix.de>
-Cc: Gatlin Newhouse <gatlin.newhouse@gmail.com>,
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-	"H. Peter Anvin" <hpa@zytor.com>, Marco Elver <elver@google.com>,
-	Andrey Konovalov <andreyknvl@gmail.com>,
-	Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Rick Edgecombe <rick.p.edgecombe@intel.com>,
-	Baoquan He <bhe@redhat.com>, Changbin Du <changbin.du@huawei.com>,
-	Pengfei Xu <pengfei.xu@intel.com>,
-	Josh Poimboeuf <jpoimboe@kernel.org>, Xin Li <xin3.li@intel.com>,
-	Jason Gunthorpe <jgg@ziepe.ca>, Tina Zhang <tina.zhang@intel.com>,
-	Uros Bizjak <ubizjak@gmail.com>,
-	"Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-	linux-kernel@vger.kernel.org, kasan-dev@googlegroups.com,
-	linux-hardening@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH v2] x86/traps: Enable UBSAN traps on x86
-Message-ID: <202406121139.5E793B4F3E@keescook>
-References: <20240601031019.3708758-1-gatlin.newhouse@gmail.com>
- <878qzm6m2m.ffs@tglx>
- <7bthvkp3kitmmxwdywyeyexajedlxxf6rqx4zxwco6bzuyx5eq@ihpax3jffuz6>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="nbVw++sh"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1718217912; x=1749753912;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=XwaC2sMvqlChtzdhaOcsngo4tLTQfibpe6co8NUeT9Y=;
+  b=nbVw++shD7o3KTtzKzAlsmKTXXFyehDDYHzg5uK0QfJbkRa2uEvvWnuR
+   GAM6Emef/QRTbTccdZymgJc0iyMpN5bMWCrrEXjb7uH0HHtRuwiWjMUzJ
+   AOIt5VyMk7vhzRAemad9YlJHg2X6HlcwbaM6/R7QzFkjEowRuYqMcGOn9
+   D0lkkp7cQfOXVQA+CEJsHqXvvD+KsKjFOIFOnXxujvNO+JKqsLWZPPBNF
+   v8EU42DZT48yWfD1THVlGsfOwHGyuHdQuH6Jkdu5wRMeBg0Mo4y0p1ajw
+   BqC4ezjTU2SbVPyHz77pPGU1YoKeZdHMw7AoJclCmq2Q6Mksmvk0D/uES
+   g==;
+X-CSE-ConnectionGUID: YsN/XHnnSYWrf0V4H46esA==
+X-CSE-MsgGUID: vn5uTvq6QZ+FVzgaFDndpg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11101"; a="26422778"
+X-IronPort-AV: E=Sophos;i="6.08,234,1712646000"; 
+   d="scan'208";a="26422778"
+Received: from fmviesa009.fm.intel.com ([10.60.135.149])
+  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jun 2024 11:45:12 -0700
+X-CSE-ConnectionGUID: WT8uOIzsSXSL2VO9DIULLA==
+X-CSE-MsgGUID: ruXB3rWDQYKmzCjAjTUNfQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.08,234,1712646000"; 
+   d="scan'208";a="39986248"
+Received: from lkp-server01.sh.intel.com (HELO 628d7d8b9fc6) ([10.239.97.150])
+  by fmviesa009.fm.intel.com with ESMTP; 12 Jun 2024 11:45:09 -0700
+Received: from kbuild by 628d7d8b9fc6 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1sHSy2-0001pW-2o;
+	Wed, 12 Jun 2024 18:45:06 +0000
+Date: Thu, 13 Jun 2024 02:44:42 +0800
+From: kernel test robot <lkp@intel.com>
+To: Raymond Hackley <raymondhackley@protonmail.com>,
+	linux-kernel@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Markuss Broks <markuss.broks@gmail.com>,
+	Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+	Rob Herring <robh+dt@kernel.org>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Stephan Gerhold <stephan@gerhold.net>,
+	Nikita Travkin <nikita@trvn.ru>, linux-input@vger.kernel.org,
+	devicetree@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht
+Subject: Re: [PATCH 2/3] input/touchscreen: imagis: Add supports for Imagis
+ IST3038
+Message-ID: <202406130224.G2LpMsby-lkp@intel.com>
+References: <20240612032036.33103-3-raymondhackley@protonmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -62,103 +72,60 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <7bthvkp3kitmmxwdywyeyexajedlxxf6rqx4zxwco6bzuyx5eq@ihpax3jffuz6>
+In-Reply-To: <20240612032036.33103-3-raymondhackley@protonmail.com>
 
-On Tue, Jun 11, 2024 at 01:26:09PM -0700, Gatlin Newhouse wrote:
-> On Mon, Jun 03, 2024 at 06:13:53PM UTC, Thomas Gleixner wrote:
-> > On Sat, Jun 01 2024 at 03:10, Gatlin Newhouse wrote:
-> > 
-> > > Bring x86 to parity with arm64, similar to commit 25b84002afb9
-> > > ("arm64: Support Clang UBSAN trap codes for better reporting").
-> > > Enable the output of UBSAN type information on x86 architectures
-> > > compiled with clang when CONFIG_UBSAN_TRAP=y. Currently ARM
-> > > architectures output which specific sanitizer caused the trap,
-> > > via the encoded data in the trap instruction. Clang on x86
-> > > currently encodes the same data in ud1 instructions but the x86
-> > > handle_bug() and is_valid_bugaddr() functions currently only look
-> > > at ud2s.
-> > 
-> > Please structure your change log properly instead of one paragraph of
-> > unstructured word salad. See:
-> > 
-> >   https://www.kernel.org/doc/html/latest/process/maintainer-tip.html#changelog
-> >   
-> > > +/*
-> > > + * Check for UD1, UD2, with or without Address Size Override Prefixes instructions.
-> > > + */
-> > >  __always_inline int is_valid_bugaddr(unsigned long addr)
-> > >  {
-> > >  	if (addr < TASK_SIZE_MAX)
-> > > @@ -88,7 +92,13 @@ __always_inline int is_valid_bugaddr(unsigned long addr)
-> > >  	 * We got #UD, if the text isn't readable we'd have gotten
-> > >  	 * a different exception.
-> > >  	 */
-> > > -	return *(unsigned short *)addr == INSN_UD2;
-> > > +	if (*(u16 *)addr == INSN_UD2)
-> > > +		return INSN_UD2;
-> > > +	if (*(u16 *)addr == INSN_UD1)
-> > > +		return INSN_UD1;
-> > > +	if (*(u8 *)addr == INSN_ASOP && *(u16 *)(addr + 1) == INSN_UD1)
-> > 
-> > 	s/1/LEN_ASOP/ ?
-> > 
-> > > +		return INSN_ASOP;
-> > > +	return 0;
-> > 
-> > I'm not really a fan of the reuse of the INSN defines here. Especially
-> > not about INSN_ASOP. Also 0 is just lame.
-> > 
-> > Neither does the function name make sense anymore. is_valid_bugaddr() is
-> > clearly telling that it's a boolean check (despite the return value
-> > being int for hysterical raisins). But now you turn it into a
-> > non-boolean integer which returns a instruction encoding. That's
-> > hideous. Programming should result in obvious code and that should be
-> > pretty obvious to people who create tools to validate code.
-> > 
-> > Also all UBSAN cares about is the actual failure type and not the
-> > instruction itself:
-> > 
-> > #define INSN_UD_MASK		0xFFFF
-> > #define INSN_ASOP_MASK		0x00FF
-> > 
-> > #define BUG_UD_NONE		0xFFFF
-> > #define BUG_UD2			0xFFFE
-> > 
-> > __always_inline u16 get_ud_type(unsigned long addr)
-> > {
-> > 	u16 insn;
-> > 
-> > 	if (addr < TASK_SIZE_MAX)
-> >         	return BUD_UD_NONE;
-> > 
-> >         insn = *(u16 *)addr;
-> >         if ((insn & INSN_UD_MASK) == INSN_UD2)
-> >         	return BUG_UD2;
-> > 
-> > 	if ((insn & INSN_ASOP_MASK) == INSN_ASOP)
-> >         	insn = *(u16 *)(++addr);
-> > 
-> > 	// UBSAN encodes the failure type in the two bytes after UD1
-> >         if ((insn & INSN_UD_MASK) == INSN_UD1)
-> >         	return *(u16 *)(addr + LEN_UD1);
-> > 
-> > 	return BUG_UD_NONE;
-> > }
-> > 
-> > No?
-> 
-> Thanks for the feedback.
-> 
-> It seems that is_valid_bugaddr() needs to be implemented on all architectures
-> and the function get_ud_type() replaces it here. So how should the patch handle
-> is_valid_bugaddr()? Should the function remain as-is in traps.c despite no
-> longer being used?
+Hi Raymond,
 
-Yeah, this is why I'd suggested to Gatlin in early designs to reuse
-is_valid_bugaddr()'s int value. It's a required function, so it seemed
-sensible to just repurpose it from yes/no to no/type1/type2/type3/etc.
+kernel test robot noticed the following build warnings:
 
--Kees
+[auto build test WARNING on dtor-input/next]
+[also build test WARNING on robh/for-next linus/master v6.10-rc3 next-20240612]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Raymond-Hackley/input-touchscreen-imagis-Clarify-the-usage-of-protocol_b/20240612-112300
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/dtor/input.git next
+patch link:    https://lore.kernel.org/r/20240612032036.33103-3-raymondhackley%40protonmail.com
+patch subject: [PATCH 2/3] input/touchscreen: imagis: Add supports for Imagis IST3038
+config: x86_64-buildonly-randconfig-006-20240612 (https://download.01.org/0day-ci/archive/20240613/202406130224.G2LpMsby-lkp@intel.com/config)
+compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240613/202406130224.G2LpMsby-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202406130224.G2LpMsby-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+   drivers/input/touchscreen/imagis.c:397:39: warning: unused variable 'imagis_3032c_data' [-Wunused-const-variable]
+     397 | static const struct imagis_properties imagis_3032c_data = {
+         |                                       ^~~~~~~~~~~~~~~~~
+>> drivers/input/touchscreen/imagis.c:406:39: warning: unused variable 'imagis_3038_data' [-Wunused-const-variable]
+     406 | static const struct imagis_properties imagis_3038_data = {
+         |                                       ^~~~~~~~~~~~~~~~
+   drivers/input/touchscreen/imagis.c:414:39: warning: unused variable 'imagis_3038b_data' [-Wunused-const-variable]
+     414 | static const struct imagis_properties imagis_3038b_data = {
+         |                                       ^~~~~~~~~~~~~~~~~
+   drivers/input/touchscreen/imagis.c:421:39: warning: unused variable 'imagis_3038c_data' [-Wunused-const-variable]
+     421 | static const struct imagis_properties imagis_3038c_data = {
+         |                                       ^~~~~~~~~~~~~~~~~
+   4 warnings generated.
+
+
+vim +/imagis_3038_data +406 drivers/input/touchscreen/imagis.c
+
+   405	
+ > 406	static const struct imagis_properties imagis_3038_data = {
+   407		.interrupt_msg_cmd = IST30XX_REG_STATUS,
+   408		.touch_coord_cmd = IST30XX_REG_STATUS,
+   409		.whoami_cmd = IST30XX_REG_CHIPID,
+   410		.whoami_val = IST3038_WHOAMI,
+   411		.touch_keys_supported = true,
+   412	};
+   413	
 
 -- 
-Kees Cook
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
