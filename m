@@ -1,205 +1,192 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
+Received: from GBR01-LO4-obe.outbound.protection.outlook.com (mail-lo4gbr01on2124.outbound.protection.outlook.com [40.107.122.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D68C18131E;
-	Wed, 12 Jun 2024 16:07:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718208480; cv=none; b=Ycwpmwi4SVPp10IzvNpLtnQS4EDaYqM5KEekEc82i8yj5lUv5sutFFhp11jdOorGP6Tpwet6/9ixk4DGlWMAOIO8x46PzwGc3UZaydjp+Gej1aFP9Hel2DltD42GUOTmAFURkFKoTfwAXyIJXDA+mSfX+2gEMTHyv/M5Z4xeWC4=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718208480; c=relaxed/simple;
-	bh=rtuimWEm6TgrHQqKSZN5FgbZhYTBkvPBw2vhOKW+lq8=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=sHwUc7g/C6hr31MF6wYb3uX2hh4wiLbU+vVrY1+gAboy3NUThm7AQIZOj4Ho2/IWqcW37V5yNk7ZN7i9wbvFw/VGpq6MW7ISAcZKengxm+z9kn+i2xAL1qt7tVcpKmbo9AGhAsYOd0Ji0OxruSJx65Kht2PiuWmNFO6oXM5GG3o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=IQe+Pxd9; arc=none smtp.client-ip=198.175.65.21
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8397F180A69
+	for <llvm@lists.linux.dev>; Wed, 12 Jun 2024 16:26:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.122.124
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1718209598; cv=fail; b=m6Q6JVUkBLFYzYBrt1T2bmmizgmKkW8xN/m0F3I8cGJjNet3xmQMe2/fhqSVjGgKL81GjDCmdMNTBof8r1sni/hM4AWNooYwBBJvbpt/hHEOQ8xBcvUlgRuedlStQVHxrOxN2F79LwhIs3HDXmlxD/pXHwbeszlFemkkFF4+6G0=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1718209598; c=relaxed/simple;
+	bh=MBFu4J9+OxZubq8gfcMp9FsYuDVq9pnlAH0AAvK8mPo=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=dS7zRLUqJbmULQAtDAGxnKQkK/NGqbJyFwk9Zqfiz/0ujkkhrwDgsEz0L+X2vzUs0D1tgZVX7ZpSCeCX4bfCf9x1go1vqhLsYgulV/bixvLBlbB0scm4ht6Rp3WkuI2HgP+qOee7YuzVpCv6nXBhwKBgZYtMh+vPgzPDhtrcg2Y=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=garyguo.net; spf=pass smtp.mailfrom=garyguo.net; dkim=pass (1024-bit key) header.d=garyguo.net header.i=@garyguo.net header.b=auijZpC8; arc=fail smtp.client-ip=40.107.122.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=garyguo.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=garyguo.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="IQe+Pxd9"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1718208479; x=1749744479;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=rtuimWEm6TgrHQqKSZN5FgbZhYTBkvPBw2vhOKW+lq8=;
-  b=IQe+Pxd97EUHZxTlk+y1GZwaWLrcaFLbrcgs1MTU5LWMeNRoxKJlQEwq
-   X/NgJdVcDMtvdl1oKHVWug60mAKD3ZIv4oLFAaOZr5TbeZnBgUu43rZti
-   8k66kce4ykDVe1qmCHOotJv40SGAZebCJRbiVBdfRWj0b86NmG84RYNY5
-   lc5HyieOsVbBhecA0KMteVpsMwhhBLnHOlZsAM4aufe70Wtty8AFQqSch
-   R1ljq/y8UcYc7ShTsEmiqzcI2rsLCK6M4kzD2XDmCbmgUF65c7xFUnkIz
-   MBy4lHbpSyvWzKWbVpjmwqmc5esattirda2LAAmHDi5QVi2LF1FZxcUR1
-   Q==;
-X-CSE-ConnectionGUID: k22TUPB3RxCPMqTmzQPFUg==
-X-CSE-MsgGUID: qRqHX8thRN+vUjjKTKqhgQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11101"; a="14944842"
-X-IronPort-AV: E=Sophos;i="6.08,233,1712646000"; 
-   d="scan'208";a="14944842"
-Received: from orviesa008.jf.intel.com ([10.64.159.148])
-  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jun 2024 09:07:59 -0700
-X-CSE-ConnectionGUID: hJ4h5/iiSraTFQbP5Am2CQ==
-X-CSE-MsgGUID: 3EHjkLjXS9eAbzMVmczoSw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.08,233,1712646000"; 
-   d="scan'208";a="40461664"
-Received: from lkp-server01.sh.intel.com (HELO 628d7d8b9fc6) ([10.239.97.150])
-  by orviesa008.jf.intel.com with ESMTP; 12 Jun 2024 09:07:58 -0700
-Received: from kbuild by 628d7d8b9fc6 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1sHQVu-0001h2-2T;
-	Wed, 12 Jun 2024 16:07:54 +0000
-Date: Thu, 13 Jun 2024 00:07:09 +0800
-From: kernel test robot <lkp@intel.com>
-To: Roger Quadros <rogerq@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Roger Quadros <rogerq@kernel.org>
-Subject: [rogerq:b4/am65-cpsw-multi-rx-1.1 6/9]
- drivers/net/ethernet/ti/cpsw_ale.h:80:1: error: expected identifier
-Message-ID: <202406122343.SPhDIkzB-lkp@intel.com>
+	dkim=pass (1024-bit key) header.d=garyguo.net header.i=@garyguo.net header.b="auijZpC8"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=JeO9Vss6Cu8VBT9X8iFsrZs7ua6lRlNvVfJh6XGICbOy7OqMmjd3XQoOS6LzLy50gyJuVgwjADrTYlBGHqz+QDued646sITNsX1YYKI8xJEsM03A70HApNn5XYu2rvuoajwZxqB/fbCISveEeeQbCr94/yalZsq+HM1tvpm4G0flygNXTPtibEMsmQWigpN+V6IvskVEU/wuu+02Hn7nYSBvN5gXMPCMNs2lcT0CjbjwnzI8ThzqPhnsH7hVlFk7+UhX1jGJvmssMpNNZXmK8PRaZScW/sIk4oSKkbfYtB3dCtuoTw/Hlp9DfvRbQ+mtPhV6HqusAcjkmALsQjQaag==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=MBFu4J9+OxZubq8gfcMp9FsYuDVq9pnlAH0AAvK8mPo=;
+ b=IIg/mkPnP3Ev5ippvQw3GgluKQuy8+oNtw8d3srhMxdI+dq7N68nVT21CV2L6Kxf+lUkF0jY7NkVBcg24uUSaYmNYqr+WuXY5NOCP9yMVOofDyY959Qn2tTk8acYPzuGpJuF3gHBd2tUdyiXaWjfu04JkhymTZG2S9YCm8IlqWPuN1XGPHGjpTobLTixiKBLFPgO2O1oZ41gwuZogCPZVZLcql5tyq8iHFeZ5810fuTAyQfAFu/cR0SvqrIz02JJC1T2rM3wWcmPiY99Ry4SyX3+GjglWixIHJbxKjDyr53VlQYf/ZNvcu6jW8SCv6rEi8FI+6wOzfKp1ZOzGn8d2g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=garyguo.net; dmarc=pass action=none header.from=garyguo.net;
+ dkim=pass header.d=garyguo.net; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=garyguo.net;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=MBFu4J9+OxZubq8gfcMp9FsYuDVq9pnlAH0AAvK8mPo=;
+ b=auijZpC8OYH4l7GyQIVDUTpd8zSaw5+mSHC85BNumInsu86oTdYZftitWQ+28UNtXrMB7rNkY9y7gP4Lc5oeuvGmXvG1og4K+QLO8Ve2cWubdVIKQ3bwjivOSl8ssyN/grQh4CBiKK93cGUMacyeQK6h/+5yhkMik1qGrUgi4KY=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=garyguo.net;
+Received: from LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM (2603:10a6:600:253::10)
+ by CWLP265MB5866.GBRP265.PROD.OUTLOOK.COM (2603:10a6:400:1a3::5) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7677.20; Wed, 12 Jun
+ 2024 16:26:25 +0000
+Received: from LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM
+ ([fe80::1818:a2bf:38a7:a1e7]) by LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM
+ ([fe80::1818:a2bf:38a7:a1e7%5]) with mapi id 15.20.7677.019; Wed, 12 Jun 2024
+ 16:26:25 +0000
+Date: Wed, 12 Jun 2024 17:26:22 +0100
+From: Gary Guo <gary@garyguo.net>
+To: Matthew Maurer <mmaurer@google.com>
+Cc: Masahiro Yamada <masahiroy@kernel.org>, Nathan Chancellor
+ <nathan@kernel.org>, Nicolas Schier <nicolas@fjasle.eu>, Andrew Morton
+ <akpm@linux-foundation.org>, Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor
+ <alex.gaynor@gmail.com>, Wedson Almeida Filho <wedsonaf@gmail.com>, Boqun
+ Feng <boqun.feng@gmail.com>, =?UTF-8?B?QmrDtnJu?= Roy Baron
+ <bjorn3_gh@protonmail.com>, Benno Lossin <benno.lossin@proton.me>, Andreas
+ Hindborg <a.hindborg@samsung.com>, Alice Ryhl <aliceryhl@google.com>, Nick
+ Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>,
+ Justin Stitt <justinstitt@google.com>, linux-kbuild@vger.kernel.org,
+ linux-kernel@vger.kernel.org, rust-for-linux@vger.kernel.org,
+ llvm@lists.linux.dev
+Subject: Re: [RFC PATCH 2/2] kbuild: rust: provide an option to inline C
+ helpers into Rust
+Message-ID: <20240612172623.5876d0ad@eugeo>
+In-Reply-To: <CAGSQo02_siEiS07H+7MCi_T2REGoyF6FFuGHVmiUFi4EocLizQ@mail.gmail.com>
+References: <20240529202817.3641974-1-gary@garyguo.net>
+	<20240529202817.3641974-3-gary@garyguo.net>
+	<CAGSQo02_siEiS07H+7MCi_T2REGoyF6FFuGHVmiUFi4EocLizQ@mail.gmail.com>
+X-Mailer: Claws Mail 4.2.0 (GTK 3.24.41; x86_64-pc-linux-gnu)
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: LNXP265CA0009.GBRP265.PROD.OUTLOOK.COM
+ (2603:10a6:600:5e::21) To LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM
+ (2603:10a6:600:253::10)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: LO2P265MB5183:EE_|CWLP265MB5866:EE_
+X-MS-Office365-Filtering-Correlation-Id: 5667fda9-ab82-4b94-405f-08dc8afc6756
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230034|7416008|366010|376008|1800799018;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?U9FJoHf6T0Lq4y2n1LMbx0/wXY0fKwf1lp6zHvINIhY4UQTyKqrUwKkohJoi?=
+ =?us-ascii?Q?XqK2D7GH6n1NdYdJFTFk5eZJUYMIE4g+irH611foKOLSoMEZqn/+4nyvmQQN?=
+ =?us-ascii?Q?D5HmGGP3qJ6cPYj1223Li4mArPx2zIuNubFKnTF1JF6wGlH4m3QKdmuG4rnH?=
+ =?us-ascii?Q?ouAS/Ah5xsajeYac+C32ZNImKwENGRxC/pQSpwiXcyb+DQ5Ggv33S/4D6UvK?=
+ =?us-ascii?Q?GuHjepb6LYAXBwKoKVu+3KyEnA9x3h71nglJiOlDxbqGZ8uredwPLml9po14?=
+ =?us-ascii?Q?Fhold2TjSQCRpN40BGhww+HA5EgAANGPg+kNcL7B/lpMXchAIlkU15WvzS41?=
+ =?us-ascii?Q?Zm/f/rAUFcMmPWinS2bahkRZjaKvIR1zCrWVKFBWQ7UtSXdObz4dsNJq7rU6?=
+ =?us-ascii?Q?MSfX3up7EVybOAJxvsLKYyG8RYu9HU8TWiWE/Kx/unEaGBB9Y64E44lr5/4E?=
+ =?us-ascii?Q?FU8/FcgDBgNjTr30e2rh5aPJRuW6mwvtmF0vB3bZfESKiyneoafjXEYJs+pf?=
+ =?us-ascii?Q?kzbcsTfHvAFE05jar2sRhflHSY+vsO9GplknE8fwHNUXEyjxjgvfP7Yx9LNo?=
+ =?us-ascii?Q?huxZ79OmxWTwPvbQIfOovdgLGTHxfdmB3ofzZrEH0hFSmqc1fTTUi7kr+d4t?=
+ =?us-ascii?Q?A8Xu5/gF8n2UG/tqgzl9OfoLm2TlOLCGzqsx1uOKlnRc5zSAF1ZEZ0i4YXvJ?=
+ =?us-ascii?Q?s3+pqynG+uEcyFzIUOrPPp7WtgqDNRF03sTy42o169YizSBUnXc/j+gy7zGd?=
+ =?us-ascii?Q?DNFM7egojSz9tbKAilz5W9yArQszhKe+UBm2uaWJJy4BD0MyWLvfHsU5afY6?=
+ =?us-ascii?Q?OTHCfARgRjAzifftEGZHExeStbV0tMCnC207CtCAXQqfqYK1NB83ROnyOuX6?=
+ =?us-ascii?Q?BJeqssApBIDPeEQS4c0/7yyATbiWRxG8kSaJQb/q1rUkEt+qHBCzYABhxkx2?=
+ =?us-ascii?Q?bValPs9CWN5syoLtGygndAwCpfWRZxGVwUM0xkSNwEyQ4L4u7CqKpIImR+4f?=
+ =?us-ascii?Q?SdGoUwkGCOwEqbBfO55t6g79AgDM4XrFGW9Hz2oS5QOWWE9uiWJ3qERIGTDe?=
+ =?us-ascii?Q?MvxV9e4MsnFfo/tYDWhSkZPBLNKR5PJRnIjM8twYFn5utoTaqn69BkgGXZ7l?=
+ =?us-ascii?Q?QxgWMC35RQehf1VfEmFtoAL3C/HGBeS/q/KfvQXA3lZWCSqC6vD5YX0ptoSD?=
+ =?us-ascii?Q?v8OJEtwAnjwpUm0yCef2gbYmxDstAZdCD8RjaIAALcTQq1xi58RrDKTlwj8j?=
+ =?us-ascii?Q?azUNNdDDrQ5NhW94RndpHNa232MIbaZ8aSEIXOyUD0W6/N2J1wSo8mDpbjHT?=
+ =?us-ascii?Q?ZexZGn5PT9fylWFe8SjhxNW/?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230034)(7416008)(366010)(376008)(1800799018);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?G00p+Ka9p+5WUlHg25Or4f2qraxx2Tzxowxct3+RoKjGAnuoZ5jgtjnf5OI8?=
+ =?us-ascii?Q?YyRRG+coZxVllxWUhtSR/MLT/uiDwGz1GHgc8lIE9OiW552sfsHTyECJ157B?=
+ =?us-ascii?Q?cdAuS0bfCuFifnoul+c2WspK4T4djIWdXzCgSTUusAr+PgFpV4K+9vdZbniv?=
+ =?us-ascii?Q?fnL1xkd7LhdeVmUgFg5RQrAO+awZJ9u0UeDgivcqqGSeuvtng2BVxkhzUZA2?=
+ =?us-ascii?Q?BbW+/Ki32LWn9cWfG7PoOhYpIi8DItQ3tF6ThVgm2hifwTxMirqBMjQpKesu?=
+ =?us-ascii?Q?OXOjMTjxUlCkr82K4oInn0A3XRprndMfTCubFZRD2PrTRMRJgEo2vNB9+dvt?=
+ =?us-ascii?Q?066BlM1xxqaRfndeVzU5rYTGz2R81QS+U6walZZ+16pvSdCkZjRBOqQx7BVB?=
+ =?us-ascii?Q?+2DRPnXaDTYNld2gM3J9OFJ5GByH54SrHsrB5knoxBpkoFJu5kn3C3Glmqqp?=
+ =?us-ascii?Q?VOzdw11lA/uQ+izCh93q/I1kF0GjrvfCm6o1EjUFUWBs3+W5Dt/1fZ/6apfX?=
+ =?us-ascii?Q?FyxvkRPaDtoDNqjP0PThWWRWeKlzbBocxZTPhzRiFKNvAGWuYe9NXBnfJPgk?=
+ =?us-ascii?Q?30BdtJMtNwxouhzhrVnyVP6IIhjLgZxk5I4yoblxY+JQS81ho+k9p9XAcf6u?=
+ =?us-ascii?Q?ZDLMSgUdU0nUHdHyHpF5NAat2H30tiXBvp1gu1/93gkQEPwf4Xk8HwZ9W8nE?=
+ =?us-ascii?Q?S3y8mCRnGucv17YdKNBMWakS7eq1O1hrKAY0+miYW+0xaVof6VUm7hBLMj3G?=
+ =?us-ascii?Q?z34erQ553iKvtiYLC1Z8RzAI71gcq2Ll42SSh/38qGU6qKZxs+btZZ1nroJq?=
+ =?us-ascii?Q?29QuKLshjkW0tSsdD6XHPXay5Gtvh08VDT8KpAbwFNy6spiCNfhoyburU5dp?=
+ =?us-ascii?Q?9fwn2rSCPXK/Mqgb+QsK2pITzv+0giH9bBFxanP7KVUns7kJhUzCdkeY90Zu?=
+ =?us-ascii?Q?TCn9YnafJzvj+pP3PqI5e4TIc4DO3VZvuTE9YAKkStsMLil+fs9tqp6/XXfs?=
+ =?us-ascii?Q?KGN9dLc2qwdn90/vdf/Ay01OFH62oqyIFb83HCOU0B/BO3K57yDMnO6CeR87?=
+ =?us-ascii?Q?o16jwzoFB9JD+qT2DWrYJU+oU5Hs24Y0LgukwI4NfHNcH3/dHPZ5PU5sm5hO?=
+ =?us-ascii?Q?j0LISiG/aEloO5x8nSVaqReRIawb57hNVTdUBPFu7sKKVsuVv2+WEd8cLDlH?=
+ =?us-ascii?Q?Wz5C83FKyHozA7v2N2fb+RBkghx0LpYxfSs/bfxXMr2Kmstw2QRj1j2D+LYI?=
+ =?us-ascii?Q?9UfVleDZSng18Kgsb5BGSnZfQv8Qe+VWg64iykl1G4+5VVY/eYOowCWeMonw?=
+ =?us-ascii?Q?R7NJhNlz6uVebYtOUEXtezw0z506CK3h46ZCQ+3DsSF6vd/Y8LTxS26EyZ18?=
+ =?us-ascii?Q?DLu5r58q4OVhNNUg99kEcv08FwPwRnm14RaC8rtjQpVGxwdFEbpAvbzZ/H3q?=
+ =?us-ascii?Q?+wkTlrfKe2JbhL7+uPfr7Sa5ZizdaX1HjTle6eXVm7zC4lsPTpKrxGKkEoN+?=
+ =?us-ascii?Q?0+k9qnr5lXojy0Ky3FuFuaPdMj2BllbmWa4ZTV+V+onYVymx2g7hn5evpzV2?=
+ =?us-ascii?Q?MkKAoazXsgNI6EXq57L7d26l63qZGsNjTCFfFgcO?=
+X-OriginatorOrg: garyguo.net
+X-MS-Exchange-CrossTenant-Network-Message-Id: 5667fda9-ab82-4b94-405f-08dc8afc6756
+X-MS-Exchange-CrossTenant-AuthSource: LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Jun 2024 16:26:25.1134
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: bbc898ad-b10f-4e10-8552-d9377b823d45
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 2sJlvZX0YWrcnTREky5JpAXWfm+Uz5bDEWiQntfEnJ1duUNmQ6rHl0Lb3R+OsJJPYJmUUmR9L7+ZOT9wRxuHAw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CWLP265MB5866
 
-tree:   https://github.com/rogerq/linux b4/am65-cpsw-multi-rx-1.1
-head:   8b49bb5d7ad14fc809b07436e283aefff4b35262
-commit: 10a677b4a557203dbac8fb4dc78cfe72c415a61a [6/9] net: ethernet: ti: cpsw_ale: add Policer and Thread control register fields
-config: arm-defconfig (https://download.01.org/0day-ci/archive/20240612/202406122343.SPhDIkzB-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240612/202406122343.SPhDIkzB-lkp@intel.com/reproduce)
+On Fri, 7 Jun 2024 07:40:45 -0700
+Matthew Maurer <mmaurer@google.com> wrote:
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202406122343.SPhDIkzB-lkp@intel.com/
+> The LLVM `.ll` textual bitcode representation may change from version
+> to version, which makes using `sed` to edit it potentially fragile.
+> Would it be possible to attach similar attributes without this? (Or
+> other attributes that can accomplish something similar, see the second
+> part.)
 
-All errors (new ones prefixed by >>):
+I agree that text editing is fragile and should be avoided, but I'm not
+aware of a way to achieve this without text editing.
 
-   In file included from drivers/net/ethernet/ti/cpsw.c:42:
->> drivers/net/ethernet/ti/cpsw_ale.h:80:1: error: expected identifier
-   >>>>>>> a407f115fe99 (net: ethernet: ti: cpsw_ale: add Policer and Thread control register fields)
-   ^
->> drivers/net/ethernet/ti/cpsw_ale.h:89:30: error: use of undeclared identifier 'ALE_FIELDS_MAX'; did you mean 'BTF_FIELDS_MAX'?
-           struct regmap_field     *fields[ALE_FIELDS_MAX];
-                                           ^~~~~~~~~~~~~~
-                                           BTF_FIELDS_MAX
-   include/linux/bpf.h:188:2: note: 'BTF_FIELDS_MAX' declared here
-           BTF_FIELDS_MAX     = 10,
-           ^
-   2 errors generated.
---
-   In file included from drivers/net/ethernet/ti/cpsw_ale.c:22:
->> drivers/net/ethernet/ti/cpsw_ale.h:80:1: error: expected identifier
-   >>>>>>> a407f115fe99 (net: ethernet: ti: cpsw_ale: add Policer and Thread control register fields)
-   ^
->> drivers/net/ethernet/ti/cpsw_ale.h:89:30: error: use of undeclared identifier 'ALE_FIELDS_MAX'; did you mean 'BTF_FIELDS_MAX'?
-           struct regmap_field     *fields[ALE_FIELDS_MAX];
-                                           ^~~~~~~~~~~~~~
-                                           BTF_FIELDS_MAX
-   include/linux/bpf.h:188:2: note: 'BTF_FIELDS_MAX' declared here
-           BTF_FIELDS_MAX     = 10,
-           ^
->> drivers/net/ethernet/ti/cpsw_ale.c:1395:1: error: expected expression
-   >>>>>>> a407f115fe99 (net: ethernet: ti: cpsw_ale: add Policer and Thread control register fields)
-   ^
-   drivers/net/ethernet/ti/cpsw_ale.c:1395:3: error: expected expression
-   >>>>>>> a407f115fe99 (net: ethernet: ti: cpsw_ale: add Policer and Thread control register fields)
-     ^
-   drivers/net/ethernet/ti/cpsw_ale.c:1395:5: error: expected expression
-   >>>>>>> a407f115fe99 (net: ethernet: ti: cpsw_ale: add Policer and Thread control register fields)
-       ^
-   drivers/net/ethernet/ti/cpsw_ale.c:1395:7: error: expected expression
-   >>>>>>> a407f115fe99 (net: ethernet: ti: cpsw_ale: add Policer and Thread control register fields)
-         ^
->> drivers/net/ethernet/ti/cpsw_ale.c:1395:9: error: implicit declaration of function 'a407f115fe99' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
-   >>>>>>> a407f115fe99 (net: ethernet: ti: cpsw_ale: add Policer and Thread control register fields)
-           ^
->> drivers/net/ethernet/ti/cpsw_ale.c:1395:23: error: use of undeclared identifier 'net'
-   >>>>>>> a407f115fe99 (net: ethernet: ti: cpsw_ale: add Policer and Thread control register fields)
-                         ^
->> drivers/net/ethernet/ti/cpsw_ale.c:1481:18: error: use of undeclared identifier 'ALE_FIELDS_MAX'; did you mean 'BTF_FIELDS_MAX'?
-           for (i = 0; i < ALE_FIELDS_MAX; i++) {
-                           ^~~~~~~~~~~~~~
-                           BTF_FIELDS_MAX
-   include/linux/bpf.h:188:2: note: 'BTF_FIELDS_MAX' declared here
-           BTF_FIELDS_MAX     = 10,
-           ^
-   9 errors generated.
+> Would it be possible to use a Rust-only-LTO (actual LTO) flag rather
+> than a `llvm-link`? It seems likely that someone that wants to use a
+> synced `clang` and `rustc` to allow helpers to be inlined would be
+> unlikely to object to thin LTO of Rust. This would avoid introducing a
+> new tool.
+
+There's no way for rustc to actually perform the LTO, since the crate
+type that we use is rlib rather than staticlibs or cdylibs, Rust does
+not take care of the linking.
+
+> As one possible route around editing the `.ll` file, we could consider
+> *not* hiding these symbols, just marking them as "good idea to inline
+> if possible", and then masking any symbol that ends up in the final
+> `.o` via `objcopy --localize-symbol=blah`. If we're doing full-kernel
+> LTO rather than rust-only LTO, we'd need to use `llvm-objcopy`
+> instead, but the same process would follow - a postprocessing step on
+> the final crate object that localizes the symbol, with LTO giving the
+> compiler the option (but not requirement) to inline these functions if
+> it seems like a good idea.
+
+This was one of the approach that I considered, but IIUC objcopy
+require you to supply it a list of exact-match symbols rather than
+patterns, so we have to get all helper symbols and then feed it to
+objcopy. I really want to avoid having a script or host program to do
+this step.
+
+Best,
+Gary
 
 
-vim +80 drivers/net/ethernet/ti/cpsw_ale.h
-
-    33	
-    34	enum ale_fields {
-    35		MINOR_VER,
-    36		MAJOR_VER,
-    37		ALE_ENTRIES,
-    38		ALE_POLICERS,
-    39		POL_PORT_MEN,
-    40		POL_TRUNK_ID,
-    41		POL_PORT_NUM,
-    42		POL_PRI_MEN,
-    43		POL_PRI_VAL,
-    44		POL_OUI_MEN,
-    45		POL_OUI_INDEX,
-    46		POL_DST_MEN,
-    47		POL_DST_INDEX,
-    48		POL_SRC_MEN,
-    49		POL_SRC_INDEX,
-    50		POL_OVLAN_MEN,
-    51		POL_OVLAN_INDEX,
-    52		POL_IVLAN_MEN,
-    53		POL_IVLAN_INDEX,
-    54		POL_ETHERTYPE_MEN,
-    55		POL_ETHERTYPE_INDEX,
-    56		POL_IPSRC_MEN,
-    57		POL_IPSRC_INDEX,
-    58		POL_IPDST_MEN,
-    59		POL_IPDST_INDEX,
-    60		POL_EN,
-    61		POL_RED_DROP_EN,
-    62		POL_YELLOW_DROP_EN,
-    63		POL_YELLOW_THRESH,
-    64		POL_POL_MATCH_MODE,
-    65		POL_PRIORITY_THREAD_EN,
-    66		POL_MAC_ONLY_DEF_DIS,
-    67		POL_TEST_CLR,
-    68		POL_TEST_CLR_RED,
-    69		POL_TEST_CLR_YELLOW,
-    70		POL_TEST_CLR_SELECTED,
-    71		POL_TEST_ENTRY,
-    72		POL_STATUS_HIT,
-    73		POL_STATUS_HIT_RED,
-    74		POL_STATUS_HIT_YELLOW,
-    75		ALE_DEFAULT_THREAD_EN,
-    76		ALE_DEFAULT_THREAD_VAL,
-    77		ALE_THREAD_CLASS_INDEX,
-    78		ALE_THREAD_ENABLE,
-    79		ALE_THREAD_VALUE,
-  > 80	>>>>>>> a407f115fe99 (net: ethernet: ti: cpsw_ale: add Policer and Thread control register fields)
-    81		/* terminator */
-    82		ALE_FIELDS_MAX,
-    83	};
-    84	
-    85	struct cpsw_ale {
-    86		struct cpsw_ale_params	params;
-    87		struct timer_list	timer;
-    88		struct regmap		*regmap;
-  > 89		struct regmap_field	*fields[ALE_FIELDS_MAX];
-    90		unsigned long		ageout;
-    91		u32			version;
-    92		u32			features;
-    93		/* These bits are different on NetCP NU Switch ALE */
-    94		u32			port_mask_bits;
-    95		u32			port_num_bits;
-    96		u32			vlan_field_bits;
-    97		unsigned long		*p0_untag_vid_mask;
-    98		const struct ale_entry_fld *vlan_entry_tbl;
-    99	};
-   100	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
