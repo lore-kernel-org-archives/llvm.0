@@ -1,107 +1,82 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B98B15624C;
-	Wed, 12 Jun 2024 11:32:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1BBE05B5B6;
+	Wed, 12 Jun 2024 12:00:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718191973; cv=none; b=JjGrhxkX/kJe5dHpz/Mzg5vslvOHoPAvOZA5dZ7pnN5TBfEjFBXSIbLobIDNhMo9cd9ZsKE82512caO17p2PDFdY3Iqc30eHVkStgV/21xd1VXpGf5Yeamhb0LKr2Ukj7/4iBkNB80xVRhFB7TgGA9jud3r4pB//YITHiwEbGSM=
+	t=1718193650; cv=none; b=KWGT2oXBjN1LBsEM/P5iVKM4twFabdy7vYyQtGPAaHjC1LDlfmYkHhW5KmNpC03StkayyOIKUetXSOvqHTnq0UOgQnUnRPASRrKNyWR3SMWkmdeTT6eLPaUxzBtd2DJesKBhwDFRo0lHZoGWyeVfW0Uo0tMK38qk98seLuvPXdo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718191973; c=relaxed/simple;
-	bh=ynq7JZEcu4dCn5nBDJ2/hiUKsuF+17am3ds3FvNCRQ8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=joQtW57mduFD5sq2ofqeFwK9EtuXL8T6jB4dnVyvsac8rz9qWbLkFPbdd8i3Rjq3roiL1NxrIlgMYUixo3A0xoT5m6BQ2TDJW7QPKwT3l7xp4gvDTxhA1csNATCXi//O8q+P1uv6caxXrh09gdhrCiZ94tfVjAa8J3GntL12M/k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=MHgYv12S; arc=none smtp.client-ip=198.175.65.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1718193650; c=relaxed/simple;
+	bh=n07DsxpF09u9uRBGe0+vElVCf39YcKw1xJ60iXRcKzg=;
+	h=Content-Type:MIME-Version:Subject:From:In-Reply-To:References:To:
+	 Cc:Message-ID:Date; b=LDHx1BUY+VCfoBQnAkRfS+Q2GbMvCRizOynoyQUTw1T7yBnGh1imJz4bAkPh+E51+4nut56TxsPAv+d+lG9oJXuMe3I3e+A2tUUR1V9OCbarzTX9+qnP/ksNdBaMtTzM8cU409reLLf1aOrfc6kQ9KtXF/3dcvrThHgPn7CTkOg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oXWplOsq; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="MHgYv12S"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1718191972; x=1749727972;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=ynq7JZEcu4dCn5nBDJ2/hiUKsuF+17am3ds3FvNCRQ8=;
-  b=MHgYv12SwogRKZkwvsuhDbbDLTzfsdP+cm7TEHqrBBdvIoo/82EEHts/
-   Tl+LH1ItwJhwXag6AQ0Uk/r7B9OhQ3UR/iDmGwe/qUZSXyh8uGoh2rKF2
-   nc3kpYSiaTj7z79H0nF23W6pQ6tCOqfN8UEeAIquptBad+XmDGq6SmJoA
-   Jv6Ch3krOqjWZYVcnMRIzSw2yCoaVpOgyELKz4LrtvZEBqvaT8qH0yFzU
-   U7UjOApm4qZzlh9kRbcJLZCtddSEOft8uinzZ68g33ZaHQeCrT+tvtnxH
-   nnba8SrWfObjyGJmczDofD5Ah0pQkh0cFjq45zGeK3P+iculpZO+bVIvd
-   w==;
-X-CSE-ConnectionGUID: gvvSRfcoRWazskfGTqhMZQ==
-X-CSE-MsgGUID: zj2irvSZRq+M2kXM5w9OSw==
-X-IronPort-AV: E=McAfee;i="6600,9927,11100"; a="26066863"
-X-IronPort-AV: E=Sophos;i="6.08,233,1712646000"; 
-   d="scan'208";a="26066863"
-Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jun 2024 04:32:49 -0700
-X-CSE-ConnectionGUID: QB8JRPOiReKFJyxZg8NW7A==
-X-CSE-MsgGUID: 5XM8o6sFQaO9s/Rsx3yTaA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.08,233,1712646000"; 
-   d="scan'208";a="70567021"
-Received: from lkp-server01.sh.intel.com (HELO 628d7d8b9fc6) ([10.239.97.150])
-  by orviesa002.jf.intel.com with ESMTP; 12 Jun 2024 04:32:47 -0700
-Received: from kbuild by 628d7d8b9fc6 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1sHMDd-0001V4-0n;
-	Wed, 12 Jun 2024 11:32:45 +0000
-Date: Wed, 12 Jun 2024 19:32:03 +0800
-From: kernel test robot <lkp@intel.com>
-To: Danilo Krummrich <dakr@redhat.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [PATCH v2 2/2] rust: add firmware abstractions
-Message-ID: <202406121959.hSkfmD0s-lkp@intel.com>
-References: <20240610180318.72152-3-dakr@redhat.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oXWplOsq"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E93BFC3277B;
+	Wed, 12 Jun 2024 12:00:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1718193649;
+	bh=n07DsxpF09u9uRBGe0+vElVCf39YcKw1xJ60iXRcKzg=;
+	h=Subject:From:In-Reply-To:References:To:Cc:Date:From;
+	b=oXWplOsq4nnAtuLBBD+pAoPfNo9LptulGP0gr4nvRfkbtxPnYsxqr3QnMyNnPfYH6
+	 kM6B6mF0kd1Ds3lXuu2aUqqdtb2Kf38jBF1DBUwPw3CjvcAU6TbpOfjINQEFLou32C
+	 gNO36MRx2EzUGOJIr1iRM4rmsewkGDoLFBIRqLrfA6o7BBfLjPGcu1/Xs+KG6d1IOK
+	 SaWDYf3mFcw/dBJ2LvrZiUKXKqd+PR93+0BQK7042tV8lwenoBsaUewEsHFnSGXvYO
+	 Z9Uz4PZkJTxFTCe4Ya9GSvubI3jvnXrYn/a7krp8m7cfs0ZimCQ+kJYlNXoJ8vWeOV
+	 fN1MYBnBNUaIg==
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240610180318.72152-3-dakr@redhat.com>
+Content-Transfer-Encoding: 7bit
+Subject: Re: [1/2] wifi: at76c50x: use sizeof(*pointer) instead of
+ sizeof(type)
+From: Kalle Valo <kvalo@kernel.org>
+In-Reply-To: 
+ <AS8PR02MB7237C784C14DBC943CB719F88BFE2@AS8PR02MB7237.eurprd02.prod.outlook.com>
+References: 
+ <AS8PR02MB7237C784C14DBC943CB719F88BFE2@AS8PR02MB7237.eurprd02.prod.outlook.com>
+To: Erick Archer <erick.archer@outlook.com>
+Cc: Nicolas Ferre <nicolas.ferre@microchip.com>,
+ Alexandre Belloni <alexandre.belloni@bootlin.com>,
+ Claudiu Beznea <claudiu.beznea@tuxon.dev>, Kees Cook <keescook@chromium.org>,
+ "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+ Nathan Chancellor <nathan@kernel.org>,
+ Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>,
+ Justin Stitt <justinstitt@google.com>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Johannes Berg <johannes.berg@intel.com>,
+ Alan Stern <stern@rowland.harvard.edu>,
+ Erick Archer <erick.archer@outlook.com>, linux-wireless@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+ linux-hardening@vger.kernel.org, llvm@lists.linux.dev
+User-Agent: pwcli/0.1.1-git (https://github.com/kvalo/pwcli/) Python/3.11.2
+Message-ID: <171819364392.3856519.7235762996052092002.kvalo@kernel.org>
+Date: Wed, 12 Jun 2024 12:00:45 +0000 (UTC)
 
-Hi Danilo,
+Erick Archer <erick.archer@outlook.com> wrote:
 
-kernel test robot noticed the following build errors:
+> It is preferred to use sizeof(*pointer) instead of sizeof(type)
+> due to the type of the variable can change and one needs not
+> change the former (unlike the latter). This patch has no effect
+> on runtime behavior.
+> 
+> At the same time remove some redundant NULL initializations.
+> 
+> Signed-off-by: Erick Archer <erick.archer@outlook.com>
 
-[auto build test ERROR on 1613e604df0cd359cf2a7fbd9be7a0bcfacfabd0]
+2 patches applied to wireless-next.git, thanks.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Danilo-Krummrich/rust-add-abstraction-for-struct-device/20240611-020558
-base:   1613e604df0cd359cf2a7fbd9be7a0bcfacfabd0
-patch link:    https://lore.kernel.org/r/20240610180318.72152-3-dakr%40redhat.com
-patch subject: [PATCH v2 2/2] rust: add firmware abstractions
-config: x86_64-randconfig-012-20240612 (https://download.01.org/0day-ci/archive/20240612/202406121959.hSkfmD0s-lkp@intel.com/config)
-compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240612/202406121959.hSkfmD0s-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202406121959.hSkfmD0s-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> error[E0277]: the `?` operator can only be used in a function that returns `Result` or `Option` (or another type that implements `FromResidual`)
-   --> rust/doctests_kernel_generated.rs:373:65
-   |
-   370 | fn main() { #[allow(non_snake_case)] fn _doctest_main__kbuild_src_consumer_rust_kernel_firmware_rs_27_0() {
-   |                                      -------------------------------------------------------------------- this function should return `Result` or `Option` to accept `?`
-   ...
-   373 | let fw = Firmware::request("path/to/firmware.bin", dev.as_ref())?;
-   |                                                                 ^ cannot use the `?` operator in a function that returns `()`
-   |
->> = help: the trait `FromResidual<core::result::Result<Infallible, rust_doctest_kernel_build_assert_rs_0::kernel::error::Error>>` is not implemented for `()`
---
->> error[E0425]: cannot find function `driver_load_firmware` in this scope
-   --> rust/doctests_kernel_generated.rs:374:1
-   |
-   374 | driver_load_firmware(fw.data());
-   | ^^^^^^^^^^^^^^^^^^^^ not found in this scope
+aea9165ccfd1 wifi: at76c50x: use sizeof(*pointer) instead of sizeof(type)
+bbef1d006cb1 wifi: at76c50x: prefer struct_size over open coded arithmetic
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+https://patchwork.kernel.org/project/linux-wireless/patch/AS8PR02MB7237C784C14DBC943CB719F88BFE2@AS8PR02MB7237.eurprd02.prod.outlook.com/
+
+https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
+
