@@ -1,155 +1,212 @@
-Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qk1-f174.google.com (mail-qk1-f174.google.com [209.85.222.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B1093391;
-	Wed, 12 Jun 2024 22:10:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.92.199
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8389428385
+	for <llvm@lists.linux.dev>; Wed, 12 Jun 2024 22:31:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718230231; cv=none; b=pbCmbZs619+22K4Y71sb7sS/0HDQGUllM7WUqhamFt3yBsyl7hmKyD48jrFdMlNDBW6HX4oOve4eW0AcPfWW5cD8hIzPeG7GQEq/ZeEVkbUKx9JGX04LwWOlLyLn1zNP3VJaHxwcs42PKFNNePtl5F7bWc2PNCZmlUgC0FIcsVI=
+	t=1718231464; cv=none; b=hOKs2S7nRefojCzK8TQXhDsAPtHCg6pIPURBU9L3hvI6Pk9Q07LblY7Q9hMns0zixtqLzyKgfsLpXRAdMtVJriXzb48LcbmnDLJUTrPRRTSZTU35Q9HJieAKf7U/nqQG7tOpAl2ukE2Q11ejyymO7evCzqaAvlKpiqDY0SM4AF8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718230231; c=relaxed/simple;
-	bh=bt3bBjmTxibuENDeAjA9wUy5gOZzKPk6baZegf+NdyI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=IyvYeFT1S05wUuvF/yMXds+1B4YLMojZHa+V8wis7DIKDAo1Ez7hdtqBVtnkuOLOZrlc2cf6mx0XLViRYzWaiTP5wlm6ndma/Zy+297Lbvq5B8zOHDeS1xwdjFFp4uoo4PHeZFAjQ1TqhIcuCnO+IdcM05n6SNjJZ9kRsNxlDDQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=jgrN9W1Q; arc=none smtp.client-ip=90.155.92.199
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
+	s=arc-20240116; t=1718231464; c=relaxed/simple;
+	bh=jnIZy7v6gRkoBg8xknS0zEjcBUhw4V/Kkf/pzr9ZLKk=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=S9mxJj8xywFa63PbgzZIpzMe91aMe0A74eAmkO55M8agceNmz5zZPQcJ67IlCLHTgyHXgd4PNlf/fmhiny6taJ7A6Ah+HRM6UIpXjDLraBm+fRBSF56Z3KJtsZFnp4LW4idRXIbRW7/GlFSkUVY4ie8n3j2a9mk4Rrj+VaxWnrA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=IMqxS9Rt; arc=none smtp.client-ip=209.85.222.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="jgrN9W1Q"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=AFaVBKZW4nApoB1IbTkcTuuDnuMN7hTpew8VlBI1fH8=; b=jgrN9W1QQsKRfHkAcQPZP4HPh6
-	nAwtS1F7uTHlvAUy/NvEJWLOlFwnjQU3TxkFJnMsf85PjKZSjKSp4DLSLryi+DiAe8arrQMB+XIFt
-	/+aVFF3nC16ci5dCVbIm8KIZcwe+Zu+QGKwy4Uelh0BBEpJWQv2TTuIEiuamqc7cIQBcje1ksQcmV
-	byDRyLMqXMoMT1g7N1e3RmOedTr+mnwalafQDuh0n+0nJGl0LcuJTQ9iG22Vch6nlMpFTm/J3SXpO
-	RUm/t4CwRoEbn4LKM7rK7qEQzC117Z49EScE6DVmzNR1+KmOwrgilC5FTgbcLXQ2yQQWNNIdjmbJu
-	pH2zHPWA==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-	by desiato.infradead.org with esmtpsa (Exim 4.97.1 #2 (Red Hat Linux))
-	id 1sHW8s-00000003A4E-17sI;
-	Wed, 12 Jun 2024 22:09:36 +0000
-Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
-	id 416D7300592; Thu, 13 Jun 2024 00:08:21 +0200 (CEST)
-Date: Thu, 13 Jun 2024 00:08:21 +0200
-From: Peter Zijlstra <peterz@infradead.org>
-To: Kees Cook <kees@kernel.org>
-Cc: Erick Archer <erick.archer@outlook.com>, Ingo Molnar <mingo@redhat.com>,
-	Arnaldo Carvalho de Melo <acme@kernel.org>,
-	Namhyung Kim <namhyung@kernel.org>,
-	Mark Rutland <mark.rutland@arm.com>,
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-	Jiri Olsa <jolsa@kernel.org>, Ian Rogers <irogers@google.com>,
-	Adrian Hunter <adrian.hunter@intel.com>,
-	"Liang, Kan" <kan.liang@linux.intel.com>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	"H. Peter Anvin" <hpa@zytor.com>,
-	"Gustavo A. R. Silva" <gustavoars@kernel.org>,
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IMqxS9Rt"
+Received: by mail-qk1-f174.google.com with SMTP id af79cd13be357-7979198531fso21445585a.0
+        for <llvm@lists.linux.dev>; Wed, 12 Jun 2024 15:31:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1718231461; x=1718836261; darn=lists.linux.dev;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:feedback-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=HaKXS0ZZbil+kikiY7Uq0U6QIK8rKqbj9kgNRJOfwg0=;
+        b=IMqxS9Rtla5Bfp/SuSUn7yM+DsYFK0jyOtubighSQZ6ryQjOLgQPzf2Y7Huja9vqE4
+         6KRjWLVkkXcd79vC8oDh/U2P6y/pJ7vpbcoCKvY44EuWB/FVrjEYDGX5d7TvG2Jz7e6/
+         echnUc4wBYetBYeeBu0kVdpzDv+VOANZBhfBs7+vGvzPB4LJ8NZ4VtNo/0t1VKcAm1y5
+         efq8NrM7DA8Jlf2M68W4lPjDLQGy8kGbLQggVg4av0HFGbnBPeLP7HXszADRWzM73v8S
+         S8iyl1wiQ4ZD4HQbXpA+++rIm9gUU7SFya7mDyGHddq6kVA1cXXbzIAZGmRP2Qzzgrjq
+         nKfQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1718231461; x=1718836261;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:feedback-id:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=HaKXS0ZZbil+kikiY7Uq0U6QIK8rKqbj9kgNRJOfwg0=;
+        b=EYQIdBo/73z5YVo87rKXyeRki8A0f44kfqjmfiHdwJ1rfthuQqKEXJicyCG14DT1bN
+         VCLmZqX2joLoEKoiLVfoBwplrEmskQgV1C9XRCdXfD/u8LlDs/tGLFASrQD18vQc+XWd
+         bhAbYHol51WyxjT2H2UOZzSAREHmNPu+OzfX6JMygjoHrjMLMy63iDfQSS3V9USZtXwV
+         8Ja5KavwLEU+Q7t+fFERAcm1TY2YlBnQ/vaip8iAfLnVQddDXfs8dmRQqyd63KiW9mZp
+         ryNEzIRYYBOdVbdihIlK0vrtUcwUKearsqkAGkqEAb/M3amjiBFlP/1Cp1SNeORfU0Um
+         tvhg==
+X-Forwarded-Encrypted: i=1; AJvYcCXj37Y8Tw1+6ETqGXgwdWGlPrjDau/kqzCF8QhY0h7ea+kexqjGWIKC2QuoJ5HXPNhr1XcgC7E1imt34LcFIBISr9D2Rg==
+X-Gm-Message-State: AOJu0YxWq6Y/RbjqwR6scvs/e9leb6Y1+UFMEq1pQj9eigW62mHoYP2z
+	7udUMfDVLRE/QEHhi0dPY3owDCj5l4SHadpvA21wf9hciL7RpPSc
+X-Google-Smtp-Source: AGHT+IE24GnzXvXHctahz7LCplx76fc3qiNipMvkxpU+kgWUnnS/78AStzuLW5X4k22oyxY3TY7sSg==
+X-Received: by 2002:a05:6214:3a81:b0:6b0:7a61:c69a with SMTP id 6a1803df08f44-6b1b5c07c5dmr41069396d6.53.1718231461421;
+        Wed, 12 Jun 2024 15:31:01 -0700 (PDT)
+Received: from fauth1-smtp.messagingengine.com (fauth1-smtp.messagingengine.com. [103.168.172.200])
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-6b2a5bf2321sm482416d6.6.2024.06.12.15.31.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 12 Jun 2024 15:31:00 -0700 (PDT)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+	by mailfauth.nyi.internal (Postfix) with ESMTP id C53A11200068;
+	Wed, 12 Jun 2024 18:30:59 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute6.internal (MEProxy); Wed, 12 Jun 2024 18:30:59 -0400
+X-ME-Sender: <xms:oyFqZiQ-WvmBIvD0sqlLQ-lCnX5rKwuTMCezlDN_9AZRb37MfaWDAg>
+    <xme:oyFqZnzpZgjrA7KE1MyLYUmJ1Jasf838cGNRKYBR9cmN-h06r_Mm-7wCTJuUGNvQc
+    IMvl745UYclYNnkKw>
+X-ME-Received: <xmr:oyFqZv0pR8czYrFZBfwaMrhVaEqTrYZVrO9_z--9aWvZMiUzf4Wz98__H1Fr9g>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvledrfeduhedgudduucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhephffvvefufffkofgggfestdekredtredttdenucfhrhhomhepuehoqhhunhcu
+    hfgvnhhguceosghoqhhunhdrfhgvnhhgsehgmhgrihhlrdgtohhmqeenucggtffrrghtth
+    gvrhhnpeejtdffueetfeetgfelvdetueeltefgieeiuedttdehuddtleeiheekfeeghfdv
+    veenucffohhmrghinhepghhithhhuhgsrdgtohhmpdhkvghrnhgvlhdrohhrghenucevlh
+    hushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegsohhquhhnodhm
+    vghsmhhtphgruhhthhhpvghrshhonhgrlhhithihqdeiledvgeehtdeigedqudejjeekhe
+    ehhedvqdgsohhquhhnrdhfvghngheppehgmhgrihhlrdgtohhmsehfihigmhgvrdhnrghm
+    vg
+X-ME-Proxy: <xmx:oyFqZuCaJSmS98VfGA9zj4mLRpiD3i2pZpHBIt5wTZ-V36xK3e8jlA>
+    <xmx:oyFqZrj165BCm8jCn54D3GXblgeQirQz_th-secKNAdOJxOikWdt1Q>
+    <xmx:oyFqZqqLwUmFLJ8aBEPTTYMt-szbs8GMM4Ijnul9ZAv6NhPqd4_7jg>
+    <xmx:oyFqZujEOOoAmrN3ioIqfRL96eY3-oRwa5UK4xUgOcgTFNQhaF-aUQ>
+    <xmx:oyFqZqQTpXnFfijf9j2bwNis1Cv9YzF90IF3jt93gVKYbNv_DRLnXnDD>
+Feedback-ID: iad51458e:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
+ 12 Jun 2024 18:30:58 -0400 (EDT)
+From: Boqun Feng <boqun.feng@gmail.com>
+To: rust-for-linux@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-arch@vger.kernel.org,
+	llvm@lists.linux.dev
+Cc: Miguel Ojeda <ojeda@kernel.org>,	Alex Gaynor <alex.gaynor@gmail.com>,
+	Wedson Almeida Filho <wedsonaf@gmail.com>,
+	Boqun Feng <boqun.feng@gmail.com>,	Gary Guo <gary@garyguo.net>,
+	=?UTF-8?q?Bj=C3=B6rn=20Roy=20Baron?= <bjorn3_gh@protonmail.com>,
+	Benno Lossin <benno.lossin@proton.me>,
+	Andreas Hindborg <a.hindborg@samsung.com>,
+	Alice Ryhl <aliceryhl@google.com>,
+	Alan Stern <stern@rowland.harvard.edu>,
+	Andrea Parri <parri.andrea@gmail.com>,	Will Deacon <will@kernel.org>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Nicholas Piggin <npiggin@gmail.com>,	David Howells <dhowells@redhat.com>,
+	Jade Alglave <j.alglave@ucl.ac.uk>,	Luc Maranget <luc.maranget@inria.fr>,
+	"Paul E. McKenney" <paulmck@kernel.org>,
+	Akira Yokosawa <akiyks@gmail.com>,	Daniel Lustig <dlustig@nvidia.com>,
+	Joel Fernandes <joel@joelfernandes.org>,
 	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-	Matthew Wilcox <mawilcox@microsoft.com>, x86@kernel.org,
-	linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-hardening@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH v4 0/3] Hardening perf subsystem
-Message-ID: <20240612220821.GA18881@noisy.programming.kicks-ass.net>
-References: <AS8PR02MB7237F5BFDAA793E15692B3998BFD2@AS8PR02MB7237.eurprd02.prod.outlook.com>
- <202406101010.E1C77AE9D@keescook>
- <20240610200544.GY8774@noisy.programming.kicks-ass.net>
- <202406101438.BC43514F@keescook>
- <20240611075542.GD8774@noisy.programming.kicks-ass.net>
- <202406121148.688240B@keescook>
+	Nick Desaulniers <ndesaulniers@google.com>,	kent.overstreet@gmail.com,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,	elver@google.com,
+	Mark Rutland <mark.rutland@arm.com>,
+	Thomas Gleixner <tglx@linutronix.de>,	Ingo Molnar <mingo@redhat.com>,
+	Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>,	x86@kernel.org,
+	"H. Peter Anvin" <hpa@zytor.com>,
+	Catalin Marinas <catalin.marinas@arm.com>,	torvalds@linux-foundation.org,
+	linux-arm-kernel@lists.infradead.org,	linux-fsdevel@vger.kernel.org,
+	Trevor Gross <tmgross@umich.edu>,	dakr@redhat.com
+Subject: [RFC 0/2] Initial LKMM atomics support in Rust
+Date: Wed, 12 Jun 2024 15:30:23 -0700
+Message-ID: <20240612223025.1158537-1-boqun.feng@gmail.com>
+X-Mailer: git-send-email 2.45.2
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <202406121148.688240B@keescook>
+Content-Transfer-Encoding: 8bit
 
-On Wed, Jun 12, 2024 at 12:01:19PM -0700, Kees Cook wrote:
-> On Tue, Jun 11, 2024 at 09:55:42AM +0200, Peter Zijlstra wrote:
-> > On Mon, Jun 10, 2024 at 02:46:09PM -0700, Kees Cook wrote:
-> > 
-> > > > I really detest this thing because it makes what was trivially readable
-> > > > into something opaque. Get me that type qualifier that traps on overflow
-> > > > and write plain C. All this __builtin_overflow garbage is just that,
-> > > > unreadable nonsense.
-> > > 
-> > > It's more readable than container_of(), 
-> > 
-> > Yeah, no. container_of() is absolutely trivial and very readable.
-> > container_of_const() a lot less so.
-> 
-> I mean, we have complex macros in the kernel. This isn't uncommon. Look
-> at cleanup.h. ;)
+Hi,
 
-Yeah, but in those cases the macro actually saves a lot of typing. A
-mult and add is something you shouldn't be needing a macro for.
-	
-> But that's why we write kern-doc:
+This is a follow-up of [1]. Thanks for all the inputs from that thread.
+I use Mark's outline atomic scripts, but make them specific for atomics
+in Rust. The reason is that I want to use Gary's work [2], and inline
+atomics if possible in Rust code. My local test can confirm it works:
 
-Right, but reading comments is asking for trouble. That is, I really
-don't even see comments -- I have a built-in pre-processor that filters
-them out. I've been burned too many times by misleading or flat out
-wrong comments.
+With RUST_LTO_HELPERS=n
 
-> > #define struct_size(p, member, num) \
-> > 	mult_add_no_overflow(num, sizeof(p->member), sizeof(*p))
-> > 
-> > would be *FAR* more readable. And then I still think struct_size() is
-> > less readable than its expansion. ]]
-> 
-> I'm happy to take patches. And for this bikeshed, this would be better
-> named under the size_*() helpers which are trying to keep size_t
-> calculations from overflowing (by saturating). i.e.:
-> 
-> 	size_add_mult(sizeof(*p), sizeof(*p->member), num)
+  224edc:       52800180        mov     w0, #0xc                        // #12
+  224ee0:       94000000        bl      219640 <rust_helper_atomic_fetch_add_relaxed>
 
-Fine I suppose, but what if we want something not size_t? Are we waiting
-for the type system extension?
+With RUST_LTO_HELPERS=y
 
-Anyway, I'll take the patch with the above. That at least is readable.
+  222fd4:       52800189        mov     w9, #0xc                        // #12
+  222fd8:       b8290108        ldadd   w9, w8, [x8]
 
-The saturating thing is relying in the allocators never granting INT_MAX
-(or whatever size_t actually is) bytes?
 
-> Generalized overflow handing (check_add/sub/mul_overflow()) helpers
-> already exist and requires a destination variable to determine type
-> sizes. It is not safe to allow C semantics to perform
-> promotion/truncation, so we have to be explicit.
+Only AtomicI32 (atomic_t) and AtomicI64 (atomic64_t) are added, and for
+AtomicPtr (atomic pointers) I plan to implement with compile-time
+selection on either of these two.
 
-Yeah, those are a sodding trainwreck, much like the
-__builtin_*_overflow() garbage. Can't we simply have them trap on
-overflow and do away with that most terrible calling convention?
+You can find a branch contains this series and Gray's patchset at:
 
-If we want to be really fancy we can have a #UD instruction that encodes
-a destination register to clear/saturate/whatever.
+	https://github.com/fbq/linux.git dev/rust/atomic-rfc
 
-> > Some day I'll have to look at this FORTIFY_SOURCE and see what it
-> > actually does I suppose :/
-> 
-> LOL. It's basically doing compile-time (__builtin_object_size) and
-> run-time (__builtin_dynamic_object_size) bounds checking on destination
-> (and source) object sizes, mainly driven by the mentioned builtins:
-> https://gcc.gnu.org/onlinedocs/gcc/Object-Size-Checking.html
 
-Right, I got that far. I also read most of:
+For testing, I randomly picked up some function and inspected the
+generated code, plus Rust code can use the function document as tests,
+so I added two tests there. Ideally we should have something similar to
+lib/atomic64_test.c, but I want to get some feedback on the
+implementation part first, plus it's just using C functions, so as long
+as C code passes the tests, it should be fine (famous last words).
 
-  https://discourse.llvm.org/t/rfc-enforcing-bounds-safety-in-c-fbounds-safety/70854
+ARM64 maintainers, I use the following to simulate cases where LSE is
+configured but not available from hardware:
 
-But none of that is showing me generated asm for the various cases. As
-such, I don't consider myself informed enough.
+diff --git a/arch/arm64/kernel/cpufeature.c b/arch/arm64/kernel/cpufeature.c
+index 48e7029f1054..99e6e2b2867f 100644
+--- a/arch/arm64/kernel/cpufeature.c
++++ b/arch/arm64/kernel/cpufeature.c
+@@ -1601,6 +1601,8 @@ static bool
+ has_cpuid_feature(const struct arm64_cpu_capabilities *entry, int scope)
+ {
+        u64 val = read_scoped_sysreg(entry, scope);
++       if (entry->capability == ARM64_HAS_LSE_ATOMICS)
++               return false;
+        return feature_matches(val, entry);
+ }
 
-> Anyway! What about the patch that takes the 2 allocations down to 1?
-> That seems like an obvious improvement.
+and my tests in a qemu emulated VM passed for both RUST_LTO_HELPERS=n
+and =y cases. Let me know what I can also do to test this.
 
-Separate it from the struct_size() nonsense and Cc the author of that
-code (Sandipan IIRC) and I might just apply it.
+
+Notes for people who are working on Rust code and need atomics, my
+target of this set of APIs is 6.11 or 6.12 (will work hard on it, but no
+guarantee ;-)). If you are currently using Rust own atomics, it's OK, we
+can always clean up quickly after this merged.
+
+Regards,
+Boqun
+
+[1]: https://lore.kernel.org/rust-for-linux/20240322233838.868874-1-boqun.feng@gmail.com/
+[2]: https://lore.kernel.org/rust-for-linux/20240529202817.3641974-1-gary@garyguo.net/
+
+Boqun Feng (2):
+  rust: Introduce atomic API helpers
+  rust: sync: Add atomic support
+
+ MAINTAINERS                               |    4 +-
+ arch/arm64/kernel/cpufeature.c            |    2 +
+ rust/atomic_helpers.h                     | 1035 ++++++++++++++++
+ rust/helpers.c                            |    2 +
+ rust/kernel/sync.rs                       |    1 +
+ rust/kernel/sync/atomic.rs                |   63 +
+ rust/kernel/sync/atomic/impl.rs           | 1375 +++++++++++++++++++++
+ scripts/atomic/gen-atomics.sh             |    2 +
+ scripts/atomic/gen-rust-atomic-helpers.sh |   64 +
+ scripts/atomic/gen-rust-atomic.sh         |  136 ++
+ 10 files changed, 2683 insertions(+), 1 deletion(-)
+ create mode 100644 rust/atomic_helpers.h
+ create mode 100644 rust/kernel/sync/atomic.rs
+ create mode 100644 rust/kernel/sync/atomic/impl.rs
+ create mode 100755 scripts/atomic/gen-rust-atomic-helpers.sh
+ create mode 100755 scripts/atomic/gen-rust-atomic.sh
+
+-- 
+2.45.2
+
