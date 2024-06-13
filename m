@@ -1,117 +1,49 @@
-Received: from mail-qk1-f181.google.com (mail-qk1-f181.google.com [209.85.222.181])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB57A82C67
-	for <llvm@lists.linux.dev>; Thu, 13 Jun 2024 20:25:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 56FC671747;
+	Thu, 13 Jun 2024 21:40:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718310337; cv=none; b=pNJVmZRdPBFivBsdM5MqvUSxOeOnylmqVjx4pzqE4X7Mjo6pIF3ibDkNlTR//YzmCzZz+O6HZSJ4PK7ODP7+YPcFbbaHWZ+/XzqUuchStUaTJkxKIlSSlqCESKRzgkTjVPPpPHDeuZYgsMIUOlnUZi8E968Ie0FYeEZ6QRNW2wc=
+	t=1718314822; cv=none; b=PRhp1bElNsqkVcP/LY/BqOgnV5zu+JndiuWTVZyK4LyfbtKZnYUjPgTPmyb9Np90CsoN0E3QpvSop3vgCHrY5zFIB8W3T/jGeWkTvjhvXHpOUOtcO3AHXf84oijfxMQ5QoDum0ZK1yGSwJ2nyh4lKadhY4R/u62hCPQ4gNoWIqI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718310337; c=relaxed/simple;
-	bh=XZMnBPtlkifS5Fdca+gG4KAFlQ4eMVf6o5s14uxWoGY=;
+	s=arc-20240116; t=1718314822; c=relaxed/simple;
+	bh=q+yRfUm4ZJKgJ+oDFldXAPnhT6dMYw/cyPge3ciy1sA=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=nMIz51rIJsW1wc842ilQC2XWhtzODoMVdemf9+96S9VzGFxz3jBTF+/U5t/sNNuWjQi+U5zd4C6onGsQ5Kw3Vc1euuh3ZvRD9BjTWBluopRw+IAbX33oVbYlvtcxx4HDpSu0PGpu07wbviLFmuwT5wK8zw91NhOdkLZUejd78EY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=gbQBbqIY; arc=none smtp.client-ip=209.85.222.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=X4d0/ZD9w5W3tgN77WdZvEPpQXRSu1T0XjAFe2eQMgG7EY/AF/Tj/pfysC8MvSRhhLJoT185xihIfeEsXD8Zd1cmCaqMJ0+BSAbawwLW0mIlf2ldAGeJKTR0FDDR0bEpOffQ1CPnJyuh9kdcgEvmhbMowsVVzmMIT6gcWk9ek+g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=msosOGth; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gbQBbqIY"
-Received: by mail-qk1-f181.google.com with SMTP id af79cd13be357-795524bb6d9so97458085a.0
-        for <llvm@lists.linux.dev>; Thu, 13 Jun 2024 13:25:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1718310335; x=1718915135; darn=lists.linux.dev;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:feedback-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=EMz0ZFRHVHUChYlldLB+9O1uGefbqiAdPKIID9/kO3c=;
-        b=gbQBbqIYR3vl473ulf8UQCp8LfkSYBuEQ19og8oxMegSP97vaeYUqT1xwG/e/er6Zh
-         IVDESsAbxW0+KQtIU4kIdLUF+c7B71cewAQuZDQ0HKT4CAKnFUfQlBmOiOnWAFvEVGha
-         qPvXDLNY8qWOpQrVoWUVwk2buQGBESJ4tXizB8EljZous9s0knll0Y+cUAT4/G4t0KhP
-         dT8dAPMTIWuW0vf/llTzVd6J1tTv3QCg8ixiKMdUQulV9uwytFO/3lEOGzeyYtYX/gX+
-         7V5Vy8JBTiCEoSUUoYSfKigrT4a5lFFUMiPLes+2rijFHHRKblz5/y8JDxlcy/GtnDKD
-         xNJA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1718310335; x=1718915135;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:feedback-id:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=EMz0ZFRHVHUChYlldLB+9O1uGefbqiAdPKIID9/kO3c=;
-        b=L8Nkq8dExyz6s5NG7r1N12qEP18E1d0BPu3p0nYLdPuh698xVOJf3rZkIJ5MM+aHve
-         XKkvxdMXlF2bXM1dGrNmRO/2zsWxtVD6Tw4ouwE73MdkkrsN5oG1MFe7Tj9bun5rq+gC
-         4mUAABocAA4OrhjfkitSZ+Gwnn1nR3q53ylCo6H2mmsane51q6l5noclwlL4o7ePAEnv
-         OlQOCfatXE/4DdUBmXUwhD3CSzpY/ypsRS9yCzyZrX4X6+dzLCfJVwBcWe2U1QTDud5+
-         hxmGjEG7XuNQJyNrBGp9tfauu5nNn6BYnfapi/FI2uRYGMOUb0KlqKxfzu8Gq+SvQGl6
-         O7Ag==
-X-Forwarded-Encrypted: i=1; AJvYcCUFty3cPCv2BgzkoZ5FVNdndRsNpTyMU5rVMti8RMkcBKGJ83o1a8Vz+TuBH7QJz3g/WKZLv4xan+AkKBHihh85+2/ghA==
-X-Gm-Message-State: AOJu0YxNesPMTuHFosSWRW4lPe3C2p6NRKogPPw/shSE+bOQd1BXN8Eq
-	5F9KrXWwhaZEcZ8uu0KH6/7cq64J4p+pVEBR+DJmxUw3S+DMxaBj
-X-Google-Smtp-Source: AGHT+IGpSoIULcvWez99JK7JK+Up8HU1l/s1FINDWZs8LC9tBJeQ3hxxZVJWnFEHKbk+02gDLzMs0Q==
-X-Received: by 2002:a05:620a:4007:b0:797:e9f7:e924 with SMTP id af79cd13be357-798d26af852mr68059885a.65.1718310334648;
-        Thu, 13 Jun 2024 13:25:34 -0700 (PDT)
-Received: from fauth2-smtp.messagingengine.com (fauth2-smtp.messagingengine.com. [103.168.172.201])
-        by smtp.gmail.com with ESMTPSA id d75a77b69052e-441f2fcc468sm9379261cf.70.2024.06.13.13.25.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 13 Jun 2024 13:25:34 -0700 (PDT)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-	by mailfauth.nyi.internal (Postfix) with ESMTP id 283391200069;
-	Thu, 13 Jun 2024 16:25:33 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute5.internal (MEProxy); Thu, 13 Jun 2024 16:25:33 -0400
-X-ME-Sender: <xms:vFVrZgtyFF8uQGfrwFobOorS3vOPl_--u_9m9T3AhsbuxVq2xi72zw>
-    <xme:vFVrZteMRM4PasZI_VHT9e2_LY__Y8z3ZnNYO3RfHb23AFY2Z913Tln8h8msbAnfB
-    eYMqpyIJIRn0-XRBg>
-X-ME-Received: <xmr:vFVrZrx5Tan5t4KnPFuuL5T2vPasCz-gKubfZx0xAmf_NUnPbp19npTIFsk>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvledrfedujedgudegiecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpeffhffvvefukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpeeuohhq
-    uhhnucfhvghnghcuoegsohhquhhnrdhfvghnghesghhmrghilhdrtghomheqnecuggftrf
-    grthhtvghrnhephedugfduffffteeutddvheeuveelvdfhleelieevtdeguefhgeeuveei
-    udffiedvnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomh
-    epsghoqhhunhdomhgvshhmthhprghuthhhphgvrhhsohhnrghlihhthidqieelvdeghedt
-    ieegqddujeejkeehheehvddqsghoqhhunhdrfhgvnhhgpeepghhmrghilhdrtghomhesfh
-    higihmvgdrnhgrmhgv
-X-ME-Proxy: <xmx:vVVrZjMpjzd4Kew3lRZR2cVcvzPaSrroXMn4v74PLBzfBsascPkW1Q>
-    <xmx:vVVrZg8hQLget4rip9IgUQthGkKPjBxRow_6r2bsiNtYh8W7qBADYQ>
-    <xmx:vVVrZrUpvA1qg1wcNJfzvK9OScd1f1tINnwbxniD6g1bzVvlFGZ-_w>
-    <xmx:vVVrZpfxD8JRupYWW-fTnuQwYYUeIqAPuEbyfo7uRA5cNm_a5wxaeg>
-    <xmx:vVVrZidUvKWatd8WUPO9_xQZFbBUTxfkOpnCNTkVq6SSFMg-qIW2TX_D>
-Feedback-ID: iad51458e:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 13 Jun 2024 16:25:32 -0400 (EDT)
-Date: Thu, 13 Jun 2024 13:25:02 -0700
-From: Boqun Feng <boqun.feng@gmail.com>
-To: rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-arch@vger.kernel.org, llvm@lists.linux.dev
-Cc: Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>,
-	Wedson Almeida Filho <wedsonaf@gmail.com>,	Gary Guo <gary@garyguo.net>,
-	=?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
-	Benno Lossin <benno.lossin@proton.me>,
-	Andreas Hindborg <a.hindborg@samsung.com>,
-	Alice Ryhl <aliceryhl@google.com>,
-	Alan Stern <stern@rowland.harvard.edu>,
-	Andrea Parri <parri.andrea@gmail.com>,	Will Deacon <will@kernel.org>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Nicholas Piggin <npiggin@gmail.com>,	David Howells <dhowells@redhat.com>,
-	Jade Alglave <j.alglave@ucl.ac.uk>,	Luc Maranget <luc.maranget@inria.fr>,
-	"Paul E. McKenney" <paulmck@kernel.org>,
-	Akira Yokosawa <akiyks@gmail.com>,	Daniel Lustig <dlustig@nvidia.com>,
-	Joel Fernandes <joel@joelfernandes.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,	kent.overstreet@gmail.com,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, elver@google.com,
-	Mark Rutland <mark.rutland@arm.com>,
-	Thomas Gleixner <tglx@linutronix.de>,	Ingo Molnar <mingo@redhat.com>,
- Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-	"H. Peter Anvin" <hpa@zytor.com>,
-	Catalin Marinas <catalin.marinas@arm.com>,	torvalds@linux-foundation.org,
- linux-arm-kernel@lists.infradead.org,	linux-fsdevel@vger.kernel.org,
- Trevor Gross <tmgross@umich.edu>,	dakr@redhat.com
-Subject: Re: [RFC 2/2] rust: sync: Add atomic support
-Message-ID: <ZmtVngqKZ0arLzL-@boqun-archlinux>
-References: <20240612223025.1158537-1-boqun.feng@gmail.com>
- <20240612223025.1158537-3-boqun.feng@gmail.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="msosOGth"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DF892C2BBFC;
+	Thu, 13 Jun 2024 21:40:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1718314821;
+	bh=q+yRfUm4ZJKgJ+oDFldXAPnhT6dMYw/cyPge3ciy1sA=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=msosOGthX/ZaxkCU22Nz753vSrVuiW7w78ubG6pAKgYeXt1kVsu1JffstQexv9gNq
+	 5Qs3VMb7mn6OKy7u8RabikVuxcGm1dpon7/GBLOtpmxkjZubbqFbTovl0wkoZRCIJD
+	 +MadUFrtUqqzYhUm+g2ayXeNu1G74rlYmBGJbL9ICE3zk3huB1n8PxrjdiPhpHwVe7
+	 FEC1SmB0awSdGPUkOk8+zIyhSYzeq+hRDrCLN3YgMItDDz4y2Xv6pB6k0T6HVlXYB1
+	 R8P7syBsUuVfl+qfZuGQ0uNcUPj2MbTxDaxAZ6XuvHj2FsvfnKRzF0XrlYYobW5P7F
+	 s7kNUQIabsOeg==
+Date: Thu, 13 Jun 2024 14:40:19 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Arnaldo Carvalho de Melo <acme@kernel.org>
+Cc: dwarves@vger.kernel.org,
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+	bpf@vger.kernel.org, Alan Maguire <alan.maguire@oracle.com>,
+	Jiri Olsa <jolsa@kernel.org>, Jan Engelhardt <jengelh@inai.de>,
+	Matthias Schwarzott <zzam@gentoo.org>,
+	Viktor Malik <vmalik@redhat.com>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Jan Alexander Steffens <heftig@archlinux.org>,
+	Domenico Andreoli <cavok@debian.org>,
+	Dominique Leuenberger <dimstar@opensuse.org>,
+	Daniel Xu <dxu@dxuuu.xyz>, Yonghong Song <yonghong.song@linux.dev>,
+	llvm@lists.linux.dev
+Subject: Re: ANNOUNCE: pahole v1.27 (reproducible builds, BTF kfuncs)
+Message-ID: <20240613214019.GA1423015@thelio-3990X>
+References: <ZmjBHWw-Q5hKBiwA@x1>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -120,27 +52,56 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240612223025.1158537-3-boqun.feng@gmail.com>
+In-Reply-To: <ZmjBHWw-Q5hKBiwA@x1>
 
-On Wed, Jun 12, 2024 at 03:30:25PM -0700, Boqun Feng wrote:
-[...]
-> diff --git a/arch/arm64/kernel/cpufeature.c b/arch/arm64/kernel/cpufeature.c
-> index 48e7029f1054..99e6e2b2867f 100644
-> --- a/arch/arm64/kernel/cpufeature.c
-> +++ b/arch/arm64/kernel/cpufeature.c
-> @@ -1601,6 +1601,8 @@ static bool
->  has_cpuid_feature(const struct arm64_cpu_capabilities *entry, int scope)
->  {
->  	u64 val = read_scoped_sysreg(entry, scope);
-> +	if (entry->capability == ARM64_HAS_LSE_ATOMICS)
-> +		return false;
->  	return feature_matches(val, entry);
->  }
->  
+Hi Arnaldo,
 
-Yeah, this part was mis-committed, will remove it in the next version.
+On Tue, Jun 11, 2024 at 06:26:53PM -0300, Arnaldo Carvalho de Melo wrote:
+> 	The v1.27 release of pahole and its friends is out, supporting
+> parallel reproducible builds and encoding kernel kfuncs in BTF, allowing
+> tools such as bpftrace to enumerate the available kfuncs and obtain its
+> function signatures and return types.
 
-Regards,
-Boqun
+After commit f632e75 ("dwarf_loader: Add the cu to the cus list early,
+remove on LSK_DELETE"), I (and others[1]) notice a crash when running
+pahole on modules built with Clang when CONFIG_LTO_CLANG is enabled:
 
-[...]
+  $ curl -LSso .config https://gitlab.archlinux.org/archlinux/packaging/packages/linux/-/raw/main/config
+
+  $ scripts/config -d LTO_NONE -e LTO_CLANG_THIN
+
+  $ make -skj"$(nproc)" ARCH=x86_64 LLVM=1 olddefconfig vmlinux crypto/cast_common.ko
+  make[3]: *** [scripts/Makefile.modfinal:59: crypto/cast_common.ko] Error 139
+
+I've isolated this to the following commands using the files available
+at [2] (these were built with LLVM 18 but I could reproduce it with LLVM
+17 and LLVM 19, so it appears to impact a number of versions):
+
+  $ tar -tf clang-lto-pahole-1.27-crash.tar.zst
+  clang-lto-pahole-1.27-crash/
+  clang-lto-pahole-1.27-crash/cast_common.mod.o
+  clang-lto-pahole-1.27-crash/module.lds
+  clang-lto-pahole-1.27-crash/cast_common.o
+  clang-lto-pahole-1.27-crash/cast_common.ko.bak
+  clang-lto-pahole-1.27-crash/vmlinux
+  clang-lto-pahole-1.27-crash/cast_common.ko
+
+  $ tar -axf clang-lto-pahole-1.27-crash.tar.zst
+
+  $ cd clang-lto-pahole-1.27-crash
+
+  $ LLVM_OBJCOPY="llvm-objcopy" pahole-1.26 -J -j --btf_features=encode_force,var,float,enum64,decl_tag,type_tag,optimized_func,consistent_func --lang_exclude=rust --btf_base vmlinux cast_common.ko
+
+  $ cp cast_common.ko{.bak,}
+
+  $ LLVM_OBJCOPY="llvm-objcopy" pahole-1.27 -J -j --btf_features=encode_force,var,float,enum64,decl_tag,type_tag,optimized_func,consistent_func --lang_exclude=rust --btf_base vmlinux cast_common.ko
+  fish: Job 1, '...' terminated by signal SIGSEGV (Address boundary error)
+
+If there is any more information I can provide or patches I can test, I
+am more than happy to do so.
+
+[1]: https://gitlab.archlinux.org/archlinux/packaging/packages/pahole/-/issues/1
+[2]: https://1drv.ms/u/s!AsQNYeB-IEbqqC2F28JuLy__Q7Vd?e=KsraMU
+
+Cheers,
+Nathan
