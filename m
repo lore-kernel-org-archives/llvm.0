@@ -1,50 +1,53 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 990351411C3;
-	Thu, 13 Jun 2024 22:35:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D076F14D71E;
+	Thu, 13 Jun 2024 22:36:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718318126; cv=none; b=gdG6L4k8uyGnlBvYXHxTdAAvkmBI/4fH4LQ3UgOYHf+xPJ5Yz4y2Ox9GTDLaxpEQstBLT3BzBYjQ5XjhcOXx4czrKpW0Peg/+dpDjbd8r4j9o37RI+UYM8rDWiJFv+zXBLwrVqyPXtwmGJ3ZZTtdikbY+PkuxwU1E0rNsSeUg3k=
+	t=1718318178; cv=none; b=IRIM3O5mGjlIo6ouFSxN2fo9QiLyiBWcCQBCnJJnsyS5Ap+fhuW+abDGOBVQ2qr6b0u0LT9Jc3mxKxgkDH7kXg8oHO+OsjD9tooNgbcKv+r+rcScsHR80dpvFwDGHRecvzOLn6uWVYv94fL2kPjpCDOQHExiLUpnJShePJ2uboY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718318126; c=relaxed/simple;
-	bh=p+VwQhv5G5CYvaf+I9sazjD4wTWlRzKTz9+GDqPyq38=;
+	s=arc-20240116; t=1718318178; c=relaxed/simple;
+	bh=wL06T1k2B8Q2rL32NqzllZw15uOhghb5OR6zN4NYrfo=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=CVCvSs7u/hYGEdUn59sWDzX6CuaKRooQZsNAO2RS1uh+gi0pWW+FPB2cFp5kgt/NAXN4RLaJND/YWmN/TORH9avAob2WivLHKoZPWL6eRVZlcXQKxip6AzxuI3L2Si4r47RLFRY3tgrHOFZzXtdULOe8MExXHAMuMyIYuoQuuIU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TZJFn8FF; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=to0mo54n+A3VpFwFrtWqr1XMgDWwSnpsoMtjwJljDulzBf/oaJpSES+wFk52dV2P7kRBYFPpjL5KBShadn07VutiM4LF+S+fMgEnJpFvf0amhhdZhJaHf59RxH9AvZjQA7v7cDEf3qb9ygLO1td3mjIrCV0IqLvks4caj5B6iwk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gNzn+PCH; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TZJFn8FF"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D1322C2BBFC;
-	Thu, 13 Jun 2024 22:35:24 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gNzn+PCH"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3894BC32786;
+	Thu, 13 Jun 2024 22:36:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1718318126;
-	bh=p+VwQhv5G5CYvaf+I9sazjD4wTWlRzKTz9+GDqPyq38=;
+	s=k20201202; t=1718318178;
+	bh=wL06T1k2B8Q2rL32NqzllZw15uOhghb5OR6zN4NYrfo=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=TZJFn8FFLtDllkEQfxJ9kmP6cm2LJADJXIuh4dWKR2L6D1gmcq535DcLm4ILeSoMK
-	 j3T+KyxIUCa1o1IBySiyVxushNMc+7F3+72NyFG1bE0bKS3hNqDyKGFuoIzABi03he
-	 nX5LMBLtIqjTb3td27LRsRQAs0KnDjwiRlvtU5X7lq+l8C7hY2MFbxJ2n51zvBRDiU
-	 IGBWaxfQbmekfiZLftmONNSVRaKIKhcXjPoa9KcInwDj2rnEjxA0AThLm1ktqZuv8j
-	 9YKIYpWy+EL54RiNB75HCp0BTx+5XXq0f/8N8LX0TvS6HGAwmYZuc+dljPLorULz3Q
-	 utC1PoKU7hXhQ==
-Date: Thu, 13 Jun 2024 15:35:23 -0700
+	b=gNzn+PCHszOklsBLsMSUobxEOt3oNA31VuDs0RoPQzosJ5FKK4ZZpIUgZvpeLy0Ys
+	 ZcnN3hmYy2Et0hsuuT7G67TJ4asf17PqyfivrljLeTL/7sbh/RvGLABbvGbZMLoJqz
+	 xu485Bb1Lx1Vd29xTjkzPXPGV0+7rvANw6oDJIi2Pt+mRZ9cCfxMfnI6Ph7qnmymx3
+	 hYltskgyvOGG2fxulkPoaxbcwPeKj5k3qWwWlGgnF8TbL8+KIagy8O2AKaf3C4Kwzg
+	 p+0A1IYbrvnDSRCtba5fIGMz4WOiHodY7XQ0tN7C3b7yH7t0aVrU98QV5BpB/ekqj/
+	 oHLy4+BBqawag==
+Date: Thu, 13 Jun 2024 15:36:15 -0700
 From: Nathan Chancellor <nathan@kernel.org>
-To: Naresh Kamboju <naresh.kamboju@linaro.org>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, stable@vger.kernel.org,
-	patches@lists.linux.dev, linux-kernel@vger.kernel.org,
-	torvalds@linux-foundation.org, akpm@linux-foundation.org,
-	linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-	lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-	f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-	srw@sladewatkins.net, rwarsow@gmx.de, conor@kernel.org,
-	allen.lkml@gmail.com, broonie@kernel.org,
-	Anders Roxell <anders.roxell@linaro.org>,
-	Guo Ren <guoren@linux.alibaba.com>, Guo Ren <guoren@kernel.org>,
+To: Andy Chiu <andy.chiu@sifive.com>
+Cc: Paul Walmsley <paul.walmsley@sifive.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>,
+	Alexandre Ghiti <alexghiti@rivosinc.com>,
+	Zong Li <zong.li@sifive.com>, Steven Rostedt <rostedt@goodmis.org>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Puranjay Mohan <puranjay@kernel.org>,
 	Palmer Dabbelt <palmer@rivosinc.com>,
-	clang-built-linux <llvm@lists.linux.dev>
-Subject: Re: [PATCH 5.10 000/317] 5.10.219-rc1 review
-Message-ID: <20240613223523.GB1849801@thelio-3990X>
-References: <20240613113247.525431100@linuxfoundation.org>
- <CA+G9fYvnVJi1RFhO5f6ZH2mpagZ6jcEdoQAxnSBxWPHsEVQwYg@mail.gmail.com>
+	linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+	linux-trace-kernel@vger.kernel.org, llvm@lists.linux.dev,
+	Evgenii Shatokhin <e.shatokhin@yadro.com>
+Subject: Re: [PATCH 3/8] riscv: ftrace: support fastcc in Clang for WITH_ARGS
+Message-ID: <20240613223615.GA2739249@thelio-3990X>
+References: <20240613-dev-andyc-dyn-ftrace-v4-v1-0-1a538e12c01e@sifive.com>
+ <20240613-dev-andyc-dyn-ftrace-v4-v1-3-1a538e12c01e@sifive.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -53,89 +56,98 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CA+G9fYvnVJi1RFhO5f6ZH2mpagZ6jcEdoQAxnSBxWPHsEVQwYg@mail.gmail.com>
+In-Reply-To: <20240613-dev-andyc-dyn-ftrace-v4-v1-3-1a538e12c01e@sifive.com>
 
-On Thu, Jun 13, 2024 at 08:43:41PM +0530, Naresh Kamboju wrote:
-> On Thu, 13 Jun 2024 at 17:43, Greg Kroah-Hartman
-> <gregkh@linuxfoundation.org> wrote:
-> >
-> > This is the start of the stable review cycle for the 5.10.219 release.
-> > There are 317 patches in this series, all will be posted as a response
-> > to this one.  If anyone has any issues with these being applied, please
-> > let me know.
-> >
-> > Responses should be made by Sat, 15 Jun 2024 11:31:50 +0000.
-> > Anything received after that time might be too late.
-> >
-> > The whole patch series can be found in one patch at:
-> >         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.10.219-rc1.gz
-> > or in the git tree and branch at:
-> >         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.10.y
-> > and the diffstat can be found below.
-> >
-> > thanks,
-> >
-> > greg k-h
+On Thu, Jun 13, 2024 at 03:11:08PM +0800, Andy Chiu wrote:
+> Some caller-saved registers which are not defined as function arguments
+> in the ABI can still be passed as arguments when the kernel is compiled
+> with Clang. As a result, we must save and restore those registers to
+> prevent ftrace from clobbering them.
 > 
-> 
-> The following build errors are noticed on riscv with clang-18 toolchain
-> but gcc-12 builds pass.
-> 
-> However, compared with older releases this is a build regression on
-> stable-rc 5.10.
-> 
-> Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
-> 
-> riscv:
->  defconfig - gcc-12 - PASS
->  defconfig - clang-18 - FAILED
-> 
-> Build error:
-> ------
-> arch/riscv/kernel/stacktrace.c:75:52: error: incompatible pointer to
-> integer conversion passing 'void *' to parameter of type 'unsigned
-> long' [-Wint-conversion]
->    75 |                                 if
-> (unlikely(!__kernel_text_address(pc) || !fn(arg, pc)))
->       |
->                 ^~~
-> include/linux/compiler.h:78:42: note: expanded from macro 'unlikely'
->    78 | # define unlikely(x)    __builtin_expect(!!(x), 0)
->       |                                             ^
-> arch/riscv/kernel/stacktrace.c:75:57: error: incompatible integer to
-> pointer conversion passing 'unsigned long' to parameter of type 'void
-> *' [-Wint-conversion]
->    75 |                                 if
-> (unlikely(!__kernel_text_address(pc) || !fn(arg, pc)))
->       |
->                      ^~
-> include/linux/compiler.h:78:42: note: expanded from macro 'unlikely'
->    78 | # define unlikely(x)    __builtin_expect(!!(x), 0)
->       |                                             ^
-> 2 errors generated.
-> make[3]: *** [scripts/Makefile.build:286:
-> arch/riscv/kernel/stacktrace.o] Error 1
+> - [1]: https://reviews.llvm.org/D68559
+> Reported-by: Evgenii Shatokhin <e.shatokhin@yadro.com>
+> Closes: https://lore.kernel.org/linux-riscv/7e7c7914-445d-426d-89a0-59a9199c45b1@yadro.com/
+> Signed-off-by: Andy Chiu <andy.chiu@sifive.com>
 
-It looks like either commit 9dd97064e21f ("riscv: Make stack walk
-callback consistent with generic code") should be applied with the
-straight from upstream copy of commit 7ecdadf7f8c6 ("riscv: stacktrace:
-Make walk_stackframe cross pt_regs frame") or the latter commit's 5.10
-backport should be modified to match the linux-5.10.y order of the
-arguments:
+Acked-by: Nathan Chancellor <nathan@kernel.org>
 
-diff --git a/arch/riscv/kernel/stacktrace.c b/arch/riscv/kernel/stacktrace.c
-index c38b20caad7c..010e4c881c8b 100644
---- a/arch/riscv/kernel/stacktrace.c
-+++ b/arch/riscv/kernel/stacktrace.c
-@@ -72,7 +72,7 @@ void notrace walk_stackframe(struct task_struct *task, struct pt_regs *regs,
- 			pc = ftrace_graph_ret_addr(current, NULL, frame->ra,
- 						   &frame->ra);
- 			if (pc == (unsigned long)ret_from_exception) {
--				if (unlikely(!__kernel_text_address(pc) || !fn(arg, pc)))
-+				if (unlikely(!__kernel_text_address(pc) || !fn(pc, arg)))
- 					break;
- 
- 				pc = ((struct pt_regs *)sp)->epc;
-
-Cheers,
-Nathan
+> ---
+>  arch/riscv/include/asm/ftrace.h |  7 +++++++
+>  arch/riscv/kernel/asm-offsets.c |  7 +++++++
+>  arch/riscv/kernel/mcount-dyn.S  | 16 ++++++++++++++--
+>  3 files changed, 28 insertions(+), 2 deletions(-)
+> 
+> diff --git a/arch/riscv/include/asm/ftrace.h b/arch/riscv/include/asm/ftrace.h
+> index 9eb31a7ea0aa..5f81c53dbfd9 100644
+> --- a/arch/riscv/include/asm/ftrace.h
+> +++ b/arch/riscv/include/asm/ftrace.h
+> @@ -144,6 +144,13 @@ struct ftrace_regs {
+>  			unsigned long a5;
+>  			unsigned long a6;
+>  			unsigned long a7;
+> +#ifdef CONFIG_CC_IS_CLANG
+> +			unsigned long t2;
+> +			unsigned long t3;
+> +			unsigned long t4;
+> +			unsigned long t5;
+> +			unsigned long t6;
+> +#endif
+>  		};
+>  	};
+>  };
+> diff --git a/arch/riscv/kernel/asm-offsets.c b/arch/riscv/kernel/asm-offsets.c
+> index b09ca5f944f7..db5a26fcc9ae 100644
+> --- a/arch/riscv/kernel/asm-offsets.c
+> +++ b/arch/riscv/kernel/asm-offsets.c
+> @@ -497,6 +497,13 @@ void asm_offsets(void)
+>  	DEFINE(FREGS_SP,	    offsetof(struct ftrace_regs, sp));
+>  	DEFINE(FREGS_S0,	    offsetof(struct ftrace_regs, s0));
+>  	DEFINE(FREGS_T1,	    offsetof(struct ftrace_regs, t1));
+> +#ifdef CONFIG_CC_IS_CLANG
+> +	DEFINE(FREGS_T2,	    offsetof(struct ftrace_regs, t2));
+> +	DEFINE(FREGS_T3,	    offsetof(struct ftrace_regs, t3));
+> +	DEFINE(FREGS_T4,	    offsetof(struct ftrace_regs, t4));
+> +	DEFINE(FREGS_T5,	    offsetof(struct ftrace_regs, t5));
+> +	DEFINE(FREGS_T6,	    offsetof(struct ftrace_regs, t6));
+> +#endif
+>  	DEFINE(FREGS_A0,	    offsetof(struct ftrace_regs, a0));
+>  	DEFINE(FREGS_A1,	    offsetof(struct ftrace_regs, a1));
+>  	DEFINE(FREGS_A2,	    offsetof(struct ftrace_regs, a2));
+> diff --git a/arch/riscv/kernel/mcount-dyn.S b/arch/riscv/kernel/mcount-dyn.S
+> index 745dd4c4a69c..e988bd26b28b 100644
+> --- a/arch/riscv/kernel/mcount-dyn.S
+> +++ b/arch/riscv/kernel/mcount-dyn.S
+> @@ -96,7 +96,13 @@
+>  	REG_S	x8,  FREGS_S0(sp)
+>  #endif
+>  	REG_S	x6,  FREGS_T1(sp)
+> -
+> +#ifdef CONFIG_CC_IS_CLANG
+> +	REG_S	x7,  FREGS_T2(sp)
+> +	REG_S	x28, FREGS_T3(sp)
+> +	REG_S	x29, FREGS_T4(sp)
+> +	REG_S	x30, FREGS_T5(sp)
+> +	REG_S	x31, FREGS_T6(sp)
+> +#endif
+>  	// save the arguments
+>  	REG_S	x10, FREGS_A0(sp)
+>  	REG_S	x11, FREGS_A1(sp)
+> @@ -115,7 +121,13 @@
+>  	REG_L	x8, FREGS_S0(sp)
+>  #endif
+>  	REG_L	x6,  FREGS_T1(sp)
+> -
+> +#ifdef CONFIG_CC_IS_CLANG
+> +	REG_L	x7,  FREGS_T2(sp)
+> +	REG_L	x28, FREGS_T3(sp)
+> +	REG_L	x29, FREGS_T4(sp)
+> +	REG_L	x30, FREGS_T5(sp)
+> +	REG_L	x31, FREGS_T6(sp)
+> +#endif
+>  	// restore the arguments
+>  	REG_L	x10, FREGS_A0(sp)
+>  	REG_L	x11, FREGS_A1(sp)
+> 
+> -- 
+> 2.43.0
+> 
