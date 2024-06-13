@@ -1,326 +1,153 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9852E13D897
-	for <llvm@lists.linux.dev>; Thu, 13 Jun 2024 08:23:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C6548174C;
+	Thu, 13 Jun 2024 09:08:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718267026; cv=none; b=alSq0V89VI6DMNPO991Q9WR4Xm5nmW4niOSftljxET3YX99022KJPg2AA540OpCqjqhjSWd9DIp1F0xDaVpnF5JgdHBV95awVJqjdrsB3A31wIAII/aApXQRFZ9/QiGU2veE7aZdDimXNoOHLHowS0sHiHsrRL1Hk8dSmk888yg=
+	t=1718269732; cv=none; b=DfIqSWXx8J+KSebo5bhIAjWmph95t6Qr8cxfvL6Iaaq838qEEG1e63ZhFkrOpl7M6JCxUlLg22r3HFyI0RDOL9XUhxqs23s1c6MxsffDlzEStM9IjXS9CrwmsvpSpk0n+K17kYuY6xCMSRzzJVFB1EQSQZHifoP92S/oJrglD8s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718267026; c=relaxed/simple;
-	bh=a7tFv5qKIYEAeCjVvQkAhaHm2De4s+Yd38pdIlWK41E=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=FYWV3a+8MzCyctFu7cEiGonllOlrxjw79+Y1Pu5pSTUjaqrx6g0PQ9Kob+g1YTpk1AGhb5VaknP0jx2wVqsLEU2pOrbSr2ESizASOa8xJ3V7t3vVf1ApPQIxcB4ZBROlG5GOfO2XoZIttg13oAdGK9W9uD6cTdr7Xvsokel1XYw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=KJsdXneB; arc=none smtp.client-ip=192.198.163.10
+	s=arc-20240116; t=1718269732; c=relaxed/simple;
+	bh=zMyaHHimo6OvjtFb9RYOmPDvcnFDV8ay23PM9meInmI=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=C/BLdjR6Bnu7g85/FYplRjfs0MPHzUNYZuHadYRPi8oDr64LFPMYcEc53nIv2/VpTMf7XcAYNmVPHGIsD8T+sCWRLSRvcYDCfZtXftEFqOsWtcRDUzNsVcrK3lqM4ZfDtUhWCtoucDGL7Kx3TI5J7hZIsD6MMiqHuWi2v7wUDc4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=naPECKQR; arc=none smtp.client-ip=198.175.65.17
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="KJsdXneB"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="naPECKQR"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1718267025; x=1749803025;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=a7tFv5qKIYEAeCjVvQkAhaHm2De4s+Yd38pdIlWK41E=;
-  b=KJsdXneBE7un9TSb9gn9bUnIJdcXS9p58f2h9R1NBHHFV7UL2ZUjtDTE
-   sU1whOPMjkHXpvXBWP8LLV0nDITcAgLuqdpzzbcmJsFwA0YMb0ROUkpUy
-   ZdTDlbBsW8riazFxCnXEIJQwJg6RZokvqnESRGcDaLSvodVcDlZ1Auze3
-   n+F5VQXK5vQToU/h7kYB8+Ep+lz2OwqgITLz/IcfdEs9wqVN+AsY9Elk/
-   hLNwbs1p7xz3SIEs8TOfkAJtIVkLeYNaESXn70n4P3q+1UTfwYdMJEz8i
-   QoO0kgY4MmXjbrvd8uetGPALDgNZhJW18ZFZpo1oEMFYL9jhkvQoeXraz
+  t=1718269731; x=1749805731;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=zMyaHHimo6OvjtFb9RYOmPDvcnFDV8ay23PM9meInmI=;
+  b=naPECKQRI6g/3n+s7jAOHN0U0ITWbvlD9M+sO5fI4T9hTboBl9qXIG6W
+   A833WIsRCyGsxGwZkF6b0uJOmVRVv0gRNafnLfOJxRQmTyqtUTRgGcTRZ
+   jWVsOe5tTDZ/bAuoJhrlVOzHptc/evZUqFt5Gl1SSwvA2xdpScYcGJEX4
+   GgHODzkeEotZWbJVp3n6GsAdJDYUlXDe+BbQOoD87kPZjLox1vhO1ZYBY
+   PcmpthgLUIjKhIVcnLaBUrh6AVTMtNFncqvaMBId2n2eOSo/t5H11vzyN
+   WB7eBb3KkUazXK5cwS7yxELiirp4rBhAqy8an+EvmVuW+gP/wpm240Fw2
    w==;
-X-CSE-ConnectionGUID: tzQJ9m/ZQf6sCX74sH5siA==
-X-CSE-MsgGUID: Q+dzwpZNTbmhG/ooKzwTSQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11101"; a="26474258"
+X-CSE-ConnectionGUID: vstYLl51SFOS8u+KeuaGFA==
+X-CSE-MsgGUID: kf47oeWkRTO3pQ3aDBc9Aw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11101"; a="15201472"
 X-IronPort-AV: E=Sophos;i="6.08,234,1712646000"; 
-   d="scan'208";a="26474258"
-Received: from orviesa009.jf.intel.com ([10.64.159.149])
-  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jun 2024 01:23:43 -0700
-X-CSE-ConnectionGUID: JChdK87NStSOarCBp9+5QQ==
-X-CSE-MsgGUID: 4zU4oS32SKGbk7IhfcpBPQ==
+   d="scan'208";a="15201472"
+Received: from fmviesa001.fm.intel.com ([10.60.135.141])
+  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jun 2024 02:08:50 -0700
+X-CSE-ConnectionGUID: n2Zi160rSOaNNMr1MU1ucQ==
+X-CSE-MsgGUID: FCT4D8H7RrWMYujVDHlHGA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.08,234,1712646000"; 
-   d="scan'208";a="40183376"
-Received: from ahunter6-mobl1.ger.corp.intel.com (HELO [10.0.2.15]) ([10.246.41.28])
-  by orviesa009-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jun 2024 01:23:31 -0700
-Message-ID: <961fe800-7160-4c53-a3a0-f16700c433cd@intel.com>
-Date: Thu, 13 Jun 2024 11:23:26 +0300
+   d="scan'208";a="71282019"
+Received: from lkp-server01.sh.intel.com (HELO 628d7d8b9fc6) ([10.239.97.150])
+  by fmviesa001.fm.intel.com with ESMTP; 13 Jun 2024 02:08:47 -0700
+Received: from kbuild by 628d7d8b9fc6 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1sHgRp-0002Qu-1P;
+	Thu, 13 Jun 2024 09:08:45 +0000
+Date: Thu, 13 Jun 2024 17:08:05 +0800
+From: kernel test robot <lkp@intel.com>
+To: GUO Zihua <guozihua@huawei.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Linux Memory Management List <linux-mm@kvack.org>,
+	Paul Moore <paul@paul-moore.com>, Mimi Zohar <zohar@linux.ibm.com>,
+	Casey Schaufler <casey@schaufler-ca.com>
+Subject: [linux-next:master 5295/5501]
+ security/integrity/ima/ima_policy.c:430:10: error: too many arguments to
+ function call, expected 4, have 5
+Message-ID: <202406131636.cCrcJztc-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/2] perf: support specify vdso path in cmdline
-To: Changbin Du <changbin.du@huawei.com>,
- Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>,
- Arnaldo Carvalho de Melo <acme@kernel.org>,
- Namhyung Kim <namhyung@kernel.org>, Nathan Chancellor <nathan@kernel.org>
-Cc: Mark Rutland <mark.rutland@arm.com>,
- Alexander Shishkin <alexander.shishkin@linux.intel.com>,
- Jiri Olsa <jolsa@kernel.org>, Ian Rogers <irogers@google.com>,
- "Liang, Kan" <kan.liang@linux.intel.com>,
- Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling
- <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
- linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
- llvm@lists.linux.dev
-References: <20240613063510.348692-1-changbin.du@huawei.com>
- <20240613063510.348692-2-changbin.du@huawei.com>
-Content-Language: en-US
-From: Adrian Hunter <adrian.hunter@intel.com>
-Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
- Business Identity Code: 0357606 - 4, Domiciled in Helsinki
-In-Reply-To: <20240613063510.348692-2-changbin.du@huawei.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On 13/06/24 09:35, Changbin Du wrote:
-> The vdso dumped from process memory (in buildid-cache) lacks debugging
-> info. To annotate vdso symbols with source lines we need specify a
-> debugging version.
-> 
-> For x86, we can find them from your local build as
-> arch/x86/entry/vdso/vdso{32,64}.so.dbg. Or they may reside in
-> /lib/modules/<version>/vdso/vdso{32,64}.so on Ubuntu. But notice that
-> the buildid has to match.
-> 
-> $ sudo perf record -a
-> $ sudo perf report --objdump=llvm-objdump \
->   --vdso arch/x86/entry/vdso/vdso64.so.dbg,arch/x86/entry/vdso/vdso32.so.dbg
-> 
-> When doing cross platform analysis, we also need specify the vdso path if
-> we are interested in its symbols.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+head:   6906a84c482f098d31486df8dc98cead21cce2d0
+commit: 29f5bedff494c278af5f804ebfe0637c5f50f3bd [5295/5501] ima: Avoid blocking in RCU read-side critical section
+config: i386-buildonly-randconfig-004-20240613 (https://download.01.org/0day-ci/archive/20240613/202406131636.cCrcJztc-lkp@intel.com/config)
+compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240613/202406131636.cCrcJztc-lkp@intel.com/reproduce)
 
-We already have logic to find debug files, and to deal with a symbol source
-(syms_ss) and runtime symbol source (runtime_ss).
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202406131636.cCrcJztc-lkp@intel.com/
 
-Can't we make that work transparently for vdso so that the user does
-not have to.
+All errors (new ones prefixed by >>):
 
-> 
-> Signed-off-by: Changbin Du <changbin.du@huawei.com>
-> ---
->  tools/perf/builtin-annotate.c |  2 +
->  tools/perf/builtin-c2c.c      |  2 +
->  tools/perf/builtin-inject.c   |  2 +
->  tools/perf/builtin-report.c   |  2 +
->  tools/perf/builtin-script.c   |  2 +
->  tools/perf/builtin-top.c      |  2 +
->  tools/perf/util/symbol.c      | 74 +++++++++++++++++++++++++++++++++++
->  tools/perf/util/symbol_conf.h |  5 +++
->  8 files changed, 91 insertions(+)
-> 
-> diff --git a/tools/perf/builtin-annotate.c b/tools/perf/builtin-annotate.c
-> index 50d2fb222d48..ff466882065d 100644
-> --- a/tools/perf/builtin-annotate.c
-> +++ b/tools/perf/builtin-annotate.c
-> @@ -742,6 +742,8 @@ int cmd_annotate(int argc, const char **argv)
->  		   "file", "vmlinux pathname"),
->  	OPT_BOOLEAN('m', "modules", &symbol_conf.use_modules,
->  		    "load module symbols - WARNING: use only with -k and LIVE kernel"),
-> +	OPT_CALLBACK(0, "vdso", NULL, "vdso1[,vdso2]", "vdso pathnames",
-> +		     parse_vdso_pathnames),
->  	OPT_BOOLEAN('l', "print-line", &annotate_opts.print_lines,
->  		    "print matching source lines (may be slow)"),
->  	OPT_BOOLEAN('P', "full-paths", &annotate_opts.full_path,
-> diff --git a/tools/perf/builtin-c2c.c b/tools/perf/builtin-c2c.c
-> index c157bd31f2e5..4764f9139661 100644
-> --- a/tools/perf/builtin-c2c.c
-> +++ b/tools/perf/builtin-c2c.c
-> @@ -3018,6 +3018,8 @@ static int perf_c2c__report(int argc, const char **argv)
->  	const struct option options[] = {
->  	OPT_STRING('k', "vmlinux", &symbol_conf.vmlinux_name,
->  		   "file", "vmlinux pathname"),
-> +	OPT_CALLBACK(0, "vdso", NULL, "vdso1[,vdso2]", "vdso pathnames",
-> +		     parse_vdso_pathnames),
->  	OPT_STRING('i', "input", &input_name, "file",
->  		   "the input file to process"),
->  	OPT_INCR('N', "node-info", &c2c.node_info,
-> diff --git a/tools/perf/builtin-inject.c b/tools/perf/builtin-inject.c
-> index a212678d47be..e774e83d0a0f 100644
-> --- a/tools/perf/builtin-inject.c
-> +++ b/tools/perf/builtin-inject.c
-> @@ -2247,6 +2247,8 @@ int cmd_inject(int argc, const char **argv)
->  			    "don't load vmlinux even if found"),
->  		OPT_STRING(0, "kallsyms", &symbol_conf.kallsyms_name, "file",
->  			   "kallsyms pathname"),
-> +		OPT_CALLBACK(0, "vdso", NULL, "vdso1[,vdso2]", "vdso pathnames",
-> +		     parse_vdso_pathnames),
->  		OPT_BOOLEAN('f', "force", &data.force, "don't complain, do it"),
->  		OPT_CALLBACK_OPTARG(0, "itrace", &inject.itrace_synth_opts,
->  				    NULL, "opts", "Instruction Tracing options\n"
-> diff --git a/tools/perf/builtin-report.c b/tools/perf/builtin-report.c
-> index 69618fb0110b..a64b48460dce 100644
-> --- a/tools/perf/builtin-report.c
-> +++ b/tools/perf/builtin-report.c
-> @@ -1324,6 +1324,8 @@ int cmd_report(int argc, const char **argv)
->                      "don't load vmlinux even if found"),
->  	OPT_STRING(0, "kallsyms", &symbol_conf.kallsyms_name,
->  		   "file", "kallsyms pathname"),
-> +	OPT_CALLBACK(0, "vdso", NULL, "vdso1[,vdso2]", "vdso pathnames",
-> +		     parse_vdso_pathnames),
->  	OPT_BOOLEAN('f', "force", &symbol_conf.force, "don't complain, do it"),
->  	OPT_BOOLEAN('m', "modules", &symbol_conf.use_modules,
->  		    "load module symbols - WARNING: use only with -k and LIVE kernel"),
-> diff --git a/tools/perf/builtin-script.c b/tools/perf/builtin-script.c
-> index c16224b1fef3..2e358922a8d1 100644
-> --- a/tools/perf/builtin-script.c
-> +++ b/tools/perf/builtin-script.c
-> @@ -3965,6 +3965,8 @@ int cmd_script(int argc, const char **argv)
->  		   "file", "vmlinux pathname"),
->  	OPT_STRING(0, "kallsyms", &symbol_conf.kallsyms_name,
->  		   "file", "kallsyms pathname"),
-> +	OPT_CALLBACK(0, "vdso", NULL, "vdso1[,vdso2]", "vdso pathnames",
-> +		     parse_vdso_pathnames),
->  	OPT_BOOLEAN('G', "hide-call-graph", &no_callchain,
->  		    "When printing symbols do not display call chain"),
->  	OPT_CALLBACK(0, "symfs", NULL, "directory",
-> diff --git a/tools/perf/builtin-top.c b/tools/perf/builtin-top.c
-> index 1d6aef51c122..a3cce4e76eb9 100644
-> --- a/tools/perf/builtin-top.c
-> +++ b/tools/perf/builtin-top.c
-> @@ -1479,6 +1479,8 @@ int cmd_top(int argc, const char **argv)
->  		   "file", "kallsyms pathname"),
->  	OPT_BOOLEAN('K', "hide_kernel_symbols", &top.hide_kernel_symbols,
->  		    "hide kernel symbols"),
-> +	OPT_CALLBACK(0, "vdso", NULL, "vdso1[,vdso2]", "vdso pathnames",
-> +		     parse_vdso_pathnames),
->  	OPT_CALLBACK('m', "mmap-pages", &opts->mmap_pages, "pages",
->  		     "number of mmap data pages", evlist__parse_mmap_pages),
->  	OPT_INTEGER('r', "realtime", &top.realtime_prio,
-> diff --git a/tools/perf/util/symbol.c b/tools/perf/util/symbol.c
-> index 9e5940b5bc59..8d040039a7ce 100644
-> --- a/tools/perf/util/symbol.c
-> +++ b/tools/perf/util/symbol.c
-> @@ -19,6 +19,7 @@
->  #include "build-id.h"
->  #include "cap.h"
->  #include "dso.h"
-> +#include "vdso.h"
->  #include "util.h" // lsdir()
->  #include "debug.h"
->  #include "event.h"
-> @@ -44,6 +45,7 @@
->  
->  static int dso__load_kernel_sym(struct dso *dso, struct map *map);
->  static int dso__load_guest_kernel_sym(struct dso *dso, struct map *map);
-> +static int dso__load_vdso_sym(struct dso *dso, struct map *map);
->  static bool symbol__is_idle(const char *name);
->  
->  int vmlinux_path__nr_entries;
-> @@ -1833,6 +1835,12 @@ int dso__load(struct dso *dso, struct map *map)
->  		goto out;
->  	}
->  
-> +	if (dso__is_vdso(dso)) {
-> +		ret = dso__load_vdso_sym(dso, map);
-> +		if (ret > 0)
-> +			goto out;
-> +	}
-> +
->  	dso__set_adjust_symbols(dso, false);
->  
->  	if (perfmap) {
-> @@ -2349,6 +2357,72 @@ static int vmlinux_path__init(struct perf_env *env)
->  	return -1;
->  }
->  
-> +int parse_vdso_pathnames(const struct option *opt __maybe_unused,
-> +			 const char *arg, int unset __maybe_unused)
-> +{
-> +	char *tmp, *tok, *str = strdup(arg);
-> +	unsigned int i = 0;
-> +
-> +	for (tok = strtok_r(str, ",", &tmp); tok && i < ARRAY_SIZE(symbol_conf.vdso_name);
-> +	     tok = strtok_r(NULL, ",", &tmp)) {
-> +		symbol_conf.vdso_name[i++] = strdup(tok);
-> +	}
-> +
-> +	free(str);
-> +	return 0;
-> +}
-> +
-> +static int dso__load_vdso(struct dso *dso, struct map *map,
-> +			  const char *vdso)
-> +{
-> +	int err = -1;
-> +	struct symsrc ss;
-> +	char symfs_vdso[PATH_MAX];
-> +
-> +	if (vdso[0] == '/')
-> +		snprintf(symfs_vdso, sizeof(symfs_vdso), "%s", vdso);
-> +	else
-> +		symbol__join_symfs(symfs_vdso, vdso);
-> +
-> +	if (symsrc__init(&ss, dso, symfs_vdso, DSO_BINARY_TYPE__SYSTEM_PATH_DSO))
-> +		return -1;
-> +
-> +	/*
-> +	 * dso__load_sym() may copy 'dso' which will result in the copies having
-> +	 * an incorrect long name unless we set it here first.
-> +	 */
-> +	dso__set_long_name(dso, vdso, false);
-> +	dso__set_binary_type(dso, DSO_BINARY_TYPE__SYSTEM_PATH_DSO);
-> +
-> +	err = dso__load_sym(dso, map, &ss, &ss, 0);
-> +	symsrc__destroy(&ss);
-> +
-> +	if (err > 0) {
-> +		dso__set_loaded(dso);
-> +		pr_debug("Using %s for %s symbols\n", symfs_vdso, dso__short_name(dso));
-> +	}
-> +
-> +	return err;
-> +}
-> +
-> +static int dso__load_vdso_sym(struct dso *dso, struct map *map)
-> +{
-> +	int ret;
-> +
-> +	if (!dso__is_vdso(dso))
-> +		return -1;
-> +
-> +	for (unsigned int i = 0; i < ARRAY_SIZE(symbol_conf.vdso_name); i++) {
-> +		if (symbol_conf.vdso_name[i] != NULL) {
-> +			ret = dso__load_vdso(dso, map, symbol_conf.vdso_name[i]);
-> +			if (ret > 0)
-> +				return ret;
-> +		}
-> +	}
-> +
-> +	return -1;
-> +}
-> +
->  int setup_list(struct strlist **list, const char *list_str,
->  		      const char *list_name)
->  {
-> diff --git a/tools/perf/util/symbol_conf.h b/tools/perf/util/symbol_conf.h
-> index c114bbceef40..108356e3c981 100644
-> --- a/tools/perf/util/symbol_conf.h
-> +++ b/tools/perf/util/symbol_conf.h
-> @@ -3,6 +3,7 @@
->  #define __PERF_SYMBOL_CONF 1
->  
->  #include <stdbool.h>
-> +#include <subcmd/parse-options.h>
->  
->  struct strlist;
->  struct intlist;
-> @@ -55,6 +56,7 @@ struct symbol_conf {
->  	const char	*default_guest_vmlinux_name,
->  			*default_guest_kallsyms,
->  			*default_guest_modules;
-> +	const char	*vdso_name[2];
->  	const char	*guestmount;
->  	const char	*dso_list_str,
->  			*comm_list_str,
-> @@ -85,4 +87,7 @@ struct symbol_conf {
->  
->  extern struct symbol_conf symbol_conf;
->  
-> +int parse_vdso_pathnames(const struct option *opt __maybe_unused,
-> +			 const char *arg, int unset __maybe_unused);
-> +
->  #endif // __PERF_SYMBOL_CONF
+>> security/integrity/ima/ima_policy.c:430:10: error: too many arguments to function call, expected 4, have 5
+     427 |                 ima_filter_rule_init(nentry->lsm[i].type, Audit_equal,
+         |                 ~~~~~~~~~~~~~~~~~~~~
+     428 |                                      nentry->lsm[i].args_p,
+     429 |                                      &nentry->lsm[i].rule,
+     430 |                                      gfp);
+         |                                      ^~~
+   security/integrity/ima/ima.h:548:19: note: 'ima_filter_rule_init' declared here
+     548 | static inline int ima_filter_rule_init(u32 field, u32 op, char *rulestr,
+         |                   ^                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     549 |                                        void **lsmrule)
+         |                                        ~~~~~~~~~~~~~~
+   security/integrity/ima/ima_policy.c:1146:11: error: too many arguments to function call, expected 4, have 5
+    1143 |         result = ima_filter_rule_init(entry->lsm[lsm_rule].type, Audit_equal,
+         |                  ~~~~~~~~~~~~~~~~~~~~
+    1144 |                                       entry->lsm[lsm_rule].args_p,
+    1145 |                                       &entry->lsm[lsm_rule].rule,
+    1146 |                                       GFP_KERNEL);
+         |                                       ^~~~~~~~~~
+   include/linux/gfp_types.h:374:20: note: expanded from macro 'GFP_KERNEL'
+     374 | #define GFP_KERNEL      (__GFP_RECLAIM | __GFP_IO | __GFP_FS)
+         |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   security/integrity/ima/ima.h:548:19: note: 'ima_filter_rule_init' declared here
+     548 | static inline int ima_filter_rule_init(u32 field, u32 op, char *rulestr,
+         |                   ^                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     549 |                                        void **lsmrule)
+         |                                        ~~~~~~~~~~~~~~
+   2 errors generated.
 
+
+vim +430 security/integrity/ima/ima_policy.c
+
+   403	
+   404	static struct ima_rule_entry *ima_lsm_copy_rule(struct ima_rule_entry *entry,
+   405							gfp_t gfp)
+   406	{
+   407		struct ima_rule_entry *nentry;
+   408		int i;
+   409	
+   410		/*
+   411		 * Immutable elements are copied over as pointers and data; only
+   412		 * lsm rules can change
+   413		 */
+   414		nentry = kmemdup(entry, sizeof(*nentry), gfp);
+   415		if (!nentry)
+   416			return NULL;
+   417	
+   418		memset(nentry->lsm, 0, sizeof_field(struct ima_rule_entry, lsm));
+   419	
+   420		for (i = 0; i < MAX_LSM_RULES; i++) {
+   421			if (!entry->lsm[i].args_p)
+   422				continue;
+   423	
+   424			nentry->lsm[i].type = entry->lsm[i].type;
+   425			nentry->lsm[i].args_p = entry->lsm[i].args_p;
+   426	
+   427			ima_filter_rule_init(nentry->lsm[i].type, Audit_equal,
+   428					     nentry->lsm[i].args_p,
+   429					     &nentry->lsm[i].rule,
+ > 430					     gfp);
+   431			if (!nentry->lsm[i].rule)
+   432				pr_warn("rule for LSM \'%s\' is undefined\n",
+   433					nentry->lsm[i].args_p);
+   434		}
+   435		return nentry;
+   436	}
+   437	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
