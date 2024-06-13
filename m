@@ -1,90 +1,102 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 045FA44C86;
-	Thu, 13 Jun 2024 05:40:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 780BC132133
+	for <llvm@lists.linux.dev>; Thu, 13 Jun 2024 06:35:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.189
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718257208; cv=none; b=RX9hUzBDdLKT/TemmJ10UR0Nd26csLosVY2thcJF3jzxW84HU0dgdM3IbvuCNsSwqwNwBpjH7JiW9Z58yaDW3BeJpymEZzrhEbGGwcWL5SNzM9dUoMhsJs8bLmkqNyAEfpTwmi76b2G0L3pBw5Q7TTz8zpzetzW0KiBK4DDiQj0=
+	t=1718260531; cv=none; b=FgCeaLWISAU/cbDWHtnREZK14yyeGKNdVaIczSuzlNMJt+TlTrNblkX7bU5dcxAnQBsE0+Mbq3u+1432FItFO+3rLic+jm/kNe+N+N74mz8Spek+u1PkNnGwQvF9S/hD1O39V8y99DTJUh6hr+MzADEvDI76u0VrKJS8z9d3b/M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718257208; c=relaxed/simple;
-	bh=ZcYTQFWs5+97Y49ShyJGWZXOwlDhMY34Jftimf0oxws=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=euhnJQjeuwMD7rvqCMSD5pqx+sAAKnyh9rvmTK7lT+MBg6YxJr49d35LdAfeatgJscn2i1qcu8g6WjQrqzhr8ma8rJuqRddjzq3kcBo9Tf8fjxpsffKfp6yDoxP2chUta23pH9vR0My9dtJ5gWeKqt16M46TPkrEHxm6a98xf7I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=W0eg7I6U; arc=none smtp.client-ip=10.30.226.201
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="W0eg7I6U"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EC6CDC2BBFC;
-	Thu, 13 Jun 2024 05:40:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1718257207;
-	bh=ZcYTQFWs5+97Y49ShyJGWZXOwlDhMY34Jftimf0oxws=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=W0eg7I6UwZWJCF3Nborq1V0QGwtPnyFwcJ6uuPowJNY0HJJLn4RRmb2/DWPN5RnbA
-	 Y/VLxnIUqobXvf5llPnQTCA+dUKbpFSIJ0LMLkRthOl3edJhorS8D2zG/clLROt6J6
-	 FIjGgs2OgvYPjQmpukp5A2JMX0tpZuTOy406nH9U=
-Date: Thu, 13 Jun 2024 07:40:04 +0200
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: Boqun Feng <boqun.feng@gmail.com>
-Cc: rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-arch@vger.kernel.org, llvm@lists.linux.dev,
-	Miguel Ojeda <ojeda@kernel.org>,
-	Alex Gaynor <alex.gaynor@gmail.com>,
-	Wedson Almeida Filho <wedsonaf@gmail.com>,
-	Gary Guo <gary@garyguo.net>,
-	=?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
-	Benno Lossin <benno.lossin@proton.me>,
-	Andreas Hindborg <a.hindborg@samsung.com>,
-	Alice Ryhl <aliceryhl@google.com>,
-	Alan Stern <stern@rowland.harvard.edu>,
-	Andrea Parri <parri.andrea@gmail.com>,
-	Will Deacon <will@kernel.org>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Nicholas Piggin <npiggin@gmail.com>,
-	David Howells <dhowells@redhat.com>,
-	Jade Alglave <j.alglave@ucl.ac.uk>,
-	Luc Maranget <luc.maranget@inria.fr>,
-	"Paul E. McKenney" <paulmck@kernel.org>,
-	Akira Yokosawa <akiyks@gmail.com>,
-	Daniel Lustig <dlustig@nvidia.com>,
-	Joel Fernandes <joel@joelfernandes.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	kent.overstreet@gmail.com, elver@google.com,
-	Mark Rutland <mark.rutland@arm.com>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-	"H. Peter Anvin" <hpa@zytor.com>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	torvalds@linux-foundation.org, linux-arm-kernel@lists.infradead.org,
-	linux-fsdevel@vger.kernel.org, Trevor Gross <tmgross@umich.edu>,
-	dakr@redhat.com
-Subject: Re: [RFC 2/2] rust: sync: Add atomic support
-Message-ID: <2024061340-charger-discourse-f077@gregkh>
-References: <20240612223025.1158537-1-boqun.feng@gmail.com>
- <20240612223025.1158537-3-boqun.feng@gmail.com>
+	s=arc-20240116; t=1718260531; c=relaxed/simple;
+	bh=OWo4rrebCjJM7qWQjGzNFquIUysjDOnaqUlR2C+r7Xg=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=meoMaAnPSjwmpLxnZASdtYrcrO7G3VLwOeSvmdxTUkfNWc8gA7THQBmUXXW1h5WppWTxaJb3TO8+lWMCCVyNA2SiuXWiPfPVTBpw6Pj2SdLFFe2BzV+gHmxAqJ2x5hZXrel2SxtyeXEDXc9/OxaWb0bFFpYTL5FKOTZJP7x98AY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.189
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.19.88.105])
+	by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4W0CHg4SmyzPpN3;
+	Thu, 13 Jun 2024 14:31:59 +0800 (CST)
+Received: from kwepemd100011.china.huawei.com (unknown [7.221.188.204])
+	by mail.maildlp.com (Postfix) with ESMTPS id 93662140382;
+	Thu, 13 Jun 2024 14:35:25 +0800 (CST)
+Received: from M910t.huawei.com (10.110.54.157) by
+ kwepemd100011.china.huawei.com (7.221.188.204) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1258.34; Thu, 13 Jun 2024 14:35:24 +0800
+From: Changbin Du <changbin.du@huawei.com>
+To: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>,
+	Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim
+	<namhyung@kernel.org>, Nathan Chancellor <nathan@kernel.org>
+CC: Mark Rutland <mark.rutland@arm.com>, Alexander Shishkin
+	<alexander.shishkin@linux.intel.com>, Jiri Olsa <jolsa@kernel.org>, Ian
+ Rogers <irogers@google.com>, Adrian Hunter <adrian.hunter@intel.com>, "Liang,
+ Kan" <kan.liang@linux.intel.com>, Nick Desaulniers <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
+	<linux-perf-users@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<llvm@lists.linux.dev>, Changbin Du <changbin.du@huawei.com>
+Subject: [PATCH 0/2] perf: support specify vdso path in cmdline
+Date: Thu, 13 Jun 2024 14:35:08 +0800
+Message-ID: <20240613063510.348692-1-changbin.du@huawei.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240612223025.1158537-3-boqun.feng@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ kwepemd100011.china.huawei.com (7.221.188.204)
 
-On Wed, Jun 12, 2024 at 03:30:25PM -0700, Boqun Feng wrote:
-> --- /dev/null
-> +++ b/rust/kernel/sync/atomic/impl.rs
-> @@ -0,0 +1,1375 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +
-> +//! Generated by scripts/atomic/gen-rust-atomic.sh
-> +//! DO NOT MODIFY THIS FILE DIRECTLY
+The vdso dumped from process memory (in buildid-cache) lacks debugging
+info. To annotate vdso symbols with source lines we need specify a
+debugging version.
 
-Again, why not generate at build time?
+For x86, we can find them from your local build as
+arch/x86/entry/vdso/vdso{32,64}.so.dbg. Or they may resides in
+/lib/modules/<version>/vdso/vdso{32,64}.so on Ubuntu. But notice that the
+builid has to match.
 
-thanks,
+$ sudo perf record -a
+$ sudo perf report --objdump=llvm-objdump \
+      --vdso arch/x86/entry/vdso/vdso64.so.dbg,arch/x86/entry/vdso/vdso32.so.dbg
 
-greg k-h
+Samples: 17K of event 'cycles:P', 4000 Hz, Event count (approx.): 1760
+__vdso_clock_gettime  /work/linux-host/arch/x86/entry/vdso/vdso64.so.d
+Percent│       movq    -48(%rbp),%rsi                                ▒
+       │       testq   %rax,%rax                                     ▒
+       │     ;               return vread_hvclock();                 ▒
+       │       movq    %rax,%rdx                                     ▒
+       │     ;               if (unlikely(!vdso_cycles_ok(cycles)))  ▒
+       │     ↑ js      eb                                            ▒
+       │     ↑ jmp     74                                            ▒
+       │     ;               ts->tv_sec = vdso_ts->sec;              ▒
+  0.02 │147:   leaq    2(%rbx),%rax                                  ▒
+       │       shlq    $4, %rax                                      ▒
+       │       addq    %r10,%rax                                     ▒
+       │     ;               while ((seq = READ_ONCE(vd->seq)) & 1) {▒
+  9.38 │152:   movl    (%r10),%ecx                                   ▒
+
+
+When doing cross platform analysis, we also need specify the vdso path if
+we are interested in its symbols.
+
+Changbin Du (2):
+  perf: support specify vdso path in cmdline
+  perf: disasm: prefer symsrc_filename for filename
+
+ tools/perf/builtin-annotate.c |  2 +
+ tools/perf/builtin-c2c.c      |  2 +
+ tools/perf/builtin-inject.c   |  2 +
+ tools/perf/builtin-report.c   |  2 +
+ tools/perf/builtin-script.c   |  2 +
+ tools/perf/builtin-top.c      |  2 +
+ tools/perf/util/disasm.c      |  5 +++
+ tools/perf/util/symbol.c      | 82 ++++++++++++++++++++++++++++++++++-
+ tools/perf/util/symbol_conf.h |  5 +++
+ 9 files changed, 102 insertions(+), 2 deletions(-)
+
+-- 
+2.34.1
+
