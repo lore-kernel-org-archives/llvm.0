@@ -1,100 +1,90 @@
-Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
+Received: from szxga04-in.huawei.com (szxga04-in.huawei.com [45.249.212.190])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6531513E8A7;
-	Thu, 13 Jun 2024 09:18:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.92.199
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E631140373
+	for <llvm@lists.linux.dev>; Thu, 13 Jun 2024 09:43:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.190
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718270294; cv=none; b=OKfdBTLOYaoM6ETT12uRUlEz0LvhVleSfWrUh75/EGq2p/w4tpji+1hS9bBwBPFzf9nofVZoS8enbIzEC59iWoTdl+Fdg+DDR9FHHgRXsioHRFdUiVYuYQm8qwAwt23kPK2TB/rReBJrDhOjFaObGAJkwMvR8AmQvjL2yJpnMVc=
+	t=1718271837; cv=none; b=b16I8ye1herGvUZ+yQ1FZs5Ke/UicjpO7/DQr402d2rZ3rLO7N0FnisLpmj9D8uKgN//hNsZ2KNNEbDF17vXVwHdagpHNEUjVy6XScroeo9b9pqwR4/+jPshG/qj1mu7yt4NSMJUQ2SEYWNAp9ACApTVFeUx6Y78gmAsB7UjjlA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718270294; c=relaxed/simple;
-	bh=j57AjH7vWOzLYS8GEi6N0Sm4lqhf9PnfiNNs+BWRZvc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ub9Sul6WhfiOSoZL6TupcoJSA6XFzYzfR9cPjZrtZ6TQmCVJEQeYm8tdR8QfzIui21jcwfDOqK0/dJGkfyjdzjZuxFuWtcZmv47TKSob4R0Bnt9NEVGB7Y3b7sbZEDHBfzWrmXnkS9HbstOpLSq1R58Li/BRmjQ2Or+TLt9EZP8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=A0TLT7/3; arc=none smtp.client-ip=90.155.92.199
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="A0TLT7/3"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=p0dnDPDEIYuJ2y75CbrgMsy67e1FESlmVsvTOPepdeA=; b=A0TLT7/3PW8jq4FG22ssotSS0g
-	zPEMM2uzluilJ2tNOjM9f5NZ6KZM2OQshkLdPgKv+9qmi+fIk9ccNkgp82a7JoC9sCGKPOG1eN6ZK
-	fLtadKbtssSZyz+uAin1jf6o+EDnhCxsprUnKhbmaxCAdSCtSINGkMzMb9Sa8yQr+d8UJrIW4e37c
-	Z7NIv6OC2+S2ZHiBSzwmuYy9biFMMC+KNad4ogL57b1BoNyAUNeuFmNTetACp01Gh8YYGucXUvY1w
-	8ZL4IUDpKPtuypRva/qqBvfWB1zmtJIqc6lwu58UdEw3eYOIvsTlkddi7wZMC0I1YWt8D1tkXCRk/
-	fWpzxxjQ==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-	by desiato.infradead.org with esmtpsa (Exim 4.97.1 #2 (Red Hat Linux))
-	id 1sHgaW-00000003Uvs-2WWA;
-	Thu, 13 Jun 2024 09:17:48 +0000
-Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
-	id 4C42E300B40; Thu, 13 Jun 2024 11:17:47 +0200 (CEST)
-Date: Thu, 13 Jun 2024 11:17:47 +0200
-From: Peter Zijlstra <peterz@infradead.org>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Boqun Feng <boqun.feng@gmail.com>, rust-for-linux@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-	llvm@lists.linux.dev, Miguel Ojeda <ojeda@kernel.org>,
-	Alex Gaynor <alex.gaynor@gmail.com>,
-	Wedson Almeida Filho <wedsonaf@gmail.com>,
-	Gary Guo <gary@garyguo.net>,
-	=?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
-	Benno Lossin <benno.lossin@proton.me>,
-	Andreas Hindborg <a.hindborg@samsung.com>,
-	Alice Ryhl <aliceryhl@google.com>,
-	Alan Stern <stern@rowland.harvard.edu>,
-	Andrea Parri <parri.andrea@gmail.com>,
-	Will Deacon <will@kernel.org>, Nicholas Piggin <npiggin@gmail.com>,
-	David Howells <dhowells@redhat.com>,
-	Jade Alglave <j.alglave@ucl.ac.uk>,
-	Luc Maranget <luc.maranget@inria.fr>,
-	"Paul E. McKenney" <paulmck@kernel.org>,
-	Akira Yokosawa <akiyks@gmail.com>,
-	Daniel Lustig <dlustig@nvidia.com>,
-	Joel Fernandes <joel@joelfernandes.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	kent.overstreet@gmail.com, elver@google.com,
-	Mark Rutland <mark.rutland@arm.com>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-	"H. Peter Anvin" <hpa@zytor.com>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	torvalds@linux-foundation.org, linux-arm-kernel@lists.infradead.org,
-	linux-fsdevel@vger.kernel.org, Trevor Gross <tmgross@umich.edu>,
-	dakr@redhat.com
-Subject: Re: [RFC 1/2] rust: Introduce atomic API helpers
-Message-ID: <20240613091747.GB17707@noisy.programming.kicks-ass.net>
-References: <20240612223025.1158537-1-boqun.feng@gmail.com>
- <20240612223025.1158537-2-boqun.feng@gmail.com>
- <2024061341-whole-snowfall-89a6@gregkh>
+	s=arc-20240116; t=1718271837; c=relaxed/simple;
+	bh=kQ9SNyo/+BrkPE7wtz1I5d20j0D1dHO8ar/GU0OUDHU=;
+	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=K39+zQsKyp7VK3X+1oLBQRkQRmMzcEj1yO+2lFgHXnK4PFlhx08OaZwsMDMDYGcdWO8oS1CfAO2VARU1VZRc5G41XAke/zXAMVbcL+37jOgImmzg1o2WUMdDdfiaipnAZe5pX0daZLd65YybiTwnjneK4YpTbkjaF6k2XyQ02PA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.190
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.19.88.234])
+	by szxga04-in.huawei.com (SkyGuard) with ESMTP id 4W0HSh43jrz2Ck2M;
+	Thu, 13 Jun 2024 17:40:04 +0800 (CST)
+Received: from kwepemd200010.china.huawei.com (unknown [7.221.188.124])
+	by mail.maildlp.com (Postfix) with ESMTPS id 00791140133;
+	Thu, 13 Jun 2024 17:43:53 +0800 (CST)
+Received: from kwepemd100011.china.huawei.com (7.221.188.204) by
+ kwepemd200010.china.huawei.com (7.221.188.124) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1258.34; Thu, 13 Jun 2024 17:43:52 +0800
+Received: from kwepemd100011.china.huawei.com ([7.221.188.204]) by
+ kwepemd100011.china.huawei.com ([7.221.188.204]) with mapi id 15.02.1258.034;
+ Thu, 13 Jun 2024 17:43:52 +0800
+From: duchangbin <changbin.du@huawei.com>
+To: Adrian Hunter <adrian.hunter@intel.com>
+CC: duchangbin <changbin.du@huawei.com>, Peter Zijlstra
+	<peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, "Arnaldo Carvalho de
+ Melo" <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, Nathan
+ Chancellor <nathan@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>, Jiri Olsa
+	<jolsa@kernel.org>, "Ian Rogers" <irogers@google.com>, "Liang, Kan"
+	<kan.liang@linux.intel.com>, "Nick Desaulniers" <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
+	"linux-perf-users@vger.kernel.org" <linux-perf-users@vger.kernel.org>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	"llvm@lists.linux.dev" <llvm@lists.linux.dev>
+Subject: Re: [PATCH 2/2] perf: disasm: prefer symsrc_filename for filename
+Thread-Topic: [PATCH 2/2] perf: disasm: prefer symsrc_filename for filename
+Thread-Index: AQHavVvh9tYwOTcSHEG6bdTlEhoGM7HE0t8AgACesgA=
+Date: Thu, 13 Jun 2024 09:43:52 +0000
+Message-ID: <39be46d6a5194b6390ed31be67689c6c@huawei.com>
+References: <20240613063510.348692-1-changbin.du@huawei.com>
+ <20240613063510.348692-3-changbin.du@huawei.com>
+ <395cfff7-9692-4123-96b6-353752007f46@intel.com>
+In-Reply-To: <395cfff7-9692-4123-96b6-353752007f46@intel.com>
+Accept-Language: en-US
+Content-Language: zh-CN
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+x-ms-exchange-imapappendstamp: kwepemd100011.china.huawei.com (15.02.1258.034)
+x-ms-exchange-messagesentrepresentingtype: 1
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <687803AF4BE4D84498FD7C39AA55BAC4@huawei.com>
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <2024061341-whole-snowfall-89a6@gregkh>
 
-On Thu, Jun 13, 2024 at 07:38:51AM +0200, Greg Kroah-Hartman wrote:
-> On Wed, Jun 12, 2024 at 03:30:24PM -0700, Boqun Feng wrote:
-> > +// Generated by scripts/atomic/gen-rust-atomic-helpers.sh
-> > +// DO NOT MODIFY THIS FILE DIRECTLY
-> 
-> Why not just build this at build time and not check the file into the
-> tree if it is always automatically generated?  That way it never gets
-> out of sync.  We do this for other types of auto-generated files in the
-> kernel today already.
+On Thu, Jun 13, 2024 at 11:15:28AM +0300, Adrian Hunter wrote:
+> On 13/06/24 09:35, Changbin Du wrote:
+> > If we already found a debugging version when loading symbols for that d=
+so,
+> > then use the same file for disasm instead of looking up in buildid-cach=
+e.
+>=20
+> In the past, there have been cases where the debugging version has not
+> worked for reading object code.  I don't remember the details, but the
+> symbols and debugging information was OK while the object code was not.
+>=20
+> In general, using anything other than the file that was actually executed
+> for reading object code seems like a bad idea.
+>=20
+Is this a platform specific issue? AFAIK, the binary code in debugging and
+non-debugging version should be identical.=20
 
-Part of the problem is, is that a *TON* of files depend on the atomic.h
-headers. If we'd generate it on every build, you'd basically get to
-rebuild the whole kernel every single time.
+>=20
+>=20
 
-Also, these files don't change too often. And if you look, there's a
-hash in those files which is used to check if things somehow got stale.
+--=20
+Cheers,
+Changbin Du
