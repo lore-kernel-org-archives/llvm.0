@@ -1,106 +1,150 @@
-Received: from mail-pg1-f178.google.com (mail-pg1-f178.google.com [209.85.215.178])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B50E713C912
-	for <llvm@lists.linux.dev>; Thu, 13 Jun 2024 07:33:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C119713BC0D
+	for <llvm@lists.linux.dev>; Thu, 13 Jun 2024 08:15:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718263994; cv=none; b=lJy9qjv9B/oOVR1rrIdXC9jnB0kVR3cJXBhhFhUdZCIN2Yv+oWGexiufzY/APPsLsqYnjyQDtSwtNhjB2eDQAOdzgVs+QC9rRjMUZf4cJ9zvPnvEjxU8E5tklyRPMIwBeBOHSOXKnDfX/oN58gr7qFPteLAYbgqohoLkE9oj+cY=
+	t=1718266539; cv=none; b=I/nr2J64tVt8WqZSo3R6mbVzxwFAr0GBWKgTnEF7AVvl05xFoIJxTVygTdMcZZBHK2JE3eG5+G6grpEirZf+mtf7fNOQPUbnPJ6m6wsjF5UDpLMunByb/bb3Kg9Xn1w94dJV8/z/D6k1eyAeTcJZx11latyqgMJvC55fIpnPbK0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718263994; c=relaxed/simple;
-	bh=uoTnrqYSg19kqb0lgMH7SLS/qe9dnaqbOD+HJnS87Ho=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=haQr3eVJqzHK/IG0iGhtYKVhWU73HwGgNhwP66rmWcD4pf6YedtqBrU0z3R73mGEGMawb4YFw4623GCb70Zr8LzFXeND1Ciagq4Mp8FmiwPpyyG3ED78jWTR5Sw4cip1zl/JJEUfsqJ7bZ7uYIQh/TlQbm8ZdvFqLTdOUPngYXY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sifive.com; spf=pass smtp.mailfrom=sifive.com; dkim=pass (2048-bit key) header.d=sifive.com header.i=@sifive.com header.b=d5RdomNf; arc=none smtp.client-ip=209.85.215.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sifive.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sifive.com
+	s=arc-20240116; t=1718266539; c=relaxed/simple;
+	bh=UMjVs06sJwT6Ygcoh+wejcNTxXAeh2E2nNUlc3p70fA=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=kRR01gs6lFItHQyedIMIMQ/pzIc3OBvPAT38qnB1uo8hwekdTzRO3RJ+g1AA3K2dqk/1vWQP08FMD5Nfamljp1zFWfe5/LjTHI7MPH6tSM82s+bPrKoGVys7YoFzrTMK0sHv11EQqKELgxH8UPYyimJRGX172PK3jcPc2w7hv3k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=kQbszUB3; arc=none smtp.client-ip=192.198.163.8
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sifive.com header.i=@sifive.com header.b="d5RdomNf"
-Received: by mail-pg1-f178.google.com with SMTP id 41be03b00d2f7-6c5a6151ff8so515702a12.2
-        for <llvm@lists.linux.dev>; Thu, 13 Jun 2024 00:33:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=sifive.com; s=google; t=1718263992; x=1718868792; darn=lists.linux.dev;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=RlJIkXaRaXYEOo0FtAy4w5B+d0jhj99dMDrjOpWfyi4=;
-        b=d5RdomNfqE52caPrqSucfrmfNRcrSmPbgCV0y6LwwvqQiEr928wXZbgzbOCK5RhPu/
-         8bEWnYcFWb2EIiRAmJCTiF50+srCHttxxGKfnykuzwZHP4UkqfYDUvB2iAuEdJoctoVB
-         va+ruUXFnEHOYaZja+nEy+lDgFr0b45veRYVKk5jepgMFXSqCtafwH70bMPIIwkV4Ngz
-         Hoa/IjftuqQ8rH+jE6lgJYYlExddA4bNwau0CZQL66EP1zTx8kGc8g3Sd5OZxXBXpeEk
-         iC18/8qq1nH/dEPBYaPj8K3NfUyr7P3uWxQ/hlkmsNaGeIV92I/xHGbDH2RN6gc5BcXT
-         p5wA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1718263992; x=1718868792;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=RlJIkXaRaXYEOo0FtAy4w5B+d0jhj99dMDrjOpWfyi4=;
-        b=jJRvK/lE4/spS4+RckAHdSgivJQRbGUzrJFveYDckhL4srI6DebHh8I39QfQ/6OT2/
-         1Vxj0TKs3+DhnWq4a/YAE+A8p2CvkNjyo0pP6yn0mqXyclETRRweM/Q+6IgdTVyIPl5z
-         OaWtH6p6UDG/5nDxLq9xLNmpN/CYSJcfIG2z3zTnjHprBcqN/YOWn3SoLRj2kbKJtu72
-         OQbL4a1b6aqKKGzmJyyWPEL4h5E1u2ReYDScb6ANcRuzKKOcVTTD0yUPM7Z2gbdbRT0C
-         w+961P9QjTXlm/bMIRD/DQMRyR+E5OMD4LmRr7Isojej9FRLyVgVYUlJ/Xg1fmvsHzL0
-         j5SA==
-X-Forwarded-Encrypted: i=1; AJvYcCVzYEA5xKSvkSuCpEa6a7Xifd2WXTZI7giT+D8YL8cyeHgjNC0E0PAsIq3xSmSMQuA46IcFHgagwUljYSBqkK6vWG9+8Q==
-X-Gm-Message-State: AOJu0YxSwnndKJ3CSWGouXGyPFSlKmuhYCUL6TjzbwbFquOrVmeci2lx
-	GFZNN98xbweXxE4ZzQbqMLFkrHQdOVx5Nm0+mF9PZVpODFipIMJN/MJ9i7Z3XgY=
-X-Google-Smtp-Source: AGHT+IEyM0ONI7ICTx6DjS1SeAdMKnjMDIyvhgY/AOB26Jk18oYzU1QW75t2bRm257+1EVhnYwVCTA==
-X-Received: by 2002:a05:6a20:3d88:b0:1b2:a889:f7da with SMTP id adf61e73a8af0-1b8a9c887fdmr4702279637.55.1718263991983;
-        Thu, 13 Jun 2024 00:33:11 -0700 (PDT)
-Received: from [127.0.1.1] (59-124-168-89.hinet-ip.hinet.net. [59.124.168.89])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-705cc78a1a0sm730028b3a.0.2024.06.13.00.33.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 13 Jun 2024 00:33:11 -0700 (PDT)
-From: Andy Chiu <andy.chiu@sifive.com>
-Date: Thu, 13 Jun 2024 15:11:13 +0800
-Subject: [PATCH 8/8] riscv: ftrace: support PREEMPT
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="kQbszUB3"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1718266538; x=1749802538;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=UMjVs06sJwT6Ygcoh+wejcNTxXAeh2E2nNUlc3p70fA=;
+  b=kQbszUB3rCi6WBIUQP0FjGhvX8665wPALlPVEdXGFT/16gdFXIPCC5wW
+   PoYPl3Ch4K9RNXg01MnlK7JdR7sQ0Y+c7l+2ZHubGK87hw/feaSqjEYvH
+   tre8q38b6jQpyWsyOrML0oKY46VhBa1Ac20qe5XAeeVlpDhKMts5XUIVt
+   7HOprIXmtPjmXLQtkNeCYVgGY3DbyXJXjwSQ3HWUw11/UvOfUdcW7Jfe8
+   lZqMBXRG2hf7b+k69Eldp99Vw+XZtCRdfsZ3squHVEtaGofINOiV2VhW5
+   vzrP/+ZWcsZNrMPC9av4FignfU7u5jPoztgWHykHLKnXmGed3D2mb2cxs
+   w==;
+X-CSE-ConnectionGUID: ur/qYhCKTTyXxFRdcB9Pjw==
+X-CSE-MsgGUID: mYbU7FVHTYuKY+s5YCFwcA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11101"; a="32611571"
+X-IronPort-AV: E=Sophos;i="6.08,234,1712646000"; 
+   d="scan'208";a="32611571"
+Received: from orviesa003.jf.intel.com ([10.64.159.143])
+  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jun 2024 01:15:37 -0700
+X-CSE-ConnectionGUID: 1AfnX+tyQFiO0NT59KF07g==
+X-CSE-MsgGUID: MV6X4M17TJyK3VRtJ1pu7w==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.08,234,1712646000"; 
+   d="scan'208";a="44974488"
+Received: from ahunter6-mobl1.ger.corp.intel.com (HELO [10.0.2.15]) ([10.246.41.28])
+  by ORVIESA003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jun 2024 01:15:32 -0700
+Message-ID: <395cfff7-9692-4123-96b6-353752007f46@intel.com>
+Date: Thu, 13 Jun 2024 11:15:28 +0300
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 2/2] perf: disasm: prefer symsrc_filename for filename
+To: Changbin Du <changbin.du@huawei.com>,
+ Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>,
+ Arnaldo Carvalho de Melo <acme@kernel.org>,
+ Namhyung Kim <namhyung@kernel.org>, Nathan Chancellor <nathan@kernel.org>
+Cc: Mark Rutland <mark.rutland@arm.com>,
+ Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+ Jiri Olsa <jolsa@kernel.org>, Ian Rogers <irogers@google.com>,
+ "Liang, Kan" <kan.liang@linux.intel.com>,
+ Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling
+ <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
+ linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+ llvm@lists.linux.dev
+References: <20240613063510.348692-1-changbin.du@huawei.com>
+ <20240613063510.348692-3-changbin.du@huawei.com>
+Content-Language: en-US
+From: Adrian Hunter <adrian.hunter@intel.com>
+Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
+ Business Identity Code: 0357606 - 4, Domiciled in Helsinki
+In-Reply-To: <20240613063510.348692-3-changbin.du@huawei.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-Message-Id: <20240613-dev-andyc-dyn-ftrace-v4-v1-8-1a538e12c01e@sifive.com>
-References: <20240613-dev-andyc-dyn-ftrace-v4-v1-0-1a538e12c01e@sifive.com>
-In-Reply-To: <20240613-dev-andyc-dyn-ftrace-v4-v1-0-1a538e12c01e@sifive.com>
-To: Paul Walmsley <paul.walmsley@sifive.com>, 
- Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, 
- Alexandre Ghiti <alexghiti@rivosinc.com>, Zong Li <zong.li@sifive.com>, 
- Steven Rostedt <rostedt@goodmis.org>, 
- Masami Hiramatsu <mhiramat@kernel.org>, Mark Rutland <mark.rutland@arm.com>, 
- Nathan Chancellor <nathan@kernel.org>, 
- Nick Desaulniers <ndesaulniers@google.com>, 
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
- Puranjay Mohan <puranjay@kernel.org>
-Cc: Palmer Dabbelt <palmer@rivosinc.com>, linux-riscv@lists.infradead.org, 
- linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
- llvm@lists.linux.dev, Andy Chiu <andy.chiu@sifive.com>
-X-Mailer: b4 0.12.4
 
-Now, we can safely enable dynamic ftrace with kernel preemption.
+On 13/06/24 09:35, Changbin Du wrote:
+> If we already found a debugging version when loading symbols for that dso,
+> then use the same file for disasm instead of looking up in buildid-cache.
 
-Signed-off-by: Andy Chiu <andy.chiu@sifive.com>
----
- arch/riscv/Kconfig | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+In the past, there have been cases where the debugging version has not
+worked for reading object code.  I don't remember the details, but the
+symbols and debugging information was OK while the object code was not.
 
-diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
-index 80b8d48e1e46..c1493ee1b8cd 100644
---- a/arch/riscv/Kconfig
-+++ b/arch/riscv/Kconfig
-@@ -133,7 +133,7 @@ config RISCV
- 	select HAVE_FTRACE_MCOUNT_RECORD if !XIP_KERNEL
- 	select HAVE_FUNCTION_GRAPH_TRACER
- 	select HAVE_FUNCTION_GRAPH_RETVAL if HAVE_FUNCTION_GRAPH_TRACER
--	select HAVE_FUNCTION_TRACER if !XIP_KERNEL && !PREEMPTION
-+	select HAVE_FUNCTION_TRACER if !XIP_KERNEL
- 	select HAVE_EBPF_JIT if MMU
- 	select HAVE_GUP_FAST if MMU
- 	select HAVE_FUNCTION_ARG_ACCESS_API
+In general, using anything other than the file that was actually executed
+for reading object code seems like a bad idea.
 
--- 
-2.43.0
+> 
+> Signed-off-by: Changbin Du <changbin.du@huawei.com>
+> ---
+>  tools/perf/util/disasm.c |  5 +++++
+>  tools/perf/util/symbol.c | 12 ++++++++----
+>  2 files changed, 13 insertions(+), 4 deletions(-)
+> 
+> diff --git a/tools/perf/util/disasm.c b/tools/perf/util/disasm.c
+> index 72aec8f61b94..75cfc6fbd11d 100644
+> --- a/tools/perf/util/disasm.c
+> +++ b/tools/perf/util/disasm.c
+> @@ -1103,6 +1103,11 @@ static int dso__disassemble_filename(struct dso *dso, char *filename, size_t fil
+>  	    !dso__is_kcore(dso))
+>  		return SYMBOL_ANNOTATE_ERRNO__NO_VMLINUX;
+>  
+> +	if (dso__symsrc_filename(dso)) {
+> +		strlcpy(filename, dso__symsrc_filename(dso), filename_size);
+> +		return 0;
+> +	}
+> +
+>  	build_id_filename = dso__build_id_filename(dso, NULL, 0, false);
+>  	if (build_id_filename) {
+>  		__symbol__join_symfs(filename, filename_size, build_id_filename);
+> diff --git a/tools/perf/util/symbol.c b/tools/perf/util/symbol.c
+> index 8d040039a7ce..a90c647d37e1 100644
+> --- a/tools/perf/util/symbol.c
+> +++ b/tools/perf/util/symbol.c
+> @@ -2025,12 +2025,14 @@ int dso__load_vmlinux(struct dso *dso, struct map *map,
+>  		dso__set_binary_type(dso, DSO_BINARY_TYPE__VMLINUX);
+>  
+>  	err = dso__load_sym(dso, map, &ss, &ss, 0);
+> -	symsrc__destroy(&ss);
+> -
+>  	if (err > 0) {
+>  		dso__set_loaded(dso);
+>  		pr_debug("Using %s for symbols\n", symfs_vmlinux);
+> +
+> +		if (symsrc__has_symtab(&ss) && !dso__symsrc_filename(dso))
+> +			dso__set_symsrc_filename(dso, strdup(symfs_vmlinux));
+>  	}
+> +	symsrc__destroy(&ss);
+>  
+>  	return err;
+>  }
+> @@ -2395,12 +2397,14 @@ static int dso__load_vdso(struct dso *dso, struct map *map,
+>  	dso__set_binary_type(dso, DSO_BINARY_TYPE__SYSTEM_PATH_DSO);
+>  
+>  	err = dso__load_sym(dso, map, &ss, &ss, 0);
+> -	symsrc__destroy(&ss);
+> -
+>  	if (err > 0) {
+>  		dso__set_loaded(dso);
+>  		pr_debug("Using %s for %s symbols\n", symfs_vdso, dso__short_name(dso));
+> +
+> +		if (symsrc__has_symtab(&ss) && !dso__symsrc_filename(dso))
+> +			dso__set_symsrc_filename(dso, strdup(symfs_vdso));
+>  	}
+> +	symsrc__destroy(&ss);
+>  
+>  	return err;
+>  }
 
