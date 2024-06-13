@@ -1,54 +1,117 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qk1-f181.google.com (mail-qk1-f181.google.com [209.85.222.181])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB509137C20;
-	Thu, 13 Jun 2024 19:09:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB57A82C67
+	for <llvm@lists.linux.dev>; Thu, 13 Jun 2024 20:25:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718305764; cv=none; b=DWYbhgdpZS/HCD7O8CddL//tSVedSGYcROmijJ/R/uP7PmNNPR6cQUVT3g5TvdT5soTPM41UsD+bzza0MVOx39Zppmlz3ab++gRldO5pBMZA6FQ22E2IeMovZw0ukGtdOryCk5bAgH2lOEB9zwxlyFWgKhA+WDN/2SPYmzsV7x8=
+	t=1718310337; cv=none; b=pNJVmZRdPBFivBsdM5MqvUSxOeOnylmqVjx4pzqE4X7Mjo6pIF3ibDkNlTR//YzmCzZz+O6HZSJ4PK7ODP7+YPcFbbaHWZ+/XzqUuchStUaTJkxKIlSSlqCESKRzgkTjVPPpPHDeuZYgsMIUOlnUZi8E968Ie0FYeEZ6QRNW2wc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718305764; c=relaxed/simple;
-	bh=HFWyWh6KpryPRqXeZqS8bpwy4cpqT7565JH13UCYe8Q=;
+	s=arc-20240116; t=1718310337; c=relaxed/simple;
+	bh=XZMnBPtlkifS5Fdca+gG4KAFlQ4eMVf6o5s14uxWoGY=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=URFTR3E1b82UiJldQXEDSVB+81XT14dvazmUnQ1xmmWrPkqxJ60oAQQPTip+jCV0NBpHp9mABL8MVyAZTINsOAaRb3IFKvGZgU9l67xF22UpQckhVG0beTo9YiduTZZ1cNngRDusphIOUkyTc+s2YcFxHggYNIASFngZtR4na0E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=r15KrCdS; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=nMIz51rIJsW1wc842ilQC2XWhtzODoMVdemf9+96S9VzGFxz3jBTF+/U5t/sNNuWjQi+U5zd4C6onGsQ5Kw3Vc1euuh3ZvRD9BjTWBluopRw+IAbX33oVbYlvtcxx4HDpSu0PGpu07wbviLFmuwT5wK8zw91NhOdkLZUejd78EY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=gbQBbqIY; arc=none smtp.client-ip=209.85.222.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="r15KrCdS"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5C484C2BBFC;
-	Thu, 13 Jun 2024 19:09:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1718305763;
-	bh=HFWyWh6KpryPRqXeZqS8bpwy4cpqT7565JH13UCYe8Q=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=r15KrCdS9IdIHad1rdEnJ2d8ckWytMU6LKbZHtECfabZeOOL5NeBLIxxPBq3z0zys
-	 3slzhtA9cdHuWZnGZHDV5NLs2bTHbBZynuD7Q8DQOxVA09rVcITHteKZ+9+HgLXR5M
-	 HdoVCKVKrpzgEk2cSlL6jYQ71DUrUvpCH8y/LyXJsqZGTYjaU0YmUIsxGTKPGUwrAM
-	 uV1gBh1sR/ghA14TJc9M7AyHJIwf42TPHHmnNcaLCqawQObi8CV5wvWxi8CbRIG6cM
-	 TBm0dJY8W1NUsdLFkBf/mQlzHFacpAS20ZjS1cela3jB5ird9bozLTcvGNoQEx+Z3j
-	 J9N0ANl5gHr0g==
-Date: Thu, 13 Jun 2024 12:09:20 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Andy Chiu <andy.chiu@sifive.com>
-Cc: Paul Walmsley <paul.walmsley@sifive.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>,
-	Alexandre Ghiti <alexghiti@rivosinc.com>,
-	Zong Li <zong.li@sifive.com>, Steven Rostedt <rostedt@goodmis.org>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gbQBbqIY"
+Received: by mail-qk1-f181.google.com with SMTP id af79cd13be357-795524bb6d9so97458085a.0
+        for <llvm@lists.linux.dev>; Thu, 13 Jun 2024 13:25:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1718310335; x=1718915135; darn=lists.linux.dev;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:feedback-id:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=EMz0ZFRHVHUChYlldLB+9O1uGefbqiAdPKIID9/kO3c=;
+        b=gbQBbqIYR3vl473ulf8UQCp8LfkSYBuEQ19og8oxMegSP97vaeYUqT1xwG/e/er6Zh
+         IVDESsAbxW0+KQtIU4kIdLUF+c7B71cewAQuZDQ0HKT4CAKnFUfQlBmOiOnWAFvEVGha
+         qPvXDLNY8qWOpQrVoWUVwk2buQGBESJ4tXizB8EljZous9s0knll0Y+cUAT4/G4t0KhP
+         dT8dAPMTIWuW0vf/llTzVd6J1tTv3QCg8ixiKMdUQulV9uwytFO/3lEOGzeyYtYX/gX+
+         7V5Vy8JBTiCEoSUUoYSfKigrT4a5lFFUMiPLes+2rijFHHRKblz5/y8JDxlcy/GtnDKD
+         xNJA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1718310335; x=1718915135;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:feedback-id:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=EMz0ZFRHVHUChYlldLB+9O1uGefbqiAdPKIID9/kO3c=;
+        b=L8Nkq8dExyz6s5NG7r1N12qEP18E1d0BPu3p0nYLdPuh698xVOJf3rZkIJ5MM+aHve
+         XKkvxdMXlF2bXM1dGrNmRO/2zsWxtVD6Tw4ouwE73MdkkrsN5oG1MFe7Tj9bun5rq+gC
+         4mUAABocAA4OrhjfkitSZ+Gwnn1nR3q53ylCo6H2mmsane51q6l5noclwlL4o7ePAEnv
+         OlQOCfatXE/4DdUBmXUwhD3CSzpY/ypsRS9yCzyZrX4X6+dzLCfJVwBcWe2U1QTDud5+
+         hxmGjEG7XuNQJyNrBGp9tfauu5nNn6BYnfapi/FI2uRYGMOUb0KlqKxfzu8Gq+SvQGl6
+         O7Ag==
+X-Forwarded-Encrypted: i=1; AJvYcCUFty3cPCv2BgzkoZ5FVNdndRsNpTyMU5rVMti8RMkcBKGJ83o1a8Vz+TuBH7QJz3g/WKZLv4xan+AkKBHihh85+2/ghA==
+X-Gm-Message-State: AOJu0YxNesPMTuHFosSWRW4lPe3C2p6NRKogPPw/shSE+bOQd1BXN8Eq
+	5F9KrXWwhaZEcZ8uu0KH6/7cq64J4p+pVEBR+DJmxUw3S+DMxaBj
+X-Google-Smtp-Source: AGHT+IGpSoIULcvWez99JK7JK+Up8HU1l/s1FINDWZs8LC9tBJeQ3hxxZVJWnFEHKbk+02gDLzMs0Q==
+X-Received: by 2002:a05:620a:4007:b0:797:e9f7:e924 with SMTP id af79cd13be357-798d26af852mr68059885a.65.1718310334648;
+        Thu, 13 Jun 2024 13:25:34 -0700 (PDT)
+Received: from fauth2-smtp.messagingengine.com (fauth2-smtp.messagingengine.com. [103.168.172.201])
+        by smtp.gmail.com with ESMTPSA id d75a77b69052e-441f2fcc468sm9379261cf.70.2024.06.13.13.25.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 13 Jun 2024 13:25:34 -0700 (PDT)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+	by mailfauth.nyi.internal (Postfix) with ESMTP id 283391200069;
+	Thu, 13 Jun 2024 16:25:33 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute5.internal (MEProxy); Thu, 13 Jun 2024 16:25:33 -0400
+X-ME-Sender: <xms:vFVrZgtyFF8uQGfrwFobOorS3vOPl_--u_9m9T3AhsbuxVq2xi72zw>
+    <xme:vFVrZteMRM4PasZI_VHT9e2_LY__Y8z3ZnNYO3RfHb23AFY2Z913Tln8h8msbAnfB
+    eYMqpyIJIRn0-XRBg>
+X-ME-Received: <xmr:vFVrZrx5Tan5t4KnPFuuL5T2vPasCz-gKubfZx0xAmf_NUnPbp19npTIFsk>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvledrfedujedgudegiecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpeffhffvvefukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpeeuohhq
+    uhhnucfhvghnghcuoegsohhquhhnrdhfvghnghesghhmrghilhdrtghomheqnecuggftrf
+    grthhtvghrnhephedugfduffffteeutddvheeuveelvdfhleelieevtdeguefhgeeuveei
+    udffiedvnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomh
+    epsghoqhhunhdomhgvshhmthhprghuthhhphgvrhhsohhnrghlihhthidqieelvdeghedt
+    ieegqddujeejkeehheehvddqsghoqhhunhdrfhgvnhhgpeepghhmrghilhdrtghomhesfh
+    higihmvgdrnhgrmhgv
+X-ME-Proxy: <xmx:vVVrZjMpjzd4Kew3lRZR2cVcvzPaSrroXMn4v74PLBzfBsascPkW1Q>
+    <xmx:vVVrZg8hQLget4rip9IgUQthGkKPjBxRow_6r2bsiNtYh8W7qBADYQ>
+    <xmx:vVVrZrUpvA1qg1wcNJfzvK9OScd1f1tINnwbxniD6g1bzVvlFGZ-_w>
+    <xmx:vVVrZpfxD8JRupYWW-fTnuQwYYUeIqAPuEbyfo7uRA5cNm_a5wxaeg>
+    <xmx:vVVrZidUvKWatd8WUPO9_xQZFbBUTxfkOpnCNTkVq6SSFMg-qIW2TX_D>
+Feedback-ID: iad51458e:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
+ 13 Jun 2024 16:25:32 -0400 (EDT)
+Date: Thu, 13 Jun 2024 13:25:02 -0700
+From: Boqun Feng <boqun.feng@gmail.com>
+To: rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-arch@vger.kernel.org, llvm@lists.linux.dev
+Cc: Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>,
+	Wedson Almeida Filho <wedsonaf@gmail.com>,	Gary Guo <gary@garyguo.net>,
+	=?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
+	Benno Lossin <benno.lossin@proton.me>,
+	Andreas Hindborg <a.hindborg@samsung.com>,
+	Alice Ryhl <aliceryhl@google.com>,
+	Alan Stern <stern@rowland.harvard.edu>,
+	Andrea Parri <parri.andrea@gmail.com>,	Will Deacon <will@kernel.org>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Nicholas Piggin <npiggin@gmail.com>,	David Howells <dhowells@redhat.com>,
+	Jade Alglave <j.alglave@ucl.ac.uk>,	Luc Maranget <luc.maranget@inria.fr>,
+	"Paul E. McKenney" <paulmck@kernel.org>,
+	Akira Yokosawa <akiyks@gmail.com>,	Daniel Lustig <dlustig@nvidia.com>,
+	Joel Fernandes <joel@joelfernandes.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,	kent.overstreet@gmail.com,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, elver@google.com,
 	Mark Rutland <mark.rutland@arm.com>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Puranjay Mohan <puranjay@kernel.org>,
-	Palmer Dabbelt <palmer@rivosinc.com>,
-	linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-	linux-trace-kernel@vger.kernel.org, llvm@lists.linux.dev,
-	Evgenii Shatokhin <e.shatokhin@yadro.com>
-Subject: Re: [PATCH 4/8] riscv: ftrace: align patchable functions to 4 Byte
- boundary
-Message-ID: <20240613190920.GB1272931@thelio-3990X>
-References: <20240613-dev-andyc-dyn-ftrace-v4-v1-0-1a538e12c01e@sifive.com>
- <20240613-dev-andyc-dyn-ftrace-v4-v1-4-1a538e12c01e@sifive.com>
+	Thomas Gleixner <tglx@linutronix.de>,	Ingo Molnar <mingo@redhat.com>,
+ Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+	"H. Peter Anvin" <hpa@zytor.com>,
+	Catalin Marinas <catalin.marinas@arm.com>,	torvalds@linux-foundation.org,
+ linux-arm-kernel@lists.infradead.org,	linux-fsdevel@vger.kernel.org,
+ Trevor Gross <tmgross@umich.edu>,	dakr@redhat.com
+Subject: Re: [RFC 2/2] rust: sync: Add atomic support
+Message-ID: <ZmtVngqKZ0arLzL-@boqun-archlinux>
+References: <20240612223025.1158537-1-boqun.feng@gmail.com>
+ <20240612223025.1158537-3-boqun.feng@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -57,76 +120,27 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240613-dev-andyc-dyn-ftrace-v4-v1-4-1a538e12c01e@sifive.com>
+In-Reply-To: <20240612223025.1158537-3-boqun.feng@gmail.com>
 
-Hi Andy,
+On Wed, Jun 12, 2024 at 03:30:25PM -0700, Boqun Feng wrote:
+[...]
+> diff --git a/arch/arm64/kernel/cpufeature.c b/arch/arm64/kernel/cpufeature.c
+> index 48e7029f1054..99e6e2b2867f 100644
+> --- a/arch/arm64/kernel/cpufeature.c
+> +++ b/arch/arm64/kernel/cpufeature.c
+> @@ -1601,6 +1601,8 @@ static bool
+>  has_cpuid_feature(const struct arm64_cpu_capabilities *entry, int scope)
+>  {
+>  	u64 val = read_scoped_sysreg(entry, scope);
+> +	if (entry->capability == ARM64_HAS_LSE_ATOMICS)
+> +		return false;
+>  	return feature_matches(val, entry);
+>  }
+>  
 
-On Thu, Jun 13, 2024 at 03:11:09PM +0800, Andy Chiu wrote:
-> We are changing ftrace code patching in order to remove dependency from
-> stop_machine() and enable kernel preemption. This requires us to align
-> functions entry at a 4-B align address.
-> 
-> However, -falign-functions on older versions of GCC alone was not strong
-> enoungh to align all functions. In fact, cold functions are not aligned
-> after turning on optimizations. We consider this is a bug in GCC and
-> turn off guess-branch-probility as a workaround to align all functions.
-> 
-> GCC bug id: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=88345
-> 
-> The option -fmin-function-alignment is able to align all functions
-> properly on newer versions of gcc. So, we add a cc-option to test if
-> the toolchain supports it.
-> 
-> Suggested-by: Evgenii Shatokhin <e.shatokhin@yadro.com>
-> Signed-off-by: Andy Chiu <andy.chiu@sifive.com>
-> ---
->  arch/riscv/Kconfig  | 1 +
->  arch/riscv/Makefile | 7 ++++++-
->  2 files changed, 7 insertions(+), 1 deletion(-)
-> 
-> diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
-> index b94176e25be1..80b8d48e1e46 100644
-> --- a/arch/riscv/Kconfig
-> +++ b/arch/riscv/Kconfig
-> @@ -203,6 +203,7 @@ config CLANG_SUPPORTS_DYNAMIC_FTRACE
->  config GCC_SUPPORTS_DYNAMIC_FTRACE
->  	def_bool CC_IS_GCC
->  	depends on $(cc-option,-fpatchable-function-entry=8)
-> +	depends on $(cc-option,-fmin-function-alignment=4) || !RISCV_ISA_C
+Yeah, this part was mis-committed, will remove it in the next version.
 
-Please use CC_HAS_MIN_FUNCTION_ALIGNMENT (from arch/Kconfig), which
-already checks for support for this option.
+Regards,
+Boqun
 
->  config HAVE_SHADOW_CALL_STACK
->  	def_bool $(cc-option,-fsanitize=shadow-call-stack)
-> diff --git a/arch/riscv/Makefile b/arch/riscv/Makefile
-> index 06de9d365088..74628ad8dcf8 100644
-> --- a/arch/riscv/Makefile
-> +++ b/arch/riscv/Makefile
-> @@ -14,8 +14,13 @@ endif
->  ifeq ($(CONFIG_DYNAMIC_FTRACE),y)
->  	LDFLAGS_vmlinux += --no-relax
->  	KBUILD_CPPFLAGS += -DCC_USING_PATCHABLE_FUNCTION_ENTRY
-> +ifeq ($(CONFIG_CC_IS_CLANG),y)
-
-Same here, please invert this and use
-
-  ifdef CONFIG_CC_HAS_MIN_FUNCTION_ALIGNMENT
-
-like the main Makefile does.
-
-> +	cflags_ftrace_align := -falign-functions=4
-> +else
-> +	cflags_ftrace_align := -fmin-function-alignment=4
-> +endif
->  ifeq ($(CONFIG_RISCV_ISA_C),y)
-> -	CC_FLAGS_FTRACE := -fpatchable-function-entry=4
-> +	CC_FLAGS_FTRACE := -fpatchable-function-entry=4 $(cflags_ftrace_align)
->  else
->  	CC_FLAGS_FTRACE := -fpatchable-function-entry=2
->  endif
-> 
-> -- 
-> 2.43.0
-> 
-> 
+[...]
