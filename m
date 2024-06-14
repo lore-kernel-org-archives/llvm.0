@@ -1,257 +1,175 @@
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2057.outbound.protection.outlook.com [40.107.93.57])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7564115CD4C
-	for <llvm@lists.linux.dev>; Fri, 14 Jun 2024 15:56:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.93.57
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718380565; cv=fail; b=qHLNRVeSP8pwN/HCZX+2JRDT/kDZNqC8364HdgXRyLBD0hSAWu/8AzefdO3wcw9/iIHuqsn33S4oDN9jqnpKlGo7kOrHjnTLSpigNP+ATTECfCmgaKVuPALfhIs0vUJX7nhXiDtl6ZC6LcxMAc+Ri49iVyLjX/sgt2KWm87oLXY=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718380565; c=relaxed/simple;
-	bh=VbhHlAwaThUdrOp7MOOLuuh2XVC5IGEMnkQJiHXRcxY=;
-	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=C2nNH1Lzrw2h4ZFmRfAeG9VnuIgMTFJS8gkh30HqK8uLclcg4LTloOtT1CZFHfQNO2dPEMOsV/qRiemgpnZDeTd8RYy9JZlFwLx2vUqE2z+GjLozF5mPRUdQlYwpiT3WB3uMS83PIIZ8LbsjUbsf2DWbomRlEkiWygEj8dETt4A=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=LT6u8QFS; arc=fail smtp.client-ip=40.107.93.57
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 149282E83F;
+	Fri, 14 Jun 2024 16:03:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1718380991; cv=none; b=BW4dG0Av5dOb344dAvhA9vWRytar9vptN996jqxXCOPv0MUxZGayOFqCQ2+v5h2xee4/opFGtMNd3ag9J4eCxMc5EVXz3ZopS6c1VnaAK5dQaUr62HUh6grJ0OWYkF/4IEUZziSnZEPQJF31mQ2atsdlyJ2Uwzyxrt/URrpn0CY=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1718380991; c=relaxed/simple;
+	bh=9A/jqOqBS9MCf4eOyP7DggQr5hwvAQA+gRex7aJt6Gs=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=cxFibAHCsU4Ov6hc/7Vjk9d+MFkezxSO1XaXQRMMrSSmoCMaeTkGmw9KinzzzKrCLhTFZ6p358zQZeA9d8b3MjUqNbc9X43zO4NoaPaJRRqL/8A9vd0pYgKRxbo1wWMJfyDBP0FZsjQ6CCOsd09YyaabycuDHvnMJX3qBdyzYAs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=W9cTosgg; arc=none smtp.client-ip=198.175.65.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="LT6u8QFS"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=AvesrJbfcEQjagUHHx/wrIBT+ZIo0p23JJxJ5/0FkAmNbfTCgIbeOUSkQi/7DLN9q+E/+l0GcQyrGQFDu1ubyZISINZfkk4Pb/KhpFjUE6mUXkVNxPSNWjXuq8gS4jnRvjDODU+9oBDuWyAev6CXC/00LMgST0FYpe3RS/Kz2RS9Q8KH9xHbQZynHGAnBcYQUDu7aelhzPr6i/dzT7ticCNe9f4lZ6as5mVVkldgUQvKarBy3t/oDbJh//+7p7XZiO5rOLjcvs7TMiuGpy0rJ+5xtM3mILBnR5VSO+wLxFFmJ7yQhFGD1XMRbmQ68oQ72n2WXfuu//ovjCMS890XZw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=mdQknaGDFOMocVoe4+tnoaeHFsAs1eOZOLLCLTBovBQ=;
- b=ZRHUY8itJQBExmOKiWaRUl+uiS4FaS4xseJJDgESwXAjEM7xLu+mpNZPPYATp6RgVYPnjmweRNA3LnDOak/LAzkRrtGGaXQsDZZOMJDGoYcqyq9PXh3WIZ+PSevbrydlGbVPJpKnOJuMyboGrFa3uVszjie3h2w+lKVpcEYeppina6KgDO5lyJDm+RjjPysmObn7w1Y13D96vInRqCqz1ROMXR5xRdra6bf5u6Vqveez/JgC6h8ElzHyhY7NSQefwDoPWffLIn8EZDbDoWGv1L83LGpBCgYthLS32jLZ/ultLX/r+bh7lveVqzMsUrSIM2ZXMVqBoK/nP1OE5FlIHQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=mdQknaGDFOMocVoe4+tnoaeHFsAs1eOZOLLCLTBovBQ=;
- b=LT6u8QFSmJqcK2WMvyvMYHe8oOVs7mTu7Td5iTfEO+QaGhZ+J6FCAF6V0RccSPw/hmbbN6FWC4vdGat9tq7FLA9KdtrdYLF1Yk03eli/3fWBv8q7SPJvBbv3IAsUnvb5BJ6fy0XHNL4f2bsJ3+rtokSlUsGO/Y1PxcThJ1RDjyE=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from CO6PR12MB5427.namprd12.prod.outlook.com (2603:10b6:5:358::13)
- by CY8PR12MB7489.namprd12.prod.outlook.com (2603:10b6:930:90::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7677.26; Fri, 14 Jun
- 2024 15:56:00 +0000
-Received: from CO6PR12MB5427.namprd12.prod.outlook.com
- ([fe80::1c2f:5c82:2d9c:6062]) by CO6PR12MB5427.namprd12.prod.outlook.com
- ([fe80::1c2f:5c82:2d9c:6062%7]) with mapi id 15.20.7677.024; Fri, 14 Jun 2024
- 15:56:00 +0000
-Message-ID: <c11cc0b7-7504-495b-a5c2-a907666895ea@amd.com>
-Date: Fri, 14 Jun 2024 11:55:56 -0400
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] drm/amd/display: Increase frame-larger-than warning limit
-To: Nathan Chancellor <nathan@kernel.org>,
- Palmer Dabbelt <palmer@rivosinc.com>
-Cc: alexander.deucher@amd.com, sunpeng.li@amd.com, Rodrigo.Siqueira@amd.com,
- christian.koenig@amd.com, Xinhui.Pan@amd.com, airlied@gmail.com,
- daniel@ffwll.ch, Qingqing.Zhuo@amd.com, hamza.mahfooz@amd.com,
- chenhuacai@kernel.org, amd-gfx@lists.freedesktop.org,
- dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
- llvm@lists.linux.dev
-References: <20240603222948.GB1802995@thelio-3990X>
- <mhng-f1fc5ef0-9e72-4b12-9a28-145bbc8938d8@palmer-ri-x1c9a>
- <20240613222225.GA1849801@thelio-3990X>
-Content-Language: en-US
-From: Harry Wentland <harry.wentland@amd.com>
-In-Reply-To: <20240613222225.GA1849801@thelio-3990X>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: YQZPR01CA0017.CANPRD01.PROD.OUTLOOK.COM
- (2603:10b6:c01:85::13) To CO6PR12MB5427.namprd12.prod.outlook.com
- (2603:10b6:5:358::13)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="W9cTosgg"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1718380989; x=1749916989;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=9A/jqOqBS9MCf4eOyP7DggQr5hwvAQA+gRex7aJt6Gs=;
+  b=W9cTosggterU745xQNLH4OlzLgCk8yUvscVjVGWz+n8d8QnTLpqgayG4
+   I2iRygwl5ZJ4b3uhVl6wEHPTT3bGg8T9cH6nVq8EJoOp79E99eqRIm0C4
+   becuezRPHPqBIAaQrrPLqcY7lTx0+qe93DxR9fXYuvm+sGfm6cuuqDOPi
+   24VZ84WaTu0SSsp2CVZMjM6ySYM1I34Fcp453XfLtcY686kXTuxCeFZzA
+   fIPzF9JuPqPoKhJgaaUa717DsbJhDfRXpPcw0B0wGRDMzfPQoFmYZdT+2
+   GDHkywwq1rX2b02sH+M8PiZ+hNzer5MfvR09yO/uWyRojM/NkX4NIG7uV
+   A==;
+X-CSE-ConnectionGUID: SqXFts4LSN6ieZoZAGuwzw==
+X-CSE-MsgGUID: 3s+3vVToQUSd+X5WDGrhRQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11103"; a="15398683"
+X-IronPort-AV: E=Sophos;i="6.08,238,1712646000"; 
+   d="scan'208";a="15398683"
+Received: from fmviesa009.fm.intel.com ([10.60.135.149])
+  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jun 2024 09:03:08 -0700
+X-CSE-ConnectionGUID: hMcYBMsRRaWhPzBhSoCGTw==
+X-CSE-MsgGUID: jmqHEHkZTxizZcPWWKVlOw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.08,238,1712646000"; 
+   d="scan'208";a="40642374"
+Received: from lkp-server01.sh.intel.com (HELO 9e3ee4e9e062) ([10.239.97.150])
+  by fmviesa009.fm.intel.com with ESMTP; 14 Jun 2024 09:03:07 -0700
+Received: from kbuild by 9e3ee4e9e062 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1sI9OK-0001TW-36;
+	Fri, 14 Jun 2024 16:03:04 +0000
+Date: Sat, 15 Jun 2024 00:02:16 +0800
+From: kernel test robot <lkp@intel.com>
+To: James Morse <james.morse@arm.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [morse:mpam/snapshot/v6.10-rc1 98/114]
+ drivers/platform/arm64/mpam/mpam_resctrl.c:350:14: warning: result of
+ comparison of constant 65536 with expression of type 'u16' (aka 'unsigned
+ short') is always false
+Message-ID: <202406150007.xsDBcEKC-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CO6PR12MB5427:EE_|CY8PR12MB7489:EE_
-X-MS-Office365-Filtering-Correlation-Id: f71cdeeb-e9be-4067-53b7-08dc8c8a7caa
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230037|366013|1800799021|376011;
-X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?L2x5QndPaGVMVUlRdG4rL3BGNUozY1JFT0VzeVV5RXdveGZpR1gyNUNnVXlP?=
- =?utf-8?B?UXhCSGhGR0kxRjNtZW51WENqd00vdzg2VXR4S2VySnlSZFRyQUJOV0Jpb3A5?=
- =?utf-8?B?V3hsbHRhemtzSGFjZDlrWTNpcFBzeFhWWHg3a3lsYkx0Rm5uYlVvUEk0cVhj?=
- =?utf-8?B?OGpBYS9VeG1BUEQycUJNZ3B6d3JzS0xLd2xnUUEwbTVWRmhaNmx3aCtmaGRs?=
- =?utf-8?B?QTVLOGpqRjBaaWRvVUR1b0gySFJseVQ0WlZTUzl6OG5hdys1VHVlc2RxckF1?=
- =?utf-8?B?MjM0WGVKTHFnTTBjWGR6NExPSTA5WTFEK1RQOTV0Y215MHhDYlh6YkRvaVZW?=
- =?utf-8?B?YjFQZmJ0SmJmbFV6bVpwbnNUNlQxR3dMbUwwTDdUeHBrZnZBN2p2UUdIRzB0?=
- =?utf-8?B?Tk5YV3QxT0NxNExMZjhSYzFnamYva3N1UUwyb0NENnRFSmNDWklDV2hqejdG?=
- =?utf-8?B?dmJza3BPV0tBV0E0R2d2RHZqVGY5VmxEa2dUaDY5RUZxb0ZFV1RhL2dKeWc2?=
- =?utf-8?B?Tng2eTZKZ3pmTGdWMkhsQ05VWUVTVlA0azl4eXdZN2FlY1ZVUlI1OUt3QzZX?=
- =?utf-8?B?Z1FtMnZtajF1M1pVOVF0QlFIMnJoNHdxSk9FMDlkQ3MwUWMyNWltYURYQWRq?=
- =?utf-8?B?aVYwelpFbUN5ME5LYUZoeHVsQkpBMlV1b25HUnNzZXJHd0hwajcrQVo4R0ZC?=
- =?utf-8?B?WkVVOHNRSUQ0WCtzWHFMU3JMcFhDcjVLaWJhZ2FMQVp5cWUvQmdKK25Md09y?=
- =?utf-8?B?RUpiU1djOG5ldlVRT2tzSFQ4dWhkNXZDMVVhT1lZS2NSRTJ0enFmcm54WCtp?=
- =?utf-8?B?c1czRkF6engyMHFNc3ZESnIvcFloOVJHL004N3U4QTA3Vjc1UlhzTWRpc1g4?=
- =?utf-8?B?dTBjR1M3MnlwRitqVmcrSHZGaDRWMGJaM2FCcFZGeU14emh5dlVGQlZ0c0VR?=
- =?utf-8?B?VWJ1RUN1SGxjNVRJN084RnR0SDUzbHNDTlZCbWQreFRreldIaGxDY1NpNmN6?=
- =?utf-8?B?QVBBQTFmd2owY1FwN21rcGtOakdYaDh5TDFJdXBCc09xZmVsbkRmK1lUcjRv?=
- =?utf-8?B?dnpTeVVPZmx1ZkRFZ0hudWlnc0dWcjlzK2p0bWlZTi9KUnY4R3diLzVnVDRm?=
- =?utf-8?B?a2NsaUxwYTFzTFRZOGx1dW5qMlVLU0xNWTB4ODBGQVdOUy85ZHd2Vm1TZzN5?=
- =?utf-8?B?Y3RIR001NnlvMm90N1EyQUxMTmNnbVdLeC9aM1VyZnB1WENnOXkwQk5jOG5y?=
- =?utf-8?B?UEtTeHZqMEhaODhvamFMQUgyNU1NYVYwTHNHeCtGNi9FbUkrMitCTk4vTGpk?=
- =?utf-8?B?eG8xZkVvMG5rcXZyaUpKZ3VITjhROTNEdkNMT1F4N1Zyc253dEo5cVYxK0NO?=
- =?utf-8?B?bWQreFhTUWVkemsyVTNqRE5ZM05PazRvclRUNG9BU1hLUDd3aEJ3M25iVFFE?=
- =?utf-8?B?SUJMV2EvZHNDMndPdkhjSnF4SFBtOS8raHZPQ3VKVWlIaUNxS3EzenE5dHkx?=
- =?utf-8?B?T1lObjB6dGJCMkV3d2YwRGNNaWx4SWZDQlFNUk1lWkVybXkyalhUem1ZZXR3?=
- =?utf-8?B?MHlIREViV0ZkMW1DSEk1aUNOWDJxc3YvbVlwWkNNOUk0NTdNZG9jZXZTZEJy?=
- =?utf-8?B?NWVvUW11aG41TDREbWRFU0g2Z3YvSTBna1dhdDEwTDF4bUFrT2JFNVNUWURD?=
- =?utf-8?B?d29XZXo1dmlmQWVudEZuZzd0ZDVRNTVPR1pkVWNMUWcycEo5amxDV2lnPT0=?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO6PR12MB5427.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230037)(366013)(1800799021)(376011);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?M3dRK3p2YUxpVDFVT29sR1BwSHBVUldJWStnMHZSYlZ4cm1vbFpTWk4xaU9W?=
- =?utf-8?B?azBCdUtxQzBwNVJIU3dPL3lCbEpKUVdTR3ZTeXQxVjdha3B4ZWg4U0szVGVx?=
- =?utf-8?B?THNMOGN6b05DdkIyN0IyVUdtamtib1RsMHdvK2lhRWpLenlCeTBzdmFVbk1Z?=
- =?utf-8?B?c01xWmJJSmFoSlJSTEhNZnhRT1dtK2VTK0hKREZuOXJwenEwOC8rQ1RlVko0?=
- =?utf-8?B?NGtSS3ZFcXZLSmIzZXBvRmhiRVNsNDJRbFFWa3lETVFWaU9LMk9nUEcxU2F5?=
- =?utf-8?B?SG4zZUdLK1VBbEVnSjlYcWFBUlVHQmdrd21yR09kM2xNTFBKemYzblZnUDQx?=
- =?utf-8?B?NDNQK0Z1UGllSTFVTE5JdHVqZytjWVJGdE1RU1cyVWhzcytocklXU0ZIbzRR?=
- =?utf-8?B?TVo2aFhpU2dOQjdiVW00NXIyQ04rSHJxek02NkEvaTJuR29tQjZJRVpZc0tN?=
- =?utf-8?B?ajQvT1dJeXlWcDh5a0VvS3hEZFVaY3llVy95OTlmdWxXVHR5R3hGODNEU3Fr?=
- =?utf-8?B?Z3BBV1hXSGNoWjJsaTIyR0xGQ1JPR25RTU1TK3lkYzZsTldKQUErMHhxTHBy?=
- =?utf-8?B?em1FZ2JKYjlyWU82ZUJPaVBiUnFvR1BRQXRLMllHN0RobHl4RFJMaHBzWTVM?=
- =?utf-8?B?ZW54d2RvNVFmSjZtWkZSWGtyczMvN252WlhVWGZIVk5QbGk2NWhoU290bmg2?=
- =?utf-8?B?MTNHRE95cG1ZandaWWZiSHZQR01abFB2dm10bEQrbkFON0lZM01kbXFGM1hJ?=
- =?utf-8?B?bUR5aVhncGpna2Y3UjZybDRmNmwxYTFxVSszdjdGcWpQWWV2RFZZYjMrWXZ0?=
- =?utf-8?B?LzZ6LzhnRVRtVlVTaDE0RUViNThvdjFoYkd0TFFvQWRobG1pbitpWUZKQkVT?=
- =?utf-8?B?SlpTeUpOeGFYYzg4R0hyZ3lJeFI2VDRKbFgzVDJGOHI3K3hUMm1xM1Bqck1y?=
- =?utf-8?B?dU5wT1hNRVRlSUpFNmhGU3VlQ1BXa1pwSW1CUUFWbVo4eDlJVUE1Z3h5ZzFw?=
- =?utf-8?B?RzFhUHMyUkdCMnV1QWdkaUJKbEdCYlM3TGFmTkloMmdIK21zdXNhL3FsZXYr?=
- =?utf-8?B?czNCRldianYzb0NXdCtvSGYwT0xXdkl3b0ZIU1dBSytkaW5nRUhSQmhMMW1Z?=
- =?utf-8?B?RElvSk5sSk45UXJkcDhZY08wZVpZTWIrTHRXSHAwNE1ZbE5XYlJRR3d5Zi9l?=
- =?utf-8?B?eHFmWDJ6TlEycFY5Tnl5WE5IcStvUGlsMHZCalZ5YlhIM1VXZDhFWlVocUlx?=
- =?utf-8?B?VTFqTVkwbDV1TEFSNFVXVVRyWkxvQVJtdDdoTkJvbE1obUpXNSt3cWVZRlhi?=
- =?utf-8?B?UDA4MEpaOFFVZTNSYWZBZFVnUDFZUUNmaXBQVW44VFFvcE9SN0ZjQ2JoUmN2?=
- =?utf-8?B?Ump2TmRwa1c4RUljQWwxSC9iU2hjNklzVE9aNlZpdTY4YUZoWCtraktXSk11?=
- =?utf-8?B?aDQreE42MFJCL0RGK2JHMTl4MkRwcEV6eE5jWjdUdUdRajJYSHBSajNXVGVJ?=
- =?utf-8?B?NDJrd3I3cVo4dnAxcXVDY05HK2wwZmkvdTRwM2RjNHhFeitWVkJ0ZUFSK3Zq?=
- =?utf-8?B?cWpPdlZMWm1SN1REN1BleDVSaEhJL05LNENDVkxrMldWd3dxQW9NaDhzT2Vw?=
- =?utf-8?B?bkNwbVdiVk5UcmxMelhjWm9zZGI1MWNwWDNJYVFZandHS2pmUllHZmJuMFVs?=
- =?utf-8?B?cFJWMU0rZUlzMHlla1pGZVZPOXRMNFlVMGlDS0NyUE04alIzV2dCMFpPaE1i?=
- =?utf-8?B?MGg5S0FWVVBETzdOdlV0VXBMVXEwUmtuYjJVRUhuREtWeUdHL3N2SjltNHBo?=
- =?utf-8?B?Y3FybFpYbFR4QVpQL1VQMXd4M1dtVnkyWFU4MzYxSWQvTkZOYTRxQUpjUkpX?=
- =?utf-8?B?d1RqMXo3emhraFdIc3NTTGZWWGZSZC9BMWtyZTRFUlA4UFcweER4OEw0Qklr?=
- =?utf-8?B?R045ZHJ0UkZ6Y1kxQnd0enVReC85aUlRNzNHbjhlSlNpVlN3ZUlkUGp0MCth?=
- =?utf-8?B?K1Y4RzllTnpTaWxMcW15K2wrZ2pLSVN0LzVWRDhDUExIV1hWZ1hHN1NwMjE5?=
- =?utf-8?B?K0pVM2owazRDUVJlTXIvM2RORlFWRXlKaU4xREo3UFlmR2gzcjl5TndtRExL?=
- =?utf-8?Q?aMQS9syDaMlHtWEhq1XDzUEWL?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: f71cdeeb-e9be-4067-53b7-08dc8c8a7caa
-X-MS-Exchange-CrossTenant-AuthSource: CO6PR12MB5427.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Jun 2024 15:56:00.7065
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 1WtEYdh4UtakF4v/RXGr1UyYnjvu8eY3aaGiYy1uCVpzoH5IgWLArifI4k4siHu7wdrIvYlAXjoDIo1VehnW2w==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY8PR12MB7489
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/morse/linux.git mpam/snapshot/v6.10-rc1
+head:   d9ba67a1a8dc6551a0b3254a8f2ee9993ad17957
+commit: 3b87a689f7311e64ff9a94ca9d22fb33aefcb372 [98/114] arm_mpam: resctrl: Add resctrl_arch_rmid_read() and resctrl_arch_reset_rmid()
+config: arm64-allmodconfig (https://download.01.org/0day-ci/archive/20240615/202406150007.xsDBcEKC-lkp@intel.com/config)
+compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project 78ee473784e5ef6f0b19ce4cb111fb6e4d23c6b2)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240615/202406150007.xsDBcEKC-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202406150007.xsDBcEKC-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+   In file included from drivers/platform/arm64/mpam/mpam_resctrl.c:6:
+   In file included from include/linux/arm_mpam.h:7:
+   In file included from include/linux/acpi.h:39:
+   In file included from include/acpi/acpi_io.h:7:
+   In file included from arch/arm64/include/asm/acpi.h:14:
+   In file included from include/linux/memblock.h:12:
+   In file included from include/linux/mm.h:2253:
+   include/linux/vmstat.h:500:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     500 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     501 |                            item];
+         |                            ~~~~
+   include/linux/vmstat.h:507:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     507 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     508 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/vmstat.h:514:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     514 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+   include/linux/vmstat.h:519:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     519 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     520 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/vmstat.h:528:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     528 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     529 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+>> drivers/platform/arm64/mpam/mpam_resctrl.c:350:14: warning: result of comparison of constant 65536 with expression of type 'u16' (aka 'unsigned short') is always false [-Wtautological-constant-out-of-range-compare]
+     350 |         if (cfg.mon == USE_RMID_IDX)
+         |             ~~~~~~~ ^  ~~~~~~~~~~~~
+   6 warnings generated.
 
 
+vim +350 drivers/platform/arm64/mpam/mpam_resctrl.c
 
-On 2024-06-13 18:22, Nathan Chancellor wrote:
-> Hi Palmer (and AMD folks),
-> 
-> On Tue, Jun 04, 2024 at 09:04:23AM -0700, Palmer Dabbelt wrote:
->> On Mon, 03 Jun 2024 15:29:48 PDT (-0700), nathan@kernel.org wrote:
->>> On Thu, May 30, 2024 at 07:57:42AM -0700, Palmer Dabbelt wrote:
->>>> From: Palmer Dabbelt <palmer@rivosinc.com>
->>>>
->>>> I get a handful of build errors along the lines of
->>>>
->>>>     linux/drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn32/display_mode_vba_32.c:58:13: error: stack frame size (2352) exceeds limit (2048) in 'DISPCLKDPPCLKDCFCLKDeepSleepPrefetchParametersWatermarksAndPerformanceCalculation' [-Werror,-Wframe-larger-than]
->>>>     static void DISPCLKDPPCLKDCFCLKDeepSleepPrefetchParametersWatermarksAndPerformanceCalculation(
->>>>                 ^
->>>>     linux/drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn32/display_mode_vba_32.c:1724:6: error: stack frame size (2096) exceeds limit (2048) in 'dml32_ModeSupportAndSystemConfigurationFull' [-Werror,-Wframe-larger-than]
->>>>     void dml32_ModeSupportAndSystemConfigurationFull(struct display_mode_lib *mode_lib)
->>>>          ^
->>>
->>> Judging from the message, this is clang/LLVM? What version?
->>
->> Yes, LLVM.  Looks like I'm on 16.0.6.  Probably time for an update, so I'll
->> give it a shot.
-> 
-> FWIW, I can reproduce this with tip of tree, I was just curious in case
-> that ended up mattering.
-> 
->>> I assume
->>> this showed up in 6.10-rc1 because of commit 77acc6b55ae4 ("riscv: add
->>> support for kernel-mode FPU"), which allows this driver to be built for
->>> RISC-V.
->>
->> Seems reasonable.  This didn't show up until post-merge, not 100% sure why.
->> I didn't really dig any farther.
-> 
-> Perhaps you fast forwarded your tree to include that commit?
-> 
->>> Is this allmodconfig or some other configuration?
->>
->> IIRC both "allmodconfig" and "allyesconfig" show it, but I don't have a
->> build tree sitting around to be 100% sure.
-> 
-> Yeah, allmodconfig triggers it.
-> 
-> I was able to come up with a "trivial" reproducer using cvise (attached
-> to this mail if you are curious) that has worse stack usage by a rough
-> factor of 2:
-> 
->   $ clang --target=riscv64-linux-gnu -O2 -Wall -Wframe-larger-than=512 -c -o /dev/null display_mode_vba_32.i
->   display_mode_vba_32.i:598:6: warning: stack frame size (1264) exceeds limit (512) in 'DISPCLKDPPCLKDCFCLKDeepSleepPrefetchParametersWatermarksAndPerformanceCalculation' [-Wframe-larger-than]
->     598 | void DISPCLKDPPCLKDCFCLKDeepSleepPrefetchParametersWatermarksAndPerformanceCalculation() {
->         |      ^
->   1 warning generated.
-> 
->   $ riscv64-linux-gcc -O2 -Wall -Wframe-larger-than=512 -c -o /dev/null display_mode_vba_32.i
->   display_mode_vba_32.i: In function 'DISPCLKDPPCLKDCFCLKDeepSleepPrefetchParametersWatermarksAndPerformanceCalculation':
->   display_mode_vba_32.i:1729:1: warning: the frame size of 528 bytes is larger than 512 bytes [-Wframe-larger-than=]
->    1729 | }
->         | ^
-> 
-> I have not done too much further investigation but this is almost
-> certainly the same issue that has come up before [1][2] with the AMD
-> display code using functions with a large number of parameters, such
-> that they have to passed on the stack, coupled with inlining (if I
-> remember correctly, LLVM gives more of an inlining discount the less a
-> function is used in a file).
-> 
-> While clang does poorly with that code, I am not interested in
-> continuing to fix this code new hardware revision after new hardware
-> revision. We could just avoid this code like we do for arm64 for a
-> similar reason:
-> 
-> diff --git a/drivers/gpu/drm/amd/display/Kconfig b/drivers/gpu/drm/amd/display/Kconfig
-> index 5fcd4f778dc3..64df713df878 100644
-> --- a/drivers/gpu/drm/amd/display/Kconfig
-> +++ b/drivers/gpu/drm/amd/display/Kconfig
-> @@ -8,7 +8,7 @@ config DRM_AMD_DC
->  	depends on BROKEN || !CC_IS_CLANG || ARM64 || RISCV || SPARC64 || X86_64
->  	select SND_HDA_COMPONENT if SND_HDA_CORE
->  	# !CC_IS_CLANG: https://github.com/ClangBuiltLinux/linux/issues/1752
-> -	select DRM_AMD_DC_FP if ARCH_HAS_KERNEL_FPU_SUPPORT && (!ARM64 || !CC_IS_CLANG)
-> +	select DRM_AMD_DC_FP if ARCH_HAS_KERNEL_FPU_SUPPORT && (!(ARM64 || RISCV) || !CC_IS_CLANG)
->  	help
->  	  Choose this option if you want to use the new display engine
->  	  support for AMDGPU. This adds required support for Vega and
-> 
+   321	
+   322	int resctrl_arch_rmid_read(struct rdt_resource	*r, struct rdt_domain *d,
+   323				   u32 closid, u32 rmid, enum resctrl_event_id eventid,
+   324				   u64 *val, void *arch_mon_ctx)
+   325	{
+   326		int err;
+   327		u64 cdp_val;
+   328		struct mon_cfg cfg;
+   329		struct mpam_resctrl_dom *dom;
+   330		u32 mon = *(u32 *)arch_mon_ctx;
+   331		enum mpam_device_features type;
+   332	
+   333		resctrl_arch_rmid_read_context_check();
+   334	
+   335		dom = container_of(d, struct mpam_resctrl_dom, resctrl_dom);
+   336	
+   337		switch (eventid) {
+   338		case QOS_L3_OCCUP_EVENT_ID:
+   339			type = mpam_feat_msmon_csu;
+   340			break;
+   341		case QOS_L3_MBM_LOCAL_EVENT_ID:
+   342		case QOS_L3_MBM_TOTAL_EVENT_ID:
+   343			type = mpam_feat_msmon_mbwu;
+   344			break;
+   345		default:
+   346			return -EINVAL;
+   347		}
+   348	
+   349		cfg.mon = mon;
+ > 350		if (cfg.mon == USE_RMID_IDX)
+   351			cfg.mon = resctrl_arch_rmid_idx_encode(closid, rmid);
+   352	
+   353		cfg.match_pmg = true;
+   354		cfg.pmg = rmid;
+   355	
+   356		if (cdp_enabled) {
+   357			cfg.partid = closid << 1;
+   358			err = mpam_msmon_read(dom->comp, &cfg, type, val);
+   359			if (err)
+   360				return err;
+   361	
+   362			cfg.partid += 1;
+   363			err = mpam_msmon_read(dom->comp, &cfg, type, &cdp_val);
+   364			if (!err)
+   365				*val += cdp_val;
+   366		} else {
+   367			cfg.partid = closid;
+   368			err = mpam_msmon_read(dom->comp, &cfg, type, val);
+   369		}
+   370	
+   371		return err;
+   372	}
+   373	
 
-This makes sense to me. I'll be happy to provide an RB if you send a patch.
-
-Harry
-
-> [1]: https://lore.kernel.org/20231019205117.GA839902@dev-arch.thelio-3990X/
-> [2]: https://lore.kernel.org/20220830203409.3491379-1-nathan@kernel.org/
-> 
-> Cheers,
-> Nathan
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
