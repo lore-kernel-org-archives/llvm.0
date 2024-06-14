@@ -1,60 +1,121 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oo1-f47.google.com (mail-oo1-f47.google.com [209.85.161.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 158364C8B;
-	Fri, 14 Jun 2024 13:45:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6DB01C2C6
+	for <llvm@lists.linux.dev>; Fri, 14 Jun 2024 14:18:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718372707; cv=none; b=ctFaVaOYFc0l1R23jj8nLvlC74aTqWHV3P2vJ/zE5PLmr1lURIF2atfbHKB01ux+q7VF3nIM05RNhIiOtE8jZN0amMTcblBB1MNtiWyvLdIXfonujnhWRai84zuujOuP9ilMaqiQTlYmmQcMjbXUvxhDCz+mKhJvB/Su3HvH+fY=
+	t=1718374716; cv=none; b=iSzwtV5xsQ082UBVLb5o/U/Zcx5/KdoqhvHXFQ9CQaOp+CKVex0YWiCAsh9knP7lhVMaqDFBPNeo80Dkjz9Gwqr24db1qDeb3SSQie2GIpEgcgireiQ2RY8X/NR+n2P/Vv09Wzr8GFH+I/p648YTsk6hs9+VSp4bk3kyO97r+eU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718372707; c=relaxed/simple;
-	bh=XVVxIjRw8aXnuO07fuMvjc8nOL4O5SMnmgXVfzEFIOc=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=Zu7esOxT2LUyB1vSUSVyKdN1/E1vCklIbwT8d7R4KHSmZDuxXYgrzTe1f3YiBDf7wg2K+JhGK8/jL7J6AA+AapQjZLE5sekNnbpgHBYo7ocpO9ZTrFKmAD5weLR2UCXEemYcg/y+EC3dNNgiledwtq0DX4uBzKcN2CM9MS0L/M0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=IxRRkXK7; arc=none smtp.client-ip=192.198.163.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1718374716; c=relaxed/simple;
+	bh=AzsmAzBa3FyhGwMJs7CFC6ijvLpC7MBVBXc1nB27RF8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=mi8una/Vv/1K0S0ybV4V1fZ8os133RsAfgRj+gB3aqgV/5UUK97KZcT0flH7A4Z1xX1UlZKSsr5/o8S80f/xDv5w1/5TCqjUJ1WVKcH8g9Bi0N+hrJvRwLm86nKZ4tW9ryfXeLpEHMvR8FmYnJNCWHRMmBChRHsp+nfVP9wSEfg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=B1+joMPm; arc=none smtp.client-ip=209.85.161.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="IxRRkXK7"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1718372705; x=1749908705;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=XVVxIjRw8aXnuO07fuMvjc8nOL4O5SMnmgXVfzEFIOc=;
-  b=IxRRkXK7vR07l5s9bQbcM0LINoUT1/JDixdJWEAE61GSWu48BBk16LWW
-   stsBUpzNYw+7Lmyzmi6VTkBx9l3/UfGG+NArMwcN7UeziCaDAz9HEKDry
-   LQ1UBF8i4OtKRn90qkt4Y7/4ajtZLo+7KirKCgmjobu2VtcSwn7eByBRv
-   rtCMhYitWDaNVG9gvXTCCi4INH0caYWw1f60ABQEbtfjMT4Ig2aQi0F2k
-   tWzLr/50nMTSRpIioYlF4QOKYiISqFoe/4wYKkn+ecw6R5YJre+VMh0v2
-   HhjRdzUTtANXkaKJMPraSZSORSoLLEGDP/zjcZb+TI61HiG1ppe2y9GEv
-   w==;
-X-CSE-ConnectionGUID: jHBg2inwRoWgwBwQH/bnAA==
-X-CSE-MsgGUID: wHKWcO/RRlOmcdF6r71ppA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11103"; a="18178295"
-X-IronPort-AV: E=Sophos;i="6.08,237,1712646000"; 
-   d="scan'208";a="18178295"
-Received: from orviesa010.jf.intel.com ([10.64.159.150])
-  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jun 2024 06:45:04 -0700
-X-CSE-ConnectionGUID: yBmByUFKTdC+Ch3m8ZoOqw==
-X-CSE-MsgGUID: sh1KYdidSzO3tgwB33fSqw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.08,237,1712646000"; 
-   d="scan'208";a="40430738"
-Received: from lkp-server01.sh.intel.com (HELO 9e3ee4e9e062) ([10.239.97.150])
-  by orviesa010.jf.intel.com with ESMTP; 14 Jun 2024 06:45:03 -0700
-Received: from kbuild by 9e3ee4e9e062 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1sI7Ei-0001MZ-2H;
-	Fri, 14 Jun 2024 13:45:00 +0000
-Date: Fri, 14 Jun 2024 21:44:45 +0800
-From: kernel test robot <lkp@intel.com>
-To: James Morse <james.morse@arm.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [morse:mpam/snapshot/v6.10-rc1 65/114]
- drivers/platform/arm64/mpam/mpam_devices.c:318:17: warning: result of
- comparison of constant 18446744073709551615 with expression of type 'u32'
- (aka 'unsigned int') is always false
-Message-ID: <202406142148.278A1iXo-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="B1+joMPm"
+Received: by mail-oo1-f47.google.com with SMTP id 006d021491bc7-5bad217c51aso1185468eaf.1
+        for <llvm@lists.linux.dev>; Fri, 14 Jun 2024 07:18:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1718374714; x=1718979514; darn=lists.linux.dev;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:feedback-id:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=+sjDmlk8xndLaxRABwpUKDEvjWtvENBQR7ofiVHlQf8=;
+        b=B1+joMPm9ZeZcwDCPGBg100u/OdaCQqAD0gAayUAE3iQBHVIYvZmGMfcL5q1vQRaeQ
+         0/geKot9cz+Z0sOk0At9HbW5/adxKLyoKiVRSCFAur8LtYZjkW6ZmizXC732RG6ypUKv
+         l/Cj7IUoIp+FHR2qMYsMVRyCrLOVhU4xw5P4jlkDP0nS/O/PLYUB57MWAAhfoMy3pcO9
+         AGZf4aNxMZpbxah5riAUuI/herpT6DakDTEyKwd9GAJto/45eLN475l/++PIYPnL3g7C
+         sVGaH2ijVLOygftvxfc+oHuBpiTVsL5yyB17ad8zvaBxFU+zSB5dk4dFQe6wzrjG4Xo1
+         zzig==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1718374714; x=1718979514;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:feedback-id:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=+sjDmlk8xndLaxRABwpUKDEvjWtvENBQR7ofiVHlQf8=;
+        b=qesKiV2br875+P0BUKsbbRNb5lp2VGXMMxnPi+Cu+n7nb/kmm25y28zYY8SuNRHPut
+         TwCo1MtswoVoW8xfCREyeN1oBW4du/O3OvtfqiRWpp1gq1Vd3EejCNRtbgrk0RRYDCJy
+         A7faIHMYsICa1HYckWvSvyyoXF8sCYYFUoDcAxBnXIDSTZj88ZCu8oZZgvDYiOjqeKwC
+         wNusEoZAholOc9jEF+lAEPdCUhBCGKUNFNhFPRRfH4hbxOK6L4grFm8leh+NyGQCTI+E
+         ub60OsYSf/Wc0ZOjiJ652Wq1eT5wrWHCefb1Xrlcsa58x1Mrtwi6VyHd0WtfjO1YJbOt
+         XNtw==
+X-Forwarded-Encrypted: i=1; AJvYcCVzlakkKqOb+ZRNu+PYAo7KrqAcTS7AnKN9R38EJ2ZWjOF1gDu/6FLnCB1xebUuJvbhZLv3+tI6OO3AmbDYR31tEFfgqQ==
+X-Gm-Message-State: AOJu0YyFzjX/6Eob5g96uvmIB3O1BfGK9bQTCJROFrhrQBxl7KiTL7Ff
+	lJDpCNIOfL4vqU9w+JO2FoRNA6UJbpqp51E7zWHC3+uNKGLDXSf/
+X-Google-Smtp-Source: AGHT+IHksCM6QMMN5oCKowkEIaoVhI9skWX8S0kfwKK9ws9t3YFTdPmgNyYWeEUIfdx/qQgRrfSgkw==
+X-Received: by 2002:a4a:344e:0:b0:5bd:b100:8ab1 with SMTP id 006d021491bc7-5bdb1008d1bmr1669345eaf.7.1718374714251;
+        Fri, 14 Jun 2024 07:18:34 -0700 (PDT)
+Received: from fauth2-smtp.messagingengine.com (fauth2-smtp.messagingengine.com. [103.168.172.201])
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-6b2a5c1ff4fsm18535236d6.47.2024.06.14.07.18.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 14 Jun 2024 07:18:33 -0700 (PDT)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+	by mailfauth.nyi.internal (Postfix) with ESMTP id B89AD1200068;
+	Fri, 14 Jun 2024 10:18:32 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute5.internal (MEProxy); Fri, 14 Jun 2024 10:18:32 -0400
+X-ME-Sender: <xms:OFFsZq-MDNYEtrWlAVNXn5jwIg2TfvjhwFoZOkk6yrCqSXCRqQqkQQ>
+    <xme:OFFsZqs8ByWvlfpKaf4EKh9YvnHUXjakTr8WzjsHKnQcmFt6z4SmMP-RofnZ4thhx
+    U82WO1A5RNTdZYrgg>
+X-ME-Received: <xmr:OFFsZgDPmnMk4EopChbpPpI_2yy6dm6Uy_o9XbGFJK-zZB6IXMb8XdEDHA>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvledrfeduledgjeefucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvfevuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepuehoqhhu
+    nhcuhfgvnhhguceosghoqhhunhdrfhgvnhhgsehgmhgrihhlrdgtohhmqeenucggtffrrg
+    htthgvrhhnpeehudfgudffffetuedtvdehueevledvhfelleeivedtgeeuhfegueeviedu
+    ffeivdenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
+    gsohhquhhnodhmvghsmhhtphgruhhthhhpvghrshhonhgrlhhithihqdeiledvgeehtdei
+    gedqudejjeekheehhedvqdgsohhquhhnrdhfvghngheppehgmhgrihhlrdgtohhmsehfih
+    igmhgvrdhnrghmvg
+X-ME-Proxy: <xmx:OFFsZiePx2emfcxiTWodZ11l2uuHwCaxesAzyJKoseaY7n36pBEWYw>
+    <xmx:OFFsZvPBzICQ22UxPNB4-q9ZjldwOttwiuMvjv0Kr21Y2h392GsUZw>
+    <xmx:OFFsZsmCWdQYsGwRiqbToXL47qfVLgMuY4Z6PufSEHyWHrdKqDCA0A>
+    <xmx:OFFsZhvXhif1LhrT9WOTaXBNgrfWLwNPAwGFIGWrXNjzrF2NEccmzw>
+    <xmx:OFFsZlulQLnfhLEy8-5lMnjAa0Ufl-7BrHGo-ZZJmlK_d7uhAYvoowqn>
+Feedback-ID: iad51458e:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
+ 14 Jun 2024 10:18:31 -0400 (EDT)
+Date: Fri, 14 Jun 2024 07:18:30 -0700
+From: Boqun Feng <boqun.feng@gmail.com>
+To: Peter Zijlstra <peterz@infradead.org>
+Cc: Gary Guo <gary@garyguo.net>, rust-for-linux@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+	llvm@lists.linux.dev, Miguel Ojeda <ojeda@kernel.org>,
+	Alex Gaynor <alex.gaynor@gmail.com>,
+	Wedson Almeida Filho <wedsonaf@gmail.com>,
+	=?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
+	Benno Lossin <benno.lossin@proton.me>,
+	Andreas Hindborg <a.hindborg@samsung.com>,
+	Alice Ryhl <aliceryhl@google.com>,
+	Alan Stern <stern@rowland.harvard.edu>,
+	Andrea Parri <parri.andrea@gmail.com>,	Will Deacon <will@kernel.org>,
+ Nicholas Piggin <npiggin@gmail.com>,	David Howells <dhowells@redhat.com>,
+	Jade Alglave <j.alglave@ucl.ac.uk>,	Luc Maranget <luc.maranget@inria.fr>,
+	"Paul E. McKenney" <paulmck@kernel.org>,
+	Akira Yokosawa <akiyks@gmail.com>,	Daniel Lustig <dlustig@nvidia.com>,
+	Joel Fernandes <joel@joelfernandes.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,	kent.overstreet@gmail.com,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, elver@google.com,
+	Mark Rutland <mark.rutland@arm.com>,
+	Thomas Gleixner <tglx@linutronix.de>,	Ingo Molnar <mingo@redhat.com>,
+ Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+	"H. Peter Anvin" <hpa@zytor.com>,
+	Catalin Marinas <catalin.marinas@arm.com>,	torvalds@linux-foundation.org,
+ linux-arm-kernel@lists.infradead.org,	linux-fsdevel@vger.kernel.org,
+ Trevor Gross <tmgross@umich.edu>,	dakr@redhat.com
+Subject: Re: [RFC 2/2] rust: sync: Add atomic support
+Message-ID: <ZmxRNgrLz2fzZDSw@Boquns-Mac-mini.home>
+References: <20240612223025.1158537-1-boqun.feng@gmail.com>
+ <20240612223025.1158537-3-boqun.feng@gmail.com>
+ <20240613144432.77711a3a@eugeo>
+ <ZmseosxVQXdsQjNB@boqun-archlinux>
+ <20240614095124.GN8774@noisy.programming.kicks-ass.net>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -63,110 +124,62 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20240614095124.GN8774@noisy.programming.kicks-ass.net>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/morse/linux.git mpam/snapshot/v6.10-rc1
-head:   d9ba67a1a8dc6551a0b3254a8f2ee9993ad17957
-commit: 80bb394628b9df80413dcc6f0b9198177355c199 [65/114] arm_mpam: Add the class and component structures for ris firmware described
-config: arm64-allmodconfig (https://download.01.org/0day-ci/archive/20240614/202406142148.278A1iXo-lkp@intel.com/config)
-compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project 78ee473784e5ef6f0b19ce4cb111fb6e4d23c6b2)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240614/202406142148.278A1iXo-lkp@intel.com/reproduce)
+On Fri, Jun 14, 2024 at 11:51:24AM +0200, Peter Zijlstra wrote:
+> On Thu, Jun 13, 2024 at 09:30:26AM -0700, Boqun Feng wrote:
+> 
+> > We can always add a layer on top of what we have here to provide the
+> > generic `Atomic<T>`. However, I personally don't think generic
+> > `Atomic<T>` is a good idea, for a few reasons:
+> > 
+> > *	I'm not sure it will bring benefits to users, the current atomic
+> > 	users in kernel are pretty specific on the size of atomic they
+> > 	use, so they want to directly use AtomicI32 or AtomicI64 in
+> > 	their type definitions rather than use a `Atomic<T>` where their
+> > 	users can provide type later.
+> > 
+> > *	I can also see the future where we have different APIs on
+> > 	different types of atomics, for example, we could have a:
+> > 
+> > 		impl AtomicI64 {
+> > 		    pub fn split(&self) -> (&AtomicI32, &AtomicI32)
+> > 		}
+> > 
+> > 	which doesn't exist for AtomicI32. Note this is not a UB because
+> > 	we write our atomic implementation in asm, so it's perfectly
+> > 	fine for mix-sized atomics.
+> > 
+> > So let's start with some basic and simple until we really have a need
+> > for generic `Atomic<T>`. Thoughts?
+> 
+> Not on the generic thing, but on the lack of long. atomic_long_t is
+> often used when we have pointers with extra bits on. Then you want a
+> number type in order to be able to manipulate the low bits.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202406142148.278A1iXo-lkp@intel.com/
+I mentioned my plan on AtomicPtr, but I think I should have clarified
+this more. My plan is:
 
-All warnings (new ones prefixed by >>):
+pub struct AtomicIsize {
+    #[cfg(CONFIG_64BIT)]
+    inner: AtomicI64
+    #[cfg(not(CONFIG_64BIT))]
+    inner: AtomicI32
+}
 
-   In file included from drivers/platform/arm64/mpam/mpam_devices.c:6:
-   In file included from include/linux/acpi.h:39:
-   In file included from include/acpi/acpi_io.h:7:
-   In file included from arch/arm64/include/asm/acpi.h:14:
-   In file included from include/linux/memblock.h:12:
-   In file included from include/linux/mm.h:2253:
-   include/linux/vmstat.h:500:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     500 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     501 |                            item];
-         |                            ~~~~
-   include/linux/vmstat.h:507:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     507 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     508 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/vmstat.h:514:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     514 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
-   include/linux/vmstat.h:519:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     519 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     520 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/vmstat.h:528:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     528 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     529 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
->> drivers/platform/arm64/mpam/mpam_devices.c:318:17: warning: result of comparison of constant 18446744073709551615 with expression of type 'u32' (aka 'unsigned int') is always false [-Wtautological-constant-out-of-range-compare]
-     318 |                         if (cache_id == ~0UL) {
-         |                             ~~~~~~~~ ^  ~~~~
-   6 warnings generated.
+i.e. building AtomicIsize (Rust's atomic_long_t) based on AtomicI64 and
+AtomicI32. And we can a AtomicPtr type on it:
 
+pub struct AtomicPtr<T> {
+    inner: AtomicIsize,
+    _type: PhantomData<*mut T>
+}
 
-vim +318 drivers/platform/arm64/mpam/mpam_devices.c
+Of course, I need to do some code generating work for AtomicIsize and
+AtomicPtr, I plan to do that in Rust not in scripts, this will keep the
+rust/kernel/sync/atomic/impl.rs relatively small (i.e. the Rust/C
+interface is smaller). I can include this part in the next version, if
+you want to see it.
 
-   282	
-   283	/*
-   284	 * The cacheinfo structures are only populated when CPUs are online.
-   285	 * This helper walks the device tree to include offline CPUs too.
-   286	 */
-   287	static int get_cpumask_from_cache_id(u32 cache_id, u32 cache_level,
-   288					     cpumask_t *affinity)
-   289	{
-   290		int cpu, err;
-   291		u32 iter_level;
-   292		int iter_cache_id;
-   293		struct device_node *iter;
-   294	
-   295		if (!acpi_disabled)
-   296			return acpi_pptt_get_cpumask_from_cache_id(cache_id, affinity);
-   297	
-   298		for_each_possible_cpu(cpu) {
-   299			iter = of_get_cpu_node(cpu, NULL);
-   300			if (!iter) {
-   301				pr_err("Failed to find cpu%d device node\n", cpu);
-   302				return -ENOENT;
-   303			}
-   304	
-   305			while ((iter = of_find_next_cache_node(iter))) {
-   306				err = of_property_read_u32(iter, "cache-level",
-   307							   &iter_level);
-   308				if (err || (iter_level != cache_level)) {
-   309					of_node_put(iter);
-   310					continue;
-   311				}
-   312	
-   313				/*
-   314				 * get_cpu_cacheinfo_id() isn't ready until sometime
-   315				 * during device_initcall(). Use cache_of_get_id().
-   316				 */
-   317				iter_cache_id = cache_of_get_id(iter);
- > 318				if (cache_id == ~0UL) {
-   319					of_node_put(iter);
-   320					continue;
-   321				}
-   322	
-   323				if (iter_cache_id == cache_id)
-   324					cpumask_set_cpu(cpu, affinity);
-   325	
-   326				of_node_put(iter);
-   327			}
-   328		}
-   329	
-   330		return 0;
-   331	}
-   332	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Regards,
+Boqun
