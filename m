@@ -1,244 +1,152 @@
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5A9471946D2
-	for <llvm@lists.linux.dev>; Fri, 14 Jun 2024 10:41:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CEED214884B
+	for <llvm@lists.linux.dev>; Fri, 14 Jun 2024 13:12:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718361663; cv=none; b=F4tCzBzYvjoRBfIqx2CEUFsKK6YGasftSBYVLCHZfNMEeekJUiF9t8uf3dtNVLiWTDDYoUztfLJF3ZoF6NewQopfBogEJY1ZDOS9PbEI3GDLJBIAK5Iv8XiV5GNNaktxcNS4Tfn0S1VPFn0fKVb22EvEO+oJoY89YsfLvPIsjQk=
+	t=1718370742; cv=none; b=iUTip6WUFDvR65TIb9WLz9cNwNSss9vH5F3QVf2loa2vGw1meWj2o262z+YkGSc9SkQE29q7eI4lRbTzfM/mBUcHdXGux/jg0aR+Ld7IvL2SSFe71mdovUKKXl1aGDNVijvWobTUG5BWGH/RoMxTI4au8iPKRB52siMimzE7l7Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718361663; c=relaxed/simple;
-	bh=AmUgqvZgbKj2NQIuvs3Dt8TOXhMLfPmQOpUxQzf8iYk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=AkX0aE3knrfmC4V6UU60Wft6dngc+8u97OQi0ifXl0+pit3ePBXZ5m7HEEVZQTFEBQi7Qi4s2BKwlGq+Wg/4ASrK0pP0XkHD/hNljUmmvD8LfXmJ0/2H0D1egUK3bFpEOl3BuXIf7LBuNCJE7s1CAunycCR8iF3sbYFDqo0phkA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 1476B1480;
-	Fri, 14 Jun 2024 03:41:20 -0700 (PDT)
-Received: from J2N7QTR9R3.cambridge.arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id B4E003F5A1;
-	Fri, 14 Jun 2024 03:40:49 -0700 (PDT)
-Date: Fri, 14 Jun 2024 11:40:47 +0100
-From: Mark Rutland <mark.rutland@arm.com>
-To: Boqun Feng <boqun.feng@gmail.com>
-Cc: rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-arch@vger.kernel.org, llvm@lists.linux.dev,
-	Miguel Ojeda <ojeda@kernel.org>,
-	Alex Gaynor <alex.gaynor@gmail.com>,
-	Wedson Almeida Filho <wedsonaf@gmail.com>,
-	Gary Guo <gary@garyguo.net>,
-	=?utf-8?B?QmrDtnJu?= Roy Baron <bjorn3_gh@protonmail.com>,
-	Benno Lossin <benno.lossin@proton.me>,
-	Andreas Hindborg <a.hindborg@samsung.com>,
-	Alice Ryhl <aliceryhl@google.com>,
-	Alan Stern <stern@rowland.harvard.edu>,
-	Andrea Parri <parri.andrea@gmail.com>,
-	Will Deacon <will@kernel.org>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Nicholas Piggin <npiggin@gmail.com>,
-	David Howells <dhowells@redhat.com>,
-	Jade Alglave <j.alglave@ucl.ac.uk>,
-	Luc Maranget <luc.maranget@inria.fr>,
-	"Paul E. McKenney" <paulmck@kernel.org>,
-	Akira Yokosawa <akiyks@gmail.com>,
-	Daniel Lustig <dlustig@nvidia.com>,
-	Joel Fernandes <joel@joelfernandes.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	kent.overstreet@gmail.com,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, elver@google.com,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-	"H. Peter Anvin" <hpa@zytor.com>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	torvalds@linux-foundation.org, linux-arm-kernel@lists.infradead.org,
-	linux-fsdevel@vger.kernel.org, Trevor Gross <tmgross@umich.edu>,
-	dakr@redhat.com
-Subject: Re: [RFC 2/2] rust: sync: Add atomic support
-Message-ID: <ZmweL12SL7Unlfpe@J2N7QTR9R3.cambridge.arm.com>
-References: <20240612223025.1158537-1-boqun.feng@gmail.com>
- <20240612223025.1158537-3-boqun.feng@gmail.com>
+	s=arc-20240116; t=1718370742; c=relaxed/simple;
+	bh=5pyCjKvHyuTZxO/AHCR2mbzqSFMYEjXIZrJUEfJpm8o=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=OCQCFK8lO68naFtZAeKpS/ekRYG6nIDF87rsThZ0uTp3j8WhOf3m1R78/0T/yO8q6sBnSS7jHr4iI5qa4auJyHcFtbH4aOd5UIlcAvh7vntqVxw+AjQSpH/FRvG6h50FUlAj3v7NnAz1R9X0Et/ZNtTszN7IhBzMh6g2PMTZRlU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=eEnoFpCx; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="eEnoFpCx"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1718370739;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=JmLEPMxTG4Gsk5yP2q+OTPDt9lbS7dRpXq+3ymJSfok=;
+	b=eEnoFpCxl1uRDfWiQZUEedNPVABOG9SdlKd+8mkEHBqwqwUrOIi80hSp3QDOjMx/JY8ylz
+	Lrzu+P2VZX93ngiWK5SihX97miebjIWLXG9FBAK8hyuxxWiqpgEi6dTOCxwZskXZ5umVPL
+	klDv5pivcDPs4c0rWDGHliO1vIXnIQM=
+Received: from mx-prod-mc-02.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-128-sz_GT0PePVyMwErmd2WXkA-1; Fri,
+ 14 Jun 2024 09:12:17 -0400
+X-MC-Unique: sz_GT0PePVyMwErmd2WXkA-1
+Received: from mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.12])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-02.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 1811A19560AE
+	for <llvm@lists.linux.dev>; Fri, 14 Jun 2024 13:12:17 +0000 (UTC)
+Received: from [172.64.3.44] (unknown [10.30.33.101])
+	by mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 7082619560BF;
+	Fri, 14 Jun 2024 13:12:16 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL (MISSED 24 of 192): Test report for master
+ (6.10.0-rc3, mainline.kernel.org-clang, d20f6b3d)
+Date: Fri, 14 Jun 2024 13:12:16 -0000
+To: bgoncalv@redhat.com, llvm@lists.linux.dev, omosnace@redhat.com
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240612223025.1158537-3-boqun.feng@gmail.com>
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.12
+Message-Id: <87215.124061409121702699@us-mta-128.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Wed, Jun 12, 2024 at 03:30:25PM -0700, Boqun Feng wrote:
-> Provide two atomic types: AtomicI32 and AtomicI64 with the existing
-> implemenation of C atomics. These atomics have the same semantics of the
-> corresponding LKMM C atomics, and using one memory (ordering) model
-> certainly reduces the reasoning difficulty and potential bugs from the
-> interaction of two different memory models.
-> 
-> Also bump my role to the maintainer of ATOMIC INFRASTRUCTURE to reflect
-> my responsiblity on these Rust APIs.
-> 
-> Note that `Atomic*::new()`s are implemented vi open coding on struct
-> atomic*_t. This allows `new()` being a `const` function, so that it can
-> be used in constant contexts.
-> 
-> Signed-off-by: Boqun Feng <boqun.feng@gmail.com>
+Hi, we tested your kernel and here are the results:
 
-I have a few minor comments below.
+    Overall result: FAILED
+             Merge: OK
+           Compile: OK
+              Test: FAILED
 
-> ---
->  MAINTAINERS                       |    4 +-
->  arch/arm64/kernel/cpufeature.c    |    2 +
->  rust/kernel/sync.rs               |    1 +
->  rust/kernel/sync/atomic.rs        |   63 ++
->  rust/kernel/sync/atomic/impl.rs   | 1375 +++++++++++++++++++++++++++++
->  scripts/atomic/gen-atomics.sh     |    1 +
->  scripts/atomic/gen-rust-atomic.sh |  136 +++
->  7 files changed, 1581 insertions(+), 1 deletion(-)
->  create mode 100644 rust/kernel/sync/atomic.rs
->  create mode 100644 rust/kernel/sync/atomic/impl.rs
->  create mode 100755 scripts/atomic/gen-rust-atomic.sh
-> 
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index d6c90161c7bf..a8528d27b260 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -3458,7 +3458,7 @@ F:	drivers/input/touchscreen/atmel_mxt_ts.c
->  ATOMIC INFRASTRUCTURE
->  M:	Will Deacon <will@kernel.org>
->  M:	Peter Zijlstra <peterz@infradead.org>
-> -R:	Boqun Feng <boqun.feng@gmail.com>
-> +M:	Boqun Feng <boqun.feng@gmail.com>
->  R:	Mark Rutland <mark.rutland@arm.com>
->  L:	linux-kernel@vger.kernel.org
->  S:	Maintained
-> @@ -3467,6 +3467,8 @@ F:	arch/*/include/asm/atomic*.h
->  F:	include/*/atomic*.h
->  F:	include/linux/refcount.h
->  F:	scripts/atomic/
-> +F:	rust/kernel/sync/atomic.rs
-> +F:	rust/kernel/sync/atomic/
->  
->  ATTO EXPRESSSAS SAS/SATA RAID SCSI DRIVER
->  M:	Bradley Grove <linuxdrivers@attotech.com>
-> diff --git a/arch/arm64/kernel/cpufeature.c b/arch/arm64/kernel/cpufeature.c
-> index 48e7029f1054..99e6e2b2867f 100644
-> --- a/arch/arm64/kernel/cpufeature.c
-> +++ b/arch/arm64/kernel/cpufeature.c
-> @@ -1601,6 +1601,8 @@ static bool
->  has_cpuid_feature(const struct arm64_cpu_capabilities *entry, int scope)
->  {
->  	u64 val = read_scoped_sysreg(entry, scope);
-> +	if (entry->capability == ARM64_HAS_LSE_ATOMICS)
-> +		return false;
->  	return feature_matches(val, entry);
->  }
 
-As per other replies, this'll obviously need to go.
+Kernel information:
+    Commit message: Merge tag 'net-6.10-rc4' of git://git.kernel.org/pub/sc=
+m/linux/kernel/git/netdev/net
 
-> diff --git a/rust/kernel/sync/atomic.rs b/rust/kernel/sync/atomic.rs
-> new file mode 100644
-> index 000000000000..b0f852cf1741
-> --- /dev/null
-> +++ b/rust/kernel/sync/atomic.rs
-> @@ -0,0 +1,63 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +
-> +//! Atomic primitives.
-> +//!
-> +//! These primitives have the same semantics as their C counterparts, for precise definitions of
-> +//! the semantics, please refer to tools/memory-model. Note that Linux Kernel Memory (Consistency)
-> +//! Model is the only model for Rust development in kernel right now, please avoid to use Rust's
-> +//! own atomics.
-> +
-> +use crate::bindings::{atomic64_t, atomic_t};
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1331624889
 
-As with the last patch, why no atomic_long_t?
+One or more kernel tests failed:
+    Unrecognized or new issues:
+        Libkcapi AF_ALG test
+              x86_64
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+redhat:1331624889-x86_64-kernel_upt_22
+                   Non-passing ran subtests:
+                       =E2=9D=8C FAIL /10_avc_check
+        Reboot test
+              x86_64
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+redhat:1331624889-x86_64-kernel_upt_35
+                   Non-passing ran subtests:
+                       =E2=9D=8C FAIL misc/reboot-test/journalctl-check
 
-[...]
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1267
+            Affected tests:
+                selinux-policy: serge-testsuite [ppc64le]
+        Issue: Storage nvme - rdma: nvme/014 - flush: Interrupted system ca=
+ll
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1980181
+            Affected tests:
+                Storage - blktests - nvme-tcp - upstream [x86_64]
+        Issue: [rhel-10] xfstests - cifsv3.11 - generic/207 - error in bloc=
+k: expected 4096 bytes, received 0
+            URL: https://issues.redhat.com/browse/RHEL-39974
+            Affected tests:
+                xfstests - cifsv3.11 [x86_64, x86_64 (debug)]
 
-> +#gen_proto_order_variant(meta, pfx, name, sfx, order, atomic, ty, int, raw, arg...)
-> +gen_proto_order_variant()
-> +{
-> +	local meta="$1"; shift
-> +	local pfx="$1"; shift
-> +	local name="$1"; shift
-> +	local sfx="$1"; shift
-> +	local order="$1"; shift
-> +	local atomic="$1"; shift
-> +	local ty="$1"; shift
-> +	local int="$1"; shift
-> +	local raw="$1"; shift
-> +
-> +	local fn_name="${raw}${pfx}${name}${sfx}${order}"
-> +	local atomicname="${raw}${atomic}_${pfx}${name}${sfx}${order}"
-> +
-> +	local ret="$(gen_ret_type "${meta}" "${int}")"
-> +	local params="$(gen_params "${int}" $@)"
-> +	local args="$(gen_args "$@")"
-> +	local retstmt="$(gen_ret_stmt "${meta}")"
-> +
-> +cat <<EOF
-> +    /// See \`${atomicname}\`.
-> +    #[inline(always)]
-> +    pub fn ${fn_name}(&self${params}) ${ret}{
-> +        // SAFETY:\`self.0.get()\` is a valid pointer.
-> +        unsafe {
-> +            ${retstmt}${atomicname}(${args});
-> +        }
-> +    }
-> +EOF
-> +}
 
-AFAICT the 'ty' argument (AtomicI32/AtomicI64) isn't used and can be
-removed.
+Tests that were not ran because of internal issues:=20
+    AMTU (Abstract Machine Test Utility) [x86_64 (debug)]
+    Boot test [s390x]
+    CKI/restraint [s390x]
+    Filesystem - Loopdev Sanity [x86_64 (debug)]
+    Hardware - pciutils: sanity smoke test [x86_64 (debug)]
+    kselftests upstream - bpf [x86_64 (debug)]
+    kselftests upstream - bpf_test_progs [x86_64 (debug)]
+    kselftests upstream - net [x86_64 (debug)]
+    Libkcapi AF_ALG test [x86_64 (debug)]
+    machineinfo [s390x]
+    Memory function: memfd_create [x86_64 (debug)]
+    Networking - Ethernet drivers sanity [x86_64 (debug)]
+    Networking cki netfilter test [x86_64 (debug)]
+    POSIX pjd-fstest suites [x86_64 (debug)]
+    Reboot test [s390x, x86_64 (debug)]
+    SELinux Custom Module Setup [s390x, x86_64]
+    Storage - blktests - blk - upstream [s390x]
+    Storage - blktests - nvme-tcp - upstream [s390x]
+    Storage - dm/common [x86_64 (debug)]
+    Storage - swraid scsi_raid [s390x]
+    stress: stress-ng - cpu-cache [s390x]
+    stress: stress-ng - memory [s390x]
 
-Likewise for 'raw'.
 
-> +
-> +cat << EOF
-> +// SPDX-License-Identifier: GPL-2.0
-> +
-> +//! Generated by $0
-> +//! DO NOT MODIFY THIS FILE DIRECTLY
-> +
-> +use super::*;
-> +use crate::bindings::*;
-> +
-> +impl AtomicI32 {
-> +EOF
-> +
-> +grep '^[a-z]' "$1" | while read name meta args; do
-> +	gen_proto "${meta}" "${name}" "atomic" "AtomicI32" "i32" "" ${args}
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
 
-With 'ty' and 'raw' gone, this'd be:
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
 
-	gen_proto "${meta}" "${name}" "atomic" "i32" ${args}
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
 
-> +done
-> +
-> +cat << EOF
-> +}
-> +
-> +impl AtomicI64 {
-> +EOF
-> +
-> +grep '^[a-z]' "$1" | while read name meta args; do
-> +	gen_proto "${meta}" "${name}" "atomic64" "AtomicI64" "i64" "" ${args}
-
-With 'ty' and 'raw' gone, this'd be:
-
-	gen_proto "${meta}" "${name}" "atomic64" "i64" ${args}
-
-Mark.
-
-> +done
-> +
-> +cat << EOF
-> +}
-> +
-> +EOF
-> -- 
-> 2.45.2
-> 
