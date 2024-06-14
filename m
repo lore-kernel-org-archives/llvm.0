@@ -1,126 +1,242 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oi1-f173.google.com (mail-oi1-f173.google.com [209.85.167.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A5167136E09;
-	Fri, 14 Jun 2024 19:55:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 445341A3BB1
+	for <llvm@lists.linux.dev>; Fri, 14 Jun 2024 20:13:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718394932; cv=none; b=GcoBTnY5tNAfnJG3YfsPUJr4/tOdb64MU+u/VM8rk1wghZSSSIrqgGW6wRR6DVAceKQm+ladJ55dV0VFzI4dge/EbOc+OoHCwH/coITKiudjVXn9BtaQNE2PpQ8uTlEvY/6tD3lOsUxY11yIh34CTCeDlnj+IURPtYtEH2wfXVE=
+	t=1718395995; cv=none; b=AO6cxklX6x1gPQxwxUDpbcpofGAEGEifrySFjXMC8kCfD5l6VXhwzdvZfySmG1CCC3UFdBDdg/gSM1XGSFV+BKzA6SuHHER67q75G6lXs2DWmRjUpwvB53RNM32M3ZbUVdxL/c4gz1F5AYCyYfCPCGN59x57fixFpA48wuVbRfw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718394932; c=relaxed/simple;
-	bh=6hytKhk1dc1GDL7VPe+EM8eZ6CLJyveS9w/tIrrv9Vw=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=Nxc6990e004/4KoxIusq00V9sA3PepkSXpg6QkvkJy+DCkMIOX4fPJu0Eo+5kXLpb6iZV6V2ZSi54Cni97sBilGoIqFHKoifwNco9Zd0j/MGptfcjhCqX/n4iqXDfD4tW6Msy9sEfaQB7Il9ZxBpKfFjtQJjt3NUMVkLy+9qdZk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=a/3qJFPP; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1718395995; c=relaxed/simple;
+	bh=QAkkkToNqaJ54H1Gf/4uegxz1byZkIwNDrgYfIhVFzg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=DnRKrfXJUqS/a3hRk4CCE44YtdA/1JPBBtPVf2IRHZJdA593zlyTg+rHzeUcDinCjsqElQE+3AxbnDuZKrZlC66t9nTk8LaPJFsZDD4aI/KeJMTXFZLWcHJHe0gyMww+b1gPkgFdT7jilvGL/Vz9gF+zxSwEV4RXSEw1NoQNH5k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=W9CqD03+; arc=none smtp.client-ip=209.85.167.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="a/3qJFPP"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3A0B4C4AF1A;
-	Fri, 14 Jun 2024 19:55:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1718394931;
-	bh=6hytKhk1dc1GDL7VPe+EM8eZ6CLJyveS9w/tIrrv9Vw=;
-	h=From:Date:Subject:To:Cc:From;
-	b=a/3qJFPPZ1KSHUorotwefPE5p80dX7pKKGLw2r9tv1f7FWgvPltENKiMPEgEUYEim
-	 NnYstjOlhwde6WRHvSlRcr04O0SSFTLSulacLuW8lOMt7AZIr3vmuyeM5khvr32s9m
-	 BJWf12zqlsXywgqhCdab2nCF8WA1FpJQ4FkUMFz7tMtP7aF2MJgzBc9raAVzlxiesq
-	 SDGP8JjnIbwZD9+U608Uwc5amP2U5jbtZzhKEqMH3IrFbGIOTbI8uSuRwIoWvCLriA
-	 SQ8y3frxPIDKESdxNyMdK1+Pu/LzXqikAftI5V8YOGObOoLRuBiSECYRUPWMFaYE2F
-	 XFV6VKvyZbFoQ==
-From: Nathan Chancellor <nathan@kernel.org>
-Date: Fri, 14 Jun 2024 12:54:52 -0700
-Subject: [PATCH] drm/amd/display: Disable CONFIG_DRM_AMD_DC_FP for RISC-V
- with clang
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="W9CqD03+"
+Received: by mail-oi1-f173.google.com with SMTP id 5614622812f47-3d226c5a157so1544976b6e.2
+        for <llvm@lists.linux.dev>; Fri, 14 Jun 2024 13:13:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1718395993; x=1719000793; darn=lists.linux.dev;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:feedback-id:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=2bHm/aaPtqr+seGxV2S60l3XmS90OeMKM4QcbWBal74=;
+        b=W9CqD03+JeuAytUDEekkqhN+thmZ7n3ACVePIB68jfk+fM6zTGjP9yONZqWPxQL5vE
+         SNJ8Fq8UDkgSqm9lhOrPzNKocP/KcHKPmlV1TOoy2K/jBA1+SWBZsnHDmy/nKma5j2dl
+         A9Civsbw/rGpGrfp/3hHoNS3QyHxfa0haaKoMns4vt7GhV84zU753BnaAo72XuWrgvBj
+         24tNDrNjZo7D+tHyRLeqtGw+HKZuygKHViBUABmIik327B3uANsXvyqSZrc1D0yAjuNw
+         oDo2/iWy6V4/J1Za5OSLFkn2wByOwZLbLzFc07vFjJKA72suUmHJXPddcbyKd3qck/pB
+         1LgQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1718395993; x=1719000793;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:feedback-id:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=2bHm/aaPtqr+seGxV2S60l3XmS90OeMKM4QcbWBal74=;
+        b=LTDixPJ7FDdStRX49G+/D/H8ZVNNqW5vNQ3IBcQBgfAC7cAq9M6sDTEaYP06NArgZM
+         u3nkr8lswG4xvaSOT0+qTM2ziMk48iASronQRbGtMCfUhI7xLE9c6+aU+kWJeIjKPsmD
+         27DIG1TfC9IbgtADGYBkwmVyYFCDW/20KNKVN2CfRQWW//d3KRYvvPgfQfkAIyPrKbEs
+         VNrg731taGtKCDIdXaUPGsoqr6BeNLOTYNXTF4XNKW7UNCSbS6jyWpXWWLADJ4YSfjhG
+         xHtDJcAONUrgjPfme2nzelI+ZuwWcMS6Jgisewr+LDJOT4kEmOanaid5lzrcYZ6CxAyV
+         Uxag==
+X-Forwarded-Encrypted: i=1; AJvYcCXiPsp+OOWlsUBF+ExQAMog9iUUDHg2M7EdOqodYSzpdN4LUYkzOLfC6nsOhB4FeLGm7sd634QuAOJSEejqo+H9BGjh4Q==
+X-Gm-Message-State: AOJu0Yx3cJ8/p6WewwjR1mqN2CBP1wtqgzuaW+AQ4llRaBHRevNJI7iQ
+	VJ6EAFO2BBNPKxWH9FfrL5kCAtXfZRf2Idyavmvh3lDCiNec0czH
+X-Google-Smtp-Source: AGHT+IGQ/7jt+p7Vy+rl8KY42hsPlfY6qspnV6dIbABmXy17cfCC4w/P5jUh7xtu725fkfqJwGMFrQ==
+X-Received: by 2002:a05:6808:e8e:b0:3d2:1ce7:43da with SMTP id 5614622812f47-3d24e9bc08fmr3473362b6e.49.1718395993043;
+        Fri, 14 Jun 2024 13:13:13 -0700 (PDT)
+Received: from fauth2-smtp.messagingengine.com (fauth2-smtp.messagingengine.com. [103.168.172.201])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-798aacb1e6dsm176551585a.13.2024.06.14.13.13.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 14 Jun 2024 13:13:12 -0700 (PDT)
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+	by mailfauth.nyi.internal (Postfix) with ESMTP id 5DA3B120006C;
+	Fri, 14 Jun 2024 16:13:11 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute4.internal (MEProxy); Fri, 14 Jun 2024 16:13:11 -0400
+X-ME-Sender: <xms:V6RsZjT5NgAWoJYubZWx-Lwxb4FJ9gSKADveBGwK-qXJYeQRozIpuQ>
+    <xme:V6RsZkzvMpf27JRJ3RDeN-g63RvQfkM8PfrNJIwaWTFsgVjcXTMriEdo56-_9eDph
+    9QWeewN60OuzMGCww>
+X-ME-Received: <xmr:V6RsZo2DHp2viMNt4J3Zs6ORsw47sKyJT-N1L1CkczmYFDQpzA13b_KRe1FI7A>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvledrfeduledgudegiecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpeffhffvvefukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpeeuohhq
+    uhhnucfhvghnghcuoegsohhquhhnrdhfvghnghesghhmrghilhdrtghomheqnecuggftrf
+    grthhtvghrnhepffdtiefhieegtddvueeuffeiteevtdegjeeuhffhgfdugfefgefgfedt
+    ieeghedvnecuffhomhgrihhnpehgihhthhhusgdrtghomhenucevlhhushhtvghrufhiii
+    gvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegsohhquhhnodhmvghsmhhtphgruhht
+    hhhpvghrshhonhgrlhhithihqdeiledvgeehtdeigedqudejjeekheehhedvqdgsohhquh
+    hnrdhfvghngheppehgmhgrihhlrdgtohhmsehfihigmhgvrdhnrghmvg
+X-ME-Proxy: <xmx:V6RsZjAdDiGhWMrmZv_UZx76-FJd3AbsXWS-0syxZFg5_adnu5Bgwg>
+    <xmx:V6RsZshRv4VnqIAfLJLkox3Y3uJM8HJbR6Z1Eefe3yfo8pyT2tD1BQ>
+    <xmx:V6RsZnoeNisY7HCHMnzVjlC9EjL1yYV8CNU8dzEsI4EsXrURx0daRQ>
+    <xmx:V6RsZngnglzREGg7aunmYGGyKmiJzVK8vrZCyRiLun_lOG6iwycPsg>
+    <xmx:V6RsZvRqMc5ns4tXEa_NKp24JsLLkk93O0HE7aDXHVoCa6cTKkvGcXFZ>
+Feedback-ID: iad51458e:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
+ 14 Jun 2024 16:13:09 -0400 (EDT)
+Date: Fri, 14 Jun 2024 13:13:06 -0700
+From: Boqun Feng <boqun.feng@gmail.com>
+To: Mark Rutland <mark.rutland@arm.com>
+Cc: rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-arch@vger.kernel.org, llvm@lists.linux.dev,
+	Miguel Ojeda <ojeda@kernel.org>,	Alex Gaynor <alex.gaynor@gmail.com>,
+	Wedson Almeida Filho <wedsonaf@gmail.com>,	Gary Guo <gary@garyguo.net>,
+	=?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
+	Benno Lossin <benno.lossin@proton.me>,
+	Andreas Hindborg <a.hindborg@samsung.com>,
+	Alice Ryhl <aliceryhl@google.com>,
+	Alan Stern <stern@rowland.harvard.edu>,
+	Andrea Parri <parri.andrea@gmail.com>,	Will Deacon <will@kernel.org>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Nicholas Piggin <npiggin@gmail.com>,	David Howells <dhowells@redhat.com>,
+	Jade Alglave <j.alglave@ucl.ac.uk>,	Luc Maranget <luc.maranget@inria.fr>,
+	"Paul E. McKenney" <paulmck@kernel.org>,
+	Akira Yokosawa <akiyks@gmail.com>,	Daniel Lustig <dlustig@nvidia.com>,
+	Joel Fernandes <joel@joelfernandes.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,	kent.overstreet@gmail.com,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, elver@google.com,
+	Thomas Gleixner <tglx@linutronix.de>,	Ingo Molnar <mingo@redhat.com>,
+ Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+	"H. Peter Anvin" <hpa@zytor.com>,
+	Catalin Marinas <catalin.marinas@arm.com>,	torvalds@linux-foundation.org,
+ linux-arm-kernel@lists.infradead.org,	linux-fsdevel@vger.kernel.org,
+ Trevor Gross <tmgross@umich.edu>,	dakr@redhat.com
+Subject: Re: [RFC 1/2] rust: Introduce atomic API helpers
+Message-ID: <ZmykUtq45z0fGn26@boqun-archlinux>
+References: <20240612223025.1158537-1-boqun.feng@gmail.com>
+ <20240612223025.1158537-2-boqun.feng@gmail.com>
+ <ZmwcBWjxf7gm89wA@J2N7QTR9R3.cambridge.arm.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20240614-amdgpu-disable-drm-amd-dc-fp-riscv-clang-v1-1-a6d40617dc9b@kernel.org>
-X-B4-Tracking: v=1; b=H4sIAAugbGYC/x2N0QqDMAxFf0XyvEDrisz9ythDbVINqCsJykD89
- 3U+ngvnngOMVdjg2RygvIvJZ63gbw2kKa4jo1BlaF0bXOcDxoXGsiGJxWFmJF3+E1LCXFDF0o5
- priLefXqE3A197wjqXVHO8r1Sr/d5/gC4IFUjegAAAA==
-To: Harry Wentland <harry.wentland@amd.com>, Leo Li <sunpeng.li@amd.com>, 
- Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>, 
- Alex Deucher <alexander.deucher@amd.com>, 
- =?utf-8?q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>, 
- Xinhui Pan <Xinhui.Pan@amd.com>
-Cc: Palmer Dabbelt <palmer@dabbelt.com>, 
- Samuel Holland <samuel.holland@sifive.com>, 
- Nick Desaulniers <ndesaulniers@google.com>, 
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
- amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org, 
- linux-riscv@lists.infradead.org, llvm@lists.linux.dev, 
- patches@lists.linux.dev, Palmer Dabbelt <palmer@rivosinc.com>, 
- Nathan Chancellor <nathan@kernel.org>
-X-Mailer: b4 0.14-dev
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3141; i=nathan@kernel.org;
- h=from:subject:message-id; bh=6hytKhk1dc1GDL7VPe+EM8eZ6CLJyveS9w/tIrrv9Vw=;
- b=owGbwMvMwCUmm602sfCA1DTG02pJDGk5C4wY5T4e+uzEkf9v82Jf87ze/3X8i1OW7Zeo9LOuf
- /ZG///PjlIWBjEuBlkxRZbqx6rHDQ3nnGW8cWoSzBxWJpAhDFycAjCRaVMYGc4eSP89k1uxT9rr
- 2ETLzcul2Q919t4KkWiKffnkvqu3wj5GhmVmusv+OH7lSj5fdvn3xEUO+YfmdW61tMh6+odJWDH
- vAysA
-X-Developer-Key: i=nathan@kernel.org; a=openpgp;
- fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZmwcBWjxf7gm89wA@J2N7QTR9R3.cambridge.arm.com>
 
-Commit 77acc6b55ae4 ("riscv: add support for kernel-mode FPU") and
-commit a28e4b672f04 ("drm/amd/display: use ARCH_HAS_KERNEL_FPU_SUPPORT")
-enabled support for CONFIG_DRM_AMD_DC_FP with RISC-V. Unfortunately,
-this exposed -Wframe-larger-than warnings (which become fatal with
-CONFIG_WERROR=y) when building ARCH=riscv allmodconfig with clang:
+On Fri, Jun 14, 2024 at 11:31:33AM +0100, Mark Rutland wrote:
+> On Wed, Jun 12, 2024 at 03:30:24PM -0700, Boqun Feng wrote:
+> > In order to support LKMM atomics in Rust, add rust_helper_* for atomic
+> > APIs. These helpers ensure the implementation of LKMM atomics in Rust is
+> > the same as in C. This could save the maintenance burden of having two
+> > similar atomic implementations in asm.
+> > 
+> > Originally-by: Mark Rutland <mark.rutland@arm.com>
+> > Signed-off-by: Boqun Feng <boqun.feng@gmail.com>
+> 
+> FWIW, I'm happy with the concept; I have a couple of minor comments
 
-  drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn32/display_mode_vba_32.c:58:13: error: stack frame size (2448) exceeds limit (2048) in 'DISPCLKDPPCLKDCFCLKDeepSleepPrefetchParametersWatermarksAndPerformanceCalculation' [-Werror,-Wframe-larger-than]
-     58 | static void DISPCLKDPPCLKDCFCLKDeepSleepPrefetchParametersWatermarksAndPerformanceCalculation(
-        |             ^
-  1 error generated.
+;-)
 
-Many functions in this file use a large number of parameters, which must
-be passed on the stack at a certain pointer due to register exhaustion,
-which can cause high stack usage when inlining and issues with stack
-slot analysis get involved. While the compiler can and should do better
-(as GCC uses less than half the amount of stack space for the same
-function), it is not as simple as a fix as adjusting the functions not
-to take a large number of parameters.
+> below.
+> 
+> > ---
+> >  rust/atomic_helpers.h                     | 1035 +++++++++++++++++++++
+> >  rust/helpers.c                            |    2 +
+> >  scripts/atomic/gen-atomics.sh             |    1 +
+> >  scripts/atomic/gen-rust-atomic-helpers.sh |   64 ++
+> >  4 files changed, 1102 insertions(+)
+> >  create mode 100644 rust/atomic_helpers.h
+> >  create mode 100755 scripts/atomic/gen-rust-atomic-helpers.sh
+> 
+> [...]
+> 
+> > +#gen_proto_order_variant(meta, pfx, name, sfx, order, atomic, int, raw, arg...)
+> > +gen_proto_order_variant()
+> > +{
+> > +	local meta="$1"; shift
+> > +	local pfx="$1"; shift
+> > +	local name="$1"; shift
+> > +	local sfx="$1"; shift
+> > +	local order="$1"; shift
+> > +	local atomic="$1"; shift
+> > +	local int="$1"; shift
+> > +	local raw="$1"; shift
+> > +	local attrs="${raw:+noinstr }"
+> 
+> You removed the 'raw_' atomic generation below, so you can drop the
+> 'raw' parameter and the 'attrs' variable (both here and in the
+> template)...
+> 
+> > +	local atomicname="${raw}${atomic}_${pfx}${name}${sfx}${order}"
+> > +
+> > +	local ret="$(gen_ret_type "${meta}" "${int}")"
+> > +	local params="$(gen_params "${int}" "${atomic}" "$@")"
+> > +	local args="$(gen_args "$@")"
+> > +	local retstmt="$(gen_ret_stmt "${meta}")"
+> > +
+> > +cat <<EOF
+> > +__rust_helper ${attrs}${ret}
+> 
+> ... e.g. you can remove '${attrs}' here.
+> 
+> [...]
+> 
+> > +grep '^[a-z]' "$1" | while read name meta args; do
+> > +	gen_proto "${meta}" "${name}" "atomic" "int" "" ${args}
+> > +done
+> > +
+> > +grep '^[a-z]' "$1" | while read name meta args; do
+> > +	gen_proto "${meta}" "${name}" "atomic64" "s64" "" ${args}
+> > +done
+> 
+> With the 'raw' parameter removed above, the '""' argument can be
+> dropped.
+> 
 
-Unfortunately, modifying these files to avoid the problem is a difficult
-to justify approach because any revisions to the files in the kernel
-tree never make it back to the original source (so copies of the code
-for newer hardware revisions just reintroduce the issue) and the files
-are hard to read/modify due to being "gcc-parsable HW gospel, coming
-straight from HW engineers".
+Fix all above locally.
 
-Avoid building the problematic code for RISC-V by modifying the existing
-condition for arm64 that exists for the same reason. Factor out the
-logical not to make the condition a little more readable naturally.
+> Any reason to not have the atomic_long_*() API? It seems like an odd
+> ommision.
+> 
 
-Fixes: a28e4b672f04 ("drm/amd/display: use ARCH_HAS_KERNEL_FPU_SUPPORT")
-Reported-by: Palmer Dabbelt <palmer@rivosinc.com>
-Closes: https://lore.kernel.org/20240530145741.7506-2-palmer@rivosinc.com/
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
----
- drivers/gpu/drm/amd/display/Kconfig | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+See my reply to Peter, but there's also a more technical reason: right
+now, we use core::ffi::c_long for bindgen to translate C's long. But
+instead of `isize` (Rust's version of pointer-sized integer)
+core::ffi::c_long is `i64` on 64bit and `i32` on 32bit. So right now,
+atomic_long_add_return()'s helper signature would be (on 64bit):
 
-diff --git a/drivers/gpu/drm/amd/display/Kconfig b/drivers/gpu/drm/amd/display/Kconfig
-index 5fcd4f778dc3..47b8b49da8a7 100644
---- a/drivers/gpu/drm/amd/display/Kconfig
-+++ b/drivers/gpu/drm/amd/display/Kconfig
-@@ -8,7 +8,7 @@ config DRM_AMD_DC
- 	depends on BROKEN || !CC_IS_CLANG || ARM64 || RISCV || SPARC64 || X86_64
- 	select SND_HDA_COMPONENT if SND_HDA_CORE
- 	# !CC_IS_CLANG: https://github.com/ClangBuiltLinux/linux/issues/1752
--	select DRM_AMD_DC_FP if ARCH_HAS_KERNEL_FPU_SUPPORT && (!ARM64 || !CC_IS_CLANG)
-+	select DRM_AMD_DC_FP if ARCH_HAS_KERNEL_FPU_SUPPORT && !(CC_IS_CLANG && (ARM64 || RISCV))
- 	help
- 	  Choose this option if you want to use the new display engine
- 	  support for AMDGPU. This adds required support for Vega and
+	extern "C" {
+	    #[link_name="rust_helper_atomic_long_add_return"]
+	    pub fn atomic_long_add_return(
+		i: i64,
+		v: *mut atomic_long_t,
+	    ) -> i64;
+	}
 
----
-base-commit: c6c4dd54012551cce5cde408b35468f2c62b0cce
-change-id: 20240614-amdgpu-disable-drm-amd-dc-fp-riscv-clang-31c84f6b990d
+and I would need to cast the types in order to put it in an
+`AtomicIsize` method:
 
-Best regards,
--- 
-Nathan Chancellor <nathan@kernel.org>
+	impl AtomicIsize {
+	    pub fn add_return(&self, i: isize) -> isize {
+	        unsafe {
+		    return atomic_long_add_return(i as i64, self.0.get()) as isize
+		}
+	    }
+	}
 
+see these two `as`s. I want to avoid handling them in a bash script ;-)
+
+A better solution would be what Gary has:
+
+	https://github.com/nbdd0121/linux/commit/b604a43db56f149a90084fa8aed7988a8066894b	
+
+, which defines kernel's own ffi types and teach bindgen to pick the
+right type for c_long. If we prefer script code generating to Rust macro
+code generating, I will work with Gary on getting that done first and
+then add atomic_long_t support unless we feel atomic_long_t support is
+urgent.
+
+Regards,
+Boqun
+
+> Mark.
