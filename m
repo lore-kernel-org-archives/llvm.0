@@ -1,79 +1,225 @@
-Received: from mail-40134.protonmail.ch (mail-40134.protonmail.ch [185.70.40.134])
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2060.outbound.protection.outlook.com [40.107.244.60])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3BD502F50
-	for <llvm@lists.linux.dev>; Fri, 14 Jun 2024 21:22:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.70.40.134
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718400158; cv=none; b=S8K1aw7uMF2U8YdSEBs2h8/Y2uo6oUzxwHIypCEVtp9FYgP3QTRUlQnKiJ9co2Enwy3W0MEGflpkDrnCyfq42adBc3V6MOshD+/Xb4W2ROlidlQp8ohMIvyJL6c2FZRFy6An7C0Y8G27yhiSJwMwfCwhWFzCWNuoAL1q+B1Qd1g=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718400158; c=relaxed/simple;
-	bh=mI0xdPiIrvwp6EccuD83bzOdj0amVBKo2auwQXYt8uE=;
-	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=ehm8tP55pdAFEm6QFchozq3OitXlv78VPv4kF4wSVFt4EDR6wi8CdJjHjd+r669hHOaonaefN2usXggQriKhHHzSAUxhSEN00HxfL+B9ykbgIBvr01iDuB241x0HzHN6tZN1ilaB96H0rTgZw1EpqjUhW4Pgd5ZJKNT55oyHjSo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=proton.me; spf=pass smtp.mailfrom=proton.me; dkim=pass (2048-bit key) header.d=proton.me header.i=@proton.me header.b=GGbMHccH; arc=none smtp.client-ip=185.70.40.134
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=proton.me
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=proton.me
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C213E149016
+	for <llvm@lists.linux.dev>; Fri, 14 Jun 2024 22:52:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.244.60
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1718405539; cv=fail; b=oqu9bMpR5cTyG9i7qS1Rcg1RPOo1fyPNVB+iNRCpOvWwZBrj55smwLl7xsj18ZqargdC/c+JdGGzD/zG9xtIQL4DLhfc9QUAEGO0BYtFEf8oLx1BTJDbP+5Mq46vUmZqggq4CJ/1Cv8i4cwQj6zXcpWLHTEYNs/tq5MzlFqbZLI=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1718405539; c=relaxed/simple;
+	bh=W/IYi4SVqEXurPkX+Rl62+E+iukcpUcHGm0jQUNrepY=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=m7zqyX5JopL+VGp1mFI0dqvlEr1fNgY8Cs8vintZVLgZhAhvOdR9dpJ7ui5suPPHk7wqmMN4Q74gNxvyCPTH5DMjY+Fu3VmMb2emVD5wv4qB8svOWyvkpQOmjSbnO088yty0Y+THdcQUkruFrskByCf7hDgdfp+AfpkmhV3WvJY=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=QeARnWer; arc=fail smtp.client-ip=40.107.244.60
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=proton.me header.i=@proton.me header.b="GGbMHccH"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=proton.me;
-	s=masz3u7cozgmbioxpjqwm7i5ae.protonmail; t=1718400152; x=1718659352;
-	bh=mI0xdPiIrvwp6EccuD83bzOdj0amVBKo2auwQXYt8uE=;
-	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
-	 Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
-	 Message-ID:BIMI-Selector;
-	b=GGbMHccHMMsGnA/ccfGbUrR5Ou/GaweRk7E0oAtlGGyBcg52NBBjlrI00Y/agaBDJ
-	 CEufLLgMBzlcAvbGboVOpXkQluxsmGSAzGhdhYEtoFmexZg5DmttSiVAvUGT51qbBe
-	 V33dUaziIsAWC4qndI9dLduaBwSF+BZdcDikAIXaIm1bjM3RIJ/ARE05k6WRxH38GZ
-	 K+dNjGtj7D7LksWZAk+iuEDyO+dWA7bDW9f44Eqxpwld1dTVHkP0nHv0L3ES4lwzdS
-	 7/dA6hIHPXoLvQ25Yht47pYU0Cav3JsEJrb3po6zYvO07E+iCD1RN5VagbqatQnhMM
-	 mb3QBQhupzr1A==
-Date: Fri, 14 Jun 2024 21:22:24 +0000
-To: Boqun Feng <boqun.feng@gmail.com>, Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-From: Benno Lossin <benno.lossin@proton.me>
-Cc: Gary Guo <gary@garyguo.net>, rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org, llvm@lists.linux.dev, Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, Wedson Almeida Filho <wedsonaf@gmail.com>, =?utf-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, Andreas Hindborg <a.hindborg@samsung.com>, Alice Ryhl <aliceryhl@google.com>, Alan Stern <stern@rowland.harvard.edu>, Andrea Parri <parri.andrea@gmail.com>, Will Deacon <will@kernel.org>, Peter Zijlstra <peterz@infradead.org>, Nicholas Piggin <npiggin@gmail.com>, David Howells <dhowells@redhat.com>, Jade Alglave <j.alglave@ucl.ac.uk>, Luc Maranget <luc.maranget@inria.fr>, "Paul E. McKenney" <paulmck@kernel.org>, Akira Yokosawa <akiyks@gmail.com>, Daniel Lustig <dlustig@nvidia.com>, Joel Fernandes <joel@joelfernandes.org>, Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, kent.overstreet@gmail.com, Greg Kroah-Hartman
-	<gregkh@linuxfoundation.org>, elver@google.com, Mark Rutland <mark.rutland@arm.com>, Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>, Catalin Marinas <catalin.marinas@arm.com>, torvalds@linux-foundation.org, linux-arm-kernel@lists.infradead.org, linux-fsdevel@vger.kernel.org, Trevor Gross <tmgross@umich.edu>, dakr@redhat.com
-Subject: Re: [RFC 2/2] rust: sync: Add atomic support
-Message-ID: <c1c45a2e-afdf-40a6-9f44-142752368d5e@proton.me>
-In-Reply-To: <ZmxUxaIwHWnB42h-@Boquns-Mac-mini.home>
-References: <20240612223025.1158537-1-boqun.feng@gmail.com> <20240612223025.1158537-3-boqun.feng@gmail.com> <20240613144432.77711a3a@eugeo> <ZmseosxVQXdsQjNB@boqun-archlinux> <CANiq72myhoCCWs7j0eZuxfoYMbTez7cPa795T57+gz2Dpd+xAw@mail.gmail.com> <ZmtC7h7v1t6XJ6EI@boqun-archlinux> <CANiq72=JdqTRPiUfT=-YMTTN+bHeAe2Pba8nERxU3cN8Q-BEOw@mail.gmail.com> <ZmxUxaIwHWnB42h-@Boquns-Mac-mini.home>
-Feedback-ID: 71780778:user:proton
-X-Pm-Message-ID: 53ca9493f4ed178b60e9c57bdabd3b5e208fb377
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="QeARnWer"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=KzV06Ud8ud+54zBvCOf0+y/FCHvbdolEJ+csWi31/rvZiZxiOoos8frM7nWfja1OxKpbP7J+chCVH9POgucc/iYIFMGL9ZqvNh3twCxHG4lsTRjP709iefq/iCBI/Cc+8kIcJLAok37aCmKtj5YbwYuVTYWd5BBD/NQd2ykZAScTIxHaJEaH5Dtzjnod9WdJdQlVbIuEImancgxJCPsjOmorl1RMGH2/5TppIvzDRSGy54ps75P3ERy4kcKOFCo31ZVKJ1DuOaMVLCM0r5dckOzNcQ13D2EIjgOB2GSCUUqcPSSA7VjCSjmXeShdH4aCS5xtannp2b2wL+3IDNajuQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=tDm5UwvaS3Itxuxhm8KZFwUZHBBKLgVVgGx1D159DDc=;
+ b=j4f2SW7v54bJPw5iPtk44W5JtaKyducMywIFZaZoPJsgXVcDKYDxvqhW7W3irObgSew69d6cITiPwIBqm09SmX8Sf028GQH42eYE4rqXOwpaBBBb7ujSiHKv40glSWw3Pfo3CWwANPzisuHY9Wuwdsmt/88mRzPwnbjWVRcHOw8Rb/f0mCupFqGDFCJpwW1pOEu0dD6o8qkvbsjCWS21YRfLsKiqLhGoTdYSJJLFf3dOxR4qU3nfQZsCFxHRMZk60Yegy/6C++1BRb9ZyTLHTZfdBcJjY6ZwQHYSes9ZAJxGYURU+G+P3Qi9Mm6o1CVx0q6RSXinzhz4w+NXM/F+jw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.117.161) smtp.rcpttodomain=google.com smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=tDm5UwvaS3Itxuxhm8KZFwUZHBBKLgVVgGx1D159DDc=;
+ b=QeARnWeraYL07ugAiTO7Feve7KHVko4YgiwvLSHReJ5d/ceCZHqFzUifDMoklkrB4GWDCiXrEk6x2eIJJroxbMihyLo7AoUIqgxF0DOFPdR6PnUhFHkdP9Iscvpqipn9nWSAJYe8okhKmTIbabWJk6uz9of/Aw4Fuz8S7xkJPUmJv/YO2tLBbeYqzFW49Vh6M9BuXeQP4GBojTq8TJ35dHGS6Y/7F2jF68GCzkW6xmHw889qZcCd0Icbq0HT33Z2KLElt4v6dpqWuswFWSynEcEla1KPkGfGhyRmC+k91R869P46456TyqY0OUDh/6Okacmg9yiz2fF3PasVMN9wAg==
+Received: from BN7PR02CA0029.namprd02.prod.outlook.com (2603:10b6:408:20::42)
+ by SJ0PR12MB6967.namprd12.prod.outlook.com (2603:10b6:a03:44b::6) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7633.36; Fri, 14 Jun
+ 2024 22:52:14 +0000
+Received: from BN1PEPF00004683.namprd03.prod.outlook.com
+ (2603:10b6:408:20:cafe::91) by BN7PR02CA0029.outlook.office365.com
+ (2603:10b6:408:20::42) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7677.26 via Frontend
+ Transport; Fri, 14 Jun 2024 22:52:13 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.161)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.117.161 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.161) by
+ BN1PEPF00004683.mail.protection.outlook.com (10.167.243.89) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.7677.15 via Frontend Transport; Fri, 14 Jun 2024 22:52:13 +0000
+Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
+ (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.4; Fri, 14 Jun
+ 2024 15:51:57 -0700
+Received: from [10.110.48.28] (10.126.230.35) by rnnvmail201.nvidia.com
+ (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.4; Fri, 14 Jun
+ 2024 15:51:56 -0700
+Message-ID: <2461f002-fdd4-4bf5-b797-827069cafc4b@nvidia.com>
+Date: Fri, 14 Jun 2024 15:51:56 -0700
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2] selftests/vDSO: fix clang build errors and warnings
+To: Carlos Llamas <cmllamas@google.com>
+CC: Shuah Khan <shuah@kernel.org>, Mark Brown <broonie@kernel.org>, "Vincenzo
+ Frascino" <vincenzo.frascino@arm.com>, Colin Ian King
+	<colin.i.king@gmail.com>, Valentin Obst <kernel@valentinobst.de>,
+	<linux-kselftest@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
+	<llvm@lists.linux.dev>
+References: <20240527211622.290635-1-jhubbard@nvidia.com>
+ <ZmiXqOHYaLLX557z@google.com>
+Content-Language: en-US
+From: John Hubbard <jhubbard@nvidia.com>
+In-Reply-To: <ZmiXqOHYaLLX557z@google.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: rnnvmail203.nvidia.com (10.129.68.9) To
+ rnnvmail201.nvidia.com (10.129.68.8)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BN1PEPF00004683:EE_|SJ0PR12MB6967:EE_
+X-MS-Office365-Filtering-Correlation-Id: 357ddfb9-54af-435f-9d05-08dc8cc4a1fe
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230037|1800799021|82310400023|36860700010|376011;
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?K2Iwcjg0TTVzdlJHaWhaNTdnUkV3RGpMb3JOOXB0TDJDcjBOT05SeXVzZFlk?=
+ =?utf-8?B?aEEwUTVBelJ2OHRuYTM3RE5rL29VdDdGVUhEVzZ4cXFwWXJIQjRnLy82NzRx?=
+ =?utf-8?B?K0tRWWorNjdGZFpLTjlDRjV2MElHdTlacTlHRVcrS1JXbzhvdWEwTStXOWx5?=
+ =?utf-8?B?OWNjamFLVUxmWDJVYlBha2ZKRVRMTTA3bXBGaEtLMzFXcERHMGt1RzBndGlC?=
+ =?utf-8?B?MnBkWitOSm13Z1BTeTRiZ3pqTkw0NW1MbUdNU2NkeGVTVm9hSVJHZlZDZFR3?=
+ =?utf-8?B?UGM5eXdWd20xMGRVNk05dldwRWxTQklPeHpvUlg3MVhPdEw0YXlFMXYyTHlF?=
+ =?utf-8?B?Qk5yYUpjQ2FtNlRtemMzZG1vVFN0NHM4ODhVa2tlMDl6dFVQekk3SHpwdmN3?=
+ =?utf-8?B?aGY2azYyR3BDSklpaWRIN0Nsa2RyNkZqWHV6cEZ1d09hdytVaHB4S05qVVlm?=
+ =?utf-8?B?cDNFZEtId0crOE5zZEpEMnU2N0RXVjhGMitpOVNYV0x5S1dIMk5aRlBEUk93?=
+ =?utf-8?B?eFFOeHg2SVpHaFpqWVRIM2Z0U3ZNckIybWcwbUJrTURyd1g1eXE2Ukd1N3pj?=
+ =?utf-8?B?cDY4SUNMUHY2UWxCem95VHk1bVRTS1JjZjJrd1VjRis3Uy9WRmRVa3NDUU9N?=
+ =?utf-8?B?TlJ6RTVoMnpYenBDUlZmV2V3ajU3T25sdTFkUngrMzhHU3lDVUtNMGF6bTU5?=
+ =?utf-8?B?TGQ1TzJ2R09OQ1VmOGFuY0hiMFlsaGpYNENhVUhzTDVtVWZ0bjZ1VEFsVEJ6?=
+ =?utf-8?B?RjVPMmdEY1FFNGlkekJxYUNDR09LMDF3RXFoc1U1eDBlK0xFZDlMcnhYZHBG?=
+ =?utf-8?B?TVZSWUlCYXBXYmFUUEZZWTY2RSthdU1GQ2MzY0U4WDZISFNEUjdTeDJHY0dI?=
+ =?utf-8?B?TzM1bmhXTGxVUmhyd1FENlpsK3AvY1k4TmxkVW9MYzFFUUtONStaRmM2ekl4?=
+ =?utf-8?B?clRMcHVxZEViNTVLcDV5em1pbVQ3ampiZExpZUpMbTJKOE1tOFdJbFo2MlBy?=
+ =?utf-8?B?QWd0ajRXREpGWWFxcHJpTnpnNFBTUENOcUFHRWgyZjRTT3k4RWcwOUNEK2Zy?=
+ =?utf-8?B?RFByTXYzazFRTEwyL3pocUdsR0daUmt5eDRieFEwbWFrb2x6VVBGQjRJWkR2?=
+ =?utf-8?B?dGlMS2pYOU9NamhhY0RzcC8vcVZvYllYMUwxWno3anhKWCtiRGgrOE5kS3BR?=
+ =?utf-8?B?ZDI0bDk3SlFFczdVM1ZQUjM3WWJSQWd2eWVrN1RHVFgvaXdBTm51L0dUbThX?=
+ =?utf-8?B?Z0grVDhvZWk0RDRCMlVobzRWOEFVellRSGNndlJsMkJDUkJEYUltVnNTalZu?=
+ =?utf-8?B?SjBBYTBFUmdFY3Y2czVwckVnY1cwSWx0NkNRTGpYbTMyVnZRbkY0TlUxRnJH?=
+ =?utf-8?B?aFhkcHZGYjlsWUJXWlpkdEdQWE9rNHN2dDVZQm9VT0F4aW1hQkk3UW9LbktW?=
+ =?utf-8?B?VkVMdUtXMjFZWXBnSlhBSFU1VHN2Q1Z0NHpiL0grNFdmS1dyWXVkYWFUYTlW?=
+ =?utf-8?B?WFFTWlA5SVk1aWNjS1c5Y2xZVVZvN2V1Tm5NalRMbjNzeWN5UWxwMnFOWXdC?=
+ =?utf-8?B?UjNNVkJlN29yM3lvdksyM2xROFYyTzA2NVcrdU5jRnVqOUFsT1ZmeXVOWk54?=
+ =?utf-8?B?WlIxWFNSMnNnSi8rTlVlNjFYd0FZK1p1QzMzWVNvK3pkK1EwZ3JYbGY5N1py?=
+ =?utf-8?B?YjViaDZBcUhBWFNWM0ZKR01nbmVxZWRIY1l1MWVmZW1xNXBvMWJHQml5aTFj?=
+ =?utf-8?B?YkQ5ekJSMnAyTFFMemcxbXNjMFlPUkgraWh6RFRabHcrTFhzU1Z4UGMzS2pk?=
+ =?utf-8?B?R3V3NkU0eEhuWkpiMlcwSURiZnZCMnhoTTBlUytiRWptMEN1bnRwMGdNTDBM?=
+ =?utf-8?B?V1kwUDA5TmN1bEtNQ21HdE9wUEVVODRFeTVuT21Lcm5FWXBCMUdua2s2dVNa?=
+ =?utf-8?Q?FjjIWv30X+k=3D?=
+X-Forefront-Antispam-Report:
+	CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230037)(1800799021)(82310400023)(36860700010)(376011);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Jun 2024 22:52:13.6408
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 357ddfb9-54af-435f-9d05-08dc8cc4a1fe
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	BN1PEPF00004683.namprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR12MB6967
 
-On 14.06.24 16:33, Boqun Feng wrote:
-> On Fri, Jun 14, 2024 at 11:59:58AM +0200, Miguel Ojeda wrote:
->> On Thu, Jun 13, 2024 at 9:05=E2=80=AFPM Boqun Feng <boqun.feng@gmail.com=
-> wrote:
->>>
->>> Does this make sense?
+On 6/11/24 11:30 AM, Carlos Llamas wrote:
+> On Mon, May 27, 2024 at 02:16:22PM -0700, John Hubbard wrote:
+>> When building with clang, via:
 >>
->> Implementation-wise, if you think it is simpler or more clear/elegant
->> to have the extra lower level layer, then that sounds fine.
+>>      make LLVM=1 -C tools/testing/selftests
 >>
->> However, I was mainly talking about what we would eventually expose to
->> users, i.e. do we want to provide `Atomic<T>` to begin with? If yes,
->=20
-> The truth is I don't know ;-) I don't have much data on which one is
-> better. Personally, I think AtomicI32 and AtomicI64 make the users have
-> to think about size, alignment, etc, and I think that's important for
-> atomic users and people who review their code, because before one uses
-> atomics, one should ask themselves: why don't I use a lock? Atomics
-> provide the ablities to do low level stuffs and when doing low level
-> stuffs, you want to be more explicit than ergonomic.
+>> ...there are several warnings, and an error. This fixes all of those and
+>> allows these tests to run and pass.
+> 
+> It might be best to split the 4 _different_ fixes into separate patches.
 
-How would this be different with `Atomic<i32>` and `Atomic<i64>`? Just
-because the underlying `Atomic<I>` type is generic shouldn't change
-this, right?
+If necessary, that can be done. It's sufficiently difficult to attract
+attention for selftests (see below) that I'm reluctant to make it even
+harder to get it all fixed, though.
 
----
-Cheers,
-Benno
+> 
+>>
+>> 1. Fix linker error (undefined reference to memcpy) by providing a local
+>>     version of memcpy.
+>>
+>> 2. clang complains about using this form:
+>>
+>>      if (g = h & 0xf0000000)
+>>
+>> ...so factor out the assignment into a separate step.
+> 
+> There has been multiple attempts to fix this. I can see these two:
+> https://lore.kernel.org/all/20211206102931.1433871-1-anders.roxell@linaro.org/
+> https://lore.kernel.org/all/20240501002150.1370861-1-edliaw@google.com/
+> 
+> ... I guess we somehow missed those?
+
+I guess so. :)
+
+> 
+>>
+>> 3. The code is passing a signed const char* to elf_hash(), which expects
+>>     a const unsigned char *. There are several callers, so fix this at
+>>     the source by allowing the function to accept a signed argument, and
+>>     then converting to unsigned operations, once inside the function.
+>>
+> 
+> There is also a v4 fix for this item that was sent out here:
+> https://lore.kernel.org/all/20240506181951.1804451-1-edliaw@google.com/
+
+No idea why these fixes are not getting picked up.
+
+> 
+>> 4. clang doesn't have __attribute__((externally_visible)) and generates
+>>     a warning to that effect. Fortunately, gcc 12 and gcc 13 do not seem
+>>     to require that attribute in order to build, run and pass tests here,
+>>     so remove it.
+>>
+>> [1] https://lore.kernel.org/all/20240329-selftests-libmk-llvm-rfc-v1-1-2f9ed7d1c49f@valentinobst.de/
+> 
+> What is this about? Left over from v1 maybe?
+
+Maybe.
+
+> 
+>>
+>> Signed-off-by: John Hubbard <jhubbard@nvidia.com>
+>> ---
+> 
+> I would prefer to pick up the fixes from folks who sent out the patches
+> first but I'm fine either way.
+
+I'm perfectly fine with dropping this and letting the other patches go
+in, but *something* needs to go in.
+
+> 
+> Reviewed-by: Carlos Llamas <cmllamas@google.com>
+
+Thanks for the review! I have no earthly idea what will happen next.
+I'd like to hear at least something from the maintainers about their
+intentions here.
+
+thanks,
+-- 
+John Hubbard
+NVIDIA
 
