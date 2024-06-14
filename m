@@ -1,263 +1,97 @@
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2055.outbound.protection.outlook.com [40.107.223.55])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 652DC186E58
-	for <llvm@lists.linux.dev>; Fri, 14 Jun 2024 23:39:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.223.55
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718408348; cv=fail; b=LVGcUWZrPabWg9D+0jsZEo47AyvfcLiuILWklblbb4c6zoa2qFDavRFMSxOV7LHxZXkMAm7y5v+KnOTR8GWq/yYke+qt+sUyk8iasToL9R1FcNFOQlF84GNYLf5OR8fpUnwRMcPaj1bfP1/lFiFSoZ3TA7/FdhkwvZ957Nmcsn0=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718408348; c=relaxed/simple;
-	bh=Pk1/ObaVXI98/IC0ygKdMUWnxqef12lUnrLMgPmG9u4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=UVzRPc7vAT/CS+orzAblNoHrMAqz8c7v3peK8xzmwqSfD2fSUQLpf87cfbXOho4iyGGDmgwbN7sLtTjw69G0hloKhxSw0yLrHF7iDQ/7Fb1tTT+cHjcmEgnHLyruzYuFkWywVOv58nVDvbyZkXSPQpZvEaAYKBoy24D8aICfqAo=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=kScD13Hs; arc=fail smtp.client-ip=40.107.223.55
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E7E7741C75;
+	Fri, 14 Jun 2024 23:58:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1718409511; cv=none; b=fpqqCa111gIqFEC0rHIlQZ9Vkn8eCeVktdy2R1R/nn/a3ZNLsfn3eNZ4bJbC1/ZIh+u/qmahPtdfc5xsY6QTybS2uPnWEi+2Us4o3gtVpUQN2B4OO4pi+S99riWnh1m78ynz1XPazJyAMzx5eBxqqa5/zsCwa6iokH1Yl15qAG8=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1718409511; c=relaxed/simple;
+	bh=99uB7Cd/uOD/uoxvs4cOs2zbalcob2jqxeYr3FcXzhk=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=gC03KWGC9wf0UCWb9IbBpPu/LU0MLCWebTVzwQ/90aEYpoOmY0lh6KzT9+Rv6p777XP5DY5O5HKB8ASGwHvcVFvcFLdY+Sh9ZS1aGlksUII5Mt9GMLttDeEmYcgPl72KL0CPoVoeLTyQZnfSzgaWxc3K3YO9xKsbEXaEThhn5D4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=F5AC/MEx; arc=none smtp.client-ip=198.175.65.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="kScD13Hs"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=igeUzbrMaHPlch7Nv7Sxdg6+wfQqSqddD3NacCxdTUlGYFgdcoDhyg0l5jeVW/zcnJeX7vjqywQ4yXWniZgSofu5Ibhta5N7MEkEXpr88FP96sjctfIYAj6HjRRkHkGmMIb49qJFD6YJNXwt/K1EnjF8sj8TA+AOasuZ0z/kEcSOC9paY7yEE6+ylVnLvfEls6FRZWMRvbE8/XOibf88YRYmUawTxsljy7Hff6s/iaeKpLb5/i9hH6waT5G5TFaRD3is59gXCHqZxzTlLhT8WZYsZxwg7nZcUtuyP4bsDhf/EreuZGHaeGzYyVw17qcMK/2jyv4UyTiWtetdBWJEJg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=slhVPvdU41zpfsVovB+m/5TIi4QEi4IZ8DvFmagAyWM=;
- b=jDd37G4x0oIxruV98s8Q+QEC7q19WdedP26k8/HMyRj2/P2xrYC9MwYs0aUeWK/pd1GH94ftLVUc3EpCuy+gTHwT+ZCFdV0QVJtu0O+IItY08IotBME4NXAP2cVClsHxzw6UG2RZQSMFvtrfXg9SYbpjRiieNyfzuNqc4Q42AYZUdEO9k6NHwI3Huav9Erg/AvHQjLJji4quihH5ra+ibkSMROQZC6Dn0gxrE2HQS3n7qkIuXcDU6xl/WQ2xHFDh76KWG+D1x9n24r+nIy8G/J9hKvh30qaUgOaoRN01yIp9JNHQxclWY+0Cl30uwQfRtMPDJm3YqpYtqird99NLOQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.161) smtp.rcpttodomain=kernel.org smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=slhVPvdU41zpfsVovB+m/5TIi4QEi4IZ8DvFmagAyWM=;
- b=kScD13HsaagFD4wnvMuM6KEfxh7Xj6oRkBKAZvixkKDxF/5FYHZ37tpQspaNFQ82SmErbsW2UdGYaYXa5vSvcFIhn0XrkP1kbEtenJJ5/MFK2SpIcFFTw0DMl7yx94QrFAiPEwN7E2BRNFBo+FCBtvaJaTtxmDpnnmL2FyVcRw4aLB36ZDeM6l57sdtnJR/qD/bLvb3J7Hg8wVDXaGkFTiWgARWoHvRxCGvTeM1lq7aAGDVJINPvyn0QGzgA4q9VjjyXIImDOR1v28o2hZ4B4r8iOEwCvst6vZrCis71ouLaatJAwuWbtKzZJ6tlbpOH/VAg6MyxJi2Ckun4iY7b/g==
-Received: from SA0PR13CA0016.namprd13.prod.outlook.com (2603:10b6:806:130::21)
- by IA1PR12MB6161.namprd12.prod.outlook.com (2603:10b6:208:3eb::21) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7633.37; Fri, 14 Jun
- 2024 23:39:02 +0000
-Received: from SA2PEPF00003F63.namprd04.prod.outlook.com
- (2603:10b6:806:130:cafe::53) by SA0PR13CA0016.outlook.office365.com
- (2603:10b6:806:130::21) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7677.21 via Frontend
- Transport; Fri, 14 Jun 2024 23:39:02 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.161)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.161 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.161) by
- SA2PEPF00003F63.mail.protection.outlook.com (10.167.248.38) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.7677.15 via Frontend Transport; Fri, 14 Jun 2024 23:39:02 +0000
-Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
- (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.4; Fri, 14 Jun
- 2024 16:38:53 -0700
-Received: from [10.110.48.28] (10.126.231.35) by rnnvmail201.nvidia.com
- (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.4; Fri, 14 Jun
- 2024 16:38:52 -0700
-Message-ID: <ab6124eb-88a7-441b-add9-b12176308155@nvidia.com>
-Date: Fri, 14 Jun 2024 16:38:47 -0700
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="F5AC/MEx"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1718409511; x=1749945511;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=99uB7Cd/uOD/uoxvs4cOs2zbalcob2jqxeYr3FcXzhk=;
+  b=F5AC/MExDCO6cli/R1nkSLBGux994jQQeQloDf3Er4rcIUt+qDNt/EEp
+   Baz8BXMP36eSNX9X7oZXBsuI2Xc3f9vSK3hW/c3c7rxY51N69gS1F6yeB
+   f7deJuhE36G0HaH/sBbPwQkC3RjdCChtM7SMURYgu+gDzRM5dxj+E6py5
+   UBQMYd829a/wRhNA/191I5YPJwiojN8gqFgXVbvjzSXzIHfpyDFq4Bt+s
+   IxE8+qlJGYFjJYYkqNuSuGMuvI7roCOAO9Wh+/5SzGaVac15OocTwa94/
+   VoIh91HGauWHzGx4niWDFuGBjbcEvAw0aFrzBaBy6CnWaHSknAq+AGJCc
+   Q==;
+X-CSE-ConnectionGUID: 9AhOToqVTBqC8P19I3psjA==
+X-CSE-MsgGUID: f6YEoFatTBCM3szhsQflkg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11103"; a="19143787"
+X-IronPort-AV: E=Sophos;i="6.08,239,1712646000"; 
+   d="scan'208";a="19143787"
+Received: from fmviesa009.fm.intel.com ([10.60.135.149])
+  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jun 2024 16:58:30 -0700
+X-CSE-ConnectionGUID: s7eKz1ViRzW+lQaQsi6rIQ==
+X-CSE-MsgGUID: PLEkrzrOSRi/OdhW/NA6uA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.08,239,1712646000"; 
+   d="scan'208";a="40754516"
+Received: from lkp-server01.sh.intel.com (HELO 9e3ee4e9e062) ([10.239.97.150])
+  by fmviesa009.fm.intel.com with ESMTP; 14 Jun 2024 16:58:28 -0700
+Received: from kbuild by 9e3ee4e9e062 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1sIGoL-0001vR-2U;
+	Fri, 14 Jun 2024 23:58:25 +0000
+Date: Sat, 15 Jun 2024 07:58:25 +0800
+From: kernel test robot <lkp@intel.com>
+To: Danilo Krummrich <dakr@redhat.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	dri-devel@lists.freedesktop.org
+Subject: [drm-misc:topic/rust-drm 3/21] error[E0050]: method `init` has 1
+ parameter but the declaration in trait `kernel::Module::init` has 2
+Message-ID: <202406150700.bk4MlPf7-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 1/3] selftests/vDSO: fix clang build errors and
- warnings
-To: Shuah Khan <shuah@kernel.org>
-CC: "Jason A . Donenfeld" <Jason@zx2c4.com>, Andy Lutomirski
-	<luto@kernel.org>, Mark Brown <broonie@kernel.org>, Vincenzo Frascino
-	<vincenzo.frascino@arm.com>, Colin Ian King <colin.i.king@gmail.com>,
-	Valentin Obst <kernel@valentinobst.de>, <linux-kselftest@vger.kernel.org>,
-	LKML <linux-kernel@vger.kernel.org>, <llvm@lists.linux.dev>, Carlos Llamas
-	<cmllamas@google.com>, Edward Liaw <edliaw@google.com>, Muhammad Usama Anjum
-	<usama.anjum@collabora.com>, Thomas Gleixner <tglx@linutronix.de>
-References: <20240614233105.265009-1-jhubbard@nvidia.com>
- <20240614233105.265009-2-jhubbard@nvidia.com>
-Content-Language: en-US
-From: John Hubbard <jhubbard@nvidia.com>
-In-Reply-To: <20240614233105.265009-2-jhubbard@nvidia.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: rnnvmail201.nvidia.com (10.129.68.8) To
- rnnvmail201.nvidia.com (10.129.68.8)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SA2PEPF00003F63:EE_|IA1PR12MB6161:EE_
-X-MS-Office365-Filtering-Correlation-Id: 6c4cbf64-1c16-4d9e-331b-08dc8ccb2c02
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230037|1800799021|82310400023|7416011|376011|36860700010;
-X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?dWxCMGVra0lBekEzNG5qL1pZWTZKMnBCMkIzUDlaT2pkejdQUVBtNC8xTEFN?=
- =?utf-8?B?aG56YUQ4L2JWa2s3VEhGTHdpQ0dEVXRSSUpoZWtHYVFWQ1lVdjQrUnY0NmR1?=
- =?utf-8?B?Q0RMTlk3UHBsTHU5VTFSdzFtUXJIV3A3UTNORWIwL2JKRWw3RzUzQWtqSUdw?=
- =?utf-8?B?blRvWVgveDBzMHJyS1kvU29LdVluV3IybjNhTDMvMWtMSmtXVytCaElhTzA0?=
- =?utf-8?B?UXZyZ3hZU1orR0xBWDNSR0hVdjRmWTc4SXE4UzJvTkVrQktpSXNZeGt5YXlZ?=
- =?utf-8?B?V0tVb01JNDU5STBtQldRWFF4MTdmVkxEaU9OZTdMb1dEVjhiRXFESnNjclF5?=
- =?utf-8?B?amhqODhUVUJBSU02K3U0UGdiR2c2bGUxM1o3R1kvUFBtMDdKNnBFV3lkZHJa?=
- =?utf-8?B?TG0wb1hPTE5BVDRuNCs5UWs3NDdmSmdKNDVCWjhaRlArNXd5MlZ0RVBOSXdC?=
- =?utf-8?B?QUN6eW1pbzVqUkYwWVRHL1VHRHlFSHlnOWUrWlErbTExN1VoelJ6dzJld0xT?=
- =?utf-8?B?ZW5GNHNuYm1RWFdIbGlPa1VvZDVBb3o3Y3pSdjRTalNTY1hVVVFielppVTFD?=
- =?utf-8?B?bDVibGRXVXFSRy8rOFVRSkVVeWgrWWpveEs0MTZWYlArYWdzMTBGRC8yZUhR?=
- =?utf-8?B?UHpMeDk4UzdqYldCTE5RcmFrTXVhUnZNdzJlendyYUxMZjkxQ3l3NDBBc3R3?=
- =?utf-8?B?cHpta0xkd2pMb25Ick9FbmRkZlhCbmdvL1p2WkxKaWgvMlJMQXZmYVVVSmlp?=
- =?utf-8?B?L0k4ajA2STdBdDJBeVdBNzNaWFh3Nk5RWGQrdnNCZTU2bkRqajZQK2I2Wnk1?=
- =?utf-8?B?L29OVFoySzFEbWRxMk1HVjlTRWpTZGY2U2lldi9haStXRWthMy9pY1Z3YkFN?=
- =?utf-8?B?T1Z4VkxyY3NrQXdkeVNncFdvSDZDdXMwSGc4N2tsdFBZQlY3Zk9BRXRZNEJG?=
- =?utf-8?B?Sm5EUDNSTjJnN2FxNmZFT2k4NDJ3aU54YjRBMTBDbDc5dFFjWHo2UXRGcEpH?=
- =?utf-8?B?Y0hTa2pSRzUrZzRoeUluOFpXMEZITmc5eENLbEVXaVk0djlPSkZUcGlRZExi?=
- =?utf-8?B?VU0yOVRNVkx4cGExWGpINXYzZDUxN0x2V2JIcE9oOXdoVHpmcU1RTG41WWZ6?=
- =?utf-8?B?TEpoZXFZY1hpWFR6djdjSXpSNStoaVFWbWZqTmJ3ZWJYYzE4ekF6NlZzSitk?=
- =?utf-8?B?Rk5leVhMVk0xOEtMQ29BV2p1MmpjQmVnRWh0d21obXdHck9vVGJYYTdaTWRh?=
- =?utf-8?B?bm00YnNwc3pwTlcvM2ZuaGtDVlpTL3pLSFZ4K2hOVEtlOXZicmZWNmk0bTh0?=
- =?utf-8?B?d2lsNDhRbmxCUnNObmdvSXlTWGl3cWRiOFpNTEhaYU1FNWorTmpHajF4SWN5?=
- =?utf-8?B?azY0bEJxSmVKSk41a1oxNzhGU2JOUk5xOUJFMXQ3bXFQWTVnZS9ITS8xYk54?=
- =?utf-8?B?VXRwN0hid0t0Y0srOHpocEx5NjVOYWl4V0drRDFUNnoxM3FYaVZlc29ZQlJq?=
- =?utf-8?B?YTlUZ29NUk1GalF4S3NlUnV0RkpFZTYxNjNkbFNtOW8zWUNNdUtHSzBhUFpt?=
- =?utf-8?B?YWlUeXdPbEw1T2E0dWlFQmxZYisvVkVyODNkdHhhZG04L0JYZko3RllYOHM4?=
- =?utf-8?B?blg4elR3L1FQelpTbHNHbGg0VkxUbVVsS00yYTAzNmNuRmZ5aGtxN1pMRWpo?=
- =?utf-8?B?WnljUlZoVGF5OXU5N1J4VnFJbHA1VnpDK0t5YmJ6ZU5XUk1Fb0hCeExmTzNn?=
- =?utf-8?B?eUoydW5CNGpsWEdhcTVzZ0lSQVluMnEwN21TcDhhU3NqOFJIbXIvZlMvVThh?=
- =?utf-8?B?Z2F4d295NGV1OWIrQVM0RzVZbFdFMHBJQ01JMHY3dlJrQVRaVjJKVGp5bjVD?=
- =?utf-8?B?ZXlzeTVZK0pMTUpjVmlsc2k5Um9XME1QNy9BZDhVNDVqZXc9PQ==?=
-X-Forefront-Antispam-Report:
-	CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230037)(1800799021)(82310400023)(7416011)(376011)(36860700010);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Jun 2024 23:39:02.2952
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 6c4cbf64-1c16-4d9e-331b-08dc8ccb2c02
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	SA2PEPF00003F63.namprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR12MB6161
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Also Cc'ing Thomas Gleixner on this one, sorry for the omission.
+tree:   git://anongit.freedesktop.org/drm/drm-misc topic/rust-drm
+head:   0a137e568c054362d0988cd65c2960de3172ff41
+commit: f79700d8c6eee68d6d2c0eb92113211d22501860 [3/21] rust: pass module name to `Module::init`
+config: x86_64-rhel-8.3-rust (https://download.01.org/0day-ci/archive/20240615/202406150700.bk4MlPf7-lkp@intel.com/config)
+compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240615/202406150700.bk4MlPf7-lkp@intel.com/reproduce)
 
-On 6/14/24 4:31 PM, John Hubbard wrote:
-> When building with clang, via:
-> 
->      make LLVM=1 -C tools/testing/selftests
-> 
-> ...there are several warnings, and an error. This fixes all of those and
-> allows these tests to run and pass.
-> 
-> 1. Fix linker error (undefined reference to memcpy) by providing a local
->     version of memcpy.
-> 
-> 2. clang complains about using this form:
-> 
->      if (g = h & 0xf0000000)
-> 
-> ...so factor out the assignment into a separate step.
-> 
-> 3. The code is passing a signed const char* to elf_hash(), which expects
->     a const unsigned char *. There are several callers, so fix this at
->     the source by allowing the function to accept a signed argument, and
->     then converting to unsigned operations, once inside the function.
-> 
-> 4. clang doesn't have __attribute__((externally_visible)) and generates
->     a warning to that effect. Fortunately, gcc 12 and gcc 13 do not seem
->     to require that attribute in order to build, run and pass tests here,
->     so remove it.
-> 
-> Reviewed-by: Carlos Llamas <cmllamas@google.com>
-> Reviewed-by: Edward Liaw <edliaw@google.com>
-> Reviewed-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
-> Tested-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
-> Signed-off-by: John Hubbard <jhubbard@nvidia.com>
-> ---
->   tools/testing/selftests/vDSO/parse_vdso.c      | 16 +++++++++++-----
->   .../selftests/vDSO/vdso_standalone_test_x86.c  | 18 ++++++++++++++++--
->   2 files changed, 27 insertions(+), 7 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/vDSO/parse_vdso.c b/tools/testing/selftests/vDSO/parse_vdso.c
-> index 413f75620a35..4ae417372e9e 100644
-> --- a/tools/testing/selftests/vDSO/parse_vdso.c
-> +++ b/tools/testing/selftests/vDSO/parse_vdso.c
-> @@ -55,14 +55,20 @@ static struct vdso_info
->   	ELF(Verdef) *verdef;
->   } vdso_info;
->   
-> -/* Straight from the ELF specification. */
-> -static unsigned long elf_hash(const unsigned char *name)
-> +/*
-> + * Straight from the ELF specification...and then tweaked slightly, in order to
-> + * avoid a few clang warnings.
-> + */
-> +static unsigned long elf_hash(const char *name)
->   {
->   	unsigned long h = 0, g;
-> -	while (*name)
-> +	const unsigned char *uch_name = (const unsigned char *)name;
-> +
-> +	while (*uch_name)
->   	{
-> -		h = (h << 4) + *name++;
-> -		if (g = h & 0xf0000000)
-> +		h = (h << 4) + *uch_name++;
-> +		g = h & 0xf0000000;
-> +		if (g)
->   			h ^= g >> 24;
->   		h &= ~g;
->   	}
-> diff --git a/tools/testing/selftests/vDSO/vdso_standalone_test_x86.c b/tools/testing/selftests/vDSO/vdso_standalone_test_x86.c
-> index 8a44ff973ee1..27f6fdf11969 100644
-> --- a/tools/testing/selftests/vDSO/vdso_standalone_test_x86.c
-> +++ b/tools/testing/selftests/vDSO/vdso_standalone_test_x86.c
-> @@ -18,7 +18,7 @@
->   
->   #include "parse_vdso.h"
->   
-> -/* We need a libc functions... */
-> +/* We need some libc functions... */
->   int strcmp(const char *a, const char *b)
->   {
->   	/* This implementation is buggy: it never returns -1. */
-> @@ -34,6 +34,20 @@ int strcmp(const char *a, const char *b)
->   	return 0;
->   }
->   
-> +/*
-> + * The clang build needs this, although gcc does not.
-> + * Stolen from lib/string.c.
-> + */
-> +void *memcpy(void *dest, const void *src, size_t count)
-> +{
-> +	char *tmp = dest;
-> +	const char *s = src;
-> +
-> +	while (count--)
-> +		*tmp++ = *s++;
-> +	return dest;
-> +}
-> +
->   /* ...and two syscalls.  This is x86-specific. */
->   static inline long x86_syscall3(long nr, long a0, long a1, long a2)
->   {
-> @@ -70,7 +84,7 @@ void to_base10(char *lastdig, time_t n)
->   	}
->   }
->   
-> -__attribute__((externally_visible)) void c_main(void **stack)
-> +void c_main(void **stack)
->   {
->   	/* Parse the stack */
->   	long argc = (long)*stack;
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202406150700.bk4MlPf7-lkp@intel.com/
 
-thanks,
+All errors (new ones prefixed by >>):
+
+>> error[E0050]: method `init` has 1 parameter but the declaration in trait `kernel::Module::init` has 2
+   --> drivers/net/phy/ax88796b_rust.rs:14:1
+   |
+   14 | / kernel::module_phy_driver! {
+   15 | |     drivers: [PhyAX88772A, PhyAX88772C, PhyAX88796B],
+   16 | |     device_table: [
+   17 | |         DeviceId::new_with_driver::<PhyAX88772A>(),
+   ...  |
+   24 | |     license: "GPL",
+   25 | | }
+   | |_^ expected 2 parameters, found 1
+   |
+>> = note: `init` from trait: `fn(&'static kernel::prelude::CStr, &'static kernel::ThisModule) -> core::result::Result<Self, kernel::error::Error>`
+   = note: this error originates in the macro `kernel::module_phy_driver` (in Nightly builds, run with -Z macro-backtrace for more info)
+
 -- 
-John Hubbard
-NVIDIA
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
