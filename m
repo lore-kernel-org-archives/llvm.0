@@ -1,61 +1,69 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1313615F418;
-	Fri, 14 Jun 2024 16:13:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4132619B3D2;
+	Fri, 14 Jun 2024 16:24:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718381628; cv=none; b=WLwS86kX3iralDBLH/l30bqcdF5S7BNXuiemPF1x1Jd9GrasnQzO1+1q2/OjC9yWpxDuPO7oqDRIedfvb+HxpsPkZjmOIek8OdwVJnfBhmNpe+/TBt9qF6VOGfcokYp0FTyR4XEZMSxT7SwdK138bZvdIuj7L/8IxgGV/XKP4vY=
+	t=1718382269; cv=none; b=f8svPxxvW2JpiyeZV3Grpa5DMOHkgT/Y9ReAzpiaE3qqmifffIIOVnTCV79usZ5Qp+nH1MaxhaY1njE0DdEKA6W2+eF0jrdMh1lGjoAzoBsamLuJ7O7r28VGj75hFKbfTPulIBkGIYJMqXl8n9VJK4bmMA79nB+1tQqospOZU6M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718381628; c=relaxed/simple;
-	bh=ROHvjcAId5hEmbP3jDbLllG+xbS+SnZjU7cqDuWWwaY=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=ohPE7ckCEIlaRgoj9bviqOIblKjaged0YHZOIf5TMdIpVrJWlvjmqKHua/r4lB14lnjzMa4xnfNPiArG0uCD+a8wYZnN54J7o/26gSLD0rN7eNt1hDxNvGsF9BoLlS8kBUKETvsCNXV/tkECpC583VpvCtHqcQXiY4c9aggZQRA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=klahJ4wd; arc=none smtp.client-ip=198.175.65.19
+	s=arc-20240116; t=1718382269; c=relaxed/simple;
+	bh=QUjO/ewrv40kB8UQDqGi+mbyl2naOvjhfguK5EKbsQk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=DwdKnY2c/l+JyMJKsKjkxLxrMGSUY7coiabXEqmnfz5DmmGqsaLQhOu7n2GfggRDbnSECa1zHJXFqxVjjxD7zxl7R/l71UwGXrXBkIyABIyKfr0ifGLnWP+TXyzrgcJ/8E/a9sKURtXE/AEJqM2dqjXstNLjjX7Xb5fRvxUg3nU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=CsRpjWFt; arc=none smtp.client-ip=198.175.65.18
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="klahJ4wd"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="CsRpjWFt"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1718381628; x=1749917628;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=ROHvjcAId5hEmbP3jDbLllG+xbS+SnZjU7cqDuWWwaY=;
-  b=klahJ4wdWZ8z5SBAXyw3tAxE44QWSNfnLSv2U8Qp3WwEN9mnq9enCuCu
-   se8HF4R87YDSm1K///4IBHn7SIWqt1IhBeVeVeCoyO0ds2uxJah06+p3t
-   ESqgVV5dfSRHEMSXAkWyuxqC2khA5+JClqV7QT4l/LudGL73jUbH+d3Y5
-   RNLUqxku1k1dECDfcFHqjeBeOdK82LhEvqNDXKWdeZd4vGvrs1pABL9Xf
-   ZQmHRIWBSEbnvWbOlUFF0OPFQfduwYgnq574APEjGgRLFD1Nu4BQR15C+
-   e1VlJoubC7hogqQNbOz/RImwnV3qV+JrPKYnR7VYsk+jcAn8/WMCgWYxk
-   g==;
-X-CSE-ConnectionGUID: LqKv9lq0TiGGI+Qa1Xnftw==
-X-CSE-MsgGUID: IsZ3603MTfCLeK6We/ttNQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11103"; a="15109466"
+  t=1718382267; x=1749918267;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=QUjO/ewrv40kB8UQDqGi+mbyl2naOvjhfguK5EKbsQk=;
+  b=CsRpjWFtKwukWuPhooBdW/Ad7BGYgmg6DTYDK8PaMqG2vzkdktoVeYPW
+   4M0XNVlaGI7nx2mg+2+pETy6eYOe7onOq78wdYtgK6a51FNYIvc30SGnw
+   FAdXaaD+yYbvDWTwG/5BqZDNCEMeSiZEOwM7aktJBWwkQL64FAvVdDvIN
+   SwdP1Q6xflKZDyoZUIgWfzNKT2pDBYnWgVNXoI+ytcCUXh1ClBcOTH2/5
+   4JBLIehscU0g+F0b7twTFAHJsqSkjKsCXyAH4chKn6/jyjymlvgE8eaNG
+   02jxKSnd4UTiFCvgg62qdl32iVFifvqziNPWBYI4tatOg70Gc+hc/ycgZ
+   A==;
+X-CSE-ConnectionGUID: W/a3oKTXTzOgc3ugwc1bGw==
+X-CSE-MsgGUID: TSTENIPeSw6GhKjAskHf+g==
+X-IronPort-AV: E=McAfee;i="6700,10204,11103"; a="15426470"
 X-IronPort-AV: E=Sophos;i="6.08,238,1712646000"; 
-   d="scan'208";a="15109466"
-Received: from orviesa007.jf.intel.com ([10.64.159.147])
-  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jun 2024 09:13:10 -0700
-X-CSE-ConnectionGUID: hIeg1GZoRT2Dwnvr4jAf8w==
-X-CSE-MsgGUID: g4vtyIBXQ9WMGIxlPbZvDw==
+   d="scan'208";a="15426470"
+Received: from orviesa001.jf.intel.com ([10.64.159.141])
+  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jun 2024 09:24:13 -0700
+X-CSE-ConnectionGUID: E+D1AwzXQ+mwB8uP53wUow==
+X-CSE-MsgGUID: MG2teJ6HTcaSrBPFV7eESg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.08,238,1712646000"; 
-   d="scan'208";a="41260636"
+   d="scan'208";a="78031221"
 Received: from lkp-server01.sh.intel.com (HELO 9e3ee4e9e062) ([10.239.97.150])
-  by orviesa007.jf.intel.com with ESMTP; 14 Jun 2024 09:13:07 -0700
+  by orviesa001.jf.intel.com with ESMTP; 14 Jun 2024 09:24:08 -0700
 Received: from kbuild by 9e3ee4e9e062 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1sI9Y1-0001UL-1B;
-	Fri, 14 Jun 2024 16:13:05 +0000
-Date: Sat, 15 Jun 2024 00:13:02 +0800
+	id 1sI9if-0001V7-2S;
+	Fri, 14 Jun 2024 16:24:05 +0000
+Date: Sat, 15 Jun 2024 00:23:46 +0800
 From: kernel test robot <lkp@intel.com>
-To: Hongbo Li <lihongbo22@huawei.com>
+To: "Jason-JH.Lin" <jason-jh.lin@mediatek.com>,
+	Jassi Brar <jassisinghbrar@gmail.com>,
+	Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Christian Brauner <christianvanbrauner@gmail.com>,
-	Christian Brauner <brauner@kernel.org>
-Subject: [brauner-vfs:vfs.mount.api 1/2] fs/hostfs/hostfs_kern.c:942:8:
- error: initializing 'char *' with an expression of type 'const char *'
- discards qualifiers
-Message-ID: <202406150027.UbbG1nAi-lkp@intel.com>
+	Matthias Brugger <matthias.bgg@gmail.com>,
+	"Jason-JH . Lin" <jason-jh.lin@mediatek.com>,
+	Singo Chang <singo.chang@mediatek.com>,
+	Nancy Lin <nancy.lin@mediatek.com>, linux-kernel@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-mediatek@lists.infradead.org,
+	Project_Global_Chrome_Upstream_Group@mediatek.com
+Subject: Re: [PATCH 1/2] mailbox: Add power_get/power_put API to mbox_chan_ops
+Message-ID: <202406150022.LXLvvkeI-lkp@intel.com>
+References: <20240614040133.24967-2-jason-jh.lin@mediatek.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -64,158 +72,91 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20240614040133.24967-2-jason-jh.lin@mediatek.com>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/vfs/vfs.git vfs.mount.api
-head:   104eef133fd9c17e4dc28bf43f592a86f26d8a59
-commit: cd140ce9f611a5e9d2a5989a282b75e55c71dab3 [1/2] hostfs: convert hostfs to use the new mount API
-config: um-defconfig (https://download.01.org/0day-ci/archive/20240615/202406150027.UbbG1nAi-lkp@intel.com/config)
+Hi Jason-JH.Lin,
+
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on linus/master]
+[also build test ERROR on v6.10-rc3 next-20240613]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Jason-JH-Lin/mailbox-Add-power_get-power_put-API-to-mbox_chan_ops/20240614-120412
+base:   linus/master
+patch link:    https://lore.kernel.org/r/20240614040133.24967-2-jason-jh.lin%40mediatek.com
+patch subject: [PATCH 1/2] mailbox: Add power_get/power_put API to mbox_chan_ops
+config: riscv-defconfig (https://download.01.org/0day-ci/archive/20240615/202406150022.LXLvvkeI-lkp@intel.com/config)
 compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project 78ee473784e5ef6f0b19ce4cb111fb6e4d23c6b2)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240615/202406150027.UbbG1nAi-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240615/202406150022.LXLvvkeI-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202406150027.UbbG1nAi-lkp@intel.com/
-
-Note: the brauner-vfs/vfs.mount.api HEAD 104eef133fd9c17e4dc28bf43f592a86f26d8a59 builds fine.
-      It only hurts bisectability.
+| Closes: https://lore.kernel.org/oe-kbuild-all/202406150022.LXLvvkeI-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
-   In file included from fs/hostfs/hostfs_kern.c:12:
+   In file included from drivers/mailbox/mailbox.c:9:
+   In file included from include/linux/interrupt.h:21:
+   In file included from arch/riscv/include/asm/sections.h:9:
    In file included from include/linux/mm.h:2253:
    include/linux/vmstat.h:514:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
      514 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
          |                               ~~~~~~~~~~~ ^ ~~~
-   In file included from fs/hostfs/hostfs_kern.c:13:
-   In file included from include/linux/pagemap.h:11:
-   In file included from include/linux/highmem.h:12:
-   In file included from include/linux/hardirq.h:11:
-   In file included from arch/um/include/asm/hardirq.h:5:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:14:
-   In file included from arch/um/include/asm/io.h:24:
-   include/asm-generic/io.h:548:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     548 |         val = __raw_readb(PCI_IOBASE + addr);
-         |                           ~~~~~~~~~~ ^
-   include/asm-generic/io.h:561:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     561 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
-      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-         |                                                   ^
-   In file included from fs/hostfs/hostfs_kern.c:13:
-   In file included from include/linux/pagemap.h:11:
-   In file included from include/linux/highmem.h:12:
-   In file included from include/linux/hardirq.h:11:
-   In file included from arch/um/include/asm/hardirq.h:5:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:14:
-   In file included from arch/um/include/asm/io.h:24:
-   include/asm-generic/io.h:574:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     574 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
-      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
-         |                                                   ^
-   In file included from fs/hostfs/hostfs_kern.c:13:
-   In file included from include/linux/pagemap.h:11:
-   In file included from include/linux/highmem.h:12:
-   In file included from include/linux/hardirq.h:11:
-   In file included from arch/um/include/asm/hardirq.h:5:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:14:
-   In file included from arch/um/include/asm/io.h:24:
-   include/asm-generic/io.h:585:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     585 |         __raw_writeb(value, PCI_IOBASE + addr);
-         |                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:595:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     595 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:605:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     605 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:693:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     693 |         readsb(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:701:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     701 |         readsw(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:709:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     709 |         readsl(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:718:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     718 |         writesb(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   include/asm-generic/io.h:727:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     727 |         writesw(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   include/asm-generic/io.h:736:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     736 |         writesl(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
->> fs/hostfs/hostfs_kern.c:942:8: error: initializing 'char *' with an expression of type 'const char *' discards qualifiers [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
-     942 |         char *host_root = fc->source;
-         |               ^           ~~~~~~~~~~
-   13 warnings and 1 error generated.
+>> drivers/mailbox/mailbox.c:382:11: error: incompatible pointer to integer conversion returning 'void *' from a function with result type 'int' [-Wint-conversion]
+     382 |                         return ERR_PTR(ret);
+         |                                ^~~~~~~~~~~~
+   1 warning and 1 error generated.
 
 
-vim +942 fs/hostfs/hostfs_kern.c
+vim +382 drivers/mailbox/mailbox.c
 
-   937	
-   938	static int hostfs_fill_super(struct super_block *sb, struct fs_context *fc)
-   939	{
-   940		struct hostfs_fs_info *fsi = sb->s_fs_info;
-   941		struct inode *root_inode;
- > 942		char *host_root = fc->source;
-   943		int err;
-   944	
-   945		sb->s_blocksize = 1024;
-   946		sb->s_blocksize_bits = 10;
-   947		sb->s_magic = HOSTFS_SUPER_MAGIC;
-   948		sb->s_op = &hostfs_sbops;
-   949		sb->s_d_op = &simple_dentry_operations;
-   950		sb->s_maxbytes = MAX_LFS_FILESIZE;
-   951		err = super_setup_bdi(sb);
-   952		if (err)
-   953			return err;
-   954	
-   955		/* NULL is printed as '(null)' by printf(): avoid that. */
-   956		if (fc->source == NULL)
-   957			host_root = "";
-   958	
-   959		fsi->host_root_path =
-   960			kasprintf(GFP_KERNEL, "%s/%s", root_ino, host_root);
-   961		if (fsi->host_root_path == NULL)
-   962			return -ENOMEM;
-   963	
-   964		root_inode = hostfs_iget(sb, fsi->host_root_path);
-   965		if (IS_ERR(root_inode))
-   966			return PTR_ERR(root_inode);
-   967	
-   968		if (S_ISLNK(root_inode->i_mode)) {
-   969			char *name;
-   970	
-   971			iput(root_inode);
-   972			name = follow_link(fsi->host_root_path);
-   973			if (IS_ERR(name))
-   974				return PTR_ERR(name);
-   975	
-   976			root_inode = hostfs_iget(sb, name);
-   977			kfree(name);
-   978			if (IS_ERR(root_inode))
-   979				return PTR_ERR(root_inode);
-   980		}
-   981	
-   982		sb->s_root = d_make_root(root_inode);
-   983		if (sb->s_root == NULL)
-   984			return -ENOMEM;
-   985	
-   986		return 0;
-   987	}
-   988	
+   355	
+   356	static int __mbox_bind_client(struct mbox_chan *chan, struct mbox_client *cl)
+   357	{
+   358		struct device *dev = cl->dev;
+   359		unsigned long flags;
+   360		int ret;
+   361	
+   362		if (chan->cl || !try_module_get(chan->mbox->dev->driver->owner)) {
+   363			dev_dbg(dev, "%s: mailbox not free\n", __func__);
+   364			return -EBUSY;
+   365		}
+   366	
+   367		spin_lock_irqsave(&chan->lock, flags);
+   368		chan->msg_free = 0;
+   369		chan->msg_count = 0;
+   370		chan->active_req = NULL;
+   371		chan->cl = cl;
+   372		init_completion(&chan->tx_complete);
+   373	
+   374		if (chan->txdone_method	== TXDONE_BY_POLL && cl->knows_txdone)
+   375			chan->txdone_method = TXDONE_BY_ACK;
+   376	
+   377		spin_unlock_irqrestore(&chan->lock, flags);
+   378	
+   379		if (chan->mbox->ops->power_get) {
+   380			ret = chan->mbox->ops->power_get(chan);
+   381			if (ret < 0)
+ > 382				return ERR_PTR(ret);
+   383		}
+   384	
+   385		if (chan->mbox->ops->startup) {
+   386			ret = chan->mbox->ops->startup(chan);
+   387	
+   388			if (ret) {
+   389				dev_err(dev, "Unable to startup the chan (%d)\n", ret);
+   390				mbox_free_channel(chan);
+   391				return ret;
+   392			}
+   393		}
+   394	
+   395		return 0;
+   396	}
+   397	
 
 -- 
 0-DAY CI Kernel Test Service
