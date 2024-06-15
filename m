@@ -1,139 +1,337 @@
-Received: from mail-4316.protonmail.ch (mail-4316.protonmail.ch [185.70.43.16])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4124717580
-	for <llvm@lists.linux.dev>; Sat, 15 Jun 2024 07:09:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.70.43.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AEA201B950;
+	Sat, 15 Jun 2024 08:17:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718435386; cv=none; b=kT/iRGmfDliuxNZGDyzv54EIXTEbgD1FLpIVEEIUnJ08de+sHnAp3b6GpI6RcNAhdod7AEXYmQOm5a1CCzqrFu3UnxElBLfopyZW5rMYrbqw/9fltHDP60ePL6tMsUvqFi4oF7xWmtHGKeC/C9Dj4EApvXZSeBJbQzSrrjIJJkE=
+	t=1718439473; cv=none; b=Ag5AhPxCdxymNv52iktktHCZWA2YdorObFmHuoPdK5QXJLjtlSiBC2NWSlMcVzHgBFU5ER5xH9LoabPqx1+Pb4E101ojQ/HK9qP2w94r17RkuRpd9gRFSunf55UELOEZuMRk4slfZzOYkaS7rukghgb8Q1SrvFSmcx+K2EUatSI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718435386; c=relaxed/simple;
-	bh=InMc+8IWJ3kDnz0Ha0kfcXNeCtlY2AtkImdW3XBWYi0=;
-	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=UCxHBGXtlRkOOy1Nze018k7VxHTu/obW3K3b9KJTEhiJ9Ce3hGjJtgJWKZGL1FijrRffXVzDPsutPfHOWBJmgQKoKGbWrj/m2+mG9Hl/BVYDhiBzgoMPoBeirvWeBrpo8kLdszu2vg9XTettkV3pk2J03KKYgV1Qv301UZIixlk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=proton.me; spf=pass smtp.mailfrom=proton.me; dkim=pass (2048-bit key) header.d=proton.me header.i=@proton.me header.b=al09To6l; arc=none smtp.client-ip=185.70.43.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=proton.me
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=proton.me
+	s=arc-20240116; t=1718439473; c=relaxed/simple;
+	bh=9ZPXo80veTMZF3yzDVmF5Ma03AjmP0nyxtJoVLB/zkQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=pZm5h44RGPWyA4z6OixGbkTmWd6YNGVSH0MOXCHbrBQCWpzyv+47br1TS468+eXkt1Mprl+1eTFmBlAOS9ps892H4F9z+1vEcBHjCBk22F6UnIYTruyTkCuaTn8dGpezfUAka9Y/bzVI+aUxsNRX/qd6HPHSI0RNTVmmTiQgGI4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=O79FN0wP; arc=none smtp.client-ip=198.175.65.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=proton.me header.i=@proton.me header.b="al09To6l"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=proton.me;
-	s=protonmail; t=1718435377; x=1718694577;
-	bh=VZAtgC22c+KKhYQxrDN1MaUsBpanAgCvr8LCqwklF+A=;
-	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
-	 Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
-	 Message-ID:BIMI-Selector;
-	b=al09To6lFGef0pLt+lAgVXExOeTE7RV2cHxyTFfnDiKPM6HH0JIcwLretKPKvEDkB
-	 Ix5L9JkKTfEIK/ZiCrif3IzTEpvAcFVkwOusL1PGEWCsRjs5OgZw5uwSSV8AHjS2gS
-	 8BelcQduzkOZafPBwRjgQpWTmpW1VAeHoLwsail/AbQQ88Dig1tIsWm54EGO/Y2RBb
-	 EIcJR5Ko7JSuwBCJdqXbfz+OV2AqT4C/OypMsZWUPvIy++By/GMQj0b2jKMiaBCwwz
-	 wmwF3X0uK2onzKhp8BdJZZlkZGlY0gIM2nsS1K0i7NkxaIQWOpwPxeqrvrJWbpXgPA
-	 IZu3dEYfErRTg==
-Date: Sat, 15 Jun 2024 07:09:30 +0000
-To: Boqun Feng <boqun.feng@gmail.com>
-From: Benno Lossin <benno.lossin@proton.me>
-Cc: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>, Gary Guo <gary@garyguo.net>, rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org, llvm@lists.linux.dev, Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, Wedson Almeida Filho <wedsonaf@gmail.com>, =?utf-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, Andreas Hindborg <a.hindborg@samsung.com>, Alice Ryhl <aliceryhl@google.com>, Alan Stern <stern@rowland.harvard.edu>, Andrea Parri <parri.andrea@gmail.com>, Will Deacon <will@kernel.org>, Peter Zijlstra <peterz@infradead.org>, Nicholas Piggin <npiggin@gmail.com>, David Howells <dhowells@redhat.com>, Jade Alglave <j.alglave@ucl.ac.uk>, Luc Maranget <luc.maranget@inria.fr>, "Paul E. McKenney" <paulmck@kernel.org>, Akira Yokosawa <akiyks@gmail.com>, Daniel Lustig <dlustig@nvidia.com>, Joel Fernandes <joel@joelfernandes.org>, Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>,
-	kent.overstreet@gmail.com, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, elver@google.com, Mark Rutland <mark.rutland@arm.com>, Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>, Catalin Marinas <catalin.marinas@arm.com>, torvalds@linux-foundation.org, linux-arm-kernel@lists.infradead.org, linux-fsdevel@vger.kernel.org, Trevor Gross <tmgross@umich.edu>, dakr@redhat.com
-Subject: Re: [RFC 2/2] rust: sync: Add atomic support
-Message-ID: <b692945b-8fa4-4918-93f6-783fbcde375c@proton.me>
-In-Reply-To: <ZmzvVr7lYfR6Dpca@Boquns-Mac-mini.home>
-References: <20240612223025.1158537-1-boqun.feng@gmail.com> <20240612223025.1158537-3-boqun.feng@gmail.com> <20240613144432.77711a3a@eugeo> <ZmseosxVQXdsQjNB@boqun-archlinux> <CANiq72myhoCCWs7j0eZuxfoYMbTez7cPa795T57+gz2Dpd+xAw@mail.gmail.com> <ZmtC7h7v1t6XJ6EI@boqun-archlinux> <CANiq72=JdqTRPiUfT=-YMTTN+bHeAe2Pba8nERxU3cN8Q-BEOw@mail.gmail.com> <ZmxUxaIwHWnB42h-@Boquns-Mac-mini.home> <c1c45a2e-afdf-40a6-9f44-142752368d5e@proton.me> <ZmzvVr7lYfR6Dpca@Boquns-Mac-mini.home>
-Feedback-ID: 71780778:user:proton
-X-Pm-Message-ID: 0fe548fbc11fa01208724021192655e59f7fc5d2
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="O79FN0wP"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1718439472; x=1749975472;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=9ZPXo80veTMZF3yzDVmF5Ma03AjmP0nyxtJoVLB/zkQ=;
+  b=O79FN0wPePAbDAgihuVFWaCxyDdWwZ5SrccNNXmxBYSn/+lC7ounC5uf
+   zuDNFZoFcG8ZoIfAgdpAxteZIeLHagb9RCsOvWUAu7PjoFKzykuvkqXvq
+   Ag/AffOOgjsBORw0I3PSjpRkJPGPeHSosgsQDKDjVyvf9iQ9vBu6LV06Y
+   CHlraQhhyC66g6KNTi4Zt2Hkm8KgxhMlXfPvuDyb42xNuNzpXBfad/PlK
+   tkh2a9qutxBgXo4Jd8kRgh/9sXCpXvGN7hLGbTQyFh2K5dpZOoNOLyxVV
+   2XoFm5QMABKm57+cDwx3b8MPbd1Ks3BBDOWLQAW9dIKS0HnzM0sA4KwR/
+   Q==;
+X-CSE-ConnectionGUID: UfiRz5rJQcSdnXDt3cpFuw==
+X-CSE-MsgGUID: L3ajVzLERXm1u62OlzrFew==
+X-IronPort-AV: E=McAfee;i="6700,10204,11103"; a="37859817"
+X-IronPort-AV: E=Sophos;i="6.08,240,1712646000"; 
+   d="scan'208";a="37859817"
+Received: from fmviesa002.fm.intel.com ([10.60.135.142])
+  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jun 2024 01:17:52 -0700
+X-CSE-ConnectionGUID: 3XVxrubOTb6Y0yCD28MSlA==
+X-CSE-MsgGUID: XelJFQ/wRCuaUmA0DQ+Apg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.08,240,1712646000"; 
+   d="scan'208";a="63939683"
+Received: from lkp-server01.sh.intel.com (HELO 9e3ee4e9e062) ([10.239.97.150])
+  by fmviesa002.fm.intel.com with ESMTP; 15 Jun 2024 01:17:49 -0700
+Received: from kbuild by 9e3ee4e9e062 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1sIObb-0002N1-2n;
+	Sat, 15 Jun 2024 08:17:47 +0000
+Date: Sat, 15 Jun 2024 16:17:34 +0800
+From: kernel test robot <lkp@intel.com>
+To: Jarkko Sakkinen <jarkko.sakkinen@iki.fi>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [jarkko-tpmdd:tpm2key-v8 7/7] security/keys/process_keys.c:771:47:
+ warning: format specifies type 'int' but the argument has type 'long'
+Message-ID: <202406151629.ksL0j1Je-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On 15.06.24 03:33, Boqun Feng wrote:
-> On Fri, Jun 14, 2024 at 09:22:24PM +0000, Benno Lossin wrote:
->> On 14.06.24 16:33, Boqun Feng wrote:
->>> On Fri, Jun 14, 2024 at 11:59:58AM +0200, Miguel Ojeda wrote:
->>>> On Thu, Jun 13, 2024 at 9:05=E2=80=AFPM Boqun Feng <boqun.feng@gmail.c=
-om> wrote:
->>>>>
->>>>> Does this make sense?
->>>>
->>>> Implementation-wise, if you think it is simpler or more clear/elegant
->>>> to have the extra lower level layer, then that sounds fine.
->>>>
->>>> However, I was mainly talking about what we would eventually expose to
->>>> users, i.e. do we want to provide `Atomic<T>` to begin with? If yes,
->>>
->>> The truth is I don't know ;-) I don't have much data on which one is
->>> better. Personally, I think AtomicI32 and AtomicI64 make the users have
->>> to think about size, alignment, etc, and I think that's important for
->>> atomic users and people who review their code, because before one uses
->>> atomics, one should ask themselves: why don't I use a lock? Atomics
->>> provide the ablities to do low level stuffs and when doing low level
->>> stuffs, you want to be more explicit than ergonomic.
->>
->> How would this be different with `Atomic<i32>` and `Atomic<i64>`? Just
->=20
-> The difference is that with Atomic{I32,I64} APIs, one has to choose (and
-> think about) the size when using atomics, and cannot leave that option
-> open. It's somewhere unconvenient, but as I said, atomics variables are
-> different. For example, if someone is going to implement a reference
-> counter struct, they can define as follow:
->=20
-> =09struct Refcount<T> {
-> =09    refcount: AtomicI32,
-> =09    data: UnsafeCell<T>
-> =09}
->=20
-> but with atomic generic, people can leave that option open and do:
->=20
-> =09struct Refcount<R, T> {
-> =09    refcount: Atomic<R>,
-> =09    data: UnsafeCell<T>
-> =09}
->=20
-> while it provides configurable options for experienced users, but it
-> also provides opportunities for sub-optimal types, e.g. Refcount<u8, T>:
-> on ll/sc architectures, because `data` and `refcount` can be in the same
-> machine-word, the accesses of `refcount` are affected by the accesses of
-> `data`.
+tree:   git://git.kernel.org/pub/scm/linux/kernel/git/jarkko/linux-tpmdd.git tpm2key-v8
+head:   bcc939c27d5d9bddbba697c643ede5cfa2e37c4a
+commit: bcc939c27d5d9bddbba697c643ede5cfa2e37c4a [7/7] fixup
+config: i386-buildonly-randconfig-001-20240615 (https://download.01.org/0day-ci/archive/20240615/202406151629.ksL0j1Je-lkp@intel.com/config)
+compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240615/202406151629.ksL0j1Je-lkp@intel.com/reproduce)
 
-I think this is a non-issue. We have two options of counteracting this:
-1. We can just point this out in reviews and force people to use
-   `Atomic<T>` with a concrete type. In cases where there really is the
-   need to be generic, we can have it.
-2. We can add a private trait in the bounds for the generic, nobody
-   outside of the module can access it and thus they need to use a
-   concrete type:
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202406151629.ksL0j1Je-lkp@intel.com/
 
-        // needs a better name
-        trait Integer {}
-        impl Integer for i32 {}
-        impl Integer for i64 {}
+All warnings (new ones prefixed by >>):
 
-        pub struct Atomic<T: Integer> {
-            /* ... */
-        }
+>> security/keys/process_keys.c:771:47: warning: format specifies type 'int' but the argument has type 'long' [-Wformat]
+     771 |                         pr_info("%s: skey_ref err=%d\n", __func__, PTR_ERR(skey_ref));
+         |                                                   ~~               ^~~~~~~~~~~~~~~~~
+         |                                                   %ld
+   include/linux/printk.h:537:34: note: expanded from macro 'pr_info'
+     537 |         printk(KERN_INFO pr_fmt(fmt), ##__VA_ARGS__)
+         |                                 ~~~     ^~~~~~~~~~~
+   include/linux/printk.h:464:60: note: expanded from macro 'printk'
+     464 | #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
+         |                                                     ~~~    ^~~~~~~~~~~
+   include/linux/printk.h:436:19: note: expanded from macro 'printk_index_wrap'
+     436 |                 _p_func(_fmt, ##__VA_ARGS__);                           \
+         |                         ~~~~    ^~~~~~~~~~~
+   1 warning generated.
 
-And then in the other module, you can't do this (with compiler error):
 
-        pub struct Refcount<R: Integer, T> {
-                            // ^^^^^^^ not found in this scope
-                            // note: trait `crate::atomic::Integer` exists =
-but is inaccessible
-            refcount: Atomic<R>,
-            data: UnsafeCell<T>,
-        }
+vim +771 security/keys/process_keys.c
 
-I think that we can start with approach 2 and if we find a use-case
-where generics are really unavoidable, we can either put it in the same
-module as `Atomic<T>`, or change the access of `Integer`.
+   592	
+   593	/*
+   594	 * Look up a key ID given us by userspace with a given permissions mask to get
+   595	 * the key it refers to.
+   596	 *
+   597	 * Flags can be passed to request that special keyrings be created if referred
+   598	 * to directly, to permit partially constructed keys to be found and to skip
+   599	 * validity and permission checks on the found key.
+   600	 *
+   601	 * Returns a pointer to the key with an incremented usage count if successful;
+   602	 * -EINVAL if the key ID is invalid; -ENOKEY if the key ID does not correspond
+   603	 * to a key or the best found key was a negative key; -EKEYREVOKED or
+   604	 * -EKEYEXPIRED if the best found key was revoked or expired; -EACCES if the
+   605	 * found key doesn't grant the requested permit or the LSM denied access to it;
+   606	 * or -ENOMEM if a special keyring couldn't be created.
+   607	 *
+   608	 * In the case of a successful return, the possession attribute is set on the
+   609	 * returned key reference.
+   610	 */
+   611	key_ref_t lookup_user_key(key_serial_t id, unsigned long lflags,
+   612				  enum key_need_perm need_perm)
+   613	{
+   614		struct keyring_search_context ctx = {
+   615			.match_data.cmp		= lookup_user_key_possessed,
+   616			.match_data.lookup_type	= KEYRING_SEARCH_LOOKUP_DIRECT,
+   617			.flags			= (KEYRING_SEARCH_NO_STATE_CHECK |
+   618						   KEYRING_SEARCH_RECURSE),
+   619		};
+   620		struct request_key_auth *rka;
+   621		struct key *key, *user_session;
+   622		key_ref_t key_ref, skey_ref;
+   623		int ret;
+   624	
+   625	try_again:
+   626		ctx.cred = get_current_cred();
+   627		key_ref = ERR_PTR(-ENOKEY);
+   628	
+   629		switch (id) {
+   630		case KEY_SPEC_THREAD_KEYRING:
+   631			if (!ctx.cred->thread_keyring) {
+   632				if (!(lflags & KEY_LOOKUP_CREATE))
+   633					goto error;
+   634	
+   635				ret = install_thread_keyring();
+   636				if (ret < 0) {
+   637					key_ref = ERR_PTR(ret);
+   638					goto error;
+   639				}
+   640				goto reget_creds;
+   641			}
+   642	
+   643			key = ctx.cred->thread_keyring;
+   644			__key_get(key);
+   645			key_ref = make_key_ref(key, 1);
+   646			break;
+   647	
+   648		case KEY_SPEC_PROCESS_KEYRING:
+   649			if (!ctx.cred->process_keyring) {
+   650				if (!(lflags & KEY_LOOKUP_CREATE))
+   651					goto error;
+   652	
+   653				ret = install_process_keyring();
+   654				if (ret < 0) {
+   655					key_ref = ERR_PTR(ret);
+   656					goto error;
+   657				}
+   658				goto reget_creds;
+   659			}
+   660	
+   661			key = ctx.cred->process_keyring;
+   662			__key_get(key);
+   663			key_ref = make_key_ref(key, 1);
+   664			break;
+   665	
+   666		case KEY_SPEC_SESSION_KEYRING:
+   667			if (!ctx.cred->session_keyring) {
+   668				/* always install a session keyring upon access if one
+   669				 * doesn't exist yet */
+   670				ret = look_up_user_keyrings(NULL, &user_session);
+   671				if (ret < 0)
+   672					goto error;
+   673				if (lflags & KEY_LOOKUP_CREATE)
+   674					ret = join_session_keyring(NULL);
+   675				else
+   676					ret = install_session_keyring(user_session);
+   677	
+   678				key_put(user_session);
+   679				if (ret < 0)
+   680					goto error;
+   681				goto reget_creds;
+   682			} else if (test_bit(KEY_FLAG_UID_KEYRING,
+   683					    &ctx.cred->session_keyring->flags) &&
+   684				   lflags & KEY_LOOKUP_CREATE) {
+   685				ret = join_session_keyring(NULL);
+   686				if (ret < 0)
+   687					goto error;
+   688				goto reget_creds;
+   689			}
+   690	
+   691			key = ctx.cred->session_keyring;
+   692			__key_get(key);
+   693			key_ref = make_key_ref(key, 1);
+   694			break;
+   695	
+   696		case KEY_SPEC_USER_KEYRING:
+   697			ret = look_up_user_keyrings(&key, NULL);
+   698			if (ret < 0)
+   699				goto error;
+   700			key_ref = make_key_ref(key, 1);
+   701			break;
+   702	
+   703		case KEY_SPEC_USER_SESSION_KEYRING:
+   704			ret = look_up_user_keyrings(NULL, &key);
+   705			if (ret < 0)
+   706				goto error;
+   707			key_ref = make_key_ref(key, 1);
+   708			break;
+   709	
+   710		case KEY_SPEC_GROUP_KEYRING:
+   711			/* group keyrings are not yet supported */
+   712			key_ref = ERR_PTR(-EINVAL);
+   713			goto error;
+   714	
+   715		case KEY_SPEC_REQKEY_AUTH_KEY:
+   716			key = ctx.cred->request_key_auth;
+   717			if (!key)
+   718				goto error;
+   719	
+   720			__key_get(key);
+   721			key_ref = make_key_ref(key, 1);
+   722			break;
+   723	
+   724		case KEY_SPEC_REQUESTOR_KEYRING:
+   725			if (!ctx.cred->request_key_auth)
+   726				goto error;
+   727	
+   728			down_read(&ctx.cred->request_key_auth->sem);
+   729			if (test_bit(KEY_FLAG_REVOKED,
+   730				     &ctx.cred->request_key_auth->flags)) {
+   731				key_ref = ERR_PTR(-EKEYREVOKED);
+   732				key = NULL;
+   733			} else {
+   734				rka = ctx.cred->request_key_auth->payload.data[0];
+   735				key = rka->dest_keyring;
+   736				__key_get(key);
+   737			}
+   738			up_read(&ctx.cred->request_key_auth->sem);
+   739			if (!key)
+   740				goto error;
+   741			key_ref = make_key_ref(key, 1);
+   742			break;
+   743	
+   744		default:
+   745			key_ref = ERR_PTR(-EINVAL);
+   746			if (id < 1)
+   747				goto error;
+   748	
+   749			key = key_lookup(id);
+   750			if (IS_ERR(key)) {
+   751				key_ref = ERR_CAST(key);
+   752				goto error;
+   753			}
+   754	
+   755			pr_info("%s: continue\n", __func__);
+   756			key_ref = make_key_ref(key, 0);
+   757	
+   758			/* check to see if we possess the key */
+   759			ctx.index_key			= key->index_key;
+   760			ctx.match_data.raw_data		= key;
+   761			kdebug("check possessed");
+   762			rcu_read_lock();
+   763			skey_ref = search_process_keyrings_rcu(&ctx);
+   764			rcu_read_unlock();
+   765			kdebug("possessed=%p", skey_ref);
+   766	
+   767			if (!IS_ERR(skey_ref)) {
+   768				key_put(key);
+   769				key_ref = skey_ref;
+   770			} else {
+ > 771				pr_info("%s: skey_ref err=%d\n", __func__, PTR_ERR(skey_ref));
+   772			}
+   773	
+   774			break;
+   775		}
+   776	
+   777		/* unlink does not use the nominated key in any way, so can skip all
+   778		 * the permission checks as it is only concerned with the keyring */
+   779		if (need_perm != KEY_NEED_UNLINK) {
+   780			if (!(lflags & KEY_LOOKUP_PARTIAL)) {
+   781				ret = wait_for_key_construction(key, true);
+   782				switch (ret) {
+   783				case -ERESTARTSYS:
+   784					goto invalid_key;
+   785				default:
+   786					if (need_perm != KEY_AUTHTOKEN_OVERRIDE &&
+   787					    need_perm != KEY_DEFER_PERM_CHECK)
+   788						goto invalid_key;
+   789					break;
+   790				case 0:
+   791					break;
+   792				}
+   793			} else if (need_perm != KEY_DEFER_PERM_CHECK) {
+   794				ret = key_validate(key);
+   795				if (ret < 0)
+   796					goto invalid_key;
+   797			}
+   798	
+   799			ret = -EIO;
+   800			if (!(lflags & KEY_LOOKUP_PARTIAL) &&
+   801			    key_read_state(key) == KEY_IS_UNINSTANTIATED)
+   802				goto invalid_key;
+   803		}
+   804	
+   805		/* check the permissions */
+   806		ret = key_task_permission(key_ref, ctx.cred, need_perm);
+   807		if (ret < 0)
+   808			goto invalid_key;
+   809	
+   810		key->last_used_at = ktime_get_real_seconds();
+   811	
+   812	error:
+   813		put_cred(ctx.cred);
+   814		return key_ref;
+   815	
+   816	invalid_key:
+   817		key_ref_put(key_ref);
+   818		key_ref = ERR_PTR(ret);
+   819		goto error;
+   820	
+   821		/* if we attempted to install a keyring, then it may have caused new
+   822		 * creds to be installed */
+   823	reget_creds:
+   824		put_cred(ctx.cred);
+   825		goto try_again;
+   826	}
+   827	EXPORT_SYMBOL(lookup_user_key);
+   828	
 
----
-Cheers,
-Benno
-
-> The point I'm trying to make here is: when you are using atomics, you
-> care about performance a lot (otherwise, why don't you use a lock?), and
-> because of that, you should care about the size of the atomics, because
-> it may affect the performance significantly.
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
