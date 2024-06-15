@@ -1,59 +1,62 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 14088168C4;
-	Sat, 15 Jun 2024 17:42:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 254411EB3D;
+	Sat, 15 Jun 2024 17:42:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718473355; cv=none; b=GiI5OtVItuw/YBpgKMkkHOBGkN0lUlKtU+GEefmIme2bsa7mcN9wIykzm7SOE8xbVWGVdZ5lyE56uJL2tlpusJqPRDYGePW4vl9Ylx8H0kyGUxU7HNs0nk4yrOMGBSpqN924vSmh8tJQSO7JYgAXrpIFrWExR3KYW3t+1iSTikA=
+	t=1718473356; cv=none; b=rQ1uKjpaFjrTQeERiRNf439sx8IvlaoFY8lTOJDyBmRpBtNLqSTZaP9YMLPNHttr91/a013mdO7Wa3ll+yOHBELn0BYITB9cKwe/447kwEjmDfpmquVC944ANpEqAlzIjQQiphpj1Koaxy8VYeva+vnWZqZwQCmGl2CBypkjn2s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718473355; c=relaxed/simple;
-	bh=/SM+DixMmulK6F9J4gE3b3vsMiMD14xnvEEMwv1L34k=;
+	s=arc-20240116; t=1718473356; c=relaxed/simple;
+	bh=0VUQB6pM3WQJPir8o/00tq+cNrVxxD0DNhSQZm3nEDk=;
 	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=u8ExEm6F+6+KEpRaP/X5YMAumsZWUnXLsZqExZ1GH4Sovsh1SFcnEBt9xIvP4kyHo0CbQ4mjkCQmNY2jJ2KOJ+yPKkdyI8gIY0AZ/PPoUOxFlqTBEDjxM65B0w6TvxRU9PtACqkwb8y4n+40gxwgmCiDwET2DSn3DKzfWO6EsL8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=UFpmvyBJ; arc=none smtp.client-ip=198.175.65.20
+	 Content-Disposition; b=VpXQoUr0aja1NnVlBeyVSjFYbXgDyFwv6YoFXV+T+9lNQcdOF9ZGPH5x3G67oNl6PwgJURyjeb0QPxizuTVaWdRsH5EkW/I1F/JK+hTJlDp2/H6tdlj95wxTM+/P1xVoIhO0s7dX9hz7HwHYtNDqo9Rathm1nxif1zfOWGT+TwY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=lwnxq+En; arc=none smtp.client-ip=198.175.65.9
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="UFpmvyBJ"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="lwnxq+En"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1718473353; x=1750009353;
+  t=1718473354; x=1750009354;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=/SM+DixMmulK6F9J4gE3b3vsMiMD14xnvEEMwv1L34k=;
-  b=UFpmvyBJNnWtFmUS1+5VSoQtewERVWdnP+psojhTDLh3q/XosaC2OQ2a
-   icdzw5VSezf3vG9UCXBW3JSbcnuldEyHUjxF7oM6Wq+HnIzqxJ7IIsXhB
-   O1+GhLtkLQgJoLha65H1EdOEjcOg+Yt3Yi/yg4189iLguodvxkSU6pizS
-   rdIzTobAY49Detdg4+Zvas2uhnQc13m1sgWAuBI3qkNNfsjtY+YjlvRCF
-   AxZHP7+alizGRnWIs82OZ2zhBfMMqSc5ytRsGUz0jLIXELCJH/lM0pOkn
-   XoCRpfiI25LSj5fwlxFJi5Wo2eyIGMw7qTkZeBJI7EffcG0DH5ZFhqO8r
-   g==;
-X-CSE-ConnectionGUID: HokJtC2WQWizk3vCvWM5Hw==
-X-CSE-MsgGUID: Uvf28K2URmOpHiEAYpYzaQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11104"; a="15186196"
+  bh=0VUQB6pM3WQJPir8o/00tq+cNrVxxD0DNhSQZm3nEDk=;
+  b=lwnxq+EnLwZeajmvxQd3eC3zoGlgz7tLKzlj8zqZlmmy7GuM2Eq7T94I
+   LvEtVTx2rlMGLl9hG9ygN+QmEARn7jnS0f5MlSSd1wYlqDKW81KEQIlUz
+   xs7LMaT7sj+BnYpP6tpX+m58ii6QD+N887Byf1lQ44Z63zw/KdUXcnk6L
+   joFqqEtoeK68KR3Myq+u1Hhoxc0Ai5I1Kw9lZUjufmQuXCXfvv34K8Efh
+   775roAvcJNtrSmsUgCSwtUdetDLOKeoHPaCy3vQuhgNoHRv4dOY+eAmk5
+   KOtRH2tJOCrhtjj4OWrvtOym+NI2H0Ouy/U0uT+6DDfsLpNCVvP4sa+GR
+   Q==;
+X-CSE-ConnectionGUID: PogQY962Rm6bjTshZZDbBQ==
+X-CSE-MsgGUID: WsB0cTlKQruKlC1bm8MR9g==
+X-IronPort-AV: E=McAfee;i="6700,10204,11104"; a="37875118"
 X-IronPort-AV: E=Sophos;i="6.08,241,1712646000"; 
-   d="scan'208";a="15186196"
-Received: from orviesa008.jf.intel.com ([10.64.159.148])
-  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jun 2024 10:42:32 -0700
-X-CSE-ConnectionGUID: OU5mBcDYSfap4CnJuHyU0A==
-X-CSE-MsgGUID: e6wJQWvPTRKcotvU9fDZ4g==
+   d="scan'208";a="37875118"
+Received: from fmviesa001.fm.intel.com ([10.60.135.141])
+  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jun 2024 10:42:33 -0700
+X-CSE-ConnectionGUID: tIVc1G3TSQ2x2vzAOjAOAQ==
+X-CSE-MsgGUID: GRaON1iaTRqs0XutZ0+6YA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.08,241,1712646000"; 
-   d="scan'208";a="41478014"
+   d="scan'208";a="72012304"
 Received: from lkp-server01.sh.intel.com (HELO 68891e0c336b) ([10.239.97.150])
-  by orviesa008.jf.intel.com with ESMTP; 15 Jun 2024 10:42:31 -0700
+  by fmviesa001.fm.intel.com with ESMTP; 15 Jun 2024 10:42:31 -0700
 Received: from kbuild by 68891e0c336b with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1sIXQ5-0000LY-15;
+	id 1sIXQ5-0000LW-0w;
 	Sat, 15 Jun 2024 17:42:29 +0000
-Date: Sun, 16 Jun 2024 01:42:08 +0800
+Date: Sun, 16 Jun 2024 01:42:07 +0800
 From: kernel test robot <lkp@intel.com>
-To: David Hildenbrand <david@redhat.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [davidhildenbrand:page_table_reclaim 10/10]
- mm/pgtable_reclaim.c:437:25: error: use of undeclared identifier
- 'root_mem_cgroup'; did you mean 'parent_mem_cgroup'?
-Message-ID: <202406160112.AInpPKC6-lkp@intel.com>
+To: Kieran Bingham <kieran.bingham@ideasonboard.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Linux Memory Management List <linux-mm@kvack.org>,
+	Hans Verkuil <hverkuil@xs4all.nl>,
+	Umang Jain <umang.jain@ideasonboard.com>,
+	Sakari Ailus <sakari.ailus@linux.intel.com>
+Subject: [linux-next:master 2997/5501] drivers/media/i2c/imx283.c:443:30:
+ error: initializer element is not a compile-time constant
+Message-ID: <202406160153.RvEj9c4I-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -63,109 +66,103 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-tree:   https://github.com/davidhildenbrand/linux page_table_reclaim
-head:   fba6b89e0737bc078c6e7ace5a0c8718e097464d
-commit: fba6b89e0737bc078c6e7ace5a0c8718e097464d [10/10] mm: page table reclaim
-config: i386-buildonly-randconfig-004-20240615 (https://download.01.org/0day-ci/archive/20240616/202406160112.AInpPKC6-lkp@intel.com/config)
-compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240616/202406160112.AInpPKC6-lkp@intel.com/reproduce)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+head:   6906a84c482f098d31486df8dc98cead21cce2d0
+commit: ccb4eb4496fa94a9131c63ad0c412ebfe7f9ac35 [2997/5501] media: i2c: Add imx283 camera sensor driver
+config: arm-randconfig-003-20240616 (https://download.01.org/0day-ci/archive/20240616/202406160153.RvEj9c4I-lkp@intel.com/config)
+compiler: clang version 16.0.6 (https://github.com/llvm/llvm-project 7cbf1a2591520c2491aa35339f227775f4d3adf6)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240616/202406160153.RvEj9c4I-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202406160112.AInpPKC6-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202406160153.RvEj9c4I-lkp@intel.com/
 
-All error/warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> mm/pgtable_reclaim.c:23:8: warning: no previous prototype for function 'lookup_pmdp' [-Wmissing-prototypes]
-      23 | pmd_t *lookup_pmdp(struct mm_struct *mm, unsigned long address)
-         |        ^
-   mm/pgtable_reclaim.c:23:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-      23 | pmd_t *lookup_pmdp(struct mm_struct *mm, unsigned long address)
-         | ^
-         | static 
->> mm/pgtable_reclaim.c:54:8: warning: no previous prototype for function 'lookup_pudp' [-Wmissing-prototypes]
-      54 | pud_t *lookup_pudp(struct mm_struct *mm, unsigned long address)
-         |        ^
-   mm/pgtable_reclaim.c:54:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-      54 | pud_t *lookup_pudp(struct mm_struct *mm, unsigned long address)
-         | ^
-         | static 
-   mm/pgtable_reclaim.c:175:9: warning: variable 'pmd' set but not used [-Wunused-but-set-variable]
-     175 |         pmd_t *pmd;
-         |                ^
-   mm/pgtable_reclaim.c:395:20: warning: unused variable 'tlb' [-Wunused-variable]
-     395 |         struct mmu_gather tlb;
-         |                           ^~~
->> mm/pgtable_reclaim.c:437:25: error: use of undeclared identifier 'root_mem_cgroup'; did you mean 'parent_mem_cgroup'?
-     437 |         if (!memcg || memcg == root_mem_cgroup)
-         |                                ^~~~~~~~~~~~~~~
-         |                                parent_mem_cgroup
-   include/linux/memcontrol.h:1217:34: note: 'parent_mem_cgroup' declared here
-    1217 | static inline struct mem_cgroup *parent_mem_cgroup(struct mem_cgroup *memcg)
-         |                                  ^
->> mm/pgtable_reclaim.c:482:33: error: use of undeclared identifier 'zap_zero_pages'
-     482 |         return sysfs_emit(buf, "%d\n", zap_zero_pages);
-         |                                        ^
-   mm/pgtable_reclaim.c:498:2: error: use of undeclared identifier 'zap_zero_pages'
-     498 |         zap_zero_pages = value;
-         |         ^
-   4 warnings and 3 errors generated.
+>> drivers/media/i2c/imx283.c:443:30: error: initializer element is not a compile-time constant
+                   .crop = CENTERED_RECTANGLE(imx283_active_area, 5472, 3648),
+                           ~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/media/i2c/imx283.c:412:11: note: expanded from macro 'CENTERED_RECTANGLE'
+                   .left = rect.left + ((rect.width - (_width)) / 2),      \
+                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/media/i2c/imx283.c:492:30: error: initializer element is not a compile-time constant
+                   .crop = CENTERED_RECTANGLE(imx283_active_area, 5472, 3648),
+                           ~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/media/i2c/imx283.c:412:11: note: expanded from macro 'CENTERED_RECTANGLE'
+                   .left = rect.left + ((rect.width - (_width)) / 2),      \
+                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   2 errors generated.
 
 
-vim +437 mm/pgtable_reclaim.c
+vim +443 drivers/media/i2c/imx283.c
 
-   434	
-   435	void memcg_reclaim_pgtables(struct mem_cgroup *memcg)
-   436	{
- > 437		if (!memcg || memcg == root_mem_cgroup)
-   438			reclaim_pgtables();
-   439		else
-   440			mem_cgroup_scan_tasks(memcg, __memcg_reclaim_pgtables, NULL);
-   441	}
-   442	
-   443	/*
-   444	 * Try to reclaim page tables from all present processes.
-   445	 *
-   446	 * Note: must not be called with any mm_lock held.
-   447	 */
-   448	void reclaim_pgtables(void)
-   449	{
-   450		struct task_struct *p, *next_p;
-   451	
-   452		p = &init_task;
-   453		get_task_struct(p);
-   454		task_reclaim_pgtables(p);
+   409	
+   410	#define CENTERED_RECTANGLE(rect, _width, _height)			\
+   411		{								\
+   412			.left = rect.left + ((rect.width - (_width)) / 2),	\
+   413			.top = rect.top + ((rect.height - (_height)) / 2),	\
+   414			.width = (_width),					\
+   415			.height = (_height),					\
+   416		}
+   417	
+   418	/* Mode configs */
+   419	static const struct imx283_mode supported_modes_12bit[] = {
+   420		{
+   421			/* 20MPix 21.40 fps readout mode 0 */
+   422			.mode = IMX283_MODE_0,
+   423			.bpp = 12,
+   424			.width = 5472,
+   425			.height = 3648,
+   426			.min_hmax = 5914, /* 887 @ 480MHz/72MHz */
+   427			.min_vmax = 3793, /* Lines */
+   428	
+   429			.veff = 3694,
+   430			.vst = 0,
+   431			.vct = 0,
+   432	
+   433			.hbin_ratio = 1,
+   434			.vbin_ratio = 1,
+   435	
+   436			/* 20.00 FPS */
+   437			.default_hmax = 6000, /* 900 @ 480MHz/72MHz */
+   438			.default_vmax = 4000,
+   439	
+   440			.min_shr = 11,
+   441			.horizontal_ob = 96,
+   442			.vertical_ob = 16,
+ > 443			.crop = CENTERED_RECTANGLE(imx283_active_area, 5472, 3648),
+   444		},
+   445		{
+   446			/*
+   447			 * Readout mode 2 : 2/2 binned mode (2736x1824)
+   448			 */
+   449			.mode = IMX283_MODE_2,
+   450			.bpp = 12,
+   451			.width = 2736,
+   452			.height = 1824,
+   453			.min_hmax = 2414, /* Pixels (362 * 480MHz/72MHz + padding) */
+   454			.min_vmax = 3840, /* Lines */
    455	
-   456		while (true) {
-   457			rcu_read_lock();
-   458			next_p = next_task(p);
-   459			put_task_struct(p);
-   460			p = next_p;
-   461			get_task_struct(p);
-   462			rcu_read_unlock();
+   456			/* 50.00 FPS */
+   457			.default_hmax = 2500, /* 375 @ 480MHz/72Mhz */
+   458			.default_vmax = 3840,
+   459	
+   460			.veff = 1824,
+   461			.vst = 0,
+   462			.vct = 0,
    463	
-   464			if (p == &init_task)
-   465				break;
+   464			.hbin_ratio = 2,
+   465			.vbin_ratio = 2,
    466	
-   467			task_reclaim_pgtables(p);
-   468	
-   469			if (unlikely(fatal_signal_pending(current)))
-   470				break;
-   471			cond_resched();
-   472		}
-   473	
-   474		put_task_struct(p);
-   475	}
-   476	
-   477	#ifdef CONFIG_SYSFS
-   478	
-   479	static ssize_t zap_zero_pages_show(struct kobject *kobj,
-   480					      struct kobj_attribute *attr, char *buf)
-   481	{
- > 482		return sysfs_emit(buf, "%d\n", zap_zero_pages);
-   483	}
-   484	
+   467			.min_shr = 12,
+   468			.horizontal_ob = 48,
+   469			.vertical_ob = 4,
+   470	
+   471			.crop = CENTERED_RECTANGLE(imx283_active_area, 5472, 3648),
+   472		},
+   473	};
+   474	
 
 -- 
 0-DAY CI Kernel Test Service
