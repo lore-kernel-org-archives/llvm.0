@@ -1,182 +1,197 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
+Received: from NAM02-SN1-obe.outbound.protection.outlook.com (mail-sn1nam02on2064.outbound.protection.outlook.com [40.107.96.64])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 89F127E6;
-	Sat, 15 Jun 2024 00:51:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718412694; cv=none; b=XFt0/DM7PuqkZXnxHDc6wJDrqoVncEOumfn9W2tL0bA+efXi6YV8mpkuxzqT4froFVeiDhN+lj5b11WUi+ywY68VTP/b0INrFTm+4d9JNeyyQnVWQG+8EHZf8XoaZyXm14kd01SbJ/ajfz7yDEBzAupeD7cCJfEqfgT8OA45qcg=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718412694; c=relaxed/simple;
-	bh=z8D5EY31SsiOMa0EUjSh7k6u0JcFPVH31zJTPgDh93g=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=Z9ZEkyiWTORVYo1vDmYbfrZefl6gpyqH0PiP87eLjdr7YKNSGmkyDMZsltayYOtel4hakTK4OG9JGpxgFL/nndk2+FeT+SR6hhhgMUlmAJ3wGUi6GgDzEf3qEP1ATs2LBympEZz+y63JDuiUixILsXwgwjcS3RUnWN0WVoj7AHc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=eOFJyC1f; arc=none smtp.client-ip=192.198.163.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2FEB619D881
+	for <llvm@lists.linux.dev>; Sat, 15 Jun 2024 01:03:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.96.64
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1718413441; cv=fail; b=LKCgAfUPYQJTtr4mLZKStAwI3wWnpIQN983xivpMtCk+m6NUqAVYO2eD1i8d/qtI5jIT0SifTwZGi4Yt7n9/2spcD23BSPlRMguUELpv+S17rGsKR+oKuQGXjdr344vGv4rPoyGgPfn0kETDYoMD6tXd44h3GtdZ1GIsW6SaPps=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1718413441; c=relaxed/simple;
+	bh=Md4OuCGfV1aAK7iAEbju5/Y6nujHjyTJuuDiPquQz5g=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=kw2Q9OfjPcxVqjoHgnzEzatsXyS+bibXfmtlXFLvLDymFKD+Ztx+lwszEDpyJM9y1JGC8Y95mqJKbB8Cs0biceZCVwWmPNJ+ca6oQdhsfSKcEO0VvezkA1IpgRoX3SZmc5FZoPteRIP2+Mfbekq8on4xiwd5pXl4X4oBzfUJlH0=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=Rgiqf7Tj; arc=fail smtp.client-ip=40.107.96.64
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="eOFJyC1f"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1718412692; x=1749948692;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=z8D5EY31SsiOMa0EUjSh7k6u0JcFPVH31zJTPgDh93g=;
-  b=eOFJyC1fHd1O9yNW5KbtXPFIqQIsTTPJiApzFt2p6j5395lo3gXh2AX+
-   D8TrAHqyyusY7NI6App5dLpwt5rnBNSytAlmanmDbqFHDBfZZof5MKpxh
-   XFYZeFbBX0qLvX4T+4MHPMU6C7HeJ+NSr8FwcA/tKG0M6Hcfhr0Es1COz
-   87BvFXSrLy8RjOns8sqtM3iCBaeWCPORlKds7AJ9hAEk8LjFG1Fif8kMS
-   YhVxu/grPlObrOUw4lCzAsNRfLeILneqQbBYHWJ6E1Gi63dSss+BJhR+8
-   Ye1FSdLT3aERZ+I2clrghH2y02TzO2E5svMqgF9KeNVMU998c7CHKgr2X
-   Q==;
-X-CSE-ConnectionGUID: 76uGqKVWRw+QpCtP+xFwZA==
-X-CSE-MsgGUID: Ae4oWk3hRmalbWx33HQ/KQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11103"; a="25956931"
-X-IronPort-AV: E=Sophos;i="6.08,239,1712646000"; 
-   d="scan'208";a="25956931"
-Received: from orviesa008.jf.intel.com ([10.64.159.148])
-  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jun 2024 17:51:31 -0700
-X-CSE-ConnectionGUID: F97hyTeRSCyIFH7ihj3D1w==
-X-CSE-MsgGUID: G9/12J2ZQl+qpDihP4q7DA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.08,239,1712646000"; 
-   d="scan'208";a="41341141"
-Received: from lkp-server01.sh.intel.com (HELO 9e3ee4e9e062) ([10.239.97.150])
-  by orviesa008.jf.intel.com with ESMTP; 14 Jun 2024 17:51:31 -0700
-Received: from kbuild by 9e3ee4e9e062 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1sIHdg-0001xd-1E;
-	Sat, 15 Jun 2024 00:51:28 +0000
-Date: Sat, 15 Jun 2024 08:51:24 +0800
-From: kernel test robot <lkp@intel.com>
-To: Josh Poimboeuf <jpoimboe@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [jpoimboe:objtool-diff 2/2] ERROR: modpost:
- "__early_static_cpu_has__thunk" [drivers/cpufreq/longhaul.ko] undefined!
-Message-ID: <202406150858.B7EpvqIu-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="Rgiqf7Tj"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=kO+WWhY9ZeazbDTejLCWaem8zcbBQPb/X8COL6yuGxQ/uFIBd7+fNEbx3WdaQMKT3P3EWknZb4zUlChYkn1t5/eJrj/IJ7Mq+Bdu73a3I0QayPbSDyKK2r9FhCUrAevBGNNGVGn4DElM58G8TU0P4afnzPwWDhElcBexiXc8YnjtRTfZxaQTYZITN+/iY02ym60MgAlO5jeDzm6YCbm37VTLKDqtHvAZiGOq3v+e6OeCv7up3VFos8F7vy1YBlH+P0/So1cY5eJUb0meCBS99SXGEq3sZQN35QAIsTPS92UiEma5sQWZta2xS7Mne61yWplWcL+X/fJpxh2BATqe4A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=+wQnPu6jsJn/7S2p4Y+wzsRPXeOmTVW9JBsX0vFSDIs=;
+ b=P3090PZs5Q/O0HgBr1+fPchyUwo4FQG5alLuvPogfllXJ1dPZU+x3OZFmebaI1PBdo4keFGycG9WQ+UbS3m7C7/bMARILClrTscaUlo8PIBOH+2oI56k62TCXc3ff//DBHbfrCtAqW1n8dgHq/gnGS+UsG/zyHKGPmQULFgUQqselPtKQJf81AVeyX/OsHGcNYh/ifmT8+V1H/VXWQkkmAx62CI+F6Io7dH40S5PnNvgEYh/ST1Q311vagfdq//WkbfWP+VdyjIAymy0Dvoqj1CeX/9Ic1qDIXL8UUIu8QdHB+LPAyu18OiAtcn64M5u5WS3m3CdGAdWyzbLWDmmBA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.117.161) smtp.rcpttodomain=gmail.com smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=+wQnPu6jsJn/7S2p4Y+wzsRPXeOmTVW9JBsX0vFSDIs=;
+ b=Rgiqf7TjZc4Lpac1yQc7gaPfTDJAO5xNx6WA80R/1cY529vyIYAEYrdLOM3FcYQAdIFsg+1pxDVUzbTjKJ9LCKWt293tydlq22Unpc8yD7L3CkMSNzUW7GdH1hM3a+EIohfDxfmG8z/C7BXNERYbP22iHTIBNWfUZj1Pksg5OgZcDOmgxW1GJc1X9ju708jdjwsQn67vMvH1SlBmsp4BncI92GWevRYiSHvb5qzS8YPkeoda8pVH7BJPToYvUEk4yCSIjz2hGQR28g9/+oK5yxGx/mKGKPNYFeeOWnjwuOSNNo2Uf0hSIvzNcGbEBNauCSx3LXvVJL+9GWaIHNHzOQ==
+Received: from CH0PR03CA0292.namprd03.prod.outlook.com (2603:10b6:610:e6::27)
+ by MN0PR12MB6003.namprd12.prod.outlook.com (2603:10b6:208:37f::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7677.24; Sat, 15 Jun
+ 2024 01:03:56 +0000
+Received: from CH2PEPF00000147.namprd02.prod.outlook.com
+ (2603:10b6:610:e6:cafe::4d) by CH0PR03CA0292.outlook.office365.com
+ (2603:10b6:610:e6::27) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7677.26 via Frontend
+ Transport; Sat, 15 Jun 2024 01:03:56 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.161)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.117.161 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.161) by
+ CH2PEPF00000147.mail.protection.outlook.com (10.167.244.104) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.7677.15 via Frontend Transport; Sat, 15 Jun 2024 01:03:56 +0000
+Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
+ (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.4; Fri, 14 Jun
+ 2024 18:03:40 -0700
+Received: from [10.110.48.28] (10.126.230.35) by rnnvmail201.nvidia.com
+ (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.4; Fri, 14 Jun
+ 2024 18:03:39 -0700
+Message-ID: <79239550-dd6e-4738-acea-e7df50176487@nvidia.com>
+Date: Fri, 14 Jun 2024 18:03:37 -0700
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+User-Agent: Mozilla Thunderbird
+Subject: Re: [RFC 2/2] rust: sync: Add atomic support
+To: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>, Boqun Feng
+	<boqun.feng@gmail.com>
+CC: Gary Guo <gary@garyguo.net>, <rust-for-linux@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>, <linux-arch@vger.kernel.org>,
+	<llvm@lists.linux.dev>, Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor
+	<alex.gaynor@gmail.com>, Wedson Almeida Filho <wedsonaf@gmail.com>,
+	=?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, Benno Lossin
+	<benno.lossin@proton.me>, Andreas Hindborg <a.hindborg@samsung.com>, "Alice
+ Ryhl" <aliceryhl@google.com>, Alan Stern <stern@rowland.harvard.edu>, "Andrea
+ Parri" <parri.andrea@gmail.com>, Will Deacon <will@kernel.org>, Peter
+ Zijlstra <peterz@infradead.org>, Nicholas Piggin <npiggin@gmail.com>, David
+ Howells <dhowells@redhat.com>, Jade Alglave <j.alglave@ucl.ac.uk>, Luc
+ Maranget <luc.maranget@inria.fr>, "Paul E. McKenney" <paulmck@kernel.org>,
+	"Akira Yokosawa" <akiyks@gmail.com>, Daniel Lustig <dlustig@nvidia.com>,
+	"Joel Fernandes" <joel@joelfernandes.org>, Nathan Chancellor
+	<nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>,
+	<kent.overstreet@gmail.com>, "Greg Kroah-Hartman"
+	<gregkh@linuxfoundation.org>, <elver@google.com>, Mark Rutland
+	<mark.rutland@arm.com>, Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar
+	<mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, Dave Hansen
+	<dave.hansen@linux.intel.com>, <x86@kernel.org>, "H. Peter Anvin"
+	<hpa@zytor.com>, Catalin Marinas <catalin.marinas@arm.com>,
+	<torvalds@linux-foundation.org>, <linux-arm-kernel@lists.infradead.org>,
+	<linux-fsdevel@vger.kernel.org>, Trevor Gross <tmgross@umich.edu>,
+	<dakr@redhat.com>
+References: <20240612223025.1158537-1-boqun.feng@gmail.com>
+ <20240612223025.1158537-3-boqun.feng@gmail.com>
+ <20240613144432.77711a3a@eugeo> <ZmseosxVQXdsQjNB@boqun-archlinux>
+ <CANiq72myhoCCWs7j0eZuxfoYMbTez7cPa795T57+gz2Dpd+xAw@mail.gmail.com>
+ <ZmtC7h7v1t6XJ6EI@boqun-archlinux>
+ <CANiq72=JdqTRPiUfT=-YMTTN+bHeAe2Pba8nERxU3cN8Q-BEOw@mail.gmail.com>
+Content-Language: en-US
+From: John Hubbard <jhubbard@nvidia.com>
+In-Reply-To: <CANiq72=JdqTRPiUfT=-YMTTN+bHeAe2Pba8nERxU3cN8Q-BEOw@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: rnnvmail201.nvidia.com (10.129.68.8) To
+ rnnvmail201.nvidia.com (10.129.68.8)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CH2PEPF00000147:EE_|MN0PR12MB6003:EE_
+X-MS-Office365-Filtering-Correlation-Id: aa803fb8-5abd-441f-faa1-08dc8cd7082e
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230037|36860700010|376011|7416011|1800799021|82310400023;
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?MFhsZnkvRlJLT3ZxR2d2OVcwQXFpbGpiTmEydDQ3Mks4TTR6ZHNYQUhuZHdB?=
+ =?utf-8?B?clhhUW53RzZjSmlUNURsZXdsRHN3ZXhRZC9UM09ld0xHWFBNQU4zUzJIeHpn?=
+ =?utf-8?B?VlVKQjlwRGphcy9uV1o5b0tXN1QwTW14ZTNkUnUzd2ZkNm9IbkdQb3o0cnFm?=
+ =?utf-8?B?a1kxbmV4T24xbHZ1RWZGR1ppVGRWZ01ZYkE1UWRsemFsNzlmLzdNSFJ0OCt0?=
+ =?utf-8?B?ZHViT04yMFE5RWgyVm11WklEdGtzQis2SmVaTlJtVlFFWUdZS0FMYTk1LzZL?=
+ =?utf-8?B?aHdMMnNUcjN1ODAyY2kyd2k5cnVYZ1I5aUpCWmQ1ajVMRnhBYVY1RStjQW40?=
+ =?utf-8?B?cmJPbk4yQXFkYi9uZFNrTlJGT3lRRFc3U0UrUFlpVHY2ZlFkYlYwbWlzNzA2?=
+ =?utf-8?B?OU9oTEVkQzE5TTA1ZjJhRmtKODBMK0FmOW9RVDVrWXlwZFJaQUhJbU1uNVVX?=
+ =?utf-8?B?RkdXbkZ0NUQvSVh6R2FhcWdZeDloYzE5OFNpam1jdWpLMWs2b0tqTXlDZWhi?=
+ =?utf-8?B?M2Y3bzJkd0t1R051NFYyT3dNYUZSOUNrL2xhUFZOUGZnTFNLenlrbEVRTUtG?=
+ =?utf-8?B?UmdMQnl6YzZDUFgzd3JMVG0zK3RRcTAyNW02UkVLRjBxdGh1cUxkOFc4emJC?=
+ =?utf-8?B?QzV4VGpHMDZ0ZDZoa3lxSWVkUEpyYnYzZnhyUFVERGFCNTNGSVJEQ3hTMWRi?=
+ =?utf-8?B?OUQ5cDNBalY4UnFtQUlHQ3lHb0c0T0c1NkMrVVFKTzhFcjcwTVBCa0RDelBR?=
+ =?utf-8?B?blN3ejVMd28zM1hsU3Q5ZGZrNEd0VXMxajdvQTZ0MlB0RGVqOTMvNm5ZbjZS?=
+ =?utf-8?B?Smhac2tjVm5UWHB0aEtKaGt2cVhwblZ1eDNoNDRvcWVta01NRlpVZVVjZVRa?=
+ =?utf-8?B?Zldud1dNVzRzVDdRTENTUlhFVkNRcGtLRFpBakVTWmY0bVY4V2t4WkNvMVRh?=
+ =?utf-8?B?TjkxNmx5dk9uMEk2K2lyTlE1K3hqVktBK0QzVC9iUGo2VjlwKzdHZExOc1JK?=
+ =?utf-8?B?OXZ4NHp6MHNMUEhXTFFNbkJFeEVWQ0FnbGduTlRJZU1sT05oMkhsVjQwaURu?=
+ =?utf-8?B?MlNwcjcvUGY5NEFySmdwZE5ucFYwWjcxSS9vYzZGcElyK3JISUZMUGVqRGdy?=
+ =?utf-8?B?bnhud1kyWldOWk1WNm5mdHN2L2dsM1B4MGR6Um1oQWhvM0NDT0d6ZXpRZ25C?=
+ =?utf-8?B?SHJYMGVUWVVrcW5MemwyQWNzU3hISGt3VkFYazd5ckQ1NGVEcTdoa0tHMXQz?=
+ =?utf-8?B?ZkRGYkltbVhhcHpDRjBHZTR4dXd2alVybnRtYXY5MXEyZStpZkVwMEpFUGZU?=
+ =?utf-8?B?alZkOFFRcFJNRStTaE1ud0JvcjQxeUFjNXVYZU54OWdwWlhmbG1yZ2REQS9O?=
+ =?utf-8?B?WVVScDVsa0lHREFwc05CUnR2Tk1vbGhEOU5zRGI0NmlNdFQ2c2ViYVJFSmJm?=
+ =?utf-8?B?cXlrbWlNYTBkbkFFaGREb3ZZSkorZEFSdVRKSUlldzZrMnBRT0lsL01FM3lk?=
+ =?utf-8?B?UWQ3WXhQMlh0Vm1jdS94amMrNnFNb0VnbmVoeXNjY3ZkNzczZER0S3NjSVNO?=
+ =?utf-8?B?UTZYTmpZMWVRYkoyeTNtaDk0SURCc2FwTEZpTnA0RDNLa01odlQzYUxENGp0?=
+ =?utf-8?B?RG9ibUdOQmF1Tjg2dVhLZnlhYzZVL2VuQlRJcmZqTmVzVWlKRDc0MURESlF1?=
+ =?utf-8?B?UUgwRC9lTzR0dUtOVWl5Ry93N2FNUk9rYVhBZXIyVkViN1ZWWVFqMFgvTDNn?=
+ =?utf-8?B?c0lzYXpCRTI1azhCZm1pOS96bk9GZDVBL2xkNnlVR3lNelNrd2RvUUNTR1J5?=
+ =?utf-8?B?aXhmMzRVaUlIL2xSRnZGN0tUMThNeWZ0L1NjZTlTS1F6RE5pTHpZVUx6Yzdh?=
+ =?utf-8?B?dnBOQzdubFFmSnc0WHVKbTRqeTNLSTVvSEVEMFVIRk4rRGc9PQ==?=
+X-Forefront-Antispam-Report:
+	CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230037)(36860700010)(376011)(7416011)(1800799021)(82310400023);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Jun 2024 01:03:56.1515
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: aa803fb8-5abd-441f-faa1-08dc8cd7082e
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	CH2PEPF00000147.namprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN0PR12MB6003
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jpoimboe/linux.git objtool-diff
-head:   cd5c807b4be90882e7b15d95233f31122e12d6b0
-commit: cd5c807b4be90882e7b15d95233f31122e12d6b0 [2/2] todo
-config: i386-randconfig-014-20240615 (https://download.01.org/0day-ci/archive/20240615/202406150858.B7EpvqIu-lkp@intel.com/config)
-compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240615/202406150858.B7EpvqIu-lkp@intel.com/reproduce)
+On 6/14/24 2:59 AM, Miguel Ojeda wrote:
+> On Thu, Jun 13, 2024 at 9:05 PM Boqun Feng <boqun.feng@gmail.com> wrote:
+>>
+>> Does this make sense?
+> 
+> Implementation-wise, if you think it is simpler or more clear/elegant
+> to have the extra lower level layer, then that sounds fine.
+> 
+> However, I was mainly talking about what we would eventually expose to
+> users, i.e. do we want to provide `Atomic<T>` to begin with? If yes,
+> then we could make the lower layer private already.
+> 
+> We can defer that extra layer/work if needed even if we go for
+> `Atomic<T>`, but it would be nice to understand if we have consensus
+> for an eventual user-facing API, or if someone has any other opinion
+> or concerns on one vs. the other.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202406150858.B7EpvqIu-lkp@intel.com/
+Well, here's one:
 
-All errors (new ones prefixed by >>, old ones prefixed by <<):
+The reason that we have things like atomic64_read() in the C code is
+because C doesn't have generics.
 
-WARNING: modpost: missing MODULE_DESCRIPTION() in vmlinux.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in kernel/locking/locktorture.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in kernel/locking/test-ww_mutex.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in kernel/rcu/rcutorture.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in kernel/rcu/rcuscale.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in kernel/rcu/refscale.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in kernel/time/time_test.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in kernel/torture.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in fs/ext4/ext4-inode-test.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in fs/nfs/nfsv4.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in fs/nls/nls_cp857.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in fs/nls/nls_cp862.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in fs/nls/nls_cp863.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in fs/nls/nls_cp869.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in fs/nls/nls_cp932.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in fs/nls/nls_euc-jp.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in fs/nls/nls_cp1251.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in fs/nls/nls_ascii.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in fs/nls/nls_iso8859-1.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in fs/nls/nls_iso8859-2.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in fs/nls/nls_iso8859-4.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in fs/nls/nls_iso8859-5.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in fs/nls/mac-celtic.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in fs/nls/mac-iceland.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in fs/nls/mac-romanian.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in fs/nls/mac-roman.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in fs/nls/mac-turkish.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in fs/unicode/utf8data.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in fs/fat/fat.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in fs/fat/fat_test.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in fs/smb/common/cifs_arc4.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in fs/smb/common/cifs_md4.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in fs/qnx4/qnx4.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in fs/bcachefs/mean_and_variance_test.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in fs/pstore/pstore.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in crypto/cast_common.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in crypto/xor.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in crypto/crypto_simd.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in lib/kunit/kunit-test.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in lib/kunit/kunit-example-test.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in lib/crypto/libdes.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in lib/crypto/libsha256.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in lib/zlib_deflate/zlib_deflate.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/gpio/gpio-pcf857x.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/video/backlight/rt4831-backlight.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/video/fbdev/vfb.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/regulator/rt4831-regulator.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/char/dtlk.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/gpu/drm/tests/drm_kunit_helpers.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/gpu/drm/tests/drm_buddy_test.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/gpu/drm/tests/drm_cmdline_parser_test.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/gpu/drm/tests/drm_connector_test.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/gpu/drm/tests/drm_damage_helper_test.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/gpu/drm/tests/drm_dp_mst_helper_test.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/gpu/drm/tests/drm_exec_test.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/gpu/drm/tests/drm_format_test.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/gpu/drm/tests/drm_framebuffer_test.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/gpu/drm/tests/drm_gem_shmem_test.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/gpu/drm/tests/drm_managed_test.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/gpu/drm/tests/drm_mm_test.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/gpu/drm/tests/drm_modes_test.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/gpu/drm/tests/drm_plane_helper_test.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/gpu/drm/tests/drm_probe_helper_test.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/gpu/drm/tests/drm_rect_test.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/gpu/drm/bridge/lontium-lt9611uxc.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/gpu/drm/bridge/sil-sii8620.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/gpu/drm/bridge/sii9234.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/base/regmap/regmap-slimbus.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/base/regmap/regmap-spmi.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/base/regmap/regmap-w1.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/scsi/scsi_common.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/scsi/advansys.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/scsi/aha1542.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/mtd/chips/cfi_cmdset_0020.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/firewire/firewire-uapi-test.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/auxdisplay/hd44780_common.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/pcmcia/i82365.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/input/misc/soc_button_array.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/input/tests/input_test.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/rtc/lib_test.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/rtc/rtc-tps65910.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/of/of_test.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/platform/goldfish/goldfish_pipe.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/devfreq/governor_userspace.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hwtracing/intel_th/intel_th_msu_sink.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/fsi/fsi-master-hub.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/iio/buffer/kfifo_buf.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in sound/core/sound_kunit.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in samples/vfio-mdev/mdpy.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in samples/vfio-mdev/mdpy-fb.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in samples/vfio-mdev/mbochs.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in samples/configfs/configfs_sample.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in samples/kfifo/bytestream-example.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in samples/kfifo/dma-example.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in samples/kfifo/inttype-example.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in samples/kfifo/record-example.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in samples/kobject/kobject-example.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in samples/kobject/kset-example.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in arch/x86/video/fbdev.o
->> ERROR: modpost: "__early_static_cpu_has__thunk" [drivers/cpufreq/longhaul.ko] undefined!
+In Rust, we should simply move directly to Atomic<T>, as there are,
+after all, associated benefits. And it's very easy to see the connection
+between the C types and the Atomic<T> types.
 
+
+thanks,
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+John Hubbard
+NVIDIA
+
