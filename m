@@ -1,246 +1,129 @@
-Received: from mail-qv1-f45.google.com (mail-qv1-f45.google.com [209.85.219.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B948929415
-	for <llvm@lists.linux.dev>; Sat, 15 Jun 2024 22:12:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4FDDE2940D
+	for <llvm@lists.linux.dev>; Sat, 15 Jun 2024 23:22:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718489560; cv=none; b=h+pPYpMkl0smePxCjQFhgTiopDyFmb881KCDsmZ3mouFkOv0W2vjvJOyHzXa1J/3bukKXSRx+8doY3j3P+GOkDHf66Lr66mq/biqU3WzFqSo8EK9U+kNILOU8v2wcNFwr1GuWATUJ0Y2GxQTmKrmjwM4adOZpqQvJajIDc43Id0=
+	t=1718493742; cv=none; b=KPZtxapaMZ2K/CZ20SFSeQPLE+BSSyVbu93dnXXmbjhvrw8Jm4BS6YINQewCxqrIry1veZevBH56CK+TXhtR/fGeYXxI0Ip1MiRgSm2tNXib0CGOvwvGu5ORqRXAuCKp7N5WG8z7BelL7HqdJb7y4hah2GG6225OQRtGmazqWWo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718489560; c=relaxed/simple;
-	bh=lHxr0MwsemA2ZMnqJsxiMmV5XulPnNeOMTCLuiEYGpo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=l41UMoK4APSA13FYJGYjlFu0TNq6/7/sK5Jbs2zh4ou/Vw3veK/grHgE4O5sS6Q9aEBpqQX0Gr7yLMULUGmeGqIUWyupipDSMEOMul5nY0ZA10i/GRSb1UGueSMjsnFMRboInNfCdsk1MT27jlsTyzQSkGDBOFDJ/6P42AJWRlQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=e5u28gMW; arc=none smtp.client-ip=209.85.219.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1718493742; c=relaxed/simple;
+	bh=oXCzjJDq5HzupH1e6s/KEhRHvYR/3ZxoexSm1mHQgFI=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=cw4b3DObq8UrH8EmF/qWtCRRbvY99mo0JHnCOG7dXN4sqb7dnrC7TO9ZII5eNBSgUV86TTJVVkXLaI6xtGdTjQRV8i8dETarr4lOhcCniJEwjL+BISUHw8jdxXQYFcN045hZyaCMSHZc1DGbhfrnM5AV2qoopG+Jwur9EGuA+ZU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=iIaRnO6w; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="e5u28gMW"
-Received: by mail-qv1-f45.google.com with SMTP id 6a1803df08f44-6b2c6291038so4240136d6.0
-        for <llvm@lists.linux.dev>; Sat, 15 Jun 2024 15:12:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1718489558; x=1719094358; darn=lists.linux.dev;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :feedback-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=VQbZ8odua1hQgPb+pK/nZMpMy6s0hU++zOMWAbph2Ak=;
-        b=e5u28gMWTrPAWBsk0ojzsFdwIkiurS2z4Ot8YHNW1ViXNAB7WInOZl8ONqe+gQLoMt
-         y01bXwFeTfkTpqD2rq3w6sN46wtwneUZAQkrQf54T1jKpJM2dMDM3VdRPTloWveRsZLe
-         szq/Mh0qlN7j/e4VtT0uYnJvrvBbDW/H3zi7bWYOcRvPFXZruEh64UB+HxpsHoEpqOQi
-         I8ROGo5bf9o/1R8yHrdJ3WV+SkmcOS3Wnsh8KGk/IeVt9sO3KoyvnyfwBmc/BaU5Ptjk
-         mEe47wqKUOYzT4PfaqivHDV6ilmai+GHyCrO2dT2Jf+JseA+n6phTMKB0CyszfcYzyjj
-         OjOg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1718489558; x=1719094358;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :feedback-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=VQbZ8odua1hQgPb+pK/nZMpMy6s0hU++zOMWAbph2Ak=;
-        b=PPdDUfvWJStRTWW6GOnT+EcNHgYLVlYQp/xcmXbfEAMaIcxSXxa9d9T/MzFyU7DuR0
-         0Hnc/78Twg9D9oQ7RzAZo0o8LPkw19mlDROFMmFBF14RY6e+tKuMB7bmWhQyLKjDW1rk
-         LOcJ0it73ED+6lMfuXgCDfYHtjIF8mJ5UPCvgGC239eUkyk+Fla+m6P8ZCnxvhfc0Z9Q
-         U2F2K8XQ62B6RJ2Q6k9ppLGzMbUEUp7sYumRkTuMGUKonIm4UCN39HKcOJDmlfpIJtLz
-         TqG6+4TVRWmaFLJhSzHHOVUkqx1lNb8RayrsKwycGwF0lsF5sRs3v9BwuTbtc2ff8Sjb
-         LV1g==
-X-Forwarded-Encrypted: i=1; AJvYcCWAR95yy1AoTwDi1WdUQANzY0VFKndL1Zs3YW1zxN9OucGGrIYG6SKiokJung72Kiq7C5iIElikBziWLn4Y93q+xGqN8w==
-X-Gm-Message-State: AOJu0YxdskyVcmJPq69S0n4jiA4X52HynYZ/CxDsv/TDw3PPbhsIewiR
-	hDo9Aq07JfsyUnxVYC9wtu0wwcXC9CjzyetdSglsCbu9MH4nWEMd
-X-Google-Smtp-Source: AGHT+IG4HmvNaRjIhMLhZmWvrLBxGBdGzpx8lIGc5erMmHO1rw2wmIF90qlwEKwxcvp0aYOUU1vmBA==
-X-Received: by 2002:a0c:c486:0:b0:6af:33ed:87de with SMTP id 6a1803df08f44-6b2af2eef89mr96166876d6.20.1718489557589;
-        Sat, 15 Jun 2024 15:12:37 -0700 (PDT)
-Received: from fauth2-smtp.messagingengine.com (fauth2-smtp.messagingengine.com. [103.168.172.201])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-6b2a5ee01d9sm36048266d6.111.2024.06.15.15.12.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 15 Jun 2024 15:12:36 -0700 (PDT)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-	by mailfauth.nyi.internal (Postfix) with ESMTP id BB4DA120006D;
-	Sat, 15 Jun 2024 18:12:35 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute5.internal (MEProxy); Sat, 15 Jun 2024 18:12:35 -0400
-X-ME-Sender: <xms:0xFuZlrY_bE0nKnF8etf9N11hrXBGTSZUsqajV7vSx_NMcCiVHBxWA>
-    <xme:0xFuZnoWZKABHQym_Al27-R6FbyuPJoHjXkImVwCQoKNHNYPV12cPXCh74-QPxjV_
-    uP26wfRs8Syfm4Y4A>
-X-ME-Received: <xmr:0xFuZiOGp7JlumhoS4vNAISpZyxHz9paxafo9_oM3Q3HNZ-HrbFMwNYdRw>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvledrfedvvddgtdejucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkfhggtggugfgjsehtkeertddttdejnecuhfhrohhmpeeuohhq
-    uhhnucfhvghnghcuoegsohhquhhnrdhfvghnghesghhmrghilhdrtghomheqnecuggftrf
-    grthhtvghrnhepvefghfeuveekudetgfevudeuudejfeeltdfhgfehgeekkeeigfdukefh
-    gfegleefnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomh
-    epsghoqhhunhdomhgvshhmthhprghuthhhphgvrhhsohhnrghlihhthidqieelvdeghedt
-    ieegqddujeejkeehheehvddqsghoqhhunhdrfhgvnhhgpeepghhmrghilhdrtghomhesfh
-    higihmvgdrnhgrmhgv
-X-ME-Proxy: <xmx:0xFuZg77_tq59ml7HlC_Z5h69QygySdhdEM0vBwuiOHNNd6XPNeTBw>
-    <xmx:0xFuZk49SyUhxrXrXcs19xpi75s5rJM0mbiY4SfqTWFVFONMGKODWA>
-    <xmx:0xFuZojK6yKmo-LzjJ8_UBHNkd4DUJUUGkL1C4hN7ct-SpajKsTZ2g>
-    <xmx:0xFuZm79WM7Y1DZ3Gur-JaVOLAvHAiLK2HHqVh31qOKaLNauBRm6Nw>
-    <xmx:0xFuZrKIrd0e9826BTvfWSIKsKcRvW-fQZ4wYyZNqlSrPnFgBSdCr7By>
-Feedback-ID: iad51458e:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sat,
- 15 Jun 2024 18:12:34 -0400 (EDT)
-Date: Sat, 15 Jun 2024 15:12:33 -0700
-From: Boqun Feng <boqun.feng@gmail.com>
-To: Benno Lossin <benno.lossin@proton.me>
-Cc: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>,
-	Gary Guo <gary@garyguo.net>, rust-for-linux@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-	llvm@lists.linux.dev, Miguel Ojeda <ojeda@kernel.org>,
-	Alex Gaynor <alex.gaynor@gmail.com>,
-	Wedson Almeida Filho <wedsonaf@gmail.com>,
-	=?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
-	Andreas Hindborg <a.hindborg@samsung.com>,
-	Alice Ryhl <aliceryhl@google.com>,
-	Alan Stern <stern@rowland.harvard.edu>,
-	Andrea Parri <parri.andrea@gmail.com>,	Will Deacon <will@kernel.org>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Nicholas Piggin <npiggin@gmail.com>,	David Howells <dhowells@redhat.com>,
-	Jade Alglave <j.alglave@ucl.ac.uk>,	Luc Maranget <luc.maranget@inria.fr>,
-	"Paul E. McKenney" <paulmck@kernel.org>,
-	Akira Yokosawa <akiyks@gmail.com>,	Daniel Lustig <dlustig@nvidia.com>,
-	Joel Fernandes <joel@joelfernandes.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,	kent.overstreet@gmail.com,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, elver@google.com,
-	Mark Rutland <mark.rutland@arm.com>,
-	Thomas Gleixner <tglx@linutronix.de>,	Ingo Molnar <mingo@redhat.com>,
- Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-	"H. Peter Anvin" <hpa@zytor.com>,
-	Catalin Marinas <catalin.marinas@arm.com>,	torvalds@linux-foundation.org,
- linux-arm-kernel@lists.infradead.org,	linux-fsdevel@vger.kernel.org,
- Trevor Gross <tmgross@umich.edu>,	dakr@redhat.com
-Subject: Re: [RFC 2/2] rust: sync: Add atomic support
-Message-ID: <Zm4R0XwTpsASpBhx@Boquns-Mac-mini.home>
-References: <20240612223025.1158537-3-boqun.feng@gmail.com>
- <20240613144432.77711a3a@eugeo>
- <ZmseosxVQXdsQjNB@boqun-archlinux>
- <CANiq72myhoCCWs7j0eZuxfoYMbTez7cPa795T57+gz2Dpd+xAw@mail.gmail.com>
- <ZmtC7h7v1t6XJ6EI@boqun-archlinux>
- <CANiq72=JdqTRPiUfT=-YMTTN+bHeAe2Pba8nERxU3cN8Q-BEOw@mail.gmail.com>
- <ZmxUxaIwHWnB42h-@Boquns-Mac-mini.home>
- <c1c45a2e-afdf-40a6-9f44-142752368d5e@proton.me>
- <ZmzvVr7lYfR6Dpca@Boquns-Mac-mini.home>
- <b692945b-8fa4-4918-93f6-783fbcde375c@proton.me>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="iIaRnO6w"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1718493739;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=NGD+3sErR9NxT5C8w/Wzgu9uUH1sONAUS98mYqBNPk4=;
+	b=iIaRnO6w4RIj0YZ1H6vuWsjlUzSZJrWkEwHV/LNmFHSLyJJV3c6x9GQY2HhbKQ+g3LG5yR
+	hHQ+CNB0saAId1EheUXtK+HHanHTYhhIDk1xNKj4v2656mlC1z0eiMYEaepyEEMa/RkHXl
+	lytbDH16QMTr3GUIMUAnjy2XtgGlTd8=
+Received: from mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-344-uhg0It4gMvCekQPCkCoufA-1; Sat,
+ 15 Jun 2024 19:22:17 -0400
+X-MC-Unique: uhg0It4gMvCekQPCkCoufA-1
+Received: from mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.17])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id CE2211956086
+	for <llvm@lists.linux.dev>; Sat, 15 Jun 2024 23:22:16 +0000 (UTC)
+Received: from [172.64.3.44] (unknown [10.30.33.101])
+	by mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 2E42B1956052;
+	Sat, 15 Jun 2024 23:22:16 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL (MISSED 20 of 192): Test report for master
+ (6.10.0-rc3, mainline.kernel.org-clang, 44ef20ba)
+Date: Sat, 15 Jun 2024 23:22:16 -0000
+To: bgoncalv@redhat.com, llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <b692945b-8fa4-4918-93f6-783fbcde375c@proton.me>
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.17
+Message-Id: <51675.124061519221700277@us-mta-344.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Sat, Jun 15, 2024 at 07:09:30AM +0000, Benno Lossin wrote:
-> On 15.06.24 03:33, Boqun Feng wrote:
-> > On Fri, Jun 14, 2024 at 09:22:24PM +0000, Benno Lossin wrote:
-> >> On 14.06.24 16:33, Boqun Feng wrote:
-> >>> On Fri, Jun 14, 2024 at 11:59:58AM +0200, Miguel Ojeda wrote:
-> >>>> On Thu, Jun 13, 2024 at 9:05 PM Boqun Feng <boqun.feng@gmail.com> wrote:
-> >>>>>
-> >>>>> Does this make sense?
-> >>>>
-> >>>> Implementation-wise, if you think it is simpler or more clear/elegant
-> >>>> to have the extra lower level layer, then that sounds fine.
-> >>>>
-> >>>> However, I was mainly talking about what we would eventually expose to
-> >>>> users, i.e. do we want to provide `Atomic<T>` to begin with? If yes,
-> >>>
-> >>> The truth is I don't know ;-) I don't have much data on which one is
-> >>> better. Personally, I think AtomicI32 and AtomicI64 make the users have
-> >>> to think about size, alignment, etc, and I think that's important for
-> >>> atomic users and people who review their code, because before one uses
-> >>> atomics, one should ask themselves: why don't I use a lock? Atomics
-> >>> provide the ablities to do low level stuffs and when doing low level
-> >>> stuffs, you want to be more explicit than ergonomic.
-> >>
-> >> How would this be different with `Atomic<i32>` and `Atomic<i64>`? Just
-> > 
-> > The difference is that with Atomic{I32,I64} APIs, one has to choose (and
-> > think about) the size when using atomics, and cannot leave that option
-> > open. It's somewhere unconvenient, but as I said, atomics variables are
-> > different. For example, if someone is going to implement a reference
-> > counter struct, they can define as follow:
-> > 
-> > 	struct Refcount<T> {
-> > 	    refcount: AtomicI32,
-> > 	    data: UnsafeCell<T>
-> > 	}
-> > 
-> > but with atomic generic, people can leave that option open and do:
-> > 
-> > 	struct Refcount<R, T> {
-> > 	    refcount: Atomic<R>,
-> > 	    data: UnsafeCell<T>
-> > 	}
-> > 
-> > while it provides configurable options for experienced users, but it
-> > also provides opportunities for sub-optimal types, e.g. Refcount<u8, T>:
-> > on ll/sc architectures, because `data` and `refcount` can be in the same
-> > machine-word, the accesses of `refcount` are affected by the accesses of
-> > `data`.
-> 
-> I think this is a non-issue. We have two options of counteracting this:
-> 1. We can just point this out in reviews and force people to use
->    `Atomic<T>` with a concrete type. In cases where there really is the
->    need to be generic, we can have it.
-> 2. We can add a private trait in the bounds for the generic, nobody
->    outside of the module can access it and thus they need to use a
->    concrete type:
-> 
->         // needs a better name
->         trait Integer {}
->         impl Integer for i32 {}
->         impl Integer for i64 {}
-> 
->         pub struct Atomic<T: Integer> {
->             /* ... */
->         }
-> 
-> And then in the other module, you can't do this (with compiler error):
-> 
->         pub struct Refcount<R: Integer, T> {
->                             // ^^^^^^^ not found in this scope
->                             // note: trait `crate::atomic::Integer` exists but is inaccessible
->             refcount: Atomic<R>,
->             data: UnsafeCell<T>,
->         }
-> 
-> I think that we can start with approach 2 and if we find a use-case
-> where generics are really unavoidable, we can either put it in the same
-> module as `Atomic<T>`, or change the access of `Integer`.
-> 
+Hi, we tested your kernel and here are the results:
 
-What's the issue of having AtomicI32 and AtomicI64 first then? We don't
-need to do 1 or 2 until the real users show up.
-
-And I'd like also to point out that there are a few more trait bound
-designs needed for Atomic<T>, for example, Atomic<u32> and Atomic<i32>
-have different sets of API (no inc_unless_negative() for u32).
-
-Don't make me wrong, I have no doubt we can handle this in the type
-system, but given the design work need, won't it make sense that we take
-baby steps on this? We can first introduce AtomicI32 and AtomicI64 which
-already have real users, and then if there are some values of generic
-atomics, we introduce them and have proper discussion on design.
-
-To me, it's perfectly fine that Atomic{I32,I64} co-exist with Atomic<T>.
-What's the downside? A bit specific example would help me understand
-the real concern here.
+    Overall result: FAILED
+             Merge: OK
+           Compile: OK
+              Test: FAILED
 
 
-Regards,
-Boqun
+Kernel information:
+    Commit message: Merge tag 's390-6.10-4' of git://git.kernel.org/pub/scm=
+/linux/kernel/git/s390/linux
 
-> ---
-> Cheers,
-> Benno
-> 
-> > The point I'm trying to make here is: when you are using atomics, you
-> > care about performance a lot (otherwise, why don't you use a lock?), and
-> > because of that, you should care about the size of the atomics, because
-> > it may affect the performance significantly.
-> 
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1333456716
+
+One or more kernel tests failed:
+    Unrecognized or new issues:
+        Reboot test
+              x86_64
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+redhat:1333456716-x86_64-kernel_upt_35
+                   Non-passing ran subtests:
+                       =E2=9D=8C FAIL misc/reboot-test/journalctl-check
+
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: [rhel-10] xfstests - cifsv3.11 - generic/207 - error in bloc=
+k: expected 4096 bytes, received 0
+            URL: https://issues.redhat.com/browse/RHEL-39974
+            Affected tests:
+                xfstests - cifsv3.11 [x86_64, x86_64 (debug)]
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1267
+            Affected tests:
+                selinux-policy: serge-testsuite [ppc64le]
+
+
+Tests that were not ran because of internal issues:=20
+    Boot test [s390x]
+    CKI/restraint [s390x]
+    machineinfo [s390x, x86_64]
+    Reboot test [s390x, x86_64 (debug)]
+    SELinux Custom Module Setup [ppc64le, s390x, x86_64]
+    Storage - blktests - blk - upstream [s390x]
+    Storage - blktests - nvme-tcp - upstream [s390x]
+    Storage - swraid scsi_raid [s390x, x86_64 (debug)]
+    stress: stress-ng - cpu-cache [s390x]
+    stress: stress-ng - memory [s390x]
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
