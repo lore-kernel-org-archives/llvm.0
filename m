@@ -1,257 +1,146 @@
-Received: from szxga06-in.huawei.com (szxga06-in.huawei.com [45.249.212.32])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A3CC32E634
-	for <llvm@lists.linux.dev>; Sat, 15 Jun 2024 09:20:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.32
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7013024B34;
+	Sat, 15 Jun 2024 09:33:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718443248; cv=none; b=SOYC3zDBh+16gPLDvf1nbd/Jc3GKOrmRJcJxRR25/ZhxKDejyS2y1DQLhMhztlJ6LTChc/3LIB8br5lADMqxQcMjKpzchueivO837I5q9MbAUQyeWbGPKxrc/hON3NPXn2vcQI7C/9/Rh55Tk+UupjnvEvUpCslzI1CE+cXORoA=
+	t=1718443995; cv=none; b=SF3mm+Pqq+/2A76JcnbeWx91FHlITj6rTqdO55RQVD2X5QHnCgDClHQO1TcRsMdBncLouuaIH8I5NrG/7dwdwtSsDD4yilr9j5OVUakSvpQ3SpdJ4FOq2qfMV+ShaMguMA96rZ/10osK6jBzSEgEwkfBmBvc3cdBaK1fUVX+Ntg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718443248; c=relaxed/simple;
-	bh=JrKS3CyUqPxaMZBI/KWBgU6EbAGxygnzOr3+O9jwQdo=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=WY63AmygQc11geHDs1lBGuVOOzbBHqjWBriRcQtrtaGvaavKuKeDXezqEfDf8e1q3FJjsz7LNL2yTL+xzmIiKSnm3IuUIPw/RMejBDsSUyDHPTcmAYvE4QNr6/GPStLP3pNO3cIdXRJxQNBuMYe+7WDXV7LNlHcPUdMw2Dg897w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.32
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.19.162.112])
-	by szxga06-in.huawei.com (SkyGuard) with ESMTP id 4W1Vvj3q5Pz1xsSb;
-	Sat, 15 Jun 2024 17:19:13 +0800 (CST)
-Received: from kwepemd100011.china.huawei.com (unknown [7.221.188.204])
-	by mail.maildlp.com (Postfix) with ESMTPS id 1D83E140381;
-	Sat, 15 Jun 2024 17:20:38 +0800 (CST)
-Received: from M910t.huawei.com (10.110.54.157) by
- kwepemd100011.china.huawei.com (7.221.188.204) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1258.34; Sat, 15 Jun 2024 17:20:36 +0800
-From: Changbin Du <changbin.du@huawei.com>
-To: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>,
-	Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim
-	<namhyung@kernel.org>, Nathan Chancellor <nathan@kernel.org>
-CC: Mark Rutland <mark.rutland@arm.com>, Alexander Shishkin
-	<alexander.shishkin@linux.intel.com>, Jiri Olsa <jolsa@kernel.org>, Ian
- Rogers <irogers@google.com>, Adrian Hunter <adrian.hunter@intel.com>, "Liang,
- Kan" <kan.liang@linux.intel.com>, Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
-	<linux-perf-users@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-	<llvm@lists.linux.dev>, Changbin Du <changbin.du@huawei.com>
-Subject: [PATCH v2 4/4] perf: symbol: try to seach vdso path if not given by user
-Date: Sat, 15 Jun 2024 17:20:15 +0800
-Message-ID: <20240615092015.1820362-5-changbin.du@huawei.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20240615092015.1820362-1-changbin.du@huawei.com>
-References: <20240615092015.1820362-1-changbin.du@huawei.com>
+	s=arc-20240116; t=1718443995; c=relaxed/simple;
+	bh=bc/4Tso4iRzwTk7+zSbemISLUV6nGZBGzfAmqNVY59g=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=l++u7OdGoZr9Gw7KVQPzQyYDOEKcrq1UjnvpfxJ6WvYLFb2B804Ck14dLk6XgdiFxEfR7Wva1OeOnKf8TOyoASjQqrGCfvxE5y8sCU8cFgG6Uh9hMttFjSyldiGScOeMfgnhxE8/BXD6A9lbY6JvgwVUwOeQ8c5ZrodpLz/bkxg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=rfBFLmRb; arc=none smtp.client-ip=10.30.226.201
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="rfBFLmRb"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 31A7AC4AF52;
+	Sat, 15 Jun 2024 09:33:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1718443995;
+	bh=bc/4Tso4iRzwTk7+zSbemISLUV6nGZBGzfAmqNVY59g=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=rfBFLmRbcYnoj+61ZEMp+Z5GwifgAx7DGspwyRk9vBKukG7kOAbVcbXSJma2MzF0Y
+	 vCQqjeIj8QbDMqSWRY7KBBhKAOMgQ75eVZlpoAUS7xa6sOSwZbXwhqfm9Z6keh58DK
+	 UXxK9j4OVXmdswAvARW20YbrSMbyKkTGFGtx0btdBD+1DziLFkmLy1vp13pfYROcb3
+	 V4bUFM6snfO1knltzXJnymxtfc7nrnThbpWgcSx7oA3nbkL+wwqWoIbjKMlw6tMqYL
+	 5eS+u9A/P+JNsKdm6SRvAcWdecTCVrphQ7ldFk0nxBXMdi+Xcr75hcjoGtz36s5jBa
+	 AQ99irCVhkwvQ==
+Received: by mail-ej1-f50.google.com with SMTP id a640c23a62f3a-a6f09eaf420so349301466b.3;
+        Sat, 15 Jun 2024 02:33:15 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCWyS1xFDJ5vmKMOhc1n74xdYtpt9euxL0aRAljCj+/L+Wfcgkr5EJ3hiLP0sb2T5xZTf2cVIf8K7wPyDRhx4uw0mJ38TlNUKyTGl3VIEob/i5zwDsJDLQXQuxGotudwDw==
+X-Gm-Message-State: AOJu0YyHUC7PWLm5SuOuxRa8p8meh4YwnvpByEJ8DRXcLOJ6+776STMx
+	MrCF21vPqJlQSSG5PxIKQtmIoRDuDvNdL7NxepcGO7pokjwMKY0WyFMY8EejM7vr+sg6MWRX8Yv
+	9CGEZqH1+/ZIDlm+Ui0HzvZw0llU=
+X-Google-Smtp-Source: AGHT+IF5m0HmRjk9vt1VeOMxfpLqhSGVZgMyBx4nmfoGhafEDfO8XUD4p5rOnEYmsUvgaoy+e743j4lvpC7/ieTi5zw=
+X-Received: by 2002:a17:907:d303:b0:a6f:6803:57d2 with SMTP id
+ a640c23a62f3a-a6f6803596cmr268616866b.53.1718443993585; Sat, 15 Jun 2024
+ 02:33:13 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- kwepemd100011.china.huawei.com (7.221.188.204)
+References: <20240604150741.30252-1-xry111@xry111.site> <20240605054328.GA279426@thelio-3990X>
+ <b55b8cb2c52f2c3701c83353586130b8dc237ee2.camel@xry111.site>
+ <20240605062548.GF279426@thelio-3990X> <f8ef61773b0119b8573fc0fed9ad0a8b43061efd.camel@xry111.site>
+ <444ec2031ef6ca016cbfa8dfedc51bddc8529ba7.camel@xry111.site>
+ <ada035690e446909c3cdbf9a43a92def96020615.camel@xry111.site>
+ <82b7e6ea-c2cb-6364-ebe9-bff928028408@loongson.cn> <1c132209a612e2e8953f0b458fc01853120db9a9.camel@xry111.site>
+ <2bf11cd2-8449-acda-f5ad-659c38cb018e@loongson.cn> <96a2e8a80c06772b64fcbdba42e1dae2d68a53a7.camel@xry111.site>
+ <2bd6ae20-ec56-c1a2-c5dd-e8c978a376d3@loongson.cn> <329dac82e09dfc75e77ae93ebbeacdec1dc9ff7f.camel@xry111.site>
+ <CAAhV-H5Wz=U4kbX+tXt1qoCr6RaEDkzZXV7B=tgU_8o+X-NtVQ@mail.gmail.com> <a97cd0f2e2cac10253d6b5cdd0ace3db3b220535.camel@xry111.site>
+In-Reply-To: <a97cd0f2e2cac10253d6b5cdd0ace3db3b220535.camel@xry111.site>
+From: Huacai Chen <chenhuacai@kernel.org>
+Date: Sat, 15 Jun 2024 17:33:02 +0800
+X-Gmail-Original-Message-ID: <CAAhV-H7hhh3Jes0jMrg82+KJCa7GQZW=F9bDtktFh=eazMDX9w@mail.gmail.com>
+Message-ID: <CAAhV-H7hhh3Jes0jMrg82+KJCa7GQZW=F9bDtktFh=eazMDX9w@mail.gmail.com>
+Subject: Re: [PATCH] loongarch: Only select HAVE_OBJTOOL and allow ORC
+ unwinder if the inline assembler supports R_LARCH_{32,64}_PCREL
+To: Xi Ruoyao <xry111@xry111.site>
+Cc: Jinyang He <hejinyang@loongson.cn>, Nathan Chancellor <nathan@kernel.org>, 
+	Peter Zijlstra <peterz@infradead.org>, WANG Xuerui <kernel@xen0n.name>, 
+	Tiezhu Yang <yangtiezhu@loongson.cn>, Nick Desaulniers <ndesaulniers@google.com>, 
+	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
+	Youling Tang <tangyouling@kylinos.cn>, loongarch@lists.linux.dev, 
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, mengqinggang@loongson.cn, 
+	cailulu@loongson.cn, wanglei@loongson.cn, luweining@loongson.cn, 
+	Yujie Liu <yujie.liu@intel.com>, Heng Qi <hengqi@linux.alibaba.com>, 
+	Tejun Heo <tj@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Just like vmlinux, try to search vdso in predefined path if it's not given
-by user. The searched path usually has debugging info.
+On Sat, Jun 15, 2024 at 4:54=E2=80=AFPM Xi Ruoyao <xry111@xry111.site> wrot=
+e:
+>
+> On Sat, 2024-06-15 at 16:45 +0800, Huacai Chen wrote:
+> > Hi, Ruoyao and Jinyang,
+> >
+> > On Fri, Jun 7, 2024 at 4:29=E2=80=AFPM Xi Ruoyao <xry111@xry111.site> w=
+rote:
+> > >
+> > > On Fri, 2024-06-07 at 15:14 +0800, Jinyang He wrote:
+> > > > >      Note: on RISC-V and LoongArch, the stack slot for the previo=
+us frame
+> > > > >      pointer is stored at fp[-2] instead of fp[0]. See [Consider
+> > > > >      standardising which stack slot fp points
+> > > > >      to](https://github.com/riscv-non-isa/riscv-elf-psabi-doc/iss=
+ues/18)
+> > > > >      for the RISC-V discussion.
+> > > >
+> > > > In most cases the $fp is saved at cfa-16. But for va args, somethin=
+g
+> > > > becomes different at LoongArch (I do not know the case of riscv), t=
+he
+> > > > $fp isn't saved at cfa-16. (e.g. printk?)
+> > >
+> > > Oops indeed.  Even with a very simple case:
+> > >
+> > > int sum(int a, int b) {
+> > >         return a + b;
+> > > }
+> > >
+> > > with -fno-omit-frame-pointer we get:
+> > >
+> > > sum:
+> > >         addi.d  $r3,$r3,-16
+> > >         st.d    $r22,$r3,8
+> > >         addi.d  $r22,$r3,16
+> > >         ld.d    $r22,$r3,8
+> > >         add.w   $r4,$r4,$r5
+> > >         addi.d  $r3,$r3,16
+> > >         jr      $r1
+> > >
+> > > So for leaf functions (where we don't save $ra) $fp is saved at cfa-8=
+.
+> > >
+> > > > I feel that the update_cfi_state should be arch specific. I believe
+> > > > that some logic can be reused, but each arch may have its own logic=
+.
+> > >
+> > > I agree it now.
+> > What is the conclusion about the clang part now? And for the original
+> > -mno-thin-add-sub problem, do you have some way to fix it in the root?
+> > I think we needn't rush, there are some weeks before 6.10 released.
+>
+> To me for now we should just make OBJTOOL and ORC depend on BROKEN and
+> backport to stable...
+But this patch allows clang to build objtool, which seems broken, too.
 
-For example, the vdso can be found in
-/lib/modules/<version>/build/arch/x86/entry/vdso/vdso*.so.dbg for local
-build on x86.
+>
+> Even if we can fix both the -mno-thin-add-sub problem and the frame
+> pointer problem in these weeks, they'll be some nontrivial large change
+> and improper to backport.  Thus we have to admit objtool doesn't really
+> work for old releases and mark it broken.
+I don't like to disable objtool, unless there is no better solution.
+And it seems there has already been some "large fix" in objtool's
+history.
 
-Cc: Adrian Hunter <adrian.hunter@intel.com>
-Signed-off-by: Changbin Du <changbin.du@huawei.com>
----
- tools/perf/builtin-annotate.c   |  1 +
- tools/perf/builtin-kallsyms.c   |  2 ++
- tools/perf/builtin-probe.c      |  2 ++
- tools/perf/builtin-top.c        |  2 ++
- tools/perf/tests/builtin-test.c |  3 ++-
- tools/perf/util/symbol.c        | 40 +++++++++++++++++++++++++++++++++
- tools/perf/util/symbol.h        |  1 +
- tools/perf/util/symbol_conf.h   |  1 +
- 8 files changed, 51 insertions(+), 1 deletion(-)
+Huacai
 
-diff --git a/tools/perf/builtin-annotate.c b/tools/perf/builtin-annotate.c
-index ff466882065d..6c5019c39068 100644
---- a/tools/perf/builtin-annotate.c
-+++ b/tools/perf/builtin-annotate.c
-@@ -883,6 +883,7 @@ int cmd_annotate(int argc, const char **argv)
- 		goto out_delete;
- 
- 	symbol_conf.try_vmlinux_path = true;
-+	symbol_conf.try_vdso_path = true;
- 
- 	ret = symbol__init(&annotate.session->header.env);
- 	if (ret < 0)
-diff --git a/tools/perf/builtin-kallsyms.c b/tools/perf/builtin-kallsyms.c
-index a3c2ffdc1af8..d049025a4959 100644
---- a/tools/perf/builtin-kallsyms.c
-+++ b/tools/perf/builtin-kallsyms.c
-@@ -63,6 +63,8 @@ int cmd_kallsyms(int argc, const char **argv)
- 		usage_with_options(kallsyms_usage, options);
- 
- 	symbol_conf.try_vmlinux_path = (symbol_conf.vmlinux_name == NULL);
-+	symbol_conf.try_vdso_path = (symbol_conf.vdso_name[0] == NULL &&
-+				     symbol_conf.vdso_name[1] == NULL);
- 	if (symbol__init(NULL) < 0)
- 		return -1;
- 
-diff --git a/tools/perf/builtin-probe.c b/tools/perf/builtin-probe.c
-index 003a3bcebfdf..91770eda37c0 100644
---- a/tools/perf/builtin-probe.c
-+++ b/tools/perf/builtin-probe.c
-@@ -667,6 +667,8 @@ __cmd_probe(int argc, const char **argv)
- 	 * Only consider the user's kernel image path if given.
- 	 */
- 	symbol_conf.try_vmlinux_path = (symbol_conf.vmlinux_name == NULL);
-+	symbol_conf.try_vdso_path = (symbol_conf.vdso_name[0] == NULL &&
-+				     symbol_conf.vdso_name[1] == NULL);
- 
- 	/*
- 	 * Except for --list, --del and --add, other command doesn't depend
-diff --git a/tools/perf/builtin-top.c b/tools/perf/builtin-top.c
-index a3cce4e76eb9..5a2dc7a0dbb8 100644
---- a/tools/perf/builtin-top.c
-+++ b/tools/perf/builtin-top.c
-@@ -1792,6 +1792,8 @@ int cmd_top(int argc, const char **argv)
- 	annotation_config__init();
- 
- 	symbol_conf.try_vmlinux_path = (symbol_conf.vmlinux_name == NULL);
-+	symbol_conf.try_vdso_path = (symbol_conf.vdso_name[0] == NULL &&
-+				     symbol_conf.vdso_name[1] == NULL);
- 	status = symbol__init(NULL);
- 	if (status < 0)
- 		goto out_delete_evlist;
-diff --git a/tools/perf/tests/builtin-test.c b/tools/perf/tests/builtin-test.c
-index c3d84b67ca8e..176196e3c183 100644
---- a/tools/perf/tests/builtin-test.c
-+++ b/tools/perf/tests/builtin-test.c
-@@ -575,7 +575,8 @@ int cmd_test(int argc, const char **argv)
- 
- 	symbol_conf.priv_size = sizeof(int);
- 	symbol_conf.try_vmlinux_path = true;
--
-+	symbol_conf.try_vdso_path = (symbol_conf.vdso_name[0] == NULL &&
-+				     symbol_conf.vdso_name[1] == NULL);
- 	if (symbol__init(NULL) < 0)
- 		return -1;
- 
-diff --git a/tools/perf/util/symbol.c b/tools/perf/util/symbol.c
-index 83e5c3807a2c..93bdaf213d1e 100644
---- a/tools/perf/util/symbol.c
-+++ b/tools/perf/util/symbol.c
-@@ -49,11 +49,13 @@ static int dso__load_vdso_sym(struct dso *dso, struct map *map);
- static bool symbol__is_idle(const char *name);
- 
- struct dso_filename_paths vmlinux_paths;
-+struct dso_filename_paths vdso_paths;
- 
- struct symbol_conf symbol_conf = {
- 	.nanosecs		= false,
- 	.use_modules		= true,
- 	.try_vmlinux_path	= true,
-+	.try_vdso_path		= true,
- 	.demangle		= true,
- 	.demangle_kernel	= false,
- 	.cumulate_callchain	= true,
-@@ -2304,6 +2306,15 @@ struct dso_filename_pattern vmlinux_patterns[] = {
- 	{"/usr/lib/debug/boot/vmlinux-%s.debug", 1},
- };
- 
-+struct dso_filename_pattern vdso_patterns[] = {
-+	{"/lib/modules/%s/vdso/vdso64.so", 1},
-+	{"/lib/modules/%s/vdso/vdso32.so", 1},
-+	{"/lib/modules/%s/build/arch/%s/entry/vdso/vdso32.so.dbg", 2},
-+	{"/lib/modules/%s/build/arch/%s/entry/vdso/vdso64.so.dbg", 2},
-+	{"/lib/modules/%s/build/arch/%s/kernel/vdso/vdso.so.dbg", 2},
-+	{"/lib/modules/%s/build/arch/%s/vdso/vdso.so.dbg", 2},
-+};
-+
- static int dso_filename_path__add(struct dso_filename_paths *paths, const char *new_entry)
- {
- 	paths->paths[paths->nr_entries] = strdup(new_entry);
-@@ -2418,6 +2429,22 @@ static int dso__load_vdso(struct dso *dso, struct map *map,
- 	return err;
- }
- 
-+static int dso__load_vdso_path(struct dso *dso, struct map *map)
-+{
-+	int i, ret = 0;
-+
-+	pr_debug("Looking at the vdso_path (%d entries long)\n",
-+		 vdso_paths.nr_entries + 1);
-+
-+	for (i = 0; i < vdso_paths.nr_entries; ++i) {
-+		ret = dso__load_vdso(dso, map, vdso_paths.paths[i]);
-+		if (ret > 0)
-+			return ret;
-+	}
-+
-+	return ret;
-+}
-+
- static int dso__load_vdso_sym(struct dso *dso, struct map *map)
- {
- 	int ret;
-@@ -2433,6 +2460,12 @@ static int dso__load_vdso_sym(struct dso *dso, struct map *map)
- 		}
- 	}
- 
-+	if (vdso_paths.paths != NULL) {
-+		ret = dso__load_vdso_path(dso, map);
-+		if (ret > 0)
-+			return ret;
-+	}
-+
- 	return -1;
- }
- 
-@@ -2566,6 +2599,12 @@ int symbol__init(struct perf_env *env)
- 		return -1;
- 	}
- 
-+	if (symbol_conf.try_vdso_path &&
-+	    dso_filename_path__init(&vdso_paths, vdso_patterns,
-+				    ARRAY_SIZE(vdso_patterns), env) < 0) {
-+		return -1;
-+	}
-+
- 	if (symbol_conf.field_sep && *symbol_conf.field_sep == '.') {
- 		pr_err("'.' is the only non valid --field-separator argument\n");
- 		return -1;
-@@ -2642,6 +2681,7 @@ void symbol__exit(void)
- 	intlist__delete(symbol_conf.pid_list);
- 	intlist__delete(symbol_conf.addr_list);
- 	dso_filename_path__exit(&vmlinux_paths);
-+	dso_filename_path__exit(&vdso_paths);
- 	symbol_conf.sym_list = symbol_conf.dso_list = symbol_conf.comm_list = NULL;
- 	symbol_conf.bt_stop_list = NULL;
- 	symbol_conf.initialized = false;
-diff --git a/tools/perf/util/symbol.h b/tools/perf/util/symbol.h
-index 30056884945b..08c339594d4e 100644
---- a/tools/perf/util/symbol.h
-+++ b/tools/perf/util/symbol.h
-@@ -107,6 +107,7 @@ struct dso_filename_paths {
- };
- 
- extern struct dso_filename_paths vmlinux_paths;
-+extern struct dso_filename_paths vdso_paths;
- 
- static inline void *symbol__priv(struct symbol *sym)
- {
-diff --git a/tools/perf/util/symbol_conf.h b/tools/perf/util/symbol_conf.h
-index 108356e3c981..58c4c4358ece 100644
---- a/tools/perf/util/symbol_conf.h
-+++ b/tools/perf/util/symbol_conf.h
-@@ -12,6 +12,7 @@ struct symbol_conf {
- 	bool		nanosecs;
- 	unsigned short	priv_size;
- 	bool		try_vmlinux_path,
-+			try_vdso_path,
- 			init_annotation,
- 			force,
- 			ignore_vmlinux,
--- 
-2.34.1
-
+>
+>
+> --
+> Xi Ruoyao <xry111@xry111.site>
+> School of Aerospace Science and Technology, Xidian University
