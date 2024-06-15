@@ -1,96 +1,246 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qv1-f45.google.com (mail-qv1-f45.google.com [209.85.219.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B57C1870;
-	Sat, 15 Jun 2024 21:22:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B948929415
+	for <llvm@lists.linux.dev>; Sat, 15 Jun 2024 22:12:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718486566; cv=none; b=TIkYCzNmRMlIbM4ncRPXOFjfdva93VRbMxXM+dClOtKZZLUkocz6LSFR8E9wMlYUKG33BoR15oZBcx/d4z5abkfODjAWWGJ3RzGQlJtgN3lp68OIa6SrgqdkkXVz0GW5xEeGmbR0BdAd54YC7i4G2kIE9LW8V8WV3gsaXLXxejw=
+	t=1718489560; cv=none; b=h+pPYpMkl0smePxCjQFhgTiopDyFmb881KCDsmZ3mouFkOv0W2vjvJOyHzXa1J/3bukKXSRx+8doY3j3P+GOkDHf66Lr66mq/biqU3WzFqSo8EK9U+kNILOU8v2wcNFwr1GuWATUJ0Y2GxQTmKrmjwM4adOZpqQvJajIDc43Id0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718486566; c=relaxed/simple;
-	bh=x1lWxE4yDf/J3NIPxBhUoWWKjVEhI2bd5Vy23s/3juQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=t2d2txRqAeVcx6BuDNc79W3fccRhxLwWLUFBTFPF2n57twA0qo5TEMy3ChLc5u7T2J+6L9IzlMZom5co4zN/xvuyVkHW2e/Lr4FipdEOpOVQppytQe6Gd20JCoFTpoC56EnO68ivhvTaUV6eiScvdripkI0LksrRZK4iaOxG3xg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=mbM8WX9D; arc=none smtp.client-ip=198.175.65.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1718489560; c=relaxed/simple;
+	bh=lHxr0MwsemA2ZMnqJsxiMmV5XulPnNeOMTCLuiEYGpo=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=l41UMoK4APSA13FYJGYjlFu0TNq6/7/sK5Jbs2zh4ou/Vw3veK/grHgE4O5sS6Q9aEBpqQX0Gr7yLMULUGmeGqIUWyupipDSMEOMul5nY0ZA10i/GRSb1UGueSMjsnFMRboInNfCdsk1MT27jlsTyzQSkGDBOFDJ/6P42AJWRlQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=e5u28gMW; arc=none smtp.client-ip=209.85.219.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="mbM8WX9D"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1718486565; x=1750022565;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=x1lWxE4yDf/J3NIPxBhUoWWKjVEhI2bd5Vy23s/3juQ=;
-  b=mbM8WX9DyhaGfYBn702/WxtMFG2jHN2KU//r665mR46Tx55qe6Y0Ryiw
-   7A4S1/7Nf/DEmPYDOca2ft0rEfxKBUsW42XPaBYTeyfZSkcWiGqMgcuMT
-   buFw1vGf3nhGrf6DoZrhgjyempTCLunKk3ZPFg0YDEXCps+i38CdDtODf
-   bUZzww4/RBxgqdEE1ipYREKdSoSx/5D8gKbqF/qYY5Te14R1Y3CX+Rdk2
-   bVDpB3/nzRjBuAp3ibM2VVVSJ51Aj4B8VTHqW3SPXphxPVqcVAzC4faLO
-   RgUfncwUFSsQXG9fU68firnW2FbSMegCUke0D2xP2HCmGZ2tmEuRnN1Yp
-   w==;
-X-CSE-ConnectionGUID: 6Av/J7NkQk2AEVnXzzK79A==
-X-CSE-MsgGUID: 7Q2kLKU5TtWDOcKisbFeDQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11104"; a="19141972"
-X-IronPort-AV: E=Sophos;i="6.08,241,1712646000"; 
-   d="scan'208";a="19141972"
-Received: from fmviesa007.fm.intel.com ([10.60.135.147])
-  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jun 2024 14:22:41 -0700
-X-CSE-ConnectionGUID: /mos4FL8TIiybm/BGzr93w==
-X-CSE-MsgGUID: vKVgfzfCQqGQ2s8656mCJg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.08,241,1712646000"; 
-   d="scan'208";a="40689517"
-Received: from lkp-server01.sh.intel.com (HELO 68891e0c336b) ([10.239.97.150])
-  by fmviesa007.fm.intel.com with ESMTP; 15 Jun 2024 14:22:39 -0700
-Received: from kbuild by 68891e0c336b with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1sIar7-0000WE-2N;
-	Sat, 15 Jun 2024 21:22:37 +0000
-Date: Sun, 16 Jun 2024 05:21:42 +0800
-From: kernel test robot <lkp@intel.com>
-To: Wedson Almeida Filho <walmeida@microsoft.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Miguel Ojeda <ojeda@kernel.org>, Danilo Krummrich <dakr@redhat.com>
-Subject: [rust:staging/rust-device 5/12] error[E0425]: cannot find value
- `THIS_MODULE` in the crate root
-Message-ID: <202406160537.FF7m5SCK-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="e5u28gMW"
+Received: by mail-qv1-f45.google.com with SMTP id 6a1803df08f44-6b2c6291038so4240136d6.0
+        for <llvm@lists.linux.dev>; Sat, 15 Jun 2024 15:12:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1718489558; x=1719094358; darn=lists.linux.dev;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :feedback-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=VQbZ8odua1hQgPb+pK/nZMpMy6s0hU++zOMWAbph2Ak=;
+        b=e5u28gMWTrPAWBsk0ojzsFdwIkiurS2z4Ot8YHNW1ViXNAB7WInOZl8ONqe+gQLoMt
+         y01bXwFeTfkTpqD2rq3w6sN46wtwneUZAQkrQf54T1jKpJM2dMDM3VdRPTloWveRsZLe
+         szq/Mh0qlN7j/e4VtT0uYnJvrvBbDW/H3zi7bWYOcRvPFXZruEh64UB+HxpsHoEpqOQi
+         I8ROGo5bf9o/1R8yHrdJ3WV+SkmcOS3Wnsh8KGk/IeVt9sO3KoyvnyfwBmc/BaU5Ptjk
+         mEe47wqKUOYzT4PfaqivHDV6ilmai+GHyCrO2dT2Jf+JseA+n6phTMKB0CyszfcYzyjj
+         OjOg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1718489558; x=1719094358;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :feedback-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=VQbZ8odua1hQgPb+pK/nZMpMy6s0hU++zOMWAbph2Ak=;
+        b=PPdDUfvWJStRTWW6GOnT+EcNHgYLVlYQp/xcmXbfEAMaIcxSXxa9d9T/MzFyU7DuR0
+         0Hnc/78Twg9D9oQ7RzAZo0o8LPkw19mlDROFMmFBF14RY6e+tKuMB7bmWhQyLKjDW1rk
+         LOcJ0it73ED+6lMfuXgCDfYHtjIF8mJ5UPCvgGC239eUkyk+Fla+m6P8ZCnxvhfc0Z9Q
+         U2F2K8XQ62B6RJ2Q6k9ppLGzMbUEUp7sYumRkTuMGUKonIm4UCN39HKcOJDmlfpIJtLz
+         TqG6+4TVRWmaFLJhSzHHOVUkqx1lNb8RayrsKwycGwF0lsF5sRs3v9BwuTbtc2ff8Sjb
+         LV1g==
+X-Forwarded-Encrypted: i=1; AJvYcCWAR95yy1AoTwDi1WdUQANzY0VFKndL1Zs3YW1zxN9OucGGrIYG6SKiokJung72Kiq7C5iIElikBziWLn4Y93q+xGqN8w==
+X-Gm-Message-State: AOJu0YxdskyVcmJPq69S0n4jiA4X52HynYZ/CxDsv/TDw3PPbhsIewiR
+	hDo9Aq07JfsyUnxVYC9wtu0wwcXC9CjzyetdSglsCbu9MH4nWEMd
+X-Google-Smtp-Source: AGHT+IG4HmvNaRjIhMLhZmWvrLBxGBdGzpx8lIGc5erMmHO1rw2wmIF90qlwEKwxcvp0aYOUU1vmBA==
+X-Received: by 2002:a0c:c486:0:b0:6af:33ed:87de with SMTP id 6a1803df08f44-6b2af2eef89mr96166876d6.20.1718489557589;
+        Sat, 15 Jun 2024 15:12:37 -0700 (PDT)
+Received: from fauth2-smtp.messagingengine.com (fauth2-smtp.messagingengine.com. [103.168.172.201])
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-6b2a5ee01d9sm36048266d6.111.2024.06.15.15.12.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 15 Jun 2024 15:12:36 -0700 (PDT)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+	by mailfauth.nyi.internal (Postfix) with ESMTP id BB4DA120006D;
+	Sat, 15 Jun 2024 18:12:35 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute5.internal (MEProxy); Sat, 15 Jun 2024 18:12:35 -0400
+X-ME-Sender: <xms:0xFuZlrY_bE0nKnF8etf9N11hrXBGTSZUsqajV7vSx_NMcCiVHBxWA>
+    <xme:0xFuZnoWZKABHQym_Al27-R6FbyuPJoHjXkImVwCQoKNHNYPV12cPXCh74-QPxjV_
+    uP26wfRs8Syfm4Y4A>
+X-ME-Received: <xmr:0xFuZiOGp7JlumhoS4vNAISpZyxHz9paxafo9_oM3Q3HNZ-HrbFMwNYdRw>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvledrfedvvddgtdejucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvfevuffkfhggtggugfgjsehtkeertddttdejnecuhfhrohhmpeeuohhq
+    uhhnucfhvghnghcuoegsohhquhhnrdhfvghnghesghhmrghilhdrtghomheqnecuggftrf
+    grthhtvghrnhepvefghfeuveekudetgfevudeuudejfeeltdfhgfehgeekkeeigfdukefh
+    gfegleefnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomh
+    epsghoqhhunhdomhgvshhmthhprghuthhhphgvrhhsohhnrghlihhthidqieelvdeghedt
+    ieegqddujeejkeehheehvddqsghoqhhunhdrfhgvnhhgpeepghhmrghilhdrtghomhesfh
+    higihmvgdrnhgrmhgv
+X-ME-Proxy: <xmx:0xFuZg77_tq59ml7HlC_Z5h69QygySdhdEM0vBwuiOHNNd6XPNeTBw>
+    <xmx:0xFuZk49SyUhxrXrXcs19xpi75s5rJM0mbiY4SfqTWFVFONMGKODWA>
+    <xmx:0xFuZojK6yKmo-LzjJ8_UBHNkd4DUJUUGkL1C4hN7ct-SpajKsTZ2g>
+    <xmx:0xFuZm79WM7Y1DZ3Gur-JaVOLAvHAiLK2HHqVh31qOKaLNauBRm6Nw>
+    <xmx:0xFuZrKIrd0e9826BTvfWSIKsKcRvW-fQZ4wYyZNqlSrPnFgBSdCr7By>
+Feedback-ID: iad51458e:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sat,
+ 15 Jun 2024 18:12:34 -0400 (EDT)
+Date: Sat, 15 Jun 2024 15:12:33 -0700
+From: Boqun Feng <boqun.feng@gmail.com>
+To: Benno Lossin <benno.lossin@proton.me>
+Cc: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>,
+	Gary Guo <gary@garyguo.net>, rust-for-linux@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+	llvm@lists.linux.dev, Miguel Ojeda <ojeda@kernel.org>,
+	Alex Gaynor <alex.gaynor@gmail.com>,
+	Wedson Almeida Filho <wedsonaf@gmail.com>,
+	=?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
+	Andreas Hindborg <a.hindborg@samsung.com>,
+	Alice Ryhl <aliceryhl@google.com>,
+	Alan Stern <stern@rowland.harvard.edu>,
+	Andrea Parri <parri.andrea@gmail.com>,	Will Deacon <will@kernel.org>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Nicholas Piggin <npiggin@gmail.com>,	David Howells <dhowells@redhat.com>,
+	Jade Alglave <j.alglave@ucl.ac.uk>,	Luc Maranget <luc.maranget@inria.fr>,
+	"Paul E. McKenney" <paulmck@kernel.org>,
+	Akira Yokosawa <akiyks@gmail.com>,	Daniel Lustig <dlustig@nvidia.com>,
+	Joel Fernandes <joel@joelfernandes.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,	kent.overstreet@gmail.com,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, elver@google.com,
+	Mark Rutland <mark.rutland@arm.com>,
+	Thomas Gleixner <tglx@linutronix.de>,	Ingo Molnar <mingo@redhat.com>,
+ Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+	"H. Peter Anvin" <hpa@zytor.com>,
+	Catalin Marinas <catalin.marinas@arm.com>,	torvalds@linux-foundation.org,
+ linux-arm-kernel@lists.infradead.org,	linux-fsdevel@vger.kernel.org,
+ Trevor Gross <tmgross@umich.edu>,	dakr@redhat.com
+Subject: Re: [RFC 2/2] rust: sync: Add atomic support
+Message-ID: <Zm4R0XwTpsASpBhx@Boquns-Mac-mini.home>
+References: <20240612223025.1158537-3-boqun.feng@gmail.com>
+ <20240613144432.77711a3a@eugeo>
+ <ZmseosxVQXdsQjNB@boqun-archlinux>
+ <CANiq72myhoCCWs7j0eZuxfoYMbTez7cPa795T57+gz2Dpd+xAw@mail.gmail.com>
+ <ZmtC7h7v1t6XJ6EI@boqun-archlinux>
+ <CANiq72=JdqTRPiUfT=-YMTTN+bHeAe2Pba8nERxU3cN8Q-BEOw@mail.gmail.com>
+ <ZmxUxaIwHWnB42h-@Boquns-Mac-mini.home>
+ <c1c45a2e-afdf-40a6-9f44-142752368d5e@proton.me>
+ <ZmzvVr7lYfR6Dpca@Boquns-Mac-mini.home>
+ <b692945b-8fa4-4918-93f6-783fbcde375c@proton.me>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <b692945b-8fa4-4918-93f6-783fbcde375c@proton.me>
 
-tree:   https://github.com/Rust-for-Linux/linux staging/rust-device
-head:   6530ecc4ac729a040a955a5e2d13c37d671b6e5c
-commit: e89012e5ba8514aeff4eb4c7247d3a98025d3201 [5/12] rust: introduce `InPlaceModule`
-config: x86_64-rhel-8.3-rust (https://download.01.org/0day-ci/archive/20240616/202406160537.FF7m5SCK-lkp@intel.com/config)
-compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240616/202406160537.FF7m5SCK-lkp@intel.com/reproduce)
+On Sat, Jun 15, 2024 at 07:09:30AM +0000, Benno Lossin wrote:
+> On 15.06.24 03:33, Boqun Feng wrote:
+> > On Fri, Jun 14, 2024 at 09:22:24PM +0000, Benno Lossin wrote:
+> >> On 14.06.24 16:33, Boqun Feng wrote:
+> >>> On Fri, Jun 14, 2024 at 11:59:58AM +0200, Miguel Ojeda wrote:
+> >>>> On Thu, Jun 13, 2024 at 9:05 PM Boqun Feng <boqun.feng@gmail.com> wrote:
+> >>>>>
+> >>>>> Does this make sense?
+> >>>>
+> >>>> Implementation-wise, if you think it is simpler or more clear/elegant
+> >>>> to have the extra lower level layer, then that sounds fine.
+> >>>>
+> >>>> However, I was mainly talking about what we would eventually expose to
+> >>>> users, i.e. do we want to provide `Atomic<T>` to begin with? If yes,
+> >>>
+> >>> The truth is I don't know ;-) I don't have much data on which one is
+> >>> better. Personally, I think AtomicI32 and AtomicI64 make the users have
+> >>> to think about size, alignment, etc, and I think that's important for
+> >>> atomic users and people who review their code, because before one uses
+> >>> atomics, one should ask themselves: why don't I use a lock? Atomics
+> >>> provide the ablities to do low level stuffs and when doing low level
+> >>> stuffs, you want to be more explicit than ergonomic.
+> >>
+> >> How would this be different with `Atomic<i32>` and `Atomic<i64>`? Just
+> > 
+> > The difference is that with Atomic{I32,I64} APIs, one has to choose (and
+> > think about) the size when using atomics, and cannot leave that option
+> > open. It's somewhere unconvenient, but as I said, atomics variables are
+> > different. For example, if someone is going to implement a reference
+> > counter struct, they can define as follow:
+> > 
+> > 	struct Refcount<T> {
+> > 	    refcount: AtomicI32,
+> > 	    data: UnsafeCell<T>
+> > 	}
+> > 
+> > but with atomic generic, people can leave that option open and do:
+> > 
+> > 	struct Refcount<R, T> {
+> > 	    refcount: Atomic<R>,
+> > 	    data: UnsafeCell<T>
+> > 	}
+> > 
+> > while it provides configurable options for experienced users, but it
+> > also provides opportunities for sub-optimal types, e.g. Refcount<u8, T>:
+> > on ll/sc architectures, because `data` and `refcount` can be in the same
+> > machine-word, the accesses of `refcount` are affected by the accesses of
+> > `data`.
+> 
+> I think this is a non-issue. We have two options of counteracting this:
+> 1. We can just point this out in reviews and force people to use
+>    `Atomic<T>` with a concrete type. In cases where there really is the
+>    need to be generic, we can have it.
+> 2. We can add a private trait in the bounds for the generic, nobody
+>    outside of the module can access it and thus they need to use a
+>    concrete type:
+> 
+>         // needs a better name
+>         trait Integer {}
+>         impl Integer for i32 {}
+>         impl Integer for i64 {}
+> 
+>         pub struct Atomic<T: Integer> {
+>             /* ... */
+>         }
+> 
+> And then in the other module, you can't do this (with compiler error):
+> 
+>         pub struct Refcount<R: Integer, T> {
+>                             // ^^^^^^^ not found in this scope
+>                             // note: trait `crate::atomic::Integer` exists but is inaccessible
+>             refcount: Atomic<R>,
+>             data: UnsafeCell<T>,
+>         }
+> 
+> I think that we can start with approach 2 and if we find a use-case
+> where generics are really unavoidable, we can either put it in the same
+> module as `Atomic<T>`, or change the access of `Integer`.
+> 
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202406160537.FF7m5SCK-lkp@intel.com/
+What's the issue of having AtomicI32 and AtomicI64 first then? We don't
+need to do 1 or 2 until the real users show up.
 
-All errors (new ones prefixed by >>):
+And I'd like also to point out that there are a few more trait bound
+designs needed for Atomic<T>, for example, Atomic<u32> and Atomic<i32>
+have different sets of API (no inc_unless_negative() for u32).
 
->> error[E0425]: cannot find value `THIS_MODULE` in the crate root
-   --> rust/doctests_kernel_generated.rs:1649:1
-   |
-   1649 | / kernel::module_phy_driver! {
-   1650 | |     drivers: [PhySample],
-   1651 | |     device_table: [
-   1652 | |         DeviceId::new_with_driver::<PhySample>()
-   ...    |
-   1657 | |     license: "GPL",
-   1658 | | }
-   | |_^ not found in the crate root
-   |
-   = note: this error originates in the macro `$crate::prelude::module` which comes from the expansion of the macro `kernel::module_phy_driver` (in Nightly builds, run with -Z macro-backtrace for more info)
+Don't make me wrong, I have no doubt we can handle this in the type
+system, but given the design work need, won't it make sense that we take
+baby steps on this? We can first introduce AtomicI32 and AtomicI64 which
+already have real users, and then if there are some values of generic
+atomics, we introduce them and have proper discussion on design.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+To me, it's perfectly fine that Atomic{I32,I64} co-exist with Atomic<T>.
+What's the downside? A bit specific example would help me understand
+the real concern here.
+
+
+Regards,
+Boqun
+
+> ---
+> Cheers,
+> Benno
+> 
+> > The point I'm trying to make here is: when you are using atomics, you
+> > care about performance a lot (otherwise, why don't you use a lock?), and
+> > because of that, you should care about the size of the atomics, because
+> > it may affect the performance significantly.
+> 
