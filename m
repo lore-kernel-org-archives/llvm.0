@@ -1,96 +1,159 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
+Received: from mailrelay.tugraz.at (mailrelay.tugraz.at [129.27.2.202])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F058826ACB;
-	Sat, 15 Jun 2024 14:37:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 411C99479
+	for <llvm@lists.linux.dev>; Sat, 15 Jun 2024 16:21:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=129.27.2.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718462246; cv=none; b=IOcLFAhdQ/7q3lzvFSWe6yySw0gCpXKZMfNW2SZW57Wk21iLRHQsBaMYCESd7RlmHUi1KtWzuJ3Z96G2eYYX/fJt0At8Vt29iw95MxubLkE3EstT/XIjRpm1jcgWpReuKh8A0Z5LdCHkFWyIi9ywniFbh+IxD/DHEjY6ui4Rr/8=
+	t=1718468470; cv=none; b=PdIHYTWLDOEUEMrFJO0TW8TnJ5mA0L1L567ZsK4d/yXaGXjbcfaiS31i4Sgy5gmj+havklJW9LiWZL539zT2Yj40bzRdjOi4XGigPZ4lL3Nz6iHxsdNQrZl04N+jnZMZfjp8N6jPttBZN0A0tplpdCzxv5DZAg/qovaG1m6baQY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718462246; c=relaxed/simple;
-	bh=08UJ5SiSS9g5bbdEdTId3IcN/Pnqg2RemH/CHhXvSOY=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=o1MLCAa+qQOnIQRWonmtSL7Mz6JxtZruLhiR5M1wnRiOJJtWylWJLkNCAdgpKS3XGFjehmAJGmZaogj1TQ4lym3alEg2ZANLvZduxWh1XZ8pswEcHJAGdun8at5nB3KCruyfIJqrQWfktR7yKzAsQtF3fey/b4EZ3Xm42Jqx92s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=XHAbwVNY; arc=none smtp.client-ip=198.175.65.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1718468470; c=relaxed/simple;
+	bh=/6ch+qcDo2MnkoBjVji3kQHm7RQTr+qczYnFfSjaNGI=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=nABw1rw8rLHatipeFN5FcFY8F9bA/8RcidapYuHeRtB1m/B4bB7AYwhyYmKK3OdsrIdMD3upEQWznGaHE8CQAwdcsqD/c/ZULLX8sH62wYEBVfe3UxQfrb12UJ/9t+fGZyFYlCh7f2bgTFLA5BZAZs/Mfe79XrZySULJJG3c/X4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=tugraz.at; spf=pass smtp.mailfrom=tugraz.at; dkim=pass (1024-bit key) header.d=tugraz.at header.i=@tugraz.at header.b=JcExtjxI; arc=none smtp.client-ip=129.27.2.202
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=tugraz.at
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tugraz.at
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="XHAbwVNY"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1718462245; x=1749998245;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=08UJ5SiSS9g5bbdEdTId3IcN/Pnqg2RemH/CHhXvSOY=;
-  b=XHAbwVNYlGaAzDJcPuKr8U9cVY3q2DaI1QRUPh0QCUXDTjifaU1F8APj
-   wZ9ak3ktkWBPiZf0Ee6YiJ5zdox75AGK9xPztYf1V9mTpsqSbYzzPyL7U
-   amB01ZS2tJ3DuCv/wYEjgUk5IZNYZnM6yAg7eiz1jV7Iq1OZKh9PWe5+c
-   RVvcYV45S2dyxVFpMB7kRyjCui28ljvBMorDJza4fe5ua7uMcmda+i+JS
-   NRZNewrpmBvbmVv0K+FmOY1g7cjirmo7eJLyBEkeQECq3m2DodPjobmrf
-   5veyHXNfPeOwAlw486cPhWscF0nYhJ8FLN2mKfdQQbQYKGmQdmvU+/uLx
-   Q==;
-X-CSE-ConnectionGUID: RCGZ96bwQtmqUslRqj+JnQ==
-X-CSE-MsgGUID: +eLkoraJSKSE7z3YbY1Ipg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11104"; a="37869941"
-X-IronPort-AV: E=Sophos;i="6.08,240,1712646000"; 
-   d="scan'208";a="37869941"
-Received: from orviesa003.jf.intel.com ([10.64.159.143])
-  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jun 2024 07:37:22 -0700
-X-CSE-ConnectionGUID: mQrfOByJTUGVHS1L/DgZDQ==
-X-CSE-MsgGUID: Gn5POfc0RKKxqdEGk2RbIQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.08,240,1712646000"; 
-   d="scan'208";a="45709164"
-Received: from lkp-server01.sh.intel.com (HELO 68891e0c336b) ([10.239.97.150])
-  by orviesa003.jf.intel.com with ESMTP; 15 Jun 2024 07:37:21 -0700
-Received: from kbuild by 68891e0c336b with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1sIUWt-00007E-0Q;
-	Sat, 15 Jun 2024 14:37:19 +0000
-Date: Sat, 15 Jun 2024 22:36:39 +0800
-From: kernel test robot <lkp@intel.com>
-To: Wedson Almeida Filho <walmeida@microsoft.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	dri-devel@lists.freedesktop.org, Danilo Krummrich <dakr@redhat.com>
-Subject: [drm-misc:topic/rust-drm 5/21] error[E0425]: cannot find value
- `THIS_MODULE` in the crate root
-Message-ID: <202406152203.flX7Kviw-lkp@intel.com>
+	dkim=pass (1024-bit key) header.d=tugraz.at header.i=@tugraz.at header.b="JcExtjxI"
+Received: from vra-174-141.tugraz.at (vra-174-141.tugraz.at [129.27.174.141])
+	by mailrelay.tugraz.at (Postfix) with ESMTPSA id 4W1h0h32dlz3wV6;
+	Sat, 15 Jun 2024 18:09:08 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=tugraz.at;
+	s=mailrelay; t=1718467750;
+	bh=Igjx9GfiOHGZFSH3MO+mk+/P1QADm/jiDsEmEwOLM6A=;
+	h=Subject:From:To:Cc:Date:In-Reply-To:References;
+	b=JcExtjxIcH4p61MtHvpDIteBnwfOz51tS8q5VDIYZI+NpJKKdBykTD9MF+auMH0gv
+	 nRpGkZ8wiqt21vJ92fMlv2TD3fQC7DD0VpoTzbPNocoCPNvnvWiCaaMcQRcSwRThCk
+	 mT/+fqYdLYEQgJHJizSid5Nle80AsJ519MKqmu88=
+Message-ID: <c8234b8e2c9c1122eec73c97901e36586160f0cb.camel@tugraz.at>
+Subject: Re: [PATCH v4 0/3] Hardening perf subsystem
+From: Martin Uecker <uecker@tugraz.at>
+To: Peter Zijlstra <peterz@infradead.org>, Kees Cook <kees@kernel.org>
+Cc: Erick Archer <erick.archer@outlook.com>, Ingo Molnar <mingo@redhat.com>,
+  Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim
+ <namhyung@kernel.org>, Mark Rutland <mark.rutland@arm.com>, Alexander
+ Shishkin <alexander.shishkin@linux.intel.com>,  Jiri Olsa
+ <jolsa@kernel.org>, Ian Rogers <irogers@google.com>, Adrian Hunter
+ <adrian.hunter@intel.com>,  "Liang, Kan" <kan.liang@linux.intel.com>,
+ Thomas Gleixner <tglx@linutronix.de>, Borislav Petkov <bp@alien8.de>,  Dave
+ Hansen <dave.hansen@linux.intel.com>, "H. Peter Anvin" <hpa@zytor.com>,
+ "Gustavo A. R. Silva" <gustavoars@kernel.org>, Nathan Chancellor
+ <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, Bill
+ Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
+ Christophe JAILLET <christophe.jaillet@wanadoo.fr>,  Matthew Wilcox
+ <mawilcox@microsoft.com>, x86@kernel.org, linux-perf-users@vger.kernel.org,
+  linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org, 
+ llvm@lists.linux.dev
+Date: Sat, 15 Jun 2024 18:09:07 +0200
+In-Reply-To: <20240614101708.GO8774@noisy.programming.kicks-ass.net>
+References: 
+	<AS8PR02MB7237F5BFDAA793E15692B3998BFD2@AS8PR02MB7237.eurprd02.prod.outlook.com>
+	 <202406101010.E1C77AE9D@keescook>
+	 <20240610200544.GY8774@noisy.programming.kicks-ass.net>
+	 <202406101438.BC43514F@keescook>
+	 <20240611075542.GD8774@noisy.programming.kicks-ass.net>
+	 <202406121148.688240B@keescook>
+	 <20240612220821.GA18881@noisy.programming.kicks-ass.net>
+	 <202406121530.D9DB956C8@keescook>
+	 <20240614101708.GO8774@noisy.programming.kicks-ass.net>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.46.4-2 
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+X-TUG-Backscatter-control: G/VXY7/6zeyuAY/PU2/0qw
+X-Spam-Scanner: SpamAssassin 3.003001 
+X-Spam-Score-relay: -1.9
+X-Scanned-By: MIMEDefang 2.74 on 129.27.10.117
 
-tree:   git://anongit.freedesktop.org/drm/drm-misc topic/rust-drm
-head:   2e2592fb7d2165e68073020066789bd8860678d0
-commit: b7222062b14f6c9e501a405305052fe88c5ff51e [5/21] rust: introduce `InPlaceModule`
-config: x86_64-rhel-8.3-rust (https://download.01.org/0day-ci/archive/20240615/202406152203.flX7Kviw-lkp@intel.com/config)
-compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240615/202406152203.flX7Kviw-lkp@intel.com/reproduce)
+Am Freitag, dem 14.06.2024 um 12:17 +0200 schrieb Peter Zijlstra:
+> On Wed, Jun 12, 2024 at 04:23:31PM -0700, Kees Cook wrote:
+> > On Thu, Jun 13, 2024 at 12:08:21AM +0200, Peter Zijlstra wrote:
+> > > On Wed, Jun 12, 2024 at 12:01:19PM -0700, Kees Cook wrote:
+> > > > I'm happy to take patches. And for this bikeshed, this would be bet=
+ter
+> > > > named under the size_*() helpers which are trying to keep size_t
+> > > > calculations from overflowing (by saturating). i.e.:
+> > > >=20
+> > > > 	size_add_mult(sizeof(*p), sizeof(*p->member), num)
+> > >=20
+> > > Fine I suppose, but what if we want something not size_t? Are we wait=
+ing
+> > > for the type system extension?
+> >=20
+> > Because of C's implicit promotion/truncation, we can't do anything
+> > sanely with return values of arbitrary type size; we have to capture th=
+e
+> > lvalue type somehow so the checking can happen without C doing silent
+> > garbage.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202406152203.flX7Kviw-lkp@intel.com/
+What is the specific problem here?
 
-All errors (new ones prefixed by >>):
+>=20
+> So sizeof() returns the native (built-in) size_t, right? If that type
+> the nooverflow qualifier on, then:
+>=20
+> 	sizeof(*p) + num*sizeof(p->foo[0])
+>=20
+> should all get the nooverflow semantics right? Because size_t is
+> effectively 'nooverflow unsigned long' the multiplication should promote
+> 'num' to some 'long'.
+>=20
+> Now, I've re-read the rules and I don't see qualifiers mentioned, so
+> can't we state that the overflow/nooverflow qualifiers are to be
+> preserved on (implicit) promotion and when nooverflow and overflow are
+> combined the 'safe' nooverflow takes precedence?
+>=20
+> I mean, when we're adding qualifiers we can make up rules about them
+> too, right?
 
->> error[E0425]: cannot find value `THIS_MODULE` in the crate root
-   --> rust/doctests_kernel_generated.rs:1649:1
-   |
-   1649 | / kernel::module_phy_driver! {
-   1650 | |     drivers: [PhySample],
-   1651 | |     device_table: [
-   1652 | |         DeviceId::new_with_driver::<PhySample>()
-   ...    |
-   1657 | |     license: "GPL",
-   1658 | | }
-   | |_^ not found in the crate root
-   |
-   = note: this error originates in the macro `$crate::prelude::module` which comes from the expansion of the macro `kernel::module_phy_driver` (in Nightly builds, run with -Z macro-backtrace for more info)
+It should probably be a type attribute.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+>=20
+> If 'people' don't want to adorn the built-in size_t, we can always do
+> something like:
+>=20
+> #define sizeof(x) ((nooverflow unsigned long)(sizeof(x)))
+>=20
+> and 'fix' it ourselves.
+
+This is likely a stupid question, but making it signed=C2=A0
+wouldn't work?   Or is a signed size_t too small=C2=A0=C2=A0
+or some architectures? Or would this change break too much?
+
+
+Martin
+
+>=20
+> > > But none of that is showing me generated asm for the various cases. A=
+s
+> > > such, I don't consider myself informed enough.
+> >=20
+> > Gotcha. For the compile-time stuff it's all just looking at
+> > known-at-compile-time sizes. So for something like this, we get a
+> > __compiletime_warning() emitted:
+> >=20
+> > 	const char src[] =3D "Hello there";
+> > 	char dst[10];
+> >=20
+> > 	strscpy(dst, src); /* Compiler yells since src is bigger than dst. */
+> >=20
+> > For run-time checks it's basically just using the regular WARN()
+> > infrastructure with __builtin_dynamic_object_size(). Here's a simplifie=
+d
+> > userspace example with assert():
+> >=20
+> > https://godbolt.org/z/zMrKnMxn5
+> >=20
+> > The kernel's FORTIFY_SOURCE is much more complex in how it does the
+> > checking, how it does the reporting (for helping people figure out what=
+'s
+> > gone weird), etc.
+>=20
+> Thanks, I'll go have a look at that.
+
