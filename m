@@ -1,60 +1,65 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0BC0126AD7;
-	Sat, 15 Jun 2024 17:53:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F150881E;
+	Sat, 15 Jun 2024 18:04:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718474016; cv=none; b=ax7K7qaNw5FHFwnyfJ44MEJCv8IHNzWIw5g/l+vIKGItOpZDERaSIxuNmHNyJyfeE+lC8XL9XR9V2NGFdtHPj5YIeWBtgGxf3SB3NeVNCM5UPhdrsUKTcjo0nX79CF9z3wJj2Zgtn9jRXvIS4yRACLGrcW0MCjIlZCJh2qo2d/4=
+	t=1718474678; cv=none; b=Isl5PnSnhxvDcJY5ZbMWhWVKXX9wrDM9FA7p1X2mVg9hx79TTdhJ7+vmBBihql01d1spkXjgd/cMjGBro0HaKS1y/gcG/bbTXH8e3eff9ERJA62U5OwMav4FXJiixpsYW+vtZf+bcw6Ha7SYFhwCzdfQKS6gXVs1OG5yfZ52CiU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718474016; c=relaxed/simple;
-	bh=18XFVSlEXxG3CE/Vp8V+kUa9jLFxKG9vXv9W/leCgMg=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=XgAftRbpXADAoVx/J0FYuL9cgPezQXLuT9C/+7jhxMCuok3VWVkfodU3/vG0zdK2aso+0i3fqR0PTT7Hox0JfZR8d0dIw0EYzm+JO3LvhPbl35P00LOhj+A4jxEC0V+dzlklLO/84DUbMPqIMUU4NtlhqWleXQcOvgedSHp5Otc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=iVRyJgWh; arc=none smtp.client-ip=198.175.65.12
+	s=arc-20240116; t=1718474678; c=relaxed/simple;
+	bh=oyqGpECu9sSJX+1MFXlkOC1YcQnSCGTgdSSt7G2X3ek=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=J5RZI1vIcvpIvJpiN6P/v6qOj+l7Twe3J3jSAu3z7KHQEqyAU7d/hae1Q4jpOHYlvUosr+vNjHQl3w1L1KyHld9PEWhejXUWfQD+X+uamCxRm++psb9Ni6zZzI37CudoM6tZMM5zjfy1aClb5aWXGVXU1abMZF3MWRMkrlR39hM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Mf41acdW; arc=none smtp.client-ip=198.175.65.19
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="iVRyJgWh"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Mf41acdW"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1718474014; x=1750010014;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=18XFVSlEXxG3CE/Vp8V+kUa9jLFxKG9vXv9W/leCgMg=;
-  b=iVRyJgWhOgqj/+x79eXaT9y2pQCGeDLx6NcFAUy6Fn29ROIgZ0gDNz7V
-   5hkUusA5yNUTEfPmDPi8q+N6rnW7yM1hSvDRtun3uJDFttKhVEvV8UQXO
-   q7jO/r97Q5rbtpjHHJySrxnTO12+ZX5eJ+HMExlqouIQJwJb0JW/m2AKr
-   N0/p+moSNMLuNUb9h7um8TzyVTeBFMVaa3pMOdpDEEahuhkbvn1oukZ9m
-   5fIXTuned2b9rUUuxF3cfSX/9bNGlTXd6q4ZYv6BKTw15i7QB/M3C8r/I
-   9FL/zIC19mL1fVYA2qXh7q0eQgW7AEqz0c6FO9hsYIHvjZZt9vRdlm7li
-   w==;
-X-CSE-ConnectionGUID: tD+5nq5/SrmRICDg/TKIUA==
-X-CSE-MsgGUID: vmDI5sevQ1mhZJt/lXwRfg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11104"; a="26772052"
+  t=1718474677; x=1750010677;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=oyqGpECu9sSJX+1MFXlkOC1YcQnSCGTgdSSt7G2X3ek=;
+  b=Mf41acdW9geC7DsmfGjf2LRHg1EOPSdFYOfC/G4tsQv3jo6gxA4K9+p5
+   g8UDiNtiNKEK8FWJkxS69NT71LvxInOhaQrzCjMZf/CBewkgj4f44AP7i
+   K9HxD2VHpyBtKTfdmnZd+iOOftJDIEiHldLnP3jKgpnxhDKeUJJaiQrsq
+   vz8Tl4ckgXcgCcoz5XrDib2kFMOqVCW4g9azuTOvbd7mIiO11e0KqJrpE
+   eb/CnO0HNPgvBy3Sg5rX7OSMsk+gL0ySI/S4EkZwRgjrC9gJATxHHhuma
+   hYyOrS76Zt8aWIbV7Yj4RHufyVjLg2WN0+bt8mwc8OR4DGuiN2/Psqwx4
+   Q==;
+X-CSE-ConnectionGUID: pObAint5RB+IHE8xx+9i+g==
+X-CSE-MsgGUID: zGVuj5qYRkuEHzK3BPGnuQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11104"; a="15187701"
 X-IronPort-AV: E=Sophos;i="6.08,241,1712646000"; 
-   d="scan'208";a="26772052"
-Received: from fmviesa006.fm.intel.com ([10.60.135.146])
-  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jun 2024 10:53:33 -0700
-X-CSE-ConnectionGUID: B85YrT9CSMe72YifvqdesQ==
-X-CSE-MsgGUID: 27ed8alASsGsVSML4U+EfA==
+   d="scan'208";a="15187701"
+Received: from orviesa002.jf.intel.com ([10.64.159.142])
+  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jun 2024 11:04:37 -0700
+X-CSE-ConnectionGUID: A26Et5dgSLi26d/ZHQNoew==
+X-CSE-MsgGUID: 9gra+hgFQXiMfeJD+h+rkw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.08,241,1712646000"; 
-   d="scan'208";a="40678102"
+   d="scan'208";a="71588247"
 Received: from lkp-server01.sh.intel.com (HELO 68891e0c336b) ([10.239.97.150])
-  by fmviesa006.fm.intel.com with ESMTP; 15 Jun 2024 10:53:31 -0700
+  by orviesa002.jf.intel.com with ESMTP; 15 Jun 2024 11:04:33 -0700
 Received: from kbuild by 68891e0c336b with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1sIXaj-0000MI-2P;
-	Sat, 15 Jun 2024 17:53:29 +0000
-Date: Sun, 16 Jun 2024 01:53:25 +0800
+	id 1sIXlO-0000Mu-0m;
+	Sat, 15 Jun 2024 18:04:30 +0000
+Date: Sun, 16 Jun 2024 02:03:39 +0800
 From: kernel test robot <lkp@intel.com>
-To: Danilo Krummrich <dakr@redhat.com>
+To: Charles Wang <charles.goodix@gmail.com>, dmitry.torokhov@gmail.com,
+	dan.carpenter@linaro.org
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Miguel Ojeda <ojeda@kernel.org>
-Subject: [rust:staging/rust-device 3/12] error[E0050]: method `init` has 1
- parameter but the declaration in trait
- `rust_doctest_kernel_build_assert_rs_0::kernel::Module::init` has 2
-Message-ID: <202406160156.optetYTW-lkp@intel.com>
+	dianders@chromium.org, robh@kernel.org, krzk+dt@kernel.org,
+	jikos@kernel.org, bentiss@kernel.org, hbarnor@chromium.org,
+	linux-input@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Charles Wang <charles.goodix@gmail.com>
+Subject: Re: [PATCH v4 1/2] HID: hid-goodix: Add Goodix HID-over-SPI driver
+Message-ID: <202406160446.MeGfJeG1-lkp@intel.com>
+References: <20240614121538.236727-2-charles.goodix@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -63,50 +68,187 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20240614121538.236727-2-charles.goodix@gmail.com>
 
-tree:   https://github.com/Rust-for-Linux/linux staging/rust-device
-head:   6530ecc4ac729a040a955a5e2d13c37d671b6e5c
-commit: c606f74489984d3b7a8f101d4fb1fe0c7d02860b [3/12] rust: pass module name to `Module::init`
-config: x86_64-rhel-8.3-rust (https://download.01.org/0day-ci/archive/20240616/202406160156.optetYTW-lkp@intel.com/config)
-compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240616/202406160156.optetYTW-lkp@intel.com/reproduce)
+Hi Charles,
+
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on hid/for-next]
+[also build test ERROR on dtor-input/next dtor-input/for-linus robh/for-next linus/master v6.10-rc3 next-20240613]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Charles-Wang/HID-hid-goodix-Add-Goodix-HID-over-SPI-driver/20240614-201949
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/hid/hid.git for-next
+patch link:    https://lore.kernel.org/r/20240614121538.236727-2-charles.goodix%40gmail.com
+patch subject: [PATCH v4 1/2] HID: hid-goodix: Add Goodix HID-over-SPI driver
+config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20240616/202406160446.MeGfJeG1-lkp@intel.com/config)
+compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project 78ee473784e5ef6f0b19ce4cb111fb6e4d23c6b2)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240616/202406160446.MeGfJeG1-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202406160156.optetYTW-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202406160446.MeGfJeG1-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All error/warnings (new ones prefixed by >>):
 
->> error[E0050]: method `init` has 1 parameter but the declaration in trait `rust_doctest_kernel_build_assert_rs_0::kernel::Module::init` has 2
-   --> rust/doctests_kernel_generated.rs:1649:1
-   |
-   1649 | / kernel::module_phy_driver! {
-   1650 | |     drivers: [PhySample],
-   1651 | |     device_table: [
-   1652 | |         DeviceId::new_with_driver::<PhySample>()
-   ...    |
-   1657 | |     license: "GPL",
-   1658 | | }
-   | |_^ expected 2 parameters, found 1
-   |
->> = note: `init` from trait: `fn(&'static rust_doctest_kernel_build_assert_rs_0::kernel::prelude::CStr, &'static rust_doctest_kernel_build_assert_rs_0::kernel::ThisModule) -> core::result::Result<Self, rust_doctest_kernel_build_assert_rs_0::kernel::error::Error>`
-   = note: this error originates in the macro `kernel::module_phy_driver` (in Nightly builds, run with -Z macro-backtrace for more info)
---
->> error[E0050]: method `init` has 1 parameter but the declaration in trait `kernel::Module::init` has 2
-   --> drivers/net/phy/ax88796b_rust.rs:14:1
-   |
-   14 | / kernel::module_phy_driver! {
-   15 | |     drivers: [PhyAX88772A, PhyAX88772C, PhyAX88796B],
-   16 | |     device_table: [
-   17 | |         DeviceId::new_with_driver::<PhyAX88772A>(),
-   ...  |
-   24 | |     license: "GPL",
-   25 | | }
-   | |_^ expected 2 parameters, found 1
-   |
->> = note: `init` from trait: `fn(&'static kernel::prelude::CStr, &'static kernel::ThisModule) -> core::result::Result<Self, kernel::error::Error>`
-   = note: this error originates in the macro `kernel::module_phy_driver` (in Nightly builds, run with -Z macro-backtrace for more info)
+   In file included from drivers/hid/hid-goodix-spi.c:9:
+   In file included from include/linux/hid.h:29:
+   In file included from include/linux/hid_bpf.h:6:
+   In file included from include/linux/bpf.h:21:
+   In file included from include/linux/kallsyms.h:13:
+   In file included from include/linux/mm.h:2253:
+   include/linux/vmstat.h:514:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     514 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+   In file included from drivers/hid/hid-goodix-spi.c:9:
+   In file included from include/linux/hid.h:29:
+   In file included from include/linux/hid_bpf.h:6:
+   In file included from include/linux/bpf.h:31:
+   In file included from include/linux/memcontrol.h:13:
+   In file included from include/linux/cgroup.h:26:
+   In file included from include/linux/kernel_stat.h:9:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:14:
+   In file included from arch/hexagon/include/asm/io.h:328:
+   include/asm-generic/io.h:548:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     548 |         val = __raw_readb(PCI_IOBASE + addr);
+         |                           ~~~~~~~~~~ ^
+   include/asm-generic/io.h:561:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     561 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
+      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
+         |                                                   ^
+   In file included from drivers/hid/hid-goodix-spi.c:9:
+   In file included from include/linux/hid.h:29:
+   In file included from include/linux/hid_bpf.h:6:
+   In file included from include/linux/bpf.h:31:
+   In file included from include/linux/memcontrol.h:13:
+   In file included from include/linux/cgroup.h:26:
+   In file included from include/linux/kernel_stat.h:9:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:14:
+   In file included from arch/hexagon/include/asm/io.h:328:
+   include/asm-generic/io.h:574:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     574 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
+      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
+         |                                                   ^
+   In file included from drivers/hid/hid-goodix-spi.c:9:
+   In file included from include/linux/hid.h:29:
+   In file included from include/linux/hid_bpf.h:6:
+   In file included from include/linux/bpf.h:31:
+   In file included from include/linux/memcontrol.h:13:
+   In file included from include/linux/cgroup.h:26:
+   In file included from include/linux/kernel_stat.h:9:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:14:
+   In file included from arch/hexagon/include/asm/io.h:328:
+   include/asm-generic/io.h:585:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     585 |         __raw_writeb(value, PCI_IOBASE + addr);
+         |                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:595:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     595 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:605:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     605 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+>> drivers/hid/hid-goodix-spi.c:148:4: warning: format specifies type 'long' but the argument has type 'unsigned int' [-Wformat]
+     147 |                 dev_err(ts->dev, "read data len exceed limit %ld",
+         |                                                              ~~~
+         |                                                              %u
+     148 |                         sizeof(ts->xfer_buf) - GOODIX_SPI_READ_PREFIX_LEN);
+         |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/dev_printk.h:154:65: note: expanded from macro 'dev_err'
+     154 |         dev_printk_index_wrap(_dev_err, KERN_ERR, dev, dev_fmt(fmt), ##__VA_ARGS__)
+         |                                                                ~~~     ^~~~~~~~~~~
+   include/linux/dev_printk.h:110:23: note: expanded from macro 'dev_printk_index_wrap'
+     110 |                 _p_func(dev, fmt, ##__VA_ARGS__);                       \
+         |                              ~~~    ^~~~~~~~~~~
+   drivers/hid/hid-goodix-spi.c:182:4: warning: format specifies type 'long' but the argument has type 'unsigned int' [-Wformat]
+     181 |                 dev_err(ts->dev, "write data len exceed limit %ld",
+         |                                                               ~~~
+         |                                                               %u
+     182 |                         sizeof(ts->xfer_buf) - GOODIX_SPI_WRITE_PREFIX_LEN);
+         |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/dev_printk.h:154:65: note: expanded from macro 'dev_err'
+     154 |         dev_printk_index_wrap(_dev_err, KERN_ERR, dev, dev_fmt(fmt), ##__VA_ARGS__)
+         |                                                                ~~~     ^~~~~~~~~~~
+   include/linux/dev_printk.h:110:23: note: expanded from macro 'dev_printk_index_wrap'
+     110 |                 _p_func(dev, fmt, ##__VA_ARGS__);                       \
+         |                              ~~~    ^~~~~~~~~~~
+   drivers/hid/hid-goodix-spi.c:606:44: warning: variable 'error' is uninitialized when used here [-Wuninitialized]
+     606 |                 dev_err(ts->dev, "failed read data, %d", error);
+         |                                                          ^~~~~
+   include/linux/dev_printk.h:154:65: note: expanded from macro 'dev_err'
+     154 |         dev_printk_index_wrap(_dev_err, KERN_ERR, dev, dev_fmt(fmt), ##__VA_ARGS__)
+         |                                                                        ^~~~~~~~~~~
+   include/linux/dev_printk.h:110:23: note: expanded from macro 'dev_printk_index_wrap'
+     110 |                 _p_func(dev, fmt, ##__VA_ARGS__);                       \
+         |                                     ^~~~~~~~~~~
+   drivers/hid/hid-goodix-spi.c:556:11: note: initialize the variable 'error' to silence this warning
+     556 |         int error;
+         |                  ^
+         |                   = 0
+>> drivers/hid/hid-goodix-spi.c:801:23: error: use of undeclared identifier 'goodix_spi_pm_ops'; did you mean 'goodix_spi_probe'?
+     801 |                 .pm = pm_sleep_ptr(&goodix_spi_pm_ops),
+         |                                     ^~~~~~~~~~~~~~~~~
+         |                                     goodix_spi_probe
+   include/linux/pm.h:476:65: note: expanded from macro 'pm_sleep_ptr'
+     476 | #define pm_sleep_ptr(_ptr) PTR_IF(IS_ENABLED(CONFIG_PM_SLEEP), (_ptr))
+         |                                                                 ^
+   include/linux/kernel.h:48:38: note: expanded from macro 'PTR_IF'
+      48 | #define PTR_IF(cond, ptr)       ((cond) ? (ptr) : NULL)
+         |                                            ^
+   drivers/hid/hid-goodix-spi.c:655:12: note: 'goodix_spi_probe' declared here
+     655 | static int goodix_spi_probe(struct spi_device *spi)
+         |            ^
+>> drivers/hid/hid-goodix-spi.c:801:9: error: incompatible pointer types initializing 'const struct dev_pm_ops *' with an expression of type 'int (*)(struct spi_device *)' [-Werror,-Wincompatible-pointer-types]
+     801 |                 .pm = pm_sleep_ptr(&goodix_spi_pm_ops),
+         |                       ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/pm.h:476:28: note: expanded from macro 'pm_sleep_ptr'
+     476 | #define pm_sleep_ptr(_ptr) PTR_IF(IS_ENABLED(CONFIG_PM_SLEEP), (_ptr))
+         |                            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/kernel.h:48:27: note: expanded from macro 'PTR_IF'
+      48 | #define PTR_IF(cond, ptr)       ((cond) ? (ptr) : NULL)
+         |                                 ^~~~~~~~~~~~~~~~~~~~~~~
+   10 warnings and 2 errors generated.
+
+
+vim +801 drivers/hid/hid-goodix-spi.c
+
+   795	
+   796	static struct spi_driver goodix_spi_driver = {
+   797		.driver = {
+   798			.name = "goodix-spi-hid",
+   799			.acpi_match_table = ACPI_PTR(goodix_spi_acpi_match),
+   800			.of_match_table = of_match_ptr(goodix_spi_of_match),
+ > 801			.pm = pm_sleep_ptr(&goodix_spi_pm_ops),
+   802		},
+   803		.probe =	goodix_spi_probe,
+   804		.remove =	goodix_spi_remove,
+   805		.shutdown =	goodix_spi_shutdown,
+   806		.id_table =	goodix_spi_ids,
+   807	};
+   808	module_spi_driver(goodix_spi_driver);
+   809	
 
 -- 
 0-DAY CI Kernel Test Service
