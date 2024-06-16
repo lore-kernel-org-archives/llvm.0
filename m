@@ -1,143 +1,135 @@
-Received: from out-173.mta0.migadu.com (out-173.mta0.migadu.com [91.218.175.173])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C4EF17F4F6
-	for <llvm@lists.linux.dev>; Sun, 16 Jun 2024 09:51:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4A30225CB
+	for <llvm@lists.linux.dev>; Sun, 16 Jun 2024 10:33:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718531483; cv=none; b=oJnS4tvxVkpKjHhwM+w9+HXSMM04Cu8qMr5Z1s/G9JlUQEFUIfSadRTPpysF6/PL3j68Z6QK4yaw3146Ik5ZtrmhLMzIrNLkDcAoAlOtUj7GF+V0szB8h8uiKQoa5H8tLTr7RP7Z7gnQYUDG3lcHA+xHLUYnOZ9YHTpB8m3qFXs=
+	t=1718534001; cv=none; b=AS/TVLoi2vEert8bVwOyogwkRYyladOMNPWkmkJEa9s3LPgPFk2jn9PtPYxCJ163q2NTdV14F/f1Nr5aUXki8FZqj9q+794CA/HawWAWvAF+Xn0d/F/dOrScJ832BDkhoO4AQN3yzfve1x1Yoxp2eQRX1B9bUsw/ptoZCwDBOjI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718531483; c=relaxed/simple;
-	bh=n4cx1Z6BJEH5jWA2Zuabkll9jSUK+CtlbukX047kvG4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=trhF6r2gBNjtOVI15ErGAXFhcAVJ52GPBtcg5OPxTfHWQB/u62Lrg0OBRSA+ladNusBj2FQ5SNhktIBCbM+8wdj3By7szRK9Souor/oMTu9V081SJZ7TFKjGzCH2oj+ylhWFDn54/BjB4+4Alh/BjtOredfWI12PxYoEGQ7Dp9U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=iesUFZJX; arc=none smtp.client-ip=91.218.175.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1718534001; c=relaxed/simple;
+	bh=E5sZ7P6ktsoPQazxqOxcCYecz/Y67k1sOEP6tDJ37Kw=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=RVuSI73EOh6JA4nbrkNMcsvYnVqb45/NN7hz8iHYmKiGVM30bD7eBSpGFYbBtnvNozg31kq67dy/0UBQiRcmXzjUqVGKlqs7jE1IuU4I3oQz7Y5GfWgFOpGO3RUkzgideJA+egefQ2I20hM/gRWOesPAcJgNv2Ip2/2ykMLDlY0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Yz4IxWjS; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="iesUFZJX"
-X-Envelope-To: boqun.feng@gmail.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1718531475;
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Yz4IxWjS"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1718533998;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=Sc0GTYUsIOhy53GbTc5pAmG+S0kUyWsfKR1YRXBUAFE=;
-	b=iesUFZJXhWISzzq/1WrJCPxUjjWPh+mWd0w/rzEVrhEGyJ9Mu71NzjiWpCZw4M545BFaiX
-	6I6iA1L5/DyAIpTb5sGMdC+H5Wfr2HYiyZgVOeNRwTrakO+019XDxBDppjj9IzIEeftDxk
-	ehJ13CJGG4rAG8eVqVxA6fTLZTfcuoY=
-X-Envelope-To: benno.lossin@proton.me
-X-Envelope-To: miguel.ojeda.sandonis@gmail.com
-X-Envelope-To: gary@garyguo.net
-X-Envelope-To: rust-for-linux@vger.kernel.org
-X-Envelope-To: linux-kernel@vger.kernel.org
-X-Envelope-To: linux-arch@vger.kernel.org
-X-Envelope-To: llvm@lists.linux.dev
-X-Envelope-To: ojeda@kernel.org
-X-Envelope-To: alex.gaynor@gmail.com
-X-Envelope-To: wedsonaf@gmail.com
-X-Envelope-To: bjorn3_gh@protonmail.com
-X-Envelope-To: a.hindborg@samsung.com
-X-Envelope-To: aliceryhl@google.com
-X-Envelope-To: stern@rowland.harvard.edu
-X-Envelope-To: parri.andrea@gmail.com
-X-Envelope-To: will@kernel.org
-X-Envelope-To: peterz@infradead.org
-X-Envelope-To: npiggin@gmail.com
-X-Envelope-To: dhowells@redhat.com
-X-Envelope-To: j.alglave@ucl.ac.uk
-X-Envelope-To: luc.maranget@inria.fr
-X-Envelope-To: paulmck@kernel.org
-X-Envelope-To: akiyks@gmail.com
-X-Envelope-To: dlustig@nvidia.com
-X-Envelope-To: joel@joelfernandes.org
-X-Envelope-To: nathan@kernel.org
-X-Envelope-To: ndesaulniers@google.com
-X-Envelope-To: kent.overstreet@gmail.com
-X-Envelope-To: gregkh@linuxfoundation.org
-X-Envelope-To: elver@google.com
-X-Envelope-To: mark.rutland@arm.com
-X-Envelope-To: tglx@linutronix.de
-X-Envelope-To: mingo@redhat.com
-X-Envelope-To: bp@alien8.de
-X-Envelope-To: dave.hansen@linux.intel.com
-X-Envelope-To: x86@kernel.org
-X-Envelope-To: hpa@zytor.com
-X-Envelope-To: catalin.marinas@arm.com
-X-Envelope-To: torvalds@linux-foundation.org
-X-Envelope-To: linux-arm-kernel@lists.infradead.org
-X-Envelope-To: linux-fsdevel@vger.kernel.org
-X-Envelope-To: tmgross@umich.edu
-X-Envelope-To: dakr@redhat.com
-Date: Sun, 16 Jun 2024 05:51:07 -0400
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Kent Overstreet <kent.overstreet@linux.dev>
-To: Boqun Feng <boqun.feng@gmail.com>
-Cc: Benno Lossin <benno.lossin@proton.me>, 
-	Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>, Gary Guo <gary@garyguo.net>, rust-for-linux@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org, llvm@lists.linux.dev, 
-	Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, 
-	Wedson Almeida Filho <wedsonaf@gmail.com>, =?utf-8?B?QmrDtnJu?= Roy Baron <bjorn3_gh@protonmail.com>, 
-	Andreas Hindborg <a.hindborg@samsung.com>, Alice Ryhl <aliceryhl@google.com>, 
-	Alan Stern <stern@rowland.harvard.edu>, Andrea Parri <parri.andrea@gmail.com>, 
-	Will Deacon <will@kernel.org>, Peter Zijlstra <peterz@infradead.org>, 
-	Nicholas Piggin <npiggin@gmail.com>, David Howells <dhowells@redhat.com>, 
-	Jade Alglave <j.alglave@ucl.ac.uk>, Luc Maranget <luc.maranget@inria.fr>, 
-	"Paul E. McKenney" <paulmck@kernel.org>, Akira Yokosawa <akiyks@gmail.com>, 
-	Daniel Lustig <dlustig@nvidia.com>, Joel Fernandes <joel@joelfernandes.org>, 
-	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
-	kent.overstreet@gmail.com, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	elver@google.com, Mark Rutland <mark.rutland@arm.com>, 
-	Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>, 
-	Catalin Marinas <catalin.marinas@arm.com>, torvalds@linux-foundation.org, 
-	linux-arm-kernel@lists.infradead.org, linux-fsdevel@vger.kernel.org, Trevor Gross <tmgross@umich.edu>, 
-	dakr@redhat.com
-Subject: Re: [RFC 2/2] rust: sync: Add atomic support
-Message-ID: <5lwylk6fhlvqfgxmt7xdoxdrhtvmplo5kazpdbt3kxpnlltxit@v5xbpiv3dnqq>
-References: <20240613144432.77711a3a@eugeo>
- <ZmseosxVQXdsQjNB@boqun-archlinux>
- <CANiq72myhoCCWs7j0eZuxfoYMbTez7cPa795T57+gz2Dpd+xAw@mail.gmail.com>
- <ZmtC7h7v1t6XJ6EI@boqun-archlinux>
- <CANiq72=JdqTRPiUfT=-YMTTN+bHeAe2Pba8nERxU3cN8Q-BEOw@mail.gmail.com>
- <ZmxUxaIwHWnB42h-@Boquns-Mac-mini.home>
- <c1c45a2e-afdf-40a6-9f44-142752368d5e@proton.me>
- <ZmzvVr7lYfR6Dpca@Boquns-Mac-mini.home>
- <b692945b-8fa4-4918-93f6-783fbcde375c@proton.me>
- <Zm4R0XwTpsASpBhx@Boquns-Mac-mini.home>
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=GhlWfCwXgep8HH4DSiRQ0pHnEnYaY9OkWq5xXSEgPig=;
+	b=Yz4IxWjSskfDMsLTJvLuDdTa4qjbFSq1CdNoh3HY3xcH13zqvIr4ZeLGjxctTdYuYfeWHz
+	zRYT7bQTPQZnE9ee4Sbl/IcLXs/6rLrUtQCy1B9joD1LVMklF7p2iw9GDFNA7VxdrdaXNR
+	WoUrPs4OKpksgU1bos6HYCN/MNNoRtQ=
+Received: from mx-prod-mc-02.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-92-Bi7P-tzZPZ28wmH069SiKA-1; Sun,
+ 16 Jun 2024 06:33:16 -0400
+X-MC-Unique: Bi7P-tzZPZ28wmH069SiKA-1
+Received: from mx-prod-int-02.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-02.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.15])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-02.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id D811319560A0
+	for <llvm@lists.linux.dev>; Sun, 16 Jun 2024 10:33:15 +0000 (UTC)
+Received: from [172.64.3.44] (unknown [10.30.33.101])
+	by mx-prod-int-02.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 2610D1956087;
+	Sun, 16 Jun 2024 10:33:15 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL (MISSED 11 of 192): Test report for master
+ (6.10.0-rc3, mainline.kernel.org-clang, a3e18a54)
+Date: Sun, 16 Jun 2024 10:33:14 -0000
+To: bgoncalv@redhat.com, xzhou@redhat.com, llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Zm4R0XwTpsASpBhx@Boquns-Mac-mini.home>
-X-Migadu-Flow: FLOW_OUT
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.15
+Message-Id: <57692.124061606331600417@us-mta-92.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Sat, Jun 15, 2024 at 03:12:33PM -0700, Boqun Feng wrote:
-> What's the issue of having AtomicI32 and AtomicI64 first then? We don't
-> need to do 1 or 2 until the real users show up.
-> 
-> And I'd like also to point out that there are a few more trait bound
-> designs needed for Atomic<T>, for example, Atomic<u32> and Atomic<i32>
-> have different sets of API (no inc_unless_negative() for u32).
-> 
-> Don't make me wrong, I have no doubt we can handle this in the type
-> system, but given the design work need, won't it make sense that we take
-> baby steps on this? We can first introduce AtomicI32 and AtomicI64 which
-> already have real users, and then if there are some values of generic
-> atomics, we introduce them and have proper discussion on design.
-> 
-> To me, it's perfectly fine that Atomic{I32,I64} co-exist with Atomic<T>.
-> What's the downside? A bit specific example would help me understand
-> the real concern here.
+Hi, we tested your kernel and here are the results:
 
-Err, what?
+    Overall result: FAILED
+             Merge: OK
+           Compile: OK
+              Test: FAILED
 
-Of course we want generic atomics, and we need that for properly
-supporting cmpxchg.
 
-Bogun, you've got all the rust guys pushing for doing this with
-generics, I'm not sure why you're being stubborn here?
+Kernel information:
+    Commit message: Merge tag 'xfs-6.10-fixes-3' of git://git.kernel.org/pu=
+b/scm/fs/xfs/xfs-linux
+
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1333818910
+
+One or more kernel tests failed:
+    Unrecognized or new issues:
+        Reboot test
+              x86_64
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+redhat:1333818910-x86_64-kernel_upt_35
+                   Non-passing ran subtests:
+                       =E2=9D=8C FAIL misc/reboot-test/journalctl-check
+        xfstests - cifsv3.11
+              x86_64 (debug)
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+redhat:1333818910-x86_64-kernel-debug_upt_32
+                   Non-passing ran subtests:
+                       =E2=9D=8C FAIL Panic
+
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: [rhel-10] xfstests - cifsv3.11 - generic/207 - error in bloc=
+k: expected 4096 bytes, received 0
+            URL: https://issues.redhat.com/browse/RHEL-39974
+            Affected tests:
+                xfstests - cifsv3.11 [x86_64]
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1267
+            Affected tests:
+                selinux-policy: serge-testsuite [ppc64le]
+
+
+Tests that were not ran because of internal issues:=20
+    Boot test [s390x]
+    CKI/restraint [s390x]
+    machineinfo [s390x]
+    Reboot test [s390x, x86_64 (debug)]
+    SELinux Custom Module Setup [s390x]
+    Storage - blktests - blk - upstream [s390x]
+    Storage - blktests - nvme-tcp - upstream [s390x]
+    Storage - swraid scsi_raid [s390x]
+    stress: stress-ng - cpu-cache [s390x]
+    stress: stress-ng - memory [s390x]
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
