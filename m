@@ -1,67 +1,67 @@
-Received: from mail-oa1-f45.google.com (mail-oa1-f45.google.com [209.85.160.45])
+Received: from mail-qk1-f169.google.com (mail-qk1-f169.google.com [209.85.222.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B93BD2FE
-	for <llvm@lists.linux.dev>; Sun, 16 Jun 2024 14:16:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A13EA610D
+	for <llvm@lists.linux.dev>; Sun, 16 Jun 2024 14:36:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718547396; cv=none; b=VArHgNb3aPbAob37TA8vu9uCzq9jMFPNAnDRDgqbhWBckCWxpgtXBSewV/1WQyHSORv5lSM8Asp4OpiOF03lB2U4IV9nnV0DCFA+g7qmS7WyL9SbV6EC0i+JllrBZ17KPh7ybL8N6eAhEWtupa+J3Ppst8m4NeFlWgTxK0+cY4w=
+	t=1718548563; cv=none; b=GmD728ol3hGYySwRK243b3hMINTySAWnTwBhUlIfaltSYQa9P/Oz5+oNufMXd2GlUSuzsig51q0d9fe0MScNQOl3nlI8Lvhj1aVrKtsVDLMjFBrU0PRDZVZ1yVtNcdCaC1K9sc7KyNjkFIlTU5j04vYc/BAymQQxKNDeW1mxJsI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718547396; c=relaxed/simple;
-	bh=7bdxquZWzFdlKtstaLLemdgdpCp+iDsft99AmCaM1WI=;
+	s=arc-20240116; t=1718548563; c=relaxed/simple;
+	bh=7e9CZmd124XeWsjsaTuz81EPjeNmZoFf85hV+ZcTGZ0=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=XWeXqEyjvy9BxSYp6R65q2oOpcjosrhLPzr057FXXBTJx+LC6hyEID6EYRNIRWIHLgcpzC6pL5LAiuCpXi+2nh6/TH45FDJUgS54ikD6xs3i9+fAydyvv0T6GyBDkKYooCRetJqKkqVG0Qkl1mS1UEgVjGL4NLc89LuUGmHbeMs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=iDu9kChw; arc=none smtp.client-ip=209.85.160.45
+	 Content-Type:Content-Disposition:In-Reply-To; b=Sc7S54DLphzUFN5ZPxZMBvhiPn5TWo91qDrvMnm7MihR/ZjiJDw2mkmxAl1tIVrA7ys7yD5i+Mz+osmf6tdWI0i3QxiJpTBQ4tz/atszSwSqmZtncfaSaRisHnvBPWb7n2B4sPIqXbYgJkoJqHFFPs884BIyajdLWdTZHkPjl7k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=kafxC3OZ; arc=none smtp.client-ip=209.85.222.169
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="iDu9kChw"
-Received: by mail-oa1-f45.google.com with SMTP id 586e51a60fabf-250671a1bc7so1722137fac.3
-        for <llvm@lists.linux.dev>; Sun, 16 Jun 2024 07:16:34 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kafxC3OZ"
+Received: by mail-qk1-f169.google.com with SMTP id af79cd13be357-797f1287aa3so270503885a.2
+        for <llvm@lists.linux.dev>; Sun, 16 Jun 2024 07:36:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1718547394; x=1719152194; darn=lists.linux.dev;
+        d=gmail.com; s=20230601; t=1718548560; x=1719153360; darn=lists.linux.dev;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:feedback-id:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=ChmSjGncEeieZ8eu54I6JXi04yAV6jjSlQKYshr68pw=;
-        b=iDu9kChw40uNDZ/LO6JGOq0iHkOj9HNaWrEUtQj+EZp3AvysYJ86rA4Onnsp+JRFAW
-         fN7D/p9bssq1NJIqYrXZM2R1pBJzMkCO1ZtMFZUVmcKewK+tVI+bbU/jiaOvsD/VNrnk
-         QdXXjj/XG8hg/UtD/+AjTuC6kKex1L5bcTGkHlQyxmJoNrt3bPx81hnFMNQH8fvVsb10
-         HIB38GwsnPLZlWVpBhRFIBcHJNtgUmV807uraXuJsrCRlGKkOOWGoAWOMXyYMo96noAn
-         604LPONltvSzSAoDFVqqjMnz+p//ku8FA2nMpocKIkcZ/2bCi0FAI+KQ6/UE383bbcyn
-         U0iQ==
+        bh=i9qsPYBwH3Sp7/6c6yDAa2y8gJfd287HNf312thuud8=;
+        b=kafxC3OZl+Lvrf+RtuXwljU2D1YkrJ1K2ENSDDr++pwRS8qAGwxFIQhngxbd4hOWNU
+         pcuLeBxenNFdfglCdSVQ1uz8vlI+TFcf76Dd9LHqRbNEZ2cnDYgOVssh74CVir6nya8k
+         72JRgHZAsL0bMfvA/VncbNEiE1xF8aCGqbCURE/kOCuIHIcB5nup+UIOm3RNXLrfJOCx
+         ckLVQFabbwIi+j/XOLv2iKwjw5tgBBE17Wby4dU06DNPTEY0ecK4Rd4Gola90qoYYqmu
+         xnbCIN94oV4N5Q6YdKXvPpU2Vlau942PVi7YYt0G61Um0WNHLtXsrRzYO6NAbkqRCTjr
+         UHzQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1718547394; x=1719152194;
+        d=1e100.net; s=20230601; t=1718548560; x=1719153360;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:feedback-id:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=ChmSjGncEeieZ8eu54I6JXi04yAV6jjSlQKYshr68pw=;
-        b=CBXdJPdQ2OfpElOund3qkY9C7kcM5wV0+xZDr6z+13iIhBl25gMU4ygwgkYnTKIa5X
-         5bsSMjgPJMBDuOvK21PlaRz1jj57WXFrW+dNlKAXiGJ6HG97zgYHEtkP7ubw1eEzA2Gw
-         sxCfcWLkM4PQxS5QePqHAZ/635h3fd7Ctoro34XZBLw055VtSaSxU2P5Fqi0Nanm46Rj
-         sXGTDXn23KRyJ1f5QymwpNl8hY7/DCstKnk/E79ppDbSRGH7pRR7jLqW2hDo0rG4hie8
-         BMyJ40btGCeI5FGFxHJUfGBTNCDatx3u8KI0+MW2CG1aZvsrNIXQhp3/lUe5HhWDXKR0
-         CbYQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWR9cWa/xdf/I21NLvUa71DlhzopT3Hov5sZ7a9i8EjHCpD0z1zkuFIFmBfvsovSK8MH3L430m08wr6vVkrtwZwqfPGYA==
-X-Gm-Message-State: AOJu0YzwcTh3bhUAVFhkmE+DAzjYqpLC7c7v5R4i933eoYD9bIvN23hy
-	3EccPlL/ipZtwP95M3o9Aw2H/omNmpzJIqy9R5+DlaPucCr5iDim
-X-Google-Smtp-Source: AGHT+IEJURaA8R00zuQB4kZ2NpS8xoyLpNJer3p9uoW3RueWraMEm/js9QdlmSnSEq9SjQvZLHSrYw==
-X-Received: by 2002:a05:6871:3408:b0:254:9501:db80 with SMTP id 586e51a60fabf-2584293f32bmr8961724fac.14.1718547394027;
-        Sun, 16 Jun 2024 07:16:34 -0700 (PDT)
+        bh=i9qsPYBwH3Sp7/6c6yDAa2y8gJfd287HNf312thuud8=;
+        b=VbjVB1e1xKVgMCQkNEeAE3rNSv65rXsVRHgxLONg7c7By4HhCroDilIOlkNk4/Ijv4
+         UbZksxONoSimN5DW73DyObz9Ir/AbV0n7KDt0ntjtgYSJ5p8aSmza7+4qF72er7GuZxN
+         G6m1PmvAFxFJJUH1G0us0dET91Jb/RrIhAMEykqG0+M5gqS4NnCuHhuADJmoeqxhwRVY
+         DMiV7qgHFRlgs2Gro7zVpH11R+Cvil0ZATYbu8AfHtaMxkb6cML/AHX6sBa56GITs4fC
+         tSmMI5UEJ6w+d+4JIFuXk3f5pm+5Yu0yA3L0o4KhdyffUScVMVaZ71919ucNRxkxdVcK
+         h1LQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVJF3SbaVjylGOWIzazEft3d0cYI98788SRVc0fT0nS9xLSvNzAs/hD/ODiOtgxtdNMAkY5dryNxydszKdgUIU5ZQrsVQ==
+X-Gm-Message-State: AOJu0YwBJIrWXKHzczmykU5FLZ9qU7/baCv4JqFZHWczAq78b77f47dG
+	z6Eg5lZzJcOxx9xwdtAj3verh2GJuEXr1eQlcFdu2vut/rUL3pam
+X-Google-Smtp-Source: AGHT+IE4znSN0CJN5q1n8JV3DeDpQHBV3vnA5qh9mxdOQC/KkdziwRzH+gkuO6qgwfyCqvW4Z/5i6A==
+X-Received: by 2002:a05:620a:4510:b0:792:c32f:caf0 with SMTP id af79cd13be357-798d26b521amr864146585a.70.1718548560454;
+        Sun, 16 Jun 2024 07:36:00 -0700 (PDT)
 Received: from fauth1-smtp.messagingengine.com (fauth1-smtp.messagingengine.com. [103.168.172.200])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-79a4e1abc56sm73235085a.65.2024.06.16.07.16.32
+        by smtp.gmail.com with ESMTPSA id d75a77b69052e-441f2ff9418sm37282091cf.86.2024.06.16.07.35.59
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 16 Jun 2024 07:16:33 -0700 (PDT)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-	by mailfauth.nyi.internal (Postfix) with ESMTP id A7EF7120006A;
-	Sun, 16 Jun 2024 10:16:32 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute2.internal (MEProxy); Sun, 16 Jun 2024 10:16:32 -0400
-X-ME-Sender: <xms:wPNuZv-w9qN1uYRINCbjw_qOwZ32sCQqPKStxrUpF6E4whf-1rl9pA>
-    <xme:wPNuZruSGAhLd6L0zorpHT1yzfVos4yZIdFuGk8bUvT6HS7FCXZYrpwd_3LB1mizu
-    H3VS1wqC49Mb20l-g>
-X-ME-Received: <xmr:wPNuZtDTDuxskLGiaBmKtVWRO0FFFF7RUMXOE8zwvmWwV3Vw7cEVNbwWDw>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvledrfedvfedgjeehucetufdoteggodetrfdotf
+        Sun, 16 Jun 2024 07:36:00 -0700 (PDT)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+	by mailfauth.nyi.internal (Postfix) with ESMTP id F0D271200043;
+	Sun, 16 Jun 2024 10:35:58 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute3.internal (MEProxy); Sun, 16 Jun 2024 10:35:59 -0400
+X-ME-Sender: <xms:TvhuZl-WuvCVZ9oBGYqbO6-oIa-PYM0cF6PrK3dAFc5bbLUIyPmqdQ>
+    <xme:TvhuZpt8FWyn1-J3XL8esS5egboM3gKdscTntpeVqP7dsBhUz4B3uPePqdUKGGhNn
+    zYVPvqiCaqNWGpErg>
+X-ME-Received: <xmr:TvhuZjCoXZPo8lMk7Gz9v8hT9VtPxaRJSJcxIPalf_zOxe0KDemSvjhvgA>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvledrfedvfedgjeelucetufdoteggodetrfdotf
     fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
     uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
     cujfgurhepfffhvfevuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepuehoqhhu
@@ -71,15 +71,15 @@ X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvledrfedvfedgjeehucetufdoteggod
     gsohhquhhnodhmvghsmhhtphgruhhthhhpvghrshhonhgrlhhithihqdeiledvgeehtdei
     gedqudejjeekheehhedvqdgsohhquhhnrdhfvghngheppehgmhgrihhlrdgtohhmsehfih
     igmhgvrdhnrghmvg
-X-ME-Proxy: <xmx:wPNuZrd7QL2n65G3s9G4zyJgGSN7GUr3rJc6QQeaxdrJqzA8BwYZhw>
-    <xmx:wPNuZkPbkn52mwh1h3Ww8KR9bF2IM8CCcKHh6AqfsTou1IRw-A1owA>
-    <xmx:wPNuZtkpMJIL6tvsfjD6d0ENJmakzBRBE6hk8NGXSso64jYNNXc4Og>
-    <xmx:wPNuZutYxLgsexVdcfhdB06sF1l3_KaGIeevPmCTiafKFHN9BNwAYg>
-    <xmx:wPNuZuvK0d5vNmZIvOUaB5TINpBHWKVM98kSCbiNbicix7_sifs6O2ba>
+X-ME-Proxy: <xmx:TvhuZpcoH9X3uZBbI_1Wkku1Oc8DCXdgNIFZ2Z4QLrtNxDKkzvGTSA>
+    <xmx:TvhuZqO2M1ZQJTw53lseHEqb5jmKUrD0ddhvQDMq5AfVlt_xfi2tIg>
+    <xmx:TvhuZrnRRWPs7bFON7P4I8UB1o0KBPEm9r4wkXDL0N36qmLMzrZjJQ>
+    <xmx:TvhuZksTUDZwGORis8-HSQ9pOWUF0IVpU0nxk48NbMFYfslb76YbNA>
+    <xmx:TvhuZstlQu2ZiepvJh5ljeT_2Y9MAIiV0JCWUucbXfJE0eFCM1ME6xFD>
 Feedback-ID: iad51458e:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sun,
- 16 Jun 2024 10:16:31 -0400 (EDT)
-Date: Sun, 16 Jun 2024 07:16:30 -0700
+ 16 Jun 2024 10:35:58 -0400 (EDT)
+Date: Sun, 16 Jun 2024 07:35:57 -0700
 From: Boqun Feng <boqun.feng@gmail.com>
 To: Kent Overstreet <kent.overstreet@linux.dev>
 Cc: Benno Lossin <benno.lossin@proton.me>,
@@ -112,9 +112,8 @@ Cc: Benno Lossin <benno.lossin@proton.me>,
  linux-arm-kernel@lists.infradead.org,	linux-fsdevel@vger.kernel.org,
  Trevor Gross <tmgross@umich.edu>,	dakr@redhat.com
 Subject: Re: [RFC 2/2] rust: sync: Add atomic support
-Message-ID: <Zm7zvt7cNT2YpiIi@Boquns-Mac-mini.home>
-References: <ZmseosxVQXdsQjNB@boqun-archlinux>
- <CANiq72myhoCCWs7j0eZuxfoYMbTez7cPa795T57+gz2Dpd+xAw@mail.gmail.com>
+Message-ID: <Zm74TbphTAU_1aBV@Boquns-Mac-mini.home>
+References: <CANiq72myhoCCWs7j0eZuxfoYMbTez7cPa795T57+gz2Dpd+xAw@mail.gmail.com>
  <ZmtC7h7v1t6XJ6EI@boqun-archlinux>
  <CANiq72=JdqTRPiUfT=-YMTTN+bHeAe2Pba8nERxU3cN8Q-BEOw@mail.gmail.com>
  <ZmxUxaIwHWnB42h-@Boquns-Mac-mini.home>
@@ -123,6 +122,7 @@ References: <ZmseosxVQXdsQjNB@boqun-archlinux>
  <b692945b-8fa4-4918-93f6-783fbcde375c@proton.me>
  <Zm4R0XwTpsASpBhx@Boquns-Mac-mini.home>
  <5lwylk6fhlvqfgxmt7xdoxdrhtvmplo5kazpdbt3kxpnlltxit@v5xbpiv3dnqq>
+ <Zm7zvt7cNT2YpiIi@Boquns-Mac-mini.home>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -131,43 +131,55 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <5lwylk6fhlvqfgxmt7xdoxdrhtvmplo5kazpdbt3kxpnlltxit@v5xbpiv3dnqq>
+In-Reply-To: <Zm7zvt7cNT2YpiIi@Boquns-Mac-mini.home>
 
-On Sun, Jun 16, 2024 at 05:51:07AM -0400, Kent Overstreet wrote:
-> On Sat, Jun 15, 2024 at 03:12:33PM -0700, Boqun Feng wrote:
-> > What's the issue of having AtomicI32 and AtomicI64 first then? We don't
-> > need to do 1 or 2 until the real users show up.
+On Sun, Jun 16, 2024 at 07:16:30AM -0700, Boqun Feng wrote:
+> On Sun, Jun 16, 2024 at 05:51:07AM -0400, Kent Overstreet wrote:
+> > On Sat, Jun 15, 2024 at 03:12:33PM -0700, Boqun Feng wrote:
+> > > What's the issue of having AtomicI32 and AtomicI64 first then? We don't
+> > > need to do 1 or 2 until the real users show up.
+> > > 
+> > > And I'd like also to point out that there are a few more trait bound
+> > > designs needed for Atomic<T>, for example, Atomic<u32> and Atomic<i32>
+> > > have different sets of API (no inc_unless_negative() for u32).
+> > > 
+> > > Don't make me wrong, I have no doubt we can handle this in the type
+> > > system, but given the design work need, won't it make sense that we take
+> > > baby steps on this? We can first introduce AtomicI32 and AtomicI64 which
+> > > already have real users, and then if there are some values of generic
+> > > atomics, we introduce them and have proper discussion on design.
+> > > 
+> > > To me, it's perfectly fine that Atomic{I32,I64} co-exist with Atomic<T>.
+> > > What's the downside? A bit specific example would help me understand
+> > > the real concern here.
 > > 
-> > And I'd like also to point out that there are a few more trait bound
-> > designs needed for Atomic<T>, for example, Atomic<u32> and Atomic<i32>
-> > have different sets of API (no inc_unless_negative() for u32).
+> > Err, what?
 > > 
-> > Don't make me wrong, I have no doubt we can handle this in the type
-> > system, but given the design work need, won't it make sense that we take
-> > baby steps on this? We can first introduce AtomicI32 and AtomicI64 which
-> > already have real users, and then if there are some values of generic
-> > atomics, we introduce them and have proper discussion on design.
+> > Of course we want generic atomics, and we need that for properly
+> > supporting cmpxchg.
 > > 
-> > To me, it's perfectly fine that Atomic{I32,I64} co-exist with Atomic<T>.
-> > What's the downside? A bit specific example would help me understand
-> > the real concern here.
 > 
-> Err, what?
-> 
-> Of course we want generic atomics, and we need that for properly
-> supporting cmpxchg.
+> Nope. Note this series only introduces the atomic types (atomic_ C
+> APIs), but cmpxchg C APIs (no atomic_ prefix) are probably presented via
+> a different API, where we need to make it easier to interact with normal
+> types, and we may use generic there.
 > 
 
-Nope. Note this series only introduces the atomic types (atomic_ C
-APIs), but cmpxchg C APIs (no atomic_ prefix) are probably presented via
-a different API, where we need to make it easier to interact with normal
-types, and we may use generic there.
+Or it could be a generic function instead of generic type like:
 
-> Bogun, you've got all the rust guys pushing for doing this with
-> generics, I'm not sure why you're being stubborn here?
+	pub unsafe fn cmpxchg<T>(ptr: * mut T, old: T, new T) -> T
 
-Hmm? Have you seen the email I replied to John, a broader Rust community
-seems doesn't appreciate the idea of generic atomics.
+the "unsafe" part is due to `ptr` may not be a valid pointer or this may
+make normal accesses data race.
 
 Regards,
 Boqun
+
+> > Bogun, you've got all the rust guys pushing for doing this with
+> > generics, I'm not sure why you're being stubborn here?
+> 
+> Hmm? Have you seen the email I replied to John, a broader Rust community
+> seems doesn't appreciate the idea of generic atomics.
+> 
+> Regards,
+> Boqun
