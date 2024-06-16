@@ -1,109 +1,281 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qv1-f49.google.com (mail-qv1-f49.google.com [209.85.219.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B51AD19D8BA;
-	Sun, 16 Jun 2024 13:08:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 798A0E554
+	for <llvm@lists.linux.dev>; Sun, 16 Jun 2024 14:08:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718543305; cv=none; b=XHX9JgUyJXr35c5Q48r8LgDSZaeL8v7vr1Zvzz0HjNqLN1hC8EEMLno6DOMEDaCxCU9zUlbtRHKlUicrE5LTICajMhs35qwYGvLaMHL+XAJvfAxHkNJ9P7RRmIfdrV7rnU8z/Kn4XDksP4VXMXRXxGs08nRswggoLc1ZXoJ7ipk=
+	t=1718546896; cv=none; b=jRKrlPhyUGAX2l1r4ZWTqunka2vmwn4EMSyeuOT6L8Rn4LuLw75/KiJEwOcYmG1jq8l5RkOEiAxtHDTw40+FcHsvrltj/T5vgYf4pm6YUr6I0RufoMTmD7X8StwLMppYm33MucK8nrRNoS313+bdz82xvugfAq1VX6sWKwmtglY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718543305; c=relaxed/simple;
-	bh=J90pPIH2zZA7mz/HC4BbMzk+6ihDFgtas/GM6TgNEfg=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=tlB5tjHInknc9BEXt+wuV6H1W5+TdUUo5P6T14tZHngwvFgOGC+ArlkthQGP7+1N6reV5p8agsQCwSvBZmTxtwpz1Xuq4muTD9+TD3tBWxO3BARB0vCSxBz8JwnVZGppSGXjiABbjn75YwAge/dB62u+TP3ysioRV/Pnq+Vm4fg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=HWzn2fyn; arc=none smtp.client-ip=192.198.163.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1718546896; c=relaxed/simple;
+	bh=tNS9Etxsl6KrAzfyJHQLvYkh19XSh1b/dhR1ppMDTy8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=EXaF0uHX1VpR1MmA2a4f+TqyYRZ4X64kS6NqK1tP4wzOIGjd/qvG7DdqINJ6A2LA/tCGVkTDTAqcA042a7H3kakzjamZkKFU7DXJc+FyIMFqV4ZuySqGTwAa+zG7bsvMeiWYnHwTux0wOkOwTjH7UpJggwHMoLCg85FDnrTmG78=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HxeD+Y6Z; arc=none smtp.client-ip=209.85.219.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="HWzn2fyn"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1718543304; x=1750079304;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=J90pPIH2zZA7mz/HC4BbMzk+6ihDFgtas/GM6TgNEfg=;
-  b=HWzn2fynlbwQdMugF0cERKE72OYiGEJyzhS5VQck9aupJZ2OeLWv0Z3v
-   BW1HlWMHZS+eFVkTfqTp5XPla/uTy+YXLXmZ5F+Yee0fZUN2qbYgZpiZ6
-   B5lKmEV8b/bSB5Nhahq2MBayyWz9t8qmm7zYuAsywZU7Ugw54s0d8IyWG
-   4dACV7lXHukh1b0WkP+rBQqcuACfyiK6n+8X1KqYttUWKpvTC8smhJdnG
-   PDFYtviRKO68e2TiytLNJck/p3k6jEFfOnqrBFmWDj6RLKHFaYycxLTqA
-   XUYuyk86aFpV73TQho0pHZ9yiJSx7EdrI6VoQ2WWLEHixgp3Kl2dldLW2
-   Q==;
-X-CSE-ConnectionGUID: BS5JadWfTr2QxlTpW1bgeg==
-X-CSE-MsgGUID: E8NT51MqQjW1r3KXcvfGIA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11104"; a="26015781"
-X-IronPort-AV: E=Sophos;i="6.08,242,1712646000"; 
-   d="scan'208";a="26015781"
-Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jun 2024 06:08:19 -0700
-X-CSE-ConnectionGUID: XUZA4DE2RkmnSWRFfmehtw==
-X-CSE-MsgGUID: FOLDhQfuR7CMbENgXtk7dw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.08,242,1712646000"; 
-   d="scan'208";a="71733166"
-Received: from lkp-server01.sh.intel.com (HELO 68891e0c336b) ([10.239.97.150])
-  by orviesa002.jf.intel.com with ESMTP; 16 Jun 2024 06:08:17 -0700
-Received: from kbuild by 68891e0c336b with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1sIpcE-0002ni-1b;
-	Sun, 16 Jun 2024 13:08:14 +0000
-Date: Sun, 16 Jun 2024 21:07:24 +0800
-From: kernel test robot <lkp@intel.com>
-To: Luo Jie <quic_luoj@quicinc.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Bjorn Andersson <andersson@kernel.org>,
-	Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-Subject: [qcom:clk-for-6.11 39/42] ld.lld: error: undefined symbol:
- __mdiobus_write
-Message-ID: <202406162047.QkUMa2fG-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HxeD+Y6Z"
+Received: by mail-qv1-f49.google.com with SMTP id 6a1803df08f44-6b06bedc5d1so21277306d6.0
+        for <llvm@lists.linux.dev>; Sun, 16 Jun 2024 07:08:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1718546893; x=1719151693; darn=lists.linux.dev;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :feedback-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=zWCtR0NK0A/iolZufFAg4WyNKPe6pDrlaIgYrNiP6lA=;
+        b=HxeD+Y6Z78KrGaCAwC1Ghn2PZZs9GHOwpiU6MebDNQyC7I3RmSSpRnzZvkRhRMlGXn
+         2uy2KfxseVl4W0fe7I3JnXM/T85I9Mr/vbAe2+0Mx8mnUBBfTI3HsQ7tGBecr4Cf+seR
+         MFusC+yJmPix7sFN7mz1MlzJhm/1BCV1vmOw4SnGG2fTfDuAWRGKlZCQBrCyXvnN7rUy
+         Rr9vwmSOdFg9X9bAcj/C8bqGTqSKFT5qNlcK07GU0oem7TH1G++yp/iRgCivSduOrbBh
+         5uXIbjZQ/vLdu2yqDRhmTW/J5AXTJSadch03hn+lAbwYKp710uJOQUOgPrdbxkbSIzmF
+         wNug==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1718546893; x=1719151693;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :feedback-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=zWCtR0NK0A/iolZufFAg4WyNKPe6pDrlaIgYrNiP6lA=;
+        b=GhcwLoF4mQvCn9rSnZN6z8pGEqlU4gB05D+J0KNgAPqxxzwUFAt1miN9FFFgoc+DC9
+         MJrGCfvPwTIHVNKGLgAQwsVZZSHCNO5zYGBSV9gN5c17q11FfytBL1K+uRdN91bghMNm
+         4H1vTqf+wlNT2TsV2MPXE7/zgYu2cgK4liOokJNQVtdNx8RbFbiIwhmUbFGduay8vIGS
+         en94RW6bSVeP+w0Efd591ObzMNC/Eb7Gmus3GOxv0qdGtoXrShlqODmeThRnyeVCNkgK
+         khKHOUeLSw9Wudg2V5A9LMcmZBR3RNbF0wdx2DSv2rrGepSRupf7lIKJ0vQtoLEbq5hZ
+         BLbA==
+X-Forwarded-Encrypted: i=1; AJvYcCVjug6U+hlmmOt4uXXDwbhPV4+6uaNAynxffQ0bMeLvy4X2NMsr+XgrwYbwNjZ3G39epHcSjZnkQ518biebsr3ebvFRLA==
+X-Gm-Message-State: AOJu0Yy6nBBba+Kl5NyJJAlqeFoSQ+FXWbJHOljVAo76HwCqfOBq1O8H
+	SHPz/V5dtv2z33lVCX10c4H7H5cAGd+MhAM00KhmHdX10H+oYAjT
+X-Google-Smtp-Source: AGHT+IGlsF1MCeeD/KzOzQlwQyzWV7lOdWKNgh9/d8ctGowzFmw3RRNpVqJUcbfJaqo3xJiTmTpRUQ==
+X-Received: by 2002:a05:622a:15d4:b0:441:2995:fa08 with SMTP id d75a77b69052e-4421687be0emr81833641cf.19.1718546893299;
+        Sun, 16 Jun 2024 07:08:13 -0700 (PDT)
+Received: from fauth1-smtp.messagingengine.com (fauth1-smtp.messagingengine.com. [103.168.172.200])
+        by smtp.gmail.com with ESMTPSA id d75a77b69052e-441f310cdfasm36804731cf.96.2024.06.16.07.08.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 16 Jun 2024 07:08:12 -0700 (PDT)
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+	by mailfauth.nyi.internal (Postfix) with ESMTP id 8033F1200043;
+	Sun, 16 Jun 2024 10:08:11 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute4.internal (MEProxy); Sun, 16 Jun 2024 10:08:11 -0400
+X-ME-Sender: <xms:y_FuZoXUsb9Fea5tacKe7eNwuAduShZLmEcoXqH6crBYlzsqlWhXXQ>
+    <xme:y_FuZskWOezMBnbYwjp3og6tmJi6ObsIwojhL1uwpy0hMjnCVOBAphc03TX7xMPNj
+    lmyZz4_LHW4hVCHRA>
+X-ME-Received: <xmr:y_FuZsahcyUHHHnG69tBUNBnER5r1oF-OUUbM1izy9llRsYN5ywcLyvjXw>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvledrfedvfedgjeefucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvfevuffkfhggtggugfgjsehtkeertddttdejnecuhfhrohhmpeeuohhq
+    uhhnucfhvghnghcuoegsohhquhhnrdhfvghnghesghhmrghilhdrtghomheqnecuggftrf
+    grthhtvghrnhepvefghfeuveekudetgfevudeuudejfeeltdfhgfehgeekkeeigfdukefh
+    gfegleefnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomh
+    epsghoqhhunhdomhgvshhmthhprghuthhhphgvrhhsohhnrghlihhthidqieelvdeghedt
+    ieegqddujeejkeehheehvddqsghoqhhunhdrfhgvnhhgpeepghhmrghilhdrtghomhesfh
+    higihmvgdrnhgrmhgv
+X-ME-Proxy: <xmx:y_FuZnUx__DUoq5IJxvYBVdDZm-X6WSSWZ8Z-L_nZ-y6mMIGpuf-8Q>
+    <xmx:y_FuZinxNi3Rq56P5ak2cUuMiZkEUDrhPpfP75NZChRPdkUhVF0xpA>
+    <xmx:y_FuZscgwv2EqjXGDgVbBL6IiFxNxf5Hy6kQFFxC96wFkn0CI9XFqg>
+    <xmx:y_FuZkFQLLHo9gTdQVexGeTslO0hz1bpm4ObMNBvYQOwEg4MghJO3Q>
+    <xmx:y_FuZolelaIdKyco5D_xqsRgD6CHUK2IYZP5MPr78Ej5fkWxjjy1F2cT>
+Feedback-ID: iad51458e:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sun,
+ 16 Jun 2024 10:08:10 -0400 (EDT)
+Date: Sun, 16 Jun 2024 07:08:09 -0700
+From: Boqun Feng <boqun.feng@gmail.com>
+To: Benno Lossin <benno.lossin@proton.me>
+Cc: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>,
+	Gary Guo <gary@garyguo.net>, rust-for-linux@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+	llvm@lists.linux.dev, Miguel Ojeda <ojeda@kernel.org>,
+	Alex Gaynor <alex.gaynor@gmail.com>,
+	Wedson Almeida Filho <wedsonaf@gmail.com>,
+	=?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
+	Andreas Hindborg <a.hindborg@samsung.com>,
+	Alice Ryhl <aliceryhl@google.com>,
+	Alan Stern <stern@rowland.harvard.edu>,
+	Andrea Parri <parri.andrea@gmail.com>,	Will Deacon <will@kernel.org>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Nicholas Piggin <npiggin@gmail.com>,	David Howells <dhowells@redhat.com>,
+	Jade Alglave <j.alglave@ucl.ac.uk>,	Luc Maranget <luc.maranget@inria.fr>,
+	"Paul E. McKenney" <paulmck@kernel.org>,
+	Akira Yokosawa <akiyks@gmail.com>,	Daniel Lustig <dlustig@nvidia.com>,
+	Joel Fernandes <joel@joelfernandes.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,	kent.overstreet@gmail.com,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, elver@google.com,
+	Mark Rutland <mark.rutland@arm.com>,
+	Thomas Gleixner <tglx@linutronix.de>,	Ingo Molnar <mingo@redhat.com>,
+ Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+	"H. Peter Anvin" <hpa@zytor.com>,
+	Catalin Marinas <catalin.marinas@arm.com>,	torvalds@linux-foundation.org,
+ linux-arm-kernel@lists.infradead.org,	linux-fsdevel@vger.kernel.org,
+ Trevor Gross <tmgross@umich.edu>,	dakr@redhat.com
+Subject: Re: [RFC 2/2] rust: sync: Add atomic support
+Message-ID: <Zm7xySzPJcddF-I_@Boquns-Mac-mini.home>
+References: <20240612223025.1158537-3-boqun.feng@gmail.com>
+ <CANiq72myhoCCWs7j0eZuxfoYMbTez7cPa795T57+gz2Dpd+xAw@mail.gmail.com>
+ <ZmtC7h7v1t6XJ6EI@boqun-archlinux>
+ <CANiq72=JdqTRPiUfT=-YMTTN+bHeAe2Pba8nERxU3cN8Q-BEOw@mail.gmail.com>
+ <ZmxUxaIwHWnB42h-@Boquns-Mac-mini.home>
+ <c1c45a2e-afdf-40a6-9f44-142752368d5e@proton.me>
+ <ZmzvVr7lYfR6Dpca@Boquns-Mac-mini.home>
+ <b692945b-8fa4-4918-93f6-783fbcde375c@proton.me>
+ <Zm4R0XwTpsASpBhx@Boquns-Mac-mini.home>
+ <d67aeb8c-3499-4498-aaf9-4ac459c2f747@proton.me>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <d67aeb8c-3499-4498-aaf9-4ac459c2f747@proton.me>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux clk-for-6.11
-head:   8cab033628b12c6f55aea4170dfe565761336a95
-commit: 2441b965c4c7adae0b4a7825f7acb67d44c3cd38 [39/42] clk: qcom: add clock controller driver for qca8386/qca8084
-config: arm64-randconfig-004-20240616 (https://download.01.org/0day-ci/archive/20240616/202406162047.QkUMa2fG-lkp@intel.com/config)
-compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project 78ee473784e5ef6f0b19ce4cb111fb6e4d23c6b2)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240616/202406162047.QkUMa2fG-lkp@intel.com/reproduce)
+On Sun, Jun 16, 2024 at 09:46:45AM +0000, Benno Lossin wrote:
+> On 16.06.24 00:12, Boqun Feng wrote:
+> > On Sat, Jun 15, 2024 at 07:09:30AM +0000, Benno Lossin wrote:
+> >> On 15.06.24 03:33, Boqun Feng wrote:
+> >>> On Fri, Jun 14, 2024 at 09:22:24PM +0000, Benno Lossin wrote:
+> >>>> On 14.06.24 16:33, Boqun Feng wrote:
+> >>>>> On Fri, Jun 14, 2024 at 11:59:58AM +0200, Miguel Ojeda wrote:
+> >>>>>> On Thu, Jun 13, 2024 at 9:05 PM Boqun Feng <boqun.feng@gmail.com> wrote:
+> >>>>>>>
+> >>>>>>> Does this make sense?
+> >>>>>>
+> >>>>>> Implementation-wise, if you think it is simpler or more clear/elegant
+> >>>>>> to have the extra lower level layer, then that sounds fine.
+> >>>>>>
+> >>>>>> However, I was mainly talking about what we would eventually expose to
+> >>>>>> users, i.e. do we want to provide `Atomic<T>` to begin with? If yes,
+> >>>>>
+> >>>>> The truth is I don't know ;-) I don't have much data on which one is
+> >>>>> better. Personally, I think AtomicI32 and AtomicI64 make the users have
+> >>>>> to think about size, alignment, etc, and I think that's important for
+> >>>>> atomic users and people who review their code, because before one uses
+> >>>>> atomics, one should ask themselves: why don't I use a lock? Atomics
+> >>>>> provide the ablities to do low level stuffs and when doing low level
+> >>>>> stuffs, you want to be more explicit than ergonomic.
+> >>>>
+> >>>> How would this be different with `Atomic<i32>` and `Atomic<i64>`? Just
+> >>>
+> >>> The difference is that with Atomic{I32,I64} APIs, one has to choose (and
+> >>> think about) the size when using atomics, and cannot leave that option
+> >>> open. It's somewhere unconvenient, but as I said, atomics variables are
+> >>> different. For example, if someone is going to implement a reference
+> >>> counter struct, they can define as follow:
+> >>>
+> >>> 	struct Refcount<T> {
+> >>> 	    refcount: AtomicI32,
+> >>> 	    data: UnsafeCell<T>
+> >>> 	}
+> >>>
+> >>> but with atomic generic, people can leave that option open and do:
+> >>>
+> >>> 	struct Refcount<R, T> {
+> >>> 	    refcount: Atomic<R>,
+> >>> 	    data: UnsafeCell<T>
+> >>> 	}
+> >>>
+> >>> while it provides configurable options for experienced users, but it
+> >>> also provides opportunities for sub-optimal types, e.g. Refcount<u8, T>:
+> >>> on ll/sc architectures, because `data` and `refcount` can be in the same
+> >>> machine-word, the accesses of `refcount` are affected by the accesses of
+> >>> `data`.
+> >>
+> >> I think this is a non-issue. We have two options of counteracting this:
+> >> 1. We can just point this out in reviews and force people to use
+> >>    `Atomic<T>` with a concrete type. In cases where there really is the
+> >>    need to be generic, we can have it.
+> >> 2. We can add a private trait in the bounds for the generic, nobody
+> >>    outside of the module can access it and thus they need to use a
+> >>    concrete type:
+> >>
+> >>         // needs a better name
+> >>         trait Integer {}
+> >>         impl Integer for i32 {}
+> >>         impl Integer for i64 {}
+> >>
+> >>         pub struct Atomic<T: Integer> {
+> >>             /* ... */
+> >>         }
+> >>
+> >> And then in the other module, you can't do this (with compiler error):
+> >>
+> >>         pub struct Refcount<R: Integer, T> {
+> >>                             // ^^^^^^^ not found in this scope
+> >>                             // note: trait `crate::atomic::Integer` exists but is inaccessible
+> >>             refcount: Atomic<R>,
+> >>             data: UnsafeCell<T>,
+> >>         }
+> >>
+> >> I think that we can start with approach 2 and if we find a use-case
+> >> where generics are really unavoidable, we can either put it in the same
+> >> module as `Atomic<T>`, or change the access of `Integer`.
+> >>
+> > 
+> > What's the issue of having AtomicI32 and AtomicI64 first then? We don't
+> > need to do 1 or 2 until the real users show up.
+> 
+> Generics allow you to avoid code duplication (I don't think that you
+> want to create the `Atomic{I32,I64}` types via macros...). We would have
+> to do a lot of refactoring, when we want to introduce it. I don't see
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202406162047.QkUMa2fG-lkp@intel.com/
+You can simply do
 
-All errors (new ones prefixed by >>):
+	type AtomicI32=Atomic<i32>;
 
->> ld.lld: error: undefined symbol: __mdiobus_write
-   >>> referenced by nsscc-qca8k.c
-   >>>               drivers/clk/qcom/nsscc-qca8k.o:(qca8k_regmap_read) in archive vmlinux.a
-   >>> referenced by nsscc-qca8k.c
-   >>>               drivers/clk/qcom/nsscc-qca8k.o:(qca8k_regmap_write) in archive vmlinux.a
-   >>> referenced by nsscc-qca8k.c
-   >>>               drivers/clk/qcom/nsscc-qca8k.o:(qca8k_regmap_write) in archive vmlinux.a
-   >>> referenced 4 more times
---
->> ld.lld: error: undefined symbol: __mdiobus_read
-   >>> referenced by nsscc-qca8k.c
-   >>>               drivers/clk/qcom/nsscc-qca8k.o:(qca8k_regmap_read) in archive vmlinux.a
-   >>> referenced by nsscc-qca8k.c
-   >>>               drivers/clk/qcom/nsscc-qca8k.o:(qca8k_regmap_read) in archive vmlinux.a
-   >>> referenced by nsscc-qca8k.c
-   >>>               drivers/clk/qcom/nsscc-qca8k.o:(qca8k_regmap_update_bits) in archive vmlinux.a
-   >>> referenced 1 more times
---
->> ld.lld: error: undefined symbol: mdio_driver_register
-   >>> referenced by nsscc-qca8k.c
-   >>>               drivers/clk/qcom/nsscc-qca8k.o:(mdio_module_init) in archive vmlinux.a
---
->> ld.lld: error: undefined symbol: mdio_driver_unregister
-   >>> referenced by nsscc-qca8k.c
-   >>>               drivers/clk/qcom/nsscc-qca8k.o:(mdio_module_exit) in archive vmlinux.a
+Plus, we always do refactoring in kernel, because it's impossible to get
+everything right at the first time. TBH, it's too confident to think one
+can.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+> the harm of introducing generics from the get-go.
+> 
+> > And I'd like also to point out that there are a few more trait bound
+> > designs needed for Atomic<T>, for example, Atomic<u32> and Atomic<i32>
+> > have different sets of API (no inc_unless_negative() for u32).
+> 
+> Sure, just like Gary said, you can just do:
+> 
+>     impl Atomic<i32> {
+>         pub fn inc_unless_negative(&self, ordering: Ordering) -> bool;
+>     }
+> 
+> Or add a `HasNegative` trait.
+> 
+> > Don't make me wrong, I have no doubt we can handle this in the type
+> > system, but given the design work need, won't it make sense that we take
+> > baby steps on this? We can first introduce AtomicI32 and AtomicI64 which
+> > already have real users, and then if there are some values of generic
+> > atomics, we introduce them and have proper discussion on design.
+> 
+> I don't understand this point, why can't we put in the effort for a good
+> design? AFAIK we normally spend considerable time to get the API right
+> and I think in this case it would include making it generic.
+> 
+
+What's the design you propose here? Well, the conversation between us is
+only the design bit I saw, elsewhere it's all handwaving that "generics
+are overall really good". I'm happy to get the API right, and it's easy
+and simple to do on concrete types. But IIUC, Gary's suggestion is to
+only have Atomic<i32> and Atomic<i64> first, and do the design later,
+which I really don't like. It may not be a complete design, but I need
+to see the design now to understand whether we need to go to that
+direction. I cannot just introduce a TBD generic.
+
+Regards,
+Boqun
+
+> > To me, it's perfectly fine that Atomic{I32,I64} co-exist with Atomic<T>.
+> > What's the downside? A bit specific example would help me understand
+> > the real concern here.
+> 
+> I don't like that, why have two ways of doing the same thing? People
+> will be confused whether they should use `AtomicI32` vs `Atomic<i32>`...
+> 
+> ---
+> Cheers,
+> Benno
+> 
