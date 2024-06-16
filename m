@@ -1,125 +1,182 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
+Received: from mail-4322.protonmail.ch (mail-4322.protonmail.ch [185.70.43.22])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A98DF1843;
-	Sun, 16 Jun 2024 06:03:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C244B16D4E4
+	for <llvm@lists.linux.dev>; Sun, 16 Jun 2024 09:47:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.70.43.22
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718517802; cv=none; b=U18AItz71mwbxi6OmD/diuwt6LTkjxBegF6XW9to1EYAdSdYwscewdf+YiTIxOugX8Z7d1rVvvadNzAROtRLiKEkfNnd92w2YZE/ZKidBX4XfC2wOkaAQZpFcQCBnRX7gCbYGQbfeBVBr7oa7PwwkaCYa9AdQfkmPQmM74gAWLo=
+	t=1718531223; cv=none; b=M0Hi38iZ18WmZR61b0CDsv/F1B2MRvJ8HS5OY2FjEbMpo4ZmO7fR5oOSPSZUSbbSMax6e9/yG2DbVIEFbx4CGvqTbL3aeBH7lWbEOlzzIMhq++XZ3Jl6mL6anzCQGDmWt02Wm+D0L0QRn381Aju1saBXhiUkFNMPDLg/v5qPUC0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718517802; c=relaxed/simple;
-	bh=K/ni8LSVOYgXxTrdjn8CCbKK4xGr4LQCEH5An9qKEvA=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=Ar4zgLX3wr616OKRM9+tU/ZeZiaaWS8rLizokI41yBKkijPSJpZAf2ytQlhRSTKWdTFq66YIr2B75jTFDSxseUn2EPMjuDpoq4j8u2I/Wb6cTobOlnoUI3ipC4o3OVR2oXJYo59G+ikuMaCt23HO1V4FfpSutEekuRAH5dm6C8w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=jQbDXXr9; arc=none smtp.client-ip=192.198.163.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1718531223; c=relaxed/simple;
+	bh=q26N2GgeVglH9gCbjku86QbUgLOk6W++2mgK2GguLKA=;
+	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=Psp8iExEV0tyzndRMKlcj/5Vl1ad3MlWDXpI4woI/qU7Bn7qtJRZGgdGeb5dgHoFes7qdR1mX2Hub2AFHGcp4EptAC2QZfkVhGg2jI08zYBN+MAwKDdwu3ad7j0BALg7S3awqdthhGC5uWrtxTobr7UzA3xv67dZHa9sE3pTSd8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=proton.me; spf=pass smtp.mailfrom=proton.me; dkim=pass (2048-bit key) header.d=proton.me header.i=@proton.me header.b=gdcka24V; arc=none smtp.client-ip=185.70.43.22
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=proton.me
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=proton.me
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="jQbDXXr9"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1718517800; x=1750053800;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=K/ni8LSVOYgXxTrdjn8CCbKK4xGr4LQCEH5An9qKEvA=;
-  b=jQbDXXr9HfHEkdKI4YR2S7SzaBJEOqsyM+yEvaXwmkdIavvpnvmNhdDl
-   GqixwRwEBCIWvLK3pJd3tpg/iuTgmhP/OHFnX3PktNaypgUu1a8xXm6Xu
-   7VYnZot/1kTi7ERweDmsqeQl83EYJObim8nF+L9D6OkRyX2NrHkuBjm8u
-   77UvwwBDWjPbaOYgE4k/CazLW2WfTPPoF0gATyB0bG5p9dhCw+z9fIhAl
-   ESbANZDgS72WQbQXQJtcTTYJHXxkKEZ5JdRjMKJGRZYcRUqtEgQqTsqi6
-   oVkRa/p54xGDrqksuwtzKwKENvQtvTIWB9lrFxzSYNCoxp2qCH/oaKREV
-   g==;
-X-CSE-ConnectionGUID: 2ReZbIByQGytxpI+iJpG5w==
-X-CSE-MsgGUID: mgtUmczTRqurMxJIuqafjw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11104"; a="15597987"
-X-IronPort-AV: E=Sophos;i="6.08,241,1712646000"; 
-   d="scan'208";a="15597987"
-Received: from orviesa003.jf.intel.com ([10.64.159.143])
-  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jun 2024 23:03:20 -0700
-X-CSE-ConnectionGUID: q9yjWNs8Q/ipO5p6yzHukA==
-X-CSE-MsgGUID: Hlhb8nUdSEaL7VfZN7Fpvg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.08,241,1712646000"; 
-   d="scan'208";a="45825662"
-Received: from lkp-server01.sh.intel.com (HELO 68891e0c336b) ([10.239.97.150])
-  by orviesa003.jf.intel.com with ESMTP; 15 Jun 2024 23:03:19 -0700
-Received: from kbuild by 68891e0c336b with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1sIiyy-0000vO-34;
-	Sun, 16 Jun 2024 06:03:16 +0000
-Date: Sun, 16 Jun 2024 14:02:55 +0800
-From: kernel test robot <lkp@intel.com>
-To: SeongJae Park <sj@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [sj:damon/next 9/47] mm/damon/core.c:705: warning: expecting
- prototype for damon_commit_quota_goals(). Prototype was for
- damos_commit_quota_goals() instead
-Message-ID: <202406161331.PjF4uMpc-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=proton.me header.i=@proton.me header.b="gdcka24V"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=proton.me;
+	s=protonmail; t=1718531210; x=1718790410;
+	bh=znzItjjdQt5Gx2XVgBVIK96GA/gE2ZHpRn5IIrL3wOI=;
+	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
+	 Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
+	 Message-ID:BIMI-Selector;
+	b=gdcka24V73hbb95kA47a+wMdMUp4FbYBulK5vF0HVp5VuuKVIHcdEWJBB3Pr9bu6R
+	 NhlXLdn5BBT81CawX9HbibONV/+vAxt3WSCairMGdKuSRg2n6YWI8G/wJ2DbrPKpf9
+	 HS2i9kWdmrq8qeVqsz85MnkkYJGU468NSjOAVPo/T9VGGCYLfS4Uf4L55f1dZy2R26
+	 9IX33orpEJWw52nEKBg45ayRvmmriRTDobFE4Yw8fZNKBX/SOqToQAtOsvc54DuE62
+	 FvHp1UnFcS7dQGK8DhM/BJHitJbhGgI0o9RkWHNf+XL3ZY7PwFhxxHMnhkctS5siBg
+	 uWVcH/2yjrgLQ==
+Date: Sun, 16 Jun 2024 09:46:45 +0000
+To: Boqun Feng <boqun.feng@gmail.com>
+From: Benno Lossin <benno.lossin@proton.me>
+Cc: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>, Gary Guo <gary@garyguo.net>, rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org, llvm@lists.linux.dev, Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, Wedson Almeida Filho <wedsonaf@gmail.com>, =?utf-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, Andreas Hindborg <a.hindborg@samsung.com>, Alice Ryhl <aliceryhl@google.com>, Alan Stern <stern@rowland.harvard.edu>, Andrea Parri <parri.andrea@gmail.com>, Will Deacon <will@kernel.org>, Peter Zijlstra <peterz@infradead.org>, Nicholas Piggin <npiggin@gmail.com>, David Howells <dhowells@redhat.com>, Jade Alglave <j.alglave@ucl.ac.uk>, Luc Maranget <luc.maranget@inria.fr>, "Paul E. McKenney" <paulmck@kernel.org>, Akira Yokosawa <akiyks@gmail.com>, Daniel Lustig <dlustig@nvidia.com>, Joel Fernandes <joel@joelfernandes.org>, Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>,
+	kent.overstreet@gmail.com, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, elver@google.com, Mark Rutland <mark.rutland@arm.com>, Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>, Catalin Marinas <catalin.marinas@arm.com>, torvalds@linux-foundation.org, linux-arm-kernel@lists.infradead.org, linux-fsdevel@vger.kernel.org, Trevor Gross <tmgross@umich.edu>, dakr@redhat.com
+Subject: Re: [RFC 2/2] rust: sync: Add atomic support
+Message-ID: <d67aeb8c-3499-4498-aaf9-4ac459c2f747@proton.me>
+In-Reply-To: <Zm4R0XwTpsASpBhx@Boquns-Mac-mini.home>
+References: <20240612223025.1158537-3-boqun.feng@gmail.com> <CANiq72myhoCCWs7j0eZuxfoYMbTez7cPa795T57+gz2Dpd+xAw@mail.gmail.com> <ZmtC7h7v1t6XJ6EI@boqun-archlinux> <CANiq72=JdqTRPiUfT=-YMTTN+bHeAe2Pba8nERxU3cN8Q-BEOw@mail.gmail.com> <ZmxUxaIwHWnB42h-@Boquns-Mac-mini.home> <c1c45a2e-afdf-40a6-9f44-142752368d5e@proton.me> <ZmzvVr7lYfR6Dpca@Boquns-Mac-mini.home> <b692945b-8fa4-4918-93f6-783fbcde375c@proton.me> <Zm4R0XwTpsASpBhx@Boquns-Mac-mini.home>
+Feedback-ID: 71780778:user:proton
+X-Pm-Message-ID: aa019b834b17958b26c96544baf90fc8c32aaadd
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/sj/linux.git damon/next
-head:   dc8dc5011c1230b2f3b20c53eec91368ee9836b4
-commit: 7b2776f2db539d498b8ed2c9e4e40c5f2c42296d [9/47] mm/damon/core: implement DAMOS quota goals online commit function
-config: i386-buildonly-randconfig-001-20240616 (https://download.01.org/0day-ci/archive/20240616/202406161331.PjF4uMpc-lkp@intel.com/config)
-compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240616/202406161331.PjF4uMpc-lkp@intel.com/reproduce)
+On 16.06.24 00:12, Boqun Feng wrote:
+> On Sat, Jun 15, 2024 at 07:09:30AM +0000, Benno Lossin wrote:
+>> On 15.06.24 03:33, Boqun Feng wrote:
+>>> On Fri, Jun 14, 2024 at 09:22:24PM +0000, Benno Lossin wrote:
+>>>> On 14.06.24 16:33, Boqun Feng wrote:
+>>>>> On Fri, Jun 14, 2024 at 11:59:58AM +0200, Miguel Ojeda wrote:
+>>>>>> On Thu, Jun 13, 2024 at 9:05=E2=80=AFPM Boqun Feng <boqun.feng@gmail=
+.com> wrote:
+>>>>>>>
+>>>>>>> Does this make sense?
+>>>>>>
+>>>>>> Implementation-wise, if you think it is simpler or more clear/elegan=
+t
+>>>>>> to have the extra lower level layer, then that sounds fine.
+>>>>>>
+>>>>>> However, I was mainly talking about what we would eventually expose =
+to
+>>>>>> users, i.e. do we want to provide `Atomic<T>` to begin with? If yes,
+>>>>>
+>>>>> The truth is I don't know ;-) I don't have much data on which one is
+>>>>> better. Personally, I think AtomicI32 and AtomicI64 make the users ha=
+ve
+>>>>> to think about size, alignment, etc, and I think that's important for
+>>>>> atomic users and people who review their code, because before one use=
+s
+>>>>> atomics, one should ask themselves: why don't I use a lock? Atomics
+>>>>> provide the ablities to do low level stuffs and when doing low level
+>>>>> stuffs, you want to be more explicit than ergonomic.
+>>>>
+>>>> How would this be different with `Atomic<i32>` and `Atomic<i64>`? Just
+>>>
+>>> The difference is that with Atomic{I32,I64} APIs, one has to choose (an=
+d
+>>> think about) the size when using atomics, and cannot leave that option
+>>> open. It's somewhere unconvenient, but as I said, atomics variables are
+>>> different. For example, if someone is going to implement a reference
+>>> counter struct, they can define as follow:
+>>>
+>>> =09struct Refcount<T> {
+>>> =09    refcount: AtomicI32,
+>>> =09    data: UnsafeCell<T>
+>>> =09}
+>>>
+>>> but with atomic generic, people can leave that option open and do:
+>>>
+>>> =09struct Refcount<R, T> {
+>>> =09    refcount: Atomic<R>,
+>>> =09    data: UnsafeCell<T>
+>>> =09}
+>>>
+>>> while it provides configurable options for experienced users, but it
+>>> also provides opportunities for sub-optimal types, e.g. Refcount<u8, T>=
+:
+>>> on ll/sc architectures, because `data` and `refcount` can be in the sam=
+e
+>>> machine-word, the accesses of `refcount` are affected by the accesses o=
+f
+>>> `data`.
+>>
+>> I think this is a non-issue. We have two options of counteracting this:
+>> 1. We can just point this out in reviews and force people to use
+>>    `Atomic<T>` with a concrete type. In cases where there really is the
+>>    need to be generic, we can have it.
+>> 2. We can add a private trait in the bounds for the generic, nobody
+>>    outside of the module can access it and thus they need to use a
+>>    concrete type:
+>>
+>>         // needs a better name
+>>         trait Integer {}
+>>         impl Integer for i32 {}
+>>         impl Integer for i64 {}
+>>
+>>         pub struct Atomic<T: Integer> {
+>>             /* ... */
+>>         }
+>>
+>> And then in the other module, you can't do this (with compiler error):
+>>
+>>         pub struct Refcount<R: Integer, T> {
+>>                             // ^^^^^^^ not found in this scope
+>>                             // note: trait `crate::atomic::Integer` exis=
+ts but is inaccessible
+>>             refcount: Atomic<R>,
+>>             data: UnsafeCell<T>,
+>>         }
+>>
+>> I think that we can start with approach 2 and if we find a use-case
+>> where generics are really unavoidable, we can either put it in the same
+>> module as `Atomic<T>`, or change the access of `Integer`.
+>>
+>=20
+> What's the issue of having AtomicI32 and AtomicI64 first then? We don't
+> need to do 1 or 2 until the real users show up.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202406161331.PjF4uMpc-lkp@intel.com/
+Generics allow you to avoid code duplication (I don't think that you
+want to create the `Atomic{I32,I64}` types via macros...). We would have
+to do a lot of refactoring, when we want to introduce it. I don't see
+the harm of introducing generics from the get-go.
 
-All warnings (new ones prefixed by >>):
+> And I'd like also to point out that there are a few more trait bound
+> designs needed for Atomic<T>, for example, Atomic<u32> and Atomic<i32>
+> have different sets of API (no inc_unless_negative() for u32).
 
->> mm/damon/core.c:705: warning: expecting prototype for damon_commit_quota_goals(). Prototype was for damos_commit_quota_goals() instead
+Sure, just like Gary said, you can just do:
 
+    impl Atomic<i32> {
+        pub fn inc_unless_negative(&self, ordering: Ordering) -> bool;
+    }
 
-vim +705 mm/damon/core.c
+Or add a `HasNegative` trait.
 
-   691	
-   692	/**
-   693	 * damon_commit_quota_goals() - Commit DAMOS quota goals to another quota.
-   694	 * @dst:	The commit destination DAMOS quota.
-   695	 * @src:	The commit source DAMOS quota.
-   696	 *
-   697	 * Copies user-specified parameters for quota goals from @src to @dst.  Users
-   698	 * should use this function for quota goals-level parameters update of running
-   699	 * DAMON contexts, instead of manual in-place updates.
-   700	 *
-   701	 * This function should be called from parameters-update safe context, like
-   702	 * DAMON callbacks.
-   703	 */
-   704	int damos_commit_quota_goals(struct damos_quota *dst, struct damos_quota *src)
- > 705	{
-   706		struct damos_quota_goal *dst_goal, *next, *src_goal, *new_goal;
-   707		int i = 0, j = 0;
-   708	
-   709		damos_for_each_quota_goal_safe(dst_goal, next, dst) {
-   710			src_goal = damos_nth_quota_goal(i++, src);
-   711			if (src_goal)
-   712				damos_commit_quota_goal(dst_goal, src_goal);
-   713			else
-   714				damos_destroy_quota_goal(dst_goal);
-   715		}
-   716		damos_for_each_quota_goal_safe(src_goal, next, src) {
-   717			if (j++ < i)
-   718				continue;
-   719			new_goal = damos_new_quota_goal(
-   720					src_goal->metric, src_goal->target_value);
-   721			if (!new_goal)
-   722				return -ENOMEM;
-   723			damos_add_quota_goal(dst, new_goal);
-   724		}
-   725		return 0;
-   726	}
-   727	
+> Don't make me wrong, I have no doubt we can handle this in the type
+> system, but given the design work need, won't it make sense that we take
+> baby steps on this? We can first introduce AtomicI32 and AtomicI64 which
+> already have real users, and then if there are some values of generic
+> atomics, we introduce them and have proper discussion on design.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+I don't understand this point, why can't we put in the effort for a good
+design? AFAIK we normally spend considerable time to get the API right
+and I think in this case it would include making it generic.
+
+> To me, it's perfectly fine that Atomic{I32,I64} co-exist with Atomic<T>.
+> What's the downside? A bit specific example would help me understand
+> the real concern here.
+
+I don't like that, why have two ways of doing the same thing? People
+will be confused whether they should use `AtomicI32` vs `Atomic<i32>`...
+
+---
+Cheers,
+Benno
+
