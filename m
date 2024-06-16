@@ -1,135 +1,177 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4A30225CB
-	for <llvm@lists.linux.dev>; Sun, 16 Jun 2024 10:33:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B4939186E44;
+	Sun, 16 Jun 2024 12:25:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718534001; cv=none; b=AS/TVLoi2vEert8bVwOyogwkRYyladOMNPWkmkJEa9s3LPgPFk2jn9PtPYxCJ163q2NTdV14F/f1Nr5aUXki8FZqj9q+794CA/HawWAWvAF+Xn0d/F/dOrScJ832BDkhoO4AQN3yzfve1x1Yoxp2eQRX1B9bUsw/ptoZCwDBOjI=
+	t=1718540720; cv=none; b=OvHwTzSJNEBIn7Zik06XtBK5R3hVY3zdrU/KlM+x+Ce+CJP51LgrpLffa/0lwv8MyTWY1hGM4t3fQzAvcuvjuOvJquGjGM/GjSONKZPaLoASBOp05U01uAA9pyfHR2Ov3VhmzkqT0NbP9rTRXEEh8Wli/wTdvEjtrCDoUVaZd2w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718534001; c=relaxed/simple;
-	bh=E5sZ7P6ktsoPQazxqOxcCYecz/Y67k1sOEP6tDJ37Kw=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=RVuSI73EOh6JA4nbrkNMcsvYnVqb45/NN7hz8iHYmKiGVM30bD7eBSpGFYbBtnvNozg31kq67dy/0UBQiRcmXzjUqVGKlqs7jE1IuU4I3oQz7Y5GfWgFOpGO3RUkzgideJA+egefQ2I20hM/gRWOesPAcJgNv2Ip2/2ykMLDlY0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Yz4IxWjS; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1718540720; c=relaxed/simple;
+	bh=M5AFfRJ2bA1LmBqiKERCcRxvTYpXriTjiy165XQ2Nho=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=kkv3IumA6JllDV/8yTwO8QRfxyBq1WoLN9rZSrvqNxijCsEiE9LFdZpo787rEB+j58o4dzoEfyi6NxbjuYCSWM6NQ84eIp457rMOZ2s9eGsCpHccRL6w3wqv8EWVZ3KwTGUR78zw4p1th+II+h48/gwlijOut02FdGL3uqOvJs4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=XyLVpqKD; arc=none smtp.client-ip=192.198.163.8
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Yz4IxWjS"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1718533998;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=GhlWfCwXgep8HH4DSiRQ0pHnEnYaY9OkWq5xXSEgPig=;
-	b=Yz4IxWjSskfDMsLTJvLuDdTa4qjbFSq1CdNoh3HY3xcH13zqvIr4ZeLGjxctTdYuYfeWHz
-	zRYT7bQTPQZnE9ee4Sbl/IcLXs/6rLrUtQCy1B9joD1LVMklF7p2iw9GDFNA7VxdrdaXNR
-	WoUrPs4OKpksgU1bos6HYCN/MNNoRtQ=
-Received: from mx-prod-mc-02.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-92-Bi7P-tzZPZ28wmH069SiKA-1; Sun,
- 16 Jun 2024 06:33:16 -0400
-X-MC-Unique: Bi7P-tzZPZ28wmH069SiKA-1
-Received: from mx-prod-int-02.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-02.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.15])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-02.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id D811319560A0
-	for <llvm@lists.linux.dev>; Sun, 16 Jun 2024 10:33:15 +0000 (UTC)
-Received: from [172.64.3.44] (unknown [10.30.33.101])
-	by mx-prod-int-02.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 2610D1956087;
-	Sun, 16 Jun 2024 10:33:15 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL (MISSED 11 of 192): Test report for master
- (6.10.0-rc3, mainline.kernel.org-clang, a3e18a54)
-Date: Sun, 16 Jun 2024 10:33:14 -0000
-To: bgoncalv@redhat.com, xzhou@redhat.com, llvm@lists.linux.dev
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="XyLVpqKD"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1718540719; x=1750076719;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=M5AFfRJ2bA1LmBqiKERCcRxvTYpXriTjiy165XQ2Nho=;
+  b=XyLVpqKDJi5Gg3J70Q//9qrOYNViYRVTn7CUxwI3aZeH/wC48UEFpqR5
+   SkThedNTLX38X8br0yqp7l72hR40x9G/i6OTZWxKKzUji9O+eT5vMHVEK
+   e6LvC+g3U3ufB5clrgSz1c3fnhM/t7gJyvBSDT8T/oy9oVopCw2Qdagj5
+   +UPU+ZaDfefGyZvj70ETnTYq10QxCDV95uh6mItkpZZIyZVXjhpbrOW/Z
+   gFTfqVIAfScqxxsUt7Nc68FHBbus1i5Mccyy8OnstB4TAaSE5zzi7XIy6
+   6GGKrFOeyYy3su+WJQFW1g+YdfZ/PfgvVwg0SwZpbDmR3Dyu4DAiSpa4f
+   w==;
+X-CSE-ConnectionGUID: hjKvb8FMQdKv35qZ+wGYpw==
+X-CSE-MsgGUID: 9IxaaPqwSTK0bwIJCa+OVQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11104"; a="32923762"
+X-IronPort-AV: E=Sophos;i="6.08,242,1712646000"; 
+   d="scan'208";a="32923762"
+Received: from fmviesa002.fm.intel.com ([10.60.135.142])
+  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jun 2024 05:25:18 -0700
+X-CSE-ConnectionGUID: A5JLZcmRTP+UEQ/dCV87zA==
+X-CSE-MsgGUID: YRUMEx5LRnmGQdxmc/zyHA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.08,242,1712646000"; 
+   d="scan'208";a="64155462"
+Received: from lkp-server01.sh.intel.com (HELO 68891e0c336b) ([10.239.97.150])
+  by fmviesa002.fm.intel.com with ESMTP; 16 Jun 2024 05:25:15 -0700
+Received: from kbuild by 68891e0c336b with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1sIowb-0002ln-0I;
+	Sun, 16 Jun 2024 12:25:13 +0000
+Date: Sun, 16 Jun 2024 20:24:37 +0800
+From: kernel test robot <lkp@intel.com>
+To: Mario Limonciello <mario.limonciello@amd.com>,
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+	Maxime Ripard <mripard@kernel.org>,
+	Thomas Zimmermann <tzimmermann@suse.de>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
+	"open list:DRM DRIVERS" <dri-devel@lists.freedesktop.org>,
+	open list <linux-kernel@vger.kernel.org>,
+	amd-gfx@lists.freedesktop.org,
+	Mario Limonciello <mario.limonciello@amd.com>,
+	Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+	Chris Bainbridge <chris.bainbridge@gmail.com>
+Subject: Re: [PATCH v3] drm/fb-helper: Detect when lid is closed during
+ initialization
+Message-ID: <202406161923.hGiUV7wr-lkp@intel.com>
+References: <20240613051700.1112-1-mario.limonciello@amd.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.15
-Message-Id: <57692.124061606331600417@us-mta-92.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240613051700.1112-1-mario.limonciello@amd.com>
 
-Hi, we tested your kernel and here are the results:
+Hi Mario,
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: OK
-              Test: FAILED
+kernel test robot noticed the following build errors:
 
+[auto build test ERROR on drm-misc/drm-misc-next]
+[also build test ERROR on linus/master v6.10-rc3 next-20240613]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Kernel information:
-    Commit message: Merge tag 'xfs-6.10-fixes-3' of git://git.kernel.org/pu=
-b/scm/fs/xfs/xfs-linux
+url:    https://github.com/intel-lab-lkp/linux/commits/Mario-Limonciello/drm-fb-helper-Detect-when-lid-is-closed-during-initialization/20240613-132009
+base:   git://anongit.freedesktop.org/drm/drm-misc drm-misc-next
+patch link:    https://lore.kernel.org/r/20240613051700.1112-1-mario.limonciello%40amd.com
+patch subject: [PATCH v3] drm/fb-helper: Detect when lid is closed during initialization
+config: x86_64-buildonly-randconfig-003-20240614 (https://download.01.org/0day-ci/archive/20240616/202406161923.hGiUV7wr-lkp@intel.com/config)
+compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240616/202406161923.hGiUV7wr-lkp@intel.com/reproduce)
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1333818910
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202406161923.hGiUV7wr-lkp@intel.com/
 
-One or more kernel tests failed:
-    Unrecognized or new issues:
-        Reboot test
-              x86_64
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-redhat:1333818910-x86_64-kernel_upt_35
-                   Non-passing ran subtests:
-                       =E2=9D=8C FAIL misc/reboot-test/journalctl-check
-        xfstests - cifsv3.11
-              x86_64 (debug)
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-redhat:1333818910-x86_64-kernel-debug_upt_32
-                   Non-passing ran subtests:
-                       =E2=9D=8C FAIL Panic
+All errors (new ones prefixed by >>, old ones prefixed by <<):
 
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: [rhel-10] xfstests - cifsv3.11 - generic/207 - error in bloc=
-k: expected 4096 bytes, received 0
-            URL: https://issues.redhat.com/browse/RHEL-39974
-            Affected tests:
-                xfstests - cifsv3.11 [x86_64]
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1267
-            Affected tests:
-                selinux-policy: serge-testsuite [ppc64le]
+WARNING: modpost: missing MODULE_DESCRIPTION() in vmlinux.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in arch/x86/events/rapl.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in kernel/locking/test-ww_mutex.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in kernel/rcu/rcutorture.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in kernel/time/time_test.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in mm/kasan/kasan_test.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in mm/kasan/kasan_test_module.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in mm/kfence/kfence_test.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in fs/nls/nls_cp737.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in fs/nls/nls_cp775.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in fs/nls/nls_cp850.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in fs/nls/nls_cp852.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in fs/nls/nls_cp861.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in fs/nls/nls_cp863.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in fs/nls/nls_cp1251.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in fs/nls/nls_ascii.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in fs/nls/nls_iso8859-3.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in fs/nls/nls_iso8859-5.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in fs/nls/nls_iso8859-7.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in fs/nls/nls_iso8859-15.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in fs/nls/nls_koi8-r.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in fs/nls/mac-inuit.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in fs/binfmt_script.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in fs/isofs/isofs.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in security/keys/trusted-keys/trusted.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in lib/kunit/kunit.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in lib/kunit/kunit-example-test.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in lib/math/prime_numbers.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in lib/crypto/libdes.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in lib/test_ubsan.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in lib/asn1_encoder.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/video/backlight/platform_lcd.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/video/fbdev/macmodes.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/clk/clk_test.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/clk/clk-gate_test.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/virtio/virtio.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/virtio/virtio_ring.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/regulator/max20411-regulator.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/char/agp/amd64-agp.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/char/agp/intel-agp.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/char/agp/intel-gtt.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/char/nvram.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/gpu/drm/tests/drm_hdmi_state_helper_test.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/base/regmap/regmap-kunit.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/base/regmap/regmap-ram.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/base/regmap/regmap-raw-ram.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/base/regmap/regmap-sccb.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/dax/device_dax.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/cxl/core/cxl_core.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/cxl/cxl_pci.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/cxl/cxl_port.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/scsi/advansys.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/scsi/atp870u.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/mtd/chips/cfi_util.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/firewire/packet-serdes-test.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/pcmcia/yenta_socket.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/media/tuners/tda9887.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/media/v4l2-core/v4l2-async.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/media/v4l2-core/v4l2-fwnode.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/leds/simple/simatic-ipc-leds.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/platform/x86/siemens/simatic-ipc.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/platform/x86/siemens/simatic-ipc-batt.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/devfreq/governor_performance.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hwmon/mr75203.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/iio/buffer/kfifo_buf.o
+>> ERROR: modpost: "input_unregister_handler" [drivers/gpu/drm/drm_kms_helper.ko] undefined!
+>> ERROR: modpost: "input_register_handler" [drivers/gpu/drm/drm_kms_helper.ko] undefined!
+>> ERROR: modpost: "input_register_handle" [drivers/gpu/drm/drm_kms_helper.ko] undefined!
+>> ERROR: modpost: "input_open_device" [drivers/gpu/drm/drm_kms_helper.ko] undefined!
+>> ERROR: modpost: "input_unregister_handle" [drivers/gpu/drm/drm_kms_helper.ko] undefined!
+>> ERROR: modpost: "input_close_device" [drivers/gpu/drm/drm_kms_helper.ko] undefined!
 
-
-Tests that were not ran because of internal issues:=20
-    Boot test [s390x]
-    CKI/restraint [s390x]
-    machineinfo [s390x]
-    Reboot test [s390x, x86_64 (debug)]
-    SELinux Custom Module Setup [s390x]
-    Storage - blktests - blk - upstream [s390x]
-    Storage - blktests - nvme-tcp - upstream [s390x]
-    Storage - swraid scsi_raid [s390x]
-    stress: stress-ng - cpu-cache [s390x]
-    stress: stress-ng - memory [s390x]
-
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
