@@ -1,112 +1,94 @@
-Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F017632;
-	Sun, 16 Jun 2024 00:51:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=156.67.10.101
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2DEC2DDA3;
+	Sun, 16 Jun 2024 00:52:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718499091; cv=none; b=S0tSP1t7+J600jLxewA9kIaZN5hfN0v8m+3awxJha6i/Bk3aAyIp6hLEAbSx7Ciq5QoTP0yOaMZbx8Z45iBKz9xn42fqc3PvoLNBqSNCqmobUCFgANh2kfZY9WpvCCuvr9muvTXyMAWY9VAdRx3Qrr08WXwT2KMkfiHSxKXI28E=
+	t=1718499129; cv=none; b=W2TWZfAk1Rlv9oymzVZWlUX198aImmjkVajhbacyy3TBTbUX6ek+8+ETBc5j5Xry2u/5jtghaqcJkgDen/EQTJlavQA2eWfd1ZyrhKz7TY6E0kngjEFom8lNEp+/qoHve4hhEdxsBQRgihTwnXAU0b5jgTpyUd+PxfQkBylv/4U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718499091; c=relaxed/simple;
-	bh=N+v/YLdQLp1vQdvfmytEeoQSouaucGro69aA2tJTLyM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=UNIpy/DO0hTobz9IjEpFvzI7092qQreKNIyQdF+tdjPCu+KyKdlcue+aw10R2wryNs/T4oacVGpkVmbNTpv04AvPWBt1aYLSapKxUSYE5gva7jnShpsvafpN9iXN3NeynY3nHvp698D39hhg65A08yywwFdN4FZ8YyZIUbtN2q0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch; spf=pass smtp.mailfrom=lunn.ch; dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b=VtLVoOlx; arc=none smtp.client-ip=156.67.10.101
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lunn.ch
+	s=arc-20240116; t=1718499129; c=relaxed/simple;
+	bh=Ijcw3WXu407Fw08aKLf9PrB+OBdJM8B5pAJf6buZ+d4=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=EQV24r4hSTeFbSbinrDXv8/ugJjpkOiQcBHQ+DcNFc0HIwLY0Z/OXE7pXjPk57WCqkHjOHDq0DqyDd9w/kSWhurYCHg8v1tLMbR6+Kchopl8vxOptOiZFBgo6zwaXUYpodVLIU9otdGMoh+cPmZWV84mnosCsqIPruC0cmnNDWM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=atnkn92G; arc=none smtp.client-ip=192.198.163.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b="VtLVoOlx"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-	s=20171124; h=In-Reply-To:Content-Transfer-Encoding:Content-Disposition:
-	Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:From:
-	Sender:Reply-To:Subject:Date:Message-ID:To:Cc:MIME-Version:Content-Type:
-	Content-Transfer-Encoding:Content-ID:Content-Description:Content-Disposition:
-	In-Reply-To:References; bh=NNUTnA9Gyih8/K0vQFv3C8sKwIbjbeGAKUG47PfmPjI=; b=Vt
-	LVoOlxKt/jIxDpOju0bj1BGfg4y9i/+40GOhfVCmfBbgWiMvAFoShBZIZsTewHSyMLPrOAN+e02dK
-	ZYq9ut3t8OBzITmFMRWBOCUi69JV2txvHNVUwDIuTcVq29brvdLHnLLpVqIrs4Kt5eJFqtfGHJjiN
-	r21Zx+G2JvCQdT4=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-	(envelope-from <andrew@lunn.ch>)
-	id 1sIe72-0009mY-2p; Sun, 16 Jun 2024 02:51:16 +0200
-Date: Sun, 16 Jun 2024 02:51:16 +0200
-From: Andrew Lunn <andrew@lunn.ch>
-To: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Cc: Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-	rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-arch@vger.kernel.org, llvm@lists.linux.dev,
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="atnkn92G"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1718499127; x=1750035127;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=Ijcw3WXu407Fw08aKLf9PrB+OBdJM8B5pAJf6buZ+d4=;
+  b=atnkn92Gm2kofFQSmAtPynjZgnV8Yh6zZz7g4q5Hksh5qFTkTyOAqPUP
+   QUnKZH5S5YvqGE08Dz6Df1C9HkUhrtLuIgJHSWJE3Im33stDSN5iHj+1t
+   93wbVIcmof4Ks5M/KGYYY9+w+e9M50b5XLqDHCblsfuU1Cn8qdMbTRa3n
+   YeRWkpGd36uqaU56X0ZpuFdQDQTWWJo+4dzNjyx87HXb61hnNQBuu/zjQ
+   KqXpL1HpX1w4IeO7GpGIBCdov+rWDKJz0rlN1ECebGyZbnnBra/8fvmtn
+   oL33dM2uhu2PkM2f/anEyzSC4CmcldXIEe2vKEC3exwPi8mzipyHQVDzK
+   Q==;
+X-CSE-ConnectionGUID: ubxK+ZTpQHeW3x1ijPQPyQ==
+X-CSE-MsgGUID: Fl1JOngXQAuGB9m1/3VZ8A==
+X-IronPort-AV: E=McAfee;i="6700,10204,11104"; a="15236850"
+X-IronPort-AV: E=Sophos;i="6.08,241,1712646000"; 
+   d="scan'208";a="15236850"
+Received: from fmviesa009.fm.intel.com ([10.60.135.149])
+  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jun 2024 17:52:07 -0700
+X-CSE-ConnectionGUID: BLzwb2ToQO6BnjX+UPZEtg==
+X-CSE-MsgGUID: b/g8TsmDQl29Fm22siBtcA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.08,241,1712646000"; 
+   d="scan'208";a="40962010"
+Received: from lkp-server01.sh.intel.com (HELO 68891e0c336b) ([10.239.97.150])
+  by fmviesa009.fm.intel.com with ESMTP; 15 Jun 2024 17:52:05 -0700
+Received: from kbuild by 68891e0c336b with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1sIe7n-0000fm-0Q;
+	Sun, 16 Jun 2024 00:52:03 +0000
+Date: Sun, 16 Jun 2024 08:51:06 +0800
+From: kernel test robot <lkp@intel.com>
+To: Danilo Krummrich <dakr@redhat.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
 	Miguel Ojeda <ojeda@kernel.org>,
-	Alex Gaynor <alex.gaynor@gmail.com>,
-	Wedson Almeida Filho <wedsonaf@gmail.com>,
-	=?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
-	Benno Lossin <benno.lossin@proton.me>,
-	Andreas Hindborg <a.hindborg@samsung.com>,
-	Alice Ryhl <aliceryhl@google.com>,
-	Alan Stern <stern@rowland.harvard.edu>,
-	Andrea Parri <parri.andrea@gmail.com>,
-	Will Deacon <will@kernel.org>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Nicholas Piggin <npiggin@gmail.com>,
-	David Howells <dhowells@redhat.com>,
-	Jade Alglave <j.alglave@ucl.ac.uk>,
-	Luc Maranget <luc.maranget@inria.fr>,
-	"Paul E. McKenney" <paulmck@kernel.org>,
-	Akira Yokosawa <akiyks@gmail.com>,
-	Daniel Lustig <dlustig@nvidia.com>,
-	Joel Fernandes <joel@joelfernandes.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	kent.overstreet@gmail.com,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, elver@google.com,
-	Mark Rutland <mark.rutland@arm.com>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-	"H. Peter Anvin" <hpa@zytor.com>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	torvalds@linux-foundation.org, linux-arm-kernel@lists.infradead.org,
-	linux-fsdevel@vger.kernel.org, Trevor Gross <tmgross@umich.edu>,
-	dakr@redhat.com
-Subject: Re: [RFC 2/2] rust: sync: Add atomic support
-Message-ID: <82b88a19-fd8b-4486-b1a5-7d7a03c12d62@lunn.ch>
-References: <20240612223025.1158537-1-boqun.feng@gmail.com>
- <20240612223025.1158537-3-boqun.feng@gmail.com>
- <20240613144432.77711a3a@eugeo>
- <ZmseosxVQXdsQjNB@boqun-archlinux>
- <CANiq72myhoCCWs7j0eZuxfoYMbTez7cPa795T57+gz2Dpd+xAw@mail.gmail.com>
- <ZmtC7h7v1t6XJ6EI@boqun-archlinux>
- <CANiq72=JdqTRPiUfT=-YMTTN+bHeAe2Pba8nERxU3cN8Q-BEOw@mail.gmail.com>
+	Philipp Stanner <pstanner@redhat.com>
+Subject: [rust:staging/rust-device 11/12] error[E0425]: cannot find function
+ `ioremap` in crate `bindings`
+Message-ID: <202406160832.0FU0NbZ6-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CANiq72=JdqTRPiUfT=-YMTTN+bHeAe2Pba8nERxU3cN8Q-BEOw@mail.gmail.com>
 
-On Fri, Jun 14, 2024 at 11:59:58AM +0200, Miguel Ojeda wrote:
-> On Thu, Jun 13, 2024 at 9:05 PM Boqun Feng <boqun.feng@gmail.com> wrote:
-> >
-> > Does this make sense?
-> 
-> Implementation-wise, if you think it is simpler or more clear/elegant
-> to have the extra lower level layer, then that sounds fine.
-> 
-> However, I was mainly talking about what we would eventually expose to
-> users, i.e. do we want to provide `Atomic<T>` to begin with? If yes,
-> then we could make the lower layer private already.
-> 
-> We can defer that extra layer/work if needed even if we go for
-> `Atomic<T>`, but it would be nice to understand if we have consensus
-> for an eventual user-facing API, or if someone has any other opinion
-> or concerns on one vs. the other.
+tree:   https://github.com/Rust-for-Linux/linux staging/rust-device
+head:   6530ecc4ac729a040a955a5e2d13c37d671b6e5c
+commit: 564a5aba91749daa7cd969c482d0ccc49f247395 [11/12] rust: add `io::Io` base type
+config: arm64-randconfig-003-20240616 (https://download.01.org/0day-ci/archive/20240616/202406160832.0FU0NbZ6-lkp@intel.com/config)
+compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project 78ee473784e5ef6f0b19ce4cb111fb6e4d23c6b2)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240616/202406160832.0FU0NbZ6-lkp@intel.com/reproduce)
 
-Since this is fully compatible to LKMM atomic operations, is there a
-use case for C and Rust operating on the same atomic value? And then
-you will need to specify the size, or odd things are likely to happen
-if they disagree on size. With Atomic<T> can we easily say what type
-the underlying implementation uses?
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202406160832.0FU0NbZ6-lkp@intel.com/
 
-     Andrew
+All errors (new ones prefixed by >>):
+
+>> error[E0425]: cannot find function `ioremap` in crate `bindings`
+   --> rust/doctests_kernel_generated.rs:2200:39
+   |
+   2200  |         let addr = unsafe { bindings::ioremap(paddr as _, SIZE.try_into().unwrap()) };
+   |                                       ^^^^^^^ help: a function with a similar name exists: `iounmap`
+   |
+   ::: rust/bindings/bindings_generated.rs:43009:5
+   |
+   43009 |     pub fn iounmap(addr: *mut core::ffi::c_void);
+   |     -------------------------------------------- similarly named function `iounmap` defined here
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
