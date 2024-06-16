@@ -1,85 +1,85 @@
-Received: from mail-yb1-f176.google.com (mail-yb1-f176.google.com [209.85.219.176])
+Received: from mail-oi1-f170.google.com (mail-oi1-f170.google.com [209.85.167.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A081112B93
-	for <llvm@lists.linux.dev>; Sun, 16 Jun 2024 16:30:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 74B9317571
+	for <llvm@lists.linux.dev>; Sun, 16 Jun 2024 17:05:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718555460; cv=none; b=nKj5/xITZpjGRci9VMNktQVUbaULeudYdkbYH0G6dZH5LqjJBbYJwNR/Kuh0b7lL6paLO9fqIaxbsQlFbiqlLTZwWf8AGs9puHacKdD1UkoAV3zax1QSTwy3wdQ3Hbqt427xfjBuy0IObBkOghKD7MIMJ+j1bnucGu84nOmT+2M=
+	t=1718557512; cv=none; b=nNAsq6he2k/g6Mc8Ke68umEj+tJFZnpcFf4gm4wb+Gk3CKVkfOBeCGpZF2fSHnzBhGFrKPBXwNAhm+2GkQ58d14/DBUEdfIZsUfNr6Rn6guNcJ1reVAYOnSw1xRkCuGRZmyWyNPR3HNh/zluzKKShVxcfiYwPuSgxAyPTzm0VRY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718555460; c=relaxed/simple;
-	bh=l7JOGDgsbkUYg7PyRqn7qrLFjhtzle2nD2NUpBjh/lQ=;
+	s=arc-20240116; t=1718557512; c=relaxed/simple;
+	bh=RIvx9kOHWKLvcoJfK4R0q0IiIfjt7q/a7nOFuOC5niM=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Ta1gUnwOAbc/ppy2jqiSSZmADcWBhb0f8iYtJSafnP0KTbFlwB26M/YTI4JJ2TTQ2y2lmMu26xlwDfl0J2X7BkDbptMufkMur1M3cXg2f9rMsBv3kOrpHp4UkEtUbRwu6vEnFK2Tgy8vDAV7QlCvNKqh9neEkF96PKYmnBvJ/ik=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Cf6EjlBz; arc=none smtp.client-ip=209.85.219.176
+	 Content-Type:Content-Disposition:In-Reply-To; b=h7OXNYFCH+qYeqfWjubimW3/EM8wxFpC1EyR694XgYeEfjwUnoA1KZO75go+BQBE8EmiGAyQla3Sb4rQM51ASjxZoUoOZ8zcYQvZeo/CffCZhLr8yPoj7L3HPF0Nilndqh7KJPGWBVWj+mvMnbNoikjd0qmSIvD0ndjDecr/1t8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fltwJKu8; arc=none smtp.client-ip=209.85.167.170
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Cf6EjlBz"
-Received: by mail-yb1-f176.google.com with SMTP id 3f1490d57ef6-dfab4779d95so3636371276.0
-        for <llvm@lists.linux.dev>; Sun, 16 Jun 2024 09:30:58 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fltwJKu8"
+Received: by mail-oi1-f170.google.com with SMTP id 5614622812f47-3d23a0a32afso2132742b6e.3
+        for <llvm@lists.linux.dev>; Sun, 16 Jun 2024 10:05:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1718555457; x=1719160257; darn=lists.linux.dev;
+        d=gmail.com; s=20230601; t=1718557510; x=1719162310; darn=lists.linux.dev;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:feedback-id:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=1u4eH5dugHh0yA2cMSq+DYOozUbC6STVml/uLjhxZuc=;
-        b=Cf6EjlBzvL6gS1hMeZS+HEhY78aWb2NGu5GI7Cszd03ZILveXddU8pV9aOx/F3aOzT
-         +ae3X7w3/v9lE7YDSr+zq2LgJuaMEyZIXvbqysPS3p4+re8lyjBukyXzJYw+HVXpyDeK
-         pJCvDl1uYgHpbhjv6a+dY/UXZVDqN3AHRuvV9oW4u/UpERTHVQIG6z+w15re5tcGnkPP
-         qtcZLetvrOiZaBK8iNO/EvL/Ge+7bLbDkDLtz3QSpheNEhaqGeAhg+LF/1w4fMjvNyvc
-         7j7igIrtVkcnBtoaRbmxhKMXjNJfSQLtNYuA7q1qrZulM8eXxT24dnAytA4fAeaAS/xz
-         eVkw==
+        bh=Pb/VuEkpep0deG9cMLgNvTgMKIQq7qL3KwU1FP8n8Zw=;
+        b=fltwJKu83dxG8yAypTn69n2Nw6MtRfAEGzV3pZIk5N1niu4hPWUmzwfzmGoGDM+naF
+         zte0o2jZLDWLWcWPsDGaHTTlnEosv61WTT2ybzWjLc7/pOsVtEHUnvc3k4bsbD8Ru+QZ
+         4WwLy1XLiy/R3RvnqtMK6WiwV/OQ7TKeGK+Sr2Gf9NHvvKq+eQY2ANhRVF87rWUViTsA
+         iuo65az7/bS87zlhoiBLxNDIBrtBQ9OwyUr986R8lOAU/5KFamZTCNOCcFQV1LKhWNJ7
+         zS3hOlQL0sG4UBGAGEttoFeBOr8Lcha+DnTlWJvSSZxzbkh/NEBhZcngEAjeOD9nsvlO
+         62Lw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1718555457; x=1719160257;
+        d=1e100.net; s=20230601; t=1718557510; x=1719162310;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:feedback-id:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=1u4eH5dugHh0yA2cMSq+DYOozUbC6STVml/uLjhxZuc=;
-        b=TZkxSirUjcwDnguEEFRS/VrsWknHSJ+rgNwbSwxgF0uMd1SO2CQfSLXpxFMDxSSkrY
-         CeJUfE3FctCfd8WOpXc6dl94slv2Z1sTlrUPayIGcpeDx60aIz1oLrHiWzML/uaHU3Ab
-         aIMsyj2gGKXIl3WGmQ8m+RFXUn/2nxUryxc5TICWVIausR0o5lDQ6wADV6fIHCcTmP+i
-         m2jY2t2W13pCS2FDqN3KoUWlOhR+Io28uPGABEFusqsrQILPSc486Mnh17TIFZZeooJY
-         KnWW4sd9Z0PmnlB0ZGwPxd/Rppa9yqKB97XaCdK2Q9hWoa5pc9k2bbeQlRCuKM1vVllu
-         bZ3Q==
-X-Forwarded-Encrypted: i=1; AJvYcCWyYzP5etZJj1OSsRXoceLq058JtBBkPB6wfKDIVGRLC3WEAPl5JcHfZ7jCYsdTpzggK55LFomma1tHW10Zxx3VpoVxRw==
-X-Gm-Message-State: AOJu0YzRkarhijeTRo6j9zTn2Dz/oStq2Fw4m/nnzrZD825ziH8gh5dv
-	9B3mQ9weEzGST/7u9vrRmo87nGiCVe3vAVavFIAigGwjCk+mwKLt
-X-Google-Smtp-Source: AGHT+IHLrkBz2GU7uiilBicmeb7dfbdnfSLCgOSqhUBo77rGvX0na2iuTCcvozdmQkE3oUG8YFK8KQ==
-X-Received: by 2002:a25:6b4a:0:b0:dff:34dd:bc3f with SMTP id 3f1490d57ef6-dff34ddbfb9mr2662474276.19.1718555457407;
-        Sun, 16 Jun 2024 09:30:57 -0700 (PDT)
+        bh=Pb/VuEkpep0deG9cMLgNvTgMKIQq7qL3KwU1FP8n8Zw=;
+        b=HtRu6u4qFFd6Khj1zaTpl6FzUc2K/zGG2ZaNXpDHapsreEIu1SOvx7CJ28AxHqp5v0
+         0vR8GEjCR320N54c2huFGWTu+hRCwsYvirsmFYLlyduM4Oyl0n1T/Vxr8vfUqSgGyTbS
+         DGXhDY8YPAWBPYzKYn92lezw+pzWpJfZS0uCW3W4NhWpZvuwuduzMG7Nn3nVhq0/Mj5A
+         wFDIm9SOvhWFXPAzwHnZcOZtd30/cgEZB02nZRvZyowWx8H5MrlE4PhCx35JFmyaaocq
+         qoIRSwoq/xYeEwqVTW6E8Ovl7+S4uRiBRmXS6piczMsJwZEvRph/qcCeVmvmXRdmwM+y
+         DZ+w==
+X-Forwarded-Encrypted: i=1; AJvYcCWHQ/CmSRcDqOoK1WwZru7FseGs0HeCs3TQJVI+EiKTzh9pKDPLoTs26ttMhJDrHoICnouMB2oWT9NpaJb6Tbkp+0jxag==
+X-Gm-Message-State: AOJu0YxdrKqtHHHWb5FdFKrjbZxH7WvUOsc8AQ61fFblAEtJGiOW237h
+	eYq/RhUyHOMwCPxBGvRu/RKO/8ml4GykniGigBxxbrrBIT9EDIac
+X-Google-Smtp-Source: AGHT+IGelQ5mYwaNQtvvsfM75dkmU6tbIL7wNO/AXelpy/8mWu1xuPwyHTXC3de/DOySHWI05Gx5qQ==
+X-Received: by 2002:a05:6808:1520:b0:3d2:2356:d273 with SMTP id 5614622812f47-3d24e8a9973mr10166314b6e.6.1718557510442;
+        Sun, 16 Jun 2024 10:05:10 -0700 (PDT)
 Received: from fauth2-smtp.messagingengine.com (fauth2-smtp.messagingengine.com. [103.168.172.201])
-        by smtp.gmail.com with ESMTPSA id d75a77b69052e-4435c59ecacsm10342021cf.79.2024.06.16.09.30.56
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-798aaedc360sm354994185a.33.2024.06.16.10.05.09
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 16 Jun 2024 09:30:56 -0700 (PDT)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-	by mailfauth.nyi.internal (Postfix) with ESMTP id C513D1200043;
-	Sun, 16 Jun 2024 12:30:55 -0400 (EDT)
+        Sun, 16 Jun 2024 10:05:10 -0700 (PDT)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+	by mailfauth.nyi.internal (Postfix) with ESMTP id F3B401200043;
+	Sun, 16 Jun 2024 13:05:08 -0400 (EDT)
 Received: from mailfrontend1 ([10.202.2.162])
-  by compute6.internal (MEProxy); Sun, 16 Jun 2024 12:30:55 -0400
-X-ME-Sender: <xms:PxNvZoMssICeArUvFENGho4TiyJ7WbBULErVblU7pXsEDgLGvaaaOg>
-    <xme:PxNvZu_Buv2fBzusasmqoDbfLjDXhZZdz-sKNLYrj8KXgDRr_auFo7QVPolGSiXXA
-    9xzKfR2sMKJ-ZGb0A>
-X-ME-Received: <xmr:PxNvZvSkddTBeVtWijHXSJtFKCZDdwTq680S0YcMag6avjkZyrV1RLD8Ng>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvledrfedvfedguddtvdcutefuodetggdotefrod
+  by compute5.internal (MEProxy); Sun, 16 Jun 2024 13:05:09 -0400
+X-ME-Sender: <xms:RBtvZj2OaSyEI2y2V9-SV8zns7pXtwAuifBua7R-qHZJIEnPe2vrag>
+    <xme:RBtvZiF67gwxLmmCwKTmfYcWn3G0RadywiVzA6IV6wWYsLCfpw5McAa_d4fWSaM7r
+    nBI0EETouif78uJwA>
+X-ME-Received: <xmr:RBtvZj7-D-81dAgltMEDzAkUxvpGg7h9V-HW_LOEYutBUzCFu1SXJIQ8UQ>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvledrfedvfedguddtlecutefuodetggdotefrod
     ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
     necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
     enucfjughrpeffhffvvefukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpeeuohhq
     uhhnucfhvghnghcuoegsohhquhhnrdhfvghnghesghhmrghilhdrtghomheqnecuggftrf
-    grthhtvghrnhephfetvdfgtdeukedvkeeiteeiteejieehvdetheduudejvdektdekfeeg
-    vddvhedtnecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvghrufhiii
-    gvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegsohhquhhnodhmvghsmhhtphgruhht
-    hhhpvghrshhonhgrlhhithihqdeiledvgeehtdeigedqudejjeekheehhedvqdgsohhquh
-    hnrdhfvghngheppehgmhgrihhlrdgtohhmsehfihigmhgvrdhnrghmvg
-X-ME-Proxy: <xmx:PxNvZgvgHRbYa5ZR_zr0B_23WfKp_WiuK7I9DQEkJZ2glUyrsyPWBA>
-    <xmx:PxNvZgcLapK6DHBGVR3wiAIrNCyMkvVvMVOXyqVLOupsB-KtsNVjmQ>
-    <xmx:PxNvZk2YaVqlreNnwIjTGxItIRHaC9WtzA1_sKanhyMeh1nlE1MEuw>
-    <xmx:PxNvZk-YZP1xoN6s7HK-P6OAy1832ZoZnha1GSZAVfU54OdHdszNrA>
-    <xmx:PxNvZn-gMDhzABzV3_Di0MWxp3xrHFVit02ug3RBmjOZqf65o6t0EiwW>
+    grthhtvghrnhephedugfduffffteeutddvheeuveelvdfhleelieevtdeguefhgeeuveei
+    udffiedvnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomh
+    epsghoqhhunhdomhgvshhmthhprghuthhhphgvrhhsohhnrghlihhthidqieelvdeghedt
+    ieegqddujeejkeehheehvddqsghoqhhunhdrfhgvnhhgpeepghhmrghilhdrtghomhesfh
+    higihmvgdrnhgrmhgv
+X-ME-Proxy: <xmx:RBtvZo1gRpIqhEQGdujZa859eZs3naawX8BSbi2KvwkOmKC4fwgdkg>
+    <xmx:RBtvZmGO9Qbn7U4XLSTouWlILV5JfyISsOlJuEZ2Mj4_O4A4g0iVJg>
+    <xmx:RBtvZp9hy3T4Q-uXgqlbb3h_q3dCAX1_n3jZKg8eg6dR6MQ6nbKENQ>
+    <xmx:RBtvZjn8fscW1pBdQVrMgRmOKdBhTcFGgzwXfwGh3MPVaIFWqAbavw>
+    <xmx:RBtvZiFn6QKs4Xn-sXl847Km0MmKF90_4OfR1iIggUg_yS6i662ClvYs>
 Feedback-ID: iad51458e:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sun,
- 16 Jun 2024 12:30:54 -0400 (EDT)
-Date: Sun, 16 Jun 2024 09:30:53 -0700
+ 16 Jun 2024 13:05:08 -0400 (EDT)
+Date: Sun, 16 Jun 2024 10:05:06 -0700
 From: Boqun Feng <boqun.feng@gmail.com>
 To: Benno Lossin <benno.lossin@proton.me>
 Cc: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>,
@@ -111,17 +111,17 @@ Cc: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>,
  linux-arm-kernel@lists.infradead.org,	linux-fsdevel@vger.kernel.org,
  Trevor Gross <tmgross@umich.edu>,	dakr@redhat.com
 Subject: Re: [RFC 2/2] rust: sync: Add atomic support
-Message-ID: <Zm8TPRK-h2mDUX0b@Boquns-Mac-mini.home>
+Message-ID: <Zm8bQktx4D-3glG5@Boquns-Mac-mini.home>
 References: <20240612223025.1158537-3-boqun.feng@gmail.com>
+ <CANiq72myhoCCWs7j0eZuxfoYMbTez7cPa795T57+gz2Dpd+xAw@mail.gmail.com>
+ <ZmtC7h7v1t6XJ6EI@boqun-archlinux>
+ <CANiq72=JdqTRPiUfT=-YMTTN+bHeAe2Pba8nERxU3cN8Q-BEOw@mail.gmail.com>
+ <ZmxUxaIwHWnB42h-@Boquns-Mac-mini.home>
  <c1c45a2e-afdf-40a6-9f44-142752368d5e@proton.me>
  <ZmzvVr7lYfR6Dpca@Boquns-Mac-mini.home>
  <b692945b-8fa4-4918-93f6-783fbcde375c@proton.me>
  <Zm4R0XwTpsASpBhx@Boquns-Mac-mini.home>
  <d67aeb8c-3499-4498-aaf9-4ac459c2f747@proton.me>
- <Zm7xySzPJcddF-I_@Boquns-Mac-mini.home>
- <f29cb2fd-651b-4bc5-8055-e3a412192e29@proton.me>
- <Zm8F7ZFnUFJkFGQ3@Boquns-Mac-mini.home>
- <0653b5d5-7a62-4baa-a500-4c110d816ba0@proton.me>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -130,181 +130,20 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <0653b5d5-7a62-4baa-a500-4c110d816ba0@proton.me>
+In-Reply-To: <d67aeb8c-3499-4498-aaf9-4ac459c2f747@proton.me>
 
-On Sun, Jun 16, 2024 at 03:55:12PM +0000, Benno Lossin wrote:
+On Sun, Jun 16, 2024 at 09:46:45AM +0000, Benno Lossin wrote:
 [...]
-> >>
-> >> I don't think that the idea was to "do the design later". I don't even
-> >> know how you would do that, since you need the design to submit a patch.
-> >>
-> > 
-> > Then I might mis-understand Gary? He said:
-> > 
-> > "Can we avoid two types and use a generic `Atomic<T>` and then implement
-> > on `Atomic<i32>` and `Atomic<i64>` instead?"
-> > 
-> > , which means just replace `impl AtomicI32` with `impl Atomic<i32>` to
-> > me.
+> > To me, it's perfectly fine that Atomic{I32,I64} co-exist with Atomic<T>.
+> > What's the downside? A bit specific example would help me understand
+> > the real concern here.
 > 
-> This is a fair interpretation, but what prevents you from merging the
-> impls of functions that can be? I assumed that you would do that
-> automatically.
+> I don't like that, why have two ways of doing the same thing? People
+> will be confused whether they should use `AtomicI32` vs `Atomic<i32>`...
 > 
 
-I think you missed the point, Gary's suggestion at that time sounds
-like: let's impl Atomic<i32> and Atomic<i64> first, and leave rest of
-the work for later, that is a "do the design later" to me.
-
-> >> I can't offer you a complete API description, since that would require
-> >> me writing it up myself. But I would recommend trying to get it to work
-> >> with generics. I got a few other comments:
-> > 
-> > We should work on things that are concrete, right? It's fine that the
-> > design is not complete, and it's fine if you just recommend. But without
-> > a somewhat concrete design (doesn't have to be complete), I cannot be
-> > sure about whether we have the same vision of the future of generic
-> > atomics (see my question to Gary), that's a bit hard for me to try to
-> 
-> Sorry, which question?
-
-	https://lore.kernel.org/rust-for-linux/Zm7_XWe6ciy1yN-h@Boquns-Mac-mini.home/
-
-> Also to be aligned on the vision, I think we should rather talk about
-> the vision and not the design, since the design that we want to have now
-> can be different from the vision. On that note, what do you envision the
-> future of the atomic API?
-> 
-
-Mine is simple, just providing AtomicI32 and AtomicI64 first, since
-there are immediate users right now, and should we learn more needs from
-the users, we get more idea about what a good API is, and we evolve from
-there.
-
-> > work something out (plus I personally don't think it's a good idea, it's
-> > OK to me, but not good). Anyway, I wasn't trying to refuse to do this
-> > just based on personal reasons, but I do need to understand what you are
-> > all proposing, because I don't have one myself.
-> 
-> I went back through the thread and here is what I think your argument
-> against generics is: people should think about size and alignment when
-> using atomics, which is problematic when allowing users to leave the
-> atomic generic.
-> But as I argued before, this is not an issue. Have I overlooked another
-
-You mean you said it's a non-issue but gave me two counteract? If it's
-really a non-issue, you won't need a couneraction, right? In other words
-non-generic atomics do provide some value.
-
-> argument? Because I don't see anything else.
-> 
-> >> - I don't think that we should resort to a script to generate the Rust
-> >>   code since it prevents adding good documentation & examples to the
-> >>   various methods. AFAIU you want to generate the functions from
-> >>   `scripts/atomic/atomics.tbl` to keep it in sync with the C side. I
-> >>   looked at the git log of that file and it hasn't been changed
-> >>   significantly since its inception. I don't think that there is any
-> >>   benefit to generating the functions from that file.
-> > 
-> > I'll leave this to other atomic maintainers.
-> > 
-> >> - most of the documented functions say "See `c_function`", I don't like
-> >>   this, can we either copy the C documentation (I imagine it not
-> >>   changing that often, or is that assumption wrong?) or write our own?
-> > 
-> > You're not wrong. AN in C side, we do have some documentation template
-> > to generate the comments (see scripts/atomic/kerneldoc). But first the
-> > format is for doxygen(I guess?), and second as you just bring up, the
-> > templates are tied with the bash script.
-> 
-> I see a bash script similarly to how Wedson sees proc macros ;)
-> We should try *hard* to avoid them and only use them when there is no
-> other way.
-> 
-
-I will just start with the existing mechanism and try to evolve, whether
-it's a script or proc macro, I don't mind, I want to get the work done
-and most relevant people can understand in the way the they prefer and
-step-by-step, move it to the place I think is the best for the project.
-
-> >> - we should try to use either const generic or normal parameters for the
-> >>   access ordering instead of putting it in the function name.
-> > 
-> > Why is it important? Keeping it in the current way brings the value that
-> > it's not too much different than their C counterparts. Could you explain
-> > a bit the pros and cons on suffix vs const generic approach?
-> 
-> Reduce code duplication, instead of 3 different variants, we can have
-> one. It allows people to build ergonomic APIs that allows the user to
-> decide which synchronization they use under the hood.
-> 
-
-I already mentioned why I think it's good in the current way, I will
-defer it to others on their inputs.
-
-> >> - why do we need both non-return and return variants?
-> >>
-> > 
-> > Historical reason I guess. Plus maybe some architectures have a better
-> > implementation on non-return atomics IIRC.
-> 
-> Could we get some more concrete arguments for why we would need these in
-> rust? If the reason is purely historical, then we shouldn't expose the
-
-Sure. Look like my memory is correct, at least on ARM64 they are
-different instructions (see arch/arm64/include/asm/atomic_lse.h)
-
-non-return atomics on ARM64:
-
-	#define ATOMIC_OP(op, asm_op)						\
-	static __always_inline void						\
-	__lse_atomic_##op(int i, atomic_t *v)					\
-	{									\
-		asm volatile(							\
-		__LSE_PREAMBLE							\
-		"	" #asm_op "	%w[i], %[v]\n"				\
-		: [v] "+Q" (v->counter)						\
-		: [i] "r" (i));							\
-	}
-
-value-return atomics on ARM64:
-
-	#define ATOMIC_FETCH_OP(name, mb, op, asm_op, cl...)			\
-	static __always_inline int						\
-	__lse_atomic_fetch_##op##name(int i, atomic_t *v)			\
-	{									\
-		int old;							\
-										\
-		asm volatile(							\
-		__LSE_PREAMBLE							\
-		"	" #asm_op #mb "	%w[i], %w[old], %[v]"			\
-		: [v] "+Q" (v->counter),					\
-		  [old] "=r" (old)						\
-		: [i] "r" (i)							\
-		: cl);								\
-										\
-		return old;							\
-	}
-
-It may not be easy to see the different instructions from the pasted
-code, but you can find them in the header file, also you could notice
-that the number of operands is different?
-
-> non-return variant IMO. If it is because of performance, then we can
-> only expose them in the respective arches.
-> 
-
-Hmm.. so we ask user to write arch-specific code like:
-
-	pub fn increase_counter(&self) {
-	    #[cfg(CONFIG_ARM64)]
-	    self.counter.inc();
-
-	    #[cfg(CONFIG_X86_64)]
-	    let _ = self.counter.inc_return();
-	}
-
-are you sure it's a good idea?
+BTW, we already have something similar like this in kernel, we have
+SpinLock<T> and Lock<T, SpinLockBackend>, how should we do about this?
 
 Regards,
 Boqun
