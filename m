@@ -1,388 +1,216 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qk1-f174.google.com (mail-qk1-f174.google.com [209.85.222.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 292B81BC4F
-	for <llvm@lists.linux.dev>; Mon, 17 Jun 2024 05:27:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B1DE8DDA6
+	for <llvm@lists.linux.dev>; Mon, 17 Jun 2024 05:36:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718602026; cv=none; b=i1VJk/FjzpZv1qZLsNImxMjJEu6mH1BR7U2/bUxDBVfIpghdqqw0P5PJQPqnfHxlAMiH8J1LBXQodUfY8dsxF1Pjt1IGKelsRQxJpijSzGJGIeQUrcfljeIEPyutApUrH6hu7bBoOIf8UW7wAyM293DbC2KKJIDGthLVAuqk1CY=
+	t=1718602583; cv=none; b=ki9dnYkCxTgLGEjFy7C/thgZwoynHyw6+tv3TpUjx1GgadQA0xOrnOtFB7Vv54V9pa6eyrg9Gtorz8O/rvu+ymgXXA7GcpW4GpeBHrjF27RY/R5VvwWLYSQhli+9AHVmPJ6eeG5meJU5AcMnAOcpnYSJC+7l60XDlmFaOexulHM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718602026; c=relaxed/simple;
-	bh=9PUMDrkYWNIljtNYV2Hf0l2hllwKm1PbdkTuhidxuz8=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ZFhyKobD+QzuTWUaNqP9DrmA+CWLOPvl+oKOkdjyi+dGHVLUUrxasgyf9mtVgr4R4qdDpiYGohZrjX7lPOhgWnXdfquLOw+DvpviVHDEu505BGUBiAtJkjxxMQcHcNFBi5A8HbnBZD83O53sBBh65lzQ/MU2w6hk9fkH8W04918=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Y+C3ejOO; arc=none smtp.client-ip=198.175.65.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1718602583; c=relaxed/simple;
+	bh=qNGJPYfBIO6Qqcf8w5/M6GsWzh6G1g0pb+xXn3QuMW0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=CoNcjoxb247Q2qG4NheJaE7baUYW7hQv55Yza6NG94bB43Pc+EOb4BVamFEEXVx/Q5bWhnuP89OXM3UWv0TTFAQneRH6iSb0cGjHVK9jiDLKB1JPxGHHKMcP+IapvONNkNxb882zH6b6qBs/F7VsoO1ufVWEajxMd7IwvaISr9A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=C2WCB7Hj; arc=none smtp.client-ip=209.85.222.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Y+C3ejOO"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1718602024; x=1750138024;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=9PUMDrkYWNIljtNYV2Hf0l2hllwKm1PbdkTuhidxuz8=;
-  b=Y+C3ejOO8J66Nf8BWvdu0tVXhLzXp9zGY05fjzuT97utK1uTNYtSEK/6
-   U1WsYzNknmNSTzedhsi+ZB4x1UMoT1s2qAfmEDxsKryYcrJo9suMCw3KP
-   iKo2nXytDtIMfsaBe68Vj1OgExnIykYnX+IMX/RAfoGk9GjFJGkRhY3Ez
-   pthhr9+ZbD+B9ELyhePgU1PsOn6QRnCNn6zndn2UQZVGXmH/bU5jp6nET
-   5gj5zubTyf/NybcTL5CDUR9+L5i1GLZRV69XI5ZAOCygYhASh+P0gr2K8
-   JNaaQ6rVk0E31+26cRcBVMdn95K1rQRBu98/EodZAs2yrKYhDIqoI+7qC
-   A==;
-X-CSE-ConnectionGUID: v+YE3HdXR2WmDLF/TVv+KA==
-X-CSE-MsgGUID: 8i4gaLwkQuGBSQqz2ecE1w==
-X-IronPort-AV: E=McAfee;i="6700,10204,11105"; a="19200265"
-X-IronPort-AV: E=Sophos;i="6.08,244,1712646000"; 
-   d="scan'208";a="19200265"
-Received: from fmviesa009.fm.intel.com ([10.60.135.149])
-  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jun 2024 22:27:04 -0700
-X-CSE-ConnectionGUID: YWFH4EBgQJe1K2tab+ffxg==
-X-CSE-MsgGUID: Z0RMN4meTAWIxXZ1dXv6RA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.08,244,1712646000"; 
-   d="scan'208";a="41185777"
-Received: from ahunter6-mobl1.ger.corp.intel.com (HELO [10.0.2.15]) ([10.246.41.28])
-  by fmviesa009-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jun 2024 22:26:59 -0700
-Message-ID: <020779ae-f3f1-4ab0-b45c-4622b199131f@intel.com>
-Date: Mon, 17 Jun 2024 08:26:55 +0300
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="C2WCB7Hj"
+Received: by mail-qk1-f174.google.com with SMTP id af79cd13be357-797a7f9b52eso317637985a.2
+        for <llvm@lists.linux.dev>; Sun, 16 Jun 2024 22:36:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1718602580; x=1719207380; darn=lists.linux.dev;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:feedback-id:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=lJeIgTT6Qh/sxRKpkuk9BR9tYX+tCBNvv142Tf4kLOk=;
+        b=C2WCB7HjG+e2QmJcunJpQXB2qfjqIX4tD65460Q+thCCmlkfXBU8Vbee4ON9ZhEL+H
+         oYsCVFAPcqKk9yw9BQJRqhwTnjbxQwBnjOf58SN9k73L9HMbWShr/iRqC7k3Y8mBnHrn
+         VwOszpAuKUYvAQUSIf6L/oZYWwRUgjFBcWXWR9JZGTV9Ef2BvCy2Ly+lxnVTop/khGn2
+         6g141HSNMPHGtnmat2c2ryFWXyEyWksk31znLqMsELnogS8aP1lU60CAApxOLGkNL+vt
+         f0b6ENEZhtnUlTHS5Nin06j1s/5+T9IOsilCmwzLiESnOtpDQtW0LrRfIEKdq2L6UpVI
+         Folw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1718602580; x=1719207380;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:feedback-id:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=lJeIgTT6Qh/sxRKpkuk9BR9tYX+tCBNvv142Tf4kLOk=;
+        b=S4zrshz5LQD1EbdXcessKZ0yDn8t2JwfJqcNxAmajIZD5GDnJbpqhm4ejIVWlunlRB
+         TUbhJFRaJVPBl9wFxPUBHtr3N1fKkwAx+ydPBT7qTYz/0RA6l7S16HiKm13rlCZWWXgf
+         wUtElH/gU3lNcJNvggMuyVA0uSw6vCi8IUJ4k6A+qgNl8hmnifAjlqUvTQzlmL8kOvoQ
+         GJ523fWdA//sWcBsIewKzKK0oVA0bXRn0QP5DX5WtofZ8cka1+uim8ZqnjI9t7+E5jT9
+         /QdWUyQp4JxXvgKlFGYSO9CdfT9cYfAVmMmgqiaZRvnCRP/ixYZp6mkyc19SAA8mgqL4
+         4Agw==
+X-Forwarded-Encrypted: i=1; AJvYcCXZ79V/93UlIhMt2mOpKbsL6hSlPCSiySbtVVU1DW0mn5hBuGsqCFOtiqLs/vZh7XHLK6DbDHFKaWbOVMEZfglmoh/OCA==
+X-Gm-Message-State: AOJu0YwUzmPCzW7pYv1pTm50hWefHuRQQ84DdySd7CRgslOBZo2hUzv8
+	fDg2+ww2kwgPrbMbQrB/ntr/vPWOMRbL80ZYuxTTcCv21qPh0zFJ
+X-Google-Smtp-Source: AGHT+IHQxDKmzbQN3wDBWu2GUvw9lePhre6ZMLcLvCTUY/3kdj6Q6oqMmjAj+h53BtENoBkKnF5x2Q==
+X-Received: by 2002:a05:620a:1921:b0:797:b67e:e843 with SMTP id af79cd13be357-798d258cf02mr869592085a.48.1718602580414;
+        Sun, 16 Jun 2024 22:36:20 -0700 (PDT)
+Received: from fauth2-smtp.messagingengine.com (fauth2-smtp.messagingengine.com. [103.168.172.201])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-798abe4f35dsm398786285a.122.2024.06.16.22.36.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 16 Jun 2024 22:36:19 -0700 (PDT)
+Received: from compute7.internal (compute7.nyi.internal [10.202.2.48])
+	by mailfauth.nyi.internal (Postfix) with ESMTP id CAEB21200066;
+	Mon, 17 Jun 2024 01:36:18 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute7.internal (MEProxy); Mon, 17 Jun 2024 01:36:18 -0400
+X-ME-Sender: <xms:UstvZg4OKD0D5PdMwUkiymvL5RVxgMkqPDyDc2oI55hL3sxResMhcA>
+    <xme:UstvZh6sjGf--LJ1guqKzRWVGnZUL4raAzsqsRnDe_w0MBAypia_nDlCVa6UOnE-F
+    fd9KZlnRwz8S75bJg>
+X-ME-Received: <xmr:UstvZveUkCBgqxC1AM2WOGv4P7WJRdcihWolYDynT_0R3qfYhm-D3DwSMTsE>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvledrfedvgedgkeduucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvfevuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepuehoqhhu
+    nhcuhfgvnhhguceosghoqhhunhdrfhgvnhhgsehgmhgrihhlrdgtohhmqeenucggtffrrg
+    htthgvrhhnpedtteeuudejhfekffeiudeuvddvheduteejudeiieffhedvhffhffevtefg
+    tdevtdenucffohhmrghinheptghrrghtvghsrdhiohdpghhithhhuhgsrdgtohhmnecuve
+    hluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepsghoqhhunhdo
+    mhgvshhmthhprghuthhhphgvrhhsohhnrghlihhthidqieelvdeghedtieegqddujeejke
+    ehheehvddqsghoqhhunhdrfhgvnhhgpeepghhmrghilhdrtghomhesfhhigihmvgdrnhgr
+    mhgv
+X-ME-Proxy: <xmx:UstvZlLD_I0DnJCopOEhlaBBeJjmGREaYlqiASh8Fv6MO2A9jTY8TQ>
+    <xmx:UstvZkKa9vP5p9jv6p81qfz3AeuwJedYZeAg2weT3j6_n3wo96UYVQ>
+    <xmx:UstvZmyWVWBZ8NH3B4zENjLVmv3YHMyyKgIO89Bohty3LX2JUZfGug>
+    <xmx:UstvZoKlw68_7R3rFxM_YpO3A1mVdjfaLqcy7N8X5yqExmZLq4HidA>
+    <xmx:UstvZjYRifXEzIfcyT5Mjjtnf8ibovnAmPvz4D5yA_GwgcxcQzqLcbcv>
+Feedback-ID: iad51458e:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
+ 17 Jun 2024 01:36:17 -0400 (EDT)
+Date: Sun, 16 Jun 2024 22:36:13 -0700
+From: Boqun Feng <boqun.feng@gmail.com>
+To: Gary Guo <gary@garyguo.net>
+Cc: John Hubbard <jhubbard@nvidia.com>,
+	Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>,
+	rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-arch@vger.kernel.org, llvm@lists.linux.dev,
+	Miguel Ojeda <ojeda@kernel.org>,	Alex Gaynor <alex.gaynor@gmail.com>,
+	Wedson Almeida Filho <wedsonaf@gmail.com>,
+	=?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
+	Benno Lossin <benno.lossin@proton.me>,
+	Andreas Hindborg <a.hindborg@samsung.com>,
+	Alice Ryhl <aliceryhl@google.com>,
+	Alan Stern <stern@rowland.harvard.edu>,
+	Andrea Parri <parri.andrea@gmail.com>,	Will Deacon <will@kernel.org>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Nicholas Piggin <npiggin@gmail.com>,	David Howells <dhowells@redhat.com>,
+	Jade Alglave <j.alglave@ucl.ac.uk>,	Luc Maranget <luc.maranget@inria.fr>,
+	"Paul E. McKenney" <paulmck@kernel.org>,
+	Akira Yokosawa <akiyks@gmail.com>,	Daniel Lustig <dlustig@nvidia.com>,
+	Joel Fernandes <joel@joelfernandes.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,	kent.overstreet@gmail.com,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, elver@google.com,
+	Mark Rutland <mark.rutland@arm.com>,
+	Thomas Gleixner <tglx@linutronix.de>,	Ingo Molnar <mingo@redhat.com>,
+ Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+	"H. Peter Anvin" <hpa@zytor.com>,
+	Catalin Marinas <catalin.marinas@arm.com>,	torvalds@linux-foundation.org,
+ linux-arm-kernel@lists.infradead.org,	linux-fsdevel@vger.kernel.org,
+ Trevor Gross <tmgross@umich.edu>,	dakr@redhat.com
+Subject: Re: [RFC 2/2] rust: sync: Add atomic support
+Message-ID: <Zm_LTXm3wJhcQIwI@Boquns-Mac-mini.home>
+References: <ZmseosxVQXdsQjNB@boqun-archlinux>
+ <CANiq72myhoCCWs7j0eZuxfoYMbTez7cPa795T57+gz2Dpd+xAw@mail.gmail.com>
+ <ZmtC7h7v1t6XJ6EI@boqun-archlinux>
+ <CANiq72=JdqTRPiUfT=-YMTTN+bHeAe2Pba8nERxU3cN8Q-BEOw@mail.gmail.com>
+ <79239550-dd6e-4738-acea-e7df50176487@nvidia.com>
+ <ZmztZd9OJdLnBZs5@Boquns-Mac-mini.home>
+ <c243bef3-e152-462f-be68-91dbf876092b@nvidia.com>
+ <Zmz-338Ad6r4vzM-@Boquns-Mac-mini.home>
+ <20240616155145.54371240.gary@garyguo.net>
+ <Zm7_XWe6ciy1yN-h@Boquns-Mac-mini.home>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 1/4] perf: support specify vdso path in cmdline
-To: Changbin Du <changbin.du@huawei.com>,
- Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>,
- Arnaldo Carvalho de Melo <acme@kernel.org>,
- Namhyung Kim <namhyung@kernel.org>, Nathan Chancellor <nathan@kernel.org>
-Cc: Mark Rutland <mark.rutland@arm.com>,
- Alexander Shishkin <alexander.shishkin@linux.intel.com>,
- Jiri Olsa <jolsa@kernel.org>, Ian Rogers <irogers@google.com>,
- "Liang, Kan" <kan.liang@linux.intel.com>,
- Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling
- <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
- linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
- llvm@lists.linux.dev
-References: <20240615092015.1820362-1-changbin.du@huawei.com>
- <20240615092015.1820362-2-changbin.du@huawei.com>
-Content-Language: en-US
-From: Adrian Hunter <adrian.hunter@intel.com>
-Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
- Business Identity Code: 0357606 - 4, Domiciled in Helsinki
-In-Reply-To: <20240615092015.1820362-2-changbin.du@huawei.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Zm7_XWe6ciy1yN-h@Boquns-Mac-mini.home>
 
-On 15/06/24 12:20, Changbin Du wrote:
-> The vdso dumped from process memory (in buildid-cache) lacks debugging
-> info. To annotate vdso symbols with source lines we need specify a
-> debugging version.
+On Sun, Jun 16, 2024 at 08:06:05AM -0700, Boqun Feng wrote:
+[...]
+> > 
+> > Note that crossbeam's AtomicCell is also generic, and crossbeam is used
+> > by tons of crates. As Miguel mentioned, I think it's very likely that in
+> > the future we want be able to do atomics on new types (e.g. for
+> > seqlocks perhaps). We probably don't need the non-lock-free fallback of
 > 
-> For x86, we can find them from your local build as
-> arch/x86/entry/vdso/vdso{32,64}.so.dbg. Or they may reside in
-> /lib/modules/<version>/vdso/vdso{32,64}.so on Ubuntu. But notice that
-> the buildid has to match.
+> Good, another design bit, thank you!
 > 
-> $ sudo perf record -a
-> $ sudo perf report --objdump=llvm-objdump \
->   --vdso arch/x86/entry/vdso/vdso64.so.dbg,arch/x86/entry/vdso/vdso32.so.dbg
+> What's our overall idea on sub-word types, like Atomic<u8> and
+> Atomic<u16>, do we plan to say no to them, or they could have a limited
+> APIs? IIUC, some operations on them are relatively sub-optimal on some
+> architectures, supporting the same set of API as i32 and i64 is probably
+> a bad idea.
 > 
-> Samples: 17K of event 'cycles:P', 4000 Hz, Event count (approx.): 1760
-> __vdso_clock_gettime  /work/linux-host/arch/x86/entry/vdso/vdso64.so.d
-> Percent│       movq    -48(%rbp),%rsi
->        │       testq   %rax,%rax
->        │     ;               return vread_hvclock();
->        │       movq    %rax,%rdx
->        │     ;               if (unlikely(!vdso_cycles_ok(cycles)))
->        │     ↑ js      eb
->        │     ↑ jmp     74
->        │     ;               ts->tv_sec = vdso_ts->sec;
->   0.02 │147:   leaq    2(%rbx),%rax
->        │       shlq    $4, %rax
->        │       addq    %r10,%rax
->        │     ;               while ((seq = READ_ONCE(vd->seq)) & 1) {
->   9.38 │152:   movl    (%r10),%ecx
+> Another thing in my mind is making `Atomic<T>`
 > 
-> When doing cross platform analysis, we also need specify the vdso path if
-> we are interested in its symbols.
+> 	pub struct Atomic<T: Send + ...> { ... }
+> 
+> so that `Atomic<T>` will always be `Sync`, because quite frankly, an
+> atomic type that cannot `Sync` is pointless.
+> 
 
-If perf can now find the vdso debug info, then why is the parameter needed?
+Also, how do we avoid this issue [1] in kernel?
 
-> 
-> Signed-off-by: Changbin Du <changbin.du@huawei.com>
-> ---
->  tools/perf/builtin-annotate.c |  2 +
->  tools/perf/builtin-c2c.c      |  2 +
->  tools/perf/builtin-inject.c   |  2 +
->  tools/perf/builtin-report.c   |  2 +
->  tools/perf/builtin-script.c   |  2 +
->  tools/perf/builtin-top.c      |  2 +
->  tools/perf/util/disasm.c      |  5 ++-
->  tools/perf/util/symbol.c      | 82 ++++++++++++++++++++++++++++++++++-
->  tools/perf/util/symbol_conf.h |  5 +++
->  9 files changed, 100 insertions(+), 4 deletions(-)
-> 
-> diff --git a/tools/perf/builtin-annotate.c b/tools/perf/builtin-annotate.c
-> index 50d2fb222d48..ff466882065d 100644
-> --- a/tools/perf/builtin-annotate.c
-> +++ b/tools/perf/builtin-annotate.c
-> @@ -742,6 +742,8 @@ int cmd_annotate(int argc, const char **argv)
->  		   "file", "vmlinux pathname"),
->  	OPT_BOOLEAN('m', "modules", &symbol_conf.use_modules,
->  		    "load module symbols - WARNING: use only with -k and LIVE kernel"),
-> +	OPT_CALLBACK(0, "vdso", NULL, "vdso1[,vdso2]", "vdso pathnames",
-> +		     parse_vdso_pathnames),
->  	OPT_BOOLEAN('l', "print-line", &annotate_opts.print_lines,
->  		    "print matching source lines (may be slow)"),
->  	OPT_BOOLEAN('P', "full-paths", &annotate_opts.full_path,
-> diff --git a/tools/perf/builtin-c2c.c b/tools/perf/builtin-c2c.c
-> index c157bd31f2e5..4764f9139661 100644
-> --- a/tools/perf/builtin-c2c.c
-> +++ b/tools/perf/builtin-c2c.c
-> @@ -3018,6 +3018,8 @@ static int perf_c2c__report(int argc, const char **argv)
->  	const struct option options[] = {
->  	OPT_STRING('k', "vmlinux", &symbol_conf.vmlinux_name,
->  		   "file", "vmlinux pathname"),
-> +	OPT_CALLBACK(0, "vdso", NULL, "vdso1[,vdso2]", "vdso pathnames",
-> +		     parse_vdso_pathnames),
->  	OPT_STRING('i', "input", &input_name, "file",
->  		   "the input file to process"),
->  	OPT_INCR('N', "node-info", &c2c.node_info,
-> diff --git a/tools/perf/builtin-inject.c b/tools/perf/builtin-inject.c
-> index a212678d47be..e774e83d0a0f 100644
-> --- a/tools/perf/builtin-inject.c
-> +++ b/tools/perf/builtin-inject.c
-> @@ -2247,6 +2247,8 @@ int cmd_inject(int argc, const char **argv)
->  			    "don't load vmlinux even if found"),
->  		OPT_STRING(0, "kallsyms", &symbol_conf.kallsyms_name, "file",
->  			   "kallsyms pathname"),
-> +		OPT_CALLBACK(0, "vdso", NULL, "vdso1[,vdso2]", "vdso pathnames",
-> +		     parse_vdso_pathnames),
->  		OPT_BOOLEAN('f', "force", &data.force, "don't complain, do it"),
->  		OPT_CALLBACK_OPTARG(0, "itrace", &inject.itrace_synth_opts,
->  				    NULL, "opts", "Instruction Tracing options\n"
-> diff --git a/tools/perf/builtin-report.c b/tools/perf/builtin-report.c
-> index 69618fb0110b..a64b48460dce 100644
-> --- a/tools/perf/builtin-report.c
-> +++ b/tools/perf/builtin-report.c
-> @@ -1324,6 +1324,8 @@ int cmd_report(int argc, const char **argv)
->                      "don't load vmlinux even if found"),
->  	OPT_STRING(0, "kallsyms", &symbol_conf.kallsyms_name,
->  		   "file", "kallsyms pathname"),
-> +	OPT_CALLBACK(0, "vdso", NULL, "vdso1[,vdso2]", "vdso pathnames",
-> +		     parse_vdso_pathnames),
->  	OPT_BOOLEAN('f', "force", &symbol_conf.force, "don't complain, do it"),
->  	OPT_BOOLEAN('m', "modules", &symbol_conf.use_modules,
->  		    "load module symbols - WARNING: use only with -k and LIVE kernel"),
-> diff --git a/tools/perf/builtin-script.c b/tools/perf/builtin-script.c
-> index c16224b1fef3..2e358922a8d1 100644
-> --- a/tools/perf/builtin-script.c
-> +++ b/tools/perf/builtin-script.c
-> @@ -3965,6 +3965,8 @@ int cmd_script(int argc, const char **argv)
->  		   "file", "vmlinux pathname"),
->  	OPT_STRING(0, "kallsyms", &symbol_conf.kallsyms_name,
->  		   "file", "kallsyms pathname"),
-> +	OPT_CALLBACK(0, "vdso", NULL, "vdso1[,vdso2]", "vdso pathnames",
-> +		     parse_vdso_pathnames),
->  	OPT_BOOLEAN('G', "hide-call-graph", &no_callchain,
->  		    "When printing symbols do not display call chain"),
->  	OPT_CALLBACK(0, "symfs", NULL, "directory",
-> diff --git a/tools/perf/builtin-top.c b/tools/perf/builtin-top.c
-> index 1d6aef51c122..a3cce4e76eb9 100644
-> --- a/tools/perf/builtin-top.c
-> +++ b/tools/perf/builtin-top.c
-> @@ -1479,6 +1479,8 @@ int cmd_top(int argc, const char **argv)
->  		   "file", "kallsyms pathname"),
->  	OPT_BOOLEAN('K', "hide_kernel_symbols", &top.hide_kernel_symbols,
->  		    "hide kernel symbols"),
-> +	OPT_CALLBACK(0, "vdso", NULL, "vdso1[,vdso2]", "vdso pathnames",
-> +		     parse_vdso_pathnames),
->  	OPT_CALLBACK('m', "mmap-pages", &opts->mmap_pages, "pages",
->  		     "number of mmap data pages", evlist__parse_mmap_pages),
->  	OPT_INTEGER('r', "realtime", &top.realtime_prio,
-> diff --git a/tools/perf/util/disasm.c b/tools/perf/util/disasm.c
-> index 72aec8f61b94..442e9802a772 100644
-> --- a/tools/perf/util/disasm.c
-> +++ b/tools/perf/util/disasm.c
-> @@ -16,6 +16,7 @@
->  #include "debug.h"
->  #include "disasm.h"
->  #include "dso.h"
-> +#include "vdso.h"
->  #include "env.h"
->  #include "evsel.h"
->  #include "map.h"
-> @@ -1134,7 +1135,7 @@ static int dso__disassemble_filename(struct dso *dso, char *filename, size_t fil
->  		goto fallback;
->  
->  	linkname[len] = '\0';
-> -	if (strstr(linkname, DSO__NAME_KALLSYMS) ||
-> +	if (strstr(linkname, DSO__NAME_KALLSYMS) || strstr(linkname, DSO__NAME_VDSO) ||
->  		access(filename, R_OK)) {
->  fallback:
->  		/*
-> @@ -1142,7 +1143,7 @@ static int dso__disassemble_filename(struct dso *dso, char *filename, size_t fil
->  		 * cache, or is just a kallsyms file, well, lets hope that this
->  		 * DSO is the same as when 'perf record' ran.
->  		 */
-> -		if (dso__kernel(dso) && dso__long_name(dso)[0] == '/')
-> +		if ((dso__kernel(dso) || dso__is_vdso(dso)) && dso__long_name(dso)[0] == '/')
->  			snprintf(filename, filename_size, "%s", dso__long_name(dso));
->  		else
->  			__symbol__join_symfs(filename, filename_size, dso__long_name(dso));
-> diff --git a/tools/perf/util/symbol.c b/tools/perf/util/symbol.c
-> index 9e5940b5bc59..a90c647d37e1 100644
-> --- a/tools/perf/util/symbol.c
-> +++ b/tools/perf/util/symbol.c
-> @@ -19,6 +19,7 @@
->  #include "build-id.h"
->  #include "cap.h"
->  #include "dso.h"
-> +#include "vdso.h"
->  #include "util.h" // lsdir()
->  #include "debug.h"
->  #include "event.h"
-> @@ -44,6 +45,7 @@
->  
->  static int dso__load_kernel_sym(struct dso *dso, struct map *map);
->  static int dso__load_guest_kernel_sym(struct dso *dso, struct map *map);
-> +static int dso__load_vdso_sym(struct dso *dso, struct map *map);
->  static bool symbol__is_idle(const char *name);
->  
->  int vmlinux_path__nr_entries;
-> @@ -1833,6 +1835,12 @@ int dso__load(struct dso *dso, struct map *map)
->  		goto out;
->  	}
->  
-> +	if (dso__is_vdso(dso)) {
-> +		ret = dso__load_vdso_sym(dso, map);
-> +		if (ret > 0)
-> +			goto out;
-> +	}
-> +
->  	dso__set_adjust_symbols(dso, false);
->  
->  	if (perfmap) {
-> @@ -2017,12 +2025,14 @@ int dso__load_vmlinux(struct dso *dso, struct map *map,
->  		dso__set_binary_type(dso, DSO_BINARY_TYPE__VMLINUX);
->  
->  	err = dso__load_sym(dso, map, &ss, &ss, 0);
-> -	symsrc__destroy(&ss);
-> -
->  	if (err > 0) {
->  		dso__set_loaded(dso);
->  		pr_debug("Using %s for symbols\n", symfs_vmlinux);
-> +
-> +		if (symsrc__has_symtab(&ss) && !dso__symsrc_filename(dso))
-> +			dso__set_symsrc_filename(dso, strdup(symfs_vmlinux));
->  	}
-> +	symsrc__destroy(&ss);
->  
->  	return err;
->  }
-> @@ -2349,6 +2359,74 @@ static int vmlinux_path__init(struct perf_env *env)
->  	return -1;
->  }
->  
-> +int parse_vdso_pathnames(const struct option *opt __maybe_unused,
-> +			 const char *arg, int unset __maybe_unused)
-> +{
-> +	char *tmp, *tok, *str = strdup(arg);
-> +	unsigned int i = 0;
-> +
-> +	for (tok = strtok_r(str, ",", &tmp); tok && i < ARRAY_SIZE(symbol_conf.vdso_name);
-> +	     tok = strtok_r(NULL, ",", &tmp)) {
-> +		symbol_conf.vdso_name[i++] = strdup(tok);
-> +	}
-> +
-> +	free(str);
-> +	return 0;
-> +}
-> +
-> +static int dso__load_vdso(struct dso *dso, struct map *map,
-> +			  const char *vdso)
-> +{
-> +	int err = -1;
-> +	struct symsrc ss;
-> +	char symfs_vdso[PATH_MAX];
-> +
-> +	if (vdso[0] == '/')
-> +		snprintf(symfs_vdso, sizeof(symfs_vdso), "%s", vdso);
-> +	else
-> +		symbol__join_symfs(symfs_vdso, vdso);
-> +
-> +	if (symsrc__init(&ss, dso, symfs_vdso, DSO_BINARY_TYPE__SYSTEM_PATH_DSO))
-> +		return -1;
-> +
-> +	/*
-> +	 * dso__load_sym() may copy 'dso' which will result in the copies having
-> +	 * an incorrect long name unless we set it here first.
-> +	 */
-> +	dso__set_long_name(dso, vdso, false);
-> +	dso__set_binary_type(dso, DSO_BINARY_TYPE__SYSTEM_PATH_DSO);
-> +
-> +	err = dso__load_sym(dso, map, &ss, &ss, 0);
-> +	if (err > 0) {
-> +		dso__set_loaded(dso);
-> +		pr_debug("Using %s for %s symbols\n", symfs_vdso, dso__short_name(dso));
-> +
-> +		if (symsrc__has_symtab(&ss) && !dso__symsrc_filename(dso))
-> +			dso__set_symsrc_filename(dso, strdup(symfs_vdso));
-> +	}
-> +	symsrc__destroy(&ss);
-> +
-> +	return err;
-> +}
-> +
-> +static int dso__load_vdso_sym(struct dso *dso, struct map *map)
-> +{
-> +	int ret;
-> +
-> +	if (!dso__is_vdso(dso))
-> +		return -1;
-> +
-> +	for (unsigned int i = 0; i < ARRAY_SIZE(symbol_conf.vdso_name); i++) {
-> +		if (symbol_conf.vdso_name[i] != NULL) {
-> +			ret = dso__load_vdso(dso, map, symbol_conf.vdso_name[i]);
-> +			if (ret > 0)
-> +				return ret;
-> +		}
-> +	}
-> +
-> +	return -1;
-> +}
-> +
->  int setup_list(struct strlist **list, const char *list_str,
->  		      const char *list_name)
->  {
-> diff --git a/tools/perf/util/symbol_conf.h b/tools/perf/util/symbol_conf.h
-> index c114bbceef40..108356e3c981 100644
-> --- a/tools/perf/util/symbol_conf.h
-> +++ b/tools/perf/util/symbol_conf.h
-> @@ -3,6 +3,7 @@
->  #define __PERF_SYMBOL_CONF 1
->  
->  #include <stdbool.h>
-> +#include <subcmd/parse-options.h>
->  
->  struct strlist;
->  struct intlist;
-> @@ -55,6 +56,7 @@ struct symbol_conf {
->  	const char	*default_guest_vmlinux_name,
->  			*default_guest_kallsyms,
->  			*default_guest_modules;
-> +	const char	*vdso_name[2];
->  	const char	*guestmount;
->  	const char	*dso_list_str,
->  			*comm_list_str,
-> @@ -85,4 +87,7 @@ struct symbol_conf {
->  
->  extern struct symbol_conf symbol_conf;
->  
-> +int parse_vdso_pathnames(const struct option *opt __maybe_unused,
-> +			 const char *arg, int unset __maybe_unused);
-> +
->  #endif // __PERF_SYMBOL_CONF
+`atomic_load()` in C is implemented as READ_ONCE() and it's, at most
+time, a volatile read, so the eventual code is:
 
+    let a: (u8, u16) = (1, 2);
+    let b = unsafe { core::ptr::read_volatile::<i32>(&a as *const _ as *const i32) };
+
+I know we probably ignore data race here and treat `read_volatile` as a
+dependency read per LKMM [2]. But this is an using of uninitialized
+data, so it's a bit different.
+
+We can do what https://crates.io/crates/atomic does:
+
+	pub struct Atomic<T: NoUninit + ..> { ... }
+
+, where `NoUinit` means no internal padding bytes, but it loses the
+ability to put a 
+
+	#[repr(u32)]
+	pub enum Foo { .. }
+
+into `Atomic<T>`, right? Which is probably a case you want to support?
+
+Regards,
+Boqun
+
+[1]: https://github.com/crossbeam-rs/crossbeam/issues/748#issuecomment-1133926617
+[2]: tools/memory-model/Documentation/access-marking.txt
+
+> Regards,
+> Boqun
+> 
+> > crossbeam's AtomicCell, but the lock-free subset with newtype support
+> > is desirable.
+> > 
+> > People in general don't use the `atomic` crate because it provides no
+> > additional feature compared to the standard library. But it doesn't
+> > really mean that the standard library's atomic design is good.
+> > 
+> > People decided to use AtomicT and NonZeroT instead of Atomic<T> or
+> > NonZero<T> long time ago, but many now thinks the decision was bad.
+> > Introduction of NonZero<T> is a good example of it. NonZeroT are now
+> > all type aliases of NonZero<T>.
+> > 
+> > I also don't see any downside in using generics. We can provide type
+> > aliases so people can use `AtomicI32` and `AtomicI64` when they want
+> > their code to be compatible with userspace Rust can still do so.
+> > 
+> > `Atomic<i32>` is also just aesthetically better than `AtomicI32` IMO.
+> > When all other types look like `NonZero<i32>`, `Wrapping<i32>`, I don't
+> > think we should have `AtomicI32` just because "it's done this way in
+> > Rust std". Our alloc already deviates a lot from Rust std.
+> > 
+> > Best,
+> > Gary
