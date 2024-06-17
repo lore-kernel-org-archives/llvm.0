@@ -1,107 +1,124 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 963FB1CB317;
-	Mon, 17 Jun 2024 13:24:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B96A197A82;
+	Mon, 17 Jun 2024 13:24:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718630651; cv=none; b=YHysR3L6PWrAK5GjqchCdW3LfnCBObwzfB3WNm4FUC+beodQTdPKjnW7J8eg0PH7kmKGOUV9mfKxIGsBhK7iIttiPhSeDUPgEOaW4KiF3CRe0AiEY+smb0X7Uzn/0f9wJoQCgdUEud7D3BuINcqYFktwsAsCYWhVV4UNUVvbcxQ=
+	t=1718630695; cv=none; b=tRrmTfa2OWj/PqlsGm/jVepelKA3ckDrSYlBWYtHTizYoatNQnN+8/mTCoi6vGx+btXw860AuAbelcjLe56FCBVZYMs0cYZSx32hVjKwexqpmC2ulEtPSbj4nSO/2XvRgmbaTixBhx/IRvgy09YfYEFueEi0E8qhnOybEq6bYJU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718630651; c=relaxed/simple;
-	bh=Ko6WKs9ylk0r3aUSIT4ZiJ7bdYWw11IOSysG9UUFjCI=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=ROkJG5l+ENljT9GOk4q5tDoFrtTUmm0m+a0UmlnE/4V2H3H3mWhm1eGZY12/04z2xuVGayCR1zPl3LcxWxuILPTcISYD2pcsSybvoOPhwt5sycKysRqUtSb3adzHybDcuN8rSUuXFz5ZBZy/IpmTKnCoifurS1Vr6bRIYFnApTQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=tDcp4FK3; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1718630695; c=relaxed/simple;
+	bh=3W7OKXAyhdPAO8/WbYF1gIWUxeS2ZzVMV22aj1YWSPw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=H21BhmQaBnN2tn70XxQ25Y8FmoKz3Nl13pZdLaIiLlYqh+7sJZvbmctSCFJU/Eu4uCrCjDhCJaR36hsMBoj7K1t6VDonk7p+xu2VSQesotoVXbQ+yjD8wZfQKmR3mxYkErLunT0vr0Da0Td1YaBEPxRqaLXTw0Z6+n43mGKj3Lw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=MOOivvcY; arc=none smtp.client-ip=192.198.163.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="tDcp4FK3"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DCDD8C4AF1C;
-	Mon, 17 Jun 2024 13:24:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1718630651;
-	bh=Ko6WKs9ylk0r3aUSIT4ZiJ7bdYWw11IOSysG9UUFjCI=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=tDcp4FK3RCxqYrUItBejA3bpA4kmcj13YO+6aYss/PXFyUa3SkS+7N1jGGiio+lTr
-	 U8ZGtPhLv56mlxWPgyozbqRWcgZ3+5RCB2C/zpopHwhqFvXOYeKqVzk+AtaSt6Tlrn
-	 kIOc1WxHVz5IG+RTbhPAXX4bvc2x5zjTU/KjUt6hQ5+/CSKpmQhcxgIUr8Rj8YczNL
-	 7nREW2fCKug9TKSiFx3MswJj4ZHbdXvc0Ai6nMfX0tAp3CRs7fveesOslcLHQLDAW1
-	 56Yzyo98bQjV+Be51em/xY9vRPu1QgjD0I51wC8v5m2lUPPWgj6pogstsB3uxjM8LA
-	 dSdFvzdgowlfA==
-From: Sasha Levin <sashal@kernel.org>
-To: linux-kernel@vger.kernel.org,
-	stable@vger.kernel.org
-Cc: John Hubbard <jhubbard@nvidia.com>,
-	Edward Liaw <edliaw@google.com>,
-	Davidlohr Bueso <dave@stgolabs.net>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	Sasha Levin <sashal@kernel.org>,
-	tglx@linutronix.de,
-	mingo@redhat.com,
-	shuah@kernel.org,
-	nathan@kernel.org,
-	linux-kselftest@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: [PATCH AUTOSEL 6.6 24/35] selftests/futex: pass _GNU_SOURCE without a value to the compiler
-Date: Mon, 17 Jun 2024 09:22:22 -0400
-Message-ID: <20240617132309.2588101-24-sashal@kernel.org>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20240617132309.2588101-1-sashal@kernel.org>
-References: <20240617132309.2588101-1-sashal@kernel.org>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="MOOivvcY"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1718630694; x=1750166694;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=3W7OKXAyhdPAO8/WbYF1gIWUxeS2ZzVMV22aj1YWSPw=;
+  b=MOOivvcYQUY3oqHCTbuRtvglayhtkHYI9zkY8QrpdtB27syy4duzUME4
+   uwAajMiElokhpzyMeSjN7Q8sddWb3wT+EeNn3rVUjI6C64D9n9P4wy4Iu
+   rukunao0vCaaR2qKpSSLRHzvl/9iB4zHqvZ7yrgtupak4xmod0IvGuFYH
+   o/cab5XVEL1Y+gwhfszLk26jyuqph32z5T9dU/y1RyVk4c/5LwAxXGvMO
+   LcbIUk9QMppJ2brifwUynJTP66x0JHnRpq8oaAesWjG7qS2QXZ5WONs3y
+   /g26dZQR31FWPm4lUhi9SHCOnFXdr9pC3pW5ktzI6z17INoU6pXpVJDu4
+   Q==;
+X-CSE-ConnectionGUID: 7koTjzxhTAWTe+SC8Lgc+A==
+X-CSE-MsgGUID: OMZ9RnfxQC+1WXfRe8Klkw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11105"; a="18372706"
+X-IronPort-AV: E=Sophos;i="6.08,244,1712646000"; 
+   d="scan'208";a="18372706"
+Received: from fmviesa006.fm.intel.com ([10.60.135.146])
+  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jun 2024 06:24:53 -0700
+X-CSE-ConnectionGUID: PPRLjr1UQsmF05dkhgQ1ZA==
+X-CSE-MsgGUID: eC9cEVyMRymH4ArabPUkbg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.08,244,1712646000"; 
+   d="scan'208";a="41072411"
+Received: from lkp-server01.sh.intel.com (HELO 68891e0c336b) ([10.239.97.150])
+  by fmviesa006.fm.intel.com with ESMTP; 17 Jun 2024 06:24:49 -0700
+Received: from kbuild by 68891e0c336b with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1sJCLm-0004KB-34;
+	Mon, 17 Jun 2024 13:24:46 +0000
+Date: Mon, 17 Jun 2024 21:24:20 +0800
+From: kernel test robot <lkp@intel.com>
+To: Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	daniel.sneddon@linux.intel.com, tony.luck@intel.com,
+	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+	linux-perf-users@vger.kernel.org,
+	Josh Poimboeuf <jpoimboe@kernel.org>,
+	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Ricardo Neri <ricardo.neri-calderon@linux.intel.com>,
+	"Liang, Kan" <kan.liang@linux.intel.com>,
+	Andrew Cooper <andrew.cooper3@citrix.com>
+Subject: Re: [PATCH PATCH 1/9] x86/cpu/topology: Add x86_cpu_type to struct
+ cpuinfo_topology
+Message-ID: <202406172104.aOlpCnvb-lkp@intel.com>
+References: <20240617-add-cpu-type-v1-1-b88998c01e76@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-X-stable-base: Linux 6.6.34
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240617-add-cpu-type-v1-1-b88998c01e76@linux.intel.com>
 
-From: John Hubbard <jhubbard@nvidia.com>
+Hi Pawan,
 
-[ Upstream commit cb708ab9f584f159798b60853edcf0c8b67ce295 ]
+kernel test robot noticed the following build errors:
 
-It's slightly better to set _GNU_SOURCE in the source code, but if one
-must do it via the compiler invocation, then the best way to do so is
-this:
+[auto build test ERROR on 83a7eefedc9b56fe7bfeff13b6c7356688ffa670]
 
-    $(CC) -D_GNU_SOURCE=
+url:    https://github.com/intel-lab-lkp/linux/commits/Pawan-Gupta/x86-cpu-topology-Add-x86_cpu_type-to-struct-cpuinfo_topology/20240617-172542
+base:   83a7eefedc9b56fe7bfeff13b6c7356688ffa670
+patch link:    https://lore.kernel.org/r/20240617-add-cpu-type-v1-1-b88998c01e76%40linux.intel.com
+patch subject: [PATCH PATCH 1/9] x86/cpu/topology: Add x86_cpu_type to struct cpuinfo_topology
+config: i386-buildonly-randconfig-004-20240617 (https://download.01.org/0day-ci/archive/20240617/202406172104.aOlpCnvb-lkp@intel.com/config)
+compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240617/202406172104.aOlpCnvb-lkp@intel.com/reproduce)
 
-...because otherwise, if this form is used:
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202406172104.aOlpCnvb-lkp@intel.com/
 
-    $(CC) -D_GNU_SOURCE
+All errors (new ones prefixed by >>):
 
-...then that leads the compiler to set a value, as if you had passed in:
+>> arch/x86/kernel/cpu/topology_common.c:145:21: error: use of undeclared identifier 'X86_CPU_TYPE_UNKNOWN'
+     145 |         c->topo.cpu_type = X86_CPU_TYPE_UNKNOWN;
+         |                            ^
+>> arch/x86/kernel/cpu/topology_common.c:148:41: error: use of undeclared identifier 'X86_CPU_TYPE_INTEL_SHIFT'
+     148 |                 c->topo.cpu_type = cpuid_eax(0x1a) >> X86_CPU_TYPE_INTEL_SHIFT;
+         |                                                       ^
+   2 errors generated.
 
-    $(CC) -D_GNU_SOURCE=1
 
-That, in turn, leads to warnings under both gcc and clang, like this:
+vim +/X86_CPU_TYPE_UNKNOWN +145 arch/x86/kernel/cpu/topology_common.c
 
-    futex_requeue_pi.c:20: warning: "_GNU_SOURCE" redefined
+   142	
+   143	static void topo_set_cpu_type(struct cpuinfo_x86 *c)
+   144	{
+ > 145		c->topo.cpu_type = X86_CPU_TYPE_UNKNOWN;
+   146	
+   147		if (c->x86_vendor == X86_VENDOR_INTEL && cpuid_eax(0) >= 0x1a)
+ > 148			c->topo.cpu_type = cpuid_eax(0x1a) >> X86_CPU_TYPE_INTEL_SHIFT;
+   149	}
+   150	
 
-Fix this by using the "-D_GNU_SOURCE=" form.
-
-Reviewed-by: Edward Liaw <edliaw@google.com>
-Reviewed-by: Davidlohr Bueso <dave@stgolabs.net>
-Signed-off-by: John Hubbard <jhubbard@nvidia.com>
-Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- tools/testing/selftests/futex/functional/Makefile | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/tools/testing/selftests/futex/functional/Makefile b/tools/testing/selftests/futex/functional/Makefile
-index a392d0917b4e5..994fa3468f170 100644
---- a/tools/testing/selftests/futex/functional/Makefile
-+++ b/tools/testing/selftests/futex/functional/Makefile
-@@ -1,6 +1,6 @@
- # SPDX-License-Identifier: GPL-2.0
- INCLUDES := -I../include -I../../ $(KHDR_INCLUDES)
--CFLAGS := $(CFLAGS) -g -O2 -Wall -D_GNU_SOURCE -pthread $(INCLUDES) $(KHDR_INCLUDES)
-+CFLAGS := $(CFLAGS) -g -O2 -Wall -D_GNU_SOURCE= -pthread $(INCLUDES) $(KHDR_INCLUDES)
- LDLIBS := -lpthread -lrt
- 
- LOCAL_HDRS := \
 -- 
-2.43.0
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
