@@ -1,196 +1,208 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2057.outbound.protection.outlook.com [40.107.244.57])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E6162E542;
-	Mon, 17 Jun 2024 20:02:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718654539; cv=none; b=o6ruptZyJjsNEhSfV3iwWJHNJh1Jx+fA0KmkAID2IvFNEaw/XiKNyjQObpK/fuwlqIBJcTbGgJD5/pLF6IOulz9qhSIHwWn/LgVH/zJM9tRG7ZOIUrb+ztC4naAJsj0sechWgWBrBqgBr1NFO8ybaiIjCPNLoxOfdMAlsbBSxHk=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718654539; c=relaxed/simple;
-	bh=ZQg+C16vaQwAiz5ZMEu7M36+6IbshIe39DjBqK4jVDA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=bPJD3LVCBE1IMyBICZ8WzANYY5yciFaKESCHd5bnCtWgwtD4Q4+Tc5rRKKa5CgQ+eEZrACZrUTkPV9qcxIed3dcyCCGRvuwAoYhY06MhmcJvtLO8bJPidUUJ6VaoKnW6QAcBnfJoshuDX4sqVeFZqy6oP2JS/wtXK2iFmizFQ6Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bnaXtYBl; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B593949632
+	for <llvm@lists.linux.dev>; Mon, 17 Jun 2024 20:16:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.244.57
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1718655376; cv=fail; b=Ul6mxGmNMqgOlVE/E7Ng92T+ohKrOEnmqeqEuuXehg74imt0b0QjLcqvv1qkbCZsSK3W7n6j01n6d3r2JDsxOiaw3h5V3UZTqX9gUQH/mLSNViXliuxIT3haw5RvfhFb4idmI+OebFmu4tlrrwbIdBZ/xyu4sjLEjaZ8hB7uJjo=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1718655376; c=relaxed/simple;
+	bh=F0SOc4te4+9IjLL/leDaXaG4JNjYwHpwK2ObItNhHuI=;
+	h=Message-ID:Date:MIME-Version:Subject:From:To:CC:References:
+	 In-Reply-To:Content-Type; b=ggLM2aEts3VT7K83KttW0NKHsTSOj1oNsThTLImhFLMgPa7OM0PoHli7zg+Shy/xGyDfBo5m5E+mMkjtV2Zq3fp5FmmOMwiNr2jhXZdvKZaMy4Swqv1iX540bG0m8x7LRRobqekhr0iZqhqpwTt8DElYs26BWjq4FQ++Jp0BiLc=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=VDUoWc7r; arc=fail smtp.client-ip=40.107.244.57
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bnaXtYBl"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E6A4BC2BD10;
-	Mon, 17 Jun 2024 20:02:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1718654538;
-	bh=ZQg+C16vaQwAiz5ZMEu7M36+6IbshIe39DjBqK4jVDA=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=bnaXtYBlodVw6zPhOSxlLyu9DsCQIshnGe835SlvRgLNYKeVP9ly+sArSHeS34cDo
-	 0yiGSdfwLYrOhfoIhWRHenjLvteOR8y0RLT3325xVv8/hTm9Ei1oJoBc1zKttETkO6
-	 MyNp0QM/d8+UYsucqiJCbtBJcuEI3sDMYOgA50tgg6rR3ikmq2Tt+mPvYQJ+w2s4RJ
-	 p+T4xPsu8uOUsZv0SlD5bON9JPd6spJhREwZ+OvQNrJngsDGKHIzmtp68DGSVYtUtq
-	 4rM9bowL6Hl5UyIBzb/JlCdGfxUZGMcMRtLuwT66FbG4++2fJpmX16yTk7xpMXVbsM
-	 qvhpLPQXS2Gng==
-Date: Mon, 17 Jun 2024 17:02:12 -0300
-From: Arnaldo Carvalho de Melo <acme@kernel.org>
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: dwarves@vger.kernel.org,
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	bpf@vger.kernel.org, Alan Maguire <alan.maguire@oracle.com>,
-	Jiri Olsa <jolsa@kernel.org>, Jan Engelhardt <jengelh@inai.de>,
-	Matthias Schwarzott <zzam@gentoo.org>,
-	Viktor Malik <vmalik@redhat.com>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Jan Alexander Steffens <heftig@archlinux.org>,
-	Domenico Andreoli <cavok@debian.org>,
-	Dominique Leuenberger <dimstar@opensuse.org>,
-	Daniel Xu <dxu@dxuuu.xyz>, Yonghong Song <yonghong.song@linux.dev>,
-	llvm@lists.linux.dev
-Subject: [PATCH/RFT] Re: ANNOUNCE: pahole v1.27 (reproducible builds, BTF
- kfuncs)
-Message-ID: <ZnCWRMfRDMHqSxBb@x1>
-References: <ZmjBHWw-Q5hKBiwA@x1>
- <20240613214019.GA1423015@thelio-3990X>
- <ZnCQ-Psf_WswMk1W@x1>
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="VDUoWc7r"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=exdU8q4Z+8wOa+O0IV4883aGD6VS4f8oJUIMjFA5C7ETovr/DxAmweb1aFLeuD2g0ZjIYHc9DRj9lm/MQML0BXz8+StZwysh9wTm3zDFNfsUzhj4tvODvY5KcXE8n3L+BTitM3QzlOO9aDoso+fzMxDJoKyptI+jBJOqhI2Es0/go8mjp6jMJHiALa3L9cTRqB1x0iQ1hDCQ7civcHsEflzeOiu9bAmnfVWsveHxkYjoIYMts/bY/8A1UOENaUBOAGxJsOn8S88D9wG4LPFg3NlvMfA5XEfYCkBl1c7DqiN5ePoBxAUhCnqi6kY63wOrv6Ux8/TLPkHxHvuTsaunog==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=QfCpajZBwmzPJv7T92Q3BK31OqYuLwBi3bo4SV36yxo=;
+ b=CM/+XVnmUK7mBIgPTixQTVmc2f4v/8NMf5e8l+iJ0QfZQXs+jRhEx+EivL0GFdWGZy7BG+k+33dbvlScaQRbDjBTiBqpf+SNzfzYBys0yxIokmTpNQm1tcYZOnUMem8qka5far9VhejaKdi62l7jGRv7Q0G2maDpUFFEesUoG4RUmv09ghgmAZ6alV2loiaWgqe4Z1XDi/ezQktx553EUtI/KrGyQABAWulAMRjF+I7CIQGMNOHFZfj3En4PWRp/fLOprfx+ZUUjwbva2BtoVs2HVemy4cS8HoYhLtjkyuP03o75V5nFU/TheMlQF0GvAtXH2R7c1nIAqaKAJdsmCw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.117.161) smtp.rcpttodomain=kernel.org smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=QfCpajZBwmzPJv7T92Q3BK31OqYuLwBi3bo4SV36yxo=;
+ b=VDUoWc7r57OgRtqu4EMq6FZwb33XewX52SZ5bIPxU8WdvaCofVdZbuteJyVtaYizETnyiH+m1cFX8aBoWfaycVrUbnCkXhCU1y01clo6BGV4GPm57xeD4UMeNOnoCs54tNZFKIGaJhopOj8qe4e4+Qpi72F0YgJMDgIYiG+NVxwYs5umrvsqmbE6ZDXrshoA4hs85U66UIOWjKiTV9AKtlpvf6aE9KHFQRUwcNt49w4aGeX0oMpts6/rfHfAzTetp53YAjSrHQaV+uLyoPpOowvmbrTWkmOJvaEegIwu8vsuQJ2m3eTtLTVM42dDIkYevWWbRWxpzS6Xi/5JYmF1NA==
+Received: from BN9PR03CA0160.namprd03.prod.outlook.com (2603:10b6:408:f4::15)
+ by PH7PR12MB6979.namprd12.prod.outlook.com (2603:10b6:510:1b9::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7677.30; Mon, 17 Jun
+ 2024 20:16:10 +0000
+Received: from BN1PEPF0000468C.namprd05.prod.outlook.com
+ (2603:10b6:408:f4:cafe::75) by BN9PR03CA0160.outlook.office365.com
+ (2603:10b6:408:f4::15) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7677.31 via Frontend
+ Transport; Mon, 17 Jun 2024 20:16:10 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.161)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.117.161 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.161) by
+ BN1PEPF0000468C.mail.protection.outlook.com (10.167.243.137) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.7677.15 via Frontend Transport; Mon, 17 Jun 2024 20:16:09 +0000
+Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
+ (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.4; Mon, 17 Jun
+ 2024 13:15:50 -0700
+Received: from [10.110.48.28] (10.126.230.35) by rnnvmail201.nvidia.com
+ (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.4; Mon, 17 Jun
+ 2024 13:15:50 -0700
+Message-ID: <e9de90dd-c541-45bf-a364-0e7aaf320314@nvidia.com>
+Date: Mon, 17 Jun 2024 13:15:49 -0700
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+User-Agent: Mozilla Thunderbird
+Subject: Shuah, Andy L: [PATCH v3 0/3] selftests/vDSO: fix clang build errors,
+ and Makefile cleanup
+From: John Hubbard <jhubbard@nvidia.com>
+To: Shuah Khan <shuah@kernel.org>
+CC: "Jason A . Donenfeld" <Jason@zx2c4.com>, Andy Lutomirski
+	<luto@kernel.org>, Mark Brown <broonie@kernel.org>, Vincenzo Frascino
+	<vincenzo.frascino@arm.com>, Colin Ian King <colin.i.king@gmail.com>,
+	Valentin Obst <kernel@valentinobst.de>, <linux-kselftest@vger.kernel.org>,
+	LKML <linux-kernel@vger.kernel.org>, <llvm@lists.linux.dev>, Thomas Gleixner
+	<tglx@linutronix.de>, Carlos Llamas <cmllamas@google.com>
+References: <20240614233105.265009-1-jhubbard@nvidia.com>
+ <102e70cd-3979-4ea5-8df4-d3b2ea01003b@nvidia.com>
+Content-Language: en-US
+In-Reply-To: <102e70cd-3979-4ea5-8df4-d3b2ea01003b@nvidia.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <ZnCQ-Psf_WswMk1W@x1>
+X-ClientProxiedBy: rnnvmail201.nvidia.com (10.129.68.8) To
+ rnnvmail201.nvidia.com (10.129.68.8)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BN1PEPF0000468C:EE_|PH7PR12MB6979:EE_
+X-MS-Office365-Filtering-Correlation-Id: 66c39ee5-c41f-4db0-8efa-08dc8f0a5403
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230037|7416011|376011|1800799021|82310400023|36860700010;
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?eUNTY2Q4K2dJRkJwTlBUbHEzSDcyK3F5Z1h0bGNHakVDMlNQVk1Gckg5bmo3?=
+ =?utf-8?B?a1ZBRGFhUEVYR0s2bHNHYlk5LzRsdUJJUjF3VFJzcTFOL3BlTlkyT09LMi9W?=
+ =?utf-8?B?MHk2UGJZbXhqbG9JcU1QenZ5WCtkbzh1eU12eXRMOHh2ZlJzY3I2NDYwRUhu?=
+ =?utf-8?B?dC9SMFRtZ2ZKRUkxakpDY1NuNHVjVzN0TEhORUh0czdzY3BJTGxyTDI5Ny9Q?=
+ =?utf-8?B?Y3NXbUdtdjdJc3o0Nlh1OUh1S2JHK3FRR1BhTjJIZVVuWGdZeXVaQ3hTSWJE?=
+ =?utf-8?B?elNkMSt6UjdNUTNKOThJZVFSY0JHTy9WY0ZkN09HU0dSTDJybUJwVDFGNFkw?=
+ =?utf-8?B?NWphWWg0TTR3Z01sUVh5Rm1wRjVPR2o0d1Zvd2tuRGg0OXd2V1NYNkNqUkh4?=
+ =?utf-8?B?VmxobzJiTUM5NTYxSkZGS2hjWEd0d1FscnlpdUU2TzBVdXNCcVFBVUNZNXVK?=
+ =?utf-8?B?aytLTmtrTGJQSnlqeHYyekxadEJrNm9HN1NNd05OWWtINEREOFVpbGQ3eVpy?=
+ =?utf-8?B?TXVjVVcwSzI1RDd2dVRpWVBJWEVSWDcxT2R3alFOTmd6c2pHQTlMMkRTUUln?=
+ =?utf-8?B?Qy9VcDRUOXpIZkVVYzBRTHQ2MEtjZkR4d0xLeSt3V3lqZkxCbDJadDZpeERF?=
+ =?utf-8?B?T01URVJTUGpIUURrekxIeEplRDZia2EvdzdVa0xFelcyYTRua1RpOXNsaFZP?=
+ =?utf-8?B?TkUxVmE1TzRUL3JrTmxFUTAvenlTQ0hsYWlkb05lemh0cUJSTGs1RHo0OUg2?=
+ =?utf-8?B?cHFLV0Y0SEZ6VnlHaTQ3cjR4UWw0dFpoRnFxQzl0RzlGUWlDYldhdURuZy9J?=
+ =?utf-8?B?SE1KdFpyZElFTnJCN1pkbnlwckIwcW5keU1FRkJjR2Z4Y25IdjJlVEdlMDlx?=
+ =?utf-8?B?UGZ4ZC9qdUduVCsvMWpYMmpPNXowREN6c3I1V21wSHkvSlRKWWkwUGIxTVdr?=
+ =?utf-8?B?bVAwM1hkeld3SEZueUVMWk9sdHBZZXFsdjZnd2VtZzhGVS9lS2tiendZb3VM?=
+ =?utf-8?B?cHNmUjJxYTl2U0UxTURMOTU3QUNIQnoyNFlLNnVORXRmMDJxc2dBVFNPMTAr?=
+ =?utf-8?B?andrNDgvcVlyVzdQUlNzVkFrUkU0ZjFMZngzRHRtcUsxZFVqelFnODNHdTlX?=
+ =?utf-8?B?WjBKaVc4VTk1WXA1cXhjalQ4V2Yyei9ZRi9VaGhVV3ZuUFJLaXk5T1E4NjNz?=
+ =?utf-8?B?L2h1YTJEaG4yK0I2V3ZRTmpVNXFScXVIdkVmUERHL0t1YWNNVzQwRjJ1bWZq?=
+ =?utf-8?B?SERQeHk3eW9VVUpSdUtHbXpvT1FGQ3dvYXQ3NURSMkYwWFd4eWJnZWhFRzlY?=
+ =?utf-8?B?cnRoZll6Q0h5VFk3eDR5aVRxcExNd0k2aDk0b09WVUo0YzQ3RGhOQklaSnZR?=
+ =?utf-8?B?anRGd0ZubnZ3OXl1TngvdGd4OVF5V0pOMkhsb28ra3orRTVLczJVT2J3R2Rs?=
+ =?utf-8?B?K2xqVWhiWTExUU9QdHdSeXlnK2JzYmZWRmJycnlqK0FVUm1QelNydm5VTjJ6?=
+ =?utf-8?B?WFNEZkRneUozdG5nR1ZLaEM0U3hIYzNSM1N0WUc1MjI1NHg5TWQyZ2xZOWN2?=
+ =?utf-8?B?TXp4MS9WRUN2YXFuYW9JWjJHZzYwTmJ1czRlVkhIT0RxWlRVTWViMExNaXc2?=
+ =?utf-8?B?M0RSWDdJaUFoYWkrQ3V4eDhyTjhxaVp1YjVOU1NNelFzTGYyNmpvNkpxeVph?=
+ =?utf-8?B?cWFEUkhxMGFTUkNub0JtZElEOTR6UDA4by9jUERKS3NMdTB2RVQxVjh5K0FP?=
+ =?utf-8?B?NHpkbFNNT0FhaUpWVXB2VUpIK2NKZFMyZnJHdlJTaGhuT3NNbWVpdE4yVTlV?=
+ =?utf-8?B?WGx2clZjdGY5aitpZlhmU3NCUTVTNFlPRG4zWTZDM2dWL3JreE5RQU5wbzJJ?=
+ =?utf-8?B?dFhpaVc0bXR6STFwcWRhMlgyT21HTDBkK0hvZEtQVTNCeHZPakxPT3JrQ2E2?=
+ =?utf-8?Q?qDM8PdPFlyA=3D?=
+X-Forefront-Antispam-Report:
+	CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230037)(7416011)(376011)(1800799021)(82310400023)(36860700010);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Jun 2024 20:16:09.9700
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 66c39ee5-c41f-4db0-8efa-08dc8f0a5403
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	BN1PEPF0000468C.namprd05.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB6979
 
-On Mon, Jun 17, 2024 at 04:39:40PM -0300, Arnaldo Carvalho de Melo wrote:
-> On Thu, Jun 13, 2024 at 02:40:19PM -0700, Nathan Chancellor wrote:
-> > On Tue, Jun 11, 2024 at 06:26:53PM -0300, Arnaldo Carvalho de Melo wrote:
-> > > 	The v1.27 release of pahole and its friends is out, supporting
-> > > parallel reproducible builds and encoding kernel kfuncs in BTF, allowing
-> > > tools such as bpftrace to enumerate the available kfuncs and obtain its
-> > > function signatures and return types.
-> > 
-> > After commit f632e75 ("dwarf_loader: Add the cu to the cus list early,
-> > remove on LSK_DELETE"), I (and others[1]) notice a crash when running
-> > pahole on modules built with Clang when CONFIG_LTO_CLANG is enabled:
-> > 
-> >   $ curl -LSso .config https://gitlab.archlinux.org/archlinux/packaging/packages/linux/-/raw/main/config
-> > 
-> >   $ scripts/config -d LTO_NONE -e LTO_CLANG_THIN
-> > 
-> >   $ make -skj"$(nproc)" ARCH=x86_64 LLVM=1 olddefconfig vmlinux crypto/cast_common.ko
-> >   make[3]: *** [scripts/Makefile.modfinal:59: crypto/cast_common.ko] Error 139
-> > 
-> > I've isolated this to the following commands using the files available
-> > at [2] (these were built with LLVM 18 but I could reproduce it with LLVM
-> > 17 and LLVM 19, so it appears to impact a number of versions):
-> > 
-> >   $ tar -tf clang-lto-pahole-1.27-crash.tar.zst
-> >   clang-lto-pahole-1.27-crash/
-> >   clang-lto-pahole-1.27-crash/cast_common.mod.o
-> >   clang-lto-pahole-1.27-crash/module.lds
-> >   clang-lto-pahole-1.27-crash/cast_common.o
-> >   clang-lto-pahole-1.27-crash/cast_common.ko.bak
-> >   clang-lto-pahole-1.27-crash/vmlinux
-> >   clang-lto-pahole-1.27-crash/cast_common.ko
-> > 
-> >   $ tar -axf clang-lto-pahole-1.27-crash.tar.zst
-> > 
-> >   $ cd clang-lto-pahole-1.27-crash
-> > 
-> >   $ LLVM_OBJCOPY="llvm-objcopy" pahole-1.26 -J -j --btf_features=encode_force,var,float,enum64,decl_tag,type_tag,optimized_func,consistent_func --lang_exclude=rust --btf_base vmlinux cast_common.ko
-> > 
-> >   $ cp cast_common.ko{.bak,}
-> > 
-> >   $ LLVM_OBJCOPY="llvm-objcopy" pahole-1.27 -J -j --btf_features=encode_force,var,float,enum64,decl_tag,type_tag,optimized_func,consistent_func --lang_exclude=rust --btf_base vmlinux cast_common.ko
-> >   fish: Job 1, '...' terminated by signal SIGSEGV (Address boundary error)
-> > 
-> > If there is any more information I can provide or patches I can test, I
-> > am more than happy to do so.
+On 6/14/24 4:34 PM, John Hubbard wrote:
+> On 6/14/24 4:31 PM, John Hubbard wrote:
+>> Hi,
+>>
+>> Jason A. Donenfeld, I've added you because I ended up looking through
+>> your latest "implement getrandom() in vDSO" series [1], which also
+>> touches this Makefile, so just a heads up about upcoming (minor) merge
+>> conflicts.
 > 
-> I reproduced the problem by just running 'pahole cast_common.ko", so
-> this isn't even related to the BTF parts, its about the DWARF loader,
-> I'm on it, thanks for the detailed report and for providing the files.
+> Belatedly adding Carlos Llamas and Thomas Gleixner to Cc.
+  
+Hi Shuah, Andy, Thomas,
 
-One liner + explanation at the end, with it both DWARF and BTF loaders
-work:
+Patches 2 and 3 fix up the Makefile, and I'm particularly eager to get
+those merged into 6.10, because the existing Makefile is leading people
+astray. See the thread in [2] for an example of that.
 
-⬢[acme@toolbox clang-lto-pahole-1.27-crash]$ pahole -F btf -C task_struct cast_common.ko | tail
-	/* XXX last struct has 1 hole, 1 bit hole */
+As a result, Jason Donenfeld is now waiting for this, for his "implement
+getrandom() in vDSO" series.
 
-	/* size: 11584, cachelines: 181, members: 265 */
-	/* sum members: 11483, holes: 22, sum holes: 85 */
-	/* sum bitfield members: 82 bits, bit holes: 2, sum bit holes: 46 bits */
-	/* member types with holes: 4, total: 6, bit holes: 2, total: 2 */
-	/* paddings: 6, sum paddings: 49 */
-	/* forced alignments: 1, forced holes: 1, sum forced holes: 8 */
-};
+The Makefile is more of a kselftest infrastructure thing in a way, so
+maybe Shuah can pull this in? I'm casting about for ways to move forward.
 
-⬢[acme@toolbox clang-lto-pahole-1.27-crash]$ pahole -F dwarf -C task_struct cast_common.ko | tail
-	/* XXX last struct has 1 hole, 1 bit hole */
+[2] https://lore.kernel.org/13483c92-cac5-4a3a-891f-22eb006c533b@nvidia.com
 
-	/* size: 11584, cachelines: 181, members: 265 */
-	/* sum members: 11483, holes: 22, sum holes: 85 */
-	/* sum bitfield members: 82 bits, bit holes: 2, sum bit holes: 46 bits */
-	/* member types with holes: 4, total: 6, bit holes: 2, total: 2 */
-	/* paddings: 6, sum paddings: 49 */
-	/* forced alignments: 8, forced holes: 1, sum forced holes: 8 */
-};
 
-⬢[acme@toolbox clang-lto-pahole-1.27-crash]$
+thanks,
+-- 
+John Hubbard
+NVIDIA
 
-Also the BTF encoder (that uses the DWARF loader), etc.
+>>
+>> Changes since v2:
+>>
+>> 1. Added two patches, both of which apply solely to the Makefile.
+>> These provide a smaller, cleaner, and more accurate Makefile.
+>>
+>> 2. Added Reviewed-by and Tested-by tags for the original patch, which
+>> fixes all of the clang errors and warnings for this selftest.
+>>
+>> 3. Removed an obsolete blurb from the commit description of the original
+>> patch, now that Valentin Obst LLVM build fix has been merged.
+>>
+>>
+>> [1] https://lore.kernel.org/20240614190646.2081057-1-Jason@zx2c4.com
+>>
+>>
+>> John Hubbard (3):
+>>    selftests/vDSO: fix clang build errors and warnings
+>>    selftests/mm: remove partially duplicated "all:" target in Makefile
+>>    selftests/vDSO: remove duplicate compiler invocations from Makefile
+>>
+>>   tools/testing/selftests/vDSO/Makefile         | 29 ++++++++-----------
+>>   tools/testing/selftests/vDSO/parse_vdso.c     | 16 ++++++----
+>>   .../selftests/vDSO/vdso_standalone_test_x86.c | 18 ++++++++++--
+>>   3 files changed, 39 insertions(+), 24 deletions(-)
+>>
+>>
+>> base-commit: 2ccbdf43d5e758f8493a95252073cf9078a5fea5
+> 
+> thanks,
 
-⬢[acme@toolbox clang-lto-pahole-1.27-crash]$ pahole -j --btf_encode cast_common.ko
-⬢[acme@toolbox clang-lto-pahole-1.27-crash]$ readelf -SW cast_common.ko | grep BTF
-  [30] .BTF              PROGBITS        0000000000000000 0223c9 01172c 00      0   0  1
-⬢[acme@toolbox clang-lto-pahole-1.27-crash]$ pahole -F btf cast_common.ko | wc -l
-4302
-⬢[acme@toolbox clang-lto-pahole-1.27-crash]$ set -o vi
-⬢[acme@toolbox clang-lto-pahole-1.27-crash]$ pahole -F btf cast_common.ko | head
-struct elf32_note {
-	Elf32_Word                 n_namesz;             /*     0     4 */
-	Elf32_Word                 n_descsz;             /*     4     4 */
-	Elf32_Word                 n_type;               /*     8     4 */
 
-	/* size: 12, cachelines: 1, members: 3 */
-	/* last cacheline: 12 bytes */
-};
-struct module {
-	enum module_state          state;                /*     0     4 */
-⬢[acme@toolbox clang-lto-pahole-1.27-crash]$ pahole -F btf cast_common.ko | tail
-	const char  *              mod_name;             /*    24     8 */
-	const char  * *            class_names;          /*    32     8 */
-	const int                  length;               /*    40     4 */
-	const int                  base;                 /*    44     4 */
-	enum class_map_type        map_type;             /*    48     4 */
-
-	/* size: 56, cachelines: 1, members: 7 */
-	/* padding: 4 */
-	/* last cacheline: 56 bytes */
-};
-⬢[acme@toolbox clang-lto-pahole-1.27-crash]$
-
-Can you try with the one liner below? We remove it from the cus list
-unconditionally, and since we alloc space with zalloc/calloc in
-cu__new() and missed initializing that list_head (cu->node) we ended up
-hitting list_del with a zeroed 'struct list_head' :-\
-
-I'll try and get this cast_common.ko checked into a test repo for pahole
-so that this gets regression tested.
-
-Please test this patch so that we see if this is the only problem and
-your kernel build with clang completes successfully.
-
-Thanks,
-
-- Arnaldo
-
-diff --git a/dwarves.c b/dwarves.c
-index 1ec259f50dbd3778..823a01524a12bb37 100644
---- a/dwarves.c
-+++ b/dwarves.c
-@@ -739,6 +739,7 @@ struct cu *cu__new(const char *name, uint8_t addr_size,
- 		cu->dfops	= NULL;
- 		INIT_LIST_HEAD(&cu->tags);
- 		INIT_LIST_HEAD(&cu->tool_list);
-+		INIT_LIST_HEAD(&cu->node);
- 
- 		cu->addr_size = addr_size;
- 		cu->extra_dbg_info = 0;
