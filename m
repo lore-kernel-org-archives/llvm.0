@@ -1,387 +1,388 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0026E1BC4F;
-	Mon, 17 Jun 2024 05:18:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 292B81BC4F
+	for <llvm@lists.linux.dev>; Mon, 17 Jun 2024 05:27:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718601525; cv=none; b=XiHO23W7SYBC4I1KHw0slil951TUpQW6+DPqOHGRyYcc2GYYwTZhUYvo83oBRu8fQArZsxuHBizjmbxPgZowZ5pp1Vp/shfhWOzark1L9+nejcJq8o1IK81OjodksXzM9sQKT/sqaULhC4r4e6ofdr06ISBPVvNsWZec6Z7TZw4=
+	t=1718602026; cv=none; b=i1VJk/FjzpZv1qZLsNImxMjJEu6mH1BR7U2/bUxDBVfIpghdqqw0P5PJQPqnfHxlAMiH8J1LBXQodUfY8dsxF1Pjt1IGKelsRQxJpijSzGJGIeQUrcfljeIEPyutApUrH6hu7bBoOIf8UW7wAyM293DbC2KKJIDGthLVAuqk1CY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718601525; c=relaxed/simple;
-	bh=dqNmKCGW4RKLnspcLEZV+AXUXnHfY22e/SxKquKJBjY=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=X9ye1vrBX5kxx8nWNQTnqY0doZeAPcilbnTiIJYOjY2ROea5BAAgS0dqalUxCmRA1wZvcClppKx7zHMye8fJBHPYnWNT5s2Hi/Os2y9AU4J93mMckXzAReHUbTLe6KLdZ+FxKXLh0h3eW/VmxEB6XOj2yPUikpcspJ97wQInX7c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=n7mkyJEl; arc=none smtp.client-ip=192.198.163.11
+	s=arc-20240116; t=1718602026; c=relaxed/simple;
+	bh=9PUMDrkYWNIljtNYV2Hf0l2hllwKm1PbdkTuhidxuz8=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=ZFhyKobD+QzuTWUaNqP9DrmA+CWLOPvl+oKOkdjyi+dGHVLUUrxasgyf9mtVgr4R4qdDpiYGohZrjX7lPOhgWnXdfquLOw+DvpviVHDEu505BGUBiAtJkjxxMQcHcNFBi5A8HbnBZD83O53sBBh65lzQ/MU2w6hk9fkH8W04918=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Y+C3ejOO; arc=none smtp.client-ip=198.175.65.15
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="n7mkyJEl"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Y+C3ejOO"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1718601523; x=1750137523;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=dqNmKCGW4RKLnspcLEZV+AXUXnHfY22e/SxKquKJBjY=;
-  b=n7mkyJElP3QXi2eiybaFgaHSzclMBpNfxGrBjIs1BbAaZEFueo1X+yz2
-   5C/b+sibDENDoSELAKqvOk3vM0ZFueJY2qR0MVDQQ6/mbSarocfyrDPRc
-   H7yCYZ3otAh6eCNjNM+cLeEu5CK5BxqR7LJU2dIheGmjPRM7DzplzIuxw
-   q514EVdDWlZI5SrDrDy7G/DLexBVspbyt1t3LDZLsROZavEc7wWWco8ez
-   hWSxRackXMwf79Tx8alfAwe9ORb7kStmgZK0aNj7ZXApu3BOOzkadkWTr
-   nYUJ2ZAEMIFwbphAGjPsZLdPYttZ5bpgF6QxvX+3xaqMXLYmAwYdPqwz3
+  t=1718602024; x=1750138024;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=9PUMDrkYWNIljtNYV2Hf0l2hllwKm1PbdkTuhidxuz8=;
+  b=Y+C3ejOO8J66Nf8BWvdu0tVXhLzXp9zGY05fjzuT97utK1uTNYtSEK/6
+   U1WsYzNknmNSTzedhsi+ZB4x1UMoT1s2qAfmEDxsKryYcrJo9suMCw3KP
+   iKo2nXytDtIMfsaBe68Vj1OgExnIykYnX+IMX/RAfoGk9GjFJGkRhY3Ez
+   pthhr9+ZbD+B9ELyhePgU1PsOn6QRnCNn6zndn2UQZVGXmH/bU5jp6nET
+   5gj5zubTyf/NybcTL5CDUR9+L5i1GLZRV69XI5ZAOCygYhASh+P0gr2K8
+   JNaaQ6rVk0E31+26cRcBVMdn95K1rQRBu98/EodZAs2yrKYhDIqoI+7qC
    A==;
-X-CSE-ConnectionGUID: kEwXpHUSQsqEhEmw1oYDag==
-X-CSE-MsgGUID: QWamgHI3Tr6PWPnL8o23PQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11105"; a="26045400"
+X-CSE-ConnectionGUID: v+YE3HdXR2WmDLF/TVv+KA==
+X-CSE-MsgGUID: 8i4gaLwkQuGBSQqz2ecE1w==
+X-IronPort-AV: E=McAfee;i="6700,10204,11105"; a="19200265"
 X-IronPort-AV: E=Sophos;i="6.08,244,1712646000"; 
-   d="scan'208";a="26045400"
-Received: from fmviesa008.fm.intel.com ([10.60.135.148])
-  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jun 2024 22:17:56 -0700
-X-CSE-ConnectionGUID: sSwzKq0pQBSft2v7cpX29g==
-X-CSE-MsgGUID: gBh68YztRlO5EA68BusajQ==
+   d="scan'208";a="19200265"
+Received: from fmviesa009.fm.intel.com ([10.60.135.149])
+  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jun 2024 22:27:04 -0700
+X-CSE-ConnectionGUID: YWFH4EBgQJe1K2tab+ffxg==
+X-CSE-MsgGUID: Z0RMN4meTAWIxXZ1dXv6RA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.08,244,1712646000"; 
-   d="scan'208";a="41019955"
-Received: from lkp-server01.sh.intel.com (HELO 68891e0c336b) ([10.239.97.150])
-  by fmviesa008.fm.intel.com with ESMTP; 16 Jun 2024 22:17:55 -0700
-Received: from kbuild by 68891e0c336b with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1sJ4ka-0003qI-2d;
-	Mon, 17 Jun 2024 05:17:52 +0000
-Date: Mon, 17 Jun 2024 13:17:42 +0800
-From: kernel test robot <lkp@intel.com>
-To: Jeff Layton <jlayton@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [jlayton:mgtime 4/10] fs/inode.c:2623:9: error: invalid output size
- for constraint '=a'
-Message-ID: <202406171358.yIauGf0w-lkp@intel.com>
+   d="scan'208";a="41185777"
+Received: from ahunter6-mobl1.ger.corp.intel.com (HELO [10.0.2.15]) ([10.246.41.28])
+  by fmviesa009-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jun 2024 22:26:59 -0700
+Message-ID: <020779ae-f3f1-4ab0-b45c-4622b199131f@intel.com>
+Date: Mon, 17 Jun 2024 08:26:55 +0300
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 1/4] perf: support specify vdso path in cmdline
+To: Changbin Du <changbin.du@huawei.com>,
+ Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>,
+ Arnaldo Carvalho de Melo <acme@kernel.org>,
+ Namhyung Kim <namhyung@kernel.org>, Nathan Chancellor <nathan@kernel.org>
+Cc: Mark Rutland <mark.rutland@arm.com>,
+ Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+ Jiri Olsa <jolsa@kernel.org>, Ian Rogers <irogers@google.com>,
+ "Liang, Kan" <kan.liang@linux.intel.com>,
+ Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling
+ <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
+ linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+ llvm@lists.linux.dev
+References: <20240615092015.1820362-1-changbin.du@huawei.com>
+ <20240615092015.1820362-2-changbin.du@huawei.com>
+Content-Language: en-US
+From: Adrian Hunter <adrian.hunter@intel.com>
+Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
+ Business Identity Code: 0357606 - 4, Domiciled in Helsinki
+In-Reply-To: <20240615092015.1820362-2-changbin.du@huawei.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jlayton/linux.git mgtime
-head:   0418364991ef20583c19f070a31c0bfd69e6ff2d
-commit: 11d2d363e0caf8bdb9191c0c1c5aa6f37207ccbd [4/10] fs: add infrastructure for multigrain timestamps
-config: um-allnoconfig (https://download.01.org/0day-ci/archive/20240617/202406171358.yIauGf0w-lkp@intel.com/config)
-compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240617/202406171358.yIauGf0w-lkp@intel.com/reproduce)
+On 15/06/24 12:20, Changbin Du wrote:
+> The vdso dumped from process memory (in buildid-cache) lacks debugging
+> info. To annotate vdso symbols with source lines we need specify a
+> debugging version.
+> 
+> For x86, we can find them from your local build as
+> arch/x86/entry/vdso/vdso{32,64}.so.dbg. Or they may reside in
+> /lib/modules/<version>/vdso/vdso{32,64}.so on Ubuntu. But notice that
+> the buildid has to match.
+> 
+> $ sudo perf record -a
+> $ sudo perf report --objdump=llvm-objdump \
+>   --vdso arch/x86/entry/vdso/vdso64.so.dbg,arch/x86/entry/vdso/vdso32.so.dbg
+> 
+> Samples: 17K of event 'cycles:P', 4000 Hz, Event count (approx.): 1760
+> __vdso_clock_gettime  /work/linux-host/arch/x86/entry/vdso/vdso64.so.d
+> Percent│       movq    -48(%rbp),%rsi
+>        │       testq   %rax,%rax
+>        │     ;               return vread_hvclock();
+>        │       movq    %rax,%rdx
+>        │     ;               if (unlikely(!vdso_cycles_ok(cycles)))
+>        │     ↑ js      eb
+>        │     ↑ jmp     74
+>        │     ;               ts->tv_sec = vdso_ts->sec;
+>   0.02 │147:   leaq    2(%rbx),%rax
+>        │       shlq    $4, %rax
+>        │       addq    %r10,%rax
+>        │     ;               while ((seq = READ_ONCE(vd->seq)) & 1) {
+>   9.38 │152:   movl    (%r10),%ecx
+> 
+> When doing cross platform analysis, we also need specify the vdso path if
+> we are interested in its symbols.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202406171358.yIauGf0w-lkp@intel.com/
+If perf can now find the vdso debug info, then why is the parameter needed?
 
-All errors (new ones prefixed by >>):
+> 
+> Signed-off-by: Changbin Du <changbin.du@huawei.com>
+> ---
+>  tools/perf/builtin-annotate.c |  2 +
+>  tools/perf/builtin-c2c.c      |  2 +
+>  tools/perf/builtin-inject.c   |  2 +
+>  tools/perf/builtin-report.c   |  2 +
+>  tools/perf/builtin-script.c   |  2 +
+>  tools/perf/builtin-top.c      |  2 +
+>  tools/perf/util/disasm.c      |  5 ++-
+>  tools/perf/util/symbol.c      | 82 ++++++++++++++++++++++++++++++++++-
+>  tools/perf/util/symbol_conf.h |  5 +++
+>  9 files changed, 100 insertions(+), 4 deletions(-)
+> 
+> diff --git a/tools/perf/builtin-annotate.c b/tools/perf/builtin-annotate.c
+> index 50d2fb222d48..ff466882065d 100644
+> --- a/tools/perf/builtin-annotate.c
+> +++ b/tools/perf/builtin-annotate.c
+> @@ -742,6 +742,8 @@ int cmd_annotate(int argc, const char **argv)
+>  		   "file", "vmlinux pathname"),
+>  	OPT_BOOLEAN('m', "modules", &symbol_conf.use_modules,
+>  		    "load module symbols - WARNING: use only with -k and LIVE kernel"),
+> +	OPT_CALLBACK(0, "vdso", NULL, "vdso1[,vdso2]", "vdso pathnames",
+> +		     parse_vdso_pathnames),
+>  	OPT_BOOLEAN('l', "print-line", &annotate_opts.print_lines,
+>  		    "print matching source lines (may be slow)"),
+>  	OPT_BOOLEAN('P', "full-paths", &annotate_opts.full_path,
+> diff --git a/tools/perf/builtin-c2c.c b/tools/perf/builtin-c2c.c
+> index c157bd31f2e5..4764f9139661 100644
+> --- a/tools/perf/builtin-c2c.c
+> +++ b/tools/perf/builtin-c2c.c
+> @@ -3018,6 +3018,8 @@ static int perf_c2c__report(int argc, const char **argv)
+>  	const struct option options[] = {
+>  	OPT_STRING('k', "vmlinux", &symbol_conf.vmlinux_name,
+>  		   "file", "vmlinux pathname"),
+> +	OPT_CALLBACK(0, "vdso", NULL, "vdso1[,vdso2]", "vdso pathnames",
+> +		     parse_vdso_pathnames),
+>  	OPT_STRING('i', "input", &input_name, "file",
+>  		   "the input file to process"),
+>  	OPT_INCR('N', "node-info", &c2c.node_info,
+> diff --git a/tools/perf/builtin-inject.c b/tools/perf/builtin-inject.c
+> index a212678d47be..e774e83d0a0f 100644
+> --- a/tools/perf/builtin-inject.c
+> +++ b/tools/perf/builtin-inject.c
+> @@ -2247,6 +2247,8 @@ int cmd_inject(int argc, const char **argv)
+>  			    "don't load vmlinux even if found"),
+>  		OPT_STRING(0, "kallsyms", &symbol_conf.kallsyms_name, "file",
+>  			   "kallsyms pathname"),
+> +		OPT_CALLBACK(0, "vdso", NULL, "vdso1[,vdso2]", "vdso pathnames",
+> +		     parse_vdso_pathnames),
+>  		OPT_BOOLEAN('f', "force", &data.force, "don't complain, do it"),
+>  		OPT_CALLBACK_OPTARG(0, "itrace", &inject.itrace_synth_opts,
+>  				    NULL, "opts", "Instruction Tracing options\n"
+> diff --git a/tools/perf/builtin-report.c b/tools/perf/builtin-report.c
+> index 69618fb0110b..a64b48460dce 100644
+> --- a/tools/perf/builtin-report.c
+> +++ b/tools/perf/builtin-report.c
+> @@ -1324,6 +1324,8 @@ int cmd_report(int argc, const char **argv)
+>                      "don't load vmlinux even if found"),
+>  	OPT_STRING(0, "kallsyms", &symbol_conf.kallsyms_name,
+>  		   "file", "kallsyms pathname"),
+> +	OPT_CALLBACK(0, "vdso", NULL, "vdso1[,vdso2]", "vdso pathnames",
+> +		     parse_vdso_pathnames),
+>  	OPT_BOOLEAN('f', "force", &symbol_conf.force, "don't complain, do it"),
+>  	OPT_BOOLEAN('m', "modules", &symbol_conf.use_modules,
+>  		    "load module symbols - WARNING: use only with -k and LIVE kernel"),
+> diff --git a/tools/perf/builtin-script.c b/tools/perf/builtin-script.c
+> index c16224b1fef3..2e358922a8d1 100644
+> --- a/tools/perf/builtin-script.c
+> +++ b/tools/perf/builtin-script.c
+> @@ -3965,6 +3965,8 @@ int cmd_script(int argc, const char **argv)
+>  		   "file", "vmlinux pathname"),
+>  	OPT_STRING(0, "kallsyms", &symbol_conf.kallsyms_name,
+>  		   "file", "kallsyms pathname"),
+> +	OPT_CALLBACK(0, "vdso", NULL, "vdso1[,vdso2]", "vdso pathnames",
+> +		     parse_vdso_pathnames),
+>  	OPT_BOOLEAN('G', "hide-call-graph", &no_callchain,
+>  		    "When printing symbols do not display call chain"),
+>  	OPT_CALLBACK(0, "symfs", NULL, "directory",
+> diff --git a/tools/perf/builtin-top.c b/tools/perf/builtin-top.c
+> index 1d6aef51c122..a3cce4e76eb9 100644
+> --- a/tools/perf/builtin-top.c
+> +++ b/tools/perf/builtin-top.c
+> @@ -1479,6 +1479,8 @@ int cmd_top(int argc, const char **argv)
+>  		   "file", "kallsyms pathname"),
+>  	OPT_BOOLEAN('K', "hide_kernel_symbols", &top.hide_kernel_symbols,
+>  		    "hide kernel symbols"),
+> +	OPT_CALLBACK(0, "vdso", NULL, "vdso1[,vdso2]", "vdso pathnames",
+> +		     parse_vdso_pathnames),
+>  	OPT_CALLBACK('m', "mmap-pages", &opts->mmap_pages, "pages",
+>  		     "number of mmap data pages", evlist__parse_mmap_pages),
+>  	OPT_INTEGER('r', "realtime", &top.realtime_prio,
+> diff --git a/tools/perf/util/disasm.c b/tools/perf/util/disasm.c
+> index 72aec8f61b94..442e9802a772 100644
+> --- a/tools/perf/util/disasm.c
+> +++ b/tools/perf/util/disasm.c
+> @@ -16,6 +16,7 @@
+>  #include "debug.h"
+>  #include "disasm.h"
+>  #include "dso.h"
+> +#include "vdso.h"
+>  #include "env.h"
+>  #include "evsel.h"
+>  #include "map.h"
+> @@ -1134,7 +1135,7 @@ static int dso__disassemble_filename(struct dso *dso, char *filename, size_t fil
+>  		goto fallback;
+>  
+>  	linkname[len] = '\0';
+> -	if (strstr(linkname, DSO__NAME_KALLSYMS) ||
+> +	if (strstr(linkname, DSO__NAME_KALLSYMS) || strstr(linkname, DSO__NAME_VDSO) ||
+>  		access(filename, R_OK)) {
+>  fallback:
+>  		/*
+> @@ -1142,7 +1143,7 @@ static int dso__disassemble_filename(struct dso *dso, char *filename, size_t fil
+>  		 * cache, or is just a kallsyms file, well, lets hope that this
+>  		 * DSO is the same as when 'perf record' ran.
+>  		 */
+> -		if (dso__kernel(dso) && dso__long_name(dso)[0] == '/')
+> +		if ((dso__kernel(dso) || dso__is_vdso(dso)) && dso__long_name(dso)[0] == '/')
+>  			snprintf(filename, filename_size, "%s", dso__long_name(dso));
+>  		else
+>  			__symbol__join_symfs(filename, filename_size, dso__long_name(dso));
+> diff --git a/tools/perf/util/symbol.c b/tools/perf/util/symbol.c
+> index 9e5940b5bc59..a90c647d37e1 100644
+> --- a/tools/perf/util/symbol.c
+> +++ b/tools/perf/util/symbol.c
+> @@ -19,6 +19,7 @@
+>  #include "build-id.h"
+>  #include "cap.h"
+>  #include "dso.h"
+> +#include "vdso.h"
+>  #include "util.h" // lsdir()
+>  #include "debug.h"
+>  #include "event.h"
+> @@ -44,6 +45,7 @@
+>  
+>  static int dso__load_kernel_sym(struct dso *dso, struct map *map);
+>  static int dso__load_guest_kernel_sym(struct dso *dso, struct map *map);
+> +static int dso__load_vdso_sym(struct dso *dso, struct map *map);
+>  static bool symbol__is_idle(const char *name);
+>  
+>  int vmlinux_path__nr_entries;
+> @@ -1833,6 +1835,12 @@ int dso__load(struct dso *dso, struct map *map)
+>  		goto out;
+>  	}
+>  
+> +	if (dso__is_vdso(dso)) {
+> +		ret = dso__load_vdso_sym(dso, map);
+> +		if (ret > 0)
+> +			goto out;
+> +	}
+> +
+>  	dso__set_adjust_symbols(dso, false);
+>  
+>  	if (perfmap) {
+> @@ -2017,12 +2025,14 @@ int dso__load_vmlinux(struct dso *dso, struct map *map,
+>  		dso__set_binary_type(dso, DSO_BINARY_TYPE__VMLINUX);
+>  
+>  	err = dso__load_sym(dso, map, &ss, &ss, 0);
+> -	symsrc__destroy(&ss);
+> -
+>  	if (err > 0) {
+>  		dso__set_loaded(dso);
+>  		pr_debug("Using %s for symbols\n", symfs_vmlinux);
+> +
+> +		if (symsrc__has_symtab(&ss) && !dso__symsrc_filename(dso))
+> +			dso__set_symsrc_filename(dso, strdup(symfs_vmlinux));
+>  	}
+> +	symsrc__destroy(&ss);
+>  
+>  	return err;
+>  }
+> @@ -2349,6 +2359,74 @@ static int vmlinux_path__init(struct perf_env *env)
+>  	return -1;
+>  }
+>  
+> +int parse_vdso_pathnames(const struct option *opt __maybe_unused,
+> +			 const char *arg, int unset __maybe_unused)
+> +{
+> +	char *tmp, *tok, *str = strdup(arg);
+> +	unsigned int i = 0;
+> +
+> +	for (tok = strtok_r(str, ",", &tmp); tok && i < ARRAY_SIZE(symbol_conf.vdso_name);
+> +	     tok = strtok_r(NULL, ",", &tmp)) {
+> +		symbol_conf.vdso_name[i++] = strdup(tok);
+> +	}
+> +
+> +	free(str);
+> +	return 0;
+> +}
+> +
+> +static int dso__load_vdso(struct dso *dso, struct map *map,
+> +			  const char *vdso)
+> +{
+> +	int err = -1;
+> +	struct symsrc ss;
+> +	char symfs_vdso[PATH_MAX];
+> +
+> +	if (vdso[0] == '/')
+> +		snprintf(symfs_vdso, sizeof(symfs_vdso), "%s", vdso);
+> +	else
+> +		symbol__join_symfs(symfs_vdso, vdso);
+> +
+> +	if (symsrc__init(&ss, dso, symfs_vdso, DSO_BINARY_TYPE__SYSTEM_PATH_DSO))
+> +		return -1;
+> +
+> +	/*
+> +	 * dso__load_sym() may copy 'dso' which will result in the copies having
+> +	 * an incorrect long name unless we set it here first.
+> +	 */
+> +	dso__set_long_name(dso, vdso, false);
+> +	dso__set_binary_type(dso, DSO_BINARY_TYPE__SYSTEM_PATH_DSO);
+> +
+> +	err = dso__load_sym(dso, map, &ss, &ss, 0);
+> +	if (err > 0) {
+> +		dso__set_loaded(dso);
+> +		pr_debug("Using %s for %s symbols\n", symfs_vdso, dso__short_name(dso));
+> +
+> +		if (symsrc__has_symtab(&ss) && !dso__symsrc_filename(dso))
+> +			dso__set_symsrc_filename(dso, strdup(symfs_vdso));
+> +	}
+> +	symsrc__destroy(&ss);
+> +
+> +	return err;
+> +}
+> +
+> +static int dso__load_vdso_sym(struct dso *dso, struct map *map)
+> +{
+> +	int ret;
+> +
+> +	if (!dso__is_vdso(dso))
+> +		return -1;
+> +
+> +	for (unsigned int i = 0; i < ARRAY_SIZE(symbol_conf.vdso_name); i++) {
+> +		if (symbol_conf.vdso_name[i] != NULL) {
+> +			ret = dso__load_vdso(dso, map, symbol_conf.vdso_name[i]);
+> +			if (ret > 0)
+> +				return ret;
+> +		}
+> +	}
+> +
+> +	return -1;
+> +}
+> +
+>  int setup_list(struct strlist **list, const char *list_str,
+>  		      const char *list_name)
+>  {
+> diff --git a/tools/perf/util/symbol_conf.h b/tools/perf/util/symbol_conf.h
+> index c114bbceef40..108356e3c981 100644
+> --- a/tools/perf/util/symbol_conf.h
+> +++ b/tools/perf/util/symbol_conf.h
+> @@ -3,6 +3,7 @@
+>  #define __PERF_SYMBOL_CONF 1
+>  
+>  #include <stdbool.h>
+> +#include <subcmd/parse-options.h>
+>  
+>  struct strlist;
+>  struct intlist;
+> @@ -55,6 +56,7 @@ struct symbol_conf {
+>  	const char	*default_guest_vmlinux_name,
+>  			*default_guest_kallsyms,
+>  			*default_guest_modules;
+> +	const char	*vdso_name[2];
+>  	const char	*guestmount;
+>  	const char	*dso_list_str,
+>  			*comm_list_str,
+> @@ -85,4 +87,7 @@ struct symbol_conf {
+>  
+>  extern struct symbol_conf symbol_conf;
+>  
+> +int parse_vdso_pathnames(const struct option *opt __maybe_unused,
+> +			 const char *arg, int unset __maybe_unused);
+> +
+>  #endif // __PERF_SYMBOL_CONF
 
-   In file included from include/linux/io.h:14:
-   In file included from arch/um/include/asm/io.h:24:
-   include/asm-generic/io.h:548:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     548 |         val = __raw_readb(PCI_IOBASE + addr);
-         |                           ~~~~~~~~~~ ^
-   include/asm-generic/io.h:561:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     561 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
-      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-         |                                                   ^
-   In file included from fs/inode.c:10:
-   In file included from include/linux/backing-dev.h:16:
-   In file included from include/linux/writeback.h:13:
-   In file included from include/linux/blk_types.h:10:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:12:
-   In file included from include/linux/hardirq.h:11:
-   In file included from arch/um/include/asm/hardirq.h:5:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:14:
-   In file included from arch/um/include/asm/io.h:24:
-   include/asm-generic/io.h:574:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     574 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
-      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
-         |                                                   ^
-   In file included from fs/inode.c:10:
-   In file included from include/linux/backing-dev.h:16:
-   In file included from include/linux/writeback.h:13:
-   In file included from include/linux/blk_types.h:10:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:12:
-   In file included from include/linux/hardirq.h:11:
-   In file included from arch/um/include/asm/hardirq.h:5:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:14:
-   In file included from arch/um/include/asm/io.h:24:
-   include/asm-generic/io.h:585:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     585 |         __raw_writeb(value, PCI_IOBASE + addr);
-         |                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:595:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     595 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:605:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     605 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:693:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     693 |         readsb(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:701:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     701 |         readsw(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:709:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     709 |         readsl(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:718:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     718 |         writesb(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   include/asm-generic/io.h:727:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     727 |         writesw(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   include/asm-generic/io.h:736:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     736 |         writesl(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   fs/inode.c:2127:7: warning: variable 'now_ts' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
-    2127 |                 if ((now | I_CTIME_QUERIED) == ctime) {
-         |                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   fs/inode.c:2133:28: note: uninitialized use occurs here
-    2133 |         return timestamp_truncate(now_ts, inode);
-         |                                   ^~~~~~
-   fs/inode.c:2127:3: note: remove the 'if' if its condition is always true
-    2127 |                 if ((now | I_CTIME_QUERIED) == ctime) {
-         |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   fs/inode.c:2122:6: warning: variable 'now_ts' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
-    2122 |         if (ctime & I_CTIME_QUERIED) {
-         |             ^~~~~~~~~~~~~~~~~~~~~~~
-   fs/inode.c:2133:28: note: uninitialized use occurs here
-    2133 |         return timestamp_truncate(now_ts, inode);
-         |                                   ^~~~~~
-   fs/inode.c:2122:2: note: remove the 'if' if its condition is always true
-    2122 |         if (ctime & I_CTIME_QUERIED) {
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   fs/inode.c:2117:6: warning: variable 'now_ts' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
-    2117 |         if (!is_mgtime(inode))
-         |             ^~~~~~~~~~~~~~~~~
-   fs/inode.c:2133:28: note: uninitialized use occurs here
-    2133 |         return timestamp_truncate(now_ts, inode);
-         |                                   ^~~~~~
-   fs/inode.c:2117:2: note: remove the 'if' if its condition is always false
-    2117 |         if (!is_mgtime(inode))
-         |         ^~~~~~~~~~~~~~~~~~~~~~
-    2118 |                 goto out;
-         |                 ~~~~~~~~
-   fs/inode.c:2113:2: note: variable 'now_ts' is declared here
-    2113 |         struct timespec64 now_ts;
-         |         ^
->> fs/inode.c:2623:9: error: invalid output size for constraint '=a'
-    2623 |                 old = cmpxchg(&ctime_floor, floor, now);
-         |                       ^
-   include/linux/atomic/atomic-instrumented.h:4788:2: note: expanded from macro 'cmpxchg'
-    4788 |         raw_cmpxchg(__ai_ptr, __VA_ARGS__); \
-         |         ^
-   include/linux/atomic/atomic-arch-fallback.h:55:21: note: expanded from macro 'raw_cmpxchg'
-      55 | #define raw_cmpxchg arch_cmpxchg
-         |                     ^
-   arch/x86/include/asm/cmpxchg.h:149:2: note: expanded from macro 'arch_cmpxchg'
-     149 |         __cmpxchg(ptr, old, new, sizeof(*(ptr)))
-         |         ^
-   arch/x86/include/asm/cmpxchg.h:134:2: note: expanded from macro '__cmpxchg'
-     134 |         __raw_cmpxchg((ptr), (old), (new), (size), LOCK_PREFIX)
-         |         ^
-   arch/x86/include/asm/cmpxchg.h:95:17: note: expanded from macro '__raw_cmpxchg'
-      95 |                              : "=a" (__ret), "+m" (*__ptr)              \
-         |                                      ^
->> fs/inode.c:2623:9: error: invalid output size for constraint '=a'
-   include/linux/atomic/atomic-instrumented.h:4788:2: note: expanded from macro 'cmpxchg'
-    4788 |         raw_cmpxchg(__ai_ptr, __VA_ARGS__); \
-         |         ^
-   include/linux/atomic/atomic-arch-fallback.h:55:21: note: expanded from macro 'raw_cmpxchg'
-      55 | #define raw_cmpxchg arch_cmpxchg
-         |                     ^
-   arch/x86/include/asm/cmpxchg.h:149:2: note: expanded from macro 'arch_cmpxchg'
-     149 |         __cmpxchg(ptr, old, new, sizeof(*(ptr)))
-         |         ^
-   arch/x86/include/asm/cmpxchg.h:134:2: note: expanded from macro '__cmpxchg'
-     134 |         __raw_cmpxchg((ptr), (old), (new), (size), LOCK_PREFIX)
-         |         ^
-   arch/x86/include/asm/cmpxchg.h:104:17: note: expanded from macro '__raw_cmpxchg'
-     104 |                              : "=a" (__ret), "+m" (*__ptr)              \
-         |                                      ^
->> fs/inode.c:2623:9: error: invalid output size for constraint '=a'
-   include/linux/atomic/atomic-instrumented.h:4788:2: note: expanded from macro 'cmpxchg'
-    4788 |         raw_cmpxchg(__ai_ptr, __VA_ARGS__); \
-         |         ^
-   include/linux/atomic/atomic-arch-fallback.h:55:21: note: expanded from macro 'raw_cmpxchg'
-      55 | #define raw_cmpxchg arch_cmpxchg
-         |                     ^
-   arch/x86/include/asm/cmpxchg.h:149:2: note: expanded from macro 'arch_cmpxchg'
-     149 |         __cmpxchg(ptr, old, new, sizeof(*(ptr)))
-         |         ^
-   arch/x86/include/asm/cmpxchg.h:134:2: note: expanded from macro '__cmpxchg'
-     134 |         __raw_cmpxchg((ptr), (old), (new), (size), LOCK_PREFIX)
-         |         ^
-   arch/x86/include/asm/cmpxchg.h:113:17: note: expanded from macro '__raw_cmpxchg'
-     113 |                              : "=a" (__ret), "+m" (*__ptr)              \
-         |                                      ^
->> fs/inode.c:2623:9: error: invalid output size for constraint '=a'
-   include/linux/atomic/atomic-instrumented.h:4788:2: note: expanded from macro 'cmpxchg'
-    4788 |         raw_cmpxchg(__ai_ptr, __VA_ARGS__); \
-         |         ^
-   include/linux/atomic/atomic-arch-fallback.h:55:21: note: expanded from macro 'raw_cmpxchg'
-      55 | #define raw_cmpxchg arch_cmpxchg
-         |                     ^
-   arch/x86/include/asm/cmpxchg.h:149:2: note: expanded from macro 'arch_cmpxchg'
-     149 |         __cmpxchg(ptr, old, new, sizeof(*(ptr)))
-         |         ^
-   arch/x86/include/asm/cmpxchg.h:134:2: note: expanded from macro '__cmpxchg'
-     134 |         __raw_cmpxchg((ptr), (old), (new), (size), LOCK_PREFIX)
-         |         ^
-   arch/x86/include/asm/cmpxchg.h:122:17: note: expanded from macro '__raw_cmpxchg'
-     122 |                              : "=a" (__ret), "+m" (*__ptr)              \
-         |                                      ^
-   fs/inode.c:2635:8: error: invalid output size for constraint '=a'
-    2635 |         now = cmpxchg(&inode->__i_ctime, ctime, sav);
-         |               ^
-   include/linux/atomic/atomic-instrumented.h:4788:2: note: expanded from macro 'cmpxchg'
-    4788 |         raw_cmpxchg(__ai_ptr, __VA_ARGS__); \
-         |         ^
-   include/linux/atomic/atomic-arch-fallback.h:55:21: note: expanded from macro 'raw_cmpxchg'
-      55 | #define raw_cmpxchg arch_cmpxchg
-         |                     ^
-   arch/x86/include/asm/cmpxchg.h:149:2: note: expanded from macro 'arch_cmpxchg'
-     149 |         __cmpxchg(ptr, old, new, sizeof(*(ptr)))
-         |         ^
-   arch/x86/include/asm/cmpxchg.h:134:2: note: expanded from macro '__cmpxchg'
-     134 |         __raw_cmpxchg((ptr), (old), (new), (size), LOCK_PREFIX)
-         |         ^
-   arch/x86/include/asm/cmpxchg.h:95:17: note: expanded from macro '__raw_cmpxchg'
-      95 |                              : "=a" (__ret), "+m" (*__ptr)              \
-         |                                      ^
-   fs/inode.c:2635:8: error: invalid output size for constraint '=a'
-   include/linux/atomic/atomic-instrumented.h:4788:2: note: expanded from macro 'cmpxchg'
-    4788 |         raw_cmpxchg(__ai_ptr, __VA_ARGS__); \
-         |         ^
-   include/linux/atomic/atomic-arch-fallback.h:55:21: note: expanded from macro 'raw_cmpxchg'
-      55 | #define raw_cmpxchg arch_cmpxchg
-         |                     ^
-   arch/x86/include/asm/cmpxchg.h:149:2: note: expanded from macro 'arch_cmpxchg'
-     149 |         __cmpxchg(ptr, old, new, sizeof(*(ptr)))
-         |         ^
-   arch/x86/include/asm/cmpxchg.h:134:2: note: expanded from macro '__cmpxchg'
-     134 |         __raw_cmpxchg((ptr), (old), (new), (size), LOCK_PREFIX)
-         |         ^
-   arch/x86/include/asm/cmpxchg.h:104:17: note: expanded from macro '__raw_cmpxchg'
-     104 |                              : "=a" (__ret), "+m" (*__ptr)              \
-         |                                      ^
-   fs/inode.c:2635:8: error: invalid output size for constraint '=a'
-   include/linux/atomic/atomic-instrumented.h:4788:2: note: expanded from macro 'cmpxchg'
-    4788 |         raw_cmpxchg(__ai_ptr, __VA_ARGS__); \
-         |         ^
-   include/linux/atomic/atomic-arch-fallback.h:55:21: note: expanded from macro 'raw_cmpxchg'
-      55 | #define raw_cmpxchg arch_cmpxchg
-         |                     ^
-   arch/x86/include/asm/cmpxchg.h:149:2: note: expanded from macro 'arch_cmpxchg'
-     149 |         __cmpxchg(ptr, old, new, sizeof(*(ptr)))
-         |         ^
-   arch/x86/include/asm/cmpxchg.h:134:2: note: expanded from macro '__cmpxchg'
-     134 |         __raw_cmpxchg((ptr), (old), (new), (size), LOCK_PREFIX)
-         |         ^
-   arch/x86/include/asm/cmpxchg.h:113:17: note: expanded from macro '__raw_cmpxchg'
-     113 |                              : "=a" (__ret), "+m" (*__ptr)              \
-         |                                      ^
-   fs/inode.c:2635:8: error: invalid output size for constraint '=a'
-   include/linux/atomic/atomic-instrumented.h:4788:2: note: expanded from macro 'cmpxchg'
-    4788 |         raw_cmpxchg(__ai_ptr, __VA_ARGS__); \
-         |         ^
-   include/linux/atomic/atomic-arch-fallback.h:55:21: note: expanded from macro 'raw_cmpxchg'
-      55 | #define raw_cmpxchg arch_cmpxchg
-         |                     ^
-   arch/x86/include/asm/cmpxchg.h:149:2: note: expanded from macro 'arch_cmpxchg'
-     149 |         __cmpxchg(ptr, old, new, sizeof(*(ptr)))
-         |         ^
-   arch/x86/include/asm/cmpxchg.h:134:2: note: expanded from macro '__cmpxchg'
-     134 |         __raw_cmpxchg((ptr), (old), (new), (size), LOCK_PREFIX)
-         |         ^
-   arch/x86/include/asm/cmpxchg.h:122:17: note: expanded from macro '__raw_cmpxchg'
-     122 |                              : "=a" (__ret), "+m" (*__ptr)              \
-         |                                      ^
-   15 warnings and 8 errors generated.
-
-
-vim +2623 fs/inode.c
-
-  2576	
-  2577	/**
-  2578	 * inode_set_ctime_current - set the ctime to current_time
-  2579	 * @inode: inode
-  2580	 *
-  2581	 * Set the inode->i_ctime to the current value for the inode. Returns
-  2582	 * the current value that was assigned to i_ctime. If this is a not
-  2583	 * multigrain inode, then we just set it to whatever the coarse time is.
-  2584	 *
-  2585	 * If it is multigrain, then we first see if the coarse-grained
-  2586	 * timestamp is distinct from what we have. If so, then we'll just use
-  2587	 * that. If we have to get a fine-grained timestamp, then do so, and
-  2588	 * try to swap it into the floor. We accept the new floor value
-  2589	 * regardless of the outcome of the cmpxchg. After that, we try to
-  2590	 * swap the new value into __i_ctime. Again, we take the resulting
-  2591	 * ctime, regardless of the outcome of the swap.
-  2592	 */
-  2593	struct timespec64 inode_set_ctime_current(struct inode *inode)
-  2594	{
-  2595		ktime_t ctime, now, sav, floor = smp_load_acquire(&ctime_floor);
-  2596	
-  2597		now = coarse_ctime(floor);
-  2598	
-  2599		/* Just return that if this is not a multigrain fs */
-  2600		if (!is_mgtime(inode)) {
-  2601			inode->__i_ctime = now;
-  2602			goto out;
-  2603		}
-  2604	
-  2605		/*
-  2606		 * We only need a fine-grained time if someone has queried it,
-  2607		 * and the current coarse grained time isn't later than what's
-  2608		 * already there.
-  2609		 */
-  2610		ctime = smp_load_acquire(&inode->__i_ctime);
-  2611		if ((ctime & I_CTIME_QUERIED) && !ktime_after(now, ctime & ~I_CTIME_QUERIED)) {
-  2612			ktime_t old;
-  2613	
-  2614			/* Get a fine-grained time */
-  2615			now = ktime_get_real() & ~I_CTIME_QUERIED;
-  2616	
-  2617			/*
-  2618			 * If the cmpxchg works, we take the new floor value. If
-  2619			 * not, then that means that someone else changed it after we
-  2620			 * fetched it but before we got here. That value is just
-  2621			 * as good, so keep it.
-  2622			 */
-> 2623			old = cmpxchg(&ctime_floor, floor, now);
-  2624			trace_ctime_floor_update(inode, floor, now, old);
-  2625			if (old != floor)
-  2626				now = old;
-  2627		}
-  2628	
-  2629		/*
-  2630		 * Swap the ctime into place. If it has changed in the interim,
-  2631		 * then we'll just take whatever the current value is under the
-  2632		 * assumption that it's new enough.
-  2633		 */
-  2634		sav = now;
-  2635		now = cmpxchg(&inode->__i_ctime, ctime, sav);
-  2636		trace_ctime_inode_update(inode, ctime, sav, now);
-  2637		if (now == ctime)
-  2638			now = sav;
-  2639	out:
-  2640		return timestamp_truncate(ktime_to_timespec64(now), inode);
-  2641	}
-  2642	EXPORT_SYMBOL(inode_set_ctime_current);
-  2643	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
