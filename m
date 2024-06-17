@@ -1,188 +1,387 @@
-Received: from mail-yw1-f171.google.com (mail-yw1-f171.google.com [209.85.128.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25885176AB2
-	for <llvm@lists.linux.dev>; Mon, 17 Jun 2024 03:13:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0026E1BC4F;
+	Mon, 17 Jun 2024 05:18:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718594006; cv=none; b=iX9hp9T/fO2uNOCeEAodmCyNNjg9ycU6fQ6MTWOaLbolDx5oxYMFSGYYSyBm3xHBHO59Z1QWV0YS6ZuUnupGsh9Jq/mWTzNekjJaKWUfffXXddyGTAjn7ZlU5VH6YFjtITi5iX6jftx+hy7sVYhBddUknbaljyLGy+E3SYL18PM=
+	t=1718601525; cv=none; b=XiHO23W7SYBC4I1KHw0slil951TUpQW6+DPqOHGRyYcc2GYYwTZhUYvo83oBRu8fQArZsxuHBizjmbxPgZowZ5pp1Vp/shfhWOzark1L9+nejcJq8o1IK81OjodksXzM9sQKT/sqaULhC4r4e6ofdr06ISBPVvNsWZec6Z7TZw4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718594006; c=relaxed/simple;
-	bh=ipKCaT77f+BUWT9EBLkbLtp2pj7mmowaKj2ZBqhLeeM=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=QBPyJ10ZnohUsCPh7FvJ5KKQEFVgBCFDqCs3sqJ2ZfcwOFNXJsVHwjVS9w+sZyfKJNoCQ3tfHo3XGJl+S5C2tDegTaZi5YutROp4Zs7kwYsMxHaYYlFXnqqXX2Pqo29BYM0vw9/PVE8dSzxDOOdDUVdRbUI8SUmF1ObjraswzPg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sifive.com; spf=pass smtp.mailfrom=sifive.com; dkim=pass (2048-bit key) header.d=sifive.com header.i=@sifive.com header.b=Tezeialh; arc=none smtp.client-ip=209.85.128.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sifive.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sifive.com
+	s=arc-20240116; t=1718601525; c=relaxed/simple;
+	bh=dqNmKCGW4RKLnspcLEZV+AXUXnHfY22e/SxKquKJBjY=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=X9ye1vrBX5kxx8nWNQTnqY0doZeAPcilbnTiIJYOjY2ROea5BAAgS0dqalUxCmRA1wZvcClppKx7zHMye8fJBHPYnWNT5s2Hi/Os2y9AU4J93mMckXzAReHUbTLe6KLdZ+FxKXLh0h3eW/VmxEB6XOj2yPUikpcspJ97wQInX7c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=n7mkyJEl; arc=none smtp.client-ip=192.198.163.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sifive.com header.i=@sifive.com header.b="Tezeialh"
-Received: by mail-yw1-f171.google.com with SMTP id 00721157ae682-627e3368394so40595787b3.2
-        for <llvm@lists.linux.dev>; Sun, 16 Jun 2024 20:13:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=sifive.com; s=google; t=1718594004; x=1719198804; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=MTUZ05e6Yum4t2GwgWWjL5msqoEXhl4LpMNkyudXVSA=;
-        b=TezeialhbHB5lL8z3RN2N10JNuOJcKzj102N2ZSaerJamEfzMvFZ4QR0IZpjk6jeX6
-         JSidltc/A/t19neewc2yv9zwY8HfUbCJQB2HVxIC1Ak8jXaMspF6kv3Zh0b3Ckhr84wT
-         73ZhiqlRS/fWoCtDsQOk5mXtYWZJoBVGuVwpkQdZphwk/EjUOZYeDDfw2c1kUydx116j
-         yo5g3rulUuxegGgoBC20r8684MkKR1frggmho/M1+BijrUsI2EliYr4ZIMj6pFPJIWXA
-         izuL+cNb+T7AEWiz1gh/+dSRWhRtgTCHyj4hAplr9fM4KLGFVD+Jp9xZuBTCxv9/2Gfy
-         SdUA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1718594004; x=1719198804;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=MTUZ05e6Yum4t2GwgWWjL5msqoEXhl4LpMNkyudXVSA=;
-        b=Mp4pM+0ucz/r773W+PxolJAmYXFWwsqLrNASlkkGdX+f++us1QEMpqc4H144m7pxBx
-         2iLU6oxTDG6ivsPk5rz444sYA4DPklrBf3pTuSj9/MmxZwoWNPnT4NMYt2alzEvftbnD
-         0yKJmnqbwpshMevF+oo+3EiRxlcUkUDkK66AkJwU3wLWAYudle3/2sJxKcqAxI7kBsad
-         jBH/7WlqSMcejcNAO1J4AW91hdTBZUTPgmAIp2O0/tlCqVP8ZkeVpIbtrcMLOmToZ3ca
-         CN/zhKMrNlfG/uyqKJQdqRNRZskDWrYbm0o+i1HjXC4nw0Y0eeeBSyBRPb+L37vTSDAP
-         a+Vw==
-X-Forwarded-Encrypted: i=1; AJvYcCXoKGBTgwWqmLk4bGFHvhc6HeFfwdCnzCWjXDb9JeRXRrIb4y+tbMw+Vc7PqDFLb/QhahJMUIVc9hH0sRMjHRx1i5StPA==
-X-Gm-Message-State: AOJu0Yza9sz64h/RcaHu5ihcOmE6ZN64UYBnceS7bc5+Vc7ubV9meHRZ
-	28pX7SPacQF/5ldkACSHs4AE9uhZY6WnPQVQvm0KbI527aQI3OF7J8dxoe6d2KIziaEGJJy9SDF
-	ODwAs/t0uOrQE8Z+rHK0zhMP+BSnwMdCOoBv3Qw==
-X-Google-Smtp-Source: AGHT+IGcbuDhr//ejMFGoqLnDmcjq65GRM5Khv3QI8grXciiziqO38Mc6HPFBs3lKXswm9MpPGZCzPb1AOhqda4ES4M=
-X-Received: by 2002:a0d:e648:0:b0:627:ecd3:6223 with SMTP id
- 00721157ae682-6322480e9e1mr84249517b3.35.1718594004136; Sun, 16 Jun 2024
- 20:13:24 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="n7mkyJEl"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1718601523; x=1750137523;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=dqNmKCGW4RKLnspcLEZV+AXUXnHfY22e/SxKquKJBjY=;
+  b=n7mkyJElP3QXi2eiybaFgaHSzclMBpNfxGrBjIs1BbAaZEFueo1X+yz2
+   5C/b+sibDENDoSELAKqvOk3vM0ZFueJY2qR0MVDQQ6/mbSarocfyrDPRc
+   H7yCYZ3otAh6eCNjNM+cLeEu5CK5BxqR7LJU2dIheGmjPRM7DzplzIuxw
+   q514EVdDWlZI5SrDrDy7G/DLexBVspbyt1t3LDZLsROZavEc7wWWco8ez
+   hWSxRackXMwf79Tx8alfAwe9ORb7kStmgZK0aNj7ZXApu3BOOzkadkWTr
+   nYUJ2ZAEMIFwbphAGjPsZLdPYttZ5bpgF6QxvX+3xaqMXLYmAwYdPqwz3
+   A==;
+X-CSE-ConnectionGUID: kEwXpHUSQsqEhEmw1oYDag==
+X-CSE-MsgGUID: QWamgHI3Tr6PWPnL8o23PQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11105"; a="26045400"
+X-IronPort-AV: E=Sophos;i="6.08,244,1712646000"; 
+   d="scan'208";a="26045400"
+Received: from fmviesa008.fm.intel.com ([10.60.135.148])
+  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jun 2024 22:17:56 -0700
+X-CSE-ConnectionGUID: sSwzKq0pQBSft2v7cpX29g==
+X-CSE-MsgGUID: gBh68YztRlO5EA68BusajQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.08,244,1712646000"; 
+   d="scan'208";a="41019955"
+Received: from lkp-server01.sh.intel.com (HELO 68891e0c336b) ([10.239.97.150])
+  by fmviesa008.fm.intel.com with ESMTP; 16 Jun 2024 22:17:55 -0700
+Received: from kbuild by 68891e0c336b with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1sJ4ka-0003qI-2d;
+	Mon, 17 Jun 2024 05:17:52 +0000
+Date: Mon, 17 Jun 2024 13:17:42 +0800
+From: kernel test robot <lkp@intel.com>
+To: Jeff Layton <jlayton@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [jlayton:mgtime 4/10] fs/inode.c:2623:9: error: invalid output size
+ for constraint '=a'
+Message-ID: <202406171358.yIauGf0w-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20240613-dev-andyc-dyn-ftrace-v4-v1-0-1a538e12c01e@sifive.com>
- <20240613-dev-andyc-dyn-ftrace-v4-v1-4-1a538e12c01e@sifive.com>
- <20240613190920.GB1272931@thelio-3990X> <CABgGipV_6sFx8TJNrHszGLk=V9X1PJAXuOmRDxnTHPrigqJL0A@mail.gmail.com>
-In-Reply-To: <CABgGipV_6sFx8TJNrHszGLk=V9X1PJAXuOmRDxnTHPrigqJL0A@mail.gmail.com>
-From: Andy Chiu <andy.chiu@sifive.com>
-Date: Mon, 17 Jun 2024 11:13:13 +0800
-Message-ID: <CABgGipXqZe5GTNNe0oRBPBaFqRYF7LLZsdhQQ9RSuXqk7+cukA@mail.gmail.com>
-Subject: Re: [PATCH 4/8] riscv: ftrace: align patchable functions to 4 Byte boundary
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>, 
-	Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti <alexghiti@rivosinc.com>, 
-	Zong Li <zong.li@sifive.com>, Steven Rostedt <rostedt@goodmis.org>, 
-	Masami Hiramatsu <mhiramat@kernel.org>, Mark Rutland <mark.rutland@arm.com>, 
-	Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, 
-	Justin Stitt <justinstitt@google.com>, Puranjay Mohan <puranjay@kernel.org>, 
-	Palmer Dabbelt <palmer@rivosinc.com>, linux-riscv@lists.infradead.org, 
-	linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
-	llvm@lists.linux.dev, Evgenii Shatokhin <e.shatokhin@yadro.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Sorry for the noise,
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jlayton/linux.git mgtime
+head:   0418364991ef20583c19f070a31c0bfd69e6ff2d
+commit: 11d2d363e0caf8bdb9191c0c1c5aa6f37207ccbd [4/10] fs: add infrastructure for multigrain timestamps
+config: um-allnoconfig (https://download.01.org/0day-ci/archive/20240617/202406171358.yIauGf0w-lkp@intel.com/config)
+compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240617/202406171358.yIauGf0w-lkp@intel.com/reproduce)
 
-On Mon, Jun 17, 2024 at 10:38=E2=80=AFAM Andy Chiu <andy.chiu@sifive.com> w=
-rote:
->
-> On Fri, Jun 14, 2024 at 3:09=E2=80=AFAM Nathan Chancellor <nathan@kernel.=
-org> wrote:
-> >
-> > Hi Andy,
-> >
-> > On Thu, Jun 13, 2024 at 03:11:09PM +0800, Andy Chiu wrote:
-> > > We are changing ftrace code patching in order to remove dependency fr=
-om
-> > > stop_machine() and enable kernel preemption. This requires us to alig=
-n
-> > > functions entry at a 4-B align address.
-> > >
-> > > However, -falign-functions on older versions of GCC alone was not str=
-ong
-> > > enoungh to align all functions. In fact, cold functions are not align=
-ed
-> > > after turning on optimizations. We consider this is a bug in GCC and
-> > > turn off guess-branch-probility as a workaround to align all function=
-s.
-> > >
-> > > GCC bug id: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=3D88345
-> > >
-> > > The option -fmin-function-alignment is able to align all functions
-> > > properly on newer versions of gcc. So, we add a cc-option to test if
-> > > the toolchain supports it.
-> > >
-> > > Suggested-by: Evgenii Shatokhin <e.shatokhin@yadro.com>
-> > > Signed-off-by: Andy Chiu <andy.chiu@sifive.com>
-> > > ---
-> > >  arch/riscv/Kconfig  | 1 +
-> > >  arch/riscv/Makefile | 7 ++++++-
-> > >  2 files changed, 7 insertions(+), 1 deletion(-)
-> > >
-> > > diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
-> > > index b94176e25be1..80b8d48e1e46 100644
-> > > --- a/arch/riscv/Kconfig
-> > > +++ b/arch/riscv/Kconfig
-> > > @@ -203,6 +203,7 @@ config CLANG_SUPPORTS_DYNAMIC_FTRACE
-> > >  config GCC_SUPPORTS_DYNAMIC_FTRACE
-> > >       def_bool CC_IS_GCC
-> > >       depends on $(cc-option,-fpatchable-function-entry=3D8)
-> > > +     depends on $(cc-option,-fmin-function-alignment=3D4) || !RISCV_=
-ISA_C
-> >
-> > Please use CC_HAS_MIN_FUNCTION_ALIGNMENT (from arch/Kconfig), which
-> > already checks for support for this option.
->
-> Thanks for the suggestion!
->
-> >
-> > >  config HAVE_SHADOW_CALL_STACK
-> > >       def_bool $(cc-option,-fsanitize=3Dshadow-call-stack)
-> > > diff --git a/arch/riscv/Makefile b/arch/riscv/Makefile
-> > > index 06de9d365088..74628ad8dcf8 100644
-> > > --- a/arch/riscv/Makefile
-> > > +++ b/arch/riscv/Makefile
-> > > @@ -14,8 +14,13 @@ endif
-> > >  ifeq ($(CONFIG_DYNAMIC_FTRACE),y)
-> > >       LDFLAGS_vmlinux +=3D --no-relax
-> > >       KBUILD_CPPFLAGS +=3D -DCC_USING_PATCHABLE_FUNCTION_ENTRY
-> > > +ifeq ($(CONFIG_CC_IS_CLANG),y)
-> >
-> > Same here, please invert this and use
-> >
-> >   ifdef CONFIG_CC_HAS_MIN_FUNCTION_ALIGNMENT
-> >
-> > like the main Makefile does.
->
-> Hope this makes sense to you. I am going to add the following in riscv Kc=
-onig:
->
-> select FUNCTION_ALIGNMENT_4B if DYNAMIC_FTRACE && !RISCV_ISA_C
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202406171358.yIauGf0w-lkp@intel.com/
 
-This should be:
+All errors (new ones prefixed by >>):
 
-select FUNCTION_ALIGNMENT_4B if DYNAMIC_FTRACE && RISCV_ISA_C
+   In file included from include/linux/io.h:14:
+   In file included from arch/um/include/asm/io.h:24:
+   include/asm-generic/io.h:548:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     548 |         val = __raw_readb(PCI_IOBASE + addr);
+         |                           ~~~~~~~~~~ ^
+   include/asm-generic/io.h:561:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     561 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
+      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
+         |                                                   ^
+   In file included from fs/inode.c:10:
+   In file included from include/linux/backing-dev.h:16:
+   In file included from include/linux/writeback.h:13:
+   In file included from include/linux/blk_types.h:10:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:12:
+   In file included from include/linux/hardirq.h:11:
+   In file included from arch/um/include/asm/hardirq.h:5:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:14:
+   In file included from arch/um/include/asm/io.h:24:
+   include/asm-generic/io.h:574:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     574 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
+      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
+         |                                                   ^
+   In file included from fs/inode.c:10:
+   In file included from include/linux/backing-dev.h:16:
+   In file included from include/linux/writeback.h:13:
+   In file included from include/linux/blk_types.h:10:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:12:
+   In file included from include/linux/hardirq.h:11:
+   In file included from arch/um/include/asm/hardirq.h:5:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:14:
+   In file included from arch/um/include/asm/io.h:24:
+   include/asm-generic/io.h:585:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     585 |         __raw_writeb(value, PCI_IOBASE + addr);
+         |                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:595:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     595 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:605:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     605 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:693:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     693 |         readsb(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:701:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     701 |         readsw(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:709:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     709 |         readsl(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:718:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     718 |         writesb(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+   include/asm-generic/io.h:727:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     727 |         writesw(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+   include/asm-generic/io.h:736:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     736 |         writesl(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+   fs/inode.c:2127:7: warning: variable 'now_ts' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
+    2127 |                 if ((now | I_CTIME_QUERIED) == ctime) {
+         |                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   fs/inode.c:2133:28: note: uninitialized use occurs here
+    2133 |         return timestamp_truncate(now_ts, inode);
+         |                                   ^~~~~~
+   fs/inode.c:2127:3: note: remove the 'if' if its condition is always true
+    2127 |                 if ((now | I_CTIME_QUERIED) == ctime) {
+         |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   fs/inode.c:2122:6: warning: variable 'now_ts' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
+    2122 |         if (ctime & I_CTIME_QUERIED) {
+         |             ^~~~~~~~~~~~~~~~~~~~~~~
+   fs/inode.c:2133:28: note: uninitialized use occurs here
+    2133 |         return timestamp_truncate(now_ts, inode);
+         |                                   ^~~~~~
+   fs/inode.c:2122:2: note: remove the 'if' if its condition is always true
+    2122 |         if (ctime & I_CTIME_QUERIED) {
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   fs/inode.c:2117:6: warning: variable 'now_ts' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
+    2117 |         if (!is_mgtime(inode))
+         |             ^~~~~~~~~~~~~~~~~
+   fs/inode.c:2133:28: note: uninitialized use occurs here
+    2133 |         return timestamp_truncate(now_ts, inode);
+         |                                   ^~~~~~
+   fs/inode.c:2117:2: note: remove the 'if' if its condition is always false
+    2117 |         if (!is_mgtime(inode))
+         |         ^~~~~~~~~~~~~~~~~~~~~~
+    2118 |                 goto out;
+         |                 ~~~~~~~~
+   fs/inode.c:2113:2: note: variable 'now_ts' is declared here
+    2113 |         struct timespec64 now_ts;
+         |         ^
+>> fs/inode.c:2623:9: error: invalid output size for constraint '=a'
+    2623 |                 old = cmpxchg(&ctime_floor, floor, now);
+         |                       ^
+   include/linux/atomic/atomic-instrumented.h:4788:2: note: expanded from macro 'cmpxchg'
+    4788 |         raw_cmpxchg(__ai_ptr, __VA_ARGS__); \
+         |         ^
+   include/linux/atomic/atomic-arch-fallback.h:55:21: note: expanded from macro 'raw_cmpxchg'
+      55 | #define raw_cmpxchg arch_cmpxchg
+         |                     ^
+   arch/x86/include/asm/cmpxchg.h:149:2: note: expanded from macro 'arch_cmpxchg'
+     149 |         __cmpxchg(ptr, old, new, sizeof(*(ptr)))
+         |         ^
+   arch/x86/include/asm/cmpxchg.h:134:2: note: expanded from macro '__cmpxchg'
+     134 |         __raw_cmpxchg((ptr), (old), (new), (size), LOCK_PREFIX)
+         |         ^
+   arch/x86/include/asm/cmpxchg.h:95:17: note: expanded from macro '__raw_cmpxchg'
+      95 |                              : "=a" (__ret), "+m" (*__ptr)              \
+         |                                      ^
+>> fs/inode.c:2623:9: error: invalid output size for constraint '=a'
+   include/linux/atomic/atomic-instrumented.h:4788:2: note: expanded from macro 'cmpxchg'
+    4788 |         raw_cmpxchg(__ai_ptr, __VA_ARGS__); \
+         |         ^
+   include/linux/atomic/atomic-arch-fallback.h:55:21: note: expanded from macro 'raw_cmpxchg'
+      55 | #define raw_cmpxchg arch_cmpxchg
+         |                     ^
+   arch/x86/include/asm/cmpxchg.h:149:2: note: expanded from macro 'arch_cmpxchg'
+     149 |         __cmpxchg(ptr, old, new, sizeof(*(ptr)))
+         |         ^
+   arch/x86/include/asm/cmpxchg.h:134:2: note: expanded from macro '__cmpxchg'
+     134 |         __raw_cmpxchg((ptr), (old), (new), (size), LOCK_PREFIX)
+         |         ^
+   arch/x86/include/asm/cmpxchg.h:104:17: note: expanded from macro '__raw_cmpxchg'
+     104 |                              : "=a" (__ret), "+m" (*__ptr)              \
+         |                                      ^
+>> fs/inode.c:2623:9: error: invalid output size for constraint '=a'
+   include/linux/atomic/atomic-instrumented.h:4788:2: note: expanded from macro 'cmpxchg'
+    4788 |         raw_cmpxchg(__ai_ptr, __VA_ARGS__); \
+         |         ^
+   include/linux/atomic/atomic-arch-fallback.h:55:21: note: expanded from macro 'raw_cmpxchg'
+      55 | #define raw_cmpxchg arch_cmpxchg
+         |                     ^
+   arch/x86/include/asm/cmpxchg.h:149:2: note: expanded from macro 'arch_cmpxchg'
+     149 |         __cmpxchg(ptr, old, new, sizeof(*(ptr)))
+         |         ^
+   arch/x86/include/asm/cmpxchg.h:134:2: note: expanded from macro '__cmpxchg'
+     134 |         __raw_cmpxchg((ptr), (old), (new), (size), LOCK_PREFIX)
+         |         ^
+   arch/x86/include/asm/cmpxchg.h:113:17: note: expanded from macro '__raw_cmpxchg'
+     113 |                              : "=a" (__ret), "+m" (*__ptr)              \
+         |                                      ^
+>> fs/inode.c:2623:9: error: invalid output size for constraint '=a'
+   include/linux/atomic/atomic-instrumented.h:4788:2: note: expanded from macro 'cmpxchg'
+    4788 |         raw_cmpxchg(__ai_ptr, __VA_ARGS__); \
+         |         ^
+   include/linux/atomic/atomic-arch-fallback.h:55:21: note: expanded from macro 'raw_cmpxchg'
+      55 | #define raw_cmpxchg arch_cmpxchg
+         |                     ^
+   arch/x86/include/asm/cmpxchg.h:149:2: note: expanded from macro 'arch_cmpxchg'
+     149 |         __cmpxchg(ptr, old, new, sizeof(*(ptr)))
+         |         ^
+   arch/x86/include/asm/cmpxchg.h:134:2: note: expanded from macro '__cmpxchg'
+     134 |         __raw_cmpxchg((ptr), (old), (new), (size), LOCK_PREFIX)
+         |         ^
+   arch/x86/include/asm/cmpxchg.h:122:17: note: expanded from macro '__raw_cmpxchg'
+     122 |                              : "=a" (__ret), "+m" (*__ptr)              \
+         |                                      ^
+   fs/inode.c:2635:8: error: invalid output size for constraint '=a'
+    2635 |         now = cmpxchg(&inode->__i_ctime, ctime, sav);
+         |               ^
+   include/linux/atomic/atomic-instrumented.h:4788:2: note: expanded from macro 'cmpxchg'
+    4788 |         raw_cmpxchg(__ai_ptr, __VA_ARGS__); \
+         |         ^
+   include/linux/atomic/atomic-arch-fallback.h:55:21: note: expanded from macro 'raw_cmpxchg'
+      55 | #define raw_cmpxchg arch_cmpxchg
+         |                     ^
+   arch/x86/include/asm/cmpxchg.h:149:2: note: expanded from macro 'arch_cmpxchg'
+     149 |         __cmpxchg(ptr, old, new, sizeof(*(ptr)))
+         |         ^
+   arch/x86/include/asm/cmpxchg.h:134:2: note: expanded from macro '__cmpxchg'
+     134 |         __raw_cmpxchg((ptr), (old), (new), (size), LOCK_PREFIX)
+         |         ^
+   arch/x86/include/asm/cmpxchg.h:95:17: note: expanded from macro '__raw_cmpxchg'
+      95 |                              : "=a" (__ret), "+m" (*__ptr)              \
+         |                                      ^
+   fs/inode.c:2635:8: error: invalid output size for constraint '=a'
+   include/linux/atomic/atomic-instrumented.h:4788:2: note: expanded from macro 'cmpxchg'
+    4788 |         raw_cmpxchg(__ai_ptr, __VA_ARGS__); \
+         |         ^
+   include/linux/atomic/atomic-arch-fallback.h:55:21: note: expanded from macro 'raw_cmpxchg'
+      55 | #define raw_cmpxchg arch_cmpxchg
+         |                     ^
+   arch/x86/include/asm/cmpxchg.h:149:2: note: expanded from macro 'arch_cmpxchg'
+     149 |         __cmpxchg(ptr, old, new, sizeof(*(ptr)))
+         |         ^
+   arch/x86/include/asm/cmpxchg.h:134:2: note: expanded from macro '__cmpxchg'
+     134 |         __raw_cmpxchg((ptr), (old), (new), (size), LOCK_PREFIX)
+         |         ^
+   arch/x86/include/asm/cmpxchg.h:104:17: note: expanded from macro '__raw_cmpxchg'
+     104 |                              : "=a" (__ret), "+m" (*__ptr)              \
+         |                                      ^
+   fs/inode.c:2635:8: error: invalid output size for constraint '=a'
+   include/linux/atomic/atomic-instrumented.h:4788:2: note: expanded from macro 'cmpxchg'
+    4788 |         raw_cmpxchg(__ai_ptr, __VA_ARGS__); \
+         |         ^
+   include/linux/atomic/atomic-arch-fallback.h:55:21: note: expanded from macro 'raw_cmpxchg'
+      55 | #define raw_cmpxchg arch_cmpxchg
+         |                     ^
+   arch/x86/include/asm/cmpxchg.h:149:2: note: expanded from macro 'arch_cmpxchg'
+     149 |         __cmpxchg(ptr, old, new, sizeof(*(ptr)))
+         |         ^
+   arch/x86/include/asm/cmpxchg.h:134:2: note: expanded from macro '__cmpxchg'
+     134 |         __raw_cmpxchg((ptr), (old), (new), (size), LOCK_PREFIX)
+         |         ^
+   arch/x86/include/asm/cmpxchg.h:113:17: note: expanded from macro '__raw_cmpxchg'
+     113 |                              : "=a" (__ret), "+m" (*__ptr)              \
+         |                                      ^
+   fs/inode.c:2635:8: error: invalid output size for constraint '=a'
+   include/linux/atomic/atomic-instrumented.h:4788:2: note: expanded from macro 'cmpxchg'
+    4788 |         raw_cmpxchg(__ai_ptr, __VA_ARGS__); \
+         |         ^
+   include/linux/atomic/atomic-arch-fallback.h:55:21: note: expanded from macro 'raw_cmpxchg'
+      55 | #define raw_cmpxchg arch_cmpxchg
+         |                     ^
+   arch/x86/include/asm/cmpxchg.h:149:2: note: expanded from macro 'arch_cmpxchg'
+     149 |         __cmpxchg(ptr, old, new, sizeof(*(ptr)))
+         |         ^
+   arch/x86/include/asm/cmpxchg.h:134:2: note: expanded from macro '__cmpxchg'
+     134 |         __raw_cmpxchg((ptr), (old), (new), (size), LOCK_PREFIX)
+         |         ^
+   arch/x86/include/asm/cmpxchg.h:122:17: note: expanded from macro '__raw_cmpxchg'
+     122 |                              : "=a" (__ret), "+m" (*__ptr)              \
+         |                                      ^
+   15 warnings and 8 errors generated.
 
-as RISCV_ISA_C =3D=3D y means that there are 2B instructions. In this
-case, functions can be non 4B aligned, so we need to enforce the
-alignment requirement from the compiler.
 
->
-> So we will not need any of these
->
-> >
-> > > +     cflags_ftrace_align :=3D -falign-functions=3D4
-> > > +else
-> > > +     cflags_ftrace_align :=3D -fmin-function-alignment=3D4
-> > > +endif
-> > >  ifeq ($(CONFIG_RISCV_ISA_C),y)
-> > > -     CC_FLAGS_FTRACE :=3D -fpatchable-function-entry=3D4
-> > > +     CC_FLAGS_FTRACE :=3D -fpatchable-function-entry=3D4 $(cflags_ft=
-race_align)
-> > >  else
-> > >       CC_FLAGS_FTRACE :=3D -fpatchable-function-entry=3D2
-> > >  endif
-> > >
-> > > --
-> > > 2.43.0
-> > >
-> > >
->
-> Thanks,
-> Andy
+vim +2623 fs/inode.c
+
+  2576	
+  2577	/**
+  2578	 * inode_set_ctime_current - set the ctime to current_time
+  2579	 * @inode: inode
+  2580	 *
+  2581	 * Set the inode->i_ctime to the current value for the inode. Returns
+  2582	 * the current value that was assigned to i_ctime. If this is a not
+  2583	 * multigrain inode, then we just set it to whatever the coarse time is.
+  2584	 *
+  2585	 * If it is multigrain, then we first see if the coarse-grained
+  2586	 * timestamp is distinct from what we have. If so, then we'll just use
+  2587	 * that. If we have to get a fine-grained timestamp, then do so, and
+  2588	 * try to swap it into the floor. We accept the new floor value
+  2589	 * regardless of the outcome of the cmpxchg. After that, we try to
+  2590	 * swap the new value into __i_ctime. Again, we take the resulting
+  2591	 * ctime, regardless of the outcome of the swap.
+  2592	 */
+  2593	struct timespec64 inode_set_ctime_current(struct inode *inode)
+  2594	{
+  2595		ktime_t ctime, now, sav, floor = smp_load_acquire(&ctime_floor);
+  2596	
+  2597		now = coarse_ctime(floor);
+  2598	
+  2599		/* Just return that if this is not a multigrain fs */
+  2600		if (!is_mgtime(inode)) {
+  2601			inode->__i_ctime = now;
+  2602			goto out;
+  2603		}
+  2604	
+  2605		/*
+  2606		 * We only need a fine-grained time if someone has queried it,
+  2607		 * and the current coarse grained time isn't later than what's
+  2608		 * already there.
+  2609		 */
+  2610		ctime = smp_load_acquire(&inode->__i_ctime);
+  2611		if ((ctime & I_CTIME_QUERIED) && !ktime_after(now, ctime & ~I_CTIME_QUERIED)) {
+  2612			ktime_t old;
+  2613	
+  2614			/* Get a fine-grained time */
+  2615			now = ktime_get_real() & ~I_CTIME_QUERIED;
+  2616	
+  2617			/*
+  2618			 * If the cmpxchg works, we take the new floor value. If
+  2619			 * not, then that means that someone else changed it after we
+  2620			 * fetched it but before we got here. That value is just
+  2621			 * as good, so keep it.
+  2622			 */
+> 2623			old = cmpxchg(&ctime_floor, floor, now);
+  2624			trace_ctime_floor_update(inode, floor, now, old);
+  2625			if (old != floor)
+  2626				now = old;
+  2627		}
+  2628	
+  2629		/*
+  2630		 * Swap the ctime into place. If it has changed in the interim,
+  2631		 * then we'll just take whatever the current value is under the
+  2632		 * assumption that it's new enough.
+  2633		 */
+  2634		sav = now;
+  2635		now = cmpxchg(&inode->__i_ctime, ctime, sav);
+  2636		trace_ctime_inode_update(inode, ctime, sav, now);
+  2637		if (now == ctime)
+  2638			now = sav;
+  2639	out:
+  2640		return timestamp_truncate(ktime_to_timespec64(now), inode);
+  2641	}
+  2642	EXPORT_SYMBOL(inode_set_ctime_current);
+  2643	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
