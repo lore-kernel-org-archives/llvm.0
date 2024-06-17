@@ -1,60 +1,66 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6FDF653E23;
-	Mon, 17 Jun 2024 17:01:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CBBDA16CD0C;
+	Mon, 17 Jun 2024 17:19:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718643695; cv=none; b=WLd8lRKIimcsGEgxPdZ9qKqIF1PZdClgVjF/Zwem+QH+2wXDCeW6kfcWtRdH5N4iUId6BYHXItAEexlTQwHClmq0QkteriqJwuh69pBuJzZJQm18pDvMfbdRstCVqiv23c1nw9TvuohIZ3MbAeNIt+rPQJF8E99tmc0/C6Lz+Po=
+	t=1718644756; cv=none; b=JWXY/uctcgfuV1vn/fsRj3pGDjGO+k5apLAn09ZeAaQxLRRdL1ToDKeracVRLUz1r93xrNipNy90xH9CrZuw96Fbns5NjCmy5CQOcslxgk5YX1oSnwtQBuZ2QhtSZr206qZHkbTXEitJj7/V+uNIPx+AWaWISDgqluqDod9qy4s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718643695; c=relaxed/simple;
-	bh=ZNJWz97UxQwH+2kJA7SKrDGn+HLG/DZWOSaiCpUIuk4=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=lC3y9sm0IM92BPqsDRWMi1/03GruGUAfBRpy6onfl3Z4pOoV8qPdzUyVWs3XHo0kcDyjUcScpyE45LHe79jz8bg9DcnDXM/MQW42Bb6w3/6KN+sJoffH0F9ELb87uUW443GNPtzvZ6ZqrRvrP7MBd2kqSWEGIxARe2Nqd4z7vTo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=l4/oC0wg; arc=none smtp.client-ip=198.175.65.20
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1718644756; c=relaxed/simple;
+	bh=ELiGKN2fHBN+ynIfeSKCNIu1f4FOFyPukTCFTs3BlS4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=DAULSwAr0sO0YoMSvL6d0PAqrK7+E1eanGgvZC9ERg2t4zKNCrWHXFzuRGXUfowCs3go+nJe84bsIFoROYlIRDZ44X/IvB2aMk3y+x+ut5Rrswc8Z69HGn7TZdjfhLQ7aioKkQ/gThSur+SfrcHBcL21YTqzMCQe0ET7jHk2vN0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WUhmfwiB; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="l4/oC0wg"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1718643694; x=1750179694;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=ZNJWz97UxQwH+2kJA7SKrDGn+HLG/DZWOSaiCpUIuk4=;
-  b=l4/oC0wgjMIpOyFOskmEhooJbcTR/oJ0eBb4Uu8E3HLQ/Nt1JxtCqzns
-   vbQYpCTkwTh7701V3MrqlpkMyGKafIFt4nekCm75G58IOkiKLRqowTsmN
-   P5ftkeP1tsxzVrsN7tGZlQdrXCIsswr03eZ5j7TTeIO1d/Achluxcr/B3
-   fWnyKbQYHGZwP8w9qKudMbD33ulNGwgMW6tVEKN8oA9OJeTg197PomH3K
-   PFTUN0+o62DhfSk02240biLSeKdUy8A8d37rqKKRgtfgA0nlXts29BL0F
-   d86HyACZki9SEQX+oBjULj3LIuhtd7/SPg04QEpZy6XaeY2hYnE0QXzhn
-   Q==;
-X-CSE-ConnectionGUID: tjBSSjppS6azz056FWFF6Q==
-X-CSE-MsgGUID: UpOgOiHURPSmeFW7+p9t4A==
-X-IronPort-AV: E=McAfee;i="6700,10204,11106"; a="15313300"
-X-IronPort-AV: E=Sophos;i="6.08,245,1712646000"; 
-   d="scan'208";a="15313300"
-Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jun 2024 10:01:33 -0700
-X-CSE-ConnectionGUID: Zk+1FeARR7GozCQpYc/djw==
-X-CSE-MsgGUID: /ie0V+tYTvuQoURjIhpDZw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.08,245,1712646000"; 
-   d="scan'208";a="72014336"
-Received: from lkp-server01.sh.intel.com (HELO 68891e0c336b) ([10.239.97.150])
-  by orviesa002.jf.intel.com with ESMTP; 17 Jun 2024 10:01:32 -0700
-Received: from kbuild by 68891e0c336b with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1sJFjU-0004hX-2l;
-	Mon, 17 Jun 2024 17:01:28 +0000
-Date: Tue, 18 Jun 2024 01:00:54 +0800
-From: kernel test robot <lkp@intel.com>
-To: Luca Weiss <luca@z3ntu.xyz>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Bjorn Andersson <andersson@kernel.org>,
-	Konrad Dybcio <konrad.dybcio@linaro.org>
-Subject: [qcom:drivers-for-6.11 20/20] ld.lld: error: undefined symbol:
- mbox_request_channel
-Message-ID: <202406180006.Z397C67h-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WUhmfwiB"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3E7A3C2BD10;
+	Mon, 17 Jun 2024 17:19:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1718644756;
+	bh=ELiGKN2fHBN+ynIfeSKCNIu1f4FOFyPukTCFTs3BlS4=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=WUhmfwiBLTadekoZLK/cJ1hPrtE8wCKxrmUiSi1VKMnPoUkfBxZUhjaKqMVeWPByu
+	 CwDmlBvvlnpvj3U8hHr6ZF1ZtwXIK0vgYV6mEH3eKXA4Dy5K70RaMHiCf0TMCtICpo
+	 7aquv5NzpLTgD0JOg4u9xUS4l26MoZiOK3087DwODru4hcuvtJOzXoCbgRhdYNJ8kO
+	 OgE8g/A+22sSv1+lfM2g8kOsNFSwgnlUDU8dVtBtdaXO/VnVwWQM3e8tUF6vYbIYUL
+	 I3lkEL7A7AM2K2/KokNMhtY+ya/piXuq6h5KEP2Phif80DNvDBu08CnGE30u/QP+D5
+	 ntPTbG3PeNZ5A==
+Date: Mon, 17 Jun 2024 10:19:15 -0700
+From: Kees Cook <kees@kernel.org>
+To: Peter Zijlstra <peterz@infradead.org>,
+	Justin Stitt <justinstitt@google.com>
+Cc: Erick Archer <erick.archer@outlook.com>, Ingo Molnar <mingo@redhat.com>,
+	Arnaldo Carvalho de Melo <acme@kernel.org>,
+	Namhyung Kim <namhyung@kernel.org>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+	Jiri Olsa <jolsa@kernel.org>, Ian Rogers <irogers@google.com>,
+	Adrian Hunter <adrian.hunter@intel.com>,
+	"Liang, Kan" <kan.liang@linux.intel.com>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	"H. Peter Anvin" <hpa@zytor.com>,
+	"Gustavo A. R. Silva" <gustavoars@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>,
+	Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+	Matthew Wilcox <mawilcox@microsoft.com>, x86@kernel.org,
+	linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-hardening@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH v4 0/3] Hardening perf subsystem
+Message-ID: <202406170957.3269DA2@keescook>
+References: <AS8PR02MB7237F5BFDAA793E15692B3998BFD2@AS8PR02MB7237.eurprd02.prod.outlook.com>
+ <202406101010.E1C77AE9D@keescook>
+ <20240610200544.GY8774@noisy.programming.kicks-ass.net>
+ <202406101438.BC43514F@keescook>
+ <20240611075542.GD8774@noisy.programming.kicks-ass.net>
+ <202406121148.688240B@keescook>
+ <20240612220821.GA18881@noisy.programming.kicks-ass.net>
+ <202406121530.D9DB956C8@keescook>
+ <20240614101708.GO8774@noisy.programming.kicks-ass.net>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -63,39 +69,68 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20240614101708.GO8774@noisy.programming.kicks-ass.net>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux drivers-for-6.11
-head:   75287992f58a74271a083fef0356bc81d629f671
-commit: 75287992f58a74271a083fef0356bc81d629f671 [20/20] soc: qcom: smsm: Support using mailbox interface
-config: i386-buildonly-randconfig-005-20240617 (https://download.01.org/0day-ci/archive/20240618/202406180006.Z397C67h-lkp@intel.com/config)
-compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240618/202406180006.Z397C67h-lkp@intel.com/reproduce)
+On Fri, Jun 14, 2024 at 12:17:08PM +0200, Peter Zijlstra wrote:
+> On Wed, Jun 12, 2024 at 04:23:31PM -0700, Kees Cook wrote:
+> > On Thu, Jun 13, 2024 at 12:08:21AM +0200, Peter Zijlstra wrote:
+> > > On Wed, Jun 12, 2024 at 12:01:19PM -0700, Kees Cook wrote:
+> > > > I'm happy to take patches. And for this bikeshed, this would be better
+> > > > named under the size_*() helpers which are trying to keep size_t
+> > > > calculations from overflowing (by saturating). i.e.:
+> > > > 
+> > > > 	size_add_mult(sizeof(*p), sizeof(*p->member), num)
+> > > 
+> > > Fine I suppose, but what if we want something not size_t? Are we waiting
+> > > for the type system extension?
+> > 
+> > Because of C's implicit promotion/truncation, we can't do anything
+> > sanely with return values of arbitrary type size; we have to capture the
+> > lvalue type somehow so the checking can happen without C doing silent
+> > garbage.
+> 
+> So sizeof() returns the native (built-in) size_t, right? If that type
+> the nooverflow qualifier on, then:
+> 
+> 	sizeof(*p) + num*sizeof(p->foo[0])
+> 
+> should all get the nooverflow semantics right? Because size_t is
+> effectively 'nooverflow unsigned long' the multiplication should promote
+> 'num' to some 'long'.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202406180006.Z397C67h-lkp@intel.com/
+Hmmm. This is an interesting point. I'll see what Justin has found as
+he's been working on limiting the overflow sanitizer to specific types.
 
-All errors (new ones prefixed by >>):
+It doesn't help this (unfortunately common) code pattern, though:
 
->> ld.lld: error: undefined symbol: mbox_request_channel
-   >>> referenced by smsm.c
-   >>>               drivers/soc/qcom/smsm.o:(qcom_smsm_probe) in archive vmlinux.a
---
->> ld.lld: error: undefined symbol: mbox_free_channel
-   >>> referenced by smsm.c
-   >>>               drivers/soc/qcom/smsm.o:(qcom_smsm_probe) in archive vmlinux.a
-   >>> referenced by smsm.c
-   >>>               drivers/soc/qcom/smsm.o:(qcom_smsm_remove) in archive vmlinux.a
---
->> ld.lld: error: undefined symbol: mbox_send_message
-   >>> referenced by smsm.c
-   >>>               drivers/soc/qcom/smsm.o:(smsm_update_bits) in archive vmlinux.a
---
->> ld.lld: error: undefined symbol: mbox_client_txdone
-   >>> referenced by smsm.c
-   >>>               drivers/soc/qcom/smsm.o:(smsm_update_bits) in archive vmlinux.a
+	int size;
+
+	size = sizeof(*p) + num*sizeof(p->foo[0]);
+	p = kmalloc(size, GFP_KERNEL);
+
+But that was going to be a problem either way.
+
+> Now, I've re-read the rules and I don't see qualifiers mentioned, so
+> can't we state that the overflow/nooverflow qualifiers are to be
+> preserved on (implicit) promotion and when nooverflow and overflow are
+> combined the 'safe' nooverflow takes precedence?
+> 
+> I mean, when we're adding qualifiers we can make up rules about them
+> too, right?
+
+Yup, that is the design of the "wraps" attribute (though it is the
+reverse: it _allows_ for wrap-around, since we want to the default state
+to be mitigation).
+
+> If 'people' don't want to adorn the built-in size_t, we can always do
+> something like:
+> 
+> #define sizeof(x) ((nooverflow unsigned long)(sizeof(x)))
+> 
+> and 'fix' it ourselves.
+
+Right, though my hope is still we get the result of "nooverflow" by
+marking that which was expected to overflow.
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Kees Cook
