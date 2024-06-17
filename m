@@ -1,135 +1,155 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE884146D7D
-	for <llvm@lists.linux.dev>; Mon, 17 Jun 2024 16:52:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D1FCA168482;
+	Mon, 17 Jun 2024 16:52:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718643147; cv=none; b=Nw/dTcZ3ra0USX5Atp4/u3LLYpcVqNEx3z3LlExNNjcmPEQuh/MVPkD9w65YWlkj3m5QevhsYECDNIQrtd3wuAFL8YPiT75CXank1HpgZsYp7QMiGnT4xGMO0b+5strjrxOOZZxKmVEBljaUODhUdcHEYKzjk2Smrm98Ul4FuYo=
+	t=1718643174; cv=none; b=ZY1Mj+AhtEZzM4tPvTV9pz07YEDa/2ZbXl67WCt+9m0hhCSArkKL5ICGpxXun4VdWkszQ8juOAg3YUIq9H9WrwfQuU8Q4JW7KEw4EVdNa8EjAVfKrbmOD6X/+BwNem6IwrOC663DRZsgjYYvFHKucpzQ8G5/dHV09wb0GR7/X04=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718643147; c=relaxed/simple;
-	bh=xzKggorSw4KbXEjRsIOzlUmNfvHTt4jTDVsjjmStgy8=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=YKn80SCv58J6t9Dp/riDHQ5sII3mquxHiLSwuK/UOQ7Omdy9gAijifmm9henYVgFOc40DGkSmYPqmkpnkth4l5iNGx9/n/tjzVm31gzeyDFeK6hn3B9Wr4DaMHSIKuKIjw1WYm/lcMn8wctG8MVHl1EdRp86+G+Xp3DRScVNbAE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=hXcDMFoS; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1718643174; c=relaxed/simple;
+	bh=eSnhqAm2EceuPb7GR0p97myLZRdOU10MmclXVrykcQE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=WZo9EVDHZITJ+RSAEuj5sKmdQ0OSE7Z//FZE3J1cZBxcX1pAfy8N6n7/WyvA3HRuDicyc0iAtRGeDpReW8+LE4r8RInEKcQotJY1R1LPUJBPFFYMAwKAp6oRcwB7NCzZkd7joSNQL2yJkuue27Cfla9Mt0Us7fWjTn/J+dtdHHk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ju/Nio2e; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="hXcDMFoS"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1718643144;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=nzjNcr6bdCqF/Tb1sa4CawaMU65W7l+dmdwN+Mk2bL4=;
-	b=hXcDMFoS9HsgEYxdrin2cXAyImu8cjBzIv0f+hONN3p2yZF03eYA23mlHIAboJgflqBZnP
-	HDLzKdFuAD+RZ25dMCtrkV3xDPZ7Mc3N4ddvCtJyGjbIRKstp8m7l1RxsRBMjhdCySC6W0
-	uf1/F7pa0XZH9ocwdB7SfrgLrIkAUpY=
-Received: from mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-38-A4KnvNvDNOuquPxxEpAZqQ-1; Mon,
- 17 Jun 2024 12:52:20 -0400
-X-MC-Unique: A4KnvNvDNOuquPxxEpAZqQ-1
-Received: from mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.12])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id AF0A61956088;
-	Mon, 17 Jun 2024 16:52:19 +0000 (UTC)
-Received: from [172.64.3.44] (unknown [10.30.33.101])
-	by mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id EBB2919560AE;
-	Mon, 17 Jun 2024 16:52:18 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL (MISSED 11 of 192): Test report for master
- (6.10.0-rc4, mainline.kernel.org-clang, 6ba59ff4)
-Date: Mon, 17 Jun 2024 16:52:18 -0000
-To: bgoncalv@redhat.com, yizhan@redhat.com, shinichiro.kawasaki@wdc.com,
- llvm@lists.linux.dev
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ju/Nio2e"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 423E1C2BD10;
+	Mon, 17 Jun 2024 16:52:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1718643174;
+	bh=eSnhqAm2EceuPb7GR0p97myLZRdOU10MmclXVrykcQE=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=ju/Nio2ekUQo8b14RA4d5uLq/NEoJTbtrPRR3ycrp0W1iGLafnBwKjFA8qysevzDj
+	 x7qKSGBs7oZOc8NK6gLzhdGOzqjFfVQz3Y40KI0j1uBCDQaT3mQ0/9/xd8ICwa2pwQ
+	 LSofAHNWiaTakNfXTxUASBja6ZNvN7KkmhX6DC383eLoNUeYxbs4zITnUD+vUiO/72
+	 y3b0j9RHGovIx9OvW5LKQO1DsJNAmkmS9n9dcDrZHoQS71AmEDLI7gVeHZR8rNMsEq
+	 jMWLkftptNFsk8lWXU/2Xo7Tvp0wvcFXv3NKuJznlFkgIV5prc1Luup8xxx78FJ/i1
+	 Qra2f1kMDF83g==
+Date: Mon, 17 Jun 2024 09:52:51 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Andy Chiu <andy.chiu@sifive.com>
+Cc: Paul Walmsley <paul.walmsley@sifive.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>,
+	Alexandre Ghiti <alexghiti@rivosinc.com>,
+	Zong Li <zong.li@sifive.com>, Steven Rostedt <rostedt@goodmis.org>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Puranjay Mohan <puranjay@kernel.org>,
+	Palmer Dabbelt <palmer@rivosinc.com>,
+	linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+	linux-trace-kernel@vger.kernel.org, llvm@lists.linux.dev,
+	Evgenii Shatokhin <e.shatokhin@yadro.com>
+Subject: Re: [PATCH 4/8] riscv: ftrace: align patchable functions to 4 Byte
+ boundary
+Message-ID: <20240617165251.GA550301@thelio-3990X>
+References: <20240613-dev-andyc-dyn-ftrace-v4-v1-0-1a538e12c01e@sifive.com>
+ <20240613-dev-andyc-dyn-ftrace-v4-v1-4-1a538e12c01e@sifive.com>
+ <20240613190920.GB1272931@thelio-3990X>
+ <CABgGipV_6sFx8TJNrHszGLk=V9X1PJAXuOmRDxnTHPrigqJL0A@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.12
-Message-Id: <29015.124061712522001147@us-mta-38.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CABgGipV_6sFx8TJNrHszGLk=V9X1PJAXuOmRDxnTHPrigqJL0A@mail.gmail.com>
 
-Hi, we tested your kernel and here are the results:
+On Mon, Jun 17, 2024 at 10:38:55AM +0800, Andy Chiu wrote:
+> On Fri, Jun 14, 2024 at 3:09 AM Nathan Chancellor <nathan@kernel.org> wrote:
+> >
+> > Hi Andy,
+> >
+> > On Thu, Jun 13, 2024 at 03:11:09PM +0800, Andy Chiu wrote:
+> > > We are changing ftrace code patching in order to remove dependency from
+> > > stop_machine() and enable kernel preemption. This requires us to align
+> > > functions entry at a 4-B align address.
+> > >
+> > > However, -falign-functions on older versions of GCC alone was not strong
+> > > enoungh to align all functions. In fact, cold functions are not aligned
+> > > after turning on optimizations. We consider this is a bug in GCC and
+> > > turn off guess-branch-probility as a workaround to align all functions.
+> > >
+> > > GCC bug id: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=88345
+> > >
+> > > The option -fmin-function-alignment is able to align all functions
+> > > properly on newer versions of gcc. So, we add a cc-option to test if
+> > > the toolchain supports it.
+> > >
+> > > Suggested-by: Evgenii Shatokhin <e.shatokhin@yadro.com>
+> > > Signed-off-by: Andy Chiu <andy.chiu@sifive.com>
+> > > ---
+> > >  arch/riscv/Kconfig  | 1 +
+> > >  arch/riscv/Makefile | 7 ++++++-
+> > >  2 files changed, 7 insertions(+), 1 deletion(-)
+> > >
+> > > diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
+> > > index b94176e25be1..80b8d48e1e46 100644
+> > > --- a/arch/riscv/Kconfig
+> > > +++ b/arch/riscv/Kconfig
+> > > @@ -203,6 +203,7 @@ config CLANG_SUPPORTS_DYNAMIC_FTRACE
+> > >  config GCC_SUPPORTS_DYNAMIC_FTRACE
+> > >       def_bool CC_IS_GCC
+> > >       depends on $(cc-option,-fpatchable-function-entry=8)
+> > > +     depends on $(cc-option,-fmin-function-alignment=4) || !RISCV_ISA_C
+> >
+> > Please use CC_HAS_MIN_FUNCTION_ALIGNMENT (from arch/Kconfig), which
+> > already checks for support for this option.
+> 
+> Thanks for the suggestion!
+> 
+> >
+> > >  config HAVE_SHADOW_CALL_STACK
+> > >       def_bool $(cc-option,-fsanitize=shadow-call-stack)
+> > > diff --git a/arch/riscv/Makefile b/arch/riscv/Makefile
+> > > index 06de9d365088..74628ad8dcf8 100644
+> > > --- a/arch/riscv/Makefile
+> > > +++ b/arch/riscv/Makefile
+> > > @@ -14,8 +14,13 @@ endif
+> > >  ifeq ($(CONFIG_DYNAMIC_FTRACE),y)
+> > >       LDFLAGS_vmlinux += --no-relax
+> > >       KBUILD_CPPFLAGS += -DCC_USING_PATCHABLE_FUNCTION_ENTRY
+> > > +ifeq ($(CONFIG_CC_IS_CLANG),y)
+> >
+> > Same here, please invert this and use
+> >
+> >   ifdef CONFIG_CC_HAS_MIN_FUNCTION_ALIGNMENT
+> >
+> > like the main Makefile does.
+> 
+> Hope this makes sense to you. I am going to add the following in riscv Kconig:
+> 
+> select FUNCTION_ALIGNMENT_4B if DYNAMIC_FTRACE && !RISCV_ISA_C
+> 
+> So we will not need any of these
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: OK
-              Test: FAILED
+Yes, that definitely makes sense, I forgot that this has been abstracted
+away via the use of those alignment Kconfig symbols that can be selected
+when needed. Much better than my suggestions, thanks!
 
-
-Kernel information:
-    Commit message: Linux 6.10-rc4
-
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1334372289
-
-One or more kernel tests failed:
-    Unrecognized or new issues:
-        Reboot test
-              x86_64
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-redhat:1334372289-x86_64-kernel_upt_35
-                   Non-passing ran subtests:
-                       =E2=9D=8C FAIL misc/reboot-test/journalctl-check
-        Storage - blktests - blk - upstream
-              x86_64
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-redhat:1334372289-x86_64-kernel_upt_5
-                   Non-passing ran subtests:
-                       =E2=9D=8C FAIL storage/blktests/tests/nbd/002
-
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1267
-            Affected tests:
-                selinux-policy: serge-testsuite [ppc64le]
-        Issue: [rhel-10] xfstests - cifsv3.11 - generic/207 - error in bloc=
-k: expected 4096 bytes, received 0
-            URL: https://issues.redhat.com/browse/RHEL-39974
-            Affected tests:
-                xfstests - cifsv3.11 [x86_64, x86_64 (debug)]
-
-
-Tests that were not ran because of internal issues:=20
-    Boot test [s390x]
-    CKI/restraint [s390x]
-    machineinfo [s390x]
-    Reboot test [s390x]
-    SELinux Custom Module Setup [ppc64le, s390x]
-    Storage - blktests - blk - upstream [s390x]
-    Storage - blktests - nvme-tcp - upstream [s390x]
-    Storage - swraid scsi_raid [s390x]
-    stress: stress-ng - cpu-cache [s390x]
-    stress: stress-ng - memory [s390x]
-
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+> >
+> > > +     cflags_ftrace_align := -falign-functions=4
+> > > +else
+> > > +     cflags_ftrace_align := -fmin-function-alignment=4
+> > > +endif
+> > >  ifeq ($(CONFIG_RISCV_ISA_C),y)
+> > > -     CC_FLAGS_FTRACE := -fpatchable-function-entry=4
+> > > +     CC_FLAGS_FTRACE := -fpatchable-function-entry=4 $(cflags_ftrace_align)
+> > >  else
+> > >       CC_FLAGS_FTRACE := -fpatchable-function-entry=2
+> > >  endif
+> > >
+> > > --
+> > > 2.43.0
+> > >
+> > >
+> 
+> Thanks,
+> Andy
