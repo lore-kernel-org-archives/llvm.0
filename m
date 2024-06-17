@@ -1,44 +1,48 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 43EFB19B3CC;
-	Mon, 17 Jun 2024 13:23:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 963FB1CB317;
+	Mon, 17 Jun 2024 13:24:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718630602; cv=none; b=dAM/mjl7ALGDltL4cdZi2F7dvShEt12i/r7zZHvnXmbvM4SjbwEd6egbe+M2UIzw3T2miDjX2GMqELXm90avmpqnFawWMMGMAJviZQNArsBFvwq9rW1fu2biQ1he+i0EnToo6IvY4qgsZ+f41+q2q+LBgXT8QtJMyL6GzrKgTeA=
+	t=1718630651; cv=none; b=YHysR3L6PWrAK5GjqchCdW3LfnCBObwzfB3WNm4FUC+beodQTdPKjnW7J8eg0PH7kmKGOUV9mfKxIGsBhK7iIttiPhSeDUPgEOaW4KiF3CRe0AiEY+smb0X7Uzn/0f9wJoQCgdUEud7D3BuINcqYFktwsAsCYWhVV4UNUVvbcxQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718630602; c=relaxed/simple;
-	bh=kaqaszhQnjB6MNLzi7ZVRYXuc9INOeh8YqNngcloKc4=;
+	s=arc-20240116; t=1718630651; c=relaxed/simple;
+	bh=Ko6WKs9ylk0r3aUSIT4ZiJ7bdYWw11IOSysG9UUFjCI=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=q6ezsQlY4dLjyCsquwtZDCWmIlJDO6deR5rjkak2fQ74HTSE2sDItzfDEwe9hHGRWucxOPf/cvuMzsu430p6C08g/O//NXKRC9zRWH0j0IceJWO4WUnz8iujsf2uOk2NvuLNCGo3yjjNVDqVAcU5suAibCjwAu60g9/llDGr8d4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=audz07BV; arc=none smtp.client-ip=10.30.226.201
+	 MIME-Version; b=ROkJG5l+ENljT9GOk4q5tDoFrtTUmm0m+a0UmlnE/4V2H3H3mWhm1eGZY12/04z2xuVGayCR1zPl3LcxWxuILPTcISYD2pcsSybvoOPhwt5sycKysRqUtSb3adzHybDcuN8rSUuXFz5ZBZy/IpmTKnCoifurS1Vr6bRIYFnApTQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=tDcp4FK3; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="audz07BV"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D2566C2BD10;
-	Mon, 17 Jun 2024 13:23:20 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="tDcp4FK3"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DCDD8C4AF1C;
+	Mon, 17 Jun 2024 13:24:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1718630601;
-	bh=kaqaszhQnjB6MNLzi7ZVRYXuc9INOeh8YqNngcloKc4=;
+	s=k20201202; t=1718630651;
+	bh=Ko6WKs9ylk0r3aUSIT4ZiJ7bdYWw11IOSysG9UUFjCI=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=audz07BVmwntu7RPcaTdg3WzYwgwFMLMRKMW0UdTxpGNw31EI9ZIVuPz4FQHUz0to
-	 VnPmzD0ONgTImWFImNdBSfzmCjENZ1E4s4x1vOSu1Kvnq6KRn0i55Ri0oxea1HRKdu
-	 fAS7Jcxrre9h0ISH6jAf7ul/x2rGEpdIFq4wp7yD3+D0wppVyXLk57kacFdn9UcSZx
-	 1Z2Er6y+mGkV/YTEU1fMh6VbWNB1s2lk9insB2hR+qa1+fJGCuz9qjZAeReuSLUDfA
-	 0wm6JbiBbvAjnSJ9BJjirt+jSei77xzQRqvX8vWJ9DtmOxHzxpsek+CGSMa4YfxmOU
-	 PUXru2QIlSCLQ==
+	b=tDcp4FK3RCxqYrUItBejA3bpA4kmcj13YO+6aYss/PXFyUa3SkS+7N1jGGiio+lTr
+	 U8ZGtPhLv56mlxWPgyozbqRWcgZ3+5RCB2C/zpopHwhqFvXOYeKqVzk+AtaSt6Tlrn
+	 kIOc1WxHVz5IG+RTbhPAXX4bvc2x5zjTU/KjUt6hQ5+/CSKpmQhcxgIUr8Rj8YczNL
+	 7nREW2fCKug9TKSiFx3MswJj4ZHbdXvc0Ai6nMfX0tAp3CRs7fveesOslcLHQLDAW1
+	 56Yzyo98bQjV+Be51em/xY9vRPu1QgjD0I51wC8v5m2lUPPWgj6pogstsB3uxjM8LA
+	 dSdFvzdgowlfA==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
-Cc: Nathan Chancellor <nathan@kernel.org>,
-	Huacai Chen <chenhuacai@loongson.cn>,
-	Ard Biesheuvel <ardb@kernel.org>,
+Cc: John Hubbard <jhubbard@nvidia.com>,
+	Edward Liaw <edliaw@google.com>,
+	Davidlohr Bueso <dave@stgolabs.net>,
+	Shuah Khan <skhan@linuxfoundation.org>,
 	Sasha Levin <sashal@kernel.org>,
-	chenhuacai@kernel.org,
-	linux-efi@vger.kernel.org,
+	tglx@linutronix.de,
+	mingo@redhat.com,
+	shuah@kernel.org,
+	nathan@kernel.org,
+	linux-kselftest@vger.kernel.org,
 	llvm@lists.linux.dev
-Subject: [PATCH AUTOSEL 6.6 06/35] efi/libstub: zboot.lds: Discard .discard sections
-Date: Mon, 17 Jun 2024 09:22:04 -0400
-Message-ID: <20240617132309.2588101-6-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 6.6 24/35] selftests/futex: pass _GNU_SOURCE without a value to the compiler
+Date: Mon, 17 Jun 2024 09:22:22 -0400
+Message-ID: <20240617132309.2588101-24-sashal@kernel.org>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20240617132309.2588101-1-sashal@kernel.org>
 References: <20240617132309.2588101-1-sashal@kernel.org>
@@ -53,52 +57,51 @@ X-Patchwork-Hint: Ignore
 X-stable-base: Linux 6.6.34
 Content-Transfer-Encoding: 8bit
 
-From: Nathan Chancellor <nathan@kernel.org>
+From: John Hubbard <jhubbard@nvidia.com>
 
-[ Upstream commit 5134acb15d9ef27aa2b90aad46d4e89fcef79fdc ]
+[ Upstream commit cb708ab9f584f159798b60853edcf0c8b67ce295 ]
 
-When building ARCH=loongarch defconfig + CONFIG_UNWINDER_ORC=y using
-LLVM, there is a warning from ld.lld when linking the EFI zboot image
-due to the use of unreachable() in number() in vsprintf.c:
+It's slightly better to set _GNU_SOURCE in the source code, but if one
+must do it via the compiler invocation, then the best way to do so is
+this:
 
-  ld.lld: warning: drivers/firmware/efi/libstub/lib.a(vsprintf.stub.o):(.discard.unreachable+0x0): has non-ABS relocation R_LARCH_32_PCREL against symbol ''
+    $(CC) -D_GNU_SOURCE=
 
-If the compiler cannot eliminate the default case for any reason, the
-.discard.unreachable section will remain in the final binary but the
-entire point of any section prefixed with .discard is that it is only
-used at compile time, so it can be discarded via /DISCARD/ in a linker
-script. The asm-generic vmlinux.lds.h includes .discard and .discard.*
-in the COMMON_DISCARDS macro but that is not used for zboot.lds, as it
-is not a kernel image linker script.
+...because otherwise, if this form is used:
 
-Add .discard and .discard.* to /DISCARD/ in zboot.lds, so that any
-sections meant to be discarded at link time are not included in the
-final zboot image. This issue is not specific to LoongArch, it is just
-the first architecture to select CONFIG_OBJTOOL, which defines
-annotate_unreachable() as an asm statement to add the
-.discard.unreachable section, and use the EFI stub.
+    $(CC) -D_GNU_SOURCE
 
-Closes: https://github.com/ClangBuiltLinux/linux/issues/2023
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
-Acked-by: Huacai Chen <chenhuacai@loongson.cn>
-Signed-off-by: Ard Biesheuvel <ardb@kernel.org>
+...then that leads the compiler to set a value, as if you had passed in:
+
+    $(CC) -D_GNU_SOURCE=1
+
+That, in turn, leads to warnings under both gcc and clang, like this:
+
+    futex_requeue_pi.c:20: warning: "_GNU_SOURCE" redefined
+
+Fix this by using the "-D_GNU_SOURCE=" form.
+
+Reviewed-by: Edward Liaw <edliaw@google.com>
+Reviewed-by: Davidlohr Bueso <dave@stgolabs.net>
+Signed-off-by: John Hubbard <jhubbard@nvidia.com>
+Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/firmware/efi/libstub/zboot.lds | 1 +
- 1 file changed, 1 insertion(+)
+ tools/testing/selftests/futex/functional/Makefile | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/firmware/efi/libstub/zboot.lds b/drivers/firmware/efi/libstub/zboot.lds
-index ac8c0ef851581..af2c82f7bd902 100644
---- a/drivers/firmware/efi/libstub/zboot.lds
-+++ b/drivers/firmware/efi/libstub/zboot.lds
-@@ -41,6 +41,7 @@ SECTIONS
- 	}
+diff --git a/tools/testing/selftests/futex/functional/Makefile b/tools/testing/selftests/futex/functional/Makefile
+index a392d0917b4e5..994fa3468f170 100644
+--- a/tools/testing/selftests/futex/functional/Makefile
++++ b/tools/testing/selftests/futex/functional/Makefile
+@@ -1,6 +1,6 @@
+ # SPDX-License-Identifier: GPL-2.0
+ INCLUDES := -I../include -I../../ $(KHDR_INCLUDES)
+-CFLAGS := $(CFLAGS) -g -O2 -Wall -D_GNU_SOURCE -pthread $(INCLUDES) $(KHDR_INCLUDES)
++CFLAGS := $(CFLAGS) -g -O2 -Wall -D_GNU_SOURCE= -pthread $(INCLUDES) $(KHDR_INCLUDES)
+ LDLIBS := -lpthread -lrt
  
- 	/DISCARD/ : {
-+		*(.discard .discard.*)
- 		*(.modinfo .init.modinfo)
- 	}
- }
+ LOCAL_HDRS := \
 -- 
 2.43.0
 
