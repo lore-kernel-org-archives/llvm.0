@@ -1,134 +1,120 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from xry111.site (xry111.site [89.208.246.23])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 949B3194A43
-	for <llvm@lists.linux.dev>; Mon, 17 Jun 2024 13:33:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B17319884D;
+	Mon, 17 Jun 2024 13:38:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=89.208.246.23
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718631209; cv=none; b=oyqjCY/43jbXYt34/jXXmwwRrtKlZyinZ/yCllb0BkT/Ud73sTthIxnw1BlwPNZQDRHap5N+AxwANN4UK+Hzs128sqP2QEfgxeiYBpEHHzxeK4AA75RECcSmKaZUyT6ReoVIg65d8MLx5Xi07/tQkenI8D4FyxQERZdw5UaeN4k=
+	t=1718631504; cv=none; b=DthjxFGlvcBGnGFQTsyWOO/6jFfek+LpHgXTNpZECzvvci2yPcPG/P70GNofW+ID8rKi36zuQqctLZt9K0T+Xw7Z7dzgleB3rc2J5jQKzrun992oPWujOpo5BqVbpLkVEvQxBC4yKDnBAVeKC64FkLhWsIF6LInhkcLFXjsVM5E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718631209; c=relaxed/simple;
-	bh=2Eun3pJDlEFmVTBJqyxQogeRLBK6Df4NjzAEGjRcs8U=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=uJ54C1Sv32fYdaAbqoIGybSuwTE2W8hZMuL+sh5V6+P3YrnVi2QezHFgCs6uaI3PX9HaV+Rhsg5K0nUqMw3vL9MflDNlZqtXAt4BmKv6U5sfw6KZSttjMX+V7ECs8dgzxfljiPbiYt8VCLcjRGEJYJmyK9Oi0NOIFle5EZWr3MA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Ls/UbLVk; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1718631504; c=relaxed/simple;
+	bh=akWFXFL9APSeZUybdYwbaKWZJ+YSl23R6WS8xUNuMz4=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=NkZkdBzpyc90bOfTj+gHW2141xYoIvHZULn3wID6n20IL0oz3AbK/VZa2fl5sb/60pBwO3stH0E2UE4Hc+bSPdTQKEBzRpftBm3iUOt0VaDRs+1RDXR4GKl2Tpjk6cANOfwndbz2rl+pd0KnjsBxXCYfwJtjh8WxuQ8Bb9dmhZE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=xry111.site; spf=pass smtp.mailfrom=xry111.site; dkim=pass (1024-bit key) header.d=xry111.site header.i=@xry111.site header.b=U+3Yx4vN; arc=none smtp.client-ip=89.208.246.23
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=xry111.site
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=xry111.site
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Ls/UbLVk"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1718631206;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=FC4T2UsF9gRHN3fgZVNK+gTE9J68Y5leLUN3TPbZ680=;
-	b=Ls/UbLVkQsl498lHVSyXn+YD5KDoQoWfewf+JULR+BHZC1O5WqVOXFWkQnRRXr/zGSopU5
-	ZIHIpkNRl965/H/aNzgeY5A87qHc84ojIDVcNb8UM0GKje2G7DJOmcYsp8J6dUmRqrVkoY
-	Hb/SkXxwqc03RQPu85cxKz7RpxpCkGI=
-Received: from mx-prod-mc-02.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-354-zBA1krKwOJSAZbVJWCk3RA-1; Mon,
- 17 Jun 2024 09:33:24 -0400
-X-MC-Unique: zBA1krKwOJSAZbVJWCk3RA-1
-Received: from mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.40])
+	dkim=pass (1024-bit key) header.d=xry111.site header.i=@xry111.site header.b="U+3Yx4vN"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=xry111.site;
+	s=default; t=1718631496;
+	bh=akWFXFL9APSeZUybdYwbaKWZJ+YSl23R6WS8xUNuMz4=;
+	h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+	b=U+3Yx4vNAiPitIxm1W3qEsYpkCOC/D0rM4UzLSFkheUmCZ0efYVicNfA8w8l14WGx
+	 ZTJB4/Ecew6fjurxAgwvnX5+Ee1AByQjroNY9Jz0NY0Hf8sqFuZV3f0W7DOGLr0Dzu
+	 8YQ20DhF2cA1vtYDSa4dP/QbH4weuk2FPW8NlVRA=
+Received: from [127.0.0.1] (unknown [IPv6:2001:470:683e::1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-02.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 7A71719560B3
-	for <llvm@lists.linux.dev>; Mon, 17 Jun 2024 13:33:23 +0000 (UTC)
-Received: from [172.64.3.44] (unknown [10.30.33.101])
-	by mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 16D701956087;
-	Mon, 17 Jun 2024 13:33:23 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL (MISSED 13 of 192): Test report for master
- (6.10.0-rc3, mainline.kernel.org-clang, b5beaa44)
-Date: Mon, 17 Jun 2024 13:33:22 -0000
-To: bgoncalv@redhat.com, llvm@lists.linux.dev
+	 key-exchange ECDHE (P-256) server-signature ECDSA (P-384) server-digest SHA384)
+	(Client did not present a certificate)
+	(Authenticated sender: xry111@xry111.site)
+	by xry111.site (Postfix) with ESMTPSA id C2D1566A19;
+	Mon, 17 Jun 2024 09:38:10 -0400 (EDT)
+Message-ID: <6e14e41b728437743fddebf78f7981ea15f6b8a8.camel@xry111.site>
+Subject: Re: [PATCH] loongarch: Only select HAVE_OBJTOOL and allow ORC
+ unwinder if the inline assembler supports R_LARCH_{32,64}_PCREL
+From: Xi Ruoyao <xry111@xry111.site>
+To: Huacai Chen <chenhuacai@kernel.org>, chenglulu <chenglulu@loongson.cn>
+Cc: Jinyang He <hejinyang@loongson.cn>, Nathan Chancellor
+ <nathan@kernel.org>,  Peter Zijlstra <peterz@infradead.org>, WANG Xuerui
+ <kernel@xen0n.name>, Tiezhu Yang <yangtiezhu@loongson.cn>,  Nick
+ Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>,
+ Justin Stitt <justinstitt@google.com>,  Youling Tang
+ <tangyouling@kylinos.cn>, loongarch@lists.linux.dev,
+ linux-kernel@vger.kernel.org,  llvm@lists.linux.dev,
+ mengqinggang@loongson.cn, cailulu@loongson.cn,  wanglei@loongson.cn,
+ luweining@loongson.cn, Yujie Liu <yujie.liu@intel.com>,  Heng Qi
+ <hengqi@linux.alibaba.com>, Tejun Heo <tj@kernel.org>
+Date: Mon, 17 Jun 2024 21:38:08 +0800
+In-Reply-To: <CAAhV-H6j0WgN6QpHBYcdprdWBpcQq4ObYK5YcE=TVsDNxGFEtA@mail.gmail.com>
+References: <20240604150741.30252-1-xry111@xry111.site>
+	 <20240605054328.GA279426@thelio-3990X>
+	 <b55b8cb2c52f2c3701c83353586130b8dc237ee2.camel@xry111.site>
+	 <20240605062548.GF279426@thelio-3990X>
+	 <f8ef61773b0119b8573fc0fed9ad0a8b43061efd.camel@xry111.site>
+	 <444ec2031ef6ca016cbfa8dfedc51bddc8529ba7.camel@xry111.site>
+	 <ada035690e446909c3cdbf9a43a92def96020615.camel@xry111.site>
+	 <82b7e6ea-c2cb-6364-ebe9-bff928028408@loongson.cn>
+	 <1c132209a612e2e8953f0b458fc01853120db9a9.camel@xry111.site>
+	 <2bf11cd2-8449-acda-f5ad-659c38cb018e@loongson.cn>
+	 <96a2e8a80c06772b64fcbdba42e1dae2d68a53a7.camel@xry111.site>
+	 <2bd6ae20-ec56-c1a2-c5dd-e8c978a376d3@loongson.cn>
+	 <329dac82e09dfc75e77ae93ebbeacdec1dc9ff7f.camel@xry111.site>
+	 <CAAhV-H5Wz=U4kbX+tXt1qoCr6RaEDkzZXV7B=tgU_8o+X-NtVQ@mail.gmail.com>
+	 <a97cd0f2e2cac10253d6b5cdd0ace3db3b220535.camel@xry111.site>
+	 <CAAhV-H7hhh3Jes0jMrg82+KJCa7GQZW=F9bDtktFh=eazMDX9w@mail.gmail.com>
+	 <12099e6fb7ba377f3dcf6686e0b37200b9818708.camel@xry111.site>
+	 <CAAhV-H6j0WgN6QpHBYcdprdWBpcQq4ObYK5YcE=TVsDNxGFEtA@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.52.2 
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.40
-Message-Id: <93895.124061709332401023@us-mta-354.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
 
-Hi, we tested your kernel and here are the results:
-
-    Overall result: FAILED
-             Merge: OK
-           Compile: OK
-              Test: FAILED
+On Mon, 2024-06-17 at 21:11 +0800, Huacai Chen wrote:
 
 
-Kernel information:
-    Commit message: Merge tag 'usb-6.10-rc4' of git://git.kernel.org/pub/sc=
-m/linux/kernel/git/gregkh/usb
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1334320760
+> > select HAVE_OBJTOOL if AS_HAS_EXPLICIT_RELOCS && AS_HAS_THIN_ADD_SUB &&=
+ !CC_IS_CLANG && !RUST
+> Maybe we needn't consider RUST here?
 
-One or more kernel tests failed:
-    Unrecognized or new issues:
-        Reboot test
-              x86_64
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-redhat:1334320760-x86_64-kernel_upt_35
-                   Non-passing ran subtests:
-                       =E2=9D=8C FAIL misc/reboot-test/journalctl-check
+Rustc does use $fp that objtool cannot handle as at now.  It can be
+demonstrated with an over-aligned type, similar to Clang:
 
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: [upstream] blktests nbd/004 failed
-            URL: https://github.com/osandov/blktests/issues/140
-            Affected tests:
-                Storage - blktests - blk - upstream [x86_64]
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1267
-            Affected tests:
-                selinux-policy: serge-testsuite [ppc64le]
-        Issue: [rhel-10] xfstests - cifsv3.11 - generic/207 - error in bloc=
-k: expected 4096 bytes, received 0
-            URL: https://issues.redhat.com/browse/RHEL-39974
-            Affected tests:
-                xfstests - cifsv3.11 [x86_64 (debug)]
+$ cat t.rs
+#[repr(C, align(64))]
+struct X(i32);
 
+extern { fn f(x: &X) -> i64; }
 
-Tests that were not ran because of internal issues:=20
-    Boot test [s390x]
-    CKI/restraint [s390x]
-    machineinfo [s390x]
-    Reboot test [s390x, x86_64]
-    SELinux Custom Module Setup [ppc64le, s390x]
-    Storage - blktests - blk - upstream [s390x]
-    Storage - blktests - nvme-tcp - upstream [s390x]
-    Storage - swraid scsi_raid [s390x]
-    stress: stress-ng - cpu-cache [s390x]
-    stress: stress-ng - memory [s390x]
-    xfstests - cifsv3.11 [x86_64]
+#[no_mangle]
+fn g() -> i64 {
+    let x =3D X(114514);
+    unsafe {f(&x)}
+}
+$ rustc t.rs --emit=3Dasm --crate-type=3Dstaticlib -O
+$ grep fp t.s
+	st.d	$fp, $sp, 112
+	addi.d	$fp, $sp, 128
+	addi.d	$sp, $fp, -128
+	ld.d	$fp, $sp, 112
 
+The kernel uses rust-bindgen to generate some .rs file from C headers.=20
+And __attribute__((aligned(x))) is directly translated to
+repr(align(x)).  As __attribute__((aligned(x))) is very common in the
+kernel I expect objtool will fail to handle some object code from rustc.
 
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
+> And can we think AS_HAS_THIN_ADD_SUB always imply
+> AS_HAS_EXPLICIT_RELOCS here?
 
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
+Maybe, AFAIK there's no assembler using thin add-sub but not explicit
+relocs.
 
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+--=20
+Xi Ruoyao <xry111@xry111.site>
+School of Aerospace Science and Technology, Xidian University
