@@ -1,107 +1,134 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A520185E65;
-	Mon, 17 Jun 2024 13:25:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 949B3194A43
+	for <llvm@lists.linux.dev>; Mon, 17 Jun 2024 13:33:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718630743; cv=none; b=cP/UXzLW0WMQcCD2T2XvmqSvsRbMcPfJKPSA+/OFJaKc6ddVU/FqyMqurSy/NGXiJW0pDRC3CRhON8HAUNObE2MlxS1aWS88P3r/KB1yrI0ZQFNE0umhiplcTMEx583k6uJr6o4TuHY00lswO06rjOlEi8QI4VmQEuPaXdm1eZk=
+	t=1718631209; cv=none; b=oyqjCY/43jbXYt34/jXXmwwRrtKlZyinZ/yCllb0BkT/Ud73sTthIxnw1BlwPNZQDRHap5N+AxwANN4UK+Hzs128sqP2QEfgxeiYBpEHHzxeK4AA75RECcSmKaZUyT6ReoVIg65d8MLx5Xi07/tQkenI8D4FyxQERZdw5UaeN4k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718630743; c=relaxed/simple;
-	bh=Ko6WKs9ylk0r3aUSIT4ZiJ7bdYWw11IOSysG9UUFjCI=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=V6ObRkrcaQp5UlhAEuiuOuQ7182/XmfCpNyzjmzvIu7BFI8zXjqUXUhYnu083clbTj683X4nAiRmuNUlHUmwC3tdVn5q3QhG/385nC3Ov/1G97W3vqkhEtfld/2YVk5+ZCXMQX7AvpeRahLA6YlpItNuTnWi7PDiStkZ8+ZU0KE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TSpIim7d; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1718631209; c=relaxed/simple;
+	bh=2Eun3pJDlEFmVTBJqyxQogeRLBK6Df4NjzAEGjRcs8U=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=uJ54C1Sv32fYdaAbqoIGybSuwTE2W8hZMuL+sh5V6+P3YrnVi2QezHFgCs6uaI3PX9HaV+Rhsg5K0nUqMw3vL9MflDNlZqtXAt4BmKv6U5sfw6KZSttjMX+V7ECs8dgzxfljiPbiYt8VCLcjRGEJYJmyK9Oi0NOIFle5EZWr3MA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Ls/UbLVk; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TSpIim7d"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8BCA6C2BD10;
-	Mon, 17 Jun 2024 13:25:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1718630742;
-	bh=Ko6WKs9ylk0r3aUSIT4ZiJ7bdYWw11IOSysG9UUFjCI=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=TSpIim7dsv93hDokeF9di0UqPfApR7kyZnrl/NBplo+8/Tu4osxSNYI0yEp+bRUNE
-	 Au56EvCz1GhJcDIBmD1FGHazVOkCsL7+i4mtVEfUJhYAgGHIaTf4d/E3AFt6bZlnjv
-	 ioz7FLaGpk4HBJslSHxpgQlPKB/Wa2FiJrOMyCMQ1xpvSAmHMXSZ0WHp0BCEIyLfR2
-	 4plm70R9y6S1cE2xLuZAJe7zKOVF0RfrRAWfbhwTNVUqiktCWL3RgquVcRug9N6oFp
-	 arSpEraY9YfqcX2OaSAPPfTdUEkJBnFeAcvpWmJRbHPCzVTgxnuv4+mT2UtX43b2jB
-	 N9N9seROu+Qdw==
-From: Sasha Levin <sashal@kernel.org>
-To: linux-kernel@vger.kernel.org,
-	stable@vger.kernel.org
-Cc: John Hubbard <jhubbard@nvidia.com>,
-	Edward Liaw <edliaw@google.com>,
-	Davidlohr Bueso <dave@stgolabs.net>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	Sasha Levin <sashal@kernel.org>,
-	tglx@linutronix.de,
-	mingo@redhat.com,
-	shuah@kernel.org,
-	nathan@kernel.org,
-	linux-kselftest@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: [PATCH AUTOSEL 6.1 21/29] selftests/futex: pass _GNU_SOURCE without a value to the compiler
-Date: Mon, 17 Jun 2024 09:24:25 -0400
-Message-ID: <20240617132456.2588952-21-sashal@kernel.org>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20240617132456.2588952-1-sashal@kernel.org>
-References: <20240617132456.2588952-1-sashal@kernel.org>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Ls/UbLVk"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1718631206;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=FC4T2UsF9gRHN3fgZVNK+gTE9J68Y5leLUN3TPbZ680=;
+	b=Ls/UbLVkQsl498lHVSyXn+YD5KDoQoWfewf+JULR+BHZC1O5WqVOXFWkQnRRXr/zGSopU5
+	ZIHIpkNRl965/H/aNzgeY5A87qHc84ojIDVcNb8UM0GKje2G7DJOmcYsp8J6dUmRqrVkoY
+	Hb/SkXxwqc03RQPu85cxKz7RpxpCkGI=
+Received: from mx-prod-mc-02.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-354-zBA1krKwOJSAZbVJWCk3RA-1; Mon,
+ 17 Jun 2024 09:33:24 -0400
+X-MC-Unique: zBA1krKwOJSAZbVJWCk3RA-1
+Received: from mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.40])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-02.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 7A71719560B3
+	for <llvm@lists.linux.dev>; Mon, 17 Jun 2024 13:33:23 +0000 (UTC)
+Received: from [172.64.3.44] (unknown [10.30.33.101])
+	by mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 16D701956087;
+	Mon, 17 Jun 2024 13:33:23 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL (MISSED 13 of 192): Test report for master
+ (6.10.0-rc3, mainline.kernel.org-clang, b5beaa44)
+Date: Mon, 17 Jun 2024 13:33:22 -0000
+To: bgoncalv@redhat.com, llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-X-stable-base: Linux 6.1.94
-Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.40
+Message-Id: <93895.124061709332401023@us-mta-354.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-From: John Hubbard <jhubbard@nvidia.com>
+Hi, we tested your kernel and here are the results:
 
-[ Upstream commit cb708ab9f584f159798b60853edcf0c8b67ce295 ]
+    Overall result: FAILED
+             Merge: OK
+           Compile: OK
+              Test: FAILED
 
-It's slightly better to set _GNU_SOURCE in the source code, but if one
-must do it via the compiler invocation, then the best way to do so is
-this:
 
-    $(CC) -D_GNU_SOURCE=
+Kernel information:
+    Commit message: Merge tag 'usb-6.10-rc4' of git://git.kernel.org/pub/sc=
+m/linux/kernel/git/gregkh/usb
 
-...because otherwise, if this form is used:
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1334320760
 
-    $(CC) -D_GNU_SOURCE
+One or more kernel tests failed:
+    Unrecognized or new issues:
+        Reboot test
+              x86_64
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+redhat:1334320760-x86_64-kernel_upt_35
+                   Non-passing ran subtests:
+                       =E2=9D=8C FAIL misc/reboot-test/journalctl-check
 
-...then that leads the compiler to set a value, as if you had passed in:
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: [upstream] blktests nbd/004 failed
+            URL: https://github.com/osandov/blktests/issues/140
+            Affected tests:
+                Storage - blktests - blk - upstream [x86_64]
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1267
+            Affected tests:
+                selinux-policy: serge-testsuite [ppc64le]
+        Issue: [rhel-10] xfstests - cifsv3.11 - generic/207 - error in bloc=
+k: expected 4096 bytes, received 0
+            URL: https://issues.redhat.com/browse/RHEL-39974
+            Affected tests:
+                xfstests - cifsv3.11 [x86_64 (debug)]
 
-    $(CC) -D_GNU_SOURCE=1
 
-That, in turn, leads to warnings under both gcc and clang, like this:
+Tests that were not ran because of internal issues:=20
+    Boot test [s390x]
+    CKI/restraint [s390x]
+    machineinfo [s390x]
+    Reboot test [s390x, x86_64]
+    SELinux Custom Module Setup [ppc64le, s390x]
+    Storage - blktests - blk - upstream [s390x]
+    Storage - blktests - nvme-tcp - upstream [s390x]
+    Storage - swraid scsi_raid [s390x]
+    stress: stress-ng - cpu-cache [s390x]
+    stress: stress-ng - memory [s390x]
+    xfstests - cifsv3.11 [x86_64]
 
-    futex_requeue_pi.c:20: warning: "_GNU_SOURCE" redefined
 
-Fix this by using the "-D_GNU_SOURCE=" form.
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
 
-Reviewed-by: Edward Liaw <edliaw@google.com>
-Reviewed-by: Davidlohr Bueso <dave@stgolabs.net>
-Signed-off-by: John Hubbard <jhubbard@nvidia.com>
-Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- tools/testing/selftests/futex/functional/Makefile | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
 
-diff --git a/tools/testing/selftests/futex/functional/Makefile b/tools/testing/selftests/futex/functional/Makefile
-index a392d0917b4e5..994fa3468f170 100644
---- a/tools/testing/selftests/futex/functional/Makefile
-+++ b/tools/testing/selftests/futex/functional/Makefile
-@@ -1,6 +1,6 @@
- # SPDX-License-Identifier: GPL-2.0
- INCLUDES := -I../include -I../../ $(KHDR_INCLUDES)
--CFLAGS := $(CFLAGS) -g -O2 -Wall -D_GNU_SOURCE -pthread $(INCLUDES) $(KHDR_INCLUDES)
-+CFLAGS := $(CFLAGS) -g -O2 -Wall -D_GNU_SOURCE= -pthread $(INCLUDES) $(KHDR_INCLUDES)
- LDLIBS := -lpthread -lrt
- 
- LOCAL_HDRS := \
--- 
-2.43.0
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
 
