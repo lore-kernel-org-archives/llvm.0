@@ -1,138 +1,216 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EACB816EB46;
-	Mon, 17 Jun 2024 17:28:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E049E1891BD;
+	Mon, 17 Jun 2024 17:38:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718645301; cv=none; b=DBlvdGVlJhNx64lhud1jhxnbIveC9YXEemlHU2XVUe31k9Y0qtoESLFAWdLtS2k4HY4w+DZdLQ+2ERNSDwxE9sfGZJzQSnrY10Zyuhg8yuk95ttC5DJ4es02M4mhFBjoqQTCA0hxSmaNGbRSKTeBb8eJOIrjlHtmShraa1Oqozc=
+	t=1718645920; cv=none; b=iqv0lUlFW/O9ls/+Bo8kYC3BXh9lnJeobmGqEBTCsnnxJdk8qmIENmap5qD1Ujo14iXptDHFFBMMNS2EwuxSn/YScd3TU6SS4ciZiWvogl1aoYPM7FHElsM6qFPJ2lUjyRfpOFyqq13IF1ZyTgLdEZfaTY9byLAdo0UTLOx5nAU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718645301; c=relaxed/simple;
-	bh=IKOgUg4zcXbjo67A/2GMnXl420R2v0GOkOcdt+ti4qM=;
+	s=arc-20240116; t=1718645920; c=relaxed/simple;
+	bh=ohF55oU0RYpuXbvAuI/ketm5NP7zWNWqe6VRHyy+bFo=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=X36TayuttHMZJmxb+08acPy1F8mjOj30GYIjxVNsRPKd18Er9JofvZU0UNidUuR3gl/I3Sxv7mwl85vTztcLx8k4agokjcUE0PvD030xgh5NM5F2FEYHu8le38b4bW+LTUTk4BPjGjphkoWoCBCW0ws7t3XiSJjk68xwtOcZbyw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=sq4HRtmo; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=LZqnoDhgr4UUeFpIhFKAWIXfNlpXaKeDXWOgbJsSeGtPUg9+9GUlnESWb15fNuZCcYtQC7cLkDSQO4pUSjWL2TdyCpWTQ8eWf41MTazZi2V/S6t3PbpHvg/86wmfUI8dMoKs/BK0zAhMGf9E+nThkhstLdmeM6JTNZkPyEz+1JA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=GCZ4gdIC; arc=none smtp.client-ip=192.198.163.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="sq4HRtmo"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7BBF1C2BD10;
-	Mon, 17 Jun 2024 17:28:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1718645300;
-	bh=IKOgUg4zcXbjo67A/2GMnXl420R2v0GOkOcdt+ti4qM=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=sq4HRtmoGBMHKg/cKbDuz2yF6q/Of50DlqO7vDUFbUAmC5vw0cWehniCmMqfcgDCc
-	 QMc1ug1du8PzBgxDRsKPZ7klIIxhDQdzjPclopll1O7H0Rn7ODrXo/eI375SZsZPGq
-	 5wmvUt81CpOfZ65JP+lTjGp1BEXeeGS7QX/o8Z+Hd+8ZokK4BuhRKOfw8QVefttCSA
-	 /kH0sUuxHmGqdkIyBB6pH/kZ/aok5Kv/0FHl2aD9dwcRpXZDpGxYPd123NH/o5TeUi
-	 rWindJ+tuyTQSnyJh4XvCKJuGdJHohpOrEk2AYy68kDb7rTXwMOqU+40PuuaNPSP9t
-	 DW02Pvk7AE5ZQ==
-Date: Mon, 17 Jun 2024 10:28:20 -0700
-From: Kees Cook <kees@kernel.org>
-To: Martin Uecker <uecker@tugraz.at>
-Cc: Peter Zijlstra <peterz@infradead.org>,
-	Erick Archer <erick.archer@outlook.com>,
-	Ingo Molnar <mingo@redhat.com>,
-	Arnaldo Carvalho de Melo <acme@kernel.org>,
-	Namhyung Kim <namhyung@kernel.org>,
-	Mark Rutland <mark.rutland@arm.com>,
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-	Jiri Olsa <jolsa@kernel.org>, Ian Rogers <irogers@google.com>,
-	Adrian Hunter <adrian.hunter@intel.com>,
-	"Liang, Kan" <kan.liang@linux.intel.com>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	"H. Peter Anvin" <hpa@zytor.com>,
-	"Gustavo A. R. Silva" <gustavoars@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-	Matthew Wilcox <mawilcox@microsoft.com>, x86@kernel.org,
-	linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-hardening@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH v4 0/3] Hardening perf subsystem
-Message-ID: <202406171019.9F0127F@keescook>
-References: <AS8PR02MB7237F5BFDAA793E15692B3998BFD2@AS8PR02MB7237.eurprd02.prod.outlook.com>
- <202406101010.E1C77AE9D@keescook>
- <20240610200544.GY8774@noisy.programming.kicks-ass.net>
- <202406101438.BC43514F@keescook>
- <20240611075542.GD8774@noisy.programming.kicks-ass.net>
- <202406121148.688240B@keescook>
- <20240612220821.GA18881@noisy.programming.kicks-ass.net>
- <202406121530.D9DB956C8@keescook>
- <20240614101708.GO8774@noisy.programming.kicks-ass.net>
- <c8234b8e2c9c1122eec73c97901e36586160f0cb.camel@tugraz.at>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="GCZ4gdIC"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1718645919; x=1750181919;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=ohF55oU0RYpuXbvAuI/ketm5NP7zWNWqe6VRHyy+bFo=;
+  b=GCZ4gdICimWwZt6B0UKuS0kfSeG5vNehPot7BqJ9zFfrLEG4H53DaONX
+   1WJzt3LzH9cLuFbvj7hCZYnbBSbRcUF/DmRLGRU/jWnqQUuzOPIHfz26r
+   zkMODVNa88kGCFjAQEy+b6lhcWy0Kls/HlA5auuNvEtSaMQabHT+u2rs/
+   nNk54Jn/GXWe/psvQgWtQqgCCoTr/odfJeR7tOHiF3IwlPsULPLTEcd7e
+   V842E+OG1VX5Eq5Zxcc/l88k0YpMbfodRXKz44oc5pzTwgr1mc7J7dxEk
+   oCJm3GtG9lDBnaMRlKZC9ph/R1MLTCmQWQ9C2hK1gNBKLRUXNm/Nx4lfh
+   A==;
+X-CSE-ConnectionGUID: WHlKphokSQGtMEnVRU2L/w==
+X-CSE-MsgGUID: 9+GI2fUQTLW1oQcTpzZmDw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11106"; a="26116020"
+X-IronPort-AV: E=Sophos;i="6.08,245,1712646000"; 
+   d="scan'208";a="26116020"
+Received: from orviesa004.jf.intel.com ([10.64.159.144])
+  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jun 2024 10:38:36 -0700
+X-CSE-ConnectionGUID: K/D4Rkz+RGqS8+tHM0+C4Q==
+X-CSE-MsgGUID: aAoqCE02Qey1QD61Rrs23Q==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.08,245,1712646000"; 
+   d="scan'208";a="46386307"
+Received: from lkp-server01.sh.intel.com (HELO 68891e0c336b) ([10.239.97.150])
+  by orviesa004.jf.intel.com with ESMTP; 17 Jun 2024 10:38:34 -0700
+Received: from kbuild by 68891e0c336b with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1sJGJM-0004jp-1P;
+	Mon, 17 Jun 2024 17:38:32 +0000
+Date: Tue, 18 Jun 2024 01:38:12 +0800
+From: kernel test robot <lkp@intel.com>
+To: Phil Sutter <phil@nwl.cc>, Florian Westphal <fw@strlen.de>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	netfilter-devel@vger.kernel.org, Fabio <pedretti.fabio@gmail.com>
+Subject: Re: [nf-next PATCH 2/2] netfilter: xt_recent: Largely lift
+ restrictions on max hitcount value
+Message-ID: <202406180137.ATtQZimm-lkp@intel.com>
+References: <20240613143254.26622-3-phil@nwl.cc>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <c8234b8e2c9c1122eec73c97901e36586160f0cb.camel@tugraz.at>
+In-Reply-To: <20240613143254.26622-3-phil@nwl.cc>
 
-On Sat, Jun 15, 2024 at 06:09:07PM +0200, Martin Uecker wrote:
-> Am Freitag, dem 14.06.2024 um 12:17 +0200 schrieb Peter Zijlstra:
-> > On Wed, Jun 12, 2024 at 04:23:31PM -0700, Kees Cook wrote:
-> > > On Thu, Jun 13, 2024 at 12:08:21AM +0200, Peter Zijlstra wrote:
-> > > > On Wed, Jun 12, 2024 at 12:01:19PM -0700, Kees Cook wrote:
-> > > > > I'm happy to take patches. And for this bikeshed, this would be better
-> > > > > named under the size_*() helpers which are trying to keep size_t
-> > > > > calculations from overflowing (by saturating). i.e.:
-> > > > > 
-> > > > > 	size_add_mult(sizeof(*p), sizeof(*p->member), num)
-> > > > 
-> > > > Fine I suppose, but what if we want something not size_t? Are we waiting
-> > > > for the type system extension?
-> > > 
-> > > Because of C's implicit promotion/truncation, we can't do anything
-> > > sanely with return values of arbitrary type size; we have to capture the
-> > > lvalue type somehow so the checking can happen without C doing silent
-> > > garbage.
-> 
-> What is the specific problem here?
+Hi Phil,
 
-This particular complaint is about not being able to "discover" the
-lvalue type during an assignment, which means we can't create helper
-macros that Just Work. For example, in:
+kernel test robot noticed the following build warnings:
 
-	void foo(some_type arg);
+[auto build test WARNING on nf-next/master]
 
-	foo(add_mul(base, size, count));
+url:    https://github.com/intel-lab-lkp/linux/commits/Phil-Sutter/netfilter-xt_reent-Reduce-size-of-struct-recent_entry-nstamps/20240613-223955
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/netfilter/nf-next.git master
+patch link:    https://lore.kernel.org/r/20240613143254.26622-3-phil%40nwl.cc
+patch subject: [nf-next PATCH 2/2] netfilter: xt_recent: Largely lift restrictions on max hitcount value
+config: s390-defconfig (https://download.01.org/0day-ci/archive/20240618/202406180137.ATtQZimm-lkp@intel.com/config)
+compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project 78ee473784e5ef6f0b19ce4cb111fb6e4d23c6b2)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240618/202406180137.ATtQZimm-lkp@intel.com/reproduce)
 
-There is no way to write "add_mul" so that it is checking for overflow
-of the "some_type" type. The behavior of such a macro changes if it's
-doing u8, int, size_t, etc.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202406180137.ATtQZimm-lkp@intel.com/
 
-The existing solution to this is to use macros (and builtins) that
-cannot be composed:
+All warnings (new ones prefixed by >>):
 
-	add_mul(base, size, count, &result);
-	foo(result);
+   In file included from net/netfilter/xt_recent.c:14:
+   In file included from include/linux/ip.h:16:
+   In file included from include/linux/skbuff.h:17:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:9:
+   In file included from include/linux/mm.h:1719:
+   include/linux/vmstat.h:508:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     508 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     509 |                            item];
+         |                            ~~~~
+   include/linux/vmstat.h:515:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     515 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     516 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/vmstat.h:522:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     522 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+   include/linux/vmstat.h:527:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     527 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     528 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/vmstat.h:536:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     536 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     537 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+   In file included from net/netfilter/xt_recent.c:14:
+   In file included from include/linux/ip.h:16:
+   In file included from include/linux/skbuff.h:31:
+   In file included from include/linux/dma-mapping.h:10:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/s390/include/asm/io.h:75:
+   include/asm-generic/io.h:464:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     464 |         val = __raw_readb(PCI_IOBASE + addr);
+         |                           ~~~~~~~~~~ ^
+   include/asm-generic/io.h:477:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     477 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
+      37 | #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
+         |                                                           ^
+   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
+     102 | #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
+         |                                                      ^
+   In file included from net/netfilter/xt_recent.c:14:
+   In file included from include/linux/ip.h:16:
+   In file included from include/linux/skbuff.h:31:
+   In file included from include/linux/dma-mapping.h:10:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/s390/include/asm/io.h:75:
+   include/asm-generic/io.h:490:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     490 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
+      35 | #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
+         |                                                           ^
+   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
+     115 | #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
+         |                                                      ^
+   In file included from net/netfilter/xt_recent.c:14:
+   In file included from include/linux/ip.h:16:
+   In file included from include/linux/skbuff.h:31:
+   In file included from include/linux/dma-mapping.h:10:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/s390/include/asm/io.h:75:
+   include/asm-generic/io.h:501:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     501 |         __raw_writeb(value, PCI_IOBASE + addr);
+         |                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:511:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     511 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:521:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     521 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:609:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     609 |         readsb(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:617:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     617 |         readsw(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:625:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     625 |         readsl(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:634:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     634 |         writesb(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+   include/asm-generic/io.h:643:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     643 |         writesw(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+   include/asm-generic/io.h:652:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     652 |         writesl(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+>> net/netfilter/xt_recent.c:738:38: warning: result of comparison of constant 4294967296 with expression of type 'unsigned int' is always false [-Wtautological-constant-out-of-range-compare]
+     738 |         if (!ip_list_tot || ip_pkt_list_tot >= XT_RECENT_MAX_NSTAMPS)
+         |                             ~~~~~~~~~~~~~~~ ^  ~~~~~~~~~~~~~~~~~~~~~
+   18 warnings generated.
 
-Here, the macro can examine the type of "result" and perform the correct
-overflow handling for that type. But lots of developers (rightly)
-dislike this style of "assignment side-effect".
 
-Additionally, it can't be composed:
+vim +738 net/netfilter/xt_recent.c
 
-	add(base, mul(size, count));
-
-But, using type attributes we have much more flexibility. Hence, the
-proposed "wraps" attribute:
-https://github.com/llvm/llvm-project/pull/86618
-
-> This is likely a stupid question, but making it signed 
-> wouldn't work?   Or is a signed size_t too small  
-> or some architectures? Or would this change break too much?
-
-The ssize_t gets used in some places already, but since size_t is used
-for address calculations too, I don't think we can universally switch
-it.
+^1da177e4c3f41 net/ipv4/netfilter/ipt_recent.c Linus Torvalds   2005-04-16  731  
+d3c5ee6d545b53 net/ipv4/netfilter/ipt_recent.c Jan Engelhardt   2007-12-04  732  static int __init recent_mt_init(void)
+^1da177e4c3f41 net/ipv4/netfilter/ipt_recent.c Linus Torvalds   2005-04-16  733  {
+404bdbfd242cb9 net/ipv4/netfilter/ipt_recent.c Patrick McHardy  2006-05-29  734  	int err;
+^1da177e4c3f41 net/ipv4/netfilter/ipt_recent.c Linus Torvalds   2005-04-16  735  
+abc86d0f99242b net/netfilter/xt_recent.c       Florian Westphal 2014-11-24  736  	BUILD_BUG_ON_NOT_POWER_OF_2(XT_RECENT_MAX_NSTAMPS);
+abc86d0f99242b net/netfilter/xt_recent.c       Florian Westphal 2014-11-24  737  
+abc86d0f99242b net/netfilter/xt_recent.c       Florian Westphal 2014-11-24 @738  	if (!ip_list_tot || ip_pkt_list_tot >= XT_RECENT_MAX_NSTAMPS)
+404bdbfd242cb9 net/ipv4/netfilter/ipt_recent.c Patrick McHardy  2006-05-29  739  		return -EINVAL;
+404bdbfd242cb9 net/ipv4/netfilter/ipt_recent.c Patrick McHardy  2006-05-29  740  	ip_list_hash_size = 1 << fls(ip_list_tot);
+^1da177e4c3f41 net/ipv4/netfilter/ipt_recent.c Linus Torvalds   2005-04-16  741  
+7d07d5632b672c net/netfilter/xt_recent.c       Alexey Dobriyan  2010-01-18  742  	err = register_pernet_subsys(&recent_net_ops);
+^1da177e4c3f41 net/ipv4/netfilter/ipt_recent.c Linus Torvalds   2005-04-16  743  	if (err)
+404bdbfd242cb9 net/ipv4/netfilter/ipt_recent.c Patrick McHardy  2006-05-29  744  		return err;
+7d07d5632b672c net/netfilter/xt_recent.c       Alexey Dobriyan  2010-01-18  745  	err = xt_register_matches(recent_mt_reg, ARRAY_SIZE(recent_mt_reg));
+7d07d5632b672c net/netfilter/xt_recent.c       Alexey Dobriyan  2010-01-18  746  	if (err)
+7d07d5632b672c net/netfilter/xt_recent.c       Alexey Dobriyan  2010-01-18  747  		unregister_pernet_subsys(&recent_net_ops);
+^1da177e4c3f41 net/ipv4/netfilter/ipt_recent.c Linus Torvalds   2005-04-16  748  	return err;
+^1da177e4c3f41 net/ipv4/netfilter/ipt_recent.c Linus Torvalds   2005-04-16  749  }
+^1da177e4c3f41 net/ipv4/netfilter/ipt_recent.c Linus Torvalds   2005-04-16  750  
 
 -- 
-Kees Cook
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
