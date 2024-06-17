@@ -1,155 +1,101 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D1FCA168482;
-	Mon, 17 Jun 2024 16:52:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6FDF653E23;
+	Mon, 17 Jun 2024 17:01:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718643174; cv=none; b=ZY1Mj+AhtEZzM4tPvTV9pz07YEDa/2ZbXl67WCt+9m0hhCSArkKL5ICGpxXun4VdWkszQ8juOAg3YUIq9H9WrwfQuU8Q4JW7KEw4EVdNa8EjAVfKrbmOD6X/+BwNem6IwrOC663DRZsgjYYvFHKucpzQ8G5/dHV09wb0GR7/X04=
+	t=1718643695; cv=none; b=WLd8lRKIimcsGEgxPdZ9qKqIF1PZdClgVjF/Zwem+QH+2wXDCeW6kfcWtRdH5N4iUId6BYHXItAEexlTQwHClmq0QkteriqJwuh69pBuJzZJQm18pDvMfbdRstCVqiv23c1nw9TvuohIZ3MbAeNIt+rPQJF8E99tmc0/C6Lz+Po=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718643174; c=relaxed/simple;
-	bh=eSnhqAm2EceuPb7GR0p97myLZRdOU10MmclXVrykcQE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=WZo9EVDHZITJ+RSAEuj5sKmdQ0OSE7Z//FZE3J1cZBxcX1pAfy8N6n7/WyvA3HRuDicyc0iAtRGeDpReW8+LE4r8RInEKcQotJY1R1LPUJBPFFYMAwKAp6oRcwB7NCzZkd7joSNQL2yJkuue27Cfla9Mt0Us7fWjTn/J+dtdHHk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ju/Nio2e; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1718643695; c=relaxed/simple;
+	bh=ZNJWz97UxQwH+2kJA7SKrDGn+HLG/DZWOSaiCpUIuk4=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=lC3y9sm0IM92BPqsDRWMi1/03GruGUAfBRpy6onfl3Z4pOoV8qPdzUyVWs3XHo0kcDyjUcScpyE45LHe79jz8bg9DcnDXM/MQW42Bb6w3/6KN+sJoffH0F9ELb87uUW443GNPtzvZ6ZqrRvrP7MBd2kqSWEGIxARe2Nqd4z7vTo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=l4/oC0wg; arc=none smtp.client-ip=198.175.65.20
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ju/Nio2e"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 423E1C2BD10;
-	Mon, 17 Jun 2024 16:52:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1718643174;
-	bh=eSnhqAm2EceuPb7GR0p97myLZRdOU10MmclXVrykcQE=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=ju/Nio2ekUQo8b14RA4d5uLq/NEoJTbtrPRR3ycrp0W1iGLafnBwKjFA8qysevzDj
-	 x7qKSGBs7oZOc8NK6gLzhdGOzqjFfVQz3Y40KI0j1uBCDQaT3mQ0/9/xd8ICwa2pwQ
-	 LSofAHNWiaTakNfXTxUASBja6ZNvN7KkmhX6DC383eLoNUeYxbs4zITnUD+vUiO/72
-	 y3b0j9RHGovIx9OvW5LKQO1DsJNAmkmS9n9dcDrZHoQS71AmEDLI7gVeHZR8rNMsEq
-	 jMWLkftptNFsk8lWXU/2Xo7Tvp0wvcFXv3NKuJznlFkgIV5prc1Luup8xxx78FJ/i1
-	 Qra2f1kMDF83g==
-Date: Mon, 17 Jun 2024 09:52:51 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Andy Chiu <andy.chiu@sifive.com>
-Cc: Paul Walmsley <paul.walmsley@sifive.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>,
-	Alexandre Ghiti <alexghiti@rivosinc.com>,
-	Zong Li <zong.li@sifive.com>, Steven Rostedt <rostedt@goodmis.org>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Mark Rutland <mark.rutland@arm.com>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Puranjay Mohan <puranjay@kernel.org>,
-	Palmer Dabbelt <palmer@rivosinc.com>,
-	linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-	linux-trace-kernel@vger.kernel.org, llvm@lists.linux.dev,
-	Evgenii Shatokhin <e.shatokhin@yadro.com>
-Subject: Re: [PATCH 4/8] riscv: ftrace: align patchable functions to 4 Byte
- boundary
-Message-ID: <20240617165251.GA550301@thelio-3990X>
-References: <20240613-dev-andyc-dyn-ftrace-v4-v1-0-1a538e12c01e@sifive.com>
- <20240613-dev-andyc-dyn-ftrace-v4-v1-4-1a538e12c01e@sifive.com>
- <20240613190920.GB1272931@thelio-3990X>
- <CABgGipV_6sFx8TJNrHszGLk=V9X1PJAXuOmRDxnTHPrigqJL0A@mail.gmail.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="l4/oC0wg"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1718643694; x=1750179694;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=ZNJWz97UxQwH+2kJA7SKrDGn+HLG/DZWOSaiCpUIuk4=;
+  b=l4/oC0wgjMIpOyFOskmEhooJbcTR/oJ0eBb4Uu8E3HLQ/Nt1JxtCqzns
+   vbQYpCTkwTh7701V3MrqlpkMyGKafIFt4nekCm75G58IOkiKLRqowTsmN
+   P5ftkeP1tsxzVrsN7tGZlQdrXCIsswr03eZ5j7TTeIO1d/Achluxcr/B3
+   fWnyKbQYHGZwP8w9qKudMbD33ulNGwgMW6tVEKN8oA9OJeTg197PomH3K
+   PFTUN0+o62DhfSk02240biLSeKdUy8A8d37rqKKRgtfgA0nlXts29BL0F
+   d86HyACZki9SEQX+oBjULj3LIuhtd7/SPg04QEpZy6XaeY2hYnE0QXzhn
+   Q==;
+X-CSE-ConnectionGUID: tjBSSjppS6azz056FWFF6Q==
+X-CSE-MsgGUID: UpOgOiHURPSmeFW7+p9t4A==
+X-IronPort-AV: E=McAfee;i="6700,10204,11106"; a="15313300"
+X-IronPort-AV: E=Sophos;i="6.08,245,1712646000"; 
+   d="scan'208";a="15313300"
+Received: from orviesa002.jf.intel.com ([10.64.159.142])
+  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jun 2024 10:01:33 -0700
+X-CSE-ConnectionGUID: Zk+1FeARR7GozCQpYc/djw==
+X-CSE-MsgGUID: /ie0V+tYTvuQoURjIhpDZw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.08,245,1712646000"; 
+   d="scan'208";a="72014336"
+Received: from lkp-server01.sh.intel.com (HELO 68891e0c336b) ([10.239.97.150])
+  by orviesa002.jf.intel.com with ESMTP; 17 Jun 2024 10:01:32 -0700
+Received: from kbuild by 68891e0c336b with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1sJFjU-0004hX-2l;
+	Mon, 17 Jun 2024 17:01:28 +0000
+Date: Tue, 18 Jun 2024 01:00:54 +0800
+From: kernel test robot <lkp@intel.com>
+To: Luca Weiss <luca@z3ntu.xyz>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Bjorn Andersson <andersson@kernel.org>,
+	Konrad Dybcio <konrad.dybcio@linaro.org>
+Subject: [qcom:drivers-for-6.11 20/20] ld.lld: error: undefined symbol:
+ mbox_request_channel
+Message-ID: <202406180006.Z397C67h-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CABgGipV_6sFx8TJNrHszGLk=V9X1PJAXuOmRDxnTHPrigqJL0A@mail.gmail.com>
 
-On Mon, Jun 17, 2024 at 10:38:55AM +0800, Andy Chiu wrote:
-> On Fri, Jun 14, 2024 at 3:09 AM Nathan Chancellor <nathan@kernel.org> wrote:
-> >
-> > Hi Andy,
-> >
-> > On Thu, Jun 13, 2024 at 03:11:09PM +0800, Andy Chiu wrote:
-> > > We are changing ftrace code patching in order to remove dependency from
-> > > stop_machine() and enable kernel preemption. This requires us to align
-> > > functions entry at a 4-B align address.
-> > >
-> > > However, -falign-functions on older versions of GCC alone was not strong
-> > > enoungh to align all functions. In fact, cold functions are not aligned
-> > > after turning on optimizations. We consider this is a bug in GCC and
-> > > turn off guess-branch-probility as a workaround to align all functions.
-> > >
-> > > GCC bug id: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=88345
-> > >
-> > > The option -fmin-function-alignment is able to align all functions
-> > > properly on newer versions of gcc. So, we add a cc-option to test if
-> > > the toolchain supports it.
-> > >
-> > > Suggested-by: Evgenii Shatokhin <e.shatokhin@yadro.com>
-> > > Signed-off-by: Andy Chiu <andy.chiu@sifive.com>
-> > > ---
-> > >  arch/riscv/Kconfig  | 1 +
-> > >  arch/riscv/Makefile | 7 ++++++-
-> > >  2 files changed, 7 insertions(+), 1 deletion(-)
-> > >
-> > > diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
-> > > index b94176e25be1..80b8d48e1e46 100644
-> > > --- a/arch/riscv/Kconfig
-> > > +++ b/arch/riscv/Kconfig
-> > > @@ -203,6 +203,7 @@ config CLANG_SUPPORTS_DYNAMIC_FTRACE
-> > >  config GCC_SUPPORTS_DYNAMIC_FTRACE
-> > >       def_bool CC_IS_GCC
-> > >       depends on $(cc-option,-fpatchable-function-entry=8)
-> > > +     depends on $(cc-option,-fmin-function-alignment=4) || !RISCV_ISA_C
-> >
-> > Please use CC_HAS_MIN_FUNCTION_ALIGNMENT (from arch/Kconfig), which
-> > already checks for support for this option.
-> 
-> Thanks for the suggestion!
-> 
-> >
-> > >  config HAVE_SHADOW_CALL_STACK
-> > >       def_bool $(cc-option,-fsanitize=shadow-call-stack)
-> > > diff --git a/arch/riscv/Makefile b/arch/riscv/Makefile
-> > > index 06de9d365088..74628ad8dcf8 100644
-> > > --- a/arch/riscv/Makefile
-> > > +++ b/arch/riscv/Makefile
-> > > @@ -14,8 +14,13 @@ endif
-> > >  ifeq ($(CONFIG_DYNAMIC_FTRACE),y)
-> > >       LDFLAGS_vmlinux += --no-relax
-> > >       KBUILD_CPPFLAGS += -DCC_USING_PATCHABLE_FUNCTION_ENTRY
-> > > +ifeq ($(CONFIG_CC_IS_CLANG),y)
-> >
-> > Same here, please invert this and use
-> >
-> >   ifdef CONFIG_CC_HAS_MIN_FUNCTION_ALIGNMENT
-> >
-> > like the main Makefile does.
-> 
-> Hope this makes sense to you. I am going to add the following in riscv Kconig:
-> 
-> select FUNCTION_ALIGNMENT_4B if DYNAMIC_FTRACE && !RISCV_ISA_C
-> 
-> So we will not need any of these
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux drivers-for-6.11
+head:   75287992f58a74271a083fef0356bc81d629f671
+commit: 75287992f58a74271a083fef0356bc81d629f671 [20/20] soc: qcom: smsm: Support using mailbox interface
+config: i386-buildonly-randconfig-005-20240617 (https://download.01.org/0day-ci/archive/20240618/202406180006.Z397C67h-lkp@intel.com/config)
+compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240618/202406180006.Z397C67h-lkp@intel.com/reproduce)
 
-Yes, that definitely makes sense, I forgot that this has been abstracted
-away via the use of those alignment Kconfig symbols that can be selected
-when needed. Much better than my suggestions, thanks!
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202406180006.Z397C67h-lkp@intel.com/
 
-> >
-> > > +     cflags_ftrace_align := -falign-functions=4
-> > > +else
-> > > +     cflags_ftrace_align := -fmin-function-alignment=4
-> > > +endif
-> > >  ifeq ($(CONFIG_RISCV_ISA_C),y)
-> > > -     CC_FLAGS_FTRACE := -fpatchable-function-entry=4
-> > > +     CC_FLAGS_FTRACE := -fpatchable-function-entry=4 $(cflags_ftrace_align)
-> > >  else
-> > >       CC_FLAGS_FTRACE := -fpatchable-function-entry=2
-> > >  endif
-> > >
-> > > --
-> > > 2.43.0
-> > >
-> > >
-> 
-> Thanks,
-> Andy
+All errors (new ones prefixed by >>):
+
+>> ld.lld: error: undefined symbol: mbox_request_channel
+   >>> referenced by smsm.c
+   >>>               drivers/soc/qcom/smsm.o:(qcom_smsm_probe) in archive vmlinux.a
+--
+>> ld.lld: error: undefined symbol: mbox_free_channel
+   >>> referenced by smsm.c
+   >>>               drivers/soc/qcom/smsm.o:(qcom_smsm_probe) in archive vmlinux.a
+   >>> referenced by smsm.c
+   >>>               drivers/soc/qcom/smsm.o:(qcom_smsm_remove) in archive vmlinux.a
+--
+>> ld.lld: error: undefined symbol: mbox_send_message
+   >>> referenced by smsm.c
+   >>>               drivers/soc/qcom/smsm.o:(smsm_update_bits) in archive vmlinux.a
+--
+>> ld.lld: error: undefined symbol: mbox_client_txdone
+   >>> referenced by smsm.c
+   >>>               drivers/soc/qcom/smsm.o:(smsm_update_bits) in archive vmlinux.a
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
