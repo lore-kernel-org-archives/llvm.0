@@ -1,98 +1,135 @@
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 40C1414F129;
-	Mon, 17 Jun 2024 15:50:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE884146D7D
+	for <llvm@lists.linux.dev>; Mon, 17 Jun 2024 16:52:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718639407; cv=none; b=hln74/QNXiTn4ixMlf9BxuQOg+ifzqlMwezipEIZ93K1MYafIe1T7fuZP6cQ+3tFiJVWBxkreARQz79kejWBvW3bsVjhwSnHrsctwg7pR6ErZ40dq31rEyXJAqA2KQTAqrSDhiweYogoSGOIUP6f/sjYhJ4L7bjIJTOLa62kTpY=
+	t=1718643147; cv=none; b=Nw/dTcZ3ra0USX5Atp4/u3LLYpcVqNEx3z3LlExNNjcmPEQuh/MVPkD9w65YWlkj3m5QevhsYECDNIQrtd3wuAFL8YPiT75CXank1HpgZsYp7QMiGnT4xGMO0b+5strjrxOOZZxKmVEBljaUODhUdcHEYKzjk2Smrm98Ul4FuYo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718639407; c=relaxed/simple;
-	bh=ggmEO6kh8N+t27DXxD23LioxVz5/oJATMOXCT+P2PEE=;
-	h=Message-ID:Date:MIME-Version:From:To:Subject:Content-Type; b=i471D6Zn0/te2Mh6Z3x+IX5nJ+L1cW08Rwir2vs+yaC9dqdpL6sCVRAaUkY7jGI9mHPriLCEt2dvGPn+AI/Qc9LWNiqyLBtweMk6biXzcsracMzZp7PujU/SF7A8jFXcOKwSVw+7iMOAWFQ8d8tqIh7/A2EgNa+7ocRwE0BwRzQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=cTTwHyU3; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+	s=arc-20240116; t=1718643147; c=relaxed/simple;
+	bh=xzKggorSw4KbXEjRsIOzlUmNfvHTt4jTDVsjjmStgy8=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=YKn80SCv58J6t9Dp/riDHQ5sII3mquxHiLSwuK/UOQ7Omdy9gAijifmm9henYVgFOc40DGkSmYPqmkpnkth4l5iNGx9/n/tjzVm31gzeyDFeK6hn3B9Wr4DaMHSIKuKIjw1WYm/lcMn8wctG8MVHl1EdRp86+G+Xp3DRScVNbAE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=hXcDMFoS; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="cTTwHyU3"
-Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 45HAxZ1w016060;
-	Mon, 17 Jun 2024 15:50:03 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	content-transfer-encoding:content-type:date:from:message-id
-	:mime-version:subject:to; s=qcppdkim1; bh=ggmEO6kh8N+t27DXxD23Li
-	oxVz5/oJATMOXCT+P2PEE=; b=cTTwHyU3M0amrmT5gTcMMEwLh/lW24McHAYwfX
-	pAVyCRe5tlzFF8VaWmAb7Oss6RFzJgOkkp6YNxm4BjaeTwN1Toi1rZK7y419ZalX
-	OZIQGEOSEiSirYIQNhuIerHTm7ECFbIVAI3WkODf5mKJHOXlwAYekDzSjpPrdfDn
-	xRc7PTu1EQR77310FHpmSBO3X/edl6K7CN9xz4N1kexXevAYgeCJXnuN9awDArZ2
-	96WdX/hliLpnJ3k6zrD6GtQvvqe5OBCZNv6/7TSpjB09le/UsKF8RhkNv9YECiDj
-	hzU0zIklAvBORQ37jfsDLq9vKd1/BI6FuTubm8uEYJyDeXjA==
-Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3ys0nfcd8g-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 17 Jun 2024 15:50:03 +0000 (GMT)
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-	by NALASPPMTA03.qualcomm.com (8.17.1.19/8.17.1.19) with ESMTPS id 45HFo2jV023329
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 17 Jun 2024 15:50:02 GMT
-Received: from [10.48.243.231] (10.49.16.6) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Mon, 17 Jun
- 2024 08:50:01 -0700
-Message-ID: <a138bd58-80b3-4adb-8cbb-65e92a0d0b6e@quicinc.com>
-Date: Mon, 17 Jun 2024 08:50:00 -0700
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="hXcDMFoS"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1718643144;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=nzjNcr6bdCqF/Tb1sa4CawaMU65W7l+dmdwN+Mk2bL4=;
+	b=hXcDMFoS9HsgEYxdrin2cXAyImu8cjBzIv0f+hONN3p2yZF03eYA23mlHIAboJgflqBZnP
+	HDLzKdFuAD+RZ25dMCtrkV3xDPZ7Mc3N4ddvCtJyGjbIRKstp8m7l1RxsRBMjhdCySC6W0
+	uf1/F7pa0XZH9ocwdB7SfrgLrIkAUpY=
+Received: from mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-38-A4KnvNvDNOuquPxxEpAZqQ-1; Mon,
+ 17 Jun 2024 12:52:20 -0400
+X-MC-Unique: A4KnvNvDNOuquPxxEpAZqQ-1
+Received: from mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.12])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id AF0A61956088;
+	Mon, 17 Jun 2024 16:52:19 +0000 (UTC)
+Received: from [172.64.3.44] (unknown [10.30.33.101])
+	by mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id EBB2919560AE;
+	Mon, 17 Jun 2024 16:52:18 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL (MISSED 11 of 192): Test report for master
+ (6.10.0-rc4, mainline.kernel.org-clang, 6ba59ff4)
+Date: Mon, 17 Jun 2024 16:52:18 -0000
+To: bgoncalv@redhat.com, yizhan@redhat.com, shinichiro.kawasaki@wdc.com,
+ llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Content-Language: en-US
-From: Jeff Johnson <quic_jjohnson@quicinc.com>
-To: <linux-mips@vger.kernel.org>, <llvm@lists.linux.dev>
-Subject: mips allmodconfig build error with llvm-18.1.7-x86_64
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: nalasex01a.na.qualcomm.com (10.47.209.196) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: k-8u4kh4Y9hnNCzAgPlBbL1SQB7GPM3O
-X-Proofpoint-ORIG-GUID: k-8u4kh4Y9hnNCzAgPlBbL1SQB7GPM3O
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
- definitions=2024-06-17_13,2024-06-17_01,2024-05-17_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 phishscore=0
- adultscore=0 clxscore=1011 suspectscore=0 spamscore=0 priorityscore=1501
- lowpriorityscore=0 mlxlogscore=450 impostorscore=0 bulkscore=0
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2405170001 definitions=main-2406170122
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.12
+Message-Id: <29015.124061712522001147@us-mta-38.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-As part of my tree-wide cleanup of missing MODULE_DESCRIPTION() macros I'm
-trying to do allmodconfig builds for every architecture.
+Hi, we tested your kernel and here are the results:
 
-With:
-export ARCH=mips
-export LLVM=llvm-18.1.7-x86_64/bin/
-make distclean
-make allmodconfig
-make -j$(nproc)
+    Overall result: FAILED
+             Merge: OK
+           Compile: OK
+              Test: FAILED
 
-I'm getting build errors like:
-Cannot find symbol for section 46: .text.free_initmem.
-init/main.o: failed
 
-Cannot find symbol for section 6: .text.copy_from_kernel_nofault_allowed.
-mm/maccess.o: failed
+Kernel information:
+    Commit message: Linux 6.10-rc4
 
-Cannot find symbol for section 10: .text.arch_asym_cpu_priority.
-kernel/sched/fair.o: failed
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1334372289
 
-Interestingly, if I make 'defconfig' instead of 'allmodconfig' I don't see
-this issue.
+One or more kernel tests failed:
+    Unrecognized or new issues:
+        Reboot test
+              x86_64
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+redhat:1334372289-x86_64-kernel_upt_35
+                   Non-passing ran subtests:
+                       =E2=9D=8C FAIL misc/reboot-test/journalctl-check
+        Storage - blktests - blk - upstream
+              x86_64
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+redhat:1334372289-x86_64-kernel_upt_5
+                   Non-passing ran subtests:
+                       =E2=9D=8C FAIL storage/blktests/tests/nbd/002
 
-Any thoughts on how to have a successful mips allmodconfig build?
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1267
+            Affected tests:
+                selinux-policy: serge-testsuite [ppc64le]
+        Issue: [rhel-10] xfstests - cifsv3.11 - generic/207 - error in bloc=
+k: expected 4096 bytes, received 0
+            URL: https://issues.redhat.com/browse/RHEL-39974
+            Affected tests:
+                xfstests - cifsv3.11 [x86_64, x86_64 (debug)]
 
-/jeff
+
+Tests that were not ran because of internal issues:=20
+    Boot test [s390x]
+    CKI/restraint [s390x]
+    machineinfo [s390x]
+    Reboot test [s390x]
+    SELinux Custom Module Setup [ppc64le, s390x]
+    Storage - blktests - blk - upstream [s390x]
+    Storage - blktests - nvme-tcp - upstream [s390x]
+    Storage - swraid scsi_raid [s390x]
+    stress: stress-ng - cpu-cache [s390x]
+    stress: stress-ng - memory [s390x]
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
 
