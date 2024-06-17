@@ -1,99 +1,122 @@
-Received: from mail-wr1-f43.google.com (mail-wr1-f43.google.com [209.85.221.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 51DD418FC99
-	for <llvm@lists.linux.dev>; Mon, 17 Jun 2024 07:34:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D789C194AC7;
+	Mon, 17 Jun 2024 13:11:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718609672; cv=none; b=rRn9JYkR38XJqCr7+Di/vGyoI8B8y1Z2HfjT8QfIrrbZjbxMgmJIgkyXbhfYUBY72ayY35uuRoMi67qiuEhrtyaAQ8I6V5TZbtfXtbxIcK8i3b+/ZFnSEshQetlK3hayQNcHz6kSgOUEIThtA3VMn8+Tj4LjdKCPWFeIWcFdf4c=
+	t=1718629906; cv=none; b=uLHdFnGUsz5IuUWfAM4tESzQS8T73HkMdex+H8N/NZa/QOsmmD/8q1fTObzdr6LEbIq2DLyWdG6SqtIlvyfSy/IynJG9PtmPoVNBu5GOR7AVaTWjrWOMbqwhKzUXCJsA50IezLL5nkBKFiQUs/E+e3zWJOzEMGKAWln/tfBgU9M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718609672; c=relaxed/simple;
-	bh=R0o7TrGhqODKpNWXbMzpDQ7iYgs+7sTBx4yxIhcJPRw=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=qvq0/bRvFKxAG9l8gN2zZUx6cPAhQT8bC3SoSPiiIUtERYVtUgcQW7Rr5aeoE+EXjIlUm5IzED6pQxx/zDbbTlI05N0J8ZL+HpNOIceK+xnO6yfueQSgIZbF4za+XlxvJy+YDgNp+pj7L9610RMb6R57tmVVMzKdVunhzwcCfI4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=Iv6E/9Yx; arc=none smtp.client-ip=209.85.221.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
+	s=arc-20240116; t=1718629906; c=relaxed/simple;
+	bh=vk8ltgfrOhK1pCbCVL3rA9Zy2WCAbA3ea5wO8nSlo/0=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=CI9rUYaIvGY+oP9Kdcd5JLSX9VEt6kbh3NsyjqeQmG8vWy7xuwxUMru1zYA1hLrofjHxOm+Q38ADLfjDZa/ASJ/YBqUurcv5jOG7+B+bot01p13npmo7GboegUFMDQsd5ubaSoeQOwTLxKht6LHQcDTvAkTCYvhe7ECcw1Gmld8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Gw1EGtxi; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="Iv6E/9Yx"
-Received: by mail-wr1-f43.google.com with SMTP id ffacd0b85a97d-35fdf7aa8a1so2779464f8f.2
-        for <llvm@lists.linux.dev>; Mon, 17 Jun 2024 00:34:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1718609669; x=1719214469; darn=lists.linux.dev;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=c/okSSlfq1HEJ/g6QWrHnUfVaTfNc87YbM14VZ347qk=;
-        b=Iv6E/9YxKvlgRYSAu082tAOMWnHSnNFZnu/OJdzNRk3DzEFLrssYTIqvu4Qmg6mCaw
-         WdIya+G2Ld/Olx3LV1iua8k93BVa+pYBdTHqMfMd/SU5F8sYt2LEZdU7XcYRn5HiqVka
-         UKjK86SUd1vJB5NV6w8mtJNkSuONderBYpO/ZKJ4nT7S9AknkP6YWesgmC8xs74rRHdK
-         AHIEFzBg9TvOKyrzv4h85cx0VSVN1Qnp44CvXqoG67CTiefxqFquA7nm+URstvAa3MWu
-         fylrY+/3q5fCLthFdwkaEIQhKaUJB/QT2j+JymDCjOlYMFJMKwXh6VLEK9OLh/wR/2oB
-         VaWQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1718609669; x=1719214469;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=c/okSSlfq1HEJ/g6QWrHnUfVaTfNc87YbM14VZ347qk=;
-        b=e7tuulW0izSDPSz20VMDaE6n0pi6OaK2oq2pBX9cqi0MLfzYqSWIblrxbiNWaCCTQ4
-         YXI012gDMAK5+B89Kq1sAsvRqy6TLvyVSuFzaFzAOViQHLYD/fisJ6Nhu70dnASYsUZQ
-         +XxieijNsSYH49JUP0VyAB/morHVs8RVoozsxzAQkHnxjiziIJmu7kxMWNs9APJezYEg
-         3z1YdS/r1fWusS3C0ZKPjv5Q92/MUwp1ihBTSPCXSR1Zi/5GvT6VXx0IdEWvWpzUGOXD
-         f1zw4iN1A3CQZnocvU0TD15FPmzhx034CpSp/AI3okxKSqq1XXaP4I/RkLqaaFV5o3+F
-         k3EA==
-X-Gm-Message-State: AOJu0Yz5CHoc9ggwzBBUZTJMzR6unE8xejHTVuBUKtB2jXdoA95VGxNh
-	azE1O5jgTj2AFg+oCTv7EYEupecpQuaLjzLYa/IwuKgY3ADW2ZAVfU+eURjy/CI=
-X-Google-Smtp-Source: AGHT+IEkVOZCwYJCmSGDhPAUAkqnymtmKetJSKXO9qUKqm5sYxGpxVM8w+5mv9WV5/Fs8R8LNM+teQ==
-X-Received: by 2002:a5d:638a:0:b0:35f:1d3c:4084 with SMTP id ffacd0b85a97d-3607a739a1emr5984501f8f.25.1718609668773;
-        Mon, 17 Jun 2024 00:34:28 -0700 (PDT)
-Received: from [192.168.1.70] ([84.102.31.231])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-360750ad0b7sm11159542f8f.53.2024.06.17.00.34.27
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 17 Jun 2024 00:34:28 -0700 (PDT)
-Message-ID: <6d9e0f19-9851-4f23-a8b8-6acc82ae7a3d@baylibre.com>
-Date: Mon, 17 Jun 2024 09:34:26 +0200
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Gw1EGtxi"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8B022C4AF55;
+	Mon, 17 Jun 2024 13:11:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1718629905;
+	bh=vk8ltgfrOhK1pCbCVL3rA9Zy2WCAbA3ea5wO8nSlo/0=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=Gw1EGtxilfH0P6Hje5XOUMthaK47vwNmpSwoNWUfuSRjT/nn174H8Flz0fPxK5V8b
+	 Msu+fX7rNkirEMe72s1HImo8J0+70gpyupOgHAmZo1ZCqFXWOROXELLFLoDDTCEFTA
+	 dX0xDVVG/+5y/5GQHms0voGtWna+7hZhkIkcCNCFmqu56pDkZRQdip1dCMQnbmG4Np
+	 IIyQwfyaznrB2sb1FVC02o+XOqlKkHzIyw5CNTVrj7N6NIBBFdPY6RKmPIJ92V+PLZ
+	 YyheSx8wO41x8dI4ScgCCVqVTxAU75KfJaxeO/RsUFyt3PXfMSVMwpCrst5phC4ZaO
+	 PhGqPFEfAgqMg==
+Received: by mail-ej1-f50.google.com with SMTP id a640c23a62f3a-a6f7720e6e8so153790366b.3;
+        Mon, 17 Jun 2024 06:11:45 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCUhKbU8wdAxClmUIGco58dUgbLFsvXvHdPoinRreph0g7kA4laxQNGhMDRMAScPc3TrSOTICLUoqQuov/sgSy8PJvPmr3JD6BUmR1tO/aXzPgK1ALZYYDLNEVCela28iw==
+X-Gm-Message-State: AOJu0Yys9yJ2sTEH06SeXP7cMDCCSWqyM7CVz4TNgTT5ST1PQtr4r1XU
+	TkxZS7KgaBm4KFZUojC23z3faaR3r7rDmvKOJKfG+mnDlcREIG+efYEB4pQ/gPUpvQLss2r1kZb
+	myAFiDsoqPYv7z0Z0ya9sGDwLQBM=
+X-Google-Smtp-Source: AGHT+IHcuRPRYJ1n13ufoO+LIkvk/Kyxa5KZKfGqTZ7cf/Yj5SrxFwd4pU8KZbp/Nqi2iqgvT8ZQoc8IcRdDCJ3pp0k=
+X-Received: by 2002:a17:906:398d:b0:a6f:4d6b:c77a with SMTP id
+ a640c23a62f3a-a6f60d13b99mr808989666b.13.1718629904025; Mon, 17 Jun 2024
+ 06:11:44 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [mediatek:v6.10-next/dts64 53/53] Error:
- arch/arm64/boot/dts/mediatek/mt8188.dtsi:673.32-33 syntax error
-To: kernel test robot <lkp@intel.com>, Nicolas Pitre <npitre@baylibre.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
- AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-References: <202406150109.433ozpQh-lkp@intel.com>
-Content-Language: en-US
-From: Julien Panis <jpanis@baylibre.com>
-In-Reply-To: <202406150109.433ozpQh-lkp@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <20240604150741.30252-1-xry111@xry111.site> <20240605054328.GA279426@thelio-3990X>
+ <b55b8cb2c52f2c3701c83353586130b8dc237ee2.camel@xry111.site>
+ <20240605062548.GF279426@thelio-3990X> <f8ef61773b0119b8573fc0fed9ad0a8b43061efd.camel@xry111.site>
+ <444ec2031ef6ca016cbfa8dfedc51bddc8529ba7.camel@xry111.site>
+ <ada035690e446909c3cdbf9a43a92def96020615.camel@xry111.site>
+ <82b7e6ea-c2cb-6364-ebe9-bff928028408@loongson.cn> <1c132209a612e2e8953f0b458fc01853120db9a9.camel@xry111.site>
+ <2bf11cd2-8449-acda-f5ad-659c38cb018e@loongson.cn> <96a2e8a80c06772b64fcbdba42e1dae2d68a53a7.camel@xry111.site>
+ <2bd6ae20-ec56-c1a2-c5dd-e8c978a376d3@loongson.cn> <329dac82e09dfc75e77ae93ebbeacdec1dc9ff7f.camel@xry111.site>
+ <CAAhV-H5Wz=U4kbX+tXt1qoCr6RaEDkzZXV7B=tgU_8o+X-NtVQ@mail.gmail.com>
+ <a97cd0f2e2cac10253d6b5cdd0ace3db3b220535.camel@xry111.site>
+ <CAAhV-H7hhh3Jes0jMrg82+KJCa7GQZW=F9bDtktFh=eazMDX9w@mail.gmail.com> <12099e6fb7ba377f3dcf6686e0b37200b9818708.camel@xry111.site>
+In-Reply-To: <12099e6fb7ba377f3dcf6686e0b37200b9818708.camel@xry111.site>
+From: Huacai Chen <chenhuacai@kernel.org>
+Date: Mon, 17 Jun 2024 21:11:33 +0800
+X-Gmail-Original-Message-ID: <CAAhV-H6j0WgN6QpHBYcdprdWBpcQq4ObYK5YcE=TVsDNxGFEtA@mail.gmail.com>
+Message-ID: <CAAhV-H6j0WgN6QpHBYcdprdWBpcQq4ObYK5YcE=TVsDNxGFEtA@mail.gmail.com>
+Subject: Re: [PATCH] loongarch: Only select HAVE_OBJTOOL and allow ORC
+ unwinder if the inline assembler supports R_LARCH_{32,64}_PCREL
+To: Xi Ruoyao <xry111@xry111.site>
+Cc: Jinyang He <hejinyang@loongson.cn>, Nathan Chancellor <nathan@kernel.org>, 
+	Peter Zijlstra <peterz@infradead.org>, WANG Xuerui <kernel@xen0n.name>, 
+	Tiezhu Yang <yangtiezhu@loongson.cn>, Nick Desaulniers <ndesaulniers@google.com>, 
+	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
+	Youling Tang <tangyouling@kylinos.cn>, loongarch@lists.linux.dev, 
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, mengqinggang@loongson.cn, 
+	cailulu@loongson.cn, wanglei@loongson.cn, luweining@loongson.cn, 
+	Yujie Liu <yujie.liu@intel.com>, Heng Qi <hengqi@linux.alibaba.com>, 
+	Tejun Heo <tj@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 6/14/24 19:48, kernel test robot wrote:
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/mediatek/linux.git v6.10-next/dts64
-> head:   2f950510411a33d98eea28c22d7880eeb48adb61
-> commit: 2f950510411a33d98eea28c22d7880eeb48adb61 [53/53] arm64: dts: mediatek: mt8188: add default thermal zones
-> config: arm64-randconfig-004-20240614 (https://download.01.org/0day-ci/archive/20240615/202406150109.433ozpQh-lkp@intel.com/config)
-> compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project 78ee473784e5ef6f0b19ce4cb111fb6e4d23c6b2)
-> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240615/202406150109.433ozpQh-lkp@intel.com/reproduce)
+On Sat, Jun 15, 2024 at 6:22=E2=80=AFPM Xi Ruoyao <xry111@xry111.site> wrot=
+e:
 >
-> If you fix the issue in a separate patch/commit (i.e. not just a new version of
-> the same patch/commit), kindly add following tags
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes: https://lore.kernel.org/oe-kbuild-all/202406150109.433ozpQh-lkp@intel.com/
+> On Sat, 2024-06-15 at 17:33 +0800, Huacai Chen wrote:
+> > > To me for now we should just make OBJTOOL and ORC depend on BROKEN an=
+d
+> > > backport to stable...
+> > But this patch allows clang to build objtool, which seems broken, too.
 >
-> All errors (new ones prefixed by >>):
->
->>> Error: arch/arm64/boot/dts/mediatek/mt8188.dtsi:673.32-33 syntax error
->     FATAL ERROR: Unable to parse input tree
->
+> Yes, so I mean make objtool depend on CONFIG_BROKEN because it is indeed
+> broken as at now.
+I don't like CONFIG_BROKEN here, that means telling everyone not to
+enable OBJTOOL, but that is not the case.
 
-This dt-binding patch has not been applied:
-https://lore.kernel.org/all/20240603-mtk-thermal-mt818x-dtsi-v7-2-8c8e3c7a3643@baylibre.com/
+>
+> Or we'll end up at least:
+>
+> select HAVE_OBJTOOL if AS_HAS_EXPLICIT_RELOCS && AS_HAS_THIN_ADD_SUB && !=
+CC_IS_CLANG && !RUST
+Maybe we needn't consider RUST here? And can we think
+AS_HAS_THIN_ADD_SUB always imply AS_HAS_EXPLICIT_RELOCS here?
 
-This is why this error is raised.
+If so, we can simplify the condition. And please submit an updated version.
 
-Julien
+Huacai
+
+>
+> this is already nasty and I still don't know if it covers all broken
+> cases (I've no idea if GCC will generate frame pointer in some cases as
+> well...)
+>
+> > > Even if we can fix both the -mno-thin-add-sub problem and the frame
+> > > pointer problem in these weeks, they'll be some nontrivial large chan=
+ge
+> > > and improper to backport.  Thus we have to admit objtool doesn't real=
+ly
+> > > work for old releases and mark it broken.
+> > I don't like to disable objtool, unless there is no better solution.
+> > And it seems there has already been some "large fix" in objtool's
+> > history.
+>
+> Then we can still backport the large fix to the stable branches when we
+> finish it up.
+>
+> --
+> Xi Ruoyao <xry111@xry111.site>
+> School of Aerospace Science and Technology, Xidian University
