@@ -1,129 +1,58 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BDB6614F9E2
-	for <llvm@lists.linux.dev>; Tue, 18 Jun 2024 08:42:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+Received: from angie.orcam.me.uk (angie.orcam.me.uk [78.133.224.34])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 876F11581F3
+	for <llvm@lists.linux.dev>; Tue, 18 Jun 2024 09:36:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=78.133.224.34
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718700150; cv=none; b=JhoklPLqtRzwyIHXoOGzybFKH9PDvJqEgIzwWveaTdwq2xJM9o1Ndv4E7wjsJDlDLKlbLlCD0MG5iGFi/OlCQk8gFObe2xUkw2I2/KWw9Cbt3RctKNGWSl0f3Si9UuW8VS6VEmPPz2MBBRBiuXxZZ4DgxKPvYTQqi7yCRNxFojM=
+	t=1718703407; cv=none; b=Xi5j0vtX8Mn07QKIgar3SvVMP02btElnoQZPOIkHcxM5CFqjneDoHnuF0BZWmVCBKuTySuTTLpmZNJkm5DGjwBxwgeu/bWUwJzZRGaCmcsxMpzH9rvMuN9Ay1QCTKstvwALl5GmKIi9XqJF5AIdP1J7CKnJwrtGl8pt22wgYv2Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718700150; c=relaxed/simple;
-	bh=XwP4R5yIC+IXu+yw4vdigY636g3och147zcjY6NznoI=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=UBAMfW7E/454+cjaDJtIjhr+pxb7bNVyuMn8myWWmaCwcDOgQ5+fHIIvvgdx90afGc3t3CuxAfrtgPthXoG0sXHVC+q5Q2MJb9Kf5BaBJFG+Fq9tvtvuDkqOBrqTuRxUj5IBZfPdyQADD3P5l3nOtEcHzLyECeX/LSxifHW6BLk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=HJk76h5f; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="HJk76h5f"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1718700147;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=M+VoKRlGjgMYCf29OHgdZ/EP8R1GlSJGtEEWHwLQErw=;
-	b=HJk76h5fVNiCdGHcmaI7TNyMN9qbYo+SpJ/kN4BVoHaW2MJylJUfK/7G/M+3Yc76SpPUDl
-	cvwaRJcehwg/PYwIDyDxZGi3GZ983WziCGiK8aVcAgH6GCnNh0NfKb1ygGRlowANLFlDkv
-	ILlvr/a+JPHHCx8Q/yjL/3+kODctres=
-Received: from mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-665-ilRpl1IWO8KV4HXXI9tiBg-1; Tue,
- 18 Jun 2024 04:42:23 -0400
-X-MC-Unique: ilRpl1IWO8KV4HXXI9tiBg-1
-Received: from mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.4])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 3986C195608E;
-	Tue, 18 Jun 2024 08:42:22 +0000 (UTC)
-Received: from [172.64.3.44] (unknown [10.30.33.101])
-	by mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id C13CB3000225;
-	Tue, 18 Jun 2024 08:42:18 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL (MISSED 11 of 192): Test report for master
- (6.10.0-rc4, mainline.kernel.org-clang, 14d7c92f)
-Date: Tue, 18 Jun 2024 08:42:18 -0000
-To: yizhan@redhat.com, shinichiro.kawasaki@wdc.com, llvm@lists.linux.dev
+	s=arc-20240116; t=1718703407; c=relaxed/simple;
+	bh=Pm72A+O9k/rVqJHLOZG9ADJ4j/Qk7mZjCw8RNSki/oA=;
+	h=Date:From:To:cc:Subject:In-Reply-To:Message-ID:References:
+	 MIME-Version:Content-Type; b=LYwmJl4PRIFXIpq+1hZi5EupmHdXafZjKy/W2Hzttc886AuHWtywv14n5J0B4VGzadNgZ/hwYmpFDY88SrleneZGbabc8/KUt5QdGPSpyQuhQT2VD/+oN3HjyNOuFKMLqdlUD4er4sHpbxLpj8GybHl7D+6EU9d9TJy97Hxs+oI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=orcam.me.uk; spf=none smtp.mailfrom=orcam.me.uk; arc=none smtp.client-ip=78.133.224.34
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=orcam.me.uk
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=orcam.me.uk
+Received: by angie.orcam.me.uk (Postfix, from userid 500)
+	id AC8F392009C; Tue, 18 Jun 2024 11:28:58 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+	by angie.orcam.me.uk (Postfix) with ESMTP id A56C492009B;
+	Tue, 18 Jun 2024 10:28:58 +0100 (BST)
+Date: Tue, 18 Jun 2024 10:28:58 +0100 (BST)
+From: "Maciej W. Rozycki" <macro@orcam.me.uk>
+To: Nathan Chancellor <nathan@kernel.org>
+cc: Jeff Johnson <quic_jjohnson@quicinc.com>, linux-mips@vger.kernel.org, 
+    llvm@lists.linux.dev
+Subject: Re: mips allmodconfig build error with llvm-18.1.7-x86_64
+In-Reply-To: <20240617174446.GA843124@thelio-3990X>
+Message-ID: <alpine.DEB.2.21.2406180329440.43454@angie.orcam.me.uk>
+References: <a138bd58-80b3-4adb-8cbb-65e92a0d0b6e@quicinc.com> <20240617174446.GA843124@thelio-3990X>
+User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.4
-Message-Id: <85740.124061804422300256@us-mta-665.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=US-ASCII
 
-Hi, we tested your kernel and here are the results:
+On Mon, 17 Jun 2024, Nathan Chancellor wrote:
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: OK
-              Test: FAILED
+> Even with that addressed though, I see another issue in an allmodconfig
+> when building arch/mips/kernel/cps-vec.S that I don't recall seeing
+> before:
+> 
+>   arch/mips/kernel/cps-vec.S:363:2: error: instruction requires a CPU feature not currently enabled
+>    jr.hb $9
+>    ^
+>   arch/mips/kernel/cps-vec.S:477:4: error: instruction requires a CPU feature not currently enabled
+>   1: jr.hb $8
+>      ^
 
+ JR.HB is supposed to be permitted for MIPSr1 as a backwards compatible 
+ISA extension, even though coming from MIPSr2 and not originally a part of 
+the MIPSr1 ISA (although there was an erratum in some MIPS 4Kc cores that 
+caused an RI exception with this encoding).
 
-Kernel information:
-    Commit message: Revert "mm: mmap: allow for the maximum number of bits =
-for randomizing mmap_base by default"
+ FWIW,
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1335996121
-
-One or more kernel tests failed:
-    Unrecognized or new issues:
-        Storage - blktests - blk - upstream
-              x86_64
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-redhat:1335996121-x86_64-kernel_upt_5
-                   Non-passing ran subtests:
-                       =E2=9D=8C FAIL storage/blktests/tests/nbd/002
-
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1267
-            Affected tests:
-                selinux-policy: serge-testsuite [ppc64le]
-        Issue: [rhel-10] xfstests - cifsv3.11 - generic/207 - error in bloc=
-k: expected 4096 bytes, received 0
-            URL: https://issues.redhat.com/browse/RHEL-39974
-            Affected tests:
-                xfstests - cifsv3.11 [x86_64, x86_64 (debug)]
-
-
-Tests that were not ran because of internal issues:=20
-    Boot test [s390x]
-    CKI/restraint [s390x]
-    machineinfo [s390x]
-    Reboot test [s390x]
-    SELinux Custom Module Setup [s390x, x86_64 (debug)]
-    Storage - blktests - blk - upstream [s390x]
-    Storage - blktests - nvme-tcp - upstream [s390x]
-    Storage - swraid scsi_raid [s390x]
-    stress: stress-ng - cpu-cache [s390x]
-    stress: stress-ng - memory [s390x]
-
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+  Maciej
