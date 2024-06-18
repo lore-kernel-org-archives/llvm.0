@@ -1,169 +1,231 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2060.outbound.protection.outlook.com [40.107.94.60])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C23615A869;
-	Tue, 18 Jun 2024 13:51:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718718710; cv=none; b=R8fWqDX5BL3rimibW1MSIeoNhJEMqc0yjZLrUrQ/gcANjtOXdvdl8Hp1Jqra6OHBYsj+Qy/JtyId8cjkLRxEh5WNheBNEf+sWa67qxU+euGB9xaeCwPw0w7BhjahB2756njg5FzFfO2mCgX0rvDat01qucEmGoVJWDnNsp/zFG8=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718718710; c=relaxed/simple;
-	bh=jZTXzxlFYVfRFo7ptSoHB/sfDeGp2NsucUm1L+1pbAM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ffqqRToS0XMNYLvjmPPO++50r+G9Q+uBvBo39z0rFjQTh4lxSMAF9nAyO2TigTcmk3wfKPzBkBSwECakd3AewC6En4mujMdUu5Vnt+PJWagzruh3Y/OzQX3OQcM59S2oUBM5lbb1HE4iYDZS6FVL6sNcg9DXK86uhWvMoyZsDNc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jWyawfa6; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB0A213D50B;
+	Tue, 18 Jun 2024 14:08:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.94.60
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1718719711; cv=fail; b=tyOVIkRZ+/4gkcPBHwIHnZ9CF8w4BlFNeT/zRFPF8F7FY2Ip7VtYzTkbD31GVbf+qq8jRylFc9XURlKvoWpOs6ge6Gsi9RYgF4TA4Vx5CZzhXZxQ1DM7fSUQzV9ZV7Ba3VutpumuDEJcjqScEHVRPfFsiS24lBCtZllSgQDCFFs=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1718719711; c=relaxed/simple;
+	bh=RQtB7WMxNdeHX8vQVSEKvRDhMx1Y+JAPXTRgY+hdkgs=;
+	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=ie3tnOLM5BSgBM/l61HoeRLgPOU/9hIxmVrbSBgfqxAg3URBe+Q7boiVtL5KRdoTLlCeJ/ZybadPi1dmbM9hrjqq/GzaS0rdPp8HszH5XHEDt8euJxqsEDc2C58yXKs9dzYI3lkJW39dZ68LlwbEAh2nci5ebsjnxeknhkvLke8=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=yg/D+mfv; arc=fail smtp.client-ip=40.107.94.60
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jWyawfa6"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2F178C4AF1D;
-	Tue, 18 Jun 2024 13:51:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1718718709;
-	bh=jZTXzxlFYVfRFo7ptSoHB/sfDeGp2NsucUm1L+1pbAM=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=jWyawfa6btzKXEdvhC+UgMCuUE7OfMHTqIc3wsT7ajozNZVzUq5AZ4uVnERVajBSb
-	 AkYqGy6iKPoC6hIuFT33xTfmMh2d9OAFR1z2ohFFhMVi3XADJgUZqQ9rFFRD0HpURq
-	 hB5T4FbOPUkEulizkqo6OomC7SbwaXThQRWC6ZVIFgjfCAyXZDEhB02N6t9Joc6Ofc
-	 AFbQBTGUvlSzps6DjOmuWHLdfDp6UIy/u6B6STVTAIK0YVNoyS2x6ofoLQWzsBk/gb
-	 OHmUqCem7/YsWsq9HT2p8sqZNaSzfmLR4R39shMxgiiFdiwFPuDLh8cIDTGkX0845G
-	 P25Wnzz7v1Y8g==
-Date: Tue, 18 Jun 2024 10:51:44 -0300
-From: Arnaldo Carvalho de Melo <acme@kernel.org>
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: dwarves@vger.kernel.org,
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	bpf@vger.kernel.org, Alan Maguire <alan.maguire@oracle.com>,
-	Jiri Olsa <jolsa@kernel.org>, Jan Engelhardt <jengelh@inai.de>,
-	Matthias Schwarzott <zzam@gentoo.org>,
-	Viktor Malik <vmalik@redhat.com>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Jan Alexander Steffens <heftig@archlinux.org>,
-	Domenico Andreoli <cavok@debian.org>,
-	Dominique Leuenberger <dimstar@opensuse.org>,
-	Daniel Xu <dxu@dxuuu.xyz>, Yonghong Song <yonghong.song@linux.dev>,
-	llvm@lists.linux.dev
-Subject: Re: [PATCH/RFT] Re: ANNOUNCE: pahole v1.27 (reproducible builds, BTF
- kfuncs)
-Message-ID: <ZnGQ8CDRaMBIj5R5@x1>
-References: <ZmjBHWw-Q5hKBiwA@x1>
- <20240613214019.GA1423015@thelio-3990X>
- <ZnCQ-Psf_WswMk1W@x1>
- <ZnCWRMfRDMHqSxBb@x1>
- <20240617210810.GA1877676@thelio-3990X>
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="yg/D+mfv"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=ez3t3Lp4a699lwZBnaRUzCnauhbvRAsn4M0j0Bzq3X056CkVJZo9Wgs5R+r6jHnk15mT3MiyEOyB4wAcFbZKQi7P2NX938qZNuKo0QUZB0W7ly3GwaIRmKO03qFa2zIQX/Q+JqVcmgE+yZ5P5HvWEbrbOMeRht7+EY8WxrsBdi5K+8mOeyKia5b8DqZXgTLG/o/sifc+XPCXt+7T5mLeJwayKZ8mdf9Kp0K4GUcALv1q7p8xm+NhiINSFuLbOICwO0JbUUaM6Zx38aO8AY19sujQQf5CbXQxldDvfl83PdDSg6UIPYNHaKtnJals8ksnDrQGcV7hFNGTGkhv/ewB/g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=O24RGwbG2nA8T3APyP2V8XPYCrVLrczVJWyV+N4qRLg=;
+ b=n1Ze7DrTuvFvBQ+u2QNawNzeQmMeDX6mXgncbO20dt20gPV12qDhwXplgZoDFqrSMO3ceES/6g1vKXOBB1DkfbZIlFM+73hiQpTVn+Q4bmB+W6xoyVAHJ56+r/INE41AjMnTRnD0TytgqyvhgNdTAZykNMCMoOqd384K+gcA47OOpxFzLpzHu7ledbrLc5ATzf7q7DEkDN8zYfw/I6Cr93ZISHuGEqkDPyXdXHZw1jbAnFXVJZYtOx5ctJOjpRMC28lkBi9k8j2imiIH/wtngpZ0ZFHUd2xMCWne/owV2cIlxuRdfmkaXLj7iBG8ICHj/TOJIUG7mwNIere3/2Vp0Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=O24RGwbG2nA8T3APyP2V8XPYCrVLrczVJWyV+N4qRLg=;
+ b=yg/D+mfvtcM4tOW0SZe2Xp1RamtqB+u0xWlInm+BtyJo4LTjX2j/HuVOg6LKEo2VUWn9RHYs6k11APn+mm0Iuhw3v4i1unaUChf9Iw17Sn+00o4rq5oWuNgpnuPoSmfk2kKx/S1lch98TYp0ly//lGze8PLmEVd6qD7XN2DUGRw=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from CO6PR12MB5427.namprd12.prod.outlook.com (2603:10b6:5:358::13)
+ by MN2PR12MB4303.namprd12.prod.outlook.com (2603:10b6:208:198::7) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7677.31; Tue, 18 Jun
+ 2024 14:08:26 +0000
+Received: from CO6PR12MB5427.namprd12.prod.outlook.com
+ ([fe80::1c2f:5c82:2d9c:6062]) by CO6PR12MB5427.namprd12.prod.outlook.com
+ ([fe80::1c2f:5c82:2d9c:6062%7]) with mapi id 15.20.7677.030; Tue, 18 Jun 2024
+ 14:08:26 +0000
+Message-ID: <58253c2e-25a2-48c6-bcd4-5bc3bbe03296@amd.com>
+Date: Tue, 18 Jun 2024 10:08:19 -0400
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] drm/amd/display: Disable CONFIG_DRM_AMD_DC_FP for RISC-V
+ with clang
+To: Nathan Chancellor <nathan@kernel.org>, Leo Li <sunpeng.li@amd.com>,
+ Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
+ Alex Deucher <alexander.deucher@amd.com>,
+ =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
+ Xinhui Pan <Xinhui.Pan@amd.com>
+Cc: Palmer Dabbelt <palmer@dabbelt.com>,
+ Samuel Holland <samuel.holland@sifive.com>,
+ Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling
+ <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
+ amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+ linux-riscv@lists.infradead.org, llvm@lists.linux.dev,
+ patches@lists.linux.dev, Palmer Dabbelt <palmer@rivosinc.com>
+References: <20240614-amdgpu-disable-drm-amd-dc-fp-riscv-clang-v1-1-a6d40617dc9b@kernel.org>
+Content-Language: en-US
+From: Harry Wentland <harry.wentland@amd.com>
+In-Reply-To: <20240614-amdgpu-disable-drm-amd-dc-fp-riscv-clang-v1-1-a6d40617dc9b@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: YT3PR01CA0117.CANPRD01.PROD.OUTLOOK.COM
+ (2603:10b6:b01:85::35) To CO6PR12MB5427.namprd12.prod.outlook.com
+ (2603:10b6:5:358::13)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20240617210810.GA1877676@thelio-3990X>
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CO6PR12MB5427:EE_|MN2PR12MB4303:EE_
+X-MS-Office365-Filtering-Correlation-Id: ef973d11-36c0-4ac6-609b-08dc8fa01eec
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230037|376011|7416011|1800799021|366013;
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?NFNsdDRsY2kybEFrSEFoM2RtZ0F3K1pDYzlHaDRiL3A4N2UzdXdnNlJ5YXBj?=
+ =?utf-8?B?UzQrOXVzTzNES3FWUWRGQmJYNWdIZ1d5Si9VbmpobGp4ZkYwZzltVzE3dS9V?=
+ =?utf-8?B?QzNqMlFBVit0VUJBVnJVdUZuZ2VvbTgvNzVIL3NEazhwRkpDcElvbjFRYjdG?=
+ =?utf-8?B?SURhYTFqTkJNTmVnektTbHBnUHpEcjBRTFd1L2ZpRXFzTHVqYnpoZHFIbXpv?=
+ =?utf-8?B?ZDF0NG9acmlBVi9qdmhFZGJOSnlPYU41eElBakU2d015MHNoTVJsbEVhNkVx?=
+ =?utf-8?B?eWpJcUE5a1Ivd3ExZWswaEFEeXpublJzQ282WXRFQ0Q0UDgzMkZmWWFScHpM?=
+ =?utf-8?B?MmpBV0FsUkZNYTVkWkQ1TUpBSTZaekNYR3FNQWNXTmpJNXk3b2lHNUVCNzla?=
+ =?utf-8?B?eTJPNkNoaHh5UE9lTUl3ZHdWcGRPdEk4elRycnV4VElZWE1hQmgrWmRoOVR5?=
+ =?utf-8?B?WFo2a2EwZ21WSHVrNE9ESk9RazFHc2tkaGpWU0lUZ3B3ZEV2NnBvNXFjdVM5?=
+ =?utf-8?B?YjNweEduTU83TTJRYXpsVDhsbjJPTHRqK0tObk9VcERuaDNGOG9vQklibU5m?=
+ =?utf-8?B?dHRBcS84RStyTHVrcVhkZmhnYTZMa2R6UlhLR3dxaDhHK3dxekFFUldiNTZz?=
+ =?utf-8?B?aUNQQlVrOUNERzNKWE9NQXFtR0dCdkdYMFRQSTRoZURRQjgzVllSTlBJVE55?=
+ =?utf-8?B?RlFBK2pWSlk3cVU4QlhGR0NyQjJXMnR4dUtkOVVUTkpJUlJ2WUk0Wm9VTkpI?=
+ =?utf-8?B?MStEYUZOVXRrZnM3VW1GcVJxRGw3V0hpT3ZidU5zSnJXUjZHalpsV2Y2TnVC?=
+ =?utf-8?B?dW5zNUFDQ1B5ekEzR0s1dnVXK1k4THlyUCtsS1p5WWZnMy9Wa0lXdFRSQXFS?=
+ =?utf-8?B?dEVQTy9uN1g5R0hwV3ViNU9UOWNMdDl0Nng1ZFRLQWpFTW9GZ2xzdncyRnZM?=
+ =?utf-8?B?NFRwaGFrMHhKMGc5dU4yTlRvNmYrZmlTTDdhbHhWZUErVHpoSDVOeXJNRjdJ?=
+ =?utf-8?B?ZEV3RmpYREFNdGNXdFJwTkFZUWlrZ1VjdERTRnU3SDdpZlFxQTRETWtJcG44?=
+ =?utf-8?B?VHN5QXZRKzh2RzA3OVN5TEQ5bklHYmtJL05ocDNydjdSRjJyWGM3ZEFMRHlF?=
+ =?utf-8?B?WUhJR25BS0dmeHF4K0lCYkdDdm9sRTZoVkNJKzJmOTVaZVF3YlhlTFZpNkMv?=
+ =?utf-8?B?ekVvNWZRSzAyR2s1TDF0R0dydDV2eTZLMXF2M29HY0l3K0x0cE1yc01XQlRL?=
+ =?utf-8?B?dXJIakp3YmFGOUFRZ0Y1azlFVTF1by9GMElRVys2SlhGR2I3VTBUN2pUNGJk?=
+ =?utf-8?B?azlGWWNTR2FiOTVnT3FRaGdXak9EZ3Z1NFdSSkl4WHVacytoRGxXY1orV0Fk?=
+ =?utf-8?B?cm1zMWMxMWt6Zkpqb08wOFZZaGliTXN4TFpBMUhEcHB3c2U1Yk16SnY0TUk1?=
+ =?utf-8?B?aWpOSTFzL05zbjNpT01DUzJIVU9XNDJGRnUxWXFZd3ZrSUJla2VFcjRiOTlD?=
+ =?utf-8?B?eklLd241MTM1Z3RlejdlQmp4K0cyOVJoS0pzTEJrMFI4aGsrelpRSzVhQjFz?=
+ =?utf-8?B?aGQvUU1qdmtkSlMxK3lVNkp5Y1FJZExJZTY1Y2U2V3F6RlZyZ0ZzdnphSzV4?=
+ =?utf-8?B?bGlLU3M1ZEdFeWRtL3ovay84dElHYUhlb3RYLy9EMEF6d1lodDFEVzJ0M1VQ?=
+ =?utf-8?B?OGxQVlpKVVdHUjhra05XUTlUa0FWckVXUTczQmdlVWNQYjRBZUNNc2d3PT0=?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO6PR12MB5427.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230037)(376011)(7416011)(1800799021)(366013);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?ajBZYmpBYUxPRWJJVXFxWlFaTnBPR0RKeWRLTDF6Skh6clFzTkJmd2lrMC9y?=
+ =?utf-8?B?M2RDMm9SK0pVTlh1T0dDK2xTV0t6YTdYTTl5SzRjNUdRaEJsTWEzd0tPUVNw?=
+ =?utf-8?B?MVAxVmVWVkdCaHRjWnc0OXp5SUxwemxPYXhvNlp5TFJpRnhudEFnVEdMbXd6?=
+ =?utf-8?B?V0QrclQybzRRN2ltUnFnVFZSNGQxaVVUZTNZTlgzVnlocHo5Qnk4NjBUL1JT?=
+ =?utf-8?B?MGxDRk9Md3E1VkZaV0tGOFJoZnU4SkU1M3Q4ZzlPNXdGSjNRTmdyOEpTUm9Y?=
+ =?utf-8?B?VDYxV3ZOa1RPQVphWlZrMjVQWmFlODhGZG9XTzgvWEo3UU5kaGo3TUxNSVMy?=
+ =?utf-8?B?ODJyTkRPNlZBTzRqaXg2dFJiSm41aTFSeVV0QWlBYktEOEpCdm5Ga2lrODVJ?=
+ =?utf-8?B?Rk00SWYxM2FzWWFFbHdNMmtiN2FDQzlDZ3hvR0lCRkFXdnN1NXRWMlF2aHU4?=
+ =?utf-8?B?MkFlWmRNNDYxNEdJMThxS2xIU0daWUZ2ekN6d2tJVzYyNURyOW1IWURXSW9K?=
+ =?utf-8?B?UzZTU1BtYUY5S2hjc1BYZndaR0g5NDI1YXA4WjVZcGduN1ZQek03QWJWTjBZ?=
+ =?utf-8?B?aE5BNm85U2hzUlh4a0lCYkNjM1N6RnI1bW9NNEY1WkhZTTIyWTdPTHhnMTVV?=
+ =?utf-8?B?ZENxY0haL21QUC9qY1RiMHNMaHJrYjkrL0VFdDVjUFlmK3RSZkh5WWgvb25F?=
+ =?utf-8?B?RXovalV1cWtsdWp6eWNWbWR1OGFrNEszRmtSWXZXRXlCa09qdUErK2pNV1FB?=
+ =?utf-8?B?cytRSEZ4NCtteVBVdXFaRU16a2I2MDJ0RUNWa0lTQzE3N1JUNzZWVFpDVWhD?=
+ =?utf-8?B?T1NXcDhQbWxTeUNQajY2WEx6d0ZSQy9DRXRzMTJiT3BrKzl3YmRvMFg1TW13?=
+ =?utf-8?B?cXJyTm1jN1NRbnRlc2dtVU1wcWdTODhMSFdSSFgwRGRsRHpHMFRPV1BmS0R5?=
+ =?utf-8?B?ZXIzVnVVWHptSlllUnVOdFFWODRjYXArWkhUUXM3TFdxNWJmM3hCbU9aR3dN?=
+ =?utf-8?B?emZQMWp1ZzNEbGc1K1E3SUdzRUU4WGNoYStJVUhvQjdIblhhbHZOQzBrb2FG?=
+ =?utf-8?B?UDVXVEVYQTA2YjNjTktjL0VMbzl2eTRqcEM2cTk3bk1reHFQTWNrQ20vaitv?=
+ =?utf-8?B?UHNjd2dxWGFzaG9ENElBNndNeE1Gd3ZMOHkxMXVsT0xJdy9ibVU1eGxta1ph?=
+ =?utf-8?B?V1h5aVBxVVNTWW1sQlF6WER6R2VVNEpZd0d2bXQwR1JtM01oV0tMV0MxRytq?=
+ =?utf-8?B?d0xSZ2c1RS9SNjVBblZLalJLZmQ2Nkt0T1ZmRjg0QVpESGQ0SHlxa25Fa2ZD?=
+ =?utf-8?B?N2xUWVIreGNWckFyVzhYQnZzdEJYelhFUUJsRytwSSthditCQ0dsVGVzSEpD?=
+ =?utf-8?B?ekxuczVnTTRNU2p0cFFObVJPRGVzSUNGQ0Z0elQzMlAxTkVRZUFhZHBKb3JO?=
+ =?utf-8?B?TEZhNDVSRFBtdnRDN3hjdzhNa2FuWnNoMnplN2JGWnc2N0lWV3JxMUtzdjdi?=
+ =?utf-8?B?ejIvSUxEbGpYcHZvaUxEN25mU0RBQ0U0cllpaTVTNkRJZ0FYTGpsVDZKWUFN?=
+ =?utf-8?B?c3VJRTVmSWJOZCtLbitnWEROdWM3RUQ3c2dEWTl5Q1UxQ21JRmlJd1V4SGlP?=
+ =?utf-8?B?bTVKRkZqZlQxNWFueXdWcklGanRaM3dtbW1DMXg1SjlYTFlyT1FLSGJGbFov?=
+ =?utf-8?B?bGJUeFdDdkVVSnRsSXZqcHVrdjA0ZTZlanpJcEFoMk0vYjg2b09tQnFxenA4?=
+ =?utf-8?B?Q0NZL3Z2QlVrSElsWWNYcWRTOHZGYitEYzhKY0h2SlJlazhCQWt1bVFVNTZi?=
+ =?utf-8?B?elZMazY5ZFVzTnBlaDNSWEFvVEl3OXRwTjZsU1BtQjJuVjB1MVBUeXVwTnBN?=
+ =?utf-8?B?V096c2FXZFBBN3phb2RoellCcXZlZWx5WWJCUUxubEJwOHdtQklwb1Bxbk91?=
+ =?utf-8?B?STZUMk92U3NjMFo4OGw3ZzZNVjlST3NySzBRSktZUzJ4UjUzdS9Lb2lsQUZ2?=
+ =?utf-8?B?MXVyWDN1RGFXMEh3QWVEU1ZnMGVSVm4zZE5EOWNUM1dPSnZBbTdpNTY4SWNG?=
+ =?utf-8?B?RDA1UXpmKzlrd0xjWVZjc1JrbFgyL0JWSGQ1b243emlDalFMeGdYeFhJWEcr?=
+ =?utf-8?Q?21wlaZFmGCd1hQ8cainj9Whp6?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: ef973d11-36c0-4ac6-609b-08dc8fa01eec
+X-MS-Exchange-CrossTenant-AuthSource: CO6PR12MB5427.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Jun 2024 14:08:25.9675
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: UfMyWaFDJYmPKDOEE906ixE2MFQWHunaM8k8PSB7IVsdMh17p7umOY7A2tBRf1dJ45Xr0eH7J1bs7DXnwSW0sA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR12MB4303
 
-On Mon, Jun 17, 2024 at 02:08:10PM -0700, Nathan Chancellor wrote:
-> On Mon, Jun 17, 2024 at 05:02:12PM -0300, Arnaldo Carvalho de Melo wrote:
-> > Can you try with the one liner below? We remove it from the cus list
-> > unconditionally, and since we alloc space with zalloc/calloc in
-> > cu__new() and missed initializing that list_head (cu->node) we ended up
-> > hitting list_del with a zeroed 'struct list_head' :-\
-> > 
-> > I'll try and get this cast_common.ko checked into a test repo for pahole
-> > so that this gets regression tested.
-> > 
-> > Please test this patch so that we see if this is the only problem and
-> > your kernel build with clang completes successfully.
+
+
+On 2024-06-14 15:54, Nathan Chancellor wrote:
+> Commit 77acc6b55ae4 ("riscv: add support for kernel-mode FPU") and
+> commit a28e4b672f04 ("drm/amd/display: use ARCH_HAS_KERNEL_FPU_SUPPORT")
+> enabled support for CONFIG_DRM_AMD_DC_FP with RISC-V. Unfortunately,
+> this exposed -Wframe-larger-than warnings (which become fatal with
+> CONFIG_WERROR=y) when building ARCH=riscv allmodconfig with clang:
 > 
-> Thanks, I rebuilt pahole with the following diff and both my build and
-> the other configuration I tested for this regression successfully
-> complete.
+>   drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn32/display_mode_vba_32.c:58:13: error: stack frame size (2448) exceeds limit (2048) in 'DISPCLKDPPCLKDCFCLKDeepSleepPrefetchParametersWatermarksAndPerformanceCalculation' [-Werror,-Wframe-larger-than]
+>      58 | static void DISPCLKDPPCLKDCFCLKDeepSleepPrefetchParametersWatermarksAndPerformanceCalculation(
+>         |             ^
+>   1 error generated.
 > 
-> Tested-by: Nathan Chancellor <nathan@kernel.org>
+> Many functions in this file use a large number of parameters, which must
+> be passed on the stack at a certain pointer due to register exhaustion,
+> which can cause high stack usage when inlining and issues with stack
+> slot analysis get involved. While the compiler can and should do better
+> (as GCC uses less than half the amount of stack space for the same
+> function), it is not as simple as a fix as adjusting the functions not
+> to take a large number of parameters.
+> 
+> Unfortunately, modifying these files to avoid the problem is a difficult
+> to justify approach because any revisions to the files in the kernel
+> tree never make it back to the original source (so copies of the code
+> for newer hardware revisions just reintroduce the issue) and the files
+> are hard to read/modify due to being "gcc-parsable HW gospel, coming
+> straight from HW engineers".
+> 
+> Avoid building the problematic code for RISC-V by modifying the existing
+> condition for arm64 that exists for the same reason. Factor out the
+> logical not to make the condition a little more readable naturally.
+> 
+> Fixes: a28e4b672f04 ("drm/amd/display: use ARCH_HAS_KERNEL_FPU_SUPPORT")
+> Reported-by: Palmer Dabbelt <palmer@rivosinc.com>
+> Closes: https://lore.kernel.org/20240530145741.7506-2-palmer@rivosinc.com/
+> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+> ---
+>  drivers/gpu/drm/amd/display/Kconfig | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/gpu/drm/amd/display/Kconfig b/drivers/gpu/drm/amd/display/Kconfig
+> index 5fcd4f778dc3..47b8b49da8a7 100644
+> --- a/drivers/gpu/drm/amd/display/Kconfig
+> +++ b/drivers/gpu/drm/amd/display/Kconfig
+> @@ -8,7 +8,7 @@ config DRM_AMD_DC
+>  	depends on BROKEN || !CC_IS_CLANG || ARM64 || RISCV || SPARC64 || X86_64
+>  	select SND_HDA_COMPONENT if SND_HDA_CORE
+>  	# !CC_IS_CLANG: https://github.com/ClangBuiltLinux/linux/issues/1752
+> -	select DRM_AMD_DC_FP if ARCH_HAS_KERNEL_FPU_SUPPORT && (!ARM64 || !CC_IS_CLANG)
+> +	select DRM_AMD_DC_FP if ARCH_HAS_KERNEL_FPU_SUPPORT && !(CC_IS_CLANG && (ARM64 || RISCV))
 
-Great, I just added this:
+Thanks for also making the logic easier to parse.
 
-From 6a2b27c0f512619b0e7a769a18a0fb05bb3789a5 Mon Sep 17 00:00:00 2001
-From: Arnaldo Carvalho de Melo <acme@redhat.com>
-Date: Tue, 18 Jun 2024 10:37:30 -0300
-Subject: [PATCH 1/1] core: Initialize cu->node with INIT_LIST_HEAD()
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Reviewed-by: Harry Wentland <harry.wentland@amd.com>
 
-In cu__new() zalloc() is used defensively, and that helped catch this
-problem where we assume that a cu us in the cus list of cu instances,
-but that is not the case when we use cus__merge_and_process_cu(), for
-instance when loading files created by clang with LTO, as reported by
-Peter Jung and narrowed down by Nathan Chancellor.
+Harry
 
-If we use INIT_LIST_HEAD() in cu__new() to initialize cu->node, which is
-what we do with other lists and nodes there, then the unconditional
-removal using list_del_init() will be a no-op and removing something not
-on the cus list of cu instances will not cause problems, just keep an
-unconsistent cus->nr_entries field.
-
-So lets just have this fix in first, keeping Nathan's Tested-by and then
-do the a bit more involved fix of either adding that cu to the cus list
-or checking at removal time if it is there.
-
-  Program received signal SIGSEGV, Segmentation fault.
-  0x00007ffff7f1e13e in __list_del (prev=0x0, next=0x0) at /home/acme/git/pahole/list.h:106
-  106		next->prev = prev;
-  (gdb) bt
-  #0  0x00007ffff7f1e13e in __list_del (prev=0x0, next=0x0) at /home/acme/git/pahole/list.h:106
-  #1  0x00007ffff7f1e176 in list_del_init (entry=0x417980) at /home/acme/git/pahole/list.h:165
-  #2  0x00007ffff7f1f8f9 in __cus__remove (cus=0x4142a0, cu=0x417980) at /home/acme/git/pahole/dwarves.c:527
-  #3  0x00007ffff7f1f92b in cus__remove (cus=0x4142a0, cu=0x417980) at /home/acme/git/pahole/dwarves.c:533
-  #4  0x00007ffff7f3d01c in cus__finalize (cus=0x4142a0, cu=0x417980, conf=0x4133c0 <conf_load>, thr_data=0x0)
-      at /home/acme/git/pahole/dwarf_loader.c:3040
-  #5  0x00007ffff7f3e05c in cus__merge_and_process_cu (cus=0x4142a0, conf=0x4133c0 <conf_load>, mod=0x415cf0, dw=0x416110, elf=0x414380,
-      filename=0x7fffffffe3f7 "cast_common.ko", build_id=0x416680 "\265D\371U\213\373u|\037\250\242\032\271\365⒜]y\023", build_id_len=20,
-      type_dcu=0x0) at /home/acme/git/pahole/dwarf_loader.c:3482
-  #6  0x00007ffff7f3e218 in cus__load_module (cus=0x4142a0, conf=0x4133c0 <conf_load>, mod=0x415cf0, dw=0x416110, elf=0x414380,
-      filename=0x7fffffffe3f7 "cast_common.ko") at /home/acme/git/pahole/dwarf_loader.c:3521
-  #7  0x00007ffff7f3e396 in cus__process_dwflmod (dwflmod=0x415cf0, userdata=0x415d00, name=0x415ea0 "cast_common.ko", base=65536,
-      arg=0x7fffffffde40) at /home/acme/git/pahole/dwarf_loader.c:3581
-  #8  0x00007ffff7eb4609 in dwfl_getmodules (dwfl=0x414300, callback=0x7ffff7f3e2ec <cus__process_dwflmod>, arg=0x7fffffffde40, offset=0)
-      at ../libdwfl/dwfl_getmodules.c:86
-  #9  0x00007ffff7f3e4c5 in cus__process_file (cus=0x4142a0, conf=0x4133c0 <conf_load>, fd=3, filename=0x7fffffffe3f7 "cast_common.ko")
-      at /home/acme/git/pahole/dwarf_loader.c:3647
-  #10 0x00007ffff7f3e5cd in dwarf__load_file (cus=0x4142a0, conf=0x4133c0 <conf_load>, filename=0x7fffffffe3f7 "cast_common.ko")
-      at /home/acme/git/pahole/dwarf_loader.c:3684
-  #11 0x00007ffff7f232df in cus__load_file (cus=0x4142a0, conf=0x4133c0 <conf_load>, filename=0x7fffffffe3f7 "cast_common.ko")
-      at /home/acme/git/pahole/dwarves.c:2134
-  #12 0x00007ffff7f23e8b in cus__load_files (cus=0x4142a0, conf=0x4133c0 <conf_load>, filenames=0x7fffffffe0f0)
-      at /home/acme/git/pahole/dwarves.c:2637
-  #13 0x000000000040aec0 in main (argc=2, argv=0x7fffffffe0e8) at /home/acme/git/pahole/pahole.c:3805
-  (gdb) fr 1
-  #1  0x00007ffff7f1e176 in list_del_init (entry=0x417980) at /home/acme/git/pahole/list.h:165
-  165		__list_del(entry->prev, entry->next);
-  (gdb) p entry
-  $1 = (struct list_head *) 0x417980
-  (gdb) p entry->next
-  $2 = (struct list_head *) 0x0
-  (gdb) p entry->prev
-  $3 = (struct list_head *) 0x0
-
-Closes: https://github.com/acmel/dwarves/issues/53
-Closes: https://gitlab.archlinux.org/archlinux/packaging/packages/pahole/-/issues/1
-Tested-by: Nathan Chancellor <nathan@kernel.org>
-Link: https://lore.kernel.org/all/20240617210810.GA1877676@thelio-3990X
-Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
----
- dwarves.c | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/dwarves.c b/dwarves.c
-index 1ec259f50dbd3778..823a01524a12bb37 100644
---- a/dwarves.c
-+++ b/dwarves.c
-@@ -739,6 +739,7 @@ struct cu *cu__new(const char *name, uint8_t addr_size,
- 		cu->dfops	= NULL;
- 		INIT_LIST_HEAD(&cu->tags);
- 		INIT_LIST_HEAD(&cu->tool_list);
-+		INIT_LIST_HEAD(&cu->node);
- 
- 		cu->addr_size = addr_size;
- 		cu->extra_dbg_info = 0;
--- 
-2.45.0
+>  	help
+>  	  Choose this option if you want to use the new display engine
+>  	  support for AMDGPU. This adds required support for Vega and
+> 
+> ---
+> base-commit: c6c4dd54012551cce5cde408b35468f2c62b0cce
+> change-id: 20240614-amdgpu-disable-drm-amd-dc-fp-riscv-clang-31c84f6b990d
+> 
+> Best regards,
 
