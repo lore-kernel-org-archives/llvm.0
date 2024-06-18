@@ -1,59 +1,75 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
+Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 24490FC18;
-	Tue, 18 Jun 2024 05:24:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 08F37139D0C;
+	Tue, 18 Jun 2024 08:26:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.92.199
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718688277; cv=none; b=BdEob6188QtXTh0+6GrhfTFH/zNPXECrp1iYUO3YnkDnnrZE08bu6WpmlG6WuYYo8TzXzTZIPmKwpM8AzweSqe2ht4hB0bc9Sy7v/oxSMPhUKgM32UECWMYnjY3cPh2kM0rCqpHAmxsxtPOFChaLRNqYcr7vKAMh0zi/KAjxJ3g=
+	t=1718699211; cv=none; b=DrUa59X7t8YP6OknZSGlu8xGLMDbPnY53S35JgAnSWpgkcc3qCgHPCqxHFZYYz8XA69iHO8pbykOFe8RsLHKUXvck7iB0DfGVpuX4zb6UASzeSShhiFlG5BlJUr5RHpeMfEWZ1C9S36VFZLIUHeeq+7Bt9XAMrk81CN++NzjZmk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718688277; c=relaxed/simple;
-	bh=kg1RYikNFkHadMFmy0XjM76udcOABVV2v3RHzhvzrpo=;
-	h=Date:From:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=FAWUkMbgJOhv5wRJMJbju5i450SbHixuD1tJHrnpHRJnU4dYiqku4C+ptLIQXzw13p5qqQQlnyUecpBBxsN8jnue8K8iL93zxSgmPNNXFay5yaSEyiVDK4hm2gsllEOHO20I/YU3eqWk2OcCgwdac9uKXqAQOmj+vcVPDnJ5TGA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=DaaQDBPk; arc=none smtp.client-ip=198.175.65.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1718699211; c=relaxed/simple;
+	bh=yz2C5fvBJTGqQpnuSLNkBiIZocKFHu/gpBvI/hES3l4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=gWQsXf8wT23nuhA1kdsNj0cD65a+hhGVjIcOFmV2MFiT1ZnnILxD0w7NOTArXxJH7vHO6VBm8MTrkmsYPCqM/QNKKRVYBg86Xl9cmn6iaf6pwSHhydt1W301FJvjn3XrIpO0nKP1OPfUjLsJx+Kc6+Otf2wi7Be7dgDYEz+FeA4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=TD8kRNf5; arc=none smtp.client-ip=90.155.92.199
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="DaaQDBPk"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1718688277; x=1750224277;
-  h=date:from:cc:subject:message-id:mime-version;
-  bh=kg1RYikNFkHadMFmy0XjM76udcOABVV2v3RHzhvzrpo=;
-  b=DaaQDBPkVnN2piu8yhd4Nsh5q9qncOCGUbLNN2Eksi/2Vi4JSYd/NPZ0
-   8mpFKLACx90WjRpZRUHIl3li0zVU4yLhFPop5fmz1EMK9X2T82UQ49t7J
-   a9lgQPjd8Jfnahyd2ryvX1oJ4c3bfOpCGvERwfJrlY/WID9Fueo2x7FbB
-   NRoyKDfb/IIrgdaSsv3WpC4yDlr1gsc4E5+XZ9vOLsuyvbkoUqmdsdxIA
-   WVNWWSyp5coJ+UlTWb/SfiPV/LkyV0HBvReGEFIrQpYl40wJBX0OTcS8R
-   zLWmN1GuY9JNVeHUqKB2a3GUInpfF8YyCFmPicUQlwD0HHGUvoyarl24p
-   Q==;
-X-CSE-ConnectionGUID: vJODe8FaQFeemH7zBbyEog==
-X-CSE-MsgGUID: 4pIAVz6ERQ6bJpmDAfpDKQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11106"; a="38064844"
-X-IronPort-AV: E=Sophos;i="6.08,246,1712646000"; 
-   d="scan'208";a="38064844"
-Received: from fmviesa009.fm.intel.com ([10.60.135.149])
-  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jun 2024 22:24:36 -0700
-X-CSE-ConnectionGUID: V1iRi19AQHa4Xn2prR7T5A==
-X-CSE-MsgGUID: j0CA044cQJClmMkUu+/0Kw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.08,246,1712646000"; 
-   d="scan'208";a="41512984"
-Received: from lkp-server01.sh.intel.com (HELO 68891e0c336b) ([10.239.97.150])
-  by fmviesa009.fm.intel.com with ESMTP; 17 Jun 2024 22:24:34 -0700
-Received: from kbuild by 68891e0c336b with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1sJRKa-0005Ed-1E;
-	Tue, 18 Jun 2024 05:24:32 +0000
-Date: Tue, 18 Jun 2024 13:23:35 +0800
-From: kernel test robot <lkp@intel.com>
-Cc: oe-kbuild-all@lists.linux.dev, llvm@lists.linux.dev
-Subject: [cel:nfsd-5.10.y 194/770] ld.lld: error:
- kernel/built-in.a(kallsyms.o):(function lookup_symbol_name: .text+0x412):
- relocation R_RISCV_PCREL_HI20 out of range: 33553758 is not in [-524288,
- 524287]; references kallsyms_names
-Message-ID: <202406181300.fyX9NQCQ-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="TD8kRNf5"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=y/V05mUJk5DDD/0Y/A3n8rzv2x+59hyyMuOW2I/yfmo=; b=TD8kRNf5i7wpP4NwVa51buHFqy
+	4luHLDjx1w/Xbig1Fi4uuSpTm6uTRaww56SpHtlvj70vUb6uoywFJ3Y8wj8CvSxdBH88Xi41DdKJ4
+	gZLXsidw0hcwi7I7jolrjupEz89w8k+t2h1OczpMw/7WaBKMhOgAsfrR0bjhMK4YfolJJblo6Vkvh
+	de2lHllu6t4vDXrrGnzzN5SiOJlDCb6XtVoHyD+SsxOhm6wfR4VAlmExV4T/H8wSRGcp8TJuWo4tA
+	1JqxPn8us9pTWW95CTZW4UrVLPGrv/jyzEXUEJVXO/FhOr3YsimhVMFnypbCh/6m23y8zQn05qEm+
+	Bnivz25Q==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+	by desiato.infradead.org with esmtpsa (Exim 4.97.1 #2 (Red Hat Linux))
+	id 1sJU78-0000000707D-3Mbp;
+	Tue, 18 Jun 2024 08:24:57 +0000
+Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
+	id C57D1300886; Tue, 18 Jun 2024 10:22:42 +0200 (CEST)
+Date: Tue, 18 Jun 2024 10:22:42 +0200
+From: Peter Zijlstra <peterz@infradead.org>
+To: Kees Cook <kees@kernel.org>
+Cc: Martin Uecker <uecker@tugraz.at>,
+	Erick Archer <erick.archer@outlook.com>,
+	Ingo Molnar <mingo@redhat.com>,
+	Arnaldo Carvalho de Melo <acme@kernel.org>,
+	Namhyung Kim <namhyung@kernel.org>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+	Jiri Olsa <jolsa@kernel.org>, Ian Rogers <irogers@google.com>,
+	Adrian Hunter <adrian.hunter@intel.com>,
+	"Liang, Kan" <kan.liang@linux.intel.com>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	"H. Peter Anvin" <hpa@zytor.com>,
+	"Gustavo A. R. Silva" <gustavoars@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+	Matthew Wilcox <mawilcox@microsoft.com>, x86@kernel.org,
+	linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-hardening@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH v4 0/3] Hardening perf subsystem
+Message-ID: <20240618082242.GC31592@noisy.programming.kicks-ass.net>
+References: <202406101010.E1C77AE9D@keescook>
+ <20240610200544.GY8774@noisy.programming.kicks-ass.net>
+ <202406101438.BC43514F@keescook>
+ <20240611075542.GD8774@noisy.programming.kicks-ass.net>
+ <202406121148.688240B@keescook>
+ <20240612220821.GA18881@noisy.programming.kicks-ass.net>
+ <202406121530.D9DB956C8@keescook>
+ <20240614101708.GO8774@noisy.programming.kicks-ass.net>
+ <c8234b8e2c9c1122eec73c97901e36586160f0cb.camel@tugraz.at>
+ <202406171019.9F0127F@keescook>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -62,46 +78,34 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <202406171019.9F0127F@keescook>
 
-TO: Christoph Hellwig <hch@lst.de>
-CC: Chuck Lever <chuck.lever@oracle.com>
-CC: Miroslav Benes <mbenes@suse.cz>
-CC: Jessica Yu <jeyu@kernel.org>
+On Mon, Jun 17, 2024 at 10:28:20AM -0700, Kees Cook wrote:
 
-tree:   git://git.kernel.org/pub/scm/linux/kernel/git/cel/linux nfsd-5.10.y
-head:   297ad218672e7f8d6e1f6af048c42a42760f56b1
-commit: 82d2e07ec0e29721d03501edea4219bdfb20e314 [194/770] kallsyms: only build {,module_}kallsyms_on_each_symbol when required
-config: riscv-randconfig-002-20240618 (https://download.01.org/0day-ci/archive/20240618/202406181300.fyX9NQCQ-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240618/202406181300.fyX9NQCQ-lkp@intel.com/reproduce)
+> But, using type attributes we have much more flexibility. Hence, the
+> proposed "wraps" attribute:
+> https://github.com/llvm/llvm-project/pull/86618
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202406181300.fyX9NQCQ-lkp@intel.com/
+So I still think that's going about things backwards.
 
-All errors (new ones prefixed by >>):
+unsigned explicitly wraps. signed is UB.
 
->> ld.lld: error: kernel/built-in.a(kallsyms.o):(function lookup_symbol_name: .text+0x412): relocation R_RISCV_PCREL_HI20 out of range: 33553758 is not in [-524288, 524287]; references kallsyms_names
-   >>> referenced by kallsyms.c:81 (kernel/kallsyms.c:81)
-   >>> defined in kernel/built-in.a(kallsyms.o)
---
->> ld.lld: error: kernel/built-in.a(kallsyms.o):(function lookup_symbol_name: .text+0x448): relocation R_RISCV_PCREL_HI20 out of range: 33553758 is not in [-524288, 524287]; references kallsyms_token_index
-   >>> referenced by kallsyms.c:81 (kernel/kallsyms.c:81)
-   >>> defined in kernel/built-in.a(kallsyms.o)
---
->> ld.lld: error: kernel/built-in.a(kallsyms.o):(function lookup_symbol_name: .text+0x450): relocation R_RISCV_PCREL_HI20 out of range: 33553758 is not in [-524288, 524287]; references kallsyms_token_table
-   >>> referenced by kallsyms.c:81 (kernel/kallsyms.c:81)
-   >>> defined in kernel/built-in.a(kallsyms.o)
---
->> ld.lld: error: kernel/built-in.a(kallsyms.o):(function lookup_symbol_attrs: .text+0x4fe): relocation R_RISCV_PCREL_HI20 out of range: 33553758 is not in [-524288, 524287]; references kallsyms_markers
-   >>> referenced by kallsyms.c:85 (kernel/kallsyms.c:85)
-   >>> defined in kernel/built-in.a(kallsyms.o)
---
->> ld.lld: error: kernel/built-in.a(kallsyms.o):(function lookup_symbol_attrs: .text+0x50c): relocation R_RISCV_PCREL_HI20 out of range: 33553758 is not in [-524288, 524287]; references kallsyms_names
-   >>> referenced by kallsyms.c:85 (kernel/kallsyms.c:85)
-   >>> defined in kernel/built-in.a(kallsyms.o)
+When using -fwrapv signed is well defined as 2s complement, which takes
+away the UB and makes it implicitly wrap.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+When extending the language, it is important to not break existing code,
+so the default must remain wrap. This in turn means you need to add a
+'nowrap' thingy.
+
+Also, I would very much not make this an attribute, but a full type
+qualifier. Furthermore, add type promotion rules to ensure nowrap takes
+precedence and is preserved throughout expressions. Such that:
+
+  'long' + 'nowrap int' -> 'nowrap long'
+
+Then, once you have this, you can go do things like:
+
+typedef nowrap unsigned long size_t;
+#define sizeof(x) ((size_t)sizeof(x))
+
+and things will just work. Hmm?
