@@ -1,107 +1,169 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3FE381A8C3B;
-	Tue, 18 Jun 2024 12:41:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C23615A869;
+	Tue, 18 Jun 2024 13:51:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718714465; cv=none; b=Qhz4qKQMJmv5n3S6pQvoxZ2/68KBIX2aUHIbLWtGbEaRfqyvfSBMC21YNaqxV5XS8DNQ2SwHL1khrySqF+PS48hoLxb9wRRnoYN44U3pvGflDZpPfqX69N9ByIVsOPCxH/pnmzL1iofpIeJ3XZEZw+9OU3k+drIe3ZFSgz/NVLo=
+	t=1718718710; cv=none; b=R8fWqDX5BL3rimibW1MSIeoNhJEMqc0yjZLrUrQ/gcANjtOXdvdl8Hp1Jqra6OHBYsj+Qy/JtyId8cjkLRxEh5WNheBNEf+sWa67qxU+euGB9xaeCwPw0w7BhjahB2756njg5FzFfO2mCgX0rvDat01qucEmGoVJWDnNsp/zFG8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718714465; c=relaxed/simple;
-	bh=Ko6WKs9ylk0r3aUSIT4ZiJ7bdYWw11IOSysG9UUFjCI=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Tyj+kviXSoTw2ybdPom0oM2kmy5QOMXyb4QGz449MWNQrZbUAgu5G/wGbSmtXC3DLIVxDPcJyfQ9KRjl47H8yF1+RIbd520TvEA2tHoYY9Lw0TBYS3/UhQspvG+ovJDDCH62Ck0WtuPhYsFj5RQLCYr23LvizshYOwKN06fcjNE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jJKXjwgQ; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1718718710; c=relaxed/simple;
+	bh=jZTXzxlFYVfRFo7ptSoHB/sfDeGp2NsucUm1L+1pbAM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ffqqRToS0XMNYLvjmPPO++50r+G9Q+uBvBo39z0rFjQTh4lxSMAF9nAyO2TigTcmk3wfKPzBkBSwECakd3AewC6En4mujMdUu5Vnt+PJWagzruh3Y/OzQX3OQcM59S2oUBM5lbb1HE4iYDZS6FVL6sNcg9DXK86uhWvMoyZsDNc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jWyawfa6; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jJKXjwgQ"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BA1D5C3277B;
-	Tue, 18 Jun 2024 12:41:03 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jWyawfa6"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2F178C4AF1D;
+	Tue, 18 Jun 2024 13:51:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1718714465;
-	bh=Ko6WKs9ylk0r3aUSIT4ZiJ7bdYWw11IOSysG9UUFjCI=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=jJKXjwgQJzp7HGlYMirdTBeb5imGixpRaotahEXUk0etHhWPmyY+igFz+n0KmTvBu
-	 ntTMoAVSM7duCCX27AvlNK+5zbtB+ewdtLUwbWPpRfMzOZaoac3fnih2Fc8ffhJTbQ
-	 eri7bo5ciBQ8bAiXQa5D0VZWpes882cn2hNzIRgQRaf4XFgzLN0OykjahAs+saKKF2
-	 SQ+oHGhmAuPOG9ylBcHWA7RGd50LdEVjypq0K78yKEwXvuqqEkvIF/CH87BU4/c4RA
-	 W9BMWpJxCo8KfY1sThE1gne61k2KKzHx7MuXnf8YCzEWImJXKeh+iSwaBjbe7CF+rh
-	 3fZ4Jwiecipwg==
-From: Sasha Levin <sashal@kernel.org>
-To: linux-kernel@vger.kernel.org,
-	stable@vger.kernel.org
-Cc: John Hubbard <jhubbard@nvidia.com>,
-	Edward Liaw <edliaw@google.com>,
-	Davidlohr Bueso <dave@stgolabs.net>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	Sasha Levin <sashal@kernel.org>,
-	tglx@linutronix.de,
-	mingo@redhat.com,
-	shuah@kernel.org,
-	nathan@kernel.org,
-	linux-kselftest@vger.kernel.org,
+	s=k20201202; t=1718718709;
+	bh=jZTXzxlFYVfRFo7ptSoHB/sfDeGp2NsucUm1L+1pbAM=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=jWyawfa6btzKXEdvhC+UgMCuUE7OfMHTqIc3wsT7ajozNZVzUq5AZ4uVnERVajBSb
+	 AkYqGy6iKPoC6hIuFT33xTfmMh2d9OAFR1z2ohFFhMVi3XADJgUZqQ9rFFRD0HpURq
+	 hB5T4FbOPUkEulizkqo6OomC7SbwaXThQRWC6ZVIFgjfCAyXZDEhB02N6t9Joc6Ofc
+	 AFbQBTGUvlSzps6DjOmuWHLdfDp6UIy/u6B6STVTAIK0YVNoyS2x6ofoLQWzsBk/gb
+	 OHmUqCem7/YsWsq9HT2p8sqZNaSzfmLR4R39shMxgiiFdiwFPuDLh8cIDTGkX0845G
+	 P25Wnzz7v1Y8g==
+Date: Tue, 18 Jun 2024 10:51:44 -0300
+From: Arnaldo Carvalho de Melo <acme@kernel.org>
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: dwarves@vger.kernel.org,
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+	bpf@vger.kernel.org, Alan Maguire <alan.maguire@oracle.com>,
+	Jiri Olsa <jolsa@kernel.org>, Jan Engelhardt <jengelh@inai.de>,
+	Matthias Schwarzott <zzam@gentoo.org>,
+	Viktor Malik <vmalik@redhat.com>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Jan Alexander Steffens <heftig@archlinux.org>,
+	Domenico Andreoli <cavok@debian.org>,
+	Dominique Leuenberger <dimstar@opensuse.org>,
+	Daniel Xu <dxu@dxuuu.xyz>, Yonghong Song <yonghong.song@linux.dev>,
 	llvm@lists.linux.dev
-Subject: [PATCH AUTOSEL 6.1 21/29] selftests/futex: pass _GNU_SOURCE without a value to the compiler
-Date: Tue, 18 Jun 2024 08:39:47 -0400
-Message-ID: <20240618124018.3303162-21-sashal@kernel.org>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20240618124018.3303162-1-sashal@kernel.org>
-References: <20240618124018.3303162-1-sashal@kernel.org>
+Subject: Re: [PATCH/RFT] Re: ANNOUNCE: pahole v1.27 (reproducible builds, BTF
+ kfuncs)
+Message-ID: <ZnGQ8CDRaMBIj5R5@x1>
+References: <ZmjBHWw-Q5hKBiwA@x1>
+ <20240613214019.GA1423015@thelio-3990X>
+ <ZnCQ-Psf_WswMk1W@x1>
+ <ZnCWRMfRDMHqSxBb@x1>
+ <20240617210810.GA1877676@thelio-3990X>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-X-stable-base: Linux 6.1.94
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20240617210810.GA1877676@thelio-3990X>
+
+On Mon, Jun 17, 2024 at 02:08:10PM -0700, Nathan Chancellor wrote:
+> On Mon, Jun 17, 2024 at 05:02:12PM -0300, Arnaldo Carvalho de Melo wrote:
+> > Can you try with the one liner below? We remove it from the cus list
+> > unconditionally, and since we alloc space with zalloc/calloc in
+> > cu__new() and missed initializing that list_head (cu->node) we ended up
+> > hitting list_del with a zeroed 'struct list_head' :-\
+> > 
+> > I'll try and get this cast_common.ko checked into a test repo for pahole
+> > so that this gets regression tested.
+> > 
+> > Please test this patch so that we see if this is the only problem and
+> > your kernel build with clang completes successfully.
+> 
+> Thanks, I rebuilt pahole with the following diff and both my build and
+> the other configuration I tested for this regression successfully
+> complete.
+> 
+> Tested-by: Nathan Chancellor <nathan@kernel.org>
+
+Great, I just added this:
+
+From 6a2b27c0f512619b0e7a769a18a0fb05bb3789a5 Mon Sep 17 00:00:00 2001
+From: Arnaldo Carvalho de Melo <acme@redhat.com>
+Date: Tue, 18 Jun 2024 10:37:30 -0300
+Subject: [PATCH 1/1] core: Initialize cu->node with INIT_LIST_HEAD()
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-From: John Hubbard <jhubbard@nvidia.com>
+In cu__new() zalloc() is used defensively, and that helped catch this
+problem where we assume that a cu us in the cus list of cu instances,
+but that is not the case when we use cus__merge_and_process_cu(), for
+instance when loading files created by clang with LTO, as reported by
+Peter Jung and narrowed down by Nathan Chancellor.
 
-[ Upstream commit cb708ab9f584f159798b60853edcf0c8b67ce295 ]
+If we use INIT_LIST_HEAD() in cu__new() to initialize cu->node, which is
+what we do with other lists and nodes there, then the unconditional
+removal using list_del_init() will be a no-op and removing something not
+on the cus list of cu instances will not cause problems, just keep an
+unconsistent cus->nr_entries field.
 
-It's slightly better to set _GNU_SOURCE in the source code, but if one
-must do it via the compiler invocation, then the best way to do so is
-this:
+So lets just have this fix in first, keeping Nathan's Tested-by and then
+do the a bit more involved fix of either adding that cu to the cus list
+or checking at removal time if it is there.
 
-    $(CC) -D_GNU_SOURCE=
+  Program received signal SIGSEGV, Segmentation fault.
+  0x00007ffff7f1e13e in __list_del (prev=0x0, next=0x0) at /home/acme/git/pahole/list.h:106
+  106		next->prev = prev;
+  (gdb) bt
+  #0  0x00007ffff7f1e13e in __list_del (prev=0x0, next=0x0) at /home/acme/git/pahole/list.h:106
+  #1  0x00007ffff7f1e176 in list_del_init (entry=0x417980) at /home/acme/git/pahole/list.h:165
+  #2  0x00007ffff7f1f8f9 in __cus__remove (cus=0x4142a0, cu=0x417980) at /home/acme/git/pahole/dwarves.c:527
+  #3  0x00007ffff7f1f92b in cus__remove (cus=0x4142a0, cu=0x417980) at /home/acme/git/pahole/dwarves.c:533
+  #4  0x00007ffff7f3d01c in cus__finalize (cus=0x4142a0, cu=0x417980, conf=0x4133c0 <conf_load>, thr_data=0x0)
+      at /home/acme/git/pahole/dwarf_loader.c:3040
+  #5  0x00007ffff7f3e05c in cus__merge_and_process_cu (cus=0x4142a0, conf=0x4133c0 <conf_load>, mod=0x415cf0, dw=0x416110, elf=0x414380,
+      filename=0x7fffffffe3f7 "cast_common.ko", build_id=0x416680 "\265D\371U\213\373u|\037\250\242\032\271\365⒜]y\023", build_id_len=20,
+      type_dcu=0x0) at /home/acme/git/pahole/dwarf_loader.c:3482
+  #6  0x00007ffff7f3e218 in cus__load_module (cus=0x4142a0, conf=0x4133c0 <conf_load>, mod=0x415cf0, dw=0x416110, elf=0x414380,
+      filename=0x7fffffffe3f7 "cast_common.ko") at /home/acme/git/pahole/dwarf_loader.c:3521
+  #7  0x00007ffff7f3e396 in cus__process_dwflmod (dwflmod=0x415cf0, userdata=0x415d00, name=0x415ea0 "cast_common.ko", base=65536,
+      arg=0x7fffffffde40) at /home/acme/git/pahole/dwarf_loader.c:3581
+  #8  0x00007ffff7eb4609 in dwfl_getmodules (dwfl=0x414300, callback=0x7ffff7f3e2ec <cus__process_dwflmod>, arg=0x7fffffffde40, offset=0)
+      at ../libdwfl/dwfl_getmodules.c:86
+  #9  0x00007ffff7f3e4c5 in cus__process_file (cus=0x4142a0, conf=0x4133c0 <conf_load>, fd=3, filename=0x7fffffffe3f7 "cast_common.ko")
+      at /home/acme/git/pahole/dwarf_loader.c:3647
+  #10 0x00007ffff7f3e5cd in dwarf__load_file (cus=0x4142a0, conf=0x4133c0 <conf_load>, filename=0x7fffffffe3f7 "cast_common.ko")
+      at /home/acme/git/pahole/dwarf_loader.c:3684
+  #11 0x00007ffff7f232df in cus__load_file (cus=0x4142a0, conf=0x4133c0 <conf_load>, filename=0x7fffffffe3f7 "cast_common.ko")
+      at /home/acme/git/pahole/dwarves.c:2134
+  #12 0x00007ffff7f23e8b in cus__load_files (cus=0x4142a0, conf=0x4133c0 <conf_load>, filenames=0x7fffffffe0f0)
+      at /home/acme/git/pahole/dwarves.c:2637
+  #13 0x000000000040aec0 in main (argc=2, argv=0x7fffffffe0e8) at /home/acme/git/pahole/pahole.c:3805
+  (gdb) fr 1
+  #1  0x00007ffff7f1e176 in list_del_init (entry=0x417980) at /home/acme/git/pahole/list.h:165
+  165		__list_del(entry->prev, entry->next);
+  (gdb) p entry
+  $1 = (struct list_head *) 0x417980
+  (gdb) p entry->next
+  $2 = (struct list_head *) 0x0
+  (gdb) p entry->prev
+  $3 = (struct list_head *) 0x0
 
-...because otherwise, if this form is used:
-
-    $(CC) -D_GNU_SOURCE
-
-...then that leads the compiler to set a value, as if you had passed in:
-
-    $(CC) -D_GNU_SOURCE=1
-
-That, in turn, leads to warnings under both gcc and clang, like this:
-
-    futex_requeue_pi.c:20: warning: "_GNU_SOURCE" redefined
-
-Fix this by using the "-D_GNU_SOURCE=" form.
-
-Reviewed-by: Edward Liaw <edliaw@google.com>
-Reviewed-by: Davidlohr Bueso <dave@stgolabs.net>
-Signed-off-by: John Hubbard <jhubbard@nvidia.com>
-Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Closes: https://github.com/acmel/dwarves/issues/53
+Closes: https://gitlab.archlinux.org/archlinux/packaging/packages/pahole/-/issues/1
+Tested-by: Nathan Chancellor <nathan@kernel.org>
+Link: https://lore.kernel.org/all/20240617210810.GA1877676@thelio-3990X
+Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
 ---
- tools/testing/selftests/futex/functional/Makefile | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ dwarves.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/tools/testing/selftests/futex/functional/Makefile b/tools/testing/selftests/futex/functional/Makefile
-index a392d0917b4e5..994fa3468f170 100644
---- a/tools/testing/selftests/futex/functional/Makefile
-+++ b/tools/testing/selftests/futex/functional/Makefile
-@@ -1,6 +1,6 @@
- # SPDX-License-Identifier: GPL-2.0
- INCLUDES := -I../include -I../../ $(KHDR_INCLUDES)
--CFLAGS := $(CFLAGS) -g -O2 -Wall -D_GNU_SOURCE -pthread $(INCLUDES) $(KHDR_INCLUDES)
-+CFLAGS := $(CFLAGS) -g -O2 -Wall -D_GNU_SOURCE= -pthread $(INCLUDES) $(KHDR_INCLUDES)
- LDLIBS := -lpthread -lrt
+diff --git a/dwarves.c b/dwarves.c
+index 1ec259f50dbd3778..823a01524a12bb37 100644
+--- a/dwarves.c
++++ b/dwarves.c
+@@ -739,6 +739,7 @@ struct cu *cu__new(const char *name, uint8_t addr_size,
+ 		cu->dfops	= NULL;
+ 		INIT_LIST_HEAD(&cu->tags);
+ 		INIT_LIST_HEAD(&cu->tool_list);
++		INIT_LIST_HEAD(&cu->node);
  
- LOCAL_HDRS := \
+ 		cu->addr_size = addr_size;
+ 		cu->extra_dbg_info = 0;
 -- 
-2.43.0
+2.45.0
 
