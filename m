@@ -1,258 +1,107 @@
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 63B9D2421D
-	for <llvm@lists.linux.dev>; Tue, 18 Jun 2024 01:56:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.188
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 24490FC18;
+	Tue, 18 Jun 2024 05:24:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718675791; cv=none; b=fuimbiXw2sUhB7+UkZ1YaMbylaQB+/gBOUR5EnmAnTQMqln8cXA4dSWX7n5BT95ai5XTYdhywIZISYgDCUwYLoimY8Km860v33MqQHa3jgwj/dz4vzh0ZJuGk0brKhOiWAtWe5CVRWmPduU0WaP3lRtyw/FQtClgwZMNEwfHZwo=
+	t=1718688277; cv=none; b=BdEob6188QtXTh0+6GrhfTFH/zNPXECrp1iYUO3YnkDnnrZE08bu6WpmlG6WuYYo8TzXzTZIPmKwpM8AzweSqe2ht4hB0bc9Sy7v/oxSMPhUKgM32UECWMYnjY3cPh2kM0rCqpHAmxsxtPOFChaLRNqYcr7vKAMh0zi/KAjxJ3g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718675791; c=relaxed/simple;
-	bh=p7isMOra9FpG2OZdR17eldiCEM6yKNyBFY+JP6GWxAo=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=p94jhvcgO1jdCTd5NFktGw3w6BWJsCjQWhWyPbIzeM/GwVsUctgal8G8802z1iZNyIIciHP0nNm2aSRNnFLSnaub7ZLvlBlA7RMzDL4R08ZQkiafsk26eHv6q6iGtnKWmgOGwzOd8z8y6HweTh3Jd6DlxYwWms9l6RK42jbhxQg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.188
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.19.163.48])
-	by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4W38vZ3j5Tzdc5t;
-	Tue, 18 Jun 2024 09:54:50 +0800 (CST)
-Received: from kwepemd100011.china.huawei.com (unknown [7.221.188.204])
-	by mail.maildlp.com (Postfix) with ESMTPS id 7DFC918006C;
-	Tue, 18 Jun 2024 09:56:20 +0800 (CST)
-Received: from M910t.huawei.com (10.110.54.157) by
- kwepemd100011.china.huawei.com (7.221.188.204) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1258.34; Tue, 18 Jun 2024 09:56:18 +0800
-From: Changbin Du <changbin.du@huawei.com>
-To: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>,
-	Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim
-	<namhyung@kernel.org>, Nathan Chancellor <nathan@kernel.org>
-CC: Mark Rutland <mark.rutland@arm.com>, Alexander Shishkin
-	<alexander.shishkin@linux.intel.com>, Jiri Olsa <jolsa@kernel.org>, Ian
- Rogers <irogers@google.com>, Adrian Hunter <adrian.hunter@intel.com>, "Liang,
- Kan" <kan.liang@linux.intel.com>, Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
-	<linux-perf-users@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-	<llvm@lists.linux.dev>, Changbin Du <changbin.du@huawei.com>
-Subject: [PATCH v3 4/4] perf: symbol: try to seach vdso path if not given by user
-Date: Tue, 18 Jun 2024 09:55:30 +0800
-Message-ID: <20240618015530.3699434-5-changbin.du@huawei.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20240618015530.3699434-1-changbin.du@huawei.com>
-References: <20240618015530.3699434-1-changbin.du@huawei.com>
+	s=arc-20240116; t=1718688277; c=relaxed/simple;
+	bh=kg1RYikNFkHadMFmy0XjM76udcOABVV2v3RHzhvzrpo=;
+	h=Date:From:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=FAWUkMbgJOhv5wRJMJbju5i450SbHixuD1tJHrnpHRJnU4dYiqku4C+ptLIQXzw13p5qqQQlnyUecpBBxsN8jnue8K8iL93zxSgmPNNXFay5yaSEyiVDK4hm2gsllEOHO20I/YU3eqWk2OcCgwdac9uKXqAQOmj+vcVPDnJ5TGA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=DaaQDBPk; arc=none smtp.client-ip=198.175.65.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="DaaQDBPk"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1718688277; x=1750224277;
+  h=date:from:cc:subject:message-id:mime-version;
+  bh=kg1RYikNFkHadMFmy0XjM76udcOABVV2v3RHzhvzrpo=;
+  b=DaaQDBPkVnN2piu8yhd4Nsh5q9qncOCGUbLNN2Eksi/2Vi4JSYd/NPZ0
+   8mpFKLACx90WjRpZRUHIl3li0zVU4yLhFPop5fmz1EMK9X2T82UQ49t7J
+   a9lgQPjd8Jfnahyd2ryvX1oJ4c3bfOpCGvERwfJrlY/WID9Fueo2x7FbB
+   NRoyKDfb/IIrgdaSsv3WpC4yDlr1gsc4E5+XZ9vOLsuyvbkoUqmdsdxIA
+   WVNWWSyp5coJ+UlTWb/SfiPV/LkyV0HBvReGEFIrQpYl40wJBX0OTcS8R
+   zLWmN1GuY9JNVeHUqKB2a3GUInpfF8YyCFmPicUQlwD0HHGUvoyarl24p
+   Q==;
+X-CSE-ConnectionGUID: vJODe8FaQFeemH7zBbyEog==
+X-CSE-MsgGUID: 4pIAVz6ERQ6bJpmDAfpDKQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11106"; a="38064844"
+X-IronPort-AV: E=Sophos;i="6.08,246,1712646000"; 
+   d="scan'208";a="38064844"
+Received: from fmviesa009.fm.intel.com ([10.60.135.149])
+  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jun 2024 22:24:36 -0700
+X-CSE-ConnectionGUID: V1iRi19AQHa4Xn2prR7T5A==
+X-CSE-MsgGUID: j0CA044cQJClmMkUu+/0Kw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.08,246,1712646000"; 
+   d="scan'208";a="41512984"
+Received: from lkp-server01.sh.intel.com (HELO 68891e0c336b) ([10.239.97.150])
+  by fmviesa009.fm.intel.com with ESMTP; 17 Jun 2024 22:24:34 -0700
+Received: from kbuild by 68891e0c336b with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1sJRKa-0005Ed-1E;
+	Tue, 18 Jun 2024 05:24:32 +0000
+Date: Tue, 18 Jun 2024 13:23:35 +0800
+From: kernel test robot <lkp@intel.com>
+Cc: oe-kbuild-all@lists.linux.dev, llvm@lists.linux.dev
+Subject: [cel:nfsd-5.10.y 194/770] ld.lld: error:
+ kernel/built-in.a(kallsyms.o):(function lookup_symbol_name: .text+0x412):
+ relocation R_RISCV_PCREL_HI20 out of range: 33553758 is not in [-524288,
+ 524287]; references kallsyms_names
+Message-ID: <202406181300.fyX9NQCQ-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- kwepemd100011.china.huawei.com (7.221.188.204)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Just like vmlinux, try to search vdso in predefined path if it's not given
-by user. The searched path usually has debugging info.
+TO: Christoph Hellwig <hch@lst.de>
+CC: Chuck Lever <chuck.lever@oracle.com>
+CC: Miroslav Benes <mbenes@suse.cz>
+CC: Jessica Yu <jeyu@kernel.org>
 
-For example, the vdso can be found in
-/lib/modules/<version>/build/arch/x86/entry/vdso/vdso*.so.dbg for local
-build on x86.
+tree:   git://git.kernel.org/pub/scm/linux/kernel/git/cel/linux nfsd-5.10.y
+head:   297ad218672e7f8d6e1f6af048c42a42760f56b1
+commit: 82d2e07ec0e29721d03501edea4219bdfb20e314 [194/770] kallsyms: only build {,module_}kallsyms_on_each_symbol when required
+config: riscv-randconfig-002-20240618 (https://download.01.org/0day-ci/archive/20240618/202406181300.fyX9NQCQ-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240618/202406181300.fyX9NQCQ-lkp@intel.com/reproduce)
 
-Cc: Adrian Hunter <adrian.hunter@intel.com>
-Signed-off-by: Changbin Du <changbin.du@huawei.com>
----
- tools/perf/builtin-annotate.c   |  1 +
- tools/perf/builtin-kallsyms.c   |  2 ++
- tools/perf/builtin-probe.c      |  2 ++
- tools/perf/builtin-top.c        |  2 ++
- tools/perf/tests/builtin-test.c |  3 ++-
- tools/perf/util/symbol.c        | 41 +++++++++++++++++++++++++++++++++
- tools/perf/util/symbol.h        |  1 +
- tools/perf/util/symbol_conf.h   |  1 +
- 8 files changed, 52 insertions(+), 1 deletion(-)
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202406181300.fyX9NQCQ-lkp@intel.com/
 
-diff --git a/tools/perf/builtin-annotate.c b/tools/perf/builtin-annotate.c
-index ff466882065d..6c5019c39068 100644
---- a/tools/perf/builtin-annotate.c
-+++ b/tools/perf/builtin-annotate.c
-@@ -883,6 +883,7 @@ int cmd_annotate(int argc, const char **argv)
- 		goto out_delete;
- 
- 	symbol_conf.try_vmlinux_path = true;
-+	symbol_conf.try_vdso_path = true;
- 
- 	ret = symbol__init(&annotate.session->header.env);
- 	if (ret < 0)
-diff --git a/tools/perf/builtin-kallsyms.c b/tools/perf/builtin-kallsyms.c
-index a3c2ffdc1af8..d049025a4959 100644
---- a/tools/perf/builtin-kallsyms.c
-+++ b/tools/perf/builtin-kallsyms.c
-@@ -63,6 +63,8 @@ int cmd_kallsyms(int argc, const char **argv)
- 		usage_with_options(kallsyms_usage, options);
- 
- 	symbol_conf.try_vmlinux_path = (symbol_conf.vmlinux_name == NULL);
-+	symbol_conf.try_vdso_path = (symbol_conf.vdso_name[0] == NULL &&
-+				     symbol_conf.vdso_name[1] == NULL);
- 	if (symbol__init(NULL) < 0)
- 		return -1;
- 
-diff --git a/tools/perf/builtin-probe.c b/tools/perf/builtin-probe.c
-index 003a3bcebfdf..91770eda37c0 100644
---- a/tools/perf/builtin-probe.c
-+++ b/tools/perf/builtin-probe.c
-@@ -667,6 +667,8 @@ __cmd_probe(int argc, const char **argv)
- 	 * Only consider the user's kernel image path if given.
- 	 */
- 	symbol_conf.try_vmlinux_path = (symbol_conf.vmlinux_name == NULL);
-+	symbol_conf.try_vdso_path = (symbol_conf.vdso_name[0] == NULL &&
-+				     symbol_conf.vdso_name[1] == NULL);
- 
- 	/*
- 	 * Except for --list, --del and --add, other command doesn't depend
-diff --git a/tools/perf/builtin-top.c b/tools/perf/builtin-top.c
-index a3cce4e76eb9..5a2dc7a0dbb8 100644
---- a/tools/perf/builtin-top.c
-+++ b/tools/perf/builtin-top.c
-@@ -1792,6 +1792,8 @@ int cmd_top(int argc, const char **argv)
- 	annotation_config__init();
- 
- 	symbol_conf.try_vmlinux_path = (symbol_conf.vmlinux_name == NULL);
-+	symbol_conf.try_vdso_path = (symbol_conf.vdso_name[0] == NULL &&
-+				     symbol_conf.vdso_name[1] == NULL);
- 	status = symbol__init(NULL);
- 	if (status < 0)
- 		goto out_delete_evlist;
-diff --git a/tools/perf/tests/builtin-test.c b/tools/perf/tests/builtin-test.c
-index c3d84b67ca8e..176196e3c183 100644
---- a/tools/perf/tests/builtin-test.c
-+++ b/tools/perf/tests/builtin-test.c
-@@ -575,7 +575,8 @@ int cmd_test(int argc, const char **argv)
- 
- 	symbol_conf.priv_size = sizeof(int);
- 	symbol_conf.try_vmlinux_path = true;
--
-+	symbol_conf.try_vdso_path = (symbol_conf.vdso_name[0] == NULL &&
-+				     symbol_conf.vdso_name[1] == NULL);
- 	if (symbol__init(NULL) < 0)
- 		return -1;
- 
-diff --git a/tools/perf/util/symbol.c b/tools/perf/util/symbol.c
-index 83e5c3807a2c..4dc1a76005d5 100644
---- a/tools/perf/util/symbol.c
-+++ b/tools/perf/util/symbol.c
-@@ -49,11 +49,13 @@ static int dso__load_vdso_sym(struct dso *dso, struct map *map);
- static bool symbol__is_idle(const char *name);
- 
- struct dso_filename_paths vmlinux_paths;
-+struct dso_filename_paths vdso_paths;
- 
- struct symbol_conf symbol_conf = {
- 	.nanosecs		= false,
- 	.use_modules		= true,
- 	.try_vmlinux_path	= true,
-+	.try_vdso_path		= true,
- 	.demangle		= true,
- 	.demangle_kernel	= false,
- 	.cumulate_callchain	= true,
-@@ -2304,6 +2306,16 @@ struct dso_filename_pattern vmlinux_patterns[] = {
- 	{"/usr/lib/debug/boot/vmlinux-%s.debug", 1},
- };
- 
-+struct dso_filename_pattern vdso_patterns[] = {
-+	{"/lib/modules/%s/vdso/vdso.so", 1},
-+	{"/lib/modules/%s/vdso/vdso64.so", 1},
-+	{"/lib/modules/%s/vdso/vdso32.so", 1},
-+	{"/lib/modules/%s/build/arch/%s/vdso/vdso.so.dbg", 2},
-+	{"/lib/modules/%s/build/arch/%s/kernel/vdso/vdso.so.dbg", 2},
-+	{"/lib/modules/%s/build/arch/%s/entry/vdso/vdso32.so.dbg", 2},
-+	{"/lib/modules/%s/build/arch/%s/entry/vdso/vdso64.so.dbg", 2},
-+};
-+
- static int dso_filename_path__add(struct dso_filename_paths *paths, const char *new_entry)
- {
- 	paths->paths[paths->nr_entries] = strdup(new_entry);
-@@ -2418,6 +2430,22 @@ static int dso__load_vdso(struct dso *dso, struct map *map,
- 	return err;
- }
- 
-+static int dso__load_vdso_path(struct dso *dso, struct map *map)
-+{
-+	int i, ret = 0;
-+
-+	pr_debug("Looking at the vdso_path (%d entries long)\n",
-+		 vdso_paths.nr_entries + 1);
-+
-+	for (i = 0; i < vdso_paths.nr_entries; ++i) {
-+		ret = dso__load_vdso(dso, map, vdso_paths.paths[i]);
-+		if (ret > 0)
-+			return ret;
-+	}
-+
-+	return ret;
-+}
-+
- static int dso__load_vdso_sym(struct dso *dso, struct map *map)
- {
- 	int ret;
-@@ -2433,6 +2461,12 @@ static int dso__load_vdso_sym(struct dso *dso, struct map *map)
- 		}
- 	}
- 
-+	if (vdso_paths.paths != NULL) {
-+		ret = dso__load_vdso_path(dso, map);
-+		if (ret > 0)
-+			return ret;
-+	}
-+
- 	return -1;
- }
- 
-@@ -2566,6 +2600,12 @@ int symbol__init(struct perf_env *env)
- 		return -1;
- 	}
- 
-+	if (symbol_conf.try_vdso_path &&
-+	    dso_filename_path__init(&vdso_paths, vdso_patterns,
-+				    ARRAY_SIZE(vdso_patterns), env) < 0) {
-+		return -1;
-+	}
-+
- 	if (symbol_conf.field_sep && *symbol_conf.field_sep == '.') {
- 		pr_err("'.' is the only non valid --field-separator argument\n");
- 		return -1;
-@@ -2642,6 +2682,7 @@ void symbol__exit(void)
- 	intlist__delete(symbol_conf.pid_list);
- 	intlist__delete(symbol_conf.addr_list);
- 	dso_filename_path__exit(&vmlinux_paths);
-+	dso_filename_path__exit(&vdso_paths);
- 	symbol_conf.sym_list = symbol_conf.dso_list = symbol_conf.comm_list = NULL;
- 	symbol_conf.bt_stop_list = NULL;
- 	symbol_conf.initialized = false;
-diff --git a/tools/perf/util/symbol.h b/tools/perf/util/symbol.h
-index 30056884945b..08c339594d4e 100644
---- a/tools/perf/util/symbol.h
-+++ b/tools/perf/util/symbol.h
-@@ -107,6 +107,7 @@ struct dso_filename_paths {
- };
- 
- extern struct dso_filename_paths vmlinux_paths;
-+extern struct dso_filename_paths vdso_paths;
- 
- static inline void *symbol__priv(struct symbol *sym)
- {
-diff --git a/tools/perf/util/symbol_conf.h b/tools/perf/util/symbol_conf.h
-index 108356e3c981..58c4c4358ece 100644
---- a/tools/perf/util/symbol_conf.h
-+++ b/tools/perf/util/symbol_conf.h
-@@ -12,6 +12,7 @@ struct symbol_conf {
- 	bool		nanosecs;
- 	unsigned short	priv_size;
- 	bool		try_vmlinux_path,
-+			try_vdso_path,
- 			init_annotation,
- 			force,
- 			ignore_vmlinux,
+All errors (new ones prefixed by >>):
+
+>> ld.lld: error: kernel/built-in.a(kallsyms.o):(function lookup_symbol_name: .text+0x412): relocation R_RISCV_PCREL_HI20 out of range: 33553758 is not in [-524288, 524287]; references kallsyms_names
+   >>> referenced by kallsyms.c:81 (kernel/kallsyms.c:81)
+   >>> defined in kernel/built-in.a(kallsyms.o)
+--
+>> ld.lld: error: kernel/built-in.a(kallsyms.o):(function lookup_symbol_name: .text+0x448): relocation R_RISCV_PCREL_HI20 out of range: 33553758 is not in [-524288, 524287]; references kallsyms_token_index
+   >>> referenced by kallsyms.c:81 (kernel/kallsyms.c:81)
+   >>> defined in kernel/built-in.a(kallsyms.o)
+--
+>> ld.lld: error: kernel/built-in.a(kallsyms.o):(function lookup_symbol_name: .text+0x450): relocation R_RISCV_PCREL_HI20 out of range: 33553758 is not in [-524288, 524287]; references kallsyms_token_table
+   >>> referenced by kallsyms.c:81 (kernel/kallsyms.c:81)
+   >>> defined in kernel/built-in.a(kallsyms.o)
+--
+>> ld.lld: error: kernel/built-in.a(kallsyms.o):(function lookup_symbol_attrs: .text+0x4fe): relocation R_RISCV_PCREL_HI20 out of range: 33553758 is not in [-524288, 524287]; references kallsyms_markers
+   >>> referenced by kallsyms.c:85 (kernel/kallsyms.c:85)
+   >>> defined in kernel/built-in.a(kallsyms.o)
+--
+>> ld.lld: error: kernel/built-in.a(kallsyms.o):(function lookup_symbol_attrs: .text+0x50c): relocation R_RISCV_PCREL_HI20 out of range: 33553758 is not in [-524288, 524287]; references kallsyms_names
+   >>> referenced by kallsyms.c:85 (kernel/kallsyms.c:85)
+   >>> defined in kernel/built-in.a(kallsyms.o)
+
 -- 
-2.34.1
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
