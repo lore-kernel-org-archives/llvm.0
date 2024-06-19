@@ -1,174 +1,105 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f52.google.com (mail-ej1-f52.google.com [209.85.218.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C066A29;
-	Wed, 19 Jun 2024 16:08:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE171134A5
+	for <llvm@lists.linux.dev>; Wed, 19 Jun 2024 16:12:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718813288; cv=none; b=urLnqcoRNtNgoXSNjfPivikEYyCOyllPtOy4XkmwpSRJK+P+BB2tAaB2v5rTEnDB9RaXuyO7jNq6flSZ1LHKcF1agfqRL4cK5yyBVX7iF9WYiAYmmyuwJ8VqDnItx64MZfEz2FUVuAQ3g/+tNlOiW8fqKB16EgS7KzXwQVAEH5w=
+	t=1718813527; cv=none; b=Yvskp8EU0aNfBzwRSiB16h9DG4W8dSAE19Nh7TB5F6Iz4p7KFVG2AJb97MSDOajVjHp+itgeKGm255RVR/nOuSUMH75OpP8J2XLThLVQGlrLyefVtazNJvsHW3h4TRSbFONAHz9xFcgeoAEDW60c/O9JBWG7JwfpEQXo/dmFtI0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718813288; c=relaxed/simple;
-	bh=iphLnCoBJGQ9qBV5Q4VL0kktTHmuiVA7bZG54ugYfcM=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=AdHh1IyyxxbFln3IHdO4XsypqRP9fghPpJmJhNsuIwCkpKfpFN0RiZ+oWjKPDbsSM7Ey2r0ahr5YtPUq6ECKC4N4ziVF8YPjexXmFYhOgBp3ybHhEDWXe2Jk4aAydRs7xPoFdwjGY45Qe3UOQgNYTqRazq1sagJ7QNSpeYftht8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=BS/n/n6E; arc=none smtp.client-ip=192.198.163.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1718813527; c=relaxed/simple;
+	bh=WvxkYqGLa/yBd53bZMfPZ2U1lIrtO/ZWbnXsdP4ZNy8=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=RD9498V9ZbiGo5mF2A8Pl1wnRm6VvV0TQ1qPWORmAZpe1QPg5cqXg+R9m+njU3fcE2yKajmGgXq0BbXYtD0W7R41vsLjJooxPt9IKCaHnbk1bQbcBK8SJypfQLc9ugsJNw+YJnncCUouj2FAr1Ls26irTVloxNplreq095/azi8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=kjifcIVw; arc=none smtp.client-ip=209.85.218.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="BS/n/n6E"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1718813286; x=1750349286;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=iphLnCoBJGQ9qBV5Q4VL0kktTHmuiVA7bZG54ugYfcM=;
-  b=BS/n/n6ETQYzwipl5gayv0QqLD3wjjIij8EvNs8tqOKtB6KJV/O7KDvL
-   rynZ1I0GXO+DdpSK9PUazr+MZyerO9XNWR9Uwb5i+lbOz8xg/WFUd/825
-   juK9IYBrlw6yMGvttSNKBgT0B4wn0o1fKb19e+h3YtZgJWcJmXxkVGoeF
-   rqorEi5ir6IgBnJm4YQfesNnY1TMihzqz5qrrHxj/Lqt/Ss1QSo8mVVhy
-   SAV+IGdSBGoz3s+8S/Bw1B6+qHw2vrHJ52bfvEOU4MFyRL3VOQXoqAGVY
-   5M396n5LFLsR4eNtK44rHGYrzXe134apCG4Mvl/UCtw2YyMsC9t5/ovre
-   w==;
-X-CSE-ConnectionGUID: PRi5WV2zQ2SZiUKfwzNW6Q==
-X-CSE-MsgGUID: aRCYa6vsQZSJsvygmZf0Ww==
-X-IronPort-AV: E=McAfee;i="6700,10204,11108"; a="18675248"
-X-IronPort-AV: E=Sophos;i="6.08,250,1712646000"; 
-   d="scan'208";a="18675248"
-Received: from orviesa009.jf.intel.com ([10.64.159.149])
-  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jun 2024 09:08:05 -0700
-X-CSE-ConnectionGUID: 7tCgh0kqTVG2nIyxPVvMOA==
-X-CSE-MsgGUID: K2MS9UeSTae+NRRKgzCZkQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.08,250,1712646000"; 
-   d="scan'208";a="42082640"
-Received: from lkp-server01.sh.intel.com (HELO 68891e0c336b) ([10.239.97.150])
-  by orviesa009.jf.intel.com with ESMTP; 19 Jun 2024 09:08:04 -0700
-Received: from kbuild by 68891e0c336b with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1sJxqr-0006jr-1p;
-	Wed, 19 Jun 2024 16:08:01 +0000
-Date: Thu, 20 Jun 2024 00:07:14 +0800
-From: kernel test robot <lkp@intel.com>
-To: Jack Yu <jack.yu@realtek.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Mark Brown <broonie@kernel.org>
-Subject: [broonie-ci:file0IqEIN 13/14] sound/soc/codecs/rt1318.c:785:5:
- warning: no previous prototype for function 'rt1318_pll_calc'
-Message-ID: <202406200032.k77XsxDK-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kjifcIVw"
+Received: by mail-ej1-f52.google.com with SMTP id a640c23a62f3a-a63359aaacaso1079711066b.1
+        for <llvm@lists.linux.dev>; Wed, 19 Jun 2024 09:12:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1718813524; x=1719418324; darn=lists.linux.dev;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=eGorT4rH9fVB+lgR1JoKoDxU9RpCSgqSCB5TfWxaDpc=;
+        b=kjifcIVw+Vic1krjzpdp8M9zUKHV9PHS/6vrAXVorwMiyfDjTIRdoSOrALWrwk/tPm
+         LJ0W756LpRK+HXKHeLstEwIvkmb7qJh0rrwqDU7wNFUE953PqG7t4yEXXqwIqi3WMlH4
+         eSX2p3fhdaysEcp+gpdxeirrj6UzoQt45nMsyC+kNx+v9gBRjF4yJf3bkslCqLYyWGgi
+         WAHvjlXnagKXOp2b7M1s+R0lKeAbgl6hDWWye5ll20QGLsRL3BmRriz1vp1GUiukbu+a
+         ZDiHS13eByrLQUEKSrwnhgPlyi27I7gE8xwvWSiWJZWBlI6v32lQJ8vWPTrwtdgl/yYL
+         Op3Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1718813524; x=1719418324;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=eGorT4rH9fVB+lgR1JoKoDxU9RpCSgqSCB5TfWxaDpc=;
+        b=qix++GtZPrfuw/c5uyyByK8yxhu2zKAxRkwgsynGi4wluxrlYVa4N7DKa+3oZ0GMQL
+         6B0zk6q7wrUr+J6WKoRyb6amlz3ZuGwQ5r4mzNzBl/iCEa24OUo36D4z8kwmSIAkVuhI
+         wPS9b3CNj6bwXxvuZK5EaoBNBIaIcUCN3/9oWusfF403l81PXDj9ntohJ8xh1zHVtn/2
+         R8EFo47BdoNFKzuDMikvWydjXhZwln3bBRonm2M4rSpsMZ2ZyQ03fWtbEWf0FTkARZel
+         vGCHnMcZFKp81uBgYeZJw94Kjqblyqb8iJqcc0CRujhcEptaUbj1qLU2jV9PlRkilxwm
+         Qijg==
+X-Forwarded-Encrypted: i=1; AJvYcCXD1mpoQ+MLJv2KkeI+k4UtGYduHNvhKVz0/WkBNtMTvmg+PaONhP2wy6BgJpkZ3RDABO7aqW0nelthFiyJI2U1rUJZQg==
+X-Gm-Message-State: AOJu0YxKyuyjtSqetyu8/aogWXOVfNs/bg7oKfMePMeIalWRwPaKIT8P
+	IfNd+vvG2KqEXwxB4fliUh/8u3ySjKHz16sniJXoab+9p/stBK9NAyovLeBX
+X-Google-Smtp-Source: AGHT+IETTsmKISRF6ckXFNkhnsxj3NqZsZJqQvxJi608L+mYCRbLb7SKQNKkDttWyIXFvpoJx8Hezw==
+X-Received: by 2002:a17:907:cc06:b0:a68:bae4:d66f with SMTP id a640c23a62f3a-a6fab615d55mr157162366b.30.1718813523802;
+        Wed, 19 Jun 2024 09:12:03 -0700 (PDT)
+Received: from [192.168.0.31] (84-115-213-103.cable.dynamic.surfer.at. [84.115.213.103])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a6f5f1c8d6fsm615589166b.0.2024.06.19.09.12.02
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 19 Jun 2024 09:12:03 -0700 (PDT)
+Message-ID: <4c74c145-4fc1-44b9-88e7-1075c541adba@gmail.com>
+Date: Wed, 19 Jun 2024 18:12:01 +0200
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] USB: serial: garmin_gps: annotate struct garmin_packet
+ with __counted_by
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: Johan Hovold <johan@kernel.org>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Kees Cook
+ <kees@kernel.org>, "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+ Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling
+ <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
+ linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-hardening@vger.kernel.org, llvm@lists.linux.dev
+References: <20240619-garmin_gps_counted_by-v1-1-d8d816f085d9@gmail.com>
+ <20240619144320.GA2091442@thelio-3990X>
+Content-Language: en-US, de-AT
+From: Javier Carrasco <javier.carrasco.cruz@gmail.com>
+In-Reply-To: <20240619144320.GA2091442@thelio-3990X>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/ci.git file0IqEIN
-head:   04c200922d911f7a33febc0e7991f3a2efd856ad
-commit: 48ed4d2435aa749a8d59fd7543313d51d0800175 [13/14] ASoC: rt1318: Add RT1318 audio amplifier driver
-config: x86_64-buildonly-randconfig-005-20240619 (https://download.01.org/0day-ci/archive/20240620/202406200032.k77XsxDK-lkp@intel.com/config)
-compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240620/202406200032.k77XsxDK-lkp@intel.com/reproduce)
+On 19/06/2024 16:43, Nathan Chancellor wrote:
+> On Wed, Jun 19, 2024 at 11:40:57AM +0200, Javier Carrasco wrote:
+>> Use the __counted_by compiler attribute for the data[] flexible array member
+>> to improve the results of array bound sanitizers.
+>>
+>> Signed-off-by: Javier Carrasco <javier.carrasco.cruz@gmail.com>
+>> ---
+>> The size is assigned before the first reference to the flexible array
+>> (see pkt_add()), which allows for a straightforward annotation without
+>> further modifications.
+> 
+> Agreed, this seems like a reasonable patch in and of itself that should
+> work:
+> 
+> Reviewed-by: Nathan Chancellor <nathan@kernel.org>
+> 
+> It might also make sense to change the pkt allocation to use
+> struct_size() instead of open coding it?
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202406200032.k77XsxDK-lkp@intel.com/
+Sure, it looks much better. I will send a v2 with the patch and the
+corresponding Suggested-by:
 
-All warnings (new ones prefixed by >>):
-
->> sound/soc/codecs/rt1318.c:785:5: warning: no previous prototype for function 'rt1318_pll_calc' [-Wmissing-prototypes]
-     785 | int rt1318_pll_calc(const unsigned int freq_in,
-         |     ^
-   sound/soc/codecs/rt1318.c:785:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-     785 | int rt1318_pll_calc(const unsigned int freq_in,
-         | ^
-         | static 
-   sound/soc/codecs/rt1318.c:1340:3: error: field designator 'probe_new' does not refer to any field in type 'struct i2c_driver'
-    1340 |         .probe_new = rt1318_i2c_probe,
-         |         ~^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   1 warning and 1 error generated.
-
-
-vim +/rt1318_pll_calc +785 sound/soc/codecs/rt1318.c
-
-   784	
- > 785	int rt1318_pll_calc(const unsigned int freq_in,
-   786		const unsigned int freq_out, struct rt1318_pll_code *pll_code)
-   787	{
-   788		int max_n = RT1318_PLL_N_MAX, max_m = RT1318_PLL_M_MAX;
-   789		int i, k, red, n_t, pll_out, in_t, out_t;
-   790		int n = 0, m = 0, m_t = 0;
-   791		int red_t = abs(freq_out - freq_in);
-   792		bool m_bypass = false, k_bypass = false;
-   793	
-   794		if (RT1318_PLL_INP_MAX < freq_in || RT1318_PLL_INP_MIN > freq_in)
-   795			return -EINVAL;
-   796	
-   797		for (i = 0; i < ARRAY_SIZE(pll_preset_table); i++) {
-   798			if (freq_in == pll_preset_table[i].pll_in &&
-   799				freq_out == pll_preset_table[i].pll_out) {
-   800				k = pll_preset_table[i].k;
-   801				m = pll_preset_table[i].m;
-   802				n = pll_preset_table[i].n;
-   803				m_bypass = pll_preset_table[i].m_bp;
-   804				k_bypass = pll_preset_table[i].k_bp;
-   805				goto code_find;
-   806			}
-   807		}
-   808	
-   809		k = 100000000 / freq_out - 2;
-   810		if (k > RT1318_PLL_K_MAX)
-   811			k = RT1318_PLL_K_MAX;
-   812		if (k < 0) {
-   813			k = 0;
-   814			k_bypass = true;
-   815		}
-   816		for (n_t = 0; n_t <= max_n; n_t++) {
-   817			in_t = freq_in / (k_bypass ? 1 : (k + 2));
-   818			pll_out = freq_out / (n_t + 2);
-   819			if (in_t < 0)
-   820				continue;
-   821			if (in_t == pll_out) {
-   822				m_bypass = true;
-   823				n = n_t;
-   824				goto code_find;
-   825			}
-   826			red = abs(in_t - pll_out);
-   827			if (red < red_t) {
-   828				m_bypass = true;
-   829				n = n_t;
-   830				m = m_t;
-   831				if (red == 0)
-   832					goto code_find;
-   833				red_t = red;
-   834			}
-   835			for (m_t = 0; m_t <= max_m; m_t++) {
-   836				out_t = in_t / (m_t + 2);
-   837				red = abs(out_t - pll_out);
-   838				if (red < red_t) {
-   839					m_bypass = false;
-   840					n = n_t;
-   841					m = m_t;
-   842					if (red == 0)
-   843						goto code_find;
-   844					red_t = red;
-   845				}
-   846			}
-   847		}
-   848		pr_debug("Only get approximation about PLL\n");
-   849	
-   850	code_find:
-   851	
-   852		pll_code->m_bp = m_bypass;
-   853		pll_code->k_bp = k_bypass;
-   854		pll_code->m_code = m;
-   855		pll_code->n_code = n;
-   856		pll_code->k_code = k;
-   857		return 0;
-   858	}
-   859	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Thanks and best regards,
+Javier Carrasco
