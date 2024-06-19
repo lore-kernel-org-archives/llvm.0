@@ -1,142 +1,120 @@
-Received: from mail-4322.protonmail.ch (mail-4322.protonmail.ch [185.70.43.22])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com [209.85.128.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BDA0580C0B
-	for <llvm@lists.linux.dev>; Wed, 19 Jun 2024 09:30:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.70.43.22
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0712180631
+	for <llvm@lists.linux.dev>; Wed, 19 Jun 2024 09:41:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718789426; cv=none; b=Vul+hcwmEuMx/d6tBxzwlAJ8ovNi6nmdfrQn7nH9Xo1Y0fU0CwZyhKILxEcvJtpR7ZVanyenKLSrd/SI0ItTjBUd0ff/Gutz47KDhHWhQ9xQjIsRk3HrHXMb2d6i/+xxLXsbUek9kaNRyySOVbSvhbPgaVV4q5tfwrPzOPRg5vM=
+	t=1718790064; cv=none; b=M3s8u+GSyfXO3heD6W3qXZRV9H5FFTBckBlTpea44aqhDD8OfrdhuOitfYagJG62UM59DtYJeAdzsXHX5vyXuOFs7BClr48SBBlA76ZsXzHiOeq8il+5/ZtE+T5nno2BL765corNvO7AnB26iI+y71CykHVh6H9D1CRkd63dBCs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718789426; c=relaxed/simple;
-	bh=7ne4ekeJPSiu9Wa/xWvMdy+2iJetKy2FB72LpR8ncLY=;
-	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=nbDy9zhx4Q1LD57qZiljCGQuxNvOmpbE6p5t1YZHBZW+L1H6HDv8zGURL12oiKRej5nGDfdIY3pgr1kYdUBUWaSzPNTHmwb/UCE9TiQZ8COE7PBPbiXCF7iohJ822UyRsgYORM+5kS1estC+IwYMDCq1d3O3WoGLDznxyA1UDxo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=proton.me; spf=pass smtp.mailfrom=proton.me; dkim=pass (2048-bit key) header.d=proton.me header.i=@proton.me header.b=cSbHonGn; arc=none smtp.client-ip=185.70.43.22
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=proton.me
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=proton.me
+	s=arc-20240116; t=1718790064; c=relaxed/simple;
+	bh=Qg6GuD9uT0FjYhDJqubImg2K17b3CJlSTTIQ09qnDB8=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=DkSDR3MAo0Ea+vaho0PpzHOc+K7Y1C3mfBWvdGkjl1cOuUtxJKs5OCI+1v2XOTazNrpZ4He9AfDyT47Yqy+e37F/v/w7+wBnNfXFqG6jbaxDRFcI9lMZRO7k+G6qp94M2JFV7rQsLTGbJ1RUDlP5G05S/xzRYgWy0iiBurSTFqM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ed7W2mWk; arc=none smtp.client-ip=209.85.128.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=proton.me header.i=@proton.me header.b="cSbHonGn"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=proton.me;
-	s=protonmail; t=1718789420; x=1719048620;
-	bh=zV1Qzzj1i+vpiKHlTH9zT9EGlrl+KcXNNmM1imA2OVs=;
-	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
-	 Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
-	 Message-ID:BIMI-Selector;
-	b=cSbHonGnWaJH37f1v+pSaKUQwYqlPPs+VtxX+8Sx2EZa4gfkG6EbZpEFL1ac6AJSJ
-	 +zm/edwto6ej3rtZoDCxktTyvEy3KwzMLuGps4gixWJId4+eIiKjM/YMAhuD6RbdTa
-	 j2RiXtPvBlCrR2Ag+uGa4Vgwq0/I7AWttYOmTjke/x5q7y7xM99zlCRi47Or+OqD4B
-	 BNKE8/RAyZk2+tGreTkAu5UwsC5NQJ1h9HMGsX3AIPaP33fOeRgCQa+6byjK08Ys5d
-	 EoE5c2uLBWYZcaqYKWiyoYziz+AMut+hOdm0vJt8NWQ+16u6mtF0WYN3hqgQ6OQor7
-	 e5Z3mWOu+o96A==
-Date: Wed, 19 Jun 2024 09:30:15 +0000
-To: Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>
-From: Benno Lossin <benno.lossin@proton.me>
-Cc: John Hubbard <jhubbard@nvidia.com>, Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>, rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org, llvm@lists.linux.dev, Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, Wedson Almeida Filho <wedsonaf@gmail.com>, =?utf-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, Andreas Hindborg <a.hindborg@samsung.com>, Alice Ryhl <aliceryhl@google.com>, Alan Stern <stern@rowland.harvard.edu>, Andrea Parri <parri.andrea@gmail.com>, Will Deacon <will@kernel.org>, Peter Zijlstra <peterz@infradead.org>, Nicholas Piggin <npiggin@gmail.com>, David Howells <dhowells@redhat.com>, Jade Alglave <j.alglave@ucl.ac.uk>, Luc Maranget <luc.maranget@inria.fr>, "Paul E. McKenney" <paulmck@kernel.org>, Akira Yokosawa <akiyks@gmail.com>, Daniel Lustig <dlustig@nvidia.com>, Joel Fernandes <joel@joelfernandes.org>, Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>,
-	kent.overstreet@gmail.com, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, elver@google.com, Mark Rutland <mark.rutland@arm.com>, Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>, Catalin Marinas <catalin.marinas@arm.com>, torvalds@linux-foundation.org, linux-arm-kernel@lists.infradead.org, linux-fsdevel@vger.kernel.org, Trevor Gross <tmgross@umich.edu>, dakr@redhat.com
-Subject: Re: [RFC 2/2] rust: sync: Add atomic support
-Message-ID: <8f23cb56-91a9-4515-a14f-4b7de70f6852@proton.me>
-In-Reply-To: <Zm_LTXm3wJhcQIwI@Boquns-Mac-mini.home>
-References: <ZmseosxVQXdsQjNB@boqun-archlinux> <CANiq72=JdqTRPiUfT=-YMTTN+bHeAe2Pba8nERxU3cN8Q-BEOw@mail.gmail.com> <79239550-dd6e-4738-acea-e7df50176487@nvidia.com> <ZmztZd9OJdLnBZs5@Boquns-Mac-mini.home> <c243bef3-e152-462f-be68-91dbf876092b@nvidia.com> <Zmz-338Ad6r4vzM-@Boquns-Mac-mini.home> <20240616155145.54371240.gary@garyguo.net> <Zm7_XWe6ciy1yN-h@Boquns-Mac-mini.home> <Zm_LTXm3wJhcQIwI@Boquns-Mac-mini.home>
-Feedback-ID: 71780778:user:proton
-X-Pm-Message-ID: 11698e3de8f944b2217c782e5cf4abe605702990
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ed7W2mWk"
+Received: by mail-wm1-f53.google.com with SMTP id 5b1f17b1804b1-421820fc26dso49526905e9.2
+        for <llvm@lists.linux.dev>; Wed, 19 Jun 2024 02:41:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1718790061; x=1719394861; darn=lists.linux.dev;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=r22BRKQXYcHOcbW5qU6bmdOJSTmqJ20MxR35f7aK9/A=;
+        b=ed7W2mWkdIjEpMGhIT1IpByuIQqH33xO6Wp8tOfl7OjwYKtuIe9QcSiTX8HAWwVUuB
+         yq8LCQGkQiDYu87s3eRkC1uU3xvWPRJ6LwP1y8htMhq1zHTcIWJYWuWwSJ/4X9otNje3
+         jFAG7wML8JOFl1syaXxJ82UvMSM1efiYbe47+aRiUczpIU/I9vFQQYz4Km4PvaArO7d/
+         UGaDjl1hjpDo1yxlxtab/aFppCR8ai+c580jgB9A/ak4ry8H34gHdeiBteh83vzUAYhi
+         XSbd1BbbWwxl4auXmAY2treChybBKdwbY7MGqu5liYVHYWMteE4h748+vyz6dbSPowk6
+         56Zw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1718790061; x=1719394861;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=r22BRKQXYcHOcbW5qU6bmdOJSTmqJ20MxR35f7aK9/A=;
+        b=tMd8jFSVTCddgaYp9yv8n9QU5Qy4fYPoMJiQ7ZKmEG20K8586yuDYTJtO904hKURPv
+         Ohh59wyzKK2alUdQmfbiq3E8jcG1iuS7jkO3rp4oi68G33naA1n6+Mw/1XpFabR9eS9H
+         +XGTnewVVwflp2EqVRNzWIcLltq7a7BwGpy7vBiqZfbgcUjJ1mFTgihaEiky991+ukjX
+         sLya9HO8fF+eynz5l+psSRbjIx+xXqqlVlEoREleRJqYR+qF3ATOFUhr/yUeohXscA36
+         sjprvg79rIvpwmLsdwcXSjolBn3TS3OK+ic+Blwa1yA6L8YyfGKPwaYk8xU9FCwSlKvv
+         sEjA==
+X-Forwarded-Encrypted: i=1; AJvYcCUiXNicLGT5g5IEt/jGvRqwLoN1Z5BCDTfDoRejjILLNYomGOnjzPomCWiCfrIITGmjgBL+NLIycIvONK4Chr0p/34/bg==
+X-Gm-Message-State: AOJu0YwbWrGSUltwd5p6CtAtY1AvH++hgtIWp3puVXXs4sgUs2qXIomM
+	pEttXkY92cmP2Fwi/qndwF8CPo3ovscR9AEXKVcvKChOwctl8AP6ThAGSgwD
+X-Google-Smtp-Source: AGHT+IElF7dg8O3LJe50WO5VqjUMPh2cpDUpsDriBW2iVQl47dtiuAO0Ws2JcFXsP6UpV3klb5M5gg==
+X-Received: by 2002:a05:600c:35c3:b0:421:7bed:5274 with SMTP id 5b1f17b1804b1-42475173ce3mr16488635e9.10.1718790061178;
+        Wed, 19 Jun 2024 02:41:01 -0700 (PDT)
+Received: from [127.0.1.1] (84-115-213-103.cable.dynamic.surfer.at. [84.115.213.103])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-42306049f1asm182804075e9.22.2024.06.19.02.41.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 19 Jun 2024 02:41:00 -0700 (PDT)
+From: Javier Carrasco <javier.carrasco.cruz@gmail.com>
+Date: Wed, 19 Jun 2024 11:40:57 +0200
+Subject: [PATCH] USB: serial: garmin_gps: annotate struct garmin_packet
+ with __counted_by
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20240619-garmin_gps_counted_by-v1-1-d8d816f085d9@gmail.com>
+X-B4-Tracking: v=1; b=H4sIAKincmYC/x3MQQ5AMBBA0avIrDUp1QpXEWnQUbNQ0iJEeneN5
+ Vv8/0JATxigzV7weFGgzSUUeQbTMjiLjEwylLysuCoaZge/ktN2D3raTneg0ePDRK1kJRvFhRS
+ Q2t3jTPf/7foYP5WT9QVnAAAA
+To: Johan Hovold <johan@kernel.org>, 
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+ Kees Cook <kees@kernel.org>, "Gustavo A. R. Silva" <gustavoars@kernel.org>, 
+ Nathan Chancellor <nathan@kernel.org>, 
+ Nick Desaulniers <ndesaulniers@google.com>, 
+ Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>
+Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ linux-hardening@vger.kernel.org, llvm@lists.linux.dev, 
+ Javier Carrasco <javier.carrasco.cruz@gmail.com>
+X-Mailer: b4 0.14-dev
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1718790059; l=1151;
+ i=javier.carrasco.cruz@gmail.com; s=20240312; h=from:subject:message-id;
+ bh=Qg6GuD9uT0FjYhDJqubImg2K17b3CJlSTTIQ09qnDB8=;
+ b=AebiJqrhEZoqxVdOt6AGpsJ3S/JQfLwNfhVOY++mgZwM+D/d/7g+jZIVsIR6q94qhuAkGG7eX
+ ict+JBHmecYBkDJ9r7+wq3TtL94ZE7beQOexXCgFNweWVRff/v7UqZC
+X-Developer-Key: i=javier.carrasco.cruz@gmail.com; a=ed25519;
+ pk=lzSIvIzMz0JhJrzLXI0HAdPwsNPSSmEn6RbS+PTS9aQ=
 
-On 17.06.24 07:36, Boqun Feng wrote:
-> On Sun, Jun 16, 2024 at 08:06:05AM -0700, Boqun Feng wrote:
-> [...]
->>>
->>> Note that crossbeam's AtomicCell is also generic, and crossbeam is used
->>> by tons of crates. As Miguel mentioned, I think it's very likely that i=
-n
->>> the future we want be able to do atomics on new types (e.g. for
->>> seqlocks perhaps). We probably don't need the non-lock-free fallback of
->>
->> Good, another design bit, thank you!
->>
->> What's our overall idea on sub-word types, like Atomic<u8> and
->> Atomic<u16>, do we plan to say no to them, or they could have a limited
->> APIs? IIUC, some operations on them are relatively sub-optimal on some
->> architectures, supporting the same set of API as i32 and i64 is probably
->> a bad idea.
->>
->> Another thing in my mind is making `Atomic<T>`
->>
->> =09pub struct Atomic<T: Send + ...> { ... }
->>
->> so that `Atomic<T>` will always be `Sync`, because quite frankly, an
->> atomic type that cannot `Sync` is pointless.
+Use the __counted_by compiler attribute for the data[] flexible array member
+to improve the results of array bound sanitizers.
 
-That is true, but adding semantically "unnecessary" bounds can be bad.
-This is because they infect everything that wants to use `Atomic<T>`,
-since they also need to add that bound.
+Signed-off-by: Javier Carrasco <javier.carrasco.cruz@gmail.com>
+---
+The size is assigned before the first reference to the flexible array
+(see pkt_add()), which allows for a straightforward annotation without
+further modifications.
+---
+ drivers/usb/serial/garmin_gps.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> Also, how do we avoid this issue [1] in kernel?
-
-I think that we can first go the way of my second approach (ie adding a
-private trait as a bound on `Atomic<T>` to prevent generic usage). And
-only allow primitives.
-If we then see that people would like to put their own (u8, u16) tuple
-structs into `Atomic<T>`, we have multiple options:
-
-1. Field projection:
-   Only primitives can be `load`ed and `store`ed, to access the values
-   of the tuple, one would need to project to each field and read them.
-
-2. Disallow padding:
-   We add an `unsafe` trait that asserts there are no padding bytes in
-   there (like `NoUinit` from below) and also add a macro that
-   implements the trait safely.
-
-3. Use `MaybeUninit` under the hood:
-   I don't know if this would fix the issue entirely, since that is what
-   crossbeam currently uses (but the issue remains open).
-
-But I don't think that we should encourage large structs to be put into
-`Atomic<T>`, since that would be bad for perf, right? So I think that
-going the way of 1 would be great (if we had FP, otherwise 2 seems fine).
-
-> `atomic_load()` in C is implemented as READ_ONCE() and it's, at most
-> time, a volatile read, so the eventual code is:
->=20
->     let a: (u8, u16) =3D (1, 2);
->     let b =3D unsafe { core::ptr::read_volatile::<i32>(&a as *const _ as =
-*const i32) };
->=20
-> I know we probably ignore data race here and treat `read_volatile` as a
-> dependency read per LKMM [2]. But this is an using of uninitialized
-> data, so it's a bit different.
-
-But would we implement it this way? Or would it go through a C function?
-If we entirely do it in Rust, then yes this is bad.
+diff --git a/drivers/usb/serial/garmin_gps.c b/drivers/usb/serial/garmin_gps.c
+index 670e942fdaaa..57df6ad183ff 100644
+--- a/drivers/usb/serial/garmin_gps.c
++++ b/drivers/usb/serial/garmin_gps.c
+@@ -104,7 +104,7 @@ struct garmin_packet {
+ 	int               seq;
+ 	/* the real size of the data array, always > 0 */
+ 	int               size;
+-	__u8              data[];
++	__u8              data[] __counted_by(size);
+ };
+ 
+ /* structure used to keep the current state of the driver */
 
 ---
-Cheers,
-Benno
+base-commit: 0c52056d9f77508cb6d4d68d3fc91c6c08ec71af
+change-id: 20240619-garmin_gps_counted_by-376545960353
 
-> We can do what https://crates.io/crates/atomic does:
->=20
-> =09pub struct Atomic<T: NoUninit + ..> { ... }
->=20
-> , where `NoUinit` means no internal padding bytes, but it loses the
-> ability to put a
->=20
-> =09#[repr(u32)]
-> =09pub enum Foo { .. }
->=20
-> into `Atomic<T>`, right? Which is probably a case you want to support?
->=20
-> Regards,
-> Boqun
->=20
-> [1]: https://github.com/crossbeam-rs/crossbeam/issues/748#issuecomment-11=
-33926617
-> [2]: tools/memory-model/Documentation/access-marking.txt
-
+Best regards,
+-- 
+Javier Carrasco <javier.carrasco.cruz@gmail.com>
 
