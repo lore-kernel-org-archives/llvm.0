@@ -1,170 +1,140 @@
-Received: from mail-pf1-f181.google.com (mail-pf1-f181.google.com [209.85.210.181])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 163D11662EA;
-	Tue, 18 Jun 2024 21:32:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 17C4E6AB6;
+	Wed, 19 Jun 2024 01:20:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718746358; cv=none; b=m5QT5ZbLsIKaCY2NpfHxwXtD8/Ja3dj6pC7iNy9wVGxYJ2ZdlSAzWBQf9AjQEEi33mc5UoUuVEK5rGZciZQdHcHNCQIs6kAJJPwsLKAbiY1ILA02ncK9f/uPlt6CC+FR203ZgOY4kJkKN1abpgR+bpwporVpKJy0wE1LjdYoKCw=
+	t=1718760038; cv=none; b=CeMk7tviHBgsauEY3vSY2w31zUM//9gdl/oYhMTE026+7Z3FA9LEcKoWBWSpvGlvQkD2bYG4oIDCUyQlS6iAeLphL1wdrSKrPNbLs0QSEKct90ge3/3/8ekXJ6eVkJAOeC90MeeZyfIbuvNYCHb7qphK125abuNAEGVwHEAn2vU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718746358; c=relaxed/simple;
-	bh=VVcf37s2EfA8gVOeqHWCxz/aViKmRNUtMDu5rG1+UfU=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=L8s2YhBrV5WzA6li7yeX3bBm5RijIUWhe0traLNagMn4x8rUAFqG9GjIqApqfkLt6qw7RMOaPIKvdzUPiTSW1Ip4+3cxSEJGnFEEqLDzIcy2OE/vqvNVaPWnweRcDiqi1Th8KFElLFvFK50XiPDcBcJF7V0AL8MgA82uCnpptPo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=H6p5vdJj; arc=none smtp.client-ip=209.85.210.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1718760038; c=relaxed/simple;
+	bh=YAOHYSF2kfOC5GvJiRI6/Eu1rzyWRuWM8z0fAkNkmgU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Mqos2DC1NYOAxuJavGXj1hFe+y8MTGCV8VoG85asJGWtcAOsvVtU/sQvIpXpNZW/833lh7HiQxIH3bF7ZAMMa6fGJk+9wpqrDLiDyVWevrcwh4+En+QZYcu39FOLIWw9Hch9MRXgQJbOHu0ac4m1wSPpWLQIS/C+WiRyMrsZRFk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Ib1r2/ge; arc=none smtp.client-ip=198.175.65.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="H6p5vdJj"
-Received: by mail-pf1-f181.google.com with SMTP id d2e1a72fcca58-7062bf6d9a1so190514b3a.1;
-        Tue, 18 Jun 2024 14:32:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1718746356; x=1719351156; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=0F2GFRylmsUf8qCCMvo7ZfErHvVg5KnaNyTwWf+ackU=;
-        b=H6p5vdJjP+uBXIT3s0dHu6th9+rSlt1tQPJVA87JUpwMDfPnk32WFBjrC8LnD0zqKX
-         H+4DjcFOu8WYV1SBwhFXdZh+D7rwXgYenhul4IW++eDUakMLKKmj9qtq+36Ei4xIg1lG
-         XdbOW/RxKMdvkjjvvqnnqEUCv/LYfP7wEYZRAUfrhke+StF0A3G6nGfB2jJfY0pavz6M
-         yG2pgFsI5vhCJEnylCOJ3UkecMSJxP4rfKCQCw/GcOZTFt7yBwqIavPY0GiWheibw64w
-         KQU4sshG6rbwFfx+lqJAsTjk6ZIEJzruS3cOzTprkjpzyoEZ9+m2R443dXxQORwsrl45
-         5XYw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1718746356; x=1719351156;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=0F2GFRylmsUf8qCCMvo7ZfErHvVg5KnaNyTwWf+ackU=;
-        b=GWdmFgv3ClSSIeN0yAK+1Utdwc5WbTBhImz3+CAXNrrLeoVk8zJ/umZfRqXSwg3Du5
-         cNux+UG2zJ6e/2cyW8lJ3riQzWIEhUXbedczqzyc8K8zjvKl+S4r8psGRAO4xI3Lm8wO
-         JW1wGXDJSmo/gxs9L4nEQ+j7cQT655hVQ4gX0ETOzfQNzv9hMQAAswX9CiyULbPdSJmg
-         n4L+HH94TbNrHKksUuGVu2tcd7Fth1xYI60uMDd200F8hSbZj3I1orndcuwe5/9ea3Yi
-         BkeCketiPiyLucYCZBfZgEFukhO59pm1doJNawrVL0YIzfx5XQxwchBBitUxX767DnlR
-         mEIg==
-X-Forwarded-Encrypted: i=1; AJvYcCWP6tPnQiCznb7B7UV1Qf2h50mY9JOPjjHISFMIZSaMwGB85PfeXRT/f8YHB+SExcARHEH+L5BvF84aVLYt9Do9W3ogOi9/gCILiiqqTH639HM+cnAp7yL+PVHiAho=
-X-Gm-Message-State: AOJu0YyOAb+oYQOH9c2SoVZt7EPwwt9Eo9t9GbkOnzQ+NuQeN4tW9OKh
-	0YUtirKLomFz8Z1T4GRL6sOPxzql0yVy8HGVwb50w5orKql59CaqanZxHIdoON4O4Veee/uIdqG
-	C/7FrZNs2XeoirtLPJMvuQrPGRRQ=
-X-Google-Smtp-Source: AGHT+IFIYnRfv9OexIBisPO8GJODl0YW0GErnOlBNhmoJ+53el0v0LQ+XytbXr/0FiI9zYwRjX6PFplolAaJccvUk80=
-X-Received: by 2002:a17:90b:344f:b0:2c2:faf7:67a0 with SMTP id
- 98e67ed59e1d1-2c7b5c725a6mr924947a91.16.1718746356201; Tue, 18 Jun 2024
- 14:32:36 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Ib1r2/ge"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1718760036; x=1750296036;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=YAOHYSF2kfOC5GvJiRI6/Eu1rzyWRuWM8z0fAkNkmgU=;
+  b=Ib1r2/geNVCGDATEEq2Yn6dwIiE3C3ucBwAydbntblPkcp/BHGJo7QRW
+   7fNy6J4JSI9BfPLHIpJNSO1MmmBog6bnNyprk4UQETokG4R6uZbbvBg8f
+   EnW95NyeSmK+VT7LryYkij9k9BUAoMvT0oIdoBziuaroIA0kwP4o6eY4g
+   S/Tmg+RiQNu82jlvrOUff1ZizLU0NAuLiOJksjTAZRFQmGu3csYhCrzgW
+   SKFiudDVx+EEPpTy6Bkw2YL2TcNdF9ds2ZQOdf5tXNt5LKiTJRrazSsNm
+   1nxEUi469namx0O5b+QWiiBTR2IvoQKTMhhglFtMD5xFQdrz5I3W/jcYb
+   w==;
+X-CSE-ConnectionGUID: oWZkYIzXTXi/Vf52pak+7g==
+X-CSE-MsgGUID: eMgzDTLkSe+qk6jOG/IyKg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11107"; a="15805304"
+X-IronPort-AV: E=Sophos;i="6.08,247,1712646000"; 
+   d="scan'208";a="15805304"
+Received: from orviesa008.jf.intel.com ([10.64.159.148])
+  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jun 2024 18:20:35 -0700
+X-CSE-ConnectionGUID: 6V5X6AoMTPKvwSDudaZOxw==
+X-CSE-MsgGUID: sMe9BSUcRACrxbiuh7slWQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.08,247,1712646000"; 
+   d="scan'208";a="42430221"
+Received: from lkp-server01.sh.intel.com (HELO 68891e0c336b) ([10.239.97.150])
+  by orviesa008.jf.intel.com with ESMTP; 18 Jun 2024 18:20:32 -0700
+Received: from kbuild by 68891e0c336b with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1sJjzx-00067k-2w;
+	Wed, 19 Jun 2024 01:20:29 +0000
+Date: Wed, 19 Jun 2024 09:19:45 +0800
+From: kernel test robot <lkp@intel.com>
+To: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+	Banajit Goswami <bgoswami@quicinc.com>,
+	Liam Girdwood <lgirdwood@gmail.com>,
+	Mark Brown <broonie@kernel.org>, Jaroslav Kysela <perex@perex.cz>,
+	Takashi Iwai <tiwai@suse.com>,
+	Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	alsa-devel@alsa-project.org, linux-sound@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+	Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+Subject: Re: [PATCH 1/2] ASoC: codecs:lpass-wsa-macro: Fix vi feedback rate
+Message-ID: <202406190857.mozJxHDO-lkp@intel.com>
+References: <20240618-lpass-wsa-vi-v1-1-416a6f162c81@linaro.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20240614-amdgpu-disable-drm-amd-dc-fp-riscv-clang-v1-1-a6d40617dc9b@kernel.org>
- <58253c2e-25a2-48c6-bcd4-5bc3bbe03296@amd.com>
-In-Reply-To: <58253c2e-25a2-48c6-bcd4-5bc3bbe03296@amd.com>
-From: Alex Deucher <alexdeucher@gmail.com>
-Date: Tue, 18 Jun 2024 17:32:24 -0400
-Message-ID: <CADnq5_Ox_Ak9XedYNPchxMh-AKuLRG1_V8YqpiEB=ke8130B5A@mail.gmail.com>
-Subject: Re: [PATCH] drm/amd/display: Disable CONFIG_DRM_AMD_DC_FP for RISC-V
- with clang
-To: Harry Wentland <harry.wentland@amd.com>
-Cc: Nathan Chancellor <nathan@kernel.org>, Leo Li <sunpeng.li@amd.com>, 
-	Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>, Alex Deucher <alexander.deucher@amd.com>, 
-	=?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>, 
-	Xinhui Pan <Xinhui.Pan@amd.com>, Palmer Dabbelt <palmer@dabbelt.com>, 
-	Samuel Holland <samuel.holland@sifive.com>, Nick Desaulniers <ndesaulniers@google.com>, 
-	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, amd-gfx@lists.freedesktop.org, 
-	dri-devel@lists.freedesktop.org, linux-riscv@lists.infradead.org, 
-	llvm@lists.linux.dev, patches@lists.linux.dev, 
-	Palmer Dabbelt <palmer@rivosinc.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240618-lpass-wsa-vi-v1-1-416a6f162c81@linaro.org>
 
-Applied.  Thanks!
+Hi Srinivas,
 
-Alex
+kernel test robot noticed the following build warnings:
 
-On Tue, Jun 18, 2024 at 10:17=E2=80=AFAM Harry Wentland <harry.wentland@amd=
-.com> wrote:
->
->
->
-> On 2024-06-14 15:54, Nathan Chancellor wrote:
-> > Commit 77acc6b55ae4 ("riscv: add support for kernel-mode FPU") and
-> > commit a28e4b672f04 ("drm/amd/display: use ARCH_HAS_KERNEL_FPU_SUPPORT"=
-)
-> > enabled support for CONFIG_DRM_AMD_DC_FP with RISC-V. Unfortunately,
-> > this exposed -Wframe-larger-than warnings (which become fatal with
-> > CONFIG_WERROR=3Dy) when building ARCH=3Driscv allmodconfig with clang:
-> >
-> >   drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn32/display_mode_vba_3=
-2.c:58:13: error: stack frame size (2448) exceeds limit (2048) in 'DISPCLKD=
-PPCLKDCFCLKDeepSleepPrefetchParametersWatermarksAndPerformanceCalculation' =
-[-Werror,-Wframe-larger-than]
-> >      58 | static void DISPCLKDPPCLKDCFCLKDeepSleepPrefetchParametersWat=
-ermarksAndPerformanceCalculation(
-> >         |             ^
-> >   1 error generated.
-> >
-> > Many functions in this file use a large number of parameters, which mus=
-t
-> > be passed on the stack at a certain pointer due to register exhaustion,
-> > which can cause high stack usage when inlining and issues with stack
-> > slot analysis get involved. While the compiler can and should do better
-> > (as GCC uses less than half the amount of stack space for the same
-> > function), it is not as simple as a fix as adjusting the functions not
-> > to take a large number of parameters.
-> >
-> > Unfortunately, modifying these files to avoid the problem is a difficul=
-t
-> > to justify approach because any revisions to the files in the kernel
-> > tree never make it back to the original source (so copies of the code
-> > for newer hardware revisions just reintroduce the issue) and the files
-> > are hard to read/modify due to being "gcc-parsable HW gospel, coming
-> > straight from HW engineers".
-> >
-> > Avoid building the problematic code for RISC-V by modifying the existin=
-g
-> > condition for arm64 that exists for the same reason. Factor out the
-> > logical not to make the condition a little more readable naturally.
-> >
-> > Fixes: a28e4b672f04 ("drm/amd/display: use ARCH_HAS_KERNEL_FPU_SUPPORT"=
-)
-> > Reported-by: Palmer Dabbelt <palmer@rivosinc.com>
-> > Closes: https://lore.kernel.org/20240530145741.7506-2-palmer@rivosinc.c=
-om/
-> > Signed-off-by: Nathan Chancellor <nathan@kernel.org>
-> > ---
-> >  drivers/gpu/drm/amd/display/Kconfig | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> >
-> > diff --git a/drivers/gpu/drm/amd/display/Kconfig b/drivers/gpu/drm/amd/=
-display/Kconfig
-> > index 5fcd4f778dc3..47b8b49da8a7 100644
-> > --- a/drivers/gpu/drm/amd/display/Kconfig
-> > +++ b/drivers/gpu/drm/amd/display/Kconfig
-> > @@ -8,7 +8,7 @@ config DRM_AMD_DC
-> >       depends on BROKEN || !CC_IS_CLANG || ARM64 || RISCV || SPARC64 ||=
- X86_64
-> >       select SND_HDA_COMPONENT if SND_HDA_CORE
-> >       # !CC_IS_CLANG: https://github.com/ClangBuiltLinux/linux/issues/1=
-752
-> > -     select DRM_AMD_DC_FP if ARCH_HAS_KERNEL_FPU_SUPPORT && (!ARM64 ||=
- !CC_IS_CLANG)
-> > +     select DRM_AMD_DC_FP if ARCH_HAS_KERNEL_FPU_SUPPORT && !(CC_IS_CL=
-ANG && (ARM64 || RISCV))
->
-> Thanks for also making the logic easier to parse.
->
-> Reviewed-by: Harry Wentland <harry.wentland@amd.com>
->
-> Harry
->
-> >       help
-> >         Choose this option if you want to use the new display engine
-> >         support for AMDGPU. This adds required support for Vega and
-> >
-> > ---
-> > base-commit: c6c4dd54012551cce5cde408b35468f2c62b0cce
-> > change-id: 20240614-amdgpu-disable-drm-amd-dc-fp-riscv-clang-31c84f6b99=
-0d
-> >
-> > Best regards,
->
+[auto build test WARNING on 1613e604df0cd359cf2a7fbd9be7a0bcfacfabd0]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Srinivas-Kandagatla/ASoC-codecs-lpass-wsa-macro-Fix-vi-feedback-rate/20240618-221030
+base:   1613e604df0cd359cf2a7fbd9be7a0bcfacfabd0
+patch link:    https://lore.kernel.org/r/20240618-lpass-wsa-vi-v1-1-416a6f162c81%40linaro.org
+patch subject: [PATCH 1/2] ASoC: codecs:lpass-wsa-macro: Fix vi feedback rate
+config: i386-buildonly-randconfig-002-20240619 (https://download.01.org/0day-ci/archive/20240619/202406190857.mozJxHDO-lkp@intel.com/config)
+compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240619/202406190857.mozJxHDO-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202406190857.mozJxHDO-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> sound/soc/codecs/lpass-wsa-macro.c:999:2: warning: unannotated fall-through between switch labels [-Wimplicit-fallthrough]
+     999 |         default:
+         |         ^
+   sound/soc/codecs/lpass-wsa-macro.c:999:2: note: insert 'break;' to avoid fall-through
+     999 |         default:
+         |         ^
+         |         break; 
+   1 warning generated.
+
+
+vim +999 sound/soc/codecs/lpass-wsa-macro.c
+
+809bcbcecebff8 Srinivas Kandagatla 2020-11-05   976  
+809bcbcecebff8 Srinivas Kandagatla 2020-11-05   977  static int wsa_macro_hw_params(struct snd_pcm_substream *substream,
+809bcbcecebff8 Srinivas Kandagatla 2020-11-05   978  			       struct snd_pcm_hw_params *params,
+809bcbcecebff8 Srinivas Kandagatla 2020-11-05   979  			       struct snd_soc_dai *dai)
+809bcbcecebff8 Srinivas Kandagatla 2020-11-05   980  {
+809bcbcecebff8 Srinivas Kandagatla 2020-11-05   981  	struct snd_soc_component *component = dai->component;
+2881dae5fbb091 Srinivas Kandagatla 2024-06-18   982  	struct wsa_macro *wsa = snd_soc_component_get_drvdata(component);
+809bcbcecebff8 Srinivas Kandagatla 2020-11-05   983  	int ret;
+809bcbcecebff8 Srinivas Kandagatla 2020-11-05   984  
+809bcbcecebff8 Srinivas Kandagatla 2020-11-05   985  	switch (substream->stream) {
+809bcbcecebff8 Srinivas Kandagatla 2020-11-05   986  	case SNDRV_PCM_STREAM_PLAYBACK:
+809bcbcecebff8 Srinivas Kandagatla 2020-11-05   987  		ret = wsa_macro_set_interpolator_rate(dai, params_rate(params));
+809bcbcecebff8 Srinivas Kandagatla 2020-11-05   988  		if (ret) {
+809bcbcecebff8 Srinivas Kandagatla 2020-11-05   989  			dev_err(component->dev,
+809bcbcecebff8 Srinivas Kandagatla 2020-11-05   990  				"%s: cannot set sample rate: %u\n",
+809bcbcecebff8 Srinivas Kandagatla 2020-11-05   991  				__func__, params_rate(params));
+809bcbcecebff8 Srinivas Kandagatla 2020-11-05   992  			return ret;
+809bcbcecebff8 Srinivas Kandagatla 2020-11-05   993  		}
+809bcbcecebff8 Srinivas Kandagatla 2020-11-05   994  		break;
+2881dae5fbb091 Srinivas Kandagatla 2024-06-18   995  	case SNDRV_PCM_STREAM_CAPTURE:
+2881dae5fbb091 Srinivas Kandagatla 2024-06-18   996  		if (dai->id == WSA_MACRO_AIF_VI)
+2881dae5fbb091 Srinivas Kandagatla 2024-06-18   997  			wsa->pcm_rate_vi = params_rate(params);
+2881dae5fbb091 Srinivas Kandagatla 2024-06-18   998  
+809bcbcecebff8 Srinivas Kandagatla 2020-11-05  @999  	default:
+809bcbcecebff8 Srinivas Kandagatla 2020-11-05  1000  		break;
+809bcbcecebff8 Srinivas Kandagatla 2020-11-05  1001  	}
+809bcbcecebff8 Srinivas Kandagatla 2020-11-05  1002  	return 0;
+809bcbcecebff8 Srinivas Kandagatla 2020-11-05  1003  }
+809bcbcecebff8 Srinivas Kandagatla 2020-11-05  1004  
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
