@@ -1,44 +1,61 @@
-Received: from mail-40133.protonmail.ch (mail-40133.protonmail.ch [185.70.40.133])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 470B07BB15
-	for <llvm@lists.linux.dev>; Wed, 19 Jun 2024 09:09:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.70.40.133
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EBA8B81AC3;
+	Wed, 19 Jun 2024 09:18:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718788195; cv=none; b=UZWKoatcWXcDrZquoTch8rq5Qd/hlGqIpp/0zxWjZE6e+JiFdy7GpWdK1ScCT8CrHcO0ZBnEb8sNa5sd1YFmJrFTT+RtwOwN7XEhFx0sHOjBv+UQNyyE5eT2OWOEq8qpze5YcihH1VNz2NmArH6AL6iD42irm3rVppU/aeWoYgM=
+	t=1718788699; cv=none; b=QcmbHfPbqczpXDwGo9aDkbqAFTqHA4F9ap2xEJ4bDIt2/Cr635KkTY+miQ28PzwNGRQ9qHOTkNrDnPUuJyoSoK6DIUKCCWoENa/e+fXMeK0Ds+gdNey+Zy0nQk63/q8XflVPse6JeOG45HZ2nw6Xu/G0LDQb4/B60bwNklhcAbc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718788195; c=relaxed/simple;
-	bh=cewcQd0hHO5cIb91kEm4bQgDjhY9hlmZwAZu0cZ8QwQ=;
-	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=NWJJCGVigBvE5qSLJ6ePoAbPv6nnsSzd7NqiZjl/V4w4nrS3lnGBqOn4KvoZlqqq0Ymlf3ZWIeNqUhIz9/XM2ekHZ7sBIGcpu/vi+kOTDKy3I2qW27RMfe2+mzlaANejBMkaXLzr1yrvZodpj1LgBQ8d6E3ZWDbw7TIhNB+4Fsc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=proton.me; spf=pass smtp.mailfrom=proton.me; dkim=pass (2048-bit key) header.d=proton.me header.i=@proton.me header.b=CUTdy6Dr; arc=none smtp.client-ip=185.70.40.133
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=proton.me
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=proton.me
+	s=arc-20240116; t=1718788699; c=relaxed/simple;
+	bh=MpVu2CG+KvjhnfALLnTmb/atxIChYs9dD6hK3LIeTho=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=O437dJGumoKfkzugaqX2uOEO/wGDdYSqF0Jlt3DufHGMQVbQxJmB/dewBW95XMA1ubHKucMNAcKqrAT2ljQjDfRBjXTrb94xzg2FTxNUIZ7WXUZ2kTgJLpoRe6NpORwSuDgdDr3KWMDSgajyN8PJyb3IraNJ0AWYnaGq0OHdma8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=EANk6S/j; arc=none smtp.client-ip=192.198.163.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=proton.me header.i=@proton.me header.b="CUTdy6Dr"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=proton.me;
-	s=protonmail; t=1718788191; x=1719047391;
-	bh=eJrma/fVCMsJbBISEt95GcF83525t5S0wAsH5rZ36k4=;
-	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
-	 Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
-	 Message-ID:BIMI-Selector;
-	b=CUTdy6DrK1LCCUqauU804s+HdcepMsEmEkFzDc7VhrbW1VA7ebQ9q62OmO6zTbcsr
-	 Mv5HSJMlYqd7kYnDy6+t5m7O6IDCn0EcnxsL4sqtBuf0/hSfMUzYcCLai8J0bggoWV
-	 LkR5iBetgQ1HmKWlH1LrrlQKcM9FTiiKyucXqsGishBzmxQTc8X/mEy+SnAOCjUb9i
-	 mT55WX9dCsF/+FJ8IpgcLGgcCu5Q1+W4u7IuVYN9CSnXrrHg8+4RZyLfLdg1UnkNDr
-	 DDvyR1NgQGMvvsq2pnbZkh4uQyhL94KCecVhxs9a9KuZzN0wKgt0wR3uhMtrlz+NL5
-	 b8tMvN3mCGxEw==
-Date: Wed, 19 Jun 2024 09:09:46 +0000
-To: Boqun Feng <boqun.feng@gmail.com>
-From: Benno Lossin <benno.lossin@proton.me>
-Cc: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>, Gary Guo <gary@garyguo.net>, rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org, llvm@lists.linux.dev, Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, Wedson Almeida Filho <wedsonaf@gmail.com>, =?utf-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, Andreas Hindborg <a.hindborg@samsung.com>, Alice Ryhl <aliceryhl@google.com>, Alan Stern <stern@rowland.harvard.edu>, Andrea Parri <parri.andrea@gmail.com>, Will Deacon <will@kernel.org>, Peter Zijlstra <peterz@infradead.org>, Nicholas Piggin <npiggin@gmail.com>, David Howells <dhowells@redhat.com>, Jade Alglave <j.alglave@ucl.ac.uk>, Luc Maranget <luc.maranget@inria.fr>, "Paul E. McKenney" <paulmck@kernel.org>, Akira Yokosawa <akiyks@gmail.com>, Daniel Lustig <dlustig@nvidia.com>, Joel Fernandes <joel@joelfernandes.org>, Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>,
-	kent.overstreet@gmail.com, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, elver@google.com, Mark Rutland <mark.rutland@arm.com>, Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>, Catalin Marinas <catalin.marinas@arm.com>, torvalds@linux-foundation.org, linux-arm-kernel@lists.infradead.org, linux-fsdevel@vger.kernel.org, Trevor Gross <tmgross@umich.edu>, dakr@redhat.com
-Subject: Re: [RFC 2/2] rust: sync: Add atomic support
-Message-ID: <d87c75d3-9557-4a9f-8fc2-a297a945ef2e@proton.me>
-In-Reply-To: <Zm8TPRK-h2mDUX0b@Boquns-Mac-mini.home>
-References: <20240612223025.1158537-3-boqun.feng@gmail.com> <b692945b-8fa4-4918-93f6-783fbcde375c@proton.me> <Zm4R0XwTpsASpBhx@Boquns-Mac-mini.home> <d67aeb8c-3499-4498-aaf9-4ac459c2f747@proton.me> <Zm7xySzPJcddF-I_@Boquns-Mac-mini.home> <f29cb2fd-651b-4bc5-8055-e3a412192e29@proton.me> <Zm8F7ZFnUFJkFGQ3@Boquns-Mac-mini.home> <0653b5d5-7a62-4baa-a500-4c110d816ba0@proton.me> <Zm8TPRK-h2mDUX0b@Boquns-Mac-mini.home>
-Feedback-ID: 71780778:user:proton
-X-Pm-Message-ID: b622b422e7574181dc2ed20ba243007baa44d09b
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="EANk6S/j"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1718788697; x=1750324697;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=MpVu2CG+KvjhnfALLnTmb/atxIChYs9dD6hK3LIeTho=;
+  b=EANk6S/jLC+mo368MxcmzBwbot3wMjO1YIY6Sj3N2synFPWBM80vZhoB
+   7Bz0w/mgebGBNWmWmmD8pwGp0uIfNqW2zrEJmyI1JVoV8v5gddLkTMlYP
+   PXgr90+d/vSmjy4xEQAJyvu0INBBuVmUCRyXPSqS+EZMHOPYIEuVJJWI1
+   cSl/n6dtTS6WAQgB/qZyw7gqLuZj/mVmY+4K7tT5K3Qpv4gPtw1xPvQi5
+   WnMNdvysat3QU6gwumk9ZKtgCFVR5pag1cRNsG2MfYamxZAvKqBUYg6k1
+   cGX3qcVIQuxN7UIxp4LgGCC0F3eEwjusITtUP0bMKAwWq3XAkIPBXENRl
+   Q==;
+X-CSE-ConnectionGUID: fljE+WziQ2Cx0IYtVa/zWg==
+X-CSE-MsgGUID: OetviwpuRni0CAQh9eg19Q==
+X-IronPort-AV: E=McAfee;i="6700,10204,11107"; a="15429140"
+X-IronPort-AV: E=Sophos;i="6.08,250,1712646000"; 
+   d="scan'208";a="15429140"
+Received: from fmviesa004.fm.intel.com ([10.60.135.144])
+  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jun 2024 02:18:16 -0700
+X-CSE-ConnectionGUID: OvOWSqFmS3C+h1v5yFlvyg==
+X-CSE-MsgGUID: 5S/X+LqzS/Syp85XNZ0rhA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.08,250,1712646000"; 
+   d="scan'208";a="46402906"
+Received: from lkp-server01.sh.intel.com (HELO 68891e0c336b) ([10.239.97.150])
+  by fmviesa004.fm.intel.com with ESMTP; 19 Jun 2024 02:18:14 -0700
+Received: from kbuild by 68891e0c336b with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1sJrSG-0006Ty-1N;
+	Wed, 19 Jun 2024 09:18:12 +0000
+Date: Wed, 19 Jun 2024 17:18:04 +0800
+From: kernel test robot <lkp@intel.com>
+To: Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kwilczynski@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-pci@vger.kernel.org
+Subject: [pci:kwilczynski/sysfs-static-resource-attributes 11/11]
+ drivers/pci/pci-sysfs.c:971:5: error: no member named 'legacy_io' in 'struct
+ pci_bus'
+Message-ID: <202406191749.Tjh9cRdX-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -46,219 +63,158 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
 
-On 16.06.24 18:30, Boqun Feng wrote:
-> On Sun, Jun 16, 2024 at 03:55:12PM +0000, Benno Lossin wrote:
-> [...]
->>>>
->>>> I don't think that the idea was to "do the design later". I don't even
->>>> know how you would do that, since you need the design to submit a patc=
-h.
->>>>
->>>
->>> Then I might mis-understand Gary? He said:
->>>
->>> "Can we avoid two types and use a generic `Atomic<T>` and then implemen=
-t
->>> on `Atomic<i32>` and `Atomic<i64>` instead?"
->>>
->>> , which means just replace `impl AtomicI32` with `impl Atomic<i32>` to
->>> me.
->>
->> This is a fair interpretation, but what prevents you from merging the
->> impls of functions that can be? I assumed that you would do that
->> automatically.
->>
->=20
-> I think you missed the point, Gary's suggestion at that time sounds
-> like: let's impl Atomic<i32> and Atomic<i64> first, and leave rest of
-> the work for later, that is a "do the design later" to me.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/pci/pci.git kwilczynski/sysfs-static-resource-attributes
+head:   7f395964ea2fe94ad5099688ff13d6ba89c68f97
+commit: fde9d2216e37abdc20fdbb73878fa040f751cb42 [11/11] PCI/sysfs: Limit pci_sysfs_init() late initcall compile time scope
+config: powerpc-randconfig-002-20240619 (https://download.01.org/0day-ci/archive/20240619/202406191749.Tjh9cRdX-lkp@intel.com/config)
+compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240619/202406191749.Tjh9cRdX-lkp@intel.com/reproduce)
 
-Hmm, but wouldn't that just be less work for you?
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202406191749.Tjh9cRdX-lkp@intel.com/
 
->>>> I can't offer you a complete API description, since that would require
->>>> me writing it up myself. But I would recommend trying to get it to wor=
-k
->>>> with generics. I got a few other comments:
->>>
->>> We should work on things that are concrete, right? It's fine that the
->>> design is not complete, and it's fine if you just recommend. But withou=
-t
->>> a somewhat concrete design (doesn't have to be complete), I cannot be
->>> sure about whether we have the same vision of the future of generic
->>> atomics (see my question to Gary), that's a bit hard for me to try to
->>
->> Sorry, which question?
->=20
-> =09https://lore.kernel.org/rust-for-linux/Zm7_XWe6ciy1yN-h@Boquns-Mac-min=
-i.home/
->=20
->> Also to be aligned on the vision, I think we should rather talk about
->> the vision and not the design, since the design that we want to have now
->> can be different from the vision. On that note, what do you envision the
->> future of the atomic API?
->>
->=20
-> Mine is simple, just providing AtomicI32 and AtomicI64 first, since
-> there are immediate users right now, and should we learn more needs from
-> the users, we get more idea about what a good API is, and we evolve from
-> there.
+All errors (new ones prefixed by >>):
 
-That is fine, but since we want to get generics in the future anyways, I
-think it would be good to already implement them now to also gather
-feedback on them.
+>> drivers/pci/pci-sysfs.c:971:5: error: no member named 'legacy_io' in 'struct pci_bus'
+           b->legacy_io = kcalloc(2, sizeof(struct bin_attribute),
+           ~  ^
+   drivers/pci/pci-sysfs.c:973:10: error: no member named 'legacy_io' in 'struct pci_bus'
+           if (!b->legacy_io)
+                ~  ^
+   drivers/pci/pci-sysfs.c:977:5: error: no member named 'legacy_io' in 'struct pci_bus'
+           b->legacy_io->attr.name = "legacy_io";
+           ~  ^
+   drivers/pci/pci-sysfs.c:978:5: error: no member named 'legacy_io' in 'struct pci_bus'
+           b->legacy_io->size = 0xffff;
+           ~  ^
+   drivers/pci/pci-sysfs.c:979:5: error: no member named 'legacy_io' in 'struct pci_bus'
+           b->legacy_io->attr.mode = 0600;
+           ~  ^
+   drivers/pci/pci-sysfs.c:980:5: error: no member named 'legacy_io' in 'struct pci_bus'
+           b->legacy_io->read = pci_read_legacy_io;
+           ~  ^
+   drivers/pci/pci-sysfs.c:981:5: error: no member named 'legacy_io' in 'struct pci_bus'
+           b->legacy_io->write = pci_write_legacy_io;
+           ~  ^
+   drivers/pci/pci-sysfs.c:983:5: error: no member named 'legacy_io' in 'struct pci_bus'
+           b->legacy_io->llseek = pci_llseek_resource;
+           ~  ^
+   drivers/pci/pci-sysfs.c:984:5: error: no member named 'legacy_io' in 'struct pci_bus'
+           b->legacy_io->mmap = pci_mmap_legacy_io;
+           ~  ^
+   drivers/pci/pci-sysfs.c:985:5: error: no member named 'legacy_io' in 'struct pci_bus'
+           b->legacy_io->f_mapping = iomem_get_mapping;
+           ~  ^
+   drivers/pci/pci-sysfs.c:987:45: error: no member named 'legacy_io' in 'struct pci_bus'
+           error = device_create_bin_file(&b->dev, b->legacy_io);
+                                                   ~  ^
+>> drivers/pci/pci-sysfs.c:992:5: error: no member named 'legacy_mem' in 'struct pci_bus'
+           b->legacy_mem = b->legacy_io + 1;
+           ~  ^
+   drivers/pci/pci-sysfs.c:992:21: error: no member named 'legacy_io' in 'struct pci_bus'
+           b->legacy_mem = b->legacy_io + 1;
+                           ~  ^
+   drivers/pci/pci-sysfs.c:994:5: error: no member named 'legacy_mem' in 'struct pci_bus'
+           b->legacy_mem->attr.name = "legacy_mem";
+           ~  ^
+   drivers/pci/pci-sysfs.c:995:5: error: no member named 'legacy_mem' in 'struct pci_bus'
+           b->legacy_mem->size = 1024*1024;
+           ~  ^
+   drivers/pci/pci-sysfs.c:996:5: error: no member named 'legacy_mem' in 'struct pci_bus'
+           b->legacy_mem->attr.mode = 0600;
+           ~  ^
+   drivers/pci/pci-sysfs.c:997:5: error: no member named 'legacy_mem' in 'struct pci_bus'
+           b->legacy_mem->mmap = pci_mmap_legacy_mem;
+           ~  ^
+   drivers/pci/pci-sysfs.c:999:5: error: no member named 'legacy_mem' in 'struct pci_bus'
+           b->legacy_mem->llseek = pci_llseek_resource;
+           ~  ^
+   drivers/pci/pci-sysfs.c:1000:5: error: no member named 'legacy_mem' in 'struct pci_bus'
+           b->legacy_mem->f_mapping = iomem_get_mapping;
+           ~  ^
+   fatal error: too many errors emitted, stopping now [-ferror-limit=]
+   20 errors generated.
 
->>> work something out (plus I personally don't think it's a good idea, it'=
-s
->>> OK to me, but not good). Anyway, I wasn't trying to refuse to do this
->>> just based on personal reasons, but I do need to understand what you ar=
-e
->>> all proposing, because I don't have one myself.
->>
->> I went back through the thread and here is what I think your argument
->> against generics is: people should think about size and alignment when
->> using atomics, which is problematic when allowing users to leave the
->> atomic generic.
->> But as I argued before, this is not an issue. Have I overlooked another
->=20
-> You mean you said it's a non-issue but gave me two counteract? If it's
-> really a non-issue, you won't need a couneraction, right? In other words
-> non-generic atomics do provide some value.
 
-The second counteractions would provide exactly the same API surface as
-your non-generic version, so I don't see how going non-generic provides
-any value over going generic.
-The first approach was intended for a future in which we are not scared
-of people using generic atomics in their structs. I don't know if we are
-going to be in that future, so I think we should go with the second
-approach for the time being.
+vim +971 drivers/pci/pci-sysfs.c
 
->> argument? Because I don't see anything else.
->>
->>>> - I don't think that we should resort to a script to generate the Rust
->>>>   code since it prevents adding good documentation & examples to the
->>>>   various methods. AFAIU you want to generate the functions from
->>>>   `scripts/atomic/atomics.tbl` to keep it in sync with the C side. I
->>>>   looked at the git log of that file and it hasn't been changed
->>>>   significantly since its inception. I don't think that there is any
->>>>   benefit to generating the functions from that file.
->>>
->>> I'll leave this to other atomic maintainers.
->>>
->>>> - most of the documented functions say "See `c_function`", I don't lik=
-e
->>>>   this, can we either copy the C documentation (I imagine it not
->>>>   changing that often, or is that assumption wrong?) or write our own?
->>>
->>> You're not wrong. AN in C side, we do have some documentation template
->>> to generate the comments (see scripts/atomic/kerneldoc). But first the
->>> format is for doxygen(I guess?), and second as you just bring up, the
->>> templates are tied with the bash script.
->>
->> I see a bash script similarly to how Wedson sees proc macros ;)
->> We should try *hard* to avoid them and only use them when there is no
->> other way.
->>
->=20
-> I will just start with the existing mechanism and try to evolve, whether
-> it's a script or proc macro, I don't mind, I want to get the work done
-> and most relevant people can understand in the way the they prefer and
-> step-by-step, move it to the place I think is the best for the project.
+10a0ef39fbd1d4 Ivan Kokshaysky        2009-02-17   952  
+f19aeb1f3638b7 Benjamin Herrenschmidt 2008-10-03   953  /**
+f19aeb1f3638b7 Benjamin Herrenschmidt 2008-10-03   954   * pci_create_legacy_files - create legacy I/O port and memory files
+f19aeb1f3638b7 Benjamin Herrenschmidt 2008-10-03   955   * @b: bus to create files under
+f19aeb1f3638b7 Benjamin Herrenschmidt 2008-10-03   956   *
+f19aeb1f3638b7 Benjamin Herrenschmidt 2008-10-03   957   * Some platforms allow access to legacy I/O port and ISA memory space on
+f19aeb1f3638b7 Benjamin Herrenschmidt 2008-10-03   958   * a per-bus basis.  This routine creates the files and ties them into
+f19aeb1f3638b7 Benjamin Herrenschmidt 2008-10-03   959   * their associated read, write and mmap files from pci-sysfs.c
+f19aeb1f3638b7 Benjamin Herrenschmidt 2008-10-03   960   *
+25985edcedea63 Lucas De Marchi        2011-03-30   961   * On error unwind, but don't propagate the error to the caller
+f19aeb1f3638b7 Benjamin Herrenschmidt 2008-10-03   962   * as it is ok to set up the PCI bus without these files.
+f19aeb1f3638b7 Benjamin Herrenschmidt 2008-10-03   963   */
+f19aeb1f3638b7 Benjamin Herrenschmidt 2008-10-03   964  void pci_create_legacy_files(struct pci_bus *b)
+f19aeb1f3638b7 Benjamin Herrenschmidt 2008-10-03   965  {
+f19aeb1f3638b7 Benjamin Herrenschmidt 2008-10-03   966  	int error;
+f19aeb1f3638b7 Benjamin Herrenschmidt 2008-10-03   967  
+efd532a679afae Daniel Vetter          2021-02-05   968  	if (!sysfs_initialized)
+efd532a679afae Daniel Vetter          2021-02-05   969  		return;
+efd532a679afae Daniel Vetter          2021-02-05   970  
+6396bb221514d2 Kees Cook              2018-06-12  @971  	b->legacy_io = kcalloc(2, sizeof(struct bin_attribute),
+f19aeb1f3638b7 Benjamin Herrenschmidt 2008-10-03   972  			       GFP_ATOMIC);
+f19aeb1f3638b7 Benjamin Herrenschmidt 2008-10-03   973  	if (!b->legacy_io)
+f19aeb1f3638b7 Benjamin Herrenschmidt 2008-10-03   974  		goto kzalloc_err;
+f19aeb1f3638b7 Benjamin Herrenschmidt 2008-10-03   975  
+62e877b893e635 Stephen Rothwell       2010-03-01   976  	sysfs_bin_attr_init(b->legacy_io);
+f19aeb1f3638b7 Benjamin Herrenschmidt 2008-10-03   977  	b->legacy_io->attr.name = "legacy_io";
+f19aeb1f3638b7 Benjamin Herrenschmidt 2008-10-03   978  	b->legacy_io->size = 0xffff;
+e2154044dd4168 Kelsey Skunberg        2019-08-13   979  	b->legacy_io->attr.mode = 0600;
+f19aeb1f3638b7 Benjamin Herrenschmidt 2008-10-03   980  	b->legacy_io->read = pci_read_legacy_io;
+f19aeb1f3638b7 Benjamin Herrenschmidt 2008-10-03   981  	b->legacy_io->write = pci_write_legacy_io;
+24de09c16f974d Valentine Sinitsyn     2023-09-25   982  	/* See pci_create_attr() for motivation */
+24de09c16f974d Valentine Sinitsyn     2023-09-25   983  	b->legacy_io->llseek = pci_llseek_resource;
+f19aeb1f3638b7 Benjamin Herrenschmidt 2008-10-03  @984  	b->legacy_io->mmap = pci_mmap_legacy_io;
+f06aff924f9758 Krzysztof Wilczyński   2021-07-29   985  	b->legacy_io->f_mapping = iomem_get_mapping;
+10a0ef39fbd1d4 Ivan Kokshaysky        2009-02-17   986  	pci_adjust_legacy_attr(b, pci_mmap_io);
+f19aeb1f3638b7 Benjamin Herrenschmidt 2008-10-03   987  	error = device_create_bin_file(&b->dev, b->legacy_io);
+f19aeb1f3638b7 Benjamin Herrenschmidt 2008-10-03   988  	if (error)
+f19aeb1f3638b7 Benjamin Herrenschmidt 2008-10-03   989  		goto legacy_io_err;
+f19aeb1f3638b7 Benjamin Herrenschmidt 2008-10-03   990  
+f19aeb1f3638b7 Benjamin Herrenschmidt 2008-10-03   991  	/* Allocated above after the legacy_io struct */
+f19aeb1f3638b7 Benjamin Herrenschmidt 2008-10-03  @992  	b->legacy_mem = b->legacy_io + 1;
+6757eca348fbbd Mel Gorman             2010-03-10   993  	sysfs_bin_attr_init(b->legacy_mem);
+f19aeb1f3638b7 Benjamin Herrenschmidt 2008-10-03   994  	b->legacy_mem->attr.name = "legacy_mem";
+f19aeb1f3638b7 Benjamin Herrenschmidt 2008-10-03   995  	b->legacy_mem->size = 1024*1024;
+e2154044dd4168 Kelsey Skunberg        2019-08-13   996  	b->legacy_mem->attr.mode = 0600;
+f19aeb1f3638b7 Benjamin Herrenschmidt 2008-10-03   997  	b->legacy_mem->mmap = pci_mmap_legacy_mem;
+24de09c16f974d Valentine Sinitsyn     2023-09-25   998  	/* See pci_create_attr() for motivation */
+24de09c16f974d Valentine Sinitsyn     2023-09-25   999  	b->legacy_mem->llseek = pci_llseek_resource;
+c6c3c5704ba708 Linus Torvalds         2021-09-01  1000  	b->legacy_mem->f_mapping = iomem_get_mapping;
+10a0ef39fbd1d4 Ivan Kokshaysky        2009-02-17  1001  	pci_adjust_legacy_attr(b, pci_mmap_mem);
+f19aeb1f3638b7 Benjamin Herrenschmidt 2008-10-03  1002  	error = device_create_bin_file(&b->dev, b->legacy_mem);
+f19aeb1f3638b7 Benjamin Herrenschmidt 2008-10-03  1003  	if (error)
+f19aeb1f3638b7 Benjamin Herrenschmidt 2008-10-03  1004  		goto legacy_mem_err;
+f19aeb1f3638b7 Benjamin Herrenschmidt 2008-10-03  1005  
+f19aeb1f3638b7 Benjamin Herrenschmidt 2008-10-03  1006  	return;
+f19aeb1f3638b7 Benjamin Herrenschmidt 2008-10-03  1007  
+f19aeb1f3638b7 Benjamin Herrenschmidt 2008-10-03  1008  legacy_mem_err:
+f19aeb1f3638b7 Benjamin Herrenschmidt 2008-10-03  1009  	device_remove_bin_file(&b->dev, b->legacy_io);
+f19aeb1f3638b7 Benjamin Herrenschmidt 2008-10-03  1010  legacy_io_err:
+f19aeb1f3638b7 Benjamin Herrenschmidt 2008-10-03  1011  	kfree(b->legacy_io);
+f19aeb1f3638b7 Benjamin Herrenschmidt 2008-10-03  1012  	b->legacy_io = NULL;
+f19aeb1f3638b7 Benjamin Herrenschmidt 2008-10-03  1013  kzalloc_err:
+7db4af43c97b68 Bjorn Helgaas          2019-05-07  1014  	dev_warn(&b->dev, "could not create legacy I/O port and ISA memory resources in sysfs\n");
+f19aeb1f3638b7 Benjamin Herrenschmidt 2008-10-03  1015  }
+f19aeb1f3638b7 Benjamin Herrenschmidt 2008-10-03  1016  
 
-I don't think that we need a script or a proc macro. A few declarative
-macros probably suffice if we go the way of generics.
+:::::: The code at line 971 was first introduced by commit
+:::::: 6396bb221514d2876fd6dc0aa2a1f240d99b37bb treewide: kzalloc() -> kcalloc()
 
->>>> - we should try to use either const generic or normal parameters for t=
-he
->>>>   access ordering instead of putting it in the function name.
->>>
->>> Why is it important? Keeping it in the current way brings the value tha=
-t
->>> it's not too much different than their C counterparts. Could you explai=
-n
->>> a bit the pros and cons on suffix vs const generic approach?
->>
->> Reduce code duplication, instead of 3 different variants, we can have
->> one. It allows people to build ergonomic APIs that allows the user to
->> decide which synchronization they use under the hood.
->>
->=20
-> I already mentioned why I think it's good in the current way, I will
-> defer it to others on their inputs.
->=20
->>>> - why do we need both non-return and return variants?
->>>>
->>>
->>> Historical reason I guess. Plus maybe some architectures have a better
->>> implementation on non-return atomics IIRC.
->>
->> Could we get some more concrete arguments for why we would need these in
->> rust? If the reason is purely historical, then we shouldn't expose the
->=20
-> Sure. Look like my memory is correct, at least on ARM64 they are
-> different instructions (see arch/arm64/include/asm/atomic_lse.h)
->=20
-> non-return atomics on ARM64:
->=20
-> =09#define ATOMIC_OP(op, asm_op)=09=09=09=09=09=09\
-> =09static __always_inline void=09=09=09=09=09=09\
-> =09__lse_atomic_##op(int i, atomic_t *v)=09=09=09=09=09\
-> =09{=09=09=09=09=09=09=09=09=09\
-> =09=09asm volatile(=09=09=09=09=09=09=09\
-> =09=09__LSE_PREAMBLE=09=09=09=09=09=09=09\
-> =09=09"=09" #asm_op "=09%w[i], %[v]\n"=09=09=09=09\
-> =09=09: [v] "+Q" (v->counter)=09=09=09=09=09=09\
-> =09=09: [i] "r" (i));=09=09=09=09=09=09=09\
-> =09}
->=20
-> value-return atomics on ARM64:
->=20
-> =09#define ATOMIC_FETCH_OP(name, mb, op, asm_op, cl...)=09=09=09\
-> =09static __always_inline int=09=09=09=09=09=09\
-> =09__lse_atomic_fetch_##op##name(int i, atomic_t *v)=09=09=09\
-> =09{=09=09=09=09=09=09=09=09=09\
-> =09=09int old;=09=09=09=09=09=09=09\
-> =09=09=09=09=09=09=09=09=09=09\
-> =09=09asm volatile(=09=09=09=09=09=09=09\
-> =09=09__LSE_PREAMBLE=09=09=09=09=09=09=09\
-> =09=09"=09" #asm_op #mb "=09%w[i], %w[old], %[v]"=09=09=09\
-> =09=09: [v] "+Q" (v->counter),=09=09=09=09=09\
-> =09=09  [old] "=3Dr" (old)=09=09=09=09=09=09\
-> =09=09: [i] "r" (i)=09=09=09=09=09=09=09\
-> =09=09: cl);=09=09=09=09=09=09=09=09\
-> =09=09=09=09=09=09=09=09=09=09\
-> =09=09return old;=09=09=09=09=09=09=09\
-> =09}
->=20
-> It may not be easy to see the different instructions from the pasted
-> code, but you can find them in the header file, also you could notice
-> that the number of operands is different?
+:::::: TO: Kees Cook <keescook@chromium.org>
+:::::: CC: Kees Cook <keescook@chromium.org>
 
-This is not my expertise, so I believe you :)
-
->> non-return variant IMO. If it is because of performance, then we can
->> only expose them in the respective arches.
->>
->=20
-> Hmm.. so we ask user to write arch-specific code like:
->=20
-> =09pub fn increase_counter(&self) {
-> =09    #[cfg(CONFIG_ARM64)]
-> =09    self.counter.inc();
->=20
-> =09    #[cfg(CONFIG_X86_64)]
-> =09    let _ =3D self.counter.inc_return();
-> =09}
->=20
-> are you sure it's a good idea?
-
-No that looks horrible.
-
-Maybe there is something that we can do with generics, but I don't know
-if it is worth it. I guess we can leave that open for the time being.
-
----
-Cheers,
-Benno
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
