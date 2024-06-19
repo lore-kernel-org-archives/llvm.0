@@ -1,261 +1,121 @@
-Received: from mail-qv1-f46.google.com (mail-qv1-f46.google.com [209.85.219.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from omta34.uswest2.a.cloudfilter.net (omta34.uswest2.a.cloudfilter.net [35.89.44.33])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 262D26FA8
-	for <llvm@lists.linux.dev>; Wed, 19 Jun 2024 15:00:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DCAE9132112
+	for <llvm@lists.linux.dev>; Wed, 19 Jun 2024 15:27:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=35.89.44.33
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718809234; cv=none; b=kmi8Bwn07VyJE+WjqfvOmzahANWVE0AIEzZgqr0gtIYqF6kBCsbZsZLMM/5G5kpntb6ZsCfhMY3HgB3BXrNqYDZeKUb2oKA5f37BgJGXR6RkXaqzbEldznrFY8EvEuWHk9cxySi7NDBSN23cLN3Lz5jM342gGkKSuJmZlbvcJas=
+	t=1718810860; cv=none; b=nEobCPaiiwrS4VWWFnnqy2gHkWk14awnFJhapCYCYV8l4lgW/OdaD0/K604Kps4duw7A3qPfj8ZuftsRiemsX+6V2Ntg0ooDpfBRWh/27/2dbaO2G0/1QSv7WwY0KxIH9G74zJnOt2xuwyaBtiRC6aMrRPaW5q/BiKa6n4BwiJ0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718809234; c=relaxed/simple;
-	bh=J3Snj/0Qxvlt0FE7ajq+a7K2r9ULR6FYlHEjvEP9EvA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=szDzrrxRRRNrHwtRmPKYIyu5waN33qLmCBnUCEYa2PLy/otT1c8eJBq1xy4WpWf57IHzZXU6Uu1N6koTcc/+X0HewdauMFbpWFPuIBQhpX48lyjsehKL5FcTFjiOOP4tsu1eyctVmUxylyGCHn8uxmu2yuLTpCBhdVHtpjxE4MI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=dcN6xEGo; arc=none smtp.client-ip=209.85.219.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1718810860; c=relaxed/simple;
+	bh=dlVW0Zt+yD0AYF7FVIAwlp8E7GCLYrxCPZlP2ToeyWw=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=e8eKqvOKdw7q+OgJgoZJ/pIo24yTwCkt4JfonotxNwj263DDlJCwCLgXqz/KMdd10DLdD1fnr+oV7kAUhJ/dRiv7DFqzXolkt/TRv1yNq6EtvVT2cikpM59SfiQLwovpynzHfFRnPVtEaIsnS8Z3O6ZjytMkKMMTNVf+5ndMsqg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=embeddedor.com; spf=pass smtp.mailfrom=embeddedor.com; dkim=pass (2048-bit key) header.d=embeddedor.com header.i=@embeddedor.com header.b=XPW+p68K; arc=none smtp.client-ip=35.89.44.33
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=embeddedor.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=embeddedor.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="dcN6xEGo"
-Received: by mail-qv1-f46.google.com with SMTP id 6a1803df08f44-6b081c675e7so33373226d6.1
-        for <llvm@lists.linux.dev>; Wed, 19 Jun 2024 08:00:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1718809232; x=1719414032; darn=lists.linux.dev;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:feedback-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=hSe7xh6KAt4sne8yLQr6PWQBZTumzGrh6Hd9VCen+Yc=;
-        b=dcN6xEGo247DjWSTdPg6KRx/XD7Oknv/Vb1w+NVXEhRLAHAZYCUfuoJt0VROR1AG38
-         EpocpDddqM64lWB11qvu2UkyIY88thi3UOo9wu5IgedwTLrHrjxDyMuIag/XZy0L9WtK
-         BDd9SHxxNJgJ+w+H22Y4ADy+oXKYIJS07Au/YT9atRDXeeAvqPNNVPLJjHzeJz99Jrzs
-         yX+NULmdDUDXkhu95L/UMdMN65cPGaZjZNx/6A8Aw+J4yhQsMLj8tXSTpmwj8aJNMwhN
-         C6wYJ9k/Mur7hKhUjQMIjEug22Qz44kUwNcToOM75cyS5ytz3n9Gf024AvjEEAqlFfKm
-         hh9A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1718809232; x=1719414032;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:feedback-id:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=hSe7xh6KAt4sne8yLQr6PWQBZTumzGrh6Hd9VCen+Yc=;
-        b=hZcgvObfXV1YB51T5owTCIBksTVTPsTnH+JMQJt8NFIIOEKekJk9q646Cl1/yLNLSM
-         EgYGUBHdoT1lkcZyQybUPqXflGYKPMlW3g9r38GxSkEnDOy4ZSKtDtzX8mlJ38DGwAmj
-         DI950XDqRoPh0ZQi6pAI9JkF5TbYVzPbYQbZvYo2D6chkADx4twgh4M48JNwyUuWjQQk
-         f3+Z5z5GOQgL0O+td5wzsRQEkbWiNl64YM0g9LG2wCdK1A/zWE6cE7x1NO4zdRl5FKnQ
-         M+/BnJhGP6bqNsdRRijA+RtH2CSy7Uusq/TS4uJMUgGE25HkW5dvRKzkNndHSGUDT17i
-         17iQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUAO10JiHHEvgkbbN5mFNoetPcNPSzf0g76z4AdhcUpHSebsNRvy5GBbEJ0WNliCUIn2elYxteM/TdvRqFvgBXUz5YqCA==
-X-Gm-Message-State: AOJu0YzhcKok77LWGofLdcRxKZIERa2x32Sfapb8tiRjzSxsVzIvXSVk
-	Q1j1Z6fZ/R0eihrBrvEd+W5b59C8f/vHnIu2uEl+zHdUj2gS3KeJ
-X-Google-Smtp-Source: AGHT+IFMO2mnnq/pKqebuYpxsv8DFlI+YICYEc0pIpoy8PluBhBbtM2i6uRQLvJpntCKJejZy2TOjA==
-X-Received: by 2002:ad4:4433:0:b0:6b4:d299:e060 with SMTP id 6a1803df08f44-6b501eda83cmr26413976d6.64.1718809231655;
-        Wed, 19 Jun 2024 08:00:31 -0700 (PDT)
-Received: from fauth1-smtp.messagingengine.com (fauth1-smtp.messagingengine.com. [103.168.172.200])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-6b4f7e0d927sm17249616d6.37.2024.06.19.08.00.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 19 Jun 2024 08:00:31 -0700 (PDT)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-	by mailfauth.nyi.internal (Postfix) with ESMTP id 031DA120006A;
-	Wed, 19 Jun 2024 11:00:30 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute2.internal (MEProxy); Wed, 19 Jun 2024 11:00:30 -0400
-X-ME-Sender: <xms:jfJyZiqcWeBDUVJGswcaHYY_pVr4V0xn99vCLGWzZBHSP8Smv3wvsg>
-    <xme:jfJyZgpWI7MtG-dtPbD1DBtHetqmqrWAUpzdhlF62RJyuX65eBQtJvnzNHuXOvMQ8
-    m-rwU9qZbElzNp-tA>
-X-ME-Received: <xmr:jfJyZnP28Pm69xMI7Kj-TmRqq4HVV5SwIWk3gf_54icNfRBR8p4MXsbKRw>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvledrfeeftddgkedvucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepuehoqhhu
-    nhcuhfgvnhhguceosghoqhhunhdrfhgvnhhgsehgmhgrihhlrdgtohhmqeenucggtffrrg
-    htthgvrhhnpefhtedvgfdtueekvdekieetieetjeeihedvteehuddujedvkedtkeefgedv
-    vdehtdenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecuvehluhhsthgvrhfuihiivg
-    eptdenucfrrghrrghmpehmrghilhhfrhhomhepsghoqhhunhdomhgvshhmthhprghuthhh
-    phgvrhhsohhnrghlihhthidqieelvdeghedtieegqddujeejkeehheehvddqsghoqhhunh
-    drfhgvnhhgpeepghhmrghilhdrtghomhesfhhigihmvgdrnhgrmhgv
-X-ME-Proxy: <xmx:jfJyZh6t6xm7wl2n5p1feQOpcdTCJWFMiQQ6qhzVth2rlSXst6bv6Q>
-    <xmx:jfJyZh5uzZ5RBWu_MGU9_tISr9HlI8gDgTd9aButBxygfsVSnnlCSA>
-    <xmx:jfJyZhhz9TYzKMtzQruo6upFLG87EG9rf7Hx0aEShqB0qmn2mSXFPw>
-    <xmx:jfJyZr4ip0hg4WXCzpOSav4RNDxhv9TWoAoiUuHTQaRy3KIquOEGYQ>
-    <xmx:jfJyZsJLOextY4AJ_e8fShT5c2e8n3wmWkl5KVNOrvcK6G-NnwOPDdDu>
-Feedback-ID: iad51458e:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 19 Jun 2024 11:00:28 -0400 (EDT)
-Date: Wed, 19 Jun 2024 08:00:27 -0700
-From: Boqun Feng <boqun.feng@gmail.com>
-To: Benno Lossin <benno.lossin@proton.me>
-Cc: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>,
-	Gary Guo <gary@garyguo.net>, rust-for-linux@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-	llvm@lists.linux.dev, Miguel Ojeda <ojeda@kernel.org>,
-	Alex Gaynor <alex.gaynor@gmail.com>,
-	Wedson Almeida Filho <wedsonaf@gmail.com>,
-	=?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
-	Andreas Hindborg <a.hindborg@samsung.com>,
-	Alice Ryhl <aliceryhl@google.com>,
-	Alan Stern <stern@rowland.harvard.edu>,
-	Andrea Parri <parri.andrea@gmail.com>,	Will Deacon <will@kernel.org>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Nicholas Piggin <npiggin@gmail.com>,	David Howells <dhowells@redhat.com>,
-	Jade Alglave <j.alglave@ucl.ac.uk>,	Luc Maranget <luc.maranget@inria.fr>,
-	"Paul E. McKenney" <paulmck@kernel.org>,
-	Akira Yokosawa <akiyks@gmail.com>,	Daniel Lustig <dlustig@nvidia.com>,
-	Joel Fernandes <joel@joelfernandes.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,	kent.overstreet@gmail.com,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, elver@google.com,
-	Mark Rutland <mark.rutland@arm.com>,
-	Thomas Gleixner <tglx@linutronix.de>,	Ingo Molnar <mingo@redhat.com>,
- Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-	"H. Peter Anvin" <hpa@zytor.com>,
-	Catalin Marinas <catalin.marinas@arm.com>,	torvalds@linux-foundation.org,
- linux-arm-kernel@lists.infradead.org,	linux-fsdevel@vger.kernel.org,
- Trevor Gross <tmgross@umich.edu>,	dakr@redhat.com
-Subject: Re: [RFC 2/2] rust: sync: Add atomic support
-Message-ID: <ZnLyi5mC8JtPMhun@Boquns-Mac-mini.home>
-References: <20240612223025.1158537-3-boqun.feng@gmail.com>
- <b692945b-8fa4-4918-93f6-783fbcde375c@proton.me>
- <Zm4R0XwTpsASpBhx@Boquns-Mac-mini.home>
- <d67aeb8c-3499-4498-aaf9-4ac459c2f747@proton.me>
- <Zm7xySzPJcddF-I_@Boquns-Mac-mini.home>
- <f29cb2fd-651b-4bc5-8055-e3a412192e29@proton.me>
- <Zm8F7ZFnUFJkFGQ3@Boquns-Mac-mini.home>
- <0653b5d5-7a62-4baa-a500-4c110d816ba0@proton.me>
- <Zm8TPRK-h2mDUX0b@Boquns-Mac-mini.home>
- <d87c75d3-9557-4a9f-8fc2-a297a945ef2e@proton.me>
+	dkim=pass (2048-bit key) header.d=embeddedor.com header.i=@embeddedor.com header.b="XPW+p68K"
+Received: from eig-obgw-6009a.ext.cloudfilter.net ([10.0.30.184])
+	by cmsmtp with ESMTPS
+	id JvT6sJC7YkQe8JxDgsNz6t; Wed, 19 Jun 2024 15:27:32 +0000
+Received: from gator4166.hostgator.com ([108.167.133.22])
+	by cmsmtp with ESMTPS
+	id JxDgsbLfWr2cRJxDgs78Ps; Wed, 19 Jun 2024 15:27:32 +0000
+X-Authority-Analysis: v=2.4 cv=UotlNfwB c=1 sm=1 tr=0 ts=6672f8e4
+ a=1YbLdUo/zbTtOZ3uB5T3HA==:117 a=frY+GlAHrI6frpeK1MvySw==:17
+ a=IkcTkHD0fZMA:10 a=T1WGqf2p2xoA:10 a=wYkD_t78qR0A:10 a=pGLkceISAAAA:8
+ a=VwQbUJbxAAAA:8 a=UpB2q-s9SAH0Zd9J5qsA:9 a=QEXdDO2ut3YA:10
+ a=AjGcO6oz07-iQ99wixmX:22
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=embeddedor.com; s=default; h=Content-Transfer-Encoding:Content-Type:
+	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
+	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
+	List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+	bh=FvJxBu1YSpxd+/VCWen78+JSc56VIImOsnuc2H9+pC4=; b=XPW+p68KqNViATw/50CcjHJeqs
+	iR2t1LTnsYC15yhdO/6Fs2o5FFz1iYsshhRXKp91gEHnzuzG49JRq9oNz+qAMy/B7EKh7SCV6vLs9
+	v4owBH/rD+Hzilp6/lvwFZRmj+W/3PAsVpnebS2jBhbLhaWUOqmBg+YmEWJfS1qtMAs8S53K9IfKt
+	OkoOkXnB5UtyR6dn5J8w2FvyDKyvJ+bmyJmC1L/cRYa29FUs1/bANOzGAeADkgz0DQmv2jJQfi0nl
+	I1vueRgsGmax2jLhEBxyo8Q+0vlZed2Yu9pVplQsaE14TU7B6CUV+uhum1KYQDECKwwH+u5zh5dZp
+	iDT0/O/w==;
+Received: from [201.172.173.139] (port=49740 helo=[192.168.15.14])
+	by gator4166.hostgator.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+	(Exim 4.96.2)
+	(envelope-from <gustavo@embeddedor.com>)
+	id 1sJxDe-000rOz-1I;
+	Wed, 19 Jun 2024 10:27:30 -0500
+Message-ID: <5832065e-d998-4dc7-9df9-9186d3d26d9b@embeddedor.com>
+Date: Wed, 19 Jun 2024 09:27:28 -0600
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <d87c75d3-9557-4a9f-8fc2-a297a945ef2e@proton.me>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] USB: serial: garmin_gps: annotate struct garmin_packet
+ with __counted_by
+To: Nathan Chancellor <nathan@kernel.org>,
+ Javier Carrasco <javier.carrasco.cruz@gmail.com>
+Cc: Johan Hovold <johan@kernel.org>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Kees Cook
+ <kees@kernel.org>, "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+ Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling
+ <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
+ linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-hardening@vger.kernel.org, llvm@lists.linux.dev
+References: <20240619-garmin_gps_counted_by-v1-1-d8d816f085d9@gmail.com>
+ <20240619144320.GA2091442@thelio-3990X>
+Content-Language: en-US
+From: "Gustavo A. R. Silva" <gustavo@embeddedor.com>
+In-Reply-To: <20240619144320.GA2091442@thelio-3990X>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - gator4166.hostgator.com
+X-AntiAbuse: Original Domain - lists.linux.dev
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - embeddedor.com
+X-BWhitelist: no
+X-Source-IP: 201.172.173.139
+X-Source-L: No
+X-Exim-ID: 1sJxDe-000rOz-1I
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: ([192.168.15.14]) [201.172.173.139]:49740
+X-Source-Auth: gustavo@embeddedor.com
+X-Email-Count: 1
+X-Org: HG=hgshared;ORG=hostgator;
+X-Source-Cap: Z3V6aWRpbmU7Z3V6aWRpbmU7Z2F0b3I0MTY2Lmhvc3RnYXRvci5jb20=
+X-Local-Domain: yes
+X-CMAE-Envelope: MS4xfPZHVqmKLGpjJFxexB/d2nVZM/azPUZNCee712FSxELGLxaxVmHi4U6BIwNrfvqpzp3+wtXRZPH5+KlLQbQpmRODf9jnea/WSBrc/927+CnjTMRSwmnf
+ ma7G4zuSFP8zZZ8JQ6cF/8J3rnluavHWxxN5vEIiP5C6jvooHEYDgicwPJQy+ts/yu3My9os72jC5rLfoIhs7/Eom1Ui0/PbGxo=
 
-On Wed, Jun 19, 2024 at 09:09:46AM +0000, Benno Lossin wrote:
-[...]
-> >>> Then I might mis-understand Gary? He said:
-> >>>
-> >>> "Can we avoid two types and use a generic `Atomic<T>` and then implement
-> >>> on `Atomic<i32>` and `Atomic<i64>` instead?"
-> >>>
-> >>> , which means just replace `impl AtomicI32` with `impl Atomic<i32>` to
-> >>> me.
-> >>
-> >> This is a fair interpretation, but what prevents you from merging the
-> >> impls of functions that can be? I assumed that you would do that
-> >> automatically.
-> >>
-> > 
-> > I think you missed the point, Gary's suggestion at that time sounds
-> > like: let's impl Atomic<i32> and Atomic<i64> first, and leave rest of
-> > the work for later, that is a "do the design later" to me.
+
+
+On 19/06/24 16:43, Nathan Chancellor wrote:
+> On Wed, Jun 19, 2024 at 11:40:57AM +0200, Javier Carrasco wrote:
+>> Use the __counted_by compiler attribute for the data[] flexible array member
+>> to improve the results of array bound sanitizers.
+>>
+>> Signed-off-by: Javier Carrasco <javier.carrasco.cruz@gmail.com>
+>> ---
+>> The size is assigned before the first reference to the flexible array
+>> (see pkt_add()), which allows for a straightforward annotation without
+>> further modifications.
 > 
-> Hmm, but wouldn't that just be less work for you?
+> Agreed, this seems like a reasonable patch in and of itself that should
+> work:
 > 
-
-Not really ;-) Committing to a generic interface without a vision/design
-is going to be a maintenace nightmare. I will need to deal the soundness
-issues and different ideas about what can be put in <..>. So I'd suggest
-we take great caution before we make our decision, and I may even ask
-for a formal proof of the soundness of a generic interface for key
-components such as atomics. Because last time I check, safety is what
-Rust brings on the table, right?
-
-Someone may say that non generic atomics is one of the biggest mistakes
-that Rust ever made. But I disagree. In fact when I saw this, my first
-impression was "these guys know their stuff": there are only a few types
-and operations that make sense, so putting them in a generic interface
-would be over-engineer (at least at the beginning). It's better correct
-than convenient/popular/aesthetical.
-
-So would you and Gary be interested at working on such a design and
-proof? Maybe someone else Cced would also be interested. Eventually we
-will need the tool of soundness proof for other types as well, that's
-going to be very vaulable. And having that would be the real "less work
-for me" ;-)
-
-Right now, I still plan to do in the current way (i.e. non-generic
-atomcis for i32, i64, isize) because there are already users [1], 
-the correctness is easy to confirm and we won't confuse users with
-half-baked generic design. But should we have a sound Atomic<T> design,
-I'm happy to adopt it ;-)
-
-[...]
-> >> Also to be aligned on the vision, I think we should rather talk about
-> >> the vision and not the design, since the design that we want to have now
-> >> can be different from the vision. On that note, what do you envision the
-> >> future of the atomic API?
-> >>
-> > 
-> > Mine is simple, just providing AtomicI32 and AtomicI64 first, since
-> > there are immediate users right now, and should we learn more needs from
-> > the users, we get more idea about what a good API is, and we evolve from
-> > there.
+> Reviewed-by: Nathan Chancellor <nathan@kernel.org>
 > 
-> That is fine, but since we want to get generics in the future anyways, I
-> think it would be good to already implement them now to also gather
-> feedback on them.
-> 
-[...]
-> > 
-> > You mean you said it's a non-issue but gave me two counteract? If it's
-> > really a non-issue, you won't need a couneraction, right? In other words
-> > non-generic atomics do provide some value.
-> 
-> The second counteractions would provide exactly the same API surface as
-> your non-generic version, so I don't see how going non-generic provides
-> any value over going generic.
-> The first approach was intended for a future in which we are not scared
-> of people using generic atomics in their structs. I don't know if we are
-> going to be in that future, so I think we should go with the second
-> approach for the time being.
-> 
+> It might also make sense to change the pkt allocation to use
+> struct_size() instead of open coding it?
 
-Not going to reply the above right now, because I'm leaning more
-torwards switching when we have a sound Atomic<T> design, but I want you
-to know I appreciate your input and explanation.
++1 :)
 
-> >> argument? Because I don't see anything else.
-> >>
-> >>>> - I don't think that we should resort to a script to generate the Rust
-> >>>>   code since it prevents adding good documentation & examples to the
-> >>>>   various methods. AFAIU you want to generate the functions from
-> >>>>   `scripts/atomic/atomics.tbl` to keep it in sync with the C side. I
-> >>>>   looked at the git log of that file and it hasn't been changed
-> >>>>   significantly since its inception. I don't think that there is any
-> >>>>   benefit to generating the functions from that file.
-> >>>
-> >>> I'll leave this to other atomic maintainers.
-> >>>
-> >>>> - most of the documented functions say "See `c_function`", I don't like
-> >>>>   this, can we either copy the C documentation (I imagine it not
-> >>>>   changing that often, or is that assumption wrong?) or write our own?
-> >>>
-> >>> You're not wrong. AN in C side, we do have some documentation template
-> >>> to generate the comments (see scripts/atomic/kerneldoc). But first the
-> >>> format is for doxygen(I guess?), and second as you just bring up, the
-> >>> templates are tied with the bash script.
-> >>
-> >> I see a bash script similarly to how Wedson sees proc macros ;)
-> >> We should try *hard* to avoid them and only use them when there is no
-> >> other way.
-> >>
-> > 
-> > I will just start with the existing mechanism and try to evolve, whether
-> > it's a script or proc macro, I don't mind, I want to get the work done
-> > and most relevant people can understand in the way the they prefer and
-> > step-by-step, move it to the place I think is the best for the project.
-> 
-> I don't think that we need a script or a proc macro. A few declarative
-> macros probably suffice if we go the way of generics.
-> 
-
-Ah right. And even without generics we could use some declarative
-macros, and I'm happy to take a look at this and provide the alternative
-approach so we can choose a better one.
-
-[1]: https://lore.kernel.org/rust-for-linux/20240611114551.228679-2-nmi@metaspace.dk/
-
-Regards,
-Boqun
+Thanks
+--
+Gustavo
