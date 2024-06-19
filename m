@@ -1,105 +1,111 @@
-Received: from mail-ej1-f52.google.com (mail-ej1-f52.google.com [209.85.218.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE171134A5
-	for <llvm@lists.linux.dev>; Wed, 19 Jun 2024 16:12:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1ACF215217F;
+	Wed, 19 Jun 2024 16:19:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718813527; cv=none; b=Yvskp8EU0aNfBzwRSiB16h9DG4W8dSAE19Nh7TB5F6Iz4p7KFVG2AJb97MSDOajVjHp+itgeKGm255RVR/nOuSUMH75OpP8J2XLThLVQGlrLyefVtazNJvsHW3h4TRSbFONAHz9xFcgeoAEDW60c/O9JBWG7JwfpEQXo/dmFtI0=
+	t=1718813952; cv=none; b=Y2cmu/sOikvD7KwsGKTO9bBUbt9OeOey8f3pfOqSGJmcHpTHbGhUYCaMnys1lMahd/aI22RW8GyYfWm1H5mhHhcjAJBvHEpwTn7hcM17Z9MUjXmdlkNwujdgbmg1Bx71Bi5V1dwqjBaftHqhJ53fWyuTXdG372ynI0PeYSMn6oM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718813527; c=relaxed/simple;
-	bh=WvxkYqGLa/yBd53bZMfPZ2U1lIrtO/ZWbnXsdP4ZNy8=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=RD9498V9ZbiGo5mF2A8Pl1wnRm6VvV0TQ1qPWORmAZpe1QPg5cqXg+R9m+njU3fcE2yKajmGgXq0BbXYtD0W7R41vsLjJooxPt9IKCaHnbk1bQbcBK8SJypfQLc9ugsJNw+YJnncCUouj2FAr1Ls26irTVloxNplreq095/azi8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=kjifcIVw; arc=none smtp.client-ip=209.85.218.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1718813952; c=relaxed/simple;
+	bh=lYkNZB0629KlZhon3CKgpJMfP2sJzPjjaTvW13OpSjw=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=VaVGEupFhrSt7l0Z31s9s+tZQ1FQeioK5Zh56a8FPqxjANIoltV5FYQBWfj9BvQqqUqm/cqAkQLVr8k083hSHMyxb8P2X9CoQV4ltCH1bbvq8hw5oxysIAg9R06EPtpjFL0F0FVFD9U5bc543zqu2CsfJeyLKpTHLScH6+G+l6g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=nRVmi0Vr; arc=none smtp.client-ip=198.175.65.20
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kjifcIVw"
-Received: by mail-ej1-f52.google.com with SMTP id a640c23a62f3a-a63359aaacaso1079711066b.1
-        for <llvm@lists.linux.dev>; Wed, 19 Jun 2024 09:12:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1718813524; x=1719418324; darn=lists.linux.dev;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=eGorT4rH9fVB+lgR1JoKoDxU9RpCSgqSCB5TfWxaDpc=;
-        b=kjifcIVw+Vic1krjzpdp8M9zUKHV9PHS/6vrAXVorwMiyfDjTIRdoSOrALWrwk/tPm
-         LJ0W756LpRK+HXKHeLstEwIvkmb7qJh0rrwqDU7wNFUE953PqG7t4yEXXqwIqi3WMlH4
-         eSX2p3fhdaysEcp+gpdxeirrj6UzoQt45nMsyC+kNx+v9gBRjF4yJf3bkslCqLYyWGgi
-         WAHvjlXnagKXOp2b7M1s+R0lKeAbgl6hDWWye5ll20QGLsRL3BmRriz1vp1GUiukbu+a
-         ZDiHS13eByrLQUEKSrwnhgPlyi27I7gE8xwvWSiWJZWBlI6v32lQJ8vWPTrwtdgl/yYL
-         Op3Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1718813524; x=1719418324;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=eGorT4rH9fVB+lgR1JoKoDxU9RpCSgqSCB5TfWxaDpc=;
-        b=qix++GtZPrfuw/c5uyyByK8yxhu2zKAxRkwgsynGi4wluxrlYVa4N7DKa+3oZ0GMQL
-         6B0zk6q7wrUr+J6WKoRyb6amlz3ZuGwQ5r4mzNzBl/iCEa24OUo36D4z8kwmSIAkVuhI
-         wPS9b3CNj6bwXxvuZK5EaoBNBIaIcUCN3/9oWusfF403l81PXDj9ntohJ8xh1zHVtn/2
-         R8EFo47BdoNFKzuDMikvWydjXhZwln3bBRonm2M4rSpsMZ2ZyQ03fWtbEWf0FTkARZel
-         vGCHnMcZFKp81uBgYeZJw94Kjqblyqb8iJqcc0CRujhcEptaUbj1qLU2jV9PlRkilxwm
-         Qijg==
-X-Forwarded-Encrypted: i=1; AJvYcCXD1mpoQ+MLJv2KkeI+k4UtGYduHNvhKVz0/WkBNtMTvmg+PaONhP2wy6BgJpkZ3RDABO7aqW0nelthFiyJI2U1rUJZQg==
-X-Gm-Message-State: AOJu0YxKyuyjtSqetyu8/aogWXOVfNs/bg7oKfMePMeIalWRwPaKIT8P
-	IfNd+vvG2KqEXwxB4fliUh/8u3ySjKHz16sniJXoab+9p/stBK9NAyovLeBX
-X-Google-Smtp-Source: AGHT+IETTsmKISRF6ckXFNkhnsxj3NqZsZJqQvxJi608L+mYCRbLb7SKQNKkDttWyIXFvpoJx8Hezw==
-X-Received: by 2002:a17:907:cc06:b0:a68:bae4:d66f with SMTP id a640c23a62f3a-a6fab615d55mr157162366b.30.1718813523802;
-        Wed, 19 Jun 2024 09:12:03 -0700 (PDT)
-Received: from [192.168.0.31] (84-115-213-103.cable.dynamic.surfer.at. [84.115.213.103])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a6f5f1c8d6fsm615589166b.0.2024.06.19.09.12.02
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 19 Jun 2024 09:12:03 -0700 (PDT)
-Message-ID: <4c74c145-4fc1-44b9-88e7-1075c541adba@gmail.com>
-Date: Wed, 19 Jun 2024 18:12:01 +0200
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="nRVmi0Vr"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1718813949; x=1750349949;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=lYkNZB0629KlZhon3CKgpJMfP2sJzPjjaTvW13OpSjw=;
+  b=nRVmi0Vr5q4rvqvJB5OtHCn1p6frvp+VGPf/klIb3zTNuoe6rpgOsUYq
+   h5+RcjhLy85I50hG87/M7E4hKF2jQi/AXnbVMTxRiNDNgeXu8RmZy/F/A
+   aH2XvN4mPqk6e1AuE+zepnUBM1DJQlhuMZB9kEt+9+9u7eyElGDWPx+gj
+   C+UtLuufM13TsLVxaDzUXNM6ekdOI1JAvfFjlM7EuKxGXKUujdoO59V84
+   dsRKhf5vwDYMrv+zhzxeiD9ZYaxWR39hxbDjLiCUJMIAPrVM4WExN9FH4
+   PrEZyzCs4IGPzW6Sswb/hkPS5gOP5uW+lnaSPum8uAnCkfdOZgEA2JZ92
+   g==;
+X-CSE-ConnectionGUID: EdZTtThzSTyEKkuyWhSPbg==
+X-CSE-MsgGUID: PuaGIbwURGWd0fCEK/Kulw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11108"; a="15599731"
+X-IronPort-AV: E=Sophos;i="6.08,250,1712646000"; 
+   d="scan'208";a="15599731"
+Received: from fmviesa010.fm.intel.com ([10.60.135.150])
+  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jun 2024 09:19:08 -0700
+X-CSE-ConnectionGUID: vUIQNYzXSdOpUBxVsLSsoA==
+X-CSE-MsgGUID: XgNIycm1SQ2Pq9SfmdMrPw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.08,250,1712646000"; 
+   d="scan'208";a="42095242"
+Received: from lkp-server01.sh.intel.com (HELO 68891e0c336b) ([10.239.97.150])
+  by fmviesa010.fm.intel.com with ESMTP; 19 Jun 2024 09:19:06 -0700
+Received: from kbuild by 68891e0c336b with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1sJy1Y-0006kh-0G;
+	Wed, 19 Jun 2024 16:19:04 +0000
+Date: Thu, 20 Jun 2024 00:18:12 +0800
+From: kernel test robot <lkp@intel.com>
+To: Jack Yu <jack.yu@realtek.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Mark Brown <broonie@kernel.org>
+Subject: [broonie-ci:file0IqEIN 13/14] sound/soc/codecs/rt1318.c:1340:3:
+ error: field designator 'probe_new' does not refer to any field in type
+ 'struct i2c_driver'
+Message-ID: <202406200054.fkVIlKhA-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] USB: serial: garmin_gps: annotate struct garmin_packet
- with __counted_by
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: Johan Hovold <johan@kernel.org>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Kees Cook
- <kees@kernel.org>, "Gustavo A. R. Silva" <gustavoars@kernel.org>,
- Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling
- <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
- linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-hardening@vger.kernel.org, llvm@lists.linux.dev
-References: <20240619-garmin_gps_counted_by-v1-1-d8d816f085d9@gmail.com>
- <20240619144320.GA2091442@thelio-3990X>
-Content-Language: en-US, de-AT
-From: Javier Carrasco <javier.carrasco.cruz@gmail.com>
-In-Reply-To: <20240619144320.GA2091442@thelio-3990X>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On 19/06/2024 16:43, Nathan Chancellor wrote:
-> On Wed, Jun 19, 2024 at 11:40:57AM +0200, Javier Carrasco wrote:
->> Use the __counted_by compiler attribute for the data[] flexible array member
->> to improve the results of array bound sanitizers.
->>
->> Signed-off-by: Javier Carrasco <javier.carrasco.cruz@gmail.com>
->> ---
->> The size is assigned before the first reference to the flexible array
->> (see pkt_add()), which allows for a straightforward annotation without
->> further modifications.
-> 
-> Agreed, this seems like a reasonable patch in and of itself that should
-> work:
-> 
-> Reviewed-by: Nathan Chancellor <nathan@kernel.org>
-> 
-> It might also make sense to change the pkt allocation to use
-> struct_size() instead of open coding it?
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/ci.git file0IqEIN
+head:   04c200922d911f7a33febc0e7991f3a2efd856ad
+commit: 48ed4d2435aa749a8d59fd7543313d51d0800175 [13/14] ASoC: rt1318: Add RT1318 audio amplifier driver
+config: x86_64-buildonly-randconfig-005-20240619 (https://download.01.org/0day-ci/archive/20240620/202406200054.fkVIlKhA-lkp@intel.com/config)
+compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240620/202406200054.fkVIlKhA-lkp@intel.com/reproduce)
 
-Sure, it looks much better. I will send a v2 with the patch and the
-corresponding Suggested-by:
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202406200054.fkVIlKhA-lkp@intel.com/
 
-Thanks and best regards,
-Javier Carrasco
+All errors (new ones prefixed by >>):
+
+   sound/soc/codecs/rt1318.c:785:5: warning: no previous prototype for function 'rt1318_pll_calc' [-Wmissing-prototypes]
+     785 | int rt1318_pll_calc(const unsigned int freq_in,
+         |     ^
+   sound/soc/codecs/rt1318.c:785:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+     785 | int rt1318_pll_calc(const unsigned int freq_in,
+         | ^
+         | static 
+>> sound/soc/codecs/rt1318.c:1340:3: error: field designator 'probe_new' does not refer to any field in type 'struct i2c_driver'
+    1340 |         .probe_new = rt1318_i2c_probe,
+         |         ~^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   1 warning and 1 error generated.
+
+
+vim +1340 sound/soc/codecs/rt1318.c
+
+  1333	
+  1334	struct i2c_driver rt1318_i2c_driver = {
+  1335		.driver = {
+  1336			.name = "rt1318",
+  1337			.of_match_table = of_match_ptr(rt1318_of_match),
+  1338			.acpi_match_table = ACPI_PTR(rt1318_acpi_match),
+  1339		},
+> 1340		.probe_new = rt1318_i2c_probe,
+  1341		.id_table = rt1318_i2c_id,
+  1342	};
+  1343	module_i2c_driver(rt1318_i2c_driver);
+  1344	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
