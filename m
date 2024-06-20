@@ -1,170 +1,147 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CEDE61B0131;
-	Thu, 20 Jun 2024 15:58:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB3FF1B4C46;
+	Thu, 20 Jun 2024 17:32:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718899138; cv=none; b=HmmD9Kc/tKREGabTn3pKcUj3j00OVLGGbC3TDMvauajgsp3Vnhgvx/xFU3d7/prKHktcjFDYL9NmTboP9N5XoP59CBTUKGTy4Z1yJnIWSFKGIRJFs9oH97CUJrdt4fprPXa/NOKi3QM2cspO6hiEl5ZntWL/CXv0flKpqqtJ838=
+	t=1718904752; cv=none; b=nBKhlLZpgbYs/Kahzl5MNCVSD+Ap0M0RhjzhtZjli09a3K5T0oWTwqRweopJoXvwP12U9qVSbvYDkpfGE2zlZttPuo13DhpsMFuwoIsgeqt8aBArQkoBrYDbmuaRjSkucn34Hcoj8KfOzyvNwpyVl8B1hA4jCVi6yDQ25b2Dk70=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718899138; c=relaxed/simple;
-	bh=sWSXWB4N7t/4NgW/qJPLeZiznzbwX6q7yzTv728kcDE=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=lhevtw0YfgKV4wSQNOsz9m1/3dD8AU012Z4Sg0OmjhwjCM4S9bFVeXFHgNd4BHUehGIoTCUPiN6pkoXkg1fPwRAp8Sk6G7j9snaCdMZT8T89FsV2HjXfcIaj82CFCWSqex/QZVzc0BDJtitXHBEvbjL+sleRyIwhT7+N8y3GLIQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EmYuXbLu; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1718904752; c=relaxed/simple;
+	bh=oFO9G2nRTwhWJIbyUtKnqB3LSa7KnG7okU5Gl/bU6lk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=X8QDPLdtfuHJLLgi2VmLcjIEKkEtbBeYHHwjcszSYiyEw+v2ImgfTKrN00kwr3/1cpiSqFjS3re9dDVYBWQt7Fjvy0VpBb/JJMJuDzejbliPUOanswmHR3F9sBx34id9Z0N46DRmDcvtel4JiSei/YtwENfvCzLwE41HIWRgQEs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=TCWdw6au; arc=none smtp.client-ip=198.175.65.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EmYuXbLu"
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 58EC9C2BD10;
-	Thu, 20 Jun 2024 15:58:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1718899138;
-	bh=sWSXWB4N7t/4NgW/qJPLeZiznzbwX6q7yzTv728kcDE=;
-	h=From:Date:Subject:To:Cc:Reply-To:From;
-	b=EmYuXbLu1/20fopNdDUbO5tEHmgQybhiDTRdta3hJQSkrQCavjGrPbNxQ9WHsYGoJ
-	 U7sjc1mvkM9X7Wq6lSq08RphDY+DbIgjiRISmdnrsAnued5rdyv+/MvMPAJheBgNzO
-	 AZVff29KUIBNs/EimnS1hnFe2BVwT+BzCl7VyxtWp0R0QhgLFrPTgvRFeyTJwahya7
-	 ThpZnG8/Syed7HP0251DDSADLcjQ1Fg6J4D5iPvLfwsr4yNc/RKHwfFBoCLe9kj4U3
-	 s93Xb9MJUYNgOdgEIOGv1HMMlNZ049Z5/NPUVA3vwaqA4gYDngYff6LXZFTJmKERGK
-	 a9AfM8cx3x26Q==
-Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 40E08C2BA1A;
-	Thu, 20 Jun 2024 15:58:58 +0000 (UTC)
-From: Koakuma via B4 Relay <devnull+koachan.protonmail.com@kernel.org>
-Date: Thu, 20 Jun 2024 22:56:00 +0700
-Subject: [PATCH] sparc/build: Make all compiler flags also clang-compatible
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="TCWdw6au"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1718904750; x=1750440750;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=oFO9G2nRTwhWJIbyUtKnqB3LSa7KnG7okU5Gl/bU6lk=;
+  b=TCWdw6auSASFpv9dDQhhDPwllLUYzk64BJrniHpCjiqym5ET+Tl9GqK9
+   y4HnQLQpRUBaMQDGkSnYIOCD5081rrlSTTgcI/2WJ9fQJ57hENqRd/P7g
+   3kJcsJ19fNimW97ofkDsgnkgcCXH142eLeu7B9tEyFH3aWH8kgo2GEfg+
+   miiUmYpQGkMSaaS2wRTUzidb3Ajp2egyQdCe6jZZT3uSDd/QxiBUkYcxG
+   e+8nNz5pGrY/0k7QMFCv6QDqi/1+ReZunQtiLGTJ7Zf/PqTsuDgd2FWa8
+   eFjkuMdYLVLaBEl3el89hCiVMVl94v98qsdem1VAO7X970s601fTrd3Bq
+   Q==;
+X-CSE-ConnectionGUID: RcdtxeBvRm6yBFiDcGbZaA==
+X-CSE-MsgGUID: HRp3dZ1cQwGJje+DaTw2jA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11109"; a="19684101"
+X-IronPort-AV: E=Sophos;i="6.08,252,1712646000"; 
+   d="scan'208";a="19684101"
+Received: from orviesa003.jf.intel.com ([10.64.159.143])
+  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jun 2024 10:32:29 -0700
+X-CSE-ConnectionGUID: 718kP6xuREe79HcLq81ntA==
+X-CSE-MsgGUID: cdf+326NRLmYXOBmkXIRiw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.08,252,1712646000"; 
+   d="scan'208";a="47268510"
+Received: from lkp-server01.sh.intel.com (HELO 68891e0c336b) ([10.239.97.150])
+  by orviesa003.jf.intel.com with ESMTP; 20 Jun 2024 10:32:15 -0700
+Received: from kbuild by 68891e0c336b with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1sKLds-0007nc-1O;
+	Thu, 20 Jun 2024 17:32:12 +0000
+Date: Fri, 21 Jun 2024 01:31:16 +0800
+From: kernel test robot <lkp@intel.com>
+To: Anand Moon <linux.amoon@gmail.com>,
+	Shawn Lin <shawn.lin@rock-chips.com>,
+	Lorenzo Pieralisi <lpieralisi@kernel.org>,
+	Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+	Rob Herring <robh@kernel.org>, Bjorn Helgaas <helgaas@kernel.org>,
+	Heiko Stuebner <heiko@sntech.de>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Anand Moon <linux.amoon@gmail.com>, linux-pci@vger.kernel.org,
+	linux-rockchip@lists.infradead.org,
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v1 1/3] PCI: rockchip: Simplify clock handling by using
+ clk_bulk*() function
+Message-ID: <202406210131.rxenHeBG-lkp@intel.com>
+References: <20240618164133.223194-2-linux.amoon@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20240620-sparc-cflags-v1-1-bba7d0ff7d42@protonmail.com>
-X-B4-Tracking: v=1; b=H4sIAA9RdGYC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
- vPSU3UzU4B8JSMDIxMDMyMD3eKCxKJk3eS0nMT0Yt1U8zSjlKSkFJMkyxQloJaCotS0zAqwcdG
- xtbUA5qLBpV4AAAA=
-To: "David S. Miller" <davem@davemloft.net>, 
- Andreas Larsson <andreas@gaisler.com>, 
- Nathan Chancellor <nathan@kernel.org>, 
- Nick Desaulniers <ndesaulniers@google.com>, 
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
- glaubitz@physik.fu-berlin.de
-Cc: sparclinux@vger.kernel.org, linux-kernel@vger.kernel.org, 
- llvm@lists.linux.dev, Koakuma <koachan@protonmail.com>
-X-Mailer: b4 0.14.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1718899135; l=4329;
- i=koachan@protonmail.com; s=20240620; h=from:subject:message-id;
- bh=TPTX/hXnvGP/7Q/0XONtbbKGd6MWmhWh/U9alDskK+Y=;
- b=lh38GZIlN9C76lksV8Ck1O5eb0K5JSJr87+5/LTH1ly8d2aesSmDXIyPPuZubaHwQx4txD/2i
- V2CnGn0gKQnCyMM56PYtjZ0z2keC5F7xp5LyBJQ5E3rmZffWNPuf8jl
-X-Developer-Key: i=koachan@protonmail.com; a=ed25519;
- pk=UA59FS3yiAA1cnAAUZ1rehTmr6skh95PgkNRBLcoKCg=
-X-Endpoint-Received: by B4 Relay for koachan@protonmail.com/20240620 with
- auth_id=174
-X-Original-From: Koakuma <koachan@protonmail.com>
-Reply-To: koachan@protonmail.com
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240618164133.223194-2-linux.amoon@gmail.com>
 
-From: Koakuma <koachan@protonmail.com>
+Hi Anand,
 
-Remove flags not supported by clang and make sure that all the flags
-used are portable between clang and GCC.
+kernel test robot noticed the following build errors:
 
-The reasoning for removing the -fcall-used* ones is as follows:
+[auto build test ERROR on pci/next]
+[also build test ERROR on pci/for-linus linus/master v6.10-rc4 next-20240619]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-In the (normal) 32-bit ABI, %g5 and %g7 is normally reserved, and in
-the 64-bit ABI, %g7 is the reserved one.
-Linux turns them into volatile registers by the way of -fcall-used-*,
-but on the other hand, omitting the flags shouldn't be harmful;
-compilers will now simply refuse to touch them, and any assembly
-code that happens to touch them would still work like usual (because
-Linux' conventions already treats them as volatile anyway).
+url:    https://github.com/intel-lab-lkp/linux/commits/Anand-Moon/PCI-rockchip-Simplify-reset-control-handling-by-using-reset_control_bulk-function/20240619-014145
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/pci/pci.git next
+patch link:    https://lore.kernel.org/r/20240618164133.223194-2-linux.amoon%40gmail.com
+patch subject: [PATCH v1 1/3] PCI: rockchip: Simplify clock handling by using clk_bulk*() function
+config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20240621/202406210131.rxenHeBG-lkp@intel.com/config)
+compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240621/202406210131.rxenHeBG-lkp@intel.com/reproduce)
 
-Signed-off-by: Koakuma <koachan@protonmail.com>
----
-Hello~
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202406210131.rxenHeBG-lkp@intel.com/
 
-This changes the CFLAGS for building the SPARC kernel so that it can be
-built with clang, as a follow up from the discussion in this thread:
+All errors (new ones prefixed by >>):
 
-https://lore.kernel.org/lkml/JAYB7uS-EdLABTR4iWZdtFOVa5MvlKosIrD_cKTzgeozCOGRM7lhxeLigFB1g3exX445I_W5VKB-tAzl2_G1zCVJRQjp67ODfsSqiZWOZ9o=@protonmail.com/T/#u
+   In file included from drivers/pci/controller/pcie-rockchip-ep.c:20:
+>> drivers/pci/controller/pcie-rockchip.h:311:28: error: array has incomplete element type 'struct clk_bulk_data'
+     311 |         struct  clk_bulk_data clks[ROCKCHIP_NUM_CLKS];
+         |                                   ^
+   drivers/pci/controller/pcie-rockchip.h:311:10: note: forward declaration of 'struct clk_bulk_data'
+     311 |         struct  clk_bulk_data clks[ROCKCHIP_NUM_CLKS];
+         |                 ^
+   1 error generated.
 
-The changes are removal of various `-fcall-used-*` flags, and changing
-`-mv8plus` to `-mcpu=v9`:
 
-- `-fcall-used-*` flags should be safe to remove; the compiler will
-  stop using the registers specified as temporaries, but it is a safe
-  change wrt. the ABI. Assembly code can still use those registers
-  as needed.
-  It does bring a theoretical possible slowdown due to the compiler
-  having less registers to work with, but in practice - in my case,
-  at least - it seems to not make any difference with daily usage.
+vim +311 drivers/pci/controller/pcie-rockchip.h
 
-- More trivial is to change `-mv8plus` -> `-mcpu=v9`.
-  This should be safe too since the kernel seems to require a V9
-  processor to run anyway, so I'm changing the flag to one that is
-  portable between GCC and clang.
+   298	
+   299	struct rockchip_pcie {
+   300		void	__iomem *reg_base;		/* DT axi-base */
+   301		void	__iomem *apb_base;		/* DT apb-base */
+   302		bool    legacy_phy;
+   303		struct  phy *phys[MAX_LANE_NUM];
+   304		struct	reset_control *core_rst;
+   305		struct	reset_control *mgmt_rst;
+   306		struct	reset_control *mgmt_sticky_rst;
+   307		struct	reset_control *pipe_rst;
+   308		struct	reset_control *pm_rst;
+   309		struct	reset_control *aclk_rst;
+   310		struct	reset_control *pclk_rst;
+ > 311		struct  clk_bulk_data clks[ROCKCHIP_NUM_CLKS];
+   312		struct	regulator *vpcie12v; /* 12V power supply */
+   313		struct	regulator *vpcie3v3; /* 3.3V power supply */
+   314		struct	regulator *vpcie1v8; /* 1.8V power supply */
+   315		struct	regulator *vpcie0v9; /* 0.9V power supply */
+   316		struct	gpio_desc *ep_gpio;
+   317		u32	lanes;
+   318		u8      lanes_map;
+   319		int	link_gen;
+   320		struct	device *dev;
+   321		struct	irq_domain *irq_domain;
+   322		int     offset;
+   323		void    __iomem *msg_region;
+   324		phys_addr_t msg_bus_addr;
+   325		bool is_rc;
+   326		struct resource *mem_res;
+   327	};
+   328	
 
-Also, as stated in the thread, building with these changes still result
-in a working kernel, at least for Sun T5120 and qemu virtual machines.
-
-On the LLVM side, the effort for building Linux/SPARC is tracked here:
-https://github.com/llvm/llvm-project/issues/40792
----
- arch/sparc/Makefile      | 4 ++--
- arch/sparc/vdso/Makefile | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
-
-diff --git a/arch/sparc/Makefile b/arch/sparc/Makefile
-index 757451c3ea1d..7318a8b452c3 100644
---- a/arch/sparc/Makefile
-+++ b/arch/sparc/Makefile
-@@ -29,7 +29,7 @@ UTS_MACHINE    := sparc
- # versions of gcc.  Some gcc versions won't pass -Av8 to binutils when you
- # give -mcpu=v8.  This silently worked with older bintutils versions but
- # does not any more.
--KBUILD_CFLAGS  += -m32 -mcpu=v8 -pipe -mno-fpu -fcall-used-g5 -fcall-used-g7
-+KBUILD_CFLAGS  += -m32 -mcpu=v8 -pipe -mno-fpu
- KBUILD_CFLAGS  += -Wa,-Av8
- 
- KBUILD_AFLAGS  += -m32 -Wa,-Av8
-@@ -45,7 +45,7 @@ export BITS   := 64
- UTS_MACHINE   := sparc64
- 
- KBUILD_CFLAGS += -m64 -pipe -mno-fpu -mcpu=ultrasparc -mcmodel=medlow
--KBUILD_CFLAGS += -ffixed-g4 -ffixed-g5 -fcall-used-g7 -Wno-sign-compare
-+KBUILD_CFLAGS += -ffixed-g4 -ffixed-g5 -Wno-sign-compare
- KBUILD_CFLAGS += -Wa,--undeclared-regs
- KBUILD_CFLAGS += $(call cc-option,-mtune=ultrasparc3)
- KBUILD_AFLAGS += -m64 -mcpu=ultrasparc -Wa,--undeclared-regs
-diff --git a/arch/sparc/vdso/Makefile b/arch/sparc/vdso/Makefile
-index 243dbfc4609d..929140facabf 100644
---- a/arch/sparc/vdso/Makefile
-+++ b/arch/sparc/vdso/Makefile
-@@ -46,7 +46,7 @@ CFL := $(PROFILING) -mcmodel=medlow -fPIC -O2 -fasynchronous-unwind-tables -m64
-        -fno-omit-frame-pointer -foptimize-sibling-calls \
-        -DDISABLE_BRANCH_PROFILING -DBUILD_VDSO
- 
--SPARC_REG_CFLAGS = -ffixed-g4 -ffixed-g5 -fcall-used-g5 -fcall-used-g7
-+SPARC_REG_CFLAGS = -ffixed-g4 -ffixed-g5
- 
- $(vobjs): KBUILD_CFLAGS := $(filter-out $(RANDSTRUCT_CFLAGS) $(GCC_PLUGINS_CFLAGS) $(SPARC_REG_CFLAGS),$(KBUILD_CFLAGS)) $(CFL)
- 
-@@ -86,7 +86,7 @@ KBUILD_CFLAGS_32 += -fno-stack-protector
- KBUILD_CFLAGS_32 += $(call cc-option, -foptimize-sibling-calls)
- KBUILD_CFLAGS_32 += -fno-omit-frame-pointer
- KBUILD_CFLAGS_32 += -DDISABLE_BRANCH_PROFILING
--KBUILD_CFLAGS_32 += -mv8plus
-+KBUILD_CFLAGS_32 += -mcpu=v9
- $(obj)/vdso32.so.dbg: KBUILD_CFLAGS = $(KBUILD_CFLAGS_32)
- 
- $(obj)/vdso32.so.dbg: FORCE \
-
----
-base-commit: 92e5605a199efbaee59fb19e15d6cc2103a04ec2
-change-id: 20240620-sparc-cflags-e7f2dbbd4b9d
-
-Best regards,
 -- 
-Koakuma <koachan@protonmail.com>
-
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
