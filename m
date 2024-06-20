@@ -1,176 +1,97 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f201.google.com (mail-yw1-f201.google.com [209.85.128.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 866121B4C43;
-	Thu, 20 Jun 2024 18:15:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 40F57376E4
+	for <llvm@lists.linux.dev>; Thu, 20 Jun 2024 18:17:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718907319; cv=none; b=gxWtNB/0pxHivBfXUSHYjYi3YzfNHteNcPp9kwcbpW5xsILIuvQgEYnlqF2V1NDiT5zhPd6Zi0gViAr5RGEJg4eG+6wjlTES0z7B4Rhcq2+QgoFOC2SEOSJrDulxpL/zlpIdeoaS8/TuQlGF3RluDVs8dNSmKcQEIJvxnqnSdos=
+	t=1718907461; cv=none; b=KwIuHBTsCd/bXMrZbJvZoqaUO3/resejy+26sUCtypLAIyDgtexcrUwVcjIdB8NOAAAx9pSXoZe0VxtNMN2RcIs5k5ckuDbp4k5WNKkKv0prv+Ap7r/N4Mt7XRnoZVOYFH6A01LM1XNAhMfkXOXppmBzbBCDgzhWG1IqPuqhbIc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718907319; c=relaxed/simple;
-	bh=xAvdfexxR7l2luPqmnxY/bYHVyDzxNXg8SzyuJ6+GC0=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=lHj7eO/JNyRs47KkBcnoKqreUaVvZ0NN2RZ8MRH8NoAaZ4lPbp/Lp+aZjmND8kGG6nf5ED7unwuzawHhDP42GGnFMDLszpEUHcX2D/gYe1Kj4nMou5od+uY3NPVJNkdlzyJipp+Pc/4kxpGC/eiU+csYUD1JEBazuolwm0Nmi4Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=CtgcUUht; arc=none smtp.client-ip=192.198.163.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1718907461; c=relaxed/simple;
+	bh=iY15znjKwXj/mYMfmF3+a0bhsiOgCwhdhV8LAVnf6/I=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=ValYHQjiH/1Zl35dcHCdPRvh46q2Ge/XQDRiUCof5y0XIQ9sC14kDf80HaDSnK5ozo2c3x/NV1soWPUZYBz/ZmhAReqTU/Tq7OuE0RG6Rx0P9GlSA2zM0A7reactaIdnajV+P6Ad9iscS0Mqjr2ypTzmZCTCfCgxWRcw8RUh3DU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--yabinc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=B72xskRo; arc=none smtp.client-ip=209.85.128.201
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--yabinc.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="CtgcUUht"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1718907317; x=1750443317;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=xAvdfexxR7l2luPqmnxY/bYHVyDzxNXg8SzyuJ6+GC0=;
-  b=CtgcUUhtDc2C4dhxYor7pIPtQ9bHlDcqWHlblrcN39iVBZPmZIaWi5ud
-   cf9gWSnMGooj6VOnvRsHvyAXbR9u0QsvoQfQ1fXgwVhPnTe71+BS5ghet
-   31bk+fptzLxAz/xzX3mf/FWudgxyg8Mv/tbqzpizopcbsnSDmR+RhQJXo
-   zibMhmO0ddZkGI9jFU6A16TKJMnH/1MwsSzRmuqPR8Cnqo9SOnREoSiyv
-   Rjapd89t9u+PNn9Cx3omQLMPHnLE9tXAuisdbSZMcQYcoskAy7bBAHZUM
-   HkhULVJX7vGRyhp4jrxCwjl3aWOs205tln3zpwLjPlen+9Vswg1gPZI6E
-   g==;
-X-CSE-ConnectionGUID: LKG4JM8QRyCdZ4t2ngVb1Q==
-X-CSE-MsgGUID: cpwkToWNSyyGrq2fbfNERg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11109"; a="16143099"
-X-IronPort-AV: E=Sophos;i="6.08,252,1712646000"; 
-   d="scan'208";a="16143099"
-Received: from orviesa007.jf.intel.com ([10.64.159.147])
-  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jun 2024 11:15:17 -0700
-X-CSE-ConnectionGUID: nI5D1bHcS6K7U4tb4YwVRw==
-X-CSE-MsgGUID: 5R8PNDwoS6yUUT7hSlUlkg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.08,252,1712646000"; 
-   d="scan'208";a="43019124"
-Received: from lkp-server01.sh.intel.com (HELO 68891e0c336b) ([10.239.97.150])
-  by orviesa007.jf.intel.com with ESMTP; 20 Jun 2024 11:15:15 -0700
-Received: from kbuild by 68891e0c336b with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1sKMJV-0007ow-0i;
-	Thu, 20 Jun 2024 18:15:13 +0000
-Date: Fri, 21 Jun 2024 02:14:54 +0800
-From: kernel test robot <lkp@intel.com>
-To: Christian Brauner <brauner@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Christian Brauner <christianvanbrauner@gmail.com>
-Subject: [brauner-vfs:work.ns_ioctl 2/2] fs/nsfs.c:199:1: warning: non-void
- function does not return a value in all control paths
-Message-ID: <202406210212.G9bLsUTj-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="B72xskRo"
+Received: by mail-yw1-f201.google.com with SMTP id 00721157ae682-62a3dec382eso14204957b3.1
+        for <llvm@lists.linux.dev>; Thu, 20 Jun 2024 11:17:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1718907459; x=1719512259; darn=lists.linux.dev;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=txPbdh0UwgPW6j6zme2yNhfuJXXQO0kUOBEsBGdoZYA=;
+        b=B72xskRo9HSX5l/pV00DO46DNNv/4Iw1hEVwrxa/hB7sBelFLr5KrUcKnw6OR0lXJ4
+         bFzmAhTG5hiJSZWx7VkjIpCsfWrJCYiTMBvID7RIYhhccNupQaA0jPQgyiFF9eO/Rb4K
+         NjW8kR0e3wRhzd60KoOD38LSBjq6lRHrUV6AbsOLRGiqxGJbE+C+SjL8xWLqdrJVvSU8
+         SPQvfjs9yRZ4EyD/8YI+pVltGxqGsesorDrVN8R6v+xs1lilpfPn1z1/VOzpxNUt2ONS
+         tx0g8ghaMp6CLIjcm2w3I68Kk+hLOBnKhqQGNkgHMDyCuW/HyJKGEHReOGL7o2ajNQLZ
+         GrFQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1718907459; x=1719512259;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=txPbdh0UwgPW6j6zme2yNhfuJXXQO0kUOBEsBGdoZYA=;
+        b=S5yGkIX+VzvsU0CUF0u7o5fANUQUAqMjOUvuUM9kEJ3yla+lGJDH1+yf48HiSG4E71
+         DrL03dAJpuV/zZ79vK5td9EEyCQScEbe4zo3WwprPGLfWYMDQA5CRLHXLo+Zj4lMqIhw
+         rXyFD6CCTEZw95lbUVA6rqFITV06Qs7T8qR+bZdsnyrCTOv1qnlbwADCBK5LHoYP4TDF
+         kZHmN7tGMpdE+kgK0oCjt2RMEcuGOQaGyK5ldLTntzsHiQwlFHyE2E12bl3HzVWUSlX7
+         4a+QbmKNAnvbVMbdXeGh/JPTkVRhUndN7gjAiN6ZM/fZ0zsCvfzqbpA37/xXeUElpZ6u
+         REXg==
+X-Forwarded-Encrypted: i=1; AJvYcCUbU2RdaOBSz1OvOkp3S739NrA4P6XTzzbVyjDZ1bju/0hRhk/xCVyF1D00CSxdZwNskJwIuhS2Hlh3VTdglZhxaP1Ixg==
+X-Gm-Message-State: AOJu0YxX9j3g7JmcDnii7Ubllt7HBDyhBrs0zrypf7LvcKgySSQmw6Rh
+	+NTsPtJ/P/jjZopAXl2IAnqQ70XPeR0lGP2kwRM68LtnCZexTFk6p3KxgBjoZkkB+e+3Bxqioon
+	2
+X-Google-Smtp-Source: AGHT+IF8GVDMyvGZpRp4boOIOSvfLSv3xxNhz/7qXqDIgZdXB8RVhwD0g/1O17E1anqM5aheujLEfMzdr1M=
+X-Received: from yabinc-desktop.mtv.corp.google.com ([2620:15c:211:202:6cd4:2b82:abfb:6e47])
+ (user=yabinc job=sendgmr) by 2002:a05:690c:30a:b0:620:32ea:e1d4 with SMTP id
+ 00721157ae682-63a84340c6dmr12853057b3.0.1718907459308; Thu, 20 Jun 2024
+ 11:17:39 -0700 (PDT)
+Date: Thu, 20 Jun 2024 11:17:36 -0700
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.45.2.741.gdbec12cfda-goog
+Message-ID: <20240620181736.1270455-1-yabinc@google.com>
+Subject: [PATCH] Fix initializing a static union variable
+From: Yabin Cui <yabinc@google.com>
+To: Steffen Klassert <steffen.klassert@secunet.com>, Herbert Xu <herbert@gondor.apana.org.au>, 
+	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
+	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>
+Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
+	Yabin Cui <yabinc@google.com>
+Content-Type: text/plain; charset="UTF-8"
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/vfs/vfs.git work.ns_ioctl
-head:   8677ab84123aeb7a4ecb3b911d28e7bd547495df
-commit: 8677ab84123aeb7a4ecb3b911d28e7bd547495df [2/2] nsfs: add pid translation ioctls
-config: i386-buildonly-randconfig-002-20240620 (https://download.01.org/0day-ci/archive/20240621/202406210212.G9bLsUTj-lkp@intel.com/config)
-compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240621/202406210212.G9bLsUTj-lkp@intel.com/reproduce)
+saddr_wildcard is a static union variable initialized with {}.
+But c11 standard doesn't guarantee initializing all fields as
+zero for this case. As in https://godbolt.org/z/rWvdv6aEx,
+clang only initializes the first field as zero, but the bits
+corresponding to other (larger) members are undefined.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202406210212.G9bLsUTj-lkp@intel.com/
+Signed-off-by: Yabin Cui <yabinc@google.com>
+---
+ net/xfrm/xfrm_state.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-All warnings (new ones prefixed by >>):
-
->> fs/nsfs.c:199:1: warning: non-void function does not return a value in all control paths [-Wreturn-type]
-     199 | }
-         | ^
-   1 warning generated.
-
-
-vim +199 fs/nsfs.c
-
-6786741dbf99e4 Andrey Vagin                2016-09-06  122  
-6786741dbf99e4 Andrey Vagin                2016-09-06  123  static long ns_ioctl(struct file *filp, unsigned int ioctl,
-6786741dbf99e4 Andrey Vagin                2016-09-06  124  			unsigned long arg)
-6786741dbf99e4 Andrey Vagin                2016-09-06  125  {
-d95fa3c76a66b6 Michael Kerrisk (man-pages  2017-01-25  126) 	struct user_namespace *user_ns;
-8677ab84123aeb Christian Brauner           2020-06-07  127  	struct pid_namespace *pid_ns;
-8677ab84123aeb Christian Brauner           2020-06-07  128  	struct task_struct *tsk;
-6786741dbf99e4 Andrey Vagin                2016-09-06  129  	struct ns_common *ns = get_proc_ns(file_inode(filp));
-d95fa3c76a66b6 Michael Kerrisk (man-pages  2017-01-25  130) 	uid_t __user *argp;
-d95fa3c76a66b6 Michael Kerrisk (man-pages  2017-01-25  131) 	uid_t uid;
-8677ab84123aeb Christian Brauner           2020-06-07  132  	pid_t pid_nr;
-6786741dbf99e4 Andrey Vagin                2016-09-06  133  
-6786741dbf99e4 Andrey Vagin                2016-09-06  134  	switch (ioctl) {
-6786741dbf99e4 Andrey Vagin                2016-09-06  135  	case NS_GET_USERNS:
-6786741dbf99e4 Andrey Vagin                2016-09-06  136  		return open_related_ns(ns, ns_get_owner);
-a7306ed8d94af7 Andrey Vagin                2016-09-06  137  	case NS_GET_PARENT:
-a7306ed8d94af7 Andrey Vagin                2016-09-06  138  		if (!ns->ops->get_parent)
-a7306ed8d94af7 Andrey Vagin                2016-09-06  139  			return -EINVAL;
-a7306ed8d94af7 Andrey Vagin                2016-09-06  140  		return open_related_ns(ns, ns->ops->get_parent);
-e5ff5ce6e20ee2 Michael Kerrisk (man-pages  2017-01-25  141) 	case NS_GET_NSTYPE:
-e5ff5ce6e20ee2 Michael Kerrisk (man-pages  2017-01-25  142) 		return ns->ops->type;
-d95fa3c76a66b6 Michael Kerrisk (man-pages  2017-01-25  143) 	case NS_GET_OWNER_UID:
-d95fa3c76a66b6 Michael Kerrisk (man-pages  2017-01-25  144) 		if (ns->ops->type != CLONE_NEWUSER)
-d95fa3c76a66b6 Michael Kerrisk (man-pages  2017-01-25  145) 			return -EINVAL;
-d95fa3c76a66b6 Michael Kerrisk (man-pages  2017-01-25  146) 		user_ns = container_of(ns, struct user_namespace, ns);
-d95fa3c76a66b6 Michael Kerrisk (man-pages  2017-01-25  147) 		argp = (uid_t __user *) arg;
-d95fa3c76a66b6 Michael Kerrisk (man-pages  2017-01-25  148) 		uid = from_kuid_munged(current_user_ns(), user_ns->owner);
-d95fa3c76a66b6 Michael Kerrisk (man-pages  2017-01-25  149) 		return put_user(uid, argp);
-8677ab84123aeb Christian Brauner           2020-06-07  150  	case NS_GET_PID_FROM_PIDNS:
-8677ab84123aeb Christian Brauner           2020-06-07  151  		fallthrough;
-8677ab84123aeb Christian Brauner           2020-06-07  152  	case NS_GET_TGID_FROM_PIDNS:
-8677ab84123aeb Christian Brauner           2020-06-07  153  		fallthrough;
-8677ab84123aeb Christian Brauner           2020-06-07  154  	case NS_GET_PID_IN_PIDNS:
-8677ab84123aeb Christian Brauner           2020-06-07  155  		fallthrough;
-8677ab84123aeb Christian Brauner           2020-06-07  156  	case NS_GET_TGID_IN_PIDNS:
-8677ab84123aeb Christian Brauner           2020-06-07  157  		if (ns->ops->type != CLONE_NEWPID)
-8677ab84123aeb Christian Brauner           2020-06-07  158  			return -EINVAL;
-8677ab84123aeb Christian Brauner           2020-06-07  159  
-8677ab84123aeb Christian Brauner           2020-06-07  160  		pid_nr = -ESRCH;
-8677ab84123aeb Christian Brauner           2020-06-07  161  		pid_ns = container_of(ns, struct pid_namespace, ns);
-8677ab84123aeb Christian Brauner           2020-06-07  162  
-8677ab84123aeb Christian Brauner           2020-06-07  163  		rcu_read_lock();
-8677ab84123aeb Christian Brauner           2020-06-07  164  
-8677ab84123aeb Christian Brauner           2020-06-07  165  		if (ioctl == NS_GET_PID_IN_PIDNS ||
-8677ab84123aeb Christian Brauner           2020-06-07  166  		    ioctl == NS_GET_TGID_IN_PIDNS)
-8677ab84123aeb Christian Brauner           2020-06-07  167  			tsk = find_task_by_vpid(arg);
-8677ab84123aeb Christian Brauner           2020-06-07  168  		else
-8677ab84123aeb Christian Brauner           2020-06-07  169  			tsk = find_task_by_pid_ns(arg, pid_ns);
-8677ab84123aeb Christian Brauner           2020-06-07  170  		if (!tsk)
-8677ab84123aeb Christian Brauner           2020-06-07  171  			break;
-8677ab84123aeb Christian Brauner           2020-06-07  172  
-8677ab84123aeb Christian Brauner           2020-06-07  173  		switch (ioctl) {
-8677ab84123aeb Christian Brauner           2020-06-07  174  		case NS_GET_PID_FROM_PIDNS:
-8677ab84123aeb Christian Brauner           2020-06-07  175  			pid_nr = task_pid_vnr(tsk);
-8677ab84123aeb Christian Brauner           2020-06-07  176  			break;
-8677ab84123aeb Christian Brauner           2020-06-07  177  		case NS_GET_TGID_FROM_PIDNS:
-8677ab84123aeb Christian Brauner           2020-06-07  178  			pid_nr = task_tgid_vnr(tsk);
-8677ab84123aeb Christian Brauner           2020-06-07  179  			break;
-8677ab84123aeb Christian Brauner           2020-06-07  180  		case NS_GET_PID_IN_PIDNS:
-8677ab84123aeb Christian Brauner           2020-06-07  181  			pid_nr = task_pid_nr_ns(tsk, pid_ns);
-8677ab84123aeb Christian Brauner           2020-06-07  182  			break;
-8677ab84123aeb Christian Brauner           2020-06-07  183  		case NS_GET_TGID_IN_PIDNS:
-8677ab84123aeb Christian Brauner           2020-06-07  184  			pid_nr = task_tgid_nr_ns(tsk, pid_ns);
-8677ab84123aeb Christian Brauner           2020-06-07  185  			break;
-8677ab84123aeb Christian Brauner           2020-06-07  186  		default:
-8677ab84123aeb Christian Brauner           2020-06-07  187  			pid_nr = 0;
-8677ab84123aeb Christian Brauner           2020-06-07  188  			break;
-8677ab84123aeb Christian Brauner           2020-06-07  189  		}
-8677ab84123aeb Christian Brauner           2020-06-07  190  		rcu_read_unlock();
-8677ab84123aeb Christian Brauner           2020-06-07  191  
-8677ab84123aeb Christian Brauner           2020-06-07  192  		if (!pid_nr)
-8677ab84123aeb Christian Brauner           2020-06-07  193  			return -ESRCH;
-8677ab84123aeb Christian Brauner           2020-06-07  194  
-8677ab84123aeb Christian Brauner           2020-06-07  195  		return pid_nr;
-6786741dbf99e4 Andrey Vagin                2016-09-06  196  	default:
-6786741dbf99e4 Andrey Vagin                2016-09-06  197  		return -ENOTTY;
-6786741dbf99e4 Andrey Vagin                2016-09-06  198  	}
-6786741dbf99e4 Andrey Vagin                2016-09-06 @199  }
-6786741dbf99e4 Andrey Vagin                2016-09-06  200  
-
-:::::: The code at line 199 was first introduced by commit
-:::::: 6786741dbf99e44fb0c0ed85a37582b8a26f1c3b nsfs: add ioctl to get an owning user namespace for ns file descriptor
-
-:::::: TO: Andrey Vagin <avagin@openvz.org>
-:::::: CC: Eric W. Biederman <ebiederm@xmission.com>
-
+diff --git a/net/xfrm/xfrm_state.c b/net/xfrm/xfrm_state.c
+index 649bb739df0d..9bc69d703e5c 100644
+--- a/net/xfrm/xfrm_state.c
++++ b/net/xfrm/xfrm_state.c
+@@ -1139,7 +1139,7 @@ xfrm_state_find(const xfrm_address_t *daddr, const xfrm_address_t *saddr,
+ 		struct xfrm_policy *pol, int *err,
+ 		unsigned short family, u32 if_id)
+ {
+-	static xfrm_address_t saddr_wildcard = { };
++	static const xfrm_address_t saddr_wildcard;
+ 	struct net *net = xp_net(pol);
+ 	unsigned int h, h_wildcard;
+ 	struct xfrm_state *x, *x0, *to_put;
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.45.2.741.gdbec12cfda-goog
+
