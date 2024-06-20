@@ -1,61 +1,60 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 581A918EAB;
-	Thu, 20 Jun 2024 02:22:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 86BE12D058;
+	Thu, 20 Jun 2024 03:50:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718850135; cv=none; b=Ey1jA1Kpv63DMIgZlkWuZdkztJDfb4XoF65Dk5O9TBH33Y5IhhKg5R6RPA3vrN7mCxctx72JW4t3soNYQAj3aOguBsrRkXsUlpYJyWZ6KITnTQmzhU7SfFO1EOna1aL9Ns5lq4zjZE07B9ZV+2AKRml5oi8w9Yhx3SQ06RzYz0M=
+	t=1718855418; cv=none; b=QOQTPZPl4DcCuuf9JOCSRIEFnhpedN2LcNCgYl2bVoeLKP7kOK6gmznCGM7zj0/9DO85RgI6i19svK1m7vhTfgBgCbrzD8SKkRSFQVYrWuZvdLsdMcF2s73KHkY0O19E6NRpp1D+v4+fj3lbojz9P57mEXB6pyZ4rPjJ8ow2Wi4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718850135; c=relaxed/simple;
-	bh=dKbEaKq1AAheLsSQ6WpmmhLpozL0m55WKntbANAb6To=;
+	s=arc-20240116; t=1718855418; c=relaxed/simple;
+	bh=H894Zspz5UBEiWWh6fNUgt0nJIyEJlyCKc1nNqaMzBE=;
 	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=bofwkCli7ADgKf16YRueP3HyydGVnMDOaC/+S96Az8pP1/VN58TI2pfddtiv7wfbSQatPqOicUcOODg2bCFsow6tbOOcYDu3fkkK/luC+ocriaVz/mDcFWdnekbhuZLW+TJJTFna195ILfGsi9kjMjP72pPbkJyfhFes/XH0Ngs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=jK+mmDZY; arc=none smtp.client-ip=192.198.163.14
+	 Content-Disposition; b=WPR5TvU4bgldN3HdqRpilrjNGHQzQNH32JUo8OP7gdIU2EooECXbv4Fku0isn/xRj23pnA28N9nl9azWZcg9QSNkA5Zzls00lNJ9LgXK3/tUND+JrW9UA1kzPnopK9lLeaLJ0DVt68u2+twSvlkvLhPaENGOCBdxFKK1lRZHXnk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=j0gwxpaj; arc=none smtp.client-ip=192.198.163.7
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="jK+mmDZY"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="j0gwxpaj"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1718850133; x=1750386133;
+  t=1718855416; x=1750391416;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=dKbEaKq1AAheLsSQ6WpmmhLpozL0m55WKntbANAb6To=;
-  b=jK+mmDZY0V4t4ZRNnzXeJXaIBVqPFtCXEKt15fjYOBHu78ITx95ldyb0
-   8PK12Ehk5nyZH2JWy4FP9+NW5bhwFxX2RMRUjx6QpRCmJqlDrmCV7TVLN
-   3VFSLjEsBH0tFK0OTQGtNubQqCOm+/G7ogXC2cJfHxX0ZTmTdwMYOear7
-   6QH8iLzgKvMu/kZmnh076TXAp/qDDX7IYy0bbJgTUfsxbKMQoSGPmnwXT
-   k4Byv4N5IUS/SYUbBdgWdxY+v8JI1gKp5aVUyYgaHVX97E06axzrImJTB
-   amygjQL5ZbBc48/kogo85nKXSizy8atHqKP2n136yQSJEAvnBmWpr956N
-   Q==;
-X-CSE-ConnectionGUID: 4bQ0difATL20207ovNOxNA==
-X-CSE-MsgGUID: 4K8bUp32QqCP9w9N14/Pkw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11108"; a="16037601"
+  bh=H894Zspz5UBEiWWh6fNUgt0nJIyEJlyCKc1nNqaMzBE=;
+  b=j0gwxpaj6wslfEhh15LCiFhWbYrHFQahdlCkyyeegeE7GMsRaN9ccs0E
+   XDo4IBHTWcP8KjYEl0lX4D2mnouXEk8nRQzpd0dNFaMre7ueRtIkOPIom
+   orYpgcCnoK38Bxh+GpPO0BxSwldsBohi44ePGm5xC+oKipcV7eeN4fFlI
+   TrTjSGJBV50y3PVOD5nS8O572VJPR0PPoEvcxyFfIo0SKPeZ57Uk7bHuZ
+   0TFpA7SGN8S0A7jqST54cluaHBj+pWHQU1XTC2WDF9wRuicjoGe801q3i
+   LABVeTld2TLnUACw7pY/jOJ8VQ0oCjb2L8vW0Znw0PIahe307XRmKnJqg
+   A==;
+X-CSE-ConnectionGUID: uoDokxSgQVqsq3I4ycRhPA==
+X-CSE-MsgGUID: iBuppbn0TfGJ0tWTbxXYTA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11108"; a="41216476"
 X-IronPort-AV: E=Sophos;i="6.08,251,1712646000"; 
-   d="scan'208";a="16037601"
-Received: from fmviesa009.fm.intel.com ([10.60.135.149])
-  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jun 2024 19:22:10 -0700
-X-CSE-ConnectionGUID: WYW8/UUrRDWF2kcTiWQZFg==
-X-CSE-MsgGUID: KIssvq5RSy+5UXS564MQKg==
+   d="scan'208";a="41216476"
+Received: from fmviesa010.fm.intel.com ([10.60.135.150])
+  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jun 2024 20:50:15 -0700
+X-CSE-ConnectionGUID: lrLOjxd3QW6249qKp9k4yQ==
+X-CSE-MsgGUID: bJtd32KSSE2wJ/C3EDchJg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.08,251,1712646000"; 
-   d="scan'208";a="42192106"
+   d="scan'208";a="42221975"
 Received: from lkp-server01.sh.intel.com (HELO 68891e0c336b) ([10.239.97.150])
-  by fmviesa009.fm.intel.com with ESMTP; 19 Jun 2024 19:22:08 -0700
+  by fmviesa010.fm.intel.com with ESMTP; 19 Jun 2024 20:50:13 -0700
 Received: from kbuild by 68891e0c336b with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1sK7R8-0007Da-1w;
-	Thu, 20 Jun 2024 02:22:06 +0000
-Date: Thu, 20 Jun 2024 10:21:16 +0800
+	id 1sK8oN-0007He-1B;
+	Thu, 20 Jun 2024 03:50:11 +0000
+Date: Thu, 20 Jun 2024 11:49:44 +0800
 From: kernel test robot <lkp@intel.com>
-To: Leo Li <sunpeng.li@amd.com>
+To: "Paul E. McKenney" <paulmck@kernel.org>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Alex Deucher <alexander.deucher@amd.com>,
-	Harry Wentland <harry.wentland@amd.com>
-Subject: [agd5f:drm-next 804/888]
- drivers/gpu/drm/amd/amdgpu/../display/amdgpu_dm/amdgpu_dm.c:371:20: error:
- unused function 'reverse_planes_order'
-Message-ID: <202406201059.TfQMDQvN-lkp@intel.com>
+	linux-kernel@vger.kernel.org
+Subject: [paulmck-rcu:dev.2024.06.18a 20/34]
+ kernel/time/clocksource.c:1167:36: error: use of undeclared identifier
+ 'CONFIG_CLOCKSOURCE_WATCHDOG_MAX_SKEW_US'
+Message-ID: <202406201149.s6KWE7XP-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -65,44 +64,152 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-tree:   https://gitlab.freedesktop.org/agd5f/linux.git drm-next
-head:   1ecef5589320fd56af599b624d59c355d162ac7b
-commit: 38e0c3df6dbd36e69d38f67853cdd1bb6110d05f [804/888] drm/amd/display: Move PRIMARY plane zpos higher
-config: x86_64-buildonly-randconfig-001-20240620 (https://download.01.org/0day-ci/archive/20240620/202406201059.TfQMDQvN-lkp@intel.com/config)
-compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240620/202406201059.TfQMDQvN-lkp@intel.com/reproduce)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git dev.2024.06.18a
+head:   f29bcafffef0ecc8a5d2cdc1bbef9a6889225263
+commit: 5800c05045dbfeb8c9e571c6b47e8d7dd0d0691d [20/34] clocksource: Take advantage of always-defined CLOCKSOURCE_WATCHDOG_MAX_SKEW_US
+config: arm-randconfig-002-20240620 (https://download.01.org/0day-ci/archive/20240620/202406201149.s6KWE7XP-lkp@intel.com/config)
+compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project 78ee473784e5ef6f0b19ce4cb111fb6e4d23c6b2)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240620/202406201149.s6KWE7XP-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202406201059.TfQMDQvN-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202406201149.s6KWE7XP-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> drivers/gpu/drm/amd/amdgpu/../display/amdgpu_dm/amdgpu_dm.c:371:20: error: unused function 'reverse_planes_order' [-Werror,-Wunused-function]
-     371 | static inline void reverse_planes_order(struct dc_surface_update *array_of_surface_update,
-         |                    ^~~~~~~~~~~~~~~~~~~~
-   1 error generated.
+>> kernel/time/clocksource.c:1167:36: error: use of undeclared identifier 'CONFIG_CLOCKSOURCE_WATCHDOG_MAX_SKEW_US'
+    1167 |                 if (cs->uncertainty_margin < 2 * WATCHDOG_MAX_SKEW)
+         |                                                  ^
+   kernel/time/clocksource.c:137:28: note: expanded from macro 'WATCHDOG_MAX_SKEW'
+     137 | #define WATCHDOG_MAX_SKEW (MAX_SKEW_USEC * NSEC_PER_USEC)
+         |                            ^
+   kernel/time/clocksource.c:136:23: note: expanded from macro 'MAX_SKEW_USEC'
+     136 | #define MAX_SKEW_USEC   CONFIG_CLOCKSOURCE_WATCHDOG_MAX_SKEW_US
+         |                         ^
+   kernel/time/clocksource.c:1168:33: error: use of undeclared identifier 'CONFIG_CLOCKSOURCE_WATCHDOG_MAX_SKEW_US'
+    1168 |                         cs->uncertainty_margin = 2 * WATCHDOG_MAX_SKEW;
+         |                                                      ^
+   kernel/time/clocksource.c:137:28: note: expanded from macro 'WATCHDOG_MAX_SKEW'
+     137 | #define WATCHDOG_MAX_SKEW (MAX_SKEW_USEC * NSEC_PER_USEC)
+         |                            ^
+   kernel/time/clocksource.c:136:23: note: expanded from macro 'MAX_SKEW_USEC'
+     136 | #define MAX_SKEW_USEC   CONFIG_CLOCKSOURCE_WATCHDOG_MAX_SKEW_US
+         |                         ^
+   kernel/time/clocksource.c:1172:44: error: use of undeclared identifier 'CONFIG_CLOCKSOURCE_WATCHDOG_MAX_SKEW_US'
+    1172 |         WARN_ON_ONCE(cs->uncertainty_margin < 2 * WATCHDOG_MAX_SKEW);
+         |                                                   ^
+   kernel/time/clocksource.c:137:28: note: expanded from macro 'WATCHDOG_MAX_SKEW'
+     137 | #define WATCHDOG_MAX_SKEW (MAX_SKEW_USEC * NSEC_PER_USEC)
+         |                            ^
+   kernel/time/clocksource.c:136:23: note: expanded from macro 'MAX_SKEW_USEC'
+     136 | #define MAX_SKEW_USEC   CONFIG_CLOCKSOURCE_WATCHDOG_MAX_SKEW_US
+         |                         ^
+   3 errors generated.
 
 
-vim +/reverse_planes_order +371 drivers/gpu/drm/amd/amdgpu/../display/amdgpu_dm/amdgpu_dm.c
+vim +/CONFIG_CLOCKSOURCE_WATCHDOG_MAX_SKEW_US +1167 kernel/time/clocksource.c
 
-a85ba00538cd4b Nikola Cornij    2021-03-15  370  
-bb46a6a9bab134 Rodrigo Siqueira 2023-02-16 @371  static inline void reverse_planes_order(struct dc_surface_update *array_of_surface_update,
-bb46a6a9bab134 Rodrigo Siqueira 2023-02-16  372  					int planes_count)
-bb46a6a9bab134 Rodrigo Siqueira 2023-02-16  373  {
-bb46a6a9bab134 Rodrigo Siqueira 2023-02-16  374  	int i, j;
-bb46a6a9bab134 Rodrigo Siqueira 2023-02-16  375  
-8866d62716c918 Jiapeng Chong    2023-03-09  376  	for (i = 0, j = planes_count - 1; i < j; i++, j--)
-8866d62716c918 Jiapeng Chong    2023-03-09  377  		swap(array_of_surface_update[i], array_of_surface_update[j]);
-bb46a6a9bab134 Rodrigo Siqueira 2023-02-16  378  }
-bb46a6a9bab134 Rodrigo Siqueira 2023-02-16  379  
+734efb467b31e5 John Stultz      2006-06-26  1107  
+d7e81c269db899 John Stultz      2010-05-07  1108  /**
+fba9e07208c0f9 John Stultz      2015-03-11  1109   * __clocksource_update_freq_scale - Used update clocksource with new freq
+b1b73d095084e7 Kusanagi Kouichi 2011-12-19  1110   * @cs:		clocksource to be registered
+d7e81c269db899 John Stultz      2010-05-07  1111   * @scale:	Scale factor multiplied against freq to get clocksource hz
+d7e81c269db899 John Stultz      2010-05-07  1112   * @freq:	clocksource frequency (cycles per second) divided by scale
+d7e81c269db899 John Stultz      2010-05-07  1113   *
+852db46d55e85b John Stultz      2010-07-13  1114   * This should only be called from the clocksource->enable() method.
+d7e81c269db899 John Stultz      2010-05-07  1115   *
+d7e81c269db899 John Stultz      2010-05-07  1116   * This *SHOULD NOT* be called directly! Please use the
+fba9e07208c0f9 John Stultz      2015-03-11  1117   * __clocksource_update_freq_hz() or __clocksource_update_freq_khz() helper
+fba9e07208c0f9 John Stultz      2015-03-11  1118   * functions.
+d7e81c269db899 John Stultz      2010-05-07  1119   */
+fba9e07208c0f9 John Stultz      2015-03-11  1120  void __clocksource_update_freq_scale(struct clocksource *cs, u32 scale, u32 freq)
+d7e81c269db899 John Stultz      2010-05-07  1121  {
+c0e299b1a91cbd Thomas Gleixner  2011-05-20  1122  	u64 sec;
+f8935983f11050 John Stultz      2015-03-11  1123  
+f8935983f11050 John Stultz      2015-03-11  1124  	/*
+f8935983f11050 John Stultz      2015-03-11  1125  	 * Default clocksources are *special* and self-define their mult/shift.
+f8935983f11050 John Stultz      2015-03-11  1126  	 * But, you're not special, so you should specify a freq value.
+f8935983f11050 John Stultz      2015-03-11  1127  	 */
+f8935983f11050 John Stultz      2015-03-11  1128  	if (freq) {
+d7e81c269db899 John Stultz      2010-05-07  1129  		/*
+724ed53e8ac2c5 Thomas Gleixner  2011-05-18  1130  		 * Calc the maximum number of seconds which we can run before
+f8935983f11050 John Stultz      2015-03-11  1131  		 * wrapping around. For clocksources which have a mask > 32-bit
+724ed53e8ac2c5 Thomas Gleixner  2011-05-18  1132  		 * we need to limit the max sleep time to have a good
+724ed53e8ac2c5 Thomas Gleixner  2011-05-18  1133  		 * conversion precision. 10 minutes is still a reasonable
+724ed53e8ac2c5 Thomas Gleixner  2011-05-18  1134  		 * amount. That results in a shift value of 24 for a
+f8935983f11050 John Stultz      2015-03-11  1135  		 * clocksource with mask >= 40-bit and f >= 4GHz. That maps to
+362fde0410377e John Stultz      2015-03-11  1136  		 * ~ 0.06ppm granularity for NTP.
+d7e81c269db899 John Stultz      2010-05-07  1137  		 */
+362fde0410377e John Stultz      2015-03-11  1138  		sec = cs->mask;
+724ed53e8ac2c5 Thomas Gleixner  2011-05-18  1139  		do_div(sec, freq);
+724ed53e8ac2c5 Thomas Gleixner  2011-05-18  1140  		do_div(sec, scale);
+724ed53e8ac2c5 Thomas Gleixner  2011-05-18  1141  		if (!sec)
+724ed53e8ac2c5 Thomas Gleixner  2011-05-18  1142  			sec = 1;
+724ed53e8ac2c5 Thomas Gleixner  2011-05-18  1143  		else if (sec > 600 && cs->mask > UINT_MAX)
+724ed53e8ac2c5 Thomas Gleixner  2011-05-18  1144  			sec = 600;
+724ed53e8ac2c5 Thomas Gleixner  2011-05-18  1145  
+d7e81c269db899 John Stultz      2010-05-07  1146  		clocks_calc_mult_shift(&cs->mult, &cs->shift, freq,
+724ed53e8ac2c5 Thomas Gleixner  2011-05-18  1147  				       NSEC_PER_SEC / scale, sec * scale);
+f8935983f11050 John Stultz      2015-03-11  1148  	}
+2e27e793e280ff Paul E. McKenney 2021-05-27  1149  
+2e27e793e280ff Paul E. McKenney 2021-05-27  1150  	/*
+ababe5f6bfbf3e Borislav Petkov  2024-06-12  1151  	 * If the uncertainty margin is not specified, calculate it.  If
+ababe5f6bfbf3e Borislav Petkov  2024-06-12  1152  	 * both scale and freq are non-zero, calculate the clock period, but
+ababe5f6bfbf3e Borislav Petkov  2024-06-12  1153  	 * bound below at 2*WATCHDOG_MAX_SKEW, that is, 500ppm by default.
+ababe5f6bfbf3e Borislav Petkov  2024-06-12  1154  	 * However, if either of scale or freq is zero, be very conservative
+ababe5f6bfbf3e Borislav Petkov  2024-06-12  1155  	 * and take the tens-of-milliseconds WATCHDOG_THRESHOLD value
+ababe5f6bfbf3e Borislav Petkov  2024-06-12  1156  	 * for the uncertainty margin.  Allow stupidly small uncertainty
+ababe5f6bfbf3e Borislav Petkov  2024-06-12  1157  	 * margins to be specified by the caller for testing purposes,
+ababe5f6bfbf3e Borislav Petkov  2024-06-12  1158  	 * but warn to discourage production use of this capability.
+ababe5f6bfbf3e Borislav Petkov  2024-06-12  1159  	 *
+ababe5f6bfbf3e Borislav Petkov  2024-06-12  1160  	 * Bottom line:  The sum of the uncertainty margins of the
+ababe5f6bfbf3e Borislav Petkov  2024-06-12  1161  	 * watchdog clocksource and the clocksource under test will be at
+ababe5f6bfbf3e Borislav Petkov  2024-06-12  1162  	 * least 500ppm by default.  For more information, please see the
+ababe5f6bfbf3e Borislav Petkov  2024-06-12  1163  	 * comment preceding CONFIG_CLOCKSOURCE_WATCHDOG_MAX_SKEW_US above.
+2e27e793e280ff Paul E. McKenney 2021-05-27  1164  	 */
+2e27e793e280ff Paul E. McKenney 2021-05-27  1165  	if (scale && freq && !cs->uncertainty_margin) {
+2e27e793e280ff Paul E. McKenney 2021-05-27  1166  		cs->uncertainty_margin = NSEC_PER_SEC / (scale * freq);
+2e27e793e280ff Paul E. McKenney 2021-05-27 @1167  		if (cs->uncertainty_margin < 2 * WATCHDOG_MAX_SKEW)
+2e27e793e280ff Paul E. McKenney 2021-05-27  1168  			cs->uncertainty_margin = 2 * WATCHDOG_MAX_SKEW;
+2e27e793e280ff Paul E. McKenney 2021-05-27  1169  	} else if (!cs->uncertainty_margin) {
+2e27e793e280ff Paul E. McKenney 2021-05-27  1170  		cs->uncertainty_margin = WATCHDOG_THRESHOLD;
+2e27e793e280ff Paul E. McKenney 2021-05-27  1171  	}
+2e27e793e280ff Paul E. McKenney 2021-05-27  1172  	WARN_ON_ONCE(cs->uncertainty_margin < 2 * WATCHDOG_MAX_SKEW);
+2e27e793e280ff Paul E. McKenney 2021-05-27  1173  
+d65670a78cdbfa John Stultz      2011-10-31  1174  	/*
+362fde0410377e John Stultz      2015-03-11  1175  	 * Ensure clocksources that have large 'mult' values don't overflow
+362fde0410377e John Stultz      2015-03-11  1176  	 * when adjusted.
+d65670a78cdbfa John Stultz      2011-10-31  1177  	 */
+d65670a78cdbfa John Stultz      2011-10-31  1178  	cs->maxadj = clocksource_max_adjustment(cs);
+f8935983f11050 John Stultz      2015-03-11  1179  	while (freq && ((cs->mult + cs->maxadj < cs->mult)
+f8935983f11050 John Stultz      2015-03-11  1180  		|| (cs->mult - cs->maxadj > cs->mult))) {
+d65670a78cdbfa John Stultz      2011-10-31  1181  		cs->mult >>= 1;
+d65670a78cdbfa John Stultz      2011-10-31  1182  		cs->shift--;
+d65670a78cdbfa John Stultz      2011-10-31  1183  		cs->maxadj = clocksource_max_adjustment(cs);
+d65670a78cdbfa John Stultz      2011-10-31  1184  	}
+d65670a78cdbfa John Stultz      2011-10-31  1185  
+f8935983f11050 John Stultz      2015-03-11  1186  	/*
+f8935983f11050 John Stultz      2015-03-11  1187  	 * Only warn for *special* clocksources that self-define
+f8935983f11050 John Stultz      2015-03-11  1188  	 * their mult/shift values and don't specify a freq.
+f8935983f11050 John Stultz      2015-03-11  1189  	 */
+f8935983f11050 John Stultz      2015-03-11  1190  	WARN_ONCE(cs->mult + cs->maxadj < cs->mult,
+f8935983f11050 John Stultz      2015-03-11  1191  		"timekeeping: Clocksource %s might overflow on 11%% adjustment\n",
+f8935983f11050 John Stultz      2015-03-11  1192  		cs->name);
+f8935983f11050 John Stultz      2015-03-11  1193  
+fb82fe2fe85887 John Stultz      2015-03-11  1194  	clocksource_update_max_deferment(cs);
+8cc8c525ad4e7b John Stultz      2015-03-11  1195  
+45bbfe64ea564a Joe Perches      2015-05-25  1196  	pr_info("%s: mask: 0x%llx max_cycles: 0x%llx, max_idle_ns: %lld ns\n",
+8cc8c525ad4e7b John Stultz      2015-03-11  1197  		cs->name, cs->mask, cs->max_cycles, cs->max_idle_ns);
+852db46d55e85b John Stultz      2010-07-13  1198  }
+fba9e07208c0f9 John Stultz      2015-03-11  1199  EXPORT_SYMBOL_GPL(__clocksource_update_freq_scale);
+852db46d55e85b John Stultz      2010-07-13  1200  
 
-:::::: The code at line 371 was first introduced by commit
-:::::: bb46a6a9bab134b9d15043ea8fa9d6c276e938b8 drm/amd/display: Ensure that planes are in the same order
+:::::: The code at line 1167 was first introduced by commit
+:::::: 2e27e793e280ff12cb5c202a1214c08b0d3a0f26 clocksource: Reduce clocksource-skew threshold
 
-:::::: TO: Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>
-:::::: CC: Alex Deucher <alexander.deucher@amd.com>
+:::::: TO: Paul E. McKenney <paulmck@kernel.org>
+:::::: CC: Thomas Gleixner <tglx@linutronix.de>
 
 -- 
 0-DAY CI Kernel Test Service
