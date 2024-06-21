@@ -1,172 +1,156 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-vk1-f172.google.com (mail-vk1-f172.google.com [209.85.221.172])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 197937E799;
-	Fri, 21 Jun 2024 02:43:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A759012CDA8;
+	Fri, 21 Jun 2024 04:25:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718937802; cv=none; b=Av0779iTooK6ODf8rRuDARJU4sp8BzRVPWNk3AlC6xaoGF5/rC/bJAPmMWmS5zrWh1BnfnR+BQKIeDetgX6Kwwq7BtPCFfyQLarEs8oTOO19YXo6RMtBRaaaGoivYEViqK9Z1qn8OJln+xtcknUYJPQY5y5dItfaj3Aq54XdL6o=
+	t=1718943940; cv=none; b=mqaD/iSZqhYS3i+R2vpBMrP68GqNjyWu5aM8Y9piCeUJ5iQEpE5lWgF40X1Jpbo7ok0O1QCO9rW86PkygGmQutQbt+Xf85m5t7QiYWRhtldalGkDLI05YJ84T7EF5kOThOAw6kRAD9SlpOcONmb9qEpvIRXXEFtJATJrHvSAClA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718937802; c=relaxed/simple;
-	bh=R89nx9GPsZw3sS3/Gf6Reyi/X9jJl5d4U1rPtlvh8yY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=FsG2kfIKh0GA0SLy0049zsV8byL2Z2McymU3rRPQIpmSHEgPmpGoSLDh3ZbSsywm1R0oibqXeV3FL3F5qPu6mKcFl14kz56OED356A5JH0sRQt2oWSRglhv+qyujnkDIafd8fWDD52Tea5PY14SV0tzEtveAD99j6Dsf42r14ng=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=jgH8WeJs; arc=none smtp.client-ip=198.175.65.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1718943940; c=relaxed/simple;
+	bh=0kHL6I+i+rEWMz6wMavPhoPEpIJxtG46vFoRIyCaf/Q=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=M8IGdP6bpt6A4Zhn3tVL6zdck2oz9saFbLfl+JBHcLbn2wOqN9TtKsLkILQs91/Q1fR3SdNvVbiV0jfs57m0nuZS4J2HEkcVSrLbFDsieECuARgoVetg16hn8dTcSzFntucSns7yTv3IqJII9SGvbf4tRHrXO2X5nX3N9YZZBYU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=SNaRht9C; arc=none smtp.client-ip=209.85.221.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="jgH8WeJs"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1718937801; x=1750473801;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=R89nx9GPsZw3sS3/Gf6Reyi/X9jJl5d4U1rPtlvh8yY=;
-  b=jgH8WeJsxg/M1N8yJEZJG7cSxOH9zxFXxrVFLzhO5qsOfU+kdaTC7sUY
-   vcUOVi54ZyxVJq6ZxPFajGxtcvdjrA10Nko4SFL//RzzRXXDBsyY6eLhy
-   dK5XmKziegOwNHnp9hSnslzvsTAg/Vlt2VF/IhNBznDb52dmal+S6mcuI
-   Ffbglj0gEWfMNPGCqozt/QGkLp8eefT4mpJXvUDJh7s5X22RQ2dKaQmkb
-   Lxl0t7gDSCt4rBkGHGdcsOMrpkm5HlBZE5skPslbcDx/j95U54dMG0c4+
-   G/YziZYznKaDahFKxsEi5yhIhsK3QFg7kmOk/zx93e5yBFhQLsIKf5Sp+
-   Q==;
-X-CSE-ConnectionGUID: 5juWwF2AS92jW4kV1AaCAA==
-X-CSE-MsgGUID: tprfeKHcQ5Ka22z2nR/ASg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11109"; a="33413353"
-X-IronPort-AV: E=Sophos;i="6.08,253,1712646000"; 
-   d="scan'208";a="33413353"
-Received: from fmviesa007.fm.intel.com ([10.60.135.147])
-  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jun 2024 19:43:20 -0700
-X-CSE-ConnectionGUID: eFhGsVG3RZOaHxSCwbdPzA==
-X-CSE-MsgGUID: AWVMIsbCSqy0MWaoPHI4ow==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.08,253,1712646000"; 
-   d="scan'208";a="42308319"
-Received: from lkp-server01.sh.intel.com (HELO 68891e0c336b) ([10.239.97.150])
-  by fmviesa007.fm.intel.com with ESMTP; 20 Jun 2024 19:43:16 -0700
-Received: from kbuild by 68891e0c336b with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1sKUF7-00088I-2M;
-	Fri, 21 Jun 2024 02:43:13 +0000
-Date: Fri, 21 Jun 2024 10:43:09 +0800
-From: kernel test robot <lkp@intel.com>
-To: Antoniu Miclaus <antoniu.miclaus@analog.com>,
-	Ramona Gradinariu <ramona.gradinariu@analog.com>,
-	Lars-Peter Clausen <lars@metafoo.de>,
-	Michael Hennerich <Michael.Hennerich@analog.com>,
-	Jonathan Cameron <jic23@kernel.org>, Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Jun Yan <jerrysteve1101@gmail.com>,
-	Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
-	Matti Vaittinen <mazziesaccount@gmail.com>,
-	Mehdi Djait <mehdi.djait.k@gmail.com>,
-	Mario Limonciello <mario.limonciello@amd.com>,
-	linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [PATCH 2/3] iio: accel: add ADXL380 driver
-Message-ID: <202406210921.VoM5ac1P-lkp@intel.com>
-References: <20240618105150.38141-2-antoniu.miclaus@analog.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="SNaRht9C"
+Received: by mail-vk1-f172.google.com with SMTP id 71dfb90a1353d-4ef12e5658bso503277e0c.2;
+        Thu, 20 Jun 2024 21:25:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1718943937; x=1719548737; darn=lists.linux.dev;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=YqZ3Ua17oxBzQaxZiLQZKE8zOImd1INklnV7GqHAAxs=;
+        b=SNaRht9C28Uf2AI7UF8lc0GrUlibGsn021oKxCwbVStDoZfLWOcKmG8XFdghVztiO9
+         QuuI4DQfTKZVfMWW/23PGsJn10/YnpPuBfK4BjFFqxcq4mNnORVd+nNo6npttAu6z1vQ
+         37PWW7TLQNGcn76fO30rEFCWu1mvm4oA0K51TxGfXzy48wdB5aKLxK9h8ebYJR4++Jaz
+         /jgcml43HjKxbaFCIaEzdGl9O6eGl+2gtMQAZsLENGPIvYkpGcBtCauuBHNTK3A8+d8l
+         NXKjWQYqlGZniVytwR4gG7cLDJKJkHfebJ4jUT9wzMDzyZTYvG3hDQpO+IZx/W2WTgag
+         HHzg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1718943937; x=1719548737;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=YqZ3Ua17oxBzQaxZiLQZKE8zOImd1INklnV7GqHAAxs=;
+        b=pC6/bEBWnHkXD9g+m9Hb+GJBuS5JOkHFpW32qOaDe7p4X7Tqm+R7ziaXsP7cnvnumT
+         K+hkhGS6l7e+CsmTRwaN/ntZy5iKNo4G+QvHN1evkomheCmvtgKIq+g7r0QE6G2ypzG5
+         5jhMAez5nfpXekvyZudNmxaGSIIJOD6MHCGvBeLUGdjNc5ThminC5neTsXt5YJWOlV9F
+         0q8UepW3PRd/6DXv77CxY9Ry2spllEnAsY65WZlJgq6Agdj3DUpYrwbbLQZsfBrYr2Io
+         LcA6kmrjo9t7DsvyVx3+q/QnftBA1BAZSSw/wWBXNWW4i1UvlEOMkDaUBGpwiDeAQbt6
+         aqvg==
+X-Forwarded-Encrypted: i=1; AJvYcCUcI/xojPhRWk6MBNXmYrQ13AVYBPQst582JXc+PufoM2TLYWF74+ftln6RbGasmHcr+JsJ+XsDJ4n5y1b4k0roSWkotADd+D03zYsCXw==
+X-Gm-Message-State: AOJu0Yzg/HeqsHJGNXZE/rFXzCsuIIX2x/UF0rt7sawCDe2OO3ibah51
+	rEQP+ukPoRZI7KTwb/tqkerhcnOPR96AHSz/rQhvv+Y59kFZg5o0UQMAG9IWZdIdRYoP2ZSTDld
+	NLtyRzNIge8ToPBk1cJwHz5DLZSY=
+X-Google-Smtp-Source: AGHT+IG5uz9w/wRrPr+fS/FhekIImaOCKZX2uIVPfp6VRlWX8eoGqOfZOF7O1EOjMAMPGfadsFUljQqzAcBdaJf/dKg=
+X-Received: by 2002:a05:6122:169e:b0:4ec:fe12:4559 with SMTP id
+ 71dfb90a1353d-4ef27813b20mr8139479e0c.13.1718943937402; Thu, 20 Jun 2024
+ 21:25:37 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240618105150.38141-2-antoniu.miclaus@analog.com>
+References: <202406211041.tUZSSJI3-lkp@intel.com>
+In-Reply-To: <202406211041.tUZSSJI3-lkp@intel.com>
+From: Allen <allen.lkml@gmail.com>
+Date: Thu, 20 Jun 2024 21:25:26 -0700
+Message-ID: <CAOMdWSKM+iGdtr_vtEXqSuy6dUgzK_hSZRh6nwB2aDSuMAJGbA@mail.gmail.com>
+Subject: Re: [ulfh-mmc:next 13/14] drivers/mmc/host/renesas_sdhi_internal_dmac.c:489:50:
+ error: no member named 'dma_complete' in 'struct tmio_mmc_host'
+To: kernel test robot <lkp@intel.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, 
+	Ulf Hansson <ulf.hansson@linaro.org>, Christian Loehle <christian.loehle@arm.com>
+Content-Type: text/plain; charset="UTF-8"
 
-Hi Antoniu,
+>
+> tree:   git://git.kernel.org/pub/scm/linux/kernel/git/ulfh/mmc.git next
+> head:   602a73f6dd02fc2501694c8e08b7a1e267b7c14c
+> commit: 74a3fe7c3784c8cae2e3e14c0078f33c1468fefc [13/14] mmc: Convert from tasklet to BH workqueue
+> config: i386-buildonly-randconfig-001-20240621 (https://download.01.org/0day-ci/archive/20240621/202406211041.tUZSSJI3-lkp@intel.com/config)
+> compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
+> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240621/202406211041.tUZSSJI3-lkp@intel.com/reproduce)
+>
+> If you fix the issue in a separate patch/commit (i.e. not just a new version of
+> the same patch/commit), kindly add following tags
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Closes: https://lore.kernel.org/oe-kbuild-all/202406211041.tUZSSJI3-lkp@intel.com/
+>
+> All errors (new ones prefixed by >>):
+>
+> >> drivers/mmc/host/renesas_sdhi_internal_dmac.c:489:50: error: no member named 'dma_complete' in 'struct tmio_mmc_host'
+>      489 |         struct tmio_mmc_host *host = from_work(host, t, dma_complete);
+>          |                                      ~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~
+>    include/linux/workqueue.h:535:44: note: expanded from macro 'from_work'
+>      535 |         container_of(callback_work, typeof(*var), work_fieldname)
+>          |         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~
+>    include/linux/container_of.h:20:49: note: expanded from macro 'container_of'
+>       20 |         static_assert(__same_type(*(ptr), ((type *)0)->member) ||       \
+>          |         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~
+>       21 |                       __same_type(*(ptr), void),                        \
+>          |                       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>       22 |                       "pointer type mismatch in container_of()");       \
+>          |                       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>    include/linux/compiler_types.h:428:74: note: expanded from macro '__same_type'
+>      428 | #define __same_type(a, b) __builtin_types_compatible_p(typeof(a), typeof(b))
+>          |                                                                          ^
+>    include/linux/build_bug.h:77:50: note: expanded from macro 'static_assert'
+>       77 | #define static_assert(expr, ...) __static_assert(expr, ##__VA_ARGS__, #expr)
+>          |                                  ~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~
+>    include/linux/build_bug.h:78:56: note: expanded from macro '__static_assert'
+>       78 | #define __static_assert(expr, msg, ...) _Static_assert(expr, msg)
+>          |                                                        ^~~~
+> >> drivers/mmc/host/renesas_sdhi_internal_dmac.c:489:31: error: no member named 'dma_complete' in 'tmio_mmc_host'
+>      489 |         struct tmio_mmc_host *host = from_work(host, t, dma_complete);
+>          |                                      ^                  ~~~~~~~~~~~~
+>    include/linux/workqueue.h:535:2: note: expanded from macro 'from_work'
+>      535 |         container_of(callback_work, typeof(*var), work_fieldname)
+>          |         ^                                         ~~~~~~~~~~~~~~
+>    include/linux/container_of.h:23:21: note: expanded from macro 'container_of'
+>       23 |         ((type *)(__mptr - offsetof(type, member))); })
+>          |                            ^              ~~~~~~
+>    include/linux/stddef.h:16:32: note: expanded from macro 'offsetof'
+>       16 | #define offsetof(TYPE, MEMBER)  __builtin_offsetof(TYPE, MEMBER)
+>          |                                 ^                        ~~~~~~
+> >> drivers/mmc/host/renesas_sdhi_internal_dmac.c:489:24: error: initializing 'struct tmio_mmc_host *' with an expression of incompatible type 'void'
+>      489 |         struct tmio_mmc_host *host = from_work(host, t, dma_complete);
+>          |                               ^      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>    3 errors generated.
+>
+>
+> vim +489 drivers/mmc/host/renesas_sdhi_internal_dmac.c
+>
+>    486
+>    487  static void renesas_sdhi_internal_dmac_complete_work_fn(struct work_struct *t)
+>    488  {
+>  > 489          struct tmio_mmc_host *host = from_work(host, t, dma_complete);
+>    490
+>    491          spin_lock_irq(&host->lock);
+>    492          if (!renesas_sdhi_internal_dmac_complete(host))
+>    493                  goto out;
+>    494
+>    495          tmio_mmc_do_data_irq(host);
+>    496  out:
+>    497          spin_unlock_irq(&host->lock);
+>    498  }
+>    499
 
-kernel test robot noticed the following build errors:
+  Thank you for reporting this issue. My compile test did not catch this.
 
-[auto build test ERROR on linus/master]
-[also build test ERROR on v6.10-rc4 next-20240620]
-[cannot apply to jic23-iio/togreg]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+This is a bit tricky, as struct tmio_mmc_host does not have a link to
+either struct renesas_sdhi or way back either. I was thinking of using
+host_to_priv(), but am not entirely sure. I am really not familiar with this
+code.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Antoniu-Miclaus/iio-accel-add-ADXL380-driver/20240618-194141
-base:   linus/master
-patch link:    https://lore.kernel.org/r/20240618105150.38141-2-antoniu.miclaus%40analog.com
-patch subject: [PATCH 2/3] iio: accel: add ADXL380 driver
-config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20240621/202406210921.VoM5ac1P-lkp@intel.com/config)
-compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240621/202406210921.VoM5ac1P-lkp@intel.com/reproduce)
+@Ulf Hansson Any thoughts on how best to fix this?
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202406210921.VoM5ac1P-lkp@intel.com/
+Thanks.
 
-All errors (new ones prefixed by >>):
-
->> drivers/iio/accel/adxl380.c:1764:9: error: call to undeclared function 'irq_get_irq_data'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-    1764 |         desc = irq_get_irq_data(st->irq);
-         |                ^
-   drivers/iio/accel/adxl380.c:1764:9: note: did you mean 'irq_set_irq_wake'?
-   include/linux/interrupt.h:485:12: note: 'irq_set_irq_wake' declared here
-     485 | extern int irq_set_irq_wake(unsigned int irq, unsigned int on);
-         |            ^
->> drivers/iio/accel/adxl380.c:1764:7: error: incompatible integer to pointer conversion assigning to 'struct irq_data *' from 'int' [-Wint-conversion]
-    1764 |         desc = irq_get_irq_data(st->irq);
-         |              ^ ~~~~~~~~~~~~~~~~~~~~~~~~~
->> drivers/iio/accel/adxl380.c:1768:13: error: call to undeclared function 'irqd_get_trigger_type'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-    1768 |         irq_type = irqd_get_trigger_type(desc);
-         |                    ^
->> drivers/iio/accel/adxl380.c:1769:18: error: use of undeclared identifier 'IRQ_TYPE_LEVEL_HIGH'
-    1769 |         if (irq_type == IRQ_TYPE_LEVEL_HIGH) {
-         |                         ^
->> drivers/iio/accel/adxl380.c:1772:25: error: use of undeclared identifier 'IRQ_TYPE_LEVEL_LOW'
-    1772 |         } else if (irq_type == IRQ_TYPE_LEVEL_LOW) {
-         |                                ^
-   5 errors generated.
-
-
-vim +/irq_get_irq_data +1764 drivers/iio/accel/adxl380.c
-
-  1754	
-  1755	static int _adxl380_config_irq(struct iio_dev *indio_dev)
-  1756	{
-  1757		int ret;
-  1758		struct irq_data *desc;
-  1759		unsigned long irq_flag;
-  1760		u32 irq_type;
-  1761		u8 polarity;
-  1762		struct adxl380_state *st = iio_priv(indio_dev);
-  1763	
-> 1764		desc = irq_get_irq_data(st->irq);
-  1765		if (!desc)
-  1766			return dev_err_probe(st->dev, -EINVAL, "Could not find IRQ %d\n", st->irq);
-  1767	
-> 1768		irq_type = irqd_get_trigger_type(desc);
-> 1769		if (irq_type == IRQ_TYPE_LEVEL_HIGH) {
-  1770			polarity = 0;
-  1771			irq_flag = IRQF_TRIGGER_HIGH;
-> 1772		} else if (irq_type == IRQ_TYPE_LEVEL_LOW) {
-  1773			polarity = 1;
-  1774			irq_flag = IRQF_TRIGGER_LOW;
-  1775		} else {
-  1776			return dev_err_probe(st->dev, -EINVAL, "Invalid interrupt type 0x%x specified\n",
-  1777				irq_type);
-  1778		}
-  1779	
-  1780		ret = regmap_update_bits(st->regmap, ADXL380_INT0,
-  1781					 ADXL380_INT0_POL_MSK,
-  1782					 FIELD_PREP(ADXL380_INT0_POL_MSK, polarity));
-  1783		if (ret)
-  1784			return ret;
-  1785	
-  1786		return devm_request_threaded_irq(st->dev, st->irq, NULL,
-  1787						 adxl380_irq_handler,
-  1788						 IRQF_ONESHOT | irq_flag,
-  1789						 indio_dev->name, indio_dev);
-  1790	}
-  1791	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+>
+> --
+> 0-DAY CI Kernel Test Service
+> https://github.com/intel/lkp-tests/wiki
