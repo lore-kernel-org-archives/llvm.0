@@ -1,144 +1,141 @@
-Received: from mail-vs1-f51.google.com (mail-vs1-f51.google.com [209.85.217.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EAC3B4D8A1
-	for <llvm@lists.linux.dev>; Thu, 20 Jun 2024 21:18:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.217.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7FEB12904;
+	Fri, 21 Jun 2024 02:12:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718918284; cv=none; b=UAT4p+adBjZSV5yb396kTbVRRPfg2nhIcHfuzsc/h4IZd4NH7luXkr7iAZnmrxohKA6zJA/F3qwkRDqd16BOfU1CE1fG/DsGJuquzalpcc9kwAUxlSviJurrZaFpbCqx8fpb2uTbUZDnK6Em2kwnfLxFiXOnS1AXqgal5+udjWM=
+	t=1718935938; cv=none; b=pL7cLGnutMkokKzChKlTdclZIiX4K7dIzI18F/+ExopoRH2Qm1KoXJoR67cUldlT6+wwo943g0y/Sk1gyz5miAr7Ium4DvxEl1PuJAQI0UOt1fgq6D+PXeRSC90scsZrVtR3RzNNiPJZ3cs/psROvyquhzRke8VjV1axavbYue8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718918284; c=relaxed/simple;
-	bh=/tlBQQa5I+myt35aHWeLT6dmvX1E6woSFRLGzCCAMQ4=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Kg6V3LtgZXpIyF168Bazs07nkCToahMai0m1zL/3hLETPSIl9xU741IC9QUIK3xdIELUP9Ryp9Qz4Kh/g3iZL4vu8gyL22wUnsY5X13fcZ9Buzoi5q/wENzbIlSnvdsJiam39Z0YmqbORoYvJcJFYB5iRpGseM6yXoFHhVUnEGk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=aFskjxIA; arc=none smtp.client-ip=209.85.217.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	s=arc-20240116; t=1718935938; c=relaxed/simple;
+	bh=cSVV91smChU59fq/0cf8CcphdgPaV6UJgHcHP4gOoKs=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=dW6t3UAKyJAv5ZqIihYgLrot90Nez1LFrxihisI3qzTEIzp8h3TT5xis/IfZj8RRjuczIL1O4mLPPoZEod7QUBoEly+dv/Cp3h1lu6M6wdwy3CZ3LZv5zG9Ag+l46i31WtJYbPXkGm53XDexuZcTmFEQvYZfEUsniTqxpgluKi4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=UfXRATAS; arc=none smtp.client-ip=192.198.163.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="aFskjxIA"
-Received: by mail-vs1-f51.google.com with SMTP id ada2fe7eead31-48c50daef1fso471391137.1
-        for <llvm@lists.linux.dev>; Thu, 20 Jun 2024 14:18:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1718918281; x=1719523081; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=bWxCTNrmZRMZjk6xShuBA8spgETA5SXOSONvnp9DFsQ=;
-        b=aFskjxIAUj+727HACmPjnlEEfcHTkkffUA9maf/Hjkjo5QYosDa8ybhwXNcl/lhwe0
-         IsuM+Yapon0kKQZ45oce+oRfi+PInyQPTqXiJPIUOOaH/FNAoq+0YLXBFJeENS0bCZbB
-         4fMGCBAi2sHzXZz0P32BbLFqVbo/+IFnHj8aZAgIwc+G3j3OnyDig7cglNVM0iSWUIAM
-         gPl+cF2iVACQnSht9sv3Wh52O29MDOHSU6foaYQzDxzLkfmHNUbp+47eJKdsT/1NpFo9
-         tyGBkn3Q7eIVdRp/9euDLg9F0IxNCIx7vnzyZVQ7PfwufUo4iM6tjze2HsQ+APFg91kz
-         5kkw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1718918281; x=1719523081;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=bWxCTNrmZRMZjk6xShuBA8spgETA5SXOSONvnp9DFsQ=;
-        b=kZcg+PJn5aWT8QWASOU6Q0pdQ4jGMEm37QSMWiP/Th92ObtYAehxCnXS4ReTgVlLkv
-         bAYxbFc/8LgruAcYVV6KSacBjs0+QL7rWA+ni8tll92BtTlLUoeyEcpCbH4TRNoygsYk
-         3MkYUMXWX159HqbbBprWqbiioapJQqfph0uU2yT/DXCFNBieLeBRW+hfOtdHD/QHFbT/
-         QUfDR3mBAOydmEMfGNFBM9+CVEe/Q1/NdeWu9mqjGZEbqe2216TFD32K7q/eiYaWEe9H
-         rnaAORGr/2mob4qvcardPr7Kgri5pFCDm1tJ0CfYZifg63mE9BQtbSQY3Wphi3y7urSo
-         k4/Q==
-X-Forwarded-Encrypted: i=1; AJvYcCUL0bsR4VdRmseo/qiExaxzjFk00PoEFm+DPK8RATF/WC3RIrnivp3rwqKA3qI8eyW2MuajrCCaUfNS0pJzACvV9TSr2Q==
-X-Gm-Message-State: AOJu0Yw0GyS895PBXQjo03b2D24d5qYRmjGJPOG/1N3LlXpGZYVHR1Dd
-	/IMVV9AzF8KUMFDtXAkEee79fp5cJfivAvYhNgfD3ssq0bEc0prc8OIL7dgVSGvwrl+i0aYL4fx
-	wOwpB8J0cr1LLt3hVRCObYsKehTtlCBE4I7yF
-X-Google-Smtp-Source: AGHT+IEsX/QziDSHpD5+IQeMjE9fk7Imgp53eZRaEY7Yos9IZHYlKmLr/4gvYJhwGwxb+PEgR0uRZi0fcBDysyzRuVM=
-X-Received: by 2002:a67:be0c:0:b0:48d:ab8c:5b66 with SMTP id
- ada2fe7eead31-48f130b7befmr7054249137.24.1718918280719; Thu, 20 Jun 2024
- 14:18:00 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="UfXRATAS"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1718935936; x=1750471936;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=cSVV91smChU59fq/0cf8CcphdgPaV6UJgHcHP4gOoKs=;
+  b=UfXRATAS74wP1A/kcV3FbtSA8/Izu3UhJAwAOjY1Sdezv1ck9xPjsF/l
+   xjf9U69jfsjIgUbF14rYxgGcsFGYYOPtlOTNK+Xtc+/0ij5iDin0dZgjd
+   UPWToqz60gS/wKBOMgT/P9dLEhC5KZliqYeenOvJhuwE9M4U+QwOiLkft
+   V1UiH3arU/x63lD55H+oyvF5L1UeMt5sbiNTBfPdAhExkZIZa98nJ2dkV
+   JZ8ufhEvlxmayEgR1lslzYDrnRVhdvS0f7LdjQjaTOzBbPzUvLiikd2ZA
+   KfPvxqyQL1go5bGBtwNvQggd8WUkSaxFeCz7l+qPfapRl7JxU4b66+pQw
+   Q==;
+X-CSE-ConnectionGUID: XdE5Yk5lRge7p6Ir7LcqiA==
+X-CSE-MsgGUID: LGVEQbjqQm2ckTAfLhCstw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11109"; a="16096307"
+X-IronPort-AV: E=Sophos;i="6.08,253,1712646000"; 
+   d="scan'208";a="16096307"
+Received: from fmviesa002.fm.intel.com ([10.60.135.142])
+  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jun 2024 19:12:16 -0700
+X-CSE-ConnectionGUID: +fcWbVETTg6E/OY+YLI/rA==
+X-CSE-MsgGUID: WzmryTMNS/STmdus2NglhA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.08,253,1712646000"; 
+   d="scan'208";a="65690574"
+Received: from lkp-server01.sh.intel.com (HELO 68891e0c336b) ([10.239.97.150])
+  by fmviesa002.fm.intel.com with ESMTP; 20 Jun 2024 19:12:15 -0700
+Received: from kbuild by 68891e0c336b with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1sKTl6-00087K-2j;
+	Fri, 21 Jun 2024 02:12:12 +0000
+Date: Fri, 21 Jun 2024 10:11:44 +0800
+From: kernel test robot <lkp@intel.com>
+To: Allen Pais <allen.lkml@gmail.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Ulf Hansson <ulf.hansson@linaro.org>,
+	Christian Loehle <christian.loehle@arm.com>
+Subject: [ulfh-mmc:next 13/14]
+ drivers/mmc/host/renesas_sdhi_internal_dmac.c:489:50: error: no member named
+ 'dma_complete' in 'struct tmio_mmc_host'
+Message-ID: <202406211041.tUZSSJI3-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <202406050622.SmOX6DL6-lkp@intel.com> <20240605061734.GD279426@thelio-3990X>
-In-Reply-To: <20240605061734.GD279426@thelio-3990X>
-From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Thu, 20 Jun 2024 14:17:45 -0700
-Message-ID: <CAKwvOd=osRnOXcha56Cir+Fh2ichSVmc-n=--JE+F4f1GL=Y7g@mail.gmail.com>
-Subject: Re: [linux-next:master 1323/3381] drivers/gpu/drm/amd/amdgpu/amdgpu_gfx.c:333:4:
- error: format specifies type 'unsigned char' but the argument has type 'int'
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: kernel test robot <lkp@intel.com>, Srinivasan Shanmugam <srinivasan.shanmugam@amd.com>, llvm@lists.linux.dev, 
-	oe-kbuild-all@lists.linux.dev, 
-	Linux Memory Management List <linux-mm@kvack.org>, Alex Deucher <alexander.deucher@amd.com>, 
-	Lijo Lazar <lijo.lazar@amd.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Tue, Jun 4, 2024 at 11:17=E2=80=AFPM Nathan Chancellor <nathan@kernel.or=
-g> wrote:
->
-> On Wed, Jun 05, 2024 at 06:23:57AM +0800, kernel test robot wrote:
-> > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next=
-.git master
-> > head:   d97496ca23a2d4ee80b7302849404859d9058bcd
-> > commit: 0ea55445554209913a72eab86b60f5788776c4d6 [1323/3381] drm/amdgpu=
-: Fix snprintf usage in amdgpu_gfx_kiq_init_ring
-> > config: arm64-randconfig-003-20240605 (https://download.01.org/0day-ci/=
-archive/20240605/202406050622.SmOX6DL6-lkp@intel.com/config)
-> > compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f2=
-8c006a5895fc0e329fe15fead81e37457cb1d1)
-> > reproduce (this is a W=3D1 build): (https://download.01.org/0day-ci/arc=
-hive/20240605/202406050622.SmOX6DL6-lkp@intel.com/reproduce)
-> >
-> > If you fix the issue in a separate patch/commit (i.e. not just a new ve=
-rsion of
-> > the same patch/commit), kindly add following tags
-> > | Reported-by: kernel test robot <lkp@intel.com>
-> > | Closes: https://lore.kernel.org/oe-kbuild-all/202406050622.SmOX6DL6-l=
-kp@intel.com/
-> >
-> > All errors (new ones prefixed by >>):
-> >
-> > >> drivers/gpu/drm/amd/amdgpu/amdgpu_gfx.c:333:4: error: format specifi=
-es type 'unsigned char' but the argument has type 'int' [-Werror,-Wformat]
-> >                     xcc_id, ring->me, ring->pipe, ring->queue);
-> >                     ^~~~~~
-> > >> drivers/gpu/drm/amd/amdgpu/amdgpu_gfx.c:333:12: error: format specif=
-ies type 'unsigned char' but the argument has type 'u32' (aka 'unsigned int=
-') [-Werror,-Wformat]
-> >                     xcc_id, ring->me, ring->pipe, ring->queue);
-> >                             ^~~~~~~~
-> >    drivers/gpu/drm/amd/amdgpu/amdgpu_gfx.c:333:22: error: format specif=
-ies type 'unsigned char' but the argument has type 'u32' (aka 'unsigned int=
-') [-Werror,-Wformat]
-> >                     xcc_id, ring->me, ring->pipe, ring->queue);
-> >                                       ^~~~~~~~~~
-> >    drivers/gpu/drm/amd/amdgpu/amdgpu_gfx.c:333:34: error: format specif=
-ies type 'unsigned char' but the argument has type 'u32' (aka 'unsigned int=
-') [-Werror,-Wformat]
-> >                     xcc_id, ring->me, ring->pipe, ring->queue);
-> >                                                   ^~~~~~~~~~~
-> >    4 errors generated.
->
-> For what it's worth, I think that we take care not to enable -Wformat
-> with clang versions older than 16 because of this issue, see commit
-> b0839b281c42 ("Makefile.extrawarn: re-enable -Wformat for clang; take
-> 2") for more information. However, now that I am looking at
-> scripts/Makefile.extrawarn, it appears that we only do that for a normal
-> build, not W=3D1? That seems like a potential oversight of that change bu=
-t
-> I am a little fuzzy on the conversation around that and I am not sure
-> Nick is around to answer that...
+tree:   git://git.kernel.org/pub/scm/linux/kernel/git/ulfh/mmc.git next
+head:   602a73f6dd02fc2501694c8e08b7a1e267b7c14c
+commit: 74a3fe7c3784c8cae2e3e14c0078f33c1468fefc [13/14] mmc: Convert from tasklet to BH workqueue
+config: i386-buildonly-randconfig-001-20240621 (https://download.01.org/0day-ci/archive/20240621/202406211041.tUZSSJI3-lkp@intel.com/config)
+compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240621/202406211041.tUZSSJI3-lkp@intel.com/reproduce)
 
-Yeah, unless `-Wformat` was being set explicitly somewhere else when I
-wrote b0839b281c42 and has since been removed (-Wformat is part of
--Wall), then it looks like my "old clang" workarounds is only for "not
-W=3D1 builds."  That block just needs to be moved outside of the
-corresponding ifneq's else block.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202406211041.tUZSSJI3-lkp@intel.com/
 
->
-> Cheers,
-> Nathan
+All errors (new ones prefixed by >>):
+
+>> drivers/mmc/host/renesas_sdhi_internal_dmac.c:489:50: error: no member named 'dma_complete' in 'struct tmio_mmc_host'
+     489 |         struct tmio_mmc_host *host = from_work(host, t, dma_complete);
+         |                                      ~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~
+   include/linux/workqueue.h:535:44: note: expanded from macro 'from_work'
+     535 |         container_of(callback_work, typeof(*var), work_fieldname)
+         |         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~
+   include/linux/container_of.h:20:49: note: expanded from macro 'container_of'
+      20 |         static_assert(__same_type(*(ptr), ((type *)0)->member) ||       \
+         |         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~
+      21 |                       __same_type(*(ptr), void),                        \
+         |                       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      22 |                       "pointer type mismatch in container_of()");       \
+         |                       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/compiler_types.h:428:74: note: expanded from macro '__same_type'
+     428 | #define __same_type(a, b) __builtin_types_compatible_p(typeof(a), typeof(b))
+         |                                                                          ^
+   include/linux/build_bug.h:77:50: note: expanded from macro 'static_assert'
+      77 | #define static_assert(expr, ...) __static_assert(expr, ##__VA_ARGS__, #expr)
+         |                                  ~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/build_bug.h:78:56: note: expanded from macro '__static_assert'
+      78 | #define __static_assert(expr, msg, ...) _Static_assert(expr, msg)
+         |                                                        ^~~~
+>> drivers/mmc/host/renesas_sdhi_internal_dmac.c:489:31: error: no member named 'dma_complete' in 'tmio_mmc_host'
+     489 |         struct tmio_mmc_host *host = from_work(host, t, dma_complete);
+         |                                      ^                  ~~~~~~~~~~~~
+   include/linux/workqueue.h:535:2: note: expanded from macro 'from_work'
+     535 |         container_of(callback_work, typeof(*var), work_fieldname)
+         |         ^                                         ~~~~~~~~~~~~~~
+   include/linux/container_of.h:23:21: note: expanded from macro 'container_of'
+      23 |         ((type *)(__mptr - offsetof(type, member))); })
+         |                            ^              ~~~~~~
+   include/linux/stddef.h:16:32: note: expanded from macro 'offsetof'
+      16 | #define offsetof(TYPE, MEMBER)  __builtin_offsetof(TYPE, MEMBER)
+         |                                 ^                        ~~~~~~
+>> drivers/mmc/host/renesas_sdhi_internal_dmac.c:489:24: error: initializing 'struct tmio_mmc_host *' with an expression of incompatible type 'void'
+     489 |         struct tmio_mmc_host *host = from_work(host, t, dma_complete);
+         |                               ^      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   3 errors generated.
 
 
+vim +489 drivers/mmc/host/renesas_sdhi_internal_dmac.c
 
---=20
-Thanks,
-~Nick Desaulniers
+   486	
+   487	static void renesas_sdhi_internal_dmac_complete_work_fn(struct work_struct *t)
+   488	{
+ > 489		struct tmio_mmc_host *host = from_work(host, t, dma_complete);
+   490	
+   491		spin_lock_irq(&host->lock);
+   492		if (!renesas_sdhi_internal_dmac_complete(host))
+   493			goto out;
+   494	
+   495		tmio_mmc_do_data_irq(host);
+   496	out:
+   497		spin_unlock_irq(&host->lock);
+   498	}
+   499	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
