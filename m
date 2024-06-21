@@ -1,156 +1,187 @@
-Received: from mail-vk1-f172.google.com (mail-vk1-f172.google.com [209.85.221.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A759012CDA8;
-	Fri, 21 Jun 2024 04:25:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 35C2D12C473;
+	Fri, 21 Jun 2024 04:27:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718943940; cv=none; b=mqaD/iSZqhYS3i+R2vpBMrP68GqNjyWu5aM8Y9piCeUJ5iQEpE5lWgF40X1Jpbo7ok0O1QCO9rW86PkygGmQutQbt+Xf85m5t7QiYWRhtldalGkDLI05YJ84T7EF5kOThOAw6kRAD9SlpOcONmb9qEpvIRXXEFtJATJrHvSAClA=
+	t=1718944051; cv=none; b=A7dCILJv8BJhAz17hA72HBN37lhBFl2WBi2/bRml9/TCM5IApvg5ajslqx+xUI8uB3/cloixaBPRNFY+yQLk8Fzs4/EuEndOGG3X0PplED3+lVtWxdzEF0uV3MeJnFBgD+arcU+IQZ2avLB02mknSvs/AIT+YuoMdLTN/EXlef8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718943940; c=relaxed/simple;
-	bh=0kHL6I+i+rEWMz6wMavPhoPEpIJxtG46vFoRIyCaf/Q=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=M8IGdP6bpt6A4Zhn3tVL6zdck2oz9saFbLfl+JBHcLbn2wOqN9TtKsLkILQs91/Q1fR3SdNvVbiV0jfs57m0nuZS4J2HEkcVSrLbFDsieECuARgoVetg16hn8dTcSzFntucSns7yTv3IqJII9SGvbf4tRHrXO2X5nX3N9YZZBYU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=SNaRht9C; arc=none smtp.client-ip=209.85.221.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1718944051; c=relaxed/simple;
+	bh=MTtU9dN7dAU2KRI4ckab2+aKCYEZVk25H67J7K4WPbE=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=dmsMXm/B+OzrpOmLY6fvSwln+UL1XY3Zc3iFNdU0wCbGx5qGg5LdRRPvGMPQSJ91JxLc85dbMuKyUa+i0uQq0wXebdt//E/71eY6tjUzzdKihUYmU3JQuAmALTLB7tGDcfAK+HINspwdFIap4hwB7R7kMTT/JlQH4ke8cFu67s4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=bltAPNrK; arc=none smtp.client-ip=198.175.65.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="SNaRht9C"
-Received: by mail-vk1-f172.google.com with SMTP id 71dfb90a1353d-4ef12e5658bso503277e0c.2;
-        Thu, 20 Jun 2024 21:25:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1718943937; x=1719548737; darn=lists.linux.dev;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=YqZ3Ua17oxBzQaxZiLQZKE8zOImd1INklnV7GqHAAxs=;
-        b=SNaRht9C28Uf2AI7UF8lc0GrUlibGsn021oKxCwbVStDoZfLWOcKmG8XFdghVztiO9
-         QuuI4DQfTKZVfMWW/23PGsJn10/YnpPuBfK4BjFFqxcq4mNnORVd+nNo6npttAu6z1vQ
-         37PWW7TLQNGcn76fO30rEFCWu1mvm4oA0K51TxGfXzy48wdB5aKLxK9h8ebYJR4++Jaz
-         /jgcml43HjKxbaFCIaEzdGl9O6eGl+2gtMQAZsLENGPIvYkpGcBtCauuBHNTK3A8+d8l
-         NXKjWQYqlGZniVytwR4gG7cLDJKJkHfebJ4jUT9wzMDzyZTYvG3hDQpO+IZx/W2WTgag
-         HHzg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1718943937; x=1719548737;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=YqZ3Ua17oxBzQaxZiLQZKE8zOImd1INklnV7GqHAAxs=;
-        b=pC6/bEBWnHkXD9g+m9Hb+GJBuS5JOkHFpW32qOaDe7p4X7Tqm+R7ziaXsP7cnvnumT
-         K+hkhGS6l7e+CsmTRwaN/ntZy5iKNo4G+QvHN1evkomheCmvtgKIq+g7r0QE6G2ypzG5
-         5jhMAez5nfpXekvyZudNmxaGSIIJOD6MHCGvBeLUGdjNc5ThminC5neTsXt5YJWOlV9F
-         0q8UepW3PRd/6DXv77CxY9Ry2spllEnAsY65WZlJgq6Agdj3DUpYrwbbLQZsfBrYr2Io
-         LcA6kmrjo9t7DsvyVx3+q/QnftBA1BAZSSw/wWBXNWW4i1UvlEOMkDaUBGpwiDeAQbt6
-         aqvg==
-X-Forwarded-Encrypted: i=1; AJvYcCUcI/xojPhRWk6MBNXmYrQ13AVYBPQst582JXc+PufoM2TLYWF74+ftln6RbGasmHcr+JsJ+XsDJ4n5y1b4k0roSWkotADd+D03zYsCXw==
-X-Gm-Message-State: AOJu0Yzg/HeqsHJGNXZE/rFXzCsuIIX2x/UF0rt7sawCDe2OO3ibah51
-	rEQP+ukPoRZI7KTwb/tqkerhcnOPR96AHSz/rQhvv+Y59kFZg5o0UQMAG9IWZdIdRYoP2ZSTDld
-	NLtyRzNIge8ToPBk1cJwHz5DLZSY=
-X-Google-Smtp-Source: AGHT+IG5uz9w/wRrPr+fS/FhekIImaOCKZX2uIVPfp6VRlWX8eoGqOfZOF7O1EOjMAMPGfadsFUljQqzAcBdaJf/dKg=
-X-Received: by 2002:a05:6122:169e:b0:4ec:fe12:4559 with SMTP id
- 71dfb90a1353d-4ef27813b20mr8139479e0c.13.1718943937402; Thu, 20 Jun 2024
- 21:25:37 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="bltAPNrK"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1718944049; x=1750480049;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=MTtU9dN7dAU2KRI4ckab2+aKCYEZVk25H67J7K4WPbE=;
+  b=bltAPNrKfuN5pYZCOdDzDzpr9eCD9f1u1l4FBx0Yk5rXV7jV+Aep7cej
+   ICeWF20MEX7XS/ylluIj3i0Xdj0XLquoYNmkTAuD4ffsE+U/u997+KJqr
+   ORLummEV/GR/oEqL4iPuxxGQkppmDsLwR2hlUAFLCaTSZzkw+f91L7Qd5
+   4qxT8hUpXS2UyeVLfmpgtaaw6lPDsf2USByfCmB6d/tBUsVDVEHEZJIb1
+   bBQ7PRz5QSov+AY/VbX8V/DeJeLF2UN2jWsWtPjZJ6S85ewsLc7zj3dpm
+   /a5tdQIqgsNySkkEJPH9zO/i2UNOspFGiw73JS3zJPd7UEbS29gHlw97a
+   w==;
+X-CSE-ConnectionGUID: Si6CdEN5Qkmwp0YIJyllOA==
+X-CSE-MsgGUID: ptX6uUrhT9avI7OJ1RqReA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11109"; a="16079683"
+X-IronPort-AV: E=Sophos;i="6.08,253,1712646000"; 
+   d="scan'208";a="16079683"
+Received: from orviesa007.jf.intel.com ([10.64.159.147])
+  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jun 2024 21:27:25 -0700
+X-CSE-ConnectionGUID: Ezi3oK+pRi+L4zTbyatcRA==
+X-CSE-MsgGUID: M9ffDE0RQzynbpt8lMJ8Gw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.08,253,1712646000"; 
+   d="scan'208";a="43144991"
+Received: from lkp-server01.sh.intel.com (HELO 68891e0c336b) ([10.239.97.150])
+  by orviesa007.jf.intel.com with ESMTP; 20 Jun 2024 21:27:24 -0700
+Received: from kbuild by 68891e0c336b with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1sKVru-0008Dc-0t;
+	Fri, 21 Jun 2024 04:27:22 +0000
+Date: Fri, 21 Jun 2024 12:27:05 +0800
+From: kernel test robot <lkp@intel.com>
+To: David Howells <dhowells@redhat.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [dhowells-fs:netfs-writeback 17/17] fs/netfs/buffered_read.c:276:7:
+ warning: variable 'slice' is used uninitialized whenever 'if' condition is
+ false
+Message-ID: <202406211226.JKZxYvs6-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <202406211041.tUZSSJI3-lkp@intel.com>
-In-Reply-To: <202406211041.tUZSSJI3-lkp@intel.com>
-From: Allen <allen.lkml@gmail.com>
-Date: Thu, 20 Jun 2024 21:25:26 -0700
-Message-ID: <CAOMdWSKM+iGdtr_vtEXqSuy6dUgzK_hSZRh6nwB2aDSuMAJGbA@mail.gmail.com>
-Subject: Re: [ulfh-mmc:next 13/14] drivers/mmc/host/renesas_sdhi_internal_dmac.c:489:50:
- error: no member named 'dma_complete' in 'struct tmio_mmc_host'
-To: kernel test robot <lkp@intel.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, 
-	Ulf Hansson <ulf.hansson@linaro.org>, Christian Loehle <christian.loehle@arm.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
->
-> tree:   git://git.kernel.org/pub/scm/linux/kernel/git/ulfh/mmc.git next
-> head:   602a73f6dd02fc2501694c8e08b7a1e267b7c14c
-> commit: 74a3fe7c3784c8cae2e3e14c0078f33c1468fefc [13/14] mmc: Convert from tasklet to BH workqueue
-> config: i386-buildonly-randconfig-001-20240621 (https://download.01.org/0day-ci/archive/20240621/202406211041.tUZSSJI3-lkp@intel.com/config)
-> compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
-> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240621/202406211041.tUZSSJI3-lkp@intel.com/reproduce)
->
-> If you fix the issue in a separate patch/commit (i.e. not just a new version of
-> the same patch/commit), kindly add following tags
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes: https://lore.kernel.org/oe-kbuild-all/202406211041.tUZSSJI3-lkp@intel.com/
->
-> All errors (new ones prefixed by >>):
->
-> >> drivers/mmc/host/renesas_sdhi_internal_dmac.c:489:50: error: no member named 'dma_complete' in 'struct tmio_mmc_host'
->      489 |         struct tmio_mmc_host *host = from_work(host, t, dma_complete);
->          |                                      ~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~
->    include/linux/workqueue.h:535:44: note: expanded from macro 'from_work'
->      535 |         container_of(callback_work, typeof(*var), work_fieldname)
->          |         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~
->    include/linux/container_of.h:20:49: note: expanded from macro 'container_of'
->       20 |         static_assert(__same_type(*(ptr), ((type *)0)->member) ||       \
->          |         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~
->       21 |                       __same_type(*(ptr), void),                        \
->          |                       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->       22 |                       "pointer type mismatch in container_of()");       \
->          |                       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->    include/linux/compiler_types.h:428:74: note: expanded from macro '__same_type'
->      428 | #define __same_type(a, b) __builtin_types_compatible_p(typeof(a), typeof(b))
->          |                                                                          ^
->    include/linux/build_bug.h:77:50: note: expanded from macro 'static_assert'
->       77 | #define static_assert(expr, ...) __static_assert(expr, ##__VA_ARGS__, #expr)
->          |                                  ~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~
->    include/linux/build_bug.h:78:56: note: expanded from macro '__static_assert'
->       78 | #define __static_assert(expr, msg, ...) _Static_assert(expr, msg)
->          |                                                        ^~~~
-> >> drivers/mmc/host/renesas_sdhi_internal_dmac.c:489:31: error: no member named 'dma_complete' in 'tmio_mmc_host'
->      489 |         struct tmio_mmc_host *host = from_work(host, t, dma_complete);
->          |                                      ^                  ~~~~~~~~~~~~
->    include/linux/workqueue.h:535:2: note: expanded from macro 'from_work'
->      535 |         container_of(callback_work, typeof(*var), work_fieldname)
->          |         ^                                         ~~~~~~~~~~~~~~
->    include/linux/container_of.h:23:21: note: expanded from macro 'container_of'
->       23 |         ((type *)(__mptr - offsetof(type, member))); })
->          |                            ^              ~~~~~~
->    include/linux/stddef.h:16:32: note: expanded from macro 'offsetof'
->       16 | #define offsetof(TYPE, MEMBER)  __builtin_offsetof(TYPE, MEMBER)
->          |                                 ^                        ~~~~~~
-> >> drivers/mmc/host/renesas_sdhi_internal_dmac.c:489:24: error: initializing 'struct tmio_mmc_host *' with an expression of incompatible type 'void'
->      489 |         struct tmio_mmc_host *host = from_work(host, t, dma_complete);
->          |                               ^      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->    3 errors generated.
->
->
-> vim +489 drivers/mmc/host/renesas_sdhi_internal_dmac.c
->
->    486
->    487  static void renesas_sdhi_internal_dmac_complete_work_fn(struct work_struct *t)
->    488  {
->  > 489          struct tmio_mmc_host *host = from_work(host, t, dma_complete);
->    490
->    491          spin_lock_irq(&host->lock);
->    492          if (!renesas_sdhi_internal_dmac_complete(host))
->    493                  goto out;
->    494
->    495          tmio_mmc_do_data_irq(host);
->    496  out:
->    497          spin_unlock_irq(&host->lock);
->    498  }
->    499
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/dhowells/linux-fs.git netfs-writeback
+head:   d75f8ece3c49fa2ab1299cdabfc879952702a19a
+commit: d75f8ece3c49fa2ab1299cdabfc879952702a19a [17/17] netfs: Speed up buffered reading
+config: i386-buildonly-randconfig-003-20240621 (https://download.01.org/0day-ci/archive/20240621/202406211226.JKZxYvs6-lkp@intel.com/config)
+compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240621/202406211226.JKZxYvs6-lkp@intel.com/reproduce)
 
-  Thank you for reporting this issue. My compile test did not catch this.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202406211226.JKZxYvs6-lkp@intel.com/
 
-This is a bit tricky, as struct tmio_mmc_host does not have a link to
-either struct renesas_sdhi or way back either. I was thinking of using
-host_to_priv(), but am not entirely sure. I am really not familiar with this
-code.
+All warnings (new ones prefixed by >>):
 
-@Ulf Hansson Any thoughts on how best to fix this?
+>> fs/netfs/buffered_read.c:276:7: warning: variable 'slice' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
+     276 |                 if (source == NETFS_INVALID_READ)
+         |                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   fs/netfs/buffered_read.c:280:11: note: uninitialized use occurs here
+     280 |                 size -= slice;
+         |                         ^~~~~
+   fs/netfs/buffered_read.c:276:3: note: remove the 'if' if its condition is always true
+     276 |                 if (source == NETFS_INVALID_READ)
+         |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     277 |                         break;
+   fs/netfs/buffered_read.c:222:16: note: initialize the variable 'slice' to silence this warning
+     222 |                 ssize_t slice;
+         |                              ^
+         |                               = 0
+   fs/netfs/buffered_read.c:23:13: warning: unused function 'netfs_rreq_expand' [-Wunused-function]
+      23 | static void netfs_rreq_expand(struct netfs_io_request *rreq,
+         |             ^~~~~~~~~~~~~~~~~
+   2 warnings generated.
 
-Thanks.
 
->
-> --
-> 0-DAY CI Kernel Test Service
-> https://github.com/intel/lkp-tests/wiki
+vim +276 fs/netfs/buffered_read.c
+
+   206	
+   207	/*
+   208	 * Perform a read to the pagecache from a series of sources of different types,
+   209	 * slicing up the region to be read according to available cache blocks and
+   210	 * network rsize.
+   211	 */
+   212	static int netfs_read_to_pagecache(struct netfs_io_request *rreq)
+   213	{
+   214		struct netfs_inode *ictx = netfs_inode(rreq->inode);
+   215		unsigned long long start = rreq->start;
+   216		ssize_t size = rreq->len;
+   217	
+   218		/* Chop the readahead request up into subrequests. */
+   219		do {
+   220			struct netfs_io_subrequest *subreq;
+   221			enum netfs_io_source source = NETFS_DOWNLOAD_FROM_SERVER;
+   222			ssize_t slice;
+   223	
+   224			subreq = netfs_alloc_subrequest(rreq);
+   225			if (!subreq)
+   226				return -ENOMEM;
+   227	
+   228			subreq->source	= NETFS_DOWNLOAD_FROM_SERVER;
+   229			subreq->start	= start;
+   230			subreq->len	= size;
+   231	
+   232			spin_lock(&rreq->lock);
+   233			list_add_tail(&subreq->rreq_link, &rreq->subrequests);
+   234			subreq->prev_donated = rreq->prev_donated;
+   235			rreq->prev_donated = 0;
+   236			trace_netfs_sreq(subreq, netfs_sreq_trace_added);
+   237			spin_unlock(&rreq->lock);
+   238	
+   239			source = netfs_cache_prepare_read(rreq, subreq, rreq->i_size);
+   240			if (source == NETFS_DOWNLOAD_FROM_SERVER) {
+   241				if (subreq->start >= ictx->zero_point) {
+   242					subreq->source = source = NETFS_FILL_WITH_ZEROES;
+   243					goto fill_with_zeroes;
+   244				}
+   245	
+   246				if (subreq->len > ictx->zero_point - subreq->start)
+   247					subreq->len = ictx->zero_point - subreq->start;
+   248				if (subreq->len > rreq->i_size - subreq->start)
+   249					subreq->len = rreq->i_size - subreq->start;
+   250	
+   251				netfs_stat(&netfs_n_rh_download);
+   252				slice = rreq->netfs_ops->issue_read(subreq);
+   253				if (slice <= 0)
+   254					return slice;
+   255				goto done;
+   256			}
+   257	
+   258		fill_with_zeroes:
+   259			if (source == NETFS_FILL_WITH_ZEROES) {
+   260				subreq->source = NETFS_FILL_WITH_ZEROES;
+   261				trace_netfs_sreq(subreq, netfs_sreq_trace_submit);
+   262				netfs_stat(&netfs_n_rh_zero);
+   263				slice = subreq->len;
+   264				subreq->transferred = slice;
+   265				__set_bit(NETFS_SREQ_CLEAR_TAIL, &subreq->flags);
+   266				netfs_read_subreq_progress(subreq, 0, false);
+   267				goto done;
+   268			}
+   269	
+   270			if (source == NETFS_READ_FROM_CACHE) {
+   271				trace_netfs_sreq(subreq, netfs_sreq_trace_submit);
+   272				slice = netfs_read_cache_to_pagecache(rreq, subreq);
+   273				goto done;
+   274			}
+   275	
+ > 276			if (source == NETFS_INVALID_READ)
+   277				break;
+   278	
+   279		done:
+   280			size -= slice;
+   281			start += slice;
+   282			cond_resched();
+   283		} while (size > 0);
+   284	
+   285		return 0;
+   286	}
+   287	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
