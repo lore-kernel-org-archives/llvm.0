@@ -1,59 +1,58 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C5F69273FE;
-	Sat, 22 Jun 2024 08:17:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 37881748E;
+	Sat, 22 Jun 2024 09:22:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719044263; cv=none; b=bsIA66TEOOItOTP2i9hY3nWZ7Dl/siz1EEJhD4xDMVq5k2V+aPHe5bLmbXDB9ZYqjP8Z+oePUAjjVj7okUqcio+Uym74t6CYqHaAhTBGJzrDLtq/VJbwTqRQ08Rdqj9ESIxPpve0SduI44tAS1ocGBJTNYUNmGceay4Jlzir5/k=
+	t=1719048165; cv=none; b=aH+u+rOYqODC/hUxZPdOyCNJQqmkm1ZC0NsojR+suaBxvZSZ6cl+jp09dDOGyOjHt4fGIlJo7HXIkzYY21En63XMjrcz4+vX6OClnzV8UqYNnUbgvEmVUg+dyXwkNq5oMnKck5kG9YGiaRe6tTtqWvRW7xisHTEbfL3iPpVN7kQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719044263; c=relaxed/simple;
-	bh=CENWCEqKv2I2uZ38LlPphZKwY1oKxsnYHi+fNRPBOnY=;
+	s=arc-20240116; t=1719048165; c=relaxed/simple;
+	bh=Y4E8Mj+5l0cceAQrwkZ9e1+6UTEXVFgSF2vvJgF2rbo=;
 	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=rHen6ztbsFgU2wL/d4WrGeeb84WvKs+vdIEkV2QaiCvwbgiZazBWIzuaeTu4iFm6eIG84KjT5m8feeuhEy1FaF90tww3jhlYlhPKmTS+Vm39fxhzsCwT4mI5sf2I4fk7CN3rN6nIAIx5SyDUTX4Tb4fKscU+JoR+Z+W9fmQFrmM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Y5gjYPDV; arc=none smtp.client-ip=192.198.163.12
+	 Content-Disposition; b=RfZyFyB0/9gr5Div0rItUjlnavAHdhREKokc+gdUyJBT8llsftiwGP5uNimGAUBSHNWg2BOGrRARRJkm1ezuX0rR1g9EKXu6h97MTy86VNyghrDunz06L595Iw0aumJIDLH8YpTzdrciElt3XF07MP2fKv02AizRk3qYHpTTfXA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=UUMNhyFI; arc=none smtp.client-ip=198.175.65.14
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Y5gjYPDV"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="UUMNhyFI"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1719044261; x=1750580261;
+  t=1719048163; x=1750584163;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=CENWCEqKv2I2uZ38LlPphZKwY1oKxsnYHi+fNRPBOnY=;
-  b=Y5gjYPDV/ywdhSULKkOss0SAEUzntjpCxAKSKZ2bUV/iWxhCVNgvblhx
-   q5izpOAiVQTRV/pm4k0pn1/i43ccb9zPcp4+8v+qnkI9aogqG/Ilp9P3y
-   IZV9Sh3Rwy5K6+zHS/dCgc8m2gMRbofScnbFJTKNx8e2FB0n2uakH5ZDY
-   8g7nazlZltIuPd0AtZexbkm6Ui0bj9liN4VoCpHshnOWXaYCgJKVSQavT
-   LBtdcXNHvaWhJUH6UUErXwZeUakKMRzfRLaOVQ9lCPzwU1jYTPeolkYci
-   akqf2Y+GU1wib+Ax6P6gQRSYOLL2p/ES4HmbAXs7zpx5sgHnmlQVEZS9+
-   w==;
-X-CSE-ConnectionGUID: l7ycFA4KSp+h9RIhXB9szA==
-X-CSE-MsgGUID: jcoe6f/USfGVIuGe4bsWKg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11110"; a="19965511"
+  bh=Y4E8Mj+5l0cceAQrwkZ9e1+6UTEXVFgSF2vvJgF2rbo=;
+  b=UUMNhyFIfgoMtVczcmEngUCU//yLh5SA7gC/ghlxilV/U0iQ9ZRf5SJF
+   OZo5KW3VGWWQyhZXSVg+7e972j8yOUTD5cexRL4d9jTdBX2AYHKmzWxMO
+   dc24Kf3hdljmriX5D9drmbtirSR7oLvCJQATDQ77m6eNBR4x2LesKT2gv
+   6oAv1fAo6n3OXUXMczs9LrX2nQ40tJjRhG7yYKhv0lVRWkquNISAZvYwp
+   8f0r6qLQWALYMzYkyAfp6e3WBfGEk0ZjSBQDLW1NNfhqIqJkzi2HzqU7P
+   Mj4BBeU8KAyBHNqvsA7vtrZbHie8ZLrYmDpnid3bQHtwRUBs2DZSyu8ON
+   g==;
+X-CSE-ConnectionGUID: XRaZwhCkSLm2m+LvJVwPHg==
+X-CSE-MsgGUID: ONP7XtXEQcm5rEIp1dxhRA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11110"; a="19893460"
 X-IronPort-AV: E=Sophos;i="6.08,257,1712646000"; 
-   d="scan'208";a="19965511"
-Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jun 2024 01:17:40 -0700
-X-CSE-ConnectionGUID: eDMYFCSTRFeJvFSACdQ7dg==
-X-CSE-MsgGUID: dGNg9oFQSJmsIKGnz04OiQ==
+   d="scan'208";a="19893460"
+Received: from orviesa002.jf.intel.com ([10.64.159.142])
+  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jun 2024 02:22:42 -0700
+X-CSE-ConnectionGUID: PBOWf08+QDmOUQZtjcm60Q==
+X-CSE-MsgGUID: YbDWQWKuS7O4NpLDqCJtfQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.08,257,1712646000"; 
-   d="scan'208";a="80327290"
+   d="scan'208";a="73568692"
 Received: from lkp-server01.sh.intel.com (HELO 68891e0c336b) ([10.239.97.150])
-  by orviesa001.jf.intel.com with ESMTP; 22 Jun 2024 01:17:38 -0700
+  by orviesa002.jf.intel.com with ESMTP; 22 Jun 2024 02:22:41 -0700
 Received: from kbuild by 68891e0c336b with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1sKvwG-0009RK-1R;
-	Sat, 22 Jun 2024 08:17:36 +0000
-Date: Sat, 22 Jun 2024 16:17:25 +0800
+	id 1sKwxD-0009Ve-0T;
+	Sat, 22 Jun 2024 09:22:39 +0000
+Date: Sat, 22 Jun 2024 17:21:53 +0800
 From: kernel test robot <lkp@intel.com>
-To: Sean Christopherson <seanjc@google.com>
+To: Josh Poimboeuf <jpoimboe@kernel.org>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [sean-jc:x86/mmu_follow_pfn 7/28]
- arch/x86/kvm/mmu/paging_tmpl.h:555:50: error: 'struct page **' and 'struct
- page *' are not pointers to compatible types
-Message-ID: <202406221621.juDuxt5k-lkp@intel.com>
+Subject: [jpoimboe:objtool-diff 5/5] ERROR: modpost:
+ "__early_static_cpu_has__thunk" [arch/x86/kvm/kvm.ko] undefined!
+Message-ID: <202406221743.kuMlNIxf-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -63,105 +62,122 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-tree:   https://github.com/sean-jc/linux x86/mmu_follow_pfn
-head:   57ff012a34bc3bfac1ebb0724078e8fe47fdb60a
-commit: 85294ecb09b3f377a64f374c2841967c6be774eb [7/28] KVM: x86/mmu: Use
-config: i386-buildonly-randconfig-002-20240622 (https://download.01.org/0day-ci/archive/20240622/202406221621.juDuxt5k-lkp@intel.com/config)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jpoimboe/linux.git objtool-diff
+head:   03896a2cffb7e9210068032867433c5393d497ea
+commit: 03896a2cffb7e9210068032867433c5393d497ea [5/5] todo
+config: i386-buildonly-randconfig-002-20240622 (https://download.01.org/0day-ci/archive/20240622/202406221743.kuMlNIxf-lkp@intel.com/config)
 compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240622/202406221621.juDuxt5k-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240622/202406221743.kuMlNIxf-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202406221621.juDuxt5k-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202406221743.kuMlNIxf-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All errors (new ones prefixed by >>, old ones prefixed by <<):
 
-   In file included from arch/x86/kvm/mmu/mmu.c:4822:
->> arch/x86/kvm/mmu/paging_tmpl.h:555:50: error: 'struct page **' and 'struct page *' are not pointers to compatible types
-     555 |         mmu_set_spte(vcpu, slot, spte, pte_access, gfn, page_to_pfn(page), NULL);
-         |                                                         ^~~~~~~~~~~~~~~~~
-   include/asm-generic/memory_model.h:64:21: note: expanded from macro 'page_to_pfn'
-      64 | #define page_to_pfn __page_to_pfn
-         |                     ^
-   include/asm-generic/memory_model.h:19:53: note: expanded from macro '__page_to_pfn'
-      19 | #define __page_to_pfn(page)     ((unsigned long)((page) - mem_map) + \
-         |                                                  ~~~~~~ ^ ~~~~~~~
-   In file included from arch/x86/kvm/mmu/mmu.c:4822:
->> arch/x86/kvm/mmu/paging_tmpl.h:556:25: error: incompatible pointer types passing 'struct page *[1]' to parameter of type 'struct page *' [-Werror,-Wincompatible-pointer-types]
-     556 |         kvm_release_page_clean(page);
-         |                                ^~~~
-   include/linux/kvm_host.h:1209:42: note: passing argument to parameter 'page' here
-    1209 | void kvm_release_page_clean(struct page *page);
-         |                                          ^
-   In file included from arch/x86/kvm/mmu/mmu.c:4826:
->> arch/x86/kvm/mmu/paging_tmpl.h:555:50: error: 'struct page **' and 'struct page *' are not pointers to compatible types
-     555 |         mmu_set_spte(vcpu, slot, spte, pte_access, gfn, page_to_pfn(page), NULL);
-         |                                                         ^~~~~~~~~~~~~~~~~
-   include/asm-generic/memory_model.h:64:21: note: expanded from macro 'page_to_pfn'
-      64 | #define page_to_pfn __page_to_pfn
-         |                     ^
-   include/asm-generic/memory_model.h:19:53: note: expanded from macro '__page_to_pfn'
-      19 | #define __page_to_pfn(page)     ((unsigned long)((page) - mem_map) + \
-         |                                                  ~~~~~~ ^ ~~~~~~~
-   In file included from arch/x86/kvm/mmu/mmu.c:4826:
->> arch/x86/kvm/mmu/paging_tmpl.h:556:25: error: incompatible pointer types passing 'struct page *[1]' to parameter of type 'struct page *' [-Werror,-Wincompatible-pointer-types]
-     556 |         kvm_release_page_clean(page);
-         |                                ^~~~
-   include/linux/kvm_host.h:1209:42: note: passing argument to parameter 'page' here
-    1209 | void kvm_release_page_clean(struct page *page);
-         |                                          ^
-   In file included from arch/x86/kvm/mmu/mmu.c:4830:
->> arch/x86/kvm/mmu/paging_tmpl.h:555:50: error: 'struct page **' and 'struct page *' are not pointers to compatible types
-     555 |         mmu_set_spte(vcpu, slot, spte, pte_access, gfn, page_to_pfn(page), NULL);
-         |                                                         ^~~~~~~~~~~~~~~~~
-   include/asm-generic/memory_model.h:64:21: note: expanded from macro 'page_to_pfn'
-      64 | #define page_to_pfn __page_to_pfn
-         |                     ^
-   include/asm-generic/memory_model.h:19:53: note: expanded from macro '__page_to_pfn'
-      19 | #define __page_to_pfn(page)     ((unsigned long)((page) - mem_map) + \
-         |                                                  ~~~~~~ ^ ~~~~~~~
-   In file included from arch/x86/kvm/mmu/mmu.c:4830:
->> arch/x86/kvm/mmu/paging_tmpl.h:556:25: error: incompatible pointer types passing 'struct page *[1]' to parameter of type 'struct page *' [-Werror,-Wincompatible-pointer-types]
-     556 |         kvm_release_page_clean(page);
-         |                                ^~~~
-   include/linux/kvm_host.h:1209:42: note: passing argument to parameter 'page' here
-    1209 | void kvm_release_page_clean(struct page *page);
-         |                                          ^
-   6 errors generated.
-
-
-vim +555 arch/x86/kvm/mmu/paging_tmpl.h
-
-   531	
-   532	static bool
-   533	FNAME(prefetch_gpte)(struct kvm_vcpu *vcpu, struct kvm_mmu_page *sp,
-   534			     u64 *spte, pt_element_t gpte)
-   535	{
-   536		struct kvm_memory_slot *slot;
-   537		struct page *page[1];
-   538		unsigned pte_access;
-   539		gfn_t gfn;
-   540	
-   541		if (FNAME(prefetch_invalid_gpte)(vcpu, sp, spte, gpte))
-   542			return false;
-   543	
-   544		gfn = gpte_to_gfn(gpte);
-   545		pte_access = sp->role.access & FNAME(gpte_access)(gpte);
-   546		FNAME(protect_clean_gpte)(vcpu->arch.mmu, &pte_access, gpte);
-   547	
-   548		slot = gfn_to_memslot_dirty_bitmap(vcpu, gfn, pte_access & ACC_WRITE_MASK);
-   549		if (!slot)
-   550			return false;
-   551	
-   552		if (gfn_to_page_many_atomic(slot, gfn, page, 1) != 1)
-   553			return false;
-   554	
- > 555		mmu_set_spte(vcpu, slot, spte, pte_access, gfn, page_to_pfn(page), NULL);
- > 556		kvm_release_page_clean(page);
-   557		return true;
-   558	}
-   559	
+WARNING: modpost: missing MODULE_DESCRIPTION() in vmlinux.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in arch/x86/events/intel/intel-uncore.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in arch/x86/events/intel/intel-cstate.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in arch/x86/crypto/crc32-pclmul.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in arch/x86/kvm/kvm.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in arch/x86/kvm/kvm-intel.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in arch/x86/kvm/kvm-amd.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in kernel/locking/locktorture.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in kernel/locking/test-ww_mutex.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in kernel/rcu/rcuscale.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in fs/binfmt_script.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in security/keys/trusted-keys/trusted.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in crypto/crypto_simd.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in lib/math/prime_numbers.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in lib/find_bit_benchmark.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in lib/test_dhry.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in lib/test_firmware.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in lib/test_min_heap.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in lib/test_module.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in lib/test_user_copy.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in lib/test_static_keys.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in lib/test_static_key_base.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in lib/test_xarray.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in lib/test_maple_tree.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in lib/test_memcat_p.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in lib/test_blackhole_dev.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in lib/test_meminit.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in lib/test_ref_tracker.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in lib/test_objpool.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in lib/atomic64_test.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/gpio/gpio-pcf857x.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/pci/pci-stub.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/dma/qcom/hdma.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/dma/dmatest.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/vdpa/ifcvf/ifcvf.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/char/agp/amd-k7-agp.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/char/agp/amd64-agp.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/char/agp/efficeon-agp.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/char/agp/intel-agp.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/char/agp/intel-gtt.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/char/agp/nvidia-agp.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/char/agp/sis-agp.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/char/lp.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/char/ppdev.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/gpu/drm/tests/drm_kunit_helpers.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/gpu/drm/tests/drm_buddy_test.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/gpu/drm/tests/drm_cmdline_parser_test.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/gpu/drm/tests/drm_connector_test.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/gpu/drm/tests/drm_damage_helper_test.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/gpu/drm/tests/drm_dp_mst_helper_test.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/gpu/drm/tests/drm_exec_test.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/gpu/drm/tests/drm_format_test.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/gpu/drm/tests/drm_framebuffer_test.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/gpu/drm/tests/drm_gem_shmem_test.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/gpu/drm/tests/drm_managed_test.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/gpu/drm/tests/drm_mm_test.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/gpu/drm/tests/drm_modes_test.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/gpu/drm/tests/drm_plane_helper_test.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/gpu/drm/tests/drm_probe_helper_test.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/gpu/drm/tests/drm_rect_test.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/gpu/drm/tiny/bochs.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/gpu/drm/drm_panel_orientation_quirks.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/mfd/pcf50633-gpio.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/dax/dax.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/mtd/chips/cfi_util.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/mtd/chips/cfi_cmdset_0020.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/auxdisplay/hd44780_common.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/auxdisplay/line-display.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/input/matrix-keymap.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/input/vivaldi-fmap.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/rtc/rtc-rc5t583.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/i2c/busses/i2c-ali1563.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/mmc/core/mmc_core.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-apple.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-aureal.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-belkin.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-cherry.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-vivaldi-common.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-kensington.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-lcpower.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-ortek.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-saitek.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-semitek.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-sunplus.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-gaff.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-tivo.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-zpff.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-viewsonic.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/parport/parport.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hwmon/corsair-cpro.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hwmon/mr75203.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in samples/kfifo/bytestream-example.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in samples/kfifo/dma-example.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in samples/kfifo/inttype-example.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in samples/kfifo/record-example.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in arch/x86/video/fbdev.o
+>> ERROR: modpost: "__early_static_cpu_has__thunk" [arch/x86/kvm/kvm.ko] undefined!
+>> ERROR: modpost: "__early_static_cpu_has__thunk" [arch/x86/kvm/kvm-intel.ko] undefined!
+>> ERROR: modpost: "__early_static_cpu_has__thunk" [arch/x86/kvm/kvm-amd.ko] undefined!
+ERROR: modpost: "__early_static_cpu_has__thunk" [drivers/gpu/drm/drm.ko] undefined!
+ERROR: modpost: "__early_static_cpu_has__thunk" [drivers/gpu/drm/i915/i915.ko] undefined!
+ERROR: modpost: "__early_static_cpu_has__thunk" [drivers/firewire/firewire-ohci.ko] undefined!
 
 -- 
 0-DAY CI Kernel Test Service
