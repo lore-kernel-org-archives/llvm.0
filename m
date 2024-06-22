@@ -1,132 +1,86 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
+Received: from mail-40140.protonmail.ch (mail-40140.protonmail.ch [185.70.40.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8271B14BF8A;
-	Sat, 22 Jun 2024 11:48:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4DF70155C87
+	for <llvm@lists.linux.dev>; Sat, 22 Jun 2024 12:18:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.70.40.140
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719056930; cv=none; b=Tg5JEP45oNbGrAFoTS4ygdrxpyW6TP7uNj1N716SPS/8SMDXm2DcobEuX7eUrMLTktyLYXTqmPI3z3a3ZYUqHzbCMhHO+NUFmxTO9EC+fz7FHzCvzj0V/wihOnPdzpScYr7sUaJVx/+nI0xv9dJNYpBD4NmjeKwRrB2uUEe7EMY=
+	t=1719058712; cv=none; b=SmR3SHv8iluLBCcoh8HabCMqNUsl8BAZJ67SgptYzQa4sL0dtNrJpZtqiL7NHlnjXZL8r9I05IHtD2T++5ZClje5JQyY8sB2jOl/C7wK/CBZlAGElGXMTqrkJBWbVknrZool+xM9v1yMs/DR7SpyEGrrKpNRKv94PjkLH7f8/+A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719056930; c=relaxed/simple;
-	bh=5oCeKv2qGVIXPBR53wt+m2yM+0t0BtVgXYnxwEGLUHg=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=tE6FVjIDp+jrlUTtv+RF6s30IqhuLljXPlGkyfiCcBrkwc9pKRp/OC55CFSH0+TdA+QQbZpOXEl9EDC9UeuCY7C69YMNHhzVd0a+9lqUDmJeI77hk1ptVVrqEy32hc3NsGqDTRm+qprtb/T/58Lb+4jUvcAFM+qgrbzP97VgmMw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=eEIq2eDl; arc=none smtp.client-ip=192.198.163.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1719058712; c=relaxed/simple;
+	bh=luy69jnF5njL8gUfluNCNLhAakoaL/yegWrkpfKE/rU=;
+	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=ueyerg2l5grQ3ieP10QJ7q52ADJGBL/bG6W0O6RSa6MOpUsZMSTSo7qFlpPUt5cYXsmp1cwEZUyA9D2o0WTLNgqWhNwguF+uoOADHm0ycW+mbX4KY8/Q3/+eqISOCNAu81dodMx4906JXmYViVBJOajcahiLAVS99CPd+MVs5TQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=protonmail.com; spf=pass smtp.mailfrom=protonmail.com; dkim=pass (2048-bit key) header.d=protonmail.com header.i=@protonmail.com header.b=cH49pnWe; arc=none smtp.client-ip=185.70.40.140
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=protonmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=protonmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="eEIq2eDl"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1719056928; x=1750592928;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=5oCeKv2qGVIXPBR53wt+m2yM+0t0BtVgXYnxwEGLUHg=;
-  b=eEIq2eDlje5D/08NSbr77Xb/sz6HMqo/RW+zYxVyrBiQbq2tBZA67cNU
-   6ewrhG34COXpvef5NnKgktHg8xb7WWsEuL9XsKEPmzmU8ca8Dn2bqcMyE
-   ftN6j6Pu6WCZcqqOqth0p+QSCk0HWklz+jKexLYUkZpRiI7zuNQ5z3J9u
-   eMbCpH4V/7FfwURZCmnTKh9s/j9WQSCNZ9LYE+27WmKhoypgbs7n09z99
-   0F9hJSe8KdOjTNcynZcpHViakIOR4OMXpPXh0CrUAcKiksN/p/ItdXIaQ
-   Fn+PySk7UPx0q1KoqEbUSdP/ipmGKzZ4yPUTByVveJMv7RmRPYOV6yy6E
-   A==;
-X-CSE-ConnectionGUID: f7to2vKbRI6dBYeKnt2cUA==
-X-CSE-MsgGUID: KpuWmnxmS9WNr/3YSKGPZg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11110"; a="26770499"
-X-IronPort-AV: E=Sophos;i="6.08,257,1712646000"; 
-   d="scan'208";a="26770499"
-Received: from orviesa007.jf.intel.com ([10.64.159.147])
-  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jun 2024 04:48:45 -0700
-X-CSE-ConnectionGUID: o3JNZImrRW2L0FhChEj1lw==
-X-CSE-MsgGUID: 1fHcByQaQwWpoO5gBGa15Q==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.08,257,1712646000"; 
-   d="scan'208";a="43515963"
-Received: from lkp-server01.sh.intel.com (HELO 68891e0c336b) ([10.239.97.150])
-  by orviesa007.jf.intel.com with ESMTP; 22 Jun 2024 04:48:44 -0700
-Received: from kbuild by 68891e0c336b with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1sKzEX-0009Zg-2k;
-	Sat, 22 Jun 2024 11:48:41 +0000
-Date: Sat, 22 Jun 2024 19:48:35 +0800
-From: kernel test robot <lkp@intel.com>
-To: Sean Christopherson <seanjc@google.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	David Stevens <stevensd@chromium.org>,
-	Maxim Levitsky <mlevitsk@redhat.com>
-Subject: [sean-jc:x86/mmu_follow_pfn 13/28]
- arch/riscv/kvm/../../../virt/kvm/kvm_main.c:2987:13: error: use of
- undeclared identifier 'atomic'
-Message-ID: <202406221947.gE0KLyPt-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=protonmail.com header.i=@protonmail.com header.b="cH49pnWe"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=protonmail.com;
+	s=protonmail3; t=1719058703; x=1719317903;
+	bh=luy69jnF5njL8gUfluNCNLhAakoaL/yegWrkpfKE/rU=;
+	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
+	 Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
+	 Message-ID:BIMI-Selector;
+	b=cH49pnWeR6k+nnE2zzNlVZ9ld0S/hoSZduwUitTHA10DJ+ICOAk+Z42SNhXkpROjX
+	 4+0XRsEts8n9OBiBMRxhPRHFApprxhKdrGYYObqGY2L3xcmx/VNHr48k3tzGHn39Rm
+	 uMk4Q9M1t7inlqzc7KwrtcyDfq4Sbq+LJSKhEfIIA3xww8MKaGReY5YYvOJr39U9Jm
+	 PGJJbh9sA12AL7XN8d/1r28hywKazGtehwqGZ0QMWFRTMesU/8eID+LitF4R8QZTad
+	 wIXhs1c2J7WQ+5cAkIU8DgPvF4vj0zY6FFqJClF4SX0KSo/ILfUxJcSZ0uvKXKV+6L
+	 gX6MJjFVJhAsA==
+Date: Sat, 22 Jun 2024 12:18:17 +0000
+To: Nathan Chancellor <nathan@kernel.org>
+From: Koakuma <koachan@protonmail.com>
+Cc: "David S. Miller" <davem@davemloft.net>, Andreas Larsson <andreas@gaisler.com>, Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, glaubitz@physik.fu-berlin.de, sparclinux@vger.kernel.org, linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH] sparc/build: Make all compiler flags also clang-compatible
+Message-ID: <e26PTXUXEz8OYXmaeKn4Mpuejr4IOlFfFwdB5vpsluXlYiqDdlyQTYcDtdAny_o4gO4SfPeQCCN2qpyT6e0nog5EaP3xk2SeUPTrF54p1gM=@protonmail.com>
+In-Reply-To: <20240621185345.GA416370@thelio-3990X>
+References: <20240620-sparc-cflags-v1-1-bba7d0ff7d42@protonmail.com> <20240621185345.GA416370@thelio-3990X>
+Feedback-ID: 6608610:user:proton
+X-Pm-Message-ID: a46a21971ad74a875ee1462ced2663a00c9316b2
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-tree:   https://github.com/sean-jc/linux x86/mmu_follow_pfn
-head:   57ff012a34bc3bfac1ebb0724078e8fe47fdb60a
-commit: 2e1ef556dc18d78c75fc1ddc11cb770a3de6eb61 [13/28] KVM: mmu: Introduce kvm_follow_pfn()
-config: riscv-defconfig (https://download.01.org/0day-ci/archive/20240622/202406221947.gE0KLyPt-lkp@intel.com/config)
-compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project ad79a14c9e5ec4a369eed4adf567c22cc029863f)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240622/202406221947.gE0KLyPt-lkp@intel.com/reproduce)
+Hi Nathan,
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202406221947.gE0KLyPt-lkp@intel.com/
+Nathan Chancellor <nathan@kernel.org> wrote:
 
-Note: the sean-jc/x86/mmu_follow_pfn HEAD 57ff012a34bc3bfac1ebb0724078e8fe47fdb60a builds fine.
-      It only hurts bisectability.
+> I saw through the LLVM issue above that one other patch is necessary to
+> fix an issue in the vDSO [1], which I applied in testing this one.=20
 
-All errors (new ones prefixed by >>):
+Mhmm, I did not submit that yet because I don't feel fully confident
+with it. I think it should probably live in include/vdso/math64.h
+as plain C code instead of the current asm version, but I don't know
+what is the proper way to check the current environment's word size.
+Is checking BITS_PER_LONG enough, or should I do it in another way?
 
-   In file included from arch/riscv/kvm/../../../virt/kvm/kvm_main.c:18:
-   In file included from include/linux/kvm_host.h:7:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:23:
-   In file included from arch/riscv/include/asm/irq.h:10:
-   In file included from include/linux/interrupt.h:21:
-   In file included from arch/riscv/include/asm/sections.h:9:
-   In file included from include/linux/mm.h:2253:
-   include/linux/vmstat.h:514:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     514 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
->> arch/riscv/kvm/../../../virt/kvm/kvm_main.c:2987:13: error: use of undeclared identifier 'atomic'
-    2987 |                 .atomic = atomic,
-         |                           ^
-   1 warning and 1 error generated.
+> I noticed in applying that change that you appear to be working on 6.1,
+> which is fine for now, but you'll need another diff once you get to a
+> newer version, as we stopped using CROSS_COMPILE to set clang's
+> '--target=3D' value:
+>=20
+> diff --git a/scripts/Makefile.clang b/scripts/Makefile.clang
+> index 6c23c6af797f..2435efae67f5 100644
+> --- a/scripts/Makefile.clang
+> +++ b/scripts/Makefile.clang
+> @@ -10,6 +10,7 @@ CLANG_TARGET_FLAGS_mips :=3D mipsel-linux-gnu
+> CLANG_TARGET_FLAGS_powerpc :=3D powerpc64le-linux-gnu
+> CLANG_TARGET_FLAGS_riscv :=3D riscv64-linux-gnu
+> CLANG_TARGET_FLAGS_s390 :=3D s390x-linux-gnu
+> +CLANG_TARGET_FLAGS_sparc :=3D sparc64-linux-gnu
+> CLANG_TARGET_FLAGS_x86 :=3D x86_64-linux-gnu
+> CLANG_TARGET_FLAGS_um :=3D $(CLANG_TARGET_FLAGS_$(SUBARCH))
+> CLANG_TARGET_FLAGS :=3D $(CLANG_TARGET_FLAGS_$(SRCARCH))
 
+Yeah, I was working with 6.1 at that time since it's the version
+that my distro have installed for me. Now this is more of a workflow
+question, but this means I should submit a v2 with this change
+merged in with mine too, right?
 
-vim +/atomic +2987 arch/riscv/kvm/../../../virt/kvm/kvm_main.c
-
-  2979	
-  2980	kvm_pfn_t __gfn_to_pfn_memslot(const struct kvm_memory_slot *slot, gfn_t gfn,
-  2981				       bool interruptible, bool no_wait,
-  2982				       bool write_fault, bool *writable)
-  2983	{
-  2984		struct kvm_follow_pfn kfp = {
-  2985			.slot = slot,
-  2986			.gfn = gfn,
-> 2987			.atomic = atomic,
-  2988			.map_writable = writable,
-  2989		};
-  2990	
-  2991		if (write_fault)
-  2992			kfp.flags |= FOLL_WRITE;
-  2993		if (no_wait)
-  2994			kfp.flags |= FOLL_NOWAIT;
-  2995		if (interruptible)
-  2996			kfp.flags |= FOLL_INTERRUPTIBLE;
-  2997	
-  2998		return kvm_follow_pfn(&kfp);
-  2999	}
-  3000	EXPORT_SYMBOL_GPL(__gfn_to_pfn_memslot);
-  3001	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+And thanks for the feedback!
