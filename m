@@ -1,371 +1,134 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
+Received: from outpost1.zedat.fu-berlin.de (outpost1.zedat.fu-berlin.de [130.133.4.66])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F34442231C;
-	Sat, 22 Jun 2024 04:23:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 10A692B2CC;
+	Sat, 22 Jun 2024 07:29:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=130.133.4.66
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719030217; cv=none; b=pybo/CpdEIU+QWE4rqTMnRAEGaQ1zRvj6/o83d+b4D04kQI004K3Mfc2qF3cAUm+aFHFkYkxOuiyno5O6YFK2O0Bt212o/rPxDmYYDmgoXsRhGLKp3SdlpsUq3X5wgwdTBf1Dw4wjgB4cyG2kKoEeqRRz/UPSktkF2z3zgG9jjg=
+	t=1719041356; cv=none; b=VxsobAEn5opYn97EqIbMgBOsYPcXDJmfn/8D09ZyiFoBVKQ5/HGvGtYY3EE10RBNuDPXL9sTa5jxkl9q+pKEPOZaf8NGbIrvqWHi+t0f3aFG0mG0jd9y6Ozbj3n2Aa6R8NHZG4L8/XBUvIoHmo/f+ltZFeEe4vMoiaXXSti2XfE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719030217; c=relaxed/simple;
-	bh=C/vIk+XIZ6LrQKWz08F76uSKtzfzfSVvNgGngX7i1UM=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=vEjwpfUI+ZaejdN5nEcr6Cf7s9vKd/gACrsFFk2I6WqXGNJc4buWUbQaw0XYvssYSpPgfIxHkjmVntVxwioz071GFrWkW106u32xqg/eYMQuFRRLOdu7ZRpjRgITKRD9zGZKFKKaiaILRq/6kJnip4ebcjUF87jyf9X4slMf9v0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=mR45C1k0; arc=none smtp.client-ip=192.198.163.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1719041356; c=relaxed/simple;
+	bh=iqLulf/rD1NvA0LE8LuLF/+Z2k5eg20+82y5x+UFl6g=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=rTCJC6T4aeDeIpfxuellw96M5esnPX8UHbdV48dtmq9AtthqdU3EoWuF9rejdx5+Ak6e3K2PDlch9nmI19B+2O2Z+nzeA6qLXwtWnGt8eznv/04vktABLXx+GoxO7mjhmixD4HDHCbzd324LdBofe3EyEqPUqjvS+06Uei0PsgY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=physik.fu-berlin.de; spf=pass smtp.mailfrom=zedat.fu-berlin.de; dkim=pass (2048-bit key) header.d=fu-berlin.de header.i=@fu-berlin.de header.b=RcfV2RhY; arc=none smtp.client-ip=130.133.4.66
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=physik.fu-berlin.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zedat.fu-berlin.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="mR45C1k0"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1719030215; x=1750566215;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=C/vIk+XIZ6LrQKWz08F76uSKtzfzfSVvNgGngX7i1UM=;
-  b=mR45C1k0x8BuUedpmZmb+lb5SnAMUdXw2RLb9GhT4xOM1eZimQFck2GF
-   /8y1a4pYFH+IKWM/7/UIt0AkAOX6OgICnfQITT9tM5OTQqDEwq/8NpX8/
-   HwFqCKgg/T1AN+IXzcqTlb3iK/2SjsA5VzhInEVDU1pnZKH/wUZSatbCQ
-   tQ1h1Rf0PTladl3VUaqd+JGHlKWyc+hIfL92WuqyhCIsPAtonTj5XYDMG
-   6aLHNrDbm8fwDpUBitbf2GVBPFFhfvq/d2roSNjT03rS9ce2eeZGPjCxt
-   If1AQHeCzhmIDKjll4NMeLhJ9AefMA1HBuJg1gQf0D6hUI8EHpj10oxnZ
-   Q==;
-X-CSE-ConnectionGUID: SbVPET81RvubKDEGC1sNdw==
-X-CSE-MsgGUID: IEzWoigDRvmb/AlO/5kjHg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11110"; a="19960222"
-X-IronPort-AV: E=Sophos;i="6.08,256,1712646000"; 
-   d="scan'208";a="19960222"
-Received: from fmviesa008.fm.intel.com ([10.60.135.148])
-  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jun 2024 21:23:34 -0700
-X-CSE-ConnectionGUID: gYMeEBYZTyiQo2yo6+6IKQ==
-X-CSE-MsgGUID: pdJrtc93Rg2gbI5Zr0kAfQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.08,256,1712646000"; 
-   d="scan'208";a="42750016"
-Received: from lkp-server01.sh.intel.com (HELO 68891e0c336b) ([10.239.97.150])
-  by fmviesa008.fm.intel.com with ESMTP; 21 Jun 2024 21:23:32 -0700
-Received: from kbuild by 68891e0c336b with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1sKsHi-0009Id-1J;
-	Sat, 22 Jun 2024 04:23:30 +0000
-Date: Sat, 22 Jun 2024 12:22:41 +0800
-From: kernel test robot <lkp@intel.com>
-To: Alexandre Mergnat <amergnat@baylibre.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Mark Brown <broonie@kernel.org>,
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-Subject: [broonie-ci:v6_20240619_amergnat_add_audio_support_for_the_mediatek_genio_350_evk_board
- 34/34] sound/soc/mediatek/mt8365/mt8365-afe-clk.c:298:5: warning: no
- previous prototype for function 'mt8365_afe_hd_engen_enable'
-Message-ID: <202406221249.REEiRekU-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=fu-berlin.de header.i=@fu-berlin.de header.b="RcfV2RhY"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=fu-berlin.de; s=fub01; h=MIME-Version:Content-Transfer-Encoding:
+	Content-Type:References:In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender
+	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
+	List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+	bh=4BlOodcHBQPbIPkH5yQr6ccoGViUa7yXt3bhkI+0hmk=; t=1719041353; x=1719646153; 
+	b=RcfV2RhYqBRjPoR6zBqFAcJYJ5yCEXPLXOaR7p88+A3wafqUOIQzQcC2GuX9EWeVLm1rrBvsfIr
+	zZ0Zvdqma8o4CI6iCVjvdEPanVa+YdPyVnKRMDtN0peH0S1IVZy/Bg2nEnA5J7hu67XN4B5LY4wqB
+	m52ODWajfSSNlNIVMDGWkO5oXcFPeopB3yJ0mKW7Bhw8nidofYaGHG/H5sHM1abHNcSmUE1njGvcg
+	VsQYcOCpB4CCeV9SkG71jjFxbBx2hOlayM2cONpg+EIFVf6ekW/v5jgJ4caMxp7/we90/yc0F5wrM
+	hmTU8zM+VtYFl2KGWUqcQAeHJVfmJHw+d2rw==;
+Received: from inpost2.zedat.fu-berlin.de ([130.133.4.69])
+          by outpost.zedat.fu-berlin.de (Exim 4.97)
+          with esmtps (TLS1.3)
+          tls TLS_AES_256_GCM_SHA384
+          (envelope-from <glaubitz@zedat.fu-berlin.de>)
+          id 1sKvBK-000000044kH-1Bvk; Sat, 22 Jun 2024 09:29:06 +0200
+Received: from p5b13a475.dip0.t-ipconnect.de ([91.19.164.117] helo=suse-laptop.fritz.box)
+          by inpost2.zedat.fu-berlin.de (Exim 4.97)
+          with esmtpsa (TLS1.3)
+          tls TLS_AES_256_GCM_SHA384
+          (envelope-from <glaubitz@physik.fu-berlin.de>)
+          id 1sKvBK-00000000bCd-2ErI; Sat, 22 Jun 2024 09:29:06 +0200
+Message-ID: <ee12bbe782e44a96f4894dfd9ab0550233014c19.camel@physik.fu-berlin.de>
+Subject: Re: [PATCH] sparc/build: Make all compiler flags also
+ clang-compatible
+From: John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
+To: Nathan Chancellor <nathan@kernel.org>, koachan@protonmail.com
+Cc: "David S. Miller" <davem@davemloft.net>, Andreas Larsson
+ <andreas@gaisler.com>, Nick Desaulniers <ndesaulniers@google.com>, Bill
+ Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
+ sparclinux@vger.kernel.org,  linux-kernel@vger.kernel.org,
+ llvm@lists.linux.dev
+Date: Sat, 22 Jun 2024 09:29:05 +0200
+In-Reply-To: <20240621185345.GA416370@thelio-3990X>
+References: <20240620-sparc-cflags-v1-1-bba7d0ff7d42@protonmail.com>
+	 <20240621185345.GA416370@thelio-3990X>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.52.2 
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+X-Original-Sender: glaubitz@physik.fu-berlin.de
+X-ZEDAT-Hint: PO
 
-Hi Alexandre,
+Hi Nathan,
 
-First bad commit (maybe != root cause):
+On Fri, 2024-06-21 at 11:53 -0700, Nathan Chancellor wrote:
+> I think a good amount of the reasoning below the '---' could probably
+> make it into the commit message as well but I don't have much of a
+> vision there, maybe one of the SPARC folks will.
+>=20
+> I saw through the LLVM issue above that one other patch is necessary to
+> fix an issue in the vDSO [1], which I applied in testing this one. I
+> noticed in applying that change that you appear to be working on 6.1,
+> which is fine for now, but you'll need another diff once you get to a
+> newer version, as we stopped using CROSS_COMPILE to set clang's
+> '--target=3D' value:
+>=20
+> diff --git a/scripts/Makefile.clang b/scripts/Makefile.clang
+> index 6c23c6af797f..2435efae67f5 100644
+> --- a/scripts/Makefile.clang
+> +++ b/scripts/Makefile.clang
+> @@ -10,6 +10,7 @@ CLANG_TARGET_FLAGS_mips		:=3D mipsel-linux-gnu
+>  CLANG_TARGET_FLAGS_powerpc	:=3D powerpc64le-linux-gnu
+>  CLANG_TARGET_FLAGS_riscv	:=3D riscv64-linux-gnu
+>  CLANG_TARGET_FLAGS_s390		:=3D s390x-linux-gnu
+> +CLANG_TARGET_FLAGS_sparc	:=3D sparc64-linux-gnu
+>  CLANG_TARGET_FLAGS_x86		:=3D x86_64-linux-gnu
+>  CLANG_TARGET_FLAGS_um		:=3D $(CLANG_TARGET_FLAGS_$(SUBARCH))
+>  CLANG_TARGET_FLAGS		:=3D $(CLANG_TARGET_FLAGS_$(SRCARCH))
+>=20
+> With those, I can successfully build a kernel with clang that boots in
+> QEMU :)
+>=20
+>   $ make -skj"$(nproc)" \
+>          ARCH=3Dsparc64 \
+>          CC=3Dclang \
+>          CROSS_COMPILE=3Dsparc64-linux-gnu- \
+>          LLVM_IAS=3D0 \
+>          mrproper defconfig all
+>=20
+>   $ qemu-system-sparc64 \
+>         -serial mon:stdio \
+>         -display none \
+>         -no-reboot \
+>         -M sun4u \
+>         -cpu 'TI UltraSparc IIi' \
+>         -m 512 \
+>         -append console=3DttyS0 \
+>         -initrd sparc64-rootfs.cpio \
+>         -kernel arch/sparc/boot/image
+>   ...
+>   [    1.788544] Run /init as init process
+>   ...
+>   Linux version 6.10.0-rc4+ (nathan@thelio-3990X) (ClangBuiltLinux clang =
+version 19.0.0git (https://github.com/llvm/llvm-project a083e50f53f0f9eb9ad=
+0c5b65f3c627cf97043e6), GNU ld (GNU Binutils) 2.42) #1 SMP Fri Jun 21 11:36=
+:18 MST 2024
+>   ...
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/ci.git v6_20240619_amergnat_add_audio_support_for_the_mediatek_genio_350_evk_board
-head:   bb7947bc00dc3b464cc5ce3db7617d3ef9a9d753
-commit: bb7947bc00dc3b464cc5ce3db7617d3ef9a9d753 [34/34] ASoC: mediatek: Add MT8365 support
-config: arm64-allmodconfig (https://download.01.org/0day-ci/archive/20240622/202406221249.REEiRekU-lkp@intel.com/config)
-compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project ad79a14c9e5ec4a369eed4adf567c22cc029863f)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240622/202406221249.REEiRekU-lkp@intel.com/reproduce)
+Wow, this is really great progress. Kudos to everyone who helped to make th=
+is happen!
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202406221249.REEiRekU-lkp@intel.com/
+Adrian
 
-All warnings (new ones prefixed by >>):
-
-   In file included from sound/soc/mediatek/mt8365/mt8365-afe-clk.c:11:
-   In file included from sound/soc/mediatek/mt8365/mt8365-afe-common.h:16:
-   In file included from include/sound/soc.h:26:
-   In file included from include/sound/ac97_codec.h:17:
-   In file included from include/sound/pcm.h:15:
-   In file included from include/linux/mm.h:2253:
-   include/linux/vmstat.h:500:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     500 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     501 |                            item];
-         |                            ~~~~
-   include/linux/vmstat.h:507:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     507 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     508 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/vmstat.h:514:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     514 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
-   include/linux/vmstat.h:519:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     519 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     520 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/vmstat.h:528:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     528 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     529 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
->> sound/soc/mediatek/mt8365/mt8365-afe-clk.c:298:5: warning: no previous prototype for function 'mt8365_afe_hd_engen_enable' [-Wmissing-prototypes]
-     298 | int mt8365_afe_hd_engen_enable(struct mtk_base_afe *afe, bool apll1)
-         |     ^
-   sound/soc/mediatek/mt8365/mt8365-afe-clk.c:298:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-     298 | int mt8365_afe_hd_engen_enable(struct mtk_base_afe *afe, bool apll1)
-         | ^
-         | static 
->> sound/soc/mediatek/mt8365/mt8365-afe-clk.c:310:5: warning: no previous prototype for function 'mt8365_afe_hd_engen_disable' [-Wmissing-prototypes]
-     310 | int mt8365_afe_hd_engen_disable(struct mtk_base_afe *afe, bool apll1)
-         |     ^
-   sound/soc/mediatek/mt8365/mt8365-afe-clk.c:310:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-     310 | int mt8365_afe_hd_engen_disable(struct mtk_base_afe *afe, bool apll1)
-         | ^
-         | static 
->> sound/soc/mediatek/mt8365/mt8365-afe-clk.c:314:24: warning: implicit conversion from 'unsigned long' to 'unsigned int' changes value from 18446744073709551614 to 4294967294 [-Wconstant-conversion]
-     313 |                 regmap_update_bits(afe->regmap, AFE_HD_ENGEN_ENABLE,
-         |                 ~~~~~~~~~~~~~~~~~~
-     314 |                                    AFE_22M_PLL_EN, ~AFE_22M_PLL_EN);
-         |                                                    ^~~~~~~~~~~~~~~
-   sound/soc/mediatek/mt8365/mt8365-afe-clk.c:317:24: warning: implicit conversion from 'unsigned long' to 'unsigned int' changes value from 18446744073709551613 to 4294967293 [-Wconstant-conversion]
-     316 |                 regmap_update_bits(afe->regmap, AFE_HD_ENGEN_ENABLE,
-         |                 ~~~~~~~~~~~~~~~~~~
-     317 |                                    AFE_24M_PLL_EN, ~AFE_24M_PLL_EN);
-         |                                                    ^~~~~~~~~~~~~~~
-   9 warnings generated.
---
-   In file included from sound/soc/mediatek/mt8365/mt8365-afe-pcm.c:14:
-   In file included from include/linux/dma-mapping.h:11:
-   In file included from include/linux/scatterlist.h:8:
-   In file included from include/linux/mm.h:2253:
-   include/linux/vmstat.h:500:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     500 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     501 |                            item];
-         |                            ~~~~
-   include/linux/vmstat.h:507:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     507 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     508 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/vmstat.h:514:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     514 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
-   include/linux/vmstat.h:519:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     519 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     520 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/vmstat.h:528:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     528 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     529 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
->> sound/soc/mediatek/mt8365/mt8365-afe-pcm.c:173:6: warning: no previous prototype for function 'mt8365_afe_clk_group_44k' [-Wmissing-prototypes]
-     173 | bool mt8365_afe_clk_group_44k(int sample_rate)
-         |      ^
-   sound/soc/mediatek/mt8365/mt8365-afe-pcm.c:173:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-     173 | bool mt8365_afe_clk_group_44k(int sample_rate)
-         | ^
-         | static 
->> sound/soc/mediatek/mt8365/mt8365-afe-pcm.c:499:5: warning: no previous prototype for function 'mt8365_afe_fe_startup' [-Wmissing-prototypes]
-     499 | int mt8365_afe_fe_startup(struct snd_pcm_substream *substream,
-         |     ^
-   sound/soc/mediatek/mt8365/mt8365-afe-pcm.c:499:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-     499 | int mt8365_afe_fe_startup(struct snd_pcm_substream *substream,
-         | ^
-         | static 
->> sound/soc/mediatek/mt8365/mt8365-afe-pcm.c:575:9: warning: implicit conversion from 'unsigned long' to 'unsigned int' changes value from 18446744073709547519 to 4294963199 [-Wconstant-conversion]
-     573 |                         regmap_update_bits(afe->regmap, AFE_CM2_CON0,
-         |                         ~~~~~~~~~~~~~~~~~~
-     574 |                                            CM_AFE_CM2_TDM_SEL,
-     575 |                                            ~CM_AFE_CM2_TDM_SEL);
-         |                                            ^~~~~~~~~~~~~~~~~~~
-   sound/soc/mediatek/mt8365/mt8365-afe-pcm.c:654:29: warning: unused variable 'memif' [-Wunused-variable]
-     654 |         struct mtk_base_afe_memif *memif = &afe->memif[dai_id];
-         |                                    ^~~~~
->> sound/soc/mediatek/mt8365/mt8365-afe-pcm.c:717:5: warning: no previous prototype for function 'mt8365_afe_fe_trigger' [-Wmissing-prototypes]
-     717 | int mt8365_afe_fe_trigger(struct snd_pcm_substream *substream, int cmd,
-         |     ^
-   sound/soc/mediatek/mt8365/mt8365-afe-pcm.c:717:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-     717 | int mt8365_afe_fe_trigger(struct snd_pcm_substream *substream, int cmd,
-         | ^
-         | static 
-   sound/soc/mediatek/mt8365/mt8365-afe-pcm.c:746:23: warning: implicit conversion from 'unsigned long' to 'unsigned int' changes value from 18446744073709551599 to 4294967279 [-Wconstant-conversion]
-     745 |                         regmap_update_bits(afe->regmap, AFE_CM1_CON0,
-         |                         ~~~~~~~~~~~~~~~~~~
-     746 |                                            CM_AFE_CM_ON, ~CM_AFE_CM_ON);
-         |                                                          ^~~~~~~~~~~~~
-   sound/soc/mediatek/mt8365/mt8365-afe-pcm.c:750:23: warning: implicit conversion from 'unsigned long' to 'unsigned int' changes value from 18446744073709551599 to 4294967279 [-Wconstant-conversion]
-     749 |                         regmap_update_bits(afe->regmap, AFE_CM2_CON0,
-         |                         ~~~~~~~~~~~~~~~~~~
-     750 |                                            CM_AFE_CM_ON, ~CM_AFE_CM_ON);
-         |                                                          ^~~~~~~~~~~~~
-   12 warnings generated.
---
-   In file included from sound/soc/mediatek/mt8365/mt8365-dai-adda.c:12:
-   In file included from include/sound/pcm_params.h:10:
-   In file included from include/sound/pcm.h:15:
-   In file included from include/linux/mm.h:2253:
-   include/linux/vmstat.h:500:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     500 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     501 |                            item];
-         |                            ~~~~
-   include/linux/vmstat.h:507:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     507 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     508 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/vmstat.h:514:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     514 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
-   include/linux/vmstat.h:519:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     519 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     520 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/vmstat.h:528:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     528 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     529 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
->> sound/soc/mediatek/mt8365/mt8365-dai-adda.c:93:8: warning: implicit conversion from 'unsigned long' to 'unsigned int' changes value from 18446744073709551614 to 4294967294 [-Wconstant-conversion]
-      91 |                 regmap_update_bits(afe->regmap, AFE_ADDA_UL_DL_CON0,
-         |                 ~~~~~~~~~~~~~~~~~~
-      92 |                                    AFE_ADDA_UL_DL_ADDA_AFE_ON,
-      93 |                                    ~AFE_ADDA_UL_DL_ADDA_AFE_ON);
-         |                                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~
-   6 warnings generated.
---
-   In file included from sound/soc/mediatek/mt8365/mt8365-dai-dmic.c:12:
-   In file included from include/sound/pcm_params.h:10:
-   In file included from include/sound/pcm.h:15:
-   In file included from include/linux/mm.h:2253:
-   include/linux/vmstat.h:500:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     500 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     501 |                            item];
-         |                            ~~~~
-   include/linux/vmstat.h:507:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     507 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     508 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/vmstat.h:514:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     514 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
-   include/linux/vmstat.h:519:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     519 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     520 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/vmstat.h:528:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     528 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     529 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
->> sound/soc/mediatek/mt8365/mt8365-dai-dmic.c:64:7: warning: implicit conversion from 'unsigned long' to 'unsigned int' changes value from 18446744073709551613 to 4294967293 [-Wconstant-conversion]
-      62 |         regmap_update_bits(afe->regmap, AFE_ADDA_UL_DL_CON0,
-         |         ~~~~~~~~~~~~~~~~~~
-      63 |                            AFE_ADDA_UL_DL_DMIC_CLKDIV_ON,
-      64 |                            ~AFE_ADDA_UL_DL_DMIC_CLKDIV_ON);
-         |                            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   sound/soc/mediatek/mt8365/mt8365-dai-dmic.c:134:12: warning: unused function 'mt8365_dai_load_dmic_iir_coeff_table' [-Wunused-function]
-     134 | static int mt8365_dai_load_dmic_iir_coeff_table(struct mtk_base_afe *afe)
-         |            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   7 warnings generated.
---
-   In file included from sound/soc/mediatek/mt8365/mt8365-dai-i2s.c:12:
-   In file included from include/sound/pcm_params.h:10:
-   In file included from include/sound/pcm.h:15:
-   In file included from include/linux/mm.h:2253:
-   include/linux/vmstat.h:500:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     500 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     501 |                            item];
-         |                            ~~~~
-   include/linux/vmstat.h:507:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     507 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     508 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/vmstat.h:514:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     514 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
-   include/linux/vmstat.h:519:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     519 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     520 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/vmstat.h:528:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     528 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     529 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
->> sound/soc/mediatek/mt8365/mt8365-dai-i2s.c:388:8: warning: implicit conversion from 'unsigned long' to 'unsigned int' changes value from 18446744073709551613 to 4294967293 [-Wconstant-conversion]
-     386 |                 regmap_update_bits(afe->regmap, AFE_ASRC_2CH_CON0,
-         |                 ~~~~~~~~~~~~~~~~~~
-     387 |                                    COEFF_SRAM_CTRL,
-     388 |                                    (unsigned long)~COEFF_SRAM_CTRL);
-         |                                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   sound/soc/mediatek/mt8365/mt8365-dai-i2s.c:396:16: warning: implicit conversion from 'unsigned long' to 'unsigned int' changes value from 18446744073709549567 to 4294965247 [-Wconstant-conversion]
-     395 |                 regmap_update_bits(afe->regmap, AFE_ASRC_2CH_CON2,
-         |                 ~~~~~~~~~~~~~~~~~~
-     396 |                                    IIR_EN, (unsigned long)~IIR_EN);
-         |                                            ^~~~~~~~~~~~~~~~~~~~~~
-   sound/soc/mediatek/mt8365/mt8365-dai-i2s.c:459:16: warning: implicit conversion from 'unsigned long' to 'unsigned int' changes value from 18446744073709551614 to 4294967294 [-Wconstant-conversion]
-     458 |                 regmap_update_bits(afe->regmap, AFE_ASRC_2CH_CON0,
-         |                 ~~~~~~~~~~~~~~~~~~
-     459 |                                    ASM_ON, (unsigned long)~ASM_ON);
-         |                                            ^~~~~~~~~~~~~~~~~~~~~~
->> sound/soc/mediatek/mt8365/mt8365-dai-i2s.c:785:33: warning: unused variable 'mt8365_i2s_enum' [-Wunused-const-variable]
-     785 | static SOC_ENUM_SINGLE_EXT_DECL(mt8365_i2s_enum, mt8365_i2s_hd_str);
-         |                                 ^~~~~~~~~~~~~~~
-   include/sound/soc.h:411:24: note: expanded from macro 'SOC_ENUM_SINGLE_EXT_DECL'
-     411 |         const struct soc_enum name = SOC_ENUM_SINGLE_EXT(ARRAY_SIZE(xtexts), xtexts)
-         |                               ^~~~
-   9 warnings generated.
-
-
-vim +/mt8365_afe_hd_engen_enable +298 sound/soc/mediatek/mt8365/mt8365-afe-clk.c
-
-04f09b11a08d4f Alexandre Mergnat 2024-06-19  297  
-04f09b11a08d4f Alexandre Mergnat 2024-06-19 @298  int mt8365_afe_hd_engen_enable(struct mtk_base_afe *afe, bool apll1)
-04f09b11a08d4f Alexandre Mergnat 2024-06-19  299  {
-04f09b11a08d4f Alexandre Mergnat 2024-06-19  300  	if (apll1)
-04f09b11a08d4f Alexandre Mergnat 2024-06-19  301  		regmap_update_bits(afe->regmap, AFE_HD_ENGEN_ENABLE,
-04f09b11a08d4f Alexandre Mergnat 2024-06-19  302  				   AFE_22M_PLL_EN, AFE_22M_PLL_EN);
-04f09b11a08d4f Alexandre Mergnat 2024-06-19  303  	else
-04f09b11a08d4f Alexandre Mergnat 2024-06-19  304  		regmap_update_bits(afe->regmap, AFE_HD_ENGEN_ENABLE,
-04f09b11a08d4f Alexandre Mergnat 2024-06-19  305  				   AFE_24M_PLL_EN, AFE_24M_PLL_EN);
-04f09b11a08d4f Alexandre Mergnat 2024-06-19  306  
-04f09b11a08d4f Alexandre Mergnat 2024-06-19  307  	return 0;
-04f09b11a08d4f Alexandre Mergnat 2024-06-19  308  }
-04f09b11a08d4f Alexandre Mergnat 2024-06-19  309  
-04f09b11a08d4f Alexandre Mergnat 2024-06-19 @310  int mt8365_afe_hd_engen_disable(struct mtk_base_afe *afe, bool apll1)
-04f09b11a08d4f Alexandre Mergnat 2024-06-19  311  {
-04f09b11a08d4f Alexandre Mergnat 2024-06-19  312  	if (apll1)
-04f09b11a08d4f Alexandre Mergnat 2024-06-19  313  		regmap_update_bits(afe->regmap, AFE_HD_ENGEN_ENABLE,
-04f09b11a08d4f Alexandre Mergnat 2024-06-19 @314  				   AFE_22M_PLL_EN, ~AFE_22M_PLL_EN);
-04f09b11a08d4f Alexandre Mergnat 2024-06-19  315  	else
-04f09b11a08d4f Alexandre Mergnat 2024-06-19  316  		regmap_update_bits(afe->regmap, AFE_HD_ENGEN_ENABLE,
-04f09b11a08d4f Alexandre Mergnat 2024-06-19  317  				   AFE_24M_PLL_EN, ~AFE_24M_PLL_EN);
-04f09b11a08d4f Alexandre Mergnat 2024-06-19  318  
-04f09b11a08d4f Alexandre Mergnat 2024-06-19  319  	return 0;
-04f09b11a08d4f Alexandre Mergnat 2024-06-19  320  }
-04f09b11a08d4f Alexandre Mergnat 2024-06-19  321  
-
-:::::: The code at line 298 was first introduced by commit
-:::::: 04f09b11a08d4fc785f0cbea3ea1dfa20bb9df2a ASoC: mediatek: mt8365: Add audio clock control support
-
-:::::: TO: Alexandre Mergnat <amergnat@baylibre.com>
-:::::: CC: Mark Brown <broonie@kernel.org>
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+--=20
+ .''`.  John Paul Adrian Glaubitz
+: :' :  Debian Developer
+`. `'   Physicist
+  `-    GPG: 62FF 8A75 84E0 2956 9546  0006 7426 3B37 F5B5 F913
