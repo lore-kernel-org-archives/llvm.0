@@ -1,225 +1,129 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 62AB014B965;
-	Sat, 22 Jun 2024 09:32:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 824CB14B965
+	for <llvm@lists.linux.dev>; Sat, 22 Jun 2024 09:42:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719048767; cv=none; b=ltXpPuW0eSUP+O5itIN62wl/v2AHImmWJq9uzKKfGKL1/XJROloZim2N5y6hE/cMMfhHZRC5dJaFwmonorZlpWZbl/J1B2twKaVfuSzh42WjzHrzYqCCmcaduuUEMYDI+7vHvjJ49WrtHaIUbnOf4dCEZ6EM7zfH/rP26D04EYg=
+	t=1719049361; cv=none; b=dwE7T4NIicIsgTzwH5x4JfSbpHLb/TRqCwq4YbcjaW9qUPJ1z7ulOZ+J5XRee8/+dMr2hb+67VH6igUHFJz3czeH2T0yMQFXrq4HE4rdpmE3+9pXN3tCN7AbrIJci7ERIlOW4bHY4YxPj6OD5I3U1Bwgb9w6ID5Nkui6jQITjnw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719048767; c=relaxed/simple;
-	bh=W2vO+MhPVEQE6EGayvdc03cCAxGUO4Xc2fdmz2I/eBI=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=kAY9wo6UspXQhaNEgYSQi1j/Mo/mKyFrFzhAU86ficIBWnKhM2UenDzP+pZIi7VKwJjzTc0Gj9UMqMJNCfGkRUeZ/hrO0TTXWeT4EXulU9UFsJdhjnFYVBGCCRKZMc7S8GSU31+GqoFlh21yKPnT+y6hfvSsce59cvI67g0L3PM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=JScH60+3; arc=none smtp.client-ip=192.198.163.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1719049361; c=relaxed/simple;
+	bh=IpgZB32/CG2KiF9vbUakK/T5ZhKr/H9P3svNb7Ds2zg=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=TJPmbGU9jxxlZmSAPyliLJy3haF7iMXMhaJ8tZd5hBFClA8Ne6WqbjhzKUZQJQBdxpuKsmUhR5SAXY+cKsSjWpJULHKWuMo3C1ME0kAYm8pIgNca49hrATIzZqlM7ikarhG57OYrK3qSWFwx/WtFwCoWgcs+VcJWJlCNAXZ5Ols=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=NkmZCyvC; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="JScH60+3"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1719048766; x=1750584766;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=W2vO+MhPVEQE6EGayvdc03cCAxGUO4Xc2fdmz2I/eBI=;
-  b=JScH60+3rdOW30+52wtxCHLSXC4ysQP02cx8LQ48TkmLuUDQ8v39fvtN
-   wbvbIxZwLjah8au29P0EbOOD3a6Gppo4MnOhbKXbOw45vkakhyMEKTWoK
-   RUMRrJ5zQ1utQ4FjmvDa1uORzIe9uQCwu7otZrpQ25C/elYZUj5h1vfi9
-   Y3EkcK09LIFfKFIXXVEhjJiS0pWJSdpxiJ6+Pd71kwZGT5yMUZ9Ug1poV
-   370nPxdGGKCL5q+f82DN34eRX+iniqHt5lA7ScHcpiU1W20uyzEnH+kU6
-   8SnX7Ie+ewmr2DLqthruWLj3VNP9dml7en9BT17YEODUGWCGyE+3vCvHn
-   w==;
-X-CSE-ConnectionGUID: GESuZs6eQQeUbaSW/YrJrA==
-X-CSE-MsgGUID: IBL/nUv1TMu93S2auxFPCg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11110"; a="27484899"
-X-IronPort-AV: E=Sophos;i="6.08,257,1712646000"; 
-   d="scan'208";a="27484899"
-Received: from orviesa009.jf.intel.com ([10.64.159.149])
-  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jun 2024 02:32:43 -0700
-X-CSE-ConnectionGUID: 5bpCH7fkTg6x4MvPvi/pVw==
-X-CSE-MsgGUID: 4rfv4OkuREepAGh+CwnXaQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.08,257,1712646000"; 
-   d="scan'208";a="42915707"
-Received: from lkp-server01.sh.intel.com (HELO 68891e0c336b) ([10.239.97.150])
-  by orviesa009.jf.intel.com with ESMTP; 22 Jun 2024 02:32:41 -0700
-Received: from kbuild by 68891e0c336b with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1sKx6t-0009Vq-0x;
-	Sat, 22 Jun 2024 09:32:39 +0000
-Date: Sat, 22 Jun 2024 17:32:37 +0800
-From: kernel test robot <lkp@intel.com>
-To: Alan Maguire <alan.maguire@oracle.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Andrii Nakryiko <andrii@kernel.org>
-Subject: [bpf-next:master 9/12] kernel/bpf/btf.c:8251:22: error: call to
- undeclared function 'btf_relocate_id'; ISO C99 and later do not support
- implicit function declarations
-Message-ID: <202406221742.d2srFLVI-lkp@intel.com>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="NkmZCyvC"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1719049358;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=FZQxyj2PKLGpxkiSuHEp0Kyj8NRlmDDw0ACDbv3tUVs=;
+	b=NkmZCyvC3+8Nb/aVhc1zhZOKrG9kLrUc/xLMuaPjejabVrEFHTzYxWNn0wwBUg31RqdesH
+	30szyQyvaLMhSx+iRYlai9fN2lCUsc+kjVCBmSjeC4/k+Gn5N8IdPkEMLkbTaElIXMKLbF
+	+xQ7TBmJSaT/tAMfqjbwskXcoe4EtuU=
+Received: from mx-prod-mc-02.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-389-cMM6MQy8OfqCF3fACIHSqA-1; Sat,
+ 22 Jun 2024 05:42:36 -0400
+X-MC-Unique: cMM6MQy8OfqCF3fACIHSqA-1
+Received: from mx-prod-int-02.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-02.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.15])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-02.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id B0F89195608D
+	for <llvm@lists.linux.dev>; Sat, 22 Jun 2024 09:42:35 +0000 (UTC)
+Received: from [172.64.3.44] (unknown [10.30.33.101])
+	by mx-prod-int-02.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id BF7E61956087;
+	Sat, 22 Jun 2024 09:42:34 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL (MISSED 13 of 192): Test report for master
+ (6.10.0-rc4, mainline.kernel.org-clang, 36c07583)
+Date: Sat, 22 Jun 2024 09:42:34 -0000
+To: bgoncalv@redhat.com, llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.15
+Message-Id: <48832.124062205423600125@us-mta-389.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git master
-head:   93265a0b79e48fde8ee23fb6e1195d7d99717063
-commit: 8646db238997df36c6ad71a9d7e0b52ceee221b2 [9/12] libbpf,bpf: Share BTF relocate-related code with kernel
-config: i386-buildonly-randconfig-003-20240622 (https://download.01.org/0day-ci/archive/20240622/202406221742.d2srFLVI-lkp@intel.com/config)
-compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240622/202406221742.d2srFLVI-lkp@intel.com/reproduce)
+Hi, we tested your kernel and here are the results:
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202406221742.d2srFLVI-lkp@intel.com/
-
-All error/warnings (new ones prefixed by >>):
-
->> kernel/bpf/btf.c:8251:22: error: call to undeclared function 'btf_relocate_id'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-    8251 |                 set->pairs[i].id = btf_relocate_id(btf, set->pairs[i].id);
-         |                                    ^
-   kernel/bpf/btf.c:8251:22: note: did you mean 'btf_relocate'?
-   include/linux/btf.h:556:5: note: 'btf_relocate' declared here
-     556 | int btf_relocate(struct btf *btf, const struct btf *base_btf, __u32 **map_ids);
-         |     ^
-   kernel/bpf/btf.c:8376:37: error: call to undeclared function 'btf_relocate_id'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-    8376 |                 ret = btf_check_kfunc_protos(btf, btf_relocate_id(btf, kset->set->pairs[i].id),
-         |                                                   ^
-   kernel/bpf/btf.c:8440:17: error: call to undeclared function 'btf_relocate_id'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-    8440 |                 dtor_btf_id = btf_relocate_id(btf, dtors[i].kfunc_btf_id);
-         |                               ^
-   kernel/bpf/btf.c:8529:26: error: call to undeclared function 'btf_relocate_id'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-    8529 |                 tab->dtors[i].btf_id = btf_relocate_id(btf, tab->dtors[i].btf_id);
-         |                                        ^
-   4 errors generated.
---
->> tools/lib/bpf/btf_relocate.c:206:23: warning: implicit truncation from 'int' to a one-bit wide bit-field changes value from 1 to -1 [-Wsingle-bit-bitfield-constant-conversion]
-     206 |                 info[id].needs_size = true;
-         |                                     ^ ~~~~
-   tools/lib/bpf/btf_relocate.c:256:25: warning: implicit truncation from 'int' to a one-bit wide bit-field changes value from 1 to -1 [-Wsingle-bit-bitfield-constant-conversion]
-     256 |                         base_info.needs_size = true;
-         |                                              ^ ~~~~
-   2 warnings generated.
+    Overall result: FAILED
+             Merge: OK
+           Compile: OK
+              Test: FAILED
 
 
-vim +/btf_relocate_id +8251 kernel/bpf/btf.c
+Kernel information:
+    Commit message: Merge tag 'acpi-6.10-rc5' of git://git.kernel.org/pub/s=
+cm/linux/kernel/git/rafael/linux-pm
 
-  8155	
-  8156	static int btf_populate_kfunc_set(struct btf *btf, enum btf_kfunc_hook hook,
-  8157					  const struct btf_kfunc_id_set *kset)
-  8158	{
-  8159		struct btf_kfunc_hook_filter *hook_filter;
-  8160		struct btf_id_set8 *add_set = kset->set;
-  8161		bool vmlinux_set = !btf_is_module(btf);
-  8162		bool add_filter = !!kset->filter;
-  8163		struct btf_kfunc_set_tab *tab;
-  8164		struct btf_id_set8 *set;
-  8165		u32 set_cnt, i;
-  8166		int ret;
-  8167	
-  8168		if (hook >= BTF_KFUNC_HOOK_MAX) {
-  8169			ret = -EINVAL;
-  8170			goto end;
-  8171		}
-  8172	
-  8173		if (!add_set->cnt)
-  8174			return 0;
-  8175	
-  8176		tab = btf->kfunc_set_tab;
-  8177	
-  8178		if (tab && add_filter) {
-  8179			u32 i;
-  8180	
-  8181			hook_filter = &tab->hook_filters[hook];
-  8182			for (i = 0; i < hook_filter->nr_filters; i++) {
-  8183				if (hook_filter->filters[i] == kset->filter) {
-  8184					add_filter = false;
-  8185					break;
-  8186				}
-  8187			}
-  8188	
-  8189			if (add_filter && hook_filter->nr_filters == BTF_KFUNC_FILTER_MAX_CNT) {
-  8190				ret = -E2BIG;
-  8191				goto end;
-  8192			}
-  8193		}
-  8194	
-  8195		if (!tab) {
-  8196			tab = kzalloc(sizeof(*tab), GFP_KERNEL | __GFP_NOWARN);
-  8197			if (!tab)
-  8198				return -ENOMEM;
-  8199			btf->kfunc_set_tab = tab;
-  8200		}
-  8201	
-  8202		set = tab->sets[hook];
-  8203		/* Warn when register_btf_kfunc_id_set is called twice for the same hook
-  8204		 * for module sets.
-  8205		 */
-  8206		if (WARN_ON_ONCE(set && !vmlinux_set)) {
-  8207			ret = -EINVAL;
-  8208			goto end;
-  8209		}
-  8210	
-  8211		/* In case of vmlinux sets, there may be more than one set being
-  8212		 * registered per hook. To create a unified set, we allocate a new set
-  8213		 * and concatenate all individual sets being registered. While each set
-  8214		 * is individually sorted, they may become unsorted when concatenated,
-  8215		 * hence re-sorting the final set again is required to make binary
-  8216		 * searching the set using btf_id_set8_contains function work.
-  8217		 *
-  8218		 * For module sets, we need to allocate as we may need to relocate
-  8219		 * BTF ids.
-  8220		 */
-  8221		set_cnt = set ? set->cnt : 0;
-  8222	
-  8223		if (set_cnt > U32_MAX - add_set->cnt) {
-  8224			ret = -EOVERFLOW;
-  8225			goto end;
-  8226		}
-  8227	
-  8228		if (set_cnt + add_set->cnt > BTF_KFUNC_SET_MAX_CNT) {
-  8229			ret = -E2BIG;
-  8230			goto end;
-  8231		}
-  8232	
-  8233		/* Grow set */
-  8234		set = krealloc(tab->sets[hook],
-  8235			       offsetof(struct btf_id_set8, pairs[set_cnt + add_set->cnt]),
-  8236			       GFP_KERNEL | __GFP_NOWARN);
-  8237		if (!set) {
-  8238			ret = -ENOMEM;
-  8239			goto end;
-  8240		}
-  8241	
-  8242		/* For newly allocated set, initialize set->cnt to 0 */
-  8243		if (!tab->sets[hook])
-  8244			set->cnt = 0;
-  8245		tab->sets[hook] = set;
-  8246	
-  8247		/* Concatenate the two sets */
-  8248		memcpy(set->pairs + set->cnt, add_set->pairs, add_set->cnt * sizeof(set->pairs[0]));
-  8249		/* Now that the set is copied, update with relocated BTF ids */
-  8250		for (i = set->cnt; i < set->cnt + add_set->cnt; i++)
-> 8251			set->pairs[i].id = btf_relocate_id(btf, set->pairs[i].id);
-  8252	
-  8253		set->cnt += add_set->cnt;
-  8254	
-  8255		sort(set->pairs, set->cnt, sizeof(set->pairs[0]), btf_id_cmp_func, NULL);
-  8256	
-  8257		if (add_filter) {
-  8258			hook_filter = &tab->hook_filters[hook];
-  8259			hook_filter->filters[hook_filter->nr_filters++] = kset->filter;
-  8260		}
-  8261		return 0;
-  8262	end:
-  8263		btf_free_kfunc_set_tab(btf);
-  8264		return ret;
-  8265	}
-  8266	
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1342629255
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+One or more kernel tests failed:
+    Unrecognized or new issues:
+        Reboot test
+              x86_64
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+redhat:1342629255-x86_64-kernel_upt_35
+                   Non-passing ran subtests:
+                       =E2=9D=8C FAIL misc/reboot-test/journalctl-check
+
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: [rhel-10] xfstests - cifsv3.11 - generic/207 - error in bloc=
+k: expected 4096 bytes, received 0
+            URL: https://issues.redhat.com/browse/RHEL-39974
+            Affected tests:
+                xfstests - cifsv3.11 [x86_64, x86_64 (debug)]
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1267
+            Affected tests:
+                selinux-policy: serge-testsuite [ppc64le]
+
+
+Tests that were not ran because of internal issues:=20
+    Boot test [s390x]
+    CKI/restraint [s390x]
+    machineinfo [s390x]
+    Reboot test [s390x, x86_64 (debug)]
+    SELinux Custom Module Setup [ppc64le, s390x]
+    Storage - blktests - blk - upstream [s390x]
+    Storage - blktests - nvme-tcp - upstream [s390x]
+    Storage - swraid scsi_raid [s390x, x86_64 (debug)]
+    stress: stress-ng - cpu-cache [s390x]
+    stress: stress-ng - memory [s390x]
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
