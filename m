@@ -1,86 +1,94 @@
-Received: from mail-40140.protonmail.ch (mail-40140.protonmail.ch [185.70.40.140])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4DF70155C87
-	for <llvm@lists.linux.dev>; Sat, 22 Jun 2024 12:18:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.70.40.140
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 501D03BBF0;
+	Sat, 22 Jun 2024 21:20:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719058712; cv=none; b=SmR3SHv8iluLBCcoh8HabCMqNUsl8BAZJ67SgptYzQa4sL0dtNrJpZtqiL7NHlnjXZL8r9I05IHtD2T++5ZClje5JQyY8sB2jOl/C7wK/CBZlAGElGXMTqrkJBWbVknrZool+xM9v1yMs/DR7SpyEGrrKpNRKv94PjkLH7f8/+A=
+	t=1719091208; cv=none; b=K6wG+lVhubf3UwMXnfR/YkE9nopnhzQc8C+HS+zh8Js3IWByh7g6+XmSICPqaWO0ligWCf7yGwxXcUYuQHEIqe2bLkiBdQRwvo6WkVWFPerfIYPRCry7G6NZGGxBwB6OjxLNg+kB7a2Xh6TZdplBRRjbWFsmhgmLZ+v+4tpIOJA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719058712; c=relaxed/simple;
-	bh=luy69jnF5njL8gUfluNCNLhAakoaL/yegWrkpfKE/rU=;
-	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=ueyerg2l5grQ3ieP10QJ7q52ADJGBL/bG6W0O6RSa6MOpUsZMSTSo7qFlpPUt5cYXsmp1cwEZUyA9D2o0WTLNgqWhNwguF+uoOADHm0ycW+mbX4KY8/Q3/+eqISOCNAu81dodMx4906JXmYViVBJOajcahiLAVS99CPd+MVs5TQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=protonmail.com; spf=pass smtp.mailfrom=protonmail.com; dkim=pass (2048-bit key) header.d=protonmail.com header.i=@protonmail.com header.b=cH49pnWe; arc=none smtp.client-ip=185.70.40.140
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=protonmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=protonmail.com
+	s=arc-20240116; t=1719091208; c=relaxed/simple;
+	bh=gI2cvJQaaiF29bgI9WjU7D4nkMAJodDwyDxztjSxUbg=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=Kle7aqjJichA2M0k2xlpIP7Zrcbjfp1xvoja98cTGwFeh+orG9biNbCi6yMe3G7WiMO4ZT/+zSo7onepgzH9bB9Iv5/aDihCGc40P/Yaa8vNsdh9Rf7c3tgY3sOFhMAITwtHKTeAki37FJoaX+LT5uZPp+U8v/e/3yyD1hao6os=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=HoePzprX; arc=none smtp.client-ip=198.175.65.21
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=protonmail.com header.i=@protonmail.com header.b="cH49pnWe"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=protonmail.com;
-	s=protonmail3; t=1719058703; x=1719317903;
-	bh=luy69jnF5njL8gUfluNCNLhAakoaL/yegWrkpfKE/rU=;
-	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
-	 Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
-	 Message-ID:BIMI-Selector;
-	b=cH49pnWeR6k+nnE2zzNlVZ9ld0S/hoSZduwUitTHA10DJ+ICOAk+Z42SNhXkpROjX
-	 4+0XRsEts8n9OBiBMRxhPRHFApprxhKdrGYYObqGY2L3xcmx/VNHr48k3tzGHn39Rm
-	 uMk4Q9M1t7inlqzc7KwrtcyDfq4Sbq+LJSKhEfIIA3xww8MKaGReY5YYvOJr39U9Jm
-	 PGJJbh9sA12AL7XN8d/1r28hywKazGtehwqGZ0QMWFRTMesU/8eID+LitF4R8QZTad
-	 wIXhs1c2J7WQ+5cAkIU8DgPvF4vj0zY6FFqJClF4SX0KSo/ILfUxJcSZ0uvKXKV+6L
-	 gX6MJjFVJhAsA==
-Date: Sat, 22 Jun 2024 12:18:17 +0000
-To: Nathan Chancellor <nathan@kernel.org>
-From: Koakuma <koachan@protonmail.com>
-Cc: "David S. Miller" <davem@davemloft.net>, Andreas Larsson <andreas@gaisler.com>, Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, glaubitz@physik.fu-berlin.de, sparclinux@vger.kernel.org, linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH] sparc/build: Make all compiler flags also clang-compatible
-Message-ID: <e26PTXUXEz8OYXmaeKn4Mpuejr4IOlFfFwdB5vpsluXlYiqDdlyQTYcDtdAny_o4gO4SfPeQCCN2qpyT6e0nog5EaP3xk2SeUPTrF54p1gM=@protonmail.com>
-In-Reply-To: <20240621185345.GA416370@thelio-3990X>
-References: <20240620-sparc-cflags-v1-1-bba7d0ff7d42@protonmail.com> <20240621185345.GA416370@thelio-3990X>
-Feedback-ID: 6608610:user:proton
-X-Pm-Message-ID: a46a21971ad74a875ee1462ced2663a00c9316b2
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="HoePzprX"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1719091207; x=1750627207;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=gI2cvJQaaiF29bgI9WjU7D4nkMAJodDwyDxztjSxUbg=;
+  b=HoePzprXgXDYNqW8GBqwN2lsZz/2dNHW+blDbWwikoM/UpVhRp1AHKhH
+   Cq13e4/rW7cNrjHUSgLK+dZtvxbWxhuxPVpfvWVDVeqTtFoC+6jt9hk3J
+   Y3YkjyP+3aQVP1WY+F3RKstW3pD8eqIebZXo4JDPlsMd9g6Am1Z9Zp6oO
+   E3fSb+PNjAre0f148Xx8iJQrqJ7k8v3ogOFymT/NVqbkT6n0g2j2z3h3w
+   bX5/FdHVfE85/xlUAYdbQUzVNw03t7ClvloF3cdCMoDcGqdz2KwxwRlrx
+   pw0UpxY+PV/w0Q6ghE3Rup+Pe9PP8F5Jcz9JIeYsmWNGW+8uTloPIPso6
+   w==;
+X-CSE-ConnectionGUID: Akf4ap4JT1GykrwjPn5EAQ==
+X-CSE-MsgGUID: Osijfd5eQROcM7m6izdNfA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11111"; a="16072714"
+X-IronPort-AV: E=Sophos;i="6.08,258,1712646000"; 
+   d="scan'208";a="16072714"
+Received: from fmviesa004.fm.intel.com ([10.60.135.144])
+  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jun 2024 14:20:06 -0700
+X-CSE-ConnectionGUID: FnD0jIkRRvas6C3n+Lz3IQ==
+X-CSE-MsgGUID: VWONRyHqTLWbgZXi9EZo4g==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.08,258,1712646000"; 
+   d="scan'208";a="47435596"
+Received: from lkp-server01.sh.intel.com (HELO 68891e0c336b) ([10.239.97.150])
+  by fmviesa004.fm.intel.com with ESMTP; 22 Jun 2024 14:20:04 -0700
+Received: from kbuild by 68891e0c336b with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1sL89S-000A0S-18;
+	Sat, 22 Jun 2024 21:20:02 +0000
+Date: Sun, 23 Jun 2024 05:19:48 +0800
+From: kernel test robot <lkp@intel.com>
+To: Josh Poimboeuf <jpoimboe@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [jpoimboe:objtool-diff 5/5] ld.lld: error:
+ arch/arm64/kernel/vdso/vdso.lds:173: unknown directive: //
+Message-ID: <202406230550.2XQjeMiI-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Hi Nathan,
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jpoimboe/linux.git objtool-diff
+head:   03896a2cffb7e9210068032867433c5393d497ea
+commit: 03896a2cffb7e9210068032867433c5393d497ea [5/5] todo
+config: arm64-randconfig-001-20240623 (https://download.01.org/0day-ci/archive/20240623/202406230550.2XQjeMiI-lkp@intel.com/config)
+compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240623/202406230550.2XQjeMiI-lkp@intel.com/reproduce)
 
-Nathan Chancellor <nathan@kernel.org> wrote:
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202406230550.2XQjeMiI-lkp@intel.com/
 
-> I saw through the LLVM issue above that one other patch is necessary to
-> fix an issue in the vDSO [1], which I applied in testing this one.=20
+All errors (new ones prefixed by >>):
 
-Mhmm, I did not submit that yet because I don't feel fully confident
-with it. I think it should probably live in include/vdso/math64.h
-as plain C code instead of the current asm version, but I don't know
-what is the proper way to check the current environment's word size.
-Is checking BITS_PER_LONG enough, or should I do it in another way?
+>> ld.lld: error: arch/arm64/kernel/vdso/vdso.lds:173: unknown directive: //
+   >>> // TODO CONFIG_USE_FFUNCTION_SECTIONS, etc - or just make it the default everywhere for consistency ...
+   >>> ^
+   make[3]: *** [arch/arm64/kernel/vdso/Makefile:63: arch/arm64/kernel/vdso/vdso.so.dbg] Error 1 shuffle=1817778435
+   make[3]: Target 'arch/arm64/kernel/vdso/vdso.so' not remade because of errors.
+   make[3]: Target 'include/generated/vdso-offsets.h' not remade because of errors.
+   make[2]: *** [arch/arm64/Makefile:198: vdso_prepare] Error 2 shuffle=1817778435
+   make[2]: Target 'prepare' not remade because of errors.
+   make[1]: *** [Makefile:240: __sub-make] Error 2 shuffle=1817778435
+   make[1]: Target 'prepare' not remade because of errors.
+   make: *** [Makefile:240: __sub-make] Error 2 shuffle=1817778435
+   make: Target 'prepare' not remade because of errors.
 
-> I noticed in applying that change that you appear to be working on 6.1,
-> which is fine for now, but you'll need another diff once you get to a
-> newer version, as we stopped using CROSS_COMPILE to set clang's
-> '--target=3D' value:
->=20
-> diff --git a/scripts/Makefile.clang b/scripts/Makefile.clang
-> index 6c23c6af797f..2435efae67f5 100644
-> --- a/scripts/Makefile.clang
-> +++ b/scripts/Makefile.clang
-> @@ -10,6 +10,7 @@ CLANG_TARGET_FLAGS_mips :=3D mipsel-linux-gnu
-> CLANG_TARGET_FLAGS_powerpc :=3D powerpc64le-linux-gnu
-> CLANG_TARGET_FLAGS_riscv :=3D riscv64-linux-gnu
-> CLANG_TARGET_FLAGS_s390 :=3D s390x-linux-gnu
-> +CLANG_TARGET_FLAGS_sparc :=3D sparc64-linux-gnu
-> CLANG_TARGET_FLAGS_x86 :=3D x86_64-linux-gnu
-> CLANG_TARGET_FLAGS_um :=3D $(CLANG_TARGET_FLAGS_$(SUBARCH))
-> CLANG_TARGET_FLAGS :=3D $(CLANG_TARGET_FLAGS_$(SRCARCH))
-
-Yeah, I was working with 6.1 at that time since it's the version
-that my distro have installed for me. Now this is more of a workflow
-question, but this means I should submit a v2 with this change
-merged in with mine too, right?
-
-And thanks for the feedback!
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
