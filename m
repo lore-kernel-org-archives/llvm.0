@@ -1,153 +1,72 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3EA0179B9C
-	for <llvm@lists.linux.dev>; Sun, 23 Jun 2024 18:23:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E76122232A;
+	Sun, 23 Jun 2024 20:53:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.11.138.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719166998; cv=none; b=bREPTrpOW+azbmaC5omaX1ZPK3sKZiTa/GSRB5L8HfRJeQHLAykfVp+MPylveGJE8v4W85IEWFqaZ8BkDymjzw7zeUypiQ0+pj2zrfJSd7Mq4FrpXyYzaG7oJ7SdKU3e/f5ejSRLcKSKyZphVQawRRgDZh903N/T5JB9ZDCK0lw=
+	t=1719176037; cv=none; b=DA/xRuVUSt5/iNDsF8zt0sL2JR17gU6P8sh2qr4LsCJJ0axN+o230bwMBI1hHLaAyJnHULy4W19tk37zBYuhuxG79+G2NHi5Hlb1JMDGt7LZ4gfr99qqd/dceTb05ybrYYTr7Zw7qMGeVgAdGSs7T0uCaxMJuftcAOLb859fX2g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719166998; c=relaxed/simple;
-	bh=d9o8LWqfM9krm8yKAuzPtv9ZHEaeKi/H4Vp5FLhz1To=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=hXoVtJVgjrHTiNSpjkSGLaaRiV/nYdveIGlkcBPudPGCmJ8vq0rzUHSn7+UptQoHaz7AKMPTJkS83OMrMA99ARvxFD8RVz7803K07bYjK2ijhgy5QHfmRpJh4Q4fV1tjZJOLANPn8iuZakNM7cq/ki9M26FjzTYFHrb94XlEOSo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=faKJoZ9G; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="faKJoZ9G"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1719166995;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=bmQYybYMdYiNOi/aPSLaor/LFu1fKjyIKfJP4MkaBrg=;
-	b=faKJoZ9GOQlZCkjLLs36OhwAW5YYeWwIisHYSdJJuIqKeWlf7gxCIplY5bNY/DVvQabiMx
-	5CnTh/oNQ/QM9sav028+hWJE/t2AMylF4j6oH9EXLvvJX5cvXo7g9/IEWTD3I8IY4nCeVD
-	GQx88wbFNS0X8qj/RjUlO/v7H+3k5ps=
-Received: from mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-527-m-2y_dzSMXecjPXVb4pW3Q-1; Sun,
- 23 Jun 2024 14:23:13 -0400
-X-MC-Unique: m-2y_dzSMXecjPXVb4pW3Q-1
-Received: from mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.4])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 7A0EB1956083
-	for <llvm@lists.linux.dev>; Sun, 23 Jun 2024 18:23:12 +0000 (UTC)
-Received: from [172.64.3.44] (unknown [10.30.33.101])
-	by mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id A20963000218;
-	Sun, 23 Jun 2024 18:23:11 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL (MISSED 23 of 192): Test report for master
- (6.10.0-rc4, mainline.kernel.org-clang, d6c94157)
-Date: Sun, 23 Jun 2024 18:23:11 -0000
-To: xzhou@redhat.com, bgoncalv@redhat.com, llvm@lists.linux.dev
+	s=arc-20240116; t=1719176037; c=relaxed/simple;
+	bh=kHSQ+DhGcPydWmByZscLjbK/iRG71P9x6ZPTC5iumxM=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=YvWO00h/Or6RbA8Ds7O1UtbPtMRspbGx2SUo8EscvBE9dPq3rTMrGDNFU6IC543eEDT7NwFESVXsrE1gDifHEideEA6711RmL2/1l/B8EJfVmpuh37cV141cjtpXwjJ0PUKkPqGil31xaoKGBI7LkAUzefoVRVUHbfoCdGG8iFA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sntech.de; spf=pass smtp.mailfrom=sntech.de; arc=none smtp.client-ip=185.11.138.130
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sntech.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sntech.de
+Received: from i53875a87.versanet.de ([83.135.90.135] helo=diego.localnet)
+	by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.94.2)
+	(envelope-from <heiko@sntech.de>)
+	id 1sLUDb-0005P6-T6; Sun, 23 Jun 2024 22:53:47 +0200
+From: Heiko =?ISO-8859-1?Q?St=FCbner?= <heiko@sntech.de>
+To: Alex Bee <knaerzche@gmail.com>, kernel test robot <lkp@intel.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+ Linux Memory Management List <linux-mm@kvack.org>
+Subject:
+ Re: [linux-next:master 4036/7797] drivers/clk/rockchip/clk-rk3128.c:582:40:
+ error: use of undeclared identifier 'CLK_NR_CLKS'
+Date: Sun, 23 Jun 2024 22:53:47 +0200
+Message-ID: <74749310.RN2Pgac3cq@diego>
+In-Reply-To: <202406240243.f4Ux9lv5-lkp@intel.com>
+References: <202406240243.f4Ux9lv5-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.4
-Message-Id: <67211.124062314231300338@us-mta-527.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
 
-Hi, we tested your kernel and here are the results:
+Am Sonntag, 23. Juni 2024, 20:20:48 CEST schrieb kernel test robot:
+> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+> head:   f76698bd9a8ca01d3581236082d786e9a6b72bb7
+> commit: 9f22b4fbd4c6d27ca4e5f8fa6632e6d7a846af28 [4036/7797] dt-bindings: clock: rk3128: Drop CLK_NR_CLKS
+> config: arm-defconfig (https://download.01.org/0day-ci/archive/20240624/202406240243.f4Ux9lv5-lkp@intel.com/config)
+> compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240624/202406240243.f4Ux9lv5-lkp@intel.com/reproduce)
+> 
+> If you fix the issue in a separate patch/commit (i.e. not just a new version of
+> the same patch/commit), kindly add following tags
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Closes: https://lore.kernel.org/oe-kbuild-all/202406240243.f4Ux9lv5-lkp@intel.com/
+> 
+> Note: the linux-next/master HEAD f76698bd9a8ca01d3581236082d786e9a6b72bb7 builds fine.
+>       It may have been fixed somewhere.
+> 
+> All errors (new ones prefixed by >>):
+> 
+> >> drivers/clk/rockchip/clk-rk3128.c:582:40: error: use of undeclared identifier 'CLK_NR_CLKS'
+>            ctx = rockchip_clk_init(np, reg_base, CLK_NR_CLKS);
+>                                                  ^
+>    1 error generated.
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: OK
-              Test: FAILED
+This was caused by the split across branches that was needed for
+binding-, dts- and clock driver changes.
 
+So yes when everything came together it build, but caused build-
+failures on one of my devicetree branches.
+I've restructured things to not cause build failures.
 
-Kernel information:
-    Commit message: Merge tag 'drm-fixes-2024-06-22' of https://gitlab.free=
-desktop.org/drm/kernel
-
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1342775689
-
-One or more kernel tests failed:
-    Unrecognized or new issues:
-        Reboot test
-              x86_64
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-redhat:1342775689-x86_64-kernel_upt_35
-                   Non-passing ran subtests:
-                       =E2=9D=8C FAIL misc/reboot-test/journalctl-check
-        xfstests - cifsv3.11
-              x86_64 (debug)
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-redhat:1342775689-x86_64-kernel-debug_upt_32
-        xfstests - nfsv4.2
-              x86_64 (debug)
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-redhat:1342775689-x86_64-kernel-debug_upt_31
-
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: [upstream]blktests nbd/002 failure
-            URL: https://github.com/osandov/blktests/issues/142
-            Affected tests:
-                Storage - blktests - blk - upstream [x86_64]
-        Issue: [rhel-10] xfstests - cifsv3.11 - generic/207 - error in bloc=
-k: expected 4096 bytes, received 0
-            URL: https://issues.redhat.com/browse/RHEL-39974
-            Affected tests:
-                xfstests - cifsv3.11 [x86_64]
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1267
-            Affected tests:
-                selinux-policy: serge-testsuite [ppc64le]
-
-
-Tests that were not ran because of internal issues:=20
-    AMTU (Abstract Machine Test Utility) [x86_64 (debug)]
-    Boot test [s390x]
-    CKI/restraint [s390x]
-    Filesystem - Loopdev Sanity [x86_64 (debug)]
-    Hardware - pciutils: sanity smoke test [x86_64 (debug)]
-    kselftests upstream - bpf [x86_64 (debug)]
-    kselftests upstream - bpf_test_progs [x86_64 (debug)]
-    kselftests upstream - net [x86_64 (debug)]
-    Libkcapi AF_ALG test [x86_64 (debug)]
-    machineinfo [s390x]
-    Memory function: memfd_create [x86_64 (debug)]
-    Networking - Ethernet drivers sanity [x86_64 (debug)]
-    Networking cki netfilter test [x86_64 (debug)]
-    POSIX pjd-fstest suites [x86_64 (debug)]
-    Reboot test [s390x, x86_64 (debug)]
-    SELinux Custom Module Setup [s390x]
-    Storage - blktests - blk - upstream [s390x]
-    Storage - blktests - nvme-tcp - upstream [s390x]
-    Storage - dm/common [x86_64 (debug)]
-    Storage - swraid scsi_raid [s390x]
-    stress: stress-ng - cpu-cache [s390x]
-    stress: stress-ng - memory [s390x]
-
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
 
