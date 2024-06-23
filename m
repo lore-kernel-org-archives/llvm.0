@@ -1,96 +1,99 @@
-Received: from outpost1.zedat.fu-berlin.de (outpost1.zedat.fu-berlin.de [130.133.4.66])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lj1-f173.google.com (mail-lj1-f173.google.com [209.85.208.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D3C3F1822D4;
-	Sun, 23 Jun 2024 16:53:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=130.133.4.66
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 956FF18131A
+	for <llvm@lists.linux.dev>; Sun, 23 Jun 2024 17:06:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719161634; cv=none; b=mSmrs0t5yD8XGq9CtnlpWxuQGwUPClXbnhJAKk3dM83kOToXC2SiAqbANgFF/iXMhLnkelTfByxG6jriPqyZjqZ0NSvDJdByk9x57Ib4gkGme5dFy9z2mmO7bHiZhrbRYcqv8WOK2IzSfPhkI4f/BOAZsVazxe4G3qW67ebxNw4=
+	t=1719162368; cv=none; b=unB0qN8zn6NNMuFPo/xiGafzjSdmdtUcCqX9hcI7omKD7rFbNrAr4komJS8ndevPcIvovwLxKyovrGxMfYZLK8+hPdcvmXhN0QmV+kGb4lETvtV8bcc/qb1k0g2ZsWx3/dJaVKZB+YK8TN68wZF7mJ0SnNhuIQfuWlLGa3itpw4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719161634; c=relaxed/simple;
-	bh=v+rKXPoMM+NgIN5MI2bPlzCVilLhrvQk7A8JsfCUxZc=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=UOVA7O6g0tnvbrGqS8LJyplr7rSnBPKRPbmxEwXzANgQ1CD4EwK5UyKvvR5P4iXp0mZtRBgbEmGmei66GByi0PYkroAiuWzRG2/CgWBqNVzL6FTd8O/hsanPDJHJYl75iErR0a6pPXtnIkfNbJHs64ZBuQ86/kWT3HlLbhj29eU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=physik.fu-berlin.de; spf=pass smtp.mailfrom=zedat.fu-berlin.de; dkim=pass (2048-bit key) header.d=fu-berlin.de header.i=@fu-berlin.de header.b=FZKSQqAt; arc=none smtp.client-ip=130.133.4.66
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=physik.fu-berlin.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zedat.fu-berlin.de
+	s=arc-20240116; t=1719162368; c=relaxed/simple;
+	bh=45LdDu3bOcCKbhXgg4h83UgXbR3JletssymwhGumCDI=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=LPfSJKwvjS7eHLKs+dus/dnHyb9O3nwy/ztrdQ496DDakjLW66oDWFbY0ZgIT1Be4M3pyaAN0RHRw7xP0iBtpAAkDkl1N1yys7vZH7KxNy6PFVQuu3/NIsEThen8guKBhiNTUM6KAr4xGOujOn4Ohrkb9Me+8KMjNoU6aTugDYk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=MfgzB2aN; arc=none smtp.client-ip=209.85.208.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=fu-berlin.de header.i=@fu-berlin.de header.b="FZKSQqAt"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=fu-berlin.de; s=fub01; h=MIME-Version:Content-Transfer-Encoding:
-	Content-Type:References:In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender
-	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
-	List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=E+CzwN+RZpYMqJ6tzL5pN6ap4pbapH0mHUpTrrmE0+Y=; t=1719161630; x=1719766430; 
-	b=FZKSQqAtUJmjoHBcKYKG9hjc0KA+azRdFZQRIgOO7kGndyITHS4WfdF8jCR7Q0eWRc5RydCnX5c
-	uax+dcicp6Ioz0/wrHU5aR7runAYZUMLa/8/Y2HoxFtkVph3szXO19JX1iRty3f0kBdzqrATj9Uwc
-	rkWJOk526t4ylJXSsESAP2w8sJMzn1lHVyYL7AhUwMt2VpDP460D/HhY+OuDYGMM/eASfOqNk2uAI
-	fdZYn1v9vWJAq10y5QLYC/kO/ypkAOQcTLmMdXBWl7pbA9VVA/KtnJGHnWNQaIOBUeIH8dD+FcEtj
-	vsGgX8r4fDzPub6Rne7mAs/eEWR6XSdJF8ew==;
-Received: from inpost2.zedat.fu-berlin.de ([130.133.4.69])
-          by outpost.zedat.fu-berlin.de (Exim 4.97)
-          with esmtps (TLS1.3)
-          tls TLS_AES_256_GCM_SHA384
-          (envelope-from <glaubitz@zedat.fu-berlin.de>)
-          id 1sLQTC-00000001U07-1pfq; Sun, 23 Jun 2024 18:53:38 +0200
-Received: from dynamic-077-191-125-192.77.191.pool.telefonica.de ([77.191.125.192] helo=[192.168.178.20])
-          by inpost2.zedat.fu-berlin.de (Exim 4.97)
-          with esmtpsa (TLS1.3)
-          tls TLS_AES_256_GCM_SHA384
-          (envelope-from <glaubitz@physik.fu-berlin.de>)
-          id 1sLQTC-00000000YxX-2uiW; Sun, 23 Jun 2024 18:53:38 +0200
-Message-ID: <9449319ebbcd59719614ee786f1abe18256d0331.camel@physik.fu-berlin.de>
-Subject: Re: [PATCH] sparc/build: Make all compiler flags also
- clang-compatible
-From: John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
-To: koachan@protonmail.com, "David S. Miller" <davem@davemloft.net>, Andreas
- Larsson <andreas@gaisler.com>, Nathan Chancellor <nathan@kernel.org>, Nick
- Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>,
- Justin Stitt <justinstitt@google.com>
-Cc: sparclinux@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	llvm@lists.linux.dev
-Date: Sun, 23 Jun 2024 18:53:37 +0200
-In-Reply-To: <20240620-sparc-cflags-v1-1-bba7d0ff7d42@protonmail.com>
-References: <20240620-sparc-cflags-v1-1-bba7d0ff7d42@protonmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.52.2 
+	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="MfgzB2aN"
+Received: by mail-lj1-f173.google.com with SMTP id 38308e7fff4ca-2ec58040f39so9836551fa.2
+        for <llvm@lists.linux.dev>; Sun, 23 Jun 2024 10:06:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google; t=1719162364; x=1719767164; darn=lists.linux.dev;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=J2lcMIrHytzsqZNd1SmlAzfYjjTDrAQdmPKhyqoEJj8=;
+        b=MfgzB2aNYPdPciglRwpSJQaeZxHHS+7ky01y9yVDPfZXxOXLSN0NAjDU12t+QWetR1
+         lAjggrY6lD0xkb7yHbw2rk72AsoeJP/yvvdkPiyhFmFTnilWLkBdR8yZl2AdcWWkW/+O
+         PbeJRFd5tSgJ3D58IEjtQNCUdWQjY+/tZnoRQ=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1719162364; x=1719767164;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=J2lcMIrHytzsqZNd1SmlAzfYjjTDrAQdmPKhyqoEJj8=;
+        b=MbUG7CeTSeyOZHgHLzcfmFWgJnQRC4dNZfiVxP6YfDjVuyC8Qiyqos3OSVXF/zSDmw
+         2Z9JL5Rnx8bHMRBYxVjwvrY959JkW1bI2MWAqmsoT51wpSYa6D6zpAmYd2wHDj4gylaI
+         07dlynGiMm0mliqlTfwfZDusVoyYt5to1UcK9kjIcw+08QIppAdrGhoG9TZY7aWX2BRD
+         kRGFD57vq4Y6BE0pVS4H/QCa8pTzhiW2jO09RnOrvFMpx50uKmYZ+PIjR6EYUrQYYSnB
+         KT008THHqvt4NWAFgJ3r4YQ/rfAk29atXZe6VH6wzOiQ16W4MKmFb0MqhkpdaXUgrA+M
+         MPfw==
+X-Forwarded-Encrypted: i=1; AJvYcCVo89ubJYv89cidg2fZojMHtCcQyccdge4GXbDVyThAaxhiyBeW6MWa8mWJi4ZRBZSvcP5P6jRWrGq0iI1spV4RCljFkw==
+X-Gm-Message-State: AOJu0YwMTYrWXpq6uRfIt/j6lcM0hJf8UDfwxRdP0yGdyBsns2ftzq5h
+	bw+gKmSsyBhf/MqgYFCkie0/8EY2YYy9kiRO8pTzCXqsMhlm2/og45DnPmMTcnx2B47AKVWV11t
+	gdELGTw==
+X-Google-Smtp-Source: AGHT+IEvr1HeJssUJ9fjoai+WHKMkaWUeEJ31fkSlSvfb+OylXvieYNZQu+xm8eAuPV845OlapuysA==
+X-Received: by 2002:ac2:4258:0:b0:52c:dac0:7993 with SMTP id 2adb3069b0e04-52ce063e74cmr1862782e87.8.1719162364582;
+        Sun, 23 Jun 2024 10:06:04 -0700 (PDT)
+Received: from mail-lj1-f182.google.com (mail-lj1-f182.google.com. [209.85.208.182])
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-52ce6ac66b8sm51727e87.107.2024.06.23.10.06.03
+        for <llvm@lists.linux.dev>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 23 Jun 2024 10:06:03 -0700 (PDT)
+Received: by mail-lj1-f182.google.com with SMTP id 38308e7fff4ca-2ec58040f39so9836371fa.2
+        for <llvm@lists.linux.dev>; Sun, 23 Jun 2024 10:06:03 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCVJ7HGGlRBFjK4xFU7T316TdI423F/OxzVPMe8lGvM06RF4eE2HgmCNwwzkx7Sn09sUHLYcRR6CEI60C1Sm+x9yEJ/rPA==
+X-Received: by 2002:a2e:3101:0:b0:2ec:1cf1:b74c with SMTP id
+ 38308e7fff4ca-2ec594cfe8fmr16692871fa.32.1719162363025; Sun, 23 Jun 2024
+ 10:06:03 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Original-Sender: glaubitz@physik.fu-berlin.de
-X-ZEDAT-Hint: PO
+References: <20240620181736.1270455-1-yabinc@google.com> <CAKwvOd=ZKS9LbJExCp8vrV9kLDE_Ew+mRcFH5-sYRW_2=sBiig@mail.gmail.com>
+ <ZnVe5JBIBGoOrk5w@gondor.apana.org.au> <CAHk-=wgubtUrE=YcvHvRkUX7ii8QHPNCJ_0Gc+3tQOw+rL1DSg@mail.gmail.com>
+In-Reply-To: <CAHk-=wgubtUrE=YcvHvRkUX7ii8QHPNCJ_0Gc+3tQOw+rL1DSg@mail.gmail.com>
+From: Linus Torvalds <torvalds@linux-foundation.org>
+Date: Sun, 23 Jun 2024 13:05:46 -0400
+X-Gmail-Original-Message-ID: <CAHk-=wiBbJLWOJxoz7srMPtKcN7+9cEh79fzf8GKXTJyRdk=tw@mail.gmail.com>
+Message-ID: <CAHk-=wiBbJLWOJxoz7srMPtKcN7+9cEh79fzf8GKXTJyRdk=tw@mail.gmail.com>
+Subject: Re: [PATCH] Fix initializing a static union variable
+To: Herbert Xu <herbert@gondor.apana.org.au>
+Cc: Nick Desaulniers <ndesaulniers@google.com>, Yabin Cui <yabinc@google.com>, 
+	Steffen Klassert <steffen.klassert@secunet.com>, "David S. Miller" <davem@davemloft.net>, 
+	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+	Nathan Chancellor <nathan@kernel.org>, Bill Wendling <morbo@google.com>, 
+	Justin Stitt <justinstitt@google.com>, netdev@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
 
-Hi Koakuma,
+On Sun, 23 Jun 2024 at 12:51, Linus Torvalds
+<torvalds@linux-foundation.org> wrote:
+>
+> I *hope* this is some unreleased clang version that has this bug.
+> Because at least the clang version I have access to (clang 17.0.6)
+> does not seem to exhibit this issue.
 
-On Thu, 2024-06-20 at 22:56 +0700, Koakuma via B4 Relay wrote:
-> - More trivial is to change `-mv8plus` -> `-mcpu=3Dv9`.
->   This should be safe too since the kernel seems to require a V9
->   processor to run anyway, so I'm changing the flag to one that is
->   portable between GCC and clang.
+Hmm. Strange. godbolt says that it happens with clang 17.0.1 (and
+earlier) with a plain -O2.
 
-I just looked up what the exact difference between V8plus and 32-bit
-V9 is and it turns out it's not exactly the same [1].
+It just doesn't happen for me. Either this got fixed already and my
+17.0.6 has the fix, or there's some subtle flag that my test-case uses
+(some config file - I just use "-O2" for local testing like the
+godbolt page did).
 
-V8plus does not use VIS instructions and also has a different ELF machine
-type, namely EM_SPARC32PLUS instead of EM_SPARCV9 if I understand correctly=
-.
+But clearly godbolt does  think this happens with released clang versions too.
 
-So, we should make sure that the above change will not affect the ELF machi=
-ne
-type.
-
-Adrian
-
-> [1] https://stackoverflow.com/questions/23506538/what-is-em-sparc32plus-f=
-or
-
---=20
- .''`.  John Paul Adrian Glaubitz
-: :' :  Debian Developer
-`. `'   Physicist
-  `-    GPG: 62FF 8A75 84E0 2956 9546  0006 7426 3B37 F5B5 F913
+            Linus
