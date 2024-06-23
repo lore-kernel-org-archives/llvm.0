@@ -1,140 +1,153 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7829B79B9C;
-	Sun, 23 Jun 2024 18:21:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3EA0179B9C
+	for <llvm@lists.linux.dev>; Sun, 23 Jun 2024 18:23:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719166877; cv=none; b=eOnsh3TTCcXuhFv4AWDtvxlVECPfAEMtiYRxImSI2xOvR0IhVR7E5wu7CL2h0afMjPlInhsTK0uyNhBK320As579j8HS5TCQskFEdgRJHbBpvcnbIeC4glyh3jJxD30O7QIG1UAD5o1aRX4cx+MtIiXT7WxBgQBwBxkNjxy7SeA=
+	t=1719166998; cv=none; b=bREPTrpOW+azbmaC5omaX1ZPK3sKZiTa/GSRB5L8HfRJeQHLAykfVp+MPylveGJE8v4W85IEWFqaZ8BkDymjzw7zeUypiQ0+pj2zrfJSd7Mq4FrpXyYzaG7oJ7SdKU3e/f5ejSRLcKSKyZphVQawRRgDZh903N/T5JB9ZDCK0lw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719166877; c=relaxed/simple;
-	bh=duSWdQ+aOaP9HENYg1+didyYLS480gMI9XxeuWAa1M4=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=AKrBtV1qcaa1khO8siG2pMsHzLv2kyovc0DpHQN4unQr0cv6f1O5naVb9UKaLf+xNOc1Ln+JvCvgcDY5+XWjUFaHwcovXfAHhfZfmFoYqy0xXSFO5kUAE2Z+VKy/SZ0B8mgBwst8AuiuXUIL2NrSajoTpk6Tz3ixA4/pIVZaykc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=MuAgNV7V; arc=none smtp.client-ip=198.175.65.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1719166998; c=relaxed/simple;
+	bh=d9o8LWqfM9krm8yKAuzPtv9ZHEaeKi/H4Vp5FLhz1To=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=hXoVtJVgjrHTiNSpjkSGLaaRiV/nYdveIGlkcBPudPGCmJ8vq0rzUHSn7+UptQoHaz7AKMPTJkS83OMrMA99ARvxFD8RVz7803K07bYjK2ijhgy5QHfmRpJh4Q4fV1tjZJOLANPn8iuZakNM7cq/ki9M26FjzTYFHrb94XlEOSo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=faKJoZ9G; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="MuAgNV7V"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1719166875; x=1750702875;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=duSWdQ+aOaP9HENYg1+didyYLS480gMI9XxeuWAa1M4=;
-  b=MuAgNV7Vrz8F6qfDcmxfszVbqXWZZDsOuz3gOsVB/rbhlEq5Lyk/XwmZ
-   80tW91OsKpheKo0Z9uuZnXKg3KsZIMV0H/1QQcUMUAaBFwnbImEEf/fZP
-   GphneniBwximpthkaSRosFQkI8c/raDDNWSW9DHWzefAcN6ZrzT+SnSSo
-   lwRKczNqosm1zfsEe1mIq4jVZaQxk3p2OmrFlonYdOF3CC24x1Do5IPD+
-   IxPO8rVQW7eG3CwQ+5OQCu4v5HPUPSoExMF/eV2AQY3vMB39cW/HmmGQI
-   WMiw6ZryKRAmcVBfi/KYvDm+ZF7mT+Qx+vWJsVG2ayqQW8D2WxdEzG7ps
-   g==;
-X-CSE-ConnectionGUID: WCeD/X38T3WL/1/Fef3YHA==
-X-CSE-MsgGUID: A4zhCEBqSWmbyKQI+X30GQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11112"; a="16273704"
-X-IronPort-AV: E=Sophos;i="6.08,260,1712646000"; 
-   d="scan'208";a="16273704"
-Received: from orviesa004.jf.intel.com ([10.64.159.144])
-  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jun 2024 11:21:14 -0700
-X-CSE-ConnectionGUID: 8XZG4GP9SluckJkCcub7pg==
-X-CSE-MsgGUID: XlbtoyUpQo2iukJMD25f0g==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.08,260,1712646000"; 
-   d="scan'208";a="48245771"
-Received: from lkp-server01.sh.intel.com (HELO 68891e0c336b) ([10.239.97.150])
-  by orviesa004.jf.intel.com with ESMTP; 23 Jun 2024 11:21:13 -0700
-Received: from kbuild by 68891e0c336b with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1sLRpu-000AwE-2f;
-	Sun, 23 Jun 2024 18:21:10 +0000
-Date: Mon, 24 Jun 2024 02:20:48 +0800
-From: kernel test robot <lkp@intel.com>
-To: Alex Bee <knaerzche@gmail.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Linux Memory Management List <linux-mm@kvack.org>,
-	Heiko Stuebner <heiko@sntech.de>
-Subject: [linux-next:master 4036/7797]
- drivers/clk/rockchip/clk-rk3128.c:582:40: error: use of undeclared
- identifier 'CLK_NR_CLKS'
-Message-ID: <202406240243.f4Ux9lv5-lkp@intel.com>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="faKJoZ9G"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1719166995;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=bmQYybYMdYiNOi/aPSLaor/LFu1fKjyIKfJP4MkaBrg=;
+	b=faKJoZ9GOQlZCkjLLs36OhwAW5YYeWwIisHYSdJJuIqKeWlf7gxCIplY5bNY/DVvQabiMx
+	5CnTh/oNQ/QM9sav028+hWJE/t2AMylF4j6oH9EXLvvJX5cvXo7g9/IEWTD3I8IY4nCeVD
+	GQx88wbFNS0X8qj/RjUlO/v7H+3k5ps=
+Received: from mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-527-m-2y_dzSMXecjPXVb4pW3Q-1; Sun,
+ 23 Jun 2024 14:23:13 -0400
+X-MC-Unique: m-2y_dzSMXecjPXVb4pW3Q-1
+Received: from mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.4])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 7A0EB1956083
+	for <llvm@lists.linux.dev>; Sun, 23 Jun 2024 18:23:12 +0000 (UTC)
+Received: from [172.64.3.44] (unknown [10.30.33.101])
+	by mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id A20963000218;
+	Sun, 23 Jun 2024 18:23:11 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL (MISSED 23 of 192): Test report for master
+ (6.10.0-rc4, mainline.kernel.org-clang, d6c94157)
+Date: Sun, 23 Jun 2024 18:23:11 -0000
+To: xzhou@redhat.com, bgoncalv@redhat.com, llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.4
+Message-Id: <67211.124062314231300338@us-mta-527.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-head:   f76698bd9a8ca01d3581236082d786e9a6b72bb7
-commit: 9f22b4fbd4c6d27ca4e5f8fa6632e6d7a846af28 [4036/7797] dt-bindings: clock: rk3128: Drop CLK_NR_CLKS
-config: arm-defconfig (https://download.01.org/0day-ci/archive/20240624/202406240243.f4Ux9lv5-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240624/202406240243.f4Ux9lv5-lkp@intel.com/reproduce)
+Hi, we tested your kernel and here are the results:
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202406240243.f4Ux9lv5-lkp@intel.com/
-
-Note: the linux-next/master HEAD f76698bd9a8ca01d3581236082d786e9a6b72bb7 builds fine.
-      It may have been fixed somewhere.
-
-All errors (new ones prefixed by >>):
-
->> drivers/clk/rockchip/clk-rk3128.c:582:40: error: use of undeclared identifier 'CLK_NR_CLKS'
-           ctx = rockchip_clk_init(np, reg_base, CLK_NR_CLKS);
-                                                 ^
-   1 error generated.
+    Overall result: FAILED
+             Merge: OK
+           Compile: OK
+              Test: FAILED
 
 
-vim +/CLK_NR_CLKS +582 drivers/clk/rockchip/clk-rk3128.c
+Kernel information:
+    Commit message: Merge tag 'drm-fixes-2024-06-22' of https://gitlab.free=
+desktop.org/drm/kernel
 
-f6022e88faca1a Elaine Zhang 2017-06-02  570  
-334614058886fc Elaine Zhang 2017-08-01  571  static struct rockchip_clk_provider *__init rk3128_common_clk_init(struct device_node *np)
-f6022e88faca1a Elaine Zhang 2017-06-02  572  {
-f6022e88faca1a Elaine Zhang 2017-06-02  573  	struct rockchip_clk_provider *ctx;
-f6022e88faca1a Elaine Zhang 2017-06-02  574  	void __iomem *reg_base;
-f6022e88faca1a Elaine Zhang 2017-06-02  575  
-f6022e88faca1a Elaine Zhang 2017-06-02  576  	reg_base = of_iomap(np, 0);
-f6022e88faca1a Elaine Zhang 2017-06-02  577  	if (!reg_base) {
-f6022e88faca1a Elaine Zhang 2017-06-02  578  		pr_err("%s: could not map cru region\n", __func__);
-334614058886fc Elaine Zhang 2017-08-01  579  		return ERR_PTR(-ENOMEM);
-f6022e88faca1a Elaine Zhang 2017-06-02  580  	}
-f6022e88faca1a Elaine Zhang 2017-06-02  581  
-f6022e88faca1a Elaine Zhang 2017-06-02 @582  	ctx = rockchip_clk_init(np, reg_base, CLK_NR_CLKS);
-f6022e88faca1a Elaine Zhang 2017-06-02  583  	if (IS_ERR(ctx)) {
-f6022e88faca1a Elaine Zhang 2017-06-02  584  		pr_err("%s: rockchip clk init failed\n", __func__);
-f6022e88faca1a Elaine Zhang 2017-06-02  585  		iounmap(reg_base);
-334614058886fc Elaine Zhang 2017-08-01  586  		return ERR_PTR(-ENOMEM);
-f6022e88faca1a Elaine Zhang 2017-06-02  587  	}
-f6022e88faca1a Elaine Zhang 2017-06-02  588  
-f6022e88faca1a Elaine Zhang 2017-06-02  589  	rockchip_clk_register_plls(ctx, rk3128_pll_clks,
-f6022e88faca1a Elaine Zhang 2017-06-02  590  				   ARRAY_SIZE(rk3128_pll_clks),
-f6022e88faca1a Elaine Zhang 2017-06-02  591  				   RK3128_GRF_SOC_STATUS0);
-334614058886fc Elaine Zhang 2017-08-01  592  	rockchip_clk_register_branches(ctx, common_clk_branches,
-334614058886fc Elaine Zhang 2017-08-01  593  				  ARRAY_SIZE(common_clk_branches));
-f6022e88faca1a Elaine Zhang 2017-06-02  594  
-f6022e88faca1a Elaine Zhang 2017-06-02  595  	rockchip_clk_register_armclk(ctx, ARMCLK, "armclk",
-f6022e88faca1a Elaine Zhang 2017-06-02  596  			mux_armclk_p, ARRAY_SIZE(mux_armclk_p),
-f6022e88faca1a Elaine Zhang 2017-06-02  597  			&rk3128_cpuclk_data, rk3128_cpuclk_rates,
-f6022e88faca1a Elaine Zhang 2017-06-02  598  			ARRAY_SIZE(rk3128_cpuclk_rates));
-f6022e88faca1a Elaine Zhang 2017-06-02  599  
-f6022e88faca1a Elaine Zhang 2017-06-02  600  	rockchip_register_softrst(np, 9, reg_base + RK2928_SOFTRST_CON(0),
-f6022e88faca1a Elaine Zhang 2017-06-02  601  				  ROCKCHIP_SOFTRST_HIWORD_MASK);
-f6022e88faca1a Elaine Zhang 2017-06-02  602  
-f6022e88faca1a Elaine Zhang 2017-06-02  603  	rockchip_register_restart_notifier(ctx, RK2928_GLB_SRST_FST, NULL);
-f6022e88faca1a Elaine Zhang 2017-06-02  604  
-334614058886fc Elaine Zhang 2017-08-01  605  	return ctx;
-334614058886fc Elaine Zhang 2017-08-01  606  }
-334614058886fc Elaine Zhang 2017-08-01  607  
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1342775689
 
-:::::: The code at line 582 was first introduced by commit
-:::::: f6022e88faca1a6a21cbd0f009b477bc530b9cc7 clk: rockchip: add clock controller for rk3128
+One or more kernel tests failed:
+    Unrecognized or new issues:
+        Reboot test
+              x86_64
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+redhat:1342775689-x86_64-kernel_upt_35
+                   Non-passing ran subtests:
+                       =E2=9D=8C FAIL misc/reboot-test/journalctl-check
+        xfstests - cifsv3.11
+              x86_64 (debug)
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+redhat:1342775689-x86_64-kernel-debug_upt_32
+        xfstests - nfsv4.2
+              x86_64 (debug)
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+redhat:1342775689-x86_64-kernel-debug_upt_31
 
-:::::: TO: Elaine Zhang <zhangqing@rock-chips.com>
-:::::: CC: Heiko Stuebner <heiko@sntech.de>
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: [upstream]blktests nbd/002 failure
+            URL: https://github.com/osandov/blktests/issues/142
+            Affected tests:
+                Storage - blktests - blk - upstream [x86_64]
+        Issue: [rhel-10] xfstests - cifsv3.11 - generic/207 - error in bloc=
+k: expected 4096 bytes, received 0
+            URL: https://issues.redhat.com/browse/RHEL-39974
+            Affected tests:
+                xfstests - cifsv3.11 [x86_64]
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1267
+            Affected tests:
+                selinux-policy: serge-testsuite [ppc64le]
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+
+Tests that were not ran because of internal issues:=20
+    AMTU (Abstract Machine Test Utility) [x86_64 (debug)]
+    Boot test [s390x]
+    CKI/restraint [s390x]
+    Filesystem - Loopdev Sanity [x86_64 (debug)]
+    Hardware - pciutils: sanity smoke test [x86_64 (debug)]
+    kselftests upstream - bpf [x86_64 (debug)]
+    kselftests upstream - bpf_test_progs [x86_64 (debug)]
+    kselftests upstream - net [x86_64 (debug)]
+    Libkcapi AF_ALG test [x86_64 (debug)]
+    machineinfo [s390x]
+    Memory function: memfd_create [x86_64 (debug)]
+    Networking - Ethernet drivers sanity [x86_64 (debug)]
+    Networking cki netfilter test [x86_64 (debug)]
+    POSIX pjd-fstest suites [x86_64 (debug)]
+    Reboot test [s390x, x86_64 (debug)]
+    SELinux Custom Module Setup [s390x]
+    Storage - blktests - blk - upstream [s390x]
+    Storage - blktests - nvme-tcp - upstream [s390x]
+    Storage - dm/common [x86_64 (debug)]
+    Storage - swraid scsi_raid [s390x]
+    stress: stress-ng - cpu-cache [s390x]
+    stress: stress-ng - memory [s390x]
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
