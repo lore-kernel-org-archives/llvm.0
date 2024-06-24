@@ -1,47 +1,61 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 35A8D1A01B7;
-	Mon, 24 Jun 2024 20:14:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D09B31A2563;
+	Mon, 24 Jun 2024 23:53:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719260090; cv=none; b=R4uSLv7/10kI+T3nZst7Vp28ALfU0S5hjKpZbLQjT3XoQ7gBF0dw4C8QlPcZZfF8sl1g9/hVhawG6vNqDjA0XcROadiu4DmefBtYlJSn83S3nVZVN5wDEbgjfrrkLYzlqDAb1jFsnJgaz4XytcHqn5ZYScy3yvSw1Wy6SAN60Y8=
+	t=1719273219; cv=none; b=pehLBNQMGqL/wL6mT5kV2VjzNjwFmc0G9C8Cxg1hbG7xgiTBCvmDJzoeSoyT7fGq6/2kPuhQuZpHCUo80Sb8ft4GcSSL9rzHfBcFJEbjLvKp/inz1fQfRBW1l7ze1QvCVamIt0kjMAHK0fX5EdybKRD4G4BvOeeoklWHSzmHxus=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719260090; c=relaxed/simple;
-	bh=B7G4o+wl4uVsOmOk5mkRzYTclrWJ1qPeYOyEfL5YUNs=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=HihgAvXUE2zMnqReZJD20UljoxvOBMmstHvnWLuTSWnm4SvvQ0Sej2xmQ3GSEHj3k2pg4kyTgMEwZCNvPPubpxI8a7RHq3fyuqd743XdM1Q4wR2oJgUhzFQwdhrIHRI1INpRvLfP33NJELbk99dhEREmQuJyUSNdeQ8r5WMisCE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nuFvNqsB; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1719273219; c=relaxed/simple;
+	bh=B/GFHm7zyq0ueXrJHR9jcizF4kP7pcHilfrk4JTO0gI=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=cSOsFGlOOzGiE4wC/95vWBdnOLkBTYZTa4eijKSbq19PhJIAO0qykkZ938BWrhsudNiU2ory6pTvZM/yGr7+C8CRmiH4ecZC9Ji+dadhyb4TivXuvUvYYzNm4gkCaoPcKLVVlb/TJHH/TE8jf/tOX9E0wzqK5e4Un2mwfR1YmL8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=lCr6UBgM; arc=none smtp.client-ip=192.198.163.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nuFvNqsB"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1CD15C2BBFC;
-	Mon, 24 Jun 2024 20:14:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1719260089;
-	bh=B7G4o+wl4uVsOmOk5mkRzYTclrWJ1qPeYOyEfL5YUNs=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=nuFvNqsBwAJtlu4pr/J7euof725uBNi2M7AwbpWG+GLkXBxGcxi4M4b0bSxKclnZX
-	 OVGOsA+MXgga4gPerliU6Kaw2x/QrA6zXG50VYbq48Fqy1eUvNxf3iKXW1sr+DLYf4
-	 iqHq69B0OaV1VNTvklt9o7C5NZ0qufAAvwJl0AHg3q00g3ta3c2ZRHUoK3+YhPyp2L
-	 Sz0ulQ6AmLS1sf+kyvbfm/Xz+LDDoRpGaOQdTN31nUkRs1BuDDHaCUGWLTgHBM67BL
-	 HDtx89T3wCoxd67+IPDu1RlPBvwfM3PZHWkxB1/TLpOJ2unp6CbEF5MJxPV1vdx5MM
-	 k/5NDuyZN7kAA==
-Date: Mon, 24 Jun 2024 13:14:47 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Koakuma <koachan@protonmail.com>
-Cc: "David S. Miller" <davem@davemloft.net>,
-	Andreas Larsson <andreas@gaisler.com>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>, glaubitz@physik.fu-berlin.de,
-	sparclinux@vger.kernel.org, linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: Re: [PATCH] sparc/build: Make all compiler flags also
- clang-compatible
-Message-ID: <20240624201447.GA774138@thelio-3990X>
-References: <20240620-sparc-cflags-v1-1-bba7d0ff7d42@protonmail.com>
- <20240621185345.GA416370@thelio-3990X>
- <e26PTXUXEz8OYXmaeKn4Mpuejr4IOlFfFwdB5vpsluXlYiqDdlyQTYcDtdAny_o4gO4SfPeQCCN2qpyT6e0nog5EaP3xk2SeUPTrF54p1gM=@protonmail.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="lCr6UBgM"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1719273218; x=1750809218;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=B/GFHm7zyq0ueXrJHR9jcizF4kP7pcHilfrk4JTO0gI=;
+  b=lCr6UBgMDY8NbX04p5/RQrcmOcjxC4IhV44AdrhkLb5IhHkXbE0k0CCS
+   b6a5VXIynWuz4v3test/+BECwB0QkO8JH/QMhfFIT+TqV5jiIv9A7Lka1
+   BOOs07WjDkxKpTQtvgJeXhKBYgbd8zzNh4gcUNNyhvt+DEZyAAK5PSdsm
+   /47O6eKTnoDp331qqKTypdJC5x4fNV3Ve4mXNR9Fww2TCQA2ESzg/glNp
+   3xBSYvP51IAeMFS9yDtxqvidfD56uvgAgjS4A7dV3Ms4JgG92QFTjfr+x
+   H29FWKvAOz/y2RYZ6Rv/tz6czkqnRgChy1QKsELJdQ963gUK2CH+XjyMn
+   Q==;
+X-CSE-ConnectionGUID: LosZ0m21RuGvLNufZ055jg==
+X-CSE-MsgGUID: 1IWZuOwxTn62fItFtbaoAw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11113"; a="27677243"
+X-IronPort-AV: E=Sophos;i="6.08,263,1712646000"; 
+   d="scan'208";a="27677243"
+Received: from orviesa005.jf.intel.com ([10.64.159.145])
+  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jun 2024 16:53:34 -0700
+X-CSE-ConnectionGUID: PlVxXWMOQre2Jc4suIX4TQ==
+X-CSE-MsgGUID: CD767dqpSqaBcWJVjR9fdg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.08,263,1712646000"; 
+   d="scan'208";a="48410056"
+Received: from lkp-server01.sh.intel.com (HELO 68891e0c336b) ([10.239.97.150])
+  by orviesa005.jf.intel.com with ESMTP; 24 Jun 2024 16:53:34 -0700
+Received: from kbuild by 68891e0c336b with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1sLtV5-000DpU-00;
+	Mon, 24 Jun 2024 23:53:31 +0000
+Date: Tue, 25 Jun 2024 07:53:10 +0800
+From: kernel test robot <lkp@intel.com>
+To: Philipp Hortmann <philipp.g.hortmann@gmail.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	devel@driverdev.osuosl.org,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: [staging:staging-testing 37/59]
+ drivers/staging/rtl8723bs/os_dep/ioctl_cfg80211.c:2553:24: warning: variable
+ 'pwdev_priv' set but not used
+Message-ID: <202406250759.FnxzD3PK-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -50,94 +64,89 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <e26PTXUXEz8OYXmaeKn4Mpuejr4IOlFfFwdB5vpsluXlYiqDdlyQTYcDtdAny_o4gO4SfPeQCCN2qpyT6e0nog5EaP3xk2SeUPTrF54p1gM=@protonmail.com>
 
-Hi Koakuma,
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/staging.git staging-testing
+head:   921190437a4827667cceef10202b2150571ebe5c
+commit: bdee203cd80ce2d3b0a52015ecfde6ad45d01eb9 [37/59] staging: rtl8723bs: Remove switch(type) as type is constant
+config: x86_64-buildonly-randconfig-004-20240625 (https://download.01.org/0day-ci/archive/20240625/202406250759.FnxzD3PK-lkp@intel.com/config)
+compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240625/202406250759.FnxzD3PK-lkp@intel.com/reproduce)
 
-On Sat, Jun 22, 2024 at 12:18:17PM +0000, Koakuma wrote:
-> Nathan Chancellor <nathan@kernel.org> wrote:
-> 
-> > I saw through the LLVM issue above that one other patch is necessary to
-> > fix an issue in the vDSO [1], which I applied in testing this one. 
-> 
-> Mhmm, I did not submit that yet because I don't feel fully confident
-> with it. I think it should probably live in include/vdso/math64.h
-> as plain C code instead of the current asm version, but I don't know
-> what is the proper way to check the current environment's word size.
-> Is checking BITS_PER_LONG enough, or should I do it in another way?
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202406250759.FnxzD3PK-lkp@intel.com/
 
-Yes, I believe that is what BITS_PER_LONG is there for, you will see
-other checks in the tree for that. You could also reach out to the
-maintainers of the generic vDSO infrastructure to see if they have any
-ideas or suggestions for integration.
+All warnings (new ones prefixed by >>):
 
-> > I noticed in applying that change that you appear to be working on 6.1,
-> > which is fine for now, but you'll need another diff once you get to a
-> > newer version, as we stopped using CROSS_COMPILE to set clang's
-> > '--target=' value:
-> > 
-> > diff --git a/scripts/Makefile.clang b/scripts/Makefile.clang
-> > index 6c23c6af797f..2435efae67f5 100644
-> > --- a/scripts/Makefile.clang
-> > +++ b/scripts/Makefile.clang
-> > @@ -10,6 +10,7 @@ CLANG_TARGET_FLAGS_mips := mipsel-linux-gnu
-> > CLANG_TARGET_FLAGS_powerpc := powerpc64le-linux-gnu
-> > CLANG_TARGET_FLAGS_riscv := riscv64-linux-gnu
-> > CLANG_TARGET_FLAGS_s390 := s390x-linux-gnu
-> > +CLANG_TARGET_FLAGS_sparc := sparc64-linux-gnu
-> > CLANG_TARGET_FLAGS_x86 := x86_64-linux-gnu
-> > CLANG_TARGET_FLAGS_um := $(CLANG_TARGET_FLAGS_$(SUBARCH))
-> > CLANG_TARGET_FLAGS := $(CLANG_TARGET_FLAGS_$(SRCARCH))
-> 
-> Yeah, I was working with 6.1 at that time since it's the version
-> that my distro have installed for me. Now this is more of a workflow
+>> drivers/staging/rtl8723bs/os_dep/ioctl_cfg80211.c:2553:24: warning: variable 'pwdev_priv' set but not used [-Wunused-but-set-variable]
+    2553 |         struct rtw_wdev_priv *pwdev_priv;
+         |                               ^
+   1 warning generated.
 
-That makes sense. I do think you should start working off of a more
-recent version (ideally at least mainline) for your future revisions,
-just so that your patches can be applied with less friction on
-maintainers. That can help your patches get picked up quicker :)
 
-> question, but this means I should submit a v2 with this change
-> merged in with mine too, right?
+vim +/pwdev_priv +2553 drivers/staging/rtl8723bs/os_dep/ioctl_cfg80211.c
 
-Here is what I would do:
+554c0a3abf216c Hans de Goede     2017-03-29  2536  
+1d85bb7fd66aa1 Franziska Naepelt 2023-07-01  2537  static int cfg80211_rtw_mgmt_tx(struct wiphy *wiphy, struct wireless_dev *wdev,
+554c0a3abf216c Hans de Goede     2017-03-29  2538  				struct cfg80211_mgmt_tx_params *params,
+554c0a3abf216c Hans de Goede     2017-03-29  2539  				u64 *cookie)
+554c0a3abf216c Hans de Goede     2017-03-29  2540  {
+554c0a3abf216c Hans de Goede     2017-03-29  2541  	struct net_device *ndev = wdev_to_ndev(wdev);
+554c0a3abf216c Hans de Goede     2017-03-29  2542  	struct ieee80211_channel *chan = params->chan;
+554c0a3abf216c Hans de Goede     2017-03-29  2543  	const u8 *buf = params->buf;
+554c0a3abf216c Hans de Goede     2017-03-29  2544  	size_t len = params->len;
+554c0a3abf216c Hans de Goede     2017-03-29  2545  	int ret = 0;
+554c0a3abf216c Hans de Goede     2017-03-29  2546  	int tx_ret;
+554c0a3abf216c Hans de Goede     2017-03-29  2547  	u32 dump_limit = RTW_MAX_MGMT_TX_CNT;
+554c0a3abf216c Hans de Goede     2017-03-29  2548  	u32 dump_cnt = 0;
+554c0a3abf216c Hans de Goede     2017-03-29  2549  	bool ack = true;
+554c0a3abf216c Hans de Goede     2017-03-29  2550  	u8 tx_ch = (u8)ieee80211_frequency_to_channel(chan->center_freq);
+554c0a3abf216c Hans de Goede     2017-03-29  2551  	u8 category, action;
+554c0a3abf216c Hans de Goede     2017-03-29  2552  	struct adapter *padapter;
+554c0a3abf216c Hans de Goede     2017-03-29 @2553  	struct rtw_wdev_priv *pwdev_priv;
+554c0a3abf216c Hans de Goede     2017-03-29  2554  
+cd1f1450092216 Michael Straube   2021-08-29  2555  	if (!ndev) {
+554c0a3abf216c Hans de Goede     2017-03-29  2556  		ret = -EINVAL;
+554c0a3abf216c Hans de Goede     2017-03-29  2557  		goto exit;
+554c0a3abf216c Hans de Goede     2017-03-29  2558  	}
+554c0a3abf216c Hans de Goede     2017-03-29  2559  
+42a18f09bcb900 Ivan Safonov      2020-10-11  2560  	padapter = rtw_netdev_priv(ndev);
+554c0a3abf216c Hans de Goede     2017-03-29  2561  	pwdev_priv = adapter_wdev_data(padapter);
+554c0a3abf216c Hans de Goede     2017-03-29  2562  
+554c0a3abf216c Hans de Goede     2017-03-29  2563  	/* cookie generation */
+554c0a3abf216c Hans de Goede     2017-03-29  2564  	*cookie = (unsigned long)buf;
+554c0a3abf216c Hans de Goede     2017-03-29  2565  
+554c0a3abf216c Hans de Goede     2017-03-29  2566  	/* indicate ack before issue frame to avoid racing with rsp frame */
+554c0a3abf216c Hans de Goede     2017-03-29  2567  	rtw_cfg80211_mgmt_tx_status(padapter, *cookie, buf, len, ack, GFP_KERNEL);
+554c0a3abf216c Hans de Goede     2017-03-29  2568  
+04c35396c5c6c6 Fabio Aiuto       2021-04-10  2569  	if (rtw_action_frame_parse(buf, len, &category, &action) == false)
+554c0a3abf216c Hans de Goede     2017-03-29  2570  		goto exit;
+554c0a3abf216c Hans de Goede     2017-03-29  2571  
+554c0a3abf216c Hans de Goede     2017-03-29  2572  	rtw_ps_deny(padapter, PS_DENY_MGNT_TX);
+51c8299a031c19 Kang Minchul      2022-09-22  2573  	if (rtw_pwr_wakeup(padapter) == _FAIL) {
+554c0a3abf216c Hans de Goede     2017-03-29  2574  		ret = -EFAULT;
+554c0a3abf216c Hans de Goede     2017-03-29  2575  		goto cancel_ps_deny;
+554c0a3abf216c Hans de Goede     2017-03-29  2576  	}
+554c0a3abf216c Hans de Goede     2017-03-29  2577  
+554c0a3abf216c Hans de Goede     2017-03-29  2578  	do {
+554c0a3abf216c Hans de Goede     2017-03-29  2579  		dump_cnt++;
+554c0a3abf216c Hans de Goede     2017-03-29  2580  		tx_ret = _cfg80211_rtw_mgmt_tx(padapter, tx_ch, buf, len);
+554c0a3abf216c Hans de Goede     2017-03-29  2581  	} while (dump_cnt < dump_limit && tx_ret != _SUCCESS);
+554c0a3abf216c Hans de Goede     2017-03-29  2582  
+554c0a3abf216c Hans de Goede     2017-03-29  2583  cancel_ps_deny:
+554c0a3abf216c Hans de Goede     2017-03-29  2584  	rtw_ps_deny_cancel(padapter, PS_DENY_MGNT_TX);
+554c0a3abf216c Hans de Goede     2017-03-29  2585  exit:
+554c0a3abf216c Hans de Goede     2017-03-29  2586  	return ret;
+554c0a3abf216c Hans de Goede     2017-03-29  2587  }
+554c0a3abf216c Hans de Goede     2017-03-29  2588  
 
-1. Either keep this patch the way that it is or break it up into two
-   separate patches (especially given Adrian's other review comment):
+:::::: The code at line 2553 was first introduced by commit
+:::::: 554c0a3abf216c991c5ebddcdb2c08689ecd290b staging: Add rtl8723bs sdio wifi driver
 
-   One for removing the '-fcall-used' flags, with the comments about how
-   it does not impact the ABI and the registers can still be used in
-   assembly if needed, perhaps with some benchmarks with any codegen?
-   Might not be strictly necessary since Sam did not seem opposed in the
-   previous discussion.
+:::::: TO: Hans de Goede <hdegoede@redhat.com>
+:::::: CC: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
-   One for changing the vDSO from '-mv8plus' to '-mcpu=v9' (if this is
-   still okay).
-
-2. Add another patch with that diff above with some notes about what was
-   tested to justify allowing this now.
-
-You'll end up with either a two or three patch series. I would send this
-series to both the SPARC people that you have added here along with the
-Kbuild and ClangBuiltLinux folks, which you can get from the output of
-
-  $ scripts/get_maintainers.pl scripts/Makefile.clang
-
-or use 'b4 prep --auto-to-cc' after crafting the series, since it
-appears you used it for this series. For the cover letter, you can add
-some commentary about what was tested and request integration from
-either the SPARC folks or Masahiro, depending on who wants to carry the
-changes, since they should go through one tree atomically ideally.
-
-If you have any questions about or issues with that comment or any other
-aspect of this process, I am happy to answer or clarify as necessary!
-I am in the #clang-built-linux channel in the LLVM Discord and
-#clangbuiltlinux on Libera if anything comes up.
-
-> And thanks for the feedback!
-
-Always happy to help get more people involved with the kernel,
-especially from the clang/LLVM side :)
-
-Cheers,
-Nathan
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
