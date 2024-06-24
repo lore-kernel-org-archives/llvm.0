@@ -1,89 +1,143 @@
-Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 198321A00FC
-	for <llvm@lists.linux.dev>; Mon, 24 Jun 2024 19:27:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 35A8D1A01B7;
+	Mon, 24 Jun 2024 20:14:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719257229; cv=none; b=JSYnD8sPNr2eS2dYmN+/CK+r7GFNoeYAshVfydv8VNaK2n97ZdQp0ESfEmZrhSImvGpiV+6buNhg4aBRJHqgoRSocpYZKk1pGWRP6OImu1hxa0DdfTVcKGSOFA1oPULOvKtzi0t7ctDDmQxwiEISKqJ8ALOpQS7XT7P9Xky+Pms=
+	t=1719260090; cv=none; b=R4uSLv7/10kI+T3nZst7Vp28ALfU0S5hjKpZbLQjT3XoQ7gBF0dw4C8QlPcZZfF8sl1g9/hVhawG6vNqDjA0XcROadiu4DmefBtYlJSn83S3nVZVN5wDEbgjfrrkLYzlqDAb1jFsnJgaz4XytcHqn5ZYScy3yvSw1Wy6SAN60Y8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719257229; c=relaxed/simple;
-	bh=aQZfSwoa+l4IMNsVymSrA1l1JRzJlII9rqUvP9kMBqw=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=OYqwlvq9IDlPUTVtc1gIkSE9ZpStIJhpLr8QAksF3fG2ddvziac0dZ299MDOvW5e9SpZGhTTjTjKcomHxdXZp5Pznmzzx7cIeXc5uPwhCNwpVKbEz361xPH/EZtwU3vHdehlg5UF1rN9I8QQyQoicnlbiJf5xHL79WArl20eZmQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=CAcgV4Zc; arc=none smtp.client-ip=209.85.214.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1719260090; c=relaxed/simple;
+	bh=B7G4o+wl4uVsOmOk5mkRzYTclrWJ1qPeYOyEfL5YUNs=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=HihgAvXUE2zMnqReZJD20UljoxvOBMmstHvnWLuTSWnm4SvvQ0Sej2xmQ3GSEHj3k2pg4kyTgMEwZCNvPPubpxI8a7RHq3fyuqd743XdM1Q4wR2oJgUhzFQwdhrIHRI1INpRvLfP33NJELbk99dhEREmQuJyUSNdeQ8r5WMisCE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nuFvNqsB; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CAcgV4Zc"
-Received: by mail-pl1-f177.google.com with SMTP id d9443c01a7336-1f64ecb1766so35773305ad.1
-        for <llvm@lists.linux.dev>; Mon, 24 Jun 2024 12:27:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1719257227; x=1719862027; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=D6NPcKWdrsF0ORnPMJ9lUOl+tIOO+xgUu7dqqnj8kWQ=;
-        b=CAcgV4ZcftWxRMSXZSaaBQC5/hk6CRxcjH4Nvv7bjMWBrFgQz9n2Mqe6tovrgqz4UQ
-         5otWv1Eg9RA/T8GSuUf1HNA5G9Etku1t5bUcbHEhV97c7PIXmYwIsbcuklTGqqSsBgsz
-         brwCRiosS5rEe6eskjOk9fCUmYQobf6heQh4hQYe1QPDMosK86pAWaZqsD1FcZv5QJgO
-         79bjR6LTHnyeIjyHMsnhAtT+MmFyQteuKPMBXHDCqYc0Z1KJqRpaz+rdXByPaLKUb8Nr
-         7v0vJsSw7wkDv1UTkfqIdoCTsHSkb0trAlH9p3kheSRXX/MWkqKkn2y8o7gRN7C/rECM
-         VClA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1719257227; x=1719862027;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=D6NPcKWdrsF0ORnPMJ9lUOl+tIOO+xgUu7dqqnj8kWQ=;
-        b=mHeZ8PPptIe6BOx9SnSJk8wBCNZzuAFHsBT/N2sYcYwxNSLmaM0jLluQyVa40k30P1
-         m1IDBCyfomRfLABd6Vumroh6ox9tJ6kK9hFTzZeJfpyeKMGfDzghtDobkpoX/WjFpF6d
-         pzsPJ0avK/TAdR+ADVKDHcwslesyHhBqV9LwoHTVQdMiTjkwapn68wYRDcaPpcDEljlH
-         4r1Yyy3/6Ec9abzw2Pq6quvK5KVPTVHcaz0admLz5lzLFxKcQkl0F/PO+YZ/pUsGMKks
-         qeVV4zzrgMj53CtqDfQKxLT1QzK2bdKpmr/15ETuDam7Z7e8/qONdJH8rOm++ie6ATTb
-         EknA==
-X-Forwarded-Encrypted: i=1; AJvYcCXiAd3tyoRyY2DHp+2QeWTeLToPUXJUyq05Tg+D2KeavbLmLQblv+I9bjHw/g1YazBYmowzkrgNPgz+75GrnNWI0tlNMg==
-X-Gm-Message-State: AOJu0YxjXllo2c62Ph+4gQJbYgufAz1svaixS/SUScpkP+d/5YWX0ChR
-	tOkwl0PIIhpjbfeRebF1J3eFjVxJKhZdMMy4mRvau4YqTkLD3lRmNTNmaQGt75jC+wwwpSgwlUm
-	cIeAAeRNIEKISBBT20bSinX439jo=
-X-Google-Smtp-Source: AGHT+IGBtjhDC6P3cpTyHX222A40DKzkhUa9Vlp3o09LRMLRvr5RdM7GaIGSlUL3/mDyjjHLONQXobYxheRm3w1BZ2o=
-X-Received: by 2002:a17:90b:1e43:b0:2c2:e175:4076 with SMTP id
- 98e67ed59e1d1-2c85829117dmr4566018a91.32.1719257227334; Mon, 24 Jun 2024
- 12:27:07 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nuFvNqsB"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1CD15C2BBFC;
+	Mon, 24 Jun 2024 20:14:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1719260089;
+	bh=B7G4o+wl4uVsOmOk5mkRzYTclrWJ1qPeYOyEfL5YUNs=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=nuFvNqsBwAJtlu4pr/J7euof725uBNi2M7AwbpWG+GLkXBxGcxi4M4b0bSxKclnZX
+	 OVGOsA+MXgga4gPerliU6Kaw2x/QrA6zXG50VYbq48Fqy1eUvNxf3iKXW1sr+DLYf4
+	 iqHq69B0OaV1VNTvklt9o7C5NZ0qufAAvwJl0AHg3q00g3ta3c2ZRHUoK3+YhPyp2L
+	 Sz0ulQ6AmLS1sf+kyvbfm/Xz+LDDoRpGaOQdTN31nUkRs1BuDDHaCUGWLTgHBM67BL
+	 HDtx89T3wCoxd67+IPDu1RlPBvwfM3PZHWkxB1/TLpOJ2unp6CbEF5MJxPV1vdx5MM
+	 k/5NDuyZN7kAA==
+Date: Mon, 24 Jun 2024 13:14:47 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Koakuma <koachan@protonmail.com>
+Cc: "David S. Miller" <davem@davemloft.net>,
+	Andreas Larsson <andreas@gaisler.com>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>, glaubitz@physik.fu-berlin.de,
+	sparclinux@vger.kernel.org, linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: Re: [PATCH] sparc/build: Make all compiler flags also
+ clang-compatible
+Message-ID: <20240624201447.GA774138@thelio-3990X>
+References: <20240620-sparc-cflags-v1-1-bba7d0ff7d42@protonmail.com>
+ <20240621185345.GA416370@thelio-3990X>
+ <e26PTXUXEz8OYXmaeKn4Mpuejr4IOlFfFwdB5vpsluXlYiqDdlyQTYcDtdAny_o4gO4SfPeQCCN2qpyT6e0nog5EaP3xk2SeUPTrF54p1gM=@protonmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20240624185312.94537-1-sj@kernel.org> <20240624185312.94537-5-sj@kernel.org>
-In-Reply-To: <20240624185312.94537-5-sj@kernel.org>
-From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date: Mon, 24 Jun 2024 21:26:55 +0200
-Message-ID: <CANiq72nBOG-oVZxMPC-XqVrYSQ95Aj-=FQFTb2y8kG2ioej=4w@mail.gmail.com>
-Subject: Re: [PATCH 4/7] Docs: Move clang-format from process/ to dev-tools/
-To: SeongJae Park <sj@kernel.org>
-Cc: Jonathan Corbet <corbet@lwn.net>, Miguel Ojeda <ojeda@kernel.org>, 
-	Federico Vaga <federico.vaga@vaga.pv.it>, Carlos Bilbao <carlos.bilbao.osdev@gmail.com>, 
-	Avadhut Naik <avadhut.naik@amd.com>, Alex Shi <alexs@kernel.org>, 
-	Yanteng Si <siyanteng@loongson.cn>, Hu Haowen <2023002089@link.tyut.edu.cn>, 
-	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
-	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, linux-kernel@vger.kernel.org, 
-	linux-doc@vger.kernel.org, workflows@vger.kernel.org, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <e26PTXUXEz8OYXmaeKn4Mpuejr4IOlFfFwdB5vpsluXlYiqDdlyQTYcDtdAny_o4gO4SfPeQCCN2qpyT6e0nog5EaP3xk2SeUPTrF54p1gM=@protonmail.com>
 
-On Mon, Jun 24, 2024 at 8:53=E2=80=AFPM SeongJae Park <sj@kernel.org> wrote=
-:
->
-> 'clang-format' is on 'Other material' section of 'process/index', but it
-> may fit more under 'dev-tools/' directory.  Move it.
->
-> Signed-off-by: SeongJae Park <sj@kernel.org>
+Hi Koakuma,
 
-Happy either way -- thanks!
+On Sat, Jun 22, 2024 at 12:18:17PM +0000, Koakuma wrote:
+> Nathan Chancellor <nathan@kernel.org> wrote:
+> 
+> > I saw through the LLVM issue above that one other patch is necessary to
+> > fix an issue in the vDSO [1], which I applied in testing this one. 
+> 
+> Mhmm, I did not submit that yet because I don't feel fully confident
+> with it. I think it should probably live in include/vdso/math64.h
+> as plain C code instead of the current asm version, but I don't know
+> what is the proper way to check the current environment's word size.
+> Is checking BITS_PER_LONG enough, or should I do it in another way?
 
-Acked-by: Miguel Ojeda <ojeda@kernel.org>
+Yes, I believe that is what BITS_PER_LONG is there for, you will see
+other checks in the tree for that. You could also reach out to the
+maintainers of the generic vDSO infrastructure to see if they have any
+ideas or suggestions for integration.
+
+> > I noticed in applying that change that you appear to be working on 6.1,
+> > which is fine for now, but you'll need another diff once you get to a
+> > newer version, as we stopped using CROSS_COMPILE to set clang's
+> > '--target=' value:
+> > 
+> > diff --git a/scripts/Makefile.clang b/scripts/Makefile.clang
+> > index 6c23c6af797f..2435efae67f5 100644
+> > --- a/scripts/Makefile.clang
+> > +++ b/scripts/Makefile.clang
+> > @@ -10,6 +10,7 @@ CLANG_TARGET_FLAGS_mips := mipsel-linux-gnu
+> > CLANG_TARGET_FLAGS_powerpc := powerpc64le-linux-gnu
+> > CLANG_TARGET_FLAGS_riscv := riscv64-linux-gnu
+> > CLANG_TARGET_FLAGS_s390 := s390x-linux-gnu
+> > +CLANG_TARGET_FLAGS_sparc := sparc64-linux-gnu
+> > CLANG_TARGET_FLAGS_x86 := x86_64-linux-gnu
+> > CLANG_TARGET_FLAGS_um := $(CLANG_TARGET_FLAGS_$(SUBARCH))
+> > CLANG_TARGET_FLAGS := $(CLANG_TARGET_FLAGS_$(SRCARCH))
+> 
+> Yeah, I was working with 6.1 at that time since it's the version
+> that my distro have installed for me. Now this is more of a workflow
+
+That makes sense. I do think you should start working off of a more
+recent version (ideally at least mainline) for your future revisions,
+just so that your patches can be applied with less friction on
+maintainers. That can help your patches get picked up quicker :)
+
+> question, but this means I should submit a v2 with this change
+> merged in with mine too, right?
+
+Here is what I would do:
+
+1. Either keep this patch the way that it is or break it up into two
+   separate patches (especially given Adrian's other review comment):
+
+   One for removing the '-fcall-used' flags, with the comments about how
+   it does not impact the ABI and the registers can still be used in
+   assembly if needed, perhaps with some benchmarks with any codegen?
+   Might not be strictly necessary since Sam did not seem opposed in the
+   previous discussion.
+
+   One for changing the vDSO from '-mv8plus' to '-mcpu=v9' (if this is
+   still okay).
+
+2. Add another patch with that diff above with some notes about what was
+   tested to justify allowing this now.
+
+You'll end up with either a two or three patch series. I would send this
+series to both the SPARC people that you have added here along with the
+Kbuild and ClangBuiltLinux folks, which you can get from the output of
+
+  $ scripts/get_maintainers.pl scripts/Makefile.clang
+
+or use 'b4 prep --auto-to-cc' after crafting the series, since it
+appears you used it for this series. For the cover letter, you can add
+some commentary about what was tested and request integration from
+either the SPARC folks or Masahiro, depending on who wants to carry the
+changes, since they should go through one tree atomically ideally.
+
+If you have any questions about or issues with that comment or any other
+aspect of this process, I am happy to answer or clarify as necessary!
+I am in the #clang-built-linux channel in the LLVM Discord and
+#clangbuiltlinux on Libera if anything comes up.
+
+> And thanks for the feedback!
+
+Always happy to help get more people involved with the kernel,
+especially from the clang/LLVM side :)
 
 Cheers,
-Miguel
+Nathan
