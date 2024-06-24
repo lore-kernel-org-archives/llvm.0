@@ -1,132 +1,127 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f45.google.com (mail-ed1-f45.google.com [209.85.208.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 75672142654;
-	Mon, 24 Jun 2024 16:30:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D8C2B1B950
+	for <llvm@lists.linux.dev>; Mon, 24 Jun 2024 18:05:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719246619; cv=none; b=GA5Hjuba/Lg39U6qEHMQN2/atLF5uV99Nfu9Fw9M4GpZL5ualo2oAKxkpiqND2Y4/POyzUkkTex/WNy3A/7AdfA0UKPxGu4a8s1jxAKrON6J8X+yRGX6MY7/k2UhdxngJQ5dGJlIABzkxdO8/mx0ZVcAGidzPUX/qvidWijGCB8=
+	t=1719252309; cv=none; b=ubapzDYeLQzwpgfqENiODt2Ugm6ZNiePVJ+8ucKRXYxH/m+WQ2ul7xrPjlz3ScEomXX8hkdOwZM+mf7ka+ist2nwZNkV/tA/mFo5MNfY+K/FzTE5DMluhgKaYmJcEYWJZPMkRal0bhsyzQ7gwWIkPgbXxZq8YCmF/OxRkmEn4L0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719246619; c=relaxed/simple;
-	bh=9Q091ES8lDXoqB+nU8Yao/3Rk0vbky2NVGED6AkiR3Q=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=CeOHtFjzU252hyM6DZqx4c1kkI9lKylRm1UAiCQlDnED/KDNlfg3XGRT2JtrfqjCFdS9MCiMxOJCeck2EjIuuYIqMrSMX8tISShO0RIJM5ZlIIp4LLU3AMk80tL3BQrIdum2tW3NwrHXP/Hw7BdLsWsv4EvgIUpJag+xGnB5ywU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Zvo2fwpi; arc=none smtp.client-ip=198.175.65.17
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1719252309; c=relaxed/simple;
+	bh=25Dq88jBB2CkOkDL/JBMijQofHLFLsFy3IjegoNUwPs=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=XTsJLpbO+xM074yNEx8OxVvsX4kek8u8uMaukfw0Rdy5hsYcLbf42Cy4youS+tHbXuRODRzwCUMrE9smcxabGVaE9h+tNanAHdq6I7DGqykr0zTLbQfL9dGOaC3OHf+Q7v/ZeoZpjdNbAbZxAE6PjMv4mRFm0w431FCrbUoO5tA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=pqHwM+zW; arc=none smtp.client-ip=209.85.208.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Zvo2fwpi"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1719246617; x=1750782617;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=9Q091ES8lDXoqB+nU8Yao/3Rk0vbky2NVGED6AkiR3Q=;
-  b=Zvo2fwpigJGiX2hZ2JoETIKtnB0qEiLnZBvm/MdbsqgVTClIUHbsByjg
-   oXjLdl+eSA5icAwIANhY7xMufLOoQGXf9kpiAeoMpmU/vUMFvBufuzm23
-   ixwgGhk8lh1HoABReDDl4P09+A6Ovr/dDybVObo994mjp0YFogXc2Ytz+
-   UE+0jhfyXZCTBm3we+k2r7lMlCj8JWyOeghiDFQbm8ukbF2n7OE+eQt1h
-   g2WKPvD4prNLBSy84PLBBB50L1VwoFpTdxdQTpY4zAWK5Q3EpYR3BrQbE
-   Omgn0EDDLrtFzhrdL7O3t0jK798I79Cn3wsSMEMiIcrnwg1yh+VIxEV2n
-   w==;
-X-CSE-ConnectionGUID: DDKw+a2RRIywF7EBm4mpAg==
-X-CSE-MsgGUID: 0MaR8iK5QU+Ww0pCXgM5ow==
-X-IronPort-AV: E=McAfee;i="6700,10204,11113"; a="16359303"
-X-IronPort-AV: E=Sophos;i="6.08,262,1712646000"; 
-   d="scan'208";a="16359303"
-Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jun 2024 09:30:17 -0700
-X-CSE-ConnectionGUID: gLkEFMboSH2VrD64V9Oahw==
-X-CSE-MsgGUID: Vzy7GEa+Q7+6/5tw21IolQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.08,262,1712646000"; 
-   d="scan'208";a="74113118"
-Received: from lkp-server01.sh.intel.com (HELO 68891e0c336b) ([10.239.97.150])
-  by orviesa002.jf.intel.com with ESMTP; 24 Jun 2024 09:30:16 -0700
-Received: from kbuild by 68891e0c336b with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1sLma5-000DWn-1w;
-	Mon, 24 Jun 2024 16:30:13 +0000
-Date: Tue, 25 Jun 2024 00:29:46 +0800
-From: kernel test robot <lkp@intel.com>
-To: David Howells <dhowells@redhat.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [dhowells-fs:netfs-writeback 16/16] fs/netfs/main.c:70:6: warning:
- format specifies type 'int' but the argument has type 'long'
-Message-ID: <202406250022.6NZKarFI-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="pqHwM+zW"
+Received: by mail-ed1-f45.google.com with SMTP id 4fb4d7f45d1cf-57d16251a07so953a12.1
+        for <llvm@lists.linux.dev>; Mon, 24 Jun 2024 11:05:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1719252305; x=1719857105; darn=lists.linux.dev;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=iU6twMwsLTVUU1XIizoid6hKLyQKsxMvfVST/Ybsw4I=;
+        b=pqHwM+zWDSZaaqbg4DFNyYKNk5PJpT9xCsydHZ1c48KAossjvWWu9tmG/XGdDOAsxh
+         tc/CRHl9TMUU0qKTuV+n+BL29I/g9x3w+RAQ4JwAT1IUgNHQIz/J3jUUd85saQZaBR4q
+         KhuEjlUVsG3Q9BeESTZdnFCR4Z0nQ48AqJBD7xL65e+J66eDi1bLusNqjoMHQeN2FY0b
+         4AHdOWbKBaC0MgsUFjQdoh23+ZKc30IcoNyX27WhK6tQqwfTXoTmNG3WbErqL2cBrXe+
+         jKNg432juY1Xq3ZYXak7WZNPX8zOc3cdaaKGrE9keieT2VmGmkhWf6u1tqtPh6bhg17e
+         hRcA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1719252305; x=1719857105;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=iU6twMwsLTVUU1XIizoid6hKLyQKsxMvfVST/Ybsw4I=;
+        b=JH6P6KMDRR83EDDzSODga9HIr/t5VivWYy8+HiKJTawklWYBoojS7NU2J/WDxgFWFo
+         iuzevlD8B9HHMC4+UgKb/x3bgKQBa3jnkdGCBqLmKJ/nrl02WhqqfyQ3ymCUaifBlANc
+         OZF9FQP6MXmxn8ntSQ342qKcrBDP7sL8b+GgJ1w+MwZMnQljLIMdRJWwUC07Stj7OBxK
+         xi5NL8QndY0aBQjIiHZhBaaviRZJQlX0werPSIunhjbdfM5VXMCGxYyI9VLuzypqoLBf
+         3NBNGw9iQY5MnOuY2De2sIdKmCrmOa9lNNkodvWQ0AhK1g6OtzXotvP+6T913ntNKIgs
+         R57w==
+X-Forwarded-Encrypted: i=1; AJvYcCWryUYNRoebH/HAv6Pspt+cnUhtp1885aYAEoMcrjCsqDnKOVUjP75Xl09Tyu7Q6Q+Fo3o8kY6umsmH2TZRKDvbbKt/iQ==
+X-Gm-Message-State: AOJu0YySLw2zsfMFf+xqPy55Q895g2yREd6N8a2/v9Lf5946qqNBNNSG
+	5qYUTgEJhRz3X5CMipz6AevmaslPDf/Q4m5GsSQ9GH/lgrRali1rkeZXn1j06cJFKdzBCZHKC2b
+	D6ORXK41Vtp7cK3pszwMBzsdFjvahw2erlqM=
+X-Google-Smtp-Source: AGHT+IH5Y7rUe3HGR92ggNIqhjJ6oN6APNDpcnfWRdAWF9v82nPgkswGoUuk1iuaf6Hb2+YP+rxpC7Z0nldf36iS1/E=
+X-Received: by 2002:a05:6402:348d:b0:57d:6e52:fff6 with SMTP id
+ 4fb4d7f45d1cf-57de4b68f0bmr4244a12.5.1719252304903; Mon, 24 Jun 2024 11:05:04
+ -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+References: <20240620181736.1270455-1-yabinc@google.com> <CAKwvOd=ZKS9LbJExCp8vrV9kLDE_Ew+mRcFH5-sYRW_2=sBiig@mail.gmail.com>
+ <ZnVe5JBIBGoOrk5w@gondor.apana.org.au> <CAHk-=wgubtUrE=YcvHvRkUX7ii8QHPNCJ_0Gc+3tQOw+rL1DSg@mail.gmail.com>
+ <CAHk-=wiBbJLWOJxoz7srMPtKcN7+9cEh79fzf8GKXTJyRdk=tw@mail.gmail.com>
+In-Reply-To: <CAHk-=wiBbJLWOJxoz7srMPtKcN7+9cEh79fzf8GKXTJyRdk=tw@mail.gmail.com>
+From: Yabin Cui <yabinc@google.com>
+Date: Mon, 24 Jun 2024 11:04:51 -0700
+Message-ID: <CALJ9ZPMHCPt-6kf-9McdKYTqs8Vrj9GLhkxObdhjyorgtZQOSg@mail.gmail.com>
+Subject: Re: [PATCH] Fix initializing a static union variable
+To: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: Herbert Xu <herbert@gondor.apana.org.au>, Nick Desaulniers <ndesaulniers@google.com>, 
+	Steffen Klassert <steffen.klassert@secunet.com>, "David S. Miller" <davem@davemloft.net>, 
+	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+	Nathan Chancellor <nathan@kernel.org>, Bill Wendling <morbo@google.com>, 
+	Justin Stitt <justinstitt@google.com>, netdev@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/dhowells/linux-fs.git netfs-writeback
-head:   4058083df1dc58322ad2ec98bcd218a43c8befac
-commit: 4058083df1dc58322ad2ec98bcd218a43c8befac [16/16] netfs: Speed up buffered reading
-config: i386-randconfig-006-20240624 (https://download.01.org/0day-ci/archive/20240625/202406250022.6NZKarFI-lkp@intel.com/config)
-compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240625/202406250022.6NZKarFI-lkp@intel.com/reproduce)
+> In other words, in the kernel we simply depend on initializers working
+> reliably and fully. Partly because we've literally been told by
+> compiler people that that is what we should do.
+>
+> So no, this is not about empty initializers. And this is not about
+> some C standard verbiage.
+>
+> This is literally about "the linux kernel expects initializers to
+> FULLY initialize variables". Padding, other union members, you name
+> it.
+>
+> If clang doesn't do that, then clang is buggy as far as the kernel is
+> concerned, and no amount of standards reading is relevant.
+>
+> And in particular, no amount of "but empty initializer" is relevant.
+>
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202406250022.6NZKarFI-lkp@intel.com/
+Thanks for the detailed explanation!
+Sorry for limiting the problem to the empty initializer. I didn't
+realize the linux
+kernel also depends on zero initializing extra bytes when explicitly
+initializing
+one field of a union type.
 
-All warnings (new ones prefixed by >>):
+> And when the union is embedded in a struct, the struct initialization
+> seems to be ok from a quick test, but I might have screwed that test
+> up.
 
->> fs/netfs/main.c:70:6: warning: format specifies type 'int' but the argument has type 'long' [-Wformat]
-      65 |                    "%08x %s %3d %2lx %4d @%04llx %llx/%llx",
-         |                                      ~~~
-         |                                      %4ld
-      66 |                    rreq->debug_id,
-      67 |                    netfs_origins[rreq->origin],
-      68 |                    refcount_read(&rreq->ref),
-      69 |                    rreq->flags,
-      70 |                    rreq->error,
-         |                    ^~~~~~~~~~~
-   1 warning generated.
+I also think so. But probably we need to add tests in clang to make sure
+it continues to work.
 
+> Hmm. Strange. godbolt says that it happens with clang 17.0.1 (and
+> earlier) with a plain -O2.
+>
+> It just doesn't happen for me. Either this got fixed already and my
+> 17.0.6 has the fix, or there's some subtle flag that my test-case uses
+> (some config file - I just use "-O2" for local testing like the
+> godbolt page did).
+>
+> But clearly godbolt does  think this happens with released clang versions too.
+>
 
-vim +70 fs/netfs/main.c
+Yes, I also think it happens in both clang trunk and past releases, as tested in
+https://godbolt.org/z/vnGqKK43z.
+Gladly in the clang bug in
+https://github.com/llvm/llvm-project/issues/78034, no one
+is against zero initializing the whole union type.
+I feel now it's no longer important to have this patch in the kernel.
+But we need to
+fix this problem in clang and backport the fix to releases we care about.
 
-87b57a048964ab David Howells 2022-03-04  47  
-87b57a048964ab David Howells 2022-03-04  48  /*
-87b57a048964ab David Howells 2022-03-04  49   * Generate a list of I/O requests in /proc/fs/netfs/requests
-87b57a048964ab David Howells 2022-03-04  50   */
-87b57a048964ab David Howells 2022-03-04  51  static int netfs_requests_seq_show(struct seq_file *m, void *v)
-87b57a048964ab David Howells 2022-03-04  52  {
-87b57a048964ab David Howells 2022-03-04  53  	struct netfs_io_request *rreq;
-87b57a048964ab David Howells 2022-03-04  54  
-87b57a048964ab David Howells 2022-03-04  55  	if (v == &netfs_io_requests) {
-87b57a048964ab David Howells 2022-03-04  56  		seq_puts(m,
-4058083df1dc58 David Howells 2024-06-19  57  			 "REQUEST  OR REF FL ERR  COVERAGE\n"
-4058083df1dc58 David Howells 2024-06-19  58  			 "======== == === == ==== =========\n"
-87b57a048964ab David Howells 2022-03-04  59  			 );
-87b57a048964ab David Howells 2022-03-04  60  		return 0;
-87b57a048964ab David Howells 2022-03-04  61  	}
-87b57a048964ab David Howells 2022-03-04  62  
-87b57a048964ab David Howells 2022-03-04  63  	rreq = list_entry(v, struct netfs_io_request, proc_link);
-87b57a048964ab David Howells 2022-03-04  64  	seq_printf(m,
-4058083df1dc58 David Howells 2024-06-19  65  		   "%08x %s %3d %2lx %4d @%04llx %llx/%llx",
-87b57a048964ab David Howells 2022-03-04  66  		   rreq->debug_id,
-87b57a048964ab David Howells 2022-03-04  67  		   netfs_origins[rreq->origin],
-87b57a048964ab David Howells 2022-03-04  68  		   refcount_read(&rreq->ref),
-87b57a048964ab David Howells 2022-03-04  69  		   rreq->flags,
-87b57a048964ab David Howells 2022-03-04 @70  		   rreq->error,
-87b57a048964ab David Howells 2022-03-04  71  		   rreq->start, rreq->submitted, rreq->len);
-87b57a048964ab David Howells 2022-03-04  72  	seq_putc(m, '\n');
-87b57a048964ab David Howells 2022-03-04  73  	return 0;
-87b57a048964ab David Howells 2022-03-04  74  }
-87b57a048964ab David Howells 2022-03-04  75  
-
-:::::: The code at line 70 was first introduced by commit
-:::::: 87b57a048964abfd5f3d8b79bc55687327f5a380 netfs: Add a procfile to list in-progress requests
-
-:::::: TO: David Howells <dhowells@redhat.com>
-:::::: CC: David Howells <dhowells@redhat.com>
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Thanks,
+Yabin
