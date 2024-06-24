@@ -1,128 +1,132 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0B461E869
-	for <llvm@lists.linux.dev>; Mon, 24 Jun 2024 15:12:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 75672142654;
+	Mon, 24 Jun 2024 16:30:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719241944; cv=none; b=HtKD8FF1S7hVICHCiD8U+PZJH2lXmwtNjS8do57fIAek9xiTgDwxEXRKklDl4SPIuHbKQWqoouphLgdtfT4zxbgZt1yao+aMcwoxbE0hiKeufNtxxI9UTIKFdkOxSRJbcyCzkosFb9EbYk+Xw5O+m3RzZ+wNPjlZemZ36fwcIRY=
+	t=1719246619; cv=none; b=GA5Hjuba/Lg39U6qEHMQN2/atLF5uV99Nfu9Fw9M4GpZL5ualo2oAKxkpiqND2Y4/POyzUkkTex/WNy3A/7AdfA0UKPxGu4a8s1jxAKrON6J8X+yRGX6MY7/k2UhdxngJQ5dGJlIABzkxdO8/mx0ZVcAGidzPUX/qvidWijGCB8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719241944; c=relaxed/simple;
-	bh=4E/H4rmvWXamwH9c03RSwYuTc15FrXDWXbU0BQbUFmw=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=D2YWawvh2CHo7OakdLe+a8YQZLwhGYL0NjidnNAp12QMzKB75OT321vvzyfMEdKt8oTUL/ZYehpuNeJ83Rvjf8I+4GksVi6kkEJFwzb2gV8dIlhEU55x2xhFa5XQox+DbX/P084rT2LpE3nVfw/5TEG/v5vqcq6FnHVeNCnYybA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=UGLnUcf2; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1719246619; c=relaxed/simple;
+	bh=9Q091ES8lDXoqB+nU8Yao/3Rk0vbky2NVGED6AkiR3Q=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=CeOHtFjzU252hyM6DZqx4c1kkI9lKylRm1UAiCQlDnED/KDNlfg3XGRT2JtrfqjCFdS9MCiMxOJCeck2EjIuuYIqMrSMX8tISShO0RIJM5ZlIIp4LLU3AMk80tL3BQrIdum2tW3NwrHXP/Hw7BdLsWsv4EvgIUpJag+xGnB5ywU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Zvo2fwpi; arc=none smtp.client-ip=198.175.65.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="UGLnUcf2"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1719241941;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=8R6rt+99cSxGyZhBRu8W3ETIGlKu6UEP1MZNwIexAYU=;
-	b=UGLnUcf2fV6hFTPHjtTvGLlh4DScbC4sYkU23gMsvAcjXdmVekrLcA9D/P4PkEbTTYCaGu
-	6asx3mSdE3rzox3Qeq//7TLzVxSpLn3Iv5ZFWg/5gKZFnXgWGHXnwl/DUVE0BSKkOkBUca
-	4VCHyLYS8mWS7bKQngxaBb+hMa7oHSI=
-Received: from mx-prod-mc-04.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-137-NIl-DvBmO7u_SvhMYyUc6A-1; Mon,
- 24 Jun 2024 11:12:19 -0400
-X-MC-Unique: NIl-DvBmO7u_SvhMYyUc6A-1
-Received: from mx-prod-int-02.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-02.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.15])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-04.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 99E7419560AD
-	for <llvm@lists.linux.dev>; Mon, 24 Jun 2024 15:12:18 +0000 (UTC)
-Received: from [172.64.15.9] (unknown [10.30.34.46])
-	by mx-prod-int-02.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id E25571955E83;
-	Mon, 24 Jun 2024 15:12:17 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL (MISSED 10 of 192): Test report for master
- (6.10.0-rc5, mainline.kernel.org-clang, f2661062)
-Date: Mon, 24 Jun 2024 15:12:17 -0000
-To: bgoncalv@redhat.com, llvm@lists.linux.dev
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Zvo2fwpi"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1719246617; x=1750782617;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=9Q091ES8lDXoqB+nU8Yao/3Rk0vbky2NVGED6AkiR3Q=;
+  b=Zvo2fwpigJGiX2hZ2JoETIKtnB0qEiLnZBvm/MdbsqgVTClIUHbsByjg
+   oXjLdl+eSA5icAwIANhY7xMufLOoQGXf9kpiAeoMpmU/vUMFvBufuzm23
+   ixwgGhk8lh1HoABReDDl4P09+A6Ovr/dDybVObo994mjp0YFogXc2Ytz+
+   UE+0jhfyXZCTBm3we+k2r7lMlCj8JWyOeghiDFQbm8ukbF2n7OE+eQt1h
+   g2WKPvD4prNLBSy84PLBBB50L1VwoFpTdxdQTpY4zAWK5Q3EpYR3BrQbE
+   Omgn0EDDLrtFzhrdL7O3t0jK798I79Cn3wsSMEMiIcrnwg1yh+VIxEV2n
+   w==;
+X-CSE-ConnectionGUID: DDKw+a2RRIywF7EBm4mpAg==
+X-CSE-MsgGUID: 0MaR8iK5QU+Ww0pCXgM5ow==
+X-IronPort-AV: E=McAfee;i="6700,10204,11113"; a="16359303"
+X-IronPort-AV: E=Sophos;i="6.08,262,1712646000"; 
+   d="scan'208";a="16359303"
+Received: from orviesa002.jf.intel.com ([10.64.159.142])
+  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jun 2024 09:30:17 -0700
+X-CSE-ConnectionGUID: gLkEFMboSH2VrD64V9Oahw==
+X-CSE-MsgGUID: Vzy7GEa+Q7+6/5tw21IolQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.08,262,1712646000"; 
+   d="scan'208";a="74113118"
+Received: from lkp-server01.sh.intel.com (HELO 68891e0c336b) ([10.239.97.150])
+  by orviesa002.jf.intel.com with ESMTP; 24 Jun 2024 09:30:16 -0700
+Received: from kbuild by 68891e0c336b with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1sLma5-000DWn-1w;
+	Mon, 24 Jun 2024 16:30:13 +0000
+Date: Tue, 25 Jun 2024 00:29:46 +0800
+From: kernel test robot <lkp@intel.com>
+To: David Howells <dhowells@redhat.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [dhowells-fs:netfs-writeback 16/16] fs/netfs/main.c:70:6: warning:
+ format specifies type 'int' but the argument has type 'long'
+Message-ID: <202406250022.6NZKarFI-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.15
-Message-Id: <87798.124062411121901777@us-mta-137.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Hi, we tested your kernel and here are the results:
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/dhowells/linux-fs.git netfs-writeback
+head:   4058083df1dc58322ad2ec98bcd218a43c8befac
+commit: 4058083df1dc58322ad2ec98bcd218a43c8befac [16/16] netfs: Speed up buffered reading
+config: i386-randconfig-006-20240624 (https://download.01.org/0day-ci/archive/20240625/202406250022.6NZKarFI-lkp@intel.com/config)
+compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240625/202406250022.6NZKarFI-lkp@intel.com/reproduce)
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: OK
-              Test: FAILED
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202406250022.6NZKarFI-lkp@intel.com/
 
+All warnings (new ones prefixed by >>):
 
-Kernel information:
-    Commit message: Linux 6.10-rc5
-
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1344527840
-
-One or more kernel tests failed:
-    Unrecognized or new issues:
-        Reboot test
-              x86_64
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-redhat:1344527840-x86_64-kernel_upt_35
-                   Non-passing ran subtests:
-                       =E2=9D=8C FAIL misc/reboot-test/journalctl-check
-
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: [rhel-10] xfstests - cifsv3.11 - generic/207 - error in bloc=
-k: expected 4096 bytes, received 0
-            URL: https://issues.redhat.com/browse/RHEL-39974
-            Affected tests:
-                xfstests - cifsv3.11 [x86_64, x86_64 (debug)]
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1267
-            Affected tests:
-                selinux-policy: serge-testsuite [ppc64le]
+>> fs/netfs/main.c:70:6: warning: format specifies type 'int' but the argument has type 'long' [-Wformat]
+      65 |                    "%08x %s %3d %2lx %4d @%04llx %llx/%llx",
+         |                                      ~~~
+         |                                      %4ld
+      66 |                    rreq->debug_id,
+      67 |                    netfs_origins[rreq->origin],
+      68 |                    refcount_read(&rreq->ref),
+      69 |                    rreq->flags,
+      70 |                    rreq->error,
+         |                    ^~~~~~~~~~~
+   1 warning generated.
 
 
-Tests that were not ran because of internal issues:=20
-    Boot test [s390x]
-    CKI/restraint [s390x]
-    machineinfo [s390x]
-    Reboot test [s390x]
-    SELinux Custom Module Setup [s390x]
-    Storage - blktests - blk - upstream [s390x]
-    Storage - blktests - nvme-tcp - upstream [s390x]
-    Storage - swraid scsi_raid [s390x]
-    stress: stress-ng - cpu-cache [s390x]
-    stress: stress-ng - memory [s390x]
+vim +70 fs/netfs/main.c
 
+87b57a048964ab David Howells 2022-03-04  47  
+87b57a048964ab David Howells 2022-03-04  48  /*
+87b57a048964ab David Howells 2022-03-04  49   * Generate a list of I/O requests in /proc/fs/netfs/requests
+87b57a048964ab David Howells 2022-03-04  50   */
+87b57a048964ab David Howells 2022-03-04  51  static int netfs_requests_seq_show(struct seq_file *m, void *v)
+87b57a048964ab David Howells 2022-03-04  52  {
+87b57a048964ab David Howells 2022-03-04  53  	struct netfs_io_request *rreq;
+87b57a048964ab David Howells 2022-03-04  54  
+87b57a048964ab David Howells 2022-03-04  55  	if (v == &netfs_io_requests) {
+87b57a048964ab David Howells 2022-03-04  56  		seq_puts(m,
+4058083df1dc58 David Howells 2024-06-19  57  			 "REQUEST  OR REF FL ERR  COVERAGE\n"
+4058083df1dc58 David Howells 2024-06-19  58  			 "======== == === == ==== =========\n"
+87b57a048964ab David Howells 2022-03-04  59  			 );
+87b57a048964ab David Howells 2022-03-04  60  		return 0;
+87b57a048964ab David Howells 2022-03-04  61  	}
+87b57a048964ab David Howells 2022-03-04  62  
+87b57a048964ab David Howells 2022-03-04  63  	rreq = list_entry(v, struct netfs_io_request, proc_link);
+87b57a048964ab David Howells 2022-03-04  64  	seq_printf(m,
+4058083df1dc58 David Howells 2024-06-19  65  		   "%08x %s %3d %2lx %4d @%04llx %llx/%llx",
+87b57a048964ab David Howells 2022-03-04  66  		   rreq->debug_id,
+87b57a048964ab David Howells 2022-03-04  67  		   netfs_origins[rreq->origin],
+87b57a048964ab David Howells 2022-03-04  68  		   refcount_read(&rreq->ref),
+87b57a048964ab David Howells 2022-03-04  69  		   rreq->flags,
+87b57a048964ab David Howells 2022-03-04 @70  		   rreq->error,
+87b57a048964ab David Howells 2022-03-04  71  		   rreq->start, rreq->submitted, rreq->len);
+87b57a048964ab David Howells 2022-03-04  72  	seq_putc(m, '\n');
+87b57a048964ab David Howells 2022-03-04  73  	return 0;
+87b57a048964ab David Howells 2022-03-04  74  }
+87b57a048964ab David Howells 2022-03-04  75  
 
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
+:::::: The code at line 70 was first introduced by commit
+:::::: 87b57a048964abfd5f3d8b79bc55687327f5a380 netfs: Add a procfile to list in-progress requests
 
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
+:::::: TO: David Howells <dhowells@redhat.com>
+:::::: CC: David Howells <dhowells@redhat.com>
 
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
