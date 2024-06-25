@@ -1,291 +1,126 @@
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE2D3143755
-	for <llvm@lists.linux.dev>; Tue, 25 Jun 2024 03:38:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.188
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6702942069;
+	Tue, 25 Jun 2024 04:46:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719286700; cv=none; b=cGRyr6whbxM6eJQZ1ACcWfwmpJG4mBQVF7+GHgEItF/Gqkj3cie3GeuQ7b6SiSlzx87qg4C5gpH+9qo7lPDJIP8EHy1GYzcjPwT4Z7gL9bOxw6Hxeg7ZnmPg0q/gzh3PSYUDDveidJTwiA4GfPtBLGppymGV93iaVShEykvnYf0=
+	t=1719290773; cv=none; b=gbB3rlpHu1OUfeSteSKn2wC/Gl4cpiKhUoLIfU2oqpSAI/ub366tdpxerVsNjUbTrExeXS8oey7KmA7hKY2vRMcNdXgii+/Q9Qy2Oq3kDsRhFShbfA5eddMkLX1LPdbvgJgKvxBZGXeP4z4tvSciKk/UcL9L7TvQqMINoSwFgmQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719286700; c=relaxed/simple;
-	bh=YovWnQCUn5/Lz+pkf0LK7nOx1JZCjeR8Saq7TlagfeY=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=TSm/zFfuSEQZ4NgyL+T/jsLXAtOa4EUn5dvJqhIQTH2wdJ6uoaywaDEvouMxGz2H32Q4FGu4AdSrNtP6N2O4fAgjMWSMAFlsv+pz+lWefSIWssr6zbeoEt4Wy8hV0clv7hdDQBQ2mcr7ccQMobC+wXSUUOSclxnAcWPzqz/OHiY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.188
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.19.88.105])
-	by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4W7VsR4PbpznXZt;
-	Tue, 25 Jun 2024 11:38:03 +0800 (CST)
-Received: from kwepemd100011.china.huawei.com (unknown [7.221.188.204])
-	by mail.maildlp.com (Postfix) with ESMTPS id CDF4F140360;
-	Tue, 25 Jun 2024 11:38:07 +0800 (CST)
-Received: from M910t.huawei.com (10.110.54.157) by
- kwepemd100011.china.huawei.com (7.221.188.204) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1258.34; Tue, 25 Jun 2024 11:38:06 +0800
-From: Changbin Du <changbin.du@huawei.com>
-To: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>,
-	Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim
-	<namhyung@kernel.org>, Nathan Chancellor <nathan@kernel.org>
-CC: Mark Rutland <mark.rutland@arm.com>, Alexander Shishkin
-	<alexander.shishkin@linux.intel.com>, Jiri Olsa <jolsa@kernel.org>, Ian
- Rogers <irogers@google.com>, Adrian Hunter <adrian.hunter@intel.com>, "Liang,
- Kan" <kan.liang@linux.intel.com>, Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
-	<linux-perf-users@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-	<llvm@lists.linux.dev>, Changbin Du <changbin.du@huawei.com>
-Subject: [PATCH v4 4/5] perf: symbol: generalize vmlinux path searching
-Date: Tue, 25 Jun 2024 11:37:39 +0800
-Message-ID: <20240625033740.223009-5-changbin.du@huawei.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20240625033740.223009-1-changbin.du@huawei.com>
-References: <20240625033740.223009-1-changbin.du@huawei.com>
+	s=arc-20240116; t=1719290773; c=relaxed/simple;
+	bh=6ybpDk0m5qk1ZWIgS+8NhVrcO85QomR7Y8n38PvURg0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=dpJtI4oWsaTtz/5LlufcBcNld4vIZkayFHBraFACRIeiSaxN2f+/DkDQnHOtGVsftkSmjc/MwThY0xnPJKe7IXledrG0ek4tmSSdnSa06vqrvMunOMdZagj6YG/c97X7fqMpkQ9Oln3C+mRtyTxQTD4Me9qMRDf1Kgf2CuFGaAA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=OthhM3tb; arc=none smtp.client-ip=198.175.65.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="OthhM3tb"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1719290771; x=1750826771;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=6ybpDk0m5qk1ZWIgS+8NhVrcO85QomR7Y8n38PvURg0=;
+  b=OthhM3tbv3BPy4z/CAN/9j6AqBurXa8Jc+nBhM/l/i5i4zZHCvX+miEw
+   0vjMqYXP7ue4hEPbu1Eg/1Z+5a+y+ImiYr2sjLzJRmWncgm/vk7OoR9TE
+   yCHnShObrb6AGMHOX0slC/NgvnuKzoHiZlMkWo6wNkZycnuaAbKKQvNyL
+   74gpigGj7T91AxoW/1ROqpdsNvawHSD4Sh2R/r6o7Z8yj5FDmr7FB4OIZ
+   ODiSS22OpLxyaaKFzUCuSjJLEiEgMzQLyDuITyVdsJPsInSWGhoe2x3lJ
+   lh2L+qJQbEkkg5T2yK9v3DdgUPm2OkTAKAyFke8DtYnOMam2op+eqvqEn
+   w==;
+X-CSE-ConnectionGUID: 0iwieA4SSS2tehsa3yrltA==
+X-CSE-MsgGUID: eRpD7CFtQ/+hA4JBXFSCdQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11113"; a="33744662"
+X-IronPort-AV: E=Sophos;i="6.08,263,1712646000"; 
+   d="scan'208";a="33744662"
+Received: from fmviesa007.fm.intel.com ([10.60.135.147])
+  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jun 2024 21:46:10 -0700
+X-CSE-ConnectionGUID: HsMMPJ4pTxizg9kXnrh1Ig==
+X-CSE-MsgGUID: NU7OacjETbeycu62XTto/w==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.08,263,1712646000"; 
+   d="scan'208";a="43386497"
+Received: from lkp-server01.sh.intel.com (HELO 68891e0c336b) ([10.239.97.150])
+  by fmviesa007.fm.intel.com with ESMTP; 24 Jun 2024 21:46:08 -0700
+Received: from kbuild by 68891e0c336b with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1sLy4E-000E4X-1e;
+	Tue, 25 Jun 2024 04:46:06 +0000
+Date: Tue, 25 Jun 2024 12:45:17 +0800
+From: kernel test robot <lkp@intel.com>
+To: Ping-Ke Shih <pkshih@realtek.com>, linux-wireless@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	gary.chang@realtek.com
+Subject: Re: [PATCH 1/7] wifi: rtw89: wow: append security header offset for
+ different cipher
+Message-ID: <202406251226.QBy2sVKF-lkp@intel.com>
+References: <20240620055825.17592-2-pkshih@realtek.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- kwepemd100011.china.huawei.com (7.221.188.204)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240620055825.17592-2-pkshih@realtek.com>
 
-This generalizes the vmlinux path searching logic. Later we will add
-another instance for vdso.
+Hi Ping-Ke,
 
-The search pattern is described by struct dso_filename_pattern, and the
-formatted paths are hold in struct dso_filename_paths.
+kernel test robot noticed the following build errors:
 
-Signed-off-by: Changbin Du <changbin.du@huawei.com>
----
- tools/perf/util/machine.c |   4 +-
- tools/perf/util/symbol.c  | 112 +++++++++++++++++++++-----------------
- tools/perf/util/symbol.h  |   8 ++-
- 3 files changed, 70 insertions(+), 54 deletions(-)
+[auto build test ERROR on wireless-next/main]
+[also build test ERROR on wireless/main linus/master v6.10-rc5 next-20240624]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-diff --git a/tools/perf/util/machine.c b/tools/perf/util/machine.c
-index 8477edefc299..68315520f15b 100644
---- a/tools/perf/util/machine.c
-+++ b/tools/perf/util/machine.c
-@@ -896,9 +896,9 @@ size_t machine__fprintf_vmlinux_path(struct machine *machine, FILE *fp)
- 			printed += fprintf(fp, "[0] %s\n", filename);
- 	}
- 
--	for (i = 0; i < vmlinux_path__nr_entries; ++i) {
-+	for (i = 0; i < vmlinux_paths.nr_entries; ++i) {
- 		printed += fprintf(fp, "[%d] %s\n", i + dso__has_build_id(kdso),
--				   vmlinux_path[i]);
-+				   vmlinux_paths.paths[i]);
- 	}
- 	return printed;
- }
-diff --git a/tools/perf/util/symbol.c b/tools/perf/util/symbol.c
-index a90c647d37e1..83e5c3807a2c 100644
---- a/tools/perf/util/symbol.c
-+++ b/tools/perf/util/symbol.c
-@@ -48,8 +48,7 @@ static int dso__load_guest_kernel_sym(struct dso *dso, struct map *map);
- static int dso__load_vdso_sym(struct dso *dso, struct map *map);
- static bool symbol__is_idle(const char *name);
- 
--int vmlinux_path__nr_entries;
--char **vmlinux_path;
-+struct dso_filename_paths vmlinux_paths;
- 
- struct symbol_conf symbol_conf = {
- 	.nanosecs		= false,
-@@ -2043,10 +2042,10 @@ int dso__load_vmlinux_path(struct dso *dso, struct map *map)
- 	char *filename = NULL;
- 
- 	pr_debug("Looking at the vmlinux_path (%d entries long)\n",
--		 vmlinux_path__nr_entries + 1);
-+		 vmlinux_paths.nr_entries + 1);
- 
--	for (i = 0; i < vmlinux_path__nr_entries; ++i) {
--		err = dso__load_vmlinux(dso, map, vmlinux_path[i], false);
-+	for (i = 0; i < vmlinux_paths.nr_entries; ++i) {
-+		err = dso__load_vmlinux(dso, map, vmlinux_paths.paths[i], false);
- 		if (err > 0)
- 			goto out;
- 	}
-@@ -2210,7 +2209,7 @@ static int dso__load_kernel_sym(struct dso *dso, struct map *map)
- 			return err;
- 	}
- 
--	if (!symbol_conf.ignore_vmlinux && vmlinux_path != NULL) {
-+	if (!symbol_conf.ignore_vmlinux && vmlinux_paths.paths != NULL) {
- 		err = dso__load_vmlinux_path(dso, map);
- 		if (err > 0)
- 			return err;
-@@ -2285,57 +2284,55 @@ static int dso__load_guest_kernel_sym(struct dso *dso, struct map *map)
- 	return err;
- }
- 
--static void vmlinux_path__exit(void)
--{
--	while (--vmlinux_path__nr_entries >= 0)
--		zfree(&vmlinux_path[vmlinux_path__nr_entries]);
--	vmlinux_path__nr_entries = 0;
--
--	zfree(&vmlinux_path);
--}
--
--static const char * const vmlinux_paths[] = {
--	"vmlinux",
--	"/boot/vmlinux"
-+struct dso_filename_pattern {
-+	const char *pattern;
-+	/*
-+	 * 0 for matching directly,
-+	 * 1 for matching by kernel_version,
-+	 * 2 for matching by kernel_version + arch.
-+	 */
-+	int match_type;
- };
- 
--static const char * const vmlinux_paths_upd[] = {
--	"/boot/vmlinux-%s",
--	"/usr/lib/debug/boot/vmlinux-%s",
--	"/lib/modules/%s/build/vmlinux",
--	"/usr/lib/debug/lib/modules/%s/vmlinux",
--	"/usr/lib/debug/boot/vmlinux-%s.debug"
-+struct dso_filename_pattern vmlinux_patterns[] = {
-+	{"vmlinux", 0},
-+	{"/boot/vmlinux", 0},
-+	{"/boot/vmlinux-%s", 1},
-+	{"/usr/lib/debug/boot/vmlinux-%s", 1},
-+	{"/lib/modules/%s/build/vmlinux", 1},
-+	{"/usr/lib/debug/lib/modules/%s/vmlinux", 1},
-+	{"/usr/lib/debug/boot/vmlinux-%s.debug", 1},
- };
- 
--static int vmlinux_path__add(const char *new_entry)
-+static int dso_filename_path__add(struct dso_filename_paths *paths, const char *new_entry)
- {
--	vmlinux_path[vmlinux_path__nr_entries] = strdup(new_entry);
--	if (vmlinux_path[vmlinux_path__nr_entries] == NULL)
-+	paths->paths[paths->nr_entries] = strdup(new_entry);
-+	if (paths->paths[paths->nr_entries] == NULL)
- 		return -1;
--	++vmlinux_path__nr_entries;
-+	++paths->nr_entries;
- 
- 	return 0;
- }
- 
--static int vmlinux_path__init(struct perf_env *env)
-+static void dso_filename_path__exit(struct dso_filename_paths *paths)
- {
--	struct utsname uts;
--	char bf[PATH_MAX];
--	char *kernel_version;
--	unsigned int i;
-+	while (--paths->nr_entries >= 0)
-+		zfree(&paths->paths[paths->nr_entries]);
-+	paths->nr_entries = 0;
- 
--	vmlinux_path = malloc(sizeof(char *) * (ARRAY_SIZE(vmlinux_paths) +
--			      ARRAY_SIZE(vmlinux_paths_upd)));
--	if (vmlinux_path == NULL)
--		return -1;
--
--	for (i = 0; i < ARRAY_SIZE(vmlinux_paths); i++)
--		if (vmlinux_path__add(vmlinux_paths[i]) < 0)
--			goto out_fail;
-+	zfree(&paths->paths);
-+}
- 
--	/* only try kernel version if no symfs was given */
--	if (symbol_conf.symfs[0] != 0)
--		return 0;
-+static int dso_filename_path__init(struct dso_filename_paths *paths,
-+				   struct dso_filename_pattern *patterns,
-+				   int nr_patterns,
-+				   struct perf_env *env)
-+{
-+	struct utsname uts;
-+	char bf[PATH_MAX];
-+	const char *kernel_version;
-+	const char *arch = perf_env__arch(env);
-+	int i;
- 
- 	if (env) {
- 		kernel_version = env->os_release;
-@@ -2346,16 +2343,28 @@ static int vmlinux_path__init(struct perf_env *env)
- 		kernel_version = uts.release;
- 	}
- 
--	for (i = 0; i < ARRAY_SIZE(vmlinux_paths_upd); i++) {
--		snprintf(bf, sizeof(bf), vmlinux_paths_upd[i], kernel_version);
--		if (vmlinux_path__add(bf) < 0)
-+	paths->paths = malloc(sizeof(char *) * nr_patterns);
-+	if (paths->paths == NULL)
-+		return -1;
-+
-+	for (i = 0; i < nr_patterns; i++) {
-+		if (patterns[i].match_type == 0)
-+			strlcpy(bf, patterns[i].pattern, sizeof(bf));
-+		else if (symbol_conf.symfs[0] == 0) {
-+			/* only try kernel version if no symfs was given */
-+			if (patterns[i].match_type == 1)
-+				snprintf(bf, sizeof(bf), patterns[i].pattern, kernel_version);
-+			else if (patterns[i].match_type == 2)
-+				snprintf(bf, sizeof(bf), patterns[i].pattern, kernel_version, arch);
-+		}
-+		if (dso_filename_path__add(paths, bf) < 0)
- 			goto out_fail;
- 	}
- 
- 	return 0;
- 
- out_fail:
--	vmlinux_path__exit();
-+	dso_filename_path__exit(paths);
- 	return -1;
- }
- 
-@@ -2551,8 +2560,11 @@ int symbol__init(struct perf_env *env)
- 
- 	symbol__elf_init();
- 
--	if (symbol_conf.try_vmlinux_path && vmlinux_path__init(env) < 0)
-+	if (symbol_conf.try_vmlinux_path &&
-+	    dso_filename_path__init(&vmlinux_paths, vmlinux_patterns,
-+				    ARRAY_SIZE(vmlinux_patterns), env) < 0) {
- 		return -1;
-+	}
- 
- 	if (symbol_conf.field_sep && *symbol_conf.field_sep == '.') {
- 		pr_err("'.' is the only non valid --field-separator argument\n");
-@@ -2629,7 +2641,7 @@ void symbol__exit(void)
- 	intlist__delete(symbol_conf.tid_list);
- 	intlist__delete(symbol_conf.pid_list);
- 	intlist__delete(symbol_conf.addr_list);
--	vmlinux_path__exit();
-+	dso_filename_path__exit(&vmlinux_paths);
- 	symbol_conf.sym_list = symbol_conf.dso_list = symbol_conf.comm_list = NULL;
- 	symbol_conf.bt_stop_list = NULL;
- 	symbol_conf.initialized = false;
-diff --git a/tools/perf/util/symbol.h b/tools/perf/util/symbol.h
-index 3fb5d146d9b1..30056884945b 100644
---- a/tools/perf/util/symbol.h
-+++ b/tools/perf/util/symbol.h
-@@ -101,8 +101,12 @@ static inline int __symbol__join_symfs(char *bf, size_t size, const char *path)
- 
- #define symbol__join_symfs(bf, path) __symbol__join_symfs(bf, sizeof(bf), path)
- 
--extern int vmlinux_path__nr_entries;
--extern char **vmlinux_path;
-+struct dso_filename_paths {
-+	int nr_entries;
-+	char **paths;
-+};
-+
-+extern struct dso_filename_paths vmlinux_paths;
- 
- static inline void *symbol__priv(struct symbol *sym)
- {
+url:    https://github.com/intel-lab-lkp/linux/commits/Ping-Ke-Shih/wifi-rtw89-wow-append-security-header-offset-for-different-cipher/20240624-152444
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/wireless/wireless-next.git main
+patch link:    https://lore.kernel.org/r/20240620055825.17592-2-pkshih%40realtek.com
+patch subject: [PATCH 1/7] wifi: rtw89: wow: append security header offset for different cipher
+config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20240625/202406251226.QBy2sVKF-lkp@intel.com/config)
+compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240625/202406251226.QBy2sVKF-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202406251226.QBy2sVKF-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+   In file included from drivers/net/wireless/realtek/rtw89/core.c:21:
+>> drivers/net/wireless/realtek/rtw89/wow.h:82:45: error: call to undeclared function 'rtw89_is_rtl885xb'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+      82 |         if (!(rtwdev->chip->chip_id == RTL8852A || rtw89_is_rtl885xb(rtwdev)))
+         |                                                    ^
+   1 error generated.
+
+
+vim +/rtw89_is_rtl885xb +82 drivers/net/wireless/realtek/rtw89/wow.h
+
+    77	
+    78	static inline int rtw89_wow_get_sec_hdr_len(struct rtw89_dev *rtwdev)
+    79	{
+    80		struct rtw89_wow_param *rtw_wow = &rtwdev->wow;
+    81	
+  > 82		if (!(rtwdev->chip->chip_id == RTL8852A || rtw89_is_rtl885xb(rtwdev)))
+    83			return 0;
+    84	
+    85		switch (rtw_wow->ptk_alg) {
+    86		case RTW89_WOW_FW_ALG_WEP40:
+    87			return 4;
+    88		case RTW89_WOW_FW_ALG_TKIP:
+    89		case RTW89_WOW_FW_ALG_CCMP:
+    90		case RTW89_WOW_FW_ALG_GCMP_256:
+    91			return 8;
+    92		default:
+    93			return 0;
+    94		}
+    95	}
+    96	
+
 -- 
-2.34.1
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
