@@ -1,275 +1,493 @@
-Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A51FA12EBEA;
-	Tue, 25 Jun 2024 09:38:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.92.199
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 43180158D91
+	for <llvm@lists.linux.dev>; Tue, 25 Jun 2024 13:21:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719308296; cv=none; b=dMDTa/vESuTPeEweXllQ/2AKYYaNkv+J+V6I34GOSBhouMJj1dykZ2S8HAqooFrRVKWhsYquep8mWrjdKETrbdqfyP/wetfsZPlx0bGdDdx/6blMG0JcAVxU/ivCtJZFaqJrVaSYzSEhjBqz30+j/C9gZdFiOyRUwu6xFKl5vi8=
+	t=1719321662; cv=none; b=RQOl1KZv68f7E/X2mHM/xU9U5O0ijrRCH3yaPHFSgSYy9myyCbGGrmdhOcps281855+I3soktD32sY8jt/SFncSyR8Hf3oiPWi5MxTHrNa4oSQiWP3i0hlooSvfKTHy8T/gw/zyp5hSt5cx3Oy7vPsCEzQGX53TuB9aF4ZtY6U4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719308296; c=relaxed/simple;
-	bh=JHBg/Hqu7jDucGLJh8PXWrcGEzA3WPJnZuttQx/ap4c=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=tioamJd+XYUbVpmYXej/4kkny+MY7xBNe8NrDbnqBtonPVpJJqcfe3idSmL/jnTO7HzzJQKoEvQ1yHEdxiTxq+n9DOSV4LbRAhl4vvmHVd2c7gX0xnWsWc7XOKg/61H03UOyKx/5WQmMFg0+7xv9Bd8VnmF6fwm/4jnOPdDgHak=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=Xj13taHy; arc=none smtp.client-ip=90.155.92.199
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
+	s=arc-20240116; t=1719321662; c=relaxed/simple;
+	bh=1eHaIAQvGPmot6G788CW2dc0bW/gFvGhklcqFFIQ4wA=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=U1SIW/X/SexjHCF91t3L2aQulX1Higxvc1FP4yh0mI4J41r/7xWY6s+ZLqH/xP5b/+YkuJQlMMvFJUNQSfJ3Ra+mIVB0yzE4zjrYTtGrFgDkScd6KwO/CmG53+Oq1eUM5GRBoyjVeIa+dT6ME36jaYxtC4vvgBUwtUJVMyEd9bk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=etPTA5sG; arc=none smtp.client-ip=192.198.163.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="Xj13taHy"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=p81muDELRMtjx8hyqZALP7SKcIRl8MDp2vLMju2Ho8E=; b=Xj13taHya5HkEoqUPsGFqMXHJ6
-	NzCzD6zqCeviLJEzSNTX732uamV96/kCoG4N49ZpaEM5ELZuyNjO5fcLmYiNSYvE+IoMQextvoGMA
-	42eZUiN+rON8xClJiFvWQp8+2oWtriG1BUMVIfrU7TPlVKFlsazxR7yaMUWpVG/6Vip3k8/FbqIqR
-	QIHj7ugnY9D2Uvpu/VN9B3o6SozZXayb0XRgc9yvCKqXpGgYcCJTlI+AR+xdS/3DooYMNppoWrisG
-	x13f+gC2IkxLXLTskwLibafo3V0Z1CcB7NKUZ2kFSz1kvt2SoXNecNOOfXdkC8JORSHN7781hXnDA
-	zmikDRBg==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-	by desiato.infradead.org with esmtpsa (Exim 4.97.1 #2 (Red Hat Linux))
-	id 1sM2c3-00000008Njg-3inE;
-	Tue, 25 Jun 2024 09:37:39 +0000
-Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
-	id 7378B300754; Tue, 25 Jun 2024 11:37:19 +0200 (CEST)
-Date: Tue, 25 Jun 2024 11:37:19 +0200
-From: Peter Zijlstra <peterz@infradead.org>
-To: Gatlin Newhouse <gatlin.newhouse@gmail.com>
-Cc: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
-	Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-	"H. Peter Anvin" <hpa@zytor.com>, Kees Cook <keescook@chromium.org>,
-	Marco Elver <elver@google.com>,
-	Andrey Konovalov <andreyknvl@gmail.com>,
-	Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	"Mike Rapoport (IBM)" <rppt@kernel.org>,
-	Baoquan He <bhe@redhat.com>,
-	Rick Edgecombe <rick.p.edgecombe@intel.com>,
-	Changbin Du <changbin.du@huawei.com>,
-	Pengfei Xu <pengfei.xu@intel.com>, Xin Li <xin3.li@intel.com>,
-	Jason Gunthorpe <jgg@ziepe.ca>, Uros Bizjak <ubizjak@gmail.com>,
-	Arnd Bergmann <arnd@arndb.de>,
-	"Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-	linux-kernel@vger.kernel.org, kasan-dev@googlegroups.com,
-	linux-hardening@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH v3] x86/traps: Enable UBSAN traps on x86
-Message-ID: <20240625093719.GW31592@noisy.programming.kicks-ass.net>
-References: <20240625032509.4155839-1-gatlin.newhouse@gmail.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="etPTA5sG"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1719321660; x=1750857660;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=1eHaIAQvGPmot6G788CW2dc0bW/gFvGhklcqFFIQ4wA=;
+  b=etPTA5sGnY1MLqvuxK/DSaRcBTkIpOBzbBB9efB9Qu8CJh4fqVhLyTBE
+   iZiyc9l+nG1E1Wh6qDqzrPHM/8dL8BSA9kgdG44rg69n1zWR7UBFWfZJb
+   IHOqCelYu6pl02AYJoRW/eLJzpsz6ceSCzI7bLfWMhh5YgDw47sJN2Eei
+   Sg+JDFAdHdK8scG/vU3bxGuPHg3yRgMbyyDZxJTP0rTCAWuink3RoGe5+
+   Jh5pIb1zFT6tCyU6wHpnKf1k9Pg1QoFaE4kIk7B53HBEmgA1rJPKsQb6Y
+   GEzBxxIAjh1O/wSmzocxg+iuU3z8ZtUU+gfc1UK5YyRIRtDcMXhDJVaWd
+   Q==;
+X-CSE-ConnectionGUID: O+H7YDalQd69VTVRT4TJZQ==
+X-CSE-MsgGUID: a5QK5odDTjiOmThIkRJGIQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11113"; a="20218501"
+X-IronPort-AV: E=Sophos;i="6.08,264,1712646000"; 
+   d="scan'208";a="20218501"
+Received: from orviesa008.jf.intel.com ([10.64.159.148])
+  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jun 2024 06:20:59 -0700
+X-CSE-ConnectionGUID: Ci2BXyjPTmGSNQImiVZHjQ==
+X-CSE-MsgGUID: pEWumFRzSRW+K3MDD1uUFQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.08,264,1712646000"; 
+   d="scan'208";a="44358182"
+Received: from ahunter6-mobl1.ger.corp.intel.com (HELO [10.0.2.15]) ([10.246.48.191])
+  by orviesa008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jun 2024 06:20:55 -0700
+Message-ID: <5a9e8dae-e9d9-4a97-98f5-d76be9068342@intel.com>
+Date: Tue, 25 Jun 2024 16:20:49 +0300
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240625032509.4155839-1-gatlin.newhouse@gmail.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v4 1/5] perf: support specify vdso path in cmdline
+To: Changbin Du <changbin.du@huawei.com>,
+ Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>,
+ Arnaldo Carvalho de Melo <acme@kernel.org>,
+ Namhyung Kim <namhyung@kernel.org>, Nathan Chancellor <nathan@kernel.org>
+Cc: Mark Rutland <mark.rutland@arm.com>,
+ Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+ Jiri Olsa <jolsa@kernel.org>, Ian Rogers <irogers@google.com>,
+ "Liang, Kan" <kan.liang@linux.intel.com>,
+ Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling
+ <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
+ linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+ llvm@lists.linux.dev
+References: <20240625033740.223009-1-changbin.du@huawei.com>
+ <20240625033740.223009-2-changbin.du@huawei.com>
+Content-Language: en-US
+From: Adrian Hunter <adrian.hunter@intel.com>
+Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
+ Business Identity Code: 0357606 - 4, Domiciled in Helsinki
+In-Reply-To: <20240625033740.223009-2-changbin.du@huawei.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Tue, Jun 25, 2024 at 03:24:55AM +0000, Gatlin Newhouse wrote:
-> Currently ARM architectures output which specific sanitizer caused
-> the trap, via the encoded data in the trap instruction. Clang on
-> x86 currently encodes the same data in ud1 instructions but the x86
-> handle_bug() and is_valid_bugaddr() functions currently only look
-> at ud2s.
+On 25/06/24 06:37, Changbin Du wrote:
+> The vdso dumped from process memory (in buildid-cache) lacks debugging
+> info. To annotate vdso symbols with source lines we need specify a
+> debugging version.
 > 
-> Bring x86 to parity with arm64, similar to commit 25b84002afb9
-> ("arm64: Support Clang UBSAN trap codes for better reporting").
-> Enable the output of UBSAN type information on x86 architectures
-> compiled with clang when CONFIG_UBSAN_TRAP=y.
+> For x86, we can find them from your local build as
+> arch/x86/entry/vdso/vdso{32,64}.so.dbg. Or they may reside in
+> /lib/modules/<version>/vdso/vdso{32,64}.so on Ubuntu. But notice that
+> the buildid has to match.
 > 
-> Signed-off-by: Gatlin Newhouse <gatlin.newhouse@gmail.com>
+> $ sudo perf record -a
+> $ sudo perf report --objdump=llvm-objdump \
+>   --vdso arch/x86/entry/vdso/vdso64.so.dbg,arch/x86/entry/vdso/vdso32.so.dbg
+> 
+> Samples: 17K of event 'cycles:P', 4000 Hz, Event count (approx.): 1760
+> __vdso_clock_gettime  /work/linux-host/arch/x86/entry/vdso/vdso64.so.d
+> Percent│       movq    -48(%rbp),%rsi
+>        │       testq   %rax,%rax
+>        │     ;               return vread_hvclock();
+>        │       movq    %rax,%rdx
+>        │     ;               if (unlikely(!vdso_cycles_ok(cycles)))
+>        │     ↑ js      eb
+>        │     ↑ jmp     74
+>        │     ;               ts->tv_sec = vdso_ts->sec;
+>   0.02 │147:   leaq    2(%rbx),%rax
+>        │       shlq    $4, %rax
+>        │       addq    %r10,%rax
+>        │     ;               while ((seq = READ_ONCE(vd->seq)) & 1) {
+>   9.38 │152:   movl    (%r10),%ecx
+> 
+> When doing cross platform analysis, we also need specify the vdso path if
+> we are interested in its symbols.
+
+Would it be possible to add vdso and vdso debug to the build-id
+cache and ensure perf can find it there?
+
+Typically, getting dsos from another machine is handled via
+build-id cache e.g. what perf-archive does
+
+> 
+> v2: update documentation.
+> 
+> Signed-off-by: Changbin Du <changbin.du@huawei.com>
 > ---
-> Changes in v3:
->   - Address Thomas's remarks about: change log structure,
->     get_ud_type() instead of is_valid_bugaddr(), handle_bug()
->     changes, and handle_ubsan_failure().
+>  tools/perf/Documentation/perf-annotate.txt |  3 +
+>  tools/perf/Documentation/perf-c2c.txt      |  3 +
+>  tools/perf/Documentation/perf-inject.txt   |  3 +
+>  tools/perf/Documentation/perf-report.txt   |  3 +
+>  tools/perf/Documentation/perf-script.txt   |  3 +
+>  tools/perf/Documentation/perf-top.txt      |  3 +
+>  tools/perf/builtin-annotate.c              |  2 +
+>  tools/perf/builtin-c2c.c                   |  2 +
+>  tools/perf/builtin-inject.c                |  2 +
+>  tools/perf/builtin-report.c                |  2 +
+>  tools/perf/builtin-script.c                |  2 +
+>  tools/perf/builtin-top.c                   |  2 +
+>  tools/perf/util/disasm.c                   |  7 +-
+>  tools/perf/util/symbol.c                   | 82 +++++++++++++++++++++-
+>  tools/perf/util/symbol_conf.h              |  5 ++
+>  15 files changed, 119 insertions(+), 5 deletions(-)
 > 
-> Changes in v2:
->   - Name the new constants 'LEN_ASOP' and 'INSN_ASOP' instead of
->     'LEN_REX' and 'INSN_REX'
->   - Change handle_ubsan_failure() from enum bug_trap_type to void
->     function
-> 
-> v1: https://lore.kernel.org/linux-hardening/20240529022043.3661757-1-gatlin.newhouse@gmail.com/
-> v2: https://lore.kernel.org/linux-hardening/20240601031019.3708758-1-gatlin.newhouse@gmail.com/
-> ---
->  MAINTAINERS                  |  2 ++
->  arch/x86/include/asm/bug.h   | 11 ++++++++++
->  arch/x86/include/asm/ubsan.h | 23 +++++++++++++++++++++
->  arch/x86/kernel/Makefile     |  1 +
->  arch/x86/kernel/traps.c      | 40 +++++++++++++++++++++++++++++++-----
->  arch/x86/kernel/ubsan.c      | 21 +++++++++++++++++++
->  6 files changed, 93 insertions(+), 5 deletions(-)
->  create mode 100644 arch/x86/include/asm/ubsan.h
->  create mode 100644 arch/x86/kernel/ubsan.c
-> 
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 28e20975c26f..b8512887ffb1 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -22635,6 +22635,8 @@ L:	kasan-dev@googlegroups.com
->  L:	linux-hardening@vger.kernel.org
->  S:	Supported
->  T:	git git://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git for-next/hardening
-> +F:	arch/x86/include/asm/ubsan.h
-> +F:	arch/x86/kernel/ubsan.c
->  F:	Documentation/dev-tools/ubsan.rst
->  F:	include/linux/ubsan.h
->  F:	lib/Kconfig.ubsan
-> diff --git a/arch/x86/include/asm/bug.h b/arch/x86/include/asm/bug.h
-> index a3ec87d198ac..a363d13c263b 100644
-> --- a/arch/x86/include/asm/bug.h
-> +++ b/arch/x86/include/asm/bug.h
-> @@ -13,6 +13,17 @@
->  #define INSN_UD2	0x0b0f
->  #define LEN_UD2		2
+> diff --git a/tools/perf/Documentation/perf-annotate.txt b/tools/perf/Documentation/perf-annotate.txt
+> index b95524bea021..4b6692f9a793 100644
+> --- a/tools/perf/Documentation/perf-annotate.txt
+> +++ b/tools/perf/Documentation/perf-annotate.txt
+> @@ -58,6 +58,9 @@ OPTIONS
+>  --ignore-vmlinux::
+>  	Ignore vmlinux files.
 >  
-> +/*
-> + * In clang we have UD1s reporting UBSAN failures on X86, 64 and 32bit.
-> + */
-> +#define INSN_UD1	0xb90f
-> +#define INSN_UD_MASK	0xFFFF
-> +#define LEN_UD1		2
-> +#define INSN_ASOP	0x67
-> +#define INSN_ASOP_MASK	0x00FF
-> +#define BUG_UD_NONE	0xFFFF
-> +#define BUG_UD2		0xFFFE
+> +--vdso=<vdso1[,vdso2]>::
+> +	Specify vdso pathnames. You can specify up to two for multiarch-support.
 > +
-
-Please look at 790d1ce71de. Also your style above is inconsistent,
-please use lower case consistently for the hex values.
-
-
->  #ifdef CONFIG_GENERIC_BUG
+>  --itrace::
+>  	Options for decoding instruction tracing data. The options are:
 >  
->  #ifdef CONFIG_X86_32
-> diff --git a/arch/x86/include/asm/ubsan.h b/arch/x86/include/asm/ubsan.h
-> new file mode 100644
-> index 000000000000..ac2080984e83
-> --- /dev/null
-> +++ b/arch/x86/include/asm/ubsan.h
-> @@ -0,0 +1,23 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +#ifndef _ASM_X86_UBSAN_H
-> +#define _ASM_X86_UBSAN_H
+> diff --git a/tools/perf/Documentation/perf-c2c.txt b/tools/perf/Documentation/perf-c2c.txt
+> index 856f0dfb8e5a..7c07efca7542 100644
+> --- a/tools/perf/Documentation/perf-c2c.txt
+> +++ b/tools/perf/Documentation/perf-c2c.txt
+> @@ -71,6 +71,9 @@ REPORT OPTIONS
+>  --vmlinux=<file>::
+>  	vmlinux pathname
+>  
+> +--vdso=<vdso1[,vdso2]>::
+> +	Specify vdso pathnames. You can specify up to two for multiarch-support.
 > +
-> +/*
-> + * Clang Undefined Behavior Sanitizer trap mode support.
-> + */
-> +#include <linux/bug.h>
-> +#include <linux/ubsan.h>
-> +#include <asm/ptrace.h>
+>  -v::
+>  --verbose::
+>  	Be more verbose (show counter open errors, etc).
+> diff --git a/tools/perf/Documentation/perf-inject.txt b/tools/perf/Documentation/perf-inject.txt
+> index c972032f4ca0..3c88967b4c7f 100644
+> --- a/tools/perf/Documentation/perf-inject.txt
+> +++ b/tools/perf/Documentation/perf-inject.txt
+> @@ -62,6 +62,9 @@ OPTIONS
+>  --kallsyms=<file>::
+>  	kallsyms pathname
+>  
+> +--vdso=<vdso1[,vdso2]>::
+> +	Specify vdso pathnames. You can specify up to two for multiarch-support.
 > +
-> +/*
-> + * UBSAN uses the EAX register to encode its type in the ModRM byte.
-> + */
-> +#define UBSAN_REG	0x40
+>  --itrace::
+>  	Decode Instruction Tracing data, replacing it with synthesized events.
+>  	Options are:
+> diff --git a/tools/perf/Documentation/perf-report.txt b/tools/perf/Documentation/perf-report.txt
+> index d2b1593ef700..8a3ba5f74cac 100644
+> --- a/tools/perf/Documentation/perf-report.txt
+> +++ b/tools/perf/Documentation/perf-report.txt
+> @@ -345,6 +345,9 @@ OPTIONS
+>          Load module symbols. WARNING: This should only be used with -k and
+>          a LIVE kernel.
+>  
+> +--vdso=<vdso1[,vdso2]>::
+> +	Specify vdso pathnames. You can specify up to two for multiarch-support.
 > +
-> +#ifdef CONFIG_UBSAN_TRAP
-> +void handle_ubsan_failure(struct pt_regs *regs, u16 insn);
-> +#else
-> +static inline void handle_ubsan_failure(struct pt_regs *regs, u16 insn) { return; }
-> +#endif /* CONFIG_UBSAN_TRAP */
+>  -f::
+>  --force::
+>          Don't do ownership validation.
+> diff --git a/tools/perf/Documentation/perf-script.txt b/tools/perf/Documentation/perf-script.txt
+> index ff086ef05a0c..48f9974ca4c5 100644
+> --- a/tools/perf/Documentation/perf-script.txt
+> +++ b/tools/perf/Documentation/perf-script.txt
+> @@ -296,6 +296,9 @@ OPTIONS
+>  --kallsyms=<file>::
+>          kallsyms pathname
+>  
+> +--vdso=<vdso1[,vdso2]>::
+> +	Specify vdso pathnames. You can specify up to two for multiarch-support.
 > +
-> +#endif /* _ASM_X86_UBSAN_H */
-> diff --git a/arch/x86/kernel/Makefile b/arch/x86/kernel/Makefile
-> index 74077694da7d..fe1d9db27500 100644
-> --- a/arch/x86/kernel/Makefile
-> +++ b/arch/x86/kernel/Makefile
-> @@ -145,6 +145,7 @@ obj-$(CONFIG_UNWINDER_GUESS)		+= unwind_guess.o
->  obj-$(CONFIG_AMD_MEM_ENCRYPT)		+= sev.o
+>  --symfs=<directory>::
+>          Look for files with symbols relative to this directory.
 >  
->  obj-$(CONFIG_CFI_CLANG)			+= cfi.o
-> +obj-$(CONFIG_UBSAN_TRAP)		+= ubsan.o
+> diff --git a/tools/perf/Documentation/perf-top.txt b/tools/perf/Documentation/perf-top.txt
+> index a754875fa5bb..1cf3ee16a0c1 100644
+> --- a/tools/perf/Documentation/perf-top.txt
+> +++ b/tools/perf/Documentation/perf-top.txt
+> @@ -76,6 +76,9 @@ Default is to monitor all CPUS.
+>  --kallsyms=<file>::
+>  	kallsyms pathname
 >  
->  obj-$(CONFIG_CALL_THUNKS)		+= callthunks.o
+> +--vdso=<vdso1[,vdso2]>::
+> +	Specify vdso pathnames. You can specify up to two for multiarch-support.
+> +
+>  -m <pages>::
+>  --mmap-pages=<pages>::
+>  	Number of mmap data pages (must be a power of two) or size
+> diff --git a/tools/perf/builtin-annotate.c b/tools/perf/builtin-annotate.c
+> index 50d2fb222d48..ff466882065d 100644
+> --- a/tools/perf/builtin-annotate.c
+> +++ b/tools/perf/builtin-annotate.c
+> @@ -742,6 +742,8 @@ int cmd_annotate(int argc, const char **argv)
+>  		   "file", "vmlinux pathname"),
+>  	OPT_BOOLEAN('m', "modules", &symbol_conf.use_modules,
+>  		    "load module symbols - WARNING: use only with -k and LIVE kernel"),
+> +	OPT_CALLBACK(0, "vdso", NULL, "vdso1[,vdso2]", "vdso pathnames",
+> +		     parse_vdso_pathnames),
+>  	OPT_BOOLEAN('l', "print-line", &annotate_opts.print_lines,
+>  		    "print matching source lines (may be slow)"),
+>  	OPT_BOOLEAN('P', "full-paths", &annotate_opts.full_path,
+> diff --git a/tools/perf/builtin-c2c.c b/tools/perf/builtin-c2c.c
+> index c157bd31f2e5..4764f9139661 100644
+> --- a/tools/perf/builtin-c2c.c
+> +++ b/tools/perf/builtin-c2c.c
+> @@ -3018,6 +3018,8 @@ static int perf_c2c__report(int argc, const char **argv)
+>  	const struct option options[] = {
+>  	OPT_STRING('k', "vmlinux", &symbol_conf.vmlinux_name,
+>  		   "file", "vmlinux pathname"),
+> +	OPT_CALLBACK(0, "vdso", NULL, "vdso1[,vdso2]", "vdso pathnames",
+> +		     parse_vdso_pathnames),
+>  	OPT_STRING('i', "input", &input_name, "file",
+>  		   "the input file to process"),
+>  	OPT_INCR('N', "node-info", &c2c.node_info,
+> diff --git a/tools/perf/builtin-inject.c b/tools/perf/builtin-inject.c
+> index a212678d47be..e774e83d0a0f 100644
+> --- a/tools/perf/builtin-inject.c
+> +++ b/tools/perf/builtin-inject.c
+> @@ -2247,6 +2247,8 @@ int cmd_inject(int argc, const char **argv)
+>  			    "don't load vmlinux even if found"),
+>  		OPT_STRING(0, "kallsyms", &symbol_conf.kallsyms_name, "file",
+>  			   "kallsyms pathname"),
+> +		OPT_CALLBACK(0, "vdso", NULL, "vdso1[,vdso2]", "vdso pathnames",
+> +		     parse_vdso_pathnames),
+>  		OPT_BOOLEAN('f', "force", &data.force, "don't complain, do it"),
+>  		OPT_CALLBACK_OPTARG(0, "itrace", &inject.itrace_synth_opts,
+>  				    NULL, "opts", "Instruction Tracing options\n"
+> diff --git a/tools/perf/builtin-report.c b/tools/perf/builtin-report.c
+> index 69618fb0110b..a64b48460dce 100644
+> --- a/tools/perf/builtin-report.c
+> +++ b/tools/perf/builtin-report.c
+> @@ -1324,6 +1324,8 @@ int cmd_report(int argc, const char **argv)
+>                      "don't load vmlinux even if found"),
+>  	OPT_STRING(0, "kallsyms", &symbol_conf.kallsyms_name,
+>  		   "file", "kallsyms pathname"),
+> +	OPT_CALLBACK(0, "vdso", NULL, "vdso1[,vdso2]", "vdso pathnames",
+> +		     parse_vdso_pathnames),
+>  	OPT_BOOLEAN('f', "force", &symbol_conf.force, "don't complain, do it"),
+>  	OPT_BOOLEAN('m', "modules", &symbol_conf.use_modules,
+>  		    "load module symbols - WARNING: use only with -k and LIVE kernel"),
+> diff --git a/tools/perf/builtin-script.c b/tools/perf/builtin-script.c
+> index c16224b1fef3..2e358922a8d1 100644
+> --- a/tools/perf/builtin-script.c
+> +++ b/tools/perf/builtin-script.c
+> @@ -3965,6 +3965,8 @@ int cmd_script(int argc, const char **argv)
+>  		   "file", "vmlinux pathname"),
+>  	OPT_STRING(0, "kallsyms", &symbol_conf.kallsyms_name,
+>  		   "file", "kallsyms pathname"),
+> +	OPT_CALLBACK(0, "vdso", NULL, "vdso1[,vdso2]", "vdso pathnames",
+> +		     parse_vdso_pathnames),
+>  	OPT_BOOLEAN('G', "hide-call-graph", &no_callchain,
+>  		    "When printing symbols do not display call chain"),
+>  	OPT_CALLBACK(0, "symfs", NULL, "directory",
+> diff --git a/tools/perf/builtin-top.c b/tools/perf/builtin-top.c
+> index 1d6aef51c122..a3cce4e76eb9 100644
+> --- a/tools/perf/builtin-top.c
+> +++ b/tools/perf/builtin-top.c
+> @@ -1479,6 +1479,8 @@ int cmd_top(int argc, const char **argv)
+>  		   "file", "kallsyms pathname"),
+>  	OPT_BOOLEAN('K', "hide_kernel_symbols", &top.hide_kernel_symbols,
+>  		    "hide kernel symbols"),
+> +	OPT_CALLBACK(0, "vdso", NULL, "vdso1[,vdso2]", "vdso pathnames",
+> +		     parse_vdso_pathnames),
+>  	OPT_CALLBACK('m', "mmap-pages", &opts->mmap_pages, "pages",
+>  		     "number of mmap data pages", evlist__parse_mmap_pages),
+>  	OPT_INTEGER('r', "realtime", &top.realtime_prio,
+> diff --git a/tools/perf/util/disasm.c b/tools/perf/util/disasm.c
+> index 72aec8f61b94..8d9d78d3150c 100644
+> --- a/tools/perf/util/disasm.c
+> +++ b/tools/perf/util/disasm.c
+> @@ -16,6 +16,7 @@
+>  #include "debug.h"
+>  #include "disasm.h"
+>  #include "dso.h"
+> +#include "vdso.h"
+>  #include "env.h"
+>  #include "evsel.h"
+>  #include "map.h"
+> @@ -1126,7 +1127,7 @@ static int dso__disassemble_filename(struct dso *dso, char *filename, size_t fil
+>  	if (pos && strlen(pos) < SBUILD_ID_SIZE - 2)
+>  		dirname(build_id_path);
 >  
-> diff --git a/arch/x86/kernel/traps.c b/arch/x86/kernel/traps.c
-> index 4fa0b17e5043..aef21287e7ed 100644
-> --- a/arch/x86/kernel/traps.c
-> +++ b/arch/x86/kernel/traps.c
-> @@ -67,6 +67,7 @@
->  #include <asm/vdso.h>
->  #include <asm/tdx.h>
->  #include <asm/cfi.h>
-> +#include <asm/ubsan.h>
+> -	if (dso__is_kcore(dso))
+> +	if (dso__is_kcore(dso) || dso__is_vdso(dso))
+>  		goto fallback;
 >  
->  #ifdef CONFIG_X86_64
->  #include <asm/x86_init.h>
-> @@ -91,6 +92,29 @@ __always_inline int is_valid_bugaddr(unsigned long addr)
->  	return *(unsigned short *)addr == INSN_UD2;
+>  	len = readlink(build_id_path, linkname, sizeof(linkname) - 1);
+> @@ -1134,7 +1135,7 @@ static int dso__disassemble_filename(struct dso *dso, char *filename, size_t fil
+>  		goto fallback;
+>  
+>  	linkname[len] = '\0';
+> -	if (strstr(linkname, DSO__NAME_KALLSYMS) ||
+> +	if (strstr(linkname, DSO__NAME_KALLSYMS) || strstr(linkname, DSO__NAME_VDSO) ||
+>  		access(filename, R_OK)) {
+>  fallback:
+>  		/*
+> @@ -1142,7 +1143,7 @@ static int dso__disassemble_filename(struct dso *dso, char *filename, size_t fil
+>  		 * cache, or is just a kallsyms file, well, lets hope that this
+>  		 * DSO is the same as when 'perf record' ran.
+>  		 */
+> -		if (dso__kernel(dso) && dso__long_name(dso)[0] == '/')
+> +		if ((dso__kernel(dso) || dso__is_vdso(dso)) && dso__long_name(dso)[0] == '/')
+>  			snprintf(filename, filename_size, "%s", dso__long_name(dso));
+>  		else
+>  			__symbol__join_symfs(filename, filename_size, dso__long_name(dso));
+> diff --git a/tools/perf/util/symbol.c b/tools/perf/util/symbol.c
+> index 9e5940b5bc59..a90c647d37e1 100644
+> --- a/tools/perf/util/symbol.c
+> +++ b/tools/perf/util/symbol.c
+> @@ -19,6 +19,7 @@
+>  #include "build-id.h"
+>  #include "cap.h"
+>  #include "dso.h"
+> +#include "vdso.h"
+>  #include "util.h" // lsdir()
+>  #include "debug.h"
+>  #include "event.h"
+> @@ -44,6 +45,7 @@
+>  
+>  static int dso__load_kernel_sym(struct dso *dso, struct map *map);
+>  static int dso__load_guest_kernel_sym(struct dso *dso, struct map *map);
+> +static int dso__load_vdso_sym(struct dso *dso, struct map *map);
+>  static bool symbol__is_idle(const char *name);
+>  
+>  int vmlinux_path__nr_entries;
+> @@ -1833,6 +1835,12 @@ int dso__load(struct dso *dso, struct map *map)
+>  		goto out;
+>  	}
+>  
+> +	if (dso__is_vdso(dso)) {
+> +		ret = dso__load_vdso_sym(dso, map);
+> +		if (ret > 0)
+> +			goto out;
+> +	}
+> +
+>  	dso__set_adjust_symbols(dso, false);
+>  
+>  	if (perfmap) {
+> @@ -2017,12 +2025,14 @@ int dso__load_vmlinux(struct dso *dso, struct map *map,
+>  		dso__set_binary_type(dso, DSO_BINARY_TYPE__VMLINUX);
+>  
+>  	err = dso__load_sym(dso, map, &ss, &ss, 0);
+> -	symsrc__destroy(&ss);
+> -
+>  	if (err > 0) {
+>  		dso__set_loaded(dso);
+>  		pr_debug("Using %s for symbols\n", symfs_vmlinux);
+> +
+> +		if (symsrc__has_symtab(&ss) && !dso__symsrc_filename(dso))
+> +			dso__set_symsrc_filename(dso, strdup(symfs_vmlinux));
+>  	}
+> +	symsrc__destroy(&ss);
+>  
+>  	return err;
+>  }
+> @@ -2349,6 +2359,74 @@ static int vmlinux_path__init(struct perf_env *env)
+>  	return -1;
 >  }
 >  
-> +/*
-> + * Check for UD1, UD2, with or without Address Size Override Prefixes instructions.
-> + */
-> +__always_inline u16 get_ud_type(unsigned long addr)
+> +int parse_vdso_pathnames(const struct option *opt __maybe_unused,
+> +			 const char *arg, int unset __maybe_unused)
 > +{
-> +	u16 insn;
+> +	char *tmp, *tok, *str = strdup(arg);
+> +	unsigned int i = 0;
 > +
-> +	if (addr < TASK_SIZE_MAX)
-> +		return BUG_UD_NONE;
-> +	insn = *(u16 *)addr;
-> +	if ((insn & INSN_UD_MASK) == INSN_UD2)
-> +		return BUG_UD2;
-> +	if ((insn & INSN_ASOP_MASK) == INSN_ASOP)
-> +		insn = *(u16 *)(++addr);
+> +	for (tok = strtok_r(str, ",", &tmp); tok && i < ARRAY_SIZE(symbol_conf.vdso_name);
+> +	     tok = strtok_r(NULL, ",", &tmp)) {
+> +		symbol_conf.vdso_name[i++] = strdup(tok);
+> +	}
 > +
-> +	// UBSAN encode the failure type in the two bytes after UD1
-> +	if ((insn & INSN_UD_MASK) == INSN_UD1)
-> +		return *(u16 *)(addr + LEN_UD1);
-> +
-> +	return BUG_UD_NONE;
+> +	free(str);
+> +	return 0;
 > +}
-
-Given that insn is u16, this INSN_UD_MASK seems eminently pointless.
-
-Are the bytes after UD1 a proper ModRM such that the whole forms a
-decodable instruction? You seem to not mention this anywhere. It is
-paramount that the instruction stream is still correctly decodable.
-
-Also, wouldn't it be saner to write this something like:
-
-__always_inline int decode_bug(unsigned long addr, u32 *imm)
-{
-	u8 v;
-
-	if (addr < TASK_SIZE)
-		return BUG_NONE;
-
-	v = *(u8 *)(addr++);
-	if (v == 0x67)
-		v = *(u8 *)(addr++);
-	if (v != 0x0f)
-		return BUG_NONE;
-	v = *(u8 *)(addr++);
-	if (v == 0x0b)
-		return BUG_UD2;
-	if (v != 0xb9)
-		return BUG_NONE;
-
-	if (X86_MODRM_RM(v) == 4)
-		addr++; /* consume SiB */
-
-	*imm = 0;
-	if (X86_MODRM_MOD(v) == 1)
-		*imm = *(u8 *)addr;
-	if (X86_MORRM_MOD(v) == 2)
-		*imm = *(u32 *)addr;
-
-	// WARN on MOD(v)==3 ??
-
-	return BUG_UD1;
-}
-
-Why does the thing emit the asop prefix at all through? afaict it
-doesn't affect the immediate you want to get at. And if it does this
-prefix, should we worry about other prefixes? Ideally we'd not accept
-any prefixes.
-
+> +
+> +static int dso__load_vdso(struct dso *dso, struct map *map,
+> +			  const char *vdso)
+> +{
+> +	int err = -1;
+> +	struct symsrc ss;
+> +	char symfs_vdso[PATH_MAX];
+> +
+> +	if (vdso[0] == '/')
+> +		snprintf(symfs_vdso, sizeof(symfs_vdso), "%s", vdso);
+> +	else
+> +		symbol__join_symfs(symfs_vdso, vdso);
+> +
+> +	if (symsrc__init(&ss, dso, symfs_vdso, DSO_BINARY_TYPE__SYSTEM_PATH_DSO))
+> +		return -1;
+> +
+> +	/*
+> +	 * dso__load_sym() may copy 'dso' which will result in the copies having
+> +	 * an incorrect long name unless we set it here first.
+> +	 */
+> +	dso__set_long_name(dso, vdso, false);
+> +	dso__set_binary_type(dso, DSO_BINARY_TYPE__SYSTEM_PATH_DSO);
+> +
+> +	err = dso__load_sym(dso, map, &ss, &ss, 0);
+> +	if (err > 0) {
+> +		dso__set_loaded(dso);
+> +		pr_debug("Using %s for %s symbols\n", symfs_vdso, dso__short_name(dso));
+> +
+> +		if (symsrc__has_symtab(&ss) && !dso__symsrc_filename(dso))
+> +			dso__set_symsrc_filename(dso, strdup(symfs_vdso));
+> +	}
+> +	symsrc__destroy(&ss);
+> +
+> +	return err;
+> +}
+> +
+> +static int dso__load_vdso_sym(struct dso *dso, struct map *map)
+> +{
+> +	int ret;
+> +
+> +	if (!dso__is_vdso(dso))
+> +		return -1;
+> +
+> +	for (unsigned int i = 0; i < ARRAY_SIZE(symbol_conf.vdso_name); i++) {
+> +		if (symbol_conf.vdso_name[i] != NULL) {
+> +			ret = dso__load_vdso(dso, map, symbol_conf.vdso_name[i]);
+> +			if (ret > 0)
+> +				return ret;
+> +		}
+> +	}
+> +
+> +	return -1;
+> +}
+> +
+>  int setup_list(struct strlist **list, const char *list_str,
+>  		      const char *list_name)
+>  {
+> diff --git a/tools/perf/util/symbol_conf.h b/tools/perf/util/symbol_conf.h
+> index c114bbceef40..108356e3c981 100644
+> --- a/tools/perf/util/symbol_conf.h
+> +++ b/tools/perf/util/symbol_conf.h
+> @@ -3,6 +3,7 @@
+>  #define __PERF_SYMBOL_CONF 1
+>  
+>  #include <stdbool.h>
+> +#include <subcmd/parse-options.h>
+>  
+>  struct strlist;
+>  struct intlist;
+> @@ -55,6 +56,7 @@ struct symbol_conf {
+>  	const char	*default_guest_vmlinux_name,
+>  			*default_guest_kallsyms,
+>  			*default_guest_modules;
+> +	const char	*vdso_name[2];
+>  	const char	*guestmount;
+>  	const char	*dso_list_str,
+>  			*comm_list_str,
+> @@ -85,4 +87,7 @@ struct symbol_conf {
+>  
+>  extern struct symbol_conf symbol_conf;
+>  
+> +int parse_vdso_pathnames(const struct option *opt __maybe_unused,
+> +			 const char *arg, int unset __maybe_unused);
+> +
+>  #endif // __PERF_SYMBOL_CONF
 
