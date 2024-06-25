@@ -1,123 +1,117 @@
-Received: from mail-pg1-f178.google.com (mail-pg1-f178.google.com [209.85.215.178])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail-0301.mail-europe.com (mail-0301.mail-europe.com [188.165.51.139])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D0D02E62F
-	for <llvm@lists.linux.dev>; Tue, 25 Jun 2024 15:45:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 78C9D13B2B0
+	for <llvm@lists.linux.dev>; Tue, 25 Jun 2024 16:37:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=188.165.51.139
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719330311; cv=none; b=KOUaHkkG3wqRDqcmfBc7INKE9GgbIYOG704jzvXB22ekwkVN7/YVuLhuKpf9pSzhxpKIpHhG7+limC5dZ22i0HytppEZxtUlg3gBA5jLiDJPyBH6+N8ICHYBZMel+a7SjVNMsRJu4SSq4Cfcs1w9L50gtI46Pg24FL9K4soLI+M=
+	t=1719333443; cv=none; b=U8MRJih7E0MOx7E7gW2Lcz/fsndIIN5LK9/jKboBQvSQ6AAAQWuFdJI6o2KME1+ufrCwCfkgR4zLKsBuJMF36f+v6v01fMR7l35t4Mya311pJTSFcAacvUgPMGBh9nvumlwiELeqRpr+9iZCyddGzmu27YPq4M48m+tabMBUvrs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719330311; c=relaxed/simple;
-	bh=hf5eUmooJC7dWoChVFFPsyBXOKh1NM93BaxyD/i/B2Y=;
-	h=Date:Subject:In-Reply-To:CC:From:To:Message-ID:Mime-Version:
-	 Content-Type; b=ZEQGz9EVPOTJjrm4DlPCMFpm1OhhXp3Cv7Fj1FUE42Cw9PtinRv1Xep8QtKdnisd2TMxxzQ5gnBk/W4aXeuHNWgHHEJzXeCKV0AaRMeldurjfdMwBQZ41Kdrp56jLSVTaG25iOmC+h+OrugcaMUJLGI+FBDeAvNtakFgEL3SBAY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dabbelt.com; spf=pass smtp.mailfrom=dabbelt.com; dkim=pass (2048-bit key) header.d=dabbelt-com.20230601.gappssmtp.com header.i=@dabbelt-com.20230601.gappssmtp.com header.b=ts7wjuI0; arc=none smtp.client-ip=209.85.215.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dabbelt.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=dabbelt.com
+	s=arc-20240116; t=1719333443; c=relaxed/simple;
+	bh=fnPzckJzBpwtTvvkEfm3K3Gv3jko4xHw6k7B6ll5zXc=;
+	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=Mk5Qc4ZFniXQABqkhJDeM6ooUu3p4vS4wi9Kz+sff3Di7kn+Eoff3MmB1leZog1kPHDChUzWSsTBdsalIWr7alLnNoacszr9ngxKtptfHDR5/puxJwFlG4dTOsuUK/7hVFtspYSE2L8Z+YdEVRMX5nuG5cxOnXizpekyNdsKuas=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=protonmail.com; spf=pass smtp.mailfrom=protonmail.com; dkim=pass (2048-bit key) header.d=protonmail.com header.i=@protonmail.com header.b=xDiSTt7t; arc=none smtp.client-ip=188.165.51.139
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=protonmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=protonmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=dabbelt-com.20230601.gappssmtp.com header.i=@dabbelt-com.20230601.gappssmtp.com header.b="ts7wjuI0"
-Received: by mail-pg1-f178.google.com with SMTP id 41be03b00d2f7-713fa1aea36so2718433a12.1
-        for <llvm@lists.linux.dev>; Tue, 25 Jun 2024 08:45:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=dabbelt-com.20230601.gappssmtp.com; s=20230601; t=1719330309; x=1719935109; darn=lists.linux.dev;
-        h=content-transfer-encoding:mime-version:message-id:to:from:cc
-         :in-reply-to:subject:date:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=2tZOMKcRfzsOTLcaI6P+nurFJ1oFQE37Rn/GemYRQhk=;
-        b=ts7wjuI0igr2viLqYR7th0EjLztMcBJoOfdC6y1CVuwMb2e+FVyfKvh+dWBJxHKnOK
-         URR7fkk33dZFYOoZOx23eu+WmzRwGYxi4FILGXu9ZV0zC20bMZkH2LHDjxdIKFoXeW1H
-         0SjGtxEehm0RZUrQbGyPmCDJgV5+uyL1sjF+f7COI6f1RE2jNSbFkzFSblp3zhlFOCd9
-         WGtjb935+bJIA6u7IRk6g57qBQwkbOL7FiUNaGSaV40hMhVhC2t8veIyQNBV0WN1m53g
-         islOUzz/zdGYD6FzrTYNf5F6pt7ybk9wZFzf46+OAyfFMCA9+jiRGg6htzaqwd0Q78Yl
-         idhQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1719330309; x=1719935109;
-        h=content-transfer-encoding:mime-version:message-id:to:from:cc
-         :in-reply-to:subject:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=2tZOMKcRfzsOTLcaI6P+nurFJ1oFQE37Rn/GemYRQhk=;
-        b=Aki9YUb1lpMfsKqMk80jThi1BsG9w+x55LbEkD6fCy0YgxjjkNAqUDWmmzdUkm+v5o
-         T7YdBT6iQ4TzO5zvfYqzD1XhUmf4uJqTlIm/YSa4rL56weUiZzTgutxhnmyBGzYYVkPt
-         O8w7KZR3Nl1ThhWlrbVXVSsGXyDKuKphILNTCqJWhZturpXtE50RETROfchQGjDcmtJs
-         CVcVG3aItzAfvavOCLHHeOSVfztQvMkVWdN55nUOv7QTYg1jKdbLYToEZx3g0Z6cvNDU
-         812PBCFlp9re4z4RiWgyCMjZ5YjpRMttby0D/7RE9ZRU9nj7GD2YjYaBlRwCOX4ELxL0
-         wttQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVewdcGHHxN/PZMRxhdR4xASY5wHyvV/gA5w73xxZGsTeKi6In9G16MgL2K4x77w81lJBcdY+tGHywWEsgJbtTMf/cP/Q==
-X-Gm-Message-State: AOJu0YwIcFxm5Pb+RjeAZLtvW+i6a6Peq2EZbeB9hHkfikYidANuyRyL
-	IZlF8L/Nm/guiwQBPEkT7OTzpBMtzdUQll+PpH8x3uK3B3tZok+5zH3G6syTUd4=
-X-Google-Smtp-Source: AGHT+IGSYCPwWhLTCA7tsdYi2n2YERYEuj0Bk7h22FlWi9B1mlJhhHz/QYqnR8FLA80DAw08tCIl9Q==
-X-Received: by 2002:a05:6a20:b918:b0:1bc:ed85:3920 with SMTP id adf61e73a8af0-1bcee9893f4mr7574816637.52.1719330307012;
-        Tue, 25 Jun 2024 08:45:07 -0700 (PDT)
-Received: from localhost ([50.145.13.30])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-70677235b41sm4843347b3a.24.2024.06.25.08.45.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 25 Jun 2024 08:45:06 -0700 (PDT)
-Date: Tue, 25 Jun 2024 08:45:06 -0700 (PDT)
-X-Google-Original-Date: Tue, 25 Jun 2024 08:45:05 PDT (-0700)
-Subject:     Re: [PATCH 1/8] riscv: stacktrace: convert arch_stack_walk() to noinstr
-In-Reply-To: <cb71a5e9-aafe-48af-9f16-baae407d467b@ghiti.fr>
-CC: andy.chiu@sifive.com, Paul Walmsley <paul.walmsley@sifive.com>,
-  aou@eecs.berkeley.edu, alexghiti@rivosinc.com, zong.li@sifive.com, rostedt@goodmis.org,
-  mhiramat@kernel.org, Mark Rutland <mark.rutland@arm.com>, nathan@kernel.org,
-  ndesaulniers@google.com, morbo@google.com, justinstitt@google.com, puranjay@kernel.org,
-  linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
-  llvm@lists.linux.dev
-From: Palmer Dabbelt <palmer@dabbelt.com>
-To: alex@ghiti.fr
-Message-ID: <mhng-37c10407-3c40-4045-9627-0b53f770cb4e@palmer-ri-x1c9a>
+	dkim=pass (2048-bit key) header.d=protonmail.com header.i=@protonmail.com header.b="xDiSTt7t"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=protonmail.com;
+	s=protonmail3; t=1719333431; x=1719592631;
+	bh=fnPzckJzBpwtTvvkEfm3K3Gv3jko4xHw6k7B6ll5zXc=;
+	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
+	 Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
+	 Message-ID:BIMI-Selector;
+	b=xDiSTt7tz+4vsmZSrWjaFL63uTKGBV2BWBe5l7IioUo9YKRQ28uXYf5jyaKpErlh6
+	 78UjmOal/QfRHOzVWF0fG0Z3yzEhl9Lm9vcPs/0jfQu1XqXAv5BT4wtbHF6SohTflJ
+	 Tg6y5HqjycK/2g7ScNRenhuRLA4k7hwzt6LB/AckGZ4xyA7mOfG+JyjaNcSS9WlZp7
+	 BVEWNFNVtMa2fxohYYxI7pHB+CuCEVPsSifs/KkFbWw4VVFyRzCCzAmBEntjbmE9W3
+	 9jmFW+p4Reg9oej3/rh6rg72OJZ9Kq+FSWO9mYmcKQCrXAIRI/crtH9YbGN+w3TVy2
+	 xgt74pjbJWbuA==
+Date: Tue, 25 Jun 2024 16:37:08 +0000
+To: John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
+From: Koakuma <koachan@protonmail.com>
+Cc: "David S. Miller" <davem@davemloft.net>, Andreas Larsson <andreas@gaisler.com>, Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, sparclinux@vger.kernel.org, linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH] sparc/build: Make all compiler flags also clang-compatible
+Message-ID: <Wcr4bsqUbuLm7J7tfuNMYZZ1cvYyh4CfBDt-siTQySe6jReMpHb7-AXX_Mao7uEh8exzhq6_Tyg9YoRzKCE77KfqFoc6L7_TEE5CuWg5Pp0=@protonmail.com>
+In-Reply-To: <e359b140839606b1856c5625669e5b6bd7ebc7eb.camel@physik.fu-berlin.de>
+References: <20240620-sparc-cflags-v1-1-bba7d0ff7d42@protonmail.com> <9449319ebbcd59719614ee786f1abe18256d0331.camel@physik.fu-berlin.de> <Mz-kWneLsFvKbBcTaGnC2xMA2U55fINzOJqmMRMumrtTaeHW40WfS5rYUjF_71aoXG56jSHo0vJ0oRPNoCrxpE_oIr7mmnK6fg9dFC_J9hk=@protonmail.com> <e359b140839606b1856c5625669e5b6bd7ebc7eb.camel@physik.fu-berlin.de>
+Feedback-ID: 6608610:user:proton
+X-Pm-Message-ID: 2dda54422a63525ab282c15bd0175fdcac607147
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0 (MHng)
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-On Tue, 18 Jun 2024 02:55:32 PDT (-0700), alex@ghiti.fr wrote:
-> Hi Andy,
->
-> On 13/06/2024 09:11, Andy Chiu wrote:
->> arch_stack_walk() is called intensively in function_graph when the
->> kernel is compiled with CONFIG_TRACE_IRQFLAGS. As a result, the kernel
->> logs a lot of arch_stack_walk and its sub-functions into the ftrace
->> buffer. However, these functions should not appear on the trace log
->> because they are part of the ftrace itself. This patch references what
->> arm64 does for the smae function. So it further prevent the re-enter
->> kprobe issue, which is also possible on riscv.
->>
->> Related-to: commit 0fbcd8abf337 ("arm64: Prohibit instrumentation on arch_stack_walk()")
->> Fixes: 680341382da5 ("riscv: add CALLER_ADDRx support")
->> Signed-off-by: Andy Chiu <andy.chiu@sifive.com>
->> ---
->>   arch/riscv/kernel/stacktrace.c | 2 +-
->>   1 file changed, 1 insertion(+), 1 deletion(-)
->>
->> diff --git a/arch/riscv/kernel/stacktrace.c b/arch/riscv/kernel/stacktrace.c
->> index 528ec7cc9a62..0d3f00eb0bae 100644
->> --- a/arch/riscv/kernel/stacktrace.c
->> +++ b/arch/riscv/kernel/stacktrace.c
->> @@ -156,7 +156,7 @@ unsigned long __get_wchan(struct task_struct *task)
->>   	return pc;
->>   }
->>
->> -noinline void arch_stack_walk(stack_trace_consume_fn consume_entry, void *cookie,
->> +noinline noinstr void arch_stack_walk(stack_trace_consume_fn consume_entry, void *cookie,
->>   		     struct task_struct *task, struct pt_regs *regs)
->>   {
->>   	walk_stackframe(task, regs, consume_entry, cookie);
->>
->
-> Reviewed-by: Alexandre Ghiti <alexghiti@rivosinc.com>
->
-> I'll try to make this go into -fixes, this is in my fixes branch at least.
+Hi Adrian~
 
-Looks like there's some comments on the rest of the patch set.
+John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de> wrote:
+> Would be interesting to find out what Sun's own C/C++ compiler (Sun Studi=
+o)
+> does in this case. I can try to run some tests on Solaris or you can chec=
+k
+> out the Solaris machines in the GCC compile farm [1].
 
-Andy: aree you going to send a v2, or do you want me to just pick this 
-one up onto fixes now and then handle the rest later?
+I am using the version included in Oracle Studio 12.6, and it seems
+that it always emit a EM_SPARC32PLUS type for 32-bit objects.
 
->
-> Thanks,
->
-> Alex
+The documentation for the -xarch also states that even when using
+the most generic target (`sparc`), it only supports emitting for V9 ISA
+(that is, EM_SPARC32PLUS for 32-bit target):
+
+> sparc
+> Compile for the SPARC-V9 ISA.
+> Compile for the V9 ISA, but without the Visual Instruction Set (VIS),
+> and without other implementation-specific ISA extensions. This option
+> enables the compiler to generate code for good performance on
+> the V9 ISA.
+
+From https://docs.oracle.com/cd/E77782_01/html/E77803/cc-1.html
+
+Other versions of the compiler might act differently, but sadly I have
+no access to them.
+
+> I just had a brief look - will do the proper review later - and I think
+> it's the right approach for the time being. However, I am wondering wheth=
+er
+> we should add "-mv8plus" to clang as well.
+>=20
+> I wondering though whether "-mcpu=3Dv9 -m32" is truly identical to "-mv8p=
+lus"
+> or not.
+
+Hmm, so I just found out after some digging that while `-m32 -mv8plus`
+and `-m32 -mcpu=3Dv9` can differ a little, I am not sure if supporting
+the full behavior in clang would be worth the effort? I think I can
+add `-mv8plus`/`-mno-v8plus` as an alias for `-mcpu=3Dv9`/`-mcpu=3Dv8`, but
+any more would probably be too much effort for too little gain?
+
+`-mv8plus` basically allows the compiler to treat the G and O registers
+as being 64-bit wide, allowing the compiler to use any of the new
+64-bit V9 instructions (e.g. `casx`) as it sees fit. From GCC's docs:
+
+> With `-mv8plus`, GCC generates code for the SPARC-V8+ ABI.
+> The difference from the V8 ABI is that the global and out registers
+> are considered 64 bits wide.=20
+
+https://gcc.gnu.org/onlinedocs/gcc/SPARC-Options.html#index-mv8plus
+
+Note that it does not change value passing in parameters or returns
+(outgoing parameters still need to be trimmed to 32-bit even though
+they are placed in the O registers, for example) so EM_SPARC32PLUS
+objects can be freely mixed with EM_SPARC ones.
+
+Also, this seems to be undocumented, but at least from my testing,
+`-mv8plus` implies `-mcpu=3Dv9` unless it gets overridden by a later
+`-mcpu` flag. So, in theory, it is totally permissible to have
+flags like `-m32 -mno-v8plus -mcpu=3Dv9` or `-m32 -mv8plus -mcpu=3Dv8`,
+however this will be useless in practice since the combination will
+end up disallowing the compiler from using any V9 instructions...
+
+And so far, looking around at kernel sources at least, there seem
+to be no need for such kind of flag combinations... though probably
+you or others who are more familar could comment on this?
