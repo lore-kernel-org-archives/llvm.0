@@ -1,138 +1,102 @@
-Received: from outpost1.zedat.fu-berlin.de (outpost1.zedat.fu-berlin.de [130.133.4.66])
+Received: from mx.kolabnow.com (mx.kolabnow.com [212.103.80.153])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A36FE73463;
-	Tue, 25 Jun 2024 07:20:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=130.133.4.66
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7BC8E1474A0
+	for <llvm@lists.linux.dev>; Tue, 25 Jun 2024 07:51:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.103.80.153
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719300029; cv=none; b=AT0aSA4OwyHWEaL4+4nZmAem5M0qufvNEt18KF7BUZa0B457+YOokctsmKaSByy+vrLIcA9Pws8WYOdCbg4sIB5426coOhlWhCqoYyudRdXtCNLBvJo7lYqhjCDd31wmoSb0QjefjfDv7PPCNuV6jH4L8mk6fRHfB4Mg6D34n4M=
+	t=1719301886; cv=none; b=OvwhCITBZsqyhZrs812KUAjnYGmtzusLJdqRxzABZeg+l+pS2u6XzF+gOIMMZ7mzjthYzptnWLijGZSEQwVuVikJgf6b/a7BedE7PMySPo5L4XPSo3BdmPIERBcVKqT6ZafQTvDbS+6iv+o7juhIFTLkLjRaNBWU1c6CXmxKEHU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719300029; c=relaxed/simple;
-	bh=Tozkm9wtFnnT9G4JCNr0lovUdYwf0yT3Ep2RxifKdZQ=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=DA6S6Jz8v55cSXpgD/XykztZ6xNC9y1DQY+8+5JhM3pjCUBw4SpZPrIjQ4QY6ioY/uIXTAtdsJ52rIz8ZEUDrlPROAs8nw2gJ2KzHH7JfLLOCH/F2SAT8yXeZfJKBMxD15xoUwVoktLyY+piv5ZrE1GVhKxIvlqE3m7/+/xTJ24=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=physik.fu-berlin.de; spf=pass smtp.mailfrom=zedat.fu-berlin.de; dkim=pass (2048-bit key) header.d=fu-berlin.de header.i=@fu-berlin.de header.b=W1Sbe4+p; arc=none smtp.client-ip=130.133.4.66
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=physik.fu-berlin.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zedat.fu-berlin.de
+	s=arc-20240116; t=1719301886; c=relaxed/simple;
+	bh=KLqf935lSAJuGQQElpBuZqXf46nRUx378xaLq4T4IaU=;
+	h=MIME-Version:Date:From:To:Cc:Subject:In-Reply-To:References:
+	 Message-ID:Content-Type; b=bAbzVtOiZXwbz6JrRwu9QyFUu+GGScCl0RnDHoBgah92OprDwK8t7wGLwOPLgTUs7tNRt2AMeT+cB9bsB8NpKQlyDRQi3kVeQYB4uHxTRT0lMJudste7oY7nBXrrN0uJh31XER0Hni8AHXB4cLqpZ57cj9dSOdQZyumnykLxmgA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=vaga.pv.it; spf=pass smtp.mailfrom=vaga.pv.it; dkim=pass (2048-bit key) header.d=kolabnow.com header.i=@kolabnow.com header.b=ooDiAHZX; arc=none smtp.client-ip=212.103.80.153
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=vaga.pv.it
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=vaga.pv.it
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=fu-berlin.de header.i=@fu-berlin.de header.b="W1Sbe4+p"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=fu-berlin.de; s=fub01; h=MIME-Version:Content-Transfer-Encoding:
-	Content-Type:References:In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender
-	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
-	List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=Fa8kWntRwF1lrvqp0Rvt4vbr7SvGesSexMl/o2xfm1U=; t=1719300025; x=1719904825; 
-	b=W1Sbe4+p1nOTW9a/sl4OuEabim6oYnpvNDQfCTjGKTLYf+idFFOee+vDwDqNlpY216c36pjLJHc
-	Pkp2indPxng3dT2HRXeSdoAMBieeeQRQzaPLGB3j/ZhLW9Px+pwieEcMlMnahcbBoQ9BcE6xyT9TD
-	3p53iVH9uoax33vggK7R6Cxx+VzcYjlSJ0TJx6wPnwTpvEpcAL9qa2EyO0w8Q3+lz0fwX+d+/uYwR
-	6Uea3xZHEIlQGz/6N/M1u8Hc44kHWnsJYL67cMKh5+CEmvtPtzT+KTWeswa+zpe2dSmKrMHuCdGWX
-	RL3IgfS5y/sU8nwlEIGMuKo2JLW9VG6iNEtw==;
-Received: from inpost2.zedat.fu-berlin.de ([130.133.4.69])
-          by outpost.zedat.fu-berlin.de (Exim 4.97)
-          with esmtps (TLS1.3)
-          tls TLS_AES_256_GCM_SHA384
-          (envelope-from <glaubitz@zedat.fu-berlin.de>)
-          id 1sM0TM-00000003B5S-0vEE; Tue, 25 Jun 2024 09:20:12 +0200
-Received: from p5b13a475.dip0.t-ipconnect.de ([91.19.164.117] helo=[192.168.178.20])
-          by inpost2.zedat.fu-berlin.de (Exim 4.97)
-          with esmtpsa (TLS1.3)
-          tls TLS_AES_256_GCM_SHA384
-          (envelope-from <glaubitz@physik.fu-berlin.de>)
-          id 1sM0TM-00000001slu-20jW; Tue, 25 Jun 2024 09:20:12 +0200
-Message-ID: <e359b140839606b1856c5625669e5b6bd7ebc7eb.camel@physik.fu-berlin.de>
-Subject: Re: [PATCH] sparc/build: Make all compiler flags also
- clang-compatible
-From: John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
-To: Koakuma <koachan@protonmail.com>
-Cc: "David S. Miller" <davem@davemloft.net>, Andreas Larsson
- <andreas@gaisler.com>, Nathan Chancellor <nathan@kernel.org>, Nick
- Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>,
- Justin Stitt <justinstitt@google.com>, sparclinux@vger.kernel.org, 
- linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Date: Tue, 25 Jun 2024 09:20:11 +0200
-In-Reply-To: <Mz-kWneLsFvKbBcTaGnC2xMA2U55fINzOJqmMRMumrtTaeHW40WfS5rYUjF_71aoXG56jSHo0vJ0oRPNoCrxpE_oIr7mmnK6fg9dFC_J9hk=@protonmail.com>
-References: <20240620-sparc-cflags-v1-1-bba7d0ff7d42@protonmail.com>
-	 <9449319ebbcd59719614ee786f1abe18256d0331.camel@physik.fu-berlin.de>
-	 <Mz-kWneLsFvKbBcTaGnC2xMA2U55fINzOJqmMRMumrtTaeHW40WfS5rYUjF_71aoXG56jSHo0vJ0oRPNoCrxpE_oIr7mmnK6fg9dFC_J9hk=@protonmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.52.2 
+	dkim=pass (2048-bit key) header.d=kolabnow.com header.i=@kolabnow.com header.b="ooDiAHZX"
+Received: from localhost (unknown [127.0.0.1])
+	by mx.kolabnow.com (Postfix) with ESMTP id 6E9CD3004C5C;
+	Tue, 25 Jun 2024 09:51:21 +0200 (CEST)
+Authentication-Results: ext-mx-out013.mykolab.com (amavis);
+ dkim=pass (2048-bit key) reason="pass (just generated, assumed good)"
+ header.d=kolabnow.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kolabnow.com; h=
+	content-transfer-encoding:content-type:content-type:message-id
+	:references:in-reply-to:subject:subject:from:from:date:date
+	:mime-version:received:received:received; s=dkim20240523; t=
+	1719301880; x=1721116281; bh=H5af9yjgTthkIh74doQYQLtPF8gG8f4WGKd
+	py7fAyBs=; b=ooDiAHZXrD03pbszTQot/79JiSgW6ToSsGGEpDWSQJDyKXv2gU0
+	PcO25ueN9JV5jNRF9RCPlBVDa/zbft3jUiFXBUojNdHk6PS2t6qxHZ2QbxD108P3
+	DuKPVIoE8LZfKk3n1LDHU1FQbOjdtrRw7ekwtCUvLmyB6TMwTFXGwHXJSVMFjmws
+	4ERPs0e1YAOA5Xb32MNVaiEM8AioVdvr8zhgbfslqRgp+vsQoQ2017ZQDiFWYk99
+	s3fFNUX9jFRKOmzQ2Jf/7iYqF7CAtaiAtWpB84dMzyJbjTh8sN4ADRTj+N32w9+P
+	gCEzn8oap/IBREGTPQ+fQFlVizySqIL/dMw==
+X-Virus-Scanned: amavis at mykolab.com
+X-Spam-Flag: NO
+X-Spam-Score: -1
+X-Spam-Level:
+Received: from mx.kolabnow.com ([127.0.0.1])
+ by localhost (ext-mx-out013.mykolab.com [127.0.0.1]) (amavis, port 10024)
+ with ESMTP id 5K128MH4078t; Tue, 25 Jun 2024 09:51:20 +0200 (CEST)
+Received: from int-mx011.mykolab.com (unknown [10.9.13.11])
+	by mx.kolabnow.com (Postfix) with ESMTPS id F15203004C4C;
+	Tue, 25 Jun 2024 09:51:19 +0200 (CEST)
+Received: from int-subm015.mykolab.com (unknown [10.9.37.15])
+	by int-mx011.mykolab.com (Postfix) with ESMTPS id 5AF8F32F1269;
+	Tue, 25 Jun 2024 09:51:19 +0200 (CEST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Original-Sender: glaubitz@physik.fu-berlin.de
-X-ZEDAT-Hint: PO
+Date: Tue, 25 Jun 2024 09:51:19 +0200
+From: Federico Vaga <federico.vaga@vaga.pv.it>
+To: SeongJae Park <sj@kernel.org>
+Cc: Jonathan Corbet <corbet@lwn.net>, Miguel Ojeda <ojeda@kernel.org>,
+ Carlos Bilbao <carlos.bilbao.osdev@gmail.com>, Avadhut Naik
+ <avadhut.naik@amd.com>, Alex Shi <alexs@kernel.org>, Yanteng Si
+ <siyanteng@loongson.cn>, Hu Haowen <2023002089@link.tyut.edu.cn>, Nathan
+ Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>,
+ Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
+ linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+ workflows@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH 4/7] Docs: Move clang-format from process/ to dev-tools/
+In-Reply-To: <20240624185312.94537-5-sj@kernel.org>
+References: <20240624185312.94537-1-sj@kernel.org>
+ <20240624185312.94537-5-sj@kernel.org>
+Message-ID: <ae3edebe685d15a4398e587ebd082a18@vaga.pv.it>
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
 
-Hi Koakuma,
+On 2024-06-24 20:53, SeongJae Park wrote:
+> 'clang-format' is on 'Other material' section of 'process/index', but 
+> it
+> may fit more under 'dev-tools/' directory.  Move it.
+> 
+> Signed-off-by: SeongJae Park <sj@kernel.org>
+> ---
+>  .clang-format                                             | 2 +-
+>  Documentation/{process => dev-tools}/clang-format.rst     | 0
+>  Documentation/dev-tools/index.rst                         | 1 +
+>  Documentation/process/4.Coding.rst                        | 2 +-
+>  Documentation/process/coding-style.rst                    | 2 +-
+>  Documentation/process/index.rst                           | 1 -
+>  Documentation/translations/it_IT/process/clang-format.rst | 2 +-
+>  Documentation/translations/sp_SP/process/coding-style.rst | 2 +-
+>  Documentation/translations/zh_CN/process/4.Coding.rst     | 2 +-
+>  Documentation/translations/zh_CN/process/coding-style.rst | 2 +-
+>  Documentation/translations/zh_TW/process/4.Coding.rst     | 2 +-
+>  Documentation/translations/zh_TW/process/coding-style.rst | 2 +-
+>  12 files changed, 10 insertions(+), 10 deletions(-)
+>  rename Documentation/{process => dev-tools}/clang-format.rst (100%)
 
-thanks for doing the research work!
+Good for me
 
-On Tue, 2024-06-25 at 02:06 +0000, Koakuma wrote:
-> John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de> wrote:
-> > V8plus does not use VIS instructions and also has a different ELF machi=
-ne
-> > type, namely EM_SPARC32PLUS instead of EM_SPARCV9 if I understand corre=
-ctly.
-> >=20
-> > So, we should make sure that the above change will not affect the ELF m=
-achine
-> > type.
->=20
-> When assembling with GNU as, there seem to be no control as to what
-> machine type we want to emit, as it simply tries to autodetect it based
-> on the instruction mix in the assembly code:
-> - If there's a V9 instruction inside, then use EM_SPARC32PLUS; and
-> - Emit EM_SPARC otherwise.
+Acked-by: Federico Vaga <federico.vaga@vaga.pv.it>
 
-Interesting. I actually expected some flags being passed to the linker to
-enable the EM_SPARC32PLUS machine type.
-
-> This is also the case with GCC - it simply happens that GCC will try
-> to emit V9 instructions whenever possible with `-m32 -mv8plus`
-> or `-m32 -mcpu=3Dv9` so there's a high chance that the resulting object
-> file will be of a EM_SPARC32PLUS type, but this does not seem to be
-> a guaranteed behavior.
-
-Would be interesting to find out what Sun's own C/C++ compiler (Sun Studio)
-does in this case. I can try to run some tests on Solaris or you can check
-out the Solaris machines in the GCC compile farm [1].
-
-> With LLVM's as, we can have finer control of emitted machine type, but
-> so far it never sets the type to EM_SPARC32PLUS - for this I have made
-> a patch over at https://github.com/llvm/llvm-project/pull/96583.
-
-I just had a brief look - will do the proper review later - and I think
-it's the right approach for the time being. However, I am wondering whether
-we should add "-mv8plus" to clang as well.
-
-I wondering though whether "-mcpu=3Dv9 -m32" is truly identical to "-mv8plu=
-s"
-or not.
-
-> As for VIS, GCC (and clang when it eventually supports vectorization)
-> should not emit it unless explicitly asked, so I think we are
-> in the clear here?
->=20
-> > With `-mvis`, GCC generates code that takes advantage of
-> > the UltraSPARC Visual Instruction Set extensions.
-> > The default is `-mno-vis`.
->=20
-> From https://gcc.gnu.org/onlinedocs/gcc/SPARC-Options.html#index-mvis
-
-OK, very good to know. Yes, I think we should be safe here.
-
-Again, thanks a lot for getting this sorted out so quickly!
-
-Adrian
-
-> [1] https://gcc.gnu.org/wiki/CompileFarm
-
---=20
- .''`.  John Paul Adrian Glaubitz
-: :' :  Debian Developer
-`. `'   Physicist
-  `-    GPG: 62FF 8A75 84E0 2956 9546  0006 7426 3B37 F5B5 F913
+-- 
+Federico Vaga
