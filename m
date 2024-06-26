@@ -1,146 +1,101 @@
-Received: from mail-lf1-f46.google.com (mail-lf1-f46.google.com [209.85.167.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2DE96D51D;
-	Wed, 26 Jun 2024 01:26:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5294F1BC4F;
+	Wed, 26 Jun 2024 02:01:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719365211; cv=none; b=H32T9r7sJR1DpFx45+upacYUz/Mtz1xXIJQYDYVYbmRYToAMvpajOPwKWIT0X7MmmCfTgmjAFxx2ir8aEMH2+LNLejaKaur14rn9RdmaLUOK50xJSfYO8/HuwQ0wETyAnPjACYUtL/6JGspEHbQFFNyIRJj0KW5/N34tE7k0SCo=
+	t=1719367275; cv=none; b=Xrgqz+TQ0rvXZTeVdoscnYv0YCyNt5uBXWNB1pvhEe+dZZMs+YMEUlJ2EyQyYk6cGsL2aN0455vBXXdN0zrlVFZNATRLK9uT+c350EL8ENByUS8PhxBDT/0h6WLmrtI7OqblSYTGzNyrImmI9jv5ACcU6wJHzkC05E2/tUKDTMw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719365211; c=relaxed/simple;
-	bh=zDNg0nPNxG4ENOO8Lxnnyf3g9QrlizOcC1M+9OwgOWk=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=LhcI2qt4dktEHVAuTDL5YxOdUyykxA+5aoHnwFeCKQqg+6mllYlIiQ20bBH/MT2gxZlfmxPnRzwksJH25Qznx3sl8/zS6FOVPJNkh0DTr+blQ9IwIDlMZbZqjtjInEZkdx9RTfaTXC2DvSNfbNaJPxAw0WlLnnOWNkmMYaQt/fU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=AEHWbhLp; arc=none smtp.client-ip=209.85.167.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1719367275; c=relaxed/simple;
+	bh=+n2QMA6KNRTTJgkpEvvnTDcrmZowd8hIu4Hn2FEgfhk=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=PmugcIwyTm3MTvDlu3hBKlxK/BjEss9af6nvH5BNhVOfrC/SdZdF3X6kSxdUJjnTeGYdLwLUwQdHuAgaOzaQegzVemMt39yo+60F/uujW3m6GQZSLTuXwbxYddv8jz598cN6lggH+pKITSW+71/IYFFRkqH487eEjYwT8XIlxAM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Od9HTW+A; arc=none smtp.client-ip=198.175.65.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="AEHWbhLp"
-Received: by mail-lf1-f46.google.com with SMTP id 2adb3069b0e04-5295e488248so7058224e87.2;
-        Tue, 25 Jun 2024 18:26:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1719365208; x=1719970008; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=tANEY+M56yiD7hSog1hj0C9LymtYDipW0j1BMyxicPw=;
-        b=AEHWbhLp9n2KlUY7yujjf3dEGkJJMyOZ9e6NMsSa3XJMdR4hMixMWYkPlpD6YUl+Hi
-         xKYoZy/zVysPCzMWdItb5ygjV+H9de/l1wBaSf6xm3GbZ9kmIJsNf6RfzUcamzEyCrFj
-         Na8WxAuT4zsuNLI15Ncw/idvHnRUpHl3p0wZ3k95vvmm++jGcMd9fbgALyPC0/XO0Tu8
-         p6UvCutDOE7rXtxK5/Yd9na97NnXteTsO86kPecbhIJmD+sVqiEIuTQ3LmsX+z4SF4/2
-         VZyMp7+oUwzUr+5rYmsFPLcn9yLw5ZQo5/fc4z71xriDuwIa3f2E1DgeRlD9pXP1dxPS
-         u2OQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1719365208; x=1719970008;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=tANEY+M56yiD7hSog1hj0C9LymtYDipW0j1BMyxicPw=;
-        b=Gfpc8Vwc8WqX8Wj/dedXr6C8X+okQIv9vd9BaSl0EHUhVwM/KejswjFVGUCSmm/a30
-         juvlAIlmRPFs1pbVz32qg58AGmtC71i9gDw9bqZ9e8FRnjUeMSexav5ERiqcI062iEQa
-         vuIkg7xYNf/8NUyZh1uSAKghafUkjQ0D5TG8qXyXjvuHV3Ck18AEWtr1ebbItcZUKzq0
-         xlIirkVmVqIO2zDscSqrx/AP74d+dXG/XVucbL7L9b6WN4QlsoBy1muazC0BgfXjl/Zc
-         OCVFNQXAjg2iXJJM95Hbh4wGelgEYC/jEnu6vjJgDB11nvG2Yb1eu5iPYOAGjEBPLtNn
-         2F3Q==
-X-Forwarded-Encrypted: i=1; AJvYcCWQw9AeaoJvy2MRlNoKyCw2fjvGvcSnlh04HdOwOkSUr4NSWCuw2Br+bQ7KHMsuiJKmPceKE8Md3QMvPUP0dVf5felHWzpy3E56r2u1ka4w9cf4w99IsQR5CQH+Utjt7Wopmvs=
-X-Gm-Message-State: AOJu0YyVnaZRto++F1hqsfTAGoHFL6bBxp/Bx6gqBShOvLyDrjSBhq/Y
-	WOUZd0aoFHEweLWpo2R/zi8YVV3PA4n1g1sxMoKUvjSSQdcg/0aUKwmzVCgwHN0RIqC7nvlU9Me
-	wx9bltIl2UY4mSqcXQXhJ6WZzLgY=
-X-Google-Smtp-Source: AGHT+IEETQh2pfp7G4EtPUAG4zfYaOcqG4MrmB8HSsZzqNVtmys/DMhBHIIqOctT8mteNfPrcq1X0+Bn/gHiO0U9f90=
-X-Received: by 2002:a19:e046:0:b0:52c:e171:ba2 with SMTP id
- 2adb3069b0e04-52ce1835617mr4892289e87.17.1719365208080; Tue, 25 Jun 2024
- 18:26:48 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Od9HTW+A"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1719367274; x=1750903274;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=+n2QMA6KNRTTJgkpEvvnTDcrmZowd8hIu4Hn2FEgfhk=;
+  b=Od9HTW+A9IChglL5nIVHK5lCCusVODD6pq1snyi4Q5o49WOxSng+R7XY
+   df5nY4CBN4Us9vUogLxTdWCSlt7aeP4GF9wd58LOovbo9xn1DIsoy9AnP
+   wGqRwJFWxiCGlXrXw7bjH6mm2nzy+d2qu+XRmw5/1ad82CLKHkIQDJI5E
+   YWU3bU1ae2725gTWOg+L3dZGMzsMoeD4nKWjDJowG1jFLzkLFnP+CNuCH
+   4MRKNu4pjYvsV9kbH/PFtVOaaiygviHHZv8ZvWGsbEkff68iCq6Ysl1KG
+   yQeZw9IF5occMMHlka5vQGo+vNG8T1/KhDGio3EqC9j7T8upSyLvP7i2M
+   g==;
+X-CSE-ConnectionGUID: MO9I1XSWSNy2+pG1tqFx7A==
+X-CSE-MsgGUID: 3oFG39CwRnmqCKdJPBvCVg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11114"; a="27008036"
+X-IronPort-AV: E=Sophos;i="6.08,265,1712646000"; 
+   d="scan'208";a="27008036"
+Received: from fmviesa005.fm.intel.com ([10.60.135.145])
+  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jun 2024 19:01:14 -0700
+X-CSE-ConnectionGUID: GoA11gVMS0+ta9Qlzk/mxA==
+X-CSE-MsgGUID: FcKVFX9ISVSpvJfYsS0DCQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.08,265,1712646000"; 
+   d="scan'208";a="48289879"
+Received: from lkp-server01.sh.intel.com (HELO 68891e0c336b) ([10.239.97.150])
+  by fmviesa005.fm.intel.com with ESMTP; 25 Jun 2024 19:01:12 -0700
+Received: from kbuild by 68891e0c336b with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1sMHyA-000Et8-0k;
+	Wed, 26 Jun 2024 02:01:10 +0000
+Date: Wed, 26 Jun 2024 10:00:59 +0800
+From: kernel test robot <lkp@intel.com>
+To: Rob Clark <robdclark@chromium.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Linux Memory Management List <linux-mm@kvack.org>,
+	Mark Brown <broonie@kernel.org>
+Subject: [linux-next:master 7925/8016]
+ drivers/gpu/drm/msm/adreno/a6xx_catalog.c:1232:20: error: unused function
+ '__build_asserts'
+Message-ID: <202406260958.0fb7w9Xu-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <202406260514.SLhNM9kQ-lkp@intel.com> <20240625145252.d78d18a109cb6bf84eefb5f7@linux-foundation.org>
-In-Reply-To: <20240625145252.d78d18a109cb6bf84eefb5f7@linux-foundation.org>
-From: Lance Yang <ioworker0@gmail.com>
-Date: Wed, 26 Jun 2024 09:26:36 +0800
-Message-ID: <CAK1f24nd1x61d+gukjMTRom+wPuanuC=yGBUXaPGe5Z-RK-vLg@mail.gmail.com>
-Subject: Re: [linux-next:master 7701/8232] mm/huge_memory.c:2735:31: warning:
- variable 'page' is uninitialized when used here
-To: Andrew Morton <akpm@linux-foundation.org>
-Cc: kernel test robot <lkp@intel.com>, llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, 
-	Linux Memory Management List <linux-mm@kvack.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Wed, Jun 26, 2024 at 5:52=E2=80=AFAM Andrew Morton <akpm@linux-foundatio=
-n.org> wrote:
->
-> On Wed, 26 Jun 2024 05:39:54 +0800 kernel test robot <lkp@intel.com> wrot=
-e:
->
-> > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next=
-.git master
-> > head:   0fc4bfab2cd45f9acb86c4f04b5191e114e901ed
-> > commit: 4627108658d68fad359600dbe667b88b501cee71 [7701/8232] mm/vmscan:=
- avoid split lazyfree THP during shrink_folio_list()
-> > config: x86_64-rhel-8.3-rust (https://download.01.org/0day-ci/archive/2=
-0240626/202406260514.SLhNM9kQ-lkp@intel.com/config)
-> > compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 61=
-7a15a9eac96088ae5e9134248d8236e34b91b1)
-> > reproduce (this is a W=3D1 build): (https://download.01.org/0day-ci/arc=
-hive/20240626/202406260514.SLhNM9kQ-lkp@intel.com/reproduce)
-> >
-> > If you fix the issue in a separate patch/commit (i.e. not just a new ve=
-rsion of
-> > the same patch/commit), kindly add following tags
-> > | Reported-by: kernel test robot <lkp@intel.com>
-> > | Closes: https://lore.kernel.org/oe-kbuild-all/202406260514.SLhNM9kQ-l=
-kp@intel.com/
-> >
-> > All warnings (new ones prefixed by >>):
-> >
-> > >> mm/huge_memory.c:2735:31: warning: variable 'page' is uninitialized =
-when used here [-Wuninitialized]
-> >     2735 |         folio_remove_rmap_pmd(folio, page, vma);
-> >          |                                      ^~~~
-> >    mm/huge_memory.c:2699:19: note: initialize the variable 'page' to si=
-lence this warning
-> >     2699 |         struct page *page;
-> >          |                          ^
-> >          |                           =3D NULL
-> >    1 warning generated.
-> >
-> >
->
-> um yes.
-> https://lore.kernel.org/all/20240622100057.3352-1-ioworker0@gmail.com/T/#=
-u
-> removed the initialization.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+head:   0fc4bfab2cd45f9acb86c4f04b5191e114e901ed
+commit: a4e9946f4bc0dcb8c404b00f6f8cab3623f82278 [7925/8016] Merge branch 'msm-next' of https://gitlab.freedesktop.org/drm/msm.git
+config: arm64-randconfig-002-20240626 (https://download.01.org/0day-ci/archive/20240626/202406260958.0fb7w9Xu-lkp@intel.com/config)
+compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project ad79a14c9e5ec4a369eed4adf567c22cc029863f)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240626/202406260958.0fb7w9Xu-lkp@intel.com/reproduce)
 
-My bad. I could have done better :(
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202406260958.0fb7w9Xu-lkp@intel.com/
 
->
-> I'll do this, because I'm about to push a tree out:
->
-> --- a/mm/huge_memory.c~hack
-> +++ a/mm/huge_memory.c
-> @@ -2697,7 +2697,6 @@ static bool __discard_anon_folio_pmd_loc
->         struct mm_struct *mm =3D vma->vm_mm;
->         int ref_count, map_count;
->         pmd_t orig_pmd =3D *pmdp;
-> -       struct page *page;
->
->         if (folio_test_dirty(folio) || pmd_dirty(orig_pmd))
->                 return false;
-> @@ -2733,7 +2732,7 @@ static bool __discard_anon_folio_pmd_loc
->                 return false;
->         }
->
-> -       folio_remove_rmap_pmd(folio, page, vma);
-> +       folio_remove_rmap_pmd(folio, pmd_page(orig_pmd), vma);
+All errors (new ones prefixed by >>):
 
-Thanks a lot for jumping in!
-Lance
+>> drivers/gpu/drm/msm/adreno/a6xx_catalog.c:1232:20: error: unused function '__build_asserts' [-Werror,-Wunused-function]
+    1232 | static inline void __build_asserts(void)
+         |                    ^~~~~~~~~~~~~~~
+   1 error generated.
 
->         zap_deposited_table(mm, pmdp);
->         add_mm_counter(mm, MM_ANONPAGES, -HPAGE_PMD_NR);
->         if (vma->vm_flags & VM_LOCKED)
-> _
->
+
+vim +/__build_asserts +1232 drivers/gpu/drm/msm/adreno/a6xx_catalog.c
+
+fccf9dd00893ef Rob Clark 2024-06-18  1231  
+fccf9dd00893ef Rob Clark 2024-06-18 @1232  static inline void __build_asserts(void)
+
+:::::: The code at line 1232 was first introduced by commit
+:::::: fccf9dd00893eff49d3a86b43280fd2ab8736298 drm/msm/adreno: Move CP_PROTECT settings to hw catalog
+
+:::::: TO: Rob Clark <robdclark@chromium.org>
+:::::: CC: Rob Clark <robdclark@chromium.org>
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
