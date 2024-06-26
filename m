@@ -1,148 +1,158 @@
-Received: from mail-yb1-f182.google.com (mail-yb1-f182.google.com [209.85.219.182])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D3BDF54907
-	for <llvm@lists.linux.dev>; Wed, 26 Jun 2024 03:23:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 02470143C70;
+	Wed, 26 Jun 2024 05:35:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719372195; cv=none; b=OAihFxdebkB85MGXyVl42VvWPos/+yWFKQEoIsaWld8IMs34eGl7Qj51740h5u5moEFiSKzgg8Cx73tyhniXROhZWua68TWa2Rgagog6r8SL1wOl7P2FN0GeB/dlPbD+mhdtV9CgswJFqaEbjEKIp1JVM/jpyJzs7R9d7CYgL3k=
+	t=1719380115; cv=none; b=XPR/t9+7382mJ5gyyPGEkLVbRf039/X8f6f5jX/H/DtVM5jBePqUqVFP6c22RCskmExVZcZwsN9fBKpcenAR7Btnh568pHk/0PEpa1oohrlNXknayJ5W8yIZXWnhyjOt4Q1NCcvMoGuIck6ZFJs7JKgBMABek12qPuBmxWiQVfQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719372195; c=relaxed/simple;
-	bh=aWjn1rK90uH7zvPoIIMTcC/De3KqAp6uqTomLwmzbzw=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=NDiuCBzOvn4Cws5JvtgFacQGM3orDKmMTCC1e+HRyUX87UeK0efDTkKXCZGMlYi1LZMP4ljO/pNl4aCMF7Hd15co9GH4CTofhdKUE6h9Ft8QGg3AH9OpXtHeQWyl/WI5AYwOIyUCQ86/B7ADZiPwcKmhriMnvnepqxvgno8VlwE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=KSPvZkwP; arc=none smtp.client-ip=209.85.219.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1719380115; c=relaxed/simple;
+	bh=/G7fO/Q3JvUeVnBbit8Ih4BufFWcmDw2Sl71qmKYszs=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ZaUzmNJlHTb5upKqP4O1cTPfMNh+/Pn0ukxSp+gdCigqLStHt92K9wpbYRt/K0MS1GXvpqWrYK3kr675RGmhCLBd0V4GpjGkjJAn4ZF4L0xqM8uJj+KYioAsBrQk5HiKT/i0zQl9trXeHRsq9tjUQ3C8tYVOz0V1MYChu9kPZbQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Y2ioERG5; arc=none smtp.client-ip=192.198.163.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KSPvZkwP"
-Received: by mail-yb1-f182.google.com with SMTP id 3f1490d57ef6-dfab5f7e749so5602480276.0
-        for <llvm@lists.linux.dev>; Tue, 25 Jun 2024 20:23:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1719372193; x=1719976993; darn=lists.linux.dev;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=iv3u99b064y1TsWE2viRxdT9uyZ/YeMIpIqbTIyfWg0=;
-        b=KSPvZkwPwgbJZxUohxhxYCYSW4/r/GT85Oe4zg1qgFu46wYqCarYS8uxsglnZcZn05
-         zLAJdWZ57oymz8h4R7UiONVcQw1q3PuuNK4/R3oHex6IyDYzs18MuL317La8FgImhhr4
-         mr3mdljEWibXlIrb57GslWr0DRvzcVcbNDEtX1oFefGtoVLyk98zB4t/kG3Vbz4qKC55
-         ZMn5iUnCV/61ijC2vcwvcoFt+aocHt93QIKFXfQ+vhr6H3htThVQ5kp8SYEsZCeRVEfJ
-         6m+4fOlLgUw+AVnqf1YqIgbKNWaSJQsq48Nuw/V3i8UTxzrU/c+duAxjKb9KXboUvG3f
-         wr5Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1719372193; x=1719976993;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=iv3u99b064y1TsWE2viRxdT9uyZ/YeMIpIqbTIyfWg0=;
-        b=AVdeoetSa96XQS3RZ6ovIfhZAyZef6L1ovLXJvjEAAN9wdHlT2IfRgTx4z2TlR06Om
-         IRXsWPFZt6LMrVxG+eRB6My6TrT2g5t68ViaC1OZTXG/MGWO6/CGiavmiHCciukSpZSz
-         ksf/xn+1rpd3NEzXy41q+tWo9KHK7UD9WhxZZDP2r9CDefNAYbPBTitdzYSBriAYD4el
-         LAQhXq7fcjClwnQZwCDkeA8/CKY5pAUD76rrzakQw3qOYCFXVJ406e4JLWkTMwKMuTuE
-         7Zv7nKBjtHgslgsP+yumrvkkNUKoN4Dj7t3PMxDFNLzGmZ0Is76h2BLctzAXaJ/qoU2I
-         OOFQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUgEIjos8nGZs+LHHlevncB83BTHYn2GtxCvdwG0RF3KFw3e3+IthFrhtiIbI+h0JmafpMjpAEJUmEbM8BlFNXh34kXDQ==
-X-Gm-Message-State: AOJu0YyGCaaICSX8mDLbd5egRKYiGfD/ywU+lRfEYGXNXBYUjYM+BISu
-	4bGoxkLegOHn6lgwQ5XqseGHhR073AfSiyW+gVrShfxfIkYJyCXK
-X-Google-Smtp-Source: AGHT+IHb3wM9H5WMVTrsE2syyBb82TfzvE2pNvRpcgKYhK4WGjMD50iPrm/hNpnspsj/and9mebuWQ==
-X-Received: by 2002:a5b:f90:0:b0:df7:7437:5801 with SMTP id 3f1490d57ef6-e0300ef0111mr9909472276.13.1719372192697;
-        Tue, 25 Jun 2024 20:23:12 -0700 (PDT)
-Received: from [127.0.1.1] (107-197-105-120.lightspeed.sntcca.sbcglobal.net. [107.197.105.120])
-        by smtp.gmail.com with ESMTPSA id 3f1490d57ef6-e02e62655b1sm4165494276.36.2024.06.25.20.23.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 25 Jun 2024 20:23:12 -0700 (PDT)
-From: Pei Li <peili.dev@gmail.com>
-Date: Tue, 25 Jun 2024 20:23:10 -0700
-Subject: [PATCH] kvm: Fix warning in__kvm_gpc_refresh
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Y2ioERG5"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1719380114; x=1750916114;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=/G7fO/Q3JvUeVnBbit8Ih4BufFWcmDw2Sl71qmKYszs=;
+  b=Y2ioERG58og+he4QKGPM7YBykQlqfDB48ncK5v1qzJsvWqvjMW2FgbTk
+   tSysG1N8MMzFzwtRMwiMCeTUwyOmLzGtmGGU09EVmT4vowN8a/wRWFSEt
+   gVkAJA9HxRClDtFnp7qEGxSXgRh07rvXhIkknZ8uFPsjWForYuaU/gaaN
+   BZMhzbkW0FwoJCXIVLeJuPPKg6Doozv6NsVhVxkP/EQkMghgmHSfMLbf+
+   uGZOlWjimEcyS6OHZ3MfqxDC34UF9dwmP8+UlRyJZltSOZxlu9x5WCxyB
+   ygKdzWHLNtRvwiGLzHheUbOMPoBNLqUnc+NYqTm9nD35tgOmE8NNgvAGv
+   g==;
+X-CSE-ConnectionGUID: sUEYlDsrQ9KvUZ8hXSfIpA==
+X-CSE-MsgGUID: 98d7X5/xQfOUjtBJTGvwOA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11114"; a="27119962"
+X-IronPort-AV: E=Sophos;i="6.08,266,1712646000"; 
+   d="scan'208";a="27119962"
+Received: from fmviesa001.fm.intel.com ([10.60.135.141])
+  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jun 2024 22:35:14 -0700
+X-CSE-ConnectionGUID: x0USdE5aRPGrRsUis8ENQg==
+X-CSE-MsgGUID: dM8BzhOPRhu2MrQumls2Gw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.08,266,1712646000"; 
+   d="scan'208";a="75091561"
+Received: from lkp-server01.sh.intel.com (HELO 68891e0c336b) ([10.239.97.150])
+  by fmviesa001.fm.intel.com with ESMTP; 25 Jun 2024 22:35:11 -0700
+Received: from kbuild by 68891e0c336b with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1sMLJF-000F1S-1b;
+	Wed, 26 Jun 2024 05:35:09 +0000
+Date: Wed, 26 Jun 2024 13:34:25 +0800
+From: kernel test robot <lkp@intel.com>
+To: Ma Ke <make24@iscas.ac.cn>, gregkh@linuxfoundation.org,
+	u.kleine-koenig@pengutronix.de
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] usb: gadget: r8a66597-udc: validate endpoint index for
+ r8a66597 udc
+Message-ID: <202406261324.4izkBtpK-lkp@intel.com>
+References: <20240622142308.1929531-1-make24@iscas.ac.cn>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20240625-bug5-v1-1-e072ed5fce85@gmail.com>
-X-B4-Tracking: v=1; b=H4sIAJ2Je2YC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
- vPSU3UzU4B8JSMDIxMDMyNT3aTSdFNd0xRjY6Mk01RTQzNDJaDSgqLUtMwKsDHRsbW1AFox/cJ
- WAAAA
-To: David Woodhouse <dwmw2@infradead.org>, Paul Durrant <paul@xen.org>, 
- Sean Christopherson <seanjc@google.com>, 
- Paolo Bonzini <pbonzini@redhat.com>, Thomas Gleixner <tglx@linutronix.de>, 
- Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
- Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
- "H. Peter Anvin" <hpa@zytor.com>, Nathan Chancellor <nathan@kernel.org>, 
- Nick Desaulniers <ndesaulniers@google.com>, 
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>
-Cc: kvm@vger.kernel.org, linux-kernel@vger.kernel.org, 
- skhan@linuxfoundation.org, linux-kernel-mentees@lists.linuxfoundation.org, 
- syzkaller-bugs@googlegroups.com, llvm@lists.linux.dev, 
- syzbot+fd555292a1da3180fc82@syzkaller.appspotmail.com, 
- Pei Li <peili.dev@gmail.com>
-X-Mailer: b4 0.15-dev-13183
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1719372190; l=2384;
- i=peili.dev@gmail.com; s=20240625; h=from:subject:message-id;
- bh=aWjn1rK90uH7zvPoIIMTcC/De3KqAp6uqTomLwmzbzw=;
- b=MhQKsSHjCelN+0W7sTUon0XvADfhupXmPz82SKJtr4qpcJEbC7Ig+R8b4TLKewDK8R6Hdy/qN
- zggzvVEplRSD2cYhuGn0i+u8jsC0aJEzwjSfa9ZDZGdUpktFKblDp8Y
-X-Developer-Key: i=peili.dev@gmail.com; a=ed25519;
- pk=I6GWb2uGzELGH5iqJTSK9VwaErhEZ2z2abryRD6a+4Q=
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240622142308.1929531-1-make24@iscas.ac.cn>
 
-Check for invalid hva address stored in data before calling
-kvm_gpc_activate_hva() instead of only compare with 0.
+Hi Ma,
 
-Reported-by: syzbot+fd555292a1da3180fc82@syzkaller.appspotmail.com
-Closes: https://syzkaller.appspot.com/bug?extid=fd555292a1da3180fc82
-Tested-by: syzbot+fd555292a1da3180fc82@syzkaller.appspotmail.com
-Signed-off-by: Pei Li <peili.dev@gmail.com>
----
-Syzbot reports a warning message in __kvm_gpc_refresh(). This warning
-requires at least one of gpa and uhva to be valid.
-WARNING: CPU: 0 PID: 5090 at arch/x86/kvm/../../../virt/kvm/pfncache.c:259 __kvm_gpc_refresh+0xf17/0x1090 arch/x86/kvm/../../../virt/kvm/pfncache.c:259
+kernel test robot noticed the following build errors:
 
-We are calling it from kvm_gpc_activate_hva(). This function always calls
-__kvm_gpc_activate() with INVALID_GPA. Thus, uhva must be valid to
-disable this warning.
+[auto build test ERROR on usb/usb-testing]
+[also build test ERROR on usb/usb-next usb/usb-linus linus/master v6.10-rc5 next-20240625]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-This patch checks for invalid hva address as well instead of only
-comparing hva with 0 before calling kvm_gpc_activate_hva()
+url:    https://github.com/intel-lab-lkp/linux/commits/Ma-Ke/usb-gadget-r8a66597-udc-validate-endpoint-index-for-r8a66597-udc/20240626-003228
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+patch link:    https://lore.kernel.org/r/20240622142308.1929531-1-make24%40iscas.ac.cn
+patch subject: [PATCH] usb: gadget: r8a66597-udc: validate endpoint index for r8a66597 udc
+config: i386-buildonly-randconfig-005-20240626 (https://download.01.org/0day-ci/archive/20240626/202406261324.4izkBtpK-lkp@intel.com/config)
+compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240626/202406261324.4izkBtpK-lkp@intel.com/reproduce)
 
-syzbot has tested the proposed patch and the reproducer did not trigger
-any issue.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202406261324.4izkBtpK-lkp@intel.com/
 
-Tested on:
+All error/warnings (new ones prefixed by >>):
 
-commit:         55027e68 Merge tag 'input-for-v6.10-rc5' of git://git...
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=16ea803a980000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=e40800950091403a
-dashboard link: https://syzkaller.appspot.com/bug?extid=fd555292a1da3180fc82
-compiler:       Debian clang version 15.0.6, GNU ld (GNU Binutils for Debian) 2.40
-patch:          https://syzkaller.appspot.com/x/patch.diff?x=16eeb53e980000
+>> drivers/usb/gadget/udc/r8a66597-udc.c:1176:3: warning: label followed by a declaration is a C23 extension [-Wc23-extensions]
+    1176 |                 int pipe = w_index & USB_ENDPOINT_NUMBER_MASK;
+         |                 ^
+>> drivers/usb/gadget/udc/r8a66597-udc.c:1178:15: error: use of undeclared identifier 'USB_MAX_ENDPOINTS'
+    1178 |                 if (pipe >= USB_MAX_ENDPOINTS)
+         |                             ^
+   drivers/usb/gadget/udc/r8a66597-udc.c:1217:15: error: use of undeclared identifier 'USB_MAX_ENDPOINTS'
+    1217 |                 if (pipe >= USB_MAX_ENDPOINTS)
+         |                             ^
+   drivers/usb/gadget/udc/r8a66597-udc.c:1280:15: error: use of undeclared identifier 'USB_MAX_ENDPOINTS'
+    1280 |                 if (pipe >= USB_MAX_ENDPOINTS)
+         |                             ^
+   1 warning and 3 errors generated.
 
-Note: testing is done by a robot and is best-effort only.
----
- arch/x86/kvm/xen.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/x86/kvm/xen.c b/arch/x86/kvm/xen.c
-index f65b35a05d91..de5f34492405 100644
---- a/arch/x86/kvm/xen.c
-+++ b/arch/x86/kvm/xen.c
-@@ -881,7 +881,7 @@ int kvm_xen_vcpu_set_attr(struct kvm_vcpu *vcpu, struct kvm_xen_vcpu_attr *data)
- 			r = kvm_gpc_activate(&vcpu->arch.xen.vcpu_info_cache,
- 					     data->u.gpa, sizeof(struct vcpu_info));
- 		} else {
--			if (data->u.hva == 0) {
-+			if (data->u.hva == 0 || kvm_is_error_hva(data->u.hva)) {
- 				kvm_gpc_deactivate(&vcpu->arch.xen.vcpu_info_cache);
- 				r = 0;
- 				break;
+vim +/USB_MAX_ENDPOINTS +1178 drivers/usb/gadget/udc/r8a66597-udc.c
 
----
-base-commit: 2bfcfd584ff5ccc8bb7acde19b42570414bf880b
-change-id: 20240625-bug5-5d332b5e5161
+  1158	
+  1159	static void get_status(struct r8a66597 *r8a66597, struct usb_ctrlrequest *ctrl)
+  1160	__releases(r8a66597->lock)
+  1161	__acquires(r8a66597->lock)
+  1162	{
+  1163		struct r8a66597_ep *ep;
+  1164		u16 pid;
+  1165		u16 status = 0;
+  1166		u16 w_index = le16_to_cpu(ctrl->wIndex);
+  1167	
+  1168		switch (ctrl->bRequestType & USB_RECIP_MASK) {
+  1169		case USB_RECIP_DEVICE:
+  1170			status = r8a66597->device_status;
+  1171			break;
+  1172		case USB_RECIP_INTERFACE:
+  1173			status = 0;
+  1174			break;
+  1175		case USB_RECIP_ENDPOINT:
+> 1176			int pipe = w_index & USB_ENDPOINT_NUMBER_MASK;
+  1177	
+> 1178			if (pipe >= USB_MAX_ENDPOINTS)
+  1179				break;
+  1180			ep = r8a66597->epaddr2ep[pipe];
+  1181			pid = control_reg_get_pid(r8a66597, ep->pipenum);
+  1182			if (pid == PID_STALL)
+  1183				status = 1 << USB_ENDPOINT_HALT;
+  1184			else
+  1185				status = 0;
+  1186			break;
+  1187		default:
+  1188			pipe_stall(r8a66597, 0);
+  1189			return;		/* exit */
+  1190		}
+  1191	
+  1192		r8a66597->ep0_data = cpu_to_le16(status);
+  1193		r8a66597->ep0_req->buf = &r8a66597->ep0_data;
+  1194		r8a66597->ep0_req->length = 2;
+  1195		/* AV: what happens if we get called again before that gets through? */
+  1196		spin_unlock(&r8a66597->lock);
+  1197		r8a66597_queue(r8a66597->gadget.ep0, r8a66597->ep0_req, GFP_ATOMIC);
+  1198		spin_lock(&r8a66597->lock);
+  1199	}
+  1200	
 
-Best regards,
 -- 
-Pei Li <peili.dev@gmail.com>
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
