@@ -1,109 +1,148 @@
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yb1-f182.google.com (mail-yb1-f182.google.com [209.85.219.182])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 051431D53F
-	for <llvm@lists.linux.dev>; Wed, 26 Jun 2024 02:26:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.255
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D3BDF54907
+	for <llvm@lists.linux.dev>; Wed, 26 Jun 2024 03:23:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719368819; cv=none; b=fR6k+f/7SBEwsNd2CQvrTm7Z28VD3mkovTIFDhs6byyg07Qml/AcdIOR8dcElmBN0u5oHF7ehKyuGDkfVTjab8hnnx5T0nqtCc9XUheEWyqxZNCh4NLCkaFJh0axvJxw1PROIyNZmSf78HmQRNMATLFfoGEYonIUsB/zZcYPnYk=
+	t=1719372195; cv=none; b=OAihFxdebkB85MGXyVl42VvWPos/+yWFKQEoIsaWld8IMs34eGl7Qj51740h5u5moEFiSKzgg8Cx73tyhniXROhZWua68TWa2Rgagog6r8SL1wOl7P2FN0GeB/dlPbD+mhdtV9CgswJFqaEbjEKIp1JVM/jpyJzs7R9d7CYgL3k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719368819; c=relaxed/simple;
-	bh=4sv6GkcBtIMVu6YqAkBTIFOuXy/QrdA6g9iW/ATOHCQ=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=MtEvgzYHqf62Qy58/0eU8NuTAwbcjhJiGydo/H1CD0HCOTZgCY/TtuSD4tevAMCY2mWb6B9MOzJDZ95cIwDVZyvm+iMdAQEZ1J9oZO0rHOlP4CappvUJYueV7F2aMgGz88LtjoMxSN6694xIz+yurEtjhZn1VB+N2qArvfVx9WE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.255
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.19.163.174])
-	by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4W857p4TBJz1SF2T;
-	Wed, 26 Jun 2024 10:22:30 +0800 (CST)
-Received: from kwepemd200011.china.huawei.com (unknown [7.221.188.251])
-	by mail.maildlp.com (Postfix) with ESMTPS id 424DB140382;
-	Wed, 26 Jun 2024 10:26:54 +0800 (CST)
-Received: from kwepemd100011.china.huawei.com (7.221.188.204) by
- kwepemd200011.china.huawei.com (7.221.188.251) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1258.34; Wed, 26 Jun 2024 10:26:53 +0800
-Received: from kwepemd100011.china.huawei.com ([7.221.188.204]) by
- kwepemd100011.china.huawei.com ([7.221.188.204]) with mapi id 15.02.1258.034;
- Wed, 26 Jun 2024 10:26:53 +0800
-From: duchangbin <changbin.du@huawei.com>
-To: Adrian Hunter <adrian.hunter@intel.com>
-CC: duchangbin <changbin.du@huawei.com>, Peter Zijlstra
-	<peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, "Arnaldo Carvalho de
- Melo" <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, Nathan
- Chancellor <nathan@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>, Jiri Olsa
-	<jolsa@kernel.org>, "Ian Rogers" <irogers@google.com>, "Liang, Kan"
-	<kan.liang@linux.intel.com>, "Nick Desaulniers" <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
-	"linux-perf-users@vger.kernel.org" <linux-perf-users@vger.kernel.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"llvm@lists.linux.dev" <llvm@lists.linux.dev>
-Subject: Re: [PATCH v4 1/5] perf: support specify vdso path in cmdline
-Thread-Topic: [PATCH v4 1/5] perf: support specify vdso path in cmdline
-Thread-Index: AQHaxrEVrjKiye8CdEijfxK9i0rUjrHX8X6AgAFhooA=
-Date: Wed, 26 Jun 2024 02:26:53 +0000
-Message-ID: <7eef4826a2f3494ea1dc92ed98d543fb@huawei.com>
-References: <20240625033740.223009-1-changbin.du@huawei.com>
- <20240625033740.223009-2-changbin.du@huawei.com>
- <5a9e8dae-e9d9-4a97-98f5-d76be9068342@intel.com>
-In-Reply-To: <5a9e8dae-e9d9-4a97-98f5-d76be9068342@intel.com>
-Accept-Language: en-US
-Content-Language: zh-CN
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-x-ms-exchange-imapappendstamp: kwepemd100011.china.huawei.com (15.02.1258.034)
-x-ms-exchange-messagesentrepresentingtype: 1
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <AD7EF75FA422E447A377B39F2A6A74CA@huawei.com>
-Content-Transfer-Encoding: base64
+	s=arc-20240116; t=1719372195; c=relaxed/simple;
+	bh=aWjn1rK90uH7zvPoIIMTcC/De3KqAp6uqTomLwmzbzw=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=NDiuCBzOvn4Cws5JvtgFacQGM3orDKmMTCC1e+HRyUX87UeK0efDTkKXCZGMlYi1LZMP4ljO/pNl4aCMF7Hd15co9GH4CTofhdKUE6h9Ft8QGg3AH9OpXtHeQWyl/WI5AYwOIyUCQ86/B7ADZiPwcKmhriMnvnepqxvgno8VlwE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=KSPvZkwP; arc=none smtp.client-ip=209.85.219.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KSPvZkwP"
+Received: by mail-yb1-f182.google.com with SMTP id 3f1490d57ef6-dfab5f7e749so5602480276.0
+        for <llvm@lists.linux.dev>; Tue, 25 Jun 2024 20:23:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1719372193; x=1719976993; darn=lists.linux.dev;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=iv3u99b064y1TsWE2viRxdT9uyZ/YeMIpIqbTIyfWg0=;
+        b=KSPvZkwPwgbJZxUohxhxYCYSW4/r/GT85Oe4zg1qgFu46wYqCarYS8uxsglnZcZn05
+         zLAJdWZ57oymz8h4R7UiONVcQw1q3PuuNK4/R3oHex6IyDYzs18MuL317La8FgImhhr4
+         mr3mdljEWibXlIrb57GslWr0DRvzcVcbNDEtX1oFefGtoVLyk98zB4t/kG3Vbz4qKC55
+         ZMn5iUnCV/61ijC2vcwvcoFt+aocHt93QIKFXfQ+vhr6H3htThVQ5kp8SYEsZCeRVEfJ
+         6m+4fOlLgUw+AVnqf1YqIgbKNWaSJQsq48Nuw/V3i8UTxzrU/c+duAxjKb9KXboUvG3f
+         wr5Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1719372193; x=1719976993;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=iv3u99b064y1TsWE2viRxdT9uyZ/YeMIpIqbTIyfWg0=;
+        b=AVdeoetSa96XQS3RZ6ovIfhZAyZef6L1ovLXJvjEAAN9wdHlT2IfRgTx4z2TlR06Om
+         IRXsWPFZt6LMrVxG+eRB6My6TrT2g5t68ViaC1OZTXG/MGWO6/CGiavmiHCciukSpZSz
+         ksf/xn+1rpd3NEzXy41q+tWo9KHK7UD9WhxZZDP2r9CDefNAYbPBTitdzYSBriAYD4el
+         LAQhXq7fcjClwnQZwCDkeA8/CKY5pAUD76rrzakQw3qOYCFXVJ406e4JLWkTMwKMuTuE
+         7Zv7nKBjtHgslgsP+yumrvkkNUKoN4Dj7t3PMxDFNLzGmZ0Is76h2BLctzAXaJ/qoU2I
+         OOFQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUgEIjos8nGZs+LHHlevncB83BTHYn2GtxCvdwG0RF3KFw3e3+IthFrhtiIbI+h0JmafpMjpAEJUmEbM8BlFNXh34kXDQ==
+X-Gm-Message-State: AOJu0YyGCaaICSX8mDLbd5egRKYiGfD/ywU+lRfEYGXNXBYUjYM+BISu
+	4bGoxkLegOHn6lgwQ5XqseGHhR073AfSiyW+gVrShfxfIkYJyCXK
+X-Google-Smtp-Source: AGHT+IHb3wM9H5WMVTrsE2syyBb82TfzvE2pNvRpcgKYhK4WGjMD50iPrm/hNpnspsj/and9mebuWQ==
+X-Received: by 2002:a5b:f90:0:b0:df7:7437:5801 with SMTP id 3f1490d57ef6-e0300ef0111mr9909472276.13.1719372192697;
+        Tue, 25 Jun 2024 20:23:12 -0700 (PDT)
+Received: from [127.0.1.1] (107-197-105-120.lightspeed.sntcca.sbcglobal.net. [107.197.105.120])
+        by smtp.gmail.com with ESMTPSA id 3f1490d57ef6-e02e62655b1sm4165494276.36.2024.06.25.20.23.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 25 Jun 2024 20:23:12 -0700 (PDT)
+From: Pei Li <peili.dev@gmail.com>
+Date: Tue, 25 Jun 2024 20:23:10 -0700
+Subject: [PATCH] kvm: Fix warning in__kvm_gpc_refresh
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20240625-bug5-v1-1-e072ed5fce85@gmail.com>
+X-B4-Tracking: v=1; b=H4sIAJ2Je2YC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
+ vPSU3UzU4B8JSMDIxMDMyNT3aTSdFNd0xRjY6Mk01RTQzNDJaDSgqLUtMwKsDHRsbW1AFox/cJ
+ WAAAA
+To: David Woodhouse <dwmw2@infradead.org>, Paul Durrant <paul@xen.org>, 
+ Sean Christopherson <seanjc@google.com>, 
+ Paolo Bonzini <pbonzini@redhat.com>, Thomas Gleixner <tglx@linutronix.de>, 
+ Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+ Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
+ "H. Peter Anvin" <hpa@zytor.com>, Nathan Chancellor <nathan@kernel.org>, 
+ Nick Desaulniers <ndesaulniers@google.com>, 
+ Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>
+Cc: kvm@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ skhan@linuxfoundation.org, linux-kernel-mentees@lists.linuxfoundation.org, 
+ syzkaller-bugs@googlegroups.com, llvm@lists.linux.dev, 
+ syzbot+fd555292a1da3180fc82@syzkaller.appspotmail.com, 
+ Pei Li <peili.dev@gmail.com>
+X-Mailer: b4 0.15-dev-13183
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1719372190; l=2384;
+ i=peili.dev@gmail.com; s=20240625; h=from:subject:message-id;
+ bh=aWjn1rK90uH7zvPoIIMTcC/De3KqAp6uqTomLwmzbzw=;
+ b=MhQKsSHjCelN+0W7sTUon0XvADfhupXmPz82SKJtr4qpcJEbC7Ig+R8b4TLKewDK8R6Hdy/qN
+ zggzvVEplRSD2cYhuGn0i+u8jsC0aJEzwjSfa9ZDZGdUpktFKblDp8Y
+X-Developer-Key: i=peili.dev@gmail.com; a=ed25519;
+ pk=I6GWb2uGzELGH5iqJTSK9VwaErhEZ2z2abryRD6a+4Q=
 
-T24gVHVlLCBKdW4gMjUsIDIwMjQgYXQgMDQ6MjA6NDlQTSArMDMwMCwgQWRyaWFuIEh1bnRlciB3
-cm90ZToNCj4gT24gMjUvMDYvMjQgMDY6MzcsIENoYW5nYmluIER1IHdyb3RlOg0KPiA+IFRoZSB2
-ZHNvIGR1bXBlZCBmcm9tIHByb2Nlc3MgbWVtb3J5IChpbiBidWlsZGlkLWNhY2hlKSBsYWNrcyBk
-ZWJ1Z2dpbmcNCj4gPiBpbmZvLiBUbyBhbm5vdGF0ZSB2ZHNvIHN5bWJvbHMgd2l0aCBzb3VyY2Ug
-bGluZXMgd2UgbmVlZCBzcGVjaWZ5IGENCj4gPiBkZWJ1Z2dpbmcgdmVyc2lvbi4NCj4gPiANCj4g
-PiBGb3IgeDg2LCB3ZSBjYW4gZmluZCB0aGVtIGZyb20geW91ciBsb2NhbCBidWlsZCBhcw0KPiA+
-IGFyY2gveDg2L2VudHJ5L3Zkc28vdmRzb3szMiw2NH0uc28uZGJnLiBPciB0aGV5IG1heSByZXNp
-ZGUgaW4NCj4gPiAvbGliL21vZHVsZXMvPHZlcnNpb24+L3Zkc28vdmRzb3szMiw2NH0uc28gb24g
-VWJ1bnR1LiBCdXQgbm90aWNlIHRoYXQNCj4gPiB0aGUgYnVpbGRpZCBoYXMgdG8gbWF0Y2guDQo+
-ID4gDQo+ID4gJCBzdWRvIHBlcmYgcmVjb3JkIC1hDQo+ID4gJCBzdWRvIHBlcmYgcmVwb3J0IC0t
-b2JqZHVtcD1sbHZtLW9iamR1bXAgXA0KPiA+ICAgLS12ZHNvIGFyY2gveDg2L2VudHJ5L3Zkc28v
-dmRzbzY0LnNvLmRiZyxhcmNoL3g4Ni9lbnRyeS92ZHNvL3Zkc28zMi5zby5kYmcNCj4gPiANCj4g
-PiBTYW1wbGVzOiAxN0sgb2YgZXZlbnQgJ2N5Y2xlczpQJywgNDAwMCBIeiwgRXZlbnQgY291bnQg
-KGFwcHJveC4pOiAxNzYwDQo+ID4gX192ZHNvX2Nsb2NrX2dldHRpbWUgIC93b3JrL2xpbnV4LWhv
-c3QvYXJjaC94ODYvZW50cnkvdmRzby92ZHNvNjQuc28uZA0KPiA+IFBlcmNlbnTilIIgICAgICAg
-bW92cSAgICAtNDgoJXJicCksJXJzaQ0KPiA+ICAgICAgICDilIIgICAgICAgdGVzdHEgICAlcmF4
-LCVyYXgNCj4gPiAgICAgICAg4pSCICAgICA7ICAgICAgICAgICAgICAgcmV0dXJuIHZyZWFkX2h2
-Y2xvY2soKTsNCj4gPiAgICAgICAg4pSCICAgICAgIG1vdnEgICAgJXJheCwlcmR4DQo+ID4gICAg
-ICAgIOKUgiAgICAgOyAgICAgICAgICAgICAgIGlmICh1bmxpa2VseSghdmRzb19jeWNsZXNfb2so
-Y3ljbGVzKSkpDQo+ID4gICAgICAgIOKUgiAgICAg4oaRIGpzICAgICAgZWINCj4gPiAgICAgICAg
-4pSCICAgICDihpEgam1wICAgICA3NA0KPiA+ICAgICAgICDilIIgICAgIDsgICAgICAgICAgICAg
-ICB0cy0+dHZfc2VjID0gdmRzb190cy0+c2VjOw0KPiA+ICAgMC4wMiDilIIxNDc6ICAgbGVhcSAg
-ICAyKCVyYngpLCVyYXgNCj4gPiAgICAgICAg4pSCICAgICAgIHNobHEgICAgJDQsICVyYXgNCj4g
-PiAgICAgICAg4pSCICAgICAgIGFkZHEgICAgJXIxMCwlcmF4DQo+ID4gICAgICAgIOKUgiAgICAg
-OyAgICAgICAgICAgICAgIHdoaWxlICgoc2VxID0gUkVBRF9PTkNFKHZkLT5zZXEpKSAmIDEpIHsN
-Cj4gPiAgIDkuMzgg4pSCMTUyOiAgIG1vdmwgICAgKCVyMTApLCVlY3gNCj4gPiANCj4gPiBXaGVu
-IGRvaW5nIGNyb3NzIHBsYXRmb3JtIGFuYWx5c2lzLCB3ZSBhbHNvIG5lZWQgc3BlY2lmeSB0aGUg
-dmRzbyBwYXRoIGlmDQo+ID4gd2UgYXJlIGludGVyZXN0ZWQgaW4gaXRzIHN5bWJvbHMuDQo+IA0K
-PiBXb3VsZCBpdCBiZSBwb3NzaWJsZSB0byBhZGQgdmRzbyBhbmQgdmRzbyBkZWJ1ZyB0byB0aGUg
-YnVpbGQtaWQNCj4gY2FjaGUgYW5kIGVuc3VyZSBwZXJmIGNhbiBmaW5kIGl0IHRoZXJlPw0KPiAN
-Cj4gVHlwaWNhbGx5LCBnZXR0aW5nIGRzb3MgZnJvbSBhbm90aGVyIG1hY2hpbmUgaXMgaGFuZGxl
-ZCB2aWENCj4gYnVpbGQtaWQgY2FjaGUgZS5nLiB3aGF0IHBlcmYtYXJjaGl2ZSBkb2VzDQo+IA0K
-SG1tLiBJIGFncmVlIHRoaXMgaXMgYmV0dGVyIGFsdGVybmF0aXZlIGFwcHJvYWNoIGZvciBjcm9z
-cy1tYWNoaW5lIGFuYWx5c2lzLg0KV2hlbiBjb2xsZWN0aW5nIHZkc29zIHRvIGJ1aWxkaWQgY2Fj
-aGUsIEkgdGhpbmsgd2UgY2FuIHVzZSB0aGUgbG9jYWwgc2VhcmNoZWQNCm9iamVjdHMgKHdpdGgg
-ZGVidWcgc3ltYm9scykgaW5zdGVhZCBpZiBpdHMgYnVpbGQtaWQgbWF0Y2hlcyB2ZHNvcyBmcm9t
-IHByb2Nlc3MNCmR1bXBpbmcgKHRoZSByZWFsIGNvZGUgcmFuKS4NCg0KQ3VycmVudGx5IEkganVz
-dCBmb2xsb3cgd2hhdCBwZXJmIGRvZXMgZm9yIHZtbGludXggc28gdG8gcmV1c2UgbW9zdCBvZiBl
-eGlzdGluZw0KY29kZS4gTWF5YmUgdm1saW51eCBpcyB0b28gYmlnIHRvIGFkZCB0byBidWlsZGlk
-LWNhaGNlPw0KDQpDYW4gd2Uga2VlcCBvdXIgY3VycmVudCBzdHJhdGVneSBmb3Igbm93PyBJJ2xs
-IHRoaW5rIGFib3V0IGFib3ZlIG9wdGlvbnMgd2hlbg0KSSBoYXZlIG1vcmUgdGltZS4NCg0KLS0g
-DQpDaGVlcnMsDQpDaGFuZ2JpbiBEdQ0K
+Check for invalid hva address stored in data before calling
+kvm_gpc_activate_hva() instead of only compare with 0.
+
+Reported-by: syzbot+fd555292a1da3180fc82@syzkaller.appspotmail.com
+Closes: https://syzkaller.appspot.com/bug?extid=fd555292a1da3180fc82
+Tested-by: syzbot+fd555292a1da3180fc82@syzkaller.appspotmail.com
+Signed-off-by: Pei Li <peili.dev@gmail.com>
+---
+Syzbot reports a warning message in __kvm_gpc_refresh(). This warning
+requires at least one of gpa and uhva to be valid.
+WARNING: CPU: 0 PID: 5090 at arch/x86/kvm/../../../virt/kvm/pfncache.c:259 __kvm_gpc_refresh+0xf17/0x1090 arch/x86/kvm/../../../virt/kvm/pfncache.c:259
+
+We are calling it from kvm_gpc_activate_hva(). This function always calls
+__kvm_gpc_activate() with INVALID_GPA. Thus, uhva must be valid to
+disable this warning.
+
+This patch checks for invalid hva address as well instead of only
+comparing hva with 0 before calling kvm_gpc_activate_hva()
+
+syzbot has tested the proposed patch and the reproducer did not trigger
+any issue.
+
+Tested on:
+
+commit:         55027e68 Merge tag 'input-for-v6.10-rc5' of git://git...
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=16ea803a980000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=e40800950091403a
+dashboard link: https://syzkaller.appspot.com/bug?extid=fd555292a1da3180fc82
+compiler:       Debian clang version 15.0.6, GNU ld (GNU Binutils for Debian) 2.40
+patch:          https://syzkaller.appspot.com/x/patch.diff?x=16eeb53e980000
+
+Note: testing is done by a robot and is best-effort only.
+---
+ arch/x86/kvm/xen.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/arch/x86/kvm/xen.c b/arch/x86/kvm/xen.c
+index f65b35a05d91..de5f34492405 100644
+--- a/arch/x86/kvm/xen.c
++++ b/arch/x86/kvm/xen.c
+@@ -881,7 +881,7 @@ int kvm_xen_vcpu_set_attr(struct kvm_vcpu *vcpu, struct kvm_xen_vcpu_attr *data)
+ 			r = kvm_gpc_activate(&vcpu->arch.xen.vcpu_info_cache,
+ 					     data->u.gpa, sizeof(struct vcpu_info));
+ 		} else {
+-			if (data->u.hva == 0) {
++			if (data->u.hva == 0 || kvm_is_error_hva(data->u.hva)) {
+ 				kvm_gpc_deactivate(&vcpu->arch.xen.vcpu_info_cache);
+ 				r = 0;
+ 				break;
+
+---
+base-commit: 2bfcfd584ff5ccc8bb7acde19b42570414bf880b
+change-id: 20240625-bug5-5d332b5e5161
+
+Best regards,
+-- 
+Pei Li <peili.dev@gmail.com>
+
