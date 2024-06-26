@@ -1,61 +1,64 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E3EA433B3;
-	Wed, 26 Jun 2024 21:58:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 89DFC193091;
+	Wed, 26 Jun 2024 22:42:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719439135; cv=none; b=naaU5PBNoYTIbHdTUJo2370kP2BZ/28OR11ZEow72sdMsYnKSatnOTusIMKdN/X0NSR52VQ9BSsY7KRj3bJfu19gvrfBvcaqV6jjvMEHwrSKpeW8A3Spr7SZ4MApZBNVGs4wDTpCGJ/BhCBRM6peFBiz/EDX/sYh4iKvYGYkiH8=
+	t=1719441769; cv=none; b=R3MtBfRK8asC4tGLlY6HsFgzSQfP55jv1rMN6yYn2oK9i5kbMNCIdNr0xWc7dH//7y7GBMw7Up/egvU37pHj7Rj8tiVxospwPJLhalQsc7uderyRkNso+uxiSuTYS7XlzumeFEjBgcNepqglTdoEVc43JYojjfeHL64SPr22u6g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719439135; c=relaxed/simple;
-	bh=0fewRG9apOAXsu6MdbDeeIpACWMxRzcivX0n9apKXwg=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=FgXUPUT1n3S0x3tcIhVtO24hcVsNqj7R0naUaIlxAHWBQGCmzpnnLCA2GFEWq0GVgQtLQh/PJelOsWOmlLM3/53FkuXZ9xVWEo13MIKHQ88mUYtmSA+G27nT/Drjg32e8f3Pdg5w+kru7FTR1jNRxWWc4Ad0Bbsz979Em3dW8RA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=U2egQM4/; arc=none smtp.client-ip=192.198.163.17
+	s=arc-20240116; t=1719441769; c=relaxed/simple;
+	bh=6Gvpn1YxFj/EbKU8uOHwNsaKTjA1vZNHzno/TrAxfGU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ZoNlvAik/6O8c7EF9oO/4LjIiLxqVJ1MEgYMdFlc/qnXrLmiRXx2NqJqm73gHF8iSB4BTRXr2h3jpecuofyrSG5AU0rr7xrG1R8nd+0qwHiduZsVDdHJbh6aenUwVvCIiByhREKHqPVhXvqdKJx3a1r5LcJ7Lbp4H1n1C3Qn87E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ZdyOxEX+; arc=none smtp.client-ip=192.198.163.18
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="U2egQM4/"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ZdyOxEX+"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1719439133; x=1750975133;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=0fewRG9apOAXsu6MdbDeeIpACWMxRzcivX0n9apKXwg=;
-  b=U2egQM4/NScPonFwRigpuEizaafiyHGRlrEC6pLSUHbcOdLKZUolExZG
-   raTu04YL8gnPKC2v1D7glfB/y1ojD4s9RETo5sK/18lkASdL3X6T569GK
-   gBoDdr5fK0KEo0508ikN60h6qbaVwWAye7tJWZ0zv8ktKwFoPT4Gcy4YY
-   1iY+9oRObZjwrkFKyA7EJqTNqYGWBD/xZD5C22/0o/EkzfDJwDxyGJlU4
-   oecfTU/NXe0MThf7xDrZsTfleifuSCOG2SJA5bd0fNOHGs9EYtpwNu0CU
-   3MPOamQoRzRvcC0G7FaRbLBGgRWQSusRw9hDj78sjww8Fi69qvANr/U1e
-   g==;
-X-CSE-ConnectionGUID: fXGdDDw/Q2moouYuMKqAvw==
-X-CSE-MsgGUID: OB+LnOdOS2yD0HZg6ymBow==
-X-IronPort-AV: E=McAfee;i="6700,10204,11115"; a="16423331"
+  t=1719441768; x=1750977768;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=6Gvpn1YxFj/EbKU8uOHwNsaKTjA1vZNHzno/TrAxfGU=;
+  b=ZdyOxEX+5Nk+Z/ld5DU35XRLRknFyTXhcNM1Ojx755Am+Qi6VZwXjPCv
+   IAyOgESIN9d9FO7T0dy0yJfmNA5hpAxnSgmefFjCHYsNxNbvlyZjv6fCi
+   zL2nJik364mxNAbt3rEonyoylkNYVKj+7CRl4UTys8lIJ+Px57mfW2NVo
+   hgr08+ER7WQrfYmA3qPOLsBJIVKdiU9b6HVw7nTqBv3XUHUoxwwUH+tM1
+   +mnz5A+Q8+epybz6EHKWRk0w7GTKT0LuietxHK9U9PbMRdkxUbANFu7wO
+   1/jEC9tTdpucxuHHGqxYtGGeDynC4FT1b+K4jxqYLNO0IsNFqiFKeNyFd
+   A==;
+X-CSE-ConnectionGUID: es5ks0aST0ChmWmg83DKmA==
+X-CSE-MsgGUID: O2TI17MZS/GiJoAWTuggCw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11115"; a="16222941"
 X-IronPort-AV: E=Sophos;i="6.08,268,1712646000"; 
-   d="scan'208";a="16423331"
-Received: from orviesa003.jf.intel.com ([10.64.159.143])
-  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jun 2024 14:58:53 -0700
-X-CSE-ConnectionGUID: BIVMztFbR6i+urgxsffMBQ==
-X-CSE-MsgGUID: x3K1Tp+6Qmq/5yEjUMzTSQ==
+   d="scan'208";a="16222941"
+Received: from fmviesa005.fm.intel.com ([10.60.135.145])
+  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jun 2024 15:42:47 -0700
+X-CSE-ConnectionGUID: F6sHt5gXT8msrSf3kPT+gQ==
+X-CSE-MsgGUID: PSGbGGpwTnuo8zO3f3rnCQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.08,268,1712646000"; 
-   d="scan'208";a="49064519"
+   d="scan'208";a="48612906"
 Received: from lkp-server01.sh.intel.com (HELO 68891e0c336b) ([10.239.97.150])
-  by orviesa003.jf.intel.com with ESMTP; 26 Jun 2024 14:58:50 -0700
+  by fmviesa005.fm.intel.com with ESMTP; 26 Jun 2024 15:42:43 -0700
 Received: from kbuild by 68891e0c336b with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1sMafA-000Fas-0Y;
-	Wed, 26 Jun 2024 21:58:48 +0000
-Date: Thu, 27 Jun 2024 05:58:18 +0800
+	id 1sMbLd-000FdG-0g;
+	Wed, 26 Jun 2024 22:42:41 +0000
+Date: Thu, 27 Jun 2024 06:42:19 +0800
 From: kernel test robot <lkp@intel.com>
-To: Mikulas Patocka <mpatocka@redhat.com>
+To: admiyo@os.amperecomputing.com, Jeremy Kerr <jk@codeconstruct.com.au>,
+	Matt Johnston <matt@codeconstruct.com.au>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Jens Axboe <axboe@kernel.dk>, Anuj Gupta <anuj20.g@samsung.com>,
-	Kanchan Joshi <joshi.k@samsung.com>, Christoph Hellwig <hch@lst.de>
-Subject: [axboe-block:for-next 94/104] include/linux/blk-integrity.h:151:9:
- error: returning 'struct bio_vec' from a function with incompatible result
- type 'struct bio_vec *'; take the address with &
-Message-ID: <202406270508.qSWqG6e7-lkp@intel.com>
+	netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 3/3] mctp pcc: Implement MCTP over PCC Transport
+Message-ID: <202406270625.2MuBj55z-lkp@intel.com>
+References: <20240625185333.23211-4-admiyo@os.amperecomputing.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -64,114 +67,159 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20240625185333.23211-4-admiyo@os.amperecomputing.com>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/axboe/linux-block.git for-next
-head:   c1440ed442a58eb4060a58f7c1f85775b6bb72ae
-commit: cf546dd289e0f6d2594c25e2fb4e19ee67c6d988 [94/104] block: change rq_integrity_vec to respect the iterator
-config: um-allnoconfig (https://download.01.org/0day-ci/archive/20240627/202406270508.qSWqG6e7-lkp@intel.com/config)
-compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240627/202406270508.qSWqG6e7-lkp@intel.com/reproduce)
+Hi,
+
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on rafael-pm/linux-next]
+[also build test ERROR on rafael-pm/bleeding-edge linus/master v6.10-rc5 next-20240625]
+[cannot apply to horms-ipvs/master]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/admiyo-os-amperecomputing-com/mctp-pcc-Check-before-sending-MCTP-PCC-response-ACK/20240626-052432
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git linux-next
+patch link:    https://lore.kernel.org/r/20240625185333.23211-4-admiyo%40os.amperecomputing.com
+patch subject: [PATCH v3 3/3] mctp pcc: Implement MCTP over PCC Transport
+config: powerpc-allyesconfig (https://download.01.org/0day-ci/archive/20240627/202406270625.2MuBj55z-lkp@intel.com/config)
+compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project ad79a14c9e5ec4a369eed4adf567c22cc029863f)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240627/202406270625.2MuBj55z-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202406270508.qSWqG6e7-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202406270625.2MuBj55z-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
-   In file included from block/bdev.c:14:
-   In file included from include/linux/blkdev.h:9:
-   In file included from include/linux/blk_types.h:10:
+   In file included from drivers/net/mctp/mctp-pcc.c:8:
+   In file included from include/linux/if_arp.h:22:
+   In file included from include/linux/skbuff.h:17:
    In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:12:
-   In file included from include/linux/hardirq.h:11:
-   In file included from arch/um/include/asm/hardirq.h:5:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:14:
-   In file included from arch/um/include/asm/io.h:24:
-   include/asm-generic/io.h:548:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     548 |         val = __raw_readb(PCI_IOBASE + addr);
-         |                           ~~~~~~~~~~ ^
-   include/asm-generic/io.h:561:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     561 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
-      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-         |                                                   ^
-   In file included from block/bdev.c:14:
-   In file included from include/linux/blkdev.h:9:
-   In file included from include/linux/blk_types.h:10:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:12:
-   In file included from include/linux/hardirq.h:11:
-   In file included from arch/um/include/asm/hardirq.h:5:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:14:
-   In file included from arch/um/include/asm/io.h:24:
-   include/asm-generic/io.h:574:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     574 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
-      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
-         |                                                   ^
-   In file included from block/bdev.c:14:
-   In file included from include/linux/blkdev.h:9:
-   In file included from include/linux/blk_types.h:10:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:12:
-   In file included from include/linux/hardirq.h:11:
-   In file included from arch/um/include/asm/hardirq.h:5:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:14:
-   In file included from arch/um/include/asm/io.h:24:
-   include/asm-generic/io.h:585:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     585 |         __raw_writeb(value, PCI_IOBASE + addr);
-         |                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:595:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     595 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:605:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     605 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:693:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     693 |         readsb(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:701:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     701 |         readsw(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:709:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     709 |         readsl(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:718:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     718 |         writesb(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   include/asm-generic/io.h:727:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     727 |         writesw(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   include/asm-generic/io.h:736:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     736 |         writesl(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   In file included from block/bdev.c:15:
->> include/linux/blk-integrity.h:151:9: error: returning 'struct bio_vec' from a function with incompatible result type 'struct bio_vec *'; take the address with &
-     151 |         return (struct bio_vec){ };
-         |                ^~~~~~~~~~~~~~~~~~~
-         |                &(                 )
-   12 warnings and 1 error generated.
+   In file included from include/linux/highmem.h:8:
+   In file included from include/linux/cacheflush.h:5:
+   In file included from arch/powerpc/include/asm/cacheflush.h:7:
+   In file included from include/linux/mm.h:2253:
+   include/linux/vmstat.h:500:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     500 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     501 |                            item];
+         |                            ~~~~
+   include/linux/vmstat.h:507:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     507 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     508 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/vmstat.h:514:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     514 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+   include/linux/vmstat.h:519:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     519 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     520 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/vmstat.h:528:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     528 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     529 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+   In file included from drivers/net/mctp/mctp-pcc.c:17:
+   include/acpi/acpi_drivers.h:72:43: warning: declaration of 'struct acpi_pci_root' will not be visible outside of this function [-Wvisibility]
+      72 | struct pci_bus *pci_acpi_scan_root(struct acpi_pci_root *root);
+         |                                           ^
+   drivers/net/mctp/mctp-pcc.c:214:19: error: incomplete definition of type 'struct acpi_device'
+     214 |         dev_dbg(&acpi_dev->dev, "Adding mctp_pcc device for HID  %s\n",
+         |                  ~~~~~~~~^
+   include/linux/dev_printk.h:165:18: note: expanded from macro 'dev_dbg'
+     165 |         dynamic_dev_dbg(dev, dev_fmt(fmt), ##__VA_ARGS__)
+         |                         ^~~
+   include/linux/dynamic_debug.h:274:7: note: expanded from macro 'dynamic_dev_dbg'
+     274 |                            dev, fmt, ##__VA_ARGS__)
+         |                            ^~~
+   include/linux/dynamic_debug.h:250:59: note: expanded from macro '_dynamic_func_call'
+     250 |         _dynamic_func_call_cls(_DPRINTK_CLASS_DFLT, fmt, func, ##__VA_ARGS__)
+         |                                                                  ^~~~~~~~~~~
+   include/linux/dynamic_debug.h:248:65: note: expanded from macro '_dynamic_func_call_cls'
+     248 |         __dynamic_func_call_cls(__UNIQUE_ID(ddebug), cls, fmt, func, ##__VA_ARGS__)
+         |                                                                        ^~~~~~~~~~~
+   include/linux/dynamic_debug.h:224:15: note: expanded from macro '__dynamic_func_call_cls'
+     224 |                 func(&id, ##__VA_ARGS__);                       \
+         |                             ^~~~~~~~~~~
+   include/linux/acpi.h:792:8: note: forward declaration of 'struct acpi_device'
+     792 | struct acpi_device;
+         |        ^
+   drivers/net/mctp/mctp-pcc.c:215:3: error: call to undeclared function 'acpi_device_hid'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     215 |                 acpi_device_hid(acpi_dev));
+         |                 ^
+   drivers/net/mctp/mctp-pcc.c:215:3: note: did you mean 'acpi_device_dep'?
+   include/acpi/acpi_bus.h:41:6: note: 'acpi_device_dep' declared here
+      41 | bool acpi_device_dep(acpi_handle target, acpi_handle match);
+         |      ^
+   drivers/net/mctp/mctp-pcc.c:216:15: error: call to undeclared function 'acpi_device_handle'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     216 |         dev_handle = acpi_device_handle(acpi_dev);
+         |                      ^
+   drivers/net/mctp/mctp-pcc.c:216:13: error: incompatible integer to pointer conversion assigning to 'acpi_handle' (aka 'void *') from 'int' [-Wint-conversion]
+     216 |         dev_handle = acpi_device_handle(acpi_dev);
+         |                    ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/net/mctp/mctp-pcc.c:220:20: error: incomplete definition of type 'struct acpi_device'
+     220 |                 dev_err(&acpi_dev->dev, "FAILURE to lookup PCC indexes from CRS");
+         |                          ~~~~~~~~^
+   include/linux/dev_printk.h:154:44: note: expanded from macro 'dev_err'
+     154 |         dev_printk_index_wrap(_dev_err, KERN_ERR, dev, dev_fmt(fmt), ##__VA_ARGS__)
+         |                                                   ^~~
+   include/linux/dev_printk.h:110:11: note: expanded from macro 'dev_printk_index_wrap'
+     110 |                 _p_func(dev, fmt, ##__VA_ARGS__);                       \
+         |                         ^~~
+   include/linux/acpi.h:792:8: note: forward declaration of 'struct acpi_device'
+     792 | struct acpi_device;
+         |        ^
+   drivers/net/mctp/mctp-pcc.c:225:17: error: incomplete definition of type 'struct acpi_device'
+     225 |         dev = &acpi_dev->dev;
+         |                ~~~~~~~~^
+   include/linux/acpi.h:792:8: note: forward declaration of 'struct acpi_device'
+     792 | struct acpi_device;
+         |        ^
+   drivers/net/mctp/mctp-pcc.c:271:10: error: incomplete definition of type 'struct acpi_device'
+     271 |         acpi_dev->driver_data = mctp_pcc_dev;
+         |         ~~~~~~~~^
+   include/linux/acpi.h:792:8: note: forward declaration of 'struct acpi_device'
+     792 | struct acpi_device;
+         |        ^
+   drivers/net/mctp/mctp-pcc.c:326:27: error: variable has incomplete type 'struct acpi_driver'
+     326 | static struct acpi_driver mctp_pcc_driver = {
+         |                           ^
+   drivers/net/mctp/mctp-pcc.c:326:15: note: forward declaration of 'struct acpi_driver'
+     326 | static struct acpi_driver mctp_pcc_driver = {
+         |               ^
+>> drivers/net/mctp/mctp-pcc.c:337:1: error: type specifier missing, defaults to 'int'; ISO C99 and later do not support implicit int [-Wimplicit-int]
+     337 | module_acpi_driver(mctp_pcc_driver);
+         | ^
+         | int
+>> drivers/net/mctp/mctp-pcc.c:337:20: error: a parameter list without types is only allowed in a function definition
+     337 | module_acpi_driver(mctp_pcc_driver);
+         |                    ^
+   6 warnings and 10 errors generated.
 
 
-vim +151 include/linux/blk-integrity.h
+vim +/int +337 drivers/net/mctp/mctp-pcc.c
 
-   147	
-   148	static inline struct bio_vec *rq_integrity_vec(struct request *rq)
-   149	{
-   150		/* the optimizer will remove all calls to this function */
- > 151		return (struct bio_vec){ };
-   152	}
-   153	#endif /* CONFIG_BLK_DEV_INTEGRITY */
-   154	
+   325	
+ > 326	static struct acpi_driver mctp_pcc_driver = {
+   327		.name = "mctp_pcc",
+   328		.class = "Unknown",
+   329		.ids = mctp_pcc_device_ids,
+   330		.ops = {
+   331			.add = mctp_pcc_driver_add,
+   332			.remove = mctp_pcc_driver_remove,
+   333		},
+   334		.owner = THIS_MODULE,
+   335	};
+   336	
+ > 337	module_acpi_driver(mctp_pcc_driver);
+   338	
 
 -- 
 0-DAY CI Kernel Test Service
