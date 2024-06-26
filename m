@@ -1,124 +1,116 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f54.google.com (mail-pj1-f54.google.com [209.85.216.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C075A13AA4C;
-	Wed, 26 Jun 2024 17:06:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 98FA0770EC
+	for <llvm@lists.linux.dev>; Wed, 26 Jun 2024 17:17:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719421568; cv=none; b=f7YyZ9wakvFgGmm+fYBfXe+RoZzVdtOtS84epiYhmexNGVLt2vInFZX/GkevYZKj4/yIir7GIvv6lT/gKByXF1bZdogDDXRG1avXWJYTEvdMC4h/D13IeabSnj0ClVv1xmS9CD2motJwS64uS3tvBXRLS0f5kZh+tuYcWmQahq4=
+	t=1719422230; cv=none; b=Ui0aXbNIIiQQSHmdqPgapa9YG5sRZsbE7zo27WsjILsUDZJGP2ONDwOJmb7OThM0HFgGxbk1TdkcRMPDF1+HcjBSaeRBdSOViQTfkuxRuDviNwPb0ko/OM4erGxN/NpqdBlplWXwGvzVIFHNvRwVdmFgZoKcBom75BSY0TltP7w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719421568; c=relaxed/simple;
-	bh=NGlqg/Pmt4gOfQtT4F33ND5D947m/+4mzw6M8io5Qtw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=cDC3gg8LU2484XuEL/KIvesD+9vWkj7fIJ5zgciXhqksncFZd9GReBlIRXqSCfg6shk8O7YvqzpkCtrh3yrzF9JzM4l7EPBqVnWNkhGuCqK+cl/uKNxzO/xDnoNLoAn3uGKVQpDu3bcAu4jVw78rVQlL8UrtHGJVRL2VfoeGek8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UfDdLa2S; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1719422230; c=relaxed/simple;
+	bh=RYtqPNzmP2LS2A3MM+323p7B2fymwB8mip9tfprdIks=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=QEvJSdF418/iWhNsW9nmi0v9S1U/Qx2RgLNj027xtrZA3RtrmGMjxSLmaJaW96uArsYp8b1BdNYiFYDI8wGdbERM6xNyHrGcnrY0t3kyIh920YCPZsykXZGXi7QfwmYnkkJzAxk1K5CJoIXydrsHyoqDT3zSf17Xbno9Cf+IB+A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=nEfj8nhU; arc=none smtp.client-ip=209.85.216.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UfDdLa2S"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6287CC116B1;
-	Wed, 26 Jun 2024 17:06:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1719421568;
-	bh=NGlqg/Pmt4gOfQtT4F33ND5D947m/+4mzw6M8io5Qtw=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=UfDdLa2S1ysiOoxcviyR4sD9rKUYuwGOxvS6LdOZDp60i58O8O/zKNCx8xVqnx9Mw
-	 LmGDsy869BKdL+jUwonXLt/4TSeOgToxdM3UkkmnmgKeStZkvrDWD+HPg9nwV90kBw
-	 hqo4bf4F2QabTiTSb+kSwp0ey36OEiffBOG+YpQT3yxG2tf8dP8Nfa8MEXVqNoylDF
-	 tBzYbmIZb/DWI0qNqLL6MQ5eSEjdoqhJTYO7Scu2Sc978nDTaO0QlF0QEExjOYQSvP
-	 Zt+Fv7574L1eefswOYgYSBFZT+tIRYGWNzdwaj53LPSQWjCPgji+/zh1U7Vj6mhiwK
-	 IuGPIDjAcC4ug==
-Date: Wed, 26 Jun 2024 10:06:05 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: James Smart <james.smart@broadcom.com>, Christoph Hellwig <hch@lst.de>,
-	Sagi Grimberg <sagi@grimberg.me>,
-	Chaitanya Kulkarni <kch@nvidia.com>
-Cc: Kees Cook <keescook@chromium.org>,
-	"Gustavo A. R. Silva" <gustavoars@kernel.org>,
+	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="nEfj8nhU"
+Received: by mail-pj1-f54.google.com with SMTP id 98e67ed59e1d1-2c7a6da20f2so5391544a91.0
+        for <llvm@lists.linux.dev>; Wed, 26 Jun 2024 10:17:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1719422228; x=1720027028; darn=lists.linux.dev;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=sfc+bItioWOLi2TuWFqieQ4WdP0MPgrB+J5zxVf671w=;
+        b=nEfj8nhU/72jpfd5eTiKZsHdTWSnTvyIiMUf65JZ9LjKpJ+TOsupn2OZ3ImdgrWlLs
+         dOTCYXVZIJun6F4PsXNffBZuu3hVHSVGFzMzyQWGj318NpfBhYHmFWVuLWw834PMOitc
+         MtsBLfw1IdTsN/jgpi/WhjlsNu7bn+4VIXwgg3W+ANk0LHeUCN/IcTOdeU/k/fnZ0Cap
+         dUVIX6XlXFJ/DFdosifTPDy3Mla8EhclUiPGm5fLQXu+OTnc4Mdr0Vzlzk55LwSzWSCU
+         Gr1jlt+Sr8vLLftIpgTtgUd8lTq/1EGDKJqQaN683q/PkJsb1Pkj0PunxmDxeFqz69qd
+         0atQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1719422228; x=1720027028;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=sfc+bItioWOLi2TuWFqieQ4WdP0MPgrB+J5zxVf671w=;
+        b=BB6ul83xojm/LrI6hz30RiHPEESbhj05xv1DPXv8kP/N1LgfI7mmnXP2zGenzoUtBx
+         a+A+i8bPrgfvYBX1BwST/ojovs9TJZsHGYWMXJJ9iuj7ff0qlZyHhH4JJnd1HXEUgJKP
+         eNdIy9vrPIgyjINCuNm/b3z5snlng4vp7Hj+jGzc7lfwdkFQ9YyU3nRzHa7g6T+y0Rt+
+         BzBJIjzz4N0DQe4xJdfWF2obIpAG1ePad/hl1DTnNSZ55r338z/Di4jz5VMeS41szGmE
+         ptdqQMtS83YuVdgLmvxqtuOJgzaTlx3jx8mMksRMGiXsu2Fsp6lQV99y3NpcE9l1fq2L
+         SGbg==
+X-Forwarded-Encrypted: i=1; AJvYcCX272R8mquaNynDy0FZCnnlxBlK+M+MSbqqa0Ukm/QOMD0oiEPfSr1xqCRBhZoA+LUZVCGuLuOq64fMyPDQXBTq3eH83Q==
+X-Gm-Message-State: AOJu0Yz+rx9aoHmjljwamlQRSJrcqMgQ95Jy/Wi5aoou8EF3Gd5mma5s
+	Lr11LrJqHxDmB+si0w9tIWWvpaIl2lO7W/MlXn2bPRhL4LcOFvSGNst7QJKA+Is=
+X-Google-Smtp-Source: AGHT+IFRRYAJqPRgI7bs8MXpEZG6vyONCJH7c7jAbKBR0F7SXl7y1eqCXlLYI6Wy4OsF9R8wyxyQng==
+X-Received: by 2002:a17:90b:b0b:b0:2c8:53be:fa21 with SMTP id 98e67ed59e1d1-2c853befb16mr11452942a91.34.1719422227952;
+        Wed, 26 Jun 2024 10:17:07 -0700 (PDT)
+Received: from jesse-desktop.. (pool-108-26-179-17.bstnma.fios.verizon.net. [108.26.179.17])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2c8f3b5ad36sm83217a91.26.2024.06.26.10.16.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 26 Jun 2024 10:17:07 -0700 (PDT)
+From: Jesse Taube <jesse@rivosinc.com>
+To: linux-riscv@lists.infradead.org
+Cc: Ard Biesheuvel <ardb@kernel.org>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
 	Bill Wendling <morbo@google.com>,
 	Justin Stitt <justinstitt@google.com>,
-	Keith Busch <kbusch@kernel.org>, linux-nvme@lists.infradead.org,
-	linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org,
-	llvm@lists.linux.dev, patches@lists.linux.dev,
-	stable@vger.kernel.org
-Subject: Re: [PATCH] nvmet-fc: Remove __counted_by from
- nvmet_fc_tgt_queue.fod[]
-Message-ID: <20240626170605.GA66745@fedora-macbook-air-m2>
-References: <20240529-drop-counted-by-fod-nvmet-fc-tgt-queue-v1-1-286adbc25943@kernel.org>
+	Jesse Taube <jesse@rivosinc.com>,
+	Alexandre Ghiti <alexghiti@rivosinc.com>,
+	Conor Dooley <conor.dooley@microchip.com>,
+	Masahiro Yamada <masahiroy@kernel.org>,
+	Wende Tan <twd2.me@gmail.com>,
+	Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+	Sami Tolvanen <samitolvanen@google.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Baoquan He <bhe@redhat.com>,
+	Chen Jiahao <chenjiahao16@huawei.com>,
+	"Mike Rapoport (IBM)" <rppt@kernel.org>,
+	"Vishal Moola (Oracle)" <vishal.moola@gmail.com>,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: [PATCH v2 1/3] RISC-V: pi: Force hidden visibility for all symbol references
+Date: Wed, 26 Jun 2024 13:16:50 -0400
+Message-ID: <20240626171652.366415-1-jesse@rivosinc.com>
+X-Mailer: git-send-email 2.45.2
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240529-drop-counted-by-fod-nvmet-fc-tgt-queue-v1-1-286adbc25943@kernel.org>
+Content-Transfer-Encoding: 8bit
 
-Ping? This is still relevant and I don't think this is a compiler bug
-that would justify withholding this change.
+Eliminate all GOT entries in the .pi section, by forcing hidden
+visibility for all symbol references, which informs the compiler that
+such references will be resolved at link time without the need for
+allocating GOT entries.
 
-On Wed, May 29, 2024 at 02:42:40PM -0700, Nathan Chancellor wrote:
-> Work for __counted_by on generic pointers in structures (not just
-> flexible array members) has started landing in Clang 19 (current tip of
-> tree). During the development of this feature, a restriction was added
-> to __counted_by to prevent the flexible array member's element type from
-> including a flexible array member itself such as:
-> 
->   struct foo {
->     int count;
->     char buf[];
->   };
-> 
->   struct bar {
->     int count;
->     struct foo data[] __counted_by(count);
->   };
-> 
-> because the size of data cannot be calculated with the standard array
-> size formula:
-> 
->   sizeof(struct foo) * count
-> 
-> This restriction was downgraded to a warning but due to CONFIG_WERROR,
-> it can still break the build. The application of __counted_by on the fod
-> member of 'struct nvmet_fc_tgt_queue' triggers this restriction,
-> resulting in:
-> 
->   drivers/nvme/target/fc.c:151:2: error: 'counted_by' should not be applied to an array with element of unknown size because 'struct nvmet_fc_fcp_iod' is a struct type with a flexible array member. This will be an error in a future compiler version [-Werror,-Wbounds-safety-counted-by-elt-type-unknown-size]
->     151 |         struct nvmet_fc_fcp_iod         fod[] __counted_by(sqsize);
->         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->   1 error generated.
-> 
-> Remove this use of __counted_by to fix the warning/error. However,
-> rather than remove it altogether, leave it commented, as it may be
-> possible to support this in future compiler releases.
-> 
-> Cc: stable@vger.kernel.org
-> Closes: https://github.com/ClangBuiltLinux/linux/issues/2027
-> Fixes: ccd3129aca28 ("nvmet-fc: Annotate struct nvmet_fc_tgt_queue with __counted_by")
-> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
-> ---
->  drivers/nvme/target/fc.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/nvme/target/fc.c b/drivers/nvme/target/fc.c
-> index 337ee1cb09ae..381b4394731f 100644
-> --- a/drivers/nvme/target/fc.c
-> +++ b/drivers/nvme/target/fc.c
-> @@ -148,7 +148,7 @@ struct nvmet_fc_tgt_queue {
->  	struct workqueue_struct		*work_q;
->  	struct kref			ref;
->  	/* array of fcp_iods */
-> -	struct nvmet_fc_fcp_iod		fod[] __counted_by(sqsize);
-> +	struct nvmet_fc_fcp_iod		fod[] /* __counted_by(sqsize) */;
->  } __aligned(sizeof(unsigned long long));
->  
->  struct nvmet_fc_hostport {
-> 
-> ---
-> base-commit: c758b77d4a0a0ed3a1292b3fd7a2aeccd1a169a4
-> change-id: 20240529-drop-counted-by-fod-nvmet-fc-tgt-queue-50edd2f8d60e
-> 
-> Best regards,
-> -- 
-> Nathan Chancellor <nathan@kernel.org>
-> 
+Include linux/hidden.h in Makefile, like arm64, for the
+hidden visibility attribute.
+
+Signed-off-by: Jesse Taube <jesse@rivosinc.com>
+---
+ arch/riscv/kernel/pi/Makefile | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/arch/riscv/kernel/pi/Makefile b/arch/riscv/kernel/pi/Makefile
+index 50bc5ef7dd2f..1ef7584be0c3 100644
+--- a/arch/riscv/kernel/pi/Makefile
++++ b/arch/riscv/kernel/pi/Makefile
+@@ -5,6 +5,7 @@ KBUILD_CFLAGS	:= $(subst $(CC_FLAGS_FTRACE),,$(KBUILD_CFLAGS)) -fpie \
+ 		   -Os -DDISABLE_BRANCH_PROFILING $(DISABLE_STACKLEAK_PLUGIN) \
+ 		   $(call cc-option,-mbranch-protection=none) \
+ 		   -I$(srctree)/scripts/dtc/libfdt -fno-stack-protector \
++		   -include $(srctree)/include/linux/hidden.h \
+ 		   -D__DISABLE_EXPORTS -ffreestanding \
+ 		   -fno-asynchronous-unwind-tables -fno-unwind-tables \
+ 		   $(call cc-option,-fno-addrsig)
+-- 
+2.45.2
+
