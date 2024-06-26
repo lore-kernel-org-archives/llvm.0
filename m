@@ -1,115 +1,102 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-vs1-f54.google.com (mail-vs1-f54.google.com [209.85.217.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A0C6218F2FB;
-	Wed, 26 Jun 2024 16:38:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 95F7018A930
+	for <llvm@lists.linux.dev>; Wed, 26 Jun 2024 16:45:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.217.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719419904; cv=none; b=dOZei8UQ0Ji5pXnULx8JM+pE+hyESI6GkPOeGxlayqtJseLFtOKFf2zLX3+D6VLCgSHJqN0DpjIfDX9wo0puMhBcswY3Lo5GUKW7QqVrp4czepcfc85jcTu4MGC2wTyD/xTSnwL4F+8cceP1UXiG8kHDy4X6M8R/MiP6595qPsw=
+	t=1719420312; cv=none; b=JRVvORdkvFqJNr/3vlV0t5555WKDlffABlX7HwFGFiVzfHMEt0iZ5LDgoMGDyHw4iKbUujQRXuoeHO1AUnWkzn+pRGS2YTPDJvL0sUPUK6LobyOm4RgiybRSUXKRyKzq0Rn8qS3MoNpEnZAA9Rn7z0L9F0MovmUjyNwvFNbOYb8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719419904; c=relaxed/simple;
-	bh=kNGz1ZD9C84KIUd6Vhg4//CwpXuzsVswOYB5t+XyDx8=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=tjaJ/tizjeP2JlaRM37fAIa4zMvD9X74lFwMEd3JQb5QTiusiWCl9AvmzuxlSm8WmWYKgpjmC0EyB6aY3mMZeXdR7MjM7Bi9cKeiXh+1KjCvuM5nCaR04Om0f5cLBLg3xG3lEQXB6tJ7bWAmEH6QefUaHWmMUrt1aFz8klVtYOA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=m94bDWEL; arc=none smtp.client-ip=192.198.163.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1719420312; c=relaxed/simple;
+	bh=/XTlK8CNVzTiVxxB1xDjgvENhRkAWNqgof0AvwLMnTA=;
+	h=MIME-Version:From:Date:Message-ID:Subject:To:Cc:Content-Type; b=f/k+89s0oEQhkAYagh3gHolNQmiiuUeiPJMuqy1pdypKUskYdNMEIlO4C6uP8GrFDAGXCnrvc0i0+jGk5hRdTyj2BOiv6FabKgk4ncze3MlvkLBWZKJ609kn8JU/Ma7JyMEg6fpX6/njUYkTj8uF+K0fSvP23Srm/wrZu+eks8g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=w5XnRqZ7; arc=none smtp.client-ip=209.85.217.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="m94bDWEL"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1719419903; x=1750955903;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=kNGz1ZD9C84KIUd6Vhg4//CwpXuzsVswOYB5t+XyDx8=;
-  b=m94bDWELWO6Jkqf8kubUhEw/Fyb5Prxb1wFgLGNXIY+vKAeMlXGyVW3f
-   duNYhQNLj3y2e3Q8bNXDvTqJZwoYYm1V9px5wllV+Q6RcVkCcm3n8cu9z
-   oXmimm6QHAD1SuA7A0lDxn8jWcT3YpEsU/IDKmZ3wNcLwtMEsbit48ZKq
-   QlLPyL1LbWGZgIF8YeXC5aM/Eqy+ExUmIB9lxK0Wf6YF53gogQ/2YN8St
-   h3QkJUABi7BR6bKrYnBdN0vACYq7OmLtImQQPHYGLWdzF63Z3p9eopmFl
-   qe4RvMEFm/r5a28prMv3yK6yB2jzcF5jtgcwWW6g3cogwzFpeBJQYiYO6
-   g==;
-X-CSE-ConnectionGUID: yndLVLBuRZyHH7SrkTShaw==
-X-CSE-MsgGUID: cRMD9zTVSTurMF0TvLXRbg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11115"; a="16730929"
-X-IronPort-AV: E=Sophos;i="6.08,267,1712646000"; 
-   d="scan'208";a="16730929"
-Received: from orviesa008.jf.intel.com ([10.64.159.148])
-  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jun 2024 09:38:22 -0700
-X-CSE-ConnectionGUID: TwNrv5gbQ1GBl6iJYVJFrA==
-X-CSE-MsgGUID: yCgtTno7QjC+Ryisvj5rgw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.08,267,1712646000"; 
-   d="scan'208";a="44778322"
-Received: from lkp-server01.sh.intel.com (HELO 68891e0c336b) ([10.239.97.150])
-  by orviesa008.jf.intel.com with ESMTP; 26 Jun 2024 09:38:20 -0700
-Received: from kbuild by 68891e0c336b with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1sMVf0-000FOQ-0Z;
-	Wed, 26 Jun 2024 16:38:18 +0000
-Date: Thu, 27 Jun 2024 00:37:23 +0800
-From: kernel test robot <lkp@intel.com>
-To: Jocelyn Falempe <jfalempe@redhat.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Linux Memory Management List <linux-mm@kvack.org>
-Subject: [akpm-mm:mm-nonmm-unstable 43/43]
- arch/powerpc/kernel/nvram_64.c:79:10: error: incompatible function pointer
- types initializing 'void (*)(struct kmsg_dumper *, enum kmsg_dump_reason,
- const char *)' with an expression of type 'void (struct kmsg_dumper *, enum
- kmsg_dump_reason)'
-Message-ID: <202406270010.IIwJCerE-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="w5XnRqZ7"
+Received: by mail-vs1-f54.google.com with SMTP id ada2fe7eead31-48f463dbbd2so1698586137.1
+        for <llvm@lists.linux.dev>; Wed, 26 Jun 2024 09:45:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1719420309; x=1720025109; darn=lists.linux.dev;
+        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=AkHDlUR7ZAep2s6CTxvJnI8Ne4BYMt6q67j2gv0FYCk=;
+        b=w5XnRqZ7WHGfAhIthOZHnaHChkjWtpuYnEYKOeypc7OynrA1POqkmFwb3VGIZlw5y4
+         dXOkJ1uQv5amb+CxXl/4pxQWqGHFe36+5QMGFIsenNi3KLiTYVChMFWJrVfTFXXHidBI
+         CHh2qtYHfa7o/TmsAQgOXVyVMXm/7kS4zrwDopV2eaKDqsYg+87zOL5+6U0wsN0amGml
+         wnfA1phO1zyD4XcyU48GmZ+V4bwpf0sNWzMfTEynMTMgSkoDpYxIcEwtC1As7UsqMjYe
+         QkClGda0CmAQgzzkZVTCbHKWfhHGmX7FyqziFRpqaRZUnigIhuDgSTaXvvaZLSv0Lm0f
+         yDUw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1719420309; x=1720025109;
+        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=AkHDlUR7ZAep2s6CTxvJnI8Ne4BYMt6q67j2gv0FYCk=;
+        b=GTnHj+HelhxmMAfJUMn8bKg3DQuU8IG81qPfK1tYNGOSSJe3G4y4jhAA/jFl0I4I+K
+         LH/7zrjtXWBfOTZS9K64pPsCwomQr9lf72ZPcx07i5Np/Xpyop37E0AvftsuXIH7dvek
+         y6r1iwRMm5kVhvM8s9WlUx7etEnRF8wno/oILylJRRoySFfhVbNMcwYUSowWXl9CSWBS
+         1FDR+7LeZ0xHbXIVtmlaDNfkSJVriW57/fTZDJ2k5LcLe9ifsgfQm54z4myVkqAWVmUz
+         6D2+Lu0lB9Ecy7JHKatu0pcjAtkuOYp9X/S5g12TY0yfP+Hcgfe+9aLer5tuIdMo7y2D
+         mCCw==
+X-Forwarded-Encrypted: i=1; AJvYcCWpc3XmcahWP6JNFDwxRR4spWQHNjHIEJF/+N7/VH4TzDjkJYZDMp0jC4WvQTSmK+kMm8qOQEsEMdGBM/ge+rCcvuOQkQ==
+X-Gm-Message-State: AOJu0YxVCwFjz9mZW8QqjnbQWN9qXcbZKN0MUbgLpnJ/EQt7Yxcv2FVF
+	rCHDcPhUCVT/POFlsAN5pLpW34jCI/5F6zrT81OYp5JNhDQXylcHbkShOafTGWHy4LgRHomBArn
+	+R/+nq1F8QqY6YZPLUfbsbi4TZ1J3SmMoelj9VQ==
+X-Google-Smtp-Source: AGHT+IERDTeo9SUWlwbISbmX+LCiLsiuQ1dzl43YSoAXQ8Dz2vixJVMLChWoKkQj5/ZsdWmFforvxh7nXH2rV/z1Zg4=
+X-Received: by 2002:ac5:cb4c:0:b0:4ef:668f:2438 with SMTP id
+ 71dfb90a1353d-4ef668f245fmr8617396e0c.0.1719420308489; Wed, 26 Jun 2024
+ 09:45:08 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+From: Naresh Kamboju <naresh.kamboju@linaro.org>
+Date: Wed, 26 Jun 2024 22:14:56 +0530
+Message-ID: <CA+G9fYv-rWNXZ9JxA19qSP0r+jhPDaMJejKbckN72kT1UpQ3QA@mail.gmail.com>
+Subject: mm: huge_memory.c:2736:31: error: variable 'page' is uninitialized
+ when used here [-Werror,-Wuninitialized]
+To: open list <linux-kernel@vger.kernel.org>, linux-mm <linux-mm@kvack.org>, 
+	lkft-triage@lists.linaro.org, clang-built-linux <llvm@lists.linux.dev>
+Cc: Andrew Morton <akpm@linux-foundation.org>, Arnd Bergmann <arnd@arndb.de>, 
+	Lance Yang <ioworker0@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-nonmm-unstable
-head:   7e72bb7504d1192ab89809f6192dba1b06f4fa51
-commit: 7e72bb7504d1192ab89809f6192dba1b06f4fa51 [43/43] printk: add a short description string to kmsg_dump()
-config: powerpc64-randconfig-002-20240626 (https://download.01.org/0day-ci/archive/20240627/202406270010.IIwJCerE-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240627/202406270010.IIwJCerE-lkp@intel.com/reproduce)
+The x86_64 clang builds failed on Linux next due to these warnings / errors.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202406270010.IIwJCerE-lkp@intel.com/
+Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
-All errors (new ones prefixed by >>):
+Build error:
+------
+mm/huge_memory.c:2736:31: error: variable 'page' is uninitialized when
+used here [-Werror,-Wuninitialized]
+ 2736 |         folio_remove_rmap_pmd(folio, page, vma);
+      |                                      ^~~~
+/builds/linux/mm/huge_memory.c:2700:19: note: initialize the variable
+'page' to silence this warning
+ 2700 |         struct page *page;
+      |                          ^
+      |                           = NULL
+1 error generated.
 
->> arch/powerpc/kernel/nvram_64.c:79:10: error: incompatible function pointer types initializing 'void (*)(struct kmsg_dumper *, enum kmsg_dump_reason, const char *)' with an expression of type 'void (struct kmsg_dumper *, enum kmsg_dump_reason)' [-Werror,-Wincompatible-function-pointer-types]
-           .dump = oops_to_nvram
-                   ^~~~~~~~~~~~~
->> arch/powerpc/kernel/nvram_64.c:645:13: error: conflicting types for 'oops_to_nvram'
-   static void oops_to_nvram(struct kmsg_dumper *dumper,
-               ^
-   arch/powerpc/kernel/nvram_64.c:75:13: note: previous declaration is here
-   static void oops_to_nvram(struct kmsg_dumper *dumper,
-               ^
-   2 errors generated.
+patch that is causing this build failures,
+  mm/vmscan: avoid split lazyfree THP during shrink_folio_list()
 
+metadata:
 
-vim +79 arch/powerpc/kernel/nvram_64.c
+--
+  git_describe: next-20240625
+  git_repo: https://gitlab.com/Linaro/lkft/mirrors/next/linux-next
+  git_short_log: 0fc4bfab2cd4 ("Add linux-next specific files for 20240625")
+  arch: x86_64
+  toolchain: clang-18
 
-78989f0a559218 Hari Bathini 2015-02-06  74  
-78989f0a559218 Hari Bathini 2015-02-06  75  static void oops_to_nvram(struct kmsg_dumper *dumper,
-78989f0a559218 Hari Bathini 2015-02-06  76  			  enum kmsg_dump_reason reason);
-78989f0a559218 Hari Bathini 2015-02-06  77  
-78989f0a559218 Hari Bathini 2015-02-06  78  static struct kmsg_dumper nvram_kmsg_dumper = {
-78989f0a559218 Hari Bathini 2015-02-06 @79  	.dump = oops_to_nvram
-78989f0a559218 Hari Bathini 2015-02-06  80  };
-78989f0a559218 Hari Bathini 2015-02-06  81  
+Links:
+ - https://storage.tuxsuite.com/public/linaro/lkft/builds/2iNfPlsMdxsqZTOC14r1xZZxq8X/
+ - https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20240625/testrun/24448204/suite/build/test/clang-18-lkftconfig/details/
 
-:::::: The code at line 79 was first introduced by commit
-:::::: 78989f0a5592182a3d45d869ddaafc71c8f673af powerpc/nvram: Move generic code for nvram and pstore
-
-:::::: TO: Hari Bathini <hbathini@linux.vnet.ibm.com>
-:::::: CC: Michael Ellerman <mpe@ellerman.id.au>
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+--
+Linaro LKFT
+https://lkft.linaro.org
