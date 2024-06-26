@@ -1,214 +1,188 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CCCE2176AD5;
-	Wed, 26 Jun 2024 10:09:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B1C6117CA1A
+	for <llvm@lists.linux.dev>; Wed, 26 Jun 2024 10:32:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719396580; cv=none; b=cJfYQQkpTyj6VaM91tpxCSz6lAPo2zVrSXzauVP6HDp5nDgZs2EdhCScB6OvvulLwVX4CvG84FCIwOlrFHmGZVI8jonh6UIAyD1AqCGBdsd6/3n4NWLFhb/rxo9pCTQuTg0r3N3lXpt/K+zokFpF4wkJGxwy148af+4LcUKalgw=
+	t=1719397974; cv=none; b=ao46CKf153aNXPClmaqyaTR+G1tDnrxhHjTiY40sDY29bL36//JksRYF/igDepz/C64NzbCC33SakQpCC3A1AgLyVNG2bRHVeOlmkesDRyr6jYLrkIaksp6dz9v4X/Zt026UxdfFwlBMvoFFZoqjluUqqGQPMIKcdHbcixUCfYI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719396580; c=relaxed/simple;
-	bh=fOsd+1HfbGLO7Zy0e3bNwQPIz9RvmS2cgJr450bfRiA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=tx+hMLOIKOd/ozNYKfOsE5ItB/rv5TkdC63FFJFwBJhpAHsDoNW7kOFXrLKDQU+loDnJSU4iRlKrKlZwBSWr/iv9Mfg660iUFpg1JzhX0VyrBD/9sBQtU1g8fBkI8K9Li+jwkwweL1xuPcZiJz6WAzovdLtWPyqx8zXZzkTY10Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=HDeOPG6f; arc=none smtp.client-ip=192.198.163.11
+	s=arc-20240116; t=1719397974; c=relaxed/simple;
+	bh=3izx0B3mI55jofLEkEwXdEAp1lB1IbFcARH6Cmm5Bnc=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=DjMVOJSrUKaDLp6HHOHLkIlmugb+NwVgDyZb/IESDJu+wkNN1+k3/YIuKp2pcfJZxShg6fA8huzxRvh1N/NLE5fdYgKu3EHavC4QZ/uUuBdIVqI4ltsga6/SCMFyuzxvpntDTYYY2Y1+OIaCOmFr/NTBMtuBuUxNO8IZ6INi3p8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=atagzg1L; arc=none smtp.client-ip=192.198.163.10
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="HDeOPG6f"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="atagzg1L"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1719396579; x=1750932579;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=fOsd+1HfbGLO7Zy0e3bNwQPIz9RvmS2cgJr450bfRiA=;
-  b=HDeOPG6fRnXpLnG9UP4pYlfHP7DtStt3KjAejcj0ELh3EYYeAAhQBLKg
-   nOvagL8RBOwV/fJ7VnGpEBq/3wZZ8YzDauLpPQgEJHjX8UKufVDku35RP
-   +66KmramEMkEDAoGHaE4tp/jXp6sbCP5tW5yT9tMtXZyo2IYH0nn4651f
-   CCzlH/3g6VrCAdcXUS989mqMlqcgvxZJ6EurZY3usUw9UrD0iZrI4KMz6
-   pKhgHW+S4jpVv+6NZHVxdFbtc1oHMJYtRIk7s+myW0t4UdyvCPqE9f9Sg
-   dFxPOT5J7kx+y5weMXFU+Z9qnPhkyAkeXVG1KP+Hc89iKOHtNVR2OtUhU
+  t=1719397973; x=1750933973;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=3izx0B3mI55jofLEkEwXdEAp1lB1IbFcARH6Cmm5Bnc=;
+  b=atagzg1Lve7YXSJv6mhp8xnds06aI1DFhCpFfAiaeJJcYlt8w/OotuGX
+   egMxpabTk40wYfW/DE6egxVCO5it9MY1T9fHlTCJ/aizM9P/PgyckfSiv
+   FnmXIa6ix2/ub0gZntK8DfB3UUKi4bH//XdF4BgBRyAf/AwaKfnb9LVEa
+   Y/vKQHPIxWkMq4iKMgBsLtlB2EDqnIkhbzGB2BN7L+Bl8E6b3lqOsL9aX
+   lVJZwp1P1ZwsXevjbxipszV5P1BNqK73JYPxHX8kpJpLp1Q7Ch1xIevpw
+   hKh6TojSWEOdl8dcbnB/5CNnl4dac/ePHunXYZcLtuNCjEH+f5iIl1Mdv
    w==;
-X-CSE-ConnectionGUID: /VEEmqyLS9KBwwaUJMrNXQ==
-X-CSE-MsgGUID: BA7qWgNqRfSukSkd6Y1I/A==
-X-IronPort-AV: E=McAfee;i="6700,10204,11114"; a="27081107"
+X-CSE-ConnectionGUID: lYcrj2reTKOAnIYhaIR0rw==
+X-CSE-MsgGUID: PaWM6OOdSc2RLIyac58eRQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11114"; a="27864749"
 X-IronPort-AV: E=Sophos;i="6.08,266,1712646000"; 
-   d="scan'208";a="27081107"
-Received: from orviesa009.jf.intel.com ([10.64.159.149])
-  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jun 2024 03:09:38 -0700
-X-CSE-ConnectionGUID: lYWXRFMqT1GDqQ7td3on1A==
-X-CSE-MsgGUID: Vnu40iiwTCmFxeN3K4W/EA==
+   d="scan'208";a="27864749"
+Received: from fmviesa005.fm.intel.com ([10.60.135.145])
+  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jun 2024 03:32:52 -0700
+X-CSE-ConnectionGUID: qrXbhX2PS1q+W2TPO99iqQ==
+X-CSE-MsgGUID: r2KSOniWSa2Xeu3HhYGpuw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.08,266,1712646000"; 
-   d="scan'208";a="44064960"
-Received: from lkp-server01.sh.intel.com (HELO 68891e0c336b) ([10.239.97.150])
-  by orviesa009.jf.intel.com with ESMTP; 26 Jun 2024 03:09:37 -0700
-Received: from kbuild by 68891e0c336b with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1sMPan-000FBC-3C;
-	Wed, 26 Jun 2024 10:09:33 +0000
-Date: Wed, 26 Jun 2024 18:09:14 +0800
-From: kernel test robot <lkp@intel.com>
-To: Zhou Shengqing <zhoushengqing@ttyinfo.com>,
-	Bjorn Helgaas <helgaas@kernel.org>, linux-pci@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	zhoushengqing@ttyinfo.com
-Subject: Re: [PATCH] PCI: Enable io space 1k granularity for intel cpu root
- port
-Message-ID: <202406261735.9Fu2z2ic-lkp@intel.com>
-References: <20240621020608.28964-1-zhoushengqing@ttyinfo.com>
+   d="scan'208";a="48403102"
+Received: from ahunter6-mobl1.ger.corp.intel.com (HELO [10.0.2.15]) ([10.246.41.28])
+  by fmviesa005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jun 2024 03:32:48 -0700
+Message-ID: <05f95eb8-9b4c-4327-a97f-a15654278c41@intel.com>
+Date: Wed, 26 Jun 2024 13:32:42 +0300
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v4 1/5] perf: support specify vdso path in cmdline
+To: duchangbin <changbin.du@huawei.com>
+Cc: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>,
+ Arnaldo Carvalho de Melo <acme@kernel.org>,
+ Namhyung Kim <namhyung@kernel.org>, Nathan Chancellor <nathan@kernel.org>,
+ Mark Rutland <mark.rutland@arm.com>,
+ Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+ Jiri Olsa <jolsa@kernel.org>, Ian Rogers <irogers@google.com>,
+ "Liang, Kan" <kan.liang@linux.intel.com>,
+ Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling
+ <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
+ "linux-perf-users@vger.kernel.org" <linux-perf-users@vger.kernel.org>,
+ "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+ "llvm@lists.linux.dev" <llvm@lists.linux.dev>
+References: <20240625033740.223009-1-changbin.du@huawei.com>
+ <20240625033740.223009-2-changbin.du@huawei.com>
+ <5a9e8dae-e9d9-4a97-98f5-d76be9068342@intel.com>
+ <7eef4826a2f3494ea1dc92ed98d543fb@huawei.com>
+Content-Language: en-US
+From: Adrian Hunter <adrian.hunter@intel.com>
+Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
+ Business Identity Code: 0357606 - 4, Domiciled in Helsinki
+In-Reply-To: <7eef4826a2f3494ea1dc92ed98d543fb@huawei.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20240621020608.28964-1-zhoushengqing@ttyinfo.com>
 
-Hi Zhou,
+On 26/06/24 05:26, duchangbin wrote:
+> On Tue, Jun 25, 2024 at 04:20:49PM +0300, Adrian Hunter wrote:
+>> On 25/06/24 06:37, Changbin Du wrote:
+>>> The vdso dumped from process memory (in buildid-cache) lacks debugging
+>>> info. To annotate vdso symbols with source lines we need specify a
+>>> debugging version.
+>>>
+>>> For x86, we can find them from your local build as
+>>> arch/x86/entry/vdso/vdso{32,64}.so.dbg. Or they may reside in
+>>> /lib/modules/<version>/vdso/vdso{32,64}.so on Ubuntu. But notice that
+>>> the buildid has to match.
+>>>
+>>> $ sudo perf record -a
+>>> $ sudo perf report --objdump=llvm-objdump \
+>>>   --vdso arch/x86/entry/vdso/vdso64.so.dbg,arch/x86/entry/vdso/vdso32.so.dbg
+>>>
+>>> Samples: 17K of event 'cycles:P', 4000 Hz, Event count (approx.): 1760
+>>> __vdso_clock_gettime  /work/linux-host/arch/x86/entry/vdso/vdso64.so.d
+>>> Percent│       movq    -48(%rbp),%rsi
+>>>        │       testq   %rax,%rax
+>>>        │     ;               return vread_hvclock();
+>>>        │       movq    %rax,%rdx
+>>>        │     ;               if (unlikely(!vdso_cycles_ok(cycles)))
+>>>        │     ↑ js      eb
+>>>        │     ↑ jmp     74
+>>>        │     ;               ts->tv_sec = vdso_ts->sec;
+>>>   0.02 │147:   leaq    2(%rbx),%rax
+>>>        │       shlq    $4, %rax
+>>>        │       addq    %r10,%rax
+>>>        │     ;               while ((seq = READ_ONCE(vd->seq)) & 1) {
+>>>   9.38 │152:   movl    (%r10),%ecx
+>>>
+>>> When doing cross platform analysis, we also need specify the vdso path if
+>>> we are interested in its symbols.
+>>
+>> Would it be possible to add vdso and vdso debug to the build-id
+>> cache and ensure perf can find it there?
+>>
+>> Typically, getting dsos from another machine is handled via
+>> build-id cache e.g. what perf-archive does
+>>
+> Hmm. I agree this is better alternative approach for cross-machine analysis.
+> When collecting vdsos to buildid cache, I think we can use the local searched
+> objects (with debug symbols) instead if its build-id matches vdsos from process
+> dumping (the real code ran).
+> 
+> Currently I just follow what perf does for vmlinux so to reuse most of existing
+> code. Maybe vmlinux is too big to add to buildid-cahce?
+> 
+> Can we keep our current strategy for now? I'll think about above options when
+> I have more time.
+> 
 
-kernel test robot noticed the following build errors:
+I tried adding vdso via perf buildid-cache.  It doesn't work only
+because the lookup expects the basename to be "vdso" but it is
+"elf".
 
-[auto build test ERROR on pci/next]
-[also build test ERROR on pci/for-linus linus/master v6.10-rc5 next-20240625]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Adding a link from "vdso" to "elf" made it work e.g.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Zhou-Shengqing/PCI-Enable-io-space-1k-granularity-for-intel-cpu-root-port/20240625-161818
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/pci/pci.git next
-patch link:    https://lore.kernel.org/r/20240621020608.28964-1-zhoushengqing%40ttyinfo.com
-patch subject: [PATCH] PCI: Enable io space 1k granularity for intel cpu root port
-config: x86_64-rhel-8.3-rust (https://download.01.org/0day-ci/archive/20240626/202406261735.9Fu2z2ic-lkp@intel.com/config)
-compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240626/202406261735.9Fu2z2ic-lkp@intel.com/reproduce)
+$ cat gettimeofday-test.c
+#include <stdio.h>
+#include <sys/time.h>
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202406261735.9Fu2z2ic-lkp@intel.com/
+int main()
+{
+        struct timeval tv;
+        int ret;
 
-All errors (new ones prefixed by >>):
+        ret = gettimeofday(&tv, NULL);
+        if (ret == -1) {
+                fprintf(stderr, "gettimeofday failed\n");
+                return 1;
+        }
 
->> drivers/pci/probe.c:484:24: error: use of undeclared identifier 'dev'
-     484 |                         list_for_each_entry(dev, &bridge->bus->devices, bus_list) {
-         |                                             ^
->> drivers/pci/probe.c:484:24: error: use of undeclared identifier 'dev'
->> drivers/pci/probe.c:484:24: error: use of undeclared identifier 'dev'
->> drivers/pci/probe.c:484:24: error: use of undeclared identifier 'dev'
->> drivers/pci/probe.c:484:24: error: use of undeclared identifier 'dev'
->> drivers/pci/probe.c:484:24: error: use of undeclared identifier 'dev'
->> drivers/pci/probe.c:484:24: error: use of undeclared identifier 'dev'
->> drivers/pci/probe.c:484:24: error: use of undeclared identifier 'dev'
->> drivers/pci/probe.c:484:24: error: use of undeclared identifier 'dev'
-   drivers/pci/probe.c:485:26: error: use of undeclared identifier 'dev'
-     485 |                                 pci_read_config_word(dev, PCI_VENDOR_ID, &ven_id);
-         |                                                      ^
-   drivers/pci/probe.c:486:26: error: use of undeclared identifier 'dev'
-     486 |                                 pci_read_config_word(dev, PCI_DEVICE_ID, &dev_id);
-         |                                                      ^
-   drivers/pci/probe.c:489:27: error: use of undeclared identifier 'dev'
-     489 |                                         pci_read_config_word(dev, 0x1c0, &en1k);
-         |                                                              ^
-   12 errors generated.
+        printf("%lu.%lu\n", (unsigned long)tv.tv_sec, (unsigned long)tv.tv_usec);
 
+        return 0;
+$ perf record -e intel_pt//u ./gettimeofday-test
+1719397042.892837
+[ perf record: Woken up 1 times to write data ]
+[ perf record: Captured and wrote 0.026 MB perf.data ]
+$ perf script --itrace=e
+$ perf buildid-cache --remove /lib/modules/6.5.0-41-generic/vdso/vdso64.so
+$ perf script --itrace=e
+Warning:
+2 instruction trace errors
+ instruction trace error type 1 time 525345.386424204 cpu 4 pid 198976 tid 198976 ip 0x7ffddb0e8e00 code 5: Failed to get instruction
+ instruction trace error type 1 time 525345.386424829 cpu 4 pid 198976 tid 198976 ip 0x7ffddb0e884d code 5: Failed to get instruction
+$ perf buildid-cache --add /lib/modules/6.5.0-41-generic/vdso/vdso64.so
+$ perf script --itrace=e
+Warning:
+2 instruction trace errors
+ instruction trace error type 1 time 525345.386424204 cpu 4 pid 198976 tid 198976 ip 0x7ffddb0e8e00 code 5: Failed to get instruction
+ instruction trace error type 1 time 525345.386424829 cpu 4 pid 198976 tid 198976 ip 0x7ffddb0e884d code 5: Failed to get instruction
+$ cd ~/.debug/.build-id/c3/530aed66e71bfd10af66039f58cc7c4d2eaba8
+~/.debug/.build-id/c3/530aed66e71bfd10af66039f58cc7c4d2eaba8$ ln -s elf vdso
+~/.debug/.build-id/c3/530aed66e71bfd10af66039f58cc7c4d2eaba8$ ls -l
+total 36
+-rw-r--r-- 1 ahunter ahunter 33272 Jun 26 13:17 elf
+-rw-r----- 1 ahunter ahunter     0 Jun 26 13:17 probes
+lrwxrwxrwx 1 ahunter ahunter     3 Jun 26 13:18 vdso -> elf
+/.debug/.build-id/c3/530aed66e71bfd10af66039f58cc7c4d2eaba8$ cd
+$ perf script --itrace=e
+$ 
 
-vim +/dev +484 drivers/pci/probe.c
+So maybe a change could be made to build_id_cache__add() to add
+the extra link if the file name matches vdso
 
-   458	
-   459	static void pci_read_bridge_windows(struct pci_dev *bridge)
-   460	{
-   461		u32 buses;
-   462		u16 io;
-   463		u32 pmem, tmp;
-   464		u16 ven_id, dev_id;
-   465		u16 en1k = 0;
-   466		struct resource res;
-   467	
-   468		pci_read_config_dword(bridge, PCI_PRIMARY_BUS, &buses);
-   469		res.flags = IORESOURCE_BUS;
-   470		res.start = (buses >> 8) & 0xff;
-   471		res.end = (buses >> 16) & 0xff;
-   472		pci_info(bridge, "PCI bridge to %pR%s\n", &res,
-   473			 bridge->transparent ? " (subtractive decode)" : "");
-   474	
-   475		pci_read_config_word(bridge, PCI_IO_BASE, &io);
-   476		if (!io) {
-   477			pci_write_config_word(bridge, PCI_IO_BASE, 0xe0f0);
-   478			pci_read_config_word(bridge, PCI_IO_BASE, &io);
-   479			pci_write_config_word(bridge, PCI_IO_BASE, 0x0);
-   480		}
-   481		if (io) {
-   482			bridge->io_window = 1;
-   483			if (pci_is_root_bus(bridge->bus)) {
- > 484				list_for_each_entry(dev, &bridge->bus->devices, bus_list) {
-   485					pci_read_config_word(dev, PCI_VENDOR_ID, &ven_id);
-   486					pci_read_config_word(dev, PCI_DEVICE_ID, &dev_id);
-   487					if (ven_id == PCI_VENDOR_ID_INTEL && dev_id == 0x09a2) {
-   488						/*IIO MISC Control offset 0x1c0*/
-   489						pci_read_config_word(dev, 0x1c0, &en1k);
-   490					}
-   491				}
-   492			/*
-   493			 *Intel ICX SPR EMR GNR
-   494			 *IIO MISC Control (IIOMISCCTRL_1_5_0_CFG) — Offset 1C0h
-   495			 *bit 2:Enable 1K (EN1K)
-   496			 *This bit when set, enables 1K granularity for I/O space decode
-   497			 *in each of the virtual P2P bridges
-   498			 *corresponding to root ports, and DMI ports.
-   499			 */
-   500			if (en1k & 0x4)
-   501				bridge->io_window_1k = 1;
-   502			}
-   503			pci_read_bridge_io(bridge, &res, true);
-   504		}
-   505	
-   506		pci_read_bridge_mmio(bridge, &res, true);
-   507	
-   508		/*
-   509		 * DECchip 21050 pass 2 errata: the bridge may miss an address
-   510		 * disconnect boundary by one PCI data phase.  Workaround: do not
-   511		 * use prefetching on this device.
-   512		 */
-   513		if (bridge->vendor == PCI_VENDOR_ID_DEC && bridge->device == 0x0001)
-   514			return;
-   515	
-   516		pci_read_config_dword(bridge, PCI_PREF_MEMORY_BASE, &pmem);
-   517		if (!pmem) {
-   518			pci_write_config_dword(bridge, PCI_PREF_MEMORY_BASE,
-   519						       0xffe0fff0);
-   520			pci_read_config_dword(bridge, PCI_PREF_MEMORY_BASE, &pmem);
-   521			pci_write_config_dword(bridge, PCI_PREF_MEMORY_BASE, 0x0);
-   522		}
-   523		if (!pmem)
-   524			return;
-   525	
-   526		bridge->pref_window = 1;
-   527	
-   528		if ((pmem & PCI_PREF_RANGE_TYPE_MASK) == PCI_PREF_RANGE_TYPE_64) {
-   529	
-   530			/*
-   531			 * Bridge claims to have a 64-bit prefetchable memory
-   532			 * window; verify that the upper bits are actually
-   533			 * writable.
-   534			 */
-   535			pci_read_config_dword(bridge, PCI_PREF_BASE_UPPER32, &pmem);
-   536			pci_write_config_dword(bridge, PCI_PREF_BASE_UPPER32,
-   537					       0xffffffff);
-   538			pci_read_config_dword(bridge, PCI_PREF_BASE_UPPER32, &tmp);
-   539			pci_write_config_dword(bridge, PCI_PREF_BASE_UPPER32, pmem);
-   540			if (tmp)
-   541				bridge->pref_64_window = 1;
-   542		}
-   543	
-   544		pci_read_bridge_mmio_pref(bridge, &res, true);
-   545	}
-   546	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
