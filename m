@@ -1,43 +1,48 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3CC5713B5BB;
-	Wed, 26 Jun 2024 17:00:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C075A13AA4C;
+	Wed, 26 Jun 2024 17:06:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719421226; cv=none; b=g7lDFHwOopmpk0acFgeyVfct0VOMBxFvR/JMlRs4J7mG8nAwwYPKjRQqZ6TDd1Me/TzLSH68IpTvhawx6YqzvAL4Xbp66AdoiSvHckQUSvn5mMh8+nAnPILx9UjE1tFt8b5MHgUur30g46FNc1xlNH5cC/gNSrYmTVsncfVs+h8=
+	t=1719421568; cv=none; b=f7YyZ9wakvFgGmm+fYBfXe+RoZzVdtOtS84epiYhmexNGVLt2vInFZX/GkevYZKj4/yIir7GIvv6lT/gKByXF1bZdogDDXRG1avXWJYTEvdMC4h/D13IeabSnj0ClVv1xmS9CD2motJwS64uS3tvBXRLS0f5kZh+tuYcWmQahq4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719421226; c=relaxed/simple;
-	bh=ck9BJVN94A8X/goWOfcFcUMXyljByonN8PhcWCiNwW8=;
+	s=arc-20240116; t=1719421568; c=relaxed/simple;
+	bh=NGlqg/Pmt4gOfQtT4F33ND5D947m/+4mzw6M8io5Qtw=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=WgM/8qfvXFTPlNDzY6/OBFKINemueb5siFDu+wnVpslLFwudIpq5lXUGsyA6LPw91nQ8rq2dxVRpyC/lo9SYdxHKCt/QsS+KMEdscHrCIDhy8SEaKBmNDgIb4rEg6T0RKus9Tn/W+hyz37vCTNmHKtYh3BqDw8Pzbc9tlOn4U6w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=E36+TvcN; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=cDC3gg8LU2484XuEL/KIvesD+9vWkj7fIJ5zgciXhqksncFZd9GReBlIRXqSCfg6shk8O7YvqzpkCtrh3yrzF9JzM4l7EPBqVnWNkhGuCqK+cl/uKNxzO/xDnoNLoAn3uGKVQpDu3bcAu4jVw78rVQlL8UrtHGJVRL2VfoeGek8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UfDdLa2S; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="E36+TvcN"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 90D09C116B1;
-	Wed, 26 Jun 2024 17:00:25 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UfDdLa2S"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6287CC116B1;
+	Wed, 26 Jun 2024 17:06:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1719421226;
-	bh=ck9BJVN94A8X/goWOfcFcUMXyljByonN8PhcWCiNwW8=;
+	s=k20201202; t=1719421568;
+	bh=NGlqg/Pmt4gOfQtT4F33ND5D947m/+4mzw6M8io5Qtw=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=E36+TvcNN3NIJeM5crOgJkH0f6cMwNGvgheTm9IsQYiTTspJzzo9y4W7/iRLX2gkJ
-	 LeDP+u3Fger1rdyxgA+iPB15PHH4jI211/GKltEBqDVD84XHc1pb0gViBxAnDpgwd1
-	 iNiigvFZi5Uuw/6wX7dzpY6E8almLmxQFiyoZjJ4WB9FgrO9BgvAYBBHd0qAcasDP8
-	 +s9R0uK7MD+YmvSj5TWO6Jwx+zP6Gso03BB/gVLi7aceTIGZzKSqkIZrEFOtdfznra
-	 AycdZtptf5sDCQs/V9EjHq9B5aZkETF0rnHlwAQJ+w/blJJ8OR7yiFfzHO2t4IUyxH
-	 73ZaPNzvCdqag==
-Date: Wed, 26 Jun 2024 10:00:23 -0700
+	b=UfDdLa2S1ysiOoxcviyR4sD9rKUYuwGOxvS6LdOZDp60i58O8O/zKNCx8xVqnx9Mw
+	 LmGDsy869BKdL+jUwonXLt/4TSeOgToxdM3UkkmnmgKeStZkvrDWD+HPg9nwV90kBw
+	 hqo4bf4F2QabTiTSb+kSwp0ey36OEiffBOG+YpQT3yxG2tf8dP8Nfa8MEXVqNoylDF
+	 tBzYbmIZb/DWI0qNqLL6MQ5eSEjdoqhJTYO7Scu2Sc978nDTaO0QlF0QEExjOYQSvP
+	 Zt+Fv7574L1eefswOYgYSBFZT+tIRYGWNzdwaj53LPSQWjCPgji+/zh1U7Vj6mhiwK
+	 IuGPIDjAcC4ug==
+Date: Wed, 26 Jun 2024 10:06:05 -0700
 From: Nathan Chancellor <nathan@kernel.org>
-To: Naresh Kamboju <naresh.kamboju@linaro.org>
-Cc: open list <linux-kernel@vger.kernel.org>, linux-mm <linux-mm@kvack.org>,
-	lkft-triage@lists.linaro.org,
-	clang-built-linux <llvm@lists.linux.dev>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Arnd Bergmann <arnd@arndb.de>, Lance Yang <ioworker0@gmail.com>
-Subject: Re: mm: huge_memory.c:2736:31: error: variable 'page' is
- uninitialized when used here [-Werror,-Wuninitialized]
-Message-ID: <20240626170023.GA65296@fedora-macbook-air-m2>
-References: <CA+G9fYv-rWNXZ9JxA19qSP0r+jhPDaMJejKbckN72kT1UpQ3QA@mail.gmail.com>
+To: James Smart <james.smart@broadcom.com>, Christoph Hellwig <hch@lst.de>,
+	Sagi Grimberg <sagi@grimberg.me>,
+	Chaitanya Kulkarni <kch@nvidia.com>
+Cc: Kees Cook <keescook@chromium.org>,
+	"Gustavo A. R. Silva" <gustavoars@kernel.org>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Keith Busch <kbusch@kernel.org>, linux-nvme@lists.infradead.org,
+	linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org,
+	llvm@lists.linux.dev, patches@lists.linux.dev,
+	stable@vger.kernel.org
+Subject: Re: [PATCH] nvmet-fc: Remove __counted_by from
+ nvmet_fc_tgt_queue.fod[]
+Message-ID: <20240626170605.GA66745@fedora-macbook-air-m2>
+References: <20240529-drop-counted-by-fod-nvmet-fc-tgt-queue-v1-1-286adbc25943@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -46,38 +51,74 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CA+G9fYv-rWNXZ9JxA19qSP0r+jhPDaMJejKbckN72kT1UpQ3QA@mail.gmail.com>
+In-Reply-To: <20240529-drop-counted-by-fod-nvmet-fc-tgt-queue-v1-1-286adbc25943@kernel.org>
 
-Hi Naresh,
+Ping? This is still relevant and I don't think this is a compiler bug
+that would justify withholding this change.
 
-On Wed, Jun 26, 2024 at 10:14:56PM +0530, Naresh Kamboju wrote:
-> The x86_64 clang builds failed on Linux next due to these warnings / errors.
+On Wed, May 29, 2024 at 02:42:40PM -0700, Nathan Chancellor wrote:
+> Work for __counted_by on generic pointers in structures (not just
+> flexible array members) has started landing in Clang 19 (current tip of
+> tree). During the development of this feature, a restriction was added
+> to __counted_by to prevent the flexible array member's element type from
+> including a flexible array member itself such as:
 > 
-> Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+>   struct foo {
+>     int count;
+>     char buf[];
+>   };
 > 
-> Build error:
-> ------
-> mm/huge_memory.c:2736:31: error: variable 'page' is uninitialized when
-> used here [-Werror,-Wuninitialized]
->  2736 |         folio_remove_rmap_pmd(folio, page, vma);
->       |                                      ^~~~
-> /builds/linux/mm/huge_memory.c:2700:19: note: initialize the variable
-> 'page' to silence this warning
->  2700 |         struct page *page;
->       |                          ^
->       |                           = NULL
-> 1 error generated.
+>   struct bar {
+>     int count;
+>     struct foo data[] __counted_by(count);
+>   };
 > 
-> patch that is causing this build failures,
->   mm/vmscan: avoid split lazyfree THP during shrink_folio_list()
-
-Thanks for the report. It looks like Andrew addressed this in
-mm-unstable based on an earlier report (although that change might need
-some more polish ;)
-
-https://lore.kernel.org/202406260514.SLhNM9kQ-lkp@intel.com/
-
-https://git.kernel.org/akpm/mm/c/199e6c3bd568657e85ead22d6f41c46e74ad9a75
-
-Cheers,
-Nathan
+> because the size of data cannot be calculated with the standard array
+> size formula:
+> 
+>   sizeof(struct foo) * count
+> 
+> This restriction was downgraded to a warning but due to CONFIG_WERROR,
+> it can still break the build. The application of __counted_by on the fod
+> member of 'struct nvmet_fc_tgt_queue' triggers this restriction,
+> resulting in:
+> 
+>   drivers/nvme/target/fc.c:151:2: error: 'counted_by' should not be applied to an array with element of unknown size because 'struct nvmet_fc_fcp_iod' is a struct type with a flexible array member. This will be an error in a future compiler version [-Werror,-Wbounds-safety-counted-by-elt-type-unknown-size]
+>     151 |         struct nvmet_fc_fcp_iod         fod[] __counted_by(sqsize);
+>         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>   1 error generated.
+> 
+> Remove this use of __counted_by to fix the warning/error. However,
+> rather than remove it altogether, leave it commented, as it may be
+> possible to support this in future compiler releases.
+> 
+> Cc: stable@vger.kernel.org
+> Closes: https://github.com/ClangBuiltLinux/linux/issues/2027
+> Fixes: ccd3129aca28 ("nvmet-fc: Annotate struct nvmet_fc_tgt_queue with __counted_by")
+> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+> ---
+>  drivers/nvme/target/fc.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/nvme/target/fc.c b/drivers/nvme/target/fc.c
+> index 337ee1cb09ae..381b4394731f 100644
+> --- a/drivers/nvme/target/fc.c
+> +++ b/drivers/nvme/target/fc.c
+> @@ -148,7 +148,7 @@ struct nvmet_fc_tgt_queue {
+>  	struct workqueue_struct		*work_q;
+>  	struct kref			ref;
+>  	/* array of fcp_iods */
+> -	struct nvmet_fc_fcp_iod		fod[] __counted_by(sqsize);
+> +	struct nvmet_fc_fcp_iod		fod[] /* __counted_by(sqsize) */;
+>  } __aligned(sizeof(unsigned long long));
+>  
+>  struct nvmet_fc_hostport {
+> 
+> ---
+> base-commit: c758b77d4a0a0ed3a1292b3fd7a2aeccd1a169a4
+> change-id: 20240529-drop-counted-by-fod-nvmet-fc-tgt-queue-50edd2f8d60e
+> 
+> Best regards,
+> -- 
+> Nathan Chancellor <nathan@kernel.org>
+> 
