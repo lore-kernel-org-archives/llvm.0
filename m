@@ -1,64 +1,63 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A6B617D36F;
-	Tue, 25 Jun 2024 23:39:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B281F1FBB;
+	Wed, 26 Jun 2024 00:19:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719358749; cv=none; b=de4QxsVQ6gU1wDlfVG8NmlSgd3MxhEirfDFeotM8GPTfoy+O3xw/My3/8k3EXUIV8Du7gfJIz+zVb/dELxPaPlEHJ1Arx5LjLrCdpaFuKFEfKWhwUaxU4LUdOU1uLCTizj026rWijhesowFb2F29Pu28M6TW+PzMc1kk4Sus6v0=
+	t=1719361199; cv=none; b=iTG8jIfmWQjnNYDkUULStLiVqhKCzoSmWTVfVqJukH0GJllwSkSNvbEbi4MZGLczGtQyE34Wgm0zG5f3UWNw/D4CYJrylwyAZsLFe9CIwZ5QpkFEbYfgY/s9FpMiS2qizXffFBLbpuv3vQrKS5g5lhQAq3EAyiRuUl9eZZBOF+Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719358749; c=relaxed/simple;
-	bh=c5S+PvYFw1THnX/NR5WSr2hpTWmvbJcAaqBG5TNgCXg=;
+	s=arc-20240116; t=1719361199; c=relaxed/simple;
+	bh=VyKJoiUnArbE85wVbW2yF8U84igiUbDe9AhUCeSC9bA=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=TQT+MDPps5B7LvSFX6s6cx9RZGv/VRydmCV+tUO3FC8QzCK5wfjxzRFnc4mLBJBUVMEPvzV4EI9rQGzsYNDheia7UplcnGt8ybymznWZJe+kptTz9RRCCp7y8EjxcNULL0VhuNxDZOGNVZETexDG2YV/EM0/IdGxRYi/FWusOLE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Au0S/IaB; arc=none smtp.client-ip=192.198.163.14
+	 Content-Type:Content-Disposition:In-Reply-To; b=AUQ+WlxplyeH0VM16fjv4ihoq6HusUadWzjyVR9ma3RHTXqXZitycNGExh1y7tqOPQtJWPNBMn9WB1wGK6jP/vXja5+SRuoPKDreHmwT8961VS9lUOB9ZAk5E6t66YZqAQ0vYgkp2iXYmQEshaeayfFcA+D3YhBvPb0/+om+1Go=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ZEYkSQad; arc=none smtp.client-ip=192.198.163.13
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Au0S/IaB"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ZEYkSQad"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1719358747; x=1750894747;
+  t=1719361198; x=1750897198;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=c5S+PvYFw1THnX/NR5WSr2hpTWmvbJcAaqBG5TNgCXg=;
-  b=Au0S/IaB05uoC34ayTc8sjz0BuvNGBVShblUJY3PthySsw0PE2ldI3n5
-   oGXqtRRBFU/IQv2z14aBUyWfNDHskPfONMzFyZg3fJDCgB4Xt/CtIZYbi
-   7YzPor3UNWM7VDmpgqaPjNCv3LVdm8mUm48aeYKQgvUDOxd3ErT4qYS5o
-   qUau6j+lg52xclw0elZV67cUnVVmFXlMj0Mw16YG2loYrEEGg6a+hAJ6e
-   p/ZTWzQcu8XSbwvYwZOdddy8peiZsvOYfAeZjpU6zUzdLd8nYgNIiCSdd
-   1d6OPxicW8XyKzgQrl+tZhLhrjho8ISAgqrezLccB8oNB2pA72yJBFURq
-   g==;
-X-CSE-ConnectionGUID: ZzND93zRS9eroUaiiF8VWg==
-X-CSE-MsgGUID: qFdzYThjS7mdYfUkE7VNiQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11114"; a="16634591"
+  bh=VyKJoiUnArbE85wVbW2yF8U84igiUbDe9AhUCeSC9bA=;
+  b=ZEYkSQadVWYpLhvWaE8Gld6G2GguV1VUFyKCz8aoILMJZawdINvU5KZ/
+   sDJQACpO7/KTpVQbQFntIWI1N1Yt02FNVlU7CEqR3zbVUDFJJk7NEgiHI
+   UghD+H2O8q49IV440IGgvT2HnbVn+EUHmaFizpzaSPyVY9U9EQcUB13xE
+   qikGdL2ojU5nhcoCeUscUJjNV8vSWg+9x+F4LopEz07MMvhdLcP0V/qgg
+   EsNZMZ0t/AOWyzCSmtLJBeUDGn0mtnfRcubh2bOySyOdRcAxQLWevRGTy
+   89z991oByaGhsdTP/MEX1h4io1TIixSPmNrkvEACiEOxjek6fU2VelNib
+   w==;
+X-CSE-ConnectionGUID: DZn3DSk7Q6yV53+igdx8ag==
+X-CSE-MsgGUID: HSwFlLnKRDap8DjUufC5RQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11114"; a="19300657"
 X-IronPort-AV: E=Sophos;i="6.08,265,1712646000"; 
-   d="scan'208";a="16634591"
+   d="scan'208";a="19300657"
 Received: from orviesa008.jf.intel.com ([10.64.159.148])
-  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jun 2024 16:39:06 -0700
-X-CSE-ConnectionGUID: ionq9pMKQnO6zgpYneVJdg==
-X-CSE-MsgGUID: IFCBErGKT4aHx7my7C92Gw==
+  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jun 2024 17:19:57 -0700
+X-CSE-ConnectionGUID: JcfAnWtYQAe43ZyW7371ww==
+X-CSE-MsgGUID: YXSpsHLhSsKFj+neRKfkBQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.08,265,1712646000"; 
-   d="scan'208";a="44523719"
+   d="scan'208";a="44531365"
 Received: from lkp-server01.sh.intel.com (HELO 68891e0c336b) ([10.239.97.150])
-  by orviesa008.jf.intel.com with ESMTP; 25 Jun 2024 16:39:05 -0700
+  by orviesa008.jf.intel.com with ESMTP; 25 Jun 2024 17:19:55 -0700
 Received: from kbuild by 68891e0c336b with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1sMFkb-000EoO-1E;
-	Tue, 25 Jun 2024 23:39:01 +0000
-Date: Wed, 26 Jun 2024 07:38:07 +0800
+	id 1sMGO8-000EpP-01;
+	Wed, 26 Jun 2024 00:19:52 +0000
+Date: Wed, 26 Jun 2024 08:19:02 +0800
 From: kernel test robot <lkp@intel.com>
-To: Jim Mattson <jmattson@google.com>,
-	Sean Christopherson <seanjc@google.com>,
-	Paolo Bonzini <pbonzini@redhat.com>,
-	Maxim Levitsky <mlevitsk@redhat.com>, kvm@vger.kernel.org
+To: David Lin <yu-hao.lin@nxp.com>, linux-wireless@vger.kernel.org
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Jim Mattson <jmattson@google.com>
-Subject: Re: [PATCH] KVM: x86: Complain about an attempt to change the APIC
- base address
-Message-ID: <202406260749.ZqcsICau-lkp@intel.com>
-References: <20240621224946.4083742-1-jmattson@google.com>
+	linux-kernel@vger.kernel.org, briannorris@chromium.org,
+	kvalo@kernel.org, francesco@dolcini.it, tsung-hsien.hsieh@nxp.com,
+	David Lin <yu-hao.lin@nxp.com>
+Subject: Re: [PATCH 42/43] wifi: nxpwifi: add Makefile and Kconfig files for
+ nxpwifi compilation
+Message-ID: <202406260755.fqLnsFhr-lkp@intel.com>
+References: <20240621075208.513497-43-yu-hao.lin@nxp.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -67,147 +66,148 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240621224946.4083742-1-jmattson@google.com>
+In-Reply-To: <20240621075208.513497-43-yu-hao.lin@nxp.com>
 
-Hi Jim,
+Hi David,
 
 kernel test robot noticed the following build warnings:
 
-[auto build test WARNING on kvm/queue]
-[also build test WARNING on linus/master v6.10-rc5 next-20240625]
-[cannot apply to kvm/linux-next]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+[auto build test WARNING on 238d636723a30311e20fde0a361662e829fe488b]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Jim-Mattson/KVM-x86-Complain-about-an-attempt-to-change-the-APIC-base-address/20240625-181629
-base:   https://git.kernel.org/pub/scm/virt/kvm/kvm.git queue
-patch link:    https://lore.kernel.org/r/20240621224946.4083742-1-jmattson%40google.com
-patch subject: [PATCH] KVM: x86: Complain about an attempt to change the APIC base address
-config: x86_64-rhel-8.3-rust (https://download.01.org/0day-ci/archive/20240626/202406260749.ZqcsICau-lkp@intel.com/config)
+url:    https://github.com/intel-lab-lkp/linux/commits/David-Lin/wifi-nxpwifi-add-11ac-c/20240625-161306
+base:   238d636723a30311e20fde0a361662e829fe488b
+patch link:    https://lore.kernel.org/r/20240621075208.513497-43-yu-hao.lin%40nxp.com
+patch subject: [PATCH 42/43] wifi: nxpwifi: add Makefile and Kconfig files for nxpwifi compilation
+config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20240626/202406260755.fqLnsFhr-lkp@intel.com/config)
 compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240626/202406260749.ZqcsICau-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240626/202406260755.fqLnsFhr-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202406260749.ZqcsICau-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202406260755.fqLnsFhr-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
->> arch/x86/kvm/lapic.c:2587:8: warning: format specifies type 'unsigned long long' but the argument has type 'unsigned long' [-Wformat]
-    2586 |                 vcpu_unimpl(vcpu, "APIC base %#llx is not %#llx",
-         |                                              ~~~~~
-         |                                              %#lx
-    2587 |                             apic->base_address, APIC_DEFAULT_PHYS_BASE);
-         |                             ^~~~~~~~~~~~~~~~~~
-   include/linux/kvm_host.h:861:44: note: expanded from macro 'vcpu_unimpl'
-     860 |         kvm_pr_unimpl("vcpu%i, guest rIP: 0x%lx " fmt,                  \
-         |                                                   ~~~
-     861 |                         (vcpu)->vcpu_id, kvm_rip_read(vcpu), ## __VA_ARGS__)
-         |                                                                 ^~~~~~~~~~~
-   include/linux/kvm_host.h:856:33: note: expanded from macro 'kvm_pr_unimpl'
-     855 |         pr_err_ratelimited("kvm [%i]: " fmt, \
-         |                                         ~~~
-     856 |                            task_tgid_nr(current), ## __VA_ARGS__)
-         |                                                      ^~~~~~~~~~~
-   include/linux/printk.h:672:45: note: expanded from macro 'pr_err_ratelimited'
-     672 |         printk_ratelimited(KERN_ERR pr_fmt(fmt), ##__VA_ARGS__)
-         |                                            ~~~     ^~~~~~~~~~~
-   include/linux/printk.h:658:17: note: expanded from macro 'printk_ratelimited'
-     658 |                 printk(fmt, ##__VA_ARGS__);                             \
-         |                        ~~~    ^~~~~~~~~~~
-   include/linux/printk.h:464:60: note: expanded from macro 'printk'
-     464 | #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
-         |                                                     ~~~    ^~~~~~~~~~~
-   include/linux/printk.h:436:19: note: expanded from macro 'printk_index_wrap'
-     436 |                 _p_func(_fmt, ##__VA_ARGS__);                           \
-         |                         ~~~~    ^~~~~~~~~~~
->> arch/x86/kvm/lapic.c:2587:28: warning: format specifies type 'unsigned long long' but the argument has type 'unsigned int' [-Wformat]
-    2586 |                 vcpu_unimpl(vcpu, "APIC base %#llx is not %#llx",
-         |                                                           ~~~~~
-         |                                                           %#x
-    2587 |                             apic->base_address, APIC_DEFAULT_PHYS_BASE);
-         |                                                 ^~~~~~~~~~~~~~~~~~~~~~
-   include/linux/kvm_host.h:861:44: note: expanded from macro 'vcpu_unimpl'
-     860 |         kvm_pr_unimpl("vcpu%i, guest rIP: 0x%lx " fmt,                  \
-         |                                                   ~~~
-     861 |                         (vcpu)->vcpu_id, kvm_rip_read(vcpu), ## __VA_ARGS__)
-         |                                                                 ^~~~~~~~~~~
-   include/linux/kvm_host.h:856:33: note: expanded from macro 'kvm_pr_unimpl'
-     855 |         pr_err_ratelimited("kvm [%i]: " fmt, \
-         |                                         ~~~
-     856 |                            task_tgid_nr(current), ## __VA_ARGS__)
-         |                                                      ^~~~~~~~~~~
-   include/linux/printk.h:672:45: note: expanded from macro 'pr_err_ratelimited'
-     672 |         printk_ratelimited(KERN_ERR pr_fmt(fmt), ##__VA_ARGS__)
-         |                                            ~~~     ^~~~~~~~~~~
-   note: (skipping 1 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
-   include/linux/printk.h:464:60: note: expanded from macro 'printk'
-     464 | #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
-         |                                                     ~~~    ^~~~~~~~~~~
-   include/linux/printk.h:436:19: note: expanded from macro 'printk_index_wrap'
-     436 |                 _p_func(_fmt, ##__VA_ARGS__);                           \
-         |                         ~~~~    ^~~~~~~~~~~
-   arch/x86/include/asm/apicdef.h:15:33: note: expanded from macro 'APIC_DEFAULT_PHYS_BASE'
-      15 | #define APIC_DEFAULT_PHYS_BASE          0xfee00000
-         |                                         ^~~~~~~~~~
-   2 warnings generated.
+>> drivers/net/wireless/nxp/nxpwifi/11h.c:208:7: warning: variable 'chan2_offset' is used uninitialized whenever switch case is taken [-Wsometimes-uninitialized]
+     208 |         case NL80211_CHAN_WIDTH_80P80:
+         |              ^~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/net/wireless/nxp/nxpwifi/11h.c:214:16: note: uninitialized use occurs here
+     214 |         *band_cfg = ((chan2_offset << BAND_CFG_CHAN2_SHIFT_BIT) &
+         |                       ^~~~~~~~~~~~
+   drivers/net/wireless/nxp/nxpwifi/11h.c:209:7: warning: variable 'chan2_offset' is used uninitialized whenever switch case is taken [-Wsometimes-uninitialized]
+     209 |         case NL80211_CHAN_WIDTH_160:
+         |              ^~~~~~~~~~~~~~~~~~~~~~
+   drivers/net/wireless/nxp/nxpwifi/11h.c:214:16: note: uninitialized use occurs here
+     214 |         *band_cfg = ((chan2_offset << BAND_CFG_CHAN2_SHIFT_BIT) &
+         |                       ^~~~~~~~~~~~
+   drivers/net/wireless/nxp/nxpwifi/11h.c:192:7: warning: variable 'chan2_offset' is used uninitialized whenever switch case is taken [-Wsometimes-uninitialized]
+     192 |         case NL80211_CHAN_WIDTH_20_NOHT:
+         |              ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/net/wireless/nxp/nxpwifi/11h.c:214:16: note: uninitialized use occurs here
+     214 |         *band_cfg = ((chan2_offset << BAND_CFG_CHAN2_SHIFT_BIT) &
+         |                       ^~~~~~~~~~~~
+   drivers/net/wireless/nxp/nxpwifi/11h.c:193:7: warning: variable 'chan2_offset' is used uninitialized whenever switch case is taken [-Wsometimes-uninitialized]
+     193 |         case NL80211_CHAN_WIDTH_20:
+         |              ^~~~~~~~~~~~~~~~~~~~~
+   drivers/net/wireless/nxp/nxpwifi/11h.c:214:16: note: uninitialized use occurs here
+     214 |         *band_cfg = ((chan2_offset << BAND_CFG_CHAN2_SHIFT_BIT) &
+         |                       ^~~~~~~~~~~~
+>> drivers/net/wireless/nxp/nxpwifi/11h.c:210:2: warning: variable 'chan2_offset' is used uninitialized whenever switch default is taken [-Wsometimes-uninitialized]
+     210 |         default:
+         |         ^~~~~~~
+   drivers/net/wireless/nxp/nxpwifi/11h.c:214:16: note: uninitialized use occurs here
+     214 |         *band_cfg = ((chan2_offset << BAND_CFG_CHAN2_SHIFT_BIT) &
+         |                       ^~~~~~~~~~~~
+   drivers/net/wireless/nxp/nxpwifi/11h.c:178:40: note: initialize the variable 'chan2_offset' to silence this warning
+     178 |         u8 chan_band, chan_width, chan2_offset;
+         |                                               ^
+         |                                                = '\0'
+>> drivers/net/wireless/nxp/nxpwifi/11h.c:208:7: warning: variable 'chan_width' is used uninitialized whenever switch case is taken [-Wsometimes-uninitialized]
+     208 |         case NL80211_CHAN_WIDTH_80P80:
+         |              ^~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/net/wireless/nxp/nxpwifi/11h.c:216:9: note: uninitialized use occurs here
+     216 |                     ((chan_width << BAND_CFG_CHAN_WIDTH_SHIFT_BIT) &
+         |                       ^~~~~~~~~~
+   drivers/net/wireless/nxp/nxpwifi/11h.c:209:7: warning: variable 'chan_width' is used uninitialized whenever switch case is taken [-Wsometimes-uninitialized]
+     209 |         case NL80211_CHAN_WIDTH_160:
+         |              ^~~~~~~~~~~~~~~~~~~~~~
+   drivers/net/wireless/nxp/nxpwifi/11h.c:216:9: note: uninitialized use occurs here
+     216 |                     ((chan_width << BAND_CFG_CHAN_WIDTH_SHIFT_BIT) &
+         |                       ^~~~~~~~~~
+>> drivers/net/wireless/nxp/nxpwifi/11h.c:210:2: warning: variable 'chan_width' is used uninitialized whenever switch default is taken [-Wsometimes-uninitialized]
+     210 |         default:
+         |         ^~~~~~~
+   drivers/net/wireless/nxp/nxpwifi/11h.c:216:9: note: uninitialized use occurs here
+     216 |                     ((chan_width << BAND_CFG_CHAN_WIDTH_SHIFT_BIT) &
+         |                       ^~~~~~~~~~
+   drivers/net/wireless/nxp/nxpwifi/11h.c:178:26: note: initialize the variable 'chan_width' to silence this warning
+     178 |         u8 chan_band, chan_width, chan2_offset;
+         |                                 ^
+         |                                  = '\0'
+>> drivers/net/wireless/nxp/nxpwifi/11h.c:187:2: warning: variable 'chan_band' is used uninitialized whenever switch default is taken [-Wsometimes-uninitialized]
+     187 |         default:
+         |         ^~~~~~~
+   drivers/net/wireless/nxp/nxpwifi/11h.c:218:9: note: uninitialized use occurs here
+     218 |                     ((chan_band << BAND_CFG_CHAN_BAND_SHIFT_BIT) &
+         |                       ^~~~~~~~~
+   drivers/net/wireless/nxp/nxpwifi/11h.c:178:14: note: initialize the variable 'chan_band' to silence this warning
+     178 |         u8 chan_band, chan_width, chan2_offset;
+         |                     ^
+         |                      = '\0'
+   9 warnings generated.
 
 
-vim +2587 arch/x86/kvm/lapic.c
+vim +/chan2_offset +208 drivers/net/wireless/nxp/nxpwifi/11h.c
 
-  2542	
-  2543	void kvm_lapic_set_base(struct kvm_vcpu *vcpu, u64 value)
-  2544	{
-  2545		u64 old_value = vcpu->arch.apic_base;
-  2546		struct kvm_lapic *apic = vcpu->arch.apic;
-  2547	
-  2548		vcpu->arch.apic_base = value;
-  2549	
-  2550		if ((old_value ^ value) & MSR_IA32_APICBASE_ENABLE)
-  2551			kvm_update_cpuid_runtime(vcpu);
-  2552	
-  2553		if (!apic)
-  2554			return;
-  2555	
-  2556		/* update jump label if enable bit changes */
-  2557		if ((old_value ^ value) & MSR_IA32_APICBASE_ENABLE) {
-  2558			if (value & MSR_IA32_APICBASE_ENABLE) {
-  2559				kvm_apic_set_xapic_id(apic, vcpu->vcpu_id);
-  2560				static_branch_slow_dec_deferred(&apic_hw_disabled);
-  2561				/* Check if there are APF page ready requests pending */
-  2562				kvm_make_request(KVM_REQ_APF_READY, vcpu);
-  2563			} else {
-  2564				static_branch_inc(&apic_hw_disabled.key);
-  2565				atomic_set_release(&apic->vcpu->kvm->arch.apic_map_dirty, DIRTY);
-  2566			}
-  2567		}
-  2568	
-  2569		if ((old_value ^ value) & X2APIC_ENABLE) {
-  2570			if (value & X2APIC_ENABLE)
-  2571				kvm_apic_set_x2apic_id(apic, vcpu->vcpu_id);
-  2572			else if (value & MSR_IA32_APICBASE_ENABLE)
-  2573				kvm_apic_set_xapic_id(apic, vcpu->vcpu_id);
-  2574		}
-  2575	
-  2576		if ((old_value ^ value) & (MSR_IA32_APICBASE_ENABLE | X2APIC_ENABLE)) {
-  2577			kvm_make_request(KVM_REQ_APICV_UPDATE, vcpu);
-  2578			static_call_cond(kvm_x86_set_virtual_apic_mode)(vcpu);
-  2579		}
-  2580	
-  2581		apic->base_address = apic->vcpu->arch.apic_base &
-  2582				     MSR_IA32_APICBASE_BASE;
-  2583	
-  2584		if ((value & MSR_IA32_APICBASE_ENABLE) &&
-  2585		     apic->base_address != APIC_DEFAULT_PHYS_BASE) {
-  2586			vcpu_unimpl(vcpu, "APIC base %#llx is not %#llx",
-> 2587				    apic->base_address, APIC_DEFAULT_PHYS_BASE);
-  2588			kvm_set_apicv_inhibit(apic->vcpu->kvm,
-  2589					      APICV_INHIBIT_REASON_APIC_BASE_MODIFIED);
-  2590		}
-  2591	}
-  2592	
+647388e635d138 David Lin 2024-06-21  174  
+647388e635d138 David Lin 2024-06-21  175  static void nxpwifi_convert_chan_to_band_cfg(u8 *band_cfg,
+647388e635d138 David Lin 2024-06-21  176  					     struct cfg80211_chan_def *chan_def)
+647388e635d138 David Lin 2024-06-21  177  {
+647388e635d138 David Lin 2024-06-21  178  	u8 chan_band, chan_width, chan2_offset;
+647388e635d138 David Lin 2024-06-21  179  
+647388e635d138 David Lin 2024-06-21  180  	switch (chan_def->chan->band) {
+647388e635d138 David Lin 2024-06-21  181  	case NL80211_BAND_2GHZ:
+647388e635d138 David Lin 2024-06-21  182  		chan_band = BAND_2GHZ;
+647388e635d138 David Lin 2024-06-21  183  		break;
+647388e635d138 David Lin 2024-06-21  184  	case NL80211_BAND_5GHZ:
+647388e635d138 David Lin 2024-06-21  185  		chan_band = BAND_5GHZ;
+647388e635d138 David Lin 2024-06-21  186  		break;
+647388e635d138 David Lin 2024-06-21 @187  	default:
+647388e635d138 David Lin 2024-06-21  188  		break;
+647388e635d138 David Lin 2024-06-21  189  	}
+647388e635d138 David Lin 2024-06-21  190  
+647388e635d138 David Lin 2024-06-21  191  	switch (chan_def->width) {
+647388e635d138 David Lin 2024-06-21  192  	case NL80211_CHAN_WIDTH_20_NOHT:
+647388e635d138 David Lin 2024-06-21  193  	case NL80211_CHAN_WIDTH_20:
+647388e635d138 David Lin 2024-06-21  194  		chan_width = CHAN_BW_20MHZ;
+647388e635d138 David Lin 2024-06-21  195  		break;
+647388e635d138 David Lin 2024-06-21  196  	case NL80211_CHAN_WIDTH_40:
+647388e635d138 David Lin 2024-06-21  197  		chan_width = CHAN_BW_40MHZ;
+647388e635d138 David Lin 2024-06-21  198  		if (chan_def->center_freq1 > chan_def->chan->center_freq)
+647388e635d138 David Lin 2024-06-21  199  			chan2_offset = SEC_CHAN_ABOVE;
+647388e635d138 David Lin 2024-06-21  200  		else
+647388e635d138 David Lin 2024-06-21  201  			chan2_offset = SEC_CHAN_BELOW;
+647388e635d138 David Lin 2024-06-21  202  		break;
+647388e635d138 David Lin 2024-06-21  203  	case NL80211_CHAN_WIDTH_80:
+647388e635d138 David Lin 2024-06-21  204  		chan2_offset =
+647388e635d138 David Lin 2024-06-21  205  			nxpwifi_get_channel_2_offset(chan_def->chan->hw_value);
+647388e635d138 David Lin 2024-06-21  206  		chan_width = CHAN_BW_80MHZ;
+647388e635d138 David Lin 2024-06-21  207  		break;
+647388e635d138 David Lin 2024-06-21 @208  	case NL80211_CHAN_WIDTH_80P80:
+647388e635d138 David Lin 2024-06-21  209  	case NL80211_CHAN_WIDTH_160:
+647388e635d138 David Lin 2024-06-21 @210  	default:
+647388e635d138 David Lin 2024-06-21  211  		break;
+647388e635d138 David Lin 2024-06-21  212  	}
+647388e635d138 David Lin 2024-06-21  213  
+647388e635d138 David Lin 2024-06-21 @214  	*band_cfg = ((chan2_offset << BAND_CFG_CHAN2_SHIFT_BIT) &
+647388e635d138 David Lin 2024-06-21  215  		     BAND_CFG_CHAN2_OFFSET_MASK) |
+647388e635d138 David Lin 2024-06-21 @216  		    ((chan_width << BAND_CFG_CHAN_WIDTH_SHIFT_BIT) &
+647388e635d138 David Lin 2024-06-21  217  		     BAND_CFG_CHAN_WIDTH_MASK) |
+647388e635d138 David Lin 2024-06-21  218  		    ((chan_band << BAND_CFG_CHAN_BAND_SHIFT_BIT) &
+647388e635d138 David Lin 2024-06-21  219  		     BAND_CFG_CHAN_BAND_MASK);
+647388e635d138 David Lin 2024-06-21  220  }
+647388e635d138 David Lin 2024-06-21  221  
 
 -- 
 0-DAY CI Kernel Test Service
