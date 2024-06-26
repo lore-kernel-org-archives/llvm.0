@@ -1,39 +1,65 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B593418C326;
-	Wed, 26 Jun 2024 15:26:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 226B61849EF;
+	Wed, 26 Jun 2024 16:23:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719415585; cv=none; b=dMxEnoHTlaQV5t4fPTBNVB1Dvl+eQ/zZdlgb0Yyw28X+uuWpdI2W9FT1nUFgGHoLhQITFh/2o6WwuMIPRF5x7AvZTT4A8PZajkHKTC2+LxDJAMwld0UllaaLJEMBk5gErieLk+/siSaTgK+LX/FYA95Lg7NBOJt4fzypnNMGXNA=
+	t=1719418985; cv=none; b=Z9h+hLcdMD1x6m2CeZwcGzpPLO1U3JnjCl7JJMEtOUdwbY4+d2ZgvnL6Ggq8w4TqDQeAF2m3COg0KfAhLZXRb4Tzxdvw8SuN0x/U5mps5k9zR6BRSFmSXMnniZ3VU3N8jtSW+Ych0PHNAsyVtYJqLpVpgc02NPpvHpIqGqEVCZU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719415585; c=relaxed/simple;
-	bh=Vjs7X7CFQfPv2HEkHqohvw8nbnwTWiGv/wBrtk9rY9o=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition:In-Reply-To; b=XOhIR3G1+KkQH3Wli0vjo0KHCQ0l0xscl1KG5oETwKTsuNG2t38VsogwTPdprqKBqiiUvjQXQ+m++KVDjuLYVwfxJ/riUpa5Z3zwGM+6N+pO01MC2WJgOobbZgDa/XgxkBTE96nlzy8orz3+5uM/qO3u5cJLznTWpR4O2Q7j25g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dH/RABsC; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1719418985; c=relaxed/simple;
+	bh=6gFjRqnmAlZ+KmWeNakm51Ebba0HMPjTrguhw4sm/E0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=WVyIKBGZLwdQ3EM2gKIjNiJMJd0AB29Z5X9GnyH9pkE+wxjC9zA9eI/FYa6S2WpYS+u99cD+BmfUZtrJR/XXHDSkJOu75IKYK2wIXXwfUWga3hM8Epw9xoO12bzOLla+0gJsyZ1iUzP9tXHP+jZHBsx7hy6m1vEUNDdXPMtGABo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=YPv+SDn7; arc=none smtp.client-ip=192.198.163.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dH/RABsC"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 15A14C32782;
-	Wed, 26 Jun 2024 15:26:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1719415585;
-	bh=Vjs7X7CFQfPv2HEkHqohvw8nbnwTWiGv/wBrtk9rY9o=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:From;
-	b=dH/RABsCM+va5O/7sr3s/Ukr/CWf+sJNt8VNd7EwxmXXbJTkWtxs39lZsuNde8xNY
-	 BehY5BqJUnzymMdtf6ZZKi8z25A/Dv/tq7dDG1RGV+Of5T32Y06HC4gDL1vhpafpeE
-	 rYUaA0OhgJs/rbTSOJFiGS80+rOhBInUv4g00/0A/6rx8cjvFh0FebY1iqosCljvS8
-	 o2lb9IDgrnOPIJelovy6ckxMNBx7NCulPwOoOvkQKSMUVf9K277qH14LT7/NwJ8O7J
-	 J/Cs1a/NLIq07X9DhS52hEOSb0r57Qr0vxeyka0QDIScZM/Ce2651B/Q2v5Ywz3Z/Y
-	 he2XQ2H/ytxvw==
-Date: Wed, 26 Jun 2024 10:26:23 -0500
-From: Bjorn Helgaas <helgaas@kernel.org>
-To: Zhou Shengqing <zhoushengqing@ttyinfo.com>
-Cc: lkp@intel.com, linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
-	llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [PATCH v2] [PATCH v2] PCI: Enable io space 1k granularity for
- intel cpu root port
-Message-ID: <20240626152623.GA1467429@bhelgaas>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="YPv+SDn7"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1719418984; x=1750954984;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=6gFjRqnmAlZ+KmWeNakm51Ebba0HMPjTrguhw4sm/E0=;
+  b=YPv+SDn7/EhbHb3HgVmYD1gHLPuUSgtsAH/+SVu0IMUDFIzLBUn+NavU
+   DeNMJQxUwS8PREfnIyBJRjHNsWle//Hr2XzOw8crUDtGkLS/WBWSDimcm
+   j878TWe3w7agPSbOeFSqmCd1qCzvUVAtTcP0WVB4su1zNSeNmC1gjcFrf
+   fuN3sBkLnQI+1iiHXvA8qCtwWJU+/8zisrVs4sxnm6Qb41m4n4oP0iqo4
+   hMyfCVynLvrCQDfcTJAkSDuCNb0RZ3jn8/FTWG6dR9d8lZM4LpOgd53sS
+   ORus+ZB/O/FjJHsJv5sp9BCIJbVTf9qLT+ZJWn3jkHm1KJxyTUJYC2Jlq
+   w==;
+X-CSE-ConnectionGUID: ADhJoNlRQseRHDJmz8S/dA==
+X-CSE-MsgGUID: nTrUG5MvQ46Sbk5Fghz4Dw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11115"; a="16651452"
+X-IronPort-AV: E=Sophos;i="6.08,267,1712646000"; 
+   d="scan'208";a="16651452"
+Received: from fmviesa007.fm.intel.com ([10.60.135.147])
+  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jun 2024 09:23:03 -0700
+X-CSE-ConnectionGUID: aqVxw+UeSm2pAi9hLFlh0g==
+X-CSE-MsgGUID: 49XKsDlLR0O245zfXBJvQg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.08,267,1712646000"; 
+   d="scan'208";a="43930121"
+Received: from lkp-server01.sh.intel.com (HELO 68891e0c336b) ([10.239.97.150])
+  by fmviesa007.fm.intel.com with ESMTP; 26 Jun 2024 09:23:00 -0700
+Received: from kbuild by 68891e0c336b with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1sMVQ9-000FNi-1r;
+	Wed, 26 Jun 2024 16:22:57 +0000
+Date: Thu, 27 Jun 2024 00:21:13 +0800
+From: kernel test robot <lkp@intel.com>
+To: ran xiaokai <ranxiaokai627@163.com>, akpm@linux-foundation.org,
+	willy@infradead.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, vbabka@suse.cz,
+	svetly.todorov@memverge.com, ran.xiaokai@zte.com.cn,
+	baohua@kernel.org, ryan.roberts@arm.com, peterx@redhat.com,
+	ziy@nvidia.com, linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+	linux-fsdevel@vger.kernel.org
+Subject: Re: [PATCH 2/2] kpageflags: fix wrong KPF_THP on non-pmd-mappable
+ compound pages
+Message-ID: <202406262300.iAURISyJ-lkp@intel.com>
+References: <20240626024924.1155558-3-ranxiaokai627@163.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -42,42 +68,111 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240626111947.367032-1-zhoushengqing@ttyinfo.com>
+In-Reply-To: <20240626024924.1155558-3-ranxiaokai627@163.com>
 
-On Wed, Jun 26, 2024 at 11:19:47AM +0000, Zhou Shengqing wrote:
-> Fix compilation error in drivers/pci/probe.c with commit
-> 1f22711375ebe9fc95ced26c7059621c4d59b437
-> 
-> Changelog:
-> v2:
->  - Fixed compilation error(missed changed).
+Hi ran,
 
-Please post a v3 that is the entire patch including the fix.  Nothing
-has been merged yet, so there's no point in making it a separate
-commit.
+kernel test robot noticed the following build errors:
 
-> Reported-by: kernel test robot <lkp@intel.com>
-> Closes: https://lore.kernel.org/oe-kbuild-all/202406261735.9Fu2z2ic-lkp@intel.com/
-> 
-> Signed-off-by: Zhou Shengqing <zhoushengqing@ttyinfo.com>
-> ---
->  drivers/pci/probe.c | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/drivers/pci/probe.c b/drivers/pci/probe.c
-> index 3f0c901c6653..909962795311 100644
-> --- a/drivers/pci/probe.c
-> +++ b/drivers/pci/probe.c
-> @@ -463,6 +463,7 @@ static void pci_read_bridge_windows(struct pci_dev *bridge)
->  	u32 pmem, tmp;
->  	u16 ven_id, dev_id;
->  	u16 en1k = 0;
-> +	struct pci_dev *dev = NULL;
->  	struct resource res;
->  
->  	pci_read_config_dword(bridge, PCI_PRIMARY_BUS, &buses);
-> 
-> base-commit: 1f22711375ebe9fc95ced26c7059621c4d59b437
-> -- 
-> 2.39.2
-> 
+[auto build test ERROR on akpm-mm/mm-everything]
+[also build test ERROR on linus/master v6.10-rc5 next-20240625]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/ran-xiaokai/mm-Constify-folio_order-folio_test_pmd_mappable/20240626-113027
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
+patch link:    https://lore.kernel.org/r/20240626024924.1155558-3-ranxiaokai627%40163.com
+patch subject: [PATCH 2/2] kpageflags: fix wrong KPF_THP on non-pmd-mappable compound pages
+config: x86_64-allnoconfig (https://download.01.org/0day-ci/archive/20240626/202406262300.iAURISyJ-lkp@intel.com/config)
+compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240626/202406262300.iAURISyJ-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202406262300.iAURISyJ-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> fs/proc/page.c:151:35: error: passing 'const struct folio *' to parameter of type 'struct folio *' discards qualifiers [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
+     151 |         else if (folio_test_pmd_mappable(folio)) {
+         |                                          ^~~~~
+   include/linux/huge_mm.h:438:58: note: passing argument to parameter 'folio' here
+     438 | static inline bool folio_test_pmd_mappable(struct folio *folio)
+         |                                                          ^
+   1 error generated.
+
+
+vim +151 fs/proc/page.c
+
+   108	
+   109	u64 stable_page_flags(const struct page *page)
+   110	{
+   111		const struct folio *folio;
+   112		unsigned long k;
+   113		unsigned long mapping;
+   114		bool is_anon;
+   115		u64 u = 0;
+   116	
+   117		/*
+   118		 * pseudo flag: KPF_NOPAGE
+   119		 * it differentiates a memory hole from a page with no flags
+   120		 */
+   121		if (!page)
+   122			return 1 << KPF_NOPAGE;
+   123		folio = page_folio(page);
+   124	
+   125		k = folio->flags;
+   126		mapping = (unsigned long)folio->mapping;
+   127		is_anon = mapping & PAGE_MAPPING_ANON;
+   128	
+   129		/*
+   130		 * pseudo flags for the well known (anonymous) memory mapped pages
+   131		 */
+   132		if (page_mapped(page))
+   133			u |= 1 << KPF_MMAP;
+   134		if (is_anon) {
+   135			u |= 1 << KPF_ANON;
+   136			if (mapping & PAGE_MAPPING_KSM)
+   137				u |= 1 << KPF_KSM;
+   138		}
+   139	
+   140		/*
+   141		 * compound pages: export both head/tail info
+   142		 * they together define a compound page's start/end pos and order
+   143		 */
+   144		if (page == &folio->page)
+   145			u |= kpf_copy_bit(k, KPF_COMPOUND_HEAD, PG_head);
+   146		else
+   147			u |= 1 << KPF_COMPOUND_TAIL;
+   148	
+   149		if (folio_test_hugetlb(folio))
+   150			u |= 1 << KPF_HUGE;
+ > 151		else if (folio_test_pmd_mappable(folio)) {
+   152			u |= 1 << KPF_THP;
+   153			if (is_huge_zero_folio(folio))
+   154				u |= 1 << KPF_ZERO_PAGE;
+   155		} else if (is_zero_pfn(page_to_pfn(page)))
+   156			u |= 1 << KPF_ZERO_PAGE;
+   157	
+   158		/*
+   159		 * Caveats on high order pages: PG_buddy and PG_slab will only be set
+   160		 * on the head page.
+   161		 */
+   162		if (PageBuddy(page))
+   163			u |= 1 << KPF_BUDDY;
+   164		else if (page_count(page) == 0 && is_free_buddy_page(page))
+   165			u |= 1 << KPF_BUDDY;
+   166	
+   167		if (PageOffline(page))
+   168			u |= 1 << KPF_OFFLINE;
+   169		if (PageTable(page))
+   170			u |= 1 << KPF_PGTABLE;
+   171		if (folio_test_slab(folio))
+   172			u |= 1 << KPF_SLAB;
+   173	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
