@@ -1,69 +1,68 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 16DC117D88D;
-	Wed, 26 Jun 2024 11:33:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 54E5317BB19;
+	Wed, 26 Jun 2024 12:09:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719401627; cv=none; b=Poe5G5/8qH5s00AC9jQ7IBK20pdKtwGtxh6fJefcM1gfvjikzv+od9VT4iX0zyD06sd4EGvXFe0yBApha0f3QOpitOSZrs/lSpB/11IHX9NcwbccyNBzeFNF7Az3gbOrPyNXrViTexmLrE2e0vtQLTCjAk/oPwkt4TuZhzGoH00=
+	t=1719403789; cv=none; b=KhcqZS7idGWxNEvtoy+lD2wcC4ClRdgBYXOBLTN4BLz6W53mtBb3QRY9Oe5e8V3mitJq4UwuyrCh2omwu2sMsUnuJHsjuKJWP0RmfP80WtRrNlxr/H+Yqq4PGXGI5QM+tweaVt/U0H0EeoihJoKWPMwo0ejsJEtM95iUk5LsLSk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719401627; c=relaxed/simple;
-	bh=rqGqww5P0DmeSRDWfh4o6RftNlXOzXNa7nE43WLEL7I=;
+	s=arc-20240116; t=1719403789; c=relaxed/simple;
+	bh=682UDvYYZ1aAaGOxp1reyfhaKc8P3rmiduqOQFcN4nQ=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=krx4dvWkllHcEyShs2kkUxdX9ogevhpm1MgPbTrV2eoeC3PjZvidr7LbxsZvbEa77IHCJ35HCC5ddqHH1EWXC0d+zqfwIqYcjiG5eIpX8iyFwY3jcmTCSvV/8L6oJx5igaL0i1SksPjH6OPCo1LRQjSVCjv3Yp/2u/c+WyOYEG0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=UI6SJYWU; arc=none smtp.client-ip=198.175.65.11
+	 Content-Type:Content-Disposition:In-Reply-To; b=SXn7F9I2m44VM3eYoV71Kzebrmon2Hf9VP2ZlymFqqqO7O2L8QxyUJfIjP5kd3CM10izC59FfihCv+QMDe+yNpCALDuZRYpwmM+w4A9eV4thjDJ8jl7baV6/SZ69oXZjw10NZ4OwHIshy3jogpnUXxoKrclYVl0ydv7TrlELV4g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=krkbnRWZ; arc=none smtp.client-ip=192.198.163.8
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="UI6SJYWU"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="krkbnRWZ"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1719401625; x=1750937625;
+  t=1719403786; x=1750939786;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=rqGqww5P0DmeSRDWfh4o6RftNlXOzXNa7nE43WLEL7I=;
-  b=UI6SJYWUihDxc3bXS1Lat5M369LoLRSL2hglBSq2k6TXJ2BUgrvzywGO
-   I8UjYLEgAY5DIdQnBaiNjUE/ygxV8UaG889xwBjwMp9j2Mu+6HGhOqV7C
-   wo11FaqTu+x3OtBMPcgsaJ7VKWn430r3ietlp3+xK+eYfUhsJj18OIy39
-   V0tk/R2b5zzJrdANVpXdHKGWcCy6K/zQ+aJM3GG8Snko3Czwl1t1WWpyQ
-   CEcN//xk1UHRBjUQ4uDkUTdb8m3Krnz/euOm2AeAu0QlnuLpbzmkEAsOD
-   ds4IW8s0cJqZxsp0SW9jIAMCdsc1fLOATLR2hwVeP4nEHvJDWeGv4LXdU
-   A==;
-X-CSE-ConnectionGUID: pZoR162IR4e89TH0HDepnQ==
-X-CSE-MsgGUID: R13xzbD/QK65Ak7TbwGnVQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11114"; a="27057363"
+  bh=682UDvYYZ1aAaGOxp1reyfhaKc8P3rmiduqOQFcN4nQ=;
+  b=krkbnRWZn3Hr3Xz0Q3d8Vd2HiAu0dOWMRyFiLptlPPJhpQ+XTls/KfD8
+   O+CthtdtQI0nXFyl3ynXYwQiAiJLlfvLZAX7MGZ5rZBd/WTs5NDO4Zlyx
+   t30qbXZ1DMLsJyWGYM/C3WejLS+RZEUrecPMNJiJMKM+TItRa/6+Cb3pj
+   93jm3V+v15tTxsQEETm8KcR8e169cVW39JvT+8z6y7VoUaNhx09CZqq55
+   oiCGBogxhOr4n2wErCkvHL1TCxvnFa8ZFzxC/RQEjWpXMOcdxvs0Tys/E
+   D5fTrWQ5i/ZA3+M/lr/V4+pU7HivD/ZlAkneWuHYKZfFl5tEWhEuDgSEi
+   w==;
+X-CSE-ConnectionGUID: A0o5tlZ/ReupmgyzvH3HgQ==
+X-CSE-MsgGUID: z1rfT7AnSFGRYowvPTGD5w==
+X-IronPort-AV: E=McAfee;i="6700,10204,11114"; a="34002237"
 X-IronPort-AV: E=Sophos;i="6.08,266,1712646000"; 
-   d="scan'208";a="27057363"
-Received: from fmviesa005.fm.intel.com ([10.60.135.145])
-  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jun 2024 04:33:44 -0700
-X-CSE-ConnectionGUID: toXJogU2R8+CcIJ8Dldbog==
-X-CSE-MsgGUID: QUSJrV7jSTufBolgt3ek9A==
+   d="scan'208";a="34002237"
+Received: from orviesa001.jf.intel.com ([10.64.159.141])
+  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jun 2024 05:09:45 -0700
+X-CSE-ConnectionGUID: ISumHd2+RkGM5L2H+zSVDA==
+X-CSE-MsgGUID: CYSlF/ybQrivsmPJO4HTXA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.08,266,1712646000"; 
-   d="scan'208";a="48423315"
+   d="scan'208";a="81528052"
 Received: from lkp-server01.sh.intel.com (HELO 68891e0c336b) ([10.239.97.150])
-  by fmviesa005.fm.intel.com with ESMTP; 26 Jun 2024 04:33:39 -0700
+  by orviesa001.jf.intel.com with ESMTP; 26 Jun 2024 05:09:41 -0700
 Received: from kbuild by 68891e0c336b with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1sMQu8-000FEM-2S;
-	Wed, 26 Jun 2024 11:33:36 +0000
-Date: Wed, 26 Jun 2024 19:32:54 +0800
+	id 1sMRT0-000FFW-0X;
+	Wed, 26 Jun 2024 12:09:38 +0000
+Date: Wed, 26 Jun 2024 20:08:38 +0800
 From: kernel test robot <lkp@intel.com>
-To: Christoph Hellwig <hch@lst.de>, Jens Axboe <axboe@kernel.dk>
+To: Chris Packham <chris.packham@alliedtelesis.co.nz>, tglx@linutronix.de,
+	robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
+	tsbogend@alpha.franken.de, daniel.lezcano@linaro.org,
+	paulburton@kernel.org, peterz@infradead.org, mail@birger-koblitz.de,
+	bert@biot.com, john@phrozen.org, sander@svanheule.net
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Damien Le Moal <dlemoal@kernel.org>,
-	Niklas Cassel <cassel@kernel.org>, Song Liu <song@kernel.org>,
-	Yu Kuai <yukuai3@huawei.com>,
-	"Martin K. Petersen" <martin.petersen@oracle.com>,
-	Alim Akhtar <alim.akhtar@samsung.com>,
-	Avri Altman <avri.altman@wdc.com>,
-	Bart Van Assche <bvanassche@acm.org>, linux-block@vger.kernel.org,
-	linux-ide@vger.kernel.org, linux-raid@vger.kernel.org,
-	linux-scsi@vger.kernel.org,
-	kernel test robot <oliver.sang@intel.com>
-Subject: Re: [PATCH 1/7] md: set md-specific flags for all queue limits
-Message-ID: <202406261925.u3nz0p2g-lkp@intel.com>
-References: <20240625110603.50885-2-hch@lst.de>
+	linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-mips@vger.kernel.org, kabel@kernel.org, ericwouds@gmail.com,
+	Chris Packham <chris.packham@alliedtelesis.co.nz>,
+	Markus Stockhausen <markus.stockhausen@gmx.de>
+Subject: Re: [PATCH 4/6] clocksource: realtek: Add timer driver for rtl-otto
+ platforms
+Message-ID: <202406261940.lYNjMHKC-lkp@intel.com>
+References: <20240621042737.674128-5-chris.packham@alliedtelesis.co.nz>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -72,137 +71,156 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240625110603.50885-2-hch@lst.de>
+In-Reply-To: <20240621042737.674128-5-chris.packham@alliedtelesis.co.nz>
 
-Hi Christoph,
+Hi Chris,
 
-kernel test robot noticed the following build errors:
+kernel test robot noticed the following build warnings:
 
-[auto build test ERROR on axboe-block/for-next]
-[also build test ERROR on next-20240625]
-[cannot apply to linus/master v6.10-rc5]
+[auto build test WARNING on robh/for-next]
+[also build test WARNING on tip/timers/core tip/irq/core tip/smp/core linus/master v6.10-rc5 next-20240625]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Christoph-Hellwig/block-correctly-report-cache-type/20240626-012117
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/axboe/linux-block.git for-next
-patch link:    https://lore.kernel.org/r/20240625110603.50885-2-hch%40lst.de
-patch subject: [PATCH 1/7] md: set md-specific flags for all queue limits
-config: arm64-randconfig-004-20240626 (https://download.01.org/0day-ci/archive/20240626/202406261925.u3nz0p2g-lkp@intel.com/config)
-compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project ad79a14c9e5ec4a369eed4adf567c22cc029863f)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240626/202406261925.u3nz0p2g-lkp@intel.com/reproduce)
+url:    https://github.com/intel-lab-lkp/linux/commits/Chris-Packham/dt-bindings-mips-realtek-Add-rtl930x-soc-compatible/20240625-160622
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
+patch link:    https://lore.kernel.org/r/20240621042737.674128-5-chris.packham%40alliedtelesis.co.nz
+patch subject: [PATCH 4/6] clocksource: realtek: Add timer driver for rtl-otto platforms
+config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20240626/202406261940.lYNjMHKC-lkp@intel.com/config)
+compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240626/202406261940.lYNjMHKC-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202406261925.u3nz0p2g-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202406261940.lYNjMHKC-lkp@intel.com/
 
-All errors (new ones prefixed by >>, old ones prefixed by <<):
+All warnings (new ones prefixed by >>):
 
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/clk/mediatek/clk-mt8183-apmixedsys.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/clk/mediatek/clk-mt8183.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/clk/mediatek/clk-mt8183-audio.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/clk/mediatek/clk-mt8183-ipu0.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/clk/mediatek/clk-mt8183-ipu_conn.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/clk/mediatek/clk-mt8183-vdec.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/clk/mediatek/clk-mt8188-apmixedsys.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/clk/mediatek/clk-mt8188-topckgen.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/clk/mediatek/clk-mt8188-peri_ao.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/clk/mediatek/clk-mt8188-infra_ao.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/clk/mediatek/clk-mt8188-adsp_audio26m.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/clk/mediatek/clk-mt8188-cam.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/clk/mediatek/clk-mt8188-ccu.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/clk/mediatek/clk-mt8188-img.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/clk/mediatek/clk-mt8188-imp_iic_wrap.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/clk/mediatek/clk-mt8188-ipe.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/clk/mediatek/clk-mt8188-mfg.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/clk/mediatek/clk-mt8188-vdec.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/clk/mediatek/clk-mt8188-vdo0.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/clk/mediatek/clk-mt8188-vdo1.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/clk/mediatek/clk-mt8188-venc.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/clk/mediatek/clk-mt8188-vpp0.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/clk/mediatek/clk-mt8188-vpp1.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/clk/mediatek/clk-mt8188-wpe.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/clk/mediatek/clk-mt8192-mdp.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/clk/mediatek/clk-mt8192-vdec.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/clk/mediatek/clk-mt8192-venc.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/clk/mediatek/clk-mt8195-img.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/clk/mediatek/clk-mt8195-mfg.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/clk/mediatek/clk-mt8195-vdo0.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/clk/mediatek/clk-mt8195-vdo1.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/clk/mediatek/clk-mt8195-vpp0.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/clk/mediatek/clk-mt8195-vpp1.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/clk/sophgo/clk-sophgo-cv1800.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/clk/sprd/clk-sprd.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/clk/clk_test.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/clk/qcom/clk-qcom.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/soc/imx/soc-imx8m.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/soc/amlogic/meson-clk-measure.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/pmdomain/amlogic/meson-ee-pwrc.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/pmdomain/amlogic/meson-secure-pwrc.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/regulator/da9121-regulator.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/reset/hisilicon/hi6220_reset.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/char/hw_random/omap3-rom-rng.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/gpu/drm/tests/drm_kunit_helpers.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/gpu/drm/tests/drm_buddy_test.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/gpu/drm/tests/drm_cmdline_parser_test.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/gpu/drm/tests/drm_connector_test.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/gpu/drm/tests/drm_damage_helper_test.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/gpu/drm/tests/drm_dp_mst_helper_test.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/gpu/drm/tests/drm_exec_test.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/gpu/drm/tests/drm_format_test.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/gpu/drm/tests/drm_framebuffer_test.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/gpu/drm/tests/drm_gem_shmem_test.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/gpu/drm/tests/drm_managed_test.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/gpu/drm/tests/drm_mm_test.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/gpu/drm/tests/drm_modes_test.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/gpu/drm/tests/drm_plane_helper_test.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/gpu/drm/tests/drm_probe_helper_test.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/gpu/drm/tests/drm_rect_test.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/gpu/drm/panel/panel-orisetech-ota5601a.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/base/regmap/regmap-kunit.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/base/regmap/regmap-ram.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/base/regmap/regmap-raw-ram.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/base/regmap/regmap-slimbus.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/base/regmap/regmap-w1.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/base/regmap/regmap-sccb.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/mfd/vexpress-sysreg.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/mfd/qcom-pm8008.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/dax/dax.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/input/touchscreen/cyttsp_i2c_common.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/rtc/rtc-rc5t583.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/rtc/rtc-twl.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/i2c/busses/i2c-qup.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/media/tuners/tda9887.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/media/platform/marvell/mmp_camera.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/media/platform/marvell/mcam-core.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/media/platform/samsung/exynos4-is/exynos-fimc-lite.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/media/platform/samsung/exynos4-is/exynos-fimc-is.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/media/platform/samsung/exynos4-is/exynos4-is-common.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/media/platform/ti/vpe/ti-vpdma.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/media/v4l2-core/v4l2-async.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/media/v4l2-core/v4l2-fwnode.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/media/radio/si470x/radio-si470x-common.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/cpufreq/cpufreq-dt-platdev.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/leds/flash/leds-rt4505.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/firmware/meson/meson_sm.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/devfreq/governor_performance.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/nvmem/nvmem_brcm_nvram.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/fsi/fsi-master-aspeed.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/fsi/fsi-master-gpio.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/interconnect/imx/imx-interconnect.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/interconnect/imx/imx8mm-interconnect.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/interconnect/imx/imx8mq-interconnect.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/interconnect/imx/imx8mn-interconnect.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/interconnect/imx/imx8mp-interconnect.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/pcmcia/pcmcia_rsrc.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/iio/adc/ingenic-adc.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/iio/adc/xilinx-ams.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/iio/buffer/kfifo_buf.o
->> ERROR: modpost: "md_init_stacking_limits" [drivers/md/raid1.ko] undefined!
->> ERROR: modpost: "md_init_stacking_limits" [drivers/md/raid10.ko] undefined!
->> ERROR: modpost: "md_init_stacking_limits" [drivers/md/raid456.ko] undefined!
+>> drivers/clocksource/timer-rtl-otto.c:105:2: warning: cast to smaller integer type 'u32' (aka 'unsigned int') from 'void *' [-Wvoid-pointer-to-int-cast]
+     105 |         RTTM_DEBUG(to->of_base.base);
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/clocksource/timer-rtl-otto.c:97:24: note: expanded from macro 'RTTM_DEBUG'
+      96 |         pr_debug("------------- %d %08x\n",     \
+         |         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      97 |                  smp_processor_id(), (u32)base)
+         |                  ~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~
+   include/linux/printk.h:588:26: note: expanded from macro 'pr_debug'
+     588 |         dynamic_pr_debug(fmt, ##__VA_ARGS__)
+         |         ~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~
+   include/linux/dynamic_debug.h:270:22: note: expanded from macro 'dynamic_pr_debug'
+     269 |         _dynamic_func_call(fmt, __dynamic_pr_debug,             \
+         |         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     270 |                            pr_fmt(fmt), ##__VA_ARGS__)
+         |                            ~~~~~~~~~~~~~~~^~~~~~~~~~~~
+   include/linux/dynamic_debug.h:250:59: note: expanded from macro '_dynamic_func_call'
+     250 |         _dynamic_func_call_cls(_DPRINTK_CLASS_DFLT, fmt, func, ##__VA_ARGS__)
+         |         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~
+   include/linux/dynamic_debug.h:248:65: note: expanded from macro '_dynamic_func_call_cls'
+     248 |         __dynamic_func_call_cls(__UNIQUE_ID(ddebug), cls, fmt, func, ##__VA_ARGS__)
+         |         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~
+   include/linux/dynamic_debug.h:224:15: note: expanded from macro '__dynamic_func_call_cls'
+     224 |                 func(&id, ##__VA_ARGS__);                       \
+         |                             ^~~~~~~~~~~
+   drivers/clocksource/timer-rtl-otto.c:127:2: warning: cast to smaller integer type 'u32' (aka 'unsigned int') from 'void *' [-Wvoid-pointer-to-int-cast]
+     127 |         RTTM_DEBUG(to->of_base.base);
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/clocksource/timer-rtl-otto.c:97:24: note: expanded from macro 'RTTM_DEBUG'
+      96 |         pr_debug("------------- %d %08x\n",     \
+         |         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      97 |                  smp_processor_id(), (u32)base)
+         |                  ~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~
+   include/linux/printk.h:588:26: note: expanded from macro 'pr_debug'
+     588 |         dynamic_pr_debug(fmt, ##__VA_ARGS__)
+         |         ~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~
+   include/linux/dynamic_debug.h:270:22: note: expanded from macro 'dynamic_pr_debug'
+     269 |         _dynamic_func_call(fmt, __dynamic_pr_debug,             \
+         |         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     270 |                            pr_fmt(fmt), ##__VA_ARGS__)
+         |                            ~~~~~~~~~~~~~~~^~~~~~~~~~~~
+   include/linux/dynamic_debug.h:250:59: note: expanded from macro '_dynamic_func_call'
+     250 |         _dynamic_func_call_cls(_DPRINTK_CLASS_DFLT, fmt, func, ##__VA_ARGS__)
+         |         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~
+   include/linux/dynamic_debug.h:248:65: note: expanded from macro '_dynamic_func_call_cls'
+     248 |         __dynamic_func_call_cls(__UNIQUE_ID(ddebug), cls, fmt, func, ##__VA_ARGS__)
+         |         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~
+   include/linux/dynamic_debug.h:224:15: note: expanded from macro '__dynamic_func_call_cls'
+     224 |                 func(&id, ##__VA_ARGS__);                       \
+         |                             ^~~~~~~~~~~
+   drivers/clocksource/timer-rtl-otto.c:139:2: warning: cast to smaller integer type 'u32' (aka 'unsigned int') from 'void *' [-Wvoid-pointer-to-int-cast]
+     139 |         RTTM_DEBUG(to->of_base.base);
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/clocksource/timer-rtl-otto.c:97:24: note: expanded from macro 'RTTM_DEBUG'
+      96 |         pr_debug("------------- %d %08x\n",     \
+         |         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      97 |                  smp_processor_id(), (u32)base)
+         |                  ~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~
+   include/linux/printk.h:588:26: note: expanded from macro 'pr_debug'
+     588 |         dynamic_pr_debug(fmt, ##__VA_ARGS__)
+         |         ~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~
+   include/linux/dynamic_debug.h:270:22: note: expanded from macro 'dynamic_pr_debug'
+     269 |         _dynamic_func_call(fmt, __dynamic_pr_debug,             \
+         |         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     270 |                            pr_fmt(fmt), ##__VA_ARGS__)
+         |                            ~~~~~~~~~~~~~~~^~~~~~~~~~~~
+   include/linux/dynamic_debug.h:250:59: note: expanded from macro '_dynamic_func_call'
+     250 |         _dynamic_func_call_cls(_DPRINTK_CLASS_DFLT, fmt, func, ##__VA_ARGS__)
+         |         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~
+   include/linux/dynamic_debug.h:248:65: note: expanded from macro '_dynamic_func_call_cls'
+     248 |         __dynamic_func_call_cls(__UNIQUE_ID(ddebug), cls, fmt, func, ##__VA_ARGS__)
+         |         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~
+   include/linux/dynamic_debug.h:224:15: note: expanded from macro '__dynamic_func_call_cls'
+     224 |                 func(&id, ##__VA_ARGS__);                       \
+         |                             ^~~~~~~~~~~
+   drivers/clocksource/timer-rtl-otto.c:151:2: warning: cast to smaller integer type 'u32' (aka 'unsigned int') from 'void *' [-Wvoid-pointer-to-int-cast]
+     151 |         RTTM_DEBUG(to->of_base.base);
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/clocksource/timer-rtl-otto.c:97:24: note: expanded from macro 'RTTM_DEBUG'
+      96 |         pr_debug("------------- %d %08x\n",     \
+         |         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      97 |                  smp_processor_id(), (u32)base)
+         |                  ~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~
+   include/linux/printk.h:588:26: note: expanded from macro 'pr_debug'
+     588 |         dynamic_pr_debug(fmt, ##__VA_ARGS__)
+         |         ~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~
+   include/linux/dynamic_debug.h:270:22: note: expanded from macro 'dynamic_pr_debug'
+     269 |         _dynamic_func_call(fmt, __dynamic_pr_debug,             \
+         |         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     270 |                            pr_fmt(fmt), ##__VA_ARGS__)
+         |                            ~~~~~~~~~~~~~~~^~~~~~~~~~~~
+   include/linux/dynamic_debug.h:250:59: note: expanded from macro '_dynamic_func_call'
+     250 |         _dynamic_func_call_cls(_DPRINTK_CLASS_DFLT, fmt, func, ##__VA_ARGS__)
+         |         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~
+   include/linux/dynamic_debug.h:248:65: note: expanded from macro '_dynamic_func_call_cls'
+     248 |         __dynamic_func_call_cls(__UNIQUE_ID(ddebug), cls, fmt, func, ##__VA_ARGS__)
+         |         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~
+   include/linux/dynamic_debug.h:224:15: note: expanded from macro '__dynamic_func_call_cls'
+     224 |                 func(&id, ##__VA_ARGS__);                       \
+         |                             ^~~~~~~~~~~
+   drivers/clocksource/timer-rtl-otto.c:163:2: warning: cast to smaller integer type 'u32' (aka 'unsigned int') from 'void *' [-Wvoid-pointer-to-int-cast]
+
+
+vim +105 drivers/clocksource/timer-rtl-otto.c
+
+    93	
+    94	/* Aggregated control functions for kernel clock framework */
+    95	#define RTTM_DEBUG(base)			\
+    96		pr_debug("------------- %d %08x\n",	\
+    97			 smp_processor_id(), (u32)base)
+    98	
+    99	static irqreturn_t rttm_timer_interrupt(int irq, void *dev_id)
+   100	{
+   101		struct clock_event_device *clkevt = dev_id;
+   102		struct timer_of *to = to_timer_of(clkevt);
+   103	
+   104		rttm_ack_irq(to->of_base.base);
+ > 105		RTTM_DEBUG(to->of_base.base);
+   106		clkevt->event_handler(clkevt);
+   107	
+   108		return IRQ_HANDLED;
+   109	}
+   110	
 
 -- 
 0-DAY CI Kernel Test Service
