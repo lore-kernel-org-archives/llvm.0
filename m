@@ -1,177 +1,172 @@
-Received: from mail-ot1-f52.google.com (mail-ot1-f52.google.com [209.85.210.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E98F11BF38
-	for <llvm@lists.linux.dev>; Thu, 27 Jun 2024 04:33:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 59C501B94F;
+	Thu, 27 Jun 2024 05:19:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719462784; cv=none; b=pVxlrKa0NLuL+HehkMgOJnViD1kgfC3ES5VqDUnpmSRyniV3yMFeWHYfLMqxgGtbRjpQlXn2K0o+cMdAc+ACs+0BUOMLSArJQm9O1z7SttWWXQUamoRb6ZkLiw0JU5Jm8lsWpNgFb/Pz94HjArofV8l0Acupg901EODWL8cRIHg=
+	t=1719465568; cv=none; b=k8uQ2Tmr0h3RUrtFeZW8QODUkmR0d5gdzLgFT/5jzafifBK8uXphhDxTveUa+hpQQQwofy4Qo1/Lvje+UIBx2sjFY/pNyIYmOx3XxiI9cmd3luJB4i2SQZLsGyYxJrUWo1Pkeodv9f/3hXXyOa3QEaiyoJ0+Fa/a4LuHtqB2iTA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719462784; c=relaxed/simple;
-	bh=WD7ygdR68fxGerBxzAyZ9F2yuKfXe8eASuhKeQ3vInM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=RhQrN47CpsCP70uUCU3AR7TdS48oaeJq9lLAyZLkuekMcfzUBuy8ZE2Em0QtaPtMFeT1tYPos0jl7QqSzjfaFA8wpTQKuVvVmoJB/vDvtDuSYzpwnTt3Ej7QZ6qPC85s/0eZsimdVzg6TpKS1jtHXZcqj4JjSvYp7hsRQBYBzWE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=nlWW6ptJ; arc=none smtp.client-ip=209.85.210.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1719465568; c=relaxed/simple;
+	bh=4zfwwWRabIBbFALvddxGp1LG99pW+TLYh9OHPV9CgFg=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=kz0KzBmyhOU3ltuFvHs8db9+HavR7iyEgP1pfHHAvKjr2bL5yDiy7TbAz4RdWnslDmycu6VmtfNtbEByLblw4QZkMtv4lAzBGuRsEAYN213UjRDAJaGGAdZWEJQQ4T2RDWvl9+Cb1+PAslKZ3dAB3it4RUF3o1SyCJx9Z83xMas=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=PNaYrHF+; arc=none smtp.client-ip=198.175.65.19
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="nlWW6ptJ"
-Received: by mail-ot1-f52.google.com with SMTP id 46e09a7af769-700d1721dd9so860299a34.0
-        for <llvm@lists.linux.dev>; Wed, 26 Jun 2024 21:33:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1719462782; x=1720067582; darn=lists.linux.dev;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=jlc5LgsXr7L99X3k84Y8N6qLtAVEf7V0a7Hh7lgRJ00=;
-        b=nlWW6ptJdKieiR53k7itjOK6cUD/2/45OkgDkcYJJ9ThFfUP/ob/ehMABJ+kVP+WTp
-         ddibyobJeU2Chr8eSIuEA4FUHSBrB4yq9AguawZZCkJSbfpzQdHpe5KFuupJTrTaQ3UF
-         hadEwAKGcbgBKPa/M+ICoJm8Pgn9+0j73kmwtFRS2xkNFsGS4eKe5fEdFpcEKLCb+sOc
-         8zJiyEclTmYH7SsmecUZ9ILLFUF52qsCMtRnE6FyuFJ9fqOLV7uHascyC0Ntsr6vZlk3
-         eq0dv1a/9nZi4yiXAbtuT1TCHezQ2ku4AhpYcUal2j8ryrwXfnoz7LHYyM2jlzyt7tA0
-         KcXg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1719462782; x=1720067582;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=jlc5LgsXr7L99X3k84Y8N6qLtAVEf7V0a7Hh7lgRJ00=;
-        b=S4PoQr6wPt/HW8ZiNkeclpX67TIs+c3zLVdujGGlESxYFNJquqA/W6SmWvGa5xa6YA
-         yKlEAbl9v/Zm55QFb6uWT5MuvFkU/4CngNnoXNDRshWVFsGh728R1AgwDhxhpOhTxu+g
-         tITecUjKSvCd25zJYnvav5KS9NiOOwC2q9me1dTaE/KVxAIYY/5jorZkVyYKY6agbkoy
-         O6p78JY3geG1MW/01utlm6QeQLiGWwicV0C/Of/evaNhw2tc7ECgeg8Roc/e4C2cNDVJ
-         43sIcwFAbI2HgtoQuaMFSHOG3DDF+RctTelGlB7SVqWJGjBKfVb9W565auVSXCFPVx/H
-         t7Ew==
-X-Forwarded-Encrypted: i=1; AJvYcCU6Q5n39bUPNYXf0VzG+TWpFfuW0tphA6TR71S3TDBZ9NVqh9MmB0RKt1fFRCVWQyzIdrwF0pCc6Wq6iiK2oTg0cfqTxw==
-X-Gm-Message-State: AOJu0Yxrc3JLRJl8NUnLRBkGtWp6WEhnjI4yoUzBvWqQVbmUgTiRv6BU
-	W7YVAIsCWzoG/06AP9rEh4vKT/sPYOKNPQa2klu3E8YGWFHygpLF
-X-Google-Smtp-Source: AGHT+IH+fV5+BoybY7N3LWHXzO46q6X8FmrZYM08XafaolZE1UQamSNMo9xYPVyx0z78L6CPS1aW7w==
-X-Received: by 2002:a05:6830:1449:b0:6f9:9540:76a8 with SMTP id 46e09a7af769-700b11f0eedmr14010345a34.13.1719462781861;
-        Wed, 26 Jun 2024 21:33:01 -0700 (PDT)
-Received: from ubuntu-linux-22-04-02-desktop (107-197-105-120.lightspeed.sntcca.sbcglobal.net. [107.197.105.120])
-        by smtp.gmail.com with ESMTPSA id 46e09a7af769-701efc09e51sm157847a34.18.2024.06.26.21.33.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 26 Jun 2024 21:33:01 -0700 (PDT)
-Date: Wed, 26 Jun 2024 21:32:58 -0700
-From: Pei Li <peili.dev@gmail.com>
-To: Sean Christopherson <seanjc@google.com>
-Cc: David Woodhouse <dwmw2@infradead.org>, Paul Durrant <paul@xen.org>,
-	Paolo Bonzini <pbonzini@redhat.com>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-	"H. Peter Anvin" <hpa@zytor.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>, kvm@vger.kernel.org,
-	linux-kernel@vger.kernel.org, skhan@linuxfoundation.org,
-	linux-kernel-mentees@lists.linuxfoundation.org,
-	syzkaller-bugs@googlegroups.com, llvm@lists.linux.dev,
-	syzbot+fd555292a1da3180fc82@syzkaller.appspotmail.com
-Subject: Re: [PATCH] kvm: Fix warning in__kvm_gpc_refresh
-Message-ID: <ZnzrekGQc24r0Gny@ubuntu-linux-22-04-02-desktop>
-References: <20240625-bug5-v1-1-e072ed5fce85@gmail.com>
- <Znx1T_hHNA_uThf2@google.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="PNaYrHF+"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1719465567; x=1751001567;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=4zfwwWRabIBbFALvddxGp1LG99pW+TLYh9OHPV9CgFg=;
+  b=PNaYrHF+/aW9wYwVStbnhqS27Y/GNJGLmHa4n3YA6rQJPLo9CS0qHjRL
+   M0gTCQRR5iZCW1xW3MvOb/e5uZGF4yxVBx+VRaMixCISl/Mln2XjkHNfT
+   FZvHYu+Wnx1rhp9YpnQPj5UqXl9o6CPYdoC28D8IQXTaSdg91bXzTfbat
+   qXKjtcw616ax/CT2Y2pWIOMvvJ7MD3b3pVF1DcTWb8iHZ2SZx+04UHzge
+   eMK9rB3OBlPxkZTWpjFR/iP2raFO0jL6qf0+Ki/eLm9kYpVA8HR4/M8LH
+   wvB3lMgWajvQ5B3dCNu4ujSQBl9c7nIcbjkiQY0EaXfwjiKoljJW84oNl
+   A==;
+X-CSE-ConnectionGUID: DZ8dllatSmOmD/wIdqbxPA==
+X-CSE-MsgGUID: F/AD4ughQSmT1gAx0uQ47A==
+X-IronPort-AV: E=McAfee;i="6700,10204,11115"; a="16407275"
+X-IronPort-AV: E=Sophos;i="6.08,269,1712646000"; 
+   d="scan'208";a="16407275"
+Received: from fmviesa006.fm.intel.com ([10.60.135.146])
+  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jun 2024 22:19:26 -0700
+X-CSE-ConnectionGUID: tvZfU1l2Q/iwPkF2sUs0qg==
+X-CSE-MsgGUID: JMh98yKRQJCkTwH9vSXtaw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.08,269,1712646000"; 
+   d="scan'208";a="44087752"
+Received: from lkp-server01.sh.intel.com (HELO 68891e0c336b) ([10.239.97.150])
+  by fmviesa006.fm.intel.com with ESMTP; 26 Jun 2024 22:19:24 -0700
+Received: from kbuild by 68891e0c336b with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1sMhXW-000FvA-0l;
+	Thu, 27 Jun 2024 05:19:22 +0000
+Date: Thu, 27 Jun 2024 13:18:46 +0800
+From: kernel test robot <lkp@intel.com>
+To: Aaradhana Sahu <quic_aarasahu@quicinc.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Kalle Valo <kvalo@codeaurora.org>, ath10k@lists.infradead.org,
+	Kalle Valo <quic_kvalo@quicinc.com>
+Subject: [kvalo-ath:pending 34/37]
+ drivers/net/wireless/ath/ath12k/wow.c:982:11: warning: enumeration value
+ 'ATH12K_HW_STATE_TM' not handled in switch
+Message-ID: <202406271317.IYXB6YVE-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <Znx1T_hHNA_uThf2@google.com>
 
-On Wed, Jun 26, 2024 at 01:08:47PM -0700, Sean Christopherson wrote:
-> On Tue, Jun 25, 2024, Pei Li wrote:
-> > Check for invalid hva address stored in data before calling
-> > kvm_gpc_activate_hva() instead of only compare with 0.
-> > 
-> > Reported-by: syzbot+fd555292a1da3180fc82@syzkaller.appspotmail.com
-> > Closes: https://syzkaller.appspot.com/bug?extid=fd555292a1da3180fc82
-> > Tested-by: syzbot+fd555292a1da3180fc82@syzkaller.appspotmail.com
-> > Signed-off-by: Pei Li <peili.dev@gmail.com>
-> > ---
-> > Syzbot reports a warning message in __kvm_gpc_refresh(). This warning
-> > requires at least one of gpa and uhva to be valid.
-> > WARNING: CPU: 0 PID: 5090 at arch/x86/kvm/../../../virt/kvm/pfncache.c:259 __kvm_gpc_refresh+0xf17/0x1090 arch/x86/kvm/../../../virt/kvm/pfncache.c:259
-> > 
-> > We are calling it from kvm_gpc_activate_hva(). This function always calls
-> > __kvm_gpc_activate() with INVALID_GPA. Thus, uhva must be valid to
-> > disable this warning.
-> > 
-> > This patch checks for invalid hva address as well instead of only
-> > comparing hva with 0 before calling kvm_gpc_activate_hva()
-> > 
-> > syzbot has tested the proposed patch and the reproducer did not trigger
-> > any issue.
-> > 
-> > Tested on:
-> > 
-> > commit:         55027e68 Merge tag 'input-for-v6.10-rc5' of git://git...
-> > git tree:       upstream
-> > console output: https://syzkaller.appspot.com/x/log.txt?x=16ea803a980000
-> > kernel config:  https://syzkaller.appspot.com/x/.config?x=e40800950091403a
-> > dashboard link: https://syzkaller.appspot.com/bug?extid=fd555292a1da3180fc82
-> > compiler:       Debian clang version 15.0.6, GNU ld (GNU Binutils for Debian) 2.40
-> > patch:          https://syzkaller.appspot.com/x/patch.diff?x=16eeb53e980000
-> > 
-> > Note: testing is done by a robot and is best-effort only.
-> > ---
-> >  arch/x86/kvm/xen.c | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> > 
-> > diff --git a/arch/x86/kvm/xen.c b/arch/x86/kvm/xen.c
-> > index f65b35a05d91..de5f34492405 100644
-> > --- a/arch/x86/kvm/xen.c
-> > +++ b/arch/x86/kvm/xen.c
-> > @@ -881,7 +881,7 @@ int kvm_xen_vcpu_set_attr(struct kvm_vcpu *vcpu, struct kvm_xen_vcpu_attr *data)
-> >  			r = kvm_gpc_activate(&vcpu->arch.xen.vcpu_info_cache,
-> >  					     data->u.gpa, sizeof(struct vcpu_info));
-> >  		} else {
-> > -			if (data->u.hva == 0) {
-> > +			if (data->u.hva == 0 || kvm_is_error_hva(data->u.hva)) {
-> >  				kvm_gpc_deactivate(&vcpu->arch.xen.vcpu_info_cache);
-> >  				r = 0;
-> >  				break;
-> 
-> Hmm, I think what we want is to return -EINVAL in this case, not deactivate the
-> region.   I could have sworn KVM does that.  Gah, I caught
-> KVM_XEN_ATTR_TYPE_SHARED_INFO_HVA during review, but missed this one.  So to fix
-> this immediate bug, and avoid similar issues in the future, this?
-> 
-> diff --git a/arch/x86/kvm/xen.c b/arch/x86/kvm/xen.c
-> index 93814d3850eb..622fe24da910 100644
-> --- a/arch/x86/kvm/xen.c
-> +++ b/arch/x86/kvm/xen.c
-> @@ -741,7 +741,7 @@ int kvm_xen_hvm_set_attr(struct kvm *kvm, struct kvm_xen_hvm_attr *data)
->                 } else {
->                         void __user * hva = u64_to_user_ptr(data->u.shared_info.hva);
->  
-> -                       if (!PAGE_ALIGNED(hva) || !access_ok(hva, PAGE_SIZE)) {
-> +                       if (!PAGE_ALIGNED(hva)) {
->                                 r = -EINVAL;
->                         } else if (!hva) {
->                                 kvm_gpc_deactivate(&kvm->arch.xen.shinfo_cache);
-> diff --git a/virt/kvm/pfncache.c b/virt/kvm/pfncache.c
-> index 0ab90f45db37..728d2c1b488a 100644
-> --- a/virt/kvm/pfncache.c
-> +++ b/virt/kvm/pfncache.c
-> @@ -438,6 +438,9 @@ int kvm_gpc_activate(struct gfn_to_pfn_cache *gpc, gpa_t gpa, unsigned long len)
->  
->  int kvm_gpc_activate_hva(struct gfn_to_pfn_cache *gpc, unsigned long uhva, unsigned long len)
->  {
-> +       if (!access_ok((void __user *)uhva, len))
-> +               return -EINVAL;
-> +
->         return __kvm_gpc_activate(gpc, INVALID_GPA, uhva, len);
->  }
-> 
-Thanks Sean. I’ll test and work on v2 based on your suggestions.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/kvalo/ath.git pending
+head:   ff7f6be343c446ec89addc6abb99e83a6b98abfe
+commit: 5e4b86c9b76950ec6bf056e17e80d6611df66182 [34/37] wifi: ath12k: add factory test mode support
+config: i386-buildonly-randconfig-003-20240627 (https://download.01.org/0day-ci/archive/20240627/202406271317.IYXB6YVE-lkp@intel.com/config)
+compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240627/202406271317.IYXB6YVE-lkp@intel.com/reproduce)
 
-Best regards,
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202406271317.IYXB6YVE-lkp@intel.com/
 
-Pei
+All warnings (new ones prefixed by >>):
 
+>> drivers/net/wireless/ath/ath12k/wow.c:982:11: warning: enumeration value 'ATH12K_HW_STATE_TM' not handled in switch [-Wswitch]
+     982 |                 switch (ah->state) {
+         |                         ^~~~~~~~~
+   1 warning generated.
+
+
+vim +/ATH12K_HW_STATE_TM +982 drivers/net/wireless/ath/ath12k/wow.c
+
+4a3c212eee0e36 Baochen Qiang 2024-06-19   929  
+4a3c212eee0e36 Baochen Qiang 2024-06-19   930  int ath12k_wow_op_resume(struct ieee80211_hw *hw)
+4a3c212eee0e36 Baochen Qiang 2024-06-19   931  {
+4a3c212eee0e36 Baochen Qiang 2024-06-19   932  	struct ath12k_hw *ah = ath12k_hw_to_ah(hw);
+4a3c212eee0e36 Baochen Qiang 2024-06-19   933  	struct ath12k *ar = ath12k_ah_to_ar(ah, 0);
+4a3c212eee0e36 Baochen Qiang 2024-06-19   934  	int ret;
+4a3c212eee0e36 Baochen Qiang 2024-06-19   935  
+4a3c212eee0e36 Baochen Qiang 2024-06-19   936  	mutex_lock(&ar->conf_mutex);
+4a3c212eee0e36 Baochen Qiang 2024-06-19   937  
+4a3c212eee0e36 Baochen Qiang 2024-06-19   938  	ret = ath12k_hif_resume(ar->ab);
+4a3c212eee0e36 Baochen Qiang 2024-06-19   939  	if (ret) {
+4a3c212eee0e36 Baochen Qiang 2024-06-19   940  		ath12k_warn(ar->ab, "failed to resume hif: %d\n", ret);
+4a3c212eee0e36 Baochen Qiang 2024-06-19   941  		goto exit;
+4a3c212eee0e36 Baochen Qiang 2024-06-19   942  	}
+4a3c212eee0e36 Baochen Qiang 2024-06-19   943  
+4a3c212eee0e36 Baochen Qiang 2024-06-19   944  	ath12k_hif_ce_irq_enable(ar->ab);
+4a3c212eee0e36 Baochen Qiang 2024-06-19   945  	ath12k_hif_irq_enable(ar->ab);
+4a3c212eee0e36 Baochen Qiang 2024-06-19   946  
+4a3c212eee0e36 Baochen Qiang 2024-06-19   947  	ret = ath12k_wow_wakeup(ar);
+16f474d6d49db5 Baochen Qiang 2024-06-04   948  	if (ret) {
+4a3c212eee0e36 Baochen Qiang 2024-06-19   949  		ath12k_warn(ar->ab, "failed to wakeup from wow: %d\n", ret);
+16f474d6d49db5 Baochen Qiang 2024-06-04   950  		goto exit;
+16f474d6d49db5 Baochen Qiang 2024-06-04   951  	}
+16f474d6d49db5 Baochen Qiang 2024-06-04   952  
+16f474d6d49db5 Baochen Qiang 2024-06-04   953  	ret = ath12k_wow_nlo_cleanup(ar);
+16f474d6d49db5 Baochen Qiang 2024-06-04   954  	if (ret) {
+16f474d6d49db5 Baochen Qiang 2024-06-04   955  		ath12k_warn(ar->ab, "failed to cleanup nlo: %d\n", ret);
+16f474d6d49db5 Baochen Qiang 2024-06-04   956  		goto exit;
+16f474d6d49db5 Baochen Qiang 2024-06-04   957  	}
+4a3c212eee0e36 Baochen Qiang 2024-06-19   958  
+66a9448b1b8977 Baochen Qiang 2024-06-19   959  	ret = ath12k_wow_clear_hw_filter(ar);
+66a9448b1b8977 Baochen Qiang 2024-06-19   960  	if (ret) {
+66a9448b1b8977 Baochen Qiang 2024-06-19   961  		ath12k_warn(ar->ab, "failed to clear hw filter: %d\n", ret);
+66a9448b1b8977 Baochen Qiang 2024-06-19   962  		goto exit;
+66a9448b1b8977 Baochen Qiang 2024-06-19   963  	}
+66a9448b1b8977 Baochen Qiang 2024-06-19   964  
+1666108c74c438 Baochen Qiang 2024-06-19   965  	ret = ath12k_wow_protocol_offload(ar, false);
+1666108c74c438 Baochen Qiang 2024-06-19   966  	if (ret) {
+1666108c74c438 Baochen Qiang 2024-06-19   967  		ath12k_warn(ar->ab, "failed to clear wow protocol offload events: %d\n",
+1666108c74c438 Baochen Qiang 2024-06-19   968  			    ret);
+1666108c74c438 Baochen Qiang 2024-06-19   969  		goto exit;
+1666108c74c438 Baochen Qiang 2024-06-19   970  	}
+1666108c74c438 Baochen Qiang 2024-06-19   971  
+7af01e56952954 Baochen Qiang 2024-06-19   972  	ret = ath12k_wow_set_keepalive(ar,
+7af01e56952954 Baochen Qiang 2024-06-19   973  				       WMI_STA_KEEPALIVE_METHOD_NULL_FRAME,
+7af01e56952954 Baochen Qiang 2024-06-19   974  				       WMI_STA_KEEPALIVE_INTERVAL_DISABLE);
+7af01e56952954 Baochen Qiang 2024-06-19   975  	if (ret) {
+7af01e56952954 Baochen Qiang 2024-06-19   976  		ath12k_warn(ar->ab, "failed to disable wow keepalive: %d\n", ret);
+7af01e56952954 Baochen Qiang 2024-06-19   977  		goto exit;
+7af01e56952954 Baochen Qiang 2024-06-19   978  	}
+7af01e56952954 Baochen Qiang 2024-06-19   979  
+4a3c212eee0e36 Baochen Qiang 2024-06-19   980  exit:
+4a3c212eee0e36 Baochen Qiang 2024-06-19   981  	if (ret) {
+4a3c212eee0e36 Baochen Qiang 2024-06-19  @982  		switch (ah->state) {
+4a3c212eee0e36 Baochen Qiang 2024-06-19   983  		case ATH12K_HW_STATE_ON:
+4a3c212eee0e36 Baochen Qiang 2024-06-19   984  			ah->state = ATH12K_HW_STATE_RESTARTING;
+4a3c212eee0e36 Baochen Qiang 2024-06-19   985  			ret = 1;
+4a3c212eee0e36 Baochen Qiang 2024-06-19   986  			break;
+4a3c212eee0e36 Baochen Qiang 2024-06-19   987  		case ATH12K_HW_STATE_OFF:
+4a3c212eee0e36 Baochen Qiang 2024-06-19   988  		case ATH12K_HW_STATE_RESTARTING:
+4a3c212eee0e36 Baochen Qiang 2024-06-19   989  		case ATH12K_HW_STATE_RESTARTED:
+4a3c212eee0e36 Baochen Qiang 2024-06-19   990  		case ATH12K_HW_STATE_WEDGED:
+4a3c212eee0e36 Baochen Qiang 2024-06-19   991  			ath12k_warn(ar->ab, "encountered unexpected device state %d on resume, cannot recover\n",
+4a3c212eee0e36 Baochen Qiang 2024-06-19   992  				    ah->state);
+4a3c212eee0e36 Baochen Qiang 2024-06-19   993  			ret = -EIO;
+4a3c212eee0e36 Baochen Qiang 2024-06-19   994  			break;
+4a3c212eee0e36 Baochen Qiang 2024-06-19   995  		}
+4a3c212eee0e36 Baochen Qiang 2024-06-19   996  	}
+4a3c212eee0e36 Baochen Qiang 2024-06-19   997  
+4a3c212eee0e36 Baochen Qiang 2024-06-19   998  	mutex_unlock(&ar->conf_mutex);
+4a3c212eee0e36 Baochen Qiang 2024-06-19   999  	return ret;
+4a3c212eee0e36 Baochen Qiang 2024-06-19  1000  }
+4a3c212eee0e36 Baochen Qiang 2024-06-19  1001  
+
+:::::: The code at line 982 was first introduced by commit
+:::::: 4a3c212eee0e36c1cd55bfbfb94041a0d3ad265b wifi: ath12k: add basic WoW functionalities
+
+:::::: TO: Baochen Qiang <quic_bqiang@quicinc.com>
+:::::: CC: Kalle Valo <quic_kvalo@quicinc.com>
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
