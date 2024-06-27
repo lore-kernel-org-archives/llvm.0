@@ -1,204 +1,86 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f49.google.com (mail-ed1-f49.google.com [209.85.208.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2ED27197A87;
-	Thu, 27 Jun 2024 18:11:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E703C199E9B;
+	Thu, 27 Jun 2024 18:40:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719511906; cv=none; b=iZzXMy9FXmx2HulZXd2GIe1fGTutvAq28PQa68X8WPRLyX2V008HlJIH6rc3OdmwxD5jkytHEWWDaQGOJ0SiyCRob5gC++WOOgoHbh04o3eGToB074MtjggAJqnDLgsS6SQAEgdmafuWnuEHYZ54v9nsF5859MVHyIrL71+nGyk=
+	t=1719513630; cv=none; b=Zu18UCBu9zeEYUftXfeHV6F+Fb7DfSBZCi0SChrJMDctH9OaeDR+VWJrlic6A/OKZaTyaNF0S4fjR9ZIXq1IKF9eg4cnR0tbUSkj+E9xsnnMXOcYxKWG4E/3S+axXLFdkJgpQglKVivIUQorCjTXoMOZFTN79ValZFKnfd667z4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719511906; c=relaxed/simple;
-	bh=tGr5k+UOROok+owllKktrHzabgkRJenLZBubo0DTG0s=;
+	s=arc-20240116; t=1719513630; c=relaxed/simple;
+	bh=KkLyl1RC/EwhIBQ23wSnNwb/PtCW43HptLeyStQCzBE=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=iDbThCbackWPHxF2o37vwFXvdeA6SGKVMmEJiF4whJl6zKzWdmkHszSX3WddNnjJXZyygQFVjQwOU9l9Oq/Q3BwAhkT31wbo+nnFuMIVAckT9MmvrVpdTk3sfVyAFQ4hWP0VtH3OOjYFAwGtvWLAqxdAweREmJY7/WHfea4ohZk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=vOcG71iL; arc=none smtp.client-ip=10.30.226.201
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="vOcG71iL"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E493DC2BBFC;
-	Thu, 27 Jun 2024 18:11:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1719511905;
-	bh=tGr5k+UOROok+owllKktrHzabgkRJenLZBubo0DTG0s=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=vOcG71iLpKz+8wzdjAeKoZo7nbkQl95XMMfEZxdbS4o7jPa+lB+lWeK4f9WmX2PhI
-	 ruGfWLpb2elb+eUFkecEt1ZgWHPDQjOlNM7Ep1cA2HoZhykr2jVnbsTvCkbtdc4SFX
-	 q3Pf8Eca+NRGe8O1VQmMmccnPrAxQKPyrLQg0uB0yewqr8MGqP7nHyFSU0eshQVb36
-	 qGHsTgY8zReYc1tNSIwFIi+n10kKIfbH4lwPvJ7ydhpSrWCJ0gYEWcujBwD5FVRFdX
-	 28AuCIeN4JVkB0xg7D6c4hfIWbBAMt6ISKkRGnILp5jActD5QhtV5my0aUutf7g0gS
-	 TYHXz/hg/69IQ==
-Date: Thu, 27 Jun 2024 19:11:38 +0100
-From: Conor Dooley <conor@kernel.org>
-To: Jesse Taube <jesse@rivosinc.com>
-Cc: Conor Dooley <conor.dooley@microchip.com>,
-	linux-riscv@lists.infradead.org, Ard Biesheuvel <ardb@kernel.org>,
-	Paul Walmsley <paul.walmsley@sifive.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Alexandre Ghiti <alexghiti@rivosinc.com>,
-	Masahiro Yamada <masahiroy@kernel.org>,
-	Wende Tan <twd2.me@gmail.com>,
-	Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-	Sami Tolvanen <samitolvanen@google.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Baoquan He <bhe@redhat.com>, Chen Jiahao <chenjiahao16@huawei.com>,
-	"Mike Rapoport (IBM)" <rppt@kernel.org>,
-	"Vishal Moola (Oracle)" <vishal.moola@gmail.com>,
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH v2 3/3] RISC-V: Use Zkr to seed KASLR base address
-Message-ID: <20240627-wispy-reconfirm-75fd034e62ce@spud>
-References: <20240626171652.366415-1-jesse@rivosinc.com>
- <20240626171652.366415-3-jesse@rivosinc.com>
- <20240627-proven-irritably-33594282739f@wendy>
- <762bb09d-af48-47e0-9d65-f530ff37cbc9@rivosinc.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=C37TX/0Z5GOAQKvqqxICo+dEG9VoToRPNN2MEFlnE1dfhbz4ycsYeqH9mhRrxFJ1aohyCDW8OfAIb8wfMZGXNxNVAZB2AyKCloKQvAY2RMxEX8V/fkLEx++JXj6VRpyfTMvRdxWk54rycKPkrgtS14uAInMvUjyFviwp7Wxs/MM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.208.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ed1-f49.google.com with SMTP id 4fb4d7f45d1cf-5854ac817afso1116391a12.2;
+        Thu, 27 Jun 2024 11:40:28 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1719513627; x=1720118427;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=TRtwt1nHk/eFQfYHJCx8+U3yM4OGoY8sGkg3XpVPOa0=;
+        b=qD3UbQwVX+iF9YHsNxkQSQJB2wpVqR1Ira3pXpFnigRN2OB6pmA4BL0JqYS+nZKVLG
+         wtmvR/MNJtgpktUcv9C3BgO2ghBBcB6X9SJrghDO/e06uZIh/MtA09eI+OUU109rzeqf
+         syNbkoYm2qzpGCZlpaAE1IH4C3XvNR2sxUvvlo8KPF0wgZkmHKJ9cuNyhVpE5aOFOtoS
+         8IK5fR+bTRstEQDiCRxB8qHNKrrz/LfVYM7kYycyz5lNK4Iz1V7eJ1EF1+/mpfa0vjBv
+         uaZugFzzFmbZGVBrpC2hCtRF+9XMnWinczhDGES39jrnvAoG6aFpt36rZ2ehdJPb81aK
+         E79A==
+X-Forwarded-Encrypted: i=1; AJvYcCV83pyv0q8BDEkyLwhNq6fz+QwtUEkcOLF9+FtFTQVhccZ7T3rR6mh90LPKIwlN9qYTpmH/dNNOp6HQabf2dsrcXtTA7useoE2J5CP9hQbzeWIErCTErqY8KmO+66lcRxm2rqk=
+X-Gm-Message-State: AOJu0Yy6O+1/YuvRQv2L2X57dVpdOoiSeMOXHr+JJ2cUd/C3+Fvhlg7z
+	5qpmFBOCAfbi38enDlrmkVNwfo2iZBFfsGnTTIKCuX/Qpdhou+Ti
+X-Google-Smtp-Source: AGHT+IGyWL39Gdti/FMrbm7JkEdRxyFNJ+JC9do85JtWo4z+QZkEpUt2llHGxHDQC6aOi9kuwYXphQ==
+X-Received: by 2002:a50:c34d:0:b0:57c:7151:2669 with SMTP id 4fb4d7f45d1cf-57d4a276171mr11107130a12.7.1719513626964;
+        Thu, 27 Jun 2024 11:40:26 -0700 (PDT)
+Received: from gmail.com (fwdproxy-lla-115.fbsv.net. [2a03:2880:30ff:73::face:b00c])
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-58612c83578sm28651a12.18.2024.06.27.11.40.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 27 Jun 2024 11:40:26 -0700 (PDT)
+Date: Thu, 27 Jun 2024 11:40:24 -0700
+From: Breno Leitao <leitao@debian.org>
+To: Vladimir Oltean <olteanv@gmail.com>
+Cc: kernel test robot <lkp@intel.com>, linuxppc-dev@lists.ozlabs.org,
+	linux-arm-kernel@lists.infradead.org, netdev@vger.kernel.org,
+	llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	kuba@kernel.org, horms@kernel.org, Roy.Pledge@nxp.com,
+	open list <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 1/4] soc: fsl: qbman: FSL_DPAA depends on COMPILE_TEST
+Message-ID: <Zn2yGBuwiW/BYvQ7@gmail.com>
+References: <20240624162128.1665620-1-leitao@debian.org>
+ <202406261920.l5pzM1rj-lkp@intel.com>
+ <20240626140623.7ebsspddqwc24ne4@skbuf>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="CKxq9ZugmAw+mCd4"
-Content-Disposition: inline
-In-Reply-To: <762bb09d-af48-47e0-9d65-f530ff37cbc9@rivosinc.com>
-
-
---CKxq9ZugmAw+mCd4
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20240626140623.7ebsspddqwc24ne4@skbuf>
 
-On Thu, Jun 27, 2024 at 01:55:19PM -0400, Jesse Taube wrote:
-> On 6/27/24 07:45, Conor Dooley wrote:
-> > On Wed, Jun 26, 2024 at 01:16:52PM -0400, Jesse Taube wrote:
+Hello Vladimir,
 
-> > > +/* Based off of fdt_stringlist_contains */
-> > > +static int isa_string_contains(const char *strlist, int listlen, con=
-st char *str)
-> > > +{
-> > > +	int len =3D strlen(str);
-> > > +	const char *p;
-> > > +
-> > > +	while (listlen >=3D len) {
-> > > +		if (strncasecmp(str, strlist, len) =3D=3D 0)
-> > > +			return 1;
-> >=20
-> > How does this handle searching a devicetree containing "rv64ima_zksed_z=
-kr"
-> > for the extension zks? Hint: https://godbolt.org/z/YfhTqe54e
-> > I think this works for fdt_stringlist_contains() because it also
-> > compares the null chars - which you're not doing so I think this also
-> > brakes for something like riscv,isa-extensions =3D "rv64ima\0zksed\0zkr"
-> > while searching for zks.
-> >=20
-> > > +		p =3D memchr(strlist, '_', listlen);
-> >=20
-> > Or how does this handle searching "rv64imafdczkr" for zkr? It's gonna
-> > run right off the end of the string without finding anything, right?
->=20
-> Yes...
->=20
-> Is that a valid isa,string?
+On Wed, Jun 26, 2024 at 05:06:23PM +0300, Vladimir Oltean wrote:
+> On Wed, Jun 26, 2024 at 08:09:53PM +0800, kernel test robot wrote:
 
-It is. I wish I had just not allowed it, but I was more naive then and
-figured we should allow whatever the spec did. Technically versioning of
-the extension isn't allowed, but in the wild people do put it in, so I
-believe that a parser shouldn't break when it encounters versioning,
-even if the regex for the property doesn't permit them:
-^rv(?:64|32)imaf?d?q?c?b?k?j?p?v?h?(?:[hsxz](?:[0-9a-z])+)?(?:_[hsxz](?:[0-=
-9a-z])+)*$
+> > All warnings (new ones prefixed by >>):
+> > 
+> > >> drivers/net/ethernet/freescale/dpaa/dpaa_eth.c:3280:12: warning: stack frame size (16664) exceeds limit (2048) in 'dpaa_eth_probe' [-Wframe-larger-than]
+> >     3280 | static int dpaa_eth_probe(struct platform_device *pdev)
+> >          |            ^
+> >    1 warning generated.
+> > --
+> > >> drivers/net/ethernet/freescale/dpaa/dpaa_ethtool.c:454:12: warning: stack frame size (8264) exceeds limit (2048) in 'dpaa_set_coalesce' [-Wframe-larger-than]
+> >      454 | static int dpaa_set_coalesce(struct net_device *dev,
+> >          |            ^
+> >    1 warning generated.
+> 
+> Arrays of NR_CPUS elements are what it probably doesn't like?
 
-> I will try to copy how cpufeature.c as close as
-> posible.
+Can it use the number of online CPUs instead of NR_CPUS?
 
-The comments there should be fairly understandable, but that parser has
-a different goal to the one here, so you should be able to make things
-simpler. I hope at least.
-
-> > Handling "riscv,isa" is not trivial, but at least the search for extens=
-ion
-> > approach here skips dealing with some of what has to be done in the "re=
-al"
-> > parser with the version numbers...
-> >=20
-> > Maybe we just say screw "riscv,isa", as it's deprecated anyway, and onl=
-y.
-> I think it's important to have.
->=20
-> > add this new feature for "riscv,isa-extensions" which is far simpler to
-> > parse and can be done using off-the-shelf fdt functions?
-> >=20
-> > If not, then I think we should use fdt_stringlist_contains verbatim for
-> > "riscv,isa-extensions".
->=20
-> Ok I had a notion that riscv,isa-extensions could be upercase they
-> cant/wont. I will use fdt_stringlist_contains.
->=20
-> > and introduce a custom function for "riscv,isa"
-> > only.
->=20
-> That was my original thought I will do that.
->=20
-> >=20
-> > > +		if (!p)
-> > > +			p =3D memchr(strlist, '\0', listlen);
-> > > +		if (!p)
-> > > +			return 0; /* malformed strlist.. */
-> > > +		listlen -=3D (p - strlist) + 1;
-> > > +		strlist =3D p + 1;
-> > > +	}
-> > > +
-> > > +	return 0;
-> > > +}
-> > > +
-> > > +/* Based off of fdt_nodename_eq_ */
-> >=20
-> > Why can't we just use fdt_nodename_eq?
->=20
-> Because fdt_nodename_eq_ is static.
-> I will change the comment to "copy of fdt_nodename_eq_".
-> Oddly there is `of_node_name_eq` but not `fdt_nodename_eq`
-
-of_node_name_eq comes from the kernel, fdt_nodename_eq comes from
-libfdt. I figure the former cannot be used this early since we've not
-extracted the dtb and parsed it yet...
-
-> > > +/*
-> > > + * Returns true if the extension is in the isa string on all cpus
-> >=20
-> > Shouldn't we only be checking CPUs that are not disabled or reserved,
-> > rather than all CPUs?
->=20
-> Its way easier to just check all the cpus rather then make sure we are
-> runing on one thats has the extention. I will add a continue for
-> dissabled/reserved cpus.
->=20
-> > To use Zkr for KASLR this is kinda irrelevant
-> > since really we only care about whether or not the boot CPU has Zkr,
-> > but in general we only want to consider CPUs that we can actually use.
-> > For example, if you did this for FPU support with mpfs.dtsi, you'd get
-> > told that the F/D extensions were not present cos hart 0
->=20
-> Can we assume that the boot hart is always 0?
-
-Nah, You cannot assume that the boot hart is hart 0, in the example I gave
-here hart 0 is not available to Linux.
-
-> > doesn't have
-> > them, even though it's disabled and will not be used by Linux.
-
---CKxq9ZugmAw+mCd4
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZn2rWgAKCRB4tDGHoIJi
-0pWXAQDJV/bVVnD9ChN+ne/BYsY76hcJyFnXGcsb19WWlTuwLQD6AsVXQpESVWJR
-BTr7LWT8JXfZoRCczrvBZCSqNsVMvwE=
-=MvYD
------END PGP SIGNATURE-----
-
---CKxq9ZugmAw+mCd4--
+Other than that, I would say we can drop this patch in the meantime, so,
+we can move with the others, while this one is being addressed.
