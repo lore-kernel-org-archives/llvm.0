@@ -1,107 +1,88 @@
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E27C13DBB6
-	for <llvm@lists.linux.dev>; Thu, 27 Jun 2024 10:35:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=68.232.153.233
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B5C6C1411EE;
+	Thu, 27 Jun 2024 11:31:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719484550; cv=none; b=eNWux5/VVnS4MLLn5sHG4TiT9Dhaj2ZwfNxGMUhCLPxTI5OI2CG4vl6+MsMxkrLnyvwhDZqFE1nryUeztqzmdrK8ZKQO1+H+eUpIr4x0OX/9nXv/+cVuyaNP6h/iDNOz1J3HPp4c+qUas2a38TzkgYFYvxJqJJY3I8tn+jk7vGg=
+	t=1719487891; cv=none; b=kIrsd5nLJUNs8a/9gU3n9VM3sfO2VFqg5iu3SY7gm2HnAFR43nNtE7gDKRGH8OCTuRWiPH021UEXQiK5uVsCjy0Ej2K5p9aef72Q2mVMttd3tuKDBj2cMBtPceB6OYS/Lr2i+RB/QHzwomDCaiUqbsUawPgPOg+4GIXpWcgX2kc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719484550; c=relaxed/simple;
-	bh=PT0DemCx5L/ZcJvMGNX3zxbnwOgua37LhSOsc+eGUas=;
-	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=cKlTaTp76KtwlgTGVeiQivt4/PLgthrSnTInNbUAcW61FaUZuD1Iok0q6zQXp5rL3vD4rMywjeIWtdRcYb30UTOMDL5Iz0so+2ticnA6Je/y0rgTQWH6QRf+3+Cp+2Ly0nbOMhVW5wkJ7DB/EHKwcNypM1urfM0oH0CG8ZTnyrI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com; spf=pass smtp.mailfrom=microchip.com; dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b=lnG9bbxy; arc=none smtp.client-ip=68.232.153.233
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=microchip.com
+	s=arc-20240116; t=1719487891; c=relaxed/simple;
+	bh=M9Q75o1kuwUigzJKrsbFgOEKX5n/SvjlNrmrEt1udAY=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=CdXJyKC0HhxtyPJ62p4lDoUNCsL0umGvghkDo/QFHTQg0/nVjZLD61+UC/sqxWFaRS70qUttvF1HWPHA2U9KF4NNoH6Us1Zn2n/rYrK6erbusfJN6DYmTtxg4kBJRUkJ04hPVLmnj98/1p0NxFKVkNL8Amql/icc7QYDTuox+rQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=KjZ1mniX; arc=none smtp.client-ip=198.175.65.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b="lnG9bbxy"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="KjZ1mniX"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1719484548; x=1751020548;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=PT0DemCx5L/ZcJvMGNX3zxbnwOgua37LhSOsc+eGUas=;
-  b=lnG9bbxyK4GmoCKutVXKTlGJcfrLVe2YVeAuKzDp0yB6gizZNshRCp7X
-   t5dnaKV9/cnBAdLu8UBWY1CyQvKEZ49CFcuIQL2vihwsZUlFevOY+SC0e
-   RGmo/PusRKCNqIodZaq9yTr9qMwmlwSwR0naR/L9YZog521nOsIQy80fi
-   NmlojwySb9H30OHU5CCm1TWb+RYHh6FoRVJkV9hQTtU3BaZcr8MoDuFSX
-   nvQqLpi1JIkTXFB0WByMTUdMUBgbn00ENUcBA3i+al1icHGbX1pxTiL3m
-   wANzYmGBMtX3AVfBGlst0bX30GsiBcIMnQ6rfwu//hL23rOy1zvPl9+36
-   Q==;
-X-CSE-ConnectionGUID: +0US9/oBS+uQ72sgXKrlTQ==
-X-CSE-MsgGUID: 3UJBguS/R3mlbAbhaHQ3dw==
-X-IronPort-AV: E=Sophos;i="6.08,269,1712646000"; 
-   d="asc'?scan'208";a="259448239"
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa5.microchip.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 27 Jun 2024 03:35:46 -0700
-Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.35; Thu, 27 Jun 2024 03:35:13 -0700
-Received: from wendy (10.10.85.11) by chn-vm-ex02.mchp-main.com (10.10.85.144)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.35 via Frontend
- Transport; Thu, 27 Jun 2024 03:35:09 -0700
-Date: Thu, 27 Jun 2024 11:34:53 +0100
-From: Conor Dooley <conor.dooley@microchip.com>
-To: Jesse Taube <jesse@rivosinc.com>
-CC: <linux-riscv@lists.infradead.org>, Ard Biesheuvel <ardb@kernel.org>, Paul
- Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>, Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>, Alexandre Ghiti
-	<alexghiti@rivosinc.com>, Masahiro Yamada <masahiroy@kernel.org>, Wende Tan
-	<twd2.me@gmail.com>, Christophe JAILLET <christophe.jaillet@wanadoo.fr>, Sami
- Tolvanen <samitolvanen@google.com>, Andrew Morton
-	<akpm@linux-foundation.org>, Baoquan He <bhe@redhat.com>, Chen Jiahao
-	<chenjiahao16@huawei.com>, "Mike Rapoport (IBM)" <rppt@kernel.org>, "Vishal
- Moola (Oracle)" <vishal.moola@gmail.com>, <linux-kernel@vger.kernel.org>,
-	<llvm@lists.linux.dev>
-Subject: Re: [PATCH v2 1/3] RISC-V: pi: Force hidden visibility for all
- symbol references
-Message-ID: <20240627-boring-handgun-40ae5bf2651e@wendy>
-References: <20240626171652.366415-1-jesse@rivosinc.com>
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1719487889; x=1751023889;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=M9Q75o1kuwUigzJKrsbFgOEKX5n/SvjlNrmrEt1udAY=;
+  b=KjZ1mniXkXFYOsNPPq70Az3RK2DOMenL+89b83QGtMJvB/OYkfZAH7FI
+   7Mm3IWIPFcvcPdhvRcXRUJODdZAewMZqDpcEdkUyQRZO5C98w7JPaOhsr
+   Li31+Mr0OW0HRDMg4S+zDYcMEY/JPWdxQ/fD3kBIIjdAeiFTNed7GVq+N
+   AlkP4rRK49GENqhXCrq4CRSXGYTOwN7vrVKoaCcRfM436Id5nbKUnH4LE
+   UBhNY0EcQf8IDMMrD+2ZMZG/SJh/VuXOEiZqjo4YHzY7r/GF8PPEa+m/4
+   8P2eV8AEenyNBXMn6HoyGbsOcsqJZJ4qEmx1Ga+s7228nS0cuWTfRVfpY
+   A==;
+X-CSE-ConnectionGUID: vlm3iatyRveC9bDGPKY+/g==
+X-CSE-MsgGUID: LnsF7v8KRAuvBDZ/QEiEPA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11115"; a="27197992"
+X-IronPort-AV: E=Sophos;i="6.09,270,1716274800"; 
+   d="scan'208";a="27197992"
+Received: from orviesa002.jf.intel.com ([10.64.159.142])
+  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jun 2024 04:31:29 -0700
+X-CSE-ConnectionGUID: YqkaLF+nS7OA3sU3TGthfQ==
+X-CSE-MsgGUID: zzB7SNLQRXGbbT9RXCrmrQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.09,270,1716274800"; 
+   d="scan'208";a="75100423"
+Received: from lkp-server01.sh.intel.com (HELO 68891e0c336b) ([10.239.97.150])
+  by orviesa002.jf.intel.com with ESMTP; 27 Jun 2024 04:31:27 -0700
+Received: from kbuild by 68891e0c336b with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1sMnLY-000G9w-31;
+	Thu, 27 Jun 2024 11:31:24 +0000
+Date: Thu, 27 Jun 2024 19:30:42 +0800
+From: kernel test robot <lkp@intel.com>
+To: Nuno Sa <nuno.sa@analog.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Nuno Sa <noname.nuno@gmail.com>
+Subject: [nsa:b4/dev-iio-ad9467-new-devs 6/9] ld.lld: error: duplicate
+ symbol: d
+Message-ID: <202406271947.IfboRh7P-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="vKFCYLL3R2eTISok"
-Content-Disposition: inline
-In-Reply-To: <20240626171652.366415-1-jesse@rivosinc.com>
-
---vKFCYLL3R2eTISok
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-On Wed, Jun 26, 2024 at 01:16:50PM -0400, Jesse Taube wrote:
-> Eliminate all GOT entries in the .pi section, by forcing hidden
-> visibility for all symbol references, which informs the compiler that
-> such references will be resolved at link time without the need for
-> allocating GOT entries.
->=20
-> Include linux/hidden.h in Makefile, like arm64, for the
-> hidden visibility attribute.
->=20
-> Signed-off-by: Jesse Taube <jesse@rivosinc.com>
+tree:   https://github.com/nunojsa/linux b4/dev-iio-ad9467-new-devs
+head:   07a190d5bdd96dcb948ba00339145f0bb2b461e9
+commit: b649e7b925e48f2b8a29b04b71c46b7b24508787 [6/9] iio: backend: add debugFs interface
+config: i386-buildonly-randconfig-004-20240627 (https://download.01.org/0day-ci/archive/20240627/202406271947.IfboRh7P-lkp@intel.com/config)
+compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240627/202406271947.IfboRh7P-lkp@intel.com/reproduce)
 
-Did you forget to add --cover-letter to your format-patch incantation?
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202406271947.IfboRh7P-lkp@intel.com/
 
---vKFCYLL3R2eTISok
-Content-Type: application/pgp-signature; name="signature.asc"
+All errors (new ones prefixed by >>):
 
------BEGIN PGP SIGNATURE-----
+>> ld.lld: error: duplicate symbol: d
+   >>> defined at industrialio-backend.c
+   >>>            drivers/iio/industrialio-backend.o:(d) in archive vmlinux.a
+   >>> defined at adi-axi-adc.c
+   >>>            drivers/iio/adc/adi-axi-adc.o:(.bss+0x0) in archive vmlinux.a
 
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZn1ATQAKCRB4tDGHoIJi
-0ro5AQDUTIQAFPaxq8FMvwx+tMjLHvhpLVDKFrBTkl0J4RVnQAD+JyHcenavbWL3
-JE+a1l9TQCnI/BGKBArtQn7zTJ0dMQ0=
-=n7mi
------END PGP SIGNATURE-----
-
---vKFCYLL3R2eTISok--
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
