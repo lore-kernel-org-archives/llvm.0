@@ -1,165 +1,107 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3108E13C67B;
-	Thu, 27 Jun 2024 10:35:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E27C13DBB6
+	for <llvm@lists.linux.dev>; Thu, 27 Jun 2024 10:35:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=68.232.153.233
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719484520; cv=none; b=RTy5YIQj3yUiR/rY8gG91TTRVZdy3LyTLROGE8RrG9YZLKbXceieHENR6P79uIKZ41+9YxIN161AsOSTTs3lQJCew2xTzSXnINOsOBsKAwVdpYjv4rQZMIRX9Ya7A1ShK8lOAyQNFmGcfZBkWRShH1XwuIxLQVBmEaZRsIeKx78=
+	t=1719484550; cv=none; b=eNWux5/VVnS4MLLn5sHG4TiT9Dhaj2ZwfNxGMUhCLPxTI5OI2CG4vl6+MsMxkrLnyvwhDZqFE1nryUeztqzmdrK8ZKQO1+H+eUpIr4x0OX/9nXv/+cVuyaNP6h/iDNOz1J3HPp4c+qUas2a38TzkgYFYvxJqJJY3I8tn+jk7vGg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719484520; c=relaxed/simple;
-	bh=n3fTqo6NFMW3NSDHDgErXu3fhjUWB/TMDTwrHQZiNk0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=TL3nHpEPG5lxvR9PbNHxV6wLeVWlWE5wfVen8/qr3B4cTdYLhWYqphP2lE413AqojLWvNV4FzWdWo3J2F4vuYCGA7KkHteKGdJd6FRqrof2iNPB58kWlRcE3P9Wg4cQmz70WcYE9jyXab5ZreBnnn4rtmVG9tmvE1sCsT8GblO0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=btwmqID4; arc=none smtp.client-ip=192.198.163.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1719484550; c=relaxed/simple;
+	bh=PT0DemCx5L/ZcJvMGNX3zxbnwOgua37LhSOsc+eGUas=;
+	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=cKlTaTp76KtwlgTGVeiQivt4/PLgthrSnTInNbUAcW61FaUZuD1Iok0q6zQXp5rL3vD4rMywjeIWtdRcYb30UTOMDL5Iz0so+2ticnA6Je/y0rgTQWH6QRf+3+Cp+2Ly0nbOMhVW5wkJ7DB/EHKwcNypM1urfM0oH0CG8ZTnyrI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com; spf=pass smtp.mailfrom=microchip.com; dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b=lnG9bbxy; arc=none smtp.client-ip=68.232.153.233
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=microchip.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="btwmqID4"
+	dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b="lnG9bbxy"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1719484519; x=1751020519;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1719484548; x=1751020548;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=n3fTqo6NFMW3NSDHDgErXu3fhjUWB/TMDTwrHQZiNk0=;
-  b=btwmqID4rWjgL2xPewEqaqGimJKmMIWth9WcdrCQ8WgbS1eSpVZGNCqN
-   H+VWLSeN3PG16AKzFn+V+E58RWONfLfiDN6P9j5tFMHyel+E7Btjdi1/+
-   PToYdEk62TPrn5FhZCf9C1P10MIT10Acp3p9f9fu9Fsk+fZn7rIkftrLc
-   vIT8k3oT7QCQ3jMicUPbP+hQrvsR9JEFkf1wZSXzHqU+e1ecIsem3CIqr
-   F0+DQuVip+iyvz9kU7+DbWN/FLxpmHiiylpvDBuKKyGGCZAO3GcDNx7Fa
-   HUeWK3kbE8yDivPUgimcZm6cXqQMw2/RLfecFNmbns4PKkoSdyljeMBw8
-   A==;
-X-CSE-ConnectionGUID: +egYIJyRSjuolThxtE+Amw==
-X-CSE-MsgGUID: yBLaFBWzS2O42RSS08rpCQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11115"; a="27291349"
+  bh=PT0DemCx5L/ZcJvMGNX3zxbnwOgua37LhSOsc+eGUas=;
+  b=lnG9bbxyK4GmoCKutVXKTlGJcfrLVe2YVeAuKzDp0yB6gizZNshRCp7X
+   t5dnaKV9/cnBAdLu8UBWY1CyQvKEZ49CFcuIQL2vihwsZUlFevOY+SC0e
+   RGmo/PusRKCNqIodZaq9yTr9qMwmlwSwR0naR/L9YZog521nOsIQy80fi
+   NmlojwySb9H30OHU5CCm1TWb+RYHh6FoRVJkV9hQTtU3BaZcr8MoDuFSX
+   nvQqLpi1JIkTXFB0WByMTUdMUBgbn00ENUcBA3i+al1icHGbX1pxTiL3m
+   wANzYmGBMtX3AVfBGlst0bX30GsiBcIMnQ6rfwu//hL23rOy1zvPl9+36
+   Q==;
+X-CSE-ConnectionGUID: +0US9/oBS+uQ72sgXKrlTQ==
+X-CSE-MsgGUID: 3UJBguS/R3mlbAbhaHQ3dw==
 X-IronPort-AV: E=Sophos;i="6.08,269,1712646000"; 
-   d="scan'208";a="27291349"
-Received: from orviesa009.jf.intel.com ([10.64.159.149])
-  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jun 2024 03:35:19 -0700
-X-CSE-ConnectionGUID: paDRu1OoTI6tUNJdOeGl2w==
-X-CSE-MsgGUID: GJd7IFfETOepN/MOy1bIdg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.08,269,1712646000"; 
-   d="scan'208";a="44457060"
-Received: from lkp-server01.sh.intel.com (HELO 68891e0c336b) ([10.239.97.150])
-  by orviesa009.jf.intel.com with ESMTP; 27 Jun 2024 03:35:14 -0700
-Received: from kbuild by 68891e0c336b with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1sMmT9-000G7y-22;
-	Thu, 27 Jun 2024 10:35:11 +0000
-Date: Thu, 27 Jun 2024 18:34:29 +0800
-From: kernel test robot <lkp@intel.com>
-To: Luigi Leonardi via B4 Relay <devnull+luigi.leonardi.outlook.com@kernel.org>,
-	Stefano Garzarella <sgarzare@redhat.com>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Stefan Hajnoczi <stefanha@redhat.com>,
-	"Michael S. Tsirkin" <mst@redhat.com>,
-	Jason Wang <jasowang@redhat.com>,
-	Eugenio =?iso-8859-1?Q?P=E9rez?= <eperezma@redhat.com>,
-	Xuan Zhuo <xuanzhuo@linux.alibaba.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	netdev@vger.kernel.org, virtualization@lists.linux.dev,
-	linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-	Luigi Leonardi <luigi.leonardi@outlook.com>,
-	Daan De Meyer <daan.j.demeyer@gmail.com>
-Subject: Re: [PATCH net-next v3 1/3] vsock: add support for SIOCOUTQ ioctl
- for all vsock socket types.
-Message-ID: <202406271827.aQ9ZYlCh-lkp@intel.com>
-References: <20240626-ioctl_next-v3-1-63be5bf19a40@outlook.com>
+   d="asc'?scan'208";a="259448239"
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa5.microchip.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 27 Jun 2024 03:35:46 -0700
+Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.35; Thu, 27 Jun 2024 03:35:13 -0700
+Received: from wendy (10.10.85.11) by chn-vm-ex02.mchp-main.com (10.10.85.144)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.35 via Frontend
+ Transport; Thu, 27 Jun 2024 03:35:09 -0700
+Date: Thu, 27 Jun 2024 11:34:53 +0100
+From: Conor Dooley <conor.dooley@microchip.com>
+To: Jesse Taube <jesse@rivosinc.com>
+CC: <linux-riscv@lists.infradead.org>, Ard Biesheuvel <ardb@kernel.org>, Paul
+ Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>, Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>, Alexandre Ghiti
+	<alexghiti@rivosinc.com>, Masahiro Yamada <masahiroy@kernel.org>, Wende Tan
+	<twd2.me@gmail.com>, Christophe JAILLET <christophe.jaillet@wanadoo.fr>, Sami
+ Tolvanen <samitolvanen@google.com>, Andrew Morton
+	<akpm@linux-foundation.org>, Baoquan He <bhe@redhat.com>, Chen Jiahao
+	<chenjiahao16@huawei.com>, "Mike Rapoport (IBM)" <rppt@kernel.org>, "Vishal
+ Moola (Oracle)" <vishal.moola@gmail.com>, <linux-kernel@vger.kernel.org>,
+	<llvm@lists.linux.dev>
+Subject: Re: [PATCH v2 1/3] RISC-V: pi: Force hidden visibility for all
+ symbol references
+Message-ID: <20240627-boring-handgun-40ae5bf2651e@wendy>
+References: <20240626171652.366415-1-jesse@rivosinc.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha256;
+	protocol="application/pgp-signature"; boundary="vKFCYLL3R2eTISok"
+Content-Disposition: inline
+In-Reply-To: <20240626171652.366415-1-jesse@rivosinc.com>
+
+--vKFCYLL3R2eTISok
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240626-ioctl_next-v3-1-63be5bf19a40@outlook.com>
+Content-Transfer-Encoding: quoted-printable
 
-Hi Luigi,
+On Wed, Jun 26, 2024 at 01:16:50PM -0400, Jesse Taube wrote:
+> Eliminate all GOT entries in the .pi section, by forcing hidden
+> visibility for all symbol references, which informs the compiler that
+> such references will be resolved at link time without the need for
+> allocating GOT entries.
+>=20
+> Include linux/hidden.h in Makefile, like arm64, for the
+> hidden visibility attribute.
+>=20
+> Signed-off-by: Jesse Taube <jesse@rivosinc.com>
 
-kernel test robot noticed the following build warnings:
+Did you forget to add --cover-letter to your format-patch incantation?
 
-[auto build test WARNING on 50b70845fc5c22cf7e7d25b57d57b3dca1725aa5]
+--vKFCYLL3R2eTISok
+Content-Type: application/pgp-signature; name="signature.asc"
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Luigi-Leonardi-via-B4-Relay/vsock-add-support-for-SIOCOUTQ-ioctl-for-all-vsock-socket-types/20240627-023902
-base:   50b70845fc5c22cf7e7d25b57d57b3dca1725aa5
-patch link:    https://lore.kernel.org/r/20240626-ioctl_next-v3-1-63be5bf19a40%40outlook.com
-patch subject: [PATCH net-next v3 1/3] vsock: add support for SIOCOUTQ ioctl for all vsock socket types.
-config: i386-buildonly-randconfig-001-20240627 (https://download.01.org/0day-ci/archive/20240627/202406271827.aQ9ZYlCh-lkp@intel.com/config)
-compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240627/202406271827.aQ9ZYlCh-lkp@intel.com/reproduce)
+-----BEGIN PGP SIGNATURE-----
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202406271827.aQ9ZYlCh-lkp@intel.com/
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZn1ATQAKCRB4tDGHoIJi
+0ro5AQDUTIQAFPaxq8FMvwx+tMjLHvhpLVDKFrBTkl0J4RVnQAD+JyHcenavbWL3
+JE+a1l9TQCnI/BGKBArtQn7zTJ0dMQ0=
+=n7mi
+-----END PGP SIGNATURE-----
 
-All warnings (new ones prefixed by >>):
-
->> net/vmw_vsock/af_vsock.c:1314:7: warning: variable 'retval' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
-    1314 |                 if (vsk->transport->unsent_bytes) {
-         |                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   net/vmw_vsock/af_vsock.c:1334:9: note: uninitialized use occurs here
-    1334 |         return retval;
-         |                ^~~~~~
-   net/vmw_vsock/af_vsock.c:1314:3: note: remove the 'if' if its condition is always true
-    1314 |                 if (vsk->transport->unsent_bytes) {
-         |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   net/vmw_vsock/af_vsock.c:1301:12: note: initialize the variable 'retval' to silence this warning
-    1301 |         int retval;
-         |                   ^
-         |                    = 0
-   1 warning generated.
-
-
-vim +1314 net/vmw_vsock/af_vsock.c
-
-  1295	
-  1296	static int vsock_do_ioctl(struct socket *sock, unsigned int cmd,
-  1297				  int __user *arg)
-  1298	{
-  1299		struct sock *sk = sock->sk;
-  1300		struct vsock_sock *vsk;
-  1301		int retval;
-  1302	
-  1303		vsk = vsock_sk(sk);
-  1304	
-  1305		switch (cmd) {
-  1306		case SIOCOUTQ: {
-  1307			size_t n_bytes;
-  1308	
-  1309			if (!vsk->transport || !vsk->transport->unsent_bytes) {
-  1310				retval = -EOPNOTSUPP;
-  1311				break;
-  1312			}
-  1313	
-> 1314			if (vsk->transport->unsent_bytes) {
-  1315				if (sock_type_connectible(sk->sk_type) && sk->sk_state == TCP_LISTEN) {
-  1316					retval = -EINVAL;
-  1317					break;
-  1318				}
-  1319	
-  1320				n_bytes = vsk->transport->unsent_bytes(vsk);
-  1321				if (n_bytes < 0) {
-  1322					retval = n_bytes;
-  1323					break;
-  1324				}
-  1325	
-  1326				retval = put_user(n_bytes, arg);
-  1327			}
-  1328			break;
-  1329		}
-  1330		default:
-  1331			retval = -ENOIOCTLCMD;
-  1332		}
-  1333	
-  1334		return retval;
-  1335	}
-  1336	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+--vKFCYLL3R2eTISok--
