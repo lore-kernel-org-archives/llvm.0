@@ -1,168 +1,129 @@
-Received: from mail-yw1-f178.google.com (mail-yw1-f178.google.com [209.85.128.178])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE19D19885F
-	for <llvm@lists.linux.dev>; Thu, 27 Jun 2024 15:04:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 90E58199E9E;
+	Thu, 27 Jun 2024 16:56:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719500642; cv=none; b=CJNqlWBLyTZrVvyjbx4KjSY9gxGFSdN2FSZa5CB1hXc2Vfn+izyFfirKHBv7tVEd5hWFhptlTbTu/OHZh2EDLsqC6pUE705hJDdshqB3irjaWa8ROn5gHiNSUbq4mqNPtzm2PTZ2C8jfkb06XBY+ArZGEuu+CElndDQApsSmGTA=
+	t=1719507375; cv=none; b=dWRx3VR6F/IUY0i8aeLyoy1sDd/vEIdIc7YbSBxwfYPDWA9kW8xwQhWQZ9JlDuiIEd2ymTTRgXm3bX8pfwGK+a7NFykSIYWwu/GLqC0Iwwok+z5oE6rezvnv50EkTY0NGonW7pnvWooMdjguQKzlWTf1ZVPZgR22alENXbnh76Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719500642; c=relaxed/simple;
-	bh=l73llJCUIKUxRecupdaIxSy64eMLHxkbYexteymENJA=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=t8KwU/hoBvS7HfSlq2FGsVFqzv99FM+8bZKUSIpzp9yrLq3RpiWJG2R5jIEwnl0GSFuUxIan3+kBue5DMkKntlmU9fm2j+Nq87Jq4H17ueTYNZz4uwd11NUDXCebXdmxqFJBk2KpUifGR/+cupvg6X3FRHPP8xKmisHXIbvkErs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=DB0Yn3R8; arc=none smtp.client-ip=209.85.128.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1719507375; c=relaxed/simple;
+	bh=tXnUP+Q4ipMZHMdFaly9rDmGwdmTVd9/H6CA/PJ6e9g=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=lsUQAo2t+V+dJ+Q5lPq4QYJ7EEKEDj6mDnvsIGCdN+E4LaRaawj+Dx7J7wKpY/M3K3NnKtVYBG76Dr3K6/b6eXuz4faxXmzwcDowspMzqdlH6TmQY+WJ6qmlT6b/EEzBC0iHlsBWFNvSupS73biczZBy89W94nsoqmTaoEMj6yk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=mrSchKrs; arc=none smtp.client-ip=192.198.163.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DB0Yn3R8"
-Received: by mail-yw1-f178.google.com with SMTP id 00721157ae682-64789495923so29289207b3.0
-        for <llvm@lists.linux.dev>; Thu, 27 Jun 2024 08:04:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1719500640; x=1720105440; darn=lists.linux.dev;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=8RPqAWJX29gQXV8+Zzq9GyOhgk6BXLzXmKNl8pcyJtY=;
-        b=DB0Yn3R8Q0p3KJQlFY+WP9qGUUXo+Q6NCumGq+oIEHQpu1ODnExtNX7Z9MnIAD+6j0
-         ScxnGQ7w2ygmGal0NFwhU0jeJkPXga2fNp/7RWcH0JgsUwrM+x+YMCEm5GbRw7nS4cVq
-         AQXBLkLDr3ysifGv0g5GQijwkiSOewRsGBL+VzyBPDA/wBiL5OAWhYcn/M4nWqgyuEAR
-         g/KI/kkalvuz1y3VIF5GYK7fv8TXkYsDC+7d19mgcCx40W3zCD/A5SDr/Yn5wVTHRane
-         hsqyU1Szkw9JpinG/SKlj8pfs5f5c1vPgjH0E3w0ziw+n0haAUC3gBSw3fYyoqw44uAZ
-         QQcA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1719500640; x=1720105440;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=8RPqAWJX29gQXV8+Zzq9GyOhgk6BXLzXmKNl8pcyJtY=;
-        b=smXYh1ZiwfcEeSv+0MBHRS2XQTCZ7D4y2tTqun+wxdYF9+M8iIKiGPBTgakr3aNpOL
-         LCoMFbjJLFG+iTNxwwH9nPQ0MbZUBsuglmt3KPbRUyMqua5K8KOkN8c0igTiRHWPGfyu
-         1GF3C+D2s3GhN885pjgHqcBj5xVhaUTyaiTjoVxZ4N7mfZq5xzlGeQ5VaGJT1mrQhFSZ
-         HbzJIZlPNpY/ksxPXVC51JGJ4i4ekerDc8XNSxLUCyfWz5khO259/TMqEziX2acabkVC
-         r22U2F48h7rZnD6MHQrdFmuUBUa7tfdWjnKxGV+XNwD9ydacggr+4kF/8ouyXAjPM8Zj
-         c5Mg==
-X-Forwarded-Encrypted: i=1; AJvYcCUJAc+w+2NhJ+lrV1ABl6VwDiouleZcmhyzw+xOaoLmRvZXCM47hDcb+dO9mj+s71ES1fewCWs9L8P7zLr4G8urOEueNg==
-X-Gm-Message-State: AOJu0YzG1Er/5Bl6OWNhjpZGFtLYNAO20aJ/3JbJnEdtd1DyhW6Oiv2g
-	S0e4/mU0OY257pHAyidZWHqZqfY+fkDXAp70ycOdn15n3VR8qvoE
-X-Google-Smtp-Source: AGHT+IHKPiZpyKzGZOIL3xcH+XD1DwotbRWUXOrtZQP4/3YIqhVff++wSdOu73KnfBIM4SnpEwRkxw==
-X-Received: by 2002:a05:690c:6c0d:b0:618:ce10:2fcd with SMTP id 00721157ae682-643aa5a426dmr160071517b3.26.1719500639499;
-        Thu, 27 Jun 2024 08:03:59 -0700 (PDT)
-Received: from [127.0.1.1] (107-197-105-120.lightspeed.sntcca.sbcglobal.net. [107.197.105.120])
-        by smtp.gmail.com with ESMTPSA id 00721157ae682-6497a755ad2sm2770537b3.76.2024.06.27.08.03.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 27 Jun 2024 08:03:59 -0700 (PDT)
-From: Pei Li <peili.dev@gmail.com>
-Date: Thu, 27 Jun 2024 08:03:56 -0700
-Subject: [PATCH v2] kvm: Fix warning in__kvm_gpc_refresh
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="mrSchKrs"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1719507374; x=1751043374;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=tXnUP+Q4ipMZHMdFaly9rDmGwdmTVd9/H6CA/PJ6e9g=;
+  b=mrSchKrshCwg0tvfnXSiLQrW+w0X5whGQDwyswMKSkfp2QD8RmQ7UqbB
+   86AHxZyrh9UKFipL/Z3je6Hy7X/XZSz4quKAq13o/iqcPZFg2S6+ORLrP
+   fRyURy5VH6IjMyEWR9du06xMb7Shl5bE9mmyLP5MBz4lRam4osMPXFLU2
+   L40ZHYvB0INs3mx7WNg2dqtxgb1V9vLtNrwXgOJ9szHSodK1n1TGiztqL
+   +fMEs1lDPLtnn/BAdXBdmwHrs4IoPdRb615nA428Lot6ZhR3I4nQc9Cb5
+   zJdmMsujT0TYpOW4Iq4azXu5sBN0pLolJWulNU4V0U2OOqDRiKTPls5Pj
+   g==;
+X-CSE-ConnectionGUID: lhpVY703TfCB/GYTGiBn3g==
+X-CSE-MsgGUID: 9KIf9bWjQN6yKebsr+AyPw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11116"; a="12286787"
+X-IronPort-AV: E=Sophos;i="6.09,166,1716274800"; 
+   d="scan'208";a="12286787"
+Received: from orviesa008.jf.intel.com ([10.64.159.148])
+  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jun 2024 09:56:13 -0700
+X-CSE-ConnectionGUID: bsmEuNJtTamAJkDBSbSqeA==
+X-CSE-MsgGUID: dLAGV4qcSZK0xnMWNIgGbQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.09,166,1716274800"; 
+   d="scan'208";a="45202273"
+Received: from lkp-server01.sh.intel.com (HELO 68891e0c336b) ([10.239.97.150])
+  by orviesa008.jf.intel.com with ESMTP; 27 Jun 2024 09:56:10 -0700
+Received: from kbuild by 68891e0c336b with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1sMsPn-000GMk-1E;
+	Thu, 27 Jun 2024 16:56:07 +0000
+Date: Fri, 28 Jun 2024 00:55:54 +0800
+From: kernel test robot <lkp@intel.com>
+To: Chris Lu <chris.lu@mediatek.com>, Marcel Holtmann <marcel@holtmann.org>,
+	Johan Hedberg <johan.hedberg@gmail.com>,
+	Luiz Von Dentz <luiz.dentz@gmail.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Sean Wang <sean.wang@mediatek.com>,
+	Aaron Hou <aaron.hou@mediatek.com>,
+	Steve Lee <steve.lee@mediatek.com>,
+	linux-bluetooth <linux-bluetooth@vger.kernel.org>,
+	linux-kernel <linux-kernel@vger.kernel.org>,
+	linux-mediatek <linux-mediatek@lists.infradead.org>,
+	Chris Lu <chris.lu@mediatek.com>
+Subject: Re: [PATCH v5 8/8] Bluetooth: btusb: mediatek: add ISO data
+ transmission functions
+Message-ID: <202406280003.brf5D1qt-lkp@intel.com>
+References: <20240626025329.26424-9-chris.lu@mediatek.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20240627-bug5-v2-1-2c63f7ee6739@gmail.com>
-X-B4-Tracking: v=1; b=H4sIAFt/fWYC/13MywrCMBCF4VcpszaSTJ0qrnwP6aJNpumAvZBoU
- Ere3dily/9w+DaIHIQjXKsNAieJsswl8FCBHbvZsxJXGlDjSTdIqn95UuTqGntiMo2Bcl0DD/L
- emXtbepT4XMJnV5P5rX9AMsoo1mdkR4PlC9381MnjaJcJ2pzzF1jDf06YAAAA
-To: David Woodhouse <dwmw2@infradead.org>, Paul Durrant <paul@xen.org>, 
- Sean Christopherson <seanjc@google.com>, 
- Paolo Bonzini <pbonzini@redhat.com>, Thomas Gleixner <tglx@linutronix.de>, 
- Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
- Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
- "H. Peter Anvin" <hpa@zytor.com>, Nathan Chancellor <nathan@kernel.org>, 
- Nick Desaulniers <ndesaulniers@google.com>, 
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>
-Cc: kvm@vger.kernel.org, linux-kernel@vger.kernel.org, 
- skhan@linuxfoundation.org, linux-kernel-mentees@lists.linuxfoundation.org, 
- syzkaller-bugs@googlegroups.com, llvm@lists.linux.dev, 
- syzbot+fd555292a1da3180fc82@syzkaller.appspotmail.com, 
- Pei Li <peili.dev@gmail.com>
-X-Mailer: b4 0.15-dev-13183
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1719500637; l=3041;
- i=peili.dev@gmail.com; s=20240625; h=from:subject:message-id;
- bh=l73llJCUIKUxRecupdaIxSy64eMLHxkbYexteymENJA=;
- b=Q6AcEfxFpP9UNEK+Is8AMNrTHFxa+L3BtOlJnguHVBEfUlnNBuNoRPOKwzHwnZlGMGU8jDnuP
- O7DDJoKQC6WBBXgb7f9M59UF437eNqYW1ygW3LzJjccTFadkoS8MP6h
-X-Developer-Key: i=peili.dev@gmail.com; a=ed25519;
- pk=I6GWb2uGzELGH5iqJTSK9VwaErhEZ2z2abryRD6a+4Q=
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240626025329.26424-9-chris.lu@mediatek.com>
 
-Check for invalid hva address stored in data and return -EINVAL before
-calling into __kvm_gpc_activate().
+Hi Chris,
 
-Reported-by: syzbot+fd555292a1da3180fc82@syzkaller.appspotmail.com
-Closes: https://syzkaller.appspot.com/bug?extid=fd555292a1da3180fc82
-Tested-by: syzbot+fd555292a1da3180fc82@syzkaller.appspotmail.com
-Signed-off-by: Pei Li <peili.dev@gmail.com>
----
-Syzbot reports a warning message in __kvm_gpc_refresh(). This warning
-requires at least one of gpa and uhva to be valid.
-WARNING: CPU: 0 PID: 5090 at arch/x86/kvm/../../../virt/kvm/pfncache.c:259 __kvm_gpc_refresh+0xf17/0x1090 arch/x86/kvm/../../../virt/kvm/pfncache.c:259
+kernel test robot noticed the following build errors:
 
-We are calling it from kvm_gpc_activate_hva(). This function always calls
-__kvm_gpc_activate() with INVALID_GPA. Thus, uhva must be valid to
-disable this warning.
+[auto build test ERROR on bluetooth-next/master]
+[also build test ERROR on next-20240626]
+[cannot apply to bluetooth/master linus/master v6.10-rc5]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-This patch checks for invalid hva address and return -EINVAL before
-calling __kvm_gpc_activate().
+url:    https://github.com/intel-lab-lkp/linux/commits/Chris-Lu/Bluetooth-btusb-mediatek-remove-the-unnecessary-goto-tag/20240626-114003
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/bluetooth/bluetooth-next.git master
+patch link:    https://lore.kernel.org/r/20240626025329.26424-9-chris.lu%40mediatek.com
+patch subject: [PATCH v5 8/8] Bluetooth: btusb: mediatek: add ISO data transmission functions
+config: i386-buildonly-randconfig-003-20240627 (https://download.01.org/0day-ci/archive/20240628/202406280003.brf5D1qt-lkp@intel.com/config)
+compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240628/202406280003.brf5D1qt-lkp@intel.com/reproduce)
 
-syzbot has tested the proposed patch and the reproducer did not trigger
-any issue.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202406280003.brf5D1qt-lkp@intel.com/
 
-Tested on:
+All errors (new ones prefixed by >>):
 
-commit:         afcd4813 Merge tag 'mm-hotfixes-stable-2024-06-26-17-2..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=1427e301980000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=e40800950091403a
-dashboard link: https://syzkaller.appspot.com/bug?extid=fd555292a1da3180fc82
-compiler:       Debian clang version 15.0.6, GNU ld (GNU Binutils for Debian) 2.40
-patch:          https://syzkaller.appspot.com/x/patch.diff?x=13838f3e980000
+   In file included from drivers/bluetooth/btusb.c:28:
+>> drivers/bluetooth/btmtk.h:274:17: error: incompatible integer to pointer conversion passing 'int' to parameter of type 'const void *' [-Wint-conversion]
+     274 |         return PTR_ERR(-EOPNOTSUPP);
+         |                        ^~~~~~~~~~~
+   include/linux/err.h:49:61: note: passing argument to parameter 'ptr' here
+      49 | static inline long __must_check PTR_ERR(__force const void *ptr)
+         |                                                             ^
+   In file included from drivers/bluetooth/btusb.c:28:
+>> drivers/bluetooth/btmtk.h:274:9: error: incompatible integer to pointer conversion returning 'long' from a function with result type 'struct urb *' [-Wint-conversion]
+     274 |         return PTR_ERR(-EOPNOTSUPP);
+         |                ^~~~~~~~~~~~~~~~~~~~
+   2 errors generated.
 
-Note: testing is done by a robot and is best-effort only.
----
-Changes in v2:
-- Adapted Sean's suggestion to check for valid address before calling
-  into __kvm_gpc_activate().
-- Link to v1: https://lore.kernel.org/r/20240625-bug5-v1-1-e072ed5fce85@gmail.com
----
- arch/x86/kvm/xen.c  | 2 +-
- virt/kvm/pfncache.c | 3 +++
- 2 files changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/arch/x86/kvm/xen.c b/arch/x86/kvm/xen.c
-index f65b35a05d91..67bb4e89c399 100644
---- a/arch/x86/kvm/xen.c
-+++ b/arch/x86/kvm/xen.c
-@@ -741,7 +741,7 @@ int kvm_xen_hvm_set_attr(struct kvm *kvm, struct kvm_xen_hvm_attr *data)
- 		} else {
- 			void __user * hva = u64_to_user_ptr(data->u.shared_info.hva);
- 
--			if (!PAGE_ALIGNED(hva) || !access_ok(hva, PAGE_SIZE)) {
-+			if (!PAGE_ALIGNED(hva)) {
- 				r = -EINVAL;
- 			} else if (!hva) {
- 				kvm_gpc_deactivate(&kvm->arch.xen.shinfo_cache);
-diff --git a/virt/kvm/pfncache.c b/virt/kvm/pfncache.c
-index e3453e869e92..f0039efb9e1e 100644
---- a/virt/kvm/pfncache.c
-+++ b/virt/kvm/pfncache.c
-@@ -430,6 +430,9 @@ int kvm_gpc_activate(struct gfn_to_pfn_cache *gpc, gpa_t gpa, unsigned long len)
- 
- int kvm_gpc_activate_hva(struct gfn_to_pfn_cache *gpc, unsigned long uhva, unsigned long len)
- {
-+	if (!access_ok((void __user *)uhva, len))
-+		return -EINVAL;
-+
- 	return __kvm_gpc_activate(gpc, INVALID_GPA, uhva, len);
- }
- 
+vim +274 drivers/bluetooth/btmtk.h
 
----
-base-commit: 2bfcfd584ff5ccc8bb7acde19b42570414bf880b
-change-id: 20240625-bug5-5d332b5e5161
+   270	
+   271	static struct urb *alloc_mtk_intr_urb(struct hci_dev *hdev, struct sk_buff *skb,
+   272					      usb_complete_t tx_complete)
+   273	{
+ > 274		return PTR_ERR(-EOPNOTSUPP);
+   275	}
+   276	
 
-Best regards,
 -- 
-Pei Li <peili.dev@gmail.com>
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
