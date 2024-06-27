@@ -1,69 +1,45 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 90E58199E9E;
-	Thu, 27 Jun 2024 16:56:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6462619A2A8;
+	Thu, 27 Jun 2024 17:14:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719507375; cv=none; b=dWRx3VR6F/IUY0i8aeLyoy1sDd/vEIdIc7YbSBxwfYPDWA9kW8xwQhWQZ9JlDuiIEd2ymTTRgXm3bX8pfwGK+a7NFykSIYWwu/GLqC0Iwwok+z5oE6rezvnv50EkTY0NGonW7pnvWooMdjguQKzlWTf1ZVPZgR22alENXbnh76Q=
+	t=1719508446; cv=none; b=UIIrXUe2OLQUoT2oT6dUsEltAUEFQTfjcE8O91HBc5eWmOEUHp5EcpzlPm+Sbdhtfd9gGXgvqPRfLnYBYYgzWHI9FNIvX28HGmU4L2mg76AKyRKSxgMj3Uqs1iO85wgzsQjFy/qw5D6GMB4sp/qngGH30Kw5k/PpqPQCSSll5NM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719507375; c=relaxed/simple;
-	bh=tXnUP+Q4ipMZHMdFaly9rDmGwdmTVd9/H6CA/PJ6e9g=;
+	s=arc-20240116; t=1719508446; c=relaxed/simple;
+	bh=tNR6ArIGiHkLTpGQkaqhID9T8qBWrrtgctZsjePiA8k=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=lsUQAo2t+V+dJ+Q5lPq4QYJ7EEKEDj6mDnvsIGCdN+E4LaRaawj+Dx7J7wKpY/M3K3NnKtVYBG76Dr3K6/b6eXuz4faxXmzwcDowspMzqdlH6TmQY+WJ6qmlT6b/EEzBC0iHlsBWFNvSupS73biczZBy89W94nsoqmTaoEMj6yk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=mrSchKrs; arc=none smtp.client-ip=192.198.163.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=ec4NOu1vEK7HIOu30BjmyTMUJJmT+at+IyEv9FEE/5mcm3ajRNiZjCpXeeL8JD+Nnw4yIYoaC+Kb82MTwXJkWKEyPSvd+2+zmobukfLIkQjpo6qpg/HrGMDUCInYXkGFLyWQdbuO1lYCKizgf1C4dStWHhdzTiM13sQ8PuRyaac=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RtAcu1FG; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="mrSchKrs"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1719507374; x=1751043374;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=tXnUP+Q4ipMZHMdFaly9rDmGwdmTVd9/H6CA/PJ6e9g=;
-  b=mrSchKrshCwg0tvfnXSiLQrW+w0X5whGQDwyswMKSkfp2QD8RmQ7UqbB
-   86AHxZyrh9UKFipL/Z3je6Hy7X/XZSz4quKAq13o/iqcPZFg2S6+ORLrP
-   fRyURy5VH6IjMyEWR9du06xMb7Shl5bE9mmyLP5MBz4lRam4osMPXFLU2
-   L40ZHYvB0INs3mx7WNg2dqtxgb1V9vLtNrwXgOJ9szHSodK1n1TGiztqL
-   +fMEs1lDPLtnn/BAdXBdmwHrs4IoPdRb615nA428Lot6ZhR3I4nQc9Cb5
-   zJdmMsujT0TYpOW4Iq4azXu5sBN0pLolJWulNU4V0U2OOqDRiKTPls5Pj
-   g==;
-X-CSE-ConnectionGUID: lhpVY703TfCB/GYTGiBn3g==
-X-CSE-MsgGUID: 9KIf9bWjQN6yKebsr+AyPw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11116"; a="12286787"
-X-IronPort-AV: E=Sophos;i="6.09,166,1716274800"; 
-   d="scan'208";a="12286787"
-Received: from orviesa008.jf.intel.com ([10.64.159.148])
-  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jun 2024 09:56:13 -0700
-X-CSE-ConnectionGUID: bsmEuNJtTamAJkDBSbSqeA==
-X-CSE-MsgGUID: dLAGV4qcSZK0xnMWNIgGbQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.09,166,1716274800"; 
-   d="scan'208";a="45202273"
-Received: from lkp-server01.sh.intel.com (HELO 68891e0c336b) ([10.239.97.150])
-  by orviesa008.jf.intel.com with ESMTP; 27 Jun 2024 09:56:10 -0700
-Received: from kbuild by 68891e0c336b with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1sMsPn-000GMk-1E;
-	Thu, 27 Jun 2024 16:56:07 +0000
-Date: Fri, 28 Jun 2024 00:55:54 +0800
-From: kernel test robot <lkp@intel.com>
-To: Chris Lu <chris.lu@mediatek.com>, Marcel Holtmann <marcel@holtmann.org>,
-	Johan Hedberg <johan.hedberg@gmail.com>,
-	Luiz Von Dentz <luiz.dentz@gmail.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Sean Wang <sean.wang@mediatek.com>,
-	Aaron Hou <aaron.hou@mediatek.com>,
-	Steve Lee <steve.lee@mediatek.com>,
-	linux-bluetooth <linux-bluetooth@vger.kernel.org>,
-	linux-kernel <linux-kernel@vger.kernel.org>,
-	linux-mediatek <linux-mediatek@lists.infradead.org>,
-	Chris Lu <chris.lu@mediatek.com>
-Subject: Re: [PATCH v5 8/8] Bluetooth: btusb: mediatek: add ISO data
- transmission functions
-Message-ID: <202406280003.brf5D1qt-lkp@intel.com>
-References: <20240626025329.26424-9-chris.lu@mediatek.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RtAcu1FG"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 09DF5C2BD10;
+	Thu, 27 Jun 2024 17:14:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1719508446;
+	bh=tNR6ArIGiHkLTpGQkaqhID9T8qBWrrtgctZsjePiA8k=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=RtAcu1FGJ6P2bbf/X4dsur5Hnf5L/FVULlmeohzDRYKuz6ePZ+uKKYm74H3EdgNmo
+	 XlWBAZeCr43+0xZjyJrKO78GGKQ785KXaJGxLHBbA+7vLgm8dj5LPhJLEdRfFSeXwr
+	 FzJSivkdhNDkiLgaKBQA001ga1cAY/Tp37wpV9noXkqcWyZ4fBhv6RIsjNPqYLiIbx
+	 R/u4GNIbrvU1JRSvc2fyK2KxRnnepks0MHIywrbegr/DKmu06qiHTZnd/A5lsnwNny
+	 j6JSGuPX7j0jJww7j2jrCZvvQKOucgU4nDRiE3PYJCL0T8PFOfIc4lDIGr76Iam4Dn
+	 AvxHsaRMYypIw==
+Date: Thu, 27 Jun 2024 10:14:05 -0700
+From: Kees Cook <kees@kernel.org>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Jiri Slaby <jirislaby@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	"Gustavo A. R. Silva" <gustavoars@kernel.org>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>, linux-serial@vger.kernel.org,
+	imx@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
+	linux-hardening@vger.kernel.org, llvm@lists.linux.dev,
+	patches@lists.linux.dev, stable@vger.kernel.org
+Subject: Re: [PATCH] tty: mxser: Remove __counted_by from mxser_board.ports[]
+Message-ID: <202406271009.4E90DF8@keescook>
+References: <20240529-drop-counted-by-ports-mxser-board-v1-1-0ab217f4da6d@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -72,58 +48,59 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240626025329.26424-9-chris.lu@mediatek.com>
+In-Reply-To: <20240529-drop-counted-by-ports-mxser-board-v1-1-0ab217f4da6d@kernel.org>
 
-Hi Chris,
+On Wed, May 29, 2024 at 02:29:42PM -0700, Nathan Chancellor wrote:
+> Work for __counted_by on generic pointers in structures (not just
+> flexible array members) has started landing in Clang 19 (current tip of
+> tree). During the development of this feature, a restriction was added
+> to __counted_by to prevent the flexible array member's element type from
+> including a flexible array member itself such as:
+> 
+>   struct foo {
+>     int count;
+>     char buf[];
+>   };
+> 
+>   struct bar {
+>     int count;
+>     struct foo data[] __counted_by(count);
+>   };
+> 
+> because the size of data cannot be calculated with the standard array
+> size formula:
+> 
+>   sizeof(struct foo) * count
+> 
+> This restriction was downgraded to a warning but due to CONFIG_WERROR,
+> it can still break the build. The application of __counted_by on the
+> ports member of 'struct mxser_board' triggers this restriction,
+> resulting in:
+> 
+>   drivers/tty/mxser.c:291:2: error: 'counted_by' should not be applied to an array with element of unknown size because 'struct mxser_port' is a struct type with a flexible array member. This will be an error in a future compiler version [-Werror,-Wbounds-safety-counted-by-elt-type-unknown-size]
+>     291 |         struct mxser_port ports[] __counted_by(nports);
+>         |         ^~~~~~~~~~~~~~~~~~~~~~~~~
+>   1 error generated.
+> 
+> Remove this use of __counted_by to fix the warning/error. However,
+> rather than remove it altogether, leave it commented, as it may be
+> possible to support this in future compiler releases.
+> 
+> Cc: stable@vger.kernel.org
+> Closes: https://github.com/ClangBuiltLinux/linux/issues/2026
+> Fixes: f34907ecca71 ("mxser: Annotate struct mxser_board with __counted_by")
+> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
 
-kernel test robot noticed the following build errors:
+Since this fixes a build issue under Clang, can we please land this so
+v6.7 and later will build again? Gustavo is still working on the more
+complete fix (which was already on his radar, so it won't be lost).
 
-[auto build test ERROR on bluetooth-next/master]
-[also build test ERROR on next-20240626]
-[cannot apply to bluetooth/master linus/master v6.10-rc5]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+If it's easier/helpful, I can land this via the hardening tree? I was
+the one who sent the bad patch originally. :)
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Chris-Lu/Bluetooth-btusb-mediatek-remove-the-unnecessary-goto-tag/20240626-114003
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/bluetooth/bluetooth-next.git master
-patch link:    https://lore.kernel.org/r/20240626025329.26424-9-chris.lu%40mediatek.com
-patch subject: [PATCH v5 8/8] Bluetooth: btusb: mediatek: add ISO data transmission functions
-config: i386-buildonly-randconfig-003-20240627 (https://download.01.org/0day-ci/archive/20240628/202406280003.brf5D1qt-lkp@intel.com/config)
-compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240628/202406280003.brf5D1qt-lkp@intel.com/reproduce)
+Thanks!
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202406280003.brf5D1qt-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
-   In file included from drivers/bluetooth/btusb.c:28:
->> drivers/bluetooth/btmtk.h:274:17: error: incompatible integer to pointer conversion passing 'int' to parameter of type 'const void *' [-Wint-conversion]
-     274 |         return PTR_ERR(-EOPNOTSUPP);
-         |                        ^~~~~~~~~~~
-   include/linux/err.h:49:61: note: passing argument to parameter 'ptr' here
-      49 | static inline long __must_check PTR_ERR(__force const void *ptr)
-         |                                                             ^
-   In file included from drivers/bluetooth/btusb.c:28:
->> drivers/bluetooth/btmtk.h:274:9: error: incompatible integer to pointer conversion returning 'long' from a function with result type 'struct urb *' [-Wint-conversion]
-     274 |         return PTR_ERR(-EOPNOTSUPP);
-         |                ^~~~~~~~~~~~~~~~~~~~
-   2 errors generated.
-
-
-vim +274 drivers/bluetooth/btmtk.h
-
-   270	
-   271	static struct urb *alloc_mtk_intr_urb(struct hci_dev *hdev, struct sk_buff *skb,
-   272					      usb_complete_t tx_complete)
-   273	{
- > 274		return PTR_ERR(-EOPNOTSUPP);
-   275	}
-   276	
+-Kees
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Kees Cook
