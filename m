@@ -1,62 +1,60 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E149F61FDD;
-	Fri, 28 Jun 2024 18:57:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E55D59147;
+	Fri, 28 Jun 2024 19:31:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719601030; cv=none; b=aA6U8aXYUa9yKY9g/aDZpTLJMaaAaefyNFksJ/gtxaM0jZW0cmXI0B4q/L6Kf326TQXZVTS+i2S84SrGZ6pEhSkK5Jcezy3f/VLRLK6rZxl25B79IaLAKz9Ij0NjdX9MEbVm3d0TiPeIFlEmidFYkJPIZz1SOeMz8cmXwqPrMJU=
+	t=1719603091; cv=none; b=iS4T6m4vfN3CX1kd3ptEMGXOn1taYjoPnhjnvWauo26bwWGkEoaHBkbaITYOXHgmHGtuNWTKeYmT/UoVfAIqjtRiE4a1sp5TNx/Tg6dF7sHrgnMbL0WHjuzaJyNgDDb8bFHeD+A9YjXwkRFaOj9cVAcMvRvDHA7QMC9WyVdy+fA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719601030; c=relaxed/simple;
-	bh=nBHL9Mhy2PUkr/VGgez2e5viO4TExv4p/2gPVPJvjgI=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=shAFuRX1qVM/sG9tfGyMHQ3YurAqlPU7gTbrgF2vBU4Qk11RG43iLnh4b/fxbp7LdnoRwwx44dy01/V/0XTZlSQmZeSp/0LZOo7hdAaQfLbWgxghjq4M5bg5RbzExEczYNuFlDmZeXL3dwzfAJq31y2Aap90i31brC9awqkxudQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ja8ThAI3; arc=none smtp.client-ip=192.198.163.18
+	s=arc-20240116; t=1719603091; c=relaxed/simple;
+	bh=NIOMP8Bpo2PGZ2zvUqCsfC1Ik0pjVA0lf/yUpHVMMAw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=IcC8tp5kOIFFpheXjzzM7I4mNVIl3VTZhy5stOmy7dfXGRJZ2b3XGw0UjOzdq8kXgmKWJqbUSDp6RC578ovAwGVSbl/tqcAE4wDiGY2NdeTFSqsr3OXkZWDrF61bnYHGdOMc36mM6ZgtBOlawrJxoJSZE90IaEaOON2zpaNnjc0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=SMiX832D; arc=none smtp.client-ip=198.175.65.13
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ja8ThAI3"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="SMiX832D"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1719601029; x=1751137029;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=nBHL9Mhy2PUkr/VGgez2e5viO4TExv4p/2gPVPJvjgI=;
-  b=ja8ThAI3I1Ob80LOD5NyMA55GhBjH2nLunRmsrs/tgxWwEXkJIURkuWN
-   IYPfLBeq3R+xF6q6ko+Bc+ZHzg8R96srUuWFP5t9/VcEwAuqDgzSpNknY
-   vI+53OFEYdcfnlkyX5LqwVdbFkpKlwxskdCFmAynT7nx34yQemJIS3Dzi
-   ypgj7/+MrO7xY2fqZ0qRhPUjH7aYqCZSILSRAStud4GxY3NGizIsr52iB
-   yJRJfw+O+sHM5bcYnM70hdqgnb3cu89zsAxuQhRlbhmp1zG4mO327BP6X
-   1unQV846PhJwPUzUP+DUNFmCGEGdLku5CWnI245TpmmRDIaF+Xc8E+vVp
-   w==;
-X-CSE-ConnectionGUID: kJf2CNHtRIO7jIVmEORcVQ==
-X-CSE-MsgGUID: ZRmoA8v2RHChlwv52A0DiQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11117"; a="16471637"
+  t=1719603089; x=1751139089;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=NIOMP8Bpo2PGZ2zvUqCsfC1Ik0pjVA0lf/yUpHVMMAw=;
+  b=SMiX832D9SqVPOnOBxnItNf2RvCic8CpR/xRGWxaSQeDRr9mDixEPAZA
+   RHb45zBToiCwT+hSyF5nnTSWkORy6Hu992B83EA04IChL+qzhMDpK4bsL
+   zBZamHk/dnj/iuhzAT84Sj1bCP3w9MdlFN7CT2Q91cWTShiwv1L395H13
+   /Z4SvUUWfWzsdzI21a1pGPVJFN3U2qT/7BDl45k4FiiYjnVL2Syrc0jCk
+   9gzTgg5/Nhz3zjNenPEbKCAGVWLlSRacTMVUFkdyuJCDk6J1yZp/HCP+E
+   kzGLtZE5VBkZk6uEU5Ce5Y9QMzbq7+2cjSLOp612KvtJRRIts8JrM9sfN
+   g==;
+X-CSE-ConnectionGUID: fLy9ppI8T7q48tNxPQ8DIg==
+X-CSE-MsgGUID: Mxiv5Jc/RkuOn2vFTK7r1g==
+X-IronPort-AV: E=McAfee;i="6700,10204,11117"; a="27931377"
 X-IronPort-AV: E=Sophos;i="6.09,170,1716274800"; 
-   d="scan'208";a="16471637"
-Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jun 2024 11:57:08 -0700
-X-CSE-ConnectionGUID: EQqKlcWBSNiA9FLsk7Q6bQ==
-X-CSE-MsgGUID: h/9eI9YHTLWcq69FfPTWpA==
+   d="scan'208";a="27931377"
+Received: from fmviesa010.fm.intel.com ([10.60.135.150])
+  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jun 2024 12:31:17 -0700
+X-CSE-ConnectionGUID: RgevMRU5TJ6u7gWjrBW5MA==
+X-CSE-MsgGUID: ZzIN3gglTXauwLIa44mRjQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.09,170,1716274800"; 
-   d="scan'208";a="68017751"
+   d="scan'208";a="44913025"
 Received: from lkp-server01.sh.intel.com (HELO 68891e0c336b) ([10.239.97.150])
-  by fmviesa002.fm.intel.com with ESMTP; 28 Jun 2024 11:57:06 -0700
+  by fmviesa010.fm.intel.com with ESMTP; 28 Jun 2024 12:31:16 -0700
 Received: from kbuild by 68891e0c336b with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1sNGmO-000Hqp-0V;
-	Fri, 28 Jun 2024 18:57:04 +0000
-Date: Sat, 29 Jun 2024 02:56:20 +0800
+	id 1sNHJS-000I4n-1f;
+	Fri, 28 Jun 2024 19:31:14 +0000
+Date: Sat, 29 Jun 2024 03:30:36 +0800
 From: kernel test robot <lkp@intel.com>
-To: Christian Brauner <brauner@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Christian Brauner <christianvanbrauner@gmail.com>,
-	Jeff Layton <jlayton@kernel.org>,
-	Josef Bacik <josef@toxicpanda.com>,
-	Alexander Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>
-Subject: [brauner-vfs:vfs.nsfs.2024-06-28 4/5] fs/nsfs.c:96:19: error: use of
- undeclared identifier '__free_path_put'
-Message-ID: <202406290204.8DT6lYeX-lkp@intel.com>
+To: Piotr Wojtaszczyk <piotr.wojtaszczyk@timesys.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: Re: [Patch v5 11/12] ASoC: fsl: Add i2s and pcm drivers for LPC32xx
+ CPUs
+Message-ID: <202406290331.ClWuGmiC-lkp@intel.com>
+References: <20240627150046.258795-12-piotr.wojtaszczyk@timesys.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -65,75 +63,92 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20240627150046.258795-12-piotr.wojtaszczyk@timesys.com>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/vfs/vfs.git vfs.nsfs.2024-06-28
-head:   1cbcd0fbb586ed09ba76dfb4e65cab2bcaec7e5e
-commit: 4cf9ee1f184ddc959556337a53075a3b824f3642 [4/5] nsfs: add open_namespace()
-config: s390-allnoconfig (https://download.01.org/0day-ci/archive/20240629/202406290204.8DT6lYeX-lkp@intel.com/config)
-compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project 326ba38a991250a8587a399a260b0f7af2c9166a)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240629/202406290204.8DT6lYeX-lkp@intel.com/reproduce)
+Hi Piotr,
+
+kernel test robot noticed the following build warnings:
+
+[auto build test WARNING on vkoul-dmaengine/next]
+[also build test WARNING on robh/for-next broonie-sound/for-next linus/master v6.10-rc5 next-20240627]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Piotr-Wojtaszczyk/dt-bindings-dma-pl08x-Add-dma-cells-description/20240628-152522
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/vkoul/dmaengine.git next
+patch link:    https://lore.kernel.org/r/20240627150046.258795-12-piotr.wojtaszczyk%40timesys.com
+patch subject: [Patch v5 11/12] ASoC: fsl: Add i2s and pcm drivers for LPC32xx CPUs
+config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20240629/202406290331.ClWuGmiC-lkp@intel.com/config)
+compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240629/202406290331.ClWuGmiC-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202406290204.8DT6lYeX-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202406290331.ClWuGmiC-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
-   In file included from fs/nsfs.c:3:
-   In file included from include/linux/pseudo_fs.h:4:
-   In file included from include/linux/fs_context.h:14:
-   In file included from include/linux/security.h:33:
-   In file included from include/linux/mm.h:2253:
-   include/linux/vmstat.h:514:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     514 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
->> fs/nsfs.c:96:19: error: use of undeclared identifier '__free_path_put'
-      96 |         struct path path __free(path_put) = {};
-         |                          ^
-   include/linux/cleanup.h:64:33: note: expanded from macro '__free'
-      64 | #define __free(_name)   __cleanup(__free_##_name)
-         |                                   ^
-   <scratch space>:28:1: note: expanded from here
-      28 | __free_path_put
-         | ^
-   1 warning and 1 error generated.
+>> sound/soc/fsl/lpc3xxx-i2s.c:42:6: warning: variable 'savedbitclkrate' set but not used [-Wunused-but-set-variable]
+      42 |         u32 savedbitclkrate, diff, trate, baseclk;
+         |             ^
+>> sound/soc/fsl/lpc3xxx-i2s.c:326:47: warning: variable 'ret' is uninitialized when used here [-Wuninitialized]
+     326 |                                      "failed to init register map: %d\n", ret);
+         |                                                                           ^~~
+   sound/soc/fsl/lpc3xxx-i2s.c:310:9: note: initialize the variable 'ret' to silence this warning
+     310 |         int ret;
+         |                ^
+         |                 = 0
+   2 warnings generated.
 
 
-vim +/__free_path_put +96 fs/nsfs.c
+vim +/savedbitclkrate +42 sound/soc/fsl/lpc3xxx-i2s.c
 
-    85	
-    86	/**
-    87	 * open_namespace - open a namespace
-    88	 * @ns: the namespace to open
-    89	 *
-    90	 * This will consume a reference to @ns indendent of success or failure.
-    91	 *
-    92	 * Return: A file descriptor on success or a negative error code on failure.
-    93	 */
-    94	int open_namespace(struct ns_common *ns)
-    95	{
-  > 96		struct path path __free(path_put) = {};
-    97		struct file *f;
-    98		int err;
-    99	
-   100		/* call first to consume reference */
-   101		err = path_from_stashed(&ns->stashed, nsfs_mnt, ns, &path);
-   102		if (err < 0)
-   103			return err;
-   104	
-   105		CLASS(get_unused_fd, fd)(O_CLOEXEC);
-   106		if (fd < 0)
-   107			return fd;
-   108	
-   109		f = dentry_open(&path, O_RDONLY, current_cred());
-   110		if (IS_ERR(f))
-   111			return PTR_ERR(f);
-   112	
-   113		fd_install(fd, f);
-   114		return take_fd(fd);
-   115	}
-   116	
+    27	
+    28	#define LPC3XXX_I2S_RATES ( \
+    29		SNDRV_PCM_RATE_16000 | SNDRV_PCM_RATE_22050 | \
+    30		SNDRV_PCM_RATE_32000 | SNDRV_PCM_RATE_44100 | \
+    31		SNDRV_PCM_RATE_48000 | SNDRV_PCM_RATE_96000)
+    32	
+    33	#define LPC3XXX_I2S_FORMATS ( \
+    34		SNDRV_PCM_FMTBIT_S8 | \
+    35		SNDRV_PCM_FMTBIT_S16_LE | \
+    36		SNDRV_PCM_FMTBIT_S32_LE)
+    37	
+    38	static void __lpc3xxx_find_clkdiv(u32 *clkx, u32 *clky, int freq, int xbytes, u32 clkrate)
+    39	{
+    40		u32 i2srate;
+    41		u32 idxx, idyy;
+  > 42		u32 savedbitclkrate, diff, trate, baseclk;
+    43	
+    44		/* Adjust rate for sample size (bits) and 2 channels and offset for
+    45		 * divider in clock output
+    46		 */
+    47		i2srate = (freq / 100) * 2 * (8 * xbytes);
+    48		i2srate = i2srate << 1;
+    49		clkrate = clkrate / 100;
+    50		baseclk = clkrate;
+    51		*clkx = 1;
+    52		*clky = 1;
+    53	
+    54		/* Find the best divider */
+    55		*clkx = *clky = 0;
+    56		savedbitclkrate = 0;
+    57		diff = ~0;
+    58		for (idxx = 1; idxx < 0xFF; idxx++) {
+    59			for (idyy = 1; idyy < 0xFF; idyy++) {
+    60				trate = (baseclk * idxx) / idyy;
+    61				if (abs(trate - i2srate) < diff) {
+    62					diff = abs(trate - i2srate);
+    63					savedbitclkrate = trate;
+    64					*clkx = idxx;
+    65					*clky = idyy;
+    66				}
+    67			}
+    68		}
+    69	}
+    70	
 
 -- 
 0-DAY CI Kernel Test Service
