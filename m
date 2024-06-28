@@ -1,117 +1,199 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF40B25569;
-	Fri, 28 Jun 2024 03:33:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7101C2032D
+	for <llvm@lists.linux.dev>; Fri, 28 Jun 2024 04:21:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.255
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719545625; cv=none; b=cVRAT/TTnTCcFozsjSjnz48ySGE3t0AUKkvCXUHflKRGbUeSRCt2HR1f3QoRnJO3Dy48Tiih+/00JpAtDlgbYUSwtlfdoYOvZ55A0HzMxzgqBDt2FxzV5ue2U35VJCMUueBfGfojjDUkR8oUwyLsVlNhTZN+x1d6cKKY1dnP+AM=
+	t=1719548520; cv=none; b=lqTiSNfH959AsvEfLNGwjVxqx8yJjBupEOerjfKXJEzAwQeQPwjdc+RD1Ba2ULOV+NNX64tTK2NHjcV1fyf4V9lFu34PwiVnzeViFoIzgRaX7DrizgWe0OEqpyBXlV//n8k2S/Uuyk+9+6mg+bHsOLnc3lThe1xisv8JsPefzxo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719545625; c=relaxed/simple;
-	bh=Yh9XNF1kuwAoeoGdI9ucQ2I3fS7pT1Go1q2P3ChIgJE=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=p+FI7I1+Qcrj3LRl5ck7IsGwRYMkTgVUsuGvizevHwWv4zBB7CIlxAKAItdr14OKOqWn6afquoiNgqZqSwAw3w14E88X6YIs1GRYnI4DWBhcpsMRfKLnB/jDUavVIH0zIENzz3az71sQtxvE+d7Rrsox3iQfAsHH5VATSCivaSk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=aCIBdYm5; arc=none smtp.client-ip=192.198.163.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="aCIBdYm5"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1719545623; x=1751081623;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=Yh9XNF1kuwAoeoGdI9ucQ2I3fS7pT1Go1q2P3ChIgJE=;
-  b=aCIBdYm5nyUsshUcvGkWhmeV/bkcd2NEBaSobD59woWYR+o3t5Hn4eaX
-   044sIXvDaOiEJ9kXYpVORithi3laQeTyyHcyNQHBowxTzeXh6/ib3qhPh
-   GLXUEvLi4HdpiFGVZLiCDyO1eUsXeFGGDB/yN3xdxEJP3UK7G0BpgafYI
-   tChhrIDby9MCfZWGbqJJO8XV06+scYKcSXn4fqfQP866CqAzjRB5+8xi+
-   t457LXAKOtbt0COsz+ms7ic3dWxG3CkYYhePKh/qkVCpI0MhxF2dDj20o
-   Rf+eiWc964D0bba1ZG2Wohzr3UvULLGVj4mdzB8BROezLvE9j6s/GK1CU
-   w==;
-X-CSE-ConnectionGUID: 5fV6GfLkTVSAcst/Wu5aeA==
-X-CSE-MsgGUID: lTe8Y8N5Qqa3JuqhRCmWoQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11116"; a="28112951"
-X-IronPort-AV: E=Sophos;i="6.09,167,1716274800"; 
-   d="scan'208";a="28112951"
-Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jun 2024 20:33:42 -0700
-X-CSE-ConnectionGUID: zighsVJUT3aetq9B0PKyuA==
-X-CSE-MsgGUID: 5x5E7KgPRCe3/Stx6BLTpA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.09,167,1716274800"; 
-   d="scan'208";a="75798021"
-Received: from lkp-server01.sh.intel.com (HELO 68891e0c336b) ([10.239.97.150])
-  by fmviesa001.fm.intel.com with ESMTP; 27 Jun 2024 20:33:41 -0700
-Received: from kbuild by 68891e0c336b with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1sN2Mk-000Glm-1G;
-	Fri, 28 Jun 2024 03:33:38 +0000
-Date: Fri, 28 Jun 2024 11:33:03 +0800
-From: kernel test robot <lkp@intel.com>
-To: Khanh Le <khanh.le.xr@renesas.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>,
-	Mark Brown <broonie@kernel.org>
-Subject: [morimoto:renesas-bsp/v6.1.95-2024-06-24-GrayHawk-sound 706/709]
- sound/soc/codecs/ak4619.c:824:17: error: use of undeclared identifier
- 'REGCACHE_MAPLE'; did you mean 'REGCACHE_NONE'?
-Message-ID: <202406281100.D8245BGl-lkp@intel.com>
+	s=arc-20240116; t=1719548520; c=relaxed/simple;
+	bh=6qXnrfXrvtxyW5eiEhaejX3LyIh9+RmbEmmPXpXFD9s=;
+	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=NTSnBOZb5+/pO0vzxExYkw1+qQe5vOBpllILaycsxDAmvgmLmLs0K/XxkpZrh4XijZsQ+aG7ad+6UPPUwOv+kUT53GGb3hcL3cI5B3FSSbkt7pCPS43CcxPx8FBNDP02ipaUWLg5Hz9gCigX24KeNPQR7xCCK8aYYZR0AzYH6sQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.255
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.19.88.105])
+	by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4W9MbX274yz1T4J2;
+	Fri, 28 Jun 2024 12:17:28 +0800 (CST)
+Received: from kwepemd200011.china.huawei.com (unknown [7.221.188.251])
+	by mail.maildlp.com (Postfix) with ESMTPS id A77881400C9;
+	Fri, 28 Jun 2024 12:21:54 +0800 (CST)
+Received: from kwepemd100011.china.huawei.com (7.221.188.204) by
+ kwepemd200011.china.huawei.com (7.221.188.251) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1258.34; Fri, 28 Jun 2024 12:21:54 +0800
+Received: from kwepemd100011.china.huawei.com ([7.221.188.204]) by
+ kwepemd100011.china.huawei.com ([7.221.188.204]) with mapi id 15.02.1258.034;
+ Fri, 28 Jun 2024 12:21:54 +0800
+From: duchangbin <changbin.du@huawei.com>
+To: Namhyung Kim <namhyung@kernel.org>, Adrian Hunter
+	<adrian.hunter@intel.com>
+CC: Adrian Hunter <adrian.hunter@intel.com>, duchangbin
+	<changbin.du@huawei.com>, Peter Zijlstra <peterz@infradead.org>, Ingo Molnar
+	<mingo@redhat.com>, Arnaldo Carvalho de Melo <acme@kernel.org>, "Nathan
+ Chancellor" <nathan@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>, Jiri Olsa
+	<jolsa@kernel.org>, Ian Rogers <irogers@google.com>, "Liang, Kan"
+	<kan.liang@linux.intel.com>, Nick Desaulniers <ndesaulniers@google.com>,
+	"Bill Wendling" <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
+	"linux-perf-users@vger.kernel.org" <linux-perf-users@vger.kernel.org>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	"llvm@lists.linux.dev" <llvm@lists.linux.dev>
+Subject: Re: [PATCH v4 1/5] perf: support specify vdso path in cmdline
+Thread-Topic: [PATCH v4 1/5] perf: support specify vdso path in cmdline
+Thread-Index: AQHaxrEVrjKiye8CdEijfxK9i0rUjrHX8X6AgAFhooCAAAG7AIACcgQAgADRDIA=
+Date: Fri, 28 Jun 2024 04:21:54 +0000
+Message-ID: <1599b5defa46422eb66885e7430cc70f@huawei.com>
+References: <20240625033740.223009-1-changbin.du@huawei.com>
+ <20240625033740.223009-2-changbin.du@huawei.com>
+ <5a9e8dae-e9d9-4a97-98f5-d76be9068342@intel.com>
+ <7eef4826a2f3494ea1dc92ed98d543fb@huawei.com>
+ <05f95eb8-9b4c-4327-a97f-a15654278c41@intel.com>
+ <Zn37bj4LER_A1bX1@google.com>
+In-Reply-To: <Zn37bj4LER_A1bX1@google.com>
+Accept-Language: en-US
+Content-Language: zh-CN
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+x-ms-exchange-imapappendstamp: kwepemd100011.china.huawei.com (15.02.1258.034)
+x-ms-exchange-messagesentrepresentingtype: 1
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <EAA555245FA06E49B60F59A00075FFE7@huawei.com>
+Content-Transfer-Encoding: base64
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
 
-tree:   https://github.com/morimoto/linux renesas-bsp/v6.1.95-2024-06-24-GrayHawk-sound
-head:   a2ad04eb2a203f409e8218f127ade36084b87721
-commit: 79d8f008f407299e889b60bca90e182ae4a0eded [706/709] ASoC: Add ak4619 codec support
-config: arm-randconfig-004-20240628 (https://download.01.org/0day-ci/archive/20240628/202406281100.D8245BGl-lkp@intel.com/config)
-compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project 326ba38a991250a8587a399a260b0f7af2c9166a)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240628/202406281100.D8245BGl-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202406281100.D8245BGl-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
-   In file included from sound/soc/codecs/ak4619.c:15:
-   In file included from include/linux/i2c.h:19:
-   In file included from include/linux/regulator/consumer.h:35:
-   In file included from include/linux/suspend.h:5:
-   In file included from include/linux/swap.h:9:
-   In file included from include/linux/memcontrol.h:20:
-   In file included from include/linux/mm.h:1775:
-   include/linux/vmstat.h:516:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     516 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
->> sound/soc/codecs/ak4619.c:824:17: error: use of undeclared identifier 'REGCACHE_MAPLE'; did you mean 'REGCACHE_NONE'?
-     824 |         .cache_type             = REGCACHE_MAPLE,
-         |                                   ^~~~~~~~~~~~~~
-         |                                   REGCACHE_NONE
-   include/linux/regmap.h:42:2: note: 'REGCACHE_NONE' declared here
-      42 |         REGCACHE_NONE,
-         |         ^
-   1 warning and 1 error generated.
-
-
-vim +824 sound/soc/codecs/ak4619.c
-
-   817	
-   818	static const struct regmap_config ak4619_regmap_cfg = {
-   819		.reg_bits		= 8,
-   820		.val_bits		= 8,
-   821		.max_register		= 0x14,
-   822		.reg_defaults		= ak4619_reg_defaults,
-   823		.num_reg_defaults	= ARRAY_SIZE(ak4619_reg_defaults),
- > 824		.cache_type		= REGCACHE_MAPLE,
-   825	};
-   826	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+T24gVGh1LCBKdW4gMjcsIDIwMjQgYXQgMDQ6NTM6MThQTSAtMDcwMCwgTmFtaHl1bmcgS2ltIHdy
+b3RlOg0KPiBIZWxsbyBndXlzLA0KPiANCj4gT24gV2VkLCBKdW4gMjYsIDIwMjQgYXQgMDE6MzI6
+NDJQTSArMDMwMCwgQWRyaWFuIEh1bnRlciB3cm90ZToNCj4gPiBPbiAyNi8wNi8yNCAwNToyNiwg
+ZHVjaGFuZ2JpbiB3cm90ZToNCj4gPiA+IE9uIFR1ZSwgSnVuIDI1LCAyMDI0IGF0IDA0OjIwOjQ5
+UE0gKzAzMDAsIEFkcmlhbiBIdW50ZXIgd3JvdGU6DQo+ID4gPj4gT24gMjUvMDYvMjQgMDY6Mzcs
+IENoYW5nYmluIER1IHdyb3RlOg0KPiA+ID4+PiBUaGUgdmRzbyBkdW1wZWQgZnJvbSBwcm9jZXNz
+IG1lbW9yeSAoaW4gYnVpbGRpZC1jYWNoZSkgbGFja3MgZGVidWdnaW5nDQo+ID4gPj4+IGluZm8u
+IFRvIGFubm90YXRlIHZkc28gc3ltYm9scyB3aXRoIHNvdXJjZSBsaW5lcyB3ZSBuZWVkIHNwZWNp
+ZnkgYQ0KPiA+ID4+PiBkZWJ1Z2dpbmcgdmVyc2lvbi4NCj4gPiA+Pj4NCj4gPiA+Pj4gRm9yIHg4
+Niwgd2UgY2FuIGZpbmQgdGhlbSBmcm9tIHlvdXIgbG9jYWwgYnVpbGQgYXMNCj4gPiA+Pj4gYXJj
+aC94ODYvZW50cnkvdmRzby92ZHNvezMyLDY0fS5zby5kYmcuIE9yIHRoZXkgbWF5IHJlc2lkZSBp
+bg0KPiA+ID4+PiAvbGliL21vZHVsZXMvPHZlcnNpb24+L3Zkc28vdmRzb3szMiw2NH0uc28gb24g
+VWJ1bnR1LiBCdXQgbm90aWNlIHRoYXQNCj4gPiA+Pj4gdGhlIGJ1aWxkaWQgaGFzIHRvIG1hdGNo
+Lg0KPiA+ID4+Pg0KPiA+ID4+PiAkIHN1ZG8gcGVyZiByZWNvcmQgLWENCj4gPiA+Pj4gJCBzdWRv
+IHBlcmYgcmVwb3J0IC0tb2JqZHVtcD1sbHZtLW9iamR1bXAgXA0KPiA+ID4+PiAgIC0tdmRzbyBh
+cmNoL3g4Ni9lbnRyeS92ZHNvL3Zkc282NC5zby5kYmcsYXJjaC94ODYvZW50cnkvdmRzby92ZHNv
+MzIuc28uZGJnDQo+ID4gPj4+DQo+ID4gPj4+IFNhbXBsZXM6IDE3SyBvZiBldmVudCAnY3ljbGVz
+OlAnLCA0MDAwIEh6LCBFdmVudCBjb3VudCAoYXBwcm94Lik6IDE3NjANCj4gPiA+Pj4gX192ZHNv
+X2Nsb2NrX2dldHRpbWUgIC93b3JrL2xpbnV4LWhvc3QvYXJjaC94ODYvZW50cnkvdmRzby92ZHNv
+NjQuc28uZA0KPiA+ID4+PiBQZXJjZW504pSCICAgICAgIG1vdnEgICAgLTQ4KCVyYnApLCVyc2kN
+Cj4gPiA+Pj4gICAgICAgIOKUgiAgICAgICB0ZXN0cSAgICVyYXgsJXJheA0KPiA+ID4+PiAgICAg
+ICAg4pSCICAgICA7ICAgICAgICAgICAgICAgcmV0dXJuIHZyZWFkX2h2Y2xvY2soKTsNCj4gPiA+
+Pj4gICAgICAgIOKUgiAgICAgICBtb3ZxICAgICVyYXgsJXJkeA0KPiA+ID4+PiAgICAgICAg4pSC
+ICAgICA7ICAgICAgICAgICAgICAgaWYgKHVubGlrZWx5KCF2ZHNvX2N5Y2xlc19vayhjeWNsZXMp
+KSkNCj4gPiA+Pj4gICAgICAgIOKUgiAgICAg4oaRIGpzICAgICAgZWINCj4gPiA+Pj4gICAgICAg
+IOKUgiAgICAg4oaRIGptcCAgICAgNzQNCj4gPiA+Pj4gICAgICAgIOKUgiAgICAgOyAgICAgICAg
+ICAgICAgIHRzLT50dl9zZWMgPSB2ZHNvX3RzLT5zZWM7DQo+ID4gPj4+ICAgMC4wMiDilIIxNDc6
+ICAgbGVhcSAgICAyKCVyYngpLCVyYXgNCj4gPiA+Pj4gICAgICAgIOKUgiAgICAgICBzaGxxICAg
+ICQ0LCAlcmF4DQo+ID4gPj4+ICAgICAgICDilIIgICAgICAgYWRkcSAgICAlcjEwLCVyYXgNCj4g
+PiA+Pj4gICAgICAgIOKUgiAgICAgOyAgICAgICAgICAgICAgIHdoaWxlICgoc2VxID0gUkVBRF9P
+TkNFKHZkLT5zZXEpKSAmIDEpIHsNCj4gPiA+Pj4gICA5LjM4IOKUgjE1MjogICBtb3ZsICAgICgl
+cjEwKSwlZWN4DQo+ID4gPj4+DQo+ID4gPj4+IFdoZW4gZG9pbmcgY3Jvc3MgcGxhdGZvcm0gYW5h
+bHlzaXMsIHdlIGFsc28gbmVlZCBzcGVjaWZ5IHRoZSB2ZHNvIHBhdGggaWYNCj4gPiA+Pj4gd2Ug
+YXJlIGludGVyZXN0ZWQgaW4gaXRzIHN5bWJvbHMuDQo+ID4gPj4NCj4gPiA+PiBXb3VsZCBpdCBi
+ZSBwb3NzaWJsZSB0byBhZGQgdmRzbyBhbmQgdmRzbyBkZWJ1ZyB0byB0aGUgYnVpbGQtaWQNCj4g
+PiA+PiBjYWNoZSBhbmQgZW5zdXJlIHBlcmYgY2FuIGZpbmQgaXQgdGhlcmU/DQo+ID4gPj4NCj4g
+PiA+PiBUeXBpY2FsbHksIGdldHRpbmcgZHNvcyBmcm9tIGFub3RoZXIgbWFjaGluZSBpcyBoYW5k
+bGVkIHZpYQ0KPiA+ID4+IGJ1aWxkLWlkIGNhY2hlIGUuZy4gd2hhdCBwZXJmLWFyY2hpdmUgZG9l
+cw0KPiA+ID4+DQo+ID4gPiBIbW0uIEkgYWdyZWUgdGhpcyBpcyBiZXR0ZXIgYWx0ZXJuYXRpdmUg
+YXBwcm9hY2ggZm9yIGNyb3NzLW1hY2hpbmUgYW5hbHlzaXMuDQo+ID4gPiBXaGVuIGNvbGxlY3Rp
+bmcgdmRzb3MgdG8gYnVpbGRpZCBjYWNoZSwgSSB0aGluayB3ZSBjYW4gdXNlIHRoZSBsb2NhbCBz
+ZWFyY2hlZA0KPiA+ID4gb2JqZWN0cyAod2l0aCBkZWJ1ZyBzeW1ib2xzKSBpbnN0ZWFkIGlmIGl0
+cyBidWlsZC1pZCBtYXRjaGVzIHZkc29zIGZyb20gcHJvY2Vzcw0KPiA+ID4gZHVtcGluZyAodGhl
+IHJlYWwgY29kZSByYW4pLg0KPiA+ID4gDQo+ID4gPiBDdXJyZW50bHkgSSBqdXN0IGZvbGxvdyB3
+aGF0IHBlcmYgZG9lcyBmb3Igdm1saW51eCBzbyB0byByZXVzZSBtb3N0IG9mIGV4aXN0aW5nDQo+
+ID4gPiBjb2RlLiBNYXliZSB2bWxpbnV4IGlzIHRvbyBiaWcgdG8gYWRkIHRvIGJ1aWxkaWQtY2Fo
+Y2U/DQo+ID4gPiANCj4gPiA+IENhbiB3ZSBrZWVwIG91ciBjdXJyZW50IHN0cmF0ZWd5IGZvciBu
+b3c/IEknbGwgdGhpbmsgYWJvdXQgYWJvdmUgb3B0aW9ucyB3aGVuDQo+ID4gPiBJIGhhdmUgbW9y
+ZSB0aW1lLg0KPiA+ID4gDQo+ID4gDQo+ID4gSSB0cmllZCBhZGRpbmcgdmRzbyB2aWEgcGVyZiBi
+dWlsZGlkLWNhY2hlLiAgSXQgZG9lc24ndCB3b3JrIG9ubHkNCj4gPiBiZWNhdXNlIHRoZSBsb29r
+dXAgZXhwZWN0cyB0aGUgYmFzZW5hbWUgdG8gYmUgInZkc28iIGJ1dCBpdCBpcw0KPiA+ICJlbGYi
+Lg0KPiA+IA0KPiA+IEFkZGluZyBhIGxpbmsgZnJvbSAidmRzbyIgdG8gImVsZiIgbWFkZSBpdCB3
+b3JrIGUuZy4NCj4gPiANCj4gPiAkIGNhdCBnZXR0aW1lb2ZkYXktdGVzdC5jDQo+ID4gI2luY2x1
+ZGUgPHN0ZGlvLmg+DQo+ID4gI2luY2x1ZGUgPHN5cy90aW1lLmg+DQo+ID4gDQo+ID4gaW50IG1h
+aW4oKQ0KPiA+IHsNCj4gPiAgICAgICAgIHN0cnVjdCB0aW1ldmFsIHR2Ow0KPiA+ICAgICAgICAg
+aW50IHJldDsNCj4gPiANCj4gPiAgICAgICAgIHJldCA9IGdldHRpbWVvZmRheSgmdHYsIE5VTEwp
+Ow0KPiA+ICAgICAgICAgaWYgKHJldCA9PSAtMSkgew0KPiA+ICAgICAgICAgICAgICAgICBmcHJp
+bnRmKHN0ZGVyciwgImdldHRpbWVvZmRheSBmYWlsZWRcbiIpOw0KPiA+ICAgICAgICAgICAgICAg
+ICByZXR1cm4gMTsNCj4gPiAgICAgICAgIH0NCj4gPiANCj4gPiAgICAgICAgIHByaW50ZigiJWx1
+LiVsdVxuIiwgKHVuc2lnbmVkIGxvbmcpdHYudHZfc2VjLCAodW5zaWduZWQgbG9uZyl0di50dl91
+c2VjKTsNCj4gPiANCj4gPiAgICAgICAgIHJldHVybiAwOw0KPiA+ICQgcGVyZiByZWNvcmQgLWUg
+aW50ZWxfcHQvL3UgLi9nZXR0aW1lb2ZkYXktdGVzdA0KPiA+IDE3MTkzOTcwNDIuODkyODM3DQo+
+ID4gWyBwZXJmIHJlY29yZDogV29rZW4gdXAgMSB0aW1lcyB0byB3cml0ZSBkYXRhIF0NCj4gPiBb
+IHBlcmYgcmVjb3JkOiBDYXB0dXJlZCBhbmQgd3JvdGUgMC4wMjYgTUIgcGVyZi5kYXRhIF0NCj4g
+PiAkIHBlcmYgc2NyaXB0IC0taXRyYWNlPWUNCj4gPiAkIHBlcmYgYnVpbGRpZC1jYWNoZSAtLXJl
+bW92ZSAvbGliL21vZHVsZXMvNi41LjAtNDEtZ2VuZXJpYy92ZHNvL3Zkc282NC5zbw0KPiA+ICQg
+cGVyZiBzY3JpcHQgLS1pdHJhY2U9ZQ0KPiA+IFdhcm5pbmc6DQo+ID4gMiBpbnN0cnVjdGlvbiB0
+cmFjZSBlcnJvcnMNCj4gPiAgaW5zdHJ1Y3Rpb24gdHJhY2UgZXJyb3IgdHlwZSAxIHRpbWUgNTI1
+MzQ1LjM4NjQyNDIwNCBjcHUgNCBwaWQgMTk4OTc2IHRpZCAxOTg5NzYgaXAgMHg3ZmZkZGIwZThl
+MDAgY29kZSA1OiBGYWlsZWQgdG8gZ2V0IGluc3RydWN0aW9uDQo+ID4gIGluc3RydWN0aW9uIHRy
+YWNlIGVycm9yIHR5cGUgMSB0aW1lIDUyNTM0NS4zODY0MjQ4MjkgY3B1IDQgcGlkIDE5ODk3NiB0
+aWQgMTk4OTc2IGlwIDB4N2ZmZGRiMGU4ODRkIGNvZGUgNTogRmFpbGVkIHRvIGdldCBpbnN0cnVj
+dGlvbg0KPiA+ICQgcGVyZiBidWlsZGlkLWNhY2hlIC0tYWRkIC9saWIvbW9kdWxlcy82LjUuMC00
+MS1nZW5lcmljL3Zkc28vdmRzbzY0LnNvDQo+ID4gJCBwZXJmIHNjcmlwdCAtLWl0cmFjZT1lDQo+
+ID4gV2FybmluZzoNCj4gPiAyIGluc3RydWN0aW9uIHRyYWNlIGVycm9ycw0KPiA+ICBpbnN0cnVj
+dGlvbiB0cmFjZSBlcnJvciB0eXBlIDEgdGltZSA1MjUzNDUuMzg2NDI0MjA0IGNwdSA0IHBpZCAx
+OTg5NzYgdGlkIDE5ODk3NiBpcCAweDdmZmRkYjBlOGUwMCBjb2RlIDU6IEZhaWxlZCB0byBnZXQg
+aW5zdHJ1Y3Rpb24NCj4gPiAgaW5zdHJ1Y3Rpb24gdHJhY2UgZXJyb3IgdHlwZSAxIHRpbWUgNTI1
+MzQ1LjM4NjQyNDgyOSBjcHUgNCBwaWQgMTk4OTc2IHRpZCAxOTg5NzYgaXAgMHg3ZmZkZGIwZTg4
+NGQgY29kZSA1OiBGYWlsZWQgdG8gZ2V0IGluc3RydWN0aW9uDQo+ID4gJCBjZCB+Ly5kZWJ1Zy8u
+YnVpbGQtaWQvYzMvNTMwYWVkNjZlNzFiZmQxMGFmNjYwMzlmNThjYzdjNGQyZWFiYTgNCj4gPiB+
+Ly5kZWJ1Zy8uYnVpbGQtaWQvYzMvNTMwYWVkNjZlNzFiZmQxMGFmNjYwMzlmNThjYzdjNGQyZWFi
+YTgkIGxuIC1zIGVsZiB2ZHNvDQo+ID4gfi8uZGVidWcvLmJ1aWxkLWlkL2MzLzUzMGFlZDY2ZTcx
+YmZkMTBhZjY2MDM5ZjU4Y2M3YzRkMmVhYmE4JCBscyAtbA0KPiA+IHRvdGFsIDM2DQo+ID4gLXJ3
+LXItLXItLSAxIGFodW50ZXIgYWh1bnRlciAzMzI3MiBKdW4gMjYgMTM6MTcgZWxmDQo+ID4gLXJ3
+LXItLS0tLSAxIGFodW50ZXIgYWh1bnRlciAgICAgMCBKdW4gMjYgMTM6MTcgcHJvYmVzDQo+ID4g
+bHJ3eHJ3eHJ3eCAxIGFodW50ZXIgYWh1bnRlciAgICAgMyBKdW4gMjYgMTM6MTggdmRzbyAtPiBl
+bGYNCj4gPiAvLmRlYnVnLy5idWlsZC1pZC9jMy81MzBhZWQ2NmU3MWJmZDEwYWY2NjAzOWY1OGNj
+N2M0ZDJlYWJhOCQgY2QNCj4gPiAkIHBlcmYgc2NyaXB0IC0taXRyYWNlPWUNCj4gPiAkIA0KPiA+
+IA0KPiA+IFNvIG1heWJlIGEgY2hhbmdlIGNvdWxkIGJlIG1hZGUgdG8gYnVpbGRfaWRfY2FjaGVf
+X2FkZCgpIHRvIGFkZA0KPiA+IHRoZSBleHRyYSBsaW5rIGlmIHRoZSBmaWxlIG5hbWUgbWF0Y2hl
+cyB2ZHNvDQo+ICANCj4gVGhhbmtzIGZvciBkb2luZyB0aGlzISAgSSBub3RpY2VkIGJ1aWxkaWRf
+Y2FjaGVfX2Jhc2VuYW1lKCkgd2lsbCBoYW5kbGUNCj4gdGhlIG5hbWUgcHJvcGVybHkgb25jZSBp
+dCByZWFsaXplcyB0aGUgZmlsZSBpcyBhIHZkc28uICBNYXliZSB3ZSBjYW4NCj4gY2hlY2sgdGhl
+IGZpbGVwYXRoIHdpdGggc29tZSBwYXR0ZXJucywgb3Igc2ltcGx5IGFkZCBhbiBjb21tYW5kIGxp
+bmUNCj4gb3B0aW9uIHRvIHNheSBpdCdzIGEgdmRzby4NCj4gDQo+IFRoYW5rcywNCj4gTmFtaHl1
+bmcNCj4NCkkgYWRkZWQgc29tZSB0cmlja3MgZm9yIHZkc28gaW4gYnVpbGRfaWRfY2FjaGVfX2Fk
+ZCgpLiBJdCByZXBsYWNlIHZkc28gb2JqZWN0DQp3aXRoIGRlYnVnZ2luZyBvbmUgaWYgZm91bmQu
+IElzIHRoaXMgb2theT8NCg0KK3N0YXRpYyBjaGFyICpidWlsZF9pZF9jYWNoZV9fZmluZF9kZWJ1
+Z192ZHNvKGNvbnN0IGNoYXIgKnNidWlsZF9pZCkNCit7DQorICAgICAgIGNoYXIgc2J1aWxkX2lk
+X3RtcFtTQlVJTERfSURfU0laRV07DQorICAgICAgIHN0cnVjdCBidWlsZF9pZCBiaWQ7DQorICAg
+ICAgIGludCBpLCByZXQgPSAwOw0KKw0KKyAgICAgICBwcmludGYoIkxvb2tpbmcgYXQgdGhlIHZk
+c29fcGF0aCAoJWQgZW50cmllcyBsb25nKVxuIiwNCisgICAgICAgICAgICAgICAgdmRzb19wYXRo
+cy5ucl9lbnRyaWVzICsgMSk7DQorDQorICAgICAgIGZvciAoaSA9IDA7IGkgPCB2ZHNvX3BhdGhz
+Lm5yX2VudHJpZXM7ICsraSkgew0KKyAgICAgICAgICAgICAgIHJldCA9IGZpbGVuYW1lX19yZWFk
+X2J1aWxkX2lkKHZkc29fcGF0aHMucGF0aHNbaV0sICZiaWQpOw0KKyAgICAgICAgICAgICAgIGlm
+IChyZXQgPCAwKQ0KKyAgICAgICAgICAgICAgICAgICAgICAgY29udGludWU7DQorDQorICAgICAg
+ICAgICAgICAgYnVpbGRfaWRfX3NwcmludGYoJmJpZCwgc2J1aWxkX2lkX3RtcCk7DQorICAgICAg
+ICAgICAgICAgaWYgKCFzdHJjbXAoc2J1aWxkX2lkLCBzYnVpbGRfaWRfdG1wKSkgew0KKyAgICAg
+ICAgICAgICAgICAgICAgICAgcHJpbnRmKCJGb3VuZCBkZWJ1Z2dpbmcgdmRzbyAlc1xuIiwgdmRz
+b19wYXRocy5wYXRoc1tpXSk7DQorICAgICAgICAgICAgICAgICAgICAgICByZXR1cm4gc3RyZHVw
+KHZkc29fcGF0aHMucGF0aHNbaV0pOw0KKyAgICAgICAgICAgICAgIH0NCisgICAgICAgfQ0KKw0K
+KyAgICAgICByZXR1cm4gTlVMTDsNCit9DQorDQogaW50DQogYnVpbGRfaWRfY2FjaGVfX2FkZChj
+b25zdCBjaGFyICpzYnVpbGRfaWQsIGNvbnN0IGNoYXIgKm5hbWUsIGNvbnN0IGNoYXIgKnJlYWxu
+YW1lLA0KICAgICAgICAgICAgICAgICAgICBzdHJ1Y3QgbnNpbmZvICpuc2ksIGJvb2wgaXNfa2Fs
+bHN5bXMsIGJvb2wgaXNfdmRzbywNCiAgICAgICAgICAgICAgICAgICAgY29uc3QgY2hhciAqcHJv
+cGVyX25hbWUsIGNvbnN0IGNoYXIgKnJvb3RfZGlyKQ0KIHsNCiAgICAgICAgY29uc3Qgc2l6ZV90
+IHNpemUgPSBQQVRIX01BWDsNCi0gICAgICAgY2hhciAqZmlsZW5hbWUgPSBOVUxMLCAqZGlyX25h
+bWUgPSBOVUxMLCAqbGlua25hbWUgPSB6YWxsb2Moc2l6ZSksICp0bXA7DQorICAgICAgIGNoYXIg
+KmZpbGVuYW1lID0gTlVMTCwgKmRpcl9uYW1lID0gTlVMTCwgKnZkc29fbmFtZSA9IE5VTEwsICps
+aW5rbmFtZSA9IHphbGxvYyhzaXplKSwgKnRtcDsNCiAgICAgICAgY2hhciAqZGVidWdmaWxlID0g
+TlVMTDsNCiAgICAgICAgaW50IGVyciA9IC0xOw0KDQorICAgICAgIC8qIHJlcGxhY2UgdmRzbyBv
+YmplY3Qgd2l0aCBkZWJ1Z2dpbmcgb25lIGlmIGZvdW5kICovDQorICAgICAgIGlmIChpc192ZHNv
+KSB7DQorICAgICAgICAgICAgICAgdmRzb19uYW1lID0gYnVpbGRfaWRfY2FjaGVfX2ZpbmRfZGVi
+dWdfdmRzbyhzYnVpbGRfaWQpOw0KKyAgICAgICAgICAgICAgIGlmICh2ZHNvX25hbWUpDQorICAg
+ICAgICAgICAgICAgICAgICAgICBuYW1lID0gcmVhbG5hbWUgPSB2ZHNvX25hbWU7DQorICAgICAg
+IH0NCisNCiAgICAgICAgaWYgKCFwcm9wZXJfbmFtZSkNCiAgICAgICAgICAgICAgICBwcm9wZXJf
+bmFtZSA9IG5hbWU7DQoNCj4gDQoNCi0tIA0KQ2hlZXJzLA0KQ2hhbmdiaW4gRHUNCg==
