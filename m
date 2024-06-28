@@ -1,199 +1,226 @@
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7101C2032D
-	for <llvm@lists.linux.dev>; Fri, 28 Jun 2024 04:21:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.255
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 109047EF10;
+	Fri, 28 Jun 2024 07:22:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719548520; cv=none; b=lqTiSNfH959AsvEfLNGwjVxqx8yJjBupEOerjfKXJEzAwQeQPwjdc+RD1Ba2ULOV+NNX64tTK2NHjcV1fyf4V9lFu34PwiVnzeViFoIzgRaX7DrizgWe0OEqpyBXlV//n8k2S/Uuyk+9+6mg+bHsOLnc3lThe1xisv8JsPefzxo=
+	t=1719559343; cv=none; b=TmChYZD4BpSFgKqEGJu9Zqaq02RRDu/gaoiRYlQm8w8ZdYOqSbWd1TR7lf0fNogWrkP7tzxi8hVpYkcvxy5Hk/l+PnH7o/9tJw4Rp40EzMaGqHpQgIZ+KGC7nK2VXxeYLHgn2oRLJcJu7ljMWjvQA2VTSpVP0/G42YcWmf2HEPI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719548520; c=relaxed/simple;
-	bh=6qXnrfXrvtxyW5eiEhaejX3LyIh9+RmbEmmPXpXFD9s=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=NTSnBOZb5+/pO0vzxExYkw1+qQe5vOBpllILaycsxDAmvgmLmLs0K/XxkpZrh4XijZsQ+aG7ad+6UPPUwOv+kUT53GGb3hcL3cI5B3FSSbkt7pCPS43CcxPx8FBNDP02ipaUWLg5Hz9gCigX24KeNPQR7xCCK8aYYZR0AzYH6sQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.255
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.19.88.105])
-	by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4W9MbX274yz1T4J2;
-	Fri, 28 Jun 2024 12:17:28 +0800 (CST)
-Received: from kwepemd200011.china.huawei.com (unknown [7.221.188.251])
-	by mail.maildlp.com (Postfix) with ESMTPS id A77881400C9;
-	Fri, 28 Jun 2024 12:21:54 +0800 (CST)
-Received: from kwepemd100011.china.huawei.com (7.221.188.204) by
- kwepemd200011.china.huawei.com (7.221.188.251) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1258.34; Fri, 28 Jun 2024 12:21:54 +0800
-Received: from kwepemd100011.china.huawei.com ([7.221.188.204]) by
- kwepemd100011.china.huawei.com ([7.221.188.204]) with mapi id 15.02.1258.034;
- Fri, 28 Jun 2024 12:21:54 +0800
-From: duchangbin <changbin.du@huawei.com>
-To: Namhyung Kim <namhyung@kernel.org>, Adrian Hunter
-	<adrian.hunter@intel.com>
-CC: Adrian Hunter <adrian.hunter@intel.com>, duchangbin
-	<changbin.du@huawei.com>, Peter Zijlstra <peterz@infradead.org>, Ingo Molnar
-	<mingo@redhat.com>, Arnaldo Carvalho de Melo <acme@kernel.org>, "Nathan
- Chancellor" <nathan@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>, Jiri Olsa
-	<jolsa@kernel.org>, Ian Rogers <irogers@google.com>, "Liang, Kan"
-	<kan.liang@linux.intel.com>, Nick Desaulniers <ndesaulniers@google.com>,
-	"Bill Wendling" <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
-	"linux-perf-users@vger.kernel.org" <linux-perf-users@vger.kernel.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"llvm@lists.linux.dev" <llvm@lists.linux.dev>
-Subject: Re: [PATCH v4 1/5] perf: support specify vdso path in cmdline
-Thread-Topic: [PATCH v4 1/5] perf: support specify vdso path in cmdline
-Thread-Index: AQHaxrEVrjKiye8CdEijfxK9i0rUjrHX8X6AgAFhooCAAAG7AIACcgQAgADRDIA=
-Date: Fri, 28 Jun 2024 04:21:54 +0000
-Message-ID: <1599b5defa46422eb66885e7430cc70f@huawei.com>
-References: <20240625033740.223009-1-changbin.du@huawei.com>
- <20240625033740.223009-2-changbin.du@huawei.com>
- <5a9e8dae-e9d9-4a97-98f5-d76be9068342@intel.com>
- <7eef4826a2f3494ea1dc92ed98d543fb@huawei.com>
- <05f95eb8-9b4c-4327-a97f-a15654278c41@intel.com>
- <Zn37bj4LER_A1bX1@google.com>
-In-Reply-To: <Zn37bj4LER_A1bX1@google.com>
-Accept-Language: en-US
-Content-Language: zh-CN
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-x-ms-exchange-imapappendstamp: kwepemd100011.china.huawei.com (15.02.1258.034)
-x-ms-exchange-messagesentrepresentingtype: 1
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <EAA555245FA06E49B60F59A00075FFE7@huawei.com>
-Content-Transfer-Encoding: base64
+	s=arc-20240116; t=1719559343; c=relaxed/simple;
+	bh=kk0jS6Zn/eajs/D76BtMMEDKGhKMcCaj28YrpERS6qw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=W+0aHUQcZwqhNb3ndY1N22xs8BRPXi9zjCsyV32DSTiQSvOdwhTsUu3ztGf3PjtxIPA+HGkexIPDtWTTpvRVUGX2MkOETXx0f04E2/wfo7CToe4Pmh3wtuvyLIkVIpH9h/BspXa5b0ELVHLf7iUqBqKRNiq7buZzNGdIgjPn9kQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Nxu+xklR; arc=none smtp.client-ip=192.198.163.19
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Nxu+xklR"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1719559341; x=1751095341;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=kk0jS6Zn/eajs/D76BtMMEDKGhKMcCaj28YrpERS6qw=;
+  b=Nxu+xklRrCKBuy4TN8nVFGR5fUyyEcjxeNiUc1ouICMzL1piC3u1xQUR
+   pKcudj6F6+Bcxn35IJcbbOJhgxPhtpo3IVlt8zVAfSx+i9VqyqMb3qG6P
+   wVEBNpL9Igtp5I4MOjWgkDRJl5pKOVaIwSM7hzzMiK9on2etzkdR7nvqF
+   YERuROWgzYceIqJ8W0qaCNxKmjEzqax85mUGj949raG8RPyPUItztk02B
+   H2G3KLYqJRf7KYUD85yAPaxb8aJ0GuYE1K+ZIZwkhZZTx6ajzU6WWRPTg
+   a+6LtaEj+u/7rbtSwZzuYk8u0z77Vyzz9xopZ9wXBylUSwaPNOBswfpSR
+   w==;
+X-CSE-ConnectionGUID: nZ1Iy5MaQn6Nc9tHo+sl8Q==
+X-CSE-MsgGUID: wyqlnN4qSSyv5f+jn0cj3Q==
+X-IronPort-AV: E=McAfee;i="6700,10204,11116"; a="16468206"
+X-IronPort-AV: E=Sophos;i="6.09,168,1716274800"; 
+   d="scan'208";a="16468206"
+Received: from orviesa003.jf.intel.com ([10.64.159.143])
+  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jun 2024 00:22:20 -0700
+X-CSE-ConnectionGUID: CBI4nw8NSwuGvrqeMakrxQ==
+X-CSE-MsgGUID: VaE3baFuSwybmyPTgbBtPg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.09,168,1716274800"; 
+   d="scan'208";a="49567540"
+Received: from lkp-server01.sh.intel.com (HELO 68891e0c336b) ([10.239.97.150])
+  by orviesa003.jf.intel.com with ESMTP; 28 Jun 2024 00:22:17 -0700
+Received: from kbuild by 68891e0c336b with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1sN5vx-000Gti-2j;
+	Fri, 28 Jun 2024 07:22:13 +0000
+Date: Fri, 28 Jun 2024 15:21:15 +0800
+From: kernel test robot <lkp@intel.com>
+To: Alex Vdovydchenko <keromvp@gmail.com>, Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Sean Anderson <sean.anderson@linux.dev>,
+	Guenter Roeck <linux@roeck-us.net>,
+	Jean Delvare <jdelvare@suse.com>, Jonathan Corbet <corbet@lwn.net>,
+	Delphine CC Chiu <Delphine_CC_Chiu@wiwynn.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
+	linux-i2c@vger.kernel.org, Alex Vdovydchenko <xzeol@yahoo.com>
+Subject: Re: [PATCH v2 2/2] hwmon: add MP5920 driver
+Message-ID: <202406281512.NAdadCZX-lkp@intel.com>
+References: <20240627090113.391730-3-xzeol@yahoo.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240627090113.391730-3-xzeol@yahoo.com>
 
-T24gVGh1LCBKdW4gMjcsIDIwMjQgYXQgMDQ6NTM6MThQTSAtMDcwMCwgTmFtaHl1bmcgS2ltIHdy
-b3RlOg0KPiBIZWxsbyBndXlzLA0KPiANCj4gT24gV2VkLCBKdW4gMjYsIDIwMjQgYXQgMDE6MzI6
-NDJQTSArMDMwMCwgQWRyaWFuIEh1bnRlciB3cm90ZToNCj4gPiBPbiAyNi8wNi8yNCAwNToyNiwg
-ZHVjaGFuZ2JpbiB3cm90ZToNCj4gPiA+IE9uIFR1ZSwgSnVuIDI1LCAyMDI0IGF0IDA0OjIwOjQ5
-UE0gKzAzMDAsIEFkcmlhbiBIdW50ZXIgd3JvdGU6DQo+ID4gPj4gT24gMjUvMDYvMjQgMDY6Mzcs
-IENoYW5nYmluIER1IHdyb3RlOg0KPiA+ID4+PiBUaGUgdmRzbyBkdW1wZWQgZnJvbSBwcm9jZXNz
-IG1lbW9yeSAoaW4gYnVpbGRpZC1jYWNoZSkgbGFja3MgZGVidWdnaW5nDQo+ID4gPj4+IGluZm8u
-IFRvIGFubm90YXRlIHZkc28gc3ltYm9scyB3aXRoIHNvdXJjZSBsaW5lcyB3ZSBuZWVkIHNwZWNp
-ZnkgYQ0KPiA+ID4+PiBkZWJ1Z2dpbmcgdmVyc2lvbi4NCj4gPiA+Pj4NCj4gPiA+Pj4gRm9yIHg4
-Niwgd2UgY2FuIGZpbmQgdGhlbSBmcm9tIHlvdXIgbG9jYWwgYnVpbGQgYXMNCj4gPiA+Pj4gYXJj
-aC94ODYvZW50cnkvdmRzby92ZHNvezMyLDY0fS5zby5kYmcuIE9yIHRoZXkgbWF5IHJlc2lkZSBp
-bg0KPiA+ID4+PiAvbGliL21vZHVsZXMvPHZlcnNpb24+L3Zkc28vdmRzb3szMiw2NH0uc28gb24g
-VWJ1bnR1LiBCdXQgbm90aWNlIHRoYXQNCj4gPiA+Pj4gdGhlIGJ1aWxkaWQgaGFzIHRvIG1hdGNo
-Lg0KPiA+ID4+Pg0KPiA+ID4+PiAkIHN1ZG8gcGVyZiByZWNvcmQgLWENCj4gPiA+Pj4gJCBzdWRv
-IHBlcmYgcmVwb3J0IC0tb2JqZHVtcD1sbHZtLW9iamR1bXAgXA0KPiA+ID4+PiAgIC0tdmRzbyBh
-cmNoL3g4Ni9lbnRyeS92ZHNvL3Zkc282NC5zby5kYmcsYXJjaC94ODYvZW50cnkvdmRzby92ZHNv
-MzIuc28uZGJnDQo+ID4gPj4+DQo+ID4gPj4+IFNhbXBsZXM6IDE3SyBvZiBldmVudCAnY3ljbGVz
-OlAnLCA0MDAwIEh6LCBFdmVudCBjb3VudCAoYXBwcm94Lik6IDE3NjANCj4gPiA+Pj4gX192ZHNv
-X2Nsb2NrX2dldHRpbWUgIC93b3JrL2xpbnV4LWhvc3QvYXJjaC94ODYvZW50cnkvdmRzby92ZHNv
-NjQuc28uZA0KPiA+ID4+PiBQZXJjZW504pSCICAgICAgIG1vdnEgICAgLTQ4KCVyYnApLCVyc2kN
-Cj4gPiA+Pj4gICAgICAgIOKUgiAgICAgICB0ZXN0cSAgICVyYXgsJXJheA0KPiA+ID4+PiAgICAg
-ICAg4pSCICAgICA7ICAgICAgICAgICAgICAgcmV0dXJuIHZyZWFkX2h2Y2xvY2soKTsNCj4gPiA+
-Pj4gICAgICAgIOKUgiAgICAgICBtb3ZxICAgICVyYXgsJXJkeA0KPiA+ID4+PiAgICAgICAg4pSC
-ICAgICA7ICAgICAgICAgICAgICAgaWYgKHVubGlrZWx5KCF2ZHNvX2N5Y2xlc19vayhjeWNsZXMp
-KSkNCj4gPiA+Pj4gICAgICAgIOKUgiAgICAg4oaRIGpzICAgICAgZWINCj4gPiA+Pj4gICAgICAg
-IOKUgiAgICAg4oaRIGptcCAgICAgNzQNCj4gPiA+Pj4gICAgICAgIOKUgiAgICAgOyAgICAgICAg
-ICAgICAgIHRzLT50dl9zZWMgPSB2ZHNvX3RzLT5zZWM7DQo+ID4gPj4+ICAgMC4wMiDilIIxNDc6
-ICAgbGVhcSAgICAyKCVyYngpLCVyYXgNCj4gPiA+Pj4gICAgICAgIOKUgiAgICAgICBzaGxxICAg
-ICQ0LCAlcmF4DQo+ID4gPj4+ICAgICAgICDilIIgICAgICAgYWRkcSAgICAlcjEwLCVyYXgNCj4g
-PiA+Pj4gICAgICAgIOKUgiAgICAgOyAgICAgICAgICAgICAgIHdoaWxlICgoc2VxID0gUkVBRF9P
-TkNFKHZkLT5zZXEpKSAmIDEpIHsNCj4gPiA+Pj4gICA5LjM4IOKUgjE1MjogICBtb3ZsICAgICgl
-cjEwKSwlZWN4DQo+ID4gPj4+DQo+ID4gPj4+IFdoZW4gZG9pbmcgY3Jvc3MgcGxhdGZvcm0gYW5h
-bHlzaXMsIHdlIGFsc28gbmVlZCBzcGVjaWZ5IHRoZSB2ZHNvIHBhdGggaWYNCj4gPiA+Pj4gd2Ug
-YXJlIGludGVyZXN0ZWQgaW4gaXRzIHN5bWJvbHMuDQo+ID4gPj4NCj4gPiA+PiBXb3VsZCBpdCBi
-ZSBwb3NzaWJsZSB0byBhZGQgdmRzbyBhbmQgdmRzbyBkZWJ1ZyB0byB0aGUgYnVpbGQtaWQNCj4g
-PiA+PiBjYWNoZSBhbmQgZW5zdXJlIHBlcmYgY2FuIGZpbmQgaXQgdGhlcmU/DQo+ID4gPj4NCj4g
-PiA+PiBUeXBpY2FsbHksIGdldHRpbmcgZHNvcyBmcm9tIGFub3RoZXIgbWFjaGluZSBpcyBoYW5k
-bGVkIHZpYQ0KPiA+ID4+IGJ1aWxkLWlkIGNhY2hlIGUuZy4gd2hhdCBwZXJmLWFyY2hpdmUgZG9l
-cw0KPiA+ID4+DQo+ID4gPiBIbW0uIEkgYWdyZWUgdGhpcyBpcyBiZXR0ZXIgYWx0ZXJuYXRpdmUg
-YXBwcm9hY2ggZm9yIGNyb3NzLW1hY2hpbmUgYW5hbHlzaXMuDQo+ID4gPiBXaGVuIGNvbGxlY3Rp
-bmcgdmRzb3MgdG8gYnVpbGRpZCBjYWNoZSwgSSB0aGluayB3ZSBjYW4gdXNlIHRoZSBsb2NhbCBz
-ZWFyY2hlZA0KPiA+ID4gb2JqZWN0cyAod2l0aCBkZWJ1ZyBzeW1ib2xzKSBpbnN0ZWFkIGlmIGl0
-cyBidWlsZC1pZCBtYXRjaGVzIHZkc29zIGZyb20gcHJvY2Vzcw0KPiA+ID4gZHVtcGluZyAodGhl
-IHJlYWwgY29kZSByYW4pLg0KPiA+ID4gDQo+ID4gPiBDdXJyZW50bHkgSSBqdXN0IGZvbGxvdyB3
-aGF0IHBlcmYgZG9lcyBmb3Igdm1saW51eCBzbyB0byByZXVzZSBtb3N0IG9mIGV4aXN0aW5nDQo+
-ID4gPiBjb2RlLiBNYXliZSB2bWxpbnV4IGlzIHRvbyBiaWcgdG8gYWRkIHRvIGJ1aWxkaWQtY2Fo
-Y2U/DQo+ID4gPiANCj4gPiA+IENhbiB3ZSBrZWVwIG91ciBjdXJyZW50IHN0cmF0ZWd5IGZvciBu
-b3c/IEknbGwgdGhpbmsgYWJvdXQgYWJvdmUgb3B0aW9ucyB3aGVuDQo+ID4gPiBJIGhhdmUgbW9y
-ZSB0aW1lLg0KPiA+ID4gDQo+ID4gDQo+ID4gSSB0cmllZCBhZGRpbmcgdmRzbyB2aWEgcGVyZiBi
-dWlsZGlkLWNhY2hlLiAgSXQgZG9lc24ndCB3b3JrIG9ubHkNCj4gPiBiZWNhdXNlIHRoZSBsb29r
-dXAgZXhwZWN0cyB0aGUgYmFzZW5hbWUgdG8gYmUgInZkc28iIGJ1dCBpdCBpcw0KPiA+ICJlbGYi
-Lg0KPiA+IA0KPiA+IEFkZGluZyBhIGxpbmsgZnJvbSAidmRzbyIgdG8gImVsZiIgbWFkZSBpdCB3
-b3JrIGUuZy4NCj4gPiANCj4gPiAkIGNhdCBnZXR0aW1lb2ZkYXktdGVzdC5jDQo+ID4gI2luY2x1
-ZGUgPHN0ZGlvLmg+DQo+ID4gI2luY2x1ZGUgPHN5cy90aW1lLmg+DQo+ID4gDQo+ID4gaW50IG1h
-aW4oKQ0KPiA+IHsNCj4gPiAgICAgICAgIHN0cnVjdCB0aW1ldmFsIHR2Ow0KPiA+ICAgICAgICAg
-aW50IHJldDsNCj4gPiANCj4gPiAgICAgICAgIHJldCA9IGdldHRpbWVvZmRheSgmdHYsIE5VTEwp
-Ow0KPiA+ICAgICAgICAgaWYgKHJldCA9PSAtMSkgew0KPiA+ICAgICAgICAgICAgICAgICBmcHJp
-bnRmKHN0ZGVyciwgImdldHRpbWVvZmRheSBmYWlsZWRcbiIpOw0KPiA+ICAgICAgICAgICAgICAg
-ICByZXR1cm4gMTsNCj4gPiAgICAgICAgIH0NCj4gPiANCj4gPiAgICAgICAgIHByaW50ZigiJWx1
-LiVsdVxuIiwgKHVuc2lnbmVkIGxvbmcpdHYudHZfc2VjLCAodW5zaWduZWQgbG9uZyl0di50dl91
-c2VjKTsNCj4gPiANCj4gPiAgICAgICAgIHJldHVybiAwOw0KPiA+ICQgcGVyZiByZWNvcmQgLWUg
-aW50ZWxfcHQvL3UgLi9nZXR0aW1lb2ZkYXktdGVzdA0KPiA+IDE3MTkzOTcwNDIuODkyODM3DQo+
-ID4gWyBwZXJmIHJlY29yZDogV29rZW4gdXAgMSB0aW1lcyB0byB3cml0ZSBkYXRhIF0NCj4gPiBb
-IHBlcmYgcmVjb3JkOiBDYXB0dXJlZCBhbmQgd3JvdGUgMC4wMjYgTUIgcGVyZi5kYXRhIF0NCj4g
-PiAkIHBlcmYgc2NyaXB0IC0taXRyYWNlPWUNCj4gPiAkIHBlcmYgYnVpbGRpZC1jYWNoZSAtLXJl
-bW92ZSAvbGliL21vZHVsZXMvNi41LjAtNDEtZ2VuZXJpYy92ZHNvL3Zkc282NC5zbw0KPiA+ICQg
-cGVyZiBzY3JpcHQgLS1pdHJhY2U9ZQ0KPiA+IFdhcm5pbmc6DQo+ID4gMiBpbnN0cnVjdGlvbiB0
-cmFjZSBlcnJvcnMNCj4gPiAgaW5zdHJ1Y3Rpb24gdHJhY2UgZXJyb3IgdHlwZSAxIHRpbWUgNTI1
-MzQ1LjM4NjQyNDIwNCBjcHUgNCBwaWQgMTk4OTc2IHRpZCAxOTg5NzYgaXAgMHg3ZmZkZGIwZThl
-MDAgY29kZSA1OiBGYWlsZWQgdG8gZ2V0IGluc3RydWN0aW9uDQo+ID4gIGluc3RydWN0aW9uIHRy
-YWNlIGVycm9yIHR5cGUgMSB0aW1lIDUyNTM0NS4zODY0MjQ4MjkgY3B1IDQgcGlkIDE5ODk3NiB0
-aWQgMTk4OTc2IGlwIDB4N2ZmZGRiMGU4ODRkIGNvZGUgNTogRmFpbGVkIHRvIGdldCBpbnN0cnVj
-dGlvbg0KPiA+ICQgcGVyZiBidWlsZGlkLWNhY2hlIC0tYWRkIC9saWIvbW9kdWxlcy82LjUuMC00
-MS1nZW5lcmljL3Zkc28vdmRzbzY0LnNvDQo+ID4gJCBwZXJmIHNjcmlwdCAtLWl0cmFjZT1lDQo+
-ID4gV2FybmluZzoNCj4gPiAyIGluc3RydWN0aW9uIHRyYWNlIGVycm9ycw0KPiA+ICBpbnN0cnVj
-dGlvbiB0cmFjZSBlcnJvciB0eXBlIDEgdGltZSA1MjUzNDUuMzg2NDI0MjA0IGNwdSA0IHBpZCAx
-OTg5NzYgdGlkIDE5ODk3NiBpcCAweDdmZmRkYjBlOGUwMCBjb2RlIDU6IEZhaWxlZCB0byBnZXQg
-aW5zdHJ1Y3Rpb24NCj4gPiAgaW5zdHJ1Y3Rpb24gdHJhY2UgZXJyb3IgdHlwZSAxIHRpbWUgNTI1
-MzQ1LjM4NjQyNDgyOSBjcHUgNCBwaWQgMTk4OTc2IHRpZCAxOTg5NzYgaXAgMHg3ZmZkZGIwZTg4
-NGQgY29kZSA1OiBGYWlsZWQgdG8gZ2V0IGluc3RydWN0aW9uDQo+ID4gJCBjZCB+Ly5kZWJ1Zy8u
-YnVpbGQtaWQvYzMvNTMwYWVkNjZlNzFiZmQxMGFmNjYwMzlmNThjYzdjNGQyZWFiYTgNCj4gPiB+
-Ly5kZWJ1Zy8uYnVpbGQtaWQvYzMvNTMwYWVkNjZlNzFiZmQxMGFmNjYwMzlmNThjYzdjNGQyZWFi
-YTgkIGxuIC1zIGVsZiB2ZHNvDQo+ID4gfi8uZGVidWcvLmJ1aWxkLWlkL2MzLzUzMGFlZDY2ZTcx
-YmZkMTBhZjY2MDM5ZjU4Y2M3YzRkMmVhYmE4JCBscyAtbA0KPiA+IHRvdGFsIDM2DQo+ID4gLXJ3
-LXItLXItLSAxIGFodW50ZXIgYWh1bnRlciAzMzI3MiBKdW4gMjYgMTM6MTcgZWxmDQo+ID4gLXJ3
-LXItLS0tLSAxIGFodW50ZXIgYWh1bnRlciAgICAgMCBKdW4gMjYgMTM6MTcgcHJvYmVzDQo+ID4g
-bHJ3eHJ3eHJ3eCAxIGFodW50ZXIgYWh1bnRlciAgICAgMyBKdW4gMjYgMTM6MTggdmRzbyAtPiBl
-bGYNCj4gPiAvLmRlYnVnLy5idWlsZC1pZC9jMy81MzBhZWQ2NmU3MWJmZDEwYWY2NjAzOWY1OGNj
-N2M0ZDJlYWJhOCQgY2QNCj4gPiAkIHBlcmYgc2NyaXB0IC0taXRyYWNlPWUNCj4gPiAkIA0KPiA+
-IA0KPiA+IFNvIG1heWJlIGEgY2hhbmdlIGNvdWxkIGJlIG1hZGUgdG8gYnVpbGRfaWRfY2FjaGVf
-X2FkZCgpIHRvIGFkZA0KPiA+IHRoZSBleHRyYSBsaW5rIGlmIHRoZSBmaWxlIG5hbWUgbWF0Y2hl
-cyB2ZHNvDQo+ICANCj4gVGhhbmtzIGZvciBkb2luZyB0aGlzISAgSSBub3RpY2VkIGJ1aWxkaWRf
-Y2FjaGVfX2Jhc2VuYW1lKCkgd2lsbCBoYW5kbGUNCj4gdGhlIG5hbWUgcHJvcGVybHkgb25jZSBp
-dCByZWFsaXplcyB0aGUgZmlsZSBpcyBhIHZkc28uICBNYXliZSB3ZSBjYW4NCj4gY2hlY2sgdGhl
-IGZpbGVwYXRoIHdpdGggc29tZSBwYXR0ZXJucywgb3Igc2ltcGx5IGFkZCBhbiBjb21tYW5kIGxp
-bmUNCj4gb3B0aW9uIHRvIHNheSBpdCdzIGEgdmRzby4NCj4gDQo+IFRoYW5rcywNCj4gTmFtaHl1
-bmcNCj4NCkkgYWRkZWQgc29tZSB0cmlja3MgZm9yIHZkc28gaW4gYnVpbGRfaWRfY2FjaGVfX2Fk
-ZCgpLiBJdCByZXBsYWNlIHZkc28gb2JqZWN0DQp3aXRoIGRlYnVnZ2luZyBvbmUgaWYgZm91bmQu
-IElzIHRoaXMgb2theT8NCg0KK3N0YXRpYyBjaGFyICpidWlsZF9pZF9jYWNoZV9fZmluZF9kZWJ1
-Z192ZHNvKGNvbnN0IGNoYXIgKnNidWlsZF9pZCkNCit7DQorICAgICAgIGNoYXIgc2J1aWxkX2lk
-X3RtcFtTQlVJTERfSURfU0laRV07DQorICAgICAgIHN0cnVjdCBidWlsZF9pZCBiaWQ7DQorICAg
-ICAgIGludCBpLCByZXQgPSAwOw0KKw0KKyAgICAgICBwcmludGYoIkxvb2tpbmcgYXQgdGhlIHZk
-c29fcGF0aCAoJWQgZW50cmllcyBsb25nKVxuIiwNCisgICAgICAgICAgICAgICAgdmRzb19wYXRo
-cy5ucl9lbnRyaWVzICsgMSk7DQorDQorICAgICAgIGZvciAoaSA9IDA7IGkgPCB2ZHNvX3BhdGhz
-Lm5yX2VudHJpZXM7ICsraSkgew0KKyAgICAgICAgICAgICAgIHJldCA9IGZpbGVuYW1lX19yZWFk
-X2J1aWxkX2lkKHZkc29fcGF0aHMucGF0aHNbaV0sICZiaWQpOw0KKyAgICAgICAgICAgICAgIGlm
-IChyZXQgPCAwKQ0KKyAgICAgICAgICAgICAgICAgICAgICAgY29udGludWU7DQorDQorICAgICAg
-ICAgICAgICAgYnVpbGRfaWRfX3NwcmludGYoJmJpZCwgc2J1aWxkX2lkX3RtcCk7DQorICAgICAg
-ICAgICAgICAgaWYgKCFzdHJjbXAoc2J1aWxkX2lkLCBzYnVpbGRfaWRfdG1wKSkgew0KKyAgICAg
-ICAgICAgICAgICAgICAgICAgcHJpbnRmKCJGb3VuZCBkZWJ1Z2dpbmcgdmRzbyAlc1xuIiwgdmRz
-b19wYXRocy5wYXRoc1tpXSk7DQorICAgICAgICAgICAgICAgICAgICAgICByZXR1cm4gc3RyZHVw
-KHZkc29fcGF0aHMucGF0aHNbaV0pOw0KKyAgICAgICAgICAgICAgIH0NCisgICAgICAgfQ0KKw0K
-KyAgICAgICByZXR1cm4gTlVMTDsNCit9DQorDQogaW50DQogYnVpbGRfaWRfY2FjaGVfX2FkZChj
-b25zdCBjaGFyICpzYnVpbGRfaWQsIGNvbnN0IGNoYXIgKm5hbWUsIGNvbnN0IGNoYXIgKnJlYWxu
-YW1lLA0KICAgICAgICAgICAgICAgICAgICBzdHJ1Y3QgbnNpbmZvICpuc2ksIGJvb2wgaXNfa2Fs
-bHN5bXMsIGJvb2wgaXNfdmRzbywNCiAgICAgICAgICAgICAgICAgICAgY29uc3QgY2hhciAqcHJv
-cGVyX25hbWUsIGNvbnN0IGNoYXIgKnJvb3RfZGlyKQ0KIHsNCiAgICAgICAgY29uc3Qgc2l6ZV90
-IHNpemUgPSBQQVRIX01BWDsNCi0gICAgICAgY2hhciAqZmlsZW5hbWUgPSBOVUxMLCAqZGlyX25h
-bWUgPSBOVUxMLCAqbGlua25hbWUgPSB6YWxsb2Moc2l6ZSksICp0bXA7DQorICAgICAgIGNoYXIg
-KmZpbGVuYW1lID0gTlVMTCwgKmRpcl9uYW1lID0gTlVMTCwgKnZkc29fbmFtZSA9IE5VTEwsICps
-aW5rbmFtZSA9IHphbGxvYyhzaXplKSwgKnRtcDsNCiAgICAgICAgY2hhciAqZGVidWdmaWxlID0g
-TlVMTDsNCiAgICAgICAgaW50IGVyciA9IC0xOw0KDQorICAgICAgIC8qIHJlcGxhY2UgdmRzbyBv
-YmplY3Qgd2l0aCBkZWJ1Z2dpbmcgb25lIGlmIGZvdW5kICovDQorICAgICAgIGlmIChpc192ZHNv
-KSB7DQorICAgICAgICAgICAgICAgdmRzb19uYW1lID0gYnVpbGRfaWRfY2FjaGVfX2ZpbmRfZGVi
-dWdfdmRzbyhzYnVpbGRfaWQpOw0KKyAgICAgICAgICAgICAgIGlmICh2ZHNvX25hbWUpDQorICAg
-ICAgICAgICAgICAgICAgICAgICBuYW1lID0gcmVhbG5hbWUgPSB2ZHNvX25hbWU7DQorICAgICAg
-IH0NCisNCiAgICAgICAgaWYgKCFwcm9wZXJfbmFtZSkNCiAgICAgICAgICAgICAgICBwcm9wZXJf
-bmFtZSA9IG5hbWU7DQoNCj4gDQoNCi0tIA0KQ2hlZXJzLA0KQ2hhbmdiaW4gRHUNCg==
+Hi Alex,
+
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on groeck-staging/hwmon-next]
+[also build test ERROR on next-20240627]
+[cannot apply to robh/for-next krzk-dt/for-next linus/master v6.10-rc5]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Alex-Vdovydchenko/dt-bindings-hwmon-Add-MPS-mp5920/20240628-021125
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
+patch link:    https://lore.kernel.org/r/20240627090113.391730-3-xzeol%40yahoo.com
+patch subject: [PATCH v2 2/2] hwmon: add MP5920 driver
+config: arm64-allmodconfig (https://download.01.org/0day-ci/archive/20240628/202406281512.NAdadCZX-lkp@intel.com/config)
+compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project 326ba38a991250a8587a399a260b0f7af2c9166a)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240628/202406281512.NAdadCZX-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202406281512.NAdadCZX-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+   In file included from drivers/hwmon/pmbus/mp5920.c:18:
+   In file included from include/linux/i2c.h:13:
+   In file included from include/linux/acpi.h:39:
+   In file included from include/acpi/acpi_io.h:7:
+   In file included from arch/arm64/include/asm/acpi.h:14:
+   In file included from include/linux/memblock.h:12:
+   In file included from include/linux/mm.h:2253:
+   include/linux/vmstat.h:500:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     500 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     501 |                            item];
+         |                            ~~~~
+   include/linux/vmstat.h:507:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     507 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     508 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/vmstat.h:514:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     514 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+   include/linux/vmstat.h:519:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     519 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     520 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/vmstat.h:528:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     528 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     529 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+>> drivers/hwmon/pmbus/mp5920.c:26:2: error: use of undeclared identifier 'pages'
+      26 |         pages = 1,
+         |         ^
+>> drivers/hwmon/pmbus/mp5920.c:27:2: error: use of undeclared identifier 'format'
+      27 |         format[PSC_VOLTAGE_IN] = direct,
+         |         ^
+   drivers/hwmon/pmbus/mp5920.c:28:2: error: use of undeclared identifier 'format'
+      28 |         format[PSC_VOLTAGE_OUT] = direct,
+         |         ^
+   drivers/hwmon/pmbus/mp5920.c:29:2: error: use of undeclared identifier 'format'
+      29 |         format[PSC_CURRENT_OUT] = direct,
+         |         ^
+   drivers/hwmon/pmbus/mp5920.c:30:2: error: use of undeclared identifier 'format'
+      30 |         format[PSC_POWER] = direct,
+         |         ^
+   drivers/hwmon/pmbus/mp5920.c:31:2: error: use of undeclared identifier 'format'
+      31 |         format[PSC_TEMPERATURE] = direct,
+         |         ^
+>> drivers/hwmon/pmbus/mp5920.c:32:2: error: use of undeclared identifier 'm'
+      32 |         m[PSC_VOLTAGE_IN] = 2266,
+         |         ^
+>> drivers/hwmon/pmbus/mp5920.c:33:2: error: use of undeclared identifier 'b'
+      33 |         b[PSC_VOLTAGE_IN] = 0,
+         |         ^
+>> drivers/hwmon/pmbus/mp5920.c:34:2: error: use of undeclared identifier 'R'
+      34 |         R[PSC_VOLTAGE_IN] = -1,
+         |         ^
+   drivers/hwmon/pmbus/mp5920.c:35:2: error: use of undeclared identifier 'm'
+      35 |         m[PSC_VOLTAGE_OUT] = 2266,
+         |         ^
+   drivers/hwmon/pmbus/mp5920.c:36:2: error: use of undeclared identifier 'b'
+      36 |         b[PSC_VOLTAGE_OUT] = 0,
+         |         ^
+   drivers/hwmon/pmbus/mp5920.c:37:2: error: use of undeclared identifier 'R'
+      37 |         R[PSC_VOLTAGE_OUT] = -1,
+         |         ^
+   drivers/hwmon/pmbus/mp5920.c:38:2: error: use of undeclared identifier 'm'
+      38 |         m[PSC_CURRENT_OUT] = 546,
+         |         ^
+   drivers/hwmon/pmbus/mp5920.c:39:2: error: use of undeclared identifier 'b'
+      39 |         b[PSC_CURRENT_OUT] = 0,
+         |         ^
+   drivers/hwmon/pmbus/mp5920.c:40:2: error: use of undeclared identifier 'R'
+      40 |         R[PSC_CURRENT_OUT] = -2,
+         |         ^
+   drivers/hwmon/pmbus/mp5920.c:41:2: error: use of undeclared identifier 'm'
+      41 |         m[PSC_POWER] = 5840,
+         |         ^
+   drivers/hwmon/pmbus/mp5920.c:42:2: error: use of undeclared identifier 'b'
+      42 |         b[PSC_POWER] = 0,
+         |         ^
+   drivers/hwmon/pmbus/mp5920.c:43:2: error: use of undeclared identifier 'R'
+      43 |         R[PSC_POWER] = -3,
+         |         ^
+   drivers/hwmon/pmbus/mp5920.c:44:2: error: use of undeclared identifier 'm'
+      44 |         m[PSC_TEMPERATURE] = 1067,
+         |         ^
+   fatal error: too many errors emitted, stopping now [-ferror-limit=]
+   5 warnings and 20 errors generated.
+
+
+vim +/pages +26 drivers/hwmon/pmbus/mp5920.c
+
+    24	
+    25	static struct pmbus_driver_info mp5920_info = {
+  > 26		pages = 1,
+  > 27		format[PSC_VOLTAGE_IN] = direct,
+    28		format[PSC_VOLTAGE_OUT] = direct,
+    29		format[PSC_CURRENT_OUT] = direct,
+    30		format[PSC_POWER] = direct,
+    31		format[PSC_TEMPERATURE] = direct,
+  > 32		m[PSC_VOLTAGE_IN] = 2266,
+  > 33		b[PSC_VOLTAGE_IN] = 0,
+  > 34		R[PSC_VOLTAGE_IN] = -1,
+    35		m[PSC_VOLTAGE_OUT] = 2266,
+    36		b[PSC_VOLTAGE_OUT] = 0,
+    37		R[PSC_VOLTAGE_OUT] = -1,
+    38		m[PSC_CURRENT_OUT] = 546,
+    39		b[PSC_CURRENT_OUT] = 0,
+    40		R[PSC_CURRENT_OUT] = -2,
+    41		m[PSC_POWER] = 5840,
+    42		b[PSC_POWER] = 0,
+    43		R[PSC_POWER] = -3,
+    44		m[PSC_TEMPERATURE] = 1067,
+    45		b[PSC_TEMPERATURE] = 20500,
+    46		R[PSC_TEMPERATURE] = -2,
+    47		func[0] = PMBUS_HAVE_VIN  | PMBUS_HAVE_VOUT |
+    48			PMBUS_HAVE_IOUT | PMBUS_HAVE_POUT |
+    49			PMBUS_HAVE_TEMP,
+    50	};
+    51	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
