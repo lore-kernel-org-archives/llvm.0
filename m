@@ -1,154 +1,117 @@
-Received: from omta36.uswest2.a.cloudfilter.net (omta36.uswest2.a.cloudfilter.net [35.89.44.35])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3279C1862C
-	for <llvm@lists.linux.dev>; Fri, 28 Jun 2024 02:51:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=35.89.44.35
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF40B25569;
+	Fri, 28 Jun 2024 03:33:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719543099; cv=none; b=tlKfu0b9Umnm0oiASFc/akEqwySK6tsviqdlADzAFbA3OadbmG3Mw2AEWuNWcB8x9vkztwwmHlgggj1EnI2h/R6mf0naQNq8kBAsX61cFss0GOTrt0gFnMERtGTkAHRqLyocpoNx0veDjkN/qFbbJA8Kd+e+SXw4OJSqm4vCmBE=
+	t=1719545625; cv=none; b=cVRAT/TTnTCcFozsjSjnz48ySGE3t0AUKkvCXUHflKRGbUeSRCt2HR1f3QoRnJO3Dy48Tiih+/00JpAtDlgbYUSwtlfdoYOvZ55A0HzMxzgqBDt2FxzV5ue2U35VJCMUueBfGfojjDUkR8oUwyLsVlNhTZN+x1d6cKKY1dnP+AM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719543099; c=relaxed/simple;
-	bh=khjubVaOAxvuDngZUIjd9rj1xxZGvg6ZvVt20JfCRyY=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ZC+TPornwT5GyyfHJY9Qk6Mhh+QvB8Z+eLY/N6rNd/oPJes4lU5U3nwJ0w1H8HkR6e5TiuONNbgZlfUQhOykURCjZw7IPjlERdqk2doBBjbjQaxDPwQSt8RCFbpeyeogcRSwMBVU2UH4pIA7FP07UdtqoOh3LzIP4B11NrzknVY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=embeddedor.com; spf=pass smtp.mailfrom=embeddedor.com; dkim=pass (2048-bit key) header.d=embeddedor.com header.i=@embeddedor.com header.b=VrcU1cKb; arc=none smtp.client-ip=35.89.44.35
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=embeddedor.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=embeddedor.com
+	s=arc-20240116; t=1719545625; c=relaxed/simple;
+	bh=Yh9XNF1kuwAoeoGdI9ucQ2I3fS7pT1Go1q2P3ChIgJE=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=p+FI7I1+Qcrj3LRl5ck7IsGwRYMkTgVUsuGvizevHwWv4zBB7CIlxAKAItdr14OKOqWn6afquoiNgqZqSwAw3w14E88X6YIs1GRYnI4DWBhcpsMRfKLnB/jDUavVIH0zIENzz3az71sQtxvE+d7Rrsox3iQfAsHH5VATSCivaSk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=aCIBdYm5; arc=none smtp.client-ip=192.198.163.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=embeddedor.com header.i=@embeddedor.com header.b="VrcU1cKb"
-Received: from eig-obgw-6002a.ext.cloudfilter.net ([10.0.30.222])
-	by cmsmtp with ESMTPS
-	id Mz23sHYY9JXoqN1hysTP30; Fri, 28 Jun 2024 02:51:30 +0000
-Received: from gator4166.hostgator.com ([108.167.133.22])
-	by cmsmtp with ESMTPS
-	id N1hxsyQ6iiKqRN1hxs7AX5; Fri, 28 Jun 2024 02:51:29 +0000
-X-Authority-Analysis: v=2.4 cv=I9quR8gg c=1 sm=1 tr=0 ts=667e2532
- a=1YbLdUo/zbTtOZ3uB5T3HA==:117 a=frY+GlAHrI6frpeK1MvySw==:17
- a=IkcTkHD0fZMA:10 a=T1WGqf2p2xoA:10 a=wYkD_t78qR0A:10 a=VwQbUJbxAAAA:8
- a=NEAV23lmAAAA:8 a=_Wotqz80AAAA:8 a=ijWZ9xZranq7hUifA4EA:9 a=QEXdDO2ut3YA:10
- a=AjGcO6oz07-iQ99wixmX:22 a=buJP51TR1BpY-zbLSsyS:22
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=embeddedor.com; s=default; h=Content-Transfer-Encoding:Content-Type:
-	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
-	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
-	List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=rKRBHzZAJa8Y5uaYN9KzLXlsQxprz1t3tpmpYAAPIhA=; b=VrcU1cKb+9PGWke1O9Eg07jCns
-	cEqyuC544UwG5leDIPUCgceMBYSUMRHn9IY1WY5WRoINOFKk0ysi/r30O9AZSsZidOw5RZiGijYJx
-	UuxpvyG4Rx4IBZHnm+Axp5mHRB+6KrIWIrv4uQL3Ti++VdCLPxs9XtRdRleTYZFoVAQHaS++tysuP
-	lm+mHRqfVMrfp6PQac+PwDQlp4cIniJFazfMlVbg9vsHkhOL+zsUaOr9K1WzDQz9ZB2hHMU47r7W0
-	6a4vvOmWKNa2K2CekofNvgNM7wDZvLU6PHbi5zjp/47osjSB0fLMDRNIb/1iWNCoD0UpbmdQCUF7p
-	PlGiuv4Q==;
-Received: from [201.172.173.139] (port=40218 helo=[192.168.15.14])
-	by gator4166.hostgator.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-	(Exim 4.96.2)
-	(envelope-from <gustavo@embeddedor.com>)
-	id 1sN1hv-003DhV-1b;
-	Thu, 27 Jun 2024 21:51:27 -0500
-Message-ID: <4c347ab7-97f6-4e18-9aca-dcb48e8fc75a@embeddedor.com>
-Date: Thu, 27 Jun 2024 20:51:23 -0600
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="aCIBdYm5"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1719545623; x=1751081623;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=Yh9XNF1kuwAoeoGdI9ucQ2I3fS7pT1Go1q2P3ChIgJE=;
+  b=aCIBdYm5nyUsshUcvGkWhmeV/bkcd2NEBaSobD59woWYR+o3t5Hn4eaX
+   044sIXvDaOiEJ9kXYpVORithi3laQeTyyHcyNQHBowxTzeXh6/ib3qhPh
+   GLXUEvLi4HdpiFGVZLiCDyO1eUsXeFGGDB/yN3xdxEJP3UK7G0BpgafYI
+   tChhrIDby9MCfZWGbqJJO8XV06+scYKcSXn4fqfQP866CqAzjRB5+8xi+
+   t457LXAKOtbt0COsz+ms7ic3dWxG3CkYYhePKh/qkVCpI0MhxF2dDj20o
+   Rf+eiWc964D0bba1ZG2Wohzr3UvULLGVj4mdzB8BROezLvE9j6s/GK1CU
+   w==;
+X-CSE-ConnectionGUID: 5fV6GfLkTVSAcst/Wu5aeA==
+X-CSE-MsgGUID: lTe8Y8N5Qqa3JuqhRCmWoQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11116"; a="28112951"
+X-IronPort-AV: E=Sophos;i="6.09,167,1716274800"; 
+   d="scan'208";a="28112951"
+Received: from fmviesa001.fm.intel.com ([10.60.135.141])
+  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jun 2024 20:33:42 -0700
+X-CSE-ConnectionGUID: zighsVJUT3aetq9B0PKyuA==
+X-CSE-MsgGUID: 5x5E7KgPRCe3/Stx6BLTpA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.09,167,1716274800"; 
+   d="scan'208";a="75798021"
+Received: from lkp-server01.sh.intel.com (HELO 68891e0c336b) ([10.239.97.150])
+  by fmviesa001.fm.intel.com with ESMTP; 27 Jun 2024 20:33:41 -0700
+Received: from kbuild by 68891e0c336b with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1sN2Mk-000Glm-1G;
+	Fri, 28 Jun 2024 03:33:38 +0000
+Date: Fri, 28 Jun 2024 11:33:03 +0800
+From: kernel test robot <lkp@intel.com>
+To: Khanh Le <khanh.le.xr@renesas.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>,
+	Mark Brown <broonie@kernel.org>
+Subject: [morimoto:renesas-bsp/v6.1.95-2024-06-24-GrayHawk-sound 706/709]
+ sound/soc/codecs/ak4619.c:824:17: error: use of undeclared identifier
+ 'REGCACHE_MAPLE'; did you mean 'REGCACHE_NONE'?
+Message-ID: <202406281100.D8245BGl-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] tty: mxser: Remove __counted_by from mxser_board.ports[]
-To: Kees Cook <kees@kernel.org>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Jiri Slaby <jirislaby@kernel.org>, Nathan Chancellor <nathan@kernel.org>,
- "Gustavo A. R. Silva" <gustavoars@kernel.org>,
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
- linux-serial@vger.kernel.org, imx@lists.linux.dev,
- linux-arm-kernel@lists.infradead.org, linux-hardening@vger.kernel.org,
- llvm@lists.linux.dev, patches@lists.linux.dev, stable@vger.kernel.org
-References: <20240529-drop-counted-by-ports-mxser-board-v1-1-0ab217f4da6d@kernel.org>
- <202406271009.4E90DF8@keescook>
-Content-Language: en-US
-From: "Gustavo A. R. Silva" <gustavo@embeddedor.com>
-In-Reply-To: <202406271009.4E90DF8@keescook>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - gator4166.hostgator.com
-X-AntiAbuse: Original Domain - lists.linux.dev
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - embeddedor.com
-X-BWhitelist: no
-X-Source-IP: 201.172.173.139
-X-Source-L: No
-X-Exim-ID: 1sN1hv-003DhV-1b
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: ([192.168.15.14]) [201.172.173.139]:40218
-X-Source-Auth: gustavo@embeddedor.com
-X-Email-Count: 3
-X-Org: HG=hgshared;ORG=hostgator;
-X-Source-Cap: Z3V6aWRpbmU7Z3V6aWRpbmU7Z2F0b3I0MTY2Lmhvc3RnYXRvci5jb20=
-X-Local-Domain: yes
-X-CMAE-Envelope: MS4xfHIKPmsIoRWQ88ZD9VHUNg0HTRJmjyLQj/aB2F7tVs7FN+SIGj+t4YSYwy0E/iqIudAzvTZt7wxMrlHBw3Gc92w3R3Y4ZTZrrskH0ryfxcyKemcWXGLU
- jOhx/TRtCIMLU0WQkPa52UZbncf9uMQvFMrzGHNfOCQmrf+/HppUDiUaa8x0jcEU0DSJL79XJl9d68pBhOhMvCM4M1U+X2CCbbM=
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+
+tree:   https://github.com/morimoto/linux renesas-bsp/v6.1.95-2024-06-24-GrayHawk-sound
+head:   a2ad04eb2a203f409e8218f127ade36084b87721
+commit: 79d8f008f407299e889b60bca90e182ae4a0eded [706/709] ASoC: Add ak4619 codec support
+config: arm-randconfig-004-20240628 (https://download.01.org/0day-ci/archive/20240628/202406281100.D8245BGl-lkp@intel.com/config)
+compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project 326ba38a991250a8587a399a260b0f7af2c9166a)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240628/202406281100.D8245BGl-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202406281100.D8245BGl-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+   In file included from sound/soc/codecs/ak4619.c:15:
+   In file included from include/linux/i2c.h:19:
+   In file included from include/linux/regulator/consumer.h:35:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:20:
+   In file included from include/linux/mm.h:1775:
+   include/linux/vmstat.h:516:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     516 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+>> sound/soc/codecs/ak4619.c:824:17: error: use of undeclared identifier 'REGCACHE_MAPLE'; did you mean 'REGCACHE_NONE'?
+     824 |         .cache_type             = REGCACHE_MAPLE,
+         |                                   ^~~~~~~~~~~~~~
+         |                                   REGCACHE_NONE
+   include/linux/regmap.h:42:2: note: 'REGCACHE_NONE' declared here
+      42 |         REGCACHE_NONE,
+         |         ^
+   1 warning and 1 error generated.
 
 
+vim +824 sound/soc/codecs/ak4619.c
 
-On 27/06/24 11:14, Kees Cook wrote:
-> On Wed, May 29, 2024 at 02:29:42PM -0700, Nathan Chancellor wrote:
->> Work for __counted_by on generic pointers in structures (not just
->> flexible array members) has started landing in Clang 19 (current tip of
->> tree). During the development of this feature, a restriction was added
->> to __counted_by to prevent the flexible array member's element type from
->> including a flexible array member itself such as:
->>
->>    struct foo {
->>      int count;
->>      char buf[];
->>    };
->>
->>    struct bar {
->>      int count;
->>      struct foo data[] __counted_by(count);
->>    };
->>
->> because the size of data cannot be calculated with the standard array
->> size formula:
->>
->>    sizeof(struct foo) * count
->>
->> This restriction was downgraded to a warning but due to CONFIG_WERROR,
->> it can still break the build. The application of __counted_by on the
->> ports member of 'struct mxser_board' triggers this restriction,
->> resulting in:
->>
->>    drivers/tty/mxser.c:291:2: error: 'counted_by' should not be applied to an array with element of unknown size because 'struct mxser_port' is a struct type with a flexible array member. This will be an error in a future compiler version [-Werror,-Wbounds-safety-counted-by-elt-type-unknown-size]
->>      291 |         struct mxser_port ports[] __counted_by(nports);
->>          |         ^~~~~~~~~~~~~~~~~~~~~~~~~
->>    1 error generated.
->>
->> Remove this use of __counted_by to fix the warning/error. However,
->> rather than remove it altogether, leave it commented, as it may be
->> possible to support this in future compiler releases.
->>
->> Cc: stable@vger.kernel.org
->> Closes: https://github.com/ClangBuiltLinux/linux/issues/2026
->> Fixes: f34907ecca71 ("mxser: Annotate struct mxser_board with __counted_by")
->> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
-> 
-> Since this fixes a build issue under Clang, can we please land this so
-> v6.7 and later will build again? Gustavo is still working on the more
-> complete fix (which was already on his radar, so it won't be lost).
-> 
-> If it's easier/helpful, I can land this via the hardening tree? I was
-> the one who sent the bad patch originally. :)
+   817	
+   818	static const struct regmap_config ak4619_regmap_cfg = {
+   819		.reg_bits		= 8,
+   820		.val_bits		= 8,
+   821		.max_register		= 0x14,
+   822		.reg_defaults		= ak4619_reg_defaults,
+   823		.num_reg_defaults	= ARRAY_SIZE(ak4619_reg_defaults),
+ > 824		.cache_type		= REGCACHE_MAPLE,
+   825	};
+   826	
 
-+1 (It'd be great if you take it.)
-
-Also, it'd be great if somebody can confirm this is an acceptable fix
-for the issue:
-
-https://lore.kernel.org/linux-hardening/c80e41e6-793e-4311-8e15-f5eda91e723e@embeddedor.com/
-
-Thanks
---
-Gustavo
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
