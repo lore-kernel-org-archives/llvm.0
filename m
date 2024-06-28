@@ -1,67 +1,62 @@
-Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0CD71B94F;
-	Fri, 28 Jun 2024 18:05:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.92.199
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E149F61FDD;
+	Fri, 28 Jun 2024 18:57:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719597917; cv=none; b=Whnwlk3ZJwvvehtUOFMyqPBCXG51lweyk5UUiTC+zrqjGlEhXQxZSoftTPEOedStwRg5bzC1IwMUjZJQ0ECOOFFYhkEnJn7JbHnnNGO15DK+l5QaAt6tjjW9EFf96tkIE4yMgPlm3Wvye7G/Y6euqSqmxxe/rP7+8b3WFZQtkNU=
+	t=1719601030; cv=none; b=aA6U8aXYUa9yKY9g/aDZpTLJMaaAaefyNFksJ/gtxaM0jZW0cmXI0B4q/L6Kf326TQXZVTS+i2S84SrGZ6pEhSkK5Jcezy3f/VLRLK6rZxl25B79IaLAKz9Ij0NjdX9MEbVm3d0TiPeIFlEmidFYkJPIZz1SOeMz8cmXwqPrMJU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719597917; c=relaxed/simple;
-	bh=mx/8AeXGv5la/SJKW47Hnq1sxQpaD4PV9moJu0IkY9w=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=bOF+QuKIWHYUk8QVd8LZeLMtBBdvZfqwXLyMD70SOhgxOPzmzYg2PT2ER2tLWmoipc8Bg/Kts3n94ojGYNIgv0vXXhyiMuP0QojYSSxB/a2ZL2TCOliwhoR6AemxJvajt0anptq7YSC8W1DZZbh/YbS4im8zPnVfLpyNfE1ZYBs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=F5de3Ybp; arc=none smtp.client-ip=90.155.92.199
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
+	s=arc-20240116; t=1719601030; c=relaxed/simple;
+	bh=nBHL9Mhy2PUkr/VGgez2e5viO4TExv4p/2gPVPJvjgI=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=shAFuRX1qVM/sG9tfGyMHQ3YurAqlPU7gTbrgF2vBU4Qk11RG43iLnh4b/fxbp7LdnoRwwx44dy01/V/0XTZlSQmZeSp/0LZOo7hdAaQfLbWgxghjq4M5bg5RbzExEczYNuFlDmZeXL3dwzfAJq31y2Aap90i31brC9awqkxudQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ja8ThAI3; arc=none smtp.client-ip=192.198.163.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="F5de3Ybp"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=dSrkPPHv57iagKOJvURV1RqHc0rOI3RdmSfKvjD0uAk=; b=F5de3YbpRIjcEh2iBGH8wgpDfZ
-	9mJQ+NFg4OmtDICFKWKVp9789hpyMVAulmI7ZeXi5WjABsnCTs1kdIh/wyUtgaFv2uO/uLYPyWqL6
-	+qgFJU8q9ahyVE3H46jvDykISEduUuCXRXhSBl0ZofhENpyKTTcbN3VRX+SgXAPdNnobWp1+J5Ja9
-	Dnv6I2Fzg2J7qGubn2gERdzsSilfhWwe41YyXrbEMYjNrXuQQLcVyv1e3pUHkVvq5ANoN/Y5lZyl9
-	8ea/RsWZXZKIF95au3hDMh5hADW+vGUSFO1oCpCnzfsTtwUBN0odqN3Lkkruc9+7A/yzlJWzJwgb0
-	20s6/0uQ==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-	by desiato.infradead.org with esmtpsa (Exim 4.97.1 #2 (Red Hat Linux))
-	id 1sNFxj-000000094Vb-431B;
-	Fri, 28 Jun 2024 18:04:44 +0000
-Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
-	id 28A44300400; Fri, 28 Jun 2024 20:04:41 +0200 (CEST)
-Date: Fri, 28 Jun 2024 20:04:41 +0200
-From: Peter Zijlstra <peterz@infradead.org>
-To: Kees Cook <kees@kernel.org>
-Cc: Gatlin Newhouse <gatlin.newhouse@gmail.com>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-	"H. Peter Anvin" <hpa@zytor.com>, Marco Elver <elver@google.com>,
-	Andrey Konovalov <andreyknvl@gmail.com>,
-	Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	"Mike Rapoport (IBM)" <rppt@kernel.org>,
-	Baoquan He <bhe@redhat.com>,
-	Rick Edgecombe <rick.p.edgecombe@intel.com>,
-	Changbin Du <changbin.du@huawei.com>,
-	Pengfei Xu <pengfei.xu@intel.com>, Xin Li <xin3.li@intel.com>,
-	Jason Gunthorpe <jgg@ziepe.ca>, Uros Bizjak <ubizjak@gmail.com>,
-	Arnd Bergmann <arnd@arndb.de>,
-	"Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-	linux-kernel@vger.kernel.org, kasan-dev@googlegroups.com,
-	linux-hardening@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH v3] x86/traps: Enable UBSAN traps on x86
-Message-ID: <20240628180441.GJ31592@noisy.programming.kicks-ass.net>
-References: <20240625032509.4155839-1-gatlin.newhouse@gmail.com>
- <20240625093719.GW31592@noisy.programming.kicks-ass.net>
- <202406261205.E2435C68@keescook>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ja8ThAI3"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1719601029; x=1751137029;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=nBHL9Mhy2PUkr/VGgez2e5viO4TExv4p/2gPVPJvjgI=;
+  b=ja8ThAI3I1Ob80LOD5NyMA55GhBjH2nLunRmsrs/tgxWwEXkJIURkuWN
+   IYPfLBeq3R+xF6q6ko+Bc+ZHzg8R96srUuWFP5t9/VcEwAuqDgzSpNknY
+   vI+53OFEYdcfnlkyX5LqwVdbFkpKlwxskdCFmAynT7nx34yQemJIS3Dzi
+   ypgj7/+MrO7xY2fqZ0qRhPUjH7aYqCZSILSRAStud4GxY3NGizIsr52iB
+   yJRJfw+O+sHM5bcYnM70hdqgnb3cu89zsAxuQhRlbhmp1zG4mO327BP6X
+   1unQV846PhJwPUzUP+DUNFmCGEGdLku5CWnI245TpmmRDIaF+Xc8E+vVp
+   w==;
+X-CSE-ConnectionGUID: kJf2CNHtRIO7jIVmEORcVQ==
+X-CSE-MsgGUID: ZRmoA8v2RHChlwv52A0DiQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11117"; a="16471637"
+X-IronPort-AV: E=Sophos;i="6.09,170,1716274800"; 
+   d="scan'208";a="16471637"
+Received: from fmviesa002.fm.intel.com ([10.60.135.142])
+  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jun 2024 11:57:08 -0700
+X-CSE-ConnectionGUID: EQqKlcWBSNiA9FLsk7Q6bQ==
+X-CSE-MsgGUID: h/9eI9YHTLWcq69FfPTWpA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.09,170,1716274800"; 
+   d="scan'208";a="68017751"
+Received: from lkp-server01.sh.intel.com (HELO 68891e0c336b) ([10.239.97.150])
+  by fmviesa002.fm.intel.com with ESMTP; 28 Jun 2024 11:57:06 -0700
+Received: from kbuild by 68891e0c336b with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1sNGmO-000Hqp-0V;
+	Fri, 28 Jun 2024 18:57:04 +0000
+Date: Sat, 29 Jun 2024 02:56:20 +0800
+From: kernel test robot <lkp@intel.com>
+To: Christian Brauner <brauner@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Christian Brauner <christianvanbrauner@gmail.com>,
+	Jeff Layton <jlayton@kernel.org>,
+	Josef Bacik <josef@toxicpanda.com>,
+	Alexander Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>
+Subject: [brauner-vfs:vfs.nsfs.2024-06-28 4/5] fs/nsfs.c:96:19: error: use of
+ undeclared identifier '__free_path_put'
+Message-ID: <202406290204.8DT6lYeX-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -70,71 +65,76 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <202406261205.E2435C68@keescook>
 
-On Wed, Jun 26, 2024 at 12:07:52PM -0700, Kees Cook wrote:
-> On Tue, Jun 25, 2024 at 11:37:19AM +0200, Peter Zijlstra wrote:
-> > Also, wouldn't it be saner to write this something like:
-> > 
-> > __always_inline int decode_bug(unsigned long addr, u32 *imm)
-> > {
-> > 	u8 v;
-> > 
-> > 	if (addr < TASK_SIZE)
-> > 		return BUG_NONE;
-> > 
-> > 	v = *(u8 *)(addr++);
-> > 	if (v == 0x67)
-> > 		v = *(u8 *)(addr++);
-> > 	if (v != 0x0f)
-> > 		return BUG_NONE;
-> > 	v = *(u8 *)(addr++);
-> > 	if (v == 0x0b)
-> > 		return BUG_UD2;
-> > 	if (v != 0xb9)
-> > 		return BUG_NONE;
-> > 
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/vfs/vfs.git vfs.nsfs.2024-06-28
+head:   1cbcd0fbb586ed09ba76dfb4e65cab2bcaec7e5e
+commit: 4cf9ee1f184ddc959556337a53075a3b824f3642 [4/5] nsfs: add open_namespace()
+config: s390-allnoconfig (https://download.01.org/0day-ci/archive/20240629/202406290204.8DT6lYeX-lkp@intel.com/config)
+compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project 326ba38a991250a8587a399a260b0f7af2c9166a)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240629/202406290204.8DT6lYeX-lkp@intel.com/reproduce)
 
-Looks like I lost:
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202406290204.8DT6lYeX-lkp@intel.com/
 
-	v = *(u8 *)(addr++);
-> > 	if (X86_MODRM_RM(v) == 4)
-> > 		addr++; /* consume SiB */
-> > 
-> > 	*imm = 0;
-> > 	if (X86_MODRM_MOD(v) == 1)
-> > 		*imm = *(u8 *)addr;
-> > 	if (X86_MORRM_MOD(v) == 2)
-> > 		*imm = *(u32 *)addr;
-> > 
-> > 	// WARN on MOD(v)==3 ??
-> > 
-> > 	return BUG_UD1;
-> > }
-> 
-> Thanks for the example! (I think it should use macros instead of
-> open-coded "0x67", "0x0f", etc, but yeah.)
+All errors (new ones prefixed by >>):
 
-Yeah, I didn't feel like hunting down pre-existing defines for all of
-them, but yeah.
+   In file included from fs/nsfs.c:3:
+   In file included from include/linux/pseudo_fs.h:4:
+   In file included from include/linux/fs_context.h:14:
+   In file included from include/linux/security.h:33:
+   In file included from include/linux/mm.h:2253:
+   include/linux/vmstat.h:514:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     514 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+>> fs/nsfs.c:96:19: error: use of undeclared identifier '__free_path_put'
+      96 |         struct path path __free(path_put) = {};
+         |                          ^
+   include/linux/cleanup.h:64:33: note: expanded from macro '__free'
+      64 | #define __free(_name)   __cleanup(__free_##_name)
+         |                                   ^
+   <scratch space>:28:1: note: expanded from here
+      28 | __free_path_put
+         | ^
+   1 warning and 1 error generated.
 
-> > Why does the thing emit the asop prefix at all through? afaict it
-> > doesn't affect the immediate you want to get at. And if it does this
-> > prefix, should we worry about other prefixes? Ideally we'd not accept
-> > any prefixes.
-> 
-> AFAICT it's because it's a small immediate? For an x86_64 build, this is
-> how Clang is generating the UD1.
 
-So the disp8 immediate comes from MOD==1, MOD==2 has a disp32. What the
-prefix does is change the size of the memory being referenced from 32bit
-to 16bit iirc, but since UD does not actually perform the load, this is
-entirely superfluous afaict.
+vim +/__free_path_put +96 fs/nsfs.c
 
-It might be good to figure out *why* clang thinks it needs this.
+    85	
+    86	/**
+    87	 * open_namespace - open a namespace
+    88	 * @ns: the namespace to open
+    89	 *
+    90	 * This will consume a reference to @ns indendent of success or failure.
+    91	 *
+    92	 * Return: A file descriptor on success or a negative error code on failure.
+    93	 */
+    94	int open_namespace(struct ns_common *ns)
+    95	{
+  > 96		struct path path __free(path_put) = {};
+    97		struct file *f;
+    98		int err;
+    99	
+   100		/* call first to consume reference */
+   101		err = path_from_stashed(&ns->stashed, nsfs_mnt, ns, &path);
+   102		if (err < 0)
+   103			return err;
+   104	
+   105		CLASS(get_unused_fd, fd)(O_CLOEXEC);
+   106		if (fd < 0)
+   107			return fd;
+   108	
+   109		f = dentry_open(&path, O_RDONLY, current_cred());
+   110		if (IS_ERR(f))
+   111			return PTR_ERR(f);
+   112	
+   113		fd_install(fd, f);
+   114		return take_fd(fd);
+   115	}
+   116	
 
-A REX prefix is far more likely to be useful (upper 8 destination
-register for instance).
-
-Anyway, it seems to basically boil down to needing a fairly complete
-instruction decoder without being able the use the normal one :/
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
