@@ -1,133 +1,106 @@
-Received: from mail-wr1-f44.google.com (mail-wr1-f44.google.com [209.85.221.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F48E1BF307
-	for <llvm@lists.linux.dev>; Fri, 28 Jun 2024 14:25:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3392EB645;
+	Fri, 28 Jun 2024 14:31:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719584722; cv=none; b=U4m4/Fd36JT+PNaaWjXz/HTEsdoBLzy9gxlkaoxxeiTbK1VnHn+ovnU9dfjqNLJaB3/xsc+ECD1KlryfNU5gMHucxWImB7HjY3/f1s+32zcFHWipS3crYkOVEU6u5XPsMHfh3KI0KKZabz7uFPeXDSePdJ+JjCEofDOGr1xpF0M=
+	t=1719585109; cv=none; b=igBodQ38fYTlxemps/Ane5E3zwakmnfY0YnF7dOnVmEvrxy/4qVZu+BkaLoJdT4dzjjnyjgk2iA8zV03L1T7Aix6p+OLd8V/A8LIWdZ9W9aisNHWE2861gZduwFxA96+8ELHSfaObf4l9iJt/wWpzaVXWajVG6LaBYFkL2rUCVE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719584722; c=relaxed/simple;
-	bh=Zo4QNEftC90ngAD8RC20T2f2OvX59Lz7ga6iZJ6sNfw=;
-	h=From:Message-ID:Date:MIME-Version:Subject:To:Cc:References:
-	 In-Reply-To:Content-Type; b=auVS3xpKsHxuWBu1d/VATDJR3btW6kKpiHGkcw1+UWgbRXB86h0g8IOliG1nylu82ok9oxqZExZbakyYwScnsbSl7Rs+AM3h+BaKHd9Qtx01vqGDj1mZdAgJOwWSgSo4XEGHcMd0x9qOTZvsUaAyzIknH31igfVeTWdPkk9JCaM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HAkLPnnT; arc=none smtp.client-ip=209.85.221.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1719585109; c=relaxed/simple;
+	bh=Mn07VvKw7mIUWBJQd1Z/D4eKm3Eed4gC7mHD2nA7nZk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=sqk/lJBF/lHJgDQFMcyAzNPBK6P/hPxXxFqY1i0NWUAyZ7Ek4Mgai+1Macp+1pAeFIIGGGylArMsGR8c06LrSowUQCvsZew1UmSKTpHRsCKsza2PM0JetR5KKJkEpHHOPKeIzxVujY6BQhe4hjoi2XSBsJjiDILlfFTEr7GGsVk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=uYw4G9Hc; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HAkLPnnT"
-Received: by mail-wr1-f44.google.com with SMTP id ffacd0b85a97d-3651ee582cfso392814f8f.2
-        for <llvm@lists.linux.dev>; Fri, 28 Jun 2024 07:25:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1719584718; x=1720189518; darn=lists.linux.dev;
-        h=content-transfer-encoding:in-reply-to:organization:content-language
-         :references:cc:to:subject:reply-to:user-agent:mime-version:date
-         :message-id:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=VeAwXuF7+pmymrZyPiqRkGCZGiMSVwcLFpTO8NXP0nk=;
-        b=HAkLPnnTUkMaSIeDMAFPHRLJdrJsiJLPW8/xZPZBSpzLgPJcmoN9t8yt6CAqsrUHy8
-         CiPIRtm0UW0nhFnIIN2GMg2Dp4caQNdLWA5m+EzDjerQ1ybuHN2ksFvgiuD8BdKfuDCd
-         ipOuPr1eZXGjKiJ9x6ngpJuCE7FaXjexzzpJ8TTBnaPhdtoR+Bn6cD8JYFOKkTeyDe0Y
-         k65qo4b2X2rcCufxxRzXkQt+TGYiEVeIITwTSR/BwLfMAEMl/n++5EdhRirneQiw0do0
-         xOKp41EhA31o00mlTmz6dmpQoMVfskhUYVWyChG/ocjgLlzkIP+IzP5hKQGtT+oiOtSg
-         nVJQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1719584718; x=1720189518;
-        h=content-transfer-encoding:in-reply-to:organization:content-language
-         :references:cc:to:subject:reply-to:user-agent:mime-version:date
-         :message-id:from:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=VeAwXuF7+pmymrZyPiqRkGCZGiMSVwcLFpTO8NXP0nk=;
-        b=sRdozV2R1mHDqpk8datG+KTYSNhnD7hhT9owM3bfTMneWp2ANQnz7RuAVWSNF5nxAK
-         xxMPKex6w1B9P7SEG39gG4ylI1D79TtKdTCdxACQPiVDLKxobzkBhiebndOZPYQVXbAr
-         a8Eg2yagmgx9C54icnNjyKkPQ/Nyv4QWvrRGYVFRgh9bE+OeXSqJy4rKzXI6RAmoU/BE
-         LYd8nvCZSgdpSUNQIeD23yqoVxL3LzHnIuG9EqdIy0OGoC5ddlLxhZJgGM/HUt+IRUEw
-         3YRQ7Pr2yIy2d1zHX9jiD5n5JC9AnZJQSALlJN+3Z5jfqOZan009vywtlERYg/+ewszh
-         X3PA==
-X-Forwarded-Encrypted: i=1; AJvYcCX/gwV1S3GvVcvyw4BYLMJYD1JulBZPyJjRJcgGObm5H/6Y8P8Ixh6kljVwcCJ3XYtMhDhtZeY3C9dYY8Q8xNDXNn3GjA==
-X-Gm-Message-State: AOJu0Yz6Q9zm9tXLEGdsXAarC84IATPEMTP1a2FLAE/2dvgTcXPIW0NW
-	R6xrBgtATqQKDI0IKDS3N/nmWP5tKeCFGlmfJ09l65SDrwSF/vdK
-X-Google-Smtp-Source: AGHT+IFTYNRmuabn1FZnyKG4Uik1w/ofEuzazYAzcKR3V8UFSfbfjagdPNoyM0oNWquKxkwJrJckjg==
-X-Received: by 2002:adf:f782:0:b0:35f:2725:7ae2 with SMTP id ffacd0b85a97d-366e9628e80mr11865862f8f.57.1719584718199;
-        Fri, 28 Jun 2024 07:25:18 -0700 (PDT)
-Received: from [10.95.168.202] (54-240-197-235.amazon.com. [54.240.197.235])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3675a0d8d9fsm2458985f8f.26.2024.06.28.07.25.16
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 28 Jun 2024 07:25:17 -0700 (PDT)
-From: Paul Durrant <xadimgnik@gmail.com>
-X-Google-Original-From: Paul Durrant <paul@xen.org>
-Message-ID: <4e25df0e-000c-4af7-a34f-ba831623aab8@xen.org>
-Date: Fri, 28 Jun 2024 15:25:15 +0100
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="uYw4G9Hc"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1ED4CC116B1;
+	Fri, 28 Jun 2024 14:31:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1719585108;
+	bh=Mn07VvKw7mIUWBJQd1Z/D4eKm3Eed4gC7mHD2nA7nZk=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=uYw4G9Hc3xl4Vbt5ovsjvHdfoWUMxAGwl/Zzp0n2pPdqpH8YO5F6EWeTv41FRhZ2D
+	 5vD7GRu20BwWsvfZBCUuFngSUpRC5lBulPDRO1LoFjE7MQjA6SkqtF0GhCltcp9773
+	 tlPPV/G1DC/LOqOYrL508bdEsxVfHV2ljqpz3yyE=
+Date: Fri, 28 Jun 2024 16:31:46 +0200
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To: Kees Cook <kees@kernel.org>
+Cc: Jiri Slaby <jirislaby@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	"Gustavo A. R. Silva" <gustavoars@kernel.org>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>, linux-serial@vger.kernel.org,
+	imx@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
+	linux-hardening@vger.kernel.org, llvm@lists.linux.dev,
+	patches@lists.linux.dev, stable@vger.kernel.org
+Subject: Re: [PATCH] tty: mxser: Remove __counted_by from mxser_board.ports[]
+Message-ID: <2024062800-doodle-pelvis-4798@gregkh>
+References: <20240529-drop-counted-by-ports-mxser-board-v1-1-0ab217f4da6d@kernel.org>
+ <202406271009.4E90DF8@keescook>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Reply-To: paul@xen.org
-Subject: Re: [PATCH v2] kvm: Fix warning in__kvm_gpc_refresh
-To: Pei Li <peili.dev@gmail.com>, David Woodhouse <dwmw2@infradead.org>,
- Sean Christopherson <seanjc@google.com>, Paolo Bonzini
- <pbonzini@redhat.com>, Thomas Gleixner <tglx@linutronix.de>,
- Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
- Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
- "H. Peter Anvin" <hpa@zytor.com>, Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling
- <morbo@google.com>, Justin Stitt <justinstitt@google.com>
-Cc: kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
- skhan@linuxfoundation.org, linux-kernel-mentees@lists.linuxfoundation.org,
- syzkaller-bugs@googlegroups.com, llvm@lists.linux.dev,
- syzbot+fd555292a1da3180fc82@syzkaller.appspotmail.com
-References: <20240627-bug5-v2-1-2c63f7ee6739@gmail.com>
-Content-Language: en-US
-Organization: Xen Project
-In-Reply-To: <20240627-bug5-v2-1-2c63f7ee6739@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <202406271009.4E90DF8@keescook>
 
-On 27/06/2024 16:03, Pei Li wrote:
-> Check for invalid hva address stored in data and return -EINVAL before
-> calling into __kvm_gpc_activate().
+On Thu, Jun 27, 2024 at 10:14:05AM -0700, Kees Cook wrote:
+> On Wed, May 29, 2024 at 02:29:42PM -0700, Nathan Chancellor wrote:
+> > Work for __counted_by on generic pointers in structures (not just
+> > flexible array members) has started landing in Clang 19 (current tip of
+> > tree). During the development of this feature, a restriction was added
+> > to __counted_by to prevent the flexible array member's element type from
+> > including a flexible array member itself such as:
+> > 
+> >   struct foo {
+> >     int count;
+> >     char buf[];
+> >   };
+> > 
+> >   struct bar {
+> >     int count;
+> >     struct foo data[] __counted_by(count);
+> >   };
+> > 
+> > because the size of data cannot be calculated with the standard array
+> > size formula:
+> > 
+> >   sizeof(struct foo) * count
+> > 
+> > This restriction was downgraded to a warning but due to CONFIG_WERROR,
+> > it can still break the build. The application of __counted_by on the
+> > ports member of 'struct mxser_board' triggers this restriction,
+> > resulting in:
+> > 
+> >   drivers/tty/mxser.c:291:2: error: 'counted_by' should not be applied to an array with element of unknown size because 'struct mxser_port' is a struct type with a flexible array member. This will be an error in a future compiler version [-Werror,-Wbounds-safety-counted-by-elt-type-unknown-size]
+> >     291 |         struct mxser_port ports[] __counted_by(nports);
+> >         |         ^~~~~~~~~~~~~~~~~~~~~~~~~
+> >   1 error generated.
+> > 
+> > Remove this use of __counted_by to fix the warning/error. However,
+> > rather than remove it altogether, leave it commented, as it may be
+> > possible to support this in future compiler releases.
+> > 
+> > Cc: stable@vger.kernel.org
+> > Closes: https://github.com/ClangBuiltLinux/linux/issues/2026
+> > Fixes: f34907ecca71 ("mxser: Annotate struct mxser_board with __counted_by")
+> > Signed-off-by: Nathan Chancellor <nathan@kernel.org>
 > 
-> Reported-by: syzbot+fd555292a1da3180fc82@syzkaller.appspotmail.com
-> Closes: https://syzkaller.appspot.com/bug?extid=fd555292a1da3180fc82
-> Tested-by: syzbot+fd555292a1da3180fc82@syzkaller.appspotmail.com
-> Signed-off-by: Pei Li <peili.dev@gmail.com>
-> ---
-> Syzbot reports a warning message in __kvm_gpc_refresh(). This warning
-> requires at least one of gpa and uhva to be valid.
-> WARNING: CPU: 0 PID: 5090 at arch/x86/kvm/../../../virt/kvm/pfncache.c:259 __kvm_gpc_refresh+0xf17/0x1090 arch/x86/kvm/../../../virt/kvm/pfncache.c:259
+> Since this fixes a build issue under Clang, can we please land this so
+> v6.7 and later will build again? Gustavo is still working on the more
+> complete fix (which was already on his radar, so it won't be lost).
 > 
-> We are calling it from kvm_gpc_activate_hva(). This function always calls
-> __kvm_gpc_activate() with INVALID_GPA. Thus, uhva must be valid to
-> disable this warning.
-> 
-> This patch checks for invalid hva address and return -EINVAL before
-> calling __kvm_gpc_activate().
-> 
-> syzbot has tested the proposed patch and the reproducer did not trigger
-> any issue.
-> 
-> Tested on:
-> 
-> commit:         afcd4813 Merge tag 'mm-hotfixes-stable-2024-06-26-17-2..
-> git tree:       upstream
-> console output: https://syzkaller.appspot.com/x/log.txt?x=1427e301980000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=e40800950091403a
-> dashboard link: https://syzkaller.appspot.com/bug?extid=fd555292a1da3180fc82
-> compiler:       Debian clang version 15.0.6, GNU ld (GNU Binutils for Debian) 2.40
-> patch:          https://syzkaller.appspot.com/x/patch.diff?x=13838f3e980000
-> 
-> Note: testing is done by a robot and is best-effort only.
-> ---
-> Changes in v2:
-> - Adapted Sean's suggestion to check for valid address before calling
->    into __kvm_gpc_activate().
-> - Link to v1: https://lore.kernel.org/r/20240625-bug5-v1-1-e072ed5fce85@gmail.com
-> ---
->   arch/x86/kvm/xen.c  | 2 +-
->   virt/kvm/pfncache.c | 3 +++
->   2 files changed, 4 insertions(+), 1 deletion(-)
+> If it's easier/helpful, I can land this via the hardening tree? I was
+> the one who sent the bad patch originally. :)
 > 
 
-Reviewed-by: Paul Durrant <paul@xen.org>
+I don't see this in my queue anywhere, sorry, can you resend it?  Or
+feel free to take it through your trees, no objection from me there.
+
+thanks,
+
+greg k-h
