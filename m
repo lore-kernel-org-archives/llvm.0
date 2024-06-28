@@ -1,229 +1,154 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
+Received: from omta36.uswest2.a.cloudfilter.net (omta36.uswest2.a.cloudfilter.net [35.89.44.35])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C9891C6A4;
-	Fri, 28 Jun 2024 02:13:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3279C1862C
+	for <llvm@lists.linux.dev>; Fri, 28 Jun 2024 02:51:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=35.89.44.35
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719540805; cv=none; b=ANJZUuJnI1ph1yZfwr0aFZHjH3iODC0JnZqm58nGCoftBvgHox+UlRO7UQKKbSNWihjxrELWiEBza6c1YPN3Xi540RyD2NvWCU9v3zTjx4zlWrWae9NVH0H9aRpTbs6oKyP77dc+oMi0CimQ3Yb1he2lSkV7bU2goeePwE+1QM4=
+	t=1719543099; cv=none; b=tlKfu0b9Umnm0oiASFc/akEqwySK6tsviqdlADzAFbA3OadbmG3Mw2AEWuNWcB8x9vkztwwmHlgggj1EnI2h/R6mf0naQNq8kBAsX61cFss0GOTrt0gFnMERtGTkAHRqLyocpoNx0veDjkN/qFbbJA8Kd+e+SXw4OJSqm4vCmBE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719540805; c=relaxed/simple;
-	bh=obqsFiB7moqSeHvfW5MvPa6iwrDiRwuIwVJo+bxnyTE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=dHAeAoFLgnH+VCSKf/j6ZiL8DA2qYGddQ1OQGRgnxuuPFGMBOGbpyId/6L+W9NVU8tqQYXxxQ0jEMzFrs7LDiVOaSmnmyZMUqaN919Kci+oXZ9yLL3LQWnxmrI7uq3d4VFlknyUHEUX4gUxa9oA/6xG8fbL3+01yjNFM468yTRU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Zm16U8C0; arc=none smtp.client-ip=198.175.65.20
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1719543099; c=relaxed/simple;
+	bh=khjubVaOAxvuDngZUIjd9rj1xxZGvg6ZvVt20JfCRyY=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=ZC+TPornwT5GyyfHJY9Qk6Mhh+QvB8Z+eLY/N6rNd/oPJes4lU5U3nwJ0w1H8HkR6e5TiuONNbgZlfUQhOykURCjZw7IPjlERdqk2doBBjbjQaxDPwQSt8RCFbpeyeogcRSwMBVU2UH4pIA7FP07UdtqoOh3LzIP4B11NrzknVY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=embeddedor.com; spf=pass smtp.mailfrom=embeddedor.com; dkim=pass (2048-bit key) header.d=embeddedor.com header.i=@embeddedor.com header.b=VrcU1cKb; arc=none smtp.client-ip=35.89.44.35
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=embeddedor.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=embeddedor.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Zm16U8C0"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1719540804; x=1751076804;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=obqsFiB7moqSeHvfW5MvPa6iwrDiRwuIwVJo+bxnyTE=;
-  b=Zm16U8C0MEB8XwvPsuvHlfcKt5Hhs7FECS2JvRJw+Ye+fkt9OUkS2Y+S
-   hjPprj4ViNzNxeAHSme+p7kGvQw1c1ESmqSlbn1bBxdpmH8LPfUVnZPC+
-   g/4J68kHyleV541xF/2UB3drbqe6/PgIIL0znFqh4ouuF2QE4rgUs5+6H
-   1VdIpoegqBz/dyXCt+fBd8m6R6uRcy4SKcIMcpChBF8KWU8bH4mqgPBXT
-   MfmgIPOnsalqLM1QRA43z9ndHSZPDcgDV1OLb37NWMsaC713WtqUgSACT
-   ijYRMAXYWCgaLUFHMnIukHoKKDA3SO13Vt7QzAETSa2ex02Srqe6XbRli
-   A==;
-X-CSE-ConnectionGUID: fJjbinqDReOgn1Tb8MdrFA==
-X-CSE-MsgGUID: hdEDpu4uSu24QDUyJKkZow==
-X-IronPort-AV: E=McAfee;i="6700,10204,11116"; a="16528823"
-X-IronPort-AV: E=Sophos;i="6.09,167,1716274800"; 
-   d="scan'208";a="16528823"
-Received: from orviesa006.jf.intel.com ([10.64.159.146])
-  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jun 2024 19:13:21 -0700
-X-CSE-ConnectionGUID: pmOPOqgFR+mj/xA3+uz33w==
-X-CSE-MsgGUID: vu/s+JTeTQGDYAeESN28AA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.09,167,1716274800"; 
-   d="scan'208";a="44993946"
-Received: from lkp-server01.sh.intel.com (HELO 68891e0c336b) ([10.239.97.150])
-  by orviesa006.jf.intel.com with ESMTP; 27 Jun 2024 19:13:12 -0700
-Received: from kbuild by 68891e0c336b with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1sN16r-000Gic-2H;
-	Fri, 28 Jun 2024 02:13:09 +0000
-Date: Fri, 28 Jun 2024 10:12:15 +0800
-From: kernel test robot <lkp@intel.com>
-To: Alistair Popple <apopple@nvidia.com>, dan.j.williams@intel.com,
-	vishal.l.verma@intel.com, dave.jiang@intel.com, logang@deltatee.com,
-	bhelgaas@google.com, jack@suse.cz, jgg@ziepe.ca
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	catalin.marinas@arm.com, will@kernel.org, mpe@ellerman.id.au,
-	npiggin@gmail.com, dave.hansen@linux.intel.com, ira.weiny@intel.com,
-	willy@infradead.org, djwong@kernel.org, tytso@mit.edu,
-	linmiaohe@huawei.com, david@redhat.com, peterx@redhat.com,
-	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, linuxppc-dev@lists.ozlabs.org,
-	nvdimm@lists.linux.dev, linux-cxl@vger.kernel.org,
-	linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-	linux-ext4@vger.kernel.org, linux-xfs@vger.kernel.org,
-	jhubbard@nvidia.com
-Subject: Re: [PATCH 13/13] mm: Remove devmap related functions and page table
- bits
-Message-ID: <202406280920.VNwSTzZT-lkp@intel.com>
-References: <47c26640cd85f3db2e0a2796047199bb984d1b3f.1719386613.git-series.apopple@nvidia.com>
+	dkim=pass (2048-bit key) header.d=embeddedor.com header.i=@embeddedor.com header.b="VrcU1cKb"
+Received: from eig-obgw-6002a.ext.cloudfilter.net ([10.0.30.222])
+	by cmsmtp with ESMTPS
+	id Mz23sHYY9JXoqN1hysTP30; Fri, 28 Jun 2024 02:51:30 +0000
+Received: from gator4166.hostgator.com ([108.167.133.22])
+	by cmsmtp with ESMTPS
+	id N1hxsyQ6iiKqRN1hxs7AX5; Fri, 28 Jun 2024 02:51:29 +0000
+X-Authority-Analysis: v=2.4 cv=I9quR8gg c=1 sm=1 tr=0 ts=667e2532
+ a=1YbLdUo/zbTtOZ3uB5T3HA==:117 a=frY+GlAHrI6frpeK1MvySw==:17
+ a=IkcTkHD0fZMA:10 a=T1WGqf2p2xoA:10 a=wYkD_t78qR0A:10 a=VwQbUJbxAAAA:8
+ a=NEAV23lmAAAA:8 a=_Wotqz80AAAA:8 a=ijWZ9xZranq7hUifA4EA:9 a=QEXdDO2ut3YA:10
+ a=AjGcO6oz07-iQ99wixmX:22 a=buJP51TR1BpY-zbLSsyS:22
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=embeddedor.com; s=default; h=Content-Transfer-Encoding:Content-Type:
+	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
+	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
+	List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+	bh=rKRBHzZAJa8Y5uaYN9KzLXlsQxprz1t3tpmpYAAPIhA=; b=VrcU1cKb+9PGWke1O9Eg07jCns
+	cEqyuC544UwG5leDIPUCgceMBYSUMRHn9IY1WY5WRoINOFKk0ysi/r30O9AZSsZidOw5RZiGijYJx
+	UuxpvyG4Rx4IBZHnm+Axp5mHRB+6KrIWIrv4uQL3Ti++VdCLPxs9XtRdRleTYZFoVAQHaS++tysuP
+	lm+mHRqfVMrfp6PQac+PwDQlp4cIniJFazfMlVbg9vsHkhOL+zsUaOr9K1WzDQz9ZB2hHMU47r7W0
+	6a4vvOmWKNa2K2CekofNvgNM7wDZvLU6PHbi5zjp/47osjSB0fLMDRNIb/1iWNCoD0UpbmdQCUF7p
+	PlGiuv4Q==;
+Received: from [201.172.173.139] (port=40218 helo=[192.168.15.14])
+	by gator4166.hostgator.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+	(Exim 4.96.2)
+	(envelope-from <gustavo@embeddedor.com>)
+	id 1sN1hv-003DhV-1b;
+	Thu, 27 Jun 2024 21:51:27 -0500
+Message-ID: <4c347ab7-97f6-4e18-9aca-dcb48e8fc75a@embeddedor.com>
+Date: Thu, 27 Jun 2024 20:51:23 -0600
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <47c26640cd85f3db2e0a2796047199bb984d1b3f.1719386613.git-series.apopple@nvidia.com>
-
-Hi Alistair,
-
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on f2661062f16b2de5d7b6a5c42a9a5c96326b8454]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Alistair-Popple/mm-gup-c-Remove-redundant-check-for-PCI-P2PDMA-page/20240627-191709
-base:   f2661062f16b2de5d7b6a5c42a9a5c96326b8454
-patch link:    https://lore.kernel.org/r/47c26640cd85f3db2e0a2796047199bb984d1b3f.1719386613.git-series.apopple%40nvidia.com
-patch subject: [PATCH 13/13] mm: Remove devmap related functions and page table bits
-config: powerpc-allyesconfig (https://download.01.org/0day-ci/archive/20240628/202406280920.VNwSTzZT-lkp@intel.com/config)
-compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project 326ba38a991250a8587a399a260b0f7af2c9166a)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240628/202406280920.VNwSTzZT-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202406280920.VNwSTzZT-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
-   In file included from arch/powerpc/kernel/asm-offsets.c:12:
-   In file included from include/linux/compat.h:14:
-   In file included from include/linux/sem.h:5:
-   In file included from include/uapi/linux/sem.h:5:
-   In file included from include/linux/ipc.h:7:
-   In file included from include/linux/rhashtable-types.h:12:
-   In file included from include/linux/alloc_tag.h:11:
-   In file included from include/linux/preempt.h:79:
-   In file included from ./arch/powerpc/include/generated/asm/preempt.h:1:
-   In file included from include/asm-generic/preempt.h:5:
-   In file included from include/linux/thread_info.h:23:
-   In file included from arch/powerpc/include/asm/current.h:13:
-   In file included from arch/powerpc/include/asm/paca.h:18:
-   In file included from arch/powerpc/include/asm/mmu.h:385:
-   In file included from arch/powerpc/include/asm/book3s/64/mmu.h:32:
-   In file included from arch/powerpc/include/asm/book3s/64/mmu-hash.h:20:
->> arch/powerpc/include/asm/book3s/64/pgtable.h:1371:1: error: extraneous closing brace ('}')
-    1371 | }
-         | ^
-   In file included from arch/powerpc/kernel/asm-offsets.c:12:
-   In file included from include/linux/compat.h:17:
-   In file included from include/linux/fs.h:33:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:98:11: warning: array index 3 is past the end of the array (that has type 'unsigned long[1]') [-Warray-bounds]
-      98 |                 return (set->sig[3] | set->sig[2] |
-         |                         ^        ~
-   arch/powerpc/include/uapi/asm/signal.h:18:2: note: array 'sig' declared here
-      18 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   In file included from arch/powerpc/kernel/asm-offsets.c:12:
-   In file included from include/linux/compat.h:17:
-   In file included from include/linux/fs.h:33:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:98:25: warning: array index 2 is past the end of the array (that has type 'unsigned long[1]') [-Warray-bounds]
-      98 |                 return (set->sig[3] | set->sig[2] |
-         |                                       ^        ~
-   arch/powerpc/include/uapi/asm/signal.h:18:2: note: array 'sig' declared here
-      18 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   In file included from arch/powerpc/kernel/asm-offsets.c:12:
-   In file included from include/linux/compat.h:17:
-   In file included from include/linux/fs.h:33:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:99:4: warning: array index 1 is past the end of the array (that has type 'unsigned long[1]') [-Warray-bounds]
-      99 |                         set->sig[1] | set->sig[0]) == 0;
-         |                         ^        ~
-   arch/powerpc/include/uapi/asm/signal.h:18:2: note: array 'sig' declared here
-      18 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   In file included from arch/powerpc/kernel/asm-offsets.c:12:
-   In file included from include/linux/compat.h:17:
-   In file included from include/linux/fs.h:33:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:101:11: warning: array index 1 is past the end of the array (that has type 'unsigned long[1]') [-Warray-bounds]
-     101 |                 return (set->sig[1] | set->sig[0]) == 0;
-         |                         ^        ~
-   arch/powerpc/include/uapi/asm/signal.h:18:2: note: array 'sig' declared here
-      18 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   In file included from arch/powerpc/kernel/asm-offsets.c:12:
-   In file included from include/linux/compat.h:17:
-   In file included from include/linux/fs.h:33:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:114:11: warning: array index 3 is past the end of the array (that has type 'const unsigned long[1]') [-Warray-bounds]
-     114 |                 return  (set1->sig[3] == set2->sig[3]) &&
-         |                          ^         ~
-   arch/powerpc/include/uapi/asm/signal.h:18:2: note: array 'sig' declared here
-      18 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   In file included from arch/powerpc/kernel/asm-offsets.c:12:
-   In file included from include/linux/compat.h:17:
-   In file included from include/linux/fs.h:33:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:114:27: warning: array index 3 is past the end of the array (that has type 'const unsigned long[1]') [-Warray-bounds]
-     114 |                 return  (set1->sig[3] == set2->sig[3]) &&
-         |                                          ^         ~
-   arch/powerpc/include/uapi/asm/signal.h:18:2: note: array 'sig' declared here
-      18 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   In file included from arch/powerpc/kernel/asm-offsets.c:12:
-   In file included from include/linux/compat.h:17:
-   In file included from include/linux/fs.h:33:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:115:5: warning: array index 2 is past the end of the array (that has type 'const unsigned long[1]') [-Warray-bounds]
-     115 |                         (set1->sig[2] == set2->sig[2]) &&
-         |                          ^         ~
-   arch/powerpc/include/uapi/asm/signal.h:18:2: note: array 'sig' declared here
-      18 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   In file included from arch/powerpc/kernel/asm-offsets.c:12:
-   In file included from include/linux/compat.h:17:
-   In file included from include/linux/fs.h:33:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:115:21: warning: array index 2 is past the end of the array (that has type 'const unsigned long[1]') [-Warray-bounds]
-     115 |                         (set1->sig[2] == set2->sig[2]) &&
-         |                                          ^         ~
-   arch/powerpc/include/uapi/asm/signal.h:18:2: note: array 'sig' declared here
-      18 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   In file included from arch/powerpc/kernel/asm-offsets.c:12:
-   In file included from include/linux/compat.h:17:
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] tty: mxser: Remove __counted_by from mxser_board.ports[]
+To: Kees Cook <kees@kernel.org>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Jiri Slaby <jirislaby@kernel.org>, Nathan Chancellor <nathan@kernel.org>,
+ "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+ Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
+ linux-serial@vger.kernel.org, imx@lists.linux.dev,
+ linux-arm-kernel@lists.infradead.org, linux-hardening@vger.kernel.org,
+ llvm@lists.linux.dev, patches@lists.linux.dev, stable@vger.kernel.org
+References: <20240529-drop-counted-by-ports-mxser-board-v1-1-0ab217f4da6d@kernel.org>
+ <202406271009.4E90DF8@keescook>
+Content-Language: en-US
+From: "Gustavo A. R. Silva" <gustavo@embeddedor.com>
+In-Reply-To: <202406271009.4E90DF8@keescook>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - gator4166.hostgator.com
+X-AntiAbuse: Original Domain - lists.linux.dev
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - embeddedor.com
+X-BWhitelist: no
+X-Source-IP: 201.172.173.139
+X-Source-L: No
+X-Exim-ID: 1sN1hv-003DhV-1b
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: ([192.168.15.14]) [201.172.173.139]:40218
+X-Source-Auth: gustavo@embeddedor.com
+X-Email-Count: 3
+X-Org: HG=hgshared;ORG=hostgator;
+X-Source-Cap: Z3V6aWRpbmU7Z3V6aWRpbmU7Z2F0b3I0MTY2Lmhvc3RnYXRvci5jb20=
+X-Local-Domain: yes
+X-CMAE-Envelope: MS4xfHIKPmsIoRWQ88ZD9VHUNg0HTRJmjyLQj/aB2F7tVs7FN+SIGj+t4YSYwy0E/iqIudAzvTZt7wxMrlHBw3Gc92w3R3Y4ZTZrrskH0ryfxcyKemcWXGLU
+ jOhx/TRtCIMLU0WQkPa52UZbncf9uMQvFMrzGHNfOCQmrf+/HppUDiUaa8x0jcEU0DSJL79XJl9d68pBhOhMvCM4M1U+X2CCbbM=
 
 
-vim +1371 arch/powerpc/include/asm/book3s/64/pgtable.h
 
-953c66c2b22a30 Aneesh Kumar K.V  2016-12-12  1370  
-ebd31197931d75 Oliver O'Halloran 2017-06-28 @1371  }
-6a1ea36260f69f Aneesh Kumar K.V  2016-04-29  1372  #endif /* CONFIG_TRANSPARENT_HUGEPAGE */
-ebd31197931d75 Oliver O'Halloran 2017-06-28  1373  
+On 27/06/24 11:14, Kees Cook wrote:
+> On Wed, May 29, 2024 at 02:29:42PM -0700, Nathan Chancellor wrote:
+>> Work for __counted_by on generic pointers in structures (not just
+>> flexible array members) has started landing in Clang 19 (current tip of
+>> tree). During the development of this feature, a restriction was added
+>> to __counted_by to prevent the flexible array member's element type from
+>> including a flexible array member itself such as:
+>>
+>>    struct foo {
+>>      int count;
+>>      char buf[];
+>>    };
+>>
+>>    struct bar {
+>>      int count;
+>>      struct foo data[] __counted_by(count);
+>>    };
+>>
+>> because the size of data cannot be calculated with the standard array
+>> size formula:
+>>
+>>    sizeof(struct foo) * count
+>>
+>> This restriction was downgraded to a warning but due to CONFIG_WERROR,
+>> it can still break the build. The application of __counted_by on the
+>> ports member of 'struct mxser_board' triggers this restriction,
+>> resulting in:
+>>
+>>    drivers/tty/mxser.c:291:2: error: 'counted_by' should not be applied to an array with element of unknown size because 'struct mxser_port' is a struct type with a flexible array member. This will be an error in a future compiler version [-Werror,-Wbounds-safety-counted-by-elt-type-unknown-size]
+>>      291 |         struct mxser_port ports[] __counted_by(nports);
+>>          |         ^~~~~~~~~~~~~~~~~~~~~~~~~
+>>    1 error generated.
+>>
+>> Remove this use of __counted_by to fix the warning/error. However,
+>> rather than remove it altogether, leave it commented, as it may be
+>> possible to support this in future compiler releases.
+>>
+>> Cc: stable@vger.kernel.org
+>> Closes: https://github.com/ClangBuiltLinux/linux/issues/2026
+>> Fixes: f34907ecca71 ("mxser: Annotate struct mxser_board with __counted_by")
+>> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+> 
+> Since this fixes a build issue under Clang, can we please land this so
+> v6.7 and later will build again? Gustavo is still working on the more
+> complete fix (which was already on his radar, so it won't be lost).
+> 
+> If it's easier/helpful, I can land this via the hardening tree? I was
+> the one who sent the bad patch originally. :)
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
++1 (It'd be great if you take it.)
+
+Also, it'd be great if somebody can confirm this is an acceptable fix
+for the issue:
+
+https://lore.kernel.org/linux-hardening/c80e41e6-793e-4311-8e15-f5eda91e723e@embeddedor.com/
+
+Thanks
+--
+Gustavo
