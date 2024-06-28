@@ -1,107 +1,140 @@
-Received: from mail-oa1-f54.google.com (mail-oa1-f54.google.com [209.85.160.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 743BD158DA8
-	for <llvm@lists.linux.dev>; Fri, 28 Jun 2024 11:48:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 220F91BF329;
+	Fri, 28 Jun 2024 14:18:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719575320; cv=none; b=YIU6noU9XU8Ibjjhvql1bUFmvTnNYhkiUtBNe3lrH2ZA0Sxk6zkzxX8Kr2N59gEqvZHS5L11FLZgQh9jvYH8e+rSe92IgfKTINm92xDxeU1v8tmqFqKbd0iblCoAXQwLpeO4QoMIjnauiK8g1LcXeFE7gfsSu941t47ZcRDoSOs=
+	t=1719584305; cv=none; b=aJ6rImR5omx8KDRNjNyqY0zyYHR5JEg9vEiOXEp9wHV2a9LiQoINT6tCqG0abI5gkLo3G77m6ReJ4JYyhrjyUFvfohdjekGk/IBDT0SqGd8tIk50Twf6v6jGLuyPxxVMGslPVgG0KTfLLswK8RxBtnOQ+ZgOxAUbsMwz33gyqVA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719575320; c=relaxed/simple;
-	bh=EqvmK9erXdF03YXwNF5KKlTIlFwBGkwfT2afCjCPw2M=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=eyTpo1hKz3vljSDv3Zzgpht44lCvG8tB0XcWv0zLYp0wDmIK56Tt8PnOwFwJOCFguu2KfadDi25m29fSsAHju3+2zPocjkZg4L7JtvAvEtSJhEdm/r/FhbWRTHFGGpTSAp4NIpRS+Stuol3PsuamQkV8jtYVJxb0HdJi+gdhJU0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sifive.com; spf=pass smtp.mailfrom=sifive.com; dkim=pass (2048-bit key) header.d=sifive.com header.i=@sifive.com header.b=WBuNKjaf; arc=none smtp.client-ip=209.85.160.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sifive.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sifive.com
+	s=arc-20240116; t=1719584305; c=relaxed/simple;
+	bh=1YJJG5D7+u3FmINigAy0zveGXvWefge1uVMDVisu0LA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=eDZCvvfKSsUrFpSMT5ujkGjeIO66726nZ21DZ3S7ggDs9EJ4luxX6+RPfawDACZNbq9FdckPtv3OpAJBDuIyKKgg49OrQE9o2lJflxOOKhNvVjmtQ+kg+jjAWxQYpHaa1YIx5vdpDHsLzcsu+ibtaGGaUv4Sk1uOjUkluu70jQE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Ad6qjDNx; arc=none smtp.client-ip=198.175.65.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sifive.com header.i=@sifive.com header.b="WBuNKjaf"
-Received: by mail-oa1-f54.google.com with SMTP id 586e51a60fabf-25d584e9fe6so280916fac.1
-        for <llvm@lists.linux.dev>; Fri, 28 Jun 2024 04:48:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=sifive.com; s=google; t=1719575318; x=1720180118; darn=lists.linux.dev;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=cVz6x8zHD2e0o5+zukG3kv+msINNXHhJ2RLc+xaoywE=;
-        b=WBuNKjafF0u3d28OyrGeRdZ9LnNlp/rSp0MTmP05Nvoch4o5FOftr08Fm7cwuSun6T
-         gM5/IBaAwqGMCdO9zZ9VipxW0AiDPePWKx+FdPbRgLHfUFm04QlArXxm+CjAeOShE8G0
-         Yq00/rRAhz/n1qBgLRG9/mkvHWhyifmyovNkeFIA7MdWxSZ/sVpjUTdRoR7UuPfrFtAE
-         mE7f9ZSKLDR1ddwOCVDRpIMP4XpwhFkng0Rc0+sOJ9JZOX6LI/xiGYISQCvKPQB99hFT
-         G3R7APTZ9QDUBWvhusJBGM1TRwVbty8XO1dYcLgcIGf40ytvigmfl1U9Jy2BCIXDHy19
-         HPkQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1719575318; x=1720180118;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=cVz6x8zHD2e0o5+zukG3kv+msINNXHhJ2RLc+xaoywE=;
-        b=hNS/VMxbJCyCXDQ3V58Lmoq5nP+QI08VfD1yiu9fQNmZCehLj+jfLhr4tQRWQ//ljv
-         7bt3rft8x54L32kI6q7031qYyf+G2xelctXj53LJL2p+imlfbXFFaHB3aRUqJI667MNq
-         RSykYXWkjwjr8HoICdSl9K8YOUNlmaQjP+/TEJ0NGp4W+UJMe8BwiMG/hY2oAWFMPBZO
-         rny/CPbq7iHYTJP7bmw1oImAmw3V9YAAb3BrR7vTVBBWZvIl+YdPnAMZfTJIdcB8Lg3n
-         80TZgVtmkIyRsuGToLsFd9vet69h88PsptZklajS1Vb1fVugrGcrliK6RauBxZ82eKez
-         ZKuQ==
-X-Forwarded-Encrypted: i=1; AJvYcCX2tTtAJl9kd+NtE7SyXN5HuJgzDFxnXH1OzKh3iRPQY+osyhuAxyGziuiHR/tuomyYX4SlMGb5otuvwC7i/dMFOjVAjA==
-X-Gm-Message-State: AOJu0Ywf/bnp3PsiK43xkuJZ6pSuX1DaPr42jrFhZd/f5xivQah4tiqS
-	8b5DsOHvWfDpeUwb/ybmGz9oW6bI3CYWAkde8SbK4OS/vBaGcqSJCPwv+AnNIeNfwVIgtMLmNuS
-	v
-X-Google-Smtp-Source: AGHT+IFOBKDdLVvGH5/U1B4nvMFkuWHQzKcK9o5xnO1lPmAh4a3+NRC7pmcUXvg9Bib/B2yboEQX6w==
-X-Received: by 2002:a05:6871:3a11:b0:259:8671:2530 with SMTP id 586e51a60fabf-25d06c5118bmr17606779fac.25.1719575318592;
-        Fri, 28 Jun 2024 04:48:38 -0700 (PDT)
-Received: from [127.0.1.1] (59-124-168-89.hinet-ip.hinet.net. [59.124.168.89])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-70803ecfb90sm1377775b3a.139.2024.06.28.04.48.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 28 Jun 2024 04:48:38 -0700 (PDT)
-From: Andy Chiu <andy.chiu@sifive.com>
-Date: Fri, 28 Jun 2024 19:47:49 +0800
-Subject: [PATCH v2 6/6] riscv: ftrace: support PREEMPT
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Ad6qjDNx"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1719584304; x=1751120304;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=1YJJG5D7+u3FmINigAy0zveGXvWefge1uVMDVisu0LA=;
+  b=Ad6qjDNxpal7S3KHAIrlX3e4oSC9+4TQjCB2xuQPZ/5baULH0y0vXgW+
+   f1Vsn5qnDUKOQ+z0I+S6SYlCX1muj6CQISoV2gTjG2o1RWSw19QKxC3Dh
+   qQJzMGWsMNWQ+Z88bgQBvXnNuiVGC4WzKJhAHokonli6UvuYeeMQuby+q
+   0zN1At3sjv9rj5eWGWWUhMGBQnwaApCEIovjw2hoSvtaEYU16EYxrEX3h
+   oMTviqADa8cfMt8F6c12+V4ybUTE9JtWB60/ZePpGMrKLkmR5L68f+19V
+   MLUYQUjK04LV0PmPSo4M2VjjoXZqRE/8Qg2Urq1qONWWP0MF/r3oYbXMW
+   g==;
+X-CSE-ConnectionGUID: E3iQfcoZQ46LYyiUyTyONw==
+X-CSE-MsgGUID: Onw6zGiOQ96He4ueOcEGUg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11117"; a="34212461"
+X-IronPort-AV: E=Sophos;i="6.09,169,1716274800"; 
+   d="scan'208";a="34212461"
+Received: from fmviesa009.fm.intel.com ([10.60.135.149])
+  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jun 2024 07:18:22 -0700
+X-CSE-ConnectionGUID: FyBt4nggTt2iWY7Wx6F2yQ==
+X-CSE-MsgGUID: Gu4d2bXORkC1ryhkIQX7Vg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.09,169,1716274800"; 
+   d="scan'208";a="44806973"
+Received: from lkp-server01.sh.intel.com (HELO 68891e0c336b) ([10.239.97.150])
+  by fmviesa009.fm.intel.com with ESMTP; 28 Jun 2024 07:18:19 -0700
+Received: from kbuild by 68891e0c336b with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1sNCQb-000HCA-1A;
+	Fri, 28 Jun 2024 14:18:17 +0000
+Date: Fri, 28 Jun 2024 22:17:51 +0800
+From: kernel test robot <lkp@intel.com>
+To: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: Re: [PATCH 2/2] drm/connector: automatically set immutable flag for
+ max_bpc property
+Message-ID: <202406282224.4sie1QiJ-lkp@intel.com>
+References: <20240623-drm-bridge-connector-fix-hdmi-reset-v1-2-41e9894dcdec@linaro.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20240628-dev-andyc-dyn-ftrace-v4-v2-6-1e5f4cb1f049@sifive.com>
-References: <20240628-dev-andyc-dyn-ftrace-v4-v2-0-1e5f4cb1f049@sifive.com>
-In-Reply-To: <20240628-dev-andyc-dyn-ftrace-v4-v2-0-1e5f4cb1f049@sifive.com>
-To: Paul Walmsley <paul.walmsley@sifive.com>, 
- Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, 
- Alexandre Ghiti <alexghiti@rivosinc.com>, Zong Li <zong.li@sifive.com>, 
- Steven Rostedt <rostedt@goodmis.org>, 
- Masami Hiramatsu <mhiramat@kernel.org>, Mark Rutland <mark.rutland@arm.com>, 
- Nathan Chancellor <nathan@kernel.org>, 
- Nick Desaulniers <ndesaulniers@google.com>, 
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
- Puranjay Mohan <puranjay@kernel.org>
-Cc: Palmer Dabbelt <palmer@rivosinc.com>, linux-riscv@lists.infradead.org, 
- linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
- llvm@lists.linux.dev, Andy Chiu <andy.chiu@sifive.com>
-X-Mailer: b4 0.12.4
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240623-drm-bridge-connector-fix-hdmi-reset-v1-2-41e9894dcdec@linaro.org>
 
-Now, we can safely enable dynamic ftrace with kernel preemption.
+Hi Dmitry,
 
-Signed-off-by: Andy Chiu <andy.chiu@sifive.com>
----
- arch/riscv/Kconfig | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+kernel test robot noticed the following build warnings:
 
-diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
-index 55c70efbad0a..881ea466ff52 100644
---- a/arch/riscv/Kconfig
-+++ b/arch/riscv/Kconfig
-@@ -139,7 +139,7 @@ config RISCV
- 	select HAVE_FTRACE_MCOUNT_RECORD if !XIP_KERNEL
- 	select HAVE_FUNCTION_GRAPH_TRACER
- 	select HAVE_FUNCTION_GRAPH_RETVAL if HAVE_FUNCTION_GRAPH_TRACER
--	select HAVE_FUNCTION_TRACER if !XIP_KERNEL && !PREEMPTION
-+	select HAVE_FUNCTION_TRACER if !XIP_KERNEL
- 	select HAVE_EBPF_JIT if MMU
- 	select HAVE_GUP_FAST if MMU
- 	select HAVE_FUNCTION_ARG_ACCESS_API
+[auto build test WARNING on 2102cb0d050d34d50b9642a3a50861787527e922]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Dmitry-Baryshkov/drm-bridge-connector-reset-the-HDMI-connector-state/20240626-024615
+base:   2102cb0d050d34d50b9642a3a50861787527e922
+patch link:    https://lore.kernel.org/r/20240623-drm-bridge-connector-fix-hdmi-reset-v1-2-41e9894dcdec%40linaro.org
+patch subject: [PATCH 2/2] drm/connector: automatically set immutable flag for max_bpc property
+config: i386-randconfig-003-20240628 (https://download.01.org/0day-ci/archive/20240628/202406282224.4sie1QiJ-lkp@intel.com/config)
+compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240628/202406282224.4sie1QiJ-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202406282224.4sie1QiJ-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/gpu/drm/drm_connector.c:2613:7: warning: variable 'flags' set but not used [-Wunused-but-set-variable]
+    2613 |                 u32 flags = 0;
+         |                     ^
+   1 warning generated.
+
+
+vim +/flags +2613 drivers/gpu/drm/drm_connector.c
+
+  2593	
+  2594	/**
+  2595	 * drm_connector_attach_max_bpc_property - attach "max bpc" property
+  2596	 * @connector: connector to attach max bpc property on.
+  2597	 * @min: The minimum bit depth supported by the connector.
+  2598	 * @max: The maximum bit depth supported by the connector.
+  2599	 *
+  2600	 * This is used to add support for limiting the bit depth on a connector.
+  2601	 *
+  2602	 * Returns:
+  2603	 * Zero on success, negative errno on failure.
+  2604	 */
+  2605	int drm_connector_attach_max_bpc_property(struct drm_connector *connector,
+  2606						  int min, int max)
+  2607	{
+  2608		struct drm_device *dev = connector->dev;
+  2609		struct drm_property *prop;
+  2610	
+  2611		prop = connector->max_bpc_property;
+  2612		if (!prop) {
+> 2613			u32 flags = 0;
+  2614	
+  2615			if (min == max)
+  2616				flags |= DRM_MODE_PROP_IMMUTABLE;
+  2617	
+  2618			prop = drm_property_create_range(dev, 0, "max bpc", min, max);
+  2619			if (!prop)
+  2620				return -ENOMEM;
+  2621	
+  2622			connector->max_bpc_property = prop;
+  2623		}
+  2624	
+  2625		drm_object_attach_property(&connector->base, prop, max);
+  2626		connector->state->max_requested_bpc = max;
+  2627		connector->state->max_bpc = max;
+  2628	
+  2629		return 0;
+  2630	}
+  2631	EXPORT_SYMBOL(drm_connector_attach_max_bpc_property);
+  2632	
 
 -- 
-2.43.0
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
