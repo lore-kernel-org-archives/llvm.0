@@ -1,102 +1,100 @@
-Received: from mail-ed1-f45.google.com (mail-ed1-f45.google.com [209.85.208.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 267941C8FC2
-	for <llvm@lists.linux.dev>; Tue,  2 Jul 2024 18:49:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 71AA9129E93;
+	Tue,  2 Jul 2024 19:09:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.69.126.157
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719946200; cv=none; b=LTzy+Ro9JccbPXAF047tP9RvMheMS4Ou6Z/jwCW/AnT8tTNI1/TsAyZvkGxx8sem7Z57aSisr9Uqha8KIkzqYTplEqKBk69Tcymx6EcyffD5jodR2R9phDEhh6/ajMpKdW4DWR1xCPJfe0HCoFlGEM+DE0Gyt7vVpwhzpl8cR4s=
+	t=1719947388; cv=none; b=M8SRIwl0yqV4qjvhOgTRkdvwkN7DX5Of6ApmUtjpM5b99dLw0x8PKGZdHg85+sjwnW63xCTMYA9TzunwOnfJzbwBnB6yrVvIA7Xdqwc31Vjq5UlrlGE9xAgq2f7IC6nwUJ+5zJde1hb3kwDUJyqmvbjwjZ95xWJnCPtveCBaHjw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719946200; c=relaxed/simple;
-	bh=wBCH0RGXQscHQNhVbPuJToAcNW1ub3XjfpU3YyPq5Pg=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=ar/9OMnFSeIEptFpHN/9vkO7MAc72gWyErFmOJTi7pFBfEsb76bTrMFCc5d4PvqwNyOQ5C0kkAbJkA86WxWi0nbUtWXLsUUMHioxlPkWWo5iuWdxetSIfUySxFHumRWrhxSR6n6y1oqSXsSVFZkEKWpnPp+RkpGLxzS+8BPLeHU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=JFbdb5AV; arc=none smtp.client-ip=209.85.208.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	s=arc-20240116; t=1719947388; c=relaxed/simple;
+	bh=yoJGjYSz4OqNu58CzNDNVNoOs+cu1lvky6yS4xaj54Q=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=QPEy76VcIbkC10iJjTaVniLblyHC8OJLzfWfnA7E8Zog4v4Knzgp9Zwg/eI4qdYjDTsSVdzGf1f32aj7DDmZ03Ri8cYUN/uvfMX2Fv0XpOfoZDPy9gn25GJZAKceC3FV1Ov0sN2InowBffPmm0zg1HShHcgF8OdzjgdzxNQZkxw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=TbW7yWji; arc=none smtp.client-ip=159.69.126.157
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=weissschuh.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="JFbdb5AV"
-Received: by mail-ed1-f45.google.com with SMTP id 4fb4d7f45d1cf-58c0abd6b35so2778a12.0
-        for <llvm@lists.linux.dev>; Tue, 02 Jul 2024 11:49:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1719946197; x=1720550997; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=wBCH0RGXQscHQNhVbPuJToAcNW1ub3XjfpU3YyPq5Pg=;
-        b=JFbdb5AVm/GQjK9+yhuOYXb5fbgFIq83D/70txpugBgKJHc6GTMUqNNxZRg88omLU9
-         Is4aoQ223lCkBtDnExrKUtbpoRwmXm3RR9LhTptWvzokEkxZgDxYPTEaBS0fUjGdWl21
-         Tw3SwHXW2Inqoh7HlVLZYPpwgGrlaE5lf5wAm0dMH5Ee22zWsfYEPTWGmPMvTZN8ytGm
-         i8gG9iUkKOHjzG92Wc2/yJO77NkIlVLCSsj3Fp2gKlmtMRBUD73+3lWIQ3RCjkJ1elkA
-         dBdLP8MeCJpql9RWW9ViLufUQkU2momPgKlV3dAyhKm8ssdyjKWY59uhxX8SDGNMRWXt
-         HRIQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1719946197; x=1720550997;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=wBCH0RGXQscHQNhVbPuJToAcNW1ub3XjfpU3YyPq5Pg=;
-        b=cEnhJhTShoQ1adUFy5ZugGTv3VO1yXeYv7pjaU7bmBbzS2hBG6wfYijqyXnip7ZkaA
-         dtsxR6mfEC2AYnc6ctc/a85Ihw7P+eS7J4JOqg1MbeZfeFZfDn33xzWb0pSz3x+N+0ij
-         +kJg1lMW+oCvHgFhXzvIjbnvrsGzlNB6CIb5Rsu14f4Y3benKT2AVCBvZxPyREmQ3SUm
-         pBAKNZuSjs8GwjFVVoVkEOQ88s6NmDfwrMZQn/RAkZ1QICRz9oFR3LpPYS1LMcIAmG8G
-         brMZwVoSxHZt7pD0GWk52ADDd9vmGgwe6e84/ur9bmp34vGbOn1AFv5G1x0ZR1Umas3j
-         CGtA==
-X-Forwarded-Encrypted: i=1; AJvYcCVxy78CdEhZTn5jAGoe3LzUhd2Yv9gY6NmQpmPNPc+i2OMeeYgiuuCOXeZDKHrEemoRD9khQ+a8Z/HoUOn48Qb+TmLBQA==
-X-Gm-Message-State: AOJu0Yznp3XDf/ZI29FshH1E3mQ9uaSVGVKZugTYALuhow10oWGQnQwJ
-	qPvNA7uFYWVUNkW6USLD0dQPpujwki0wNIZW398jqSL5s8ncQAqqIcl9cmFtqdWUh0eWh1nd1Gy
-	c6cUGiF3o5w/j+Mv8fcXwTd36CGoooMx7Lzoc
-X-Google-Smtp-Source: AGHT+IEXouaVIvQZ1bo2Efta4GbpBxhXnzrZmhgd0nFm/uUDODI5B9UrHV01kVC3BKPp2wNuFauI52mbQ00Tz1Bob00=
-X-Received: by 2002:a50:9e2c:0:b0:57d:436b:68d6 with SMTP id
- 4fb4d7f45d1cf-58c9891046cmr17632a12.7.1719946197278; Tue, 02 Jul 2024
- 11:49:57 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="TbW7yWji"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
+	s=mail; t=1719947382;
+	bh=yoJGjYSz4OqNu58CzNDNVNoOs+cu1lvky6yS4xaj54Q=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=TbW7yWjisbGtI68gpn9U6dR9u5puJYC687+psWSUcnUMzcv1icgRIHZTvUn2MMmzj
+	 l8vZa7+QoT3zCy/jbDDygkhaGEllRHwL+BgGedvSFmBNjKp++7AWUWhImgVoZPbENh
+	 G9nGnl7CTgGwceqhbDXyTmDYFF0wL0Q+hJlu7ysY=
+Date: Tue, 2 Jul 2024 21:09:42 +0200
+From: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <thomas@weissschuh.net>
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: Tzung-Bi Shih <tzungbi@kernel.org>, Benson Leung <bleung@chromium.org>, 
+	Guenter Roeck <groeck@chromium.org>, Sebastian Reichel <sre@kernel.org>, 
+	chrome-platform@lists.linux.dev, linux-pm@vger.kernel.org, llvm@lists.linux.dev, 
+	patches@lists.linux.dev
+Subject: Re: [PATCH] power: supply: cros_charge-control: Avoid accessing
+ attributes out of bounds
+Message-ID: <63208f3f-7d10-4126-b94b-f03887cf20d1@t-8ch.de>
+References: <20240702-cros_charge-control-fix-clang-array-bounds-warning-v1-1-ae04d995cd1d@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20240614233105.265009-1-jhubbard@nvidia.com> <20240614233105.265009-2-jhubbard@nvidia.com>
- <CAG4es9WQOOga8Oh9BOjr_JXy5gcUzVN0iTtfjN_HVdRj7_G7iQ@mail.gmail.com> <b4720a40-6e74-4b1d-93ca-a3444e400a1a@nvidia.com>
-In-Reply-To: <b4720a40-6e74-4b1d-93ca-a3444e400a1a@nvidia.com>
-From: Edward Liaw <edliaw@google.com>
-Date: Tue, 2 Jul 2024 11:49:31 -0700
-Message-ID: <CAG4es9V4EiVBi08X7xNrEpCd5eUum1-5DrYV7+52BB=OP_4DKA@mail.gmail.com>
-Subject: Re: [PATCH v3 1/3] selftests/vDSO: fix clang build errors and warnings
-To: John Hubbard <jhubbard@nvidia.com>
-Cc: Shuah Khan <shuah@kernel.org>, "Jason A . Donenfeld" <Jason@zx2c4.com>, Andy Lutomirski <luto@kernel.org>, 
-	Mark Brown <broonie@kernel.org>, Vincenzo Frascino <vincenzo.frascino@arm.com>, 
-	Colin Ian King <colin.i.king@gmail.com>, Valentin Obst <kernel@valentinobst.de>, 
-	linux-kselftest@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>, 
-	llvm@lists.linux.dev, Carlos Llamas <cmllamas@google.com>, 
-	Muhammad Usama Anjum <usama.anjum@collabora.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20240702-cros_charge-control-fix-clang-array-bounds-warning-v1-1-ae04d995cd1d@kernel.org>
 
-On Tue, Jul 2, 2024 at 11:26=E2=80=AFAM John Hubbard <jhubbard@nvidia.com> =
-wrote:
->
-> On 7/2/24 11:12 AM, Edward Liaw wrote:
-> > On Fri, Jun 14, 2024 at 4:31=E2=80=AFPM John Hubbard <jhubbard@nvidia.c=
-om> wrote:
-> ...
-> > Hi John,
-> > Could you try re-submitting this series with the RESEND prefix?
-> >
-> > Thanks,
-> > Edward
->
-> Sure. Is that the key, for kselftests? Because I've got 5+ small
-> patchsets that are languishing there, and I'm at a loss for how to even
-> get a response, much less get something merged.
+Hi Nathan,
 
-I don't really know, but it was suggested to me that it can help to
-point out that the patch might have been missed before.
+Thanks!
 
->
->
-> thanks,
-> --
-> John Hubbard
-> NVIDIA
->
+On 2024-07-02 07:48:48+0000, Nathan Chancellor wrote:
+> Clang warns (or errors with CONFIG_WERROR=y):
+> 
+>   drivers/power/supply/cros_charge-control.c:319:2: error: array index 3 is past the end of the array (that has type 'struct attribute *[3]') [-Werror,-Warray-bounds]
+>     319 |         priv->attributes[_CROS_CHCTL_ATTR_COUNT] = NULL;
+>         |         ^                ~~~~~~~~~~~~~~~~~~~~~~
+>   drivers/power/supply/cros_charge-control.c:49:2: note: array 'attributes' declared here
+>      49 |         struct attribute *attributes[_CROS_CHCTL_ATTR_COUNT];
+>         |         ^
+>   1 error generated.
+> 
+> In earlier revisions of the driver, the attributes array in
+> cros_chctl_priv had four elements with four distinct assignments but
+> during review, the number of elements was changed to three through use
+> of an enum and the assignments became a for loop, except for this one,
+> which is now out of bounds. This assignment is no longer necessary
+> because the size of the attributes array no longer accounts for it, so
+> just remove it to clear up the warning.
+> 
+> Fixes: c6ed48ef5259 ("power: supply: add ChromeOS EC based charge control driver")
+> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+
+Acked-by: Thomas Weißschuh <linux@weissschuh.net>
+
+> ---
+>  drivers/power/supply/cros_charge-control.c | 1 -
+>  1 file changed, 1 deletion(-)
+> 
+> diff --git a/drivers/power/supply/cros_charge-control.c b/drivers/power/supply/cros_charge-control.c
+> index 73d7f2dc0fa3..2dd8ddbd56bc 100644
+> --- a/drivers/power/supply/cros_charge-control.c
+> +++ b/drivers/power/supply/cros_charge-control.c
+> @@ -316,7 +316,6 @@ static int cros_chctl_probe(struct platform_device *pdev)
+>  		sysfs_attr_init(&priv->device_attrs[i].attr);
+>  		priv->attributes[i] = &priv->device_attrs[i].attr;
+>  	}
+> -	priv->attributes[_CROS_CHCTL_ATTR_COUNT] = NULL;
+>  	priv->group.is_visible = cros_chtl_attr_is_visible;
+>  	priv->group.attrs = priv->attributes;
+>  
+> 
+> ---
+> base-commit: 3664706e875f84bd4e3fa25ed1c6e46934cb32cd
+> change-id: 20240702-cros_charge-control-fix-clang-array-bounds-warning-b84fd0f642a0
+> 
+> Best regards,
+> -- 
+> Nathan Chancellor <nathan@kernel.org>
+> 
