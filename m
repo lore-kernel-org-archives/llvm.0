@@ -1,102 +1,98 @@
-Received: from out198-29.us.a.mail.aliyun.com (out198-29.us.a.mail.aliyun.com [47.90.198.29])
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 914F2182DA;
-	Tue,  2 Jul 2024 03:57:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=47.90.198.29
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C6C9D22F14
+	for <llvm@lists.linux.dev>; Tue,  2 Jul 2024 04:19:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.255
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719892634; cv=none; b=R2u6QQnSjDgZ/Vc2ILLXUiMEPzTvjVw78Heg6EP+GH5SIHydShm7FUtAXITMzWAgIZ8rL97N19MXpYDLhJg5L0EF2+IAIa2yWwwTS2ASOw9jIuylpoUMNEjlvzDxgqAhh/sih8QvxlAsEGw3L4TyBBm7CsfPBUomCAWQ7pWgWNQ=
+	t=1719893942; cv=none; b=UmgvQ1kK2HYOT5Kg/ynWFSZyqt3ZOAELM70lpur/fk9AyXmSfhHe8ZzOuBroLMr6dRXNbj7IKgQiqtxIW85KFo8AMNi/0sQwvfTTwBHjfziOyIPYU4zjY4Ntkrtq4TNrZo0Usu1fQKmTf+QHMEKfvOx1pgctMuu4GvSSCqFSPec=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719892634; c=relaxed/simple;
-	bh=6L//tL6snjw3XG6uDl5X7hVQvPpkjw9I6A6kHOsg5kM=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=ByksYzm9veOOzSOwR7s4C4j3IhkUd/7ZopVa6+Cdlrgi5tHkcjw/JR7RHu9StK1rceo+RU7biEEi42chX+anCW2jGbsO0k43EFHpMRSylddq959ElfOhALDuWqHd4bk4xr8uQVIdTeZ6VRbZqfXTJutFO18Cn4Ddo6W/SsmUfA8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ttyinfo.com; spf=pass smtp.mailfrom=ttyinfo.com; arc=none smtp.client-ip=47.90.198.29
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ttyinfo.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ttyinfo.com
-X-Alimail-AntiSpam:AC=CONTINUE;BC=0.1156118|-1;CH=green;DM=|CONTINUE|false|;DS=CONTINUE|ham_regular_dialog|0.0117572-0.00035777-0.987885;FP=0|0|0|0|0|-1|-1|-1;HT=maildocker-contentspam033037088118;MF=zhoushengqing@ttyinfo.com;NM=1;PH=DS;RN=7;RT=7;SR=0;TI=SMTPD_---.YEnuEv._1719892611;
-Received: from tzl..(mailfrom:zhoushengqing@ttyinfo.com fp:SMTPD_---.YEnuEv._1719892611)
-          by smtp.aliyun-inc.com;
-          Tue, 02 Jul 2024 11:56:52 +0800
-From: Zhou Shengqing <zhoushengqing@ttyinfo.com>
-To: helgaas@kernel.org
-Cc: linux-kernel@vger.kernel.org,
-	linux-pci@vger.kernel.org,
-	lkp@intel.com,
-	llvm@lists.linux.dev,
-	oe-kbuild-all@lists.linux.dev,
-	zhoushengqing@ttyinfo.com
-Subject: [PATCH v4] Subject: PCI: Enable io space 1k granularity for intel cpu root port
-Date: Tue,  2 Jul 2024 03:56:49 +0000
-Message-Id: <20240702035649.26039-1-zhoushengqing@ttyinfo.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20240701210656.GA16926@bhelgaas>
-References: <20240701210656.GA16926@bhelgaas>
+	s=arc-20240116; t=1719893942; c=relaxed/simple;
+	bh=B1wopyCB6TwD/11E6lk/IigAXVhadQ1tVMMgoE/cy0g=;
+	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=ZsU0HZ+QOsG7uAdI+1jOmqiJCXKWJ+WUWPf3tVH9w0lx2g2vvAWZ1o+Um+8IsNhDuENMKHQ90CicDL0SwXjoAUt6Mbe6hqFYrbVBE8NBD0OBqn7O47sLhzH5pvcgNNf7zp/ymeT5lmzqDJXCzU8JYkFcStjZRXgq7fgn1I6I95c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.255
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.19.88.105])
+	by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4WCqLC2R2Dz1T4HB;
+	Tue,  2 Jul 2024 12:14:27 +0800 (CST)
+Received: from kwepemd100011.china.huawei.com (unknown [7.221.188.204])
+	by mail.maildlp.com (Postfix) with ESMTPS id F12C114037D;
+	Tue,  2 Jul 2024 12:18:58 +0800 (CST)
+Received: from M910t.huawei.com (10.110.54.157) by
+ kwepemd100011.china.huawei.com (7.221.188.204) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1258.34; Tue, 2 Jul 2024 12:18:57 +0800
+From: Changbin Du <changbin.du@huawei.com>
+To: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>,
+	Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim
+	<namhyung@kernel.org>, Nathan Chancellor <nathan@kernel.org>
+CC: Mark Rutland <mark.rutland@arm.com>, Alexander Shishkin
+	<alexander.shishkin@linux.intel.com>, Jiri Olsa <jolsa@kernel.org>, Ian
+ Rogers <irogers@google.com>, Adrian Hunter <adrian.hunter@intel.com>, "Liang,
+ Kan" <kan.liang@linux.intel.com>, Nick Desaulniers <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
+	<linux-perf-users@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<llvm@lists.linux.dev>, Hui Wang <hw.huiwang@huawei.com>, Changbin Du
+	<changbin.du@huawei.com>
+Subject: [PATCH v5 3/8] perf: disasm: use build_id_path if fallback failed
+Date: Tue, 2 Jul 2024 12:18:32 +0800
+Message-ID: <20240702041837.5306-4-changbin.du@huawei.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20240702041837.5306-1-changbin.du@huawei.com>
+References: <20240702041837.5306-1-changbin.du@huawei.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ kwepemd100011.china.huawei.com (7.221.188.204)
 
-This patch add 1k granularity for intel root port bridge. Intel latest
-server CPU support 1K granularity, And there is an BIOS setup item named
-"EN1K", but linux doesn't support it. if an IIO has 5 IOU (SPR has 5 IOUs)
-all are bifurcated 2x8.In a 2P server system,There are 20 P2P bridges
-present. if keep 4K granularity allocation,it need 20*4=80k io space,
-exceeding 64k. I test it in a 16*nvidia 4090s system under intel eaglestrem
-platform. There are six 4090s that cannot be allocated I/O resources.
-So I applied this patch. And I found a similar implementation in quirks.c,
-but it only targets the Intel P64H2 platform.
+If we can not fallback for special dso (vmlinx and vdso), use the
+build_id_path found previously.
 
-Signed-off-by: Zhou Shengqing <zhoushengqing@ttyinfo.com>
+Signed-off-by: Changbin Du <changbin.du@huawei.com>
 ---
- drivers/pci/quirks.c | 30 ++++++++++++++++++++++++++++++
- 1 file changed, 30 insertions(+)
+ tools/perf/util/disasm.c | 18 ++++++++++++------
+ 1 file changed, 12 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/pci/quirks.c b/drivers/pci/quirks.c
-index 568410e64ce6..f30083d51e15 100644
---- a/drivers/pci/quirks.c
-+++ b/drivers/pci/quirks.c
-@@ -2562,6 +2562,36 @@ static void quirk_p64h2_1k_io(struct pci_dev *dev)
- }
- DECLARE_PCI_FIXUP_HEADER(PCI_VENDOR_ID_INTEL, 0x1460, quirk_p64h2_1k_io);
+diff --git a/tools/perf/util/disasm.c b/tools/perf/util/disasm.c
+index c4ab98c0eaa1..f4e94ff37e50 100644
+--- a/tools/perf/util/disasm.c
++++ b/tools/perf/util/disasm.c
+@@ -1176,15 +1176,21 @@ static int dso__disassemble_filename(struct dso *dso, char *filename, size_t fil
+ 		return fallback_filename(dso, filename, filename_size);
  
-+/* Enable 1k I/O space granularity on the intel root port */
-+static void quirk_intel_rootport_1k_io(struct pci_dev *dev)
-+{
-+	struct pci_dev *d = NULL;
-+	u16 en1k = 0;
-+	struct pci_dev *root_port = pcie_find_root_port(dev);
-+
-+	if (!root_port)
-+		return;
-+
-+	/*
-+	 * Per intel sever CPU EDS vol2(register) spec,
-+	 * Intel Memory Map/Intel VT-d configuration space,
-+	 * IIO MISC Control (IIOMISCCTRL_1_5_0_CFG) — Offset 1C0h
-+	 * bit 2.
-+	 * Enable 1K (EN1K):
-+	 * This bit when set, enables 1K granularity for I/O space decode
-+	 * in each of the virtual P2P bridges
-+	 * corresponding to root ports, and DMI ports.
-+	 */
-+	while ((d = pci_get_device(PCI_VENDOR_ID_INTEL, 0x09a2, d))) {
-+		pci_read_config_word(d, 0x1c0, &en1k);
-+		if (en1k & 0x4) {
-+			pci_info(d, "INTEL: System should support 1k io window\n");
-+			dev->io_window_1k = 1;
-+		}
+ 	if (dso__is_kcore(dso) || dso__is_vdso(dso))
+-		return fallback_filename(dso, filename, filename_size);
++		goto fallback;
+ 
+-	if (read_buildid_linkname(filename, linkname, sizeof(linkname) - 1) ||
+-	    strstr(linkname, DSO__NAME_KALLSYMS) || strstr(linkname, DSO__NAME_VDSO)) {
+-		return fallback_filename(dso, filename, filename_size);
++	if (!read_buildid_linkname(filename, linkname, sizeof(linkname) - 1) &&
++	    (!strstr(linkname, DSO__NAME_KALLSYMS) && !strstr(linkname, DSO__NAME_VDSO))) {
++		/* It's not kallsysms or vdso, use build_id path found above */
++		goto out;
+ 	}
+ 
+-	if (dso__binary_type(dso) == DSO_BINARY_TYPE__NOT_FOUND)
+-		dso__set_binary_type(dso, DSO_BINARY_TYPE__BUILD_ID_CACHE);
++fallback:
++	if (fallback_filename(dso, filename, filename_size)) {
++		/* if fallback failed, use build_id path found above */
++out:
++		if (dso__binary_type(dso) == DSO_BINARY_TYPE__NOT_FOUND)
++			dso__set_binary_type(dso, DSO_BINARY_TYPE__BUILD_ID_CACHE);
 +	}
-+}
-+DECLARE_PCI_FIXUP_HEADER(PCI_VENDOR_ID_INTEL,	PCI_ANY_ID,	quirk_intel_rootport_1k_io);
-+
- /*
-  * Under some circumstances, AER is not linked with extended capabilities.
-  * Force it to be linked by setting the corresponding control bit in the
+ 	return 0;
+ }
+ 
 -- 
-2.39.2
+2.34.1
 
