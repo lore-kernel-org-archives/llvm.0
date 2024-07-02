@@ -1,104 +1,136 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DEF921B583F;
-	Tue,  2 Jul 2024 14:48:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F19A71B51
+	for <llvm@lists.linux.dev>; Tue,  2 Jul 2024 15:13:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719931734; cv=none; b=JfcoQi2+Jip5UrCIldMTS9+Vbm35e27h/ojLThptW4VUSsh/DW8zJ2ph4LhGXd5Hm0i+5g42Oy7l5+SB62C6flENqMzWzlQ+/KLgpvaM74sP96UvYQFbrG5X5gvrC+L6XF7fo3MjzZETPbvQRnY3ScFkssQmGcPhIOJi6R4eujg=
+	t=1719933238; cv=none; b=qwJQOInhGfXlipGaUla9rXnn4iRC0DSdXefsgNdZHFFptKPv/H6pw97zkzOguZr2jJPlt6+49cFAFM+PBuiyr4M8THbA7GcrDXHXuQ6YHNatJjKKWKEUWdzxgUMtjT3al/P4RpDa72vaJwjBO59Lz6roAgFXPoUk0+sp2gXmt9I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719931734; c=relaxed/simple;
-	bh=6nM7P33MSykyTDjnm62rbDQplKtWiymkghofPsMaMPA=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=dpcQxhLXUZ+xHm8VFSYeApTCXgeUnR5uNb7udtsnKCbCpLqCDTu3oCoumTUhh6yVNsn0bkyPY3Nqm3EOFaIptX7kbq6Sai1vxwpUZblzeiLMe4PPFEehrir/DkDAwmXt3dVUYJ42YeetU4kqxJtWXBVDqqxVz3y0YWzw7K0yZcU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=grlDPDnN; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1719933238; c=relaxed/simple;
+	bh=o0DTueSQJo6BAeOLaG9J0Krzi49F0C8LL7J/rYuhz6s=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=jn4ETy5vboZEK8Y5VSXxJEpx0pJNCc7UFR6sDR88yg5Y54MdqwD9RSX7wKYxKXsv8JYfhrKHqUUyje97/gzN+BVfFZP0oR+dBYA5zSl3Qhuao0I+EieH+yw67rA/sv39BsWWmmNw3YwsnAK3ouG/tRhGNrLvm9yv1fT7cYdcIAA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=B0do9GVT; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="grlDPDnN"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ECCE7C116B1;
-	Tue,  2 Jul 2024 14:48:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1719931733;
-	bh=6nM7P33MSykyTDjnm62rbDQplKtWiymkghofPsMaMPA=;
-	h=From:Date:Subject:To:Cc:From;
-	b=grlDPDnNujQAEKfRF0P/1fSNQduOUujHvXT1bZDSV/dvZShvannniXiPSKpTgSbjJ
-	 DEYv0GEF/+eiriFBUjwQ5d7YwjxCOoLyNTTamBFL3JCBLOmxhpF5kR4YnQI3hLxJ+a
-	 752XPRKF2xSaQadJ/xN8GxOcWvztplosmWGBt6BT2EqNeVR1UewveC0G4Ykczn5qym
-	 PnnYexgjtP0d7s1dQFgJEYzu/cmvINn8Ft7LsMZ1bAmq2ihB9aJTMJLDgVCEcSP7Ov
-	 u1OXVJNcoTghUYo+Fciii+qwUbTrOLO+9wi6KX0WZCyAmWhfsrEDM57KSiAISRjazO
-	 Lhv55qIKGXJng==
-From: Nathan Chancellor <nathan@kernel.org>
-Date: Tue, 02 Jul 2024 07:48:48 -0700
-Subject: [PATCH] power: supply: cros_charge-control: Avoid accessing
- attributes out of bounds
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="B0do9GVT"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1719933235;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=GNKWYc4u3+KSmS/mHngSa3z5W2SzjUSyUZscD0Bl7Zg=;
+	b=B0do9GVTtTaSlnU4sX/2dGLxU9tTYggfPk6lzPHcph7P8TXzKMa6sDTysovXK4PhWbt856
+	PhJTPUdc3g0e++mhn0BJ0tHiWYFd+OqkjCJdkahzBHx0fRupr4PFuLrdRbtqMtFTObGH6w
+	hsNq4FxnYDoHdi+f+OErP0XtV8AXAGU=
+Received: from mx-prod-mc-04.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-558-HZc4JzMAOnO32LxGwlbqOA-1; Tue,
+ 02 Jul 2024 11:13:51 -0400
+X-MC-Unique: HZc4JzMAOnO32LxGwlbqOA-1
+Received: from mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.12])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-04.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 62F3C1955E74
+	for <llvm@lists.linux.dev>; Tue,  2 Jul 2024 15:13:50 +0000 (UTC)
+Received: from [172.64.0.79] (unknown [10.30.33.131])
+	by mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 76CB319560AA;
+	Tue,  2 Jul 2024 15:13:49 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL (MISSED 14 of 192): Test report for master
+ (6.10.0-rc6, mainline.kernel.org-clang, 9903efbd)
+Date: Tue, 02 Jul 2024 15:13:49 -0000
+To: bgoncalv@redhat.com, llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.12
+Message-Id: <05734.124070211135104283@us-mta-558.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20240702-cros_charge-control-fix-clang-array-bounds-warning-v1-1-ae04d995cd1d@kernel.org>
-X-B4-Tracking: v=1; b=H4sIAE8ThGYC/x2N2wrCMAyGX2Xk2kAtRcVXEZGuTTUwEkk9jbF3X
- /Dy+48LdDKmDudhAaMPd1Zx2O8GKI8sd0KuzhBDTOEYIhbTfnPL3CoqL9MJG/+wTJ7GbJZnHPU
- tteM3m7CL4ym1GtohxRzAh59G3vifXq7rugEPrgOThAAAAA==
-To: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas@weissschuh.net>, 
- Tzung-Bi Shih <tzungbi@kernel.org>, Benson Leung <bleung@chromium.org>
-Cc: Guenter Roeck <groeck@chromium.org>, Sebastian Reichel <sre@kernel.org>, 
- chrome-platform@lists.linux.dev, linux-pm@vger.kernel.org, 
- llvm@lists.linux.dev, patches@lists.linux.dev, 
- Nathan Chancellor <nathan@kernel.org>
-X-Mailer: b4 0.15-dev
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2030; i=nathan@kernel.org;
- h=from:subject:message-id; bh=6nM7P33MSykyTDjnm62rbDQplKtWiymkghofPsMaMPA=;
- b=owGbwMvMwCUmm602sfCA1DTG02pJDGktwiH/eg+0M804/NP2ArtjWqR867/Gq+1Pl+6IXGc1z
- diJ+/bPjlIWBjEuBlkxRZbqx6rHDQ3nnGW8cWoSzBxWJpAhDFycAjARhVaGf2acfmnxi/M+ePeU
- ZWyvr2Sbuvyxi/r1mE/NL00yhDz+SzAyvOL3bJDUlYirufbaz2BT/8Rligl6UX8YIv9OkZuQ1by
- REwA=
-X-Developer-Key: i=nathan@kernel.org; a=openpgp;
- fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
+Content-Transfer-Encoding: quoted-printable
 
-Clang warns (or errors with CONFIG_WERROR=y):
+Hi, we tested your kernel and here are the results:
 
-  drivers/power/supply/cros_charge-control.c:319:2: error: array index 3 is past the end of the array (that has type 'struct attribute *[3]') [-Werror,-Warray-bounds]
-    319 |         priv->attributes[_CROS_CHCTL_ATTR_COUNT] = NULL;
-        |         ^                ~~~~~~~~~~~~~~~~~~~~~~
-  drivers/power/supply/cros_charge-control.c:49:2: note: array 'attributes' declared here
-     49 |         struct attribute *attributes[_CROS_CHCTL_ATTR_COUNT];
-        |         ^
-  1 error generated.
+    Overall result: FAILED
+             Merge: OK
+           Compile: OK
+              Test: FAILED
 
-In earlier revisions of the driver, the attributes array in
-cros_chctl_priv had four elements with four distinct assignments but
-during review, the number of elements was changed to three through use
-of an enum and the assignments became a for loop, except for this one,
-which is now out of bounds. This assignment is no longer necessary
-because the size of the attributes array no longer accounts for it, so
-just remove it to clear up the warning.
 
-Fixes: c6ed48ef5259 ("power: supply: add ChromeOS EC based charge control driver")
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
----
- drivers/power/supply/cros_charge-control.c | 1 -
- 1 file changed, 1 deletion(-)
+Kernel information:
+    Commit message: Merge tag 'asm-generic-fixes-6.10-2' of git://git.kerne=
+l.org/pub/scm/linux/kernel/git/arnd/asm-generic
 
-diff --git a/drivers/power/supply/cros_charge-control.c b/drivers/power/supply/cros_charge-control.c
-index 73d7f2dc0fa3..2dd8ddbd56bc 100644
---- a/drivers/power/supply/cros_charge-control.c
-+++ b/drivers/power/supply/cros_charge-control.c
-@@ -316,7 +316,6 @@ static int cros_chctl_probe(struct platform_device *pdev)
- 		sysfs_attr_init(&priv->device_attrs[i].attr);
- 		priv->attributes[i] = &priv->device_attrs[i].attr;
- 	}
--	priv->attributes[_CROS_CHCTL_ATTR_COUNT] = NULL;
- 	priv->group.is_visible = cros_chtl_attr_is_visible;
- 	priv->group.attrs = priv->attributes;
- 
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1356168349
 
----
-base-commit: 3664706e875f84bd4e3fa25ed1c6e46934cb32cd
-change-id: 20240702-cros_charge-control-fix-clang-array-bounds-warning-b84fd0f642a0
+One or more kernel tests failed:
+    Unrecognized or new issues:
+        Boot test
+             aarch64
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+redhat:1356168349-aarch64-kernel_upt_4
+                   Non-passing ran subtests:
+                       =E2=9D=8C FAIL distribution/kpkginstall/journalctl-c=
+heck
+        Reboot test
+              x86_64
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+redhat:1356168349-x86_64-kernel_upt_35
+                   Non-passing ran subtests:
+                       =E2=9D=8C FAIL misc/reboot-test/journalctl-check
+             aarch64
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+redhat:1356168349-aarch64-kernel_upt_10
+                   Non-passing ran subtests:
+                       =E2=9D=8C FAIL misc/reboot-test/journalctl-check
 
-Best regards,
--- 
-Nathan Chancellor <nathan@kernel.org>
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1267
+            Affected tests:
+                selinux-policy: serge-testsuite [ppc64le]
+
+
+Tests that were not ran because of internal issues:=20
+    Boot test [s390x]
+    CKI/restraint [s390x]
+    machineinfo [ppc64le, s390x]
+    Reboot test [s390x]
+    SELinux Custom Module Setup [ppc64le, s390x]
+    Storage - blktests - blk - upstream [s390x]
+    Storage - blktests - nvme-tcp - upstream [s390x]
+    Storage - swraid scsi_raid [s390x]
+    stress: stress-ng - cpu-cache [s390x]
+    stress: stress-ng - memory [s390x]
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
 
