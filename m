@@ -1,123 +1,198 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com [209.85.128.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A1EBC1BE849;
-	Tue,  2 Jul 2024 17:43:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5AAE21BB68C
+	for <llvm@lists.linux.dev>; Tue,  2 Jul 2024 18:12:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719942195; cv=none; b=aks5sZG6yuCAkM/7Y1hStPyVsjGZoz86HPbZHgGM2xYo6S/PDUfTDEz9hlwxmZ6lGVNtnZVTE3rhd3PLhmHObl9fELmXFHmFlrAqUpqk21cTbJn8VtgIeMR84CVCSOiS8oCHXv0nOJURair/I7FPJ0vRIcTKNkQBO7BeTzlHtT0=
+	t=1719943963; cv=none; b=p324zsCKuCk5llH4KLuuniCVaczs5bPN0Tb+8VyK3UsZKioHGd/uEIylwD2wcH8lFyXGyD+99unU+uSjEfMthnGxy/CQsJcaQTiBp4v3bMqVLXyk72puOpqU1cZC7zzDbQ+ChX2zNlFFiCOOHDKxMUCIHS5r/4WHgPjBK3TqPAk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719942195; c=relaxed/simple;
-	bh=O7b7qKMxkIfAS7EHP8HjWDosiM650B/nyjHx/9PDK0M=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=lytFgew9wb0pDvqbvtBUNCXu0fvdja8z7l+yvPJwkE5N/H1Vua6N2dQG1ph1oidtsoe290YaDfIi3NV0gQ8Ox6NG/uf9DS8Kbh7N/lqGpPtp47L1adrUq5M42a5zfnwAp0VBbn2m2WuF2J9cz+Cc0CDQjpJzAnmmvluvTOu79eI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=mORdXLFT; arc=none smtp.client-ip=192.198.163.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1719943963; c=relaxed/simple;
+	bh=71JMdtPJKOootxvCEMGdevKLHTSBxHr4nk048+qJMCI=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=KpWQ2M029yOUe2p9AUoYj8SP40zSnniCECxtKV+oGtW/xyX+S8Zqy0cSmRyZxLJlqDKRlbCrp68RNpW+8MdnD6uUC6TnJmLLoY3GspAdyXGQPvP65TDhpTfrd2NiX7ZN/m9i6qlDf42cCNWfA9v9CgHyGcc6UjlcifyfjLhQhCw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=wZo/6xSe; arc=none smtp.client-ip=209.85.128.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="mORdXLFT"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1719942194; x=1751478194;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=O7b7qKMxkIfAS7EHP8HjWDosiM650B/nyjHx/9PDK0M=;
-  b=mORdXLFT8KFTUZglu94cWd/L96qLSnHlwyDRNeldAuDOHj1Kh3SPVyTk
-   UkGvjxmtNbEkWio25WDWlRZSFXzqRhTEalqnrbJiT+caGZCXmEprC0fvD
-   6a0LBha2nLloERhWOWAnuGF0dUJMA8r9LfslIjrtirp3BEefA25jBeoNl
-   N+MnJNoj6gGDDsb73QVpoMlU1wlNtQopWnAabFX3Aj5CSbj9HcW91EI3Z
-   eQPTbKikI4ZXSAeLf0x0ZySE+PmYxlQOmJjB/aWsNzk9bPzgkkPaFfHQJ
-   kdzZMLyPx+/4vX9x3uyaGzJ7VGPTjcjKP4oxtyd5JwhvOQQb4KZY26Us/
-   Q==;
-X-CSE-ConnectionGUID: 6cHGQ9rFQke5nLhRnW9Atg==
-X-CSE-MsgGUID: EYd6mg4hSc+8LDzEG7l3pQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11121"; a="17264335"
-X-IronPort-AV: E=Sophos;i="6.09,178,1716274800"; 
-   d="scan'208";a="17264335"
-Received: from orviesa010.jf.intel.com ([10.64.159.150])
-  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jul 2024 10:43:13 -0700
-X-CSE-ConnectionGUID: TGJ7vm9kRTu6uVfCZss4Ng==
-X-CSE-MsgGUID: M7XCL8v4Ql+4Mt/PcJva9A==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.09,178,1716274800"; 
-   d="scan'208";a="45887625"
-Received: from lkp-server01.sh.intel.com (HELO 68891e0c336b) ([10.239.97.150])
-  by orviesa010.jf.intel.com with ESMTP; 02 Jul 2024 10:43:12 -0700
-Received: from kbuild by 68891e0c336b with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1sOhX3-000OTf-0Z;
-	Tue, 02 Jul 2024 17:43:09 +0000
-Date: Wed, 3 Jul 2024 01:42:10 +0800
-From: kernel test robot <lkp@intel.com>
-To: Qi Zheng <zhengqi.arch@bytedance.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [RFC PATCH 7/7] x86: select ARCH_SUPPORTS_PT_RECLAIM if X86_64
-Message-ID: <202407030101.H0oWNjhx-lkp@intel.com>
-References: <0f3aacc9707da962398de71c127e7771c6798062.1719570849.git.zhengqi.arch@bytedance.com>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="wZo/6xSe"
+Received: by mail-wm1-f53.google.com with SMTP id 5b1f17b1804b1-4257c6eea33so12985e9.0
+        for <llvm@lists.linux.dev>; Tue, 02 Jul 2024 11:12:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1719943960; x=1720548760; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=t9Qvs/xdNpeY7QBD9VeBqFWNEzSHsvYpGEEj0o/6yQY=;
+        b=wZo/6xSenR5IyF8bfpwIx0HFCrYv02FFkdlTRmsz1ms6/WMrvWPWkoougbkl8f/lqs
+         lHb/A5Zp5xC+4rw+PztlZtA9/ToD5Nnhjn5RnjwXmHjmnUV75P7T03ovcwEDtrfDBWiz
+         ea+P3cjTuQoO3/BwpqTdd+qDlL9j1hfpKwGoqzJpj913aTckMl/rVrwEeuFZx3X+D+Kr
+         ifrBPv/S2Zd5eq2se9RK4yVmhpVTSBEvl4ix2fWY94s323daFynS4Scwyl/L6t/jUNjr
+         Uf7/cXz1PzEnZx0cOpaB6RsRHHAdo8wpxvIapPDMD8Ror6S+cwDc9SbxWn+7ww+ovKij
+         IBsw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1719943960; x=1720548760;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=t9Qvs/xdNpeY7QBD9VeBqFWNEzSHsvYpGEEj0o/6yQY=;
+        b=mDkuvLzlMcJ+hozzbTylr50Y3mPPkdYY7+K0Um6rN/xkLl3ms11m7blBZpQ52EGE8u
+         dKm/1fWSpLOQZr9K00z70SksTl0+tUD0VfIckINNyJchVY/cM+Guew6JMR4ISUN1Ljjd
+         yCCsuyXFGUX0m2hr5j5tQZ+rqeNrcw48prLZ530AGduu3xgMsZW3GApoiSJD1LItHMVP
+         EmCb1mlYS+cfJJbDmVZF98Zi1JguxeOsHCaOuTMcA/YwCRf5iHNIngrBonjox4EcYC1S
+         7LkIUrij/ctUxR20zAS1z6qws5FNU0P+lFAvNSPo2kWPdPT9CabwtR83wovTdOajqc3J
+         7YlA==
+X-Forwarded-Encrypted: i=1; AJvYcCVPI5IRGuiahLvf79Uqhw8FKme6V7VUIQS/xIZbvkA4FzVwPQz1NcPxsG6TL/1xhz5DGWyw5rjeiS5DnyeFN1luhSOaag==
+X-Gm-Message-State: AOJu0YxWzOLkqeTvOTe42uaYjuyUWeU0i41tnr9w8DucELyW5DEqR2of
+	6PCzBF4OMFElAZfgVQv2FGPmQGK8187adipO6CG2h8dxHR8tyw0j+zpNFlS4+xkO7Yhu9YfJkio
+	555Tlgxx387nAASY09icP4zf9S3Pg8wBnIoId
+X-Google-Smtp-Source: AGHT+IFcNOGrNsnxiVD/J/AoO7E2rvJBq4MplbsS8y++kB32UStlq8B4Z3ZxGjiOUInZMdjEwmZc2Fv1o3AVHpoxZ10=
+X-Received: by 2002:a05:600c:1c96:b0:424:a58e:31ff with SMTP id
+ 5b1f17b1804b1-426376a5d8dmr187865e9.0.1719943959538; Tue, 02 Jul 2024
+ 11:12:39 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <0f3aacc9707da962398de71c127e7771c6798062.1719570849.git.zhengqi.arch@bytedance.com>
+References: <20240614233105.265009-1-jhubbard@nvidia.com> <20240614233105.265009-2-jhubbard@nvidia.com>
+In-Reply-To: <20240614233105.265009-2-jhubbard@nvidia.com>
+From: Edward Liaw <edliaw@google.com>
+Date: Tue, 2 Jul 2024 11:12:12 -0700
+Message-ID: <CAG4es9WQOOga8Oh9BOjr_JXy5gcUzVN0iTtfjN_HVdRj7_G7iQ@mail.gmail.com>
+Subject: Re: [PATCH v3 1/3] selftests/vDSO: fix clang build errors and warnings
+To: John Hubbard <jhubbard@nvidia.com>
+Cc: Shuah Khan <shuah@kernel.org>, "Jason A . Donenfeld" <Jason@zx2c4.com>, Andy Lutomirski <luto@kernel.org>, 
+	Mark Brown <broonie@kernel.org>, Vincenzo Frascino <vincenzo.frascino@arm.com>, 
+	Colin Ian King <colin.i.king@gmail.com>, Valentin Obst <kernel@valentinobst.de>, 
+	linux-kselftest@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>, 
+	llvm@lists.linux.dev, Carlos Llamas <cmllamas@google.com>, 
+	Muhammad Usama Anjum <usama.anjum@collabora.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Qi,
+On Fri, Jun 14, 2024 at 4:31=E2=80=AFPM John Hubbard <jhubbard@nvidia.com> =
+wrote:
+>
+> When building with clang, via:
+>
+>     make LLVM=3D1 -C tools/testing/selftests
+>
+> ...there are several warnings, and an error. This fixes all of those and
+> allows these tests to run and pass.
+>
+> 1. Fix linker error (undefined reference to memcpy) by providing a local
+>    version of memcpy.
+>
+> 2. clang complains about using this form:
+>
+>     if (g =3D h & 0xf0000000)
+>
+> ...so factor out the assignment into a separate step.
+>
+> 3. The code is passing a signed const char* to elf_hash(), which expects
+>    a const unsigned char *. There are several callers, so fix this at
+>    the source by allowing the function to accept a signed argument, and
+>    then converting to unsigned operations, once inside the function.
+>
+> 4. clang doesn't have __attribute__((externally_visible)) and generates
+>    a warning to that effect. Fortunately, gcc 12 and gcc 13 do not seem
+>    to require that attribute in order to build, run and pass tests here,
+>    so remove it.
+>
+> Reviewed-by: Carlos Llamas <cmllamas@google.com>
+> Reviewed-by: Edward Liaw <edliaw@google.com>
+> Reviewed-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
+> Tested-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
+> Signed-off-by: John Hubbard <jhubbard@nvidia.com>
+> ---
+>  tools/testing/selftests/vDSO/parse_vdso.c      | 16 +++++++++++-----
+>  .../selftests/vDSO/vdso_standalone_test_x86.c  | 18 ++++++++++++++++--
+>  2 files changed, 27 insertions(+), 7 deletions(-)
+>
+> diff --git a/tools/testing/selftests/vDSO/parse_vdso.c b/tools/testing/se=
+lftests/vDSO/parse_vdso.c
+> index 413f75620a35..4ae417372e9e 100644
+> --- a/tools/testing/selftests/vDSO/parse_vdso.c
+> +++ b/tools/testing/selftests/vDSO/parse_vdso.c
+> @@ -55,14 +55,20 @@ static struct vdso_info
+>         ELF(Verdef) *verdef;
+>  } vdso_info;
+>
+> -/* Straight from the ELF specification. */
+> -static unsigned long elf_hash(const unsigned char *name)
+> +/*
+> + * Straight from the ELF specification...and then tweaked slightly, in o=
+rder to
+> + * avoid a few clang warnings.
+> + */
+> +static unsigned long elf_hash(const char *name)
+>  {
+>         unsigned long h =3D 0, g;
+> -       while (*name)
+> +       const unsigned char *uch_name =3D (const unsigned char *)name;
+> +
+> +       while (*uch_name)
+>         {
+> -               h =3D (h << 4) + *name++;
+> -               if (g =3D h & 0xf0000000)
+> +               h =3D (h << 4) + *uch_name++;
+> +               g =3D h & 0xf0000000;
+> +               if (g)
+>                         h ^=3D g >> 24;
+>                 h &=3D ~g;
+>         }
+> diff --git a/tools/testing/selftests/vDSO/vdso_standalone_test_x86.c b/to=
+ols/testing/selftests/vDSO/vdso_standalone_test_x86.c
+> index 8a44ff973ee1..27f6fdf11969 100644
+> --- a/tools/testing/selftests/vDSO/vdso_standalone_test_x86.c
+> +++ b/tools/testing/selftests/vDSO/vdso_standalone_test_x86.c
+> @@ -18,7 +18,7 @@
+>
+>  #include "parse_vdso.h"
+>
+> -/* We need a libc functions... */
+> +/* We need some libc functions... */
+>  int strcmp(const char *a, const char *b)
+>  {
+>         /* This implementation is buggy: it never returns -1. */
+> @@ -34,6 +34,20 @@ int strcmp(const char *a, const char *b)
+>         return 0;
+>  }
+>
+> +/*
+> + * The clang build needs this, although gcc does not.
+> + * Stolen from lib/string.c.
+> + */
+> +void *memcpy(void *dest, const void *src, size_t count)
+> +{
+> +       char *tmp =3D dest;
+> +       const char *s =3D src;
+> +
+> +       while (count--)
+> +               *tmp++ =3D *s++;
+> +       return dest;
+> +}
+> +
+>  /* ...and two syscalls.  This is x86-specific. */
+>  static inline long x86_syscall3(long nr, long a0, long a1, long a2)
+>  {
+> @@ -70,7 +84,7 @@ void to_base10(char *lastdig, time_t n)
+>         }
+>  }
+>
+> -__attribute__((externally_visible)) void c_main(void **stack)
+> +void c_main(void **stack)
+>  {
+>         /* Parse the stack */
+>         long argc =3D (long)*stack;
+> --
+> 2.45.2
+>
 
-[This is a private test report for your RFC patch.]
-kernel test robot noticed the following build errors:
+Hi John,
+Could you try re-submitting this series with the RESEND prefix?
 
-[auto build test ERROR on akpm-mm/mm-everything]
-[also build test ERROR on next-20240702]
-[cannot apply to tip/x86/core linus/master tip/x86/mm v6.10-rc6]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Qi-Zheng/mm-pgtable-make-pte_offset_map_nolock-return-pmdval/20240701-165916
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
-patch link:    https://lore.kernel.org/r/0f3aacc9707da962398de71c127e7771c6798062.1719570849.git.zhengqi.arch%40bytedance.com
-patch subject: [RFC PATCH 7/7] x86: select ARCH_SUPPORTS_PT_RECLAIM if X86_64
-config: x86_64-buildonly-randconfig-002-20240702 (https://download.01.org/0day-ci/archive/20240703/202407030101.H0oWNjhx-lkp@intel.com/config)
-compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240703/202407030101.H0oWNjhx-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202407030101.H0oWNjhx-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> arch/x86/mm/pgtable.c:57:2: error: call to undeclared function 'paravirt_tlb_remove_table'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-      57 |         paravirt_tlb_remove_table(tlb, pte);
-         |         ^
-   arch/x86/mm/pgtable.c:57:2: note: did you mean '__tlb_remove_table'?
-   arch/x86/include/asm/tlb.h:32:20: note: '__tlb_remove_table' declared here
-      32 | static inline void __tlb_remove_table(void *table)
-         |                    ^
-   arch/x86/mm/pgtable.c:73:2: error: call to undeclared function 'paravirt_tlb_remove_table'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-      73 |         paravirt_tlb_remove_table(tlb, ptdesc_page(ptdesc));
-         |         ^
-   arch/x86/mm/pgtable.c:83:2: error: call to undeclared function 'paravirt_tlb_remove_table'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-      83 |         paravirt_tlb_remove_table(tlb, virt_to_page(pud));
-         |         ^
-   3 errors generated.
-
-
-vim +/paravirt_tlb_remove_table +57 arch/x86/mm/pgtable.c
-
-14315592009c17 Ian Campbell           2010-02-17  52  
-9e1b32caa525cb Benjamin Herrenschmidt 2009-07-22  53  void ___pte_free_tlb(struct mmu_gather *tlb, struct page *pte)
-397f687ab7f840 Jeremy Fitzhardinge    2008-03-17  54  {
-f92c494f420a9f Vishal Moola (Oracle   2023-08-07  55) 	pagetable_pte_dtor(page_ptdesc(pte));
-6944a9c8945212 Jeremy Fitzhardinge    2008-03-17  56  	paravirt_release_pte(page_to_pfn(pte));
-48a8b97cfd804a Peter Zijlstra         2018-08-22 @57  	paravirt_tlb_remove_table(tlb, pte);
-397f687ab7f840 Jeremy Fitzhardinge    2008-03-17  58  }
-397f687ab7f840 Jeremy Fitzhardinge    2008-03-17  59  
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Thanks,
+Edward
