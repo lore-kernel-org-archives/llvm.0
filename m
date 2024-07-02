@@ -1,136 +1,123 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F19A71B51
-	for <llvm@lists.linux.dev>; Tue,  2 Jul 2024 15:13:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A1EBC1BE849;
+	Tue,  2 Jul 2024 17:43:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719933238; cv=none; b=qwJQOInhGfXlipGaUla9rXnn4iRC0DSdXefsgNdZHFFptKPv/H6pw97zkzOguZr2jJPlt6+49cFAFM+PBuiyr4M8THbA7GcrDXHXuQ6YHNatJjKKWKEUWdzxgUMtjT3al/P4RpDa72vaJwjBO59Lz6roAgFXPoUk0+sp2gXmt9I=
+	t=1719942195; cv=none; b=aks5sZG6yuCAkM/7Y1hStPyVsjGZoz86HPbZHgGM2xYo6S/PDUfTDEz9hlwxmZ6lGVNtnZVTE3rhd3PLhmHObl9fELmXFHmFlrAqUpqk21cTbJn8VtgIeMR84CVCSOiS8oCHXv0nOJURair/I7FPJ0vRIcTKNkQBO7BeTzlHtT0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719933238; c=relaxed/simple;
-	bh=o0DTueSQJo6BAeOLaG9J0Krzi49F0C8LL7J/rYuhz6s=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=jn4ETy5vboZEK8Y5VSXxJEpx0pJNCc7UFR6sDR88yg5Y54MdqwD9RSX7wKYxKXsv8JYfhrKHqUUyje97/gzN+BVfFZP0oR+dBYA5zSl3Qhuao0I+EieH+yw67rA/sv39BsWWmmNw3YwsnAK3ouG/tRhGNrLvm9yv1fT7cYdcIAA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=B0do9GVT; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1719942195; c=relaxed/simple;
+	bh=O7b7qKMxkIfAS7EHP8HjWDosiM650B/nyjHx/9PDK0M=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=lytFgew9wb0pDvqbvtBUNCXu0fvdja8z7l+yvPJwkE5N/H1Vua6N2dQG1ph1oidtsoe290YaDfIi3NV0gQ8Ox6NG/uf9DS8Kbh7N/lqGpPtp47L1adrUq5M42a5zfnwAp0VBbn2m2WuF2J9cz+Cc0CDQjpJzAnmmvluvTOu79eI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=mORdXLFT; arc=none smtp.client-ip=192.198.163.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="B0do9GVT"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1719933235;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=GNKWYc4u3+KSmS/mHngSa3z5W2SzjUSyUZscD0Bl7Zg=;
-	b=B0do9GVTtTaSlnU4sX/2dGLxU9tTYggfPk6lzPHcph7P8TXzKMa6sDTysovXK4PhWbt856
-	PhJTPUdc3g0e++mhn0BJ0tHiWYFd+OqkjCJdkahzBHx0fRupr4PFuLrdRbtqMtFTObGH6w
-	hsNq4FxnYDoHdi+f+OErP0XtV8AXAGU=
-Received: from mx-prod-mc-04.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-558-HZc4JzMAOnO32LxGwlbqOA-1; Tue,
- 02 Jul 2024 11:13:51 -0400
-X-MC-Unique: HZc4JzMAOnO32LxGwlbqOA-1
-Received: from mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.12])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-04.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 62F3C1955E74
-	for <llvm@lists.linux.dev>; Tue,  2 Jul 2024 15:13:50 +0000 (UTC)
-Received: from [172.64.0.79] (unknown [10.30.33.131])
-	by mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 76CB319560AA;
-	Tue,  2 Jul 2024 15:13:49 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL (MISSED 14 of 192): Test report for master
- (6.10.0-rc6, mainline.kernel.org-clang, 9903efbd)
-Date: Tue, 02 Jul 2024 15:13:49 -0000
-To: bgoncalv@redhat.com, llvm@lists.linux.dev
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="mORdXLFT"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1719942194; x=1751478194;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=O7b7qKMxkIfAS7EHP8HjWDosiM650B/nyjHx/9PDK0M=;
+  b=mORdXLFT8KFTUZglu94cWd/L96qLSnHlwyDRNeldAuDOHj1Kh3SPVyTk
+   UkGvjxmtNbEkWio25WDWlRZSFXzqRhTEalqnrbJiT+caGZCXmEprC0fvD
+   6a0LBha2nLloERhWOWAnuGF0dUJMA8r9LfslIjrtirp3BEefA25jBeoNl
+   N+MnJNoj6gGDDsb73QVpoMlU1wlNtQopWnAabFX3Aj5CSbj9HcW91EI3Z
+   eQPTbKikI4ZXSAeLf0x0ZySE+PmYxlQOmJjB/aWsNzk9bPzgkkPaFfHQJ
+   kdzZMLyPx+/4vX9x3uyaGzJ7VGPTjcjKP4oxtyd5JwhvOQQb4KZY26Us/
+   Q==;
+X-CSE-ConnectionGUID: 6cHGQ9rFQke5nLhRnW9Atg==
+X-CSE-MsgGUID: EYd6mg4hSc+8LDzEG7l3pQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11121"; a="17264335"
+X-IronPort-AV: E=Sophos;i="6.09,178,1716274800"; 
+   d="scan'208";a="17264335"
+Received: from orviesa010.jf.intel.com ([10.64.159.150])
+  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jul 2024 10:43:13 -0700
+X-CSE-ConnectionGUID: TGJ7vm9kRTu6uVfCZss4Ng==
+X-CSE-MsgGUID: M7XCL8v4Ql+4Mt/PcJva9A==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.09,178,1716274800"; 
+   d="scan'208";a="45887625"
+Received: from lkp-server01.sh.intel.com (HELO 68891e0c336b) ([10.239.97.150])
+  by orviesa010.jf.intel.com with ESMTP; 02 Jul 2024 10:43:12 -0700
+Received: from kbuild by 68891e0c336b with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1sOhX3-000OTf-0Z;
+	Tue, 02 Jul 2024 17:43:09 +0000
+Date: Wed, 3 Jul 2024 01:42:10 +0800
+From: kernel test robot <lkp@intel.com>
+To: Qi Zheng <zhengqi.arch@bytedance.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: Re: [RFC PATCH 7/7] x86: select ARCH_SUPPORTS_PT_RECLAIM if X86_64
+Message-ID: <202407030101.H0oWNjhx-lkp@intel.com>
+References: <0f3aacc9707da962398de71c127e7771c6798062.1719570849.git.zhengqi.arch@bytedance.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.12
-Message-Id: <05734.124070211135104283@us-mta-558.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <0f3aacc9707da962398de71c127e7771c6798062.1719570849.git.zhengqi.arch@bytedance.com>
 
-Hi, we tested your kernel and here are the results:
+Hi Qi,
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: OK
-              Test: FAILED
+[This is a private test report for your RFC patch.]
+kernel test robot noticed the following build errors:
 
+[auto build test ERROR on akpm-mm/mm-everything]
+[also build test ERROR on next-20240702]
+[cannot apply to tip/x86/core linus/master tip/x86/mm v6.10-rc6]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Kernel information:
-    Commit message: Merge tag 'asm-generic-fixes-6.10-2' of git://git.kerne=
-l.org/pub/scm/linux/kernel/git/arnd/asm-generic
+url:    https://github.com/intel-lab-lkp/linux/commits/Qi-Zheng/mm-pgtable-make-pte_offset_map_nolock-return-pmdval/20240701-165916
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
+patch link:    https://lore.kernel.org/r/0f3aacc9707da962398de71c127e7771c6798062.1719570849.git.zhengqi.arch%40bytedance.com
+patch subject: [RFC PATCH 7/7] x86: select ARCH_SUPPORTS_PT_RECLAIM if X86_64
+config: x86_64-buildonly-randconfig-002-20240702 (https://download.01.org/0day-ci/archive/20240703/202407030101.H0oWNjhx-lkp@intel.com/config)
+compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240703/202407030101.H0oWNjhx-lkp@intel.com/reproduce)
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1356168349
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202407030101.H0oWNjhx-lkp@intel.com/
 
-One or more kernel tests failed:
-    Unrecognized or new issues:
-        Boot test
-             aarch64
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-redhat:1356168349-aarch64-kernel_upt_4
-                   Non-passing ran subtests:
-                       =E2=9D=8C FAIL distribution/kpkginstall/journalctl-c=
-heck
-        Reboot test
-              x86_64
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-redhat:1356168349-x86_64-kernel_upt_35
-                   Non-passing ran subtests:
-                       =E2=9D=8C FAIL misc/reboot-test/journalctl-check
-             aarch64
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-redhat:1356168349-aarch64-kernel_upt_10
-                   Non-passing ran subtests:
-                       =E2=9D=8C FAIL misc/reboot-test/journalctl-check
+All errors (new ones prefixed by >>):
 
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1267
-            Affected tests:
-                selinux-policy: serge-testsuite [ppc64le]
+>> arch/x86/mm/pgtable.c:57:2: error: call to undeclared function 'paravirt_tlb_remove_table'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+      57 |         paravirt_tlb_remove_table(tlb, pte);
+         |         ^
+   arch/x86/mm/pgtable.c:57:2: note: did you mean '__tlb_remove_table'?
+   arch/x86/include/asm/tlb.h:32:20: note: '__tlb_remove_table' declared here
+      32 | static inline void __tlb_remove_table(void *table)
+         |                    ^
+   arch/x86/mm/pgtable.c:73:2: error: call to undeclared function 'paravirt_tlb_remove_table'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+      73 |         paravirt_tlb_remove_table(tlb, ptdesc_page(ptdesc));
+         |         ^
+   arch/x86/mm/pgtable.c:83:2: error: call to undeclared function 'paravirt_tlb_remove_table'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+      83 |         paravirt_tlb_remove_table(tlb, virt_to_page(pud));
+         |         ^
+   3 errors generated.
 
 
-Tests that were not ran because of internal issues:=20
-    Boot test [s390x]
-    CKI/restraint [s390x]
-    machineinfo [ppc64le, s390x]
-    Reboot test [s390x]
-    SELinux Custom Module Setup [ppc64le, s390x]
-    Storage - blktests - blk - upstream [s390x]
-    Storage - blktests - nvme-tcp - upstream [s390x]
-    Storage - swraid scsi_raid [s390x]
-    stress: stress-ng - cpu-cache [s390x]
-    stress: stress-ng - memory [s390x]
+vim +/paravirt_tlb_remove_table +57 arch/x86/mm/pgtable.c
 
+14315592009c17 Ian Campbell           2010-02-17  52  
+9e1b32caa525cb Benjamin Herrenschmidt 2009-07-22  53  void ___pte_free_tlb(struct mmu_gather *tlb, struct page *pte)
+397f687ab7f840 Jeremy Fitzhardinge    2008-03-17  54  {
+f92c494f420a9f Vishal Moola (Oracle   2023-08-07  55) 	pagetable_pte_dtor(page_ptdesc(pte));
+6944a9c8945212 Jeremy Fitzhardinge    2008-03-17  56  	paravirt_release_pte(page_to_pfn(pte));
+48a8b97cfd804a Peter Zijlstra         2018-08-22 @57  	paravirt_tlb_remove_table(tlb, pte);
+397f687ab7f840 Jeremy Fitzhardinge    2008-03-17  58  }
+397f687ab7f840 Jeremy Fitzhardinge    2008-03-17  59  
 
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
