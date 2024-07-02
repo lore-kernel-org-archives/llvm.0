@@ -1,155 +1,104 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 79D971B581A;
-	Tue,  2 Jul 2024 14:08:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DEF921B583F;
+	Tue,  2 Jul 2024 14:48:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719929292; cv=none; b=s52VEheeCmJIxnnRcN/2D/h0U2YSmZYRMMwfjhokn7EGodjcOkXSX06SNSP777OwdW5dlemEycjHEb6rHMwUutujGDMplUGdcFOyh+ZyCsKHP/OWI0bGDnRwzwv62lVYPWIMB2Gxj2xkgNGYerCKYz/LfH4ziEG0mM9xGtPJRRc=
+	t=1719931734; cv=none; b=JfcoQi2+Jip5UrCIldMTS9+Vbm35e27h/ojLThptW4VUSsh/DW8zJ2ph4LhGXd5Hm0i+5g42Oy7l5+SB62C6flENqMzWzlQ+/KLgpvaM74sP96UvYQFbrG5X5gvrC+L6XF7fo3MjzZETPbvQRnY3ScFkssQmGcPhIOJi6R4eujg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719929292; c=relaxed/simple;
-	bh=FczaPhMPNC2StePC+oGnLGpU1tRFqdJWKJZyTLhC67U=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Zr3HgxjrX7fe8A2xHGj/kXXmLpdo2IoslogB9Rp8v2iwhbZEsJmo1+OUK3RMD0VR+bHmVuPviHIYhdnSvWBjVdJuD8omojswVOCdcex7hV8EWUUjkVkR2pcM5x0WChHKeZyNL8XSScCq/O//Zna4TgdoJ0q1HXJFIUw1necMyv4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Pd1kgJmj; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1719931734; c=relaxed/simple;
+	bh=6nM7P33MSykyTDjnm62rbDQplKtWiymkghofPsMaMPA=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=dpcQxhLXUZ+xHm8VFSYeApTCXgeUnR5uNb7udtsnKCbCpLqCDTu3oCoumTUhh6yVNsn0bkyPY3Nqm3EOFaIptX7kbq6Sai1vxwpUZblzeiLMe4PPFEehrir/DkDAwmXt3dVUYJ42YeetU4kqxJtWXBVDqqxVz3y0YWzw7K0yZcU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=grlDPDnN; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Pd1kgJmj"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B4831C2BD10;
-	Tue,  2 Jul 2024 14:08:07 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="grlDPDnN"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ECCE7C116B1;
+	Tue,  2 Jul 2024 14:48:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1719929291;
-	bh=FczaPhMPNC2StePC+oGnLGpU1tRFqdJWKJZyTLhC67U=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Pd1kgJmjphvQZpFYPGN5fWrwFeCN4vdbE37IPda6u/ZDAXOjwNht89sKsRynFIoO5
-	 ZN5AATxpTwAdDCt7Yi+IndVIPBtE4s+XjYj+x7ByM74y3HqRiXjZPvXS51qOLCC2lM
-	 j17ah0qHZX3Bq3UW5yCU8RuIsteqSG03qgqseXAnspD7LiR+3egEEC0PBoj2jDXKT+
-	 6ASk2Ke2SMX9WaI3K94tVueVY/ntVogA1vjm49Hty59Kja+OKIo94w5aNkf5kLTFDC
-	 DaPq6hsfupejni532Qx7Ndp4hOvLcVctRKu1jSBihfHGR10tktG3plBWTMCUB0ZO6/
-	 G28xOD4jn4paQ==
-Date: Tue, 2 Jul 2024 15:08:05 +0100
-From: Conor Dooley <conor@kernel.org>
-To: Jesse Taube <jesse@rivosinc.com>
-Cc: linux-riscv@lists.infradead.org, Ard Biesheuvel <ardb@kernel.org>,
-	Paul Walmsley <paul.walmsley@sifive.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Alexandre Ghiti <alexghiti@rivosinc.com>,
-	Conor Dooley <conor.dooley@microchip.com>,
-	Masahiro Yamada <masahiroy@kernel.org>,
-	Wende Tan <twd2.me@gmail.com>,
-	Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-	Sami Tolvanen <samitolvanen@google.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Baoquan He <bhe@redhat.com>,
-	"Mike Rapoport (IBM)" <rppt@kernel.org>,
-	"Vishal Moola (Oracle)" <vishal.moola@gmail.com>,
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH v3 4/4] RISC-V: Use Zkr to seed KASLR base address
-Message-ID: <20240702-unissued-dreamlike-badd0fb75ab0@spud>
-References: <20240701185132.319995-1-jesse@rivosinc.com>
- <20240701185132.319995-5-jesse@rivosinc.com>
+	s=k20201202; t=1719931733;
+	bh=6nM7P33MSykyTDjnm62rbDQplKtWiymkghofPsMaMPA=;
+	h=From:Date:Subject:To:Cc:From;
+	b=grlDPDnNujQAEKfRF0P/1fSNQduOUujHvXT1bZDSV/dvZShvannniXiPSKpTgSbjJ
+	 DEYv0GEF/+eiriFBUjwQ5d7YwjxCOoLyNTTamBFL3JCBLOmxhpF5kR4YnQI3hLxJ+a
+	 752XPRKF2xSaQadJ/xN8GxOcWvztplosmWGBt6BT2EqNeVR1UewveC0G4Ykczn5qym
+	 PnnYexgjtP0d7s1dQFgJEYzu/cmvINn8Ft7LsMZ1bAmq2ihB9aJTMJLDgVCEcSP7Ov
+	 u1OXVJNcoTghUYo+Fciii+qwUbTrOLO+9wi6KX0WZCyAmWhfsrEDM57KSiAISRjazO
+	 Lhv55qIKGXJng==
+From: Nathan Chancellor <nathan@kernel.org>
+Date: Tue, 02 Jul 2024 07:48:48 -0700
+Subject: [PATCH] power: supply: cros_charge-control: Avoid accessing
+ attributes out of bounds
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="x34tUiPHU+DtDFfq"
-Content-Disposition: inline
-In-Reply-To: <20240701185132.319995-5-jesse@rivosinc.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20240702-cros_charge-control-fix-clang-array-bounds-warning-v1-1-ae04d995cd1d@kernel.org>
+X-B4-Tracking: v=1; b=H4sIAE8ThGYC/x2N2wrCMAyGX2Xk2kAtRcVXEZGuTTUwEkk9jbF3X
+ /Dy+48LdDKmDudhAaMPd1Zx2O8GKI8sd0KuzhBDTOEYIhbTfnPL3CoqL9MJG/+wTJ7GbJZnHPU
+ tteM3m7CL4ym1GtohxRzAh59G3vifXq7rugEPrgOThAAAAA==
+To: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas@weissschuh.net>, 
+ Tzung-Bi Shih <tzungbi@kernel.org>, Benson Leung <bleung@chromium.org>
+Cc: Guenter Roeck <groeck@chromium.org>, Sebastian Reichel <sre@kernel.org>, 
+ chrome-platform@lists.linux.dev, linux-pm@vger.kernel.org, 
+ llvm@lists.linux.dev, patches@lists.linux.dev, 
+ Nathan Chancellor <nathan@kernel.org>
+X-Mailer: b4 0.15-dev
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2030; i=nathan@kernel.org;
+ h=from:subject:message-id; bh=6nM7P33MSykyTDjnm62rbDQplKtWiymkghofPsMaMPA=;
+ b=owGbwMvMwCUmm602sfCA1DTG02pJDGktwiH/eg+0M804/NP2ArtjWqR867/Gq+1Pl+6IXGc1z
+ diJ+/bPjlIWBjEuBlkxRZbqx6rHDQ3nnGW8cWoSzBxWJpAhDFycAjARhVaGf2acfmnxi/M+ePeU
+ ZWyvr2Sbuvyxi/r1mE/NL00yhDz+SzAyvOL3bJDUlYirufbaz2BT/8Rligl6UX8YIv9OkZuQ1by
+ REwA=
+X-Developer-Key: i=nathan@kernel.org; a=openpgp;
+ fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
 
+Clang warns (or errors with CONFIG_WERROR=y):
 
---x34tUiPHU+DtDFfq
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+  drivers/power/supply/cros_charge-control.c:319:2: error: array index 3 is past the end of the array (that has type 'struct attribute *[3]') [-Werror,-Warray-bounds]
+    319 |         priv->attributes[_CROS_CHCTL_ATTR_COUNT] = NULL;
+        |         ^                ~~~~~~~~~~~~~~~~~~~~~~
+  drivers/power/supply/cros_charge-control.c:49:2: note: array 'attributes' declared here
+     49 |         struct attribute *attributes[_CROS_CHCTL_ATTR_COUNT];
+        |         ^
+  1 error generated.
 
-On Mon, Jul 01, 2024 at 02:51:32PM -0400, Jesse Taube wrote:
+In earlier revisions of the driver, the attributes array in
+cros_chctl_priv had four elements with four distinct assignments but
+during review, the number of elements was changed to three through use
+of an enum and the assignments became a for loop, except for this one,
+which is now out of bounds. This assignment is no longer necessary
+because the size of the attributes array no longer accounts for it, so
+just remove it to clear up the warning.
 
-> +/**
-> + *  isa_string_contains - check if isa string contains an extension
-> + *
-> + * @isa_str: isa string to search
-> + * @ext_name: the extension to search for
-> + *
-> + *  Returns true if the extension is in the given isa string,
-> + *  false otherwise
-> + */
-> +static bool isa_string_contains(const char *isa_str, const char *ext_name)
-> +{
-> +	size_t i, single_end, len = strlen(ext_name);
-> +	char ext_end;
-> +
-> +	/* Error must contain rv32/64 */
-> +	if (strlen(isa_str) < 4)
-> +		return false;
-> +
-> +	if (len == 1) {
-> +		single_end = strcspn(isa_str, "sSxXzZ");
-> +		/* Search for single chars between rv32/64 and multi-letter extensions */
-> +		for (i = 4; i < single_end; i++) {
-> +			if (tolower(isa_str[i]) == ext_name[0])
-> +				return true;
-> +		}
-> +		return false;
-> +	}
-> +
-> +	/* Skip to start of multi-letter extensions */
-> +	isa_str = strpbrk(isa_str, "sSxXzZ");
+Fixes: c6ed48ef5259 ("power: supply: add ChromeOS EC based charge control driver")
+Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+---
+ drivers/power/supply/cros_charge-control.c | 1 -
+ 1 file changed, 1 deletion(-)
 
-Technically this could break with the old QEMUs that had "su" in the
-single letter part, but at this point I think enough time has passed
-that it does not matter.
+diff --git a/drivers/power/supply/cros_charge-control.c b/drivers/power/supply/cros_charge-control.c
+index 73d7f2dc0fa3..2dd8ddbd56bc 100644
+--- a/drivers/power/supply/cros_charge-control.c
++++ b/drivers/power/supply/cros_charge-control.c
+@@ -316,7 +316,6 @@ static int cros_chctl_probe(struct platform_device *pdev)
+ 		sysfs_attr_init(&priv->device_attrs[i].attr);
+ 		priv->attributes[i] = &priv->device_attrs[i].attr;
+ 	}
+-	priv->attributes[_CROS_CHCTL_ATTR_COUNT] = NULL;
+ 	priv->group.is_visible = cros_chtl_attr_is_visible;
+ 	priv->group.attrs = priv->attributes;
+ 
 
-> +	while (isa_str) {
-> +		if (strncasecmp(isa_str, ext_name, len) == 0) {
-> +			ext_end = isa_str[len];
-> +			/* Check if matches the whole extension excluding version. */
-> +			if (ext_end == '\0' || ext_end == '_' || isdigit(ext_end))
+---
+base-commit: 3664706e875f84bd4e3fa25ed1c6e46934cb32cd
+change-id: 20240702-cros_charge-control-fix-clang-array-bounds-warning-b84fd0f642a0
 
-I'm also not entirely sure about the final clause here. If you have an
-extension "foo" and "foo32b", you'd match on the latter, right? I don't
-think any extensions like that at the minute (foo32b type stuff does,
-but the "root" alphabetical part for a foo32b doesn't), but I also don't
-wanna have to chase down bugs in a parser this early in the future! The
-devicetree binding doesn't actually allow anyone to put version
-information in the isa string, so maybe the thing to do is just drop the
-isdigit() check, given we only support devicetree right now for this early
-probing?
+Best regards,
+-- 
+Nathan Chancellor <nathan@kernel.org>
 
-> +				return true;
-> +		}
-> +		/* Multi-letter extensions must be split from other multi-letter
-> +		 * extensions with an "_", the end of a multi-letter extension will
-> +		 * either be the null character or the "_" at the start of the next
-> +		 * multi-letter extension.
-> +		 */
-> +		isa_str = strchr(isa_str, '_');
-> +		if (isa_str)
-> +			isa_str++;
-> +	}
-> +
-> +	return false;
-> +}
-
-Otherwise, I think this is fine now. Thanks for the updates.
-
-Cheers,
-Conor.
-
---x34tUiPHU+DtDFfq
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZoQJxQAKCRB4tDGHoIJi
-0k6uAP4h26hzrqUn8SQOtea5MoE7pVfXu05eNbYHvp84e0SVewEAtZqV1yZzenjn
-RAoQXWnUc4/VGcwTElosMZrjivWItQY=
-=D3gK
------END PGP SIGNATURE-----
-
---x34tUiPHU+DtDFfq--
