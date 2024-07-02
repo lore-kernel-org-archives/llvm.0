@@ -1,29 +1,29 @@
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 271AA946C
-	for <llvm@lists.linux.dev>; Tue,  2 Jul 2024 04:19:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.187
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 760797F47B
+	for <llvm@lists.linux.dev>; Tue,  2 Jul 2024 04:19:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.188
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719893948; cv=none; b=Jy/o9UelIGBdu3YWt8WVHU4cvlmeGYvKMFSL8glMR9334/kSLBmCiZr31wdluD5DA33DqFigWIPe5miqQCmf4NIMTQUbFmErhyA3J1L52JdkEwB/6fRKHRD2DdS6KWHgqARjtzne6owInpVMRS0olVqzn72DkXnd1zcb4wMsSIU=
+	t=1719893949; cv=none; b=TF1QjNSpwEv3wY5gOc7ODqNImMIm9swRa6GB7eGKOJFejiSecwmdy7iUjHO/B89ki/711Kxt+A+xLTWnWLOz+yuud353gm8JwS/7fXo0nyv8mdVrxcR7MoSMmMaxCBrhI0P7egpmjzObAuxSDDiHpp/quuqle23SRqWzpijr2fU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719893948; c=relaxed/simple;
-	bh=rvCkn96ZnyyifOzsm+3uC4OPYarXGdZ24pjiAWVAlzA=;
+	s=arc-20240116; t=1719893949; c=relaxed/simple;
+	bh=6KnXP5/kVbBhp4xtOY0o8D1oZBIYLXMx71oUKcb6ZK4=;
 	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=gvPg9rliCJGG2b9149Z9JfbrfNaVwBAbPsW0jt0pXCRsU4TIFmKlTol28DKXuwnhEO8XEfo/KtNVLdlxAt4Mi+1/Zl2K9eWPC0rVbmfwKAsNbVfqGRRu9l3Q+9J4e1nzUnUh1mz0XUnodctwrrRi669eDVLBV8MmnurYwCi5EFE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.187
+	 MIME-Version:Content-Type; b=DqFiCazQe27z+rw7ed68Vh7nU8gvwozv+fyIhJvkudf6+ncpYysGO6IviDoT81zFMxRxj1Jp7/FJbYPu4zIg9w+iOakhmoY4gP21LGtoCAMvsFWkOL7q9D6kB5BspSJ7w9j4JrGmpnAqztsdS5Ki38wZL2omN41vkfe4FnVyWUM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.188
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.19.163.48])
-	by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4WCqLP1MqKzxTX9;
-	Tue,  2 Jul 2024 12:14:37 +0800 (CST)
+Received: from mail.maildlp.com (unknown [172.19.88.194])
+	by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4WCqPb61qLzdfvf;
+	Tue,  2 Jul 2024 12:17:23 +0800 (CST)
 Received: from kwepemd100011.china.huawei.com (unknown [7.221.188.204])
-	by mail.maildlp.com (Postfix) with ESMTPS id 477FA180064;
-	Tue,  2 Jul 2024 12:19:03 +0800 (CST)
+	by mail.maildlp.com (Postfix) with ESMTPS id 646271403D2;
+	Tue,  2 Jul 2024 12:19:00 +0800 (CST)
 Received: from M910t.huawei.com (10.110.54.157) by
  kwepemd100011.china.huawei.com (7.221.188.204) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1258.34; Tue, 2 Jul 2024 12:19:01 +0800
+ 15.2.1258.34; Tue, 2 Jul 2024 12:18:58 +0800
 From: Changbin Du <changbin.du@huawei.com>
 To: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>,
 	Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim
@@ -36,9 +36,9 @@ CC: Mark Rutland <mark.rutland@arm.com>, Alexander Shishkin
 	<linux-perf-users@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
 	<llvm@lists.linux.dev>, Hui Wang <hw.huiwang@huawei.com>, Changbin Du
 	<changbin.du@huawei.com>
-Subject: [PATCH v5 6/8] perf: build-id: try to search debugging vdso and add to cache
-Date: Tue, 2 Jul 2024 12:18:35 +0800
-Message-ID: <20240702041837.5306-7-changbin.du@huawei.com>
+Subject: [PATCH v5 4/8] perf: build-id: name debugging vdso as "debug"
+Date: Tue, 2 Jul 2024 12:18:33 +0800
+Message-ID: <20240702041837.5306-5-changbin.du@huawei.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20240702041837.5306-1-changbin.du@huawei.com>
 References: <20240702041837.5306-1-changbin.du@huawei.com>
@@ -53,169 +53,29 @@ Content-Type: text/plain
 X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
  kwepemd100011.china.huawei.com (7.221.188.204)
 
-Just like vmlinux, try to search vdso in predefined paths when collecting
-build-ids. The searched paths usually have debugging info.
+As normal objects, we will add debugging vdso elf to build-id cache later.
+Here we name the debugging one as "debug".
 
-For example, the vdso can be found in
-/lib/modules/<version>/build/arch/x86/entry/vdso/vdso*.so.dbg for local
-build on x86.
-
-Cc: Adrian Hunter <adrian.hunter@intel.com>
 Signed-off-by: Changbin Du <changbin.du@huawei.com>
-
 ---
-v2:
-  - Searching the vdso in record stage instead of report. So the debugging
-    vdso will be in build-id cache. This is friendly for cross-machine
-    analysis.
----
- tools/perf/util/build-id.c | 53 +++++++++++++++++++++++++++++++++-----
- tools/perf/util/symbol.c   | 17 ++++++++++++
- tools/perf/util/symbol.h   |  1 +
- 3 files changed, 64 insertions(+), 7 deletions(-)
+ tools/perf/util/build-id.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/tools/perf/util/build-id.c b/tools/perf/util/build-id.c
-index 15530af2bad9..f40de2d9843a 100644
+index 83a1581e8cf1..15530af2bad9 100644
 --- a/tools/perf/util/build-id.c
 +++ b/tools/perf/util/build-id.c
-@@ -593,9 +593,8 @@ static int build_id_cache__add_sdt_cache(const char *sbuild_id,
- #define build_id_cache__add_sdt_cache(sbuild_id, realname, nsi) (0)
- #endif
- 
--static char *build_id_cache__find_debug(const char *sbuild_id,
--					struct nsinfo *nsi,
--					const char *root_dir)
-+static char *build_id_cache__find_debug_normal(const char *sbuild_id,
-+				struct nsinfo *nsi, const char *root_dir)
+@@ -259,8 +259,8 @@ static bool build_id_cache__valid_id(char *sbuild_id)
+ static const char *build_id_cache__basename(bool is_kallsyms, bool is_vdso,
+ 					    bool is_debug)
  {
- 	const char *dirname = "/usr/lib/debug/.build-id/";
- 	char *realname = NULL;
-@@ -646,6 +645,47 @@ static char *build_id_cache__find_debug(const char *sbuild_id,
- 	return realname;
+-	return is_kallsyms ? "kallsyms" : (is_vdso ? "vdso" : (is_debug ?
+-	    "debug" : "elf"));
++	return is_kallsyms ? "kallsyms" : (is_debug ? "debug" : (is_vdso ?
++		"vdso" : "elf"));
  }
  
-+static char *build_id_cache__find_debug_vdso(const char *sbuild_id)
-+{
-+	char sbuild_id_tmp[SBUILD_ID_SIZE];
-+	struct build_id bid;
-+	int i, ret = 0;
-+
-+	if (!vdso_paths.paths)
-+		return NULL;
-+
-+	pr_debug("Looking at the vdso_path (%d entries long)\n",
-+		 vdso_paths.nr_entries + 1);
-+
-+	for (i = 0; i < vdso_paths.nr_entries; ++i) {
-+		ret = filename__read_build_id(vdso_paths.paths[i], &bid);
-+		if (ret < 0)
-+			continue;
-+
-+		build_id__sprintf(&bid, sbuild_id_tmp);
-+		if (!strcmp(sbuild_id, sbuild_id_tmp)) {
-+			pr_debug("Found debugging vdso %s\n", vdso_paths.paths[i]);
-+			return strdup(vdso_paths.paths[i]);
-+		}
-+	}
-+
-+	return NULL;
-+}
-+
-+static char *build_id_cache__find_debug(const char *sbuild_id,
-+					struct nsinfo *nsi,
-+					bool is_vdso,
-+					const char *root_dir)
-+{
-+	char *name = NULL;
-+
-+	if (is_vdso)
-+		name = build_id_cache__find_debug_vdso(sbuild_id);
-+	else
-+		name = build_id_cache__find_debug_normal(sbuild_id, nsi, root_dir);
-+	return name;
-+}
-+
- int
- build_id_cache__add(const char *sbuild_id, const char *name, const char *realname,
- 		    struct nsinfo *nsi, bool is_kallsyms, bool is_vdso,
-@@ -701,13 +741,12 @@ build_id_cache__add(const char *sbuild_id, const char *name, const char *realnam
- 	 * file itself may not be very useful to users of our tools without a
- 	 * symtab.
- 	 */
--	if (!is_kallsyms && !is_vdso &&
--	    strncmp(".ko", name + strlen(name) - 3, 3)) {
--		debugfile = build_id_cache__find_debug(sbuild_id, nsi, root_dir);
-+	if (!is_kallsyms && strncmp(".ko", name + strlen(name) - 3, 3)) {
-+		debugfile = build_id_cache__find_debug(sbuild_id, nsi, is_vdso, root_dir);
- 		if (debugfile) {
- 			zfree(&filename);
- 			if (asprintf(&filename, "%s/%s", dir_name,
--			    build_id_cache__basename(false, false, true)) < 0) {
-+			    build_id_cache__basename(false, is_vdso, true)) < 0) {
- 				filename = NULL;
- 				goto out_free;
- 			}
-diff --git a/tools/perf/util/symbol.c b/tools/perf/util/symbol.c
-index 83e5c3807a2c..6ad3a057f727 100644
---- a/tools/perf/util/symbol.c
-+++ b/tools/perf/util/symbol.c
-@@ -49,6 +49,7 @@ static int dso__load_vdso_sym(struct dso *dso, struct map *map);
- static bool symbol__is_idle(const char *name);
- 
- struct dso_filename_paths vmlinux_paths;
-+struct dso_filename_paths vdso_paths;
- 
- struct symbol_conf symbol_conf = {
- 	.nanosecs		= false,
-@@ -2304,6 +2305,16 @@ struct dso_filename_pattern vmlinux_patterns[] = {
- 	{"/usr/lib/debug/boot/vmlinux-%s.debug", 1},
- };
- 
-+struct dso_filename_pattern vdso_patterns[] = {
-+	{"/lib/modules/%s/vdso/vdso.so", 1},
-+	{"/lib/modules/%s/vdso/vdso64.so", 1},
-+	{"/lib/modules/%s/vdso/vdso32.so", 1},
-+	{"/lib/modules/%s/build/arch/%s/vdso/vdso.so.dbg", 2},
-+	{"/lib/modules/%s/build/arch/%s/kernel/vdso/vdso.so.dbg", 2},
-+	{"/lib/modules/%s/build/arch/%s/entry/vdso/vdso32.so.dbg", 2},
-+	{"/lib/modules/%s/build/arch/%s/entry/vdso/vdso64.so.dbg", 2},
-+};
-+
- static int dso_filename_path__add(struct dso_filename_paths *paths, const char *new_entry)
- {
- 	paths->paths[paths->nr_entries] = strdup(new_entry);
-@@ -2566,6 +2577,11 @@ int symbol__init(struct perf_env *env)
- 		return -1;
- 	}
- 
-+	if (dso_filename_path__init(&vdso_paths, vdso_patterns,
-+				    ARRAY_SIZE(vdso_patterns), env) < 0) {
-+		return -1;
-+	}
-+
- 	if (symbol_conf.field_sep && *symbol_conf.field_sep == '.') {
- 		pr_err("'.' is the only non valid --field-separator argument\n");
- 		return -1;
-@@ -2642,6 +2658,7 @@ void symbol__exit(void)
- 	intlist__delete(symbol_conf.pid_list);
- 	intlist__delete(symbol_conf.addr_list);
- 	dso_filename_path__exit(&vmlinux_paths);
-+	dso_filename_path__exit(&vdso_paths);
- 	symbol_conf.sym_list = symbol_conf.dso_list = symbol_conf.comm_list = NULL;
- 	symbol_conf.bt_stop_list = NULL;
- 	symbol_conf.initialized = false;
-diff --git a/tools/perf/util/symbol.h b/tools/perf/util/symbol.h
-index 30056884945b..08c339594d4e 100644
---- a/tools/perf/util/symbol.h
-+++ b/tools/perf/util/symbol.h
-@@ -107,6 +107,7 @@ struct dso_filename_paths {
- };
- 
- extern struct dso_filename_paths vmlinux_paths;
-+extern struct dso_filename_paths vdso_paths;
- 
- static inline void *symbol__priv(struct symbol *sym)
- {
+ char *__dso__build_id_filename(const struct dso *dso, char *bf, size_t size,
 -- 
 2.34.1
 
