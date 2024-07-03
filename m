@@ -1,160 +1,165 @@
-Received: from mail-ej1-f43.google.com (mail-ej1-f43.google.com [209.85.218.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 919BD18FC90
-	for <llvm@lists.linux.dev>; Wed,  3 Jul 2024 21:23:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 644E9190694;
+	Wed,  3 Jul 2024 21:26:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720041809; cv=none; b=qB9+ax/AmuGDPj2Nqi8GP35FJ8gUedBSACuLozpZ1W0gXCcNWEuAzXilPI/LtqrZ2l8ni+tJQBOUo+Vc7K117sI/CoC7XYa6dtSAw1w6BbXHd79774QI9vO9tT45XFGnqrt4Ohe6KyOg0dFb9SHFu9KmbAWJNWyHi3ckeBQ0NcE=
+	t=1720041986; cv=none; b=NtEE15Kxk+psaqKtjHQgKyw6RB295uG25yc1H9ZYFWpXGBDZLrz0ZYPhU+DLCGq6nX7ZBzrL+jjNvhOhfnJcyKIO3v4ROHnulFwYL8w39cITU38Cx1exkd45ys31lV5bgqgcjMyiIxXPBr0ruZiEqha9FkB8yylYFvYfyl+4CzQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720041809; c=relaxed/simple;
-	bh=1yCUJShNVEleKhhq5ttC7d+C2KlI7KvONMEvrwhI5X0=;
+	s=arc-20240116; t=1720041986; c=relaxed/simple;
+	bh=N4vDhkwtkH6NXF985wmCUNbN+JIz4qMWpF58qBSQ/UU=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ocnN2ApkiVTKpgDQTxmQmyMt9TxqUb+YbcZOVenELhpZ+Ep1G0nVP7osHf3dIfPEnCMha+/f/NYwaF9ad1NhBMwHu6pMlkAOUZsikLGjOkd5Vyg9LaWCRaD14MeP60jAuo32rAwSGcacsOEpKE4Ny0fhzcreXh1uf1MB7Z9kNik=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=BOy2OQPF; arc=none smtp.client-ip=209.85.218.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=hJPbuJlK2WI8uOm/EIGFRifNwKfLq4Tu92I1KvxmUamqT07rKJ6+jNw1vGrDIQ51zSuAIH6PNNMR86ArW37b1mMgFw3YqXqYkJ+mMQOBdF5GZUJFJOZemQfare6+uoaidqu/zr7C54zPV0Vho3vPyOcbOE6lpjNvXzB5t8pW1x4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ivZpLah2; arc=none smtp.client-ip=192.198.163.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="BOy2OQPF"
-Received: by mail-ej1-f43.google.com with SMTP id a640c23a62f3a-a728f74c23dso668623566b.1
-        for <llvm@lists.linux.dev>; Wed, 03 Jul 2024 14:23:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1720041805; x=1720646605; darn=lists.linux.dev;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=rmKjZalCS3qgqBNUJ2X1ny0z1S/+Ouz6++2zspqi0Zc=;
-        b=BOy2OQPFLq9f54WRwqkylnC7v3IRvL0VzehYADd4yjGxVTJo9rzaDSTeF/QuYoKcF0
-         IDWIE0s2QH82X5fxP4ImS0ETh5Pr9A905QOSTsssUc8wsV+BxH6fzomkrnwZEXUHd5OI
-         +TDsKYpGU7E1/q88uUxdCZVKjaqW7myVjeMEC5TVTaPSCMi8IKzb4/QanSFBTsxTGYwz
-         2eJh2OWbWUFKMytE6giVwqrdAw+E4e61xBfDLahxLa4dP53/LIiH6uz3C626ODlxDxFa
-         WVPXtnRldJY9Lxs7cqeG7+Hrg/1JqLmBNU+eGTRc0tGmkMmMgQbvIPCtllGnmShMWkTJ
-         f6zA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1720041805; x=1720646605;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=rmKjZalCS3qgqBNUJ2X1ny0z1S/+Ouz6++2zspqi0Zc=;
-        b=aUWXX3P6P9bAIY61nfg6lr7rfpHFR574KYu8AE8beoZGn5Geo14IhtmIqEWUeEVuqU
-         3wPQ2ODjyjcGcrKPaRAfYWZ05fP9dSWxEPFrKL/EiAwx04nr+WkDczl7p80Gtv8ntWjX
-         FHD33N42ley4fkpBfiGxVoc+u7KTpAgQ6lXcBiG4lXWxdf3P9foykZNc2Oh+sRqx9WJi
-         P7AdDjrpg8OY7gj5K295Wx7ErY0lL/EeHDssUay0vBxVT7GA7377T44YXpyk3TMJub4V
-         kfN8/jGgcC04hwxduEEvxK52baTi2xjrXtbKPjCzGXJRCWfT9j15wgYZ5xbxo4o0rZhA
-         /QNg==
-X-Forwarded-Encrypted: i=1; AJvYcCX58uhKFvvCJQTb0GEas7bIx1QBcKyRCpyQq+mWPe+NBb8NxGmOQEnebx3/NazWQmHP0Y85TbFcIdEpUhbWb43duT+YmA==
-X-Gm-Message-State: AOJu0YzUczPL6aNEbdElCk30+VoueJ2R11qKIbnNEfd788qMs6mw2pN4
-	Q/RV+etocORh1GUYdGobqjTX6o0KOh8vpfn3Z1B/fDKSh9KG4iCj0JqSRIHJXSg=
-X-Google-Smtp-Source: AGHT+IEiDeirJZbiRR9WOgvKVRp5lPoOHJBTmQD67pQvhrzI/8nB0fQNgTn38F10sD2qUfAawYddVg==
-X-Received: by 2002:a17:907:1c15:b0:a72:883f:f3dd with SMTP id a640c23a62f3a-a75144a8a02mr1042146966b.56.1720041804879;
-        Wed, 03 Jul 2024 14:23:24 -0700 (PDT)
-Received: from localhost ([2a02:8071:b783:6940:5696:f293:6e5e:98bf])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a72ab0651c0sm541105666b.123.2024.07.03.14.23.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 03 Jul 2024 14:23:24 -0700 (PDT)
-Date: Wed, 3 Jul 2024 23:23:22 +0200
-From: Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@baylibre.com>
-To: Luca Ceresoli <luca.ceresoli@bootlin.com>
-Cc: Miguel Ojeda <ojeda@kernel.org>, Rob Herring <robh@kernel.org>, 
-	Saravana Kannan <saravanak@google.com>, Nathan Chancellor <nathan@kernel.org>, 
-	Michael Turquette <mturquette@baylibre.com>, Stephen Boyd <sboyd@kernel.org>, 
-	Tony Lindgren <tony@atomide.com>, Bjorn Andersson <andersson@kernel.org>, 
-	Emilio =?utf-8?B?TMOzcGV6?= <emilio@elopez.com.ar>, Chen-Yu Tsai <wens@csie.org>, 
-	Jernej Skrabec <jernej.skrabec@gmail.com>, Samuel Holland <samuel@sholland.org>, 
-	Krzysztof Kozlowski <krzk@kernel.org>, Daniel Lezcano <daniel.lezcano@linaro.org>, 
-	Thomas Gleixner <tglx@linutronix.de>, Florian Fainelli <florian.fainelli@broadcom.com>, 
-	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>, Linus Walleij <linus.walleij@linaro.org>, 
-	Bartosz Golaszewski <brgl@bgdev.pl>, Jonathan Cameron <jic23@kernel.org>, Lee Jones <lee@kernel.org>, 
-	Shawn Guo <shawnguo@kernel.org>, Pengutronix Kernel Team <kernel@pengutronix.de>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Jiri Slaby <jirislaby@kernel.org>, 
-	Richard Leitner <richard.leitner@linux.dev>, Liam Girdwood <lgirdwood@gmail.com>, 
-	Mark Brown <broonie@kernel.org>, Nicolas Ferre <nicolas.ferre@microchip.com>, 
-	Michael Ellerman <mpe@ellerman.id.au>, Nicholas Piggin <npiggin@gmail.com>, 
-	Christophe Leroy <christophe.leroy@csgroup.eu>, "Naveen N. Rao" <naveen.n.rao@linux.ibm.com>, 
-	Damien Le Moal <dlemoal@kernel.org>, "Peng Fan (OSS)" <peng.fan@oss.nxp.com>, 
-	Thomas Petazzoni <thomas.petazzoni@bootlin.com>, linux-kernel@vger.kernel.org, devicetree@vger.kernel.org, 
-	llvm@lists.linux.dev, linux-clk@vger.kernel.org, linux-omap@vger.kernel.org, 
-	linux-arm-msm@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	linux-sunxi@lists.linux.dev, linux-samsung-soc@vger.kernel.org, linux-gpio@vger.kernel.org, 
-	linux-iio@vger.kernel.org, linux-pwm@vger.kernel.org, linux-serial@vger.kernel.org, 
-	linux-usb@vger.kernel.org, patches@opensource.cirrus.com, linux-sound@vger.kernel.org, 
-	linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org
-Subject: Re: [PATCH 13/20] pwm: samsung: convert to
- of_property_for_each_u32_new()
-Message-ID: <l2xret6kx4qwee3c3abmmhz5uop7zuobxath2eou2utklztkgl@c7lskt3xk3wj>
-References: <20240703-of_property_for_each_u32-v1-0-42c1fc0b82aa@bootlin.com>
- <20240703-of_property_for_each_u32-v1-13-42c1fc0b82aa@bootlin.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ivZpLah2"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1720041984; x=1751577984;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=N4vDhkwtkH6NXF985wmCUNbN+JIz4qMWpF58qBSQ/UU=;
+  b=ivZpLah2kSuI+HUP40DJP3lmwShQcArSdWnVH/Bj8YIsgbm0DPLInkD4
+   mUfOIH0SQr2zmC0q/saq+tf/6HzGyiMp4ZfWdhmTwBC/pHXaW8mg3n9hH
+   08SSDAEOi/PgQ7CQidDNXCGutRhHyY2iN3H64A2WmF/vayaEAHXxAbj31
+   VfmabEo/h86RH3Kws60ibEPsEmZNeYB3ASHEtELnQ3dwkK9grXdmTFM2S
+   kACncqUj9wDifr/nbOTUJchn6ocE38v23gdL/LWYkowXQOGGBNV8U7uVh
+   cFS+5LltFhCYcFsDcyRpAf5mvGiE9P9NxN6QH/pJKMk+IFosc5w9clVVZ
+   Q==;
+X-CSE-ConnectionGUID: xcaKOe8ST9exWCnqDlm7Ig==
+X-CSE-MsgGUID: SRwyiXRyQ1uvoCopCTxMOQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11122"; a="20201511"
+X-IronPort-AV: E=Sophos;i="6.09,183,1716274800"; 
+   d="scan'208";a="20201511"
+Received: from orviesa005.jf.intel.com ([10.64.159.145])
+  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jul 2024 14:26:24 -0700
+X-CSE-ConnectionGUID: hO4vBnlwRdOBnWd46L+xgw==
+X-CSE-MsgGUID: q6o03YIPR+e2Ds0uBKt95g==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.09,183,1716274800"; 
+   d="scan'208";a="51330694"
+Received: from lkp-server01.sh.intel.com (HELO 68891e0c336b) ([10.239.97.150])
+  by orviesa005.jf.intel.com with ESMTP; 03 Jul 2024 14:26:23 -0700
+Received: from kbuild by 68891e0c336b with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1sP7Ua-000QFM-1P;
+	Wed, 03 Jul 2024 21:26:20 +0000
+Date: Thu, 4 Jul 2024 05:26:01 +0800
+From: kernel test robot <lkp@intel.com>
+To: Eric Sandeen <sandeen@redhat.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: Re: [PATCH 2/2] fuse: Convert to new uid/gid option parsing helpers
+Message-ID: <202407040514.52Z73Et4-lkp@intel.com>
+References: <4e1a4efa-4ca5-4358-acee-40efd07c3c44@redhat.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="3uu6b6ybcnfri4lk"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240703-of_property_for_each_u32-v1-13-42c1fc0b82aa@bootlin.com>
+In-Reply-To: <4e1a4efa-4ca5-4358-acee-40efd07c3c44@redhat.com>
+
+Hi Eric,
+
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on mszeredi-fuse/for-next]
+[also build test ERROR on linus/master vfs-idmapping/for-next v6.10-rc6 next-20240703]
+[cannot apply to brauner-vfs/vfs.all]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Eric-Sandeen/fuse-verify-g-u-id-mount-options-correctly/20240703-162239
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/mszeredi/fuse.git for-next
+patch link:    https://lore.kernel.org/r/4e1a4efa-4ca5-4358-acee-40efd07c3c44%40redhat.com
+patch subject: [PATCH 2/2] fuse: Convert to new uid/gid option parsing helpers
+config: mips-mtx1_defconfig (https://download.01.org/0day-ci/archive/20240704/202407040514.52Z73Et4-lkp@intel.com/config)
+compiler: clang version 16.0.6 (https://github.com/llvm/llvm-project 7cbf1a2591520c2491aa35339f227775f4d3adf6)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240704/202407040514.52Z73Et4-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202407040514.52Z73Et4-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+   fs/fuse/inode.c:743:2: error: call to undeclared function 'fsparam_uid'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           fsparam_uid     ("user_id",             OPT_USER_ID),
+           ^
+   fs/fuse/inode.c:744:2: error: call to undeclared function 'fsparam_gid'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           fsparam_gid     ("group_id",            OPT_GROUP_ID),
+           ^
+   fs/fuse/inode.c:743:2: error: incompatible integer to pointer conversion initializing 'const char *' with an expression of type 'int' [-Wint-conversion]
+           fsparam_uid     ("user_id",             OPT_USER_ID),
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   fs/fuse/inode.c:744:2: error: incompatible integer to pointer conversion initializing 'fs_param_type *' (aka 'int (*)(struct p_log *, const struct fs_parameter_spec *, struct fs_parameter *, struct fs_parse_result *)') with an expression of type 'int' [-Wint-conversion]
+           fsparam_gid     ("group_id",            OPT_GROUP_ID),
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>> fs/fuse/inode.c:745:2: error: designator in initializer for scalar type 'u8' (aka 'unsigned char')
+           fsparam_flag    ("default_permissions", OPT_DEFAULT_PERMISSIONS),
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/fs_parser.h:116:33: note: expanded from macro 'fsparam_flag'
+   #define fsparam_flag(NAME, OPT) __fsparam(NULL, NAME, OPT, 0, NULL)
+                                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/fs_parser.h:109:3: note: expanded from macro '__fsparam'
+                   .name = NAME, \
+                   ^~~~~~~~~~~~
+>> fs/fuse/inode.c:746:2: error: designator in initializer for scalar type 'unsigned short'
+           fsparam_flag    ("allow_other",         OPT_ALLOW_OTHER),
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/fs_parser.h:116:33: note: expanded from macro 'fsparam_flag'
+   #define fsparam_flag(NAME, OPT) __fsparam(NULL, NAME, OPT, 0, NULL)
+                                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/fs_parser.h:109:3: note: expanded from macro '__fsparam'
+                   .name = NAME, \
+                   ^~~~~~~~~~~~
+>> fs/fuse/inode.c:747:2: error: designator in initializer for scalar type 'const void *'
+           fsparam_u32     ("max_read",            OPT_MAX_READ),
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/fs_parser.h:120:32: note: expanded from macro 'fsparam_u32'
+   #define fsparam_u32(NAME, OPT)  __fsparam(fs_param_is_u32, NAME, OPT, 0, NULL)
+                                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/fs_parser.h:109:3: note: expanded from macro '__fsparam'
+                   .name = NAME, \
+                   ^~~~~~~~~~~~
+   fs/fuse/inode.c:743:2: warning: suggest braces around initialization of subobject [-Wmissing-braces]
+           fsparam_uid     ("user_id",             OPT_USER_ID),
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+           {
+   fs/fuse/inode.c:804:17: error: no member named 'uid' in 'struct fs_parse_result'
+                   kuid = result.uid;
+                          ~~~~~~ ^
+   fs/fuse/inode.c:816:17: error: no member named 'gid' in 'struct fs_parse_result'
+                   kgid = result.gid;
+                          ~~~~~~ ^
+   1 warning and 9 errors generated.
 
 
---3uu6b6ybcnfri4lk
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+vim +745 fs/fuse/inode.c
 
-Hello,
+d8a5ba45457e4a Miklos Szeredi 2005-09-09  738  
+d7167b149943e3 Al Viro        2019-09-07  739  static const struct fs_parameter_spec fuse_fs_parameters[] = {
+c30da2e981a703 David Howells  2019-03-25  740  	fsparam_string	("source",		OPT_SOURCE),
+c30da2e981a703 David Howells  2019-03-25  741  	fsparam_u32	("fd",			OPT_FD),
+c30da2e981a703 David Howells  2019-03-25  742  	fsparam_u32oct	("rootmode",		OPT_ROOTMODE),
+b382c6a31542e9 Eric Sandeen   2024-07-02  743  	fsparam_uid	("user_id",		OPT_USER_ID),
+b382c6a31542e9 Eric Sandeen   2024-07-02  744  	fsparam_gid	("group_id",		OPT_GROUP_ID),
+c30da2e981a703 David Howells  2019-03-25 @745  	fsparam_flag	("default_permissions",	OPT_DEFAULT_PERMISSIONS),
+c30da2e981a703 David Howells  2019-03-25 @746  	fsparam_flag	("allow_other",		OPT_ALLOW_OTHER),
+c30da2e981a703 David Howells  2019-03-25 @747  	fsparam_u32	("max_read",		OPT_MAX_READ),
+c30da2e981a703 David Howells  2019-03-25  748  	fsparam_u32	("blksize",		OPT_BLKSIZE),
+c7eb6869632a5d David Howells  2019-03-25  749  	fsparam_string	("subtype",		OPT_SUBTYPE),
+c30da2e981a703 David Howells  2019-03-25  750  	{}
+d8a5ba45457e4a Miklos Szeredi 2005-09-09  751  };
+d8a5ba45457e4a Miklos Szeredi 2005-09-09  752  
 
-On Wed, Jul 03, 2024 at 12:36:57PM +0200, Luca Ceresoli wrote:
-> Simplify code using of_property_for_each_u32_new() as the two additional
-> parameters in of_property_for_each_u32() are not used here.
->=20
-> Signed-off-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
-> ---
->  drivers/pwm/pwm-samsung.c | 4 +---
->  1 file changed, 1 insertion(+), 3 deletions(-)
->=20
-> diff --git a/drivers/pwm/pwm-samsung.c b/drivers/pwm/pwm-samsung.c
-> index efb60c9f0cb3..fef02a0b023e 100644
-> --- a/drivers/pwm/pwm-samsung.c
-> +++ b/drivers/pwm/pwm-samsung.c
-> @@ -510,8 +510,6 @@ static int pwm_samsung_parse_dt(struct pwm_chip *chip)
->  	struct samsung_pwm_chip *our_chip =3D to_samsung_pwm_chip(chip);
->  	struct device_node *np =3D pwmchip_parent(chip)->of_node;
->  	const struct of_device_id *match;
-> -	struct property *prop;
-> -	const __be32 *cur;
->  	u32 val;
-> =20
->  	match =3D of_match_node(samsung_pwm_matches, np);
-> @@ -520,7 +518,7 @@ static int pwm_samsung_parse_dt(struct pwm_chip *chip)
-> =20
->  	memcpy(&our_chip->variant, match->data, sizeof(our_chip->variant));
-> =20
-> -	of_property_for_each_u32(np, "samsung,pwm-outputs", prop, cur, val) {
-> +	of_property_for_each_u32_new(np, "samsung,pwm-outputs", val) {
->  		if (val >=3D SAMSUNG_PWM_NUM) {
->  			dev_err(pwmchip_parent(chip),
->  				"%s: invalid channel index in samsung,pwm-outputs property\n",
->=20
-
-Acked-by: Uwe Kleine-K=F6nig <u.kleine-koenig@baylibre.com>
-
-Feel free to merge this together with the change from the first patch.
-
-Best regards
-Uwe
-
---3uu6b6ybcnfri4lk
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmaFwUcACgkQj4D7WH0S
-/k6PuggAu8WCVFGH6QIMKU3X2rf+i2w61Hm9yGoz/E1JXjYYwhvN07D9QQrg3lFk
-uuvOlwgkdfuIHAsZupm4B503z6Cr+9e1c0yd2UsXZkR+Y5e5uAcWpFrqQPpsUjg6
-K4y5iO46KFiNdoyIw5vaEqa9r+2MGaV/6utEBzK71uNVzWWnYAxGJSrp9BXXUlRN
-ZUz4u7b3Yp+kmsIoFWF2SYjPB08bXS+XlNegSLFuhFLAklD1WtMgdfiyFyqVm20f
-wxAtUX4pOe9E7HV+9qcyWKkbxhOVOOD6iG1CnatgtZoAeRfvmcNx+o2M4x8H0qXK
-hetCnR7IsLL80SX5lvKiYYw2At4OEA==
-=UQNH
------END PGP SIGNATURE-----
-
---3uu6b6ybcnfri4lk--
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
