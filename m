@@ -1,111 +1,128 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A011A1E49F;
-	Wed,  3 Jul 2024 21:57:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 444A8136643;
+	Wed,  3 Jul 2024 23:18:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720043866; cv=none; b=FSqEBYLj05jPDZtB6C0GqoMf8diRzI+OCXywsvCsmGCe2w2b2xTyvdtPxmTt/cyiG0mo1TupsDrjTs5bwKQzqFK/gri1PYaSIFZYa1RMmfHs39vzv24sWdhq6FabgKLoZrskUTvQadu9BZuGdPO+qnsbaiz6cRPqsrVFv8CRmn4=
+	t=1720048709; cv=none; b=ARbKkRWCRoxIY0F3ny5ExUXsCVRZmtTvZgAlGpnqF4hKJmoXZTY5/5z7Y+miCV+eXiPJXWdoa+Vz76H5LMA32mb5svz2qkLRC3qjwyM7bIFXXH+paw7/uE5YOYIuHmRIq9Gg4PWS+fr/eHPfd3xucgRc01Ly9m27j0JP8blOisk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720043866; c=relaxed/simple;
-	bh=u6c8cEhbKLASZ3y0kQ8VmLeFrZTrVpISAbknzZDwfxI=;
+	s=arc-20240116; t=1720048709; c=relaxed/simple;
+	bh=leq8VNyokdvpQStEdxb0BGwQSSksYqqYCuQZSbBzsQ4=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=awuHkMY0vimhJUIY6sHnRQq886JixoqlrKNZk0TkKSfPwbH5Hb3FpW8Lb5GeYrEzt+vKVDD8dYnoJkQBscVV9JVFibQfYPY0/Y1mV8cdTZHSmql6/dXxoIUYz24lamOf1r46755xflhZio4BrHkavfiqXAPWjpDyLCsnoF1/OnU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=h3HuJcMC; arc=none smtp.client-ip=198.175.65.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=JlqkcyPNbIkHWR9ZzpeNpRY3NZpldwRzl552R2HQKvK7gCrS+CTDBB15FDSLzAtDBPwR9PizIom8EeCOVcrMiwQLUyTo5AIGtazfPBuhIqiO3oTL9ztfvn/hpTdfDtBHjOS70JtAV4ab5c+gICwLBSmYVjNZ/+Tgdl2wMcjiFlk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Bp/WzDVC; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="h3HuJcMC"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1720043865; x=1751579865;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=u6c8cEhbKLASZ3y0kQ8VmLeFrZTrVpISAbknzZDwfxI=;
-  b=h3HuJcMCQM99LZBmMUvY0ZcVE4oijtxG3RF5OqXZ2AKfJl0zqSNF5eLW
-   lR5RLbIicvoWHIrUeReERV5scb+5B5xK1rx9PiR4K6gJ60HS84VA/8Xj6
-   v99SSKhTZmQDGrN5MZOSWbWxTzu/iCAaZ8L9Y3m2rJQFAlgyMyt8achyQ
-   101lsRRrue7ndjLwzQ8aLwdKNh7HCNwFSjnDeM7++a5Hsj3kJT7qa9CF2
-   sfsVp2HC5MGxdVQmcwd9Z0bwUdHRjkQQsXw/OjecND8FIuqCVHeMhKeli
-   pxyDqLfGG3pQzNvNL0Ljwj5ITNT/877C1iHbuv8x6cvaFhLqN7DlKMt1N
-   A==;
-X-CSE-ConnectionGUID: Z2rRw+W1TpmSQkXR1iijPA==
-X-CSE-MsgGUID: GcXMLSFtRy6qJcYOurGt7A==
-X-IronPort-AV: E=McAfee;i="6700,10204,11122"; a="21108335"
-X-IronPort-AV: E=Sophos;i="6.09,183,1716274800"; 
-   d="scan'208";a="21108335"
-Received: from fmviesa009.fm.intel.com ([10.60.135.149])
-  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jul 2024 14:57:45 -0700
-X-CSE-ConnectionGUID: eaGsrHu6QAacS3dyfbqhvQ==
-X-CSE-MsgGUID: dyn5UHmVRhyPomcjdysQPw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.09,183,1716274800"; 
-   d="scan'208";a="46402822"
-Received: from lkp-server01.sh.intel.com (HELO 68891e0c336b) ([10.239.97.150])
-  by fmviesa009.fm.intel.com with ESMTP; 03 Jul 2024 14:57:41 -0700
-Received: from kbuild by 68891e0c336b with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1sP7yt-000QGs-2f;
-	Wed, 03 Jul 2024 21:57:39 +0000
-Date: Thu, 4 Jul 2024 05:57:15 +0800
-From: kernel test robot <lkp@intel.com>
-To: Basavaraj Natikar <Basavaraj.Natikar@amd.com>, vkoul@kernel.org,
-	dmaengine@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Raju.Rangoju@amd.com, Frank.li@nxp.com, helgaas@kernel.org,
-	pstanner@redhat.com, Basavaraj Natikar <Basavaraj.Natikar@amd.com>
-Subject: Re: [PATCH v3 5/7] dmaengine: ae4dma: Register AE4DMA using
- pt_dmaengine_register
-Message-ID: <202407040547.MfCINdp6-lkp@intel.com>
-References: <20240624075610.1659502-6-Basavaraj.Natikar@amd.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Bp/WzDVC"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3F0EAC2BD10;
+	Wed,  3 Jul 2024 23:18:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1720048708;
+	bh=leq8VNyokdvpQStEdxb0BGwQSSksYqqYCuQZSbBzsQ4=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=Bp/WzDVC4BdTUPn2o2qlmwUR55Hld+30vDvwX7VrDHWNYUeDB+bvBPG+OpCn1W8su
+	 0C6In+U+QOJra838+j9XuCsk0SNM4tMBV7aQ8L8xTK5JxSGUnEoOwu5+hyNcStpns7
+	 p9usbd70QPW0pzUVHK1F6LlZDZ4+HImnLM7JN8uXjXksLExKUbAoRSPkLp2ty8VCTz
+	 0rojh20k7YeJjpEydGkG78SVu/uWoWNvE+Sek6dWoC8koBT2KsN0xX2xY78rWLkSNE
+	 2BzIhr0e+nrVgM6ZEZJ7YUNqVJQWCt62Dk5UgwvOEvvDzcDPt+94agNEM50NHxjsFX
+	 WpBaoDWtfZ4uQ==
+Date: Wed, 3 Jul 2024 16:18:26 -0700
+From: Namhyung Kim <namhyung@kernel.org>
+To: Changbin Du <changbin.du@huawei.com>
+Cc: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>,
+	Arnaldo Carvalho de Melo <acme@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+	Jiri Olsa <jolsa@kernel.org>, Ian Rogers <irogers@google.com>,
+	Adrian Hunter <adrian.hunter@intel.com>,
+	"Liang, Kan" <kan.liang@linux.intel.com>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev, Hui Wang <hw.huiwang@huawei.com>
+Subject: Re: [PATCH v5 8/8] perf buildid-cache: recognize vdso when adding
+ files
+Message-ID: <ZoXcQunHBf0Z1JIW@google.com>
+References: <20240702041837.5306-1-changbin.du@huawei.com>
+ <20240702041837.5306-9-changbin.du@huawei.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20240624075610.1659502-6-Basavaraj.Natikar@amd.com>
+In-Reply-To: <20240702041837.5306-9-changbin.du@huawei.com>
 
-Hi Basavaraj,
+Hello,
 
-kernel test robot noticed the following build errors:
+On Tue, Jul 02, 2024 at 12:18:37PM +0800, Changbin Du wrote:
+> Identify vdso by file name matching. The vdso objects have name
+> as vdso[32,64].so[.dbg].
+> 
+> $ perf buildid-cache -a /work/linux/arch/x86/entry/vdso/vdso64.so.dbg
+> 
+> Without this change, adding vdso using above command actually will never
+> be used.
 
-[auto build test ERROR on linus/master]
-[also build test ERROR on v6.10-rc6]
-[cannot apply to vkoul-dmaengine/next next-20240703]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Can we handle /tmp/perf-vdso.so-XXXXXX too?
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Basavaraj-Natikar/dmaengine-Move-AMD-DMA-driver-to-separate-directory/20240625-194947
-base:   linus/master
-patch link:    https://lore.kernel.org/r/20240624075610.1659502-6-Basavaraj.Natikar%40amd.com
-patch subject: [PATCH v3 5/7] dmaengine: ae4dma: Register AE4DMA using pt_dmaengine_register
-config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20240704/202407040547.MfCINdp6-lkp@intel.com/config)
-compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240704/202407040547.MfCINdp6-lkp@intel.com/reproduce)
+Thanks,
+Namhyung
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202407040547.MfCINdp6-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> ld.lld: error: duplicate symbol: __cfi_pt_check_status_trans
-   >>> defined at ptdma-dev.c
-   >>>            drivers/dma/amd/ptdma/ptdma-dev.o:(__cfi_pt_check_status_trans) in archive vmlinux.a
-   >>> defined at ae4dma-dev.c
-   >>>            drivers/dma/amd/ae4dma/ae4dma-dev.o:(.text+0x0) in archive vmlinux.a
---
->> ld.lld: error: duplicate symbol: __cfi_pt_core_perform_passthru
-   >>> defined at ptdma-dev.c
-   >>>            drivers/dma/amd/ptdma/ptdma-dev.o:(__cfi_pt_core_perform_passthru) in archive vmlinux.a
-   >>> defined at ae4dma-dev.c
-   >>>            drivers/dma/amd/ae4dma/ae4dma-dev.o:(.text+0x440) in archive vmlinux.a
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+> 
+> Signed-off-by: Changbin Du <changbin.du@huawei.com>
+> ---
+>  tools/perf/builtin-buildid-cache.c | 26 +++++++++++++++++++++++++-
+>  1 file changed, 25 insertions(+), 1 deletion(-)
+> 
+> diff --git a/tools/perf/builtin-buildid-cache.c b/tools/perf/builtin-buildid-cache.c
+> index b0511d16aeb6..8edea9044a65 100644
+> --- a/tools/perf/builtin-buildid-cache.c
+> +++ b/tools/perf/builtin-buildid-cache.c
+> @@ -172,6 +172,30 @@ static int build_id_cache__add_kcore(const char *filename, bool force)
+>  	return 0;
+>  }
+>  
+> +static bool filename_is_vdso(const char *filename)
+> +{
+> +	char *fname, *bname;
+> +	static const char * const vdso_names[] = {
+> +		"vdso.so", "vdso32.so", "vdso64.so", "vdsox32.so"
+> +	};
+> +
+> +	fname = strdup(filename);
+> +	if (!fname) {
+> +		pr_err("no mememory\n");
+> +		return false;
+> +	}
+> +
+> +	bname = basename(fname);
+> +	if (!bname)
+> +		return false;
+> +
+> +	for (unsigned int i = 0; i < ARRAY_SIZE(vdso_names); i++) {
+> +		if (!strncmp(bname, vdso_names[i], strlen(vdso_names[i])))
+> +			return true;
+> +	}
+> +	return false;
+> +}
+> +
+>  static int build_id_cache__add_file(const char *filename, struct nsinfo *nsi)
+>  {
+>  	char sbuild_id[SBUILD_ID_SIZE];
+> @@ -189,7 +213,7 @@ static int build_id_cache__add_file(const char *filename, struct nsinfo *nsi)
+>  
+>  	build_id__sprintf(&bid, sbuild_id);
+>  	err = build_id_cache__add_s(sbuild_id, filename, nsi,
+> -				    false, false);
+> +				    false, filename_is_vdso(filename));
+>  	pr_debug("Adding %s %s: %s\n", sbuild_id, filename,
+>  		 err ? "FAIL" : "Ok");
+>  	return err;
+> -- 
+> 2.34.1
+> 
