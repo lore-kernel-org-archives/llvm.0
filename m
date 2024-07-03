@@ -1,169 +1,139 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB7CF191F91
-	for <llvm@lists.linux.dev>; Wed,  3 Jul 2024 18:03:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D201CF9D4;
+	Wed,  3 Jul 2024 18:07:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720029801; cv=none; b=WgXPDSqIbRFoZaXrK+jQqAmj0tQ1e+YcAy9cwdqgegb3vfZmbBJIQdUFjAwirCGqO+SbesgZPWDDWOKEAgqPOOaoqYIA6VXlkBrSDa/7sXZvkfWV19SUTaV6sU5GnzU6awsepZ1sFe8lbomlycvLeWbLaCd8gxNhVw6onX4CS2M=
+	t=1720030064; cv=none; b=i9XdwKQC4XV3xSPFlK/JYqpMJIbcTREXhPXjgN0PglgwgMJJxS/+FIgelBReg3LS8Wzr9omICAep/mLO8s/VRcYZWAgXPeH3ibLmzwNTHG0n6qRVW0wTQiJm72dFqXlMnCR8jdlYTenorftNIGnZvhQN6COL5MjlO98R8wLz1qE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720029801; c=relaxed/simple;
-	bh=rpkk3eszE0pZXbO6wsoMdfLvcsO2aeIBIUTFlb1Kx5Q=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=BDpmqPWyZ2x/W56vswMqGvfNmjVsGdIS5fso8WCSnwzFRovdFQ3bhLkA2bwyAiHeZG3+nugVvjDGn9No8cJif5nE77N92m49FKJcJhXqP8J7bqA06Ljnl3CBMDA02BmM9/GSH/9z4Ny+soX/U6d047b3r54eP8GTPfFuI9+B1TA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=B1u7iGyC; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1720030064; c=relaxed/simple;
+	bh=7VkdfXXbnQAAagurnl0t1uowHfXXxqv6JWqV5yzvHyc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=CiMPUxASSVAdQ8N1jrJ4jlLETUK7VWDp3bpK1DeOHc+gim4rshy99CIXb9XQjsp7n9GbL6+VnGBgMdVXmLlMVfo34rFFswixa9gasJlyUYqZ0OkyMARPECxh1EncSIm+fCuZJJ8KcUj3zfgBnQWwkNnfSOHqyyF1gRKjH2P3384=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=X3bpvJgx; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="B1u7iGyC"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1720029798;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=Zo31XQTFtStCHG75LmJtzrY0zLh2lPlEKkPbi+Dl1LA=;
-	b=B1u7iGyCiEAIRWuO3csKq/cdV/zBaX5VPBrhUaGohFPj1AXPLroh5iZxQDYDFe2cY58Llp
-	0fC7ZhCDkP1duJ0ORCpt8MjRceN19/yKu7EHadaeA8QpaHLWzCbkSSkFAdyJNJ/ofyONMB
-	qOCgYvItlZBRpgtbOucj2kloUTYu0fA=
-Received: from mx-prod-mc-04.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-546-yeOgSlYEP06OBWdxxH5zmA-1; Wed,
- 03 Jul 2024 14:03:17 -0400
-X-MC-Unique: yeOgSlYEP06OBWdxxH5zmA-1
-Received: from mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.12])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-04.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 9773719560A3
-	for <llvm@lists.linux.dev>; Wed,  3 Jul 2024 18:03:16 +0000 (UTC)
-Received: from [172.64.0.79] (unknown [10.30.33.131])
-	by mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id DC9411954B0D;
-	Wed,  3 Jul 2024 18:03:15 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL (MISSED 39 of 192): Test report for master
- (6.10.0-rc6, mainline.kernel.org-clang, 73461051)
-Date: Wed, 03 Jul 2024 18:03:15 -0000
-To: llvm@lists.linux.dev, bgoncalv@redhat.com
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="X3bpvJgx"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2346AC2BD10;
+	Wed,  3 Jul 2024 18:07:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1720030063;
+	bh=7VkdfXXbnQAAagurnl0t1uowHfXXxqv6JWqV5yzvHyc=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=X3bpvJgxZPWMXNOzcyielDafYLsorlGeMfGsYxZsE3DcfgNG38u+IpqkFauqV7JBb
+	 5vrbm1WYc3A6PpB/BYRkykAD7OTF0Cj7mNGz1MOi0sa5ZMS/EgfduMIqZfBT2ojOEE
+	 bFo2aTY3NN6jY868V+Ef+HPG5nwsrIILcL4gaARoEmQ/3VJxlw8KNvls5K1NJbvrcL
+	 liQUqmGsYZrzJg5w0kk4/LvcK6Tdp62Zk7+kzOZ/GnWL+VAWuwzwfMk9DNJ/Cy73bN
+	 +KSVQC/fntqBgC8EoMj80EdF4hoVvz6Kgpa3QHWVeUvUPp8LsLtGUtLPC5Ip21htEj
+	 aLChwBO4AdEcA==
+Date: Wed, 3 Jul 2024 12:07:42 -0600
+From: Rob Herring <robh@kernel.org>
+To: Luca Ceresoli <luca.ceresoli@bootlin.com>
+Cc: Miguel Ojeda <ojeda@kernel.org>, Saravana Kannan <saravanak@google.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Michael Turquette <mturquette@baylibre.com>,
+	Stephen Boyd <sboyd@kernel.org>, Tony Lindgren <tony@atomide.com>,
+	Bjorn Andersson <andersson@kernel.org>,
+	Emilio =?iso-8859-1?Q?L=F3pez?= <emilio@elopez.com.ar>,
+	Chen-Yu Tsai <wens@csie.org>,
+	Jernej Skrabec <jernej.skrabec@gmail.com>,
+	Samuel Holland <samuel@sholland.org>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Daniel Lezcano <daniel.lezcano@linaro.org>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Florian Fainelli <florian.fainelli@broadcom.com>,
+	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>,
+	Linus Walleij <linus.walleij@linaro.org>,
+	Bartosz Golaszewski <brgl@bgdev.pl>,
+	Jonathan Cameron <jic23@kernel.org>, Lee Jones <lee@kernel.org>,
+	Shawn Guo <shawnguo@kernel.org>,
+	Pengutronix Kernel Team <kernel@pengutronix.de>,
+	Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <ukleinek@kernel.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Jiri Slaby <jirislaby@kernel.org>,
+	Richard Leitner <richard.leitner@linux.dev>,
+	Liam Girdwood <lgirdwood@gmail.com>,
+	Mark Brown <broonie@kernel.org>,
+	Nicolas Ferre <nicolas.ferre@microchip.com>,
+	Michael Ellerman <mpe@ellerman.id.au>,
+	Nicholas Piggin <npiggin@gmail.com>,
+	Christophe Leroy <christophe.leroy@csgroup.eu>,
+	"Naveen N. Rao" <naveen.n.rao@linux.ibm.com>,
+	Damien Le Moal <dlemoal@kernel.org>,
+	"Peng Fan (OSS)" <peng.fan@oss.nxp.com>,
+	Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+	linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+	llvm@lists.linux.dev, linux-clk@vger.kernel.org,
+	linux-omap@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+	linux-samsung-soc@vger.kernel.org, linux-gpio@vger.kernel.org,
+	linux-iio@vger.kernel.org, linux-pwm@vger.kernel.org,
+	linux-serial@vger.kernel.org, linux-usb@vger.kernel.org,
+	patches@opensource.cirrus.com, linux-sound@vger.kernel.org,
+	linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org
+Subject: Re: [PATCH 00/20] Simplify of_property_for_each_u32()
+Message-ID: <20240703180742.GB1245093-robh@kernel.org>
+References: <20240703-of_property_for_each_u32-v1-0-42c1fc0b82aa@bootlin.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.12
-Message-Id: <72853.124070314031702525@us-mta-546.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240703-of_property_for_each_u32-v1-0-42c1fc0b82aa@bootlin.com>
 
-Hi, we tested your kernel and here are the results:
+On Wed, Jul 03, 2024 at 12:36:44PM +0200, Luca Ceresoli wrote:
+> [Note: to reduce the noise I have trimmed the get_maintainers list
+> manually. Should you want to be removed, or someone else added, to future
+> versions, just tell me. Sorry for the noise.]
+> 
+> This series aims at simplifying of_property_for_each_u32() as well as
+> making it more difficult to misuse it in the future.
+> 
+> The long-term goal is changing this pattern:
+> 
+>   struct property *prop;
+>   const __be32 *p;
+>   u32 val;
+>  
+>   of_property_for_each_u32(np, "xyz", prop, p, val) { ... }
+> 
+> to this:
+> 
+>   u32 val;
+> 
+>   of_property_for_each_u32(np, "xyz", val) { ... }
+> 
+> So, removing the 3rd and 4th arguments which are typically meant to be
+> internal. Those two parameters used to be unavoidable until the kernel
+> moved to building with the C11 standard unconditionally. Since then, it is
+> now possible to get rid of them. However a few users of
+> of_property_for_each_u32() do actually use those arguments, which
+> complicates the transition. For this reason this series does the following:
+> 
+>  * Add of_property_for_each_u32_new(), which does not have those two
+>    arguments (patch 1)
+>  * Convert _almost_ every usage to of_property_for_each_u32_new()
+>  * Rename of_property_for_each_u32() to of_property_for_each_u32_old() and
+>    deprecate it, as a incentive to code not (yet) in mainline to upgrade
+>    to the *_new() version (last patch)
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: OK
-              Test: FAILED
+I don't really see the point of introducing the _old variant. Let's get 
+this done in one step.
 
+> 
+> The plan for the next series is to additionally:
+> 
+>  * Convert the few remaining of_property_for_each_u32_old() instantes to
+>    of_property_for_each_u32_new()
+>  * Remove of_property_for_each_u32_old()
+>  * Rename of_property_for_each_u32_new() to of_property_for_each_u32()
 
-Kernel information:
-    Commit message: Merge tag 'erofs-for-6.10-rc7-fixes' of git://git.kerne=
-l.org/pub/scm/linux/kernel/git/xiang/erofs
+Honestly, I think there's few enough users we could just convert the 
+whole thing in one patch. It's all got to go thru 1 tree anyways. If 
+there's new cases in -next, then I'd be happy to send it to Linus at the 
+end of the merge window.
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1358019500
-
-One or more kernel tests failed:
-    Unrecognized or new issues:
-        Boot test
-               s390x
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-redhat:1358019500-s390x-kernel_upt_14
-                   Non-passing ran subtests:
-                       =E2=9D=8C FAIL Boot test
-               s390x
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-redhat:1358019500-s390x-kernel_upt_29
-                   Non-passing ran subtests:
-                       =E2=9D=8C FAIL Boot test
-               s390x
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-redhat:1358019500-s390x-kernel_upt_35
-                   Non-passing ran subtests:
-                       =E2=9D=8C FAIL Boot test
-             ppc64le
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-redhat:1358019500-ppc64le-kernel_upt_4
-                   Non-passing ran subtests:
-                       =E2=9D=8C FAIL Boot test
-             ppc64le
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-redhat:1358019500-ppc64le-kernel_upt_18
-                   Non-passing ran subtests:
-                       =E2=9D=8C FAIL Boot test
-             ppc64le
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-redhat:1358019500-ppc64le-kernel_upt_24
-                   Non-passing ran subtests:
-                       =E2=9D=8C FAIL Boot test
-             aarch64
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-redhat:1358019500-aarch64-kernel_upt_4
-                   Non-passing ran subtests:
-                       =E2=9D=8C FAIL distribution/kpkginstall/journalctl-c=
-heck
-        Reboot test
-              x86_64
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-redhat:1358019500-x86_64-kernel_upt_35
-                   Non-passing ran subtests:
-                       =E2=9D=8C FAIL misc/reboot-test/journalctl-check
-             aarch64
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-redhat:1358019500-aarch64-kernel_upt_10
-                   Non-passing ran subtests:
-                       =E2=9D=8C FAIL misc/reboot-test/journalctl-check
-
-
-Tests that were not ran because of internal issues:=20
-    AMTU (Abstract Machine Test Utility) [ppc64le, s390x]
-    Boot test [s390x]
-    CKI/restraint [s390x]
-    Filesystem - Loopdev Sanity [ppc64le, s390x]
-    kdump - crash-file-load [ppc64le, s390x]
-    kdump - kexec-file-load [s390x]
-    Libkcapi AF_ALG test [ppc64le, s390x]
-    machineinfo [s390x]
-    Memory function: memfd_create [ppc64le, s390x]
-    Networking - Ethernet drivers sanity [ppc64le, s390x]
-    Networking cki netfilter test [ppc64le, s390x]
-    Networking vnic: ipvlan/basic [ppc64le, s390x]
-    POSIX pjd-fstest suites [ppc64le, s390x]
-    Reboot test [ppc64le, s390x]
-    SELinux Custom Module Setup [s390x]
-    selinux-policy: serge-testsuite [ppc64le, s390x]
-    Storage - blktests - blk - upstream [s390x]
-    Storage - blktests - nvme-tcp - upstream [s390x]
-    Storage - dm/common [ppc64le, s390x]
-    Storage - swraid scsi_raid [s390x]
-    stress: stress-ng - cpu-cache [s390x]
-    stress: stress-ng - memory [s390x]
-
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+Rob
