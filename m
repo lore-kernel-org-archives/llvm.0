@@ -1,38 +1,38 @@
 Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net [217.70.183.194])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 558A517FADC;
-	Wed,  3 Jul 2024 10:38:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C70B181CE6;
+	Wed,  3 Jul 2024 10:38:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.194
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720003093; cv=none; b=RdMfRtZAOOxRp6XhseZJ/WUpCX/1ypG8no5/6I74JAW5r4JbXYdWzVzODKjtciAht0eirBY6NTMqgMv/2HYZPdCA+iAkle/FGNNCNmqLSYBDi93sX3ElJj8WTUD2a57fQ9k85vZJwrJbzsGXqrnJ8U1M9P53AkcpF327t7UQCwc=
+	t=1720003097; cv=none; b=NbkAb/pLliAD06/9ae3eggc1wm8scKsIsK8Vb0d9VmprBdeXXMiIEXV9u5EHkyHHLvKVz8JfpD+ObbTG9AdCoM5qgFXw9A2rG8pktJ/UciCYr/FpFSI88Hg7mQgyGE3bvTHvdAXJDGoiWxkdlqXrJkcH3lD1i1dFLockAQyYNAA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720003093; c=relaxed/simple;
-	bh=MWb3iKSy3KuhMAp3Fcz0XaJXmnFKQzA4tbf+M+qvL1I=;
+	s=arc-20240116; t=1720003097; c=relaxed/simple;
+	bh=fGYi73hgDS5Rv5+1Sa5HL9L5zXbbHHgnDvkETXpxFbI=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=V+IiRekoVb62vnB0eJAWFog6LSXHqHK1N5Az+SqwXD+Uq1SfX3oFfzUWAMx5/ulxrYnFkvU5qWdvkUJTV5DRybUVqjLDHNVKnVkVP/G8l48vJmYilgE1n+aZPUcd3suOLb7NUh35rbb7TyH/I/n2oZwrn0POJBm2mYjXFZYwrmg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=MG5/4/cp; arc=none smtp.client-ip=217.70.183.194
+	 In-Reply-To:To:Cc; b=gVRLZcLHeh8YitfjnnldfoFdqiZkhZWL+YO5FSHYc8tv6tw2wH5mnXzBqbcHDtCnRWxhmqfW6uR+dIAUaxkKn36fNU3UV8g6LEx4jpa6PgtVOHuemDrMBltZRVDeY/zNWNBwNXgyuPKU8BUlbN6LEQH+OIezfNQny7S/NV4cj4A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=QjQJZfS3; arc=none smtp.client-ip=217.70.183.194
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="MG5/4/cp"
-Received: by mail.gandi.net (Postfix) with ESMTPSA id E6DCC4000C;
-	Wed,  3 Jul 2024 10:38:05 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="QjQJZfS3"
+Received: by mail.gandi.net (Postfix) with ESMTPSA id E267B40002;
+	Wed,  3 Jul 2024 10:38:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1720003089;
+	t=1720003093;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=m4n9Na9c++gxwPPGLgqtYV2GyYYvNsA2Yt/HwrgABCM=;
-	b=MG5/4/cpLUMYOoTYdFn5GEE4xSFBzFjdeyIQ7Ld1HS4jyQDwPVsZ+sRL0NZJG4V/L8kZmK
-	AgucvPwKtMSRmVMMFP/pyy6BmAd8dH0RIR69LfAGutPOXk4KF/W3VXvSAyQduxnAUBUPwU
-	l6wZER48jsIRJRKiz33tDEYUFGUJy6RCkV/TNP4d5b5SSy7IpASLaQ+r2nHReMZ3eLbjM2
-	HGa18fhNeNscNVPKqWC9mUCVYrb5FfcvTdaf/U2NNGahQ78hr7yJ98q08+AVuSs0yLA1OB
-	fumgPcFVsUlRIKMhXK5RBPsv4fND81CPBwB7KkNckBhTs8MkFV9Mxy1yBSsghg==
+	bh=JB7jnVV90mJW2p0b0n6I13HQQYwTmmWWoFEk/HwlIBA=;
+	b=QjQJZfS3hQSmHwIyTs5N6cWBkKEhVJTnmXxV93K/mH/jCw3bNE8vBVQazsP6i+9s7H/eKZ
+	WQ573YI8LUuy/E7FsVFy7LphtduSQki23ZLleDsQAiHGRYob4mVEeLvvfzWmuC++ENo7GP
+	z56ULB449b1QKqRW49icT0WrmlOIurvHPx95lM4gK0zARettlLCbxHyglvYZt7IuPzQwDZ
+	pPyregDeYjogULkibHX5sMVBCzcCYzEI290IYlZOTNreRVC/JZ9ORcuum4RGJIjQ0j/Tu3
+	bkDdZHqjZdtRBTwwd8l0pwDZZ+Xl6swWizUKdCrki+QAvN2fUScfyf28Brju6g==
 From: Luca Ceresoli <luca.ceresoli@bootlin.com>
-Date: Wed, 03 Jul 2024 12:36:55 +0200
-Subject: [PATCH 11/20] irqchip/atmel-aic: convert to
+Date: Wed, 03 Jul 2024 12:36:56 +0200
+Subject: [PATCH 12/20] iio: adc: ti_am335x_adc: convert to
  of_property_for_each_u32_new()
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -42,7 +42,7 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20240703-of_property_for_each_u32-v1-11-42c1fc0b82aa@bootlin.com>
+Message-Id: <20240703-of_property_for_each_u32-v1-12-42c1fc0b82aa@bootlin.com>
 References: <20240703-of_property_for_each_u32-v1-0-42c1fc0b82aa@bootlin.com>
 In-Reply-To: <20240703-of_property_for_each_u32-v1-0-42c1fc0b82aa@bootlin.com>
 To: Miguel Ojeda <ojeda@kernel.org>, Rob Herring <robh@kernel.org>, 
@@ -91,31 +91,28 @@ parameters in of_property_for_each_u32() are not used here.
 
 Signed-off-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
 ---
- drivers/irqchip/irq-atmel-aic-common.c | 4 +---
+ drivers/iio/adc/ti_am335x_adc.c | 4 +---
  1 file changed, 1 insertion(+), 3 deletions(-)
 
-diff --git a/drivers/irqchip/irq-atmel-aic-common.c b/drivers/irqchip/irq-atmel-aic-common.c
-index 072bd227b6c6..543ea249df53 100644
---- a/drivers/irqchip/irq-atmel-aic-common.c
-+++ b/drivers/irqchip/irq-atmel-aic-common.c
-@@ -111,8 +111,6 @@ static void __init aic_common_ext_irq_of_init(struct irq_domain *domain)
- 	struct device_node *node = irq_domain_get_of_node(domain);
- 	struct irq_chip_generic *gc;
- 	struct aic_chip_data *aic;
+diff --git a/drivers/iio/adc/ti_am335x_adc.c b/drivers/iio/adc/ti_am335x_adc.c
+index 95fa857e8aad..ca0f542ebc77 100644
+--- a/drivers/iio/adc/ti_am335x_adc.c
++++ b/drivers/iio/adc/ti_am335x_adc.c
+@@ -564,13 +564,11 @@ static int tiadc_parse_dt(struct platform_device *pdev,
+ 			  struct tiadc_device *adc_dev)
+ {
+ 	struct device_node *node = pdev->dev.of_node;
 -	struct property *prop;
--	const __be32 *p;
- 	u32 hwirq;
+-	const __be32 *cur;
+ 	int channels = 0;
+ 	u32 val;
+ 	int i;
  
- 	gc = irq_get_domain_generic_chip(domain, 0);
-@@ -120,7 +118,7 @@ static void __init aic_common_ext_irq_of_init(struct irq_domain *domain)
- 	aic = gc->private;
- 	aic->ext_irqs |= 1;
+-	of_property_for_each_u32(node, "ti,adc-channels", prop, cur, val) {
++	of_property_for_each_u32_new(node, "ti,adc-channels", val) {
+ 		adc_dev->channel_line[channels] = val;
  
--	of_property_for_each_u32(node, "atmel,external-irqs", prop, p, hwirq) {
-+	of_property_for_each_u32_new(node, "atmel,external-irqs", hwirq) {
- 		gc = irq_get_domain_generic_chip(domain, hwirq);
- 		if (!gc) {
- 			pr_warn("AIC: external irq %d >= %d skip it\n",
+ 		/* Set Default values for optional DT parameters */
 
 -- 
 2.34.1
