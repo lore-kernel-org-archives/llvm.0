@@ -1,139 +1,209 @@
-Received: from mail-lf1-f51.google.com (mail-lf1-f51.google.com [209.85.167.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA26B16DEC3
-	for <llvm@lists.linux.dev>; Wed,  3 Jul 2024 11:34:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE768137910;
+	Wed,  3 Jul 2024 11:40:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720006448; cv=none; b=kdSl6jnJBVUuMt7ad26dD5gfX5i2+rTpMEpFl3xwg0PBDx1OQ9k1uOBgUKv/67RejyCeVKDI3iM6uwQxwn4zbCXLt/YP+0duTpCtooOONfMlakbfe/pejcI9FM1vSImH/A0Y/3xKeUHIjvrIrg4yLnupvvZtXsCgyUJ3XqUqNFk=
+	t=1720006815; cv=none; b=B6U9KX1CvozYDBBvCw7dkilnMmjHRZDGQ6O1injcioeEOnP1YUAn4V/9Qi3YYrnswMie0K2WmSjOc1iRj/JyIZ/pgW03zRcj94TbxSnMmwXG5dLnfQV9wVvyeDUsGiY6PDZcNzVmwTXsRwkYdoj7yqPSDcwecJ00uAoZsl3a2Vk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720006448; c=relaxed/simple;
-	bh=FZENwCduhzMR7HNXX0tAbKbkTMhnOf9iriLhVyWT2uM=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Zq5DYXSYbHHXrEsLYjRYaFm6eeM0Q7FM0BxvwnF2WtqG1ALQCv+Snn3pzeHPbvcMfhovj8yEY5oP5bzCvhUa2S7Dj2Enr3tFM0vkeqkkAKG8A1YGWjwV8V6dD1Xt1f/RJ21LL7IO0slaJmqGgeKwXd5dov5SsilfWYhJnwFr6no=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl; spf=none smtp.mailfrom=bgdev.pl; dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b=LiEClGIh; arc=none smtp.client-ip=209.85.167.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=bgdev.pl
+	s=arc-20240116; t=1720006815; c=relaxed/simple;
+	bh=gGzduXQsbcHDOGbCXKRFQzBo6s/46Jc9BIE/FSN493k=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=dxcZa02jBVrVXDec8itYWuqd/ygf0FQF4PqWP/AhfkPz2L7Cys5kzGa7A6zOKK7s7pL2Bg0r2tNdNwQ54o76nKSQGrbx6+WTnuBLbWlDN+uZgpbtAoZ3KRuEomZHXJX+bLm7N67OSL3dRDvDbadKq1h31LHTh1fBh/5BPO+mDqs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=XQOR4v06; arc=none smtp.client-ip=198.175.65.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b="LiEClGIh"
-Received: by mail-lf1-f51.google.com with SMTP id 2adb3069b0e04-52e9a920e73so416659e87.2
-        for <llvm@lists.linux.dev>; Wed, 03 Jul 2024 04:34:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20230601.gappssmtp.com; s=20230601; t=1720006444; x=1720611244; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=KGjQIIef8f4D8V2nNTqkl2FTePoqDGpILu519rNKT2M=;
-        b=LiEClGIhpgOlHUWpXE1i7Dzj4sCX04wIWimq7Jsd1EHcxIN0Arrixc0ymKfUd3vy7U
-         P6B0vfsOhrFpGdgO6G6xTzL4ClsF9rN2MFoGrlc2kLGHty4kcSAWF7aMQluPOQ1oH767
-         RMwZ5Bis4g5nk9OD9BqC6dKJTS+LLidOKrm5u0JHyTFVr+ZavoWxCbJAPUiTEWU5GLYz
-         tGENyxzOs6Uo9BkRhfzQmf3PRhUGcWaWrcnMzv4LKA6Ug5Hnx5MhjGHsmCcOKknEgpTO
-         hj/cUtAT/GfB3oaDykOVLYAXJalC9r/29tlK0Emwh1k2BBLuuu/IVpMWrWZJhZyxh03z
-         hKLg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1720006444; x=1720611244;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=KGjQIIef8f4D8V2nNTqkl2FTePoqDGpILu519rNKT2M=;
-        b=r3Ny8PK9/TfGzB2SxFkXOGiOYur8c5DtlNS/ousPLaJgxKxeoDQLYERj/HfHkZkNwT
-         VZWY5ew4qNTcTv8vLIsbCYi9COBuuvaoE6/KY/PjFy5zdjMrnMPWza8akGQWG658WPmX
-         71uouoG2ez22CVs+y8BuVocGEqfup193PUPJ+etOTC6m2EfXWoVggd1wjjSIHwOPLHbK
-         GShF7F74H61B3GRMCUL/cCeTCxrdQZbmDXaiQgiQOJEl1s1nwjGEOPvdZ1XRue42YJCy
-         cwzReczuo1xjbHtQTjAeNjXZc2sqdo4XdpjjyN40BJwgWg2yq440xJQdGAVSsVIHz7wd
-         4jfw==
-X-Forwarded-Encrypted: i=1; AJvYcCUbkNGix6QBEJ7QLU9gY7ZOiPkSUjFW3W4t+dEBwmCNwZKCy/wF6Dt5lTPv2fFmeR8mQJAbHRKGx/nIfwy1pBhyPu/jUw==
-X-Gm-Message-State: AOJu0YxmNUkKmzNPORwSnWmpqhZA/DN4AlpgEO3XGi62Lc/Oesp/mpu3
-	JPQfDQr36itrgrzbXWvi8tx7o/0FmfASf9vfnqA+vLyCe9z7vyQMDqMAz0PJWCKv3dcMKTFawYn
-	xbU7ZRmA4AyeofYyhLae5JOmVrHA1stxlRN6GxQ==
-X-Google-Smtp-Source: AGHT+IHvYQvlnz9xSSjxxA0C9+ARDlWBymS0Nc+4OcDhYKcJABqlW19CRkZVdGMg0Rc503nQzevZwF7mryFVzLHp4+k=
-X-Received: by 2002:ac2:4e09:0:b0:52c:d8e9:5d8b with SMTP id
- 2adb3069b0e04-52e826678a3mr7597242e87.25.1720006444010; Wed, 03 Jul 2024
- 04:34:04 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="XQOR4v06"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1720006813; x=1751542813;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=gGzduXQsbcHDOGbCXKRFQzBo6s/46Jc9BIE/FSN493k=;
+  b=XQOR4v064lbVAWVIvNamOLaLt8sYoy76WgBf7kXD6flwrt1m7to0Mh9i
+   CIqZB/aVVxX3o0JGyt5E2OEjyo6TIStC+Agda7MxulK0eTNngSH/PMh+9
+   WrSAIdS0y4FQkorITj+FZcuAK/UN93nfeqV6vR7yrx6fFK5FUkkIsJTUK
+   Cqm2QxITnOSd7BjnRYujHXB+h0petUovYzlvWdHLWhy8Q7Ocr84haipf/
+   gXFzmSX0WaCaacMG36b0gxjAwE3yAZFak7tI6+G250MsWoCl3+9D36emw
+   khW43zZ12fAuga7Q4gyHbqlHPH5gH0WQ8+44npVrdpxKtQRDU0hH798uV
+   w==;
+X-CSE-ConnectionGUID: XsLJ8iJ/SJeh/N/AmAHucQ==
+X-CSE-MsgGUID: Z+fiEW3KSLC4IiD/9EeQcA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11121"; a="27835756"
+X-IronPort-AV: E=Sophos;i="6.09,182,1716274800"; 
+   d="scan'208";a="27835756"
+Received: from orviesa005.jf.intel.com ([10.64.159.145])
+  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jul 2024 04:40:12 -0700
+X-CSE-ConnectionGUID: 4KJNRBk8TaCHsfFIQTaGOw==
+X-CSE-MsgGUID: rdxdzNj3Tqydy6O5puV84Q==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.09,182,1716274800"; 
+   d="scan'208";a="51182641"
+Received: from lkp-server01.sh.intel.com (HELO 68891e0c336b) ([10.239.97.150])
+  by orviesa005.jf.intel.com with ESMTP; 03 Jul 2024 04:40:11 -0700
+Received: from kbuild by 68891e0c336b with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1sOyLI-000PfQ-30;
+	Wed, 03 Jul 2024 11:40:08 +0000
+Date: Wed, 3 Jul 2024 19:39:16 +0800
+From: kernel test robot <lkp@intel.com>
+To: David Hildenbrand <david@redhat.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [davidhildenbrand:rmap_id 6/6] mm/internal.h:660:2: error: call to
+ undeclared function '__folio_prep_large_mapcount_metadata'; ISO C99 and
+ later do not support implicit function declarations
+Message-ID: <202407031902.jUw1oJIv-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20240703-of_property_for_each_u32-v1-0-42c1fc0b82aa@bootlin.com> <20240703-of_property_for_each_u32-v1-9-42c1fc0b82aa@bootlin.com>
-In-Reply-To: <20240703-of_property_for_each_u32-v1-9-42c1fc0b82aa@bootlin.com>
-From: Bartosz Golaszewski <brgl@bgdev.pl>
-Date: Wed, 3 Jul 2024 13:33:52 +0200
-Message-ID: <CAMRc=MfjdCxbQfthWXcgz2tC+2_owfx73DBq9LqN_4wFvWwgqA@mail.gmail.com>
-Subject: Re: [PATCH 09/20] gpio: brcmstb: convert to of_property_for_each_u32_new()
-To: Luca Ceresoli <luca.ceresoli@bootlin.com>
-Cc: Miguel Ojeda <ojeda@kernel.org>, Rob Herring <robh@kernel.org>, 
-	Saravana Kannan <saravanak@google.com>, Nathan Chancellor <nathan@kernel.org>, 
-	Michael Turquette <mturquette@baylibre.com>, Stephen Boyd <sboyd@kernel.org>, 
-	Tony Lindgren <tony@atomide.com>, Bjorn Andersson <andersson@kernel.org>, 
-	=?UTF-8?Q?Emilio_L=C3=B3pez?= <emilio@elopez.com.ar>, 
-	Chen-Yu Tsai <wens@csie.org>, Jernej Skrabec <jernej.skrabec@gmail.com>, 
-	Samuel Holland <samuel@sholland.org>, Krzysztof Kozlowski <krzk@kernel.org>, 
-	Daniel Lezcano <daniel.lezcano@linaro.org>, Thomas Gleixner <tglx@linutronix.de>, 
-	Florian Fainelli <florian.fainelli@broadcom.com>, 
-	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>, 
-	Linus Walleij <linus.walleij@linaro.org>, Jonathan Cameron <jic23@kernel.org>, Lee Jones <lee@kernel.org>, 
-	Shawn Guo <shawnguo@kernel.org>, Pengutronix Kernel Team <kernel@pengutronix.de>, 
-	=?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= <ukleinek@kernel.org>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Jiri Slaby <jirislaby@kernel.org>, 
-	Richard Leitner <richard.leitner@linux.dev>, Liam Girdwood <lgirdwood@gmail.com>, 
-	Mark Brown <broonie@kernel.org>, Nicolas Ferre <nicolas.ferre@microchip.com>, 
-	Michael Ellerman <mpe@ellerman.id.au>, Nicholas Piggin <npiggin@gmail.com>, 
-	Christophe Leroy <christophe.leroy@csgroup.eu>, "Naveen N. Rao" <naveen.n.rao@linux.ibm.com>, 
-	Damien Le Moal <dlemoal@kernel.org>, "Peng Fan (OSS)" <peng.fan@oss.nxp.com>, 
-	Thomas Petazzoni <thomas.petazzoni@bootlin.com>, linux-kernel@vger.kernel.org, 
-	devicetree@vger.kernel.org, llvm@lists.linux.dev, linux-clk@vger.kernel.org, 
-	linux-omap@vger.kernel.org, linux-arm-msm@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev, 
-	linux-samsung-soc@vger.kernel.org, linux-gpio@vger.kernel.org, 
-	linux-iio@vger.kernel.org, linux-pwm@vger.kernel.org, 
-	linux-serial@vger.kernel.org, linux-usb@vger.kernel.org, 
-	patches@opensource.cirrus.com, linux-sound@vger.kernel.org, 
-	linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Wed, Jul 3, 2024 at 12:38=E2=80=AFPM Luca Ceresoli <luca.ceresoli@bootli=
-n.com> wrote:
->
-> Simplify code using of_property_for_each_u32_new() as the two additional
-> parameters in of_property_for_each_u32() are not used here.
->
-> Signed-off-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
-> ---
->  drivers/gpio/gpio-brcmstb.c | 5 +----
->  1 file changed, 1 insertion(+), 4 deletions(-)
->
-> diff --git a/drivers/gpio/gpio-brcmstb.c b/drivers/gpio/gpio-brcmstb.c
-> index 8dce78ea7139..77557bc596cd 100644
-> --- a/drivers/gpio/gpio-brcmstb.c
-> +++ b/drivers/gpio/gpio-brcmstb.c
-> @@ -591,8 +591,6 @@ static int brcmstb_gpio_probe(struct platform_device =
-*pdev)
->         void __iomem *reg_base;
->         struct brcmstb_gpio_priv *priv;
->         struct resource *res;
-> -       struct property *prop;
-> -       const __be32 *p;
->         u32 bank_width;
->         int num_banks =3D 0;
->         int num_gpios =3D 0;
-> @@ -636,8 +634,7 @@ static int brcmstb_gpio_probe(struct platform_device =
-*pdev)
->         flags =3D BGPIOF_BIG_ENDIAN_BYTE_ORDER;
->  #endif
->
-> -       of_property_for_each_u32(np, "brcm,gpio-bank-widths", prop, p,
-> -                       bank_width) {
-> +       of_property_for_each_u32_new(np, "brcm,gpio-bank-widths", bank_wi=
-dth) {
->                 struct brcmstb_gpio_bank *bank;
->                 struct gpio_chip *gc;
->
->
-> --
-> 2.34.1
->
+tree:   https://github.com/davidhildenbrand/linux rmap_id
+head:   ff5e85c45e818366d70159de7e6e0d0cc781d2cb
+commit: ff5e85c45e818366d70159de7e6e0d0cc781d2cb [6/6] rmap_id
+config: arm-allnoconfig (https://download.01.org/0day-ci/archive/20240703/202407031902.jUw1oJIv-lkp@intel.com/config)
+compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project 326ba38a991250a8587a399a260b0f7af2c9166a)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240703/202407031902.jUw1oJIv-lkp@intel.com/reproduce)
 
-Acked-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202407031902.jUw1oJIv-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+   In file included from mm/filemap.c:15:
+   In file included from include/linux/dax.h:6:
+   In file included from include/linux/mm.h:2250:
+   include/linux/vmstat.h:514:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     514 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+   In file included from mm/filemap.c:51:
+>> mm/internal.h:660:2: error: call to undeclared function '__folio_prep_large_mapcount_metadata'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     660 |         __folio_prep_large_mapcount_metadata(folio, order);
+         |         ^
+   1 warning and 1 error generated.
+--
+   In file included from mm/page-writeback.c:20:
+   In file included from include/linux/mm.h:2250:
+   include/linux/vmstat.h:514:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     514 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+   In file included from mm/page-writeback.c:40:
+   include/linux/mm_inline.h:47:41: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+      47 |         __mod_lruvec_state(lruvec, NR_LRU_BASE + lru, nr_pages);
+         |                                    ~~~~~~~~~~~ ^ ~~~
+   include/linux/mm_inline.h:49:22: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+      49 |                                 NR_ZONE_LRU_BASE + lru, nr_pages);
+         |                                 ~~~~~~~~~~~~~~~~ ^ ~~~
+   In file included from mm/page-writeback.c:43:
+>> mm/internal.h:660:2: error: call to undeclared function '__folio_prep_large_mapcount_metadata'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     660 |         __folio_prep_large_mapcount_metadata(folio, order);
+         |         ^
+   3 warnings and 1 error generated.
+--
+   In file included from mm/vmscan.c:15:
+   In file included from include/linux/mm.h:2250:
+   include/linux/vmstat.h:514:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     514 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+   In file included from mm/vmscan.c:30:
+   include/linux/mm_inline.h:47:41: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+      47 |         __mod_lruvec_state(lruvec, NR_LRU_BASE + lru, nr_pages);
+         |                                    ~~~~~~~~~~~ ^ ~~~
+   include/linux/mm_inline.h:49:22: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+      49 |                                 NR_ZONE_LRU_BASE + lru, nr_pages);
+         |                                 ~~~~~~~~~~~~~~~~ ^ ~~~
+   In file included from mm/vmscan.c:67:
+>> mm/internal.h:660:2: error: call to undeclared function '__folio_prep_large_mapcount_metadata'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     660 |         __folio_prep_large_mapcount_metadata(folio, order);
+         |         ^
+   mm/vmscan.c:401:51: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     401 |                         size += zone_page_state(zone, NR_ZONE_LRU_BASE + lru);
+         |                                                       ~~~~~~~~~~~~~~~~ ^ ~~~
+   mm/vmscan.c:1729:4: warning: arithmetic between different enumeration types ('enum vm_event_item' and 'enum zone_type') [-Wenum-enum-conversion]
+    1729 |                         __count_zid_vm_events(PGSCAN_SKIP, zid, nr_skipped[zid]);
+         |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/vmstat.h:135:34: note: expanded from macro '__count_zid_vm_events'
+     135 |         __count_vm_events(item##_NORMAL - ZONE_NORMAL + zid, delta)
+         |                           ~~~~~~~~~~~~~ ^ ~~~~~~~~~~~
+   mm/vmscan.c:2232:51: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+    2232 |         inactive = lruvec_page_state(lruvec, NR_LRU_BASE + inactive_lru);
+         |                                              ~~~~~~~~~~~ ^ ~~~~~~~~~~~~
+   mm/vmscan.c:2233:49: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+    2233 |         active = lruvec_page_state(lruvec, NR_LRU_BASE + active_lru);
+         |                                            ~~~~~~~~~~~ ^ ~~~~~~~~~~
+   mm/vmscan.c:6259:3: warning: arithmetic between different enumeration types ('enum vm_event_item' and 'enum zone_type') [-Wenum-enum-conversion]
+    6259 |                 __count_zid_vm_events(ALLOCSTALL, sc->reclaim_idx, 1);
+         |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/vmstat.h:135:34: note: expanded from macro '__count_zid_vm_events'
+     135 |         __count_vm_events(item##_NORMAL - ZONE_NORMAL + zid, delta)
+         |                           ~~~~~~~~~~~~~ ^ ~~~~~~~~~~~
+   8 warnings and 1 error generated.
+--
+   In file included from mm/page_alloc.c:19:
+   In file included from include/linux/mm.h:2250:
+   include/linux/vmstat.h:514:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     514 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+   In file included from mm/page_alloc.c:44:
+   include/linux/mm_inline.h:47:41: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+      47 |         __mod_lruvec_state(lruvec, NR_LRU_BASE + lru, nr_pages);
+         |                                    ~~~~~~~~~~~ ^ ~~~
+   include/linux/mm_inline.h:49:22: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+      49 |                                 NR_ZONE_LRU_BASE + lru, nr_pages);
+         |                                 ~~~~~~~~~~~~~~~~ ^ ~~~
+   In file included from mm/page_alloc.c:59:
+>> mm/internal.h:660:2: error: call to undeclared function '__folio_prep_large_mapcount_metadata'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     660 |         __folio_prep_large_mapcount_metadata(folio, order);
+         |         ^
+>> mm/page_alloc.c:1079:4: error: call to undeclared function '__folio_undo_large_mapcount_metadata'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+    1079 |                         __folio_undo_large_mapcount_metadata(page_folio(page),
+         |                         ^
+   mm/page_alloc.c:2939:2: warning: arithmetic between different enumeration types ('enum vm_event_item' and 'enum zone_type') [-Wenum-enum-conversion]
+    2939 |         __count_zid_vm_events(PGALLOC, page_zonenum(page), 1 << order);
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/vmstat.h:135:34: note: expanded from macro '__count_zid_vm_events'
+     135 |         __count_vm_events(item##_NORMAL - ZONE_NORMAL + zid, delta)
+         |                           ~~~~~~~~~~~~~ ^ ~~~~~~~~~~~
+   mm/page_alloc.c:3056:3: warning: arithmetic between different enumeration types ('enum vm_event_item' and 'enum zone_type') [-Wenum-enum-conversion]
+    3056 |                 __count_zid_vm_events(PGALLOC, page_zonenum(page), 1 << order);
+         |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/vmstat.h:135:34: note: expanded from macro '__count_zid_vm_events'
+     135 |         __count_vm_events(item##_NORMAL - ZONE_NORMAL + zid, delta)
+         |                           ~~~~~~~~~~~~~ ^ ~~~~~~~~~~~
+   mm/page_alloc.c:4697:2: warning: arithmetic between different enumeration types ('enum vm_event_item' and 'enum zone_type') [-Wenum-enum-conversion]
+    4697 |         __count_zid_vm_events(PGALLOC, zone_idx(zone), nr_account);
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/vmstat.h:135:34: note: expanded from macro '__count_zid_vm_events'
+     135 |         __count_vm_events(item##_NORMAL - ZONE_NORMAL + zid, delta)
+         |                           ~~~~~~~~~~~~~ ^ ~~~~~~~~~~~
+   6 warnings and 2 errors generated.
+
+
+vim +/__folio_prep_large_mapcount_metadata +660 mm/internal.h
+
+   650	
+   651	static inline void prep_compound_head(struct page *page, unsigned int order)
+   652	{
+   653		struct folio *folio = (struct folio *)page;
+   654	
+   655		folio_set_order(folio, order);
+   656		atomic_set(&folio->_large_mapcount, -1);
+   657		atomic_set(&folio->_entire_mapcount, -1);
+   658		atomic_set(&folio->_nr_pages_mapped, 0);
+   659		atomic_set(&folio->_pincount, 0);
+ > 660		__folio_prep_large_mapcount_metadata(folio, order);
+   661		if (order > 1)
+   662			INIT_LIST_HEAD(&folio->_deferred_list);
+   663	}
+   664	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
