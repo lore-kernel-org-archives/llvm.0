@@ -1,124 +1,159 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 977EB17C60
-	for <llvm@lists.linux.dev>; Wed,  3 Jul 2024 05:23:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D8A3417C60;
+	Wed,  3 Jul 2024 05:28:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719984207; cv=none; b=GsO/y2Rg/Ggpm110KAQEdyCq0gB3gu6qFzYFtGlSQI1keFx8Ulegpvb+8IJnC04AwgTdw2ZfbfJWMteB27hh9pP1S7SPYk7OWgCFzk0Vv4dDi/l3VIPJllR4srrUcmYROCatC63F0LzWfEKp8NXO+8//sirc5IWoMUoGoF+h+4c=
+	t=1719984514; cv=none; b=lnCWg7BV2FpqueGdCs7upUG7v3iRcPKrLk+s4EXz6qYG/0cK/NOqY7tjRbYFcQfEnOzInFI20HMAu2R15E/bAGXhLzLsh8khHvPcsyXOmAEToc98TnBAikuKS2MmYa9Jgjw2NJQ5uVuKbpbwMdgK/4NSfu5Sph6uQNC63aaDaPM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719984207; c=relaxed/simple;
-	bh=TnOK0u2aVraRJ6tCJoBaI55xgP3ckSBmT8RIwVnR7aU=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=OYdhVb/ercEtjS5UrJ0f79yUEaLS+5LUsQxYR4Yw3W63ZDRv0ansgfOdvwxstriN0K44+HfTo7GMdNDCK+WSW+owcgyoehIht9rYMQh5gKthNWhRb6TB0HAf7sXs8Eq02e8z6wahme0Ld8Qap638DVANbiQ/pqR3LGDp17fnUqI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=KWfbG0aZ; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1719984514; c=relaxed/simple;
+	bh=NmcpM8ZbjK5/C928dVQ7tpbGMaR2fDk4l+jdHDUk0dY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=NopGkaFoDBKSciAHMGuXKN05wpJN3mr29RV8pUKAWoFpGKE15Rd/TNl7xh39l+vkDgqLh7z4McsimYf9lPSvqHcpnm9io61a8EVYWAMzSvgbVNFwWFL/3HwSCppkv0i9kqdY2DcoguMRAgfzj1D/StJPOXZmGvUFvH/gKm0Gkts=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=KLLBfu42; arc=none smtp.client-ip=192.198.163.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="KWfbG0aZ"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1719984203;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=/GEwi3AT9hKlUGE5Gsgpt4pkgIX+3X6JgudijbIdcPA=;
-	b=KWfbG0aZQ0u2GJAkuSSvILzZtNaTnQ1N1bMBOIoTaDhcj0DlgrVG8M4qswM4PyI/H/sYeY
-	S2UL+b8DBgLFvV5SkelISqZIsx21nKrQjVa5yCou743osgrari4CoUxDrWBskZsD31/iPq
-	nAMReUyvxTi2buGbajTx6RyU/qdCPvI=
-Received: from mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-136-XgNNVNOdPNewSsClCTHW_Q-1; Wed,
- 03 Jul 2024 01:23:21 -0400
-X-MC-Unique: XgNNVNOdPNewSsClCTHW_Q-1
-Received: from mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.40])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id D0ACB195395B
-	for <llvm@lists.linux.dev>; Wed,  3 Jul 2024 05:23:20 +0000 (UTC)
-Received: from [172.64.0.79] (unknown [10.30.33.131])
-	by mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 33B4A1954200;
-	Wed,  3 Jul 2024 05:23:19 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL (MISSED 16 of 192): Test report for master
- (6.10.0-rc6, mainline.kernel.org-clang, 1dfe225e)
-Date: Wed, 03 Jul 2024 05:23:18 -0000
-To: llvm@lists.linux.dev, bgoncalv@redhat.com
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="KLLBfu42"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1719984512; x=1751520512;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=NmcpM8ZbjK5/C928dVQ7tpbGMaR2fDk4l+jdHDUk0dY=;
+  b=KLLBfu42Ztt4KqKPu06Sb/JSoo3M4ZCliCCTViSyNiD/7Ti6fRmR70El
+   qif+WaPZsx80SOMl1OtcdQD+EZOww+L8pfDMi4fVbD3udUHQ7jRPyRSUd
+   kCczvva2K+ffjDdjfBICqinnRR993ybrTDKhKvYcd1LvZUPhJVKUvNysk
+   OCicmeryLF7r8i8m76bngtjkiadps9gvXnh2TZz7hCoZ+4U2c4PTUWdsQ
+   g8t9Nsmaa7T/JTLyUHvbb2ia7T4/Ycj+zKN2gMrhkSYBd73p7sEmDwvRT
+   3fJgwvK6OthPjFULwzHi2fzvCRk+n0hEV2qoxxS18f5cV/bEQZLgO+wAg
+   g==;
+X-CSE-ConnectionGUID: U3S3qLrsRWyovaEwm4Jh+Q==
+X-CSE-MsgGUID: Cp0FcypNR2uUSLkl6/kYKQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11121"; a="21064702"
+X-IronPort-AV: E=Sophos;i="6.09,181,1716274800"; 
+   d="scan'208";a="21064702"
+Received: from orviesa001.jf.intel.com ([10.64.159.141])
+  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jul 2024 22:28:31 -0700
+X-CSE-ConnectionGUID: RgdYGRE6Qnu1alhN+7ihPA==
+X-CSE-MsgGUID: 85M9myFyRYmrgre2tt2Psg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.09,181,1716274800"; 
+   d="scan'208";a="83688463"
+Received: from lkp-server01.sh.intel.com (HELO 68891e0c336b) ([10.239.97.150])
+  by orviesa001.jf.intel.com with ESMTP; 02 Jul 2024 22:28:30 -0700
+Received: from kbuild by 68891e0c336b with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1sOsXb-000PKQ-29;
+	Wed, 03 Jul 2024 05:28:27 +0000
+Date: Wed, 3 Jul 2024 13:27:48 +0800
+From: kernel test robot <lkp@intel.com>
+To: Alex Vdovydchenko <xzeol@yahoo.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: Re: [PATCH v4 2/2] hwmon: add MP5920 driver
+Message-ID: <202407031340.i4o4meQh-lkp@intel.com>
+References: <20240702115252.981416-3-xzeol@yahoo.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.40
-Message-Id: <28905.124070301232100195@us-mta-136.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240702115252.981416-3-xzeol@yahoo.com>
 
-Hi, we tested your kernel and here are the results:
+Hi Alex,
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: OK
-              Test: FAILED
+kernel test robot noticed the following build warnings:
+
+[auto build test WARNING on groeck-staging/hwmon-next]
+[also build test WARNING on next-20240702]
+[cannot apply to robh/for-next krzk-dt/for-next linus/master v6.10-rc6]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Alex-Vdovydchenko/dt-bindings-hwmon-Add-MPS-mp5920/20240702-202656
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
+patch link:    https://lore.kernel.org/r/20240702115252.981416-3-xzeol%40yahoo.com
+patch subject: [PATCH v4 2/2] hwmon: add MP5920 driver
+config: arm64-allmodconfig (https://download.01.org/0day-ci/archive/20240703/202407031340.i4o4meQh-lkp@intel.com/config)
+compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project 326ba38a991250a8587a399a260b0f7af2c9166a)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240703/202407031340.i4o4meQh-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202407031340.i4o4meQh-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+   In file included from drivers/hwmon/pmbus/mp5920.c:2:
+   In file included from include/linux/i2c.h:13:
+   In file included from include/linux/acpi.h:39:
+   In file included from include/acpi/acpi_io.h:7:
+   In file included from arch/arm64/include/asm/acpi.h:14:
+   In file included from include/linux/memblock.h:12:
+   In file included from include/linux/mm.h:2253:
+   include/linux/vmstat.h:500:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     500 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     501 |                            item];
+         |                            ~~~~
+   include/linux/vmstat.h:507:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     507 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     508 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/vmstat.h:514:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     514 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+   include/linux/vmstat.h:519:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     519 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     520 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/vmstat.h:528:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     528 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     529 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+>> drivers/hwmon/pmbus/mp5920.c:49:48: warning: field precision should have type 'int', but argument has type 'unsigned long' [-Wformat]
+      49 |                 return dev_err_probe(dev, -ENODEV, "Model '%.*s' not supported\n",
+         |                                                            ~~^~
+      50 |                                      sizeof(buf), buf);
+         |                                      ~~~~~~~~~~~
+   6 warnings generated.
 
 
-Kernel information:
-    Commit message: Merge tag 'scsi-fixes' of git://git.kernel.org/pub/scm/=
-linux/kernel/git/jejb/scsi
+vim +49 drivers/hwmon/pmbus/mp5920.c
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1356862906
+    33	
+    34	static int mp5920_probe(struct i2c_client *client)
+    35	{
+    36		struct device *dev =  &client->dev;
+    37		int ret;
+    38		u8 buf[I2C_SMBUS_BLOCK_MAX];
+    39	
+    40		if (!i2c_check_functionality(client->adapter,
+    41					     I2C_FUNC_SMBUS_READ_WORD_DATA))
+    42			return -ENODEV;
+    43	
+    44		ret = i2c_smbus_read_block_data(client, PMBUS_MFR_MODEL, buf);
+    45		if (ret < 0)
+    46			return dev_err_probe(dev, ret, "Failed to read PMBUS_MFR_MODEL\n");
+    47	
+    48		if (ret != 6 || strncmp(buf, "MP5920", 6)) {
+  > 49			return dev_err_probe(dev, -ENODEV, "Model '%.*s' not supported\n",
+    50					     sizeof(buf), buf);
+    51		}
+    52	
+    53		return pmbus_do_probe(client, &mp5920_info);
+    54	}
+    55	
 
-One or more kernel tests failed:
-    Unrecognized or new issues:
-        Reboot test
-              x86_64
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-redhat:1356862906-x86_64-kernel_upt_35
-                   Non-passing ran subtests:
-                       =E2=9D=8C FAIL misc/reboot-test/journalctl-check
-
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1267
-            Affected tests:
-                selinux-policy: serge-testsuite [ppc64le]
-
-
-Tests that were not ran because of internal issues:=20
-    Boot test [s390x]
-    CKI/restraint [s390x]
-    machineinfo [ppc64le, s390x]
-    Reboot test [s390x]
-    SELinux Custom Module Setup [ppc64le, s390x]
-    Storage - blktests - blk - upstream [s390x]
-    Storage - blktests - nvme-tcp - upstream [s390x]
-    Storage - swraid scsi_raid [s390x]
-    stress: stress-ng - cpu-cache [s390x]
-    stress: stress-ng - memory [s390x]
-
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
