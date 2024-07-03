@@ -1,435 +1,219 @@
-Received: from mail-io1-f43.google.com (mail-io1-f43.google.com [209.85.166.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A5FD24963C
-	for <llvm@lists.linux.dev>; Wed,  3 Jul 2024 07:45:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB1C613A86A;
+	Wed,  3 Jul 2024 08:00:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719992737; cv=none; b=mJMIq+1HeF8XjXxkaT+Jv1ZZjiGdPdxUugO5tqIsERwiqFLFNpPoNCBcNJqpM8IGlvH0BoCOzwxCm5qiEbaEYg9AsB7YjO1HAeJ5qTRCyDl6imhP68XaX38ny1/7s+zgCRocFRK1ZQJ3E+4tAaoZ8U3pZjFFSDtA/oZ2mu4ZbKk=
+	t=1719993611; cv=none; b=rN6kq+l7xE6El/tRnFVl0ZUq66uYtAXwHOzCzUH7pnOR63QuaXl+RNxsRqS/Y0W3EzBa465a1Fl758zH/ejfNhoFeI+Ynop+GmNOAWaLsKzR1UPZASfBubVIV6oBPvCNQyfxdc5v8uMXJy2JrlwfFxLjC/0jN28gLWoAmOYz4w4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719992737; c=relaxed/simple;
-	bh=RVlufy0Zsrdw4i+pyQsMhbaQUm0UkVeCnZqClMThzYo=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=GibD7Rr0YFI6gZ4RNxJz5T9ksTT8UQkF3FyRkSY/wM1sL/NPahJMxiv6HbvB9FzicNVwLhD0x/SAUucu/7KTDj5ywkygiTAIqY1773lOLZguw2+IE3TGP+Jk5ve/Mv0SZTS80mJ4yHqKGHmZxu85MhssxAN8Hhhu0E6w5vbkXuU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sifive.com; spf=pass smtp.mailfrom=sifive.com; dkim=pass (2048-bit key) header.d=sifive.com header.i=@sifive.com header.b=Is3r2sal; arc=none smtp.client-ip=209.85.166.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sifive.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sifive.com
+	s=arc-20240116; t=1719993611; c=relaxed/simple;
+	bh=NYOBwTEmdPgykvH6vEPAL1W67m1ZrkjTAtdjA4cd6cc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=lWWdxzCtERprX3xgbtKIFPj6kTF31Kv8AQ2KWll0Vsr/cr/2kpdzoPD+ljEEQm3lyvMR53wXIOL6cr9/5up5hUiTeFFrLB6iAXevqc1OinDfGx6QXLPDEanjFJRoahKyV+5uEzec6hNLYQFSUYJFtLm33xmGua0DLqxEpUqj190=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ibqkKlaV; arc=none smtp.client-ip=192.198.163.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sifive.com header.i=@sifive.com header.b="Is3r2sal"
-Received: by mail-io1-f43.google.com with SMTP id ca18e2360f4ac-7f624e70870so274132739f.3
-        for <llvm@lists.linux.dev>; Wed, 03 Jul 2024 00:45:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=sifive.com; s=google; t=1719992734; x=1720597534; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=vStFECpK62GkDremSSfY0qvyUmqn3ow279d8De6vgeI=;
-        b=Is3r2salZVSw2oeyZyqJVZNh6c7L2TmAV6zme8obNJQ5ysycQ6HAak55aLcQ4//t5y
-         sTX4r7iymrcIp54Ajp7eMEOovCQnZKOqLsItqIg+NFP3Ep7SxXZbwW8ZZ+WRdqP3Z+ey
-         2T4oJICRSza3Vmj9Mxy8lqhunm1ruPuK0fGb3FjYGmPYgM3uJDQXyUOJdmVdUVTM4f75
-         7mufiVDzfbgIdJRVw3Y0S8X0o9wK29vgOiHWwz70bS7LcX70YbuynuH2pI9ggF/f2ihD
-         Z4Yav4/kdgEKfCryL5tl3c66qVb2TrOEjNZZ2uCG3vis+cTSRNyhDE3gmwBUrPmhdUYa
-         8QwQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1719992734; x=1720597534;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=vStFECpK62GkDremSSfY0qvyUmqn3ow279d8De6vgeI=;
-        b=dvu8bTfszXKydDPolNbmFxZRQxWtugCPvGBADu0lrAj5wEHuZ3ocQfDaW6lzKxM5f1
-         uN4CLUpu1BP3FV6AFXVyuS4eKx8fuhvgzwm86zothXuwx/po6o2q8A6n3vQjR1eryxUe
-         TmTsz2v9ICKPXcZyGxda5Ej1V5SRkf1Vd9HI3fg2PLVPFaw5eK+RfFcyw1g3yVaWVc4B
-         3mr6yH2OOnf+YJPOvJMD0lVKKOFnF6FK1bpXHudiWue5k78xrUU+LRce8erBBfIrUa/E
-         46xPzBmfsxUpPr/vS6HAzubOz89nES2EsTQqbg+C2YBcU+sMWWwwSDteNu9ZI+efSPMi
-         y2ow==
-X-Forwarded-Encrypted: i=1; AJvYcCUnC3dlSRLWR2jps0YLLUIY9WVRj/iInKBZyWOKiElFY7w1IqUiXekEMPlOsa1LF12bjAoZzUojcwAS7p/O8lpQNSb33Q==
-X-Gm-Message-State: AOJu0YwZNURmoV5bdoMllGz0YU2KIofnxeKz/ZYl4/Aic5XG0JU4Y/fD
-	pGJGNuWWmzfxk4tPp7E8PODcwwJ44iz1a72elv04V+R2tOVYBajGHuRMWYlMf7VXHme/gQ1013L
-	2YWVG/YjbYNt8GZOkDugUkzTph+rxf/lANEprsw==
-X-Google-Smtp-Source: AGHT+IFdJHySNR7aomh7HqVrHDCw/f7ROaC9Ds2tvQCAEr1ebDf+ekMw/vBvC+X7Hb5QrTC4VUGqp09SnSUVaNsj10E=
-X-Received: by 2002:a6b:5816:0:b0:7f3:a7d9:5912 with SMTP id
- ca18e2360f4ac-7f62eea3088mr1116604939f.18.1719992733478; Wed, 03 Jul 2024
- 00:45:33 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ibqkKlaV"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1719993609; x=1751529609;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=NYOBwTEmdPgykvH6vEPAL1W67m1ZrkjTAtdjA4cd6cc=;
+  b=ibqkKlaV0IIJgcwEzAHjtSQK7BCVbMi7+q1R6ThMHRX3DNB3h0CNCKWX
+   /jMaakcicOMZzQmWi1aRbWTQ6guvGx4JZdwNMh+/MVbisJrXS81KYnSPU
+   T3sNnf6r8GG5PwFY8Narb/v85/5LFQGj952HDUlXg/aXudRvvOryX5+tG
+   qbS+L/nP2u8OoimSRYg/rQoZw5qf53LZQk8UWAB/c9rAgzgSLfFBpLlr9
+   cRKBPIvyvoZYoe8wQ1U1aaK7SA5iCVmCcKWKVm6txEugAfm2VlHlo4bfX
+   1r0xAuBeWq+UxFJfkerpGtcwLc4cVBIl2HGfFrj1cBlrUZVaE/wMySRcK
+   A==;
+X-CSE-ConnectionGUID: 2l0K69WYTy2/sVfHjckmvA==
+X-CSE-MsgGUID: NpHXd45nSOaduTtUEidInQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11121"; a="17342365"
+X-IronPort-AV: E=Sophos;i="6.09,181,1716274800"; 
+   d="scan'208";a="17342365"
+Received: from orviesa009.jf.intel.com ([10.64.159.149])
+  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jul 2024 01:00:06 -0700
+X-CSE-ConnectionGUID: NFr0iqkHTQWyVOUDJW1Qpg==
+X-CSE-MsgGUID: chDm7pBSQxOKS2aZ70pGyA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.09,181,1716274800"; 
+   d="scan'208";a="46313799"
+Received: from lkp-server01.sh.intel.com (HELO 68891e0c336b) ([10.239.97.150])
+  by orviesa009.jf.intel.com with ESMTP; 03 Jul 2024 01:00:05 -0700
+Received: from kbuild by 68891e0c336b with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1sOuuI-000PWi-2N;
+	Wed, 03 Jul 2024 08:00:02 +0000
+Date: Wed, 3 Jul 2024 15:59:37 +0800
+From: kernel test robot <lkp@intel.com>
+To: Huan Yang <link@vivo.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: Re: [RFC PATCH 4/4] mm: memcg: pmc: support oom release
+Message-ID: <202407031748.Jhbfna4Y-lkp@intel.com>
+References: <20240702084423.1717904-5-link@vivo.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20240701185132.319995-1-jesse@rivosinc.com> <20240701185132.319995-5-jesse@rivosinc.com>
- <ZoOCeMUTIgnA72xj@ghost>
-In-Reply-To: <ZoOCeMUTIgnA72xj@ghost>
-From: Zong Li <zong.li@sifive.com>
-Date: Wed, 3 Jul 2024 15:45:22 +0800
-Message-ID: <CANXhq0oQ9LvzKYWMD6Bf9fVUGFDvmSfMZK=R9PRTnWv-qqg0Ew@mail.gmail.com>
-Subject: Re: [PATCH v3 4/4] RISC-V: Use Zkr to seed KASLR base address
-To: Charlie Jenkins <charlie@rivosinc.com>
-Cc: Jesse Taube <jesse@rivosinc.com>, linux-riscv@lists.infradead.org, 
-	Ard Biesheuvel <ardb@kernel.org>, Paul Walmsley <paul.walmsley@sifive.com>, 
-	Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, 
-	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
-	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
-	Alexandre Ghiti <alexghiti@rivosinc.com>, Conor Dooley <conor.dooley@microchip.com>, 
-	Masahiro Yamada <masahiroy@kernel.org>, Wende Tan <twd2.me@gmail.com>, 
-	Christophe JAILLET <christophe.jaillet@wanadoo.fr>, Sami Tolvanen <samitolvanen@google.com>, 
-	Andrew Morton <akpm@linux-foundation.org>, Baoquan He <bhe@redhat.com>, 
-	"Mike Rapoport (IBM)" <rppt@kernel.org>, "Vishal Moola (Oracle)" <vishal.moola@gmail.com>, linux-kernel@vger.kernel.org, 
-	llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240702084423.1717904-5-link@vivo.com>
 
-On Tue, Jul 2, 2024 at 12:31=E2=80=AFPM Charlie Jenkins <charlie@rivosinc.c=
-om> wrote:
->
-> On Mon, Jul 01, 2024 at 02:51:32PM -0400, Jesse Taube wrote:
-> > Parse the device tree for Zkr in the isa string.
-> > If Zkr is present, use it to seed the kernel base address.
-> >
-> > On an ACPI system, as of this commit, there is no easy way to check if
-> > Zkr is present. Blindly running the instruction isn't an option as;
-> > we have to be able to trust the firmware.
-> >
-> > Signed-off-by: Jesse Taube <jesse@rivosinc.com>
+Hi Huan,
 
-I have tried this patch, it works to me.
+[This is a private test report for your RFC patch.]
+kernel test robot noticed the following build errors:
 
-Tested-by: Zong Li <zong.li@sifive.com>
+[auto build test ERROR on 727900b675b749c40ba1f6669c7ae5eb7eb8e837]
 
-> > ---
-> > V1 -> V2:
-> >  - Almost entire rewrite
-> > V2 -> V3:
-> >  - Dont parse iscv,isa-base
-> >  - Move fdt_early_match_extension_isa in pi.h under comment
-> >  - Only check enabled cpus
-> >  - Rename early_isa_str to fdt_early_match_extension_isa
-> >  - Rename get_ext_named to early_cpu_isa_ext_available
-> >  - Rewrite isa_string_contains
-> >  - Update commit description
-> >  - Use fdt_stringlist_contains for riscv,isa-extensions
-> > ---
-> >  arch/riscv/kernel/pi/Makefile           |   2 +-
-> >  arch/riscv/kernel/pi/archrandom_early.c |  30 +++++
-> >  arch/riscv/kernel/pi/fdt_early.c        | 160 ++++++++++++++++++++++++
-> >  arch/riscv/kernel/pi/pi.h               |   3 +
-> >  arch/riscv/mm/init.c                    |   5 +-
-> >  5 files changed, 198 insertions(+), 2 deletions(-)
-> >  create mode 100644 arch/riscv/kernel/pi/archrandom_early.c
-> >
-> > diff --git a/arch/riscv/kernel/pi/Makefile b/arch/riscv/kernel/pi/Makef=
-ile
-> > index 1ef7584be0c3..dba902f2a538 100644
-> > --- a/arch/riscv/kernel/pi/Makefile
-> > +++ b/arch/riscv/kernel/pi/Makefile
-> > @@ -33,5 +33,5 @@ $(obj)/string.o: $(srctree)/lib/string.c FORCE
-> >  $(obj)/ctype.o: $(srctree)/lib/ctype.c FORCE
-> >       $(call if_changed_rule,cc_o_c)
-> >
-> > -obj-y                :=3D cmdline_early.pi.o fdt_early.pi.o string.pi.=
-o ctype.pi.o lib-fdt.pi.o lib-fdt_ro.pi.o
-> > +obj-y                :=3D cmdline_early.pi.o fdt_early.pi.o string.pi.=
-o ctype.pi.o lib-fdt.pi.o lib-fdt_ro.pi.o archrandom_early.pi.o
->
-> When CONFIG_FORTIFY_SOURCE is enabled, the string functions try to
-> reference `__fortify_panic` which gets aliased to `__pi___fortify_panic`
-> and causes lld to fail:
->
-> ld.lld: error: undefined hidden symbol: __pi___fortify_panic
-> >>> referenced by fdt_early.c:24 (arch/riscv/kernel/pi/fdt_early.c:24)
-> >>>               arch/riscv/kernel/pi/fdt_early.pi.o:(__pi_fdt_early_mat=
-ch_extension_isa) in archive vmlinux.a
->
-> This early in boot __fortify_panic isn't supported. Can you add
-> `CFLAGS_fdt_early.o +=3D -D__NO_FORTIFY` next to the same addition for
-> cmdline_early and fdt_early?
->
-> The rest of this looks go to me (just send a new version with this simple=
- fix).
->
-> Reviewed-by: Charlie Jenkins <charlie@rivosinc.com>
->
-> >  extra-y              :=3D $(patsubst %.pi.o,%.o,$(obj-y))
-> > diff --git a/arch/riscv/kernel/pi/archrandom_early.c b/arch/riscv/kerne=
-l/pi/archrandom_early.c
-> > new file mode 100644
-> > index 000000000000..3f05d3cf3b7b
-> > --- /dev/null
-> > +++ b/arch/riscv/kernel/pi/archrandom_early.c
-> > @@ -0,0 +1,30 @@
-> > +// SPDX-License-Identifier: GPL-2.0-only
-> > +
-> > +#include <asm/csr.h>
-> > +#include <linux/processor.h>
-> > +
-> > +#include "pi.h"
-> > +
-> > +/*
-> > + * To avoid rewriting code include asm/archrandom.h and create macros
-> > + * for the functions that won't be included.
-> > + */
-> > +#undef riscv_has_extension_unlikely
-> > +#define riscv_has_extension_likely(...) false
-> > +#undef pr_err_once
-> > +#define pr_err_once(...)
-> > +
-> > +#include <asm/archrandom.h>
-> > +
-> > +u64 get_kaslr_seed_zkr(const uintptr_t dtb_pa)
-> > +{
-> > +     unsigned long seed =3D 0;
-> > +
-> > +     if (!fdt_early_match_extension_isa((const void *)dtb_pa, "zkr"))
-> > +             return 0;
-> > +
-> > +     if (!csr_seed_long(&seed))
-> > +             return 0;
-> > +
-> > +     return seed;
-> > +}
-> > diff --git a/arch/riscv/kernel/pi/fdt_early.c b/arch/riscv/kernel/pi/fd=
-t_early.c
-> > index 40ee299702bf..49ff5360bf87 100644
-> > --- a/arch/riscv/kernel/pi/fdt_early.c
-> > +++ b/arch/riscv/kernel/pi/fdt_early.c
-> > @@ -2,6 +2,7 @@
-> >  #include <linux/types.h>
-> >  #include <linux/init.h>
-> >  #include <linux/libfdt.h>
-> > +#include <linux/ctype.h>
-> >
-> >  #include "pi.h"
-> >
-> > @@ -23,3 +24,162 @@ u64 get_kaslr_seed(uintptr_t dtb_pa)
-> >       *prop =3D 0;
-> >       return ret;
-> >  }
-> > +
-> > +/**
-> > + *  fdt_device_is_available - check if a device is available for use
-> > + *
-> > + * @fdt: pointer to the device tree blob
-> > + * @node: offset of the node whose property to find
-> > + *
-> > + *  Returns true if the status property is absent or set to "okay" or =
-"ok",
-> > + *  false otherwise
-> > + */
-> > +static bool fdt_device_is_available(const void *fdt, int node)
-> > +{
-> > +     const char *status;
-> > +     int statlen;
-> > +
-> > +     status =3D fdt_getprop(fdt, node, "status", &statlen);
-> > +     if (!status)
-> > +             return true;
-> > +
-> > +     if (statlen > 0) {
-> > +             if (!strcmp(status, "okay") || !strcmp(status, "ok"))
-> > +                     return true;
-> > +     }
-> > +
-> > +     return false;
-> > +}
-> > +
-> > +/* Copy of fdt_nodename_eq_ */
-> > +static int fdt_node_name_eq(const void *fdt, int offset,
-> > +                         const char *s)
-> > +{
-> > +     int olen;
-> > +     int len =3D strlen(s);
-> > +     const char *p =3D fdt_get_name(fdt, offset, &olen);
-> > +
-> > +     if (!p || olen < len)
-> > +             /* short match */
-> > +             return 0;
-> > +
-> > +     if (memcmp(p, s, len) !=3D 0)
-> > +             return 0;
-> > +
-> > +     if (p[len] =3D=3D '\0')
-> > +             return 1;
-> > +     else if (!memchr(s, '@', len) && (p[len] =3D=3D '@'))
-> > +             return 1;
-> > +     else
-> > +             return 0;
-> > +}
-> > +
-> > +/**
-> > + *  isa_string_contains - check if isa string contains an extension
-> > + *
-> > + * @isa_str: isa string to search
-> > + * @ext_name: the extension to search for
-> > + *
-> > + *  Returns true if the extension is in the given isa string,
-> > + *  false otherwise
-> > + */
-> > +static bool isa_string_contains(const char *isa_str, const char *ext_n=
-ame)
-> > +{
-> > +     size_t i, single_end, len =3D strlen(ext_name);
-> > +     char ext_end;
-> > +
-> > +     /* Error must contain rv32/64 */
-> > +     if (strlen(isa_str) < 4)
-> > +             return false;
-> > +
-> > +     if (len =3D=3D 1) {
-> > +             single_end =3D strcspn(isa_str, "sSxXzZ");
-> > +             /* Search for single chars between rv32/64 and multi-lett=
-er extensions */
-> > +             for (i =3D 4; i < single_end; i++) {
-> > +                     if (tolower(isa_str[i]) =3D=3D ext_name[0])
-> > +                             return true;
-> > +             }
-> > +             return false;
-> > +     }
-> > +
-> > +     /* Skip to start of multi-letter extensions */
-> > +     isa_str =3D strpbrk(isa_str, "sSxXzZ");
-> > +     while (isa_str) {
-> > +             if (strncasecmp(isa_str, ext_name, len) =3D=3D 0) {
-> > +                     ext_end =3D isa_str[len];
-> > +                     /* Check if matches the whole extension excluding=
- version. */
-> > +                     if (ext_end =3D=3D '\0' || ext_end =3D=3D '_' || =
-isdigit(ext_end))
-> > +                             return true;
-> > +             }
-> > +             /* Multi-letter extensions must be split from other multi=
--letter
-> > +              * extensions with an "_", the end of a multi-letter exte=
-nsion will
-> > +              * either be the null character or the "_" at the start o=
-f the next
-> > +              * multi-letter extension.
-> > +              */
-> > +             isa_str =3D strchr(isa_str, '_');
-> > +             if (isa_str)
-> > +                     isa_str++;
-> > +     }
-> > +
-> > +     return false;
-> > +}
-> > +
-> > +/**
-> > + *  early_cpu_isa_ext_available - check if cpu node has an extension
-> > + *
-> > + * @fdt: pointer to the device tree blob
-> > + * @node: offset of the cpu node
-> > + * @ext_name: the extension to search for
-> > + *
-> > + *  Returns true if the cpu node has the extension,
-> > + *  false otherwise
-> > + */
-> > +static bool early_cpu_isa_ext_available(const void *fdt, int node, con=
-st char *ext_name)
-> > +{
-> > +     const void *prop;
-> > +     int len;
-> > +
-> > +     prop =3D fdt_getprop(fdt, node, "riscv,isa-extensions", &len);
-> > +     if (prop && fdt_stringlist_contains(prop, len, ext_name))
-> > +             return true;
-> > +
-> > +     prop =3D fdt_getprop(fdt, node, "riscv,isa", &len);
-> > +     if (prop && isa_string_contains(prop, ext_name))
-> > +             return true;
-> > +
-> > +     return false;
-> > +}
-> > +
-> > +/**
-> > + *  fdt_early_match_extension_isa - check if all cpu nodes have an ext=
-ension
-> > + *
-> > + * @fdt: pointer to the device tree blob
-> > + * @ext_name: the extension to search for
-> > + *
-> > + *  Returns true if the all available the cpu nodes have the extension=
-,
-> > + *  false otherwise
-> > + */
-> > +bool fdt_early_match_extension_isa(const void *fdt, const char *ext_na=
-me)
-> > +{
-> > +     int node, parent;
-> > +     bool ret =3D false;
-> > +
-> > +     parent =3D fdt_path_offset(fdt, "/cpus");
-> > +     if (parent < 0)
-> > +             return false;
-> > +
-> > +     fdt_for_each_subnode(node, fdt, parent) {
-> > +             if (!fdt_node_name_eq(fdt, node, "cpu"))
-> > +                     continue;
-> > +
-> > +             if (!fdt_device_is_available(fdt, node))
-> > +                     continue;
-> > +
-> > +             if (!early_cpu_isa_ext_available(fdt, node, ext_name))
-> > +                     return false;
-> > +
-> > +             ret =3D true;
-> > +     }
-> > +
-> > +     return ret;
-> > +}
-> > diff --git a/arch/riscv/kernel/pi/pi.h b/arch/riscv/kernel/pi/pi.h
-> > index 493c8cb7c0e6..21141d84fea6 100644
-> > --- a/arch/riscv/kernel/pi/pi.h
-> > +++ b/arch/riscv/kernel/pi/pi.h
-> > @@ -11,7 +11,10 @@
-> >   */
-> >
-> >  u64 get_kaslr_seed(uintptr_t dtb_pa);
-> > +u64 get_kaslr_seed_zkr(const uintptr_t dtb_pa);
-> >  bool set_nokaslr_from_cmdline(uintptr_t dtb_pa);
-> >  u64 set_satp_mode_from_cmdline(uintptr_t dtb_pa);
-> >
-> > +bool fdt_early_match_extension_isa(const void *fdt, const char *ext_na=
-me);
-> > +
-> >  #endif /* _RISCV_PI_H_ */
-> > diff --git a/arch/riscv/mm/init.c b/arch/riscv/mm/init.c
-> > index 9940171c79f0..bfb068dc4a64 100644
-> > --- a/arch/riscv/mm/init.c
-> > +++ b/arch/riscv/mm/init.c
-> > @@ -1025,6 +1025,7 @@ static void __init pt_ops_set_late(void)
-> >  #ifdef CONFIG_RANDOMIZE_BASE
-> >  extern bool __init __pi_set_nokaslr_from_cmdline(uintptr_t dtb_pa);
-> >  extern u64 __init __pi_get_kaslr_seed(uintptr_t dtb_pa);
-> > +extern u64 __init __pi_get_kaslr_seed_zkr(const uintptr_t dtb_pa);
-> >
-> >  static int __init print_nokaslr(char *p)
-> >  {
-> > @@ -1045,10 +1046,12 @@ asmlinkage void __init setup_vm(uintptr_t dtb_p=
-a)
-> >
-> >  #ifdef CONFIG_RANDOMIZE_BASE
-> >       if (!__pi_set_nokaslr_from_cmdline(dtb_pa)) {
-> > -             u64 kaslr_seed =3D __pi_get_kaslr_seed(dtb_pa);
-> > +             u64 kaslr_seed =3D __pi_get_kaslr_seed_zkr(dtb_pa);
-> >               u32 kernel_size =3D (uintptr_t)(&_end) - (uintptr_t)(&_st=
-art);
-> >               u32 nr_pos;
-> >
-> > +             if (kaslr_seed =3D=3D 0)
-> > +                     kaslr_seed =3D __pi_get_kaslr_seed(dtb_pa);
-> >               /*
-> >                * Compute the number of positions available: we are limi=
-ted
-> >                * by the early page table that only has one PUD and we m=
-ust
-> > --
-> > 2.45.2
-> >
-> >
-> > _______________________________________________
-> > linux-riscv mailing list
-> > linux-riscv@lists.infradead.org
-> > http://lists.infradead.org/mailman/listinfo/linux-riscv
->
-> _______________________________________________
-> linux-riscv mailing list
-> linux-riscv@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-riscv
+url:    https://github.com/intel-lab-lkp/linux/commits/Huan-Yang/mm-memcg-pmc-framework/20240702-165351
+base:   727900b675b749c40ba1f6669c7ae5eb7eb8e837
+patch link:    https://lore.kernel.org/r/20240702084423.1717904-5-link%40vivo.com
+patch subject: [RFC PATCH 4/4] mm: memcg: pmc: support oom release
+config: s390-allnoconfig (https://download.01.org/0day-ci/archive/20240703/202407031748.Jhbfna4Y-lkp@intel.com/config)
+compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project 326ba38a991250a8587a399a260b0f7af2c9166a)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240703/202407031748.Jhbfna4Y-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202407031748.Jhbfna4Y-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+   In file included from arch/s390/kernel/asm-offsets.c:11:
+   In file included from include/linux/kvm_host.h:16:
+   In file included from include/linux/mm.h:7:
+   In file included from include/linux/gfp.h:7:
+>> include/linux/mmzone.h:626:24: error: field has incomplete type 'struct notifier_block'
+     626 |         struct notifier_block oom_nb;
+         |                               ^
+   include/linux/random.h:12:8: note: forward declaration of 'struct notifier_block'
+      12 | struct notifier_block;
+         |        ^
+   In file included from arch/s390/kernel/asm-offsets.c:11:
+   In file included from include/linux/kvm_host.h:16:
+   In file included from include/linux/mm.h:2239:
+   include/linux/vmstat.h:514:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     514 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+   In file included from arch/s390/kernel/asm-offsets.c:11:
+   In file included from include/linux/kvm_host.h:19:
+   In file included from include/linux/msi.h:27:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/s390/include/asm/io.h:78:
+   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     547 |         val = __raw_readb(PCI_IOBASE + addr);
+         |                           ~~~~~~~~~~ ^
+   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     560 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
+      37 | #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
+         |                                                           ^
+   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
+     102 | #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
+         |                                                      ^
+   In file included from arch/s390/kernel/asm-offsets.c:11:
+   In file included from include/linux/kvm_host.h:19:
+   In file included from include/linux/msi.h:27:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/s390/include/asm/io.h:78:
+   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     573 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
+      35 | #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
+         |                                                           ^
+   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
+     115 | #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
+         |                                                      ^
+   In file included from arch/s390/kernel/asm-offsets.c:11:
+   In file included from include/linux/kvm_host.h:19:
+   In file included from include/linux/msi.h:27:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/s390/include/asm/io.h:78:
+   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     584 |         __raw_writeb(value, PCI_IOBASE + addr);
+         |                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     594 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     604 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:692:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     692 |         readsb(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:700:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     700 |         readsw(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:708:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     708 |         readsl(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:717:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     717 |         writesb(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+   include/asm-generic/io.h:726:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     726 |         writesw(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+   include/asm-generic/io.h:735:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     735 |         writesl(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+   In file included from arch/s390/kernel/asm-offsets.c:11:
+   In file included from include/linux/kvm_host.h:19:
+   In file included from include/linux/msi.h:27:
+   In file included from include/linux/irq.h:591:
+   In file included from arch/s390/include/asm/hw_irq.h:6:
+   In file included from include/linux/pci.h:37:
+   In file included from include/linux/device.h:32:
+   In file included from include/linux/device/driver.h:21:
+   In file included from include/linux/module.h:19:
+   In file included from include/linux/elf.h:6:
+   In file included from arch/s390/include/asm/elf.h:160:
+   include/linux/compat.h:454:22: warning: array index 3 is past the end of the array (that has type 'const unsigned long[1]') [-Warray-bounds]
+     454 |         case 4: v.sig[7] = (set->sig[3] >> 32); v.sig[6] = set->sig[3];
+         |                             ^        ~
+   arch/s390/include/asm/signal.h:22:9: note: array 'sig' declared here
+      22 |         unsigned long sig[_NSIG_WORDS];
+         |         ^
+   In file included from arch/s390/kernel/asm-offsets.c:11:
+   In file included from include/linux/kvm_host.h:19:
+   In file included from include/linux/msi.h:27:
+   In file included from include/linux/irq.h:591:
+   In file included from arch/s390/include/asm/hw_irq.h:6:
+   In file included from include/linux/pci.h:37:
+
+
+vim +626 include/linux/mmzone.h
+
+   614	
+   615	struct mem_cgroup_per_node_cache {
+   616		/* per zone cache */
+   617		struct mem_cgroup_zone_cache zone_cachep[MAX_NR_ZONES];
+   618		struct mem_cgroup *memcg;
+   619	
+   620		/* cycle cache reclaim time unit, us, default 5s, 0 means disable reaper */
+   621	#define DEFAULT_PMC_REAPER_TIME ((5 * 1000 * 1000))
+   622		unsigned int reaper_wait;
+   623		struct delayed_work reaper_work;
+   624	
+   625		/* listen oom event, release hold cache */
+ > 626		struct notifier_block oom_nb;
+   627	
+   628		/* max number to hold page, unit page, default 100MB */
+   629	#define DEFAULT_PMC_HOLD_LIMIX ((100 << 20) >> PAGE_SHIFT)
+   630		unsigned int hold_limit;
+   631	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
