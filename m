@@ -1,38 +1,38 @@
 Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net [217.70.183.194])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D4E41862A8;
-	Wed,  3 Jul 2024 10:38:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB807174ED0;
+	Wed,  3 Jul 2024 10:38:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.194
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720003117; cv=none; b=GUIlQcqLofI5oiJzh1mMnJPVE0cbdd/qEp/c0LHuQiv8e8NXwnGns10Qsw61FIAqLp6WOBsoyGCKJhGElkVvtae6VKgM5fHQJSF6snbDakYhKH/CKLVGfxQfFq++W47DzmUxGjR0c6HgBAvaKUpyNKDsnqNZHzQR9yBMAEFkjB0=
+	t=1720003121; cv=none; b=cn9SxEabICCp11sQej/5TY91E8TI+Ugar8cBibIT038vjm6OeWKr5KtgO0Y3OslB/Uk/EcAAnFtj6hrdJBDT+MoclrFGDZGPPWzsYxv4b9uY7YhKO2s19RqolQeBqNSkFYfIaRO/dBnKI3pPBD5CjniSKGCNcb8cTK/rpUUoyjU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720003117; c=relaxed/simple;
-	bh=7YYtT92MBrhUvwr5Xf3auiYyhieH/7rEI4oqnle8qPw=;
+	s=arc-20240116; t=1720003121; c=relaxed/simple;
+	bh=ZA1MlZdBI7doZt78PDSBd4igLHTUrxDMaO72gu1vD6I=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=LRDisue3UW0QCViceq25Wf5FrT1mq5kMPAU5iM4fOEMLhR+0RwQR4iSkKNGLkPFUj7sVbM51uv2uWqGCoFTBlipR4MqaJLHkaECDusjURBTHhKjPPpW/U7UrT9TaTs8rkcZShBhsJop/MJYbslou1eAunF38IiOQjB1PULt/IeQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=cPZSrbgY; arc=none smtp.client-ip=217.70.183.194
+	 In-Reply-To:To:Cc; b=pDbGGbWcjApWF4usHrqaSaNP4RnM/JDNBYFa0aO5fxYU77DFseOWQ/o9MTlX2xY5nYEoACWXSocCvfzI3jW0trlVnowOsLcaVpLWW7ERdZ2FoyTzuZ7HIixZQ8y4Wq/8mhS3VRVNF6fu2OuxAEJhtvr0AMqFJZTtj4qH5z8T0RI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=jFdqi5Os; arc=none smtp.client-ip=217.70.183.194
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="cPZSrbgY"
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 1B34140007;
-	Wed,  3 Jul 2024 10:38:30 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="jFdqi5Os"
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 18AC440011;
+	Wed,  3 Jul 2024 10:38:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1720003113;
+	t=1720003118;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=RU3pzYG6bF53Hk2/xb6Gkld3bSr1k5kQ8wZC1imwq1g=;
-	b=cPZSrbgY1uyHHUyxN4ire6Mmb4TO2Vu4T16Cw0ijX9WtOdQxRVHvR8xZ+jgMpz5IE44inL
-	vII6SqG0BXZ0XbJVzXjYjxMz8zquGtkc7ojMGbf+/xzpe9vPjARGlOsl4Kt/bELXixFXbH
-	5T4k5i2pHjA7qYSjwFIN2biRcDna40ZV3h1eAQappwyEIKEtCUiI5XdvuyfwdrmtIeJjgC
-	EmXxc3JWVdEIgSVbA2I6p8eyD4T5kYYxryDYm4ngJCNcK71xw65khBJRmgNBswdV/gvQA8
-	WY/WU4scw62nCs+t+3Qq4YDu8vQayuKSd07TBXf+564kOUKkT1WLhWlM6A8vaQ==
+	bh=oMehpDNTeRyaz1zic+l04kLg7AXLrSaEnuPGELbIuZE=;
+	b=jFdqi5OsnQOEYKAlVCxNckkwV8Npp65NBgpjBiqLL7g/ksg2thGvjn9+Ax+I2jTLZgTnQC
+	YVaI76MrWZUOgxVJEDA1IHM6CIfwmMaPul1TkX4/FFliVn1zV3Y6Ojrmz1w5gbn7WRXZ2Y
+	NXfuOsS5q++HwQAgAJDmjuU3CPj9pCe1dRxKpRjNltGurs5MuL/8luLny1NIhi7kgQkLpZ
+	5gO1z3R/HKqtfEtYkC5ME/AGs6ZXp1zPaDVoFmodU6XfMO3FqvCzbEYHuMaWhpK+eRV0te
+	lUS3ta95c7K7fK0d85HSuLNauUMJw0G4uDvN/JZ0q0YpISfNysTfZ1KdEdJO4w==
 From: Luca Ceresoli <luca.ceresoli@bootlin.com>
-Date: Wed, 03 Jul 2024 12:37:01 +0200
-Subject: [PATCH 17/20] ASoC: arizona: convert to
+Date: Wed, 03 Jul 2024 12:37:02 +0200
+Subject: [PATCH 18/20] powerpc/xive: convert to
  of_property_for_each_u32_new()
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -42,7 +42,7 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20240703-of_property_for_each_u32-v1-17-42c1fc0b82aa@bootlin.com>
+Message-Id: <20240703-of_property_for_each_u32-v1-18-42c1fc0b82aa@bootlin.com>
 References: <20240703-of_property_for_each_u32-v1-0-42c1fc0b82aa@bootlin.com>
 In-Reply-To: <20240703-of_property_for_each_u32-v1-0-42c1fc0b82aa@bootlin.com>
 To: Miguel Ojeda <ojeda@kernel.org>, Rob Herring <robh@kernel.org>, 
@@ -91,66 +91,32 @@ parameters in of_property_for_each_u32() are not used here.
 
 Signed-off-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
 ---
- sound/soc/codecs/arizona.c | 12 +++++-------
- 1 file changed, 5 insertions(+), 7 deletions(-)
+ arch/powerpc/sysdev/xive/native.c | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
 
-diff --git a/sound/soc/codecs/arizona.c b/sound/soc/codecs/arizona.c
-index 7434aeeda292..1a64b9815809 100644
---- a/sound/soc/codecs/arizona.c
-+++ b/sound/soc/codecs/arizona.c
-@@ -2786,15 +2786,13 @@ int arizona_of_get_audio_pdata(struct arizona *arizona)
- {
- 	struct arizona_pdata *pdata = &arizona->pdata;
- 	struct device_node *np = arizona->dev->of_node;
+diff --git a/arch/powerpc/sysdev/xive/native.c b/arch/powerpc/sysdev/xive/native.c
+index 517b963e3e6a..de31a1588303 100644
+--- a/arch/powerpc/sysdev/xive/native.c
++++ b/arch/powerpc/sysdev/xive/native.c
+@@ -559,9 +559,7 @@ bool __init xive_native_init(void)
+ 	struct device_node *np;
+ 	struct resource r;
+ 	void __iomem *tima;
 -	struct property *prop;
--	const __be32 *cur;
- 	u32 val;
- 	u32 pdm_val[ARIZONA_MAX_PDM_SPK];
- 	int ret;
- 	int count = 0;
+ 	u8 max_prio = 7;
+-	const __be32 *p;
+ 	u32 val, cpu;
+ 	s64 rc;
  
- 	count = 0;
--	of_property_for_each_u32(np, "wlf,inmode", prop, cur, val) {
-+	of_property_for_each_u32_new(np, "wlf,inmode", val) {
- 		if (count == ARRAY_SIZE(pdata->inmode))
+@@ -592,7 +590,7 @@ bool __init xive_native_init(void)
+ 		max_prio = val - 1;
+ 
+ 	/* Iterate the EQ sizes and pick one */
+-	of_property_for_each_u32(np, "ibm,xive-eq-sizes", prop, p, val) {
++	of_property_for_each_u32_new(np, "ibm,xive-eq-sizes", val) {
+ 		xive_queue_shift = val;
+ 		if (val == PAGE_SHIFT)
  			break;
- 
-@@ -2803,7 +2801,7 @@ int arizona_of_get_audio_pdata(struct arizona *arizona)
- 	}
- 
- 	count = 0;
--	of_property_for_each_u32(np, "wlf,dmic-ref", prop, cur, val) {
-+	of_property_for_each_u32_new(np, "wlf,dmic-ref", val) {
- 		if (count == ARRAY_SIZE(pdata->dmic_ref))
- 			break;
- 
-@@ -2812,7 +2810,7 @@ int arizona_of_get_audio_pdata(struct arizona *arizona)
- 	}
- 
- 	count = 0;
--	of_property_for_each_u32(np, "wlf,out-mono", prop, cur, val) {
-+	of_property_for_each_u32_new(np, "wlf,out-mono", val) {
- 		if (count == ARRAY_SIZE(pdata->out_mono))
- 			break;
- 
-@@ -2821,7 +2819,7 @@ int arizona_of_get_audio_pdata(struct arizona *arizona)
- 	}
- 
- 	count = 0;
--	of_property_for_each_u32(np, "wlf,max-channels-clocked", prop, cur, val) {
-+	of_property_for_each_u32_new(np, "wlf,max-channels-clocked", val) {
- 		if (count == ARRAY_SIZE(pdata->max_channels_clocked))
- 			break;
- 
-@@ -2830,7 +2828,7 @@ int arizona_of_get_audio_pdata(struct arizona *arizona)
- 	}
- 
- 	count = 0;
--	of_property_for_each_u32(np, "wlf,out-volume-limit", prop, cur, val) {
-+	of_property_for_each_u32_new(np, "wlf,out-volume-limit", val) {
- 		if (count == ARRAY_SIZE(pdata->out_vol_limit))
- 			break;
- 
 
 -- 
 2.34.1
