@@ -1,147 +1,160 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f43.google.com (mail-ej1-f43.google.com [209.85.218.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 63B6917DA39;
-	Wed,  3 Jul 2024 19:57:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 919BD18FC90
+	for <llvm@lists.linux.dev>; Wed,  3 Jul 2024 21:23:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720036647; cv=none; b=m2WAtp3aCBhdcwf11VvXcsYRxZbynjj5Gk7+Sf5naKhqcKzk0fS5GLDoL7qOK7h+zczJ5gdtTlytsFG5cPsoREhQxZCpDe5akyIG9fcFh3tLTBQZTGZl9WR2BQ53TSWgr7FeljVByYOO8EYyqcJ0hLrVo4RA5ooMBo3dQVVcEFQ=
+	t=1720041809; cv=none; b=qB9+ax/AmuGDPj2Nqi8GP35FJ8gUedBSACuLozpZ1W0gXCcNWEuAzXilPI/LtqrZ2l8ni+tJQBOUo+Vc7K117sI/CoC7XYa6dtSAw1w6BbXHd79774QI9vO9tT45XFGnqrt4Ohe6KyOg0dFb9SHFu9KmbAWJNWyHi3ckeBQ0NcE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720036647; c=relaxed/simple;
-	bh=B29EQa+mtbSVXg+rbhLNxiaBQ3eymypv1ZXUo7G4/30=;
+	s=arc-20240116; t=1720041809; c=relaxed/simple;
+	bh=1yCUJShNVEleKhhq5ttC7d+C2KlI7KvONMEvrwhI5X0=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=VB1CwgM5wF46kNRoNaeuIbMNqRtAgJvhfiVGQ+EECIZOOvYUCbhixtrTjR8Ms/gKoRVQYlDGdgHyCz7sB50X8itlBFx91CyYa8NdRKoPLceGlSnqN8nhKuR8UNV5+oVUfaEPsoFPL6ynXhkVUXVqvR7NF5kbopbyjJTuwwq7YAw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dc2U6igV; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=ocnN2ApkiVTKpgDQTxmQmyMt9TxqUb+YbcZOVenELhpZ+Ep1G0nVP7osHf3dIfPEnCMha+/f/NYwaF9ad1NhBMwHu6pMlkAOUZsikLGjOkd5Vyg9LaWCRaD14MeP60jAuo32rAwSGcacsOEpKE4Ny0fhzcreXh1uf1MB7Z9kNik=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=BOy2OQPF; arc=none smtp.client-ip=209.85.218.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dc2U6igV"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 654FDC2BD10;
-	Wed,  3 Jul 2024 19:57:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1720036646;
-	bh=B29EQa+mtbSVXg+rbhLNxiaBQ3eymypv1ZXUo7G4/30=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=dc2U6igV06Mk6Ler8Jh2sPmW7UsRoYhhDxSIuTcf15aQ0DL0YKjoBXiZwXomQxAmz
-	 c3eUbhR9KhK0GcP4044I6b5x6vzKQxVDpmvibULBUyr3FP29rmkiSdKiHZXjYTJHcc
-	 httCFkQEEUy/6M74YGUgQ616eSjCoPRV+56H1ZF3pqleuYLp1pihn7zzOZxkIwECgL
-	 XzZzf0IU1yUVahJ9qJZ7S2fM0z0BASZGrgZ2N/9iTHj8hrnBI1H8+JYsq/c1uENr2O
-	 R23SCmldmTvE5lXA5JFo955y8YWRFoINVQUjVudiUVk0PKeQyWYwOLQTEt/+dWG5jF
-	 oNXlZvzz5xymw==
-Date: Wed, 3 Jul 2024 12:57:24 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Yury Norov <yury.norov@gmail.com>
-Cc: Brian Norris <briannorris@chromium.org>,
-	Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>, llvm@lists.linux.dev,
-	linux-kernel@vger.kernel.org, Justin Stitt <justinstitt@google.com>
-Subject: Re: [PATCH] cpumask: Switch from inline to __always_inline
-Message-ID: <20240703195724.GA292031@thelio-3990X>
-References: <20240514204910.1383909-1-briannorris@chromium.org>
- <ZnsML1RYMmEhhdPP@google.com>
- <ZoWhPFJIvGpMGKm4@yury-ThinkPad>
+	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="BOy2OQPF"
+Received: by mail-ej1-f43.google.com with SMTP id a640c23a62f3a-a728f74c23dso668623566b.1
+        for <llvm@lists.linux.dev>; Wed, 03 Jul 2024 14:23:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1720041805; x=1720646605; darn=lists.linux.dev;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=rmKjZalCS3qgqBNUJ2X1ny0z1S/+Ouz6++2zspqi0Zc=;
+        b=BOy2OQPFLq9f54WRwqkylnC7v3IRvL0VzehYADd4yjGxVTJo9rzaDSTeF/QuYoKcF0
+         IDWIE0s2QH82X5fxP4ImS0ETh5Pr9A905QOSTsssUc8wsV+BxH6fzomkrnwZEXUHd5OI
+         +TDsKYpGU7E1/q88uUxdCZVKjaqW7myVjeMEC5TVTaPSCMi8IKzb4/QanSFBTsxTGYwz
+         2eJh2OWbWUFKMytE6giVwqrdAw+E4e61xBfDLahxLa4dP53/LIiH6uz3C626ODlxDxFa
+         WVPXtnRldJY9Lxs7cqeG7+Hrg/1JqLmBNU+eGTRc0tGmkMmMgQbvIPCtllGnmShMWkTJ
+         f6zA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1720041805; x=1720646605;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=rmKjZalCS3qgqBNUJ2X1ny0z1S/+Ouz6++2zspqi0Zc=;
+        b=aUWXX3P6P9bAIY61nfg6lr7rfpHFR574KYu8AE8beoZGn5Geo14IhtmIqEWUeEVuqU
+         3wPQ2ODjyjcGcrKPaRAfYWZ05fP9dSWxEPFrKL/EiAwx04nr+WkDczl7p80Gtv8ntWjX
+         FHD33N42ley4fkpBfiGxVoc+u7KTpAgQ6lXcBiG4lXWxdf3P9foykZNc2Oh+sRqx9WJi
+         P7AdDjrpg8OY7gj5K295Wx7ErY0lL/EeHDssUay0vBxVT7GA7377T44YXpyk3TMJub4V
+         kfN8/jGgcC04hwxduEEvxK52baTi2xjrXtbKPjCzGXJRCWfT9j15wgYZ5xbxo4o0rZhA
+         /QNg==
+X-Forwarded-Encrypted: i=1; AJvYcCX58uhKFvvCJQTb0GEas7bIx1QBcKyRCpyQq+mWPe+NBb8NxGmOQEnebx3/NazWQmHP0Y85TbFcIdEpUhbWb43duT+YmA==
+X-Gm-Message-State: AOJu0YzUczPL6aNEbdElCk30+VoueJ2R11qKIbnNEfd788qMs6mw2pN4
+	Q/RV+etocORh1GUYdGobqjTX6o0KOh8vpfn3Z1B/fDKSh9KG4iCj0JqSRIHJXSg=
+X-Google-Smtp-Source: AGHT+IEiDeirJZbiRR9WOgvKVRp5lPoOHJBTmQD67pQvhrzI/8nB0fQNgTn38F10sD2qUfAawYddVg==
+X-Received: by 2002:a17:907:1c15:b0:a72:883f:f3dd with SMTP id a640c23a62f3a-a75144a8a02mr1042146966b.56.1720041804879;
+        Wed, 03 Jul 2024 14:23:24 -0700 (PDT)
+Received: from localhost ([2a02:8071:b783:6940:5696:f293:6e5e:98bf])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a72ab0651c0sm541105666b.123.2024.07.03.14.23.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 03 Jul 2024 14:23:24 -0700 (PDT)
+Date: Wed, 3 Jul 2024 23:23:22 +0200
+From: Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@baylibre.com>
+To: Luca Ceresoli <luca.ceresoli@bootlin.com>
+Cc: Miguel Ojeda <ojeda@kernel.org>, Rob Herring <robh@kernel.org>, 
+	Saravana Kannan <saravanak@google.com>, Nathan Chancellor <nathan@kernel.org>, 
+	Michael Turquette <mturquette@baylibre.com>, Stephen Boyd <sboyd@kernel.org>, 
+	Tony Lindgren <tony@atomide.com>, Bjorn Andersson <andersson@kernel.org>, 
+	Emilio =?utf-8?B?TMOzcGV6?= <emilio@elopez.com.ar>, Chen-Yu Tsai <wens@csie.org>, 
+	Jernej Skrabec <jernej.skrabec@gmail.com>, Samuel Holland <samuel@sholland.org>, 
+	Krzysztof Kozlowski <krzk@kernel.org>, Daniel Lezcano <daniel.lezcano@linaro.org>, 
+	Thomas Gleixner <tglx@linutronix.de>, Florian Fainelli <florian.fainelli@broadcom.com>, 
+	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>, Linus Walleij <linus.walleij@linaro.org>, 
+	Bartosz Golaszewski <brgl@bgdev.pl>, Jonathan Cameron <jic23@kernel.org>, Lee Jones <lee@kernel.org>, 
+	Shawn Guo <shawnguo@kernel.org>, Pengutronix Kernel Team <kernel@pengutronix.de>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Jiri Slaby <jirislaby@kernel.org>, 
+	Richard Leitner <richard.leitner@linux.dev>, Liam Girdwood <lgirdwood@gmail.com>, 
+	Mark Brown <broonie@kernel.org>, Nicolas Ferre <nicolas.ferre@microchip.com>, 
+	Michael Ellerman <mpe@ellerman.id.au>, Nicholas Piggin <npiggin@gmail.com>, 
+	Christophe Leroy <christophe.leroy@csgroup.eu>, "Naveen N. Rao" <naveen.n.rao@linux.ibm.com>, 
+	Damien Le Moal <dlemoal@kernel.org>, "Peng Fan (OSS)" <peng.fan@oss.nxp.com>, 
+	Thomas Petazzoni <thomas.petazzoni@bootlin.com>, linux-kernel@vger.kernel.org, devicetree@vger.kernel.org, 
+	llvm@lists.linux.dev, linux-clk@vger.kernel.org, linux-omap@vger.kernel.org, 
+	linux-arm-msm@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+	linux-sunxi@lists.linux.dev, linux-samsung-soc@vger.kernel.org, linux-gpio@vger.kernel.org, 
+	linux-iio@vger.kernel.org, linux-pwm@vger.kernel.org, linux-serial@vger.kernel.org, 
+	linux-usb@vger.kernel.org, patches@opensource.cirrus.com, linux-sound@vger.kernel.org, 
+	linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org
+Subject: Re: [PATCH 13/20] pwm: samsung: convert to
+ of_property_for_each_u32_new()
+Message-ID: <l2xret6kx4qwee3c3abmmhz5uop7zuobxath2eou2utklztkgl@c7lskt3xk3wj>
+References: <20240703-of_property_for_each_u32-v1-0-42c1fc0b82aa@bootlin.com>
+ <20240703-of_property_for_each_u32-v1-13-42c1fc0b82aa@bootlin.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="3uu6b6ybcnfri4lk"
 Content-Disposition: inline
-In-Reply-To: <ZoWhPFJIvGpMGKm4@yury-ThinkPad>
+In-Reply-To: <20240703-of_property_for_each_u32-v1-13-42c1fc0b82aa@bootlin.com>
 
-On Wed, Jul 03, 2024 at 12:06:36PM -0700, Yury Norov wrote:
-> On Tue, Jun 25, 2024 at 11:27:59AM -0700, Brian Norris wrote:
-> > Hi Yuri, Rasmus,
-> > 
-> > On Tue, May 14, 2024 at 01:49:01PM -0700, Brian Norris wrote:
-> > > On recent (v6.6+) builds with Clang (based on Clang 18.0.0) and certain
-> > > configurations [0], I'm finding that (lack of) inlining decisions may
-> > > lead to section mismatch warnings like the following:
-> > > 
-> > >   WARNING: modpost: vmlinux.o: section mismatch in reference:
-> > >   cpumask_andnot (section: .text) ->
-> > >   cpuhp_bringup_cpus_parallel.tmp_mask (section: .init.data) ERROR:
-> > >   modpost: Section mismatches detected.
-> > > 
-> > > or more confusingly:
-> > > 
-> > >   WARNING: modpost: vmlinux: section mismatch in reference:
-> > >   cpumask_andnot+0x5f (section: .text) -> efi_systab_phys (section:
-> > >   .init.data)
-> > > 
-> > > The first warning makes a little sense, because
-> > > cpuhp_bringup_cpus_parallel() (an __init function) calls
-> > > cpumask_andnot() on tmp_mask (an __initdata symbol). If the compiler
-> > > doesn't inline cpumask_andnot(), this may appear like a mismatch.
-> > > 
-> > > The second warning makes less sense, but might be because efi_systab_phys
-> > > and cpuhp_bringup_cpus_parallel.tmp_mask are laid out near each other,
-> > > and the latter isn't a proper C symbol definition.
-> > > 
-> > > In any case, it seems a reasonable solution to suggest more strongly to
-> > > the compiler that these cpumask macros *must* be inlined, as 'inline' is
-> > > just a recommendation.
-> > > 
-> > > This change (plus more) has been previously proposed for other reasons
-> > > -- that some of the bitmask 'const' machinery doesn't work without
-> > > inlining -- in the past as:
-> > > 
-> > >   Subject: [PATCH 1/3] bitmap: switch from inline to __always_inline
-> > >   https://lore.kernel.org/all/20221027043810.350460-2-yury.norov@gmail.com/
-> > > 
-> > > It seems like a good idea to at least make all cpumask functions use
-> > > __always_inline; several already do.
-> > > 
-> > > According to bloat-o-meter, my ~29MB vmlinux increases by a total of 61
-> > > bytes (0.00%) with this change.
-> > > 
-> > > [0] CONFIG_HOTPLUG_PARALLEL=y ('select'ed for x86 as of [1]) and
-> > >     CONFIG_GCOV_PROFILE_ALL.
-> > > 
-> > > [1] commit 0c7ffa32dbd6 ("x86/smpboot/64: Implement
-> > >     arch_cpuhp_init_parallel_bringup() and enable it")
-> > > 
-> > > Cc: Yury Norov <yury.norov@gmail.com>
-> > > Signed-off-by: Brian Norris <briannorris@chromium.org>
-> > > ---
-> > > 
-> > >  include/linux/cpumask.h | 214 +++++++++++++++++++++-------------------
-> > >  1 file changed, 113 insertions(+), 101 deletions(-)
-...
-> cpumask_andnot() is a pure wrapper around bitmap_andnot(), and it's
-> really surprising that clang decided to make it an outline function.
-> Maybe the bitmap_andnot() is one that outlined? Did you apply only
-> this patch, or my patch for bitmaps too to fix the warning?
-> 
-> Clang people are already in CC. Guys, can you please comment if making
-> cpumask API __always_inline is OK for you? Why Clang decides to make a
-> pure wrapper outlined?
 
-There are a whole host of reasons why Clang's inliner might decide not
-to inline a function. There is '-Rpass-missed=inliner', which should
-enable optimization remarks for the inliner to maybe see why LLVM
-thought it was not profitable to inline these functions, which could be
-passed to Kbuild via KCFLAGS=-Rpass-missed=inliner or selectively for a
-translation unit by adding 'CFLAGS_<file>.o := -Rpass-missed=inliner' to
-whatever translation unit's Makefile that has a warning.
+--3uu6b6ybcnfri4lk
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-However, given that this appears to only show up when GCOV is enabled,
-it is likely just the case that the additional instrumentation makes
-certain functions appear unprofitable. Overriding the inliner with
-__always_inline is not the end of the world, especially if it is
-genuinely beneficial to always inline them. I can see how that would be
-the case with these functions.
+Hello,
 
-> I feel that if we decide making cpumask an __always_inline is the
-> right way, we also should make underlying bitmap API __always_inline
-> just as well. Otherwise, there will be a chance of having outlined
-> bitmap helpers, which may confuse clang again.
+On Wed, Jul 03, 2024 at 12:36:57PM +0200, Luca Ceresoli wrote:
+> Simplify code using of_property_for_each_u32_new() as the two additional
+> parameters in of_property_for_each_u32() are not used here.
+>=20
+> Signed-off-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
+> ---
+>  drivers/pwm/pwm-samsung.c | 4 +---
+>  1 file changed, 1 insertion(+), 3 deletions(-)
+>=20
+> diff --git a/drivers/pwm/pwm-samsung.c b/drivers/pwm/pwm-samsung.c
+> index efb60c9f0cb3..fef02a0b023e 100644
+> --- a/drivers/pwm/pwm-samsung.c
+> +++ b/drivers/pwm/pwm-samsung.c
+> @@ -510,8 +510,6 @@ static int pwm_samsung_parse_dt(struct pwm_chip *chip)
+>  	struct samsung_pwm_chip *our_chip =3D to_samsung_pwm_chip(chip);
+>  	struct device_node *np =3D pwmchip_parent(chip)->of_node;
+>  	const struct of_device_id *match;
+> -	struct property *prop;
+> -	const __be32 *cur;
+>  	u32 val;
+> =20
+>  	match =3D of_match_node(samsung_pwm_matches, np);
+> @@ -520,7 +518,7 @@ static int pwm_samsung_parse_dt(struct pwm_chip *chip)
+> =20
+>  	memcpy(&our_chip->variant, match->data, sizeof(our_chip->variant));
+> =20
+> -	of_property_for_each_u32(np, "samsung,pwm-outputs", prop, cur, val) {
+> +	of_property_for_each_u32_new(np, "samsung,pwm-outputs", val) {
+>  		if (val >=3D SAMSUNG_PWM_NUM) {
+>  			dev_err(pwmchip_parent(chip),
+>  				"%s: invalid channel index in samsung,pwm-outputs property\n",
+>=20
 
-If this does not result in noticeable bloat, this may not be a bad
-idea. I seem to recall this being an issue in the past for us but I
-cannot seem to find the issue at this point. Commit 1dc01abad654
-("cpumask: Always inline helpers which use bit manipulation functions")
-comes to mind.
+Acked-by: Uwe Kleine-K=F6nig <u.kleine-koenig@baylibre.com>
 
-Cheers,
-Nathan
+Feel free to merge this together with the change from the first patch.
+
+Best regards
+Uwe
+
+--3uu6b6ybcnfri4lk
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmaFwUcACgkQj4D7WH0S
+/k6PuggAu8WCVFGH6QIMKU3X2rf+i2w61Hm9yGoz/E1JXjYYwhvN07D9QQrg3lFk
+uuvOlwgkdfuIHAsZupm4B503z6Cr+9e1c0yd2UsXZkR+Y5e5uAcWpFrqQPpsUjg6
+K4y5iO46KFiNdoyIw5vaEqa9r+2MGaV/6utEBzK71uNVzWWnYAxGJSrp9BXXUlRN
+ZUz4u7b3Yp+kmsIoFWF2SYjPB08bXS+XlNegSLFuhFLAklD1WtMgdfiyFyqVm20f
+wxAtUX4pOe9E7HV+9qcyWKkbxhOVOOD6iG1CnatgtZoAeRfvmcNx+o2M4x8H0qXK
+hetCnR7IsLL80SX5lvKiYYw2At4OEA==
+=UQNH
+-----END PGP SIGNATURE-----
+
+--3uu6b6ybcnfri4lk--
