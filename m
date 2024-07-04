@@ -1,99 +1,238 @@
-Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 374A4157A43
-	for <llvm@lists.linux.dev>; Thu,  4 Jul 2024 05:48:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.227.194
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 547ED53370;
+	Thu,  4 Jul 2024 06:09:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720072122; cv=none; b=fC6AryFC+L2Wa+abkNabZOmQ9i/H0QwM0/IbwPo4x6rEY5KpeFDxYL9u7mCe6/FxH7CL1F/af6yL0lLLGREIpdSduF/W8t+GGrFOD3WoY31Wqarr8DqImaAFBbafiqxWjwNQbB4wkthDB2sQcUeK1ZZXMn7Jk7yt/pKrmZnKtnQ=
+	t=1720073357; cv=none; b=CJ3A9QuNnHrSxZxKCTBPaMbl8D6IzEb8VmbVykyGxAfB3BERIF+4JAzpTO61ZpZg12WhDdsTC9Xq8T6leJ+FjP4R+H07seX1UumDJImUmacKHDz3VYV0mACHOQpf+m/nzmjLMflFxtJ2C7lXRTovzNS5U9l5H2ld0PVyQ72hHZg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720072122; c=relaxed/simple;
-	bh=ETiXUSdUNkqvQTr20H04++pbgV0yc6V3cMGeLljFAMQ=;
-	h=Message-ID:Date:MIME-Version:Cc:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=iAzZqN8awDneY465JLWcm6Rjf97MkebDY/306VbC6yhejbcpvbmq5ZGm7MxzREnuS5KVXLQtdgxsMuir93f4p5IXWiUnm42gmKYnqtnDInpliia0dpUFYnrhrfV+kdU9Es6HdgdDFKDEQKwgvKn/B8Mpz0/MxTEzxGTXGN2Wj4M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=LvHqv8So; arc=none smtp.client-ip=46.235.227.194
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+	s=arc-20240116; t=1720073357; c=relaxed/simple;
+	bh=NAEfW1Rm4pXh5jwCrw8zGZXy9DqVW2BjlR6Z5pMqLvU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=uKOstzGBU660OUQje7YeGnkYt2lp7TtrYPjYMrnT9GVeKJzsyvmz0b64beRkYLssW0gsIIIdxnhxHYfauol9c25p71Bo5yhYoF8ckqnA3Z6DWHfL2tacIafABePtgUkagtdastUGDJgsELYyewHttgAKSxQLPfPeHRv9tytV90c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=LMYBY0XX; arc=none smtp.client-ip=192.198.163.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="LvHqv8So"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1720072116;
-	bh=ETiXUSdUNkqvQTr20H04++pbgV0yc6V3cMGeLljFAMQ=;
-	h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
-	b=LvHqv8Soe2AuBhrefypzX0dF1O+rTLisyr/8nFP3yLod5Q0JBHrL+r5mWk5ofkZt1
-	 NxLGSuKN4MAN2A4oowKzJavH/ZGK+P9ZoloOY+j6kR4jCJyw7XVi6+fU1tBpcb3W4d
-	 EhJ0Y+YeFcgTa2fnCPuNNv85VNfVD7gzBk0QjYaoYCW3+Q0JOyXMKyWwo8eQP2SgnQ
-	 uP38iND5C4P2FwzlFxrNz98QyLsj2w7Uai4+kwRVwyOFV+9SvRHlh9IA6crP2Koaeb
-	 xwrwZ6BT07wgQw2kuBfzZybr1noJy3q/x+LbnY3gIWdhsMCsD/3Ckoflmw9OAxv9SK
-	 +IBm8zIotzOeQ==
-Received: from [100.113.15.66] (ec2-34-240-57-77.eu-west-1.compute.amazonaws.com [34.240.57.77])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: usama.anjum)
-	by madrid.collaboradmins.com (Postfix) with ESMTPSA id DEDFE37810CD;
-	Thu,  4 Jul 2024 05:48:31 +0000 (UTC)
-Message-ID: <cd08a86a-8ce0-4ca3-946f-b33ae5a2f133@collabora.com>
-Date: Thu, 4 Jul 2024 10:48:27 +0500
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="LMYBY0XX"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1720073355; x=1751609355;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=NAEfW1Rm4pXh5jwCrw8zGZXy9DqVW2BjlR6Z5pMqLvU=;
+  b=LMYBY0XX8OnGkSXntzCsWrwYT8D4wSQ6GRMGXHINkRes0DjQM4QNjyGR
+   wwHMFL9uEWzVpm9kqUAaF0F473yi2PNACkIEzoCCF+tEyUvbHud7n8m2v
+   uzpGGvmOefmxnqjDqwdPVZjDGpLzd6xFR4XiRhicFjx2O5AwsRvHgaUZQ
+   KXHDvRgtfA4/LDfyT9gDZZojHpvP66EiyEY8meZGJJXBlYqwKyqP6Tvft
+   RFtZBeQpgW93qqMwtACzj+S4rJEB7sgib40xGaK9gU2wFGrwbY+aKmAWW
+   mtnbu6fGMXdOwScGg7Sq9wUDvUyj/Y3Vm7W/gDeqbO82XXUdgwlckA7pc
+   g==;
+X-CSE-ConnectionGUID: JEAe3qlTT1uZLKQNdkFqRA==
+X-CSE-MsgGUID: 0YMAeu1ZSPu5PBbtjMuUrw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11122"; a="27948456"
+X-IronPort-AV: E=Sophos;i="6.09,183,1716274800"; 
+   d="scan'208";a="27948456"
+Received: from orviesa008.jf.intel.com ([10.64.159.148])
+  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jul 2024 23:09:14 -0700
+X-CSE-ConnectionGUID: 6SBds+EjSXOqnpNUb1rF6g==
+X-CSE-MsgGUID: UrqdOjPiSqmnOb6m2wEKfQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.09,183,1716274800"; 
+   d="scan'208";a="47233541"
+Received: from lkp-server01.sh.intel.com (HELO 68891e0c336b) ([10.239.97.150])
+  by orviesa008.jf.intel.com with ESMTP; 03 Jul 2024 23:09:11 -0700
+Received: from kbuild by 68891e0c336b with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1sPFeW-000QdO-0n;
+	Thu, 04 Jul 2024 06:09:08 +0000
+Date: Thu, 4 Jul 2024 14:08:11 +0800
+From: kernel test robot <lkp@intel.com>
+To: admiyo@os.amperecomputing.com, Jeremy Kerr <jk@codeconstruct.com.au>,
+	Matt Johnston <matt@codeconstruct.com.au>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Sudeep Holla <sudeep.holla@arm.com>,
+	Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+	Huisong Li <lihuisong@huawei.com>
+Subject: Re: [PATCH v4 3/3] mctp pcc: Implement MCTP over PCC Transport
+Message-ID: <202407041340.ve4NQPsF-lkp@intel.com>
+References: <20240702225845.322234-4-admiyo@os.amperecomputing.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Cc: Muhammad Usama Anjum <usama.anjum@collabora.com>,
- angquan yu <angquan21@gmail.com>,
- "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
- Ingo Molnar <mingo@kernel.org>, Binbin Wu <binbin.wu@linux.intel.com>,
- Alexey Dobriyan <adobriyan@gmail.com>,
- Rick Edgecombe <rick.p.edgecombe@intel.com>,
- Sohil Mehta <sohil.mehta@intel.com>, Yu-cheng Yu <yu-cheng.yu@intel.com>,
- Valentin Obst <kernel@valentinobst.de>, linux-kselftest@vger.kernel.org,
- LKML <linux-kernel@vger.kernel.org>, llvm@lists.linux.dev, x86@kernel.org
-Subject: Re: [PATCH v3 0/7] selftests/x86: fix build errors and warnings found
- via clang
-To: John Hubbard <jhubbard@nvidia.com>, Shuah Khan <shuah@kernel.org>,
- Dave Hansen <dave.hansen@linux.intel.com>
-References: <20240531193838.108454-1-jhubbard@nvidia.com>
- <d9c56b70-6120-4de7-920b-9ece52905c00@nvidia.com>
- <64f44840-823a-4b82-8187-c94c6e021c15@collabora.com>
- <17675d27-6a9c-4f1d-a771-4830393465d3@nvidia.com>
-Content-Language: en-US
-From: Muhammad Usama Anjum <usama.anjum@collabora.com>
-In-Reply-To: <17675d27-6a9c-4f1d-a771-4830393465d3@nvidia.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240702225845.322234-4-admiyo@os.amperecomputing.com>
 
-On 7/4/24 8:08 AM, John Hubbard wrote:
-> On 7/2/24 3:28 AM, Muhammad Usama Anjum wrote:
->> On 6/29/24 1:06 AM, John Hubbard wrote:
->>> On 5/31/24 12:38 PM, John Hubbard wrote:
->>>> Hi,
->>>>
->>>> Dave Hansen, Muhammad Usama Anjum, here is the combined series that we
->>>> discussed yesterday [1].
->>>
->>> Hi Dave, Shuah,
->>>
->>> Are either of you planning to take this series? I ask because I have a
->>> very slightly overlapping series that enhances the LLVM/clang checks,
->>> that I'm about to post. And I'm not sure if I should try to include
->>> a small fix that would apply to patch 5/7 here.
->> This series is important. Please accept it.
->>
-> 
-> Hi Muhammad,
-> 
-> May I add your acked by to the series? I can use that as a weak excuse to
-> resend this, rebased onto the latest, and keep trying to get attention on
-> it.
-Yeah, sure. I've reviewed the patches. But haven't found time to send the
-tags to patches individually.
+Hi,
 
-> 
-> thanks,
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on rafael-pm/linux-next]
+[also build test ERROR on rafael-pm/bleeding-edge linus/master v6.10-rc6 next-20240703]
+[cannot apply to horms-ipvs/master]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/admiyo-os-amperecomputing-com/mctp-pcc-Check-before-sending-MCTP-PCC-response-ACK/20240703-163558
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git linux-next
+patch link:    https://lore.kernel.org/r/20240702225845.322234-4-admiyo%40os.amperecomputing.com
+patch subject: [PATCH v4 3/3] mctp pcc: Implement MCTP over PCC Transport
+config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20240704/202407041340.ve4NQPsF-lkp@intel.com/config)
+compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project 326ba38a991250a8587a399a260b0f7af2c9166a)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240704/202407041340.ve4NQPsF-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202407041340.ve4NQPsF-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+         |                                                   ^
+   In file included from drivers/net/mctp/mctp-pcc.c:8:
+   In file included from include/linux/if_arp.h:22:
+   In file included from include/linux/skbuff.h:17:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:12:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:14:
+   In file included from arch/hexagon/include/asm/io.h:328:
+   include/asm-generic/io.h:574:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     574 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
+      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
+         |                                                   ^
+   In file included from drivers/net/mctp/mctp-pcc.c:8:
+   In file included from include/linux/if_arp.h:22:
+   In file included from include/linux/skbuff.h:17:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:12:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:14:
+   In file included from arch/hexagon/include/asm/io.h:328:
+   include/asm-generic/io.h:585:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     585 |         __raw_writeb(value, PCI_IOBASE + addr);
+         |                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:595:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     595 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:605:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     605 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   In file included from drivers/net/mctp/mctp-pcc.c:17:
+   include/acpi/acpi_drivers.h:72:43: warning: declaration of 'struct acpi_pci_root' will not be visible outside of this function [-Wvisibility]
+      72 | struct pci_bus *pci_acpi_scan_root(struct acpi_pci_root *root);
+         |                                           ^
+   drivers/net/mctp/mctp-pcc.c:207:19: error: incomplete definition of type 'struct acpi_device'
+     207 |         dev_dbg(&acpi_dev->dev, "Adding mctp_pcc device for HID  %s\n",
+         |                  ~~~~~~~~^
+   include/linux/dev_printk.h:165:18: note: expanded from macro 'dev_dbg'
+     165 |         dynamic_dev_dbg(dev, dev_fmt(fmt), ##__VA_ARGS__)
+         |                         ^~~
+   include/linux/dynamic_debug.h:274:7: note: expanded from macro 'dynamic_dev_dbg'
+     274 |                            dev, fmt, ##__VA_ARGS__)
+         |                            ^~~
+   include/linux/dynamic_debug.h:250:59: note: expanded from macro '_dynamic_func_call'
+     250 |         _dynamic_func_call_cls(_DPRINTK_CLASS_DFLT, fmt, func, ##__VA_ARGS__)
+         |                                                                  ^~~~~~~~~~~
+   include/linux/dynamic_debug.h:248:65: note: expanded from macro '_dynamic_func_call_cls'
+     248 |         __dynamic_func_call_cls(__UNIQUE_ID(ddebug), cls, fmt, func, ##__VA_ARGS__)
+         |                                                                        ^~~~~~~~~~~
+   include/linux/dynamic_debug.h:224:15: note: expanded from macro '__dynamic_func_call_cls'
+     224 |                 func(&id, ##__VA_ARGS__);                       \
+         |                             ^~~~~~~~~~~
+   include/linux/acpi.h:793:8: note: forward declaration of 'struct acpi_device'
+     793 | struct acpi_device;
+         |        ^
+   drivers/net/mctp/mctp-pcc.c:208:3: error: call to undeclared function 'acpi_device_hid'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     208 |                 acpi_device_hid(acpi_dev));
+         |                 ^
+   drivers/net/mctp/mctp-pcc.c:208:3: note: did you mean 'acpi_device_dep'?
+   include/acpi/acpi_bus.h:41:6: note: 'acpi_device_dep' declared here
+      41 | bool acpi_device_dep(acpi_handle target, acpi_handle match);
+         |      ^
+   drivers/net/mctp/mctp-pcc.c:209:15: error: call to undeclared function 'acpi_device_handle'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     209 |         dev_handle = acpi_device_handle(acpi_dev);
+         |                      ^
+   drivers/net/mctp/mctp-pcc.c:209:13: error: incompatible integer to pointer conversion assigning to 'acpi_handle' (aka 'void *') from 'int' [-Wint-conversion]
+     209 |         dev_handle = acpi_device_handle(acpi_dev);
+         |                    ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/net/mctp/mctp-pcc.c:213:20: error: incomplete definition of type 'struct acpi_device'
+     213 |                 dev_err(&acpi_dev->dev, "FAILURE to lookup PCC indexes from CRS");
+         |                          ~~~~~~~~^
+   include/linux/dev_printk.h:154:44: note: expanded from macro 'dev_err'
+     154 |         dev_printk_index_wrap(_dev_err, KERN_ERR, dev, dev_fmt(fmt), ##__VA_ARGS__)
+         |                                                   ^~~
+   include/linux/dev_printk.h:110:11: note: expanded from macro 'dev_printk_index_wrap'
+     110 |                 _p_func(dev, fmt, ##__VA_ARGS__);                       \
+         |                         ^~~
+   include/linux/acpi.h:793:8: note: forward declaration of 'struct acpi_device'
+     793 | struct acpi_device;
+         |        ^
+   drivers/net/mctp/mctp-pcc.c:218:17: error: incomplete definition of type 'struct acpi_device'
+     218 |         dev = &acpi_dev->dev;
+         |                ~~~~~~~~^
+   include/linux/acpi.h:793:8: note: forward declaration of 'struct acpi_device'
+     793 | struct acpi_device;
+         |        ^
+   drivers/net/mctp/mctp-pcc.c:264:10: error: incomplete definition of type 'struct acpi_device'
+     264 |         acpi_dev->driver_data = mctp_pcc_dev;
+         |         ~~~~~~~~^
+   include/linux/acpi.h:793:8: note: forward declaration of 'struct acpi_device'
+     793 | struct acpi_device;
+         |        ^
+>> drivers/net/mctp/mctp-pcc.c:293:40: error: call to undeclared function 'acpi_driver_data'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     293 |         struct mctp_pcc_ndev *mctp_pcc_ndev = acpi_driver_data(adev);
+         |                                               ^
+>> drivers/net/mctp/mctp-pcc.c:293:24: error: incompatible integer to pointer conversion initializing 'struct mctp_pcc_ndev *' with an expression of type 'int' [-Wint-conversion]
+     293 |         struct mctp_pcc_ndev *mctp_pcc_ndev = acpi_driver_data(adev);
+         |                               ^               ~~~~~~~~~~~~~~~~~~~~~~
+   drivers/net/mctp/mctp-pcc.c:305:27: error: variable has incomplete type 'struct acpi_driver'
+     305 | static struct acpi_driver mctp_pcc_driver = {
+         |                           ^
+   drivers/net/mctp/mctp-pcc.c:305:15: note: forward declaration of 'struct acpi_driver'
+     305 | static struct acpi_driver mctp_pcc_driver = {
+         |               ^
+   drivers/net/mctp/mctp-pcc.c:316:1: error: type specifier missing, defaults to 'int'; ISO C99 and later do not support implicit int [-Wimplicit-int]
+     316 | module_acpi_driver(mctp_pcc_driver);
+         | ^
+         | int
+   drivers/net/mctp/mctp-pcc.c:316:20: error: a parameter list without types is only allowed in a function definition
+     316 | module_acpi_driver(mctp_pcc_driver);
+         |                    ^
+   8 warnings and 12 errors generated.
+
+
+vim +/acpi_driver_data +293 drivers/net/mctp/mctp-pcc.c
+
+   290	
+   291	static void mctp_pcc_driver_remove(struct acpi_device *adev)
+   292	{
+ > 293		struct mctp_pcc_ndev *mctp_pcc_ndev = acpi_driver_data(adev);
+   294	
+   295		pcc_mbox_free_channel(mctp_pcc_ndev->out_chan);
+   296		pcc_mbox_free_channel(mctp_pcc_ndev->in_chan);
+   297		mctp_unregister_netdev(mctp_pcc_ndev->mdev.dev);
+   298	}
+   299	
 
 -- 
-BR,
-Muhammad Usama Anjum
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
