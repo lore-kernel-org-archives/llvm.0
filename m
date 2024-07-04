@@ -1,164 +1,150 @@
-Received: from mail-ed1-f45.google.com (mail-ed1-f45.google.com [209.85.208.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net [217.70.183.199])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EFC2213D53B
-	for <llvm@lists.linux.dev>; Thu,  4 Jul 2024 21:23:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C3E3EC2ED;
+	Thu,  4 Jul 2024 21:32:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.199
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720128241; cv=none; b=W/HyDq393RONmzBkAa+gFvkROdy0Qtun6eyHqU+Hs/68fz3lcw0aNBBp9RvbJFIJ4fyHbCK3schOjQvdLB3aiYvmixjwp+V8wBMDVtvKCvnLmAQd2Nnl+eKBS1S9XRfHCIW8TQZR7zGWsTVKgJYFRhiSUopyyfWw3p7fPlhAJzY=
+	t=1720128734; cv=none; b=CUnGmLCU3U0zT1OLQwKeQxSoIx69RxumK1FKfp8vNvZZBHn9KS46hZ4h92fIYLEMw96XIwooT16MHYs7vcdoYGT3T395K7aruz8NhYGqYzlsrjY48FrgIMw4d4uDzcMHDYWN81VpMe3Ls4kz7Kq+v1vH98vqKXoCRAJyd/eLqio=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720128241; c=relaxed/simple;
-	bh=WkQita1UbMfMen1gzqw2QW7P3OKiOs39bLWHgZY5IA4=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=kN3R3HHwxqIH0tGux1L8aC8s+FeKyOgk0oHNPikNfi2ljrpWe8JlKxNjLGxXWIYKqvJlrMcQSCZRGrWpbR5Br3TYPWqKeFMsffeh5jDm3i5kTPa5lJ1LGTM8Vl+GYqG9pgTZUKSRm6BpRQdeX98HDrtnCZLMrJ7coQvcbwAAm1g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=ZnxBY7QL; arc=none smtp.client-ip=209.85.208.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	s=arc-20240116; t=1720128734; c=relaxed/simple;
+	bh=jEOP4tmTJgNwT4VJJ/H4/e/Pm5Ggkrq6iv0SA5dQ8ws=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=hWIn1hPtQaLDQqqh8g8JW+Q7pwj/BuZHLU3O52MtdBA2Bi+UNNbHhedcVmRNLJ7KNT1UKXJcY2XWLNoEPMjoMENh3l5ka9xAeSkFoFNpvDzcKXsxTgvOgeTN09LEN3tq/aApaKlQMTiUD91gmY+dEfWXzgJwSjyud8FGGv4tHAk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=S0JEVBhI; arc=none smtp.client-ip=217.70.183.199
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="ZnxBY7QL"
-Received: by mail-ed1-f45.google.com with SMTP id 4fb4d7f45d1cf-58ce966a1d3so12860a12.1
-        for <llvm@lists.linux.dev>; Thu, 04 Jul 2024 14:23:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1720128238; x=1720733038; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=XZUXkSX9WN+AQbdLcHROy2ZT3v7SVR09OPnTWoMgUyo=;
-        b=ZnxBY7QLH4MrH7CuR2BD2YqY1omtejlNVc/0zKIFatieTmPoQQXNDKAjW+Md/rWORa
-         V7m5brc5/EzFDtVSJjtD7+tURGoJ+jaTd3oXXGc6GS8SERrafN0ZMIzEJOJad/Kkn4Zg
-         hHE/SXTPgZ1K/WdppT3OY9cIcKVkf9ZyI7nuT560ZoYWnTsqRJrEzdo5qBWEJw5GnO1z
-         MR4LU4YleJ38XbRrAvuweWWPjNCmlaq0h+ckbnlyCqkFPAgd4SQpZ0LuGQFMLHNhG9BD
-         V8S8emWQ+Z2Ha8/KHFEHunBDNWI5kbyWgJBAlaDBr6t8GxLyRuwu/FbuxCEaeXf5nywz
-         9Zsw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1720128238; x=1720733038;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=XZUXkSX9WN+AQbdLcHROy2ZT3v7SVR09OPnTWoMgUyo=;
-        b=Rn1RFhB2EAQTz8nZXIcmUlyzmwR7opDrM6TlS5nTl4KXd9jgEs30zOzV540ph1Y4uC
-         oRGye87jXTIzh1H7tt9Wqhs3Zgj5tkOjc0KVpgEfihLzQlNyc9B9uM+YjDKMYd+96WlK
-         zLPqNmOlAXGLwD6Qv6+WitiAdAVBC9a3JJIvXjusR3pIvloUlWBi3UT7M0NeEP93aP4o
-         V9b3zWgcIZKdY6sWuajXo9wtHUQxmUWd+fYeBV3dnzx3DJSov3eGJy96bUE4jGY18/OZ
-         6ymtMQZMRJXK8dpuuH7LId8eh7OGbUmYuhQeWSf55118eHrdO1yYaUtTL4vBQMug724b
-         zOQA==
-X-Forwarded-Encrypted: i=1; AJvYcCXtqX/Obo2ScMK85y9gUvO1JhMkDWxXqViHbrb14JkG1cA9CkozDEGPldqeF71YpLdeJYIC2agMdXCwyiok3FnYpNQIbQ==
-X-Gm-Message-State: AOJu0YwJs9z4RZmNPjsxD6jtwmttNwjfAsMUMAb8HxSpHRcUWdS7Enre
-	mMAamNCS+KGqAQzQUyokwgXp1NZMbwqw9tQtGC+UZXCooXhyFMDM7Fb6Fwq1FyNIuF7N0JDRnYS
-	yW9cZu9k/ZepdNsBnYo3vJtsbK6ceQ/IaAkLG
-X-Google-Smtp-Source: AGHT+IFNiC12ACDfwoCP+FCXjiKRvFZtf6R72oNOV5+4tIR6dsRZUTSkQftvcnrUomvX2XqiYI70nEOpdD0FSz54nrc=
-X-Received: by 2002:a50:9fa1:0:b0:57c:b712:47b5 with SMTP id
- 4fb4d7f45d1cf-58e02735e86mr205813a12.4.1720128237990; Thu, 04 Jul 2024
- 14:23:57 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="S0JEVBhI"
+Received: by mail.gandi.net (Postfix) with ESMTPSA id BD86AFF802;
+	Thu,  4 Jul 2024 21:32:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+	t=1720128729;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=Rey18xTlnMgOgIPL25ImB7B15sMWYzxAsvnHNthV5S0=;
+	b=S0JEVBhI3tfc5ntPMObRrKKeyUXsGRrO+dmrSHHiA/CXiaTrDzUnuWN/8RLan/W8yEPBYy
+	WTaC4P67s78ijbrvczP1KnuPtKQbrRcwlYEqUPZPpZW0nhX/siqNP/GhziUB79nYOQPi8r
+	PhP0fpq9va52mSjevxSqg9gaf/S2Ukug9XtKh8mzSUYLpNZp80MAwL96mMkrYY7WNzzmay
+	5AT/X7DCWHP8tVhsE6o3C1PHb0Q9g3z2DXN4uHMidHU5Rwoaz4Y/LepANuZA6Uuvs21L3L
+	95mP/Ounvba0aITTStBPv4Esd+fhuzK/5YdBxhSIiG700JAP0NMtF9NGxcnshQ==
+Date: Thu, 4 Jul 2024 23:31:55 +0200
+From: Luca Ceresoli <luca.ceresoli@bootlin.com>
+To: Rob Herring <robh@kernel.org>
+Cc: Miguel Ojeda <ojeda@kernel.org>, Saravana Kannan <saravanak@google.com>,
+ Nathan Chancellor <nathan@kernel.org>, Michael Turquette
+ <mturquette@baylibre.com>, Stephen Boyd <sboyd@kernel.org>, Tony Lindgren
+ <tony@atomide.com>, Bjorn Andersson <andersson@kernel.org>, Emilio
+ =?UTF-8?Q?L=C3=B3pez?= <emilio@elopez.com.ar>, Chen-Yu Tsai
+ <wens@csie.org>, Jernej Skrabec <jernej.skrabec@gmail.com>, Samuel Holland
+ <samuel@sholland.org>, Krzysztof Kozlowski <krzk@kernel.org>, Daniel
+ Lezcano <daniel.lezcano@linaro.org>, Thomas Gleixner <tglx@linutronix.de>,
+ Florian Fainelli <florian.fainelli@broadcom.com>, Broadcom internal kernel
+ review list <bcm-kernel-feedback-list@broadcom.com>, Linus Walleij
+ <linus.walleij@linaro.org>, Bartosz Golaszewski <brgl@bgdev.pl>, Jonathan
+ Cameron <jic23@kernel.org>, Lee Jones <lee@kernel.org>, Shawn Guo
+ <shawnguo@kernel.org>, Pengutronix Kernel Team <kernel@pengutronix.de>, Uwe
+ =?UTF-8?Q?Kleine-K=C3=B6nig?= <ukleinek@kernel.org>, Greg Kroah-Hartman
+ <gregkh@linuxfoundation.org>, Jiri Slaby <jirislaby@kernel.org>, Richard
+ Leitner <richard.leitner@linux.dev>, Liam Girdwood <lgirdwood@gmail.com>,
+ Mark Brown <broonie@kernel.org>, Nicolas Ferre
+ <nicolas.ferre@microchip.com>, Michael Ellerman <mpe@ellerman.id.au>,
+ Nicholas Piggin <npiggin@gmail.com>, Christophe Leroy
+ <christophe.leroy@csgroup.eu>, "Naveen N. Rao"
+ <naveen.n.rao@linux.ibm.com>, Damien Le Moal <dlemoal@kernel.org>, "Peng
+ Fan (OSS)" <peng.fan@oss.nxp.com>, Thomas Petazzoni
+ <thomas.petazzoni@bootlin.com>, linux-kernel@vger.kernel.org,
+ devicetree@vger.kernel.org, llvm@lists.linux.dev,
+ linux-clk@vger.kernel.org, linux-omap@vger.kernel.org,
+ linux-arm-msm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-sunxi@lists.linux.dev, linux-samsung-soc@vger.kernel.org,
+ linux-gpio@vger.kernel.org, linux-iio@vger.kernel.org,
+ linux-pwm@vger.kernel.org, linux-serial@vger.kernel.org,
+ linux-usb@vger.kernel.org, patches@opensource.cirrus.com,
+ linux-sound@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+ linux-riscv@lists.infradead.org
+Subject: Re: [PATCH 00/20] Simplify of_property_for_each_u32()
+Message-ID: <20240704233155.61b5323c@booty>
+In-Reply-To: <20240703180742.GB1245093-robh@kernel.org>
+References: <20240703-of_property_for_each_u32-v1-0-42c1fc0b82aa@bootlin.com>
+	<20240703180742.GB1245093-robh@kernel.org>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20240704-update-ld-version-for-new-lld-ver-str-v1-1-91bccc020a93@kernel.org>
-In-Reply-To: <20240704-update-ld-version-for-new-lld-ver-str-v1-1-91bccc020a93@kernel.org>
-From: Fangrui Song <maskray@google.com>
-Date: Thu, 4 Jul 2024 14:23:46 -0700
-Message-ID: <CAFP8O3JUgH-tBJtqO-QS0HmO4mrFBE6Dz+tnrBcse=gw_Q_4vQ@mail.gmail.com>
-Subject: Re: [PATCH] kbuild: Update ld-version.sh for change in LLD version output
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: Masahiro Yamada <masahiroy@kernel.org>, Nicolas Schier <nicolas@fjasle.eu>, 
-	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, linux-kbuild@vger.kernel.org, 
-	llvm@lists.linux.dev, patches@lists.linux.dev, stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-GND-Sasl: luca.ceresoli@bootlin.com
 
-On Thu, Jul 4, 2024 at 9:19=E2=80=AFAM Nathan Chancellor <nathan@kernel.org=
-> wrote:
->
-> After [1] in upstream LLVM, ld.lld's version output is slightly
-> different when the cmake configuration option LLVM_APPEND_VC_REV is
-> disabled.
->
-> Before:
->
->   Debian LLD 19.0.0 (compatible with GNU linkers)
->
-> After:
->
->   Debian LLD 19.0.0, compatible with GNU linkers
->
-> This results in ld-version.sh failing with
->
->   scripts/ld-version.sh: 19: arithmetic expression: expecting EOF: "10000=
- * 19 + 100 * 0 + 0,"
->
-> because the trailing comma is included in the patch level part of the
-> expression. Remove the trailing comma when assigning the version
-> variable in the LLD block to resolve the error, resulting in the proper
-> output:
->
->   LLD 190000
->
-> With LLVM_APPEND_VC_REV enabled, there is no issue with the new output
-> because it is treated the same as the prior LLVM_APPEND_VC_REV=3DOFF
-> version string was.
->
->   ClangBuiltLinux LLD 19.0.0 (https://github.com/llvm/llvm-project a3c5c8=
-3273358a85a4e02f5f76379b1a276e7714), compatible with GNU linkers
->
-> Cc: stable@vger.kernel.org
-> Fixes: 02aff8592204 ("kbuild: check the minimum linker version in Kconfig=
-")
-> Link: https://github.com/llvm/llvm-project/commit/0f9fbbb63cfcd2069441aa2=
-ebef622c9716f8dbb [1]
-> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
-> ---
->  scripts/ld-version.sh | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
->
-> diff --git a/scripts/ld-version.sh b/scripts/ld-version.sh
-> index a78b804b680c..f2f425322524 100755
-> --- a/scripts/ld-version.sh
-> +++ b/scripts/ld-version.sh
-> @@ -47,7 +47,9 @@ else
->         done
->
->         if [ "$1" =3D LLD ]; then
-> -               version=3D$2
-> +               # LLD after https://github.com/llvm/llvm-project/commit/0=
-f9fbbb63cfcd2069441aa2ebef622c9716f8dbb
-> +               # may have a trailing comma on the patch version with LLV=
-M_APPEND_VC_REV=3Doff.
-> +               version=3D${2%,}
->                 min_version=3D$($min_tool_version llvm)
->                 name=3DLLD
->                 disp_name=3DLLD
->
-> ---
-> base-commit: 22a40d14b572deb80c0648557f4bd502d7e83826
-> change-id: 20240704-update-ld-version-for-new-lld-ver-str-b7a4afbbd5f1
->
-> Best regards,
-> --
-> Nathan Chancellor <nathan@kernel.org>
->
+Hello Rob,
 
-Thanks for catching the issue.
-If we want to minimize the number of special cases, perhaps we can
-adjust `version=3D${version%-*}` below to
+On Wed, 3 Jul 2024 12:07:42 -0600
+Rob Herring <robh@kernel.org> wrote:
 
-version=3D${version%%[^0-9.]*}
+> On Wed, Jul 03, 2024 at 12:36:44PM +0200, Luca Ceresoli wrote:
+> > [Note: to reduce the noise I have trimmed the get_maintainers list
+> > manually. Should you want to be removed, or someone else added, to future
+> > versions, just tell me. Sorry for the noise.]
+> > 
+> > This series aims at simplifying of_property_for_each_u32() as well as
+> > making it more difficult to misuse it in the future.
+> > 
+> > The long-term goal is changing this pattern:
+> > 
+> >   struct property *prop;
+> >   const __be32 *p;
+> >   u32 val;
+> >  
+> >   of_property_for_each_u32(np, "xyz", prop, p, val) { ... }
+> > 
+> > to this:
+> > 
+> >   u32 val;
+> > 
+> >   of_property_for_each_u32(np, "xyz", val) { ... }
+> > 
+> > So, removing the 3rd and 4th arguments which are typically meant to be
+> > internal. Those two parameters used to be unavoidable until the kernel
+> > moved to building with the C11 standard unconditionally. Since then, it is
+> > now possible to get rid of them. However a few users of
+> > of_property_for_each_u32() do actually use those arguments, which
+> > complicates the transition. For this reason this series does the following:
+> > 
+> >  * Add of_property_for_each_u32_new(), which does not have those two
+> >    arguments (patch 1)
+> >  * Convert _almost_ every usage to of_property_for_each_u32_new()
+> >  * Rename of_property_for_each_u32() to of_property_for_each_u32_old() and
+> >    deprecate it, as a incentive to code not (yet) in mainline to upgrade
+> >    to the *_new() version (last patch)  
+> 
+> I don't really see the point of introducing the _old variant. Let's get 
+> this done in one step.
+> 
+> > 
+> > The plan for the next series is to additionally:
+> > 
+> >  * Convert the few remaining of_property_for_each_u32_old() instantes to
+> >    of_property_for_each_u32_new()
+> >  * Remove of_property_for_each_u32_old()
+> >  * Rename of_property_for_each_u32_new() to of_property_for_each_u32()  
+> 
+> Honestly, I think there's few enough users we could just convert the 
+> whole thing in one patch. It's all got to go thru 1 tree anyways. If 
+> there's new cases in -next, then I'd be happy to send it to Linus at the 
+> end of the merge window.
 
-(POSIX shell doc:
-https://pubs.opengroup.org/onlinepubs/9699919799/utilities/V3_chap02.html#:=
-~:text=3DRemove%20Largest)
+Sure, make sense. I'll need to convert the few remaining users, then
+I'm sending a squashed v2.
 
-${version%%[^0-9.]*} is a simpler form than what glibc uses:
+Luca
 
-  "LLD"*)
-  # Accept LLD 13.0.0 or higher
-    AC_CHECK_PROG_VER(LD, $LD, --version,
-                    [LLD.* \([0-9][0-9]*\.[0-9.]*\)],
-                    [1[3-9].*|[2-9][0-9].*],
-
-
-
---=20
-=E5=AE=8B=E6=96=B9=E7=9D=BF
+-- 
+Luca Ceresoli, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
