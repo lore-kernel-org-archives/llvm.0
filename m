@@ -1,119 +1,205 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2CB2B1AEFFF;
-	Thu,  4 Jul 2024 16:19:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 99489101DB;
+	Thu,  4 Jul 2024 18:23:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720109944; cv=none; b=De5wOfZY88xG7YQXzuDslJs6NbwT+S8HLiFS9uizdT/KIYMiirMmFwsFvMGuTd0QVVEp33v6Acw9ma8kmOGCftnVyhpXJbumcSHax9VfAxkEFlfp8iHerck3TSoYN00/lmC008ciWaYU+YPpXlVbiOK1aPLexpWevdID//o/V7I=
+	t=1720117415; cv=none; b=pF4cIaHaPpBCoU1IZ2ZqTFZwxIcrUpiv1IF/h/Ti1EUztgW0wSBBCCVe5O0S1MwaVdRUdMn5WbbRnhnBVkkV1kE6GGmUUrA9DrfQVi5jn99IOMKpArKP5ABu8MhsZHDMVBO4mFaK/uETZYBAL79xawAEkBNPX7OB6NO8eAuU8MY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720109944; c=relaxed/simple;
-	bh=FK7xagcryPXQhWjVE09ZqleC0sW1mp/6aeRQYGumgKc=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=nBo3/dnpo4F1IW6xWXq/ggg5yH8+xMlkHq9jD1I13p4/J0dp0IckjVXfBqOVjnqtohV9TRsbdXEJ15ezWYOU0uTmtD4cftYJ7x9bwjMl7F8vk75HkdMcTfphfF/AWgenfGzROVv/DUadRKRRuwuWDIt3fBpSsItx6kkOc//4sA4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=pc1loxFy; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1720117415; c=relaxed/simple;
+	bh=1gOMpOWjLezCyg/YwRnvdCDadwOiGFbKKqb9FaVZ1Ps=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=LdUOcOwaQTr0qdo4hO1BVqNSNktHMwQCbzWWtjoATg2JLLuWHshEHS2COF+B59F+2LS7L2Nz70xpYUtChXFvHv6jeKFTZYamAD3nD0eDtiDyN9/sME7dKcCuB47wiWxtV5Mnvz5XL4DVBDpIGZdz9ELbpP7gxxWAjCCBfDGdluE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jmObUB3R; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="pc1loxFy"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2A719C3277B;
-	Thu,  4 Jul 2024 16:19:03 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jmObUB3R"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8AC49C3277B;
+	Thu,  4 Jul 2024 18:23:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1720109943;
-	bh=FK7xagcryPXQhWjVE09ZqleC0sW1mp/6aeRQYGumgKc=;
-	h=From:Date:Subject:To:Cc:From;
-	b=pc1loxFy2lAtGe0Tq1t9A3ew7QLklxg3n7Pia68N/7imKeB/FHQaJ5tRa3yXi0KlH
-	 HAdfND9Fa7ATHQH1O9N2vZvD6vll8Vd2wOxXKPH7QJJoch0KUDd90jhMlTY2mMV590
-	 3DCtOVQiPY6x/zNZ4Ywt2PaSthNmvCLujhOULv/P/EiKMxir4FEvS5NmA1D79KbECh
-	 YsdJltEvoDuirGmoOXKNa5ICC8PMGneMpaP/YQ/qRbCRRjqcsiCXoiuDmtJ+2GTSxG
-	 eBvsNCKYN1w/IxZI+BwvtwI07HfyYD5zWskwYuce2k5rwkfcdhzayro+y6HCVc51Ax
-	 1eGp+WWp7xyog==
+	s=k20201202; t=1720117415;
+	bh=1gOMpOWjLezCyg/YwRnvdCDadwOiGFbKKqb9FaVZ1Ps=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=jmObUB3RXWpAOTziKIxShAXrbMDwPQg0Tyo4OIbrWNc3fDBChvEuX5UyqJmjEcVSv
+	 tLiU9KKNsazbubPe2iv4yg2HhOnD0RBcCDaxO1ykVaJlG6sLrryjVVIN+aK5fxZGpB
+	 6cCLOtJS4V6T2L9UZfRuTaMTQDTPH6YqDv1bLzL0y65SRgQ5tm9ssVAyOiNCKtC2zP
+	 WZXbcizFwioyD3s55m7GcKZiHI21+CE3xQRtlOS1V4n/fFIOHfeCU6vAMFtNKciOY/
+	 g+oUFYw7gd4jKosZJ56dIVxarhPzlXzyEDAHQaM8F4HhvhBMjPG23n6Mii/hdsQkvp
+	 blsEC0/Ue7wJA==
+Date: Thu, 4 Jul 2024 11:23:32 -0700
 From: Nathan Chancellor <nathan@kernel.org>
-Date: Thu, 04 Jul 2024 09:18:56 -0700
-Subject: [PATCH] kbuild: Update ld-version.sh for change in LLD version
- output
+To: John Hubbard <jhubbard@nvidia.com>
+Cc: Shuah Khan <shuah@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>,
+	Ryan Roberts <ryan.roberts@arm.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Muhammad Usama Anjum <usama.anjum@collabora.com>,
+	linux-kselftest@vger.kernel.org, llvm@lists.linux.dev,
+	LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [RFC PATCH] selftests: introduce and use SELFTESTS_CC_IS_CLANG
+ instead of LLVM
+Message-ID: <20240704182332.GB300903@thelio-3990X>
+References: <20240704030452.88793-1-jhubbard@nvidia.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20240704-update-ld-version-for-new-lld-ver-str-v1-1-91bccc020a93@kernel.org>
-X-B4-Tracking: v=1; b=H4sIAG/LhmYC/yWN0QqDMBAEf0XuuQtRIkJ/RXxIzKU9kCgXq4L47
- 03t4yzDzkmZVTjTszpJeZMscypQPyoa3y69GBIKU2Maazpj8VmCWxlTwMb6sxFnReId039DXhW
- +c9ZF70Mbaypfi3KU4+70w3V9AT/38BZ3AAAA
-To: Masahiro Yamada <masahiroy@kernel.org>
-Cc: Nicolas Schier <nicolas@fjasle.eu>, Fangrui Song <maskray@google.com>, 
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
- linux-kbuild@vger.kernel.org, llvm@lists.linux.dev, patches@lists.linux.dev, 
- stable@vger.kernel.org, Nathan Chancellor <nathan@kernel.org>
-X-Mailer: b4 0.15-dev
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2008; i=nathan@kernel.org;
- h=from:subject:message-id; bh=FK7xagcryPXQhWjVE09ZqleC0sW1mp/6aeRQYGumgKc=;
- b=owGbwMvMwCUmm602sfCA1DTG02pJDGltp8sYuePmmG9RvdRlsUIySsakbYOxwdumk9bbnA5fX
- ntg3pRzHaUsDGJcDLJiiizVj1WPGxrOOct449QkmDmsTCBDGLg4BWAiKZcZ/qc8WfdJ1n6+g+Xi
- h3t379y3Za/9NqGQp3Fvt0VdV5R+eIuR4a9EmcnrGHH7T95vvud8bNq9T0qXyYu11VVu690bFZz
- PJ7ADAA==
-X-Developer-Key: i=nathan@kernel.org; a=openpgp;
- fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240704030452.88793-1-jhubbard@nvidia.com>
 
-After [1] in upstream LLVM, ld.lld's version output is slightly
-different when the cmake configuration option LLVM_APPEND_VC_REV is
-disabled.
+On Wed, Jul 03, 2024 at 08:04:52PM -0700, John Hubbard wrote:
+> Current practice in the selftests Makefiles is to use $(LLVM) as a way
+> to decide if clang is being used as the compiler (and/or the linker
+> front end). Unfortunately, this does not cover all of the use cases:
+> 
+> 1) CC could have been set within selftests/lib.mk, by inferring it from
+> LLVM==1, or
+> 
+> 2) CC could have been set externally, such as when cross compiling.
+> 
+> Solution: In order to allow subsystem selftests to more accurately
+> control clang-specific behavior, such as compiler options, provide a new
+> Makefile variable: SELFTESTS_CC_IS_CLANG. If $(CC) contains an
+> invocation of clang in any form, then SELFTESTS_CC_IS_CLANG will be
+> non-empty.
+> 
+> SELFTESTS_CC_IS_CLANG does not specify which linker is being used.
+> However, it can still help with linker options, because $(CC) is often
+> used to do both the compile and link steps (often in the same step).
+> 
+> Signed-off-by: John Hubbard <jhubbard@nvidia.com>
+> ---
+> 
+> Hi,
+> 
+> If this looks reasonable, I'll break it up into separate patches and
+> post it as a non-RFC.
 
-Before:
+Aside from the polarity issue with the checks as you already noted, this
+seems reasonable to me and matches what I had in mind.
 
-  Debian LLD 19.0.0 (compatible with GNU linkers)
-
-After:
-
-  Debian LLD 19.0.0, compatible with GNU linkers
-
-This results in ld-version.sh failing with
-
-  scripts/ld-version.sh: 19: arithmetic expression: expecting EOF: "10000 * 19 + 100 * 0 + 0,"
-
-because the trailing comma is included in the patch level part of the
-expression. Remove the trailing comma when assigning the version
-variable in the LLD block to resolve the error, resulting in the proper
-output:
-
-  LLD 190000
-
-With LLVM_APPEND_VC_REV enabled, there is no issue with the new output
-because it is treated the same as the prior LLVM_APPEND_VC_REV=OFF
-version string was.
-
-  ClangBuiltLinux LLD 19.0.0 (https://github.com/llvm/llvm-project a3c5c83273358a85a4e02f5f76379b1a276e7714), compatible with GNU linkers
-
-Cc: stable@vger.kernel.org
-Fixes: 02aff8592204 ("kbuild: check the minimum linker version in Kconfig")
-Link: https://github.com/llvm/llvm-project/commit/0f9fbbb63cfcd2069441aa2ebef622c9716f8dbb [1]
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
----
- scripts/ld-version.sh | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
-
-diff --git a/scripts/ld-version.sh b/scripts/ld-version.sh
-index a78b804b680c..f2f425322524 100755
---- a/scripts/ld-version.sh
-+++ b/scripts/ld-version.sh
-@@ -47,7 +47,9 @@ else
- 	done
- 
- 	if [ "$1" = LLD ]; then
--		version=$2
-+		# LLD after https://github.com/llvm/llvm-project/commit/0f9fbbb63cfcd2069441aa2ebef622c9716f8dbb
-+		# may have a trailing comma on the patch version with LLVM_APPEND_VC_REV=off.
-+		version=${2%,}
- 		min_version=$($min_tool_version llvm)
- 		name=LLD
- 		disp_name=LLD
-
----
-base-commit: 22a40d14b572deb80c0648557f4bd502d7e83826
-change-id: 20240704-update-ld-version-for-new-lld-ver-str-b7a4afbbd5f1
-
-Best regards,
--- 
-Nathan Chancellor <nathan@kernel.org>
-
+>  tools/testing/selftests/bpf/Makefile       |  2 +-
+>  tools/testing/selftests/fchmodat2/Makefile | 12 +++++++-----
+>  tools/testing/selftests/hid/Makefile       |  2 +-
+>  tools/testing/selftests/lib.mk             | 15 +++++++++++++++
+>  tools/testing/selftests/openat2/Makefile   | 16 +++++++++-------
+>  5 files changed, 33 insertions(+), 14 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
+> index dd49c1d23a60..6b924297ab71 100644
+> --- a/tools/testing/selftests/bpf/Makefile
+> +++ b/tools/testing/selftests/bpf/Makefile
+> @@ -55,7 +55,7 @@ progs/test_sk_lookup.c-CFLAGS := -fno-strict-aliasing
+>  progs/timer_crash.c-CFLAGS := -fno-strict-aliasing
+>  progs/test_global_func9.c-CFLAGS := -fno-strict-aliasing
+>  
+> -ifneq ($(LLVM),)
+> +ifeq ($(SELFTESTS_CC_IS_CLANG),)
+>  # Silence some warnings when compiled with clang
+>  CFLAGS += -Wno-unused-command-line-argument
+>  endif
+> diff --git a/tools/testing/selftests/fchmodat2/Makefile b/tools/testing/selftests/fchmodat2/Makefile
+> index 4373cea79b79..d00b01be5d96 100644
+> --- a/tools/testing/selftests/fchmodat2/Makefile
+> +++ b/tools/testing/selftests/fchmodat2/Makefile
+> @@ -2,14 +2,16 @@
+>  
+>  CFLAGS += -Wall -O2 -g -fsanitize=address -fsanitize=undefined $(KHDR_INCLUDES)
+>  
+> +TEST_GEN_PROGS := fchmodat2_test
+> +
+> +include ../lib.mk
+> +
+>  # gcc requires -static-libasan in order to ensure that Address Sanitizer's
+>  # library is the first one loaded. However, clang already statically links the
+>  # Address Sanitizer if -fsanitize is specified. Therefore, simply omit
+>  # -static-libasan for clang builds.
+> -ifeq ($(LLVM),)
+> +# This check must be done after including ../lib.mk, in order to pick up the
+> +# correct value of SELFTESTS_CC_IS_CLANG.
+> +ifeq ($(SELFTESTS_CC_IS_CLANG),)
+>      CFLAGS += -static-libasan
+>  endif
+> -
+> -TEST_GEN_PROGS := fchmodat2_test
+> -
+> -include ../lib.mk
+> diff --git a/tools/testing/selftests/hid/Makefile b/tools/testing/selftests/hid/Makefile
+> index 2b5ea18bde38..734a53dc8ad9 100644
+> --- a/tools/testing/selftests/hid/Makefile
+> +++ b/tools/testing/selftests/hid/Makefile
+> @@ -27,7 +27,7 @@ CFLAGS += -I$(OUTPUT)/tools/include
+>  LDLIBS += -lelf -lz -lrt -lpthread
+>  
+>  # Silence some warnings when compiled with clang
+> -ifneq ($(LLVM),)
+> +ifeq ($(SELFTESTS_CC_IS_CLANG),)
+>  CFLAGS += -Wno-unused-command-line-argument
+>  endif
+>  
+> diff --git a/tools/testing/selftests/lib.mk b/tools/testing/selftests/lib.mk
+> index 429535816dbd..f321ad5a1d0c 100644
+> --- a/tools/testing/selftests/lib.mk
+> +++ b/tools/testing/selftests/lib.mk
+> @@ -43,6 +43,21 @@ else
+>  CC := $(CROSS_COMPILE)gcc
+>  endif # LLVM
+>  
+> +# SELFTESTS_CC_IS_CLANG allows subsystem selftests to more accurately control
+> +# clang-specific behavior, such as compiler options. If CC is an invocation of
+> +# clang in any form, then SELFTESTS_CC_IS_CLANG will be non-empty. Notes:
+> +#
+> +# 1) CC could have been set above, by inferring it from LLVM==1, or externally,
+> +# from the CC shell environment variable.
+> +#
+> +# 2) SELFTESTS_CC_IS_CLANG does not specify which linker is being used. However,
+> +#    it can still help with linker options, if clang or gcc is used for the
+> +#    linker front end.
+> +SELFTESTS_CC_IS_CLANG :=
+> +ifeq ($(findstring clang,$(CC)),clang)
+> +    SELFTESTS_CC_IS_CLANG := 1
+> +endif
+> +
+>  ifeq (0,$(MAKELEVEL))
+>      ifeq ($(OUTPUT),)
+>  	OUTPUT := $(shell pwd)
+> diff --git a/tools/testing/selftests/openat2/Makefile b/tools/testing/selftests/openat2/Makefile
+> index 185dc76ebb5f..7acb85a8f2ac 100644
+> --- a/tools/testing/selftests/openat2/Makefile
+> +++ b/tools/testing/selftests/openat2/Makefile
+> @@ -3,16 +3,18 @@
+>  CFLAGS += -Wall -O2 -g -fsanitize=address -fsanitize=undefined
+>  TEST_GEN_PROGS := openat2_test resolve_test rename_attack_test
+>  
+> +LOCAL_HDRS += helpers.h
+> +
+> +include ../lib.mk
+> +
+> +$(TEST_GEN_PROGS): helpers.c
+> +
+>  # gcc requires -static-libasan in order to ensure that Address Sanitizer's
+>  # library is the first one loaded. However, clang already statically links the
+>  # Address Sanitizer if -fsanitize is specified. Therefore, simply omit
+>  # -static-libasan for clang builds.
+> -ifeq ($(LLVM),)
+> +# This check must be done after including ../lib.mk, in order to pick up the
+> +# correct value of SELFTESTS_CC_IS_CLANG.
+> +ifeq ($(SELFTESTS_CC_IS_CLANG),)
+>      CFLAGS += -static-libasan
+>  endif
+> -
+> -LOCAL_HDRS += helpers.h
+> -
+> -include ../lib.mk
+> -
+> -$(TEST_GEN_PROGS): helpers.c
+> 
+> base-commit: 9a5cd459be8a425d70cda1fa1c89af7875a35d17
+> -- 
+> 2.45.2
+> 
+> 
