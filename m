@@ -1,201 +1,93 @@
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 133711A2555
-	for <llvm@lists.linux.dev>; Thu,  4 Jul 2024 09:31:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9677E1AB914;
+	Thu,  4 Jul 2024 10:35:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720085498; cv=none; b=dNcvkd8jtwN6jAlyuXZTV/CyzOpRrLHV9pD28uhOmQ3ESDER5iBiuGQdQlWM466cxriS/gbXloFlq+q3tWD/cz7OvJOtf0NSgqDzTVP74tgOAOgGvMSEHEkx1QcDloh/Bmdx41RB5GTm5BRuQ6UuyVSVpwq71ucUTfNo2Ll2zO8=
+	t=1720089308; cv=none; b=satd+0emfuiu0cnU/ylgtWCtvDVxPDi34NKhBFLGPeGrgvjFYYi6awbUC8SMe7BCVUEFhF4p1h4gzmLbiyCZWPzIO6tLauQIHDEcQiP9NGDBl2MRhW7SI+bd8z567JBuq2++cLRv2QJAc4JNIKFflckVSifYS19mmOF01xh2few=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720085498; c=relaxed/simple;
-	bh=6JvIoGeJYxTilGdyGLvutd4vO5hzpifvREfdh9Tlzy4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=gc9J/+pUWgEGVRRMp8wsCPKwn7yRC4m7x9qnLOPrlZw9IHvwz38VgTpCVHSOQhZ2mMK97JIoV08VvSXHTtSbf+TOvp/0+nvhkGdRovl8BkNfQIzO+806mEw4DwkKX0D5d9QeUW/lQnvjec1S7+VT1MIB1oYfE4+OmtLkAs4nxCA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 74E3ADA7;
-	Thu,  4 Jul 2024 02:32:00 -0700 (PDT)
-Received: from [10.1.29.168] (XHFQ2J9959.cambridge.arm.com [10.1.29.168])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 2FF323F766;
-	Thu,  4 Jul 2024 02:31:34 -0700 (PDT)
-Message-ID: <92b7375f-7239-4fbd-bedd-b3b8d55bf7a1@arm.com>
-Date: Thu, 4 Jul 2024 10:31:32 +0100
+	s=arc-20240116; t=1720089308; c=relaxed/simple;
+	bh=UxKmdl7rBE64r9VxTRb3v+7EHD4ClSK6zr1eNsydv50=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=Bp9gQ+KeMmdUDKL/wor7RBDLSQnFUVsmxJLXevOBDolUD/GbBtfwJlX4/XTXtquxUct1rUpo7QBRf6urUH/MFkpr7QV5+Wv6jsXC3BJQ2pG+2/xJd2/kHUwHmC79AajpaztXJYI8cHWHw15dkiYFhjvnVv08fXSydqoUQNdafms=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=E7tmU1XE; arc=none smtp.client-ip=198.175.65.19
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="E7tmU1XE"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1720089306; x=1751625306;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=UxKmdl7rBE64r9VxTRb3v+7EHD4ClSK6zr1eNsydv50=;
+  b=E7tmU1XEcsht/G3vZd8dX6V/rK9F6PzfAQImYqFA/DXyvrnpsOVGDN6S
+   ksEem7BFQvcUMV2BayAfNAbmBnIzulWk1Y9dh93dM+lw9bI9Wh56nNayo
+   C64Am4usBc63fpVB3tqWdOz18mOIoJKH8vM5qK7glHBSsWlJx6ryj2TuS
+   oisMOc3Jxw1QpAFqUGqu0XGSIRf4VZPhOZ9xlPaHDxmS7eU43v9qQ6xrP
+   A83SAxdiNVvUn6feEsgYCiTURSq4KmF5DEoJ2YSqGfHHbxxwT2Z3XP5jT
+   V5BQGR48X6dY2H0K306O3LjysmjkcVs+dSfQbLjGSrr+doN6NbSGECUVo
+   g==;
+X-CSE-ConnectionGUID: FEBAhj6rRvGpRxTXCvBISg==
+X-CSE-MsgGUID: jGlTUPt9R8S4i6rVbFoqzg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11122"; a="17199065"
+X-IronPort-AV: E=Sophos;i="6.09,183,1716274800"; 
+   d="scan'208";a="17199065"
+Received: from orviesa009.jf.intel.com ([10.64.159.149])
+  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jul 2024 03:35:06 -0700
+X-CSE-ConnectionGUID: f/tEF2/QSySnbsE8UA5utw==
+X-CSE-MsgGUID: 4ZMRpkqGRjqM1HJCEj+q6g==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.09,183,1716274800"; 
+   d="scan'208";a="46698714"
+Received: from lkp-server01.sh.intel.com (HELO 68891e0c336b) ([10.239.97.150])
+  by orviesa009.jf.intel.com with ESMTP; 04 Jul 2024 03:35:04 -0700
+Received: from kbuild by 68891e0c336b with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1sPJnp-000Qs2-2N;
+	Thu, 04 Jul 2024 10:35:01 +0000
+Date: Thu, 4 Jul 2024 18:34:26 +0800
+From: kernel test robot <lkp@intel.com>
+To: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>,
+	Conor Dooley <conor.dooley@microchip.com>,
+	Guo Ren <guoren@kernel.org>,
+	Geert Uytterhoeven <geert+renesas@glider.be>
+Subject: [morimoto:renesas-bsp/v6.1.96-2024-06-28-3-GrayHawk-sound 52/720]
+ ld.lld: error: section .rodata virtual address range overlaps with .data
+Message-ID: <202407041811.M4KRJocQ-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC PATCH] selftests: introduce and use SELFTESTS_CC_IS_CLANG
- instead of LLVM
-Content-Language: en-GB
-To: John Hubbard <jhubbard@nvidia.com>, Shuah Khan <shuah@kernel.org>
-Cc: Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling
- <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
- Muhammad Usama Anjum <usama.anjum@collabora.com>,
- linux-kselftest@vger.kernel.org, llvm@lists.linux.dev,
- LKML <linux-kernel@vger.kernel.org>
-References: <20240704030452.88793-1-jhubbard@nvidia.com>
-From: Ryan Roberts <ryan.roberts@arm.com>
-In-Reply-To: <20240704030452.88793-1-jhubbard@nvidia.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On 04/07/2024 04:04, John Hubbard wrote:
-> Current practice in the selftests Makefiles is to use $(LLVM) as a way
-> to decide if clang is being used as the compiler (and/or the linker
-> front end). Unfortunately, this does not cover all of the use cases:
-> 
-> 1) CC could have been set within selftests/lib.mk, by inferring it from
-> LLVM==1, or
-> 
-> 2) CC could have been set externally, such as when cross compiling.
-> 
-> Solution: In order to allow subsystem selftests to more accurately
-> control clang-specific behavior, such as compiler options, provide a new
-> Makefile variable: SELFTESTS_CC_IS_CLANG. If $(CC) contains an
-> invocation of clang in any form, then SELFTESTS_CC_IS_CLANG will be
-> non-empty.
-> 
-> SELFTESTS_CC_IS_CLANG does not specify which linker is being used.
-> However, it can still help with linker options, because $(CC) is often
-> used to do both the compile and link steps (often in the same step).
-> 
-> Signed-off-by: John Hubbard <jhubbard@nvidia.com>
-> ---
-> 
-> Hi,
-> 
-> If this looks reasonable, I'll break it up into separate patches and
-> post it as a non-RFC.
+tree:   https://github.com/morimoto/linux renesas-bsp/v6.1.96-2024-06-28-3-GrayHawk-sound
+head:   5ccadb6d5d2943e6eefe732f994c5f1039a22284
+commit: f12bfbee0d61c17a63d1eaeab9775dc0e34a2bca [52/720] riscv: Kconfig.socs: Add ARCH_RENESAS kconfig option
+config: riscv-randconfig-001-20240704 (https://download.01.org/0day-ci/archive/20240704/202407041811.M4KRJocQ-lkp@intel.com/config)
+compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project a0c6b8aef853eedaa0980f07c0a502a5a8a9740e)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240704/202407041811.M4KRJocQ-lkp@intel.com/reproduce)
 
-I'm makefile-illiterate so not really qualified to review. But the concept
-certainly looks fine to me.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202407041811.M4KRJocQ-lkp@intel.com/
 
-Thanks,
-Ryan
+All errors (new ones prefixed by >>):
 
-> 
-> thanks,
-> John Hubbard
-> 
->  tools/testing/selftests/bpf/Makefile       |  2 +-
->  tools/testing/selftests/fchmodat2/Makefile | 12 +++++++-----
->  tools/testing/selftests/hid/Makefile       |  2 +-
->  tools/testing/selftests/lib.mk             | 15 +++++++++++++++
->  tools/testing/selftests/openat2/Makefile   | 16 +++++++++-------
->  5 files changed, 33 insertions(+), 14 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
-> index dd49c1d23a60..6b924297ab71 100644
-> --- a/tools/testing/selftests/bpf/Makefile
-> +++ b/tools/testing/selftests/bpf/Makefile
-> @@ -55,7 +55,7 @@ progs/test_sk_lookup.c-CFLAGS := -fno-strict-aliasing
->  progs/timer_crash.c-CFLAGS := -fno-strict-aliasing
->  progs/test_global_func9.c-CFLAGS := -fno-strict-aliasing
->  
-> -ifneq ($(LLVM),)
-> +ifeq ($(SELFTESTS_CC_IS_CLANG),)
->  # Silence some warnings when compiled with clang
->  CFLAGS += -Wno-unused-command-line-argument
->  endif
-> diff --git a/tools/testing/selftests/fchmodat2/Makefile b/tools/testing/selftests/fchmodat2/Makefile
-> index 4373cea79b79..d00b01be5d96 100644
-> --- a/tools/testing/selftests/fchmodat2/Makefile
-> +++ b/tools/testing/selftests/fchmodat2/Makefile
-> @@ -2,14 +2,16 @@
->  
->  CFLAGS += -Wall -O2 -g -fsanitize=address -fsanitize=undefined $(KHDR_INCLUDES)
->  
-> +TEST_GEN_PROGS := fchmodat2_test
-> +
-> +include ../lib.mk
-> +
->  # gcc requires -static-libasan in order to ensure that Address Sanitizer's
->  # library is the first one loaded. However, clang already statically links the
->  # Address Sanitizer if -fsanitize is specified. Therefore, simply omit
->  # -static-libasan for clang builds.
-> -ifeq ($(LLVM),)
-> +# This check must be done after including ../lib.mk, in order to pick up the
-> +# correct value of SELFTESTS_CC_IS_CLANG.
-> +ifeq ($(SELFTESTS_CC_IS_CLANG),)
->      CFLAGS += -static-libasan
->  endif
-> -
-> -TEST_GEN_PROGS := fchmodat2_test
-> -
-> -include ../lib.mk
-> diff --git a/tools/testing/selftests/hid/Makefile b/tools/testing/selftests/hid/Makefile
-> index 2b5ea18bde38..734a53dc8ad9 100644
-> --- a/tools/testing/selftests/hid/Makefile
-> +++ b/tools/testing/selftests/hid/Makefile
-> @@ -27,7 +27,7 @@ CFLAGS += -I$(OUTPUT)/tools/include
->  LDLIBS += -lelf -lz -lrt -lpthread
->  
->  # Silence some warnings when compiled with clang
-> -ifneq ($(LLVM),)
-> +ifeq ($(SELFTESTS_CC_IS_CLANG),)
->  CFLAGS += -Wno-unused-command-line-argument
->  endif
->  
-> diff --git a/tools/testing/selftests/lib.mk b/tools/testing/selftests/lib.mk
-> index 429535816dbd..f321ad5a1d0c 100644
-> --- a/tools/testing/selftests/lib.mk
-> +++ b/tools/testing/selftests/lib.mk
-> @@ -43,6 +43,21 @@ else
->  CC := $(CROSS_COMPILE)gcc
->  endif # LLVM
->  
-> +# SELFTESTS_CC_IS_CLANG allows subsystem selftests to more accurately control
-> +# clang-specific behavior, such as compiler options. If CC is an invocation of
-> +# clang in any form, then SELFTESTS_CC_IS_CLANG will be non-empty. Notes:
-> +#
-> +# 1) CC could have been set above, by inferring it from LLVM==1, or externally,
-> +# from the CC shell environment variable.
-> +#
-> +# 2) SELFTESTS_CC_IS_CLANG does not specify which linker is being used. However,
-> +#    it can still help with linker options, if clang or gcc is used for the
-> +#    linker front end.
-> +SELFTESTS_CC_IS_CLANG :=
-> +ifeq ($(findstring clang,$(CC)),clang)
-> +    SELFTESTS_CC_IS_CLANG := 1
-> +endif
-> +
->  ifeq (0,$(MAKELEVEL))
->      ifeq ($(OUTPUT),)
->  	OUTPUT := $(shell pwd)
-> diff --git a/tools/testing/selftests/openat2/Makefile b/tools/testing/selftests/openat2/Makefile
-> index 185dc76ebb5f..7acb85a8f2ac 100644
-> --- a/tools/testing/selftests/openat2/Makefile
-> +++ b/tools/testing/selftests/openat2/Makefile
-> @@ -3,16 +3,18 @@
->  CFLAGS += -Wall -O2 -g -fsanitize=address -fsanitize=undefined
->  TEST_GEN_PROGS := openat2_test resolve_test rename_attack_test
->  
-> +LOCAL_HDRS += helpers.h
-> +
-> +include ../lib.mk
-> +
-> +$(TEST_GEN_PROGS): helpers.c
-> +
->  # gcc requires -static-libasan in order to ensure that Address Sanitizer's
->  # library is the first one loaded. However, clang already statically links the
->  # Address Sanitizer if -fsanitize is specified. Therefore, simply omit
->  # -static-libasan for clang builds.
-> -ifeq ($(LLVM),)
-> +# This check must be done after including ../lib.mk, in order to pick up the
-> +# correct value of SELFTESTS_CC_IS_CLANG.
-> +ifeq ($(SELFTESTS_CC_IS_CLANG),)
->      CFLAGS += -static-libasan
->  endif
-> -
-> -LOCAL_HDRS += helpers.h
-> -
-> -include ../lib.mk
-> -
-> -$(TEST_GEN_PROGS): helpers.c
-> 
-> base-commit: 9a5cd459be8a425d70cda1fa1c89af7875a35d17
+>> ld.lld: error: section .rodata virtual address range overlaps with .data
+   >>> .rodata range is [0xFFFFFFFF81B3B800, 0xFFFFFFFF82035F4C]
+   >>> .data range is [0xFFFFFFFF82000000, 0xFFFFFFFF8263A867]
+--
+>> ld.lld: error: section .data virtual address range overlaps with .pci_fixup
+   >>> .data range is [0xFFFFFFFF82000000, 0xFFFFFFFF8263A867]
+   >>> .pci_fixup range is [0xFFFFFFFF82035F50, 0xFFFFFFFF82039F0F]
 
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
