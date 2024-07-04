@@ -1,47 +1,47 @@
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2057.outbound.protection.outlook.com [40.107.93.57])
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2074.outbound.protection.outlook.com [40.107.94.74])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE6821A2554
-	for <llvm@lists.linux.dev>; Thu,  4 Jul 2024 07:25:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.93.57
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9077B1A2576
+	for <llvm@lists.linux.dev>; Thu,  4 Jul 2024 07:25:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.94.74
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720077929; cv=fail; b=m8ESczRpYl5j50a+HALWeozb0GeHl6yZzk6kVYzWi1ODQQ3TTKsiupTJAWrdN36aWa4mi5Efb413FVSHoPCdUIqJHau5buBGda3WLxyjHYpOEYWQdNz52B+txUWFyFf3vcD7Qka5edFFtF4Ucc/bCf9lM6z7X/Zx8Dq6HFNLatQ=
+	t=1720077931; cv=fail; b=mmJZbG4G1aOBLoiNfAH94ipyK8VJWs35XFOp5Mh++RUMNO75GnDdOBEXO4UJLQweVOdlqJkPR2AKTHnzIlqmAiRGWkT8BwKyvWDvxJ+9uew2p8uWvGAw7dec8zK1ARU2yI21H/5hb8mADtnbXTVQ8nvanc/EwV3JFizJRvTd/BQ=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720077929; c=relaxed/simple;
-	bh=Q1CNzg7KFgrBpGICrW6otC8HFz8qTN3t0zVW1WchG8Q=;
+	s=arc-20240116; t=1720077931; c=relaxed/simple;
+	bh=DTgQyBw9GXIK9jtF+2JVzwIyY7Rc1dncgmx3AN8ftAs=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=BADbzFgU3BIfFEHsfbVdf7SYRMmIPBZgSlL0PAiitlpHRPgwSpd/O4aPuPPSlTdm8Gkb0kR/bYwa5MG2R7CqCTgVjaHueIjEASez/2qM/DRFd9gWAhzbIAYPDUeOaUdn2KoN0oLGo03dE3wu1W1rz3Du04KtdSG9sDa5dMjA5Y8=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=OTFM3nmU; arc=fail smtp.client-ip=40.107.93.57
+	 Content-Type:MIME-Version; b=RCAgW2ymJ904QjD52VEGEtTj9rIKdvWdWXxSvYPkWPS5mcm3uh6OVYDgfJGGJ0Cyml5/gaiLg1iqO3t5oORY1J111NTm/AzeLHJd0GKJZDqVUbhdU0NqzIq52ESoW884g0mnttTsth6TClwYFTdvb4xaaoYRwtqdirVSDeY6zoc=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=fc9XRb4R; arc=fail smtp.client-ip=40.107.94.74
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="OTFM3nmU"
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="fc9XRb4R"
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=oP1ZRtDBVLP+YrG4yBVSbryDMhsXv8/CVYiaglA5P+14Vq0glTVE+F9oNWlDIms4bYaGVaklozYa8+kAu3OE8Z+wyfBZRSBBAYjWHws4H//YFcafmF6BT0RHd2kprNMmenPN8KzyBndTVWNZvtMfzDeONxfolSS0yYc7Oad+Dg3cOOrNzlRR/sN1nb02JkhubW2x9zuCJbZ8OYS79P6MSrGF7sPM2lUlcY1qb+dkdJQVEYqHSBihyp4d2fIQsKV6ZBvKPXzFCSIpzOfQ0N2csQtr7hVaUv1s2qSMqPqHVWyqce8aBVM6yF5zG8MLBaJoNM9k4CGBeRxM2qbHs5TeTA==
+ b=fo4K2mTaQY2J91KIybMea/E8Vy3hAeX2sDPSpWgS0PQ+xZTjWSZsPRCKLAEynsNMs6ke4fQErJ18OFkCZ/P+nnzo+011wyNPzdo9swaRvV9GFdAAreSJUcgO7UQcy+ARFr0SQsgbuw/wu3boW+17lKM1sDdTTzXCwv7Vwq83UDhdqoVjdCVgTB0b6ooKrQ/Rhjngu8unAqbp0n5SbXFcXbqXO6fH7UbGtGXCOLTnPusS4CFa13etc29nG2cAD6luaIipR+e5LDnjIJYekAHbILnEsNUA8HdecWFYXFwcvgxoRz38Vp5hX//fivEzdA8uA28gydtKcMB7M/I23Z9yOw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=NrObOgsx3VK7nqLySm8Y0XSVs0ljqbPqnKHPwavHT9I=;
- b=NeFPRrNMZMPrZb/vIdS3n+tLUShxkRDXFxjWTMZaaE/o0pubBd9eWs0g4H7VU0n/8Yt/hsaaAGIDfUcm1feVgqwpIhCQnvW9mWEnN1/A7CHEKZm4f2vhNrkXfn0U0mPRi0CJPyJlT0Z1ISjHPrGnGHWlnVSPDojUm0UWFFpwnvGiZu+bSm/iA13cG9glJ2bMov0KP26biAp+E+iARBbho/12EpW1hao0n0aEMleJ3H1ENcEiOCieKvyyH8aS3+ZS+rpowS1Nh59Aq3blIDWjzoAQzNpd7Qi/5/7UKYlNR50/BZG0kS5ISIJdh6tjKePjf1yHonAwJ8BFK2uzmgf4bQ==
+ bh=TiO9fnNaxrpy1qMqk2msiESE60kkn1veq7Dl0qy3pms=;
+ b=fFLi2BqVUDeLIHRlvbhokcl+m/rvvmxzvV/9sw0PQ7XT9jdHqFV64ScqjEHbIh9Sn3c21i+w7kRLFIEwSddy870tpL2B9/MV9M+5QSBwMZKgYqEu8F+BwCm7K9IIKwORRWYhAJVvFMldq4qwWjG8G8JLwRwduMTDRQFe2TBFWsLxCEiYcOzVczAZ314IXr7bFvGye/HvklCojvkJePhbnQxkeueKYCKM11Rmay8VwU5SL4kc5DSWxVnwxa0ThR+0B9wcTGozTyH3JBs+8C9rvkUHnGSTmXdaRMhQ9UcfNjz/47TAsMiM5FJlwbJlnAN1nFHH72WS5agj7v7zleKavw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
  dkim=pass header.d=nvidia.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
  s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=NrObOgsx3VK7nqLySm8Y0XSVs0ljqbPqnKHPwavHT9I=;
- b=OTFM3nmU4gL1H9P86mo8KwEyloidJQ/wHjHUd4leEn5M6BARQBV/Zt6rXLLGAsLpHskKvBhrT4GNAkg+yWfq+d7Ys6fP3c5XW+w5NPm+od/AoV8wt+l82YxfiwuUuRdaIh/KRqpn4LVgokWa23310Sg04OqmVcTaaetclWntrEhx9H5ulvJp/SrZRurAyTCIPKPFSLrKrw2YzLd01ySx7SJUQna2Wa2A8uh+BRUkTu8E5lEBnxzaveEFEZy2TIVGq5lY2O5rrKnLYbL2y6vFTuCx4235AToFTcr802kQnPRa8FFnRofdJrMo3sJjhf5RX0bU2ps+ZXyF73pT4jKz9w==
+ bh=TiO9fnNaxrpy1qMqk2msiESE60kkn1veq7Dl0qy3pms=;
+ b=fc9XRb4RZAHFD/fmg2afykAp/X8xi5Z486Oa3W3JL4nHS0y5BsPPUVh18nqLWz+EJnPsIiE4TPRYwI3sTco/tVnXo2uAiz3EUjK2FnarbeBYHrpXy5typV6yDi5MDtYWwm6aw9/4HIMe/EnbIAZ7LryLSQYDgh/Mss+3dd0LiwotoWNyzl9WQ9N0bbv/tB4Nr1Bj0NsVUuF5yhjbghodF88VxKnRNXjduVW7MwkFhWZnpxTdxHZRda3XwmsdDIAjUwUXDQAhSDs1TcaEf7k/+8qdXCn5/cKPF5JpqFpYeR7Un520zPSQ4NXh0ffNgozHf10LVnlc0+gI1uuLsAxFhA==
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=nvidia.com;
 Received: from BY5PR12MB4130.namprd12.prod.outlook.com (2603:10b6:a03:20b::16)
  by PH7PR12MB6610.namprd12.prod.outlook.com (2603:10b6:510:212::22) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7719.33; Thu, 4 Jul
- 2024 07:25:22 +0000
+ 2024 07:25:21 +0000
 Received: from BY5PR12MB4130.namprd12.prod.outlook.com
  ([fe80::2cf4:5198:354a:cd07]) by BY5PR12MB4130.namprd12.prod.outlook.com
  ([fe80::2cf4:5198:354a:cd07%6]) with mapi id 15.20.7741.017; Thu, 4 Jul 2024
- 07:25:22 +0000
+ 07:25:21 +0000
 From: John Hubbard <jhubbard@nvidia.com>
 To: Shuah Khan <shuah@kernel.org>
 Cc: angquan yu <angquan21@gmail.com>,
@@ -60,17 +60,17 @@ Cc: angquan yu <angquan21@gmail.com>,
 	llvm@lists.linux.dev,
 	x86@kernel.org,
 	John Hubbard <jhubbard@nvidia.com>
-Subject: [PATCH v4 3/7] selftests/x86: build fsgsbase_restore.c with clang
-Date: Thu,  4 Jul 2024 00:24:27 -0700
-Message-ID: <20240704072431.111640-4-jhubbard@nvidia.com>
+Subject: [PATCH v4 1/7] selftests/x86: fix Makefile dependencies to work with clang
+Date: Thu,  4 Jul 2024 00:24:25 -0700
+Message-ID: <20240704072431.111640-2-jhubbard@nvidia.com>
 X-Mailer: git-send-email 2.45.2
 In-Reply-To: <20240704072431.111640-1-jhubbard@nvidia.com>
 References: <20240704072431.111640-1-jhubbard@nvidia.com>
 X-NVConfidentiality: public
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-ClientProxiedBy: BYAPR03CA0017.namprd03.prod.outlook.com
- (2603:10b6:a02:a8::30) To BY5PR12MB4130.namprd12.prod.outlook.com
+X-ClientProxiedBy: SJ0PR05CA0199.namprd05.prod.outlook.com
+ (2603:10b6:a03:330::24) To BY5PR12MB4130.namprd12.prod.outlook.com
  (2603:10b6:a03:20b::16)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -80,169 +80,155 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
 X-MS-TrafficTypeDiagnostic: BY5PR12MB4130:EE_|PH7PR12MB6610:EE_
-X-MS-Office365-Filtering-Correlation-Id: f57eb2c8-f3c6-4042-e794-08dc9bfa7718
+X-MS-Office365-Filtering-Correlation-Id: 5f66860f-a632-4262-6859-08dc9bfa7688
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;ARA:13230040|376014|7416014|1800799024|366016;
 X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?8xN/ADqC4LuwHwfPsLV+lXqtMlJZEsuDg3iCHN600QaaZkTuw4qPqEKc396N?=
- =?us-ascii?Q?A/BC8gu7QGS0KUVpMVMRTNTfBefzuPOUoSgVj43PjjaJe/xGOLmFJ12O/R6g?=
- =?us-ascii?Q?lt73wHenv6atiZ6KHXKe3WABU8VXeFcYK3g26TI74Qao4rSzqFdqg8BMXypa?=
- =?us-ascii?Q?OWRGdW9r/+rLL1NWX01bGD1n8mR/RvIAdw3tlCoUJtNYcMqejZD9RtD746oc?=
- =?us-ascii?Q?MFDQBLd2NciU6dpew1zvQ5lhVf9E/itUz0UgOmaoY7O+/XuJb9BSPN7PZMtT?=
- =?us-ascii?Q?WHooNDre7pCbfsSrWeFNJRxnJOOxk/4TMHii+tUy3SswzfmyjmQ20c4f9qeJ?=
- =?us-ascii?Q?KJ15V6DHwsrvXRDem823x+l+IEMTfO0IzGoXhANL3Hyz+IorBuDOkmcOXLOo?=
- =?us-ascii?Q?DbFBuvncig5wkodEiifTStPWhSqwComx3Ra6QOaeiH7QXRM5b/9fs4D5Xja9?=
- =?us-ascii?Q?uDR6BX32JPOM7UBaGfajXp+NA/HtbXhRvchT7qbZ4EUXeRPm+D4HLPlxbnWK?=
- =?us-ascii?Q?UhEiWGgwLMrvP8M1tBLkxID8cbZ6HrPUPQ2I7atfsCVQDrXRxxy6ZkGxYlLt?=
- =?us-ascii?Q?Xv7V4Tbd1U63fPly0CMLOoKu5HoGj/roW0kzcCZXNsf8HKlAmdaDNYGyS7Po?=
- =?us-ascii?Q?Q19tXbYMnmY53LEEiLT05n/LLTu9N+00XCaoi3kjF467k9AUZ9pqq3W9u6P/?=
- =?us-ascii?Q?pq4Q8ik+IbYEha7XZWftKH63qiS8lTaZbzJvVJ5q8s/Rh5Hzr8SJmgM73EDe?=
- =?us-ascii?Q?o+tYo8TirEDn/rcMO+4rpx4Q0U8GJQt+T31+Gp3CE8Xcza9XsiMwea7kguVZ?=
- =?us-ascii?Q?IKhzZzANzqa1bRywHcHTZwskbUj0UjZeb2hKYdDL0drWhbm24jQY1x7lMdgU?=
- =?us-ascii?Q?E/CAdJf+1Pvt1ZpO6azEJCbY7kRbZ4pu+nVXR7diNPhtDAoAz0ngAqneJhqJ?=
- =?us-ascii?Q?NKvCpS+6NxRiU2ZKZa1ErVX2lZNN9A3n7RXOQXYVtX5svuRtZWX1/OoVD3jf?=
- =?us-ascii?Q?mhQvaxl6taJoCQIjljyTnvAoN4+f6bYaqO0MyUff5rAvFF+ofha8ioqSpzfj?=
- =?us-ascii?Q?vxQMz8mJJA9RqwxVbGRzr1H3GbFht4bxOzW5fR8mWK4iDOIieRBXPXnYR2O2?=
- =?us-ascii?Q?pYarz1EwGoEi412TmhNmjk9onq1hCiZSc7VBOgNN0BR5VlRHy34mfe5gCeI1?=
- =?us-ascii?Q?HM/fb4Wl0+xsIOHCIHIuZ6C+zQlR77c1OTXhlGcQJZmDX358IOAj+q1q+Ktw?=
- =?us-ascii?Q?FT26zIRXxaUEDX+qTO3PvYlYX8RaoB/YNuBJhC2zfF1Z1fHZ7wazZe8Ceg0i?=
- =?us-ascii?Q?qw1eq1Zkr0HjrQ9dmEFh3Rnk+UzhEr10vsZGKZYa3WLgTw=3D=3D?=
+	=?us-ascii?Q?XsxTyXSUfS7i55Jq6x/dEy+M3A39XRb01mnIsAV9C/4aaAJ1QKtdOBFcnOni?=
+ =?us-ascii?Q?uiPuxO56hEvM70UKuorRBCF6m9VtxaCfczsrFvCx9hGqdJYV42c0PMrp/4AV?=
+ =?us-ascii?Q?LgzilhXnFwRoHflOa4Ts0YXVVb/jR+NFJQIwEwP80d/DI622/9iF6Fi4DmQ+?=
+ =?us-ascii?Q?daJazmUMOLc+0jWnwsAOV4s9FIJa+P1YiMOqk8NFpNmvo6qmFPiA5rUvu65W?=
+ =?us-ascii?Q?lQXWDpSlTSMKqBAkA13jQxprkEL0quM5V/yMBT3KSQviMMmhK57hzb6ErFJR?=
+ =?us-ascii?Q?zHmK1wjTY9qBeHixtto2DIP8IdFgbwJhh7MJWmX418h8mUoh/+UdF27lpPs4?=
+ =?us-ascii?Q?2H7dqM7V4UMvH6ECrZu2jA7iwVy5k66aa7B/Kw6Pzg0va+kjzXqyawEbIf11?=
+ =?us-ascii?Q?Rp5pc04DlH+6VxbgyKwXxAST6DSdDYxSifbDM65hhVikEKd/7kfZxCi1R+io?=
+ =?us-ascii?Q?QTfPGNu+rFAYsxofhTzfC7UZGCz3WLiHDaCSGAAqHTLBzgXkm9l4dNTQsmyI?=
+ =?us-ascii?Q?C1poYHu0+HaJ/VrFCWDwT82GYf/IZpj7034yerXyfE/EhaQqzADFK5Y+EVDy?=
+ =?us-ascii?Q?0IafRavE8xU4R4uf5UsxV+DE5l95VGJ3XaBHxZaxkz3z195JkIjQie2sU7dF?=
+ =?us-ascii?Q?V3oUKFWc3NO8hAM/Opb0Fhv3Gkp5V8liXJ3w+6PVhhS5Z+zx7Sj6/y8B9IZR?=
+ =?us-ascii?Q?o4DJmfjN2OzZv7/3y0wiGbwnS4j+5cZ5HqLgQjV5z92VVv5/0QHQnOdy7ZiT?=
+ =?us-ascii?Q?aquqk/PU9F63V5hqQ28xp4+m7+AiLCGGWqLLsjXgTRzC81EBbp2p8PzYxv0b?=
+ =?us-ascii?Q?GKVzkLPT+pffB00I7upBc0BG9mqXkKFoc3OjuQdFI5Xs1PpR1hJnivj7MHJE?=
+ =?us-ascii?Q?W6crlk79/daCS0/tpIc5bwWzuXcfSPtGghiMemTNH4eQ0MIesKApbZQvUPGM?=
+ =?us-ascii?Q?9MSm6mOYRXFyc8tSP0Q/sL5ab2ed5wuNy8QctzdWRwzMN0ErpGQfT5eWw3JG?=
+ =?us-ascii?Q?wF8TKPuRoSOvA/Vtmn6eiosSH8o8IFPQKP7oyqWes6Y+fvF2mzWbvgjb5wZe?=
+ =?us-ascii?Q?/Hk1dQy6qQIIhlET78wNWfZLrt9Dn2qSS9DdoObgPpte+tM6v6y7YLrlhWWh?=
+ =?us-ascii?Q?Dgg9Pk63NOLsSIuByoV+8b/WQyY4DJpiwNZNMTI0v2WcIMZGmNeaEnx23dN6?=
+ =?us-ascii?Q?vbEN7jb97cBhACY1v7e0AU1mqqV6GqJ0Q98zEnE+nLSZj3ivjKSazUCSf6eo?=
+ =?us-ascii?Q?swzHCJBQ8RYcwLbsszM14lutcb1IGK09uVYBzuTbuvZHO2NlVSaGmNtsAhWr?=
+ =?us-ascii?Q?+eVMV4x0bcqrE42c3ZSbOfGbcuicMnPg12kCxiDRrU+rJg=3D=3D?=
 X-Forefront-Antispam-Report:
 	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR12MB4130.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(7416014)(1800799024)(366016);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?IJd9XbI6cjcZRa9MSWROoBz8tM8cgLvS4oXt3A+NKVeQiLyFVYK3AVHcdh5F?=
- =?us-ascii?Q?gmVgen6OksZHMkXH50ImCEd30bdrKB1SIsW1RpZtnasE12lnf0rgl9ptPgkp?=
- =?us-ascii?Q?pp0oBkQeh37bxRSq4DL6pNSMlNyHte01vvh/f7hkCTx5v+CUIBpW2jGfpebQ?=
- =?us-ascii?Q?OwFDyl9M4n0n/qfHkv9UxKS+lHxX46MHYNKwNpo0I2vmsHlpULhmJ7J7zMS8?=
- =?us-ascii?Q?OTUOwdvgdk3dUv00IY7gWvDWh9Fy3jphu2R21xX1eCNJscwmi2rQx7YvQiZG?=
- =?us-ascii?Q?m1tigdJVeA5Lk0XGzOX4VHpSAVhmwxQ28lY670yhmm63tujJICdM+Glz1Yok?=
- =?us-ascii?Q?/Rs7FEB3FdpLqSf0ef2sgqjsRygxybzHFGv3Y8DJyNJ9xuZ40JDg1hPskRFf?=
- =?us-ascii?Q?9dVem6fufdyvAizlRPixEnULoS97voI6/jqfPTTXhnrjJJuekBjI9GaZM95R?=
- =?us-ascii?Q?DORFJJuEBZBTNSabzXFyZAxVm8wwSBScow5XTNYub9LGVdroiAqoyzI9gBVd?=
- =?us-ascii?Q?Hx92879BaPB7kCJpLZxdP3YfmGKeHXF6jigMQHfzp5VH8japJo+rJ4jg5V3g?=
- =?us-ascii?Q?cuad85MevmkkTW8jcf+c9hyuIGtmN+pgOLPOyWZMB3Br+WdIO9rrCP+tPQOC?=
- =?us-ascii?Q?sAJf1O1iI4omCFClD3K7tiT972A8BxpSkSiUKPtI7M27c56TeRanVhh3mI44?=
- =?us-ascii?Q?V1zzghVPcozCG8JJYySg4b8cAgpisyx8W/8X9VHvR1iY1b+bHLkv98oqiror?=
- =?us-ascii?Q?gkJ5dcSJM5cC6nhNjC00WP14/9J85Kbhd1qi+nVZopK/L1qbcxjmHRovrl2+?=
- =?us-ascii?Q?I8FsUh1E7UpfyyFyffbxtoJYhwqGI5X/7gup3xmirejukQ+ABsKg1XxWCmJT?=
- =?us-ascii?Q?G02BQoYCmHQ02lASXQ6olh/RTi/nb1k2UM2Zl7QjlC2ODcbIvGlTtxGCqgFr?=
- =?us-ascii?Q?J01YV++/KmukMXJofzgIa3kxB2HkG7bPO0KkSqZ56swqrjIFmrSQqWUOY2fO?=
- =?us-ascii?Q?Y6M5qPpg7YZsbEwKmtxH+vVcXcSC4t7L8QRsqRwkM/ZbZAtdXnD2YrSYHMOO?=
- =?us-ascii?Q?ilEjfnp5oiLh6w5KiZyItrnXrRlszQxfHg6hpPDe4zlT8oVhrvqnn/DSVvx9?=
- =?us-ascii?Q?FWR+QbDPXI4gPvEOIpLVMUbrV7GGANXTmPRhxGFFHICP/7mb4MlgU/kZQh17?=
- =?us-ascii?Q?DzEpmNTzA6g116z4jURIVACGA7x8TOd/29tmW6WkFZeVrv2Zn4aNTlV8CWED?=
- =?us-ascii?Q?Cv+iRUOClchvPN0j/n+gXfoEDVHElSBiYXE31ZURjizO6jkdvGfBsGnJloJU?=
- =?us-ascii?Q?60G0Xs+ea++T8obvwHHUZfFZN/kX5qi74uhl0MPkaT4AqogtMWRWMUIR0B6J?=
- =?us-ascii?Q?Cpz5M+89DIWVN5BCyi2ORDgjLs/oAJ90QzMNsODLtgp49QGk7gl8IixyFC1O?=
- =?us-ascii?Q?KEE7XN9NKssctbedStbYBmdqbw32ksyZOqdilb+WSsYNNQcfY2Wf8riuNMJr?=
- =?us-ascii?Q?KCbCClCw+6Km3/q8hnazqNkbdYZxQ4LA5IlpsnmUxWBr/PZrkfoYTmLMm6MU?=
- =?us-ascii?Q?IRpOl57yyhySdcSfY53HG6gDyBJSOeULEKAsygAAgaYjKEJRgdFFhrfLLtZI?=
- =?us-ascii?Q?Zw=3D=3D?=
+	=?us-ascii?Q?vz0qcBIzSrgdaI+C6DOoQkPpCZwitjYANQkZFXi5QU5ohoFj3zKl4z6nUnoB?=
+ =?us-ascii?Q?xjlYfxkp5kug5C6sAn6TGLHJx4o6hUmYCiXsSLNWEuWH8kwEYiTCvp6Mt71R?=
+ =?us-ascii?Q?6MltkK7wwrLHowYruq3QSdZ2FRTalitqUMJmb5r1fa5n6ccEYzK9/r9eudGi?=
+ =?us-ascii?Q?ra7IAskypGkaBmsustglZP4D73zRq/UPXry5JSFJJCIuRrWjOsuqmj90PgxF?=
+ =?us-ascii?Q?M1d9/XUlrYnP0KM5oaE2R2kKluNx4TQp6aN+SBZDcoKrvrZGGY5ZDPbetPv3?=
+ =?us-ascii?Q?kKjFa8F0LDl5p+WCuo8YYh/yw2I8OHToe4F+MNF89ofnIunEBgtNXX+dIF+e?=
+ =?us-ascii?Q?LjKlfGHaQAIr2vc1Ymoa8+05l2fugsTi8oE5iAQ0HOCOqbkq52BrlBc5ZcNZ?=
+ =?us-ascii?Q?Vzlhn5vPmCplxHTWDJbJdbxpak1zaQBtqRpT9+wm4UG7Ot/ieaVT2wZ15NjT?=
+ =?us-ascii?Q?QXvgb0L/5wGJMkUbh72Z5ipApKgW1qLb099HfyAP9RGugh7doJR8RZyXqPJD?=
+ =?us-ascii?Q?PQJt+leuUdSPEG08Ed/l5UzLSU2PdLaoVtzMseCw8Jo7tV7vsqg5wAsjyMcx?=
+ =?us-ascii?Q?zskq1Ej5Va3u/XKcjWozJhmzBQJNFGff64fciZI+3DYYVUhdWjiLU50vrTGe?=
+ =?us-ascii?Q?sEVeJHwPISxQFJu5QuM0N1lGlW3Fk75mL+EZy34xLvcYYMLksmRrT1XmH9+S?=
+ =?us-ascii?Q?YJmTMAsDrYaemag6oGM1j8z501RZinGTWAdvobt9Qk0sCoLESxP7tvASHm5y?=
+ =?us-ascii?Q?+Ibh0Lh7QXwXriNNfZC1QA0RFtZ0AAU9AKojirz/SYhNBrLH+XBAslKq8SU6?=
+ =?us-ascii?Q?9YWky8z14Uk7s9SYGpjozeQZoXS2bveUDUHsu2SrGmuvraffU5DnvMMh04Jz?=
+ =?us-ascii?Q?2rNulrQI4zgX7vcIMxrWKIjRR47YW5BYyw8s5iBiN6wuHHkMTh6x43NIPLta?=
+ =?us-ascii?Q?a0ZFz8LmBzZ/U+2UdKqxgdCNYyCp/QmAJ0SY3PyittGANuOs9QRRQZFnvHyV?=
+ =?us-ascii?Q?sJJMjhxS43FNXdubyNy9TsO4smsg/poSjycD2boZRmSeA68isI99YLnCg27z?=
+ =?us-ascii?Q?X2Q1maKoULhtlIzdTVIUkpwIZfLgkoCxRyuv6Wc0GGwtuVrIrojIINa32WA9?=
+ =?us-ascii?Q?VSsd19dU3g7SDNtI08DZetppxTnFpdck4C/OFQUN+GCZuIyetSHqp+47d7T1?=
+ =?us-ascii?Q?VqBktg4x6uXZ/uUjSZ2simCbutqtFBo8TBJV8gRLgF1P6UR8O3kDhDuclvt6?=
+ =?us-ascii?Q?nCZz3QBo7H8d78vruO926LGjI1iNKJgzMR+WZZSda4lTrghGf+q/4F4N0Q0I?=
+ =?us-ascii?Q?t96874HYG9GJ7woW67XTPdOhtdkdeVAzUmso81z8rYuJ4OwyhsdjiLc8m+t4?=
+ =?us-ascii?Q?cJmQ832ELkQPF9cSyvfGaLNls/rvESutZp6jdRoTHzwTmyVJsWPvHkdboo4M?=
+ =?us-ascii?Q?IXhih6YNWZ4vbfn51WLFnqq6ZJTc+G2Bmhy4X2mgcBZ5mOBDOoQB/zmBxe42?=
+ =?us-ascii?Q?zr425JhTz7XB4WT/LCpRBi3L/tB2fja2VTdTEw3fLyMOACJSMVkXSC3yEjMY?=
+ =?us-ascii?Q?RGJdWEJcR1ZTBMMQSr0Oci5ONb6mqtqy9d7KMg3xoTGYXNmPXb8FQyMsuHAe?=
+ =?us-ascii?Q?sg=3D=3D?=
 X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: f57eb2c8-f3c6-4042-e794-08dc9bfa7718
+X-MS-Exchange-CrossTenant-Network-Message-Id: 5f66860f-a632-4262-6859-08dc9bfa7688
 X-MS-Exchange-CrossTenant-AuthSource: BY5PR12MB4130.namprd12.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Jul 2024 07:25:22.2609
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Jul 2024 07:25:21.3164
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: s9n4XtMtBwaqPfo4ZDHKSNYls7jpuXWdKwGkTiZIEvoFcSJCk9l/vcUWtf6Q2NcuPWEM1J9an2rGOparkQkTQw==
+X-MS-Exchange-CrossTenant-UserPrincipalName: TbsEX/Uq5N4u8kBacoCHDT/0nyd9mvvr9RDv1GxuzN6CKLcVZSY9+gHNJNJwKr7zyv942Bva83VjB+gFLc/vGQ==
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB6610
 
 When building with clang, via:
 
     make LLVM=1 -C tools/testing/selftests
 
-Fix this by moving the inline asm to "pure" assembly, in two new files:
-clang_helpers_32.S, clang_helpers_64.S.
+...the following build failure occurs in selftests/x86:
 
-As a bonus, the pure asm avoids the need for ifdefs, and is now very
-simple and easy on the eyes.
+   clang: error: cannot specify -o when generating multiple output files
+
+This happens because, although gcc doesn't complain if you invoke it
+like this:
+
+    gcc file1.c header2.h
+
+...clang won't accept that form--it rejects the .h file(s). Also, the
+above approach is inaccurate anyway, because file.c includes header2.h
+in this case, and the inclusion of header2.h on the invocation is an
+artifact of the Makefile's desire to maintain dependencies.
+
+In Makefiles of this type, a better way to do it is to use Makefile
+dependencies to trigger the appropriate incremental rebuilds, and
+separately use file lists (see EXTRA_FILES in this commit) to track what
+to pass to the compiler.
+
+This commit splits those concepts up, by setting up both EXTRA_FILES and
+the Makefile dependencies with a single call to the new Makefile
+function extra-files.
+
+That fixes the build failure, while still providing the correct
+dependencies in all cases.
 
 Acked-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
 Signed-off-by: John Hubbard <jhubbard@nvidia.com>
 ---
- tools/testing/selftests/x86/Makefile           |  2 ++
- tools/testing/selftests/x86/clang_helpers_32.S | 11 +++++++++++
- tools/testing/selftests/x86/clang_helpers_64.S | 12 ++++++++++++
- tools/testing/selftests/x86/fsgsbase_restore.c | 11 +++++------
- 4 files changed, 30 insertions(+), 6 deletions(-)
- create mode 100644 tools/testing/selftests/x86/clang_helpers_32.S
- create mode 100644 tools/testing/selftests/x86/clang_helpers_64.S
+ tools/testing/selftests/x86/Makefile | 21 +++++++++++++++------
+ 1 file changed, 15 insertions(+), 6 deletions(-)
 
 diff --git a/tools/testing/selftests/x86/Makefile b/tools/testing/selftests/x86/Makefile
-index c1269466e0f8..99bc2ef84f5a 100644
+index 0b872c0a42d2..c1269466e0f8 100644
 --- a/tools/testing/selftests/x86/Makefile
 +++ b/tools/testing/selftests/x86/Makefile
-@@ -113,6 +113,8 @@ endef
- $(eval $(call extra-files,sysret_ss_attrs_64,thunks.S))
- $(eval $(call extra-files,ptrace_syscall_32,raw_syscall_helper_32.S))
- $(eval $(call extra-files,test_syscall_vdso_32,thunks_32.S))
-+$(eval $(call extra-files,fsgsbase_restore_64,clang_helpers_64.S))
-+$(eval $(call extra-files,fsgsbase_restore_32,clang_helpers_32.S))
+@@ -73,10 +73,10 @@ all_64: $(BINARIES_64)
+ EXTRA_CLEAN := $(BINARIES_32) $(BINARIES_64)
+ 
+ $(BINARIES_32): $(OUTPUT)/%_32: %.c helpers.h
+-	$(CC) -m32 -o $@ $(CFLAGS) $(EXTRA_CFLAGS) $^ -lrt -ldl -lm
++	$(CC) -m32 -o $@ $(CFLAGS) $(EXTRA_CFLAGS) $< $(EXTRA_FILES) -lrt -ldl -lm
+ 
+ $(BINARIES_64): $(OUTPUT)/%_64: %.c helpers.h
+-	$(CC) -m64 -o $@ $(CFLAGS) $(EXTRA_CFLAGS) $^ -lrt -ldl
++	$(CC) -m64 -o $@ $(CFLAGS) $(EXTRA_CFLAGS) $< $(EXTRA_FILES) -lrt -ldl
+ 
+ # x86_64 users should be encouraged to install 32-bit libraries
+ ifeq ($(CAN_BUILD_I386)$(CAN_BUILD_X86_64),01)
+@@ -100,10 +100,19 @@ warn_32bit_failure:
+ 	exit 0;
+ endif
+ 
+-# Some tests have additional dependencies.
+-$(OUTPUT)/sysret_ss_attrs_64: thunks.S
+-$(OUTPUT)/ptrace_syscall_32: raw_syscall_helper_32.S
+-$(OUTPUT)/test_syscall_vdso_32: thunks_32.S
++# Add an additional file to the source file list for a given target, and also
++# add a Makefile dependency on that same file. However, do these separately, so
++# that the compiler invocation ("$(CC) file1.c file2.S") is not combined with
++# the dependencies ("header3.h"), because clang, unlike gcc, will not accept
++# header files as an input to the compiler invocation.
++define extra-files
++$(OUTPUT)/$(1): EXTRA_FILES := $(2)
++$(OUTPUT)/$(1): $(2)
++endef
++
++$(eval $(call extra-files,sysret_ss_attrs_64,thunks.S))
++$(eval $(call extra-files,ptrace_syscall_32,raw_syscall_helper_32.S))
++$(eval $(call extra-files,test_syscall_vdso_32,thunks_32.S))
  
  # check_initial_reg_state is special: it needs a custom entry, and it
  # needs to be static so that its interpreter doesn't destroy its initial
-diff --git a/tools/testing/selftests/x86/clang_helpers_32.S b/tools/testing/selftests/x86/clang_helpers_32.S
-new file mode 100644
-index 000000000000..dc16271bac70
---- /dev/null
-+++ b/tools/testing/selftests/x86/clang_helpers_32.S
-@@ -0,0 +1,11 @@
-+/* SPDX-License-Identifier: GPL-2.0-only */
-+/*
-+ * 32-bit assembly helpers for asm operations that lack support in both gcc and
-+ * clang. For example, clang asm does not support segment prefixes.
-+ */
-+.global dereference_seg_base
-+dereference_seg_base:
-+	mov %fs:(0), %eax
-+	ret
-+
-+.section .note.GNU-stack,"",%progbits
-diff --git a/tools/testing/selftests/x86/clang_helpers_64.S b/tools/testing/selftests/x86/clang_helpers_64.S
-new file mode 100644
-index 000000000000..0d81c71cad97
---- /dev/null
-+++ b/tools/testing/selftests/x86/clang_helpers_64.S
-@@ -0,0 +1,12 @@
-+/* SPDX-License-Identifier: GPL-2.0-only */
-+/*
-+ * 64-bit assembly helpers for asm operations that lack support in both gcc and
-+ * clang. For example, clang asm does not support segment prefixes.
-+ */
-+.global dereference_seg_base
-+
-+dereference_seg_base:
-+	mov %gs:(0), %rax
-+	ret
-+
-+.section .note.GNU-stack,"",%progbits
-diff --git a/tools/testing/selftests/x86/fsgsbase_restore.c b/tools/testing/selftests/x86/fsgsbase_restore.c
-index 6fffadc51579..224058c1e4b2 100644
---- a/tools/testing/selftests/x86/fsgsbase_restore.c
-+++ b/tools/testing/selftests/x86/fsgsbase_restore.c
-@@ -39,12 +39,11 @@
- # define SEG "%fs"
- #endif
- 
--static unsigned int dereference_seg_base(void)
--{
--	int ret;
--	asm volatile ("mov %" SEG ":(0), %0" : "=rm" (ret));
--	return ret;
--}
-+/*
-+ * Defined in clang_helpers_[32|64].S, because unlike gcc, clang inline asm does
-+ * not support segmentation prefixes.
-+ */
-+unsigned int dereference_seg_base(void);
- 
- static void init_seg(void)
- {
 -- 
 2.45.2
 
