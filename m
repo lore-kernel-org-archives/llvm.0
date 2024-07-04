@@ -1,116 +1,164 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f45.google.com (mail-ed1-f45.google.com [209.85.208.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D446544C77;
-	Thu,  4 Jul 2024 20:36:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EFC2213D53B
+	for <llvm@lists.linux.dev>; Thu,  4 Jul 2024 21:23:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720125417; cv=none; b=nTL4nXHAWitG20/92+UH/ZwnXpdatB2o8SVPuam0+z8RCTPEU5N9dhw7gQFuRwbIsbIPn1pgniB8uYbnpyXLrGHBzkPlC0wU6bHmVgwZdL3+/VPvisgHMdgL5NoXtuT1bhxif28sArOV51S45V1z6GVp4EPuUSpPYrjXDaFi2IY=
+	t=1720128241; cv=none; b=W/HyDq393RONmzBkAa+gFvkROdy0Qtun6eyHqU+Hs/68fz3lcw0aNBBp9RvbJFIJ4fyHbCK3schOjQvdLB3aiYvmixjwp+V8wBMDVtvKCvnLmAQd2Nnl+eKBS1S9XRfHCIW8TQZR7zGWsTVKgJYFRhiSUopyyfWw3p7fPlhAJzY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720125417; c=relaxed/simple;
-	bh=SZheplUgeuc3mMpH+adr7zOhZZipa5FdbT93WJJBlGo=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=qxESV9TcqNfblkSvGZmZBuCOEHUBC17HkRQs4e4mFf1JmMDE3rOGuOGsC3TjLJssmlHP9ztsDbGPxkIw3TE0/thv3K1Xt8vx6pyaRSrAdUIxc+/dsBw3fGr3uy80P4XrHPRl4RkcvXk5ajHAcU1lN/KcnGtSBWknzuGz9OD6rns=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=LL31kJ9X; arc=none smtp.client-ip=198.175.65.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1720128241; c=relaxed/simple;
+	bh=WkQita1UbMfMen1gzqw2QW7P3OKiOs39bLWHgZY5IA4=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=kN3R3HHwxqIH0tGux1L8aC8s+FeKyOgk0oHNPikNfi2ljrpWe8JlKxNjLGxXWIYKqvJlrMcQSCZRGrWpbR5Br3TYPWqKeFMsffeh5jDm3i5kTPa5lJ1LGTM8Vl+GYqG9pgTZUKSRm6BpRQdeX98HDrtnCZLMrJ7coQvcbwAAm1g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=ZnxBY7QL; arc=none smtp.client-ip=209.85.208.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="LL31kJ9X"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1720125416; x=1751661416;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=SZheplUgeuc3mMpH+adr7zOhZZipa5FdbT93WJJBlGo=;
-  b=LL31kJ9XubBug1MRpkALQ76N58olpJHFBOycDh+kmuzcc6s2EiDCMm2f
-   I/20QSeU63pKIKrERAycapPt2iWL56pF31Ewx5uAUrzIF6MY9tSD1AQiu
-   in5XdK5Zp1KY+6McCA1xu8Y+N7EWY4/HB6ez0kQW6xp2/bM1F6GrZKkxC
-   z41T1swsVFoc8qXIrI0mtO1XVcRrGhYgvfmCC7y9MvzNgLlB3oAEb/kyo
-   FFsBS9eJ9p9PPzRHIcF2I9b+gRrmRdXgYOICS1mRMW+l2DNARBBItyZ6I
-   39QQD2qSkNvnEHexGnHZaO09D4uGC8vhE1ls4vYl414ekbwHRbNTu00qu
-   A==;
-X-CSE-ConnectionGUID: OKVPwnw7QDWPnJUg+JbiIw==
-X-CSE-MsgGUID: eYLC+qR9RlGP0/xw4BRThA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11123"; a="17549348"
-X-IronPort-AV: E=Sophos;i="6.09,183,1716274800"; 
-   d="scan'208";a="17549348"
-Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jul 2024 13:36:55 -0700
-X-CSE-ConnectionGUID: Y3z5vfUSTr2/D/ZsPx0a1w==
-X-CSE-MsgGUID: LJQLBUwgQgKvlCh6TXsxqw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.09,183,1716274800"; 
-   d="scan'208";a="69896560"
-Received: from lkp-server01.sh.intel.com (HELO 68891e0c336b) ([10.239.97.150])
-  by fmviesa002.fm.intel.com with ESMTP; 04 Jul 2024 13:36:52 -0700
-Received: from kbuild by 68891e0c336b with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1sPTCE-000RPr-1C;
-	Thu, 04 Jul 2024 20:36:50 +0000
-Date: Fri, 5 Jul 2024 04:36:00 +0800
-From: kernel test robot <lkp@intel.com>
-To: Sean Wang <sean.wang@mediatek.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Felix Fietkau <nbd@nbd.name>,
-	Ming Yen Hsieh <mingyen.hsieh@mediatek.com>,
-	Deren Wu <deren.wu@mediatek.com>
-Subject: [nbd168-wireless:mt76 63/76]
- drivers/net/wireless/mediatek/mt76/mt7925/pci_mac.c:63:37: warning:
- expression which evaluates to zero treated as a null pointer constant of
- type 'struct mt76_wcid *'
-Message-ID: <202407050405.0plneRz2-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="ZnxBY7QL"
+Received: by mail-ed1-f45.google.com with SMTP id 4fb4d7f45d1cf-58ce966a1d3so12860a12.1
+        for <llvm@lists.linux.dev>; Thu, 04 Jul 2024 14:23:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1720128238; x=1720733038; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=XZUXkSX9WN+AQbdLcHROy2ZT3v7SVR09OPnTWoMgUyo=;
+        b=ZnxBY7QLH4MrH7CuR2BD2YqY1omtejlNVc/0zKIFatieTmPoQQXNDKAjW+Md/rWORa
+         V7m5brc5/EzFDtVSJjtD7+tURGoJ+jaTd3oXXGc6GS8SERrafN0ZMIzEJOJad/Kkn4Zg
+         hHE/SXTPgZ1K/WdppT3OY9cIcKVkf9ZyI7nuT560ZoYWnTsqRJrEzdo5qBWEJw5GnO1z
+         MR4LU4YleJ38XbRrAvuweWWPjNCmlaq0h+ckbnlyCqkFPAgd4SQpZ0LuGQFMLHNhG9BD
+         V8S8emWQ+Z2Ha8/KHFEHunBDNWI5kbyWgJBAlaDBr6t8GxLyRuwu/FbuxCEaeXf5nywz
+         9Zsw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1720128238; x=1720733038;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=XZUXkSX9WN+AQbdLcHROy2ZT3v7SVR09OPnTWoMgUyo=;
+        b=Rn1RFhB2EAQTz8nZXIcmUlyzmwR7opDrM6TlS5nTl4KXd9jgEs30zOzV540ph1Y4uC
+         oRGye87jXTIzh1H7tt9Wqhs3Zgj5tkOjc0KVpgEfihLzQlNyc9B9uM+YjDKMYd+96WlK
+         zLPqNmOlAXGLwD6Qv6+WitiAdAVBC9a3JJIvXjusR3pIvloUlWBi3UT7M0NeEP93aP4o
+         V9b3zWgcIZKdY6sWuajXo9wtHUQxmUWd+fYeBV3dnzx3DJSov3eGJy96bUE4jGY18/OZ
+         6ymtMQZMRJXK8dpuuH7LId8eh7OGbUmYuhQeWSf55118eHrdO1yYaUtTL4vBQMug724b
+         zOQA==
+X-Forwarded-Encrypted: i=1; AJvYcCXtqX/Obo2ScMK85y9gUvO1JhMkDWxXqViHbrb14JkG1cA9CkozDEGPldqeF71YpLdeJYIC2agMdXCwyiok3FnYpNQIbQ==
+X-Gm-Message-State: AOJu0YwJs9z4RZmNPjsxD6jtwmttNwjfAsMUMAb8HxSpHRcUWdS7Enre
+	mMAamNCS+KGqAQzQUyokwgXp1NZMbwqw9tQtGC+UZXCooXhyFMDM7Fb6Fwq1FyNIuF7N0JDRnYS
+	yW9cZu9k/ZepdNsBnYo3vJtsbK6ceQ/IaAkLG
+X-Google-Smtp-Source: AGHT+IFNiC12ACDfwoCP+FCXjiKRvFZtf6R72oNOV5+4tIR6dsRZUTSkQftvcnrUomvX2XqiYI70nEOpdD0FSz54nrc=
+X-Received: by 2002:a50:9fa1:0:b0:57c:b712:47b5 with SMTP id
+ 4fb4d7f45d1cf-58e02735e86mr205813a12.4.1720128237990; Thu, 04 Jul 2024
+ 14:23:57 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+References: <20240704-update-ld-version-for-new-lld-ver-str-v1-1-91bccc020a93@kernel.org>
+In-Reply-To: <20240704-update-ld-version-for-new-lld-ver-str-v1-1-91bccc020a93@kernel.org>
+From: Fangrui Song <maskray@google.com>
+Date: Thu, 4 Jul 2024 14:23:46 -0700
+Message-ID: <CAFP8O3JUgH-tBJtqO-QS0HmO4mrFBE6Dz+tnrBcse=gw_Q_4vQ@mail.gmail.com>
+Subject: Re: [PATCH] kbuild: Update ld-version.sh for change in LLD version output
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: Masahiro Yamada <masahiroy@kernel.org>, Nicolas Schier <nicolas@fjasle.eu>, 
+	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, linux-kbuild@vger.kernel.org, 
+	llvm@lists.linux.dev, patches@lists.linux.dev, stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-tree:   https://github.com/nbd168/wireless mt76
-head:   d4e88257700387ae5702a89a2abb9ebc723c4bf2
-commit: ef59fda6d20683a7baf243dd68de6b0f3285d480 [63/76] wifi: mt76: mt7925: add link handling in mt7925_txwi_free
-config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20240705/202407050405.0plneRz2-lkp@intel.com/config)
-compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240705/202407050405.0plneRz2-lkp@intel.com/reproduce)
+On Thu, Jul 4, 2024 at 9:19=E2=80=AFAM Nathan Chancellor <nathan@kernel.org=
+> wrote:
+>
+> After [1] in upstream LLVM, ld.lld's version output is slightly
+> different when the cmake configuration option LLVM_APPEND_VC_REV is
+> disabled.
+>
+> Before:
+>
+>   Debian LLD 19.0.0 (compatible with GNU linkers)
+>
+> After:
+>
+>   Debian LLD 19.0.0, compatible with GNU linkers
+>
+> This results in ld-version.sh failing with
+>
+>   scripts/ld-version.sh: 19: arithmetic expression: expecting EOF: "10000=
+ * 19 + 100 * 0 + 0,"
+>
+> because the trailing comma is included in the patch level part of the
+> expression. Remove the trailing comma when assigning the version
+> variable in the LLD block to resolve the error, resulting in the proper
+> output:
+>
+>   LLD 190000
+>
+> With LLVM_APPEND_VC_REV enabled, there is no issue with the new output
+> because it is treated the same as the prior LLVM_APPEND_VC_REV=3DOFF
+> version string was.
+>
+>   ClangBuiltLinux LLD 19.0.0 (https://github.com/llvm/llvm-project a3c5c8=
+3273358a85a4e02f5f76379b1a276e7714), compatible with GNU linkers
+>
+> Cc: stable@vger.kernel.org
+> Fixes: 02aff8592204 ("kbuild: check the minimum linker version in Kconfig=
+")
+> Link: https://github.com/llvm/llvm-project/commit/0f9fbbb63cfcd2069441aa2=
+ebef622c9716f8dbb [1]
+> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+> ---
+>  scripts/ld-version.sh | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
+>
+> diff --git a/scripts/ld-version.sh b/scripts/ld-version.sh
+> index a78b804b680c..f2f425322524 100755
+> --- a/scripts/ld-version.sh
+> +++ b/scripts/ld-version.sh
+> @@ -47,7 +47,9 @@ else
+>         done
+>
+>         if [ "$1" =3D LLD ]; then
+> -               version=3D$2
+> +               # LLD after https://github.com/llvm/llvm-project/commit/0=
+f9fbbb63cfcd2069441aa2ebef622c9716f8dbb
+> +               # may have a trailing comma on the patch version with LLV=
+M_APPEND_VC_REV=3Doff.
+> +               version=3D${2%,}
+>                 min_version=3D$($min_tool_version llvm)
+>                 name=3DLLD
+>                 disp_name=3DLLD
+>
+> ---
+> base-commit: 22a40d14b572deb80c0648557f4bd502d7e83826
+> change-id: 20240704-update-ld-version-for-new-lld-ver-str-b7a4afbbd5f1
+>
+> Best regards,
+> --
+> Nathan Chancellor <nathan@kernel.org>
+>
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202407050405.0plneRz2-lkp@intel.com/
+Thanks for catching the issue.
+If we want to minimize the number of special cases, perhaps we can
+adjust `version=3D${version%-*}` below to
 
-All warnings (new ones prefixed by >>):
+version=3D${version%%[^0-9.]*}
 
->> drivers/net/wireless/mediatek/mt76/mt7925/pci_mac.c:63:37: warning: expression which evaluates to zero treated as a null pointer constant of type 'struct mt76_wcid *' [-Wnon-literal-null-conversion]
-      63 |                 mt7925_txwi_free(dev, txwi, NULL, false, NULL);
-         |                                                   ^~~~~
-   1 warning generated.
+(POSIX shell doc:
+https://pubs.opengroup.org/onlinepubs/9699919799/utilities/V3_chap02.html#:=
+~:text=3DRemove%20Largest)
+
+${version%%[^0-9.]*} is a simpler form than what glibc uses:
+
+  "LLD"*)
+  # Accept LLD 13.0.0 or higher
+    AC_CHECK_PROG_VER(LD, $LD, --version,
+                    [LLD.* \([0-9][0-9]*\.[0-9.]*\)],
+                    [1[3-9].*|[2-9][0-9].*],
 
 
-vim +63 drivers/net/wireless/mediatek/mt76/mt7925/pci_mac.c
 
-c948b5da6bbec7 Deren Wu 2023-09-18  55  
-c948b5da6bbec7 Deren Wu 2023-09-18  56  void mt7925_tx_token_put(struct mt792x_dev *dev)
-c948b5da6bbec7 Deren Wu 2023-09-18  57  {
-c948b5da6bbec7 Deren Wu 2023-09-18  58  	struct mt76_txwi_cache *txwi;
-c948b5da6bbec7 Deren Wu 2023-09-18  59  	int id;
-c948b5da6bbec7 Deren Wu 2023-09-18  60  
-c948b5da6bbec7 Deren Wu 2023-09-18  61  	spin_lock_bh(&dev->mt76.token_lock);
-c948b5da6bbec7 Deren Wu 2023-09-18  62  	idr_for_each_entry(&dev->mt76.token, txwi, id) {
-c948b5da6bbec7 Deren Wu 2023-09-18 @63  		mt7925_txwi_free(dev, txwi, NULL, false, NULL);
-c948b5da6bbec7 Deren Wu 2023-09-18  64  		dev->mt76.token_count--;
-c948b5da6bbec7 Deren Wu 2023-09-18  65  	}
-c948b5da6bbec7 Deren Wu 2023-09-18  66  	spin_unlock_bh(&dev->mt76.token_lock);
-c948b5da6bbec7 Deren Wu 2023-09-18  67  	idr_destroy(&dev->mt76.token);
-c948b5da6bbec7 Deren Wu 2023-09-18  68  }
-c948b5da6bbec7 Deren Wu 2023-09-18  69  
-
-:::::: The code at line 63 was first introduced by commit
-:::::: c948b5da6bbec742b433138e3e3f9537a85af2e5 wifi: mt76: mt7925: add Mediatek Wi-Fi7 driver for mt7925 chips
-
-:::::: TO: Deren Wu <deren.wu@mediatek.com>
-:::::: CC: Felix Fietkau <nbd@nbd.name>
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+--=20
+=E5=AE=8B=E6=96=B9=E7=9D=BF
