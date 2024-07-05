@@ -1,56 +1,56 @@
-Received: from mail-il1-f180.google.com (mail-il1-f180.google.com [209.85.166.180])
+Received: from mail-il1-f172.google.com (mail-il1-f172.google.com [209.85.166.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D34716D33D
-	for <llvm@lists.linux.dev>; Fri,  5 Jul 2024 16:53:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 049C116CD00
+	for <llvm@lists.linux.dev>; Fri,  5 Jul 2024 16:55:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720198394; cv=none; b=IHv+ET9L29zpZHb7P/i9FWMPfwn6guKc4jXdHYT3j7iecJQYtvHHgPvBZK6byWcI0b4C6OBWDG74ztihvJMTYybvVeWNMEk8iDO4TjM6m9wmjzhGikliDyrrUD9WRrLHSXkowCr4OJuHwJOvtqD9OV2yR1CUDImnFdvY7sHqVC0=
+	t=1720198502; cv=none; b=pGTOlB8iGyuDQtdS+qEtLjc5+cbDeLrPgF2/nCU0UMOVpNoX4Uw/iOiEG1JW9Qlp3Xm28MUbqc7O0jZM0ey2yylR4zI93yeD1cxWvEz2UcpJ/CvdVT1hLPvmHkjIqzi+xK3JiT50okTBPTSfwaDzaNGQrn9daNI9RlNe6b6mDR4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720198394; c=relaxed/simple;
-	bh=RncQKJYbfy5H0b3XrKMgUXVHO/dixUXWg65oa+C6FdQ=;
+	s=arc-20240116; t=1720198502; c=relaxed/simple;
+	bh=JbpMAAp767cJMVvvsfmlKOVKEDBe1tv8WSltj4UH6v4=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=DX97OlvthFG14482Lexx7Fej5E9fCW+j+DNBw1r5arsr9loAieEgy0AGxZygOqF6NugatB6Rb3W9RO5ZE3Ea6lIrEQTv2E2456MI5aR/f1HQNvaLbyg4n/9+iLGAfLWrLzASfuyIsXivM7PPiJtf2J7YHSAbHeC/F7swjQVLdaw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=B5l+sgVn; arc=none smtp.client-ip=209.85.166.180
+	 In-Reply-To:Content-Type; b=T8sar6MAm/PxNOfS6nrKFxx5rC3dJW2EHYRmgoTqp+JlqTiP0weolq3xHdZwZtQgtgIhh3qTZJ1iqLOoI9USSe4R1dkKTqlpSW6fmoj8T5MlNFe84dhDIaBI3l9GWXCGLvTqpYtP0aCBy22e8C9C3ZYcnaDCuA8af6tUwo25HBo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=ccgC07of; arc=none smtp.client-ip=209.85.166.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="B5l+sgVn"
-Received: by mail-il1-f180.google.com with SMTP id e9e14a558f8ab-380cdc44559so971765ab.0
-        for <llvm@lists.linux.dev>; Fri, 05 Jul 2024 09:53:12 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="ccgC07of"
+Received: by mail-il1-f172.google.com with SMTP id e9e14a558f8ab-3764dd53b5aso881385ab.2
+        for <llvm@lists.linux.dev>; Fri, 05 Jul 2024 09:55:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1720198391; x=1720803191; darn=lists.linux.dev;
+        d=linuxfoundation.org; s=google; t=1720198500; x=1720803300; darn=lists.linux.dev;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=DLrD/RGWBG3HDOWPiY9D8ry94UHKUAljIHl+MpL5ZcQ=;
-        b=B5l+sgVn+BSSfiQJwSp34OWP0LXmLKel8klIR7OzTmWZlyMOJg/oKGiHDXi/3ujGpN
-         t+XxD0hva0Ej5irUajI+Af/4W08GX4lkD+/7eO+9dWMS2+ZLPrs179vLlhc/yP2HLagX
-         4o4gpxT/V/pj3RKKFJMJ3ntH/qxkg520ycGlg=
+        bh=2+6p2HoNrUHHa/yVChF/+f6ARUdHwWa9m3WGICPV8zw=;
+        b=ccgC07ofqUsCnWNDv7l9qp/uUn0wDclh6BrCZe/gnMEJ0xT39YtGl5pRalV5nyWh2I
+         BgZc4aNFQYVRuExkEENDwh3+FAsni3DZtpQK1kzhxjvwTlq/kiDXxXxfAhSOdjEBVEL5
+         GJP07FgqIyHcEB02VRrxgD0S/2hc9s3eigL2E=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1720198391; x=1720803191;
+        d=1e100.net; s=20230601; t=1720198500; x=1720803300;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=DLrD/RGWBG3HDOWPiY9D8ry94UHKUAljIHl+MpL5ZcQ=;
-        b=UsX9mWzB/JG7eeFK0f75rWHLFy4D/9wmZrYYb9fGWthmvKSgNyJQYGObsEVzS5mvlI
-         aruvmh4b6SfjyAUOAzp82wr3bc+gDlOzFdK3slPph0B+EhooVe9gtQ5ogjYNkH9dQ25o
-         x26VuHM8Q8zmC3EsGNwUXrZ5p+WMievwOF7rk+n2tt/z6QS8D/EEhqIxocYd7XckEZZX
-         y1bzcIZIE1P+8YIr2UmVlB0BY0Gd9hb7u/8uAUVr+0Tojw3pxDHaz3zo5UooD9ZRqw09
-         2gLOojYSrbSvZq8fFdc8aYmClZzPQmwQl2yxvs/QT6iA2ZaqvLMPbWmDHyJvzghsC0A7
-         3W5Q==
-X-Forwarded-Encrypted: i=1; AJvYcCUXsYtf461yKgLBpDpYx7xFXNotEmXg71VLROzuD2cmgq4zZm+DPuZfY6+p3mb94UTLAa8uKVmzdpp9T/3aktGOa9ctWw==
-X-Gm-Message-State: AOJu0YzV/AuXLno9Dcl9Z8xi6JTK0gpCCIrHWorms4RdCw1wtXp2Cx5e
-	7DfH5HVeVP55gRWrLUF8wEGZo1s9RdBMV4Dt5ZADAdF2Pk4q9GEltozSV5bIQRE=
-X-Google-Smtp-Source: AGHT+IFnMHVSBiih/3sZgpAFXUvJl8b4JDQIC1sGK7IOw0ZIUebUnheLQu/ZKBtQd2s/VP+yFXOJbA==
-X-Received: by 2002:a05:6602:6398:b0:7f3:9dd3:15b2 with SMTP id ca18e2360f4ac-7f66db3caeemr477668639f.0.1720198391430;
-        Fri, 05 Jul 2024 09:53:11 -0700 (PDT)
+        bh=2+6p2HoNrUHHa/yVChF/+f6ARUdHwWa9m3WGICPV8zw=;
+        b=gOV8nd0ztEPmosjBm8NETY0qaS62SkGnd48kllCnUTpCN+BXZ+dI752FV+GqmbwqJW
+         4WBErTCqvED7/6vsJmxA9POBxydaKxWD32vJsil8GwCTH++gj6254rc3sk5qDK53kGw6
+         l/lL8jAvNp6m1+av+BzyB0vIxmiXqKsfSk0gS/Spz8x11CLdHonqQMsYNCbL9vU9FDoA
+         1EsQMfPn9AYJKrDMxRY8hXxX94zPWzuKuJhfSeh5zucShTmZZg+hm1YgczXgyVzuRQjE
+         MD3zVIW5MWVUhmBVb2NkXAwUOUJtom3gO9mVXzypJ7CaReOeVyeVTjZzzitYTLp8MxBc
+         SmTg==
+X-Forwarded-Encrypted: i=1; AJvYcCXp33EgGAi2ZQsoS1EE8rLFXbajDNixIbTDbVv9znxXJxDYxtJcmf1v41wQDra4eR/MFM7Gypf9DhAZvzwKRuU/gp+7Pw==
+X-Gm-Message-State: AOJu0YxQE6LpozbnJDK+pIh0DtSiAgACrIEG1AC4C+6IlHQY2FSkeH5q
+	J2sjU4zK9bryz838Aiilf3szLa+0ukRzPLplRLRY+JHZtTCy9qOTRWPv3wHOcjU=
+X-Google-Smtp-Source: AGHT+IHY3in/e9Yxt3K+EtGGW2Ojce03GKiDSgxyEYqs6zBH6DryDUXwKCb6gpUav66FAfp/eAhNgg==
+X-Received: by 2002:a05:6602:6211:b0:7f6:5178:8607 with SMTP id ca18e2360f4ac-7f66df05100mr601855839f.2.1720198500122;
+        Fri, 05 Jul 2024 09:55:00 -0700 (PDT)
 Received: from [192.168.1.128] ([38.175.170.29])
-        by smtp.gmail.com with ESMTPSA id 8926c6da1cb9f-4bb73fa17cdsm4449380173.119.2024.07.05.09.53.10
+        by smtp.gmail.com with ESMTPSA id 8926c6da1cb9f-4bb73f910fdsm4521403173.91.2024.07.05.09.54.59
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 05 Jul 2024 09:53:11 -0700 (PDT)
-Message-ID: <5a3a3c0b-2c72-45bf-91c5-0d5808e3bd14@linuxfoundation.org>
-Date: Fri, 5 Jul 2024 10:53:10 -0600
+        Fri, 05 Jul 2024 09:54:59 -0700 (PDT)
+Message-ID: <9262c7ff-41e6-4df2-a335-e81897381ed0@linuxfoundation.org>
+Date: Fri, 5 Jul 2024 10:54:59 -0600
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -58,42 +58,67 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3] selftests/timers: remove unused irqcount variable
-To: John Stultz <jstultz@google.com>, John Hubbard <jhubbard@nvidia.com>
-Cc: Shuah Khan <shuah@kernel.org>, Thomas Gleixner <tglx@linutronix.de>,
- Stephen Boyd <sboyd@kernel.org>,
- Anna-Maria Behnsen <anna-maria@linutronix.de>,
- Frederic Weisbecker <frederic@kernel.org>,
+Subject: Re: [PATCH v4 0/3] selftests/vDSO: fix clang build errors, and
+ Makefile cleanup
+To: John Hubbard <jhubbard@nvidia.com>, Shuah Khan <shuah@kernel.org>
+Cc: "Jason A . Donenfeld" <Jason@zx2c4.com>,
+ Thomas Gleixner <tglx@linutronix.de>, Andy Lutomirski <luto@kernel.org>,
+ Mark Brown <broonie@kernel.org>,
+ Vincenzo Frascino <vincenzo.frascino@arm.com>,
+ Colin Ian King <colin.i.king@gmail.com>,
  Valentin Obst <kernel@valentinobst.de>, linux-kselftest@vger.kernel.org,
  LKML <linux-kernel@vger.kernel.org>, llvm@lists.linux.dev,
  Shuah Khan <skhan@linuxfoundation.org>
-References: <20240704024202.84726-1-jhubbard@nvidia.com>
- <CANDhNCpEvPL+b1mve-YJp4+yzQU-BAaAQLr1-G6Br7i83zaQaw@mail.gmail.com>
+References: <20240704023324.83564-1-jhubbard@nvidia.com>
 Content-Language: en-US
 From: Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <CANDhNCpEvPL+b1mve-YJp4+yzQU-BAaAQLr1-G6Br7i83zaQaw@mail.gmail.com>
+In-Reply-To: <20240704023324.83564-1-jhubbard@nvidia.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 
-On 7/3/24 21:11, John Stultz wrote:
-> On Wed, Jul 3, 2024 at 7:42 PM John Hubbard <jhubbard@nvidia.com> wrote:
->>
->> When building with clang, via:
->>
->>      make LLVM=1 -C tools/testing/selftest
->>
->> ...clang warns about an unused irqcount variable. clang is correct: the
->> variable is incremented and then ignored.
->>
->> Fix this by deleting the irqcount variable.
->>
->> Signed-off-by: John Hubbard <jhubbard@nvidia.com>
+On 7/3/24 20:33, John Hubbard wrote:
+> Hi,
 > 
-> Acked-by: John Stultz <jstultz@google.com>
+> This is basically a resend, with a rebase onto today's latest Linux
+> main, in order to show that the patches are still relevant and correct.
+> 
+> Changes since v3:
+> 
+> 1. Rebased onto Linux 6.10-rc6+.
+> 
+> Cover letter for v3:
+> 
+> Jason A. Donenfeld, I've added you because I ended up looking through
+> your latest "implement getrandom() in vDSO" series [1], which also
+> touches this Makefile, so just a heads up about upcoming (minor) merge
+> conflicts.
+> 
+> Changes since v2:
+> 
+> 1. Added two patches, both of which apply solely to the Makefile.
+> These provide a smaller, cleaner, and more accurate Makefile.
+> 
+> 2. Added Reviewed-by and Tested-by tags for the original patch, which
+> fixes all of the clang errors and warnings for this selftest.
+> 
+> 3. Removed an obsolete blurb from the commit description of the original
+> patch, now that Valentin Obst LLVM build fix has been merged.
+> 
+> John Hubbard (3):
+>    selftests/vDSO: fix clang build errors and warnings
+>    selftests/mm: remove partially duplicated "all:" target in Makefile
+>    selftests/vDSO: remove duplicate compiler invocations from Makefile
+> 
+>   tools/testing/selftests/vDSO/Makefile         | 29 ++++++++-----------
+>   tools/testing/selftests/vDSO/parse_vdso.c     | 16 ++++++----
+>   .../selftests/vDSO/vdso_standalone_test_x86.c | 18 ++++++++++--
+>   3 files changed, 39 insertions(+), 24 deletions(-)
+> 
+> 
+> base-commit: 8a9c6c40432e265600232b864f97d7c675e8be52
 
-Thank you all.
-
-Applied to linux_kselftest next for Linux 6.11-rc1.
+Applied all 3 patches to linux_kselftest next for Linux 6.11-rc1.
 
 thanks,
 -- Shuah
+
