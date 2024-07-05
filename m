@@ -1,163 +1,112 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net [217.70.183.197])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2DB8C146D41;
-	Fri,  5 Jul 2024 09:34:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5EDEF13A252;
+	Fri,  5 Jul 2024 10:03:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.197
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720172046; cv=none; b=n4IcYYplVynF6mxbe47Oh6XyaccJQMOCLv4uhR/j4EXAxxo1QRSxrCvV6mNtRWCKs8zuoHSjecgROD0yoc+5KDNAJHJD6FkhHvSGy9tztDI2b5IGuUN4PIe52kvRY4/8g5x20TsRiN4NgEx8Aa3pwVHBNdpp1sOgt0o2tWSuIfg=
+	t=1720173840; cv=none; b=q13Alp1OODoTnHnsgUs90P6IOYWGnPEUY/Kp1ANtCe77Gc6y0enVUH4t9K5qG43DucJtwem4nY80e3PJSoBHSH5gPeLVPDcWZs1AKWLeGVR5Gmhmu+s5aKTcl/lcE86Ttaexecv2Jey+2QIpD+qtga7al++qbT0fOekjL9rsRlE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720172046; c=relaxed/simple;
-	bh=YX5tZVp00PFMDWlfSQ2Dl8sMbsg4a8I88ejzlI8Zz7w=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=pPSlm0/Cm3uhL/Lsj5dLkEn9FJMxV+LJih0Cpbi/vFmDr5gCxcjHoi3cf5LQnYSqmTOQm7tsr/P3nHHUUwYePZ3k8WSQF1lQkStkX5jZPLv1+QfMabUU0QCv0AGYJ0vDUUGKwjUsKVomHN87YrET08KaHW9lBuHg9Z4Ej8tEzk8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=kE1H1XKU; arc=none smtp.client-ip=192.198.163.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1720173840; c=relaxed/simple;
+	bh=WgDu9ZpACAJvm7Pa4gqk+rNT3auetxE4+ckzl7sJ1ig=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:To:From:Subject:
+	 References:In-Reply-To; b=ozOyeiiFL78nCEZNQUXlBGd2JFuBODbkB7PkvBJVSpeDQkxpcjqgIvRk39NaUlsKebEHrYOHAzX+vg8qqWsteLmAjYivQRc6zV/YP/zv6xK9E1u1CsXrb20ddPnRKDTqLp0IGc7n/jIDbGZoJbUm6+82NzlUbmyv7vrWSVFhxLc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=TVq8H7Lj; arc=none smtp.client-ip=217.70.183.197
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="kE1H1XKU"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1720172044; x=1751708044;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=YX5tZVp00PFMDWlfSQ2Dl8sMbsg4a8I88ejzlI8Zz7w=;
-  b=kE1H1XKUa/7rjkcFytCCXFQBh859ZMSyViYNpELzYcV7zuQU40G77V1s
-   xlUi4f+6Ib2pqI2Mq0bbcFCXhy/G1AfQvkZ9OR2Z1rsw+reJvkLNefqxY
-   0NxVMVi2jBg3UdINczXVNRtjZgbVoyIUCOs0lJeF6PfccnY8eOKnl24ft
-   alB57ZdoEfFYrZoPVFsCR1P5CntD5d+ZPZNTS44qf6ofUScyC4B22sWSV
-   BHbPI97PHm3OlXZeNI4MQifKKYoeyoqsgQDxRoYBBJ4MkDiNydCNFgKoi
-   96Kw1WO8Wh2DursGL7QqgBizZnm8SvreA1v58jjA1VzxcQ6drUIzryNTr
-   Q==;
-X-CSE-ConnectionGUID: vcNKnmdQTDWoYvPQRNW5Xw==
-X-CSE-MsgGUID: bpYJ6raMQi6mBP6RBu24fQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11123"; a="17105706"
-X-IronPort-AV: E=Sophos;i="6.09,184,1716274800"; 
-   d="scan'208";a="17105706"
-Received: from fmviesa003.fm.intel.com ([10.60.135.143])
-  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jul 2024 02:34:03 -0700
-X-CSE-ConnectionGUID: ad/sm7S6RGGDsNwwZWskHw==
-X-CSE-MsgGUID: R/bg8Qo8RtO7OaOazZugPA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.09,184,1716274800"; 
-   d="scan'208";a="51161590"
-Received: from lkp-server01.sh.intel.com (HELO 68891e0c336b) ([10.239.97.150])
-  by fmviesa003.fm.intel.com with ESMTP; 05 Jul 2024 02:34:02 -0700
-Received: from kbuild by 68891e0c336b with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1sPfKJ-000SC2-2z;
-	Fri, 05 Jul 2024 09:33:59 +0000
-Date: Fri, 5 Jul 2024 17:32:46 +0800
-From: kernel test robot <lkp@intel.com>
-To: Nicolas Pitre <npitre@baylibre.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Linux Memory Management List <linux-mm@kvack.org>
-Subject: [akpm-mm:mm-nonmm-unstable 38/39] lib/math/div64.c:211:2: error:
- "unknown endianness"
-Message-ID: <202407051719.g3Vhv3Nn-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="TVq8H7Lj"
+Received: by mail.gandi.net (Postfix) with ESMTPSA id BDA511C0012;
+	Fri,  5 Jul 2024 10:03:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+	t=1720173836;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=63549/JWR8ZN81iPpBOmB7VHeCd6i6W3nkUlZJSwKPA=;
+	b=TVq8H7Ljl3Cxhy3s5+zVlF60lJwrKbloXTFbbA1uBzXwUN4L9IFxGZn0Ppmd7mjAhknM+t
+	dH28EleXtEiNik7Uu/HeIMf50fGEPNEHmYegErsdPcqWQ8WIr3Ltcoi9ddSmvN1MFjvHej
+	Btbt/MHZBMveLeIv+jeblBjBMafXI4Cu8gZYUXeQk7SgWekwoRykFGXrmM9cWokCDbQS8M
+	rsW0UKLi2KY8RY3GeouyXr4KxL6EiaaAtlNrMX/lr5vXEL53BXRtB3ADULbpULwT4QTDEA
+	gq98IZRL1BGKxBdYhfcf9uW8g17wE/ONuaYHUDFYHruhwheM2i0T/G3STUP24A==
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Fri, 05 Jul 2024 12:03:55 +0200
+Message-Id: <D2HIQELPOBJD.1HJZS16QJSSZJ@bootlin.com>
+Cc: <llvm@lists.linux.dev>, <oe-kbuild-all@lists.linux.dev>,
+ <linux-clk@vger.kernel.org>, <devicetree@vger.kernel.org>,
+ <linux-kernel@vger.kernel.org>, "Vladimir Kondratiev"
+ <vladimir.kondratiev@mobileye.com>, =?utf-8?q?Gr=C3=A9gory_Clement?=
+ <gregory.clement@bootlin.com>, "Thomas Petazzoni"
+ <thomas.petazzoni@bootlin.com>, "Tawfik Bayouk"
+ <tawfik.bayouk@mobileye.com>
+To: "kernel test robot" <lkp@intel.com>, "Michael Turquette"
+ <mturquette@baylibre.com>, "Stephen Boyd" <sboyd@kernel.org>, "Rob Herring"
+ <robh@kernel.org>, "Krzysztof Kozlowski" <krzk@kernel.org>, "Conor Dooley"
+ <conor+dt@kernel.org>
+From: =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>
+Subject: Re: [PATCH v2 4/4] clk: eyeq: add driver
+X-Mailer: aerc 0.17.0-0-g6ea74eb30457
+References: <20240703-mbly-clk-v2-4-fe8c6199a579@bootlin.com>
+ <202407050921.S41aCBdD-lkp@intel.com>
+In-Reply-To: <202407050921.S41aCBdD-lkp@intel.com>
+X-GND-Sasl: theo.lebrun@bootlin.com
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-nonmm-unstable
-head:   6e608255168707beff8474615c2da433ed0dbd63
-commit: 0b7a2b15a66f84b363058df56e392793b2fea2b2 [38/39] mul_u64_u64_div_u64: make it precise always
-config: um-allnoconfig (https://download.01.org/0day-ci/archive/20240705/202407051719.g3Vhv3Nn-lkp@intel.com/config)
-compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240705/202407051719.g3Vhv3Nn-lkp@intel.com/reproduce)
+Hello,
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202407051719.g3Vhv3Nn-lkp@intel.com/
+*Grasp*, I forgot addressing this topic.
 
-All errors (new ones prefixed by >>):
+On Fri Jul 5, 2024 at 3:50 AM CEST, kernel test robot wrote:
+> kernel test robot noticed the following build errors:
 
->> lib/math/div64.c:211:2: error: "unknown endianness"
-     211 | #error "unknown endianness"
-         |  ^
->> lib/math/div64.c:219:15: error: no member named 'l' in 'union (unnamed at lib/math/div64.c:201:2)'
-     219 |         X.v = (u64)A.l * B.l;
-         |                    ~ ^
-   lib/math/div64.c:219:21: error: no member named 'l' in 'union (unnamed at lib/math/div64.c:201:2)'
-     219 |         X.v = (u64)A.l * B.l;
-         |                          ~ ^
-   lib/math/div64.c:220:15: error: no member named 'l' in 'union (unnamed at lib/math/div64.c:201:2)'
-     220 |         Y.v = (u64)A.l * B.h + X.h;
-         |                    ~ ^
->> lib/math/div64.c:220:21: error: no member named 'h' in 'union (unnamed at lib/math/div64.c:201:2)'
-     220 |         Y.v = (u64)A.l * B.h + X.h;
-         |                          ~ ^
-   lib/math/div64.c:220:27: error: no member named 'h' in 'union (unnamed at lib/math/div64.c:201:2)'
-     220 |         Y.v = (u64)A.l * B.h + X.h;
-         |                                ~ ^
-   lib/math/div64.c:221:15: error: no member named 'h' in 'union (unnamed at lib/math/div64.c:201:2)'
-     221 |         Z.v = (u64)A.h * B.h + Y.h;
-         |                    ~ ^
-   lib/math/div64.c:221:21: error: no member named 'h' in 'union (unnamed at lib/math/div64.c:201:2)'
-     221 |         Z.v = (u64)A.h * B.h + Y.h;
-         |                          ~ ^
-   lib/math/div64.c:221:27: error: no member named 'h' in 'union (unnamed at lib/math/div64.c:201:2)'
-     221 |         Z.v = (u64)A.h * B.h + Y.h;
-         |                                ~ ^
-   lib/math/div64.c:222:15: error: no member named 'h' in 'union (unnamed at lib/math/div64.c:201:2)'
-     222 |         Y.v = (u64)A.h * B.l + Y.l;
-         |                    ~ ^
-   lib/math/div64.c:222:21: error: no member named 'l' in 'union (unnamed at lib/math/div64.c:201:2)'
-     222 |         Y.v = (u64)A.h * B.l + Y.l;
-         |                          ~ ^
-   lib/math/div64.c:222:27: error: no member named 'l' in 'union (unnamed at lib/math/div64.c:201:2)'
-     222 |         Y.v = (u64)A.h * B.l + Y.l;
-         |                                ~ ^
-   lib/math/div64.c:223:4: error: no member named 'h' in 'union (unnamed at lib/math/div64.c:201:2)'
-     223 |         X.h = Y.l;
-         |         ~ ^
-   lib/math/div64.c:223:10: error: no member named 'l' in 'union (unnamed at lib/math/div64.c:201:2)'
-     223 |         X.h = Y.l;
-         |               ~ ^
-   lib/math/div64.c:224:11: error: no member named 'h' in 'union (unnamed at lib/math/div64.c:201:2)'
-     224 |         Z.v += Y.h;
-         |                ~ ^
-   15 errors generated.
+[...]
 
+> All errors (new ones prefixed by >>):
+>
+>    In file included from drivers/clk/clk-eyeq.c:30:
+>    In file included from include/linux/io.h:14:
+>    In file included from arch/hexagon/include/asm/io.h:328:
+>    include/asm-generic/io.h:548:31: warning: performing pointer
+>        arithmetic on a null pointer has undefined behavior [-Wnull-pointe=
+r-arithmetic]
+>      548 |         val =3D __raw_readb(PCI_IOBASE + addr);
+>          |                           ~~~~~~~~~~ ^
+[...]
 
-vim +211 lib/math/div64.c
+Ignoring all the warnings relative to <linux/io.h> as they appear on all
+objects using this config, nothing specific to clk-eyeq.
 
-   199	
-   200		/* perform a 64x64=128 bits multiplication manually */
-   201		union {
-   202			u64 v;
-   203			struct {
-   204	#if defined(CONFIG_CPU_LITTLE_ENDIAN)
-   205				u32 l;
-   206				u32 h;
-   207	#elif defined(CONFIG_CPU_BIG_ENDIAN)
-   208				u32 h;
-   209				u32 l;
-   210	#else
- > 211	#error "unknown endianness"
-   212	#endif
-   213			};
-   214		} A, B, X, Y, Z;
-   215	
-   216		A.v = a;
-   217		B.v = b;
-   218	
- > 219		X.v = (u64)A.l * B.l;
- > 220		Y.v = (u64)A.l * B.h + X.h;
-   221		Z.v = (u64)A.h * B.h + Y.h;
-   222		Y.v = (u64)A.h * B.l + Y.l;
-   223		X.h = Y.l;
-   224		Z.v += Y.h;
-   225	
-   226		u64 n_lo = X.v, n_hi = Z.v;
-   227	
+> >> drivers/clk/clk-eyeq.c:264:9: error: call to undeclared function
+> >>     'readq'; ISO C99 and later do not support implicit function
+> >>     declarations [-Wimplicit-function-declaration]
+>      264 |                 val =3D readq(priv->base + pll->reg64);
+>          |                       ^
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Options are:
+
+ - #include <linux/io-64-nonatomic-lo-hi.h> or
+            <linux/io-64-nonatomic-hi-lo.h> or
+
+ - in Kconfig, add "depends on 64BIT # for readq()"
+
+I'm leaning towards the Kconfig option. Build testing this driver on
+32bit platforms makes no sense, this is a SoC clk platform driver used
+on 64bit SoCs. Including a compat layer is a more complex solution.
+
+I'll wait a bit before sending next revision.
+You can ping if you want it straight away of course.
+
+Thanks,
+
+--
+Th=C3=A9o Lebrun, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
+
