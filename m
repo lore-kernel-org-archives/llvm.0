@@ -1,120 +1,106 @@
-Received: from mail-il1-f180.google.com (mail-il1-f180.google.com [209.85.166.180])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 37A0E6125
-	for <llvm@lists.linux.dev>; Fri,  5 Jul 2024 18:10:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 240001B963;
+	Fri,  5 Jul 2024 18:14:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720203023; cv=none; b=L87msMaMCNPcNxM32zTbmL6+bT1kPPD0vS8oiLBVcT+ODcSkumauT4sP+TZHdW4D2drkqA9WqLl3FOJ8T7fdK6Zoix/ujZU58Erb0wI4CFfu1/7HdyCJbK4cAGvDlqIWsOuEt3VGToGVaF0JuZTTNou4GRbinu015Vdj1inA3Pc=
+	t=1720203300; cv=none; b=Ksiq8vHS7+7SxDplCx9ydexmpK/qNRy+/KtHHt7bYm4kvkCWFJw5tCg/f4yIzgnzq0CWgWOej5Q4C6Jp9Re6sEMSG0mQxhe9AfHF7QCOQqw/CWc711Jo0n2EVqi19m84vDOvvNOr2q+Mxj2JdK/mFNuCKyz1aKYowyGEBT/GW6Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720203023; c=relaxed/simple;
-	bh=7dKVWzFhqcdwTAHOJrZFlh1/32PUtLe6VOINCqyYYYQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=glEXHaJ/hGz8OpJjZ8Pm0jkymCJ//4yRrbkOFzNz8j004EY0g9zb7yraRW8XAaeJX1JUIeywmrdMFziai8b99RxcGkcgnBj06UJ6u8jSoP2MYQ012SEyq4BPAucpAUaVUV6g8+h+gEHHzz2lfGgcxfADntaYZ0HDBpxYjkmZQPA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=BbgMPBWj; arc=none smtp.client-ip=209.85.166.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
+	s=arc-20240116; t=1720203300; c=relaxed/simple;
+	bh=1yUskJF5r77KmHf7/IA03V7zymkcDKZmE6W2B18ANvE=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=Hg9MkQFEALYz1TzjODzjPIRbSPZAYffq0gQYVOTRHb0/Re+HEDdj2YoelEafl1o6tnef7i8WtDE46Sd17H+Wc/aYE+aPw5dENubzD4m9LdT4U2pzau7aVu4xq54BXJAU9sg/ipKTum9/Iu/2kSKgrNILUaVHGEs5lVwhjEGg8M8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=RvBtvluy; arc=none smtp.client-ip=192.198.163.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="BbgMPBWj"
-Received: by mail-il1-f180.google.com with SMTP id e9e14a558f8ab-380d8ba4548so1247115ab.1
-        for <llvm@lists.linux.dev>; Fri, 05 Jul 2024 11:10:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1720203021; x=1720807821; darn=lists.linux.dev;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=gfT5A5m5TRLHFfKNa8cuOS8hGTJVflloANcGwiwozfY=;
-        b=BbgMPBWjO+I0IfHgf2F6HTo11nZjAnd5pNkhN5oPxRoNcojydTdPz15dXUfluQAVOe
-         ojz3ALNistjV2Zk5mfCJNTjDPSDIpm/dw511aZb/VbjEzmhd0mGvtbccAQu89a8MA1Ag
-         /ZCaz6CwAvXANL8U9cl5K0gb2Fg4EKxuhdP/E=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1720203021; x=1720807821;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=gfT5A5m5TRLHFfKNa8cuOS8hGTJVflloANcGwiwozfY=;
-        b=ZVOhS7aPhpVEaIo7cnsH3CDPvP+0bIsAdzV9PJDUArbe/Efinb8OPPjpQrI21cShBe
-         DAty0DYxRporBmtPdDQjLY2t4sTS8C8nc43srcURPbUo3y/oD3/g8za/NwN86S8cFoGO
-         peCbYy1GdED80z/rpgnYhEAcExl/f42c0a2SAiyghS91vVpfjzF73Xk27w6cxWYqcYKq
-         Dy/nvq0Fkbc8vIZhv3kxJV4D7LwuVACKeEQWhuIH4m/okCRb2hwqb/yne3ytgNOwS2Wa
-         7OEzjW5CQEokv6bFcf9FOwhU1PCMkUmTNQtRPkOL6NFnGguCdocWJFdtMsyTcQ7Pfi7n
-         nuAw==
-X-Forwarded-Encrypted: i=1; AJvYcCVyj5d8xDf7NBGolP+69CMXcugbSTjCJn0l9SD9Pi98knwdhBCFp2LaJwoj1GJETCbyB5UgtLipSrFl/D/ePR4H10nozw==
-X-Gm-Message-State: AOJu0Yzlq3bpi2kGiPMtKZjhy4pT+5yWsrWBnU/qTIrIP8pOOzYPTH8x
-	Aw04dp5a9lhfSjpFTMyHFTNVk0qyrsELrWrghIYWLVMRRgXlkhv8hGwHn+CrDBw=
-X-Google-Smtp-Source: AGHT+IEmjNDu/+i49etUyMQh25KpJihMcsAHI7NWFylJpgwGEGQ9bSlSjqPT+ZyYcP/4mAxoJLiM4Q==
-X-Received: by 2002:a05:6e02:13a9:b0:381:c5f0:20d5 with SMTP id e9e14a558f8ab-383953e23c4mr71729995ab.0.1720203021379;
-        Fri, 05 Jul 2024 11:10:21 -0700 (PDT)
-Received: from [192.168.1.128] ([38.175.170.29])
-        by smtp.gmail.com with ESMTPSA id e9e14a558f8ab-37ad2f41329sm38763435ab.50.2024.07.05.11.10.20
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 05 Jul 2024 11:10:20 -0700 (PDT)
-Message-ID: <38852b52-7ea5-431a-b946-b0dc6bb54e7d@linuxfoundation.org>
-Date: Fri, 5 Jul 2024 12:10:20 -0600
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="RvBtvluy"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1720203298; x=1751739298;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=1yUskJF5r77KmHf7/IA03V7zymkcDKZmE6W2B18ANvE=;
+  b=RvBtvluyzuve+3ny+742X9IgqJCQeg/SG2I8XRIjcD1uguVuKKQavMJy
+   CySMsBcpHM54jfwEmAd6cTcSLRoCovcz11DSs0zm46JFb2uaUQ5X80XfS
+   WNGQrqhHUKUDApXt16Re4yPepH+oP7/5WniF7lIbv6EROoQBrjjY5aEMe
+   IZpxVBeDBJJIXMbYhk0AZqvOFoP56t8NQzpNen3ngGstiHmQbPCG/Kkgo
+   nu/dRatKdETWuuikucnqsL3Ojh3ArF9jcEx7CsQmjahlBotWyHM6iPkt+
+   IlmeJ5hDH73TirD2RtLpdDo1RaQ6iqg9DKFCIoP+VkRiYIVcDiugq6JUq
+   A==;
+X-CSE-ConnectionGUID: vnljpCVlTnuvetvS2YZejQ==
+X-CSE-MsgGUID: CAN6RIAEQL6eH36H62GxNQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11123"; a="12410706"
+X-IronPort-AV: E=Sophos;i="6.09,185,1716274800"; 
+   d="scan'208";a="12410706"
+Received: from fmviesa005.fm.intel.com ([10.60.135.145])
+  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jul 2024 11:14:56 -0700
+X-CSE-ConnectionGUID: GJYPcKArQhiKKzOfZ7O6lg==
+X-CSE-MsgGUID: Gp+QWFnRRYaVbHyDL/6kHg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.09,185,1716274800"; 
+   d="scan'208";a="51359316"
+Received: from lkp-server01.sh.intel.com (HELO 68891e0c336b) ([10.239.97.150])
+  by fmviesa005.fm.intel.com with ESMTP; 05 Jul 2024 11:14:56 -0700
+Received: from kbuild by 68891e0c336b with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1sPnSP-000Shc-2Y;
+	Fri, 05 Jul 2024 18:14:53 +0000
+Date: Sat, 6 Jul 2024 02:14:50 +0800
+From: kernel test robot <lkp@intel.com>
+To: Peter Zijlstra <peterz@infradead.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [peterz-queue:perf/uprobes 9/11] kernel/rcu/srcutree.c:724:1: error:
+ expected identifier or '('
+Message-ID: <202407060220.GLzM9U1O-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 2/3] selftests/mm: remove partially duplicated "all:"
- target in Makefile
-To: John Hubbard <jhubbard@nvidia.com>, Shuah Khan <shuah@kernel.org>
-Cc: "Jason A . Donenfeld" <Jason@zx2c4.com>,
- Thomas Gleixner <tglx@linutronix.de>, Andy Lutomirski <luto@kernel.org>,
- Mark Brown <broonie@kernel.org>,
- Vincenzo Frascino <vincenzo.frascino@arm.com>,
- Colin Ian King <colin.i.king@gmail.com>,
- Valentin Obst <kernel@valentinobst.de>, linux-kselftest@vger.kernel.org,
- LKML <linux-kernel@vger.kernel.org>, llvm@lists.linux.dev,
- Shuah Khan <skhan@linuxfoundation.org>
-References: <20240704023324.83564-1-jhubbard@nvidia.com>
- <20240704023324.83564-3-jhubbard@nvidia.com>
- <9b59fc84-2d78-4304-9f39-3a495e438af8@linuxfoundation.org>
- <da35faba-b6c7-42bd-86a1-57328ebc9ad8@nvidia.com>
-Content-Language: en-US
-From: Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <da35faba-b6c7-42bd-86a1-57328ebc9ad8@nvidia.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On 7/5/24 11:58, John Hubbard wrote:
-> On 7/5/24 10:53, Shuah Khan wrote:
->> On 7/3/24 20:33, John Hubbard wrote:
->>> There were a couple of errors here:
->>>
->>> 1. TEST_GEN_PROGS was incorrectly prepending $(OUTPUT) to each program
->>> to be built. However, lib.mk already does that because it assumes "bare"
->>> program names are passed in, so this ended up creating
->>> $(OUTPUT)/$(OUTPUT)/file.c, which of course won't work as intended.
->>>
->>> 2. lib.mk was included before TEST_GEN_PROGS was set, which led to
->>> lib.mk's "all:" target not seeing anything to rebuild.
->>>
->>> So nothing worked, which caused the author to force things by creating
->>> an "all:" target locally--while still including ../lib.mk.
->>>
->>> Fix all of this by including ../lib.mk at the right place, and removing
->>> the $(OUTPUT) prefix to the programs to be built, and removing the
->>> duplicate "all:" target.
->>>
->>> Signed-off-by: John Hubbard <jhubbard@nvidia.com>
->>
->> Why does the summary say mm ?
-> 
-> This is a mistake. I was also preparing some mm work at the time,
-> and typed the wrong thing.
-> 
-> Could you fix it up to s/mm/vDSO/ for me? Or if it's easier, I can send
-> an updated patch, let me know.
-> 
-> 
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git perf/uprobes
+head:   b9867ee7d141bc8791e501495bafdfdb97283196
+commit: 6b39b0e14b07a435cba021ae102a95ded6e6cab1 [9/11] srcu: Add __srcu_clone_read_lock()
+config: s390-allnoconfig (https://download.01.org/0day-ci/archive/20240706/202407060220.GLzM9U1O-lkp@intel.com/config)
+compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project a0c6b8aef853eedaa0980f07c0a502a5a8a9740e)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240706/202407060220.GLzM9U1O-lkp@intel.com/reproduce)
 
-Send me updated patch - it will be easier that way. I saw the note
-about getting these into 6.10 - As soon as you send the patch I will
-apply them and send them for 6.10
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202407060220.GLzM9U1O-lkp@intel.com/
 
-thanks,
--- Shuah
+All errors (new ones prefixed by >>):
 
+   In file included from kernel/rcu/srcutree.c:26:
+   In file included from include/linux/module.h:19:
+   In file included from include/linux/elf.h:6:
+   In file included from arch/s390/include/asm/elf.h:173:
+   In file included from arch/s390/include/asm/mmu_context.h:11:
+   In file included from arch/s390/include/asm/pgalloc.h:18:
+   In file included from include/linux/mm.h:2258:
+   include/linux/vmstat.h:514:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     514 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+>> kernel/rcu/srcutree.c:724:1: error: expected identifier or '('
+     724 | {
+         | ^
+   1 warning and 1 error generated.
+
+
+vim +724 kernel/rcu/srcutree.c
+
+   722	
+   723	void __srcu_clone_read_lock(struct srcu_struct *ssp, int idx);
+ > 724	{
+   725		this_cpu_inc(ssp->sda->srcu_lock_count[idx].counter);
+   726	}
+   727	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
