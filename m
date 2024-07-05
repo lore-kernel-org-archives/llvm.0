@@ -1,95 +1,101 @@
-Received: from mail-il1-f177.google.com (mail-il1-f177.google.com [209.85.166.177])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 043428175B
-	for <llvm@lists.linux.dev>; Fri,  5 Jul 2024 20:16:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C702979F3
+	for <llvm@lists.linux.dev>; Fri,  5 Jul 2024 21:02:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720210603; cv=none; b=Geyc8S2+cF+Hv2uMOLcjXJ7NpUGUZiCsIvheXkQMM/5DsJqBhm0bXk5AIa0UIEkiDGRNQMyS8eTFioJNnTrVcIOR4LU/bqR8MxVF6+CqANoaS53Q5Wcm9fJIVuCyk9Z7ZzdSII9Goz1GfP8tnDqTDqr4uQEMAgFIlGCSxRVmLCk=
+	t=1720213331; cv=none; b=qDYfSKQP+xAHYT4810B0/8ApUcfFmnmKfYxAFhJ/GTGZTQiknf1XlLJi8oXClSg/FfzSd5rPQbAFVWK5pq1+h34F+CXs+49tdUMJK7Hy8WsyjMC3qnDDWQv/WX74KkwSuTUaOUc9TApMTHa3nwCOfjzai8vG8QZUa1DYf6liVJU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720210603; c=relaxed/simple;
-	bh=T0Yezoe/XJwes714mKbKM0egw+ZynvAnNMtDEZXPuzs=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=K8ckmGWSO38Vr/LiIlLc4pFSivPRv/Z9dfkHXTDQYWPJsF8hRG0aePC1aiLiCw2wP2dfAcmVUbw89+GTmxFoAcfmkiZTKKoxmJ55dkz61H38F8iWg0MWeaxJFpWXEoqoiqKQWk0ZYtmzw2cRgweJPPAWJoyQeoZznQd+gpb8H0A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=JJ03O6Kv; arc=none smtp.client-ip=209.85.166.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
+	s=arc-20240116; t=1720213331; c=relaxed/simple;
+	bh=9S0YoEp1jkGbkEJXhdjBrqCrFMT5/HywUQm1L/46Ykw=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=GHip/zLS0Ixabn3QzGxit3dEnKoY7FDTGf54VgF2zF+do1aV3O0dQYYYyqxmaBpwNK0w1fgEJOCufrwd4OZaCyuhNWlJHS8SCxxkU9T86AqTVoc5WLFWDufK6oO9gU30p1g6C/utpKeFJRT/qdjvQUZ98DJo5ppbv0SWXuXYEHg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=JrS1oKcK; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="JJ03O6Kv"
-Received: by mail-il1-f177.google.com with SMTP id e9e14a558f8ab-3748ec0cae2so1326585ab.3
-        for <llvm@lists.linux.dev>; Fri, 05 Jul 2024 13:16:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1720210600; x=1720815400; darn=lists.linux.dev;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=hICKxoDUywMdQbtGCI28pRH9+4hLvJaqbu+wfwSzwBU=;
-        b=JJ03O6KvV80Rc+O4QrQ3+3LHUU0I4DRzkQcbo8RhpEQGaTqHPtykResEnidvtt/3Ai
-         a1nRdr+KDT499E1l6AisR/WnccwVOVxAEqgQXQiSvbcCwnuK1JklgDlZlLO/4DvVD5cq
-         q7qEedwwEOt5QK2wALFWKC8JMEIQ7KeRR1UJA=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1720210600; x=1720815400;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=hICKxoDUywMdQbtGCI28pRH9+4hLvJaqbu+wfwSzwBU=;
-        b=sdAu/fxNFScvIyT90KuuokNKzUnLvssD2Jxxsw/5HcHBLJ9t3Klth36fRgexoiL4s2
-         dzY+wwUN5Y6ET0jQGMPppAY+QUtzcT9xPdxYqsZyZdtMac+0dQzn8Xqti3fBJB7cexP6
-         UyUoWQ33pWPRxWbIlApW5gX016i1PkNjOMwfczm2FWOf8BocrgFkaSce4aLOpK7onNKB
-         BxMcHkGaPuDWcYRSaaFKhfOYGJFWXBboCdNdbv19wWmxdtz7uET0ssUCgWg7roQg8l0e
-         REPyQhIbjT4COFbgKZtV8i/C3Wfq0Lo4G8nOsZoSxX5Gv5I2uVia1rMETX7urgSYergv
-         Rw0w==
-X-Forwarded-Encrypted: i=1; AJvYcCUmzMVC2iW1iGpIs2yqp2bLIA0gwHWlrDgrU7A3o9LHRYtf/tO/stpaCcIR+1q/V3f1ZVv5zWGmJ1LRabqildLk2NYHQA==
-X-Gm-Message-State: AOJu0Ywo1kMRxa9MZS3GbV8t0okp5wlTui7csZbWJW7Ze9YXTRuwoHS2
-	/ojRjK0KK5438di5ozoiEsgIVlHFEKz3FQvgFUBBHXfsukc89iuUH+J7+XUt2bE=
-X-Google-Smtp-Source: AGHT+IFxJeifz5EcUyoQ7zGXVAt/YfV1u/9+SuLU0gHe+drTSap9H+MC4G0IQtB9rf9SBDEaRTKPgA==
-X-Received: by 2002:a05:6e02:128c:b0:382:56bd:dfb8 with SMTP id e9e14a558f8ab-38398710577mr53428745ab.1.1720210600102;
-        Fri, 05 Jul 2024 13:16:40 -0700 (PDT)
-Received: from [192.168.1.128] ([38.175.170.29])
-        by smtp.gmail.com with ESMTPSA id e9e14a558f8ab-37ad22cb6b2sm40055505ab.14.2024.07.05.13.16.39
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 05 Jul 2024 13:16:39 -0700 (PDT)
-Message-ID: <d99a1e3b-1893-4fac-bf05-bcb60ca7f89c@linuxfoundation.org>
-Date: Fri, 5 Jul 2024 14:16:39 -0600
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="JrS1oKcK"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1720213328;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=LS/Z3LFobrNHwdmAJdDhuYpRZVH411TNaATNMi6NEwM=;
+	b=JrS1oKcKcSlxQT8/KP552EzsTgN/Qf1tuPTP8jB+yl9i9HUQkC7qdR0zjRwRJeMrNUuWKk
+	tPSYehVDUjnRBrC0rodStDk6dwIvfkBe0sOTm6pMhtHuUSO5ws4NWRIx4XceBYSj+f/WME
+	0YsTWThy/xfDn0hxrqPpkvr0Ek/1uTU=
+Received: from mx-prod-mc-04.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-569-LlpOQtc3OsqWIP8V8oHyvA-1; Fri,
+ 05 Jul 2024 17:02:07 -0400
+X-MC-Unique: LlpOQtc3OsqWIP8V8oHyvA-1
+Received: from mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.4])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-04.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 9C2E21955F3B
+	for <llvm@lists.linux.dev>; Fri,  5 Jul 2024 21:02:06 +0000 (UTC)
+Received: from [172.64.13.54] (unknown [10.30.32.93])
+	by mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 1DE723000184;
+	Fri,  5 Jul 2024 21:02:05 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.10.0-rc6,
+ mainline.kernel.org-clang, d270dd21)
+Date: Fri, 05 Jul 2024 21:02:05 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5 0/3] selftests/vDSO: fix clang build errors, and
- Makefile cleanup
-To: John Hubbard <jhubbard@nvidia.com>, Shuah Khan <shuah@kernel.org>
-Cc: "Jason A . Donenfeld" <Jason@zx2c4.com>, Andy Lutomirski
- <luto@kernel.org>, Mark Brown <broonie@kernel.org>,
- Vincenzo Frascino <vincenzo.frascino@arm.com>,
- Colin Ian King <colin.i.king@gmail.com>,
- Valentin Obst <kernel@valentinobst.de>, linux-kselftest@vger.kernel.org,
- LKML <linux-kernel@vger.kernel.org>, llvm@lists.linux.dev,
- Shuah Khan <skhan@linuxfoundation.org>
-References: <20240705195736.34039-1-jhubbard@nvidia.com>
-Content-Language: en-US
-From: Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <20240705195736.34039-1-jhubbard@nvidia.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.4
+Message-Id: <52063.124070517020700247@us-mta-569.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 7/5/24 13:57, John Hubbard wrote:
-> Hi Shuah,
-> 
-> These are for 6.10, as we just discussed.
-> 
-> Changes since v4:
-> 
-> 1) Subject line on patch #2/3: s/mm/vDSO/
-> 
-> 2) Added Muhammad's review tag.
-> 
+Hi, we tested your kernel and here are the results:
 
-Applied to
-https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest.git/?h=fixes
-for Linux 6.10
+    Overall result: FAILED
+             Merge: OK
+           Compile: FAILED
 
-thanks,
--- Shuah
+
+Kernel information:
+    Commit message: Merge tag 'pci-v6.10-fixes-2' of git://git.kernel.org/p=
+ub/scm/linux/kernel/git/pci/pci
+
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1362472637
+
+One or more kernel builds failed:
+    Unrecognized or new issues:
+         ppc64le - https://datawarehouse.cki-project.org/kcidb/builds/redha=
+t:1362472637-ppc64le-kernel
+           s390x - https://datawarehouse.cki-project.org/kcidb/builds/redha=
+t:1362472637-s390x-kernel
+          x86_64 (debug) - https://datawarehouse.cki-project.org/kcidb/buil=
+ds/redhat:1362472637-x86_64-kernel-debug
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
