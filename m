@@ -1,124 +1,245 @@
-Received: from mail-il1-f172.google.com (mail-il1-f172.google.com [209.85.166.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 049C116CD00
-	for <llvm@lists.linux.dev>; Fri,  5 Jul 2024 16:55:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 20A282B9B9;
+	Fri,  5 Jul 2024 16:56:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720198502; cv=none; b=pGTOlB8iGyuDQtdS+qEtLjc5+cbDeLrPgF2/nCU0UMOVpNoX4Uw/iOiEG1JW9Qlp3Xm28MUbqc7O0jZM0ey2yylR4zI93yeD1cxWvEz2UcpJ/CvdVT1hLPvmHkjIqzi+xK3JiT50okTBPTSfwaDzaNGQrn9daNI9RlNe6b6mDR4=
+	t=1720198590; cv=none; b=u+TryUBAvKkWaGN6l9yRkvsYs924wGMUyHc5NAS5Wtjaam8Yq85grTRYep0vXynYaOZYkUP/OrDLvzhgqfsDPBLcM/dyKzdPxICJMB3FJVD7uh6FczPmHTBhJ+aJnBkIwLoczskqOxBAp43ZZvbHWXrofsJuazqc1lShrrib+Ko=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720198502; c=relaxed/simple;
-	bh=JbpMAAp767cJMVvvsfmlKOVKEDBe1tv8WSltj4UH6v4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=T8sar6MAm/PxNOfS6nrKFxx5rC3dJW2EHYRmgoTqp+JlqTiP0weolq3xHdZwZtQgtgIhh3qTZJ1iqLOoI9USSe4R1dkKTqlpSW6fmoj8T5MlNFe84dhDIaBI3l9GWXCGLvTqpYtP0aCBy22e8C9C3ZYcnaDCuA8af6tUwo25HBo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=ccgC07of; arc=none smtp.client-ip=209.85.166.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
+	s=arc-20240116; t=1720198590; c=relaxed/simple;
+	bh=3c83NHxscbCFMyyevE9dy5GhQA7qrWG4fG6eRk+VYZs=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=OzJLqcunTBlf+J7b4tSYcX4TSI+svHdmm2qSCtPbKoaAkWcxnVhLlU/wRYnqt4+77l7mmxEfehbHu0CiEt6ysQs/PMU4CYC2TSq5K8rv7uCwVaqkESz00NVpvbJxl+bwP14XTzsQmQU6jr+QSD++tQHskiITACCWVblu0C7H0U0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=F2oFY/ZW; arc=none smtp.client-ip=192.198.163.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="ccgC07of"
-Received: by mail-il1-f172.google.com with SMTP id e9e14a558f8ab-3764dd53b5aso881385ab.2
-        for <llvm@lists.linux.dev>; Fri, 05 Jul 2024 09:55:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1720198500; x=1720803300; darn=lists.linux.dev;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=2+6p2HoNrUHHa/yVChF/+f6ARUdHwWa9m3WGICPV8zw=;
-        b=ccgC07ofqUsCnWNDv7l9qp/uUn0wDclh6BrCZe/gnMEJ0xT39YtGl5pRalV5nyWh2I
-         BgZc4aNFQYVRuExkEENDwh3+FAsni3DZtpQK1kzhxjvwTlq/kiDXxXxfAhSOdjEBVEL5
-         GJP07FgqIyHcEB02VRrxgD0S/2hc9s3eigL2E=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1720198500; x=1720803300;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=2+6p2HoNrUHHa/yVChF/+f6ARUdHwWa9m3WGICPV8zw=;
-        b=gOV8nd0ztEPmosjBm8NETY0qaS62SkGnd48kllCnUTpCN+BXZ+dI752FV+GqmbwqJW
-         4WBErTCqvED7/6vsJmxA9POBxydaKxWD32vJsil8GwCTH++gj6254rc3sk5qDK53kGw6
-         l/lL8jAvNp6m1+av+BzyB0vIxmiXqKsfSk0gS/Spz8x11CLdHonqQMsYNCbL9vU9FDoA
-         1EsQMfPn9AYJKrDMxRY8hXxX94zPWzuKuJhfSeh5zucShTmZZg+hm1YgczXgyVzuRQjE
-         MD3zVIW5MWVUhmBVb2NkXAwUOUJtom3gO9mVXzypJ7CaReOeVyeVTjZzzitYTLp8MxBc
-         SmTg==
-X-Forwarded-Encrypted: i=1; AJvYcCXp33EgGAi2ZQsoS1EE8rLFXbajDNixIbTDbVv9znxXJxDYxtJcmf1v41wQDra4eR/MFM7Gypf9DhAZvzwKRuU/gp+7Pw==
-X-Gm-Message-State: AOJu0YxQE6LpozbnJDK+pIh0DtSiAgACrIEG1AC4C+6IlHQY2FSkeH5q
-	J2sjU4zK9bryz838Aiilf3szLa+0ukRzPLplRLRY+JHZtTCy9qOTRWPv3wHOcjU=
-X-Google-Smtp-Source: AGHT+IHY3in/e9Yxt3K+EtGGW2Ojce03GKiDSgxyEYqs6zBH6DryDUXwKCb6gpUav66FAfp/eAhNgg==
-X-Received: by 2002:a05:6602:6211:b0:7f6:5178:8607 with SMTP id ca18e2360f4ac-7f66df05100mr601855839f.2.1720198500122;
-        Fri, 05 Jul 2024 09:55:00 -0700 (PDT)
-Received: from [192.168.1.128] ([38.175.170.29])
-        by smtp.gmail.com with ESMTPSA id 8926c6da1cb9f-4bb73f910fdsm4521403173.91.2024.07.05.09.54.59
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 05 Jul 2024 09:54:59 -0700 (PDT)
-Message-ID: <9262c7ff-41e6-4df2-a335-e81897381ed0@linuxfoundation.org>
-Date: Fri, 5 Jul 2024 10:54:59 -0600
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="F2oFY/ZW"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1720198588; x=1751734588;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=3c83NHxscbCFMyyevE9dy5GhQA7qrWG4fG6eRk+VYZs=;
+  b=F2oFY/ZWSR/4ld6YPaYsTGjNpIja/I9oMO9JljDUPFF6b0ob5Agxm1s6
+   /CatRX0tsXX44XVdwwQZHFj+jDmYmz1sVAS/w8oNVnc3H972XyhV/Sktr
+   Tz005SqvXmRY9PM4gqVS65zqOfslqRNxLFHGFMxvX0ePes0CzkgcFRWKO
+   /ye8tJv1bwtf8iWxZiLRrZ6ZnhPXFq9/EtAr2aiJpjYq6+VN4Gle3Gz15
+   y8iy5BDJz+mCyFLtmZ/5zZCLeMpEzRGaLkWrIdEfaz825qZ3vC2gSUW2y
+   KyGhUnJCzhiHvsS0Bd5GPacSahGBttCQ9T4jfwk9MZSD7ezcKtUQL73H+
+   Q==;
+X-CSE-ConnectionGUID: rG3TdwwITB+wZD0cuw6RGQ==
+X-CSE-MsgGUID: ziacsw1GQIamS6zJtErT8g==
+X-IronPort-AV: E=McAfee;i="6700,10204,11123"; a="17365979"
+X-IronPort-AV: E=Sophos;i="6.09,185,1716274800"; 
+   d="scan'208";a="17365979"
+Received: from orviesa001.jf.intel.com ([10.64.159.141])
+  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jul 2024 09:56:27 -0700
+X-CSE-ConnectionGUID: kQtLtrRYQ/qcqDzLXVIoqA==
+X-CSE-MsgGUID: yIFw6MV5RoupqrHjhkWkUQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.09,185,1716274800"; 
+   d="scan'208";a="84473979"
+Received: from lkp-server01.sh.intel.com (HELO 68891e0c336b) ([10.239.97.150])
+  by orviesa001.jf.intel.com with ESMTP; 05 Jul 2024 09:56:24 -0700
+Received: from kbuild by 68891e0c336b with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1sPmEP-000SdM-0n;
+	Fri, 05 Jul 2024 16:56:21 +0000
+Date: Sat, 6 Jul 2024 00:56:15 +0800
+From: kernel test robot <lkp@intel.com>
+To: Oscar Salvador <osalvador@suse.de>,
+	Andrew Morton <akpm@linux-foundation.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Linux Memory Management List <linux-mm@kvack.org>,
+	linux-kernel@vger.kernel.org, Peter Xu <peterx@redhat.com>,
+	Muchun Song <muchun.song@linux.dev>,
+	David Hildenbrand <david@redhat.com>, SeongJae Park <sj@kernel.org>,
+	Miaohe Lin <linmiaohe@huawei.com>, Michal Hocko <mhocko@suse.com>,
+	Matthew Wilcox <willy@infradead.org>,
+	Christophe Leroy <christophe.leroy@csgroup.eu>,
+	Oscar Salvador <osalvador@suse.de>
+Subject: Re: [PATCH 05/45] mm/pagewalk: Enable walk_pmd_range to handle
+ cont-pmds
+Message-ID: <202407060025.WIFWw7WY-lkp@intel.com>
+References: <20240704043132.28501-6-osalvador@suse.de>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 0/3] selftests/vDSO: fix clang build errors, and
- Makefile cleanup
-To: John Hubbard <jhubbard@nvidia.com>, Shuah Khan <shuah@kernel.org>
-Cc: "Jason A . Donenfeld" <Jason@zx2c4.com>,
- Thomas Gleixner <tglx@linutronix.de>, Andy Lutomirski <luto@kernel.org>,
- Mark Brown <broonie@kernel.org>,
- Vincenzo Frascino <vincenzo.frascino@arm.com>,
- Colin Ian King <colin.i.king@gmail.com>,
- Valentin Obst <kernel@valentinobst.de>, linux-kselftest@vger.kernel.org,
- LKML <linux-kernel@vger.kernel.org>, llvm@lists.linux.dev,
- Shuah Khan <skhan@linuxfoundation.org>
-References: <20240704023324.83564-1-jhubbard@nvidia.com>
-Content-Language: en-US
-From: Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <20240704023324.83564-1-jhubbard@nvidia.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240704043132.28501-6-osalvador@suse.de>
 
-On 7/3/24 20:33, John Hubbard wrote:
-> Hi,
-> 
-> This is basically a resend, with a rebase onto today's latest Linux
-> main, in order to show that the patches are still relevant and correct.
-> 
-> Changes since v3:
-> 
-> 1. Rebased onto Linux 6.10-rc6+.
-> 
-> Cover letter for v3:
-> 
-> Jason A. Donenfeld, I've added you because I ended up looking through
-> your latest "implement getrandom() in vDSO" series [1], which also
-> touches this Makefile, so just a heads up about upcoming (minor) merge
-> conflicts.
-> 
-> Changes since v2:
-> 
-> 1. Added two patches, both of which apply solely to the Makefile.
-> These provide a smaller, cleaner, and more accurate Makefile.
-> 
-> 2. Added Reviewed-by and Tested-by tags for the original patch, which
-> fixes all of the clang errors and warnings for this selftest.
-> 
-> 3. Removed an obsolete blurb from the commit description of the original
-> patch, now that Valentin Obst LLVM build fix has been merged.
-> 
-> John Hubbard (3):
->    selftests/vDSO: fix clang build errors and warnings
->    selftests/mm: remove partially duplicated "all:" target in Makefile
->    selftests/vDSO: remove duplicate compiler invocations from Makefile
-> 
->   tools/testing/selftests/vDSO/Makefile         | 29 ++++++++-----------
->   tools/testing/selftests/vDSO/parse_vdso.c     | 16 ++++++----
->   .../selftests/vDSO/vdso_standalone_test_x86.c | 18 ++++++++++--
->   3 files changed, 39 insertions(+), 24 deletions(-)
-> 
-> 
-> base-commit: 8a9c6c40432e265600232b864f97d7c675e8be52
+Hi Oscar,
 
-Applied all 3 patches to linux_kselftest next for Linux 6.11-rc1.
+kernel test robot noticed the following build errors:
 
-thanks,
--- Shuah
+[auto build test ERROR on akpm-mm/mm-everything]
+[also build test ERROR on sj/damon/next powerpc/next powerpc/fixes linus/master v6.10-rc6 next-20240703]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
+url:    https://github.com/intel-lab-lkp/linux/commits/Oscar-Salvador/arch-x86-Drop-own-definition-of-pgd-p4d_leaf/20240705-042640
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
+patch link:    https://lore.kernel.org/r/20240704043132.28501-6-osalvador%40suse.de
+patch subject: [PATCH 05/45] mm/pagewalk: Enable walk_pmd_range to handle cont-pmds
+config: um-allnoconfig (https://download.01.org/0day-ci/archive/20240706/202407060025.WIFWw7WY-lkp@intel.com/config)
+compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240706/202407060025.WIFWw7WY-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202407060025.WIFWw7WY-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+   In file included from mm/pagewalk.c:3:
+   In file included from include/linux/highmem.h:12:
+   In file included from include/linux/hardirq.h:11:
+   In file included from arch/um/include/asm/hardirq.h:5:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:14:
+   In file included from arch/um/include/asm/io.h:24:
+   include/asm-generic/io.h:548:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     548 |         val = __raw_readb(PCI_IOBASE + addr);
+         |                           ~~~~~~~~~~ ^
+   include/asm-generic/io.h:561:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     561 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
+      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
+         |                                                   ^
+   In file included from mm/pagewalk.c:3:
+   In file included from include/linux/highmem.h:12:
+   In file included from include/linux/hardirq.h:11:
+   In file included from arch/um/include/asm/hardirq.h:5:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:14:
+   In file included from arch/um/include/asm/io.h:24:
+   include/asm-generic/io.h:574:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     574 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
+      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
+         |                                                   ^
+   In file included from mm/pagewalk.c:3:
+   In file included from include/linux/highmem.h:12:
+   In file included from include/linux/hardirq.h:11:
+   In file included from arch/um/include/asm/hardirq.h:5:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:14:
+   In file included from arch/um/include/asm/io.h:24:
+   include/asm-generic/io.h:585:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     585 |         __raw_writeb(value, PCI_IOBASE + addr);
+         |                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:595:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     595 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:605:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     605 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:693:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     693 |         readsb(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:701:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     701 |         readsw(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:709:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     709 |         readsl(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:718:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     718 |         writesb(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+   include/asm-generic/io.h:727:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     727 |         writesw(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+   include/asm-generic/io.h:736:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     736 |         writesl(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+>> mm/pagewalk.c:91:11: error: call to undeclared function 'pmd_cont_addr_end'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+      91 |                         next = pmd_cont_addr_end(addr, end);
+         |                                ^
+   12 warnings and 1 error generated.
+
+
+vim +/pmd_cont_addr_end +91 mm/pagewalk.c
+
+    75	
+    76	static int walk_pmd_range(pud_t *pud, unsigned long addr, unsigned long end,
+    77				  struct mm_walk *walk)
+    78	{
+    79		pmd_t *pmd;
+    80		unsigned long next;
+    81		const struct mm_walk_ops *ops = walk->ops;
+    82		int err = 0;
+    83		int depth = real_depth(3);
+    84		int cont_pmds;
+    85	
+    86		pmd = pmd_offset(pud, addr);
+    87		do {
+    88	again:
+    89			if (pmd_cont(*pmd)) {
+    90				cont_pmds = CONT_PMDS;
+  > 91				next = pmd_cont_addr_end(addr, end);
+    92			} else {
+    93				cont_pmds = 1;
+    94				next = pmd_addr_end(addr, end);
+    95			}
+    96			if (pmd_none(*pmd)) {
+    97				if (ops->pte_hole)
+    98					err = ops->pte_hole(addr, next, depth, walk);
+    99				if (err)
+   100					break;
+   101				continue;
+   102			}
+   103	
+   104			walk->action = ACTION_SUBTREE;
+   105	
+   106			/*
+   107			 * This implies that each ->pmd_entry() handler
+   108			 * needs to know about pmd_trans_huge() pmds
+   109			 */
+   110			if (ops->pmd_entry)
+   111				err = ops->pmd_entry(pmd, addr, next, walk);
+   112			if (err)
+   113				break;
+   114	
+   115			if (walk->action == ACTION_AGAIN)
+   116				goto again;
+   117	
+   118			/*
+   119			 * Check this here so we only break down trans_huge
+   120			 * pages when we _need_ to
+   121			 */
+   122			if ((!walk->vma && (pmd_leaf(*pmd) || !pmd_present(*pmd))) ||
+   123			    walk->action == ACTION_CONTINUE ||
+   124			    !(ops->pte_entry))
+   125				continue;
+   126	
+   127			if (walk->vma)
+   128				split_huge_pmd(walk->vma, pmd, addr);
+   129	
+   130			err = walk_pte_range(pmd, addr, next, walk);
+   131			if (err)
+   132				break;
+   133	
+   134			if (walk->action == ACTION_AGAIN)
+   135				goto again;
+   136		} while (pmd += cont_pmds, addr = next, addr != end);
+   137	
+   138		return err;
+   139	}
+   140	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
