@@ -1,136 +1,106 @@
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [217.70.183.193])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 05A157347A;
-	Thu,  4 Jul 2024 21:34:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.193
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 29747647;
+	Fri,  5 Jul 2024 00:35:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720128844; cv=none; b=IYcVP4fZQc2HGsMBfRe8Uov4tV23JdenytiOny1Ye1FPM1ojSGVsGkoVXLOOZGebHmp+Gs6QkHOM6ae1J7a/9Z9QXK0tpcOQD8UvTHhmZ/MAV8z+V/ijbMYJkkdx28Fm2g14pn+uPn+mD2azjDCb/9we4RUd6AWjSV7WvviNsyI=
+	t=1720139741; cv=none; b=JOrs2oMRGgmoKGMXMOgaZ5wl7I9oLlb23/3Dkz2iZBJY1FDGsCW5aJrRpOf1Jno8RYvOWXtBVJCdxyJJ4ZTd8Ark1HA13jAPzxuKQ+8KG9cQLNS2WCTis+Yy4miFW/JwcbNT0T4/Qn7oftwEd4KkrSm27cM/XH1e8UWs6Xpb0TY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720128844; c=relaxed/simple;
-	bh=3vfbqv9gQQpm1LW9Dts5ISDGsd5fjFLtPgac8Es5wPo=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=iHKKZATp3LK+jnAyhCHjnTy371tdINADPefCzL0OZ1E5REYmWb0UuJ+GLcA4VWYAHP1fLDLwPb2cx3Qafj9ND2/EhHwXQ1xWK4vncoGQRyufWCQ3bxdOHaxPfeJKZbrNxCO/auWIouuGHBtni0ulUU2Gy9T64XWa3o/uh85I1UQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=OW87Yyqx; arc=none smtp.client-ip=217.70.183.193
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+	s=arc-20240116; t=1720139741; c=relaxed/simple;
+	bh=p8OOfhn+XPTMTyv4z0em8hyAMi9nfYqi2VUXqoaHQPI=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=F8zmADI297E7ALaSLSiGZzTC0U2NLg+cG6iHxzV3JqT6LPdadLbycYeLK3iI2jSCd6Dbl27BlWKtPyMbwfA7+uQprKJy9yJPW9UmLJ06HwQKiX9KScu5/j27IPZqGKa1shdg1ynT2NWHIq4DrzVJbEYILpwZSksMneBc3f+myEk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=cKwADU5a; arc=none smtp.client-ip=198.175.65.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="OW87Yyqx"
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 2FECD240006;
-	Thu,  4 Jul 2024 21:33:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1720128840;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=q5IBUlpk519TSgD6Osr1ZyaFchjMZnggQfjeK80Zda4=;
-	b=OW87YyqxfC/aisrIaK1t9t5rNi1tv8W2h+PNzPy/mbY2MLmPV40lXp/tAQHoWvKu4AWsjJ
-	t1azANkvi0z3C8c1zRY+dEwMFTe4IitMjntGqs0weShRTHE6S9YLuTRM50bq5PQggOGH3h
-	VTb1TQxTb2kbXJ5aFHoZUbrXoTHiCyUiMq8h02kLT12CEGs/CoF9H4DdX4VqNE0u4czR5l
-	eyYcAzvCetxJAj9pUcmrGPPibpICDtqgs90easLdjOXXyAP4rPd46IcoQOzY7rAZwcoezR
-	bPShL3nDBJRC3irR8YI4aF7W8jyTpxGZxv27dKpKX4ap2xqwkURoZOagKsVprQ==
-Date: Thu, 4 Jul 2024 23:33:46 +0200
-From: Luca Ceresoli <luca.ceresoli@bootlin.com>
-To: Rob Herring <robh@kernel.org>
-Cc: Miguel Ojeda <ojeda@kernel.org>, Saravana Kannan <saravanak@google.com>,
- Nathan Chancellor <nathan@kernel.org>, Michael Turquette
- <mturquette@baylibre.com>, Stephen Boyd <sboyd@kernel.org>, Tony Lindgren
- <tony@atomide.com>, Bjorn Andersson <andersson@kernel.org>, Emilio
- =?UTF-8?Q?L=C3=B3pez?= <emilio@elopez.com.ar>, Chen-Yu Tsai
- <wens@csie.org>, Jernej Skrabec <jernej.skrabec@gmail.com>, Samuel Holland
- <samuel@sholland.org>, Krzysztof Kozlowski <krzk@kernel.org>, Daniel
- Lezcano <daniel.lezcano@linaro.org>, Thomas Gleixner <tglx@linutronix.de>,
- Florian Fainelli <florian.fainelli@broadcom.com>, Broadcom internal kernel
- review list <bcm-kernel-feedback-list@broadcom.com>, Linus Walleij
- <linus.walleij@linaro.org>, Bartosz Golaszewski <brgl@bgdev.pl>, Jonathan
- Cameron <jic23@kernel.org>, Lee Jones <lee@kernel.org>, Shawn Guo
- <shawnguo@kernel.org>, Pengutronix Kernel Team <kernel@pengutronix.de>, Uwe
- =?UTF-8?Q?Kleine-K=C3=B6nig?= <ukleinek@kernel.org>, Greg Kroah-Hartman
- <gregkh@linuxfoundation.org>, Jiri Slaby <jirislaby@kernel.org>, Richard
- Leitner <richard.leitner@linux.dev>, Liam Girdwood <lgirdwood@gmail.com>,
- Mark Brown <broonie@kernel.org>, Nicolas Ferre
- <nicolas.ferre@microchip.com>, Michael Ellerman <mpe@ellerman.id.au>,
- Nicholas Piggin <npiggin@gmail.com>, Christophe Leroy
- <christophe.leroy@csgroup.eu>, "Naveen N. Rao"
- <naveen.n.rao@linux.ibm.com>, Damien Le Moal <dlemoal@kernel.org>, "Peng
- Fan (OSS)" <peng.fan@oss.nxp.com>, Thomas Petazzoni
- <thomas.petazzoni@bootlin.com>, linux-kernel@vger.kernel.org,
- devicetree@vger.kernel.org, llvm@lists.linux.dev,
- linux-clk@vger.kernel.org, linux-omap@vger.kernel.org,
- linux-arm-msm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-sunxi@lists.linux.dev, linux-samsung-soc@vger.kernel.org,
- linux-gpio@vger.kernel.org, linux-iio@vger.kernel.org,
- linux-pwm@vger.kernel.org, linux-serial@vger.kernel.org,
- linux-usb@vger.kernel.org, patches@opensource.cirrus.com,
- linux-sound@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
- linux-riscv@lists.infradead.org
-Subject: Re: [PATCH 20/20] of: deprecate and rename
- of_property_for_each_u32()
-Message-ID: <20240704233346.478431f8@booty>
-In-Reply-To: <20240703180111.GA1245093-robh@kernel.org>
-References: <20240703-of_property_for_each_u32-v1-0-42c1fc0b82aa@bootlin.com>
-	<20240703-of_property_for_each_u32-v1-20-42c1fc0b82aa@bootlin.com>
-	<20240703180111.GA1245093-robh@kernel.org>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="cKwADU5a"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1720139740; x=1751675740;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=p8OOfhn+XPTMTyv4z0em8hyAMi9nfYqi2VUXqoaHQPI=;
+  b=cKwADU5aS36U9GGszjHieCj3t3B70+EhjkTilxTvAhpuKJDFBkciuQbs
+   rYMYHnglhGACpBOWnR1SgQjwhTIJ52rEG4tiPl1NGUJEfEPPxb1TuVutq
+   F82cW57QSBtDBHEeLjIGbG4ewleq6Wsh9I1uq+N7bAmu6LgN85DoAyBES
+   1+6zix/C3W81O2APflXFqz2Mx9SR52CQqz/6fcp4btQI8sEUnZYg8RbBZ
+   leW/S7apbMYkaJheiijZqB0f9/Taz3eoD7b6h5PjvQOU8cMMc/Z+29zRu
+   cdlk0TWaHJxEGmwaboPTY33c+Xis6yYFKdfeuZgOxmF+nY50xJ+XwzJwQ
+   w==;
+X-CSE-ConnectionGUID: Y3B43icWT1Ov2CjkQas3jQ==
+X-CSE-MsgGUID: PJbcAnZiRE6g6CTBAWa6XA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11123"; a="28823104"
+X-IronPort-AV: E=Sophos;i="6.09,183,1716274800"; 
+   d="scan'208";a="28823104"
+Received: from fmviesa001.fm.intel.com ([10.60.135.141])
+  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jul 2024 17:35:39 -0700
+X-CSE-ConnectionGUID: pLi5glCgTKKP2TlN9M2qWQ==
+X-CSE-MsgGUID: yF0MbkPxRfOGFq0I/RLYAQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.09,183,1716274800"; 
+   d="scan'208";a="77867362"
+Received: from lkp-server01.sh.intel.com (HELO 68891e0c336b) ([10.239.97.150])
+  by fmviesa001.fm.intel.com with ESMTP; 04 Jul 2024 17:35:37 -0700
+Received: from kbuild by 68891e0c336b with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1sPWvG-000RhK-2x;
+	Fri, 05 Jul 2024 00:35:34 +0000
+Date: Fri, 5 Jul 2024 08:35:11 +0800
+From: kernel test robot <lkp@intel.com>
+To: Suren Baghdasaryan <surenb@google.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-kernel@vger.kernel.org,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Linux Memory Management List <linux-mm@kvack.org>
+Subject: mm/slub.c:2077:1: error: unused function 'prepare_slab_obj_exts_hook'
+Message-ID: <202407050845.zNONqauD-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-GND-Sasl: luca.ceresoli@bootlin.com
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Hello Rob,
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   661e504db04c6b7278737ee3a9116738536b4ed4
+commit: b4601d096aac8ed26afa88ef8b249975b0530ca1 mm/slab: fix 'variable obj_exts set but not used' warning
+date:   10 days ago
+config: x86_64-sof-customedconfig-amd-defconfig (https://download.01.org/0day-ci/archive/20240705/202407050845.zNONqauD-lkp@intel.com/config)
+compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240705/202407050845.zNONqauD-lkp@intel.com/reproduce)
 
-On Wed, 3 Jul 2024 12:01:11 -0600
-Rob Herring <robh@kernel.org> wrote:
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202407050845.zNONqauD-lkp@intel.com/
 
-> On Wed, Jul 03, 2024 at 12:37:04PM +0200, Luca Ceresoli wrote:
-> > of_property_for_each_u32() is meant to disappear. All the call sites not
-> > using the 3rd and 4th arguments have already been replaced by
-> > of_property_for_each_u32_new().
-> > 
-> > Deprecate the old macro. Also rename it to minimize the number of new
-> > usages and encourage conversion to the of_property_for_each_u32_new() macro
-> > in not(-yet)-upstream code.
-> > 
-> > Signed-off-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
-> > 
-> > ---
-> > 
-> > Notes:
-> > 
-> >  * The following files have not been build-tested simply because I haven't
-> >    managed to have a config that enables them so far:
-> > 
-> >      drivers/irqchip/irq-pic32-evic.c
-> >      drivers/pinctrl/pinctrl-k210.c
-> > 
-> >  * These have not been converted yet as they are not trivial, and they will
-> >    need to use a more specific function that does the lookup they need and
-> >    returns the result:
-> > 
-> >      drivers/clk/clk-si5351.c  
-> 
-> I would do something like this:
+All errors (new ones prefixed by >>):
 
-Thanks for the suggestions.
+>> mm/slub.c:2077:1: error: unused function 'prepare_slab_obj_exts_hook' [-Werror,-Wunused-function]
+    2077 | prepare_slab_obj_exts_hook(struct kmem_cache *s, gfp_t flags, void *p)
+         | ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   1 error generated.
 
-I literally did not even try to look at what the code does in these few
-places, and still haven't, simply due to time availability. But I wanted
-to get a first series out as soon as possible as it would probably be
-useful to Peng [0]. Yours will be a good starting point for when I
-tackle those few remaining usages of the "old" macro. Thanks.
 
-[0] https://lore.kernel.org/all/20240628161617.6bc9ca3c@booty/
+vim +/prepare_slab_obj_exts_hook +2077 mm/slub.c
 
-Luca
+0bedcc66d2a43a Vlastimil Babka    2023-10-03  2075  
+4b8736964640fe Suren Baghdasaryan 2024-03-21  2076  static inline struct slabobj_ext *
+4b8736964640fe Suren Baghdasaryan 2024-03-21 @2077  prepare_slab_obj_exts_hook(struct kmem_cache *s, gfp_t flags, void *p)
+3450a0e5a6fc4c Vlastimil Babka    2023-11-13  2078  {
+4b8736964640fe Suren Baghdasaryan 2024-03-21  2079  	return NULL;
+4b8736964640fe Suren Baghdasaryan 2024-03-21  2080  }
+3450a0e5a6fc4c Vlastimil Babka    2023-11-13  2081  
+
+:::::: The code at line 2077 was first introduced by commit
+:::::: 4b8736964640fe160724e7135dc62883bddcdace mm/slab: add allocation accounting into slab allocation and free paths
+
+:::::: TO: Suren Baghdasaryan <surenb@google.com>
+:::::: CC: Andrew Morton <akpm@linux-foundation.org>
 
 -- 
-Luca Ceresoli, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
