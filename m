@@ -1,106 +1,77 @@
-Received: from mail-lf1-f46.google.com (mail-lf1-f46.google.com [209.85.167.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F89D149019
-	for <llvm@lists.linux.dev>; Fri,  5 Jul 2024 11:31:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A4AF81487FE;
+	Fri,  5 Jul 2024 12:04:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720179083; cv=none; b=HApHefe+DRLKs9Sa5IQKEpTMejxei8lk26jnDDIkjfRjzCqdUdxYPFjY1aa/9gkyIB4Xe6h0TXnAQfbVO/opTbs7R1NZDOdECtwI+NdYc6IySQb1E4STWDTf8zmrS1+QXKeYSbbOxv2VpUgGQCsGlCq6pvKOAvkZZS1MRig8BhA=
+	t=1720181059; cv=none; b=c8kisZpNDRhKkiOHLOATB5eGN/LkVBh1noue5XsgE+FLaC7LRQDWYdPKNfG+7PZ1s9krkrEi1HA0fkMUx0ai6N21g8jpBwwgUbMTgCaB6m0tpdyziA2WAqRqrCXnXrNT2xUdgB4CHJzxsgD4anrGCZOokbJXovxtxE8h9le00pI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720179083; c=relaxed/simple;
-	bh=hPHreMrDt1doXkKIFfOnokfWoTTGR/eEdk8FJb3tsIk=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=DEhgu5EYWldFKvKIbioSrfl3vHQre5gAEEi7vHOj98ioV0dOUiiaozyfkSttcdzluFLnD4Fbd+WqZfzs85qEwCmAYx21p4jpljNNplhYXtzKfD3h36HjN90qL0QmvWneaz9+rSdar0QTROE9qptimF2V3TSEgFrIolCac88XN5Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=d81aqrzm; arc=none smtp.client-ip=209.85.167.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+	s=arc-20240116; t=1720181059; c=relaxed/simple;
+	bh=1oUR9Y0C1q+vdr3FNHCBM/69qcTQYNHIa5X5pQnwP20=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=d5CNEDrfBtrsjHjyreLWzLMXv6lAX75mSBlMTKbS+VmqwqdgbBoONPeiB6YBxD5a7A3uIfeHK6y7kZFkC5nxKrIW9s4Hf3e4A6IQ/364SyN4ptCKooxwlGKLoPO2iogX1Qv9mlmyABipk/8J4vrsSU5dZEfp8evt3oTQlcSPotA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=N8KCx9+W; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="d81aqrzm"
-Received: by mail-lf1-f46.google.com with SMTP id 2adb3069b0e04-52e9b9fb3dcso1760881e87.1
-        for <llvm@lists.linux.dev>; Fri, 05 Jul 2024 04:31:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1720179078; x=1720783878; darn=lists.linux.dev;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=peeNZCDuyoda2DYpfs5bkgO4H7nlJlel4Yeo4yaX2aw=;
-        b=d81aqrzmAa4qHW1aMNFEKC8itktexEob+hNWPo+FjWX9olFRCnz6OeFKeLPBZEMWOK
-         safumZhltp8rR+okXyWzKnzkJZF6z+LJPpvie3AmZIZRzYmM9WqF93GpmdcsarHj26OY
-         dJx7VApPI7eIiWN23PGAesgtCgG3KSwZN0s/gHHiAK17K2N7gmd+H1KzO+SiuiXz22QY
-         r7Fm62DyxS+WxEDh+OamTCOIuRc+JdMBK6TRpb2eSQaEF6ZCm84CoIaUpHmXeB6mnOMZ
-         /RipT6J8hOyAxae8ZEGwneibFcXPzj+6kInhWdMliCCrdzl7XwP16XmtZY+1UNBZRTL5
-         ZDjw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1720179078; x=1720783878;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=peeNZCDuyoda2DYpfs5bkgO4H7nlJlel4Yeo4yaX2aw=;
-        b=esufgFpkc5U4gBTl+7XbBZQCicXdujrrSXW3qJWZIa6NgWYiWQa2d3Bs7ztPTyE1m5
-         Lwwh8cR7EbPZ9a1qDu9T/1cKDw4mlErT4stpgbO+fPpaf5z12Or9HMbxhi1tglmiQxMi
-         VhQeqmW8VdJTlSrL5YgKjNO4VdBl64VHW4OXPBcu9bP+PlxqLCjUR1P7yVBCpcQflzi6
-         0sSk4VCWJCAf1F3SPDb3imJMKu3Y28nFOT1f6KDkIV2WFSka+ldZ6vSUByfgl45Pednf
-         C/ODkkAOxK8/f2nBSWlUt+Fnqy6ElNf0BJmxPZsAtSg8Q3gXdHkhs4PF9MAieWkUANH0
-         KlAg==
-X-Forwarded-Encrypted: i=1; AJvYcCXBZu/j+mfjg3EATc3YWVJyuJw7eHc88FNT4SLofvVaosGPJUSYi8QsU3aonQ25PKOUmufh1vinQa7ZlQi3Gtd68UDmJw==
-X-Gm-Message-State: AOJu0YyY6CMKYRNGSZMm9bzYr4sDTXVJ2ZhQSajxu+E504yv/gznq9D9
-	8tETlwumzICL2u+myGuq9KypTfhQmaw1xKYV+e+PTw3RttewViIfA/yzDxTyRinvbhvrK6TIWO9
-	8
-X-Google-Smtp-Source: AGHT+IG87fGjXF+TaN2rAGmYDwXmCBV4e70dP7HYgoU/5vS+jGGZ87IXfHT7BTxzfN8kyxOo+KkYcg==
-X-Received: by 2002:a05:6512:3ca8:b0:52c:8abe:51fb with SMTP id 2adb3069b0e04-52ea061f4e1mr4207586e87.10.1720179078543;
-        Fri, 05 Jul 2024 04:31:18 -0700 (PDT)
-Received: from krzk-bin.. ([178.197.219.137])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4264a2fc942sm58090725e9.42.2024.07.05.04.31.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 05 Jul 2024 04:31:17 -0700 (PDT)
-From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To: Sebastian Reichel <sre@kernel.org>,
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="N8KCx9+W"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3417DC116B1;
+	Fri,  5 Jul 2024 12:04:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1720181059;
+	bh=1oUR9Y0C1q+vdr3FNHCBM/69qcTQYNHIa5X5pQnwP20=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=N8KCx9+Wf1Y2ccoBaDCuzUe7bHZhyzChrmfBgJ9WoUkmGKnGBWTXfxT2Kogr3DWrb
+	 bCA6dllwLH53jIQRJn+j9P21TBMJg8FVaFv5MKfxDcUWfpnJapTw0RGEc9XVNUEgN1
+	 a7VZCEl7FmrYOY1fG/BbHcixlbFJz29YohawGP19e92YQNpel/S5VHkBnk71iJDxSa
+	 qND0y9oeJZrrGlPImOIEmIMwLBM+rzzTRS3VDZrJM5s9VrAj5gGPxB3Jg1jClHAd7K
+	 H5hrKTl2ZivEQ68TK6RQO3Y6aOExQNXfsRg4pE+x5R4VPVO453qbhh0AjqVbW2+g6D
+	 CNNPyCSJIhKSw==
+Received: from johan by xi.lan with local (Exim 4.97.1)
+	(envelope-from <johan@kernel.org>)
+	id 1sPhfq-000000007PG-00h2;
+	Fri, 05 Jul 2024 14:04:22 +0200
+Date: Fri, 5 Jul 2024 14:04:21 +0200
+From: Johan Hovold <johan@kernel.org>
+To: Javier Carrasco <javier.carrasco.cruz@gmail.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Kees Cook <kees@kernel.org>,
+	"Gustavo A. R. Silva" <gustavoars@kernel.org>,
 	Nathan Chancellor <nathan@kernel.org>,
 	Nick Desaulniers <ndesaulniers@google.com>,
 	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	linux-pm@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
+	Justin Stitt <justinstitt@google.com>, linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org,
 	llvm@lists.linux.dev
-Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH 2/2] power: supply: twl4030_charger: correct comparision with old current
-Date: Fri,  5 Jul 2024 13:31:13 +0200
-Message-ID: <20240705113113.42851-2-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20240705113113.42851-1-krzysztof.kozlowski@linaro.org>
-References: <20240705113113.42851-1-krzysztof.kozlowski@linaro.org>
+Subject: Re: [PATCH v2 0/2] USB: serial: garmin_gps: annotate struct
+ garmin_packet with __counted_by
+Message-ID: <ZofhReiVQ3k8IaFy@hovoldconsulting.com>
+References: <20240619-garmin_gps_counted_by-v2-0-f82f10ebbf28@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240619-garmin_gps_counted_by-v2-0-f82f10ebbf28@gmail.com>
 
-Driver reads existing current value from two 8-bit registers, but then
-compares only one of them with the new 16-bit value.  clang W=1 is also
-not happy:
+On Wed, Jun 19, 2024 at 09:42:43PM +0200, Javier Carrasco wrote:
+> The size is assigned before the first reference to the flexible array
+> (see pkt_add()), which allows for a straightforward annotation without
+> further modifications.
+> 
+> Signed-off-by: Javier Carrasco <javier.carrasco.cruz@gmail.com>
+> ---
+> Changes in v2:
+> - Use struct_size to calculate the size of pkt.
+> - Link to v1: https://lore.kernel.org/r/20240619-garmin_gps_counted_by-v1-1-d8d816f085d9@gmail.com
+> 
+> ---
+> Javier Carrasco (2):
+>       USB: serial: garmin_gps: annotate struct garmin_packet with __counted_by
+>       USB: serial: garmin_gps: use struct_size to allocate pkt
 
-  twl4030_charger.c:243:16: error: variable 'cur_reg' set but not used [-Werror,-Wunused-but-set-variable]
+Now applied (after adding parentheses to struct_size() in the summary).
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
----
- drivers/power/supply/twl4030_charger.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/power/supply/twl4030_charger.c b/drivers/power/supply/twl4030_charger.c
-index 7b9b0b3e164e..f3f1a0862e93 100644
---- a/drivers/power/supply/twl4030_charger.c
-+++ b/drivers/power/supply/twl4030_charger.c
-@@ -363,7 +363,7 @@ static int twl4030_charger_update_current(struct twl4030_bci *bci)
- 	if (status < 0)
- 		return status;
- 	cur_reg |= oldreg << 8;
--	if (reg != oldreg) {
-+	if (reg != cur_reg) {
- 		/* disable write protection for one write access for
- 		 * BCIIREF */
- 		status = twl_i2c_write_u8(TWL_MODULE_MAIN_CHARGE, 0xE7,
--- 
-2.43.0
-
+Johan
