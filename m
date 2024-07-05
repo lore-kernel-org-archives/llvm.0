@@ -1,101 +1,117 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C702979F3
-	for <llvm@lists.linux.dev>; Fri,  5 Jul 2024 21:02:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6FC0413B5B2;
+	Fri,  5 Jul 2024 21:47:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720213331; cv=none; b=qDYfSKQP+xAHYT4810B0/8ApUcfFmnmKfYxAFhJ/GTGZTQiknf1XlLJi8oXClSg/FfzSd5rPQbAFVWK5pq1+h34F+CXs+49tdUMJK7Hy8WsyjMC3qnDDWQv/WX74KkwSuTUaOUc9TApMTHa3nwCOfjzai8vG8QZUa1DYf6liVJU=
+	t=1720216034; cv=none; b=pucJKBnPuD/bDQ8SC6xYSOq2cTIbQIcJchyKUo6J82oTkgKy3WaZMOXZ8aVUADFmM320nY/IHhfPIH1Ha74LhBi7H6mP+UzcewgTKLFRfjIe4ZFJBMqOPTMo89qM/79lJbE4OEyE+nUQuwuV4FIqr2hXyxJztQPpKE03ZY+WKSM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720213331; c=relaxed/simple;
-	bh=9S0YoEp1jkGbkEJXhdjBrqCrFMT5/HywUQm1L/46Ykw=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=GHip/zLS0Ixabn3QzGxit3dEnKoY7FDTGf54VgF2zF+do1aV3O0dQYYYyqxmaBpwNK0w1fgEJOCufrwd4OZaCyuhNWlJHS8SCxxkU9T86AqTVoc5WLFWDufK6oO9gU30p1g6C/utpKeFJRT/qdjvQUZ98DJo5ppbv0SWXuXYEHg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=JrS1oKcK; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1720216034; c=relaxed/simple;
+	bh=DO9YI6U87/AdMasnKM6dLVn1EA/TZFiL2Gbj0GMnUZ4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=H92ENaMcRJmj9Fs3fxsJtsmXmN1VmsGOTD6q7TELG6wz6ah7XhCZwtyVh2Z86BO6xTzK4ixzLCNEHU2h1ztYxLX/TuiDr/yo3ZoJXcnDv4bTTnhk+WmnBkPhpRjuwA3DY85GrAR8bccHX8leTppBK6hQpth2joNbInmHxMUHC2o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=muGtsAxj; arc=none smtp.client-ip=198.175.65.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="JrS1oKcK"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1720213328;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=LS/Z3LFobrNHwdmAJdDhuYpRZVH411TNaATNMi6NEwM=;
-	b=JrS1oKcKcSlxQT8/KP552EzsTgN/Qf1tuPTP8jB+yl9i9HUQkC7qdR0zjRwRJeMrNUuWKk
-	tPSYehVDUjnRBrC0rodStDk6dwIvfkBe0sOTm6pMhtHuUSO5ws4NWRIx4XceBYSj+f/WME
-	0YsTWThy/xfDn0hxrqPpkvr0Ek/1uTU=
-Received: from mx-prod-mc-04.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-569-LlpOQtc3OsqWIP8V8oHyvA-1; Fri,
- 05 Jul 2024 17:02:07 -0400
-X-MC-Unique: LlpOQtc3OsqWIP8V8oHyvA-1
-Received: from mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.4])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-04.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 9C2E21955F3B
-	for <llvm@lists.linux.dev>; Fri,  5 Jul 2024 21:02:06 +0000 (UTC)
-Received: from [172.64.13.54] (unknown [10.30.32.93])
-	by mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 1DE723000184;
-	Fri,  5 Jul 2024 21:02:05 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.10.0-rc6,
- mainline.kernel.org-clang, d270dd21)
-Date: Fri, 05 Jul 2024 21:02:05 -0000
-To: llvm@lists.linux.dev
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="muGtsAxj"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1720216032; x=1751752032;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=DO9YI6U87/AdMasnKM6dLVn1EA/TZFiL2Gbj0GMnUZ4=;
+  b=muGtsAxjD/Igzsv+LCo4NmSKZsOQBFuEN/zhBlUgW7htJV0jzxntUk1n
+   ErLXjna8TRyItrOO7220YNMTLsgwhb8BQmc58FE8ylXfqy3sR61BNf5z5
+   wHiRl2V2l4D2WaDfj8nOPLxYJWI3EESI6VzyASIglba4dtwbPuFQQ4QgP
+   ltgfYCklIA74gyTIWJKtYL7gimXIgCZQUzlM3PEyAGJywHrn+BmUwO4aD
+   1sdh8Exh5WUwEzQyvL6F+VO+yjPJu0q3uO90HjW3Q/TdrDdAxLZUS3YRa
+   mhqmW+6s/kkw6RQ1QxIu8UoYRqkBnCMv8Vn+WZ+luTurqcZO2HxVg+l3M
+   A==;
+X-CSE-ConnectionGUID: kQ/2Uv0+SIWieoIV6WTaKg==
+X-CSE-MsgGUID: hVqEG2e/R++cRt5wyA2yPA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11123"; a="40018477"
+X-IronPort-AV: E=Sophos;i="6.09,186,1716274800"; 
+   d="scan'208";a="40018477"
+Received: from fmviesa010.fm.intel.com ([10.60.135.150])
+  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jul 2024 14:47:12 -0700
+X-CSE-ConnectionGUID: aIZrDO3KQ0C9qQiMHrZZJA==
+X-CSE-MsgGUID: OxqEUSBdR2KL+507Z7R3SA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.09,186,1716274800"; 
+   d="scan'208";a="47040794"
+Received: from lkp-server01.sh.intel.com (HELO 68891e0c336b) ([10.239.97.150])
+  by fmviesa010.fm.intel.com with ESMTP; 05 Jul 2024 14:47:09 -0700
+Received: from kbuild by 68891e0c336b with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1sPqlm-000Svc-39;
+	Fri, 05 Jul 2024 21:47:06 +0000
+Date: Sat, 6 Jul 2024 05:46:49 +0800
+From: kernel test robot <lkp@intel.com>
+To: Sunyeal Hong <sunyeal.hong@samsung.com>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Sylwester Nawrocki <s.nawrocki@samsung.com>,
+	Chanwoo Choi <cw00.choi@samsung.com>,
+	Alim Akhtar <alim.akhtar@samsung.com>,
+	Michael Turquette <mturquette@baylibre.com>,
+	Stephen Boyd <sboyd@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-samsung-soc@vger.kernel.org, linux-clk@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Sunyeal Hong <sunyeal.hong@samsung.com>
+Subject: Re: [PATCH 5/5] clk: samsung: add top clock support for Exynos Auto
+ v920 SoC
+Message-ID: <202407060546.Zqh1m0PR-lkp@intel.com>
+References: <20240705021110.2495344-6-sunyeal.hong@samsung.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.4
-Message-Id: <52063.124070517020700247@us-mta-569.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240705021110.2495344-6-sunyeal.hong@samsung.com>
 
-Hi, we tested your kernel and here are the results:
+Hi Sunyeal,
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: FAILED
+kernel test robot noticed the following build warnings:
+
+[auto build test WARNING on krzk/for-next]
+[also build test WARNING on pinctrl-samsung/for-next krzk-dt/for-next linus/master v6.10-rc6 next-20240703]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Sunyeal-Hong/dt-bindings-clock-add-Exynos-Auto-v920-SoC-CMU-bindings/20240705-195227
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux.git for-next
+patch link:    https://lore.kernel.org/r/20240705021110.2495344-6-sunyeal.hong%40samsung.com
+patch subject: [PATCH 5/5] clk: samsung: add top clock support for Exynos Auto v920 SoC
+config: arm64-randconfig-003-20240706 (https://download.01.org/0day-ci/archive/20240706/202407060546.Zqh1m0PR-lkp@intel.com/config)
+compiler: clang version 16.0.6 (https://github.com/llvm/llvm-project 7cbf1a2591520c2491aa35339f227775f4d3adf6)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240706/202407060546.Zqh1m0PR-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202407060546.Zqh1m0PR-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/clk/samsung/clk-exynosautov920.c:1131:40: warning: unused variable 'peric0_gate_clks' [-Wunused-const-variable]
+   static const struct samsung_gate_clock peric0_gate_clks[] __initconst = {
+                                          ^
+   1 warning generated.
 
 
-Kernel information:
-    Commit message: Merge tag 'pci-v6.10-fixes-2' of git://git.kernel.org/p=
-ub/scm/linux/kernel/git/pci/pci
+vim +/peric0_gate_clks +1131 drivers/clk/samsung/clk-exynosautov920.c
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1362472637
+  1130	
+> 1131	static const struct samsung_gate_clock peric0_gate_clks[] __initconst = {
+  1132	};
+  1133	
 
-One or more kernel builds failed:
-    Unrecognized or new issues:
-         ppc64le - https://datawarehouse.cki-project.org/kcidb/builds/redha=
-t:1362472637-ppc64le-kernel
-           s390x - https://datawarehouse.cki-project.org/kcidb/builds/redha=
-t:1362472637-s390x-kernel
-          x86_64 (debug) - https://datawarehouse.cki-project.org/kcidb/buil=
-ds/redhat:1362472637-x86_64-kernel-debug
-
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
