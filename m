@@ -1,199 +1,122 @@
-Received: from NAM04-MW2-obe.outbound.protection.outlook.com (mail-mw2nam04on2042.outbound.protection.outlook.com [40.107.101.42])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 809B9176FAE
-	for <llvm@lists.linux.dev>; Fri,  5 Jul 2024 19:57:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.101.42
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720209477; cv=fail; b=oRtVsRPss9LLTCkcZW4GZQITmrEbCl/F9z9b2s6uz+UbBD9Gcg8FvZaUn4GedPW3FYl9E84G5O3X4UEYkhuIGh88GJNcEhR7zVQvCjMf8qSP0HkKYERQ4PDSdgduUrPG4EE440+vojUbJtv38447kpdKJiopEPMhkZo5cpKHOLU=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720209477; c=relaxed/simple;
-	bh=l4Qayl59V/s7Q9mn9YD+B18jKgdDP2BoP9T4RlmbXco=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=An+syd97CJUKBZFNAwBeSgN9nYkZ1A3oft7JOOcFj96NZJEV4WosMuInXqzvd+xXuCm6+aoLKC2tvYO+ia4Y3/RNh5smhyYJzq9G236SFa+X/VvtYqzXB4PzYkfnS6lFuDWC5zd55h6ZTnQY8LV52PRlLO9k9iR+Dmi39rociXA=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=Rl3trHOW; arc=fail smtp.client-ip=40.107.101.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B40D2AE6A;
+	Fri,  5 Jul 2024 20:03:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1720209786; cv=none; b=Xse0CpXRb176bJL64BpGDcduA812YTkIYcygtP/HUNG6XU65N5xsvjWfyBaNn9RHy/BZH/vuAXYzsENG7C55CRdVMlBVVfaBYjM/87rachEFE3N6NH8f6QcuGesyYszQq0u7YKzorv1JLkaId2iqvE1BjLhwhPiPtervL84W1YE=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1720209786; c=relaxed/simple;
+	bh=vNY0WjeD+ZgQq9PV5NovSKyND5bsaQ7EN4YZfzPyRZU=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=aQROvExWfFD91MkDU3+f5d31p47hTNbi3Stws2zhz5cWL/wFrRr3n8baY/CowXNi0ccicnSgt30pwHbcuFQz2nSUSh5yNsm2FOFFp9nleL5Zp/llyqqzeSJx0ZShJ3CDxeY05Ec1Rjb9Kl5Pg8Y0nczzRkSiQp7rkttT/xD6UFU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=GIHthIL4; arc=none smtp.client-ip=192.198.163.19
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="Rl3trHOW"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=VG7B24GkWhDdk+KjSwC9wiHD5KUr3aX4vt0a4i03bIdLeIuHJfaYvyj23HYEK42dPNHpF1IARN1JhRSLeoL0NfWSUw6zvdrxvw2B1XCpjDiDqOiEGRvZDaMH27tTX3Kkh0GHl7c/4/HntWFVGT6ImRfPAhU8GjNCDUYXBSYRVLFtiQFpPCkdNRiGhSedUaFqxHKt1wMrOrtF6yAsV8S4m3ORJ7T3L7HUEwUXFHsWxzDEw+RGypIh+/BxlwIDDqk5HiCSKU5OcXZWUS8XTi86MJ6vLfxag6VzK0Zud9O83TBhiRXKq3a5Igks2vEX6MfQtDFf40W/hKCZIbEYCm6EIg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=7oGgTKmR12kMPn7/W03CqVjSGfJLsOUVM96PrbZRhQU=;
- b=OuOlknib12wUcNbOb9cZCmouEerN9jI2enP4zfgWl1y7jWuY4PmkfZK/DACKZ1zReBFZWRZayJzGxIQ3eAwLtWkghh3WJR6lUyjO7cIjFgbZpOxl2L9Qcwf6nvxF3FF7UO2Sk5T28myCUexSDpCvsWJYoGXK4NyMatqsyC9loEM5EUMg4hlIQQwYtOWE8OPHPptfyy307g2ZubdE9PWa95YWDsmNO7c2bQh6037RKhxeimiiapSQjOBE+bGtKwAcsZOauDgzdQFtXwi/lnWH+mvzlXPmdifn3Z2KxMeNcyKtSTCCzBwpKwT2bfVTa+NeCtZPmR5AgUI/svly0Q2ZQQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=7oGgTKmR12kMPn7/W03CqVjSGfJLsOUVM96PrbZRhQU=;
- b=Rl3trHOWEiahMo3OJT8cpLgVjtzardaKwMldPSK8nV87z4PTX8iOTK3Kj3JkrcXslwIBnPGW/q0YUNdBMHQG9LQKzWiNzm/rHRWFbrEW6FbscsVSijrRdJwCC0ugaBD2//c8lQvKUHxBi0YBQGBCLJ2GNK99ZWNfgAQBFtl3IwaNbgT8vVpi+L1lNR2xDDuwxh2/vKgdWXUm4+2OzGZ5BIEt0a5bDhmhCY7AR1w5Ns8UITHfsU6Jfv29bWMCcXeUQ4MGCdK791U+744GfUdhsejmO5OFe9d5zkML1BdpTvAsSUR1GvzGm4zPBG9veWuASU7q+To9oa/mrks6bRltWg==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from BY5PR12MB4130.namprd12.prod.outlook.com (2603:10b6:a03:20b::16)
- by SJ0PR12MB6877.namprd12.prod.outlook.com (2603:10b6:a03:47f::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7741.23; Fri, 5 Jul
- 2024 19:57:52 +0000
-Received: from BY5PR12MB4130.namprd12.prod.outlook.com
- ([fe80::2cf4:5198:354a:cd07]) by BY5PR12MB4130.namprd12.prod.outlook.com
- ([fe80::2cf4:5198:354a:cd07%6]) with mapi id 15.20.7741.017; Fri, 5 Jul 2024
- 19:57:52 +0000
-From: John Hubbard <jhubbard@nvidia.com>
-To: Shuah Khan <shuah@kernel.org>
-Cc: "Jason A . Donenfeld" <Jason@zx2c4.com>,
-	Andy Lutomirski <luto@kernel.org>,
-	Mark Brown <broonie@kernel.org>,
-	Vincenzo Frascino <vincenzo.frascino@arm.com>,
-	Colin Ian King <colin.i.king@gmail.com>,
-	Valentin Obst <kernel@valentinobst.de>,
-	linux-kselftest@vger.kernel.org,
-	LKML <linux-kernel@vger.kernel.org>,
-	llvm@lists.linux.dev,
-	John Hubbard <jhubbard@nvidia.com>
-Subject: [PATCH v5 3/3] selftests/vDSO: remove duplicate compiler invocations from Makefile
-Date: Fri,  5 Jul 2024 09:57:36 -1000
-Message-Id: <20240705195736.34039-4-jhubbard@nvidia.com>
-X-Mailer: git-send-email 2.40.1
-In-Reply-To: <20240705195736.34039-1-jhubbard@nvidia.com>
-References: <20240705195736.34039-1-jhubbard@nvidia.com>
-X-NVConfidentiality: public
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: SJ0P220CA0008.NAMP220.PROD.OUTLOOK.COM
- (2603:10b6:a03:41b::17) To BY5PR12MB4130.namprd12.prod.outlook.com
- (2603:10b6:a03:20b::16)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="GIHthIL4"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1720209784; x=1751745784;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=vNY0WjeD+ZgQq9PV5NovSKyND5bsaQ7EN4YZfzPyRZU=;
+  b=GIHthIL4AkBzxfWnOGl4IJ5Gput4OHk4TV+GMX4TccXDB26ZKka2EL/s
+   35q/RZHaBiXmECK1YFPCC+a36gH/tacGkG8+X/mg/ikfPZXUrjr1FMMmg
+   RCoX/MYjK7xChjlmF9JCZnzaKzMsUc4RzJzJWQBi+Q2kXMk6x5iU8PdjH
+   Oixe16mOyjhxyyA4Vn+ylSKMXRepGrzWPu63EC1TPQJTB5mtpPxdw1NNy
+   B2sDUdE+AfV/rrJ+Li3IDi70teHICjoAeIjzEfOQGGNf4LKtGD7xYlRUE
+   2fLm6vGwyOpKcpLyBA5oqRarGWiNyRMP+gOCNIo8czInH3USx8LKCQPLb
+   w==;
+X-CSE-ConnectionGUID: SC9cIIzOTgWrnN8gTB5i7Q==
+X-CSE-MsgGUID: NU+iPs2KSCqNfPrRKqDmFA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11123"; a="17221573"
+X-IronPort-AV: E=Sophos;i="6.09,185,1716274800"; 
+   d="scan'208";a="17221573"
+Received: from orviesa010.jf.intel.com ([10.64.159.150])
+  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jul 2024 13:03:04 -0700
+X-CSE-ConnectionGUID: KNUdsSiNSjOFCEv+chHv3w==
+X-CSE-MsgGUID: 8hpLQqBTRXmlhvQaxtRNdQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.09,185,1716274800"; 
+   d="scan'208";a="46890003"
+Received: from lkp-server01.sh.intel.com (HELO 68891e0c336b) ([10.239.97.150])
+  by orviesa010.jf.intel.com with ESMTP; 05 Jul 2024 13:03:02 -0700
+Received: from kbuild by 68891e0c336b with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1sPp91-000Snk-2W;
+	Fri, 05 Jul 2024 20:02:59 +0000
+Date: Sat, 6 Jul 2024 04:02:08 +0800
+From: kernel test robot <lkp@intel.com>
+To: Peter Zijlstra <peterz@infradead.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [peterz-queue:perf/uprobes 11/11] kernel/events/uprobes.c:1775:32:
+ error: incompatible pointer types passing 'struct callback_head *' to
+ parameter of type 'task_work_func_t' (aka 'void (*)(struct callback_head
+ *)')
+Message-ID: <202407060337.GGKAMoWl-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BY5PR12MB4130:EE_|SJ0PR12MB6877:EE_
-X-MS-Office365-Filtering-Correlation-Id: fea32154-2c6f-4202-9934-08dc9d2cc12d
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|376014|1800799024|7416014|366016;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?zOSU+B0M+6I4fIcSmp+UyzZJuYoDrGCi18r/1AcdkxfAleuKUJKoG+Kxoa5r?=
- =?us-ascii?Q?pNOgwgCyeH12XlnoeOm8LBRYZTV/Eo4wimsNKCDyl+HNOpFuGRK7EEepbWXG?=
- =?us-ascii?Q?hUwF2tuPWFz6nX3nJ+Ar/GYUTsGJUammpMi1Gs22a+2kuMBwXOKVSaDwe7cP?=
- =?us-ascii?Q?c1loWd9xvwd1C2za778OrALJImB7tushiulISML1VrVCMsNXe/KM8unL66Y1?=
- =?us-ascii?Q?mcbOcdqNC9uGEfb3cIVm/gZbARVVWz6PbUfCe9PrMMSAf7q9Iq3HzxcozZTy?=
- =?us-ascii?Q?L21aJ2Ie5DUskOVMiGKlDp2LL7pk8kDkutkXd6giW50JLt3mu1RsYgKoxZO1?=
- =?us-ascii?Q?bH3QFqho1KYkufZfqwECtKlVFND5HDnyVVc+gniGNIH0Wjg/Uff7oYDTCSKs?=
- =?us-ascii?Q?ae4mlPXX3U5EKY+n8sJkJduvj/KxkkDdRVa9ALvfnv+PPwXT7voFol37zirN?=
- =?us-ascii?Q?H7Y2Vd1w5K9G1zaGkSSQ+4b4E8PLCuodfLLvWFXYWvyiwpGTDsVMQT/hj7/0?=
- =?us-ascii?Q?SJrX4AW60K63US0567z8x8upiCFF74/EZVx+nbGN7gDXE+isZaZG9ut0ke8W?=
- =?us-ascii?Q?OHdfhSFh2kcKqWcTgbIvPNDVwQneMLXCZDOKZXAmcfuPRL26wpUpbNFkSmGf?=
- =?us-ascii?Q?lzuIGwif1FAHddYQvSg95GM/Vp5SPTxIb/rCk0YdL0+t5+5D727lxyrQa9mw?=
- =?us-ascii?Q?BWc/iNPCK/rejza3FkHj/TmrkKaWbqcICfXrNJixvlBihisVZSUe66X3t6jE?=
- =?us-ascii?Q?FuaaLEQykq9ItNk/61W+fRz+XFaM1hMyKEJxDISznYWK+T5JmXqSShkZdYF/?=
- =?us-ascii?Q?NwrMFvjTBYA3w3+HBKMDk+PFoLWUSDpsdg7CSTT2ni8nV5c98KZuIVSFNV1K?=
- =?us-ascii?Q?JIFK6Adk/Hmq+3pnNjFXEUsMry2Q0xKzjdkICNAWSxQzxP10E+Vx92yLvQh9?=
- =?us-ascii?Q?dy8X3xrq3ui+2RKhnmQQfLW7XTXYZOtHDFj00ZscBI9yVLC2RQlTGRiidqWQ?=
- =?us-ascii?Q?LCD9ZV7mAOcxWyttvNnPypcmD78QJ5we1ekT15KgF3pj9ntn8zLDybC3GRUP?=
- =?us-ascii?Q?rTmxuLC54tO4KoogSE29o5cCt1NPJ1lPuWI33yarOd9tNIlggjBJUIoXLss2?=
- =?us-ascii?Q?guaHBgwhH22aOAc1f1wiiPt/qkd2HnCAqwuRyMnuHfkkCwOonj/QRLAmPldz?=
- =?us-ascii?Q?zsoxydTqvN+1KhhlcZhD3Ae7c+e4xNSipGt3fVBDYHspzsduXnYGhnemAJdQ?=
- =?us-ascii?Q?GLa74Akj7zOoIizl9kYKFpV2aVJ+rpTlUdvrxfkuCSst0R1KoIfSzMTCwF0j?=
- =?us-ascii?Q?/Hyfx/2oc2CKp8GZaV7GmU/33+1TPmhUaO/bTG/u7V4EKw=3D=3D?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR12MB4130.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(1800799024)(7416014)(366016);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?ygTaqa7SRl0GQQnafTdPKyFB7MTxcjBO0htGZF/NMPcP9HKSTiMXt3M+rNnE?=
- =?us-ascii?Q?bQ5nuP0BVbYWBGiVQjwTyL1AS7+TuHkpUp99UdBoMNKE8EVRLzrXmyuCS2sU?=
- =?us-ascii?Q?Kf5PoEmpACF83W0uxpdp4es72DfTm81KR7wq+O0iTsNO4SoFUR6ulHyaPhgs?=
- =?us-ascii?Q?v4aWTH7joki/X1c5/uf0cypxNkpIzhOhZznC+82x32WrzV0PT8oB7EjkkQo7?=
- =?us-ascii?Q?+CbooSdE8yt2YhaPGcTR694vmrDjJyy9nJQjuhSrKppyz/hQzdXJVM4jDhLh?=
- =?us-ascii?Q?0j0FaK2366rG5Am270f4lWIVj8oFULK19oRHE2Wnw+0r+vBS6P8uWFdEWMpI?=
- =?us-ascii?Q?+h08gH5yl3PgG/PGkbzCPG+d6iQyWmLs8EMeUsHkIM+2iuPQ/lKSK0uYRyNF?=
- =?us-ascii?Q?A7VFhYyWo1+6hyWgj3jD80Fs4BWCtY0GS0XH3KDeCZqOMIwZXQR9nrzs+YiY?=
- =?us-ascii?Q?th6neIT94X9KJTCp2QOiztLCpkoVpiYb9pb5fcy+LNJwcvQhs2aBBbV90983?=
- =?us-ascii?Q?RU9J824K+CFyScZV8DaRKkwKwsITleJey4Pe3O+y3Izz5pXd6cAqZRzz/fE8?=
- =?us-ascii?Q?BkMGxV2ySyXkxltjET9MNATHo6c7weo+B75fYL+hPWKh6Pqt0yyN7iebjDez?=
- =?us-ascii?Q?DdtM1TzErtYrOixR8imxngCgRhBaMFQ0WYWtmewhFWxAb6U0EMNBeZ9HEg5y?=
- =?us-ascii?Q?nnLsBk1UcvpqYZSqNso2OfwsXqI5MQy/Mu1OQbh/ONkR2agJSVL0AjBQ9/b6?=
- =?us-ascii?Q?aoIL+uAWewsfDlV5xEcu2Ce+jjkB1XIazutpXtzdiHHlcBQ/TKUSMul9x8AH?=
- =?us-ascii?Q?+4ZMjATT+RuD/ew83V83RThzxBp3DWsD2tgPy/pWAGcXujMk0Ta/tkpRkgtu?=
- =?us-ascii?Q?aTf5oZpaGx+bx92IJzcdykxONh3+vDg2Ib0X5TO3LPmxEZPckB9sarVfkEWH?=
- =?us-ascii?Q?5wwv/WBTSzcVueoz1yFJgb4GQ6p2FnWTKcjx2icfQGTEsQrmV5TFgHrdptHM?=
- =?us-ascii?Q?gYGNpbk5fm+KbaUeoBLzMBmBhnTiyQr43k/oL6llD2G4DcLbdvVahgvecKjs?=
- =?us-ascii?Q?flU+ie8yDU8V5taIsI18wCb/pk6BiIAbi+rkAjnTVEu1J4TCnjX0BGDbwDyk?=
- =?us-ascii?Q?nV2knI96KUXGfEAOjzKLOtUrJ02eCtp1fSfo8LPvhBbAuRoRSuVo6X110491?=
- =?us-ascii?Q?1dH2rYhZC2lFcUl3uefM9JbzLfkVY2NHWPdYjNnAJwy49RlFsXcS18qFmG47?=
- =?us-ascii?Q?0W5qsnMj6ZyvImrjyBLFTQfxm//2PVKPNGvEpyBLZ3qae9MQIIhvvaD+CjOq?=
- =?us-ascii?Q?5tEmMk2XiLQudD41V0cLwb1LiORMt7hBlma7YKJLYUWJzLfAaYTvp+KwS7gC?=
- =?us-ascii?Q?cmEUha+pIs7APQ06QOURPtqAL36EMVJAuQSyuCudajvJXon5HBlB8LtUoKd+?=
- =?us-ascii?Q?hJlphSrWzcapmXiK9aIEcMIoWFTObHJwO58RXIu6pC3z514HjwsnMmcnPK0g?=
- =?us-ascii?Q?DyBtEIbL0878ECKJkshBQK5qQestny6/TcLYy99MAl7Nv5R34n2BfCbeRoxm?=
- =?us-ascii?Q?woazjssZHytDjyaEJrnOx3XnAh4sJqCEo1mqW6Rb?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: fea32154-2c6f-4202-9934-08dc9d2cc12d
-X-MS-Exchange-CrossTenant-AuthSource: BY5PR12MB4130.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Jul 2024 19:57:52.5763
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: rw4mOf2IiDDSXToEaF97K1h1WcMxqKSRdpJIpvuRVDGa4LjnKFpN9u/RESr0xAIOa8hYmQkLkVMVplls7CISDw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR12MB6877
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-The Makefile open-codes compiler invocations that ../lib.mk already
-provides.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git perf/uprobes
+head:   b9867ee7d141bc8791e501495bafdfdb97283196
+commit: b9867ee7d141bc8791e501495bafdfdb97283196 [11/11] perf/uprobe: Add uretprobe timer
+config: i386-buildonly-randconfig-003-20240706 (https://download.01.org/0day-ci/archive/20240706/202407060337.GGKAMoWl-lkp@intel.com/config)
+compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240706/202407060337.GGKAMoWl-lkp@intel.com/reproduce)
 
-Avoid this by using a Make feature that allows setting per-target
-variables, which in this case are: CFLAGS and LDFLAGS. This approach
-generates the exact same compiler invocations as before, but removes all
-of the code duplication, along with the quirky mangled variable names.
-So now the Makefile is smaller, less unusual, and easier to read.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202407060337.GGKAMoWl-lkp@intel.com/
 
-The new dependencies are listed after including lib.mk, in order to
-let lib.mk provide the first target ("all:"), and are grouped together
-with their respective source file dependencies, for visual clarity.
+All errors (new ones prefixed by >>):
 
-Signed-off-by: John Hubbard <jhubbard@nvidia.com>
----
- tools/testing/selftests/vDSO/Makefile | 14 +++++---------
- 1 file changed, 5 insertions(+), 9 deletions(-)
+>> kernel/events/uprobes.c:1775:32: error: incompatible pointer types passing 'struct callback_head *' to parameter of type 'task_work_func_t' (aka 'void (*)(struct callback_head *)') [-Werror,-Wincompatible-pointer-types]
+    1775 |         task_work_cancel(utask->task, &utask->ri_task_work);
+         |                                       ^~~~~~~~~~~~~~~~~~~~
+   include/linux/task_work.h:33:78: note: passing argument to parameter here
+      33 | struct callback_head *task_work_cancel(struct task_struct *, task_work_func_t);
+         |                                                                              ^
+   1 error generated.
 
-diff --git a/tools/testing/selftests/vDSO/Makefile b/tools/testing/selftests/vDSO/Makefile
-index 209ede5de208..98d8ba2afa00 100644
---- a/tools/testing/selftests/vDSO/Makefile
-+++ b/tools/testing/selftests/vDSO/Makefile
-@@ -12,8 +12,7 @@ endif
- TEST_GEN_PROGS += vdso_test_correctness
- 
- CFLAGS := -std=gnu99
--CFLAGS_vdso_standalone_test_x86 := -nostdlib -fno-asynchronous-unwind-tables -fno-stack-protector
--LDFLAGS_vdso_test_correctness := -ldl
-+
- ifeq ($(CONFIG_X86_32),y)
- LDLIBS += -lgcc_s
- endif
-@@ -23,12 +22,9 @@ $(OUTPUT)/vdso_test_gettimeofday: parse_vdso.c vdso_test_gettimeofday.c
- $(OUTPUT)/vdso_test_getcpu: parse_vdso.c vdso_test_getcpu.c
- $(OUTPUT)/vdso_test_abi: parse_vdso.c vdso_test_abi.c
- $(OUTPUT)/vdso_test_clock_getres: vdso_test_clock_getres.c
-+
- $(OUTPUT)/vdso_standalone_test_x86: vdso_standalone_test_x86.c parse_vdso.c
--	$(CC) $(CFLAGS) $(CFLAGS_vdso_standalone_test_x86) \
--		vdso_standalone_test_x86.c parse_vdso.c \
--		-o $@
-+$(OUTPUT)/vdso_standalone_test_x86: CFLAGS +=-nostdlib -fno-asynchronous-unwind-tables -fno-stack-protector
-+
- $(OUTPUT)/vdso_test_correctness: vdso_test_correctness.c
--	$(CC) $(CFLAGS) \
--		vdso_test_correctness.c \
--		-o $@ \
--		$(LDFLAGS_vdso_test_correctness)
-+$(OUTPUT)/vdso_test_correctness: LDFLAGS += -ldl
+
+vim +1775 kernel/events/uprobes.c
+
+  1754	
+  1755	/*
+  1756	 * Called with no locks held.
+  1757	 * Called in context of an exiting or an exec-ing thread.
+  1758	 */
+  1759	void uprobe_free_utask(struct task_struct *t)
+  1760	{
+  1761		struct uprobe_task *utask = t->utask;
+  1762		struct return_instance *ri;
+  1763	
+  1764		if (!utask)
+  1765			return;
+  1766	
+  1767		if (utask->active_uprobe)
+  1768			srcu_read_unlock(&uretprobes_srcu, utask->active_srcu_idx);
+  1769	
+  1770		ri = utask->return_instances;
+  1771		while (ri)
+  1772			ri = free_ret_instance(ri);
+  1773	
+  1774		timer_delete_sync(&utask->ri_timer);
+> 1775		task_work_cancel(utask->task, &utask->ri_task_work);
+  1776		xol_free_insn_slot(t);
+  1777		kfree(utask);
+  1778		t->utask = NULL;
+  1779	}
+  1780	
+
 -- 
-2.40.1
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
