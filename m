@@ -1,94 +1,116 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
+Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C08621C6A0;
-	Fri,  5 Jul 2024 06:10:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2CB8513BAC2
+	for <llvm@lists.linux.dev>; Fri,  5 Jul 2024 08:11:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.227.194
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720159809; cv=none; b=AtlQ3kDYHYCEu5sRquoB/aJucSZV2LlzSfAeri8SydDrkLRJncvxBFQF9G7osEqVot85DfypSpaZRuRtHjGmOL3Yu7A+XPKgDby3D76l45qnEq3lxC38ihu95LiPspK6ymjUyOIJjouXgGwnZ3o3HzNoy1/io85C7SIhH7IU3cU=
+	t=1720167114; cv=none; b=uWFy1Aye7lcar5hiV6dXnZFtp9e94lIRPmqTuSPd5fuZELPrCb6obQqqFm23ej9OCzTrXHfbA6ItLorUyKxtoZSdL4HR99+HTTMNdsQ4p77FqvpEZoKurhmp51TwvqCmtbZiPu9UEc9ZJBWjo/bDD5wCXtGBsDCFO0lH0+xBiiQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720159809; c=relaxed/simple;
-	bh=vTcx2+1lCMBfWrPZ13b428fkp2SjuNVrG8fTeuvkDww=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=CAGxj5Zyf7sibJkUc8AOVj7p61dPB+G4MjzG9btGQVkk/Nzaa+vhRrCLpfZh3P30G8/n/qnaRlRAecDU/lMteYCSwVvRATZd7xfTPqRYi9xhQWqThv+sQuaKzV52fT/4fwCGKGpDMm6Rru7JZ9r6E3+6us9MG1PfNb0tQqxAFnk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=YsRCFO0A; arc=none smtp.client-ip=198.175.65.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1720167114; c=relaxed/simple;
+	bh=Aj0m6t8GDqsHhAgXUzxgI6F12Xfm6vOntSjq+v8Fu+k=;
+	h=Message-ID:Date:MIME-Version:Cc:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=Bqo5m6y6p1UYPWW1xTFJMGxi4QnfBZ8vG9GbH40fI/Vlz/HOF0i61Fb5bDrTw7tJuSxgExeJKBP481IogV8n8agNItDPWybkHy4H7XUqxiXsBOCWcKnXM997r1GRh9P4PB/hWVz6p7/hlltKh5hE+2q/SCcmOMVhrIjO4bRUeCo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=k0R4d9k1; arc=none smtp.client-ip=46.235.227.194
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="YsRCFO0A"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1720159808; x=1751695808;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=vTcx2+1lCMBfWrPZ13b428fkp2SjuNVrG8fTeuvkDww=;
-  b=YsRCFO0A1ra+xClkAgeAF4vUgVoUm3LuOYu1JSiLsCjSxywG0IMuWbjo
-   LTLYD5sLMNo4mJU1HbRIWORK3X1lziugEaMthMKZaJER80qUMXroeec84
-   GZwaIsLR07xAoS+mR0mXTCOgmlcPiadZSGm+Bs7CRKRxsxPFWpmVx5u34
-   6muxvLkV9btAZDzsOkIitLa8FEgYWx1dMSOHQXuowAsC9OnzDPbIhQV9F
-   JTd/DAxzr4up74tunB9YdhksBiFe4G2aZdLC4xSk0zuomqeMbAwcGHkjc
-   iCX9zzugS3DkeRmomH5B5WclFLPQKhrb6vvMy0+MOZ8aeHtKXpkFrSTJR
-   Q==;
-X-CSE-ConnectionGUID: 8jPxptDASnqkUMaT5gPehQ==
-X-CSE-MsgGUID: vKRekkbsSE6n0iSdoCB2iw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11123"; a="17587067"
-X-IronPort-AV: E=Sophos;i="6.09,184,1716274800"; 
-   d="scan'208";a="17587067"
-Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jul 2024 23:10:08 -0700
-X-CSE-ConnectionGUID: hU/CBXYEQB2djr27ycd+WA==
-X-CSE-MsgGUID: +PBv/BLxTIagLVNxVlwYyQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.09,184,1716274800"; 
-   d="scan'208";a="77518697"
-Received: from lkp-server01.sh.intel.com (HELO 68891e0c336b) ([10.239.97.150])
-  by orviesa002.jf.intel.com with ESMTP; 04 Jul 2024 23:10:06 -0700
-Received: from kbuild by 68891e0c336b with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1sPc8x-000S0i-1X;
-	Fri, 05 Jul 2024 06:10:03 +0000
-Date: Fri, 5 Jul 2024 14:09:37 +0800
-From: kernel test robot <lkp@intel.com>
-To: Danielle Ratson <danieller@nvidia.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Linux Memory Management List <linux-mm@kvack.org>,
-	Petr Machata <petrm@nvidia.com>
-Subject: [linux-next:master 8719/10451] ld.lld: error: section .pci_fixup
- virtual address range overlaps with __bug_table
-Message-ID: <202407051359.IdUPkWid-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="k0R4d9k1"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+	s=mail; t=1720167111;
+	bh=Aj0m6t8GDqsHhAgXUzxgI6F12Xfm6vOntSjq+v8Fu+k=;
+	h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
+	b=k0R4d9k1T8mdsROZzkU9HtEXYxYzZe6bMlgmgkz+5WdFxt3rkdS2zx88DTZGS+Vap
+	 j+V3KLRGy/SKofIaLWaRExYjrWTANIwdAjaYiBBFuZot3PP2YzLaGGMRxb5g0MHZqU
+	 x6Ots4XX8Owe4bhA3i1AcbaLPlox5YJB3Pd6oURIwj8nQY0lNgkXPwdnmWc0jrGTG6
+	 bJcwaMqrxM8yJwKJQsL87449QRIIwiC3GekKEHOp2iNIJ50GUKKaW0Ycw7dfhjF/lQ
+	 z9r+fdyWOy/lS2dobpgpwSubfHkYUhMtKsqwdOx9mbBZo+Atz+WWv1RpYF4Mkocsit
+	 TUjkTo7i17Nuw==
+Received: from [100.113.15.66] (ec2-34-240-57-77.eu-west-1.compute.amazonaws.com [34.240.57.77])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: usama.anjum)
+	by madrid.collaboradmins.com (Postfix) with ESMTPSA id 454AA37810FB;
+	Fri,  5 Jul 2024 08:11:48 +0000 (UTC)
+Message-ID: <b5c4d39c-a993-4929-af95-013e767fcdb1@collabora.com>
+Date: Fri, 5 Jul 2024 13:11:45 +0500
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+User-Agent: Mozilla Thunderbird
+Cc: Muhammad Usama Anjum <usama.anjum@collabora.com>,
+ John Stultz <jstultz@google.com>, Thomas Gleixner <tglx@linutronix.de>,
+ Stephen Boyd <sboyd@kernel.org>,
+ Anna-Maria Behnsen <anna-maria@linutronix.de>,
+ Frederic Weisbecker <frederic@kernel.org>,
+ Valentin Obst <kernel@valentinobst.de>, linux-kselftest@vger.kernel.org,
+ LKML <linux-kernel@vger.kernel.org>, llvm@lists.linux.dev
+Subject: Re: [PATCH v3] selftests/timers: remove unused irqcount variable
+To: John Hubbard <jhubbard@nvidia.com>, Shuah Khan <shuah@kernel.org>
+References: <20240704024202.84726-1-jhubbard@nvidia.com>
+Content-Language: en-US
+From: Muhammad Usama Anjum <usama.anjum@collabora.com>
+In-Reply-To: <20240704024202.84726-1-jhubbard@nvidia.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-head:   0b58e108042b0ed28a71cd7edf5175999955b233
-commit: a39c84d796254e6b1662ca0c46dbc313379e9291 [8719/10451] ethtool: cmis_cdb: Add a layer for supporting CDB commands
-config: riscv-randconfig-001-20240704 (https://download.01.org/0day-ci/archive/20240705/202407051359.IdUPkWid-lkp@intel.com/config)
-compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project a0c6b8aef853eedaa0980f07c0a502a5a8a9740e)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240705/202407051359.IdUPkWid-lkp@intel.com/reproduce)
+On 7/4/24 7:42 AM, John Hubbard wrote:
+> When building with clang, via:
+> 
+>     make LLVM=1 -C tools/testing/selftest
+> 
+> ...clang warns about an unused irqcount variable. clang is correct: the
+> variable is incremented and then ignored.
+> 
+> Fix this by deleting the irqcount variable.
+> 
+> Signed-off-by: John Hubbard <jhubbard@nvidia.com>
+Reviewed-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202407051359.IdUPkWid-lkp@intel.com/
-
-Note: the linux-next/master HEAD 0b58e108042b0ed28a71cd7edf5175999955b233 builds fine.
-      It may have been fixed somewhere.
-
-All errors (new ones prefixed by >>):
-
->> ld.lld: error: section .pci_fixup virtual address range overlaps with __bug_table
-   >>> .pci_fixup range is [0xFFFFFFFF826C79D8, 0xFFFFFFFF826CB9DF]
-   >>> __bug_table range is [0xFFFFFFFF826CA788, 0xFFFFFFFF8270CE6B]
---
->> ld.lld: error: section __bug_table virtual address range overlaps with __ksymtab
-   >>> __bug_table range is [0xFFFFFFFF826CA788, 0xFFFFFFFF8270CE6B]
-   >>> __ksymtab range is [0xFFFFFFFF826CB9E0, 0xFFFFFFFF826EE86F]
+> ---
+> 
+> Changes since v2:
+> 
+> 1) Rebased onto Linux 6.10-rc6+
+> 
+> Changes since the first version:
+> 
+> 1) Rebased onto Linux 6.10-rc1
+> 
+> thanks,
+> John Hubbard
+> 
+>  tools/testing/selftests/timers/rtcpie.c | 3 +--
+>  1 file changed, 1 insertion(+), 2 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/timers/rtcpie.c b/tools/testing/selftests/timers/rtcpie.c
+> index 4ef2184f1558..7c07edd0d450 100644
+> --- a/tools/testing/selftests/timers/rtcpie.c
+> +++ b/tools/testing/selftests/timers/rtcpie.c
+> @@ -29,7 +29,7 @@ static const char default_rtc[] = "/dev/rtc0";
+>  
+>  int main(int argc, char **argv)
+>  {
+> -	int i, fd, retval, irqcount = 0;
+> +	int i, fd, retval;
+>  	unsigned long tmp, data, old_pie_rate;
+>  	const char *rtc = default_rtc;
+>  	struct timeval start, end, diff;
+> @@ -120,7 +120,6 @@ int main(int argc, char **argv)
+>  
+>  			fprintf(stderr, " %d",i);
+>  			fflush(stderr);
+> -			irqcount++;
+>  		}
+>  
+>  		/* Disable periodic interrupts */
+> 
+> base-commit: 8a9c6c40432e265600232b864f97d7c675e8be52
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+BR,
+Muhammad Usama Anjum
