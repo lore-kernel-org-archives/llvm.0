@@ -1,128 +1,156 @@
-Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
+Received: from fout2-smtp.messagingengine.com (fout2-smtp.messagingengine.com [103.168.172.145])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 813DF14532A
-	for <llvm@lists.linux.dev>; Fri,  5 Jul 2024 08:13:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.227.194
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E2D30145FF1
+	for <llvm@lists.linux.dev>; Fri,  5 Jul 2024 08:17:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.145
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720167200; cv=none; b=sGbv9ptEKG2Ww+jKdweWLuhCfZ9oA5oK+dQCzucDEJGcvetJMBFlEy9rwL4F97UXin05pZp2ecx0lsULD+bZeFk3Xdo1nY1UAeKYDIBqzsMmJoSF8dfcjs5XUqbnbg3JFpFct+L3B77xQ40C+Aw5BWazHahw1ce/h/dkRcDxd6I=
+	t=1720167475; cv=none; b=ogK8vqr1B20QlUiF5P9x/3FDhMqxv7ytM2a1AaZ/oF0oMGvXHyJbi0NMLmdnbVP4BZXy0S997f4vrrtbURnbDUxkhAp7abtI6vW6tprqbX9TlbtD7FIqLN+5d2KIZEDO6DxWbF9WoFuWSG8L3LNau9fyjxEyMcr5oV9UqniuvPk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720167200; c=relaxed/simple;
-	bh=AgHhyMmoeUtAdP6SOZU4iVITltEbZQrn++sF+5ZO118=;
-	h=Message-ID:Date:MIME-Version:Cc:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=UqMlsyBbeqwLSsEiJJKfiqyL+7YVMmNSAu6T+9bfHkfylJ2ZUEl0zgBAo4CSPZ9A3ttZSkgi328z8XFU7ArKpQT80M/Hjf7Fue8p/H4TrAyAAmsCv4Cu4Tpcn3XO53TMRn8jhONgpddkstjikVFDAGVC4g3Gi4PPCDyzIw20BT8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=HoldbA2P; arc=none smtp.client-ip=46.235.227.194
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+	s=arc-20240116; t=1720167475; c=relaxed/simple;
+	bh=JaZCq90X99txXZZxHzux67wr72AiqVEawp8RvvV6yHg=;
+	h=MIME-Version:Message-Id:In-Reply-To:References:Date:From:To:Cc:
+	 Subject:Content-Type; b=nIRZXUWWvtG6U9xq/4tdYaN5Wiy684G4qc5jCenkBPTLi5hkK6ZDcOiHhpnLFJV1XZQiJuNobByTX75gFKGIumQadtcrF/+XqorUSzyA8jVJISHJpcLX97CpyU1+DdNBbVWTVB2KETqtyhMVQOqMUcrgKkBjz2IxActz7dPr9fg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=bPPRVJFz; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=FypYW0TJ; arc=none smtp.client-ip=103.168.172.145
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="HoldbA2P"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1720167197;
-	bh=AgHhyMmoeUtAdP6SOZU4iVITltEbZQrn++sF+5ZO118=;
-	h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
-	b=HoldbA2PudjyKSW+lmdADb7c71gZmV2dnVkpuATZTY5f9OsRhA9ZaDyGRMo56yHtD
-	 HLmFX2TjcqRri2gD0tVolXWVevWBlh0TbZibKdJ1XC6P/B276vvIRjjia/IqNEharA
-	 7U+iTkFNEesgGNNMh31TiZoOQbHfI5ml4ji7pwmI6hCsR0GRVgNqZoKeiP7pwm0i6w
-	 N3GR5oZTYMbd3GmdoGm5fJnuGKLGTxhb4e8v3eTkHimFdX1OxE/fgbq3yh3BPEjkgY
-	 AM0gM8Fb5LGrpNQaG8puXUdBsFxymchJStwIMyl5AbkkZa+IYmtIzM7w91m/OdSptJ
-	 kn9e382/4Glfw==
-Received: from [100.113.15.66] (ec2-34-240-57-77.eu-west-1.compute.amazonaws.com [34.240.57.77])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: usama.anjum)
-	by madrid.collaboradmins.com (Postfix) with ESMTPSA id E063E378219E;
-	Fri,  5 Jul 2024 08:13:10 +0000 (UTC)
-Message-ID: <03195dcd-e689-421d-bcf5-4134c1f18990@collabora.com>
-Date: Fri, 5 Jul 2024 13:13:08 +0500
+	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="bPPRVJFz";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="FypYW0TJ"
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+	by mailfout.nyi.internal (Postfix) with ESMTP id E8BD1138046B;
+	Fri,  5 Jul 2024 04:17:52 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute5.internal (MEProxy); Fri, 05 Jul 2024 04:17:52 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-type:content-type:date:date:from:from:in-reply-to
+	:in-reply-to:message-id:mime-version:references:reply-to:subject
+	:subject:to:to; s=fm1; t=1720167472; x=1720253872; bh=yX5cCkRdrC
+	0vhKeykg3zHmQM8vjUu8YPsevI5qXlp5M=; b=bPPRVJFzZMyuJiV7d9nFdo88/a
+	OZw6+WdvrAAAOoPbYBosQvrmGTVZVz9XRpJlSu93Yy+cQn9zsKHItGtN+6YX27f9
+	PT4Zk9k6d8IfQvqNWo0RquYYvy4r2fZgPcmGVOW5bHBoAR+dw1KElI0CIhM2NHCz
+	7/dLGBMFiK0W5qN5nT6XxldhyjG2J6PMiOQbbfXIIaG/ufQn+2oCpX0kVoZ3fLKw
+	fbMj3d+iUC7mxpACX1fvj1HD3LlTIU34AiIAtjvaXaN7YNfI/swvoPyL3ql5tM86
+	UDAaHovjEsaIjaKREy2w9HUog89ZbUYKZbVfUofT6j7vw7tQ4JkW2phkvswQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-type:content-type:date:date
+	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+	:message-id:mime-version:references:reply-to:subject:subject:to
+	:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+	fm2; t=1720167472; x=1720253872; bh=yX5cCkRdrC0vhKeykg3zHmQM8vjU
+	u8YPsevI5qXlp5M=; b=FypYW0TJxqN2Rdcgv/IZURdb7QK+8264E6i0zF1ePm1o
+	1ODSn7QOheYwJzVfExxo0nV6c6j4xk/mw/eEy9W1Mfic1B32taOn/qlZk9wgpo2y
+	To2X1DFSrkK31nQZ/yWh8p3l+17IGfDBmlCDj+BiMHjmNYrGGAI+zM/3i+rlNnjh
+	iwNmM8/u+3/9ib3m2LImWYEjjyjzCu0TBm492PuxFbJM1RsG1OMdkusKXKRreA8w
+	1Jyxmwbo/LrcaAtbAWB3kJJXXlyxfpXTbnXXKNBQK6QDkv+em7eKf9Twuefe2O9+
+	5v/nofzgqfRf3DF3RMXGxbUSSue9lDdLuWcKe17G6w==
+X-ME-Sender: <xms:MKyHZobzYwNs4LEoKjKjOA_vzCIEuvpZnmFmcPVqtp6nECfQWHY4CQ>
+    <xme:MKyHZjYw1znDYS-ij887nZqukCUix8VdQhv6AvZnQ3Nd0DvsoQLArNlXXKEfr9NtG
+    xG7vTpf3tiAH1nTx9E>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeftddrvddugddtudcutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdetrhhn
+    ugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrghtth
+    gvrhhnpeffheeugeetiefhgeethfejgfdtuefggeejleehjeeutefhfeeggefhkedtkeet
+    ffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrh
+    hnugesrghrnhgusgdruggv
+X-ME-Proxy: <xmx:MKyHZi9jGDNVqkUNJSwbg0byIb6LTPQcjmQTUtx179Eg4EoBnkeZMA>
+    <xmx:MKyHZirhtSCIuc5OoiP2LNYo8sud51vWirq2osKxyXgc3PpthnUtmA>
+    <xmx:MKyHZjpfuJDLYwkCMosXhjbij4USIQ1Co_hY7p-sgHRai4LCxVHVSA>
+    <xmx:MKyHZgREbdqSntQKkAynDCa9HpUPxMkK522rTvQDprBoepw-p_aTSg>
+    <xmx:MKyHZkdGbejUp37PvcNC9Gsa6Ey1KEHis4THiDUXWnr2i_HPu3ZcLMIo>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+	id 7060CB6008D; Fri,  5 Jul 2024 04:17:52 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.11.0-alpha0-566-g3812ddbbc-fm-20240627.001-g3812ddbb
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Cc: Muhammad Usama Anjum <usama.anjum@collabora.com>,
- "Jason A . Donenfeld" <Jason@zx2c4.com>, Thomas Gleixner
- <tglx@linutronix.de>, Andy Lutomirski <luto@kernel.org>,
- Mark Brown <broonie@kernel.org>,
- Vincenzo Frascino <vincenzo.frascino@arm.com>,
- Colin Ian King <colin.i.king@gmail.com>,
- Valentin Obst <kernel@valentinobst.de>, linux-kselftest@vger.kernel.org,
- LKML <linux-kernel@vger.kernel.org>, llvm@lists.linux.dev
-Subject: Re: [PATCH v4 2/3] selftests/mm: remove partially duplicated "all:"
- target in Makefile
-To: John Hubbard <jhubbard@nvidia.com>, Shuah Khan <shuah@kernel.org>
-References: <20240704023324.83564-1-jhubbard@nvidia.com>
- <20240704023324.83564-3-jhubbard@nvidia.com>
-Content-Language: en-US
-From: Muhammad Usama Anjum <usama.anjum@collabora.com>
-In-Reply-To: <20240704023324.83564-3-jhubbard@nvidia.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Message-Id: <3adf7f7b-a46e-4368-a87a-a217a8a8f9d1@app.fastmail.com>
+In-Reply-To: <20240705022334.1378363-3-nico@fluxnic.net>
+References: <20240705022334.1378363-1-nico@fluxnic.net>
+ <20240705022334.1378363-3-nico@fluxnic.net>
+Date: Fri, 05 Jul 2024 10:17:18 +0200
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "Nicolas Pitre" <nico@fluxnic.net>, "Russell King" <linux@armlinux.org.uk>
+Cc: "Nicolas Pitre" <npitre@baylibre.com>,
+ Linux-Arch <linux-arch@vger.kernel.org>, linux-kernel@vger.kernel.org,
+ llvm@lists.linux.dev, "Nathan Chancellor" <nathan@kernel.org>
+Subject: Re: [PATCH 2/2] asm-generic/div64: reimplement __arch_xprod64()
+Content-Type: text/plain
 
-On 7/4/24 7:33 AM, John Hubbard wrote:
-> There were a couple of errors here:
-> 
-> 1. TEST_GEN_PROGS was incorrectly prepending $(OUTPUT) to each program
-> to be built. However, lib.mk already does that because it assumes "bare"
-> program names are passed in, so this ended up creating
-> $(OUTPUT)/$(OUTPUT)/file.c, which of course won't work as intended.
-> 
-> 2. lib.mk was included before TEST_GEN_PROGS was set, which led to
-> lib.mk's "all:" target not seeing anything to rebuild.
-> 
-> So nothing worked, which caused the author to force things by creating
-> an "all:" target locally--while still including ../lib.mk.
-> 
-> Fix all of this by including ../lib.mk at the right place, and removing
-> the $(OUTPUT) prefix to the programs to be built, and removing the
-> duplicate "all:" target.
-> 
-> Signed-off-by: John Hubbard <jhubbard@nvidia.com>
-Reviewed-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
+On Fri, Jul 5, 2024, at 04:20, Nicolas Pitre wrote:
+> From: Nicolas Pitre <npitre@baylibre.com>
+>
+> Several years later I just realized that this code could be optimized
+> and more importantly simplified even further. With some reordering, it
+> is possible to dispense with overflow handling entirely and still have
+> optimal code.
+>
+> There is also no longer a reason to have the possibility for
+> architectures to override the generic version. Only ARM did it and these
+> days the compiler does a better job than the hand-crafted assembly
+> version anyway.
+>
+> Kernel binary gets slightly smaller as well. Using the ARM's
+> versatile_defconfig plus CONFIG_TEST_DIV64=y:
+>
+> Before this patch:
+>
+>    text    data     bss     dec     hex filename
+> 9644668 2743926  193424 12582018         bffc82 vmlinux
+>
+> With this patch:
+>
+>    text    data     bss     dec     hex filename
+> 9643572 2743926  193424 12580922         bff83a vmlinux
+>
+> Signed-off-by: Nicolas Pitre <npitre@baylibre.com>
 
-> ---
->  tools/testing/selftests/vDSO/Makefile | 15 +++++++--------
->  1 file changed, 7 insertions(+), 8 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/vDSO/Makefile b/tools/testing/selftests/vDSO/Makefile
-> index d53a4d8008f9..209ede5de208 100644
-> --- a/tools/testing/selftests/vDSO/Makefile
-> +++ b/tools/testing/selftests/vDSO/Makefile
-> @@ -1,16 +1,15 @@
->  # SPDX-License-Identifier: GPL-2.0
-> -include ../lib.mk
-> -
->  uname_M := $(shell uname -m 2>/dev/null || echo not)
->  ARCH ?= $(shell echo $(uname_M) | sed -e s/i.86/x86/ -e s/x86_64/x86/)
->  
-> -TEST_GEN_PROGS := $(OUTPUT)/vdso_test_gettimeofday $(OUTPUT)/vdso_test_getcpu
-> -TEST_GEN_PROGS += $(OUTPUT)/vdso_test_abi
-> -TEST_GEN_PROGS += $(OUTPUT)/vdso_test_clock_getres
-> +TEST_GEN_PROGS := vdso_test_gettimeofday
-> +TEST_GEN_PROGS += vdso_test_getcpu
-> +TEST_GEN_PROGS += vdso_test_abi
-> +TEST_GEN_PROGS += vdso_test_clock_getres
->  ifeq ($(ARCH),$(filter $(ARCH),x86 x86_64))
-> -TEST_GEN_PROGS += $(OUTPUT)/vdso_standalone_test_x86
-> +TEST_GEN_PROGS += vdso_standalone_test_x86
->  endif
-> -TEST_GEN_PROGS += $(OUTPUT)/vdso_test_correctness
-> +TEST_GEN_PROGS += vdso_test_correctness
->  
->  CFLAGS := -std=gnu99
->  CFLAGS_vdso_standalone_test_x86 := -nostdlib -fno-asynchronous-unwind-tables -fno-stack-protector
-> @@ -19,7 +18,7 @@ ifeq ($(CONFIG_X86_32),y)
->  LDLIBS += -lgcc_s
->  endif
->  
-> -all: $(TEST_GEN_PROGS)
-> +include ../lib.mk
->  $(OUTPUT)/vdso_test_gettimeofday: parse_vdso.c vdso_test_gettimeofday.c
->  $(OUTPUT)/vdso_test_getcpu: parse_vdso.c vdso_test_getcpu.c
->  $(OUTPUT)/vdso_test_abi: parse_vdso.c vdso_test_abi.c
+This looks really nice, thanks for the work!
 
--- 
-BR,
-Muhammad Usama Anjum
+I've tried reproducing your finding to see what compiler
+version started being good enough to benefit from the
+new version. Looking at just the vmlinux size as you did
+above, I can confirm that the generated code is noticeably
+smaller in gcc-11 and above, slightly smaller in gcc-10
+but larger in gcc-9 and below. With gcc-10 being 4 years
+old now and already in debian 'oldstable', that should be
+good enough.
+
+Unfortunately, I see that clang-19 still produces smaller
+arm code with the old version, so this is likely missing
+some optimization that went into gcc. Specifically these
+are the numbers I see for an armv7 defconfig with many
+drivers disabled for faster builds, comparing the current
+upstream version with inline asm, the upstream C version
+(patch 1/2 applied) and the new C version (both applied):
+
+text	   data	    bss	    dec	    hex	filename
+6332190	2577094	 257664	9166948	 8be064	vmlinux-old-asm
+6334518	2577158	 257664	9169340	 8be9bc	vmlinux-old-C
+6333366	2577158	 257664	9168188	 8be53c	vmlinux-new-C
+
+The results for clang-14 are very similar. Adding Nathan
+and the llvm linux mailing list to see if anyone there
+thinks we need to dig deeper on whether llvm should handle
+this better.
+
+I also checked a few other 32-bit targets with gcc-14
+and found that mips and powerpc get slightly worse with
+your new version, while x86 doesn't use this code and
+is unaffected.
+
+With all this said, I think we still want your patch
+or something very close to it because the new version
+is so much more readable and better on the one 32-bit
+config that users care about in practice (armv7 with
+modern gcc), but it would be nice if we could find
+a way to not make it worse for the other configurations.
+
+       Arnd
