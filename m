@@ -1,82 +1,131 @@
-Received: from xry111.site (xry111.site [89.208.246.23])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6989B42A85;
-	Sat,  6 Jul 2024 10:33:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=89.208.246.23
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D8F355589B;
+	Sat,  6 Jul 2024 10:58:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720262040; cv=none; b=d2OA4gXtD3dUfb933J5aWS2BbA+d8SBS+Zo8PltmL5nnf5QlnCi5ydRD+2/4EuFqotLqkLkZD1o6nEnSJL2KIns5FGJI0NNKdwzvNZcnUOuzk5IgXR6Uu7K+iVniMpF09DXSd0yWKMt1+IWalAebxMjh24Um/NQ+ocXdRAkF6/0=
+	t=1720263512; cv=none; b=DhhBVCFbtopy3cPu2Kp6ryYM/csJxjSfLjQFu0lBajKcCPl9XB0yTVsQs6twqer9qetyIfYyQd/mugcZ0ZMv2UkD8DSHS/CHc3r/vG7ioBlJRtj+YnZniw/BCiNRwpGWffz6Zkx5+jkS5WFIJqVWeS4SlM7yUg5yXd+pcmSlWZ4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720262040; c=relaxed/simple;
-	bh=bTtWeZRzbbPRWBKxo6xX5E59qwVMl0ItQh6g88f4jzo=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=hBViAQoy78JJghrxwsRW0EF9uIBXNwIRC4MSK9lgLlP1RIwoA/FibjBYmjZ56Na3skpqkDoB3ZTMMkYEJ7pddVpwio5ShWM70yNVHiRdA6bT4tO0UjxanPpLUZqzf+cp/rCTU1GUYET2QkZc0RGvTZ0LDhuONUAHqeWjkmN1CEc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=xry111.site; spf=pass smtp.mailfrom=xry111.site; dkim=pass (1024-bit key) header.d=xry111.site header.i=@xry111.site header.b=FAtDbflc; arc=none smtp.client-ip=89.208.246.23
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=xry111.site
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=xry111.site
+	s=arc-20240116; t=1720263512; c=relaxed/simple;
+	bh=XFmbSHZPyF4ncxdS/EMdWTrzlspJlgiQH+AGeELwC5Y=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=R1ejs23K2C54XU5idDF4yBqSE0ZoKaI8qG4X7VEiCpT+4XSHuixXnB/UeJJKrPsrhWuB+a2St6u7HTW+UKvYZtnB4ky1Pxe7dpp2pEYFby89c8uKAemuu8Rbd54TzHiWJkS6mt/FuKwYrHaHhoWTdyEqbRVEJUM9GeDF4s7kRp4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CbHIdkPb; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=xry111.site header.i=@xry111.site header.b="FAtDbflc"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=xry111.site;
-	s=default; t=1720262037;
-	bh=bTtWeZRzbbPRWBKxo6xX5E59qwVMl0ItQh6g88f4jzo=;
-	h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-	b=FAtDbflcwVxItID1+bTWivDzc9tvnzzeHOpdZIV9kzv2akw8YgvTlH8oInVTmHqV5
-	 eWvSpzHTizW2JRqH8oJjS0ZQNNeL4gv2HXIL6guP1+RID1RHZ2LDR3ki811o55BzXz
-	 6P3CLAYE6ktE2jlRsdrRgS0moAJFd9ximJoHoKtk=
-Received: from [127.0.0.1] (unknown [IPv6:2001:470:683e::1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-256) server-signature ECDSA (P-384) server-digest SHA384)
-	(Client did not present a certificate)
-	(Authenticated sender: xry111@xry111.site)
-	by xry111.site (Postfix) with ESMTPSA id 7F9F366E91;
-	Sat,  6 Jul 2024 06:33:55 -0400 (EDT)
-Message-ID: <cb3c2038b97689371226c467befdbf9e13113744.camel@xry111.site>
-Subject: Re: [PATCH 2/2] LoongArch: Add support for relocating the kernel
- with RELR relocation
-From: Xi Ruoyao <xry111@xry111.site>
-To: Huacai Chen <chenhuacai@kernel.org>
-Cc: WANG Xuerui <kernel@xen0n.name>, Jinyang He <hejinyang@loongson.cn>, 
- Youling Tang <tangyouling@kylinos.cn>, Tiezhu Yang
- <yangtiezhu@loongson.cn>, Fangrui Song <maskray@google.com>,  Nathan
- Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>,
-  loongarch@lists.linux.dev, linux-kernel@vger.kernel.org,
- llvm@lists.linux.dev
-Date: Sat, 06 Jul 2024 18:33:53 +0800
-In-Reply-To: <CAAhV-H6K7SXtXpv9Udo8md0sdn+40TGPTCdSPeM1HmbJqrhboQ@mail.gmail.com>
-References: <20240706073858.161035-1-xry111@xry111.site>
-	 <20240706073858.161035-2-xry111@xry111.site>
-	 <CAAhV-H6K7SXtXpv9Udo8md0sdn+40TGPTCdSPeM1HmbJqrhboQ@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.52.2 
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CbHIdkPb"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4A15FC4AF0A;
+	Sat,  6 Jul 2024 10:58:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1720263510;
+	bh=XFmbSHZPyF4ncxdS/EMdWTrzlspJlgiQH+AGeELwC5Y=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=CbHIdkPbyDI0zp//4XKdrhjCHYfOseNHpqfSG2aP9N1bRlc1erSqCraNVQerpPRVE
+	 +nCs33FtE6eI8u+WE9v8zzyvtVYSjBTP1fNmZsyQg+yPGRRQjZTSBwMrxsFJIDO+GF
+	 w+cAw3SNTsEahv+QsSNEFKSFj9RN/h0enVpmsDLUgt1c4IWxRcKnQTJCmJIzvHm+r1
+	 a5b+jzPsymuIOYfD94hesrH9nnNUonKILW6BmBleFIWtr2KE0Tr3d2EaGF9Vy+4dFT
+	 xLoFym3fBBueEDZRfklXBgS1uG9ZpeJfED7e5o9uNyM/IZVthbgm5ps4SoHaK9/Q70
+	 nofrsLjAdMITw==
+Date: Sat, 6 Jul 2024 11:58:19 +0100
+From: Jonathan Cameron <jic23@kernel.org>
+To: kernel test robot <lkp@intel.com>
+Cc: Thomas Bonnefille <thomas.bonnefille@bootlin.com>, Lars-Peter Clausen
+ <lars@metafoo.de>, Rob Herring <robh@kernel.org>, Krzysztof Kozlowski
+ <krzk@kernel.org>, Conor Dooley <conor+dt@kernel.org>, Chen Wang
+ <unicorn_wang@outlook.com>, Inochi Amaoto <inochiama@outlook.com>, Paul
+ Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>,
+ Albert Ou <aou@eecs.berkeley.edu>, llvm@lists.linux.dev,
+ oe-kbuild-all@lists.linux.dev, Thomas Petazzoni
+ <thomas.petazzoni@bootlin.com>, =?UTF-8?B?TWlxdcOobA==?= Raynal
+ <miquel.raynal@bootlin.com>, linux-iio@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-riscv@lists.infradead.org
+Subject: Re: [PATCH v2 2/3] iio: adc: sophgo-saradc: Add driver for Sophgo
+ SARADC
+Message-ID: <20240706115819.49a570e3@jic23-huawei>
+In-Reply-To: <202407061311.ZEmwMY8m-lkp@intel.com>
+References: <20240705-sg2002-adc-v2-2-83428c20a9b2@bootlin.com>
+	<202407061311.ZEmwMY8m-lkp@intel.com>
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.42; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-On Sat, 2024-07-06 at 18:29 +0800, Huacai Chen wrote:
+On Sat, 6 Jul 2024 13:16:36 +0800
+kernel test robot <lkp@intel.com> wrote:
 
-/* snip */
+> Hi Thomas,
+> 
+> kernel test robot noticed the following build warnings:
+> 
+> [auto build test WARNING on d20f6b3d747c36889b7ce75ee369182af3decb6b]
+> 
+> url:    https://github.com/intel-lab-lkp/linux/commits/Thomas-Bonnefille/dt-bindings-iio-adc-sophgo-cv18xx-saradc-yaml-Add-Sophgo-SARADC-binding-documentation/20240706-040736
+> base:   d20f6b3d747c36889b7ce75ee369182af3decb6b
+> patch link:    https://lore.kernel.org/r/20240705-sg2002-adc-v2-2-83428c20a9b2%40bootlin.com
+> patch subject: [PATCH v2 2/3] iio: adc: sophgo-saradc: Add driver for Sophgo SARADC
+> config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20240706/202407061311.ZEmwMY8m-lkp@intel.com/config)
+> compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
+> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240706/202407061311.ZEmwMY8m-lkp@intel.com/reproduce)
+> 
+> If you fix the issue in a separate patch/commit (i.e. not just a new version of
+> the same patch/commit), kindly add following tags
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Closes: https://lore.kernel.org/oe-kbuild-all/202407061311.ZEmwMY8m-lkp@intel.com/
+> 
+> All warnings (new ones prefixed by >>):
+> 
+> >> drivers/iio/adc/sophgo-cv18xx-adc.c:85:3: warning: label followed by a declaration is a C23 extension [-Wc23-extensions]  
+>       85 |                 struct cv18xx_adc *saradc = iio_priv(indio_dev);
+>          |                 ^
+>    1 warning generated.
+> 
+> 
+> vim +85 drivers/iio/adc/sophgo-cv18xx-adc.c
+> 
+>     78	
+>     79	static int cv18xx_adc_read_raw(struct iio_dev *indio_dev,
+>     80					  struct iio_chan_spec const *chan,
+>     81					  int *val, int *val2, long mask)
+>     82	{
+>     83		switch (mask) {
+>     84		case IIO_CHAN_INFO_RAW:
 
-> > diff --git a/arch/loongarch/Kconfig b/arch/loongarch/Kconfig
-> > index ddc042895d01..03b3ef5edd24 100644
-> > --- a/arch/loongarch/Kconfig
-> > +++ b/arch/loongarch/Kconfig
-> > @@ -607,6 +607,7 @@ config ARCH_HAS_GENERIC_CRASHKERNEL_RESERVATION
-> >=20
-> > =C2=A0config RELOCATABLE
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 bool "Relocatable kernel"
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 select ARCH_HAS_RELR
-> Why is this selection under RELOCATABLE? I know ARM64 is the same, but
-> why?
+I guess you figured this out but if not.. Key is you need to define a scope so
+			{
+>   > 85			struct cv18xx_adc *saradc = iio_priv(indio_dev);  
+>     86			u32 sample;
+>     87			int ret;
+>     88	
+>     89			scoped_guard(mutex, &saradc->lock) {
+>     90				cv18xx_adc_start_measurement(saradc, chan->scan_index);
+>     91				ret = cv18xx_adc_wait(saradc);
+>     92				if (ret < 0)
+>     93					return ret;
+>     94	
+>     95				sample = readl(saradc->regs + CV18XX_ADC_CH_RESULT_REG(chan->scan_index));
+>     96			}
+>     97			if (!(sample & CV18XX_ADC_CH_VALID))
+>     98				return -ENODATA;
+>     99	
+>    100			*val = sample & CV18XX_ADC_CH_RESULT;
+>    101			return IIO_VAL_INT;
 
-Because if we just select it in CONFIG_LOONGARCH instead of
-CONFIG_RELOCATABLE, the users who have disabled CONFIG_RELOCATABLE will
-still see the entry for RELR in their configuration interface.  And
-they'll ask "hey what's this for?  Why my kernel needs relocation?"
+			}
 
---=20
-Xi Ruoyao <xry111@xry111.site>
-School of Aerospace Science and Technology, Xidian University
+>    102		case IIO_CHAN_INFO_SCALE:
+>    103			*val = 3300;
+>    104			*val2 = 12;
+>    105			return IIO_VAL_FRACTIONAL_LOG2;
+>    106		default:
+>    107			return -EINVAL;
+>    108		}
+>    109	}
+>    110	
+> 
+
