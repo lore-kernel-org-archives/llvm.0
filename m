@@ -1,187 +1,120 @@
-Received: from xry111.site (xry111.site [89.208.246.23])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E97D22309;
-	Sat,  6 Jul 2024 07:39:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=89.208.246.23
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E5AB22309;
+	Sat,  6 Jul 2024 09:27:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720251582; cv=none; b=m1T14A3nh9ZTR4XzWDhHHFleUCrUagJTOOApvri6jEFeDnhrl/PLMA9Ndfk6jgPmuJPBAOQEZiZbxMa0AoycOXKt/ZW7eUFb58YuQjianE4ciLMi3SXhoAmQ0Cz0ktqdgWebfYKzbta47brTlqmrSuGnGl44XS0EQtwuiGPoqmk=
+	t=1720258062; cv=none; b=nSU4Gp7bUU0ziz95u+kl6FL8pU7TwcoXioT45JC0MM1IFgNep9CTjtrMpdeM0Eaw2hppmAcFmElmcowCOpXv8nWa6pjRpYnVWq/g9WExf9Fl17HznqA8ujVDHOzL2Mrk4FCNPh7WGouNsdpJeyeCzwLTHK2Jw2pRDUUGLp5W4v0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720251582; c=relaxed/simple;
-	bh=MvAhHD0mCFd5HZCn7eaIcksLlpWJk6ZfkvX77KevoqI=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=TaMlTDNNqXlTorLbh75XahyjgeY8hVIqz7fs01EVt3J5YGp+4oQ/clORLUqkRYdJbcXQUtQXpllGcJGJvwGrtt9gYgwx2V1/suTcRnU/GVzCcGGZeMn3ao+/We7rGJuyNrOc4dK5Fj3k51N9jsVce44jFeGI7naLgTjhZwFkFmg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=xry111.site; spf=pass smtp.mailfrom=xry111.site; dkim=pass (1024-bit key) header.d=xry111.site header.i=@xry111.site header.b=PU7FsXvS; arc=none smtp.client-ip=89.208.246.23
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=xry111.site
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=xry111.site
+	s=arc-20240116; t=1720258062; c=relaxed/simple;
+	bh=zJxqkkgpkYWfglPragPLn3buWTOXDky4ofBj2wUdfTM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=tQOrdmsVV4AaXDvsWST5M9wYCCoGIFGP5vsSLSghysNcUKt1IzCowCOWa06XKyWCDRuUHuIOBCCUF6/E+uoSqPxTYfvnpRedsdyOjVcjlcTnkDCfbMTx/slItw0WHI9LJInY5dCY9g9VMGU1xvBU70tcDW2mwB4SUcr7qLto0SI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=TdIbf/Om; arc=none smtp.client-ip=192.198.163.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=xry111.site header.i=@xry111.site header.b="PU7FsXvS"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=xry111.site;
-	s=default; t=1720251580;
-	bh=MvAhHD0mCFd5HZCn7eaIcksLlpWJk6ZfkvX77KevoqI=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=PU7FsXvSa73P3jBx11/rXs5xlAqHGkfOzWv+fP8AACXxeqbQREvwfuhPB63zd6HKb
-	 vHYQjJ31XQUtItkh2frJwIGG8cRo+xlqYDIzho2wc955dWUJB6CbYUt3AZIwdT51DL
-	 Ty5HsNGWA1waap/XklxtSF09HwNEqcvJlir6FTwA=
-Received: from stargazer.. (unknown [IPv6:240e:358:11fb:d500:dc73:854d:832e:4])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (P-384) server-digest SHA384)
-	(Client did not present a certificate)
-	(Authenticated sender: xry111@xry111.site)
-	by xry111.site (Postfix) with ESMTPSA id CC6011A411D;
-	Sat,  6 Jul 2024 03:39:35 -0400 (EDT)
-From: Xi Ruoyao <xry111@xry111.site>
-To: Huacai Chen <chenhuacai@kernel.org>,
-	WANG Xuerui <kernel@xen0n.name>
-Cc: Jinyang He <hejinyang@loongson.cn>,
-	Youling Tang <tangyouling@kylinos.cn>,
-	Tiezhu Yang <yangtiezhu@loongson.cn>,
-	Fangrui Song <maskray@google.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	loongarch@lists.linux.dev,
-	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev,
-	Xi Ruoyao <xry111@xry111.site>
-Subject: [PATCH 2/2] LoongArch: Add support for relocating the kernel with RELR relocation
-Date: Sat,  6 Jul 2024 15:38:58 +0800
-Message-ID: <20240706073858.161035-2-xry111@xry111.site>
-X-Mailer: git-send-email 2.45.2
-In-Reply-To: <20240706073858.161035-1-xry111@xry111.site>
-References: <20240706073858.161035-1-xry111@xry111.site>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="TdIbf/Om"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1720258061; x=1751794061;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=zJxqkkgpkYWfglPragPLn3buWTOXDky4ofBj2wUdfTM=;
+  b=TdIbf/OmtyAhAIpnrI7bjRtqvCtfa7Q9kumh1ZTym+sF1QFe85n2KmMj
+   bHW9dY2Lc0wGAk0+2EWBo6QvD6Fw1POKZtTgQIm3r7L5onwDwzZw5UqMJ
+   Q5+yeAWL7tTGFaj8fgbqjcflTmvwMC08uyprOSrjNAfl3qgwdZlpkVUUw
+   bhRHTztwRZMiA7c3QN6LxJCPurxt6hei0IqaYjk6B6PVWheA62MGAJSaL
+   aTSSkL5srAsDYqb0zrbaCllqFsLNfupGK987LrLZgjSUvgy584wlUzcRq
+   iVFhJWNz6WfoLeQlqpNZei1QiTjHXdS+hjQKpRMhyO01jf/i6hAUJ63bb
+   Q==;
+X-CSE-ConnectionGUID: bzX1IcDRTIazY1v+1BNyfQ==
+X-CSE-MsgGUID: vfRjSn85Ro2gBr3P3ebmwg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11123"; a="28919114"
+X-IronPort-AV: E=Sophos;i="6.09,187,1716274800"; 
+   d="scan'208";a="28919114"
+Received: from fmviesa008.fm.intel.com ([10.60.135.148])
+  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jul 2024 02:27:39 -0700
+X-CSE-ConnectionGUID: ecxtjR05SMiJs6sjQbeFUw==
+X-CSE-MsgGUID: MCNO2jV5SZ2+sYFoe7ksVQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.09,187,1716274800"; 
+   d="scan'208";a="47017844"
+Received: from lkp-server01.sh.intel.com (HELO 68891e0c336b) ([10.239.97.150])
+  by fmviesa008.fm.intel.com with ESMTP; 06 Jul 2024 02:27:36 -0700
+Received: from kbuild by 68891e0c336b with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1sQ1he-000TYS-1K;
+	Sat, 06 Jul 2024 09:27:34 +0000
+Date: Sat, 6 Jul 2024 17:26:56 +0800
+From: kernel test robot <lkp@intel.com>
+To: Tariq Toukan <tariqt@nvidia.com>,
+	"David S. Miller" <davem@davemloft.net>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Eric Dumazet <edumazet@google.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	netdev@vger.kernel.org, Saeed Mahameed <saeedm@nvidia.com>,
+	Gal Pressman <gal@nvidia.com>, Leon Romanovsky <leonro@nvidia.com>,
+	Rahul Rameshbabu <rrameshbabu@nvidia.com>,
+	Carolina Jubran <cjubran@nvidia.com>,
+	Tariq Toukan <tariqt@nvidia.com>
+Subject: Re: [PATCH net-next 07/10] net/mlx5: Implement PTM cross
+ timestamping support
+Message-ID: <202407061720.xkyGAPIS-lkp@intel.com>
+References: <20240705071357.1331313-8-tariqt@nvidia.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240705071357.1331313-8-tariqt@nvidia.com>
 
-RELR as a relocation packing format for relative relocations for
-reducing the size of relative relocation records.  In a position
-independent executable there are often many relative relocation
-records, and our vmlinux is a PIE.
+Hi Tariq,
 
-The LLD linker (since 17.0.0) and the BFD linker (since 2.43) supports
-packing the relocations in the RELR format for LoongArch, with the flag
--z pack-relative-relocs.
+kernel test robot noticed the following build errors:
 
-Commits 5cf896fb6be3
-("arm64: Add support for relocating the kernel with RELR relocations")
-and ccb2d173b983
-("Makefile: use -z pack-relative-relocs") have already added the
-framework to use RELR.  We just need to wire it up and process the RELR
-relocation records in relocate_relative() in addition to the RELA
-relocation records.
+[auto build test ERROR on net-next/main]
 
-A ".p2align 3" directive is added to la_abs macro or the BFD linker
-cannot pack the relocation records against the .la_abs section (the
-". = ALIGN(8);" directive in vmlinux.lds.S is too late in the linking
-process).
+url:    https://github.com/intel-lab-lkp/linux/commits/Tariq-Toukan/net-mlx5-IFC-updates-for-SF-max-IO-EQs/20240705-205245
+base:   net-next/main
+patch link:    https://lore.kernel.org/r/20240705071357.1331313-8-tariqt%40nvidia.com
+patch subject: [PATCH net-next 07/10] net/mlx5: Implement PTM cross timestamping support
+config: arm64-allmodconfig (https://download.01.org/0day-ci/archive/20240706/202407061720.xkyGAPIS-lkp@intel.com/config)
+compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project a0c6b8aef853eedaa0980f07c0a502a5a8a9740e)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240706/202407061720.xkyGAPIS-lkp@intel.com/reproduce)
 
-With defconfig and CONFIG_RELR vmlinux.efi is 2.1 MiB (6%) smaller, and
-vmlinuz.efi (using gzip compression) is 384 KiB (2.8%) smaller.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202407061720.xkyGAPIS-lkp@intel.com/
 
-Link: https://groups.google.com/d/topic/generic-abi/bX460iggiKg
-Link: https://reviews.llvm.org/D138135#4531389
-Link: https://sourceware.org/git/?p=binutils-gdb.git;a=commit;h=d89ecf33ab6d
-Signed-off-by: Xi Ruoyao <xry111@xry111.site>
----
- arch/loongarch/Kconfig                |  1 +
- arch/loongarch/include/asm/asmmacro.h |  1 +
- arch/loongarch/include/asm/setup.h    |  5 +++++
- arch/loongarch/kernel/relocate.c      | 18 ++++++++++++++++++
- arch/loongarch/kernel/vmlinux.lds.S   |  8 ++++++++
- 5 files changed, 33 insertions(+)
+All errors (new ones prefixed by >>):
 
-diff --git a/arch/loongarch/Kconfig b/arch/loongarch/Kconfig
-index ddc042895d01..03b3ef5edd24 100644
---- a/arch/loongarch/Kconfig
-+++ b/arch/loongarch/Kconfig
-@@ -607,6 +607,7 @@ config ARCH_HAS_GENERIC_CRASHKERNEL_RESERVATION
- 
- config RELOCATABLE
- 	bool "Relocatable kernel"
-+	select ARCH_HAS_RELR
- 	help
- 	  This builds the kernel as a Position Independent Executable (PIE),
- 	  which retains all relocation metadata required, so as to relocate
-diff --git a/arch/loongarch/include/asm/asmmacro.h b/arch/loongarch/include/asm/asmmacro.h
-index 655db7d7a427..8d7f501b0a12 100644
---- a/arch/loongarch/include/asm/asmmacro.h
-+++ b/arch/loongarch/include/asm/asmmacro.h
-@@ -609,6 +609,7 @@
- 	lu32i.d	\reg, 0
- 	lu52i.d	\reg, \reg, 0
- 	.pushsection ".la_abs", "aw", %progbits
-+	.p2align 3
- 	.dword	766b
- 	.dword	\sym
- 	.popsection
-diff --git a/arch/loongarch/include/asm/setup.h b/arch/loongarch/include/asm/setup.h
-index ee52fb1e9963..3c2fb16b11b6 100644
---- a/arch/loongarch/include/asm/setup.h
-+++ b/arch/loongarch/include/asm/setup.h
-@@ -34,6 +34,11 @@ extern long __la_abs_end;
- extern long __rela_dyn_begin;
- extern long __rela_dyn_end;
- 
-+#ifdef CONFIG_RELR
-+extern long __relr_dyn_begin;
-+extern long __relr_dyn_end;
-+#endif
-+
- extern unsigned long __init relocate_kernel(void);
- 
- #endif
-diff --git a/arch/loongarch/kernel/relocate.c b/arch/loongarch/kernel/relocate.c
-index 69d73dc7326a..6abb9c91b255 100644
---- a/arch/loongarch/kernel/relocate.c
-+++ b/arch/loongarch/kernel/relocate.c
-@@ -37,6 +37,24 @@ static inline void __init relocate_relative(void)
- 		relocated_addr = (Elf64_Addr)RELOCATED(relocated_addr);
- 		*(Elf64_Addr *)RELOCATED(addr) = relocated_addr;
- 	}
-+
-+#ifdef CONFIG_RELR
-+	u64 *relr = (u64 *)&__relr_dyn_begin;
-+	u64 *relr_end = (u64 *)&__relr_dyn_end;
-+	u64 *addr = NULL;
-+
-+	for ( ; relr < relr_end; relr++) {
-+		if ((*relr & 1) == 0) {
-+			addr = (u64 *)(*relr + reloc_offset);
-+			*addr++ += reloc_offset;
-+		} else {
-+			for (u64 *p = addr, r = *relr >> 1; r; p++, r >>= 1)
-+				if (r & 1)
-+					*p += reloc_offset;
-+			addr += 63;
-+		}
-+	}
-+#endif
- }
- 
- static inline void __init relocate_absolute(long random_offset)
-diff --git a/arch/loongarch/kernel/vmlinux.lds.S b/arch/loongarch/kernel/vmlinux.lds.S
-index 3c7595342730..08ea921cdec1 100644
---- a/arch/loongarch/kernel/vmlinux.lds.S
-+++ b/arch/loongarch/kernel/vmlinux.lds.S
-@@ -113,6 +113,14 @@ SECTIONS
- 		__rela_dyn_end = .;
- 	}
- 
-+#ifdef CONFIG_RELR
-+	.relr.dyn : ALIGN(8) {
-+		__relr_dyn_begin = .;
-+		 *(.relr.dyn)
-+		__relr_dyn_end = .;
-+	}
-+#endif
-+
- 	.data.rel : { *(.data.rel*) }
- 
- #ifdef CONFIG_RELOCATABLE
+>> drivers/net/ethernet/mellanox/mlx5/core/lib/clock.c:33:10: fatal error: 'asm/tsc.h' file not found
+      33 | #include <asm/tsc.h>
+         |          ^~~~~~~~~~~
+   1 error generated.
+
+
+vim +33 drivers/net/ethernet/mellanox/mlx5/core/lib/clock.c
+
+  > 33	#include <asm/tsc.h>
+    34	#include <linux/clocksource.h>
+    35	#include <linux/cpufeature.h>
+    36	#include <linux/highmem.h>
+    37	#include <linux/log2.h>
+    38	#include <linux/ptp_clock_kernel.h>
+    39	#include <linux/timekeeping.h>
+    40	#include <rdma/mlx5-abi.h>
+    41	#include "lib/eq.h"
+    42	#include "en.h"
+    43	#include "clock.h"
+    44	
+
 -- 
-2.45.2
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
