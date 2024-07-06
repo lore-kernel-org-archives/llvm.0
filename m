@@ -1,89 +1,206 @@
-Received: from mout.web.de (mout.web.de [212.227.17.12])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 889A1DF6C;
-	Sat,  6 Jul 2024 09:46:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.17.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 275434D8BD;
+	Sat,  6 Jul 2024 10:29:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720259198; cv=none; b=ctSlMWJdUfnuQ2te4cy0MmghrPy8ENt9wjOI4pbcMxFpslj2O/zTuZDHdKQz4KFPBj0SrEskQYYF9cpkb3AwXf/Zu1UAuk72xI35XKJuE3ga4jH3tvIJwcBp/XFZ5m7hIrYFUYStZp3frAMEDZEwhL9t84qcyl5rLCD7qF3qWcQ=
+	t=1720261779; cv=none; b=H9ysGZXCm3n4sathV4lbEeAFv2Xw1Odk4ayDMdtts1Hv51Df1OvG6jQOxeiYA897TCbc+izV58HRQzKVzlG8YWxbvXwOaqThZKGUWMQyV8HofY4wE80wWDIHCbpv4R/9YW3M0EKrajbDwVxEGL/tMKddV8+HlNPfc5anaynzCNk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720259198; c=relaxed/simple;
-	bh=QnGcOl9oXoeopuI5Udmk0RgExWQN/v3kgP7QbQETryE=;
-	h=Message-ID:Date:MIME-Version:To:Cc:References:Subject:From:
-	 In-Reply-To:Content-Type; b=uEdOoug+JrPy12vF+Rcj/TtRkG7j/QYkkSMWkrLFur7AxpVJ6wXI/VRV7YI0hIHX875nvAXvswB65k0aaH/mEVi+YXiYgr1XZJl0U7AbHKptGZBsNez5CI3QddS8lwI0uRU/IMvQejsockXyreSWMHZn05JRE7EfyCC9oZxzCUU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de; spf=pass smtp.mailfrom=web.de; dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b=KXKdmgl+; arc=none smtp.client-ip=212.227.17.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=web.de
+	s=arc-20240116; t=1720261779; c=relaxed/simple;
+	bh=r7NUPpKWJkcWjWI8J6KpTF0A56sbKiYsklXo24upl50=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=bvf2JH8QrOF7Wnljm7eeD0yuhCbsEPb2SdbggEQ7TFD7cAV5YI00Ew7YXMm/2WT3By77LPAD98Ojotl0kkTactiqC0r+RE5KXjhTfsxwi1NlOtV/zVlxDkwGc9DK37iV+vaaP5b4a4IVbpDjFgP88MU67S85hFZR5WlOyeraX9A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PHVBteYQ; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b="KXKdmgl+"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=web.de;
-	s=s29768273; t=1720259098; x=1720863898; i=markus.elfring@web.de;
-	bh=ZUBSXMP3zCePbXBrp/yGxgf8fIuR0VVp7H9msICP90U=;
-	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:To:Cc:References:
-	 Subject:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:
-	 cc:content-transfer-encoding:content-type:date:from:message-id:
-	 mime-version:reply-to:subject:to;
-	b=KXKdmgl+TKIPDoYTraWvhyrqLaakhxklOgMCuJInmaAKj7pjYGXc5V2hxXO+xyjh
-	 6majvpiox2Q7ZD3CqJY2gABjEVtPWSxZGRsKrY555mhsGSokHi8FC1WW29NEdbGz2
-	 yFhEAaifKNeQ6IwB41Hphgp4HbeexKblHK+Z/iFXKxKGqtwr2oU2UhCY3QdLujy1u
-	 V89Qu3iOv+rDvZSYSsZyuxV5VDAvFzozoZuVTllUt2A4E9P7LftPMSZwoXkhzD6ex
-	 CFzxi02nkJ4Ru7P5rgWOn4JWHMOG/9F9ZJUsCFBoghxWhtybxkJ3roelYXjmGGDrC
-	 qMszOF+1eCRd+ZSYMQ==
-X-UI-Sender-Class: 814a7b36-bfc1-4dae-8640-3722d8ec6cd6
-Received: from [192.168.178.21] ([94.31.91.95]) by smtp.web.de (mrweb106
- [213.165.67.124]) with ESMTPSA (Nemesis) id 1MnX1L-1s0dSO3qOT-00cVet; Sat, 06
- Jul 2024 11:44:57 +0200
-Message-ID: <2b0c7d74-8a20-4a54-9467-bec4395a203e@web.de>
-Date: Sat, 6 Jul 2024 11:44:39 +0200
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PHVBteYQ"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EA24FC4AF0D;
+	Sat,  6 Jul 2024 10:29:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1720261779;
+	bh=r7NUPpKWJkcWjWI8J6KpTF0A56sbKiYsklXo24upl50=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=PHVBteYQkNKeUsKRG0oItxUH0rGLsi30jHx9ctAVQKZa36Q04xH+w643geSJJN2BP
+	 nAwRpxiMy2O4seCdqL1XggOdnNOmYTRoflhNxfdaIo/rAlqDCpI4m8eC0UDU62hwP3
+	 xHsuwOCmTybYHUgvuS4JRT3347Frnwqk6bnNrYjLnI+IJD5FmUjg9/x0efxP3r/rcN
+	 EWKX97wSqDloyVB+D42xP7F7bgVaPsOKCwnsjNA89qDFL2tKy2CQevYjfOJmLusKRU
+	 ub1myJ2cdu7/a0aHM0UT1kf9u2eG6U9Pr7pyaDpWvK/oqlB/JKkIEoiJKiRmNIQNEP
+	 0U4Cms+dPmEbQ==
+Received: by mail-ej1-f41.google.com with SMTP id a640c23a62f3a-a6fd513f18bso243089666b.3;
+        Sat, 06 Jul 2024 03:29:38 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCVjJ7uhnd3fbK5ggMTmC55en8shsWeCFylzA/4jdyV3j10goQu7iyRbd8yHLbt6N72hqAhPqoNZhZxvx9e22DMPfIy70pyKdJb5SApDijI6S88fV9oe05qjvchTv420dg==
+X-Gm-Message-State: AOJu0Yw9PNScvBxbzEHBAHwyzLtZTCZxyaig/6ZSCF6siFbi0jk5a8nM
+	+5+UuEqMC8CJY8bqlc8m6eFb61W2SR0xl8eFW0k3EuUsjrtbEbfzJ15GbgQw57u0sYaa+jdy1Ov
+	rONktwu3pTagnSp5o2jw7s+LJwZU=
+X-Google-Smtp-Source: AGHT+IFNIEG18Cj0x0Siil0rzAqfYZr9X+bAg1/I4JmZ5boLndckP1EN+QzSiuFk9E3CIS6gwqCTWnSJBAOl5AHr57o=
+X-Received: by 2002:a17:906:4f0f:b0:a6f:49eb:31a5 with SMTP id
+ a640c23a62f3a-a77ba72e088mr380092966b.77.1720261777447; Sat, 06 Jul 2024
+ 03:29:37 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-To: Xi Ruoyao <xry111@xry111.site>, loongarch@lists.linux.dev,
- llvm@lists.linux.dev, Huacai Chen <chenhuacai@kernel.org>,
- Wang Xuerui <kernel@xen0n.name>
-Cc: LKML <linux-kernel@vger.kernel.org>, Fangrui Song <maskray@google.com>,
- Jinyang He <hejinyang@loongson.cn>, Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <ndesaulniers@google.com>,
- Tiezhu Yang <yangtiezhu@loongson.cn>, Youling Tang <tangyouling@kylinos.cn>
-References: <20240706073858.161035-1-xry111@xry111.site>
-Subject: Re: [PATCH 1/2] LoongArch: Remove a redundant checking in relocator
-Content-Language: en-GB
-From: Markus Elfring <Markus.Elfring@web.de>
-In-Reply-To: <20240706073858.161035-1-xry111@xry111.site>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Provags-ID: V03:K1:El3xGddA3OmLZNBG8qQpEg+y947RSqGdyNGexujx06XBdUcOesj
- IJzhW1nW++qs0YBHy1Yj5xmwUl/sJQqG7IMtuoI6pKvmwRunoudCVLuAOvuBHPexALMGKzz
- m3NuxdHcjlxB2vNCCvVatGnCPKlgqVXGKGB7VrhADMfBZu3RHByprRkgQTX9v3DZVHFjPLG
- CVUL3Ogb3h3blSM7EqyAw==
-X-Spam-Flag: NO
-UI-OutboundReport: notjunk:1;M01:P0:aqTKmKEGH6g=;r8IP2hz+nCTPUyZGLUrShQKycOb
- o6uuMPbQw5VqwyVEGbic+SQ0j8S+Zj/kAsRuHK+J/+7VTcLrgiLFkbMKaiuF6gsPcO2SJYp5q
- jV4dVK153FdLtS6yGd8/Fmw0A6s9674e4uoqkAzZSgEecdUFwVHqv0ivWGp0kDxIVVkwAPpcy
- KyuUF/2T2ZJTgy+OjYfJQQaavC0V8O2W9Zbg0+eJli/+/SLlV0jM132MnsxSZ887KPmSrEiL/
- /qEJjpY4fmaDiP054CbaOT3gYhayY79zRitv+WHzRrEvZdjWwQlBBzutzOslJakSRAvVn7IvE
- 9qrm8LhqSnu11LAHUt6RJY0kH94C7M7iepwTX8tsO7Ds9knjvSVacxv3uaS1EKhGZZG0PyCI/
- hOC6Ya0Pdlhcxfqt9q6NovgBLr+Jql/M9VTVV/NXaLkDiy1APkZe8lI3UMLcUMIzGfemddhB8
- x2cXoiftLNpXHv4fp3MgA2TrXiFiiTxSvVzPuzvGKlY3A3skVIbteie8fD2Sx0Xf2axgPixaw
- W69GzQA350TpARNo+q3vo6EWlguzb+/a7+PKhfGpDCREGfTD7mDLssK3MK4Kf9zN9Lb/R/a3P
- TC+Ww1yCRwNgymeeRbkdqEkd2Ip5m9pyli+g3OhK6cDB3tcqz0dTMQUkfBfDVyTUxhpT4C6ky
- H41nLjSPfBpIQeg9Vwv0jlZizd2KFZegycb9Pnqjf7fiZZzVjWuqs0Zcw9/+YpaI7Q+jloiXi
- fa2hJW8Ka7Hz0sTXJLhiH3PyNNlMJfnGQCDzthlblFrHE+Fl9qFQc0G/DEQ+7Od+1L5y6VMem
- /MnQOpxN/HcCk9evZ93YNkTcznQ7RW8RiYo2kRaVnfzKY=
+References: <20240706073858.161035-1-xry111@xry111.site> <20240706073858.161035-2-xry111@xry111.site>
+In-Reply-To: <20240706073858.161035-2-xry111@xry111.site>
+From: Huacai Chen <chenhuacai@kernel.org>
+Date: Sat, 6 Jul 2024 18:29:24 +0800
+X-Gmail-Original-Message-ID: <CAAhV-H6K7SXtXpv9Udo8md0sdn+40TGPTCdSPeM1HmbJqrhboQ@mail.gmail.com>
+Message-ID: <CAAhV-H6K7SXtXpv9Udo8md0sdn+40TGPTCdSPeM1HmbJqrhboQ@mail.gmail.com>
+Subject: Re: [PATCH 2/2] LoongArch: Add support for relocating the kernel with
+ RELR relocation
+To: Xi Ruoyao <xry111@xry111.site>
+Cc: WANG Xuerui <kernel@xen0n.name>, Jinyang He <hejinyang@loongson.cn>, 
+	Youling Tang <tangyouling@kylinos.cn>, Tiezhu Yang <yangtiezhu@loongson.cn>, 
+	Fangrui Song <maskray@google.com>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <ndesaulniers@google.com>, loongarch@lists.linux.dev, 
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-> With our linker script "relocated_addr >= VMLINUX_LOAD_ADDRESS" should
-> be always true.
+Hi, Ruoyao,
 
-* I find cover letters helpful for patch series.
+On Sat, Jul 6, 2024 at 3:39=E2=80=AFPM Xi Ruoyao <xry111@xry111.site> wrote=
+:
+>
+> RELR as a relocation packing format for relative relocations for
+> reducing the size of relative relocation records.  In a position
+> independent executable there are often many relative relocation
+> records, and our vmlinux is a PIE.
+>
+> The LLD linker (since 17.0.0) and the BFD linker (since 2.43) supports
+> packing the relocations in the RELR format for LoongArch, with the flag
+> -z pack-relative-relocs.
+>
+> Commits 5cf896fb6be3
+> ("arm64: Add support for relocating the kernel with RELR relocations")
+> and ccb2d173b983
+> ("Makefile: use -z pack-relative-relocs") have already added the
+> framework to use RELR.  We just need to wire it up and process the RELR
+> relocation records in relocate_relative() in addition to the RELA
+> relocation records.
+>
+> A ".p2align 3" directive is added to la_abs macro or the BFD linker
+> cannot pack the relocation records against the .la_abs section (the
+> ". =3D ALIGN(8);" directive in vmlinux.lds.S is too late in the linking
+> process).
+>
+> With defconfig and CONFIG_RELR vmlinux.efi is 2.1 MiB (6%) smaller, and
+> vmlinuz.efi (using gzip compression) is 384 KiB (2.8%) smaller.
+>
+> Link: https://groups.google.com/d/topic/generic-abi/bX460iggiKg
+> Link: https://reviews.llvm.org/D138135#4531389
+> Link: https://sourceware.org/git/?p=3Dbinutils-gdb.git;a=3Dcommit;h=3Dd89=
+ecf33ab6d
+> Signed-off-by: Xi Ruoyao <xry111@xry111.site>
+> ---
+>  arch/loongarch/Kconfig                |  1 +
+>  arch/loongarch/include/asm/asmmacro.h |  1 +
+>  arch/loongarch/include/asm/setup.h    |  5 +++++
+>  arch/loongarch/kernel/relocate.c      | 18 ++++++++++++++++++
+>  arch/loongarch/kernel/vmlinux.lds.S   |  8 ++++++++
+>  5 files changed, 33 insertions(+)
+>
+> diff --git a/arch/loongarch/Kconfig b/arch/loongarch/Kconfig
+> index ddc042895d01..03b3ef5edd24 100644
+> --- a/arch/loongarch/Kconfig
+> +++ b/arch/loongarch/Kconfig
+> @@ -607,6 +607,7 @@ config ARCH_HAS_GENERIC_CRASHKERNEL_RESERVATION
+>
+>  config RELOCATABLE
+>         bool "Relocatable kernel"
+> +       select ARCH_HAS_RELR
+Why is this selection under RELOCATABLE? I know ARM64 is the same, but why?
 
-* Under which circumstances would you care more for remaining patch review concerns
-  also according to better change descriptions (or changelogs)?
-  https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Documentation/process/submitting-patches.rst?h=v6.10-rc6#n94
+Huacai
 
-
-Regards,
-Markus
+>         help
+>           This builds the kernel as a Position Independent Executable (PI=
+E),
+>           which retains all relocation metadata required, so as to reloca=
+te
+> diff --git a/arch/loongarch/include/asm/asmmacro.h b/arch/loongarch/inclu=
+de/asm/asmmacro.h
+> index 655db7d7a427..8d7f501b0a12 100644
+> --- a/arch/loongarch/include/asm/asmmacro.h
+> +++ b/arch/loongarch/include/asm/asmmacro.h
+> @@ -609,6 +609,7 @@
+>         lu32i.d \reg, 0
+>         lu52i.d \reg, \reg, 0
+>         .pushsection ".la_abs", "aw", %progbits
+> +       .p2align 3
+>         .dword  766b
+>         .dword  \sym
+>         .popsection
+> diff --git a/arch/loongarch/include/asm/setup.h b/arch/loongarch/include/=
+asm/setup.h
+> index ee52fb1e9963..3c2fb16b11b6 100644
+> --- a/arch/loongarch/include/asm/setup.h
+> +++ b/arch/loongarch/include/asm/setup.h
+> @@ -34,6 +34,11 @@ extern long __la_abs_end;
+>  extern long __rela_dyn_begin;
+>  extern long __rela_dyn_end;
+>
+> +#ifdef CONFIG_RELR
+> +extern long __relr_dyn_begin;
+> +extern long __relr_dyn_end;
+> +#endif
+> +
+>  extern unsigned long __init relocate_kernel(void);
+>
+>  #endif
+> diff --git a/arch/loongarch/kernel/relocate.c b/arch/loongarch/kernel/rel=
+ocate.c
+> index 69d73dc7326a..6abb9c91b255 100644
+> --- a/arch/loongarch/kernel/relocate.c
+> +++ b/arch/loongarch/kernel/relocate.c
+> @@ -37,6 +37,24 @@ static inline void __init relocate_relative(void)
+>                 relocated_addr =3D (Elf64_Addr)RELOCATED(relocated_addr);
+>                 *(Elf64_Addr *)RELOCATED(addr) =3D relocated_addr;
+>         }
+> +
+> +#ifdef CONFIG_RELR
+> +       u64 *relr =3D (u64 *)&__relr_dyn_begin;
+> +       u64 *relr_end =3D (u64 *)&__relr_dyn_end;
+> +       u64 *addr =3D NULL;
+> +
+> +       for ( ; relr < relr_end; relr++) {
+> +               if ((*relr & 1) =3D=3D 0) {
+> +                       addr =3D (u64 *)(*relr + reloc_offset);
+> +                       *addr++ +=3D reloc_offset;
+> +               } else {
+> +                       for (u64 *p =3D addr, r =3D *relr >> 1; r; p++, r=
+ >>=3D 1)
+> +                               if (r & 1)
+> +                                       *p +=3D reloc_offset;
+> +                       addr +=3D 63;
+> +               }
+> +       }
+> +#endif
+>  }
+>
+>  static inline void __init relocate_absolute(long random_offset)
+> diff --git a/arch/loongarch/kernel/vmlinux.lds.S b/arch/loongarch/kernel/=
+vmlinux.lds.S
+> index 3c7595342730..08ea921cdec1 100644
+> --- a/arch/loongarch/kernel/vmlinux.lds.S
+> +++ b/arch/loongarch/kernel/vmlinux.lds.S
+> @@ -113,6 +113,14 @@ SECTIONS
+>                 __rela_dyn_end =3D .;
+>         }
+>
+> +#ifdef CONFIG_RELR
+> +       .relr.dyn : ALIGN(8) {
+> +               __relr_dyn_begin =3D .;
+> +                *(.relr.dyn)
+> +               __relr_dyn_end =3D .;
+> +       }
+> +#endif
+> +
+>         .data.rel : { *(.data.rel*) }
+>
+>  #ifdef CONFIG_RELOCATABLE
+> --
+> 2.45.2
+>
