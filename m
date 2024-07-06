@@ -1,120 +1,89 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
+Received: from mout.web.de (mout.web.de [212.227.17.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E5AB22309;
-	Sat,  6 Jul 2024 09:27:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 889A1DF6C;
+	Sat,  6 Jul 2024 09:46:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.17.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720258062; cv=none; b=nSU4Gp7bUU0ziz95u+kl6FL8pU7TwcoXioT45JC0MM1IFgNep9CTjtrMpdeM0Eaw2hppmAcFmElmcowCOpXv8nWa6pjRpYnVWq/g9WExf9Fl17HznqA8ujVDHOzL2Mrk4FCNPh7WGouNsdpJeyeCzwLTHK2Jw2pRDUUGLp5W4v0=
+	t=1720259198; cv=none; b=ctSlMWJdUfnuQ2te4cy0MmghrPy8ENt9wjOI4pbcMxFpslj2O/zTuZDHdKQz4KFPBj0SrEskQYYF9cpkb3AwXf/Zu1UAuk72xI35XKJuE3ga4jH3tvIJwcBp/XFZ5m7hIrYFUYStZp3frAMEDZEwhL9t84qcyl5rLCD7qF3qWcQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720258062; c=relaxed/simple;
-	bh=zJxqkkgpkYWfglPragPLn3buWTOXDky4ofBj2wUdfTM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=tQOrdmsVV4AaXDvsWST5M9wYCCoGIFGP5vsSLSghysNcUKt1IzCowCOWa06XKyWCDRuUHuIOBCCUF6/E+uoSqPxTYfvnpRedsdyOjVcjlcTnkDCfbMTx/slItw0WHI9LJInY5dCY9g9VMGU1xvBU70tcDW2mwB4SUcr7qLto0SI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=TdIbf/Om; arc=none smtp.client-ip=192.198.163.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1720259198; c=relaxed/simple;
+	bh=QnGcOl9oXoeopuI5Udmk0RgExWQN/v3kgP7QbQETryE=;
+	h=Message-ID:Date:MIME-Version:To:Cc:References:Subject:From:
+	 In-Reply-To:Content-Type; b=uEdOoug+JrPy12vF+Rcj/TtRkG7j/QYkkSMWkrLFur7AxpVJ6wXI/VRV7YI0hIHX875nvAXvswB65k0aaH/mEVi+YXiYgr1XZJl0U7AbHKptGZBsNez5CI3QddS8lwI0uRU/IMvQejsockXyreSWMHZn05JRE7EfyCC9oZxzCUU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de; spf=pass smtp.mailfrom=web.de; dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b=KXKdmgl+; arc=none smtp.client-ip=212.227.17.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=web.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="TdIbf/Om"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1720258061; x=1751794061;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=zJxqkkgpkYWfglPragPLn3buWTOXDky4ofBj2wUdfTM=;
-  b=TdIbf/OmtyAhAIpnrI7bjRtqvCtfa7Q9kumh1ZTym+sF1QFe85n2KmMj
-   bHW9dY2Lc0wGAk0+2EWBo6QvD6Fw1POKZtTgQIm3r7L5onwDwzZw5UqMJ
-   Q5+yeAWL7tTGFaj8fgbqjcflTmvwMC08uyprOSrjNAfl3qgwdZlpkVUUw
-   bhRHTztwRZMiA7c3QN6LxJCPurxt6hei0IqaYjk6B6PVWheA62MGAJSaL
-   aTSSkL5srAsDYqb0zrbaCllqFsLNfupGK987LrLZgjSUvgy584wlUzcRq
-   iVFhJWNz6WfoLeQlqpNZei1QiTjHXdS+hjQKpRMhyO01jf/i6hAUJ63bb
-   Q==;
-X-CSE-ConnectionGUID: bzX1IcDRTIazY1v+1BNyfQ==
-X-CSE-MsgGUID: vfRjSn85Ro2gBr3P3ebmwg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11123"; a="28919114"
-X-IronPort-AV: E=Sophos;i="6.09,187,1716274800"; 
-   d="scan'208";a="28919114"
-Received: from fmviesa008.fm.intel.com ([10.60.135.148])
-  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jul 2024 02:27:39 -0700
-X-CSE-ConnectionGUID: ecxtjR05SMiJs6sjQbeFUw==
-X-CSE-MsgGUID: MCNO2jV5SZ2+sYFoe7ksVQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.09,187,1716274800"; 
-   d="scan'208";a="47017844"
-Received: from lkp-server01.sh.intel.com (HELO 68891e0c336b) ([10.239.97.150])
-  by fmviesa008.fm.intel.com with ESMTP; 06 Jul 2024 02:27:36 -0700
-Received: from kbuild by 68891e0c336b with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1sQ1he-000TYS-1K;
-	Sat, 06 Jul 2024 09:27:34 +0000
-Date: Sat, 6 Jul 2024 17:26:56 +0800
-From: kernel test robot <lkp@intel.com>
-To: Tariq Toukan <tariqt@nvidia.com>,
-	"David S. Miller" <davem@davemloft.net>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Eric Dumazet <edumazet@google.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	netdev@vger.kernel.org, Saeed Mahameed <saeedm@nvidia.com>,
-	Gal Pressman <gal@nvidia.com>, Leon Romanovsky <leonro@nvidia.com>,
-	Rahul Rameshbabu <rrameshbabu@nvidia.com>,
-	Carolina Jubran <cjubran@nvidia.com>,
-	Tariq Toukan <tariqt@nvidia.com>
-Subject: Re: [PATCH net-next 07/10] net/mlx5: Implement PTM cross
- timestamping support
-Message-ID: <202407061720.xkyGAPIS-lkp@intel.com>
-References: <20240705071357.1331313-8-tariqt@nvidia.com>
+	dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b="KXKdmgl+"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=web.de;
+	s=s29768273; t=1720259098; x=1720863898; i=markus.elfring@web.de;
+	bh=ZUBSXMP3zCePbXBrp/yGxgf8fIuR0VVp7H9msICP90U=;
+	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:To:Cc:References:
+	 Subject:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:
+	 cc:content-transfer-encoding:content-type:date:from:message-id:
+	 mime-version:reply-to:subject:to;
+	b=KXKdmgl+TKIPDoYTraWvhyrqLaakhxklOgMCuJInmaAKj7pjYGXc5V2hxXO+xyjh
+	 6majvpiox2Q7ZD3CqJY2gABjEVtPWSxZGRsKrY555mhsGSokHi8FC1WW29NEdbGz2
+	 yFhEAaifKNeQ6IwB41Hphgp4HbeexKblHK+Z/iFXKxKGqtwr2oU2UhCY3QdLujy1u
+	 V89Qu3iOv+rDvZSYSsZyuxV5VDAvFzozoZuVTllUt2A4E9P7LftPMSZwoXkhzD6ex
+	 CFzxi02nkJ4Ru7P5rgWOn4JWHMOG/9F9ZJUsCFBoghxWhtybxkJ3roelYXjmGGDrC
+	 qMszOF+1eCRd+ZSYMQ==
+X-UI-Sender-Class: 814a7b36-bfc1-4dae-8640-3722d8ec6cd6
+Received: from [192.168.178.21] ([94.31.91.95]) by smtp.web.de (mrweb106
+ [213.165.67.124]) with ESMTPSA (Nemesis) id 1MnX1L-1s0dSO3qOT-00cVet; Sat, 06
+ Jul 2024 11:44:57 +0200
+Message-ID: <2b0c7d74-8a20-4a54-9467-bec4395a203e@web.de>
+Date: Sat, 6 Jul 2024 11:44:39 +0200
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240705071357.1331313-8-tariqt@nvidia.com>
+User-Agent: Mozilla Thunderbird
+To: Xi Ruoyao <xry111@xry111.site>, loongarch@lists.linux.dev,
+ llvm@lists.linux.dev, Huacai Chen <chenhuacai@kernel.org>,
+ Wang Xuerui <kernel@xen0n.name>
+Cc: LKML <linux-kernel@vger.kernel.org>, Fangrui Song <maskray@google.com>,
+ Jinyang He <hejinyang@loongson.cn>, Nathan Chancellor <nathan@kernel.org>,
+ Nick Desaulniers <ndesaulniers@google.com>,
+ Tiezhu Yang <yangtiezhu@loongson.cn>, Youling Tang <tangyouling@kylinos.cn>
+References: <20240706073858.161035-1-xry111@xry111.site>
+Subject: Re: [PATCH 1/2] LoongArch: Remove a redundant checking in relocator
+Content-Language: en-GB
+From: Markus Elfring <Markus.Elfring@web.de>
+In-Reply-To: <20240706073858.161035-1-xry111@xry111.site>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Provags-ID: V03:K1:El3xGddA3OmLZNBG8qQpEg+y947RSqGdyNGexujx06XBdUcOesj
+ IJzhW1nW++qs0YBHy1Yj5xmwUl/sJQqG7IMtuoI6pKvmwRunoudCVLuAOvuBHPexALMGKzz
+ m3NuxdHcjlxB2vNCCvVatGnCPKlgqVXGKGB7VrhADMfBZu3RHByprRkgQTX9v3DZVHFjPLG
+ CVUL3Ogb3h3blSM7EqyAw==
+X-Spam-Flag: NO
+UI-OutboundReport: notjunk:1;M01:P0:aqTKmKEGH6g=;r8IP2hz+nCTPUyZGLUrShQKycOb
+ o6uuMPbQw5VqwyVEGbic+SQ0j8S+Zj/kAsRuHK+J/+7VTcLrgiLFkbMKaiuF6gsPcO2SJYp5q
+ jV4dVK153FdLtS6yGd8/Fmw0A6s9674e4uoqkAzZSgEecdUFwVHqv0ivWGp0kDxIVVkwAPpcy
+ KyuUF/2T2ZJTgy+OjYfJQQaavC0V8O2W9Zbg0+eJli/+/SLlV0jM132MnsxSZ887KPmSrEiL/
+ /qEJjpY4fmaDiP054CbaOT3gYhayY79zRitv+WHzRrEvZdjWwQlBBzutzOslJakSRAvVn7IvE
+ 9qrm8LhqSnu11LAHUt6RJY0kH94C7M7iepwTX8tsO7Ds9knjvSVacxv3uaS1EKhGZZG0PyCI/
+ hOC6Ya0Pdlhcxfqt9q6NovgBLr+Jql/M9VTVV/NXaLkDiy1APkZe8lI3UMLcUMIzGfemddhB8
+ x2cXoiftLNpXHv4fp3MgA2TrXiFiiTxSvVzPuzvGKlY3A3skVIbteie8fD2Sx0Xf2axgPixaw
+ W69GzQA350TpARNo+q3vo6EWlguzb+/a7+PKhfGpDCREGfTD7mDLssK3MK4Kf9zN9Lb/R/a3P
+ TC+Ww1yCRwNgymeeRbkdqEkd2Ip5m9pyli+g3OhK6cDB3tcqz0dTMQUkfBfDVyTUxhpT4C6ky
+ H41nLjSPfBpIQeg9Vwv0jlZizd2KFZegycb9Pnqjf7fiZZzVjWuqs0Zcw9/+YpaI7Q+jloiXi
+ fa2hJW8Ka7Hz0sTXJLhiH3PyNNlMJfnGQCDzthlblFrHE+Fl9qFQc0G/DEQ+7Od+1L5y6VMem
+ /MnQOpxN/HcCk9evZ93YNkTcznQ7RW8RiYo2kRaVnfzKY=
 
-Hi Tariq,
+> With our linker script "relocated_addr >= VMLINUX_LOAD_ADDRESS" should
+> be always true.
 
-kernel test robot noticed the following build errors:
+* I find cover letters helpful for patch series.
 
-[auto build test ERROR on net-next/main]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Tariq-Toukan/net-mlx5-IFC-updates-for-SF-max-IO-EQs/20240705-205245
-base:   net-next/main
-patch link:    https://lore.kernel.org/r/20240705071357.1331313-8-tariqt%40nvidia.com
-patch subject: [PATCH net-next 07/10] net/mlx5: Implement PTM cross timestamping support
-config: arm64-allmodconfig (https://download.01.org/0day-ci/archive/20240706/202407061720.xkyGAPIS-lkp@intel.com/config)
-compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project a0c6b8aef853eedaa0980f07c0a502a5a8a9740e)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240706/202407061720.xkyGAPIS-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202407061720.xkyGAPIS-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> drivers/net/ethernet/mellanox/mlx5/core/lib/clock.c:33:10: fatal error: 'asm/tsc.h' file not found
-      33 | #include <asm/tsc.h>
-         |          ^~~~~~~~~~~
-   1 error generated.
+* Under which circumstances would you care more for remaining patch review concerns
+  also according to better change descriptions (or changelogs)?
+  https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Documentation/process/submitting-patches.rst?h=v6.10-rc6#n94
 
 
-vim +33 drivers/net/ethernet/mellanox/mlx5/core/lib/clock.c
-
-  > 33	#include <asm/tsc.h>
-    34	#include <linux/clocksource.h>
-    35	#include <linux/cpufeature.h>
-    36	#include <linux/highmem.h>
-    37	#include <linux/log2.h>
-    38	#include <linux/ptp_clock_kernel.h>
-    39	#include <linux/timekeeping.h>
-    40	#include <rdma/mlx5-abi.h>
-    41	#include "lib/eq.h"
-    42	#include "en.h"
-    43	#include "clock.h"
-    44	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Regards,
+Markus
