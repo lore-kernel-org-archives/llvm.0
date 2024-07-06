@@ -1,204 +1,85 @@
-Received: from mail-ed1-f46.google.com (mail-ed1-f46.google.com [209.85.208.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 87B736FC2
-	for <llvm@lists.linux.dev>; Sat,  6 Jul 2024 03:24:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 55BF1FC18;
+	Sat,  6 Jul 2024 04:23:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720236253; cv=none; b=L3qtRuRN/btog+tfYdZgC/UOEdBxlnXZoTX0JIOttBdBDZX6DXo2R7hbN2XL8fkXu1uN7rG9dAp7OISuMvKHQ1k9W3totVArVBPZk1pF0o5DhqPZfVTYwr3t/Rd/gsLvG6OOnpi2D5nE1PjaXCuNeZamqL44AWHH/S7PQdKfNro=
+	t=1720239809; cv=none; b=MqFcbmNvTNy1yVuScTbvPlf2TNRpoclMOT+8Swkk2dQnBOPI2wd61u7h4XhunU18jhXWYAC8SOUr4LHialkw8IJXOZyqyQjHpNVl1yXjgxnxVdDd+no/Szjggd0k0qxrHhGka0BjNwd2KG3uC7xzSY5kWp7L5sQjL1ku9gSDiXY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720236253; c=relaxed/simple;
-	bh=Zf7fegEOz88S+uefNQgGk7kN64iUyK0nqei1SbhANDY=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Lic2oFRjqX4fUJvTmQAXDLIwCZwPuHcf/BDtWIro6kM3YuFqXDXJUFCFstskyz1XGwJrTDfu8/BPlTSYR/z2fFwMl5Nc4kmQmzUYXhOLMZ73SnqtWjormIgBE5MkJUkdJHkv6HAvietAf+nZkD2/JeqU743MBU45slNweEeJPHA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=d6Y1lQdj; arc=none smtp.client-ip=209.85.208.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	s=arc-20240116; t=1720239809; c=relaxed/simple;
+	bh=M1toomnqG+m5n3Uu1aBzpp995ewKwuxQs6zCrOPs8QY=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=Gn84HWObUfuMM/g7mt7a90je1e33jouiOEwnq31LYfnefnZY++4azj8e+b2ot16Pln5m8Syu1duKr/7FX4Pe35KPWKhM3OiDkGH/zSserUWrnWqTyL29pGtg+cMLtstkfr0KXbP7mOkjHXrEPwx6qzKLlWw63c1sN8kgCp7VwRE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=AaEj0Ipe; arc=none smtp.client-ip=192.198.163.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="d6Y1lQdj"
-Received: by mail-ed1-f46.google.com with SMTP id 4fb4d7f45d1cf-58ce966a1d3so23893a12.1
-        for <llvm@lists.linux.dev>; Fri, 05 Jul 2024 20:24:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1720236250; x=1720841050; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=EeOWn8Dcpi/0Zne7XKezGHMzmpPhwxsGnD8ugnUza50=;
-        b=d6Y1lQdji4URgM8MjhuFPxZ6ifzhfxNbYSeFW6GzHLrxT3FdfGu69ue5B3WC5SpSG3
-         spHOg2Ws722VPFsm7IlFoHAVKG/VSmhLu6rjvuMYx9jDR6vxLPbrzluYh8BTcPjwbJud
-         4iNKzN3+T2TVbN0Ky2JpASaWADhLrhWqcdvRyKJTQXofXyJmEcCLCq2f2zVxnE5qXUq6
-         e+mYYP6lZ3zZg+yj/NbW5NZejckOyEuMHPYapVl+ojFZozVLaQ0eiWRb7ouoP7OufHTs
-         ZA5oRydZ4TW4zlxD06AeSaCWaTu0BWk8gxl+xRKvh6FLnWtBMAnwkSVZLDuak2Sx/yDs
-         ntFA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1720236250; x=1720841050;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=EeOWn8Dcpi/0Zne7XKezGHMzmpPhwxsGnD8ugnUza50=;
-        b=vT2rIaY66YDBJQZrPLgMIhoGRW17JV6yATVvGIyMi09Me+kSSHQ7vP+EnIWECipIUX
-         ujBkGDbSgGfOs2Z0iEluBj2wil5FxBUkSbijlVMEzyWf2qEXCSbLegeYlkDVjzGCooJf
-         tmVW0F8iqowjnP1UQmLRHhRQj6T16d1ya210Af3368XXVWWzPL0LMFh0QCDzHiLuhOF4
-         NJjMYKwr9oCeMM39ujKAfxuqqYkmiivgdaX+XHpyzXVFFEk1LeC6IGPLtY2w2Z4S9Ij8
-         /0vh16vcmEaeCDNf6GlzXPU3/Avhci87ZT6bx16ScFlvrDYX2L4ZqzLUQ5r1O4XB8M6N
-         ykHw==
-X-Forwarded-Encrypted: i=1; AJvYcCUXXd5e99vcCq2Qwq40KRU+wVNkwmRSEFuN4xiFjx6l7MIZcbMM39Qgg11BhyicP8clwuPrGbWWlAAUlyUEN/TNK4VXkQ==
-X-Gm-Message-State: AOJu0YytfV568cpAptf/WyFWSds1hH/lKIK8crcEDPGV5JRtvcMAzi3S
-	gox0kVniC/q/0ZmQs2CNJp7Mf17Wrs/JOHJ7p8NCdCc58/FylTIVz/IfJjiRZJ0HIhPnbmUelvk
-	1Vkb3pmgVDIIKh5cJmKkoOQIIZN0FUomz0jFO
-X-Google-Smtp-Source: AGHT+IExJJ+2hSaxJtRHZGJ4Ox4OzW4oFndkiki9VhxYJFTQsxkQqN4Vpb3uXzUPWyQhWCVip8yKpWFGS+CMtG1GfTA=
-X-Received: by 2002:a50:8ad3:0:b0:57c:bb0d:5e48 with SMTP id
- 4fb4d7f45d1cf-58e00933a13mr316161a12.2.1720236249500; Fri, 05 Jul 2024
- 20:24:09 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="AaEj0Ipe"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1720239807; x=1751775807;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=M1toomnqG+m5n3Uu1aBzpp995ewKwuxQs6zCrOPs8QY=;
+  b=AaEj0IpeU/MWdLRM/4jAiOrhoTgdrnQxiduvYfXYfGbxP6suhhANjPTR
+   hjy6VGxxJgypXY2W3+mXyo0MBdKctAKnH6dgzmx7PBNtRgOeAPc2Yzq9Y
+   ZHRUhauek1KBKy+hLH0ILS1Vhe9WUsRaMiyQRHMrCIf9yJfMxLLXpz1CY
+   roH2tZL55TO5DloHQkht9oSvPW06tD3TZEQRui0FjKHGc+upcWmIy+RKl
+   hby0BMCluvTSgEZLZ2lf9XQjnh/CSXQTmN8s4iki5Nd5OXrptP1xzS71F
+   bq+xfqpi2aZPo3APChBg2wKHnwbU8+umAavQ0AgH4XOZuvbmTAj4esasD
+   g==;
+X-CSE-ConnectionGUID: 9w4n5gQAS7m7mugj4NhcVQ==
+X-CSE-MsgGUID: 3h3OrqEMTNeDqDbj4hEd0g==
+X-IronPort-AV: E=McAfee;i="6700,10204,11123"; a="17164384"
+X-IronPort-AV: E=Sophos;i="6.09,186,1716274800"; 
+   d="scan'208";a="17164384"
+Received: from fmviesa007.fm.intel.com ([10.60.135.147])
+  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jul 2024 21:23:26 -0700
+X-CSE-ConnectionGUID: Cd74fsVBRjyxwmh3tppoWQ==
+X-CSE-MsgGUID: koKODRc6TJ6NicQw5g6lWA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.09,187,1716274800"; 
+   d="scan'208";a="46904214"
+Received: from lkp-server01.sh.intel.com (HELO 68891e0c336b) ([10.239.97.150])
+  by fmviesa007.fm.intel.com with ESMTP; 05 Jul 2024 21:23:25 -0700
+Received: from kbuild by 68891e0c336b with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1sPwxH-000TIe-2F;
+	Sat, 06 Jul 2024 04:23:23 +0000
+Date: Sat, 6 Jul 2024 12:22:39 +0800
+From: kernel test robot <lkp@intel.com>
+To: "Paul E. McKenney" <paulmck@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [paulmckrcu:dev 40/64] ld.lld: error: undefined symbol:
+ csd_lock_is_stuck
+Message-ID: <202407061243.x1jKsINQ-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20240704-update-ld-version-for-new-lld-ver-str-v1-1-91bccc020a93@kernel.org>
- <CAFP8O3JUgH-tBJtqO-QS0HmO4mrFBE6Dz+tnrBcse=gw_Q_4vQ@mail.gmail.com> <20240705160007.GA875035@thelio-3990X>
-In-Reply-To: <20240705160007.GA875035@thelio-3990X>
-From: Fangrui Song <maskray@google.com>
-Date: Fri, 5 Jul 2024 20:23:58 -0700
-Message-ID: <CAFP8O3+X4iT1OPoMdTTa_Y1WKjK4f6ownE0tBYZD_a-ngSNufg@mail.gmail.com>
-Subject: Re: [PATCH] kbuild: Update ld-version.sh for change in LLD version output
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: Masahiro Yamada <masahiroy@kernel.org>, Nicolas Schier <nicolas@fjasle.eu>, 
-	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, linux-kbuild@vger.kernel.org, 
-	llvm@lists.linux.dev, patches@lists.linux.dev, stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Fri, Jul 5, 2024 at 9:00=E2=80=AFAM Nathan Chancellor <nathan@kernel.org=
-> wrote:
->
-> On Thu, Jul 04, 2024 at 02:23:46PM -0700, Fangrui Song wrote:
-> > On Thu, Jul 4, 2024 at 9:19=E2=80=AFAM Nathan Chancellor <nathan@kernel=
-.org> wrote:
-> > >
-> > > After [1] in upstream LLVM, ld.lld's version output is slightly
-> > > different when the cmake configuration option LLVM_APPEND_VC_REV is
-> > > disabled.
-> > >
-> > > Before:
-> > >
-> > >   Debian LLD 19.0.0 (compatible with GNU linkers)
-> > >
-> > > After:
-> > >
-> > >   Debian LLD 19.0.0, compatible with GNU linkers
-> > >
-> > > This results in ld-version.sh failing with
-> > >
-> > >   scripts/ld-version.sh: 19: arithmetic expression: expecting EOF: "1=
-0000 * 19 + 100 * 0 + 0,"
-> > >
-> > > because the trailing comma is included in the patch level part of the
-> > > expression. Remove the trailing comma when assigning the version
-> > > variable in the LLD block to resolve the error, resulting in the prop=
-er
-> > > output:
-> > >
-> > >   LLD 190000
-> > >
-> > > With LLVM_APPEND_VC_REV enabled, there is no issue with the new outpu=
-t
-> > > because it is treated the same as the prior LLVM_APPEND_VC_REV=3DOFF
-> > > version string was.
-> > >
-> > >   ClangBuiltLinux LLD 19.0.0 (https://github.com/llvm/llvm-project a3=
-c5c83273358a85a4e02f5f76379b1a276e7714), compatible with GNU linkers
-> > >
-> > > Cc: stable@vger.kernel.org
-> > > Fixes: 02aff8592204 ("kbuild: check the minimum linker version in Kco=
-nfig")
-> > > Link: https://github.com/llvm/llvm-project/commit/0f9fbbb63cfcd206944=
-1aa2ebef622c9716f8dbb [1]
-> > > Signed-off-by: Nathan Chancellor <nathan@kernel.org>
-> > > ---
-> > >  scripts/ld-version.sh | 4 +++-
-> > >  1 file changed, 3 insertions(+), 1 deletion(-)
-> > >
-> > > diff --git a/scripts/ld-version.sh b/scripts/ld-version.sh
-> > > index a78b804b680c..f2f425322524 100755
-> > > --- a/scripts/ld-version.sh
-> > > +++ b/scripts/ld-version.sh
-> > > @@ -47,7 +47,9 @@ else
-> > >         done
-> > >
-> > >         if [ "$1" =3D LLD ]; then
-> > > -               version=3D$2
-> > > +               # LLD after https://github.com/llvm/llvm-project/comm=
-it/0f9fbbb63cfcd2069441aa2ebef622c9716f8dbb
-> > > +               # may have a trailing comma on the patch version with=
- LLVM_APPEND_VC_REV=3Doff.
-> > > +               version=3D${2%,}
-> > >                 min_version=3D$($min_tool_version llvm)
-> > >                 name=3DLLD
-> > >                 disp_name=3DLLD
-> > >
-> > > ---
-> > > base-commit: 22a40d14b572deb80c0648557f4bd502d7e83826
-> > > change-id: 20240704-update-ld-version-for-new-lld-ver-str-b7a4afbbd5f=
-1
-> > >
-> > > Best regards,
-> > > --
-> > > Nathan Chancellor <nathan@kernel.org>
-> > >
-> >
-> > Thanks for catching the issue.
-> > If we want to minimize the number of special cases, perhaps we can
-> > adjust `version=3D${version%-*}` below to
-> >
-> > version=3D${version%%[^0-9.]*}
->
-> Thanks for the suggestion! I think this wants to be
->
->   version=3D${version%%[!0-9.]*}
->
-> because of "If an open bracket introduces a bracket expression as in XBD
-> RE Bracket Expression, except that the <exclamation-mark> character
-> ('!') shall replace the <circumflex> character ('^') in its role in a
-> non-matching list in the regular expression notation, it shall introduce
-> a pattern bracket expression." from the link that you have below.
+tree:   https://github.com/paulmckrcu/linux dev
+head:   1b9ee36634289bdfe55e5b6e99494239f80ecb98
+commit: c9ba6970102a7c706e1203b32ca5c8a840e11a78 [40/64] rcu: Summarize RCU CPU stall warnings during CSD-lock stalls
+config: x86_64-randconfig-003-20240705 (https://download.01.org/0day-ci/archive/20240706/202407061243.x1jKsINQ-lkp@intel.com/config)
+compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240706/202407061243.x1jKsINQ-lkp@intel.com/reproduce)
 
-Yes! ! should be used instead.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202407061243.x1jKsINQ-lkp@intel.com/
 
-> That does work for me with all the different linker versions that I can
-> easily access (Arch, Debian, Fedora) along with my own self built
-> toolchains, so it seems like it should be pretty robust.
->
-> Masahiro, would you be okay with me sending a v2 with that change or do
-> you foresee any issues where it would not be sufficient? I would
-> probably change the comment to:
->
->   # There may be something after the version, such as a distribution's
->   # package release number (2.34-4.fc32) or a comma (like LLD adds
->   # before the "compatible with GNU linkers" string), so remove anything
->   # that is not a number or a period.
+All errors (new ones prefixed by >>):
 
-The v2 change LGTM :)
+>> ld.lld: error: undefined symbol: csd_lock_is_stuck
+   >>> referenced by tree_stall.h:798 (kernel/rcu/tree_stall.h:798)
+   >>>               vmlinux.o:(rcu_sched_clock_irq)
 
-Reviewed-by: Fangrui Song <maskray@google.com>
-
-> > (POSIX shell doc:
-> > https://pubs.opengroup.org/onlinepubs/9699919799/utilities/V3_chap02.ht=
-ml#:~:text=3DRemove%20Largest)
-> >
-> > ${version%%[^0-9.]*} is a simpler form than what glibc uses:
-> >
-> >   "LLD"*)
-> >   # Accept LLD 13.0.0 or higher
-> >     AC_CHECK_PROG_VER(LD, $LD, --version,
-> >                     [LLD.* \([0-9][0-9]*\.[0-9.]*\)],
-> >                     [1[3-9].*|[2-9][0-9].*],
->
-> Cheers,
-> Nathan
->
-
-
---=20
-=E5=AE=8B=E6=96=B9=E7=9D=BF
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
