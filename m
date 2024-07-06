@@ -1,114 +1,204 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f46.google.com (mail-ed1-f46.google.com [209.85.208.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C237EA927;
-	Sat,  6 Jul 2024 02:10:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 87B736FC2
+	for <llvm@lists.linux.dev>; Sat,  6 Jul 2024 03:24:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720231824; cv=none; b=W9WL9CnNxZtmjihlssPENemyjvIBVB+DrMnWxrodYF12CFe23cB8eQsLVq/+BTkDebhe0ykYzSDyUrla4wEBvsPz7B1jvlyj48v8CmtEJiQHCobmxnbaBhdtDt7aE06Dm4J0Wg8DsYZeijTGNHYWCP91UkYBkd5YR6JR4P5WMhU=
+	t=1720236253; cv=none; b=L3qtRuRN/btog+tfYdZgC/UOEdBxlnXZoTX0JIOttBdBDZX6DXo2R7hbN2XL8fkXu1uN7rG9dAp7OISuMvKHQ1k9W3totVArVBPZk1pF0o5DhqPZfVTYwr3t/Rd/gsLvG6OOnpi2D5nE1PjaXCuNeZamqL44AWHH/S7PQdKfNro=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720231824; c=relaxed/simple;
-	bh=y5OYvQ7qoNRRu/fAFV6HRl2+kvQ30bbSzm1awHnw//o=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=f+XKr7NZYwf4ca5C6Hp+YeDjqQ23+prE645d7/VqMcNRI8b/Kr0P9YtE5HIE6JwveGmK0m2470niQRGdTHCAAuAza/e/pvpPzLIo7BRciPbNb/AHUPT0hcT4vUFUA3+Fcz9XNffAGW7iJWGimnpMcdkShXGL1YiAalAyQjZDz1Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=KdYWKldN; arc=none smtp.client-ip=192.198.163.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1720236253; c=relaxed/simple;
+	bh=Zf7fegEOz88S+uefNQgGk7kN64iUyK0nqei1SbhANDY=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Lic2oFRjqX4fUJvTmQAXDLIwCZwPuHcf/BDtWIro6kM3YuFqXDXJUFCFstskyz1XGwJrTDfu8/BPlTSYR/z2fFwMl5Nc4kmQmzUYXhOLMZ73SnqtWjormIgBE5MkJUkdJHkv6HAvietAf+nZkD2/JeqU743MBU45slNweEeJPHA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=d6Y1lQdj; arc=none smtp.client-ip=209.85.208.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="KdYWKldN"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1720231822; x=1751767822;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=y5OYvQ7qoNRRu/fAFV6HRl2+kvQ30bbSzm1awHnw//o=;
-  b=KdYWKldNIlE0kO2T2sb3IZJ1TBf+RlprG6Huc0/W2n/Jdd7P85DNYled
-   xaNmCi0XC8mVmEGijDzBBi1xrz9xMxFTj3Li6CzBIuMEZs6UqTedzmkrK
-   EFGgXNiPmLUrnp8Wsg2bUKsFK9ct+aA16WJgoDRuntm/EQh1AeOXXn/d3
-   yUxZPV1GtPq7aKB/0XffPkvXNIaTGAisQ+QeseCH2+omNMOibpyyWF3VX
-   nhng5rARoO0d5SeWkIrlJEUwEWDZ3tyvV+1dQRnvTOHJkzOhRf/dGE9zd
-   I8fnLOa0tiBod4hKXwG4Pa9mfog1q64u8pS3ODbrbxn0tgmV3soNRs82j
-   Q==;
-X-CSE-ConnectionGUID: IB8RnPZSTymMD1dNshlObA==
-X-CSE-MsgGUID: VDhj3oX4QY6qid5speJq5Q==
-X-IronPort-AV: E=McAfee;i="6700,10204,11123"; a="17648377"
-X-IronPort-AV: E=Sophos;i="6.09,186,1716274800"; 
-   d="scan'208";a="17648377"
-Received: from fmviesa010.fm.intel.com ([10.60.135.150])
-  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jul 2024 19:10:21 -0700
-X-CSE-ConnectionGUID: Ml9y3AEqS7+6VF+aXGLSxA==
-X-CSE-MsgGUID: 0N/MBXoHRkGeR6P0qAju8g==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.09,186,1716274800"; 
-   d="scan'208";a="47079091"
-Received: from lkp-server01.sh.intel.com (HELO 68891e0c336b) ([10.239.97.150])
-  by fmviesa010.fm.intel.com with ESMTP; 05 Jul 2024 19:10:20 -0700
-Received: from kbuild by 68891e0c336b with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1sPusU-000TCS-02;
-	Sat, 06 Jul 2024 02:10:18 +0000
-Date: Sat, 6 Jul 2024 10:08:52 +0800
-From: kernel test robot <lkp@intel.com>
-To: Nemesa Garg <nemesa.garg@intel.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [PATCH 2/5] drm/i915/display: Compute the scaler filter
- coefficients
-Message-ID: <202407060905.l9gatVXa-lkp@intel.com>
-References: <20240705090205.72302-3-nemesa.garg@intel.com>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="d6Y1lQdj"
+Received: by mail-ed1-f46.google.com with SMTP id 4fb4d7f45d1cf-58ce966a1d3so23893a12.1
+        for <llvm@lists.linux.dev>; Fri, 05 Jul 2024 20:24:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1720236250; x=1720841050; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=EeOWn8Dcpi/0Zne7XKezGHMzmpPhwxsGnD8ugnUza50=;
+        b=d6Y1lQdji4URgM8MjhuFPxZ6ifzhfxNbYSeFW6GzHLrxT3FdfGu69ue5B3WC5SpSG3
+         spHOg2Ws722VPFsm7IlFoHAVKG/VSmhLu6rjvuMYx9jDR6vxLPbrzluYh8BTcPjwbJud
+         4iNKzN3+T2TVbN0Ky2JpASaWADhLrhWqcdvRyKJTQXofXyJmEcCLCq2f2zVxnE5qXUq6
+         e+mYYP6lZ3zZg+yj/NbW5NZejckOyEuMHPYapVl+ojFZozVLaQ0eiWRb7ouoP7OufHTs
+         ZA5oRydZ4TW4zlxD06AeSaCWaTu0BWk8gxl+xRKvh6FLnWtBMAnwkSVZLDuak2Sx/yDs
+         ntFA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1720236250; x=1720841050;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=EeOWn8Dcpi/0Zne7XKezGHMzmpPhwxsGnD8ugnUza50=;
+        b=vT2rIaY66YDBJQZrPLgMIhoGRW17JV6yATVvGIyMi09Me+kSSHQ7vP+EnIWECipIUX
+         ujBkGDbSgGfOs2Z0iEluBj2wil5FxBUkSbijlVMEzyWf2qEXCSbLegeYlkDVjzGCooJf
+         tmVW0F8iqowjnP1UQmLRHhRQj6T16d1ya210Af3368XXVWWzPL0LMFh0QCDzHiLuhOF4
+         NJjMYKwr9oCeMM39ujKAfxuqqYkmiivgdaX+XHpyzXVFFEk1LeC6IGPLtY2w2Z4S9Ij8
+         /0vh16vcmEaeCDNf6GlzXPU3/Avhci87ZT6bx16ScFlvrDYX2L4ZqzLUQ5r1O4XB8M6N
+         ykHw==
+X-Forwarded-Encrypted: i=1; AJvYcCUXXd5e99vcCq2Qwq40KRU+wVNkwmRSEFuN4xiFjx6l7MIZcbMM39Qgg11BhyicP8clwuPrGbWWlAAUlyUEN/TNK4VXkQ==
+X-Gm-Message-State: AOJu0YytfV568cpAptf/WyFWSds1hH/lKIK8crcEDPGV5JRtvcMAzi3S
+	gox0kVniC/q/0ZmQs2CNJp7Mf17Wrs/JOHJ7p8NCdCc58/FylTIVz/IfJjiRZJ0HIhPnbmUelvk
+	1Vkb3pmgVDIIKh5cJmKkoOQIIZN0FUomz0jFO
+X-Google-Smtp-Source: AGHT+IExJJ+2hSaxJtRHZGJ4Ox4OzW4oFndkiki9VhxYJFTQsxkQqN4Vpb3uXzUPWyQhWCVip8yKpWFGS+CMtG1GfTA=
+X-Received: by 2002:a50:8ad3:0:b0:57c:bb0d:5e48 with SMTP id
+ 4fb4d7f45d1cf-58e00933a13mr316161a12.2.1720236249500; Fri, 05 Jul 2024
+ 20:24:09 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240705090205.72302-3-nemesa.garg@intel.com>
+References: <20240704-update-ld-version-for-new-lld-ver-str-v1-1-91bccc020a93@kernel.org>
+ <CAFP8O3JUgH-tBJtqO-QS0HmO4mrFBE6Dz+tnrBcse=gw_Q_4vQ@mail.gmail.com> <20240705160007.GA875035@thelio-3990X>
+In-Reply-To: <20240705160007.GA875035@thelio-3990X>
+From: Fangrui Song <maskray@google.com>
+Date: Fri, 5 Jul 2024 20:23:58 -0700
+Message-ID: <CAFP8O3+X4iT1OPoMdTTa_Y1WKjK4f6ownE0tBYZD_a-ngSNufg@mail.gmail.com>
+Subject: Re: [PATCH] kbuild: Update ld-version.sh for change in LLD version output
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: Masahiro Yamada <masahiroy@kernel.org>, Nicolas Schier <nicolas@fjasle.eu>, 
+	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, linux-kbuild@vger.kernel.org, 
+	llvm@lists.linux.dev, patches@lists.linux.dev, stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Nemesa,
+On Fri, Jul 5, 2024 at 9:00=E2=80=AFAM Nathan Chancellor <nathan@kernel.org=
+> wrote:
+>
+> On Thu, Jul 04, 2024 at 02:23:46PM -0700, Fangrui Song wrote:
+> > On Thu, Jul 4, 2024 at 9:19=E2=80=AFAM Nathan Chancellor <nathan@kernel=
+.org> wrote:
+> > >
+> > > After [1] in upstream LLVM, ld.lld's version output is slightly
+> > > different when the cmake configuration option LLVM_APPEND_VC_REV is
+> > > disabled.
+> > >
+> > > Before:
+> > >
+> > >   Debian LLD 19.0.0 (compatible with GNU linkers)
+> > >
+> > > After:
+> > >
+> > >   Debian LLD 19.0.0, compatible with GNU linkers
+> > >
+> > > This results in ld-version.sh failing with
+> > >
+> > >   scripts/ld-version.sh: 19: arithmetic expression: expecting EOF: "1=
+0000 * 19 + 100 * 0 + 0,"
+> > >
+> > > because the trailing comma is included in the patch level part of the
+> > > expression. Remove the trailing comma when assigning the version
+> > > variable in the LLD block to resolve the error, resulting in the prop=
+er
+> > > output:
+> > >
+> > >   LLD 190000
+> > >
+> > > With LLVM_APPEND_VC_REV enabled, there is no issue with the new outpu=
+t
+> > > because it is treated the same as the prior LLVM_APPEND_VC_REV=3DOFF
+> > > version string was.
+> > >
+> > >   ClangBuiltLinux LLD 19.0.0 (https://github.com/llvm/llvm-project a3=
+c5c83273358a85a4e02f5f76379b1a276e7714), compatible with GNU linkers
+> > >
+> > > Cc: stable@vger.kernel.org
+> > > Fixes: 02aff8592204 ("kbuild: check the minimum linker version in Kco=
+nfig")
+> > > Link: https://github.com/llvm/llvm-project/commit/0f9fbbb63cfcd206944=
+1aa2ebef622c9716f8dbb [1]
+> > > Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+> > > ---
+> > >  scripts/ld-version.sh | 4 +++-
+> > >  1 file changed, 3 insertions(+), 1 deletion(-)
+> > >
+> > > diff --git a/scripts/ld-version.sh b/scripts/ld-version.sh
+> > > index a78b804b680c..f2f425322524 100755
+> > > --- a/scripts/ld-version.sh
+> > > +++ b/scripts/ld-version.sh
+> > > @@ -47,7 +47,9 @@ else
+> > >         done
+> > >
+> > >         if [ "$1" =3D LLD ]; then
+> > > -               version=3D$2
+> > > +               # LLD after https://github.com/llvm/llvm-project/comm=
+it/0f9fbbb63cfcd2069441aa2ebef622c9716f8dbb
+> > > +               # may have a trailing comma on the patch version with=
+ LLVM_APPEND_VC_REV=3Doff.
+> > > +               version=3D${2%,}
+> > >                 min_version=3D$($min_tool_version llvm)
+> > >                 name=3DLLD
+> > >                 disp_name=3DLLD
+> > >
+> > > ---
+> > > base-commit: 22a40d14b572deb80c0648557f4bd502d7e83826
+> > > change-id: 20240704-update-ld-version-for-new-lld-ver-str-b7a4afbbd5f=
+1
+> > >
+> > > Best regards,
+> > > --
+> > > Nathan Chancellor <nathan@kernel.org>
+> > >
+> >
+> > Thanks for catching the issue.
+> > If we want to minimize the number of special cases, perhaps we can
+> > adjust `version=3D${version%-*}` below to
+> >
+> > version=3D${version%%[^0-9.]*}
+>
+> Thanks for the suggestion! I think this wants to be
+>
+>   version=3D${version%%[!0-9.]*}
+>
+> because of "If an open bracket introduces a bracket expression as in XBD
+> RE Bracket Expression, except that the <exclamation-mark> character
+> ('!') shall replace the <circumflex> character ('^') in its role in a
+> non-matching list in the regular expression notation, it shall introduce
+> a pattern bracket expression." from the link that you have below.
 
-kernel test robot noticed the following build errors:
+Yes! ! should be used instead.
 
-[auto build test ERROR on drm-intel/for-linux-next]
-[also build test ERROR on drm-intel/for-linux-next-fixes drm-tip/drm-tip drm-xe/drm-xe-next drm/drm-next drm-exynos/exynos-drm-next drm-misc/drm-misc-next linus/master v6.10-rc6 next-20240703]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+> That does work for me with all the different linker versions that I can
+> easily access (Arch, Debian, Fedora) along with my own self built
+> toolchains, so it seems like it should be pretty robust.
+>
+> Masahiro, would you be okay with me sending a v2 with that change or do
+> you foresee any issues where it would not be sufficient? I would
+> probably change the comment to:
+>
+>   # There may be something after the version, such as a distribution's
+>   # package release number (2.34-4.fc32) or a comma (like LLD adds
+>   # before the "compatible with GNU linkers" string), so remove anything
+>   # that is not a number or a period.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Nemesa-Garg/drm-Introduce-sharpness-mode-property/20240705-214049
-base:   git://anongit.freedesktop.org/drm-intel for-linux-next
-patch link:    https://lore.kernel.org/r/20240705090205.72302-3-nemesa.garg%40intel.com
-patch subject: [PATCH 2/5] drm/i915/display: Compute the scaler filter coefficients
-config: x86_64-buildonly-randconfig-001-20240706 (https://download.01.org/0day-ci/archive/20240706/202407060905.l9gatVXa-lkp@intel.com/config)
-compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240706/202407060905.l9gatVXa-lkp@intel.com/reproduce)
+The v2 change LGTM :)
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202407060905.l9gatVXa-lkp@intel.com/
+Reviewed-by: Fangrui Song <maskray@google.com>
 
-All errors (new ones prefixed by >>):
-
-   In file included from drivers/gpu/drm/i915/display/intel_dsi.c:9:
-   In file included from drivers/gpu/drm/i915/display/intel_dsi.h:30:
-   In file included from drivers/gpu/drm/i915/display/intel_display_types.h:58:
->> drivers/gpu/drm/i915/display/intel_sharpen_filter.h:6:9: error: '__INTEL_SHARPEN_FLITER_H__' is used as a header guard here, followed by #define of a different macro [-Werror,-Wheader-guard]
-       6 | #ifndef __INTEL_SHARPEN_FLITER_H__
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/gpu/drm/i915/display/intel_sharpen_filter.h:7:9: note: '__INTEL_SHARPEN_FILTER_H__' is defined here; did you mean '__INTEL_SHARPEN_FLITER_H__'?
-       7 | #define __INTEL_SHARPEN_FILTER_H__
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~
-         |         __INTEL_SHARPEN_FLITER_H__
-   1 error generated.
+> > (POSIX shell doc:
+> > https://pubs.opengroup.org/onlinepubs/9699919799/utilities/V3_chap02.ht=
+ml#:~:text=3DRemove%20Largest)
+> >
+> > ${version%%[^0-9.]*} is a simpler form than what glibc uses:
+> >
+> >   "LLD"*)
+> >   # Accept LLD 13.0.0 or higher
+> >     AC_CHECK_PROG_VER(LD, $LD, --version,
+> >                     [LLD.* \([0-9][0-9]*\.[0-9.]*\)],
+> >                     [1[3-9].*|[2-9][0-9].*],
+>
+> Cheers,
+> Nathan
+>
 
 
-vim +/__INTEL_SHARPEN_FLITER_H__ +6 drivers/gpu/drm/i915/display/intel_sharpen_filter.h
-
-   > 6	#ifndef __INTEL_SHARPEN_FLITER_H__
-     7	#define __INTEL_SHARPEN_FILTER_H__
-     8	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+--=20
+=E5=AE=8B=E6=96=B9=E7=9D=BF
