@@ -1,205 +1,94 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 099B9482D3;
-	Sat,  6 Jul 2024 13:23:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8422F71B3A;
+	Sat,  6 Jul 2024 13:49:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720272233; cv=none; b=lXBg9RfeftmfqY6ic8nvMEBDP3ruo+72Xa7BejdU9Jx2qZAA5cSz+TXk6h3U/wnOB61fLZ/QJMR7hP9TGfEI6Y8SAL648RdMzap+Q2Q5dvGjQdUGBZDr3UrGH3ZXgGqwYQpKzd2ivxYIX6JgkZg2JyZsloGCyyEwdo+nXjWCGvE=
+	t=1720273791; cv=none; b=F1z2jGshGhXROv5vgwi4sMC388iVPWINAsq+H9uKgKVTlQ18YGI6sH8eWnFun0fMJXLXLwwDFbYCcDntBh7SNN1mn+9zyMS0LAbSHKN4RYV6rZ75QJ0nGpTAjelaJM3+TqJSuIPRhSdB3ZhN7M9CG6fxzUc9bfCgAhMgclCx1c4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720272233; c=relaxed/simple;
-	bh=+RdjaHOF+DEjnYP41Cvikw9VGFTxSS1m3OR7AV6wDh0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=MeJ0Kwp05Z4rFEudNccrMqmujImD1w/jtiQYsJ1ud3GxC5BRmwiX5OQ4UpZoi0TrAFLmdjFmYZTLV/rFZT9yxnlCjSyuLtldBkcEvNIIE0RJ0p5uBikDbLCC4ooqNRSTP1JGV3wm+UVkmPRJttTmRcyp335j8SVJcEB1bmrLsGs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=KHAuw45H; arc=none smtp.client-ip=192.198.163.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1720273791; c=relaxed/simple;
+	bh=WwtWGqd3b7WM+nXM9jFiZlnjseqVlB8/RHiBNoQSNnU=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=IKX36ZAk2Zrw0as2Cu3Qq1Upu1z9lc31TZUyaMV5q9Bm3jEH6qaluk9HVA0lpwS2QOk3NR/FnEHAwrMTwLdTdV9oOB4XNRPn49hYkDUiIYuEJsHEX9TylwP5AbfTXKuaIJAAK4rbKx8XCnYvgoA/Q0paPRLCnB/vVq5dKV3RSEY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aQ6n1yW3; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="KHAuw45H"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1720272231; x=1751808231;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=+RdjaHOF+DEjnYP41Cvikw9VGFTxSS1m3OR7AV6wDh0=;
-  b=KHAuw45HEEmGhXitDrnvgDLxECrABdG7BXA7I0zwGCrHlHfUGBxFR5gG
-   dE47RXbpT7LmlqWcJcjPKWKSmtK93hev+dR0rPvqLYLNDWJikR/p4A5KQ
-   wteYBoDVYbeTF81KVyGjyzsLfJKQtFesKTs2AB6RFPaakdau1/urC63rO
-   um1UfsoWguJdYhdiLzL24Yfj/EbcEWqpGLDV3qI83JnObXNBZY4bVgXAz
-   lE02paNVNLYvkkZXhpMNLKdZVGtJ15VvJERLjRXqqV05+mHjSlci/vgmf
-   VVxvnORqRQVh+zeVWpXPT2gmcKUorfNQqnH675WMMn+B/YOunf/GrAfsy
-   g==;
-X-CSE-ConnectionGUID: yFkDuL6fRcalVnZ/haV1zQ==
-X-CSE-MsgGUID: jgG/HW+cRrqeU1ZR6X2Ytw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11125"; a="17248788"
-X-IronPort-AV: E=Sophos;i="6.09,187,1716274800"; 
-   d="scan'208";a="17248788"
-Received: from orviesa005.jf.intel.com ([10.64.159.145])
-  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jul 2024 06:23:50 -0700
-X-CSE-ConnectionGUID: bVxVNvhsTeKqH7i9497hXQ==
-X-CSE-MsgGUID: 6zbtY07iRzyGU0/lHhlCwA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.09,187,1716274800"; 
-   d="scan'208";a="52034777"
-Received: from lkp-server01.sh.intel.com (HELO 68891e0c336b) ([10.239.97.150])
-  by orviesa005.jf.intel.com with ESMTP; 06 Jul 2024 06:23:49 -0700
-Received: from kbuild by 68891e0c336b with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1sQ5OE-000TpE-22;
-	Sat, 06 Jul 2024 13:23:46 +0000
-Date: Sat, 6 Jul 2024 21:22:57 +0800
-From: kernel test robot <lkp@intel.com>
-To: "Xin Li (Intel)" <xin@zytor.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [PATCH v4 1/4] x86/cpufeatures: Add {required,disabled} feature
- configs
-Message-ID: <202407062128.Khlv5TdW-lkp@intel.com>
-References: <20240628174544.3118826-2-xin@zytor.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aQ6n1yW3"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EC173C4AF0E;
+	Sat,  6 Jul 2024 13:49:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1720273791;
+	bh=WwtWGqd3b7WM+nXM9jFiZlnjseqVlB8/RHiBNoQSNnU=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=aQ6n1yW3LQvL8IMo2Spw+LlgLy92sXGml39aALacI8i/6Vky0GOkjxnyJBscWF8+y
+	 glmNIUJukT3vRXDxDmLVw3A527OI8+zyWkQRWI407+lhxy2An21OWI4EKdaMEGauQ2
+	 8IfAtP8NOaV9xKpcAoABq7Geh/rvREYyudTI/6jB35qJW8asDyNQ6L09q5sgHRz6dG
+	 N8FYENwzK16gzkPmAPm+lhBtPceXl595GChXjL2L7nLcd2qckLh4aYdOSoyMOSjQnc
+	 CxKmohqJFiY1ynCpypaCqa/dyaD8IpU1lIs4djD6ItHvuEOe1/kvhCXyKtsD5hKivv
+	 ae3ZHLE/2BNEg==
+Received: by mail-ed1-f47.google.com with SMTP id 4fb4d7f45d1cf-58ba3e38027so2968838a12.1;
+        Sat, 06 Jul 2024 06:49:50 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCVPgwtgea4/R+DlskhMVhafPOwd+ssLEx4xHKu/p14pVXKQ99RBqoDUfnU5OG5wuHo/u2qjaYphwBj2o1sJcXJ5nCUsNu5rc7sdDGAFw3RqjRDFMu+289vx8IssJ1sVaw==
+X-Gm-Message-State: AOJu0Yy3m7+FAgEWPgNj7W/KlZuXMbGaCdsbW0gUqSF90jk2FKY6KNNo
+	JCnsEJsI9W3z0WBrXKAi1xbJYBIrQp7mgysLhgapi4DnGQ/pbGV+IQnKbBxCuSM/o8v12YhmWQN
+	tsXjEc+ZYrgFgOX5POf1XSOAddyA=
+X-Google-Smtp-Source: AGHT+IESGgckyWRKHZbg0sq8z9FEAOZ/7LM0DfdCM/NpkuRRuuAsW+3xXiTKLmrRqbU3XT7zJUed4tVMreQO5TRl/aA=
+X-Received: by 2002:a17:906:aed1:b0:a77:b01b:f949 with SMTP id
+ a640c23a62f3a-a77ba48cfc6mr558366566b.35.1720273789487; Sat, 06 Jul 2024
+ 06:49:49 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240628174544.3118826-2-xin@zytor.com>
+References: <20240706073858.161035-1-xry111@xry111.site> <20240706073858.161035-2-xry111@xry111.site>
+ <CAAhV-H6K7SXtXpv9Udo8md0sdn+40TGPTCdSPeM1HmbJqrhboQ@mail.gmail.com> <cb3c2038b97689371226c467befdbf9e13113744.camel@xry111.site>
+In-Reply-To: <cb3c2038b97689371226c467befdbf9e13113744.camel@xry111.site>
+From: Huacai Chen <chenhuacai@kernel.org>
+Date: Sat, 6 Jul 2024 21:49:40 +0800
+X-Gmail-Original-Message-ID: <CAAhV-H4CQMmrLRv=vi8N63p2NXbdozpDakJLia8soFvVohCbqQ@mail.gmail.com>
+Message-ID: <CAAhV-H4CQMmrLRv=vi8N63p2NXbdozpDakJLia8soFvVohCbqQ@mail.gmail.com>
+Subject: Re: [PATCH 2/2] LoongArch: Add support for relocating the kernel with
+ RELR relocation
+To: Xi Ruoyao <xry111@xry111.site>
+Cc: WANG Xuerui <kernel@xen0n.name>, Jinyang He <hejinyang@loongson.cn>, 
+	Youling Tang <tangyouling@kylinos.cn>, Tiezhu Yang <yangtiezhu@loongson.cn>, 
+	Fangrui Song <maskray@google.com>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <ndesaulniers@google.com>, loongarch@lists.linux.dev, 
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Xin,
+On Sat, Jul 6, 2024 at 6:34=E2=80=AFPM Xi Ruoyao <xry111@xry111.site> wrote=
+:
+>
+> On Sat, 2024-07-06 at 18:29 +0800, Huacai Chen wrote:
+>
+> /* snip */
+>
+> > > diff --git a/arch/loongarch/Kconfig b/arch/loongarch/Kconfig
+> > > index ddc042895d01..03b3ef5edd24 100644
+> > > --- a/arch/loongarch/Kconfig
+> > > +++ b/arch/loongarch/Kconfig
+> > > @@ -607,6 +607,7 @@ config ARCH_HAS_GENERIC_CRASHKERNEL_RESERVATION
+> > >
+> > >  config RELOCATABLE
+> > >         bool "Relocatable kernel"
+> > > +       select ARCH_HAS_RELR
+> > Why is this selection under RELOCATABLE? I know ARM64 is the same, but
+> > why?
+>
+> Because if we just select it in CONFIG_LOONGARCH instead of
+> CONFIG_RELOCATABLE, the users who have disabled CONFIG_RELOCATABLE will
+> still see the entry for RELR in their configuration interface.  And
+> they'll ask "hey what's this for?  Why my kernel needs relocation?"
+RELR is not a similar conception to RELA, it is only used for
+relocatable kernel?
 
-kernel test robot noticed the following build warnings:
+Huacai
 
-[auto build test WARNING on f6a465a2d29701aa1a5189cae63a6870b65cef48]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Xin-Li-Intel/x86-cpufeatures-Add-required-disabled-feature-configs/20240630-095851
-base:   f6a465a2d29701aa1a5189cae63a6870b65cef48
-patch link:    https://lore.kernel.org/r/20240628174544.3118826-2-xin%40zytor.com
-patch subject: [PATCH v4 1/4] x86/cpufeatures: Add {required,disabled} feature configs
-config: um-randconfig-001-20240706 (https://download.01.org/0day-ci/archive/20240706/202407062128.Khlv5TdW-lkp@intel.com/config)
-compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project a0c6b8aef853eedaa0980f07c0a502a5a8a9740e)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240706/202407062128.Khlv5TdW-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202407062128.Khlv5TdW-lkp@intel.com/
-
-All warnings (new ones prefixed by >>, old ones prefixed by <<):
-
-WARNING: modpost: missing MODULE_DESCRIPTION() in fs/nls/nls_utf8.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in fs/nls/mac-centeuro.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in fs/nls/mac-gaelic.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in fs/nls/mac-iceland.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in fs/nls/mac-turkish.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in security/keys/encrypted-keys/encrypted-keys.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in crypto/algif_skcipher.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in crypto/curve25519-generic.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in lib/crypto/libarc4.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/pinctrl/pinctrl-mcp23s08_i2c.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/pinctrl/pinctrl-mcp23s08_spi.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/pinctrl/pinctrl-mcp23s08.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/video/backlight/platform_lcd.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/video/backlight/rt4831-backlight.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/regulator/rt4831-regulator.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/gpu/drm/panel/panel-abt-y030xx067a.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/gpu/drm/panel/panel-auo-a030jtn01.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/gpu/drm/panel/panel-newvision-nv3052c.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/gpu/drm/bridge/lontium-lt9611.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/gpu/drm/bridge/lontium-lt9611uxc.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/gpu/drm/tiny/cirrus.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/gpu/drm/gud/gud.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/gpu/drm/udl/udl.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/misc/open-dice.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/mfd/pcf50633-gpio.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/mfd/rt4831.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/mfd/qcom-pm8008.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/dax/dax.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/spi/spi-fsl-lib.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/usb/host/xhci-pci-renesas.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/usb/class/usbtmc.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/usb/misc/ezusb.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/usb/serial/mxuport.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/usb/serial/navman.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/usb/gadget/libcomposite.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/usb/gadget/function/usb_f_acm.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/usb/gadget/function/usb_f_ss_lb.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/usb/gadget/function/u_serial.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/usb/gadget/function/usb_f_serial.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/usb/gadget/function/usb_f_obex.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/usb/gadget/function/u_ether.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/usb/gadget/function/usb_f_ecm.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/usb/gadget/function/usb_f_eem.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/usb/gadget/function/usb_f_ecm_subset.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/usb/gadget/function/usb_f_rndis.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/usb/gadget/function/usb_f_fs.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/usb/gadget/function/usb_f_hid.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/usb/gadget/legacy/g_zero.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/media/rc/rc-core.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-apple.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-aureal.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-cypress.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-elecom.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-ezkey.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-vivaldi-common.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-google-stadiaff.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-ite.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-keytouch.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-lcpower.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-lenovo.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-mf.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-ortek.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-pl.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-petalynx.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-primax.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-razer.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-saitek.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-semitek.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-speedlink.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-steam.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-sunplus.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-gaff.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-tivo.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-topseed.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-twinhan.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-xinmo.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-zpff.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-zydacron.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-viewsonic.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/staging/greybus/gb-hid.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/staging/greybus/gb-vibrator.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/staging/greybus/gb-gpio.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/staging/greybus/gb-pwm.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/staging/greybus/gb-spi.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/staging/greybus/gb-usb.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hwtracing/intel_th/intel_th_msu_sink.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/pcmcia/pcmcia_rsrc.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/pcmcia/yenta_socket.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/input/touchscreen/cyttsp_i2c_common.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/input/matrix-keymap.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/input/vivaldi-fmap.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/input/tests/input_test.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/siox/siox-bus-gpio.o
-WARNING: modpost: EXPORT symbol "cmpxchg8b_emu" [vmlinux] version generation failed, symbol will not be versioned.
-Is "cmpxchg8b_emu" prototyped in <asm/asm-prototypes.h>?
-WARNING: modpost: EXPORT symbol "csum_partial" [vmlinux] version generation failed, symbol will not be versioned.
-Is "csum_partial" prototyped in <asm/asm-prototypes.h>?
-WARNING: modpost: EXPORT symbol "csum_partial_copy_generic" [vmlinux] version generation failed, symbol will not be versioned.
-Is "csum_partial_copy_generic" prototyped in <asm/asm-prototypes.h>?
->> WARNING: modpost: "cmpxchg8b_emu" [fs/ceph/ceph.ko] has no CRC!
-WARNING: modpost: "cmpxchg8b_emu" [lib/test_lockup.ko] has no CRC!
-WARNING: modpost: "cmpxchg8b_emu" [drivers/media/rc/rc-core.ko] has no CRC!
-WARNING: modpost: "csum_partial" [net/netfilter/nf_tables.ko] has no CRC!
-WARNING: modpost: "csum_partial" [net/wireless/cfg80211.ko] has no CRC!
-WARNING: modpost: "csum_partial" [net/openvswitch/openvswitch.ko] has no CRC!
-WARNING: modpost: "csum_partial" [net/nsh/nsh.ko] has no CRC!
-
-Kconfig warnings: (for reference only)
-   WARNING: unmet direct dependencies detected for FB_IOMEM_HELPERS
-   Depends on [n]: HAS_IOMEM [=y] && FB_CORE [=n]
-   Selected by [m]:
-   - DRM_XE_DISPLAY [=y] && HAS_IOMEM [=y] && DRM [=y] && DRM_XE [=m] && DRM_XE [=m]=m [=m]
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+>
+> --
+> Xi Ruoyao <xry111@xry111.site>
+> School of Aerospace Science and Technology, Xidian University
