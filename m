@@ -1,119 +1,148 @@
-Received: from pb-smtp1.pobox.com (pb-smtp1.pobox.com [64.147.108.70])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D88C647A5C
-	for <llvm@lists.linux.dev>; Sun,  7 Jul 2024 16:53:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=64.147.108.70
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD42D1DFF7;
+	Sun,  7 Jul 2024 17:05:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720371222; cv=none; b=HLfE/830wa438QV6lLQRHKGRU9XFiwQrVxAuQcQhNjMhQANUtSMfo61MdQ8qdoZGcfn289CEGkIFBT66db8/lafvvohgAtLAarYAVCw/bYl9kvXjLCSfTX1GOY/F5JcJDoYwudPH33KYEF1eEdkJURAeDqd+YwvJZefMQuLCZhc=
+	t=1720371954; cv=none; b=n/uw59z0tVPmOx7ndVNt4eRDjyfGmCSwZHU/GHi29ulMW5qEKoopCbsMZg9rpDKvJra8uCgHA/VYKqhLipPsA9uWlZoXwrgXYG7MuHpGJnAEQyV/MHY12bg+jPeSnYzGBwbfSrX8mSGmVcPV5sqEsHi75q3F/lC8cr+37+im9Ec=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720371222; c=relaxed/simple;
-	bh=vntOzjQEI3yBL/RjMRz59P/+MLtpRD2YnC8nimZ3bu8=;
-	h=Date:From:To:cc:Subject:In-Reply-To:Message-ID:References:
-	 MIME-Version:Content-Type; b=GbNwzpnkbHCyuDXC5FL1JatbcVz9Gmmj9RFIdDrSEQg7LvNdOATqmhA4q7ul9TRnv+13Iz83qkmXUDVlcCC4h3S1Il2Rd74uWGJcT4chyfnKUGSn7JXgvyRKEtJVX4TJB3IouMclZsfAuO5xpjssq5Pclw6AzkMivn2KisGVY5Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=fluxnic.net; spf=pass smtp.mailfrom=fluxnic.net; dkim=pass (1024-bit key) header.d=pobox.com header.i=@pobox.com header.b=IQlRACtA; dkim=pass (1024-bit key) header.d=fluxnic.net header.i=@fluxnic.net header.b=rCpNcsQd; arc=none smtp.client-ip=64.147.108.70
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=fluxnic.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fluxnic.net
+	s=arc-20240116; t=1720371954; c=relaxed/simple;
+	bh=i6KGoCpJnCx3OiRmHrSxCsSRTwsgE6tNYNiKvNjiXJE=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=eeeBfj+5GZQIWqVAMsB/spZFzLIYyd2nSQ6Yb4HIEy4ZPjsk5tzoJ94Q37JlEv9gQ9DFQdwUul4YqhIDxXG5L5XWvPsFhMwPBx+i5AEUbVOBiOZbpgA+TW6BEO8lCm0Y50OiEsEPcfgpwuN4r6z+YHinhXwgUO1P216Gn9M8x+U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=G1gCzkS8; arc=none smtp.client-ip=192.198.163.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=pobox.com header.i=@pobox.com header.b="IQlRACtA";
-	dkim=pass (1024-bit key) header.d=fluxnic.net header.i=@fluxnic.net header.b="rCpNcsQd"
-Received: from pb-smtp1.pobox.com (unknown [127.0.0.1])
-	by pb-smtp1.pobox.com (Postfix) with ESMTP id 8EA292270F;
-	Sun,  7 Jul 2024 12:53:39 -0400 (EDT)
-	(envelope-from nico@fluxnic.net)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed; d=pobox.com; h=date:from
-	:to:cc:subject:in-reply-to:message-id:references:mime-version
-	:content-type; s=sasl; bh=vntOzjQEI3yBL/RjMRz59P/+MLtpRD2YnC8nim
-	Z3bu8=; b=IQlRACtAJ5fqsi2crNtXveguHnskQhSRc8hddeYqP3LB1Vca7ZH0uG
-	OXZwxvv9osG4aw+EDIpEkHx/d9LCDwsV3hyRyih8E7DVHSoA+sGeLigjnD4IDLV5
-	sNq6GF/Wy9ZFTEXUfxY1vqC/S+mSdXjXdghVJ6qTlCGOXro2Gm0AM=
-Received: from pb-smtp1.nyi.icgroup.com (unknown [127.0.0.1])
-	by pb-smtp1.pobox.com (Postfix) with ESMTP id 8459F2270E;
-	Sun,  7 Jul 2024 12:53:39 -0400 (EDT)
-	(envelope-from nico@fluxnic.net)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed; d=fluxnic.net;
- h=date:from:to:cc:subject:in-reply-to:message-id:references:mime-version:content-type; s=2016-12.pbsmtp; bh=vntOzjQEI3yBL/RjMRz59P/+MLtpRD2YnC8nimZ3bu8=; b=rCpNcsQd6FgPNVNfb/fWwwge/pwhoCqoYxE7RJuDwRonS0AD3kZa2rpjq+TXj0sxm8Oe9hbMJ7oHrLZ98/GPYUqiBafzSahp+mHi0q6O/IrIeesfgMIQGB+L04LtSHtJZh8PRXEcMcwghsh1qstpshpplESJQPtD38f5hJh+SbE=
-Received: from yoda.fluxnic.net (unknown [184.162.15.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by pb-smtp1.pobox.com (Postfix) with ESMTPSA id 0D5002270D;
-	Sun,  7 Jul 2024 12:53:39 -0400 (EDT)
-	(envelope-from nico@fluxnic.net)
-Received: from xanadu (unknown [IPv6:fd17:d3d3:663b:0:9696:df8a:e3:af35])
-	by yoda.fluxnic.net (Postfix) with ESMTPSA id D8A4ED3B18E;
-	Sun,  7 Jul 2024 12:53:37 -0400 (EDT)
-Date: Sun, 7 Jul 2024 12:53:37 -0400 (EDT)
-From: Nicolas Pitre <nico@fluxnic.net>
-To: Arnd Bergmann <arnd@arndb.de>
-cc: Russell King <linux@armlinux.org.uk>, 
-    Linux-Arch <linux-arch@vger.kernel.org>, linux-kernel@vger.kernel.org, 
-    llvm@lists.linux.dev, Nathan Chancellor <nathan@kernel.org>
-Subject: Re: [PATCH 2/2] asm-generic/div64: reimplement __arch_xprod64()
-In-Reply-To: <3adf7f7b-a46e-4368-a87a-a217a8a8f9d1@app.fastmail.com>
-Message-ID: <n42s335n-44n0-pq0o-78q8-s38o2ssn8p5r@syhkavp.arg>
-References: <20240705022334.1378363-1-nico@fluxnic.net> <20240705022334.1378363-3-nico@fluxnic.net> <3adf7f7b-a46e-4368-a87a-a217a8a8f9d1@app.fastmail.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="G1gCzkS8"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1720371952; x=1751907952;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=i6KGoCpJnCx3OiRmHrSxCsSRTwsgE6tNYNiKvNjiXJE=;
+  b=G1gCzkS8wUDj0Hdzx9UY0izXuo8qLRIvx4PKMgqH2eGZrIvPYaUjwbhh
+   6U0KzC3tKErOsBF9NyRg+DlEtsO3oBWOXOcMTalB6+5JxiTj7lvPt4gcL
+   c4V63xHY4q5tl83Rlh1gP0yGPkmuFJu2UI9V/hJYUCTye3xtx8Qik7/bP
+   oMBxS6/9t3N7xAOa8drs26OqeWMFqDy7hdWtBKmsC1FfpeCwc61yZOqdE
+   XIe8SFLJvg2xZDYiP8eNwT3d6GkFWUm4Zh9AcgRjRbYfOrZR9fR1VaSnP
+   ks0rJsADberIyKTKMvXTZuf4Wc9xNle4S282Yb7oERkI7S/Aa/F0ICFxm
+   g==;
+X-CSE-ConnectionGUID: 66Tz8rZ5S9mMsBvRpMFI+Q==
+X-CSE-MsgGUID: r9BfGPtST7K8C9fHnSyYkw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11126"; a="17449459"
+X-IronPort-AV: E=Sophos;i="6.09,190,1716274800"; 
+   d="scan'208";a="17449459"
+Received: from fmviesa003.fm.intel.com ([10.60.135.143])
+  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jul 2024 10:05:51 -0700
+X-CSE-ConnectionGUID: yELR9w6MReW9RDk5jh5uEg==
+X-CSE-MsgGUID: DwJJsYfRSg+HmdElycOrYQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.09,190,1716274800"; 
+   d="scan'208";a="51643398"
+Received: from lkp-server01.sh.intel.com (HELO 68891e0c336b) ([10.239.97.150])
+  by fmviesa003.fm.intel.com with ESMTP; 07 Jul 2024 10:05:50 -0700
+Received: from kbuild by 68891e0c336b with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1sQVKe-000V8S-0C;
+	Sun, 07 Jul 2024 17:05:48 +0000
+Date: Mon, 8 Jul 2024 01:05:11 +0800
+From: kernel test robot <lkp@intel.com>
+To: Jeff Layton <jlayton@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [jlayton:mgtime 5/13] arch/powerpc/include/asm/cmpxchg.h:636:2:
+ error: call to '__compiletime_assert_35' declared with 'error' attribute:
+ Unsupported size for __cmpxchg
+Message-ID: <202407080156.STNjCTNk-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Pobox-Relay-ID:
- 75738646-3C81-11EF-A52D-5B6DE52EC81B-78420484!pb-smtp1.pobox.com
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Fri, 5 Jul 2024, Arnd Bergmann wrote:
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jlayton/linux.git mgtime
+head:   ce2d8b57e9c187fac67576e9577736d268780ba9
+commit: 034a5675908ff1a97b0e6f0f209373e97d969972 [5/13] fs: add infrastructure for multigrain timestamps
+config: powerpc-randconfig-001-20240707 (https://download.01.org/0day-ci/archive/20240708/202407080156.STNjCTNk-lkp@intel.com/config)
+compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project a0c6b8aef853eedaa0980f07c0a502a5a8a9740e)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240708/202407080156.STNjCTNk-lkp@intel.com/reproduce)
 
-> On Fri, Jul 5, 2024, at 04:20, Nicolas Pitre wrote:
-> > From: Nicolas Pitre <npitre@baylibre.com>
-> >
-> > Several years later I just realized that this code could be optimized
-> > and more importantly simplified even further. With some reordering, it
-> > is possible to dispense with overflow handling entirely and still have
-> > optimal code.
-> >
-> > There is also no longer a reason to have the possibility for
-> > architectures to override the generic version. Only ARM did it and these
-> > days the compiler does a better job than the hand-crafted assembly
-> > version anyway.
-> >
-> > Kernel binary gets slightly smaller as well. Using the ARM's
-> > versatile_defconfig plus CONFIG_TEST_DIV64=y:
-> >
-> > Before this patch:
-> >
-> >    text    data     bss     dec     hex filename
-> > 9644668 2743926  193424 12582018         bffc82 vmlinux
-> >
-> > With this patch:
-> >
-> >    text    data     bss     dec     hex filename
-> > 9643572 2743926  193424 12580922         bff83a vmlinux
-> >
-> > Signed-off-by: Nicolas Pitre <npitre@baylibre.com>
-> 
-> This looks really nice, thanks for the work!
-> 
-> I've tried reproducing your finding to see what compiler
-> version started being good enough to benefit from the
-> new version. Looking at just the vmlinux size as you did
-> above, I can confirm that the generated code is noticeably
-> smaller in gcc-11 and above, slightly smaller in gcc-10
-> but larger in gcc-9 and below.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202407080156.STNjCTNk-lkp@intel.com/
 
-Well well... Turns out that binary size is a bad metric here. The main 
-reason why the compiled code gets smaller is because gcc decides to 
-_not_ inline __arch_xprod_64(). That makes the kernel smaller, but a 
-bunch of conditionals in there were really meant to be resolved at 
-compile time in order to generate the best code for each instance. With 
-a non inlined version, those conditionals are no longer based on 
-constants and the compiler emits code to determine at runtime if 2 or 3 
-instructions can be saved, which completely defeats the purpose in 
-addition to make performance worse.
+All errors (new ones prefixed by >>):
 
-So I've reworked it all again, this time taking into account the 
-possibility for the compiler not to inline that code sometimes. Plus 
-some more simplifications.
+   In file included from fs/inode.c:9:
+   In file included from include/linux/mm.h:2258:
+   include/linux/vmstat.h:514:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     514 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+   In file included from fs/inode.c:7:
+   In file included from include/linux/fs.h:6:
+   In file included from include/linux/wait_bit.h:8:
+   In file included from include/linux/wait.h:9:
+   In file included from include/linux/spinlock.h:63:
+   In file included from include/linux/lockdep.h:14:
+   In file included from include/linux/smp.h:13:
+   In file included from include/linux/cpumask.h:14:
+   In file included from include/linux/atomic.h:7:
+   In file included from arch/powerpc/include/asm/atomic.h:11:
+>> arch/powerpc/include/asm/cmpxchg.h:636:2: error: call to '__compiletime_assert_35' declared with 'error' attribute: Unsupported size for __cmpxchg
+     636 |         BUILD_BUG_ON_MSG(1, "Unsupported size for __cmpxchg");
+         |         ^
+   include/linux/build_bug.h:39:37: note: expanded from macro 'BUILD_BUG_ON_MSG'
+      39 | #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
+         |                                     ^
+   include/linux/compiler_types.h:510:2: note: expanded from macro 'compiletime_assert'
+     510 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+         |         ^
+   include/linux/compiler_types.h:498:2: note: expanded from macro '_compiletime_assert'
+     498 |         __compiletime_assert(condition, msg, prefix, suffix)
+         |         ^
+   include/linux/compiler_types.h:491:4: note: expanded from macro '__compiletime_assert'
+     491 |                         prefix ## suffix();                             \
+         |                         ^
+   <scratch space>:220:1: note: expanded from here
+     220 | __compiletime_assert_35
+         | ^
+   1 warning and 1 error generated.
 
 
-Nicolas
+vim +636 arch/powerpc/include/asm/cmpxchg.h
+
+ae3a197e3d0bfe David Howells    2012-03-28  619  
+ae3a197e3d0bfe David Howells    2012-03-28  620  static __always_inline unsigned long
+da58b23cb976ab Michael Ellerman 2016-11-24  621  __cmpxchg(volatile void *ptr, unsigned long old, unsigned long new,
+ae3a197e3d0bfe David Howells    2012-03-28  622  	  unsigned int size)
+ae3a197e3d0bfe David Howells    2012-03-28  623  {
+ae3a197e3d0bfe David Howells    2012-03-28  624  	switch (size) {
+d0563a1297e234 Pan Xinhui       2016-04-27  625  	case 1:
+d0563a1297e234 Pan Xinhui       2016-04-27  626  		return __cmpxchg_u8(ptr, old, new);
+d0563a1297e234 Pan Xinhui       2016-04-27  627  	case 2:
+d0563a1297e234 Pan Xinhui       2016-04-27  628  		return __cmpxchg_u16(ptr, old, new);
+ae3a197e3d0bfe David Howells    2012-03-28  629  	case 4:
+ae3a197e3d0bfe David Howells    2012-03-28  630  		return __cmpxchg_u32(ptr, old, new);
+ae3a197e3d0bfe David Howells    2012-03-28  631  #ifdef CONFIG_PPC64
+ae3a197e3d0bfe David Howells    2012-03-28  632  	case 8:
+ae3a197e3d0bfe David Howells    2012-03-28  633  		return __cmpxchg_u64(ptr, old, new);
+ae3a197e3d0bfe David Howells    2012-03-28  634  #endif
+ae3a197e3d0bfe David Howells    2012-03-28  635  	}
+10d8b1480e6966 pan xinhui       2016-02-23 @636  	BUILD_BUG_ON_MSG(1, "Unsupported size for __cmpxchg");
+ae3a197e3d0bfe David Howells    2012-03-28  637  	return old;
+ae3a197e3d0bfe David Howells    2012-03-28  638  }
+ae3a197e3d0bfe David Howells    2012-03-28  639  
+
+:::::: The code at line 636 was first introduced by commit
+:::::: 10d8b1480e6966ba03cd3afad3b5d6eb5e341fae powerpc: Use BUILD_BUG_ON_MSG() for unsupported {cmp}xchg sizes
+
+:::::: TO: pan xinhui <xinhui.pan@linux.vnet.ibm.com>
+:::::: CC: Michael Ellerman <mpe@ellerman.id.au>
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
