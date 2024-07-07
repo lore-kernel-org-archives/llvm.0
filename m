@@ -1,76 +1,60 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7AAFD45C16;
-	Sat,  6 Jul 2024 23:28:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CBC41136A;
+	Sun,  7 Jul 2024 01:32:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720308507; cv=none; b=gOsHe0hVhRgx/o9qziZxeWIhWjAfRkq9QYpkOvCDMsrop8lhi/CYf4bJzqRmj4l4al542ilNQNoylKL4otmBjBjjJLFQO2OnNi9L2r487l5QzjLBiPchctVqrJS82KQLO717HV/+WUO9HGduFnWWt67wizYDlAoAesA6NFZGt1U=
+	t=1720315951; cv=none; b=XyWO36iWrD5qEhijvTEcHyrM/rkI4Zlelwqc9/3rIpogYpHKfGrZNTK+XtJfb0nUNa5nYd7feC5qA/9N4REHAPhA4I4gm78tXT+3YKfH8DmjTjeg8+YZt1gqwRISl0AmbfZMq7AnvKXJVz0e4rfMGBvnX2HfliYOZiGUFnh20h8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720308507; c=relaxed/simple;
-	bh=KKo+oGs4TSAe84B4lLvyAQD2Yu0uFJMI3pTFZWerumM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=hIWL8pEiVMSt7XywoGq2SiigzELmFM3RiTfCjbVAJtNQC9uSKco2ytnuJx939V22M3UU+mnf/U79XUsKRCib+CHVfHQU1uI03QqK7vngfO49vkLEx+PFk5E4gXnJOux5l1PPr3G/xpvBU6svLXZZnlUgCKQEcSuay0RtEg8ztOo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=LtAFVVc9; arc=none smtp.client-ip=198.175.65.15
+	s=arc-20240116; t=1720315951; c=relaxed/simple;
+	bh=o6UPxlrZWlUTwnJHPoouIAjTB4S4+KqX6H7B4WlISIM=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=DxbfLDYgLLEVodFAc0QnP9hNZ1vkg9ZoPjIbqY/pYsbF1swdEXbvU8bIBK9T2Y78ikSfk2e9EY95+ElC2KMsU4kKGX2MS0QdFO+ax/VGdmfnx454D/ZyaVpEofga/6mn+YkayM+vYp8DlOidz33Dbb0y5qL3V7mbCG8UWA7nOwU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=m7n7Wu+8; arc=none smtp.client-ip=192.198.163.19
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="LtAFVVc9"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="m7n7Wu+8"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1720308506; x=1751844506;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=KKo+oGs4TSAe84B4lLvyAQD2Yu0uFJMI3pTFZWerumM=;
-  b=LtAFVVc9oQ9TYYB595lSx5624xyobtEGQXTkE72IZC1ZP+uPJAcc/8ho
-   Fp+7Z90bLd+1dHuRLWFuRmp9Ew2fzermxPZEK9lhBYiSdfKyUoL+wDmpI
-   IbTU7PY918a191+LQpHZrWsfz+pFII9qaFa1rCtMgxSgrqJnhdoyBWakz
-   m/go3b4OcGK+LajBczZbPRcNjsRQXsfBoSvHts7qB3TPXAr14nWK0CRU3
-   LLscBG5HjBHp2FQJ4qJwpBMveTP+ZwL7ppkIVKyT3M1LnWKxxRuve9t2y
-   /YbngZrUj9rpjBFu6KWCq7fuzI941mX7jR9AYX0bMQtJf6Yvl/bPw4el2
-   A==;
-X-CSE-ConnectionGUID: kNDYbHtYT/yBt/sFIZLYow==
-X-CSE-MsgGUID: HWIyt8X5T9Sn5kZs8xLtng==
-X-IronPort-AV: E=McAfee;i="6700,10204,11125"; a="21317112"
-X-IronPort-AV: E=Sophos;i="6.09,188,1716274800"; 
-   d="scan'208";a="21317112"
-Received: from fmviesa006.fm.intel.com ([10.60.135.146])
-  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jul 2024 16:28:25 -0700
-X-CSE-ConnectionGUID: 89uIwiqsRbS9b7F/jfaP2A==
-X-CSE-MsgGUID: dp1IKG+zTt+nmFQzyBu1Vg==
+  t=1720315950; x=1751851950;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=o6UPxlrZWlUTwnJHPoouIAjTB4S4+KqX6H7B4WlISIM=;
+  b=m7n7Wu+8AA20nHCIXoz/XDSfa6ar3dnTRIOH4P0mAcePqnomWHiRElZu
+   JLl4qBEyxMm/cfpNaZ1sNjbWvU6bBnyMP+zz3s3mpxMQQ5trUy1XUZ5Cs
+   R2a4WEwpNHhnqFOWHNi0LWtVrO3jWyxC1/NoGxfFyhm1HZCQqMhSKppDF
+   FFzAiK0Y56A+l4tCwizaDrrEP/CQNF6eUUsAOwa/MMltoR0TcwbMqk/2o
+   aeSUHzTfkbael8CKzsMOy+wYdXzgdZdQiHVZ+W5BxCO5h6K7G0N7Dbmxx
+   aVamziiWH8Q4lYjMPWMApWHRz2IPG/KEMdDlVdH05VK3xr5PYerQ/b0tY
+   Q==;
+X-CSE-ConnectionGUID: 2JqRehm9RdunDYoEVk4HOw==
+X-CSE-MsgGUID: eDVFh3T7Q1Olz9qdTc3uyA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11125"; a="17266194"
+X-IronPort-AV: E=Sophos;i="6.09,189,1716274800"; 
+   d="scan'208";a="17266194"
+Received: from fmviesa007.fm.intel.com ([10.60.135.147])
+  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jul 2024 18:32:27 -0700
+X-CSE-ConnectionGUID: mhUyIMiNSKSN5677zU2kYQ==
+X-CSE-MsgGUID: fQvj5nkTSc6tb0nxbb2fdA==
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.09,188,1716274800"; 
-   d="scan'208";a="46930242"
+X-IronPort-AV: E=Sophos;i="6.09,189,1716274800"; 
+   d="scan'208";a="47057057"
 Received: from lkp-server01.sh.intel.com (HELO 68891e0c336b) ([10.239.97.150])
-  by fmviesa006.fm.intel.com with ESMTP; 06 Jul 2024 16:28:20 -0700
+  by fmviesa007.fm.intel.com with ESMTP; 06 Jul 2024 18:32:26 -0700
 Received: from kbuild by 68891e0c336b with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1sQEpF-000UOo-23;
-	Sat, 06 Jul 2024 23:28:17 +0000
-Date: Sun, 7 Jul 2024 07:27:25 +0800
+	id 1sQGlL-000UTO-2T;
+	Sun, 07 Jul 2024 01:32:23 +0000
+Date: Sun, 7 Jul 2024 09:32:18 +0800
 From: kernel test robot <lkp@intel.com>
-To: Bartosz Golaszewski <brgl@bgdev.pl>,
-	Marcel Holtmann <marcel@holtmann.org>,
-	Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Balakrishna Godavarthi <quic_bgodavar@quicinc.com>,
-	Rocky Liao <quic_rjliao@quicinc.com>,
-	Bjorn Andersson <andersson@kernel.org>,
-	Konrad Dybcio <konrad.dybcio@linaro.org>
+To: "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	netdev@vger.kernel.org, linux-bluetooth@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-arm-msm@vger.kernel.org,
-	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-Subject: Re: [PATCH 2/6] Bluetooth: hci_qca: schedule a devm action for
- disabling the clock
-Message-ID: <202407070754.L1XER9qH-lkp@intel.com>
-References: <20240705-hci_qca_refactor-v1-2-e2442121c13e@linaro.org>
+	"Steven Rostedt (Google)" <rostedt@goodmis.org>
+Subject: [trace:probes/for-next 16/16] kernel/trace/trace_kprobe.c:810:9:
+ error: call to undeclared function 'find_module'; ISO C99 and later do not
+ support implicit function declarations
+Message-ID: <202407070917.VVUCBlaS-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -79,106 +63,75 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240705-hci_qca_refactor-v1-2-e2442121c13e@linaro.org>
 
-Hi Bartosz,
-
-kernel test robot noticed the following build warnings:
-
-[auto build test WARNING on 0b58e108042b0ed28a71cd7edf5175999955b233]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Bartosz-Golaszewski/dt-bindings-bluetooth-qualcomm-describe-the-inputs-from-PMU-for-wcn7850/20240706-055822
-base:   0b58e108042b0ed28a71cd7edf5175999955b233
-patch link:    https://lore.kernel.org/r/20240705-hci_qca_refactor-v1-2-e2442121c13e%40linaro.org
-patch subject: [PATCH 2/6] Bluetooth: hci_qca: schedule a devm action for disabling the clock
-config: hexagon-allyesconfig (https://download.01.org/0day-ci/archive/20240707/202407070754.L1XER9qH-lkp@intel.com/config)
+tree:   git://git.kernel.org/pub/scm/linux/kernel/git/trace/linux-trace probes/for-next
+head:   9d8616034f161222a4ac166c1b42b6d79961c005
+commit: 9d8616034f161222a4ac166c1b42b6d79961c005 [16/16] tracing/kprobes: Add symbol counting check when module loads
+config: arm-randconfig-004-20240707 (https://download.01.org/0day-ci/archive/20240707/202407070917.VVUCBlaS-lkp@intel.com/config)
 compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project a0c6b8aef853eedaa0980f07c0a502a5a8a9740e)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240707/202407070754.L1XER9qH-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240707/202407070917.VVUCBlaS-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202407070754.L1XER9qH-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202407070917.VVUCBlaS-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
-   In file included from drivers/bluetooth/hci_qca.c:23:
-   In file included from include/linux/devcoredump.h:12:
-   In file included from include/linux/scatterlist.h:8:
-   In file included from include/linux/mm.h:2229:
+   In file included from kernel/trace/trace_kprobe.c:10:
+   In file included from include/linux/bpf-cgroup.h:5:
+   In file included from include/linux/bpf.h:21:
+   In file included from include/linux/kallsyms.h:13:
+   In file included from include/linux/mm.h:2253:
    include/linux/vmstat.h:514:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
      514 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
          |                               ~~~~~~~~~~~ ^ ~~~
-   In file included from drivers/bluetooth/hci_qca.c:23:
-   In file included from include/linux/devcoredump.h:12:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/hexagon/include/asm/io.h:328:
-   include/asm-generic/io.h:548:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     548 |         val = __raw_readb(PCI_IOBASE + addr);
-         |                           ~~~~~~~~~~ ^
-   include/asm-generic/io.h:561:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     561 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
-      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-         |                                                   ^
-   In file included from drivers/bluetooth/hci_qca.c:23:
-   In file included from include/linux/devcoredump.h:12:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/hexagon/include/asm/io.h:328:
-   include/asm-generic/io.h:574:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     574 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
-      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
-         |                                                   ^
-   In file included from drivers/bluetooth/hci_qca.c:23:
-   In file included from include/linux/devcoredump.h:12:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/hexagon/include/asm/io.h:328:
-   include/asm-generic/io.h:585:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     585 |         __raw_writeb(value, PCI_IOBASE + addr);
-         |                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:595:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     595 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:605:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     605 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
->> drivers/bluetooth/hci_qca.c:2499:2: warning: label at end of compound statement is a C23 extension [-Wc23-extensions]
-    2499 |         }
-         |         ^
-   8 warnings generated.
+>> kernel/trace/trace_kprobe.c:810:9: error: call to undeclared function 'find_module'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     810 |                 mod = find_module(modname);
+         |                       ^
+   kernel/trace/trace_kprobe.c:810:9: note: did you mean 'init_module'?
+   include/linux/module.h:76:12: note: 'init_module' declared here
+      76 | extern int init_module(void);
+         |            ^
+>> kernel/trace/trace_kprobe.c:810:7: error: incompatible integer to pointer conversion assigning to 'struct module *' from 'int' [-Wint-conversion]
+     810 |                 mod = find_module(modname);
+         |                     ^ ~~~~~~~~~~~~~~~~~~~~
+   1 warning and 2 errors generated.
 
 
-vim +2499 drivers/bluetooth/hci_qca.c
+vim +/find_module +810 kernel/trace/trace_kprobe.c
 
-05ba533c5c1155 Thierry Escande                2018-03-29  2478  
-05ba533c5c1155 Thierry Escande                2018-03-29  2479  static void qca_serdev_remove(struct serdev_device *serdev)
-05ba533c5c1155 Thierry Escande                2018-03-29  2480  {
-05ba533c5c1155 Thierry Escande                2018-03-29  2481  	struct qca_serdev *qcadev = serdev_device_get_drvdata(serdev);
-054ec5e94a46b0 Venkata Lakshmi Narayana Gubba 2020-09-10  2482  	struct qca_power *power = qcadev->bt_power;
-05ba533c5c1155 Thierry Escande                2018-03-29  2483  
-691d54d0f7cb14 Neil Armstrong                 2023-08-16  2484  	switch (qcadev->btsoc_type) {
-691d54d0f7cb14 Neil Armstrong                 2023-08-16  2485  	case QCA_WCN3988:
-691d54d0f7cb14 Neil Armstrong                 2023-08-16  2486  	case QCA_WCN3990:
-691d54d0f7cb14 Neil Armstrong                 2023-08-16  2487  	case QCA_WCN3991:
-691d54d0f7cb14 Neil Armstrong                 2023-08-16  2488  	case QCA_WCN3998:
-691d54d0f7cb14 Neil Armstrong                 2023-08-16  2489  	case QCA_WCN6750:
-691d54d0f7cb14 Neil Armstrong                 2023-08-16  2490  	case QCA_WCN6855:
-e0c1278ac89b03 Neil Armstrong                 2023-08-16  2491  	case QCA_WCN7850:
-691d54d0f7cb14 Neil Armstrong                 2023-08-16  2492  		if (power->vregs_on) {
-c2d7827338618a Balakrishna Godavarthi         2018-08-22  2493  			qca_power_shutdown(&qcadev->serdev_hu);
-691d54d0f7cb14 Neil Armstrong                 2023-08-16  2494  			break;
-691d54d0f7cb14 Neil Armstrong                 2023-08-16  2495  		}
-691d54d0f7cb14 Neil Armstrong                 2023-08-16  2496  		fallthrough;
-691d54d0f7cb14 Neil Armstrong                 2023-08-16  2497  
-691d54d0f7cb14 Neil Armstrong                 2023-08-16  2498  	default:
-691d54d0f7cb14 Neil Armstrong                 2023-08-16 @2499  	}
-fa9ad876b8e0eb Balakrishna Godavarthi         2018-08-03  2500  
-fa9ad876b8e0eb Balakrishna Godavarthi         2018-08-03  2501  	hci_uart_unregister_device(&qcadev->serdev_hu);
-05ba533c5c1155 Thierry Escande                2018-03-29  2502  }
-05ba533c5c1155 Thierry Escande                2018-03-29  2503  
+   796	
+   797	static int validate_probe_symbol(char *symbol)
+   798	{
+   799		struct module *mod = NULL;
+   800		char *modname = NULL, *p;
+   801		int ret = 0;
+   802	
+   803		p = strchr(symbol, ':');
+   804		if (p) {
+   805			modname = symbol;
+   806			symbol = p + 1;
+   807			*p = '\0';
+   808			/* Return 0 (defer) if the module does not exist yet. */
+   809			rcu_read_lock_sched();
+ > 810			mod = find_module(modname);
+   811			if (mod && !try_module_get(mod))
+   812				mod = NULL;
+   813			rcu_read_unlock_sched();
+   814			if (!mod)
+   815				goto out;
+   816		}
+   817	
+   818		ret = validate_module_probe_symbol(modname, symbol);
+   819	out:
+   820		if (p)
+   821			*p = ':';
+   822		if (mod)
+   823			module_put(mod);
+   824		return ret;
+   825	}
+   826	
 
 -- 
 0-DAY CI Kernel Test Service
