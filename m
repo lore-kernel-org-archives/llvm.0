@@ -1,101 +1,147 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D8213F51B
-	for <llvm@lists.linux.dev>; Sun,  7 Jul 2024 20:52:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9AD1F56773;
+	Sun,  7 Jul 2024 22:22:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720385530; cv=none; b=Bg82LeTdgAs0TfwVFymc2IzlN8CTtK87uiTT3xUR7d1yDL6yN8/gVBKkC6do5XOsFDWZTpL1SxE0H1UXfQOuzhxa0fpqF7qGXvyzpWr6XNtcg4ZxmG+h/m+HSQ4JyiVh2wLeqUKOrDLXi67yySAPhRXFUXUu9sm4soGDYHYcf0U=
+	t=1720390971; cv=none; b=mL8D0kMDruiqhIi939cgfPOJzTvUP/Q4O1abvUnGCuJgP9pKKXFXVzOmWFYX4IULVEb1Eyu5RfX5g1xU8sWCcYiy6b43SMLcvakE5g4G15Ta/dSr+nXplE6NMQAN4oa7Wj0iXSQcTaeBOLBP+lQRs1S2vhMcUYFyNIgWC1v0Haw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720385530; c=relaxed/simple;
-	bh=a8Wvw69/5U/50KZNXq5d9DU5Z8y/GWdqzDPwUlzhKKM=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=sKLp9UOLLy/6pKwLBO/DXfTO0QJJeezQu38FQ4Tn9YnX+V2CcMn3dkFXu7C8GlIa6KW0qGhUmjOEgATo2gDegWmdF5L5tYVatyeTr8XZMG5wE0+OPM+bN+GarFg4xOGrN4A92m52oTEGrtcTI5CAtYx1rep1JBRKaAyu7PZlZbk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=iBqne6Ln; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1720390971; c=relaxed/simple;
+	bh=98u504Gu/hQJ3jYkKc4S3uNEBdxO1PKUAZ7U+QLe6Fo=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=FOw8N7FCidSFza0aoiF9TgxCs8So+mI5U2XTjm4ZD6+kC4zex9nrRLFqtk1XxiY9qW2IEvKcXmDRxi7YshIy/Tds9mjTLpEJkHrD/jcAn13w02vr2t/D5jp0EdzFZt1qLY/tFmmsp6WAvCe4VD3eidClyCiq/OjPRzC6BvcHQec=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ndgY8NA3; arc=none smtp.client-ip=198.175.65.20
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="iBqne6Ln"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1720385527;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=rqy95J1VUnfCMDx73g6UZutgsDDTcYCsoY0uBKlrlgA=;
-	b=iBqne6Ln9ymXbNTzdq4aYQq4aoiHLQ1Y8E9vcUUEncnOFAJQDYrAjKPRSHSpk1epRzJFtN
-	6/iXLaTmw+nxpAp8sg/x7myq1T8tuz7mwTaFruD4fJCILfv/vg9bSf9ExC5A8BSXbG3IAw
-	7Jx6qdbjO06aoo8qDVzLB7QFxDBdqvM=
-Received: from mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-655-O0SlBhMfPLu2nHmniQKUNQ-1; Sun,
- 07 Jul 2024 16:52:05 -0400
-X-MC-Unique: O0SlBhMfPLu2nHmniQKUNQ-1
-Received: from mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.12])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id F2D5F195609F
-	for <llvm@lists.linux.dev>; Sun,  7 Jul 2024 20:52:04 +0000 (UTC)
-Received: from [172.64.13.54] (unknown [10.30.32.93])
-	by mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 3565019560AE;
-	Sun,  7 Jul 2024 20:52:04 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.10.0-rc6,
- mainline.kernel.org-clang, 5a4bd506)
-Date: Sun, 07 Jul 2024 20:52:03 -0000
-To: llvm@lists.linux.dev
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ndgY8NA3"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1720390969; x=1751926969;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=98u504Gu/hQJ3jYkKc4S3uNEBdxO1PKUAZ7U+QLe6Fo=;
+  b=ndgY8NA3uhHP5ZbButJwi1h5FDRrEpg34AQtTsZmNCFDA2JsxA2/EdON
+   jQiyeCoMzRJKGv8mWHdvJukDG//PKU9FjJynHJIhqoU2I2186QbOyxypf
+   BxGhKW/APdqcpbfj0LRDG4BorMOKTMOG5SvlSWYiYr+c+7I3SwXdeB7vj
+   wMObN/oVHCbNOzOvUN4X3KC2gyBonj4fxnFUQITfFfhjVKPyZ+ZPo5RvH
+   CmkT8N3DKmYYsTZT3y6ZJreMOwkUSzvUEwpqh0Cm6TIsRSI7b+2qviDyo
+   TC9nA05vIz8kLpNrUYbMN0Uvj4+M1KK1yMOfNEKxs99LW2LSxb23cpWU3
+   w==;
+X-CSE-ConnectionGUID: PFIY6b5yTXCK0x/wrOVuDw==
+X-CSE-MsgGUID: qoXAxenRR9qn6+r29uO92w==
+X-IronPort-AV: E=McAfee;i="6700,10204,11126"; a="17399102"
+X-IronPort-AV: E=Sophos;i="6.09,190,1716274800"; 
+   d="scan'208";a="17399102"
+Received: from fmviesa006.fm.intel.com ([10.60.135.146])
+  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jul 2024 15:22:47 -0700
+X-CSE-ConnectionGUID: vKzqC/cNRHyXyqrEBx0YmQ==
+X-CSE-MsgGUID: 6eV1rcM4R3y5Yz2/WGI6YA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.09,190,1716274800"; 
+   d="scan'208";a="47096845"
+Received: from lkp-server01.sh.intel.com (HELO 68891e0c336b) ([10.239.97.150])
+  by fmviesa006.fm.intel.com with ESMTP; 07 Jul 2024 15:22:46 -0700
+Received: from kbuild by 68891e0c336b with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1sQaHL-000VJe-2V;
+	Sun, 07 Jul 2024 22:22:43 +0000
+Date: Mon, 8 Jul 2024 06:22:11 +0800
+From: kernel test robot <lkp@intel.com>
+To: Carlos Ferreira <carlosmiguelferreira.2003@gmail.com>,
+	hdegoede@redhat.com
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org,
+	carlosmiguelferreira.2003@gmail.com
+Subject: Re: [PATCH v3 1/1] HP: wmi: added support for 4 zone keyboard rgb
+Message-ID: <202407080657.XLHI1WRv-lkp@intel.com>
+References: <20240707175613.27529-2-carlosmiguelferreira.2003@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.12
-Message-Id: <96363.124070716520500715@us-mta-655.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240707175613.27529-2-carlosmiguelferreira.2003@gmail.com>
 
-Hi, we tested your kernel and here are the results:
+Hi Carlos,
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: FAILED
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on linus/master]
+[also build test ERROR on v6.10-rc6 next-20240703]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Carlos-Ferreira/HP-wmi-added-support-for-4-zone-keyboard-rgb/20240708-015808
+base:   linus/master
+patch link:    https://lore.kernel.org/r/20240707175613.27529-2-carlosmiguelferreira.2003%40gmail.com
+patch subject: [PATCH v3 1/1] HP: wmi: added support for 4 zone keyboard rgb
+config: i386-randconfig-001-20240708 (https://download.01.org/0day-ci/archive/20240708/202407080657.XLHI1WRv-lkp@intel.com/config)
+compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240708/202407080657.XLHI1WRv-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202407080657.XLHI1WRv-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> drivers/platform/x86/hp/hp-wmi.c:1590:28: error: call to undeclared function 'FIELD_GET'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+    1590 |         buff[25 + zone * 3]     = FIELD_GET(FOURZONE_COLOR_R, color);
+         |                                   ^
+>> drivers/platform/x86/hp/hp-wmi.c:1609:15: error: call to undeclared function 'FIELD_PREP'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+    1609 |                 colors[i] = FIELD_PREP(FOURZONE_COLOR_R, buff[25 + i * 3])
+         |                             ^
+   2 errors generated.
 
 
-Kernel information:
-    Commit message: Merge tag 'clk-fixes-for-linus' of git://git.kernel.org=
-/pub/scm/linux/kernel/git/clk/linux
+vim +/FIELD_GET +1590 drivers/platform/x86/hp/hp-wmi.c
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1363575261
+  1579	
+  1580	static int fourzone_set_colors(u32 color, size_t zone)
+  1581	{
+  1582		u8 buff[128];
+  1583		int ret;
+  1584	
+  1585		ret = hp_wmi_perform_query(HPWMI_FOURZONE_COLOR_GET, HPWMI_FOURZONE,
+  1586			&buff, sizeof(buff), sizeof(buff));
+  1587		if (ret != 0)
+  1588			return -EINVAL;
+  1589	
+> 1590		buff[25 + zone * 3]     = FIELD_GET(FOURZONE_COLOR_R, color);
+  1591		buff[25 + zone * 3 + 1] = FIELD_GET(FOURZONE_COLOR_G, color);
+  1592		buff[25 + zone * 3 + 2] = FIELD_GET(FOURZONE_COLOR_B, color);
+  1593	
+  1594		return hp_wmi_perform_query(HPWMI_FOURZONE_COLOR_SET, HPWMI_FOURZONE,
+  1595			&buff, sizeof(buff), sizeof(buff));
+  1596	}
+  1597	
+  1598	static int fourzone_get_colors(u32 *colors)
+  1599	{
+  1600		u8 buff[128];
+  1601		int ret;
+  1602	
+  1603		ret = hp_wmi_perform_query(HPWMI_FOURZONE_COLOR_GET, HPWMI_FOURZONE,
+  1604			&buff, sizeof(buff), sizeof(buff));
+  1605		if (ret != 0)
+  1606			return -EINVAL;
+  1607	
+  1608		for (int i = 0; i < 4; i++) {
+> 1609			colors[i] = FIELD_PREP(FOURZONE_COLOR_R, buff[25 + i * 3])
+  1610				  | FIELD_PREP(FOURZONE_COLOR_G, buff[25 + i * 3 + 1])
+  1611				  | FIELD_PREP(FOURZONE_COLOR_B, buff[25 + i * 3 + 2]);
+  1612		}
+  1613	
+  1614		return 0;
+  1615	}
+  1616	
 
-One or more kernel builds failed:
-    Unrecognized or new issues:
-         ppc64le - https://datawarehouse.cki-project.org/kcidb/builds/redha=
-t:1363575261-ppc64le-kernel
-           s390x - https://datawarehouse.cki-project.org/kcidb/builds/redha=
-t:1363575261-s390x-kernel
-          x86_64 (debug) - https://datawarehouse.cki-project.org/kcidb/buil=
-ds/redhat:1363575261-x86_64-kernel-debug
-
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
