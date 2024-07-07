@@ -1,64 +1,70 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 41BF0EDC;
-	Sun,  7 Jul 2024 15:21:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 94726225A8;
+	Sun,  7 Jul 2024 16:03:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720365701; cv=none; b=usi8r02NhnCqSOxGP0+ge0psMCGHaxLPKHIzuBDWHfqM2aWs0+etJnrzHlaKq53a1MFKY9Vw6UXQv/0ImChFMPGwK63Wpk7jxNVTPj18OxaBfBslb36OIMdi12qgIM094e1txekiMwJWmp3Y32BvpuvJ5BqW3kZywdyud9Hz99A=
+	t=1720368228; cv=none; b=nqazl0X+I6EjAOwBXdOc0XpLZnNJKWqrSnaoRMRicM+SXb9mu0UukvVkBKOcKflkkWrWiU1Kyl1UBmd3Zr/CvVQQyhypmZdT9WP7j4R5CiYMq85TPDDTiE/QKfRapoeBcdFAXR3tP8oMn9vAtj2hFeMnHrvdDHhR/37qG5Hshbg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720365701; c=relaxed/simple;
-	bh=+ljliBX5k1jokWhX0ybalM/DGnAzoOVpNUDv/josXrA=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=cZ/ON/2HET2pnu1kER4mv+FTofW2s08YSjfNfwRw8x641Tqum6ovwq99W63IXfr1yPEuT9+KIqh3lOP2bhzxPgTd2qJci6N8AONE4iPr4eijSRHmyt6ocGbsf+vBLiHXq3rsComjnHs9xodzcuut0+vvptj7/OcVwbf73No3Vws=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=iQsFPAOj; arc=none smtp.client-ip=198.175.65.19
+	s=arc-20240116; t=1720368228; c=relaxed/simple;
+	bh=+C98fktP2PvVUClWe+Ihb8xDaQzuDfLxCpAMjLAICOE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=sEe7wu/t+qRNPoWHmBreQ6trBzutYlpDugd5kuu0/UdVWmyfLmXPFMcr1FAcOqsU5o9eYXYEqa5xZfk5NP8IB+dtk9+fDa7ozkGHrx9Cwy6/eqgq8h8Bkcht+bKv/ueM0NotZOouARs8M3Zpyc7mbkgrVSR8wo/kcWeACZ8/2yk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=SEe/JAKt; arc=none smtp.client-ip=198.175.65.20
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="iQsFPAOj"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="SEe/JAKt"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1720365700; x=1751901700;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=+ljliBX5k1jokWhX0ybalM/DGnAzoOVpNUDv/josXrA=;
-  b=iQsFPAOjyE8ShATcF9wyj9L12J9n3v8tTtnQIvsj2bClNFZOE/hpQ3FP
-   SZIGnHvp/LLEQNNI0kDR7QBVeyypnoiRRT7Ghh9Co2guC05mSQgND0/YZ
-   RpWKuZAmp01IWlCX4GUKScHjbm8EZ1Kk4H/xuEa04NYOEb8z6wH+yU/ib
-   cQfKjhzUlfzIKM0s29srtIizNCU2cInhOffUns8iM2iWhw9cYRnUxn7C6
-   Ph90vbosox8wQUQSv8TLh0Fhfyhu19bWo5aDM7LLkJl3ds/PcKRFr0GeT
-   TrzBU4JxIrGWVB685wdpJCKmfitv3PprBDHGu5XlZ+2vOqOiFvw9wLtI5
-   Q==;
-X-CSE-ConnectionGUID: Ne8KjXxMRNy8PP70NnuELA==
-X-CSE-MsgGUID: vRbWy3chRAiId0DXaHQDJQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11126"; a="17405868"
+  t=1720368225; x=1751904225;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=+C98fktP2PvVUClWe+Ihb8xDaQzuDfLxCpAMjLAICOE=;
+  b=SEe/JAKtyVjlEGal+UM3k20W8sL+7+busMziGhc8tlKei+aGvlj1z7hv
+   t0ZCjiyUEhLBhL0l1Wytj9MiohyiFFco1TyXcVPxHyVHQ6BtPRwPTqLmw
+   Ot43cZc4gngFQVvLYAr9p96aWudu5D7jqRMfrUSAyPnvCRFclMXnnX921
+   ibplSwbyXrkzqDMxZ15YLOjzQQjZuyGZ6cB72td7PS7//sA0bPu0WxsSI
+   IjjVjl/3d9GOoYYsvTSKD7nr/wXlD3Vp6+gwfXAwBVjpEBEGTYdZ2Fl6h
+   eRdE/Lr49rw7piMQ/Ttr0GG4oRf3duXrkhGgfAOgQH6GcwpB5AtOBitjY
+   A==;
+X-CSE-ConnectionGUID: Fq0NeBBXSZy4/uA6tGVnDw==
+X-CSE-MsgGUID: tku8Wc3SRwCytENf45UgvQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11126"; a="17390521"
 X-IronPort-AV: E=Sophos;i="6.09,190,1716274800"; 
-   d="scan'208";a="17405868"
-Received: from fmviesa004.fm.intel.com ([10.60.135.144])
-  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jul 2024 08:21:39 -0700
-X-CSE-ConnectionGUID: 92DDdoQATcSe0NhMQKJJEg==
-X-CSE-MsgGUID: dpOWJ5ZhTRKWbU/FLAcEQQ==
+   d="scan'208";a="17390521"
+Received: from fmviesa007.fm.intel.com ([10.60.135.147])
+  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jul 2024 09:03:44 -0700
+X-CSE-ConnectionGUID: yQJthOFoQWGPoURzIEQO+Q==
+X-CSE-MsgGUID: mFpJMzK7Sf2t0YVMMwJOLg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.09,190,1716274800"; 
-   d="scan'208";a="51894781"
+   d="scan'208";a="47175035"
 Received: from lkp-server01.sh.intel.com (HELO 68891e0c336b) ([10.239.97.150])
-  by fmviesa004.fm.intel.com with ESMTP; 07 Jul 2024 08:21:36 -0700
+  by fmviesa007.fm.intel.com with ESMTP; 07 Jul 2024 09:03:40 -0700
 Received: from kbuild by 68891e0c336b with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1sQThm-000V2U-0x;
-	Sun, 07 Jul 2024 15:21:34 +0000
-Date: Sun, 7 Jul 2024 23:20:36 +0800
+	id 1sQUMU-000V4Q-0o;
+	Sun, 07 Jul 2024 16:03:38 +0000
+Date: Mon, 8 Jul 2024 00:03:11 +0800
 From: kernel test robot <lkp@intel.com>
-To: Jagadeesh Kona <quic_jkona@quicinc.com>
+To: Cristian Marussi <cristian.marussi@arm.com>,
+	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	arm-scmi@vger.kernel.org
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Linux Memory Management List <linux-mm@kvack.org>,
-	Bjorn Andersson <andersson@kernel.org>,
-	Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
-	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-	Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>
-Subject: [linux-next:master 7766/10451]
- drivers/clk/qcom/camcc-sm8650.c:3573:29: error: incompatible pointer types
- passing 'struct device *' to parameter of type 'struct platform_device *'
-Message-ID: <202407072331.baglL4Sd-lkp@intel.com>
+	sudeep.holla@arm.com, james.quinlan@broadcom.com,
+	f.fainelli@gmail.com, vincent.guittot@linaro.org,
+	etienne.carriere@foss.st.com, peng.fan@oss.nxp.com,
+	michal.simek@amd.com, quic_sibis@quicinc.com,
+	quic_nkela@quicinc.com, ptosi@google.com, dan.carpenter@linaro.org,
+	souvik.chakravarty@arm.com,
+	Cristian Marussi <cristian.marussi@arm.com>,
+	Peng Fan <peng.fan@nxp.com>
+Subject: Re: [PATCH 5/8] firmware: arm_scmi: Make SMC transport a standalone
+ driver
+Message-ID: <202407072316.PqU8yj52-lkp@intel.com>
+References: <20240707002055.1835121-6-cristian.marussi@arm.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -67,80 +73,115 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20240707002055.1835121-6-cristian.marussi@arm.com>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-head:   0b58e108042b0ed28a71cd7edf5175999955b233
-commit: 09ea421652a832083ea380a72addf383965f3682 [7766/10451] clk: qcom: camcc-sm8650: Add SM8650 camera clock controller driver
-config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20240707/202407072331.baglL4Sd-lkp@intel.com/config)
-compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240707/202407072331.baglL4Sd-lkp@intel.com/reproduce)
+Hi Cristian,
+
+kernel test robot noticed the following build warnings:
+
+[auto build test WARNING on soc/for-next]
+[also build test WARNING on next-20240703]
+[cannot apply to linus/master v6.10-rc6]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Cristian-Marussi/firmware-arm_scmi-Introduce-setup_shmem_iomap/20240707-082513
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git for-next
+patch link:    https://lore.kernel.org/r/20240707002055.1835121-6-cristian.marussi%40arm.com
+patch subject: [PATCH 5/8] firmware: arm_scmi: Make SMC transport a standalone driver
+config: arm-defconfig (https://download.01.org/0day-ci/archive/20240707/202407072316.PqU8yj52-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240707/202407072316.PqU8yj52-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202407072331.baglL4Sd-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202407072316.PqU8yj52-lkp@intel.com/
 
-Note: the linux-next/master HEAD 0b58e108042b0ed28a71cd7edf5175999955b233 builds fine.
-      It may have been fixed somewhere.
+All warnings (new ones prefixed by >>):
 
-All errors (new ones prefixed by >>):
-
->> drivers/clk/qcom/camcc-sm8650.c:3573:29: error: incompatible pointer types passing 'struct device *' to parameter of type 'struct platform_device *' [-Werror,-Wincompatible-pointer-types]
-    3573 |         ret = qcom_cc_really_probe(&pdev->dev, &cam_cc_sm8650_desc, regmap);
-         |                                    ^~~~~~~~~~
-   drivers/clk/qcom/common.h:63:57: note: passing argument to parameter 'pdev' here
-      63 | extern int qcom_cc_really_probe(struct platform_device *pdev,
-         |                                                         ^
-   1 error generated.
+>> drivers/firmware/arm_scmi/scmi_transport_smc.c:157:58: warning: variable 'size' is uninitialized when used here [-Wuninitialized]
+                   void __iomem *ptr = (void __iomem *)scmi_info->shmem + size - 8;
+                                                                          ^~~~
+   drivers/firmware/arm_scmi/scmi_transport_smc.c:136:22: note: initialize the variable 'size' to silence this warning
+           resource_size_t size;
+                               ^
+                                = 0
+   1 warning generated.
 
 
-vim +3573 drivers/clk/qcom/camcc-sm8650.c
+vim +/size +157 drivers/firmware/arm_scmi/scmi_transport_smc.c
 
-  3535	
-  3536	static int cam_cc_sm8650_probe(struct platform_device *pdev)
-  3537	{
-  3538		struct regmap *regmap;
-  3539		int ret;
-  3540	
-  3541		ret = devm_pm_runtime_enable(&pdev->dev);
-  3542		if (ret)
-  3543			return ret;
-  3544	
-  3545		ret = pm_runtime_resume_and_get(&pdev->dev);
-  3546		if (ret)
-  3547			return ret;
-  3548	
-  3549		regmap = qcom_cc_map(pdev, &cam_cc_sm8650_desc);
-  3550		if (IS_ERR(regmap)) {
-  3551			pm_runtime_put(&pdev->dev);
-  3552			return PTR_ERR(regmap);
-  3553		}
-  3554	
-  3555		clk_lucid_ole_pll_configure(&cam_cc_pll0, regmap, &cam_cc_pll0_config);
-  3556		clk_lucid_ole_pll_configure(&cam_cc_pll1, regmap, &cam_cc_pll1_config);
-  3557		clk_rivian_evo_pll_configure(&cam_cc_pll2, regmap, &cam_cc_pll2_config);
-  3558		clk_lucid_ole_pll_configure(&cam_cc_pll3, regmap, &cam_cc_pll3_config);
-  3559		clk_lucid_ole_pll_configure(&cam_cc_pll4, regmap, &cam_cc_pll4_config);
-  3560		clk_lucid_ole_pll_configure(&cam_cc_pll5, regmap, &cam_cc_pll5_config);
-  3561		clk_lucid_ole_pll_configure(&cam_cc_pll6, regmap, &cam_cc_pll6_config);
-  3562		clk_lucid_ole_pll_configure(&cam_cc_pll7, regmap, &cam_cc_pll7_config);
-  3563		clk_lucid_ole_pll_configure(&cam_cc_pll8, regmap, &cam_cc_pll8_config);
-  3564		clk_lucid_ole_pll_configure(&cam_cc_pll9, regmap, &cam_cc_pll9_config);
-  3565		clk_lucid_ole_pll_configure(&cam_cc_pll10, regmap, &cam_cc_pll10_config);
-  3566	
-  3567		/* Keep clocks always enabled */
-  3568		qcom_branch_set_clk_en(regmap, 0x13318); /* CAM_CC_DRV_AHB_CLK */
-  3569		qcom_branch_set_clk_en(regmap, 0x13314); /* CAM_CC_DRV_XO_CLK */
-  3570		qcom_branch_set_clk_en(regmap, 0x132ec); /* CAM_CC_GDSC_CLK */
-  3571		qcom_branch_set_clk_en(regmap, 0x13308); /* CAM_CC_SLEEP_CLK */
-  3572	
-> 3573		ret = qcom_cc_really_probe(&pdev->dev, &cam_cc_sm8650_desc, regmap);
-  3574	
-  3575		pm_runtime_put(&pdev->dev);
-  3576	
-  3577		return ret;
-  3578	}
-  3579	
+0bfdca8a8661aa drivers/firmware/arm_scmi/smc.c                Cristian Marussi 2021-12-20  129  
+1dc6558062dadf drivers/firmware/arm_scmi/smc.c                Peng Fan         2020-03-08  130  static int smc_chan_setup(struct scmi_chan_info *cinfo, struct device *dev,
+1dc6558062dadf drivers/firmware/arm_scmi/smc.c                Peng Fan         2020-03-08  131  			  bool tx)
+1dc6558062dadf drivers/firmware/arm_scmi/smc.c                Peng Fan         2020-03-08  132  {
+1dc6558062dadf drivers/firmware/arm_scmi/smc.c                Peng Fan         2020-03-08  133  	struct device *cdev = cinfo->dev;
+da405477e76707 drivers/firmware/arm_scmi/smc.c                Nikunj Kela      2023-10-09  134  	unsigned long cap_id = ULONG_MAX;
+1dc6558062dadf drivers/firmware/arm_scmi/smc.c                Peng Fan         2020-03-08  135  	struct scmi_smc *scmi_info;
+1dc6558062dadf drivers/firmware/arm_scmi/smc.c                Peng Fan         2020-03-08  136  	resource_size_t size;
+1dc6558062dadf drivers/firmware/arm_scmi/smc.c                Peng Fan         2020-03-08  137  	struct resource res;
+1dc6558062dadf drivers/firmware/arm_scmi/smc.c                Peng Fan         2020-03-08  138  	u32 func_id;
+d1ff11d7ad8704 drivers/firmware/arm_scmi/smc.c                Cristian Marussi 2023-07-19  139  	int ret;
+1dc6558062dadf drivers/firmware/arm_scmi/smc.c                Peng Fan         2020-03-08  140  
+1dc6558062dadf drivers/firmware/arm_scmi/smc.c                Peng Fan         2020-03-08  141  	if (!tx)
+1dc6558062dadf drivers/firmware/arm_scmi/smc.c                Peng Fan         2020-03-08  142  		return -ENODEV;
+1dc6558062dadf drivers/firmware/arm_scmi/smc.c                Peng Fan         2020-03-08  143  
+1dc6558062dadf drivers/firmware/arm_scmi/smc.c                Peng Fan         2020-03-08  144  	scmi_info = devm_kzalloc(dev, sizeof(*scmi_info), GFP_KERNEL);
+1dc6558062dadf drivers/firmware/arm_scmi/smc.c                Peng Fan         2020-03-08  145  	if (!scmi_info)
+1dc6558062dadf drivers/firmware/arm_scmi/smc.c                Peng Fan         2020-03-08  146  		return -ENOMEM;
+1dc6558062dadf drivers/firmware/arm_scmi/smc.c                Peng Fan         2020-03-08  147  
+728a057b6ab114 drivers/firmware/arm_scmi/scmi_transport_smc.c Cristian Marussi 2024-07-07  148  	scmi_info->shmem = core->shmem->setup_iomap(cinfo, dev, tx);
+6c5d3315c40fa0 drivers/firmware/arm_scmi/smc.c                Peng Fan         2024-07-07  149  	if (IS_ERR(scmi_info->shmem))
+6c5d3315c40fa0 drivers/firmware/arm_scmi/smc.c                Peng Fan         2024-07-07  150  		return PTR_ERR(scmi_info->shmem);
+1dc6558062dadf drivers/firmware/arm_scmi/smc.c                Peng Fan         2020-03-08  151  
+1dc6558062dadf drivers/firmware/arm_scmi/smc.c                Peng Fan         2020-03-08  152  	ret = of_property_read_u32(dev->of_node, "arm,smc-id", &func_id);
+1dc6558062dadf drivers/firmware/arm_scmi/smc.c                Peng Fan         2020-03-08  153  	if (ret < 0)
+1dc6558062dadf drivers/firmware/arm_scmi/smc.c                Peng Fan         2020-03-08  154  		return ret;
+1dc6558062dadf drivers/firmware/arm_scmi/smc.c                Peng Fan         2020-03-08  155  
+da405477e76707 drivers/firmware/arm_scmi/smc.c                Nikunj Kela      2023-10-09  156  	if (of_device_is_compatible(dev->of_node, "qcom,scmi-smc")) {
+da405477e76707 drivers/firmware/arm_scmi/smc.c                Nikunj Kela      2023-10-09 @157  		void __iomem *ptr = (void __iomem *)scmi_info->shmem + size - 8;
+da405477e76707 drivers/firmware/arm_scmi/smc.c                Nikunj Kela      2023-10-09  158  		/* The capability-id is kept in last 8 bytes of shmem.
+da405477e76707 drivers/firmware/arm_scmi/smc.c                Nikunj Kela      2023-10-09  159  		 *     +-------+ <-- 0
+da405477e76707 drivers/firmware/arm_scmi/smc.c                Nikunj Kela      2023-10-09  160  		 *     | shmem |
+da405477e76707 drivers/firmware/arm_scmi/smc.c                Nikunj Kela      2023-10-09  161  		 *     +-------+ <-- size - 8
+da405477e76707 drivers/firmware/arm_scmi/smc.c                Nikunj Kela      2023-10-09  162  		 *     | capId |
+da405477e76707 drivers/firmware/arm_scmi/smc.c                Nikunj Kela      2023-10-09  163  		 *     +-------+ <-- size
+da405477e76707 drivers/firmware/arm_scmi/smc.c                Nikunj Kela      2023-10-09  164  		 */
+da405477e76707 drivers/firmware/arm_scmi/smc.c                Nikunj Kela      2023-10-09  165  		memcpy_fromio(&cap_id, ptr, sizeof(cap_id));
+da405477e76707 drivers/firmware/arm_scmi/smc.c                Nikunj Kela      2023-10-09  166  	}
+da405477e76707 drivers/firmware/arm_scmi/smc.c                Nikunj Kela      2023-10-09  167  
+5f2ea10a808aef drivers/firmware/arm_scmi/smc.c                Nikunj Kela      2023-05-06  168  	if (of_device_is_compatible(dev->of_node, "arm,scmi-smc-param")) {
+5f2ea10a808aef drivers/firmware/arm_scmi/smc.c                Nikunj Kela      2023-05-06  169  		scmi_info->param_page = SHMEM_PAGE(res.start);
+5f2ea10a808aef drivers/firmware/arm_scmi/smc.c                Nikunj Kela      2023-05-06  170  		scmi_info->param_offset = SHMEM_OFFSET(res.start);
+5f2ea10a808aef drivers/firmware/arm_scmi/smc.c                Nikunj Kela      2023-05-06  171  	}
+dd820ee21d5e07 drivers/firmware/arm_scmi/smc.c                Jim Quinlan      2020-12-22  172  	/*
+dd820ee21d5e07 drivers/firmware/arm_scmi/smc.c                Jim Quinlan      2020-12-22  173  	 * If there is an interrupt named "a2p", then the service and
+dd820ee21d5e07 drivers/firmware/arm_scmi/smc.c                Jim Quinlan      2020-12-22  174  	 * completion of a message is signaled by an interrupt rather than by
+dd820ee21d5e07 drivers/firmware/arm_scmi/smc.c                Jim Quinlan      2020-12-22  175  	 * the return of the SMC call.
+dd820ee21d5e07 drivers/firmware/arm_scmi/smc.c                Jim Quinlan      2020-12-22  176  	 */
+d1ff11d7ad8704 drivers/firmware/arm_scmi/smc.c                Cristian Marussi 2023-07-19  177  	scmi_info->irq = of_irq_get_byname(cdev->of_node, "a2p");
+d1ff11d7ad8704 drivers/firmware/arm_scmi/smc.c                Cristian Marussi 2023-07-19  178  	if (scmi_info->irq > 0) {
+d1ff11d7ad8704 drivers/firmware/arm_scmi/smc.c                Cristian Marussi 2023-07-19  179  		ret = request_irq(scmi_info->irq, smc_msg_done_isr,
+d1ff11d7ad8704 drivers/firmware/arm_scmi/smc.c                Cristian Marussi 2023-07-19  180  				  IRQF_NO_SUSPEND, dev_name(dev), scmi_info);
+dd820ee21d5e07 drivers/firmware/arm_scmi/smc.c                Jim Quinlan      2020-12-22  181  		if (ret) {
+dd820ee21d5e07 drivers/firmware/arm_scmi/smc.c                Jim Quinlan      2020-12-22  182  			dev_err(dev, "failed to setup SCMI smc irq\n");
+dd820ee21d5e07 drivers/firmware/arm_scmi/smc.c                Jim Quinlan      2020-12-22  183  			return ret;
+dd820ee21d5e07 drivers/firmware/arm_scmi/smc.c                Jim Quinlan      2020-12-22  184  		}
+f716cbd33f038a drivers/firmware/arm_scmi/smc.c                Cristian Marussi 2021-12-20  185  	} else {
+f716cbd33f038a drivers/firmware/arm_scmi/smc.c                Cristian Marussi 2021-12-20  186  		cinfo->no_completion_irq = true;
+dd820ee21d5e07 drivers/firmware/arm_scmi/smc.c                Jim Quinlan      2020-12-22  187  	}
+dd820ee21d5e07 drivers/firmware/arm_scmi/smc.c                Jim Quinlan      2020-12-22  188  
+1dc6558062dadf drivers/firmware/arm_scmi/smc.c                Peng Fan         2020-03-08  189  	scmi_info->func_id = func_id;
+da405477e76707 drivers/firmware/arm_scmi/smc.c                Nikunj Kela      2023-10-09  190  	scmi_info->cap_id = cap_id;
+1dc6558062dadf drivers/firmware/arm_scmi/smc.c                Peng Fan         2020-03-08  191  	scmi_info->cinfo = cinfo;
+0bfdca8a8661aa drivers/firmware/arm_scmi/smc.c                Cristian Marussi 2021-12-20  192  	smc_channel_lock_init(scmi_info);
+1dc6558062dadf drivers/firmware/arm_scmi/smc.c                Peng Fan         2020-03-08  193  	cinfo->transport_info = scmi_info;
+1dc6558062dadf drivers/firmware/arm_scmi/smc.c                Peng Fan         2020-03-08  194  
+1dc6558062dadf drivers/firmware/arm_scmi/smc.c                Peng Fan         2020-03-08  195  	return 0;
+1dc6558062dadf drivers/firmware/arm_scmi/smc.c                Peng Fan         2020-03-08  196  }
+1dc6558062dadf drivers/firmware/arm_scmi/smc.c                Peng Fan         2020-03-08  197  
 
 -- 
 0-DAY CI Kernel Test Service
