@@ -1,155 +1,132 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net [217.70.183.199])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0153F383A1;
-	Mon,  8 Jul 2024 20:16:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BEB30A29
+	for <llvm@lists.linux.dev>; Mon,  8 Jul 2024 22:10:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.199
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720469790; cv=none; b=axJjXuO8RLK1R6RovPxQTsz8E1MVSW/p1AwYsZm34UparU2yenz7MsXLhw1ePLsuQIwxPXTiDD+xXlV0dyZe82v8R3fZrzKks3CV8LS/xrAk/oSRU9bs+x7LvCj/WyTkZqMYva7uqwZnVfxVRVAMZDqtmDTdnMf9/VmmRz9hUNE=
+	t=1720476657; cv=none; b=D1Z1a3MH5I0tBTYSVSC8thFTxx1/GkArCPzVXI8aQOJB0gww9ZXZ8xvn2XqB55NYL0LKNxJlKV0XEmz6sq6OqkQeFfp7Wx8GbpTe3wG7c1977fmbtapG8T26oN/g6PYVsMV1wDkSiDW8BlX6aHOLhWZvlsYMN2RzRcGN2utQt8U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720469790; c=relaxed/simple;
-	bh=D7MSzBtksyzEzHld1Uj/aeTSTmrwtYg9MMVPgVBiHTs=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=nENq2qxTU4YXjFOLFLFCiCf1Txehs1NLKLJxh0Y9neZ1K9qoHGhx0C7cK+JuqxSaHgdBs8fmKSXWEGX9rsu0IP/2Wzunrmne8meUgPzaGPDjwZcsMI0qR6/Rg0GJANT3jjTKCVu6VBPCxI8CzWMSozsZ+ockiWBheeppl2CkeBE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=OpUAQeAy; arc=none smtp.client-ip=198.175.65.17
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1720476657; c=relaxed/simple;
+	bh=5UsUObC0/KKWIMavGDA73Hj3cvjxYkOVXJo+CQyzx7E=;
+	h=Message-ID:Date:MIME-Version:To:Cc:From:Subject:Content-Type; b=CzP74cJvk7Dppu4VttwboLArg4oJQDbRybXDg+Q5RDhRtWdb66ct+0DmaRAVFqrDzTA5wiNfoY9n566T0dYXfqNukT0M3cEhT2ZQQIG+mYggeA9mlI8XxrJJpbTe/kzUu4f6E8IDUwsnBggRty4UgClhUg0MkSZhcfVb3kbh3gQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=gtucker.io; spf=pass smtp.mailfrom=gtucker.io; dkim=pass (2048-bit key) header.d=gtucker.io header.i=@gtucker.io header.b=Up0O9Dca; arc=none smtp.client-ip=217.70.183.199
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=gtucker.io
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gtucker.io
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="OpUAQeAy"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1720469790; x=1752005790;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=D7MSzBtksyzEzHld1Uj/aeTSTmrwtYg9MMVPgVBiHTs=;
-  b=OpUAQeAy/Ulu2zQHrZorCMAn9KXxJsGlJD/xNjs6elXqJKQYHRGgjK9Q
-   vSzQ6TDsbcUDOsqgm3I7mgLJ8JL8JRkINJ1KveIbLZPVgrL6ZdcWLPmvE
-   aW/K2WyMWFc4ff0YM6wqUGDfevRNaSDhIx78uCTNs5LsF4/JSwFVnzdhl
-   cQ8kLdzGz8S0C+/CjbLIGGoLgL7PhVzZD8tE56XwLr48xJmax1IU1adwM
-   rOkz1BJgnufZbklmMiSWFCBZmJqzi5qhUJVH6h1jQLnvHKWJGHOON+If4
-   qAGd1Sb5/mf/mdQga7MSO2J5rpvgzUF22HM7833+c4NrN+XX2BHLtcoAP
-   Q==;
-X-CSE-ConnectionGUID: mej8f+rCTme8gD/lLoBRrA==
-X-CSE-MsgGUID: 6aqh+UvmSTu2e3dz5k/CDA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11127"; a="17797121"
-X-IronPort-AV: E=Sophos;i="6.09,192,1716274800"; 
-   d="scan'208";a="17797121"
-Received: from fmviesa010.fm.intel.com ([10.60.135.150])
-  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jul 2024 13:16:29 -0700
-X-CSE-ConnectionGUID: Yv3M7AEoRxCJJp/0/J2LHA==
-X-CSE-MsgGUID: 8PrfitQTTDqhYzEC6Xrsgw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.09,192,1716274800"; 
-   d="scan'208";a="47701192"
-Received: from lkp-server01.sh.intel.com (HELO 68891e0c336b) ([10.239.97.150])
-  by fmviesa010.fm.intel.com with ESMTP; 08 Jul 2024 13:16:26 -0700
-Received: from kbuild by 68891e0c336b with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1sQume-000W0U-0I;
-	Mon, 08 Jul 2024 20:16:24 +0000
-Date: Tue, 9 Jul 2024 04:16:09 +0800
-From: kernel test robot <lkp@intel.com>
-To: Mark Brown <broonie@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [broonie-ci:kvm-arm64-fix-pkvm-sve-vl 5/5]
- arch/arm64/kvm/reset.c:55:29: error: call to undeclared function
- 'sve_max_cpu_vl'; ISO C99 and later do not support implicit function
- declarations
-Message-ID: <202407090403.VAerDWzY-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=gtucker.io header.i=@gtucker.io header.b="Up0O9Dca"
+Received: by mail.gandi.net (Postfix) with ESMTPSA id B4DF6FF804;
+	Mon,  8 Jul 2024 22:10:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gtucker.io; s=gm1;
+	t=1720476652;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=oZ5wzEZQjhyCIlXR6z+QZsZFscm+l+6h9ZCxJ7SE/p0=;
+	b=Up0O9DcaKTvMJZe1gWWIRVs5IJRtFv5NNVU+BdsCl3BAtQVcMdOrE9o2/NQ7FcVXWZK9U/
+	IkOgTCMIhSJRNrnxAIW1mBM/PRiE/g39v54E5cmwMn650GoobrLuVXqxyRlSJB/smtwQTj
+	tkgYUQMNi9IVhB/A2UjNuWSBE8r4C8jzx86ztJcT1y7BQW/QY9sDaiAYzabm4+f17EKuoW
+	LbrJK6S2+8oGmUozwXLWf01arZVXl8z/yKgP1kPhg4fDRewzPh2RmKwk8o1FyvEn1zoI2R
+	qyHbeVwwpJ4ibzvPFqe2kWiVCnE7ZwGaVoObP4XG8T5M2J2LNNcdwsv5soUa6A==
+Message-ID: <f80acb84-1d98-44d3-84b7-d976de77d8ce@gtucker.io>
+Date: Tue, 9 Jul 2024 00:10:51 +0200
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+User-Agent: Mozilla Thunderbird
+Content-Language: en-GB
+To: Nick Desaulniers <ndesaulniers@google.com>,
+ Miguel Ojeda <ojeda@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+ Arnd Bergmann <arnd@arndb.de>
+Cc: llvm@lists.linux.dev, rust-for-linux@vger.kernel.org, yurinnick@meta.com,
+ bpf@vger.kernel.org, Sasha Levin <sashal@kernel.org>,
+ Shuah Khan <skhan@linuxfoundation.org>,
+ automated-testing@lists.yoctoproject.org
+From: Guillaume Tucker <gtucker@gtucker.io>
+Organization: gtucker.io
+Subject: Plumbers Testing MC potential topic: specialised toolchains
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-GND-Sasl: gtucker@gtucker.io
 
-Hi Mark,
+Hello,
 
-FYI, the error/warning was bisected to this commit, please ignore it if it's irrelevant.
+While exchanging a few ideas with others around the Testing
+micro-conference[1] for Plumbers 2024, and based on some older
+discussions, one key issue which seems to be common to several
+subsystems is how to manage specialised toolchains.
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/ci.git kvm-arm64-fix-pkvm-sve-vl
-head:   f56ea0fbdcb8321483246b871bea3dc6abdca327
-commit: f56ea0fbdcb8321483246b871bea3dc6abdca327 [5/5] KVM: arm64: Avoid underallocating storage for host SVE state
-config: arm64-randconfig-004-20240709 (https://download.01.org/0day-ci/archive/20240709/202407090403.VAerDWzY-lkp@intel.com/config)
-compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project a0c6b8aef853eedaa0980f07c0a502a5a8a9740e)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240709/202407090403.VAerDWzY-lkp@intel.com/reproduce)
+By "specialised", I mean the ones that can't easily be installed
+via major Linux distros or other packaging systems.  Say, if a
+specific compiler revision is required with particular compiler
+flags in order to build certain parts of the kernel - and maybe
+even a particular compiler to build the toolchain itself.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202407090403.VAerDWzY-lkp@intel.com/
+LLVM / Clang-Built-Linux used to be in this category, and I
+believe it's still the case to some extent for linux-next
+although a minimal LLVM version has now been supported in
+mainline for a few years.
 
-All errors (new ones prefixed by >>):
+A more critical example is eBPF, which I believe still requires a
+cutting-edge version of LLVM.  For example, this is why bpf tests
+are not enabled by default in kselftest.
 
-   In file included from arch/arm64/kvm/reset.c:13:
-   In file included from include/linux/kvm_host.h:16:
-   In file included from include/linux/mm.h:2253:
-   include/linux/vmstat.h:500:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     500 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     501 |                            item];
-         |                            ~~~~
-   include/linux/vmstat.h:507:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     507 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     508 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/vmstat.h:514:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     514 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
-   include/linux/vmstat.h:519:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     519 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     520 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/vmstat.h:528:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     528 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     529 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
->> arch/arm64/kvm/reset.c:55:29: error: call to undeclared function 'sve_max_cpu_vl'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-      55 |                 kvm_host_sve_max_cpu_vl = sve_max_cpu_vl();
-         |                                           ^
-   arch/arm64/kvm/reset.c:55:29: note: did you mean 'sve_max_vl'?
-   arch/arm64/include/asm/fpsimd.h:339:19: note: 'sve_max_vl' declared here
-     339 | static inline int sve_max_vl(void)
-         |                   ^
-   5 warnings and 1 error generated.
+Then Rust support in the kernel is still work-in-progress, so the
+rustc compiler version has to closely follow the kernel revision.
+Add to this other alternative ways to build Rust code using
+rustc_codegen_gcc and native Rust support in GCC.
+
+The list can probably be extended with things like nolibc and
+unusual cross-compiler toolchains, although I guess they're also
+less commonly used.  And I guess GCC support has otherwise been
+pretty stable since maybe the v2.6.x days but there might still
+be special cases too.  Performance and optimizations is another
+factor to take into consideration.
 
 
-vim +/sve_max_cpu_vl +55 arch/arm64/kvm/reset.c
+Based on these assumptions, the issue is about reproducibility -
+yet alone setting up a toolchain that can build the code at all.
+For an automated system to cover these use-cases, or for any
+developer wanting to work on these particular areas of the
+kernel, having the ability to reliably build it in a reproducible
+way using a reference toolchain adds a lot of value.  It means
+better quality control, less scope for errors and unexpected
+behaviour with different code paths being executed or built
+differently.
 
-    50	
-    51	int __init kvm_arm_init_sve(void)
-    52	{
-    53		if (system_supports_sve()) {
-    54			kvm_sve_max_vl = sve_max_virtualisable_vl();
-  > 55			kvm_host_sve_max_cpu_vl = sve_max_cpu_vl();
-    56			kvm_nvhe_sym(kvm_host_sve_max_cpu_vl) = kvm_host_sve_max_cpu_vl;
-    57	
-    58			/*
-    59			 * The get_sve_reg()/set_sve_reg() ioctl interface will need
-    60			 * to be extended with multiple register slice support in
-    61			 * order to support vector lengths greater than
-    62			 * VL_ARCH_MAX:
-    63			 */
-    64			if (WARN_ON(kvm_sve_max_vl > VL_ARCH_MAX))
-    65				kvm_sve_max_vl = VL_ARCH_MAX;
-    66	
-    67			/*
-    68			 * Don't even try to make use of vector lengths that
-    69			 * aren't available on all CPUs, for now:
-    70			 */
-    71			if (kvm_sve_max_vl < sve_max_vl())
-    72				pr_warn("KVM: SVE vector length for guests limited to %u bytes\n",
-    73					kvm_sve_max_vl);
-    74		}
-    75	
-    76		return 0;
-    77	}
-    78	
+The current state of the art are the kernel.org toolchains:
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+  https://mirrors.edge.kernel.org/pub/tools/
+
+These are for LLVM and cross-compilers, and they already solve a
+large part of the issue described above.  However, they don't
+include Rust (yet), and all the dependencies need to be installed
+manually which can have a significant impact on the build
+result (gcc, binutils...).  One step further are the Linaro
+TuxMake Docker images[2] which got some very recent blog
+coverage[3].  The issues then are that not all the toolchains are
+necessarily available in Docker images, they're tailored to
+TuxMake use-cases, and I'm not sure to which extent upstream
+kernel maintainers rely on them.
+
+
+Now, I might have missed some other important aspects so please
+correct me if this reasoning seems flawed in any way.  I have
+however seen how hard it can be for automated systems to build
+kernels correctly and in a way that developers can reproduce, so
+this is no trivial issue.  Then for the Testing MC, I would be
+very interested to hear whether people feel it would be
+beneficial to work towards a more exhaustive solution supported
+upstream: kernel.org Docker images or something close such as
+Dockerfiles in Git or another type of images with all the
+dependencies included.  How does that sound?
+
+Thanks,
+Guillaume
+
+[1] https://lpc.events/event/18/contributions/1665/
+[2] https://hub.docker.com/u/tuxmake
+[3] https://www.linaro.org/blog/tuxmake-building-linux-with-kernel-org-toolchains/
