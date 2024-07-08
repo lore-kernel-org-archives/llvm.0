@@ -1,137 +1,163 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from out-185.mta1.migadu.com (out-185.mta1.migadu.com [95.215.58.185])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0CD198F5A;
-	Mon,  8 Jul 2024 05:07:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 93A933611E
+	for <llvm@lists.linux.dev>; Mon,  8 Jul 2024 07:45:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.185
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720415222; cv=none; b=dX4bZs46d2ZEDpS8UiY1Ms9lbyMYRyQrrI8358Cl69Y9HH6dVRIpvt3nP33jY7oqobgGV95XWjbphA+2HtpQNeVmkTpUfXNIEinYJLydKaZDuoyuiKMIGHHTAgwkhmb2KhL1Zg7BG8h3nsn66tOrbd0AhRaNB0aMXyKIfZpjbOc=
+	t=1720424750; cv=none; b=ql7tkOHxT85jBaV1ml4atYCKECmyM0CXq/LYTCWjjzcNXop3VRK7LwW1sT/Dz3LQ81ks40lgKZH3Md1uEgcdKs9/L5vjUHJC3hhxp9ix6NU6MkJkN1ZbFLU48sXe4vcw3tEjywWi/9WeNDu5MHgzxXfDPg2kz9s8sbBnAIqcJ4E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720415222; c=relaxed/simple;
-	bh=28P5DxuZtpcNeH3XINse8v/z7lEZTB6poCC+rDFkGhc=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=lZh8ymdsC3F7/lXTaQJrS6OZgDxQZCDPp0EyCHjZQl+xlGQIy6EAjOv83/b5CKenIyCSwQBYudT5ZkGnZmr+B1on7oTE1DuN/iPj6sZrCWbzWBHlWZpbyMwmwwzRddO4pAIOw8AvOYx68fJCmoSYLx62I0uQPDN7ietnwCqzGv0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mfg95EPd; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1720424750; c=relaxed/simple;
+	bh=Ctg0u/mGa+VwyDSlNuzK+P613udK8Frsp14C56Ebnqw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=MyoFKImpPMGN9sOnaJ8QVsZej0C6uOujQmNd6mYfLuIcZcFzEAyefJAQdrUqXzs28ZM0V4pr/iF0nHPtakwg6hsuXJooE90kNjNAmpeReUPOtsbgYjwY34V0iqh3PW0XjizHa/1KLpn7J7RPzwHUi5/LFTq+wi26IV0FDK6pvNc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=gh9N9Uw0; arc=none smtp.client-ip=95.215.58.185
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mfg95EPd"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 17685C116B1;
-	Mon,  8 Jul 2024 05:07:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1720415221;
-	bh=28P5DxuZtpcNeH3XINse8v/z7lEZTB6poCC+rDFkGhc=;
-	h=From:Date:Subject:To:Cc:From;
-	b=mfg95EPdmWmSWzRNDZbtUgQ9lHfE5G8Evj1XCNPLOC6QUJOkAHu+281M5wpeMnEnP
-	 rVSZG3IMWBOeRPmxSLnHC27Y15w/8pu4ZG0pUGD/D/EUGz6g8TzK6+lOVTIXvE1am3
-	 rO3wPkqw95XFDb1JBAsXGHCqhjAjDELSf7ew8rO/bV0i8v+aCTmcF4dBO7BKMoMtbv
-	 QLfyx2KhFijKPtdFCZb5UoCsgKNlADQDLI5QLYv4wjR0Uasc/HW1KVjTWnzIJTs8dh
-	 6aRwfJxU2Mo2LajMm1zq4mAX8wfNZ8mUxrdValka2H5PjFxY8EEO6vzV+d5o+7K5eV
-	 +3ll5nFxY0upQ==
-From: Nathan Chancellor <nathan@kernel.org>
-Date: Sun, 07 Jul 2024 22:06:47 -0700
-Subject: [PATCH v2] kbuild: Make ld-version.sh more robust against version
- string changes
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="gh9N9Uw0"
+X-Envelope-To: luca.ceresoli@bootlin.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1720424745;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=6r0t4bqCeyTcKMQipHqJ13XIJ0M/NNLgBRa8TFFkq0k=;
+	b=gh9N9Uw0u8C6T2INQwENuJbySC4x56TU/bCYId7J19tXTNv2leS8YvS59ZHGfqV5iEcc2W
+	giRbXLJT0kVM9blL6cZF0eI0W/NaGwdLwsoCYd+qWtWL+ssOTOGgYIaHoZkEp8DXV+BDKD
+	QBEscHkTSbtdZ0QzmCUfJBvJe1gdrAw=
+X-Envelope-To: ojeda@kernel.org
+X-Envelope-To: robh@kernel.org
+X-Envelope-To: saravanak@google.com
+X-Envelope-To: nathan@kernel.org
+X-Envelope-To: mturquette@baylibre.com
+X-Envelope-To: sboyd@kernel.org
+X-Envelope-To: tony@atomide.com
+X-Envelope-To: andersson@kernel.org
+X-Envelope-To: emilio@elopez.com.ar
+X-Envelope-To: wens@csie.org
+X-Envelope-To: jernej.skrabec@gmail.com
+X-Envelope-To: samuel@sholland.org
+X-Envelope-To: krzk@kernel.org
+X-Envelope-To: daniel.lezcano@linaro.org
+X-Envelope-To: tglx@linutronix.de
+X-Envelope-To: florian.fainelli@broadcom.com
+X-Envelope-To: bcm-kernel-feedback-list@broadcom.com
+X-Envelope-To: linus.walleij@linaro.org
+X-Envelope-To: brgl@bgdev.pl
+X-Envelope-To: jic23@kernel.org
+X-Envelope-To: lee@kernel.org
+X-Envelope-To: shawnguo@kernel.org
+X-Envelope-To: kernel@pengutronix.de
+X-Envelope-To: ukleinek@kernel.org
+X-Envelope-To: gregkh@linuxfoundation.org
+X-Envelope-To: jirislaby@kernel.org
+X-Envelope-To: lgirdwood@gmail.com
+X-Envelope-To: broonie@kernel.org
+X-Envelope-To: nicolas.ferre@microchip.com
+X-Envelope-To: mpe@ellerman.id.au
+X-Envelope-To: npiggin@gmail.com
+X-Envelope-To: christophe.leroy@csgroup.eu
+X-Envelope-To: naveen.n.rao@linux.ibm.com
+X-Envelope-To: dlemoal@kernel.org
+X-Envelope-To: peng.fan@oss.nxp.com
+X-Envelope-To: thomas.petazzoni@bootlin.com
+X-Envelope-To: linux-kernel@vger.kernel.org
+X-Envelope-To: devicetree@vger.kernel.org
+X-Envelope-To: llvm@lists.linux.dev
+X-Envelope-To: linux-clk@vger.kernel.org
+X-Envelope-To: linux-omap@vger.kernel.org
+X-Envelope-To: linux-arm-msm@vger.kernel.org
+X-Envelope-To: linux-arm-kernel@lists.infradead.org
+X-Envelope-To: linux-sunxi@lists.linux.dev
+X-Envelope-To: linux-samsung-soc@vger.kernel.org
+X-Envelope-To: linux-gpio@vger.kernel.org
+X-Envelope-To: linux-iio@vger.kernel.org
+X-Envelope-To: linux-pwm@vger.kernel.org
+X-Envelope-To: linux-serial@vger.kernel.org
+X-Envelope-To: linux-usb@vger.kernel.org
+X-Envelope-To: patches@opensource.cirrus.com
+X-Envelope-To: linux-sound@vger.kernel.org
+X-Envelope-To: linuxppc-dev@lists.ozlabs.org
+X-Envelope-To: linux-riscv@lists.infradead.org
+Date: Mon, 8 Jul 2024 09:45:39 +0200
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Richard Leitner <richard.leitner@linux.dev>
+To: Luca Ceresoli <luca.ceresoli@bootlin.com>
+Cc: Miguel Ojeda <ojeda@kernel.org>, Rob Herring <robh@kernel.org>, 
+	Saravana Kannan <saravanak@google.com>, Nathan Chancellor <nathan@kernel.org>, 
+	Michael Turquette <mturquette@baylibre.com>, Stephen Boyd <sboyd@kernel.org>, 
+	Tony Lindgren <tony@atomide.com>, Bjorn Andersson <andersson@kernel.org>, 
+	Emilio =?utf-8?B?TMOzcGV6?= <emilio@elopez.com.ar>, Chen-Yu Tsai <wens@csie.org>, 
+	Jernej Skrabec <jernej.skrabec@gmail.com>, Samuel Holland <samuel@sholland.org>, 
+	Krzysztof Kozlowski <krzk@kernel.org>, Daniel Lezcano <daniel.lezcano@linaro.org>, 
+	Thomas Gleixner <tglx@linutronix.de>, Florian Fainelli <florian.fainelli@broadcom.com>, 
+	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>, Linus Walleij <linus.walleij@linaro.org>, 
+	Bartosz Golaszewski <brgl@bgdev.pl>, Jonathan Cameron <jic23@kernel.org>, Lee Jones <lee@kernel.org>, 
+	Shawn Guo <shawnguo@kernel.org>, Pengutronix Kernel Team <kernel@pengutronix.de>, 
+	Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <ukleinek@kernel.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	Jiri Slaby <jirislaby@kernel.org>, Liam Girdwood <lgirdwood@gmail.com>, 
+	Mark Brown <broonie@kernel.org>, Nicolas Ferre <nicolas.ferre@microchip.com>, 
+	Michael Ellerman <mpe@ellerman.id.au>, Nicholas Piggin <npiggin@gmail.com>, 
+	Christophe Leroy <christophe.leroy@csgroup.eu>, "Naveen N. Rao" <naveen.n.rao@linux.ibm.com>, 
+	Damien Le Moal <dlemoal@kernel.org>, "Peng Fan (OSS)" <peng.fan@oss.nxp.com>, 
+	Thomas Petazzoni <thomas.petazzoni@bootlin.com>, linux-kernel@vger.kernel.org, devicetree@vger.kernel.org, 
+	llvm@lists.linux.dev, linux-clk@vger.kernel.org, linux-omap@vger.kernel.org, 
+	linux-arm-msm@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+	linux-sunxi@lists.linux.dev, linux-samsung-soc@vger.kernel.org, linux-gpio@vger.kernel.org, 
+	linux-iio@vger.kernel.org, linux-pwm@vger.kernel.org, linux-serial@vger.kernel.org, 
+	linux-usb@vger.kernel.org, patches@opensource.cirrus.com, linux-sound@vger.kernel.org, 
+	linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org
+Subject: Re: [PATCH 15/20] usb: usb251xb: convert to
+ of_property_for_each_u32_new()
+Message-ID: <34bbebxag4neccfkb4isi4bx5uvi2dk446bqqmfmtru4vwbehk@hp7vufvfyon4>
+References: <20240703-of_property_for_each_u32-v1-0-42c1fc0b82aa@bootlin.com>
+ <20240703-of_property_for_each_u32-v1-15-42c1fc0b82aa@bootlin.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20240707-update-ld-version-for-new-lld-ver-str-v2-1-8f24421198c0@kernel.org>
-X-B4-Tracking: v=1; b=H4sIAOZzi2YC/5WNSw6CMBRFt0I69pm2YgiO3Adh0M8rNJKWvGLVE
- PZuwRU4PCc396wsIXlM7FatjDD75GMoIE8VM6MKA4K3hZnksuYNr+E5W7UgTBYy0r4GFwkCvmD
- 6OUgLgW5UrZzW9uoEK18zofPvo9P1hUeflkifI5vFbv8tZAECWqGNMVxy1V7uD6SA0znSwPpt2
- 7523XIW2wAAAA==
-To: Masahiro Yamada <masahiroy@kernel.org>
-Cc: Nicolas Schier <nicolas@fjasle.eu>, Fangrui Song <maskray@google.com>, 
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
- linux-kbuild@vger.kernel.org, llvm@lists.linux.dev, patches@lists.linux.dev, 
- Nathan Chancellor <nathan@kernel.org>
-X-Mailer: b4 0.15-dev
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3291; i=nathan@kernel.org;
- h=from:subject:message-id; bh=28P5DxuZtpcNeH3XINse8v/z7lEZTB6poCC+rDFkGhc=;
- b=owGbwMvMwCUmm602sfCA1DTG02pJDGndxV/kvlmIHLn2TOz1r+kBoXEfb+67lewWP32nHU+v3
- /8HGnwrO0pZGMS4GGTFFFmqH6seNzScc5bxxqlJMHNYmUCGMHBxCsBErJ8yMhy6/UH40t19dyd2
- 6Gv4aO83CX9uPlsyuYRBKlbi2WGD4k8M/6sXhCZpHfj0fNvaxFcH92XM1WvsYdjj9PBTM//tQj5
- ZIW4A
-X-Developer-Key: i=nathan@kernel.org; a=openpgp;
- fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240703-of_property_for_each_u32-v1-15-42c1fc0b82aa@bootlin.com>
+X-Migadu-Flow: FLOW_OUT
 
-After [1] in upstream LLVM, ld.lld's version output became slightly
-different when the cmake configuration option LLVM_APPEND_VC_REV is
-disabled.
+Hi Luca,
 
-Before:
+On Wed, Jul 03, 2024 at 12:36:59PM GMT, Luca Ceresoli wrote:
+> Simplify code using of_property_for_each_u32_new() as the two additional
+> parameters in of_property_for_each_u32() are not used here.
+> 
+> Signed-off-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
 
-  Debian LLD 19.0.0 (compatible with GNU linkers)
+please feel free to add:
 
-After:
+Acked-by: Richard Leitner <richard.leitner@linux.dev>
 
-  Debian LLD 19.0.0, compatible with GNU linkers
-
-This results in ld-version.sh failing with
-
-  scripts/ld-version.sh: 18: arithmetic expression: expecting EOF: "10000 * 19 + 100 * 0 + 0,"
-
-because the trailing comma is included in the patch level part of the
-expression. While [1] has been partially reverted in [2] to avoid this
-breakage (as it impacts the configuration stage and it is present in all
-LTS branches), it would be good to make ld-version.sh more robust
-against such miniscule changes like this one.
-
-Use POSIX shell parameter expansion [3] to remove the largest suffix
-after just numbers and periods, replacing of the current removal of
-everything after a hyphen. ld-version.sh continues to work for a number
-of distributions (Arch Linux, Debian, and Fedora) and the kernel.org
-toolchains and no longer errors on a version of ld.lld with [1].
-
-Fixes: 02aff8592204 ("kbuild: check the minimum linker version in Kconfig")
-Link: https://github.com/llvm/llvm-project/commit/0f9fbbb63cfcd2069441aa2ebef622c9716f8dbb [1]
-Link: https://github.com/llvm/llvm-project/commit/649cdfc4b6781a350dfc87d9b2a4b5a4c3395909 [2]
-Link: https://pubs.opengroup.org/onlinepubs/9699919799/utilities/V3_chap02.html [3]
-Suggested-by: Fangrui Song <maskray@google.com>
-Reviewed-by: Fangrui Song <maskray@google.com>
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
----
-Changes in v2:
-- Move to a pattern matching notation with remove largest suffix to
-  remove everything after just numbers and periods.
-- The LLVM change that prompted this has been partially reverted to
-  avoid this problem, so reword commit message to reflect this is being
-  done defensively. As such, remove 'Cc: stable@vger.kernel.org'. If it
-  is needed there at some point, it can just be manually backported (or
-  it will just get AUTOSEL'd).
-- Add tags for Fangrui's suggestion and review on v1.
-- Link to v1: https://lore.kernel.org/r/20240704-update-ld-version-for-new-lld-ver-str-v1-1-91bccc020a93@kernel.org
----
- scripts/ld-version.sh | 8 +++++---
- 1 file changed, 5 insertions(+), 3 deletions(-)
-
-diff --git a/scripts/ld-version.sh b/scripts/ld-version.sh
-index a78b804b680c..b9513d224476 100755
---- a/scripts/ld-version.sh
-+++ b/scripts/ld-version.sh
-@@ -57,9 +57,11 @@ else
- 	fi
- fi
- 
--# Some distributions append a package release number, as in 2.34-4.fc32
--# Trim the hyphen and any characters that follow.
--version=${version%-*}
-+# There may be something after the version, such as a distribution's package
-+# release number (like Fedora's "2.34-4.fc32") or punctuation (like LLD briefly
-+# added before the "compatible with GNU linkers" string), so remove everything
-+# after just numbers and periods.
-+version=${version%%[!0-9.]*}
- 
- cversion=$(get_canonical_version $version)
- min_cversion=$(get_canonical_version $min_version)
-
----
-base-commit: 22a40d14b572deb80c0648557f4bd502d7e83826
-change-id: 20240704-update-ld-version-for-new-lld-ver-str-b7a4afbbd5f1
-
-Best regards,
--- 
-Nathan Chancellor <nathan@kernel.org>
+> ---
+>  drivers/usb/misc/usb251xb.c | 4 +---
+>  1 file changed, 1 insertion(+), 3 deletions(-)
+> 
+> diff --git a/drivers/usb/misc/usb251xb.c b/drivers/usb/misc/usb251xb.c
+> index 7da404f55a6d..490004dbb9d8 100644
+> --- a/drivers/usb/misc/usb251xb.c
+> +++ b/drivers/usb/misc/usb251xb.c
+> @@ -382,11 +382,9 @@ static void usb251xb_get_ports_field(struct usb251xb *hub,
+>  				    bool ds_only, u8 *fld)
+>  {
+>  	struct device *dev = hub->dev;
+> -	struct property *prop;
+> -	const __be32 *p;
+>  	u32 port;
+>  
+> -	of_property_for_each_u32(dev->of_node, prop_name, prop, p, port) {
+> +	of_property_for_each_u32_new(dev->of_node, prop_name, port) {
+>  		if ((port >= ds_only ? 1 : 0) && (port <= port_cnt))
+>  			*fld |= BIT(port);
+>  		else
+> 
+> -- 
+> 2.34.1
 
