@@ -1,118 +1,62 @@
-Received: from out-185.mta1.migadu.com (out-185.mta1.migadu.com [95.215.58.185])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 93A933611E
-	for <llvm@lists.linux.dev>; Mon,  8 Jul 2024 07:45:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.185
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B7692574B;
+	Mon,  8 Jul 2024 09:15:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720424750; cv=none; b=ql7tkOHxT85jBaV1ml4atYCKECmyM0CXq/LYTCWjjzcNXop3VRK7LwW1sT/Dz3LQ81ks40lgKZH3Md1uEgcdKs9/L5vjUHJC3hhxp9ix6NU6MkJkN1ZbFLU48sXe4vcw3tEjywWi/9WeNDu5MHgzxXfDPg2kz9s8sbBnAIqcJ4E=
+	t=1720430157; cv=none; b=qFgWzjI0XYoheppo38nsQ3Flc/FwRb/yreQZ886yE5K7La5PT4qtVO+wSJU9gtEsP8uqFNaF4yEeh8G95W4qCHfJ+9LpQ1WhATsXCa4AO/4T/ROKWsBDCYqYD6gzmWoe6d8wTVavAk7Mu/w3OQgezk1RXkFn/Z8l9kY+rhR7P9Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720424750; c=relaxed/simple;
-	bh=Ctg0u/mGa+VwyDSlNuzK+P613udK8Frsp14C56Ebnqw=;
+	s=arc-20240116; t=1720430157; c=relaxed/simple;
+	bh=hgN66bAz8IkkTy8CvtHp3JUw6MLJpCYUWOaeBYIssMU=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=MyoFKImpPMGN9sOnaJ8QVsZej0C6uOujQmNd6mYfLuIcZcFzEAyefJAQdrUqXzs28ZM0V4pr/iF0nHPtakwg6hsuXJooE90kNjNAmpeReUPOtsbgYjwY34V0iqh3PW0XjizHa/1KLpn7J7RPzwHUi5/LFTq+wi26IV0FDK6pvNc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=gh9N9Uw0; arc=none smtp.client-ip=95.215.58.185
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	 Content-Type:Content-Disposition:In-Reply-To; b=sXVvPIi3tfdOK39cAoX97GG+9X2X7Vlmc90GAIuN8fsFb3yHXBESnwD9b5H6WclRRI0DBWLWVxzCNhiLa2M/HVYRqiu3vsp8B2unoo4SNSKwbbhU/uH15GWzXx9S9aNMSS1+PTwJl97NVd6H+SFI8IV9ye358l5MFlTBfKiQ6Jk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=KxY8xRGs; arc=none smtp.client-ip=198.175.65.20
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="gh9N9Uw0"
-X-Envelope-To: luca.ceresoli@bootlin.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1720424745;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=6r0t4bqCeyTcKMQipHqJ13XIJ0M/NNLgBRa8TFFkq0k=;
-	b=gh9N9Uw0u8C6T2INQwENuJbySC4x56TU/bCYId7J19tXTNv2leS8YvS59ZHGfqV5iEcc2W
-	giRbXLJT0kVM9blL6cZF0eI0W/NaGwdLwsoCYd+qWtWL+ssOTOGgYIaHoZkEp8DXV+BDKD
-	QBEscHkTSbtdZ0QzmCUfJBvJe1gdrAw=
-X-Envelope-To: ojeda@kernel.org
-X-Envelope-To: robh@kernel.org
-X-Envelope-To: saravanak@google.com
-X-Envelope-To: nathan@kernel.org
-X-Envelope-To: mturquette@baylibre.com
-X-Envelope-To: sboyd@kernel.org
-X-Envelope-To: tony@atomide.com
-X-Envelope-To: andersson@kernel.org
-X-Envelope-To: emilio@elopez.com.ar
-X-Envelope-To: wens@csie.org
-X-Envelope-To: jernej.skrabec@gmail.com
-X-Envelope-To: samuel@sholland.org
-X-Envelope-To: krzk@kernel.org
-X-Envelope-To: daniel.lezcano@linaro.org
-X-Envelope-To: tglx@linutronix.de
-X-Envelope-To: florian.fainelli@broadcom.com
-X-Envelope-To: bcm-kernel-feedback-list@broadcom.com
-X-Envelope-To: linus.walleij@linaro.org
-X-Envelope-To: brgl@bgdev.pl
-X-Envelope-To: jic23@kernel.org
-X-Envelope-To: lee@kernel.org
-X-Envelope-To: shawnguo@kernel.org
-X-Envelope-To: kernel@pengutronix.de
-X-Envelope-To: ukleinek@kernel.org
-X-Envelope-To: gregkh@linuxfoundation.org
-X-Envelope-To: jirislaby@kernel.org
-X-Envelope-To: lgirdwood@gmail.com
-X-Envelope-To: broonie@kernel.org
-X-Envelope-To: nicolas.ferre@microchip.com
-X-Envelope-To: mpe@ellerman.id.au
-X-Envelope-To: npiggin@gmail.com
-X-Envelope-To: christophe.leroy@csgroup.eu
-X-Envelope-To: naveen.n.rao@linux.ibm.com
-X-Envelope-To: dlemoal@kernel.org
-X-Envelope-To: peng.fan@oss.nxp.com
-X-Envelope-To: thomas.petazzoni@bootlin.com
-X-Envelope-To: linux-kernel@vger.kernel.org
-X-Envelope-To: devicetree@vger.kernel.org
-X-Envelope-To: llvm@lists.linux.dev
-X-Envelope-To: linux-clk@vger.kernel.org
-X-Envelope-To: linux-omap@vger.kernel.org
-X-Envelope-To: linux-arm-msm@vger.kernel.org
-X-Envelope-To: linux-arm-kernel@lists.infradead.org
-X-Envelope-To: linux-sunxi@lists.linux.dev
-X-Envelope-To: linux-samsung-soc@vger.kernel.org
-X-Envelope-To: linux-gpio@vger.kernel.org
-X-Envelope-To: linux-iio@vger.kernel.org
-X-Envelope-To: linux-pwm@vger.kernel.org
-X-Envelope-To: linux-serial@vger.kernel.org
-X-Envelope-To: linux-usb@vger.kernel.org
-X-Envelope-To: patches@opensource.cirrus.com
-X-Envelope-To: linux-sound@vger.kernel.org
-X-Envelope-To: linuxppc-dev@lists.ozlabs.org
-X-Envelope-To: linux-riscv@lists.infradead.org
-Date: Mon, 8 Jul 2024 09:45:39 +0200
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Richard Leitner <richard.leitner@linux.dev>
-To: Luca Ceresoli <luca.ceresoli@bootlin.com>
-Cc: Miguel Ojeda <ojeda@kernel.org>, Rob Herring <robh@kernel.org>, 
-	Saravana Kannan <saravanak@google.com>, Nathan Chancellor <nathan@kernel.org>, 
-	Michael Turquette <mturquette@baylibre.com>, Stephen Boyd <sboyd@kernel.org>, 
-	Tony Lindgren <tony@atomide.com>, Bjorn Andersson <andersson@kernel.org>, 
-	Emilio =?utf-8?B?TMOzcGV6?= <emilio@elopez.com.ar>, Chen-Yu Tsai <wens@csie.org>, 
-	Jernej Skrabec <jernej.skrabec@gmail.com>, Samuel Holland <samuel@sholland.org>, 
-	Krzysztof Kozlowski <krzk@kernel.org>, Daniel Lezcano <daniel.lezcano@linaro.org>, 
-	Thomas Gleixner <tglx@linutronix.de>, Florian Fainelli <florian.fainelli@broadcom.com>, 
-	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>, Linus Walleij <linus.walleij@linaro.org>, 
-	Bartosz Golaszewski <brgl@bgdev.pl>, Jonathan Cameron <jic23@kernel.org>, Lee Jones <lee@kernel.org>, 
-	Shawn Guo <shawnguo@kernel.org>, Pengutronix Kernel Team <kernel@pengutronix.de>, 
-	Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <ukleinek@kernel.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	Jiri Slaby <jirislaby@kernel.org>, Liam Girdwood <lgirdwood@gmail.com>, 
-	Mark Brown <broonie@kernel.org>, Nicolas Ferre <nicolas.ferre@microchip.com>, 
-	Michael Ellerman <mpe@ellerman.id.au>, Nicholas Piggin <npiggin@gmail.com>, 
-	Christophe Leroy <christophe.leroy@csgroup.eu>, "Naveen N. Rao" <naveen.n.rao@linux.ibm.com>, 
-	Damien Le Moal <dlemoal@kernel.org>, "Peng Fan (OSS)" <peng.fan@oss.nxp.com>, 
-	Thomas Petazzoni <thomas.petazzoni@bootlin.com>, linux-kernel@vger.kernel.org, devicetree@vger.kernel.org, 
-	llvm@lists.linux.dev, linux-clk@vger.kernel.org, linux-omap@vger.kernel.org, 
-	linux-arm-msm@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	linux-sunxi@lists.linux.dev, linux-samsung-soc@vger.kernel.org, linux-gpio@vger.kernel.org, 
-	linux-iio@vger.kernel.org, linux-pwm@vger.kernel.org, linux-serial@vger.kernel.org, 
-	linux-usb@vger.kernel.org, patches@opensource.cirrus.com, linux-sound@vger.kernel.org, 
-	linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org
-Subject: Re: [PATCH 15/20] usb: usb251xb: convert to
- of_property_for_each_u32_new()
-Message-ID: <34bbebxag4neccfkb4isi4bx5uvi2dk446bqqmfmtru4vwbehk@hp7vufvfyon4>
-References: <20240703-of_property_for_each_u32-v1-0-42c1fc0b82aa@bootlin.com>
- <20240703-of_property_for_each_u32-v1-15-42c1fc0b82aa@bootlin.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="KxY8xRGs"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1720430156; x=1751966156;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=hgN66bAz8IkkTy8CvtHp3JUw6MLJpCYUWOaeBYIssMU=;
+  b=KxY8xRGsbd3BfyVE/R2N5+YRZGwtBnkkRG4HvzhVf3SBWU1oyIhqzt7Y
+   73eq7M+pCMgTff/EMQJTDuHQaKhj/mo5TxvhP0rUVEn/chKtu4WrijXRg
+   VbfJtrCoBiZOQzBMa1lW0+xL08SfaRhQs0HLfljiMBm4JFtTZuE5p+twm
+   yhjLF35orJVhFCO25aH12kPzMtEddz3ehXl/DSneCUEeWFLHjgHLPrAA5
+   K3U8I7ToWufxaFnYJgbJjGn/YhtG2aQlnOHLTWnqIDS2yW0Wjf2EM8s/d
+   2V58eGuPeRKMgjRTzMC0NryvNOJwtmfiVlylRGEJuyOa01zaBcjzn+noe
+   Q==;
+X-CSE-ConnectionGUID: F8NybuMGTT2LG68/Yb6UYg==
+X-CSE-MsgGUID: 19RpCPfRRDyY3nCVZ0qlEg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11126"; a="17437023"
+X-IronPort-AV: E=Sophos;i="6.09,191,1716274800"; 
+   d="scan'208";a="17437023"
+Received: from fmviesa002.fm.intel.com ([10.60.135.142])
+  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jul 2024 02:15:55 -0700
+X-CSE-ConnectionGUID: GrQZXYTkQeW7szw5V2SzlQ==
+X-CSE-MsgGUID: 5eqphG5pS+y70DV+Iv/DwA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.09,191,1716274800"; 
+   d="scan'208";a="70652136"
+Received: from lkp-server01.sh.intel.com (HELO 68891e0c336b) ([10.239.97.150])
+  by fmviesa002.fm.intel.com with ESMTP; 08 Jul 2024 02:15:52 -0700
+Received: from kbuild by 68891e0c336b with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1sQkTO-000Ve0-01;
+	Mon, 08 Jul 2024 09:15:50 +0000
+Date: Mon, 8 Jul 2024 17:15:42 +0800
+From: kernel test robot <lkp@intel.com>
+To: Cindy Lu <lulu@redhat.com>, dtatulea@nvidia.com, mst@redhat.com,
+	jasowang@redhat.com, parav@nvidia.com, sgarzare@redhat.com,
+	netdev@vger.kernel.org, virtualization@lists.linux-foundation.org,
+	linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: Re: [PATCH v3 1/2] vdpa: support set mac address from vdpa tool
+Message-ID: <202407081733.FCiMubD8-lkp@intel.com>
+References: <20240708064820.88955-2-lulu@redhat.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -121,43 +65,142 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240703-of_property_for_each_u32-v1-15-42c1fc0b82aa@bootlin.com>
-X-Migadu-Flow: FLOW_OUT
+In-Reply-To: <20240708064820.88955-2-lulu@redhat.com>
 
-Hi Luca,
+Hi Cindy,
 
-On Wed, Jul 03, 2024 at 12:36:59PM GMT, Luca Ceresoli wrote:
-> Simplify code using of_property_for_each_u32_new() as the two additional
-> parameters in of_property_for_each_u32() are not used here.
-> 
-> Signed-off-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
+kernel test robot noticed the following build warnings:
 
-please feel free to add:
+[auto build test WARNING on linus/master]
+[also build test WARNING on horms-ipvs/master v6.10-rc7 next-20240703]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Acked-by: Richard Leitner <richard.leitner@linux.dev>
+url:    https://github.com/intel-lab-lkp/linux/commits/Cindy-Lu/vdpa-support-set-mac-address-from-vdpa-tool/20240708-144942
+base:   linus/master
+patch link:    https://lore.kernel.org/r/20240708064820.88955-2-lulu%40redhat.com
+patch subject: [PATCH v3 1/2] vdpa: support set mac address from vdpa tool
+config: i386-buildonly-randconfig-005-20240708 (https://download.01.org/0day-ci/archive/20240708/202407081733.FCiMubD8-lkp@intel.com/config)
+compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240708/202407081733.FCiMubD8-lkp@intel.com/reproduce)
 
-> ---
->  drivers/usb/misc/usb251xb.c | 4 +---
->  1 file changed, 1 insertion(+), 3 deletions(-)
-> 
-> diff --git a/drivers/usb/misc/usb251xb.c b/drivers/usb/misc/usb251xb.c
-> index 7da404f55a6d..490004dbb9d8 100644
-> --- a/drivers/usb/misc/usb251xb.c
-> +++ b/drivers/usb/misc/usb251xb.c
-> @@ -382,11 +382,9 @@ static void usb251xb_get_ports_field(struct usb251xb *hub,
->  				    bool ds_only, u8 *fld)
->  {
->  	struct device *dev = hub->dev;
-> -	struct property *prop;
-> -	const __be32 *p;
->  	u32 port;
->  
-> -	of_property_for_each_u32(dev->of_node, prop_name, prop, p, port) {
-> +	of_property_for_each_u32_new(dev->of_node, prop_name, port) {
->  		if ((port >= ds_only ? 1 : 0) && (port <= port_cnt))
->  			*fld |= BIT(port);
->  		else
-> 
-> -- 
-> 2.34.1
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202407081733.FCiMubD8-lkp@intel.com/
 
+All warnings (new ones prefixed by >>):
+
+>> drivers/vdpa/vdpa.c:1377:6: warning: variable 'err' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
+    1377 |         if ((mdev->supported_features & BIT_ULL(VIRTIO_NET_F_MAC)) &&
+         |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    1378 |             nl_attrs[VDPA_ATTR_DEV_NET_CFG_MACADDR]) {
+         |             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/vdpa/vdpa.c:1394:9: note: uninitialized use occurs here
+    1394 |         return err;
+         |                ^~~
+   drivers/vdpa/vdpa.c:1377:2: note: remove the 'if' if its condition is always true
+    1377 |         if ((mdev->supported_features & BIT_ULL(VIRTIO_NET_F_MAC)) &&
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    1378 |             nl_attrs[VDPA_ATTR_DEV_NET_CFG_MACADDR]) {
+         |             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>> drivers/vdpa/vdpa.c:1377:6: warning: variable 'err' is used uninitialized whenever '&&' condition is false [-Wsometimes-uninitialized]
+    1377 |         if ((mdev->supported_features & BIT_ULL(VIRTIO_NET_F_MAC)) &&
+         |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/vdpa/vdpa.c:1394:9: note: uninitialized use occurs here
+    1394 |         return err;
+         |                ^~~
+   drivers/vdpa/vdpa.c:1377:6: note: remove the '&&' if its condition is always true
+    1377 |         if ((mdev->supported_features & BIT_ULL(VIRTIO_NET_F_MAC)) &&
+         |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/vdpa/vdpa.c:1371:9: note: initialize the variable 'err' to silence this warning
+    1371 |         int err;
+         |                ^
+         |                 = 0
+   2 warnings generated.
+
+
+vim +1377 drivers/vdpa/vdpa.c
+
+  1363	
+  1364	static int vdpa_dev_net_device_attr_set(struct vdpa_device *vdev,
+  1365						struct genl_info *info)
+  1366	{
+  1367		struct vdpa_dev_set_config set_config = {};
+  1368		const u8 *macaddr;
+  1369		struct vdpa_mgmt_dev *mdev = vdev->mdev;
+  1370		struct nlattr **nl_attrs = info->attrs;
+  1371		int err;
+  1372	
+  1373		if (!vdev->mdev)
+  1374			return -EINVAL;
+  1375	
+  1376		down_write(&vdev->cf_lock);
+> 1377		if ((mdev->supported_features & BIT_ULL(VIRTIO_NET_F_MAC)) &&
+  1378		    nl_attrs[VDPA_ATTR_DEV_NET_CFG_MACADDR]) {
+  1379			set_config.mask |= BIT_ULL(VDPA_ATTR_DEV_NET_CFG_MACADDR);
+  1380			macaddr = nla_data(nl_attrs[VDPA_ATTR_DEV_NET_CFG_MACADDR]);
+  1381			memcpy(set_config.net.mac, macaddr, ETH_ALEN);
+  1382	
+  1383			if (mdev->ops->dev_set_attr) {
+  1384				err = mdev->ops->dev_set_attr(mdev, vdev, &set_config);
+  1385			} else {
+  1386				NL_SET_ERR_MSG_FMT_MOD(info->extack,
+  1387						       "features 0x%llx not supported",
+  1388						       BIT_ULL(VIRTIO_NET_F_MAC));
+  1389				err = -EINVAL;
+  1390			}
+  1391		}
+  1392		up_write(&vdev->cf_lock);
+  1393	
+  1394		return err;
+  1395	}
+  1396	static int vdpa_nl_cmd_dev_attr_set_doit(struct sk_buff *skb,
+  1397						 struct genl_info *info)
+  1398	{
+  1399		const char *name;
+  1400		int err = 0;
+  1401		struct device *dev;
+  1402		struct vdpa_device *vdev;
+  1403		u64 classes;
+  1404	
+  1405		if (!info->attrs[VDPA_ATTR_DEV_NAME])
+  1406			return -EINVAL;
+  1407	
+  1408		name = nla_data(info->attrs[VDPA_ATTR_DEV_NAME]);
+  1409	
+  1410		down_write(&vdpa_dev_lock);
+  1411		dev = bus_find_device(&vdpa_bus, NULL, name, vdpa_name_match);
+  1412		if (!dev) {
+  1413			NL_SET_ERR_MSG_MOD(info->extack, "device not found");
+  1414			err = -ENODEV;
+  1415			goto dev_err;
+  1416		}
+  1417		vdev = container_of(dev, struct vdpa_device, dev);
+  1418		if (!vdev->mdev) {
+  1419			NL_SET_ERR_MSG_MOD(
+  1420				info->extack,
+  1421				"Fail to find the specified management device");
+  1422			err = -EINVAL;
+  1423			goto mdev_err;
+  1424		}
+  1425		classes = vdpa_mgmtdev_get_classes(vdev->mdev, NULL);
+  1426		if (classes & BIT_ULL(VIRTIO_ID_NET)) {
+  1427			err = vdpa_dev_net_device_attr_set(vdev, info);
+  1428		} else {
+  1429			NL_SET_ERR_MSG_FMT_MOD(info->extack, "%s device not supported",
+  1430					       name);
+  1431		}
+  1432	
+  1433	mdev_err:
+  1434		put_device(dev);
+  1435	dev_err:
+  1436		up_write(&vdpa_dev_lock);
+  1437		return err;
+  1438	}
+  1439	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
