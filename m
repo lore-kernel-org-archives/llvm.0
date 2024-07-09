@@ -1,57 +1,57 @@
-Received: from mail-qk1-f176.google.com (mail-qk1-f176.google.com [209.85.222.176])
+Received: from mail-qk1-f181.google.com (mail-qk1-f181.google.com [209.85.222.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DAA3517B023
-	for <llvm@lists.linux.dev>; Tue,  9 Jul 2024 17:39:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D9C1117B046
+	for <llvm@lists.linux.dev>; Tue,  9 Jul 2024 17:39:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720546783; cv=none; b=d5ik7VkatZ7eZ8y5ggyx81+zxiVrfqWHIrkUh55gbe+B1ni7BmsfyxrMAw1pPCKOzTJ7aN+0eQ5Wmwyim4eNxpJ/p3JS9DYTngsCLh9P/d5c2HEkMd0ti5Z1TxJRBLKPi1K+4WyiYvN2wuC1Un2abO6rYiN6aYRlNxHUaervYVE=
+	t=1720546785; cv=none; b=OlamjD6AiLEutWgrc5Z/YOhkwq6YbutynW5zZr7osVNWEzA2z0Zme4nu1GZ9Qo8aMbBuT/Gjn1YjaiRB7Ur2Rdfi/rSwGmc9/8xI9Co/lKSw0mRW4jBb0xF9VjfwGw5zLn6DcpHX3I/ogmS/5k4PoGRWHetRQr+WksPqivqsLFE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720546783; c=relaxed/simple;
-	bh=MjG0wx0U38uUII74AFjua/T8NeFZTe9VZSo8JReQo/s=;
+	s=arc-20240116; t=1720546785; c=relaxed/simple;
+	bh=iZR0NGWR5vQW1Y6XAHVII3rqckWYwV27vJBs+YmWQHY=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Kpt9j/7MZMBBapijLeRWuIEa8ogvI4iepQdGjYkYRiRaZcHGW3oewbjgpp4JUkJrsYsZTuZRpKei5fS4Mj9cmKJl3M/qBIr06ollzOmDZRANdi+lOphJyDYZNCabDK7Ujo+7JllGFxybTcROneSQAio/XoVbKbB71w0RrLb7z6g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=oqweYM9Q; arc=none smtp.client-ip=209.85.222.176
+	 MIME-Version; b=XTNgdKwpNlV5TCExMrEO/pczyI2mo/bPUF5K+BQS2z+rf2DBZP1PLAWugxw3zO6HRDA4WYvp0yc4L5+lHKu+NGyYRJ0AAICqpkn/X57WB4uh3ZCwQNYQO3xGdD0iBSYY4bPY/5/82dQPgUy+aXwlgPw8+eKgSYlQ0wkmxpjl5Ec=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=M3sMJIgU; arc=none smtp.client-ip=209.85.222.181
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="oqweYM9Q"
-Received: by mail-qk1-f176.google.com with SMTP id af79cd13be357-79f1828ed64so103346085a.1
-        for <llvm@lists.linux.dev>; Tue, 09 Jul 2024 10:39:41 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="M3sMJIgU"
+Received: by mail-qk1-f181.google.com with SMTP id af79cd13be357-79f08b01ba6so246825485a.0
+        for <llvm@lists.linux.dev>; Tue, 09 Jul 2024 10:39:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1720546781; x=1721151581; darn=lists.linux.dev;
+        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1720546782; x=1721151582; darn=lists.linux.dev;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Bs+9F/AX0q+LBs1CELfWwb/nqSLPDtCG32+ZAsR7dQo=;
-        b=oqweYM9QlB31YKoMLX7CuK9bccfTl7SOGsfIIBxYzriC8K/Q2C58yiYumSpvcQwkdr
-         nIy9LSO9Ufngic7Rnlzrg4juTpOFnEkiSb3NswTnhdtus434IDtGtqjqVbPCTuN7mycq
-         Hj+H4FDY1HWQhNzuwPr81/0mx9DW/p/See0Mj2xYrSY1JpRMlo//3MbhpuVaBR5mulU1
-         3LR6ddeZ3SMxl21oLpVG3FgUK6uPXXdqBDSUCpxX03lKlDOqHWQyKvwGr/Bfy+P1vy/E
-         xAQtDu1XAEhLt8qeceYYpvvj5Vcks35gbN4H7S9JEXVRbys0PzvVbUnG3l/xlFNoyvNR
-         DezQ==
+        bh=oe7d24KWB8rzk++ulHp+tuuvOpse+BwjRMWl/Nf52L0=;
+        b=M3sMJIgURAfHpik/nS2rteGErKU1mR2x0QsX73auIK9gXOePxasvT9LuhbSlYmb4le
+         4lLzy3CNsDWBHuuCyCBAZ8T9QgrRdicfVN+Ry2VAvesRjigG0JnhBf9OvuCl0uHK2VEV
+         qLfBqI9WdLHUNjSTq7X6n6/aMU0bm7IONNQbrMN/GUisD2UiU/XlbeXZ87KqUlCq4Gxh
+         QwtdBZs/KliOnuq+w9osMRe+5SrPbdcIPviRx2O+bs5HWCOqNa42S0pxzEn9flzWNopX
+         jZAfyUcgrhoBc0OnsxXQxJetiUa0D+KYPcLOstS12ZfHC/4A7usC/hsaRs0Chg9eQjWC
+         eaxA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1720546781; x=1721151581;
+        d=1e100.net; s=20230601; t=1720546782; x=1721151582;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=Bs+9F/AX0q+LBs1CELfWwb/nqSLPDtCG32+ZAsR7dQo=;
-        b=T2M/Tlk58lgg0watFR/fQv8D/kZJL/XCGZ4XIO6i27SQa0RRV4ib3KtMH4yh30O9c7
-         fYMFcTqa4Clln/Iw3Z9j4MmmY2q+QWsAmRkTgWTRdus9ne3845Dj7hTPB22eMzmdcJqV
-         /n5iGHx9rQiipW5nORbfDHXMsRIJF+WlIfHKys8p91gNB2ZnR+Vp+VdBqrPmd9aQheEC
-         DAaLLI2ld7XJUHWP5gYBMSOPmcJ6S8jnrYWZmc9nmbhk72/fs1FrUqY/73ppjPVrzYc5
-         8wxLJvPVRx5Vg/anVcIUu7S8Owqg/nQnU7rjtqQfBzFFAPUwc2HR/gC4h3Bi4gf0PAsi
-         TaBA==
-X-Forwarded-Encrypted: i=1; AJvYcCUO5EOhDHVAxZ8NwCKCsa5baEH7H7WtOzfB4nkfdoyePN1mBrcS1VdZ71NYc4KCzDUO40T4LDVgSwGkx3nrTGOzx+sUfg==
-X-Gm-Message-State: AOJu0Yw+bdUGcxQkJgJ8a05kg4gDiFCRD5xIMUoXkIVydzSC9aTFmIAy
-	gnZrky+dyDGy7hJVgXGQ28ojadiEZlmNuzfuWC8za8+iGnxkVG69hR82dkKtXYM=
-X-Google-Smtp-Source: AGHT+IF5vRwH3MAJLaUEo4+iqmQHIG8YR3UCz6IbvA0rf0+v0uyHD1q0n/vo2ks9owSgX2DYVwobqQ==
-X-Received: by 2002:a05:620a:3b89:b0:79e:f7ea:2df4 with SMTP id af79cd13be357-79f19a5fd69mr325013085a.19.1720546780865;
-        Tue, 09 Jul 2024 10:39:40 -0700 (PDT)
+        bh=oe7d24KWB8rzk++ulHp+tuuvOpse+BwjRMWl/Nf52L0=;
+        b=wtF6emMGaLwAJk0Fm/rFwezI9u2oKK14Z5M4rypn9MfX35Dsd1uGJzbCMIfGRj8opV
+         z5xFiqSw8ImOdOm4vUaSQxqdRoPiQG7WkWngL6MLBlYOvR8EjVX3ap/IwXZ2LWXjWRGr
+         6opgEEmkkYHcQfH2pkoRux1jeuUVNXOpst9m932zVGJxD/tO1E7ikixnlca3KM8YbtDK
+         KAV1utCPRWKbbKbckoxYTytvt4Hdm0YX7WAt5vbFBD8yjBaoO8lNKdvsqFef/h2fNpWe
+         xzONJ7vXuuwXmLzdaxd3dE07T2dinymNGa6rCH02aa8WE64UtovUWt/S4AMrC0ppzwUh
+         R2vg==
+X-Forwarded-Encrypted: i=1; AJvYcCXDZvw9k59YiSpI+FsHaftE5yiNC7yAtQNFKfQPtVLyuAJLa0lbKZ+iML9+L7DE2PlJmtf22iQkLMnjK2WKG6vGm0/CPw==
+X-Gm-Message-State: AOJu0YxY+Q06/k3gehyWg9DSkYuBtt3Dm0Lz04gcOXPdeE0UlXo4VB6f
+	iDRM4vmcunBZEUxQGzy8YeK4eGHN6jZQJoorVcZptYKKEoe0RdtBETN/s8tZ7ig=
+X-Google-Smtp-Source: AGHT+IGWO7bA4cK6KdAEt99qo/k1Gyg+6RZq4MQ67Cvy2nU3f5DYdGmozbUGc4IeTVAirQbmHO6UsQ==
+X-Received: by 2002:ae9:e411:0:b0:79f:1bb:e7e6 with SMTP id af79cd13be357-79f1b5a9a89mr506394585a.18.1720546781921;
+        Tue, 09 Jul 2024 10:39:41 -0700 (PDT)
 Received: from jesse-desktop.. (pool-108-26-179-17.bstnma.fios.verizon.net. [108.26.179.17])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-79f18ff6762sm117547785a.10.2024.07.09.10.39.39
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-79f18ff6762sm117547785a.10.2024.07.09.10.39.41
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 09 Jul 2024 10:39:40 -0700 (PDT)
+        Tue, 09 Jul 2024 10:39:41 -0700 (PDT)
 From: Jesse Taube <jesse@rivosinc.com>
 To: linux-riscv@lists.infradead.org
 Cc: Ard Biesheuvel <ardb@kernel.org>,
@@ -76,9 +76,9 @@ Cc: Ard Biesheuvel <ardb@kernel.org>,
 	linux-kernel@vger.kernel.org,
 	llvm@lists.linux.dev,
 	Charlie Jenkins <charlie@rivosinc.com>
-Subject: [PATCH v4 2/4] RISC-V: lib: Add pi aliases for string functions
-Date: Tue,  9 Jul 2024 13:39:35 -0400
-Message-ID: <20240709173937.510084-3-jesse@rivosinc.com>
+Subject: [PATCH v4 3/4] RISC-V: pi: Add kernel/pi/pi.h
+Date: Tue,  9 Jul 2024 13:39:36 -0400
+Message-ID: <20240709173937.510084-4-jesse@rivosinc.com>
 X-Mailer: git-send-email 2.45.2
 In-Reply-To: <20240709173937.510084-1-jesse@rivosinc.com>
 References: <20240709173937.510084-1-jesse@rivosinc.com>
@@ -90,54 +90,89 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-memset, strcmp, and strncmp are all used in the __pi_ section,
-add SYM_FUNC_ALIAS for them.
-
-When KASAN is enabled in <asm/string.h> __pi___memset is also needed.
+Add pi.h header for declarations of the kernel/pi prefixed functions
+and any other related declarations.
 
 Suggested-by: Charlie Jenkins <charlie@rivosinc.com>
 Signed-off-by: Jesse Taube <jesse@rivosinc.com>
-Reviewed-by: Charlie Jenkins <charlie@rivosinc.com>
 Reviewed-by: Alexandre Ghiti <alexghiti@rivosinc.com>
 ---
-V2 -> V3:
+V1 -> V2:
  - New patch
+V2 -> V3:
+ - Spelling
 V3 -> V4:
- - Fix duplicate the in commit message
+ - No changes
 ---
- arch/riscv/lib/memset.S  | 2 ++
- arch/riscv/lib/strcmp.S  | 1 +
- arch/riscv/lib/strncmp.S | 1 +
- 3 files changed, 4 insertions(+)
+ arch/riscv/kernel/pi/cmdline_early.c | 10 ++--------
+ arch/riscv/kernel/pi/fdt_early.c     |  7 +------
+ arch/riscv/kernel/pi/pi.h            | 17 +++++++++++++++++
+ 3 files changed, 20 insertions(+), 14 deletions(-)
+ create mode 100644 arch/riscv/kernel/pi/pi.h
 
-diff --git a/arch/riscv/lib/memset.S b/arch/riscv/lib/memset.S
-index 35f358e70bdb..da23b8347e2d 100644
---- a/arch/riscv/lib/memset.S
-+++ b/arch/riscv/lib/memset.S
-@@ -111,3 +111,5 @@ SYM_FUNC_START(__memset)
- 	ret
- SYM_FUNC_END(__memset)
- SYM_FUNC_ALIAS_WEAK(memset, __memset)
-+SYM_FUNC_ALIAS(__pi_memset, __memset)
-+SYM_FUNC_ALIAS(__pi___memset, __memset)
-diff --git a/arch/riscv/lib/strcmp.S b/arch/riscv/lib/strcmp.S
-index 687b2bea5c43..bc73325b2fd1 100644
---- a/arch/riscv/lib/strcmp.S
-+++ b/arch/riscv/lib/strcmp.S
-@@ -120,3 +120,4 @@ strcmp_zbb:
- .option pop
- #endif
- SYM_FUNC_END(strcmp)
-+SYM_FUNC_ALIAS(__pi_strcmp, strcmp)
-diff --git a/arch/riscv/lib/strncmp.S b/arch/riscv/lib/strncmp.S
-index aba5b3148621..b36325a57f6a 100644
---- a/arch/riscv/lib/strncmp.S
-+++ b/arch/riscv/lib/strncmp.S
-@@ -136,3 +136,4 @@ strncmp_zbb:
- .option pop
- #endif
- SYM_FUNC_END(strncmp)
-+SYM_FUNC_ALIAS(__pi_strncmp, strncmp)
+diff --git a/arch/riscv/kernel/pi/cmdline_early.c b/arch/riscv/kernel/pi/cmdline_early.c
+index f6d4dedffb84..fbcdc9e4e143 100644
+--- a/arch/riscv/kernel/pi/cmdline_early.c
++++ b/arch/riscv/kernel/pi/cmdline_early.c
+@@ -6,15 +6,9 @@
+ #include <asm/pgtable.h>
+ #include <asm/setup.h>
+ 
+-static char early_cmdline[COMMAND_LINE_SIZE];
++#include "pi.h"
+ 
+-/*
+- * Declare the functions that are exported (but prefixed) here so that LLVM
+- * does not complain it lacks the 'static' keyword (which, if added, makes
+- * LLVM complain because the function is actually unused in this file).
+- */
+-u64 set_satp_mode_from_cmdline(uintptr_t dtb_pa);
+-bool set_nokaslr_from_cmdline(uintptr_t dtb_pa);
++static char early_cmdline[COMMAND_LINE_SIZE];
+ 
+ static char *get_early_cmdline(uintptr_t dtb_pa)
+ {
+diff --git a/arch/riscv/kernel/pi/fdt_early.c b/arch/riscv/kernel/pi/fdt_early.c
+index 899610e042ab..40ee299702bf 100644
+--- a/arch/riscv/kernel/pi/fdt_early.c
++++ b/arch/riscv/kernel/pi/fdt_early.c
+@@ -3,12 +3,7 @@
+ #include <linux/init.h>
+ #include <linux/libfdt.h>
+ 
+-/*
+- * Declare the functions that are exported (but prefixed) here so that LLVM
+- * does not complain it lacks the 'static' keyword (which, if added, makes
+- * LLVM complain because the function is actually unused in this file).
+- */
+-u64 get_kaslr_seed(uintptr_t dtb_pa);
++#include "pi.h"
+ 
+ u64 get_kaslr_seed(uintptr_t dtb_pa)
+ {
+diff --git a/arch/riscv/kernel/pi/pi.h b/arch/riscv/kernel/pi/pi.h
+new file mode 100644
+index 000000000000..493c8cb7c0e6
+--- /dev/null
++++ b/arch/riscv/kernel/pi/pi.h
+@@ -0,0 +1,17 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++#ifndef _RISCV_PI_H_
++#define _RISCV_PI_H_
++
++#include <linux/types.h>
++
++/*
++ * The following functions are exported (but prefixed). Declare them here so
++ * that LLVM does not complain it lacks the 'static' keyword (which, if
++ * added, makes LLVM complain because the function is unused).
++ */
++
++u64 get_kaslr_seed(uintptr_t dtb_pa);
++bool set_nokaslr_from_cmdline(uintptr_t dtb_pa);
++u64 set_satp_mode_from_cmdline(uintptr_t dtb_pa);
++
++#endif /* _RISCV_PI_H_ */
 -- 
 2.45.2
 
