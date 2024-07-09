@@ -1,56 +1,56 @@
-Received: from mail-io1-f47.google.com (mail-io1-f47.google.com [209.85.166.47])
+Received: from mail-io1-f41.google.com (mail-io1-f41.google.com [209.85.166.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B4BC15FB8A
-	for <llvm@lists.linux.dev>; Tue,  9 Jul 2024 20:51:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C61965FB8A
+	for <llvm@lists.linux.dev>; Tue,  9 Jul 2024 20:55:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720558303; cv=none; b=jqpdBL58vYSnlLy3dTrU/30FlJu/EPsuVP7ODv1mUuWMZ6oThRVEHecn6hH0KU+p7zbAAcvcdGDl46xFXsKceTaODIUO9FJYzLLdsZh7yG66ODf1jFpfivICDYeB10QdTlD/hWM6RAQ18JowyFfHEkUsZdrKs01t+bfHqMAxSOg=
+	t=1720558514; cv=none; b=tPp3HJGonZcezYms2vi05CY2AAQ/h12VAPCPm7sh/J9clWtQNZFHQn/nD+ZzEMm6PA0g/xuSniYFeBDMNcqZWarvD3ua8qHhhA+2PEtazILw9MaOdkGGb7qIzkmsVY93ySKjTkrb4TDgAnj/YVkUGFxpqw/z/G5QBDY9dXBlSIg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720558303; c=relaxed/simple;
-	bh=UIhfklEojLDQfKqDzlwiV+qYzjKtVVw9UeAmeQy8piY=;
+	s=arc-20240116; t=1720558514; c=relaxed/simple;
+	bh=o+kjmggQJg9k2C51wKggJKaDqzA0Rap7ZoYOuaO1xOo=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=IAIn7Tbr3XeKRhFJtWB0t4E7/SieSuG9zusnTSOTMhK0w8DDyct7h7apUBDaUtkOToJNuA1/Xj8xgefoqVffYlarfdE6eD5+/FbcljtDhIrILTUXYCs52VYxBl9ycpzl5QLWhHkY8IJFVB8neNoQGrm1GcRIheK2fA/PFJ6ywiY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=Mdl+/L/B; arc=none smtp.client-ip=209.85.166.47
+	 In-Reply-To:Content-Type; b=vDS95/Jmp+3ZmtujUiHvGv4mOxHrEmovg0nJDeilvVnyc0r6yfDTIGi0AIR1xr7nwImIhecTOCw/Gi/PddG0vpWedfsvmDa6EeHjgO593GiO5vA7BiYa7JEXDvUGbh+3/Tq0f7qGEUPyUFoOFG7ZjK/eKHuBRtN5Cyiuc+vqlcI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=ZXHc0H6g; arc=none smtp.client-ip=209.85.166.41
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="Mdl+/L/B"
-Received: by mail-io1-f47.google.com with SMTP id ca18e2360f4ac-7f7c41f1bb5so9066839f.3
-        for <llvm@lists.linux.dev>; Tue, 09 Jul 2024 13:51:41 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="ZXHc0H6g"
+Received: by mail-io1-f41.google.com with SMTP id ca18e2360f4ac-7f906800b4cso10082739f.3
+        for <llvm@lists.linux.dev>; Tue, 09 Jul 2024 13:55:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1720558301; x=1721163101; darn=lists.linux.dev;
+        d=linuxfoundation.org; s=google; t=1720558512; x=1721163312; darn=lists.linux.dev;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=UIhfklEojLDQfKqDzlwiV+qYzjKtVVw9UeAmeQy8piY=;
-        b=Mdl+/L/BUB8Or+YN7IGxp1TraU9tbMHQnZ3FieDiTT4yIhU3xa2WZqRPFB5aRo6R0h
-         0PPYdGWuZDeYGTEKkniIkIC7Wuj/zyeETWVUrMxgGguV+aQb0A4IdroDmadauZ1Hq1Fv
-         EvB2KKPwc6fDcjt7Of6NwTKOjGkqE6O9lAvTQ=
+        bh=ojllmUSpZm6yrskg60MuCouRkTNtpmyHnalLRc4XlN0=;
+        b=ZXHc0H6gpaiaYC+0Mvy6KnenTsBYIJUnjIJh/MVRFIC2q9TtaPD1aOFKAqwt5eh+Rr
+         /M5HoUXWj7nPo/WVFxx3W55eTXINlmq7Wi8M19XIZyfR9f0A8Y9gkjEy9pxxFuEJzyiq
+         50VUMYJXGdYs2zXpFNkA8UhRwZiKLyUb6FYnA=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1720558301; x=1721163101;
+        d=1e100.net; s=20230601; t=1720558512; x=1721163312;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=UIhfklEojLDQfKqDzlwiV+qYzjKtVVw9UeAmeQy8piY=;
-        b=ukCJppykvIgC3IjVMsV3/cxGNKMsqE+s7abHBN0tx7+/NHc8dekxtkPdDsv8qEZKV3
-         X0wDO8XP/HaT7S+4YngzNQJjyxkT3k6OhXsypMSwrx+spVtQ2cU9gyes+5XseAdrzfIE
-         kYeD+cW30vJwM/W0QVa3vhEBF4Pqv9PKidcG9cxD7P6G7AbtyBKqOwHlsnOvIbc8//t2
-         bJtoZWFFm0coN6Wn9RS1KNijPlGzJljhxZ86KSME9RbJ5siLYgB38sZWf2C6a9LWsk5m
-         GFGHyx8pUTWG+NhNG4dIHrEo0xZB7EooFahxaLt/nNe2wkq4z+aNYVRt4nABlyRP3tJn
-         unwA==
-X-Forwarded-Encrypted: i=1; AJvYcCVktmZumLyszTkWmowUXagzUtdpTeRdc6rAvPYAbAOMB9LpZ+DB3e+WFVVmJtWlCJ9fzfVs6ht67E5RcprxKV1SW5XD3Q==
-X-Gm-Message-State: AOJu0Yy2buOzXsivFJgO3OdSiWkcaNJM5CjlVS2DfTjPkja1WloO5+rL
-	uIXNWE0tOd2qz09yPJbB5UoislUpUO2yxZHzYVsLkhITJwNg66iMM70SNZRl9AE=
-X-Google-Smtp-Source: AGHT+IEqMVN2v6iXfRRRelBibAQXZalOQUm9pKB32R2RN8hexYBdUR2mGYYnXtQP1/9U74HqyIxrgg==
-X-Received: by 2002:a05:6602:3413:b0:7f9:90c5:4107 with SMTP id ca18e2360f4ac-800023b5fdcmr489122939f.1.1720558300852;
-        Tue, 09 Jul 2024 13:51:40 -0700 (PDT)
+        bh=ojllmUSpZm6yrskg60MuCouRkTNtpmyHnalLRc4XlN0=;
+        b=IiDcKamunuPZ1j0lzyxYSiiz+StIC2fB4F2n7d0AUeAS60vLRVrrZy7NxAtKR4mAtM
+         8qb3iw6zhNvQiKtfNKRieMJBLzXVvMcQnKnjze7XlRFN0609SroAx398p6yzUZfTnet/
+         3V5IGBJXMTe/YfDqpveeWFWNKfiMPJb8JiC7GzFju7/i8uY3n1lJY23xVQUtTtzGLKyF
+         WTqG8LeAdMlRoWIy2i1R2+Dona0qWXl9WNc016HoMSHx26B8kQnHhcBpmHBlhY7L6Ysm
+         JXdffHQeUrYd20wFlxy5Rpx4myPMXc6e+9YpUEUSiKZBNGldx7/tIkOAgx6SM3fwJpyM
+         3KHg==
+X-Forwarded-Encrypted: i=1; AJvYcCWmDNbr9lfWM2Z6bEMYzrJdbf/2SLmwxkbh0x3pwnukRBzhIsJuNOVAgEBSTwsf+TEK7I5jfgdu+r/obxaii8YQoGyBIA==
+X-Gm-Message-State: AOJu0Yzm/0vKGXjLIWz+erKvu6L2lStF9g+ZugA3oZV6PBvY1FRqLD/z
+	bcpDgT0EE3ZiComIJzIOCtkfaLS4n0WY92CdoLtUeKq42y+szTpRu4/6WuEv7bo=
+X-Google-Smtp-Source: AGHT+IGsTMwpROjo3tzdIGl+v6KmheqJ1Zkqq2lQFdbmodzrdfcJ5ZovcBQXKo9Hg/rrSAQ8WBlnZg==
+X-Received: by 2002:a05:6602:6103:b0:7f6:85d1:f81a with SMTP id ca18e2360f4ac-80004dea088mr421983139f.2.1720558511891;
+        Tue, 09 Jul 2024 13:55:11 -0700 (PDT)
 Received: from [192.168.1.128] ([38.175.170.29])
-        by smtp.gmail.com with ESMTPSA id 8926c6da1cb9f-4c0b1c138f9sm690522173.148.2024.07.09.13.51.39
+        by smtp.gmail.com with ESMTPSA id 8926c6da1cb9f-4c0b1b5c55fsm687026173.77.2024.07.09.13.55.11
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 09 Jul 2024 13:51:40 -0700 (PDT)
-Message-ID: <78c3ed1e-32b2-43aa-9979-0479fa524018@linuxfoundation.org>
-Date: Tue, 9 Jul 2024 14:51:39 -0600
+        Tue, 09 Jul 2024 13:55:11 -0700 (PDT)
+Message-ID: <0ce444f4-8d49-472f-a687-34804347296e@linuxfoundation.org>
+Date: Tue, 9 Jul 2024 14:55:10 -0600
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -75,29 +75,38 @@ Cc: angquan yu <angquan21@gmail.com>,
 References: <20240704072431.111640-1-jhubbard@nvidia.com>
  <a08e6846-2f9e-4fb4-910f-b33fe779fa01@linuxfoundation.org>
  <49c14f8f-0c08-41e0-b987-7c4253edf6de@nvidia.com>
+ <78c3ed1e-32b2-43aa-9979-0479fa524018@linuxfoundation.org>
 Content-Language: en-US
 From: Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <49c14f8f-0c08-41e0-b987-7c4253edf6de@nvidia.com>
+In-Reply-To: <78c3ed1e-32b2-43aa-9979-0479fa524018@linuxfoundation.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
-On 7/9/24 14:40, John Hubbard wrote:
-> On 7/9/24 1:34 PM, Shuah Khan wrote:
->> On 7/4/24 01:24, John Hubbard wrote:
-> ...>> Muhammad Usama Anjum (1):
->>>    selftests: x86: test_FISTTP: use fisttps instead of ambiguous fisttp
->>
->>
->> Usama and John,
->>
->> I am seeing checkpatch warnings in this series.
->>
->> v4-3-7
->> WARNING: externs should be avoided in .c files
->> #210: FILE: tools/testing/selftests/x86/fsgsbase_restore.c:46:
->> +unsigned int dereference_seg_base(void);
+On 7/9/24 14:51, Shuah Khan wrote:
+> On 7/9/24 14:40, John Hubbard wrote:
+>> On 7/9/24 1:34 PM, Shuah Khan wrote:
+>>> On 7/4/24 01:24, John Hubbard wrote:
+>> ...>> Muhammad Usama Anjum (1):
+>>>>    selftests: x86: test_FISTTP: use fisttps instead of ambiguous fisttp
+>>>
+>>>
+>>> Usama and John,
+>>>
+>>> I am seeing checkpatch warnings in this series.
+>>>
+>>> v4-3-7
+>>> WARNING: externs should be avoided in .c files
+>>> #210: FILE: tools/testing/selftests/x86/fsgsbase_restore.c:46:
+>>> +unsigned int dereference_seg_base(void);
+> 
+> This one looked new though.
+> 
 
-This one looked new though.
+Never mind. Looks like there are a few existing warns - pulling
+these now for Linux 6.11-rc1.
+
+Thank you both for fixing these.
 
 thanks,
 -- Shuah
+
