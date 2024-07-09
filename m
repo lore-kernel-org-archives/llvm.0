@@ -1,57 +1,57 @@
-Received: from mail-qk1-f170.google.com (mail-qk1-f170.google.com [209.85.222.170])
+Received: from mail-qk1-f176.google.com (mail-qk1-f176.google.com [209.85.222.176])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DEB4515886B
-	for <llvm@lists.linux.dev>; Tue,  9 Jul 2024 17:39:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DAA3517B023
+	for <llvm@lists.linux.dev>; Tue,  9 Jul 2024 17:39:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720546782; cv=none; b=SS6fcxOo29UwzLb4TMSCE8YJR4LYhveNfIllFex32VPovPv5peNveoSi+f/821ZW/ogfqAiQLbI3NXTf7O4LdTY+/mPsz5OSxeNYdnA10T9w35ngkKTrUbWn/bC6aL2TVS5fCXDaGKNsoXRQKRfUK7on0gFx3G9HPPnEmEggV4Q=
+	t=1720546783; cv=none; b=d5ik7VkatZ7eZ8y5ggyx81+zxiVrfqWHIrkUh55gbe+B1ni7BmsfyxrMAw1pPCKOzTJ7aN+0eQ5Wmwyim4eNxpJ/p3JS9DYTngsCLh9P/d5c2HEkMd0ti5Z1TxJRBLKPi1K+4WyiYvN2wuC1Un2abO6rYiN6aYRlNxHUaervYVE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720546782; c=relaxed/simple;
-	bh=IeOtPKogez48r2P3oAafPf7mWpdrIEUVTbXKWkBu+s4=;
+	s=arc-20240116; t=1720546783; c=relaxed/simple;
+	bh=MjG0wx0U38uUII74AFjua/T8NeFZTe9VZSo8JReQo/s=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=pauIwZ8MaDIylhZvEbu3xYUsGpsctvgatu1Kz4YvZF+0k1Qko7FQnzy10aKygxVrO92beX2Vpj+nKLe/VH3h2+xgSqKEMO/CNI5gQFrZ90S6X3dwyXfieuvgTfegYmnyolFqiNn8QXKWq/Os9OK5XR4bjZ4K9ExDeOLph8UiNjE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=0Ea4Cc0K; arc=none smtp.client-ip=209.85.222.170
+	 MIME-Version; b=Kpt9j/7MZMBBapijLeRWuIEa8ogvI4iepQdGjYkYRiRaZcHGW3oewbjgpp4JUkJrsYsZTuZRpKei5fS4Mj9cmKJl3M/qBIr06ollzOmDZRANdi+lOphJyDYZNCabDK7Ujo+7JllGFxybTcROneSQAio/XoVbKbB71w0RrLb7z6g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=oqweYM9Q; arc=none smtp.client-ip=209.85.222.176
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="0Ea4Cc0K"
-Received: by mail-qk1-f170.google.com with SMTP id af79cd13be357-79f178e6225so108819185a.2
-        for <llvm@lists.linux.dev>; Tue, 09 Jul 2024 10:39:40 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="oqweYM9Q"
+Received: by mail-qk1-f176.google.com with SMTP id af79cd13be357-79f1828ed64so103346085a.1
+        for <llvm@lists.linux.dev>; Tue, 09 Jul 2024 10:39:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1720546780; x=1721151580; darn=lists.linux.dev;
+        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1720546781; x=1721151581; darn=lists.linux.dev;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=gIkiZ+EC0cy3qQspr3kP3SqSJopsA9NQAjKMM+c2r1A=;
-        b=0Ea4Cc0K83c/o528j+ggUdJUQf520Th8b7BMbAEQnwlAr/cHKpn1NCU1gMi1vkm0pG
-         a+SUe/KYC4rldaDD6v1rsk67l7oOzNLIB3aaS32MY9F5J5OwXJDpE5fTHy459SkR7Giw
-         A/71gQtgeJZXky/CjX3RFIkSNzdyaHYDfyVDXHW/+87RZN7u9WA5pxo7wIvD30sI3wVA
-         4IDHiPKRD/EnnLXlA76kCx+VLRFwklib8HSvJdnzPPBZlVhApuUTGbrxKlYiH1yBkM6i
-         McO5IlIC26n7F1PPs2jm1B2rm9uqLv/2OfCZINF9cf9ybnjk48gnVcEMhaRVPYCg4nTg
-         zj0w==
+        bh=Bs+9F/AX0q+LBs1CELfWwb/nqSLPDtCG32+ZAsR7dQo=;
+        b=oqweYM9QlB31YKoMLX7CuK9bccfTl7SOGsfIIBxYzriC8K/Q2C58yiYumSpvcQwkdr
+         nIy9LSO9Ufngic7Rnlzrg4juTpOFnEkiSb3NswTnhdtus434IDtGtqjqVbPCTuN7mycq
+         Hj+H4FDY1HWQhNzuwPr81/0mx9DW/p/See0Mj2xYrSY1JpRMlo//3MbhpuVaBR5mulU1
+         3LR6ddeZ3SMxl21oLpVG3FgUK6uPXXdqBDSUCpxX03lKlDOqHWQyKvwGr/Bfy+P1vy/E
+         xAQtDu1XAEhLt8qeceYYpvvj5Vcks35gbN4H7S9JEXVRbys0PzvVbUnG3l/xlFNoyvNR
+         DezQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1720546780; x=1721151580;
+        d=1e100.net; s=20230601; t=1720546781; x=1721151581;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=gIkiZ+EC0cy3qQspr3kP3SqSJopsA9NQAjKMM+c2r1A=;
-        b=lXhQQh/OUhD/xVyPVz7gZCg3MPIHSvGc7sbxH+qr3nc3FGJZiU5YTQN+gSe3hnnXZe
-         SfTT11C3uAi//Ch4mgyMv5VEjQRzHeItZaEXM5tOY56r5jyvbwwnaarO8bvl+FBbrvoX
-         QAqhQvMtpMyd0R57BRGEIf89P/HH/+nvyMOI5fhHfe+GAIYRR3sn6jWi6eDV9VYh5KBf
-         6M/n8pbfzNOkJpgs0SHbvnj30Zuuxs8LX8MXv35jexnefeEjHGS8GbspNfZoKp0zDzLb
-         VTXHgPFkx5o0hZMS38dB3se4bWnLSccgEi6m9JMlh5C8KFBPoLcKNSKX6xvS2cZdjiyd
-         wJMQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVLwYXafxNrDfbB4m3k4n+ExropXuX0O0P7iQKXYKqZoDoC2W+udfpn0E+ax+G7RXuNv2HrsYgtjlzjzFJKfVVL79Zn5A==
-X-Gm-Message-State: AOJu0YwvFyct8M3+KTgF+DmC2mlbx9u/Iy87wIDZ4kAn1KKsPZpq/rM7
-	1+6K6rHtRhi6VO3A6un/crJyLn8dTBoZjNOHG20sQQko7nMmBNc8o8jTZpl3ALA=
-X-Google-Smtp-Source: AGHT+IFqf9MGCcfZzUZn5e2OPi31BYIsZtdOvyOYSAfI80AmjeHPmXW5Hh4FPbdEJB+RjrwEI5CSIg==
-X-Received: by 2002:ae9:e017:0:b0:79c:f0e:f7ac with SMTP id af79cd13be357-79f19a1f8a5mr329303185a.28.1720546779837;
-        Tue, 09 Jul 2024 10:39:39 -0700 (PDT)
+        bh=Bs+9F/AX0q+LBs1CELfWwb/nqSLPDtCG32+ZAsR7dQo=;
+        b=T2M/Tlk58lgg0watFR/fQv8D/kZJL/XCGZ4XIO6i27SQa0RRV4ib3KtMH4yh30O9c7
+         fYMFcTqa4Clln/Iw3Z9j4MmmY2q+QWsAmRkTgWTRdus9ne3845Dj7hTPB22eMzmdcJqV
+         /n5iGHx9rQiipW5nORbfDHXMsRIJF+WlIfHKys8p91gNB2ZnR+Vp+VdBqrPmd9aQheEC
+         DAaLLI2ld7XJUHWP5gYBMSOPmcJ6S8jnrYWZmc9nmbhk72/fs1FrUqY/73ppjPVrzYc5
+         8wxLJvPVRx5Vg/anVcIUu7S8Owqg/nQnU7rjtqQfBzFFAPUwc2HR/gC4h3Bi4gf0PAsi
+         TaBA==
+X-Forwarded-Encrypted: i=1; AJvYcCUO5EOhDHVAxZ8NwCKCsa5baEH7H7WtOzfB4nkfdoyePN1mBrcS1VdZ71NYc4KCzDUO40T4LDVgSwGkx3nrTGOzx+sUfg==
+X-Gm-Message-State: AOJu0Yw+bdUGcxQkJgJ8a05kg4gDiFCRD5xIMUoXkIVydzSC9aTFmIAy
+	gnZrky+dyDGy7hJVgXGQ28ojadiEZlmNuzfuWC8za8+iGnxkVG69hR82dkKtXYM=
+X-Google-Smtp-Source: AGHT+IF5vRwH3MAJLaUEo4+iqmQHIG8YR3UCz6IbvA0rf0+v0uyHD1q0n/vo2ks9owSgX2DYVwobqQ==
+X-Received: by 2002:a05:620a:3b89:b0:79e:f7ea:2df4 with SMTP id af79cd13be357-79f19a5fd69mr325013085a.19.1720546780865;
+        Tue, 09 Jul 2024 10:39:40 -0700 (PDT)
 Received: from jesse-desktop.. (pool-108-26-179-17.bstnma.fios.verizon.net. [108.26.179.17])
         by smtp.gmail.com with ESMTPSA id af79cd13be357-79f18ff6762sm117547785a.10.2024.07.09.10.39.39
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 09 Jul 2024 10:39:39 -0700 (PDT)
+        Tue, 09 Jul 2024 10:39:40 -0700 (PDT)
 From: Jesse Taube <jesse@rivosinc.com>
 To: linux-riscv@lists.infradead.org
 Cc: Ard Biesheuvel <ardb@kernel.org>,
@@ -74,10 +74,11 @@ Cc: Ard Biesheuvel <ardb@kernel.org>,
 	"Mike Rapoport (IBM)" <rppt@kernel.org>,
 	"Vishal Moola (Oracle)" <vishal.moola@gmail.com>,
 	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: [PATCH v4 1/4] RISC-V: pi: Force hidden visibility for all symbol references
-Date: Tue,  9 Jul 2024 13:39:34 -0400
-Message-ID: <20240709173937.510084-2-jesse@rivosinc.com>
+	llvm@lists.linux.dev,
+	Charlie Jenkins <charlie@rivosinc.com>
+Subject: [PATCH v4 2/4] RISC-V: lib: Add pi aliases for string functions
+Date: Tue,  9 Jul 2024 13:39:35 -0400
+Message-ID: <20240709173937.510084-3-jesse@rivosinc.com>
 X-Mailer: git-send-email 2.45.2
 In-Reply-To: <20240709173937.510084-1-jesse@rivosinc.com>
 References: <20240709173937.510084-1-jesse@rivosinc.com>
@@ -89,39 +90,54 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Eliminate all GOT entries in the .pi section, by forcing hidden
-visibility for all symbol references, which informs the compiler that
-such references will be resolved at link time without the need for
-allocating GOT entries.
+memset, strcmp, and strncmp are all used in the __pi_ section,
+add SYM_FUNC_ALIAS for them.
 
-Include linux/hidden.h in Makefile, like arm64, for the
-hidden visibility attribute.
+When KASAN is enabled in <asm/string.h> __pi___memset is also needed.
 
+Suggested-by: Charlie Jenkins <charlie@rivosinc.com>
 Signed-off-by: Jesse Taube <jesse@rivosinc.com>
+Reviewed-by: Charlie Jenkins <charlie@rivosinc.com>
 Reviewed-by: Alexandre Ghiti <alexghiti@rivosinc.com>
 ---
-V1 -> V2:
- - New patch
 V2 -> V3:
- - No changes
+ - New patch
 V3 -> V4:
- - No changes
+ - Fix duplicate the in commit message
 ---
- arch/riscv/kernel/pi/Makefile | 1 +
- 1 file changed, 1 insertion(+)
+ arch/riscv/lib/memset.S  | 2 ++
+ arch/riscv/lib/strcmp.S  | 1 +
+ arch/riscv/lib/strncmp.S | 1 +
+ 3 files changed, 4 insertions(+)
 
-diff --git a/arch/riscv/kernel/pi/Makefile b/arch/riscv/kernel/pi/Makefile
-index 50bc5ef7dd2f..1ef7584be0c3 100644
---- a/arch/riscv/kernel/pi/Makefile
-+++ b/arch/riscv/kernel/pi/Makefile
-@@ -5,6 +5,7 @@ KBUILD_CFLAGS	:= $(subst $(CC_FLAGS_FTRACE),,$(KBUILD_CFLAGS)) -fpie \
- 		   -Os -DDISABLE_BRANCH_PROFILING $(DISABLE_STACKLEAK_PLUGIN) \
- 		   $(call cc-option,-mbranch-protection=none) \
- 		   -I$(srctree)/scripts/dtc/libfdt -fno-stack-protector \
-+		   -include $(srctree)/include/linux/hidden.h \
- 		   -D__DISABLE_EXPORTS -ffreestanding \
- 		   -fno-asynchronous-unwind-tables -fno-unwind-tables \
- 		   $(call cc-option,-fno-addrsig)
+diff --git a/arch/riscv/lib/memset.S b/arch/riscv/lib/memset.S
+index 35f358e70bdb..da23b8347e2d 100644
+--- a/arch/riscv/lib/memset.S
++++ b/arch/riscv/lib/memset.S
+@@ -111,3 +111,5 @@ SYM_FUNC_START(__memset)
+ 	ret
+ SYM_FUNC_END(__memset)
+ SYM_FUNC_ALIAS_WEAK(memset, __memset)
++SYM_FUNC_ALIAS(__pi_memset, __memset)
++SYM_FUNC_ALIAS(__pi___memset, __memset)
+diff --git a/arch/riscv/lib/strcmp.S b/arch/riscv/lib/strcmp.S
+index 687b2bea5c43..bc73325b2fd1 100644
+--- a/arch/riscv/lib/strcmp.S
++++ b/arch/riscv/lib/strcmp.S
+@@ -120,3 +120,4 @@ strcmp_zbb:
+ .option pop
+ #endif
+ SYM_FUNC_END(strcmp)
++SYM_FUNC_ALIAS(__pi_strcmp, strcmp)
+diff --git a/arch/riscv/lib/strncmp.S b/arch/riscv/lib/strncmp.S
+index aba5b3148621..b36325a57f6a 100644
+--- a/arch/riscv/lib/strncmp.S
++++ b/arch/riscv/lib/strncmp.S
+@@ -136,3 +136,4 @@ strncmp_zbb:
+ .option pop
+ #endif
+ SYM_FUNC_END(strncmp)
++SYM_FUNC_ALIAS(__pi_strncmp, strncmp)
 -- 
 2.45.2
 
