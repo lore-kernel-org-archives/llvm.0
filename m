@@ -1,45 +1,60 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 20B1C63A;
-	Tue,  9 Jul 2024 05:30:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF92D45948;
+	Tue,  9 Jul 2024 05:38:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720503034; cv=none; b=C672Ip5xi3IvDTSzXPTaPXjmvLnCIa6WOAbGh5nB7H5QMB83U218Uw++aqB6utlUOBlrj4aJu16RPvxf8iGrZ8XbmfY4JIqI8cJBsH7tvW+upjJ9wcFL1rWM2eOrAYBKWpSxe6lbybYEHAlqNJ9MhXQhsMr7NH7khSiy6ghVq+g=
+	t=1720503489; cv=none; b=j/upgyReAJOuOCIMasImneLjs0wtjERO+x+5ud3TZcYMOHTkCq2AbOl8sSKsFABaJW8kK8UZaWteWj4xkWsDgUS3GFHsAYc6XYfPqP9tMy2tmBUbcRqa+oh7zNBoZbt6A3EpJx608DWTIaG+a0GdTRh2A2OQdcl2FKQrM88sgRM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720503034; c=relaxed/simple;
-	bh=3v5wbcP0hZPdO4H71xPWdtsCXwN4cSEbDdTpxtfZxbc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=GLVTnwlMfMjmw+M+Uh7TuTCVFYwCyIrTxOOo51/Y3UeQodnzYEWd4IaG/7oT1dIku3y91BXs49pCm1epnRKsjEPafi8UsEK4Ec+Fn5mRyWwbgvqTa07UWQJwZWQ/kXMUM0Z0sUyEtlB3/A1n++pq3WoRanrhGCIGkPXBBEtLPCk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=sWrGFqI+; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1720503489; c=relaxed/simple;
+	bh=nPDHhRrt/iTGrBveipGn7jTYvOBrqt5YqqlhOaEFfJ4=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=gOiIerX62HH9XvYXBs3ksk4PSL+QdQayhu/trcmRJHoH2JH1jGd0qQAecpwgb2v+wIdq7oA4Y2eUpFsLkPECpITuAB3wfBds05/TV05BzsMwdAyWHbrMJQ9bkvjgaffZBJgykfk07FvVtFZNDiLVb+T7mJkBAzq+iJGor+2CXIs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=URYGldn3; arc=none smtp.client-ip=198.175.65.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="sWrGFqI+"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E1ED3C4AF07;
-	Tue,  9 Jul 2024 05:30:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1720503033;
-	bh=3v5wbcP0hZPdO4H71xPWdtsCXwN4cSEbDdTpxtfZxbc=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=sWrGFqI+R41C2LlSVz0Bz3IJXyX0qmmOMlUWtw+s84NUrvt+zLC8aT5v4ves3coeO
-	 hly5Q5XmqSRWKVV0PDqtQrkDFEqKcDmLreiwvucLkjgA3Y8GHgMi2qlD6F4W4/Cuwi
-	 b1fKbzkHDhPVQ72AjQIqM4cu/5l8CBK5abH3pl3EKwQsVE7K65qKJGsIELXvx6J/j9
-	 g2nC2n/NbaSRT/mkAO4IDsFzL6cVBX0Vgjd6luFC3FxGVZ72XJaTEbayOQDVGzaWsU
-	 Y7OoRFdmm5/5WhaA7EOiWd7bMOgBEBPnPdpmh8UdJsahZdUfx3Vo7asSrpNYgxbUER
-	 udg46dZi1lqgQ==
-Date: Mon, 8 Jul 2024 22:30:31 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Guillaume Tucker <gtucker@gtucker.io>
-Cc: Nick Desaulniers <ndesaulniers@google.com>,
-	Miguel Ojeda <ojeda@kernel.org>,
-	Alexei Starovoitov <ast@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-	llvm@lists.linux.dev, rust-for-linux@vger.kernel.org,
-	yurinnick@meta.com, bpf@vger.kernel.org,
-	Sasha Levin <sashal@kernel.org>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	automated-testing@lists.yoctoproject.org
-Subject: Re: Plumbers Testing MC potential topic: specialised toolchains
-Message-ID: <20240709053031.GB2120498@thelio-3990X>
-References: <f80acb84-1d98-44d3-84b7-d976de77d8ce@gtucker.io>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="URYGldn3"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1720503486; x=1752039486;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=nPDHhRrt/iTGrBveipGn7jTYvOBrqt5YqqlhOaEFfJ4=;
+  b=URYGldn3qtydI+gT3HD7oOWlm6BPPSxZKF93pls3KKE5kgAs0Ve8bX6W
+   QlT+BmhIr3aDjYkZXGS1vDCLaELFocnITxz85SFcQqp/EHJKX7KY+v2lT
+   TM9zipiGJuocyB2L9eixplUCmUyGue+eFciWp0WiRYzRoXDMtc64CCYxs
+   mZPLEFukajMVIiu+HnQrc1Cg9kAe+PcgfAlsiuuFi8j2a55viBNvVW364
+   UrI4FjOl6VJ+yvgX7BOJ/7tTB+ED5libAII/QuspyDFt1M/aMWyXQ2xt2
+   L6trpLBEaW/xurpsaZTtwZXburifqXPHore6f4PCWw+xG2+d9LmOFzPQH
+   A==;
+X-CSE-ConnectionGUID: b52LCLt+SRu8fKd9ao/mZw==
+X-CSE-MsgGUID: IA2/sNpMS1mjmD4O/zlAWA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11127"; a="40243772"
+X-IronPort-AV: E=Sophos;i="6.09,194,1716274800"; 
+   d="scan'208";a="40243772"
+Received: from orviesa005.jf.intel.com ([10.64.159.145])
+  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jul 2024 22:38:06 -0700
+X-CSE-ConnectionGUID: n5KfivZ7SteUsuQf6RDKyw==
+X-CSE-MsgGUID: vkruCqX2QsqcYF/V2MATCQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.09,194,1716274800"; 
+   d="scan'208";a="52670882"
+Received: from lkp-server01.sh.intel.com (HELO 68891e0c336b) ([10.239.97.150])
+  by orviesa005.jf.intel.com with ESMTP; 08 Jul 2024 22:38:05 -0700
+Received: from kbuild by 68891e0c336b with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1sR3YA-000WMA-2R;
+	Tue, 09 Jul 2024 05:38:02 +0000
+Date: Tue, 9 Jul 2024 13:37:45 +0800
+From: kernel test robot <lkp@intel.com>
+To: Nuno Sa <nuno.sa@analog.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Nuno Sa <noname.nuno@gmail.com>
+Subject: [nsa:b4/dev-iio-backend-add-debugfs 15/17]
+ arch/arm/boot/dts/xilinx/zynq-zed.dts:116:10: fatal error:
+ 'adi-fmcomms1.dtsi' file not found
+Message-ID: <202407091321.o2rmotVL-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -48,149 +63,35 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <f80acb84-1d98-44d3-84b7-d976de77d8ce@gtucker.io>
 
-Hi Guillaume,
+tree:   https://github.com/nunojsa/linux b4/dev-iio-backend-add-debugfs
+head:   4120536adfc0bc741c466d38ae50ffb9760576e3
+commit: 813decf00f69c8e38c0b78cbd93c9a2b332c8bdf [15/17] fixup! Out of tree stuff to test the ad9467 FMC
+config: arm-randconfig-003-20240709 (https://download.01.org/0day-ci/archive/20240709/202407091321.o2rmotVL-lkp@intel.com/config)
+compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project a0c6b8aef853eedaa0980f07c0a502a5a8a9740e)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240709/202407091321.o2rmotVL-lkp@intel.com/reproduce)
 
-On Tue, Jul 09, 2024 at 12:10:51AM +0200, Guillaume Tucker wrote:
-> While exchanging a few ideas with others around the Testing
-> micro-conference[1] for Plumbers 2024, and based on some older
-> discussions, one key issue which seems to be common to several
-> subsystems is how to manage specialised toolchains.
-> 
-> By "specialised", I mean the ones that can't easily be installed
-> via major Linux distros or other packaging systems.  Say, if a
-> specific compiler revision is required with particular compiler
-> flags in order to build certain parts of the kernel - and maybe
-> even a particular compiler to build the toolchain itself.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202407091321.o2rmotVL-lkp@intel.com/
 
-I am having trouble understanding this paragraph, or maybe what it is
-getting after? While certain features in the kernel may require support
-from the compiler/toolchain (such as LTO or CFI), they should not be
-required. Perhaps you are talking about the selftests but I think that
-is distinctly different from the kernel itself. Is there a different (or
-perhaps tangible) situation that you have encounted or envision?
+All errors (new ones prefixed by >>):
 
-> LLVM / Clang-Built-Linux used to be in this category, and I
-> believe it's still the case to some extent for linux-next
-> although a minimal LLVM version has now been supported in
-> mainline for a few years.
+>> arch/arm/boot/dts/xilinx/zynq-zed.dts:116:10: fatal error: 'adi-fmcomms1.dtsi' file not found
+     116 | #include "adi-fmcomms1.dtsi"
+         |          ^~~~~~~~~~~~~~~~~~~
+   1 error generated.
 
-Yes, we committed to a minimum version a few years ago. We have had to
-bump it twice for various reasons since then but I have tried to be
-fairly methodical about selecting a version that should be available
-enough. Has that caused problems?
 
-> A more critical example is eBPF, which I believe still requires a
-> cutting-edge version of LLVM.  For example, this is why bpf tests
-> are not enabled by default in kselftest.
+vim +116 arch/arm/boot/dts/xilinx/zynq-zed.dts
 
-This sounds like something to bring up to the BPF folks, has anyone
-interacted with them to discuss this situation and see if stabilization
-for the sake of testing is possible?
+   112	
+   113	
+   114	#define fmc_spi spi0
+   115	//#include "adi-ad9467-fmc-250ebz.dtsi"
+ > 116	#include "adi-fmcomms1.dtsi"
 
-> Based on these assumptions, the issue is about reproducibility -
-> yet alone setting up a toolchain that can build the code at all.
-> For an automated system to cover these use-cases, or for any
-> developer wanting to work on these particular areas of the
-> kernel, having the ability to reliably build it in a reproducible
-> way using a reference toolchain adds a lot of value.  It means
-> better quality control, less scope for errors and unexpected
-> behaviour with different code paths being executed or built
-> differently.
-> 
-> The current state of the art are the kernel.org toolchains:
-> 
->   https://mirrors.edge.kernel.org/pub/tools/
-> 
-> These are for LLVM and cross-compilers, and they already solve a
-> large part of the issue described above.  However, they don't
-> include Rust (yet), and all the dependencies need to be installed
-
-As Miguel pointed out in a side thread, there are some Rust toolchains
-available:
-
-https://lore.kernel.org/rust-for-linux/CANiq72mYRkmRffFjNLWd4_Bws5nEyTYvm3xroT-hoDiWMqUOTA@mail.gmail.com/
-
-I will try to make those more discoverable from the LLVM folder.
-
-> manually which can have a significant impact on the build
-> result (gcc, binutils...).  One step further are the Linaro
-
-I have considered trying to statically compile LLVM (we started the
-effort some time ago but I have not been able to get back to it) but
-honestly, the xz disaster made me worry about building a static
-toolchain with a potentially vulnerable dependency, either necessitating
-removing the toolchain or rebuilding it.
-
-FWIW, I don't think the list of dependencies for the LLVM toolchain is
-too long. In fact, it appears they are all installed in a default Fedora
-image.
-
-> TuxMake Docker images[2] which got some very recent blog
-> coverage[3].  The issues then are that not all the toolchains are
-
-Ah, interesting, I did not realize that there was a blog post, that is
-cool!
-
-> necessarily available in Docker images, they're tailored to
-> TuxMake use-cases, and I'm not sure to which extent upstream
-> kernel maintainers rely on them.
-
-FWIW, the general vibe I get from kernel maintainers is most are pretty
-old school. I know some that use tuxmake but I suspect most probably
-just use their own scripts and wrappers that they have developed over
-the years. Part of the reason I made the toolchains as tarballs is so
-that all a maintainer has to do is install it to somewhere on the hard
-drive then they can just use LLVM=<prefix>/bin/ to use it.
-
-> Now, I might have missed some other important aspects so please
-> correct me if this reasoning seems flawed in any way.  I have
-> however seen how hard it can be for automated systems to build
-> kernels correctly and in a way that developers can reproduce, so
-> this is no trivial issue.  Then for the Testing MC, I would be
-
-Right, I think reproducibility and ease of setup/use is really
-important.
-
-> very interested to hear whether people feel it would be
-> beneficial to work towards a more exhaustive solution supported
-> upstream: kernel.org Docker images or something close such as
-> Dockerfiles in Git or another type of images with all the
-> dependencies included.  How does that sound?
-
-A few thoughts around this:
-
-Having first party Dockerfiles could be useful but how would they be
-used? Perhaps building a kernel in such a container could be plumbed
-into Kbuild, such that the container manager could be invoked to build
-the image if it does not exist then build the kernel in that image? This
-might be a lofty idea but it would remove a lot of the friction of using
-containers to build the kernel so that more people would adopt it?
-
-Another aspect of this is discoverability. I think a big problem with a
-project like TuxMake is that while it is developed for the kernel
-community, it is not a first party project, so without word of mouth,
-there is not a great way for other people to hear about it.
-
-I think it would be a good idea to try and solicit feedback from the
-greater kernel community at large to ensure that whatever solution is
-decided on will work for both testing systems and
-developers/maintainers. I think that a first party solution for having a
-consistent and easy to set up/work with build environment has been
-needed for some time but unfortunately, I am not sure how much
-discussion around this problem has happened directly with those folks.
-
-> [1] https://lpc.events/event/18/contributions/1665/
-> [2] https://hub.docker.com/u/tuxmake
-> [3] https://www.linaro.org/blog/tuxmake-building-linux-with-kernel-org-toolchains/
-
-As an aside, consider using me as a point of contact for anything
-ClangBuiltLinux related instead of Nick going forward, he has stepped
-away to focus on LLVM libc for the immediate future.
-
-Thanks a lot for bring up this topic. I think it is important to work on
-and I look forward to talking through this at Plumbers.
-
-Cheers,
-Nathan
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
