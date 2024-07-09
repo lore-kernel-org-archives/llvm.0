@@ -1,484 +1,175 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-io1-f46.google.com (mail-io1-f46.google.com [209.85.166.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C30D46BFB0;
-	Tue,  9 Jul 2024 18:07:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 634F81B86FB
+	for <llvm@lists.linux.dev>; Tue,  9 Jul 2024 20:34:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720548477; cv=none; b=gxv56I4W4sFqap0RMkRbBI50lVS5kFW+N2IZgIm4kK1vx5iB4XxHk7E9LWcA7NpHs9o3eFM+sRmGTJpqwDE/lLx6j/kUkl+mBfKqDm3XYVQ9LjHb1TysfENabz/nShaef1x2bjZgu56hU0m+Tzz0lRZMob1SP3BZtMKHt/HkHE8=
+	t=1720557256; cv=none; b=hR0y+TGDGto0kizNtSXEwIrDMdTPsiw8wXvpaXHfiL6VrPIddHDrxImbjSMYOUUC2jHExyxwj1Q9OqJJh/YRvMlYpUn6FDqOnjIGNpM4jrU8L6zbY/ork04CNqo7reRvWQmV2KgwttuklmccTxXLPvoPIryF2HfHLQXbvJlH818=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720548477; c=relaxed/simple;
-	bh=qrUzN8iAXN6LvBd2i2jNUgBvTEMvs6JsT+iLk2FnUnE=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=VNndjsJ4payjcx0HMprcsDUT6Nom3RRK1QXY8BxFQtU5zFcQOqly3+F0ZZMhRXSQSF9TZs3KhKm+mYBmPUfd6ST+qsVXgjVebJNdG6ijQ0ONwzrXfIz7v/r1hXEhsB+t95hHQbiadYXXML3DSFHlE+kuDzkrLn74jfd1KBaWJu0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=DtsPLFMw; arc=none smtp.client-ip=198.175.65.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1720557256; c=relaxed/simple;
+	bh=oSSLuaVvZNJdsTu9BmDGZM0FU3LhjFv/rnMNrZfHTas=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=rtHmkgAyzZ0VwtoPZVsl/znKKFUWIxPEopyn8pRfViwWSgqLJvOBUul0ST261UuGAuRC0vImXISgU81yrPsh/85FNkXvb1N6gXPKLEptHxI6nezDl+M9p8XpdQf7gVR/XMPrq92t7KGFCbM5Qki9N1sEsYW0U1sW/uJL6saDweo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=fegsODpl; arc=none smtp.client-ip=209.85.166.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="DtsPLFMw"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1720548475; x=1752084475;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=qrUzN8iAXN6LvBd2i2jNUgBvTEMvs6JsT+iLk2FnUnE=;
-  b=DtsPLFMwQMThGXsGBSUYK192dlA5Z4aQYWIVhRt+8Fh4zr+4Et/EQegB
-   gCaqjPZR8q/HndxZLjd3fykBT9Mk5pSSHeAVAUZckKbAZOk5GYM4JhI5v
-   4EExA9l/Jk8P1nWP9By0Db9W7QVhCssB/Uz+wiNacak7w1feQa5ZivuhY
-   4F16+95YQkEFUoGbCokRfUW4gsty2TKTGTxSNcz42rAMPX2xOpftfIbsV
-   1K+Mebn6bLx96n0DpzaV/W1M6Xrk70oRQkIn6g4hZv4tD1lcbOYwuUtmt
-   hNLAhvC+lUip5ct9K/7PhwkD24dgCF67llXsIDccvZrSeM2xNFxMe5J4D
-   Q==;
-X-CSE-ConnectionGUID: 08ETd0EYT8OYMuFh2j8ZGA==
-X-CSE-MsgGUID: VXX7xmLET3uMgL9pP3ackw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11128"; a="28416735"
-X-IronPort-AV: E=Sophos;i="6.09,195,1716274800"; 
-   d="scan'208";a="28416735"
-Received: from fmviesa010.fm.intel.com ([10.60.135.150])
-  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jul 2024 11:07:54 -0700
-X-CSE-ConnectionGUID: jRBsUFI9TSasEFs/2T9CrQ==
-X-CSE-MsgGUID: xaHH32hSTKCK0csP7ZOZQw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.09,195,1716274800"; 
-   d="scan'208";a="48028816"
-Received: from lkp-server01.sh.intel.com (HELO 68891e0c336b) ([10.239.97.150])
-  by fmviesa010.fm.intel.com with ESMTP; 09 Jul 2024 11:07:53 -0700
-Received: from kbuild by 68891e0c336b with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1sRFFl-000WyO-2f;
-	Tue, 09 Jul 2024 18:07:49 +0000
-Date: Wed, 10 Jul 2024 02:07:32 +0800
-From: kernel test robot <lkp@intel.com>
-To: Christian Marangi <ansuelsmth@gmail.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-leds@vger.kernel.org, Lee Jones <lee@kernel.org>
-Subject: [lee-leds:for-leds-next 61/62] drivers/leds/leds-lp5521.c:189:15:
- error: too many arguments provided to function-like macro invocation
-Message-ID: <202407100245.4payjdih-lkp@intel.com>
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="fegsODpl"
+Received: by mail-io1-f46.google.com with SMTP id ca18e2360f4ac-7f94c2178e5so12816039f.2
+        for <llvm@lists.linux.dev>; Tue, 09 Jul 2024 13:34:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google; t=1720557254; x=1721162054; darn=lists.linux.dev;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=QUXBhOV5n1K5bTAMQXFOdx48Z9Kt3voOMhmISQHx+NE=;
+        b=fegsODpldiEvZWBr1eqvkbmJUNGlVyU0MBih9/+OCwccuh/3OUC9F4pBaZNsrOpMVV
+         HJsFrXgQ4sS3Vw3ZcRQ0QCj2SmXDd8cIyU0un4amq/xbBvkDGrqqKAK+9CdrEtZfEJ2q
+         M/UMl1S7tR+/7mIeixy0J2S5yhxZB6SkWWyf0=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1720557254; x=1721162054;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=QUXBhOV5n1K5bTAMQXFOdx48Z9Kt3voOMhmISQHx+NE=;
+        b=STvlK7R553i6chgcwkHzsTmGP+5sDrrlfvQlU3G4G8OsoFawL/dJHHMuF0d22j54Jl
+         JgWXq4EMA9nbOEKXWyq080VJ/RDIQYVXUVRCLu5vncoSDjrdER9xtC6MBJy+mdml3rw4
+         5ymxakbehPtat+gRG8ObIPrWXDPYkWhUWNGjxS438N01DmP5eH8fZCGSoZCKMOYwwLWI
+         EjzszhB7Hb6so6jcxPXwWzXCST6od8C2tQKyKPPpyyEiH5H8g0hY0T0U/TUy9IjjeijX
+         RwekUj0SKl6uRAjKut+7R7IKWpCa4IR07xYV0vxSgKSyeMkio2HDClP/CrjZL4KZ/1vo
+         GjLw==
+X-Forwarded-Encrypted: i=1; AJvYcCULMMtnfgxqeVlSV0QznNAR1WbP+eISLi6sEMht86uzDaSIL9EIGR3Joy5tpAwuvQzyz0ZsMTGjH/tHqE5Av4WhsxScaQ==
+X-Gm-Message-State: AOJu0Ywjg1asizJmkFHZFj0W8CD4dld4dM86aOntK58sLyjJW9yg7OmM
+	cXE+G6U8pKB8qqUmE+vdpAe0tLpaz/JSNHPaZgjQrZGyLEGMvGHZ8QSBVof6g2M=
+X-Google-Smtp-Source: AGHT+IFnaltfqT9pdcjmDKQ5RL1R7ZLBWzlQHgI3b93HGvP83oo06ef5k6SFp1k0XTHt6xuyuG6s7w==
+X-Received: by 2002:a92:cf41:0:b0:381:c5f0:20d5 with SMTP id e9e14a558f8ab-38a53e8fc76mr36039665ab.0.1720557254426;
+        Tue, 09 Jul 2024 13:34:14 -0700 (PDT)
+Received: from [192.168.1.128] ([38.175.170.29])
+        by smtp.gmail.com with ESMTPSA id e9e14a558f8ab-38a49c21c42sm5740615ab.48.2024.07.09.13.34.13
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 09 Jul 2024 13:34:14 -0700 (PDT)
+Message-ID: <a08e6846-2f9e-4fb4-910f-b33fe779fa01@linuxfoundation.org>
+Date: Tue, 9 Jul 2024 14:34:13 -0600
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v4 0/7] selftests/x86: fix build errors and warnings found
+ via clang
+To: John Hubbard <jhubbard@nvidia.com>, Shuah Khan <shuah@kernel.org>
+Cc: angquan yu <angquan21@gmail.com>,
+ "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+ Ingo Molnar <mingo@kernel.org>, Binbin Wu <binbin.wu@linux.intel.com>,
+ Alexey Dobriyan <adobriyan@gmail.com>,
+ Rick Edgecombe <rick.p.edgecombe@intel.com>,
+ Sohil Mehta <sohil.mehta@intel.com>, Yu-cheng Yu <yu-cheng.yu@intel.com>,
+ Dave Hansen <dave.hansen@linux.intel.com>,
+ Muhammad Usama Anjum <usama.anjum@collabora.com>,
+ Valentin Obst <kernel@valentinobst.de>, linux-kselftest@vger.kernel.org,
+ LKML <linux-kernel@vger.kernel.org>, llvm@lists.linux.dev, x86@kernel.org,
+ Shuah Khan <skhan@linuxfoundation.org>
+References: <20240704072431.111640-1-jhubbard@nvidia.com>
+Content-Language: en-US
+From: Shuah Khan <skhan@linuxfoundation.org>
+In-Reply-To: <20240704072431.111640-1-jhubbard@nvidia.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/lee/leds.git for-leds-next
-head:   b9bd590268485652b928110b5543057543b5d02b
-commit: efd0d1cbb8c5dd1049922e839fa7d85811facd53 [61/62] leds: leds-lp55xx: Convert mutex lock/unlock to guard API
-config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20240710/202407100245.4payjdih-lkp@intel.com/config)
-compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project a0c6b8aef853eedaa0980f07c0a502a5a8a9740e)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240710/202407100245.4payjdih-lkp@intel.com/reproduce)
+On 7/4/24 01:24, John Hubbard wrote:
+> Changes since v3:
+> 
+> 1) Rebased onto Linux 6.10-rc6+.
+> 
+> 2) Added Muhammad's acks for the series.
+> 
+> Cover letter for v3:
+> 
+> Hi,
+> 
+> Dave Hansen, Muhammad Usama Anjum, here is the combined series that we
+> discussed yesterday [1].
+> 
+> As I mentioned then, this is a bit intrusive--but no more than
+> necessary, IMHO. Specifically, it moves some clang-un-inlineable things
+> out to "pure" assembly code files.
+> 
+> I've tested this by building with clang, then running each binary on my
+> x86_64 test system with today's 6.10-rc1, and comparing the console and
+> dmesg output to a gcc-based build without these patches applied. Aside
+> from timestamps and virtual addresses, it looks identical.
+> 
+> Earlier cover letter:
+> 
+> Just a bunch of build and warnings fixes that show up when building with
+> clang. Some of these depend on each other, so I'm sending them as a
+> series.
+> 
+> Changes since v2:
+> 
+> 1) Dropped my test_FISTTP.c patch, and picked up Muhammad's fix instead,
+>     seeing as how that was posted first.
+> 
+> 2) Updated patch descriptions to reflect that Valentin Obst's build fix
+>     for LLVM [1] has already been merged into Linux main.
+> 
+> 3) Minor wording and typo corrections in the commit logs throughout.
+> 
+> Changes since the first version:
+> 1) Rebased onto Linux 6.10-rc1
+> 
+> Enjoy!
+> 
+> [1] https://lore.kernel.org/44428518-4d21-4de7-8587-04eceefb330d@nvidia.com
+> 
+> thanks,
+> John Hubbard
+> 
+> John Hubbard (6):
+>    selftests/x86: fix Makefile dependencies to work with clang
+>    selftests/x86: build fsgsbase_restore.c with clang
+>    selftests/x86: build sysret_rip.c with clang
+>    selftests/x86: avoid -no-pie warnings from clang during compilation
+>    selftests/x86: remove (or use) unused variables and functions
+>    selftests/x86: fix printk warnings reported by clang
+> 
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202407100245.4payjdih-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
-   In file included from drivers/leds/leds-lp5521.c:15:
-   In file included from include/linux/i2c.h:13:
-   In file included from include/linux/acpi.h:14:
-   In file included from include/linux/device.h:32:
-   In file included from include/linux/device/driver.h:21:
-   In file included from include/linux/module.h:19:
-   In file included from include/linux/elf.h:6:
-   In file included from arch/s390/include/asm/elf.h:173:
-   In file included from arch/s390/include/asm/mmu_context.h:11:
-   In file included from arch/s390/include/asm/pgalloc.h:18:
-   In file included from include/linux/mm.h:2253:
-   include/linux/vmstat.h:500:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     500 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     501 |                            item];
-         |                            ~~~~
-   include/linux/vmstat.h:507:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     507 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     508 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/vmstat.h:514:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     514 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
-   include/linux/vmstat.h:519:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     519 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     520 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/vmstat.h:528:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     528 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     529 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
->> drivers/leds/leds-lp5521.c:189:15: error: too many arguments provided to function-like macro invocation
-     189 |         guard(mutex, &chip->lock);
-         |                      ^
-   include/linux/cleanup.h:163:9: note: macro 'guard' defined here
-     163 | #define guard(_name) \
-         |         ^
->> drivers/leds/leds-lp5521.c:189:2: error: use of undeclared identifier 'guard'
-     189 |         guard(mutex, &chip->lock);
-         |         ^
-   5 warnings and 2 errors generated.
---
-   In file included from drivers/leds/leds-lp5523.c:15:
-   In file included from include/linux/i2c.h:13:
-   In file included from include/linux/acpi.h:14:
-   In file included from include/linux/device.h:32:
-   In file included from include/linux/device/driver.h:21:
-   In file included from include/linux/module.h:19:
-   In file included from include/linux/elf.h:6:
-   In file included from arch/s390/include/asm/elf.h:173:
-   In file included from arch/s390/include/asm/mmu_context.h:11:
-   In file included from arch/s390/include/asm/pgalloc.h:18:
-   In file included from include/linux/mm.h:2253:
-   include/linux/vmstat.h:500:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     500 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     501 |                            item];
-         |                            ~~~~
-   include/linux/vmstat.h:507:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     507 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     508 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/vmstat.h:514:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     514 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
-   include/linux/vmstat.h:519:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     519 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     520 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/vmstat.h:528:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     528 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     529 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
->> drivers/leds/leds-lp5523.c:192:15: error: too many arguments provided to function-like macro invocation
-     192 |         guard(mutex, &chip->lock);
-         |                      ^
-   include/linux/cleanup.h:163:9: note: macro 'guard' defined here
-     163 | #define guard(_name) \
-         |         ^
->> drivers/leds/leds-lp5523.c:192:2: error: use of undeclared identifier 'guard'
-     192 |         guard(mutex, &chip->lock);
-         |         ^
-   5 warnings and 2 errors generated.
---
-   In file included from drivers/leds/leds-lp5562.c:13:
-   In file included from include/linux/i2c.h:13:
-   In file included from include/linux/acpi.h:14:
-   In file included from include/linux/device.h:32:
-   In file included from include/linux/device/driver.h:21:
-   In file included from include/linux/module.h:19:
-   In file included from include/linux/elf.h:6:
-   In file included from arch/s390/include/asm/elf.h:173:
-   In file included from arch/s390/include/asm/mmu_context.h:11:
-   In file included from arch/s390/include/asm/pgalloc.h:18:
-   In file included from include/linux/mm.h:2253:
-   include/linux/vmstat.h:500:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     500 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     501 |                            item];
-         |                            ~~~~
-   include/linux/vmstat.h:507:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     507 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     508 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/vmstat.h:514:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     514 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
-   include/linux/vmstat.h:519:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     519 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     520 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/vmstat.h:528:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     528 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     529 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
->> drivers/leds/leds-lp5562.c:175:15: error: too many arguments provided to function-like macro invocation
-     175 |         guard(mutex, &chip->lock);
-         |                      ^
-   include/linux/cleanup.h:163:9: note: macro 'guard' defined here
-     163 | #define guard(_name) \
-         |         ^
->> drivers/leds/leds-lp5562.c:175:2: error: use of undeclared identifier 'guard'
-     175 |         guard(mutex, &chip->lock);
-         |         ^
-   drivers/leds/leds-lp5562.c:272:15: error: too many arguments provided to function-like macro invocation
-     272 |         guard(mutex, &chip->lock);
-         |                      ^
-   include/linux/cleanup.h:163:9: note: macro 'guard' defined here
-     163 | #define guard(_name) \
-         |         ^
-   drivers/leds/leds-lp5562.c:272:2: error: use of undeclared identifier 'guard'
-     272 |         guard(mutex, &chip->lock);
-         |         ^
-   drivers/leds/leds-lp5562.c:324:15: error: too many arguments provided to function-like macro invocation
-     324 |         guard(mutex, &chip->lock);
-         |                      ^
-   include/linux/cleanup.h:163:9: note: macro 'guard' defined here
-     163 | #define guard(_name) \
-         |         ^
-   drivers/leds/leds-lp5562.c:324:2: error: use of undeclared identifier 'guard'
-     324 |         guard(mutex, &chip->lock);
-         |         ^
-   5 warnings and 6 errors generated.
---
-   In file included from drivers/leds/leds-lp5569.c:10:
-   In file included from include/linux/i2c.h:13:
-   In file included from include/linux/acpi.h:14:
-   In file included from include/linux/device.h:32:
-   In file included from include/linux/device/driver.h:21:
-   In file included from include/linux/module.h:19:
-   In file included from include/linux/elf.h:6:
-   In file included from arch/s390/include/asm/elf.h:173:
-   In file included from arch/s390/include/asm/mmu_context.h:11:
-   In file included from arch/s390/include/asm/pgalloc.h:18:
-   In file included from include/linux/mm.h:2253:
-   include/linux/vmstat.h:500:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     500 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     501 |                            item];
-         |                            ~~~~
-   include/linux/vmstat.h:507:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     507 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     508 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/vmstat.h:514:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     514 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
-   include/linux/vmstat.h:519:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     519 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     520 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/vmstat.h:528:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     528 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     529 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
->> drivers/leds/leds-lp5569.c:400:15: error: too many arguments provided to function-like macro invocation
-     400 |         guard(mutex, &chip->lock);
-         |                      ^
-   include/linux/cleanup.h:163:9: note: macro 'guard' defined here
-     163 | #define guard(_name) \
-         |         ^
->> drivers/leds/leds-lp5569.c:400:2: error: use of undeclared identifier 'guard'
-     400 |         guard(mutex, &chip->lock);
-         |         ^
-   5 warnings and 2 errors generated.
---
-   In file included from drivers/leds/leds-lp55xx-common.c:17:
-   In file included from include/linux/i2c.h:13:
-   In file included from include/linux/acpi.h:14:
-   In file included from include/linux/device.h:32:
-   In file included from include/linux/device/driver.h:21:
-   In file included from include/linux/module.h:19:
-   In file included from include/linux/elf.h:6:
-   In file included from arch/s390/include/asm/elf.h:173:
-   In file included from arch/s390/include/asm/mmu_context.h:11:
-   In file included from arch/s390/include/asm/pgalloc.h:18:
-   In file included from include/linux/mm.h:2253:
-   include/linux/vmstat.h:500:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     500 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     501 |                            item];
-         |                            ~~~~
-   include/linux/vmstat.h:507:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     507 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     508 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/vmstat.h:514:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     514 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
-   include/linux/vmstat.h:519:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     519 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     520 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/vmstat.h:528:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     528 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     529 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   In file included from drivers/leds/leds-lp55xx-common.c:18:
-   In file included from include/linux/iopoll.h:14:
-   In file included from include/linux/io.h:14:
-   In file included from arch/s390/include/asm/io.h:93:
-   include/asm-generic/io.h:548:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     548 |         val = __raw_readb(PCI_IOBASE + addr);
-         |                           ~~~~~~~~~~ ^
-   include/asm-generic/io.h:561:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     561 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
-      37 | #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
-         |                                                           ^
-   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
-     102 | #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
-         |                                                      ^
-   In file included from drivers/leds/leds-lp55xx-common.c:18:
-   In file included from include/linux/iopoll.h:14:
-   In file included from include/linux/io.h:14:
-   In file included from arch/s390/include/asm/io.h:93:
-   include/asm-generic/io.h:574:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     574 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
-      35 | #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
-         |                                                           ^
-   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
-     115 | #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
-         |                                                      ^
-   In file included from drivers/leds/leds-lp55xx-common.c:18:
-   In file included from include/linux/iopoll.h:14:
-   In file included from include/linux/io.h:14:
-   In file included from arch/s390/include/asm/io.h:93:
-   include/asm-generic/io.h:585:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     585 |         __raw_writeb(value, PCI_IOBASE + addr);
-         |                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:595:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     595 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:605:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     605 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:693:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     693 |         readsb(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:701:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     701 |         readsw(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:709:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     709 |         readsl(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:718:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     718 |         writesb(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   include/asm-generic/io.h:727:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     727 |         writesw(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   include/asm-generic/io.h:736:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     736 |         writesl(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
->> drivers/leds/leds-lp55xx-common.c:276:15: error: too many arguments provided to function-like macro invocation
-     276 |         guard(mutex, &chip->lock);
-         |                      ^
-   include/linux/cleanup.h:163:9: note: macro 'guard' defined here
-     163 | #define guard(_name) \
-         |         ^
->> drivers/leds/leds-lp55xx-common.c:276:2: error: use of undeclared identifier 'guard'
-     276 |         guard(mutex, &chip->lock);
-         |         ^
-   drivers/leds/leds-lp55xx-common.c:291:15: error: too many arguments provided to function-like macro invocation
-     291 |         guard(mutex, &chip->lock);
-         |                      ^
-   include/linux/cleanup.h:163:9: note: macro 'guard' defined here
-     163 | #define guard(_name) \
-         |         ^
-   drivers/leds/leds-lp55xx-common.c:291:2: error: use of undeclared identifier 'guard'
-     291 |         guard(mutex, &chip->lock);
-         |         ^
-   drivers/leds/leds-lp55xx-common.c:409:15: error: too many arguments provided to function-like macro invocation
-     409 |         guard(mutex, &chip->lock);
-         |                      ^
-   include/linux/cleanup.h:163:9: note: macro 'guard' defined here
-     163 | #define guard(_name) \
-         |         ^
-   drivers/leds/leds-lp55xx-common.c:409:2: error: use of undeclared identifier 'guard'
-     409 |         guard(mutex, &chip->lock);
-         |         ^
-   drivers/leds/leds-lp55xx-common.c:637:15: error: too many arguments provided to function-like macro invocation
-     637 |         guard(mutex, &chip->lock);
-         |                      ^
-   include/linux/cleanup.h:163:9: note: macro 'guard' defined here
-     163 | #define guard(_name) \
-         |         ^
-   drivers/leds/leds-lp55xx-common.c:637:2: error: use of undeclared identifier 'guard'
-     637 |         guard(mutex, &chip->lock);
-         |         ^
-   drivers/leds/leds-lp55xx-common.c:676:15: error: too many arguments provided to function-like macro invocation
-     676 |         guard(mutex, &chip->lock);
-         |                      ^
-   include/linux/cleanup.h:163:9: note: macro 'guard' defined here
-     163 | #define guard(_name) \
-         |         ^
-   drivers/leds/leds-lp55xx-common.c:676:2: error: use of undeclared identifier 'guard'
-     676 |         guard(mutex, &chip->lock);
-         |         ^
-   drivers/leds/leds-lp55xx-common.c:704:15: error: too many arguments provided to function-like macro invocation
-     704 |         guard(mutex, &chip->lock);
-         |                      ^
-   include/linux/cleanup.h:163:9: note: macro 'guard' defined here
-     163 | #define guard(_name) \
-         |         ^
-   drivers/leds/leds-lp55xx-common.c:704:2: error: use of undeclared identifier 'guard'
-     704 |         guard(mutex, &chip->lock);
-         |         ^
-   drivers/leds/leds-lp55xx-common.c:803:15: error: too many arguments provided to function-like macro invocation
-     803 |         guard(mutex, &chip->lock);
-         |                      ^
-   include/linux/cleanup.h:163:9: note: macro 'guard' defined here
-     163 | #define guard(_name) \
-         |         ^
-   drivers/leds/leds-lp55xx-common.c:803:2: error: use of undeclared identifier 'guard'
-     803 |         guard(mutex, &chip->lock);
-         |         ^
-   drivers/leds/leds-lp55xx-common.c:827:15: error: too many arguments provided to function-like macro invocation
-     827 |         guard(mutex, &chip->lock);
-         |                      ^
-   include/linux/cleanup.h:163:9: note: macro 'guard' defined here
-     163 | #define guard(_name) \
-         |         ^
-   drivers/leds/leds-lp55xx-common.c:827:2: error: use of undeclared identifier 'guard'
-     827 |         guard(mutex, &chip->lock);
-         |         ^
-   drivers/leds/leds-lp55xx-common.c:851:15: error: too many arguments provided to function-like macro invocation
-     851 |         guard(mutex, &chip->lock);
-         |                      ^
-   include/linux/cleanup.h:163:9: note: macro 'guard' defined here
-     163 | #define guard(_name) \
-         |         ^
-   drivers/leds/leds-lp55xx-common.c:851:2: error: use of undeclared identifier 'guard'
-     851 |         guard(mutex, &chip->lock);
-         |         ^
-   drivers/leds/leds-lp55xx-common.c:870:15: error: too many arguments provided to function-like macro invocation
-     870 |         guard(mutex, &chip->lock);
-         |                      ^
-   include/linux/cleanup.h:163:9: note: macro 'guard' defined here
-     163 | #define guard(_name) \
-         |         ^
-   fatal error: too many errors emitted, stopping now [-ferror-limit=]
-   17 warnings and 20 errors generated.
+> Muhammad Usama Anjum (1):
+>    selftests: x86: test_FISTTP: use fisttps instead of ambiguous fisttp
 
 
-vim +189 drivers/leds/leds-lp5521.c
+Usama and John,
 
-   180	
-   181	static ssize_t lp5521_selftest(struct device *dev,
-   182				       struct device_attribute *attr,
-   183				       char *buf)
-   184	{
-   185		struct lp55xx_led *led = i2c_get_clientdata(to_i2c_client(dev));
-   186		struct lp55xx_chip *chip = led->chip;
-   187		int ret;
-   188	
- > 189		guard(mutex, &chip->lock);
-   190	
-   191		ret = lp5521_run_selftest(chip, buf);
-   192	
-   193		return sysfs_emit(buf, "%s\n", ret ? "FAIL" : "OK");
-   194	}
-   195	
+I am seeing checkpatch warnings in this series.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+v4-3-7
+WARNING: externs should be avoided in .c files
+#210: FILE: tools/testing/selftests/x86/fsgsbase_restore.c:46:
++unsigned int dereference_seg_base(void);
+
+ARNING: Consecutive strings are generally better as a single string
+#156: FILE: tools/testing/selftests/x86/test_FISTTP.c:28:
++	"	fisttps	res16""\n"
+
+WARNING: Consecutive strings are generally better as a single string
+#165: FILE: tools/testing/selftests/x86/test_FISTTP.c:48:
++	"	fisttps	res16""\n"
+
+WARNING: Consecutive strings are generally better as a single string
+#174: FILE: tools/testing/selftests/x86/test_FISTTP.c:69:
++	"	fisttps	res16""\n"
+
+WARNING: Consecutive strings are generally better as a single string
+#183: FILE: tools/testing/selftests/x86/test_FISTTP.c:91:
++	"	fisttps	res16""\n"
+
+total: 0 errors, 5 warnings, 32 lines checked
+
+Can you take a look at these and see if they can be fixed. Send me
+v5 with these fixed - I will pull these in for 6.11-rc1
+
+thanks,
+-- Shuah
