@@ -1,125 +1,123 @@
-Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
+Received: from mail-qk1-f170.google.com (mail-qk1-f170.google.com [209.85.222.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8634215DBB9;
-	Tue,  9 Jul 2024 15:25:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E5449157470
+	for <llvm@lists.linux.dev>; Tue,  9 Jul 2024 17:39:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720538756; cv=none; b=D3xjZbmSz87bZvYs7THS9JUwOg2ey7LqReARwAzFcMUwhaUQKEVjOJQGsJM2UxomMH6jRqael6fOzKEV4TDGaDFTQkgq7GimhpxKP+MFLEFG/LUdoMeXM+Xd09EElCo6vWTzHUN96eCE7j3ZNEMYgx/I315Y8BRo7k7h75RX15g=
+	t=1720546781; cv=none; b=rJjSpjeQqoOm0WuYzvBB2KGQ9iqOib2ZiOObJ7Bx+DlZuEL2E5HUKHMFnyLFMrizXx0wNLBKiVW7MPZJBX2+Ac5lj2o+pB1cb39M2h92HNR6tLDEp6t/aEsWbgq1VYxZCy8eWaUK1Y1fY0XDYU3uzQkIlBeyT8fd8cfU2Ap7jXM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720538756; c=relaxed/simple;
-	bh=uYI1VF4OgeMzpAHhQoBVxsymSg1MML7D16rAqKWGrW4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=aahq5kGrBXlBC8H9IeCHVlWjRnc85PZkob1okypd+zBpp4xa62RkK3vbDalvWIaURyUM3W5mOoJ7b1UXWyS7Fh+gv/C3zFlB7j1oPh+pj8g7yVF5vmw1BMoE1I8mSVpDHJsfwW3akT8PBa4TIo/DuavWFAkMI6jgvUjDt9/ybpQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=COdzAas4; arc=none smtp.client-ip=209.85.128.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1720546781; c=relaxed/simple;
+	bh=d0K/xZYfkfM7LYdV9v3IX6Evpj3aZ/O5jBSxXMFfgHk=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=U9QNYxFrN8uSJ0S1Wh74fua8CX2912GW+K+qiDrlEiSk7XbLwx8y1xShcSy35UNHrr8pM0tKsQJdILtnwgJ0Z31J+H7kNTRW2JWs/eBgP4jfO1Zwl9r6XnQoLyFXBXA2F0CIJPFmiiiJSl1ABiNIEvUaqwfOhgWjlEh9jP59bJ4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=hnZcOuBR; arc=none smtp.client-ip=209.85.222.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="COdzAas4"
-Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-4266fd395eeso8149675e9.3;
-        Tue, 09 Jul 2024 08:25:54 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="hnZcOuBR"
+Received: by mail-qk1-f170.google.com with SMTP id af79cd13be357-79ef8e0c294so275823385a.1
+        for <llvm@lists.linux.dev>; Tue, 09 Jul 2024 10:39:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1720538753; x=1721143553; darn=lists.linux.dev;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=sEP9HFUIvOyMzrlfw2zh4onk/mGWAtEnPNTkOS2BI8k=;
-        b=COdzAas4v0nLB35I6VEgbpJ6LSYElAgqFCV22ampEvpm35l3ZbX3+M8evMQhxFgvGx
-         4fb/QixrtxWA9McQhPG+aG4S4sjpBaU73xNcAdSMOj7BaFQDT4twrU/wbSlcHrHf55zR
-         cHE1NwCwznf+4yci0HN8r1QLPMR9zL7flhp5M8IDbmTPHE/o2zT5dxjpKfDxnud/d1HX
-         UAYGTE88DJXDa2qydccZr8tpHoWG2yJu+dfFD5TVygWhhG7FVo/IGn9MgyP+YbRsub32
-         ID2Vhkn8OkAfxru/aGC41tE4RXcZoEm/br/oEd5/t7eLiQOhmfz/YoLXa4XR18tGgdUt
-         2I3g==
+        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1720546779; x=1721151579; darn=lists.linux.dev;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=4MkRq9pJZdtUmCqu5iT1gqMbhpvrDb9DS4nLumIGatQ=;
+        b=hnZcOuBR+j4XKHoZ/4owKK4+d59kZUJcfnPyhm653nQmjj2mDX4jYPVqv/bEUOTAJY
+         3K8iMbiMXlFwTtE/xDxollrlRX/kuVh6m9yDOZeiGStnUSX9EPFyVf9akea+Cx28oKsT
+         XHRDxL9HUEqhHYm37hL1GmJ5qY3PIpfsdUEg3ifcinpuoAQcZP6QIgQt6gbACFMIF/41
+         qgKIXnLLmiuCUBq35hm7zoolSBy4Q9JaKcfk7Me2fPMKoDeE4X+sheAWn0N1OR1CILzh
+         yZEeSpM82zLeju/1wCIanbi8RoLjoAcj5r04RvSz5nYEms8VSLgEievAf9YNAxXltzjn
+         hBnA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1720538753; x=1721143553;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=sEP9HFUIvOyMzrlfw2zh4onk/mGWAtEnPNTkOS2BI8k=;
-        b=Zv1QiJpzuOK5WqQiteVDNlfQAjbQW+H14AEIyBbR7zdO0hj7iMi0GsKaJlwc3g5y+Z
-         xS6vzXrNiFXcmm6+fxzsJh1DGbALC/kSAqkx/FKHBv8RNmg3m3gms47ea7wU3pjD0B42
-         /EvrV9WflsyO9TbU0uFc0BDT+xng8z9AQTjMqYUnHWLEuPDE0S8mLxM34CzIDyIkpmCY
-         wwq/eaLWIAkW7LQgIuQ2/wp1KMFV8vYbuKaKbt2Xllf5t2QY0HfNeISbM5Tyy3EwoRKj
-         tmp/Ffulu2gQvSfZtJTP6haUvwAqVzcZUbzJq2cbxXvOWPkSzpxr+klRaseib9VZQpFF
-         p7jg==
-X-Forwarded-Encrypted: i=1; AJvYcCVbRHwLv7sAxYJmK63Ch89E69S/2TkesgJ0aEr1YDZKIDB5agN9LCMTFHYR5nRfV/+qnd7TcLOHumxcUGdcBN2G1r3Ri7Fm/v1JsNymtPIjPMfZm6o7ADDAsOb3jk4bNktHq+0=
-X-Gm-Message-State: AOJu0Yw1HAVTCbztJqkqS+twHUy+NRJW3OauF//71BctBj/GFyX3mCYd
-	KrEcgsPg7ZbWAqsWRja+WtCW6PNSIwFbjuNCUv2uVVIMAtozWBNc
-X-Google-Smtp-Source: AGHT+IGaU+IhfijAp8zflrrfJXXMbDU1JKbjE4Rpg8g3NjL5OvpVpNRl2dIMiWa8Bd6kfcsTT2jamg==
-X-Received: by 2002:a5d:58f1:0:b0:367:8900:c621 with SMTP id ffacd0b85a97d-367ceaca897mr1943578f8f.56.1720538752641;
-        Tue, 09 Jul 2024 08:25:52 -0700 (PDT)
-Received: from skbuf ([188.25.110.57])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-367cdfab136sm2849553f8f.98.2024.07.09.08.25.51
+        d=1e100.net; s=20230601; t=1720546779; x=1721151579;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=4MkRq9pJZdtUmCqu5iT1gqMbhpvrDb9DS4nLumIGatQ=;
+        b=uCk/kkV9HfsSGu/Q4oJ4xH793IP5a5BbqTqhh7/JLLJtDLcu1Lee8oA6739ZZtCFN+
+         l34oJ4gGgTF/JNv4Wjji7mE9ned2Y7k/2UDnae4jJ/uq7YvYHoewqRY9yf1UEA3ihSci
+         ql9WKXT0lpCo6f+83xqgeFl9OHntEAUW1Q+No2T0v/GImhGViXHS0uEriqLQ5RmUvyMy
+         hxv4zsCY9nU6JphnCV6+1O9WlzFIBvevlfoYkojk4My+OvfqObxLCpBco2lb5fObgLo5
+         ZiEaD7xWooegykldf1MsAqNYOle+IBPWJGOq3meVtRrLs/1jcmH+F8SOHMR+b9jvEzM3
+         XF0w==
+X-Forwarded-Encrypted: i=1; AJvYcCWV+0Fp0e8sxjrs93DSeBivOrKGNR3qWK8KRi2Gdj4ED8dTO9ATvdSK2Oey6GJp3aGk3To4ccpETRYqJFVo01X6fheJ7w==
+X-Gm-Message-State: AOJu0Yzi5PLMgtGpEDuzmmSkFMW4areLzgVL2wvQ6J3GrzE6YC9DwZLc
+	Jkhn6faUPru6O7WDcb3XmUDvkke8RmDYJEi0VkcbUVuY9MV2TjuPRsDn5ftbGA8=
+X-Google-Smtp-Source: AGHT+IGVttz6ocCRARNPeKFY4qZPLhSqhYKVAK3N9nGYjiO1emaTxC7eUVnojkoDW25ZMQuH4lzesw==
+X-Received: by 2002:a05:620a:816:b0:79e:fec7:d6e9 with SMTP id af79cd13be357-79f1b5da34amr487803585a.32.1720546778885;
+        Tue, 09 Jul 2024 10:39:38 -0700 (PDT)
+Received: from jesse-desktop.. (pool-108-26-179-17.bstnma.fios.verizon.net. [108.26.179.17])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-79f18ff6762sm117547785a.10.2024.07.09.10.39.38
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 09 Jul 2024 08:25:51 -0700 (PDT)
-Date: Tue, 9 Jul 2024 18:25:49 +0300
-From: Vladimir Oltean <olteanv@gmail.com>
-To: Breno Leitao <leitao@debian.org>
-Cc: kernel test robot <lkp@intel.com>, linuxppc-dev@lists.ozlabs.org,
-	linux-arm-kernel@lists.infradead.org, netdev@vger.kernel.org,
-	llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	kuba@kernel.org, horms@kernel.org, Roy.Pledge@nxp.com,
-	open list <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 1/4] soc: fsl: qbman: FSL_DPAA depends on COMPILE_TEST
-Message-ID: <20240709152549.3yak6yeij7x5dlal@skbuf>
-References: <20240624162128.1665620-1-leitao@debian.org>
- <202406261920.l5pzM1rj-lkp@intel.com>
- <20240626140623.7ebsspddqwc24ne4@skbuf>
- <Zn2yGBuwiW/BYvQ7@gmail.com>
- <20240708133746.ea62kkeq2inzcos5@skbuf>
- <Zow5FUmOADrqUpM9@gmail.com>
- <20240709135811.c7tqh3ocfumg6ctt@skbuf>
- <Zo1UC/grXeIocGu5@gmail.com>
+        Tue, 09 Jul 2024 10:39:38 -0700 (PDT)
+From: Jesse Taube <jesse@rivosinc.com>
+To: linux-riscv@lists.infradead.org
+Cc: Ard Biesheuvel <ardb@kernel.org>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Jesse Taube <jesse@rivosinc.com>,
+	Alexandre Ghiti <alexghiti@rivosinc.com>,
+	Conor Dooley <conor.dooley@microchip.com>,
+	Masahiro Yamada <masahiroy@kernel.org>,
+	Wende Tan <twd2.me@gmail.com>,
+	Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+	Sami Tolvanen <samitolvanen@google.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Baoquan He <bhe@redhat.com>,
+	"Mike Rapoport (IBM)" <rppt@kernel.org>,
+	"Vishal Moola (Oracle)" <vishal.moola@gmail.com>,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: [PATCH v4 0/4] RISC-V: Parse DT for Zkr to seed KASLR
+Date: Tue,  9 Jul 2024 13:39:33 -0400
+Message-ID: <20240709173937.510084-1-jesse@rivosinc.com>
+X-Mailer: git-send-email 2.45.2
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Zo1UC/grXeIocGu5@gmail.com>
+Content-Transfer-Encoding: 8bit
 
-On Tue, Jul 09, 2024 at 08:15:23AM -0700, Breno Leitao wrote:
-> Hello Vladimir,
-> 
-> On Tue, Jul 09, 2024 at 04:58:11PM +0300, Vladimir Oltean wrote:
-> 
-> > On Mon, Jul 08, 2024 at 12:08:05PM -0700, Breno Leitao wrote:
-> > > I thought about a patch like the following (compile tested only). What
-> > > do you think?
-> > 
-> > To be honest, there are several things I don't really like about this
-> > patch.
-> > 
-> > - I really struggled with applying it in the current format. Could you
-> >   please post the output of git format-patch in the future?
-> 
-> This is the output of `git format-patch` shifted right by a tab.
+Add functions to pi/fdt_early.c to help parse the FDT to check if
+the isa string has the Zkr extension. Then use the Zkr extension to
+seed the KASLR base address.
 
-I don't want to insist too much on it, but this is not correct. In the
-process of shifting the patch to the right, something ate the leading
-space on each patch context line. The patch is ill-formatted even if the
-first tab is removed. Try to keep it simple and either attach it or post
-it without any change whatsoever.
+The first two patches fix the visibility of symbols.
 
-> > I have prepared and tested the attached alternative patch on a board and
-> > I am preparing to submit it myself, if you don't have any objection.
-> 
-> Sure, not a problem. You just asked how that would be possible, and I
-> decided to craft patch to show what I had in mind. I am glad we have a
-> way moving forward.
-> 
-> Thanks for solving it.
+V1 -> V2:
+ - Add RISC-V: pi: Force hidden visibility for all symbol references
+ - Add RISC-V: pi: Add kernel/pi/pi.h
+ - Rewrite archrandom_early.c to parse DT over checking the csr
+V2 -> V3:
+ - Add RISC-V: lib: Add pi aliases for string functions
+ - Rewrite isa_string_contains in third patch
 
-I mean I did suggest dynamic allocation for the array since my first
-reply in this thread, which is essentially what the patch is..
-Given that dynamic allocation was already mentioned and then you
-suggested to replace NR_CPUS with something dynamic, I took that as an
-alternative proposal and an invitation at using VLAs, which is what I
-was commenting on, and what I was saying I don't think would work.
+Jesse Taube (4):
+  RISC-V: pi: Force hidden visibility for all symbol references
+  RISC-V: lib: Add pi aliases for string functions
+  RISC-V: pi: Add kernel/pi/pi.h
+  RISC-V: Use Zkr to seed KASLR base address
 
-By VLAs I mean:
--	u16 channels[NR_CPUS];
-+	u16 channels[num_possible_cpus()];
+ arch/riscv/kernel/pi/Makefile           |   4 +-
+ arch/riscv/kernel/pi/archrandom_early.c |  30 +++++
+ arch/riscv/kernel/pi/cmdline_early.c    |  10 +-
+ arch/riscv/kernel/pi/fdt_early.c        | 167 +++++++++++++++++++++++-
+ arch/riscv/kernel/pi/pi.h               |  20 +++
+ arch/riscv/lib/memset.S                 |   2 +
+ arch/riscv/lib/strcmp.S                 |   1 +
+ arch/riscv/lib/strncmp.S                |   1 +
+ arch/riscv/mm/init.c                    |   5 +-
+ 9 files changed, 224 insertions(+), 16 deletions(-)
+ create mode 100644 arch/riscv/kernel/pi/archrandom_early.c
+ create mode 100644 arch/riscv/kernel/pi/pi.h
 
-Anyway...
+-- 
+2.45.2
+
