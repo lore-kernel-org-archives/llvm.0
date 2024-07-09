@@ -1,56 +1,56 @@
-Received: from mail-io1-f46.google.com (mail-io1-f46.google.com [209.85.166.46])
+Received: from mail-io1-f44.google.com (mail-io1-f44.google.com [209.85.166.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 634F81B86FB
-	for <llvm@lists.linux.dev>; Tue,  9 Jul 2024 20:34:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5DBC213F43B
+	for <llvm@lists.linux.dev>; Tue,  9 Jul 2024 20:35:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720557256; cv=none; b=hR0y+TGDGto0kizNtSXEwIrDMdTPsiw8wXvpaXHfiL6VrPIddHDrxImbjSMYOUUC2jHExyxwj1Q9OqJJh/YRvMlYpUn6FDqOnjIGNpM4jrU8L6zbY/ork04CNqo7reRvWQmV2KgwttuklmccTxXLPvoPIryF2HfHLQXbvJlH818=
+	t=1720557323; cv=none; b=Xqql70ClZ/kZ2HTCo3LynPM5ASzWiiolGKpWQBl6fTXEp3Nw1XBWuAf9UAJlun2KtkwKEiqnoL/Y3Ov6lHwLnxfm+b/JYofhiA52G54mDo3k0eCm4DZv3ZLFTQ+trMA+JQYPdTYHFNsTW1//VDZZ8KnkTaQzhNfqIlxcb21ev7o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720557256; c=relaxed/simple;
-	bh=oSSLuaVvZNJdsTu9BmDGZM0FU3LhjFv/rnMNrZfHTas=;
+	s=arc-20240116; t=1720557323; c=relaxed/simple;
+	bh=B6TBOvniiIY4yBsFeLV75HI56BIl5JHOPJ2OBmxRZh4=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=rtHmkgAyzZ0VwtoPZVsl/znKKFUWIxPEopyn8pRfViwWSgqLJvOBUul0ST261UuGAuRC0vImXISgU81yrPsh/85FNkXvb1N6gXPKLEptHxI6nezDl+M9p8XpdQf7gVR/XMPrq92t7KGFCbM5Qki9N1sEsYW0U1sW/uJL6saDweo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=fegsODpl; arc=none smtp.client-ip=209.85.166.46
+	 In-Reply-To:Content-Type; b=bkayyXBBEypFQGq34Nz2fBi7WEUBi0U6gjqtavkRfHHSK1QsYaD3i84K0Y4c9snI/pXUEXDIto0ADGsw42MdGt+dLtf50BlLK2l4gTpgBvvp1/w39M3AmZARr4FdRos/nGDMgyycZ68pbI69Tr/UK72wy4hDkW2ggnCPHRouCT0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=J7Qzq2u/; arc=none smtp.client-ip=209.85.166.44
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="fegsODpl"
-Received: by mail-io1-f46.google.com with SMTP id ca18e2360f4ac-7f94c2178e5so12816039f.2
-        for <llvm@lists.linux.dev>; Tue, 09 Jul 2024 13:34:15 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="J7Qzq2u/"
+Received: by mail-io1-f44.google.com with SMTP id ca18e2360f4ac-7eeecebb313so21642939f.3
+        for <llvm@lists.linux.dev>; Tue, 09 Jul 2024 13:35:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1720557254; x=1721162054; darn=lists.linux.dev;
+        d=linuxfoundation.org; s=google; t=1720557321; x=1721162121; darn=lists.linux.dev;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=QUXBhOV5n1K5bTAMQXFOdx48Z9Kt3voOMhmISQHx+NE=;
-        b=fegsODpldiEvZWBr1eqvkbmJUNGlVyU0MBih9/+OCwccuh/3OUC9F4pBaZNsrOpMVV
-         HJsFrXgQ4sS3Vw3ZcRQ0QCj2SmXDd8cIyU0un4amq/xbBvkDGrqqKAK+9CdrEtZfEJ2q
-         M/UMl1S7tR+/7mIeixy0J2S5yhxZB6SkWWyf0=
+        bh=/Uw/sa6sLips5jCn0SIjbZbXatTX5nFO4bBzPwrcrqQ=;
+        b=J7Qzq2u/Blw+IaxMR25K0SQudOv3gdLL2QDKEQ/WznhtfuSCEzBpUWvBnFtaZvzvnL
+         hQiEU/0L2+1n/GNHvX3HMw28u4f/ipyRhXW90dCZDv+uWYTUDaghHeeEVNnZSh/2AGP3
+         3HRcVNe6OaKevZiqXMJ3uDmKSepRaxbRyCTKE=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1720557254; x=1721162054;
+        d=1e100.net; s=20230601; t=1720557321; x=1721162121;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=QUXBhOV5n1K5bTAMQXFOdx48Z9Kt3voOMhmISQHx+NE=;
-        b=STvlK7R553i6chgcwkHzsTmGP+5sDrrlfvQlU3G4G8OsoFawL/dJHHMuF0d22j54Jl
-         JgWXq4EMA9nbOEKXWyq080VJ/RDIQYVXUVRCLu5vncoSDjrdER9xtC6MBJy+mdml3rw4
-         5ymxakbehPtat+gRG8ObIPrWXDPYkWhUWNGjxS438N01DmP5eH8fZCGSoZCKMOYwwLWI
-         EjzszhB7Hb6so6jcxPXwWzXCST6od8C2tQKyKPPpyyEiH5H8g0hY0T0U/TUy9IjjeijX
-         RwekUj0SKl6uRAjKut+7R7IKWpCa4IR07xYV0vxSgKSyeMkio2HDClP/CrjZL4KZ/1vo
-         GjLw==
-X-Forwarded-Encrypted: i=1; AJvYcCULMMtnfgxqeVlSV0QznNAR1WbP+eISLi6sEMht86uzDaSIL9EIGR3Joy5tpAwuvQzyz0ZsMTGjH/tHqE5Av4WhsxScaQ==
-X-Gm-Message-State: AOJu0Ywjg1asizJmkFHZFj0W8CD4dld4dM86aOntK58sLyjJW9yg7OmM
-	cXE+G6U8pKB8qqUmE+vdpAe0tLpaz/JSNHPaZgjQrZGyLEGMvGHZ8QSBVof6g2M=
-X-Google-Smtp-Source: AGHT+IFnaltfqT9pdcjmDKQ5RL1R7ZLBWzlQHgI3b93HGvP83oo06ef5k6SFp1k0XTHt6xuyuG6s7w==
-X-Received: by 2002:a92:cf41:0:b0:381:c5f0:20d5 with SMTP id e9e14a558f8ab-38a53e8fc76mr36039665ab.0.1720557254426;
-        Tue, 09 Jul 2024 13:34:14 -0700 (PDT)
+        bh=/Uw/sa6sLips5jCn0SIjbZbXatTX5nFO4bBzPwrcrqQ=;
+        b=ENnsG3WSf3oGhZotW9zriNgoOf7QhV37iPjztfXrLSHFISGV8SYW7fP1Y9hiXIwVNr
+         V9q1kJKdrxehAfn/iIRjKxS6dnHZuxCrTlHDRFYuDPYMq1aOj9rzG64yE1zAJLzVNb9Q
+         imDfZdvDAqPRi3vwot/AYgmq57ZtGJ4wfIKr3t9WY8bMC+nelnXnMIlSHJsKTnrfWGKI
+         fGGUNk8jIoOsZNea8lPaK2jZ0g0E+65pVrvw08F5aC9DcMJQrB6QyJP9reXb7/VW4/pn
+         UtnA/qE0XUBG950fsXK5z8Jdsy3+vvLV9i5rRGmm5MliT8BChlcPEOdQuoxRGmuuUPlS
+         IgQw==
+X-Forwarded-Encrypted: i=1; AJvYcCXQtZ3cy+7z1kTXXwA6Rlt4m2JtMEXhDu+c8ET+H1wjwY86nY6jJgJHXe8GLCO1kn/2fTa/Ss7vq04ylnG4J4AHWsPSrQ==
+X-Gm-Message-State: AOJu0Yx3wAkF5uXXLvjiTXUp5s8pTD6+3kbQPpjZ/0EAQ85YctOCSbVy
+	mpzJ9Kod5hGZi8+cZPGwK0b4blWtKCRWteJJw1nH4C6lXdPiYcDNmLUPdDh3eLw=
+X-Google-Smtp-Source: AGHT+IFSFdPJDDf6UfJgdzx9C/1pJLpTxO/0uyjQPpSaIATfc7XdSOsrOKq9Ub2TUBKnYOM2bXdgxA==
+X-Received: by 2002:a05:6602:6103:b0:7f3:9dd3:15b2 with SMTP id ca18e2360f4ac-7fff92c5be4mr394599039f.0.1720557321484;
+        Tue, 09 Jul 2024 13:35:21 -0700 (PDT)
 Received: from [192.168.1.128] ([38.175.170.29])
-        by smtp.gmail.com with ESMTPSA id e9e14a558f8ab-38a49c21c42sm5740615ab.48.2024.07.09.13.34.13
+        by smtp.gmail.com with ESMTPSA id 8926c6da1cb9f-4c0b1c138eesm683371173.151.2024.07.09.13.35.20
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 09 Jul 2024 13:34:14 -0700 (PDT)
-Message-ID: <a08e6846-2f9e-4fb4-910f-b33fe779fa01@linuxfoundation.org>
-Date: Tue, 9 Jul 2024 14:34:13 -0600
+        Tue, 09 Jul 2024 13:35:21 -0700 (PDT)
+Message-ID: <b8af74c6-1489-421b-8495-0056ecf144d8@linuxfoundation.org>
+Date: Tue, 9 Jul 2024 14:35:20 -0600
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -58,118 +58,42 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 0/7] selftests/x86: fix build errors and warnings found
- via clang
-To: John Hubbard <jhubbard@nvidia.com>, Shuah Khan <shuah@kernel.org>
-Cc: angquan yu <angquan21@gmail.com>,
- "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
- Ingo Molnar <mingo@kernel.org>, Binbin Wu <binbin.wu@linux.intel.com>,
- Alexey Dobriyan <adobriyan@gmail.com>,
- Rick Edgecombe <rick.p.edgecombe@intel.com>,
- Sohil Mehta <sohil.mehta@intel.com>, Yu-cheng Yu <yu-cheng.yu@intel.com>,
- Dave Hansen <dave.hansen@linux.intel.com>,
+Subject: Re: [PATCH v3] selftest/timerns: fix clang build failures for abs()
+ calls
+To: Andrei Vagin <avagin@gmail.com>, John Hubbard <jhubbard@nvidia.com>
+Cc: Shuah Khan <shuah@kernel.org>, Dmitry Safonov <dima@arista.com>,
+ Thomas Gleixner <tglx@linutronix.de>, Valentin Obst
+ <kernel@valentinobst.de>, linux-kselftest@vger.kernel.org,
+ LKML <linux-kernel@vger.kernel.org>, llvm@lists.linux.dev,
  Muhammad Usama Anjum <usama.anjum@collabora.com>,
- Valentin Obst <kernel@valentinobst.de>, linux-kselftest@vger.kernel.org,
- LKML <linux-kernel@vger.kernel.org>, llvm@lists.linux.dev, x86@kernel.org,
  Shuah Khan <skhan@linuxfoundation.org>
-References: <20240704072431.111640-1-jhubbard@nvidia.com>
+References: <20240704025247.86418-1-jhubbard@nvidia.com>
+ <CANaxB-zk-j2E8D0_4x04WL5Jbe08SD39jqBLbehBYWedFg+mMw@mail.gmail.com>
 Content-Language: en-US
 From: Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <20240704072431.111640-1-jhubbard@nvidia.com>
+In-Reply-To: <CANaxB-zk-j2E8D0_4x04WL5Jbe08SD39jqBLbehBYWedFg+mMw@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 7/4/24 01:24, John Hubbard wrote:
-> Changes since v3:
+On 7/3/24 21:44, Andrei Vagin wrote:
+> On Wed, Jul 3, 2024 at 7:52 PM John Hubbard <jhubbard@nvidia.com> wrote:
+>>
+>> When building with clang, via:
+>>
+>>      make LLVM=1 -C tools/testing/selftests
+>>
+>> ...clang warns about mismatches between the expected and required
+>> integer length being supplied to abs(3).
+>>
+>> Fix this by using the correct variant of abs(3): labs(3) or llabs(3), in
+>> these cases.
+>>
 > 
-> 1) Rebased onto Linux 6.10-rc6+.
-> 
-> 2) Added Muhammad's acks for the series.
-> 
-> Cover letter for v3:
-> 
-> Hi,
-> 
-> Dave Hansen, Muhammad Usama Anjum, here is the combined series that we
-> discussed yesterday [1].
-> 
-> As I mentioned then, this is a bit intrusive--but no more than
-> necessary, IMHO. Specifically, it moves some clang-un-inlineable things
-> out to "pure" assembly code files.
-> 
-> I've tested this by building with clang, then running each binary on my
-> x86_64 test system with today's 6.10-rc1, and comparing the console and
-> dmesg output to a gcc-based build without these patches applied. Aside
-> from timestamps and virtual addresses, it looks identical.
-> 
-> Earlier cover letter:
-> 
-> Just a bunch of build and warnings fixes that show up when building with
-> clang. Some of these depend on each other, so I'm sending them as a
-> series.
-> 
-> Changes since v2:
-> 
-> 1) Dropped my test_FISTTP.c patch, and picked up Muhammad's fix instead,
->     seeing as how that was posted first.
-> 
-> 2) Updated patch descriptions to reflect that Valentin Obst's build fix
->     for LLVM [1] has already been merged into Linux main.
-> 
-> 3) Minor wording and typo corrections in the commit logs throughout.
-> 
-> Changes since the first version:
-> 1) Rebased onto Linux 6.10-rc1
-> 
-> Enjoy!
-> 
-> [1] https://lore.kernel.org/44428518-4d21-4de7-8587-04eceefb330d@nvidia.com
-> 
-> thanks,
-> John Hubbard
-> 
-> John Hubbard (6):
->    selftests/x86: fix Makefile dependencies to work with clang
->    selftests/x86: build fsgsbase_restore.c with clang
->    selftests/x86: build sysret_rip.c with clang
->    selftests/x86: avoid -no-pie warnings from clang during compilation
->    selftests/x86: remove (or use) unused variables and functions
->    selftests/x86: fix printk warnings reported by clang
+> Acked-by: Andrei Vagin <avagin@google.com>
 > 
 
-> Muhammad Usama Anjum (1):
->    selftests: x86: test_FISTTP: use fisttps instead of ambiguous fisttp
-
-
-Usama and John,
-
-I am seeing checkpatch warnings in this series.
-
-v4-3-7
-WARNING: externs should be avoided in .c files
-#210: FILE: tools/testing/selftests/x86/fsgsbase_restore.c:46:
-+unsigned int dereference_seg_base(void);
-
-ARNING: Consecutive strings are generally better as a single string
-#156: FILE: tools/testing/selftests/x86/test_FISTTP.c:28:
-+	"	fisttps	res16""\n"
-
-WARNING: Consecutive strings are generally better as a single string
-#165: FILE: tools/testing/selftests/x86/test_FISTTP.c:48:
-+	"	fisttps	res16""\n"
-
-WARNING: Consecutive strings are generally better as a single string
-#174: FILE: tools/testing/selftests/x86/test_FISTTP.c:69:
-+	"	fisttps	res16""\n"
-
-WARNING: Consecutive strings are generally better as a single string
-#183: FILE: tools/testing/selftests/x86/test_FISTTP.c:91:
-+	"	fisttps	res16""\n"
-
-total: 0 errors, 5 warnings, 32 lines checked
-
-Can you take a look at these and see if they can be fixed. Send me
-v5 with these fixed - I will pull these in for 6.11-rc1
+Sent in for Linux 6.10 fixes update.
 
 thanks,
 -- Shuah
+
