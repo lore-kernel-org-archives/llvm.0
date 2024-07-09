@@ -1,62 +1,45 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F8B62746F;
-	Tue,  9 Jul 2024 01:13:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 20B1C63A;
+	Tue,  9 Jul 2024 05:30:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720487624; cv=none; b=lV2RXZAdnpTN4DLkBAyG4U017VXBzJNRA/+v594sjebaPgsdhCvSdgoRl7JeByQIIg4Fk2egvPOzlvJrQUfxHx4unGQ4ajJum5eq96stns8WnsViZzzVj7dEKZmMJbR24By186CO8aEDXiutygtb1HJdXAFI+9Immq2dSBzuQ0E=
+	t=1720503034; cv=none; b=C672Ip5xi3IvDTSzXPTaPXjmvLnCIa6WOAbGh5nB7H5QMB83U218Uw++aqB6utlUOBlrj4aJu16RPvxf8iGrZ8XbmfY4JIqI8cJBsH7tvW+upjJ9wcFL1rWM2eOrAYBKWpSxe6lbybYEHAlqNJ9MhXQhsMr7NH7khSiy6ghVq+g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720487624; c=relaxed/simple;
-	bh=RL2nzavEFmTdPgytejsONtIPz++Im7ZHpcYJyZperJ0=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=IScTuNegkfTPxCZdkBgqicBmkO/dgIi7hNrNeYC6upSpA9NqYPEhQADX5h4wFohUxAWF/8e71OVprMpEdCtg5z5G3YBIyUN/bUBj+kdCn/KdhMBKu94CGQTd+XQHO8DAd0JxiOot8z3hABUyxYRwHhuseLz+B6f7Ux+LRYorBQY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=BnemUNXi; arc=none smtp.client-ip=192.198.163.17
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1720503034; c=relaxed/simple;
+	bh=3v5wbcP0hZPdO4H71xPWdtsCXwN4cSEbDdTpxtfZxbc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=GLVTnwlMfMjmw+M+Uh7TuTCVFYwCyIrTxOOo51/Y3UeQodnzYEWd4IaG/7oT1dIku3y91BXs49pCm1epnRKsjEPafi8UsEK4Ec+Fn5mRyWwbgvqTa07UWQJwZWQ/kXMUM0Z0sUyEtlB3/A1n++pq3WoRanrhGCIGkPXBBEtLPCk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=sWrGFqI+; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="BnemUNXi"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1720487623; x=1752023623;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=RL2nzavEFmTdPgytejsONtIPz++Im7ZHpcYJyZperJ0=;
-  b=BnemUNXisdJ+XjZyJMlfJZAcSpMv/2KuBlK5ZMJjh7bEXkgm2B7ttQ9L
-   Hv2zXawmK2bhQFTIGPMZeqUCvG5Hv8+4o01YCVuPxZWjkhDUAfCRUYazh
-   VJXZ57JfCTdgbQ0rBSAOC6fYH5rOWrlFfM5KMCg8HW6j32fP+nsS48j7t
-   UfE8QFS7JyEetTsDJ6Q2TLjovQXaXih0ocAn6j/l/TnOQJSsLSUHN+oZP
-   P6bHADXVos+jf6et3tN+H/QHN4bPMl+oMJxGm43g+OlBGVYRaWLegLJU+
-   a07kRsAj2L1EF7lqaqqtJ7azQk+EveEw6COyCtbAWfTT1i7JeImE8dHcY
-   Q==;
-X-CSE-ConnectionGUID: ORQZtSNcTV6+nMjavE5pBQ==
-X-CSE-MsgGUID: 4DGLviPYR/mLmJzKxmdN9Q==
-X-IronPort-AV: E=McAfee;i="6700,10204,11127"; a="17587885"
-X-IronPort-AV: E=Sophos;i="6.09,193,1716274800"; 
-   d="scan'208";a="17587885"
-Received: from orviesa010.jf.intel.com ([10.64.159.150])
-  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jul 2024 18:13:42 -0700
-X-CSE-ConnectionGUID: iEtsmX5oRdK6p+U8978hog==
-X-CSE-MsgGUID: PI6vWzClTHmzq3OeE42Lag==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.09,193,1716274800"; 
-   d="scan'208";a="47607816"
-Received: from lkp-server01.sh.intel.com (HELO 68891e0c336b) ([10.239.97.150])
-  by orviesa010.jf.intel.com with ESMTP; 08 Jul 2024 18:13:40 -0700
-Received: from kbuild by 68891e0c336b with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1sQzQI-000WBy-0x;
-	Tue, 09 Jul 2024 01:13:38 +0000
-Date: Tue, 9 Jul 2024 09:13:12 +0800
-From: kernel test robot <lkp@intel.com>
-To: En-Wei Wu <en-wei.wu@canonical.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Johannes Berg <johannes@sipsolutions.net>,
-	Kalle Valo <kvalo@kernel.org>, linux-wireless@vger.kernel.org,
-	Johannes Berg <johannes.berg@intel.com>
-Subject: [wireless-next:main 24/27]
- drivers/net/wireless/virtual/virt_wifi.c:151:10: error: initializer element
- is not a compile-time constant
-Message-ID: <202407090944.mpwLHGt9-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="sWrGFqI+"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E1ED3C4AF07;
+	Tue,  9 Jul 2024 05:30:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1720503033;
+	bh=3v5wbcP0hZPdO4H71xPWdtsCXwN4cSEbDdTpxtfZxbc=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=sWrGFqI+R41C2LlSVz0Bz3IJXyX0qmmOMlUWtw+s84NUrvt+zLC8aT5v4ves3coeO
+	 hly5Q5XmqSRWKVV0PDqtQrkDFEqKcDmLreiwvucLkjgA3Y8GHgMi2qlD6F4W4/Cuwi
+	 b1fKbzkHDhPVQ72AjQIqM4cu/5l8CBK5abH3pl3EKwQsVE7K65qKJGsIELXvx6J/j9
+	 g2nC2n/NbaSRT/mkAO4IDsFzL6cVBX0Vgjd6luFC3FxGVZ72XJaTEbayOQDVGzaWsU
+	 Y7OoRFdmm5/5WhaA7EOiWd7bMOgBEBPnPdpmh8UdJsahZdUfx3Vo7asSrpNYgxbUER
+	 udg46dZi1lqgQ==
+Date: Mon, 8 Jul 2024 22:30:31 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Guillaume Tucker <gtucker@gtucker.io>
+Cc: Nick Desaulniers <ndesaulniers@google.com>,
+	Miguel Ojeda <ojeda@kernel.org>,
+	Alexei Starovoitov <ast@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+	llvm@lists.linux.dev, rust-for-linux@vger.kernel.org,
+	yurinnick@meta.com, bpf@vger.kernel.org,
+	Sasha Levin <sashal@kernel.org>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	automated-testing@lists.yoctoproject.org
+Subject: Re: Plumbers Testing MC potential topic: specialised toolchains
+Message-ID: <20240709053031.GB2120498@thelio-3990X>
+References: <f80acb84-1d98-44d3-84b7-d976de77d8ce@gtucker.io>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -65,54 +48,149 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <f80acb84-1d98-44d3-84b7-d976de77d8ce@gtucker.io>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/wireless/wireless-next.git main
-head:   b3603133d3b727b0b07a7094ab74cf27c8aee3bd
-commit: b5d14b0c6716fad7f0c94ac6e1d6f60a49f985c7 [24/27] wifi: virt_wifi: avoid reporting connection success with wrong SSID
-config: i386-randconfig-015-20240709 (https://download.01.org/0day-ci/archive/20240709/202407090944.mpwLHGt9-lkp@intel.com/config)
-compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240709/202407090944.mpwLHGt9-lkp@intel.com/reproduce)
+Hi Guillaume,
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202407090944.mpwLHGt9-lkp@intel.com/
+On Tue, Jul 09, 2024 at 12:10:51AM +0200, Guillaume Tucker wrote:
+> While exchanging a few ideas with others around the Testing
+> micro-conference[1] for Plumbers 2024, and based on some older
+> discussions, one key issue which seems to be common to several
+> subsystems is how to manage specialised toolchains.
+> 
+> By "specialised", I mean the ones that can't easily be installed
+> via major Linux distros or other packaging systems.  Say, if a
+> specific compiler revision is required with particular compiler
+> flags in order to build certain parts of the kernel - and maybe
+> even a particular compiler to build the toolchain itself.
 
-All errors (new ones prefixed by >>):
+I am having trouble understanding this paragraph, or maybe what it is
+getting after? While certain features in the kernel may require support
+from the compiler/toolchain (such as LTO or CFI), they should not be
+required. Perhaps you are talking about the selftests but I think that
+is distinctly different from the kernel itself. Is there a different (or
+perhaps tangible) situation that you have encounted or envision?
 
->> drivers/net/wireless/virtual/virt_wifi.c:151:10: error: initializer element is not a compile-time constant
-     151 |                 .len = strlen(VIRT_WIFI_SSID),
-         |                        ^~~~~~~~~~~~~~~~~~~~~~
-   1 error generated.
+> LLVM / Clang-Built-Linux used to be in this category, and I
+> believe it's still the case to some extent for linux-next
+> although a minimal LLVM version has now been supported in
+> mainline for a few years.
 
+Yes, we committed to a minimum version a few years ago. We have had to
+bump it twice for various reasons since then but I have tried to be
+fairly methodical about selecting a version that should be available
+enough. Has that caused problems?
 
-vim +151 drivers/net/wireless/virtual/virt_wifi.c
+> A more critical example is eBPF, which I believe still requires a
+> cutting-edge version of LLVM.  For example, this is why bpf tests
+> are not enabled by default in kselftest.
 
-   140	
-   141	static void virt_wifi_inform_bss(struct wiphy *wiphy)
-   142	{
-   143		u64 tsf = div_u64(ktime_get_boottime_ns(), 1000);
-   144		struct cfg80211_bss *informed_bss;
-   145		static const struct {
-   146			u8 tag;
-   147			u8 len;
-   148			u8 ssid[8];
-   149		} __packed ssid = {
-   150			.tag = WLAN_EID_SSID,
- > 151			.len = strlen(VIRT_WIFI_SSID),
-   152			.ssid = VIRT_WIFI_SSID,
-   153		};
-   154	
-   155		informed_bss = cfg80211_inform_bss(wiphy, &channel_5ghz,
-   156						   CFG80211_BSS_FTYPE_PRESP,
-   157						   fake_router_bssid, tsf,
-   158						   WLAN_CAPABILITY_ESS, 0,
-   159						   (void *)&ssid, sizeof(ssid),
-   160						   DBM_TO_MBM(-50), GFP_KERNEL);
-   161		cfg80211_put_bss(wiphy, informed_bss);
-   162	}
-   163	
+This sounds like something to bring up to the BPF folks, has anyone
+interacted with them to discuss this situation and see if stabilization
+for the sake of testing is possible?
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+> Based on these assumptions, the issue is about reproducibility -
+> yet alone setting up a toolchain that can build the code at all.
+> For an automated system to cover these use-cases, or for any
+> developer wanting to work on these particular areas of the
+> kernel, having the ability to reliably build it in a reproducible
+> way using a reference toolchain adds a lot of value.  It means
+> better quality control, less scope for errors and unexpected
+> behaviour with different code paths being executed or built
+> differently.
+> 
+> The current state of the art are the kernel.org toolchains:
+> 
+>   https://mirrors.edge.kernel.org/pub/tools/
+> 
+> These are for LLVM and cross-compilers, and they already solve a
+> large part of the issue described above.  However, they don't
+> include Rust (yet), and all the dependencies need to be installed
+
+As Miguel pointed out in a side thread, there are some Rust toolchains
+available:
+
+https://lore.kernel.org/rust-for-linux/CANiq72mYRkmRffFjNLWd4_Bws5nEyTYvm3xroT-hoDiWMqUOTA@mail.gmail.com/
+
+I will try to make those more discoverable from the LLVM folder.
+
+> manually which can have a significant impact on the build
+> result (gcc, binutils...).  One step further are the Linaro
+
+I have considered trying to statically compile LLVM (we started the
+effort some time ago but I have not been able to get back to it) but
+honestly, the xz disaster made me worry about building a static
+toolchain with a potentially vulnerable dependency, either necessitating
+removing the toolchain or rebuilding it.
+
+FWIW, I don't think the list of dependencies for the LLVM toolchain is
+too long. In fact, it appears they are all installed in a default Fedora
+image.
+
+> TuxMake Docker images[2] which got some very recent blog
+> coverage[3].  The issues then are that not all the toolchains are
+
+Ah, interesting, I did not realize that there was a blog post, that is
+cool!
+
+> necessarily available in Docker images, they're tailored to
+> TuxMake use-cases, and I'm not sure to which extent upstream
+> kernel maintainers rely on them.
+
+FWIW, the general vibe I get from kernel maintainers is most are pretty
+old school. I know some that use tuxmake but I suspect most probably
+just use their own scripts and wrappers that they have developed over
+the years. Part of the reason I made the toolchains as tarballs is so
+that all a maintainer has to do is install it to somewhere on the hard
+drive then they can just use LLVM=<prefix>/bin/ to use it.
+
+> Now, I might have missed some other important aspects so please
+> correct me if this reasoning seems flawed in any way.  I have
+> however seen how hard it can be for automated systems to build
+> kernels correctly and in a way that developers can reproduce, so
+> this is no trivial issue.  Then for the Testing MC, I would be
+
+Right, I think reproducibility and ease of setup/use is really
+important.
+
+> very interested to hear whether people feel it would be
+> beneficial to work towards a more exhaustive solution supported
+> upstream: kernel.org Docker images or something close such as
+> Dockerfiles in Git or another type of images with all the
+> dependencies included.  How does that sound?
+
+A few thoughts around this:
+
+Having first party Dockerfiles could be useful but how would they be
+used? Perhaps building a kernel in such a container could be plumbed
+into Kbuild, such that the container manager could be invoked to build
+the image if it does not exist then build the kernel in that image? This
+might be a lofty idea but it would remove a lot of the friction of using
+containers to build the kernel so that more people would adopt it?
+
+Another aspect of this is discoverability. I think a big problem with a
+project like TuxMake is that while it is developed for the kernel
+community, it is not a first party project, so without word of mouth,
+there is not a great way for other people to hear about it.
+
+I think it would be a good idea to try and solicit feedback from the
+greater kernel community at large to ensure that whatever solution is
+decided on will work for both testing systems and
+developers/maintainers. I think that a first party solution for having a
+consistent and easy to set up/work with build environment has been
+needed for some time but unfortunately, I am not sure how much
+discussion around this problem has happened directly with those folks.
+
+> [1] https://lpc.events/event/18/contributions/1665/
+> [2] https://hub.docker.com/u/tuxmake
+> [3] https://www.linaro.org/blog/tuxmake-building-linux-with-kernel-org-toolchains/
+
+As an aside, consider using me as a point of contact for anything
+ClangBuiltLinux related instead of Nick going forward, he has stepped
+away to focus on LLVM libc for the immediate future.
+
+Thanks a lot for bring up this topic. I think it is important to work on
+and I look forward to talking through this at Plumbers.
+
+Cheers,
+Nathan
