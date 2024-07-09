@@ -1,67 +1,56 @@
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2080.outbound.protection.outlook.com [40.107.236.80])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-io1-f47.google.com (mail-io1-f47.google.com [209.85.166.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F32F8144313
-	for <llvm@lists.linux.dev>; Tue,  9 Jul 2024 20:41:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.236.80
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720557680; cv=fail; b=r1YC6i91EBuJy63WbpvSvyaqTLot8HtOFfg7+KIwEgbrLtW2/f5fZtmg2Ft5r+uPhA3YWCZUOSyEYmYPtDXryrQqgOKzQg9ZO/in50RYVylXKV7JGjfKQgtbXsYlFTqyQyoVDcAG0vqfmQVPOVKoh8m+XwbP9rA33Id+SJC0N2Q=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720557680; c=relaxed/simple;
-	bh=UpMfGBSxplmNJno07ZrI4o3ZAY7WNMzTCtPnGMvZofY=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=K9HfcwLr3IsvPKccT6VP4ESntvARWAylYKNg/CtCgbtwvYbuqLVgJ1M41UAOL1/FIxHxG7WkcK4lonWI7A6ADQB8wsycVLJd3VvVk8Z0rUDU9rhCEUgmHHVABPhuliL1aHkp014yVLMfere7CXUAwrN8pzEnZxyjqAITNbVH8Do=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=neszWRcq; arc=fail smtp.client-ip=40.107.236.80
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B4BC15FB8A
+	for <llvm@lists.linux.dev>; Tue,  9 Jul 2024 20:51:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.47
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1720558303; cv=none; b=jqpdBL58vYSnlLy3dTrU/30FlJu/EPsuVP7ODv1mUuWMZ6oThRVEHecn6hH0KU+p7zbAAcvcdGDl46xFXsKceTaODIUO9FJYzLLdsZh7yG66ODf1jFpfivICDYeB10QdTlD/hWM6RAQ18JowyFfHEkUsZdrKs01t+bfHqMAxSOg=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1720558303; c=relaxed/simple;
+	bh=UIhfklEojLDQfKqDzlwiV+qYzjKtVVw9UeAmeQy8piY=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=IAIn7Tbr3XeKRhFJtWB0t4E7/SieSuG9zusnTSOTMhK0w8DDyct7h7apUBDaUtkOToJNuA1/Xj8xgefoqVffYlarfdE6eD5+/FbcljtDhIrILTUXYCs52VYxBl9ycpzl5QLWhHkY8IJFVB8neNoQGrm1GcRIheK2fA/PFJ6ywiY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=Mdl+/L/B; arc=none smtp.client-ip=209.85.166.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="neszWRcq"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=C2167jxtoJOCmLDy5ObZ9PIIzCDW1O1WkENiDb23blbDPm7vjETeZY0MrWd6ZmadOTdhrjyYURrWCmiFbgSBjNPXbMC3YwqjlLX8d0X9feeJ2EUE18hm0g/vDggT1Ljn4bVvKv5/F3kYivWMTKHW8EGqVPqby3W7G7bGmEcghQVahOslPD/LZPbxFzFbKkp56oy8525b/FM5wKo2YdiL73t93dnFQ37U7RVdi116xxApPcJRyXnl8IytL9W0ddeu58F887meG4hTY9gBGxGVvZA9t546+khi9BXyZEBJgiUMdHKYvVtstch7yr9r8rlOD84AVseB3LsAZXaWGY6d8Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=R76DRrwQCLBt0sx5H0KS2EJyGR6skjbmOA6HV9ZeAYs=;
- b=MgRHYuw3r198nqLkOdO1Rs7VDTgYtAz8JFqeugc2tFem9NPNnIrZaaUNZVsP5JaOw4N8NbCWimEK+qe0ZoEBXvA3AXb2YxySFBKoz+aOhvkOK6oMoYRenDvWBkCYUjfCrkUPTCvPIBMZROT9tsa1K2jf2hfcPQ4xhaEC2wSwujX0OUjWzQDQejvCJeHi7fG+ZK+DrceDlKCizo6W0zjj+sQ+xKujIZciMq2LpR/dUviP5VLHNUyIzHxTGPoPfp4H7j/8aJQ4XPzYr4Hi4J9SopMZf+L9zBTpj/YKjUsHad0B2bFcR/nwoh8g8/WbdA+liuq1vJT393vVKZaI8FSEcw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.160) smtp.rcpttodomain=linuxfoundation.org
- smtp.mailfrom=nvidia.com; dmarc=pass (p=reject sp=reject pct=100) action=none
- header.from=nvidia.com; dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=R76DRrwQCLBt0sx5H0KS2EJyGR6skjbmOA6HV9ZeAYs=;
- b=neszWRcqkf9Hwxj52/Q392Q/9C9mEmzailZdS2FEZHMjpAI70B4Y0oURUglXIX6fVQsSJRFrXIjGYT6y9ItY56FIrqwpWs3eRpEb4ipVMTB3YnNId4YHmqwwg5HSupqI1PNRLnVKgR1que1BeaMO94fsqCbym4yg1/o2F4xlL1ojjt7rrLKDC94DURyadUTeBVskeCKnkBDeNS+8is6z04QxSCwD9dMAN1dGer/wJVJPJzK8RSj8dAfPUmkStanyNP2z8ektn6L7H0K2QTmFfwScm+a4KP3HV3Opitb3qIjAOGXP8s1d+kYgUY7hLW3z6qAoGczl+nwU5rjMjWVIsw==
-Received: from PH8PR07CA0016.namprd07.prod.outlook.com (2603:10b6:510:2cd::24)
- by SA0PR12MB4416.namprd12.prod.outlook.com (2603:10b6:806:99::8) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7741.36; Tue, 9 Jul
- 2024 20:41:15 +0000
-Received: from SJ1PEPF00002321.namprd03.prod.outlook.com
- (2603:10b6:510:2cd:cafe::a4) by PH8PR07CA0016.outlook.office365.com
- (2603:10b6:510:2cd::24) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7762.20 via Frontend
- Transport; Tue, 9 Jul 2024 20:41:08 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.160) by
- SJ1PEPF00002321.mail.protection.outlook.com (10.167.242.91) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.7762.17 via Frontend Transport; Tue, 9 Jul 2024 20:41:14 +0000
-Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
- (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.4; Tue, 9 Jul 2024
- 13:40:54 -0700
-Received: from [10.110.48.28] (10.126.231.35) by rnnvmail201.nvidia.com
- (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.4; Tue, 9 Jul 2024
- 13:40:54 -0700
-Message-ID: <49c14f8f-0c08-41e0-b987-7c4253edf6de@nvidia.com>
-Date: Tue, 9 Jul 2024 13:40:53 -0700
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="Mdl+/L/B"
+Received: by mail-io1-f47.google.com with SMTP id ca18e2360f4ac-7f7c41f1bb5so9066839f.3
+        for <llvm@lists.linux.dev>; Tue, 09 Jul 2024 13:51:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google; t=1720558301; x=1721163101; darn=lists.linux.dev;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=UIhfklEojLDQfKqDzlwiV+qYzjKtVVw9UeAmeQy8piY=;
+        b=Mdl+/L/BUB8Or+YN7IGxp1TraU9tbMHQnZ3FieDiTT4yIhU3xa2WZqRPFB5aRo6R0h
+         0PPYdGWuZDeYGTEKkniIkIC7Wuj/zyeETWVUrMxgGguV+aQb0A4IdroDmadauZ1Hq1Fv
+         EvB2KKPwc6fDcjt7Of6NwTKOjGkqE6O9lAvTQ=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1720558301; x=1721163101;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=UIhfklEojLDQfKqDzlwiV+qYzjKtVVw9UeAmeQy8piY=;
+        b=ukCJppykvIgC3IjVMsV3/cxGNKMsqE+s7abHBN0tx7+/NHc8dekxtkPdDsv8qEZKV3
+         X0wDO8XP/HaT7S+4YngzNQJjyxkT3k6OhXsypMSwrx+spVtQ2cU9gyes+5XseAdrzfIE
+         kYeD+cW30vJwM/W0QVa3vhEBF4Pqv9PKidcG9cxD7P6G7AbtyBKqOwHlsnOvIbc8//t2
+         bJtoZWFFm0coN6Wn9RS1KNijPlGzJljhxZ86KSME9RbJ5siLYgB38sZWf2C6a9LWsk5m
+         GFGHyx8pUTWG+NhNG4dIHrEo0xZB7EooFahxaLt/nNe2wkq4z+aNYVRt4nABlyRP3tJn
+         unwA==
+X-Forwarded-Encrypted: i=1; AJvYcCVktmZumLyszTkWmowUXagzUtdpTeRdc6rAvPYAbAOMB9LpZ+DB3e+WFVVmJtWlCJ9fzfVs6ht67E5RcprxKV1SW5XD3Q==
+X-Gm-Message-State: AOJu0Yy2buOzXsivFJgO3OdSiWkcaNJM5CjlVS2DfTjPkja1WloO5+rL
+	uIXNWE0tOd2qz09yPJbB5UoislUpUO2yxZHzYVsLkhITJwNg66iMM70SNZRl9AE=
+X-Google-Smtp-Source: AGHT+IEqMVN2v6iXfRRRelBibAQXZalOQUm9pKB32R2RN8hexYBdUR2mGYYnXtQP1/9U74HqyIxrgg==
+X-Received: by 2002:a05:6602:3413:b0:7f9:90c5:4107 with SMTP id ca18e2360f4ac-800023b5fdcmr489122939f.1.1720558300852;
+        Tue, 09 Jul 2024 13:51:40 -0700 (PDT)
+Received: from [192.168.1.128] ([38.175.170.29])
+        by smtp.gmail.com with ESMTPSA id 8926c6da1cb9f-4c0b1c138f9sm690522173.148.2024.07.09.13.51.39
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 09 Jul 2024 13:51:40 -0700 (PDT)
+Message-ID: <78c3ed1e-32b2-43aa-9979-0479fa524018@linuxfoundation.org>
+Date: Tue, 9 Jul 2024 14:51:39 -0600
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -71,134 +60,44 @@ MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Subject: Re: [PATCH v4 0/7] selftests/x86: fix build errors and warnings found
  via clang
-To: Shuah Khan <skhan@linuxfoundation.org>, Shuah Khan <shuah@kernel.org>
-CC: angquan yu <angquan21@gmail.com>, "Kirill A . Shutemov"
-	<kirill.shutemov@linux.intel.com>, Ingo Molnar <mingo@kernel.org>, Binbin Wu
-	<binbin.wu@linux.intel.com>, Alexey Dobriyan <adobriyan@gmail.com>, "Rick
- Edgecombe" <rick.p.edgecombe@intel.com>, Sohil Mehta <sohil.mehta@intel.com>,
-	Yu-cheng Yu <yu-cheng.yu@intel.com>, Dave Hansen
-	<dave.hansen@linux.intel.com>, Muhammad Usama Anjum
-	<usama.anjum@collabora.com>, Valentin Obst <kernel@valentinobst.de>,
-	<linux-kselftest@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
-	<llvm@lists.linux.dev>, <x86@kernel.org>
+To: John Hubbard <jhubbard@nvidia.com>, Shuah Khan <shuah@kernel.org>
+Cc: angquan yu <angquan21@gmail.com>,
+ "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+ Ingo Molnar <mingo@kernel.org>, Binbin Wu <binbin.wu@linux.intel.com>,
+ Alexey Dobriyan <adobriyan@gmail.com>,
+ Rick Edgecombe <rick.p.edgecombe@intel.com>,
+ Sohil Mehta <sohil.mehta@intel.com>, Yu-cheng Yu <yu-cheng.yu@intel.com>,
+ Dave Hansen <dave.hansen@linux.intel.com>,
+ Muhammad Usama Anjum <usama.anjum@collabora.com>,
+ Valentin Obst <kernel@valentinobst.de>, linux-kselftest@vger.kernel.org,
+ LKML <linux-kernel@vger.kernel.org>, llvm@lists.linux.dev, x86@kernel.org,
+ Shuah Khan <skhan@linuxfoundation.org>
 References: <20240704072431.111640-1-jhubbard@nvidia.com>
  <a08e6846-2f9e-4fb4-910f-b33fe779fa01@linuxfoundation.org>
+ <49c14f8f-0c08-41e0-b987-7c4253edf6de@nvidia.com>
 Content-Language: en-US
-From: John Hubbard <jhubbard@nvidia.com>
-In-Reply-To: <a08e6846-2f9e-4fb4-910f-b33fe779fa01@linuxfoundation.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+From: Shuah Khan <skhan@linuxfoundation.org>
+In-Reply-To: <49c14f8f-0c08-41e0-b987-7c4253edf6de@nvidia.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: rnnvmail203.nvidia.com (10.129.68.9) To
- rnnvmail201.nvidia.com (10.129.68.8)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SJ1PEPF00002321:EE_|SA0PR12MB4416:EE_
-X-MS-Office365-Filtering-Correlation-Id: 670c65db-3d89-427d-c45b-08dca0577a05
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|376014|1800799024|7416014|82310400026|36860700013;
-X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?VTZiek84QU1JMjdRY0V3dDhDc2J3MTFQYVFMQUNSRVB2Y2ZYWUtWcE9rTUlP?=
- =?utf-8?B?U0diRmhjVHdpOTdSK2JPTkx6akg4ZC92UnV1Y2l4ellLN3pzK21EM0VvN2RL?=
- =?utf-8?B?T1J0eHVjMUVTV1dTY1dZQ04rYytzTkRaUVE3N1NsbUVjdFJjOVlDV0VvK2w0?=
- =?utf-8?B?ajFOVXFJNnFwQTB6OHJuSXV6OWtmS3J5bThkZ3gydndTOEpFT2JoaTBqV09a?=
- =?utf-8?B?Vy91Z09rUytqVTZWSzJzMnlGYkl3OWVIL2dNdTdUWnBUTkx5TmE4SVhmTmpI?=
- =?utf-8?B?NHJpQ0IvZFNoWDRFdVR2cFVIRE5xRTkxaktSSXlUbzlSK3Jidi90MHI4WWRJ?=
- =?utf-8?B?RGhGbEV5bUM2aUN0aVZNRUFZQXpJYXBZQ0VGZzBKRG8vcXdzemRIQmx5OHdw?=
- =?utf-8?B?NVVGdXpZQ0hGKytQM2Z1MURRTWlwT2hJUVVrV2xhbWsrcHIwb2FtcHdCQkpU?=
- =?utf-8?B?bmNRZjBQUFE0RjdqMmxWWGxiMlIwTTFIZk5CeWZ6TzJkUUx4VlRjUVo4cldu?=
- =?utf-8?B?N0d4R3FPQ2RTWGY3K05lbzZ1M2p6K0VEWE51Y0ZZNEtVS1FDcFJRR2l3bjZ3?=
- =?utf-8?B?VXBGZUYyS2wyWmgyQWc2MUVoeUI1SmtVTkRjNTBQcGVtUEtJcllrQzlpUzh0?=
- =?utf-8?B?VVpvTEp3Q05sNWQvUjM2MjlIQUNpVU9xSzVsaGhGL2VvNFgzMzQzYUFGRUNs?=
- =?utf-8?B?dGdTUjdtM1Q0NmhsdG9EZmVTczVZYWdxdndCVnB4OE43OEoxZ25ZZGZzTGNU?=
- =?utf-8?B?bm8vMGNaNUJ0QzdQeFI2ekw2U28vcjdDbWgybTlqWTJJazFzM1IxYm56Mmd4?=
- =?utf-8?B?SjV6bXdReXh4VHdVWlFteVhaN2NybTBib1JuZlVwd2NRZVBKeUJkbGZtVHBR?=
- =?utf-8?B?RkVveXkrN0VFRG5nZ0dvenF3aTErWTV2bElVM1lyaHlzVTQ3MGRBZGlKcHpv?=
- =?utf-8?B?STJhSDZjMkxlVFNyOU5DUTFKd29IVm8wZWRPbWRVUmRFdzgxd3hIcGlVWHRS?=
- =?utf-8?B?TXF1UTlFLzB6L21ucFhyaGU5Y2JETTRNS0pyRVp1VjY5ZUlZZ1hvSnp2UXpy?=
- =?utf-8?B?RStZOUY5NWc4NzAxcGJYakFFc3FXTGwwU0M3SmhPM2pLN1hNMlc1eTNjREU4?=
- =?utf-8?B?c2hiN3l0MEIzbGJGclhEQ3FlOVMySTRWd3h5OGtnY1ZnR1BSeE9XNTJVdkFZ?=
- =?utf-8?B?MFNXSjRmS3dLZjYwelVjS3dSVGJjdEdseUQwdmZ3aExGR0gyNkpENWVXMlpo?=
- =?utf-8?B?aFc3L29kWjFyUWhXR3EwVExEYyt0dWZ4UGZrQUM5UDdPY05PSHp3d3ZIK3Rt?=
- =?utf-8?B?N1JxOWd4RDQ5YXBHVkN3UkRhRGVQeUVyR0ZuYkdSRDVWVHp1WStKMXBReUN6?=
- =?utf-8?B?ZkVUTGpGL05GU2hwdGZURU9jRm50MVRhSDBmSWRTZzU5aTI1ZnoxT1BtNlhy?=
- =?utf-8?B?WmZ0WTRxRkdIVnB1VTVRNnNPQms3QUJFRStVMlhlUUNublIrMnpabjFoT2d2?=
- =?utf-8?B?Z1V3ZFlOL3JtSWR2c3pXeTZ3L2NvMWpDdWkyMURPZFZJTGp4bnRRc3RxRHln?=
- =?utf-8?B?U2s2RG5aNjY3M3dPbHlYbjNtdU9sanc5bitGWGRabm5idG45cDNvN0hIRjlp?=
- =?utf-8?B?RVArTC9SRHdTM0RIaFdwVjBaTUs3c0VqalcrRnNtUXBGUUUrdkcxNFNDeUlu?=
- =?utf-8?B?akFjWDdGMUU1UGwwaXdaUEtqanEvVGlIWitNWndJMXBGTmxsQjIzYzlodzY4?=
- =?utf-8?B?SldqYm80b0JzWm5CN0JHR2gvTnRidWREYWR2T0I1ejBOQS84YXJVRElOSkFL?=
- =?utf-8?B?bk9VVTgybDQxS3NtODFCa0xTUmx3eHcyZTE2SjI4SWZrN2U5VWRMSk1WUXJu?=
- =?utf-8?B?YWdxRUEwVzd0OThiUGZ4YjYxU0FnTHNibEk2UW40NnJHVStqOEgySEFnZnRK?=
- =?utf-8?Q?hEBXDFB1wBOmHR67+0ZwsZ6pl2Skk+gF?=
-X-Forefront-Antispam-Report:
-	CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230040)(376014)(1800799024)(7416014)(82310400026)(36860700013);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Jul 2024 20:41:14.9408
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 670c65db-3d89-427d-c45b-08dca0577a05
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	SJ1PEPF00002321.namprd03.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA0PR12MB4416
 
-On 7/9/24 1:34 PM, Shuah Khan wrote:
-> On 7/4/24 01:24, John Hubbard wrote:
-...>> Muhammad Usama Anjum (1):
->>    selftests: x86: test_FISTTP: use fisttps instead of ambiguous fisttp
-> 
-> 
-> Usama and John,
-> 
-> I am seeing checkpatch warnings in this series.
-> 
-> v4-3-7
-> WARNING: externs should be avoided in .c files
-> #210: FILE: tools/testing/selftests/x86/fsgsbase_restore.c:46:
-> +unsigned int dereference_seg_base(void);
-> 
-> ARNING: Consecutive strings are generally better as a single string
-> #156: FILE: tools/testing/selftests/x86/test_FISTTP.c:28:
-> +    "    fisttps    res16""\n"
-> 
-> WARNING: Consecutive strings are generally better as a single string
-> #165: FILE: tools/testing/selftests/x86/test_FISTTP.c:48:
-> +    "    fisttps    res16""\n"
-> 
-> WARNING: Consecutive strings are generally better as a single string
-> #174: FILE: tools/testing/selftests/x86/test_FISTTP.c:69:
-> +    "    fisttps    res16""\n"
-> 
-> WARNING: Consecutive strings are generally better as a single string
-> #183: FILE: tools/testing/selftests/x86/test_FISTTP.c:91:
-> +    "    fisttps    res16""\n"
-> 
-> total: 0 errors, 5 warnings, 32 lines checked
-> 
-> Can you take a look at these and see if they can be fixed. Send me
-> v5 with these fixed - I will pull these in for 6.11-rc1
-> 
-> thanks,
-> -- Shuah
+On 7/9/24 14:40, John Hubbard wrote:
+> On 7/9/24 1:34 PM, Shuah Khan wrote:
+>> On 7/4/24 01:24, John Hubbard wrote:
+> ...>> Muhammad Usama Anjum (1):
+>>>    selftests: x86: test_FISTTP: use fisttps instead of ambiguous fisttp
+>>
+>>
+>> Usama and John,
+>>
+>> I am seeing checkpatch warnings in this series.
+>>
+>> v4-3-7
+>> WARNING: externs should be avoided in .c files
+>> #210: FILE: tools/testing/selftests/x86/fsgsbase_restore.c:46:
+>> +unsigned int dereference_seg_base(void);
 
-Hi Shuah,
-
-These warnings are pre-existing. For such things, it's usually prudent
-to avoid changing them--or at least, not in the same patch.
-
-I think it's best to submit the patch (and series) as-is. If the x86
-team wants the above things cleaned up (which I seriously doubt), they'll
-let us know.
-
-Yes?
-
+This one looked new though.
 
 thanks,
--- 
-John Hubbard
-NVIDIA
-
+-- Shuah
