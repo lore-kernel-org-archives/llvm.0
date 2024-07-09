@@ -1,55 +1,57 @@
 Received: from mail-qk1-f170.google.com (mail-qk1-f170.google.com [209.85.222.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E5449157470
-	for <llvm@lists.linux.dev>; Tue,  9 Jul 2024 17:39:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DEB4515886B
+	for <llvm@lists.linux.dev>; Tue,  9 Jul 2024 17:39:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720546781; cv=none; b=rJjSpjeQqoOm0WuYzvBB2KGQ9iqOib2ZiOObJ7Bx+DlZuEL2E5HUKHMFnyLFMrizXx0wNLBKiVW7MPZJBX2+Ac5lj2o+pB1cb39M2h92HNR6tLDEp6t/aEsWbgq1VYxZCy8eWaUK1Y1fY0XDYU3uzQkIlBeyT8fd8cfU2Ap7jXM=
+	t=1720546782; cv=none; b=SS6fcxOo29UwzLb4TMSCE8YJR4LYhveNfIllFex32VPovPv5peNveoSi+f/821ZW/ogfqAiQLbI3NXTf7O4LdTY+/mPsz5OSxeNYdnA10T9w35ngkKTrUbWn/bC6aL2TVS5fCXDaGKNsoXRQKRfUK7on0gFx3G9HPPnEmEggV4Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720546781; c=relaxed/simple;
-	bh=d0K/xZYfkfM7LYdV9v3IX6Evpj3aZ/O5jBSxXMFfgHk=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=U9QNYxFrN8uSJ0S1Wh74fua8CX2912GW+K+qiDrlEiSk7XbLwx8y1xShcSy35UNHrr8pM0tKsQJdILtnwgJ0Z31J+H7kNTRW2JWs/eBgP4jfO1Zwl9r6XnQoLyFXBXA2F0CIJPFmiiiJSl1ABiNIEvUaqwfOhgWjlEh9jP59bJ4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=hnZcOuBR; arc=none smtp.client-ip=209.85.222.170
+	s=arc-20240116; t=1720546782; c=relaxed/simple;
+	bh=IeOtPKogez48r2P3oAafPf7mWpdrIEUVTbXKWkBu+s4=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=pauIwZ8MaDIylhZvEbu3xYUsGpsctvgatu1Kz4YvZF+0k1Qko7FQnzy10aKygxVrO92beX2Vpj+nKLe/VH3h2+xgSqKEMO/CNI5gQFrZ90S6X3dwyXfieuvgTfegYmnyolFqiNn8QXKWq/Os9OK5XR4bjZ4K9ExDeOLph8UiNjE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=0Ea4Cc0K; arc=none smtp.client-ip=209.85.222.170
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="hnZcOuBR"
-Received: by mail-qk1-f170.google.com with SMTP id af79cd13be357-79ef8e0c294so275823385a.1
-        for <llvm@lists.linux.dev>; Tue, 09 Jul 2024 10:39:39 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="0Ea4Cc0K"
+Received: by mail-qk1-f170.google.com with SMTP id af79cd13be357-79f178e6225so108819185a.2
+        for <llvm@lists.linux.dev>; Tue, 09 Jul 2024 10:39:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1720546779; x=1721151579; darn=lists.linux.dev;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=4MkRq9pJZdtUmCqu5iT1gqMbhpvrDb9DS4nLumIGatQ=;
-        b=hnZcOuBR+j4XKHoZ/4owKK4+d59kZUJcfnPyhm653nQmjj2mDX4jYPVqv/bEUOTAJY
-         3K8iMbiMXlFwTtE/xDxollrlRX/kuVh6m9yDOZeiGStnUSX9EPFyVf9akea+Cx28oKsT
-         XHRDxL9HUEqhHYm37hL1GmJ5qY3PIpfsdUEg3ifcinpuoAQcZP6QIgQt6gbACFMIF/41
-         qgKIXnLLmiuCUBq35hm7zoolSBy4Q9JaKcfk7Me2fPMKoDeE4X+sheAWn0N1OR1CILzh
-         yZEeSpM82zLeju/1wCIanbi8RoLjoAcj5r04RvSz5nYEms8VSLgEievAf9YNAxXltzjn
-         hBnA==
+        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1720546780; x=1721151580; darn=lists.linux.dev;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=gIkiZ+EC0cy3qQspr3kP3SqSJopsA9NQAjKMM+c2r1A=;
+        b=0Ea4Cc0K83c/o528j+ggUdJUQf520Th8b7BMbAEQnwlAr/cHKpn1NCU1gMi1vkm0pG
+         a+SUe/KYC4rldaDD6v1rsk67l7oOzNLIB3aaS32MY9F5J5OwXJDpE5fTHy459SkR7Giw
+         A/71gQtgeJZXky/CjX3RFIkSNzdyaHYDfyVDXHW/+87RZN7u9WA5pxo7wIvD30sI3wVA
+         4IDHiPKRD/EnnLXlA76kCx+VLRFwklib8HSvJdnzPPBZlVhApuUTGbrxKlYiH1yBkM6i
+         McO5IlIC26n7F1PPs2jm1B2rm9uqLv/2OfCZINF9cf9ybnjk48gnVcEMhaRVPYCg4nTg
+         zj0w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1720546779; x=1721151579;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=4MkRq9pJZdtUmCqu5iT1gqMbhpvrDb9DS4nLumIGatQ=;
-        b=uCk/kkV9HfsSGu/Q4oJ4xH793IP5a5BbqTqhh7/JLLJtDLcu1Lee8oA6739ZZtCFN+
-         l34oJ4gGgTF/JNv4Wjji7mE9ned2Y7k/2UDnae4jJ/uq7YvYHoewqRY9yf1UEA3ihSci
-         ql9WKXT0lpCo6f+83xqgeFl9OHntEAUW1Q+No2T0v/GImhGViXHS0uEriqLQ5RmUvyMy
-         hxv4zsCY9nU6JphnCV6+1O9WlzFIBvevlfoYkojk4My+OvfqObxLCpBco2lb5fObgLo5
-         ZiEaD7xWooegykldf1MsAqNYOle+IBPWJGOq3meVtRrLs/1jcmH+F8SOHMR+b9jvEzM3
-         XF0w==
-X-Forwarded-Encrypted: i=1; AJvYcCWV+0Fp0e8sxjrs93DSeBivOrKGNR3qWK8KRi2Gdj4ED8dTO9ATvdSK2Oey6GJp3aGk3To4ccpETRYqJFVo01X6fheJ7w==
-X-Gm-Message-State: AOJu0Yzi5PLMgtGpEDuzmmSkFMW4areLzgVL2wvQ6J3GrzE6YC9DwZLc
-	Jkhn6faUPru6O7WDcb3XmUDvkke8RmDYJEi0VkcbUVuY9MV2TjuPRsDn5ftbGA8=
-X-Google-Smtp-Source: AGHT+IGVttz6ocCRARNPeKFY4qZPLhSqhYKVAK3N9nGYjiO1emaTxC7eUVnojkoDW25ZMQuH4lzesw==
-X-Received: by 2002:a05:620a:816:b0:79e:fec7:d6e9 with SMTP id af79cd13be357-79f1b5da34amr487803585a.32.1720546778885;
-        Tue, 09 Jul 2024 10:39:38 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1720546780; x=1721151580;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=gIkiZ+EC0cy3qQspr3kP3SqSJopsA9NQAjKMM+c2r1A=;
+        b=lXhQQh/OUhD/xVyPVz7gZCg3MPIHSvGc7sbxH+qr3nc3FGJZiU5YTQN+gSe3hnnXZe
+         SfTT11C3uAi//Ch4mgyMv5VEjQRzHeItZaEXM5tOY56r5jyvbwwnaarO8bvl+FBbrvoX
+         QAqhQvMtpMyd0R57BRGEIf89P/HH/+nvyMOI5fhHfe+GAIYRR3sn6jWi6eDV9VYh5KBf
+         6M/n8pbfzNOkJpgs0SHbvnj30Zuuxs8LX8MXv35jexnefeEjHGS8GbspNfZoKp0zDzLb
+         VTXHgPFkx5o0hZMS38dB3se4bWnLSccgEi6m9JMlh5C8KFBPoLcKNSKX6xvS2cZdjiyd
+         wJMQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVLwYXafxNrDfbB4m3k4n+ExropXuX0O0P7iQKXYKqZoDoC2W+udfpn0E+ax+G7RXuNv2HrsYgtjlzjzFJKfVVL79Zn5A==
+X-Gm-Message-State: AOJu0YwvFyct8M3+KTgF+DmC2mlbx9u/Iy87wIDZ4kAn1KKsPZpq/rM7
+	1+6K6rHtRhi6VO3A6un/crJyLn8dTBoZjNOHG20sQQko7nMmBNc8o8jTZpl3ALA=
+X-Google-Smtp-Source: AGHT+IFqf9MGCcfZzUZn5e2OPi31BYIsZtdOvyOYSAfI80AmjeHPmXW5Hh4FPbdEJB+RjrwEI5CSIg==
+X-Received: by 2002:ae9:e017:0:b0:79c:f0e:f7ac with SMTP id af79cd13be357-79f19a1f8a5mr329303185a.28.1720546779837;
+        Tue, 09 Jul 2024 10:39:39 -0700 (PDT)
 Received: from jesse-desktop.. (pool-108-26-179-17.bstnma.fios.verizon.net. [108.26.179.17])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-79f18ff6762sm117547785a.10.2024.07.09.10.39.38
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-79f18ff6762sm117547785a.10.2024.07.09.10.39.39
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 09 Jul 2024 10:39:38 -0700 (PDT)
+        Tue, 09 Jul 2024 10:39:39 -0700 (PDT)
 From: Jesse Taube <jesse@rivosinc.com>
 To: linux-riscv@lists.infradead.org
 Cc: Ard Biesheuvel <ardb@kernel.org>,
@@ -73,10 +75,12 @@ Cc: Ard Biesheuvel <ardb@kernel.org>,
 	"Vishal Moola (Oracle)" <vishal.moola@gmail.com>,
 	linux-kernel@vger.kernel.org,
 	llvm@lists.linux.dev
-Subject: [PATCH v4 0/4] RISC-V: Parse DT for Zkr to seed KASLR
-Date: Tue,  9 Jul 2024 13:39:33 -0400
-Message-ID: <20240709173937.510084-1-jesse@rivosinc.com>
+Subject: [PATCH v4 1/4] RISC-V: pi: Force hidden visibility for all symbol references
+Date: Tue,  9 Jul 2024 13:39:34 -0400
+Message-ID: <20240709173937.510084-2-jesse@rivosinc.com>
 X-Mailer: git-send-email 2.45.2
+In-Reply-To: <20240709173937.510084-1-jesse@rivosinc.com>
+References: <20240709173937.510084-1-jesse@rivosinc.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -85,39 +89,39 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Add functions to pi/fdt_early.c to help parse the FDT to check if
-the isa string has the Zkr extension. Then use the Zkr extension to
-seed the KASLR base address.
+Eliminate all GOT entries in the .pi section, by forcing hidden
+visibility for all symbol references, which informs the compiler that
+such references will be resolved at link time without the need for
+allocating GOT entries.
 
-The first two patches fix the visibility of symbols.
+Include linux/hidden.h in Makefile, like arm64, for the
+hidden visibility attribute.
 
+Signed-off-by: Jesse Taube <jesse@rivosinc.com>
+Reviewed-by: Alexandre Ghiti <alexghiti@rivosinc.com>
+---
 V1 -> V2:
- - Add RISC-V: pi: Force hidden visibility for all symbol references
- - Add RISC-V: pi: Add kernel/pi/pi.h
- - Rewrite archrandom_early.c to parse DT over checking the csr
+ - New patch
 V2 -> V3:
- - Add RISC-V: lib: Add pi aliases for string functions
- - Rewrite isa_string_contains in third patch
+ - No changes
+V3 -> V4:
+ - No changes
+---
+ arch/riscv/kernel/pi/Makefile | 1 +
+ 1 file changed, 1 insertion(+)
 
-Jesse Taube (4):
-  RISC-V: pi: Force hidden visibility for all symbol references
-  RISC-V: lib: Add pi aliases for string functions
-  RISC-V: pi: Add kernel/pi/pi.h
-  RISC-V: Use Zkr to seed KASLR base address
-
- arch/riscv/kernel/pi/Makefile           |   4 +-
- arch/riscv/kernel/pi/archrandom_early.c |  30 +++++
- arch/riscv/kernel/pi/cmdline_early.c    |  10 +-
- arch/riscv/kernel/pi/fdt_early.c        | 167 +++++++++++++++++++++++-
- arch/riscv/kernel/pi/pi.h               |  20 +++
- arch/riscv/lib/memset.S                 |   2 +
- arch/riscv/lib/strcmp.S                 |   1 +
- arch/riscv/lib/strncmp.S                |   1 +
- arch/riscv/mm/init.c                    |   5 +-
- 9 files changed, 224 insertions(+), 16 deletions(-)
- create mode 100644 arch/riscv/kernel/pi/archrandom_early.c
- create mode 100644 arch/riscv/kernel/pi/pi.h
-
+diff --git a/arch/riscv/kernel/pi/Makefile b/arch/riscv/kernel/pi/Makefile
+index 50bc5ef7dd2f..1ef7584be0c3 100644
+--- a/arch/riscv/kernel/pi/Makefile
++++ b/arch/riscv/kernel/pi/Makefile
+@@ -5,6 +5,7 @@ KBUILD_CFLAGS	:= $(subst $(CC_FLAGS_FTRACE),,$(KBUILD_CFLAGS)) -fpie \
+ 		   -Os -DDISABLE_BRANCH_PROFILING $(DISABLE_STACKLEAK_PLUGIN) \
+ 		   $(call cc-option,-mbranch-protection=none) \
+ 		   -I$(srctree)/scripts/dtc/libfdt -fno-stack-protector \
++		   -include $(srctree)/include/linux/hidden.h \
+ 		   -D__DISABLE_EXPORTS -ffreestanding \
+ 		   -fno-asynchronous-unwind-tables -fno-unwind-tables \
+ 		   $(call cc-option,-fno-addrsig)
 -- 
 2.45.2
 
