@@ -1,99 +1,171 @@
-Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
+Received: from out-172.mta1.migadu.com (out-172.mta1.migadu.com [95.215.58.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6498618651;
-	Wed, 10 Jul 2024 03:03:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D007C182D2
+	for <llvm@lists.linux.dev>; Wed, 10 Jul 2024 03:16:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720580631; cv=none; b=MaFMr/G86pPQPCYc4g5InKmTV270u2+Wq1lVeetletEkwFX7pU93zD4LdakGqDN85wD2gnMA6zhCJLpq+1yCYE+/WDt0xypbXhHbz4q/TXSxxaFVwF33/la2tFcaJUkZosc/7KU5Ix1DFuBLIyyN0noNtr/qBbgXonaanzOzvIw=
+	t=1720581377; cv=none; b=kXsdXfY4DTIiFEMk0uBVQuudwBJV8500IA2kh0++CBCA8PcIeDnfHuI1xx8vkvoSTdW8/fHrmPc9JIM6CtICTXQMBSja9ufu59+SaoP28nscMo5ZSBqultNuIvzyD8MLM85+7KiLLgxWwFqRKb0g4L/VAPVSYeHxTLceQ08Zouo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720580631; c=relaxed/simple;
-	bh=lZL60FD/ZnMauqokW//cEozqbNGygPLb+advuIPrLOQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=d5aU4S8kymXhdxfTIkkG2jBNXt1MV0De2DxxpmARlLvHJbvl5y6ZFb0LGdsGx7yOLolUGD05zzYjaJ925a5q5JeOn4Ewb0vQXe3JzA4bLpTUgVozcNXvIEgYONnHMhpu72bLuuPRTSMLZpUbqsrp+8wWstxNWKuOZiIkbhUR8no=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=Nc9HF4+F; arc=none smtp.client-ip=90.155.50.34
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
+	s=arc-20240116; t=1720581377; c=relaxed/simple;
+	bh=roUE502xLfXq4pcTuAI0h89lP71wNlAZnzYPEpEqFpg=;
+	h=MIME-Version:Date:Content-Type:From:Message-ID:Subject:To:Cc:
+	 In-Reply-To:References; b=uDv3tNc3Xq6CsKa60v9R7/P9/AX4ZXh+B2fa06bB5pecS9jMNNv2PdwA3GDlYb8iy7NCxHUQyTl8IRfwnWo2JYivvQKJCky/rEisOZiiE5c2sn1obdkD+7/Ah8X96iJv7VYDART77+QSMO44DocwWMSJjhaOvv/uOsYAjK3EDtA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=gzxK4JI1; arc=none smtp.client-ip=95.215.58.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="Nc9HF4+F"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=4QCXCz0zQ+WlrfEgvyLBZrRzTFdgqTlxMzUM+AKRzos=; b=Nc9HF4+FeXLRBKeWwJ8dE4sC+4
-	pTatc1wxGhT87C4gpQ7rzONyvrF+NJLuI382zUE0PHOO5RBDRaAeI7+NUbheXCZ8/MNI/pFVbwoLC
-	+5+GT4rp1r6a8iZzRQ3H+eghUm9KMaiBhWgJRJ6yJKgTJUjNruYHo2AVqbjbqxL0V31YOjrQn9GXV
-	5DlqZL5vh8X+C1i2jykhPQCpyHWd8OzfSbIuItSotjcqN3Z+ARVkw19rMZLNTb6DxatIe6cCel1Ux
-	qOpwXAF7Tt2VvE6XEb+YeuvfJfGS4Q8NIMh+lkcaBEpQcN5z3RlVKZohWehUTb8qgXB8tVeUubGSc
-	ajXN6tCw==;
-Received: from willy by casper.infradead.org with local (Exim 4.97.1 #2 (Red Hat Linux))
-	id 1sRNcD-00000008drV-0f3I;
-	Wed, 10 Jul 2024 03:03:33 +0000
-Date: Wed, 10 Jul 2024 04:03:33 +0100
-From: Matthew Wilcox <willy@infradead.org>
-To: sxwjean@me.com
-Cc: vbabka@suse.cz, surenb@google.com, cl@linux.co, penberg@kernel.org,
-	rientjes@google.com, iamjoonsoo.kim@lge.com,
-	akpm@linux-foundation.org, roman.gushchin@linux.dev,
-	42.hyeyoo@gmail.com, xiongwei.song@linux.dev, linux-mm@kvack.org,
-	linux-kernel@vger.kernel.org, kernel test robot <lkp@intel.com>,
-	Nathan Chancellor <nathan@kernel.org>, llvm@lists.linux.dev,
-	Nick Desaulniers <ndesaulniers@google.com>
-Subject: Re: [PATCH] mm/slub: quiet the clang warning with -Wunused-function
- enabled
-Message-ID: <Zo36BTqhzGkukyT_@casper.infradead.org>
-References: <20240710025418.394321-1-sxwjean@me.com>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="gzxK4JI1"
+X-Envelope-To: willy@infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1720581368;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=Ab57vPDAVW6n2fvyGHo7nNxLm+m7V/+rr2GUI7WVKJg=;
+	b=gzxK4JI1hQdkiilYBppppSxd6E3NMcRJKQ17Oo7M30MovjFrxG/DZRb8AnPKrmzVltEPuB
+	5N9bCEZScgcOdj1UHAU1R2KzTV91DfI7BUDhmsGMjLcKuAhM55xDtLhWe0yLXR8ZMykuZq
+	9ETXsSCuUJzWaKvlJ+o9F5ijarLjnTM=
+X-Envelope-To: vbabka@suse.cz
+X-Envelope-To: surenb@google.com
+X-Envelope-To: cl@linux.co
+X-Envelope-To: penberg@kernel.org
+X-Envelope-To: rientjes@google.com
+X-Envelope-To: iamjoonsoo.kim@lge.com
+X-Envelope-To: akpm@linux-foundation.org
+X-Envelope-To: roman.gushchin@linux.dev
+X-Envelope-To: 42.hyeyoo@gmail.com
+X-Envelope-To: linux-mm@kvack.org
+X-Envelope-To: linux-kernel@vger.kernel.org
+X-Envelope-To: lkp@intel.com
+X-Envelope-To: nathan@kernel.org
+X-Envelope-To: llvm@lists.linux.dev
+X-Envelope-To: ndesaulniers@google.com
+X-Envelope-To: sxwjean@me.com
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240710025418.394321-1-sxwjean@me.com>
+Date: Wed, 10 Jul 2024 03:16:06 +0000
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: xiongwei.song@linux.dev
+Message-ID: <43ca4cc6d11f2cff96f2596783442d5ca4b9358e@linux.dev>
+TLS-Required: No
+Subject: Re: [PATCH] mm/slub: quiet the clang warning with -Wunused-function
+ enabled
+To: "Matthew Wilcox" <willy@infradead.org>
+Cc: vbabka@suse.cz, surenb@google.com, cl@linux.co, penberg@kernel.org,
+ rientjes@google.com, iamjoonsoo.kim@lge.com, akpm@linux-foundation.org,
+ roman.gushchin@linux.dev, 42.hyeyoo@gmail.com, linux-mm@kvack.org,
+ linux-kernel@vger.kernel.org, "kernel test robot" <lkp@intel.com>,
+ "Nathan Chancellor" <nathan@kernel.org>, llvm@lists.linux.dev, "Nick
+ Desaulniers" <ndesaulniers@google.com>, sxwjean@me.com
+In-Reply-To: <Zo36BTqhzGkukyT_@casper.infradead.org>
+References: <20240710025418.394321-1-sxwjean@me.com>
+ <Zo36BTqhzGkukyT_@casper.infradead.org>
+X-Migadu-Flow: FLOW_OUT
 
-On Wed, Jul 10, 2024 at 10:54:18AM +0800, sxwjean@me.com wrote:
-> From: Xiongwei Song <xiongwei.song@linux.dev>
-> 
-> The only user of prepare_slab_obj_exts_hook() is
-> alloc_tagging_slab_alloc_hook(), which can build with
-> CONFIG_MEM_ALLOC_PROFILING enabled. So, the warning was triggerred
-> when disabling CONFIG_MEM_ALLOC_PROFILING. Let's add "__maybe_unused"
-> for prepare_slab_obj_exts_hook().
+July 10, 2024 at 11:03 AM, "Matthew Wilcox" <willy@infradead.org> wrote:
 
-Perhaps instead clang can be fixed to match gcc's behaviour?
 
-> Reported-by: kernel test robot <lkp@intel.com>
-> Closes: https://lore.kernel.org/oe-kbuild-all/202407050845.zNONqauD-lkp@intel.com/
-> Signed-off-by: Xiongwei Song <xiongwei.song@linux.dev>
-> ---
->  mm/slub.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/mm/slub.c b/mm/slub.c
-> index ce39544acf7c..2e26f20759c0 100644
-> --- a/mm/slub.c
-> +++ b/mm/slub.c
-> @@ -2027,7 +2027,7 @@ static inline bool need_slab_obj_ext(void)
->  	return false;
->  }
->  
-> -static inline struct slabobj_ext *
-> +static inline struct slabobj_ext * __maybe_unused
->  prepare_slab_obj_exts_hook(struct kmem_cache *s, gfp_t flags, void *p)
->  {
->  	struct slab *slab;
-> @@ -2068,7 +2068,7 @@ static inline bool need_slab_obj_ext(void)
->  	return false;
->  }
->  
-> -static inline struct slabobj_ext *
-> +static inline struct slabobj_ext * __maybe_unused
->  prepare_slab_obj_exts_hook(struct kmem_cache *s, gfp_t flags, void *p)
->  {
->  	return NULL;
-> -- 
-> 2.34.1
-> 
-> 
+
+>=20
+>=20On Wed, Jul 10, 2024 at 10:54:18AM +0800, sxwjean@me.com wrote:
+>=20
+>=20>=20
+>=20> From: Xiongwei Song <xiongwei.song@linux.dev>
+> >=20
+>=20>=20=20
+>=20>=20
+>=20>  The only user of prepare_slab_obj_exts_hook() is
+> >=20
+>=20>  alloc_tagging_slab_alloc_hook(), which can build with
+> >=20
+>=20>  CONFIG_MEM_ALLOC_PROFILING enabled. So, the warning was triggerred
+> >=20
+>=20>  when disabling CONFIG_MEM_ALLOC_PROFILING. Let's add "__maybe_unus=
+ed"
+> >=20
+>=20>  for prepare_slab_obj_exts_hook().
+> >=20
+>=20
+> Perhaps instead clang can be fixed to match gcc's behaviour?
+
+Maybe, I'm not sure.=20
+
+Thanks,
+Xiongwei
+
+>=20
+> >=20
+>=20> Reported-by: kernel test robot <lkp@intel.com>
+> >=20
+>=20>  Closes: https://lore.kernel.org/oe-kbuild-all/202407050845.zNONqau=
+D-lkp@intel.com/
+> >=20
+>=20>  Signed-off-by: Xiongwei Song <xiongwei.song@linux.dev>
+> >=20
+>=20>  ---
+> >=20
+>=20>  mm/slub.c | 4 ++--
+> >=20
+>=20>  1 file changed, 2 insertions(+), 2 deletions(-)
+> >=20
+>=20>=20=20
+>=20>=20
+>=20>  diff --git a/mm/slub.c b/mm/slub.c
+> >=20
+>=20>  index ce39544acf7c..2e26f20759c0 100644
+> >=20
+>=20>  --- a/mm/slub.c
+> >=20
+>=20>  +++ b/mm/slub.c
+> >=20
+>=20>  @@ -2027,7 +2027,7 @@ static inline bool need_slab_obj_ext(void)
+> >=20
+>=20>  return false;
+> >=20
+>=20>  }
+> >=20
+>=20>=20=20
+>=20>=20
+>=20>  -static inline struct slabobj_ext *
+> >=20
+>=20>  +static inline struct slabobj_ext * __maybe_unused
+> >=20
+>=20>  prepare_slab_obj_exts_hook(struct kmem_cache *s, gfp_t flags, void=
+ *p)
+> >=20
+>=20>  {
+> >=20
+>=20>  struct slab *slab;
+> >=20
+>=20>  @@ -2068,7 +2068,7 @@ static inline bool need_slab_obj_ext(void)
+> >=20
+>=20>  return false;
+> >=20
+>=20>  }
+> >=20
+>=20>=20=20
+>=20>=20
+>=20>  -static inline struct slabobj_ext *
+> >=20
+>=20>  +static inline struct slabobj_ext * __maybe_unused
+> >=20
+>=20>  prepare_slab_obj_exts_hook(struct kmem_cache *s, gfp_t flags, void=
+ *p)
+> >=20
+>=20>  {
+> >=20
+>=20>  return NULL;
+> >=20
+>=20>  --=20
+>=20>=20
+>=20>  2.34.1
+> >
+>
