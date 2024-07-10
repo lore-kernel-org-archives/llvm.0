@@ -1,89 +1,170 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f173.google.com (mail-yw1-f173.google.com [209.85.128.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8FCA08120F;
-	Wed, 10 Jul 2024 21:17:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 315CF83CCB
+	for <llvm@lists.linux.dev>; Wed, 10 Jul 2024 21:40:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720646226; cv=none; b=RZhov+Lr3/fGY2ciYBKhHPPJLxuXoozmbv1Kr6MQGDXp3182NfG5kbDH5nqvVTDU2PxCdkahkicSgRkkNOGsbHvIuutsrp1aEIH62Q+kN5zgR40EkiW35E6OpN1eZ3kNQaai4u0/Jr2bAHARgN0aPYJPWMzA3NknsgN0zvi4SJQ=
+	t=1720647659; cv=none; b=WmVXgqScKv/rvYSQdjWjmhsbo6seIy8eOClGoajq7SPF0xLi/lZF7chjk2VROxc7ND26mBaDRnrtDd9btOPl7jsT2dGwf/cn7hKuIasjlHb79o7kVsp5qVHuM3WKtW6HowGzo6N/fArQNevcdUitfHrI7mtgXWMLF+hDBBFr1dU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720646226; c=relaxed/simple;
-	bh=d9NIoNvAmXJAYWmjVWiD/n/PtWG7Ev/HfH7ECteYYgc=;
-	h=Message-ID:Content-Type:MIME-Version:In-Reply-To:References:
-	 Subject:From:Cc:To:Date; b=V6Sgfn100y8T+SpHZTLRpUeJMDoM3j2LQdPLYcHHZg+r8rZdv/XJp/tIMdz0h7K5sSOnK6rW92jYedEUQnAWrazBIqSyxOe10T9lx6bTAUEQsXjx9WnfPhjj8snntB3Oc3lmoLJIgKF1sEDX/s1nmPWAygvcDICk4o+x9f7G2bM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VFnwj8fr; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1720647659; c=relaxed/simple;
+	bh=x0c0iBYcvD/rDFCSBzWak3CbeopcLqST+3WdVzu/Ge4=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=b4a/GlZ5XPLOF0Yuxm8naUWybsZBpzwlXNkRPkfheFitbGTucfhU4YudT7krt615PW3JWCu1Z+JAk4M9oz7U5nlTLT2uAyJ4tkGUzC9WXUkJa0EBSeBgAWrdmiM4XSO7al2U+0Vp1Uw0L4yvnj0Xap1XxeKom66MqRM4vLsXHVg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=i8f4Fc0F; arc=none smtp.client-ip=209.85.128.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VFnwj8fr"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5108CC4AF07;
-	Wed, 10 Jul 2024 21:17:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1720646226;
-	bh=d9NIoNvAmXJAYWmjVWiD/n/PtWG7Ev/HfH7ECteYYgc=;
-	h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-	b=VFnwj8fr/kUfeYy6M2uXEDgC4wbdVbrCGBf24UiA0AGu753EMuQNsjOOWV0u9uUSD
-	 KM6i1JILZFnF+cxLKS2b60M31Eh1+S7VYuZyCfUfwYCzTbY075tcHDKRZ7Dbrx2byX
-	 GqXM/IivdRXA2+wJraUTI5lcxDudsB+VaFaGZGBDv51AATzCBEJ15MRpPri/Af/9KR
-	 LXNO+GeFZvEf3mxuUH2I4SWjcVyk+Q2fBNBh3uiedtny/R0IZLxQ5n33xSqNpCpmso
-	 7w/qCvgx5N4n8MT0MQxaDjFj90/M2lQ9Qx+QJ62TXotUrypIgHHYa6pdq47zBRIt1D
-	 CCfeY1TDuhR3A==
-Message-ID: <c9fe1a32e0e362a8b7732ea554625c55.sboyd@kernel.org>
-Content-Type: text/plain; charset="utf-8"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="i8f4Fc0F"
+Received: by mail-yw1-f173.google.com with SMTP id 00721157ae682-6519528f44fso2183017b3.1
+        for <llvm@lists.linux.dev>; Wed, 10 Jul 2024 14:40:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1720647657; x=1721252457; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=5XBOBObJaAEK1M46KNmNvsVNBPngWj8fU0d2YVNpK0Q=;
+        b=i8f4Fc0F5hW0qCRiZaBNyeKke7uIg4oc8IFd0go5Zd4GBI/ngbWN3L+NcnEKJMJhru
+         GX7eSo86sDOkqhWULpW8ajUeGa5O9Iqyqtqqb/TkJ6/6kSzKb3lq1LNie8kfrFy+C+ds
+         uHPgs1bmo5n27MH2v/8oh79Ne7nNQ6G7iTGaLiqGnUcac2050upR1ipRWJclXh6LSsZc
+         m4LmQwvWzSuZ47jfkNlitCMeac7q1x6L8GYfMoIAo86K+KsTWKNA6Pz2FBGFhGy0/0j4
+         IKJTLD333i10plA/eq1foT0eGCo7r/CaRa/AZKtK6/r3/RItDIBtOQdwtN7jFmdB3RKU
+         LhaQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1720647657; x=1721252457;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=5XBOBObJaAEK1M46KNmNvsVNBPngWj8fU0d2YVNpK0Q=;
+        b=GL6cmR7hQITtPKmNJU7jolk2/DkVtcpkKXjpb/xMyMCkoszIh59zYp50r9rDbh1O0k
+         Xtd1VyNO734zo0c9j7ZLaf0X+FW/7fc7NuFxvJK5nrsA7tKpSquU4c6s7uylYx16WY9V
+         MZQuafPzpzKXLldpS3UAj9kk1U6dKKEDnOyG3J4UnsyNBclhzhOMsRBlh3kPeNw5f5zS
+         yOCk0DGrzumNpYtmBN3J4u1ED9PGnbu1ga1VqJLIGpW5x+xIDaQ4HdaRWjgg0lxacSJH
+         oNSIMU3J9UL68abiD1qKCynOoWB3ShDJgcjFu7GSlGgrcVRGf72tqFpJRZL5mHBBV/Gd
+         /xqQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWj5J80OyivbTTKBNRSsSWPT28HvtLySP0JNKUoWNmn2DSyBAC0D1C71DU1nDRGlnwRuLfqerJADqOk74+xqSHDzSi0zQ==
+X-Gm-Message-State: AOJu0YxcFRVweIxw973pYYB/SIvkGS3O5XKrLQhQWbxu2tJkPYYVinNg
+	lKdkWMJjzdiOdh57Y6+COMSVPBWeI7BYcDjuO6Ff2Vkt6mKOMRcXQ3uzphhl1nVGE/VbbSdS8Iz
+	tCpY0U1qGw7WeZGbewZfan47D/ZgGMIusucGW
+X-Google-Smtp-Source: AGHT+IE9LwO7snLlHt6fREw7Kb3flbhkA09QJ9tqIVaUo48iiu8//3dVR54mhZCPewECzH/0QpeEaLObv4Du7/1Ag88=
+X-Received: by 2002:a05:690c:c0b:b0:64a:4728:ef4 with SMTP id
+ 00721157ae682-658f09c2d41mr82527977b3.47.1720647656845; Wed, 10 Jul 2024
+ 14:40:56 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
+References: <20240710025418.394321-1-sxwjean@me.com> <Zo36BTqhzGkukyT_@casper.infradead.org>
+ <20240710150154.GA1684801@thelio-3990X>
+In-Reply-To: <20240710150154.GA1684801@thelio-3990X>
+From: Suren Baghdasaryan <surenb@google.com>
+Date: Wed, 10 Jul 2024 14:40:45 -0700
+Message-ID: <CAJuCfpFUawbMXf34YpUv_hrEvwOFX=CvPmyTS3CBOSZtC=c6Tg@mail.gmail.com>
+Subject: Re: [PATCH] mm/slub: quiet the clang warning with -Wunused-function enabled
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: Matthew Wilcox <willy@infradead.org>, sxwjean@me.com, vbabka@suse.cz, cl@linux.co, 
+	penberg@kernel.org, rientjes@google.com, iamjoonsoo.kim@lge.com, 
+	akpm@linux-foundation.org, roman.gushchin@linux.dev, 42.hyeyoo@gmail.com, 
+	xiongwei.song@linux.dev, linux-mm@kvack.org, linux-kernel@vger.kernel.org, 
+	kernel test robot <lkp@intel.com>, llvm@lists.linux.dev, 
+	Nick Desaulniers <ndesaulniers@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20240710-clk-sg2042-fix-sometimes-uninitialized-pll_set_rate-v1-1-538fa82dd539@kernel.org>
-References: <20240710-clk-sg2042-fix-sometimes-uninitialized-pll_set_rate-v1-1-538fa82dd539@kernel.org>
-Subject: Re: [PATCH] clk: sophgo: Avoid -Wsometimes-uninitialized in sg2042_clk_pll_set_rate()
-From: Stephen Boyd <sboyd@kernel.org>
-Cc: linux-clk@vger.kernel.org, llvm@lists.linux.dev, patches@lists.linux.dev, Nathan Chancellor <nathan@kernel.org>
-To: Chen Wang <unicorn_wang@outlook.com>, Inochi Amaoto <inochiama@outlook.com>, Michael Turquette <mturquette@baylibre.com>, Nathan Chancellor <nathan@kernel.org>
-Date: Wed, 10 Jul 2024 14:17:04 -0700
-User-Agent: alot/0.10
 
-Quoting Nathan Chancellor (2024-07-10 10:07:52)
-> Clang warns (or errors with CONFIG_WERROR=3Dy):
->=20
->   drivers/clk/sophgo/clk-sg2042-pll.c:396:6: error: variable 'ret' is use=
-d uninitialized whenever 'if' condition is true [-Werror,-Wsometimes-uninit=
-ialized]
->     396 |         if (sg2042_pll_enable(pll, 0)) {
->         |             ^~~~~~~~~~~~~~~~~~~~~~~~~
->   drivers/clk/sophgo/clk-sg2042-pll.c:418:9: note: uninitialized use occu=
-rs here
->     418 |         return ret;
->         |                ^~~
->   drivers/clk/sophgo/clk-sg2042-pll.c:396:2: note: remove the 'if' if its=
- condition is always false
->     396 |         if (sg2042_pll_enable(pll, 0)) {
->         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->     397 |                 pr_warn("Can't disable pll(%s), status error\n"=
-, pll->hw.init->name);
->         |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~=
-~~~~~~~~~~~~~~~~~~~~~~
->     398 |                 goto out;
->         |                 ~~~~~~~~~
->     399 |         }
->         |         ~
->   drivers/clk/sophgo/clk-sg2042-pll.c:393:9: note: initialize the variabl=
-e 'ret' to silence this warning
->     393 |         int ret;
->         |                ^
->         |                 =3D 0
->   1 error generated.
->=20
-> sg2042_pll_enable() only ever returns zero, so this situation cannot
-> happen, but clang does not perform interprocedural analysis, so it
-> cannot know this to avoid the warning. Make it clearer to the compiler
-> by making sg2042_pll_enable() void and eliminate the error handling in
-> sg2042_clk_pll_set_rate(), which clears up the warning, as ret will
-> always be initialized.
->=20
-> Fixes: 48cf7e01386e ("clk: sophgo: Add SG2042 clock driver")
-> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
-> ---
+On Wed, Jul 10, 2024 at 8:02=E2=80=AFAM Nathan Chancellor <nathan@kernel.or=
+g> wrote:
+>
+> On Wed, Jul 10, 2024 at 04:03:33AM +0100, Matthew Wilcox wrote:
+> > On Wed, Jul 10, 2024 at 10:54:18AM +0800, sxwjean@me.com wrote:
+> > > From: Xiongwei Song <xiongwei.song@linux.dev>
+> > >
+> > > The only user of prepare_slab_obj_exts_hook() is
+> > > alloc_tagging_slab_alloc_hook(), which can build with
+> > > CONFIG_MEM_ALLOC_PROFILING enabled. So, the warning was triggerred
+> > > when disabling CONFIG_MEM_ALLOC_PROFILING. Let's add "__maybe_unused"
+> > > for prepare_slab_obj_exts_hook().
+> >
+> > Perhaps instead clang can be fixed to match gcc's behaviour?
+>
+> Clang only differs from GCC on warning for unused static inline functions=
+ in .c
+> files, not .h files. The kernel already handles this in
+> include/linux/compiler_types.h but it disables this workaround for W=3D1 =
+to catch
+> unused functions like this as a result of commit 6863f5643dd7 ("kbuild: a=
+llow
+> Clang to find unused static inline functions for W=3D1 build"):
+>
+> /*
+>  * GCC does not warn about unused static inline functions for -Wunused-fu=
+nction.
+>  * Suppress the warning in clang as well by using __maybe_unused, but ena=
+ble it
+>  * for W=3D1 build. This will allow clang to find unused functions. Remov=
+e the
+>  * __inline_maybe_unused entirely after fixing most of -Wunused-function =
+warnings.
+>  */
+> #ifdef KBUILD_EXTRA_WARN1
+> #define __inline_maybe_unused
+> #else
+> #define __inline_maybe_unused __maybe_unused
+> #endif
+>
+> So I don't really think there is much for clang to do here and I think ha=
+ving
+> the ability to find unused static inline functions in .c files is useful =
+(you
+> might disagree, perhaps a revert could still be discussed). I guess
+> IS_ENABLED() can't be used there, so it seems like either taking this pat=
+ch,
+> ignoring the warning, or refactoring the code in some other way are the o=
+nly
+> options I see.
 
-Applied to clk-next
+I think this is the consequence of the recent refactoring I've done in
+https://lore.kernel.org/all/20240704135941.1145038-1-surenb@google.com/.
+There should be a cleaner way to fix this. I'll post it later today or
+tomorrow morning.
+Thanks,
+Suren.
+
+>
+> > > Reported-by: kernel test robot <lkp@intel.com>
+> > > Closes: https://lore.kernel.org/oe-kbuild-all/202407050845.zNONqauD-l=
+kp@intel.com/
+> > > Signed-off-by: Xiongwei Song <xiongwei.song@linux.dev>
+> > > ---
+> > >  mm/slub.c | 4 ++--
+> > >  1 file changed, 2 insertions(+), 2 deletions(-)
+> > >
+> > > diff --git a/mm/slub.c b/mm/slub.c
+> > > index ce39544acf7c..2e26f20759c0 100644
+> > > --- a/mm/slub.c
+> > > +++ b/mm/slub.c
+> > > @@ -2027,7 +2027,7 @@ static inline bool need_slab_obj_ext(void)
+> > >     return false;
+> > >  }
+> > >
+> > > -static inline struct slabobj_ext *
+> > > +static inline struct slabobj_ext * __maybe_unused
+> > >  prepare_slab_obj_exts_hook(struct kmem_cache *s, gfp_t flags, void *=
+p)
+> > >  {
+> > >     struct slab *slab;
+> > > @@ -2068,7 +2068,7 @@ static inline bool need_slab_obj_ext(void)
+> > >     return false;
+> > >  }
+> > >
+> > > -static inline struct slabobj_ext *
+> > > +static inline struct slabobj_ext * __maybe_unused
+> > >  prepare_slab_obj_exts_hook(struct kmem_cache *s, gfp_t flags, void *=
+p)
+> > >  {
+> > >     return NULL;
+> > > --
+> > > 2.34.1
+> > >
+> > >
