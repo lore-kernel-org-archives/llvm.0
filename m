@@ -1,133 +1,176 @@
-Received: from mail-yb1-f180.google.com (mail-yb1-f180.google.com [209.85.219.180])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D43C450FA
-	for <llvm@lists.linux.dev>; Thu, 11 Jul 2024 17:09:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D0F5F28FF;
+	Thu, 11 Jul 2024 18:49:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.92.199
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720717767; cv=none; b=RxI13+yHe8IGQFx46Niu8NPfYrxUs/V3xUqdw+vXJbKuDkH/o5xqFmdSFtNhDRTJsrP8rwdASwBPiA4ME36+a+r7m2go1RzzzAZzmC+VNNpCjJyTBpAQpVzHmrvnjE8PrqsL/fCNCUtbJKy4JRx+m0ZdADif4Nspvi7ygtSvZRI=
+	t=1720723796; cv=none; b=fq7UPkrKeb/yLfUMW0Etfrd/bSlA5dMZSzrxRwZW0zcH+dxOdZEtDQTxPKRb/CqbzQEx+4O45ESWUJC/chLAjsCONlULi360bG/Ym7f2HvL1pds6zEa9i/+rZcaKDAJtF+wVt+GJ65FkQbABSFQXQ3F2soaTh3qDkxsgeof3xuw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720717767; c=relaxed/simple;
-	bh=C3F9jB3kZe372d/2FqZSOc9k/pEeRRtlSpwAdrHy+RI=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=nfjeKjn959Bpz0DoYMjFeFX1afwp1MUy251+RMC1+wzddUwqPif/2AvcFGDqJBlLlq95GUQwb+Ukpej45eqxaYXP84jzG+VczrRYSb5ihJ00F/yvyVlBjVjShRFOSINk3iAH5/OThPlb1g7Sn6qpzSwirIxeOx042aedzzuQOMQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=lnPZVFLp; arc=none smtp.client-ip=209.85.219.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	s=arc-20240116; t=1720723796; c=relaxed/simple;
+	bh=z2Zau4uAm8vaFqoE5iU5MmFK+8bXegUBo5jC5aSrspE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=J2GOyhz9RubhmSeqF8x9LCyR2gjtq70m46dcqL3xkJrt5FO7Vz6X+WVAjcLt1hIMHfbHjaoPXNUa4WUzRbu4IkwfTaFk3O8ytYKuvV5tT+qCUlzCcmN1zmnByTvVLFw+a1ixiZS6mElSJf9czRLw0iEK48V0Rf4sseHDzd6eeC0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=By5aYvAq; arc=none smtp.client-ip=90.155.92.199
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="lnPZVFLp"
-Received: by mail-yb1-f180.google.com with SMTP id 3f1490d57ef6-e057bdc936fso1074860276.1
-        for <llvm@lists.linux.dev>; Thu, 11 Jul 2024 10:09:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1720717764; x=1721322564; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=BT4Q0fDnQo1b1rbWAFdQTaPbqeR+6myjThNugn0g5s4=;
-        b=lnPZVFLpa3awowufJjdgxrpGg9wLVUFSwIc6WVyzM5IdDNtxpWWu6zUpVDPyvA0See
-         K34vMjvd/RsUloDW/+yzYkkQFP81KTl1Be35+N7tqaE/AQF6/NyrwNUwIOFCvHVv2je/
-         3YrnjZyQy5QdH44/qD+UF5pxNycn9I6jWoRFh4BvVwBG1gcpTIvDioFbNONkpBFFknnG
-         ls1qN8r8GqZxeRTMJwmMCfuvoVqnk/8gvMY9o3Qii+eALAhGNKvgpJkU+GUXQnzRJ3hL
-         xg9IMLHzdAWvktgDh8yFm3/TPXoCDbS1kdkUKMyhEdyPJXA1gfuDJYIx5iVZGgqKwJws
-         6PnA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1720717764; x=1721322564;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=BT4Q0fDnQo1b1rbWAFdQTaPbqeR+6myjThNugn0g5s4=;
-        b=DPxTpvP1XWd2hcDAcemu9nQ0ViszbfG3IDQw0KrFYZvJvmsQ4FoGU1rlcEWYgRKvDs
-         sS0F8F2PYqcYZn02UlBTi1bjs+yu+uont6BqJMFiTsYsKqvPb1FzRbMEm1x6YWvQEFIs
-         wENL1QL7iSlbBwKPQlOZYflsGqgVuilXg5UWfsKOXrMi7SMpvr+R0K5caYUlZPKSmblQ
-         rQQ90KN2SIhNzJhFegYsUYAdB1MD4Fxz8tmlyiOqXeXaK20+bRqPXtqP3mKm71EjKytC
-         VK46WP4X0ihAVMUelra87IQ2sRT7rY6hVC/yDew4r/Z0wiRze5IGA6hWgyIhediOtPNb
-         H7Lg==
-X-Gm-Message-State: AOJu0YzajDN1qkYC2x5HQGd5F26MOoIA8+8LLEljIeR9e22dz/U1qpzn
-	e7Wo5Za1Kxobbrs257196fQjR35Vq3mj7rEuiFGQMBLrDNmR161m5Tsh8unfcbTyJnjJuRwskzq
-	CisrPiF2T4GKAnitevhaycWaKqDJO2ETTokuF
-X-Google-Smtp-Source: AGHT+IFhB7a+a8BufuhlkTWktjp2U5ed8yphy1GsV9RSCnMPrnocZGbTiFQNSoEMqZd7f6XE4G2m/LQxA5D5a5Q+8sc=
-X-Received: by 2002:a5b:b0b:0:b0:e03:ae1c:8d0f with SMTP id
- 3f1490d57ef6-e041b17328fmr10346582276.59.1720717764206; Thu, 11 Jul 2024
- 10:09:24 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="By5aYvAq"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=o/IW2cCwLwJEDMO66z3r5dlrUmlAEsjcwslEcQLO45s=; b=By5aYvAqIMwiWTdp67RiKFT7sD
+	+qDZ7b1sxVwD8VDiFHi9n1oSEdZ/3h5u/OftoP8fJgV1h4+y2lNUpjtwaPm5oMmGidDXTk6dic2b4
+	w/casdFX/c1h5f+6ZemMDjQZ3uPI7rmnlYxBw3xBJCi2rYWiwztHif2ZV7DI7aeYu616aotcFIN9C
+	fHGJCn/AfGhzqriuT4bVmSK64p4kqVZZQosYcIq2LPVBTd0SKRaSVRPAogOxHR/mIyA4AfgJUzmTU
+	oPPAOqDQ/Yspi76VOtRsNQDtachP5NzFDNsIkhS/3e01Lk0lh5amtvxv19zcydP/4ugY7iD9yonGR
+	xdtwKXHw==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+	by desiato.infradead.org with esmtpsa (Exim 4.97.1 #2 (Red Hat Linux))
+	id 1sRyrJ-000000018ze-3Fdq;
+	Thu, 11 Jul 2024 18:49:37 +0000
+Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
+	id 4636630050D; Thu, 11 Jul 2024 20:49:37 +0200 (CEST)
+Date: Thu, 11 Jul 2024 20:49:37 +0200
+From: Peter Zijlstra <peterz@infradead.org>
+To: Kees Cook <kees@kernel.org>
+Cc: Marco Elver <elver@google.com>,
+	Gatlin Newhouse <gatlin.newhouse@gmail.com>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+	"H. Peter Anvin" <hpa@zytor.com>,
+	Andrey Konovalov <andreyknvl@gmail.com>,
+	Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Baoquan He <bhe@redhat.com>,
+	Rick Edgecombe <rick.p.edgecombe@intel.com>,
+	Pengfei Xu <pengfei.xu@intel.com>,
+	Josh Poimboeuf <jpoimboe@kernel.org>,
+	Changbin Du <changbin.du@huawei.com>, Xin Li <xin3.li@intel.com>,
+	Jason Gunthorpe <jgg@ziepe.ca>, Arnd Bergmann <arnd@arndb.de>,
+	"Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+	linux-kernel@vger.kernel.org, kasan-dev@googlegroups.com,
+	linux-hardening@vger.kernel.org, llvm@lists.linux.dev,
+	t.p.northover@gmail.com, Fangrui Song <maskray@google.com>
+Subject: Re: [PATCH v4] x86/traps: Enable UBSAN traps on x86
+Message-ID: <20240711184937.GE27299@noisy.programming.kicks-ass.net>
+References: <20240710203250.238782-1-gatlin.newhouse@gmail.com>
+ <20240711081031.GB4587@noisy.programming.kicks-ass.net>
+ <CANpmjNObEzShHvw19EAntPvCYJbqezKBq+pB=mkd7j3sXDEE7A@mail.gmail.com>
+ <202407110924.81A08DD4D@keescook>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <202407050845.zNONqauD-lkp@intel.com>
-In-Reply-To: <202407050845.zNONqauD-lkp@intel.com>
-From: Suren Baghdasaryan <surenb@google.com>
-Date: Thu, 11 Jul 2024 10:09:13 -0700
-Message-ID: <CAJuCfpEwNE5tsm+iZTzZc-hdR5sBXAKd57tOGum67_fAu2Gi3A@mail.gmail.com>
-Subject: Re: mm/slub.c:2077:1: error: unused function 'prepare_slab_obj_exts_hook'
-To: kernel test robot <lkp@intel.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, 
-	linux-kernel@vger.kernel.org, Andrew Morton <akpm@linux-foundation.org>, 
-	Linux Memory Management List <linux-mm@kvack.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <202407110924.81A08DD4D@keescook>
 
-On Thu, Jul 4, 2024 at 5:35=E2=80=AFPM kernel test robot <lkp@intel.com> wr=
-ote:
->
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.gi=
-t master
-> head:   661e504db04c6b7278737ee3a9116738536b4ed4
-> commit: b4601d096aac8ed26afa88ef8b249975b0530ca1 mm/slab: fix 'variable o=
-bj_exts set but not used' warning
-> date:   10 days ago
-> config: x86_64-sof-customedconfig-amd-defconfig (https://download.01.org/=
-0day-ci/archive/20240705/202407050845.zNONqauD-lkp@intel.com/config)
-> compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a=
-15a9eac96088ae5e9134248d8236e34b91b1)
-> reproduce (this is a W=3D1 build): (https://download.01.org/0day-ci/archi=
-ve/20240705/202407050845.zNONqauD-lkp@intel.com/reproduce)
->
-> If you fix the issue in a separate patch/commit (i.e. not just a new vers=
-ion of
-> the same patch/commit), kindly add following tags
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes: https://lore.kernel.org/oe-kbuild-all/202407050845.zNONqauD-lkp=
-@intel.com/
+On Thu, Jul 11, 2024 at 09:35:24AM -0700, Kees Cook wrote:
+> On Thu, Jul 11, 2024 at 11:06:12AM +0200, Marco Elver wrote:
+> > On Thu, 11 Jul 2024 at 10:10, Peter Zijlstra <peterz@infradead.org> wrote:
+> > >
+> > > On Wed, Jul 10, 2024 at 08:32:38PM +0000, Gatlin Newhouse wrote:
+> > > > Currently ARM architectures extract which specific sanitizer
+> > > > has caused a trap via encoded data in the trap instruction.
+> > > > Clang on x86 currently encodes the same data in ud1 instructions
+> > > > but the x86 handle_bug() and is_valid_bugaddr() functions
+> > > > currently only look at ud2s.
+> > > >
+> > > > Bring x86 to parity with arm64, similar to commit 25b84002afb9
+> > > > ("arm64: Support Clang UBSAN trap codes for better reporting").
+> > > > Enable the reporting of UBSAN sanitizer detail on x86 architectures
+> > > > compiled with clang when CONFIG_UBSAN_TRAP=y.
+> > >
+> > > Can we please get some actual words on what code clang will generate for
+> > > this? This doesn't even refer to the clang commit.
+> > >
+> > > How am I supposed to know if the below patch matches what clang will
+> > > generate etc..
+> > 
+> > I got curious what the history of this is - I think it was introduced
+> > in https://github.com/llvm/llvm-project/commit/c5978f42ec8e9, which
+> > was reviewed here: https://reviews.llvm.org/D89959
+> 
+> Sorry, I should have suggested this commit be mentioned in the commit
+> log. The details are in llvm/lib/Target/X86/X86MCInstLower.cpp:
+> https://github.com/llvm/llvm-project/commit/c5978f42ec8e9#diff-bb68d7cd885f41cfc35843998b0f9f534adb60b415f647109e597ce448e92d9f
+> 
+>   case X86::UBSAN_UD1:
+>     EmitAndCountInstruction(MCInstBuilder(X86::UD1Lm)
+>                                 .addReg(X86::EAX)
+>                                 .addReg(X86::EAX)
+>                                 .addImm(1)
+>                                 .addReg(X86::NoRegister)
+>                                 .addImm(MI->getOperand(0).getImm())
+>                                 .addReg(X86::NoRegister));
+> 
+> Which is using the UD1Lm template from
+> https://github.com/llvm/llvm-project/blob/main/llvm/lib/Target/X86/X86InstrSystem.td#L27
+> 
+>   def UD1Lm   : I<0xB9, MRMSrcMem, (outs), (ins GR32:$src1, i32mem:$src2),
+>                   "ud1{l}\t{$src2, $src1|$src1, $src2}", []>, TB, OpSize32;
+> 
+> It uses OpSize32, distinct from UD1Wm (16) and UD1Qm (64).
+> 
+> > But besides that, there's very little documentation. Either Gatlin or
+> > one of the other LLVM folks might have more background, but we might
+> > be out of luck if that 1 commit is all there is.
+> > 
+> > [+Cc Tim, author of the LLVM commit]
+> > 
+> > > > diff --git a/arch/x86/include/asm/bug.h b/arch/x86/include/asm/bug.h
+> > > > index a3ec87d198ac..ccd573d58edb 100644
+> > > > --- a/arch/x86/include/asm/bug.h
+> > > > +++ b/arch/x86/include/asm/bug.h
+> > > > @@ -13,6 +13,17 @@
+> > > >  #define INSN_UD2     0x0b0f
+> > > >  #define LEN_UD2              2
+> > > >
+> > > > +/*
+> > > > + * In clang we have UD1s reporting UBSAN failures on X86, 64 and 32bit.
+> > > > + */
+> > > > +#define INSN_ASOP    0x67
+> > >
+> > > I asked, but did not receive answer, *WHY* does clang add this silly
+> > > prefix? AFAICT this is entirely spurious and things would be simpler if
+> > > we don't have to deal with it.
+> 
+> Even if we change LLVM, I'd still like to support the older versions, so
+> we'll need to handle this regardless.
 
-Fix is posted at
-https://lore.kernel.org/all/20240711170216.1149695-1-surenb@google.com/
-over slab/for-next baseline because that branch contains another code
-refactoring [1] which would cause merge conflicts.
+Is it (LLVM) allowed to do prefix stuffing for 'random' instructions in
+order to achieve alignment goals? That is, are we ever expecting more
+prefixes here?
 
-[1] https://lore.kernel.org/all/20240704135941.1145038-1-surenb@google.com/
+Anyway, as proposed the 'decoder' also accepts ASOP UD2, should we be
+complete and also return an instruction length? Just in case we want to
+be non fatal (WARN like) and skip over the instruction.
 
->
-> All errors (new ones prefixed by >>):
->
-> >> mm/slub.c:2077:1: error: unused function 'prepare_slab_obj_exts_hook' =
-[-Werror,-Wunused-function]
->     2077 | prepare_slab_obj_exts_hook(struct kmem_cache *s, gfp_t flags, =
-void *p)
->          | ^~~~~~~~~~~~~~~~~~~~~~~~~~
->    1 error generated.
->
->
-> vim +/prepare_slab_obj_exts_hook +2077 mm/slub.c
->
-> 0bedcc66d2a43a Vlastimil Babka    2023-10-03  2075
-> 4b8736964640fe Suren Baghdasaryan 2024-03-21  2076  static inline struct =
-slabobj_ext *
-> 4b8736964640fe Suren Baghdasaryan 2024-03-21 @2077  prepare_slab_obj_exts=
-_hook(struct kmem_cache *s, gfp_t flags, void *p)
-> 3450a0e5a6fc4c Vlastimil Babka    2023-11-13  2078  {
-> 4b8736964640fe Suren Baghdasaryan 2024-03-21  2079      return NULL;
-> 4b8736964640fe Suren Baghdasaryan 2024-03-21  2080  }
-> 3450a0e5a6fc4c Vlastimil Babka    2023-11-13  2081
->
-> :::::: The code at line 2077 was first introduced by commit
-> :::::: 4b8736964640fe160724e7135dc62883bddcdace mm/slab: add allocation a=
-ccounting into slab allocation and free paths
->
-> :::::: TO: Suren Baghdasaryan <surenb@google.com>
-> :::::: CC: Andrew Morton <akpm@linux-foundation.org>
->
-> --
-> 0-DAY CI Kernel Test Service
-> https://github.com/intel/lkp-tests/wiki
+> > >
+> > > > +#define OPCODE_PREFIX        0x0f
+> > >
+> > > This is *NOT* a prefix, it is an escape, please see the SDM Vol 2
+> > > Chapter 'Instruction Format'. That ASOP thing above is a prefix.
+> > >
+> > > > +#define OPCODE_UD1   0xb9
+> > > > +#define OPCODE_UD2   0x0b
+> > >
+> > > These are second byte opcodes. The actual (single byte opcodes) of those
+> > > value exist and are something entirely different (0xB0+r is MOV, and
+> > > 0x0B is OR).
+> 
+> What would be your preferred names for all of these defines?
+
+SDM calls 0x0f the escape opcode and these others secondary opcode
+bytes, so something along those lines would be clear I suppose.	
+
+Vol2 2.1.2 (todays edition)
