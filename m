@@ -1,315 +1,101 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D88E15F40D;
-	Thu, 11 Jul 2024 19:03:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 354D9130A46
+	for <llvm@lists.linux.dev>; Thu, 11 Jul 2024 20:52:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720724627; cv=none; b=i5IXvCmihUfFUVhzZuoFYg18vagwcVeXXaQnSO+sGkoR/N7t3ud38TjV9crhwVCvI7IvCfJUMRkoxF+753fMrxwMZaoRWc9+hEwXwrrZ5/bRdhe5qXGZ0YAeegJNKecBSZAsUx1B0C4TDAiv2wC95I+sbJgW90cxHrdGhk+4voo=
+	t=1720731132; cv=none; b=sFPycVaE7VDIj441OPHCQKpyKkbAB/QleVU/XepvUEOW9flNk2WpnhbW8OLm12I4OUBnRJOJIat9OYd8ZCCEDtsRCmOawFP9miGUasUc7Ku2nMh1CY8VFlreUveOEb3VVXJDIStho4EGC0IOfO4c48TD6+QWUfmFslTszhseQDQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720724627; c=relaxed/simple;
-	bh=KjDHsBomUHrlcuMySZ8NJg7L3Q0FPnsN62pBzRy47t0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=jIQ1i1l72R5NUCa5AS5JN8kTigbdlvfYutXLIAdVyC6JzIjk/nz/lgNIDomB13yColNlVFW9bv7aXd3LAET5UEgxkTzGT680k66QmZaVqUgYyJdQZ8quz5n/8lNFbXU7dqCQ14W5SMMmZVAFPCYvKb6sqiNPJNsPdAkIYEebAT4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=NoqSdTvw; arc=none smtp.client-ip=192.198.163.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1720731132; c=relaxed/simple;
+	bh=+9hCdNqD2yU12krdbJRCgIskCOU0Lk7gFmBgHY2pk8M=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=kz7fOatL7XCSHKJIfd7n7zo9uPlincrx51hv0vFr8bJllVqZqQ1AmsSq2pBPGLYJqjqrJdBKPxPCaYqfmqpzbGg7FKmfi2FZHjqXJhCQ7c7HvPBkkBTttA8ST35cDPMQJyLbtClj5Wrkt5dar662ssQRP2xrWWTgsOpdJfBoB5M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=WKSzu9es; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="NoqSdTvw"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1720724626; x=1752260626;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=KjDHsBomUHrlcuMySZ8NJg7L3Q0FPnsN62pBzRy47t0=;
-  b=NoqSdTvwGC4NG6uD1UlYQ5l3vpIGNvrolOQmwASKTri/DYCb4VE1k/jn
-   gAGOU+jYUX/YqykC5pNWFFt2i//MxAECOppJK886lpr4U7dATmubopAJa
-   +VJPbaPgwPBMA+qw76OzsqGj1e6HvB9Cg6345A0Rn9DnkBSypF1AM6qbg
-   +2uL9nBJX/8xFBuT6rrnMO67scl1WYhzOG7r8iNv3tJqx5XdZQV32NOK/
-   UM6gb2feAtEkGsHGodV78lB9BR8XCB3c8YeaY+610pNpMuPUl7fSJlUbv
-   t3f2l1xZubJsWvtzci3h3W9eJV0I+Jg+83wX1uH2y8njC6WkjPbHoUnXY
-   g==;
-X-CSE-ConnectionGUID: vpJUbuGPQgeBEQEatrUmZA==
-X-CSE-MsgGUID: 7yJwf7ruSMyGd6+guTv/JA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11130"; a="17753633"
-X-IronPort-AV: E=Sophos;i="6.09,201,1716274800"; 
-   d="scan'208";a="17753633"
-Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jul 2024 12:03:45 -0700
-X-CSE-ConnectionGUID: 8bj9pQiWR/6B/B20EEpk+A==
-X-CSE-MsgGUID: ulTMRKI8TFan/Xihp4bMsA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.09,201,1716274800"; 
-   d="scan'208";a="79358047"
-Received: from lkp-server01.sh.intel.com (HELO 68891e0c336b) ([10.239.97.150])
-  by orviesa002.jf.intel.com with ESMTP; 11 Jul 2024 12:03:42 -0700
-Received: from kbuild by 68891e0c336b with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1sRz4s-000ZiI-29;
-	Thu, 11 Jul 2024 19:03:38 +0000
-Date: Fri, 12 Jul 2024 03:03:27 +0800
-From: kernel test robot <lkp@intel.com>
-To: Jerome Brunet <jbrunet@baylibre.com>,
-	Philipp Zabel <p.zabel@pengutronix.de>,
-	Stephen Boyd <sboyd@kernel.org>,
-	Neil Armstrong <neil.armstrong@linaro.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Jerome Brunet <jbrunet@baylibre.com>,
-	Jan Dakinevich <jan.dakinevich@salutedevices.com>,
-	linux-kernel@vger.kernel.org, linux-amlogic@lists.infradead.org,
-	linux-clk@vger.kernel.org
-Subject: Re: [PATCH 7/8] reset: amlogic: add auxiliary reset driver support
-Message-ID: <202407120208.ub5kh5K1-lkp@intel.com>
-References: <20240710162526.2341399-8-jbrunet@baylibre.com>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="WKSzu9es"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1720731128;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=Rgjwg99qXYAjHxbVawwLg0nCXYjSS0Y5BSyagYrUBa0=;
+	b=WKSzu9esbr1q3GdKFxuPi7eLQHEsNt/FU1YJz5vxuFyFEWwOUMD1lN62GuemnHCXnL40Cn
+	/ZJZsarvwbMTNbDdkmpSpXAbNHCE9oe61FbFNRRqbbTOUEiTHEVecMVSjSlBVIxfLXLirH
+	vInPnfyX1XATIpPjnrniY3Gju10k/dw=
+Received: from mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-400-01vV0hhpO9GQ0glWBMG3pA-1; Thu,
+ 11 Jul 2024 16:52:07 -0400
+X-MC-Unique: 01vV0hhpO9GQ0glWBMG3pA-1
+Received: from mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.4])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 7AB061955F43
+	for <llvm@lists.linux.dev>; Thu, 11 Jul 2024 20:52:06 +0000 (UTC)
+Received: from [172.64.15.30] (unknown [10.30.34.46])
+	by mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id D18A13000181;
+	Thu, 11 Jul 2024 20:52:05 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.10.0-rc7,
+ mainline.kernel.org-clang, 8a18fda0)
+Date: Thu, 11 Jul 2024 20:52:05 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240710162526.2341399-8-jbrunet@baylibre.com>
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.4
+Message-Id: <75482.124071116520701540@us-mta-400.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Jerome,
+Hi, we tested your kernel and here are the results:
 
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on pza/reset/next]
-[also build test ERROR on clk/clk-next linus/master v6.10-rc7 next-20240711]
-[cannot apply to pza/imx-drm/next]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Jerome-Brunet/reset-amlogic-convert-driver-to-regmap/20240711-055833
-base:   https://git.pengutronix.de/git/pza/linux reset/next
-patch link:    https://lore.kernel.org/r/20240710162526.2341399-8-jbrunet%40baylibre.com
-patch subject: [PATCH 7/8] reset: amlogic: add auxiliary reset driver support
-config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20240712/202407120208.ub5kh5K1-lkp@intel.com/config)
-compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project a0c6b8aef853eedaa0980f07c0a502a5a8a9740e)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240712/202407120208.ub5kh5K1-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202407120208.ub5kh5K1-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
-   In file included from drivers/reset/reset-meson.c:8:
-   In file included from include/linux/auxiliary_bus.h:11:
-   In file included from include/linux/device.h:32:
-   In file included from include/linux/device/driver.h:21:
-   In file included from include/linux/module.h:19:
-   In file included from include/linux/elf.h:6:
-   In file included from arch/s390/include/asm/elf.h:173:
-   In file included from arch/s390/include/asm/mmu_context.h:11:
-   In file included from arch/s390/include/asm/pgalloc.h:18:
-   In file included from include/linux/mm.h:2253:
-   include/linux/vmstat.h:500:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     500 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     501 |                            item];
-         |                            ~~~~
-   include/linux/vmstat.h:507:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     507 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     508 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/vmstat.h:514:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     514 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
-   include/linux/vmstat.h:519:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     519 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     520 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/vmstat.h:528:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     528 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     529 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   In file included from drivers/reset/reset-meson.c:11:
-   In file included from include/linux/io.h:14:
-   In file included from arch/s390/include/asm/io.h:93:
-   include/asm-generic/io.h:548:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     548 |         val = __raw_readb(PCI_IOBASE + addr);
-         |                           ~~~~~~~~~~ ^
-   include/asm-generic/io.h:561:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     561 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
-      37 | #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
-         |                                                           ^
-   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
-     102 | #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
-         |                                                      ^
-   In file included from drivers/reset/reset-meson.c:11:
-   In file included from include/linux/io.h:14:
-   In file included from arch/s390/include/asm/io.h:93:
-   include/asm-generic/io.h:574:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     574 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
-      35 | #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
-         |                                                           ^
-   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
-     115 | #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
-         |                                                      ^
-   In file included from drivers/reset/reset-meson.c:11:
-   In file included from include/linux/io.h:14:
-   In file included from arch/s390/include/asm/io.h:93:
-   include/asm-generic/io.h:585:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     585 |         __raw_writeb(value, PCI_IOBASE + addr);
-         |                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:595:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     595 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:605:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     605 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:693:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     693 |         readsb(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:701:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     701 |         readsw(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:709:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     709 |         readsl(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:718:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     718 |         writesb(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   include/asm-generic/io.h:727:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     727 |         writesw(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   include/asm-generic/io.h:736:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     736 |         writesl(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
->> drivers/reset/reset-meson.c:272:1: error: redefinition of '__inittest'
-     272 | module_auxiliary_driver(meson_reset_aux_driver);
-         | ^
-   include/linux/auxiliary_bus.h:245:2: note: expanded from macro 'module_auxiliary_driver'
-     245 |         module_driver(__auxiliary_driver, auxiliary_driver_register, auxiliary_driver_unregister)
-         |         ^
-   include/linux/device/driver.h:261:3: note: expanded from macro 'module_driver'
-     261 | } \
-         |   ^
-   include/linux/module.h:131:42: note: expanded from macro '\
-   module_init'
-     131 |         static inline initcall_t __maybe_unused __inittest(void)                \
-         |                                                 ^
-   drivers/reset/reset-meson.c:232:1: note: previous definition is here
-     232 | module_platform_driver(meson_reset_pltf_driver);
-         | ^
-   include/linux/platform_device.h:303:2: note: expanded from macro 'module_platform_driver'
-     303 |         module_driver(__platform_driver, platform_driver_register, \
-         |         ^
-   include/linux/device/driver.h:261:3: note: expanded from macro 'module_driver'
-     261 | } \
-         |   ^
-   include/linux/module.h:131:42: note: expanded from macro '\
-   module_init'
-     131 |         static inline initcall_t __maybe_unused __inittest(void)                \
-         |                                                 ^
->> drivers/reset/reset-meson.c:272:1: error: redefinition of 'init_module'
-     272 | module_auxiliary_driver(meson_reset_aux_driver);
-         | ^
-   include/linux/auxiliary_bus.h:245:2: note: expanded from macro 'module_auxiliary_driver'
-     245 |         module_driver(__auxiliary_driver, auxiliary_driver_register, auxiliary_driver_unregister)
-         |         ^
-   include/linux/device/driver.h:261:3: note: expanded from macro 'module_driver'
-     261 | } \
-         |   ^
-   include/linux/module.h:133:6: note: expanded from macro '\
-   module_init'
-     133 |         int init_module(void) __copy(initfn)                    \
-         |             ^
-   drivers/reset/reset-meson.c:232:1: note: previous definition is here
-     232 | module_platform_driver(meson_reset_pltf_driver);
-         | ^
-   include/linux/platform_device.h:303:2: note: expanded from macro 'module_platform_driver'
-     303 |         module_driver(__platform_driver, platform_driver_register, \
-         |         ^
-   include/linux/device/driver.h:261:3: note: expanded from macro 'module_driver'
-     261 | } \
-         |   ^
-   include/linux/module.h:133:6: note: expanded from macro '\
-   module_init'
-     133 |         int init_module(void) __copy(initfn)                    \
-         |             ^
->> drivers/reset/reset-meson.c:272:1: error: redefinition of '__exittest'
-     272 | module_auxiliary_driver(meson_reset_aux_driver);
-         | ^
-   include/linux/auxiliary_bus.h:245:2: note: expanded from macro 'module_auxiliary_driver'
-     245 |         module_driver(__auxiliary_driver, auxiliary_driver_register, auxiliary_driver_unregister)
-         |         ^
-   include/linux/device/driver.h:266:3: note: expanded from macro 'module_driver'
-     266 | } \
-         |   ^
-   include/linux/module.h:139:42: note: expanded from macro '\
-   module_exit'
-     139 |         static inline exitcall_t __maybe_unused __exittest(void)                \
-         |                                                 ^
-   drivers/reset/reset-meson.c:232:1: note: previous definition is here
-     232 | module_platform_driver(meson_reset_pltf_driver);
-         | ^
-   include/linux/platform_device.h:303:2: note: expanded from macro 'module_platform_driver'
-     303 |         module_driver(__platform_driver, platform_driver_register, \
-         |         ^
-   include/linux/device/driver.h:266:3: note: expanded from macro 'module_driver'
-     266 | } \
-         |   ^
-   include/linux/module.h:139:42: note: expanded from macro '\
-   module_exit'
-     139 |         static inline exitcall_t __maybe_unused __exittest(void)                \
-         |                                                 ^
->> drivers/reset/reset-meson.c:272:1: error: redefinition of 'cleanup_module'
-     272 | module_auxiliary_driver(meson_reset_aux_driver);
-         | ^
-   include/linux/auxiliary_bus.h:245:2: note: expanded from macro 'module_auxiliary_driver'
-     245 |         module_driver(__auxiliary_driver, auxiliary_driver_register, auxiliary_driver_unregister)
-         |         ^
-   include/linux/device/driver.h:266:3: note: expanded from macro 'module_driver'
-     266 | } \
-         |   ^
-   include/linux/module.h:141:7: note: expanded from macro '\
-   module_exit'
-     141 |         void cleanup_module(void) __copy(exitfn)                \
-         |              ^
-   drivers/reset/reset-meson.c:232:1: note: previous definition is here
-     232 | module_platform_driver(meson_reset_pltf_driver);
-         | ^
-   include/linux/platform_device.h:303:2: note: expanded from macro 'module_platform_driver'
-     303 |         module_driver(__platform_driver, platform_driver_register, \
-         |         ^
-   include/linux/device/driver.h:266:3: note: expanded from macro 'module_driver'
-     266 | } \
-         |   ^
-   include/linux/module.h:141:7: note: expanded from macro '\
-   module_exit'
-     141 |         void cleanup_module(void) __copy(exitfn)                \
-         |              ^
-   drivers/reset/reset-meson.c:292:5: error: redefinition of 'devm_meson_rst_aux_register'
-     292 | int devm_meson_rst_aux_register(struct device *dev,
-         |     ^
-   include/soc/amlogic/meson-auxiliary-reset.h:15:19: note: previous definition is here
-      15 | static inline int devm_meson_rst_aux_register(struct device *dev,
-         |                   ^
-   17 warnings and 5 errors generated.
+    Overall result: FAILED
+             Merge: OK
+           Compile: FAILED
 
 
-vim +/__inittest +272 drivers/reset/reset-meson.c
+Kernel information:
+    Commit message: Merge tag 'spi-fix-v6.10-rc7' of git://git.kernel.org/p=
+ub/scm/linux/kernel/git/broonie/spi
 
-   267	
-   268	static struct auxiliary_driver meson_reset_aux_driver = {
-   269		.probe		= meson_reset_aux_probe,
-   270		.id_table	= meson_reset_aux_ids,
-   271	};
- > 272	module_auxiliary_driver(meson_reset_aux_driver);
-   273	
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1370313095
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+One or more kernel builds failed:
+    Unrecognized or new issues:
+         ppc64le - https://datawarehouse.cki-project.org/kcidb/builds/redha=
+t:1370313095-ppc64le-kernel
+           s390x - https://datawarehouse.cki-project.org/kcidb/builds/redha=
+t:1370313095-s390x-kernel
+          x86_64 (debug) - https://datawarehouse.cki-project.org/kcidb/buil=
+ds/redhat:1370313095-x86_64-kernel-debug
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
