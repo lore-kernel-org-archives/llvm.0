@@ -1,69 +1,66 @@
-Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D0F5F28FF;
-	Thu, 11 Jul 2024 18:49:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.92.199
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D88E15F40D;
+	Thu, 11 Jul 2024 19:03:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720723796; cv=none; b=fq7UPkrKeb/yLfUMW0Etfrd/bSlA5dMZSzrxRwZW0zcH+dxOdZEtDQTxPKRb/CqbzQEx+4O45ESWUJC/chLAjsCONlULi360bG/Ym7f2HvL1pds6zEa9i/+rZcaKDAJtF+wVt+GJ65FkQbABSFQXQ3F2soaTh3qDkxsgeof3xuw=
+	t=1720724627; cv=none; b=i5IXvCmihUfFUVhzZuoFYg18vagwcVeXXaQnSO+sGkoR/N7t3ud38TjV9crhwVCvI7IvCfJUMRkoxF+753fMrxwMZaoRWc9+hEwXwrrZ5/bRdhe5qXGZ0YAeegJNKecBSZAsUx1B0C4TDAiv2wC95I+sbJgW90cxHrdGhk+4voo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720723796; c=relaxed/simple;
-	bh=z2Zau4uAm8vaFqoE5iU5MmFK+8bXegUBo5jC5aSrspE=;
+	s=arc-20240116; t=1720724627; c=relaxed/simple;
+	bh=KjDHsBomUHrlcuMySZ8NJg7L3Q0FPnsN62pBzRy47t0=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=J2GOyhz9RubhmSeqF8x9LCyR2gjtq70m46dcqL3xkJrt5FO7Vz6X+WVAjcLt1hIMHfbHjaoPXNUa4WUzRbu4IkwfTaFk3O8ytYKuvV5tT+qCUlzCcmN1zmnByTvVLFw+a1ixiZS6mElSJf9czRLw0iEK48V0Rf4sseHDzd6eeC0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=By5aYvAq; arc=none smtp.client-ip=90.155.92.199
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
+	 Content-Type:Content-Disposition:In-Reply-To; b=jIQ1i1l72R5NUCa5AS5JN8kTigbdlvfYutXLIAdVyC6JzIjk/nz/lgNIDomB13yColNlVFW9bv7aXd3LAET5UEgxkTzGT680k66QmZaVqUgYyJdQZ8quz5n/8lNFbXU7dqCQ14W5SMMmZVAFPCYvKb6sqiNPJNsPdAkIYEebAT4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=NoqSdTvw; arc=none smtp.client-ip=192.198.163.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="By5aYvAq"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=o/IW2cCwLwJEDMO66z3r5dlrUmlAEsjcwslEcQLO45s=; b=By5aYvAqIMwiWTdp67RiKFT7sD
-	+qDZ7b1sxVwD8VDiFHi9n1oSEdZ/3h5u/OftoP8fJgV1h4+y2lNUpjtwaPm5oMmGidDXTk6dic2b4
-	w/casdFX/c1h5f+6ZemMDjQZ3uPI7rmnlYxBw3xBJCi2rYWiwztHif2ZV7DI7aeYu616aotcFIN9C
-	fHGJCn/AfGhzqriuT4bVmSK64p4kqVZZQosYcIq2LPVBTd0SKRaSVRPAogOxHR/mIyA4AfgJUzmTU
-	oPPAOqDQ/Yspi76VOtRsNQDtachP5NzFDNsIkhS/3e01Lk0lh5amtvxv19zcydP/4ugY7iD9yonGR
-	xdtwKXHw==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-	by desiato.infradead.org with esmtpsa (Exim 4.97.1 #2 (Red Hat Linux))
-	id 1sRyrJ-000000018ze-3Fdq;
-	Thu, 11 Jul 2024 18:49:37 +0000
-Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
-	id 4636630050D; Thu, 11 Jul 2024 20:49:37 +0200 (CEST)
-Date: Thu, 11 Jul 2024 20:49:37 +0200
-From: Peter Zijlstra <peterz@infradead.org>
-To: Kees Cook <kees@kernel.org>
-Cc: Marco Elver <elver@google.com>,
-	Gatlin Newhouse <gatlin.newhouse@gmail.com>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-	"H. Peter Anvin" <hpa@zytor.com>,
-	Andrey Konovalov <andreyknvl@gmail.com>,
-	Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Baoquan He <bhe@redhat.com>,
-	Rick Edgecombe <rick.p.edgecombe@intel.com>,
-	Pengfei Xu <pengfei.xu@intel.com>,
-	Josh Poimboeuf <jpoimboe@kernel.org>,
-	Changbin Du <changbin.du@huawei.com>, Xin Li <xin3.li@intel.com>,
-	Jason Gunthorpe <jgg@ziepe.ca>, Arnd Bergmann <arnd@arndb.de>,
-	"Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-	linux-kernel@vger.kernel.org, kasan-dev@googlegroups.com,
-	linux-hardening@vger.kernel.org, llvm@lists.linux.dev,
-	t.p.northover@gmail.com, Fangrui Song <maskray@google.com>
-Subject: Re: [PATCH v4] x86/traps: Enable UBSAN traps on x86
-Message-ID: <20240711184937.GE27299@noisy.programming.kicks-ass.net>
-References: <20240710203250.238782-1-gatlin.newhouse@gmail.com>
- <20240711081031.GB4587@noisy.programming.kicks-ass.net>
- <CANpmjNObEzShHvw19EAntPvCYJbqezKBq+pB=mkd7j3sXDEE7A@mail.gmail.com>
- <202407110924.81A08DD4D@keescook>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="NoqSdTvw"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1720724626; x=1752260626;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=KjDHsBomUHrlcuMySZ8NJg7L3Q0FPnsN62pBzRy47t0=;
+  b=NoqSdTvwGC4NG6uD1UlYQ5l3vpIGNvrolOQmwASKTri/DYCb4VE1k/jn
+   gAGOU+jYUX/YqykC5pNWFFt2i//MxAECOppJK886lpr4U7dATmubopAJa
+   +VJPbaPgwPBMA+qw76OzsqGj1e6HvB9Cg6345A0Rn9DnkBSypF1AM6qbg
+   +2uL9nBJX/8xFBuT6rrnMO67scl1WYhzOG7r8iNv3tJqx5XdZQV32NOK/
+   UM6gb2feAtEkGsHGodV78lB9BR8XCB3c8YeaY+610pNpMuPUl7fSJlUbv
+   t3f2l1xZubJsWvtzci3h3W9eJV0I+Jg+83wX1uH2y8njC6WkjPbHoUnXY
+   g==;
+X-CSE-ConnectionGUID: vpJUbuGPQgeBEQEatrUmZA==
+X-CSE-MsgGUID: 7yJwf7ruSMyGd6+guTv/JA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11130"; a="17753633"
+X-IronPort-AV: E=Sophos;i="6.09,201,1716274800"; 
+   d="scan'208";a="17753633"
+Received: from orviesa002.jf.intel.com ([10.64.159.142])
+  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jul 2024 12:03:45 -0700
+X-CSE-ConnectionGUID: 8bj9pQiWR/6B/B20EEpk+A==
+X-CSE-MsgGUID: ulTMRKI8TFan/Xihp4bMsA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.09,201,1716274800"; 
+   d="scan'208";a="79358047"
+Received: from lkp-server01.sh.intel.com (HELO 68891e0c336b) ([10.239.97.150])
+  by orviesa002.jf.intel.com with ESMTP; 11 Jul 2024 12:03:42 -0700
+Received: from kbuild by 68891e0c336b with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1sRz4s-000ZiI-29;
+	Thu, 11 Jul 2024 19:03:38 +0000
+Date: Fri, 12 Jul 2024 03:03:27 +0800
+From: kernel test robot <lkp@intel.com>
+To: Jerome Brunet <jbrunet@baylibre.com>,
+	Philipp Zabel <p.zabel@pengutronix.de>,
+	Stephen Boyd <sboyd@kernel.org>,
+	Neil Armstrong <neil.armstrong@linaro.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Jerome Brunet <jbrunet@baylibre.com>,
+	Jan Dakinevich <jan.dakinevich@salutedevices.com>,
+	linux-kernel@vger.kernel.org, linux-amlogic@lists.infradead.org,
+	linux-clk@vger.kernel.org
+Subject: Re: [PATCH 7/8] reset: amlogic: add auxiliary reset driver support
+Message-ID: <202407120208.ub5kh5K1-lkp@intel.com>
+References: <20240710162526.2341399-8-jbrunet@baylibre.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -72,105 +69,247 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <202407110924.81A08DD4D@keescook>
+In-Reply-To: <20240710162526.2341399-8-jbrunet@baylibre.com>
 
-On Thu, Jul 11, 2024 at 09:35:24AM -0700, Kees Cook wrote:
-> On Thu, Jul 11, 2024 at 11:06:12AM +0200, Marco Elver wrote:
-> > On Thu, 11 Jul 2024 at 10:10, Peter Zijlstra <peterz@infradead.org> wrote:
-> > >
-> > > On Wed, Jul 10, 2024 at 08:32:38PM +0000, Gatlin Newhouse wrote:
-> > > > Currently ARM architectures extract which specific sanitizer
-> > > > has caused a trap via encoded data in the trap instruction.
-> > > > Clang on x86 currently encodes the same data in ud1 instructions
-> > > > but the x86 handle_bug() and is_valid_bugaddr() functions
-> > > > currently only look at ud2s.
-> > > >
-> > > > Bring x86 to parity with arm64, similar to commit 25b84002afb9
-> > > > ("arm64: Support Clang UBSAN trap codes for better reporting").
-> > > > Enable the reporting of UBSAN sanitizer detail on x86 architectures
-> > > > compiled with clang when CONFIG_UBSAN_TRAP=y.
-> > >
-> > > Can we please get some actual words on what code clang will generate for
-> > > this? This doesn't even refer to the clang commit.
-> > >
-> > > How am I supposed to know if the below patch matches what clang will
-> > > generate etc..
-> > 
-> > I got curious what the history of this is - I think it was introduced
-> > in https://github.com/llvm/llvm-project/commit/c5978f42ec8e9, which
-> > was reviewed here: https://reviews.llvm.org/D89959
-> 
-> Sorry, I should have suggested this commit be mentioned in the commit
-> log. The details are in llvm/lib/Target/X86/X86MCInstLower.cpp:
-> https://github.com/llvm/llvm-project/commit/c5978f42ec8e9#diff-bb68d7cd885f41cfc35843998b0f9f534adb60b415f647109e597ce448e92d9f
-> 
->   case X86::UBSAN_UD1:
->     EmitAndCountInstruction(MCInstBuilder(X86::UD1Lm)
->                                 .addReg(X86::EAX)
->                                 .addReg(X86::EAX)
->                                 .addImm(1)
->                                 .addReg(X86::NoRegister)
->                                 .addImm(MI->getOperand(0).getImm())
->                                 .addReg(X86::NoRegister));
-> 
-> Which is using the UD1Lm template from
-> https://github.com/llvm/llvm-project/blob/main/llvm/lib/Target/X86/X86InstrSystem.td#L27
-> 
->   def UD1Lm   : I<0xB9, MRMSrcMem, (outs), (ins GR32:$src1, i32mem:$src2),
->                   "ud1{l}\t{$src2, $src1|$src1, $src2}", []>, TB, OpSize32;
-> 
-> It uses OpSize32, distinct from UD1Wm (16) and UD1Qm (64).
-> 
-> > But besides that, there's very little documentation. Either Gatlin or
-> > one of the other LLVM folks might have more background, but we might
-> > be out of luck if that 1 commit is all there is.
-> > 
-> > [+Cc Tim, author of the LLVM commit]
-> > 
-> > > > diff --git a/arch/x86/include/asm/bug.h b/arch/x86/include/asm/bug.h
-> > > > index a3ec87d198ac..ccd573d58edb 100644
-> > > > --- a/arch/x86/include/asm/bug.h
-> > > > +++ b/arch/x86/include/asm/bug.h
-> > > > @@ -13,6 +13,17 @@
-> > > >  #define INSN_UD2     0x0b0f
-> > > >  #define LEN_UD2              2
-> > > >
-> > > > +/*
-> > > > + * In clang we have UD1s reporting UBSAN failures on X86, 64 and 32bit.
-> > > > + */
-> > > > +#define INSN_ASOP    0x67
-> > >
-> > > I asked, but did not receive answer, *WHY* does clang add this silly
-> > > prefix? AFAICT this is entirely spurious and things would be simpler if
-> > > we don't have to deal with it.
-> 
-> Even if we change LLVM, I'd still like to support the older versions, so
-> we'll need to handle this regardless.
+Hi Jerome,
 
-Is it (LLVM) allowed to do prefix stuffing for 'random' instructions in
-order to achieve alignment goals? That is, are we ever expecting more
-prefixes here?
+kernel test robot noticed the following build errors:
 
-Anyway, as proposed the 'decoder' also accepts ASOP UD2, should we be
-complete and also return an instruction length? Just in case we want to
-be non fatal (WARN like) and skip over the instruction.
+[auto build test ERROR on pza/reset/next]
+[also build test ERROR on clk/clk-next linus/master v6.10-rc7 next-20240711]
+[cannot apply to pza/imx-drm/next]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-> > >
-> > > > +#define OPCODE_PREFIX        0x0f
-> > >
-> > > This is *NOT* a prefix, it is an escape, please see the SDM Vol 2
-> > > Chapter 'Instruction Format'. That ASOP thing above is a prefix.
-> > >
-> > > > +#define OPCODE_UD1   0xb9
-> > > > +#define OPCODE_UD2   0x0b
-> > >
-> > > These are second byte opcodes. The actual (single byte opcodes) of those
-> > > value exist and are something entirely different (0xB0+r is MOV, and
-> > > 0x0B is OR).
-> 
-> What would be your preferred names for all of these defines?
+url:    https://github.com/intel-lab-lkp/linux/commits/Jerome-Brunet/reset-amlogic-convert-driver-to-regmap/20240711-055833
+base:   https://git.pengutronix.de/git/pza/linux reset/next
+patch link:    https://lore.kernel.org/r/20240710162526.2341399-8-jbrunet%40baylibre.com
+patch subject: [PATCH 7/8] reset: amlogic: add auxiliary reset driver support
+config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20240712/202407120208.ub5kh5K1-lkp@intel.com/config)
+compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project a0c6b8aef853eedaa0980f07c0a502a5a8a9740e)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240712/202407120208.ub5kh5K1-lkp@intel.com/reproduce)
 
-SDM calls 0x0f the escape opcode and these others secondary opcode
-bytes, so something along those lines would be clear I suppose.	
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202407120208.ub5kh5K1-lkp@intel.com/
 
-Vol2 2.1.2 (todays edition)
+All errors (new ones prefixed by >>):
+
+   In file included from drivers/reset/reset-meson.c:8:
+   In file included from include/linux/auxiliary_bus.h:11:
+   In file included from include/linux/device.h:32:
+   In file included from include/linux/device/driver.h:21:
+   In file included from include/linux/module.h:19:
+   In file included from include/linux/elf.h:6:
+   In file included from arch/s390/include/asm/elf.h:173:
+   In file included from arch/s390/include/asm/mmu_context.h:11:
+   In file included from arch/s390/include/asm/pgalloc.h:18:
+   In file included from include/linux/mm.h:2253:
+   include/linux/vmstat.h:500:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     500 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     501 |                            item];
+         |                            ~~~~
+   include/linux/vmstat.h:507:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     507 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     508 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/vmstat.h:514:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     514 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+   include/linux/vmstat.h:519:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     519 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     520 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/vmstat.h:528:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     528 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     529 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+   In file included from drivers/reset/reset-meson.c:11:
+   In file included from include/linux/io.h:14:
+   In file included from arch/s390/include/asm/io.h:93:
+   include/asm-generic/io.h:548:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     548 |         val = __raw_readb(PCI_IOBASE + addr);
+         |                           ~~~~~~~~~~ ^
+   include/asm-generic/io.h:561:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     561 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
+      37 | #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
+         |                                                           ^
+   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
+     102 | #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
+         |                                                      ^
+   In file included from drivers/reset/reset-meson.c:11:
+   In file included from include/linux/io.h:14:
+   In file included from arch/s390/include/asm/io.h:93:
+   include/asm-generic/io.h:574:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     574 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
+      35 | #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
+         |                                                           ^
+   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
+     115 | #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
+         |                                                      ^
+   In file included from drivers/reset/reset-meson.c:11:
+   In file included from include/linux/io.h:14:
+   In file included from arch/s390/include/asm/io.h:93:
+   include/asm-generic/io.h:585:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     585 |         __raw_writeb(value, PCI_IOBASE + addr);
+         |                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:595:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     595 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:605:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     605 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:693:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     693 |         readsb(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:701:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     701 |         readsw(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:709:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     709 |         readsl(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:718:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     718 |         writesb(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+   include/asm-generic/io.h:727:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     727 |         writesw(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+   include/asm-generic/io.h:736:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     736 |         writesl(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+>> drivers/reset/reset-meson.c:272:1: error: redefinition of '__inittest'
+     272 | module_auxiliary_driver(meson_reset_aux_driver);
+         | ^
+   include/linux/auxiliary_bus.h:245:2: note: expanded from macro 'module_auxiliary_driver'
+     245 |         module_driver(__auxiliary_driver, auxiliary_driver_register, auxiliary_driver_unregister)
+         |         ^
+   include/linux/device/driver.h:261:3: note: expanded from macro 'module_driver'
+     261 | } \
+         |   ^
+   include/linux/module.h:131:42: note: expanded from macro '\
+   module_init'
+     131 |         static inline initcall_t __maybe_unused __inittest(void)                \
+         |                                                 ^
+   drivers/reset/reset-meson.c:232:1: note: previous definition is here
+     232 | module_platform_driver(meson_reset_pltf_driver);
+         | ^
+   include/linux/platform_device.h:303:2: note: expanded from macro 'module_platform_driver'
+     303 |         module_driver(__platform_driver, platform_driver_register, \
+         |         ^
+   include/linux/device/driver.h:261:3: note: expanded from macro 'module_driver'
+     261 | } \
+         |   ^
+   include/linux/module.h:131:42: note: expanded from macro '\
+   module_init'
+     131 |         static inline initcall_t __maybe_unused __inittest(void)                \
+         |                                                 ^
+>> drivers/reset/reset-meson.c:272:1: error: redefinition of 'init_module'
+     272 | module_auxiliary_driver(meson_reset_aux_driver);
+         | ^
+   include/linux/auxiliary_bus.h:245:2: note: expanded from macro 'module_auxiliary_driver'
+     245 |         module_driver(__auxiliary_driver, auxiliary_driver_register, auxiliary_driver_unregister)
+         |         ^
+   include/linux/device/driver.h:261:3: note: expanded from macro 'module_driver'
+     261 | } \
+         |   ^
+   include/linux/module.h:133:6: note: expanded from macro '\
+   module_init'
+     133 |         int init_module(void) __copy(initfn)                    \
+         |             ^
+   drivers/reset/reset-meson.c:232:1: note: previous definition is here
+     232 | module_platform_driver(meson_reset_pltf_driver);
+         | ^
+   include/linux/platform_device.h:303:2: note: expanded from macro 'module_platform_driver'
+     303 |         module_driver(__platform_driver, platform_driver_register, \
+         |         ^
+   include/linux/device/driver.h:261:3: note: expanded from macro 'module_driver'
+     261 | } \
+         |   ^
+   include/linux/module.h:133:6: note: expanded from macro '\
+   module_init'
+     133 |         int init_module(void) __copy(initfn)                    \
+         |             ^
+>> drivers/reset/reset-meson.c:272:1: error: redefinition of '__exittest'
+     272 | module_auxiliary_driver(meson_reset_aux_driver);
+         | ^
+   include/linux/auxiliary_bus.h:245:2: note: expanded from macro 'module_auxiliary_driver'
+     245 |         module_driver(__auxiliary_driver, auxiliary_driver_register, auxiliary_driver_unregister)
+         |         ^
+   include/linux/device/driver.h:266:3: note: expanded from macro 'module_driver'
+     266 | } \
+         |   ^
+   include/linux/module.h:139:42: note: expanded from macro '\
+   module_exit'
+     139 |         static inline exitcall_t __maybe_unused __exittest(void)                \
+         |                                                 ^
+   drivers/reset/reset-meson.c:232:1: note: previous definition is here
+     232 | module_platform_driver(meson_reset_pltf_driver);
+         | ^
+   include/linux/platform_device.h:303:2: note: expanded from macro 'module_platform_driver'
+     303 |         module_driver(__platform_driver, platform_driver_register, \
+         |         ^
+   include/linux/device/driver.h:266:3: note: expanded from macro 'module_driver'
+     266 | } \
+         |   ^
+   include/linux/module.h:139:42: note: expanded from macro '\
+   module_exit'
+     139 |         static inline exitcall_t __maybe_unused __exittest(void)                \
+         |                                                 ^
+>> drivers/reset/reset-meson.c:272:1: error: redefinition of 'cleanup_module'
+     272 | module_auxiliary_driver(meson_reset_aux_driver);
+         | ^
+   include/linux/auxiliary_bus.h:245:2: note: expanded from macro 'module_auxiliary_driver'
+     245 |         module_driver(__auxiliary_driver, auxiliary_driver_register, auxiliary_driver_unregister)
+         |         ^
+   include/linux/device/driver.h:266:3: note: expanded from macro 'module_driver'
+     266 | } \
+         |   ^
+   include/linux/module.h:141:7: note: expanded from macro '\
+   module_exit'
+     141 |         void cleanup_module(void) __copy(exitfn)                \
+         |              ^
+   drivers/reset/reset-meson.c:232:1: note: previous definition is here
+     232 | module_platform_driver(meson_reset_pltf_driver);
+         | ^
+   include/linux/platform_device.h:303:2: note: expanded from macro 'module_platform_driver'
+     303 |         module_driver(__platform_driver, platform_driver_register, \
+         |         ^
+   include/linux/device/driver.h:266:3: note: expanded from macro 'module_driver'
+     266 | } \
+         |   ^
+   include/linux/module.h:141:7: note: expanded from macro '\
+   module_exit'
+     141 |         void cleanup_module(void) __copy(exitfn)                \
+         |              ^
+   drivers/reset/reset-meson.c:292:5: error: redefinition of 'devm_meson_rst_aux_register'
+     292 | int devm_meson_rst_aux_register(struct device *dev,
+         |     ^
+   include/soc/amlogic/meson-auxiliary-reset.h:15:19: note: previous definition is here
+      15 | static inline int devm_meson_rst_aux_register(struct device *dev,
+         |                   ^
+   17 warnings and 5 errors generated.
+
+
+vim +/__inittest +272 drivers/reset/reset-meson.c
+
+   267	
+   268	static struct auxiliary_driver meson_reset_aux_driver = {
+   269		.probe		= meson_reset_aux_probe,
+   270		.id_table	= meson_reset_aux_ids,
+   271	};
+ > 272	module_auxiliary_driver(meson_reset_aux_driver);
+   273	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
