@@ -1,203 +1,133 @@
-Received: from mail-yw1-f179.google.com (mail-yw1-f179.google.com [209.85.128.179])
+Received: from mail-yb1-f180.google.com (mail-yb1-f180.google.com [209.85.219.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 42A3C450FA
-	for <llvm@lists.linux.dev>; Thu, 11 Jul 2024 17:06:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D43C450FA
+	for <llvm@lists.linux.dev>; Thu, 11 Jul 2024 17:09:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720717597; cv=none; b=Xy0xP6Xi7mhvf8oO3gPMl0GaJW8TPNHQN6i8BK9FqJyZq1YFlGkFKcgrcBCFOpRFGYE2CuFvuM8O+yvLdvVUV77IAvqusgXcdnZ9yXHxGAm2wv7uYj/2aasdWd8ZpGaAnrl0Z9Xpa1hcRewf7ANy+mAac7uvQEP13FFIqh9fz9A=
+	t=1720717767; cv=none; b=RxI13+yHe8IGQFx46Niu8NPfYrxUs/V3xUqdw+vXJbKuDkH/o5xqFmdSFtNhDRTJsrP8rwdASwBPiA4ME36+a+r7m2go1RzzzAZzmC+VNNpCjJyTBpAQpVzHmrvnjE8PrqsL/fCNCUtbJKy4JRx+m0ZdADif4Nspvi7ygtSvZRI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720717597; c=relaxed/simple;
-	bh=fDkBPWeYQgsnESRoC4KC4O1cV67QHs0vDF8sT41VJVo=;
+	s=arc-20240116; t=1720717767; c=relaxed/simple;
+	bh=C3F9jB3kZe372d/2FqZSOc9k/pEeRRtlSpwAdrHy+RI=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=urUs4Z2eMxfPtxlDiwZVApFCFmmz4jjXQKOPfi4TUIqTCapSywdIh6ArSEzvtvgHbEoRU+mOu84HISo9CUmnAQusBkE2Q8n3BeyT+A8IoOFGzQGeiRIee9b/2DCMBneyOswyY8OSogDSem14usi3mleZzRjU26Lrxp6Aru1DI4Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=EkscpvO4; arc=none smtp.client-ip=209.85.128.179
+	 To:Cc:Content-Type; b=nfjeKjn959Bpz0DoYMjFeFX1afwp1MUy251+RMC1+wzddUwqPif/2AvcFGDqJBlLlq95GUQwb+Ukpej45eqxaYXP84jzG+VczrRYSb5ihJ00F/yvyVlBjVjShRFOSINk3iAH5/OThPlb1g7Sn6qpzSwirIxeOx042aedzzuQOMQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=lnPZVFLp; arc=none smtp.client-ip=209.85.219.180
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="EkscpvO4"
-Received: by mail-yw1-f179.google.com with SMTP id 00721157ae682-6512866fa87so12015937b3.2
-        for <llvm@lists.linux.dev>; Thu, 11 Jul 2024 10:06:35 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="lnPZVFLp"
+Received: by mail-yb1-f180.google.com with SMTP id 3f1490d57ef6-e057bdc936fso1074860276.1
+        for <llvm@lists.linux.dev>; Thu, 11 Jul 2024 10:09:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1720717594; x=1721322394; darn=lists.linux.dev;
+        d=google.com; s=20230601; t=1720717764; x=1721322564; darn=lists.linux.dev;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=djklYk9rWCjm2tsWgbZ32mQ8UgJBx4pRhVg9VXDIihA=;
-        b=EkscpvO4ivXywgl6Dayy0vHxsJBj1rkOX8FtqPW/JTgriOSxZlgkG7ugZmhehllsoM
-         NamL1T5TUF5jUrFIHUOsjqkeHtqZolR5CrUZF24nxnP4ppS5npvHwzc0SBsCzvlSkmwD
-         p+o7VTmM3QxK28O5Ane1u/nc0ytjbK2nfGtXXxY+yb4pUlKf3Z/v8VlQKHaD+RFZxBI4
-         ipOPl8v4bil3UzH8bmtHB9dyh6qBt8MDvR+gsrYU/WlQkIu0UbG61yZ8KLPu7uZGXViE
-         temgwnpl9rDstuQuHeLwZ7pDzXUgiGtld7S+rbVQ9ekdVieeRIY2WAmAlXbLUk8fgK8l
-         xvZQ==
+        bh=BT4Q0fDnQo1b1rbWAFdQTaPbqeR+6myjThNugn0g5s4=;
+        b=lnPZVFLpa3awowufJjdgxrpGg9wLVUFSwIc6WVyzM5IdDNtxpWWu6zUpVDPyvA0See
+         K34vMjvd/RsUloDW/+yzYkkQFP81KTl1Be35+N7tqaE/AQF6/NyrwNUwIOFCvHVv2je/
+         3YrnjZyQy5QdH44/qD+UF5pxNycn9I6jWoRFh4BvVwBG1gcpTIvDioFbNONkpBFFknnG
+         ls1qN8r8GqZxeRTMJwmMCfuvoVqnk/8gvMY9o3Qii+eALAhGNKvgpJkU+GUXQnzRJ3hL
+         xg9IMLHzdAWvktgDh8yFm3/TPXoCDbS1kdkUKMyhEdyPJXA1gfuDJYIx5iVZGgqKwJws
+         6PnA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1720717594; x=1721322394;
+        d=1e100.net; s=20230601; t=1720717764; x=1721322564;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=djklYk9rWCjm2tsWgbZ32mQ8UgJBx4pRhVg9VXDIihA=;
-        b=vSc3rkvfdB6eMv6vm+lIudfGq/INHYxlPZmj7ti9xEqkOEmcirkAq+nM005try0DfZ
-         SpCfyWvsUJ2x8Sln8xjSvMjePZ82Kjvb9bZU70329kt6myfgXkKBGTXrjVqvJDMtSUIi
-         /lkdOu832XhIOk5gsUGKTO2ItZaXfmZr0ANGRfYaMVCDrYmEb/Q1376mroCdybo6mbPg
-         pneEZk4r01lnD8aPYn5J6dGHaC54y6dHdrWHRI7TDiTD3SQQbLEQLyB41TMpx5qP0XRB
-         kJvqLldVQxq8L3lHl8AjIIFXVXKcSx8hnCZWQECxFo6EaLpwFJhEH+oCkO7Sx4LjZYmv
-         RywA==
-X-Forwarded-Encrypted: i=1; AJvYcCUxCZc/rcFn3i+qiPB2Erd1xbxYAQhS8iLGsZvD0LgC1A4Mqh88vlrCgN6CE6dDDxlvFq7DIx1zTzDSPFFEN8/0iueQ/A==
-X-Gm-Message-State: AOJu0YwtNTiv55aw5HUda+a5QqaR/4N2ebyCKrPEsw5B3YaXFmBhxUrB
-	BjiReaQdmS/0EkaPV30bwaIWGj3wX8vujL4OMxu83/mwRYuRYVvGFffL+/ew1p8OcwsRD37wTul
-	sU67pS3b8srrbGMtl3ntYGe+5biTV/+OgOX2P
-X-Google-Smtp-Source: AGHT+IEjLTuYW3rMjiWDPSDFo/eiUXPqxmY1jhWYiTkKdjmVVxgLDTfX3dkdkMaURNMZn39k8dgTfzzNTZOG6FO4Tuo=
-X-Received: by 2002:a0d:ed45:0:b0:646:5ae1:b74d with SMTP id
- 00721157ae682-658f0dc3243mr98784117b3.48.1720717593956; Thu, 11 Jul 2024
- 10:06:33 -0700 (PDT)
+        bh=BT4Q0fDnQo1b1rbWAFdQTaPbqeR+6myjThNugn0g5s4=;
+        b=DPxTpvP1XWd2hcDAcemu9nQ0ViszbfG3IDQw0KrFYZvJvmsQ4FoGU1rlcEWYgRKvDs
+         sS0F8F2PYqcYZn02UlBTi1bjs+yu+uont6BqJMFiTsYsKqvPb1FzRbMEm1x6YWvQEFIs
+         wENL1QL7iSlbBwKPQlOZYflsGqgVuilXg5UWfsKOXrMi7SMpvr+R0K5caYUlZPKSmblQ
+         rQQ90KN2SIhNzJhFegYsUYAdB1MD4Fxz8tmlyiOqXeXaK20+bRqPXtqP3mKm71EjKytC
+         VK46WP4X0ihAVMUelra87IQ2sRT7rY6hVC/yDew4r/Z0wiRze5IGA6hWgyIhediOtPNb
+         H7Lg==
+X-Gm-Message-State: AOJu0YzajDN1qkYC2x5HQGd5F26MOoIA8+8LLEljIeR9e22dz/U1qpzn
+	e7Wo5Za1Kxobbrs257196fQjR35Vq3mj7rEuiFGQMBLrDNmR161m5Tsh8unfcbTyJnjJuRwskzq
+	CisrPiF2T4GKAnitevhaycWaKqDJO2ETTokuF
+X-Google-Smtp-Source: AGHT+IFhB7a+a8BufuhlkTWktjp2U5ed8yphy1GsV9RSCnMPrnocZGbTiFQNSoEMqZd7f6XE4G2m/LQxA5D5a5Q+8sc=
+X-Received: by 2002:a5b:b0b:0:b0:e03:ae1c:8d0f with SMTP id
+ 3f1490d57ef6-e041b17328fmr10346582276.59.1720717764206; Thu, 11 Jul 2024
+ 10:09:24 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20240710025418.394321-1-sxwjean@me.com> <Zo36BTqhzGkukyT_@casper.infradead.org>
- <20240710150154.GA1684801@thelio-3990X> <CAJuCfpFUawbMXf34YpUv_hrEvwOFX=CvPmyTS3CBOSZtC=c6Tg@mail.gmail.com>
- <4b533d6c-b2f3-49eb-a7fb-807af482def8@suse.cz> <CAJuCfpGoSMvPWTjoKDiN+yMMfiwz7XFmv-i71nvK14uJbCPmRA@mail.gmail.com>
-In-Reply-To: <CAJuCfpGoSMvPWTjoKDiN+yMMfiwz7XFmv-i71nvK14uJbCPmRA@mail.gmail.com>
+References: <202407050845.zNONqauD-lkp@intel.com>
+In-Reply-To: <202407050845.zNONqauD-lkp@intel.com>
 From: Suren Baghdasaryan <surenb@google.com>
-Date: Thu, 11 Jul 2024 10:06:19 -0700
-Message-ID: <CAJuCfpG08jmspY11dGej5Wdz2hT4iC=nr4V3HH-S4YfhXV7wyg@mail.gmail.com>
-Subject: Re: [PATCH] mm/slub: quiet the clang warning with -Wunused-function enabled
-To: Vlastimil Babka <vbabka@suse.cz>
-Cc: Nathan Chancellor <nathan@kernel.org>, Matthew Wilcox <willy@infradead.org>, sxwjean@me.com, cl@linux.co, 
-	penberg@kernel.org, rientjes@google.com, iamjoonsoo.kim@lge.com, 
-	akpm@linux-foundation.org, roman.gushchin@linux.dev, 42.hyeyoo@gmail.com, 
-	xiongwei.song@linux.dev, linux-mm@kvack.org, linux-kernel@vger.kernel.org, 
-	kernel test robot <lkp@intel.com>, llvm@lists.linux.dev, 
-	Nick Desaulniers <ndesaulniers@google.com>
+Date: Thu, 11 Jul 2024 10:09:13 -0700
+Message-ID: <CAJuCfpEwNE5tsm+iZTzZc-hdR5sBXAKd57tOGum67_fAu2Gi3A@mail.gmail.com>
+Subject: Re: mm/slub.c:2077:1: error: unused function 'prepare_slab_obj_exts_hook'
+To: kernel test robot <lkp@intel.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, 
+	linux-kernel@vger.kernel.org, Andrew Morton <akpm@linux-foundation.org>, 
+	Linux Memory Management List <linux-mm@kvack.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Jul 11, 2024 at 6:56=E2=80=AFAM Suren Baghdasaryan <surenb@google.c=
-om> wrote:
+On Thu, Jul 4, 2024 at 5:35=E2=80=AFPM kernel test robot <lkp@intel.com> wr=
+ote:
 >
-> On Thu, Jul 11, 2024 at 12:43=E2=80=AFAM Vlastimil Babka <vbabka@suse.cz>=
- wrote:
-> >
-> > On 7/10/24 11:40 PM, Suren Baghdasaryan wrote:
-> > > On Wed, Jul 10, 2024 at 8:02=E2=80=AFAM Nathan Chancellor <nathan@ker=
-nel.org> wrote:
-> > >>
-> > >> On Wed, Jul 10, 2024 at 04:03:33AM +0100, Matthew Wilcox wrote:
-> > >> > On Wed, Jul 10, 2024 at 10:54:18AM +0800, sxwjean@me.com wrote:
-> > >> > > From: Xiongwei Song <xiongwei.song@linux.dev>
-> > >> > >
-> > >> > > The only user of prepare_slab_obj_exts_hook() is
-> > >> > > alloc_tagging_slab_alloc_hook(), which can build with
-> > >> > > CONFIG_MEM_ALLOC_PROFILING enabled. So, the warning was triggerr=
-ed
-> > >> > > when disabling CONFIG_MEM_ALLOC_PROFILING. Let's add "__maybe_un=
-used"
-> > >> > > for prepare_slab_obj_exts_hook().
-> > >> >
-> > >> > Perhaps instead clang can be fixed to match gcc's behaviour?
-> > >>
-> > >> Clang only differs from GCC on warning for unused static inline func=
-tions in .c
-> > >> files, not .h files. The kernel already handles this in
-> > >> include/linux/compiler_types.h but it disables this workaround for W=
-=3D1 to catch
-> > >> unused functions like this as a result of commit 6863f5643dd7 ("kbui=
-ld: allow
-> > >> Clang to find unused static inline functions for W=3D1 build"):
-> > >>
-> > >> /*
-> > >>  * GCC does not warn about unused static inline functions for -Wunus=
-ed-function.
-> > >>  * Suppress the warning in clang as well by using __maybe_unused, bu=
-t enable it
-> > >>  * for W=3D1 build. This will allow clang to find unused functions. =
-Remove the
-> > >>  * __inline_maybe_unused entirely after fixing most of -Wunused-func=
-tion warnings.
-> > >>  */
-> > >> #ifdef KBUILD_EXTRA_WARN1
-> > >> #define __inline_maybe_unused
-> > >> #else
-> > >> #define __inline_maybe_unused __maybe_unused
-> > >> #endif
-> > >>
-> > >> So I don't really think there is much for clang to do here and I thi=
-nk having
-> > >> the ability to find unused static inline functions in .c files is us=
-eful (you
-> > >> might disagree, perhaps a revert could still be discussed). I guess
-> > >> IS_ENABLED() can't be used there, so it seems like either taking thi=
-s patch,
-> > >> ignoring the warning, or refactoring the code in some other way are =
-the only
-> > >> options I see.
-> > >
-> > > I think this is the consequence of the recent refactoring I've done i=
-n
-> > > https://lore.kernel.org/all/20240704135941.1145038-1-surenb@google.co=
-m/.
-> > > There should be a cleaner way to fix this. I'll post it later today o=
-r
-> > > tomorrow morning.
-> >
-> > Yeah looks like the non-empty prepare_slab_obj_exts_hook() could move t=
-o the
-> > #ifdef CONFIG_MEM_ALLOC_PROFILING section above
-> > alloc_tagging_slab_alloc_hook() and the empty one just removed.
+> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.gi=
+t master
+> head:   661e504db04c6b7278737ee3a9116738536b4ed4
+> commit: b4601d096aac8ed26afa88ef8b249975b0530ca1 mm/slab: fix 'variable o=
+bj_exts set but not used' warning
+> date:   10 days ago
+> config: x86_64-sof-customedconfig-amd-defconfig (https://download.01.org/=
+0day-ci/archive/20240705/202407050845.zNONqauD-lkp@intel.com/config)
+> compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a=
+15a9eac96088ae5e9134248d8236e34b91b1)
+> reproduce (this is a W=3D1 build): (https://download.01.org/0day-ci/archi=
+ve/20240705/202407050845.zNONqauD-lkp@intel.com/reproduce)
 >
-> Exactly my plan. I'll post a patch once I reach the office.
+> If you fix the issue in a separate patch/commit (i.e. not just a new vers=
+ion of
+> the same patch/commit), kindly add following tags
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Closes: https://lore.kernel.org/oe-kbuild-all/202407050845.zNONqauD-lkp=
+@intel.com/
 
-Actually I was wrong and the problem exists even without my
-refactoring in [1]. I posted the fix at [2] and I based it on
-slab/for-next because that's the only branch that contains [1]. Not
-because [2] requires [1] but because they are changing adjacent code,
-so would create merge problems if merged separately.
+Fix is posted at
+https://lore.kernel.org/all/20240711170216.1149695-1-surenb@google.com/
+over slab/for-next baseline because that branch contains another code
+refactoring [1] which would cause merge conflicts.
 
 [1] https://lore.kernel.org/all/20240704135941.1145038-1-surenb@google.com/
-[2] https://lore.kernel.org/all/20240711170216.1149695-1-surenb@google.com/
 
 >
-> >
-> > > Thanks,
-> > > Suren.
-> > >
-> > >>
-> > >> > > Reported-by: kernel test robot <lkp@intel.com>
-> > >> > > Closes: https://lore.kernel.org/oe-kbuild-all/202407050845.zNONq=
-auD-lkp@intel.com/
-> > >> > > Signed-off-by: Xiongwei Song <xiongwei.song@linux.dev>
-> > >> > > ---
-> > >> > >  mm/slub.c | 4 ++--
-> > >> > >  1 file changed, 2 insertions(+), 2 deletions(-)
-> > >> > >
-> > >> > > diff --git a/mm/slub.c b/mm/slub.c
-> > >> > > index ce39544acf7c..2e26f20759c0 100644
-> > >> > > --- a/mm/slub.c
-> > >> > > +++ b/mm/slub.c
-> > >> > > @@ -2027,7 +2027,7 @@ static inline bool need_slab_obj_ext(void)
-> > >> > >     return false;
-> > >> > >  }
-> > >> > >
-> > >> > > -static inline struct slabobj_ext *
-> > >> > > +static inline struct slabobj_ext * __maybe_unused
-> > >> > >  prepare_slab_obj_exts_hook(struct kmem_cache *s, gfp_t flags, v=
-oid *p)
-> > >> > >  {
-> > >> > >     struct slab *slab;
-> > >> > > @@ -2068,7 +2068,7 @@ static inline bool need_slab_obj_ext(void)
-> > >> > >     return false;
-> > >> > >  }
-> > >> > >
-> > >> > > -static inline struct slabobj_ext *
-> > >> > > +static inline struct slabobj_ext * __maybe_unused
-> > >> > >  prepare_slab_obj_exts_hook(struct kmem_cache *s, gfp_t flags, v=
-oid *p)
-> > >> > >  {
-> > >> > >     return NULL;
-> > >> > > --
-> > >> > > 2.34.1
-> > >> > >
-> > >> > >
-> >
+> All errors (new ones prefixed by >>):
+>
+> >> mm/slub.c:2077:1: error: unused function 'prepare_slab_obj_exts_hook' =
+[-Werror,-Wunused-function]
+>     2077 | prepare_slab_obj_exts_hook(struct kmem_cache *s, gfp_t flags, =
+void *p)
+>          | ^~~~~~~~~~~~~~~~~~~~~~~~~~
+>    1 error generated.
+>
+>
+> vim +/prepare_slab_obj_exts_hook +2077 mm/slub.c
+>
+> 0bedcc66d2a43a Vlastimil Babka    2023-10-03  2075
+> 4b8736964640fe Suren Baghdasaryan 2024-03-21  2076  static inline struct =
+slabobj_ext *
+> 4b8736964640fe Suren Baghdasaryan 2024-03-21 @2077  prepare_slab_obj_exts=
+_hook(struct kmem_cache *s, gfp_t flags, void *p)
+> 3450a0e5a6fc4c Vlastimil Babka    2023-11-13  2078  {
+> 4b8736964640fe Suren Baghdasaryan 2024-03-21  2079      return NULL;
+> 4b8736964640fe Suren Baghdasaryan 2024-03-21  2080  }
+> 3450a0e5a6fc4c Vlastimil Babka    2023-11-13  2081
+>
+> :::::: The code at line 2077 was first introduced by commit
+> :::::: 4b8736964640fe160724e7135dc62883bddcdace mm/slab: add allocation a=
+ccounting into slab allocation and free paths
+>
+> :::::: TO: Suren Baghdasaryan <surenb@google.com>
+> :::::: CC: Andrew Morton <akpm@linux-foundation.org>
+>
+> --
+> 0-DAY CI Kernel Test Service
+> https://github.com/intel/lkp-tests/wiki
