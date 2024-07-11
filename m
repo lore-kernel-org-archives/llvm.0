@@ -1,175 +1,97 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yb1-f182.google.com (mail-yb1-f182.google.com [209.85.219.182])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 747BC15ECF9;
-	Thu, 11 Jul 2024 13:24:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6339515F40D
+	for <llvm@lists.linux.dev>; Thu, 11 Jul 2024 13:50:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720704275; cv=none; b=DcrtpGiFgQxfmVanrZV55YdZJZwbAjUaKizax53D199ElkrD1tJTdf1nJPMcAYU8BX1JZk/ROISac/EDJhON1/6+hnayk++4cNj6XTnW8kIa1Ga8InSFUVBc45cS0Fm88iaJWtL68DlhZwx+PgNOVCR6avSKOuGGoIyeHOCpJiQ=
+	t=1720705836; cv=none; b=SWAz0qEfBQaY7+73wrIkqXxi/cWjG8fwJrpGLvNCsomQL61yTT3yd3ZmMs0eLs93nIb2D7XycL20lKrcTHszCjpY+rN6Knlzgp6ezmOO8sECaYpl6HVOivXpOh0lpLT8cRO8UeGCHWJ3eE2IIUcJov1ZpzhvVAh8h73h3l+yMp4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720704275; c=relaxed/simple;
-	bh=w1u81luxRSKXuuP8bL2ZtVySjx/0jxSrRzrfaS7TWpk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=HqsHFzUONatg617mG+Jvr+lsFMhL3wcqPgYCg7oDffTzAhvD7BEMSW4upEKgQ66nsgg8lXqWqWMUXFrMm9ambFuwaiHEoPAJPuF5bqYFPJs+KQPuuvUSZFhHvuYuWkrdIcoUlm3TvHcv/vy7YZ7ARohRVn2IXSKOA9n/7NCwDmA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=fnKlRyzT; arc=none smtp.client-ip=198.175.65.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1720705836; c=relaxed/simple;
+	bh=se61FPZzUA5HwQEvtVy2/8LlK6ztmeHr/a3V6wHR1ko=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=n7JVcJiKkqIJA1JKWwbFuuXhvxKs0qlSK9hR+Oni6ufN9c1CM4vfwLyjqZKecOb2yPjkBo9yt8FFdpE7jIsM30tvw/UyarS04yAoSjgDRRDdMQEugD/jw0r/3lZO0RsdPsBz5oQHSooAgpQFwbWWP7WzcC87sY1MknPOWNGj3J4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=OEsQgmMF; arc=none smtp.client-ip=209.85.219.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="fnKlRyzT"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1720704274; x=1752240274;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=w1u81luxRSKXuuP8bL2ZtVySjx/0jxSrRzrfaS7TWpk=;
-  b=fnKlRyzTMusmSQxIr//bTdOI1F6boLgTfbRyVQUJnNsQyZPOY7wrhGDR
-   OVJhlorejfnUVWxDwHVLbCP2luSVg9K5/RGzYx5QYH2mknkAeEc2MKoZy
-   0iAzz6Q/jZPGk3T0DsDCqKdPbPiWnLEAJd2GEROsNHJj6UgdPqTFj1lwI
-   /yHfD7OGTnXPVQ20SqJx4tCKwPNWJuKRX0zg5SyK+U8Acf1A12nqA/Jt0
-   fB2EOBEy4pxASqpJsvqgbMp95mmV2QpM3NypwPYC6hxJTAUcGWnq2lwvQ
-   N/wylCQ9rNKZKOkFztasjAYZm2hYXjsckhqre+yEd1YAn+2Ll5+7/I8fS
-   w==;
-X-CSE-ConnectionGUID: KHuwuM5RQsetM6eFjqfPgA==
-X-CSE-MsgGUID: O7FLZ1HoTCGPAjopzjkdDQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11130"; a="28676500"
-X-IronPort-AV: E=Sophos;i="6.09,200,1716274800"; 
-   d="scan'208";a="28676500"
-Received: from orviesa003.jf.intel.com ([10.64.159.143])
-  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jul 2024 06:24:33 -0700
-X-CSE-ConnectionGUID: w68rnNGyTX+raf3+ra/vZQ==
-X-CSE-MsgGUID: xfhpknJGQvakxEtM1SwOLA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.09,200,1716274800"; 
-   d="scan'208";a="53376105"
-Received: from lkp-server01.sh.intel.com (HELO 68891e0c336b) ([10.239.97.150])
-  by orviesa003.jf.intel.com with ESMTP; 11 Jul 2024 06:24:27 -0700
-Received: from kbuild by 68891e0c336b with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1sRtmZ-000ZJz-2y;
-	Thu, 11 Jul 2024 13:24:23 +0000
-Date: Thu, 11 Jul 2024 21:23:54 +0800
-From: kernel test robot <lkp@intel.com>
-To: "Michael S. Tsirkin" <mst@redhat.com>, linux-kernel@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Alexander Duyck <alexander.h.duyck@linux.intel.com>,
-	Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Linux Memory Management List <linux-mm@kvack.org>,
-	David Hildenbrand <david@redhat.com>,
-	Richard Weinberger <richard@nod.at>,
-	Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-	Johannes Berg <johannes@sipsolutions.net>,
-	Bjorn Andersson <andersson@kernel.org>,
-	Mathieu Poirier <mathieu.poirier@linaro.org>,
-	Cornelia Huck <cohuck@redhat.com>,
-	Halil Pasic <pasic@linux.ibm.com>,
-	Eric Farman <farman@linux.ibm.com>,
-	Heiko Carstens <hca@linux.ibm.com>,
-	Vasily Gorbik <gor@linux.ibm.com>,
-	Alexander Gordeev <agordeev@linux.ibm.com>,
-	Christian Borntraeger <borntraeger@linux.ibm.com>,
-	Sven Schnelle <svens@linux.ibm.com>,
-	Jason Wang <jasowang@redhat.com>,
-	Eugenio =?iso-8859-1?Q?P=E9rez?= <eperezma@redhat.com>,
-	linux-um@lists.infradead.org, linux-remoteproc@vger.kernel.org,
-	linux-s390@vger.kernel.org, virtualization@lists.linux.dev,
-	kvm@vger.kernel.org
-Subject: Re: [PATCH v2 2/2] virtio: fix vq # for balloon
-Message-ID: <202407112113.SzSpdDLK-lkp@intel.com>
-References: <3d655be73ce220f176b2c163839d83699f8faf43.1720611677.git.mst@redhat.com>
+	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="OEsQgmMF"
+Received: by mail-yb1-f182.google.com with SMTP id 3f1490d57ef6-e0354459844so901062276.3
+        for <llvm@lists.linux.dev>; Thu, 11 Jul 2024 06:50:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore.com; s=google; t=1720705833; x=1721310633; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ywdrhTjQNxm59oHEeOA1QDJuGdM3/Aym7bJC9qh8zJA=;
+        b=OEsQgmMFDrjQ+ddEiI6c27VihmadErHxXE6Zh8p8sb2zPD6G8naKBu/+ipkyqjAwBW
+         nHX8lv0lS19VSp/6wAbiKU0nscF4/Bbkj7yFAUnpokzpH+w0FcKoI93eBui/ORcESYkk
+         BSUiOSxzk6lUV5qKiSdEsR6HDND7RR2+E7zmob9TCvrOzaVDSO/GlZyEzRcidyUQaShu
+         hCJIur4872OsLljZc5nHFcvXk3Z9IpXMfKZkzWsxXUM4qTXmDTWY+kdSnrFymgk7EMbQ
+         4NhjDEJi6lAS4T+GVybio519dWZlPcWdrG1/gyWefyBl3Xi2HmMfL27R9KqmSbcjqX5c
+         SLhQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1720705833; x=1721310633;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ywdrhTjQNxm59oHEeOA1QDJuGdM3/Aym7bJC9qh8zJA=;
+        b=l8+IgpetlCXmUa9JtBvX7H+Wtdnq5V8VYbi39bRHJ2IXo7a0Wnf7283pN65VtCXf78
+         KarZBXfe+O4DuhRmTJhrbqWsqV3msKRmKOhz4AIaA8eqztYV/prSfj72rEqW4DUCN4/Q
+         geQdyXCeOw8Wga3ztbnREkOz8rTxVn7ky0fVqp8eua0s4GVmAaQgTun19eDGDe12tTao
+         3XO937RYQar5EktF2bqpaUSxgH48zqA15/c9qrMgJ3XJ64QV7/YUWH++1dgSAAUW9KFA
+         rI38DAC/iRC8uPQ1AGal5k9T1Y4lJ3nGNMoqoVeQEccTkMZSQ95eo1g0wetkekzE69WO
+         nqSw==
+X-Gm-Message-State: AOJu0Ywpbhn4PFg2J5xxuUj4xpFTNPr30Dr7L8XM5dkR4Q9+yjfVi5Xq
+	oUtYjYgnEBJcz9bFfZWsRpXVL5QRR048n1JWSnp9H+hHVcjx/naDs+egu0G1jf6msGudGCmR6x2
+	tDUHr+ee3VTTTptjQBCtSWNypn2hws129iHEM
+X-Google-Smtp-Source: AGHT+IHaoYKq/YKmu2Z/szFpe1/WajGQX2D4bEfURKfajhpytclcvlib7RUfZXi4aqzgVDS/tAm9oTE4sjjzndcULwY=
+X-Received: by 2002:a25:5f11:0:b0:e03:64c1:2b0c with SMTP id
+ 3f1490d57ef6-e041af3b488mr9807730276.0.1720705833125; Thu, 11 Jul 2024
+ 06:50:33 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <3d655be73ce220f176b2c163839d83699f8faf43.1720611677.git.mst@redhat.com>
+References: <202407111803.LoTE3SJX-lkp@intel.com>
+In-Reply-To: <202407111803.LoTE3SJX-lkp@intel.com>
+From: Paul Moore <paul@paul-moore.com>
+Date: Thu, 11 Jul 2024 09:50:22 -0400
+Message-ID: <CAHC9VhT8o--Xwj-0TwBwa-n09qbQJzaYruCVyPtqdY_pw49hWw@mail.gmail.com>
+Subject: Re: [robertosassu:inode-free-security 1/1] include/linux/lsm_hook_defs.h:117:1:
+ warning: omitting the parameter name in a function definition is a C23 extension
+To: kernel test robot <lkp@intel.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, 
+	Roberto Sassu <roberto.sassu@huawei.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Michael,
+On Thu, Jul 11, 2024 at 6:18=E2=80=AFAM kernel test robot <lkp@intel.com> w=
+rote:
+>
+> tree:   https://github.com/robertosassu/linux inode-free-security
+> head:   804df4ecdaed5aab1b4ba876acd207195090d9cb
+> commit: 804df4ecdaed5aab1b4ba876acd207195090d9cb [1/1] lsm: add the inode=
+_free_security_rcu() LSM implementation hook
+> config: s390-defconfig (https://download.01.org/0day-ci/archive/20240711/=
+202407111803.LoTE3SJX-lkp@intel.com/config)
+> compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project a=
+0c6b8aef853eedaa0980f07c0a502a5a8a9740e)
+> reproduce (this is a W=3D1 build): (https://download.01.org/0day-ci/archi=
+ve/20240711/202407111803.LoTE3SJX-lkp@intel.com/reproduce)
+>
+> If you fix the issue in a separate patch/commit (i.e. not just a new vers=
+ion of
+> the same patch/commit), kindly add following tags
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Closes: https://lore.kernel.org/oe-kbuild-all/202407111803.LoTE3SJX-lkp=
+@intel.com/
 
-kernel test robot noticed the following build errors:
+FWIW, I caught this when renaming the parameter based on other
+feedback on the RFC patch; it will be corrected when I post the next
+revision.
 
-[auto build test ERROR on next-20240710]
-[cannot apply to uml/next remoteproc/rproc-next s390/features linus/master uml/fixes v6.10-rc7 v6.10-rc6 v6.10-rc5 v6.10-rc7]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Michael-S-Tsirkin/virtio_balloon-add-work-around-for-out-of-spec-QEMU/20240711-004346
-base:   next-20240710
-patch link:    https://lore.kernel.org/r/3d655be73ce220f176b2c163839d83699f8faf43.1720611677.git.mst%40redhat.com
-patch subject: [PATCH v2 2/2] virtio: fix vq # for balloon
-config: i386-randconfig-014-20240711 (https://download.01.org/0day-ci/archive/20240711/202407112113.SzSpdDLK-lkp@intel.com/config)
-compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240711/202407112113.SzSpdDLK-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202407112113.SzSpdDLK-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> drivers/virtio/virtio_pci_common.c:391:1: error: version control conflict marker in file
-     391 | <<<<<<< HEAD
-         | ^
->> drivers/virtio/virtio_pci_common.c:392:30: error: use of undeclared identifier 'queue_idx'
-     392 |                 vqs[i] = vp_setup_vq(vdev, queue_idx++, vqi->callback,
-         |                                            ^
-   2 errors generated.
-
-
-vim +391 drivers/virtio/virtio_pci_common.c
-
-   365	
-   366	static int vp_find_vqs_intx(struct virtio_device *vdev, unsigned int nvqs,
-   367				    struct virtqueue *vqs[],
-   368				    struct virtqueue_info vqs_info[])
-   369	{
-   370		struct virtio_pci_device *vp_dev = to_vp_device(vdev);
-   371		int i, err;
-   372	
-   373		vp_dev->vqs = kcalloc(nvqs, sizeof(*vp_dev->vqs), GFP_KERNEL);
-   374		if (!vp_dev->vqs)
-   375			return -ENOMEM;
-   376	
-   377		err = request_irq(vp_dev->pci_dev->irq, vp_interrupt, IRQF_SHARED,
-   378				dev_name(&vdev->dev), vp_dev);
-   379		if (err)
-   380			goto out_del_vqs;
-   381	
-   382		vp_dev->intx_enabled = 1;
-   383		vp_dev->per_vq_vectors = false;
-   384		for (i = 0; i < nvqs; ++i) {
-   385			struct virtqueue_info *vqi = &vqs_info[i];
-   386	
-   387			if (!vqi->name) {
-   388				vqs[i] = NULL;
-   389				continue;
-   390			}
- > 391	<<<<<<< HEAD
- > 392			vqs[i] = vp_setup_vq(vdev, queue_idx++, vqi->callback,
-   393					     vqi->name, vqi->ctx,
-   394	=======
-   395			vqs[i] = vp_setup_vq(vdev, i, callbacks[i], names[i],
-   396					     ctx ? ctx[i] : false,
-   397	>>>>>>> f814759f80b7... virtio: fix vq # for balloon
-   398					     VIRTIO_MSI_NO_VECTOR);
-   399			if (IS_ERR(vqs[i])) {
-   400				err = PTR_ERR(vqs[i]);
-   401				goto out_del_vqs;
-   402			}
-   403		}
-   404	
-   405		return 0;
-   406	out_del_vqs:
-   407		vp_del_vqs(vdev);
-   408		return err;
-   409	}
-   410	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+--=20
+paul-moore.com
