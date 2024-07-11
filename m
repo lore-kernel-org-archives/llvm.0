@@ -1,160 +1,264 @@
-Received: from IND01-MAX-obe.outbound.protection.outlook.com (mail-maxind01olkn2104.outbound.protection.outlook.com [40.92.102.104])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B72A414D428;
-	Wed, 10 Jul 2024 23:09:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.92.102.104
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720653000; cv=fail; b=k/sl4DOrMQ+lCsgV6EVcyYqeG8A0sUQGAU1Hditacre4BtNRtzcVOFSNcswLQ3F1Nd9vRruXX/wlTy5BfVUowppV8n7b7YEXQCCidvThge/xQm1RQ7BJa4wUpcJ1e4eFvXKQcOvGHjjbMhlqt7idrapJ86hCJwIlTDHdb+OaVek=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720653000; c=relaxed/simple;
-	bh=0XqOufcBnZkBetjjcciQABinS2pGpKQrzdgtm/Rbge4=;
-	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=IvKS3/n37gG8HJhFZlYSLa1zKZhrotcs2R7mVYFr8lX3E6sRz9szfDMo7sX4As2ctMgKxxOYPBNW5LccAxa4+1UlT/mxNodEW+ZrsQQGRuyFVnbqQkTvdNEM6l6tnxrI/UQdMgCQpnhSuvUk+YE5qJMv5X9UwxNEEEPFqrQYzK0=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=outlook.com; spf=pass smtp.mailfrom=outlook.com; dkim=pass (2048-bit key) header.d=outlook.com header.i=@outlook.com header.b=L7xd3fGm; arc=fail smtp.client-ip=40.92.102.104
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=outlook.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=outlook.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC2AD846D;
+	Thu, 11 Jul 2024 01:16:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1720660622; cv=none; b=EO3WGKAQjtByZlc4lNTcA9RNZHTGt8J0AnktVjOX21lB3h6lUjW/xIZn6Zo3m6COZEahJNUEvkm/1gjvp8a44KEKVJTjJ63j+yAFvkbDyjxqEhNg6JFnl8b8fv7zbJnfOXdjDBIJffLc+VYGws/YVV/HQjjeRF27rkC7dGss5d8=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1720660622; c=relaxed/simple;
+	bh=CqsYrItIm0jCcEk4sTMjJkjG7HibnX/Wiy1jFW8ZqJo=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=Mb0+bdkWXiAMdUvhTgYW0k5nDER1VBVLkxLnAQqCbjUBEQWBwvOuc1Ev0nTwStHS3g20DBQoA/IdtQSAjaXNMYANidoP7QEDlbHzz4uVAncl6VXumehS6KPSpLfB+Zkmv4g8qsw1sYrOOtgKYySohTfYOcLnwVhFAdmUHb7C0S4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=DN+7aWKS; arc=none smtp.client-ip=192.198.163.8
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=outlook.com header.i=@outlook.com header.b="L7xd3fGm"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=MjuQROzT8/X1heptd2fJArcTUtWACHim+Q6XVaHVlDC4UEH4CecN9S35q3bp2kMpTaJfRcL95A/cWqV9ZcfUy59OGtlXtluR9ToeZr9vWpfKkJR0hpVE3wGgT8vIf1F5O8zn4xePU+8GVCnF7u91ycxgPtT5nHEqrnPN85T+R0XL8BwSs/EKCFLrOaQqcfvVcI+PgJ919OYpArTiaJHetR+6ksGBkcE3SE6PK1zqGDKTX/qPImJjvm2Ckg7YXfwVTy1UtxkCAex4K2DTybTq46naG5Eqpz6ba+OBdYrs81cWdAVbbPePbLrrfhIo1OYpa3HvPpz0MrJbQUhgjbT6WQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=/skBeWFMcR9j/OaVeFd2IUR/prxHJggz9mhRnDsd4pQ=;
- b=X3inw1o4NTjjUo8HAd2gPFGPhRakabkPlcUbMBr1ADbFglIA5VFk5PHnzWh6p44sm4CHHB3hYhb8YnZP4mcljVS6XcUM4s4VafuvlZ3nVXQ/9SBCJJuvyvI4Z7AaRJtRp6gmWDUdPiUG+iRTEySCSYIZB0OotfNTOJoPjTZuOMeHDh7dOIQoGrT2GUbWHuaJ4d3VWo7k/X5qncu/4a2APTlEPWMtELHc4ZrxDoCLYFrtGZ02RwHygMaSVAhhEihDwAC4E6pXfoScu1WVNc9YM/qmymyz1niZhEThhX3fuV8DkbQlbEicKOEiOPpRW974G2G0fOIzj6hiZCulfyEHaQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=outlook.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=/skBeWFMcR9j/OaVeFd2IUR/prxHJggz9mhRnDsd4pQ=;
- b=L7xd3fGmKdKKaQ5u+sYzCT1hkzJU/zmVioIppK43Pg37Gg4I7DLX28rHMuL2ljozw3BDpnm1bwY6F52WXCcXVZMySETVQQApSMoWVyM9reeNsa+5FcAFzL97By7TA4P2QCjrD9s02DIjN+ZWnzHIVwn8RfJ8QMssQVJGcTB2zZ8BLPf3fjXoWSOR/RU4m8NuCx9EjDdD/+Q/uiUw4rLON6QX7PEnXq6s4Deqb+sO/j2HdNcmspqZ/zDL1j2RiyT+TnokR/kXUYyhFAF0E8n9YkQvUq0f1uzKXfBToX+q/aT2labSCGSFIdcN5xkJfFPjqZKLsrtRlMSHLkG2HtbYvA==
-Received: from MA0P287MB2822.INDP287.PROD.OUTLOOK.COM (2603:1096:a01:138::5)
- by PN0P287MB0876.INDP287.PROD.OUTLOOK.COM (2603:1096:c01:145::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7762.22; Wed, 10 Jul
- 2024 23:09:53 +0000
-Received: from MA0P287MB2822.INDP287.PROD.OUTLOOK.COM
- ([fe80::a94:ad0a:9071:806c]) by MA0P287MB2822.INDP287.PROD.OUTLOOK.COM
- ([fe80::a94:ad0a:9071:806c%5]) with mapi id 15.20.7762.016; Wed, 10 Jul 2024
- 23:09:53 +0000
-Message-ID:
- <MA0P287MB2822C48F3DF670881D26E801FEA42@MA0P287MB2822.INDP287.PROD.OUTLOOK.COM>
-Date: Thu, 11 Jul 2024 07:09:48 +0800
-User-Agent: Mozilla Thunderbird
-Subject: Re: [soc:sophgo/dt 1/1] arch/riscv/boot/dts/sophgo/sg2042.dtsi:7:10:
- fatal error: 'dt-bindings/clock/sophgo,sg2042-clkgen.h' file not found
-To: kernel test robot <lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="DN+7aWKS"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1720660620; x=1752196620;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=CqsYrItIm0jCcEk4sTMjJkjG7HibnX/Wiy1jFW8ZqJo=;
+  b=DN+7aWKSYM4H9+6z6g8yDx3mAx1O8pIvFMsxp/EArkDUFOnopankneJy
+   dDyOOMgDvzpSUwY5D+ubXgOvsDZsjUBJ2wBXIUVGPXKPbTYi5ccXGIDRX
+   w1lvbjCE08/Tqm58o0bkETrtZhc2UdK81I3XwGWzUmoqsTlEEE4iUCrz7
+   flyNUuUbWskcxsT19ZllWH9ouszBpHsOsIQOOHvI6QqsKl+sN9GPrH6y0
+   pU3C03ZlmqSAiCMrlu45xJRlKyRp9IDW2ZmYHiSVfLR693P8gnNgCnRqf
+   DNaqxQNUjRrEE6TFPVgWkzS9v1AesBlyhujS+kBdaJ+qT5JGaa0CN/J2d
+   w==;
+X-CSE-ConnectionGUID: OxFmJbKRRuCzK+RH89czyQ==
+X-CSE-MsgGUID: 5Ytg66jeSyKdzNcPcImF4Q==
+X-IronPort-AV: E=McAfee;i="6700,10204,11129"; a="35555910"
+X-IronPort-AV: E=Sophos;i="6.09,198,1716274800"; 
+   d="scan'208";a="35555910"
+Received: from fmviesa009.fm.intel.com ([10.60.135.149])
+  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jul 2024 18:16:58 -0700
+X-CSE-ConnectionGUID: ehVvAkArQiii4TmP8+suhw==
+X-CSE-MsgGUID: fOtKRAFqTuaobYfQDz5m9g==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.09,198,1716274800"; 
+   d="scan'208";a="48394218"
+Received: from lkp-server01.sh.intel.com (HELO 68891e0c336b) ([10.239.97.150])
+  by fmviesa009.fm.intel.com with ESMTP; 10 Jul 2024 18:16:56 -0700
+Received: from kbuild by 68891e0c336b with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1sRiQY-000YZz-1o;
+	Thu, 11 Jul 2024 01:16:54 +0000
+Date: Thu, 11 Jul 2024 09:16:39 +0800
+From: kernel test robot <lkp@intel.com>
+To: "Paul E. McKenney" <paulmck@kernel.org>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
- linux-arm-kernel@lists.infradead.org, arm@kernel.org,
- Guo Ren <guoren@kernel.org>
-References: <202407101850.eIQyngoV-lkp@intel.com>
-From: Chen Wang <unicorn_wang@outlook.com>
-In-Reply-To: <202407101850.eIQyngoV-lkp@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-TMN: [Wp0f8Z9mlTuuB203mjE8+K+wYxOZvByv]
-X-ClientProxiedBy: SI1PR02CA0033.apcprd02.prod.outlook.com
- (2603:1096:4:1f6::14) To MA0P287MB2822.INDP287.PROD.OUTLOOK.COM
- (2603:1096:a01:138::5)
-X-Microsoft-Original-Message-ID:
- <8336cb84-35a9-436b-9412-083fad681f5b@outlook.com>
+	linux-kernel@vger.kernel.org
+Subject: [paulmck-rcu:for-neeraj.2024.07.10a 30/42]
+ kernel/rcu/tree_stall.h:798:49: error: call to undeclared function
+ 'csd_lock_is_stuck'; ISO C99 and later do not support implicit function
+ declarations
+Message-ID: <202407110950.SoSbeyIm-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MA0P287MB2822:EE_|PN0P287MB0876:EE_
-X-MS-Office365-Filtering-Correlation-Id: ecb1d7b2-8e56-4f11-07dd-08dca1356805
-X-MS-Exchange-SLBlob-MailProps:
-	ynsnEk/J89d8okb5et3JV6t97Zt6rZvlh9KL+3PERtPGroyOURFxzwcK8IsgVLYZ+KIxeR4o7sn6pxSzAEF5lTqL0gr7g6tfT6MdzOSJv+AJrul3Xg28O/d/3d2jOEVS3JSFGUy/SOWCsYj6ZYvJR3e1tKd//V3q50TwDchSjOZB74zUhFdjttqs1kvM2oOYOAkTSdh9Z2UC3aj8u7hMqq3V7LhtjLLfPZmcOHD3GG09dNRlMRMrW+F8Av3gjj+hpLsOA0KuytLLjHxKaMMMJiupQH2PXJbaZdBmdORQKwA680qOJLeDvt34BidUnQFhTdWgPcP3Ca8zcTKEP/3LHyh/rTuKV/0Zx98FMqwcWhkmKcSYGiB8iMKdJs6I98yfV9Wjtm4ZVcsd0wsMFdkNVlr/1yHQ6DQrm+DapKGKivB9dz+eA3F16eEXPgT99sS4YYeMzb9JXKnev12nFGdyo1keEJfne4aSMpv0Qmh1uD8XDv5iKAWof7ywafYtg2YXahWUE8uwhtbnRc3/5dLVkFfFzP3Lg/zagHt6B/yeOm9RixjrGKtRNuVv+rHYO/1vl/X/4q6ry+mElAhMQ2IUZK3ty/PHapHP5Aa+AU9DKtbxT3wkhiJpSe/NhVn6qhN9F2MEzc5Wl9Cmw6X7hrt0eDPnLrUDjPO2I1j13FHGTy6jUfY0GTGoqS70tjOxLcayMERdC5ingRBr0PwQLwLCS4d7yU2Q6QQ7fi9cu4zoHRo1s4ib5N3/Bt5dpaYh/GlkZhmaxEElBY+x2dFXXwuDKwlwDNymvK1GsYynb8ZPcDPg4VivnUebPZ544s1Vcngj+reqyhxor8A9LvEFJYQA566r0RRED8hhfzvhNfrkHSSCBJqIyKcelM8DM2Xf0vp2pmApz2uzCH0W27MLfvZJMg==
-X-Microsoft-Antispam:
-	BCL:0;ARA:14566002|8060799006|19110799003|461199028|440099028|3412199025|4302099013|1602099012;
-X-Microsoft-Antispam-Message-Info:
-	5ZvfINhozcecYfcwS9lMFvsgOYiv8A1WTsjcAhuID2FVobT2DnrwbCPhFXI7j3IdndZW0LgxtzYHMMmB94mJNfcZm0UTfbJnQoUO0cuwvRW9361I7Mm45I5Ps+9YEAGjerWACrrjYoJV/+jWra6VDDEA3hxQhEpdi4X1yXTfu335yiCyiEKBpKiB4vGjgdA35IK+NNH/ZVKEI0ott7MqBqQCTooaIyFZkIADnwWrS4fpANHY1WPIB+/yK4BbMsmcNKG6zj3nC5ilKzz16Cvyk/WbxIpXpomx6kxps6ciWt5vma8+gGDCZyzrOhxp6sdQ1vZwRWBq4bob+vmhv3DbG8J1XZXmjU3Eqn+FSDmemGAiRViIAmZgAKAFCADBGCahn3+rOlNrkAZ/xeWG/DMBu3d4kQyMDWP7WFweNyhABkuacHC8wJGScSM6k57XubA80qj29OIKiJhDx3Ohr60kzhFYoDR9s3dAhMfvLJiNYZ1gSoewFiN4A0EFmSwfyPBJBrBc3yKZeY6teM/4ebo50gzHwYeMl8NDJMG9DI1QpfZRPxPreFeSqPHtJD9507mQEuaAd8IeyQl9SV1NuD5mK0ZAvIxddAhOLhP7X77oTKRUCxIqedg2MlS0GKQBLdgcnpi9WbbtSXvHLXJzO9yd1p6mEiMhbN+QmgqM2zRhm7i+j6jVyVxBLV/YlueRi5f9AByu1W6JGQp3HV5gs+Y06xL3jtDyD/0yGOtgXN1gC3napp5xumWoIB6wgbQCgUBkuDJTZ4hJbI/+reldDfzjpw==
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?THdFckp5TUFyM1pUZnhmZm1taXdlZW9DYWRYditPNXRWSDJzam9VM2xQSEYr?=
- =?utf-8?B?RE9WbHZRMnFGWllaUlVDL2wwUW5vV2RGQ3FJNnozSzhFR09DbHpPeU5TVjhk?=
- =?utf-8?B?YWhFSFVGaVI0UDVpc3pVaG1yaVY2SEVwK3grVHR0dzc5SEE2b1dsRlBLZTgz?=
- =?utf-8?B?UGRINFhOcHVDL29iMlpDZUVRQnlTdGhYbk0zSmRnMEdXZGQ4NkNRbzVEbGU5?=
- =?utf-8?B?QVhQY0VZSTZENTBjcXRQTDRxNmJYcWpyMnpRTXZka1dzQjl0WnVLcWM0Nksz?=
- =?utf-8?B?MEtSWFNoQlBWMVZCYkVEams1emo4TTJFd0VqN25hRDBiQmNpNFFId2xJdWxs?=
- =?utf-8?B?TCtwUHNZRUdvUTV1T2liekRFbE1ieVhJSGNtUjkwN1U1aGNFdDZ6cklaUDF4?=
- =?utf-8?B?eFJ4Q2VPei9MTUs4cHZkVHV2YUY0eGVLc1hDL0ZRazJkYWZPQkloYS9iRDN4?=
- =?utf-8?B?WUpZblg5cEpOWStMU0dBNGh4b0h1TWhFSnZFSFlnUGJNd0l2NndUWk80N1Zu?=
- =?utf-8?B?d2tKTzZ6OXZoL1ptNTBVbXpzakdCL1dCclEzR1NrQjRjRmxMYnpuVFpBR0tv?=
- =?utf-8?B?TzdFUkRqclptU0x6SFE4Z2FXbTZsVVRwR1lSY2VHTXBNOW5jdnhabnUrOHVm?=
- =?utf-8?B?T0xtdVpCamUxMWpyc3ZrcmtyQjgzU3gycytnUFFkVDR5TTRkVVYxeFJCRVVv?=
- =?utf-8?B?UFF0eFppak95a1lYQWFpNDhFMTNMWjVwTnc2R1NnUzYzS2pmdnFMc0hMR2FQ?=
- =?utf-8?B?U3ZBeVFidDZhM0t3a1hSMHBuck9qWUlodS90M05ZazlXOFVCN2YyM1NRS01X?=
- =?utf-8?B?N1hZRXNkaGhhMzFpNXk0d3BSTXUzY1ZZQ2xHMi9EcmcySlZJcWpXd0dpRnRF?=
- =?utf-8?B?YytxNXhpbFRRZmw4cmZxbkZsQXNIRW9oVWRZbDVQMCtMTWZLMVU1RG1hQnFT?=
- =?utf-8?B?bVFtV1grZ0VZWFBjVXJoNnZ0MjgrcTBpREJmSExvdGRFbjlDR21rYzhBOXlm?=
- =?utf-8?B?VEE3d2dSeDJsUFpNNDArV21GREQvWVlTWUpqeVpaUXV3VURPOTI4citQbVlH?=
- =?utf-8?B?N2JjUGxpbnd4N3liU1M3ME53eS9CeHQwOUh3VUhpeGluT0V4dU1pbkFVT3pU?=
- =?utf-8?B?TEdlWXBJOTJoSk5LTHhhQnkwcnFOWlVQY2lQNXFYUXk5ZDV2aTB6V3VWZEVX?=
- =?utf-8?B?dE9HNlVZRTVRZWFOSUI0U0pFelBpZ1l4SGdvMGRlUFJ6Z0R1TkE2WmE4N0No?=
- =?utf-8?B?K2t3OVpiM2FIR0tjQWg5Y3BHN1lodXl1eVFEYXlKK1lxTFZoaEhuRHEraXhr?=
- =?utf-8?B?c09wNUJ4bzd1dXYwaDNVWUxXTmZaamNmdmN1RG9TR0Z4Q0taWEN5eHg1UWwr?=
- =?utf-8?B?UU4yMFZ0akFwK0xFR0lmKytQQXZxdTEwcjZ4dFBoWncvOVUvcUt4SFdab2Nm?=
- =?utf-8?B?RWZiVHVzSDV4UnRKdThOVVdsK09kVWFTNGpITWphUnpUeVE2dHhHVzBYcFRo?=
- =?utf-8?B?cGlyYVIzaS9uaVhaV0x4Q0pTTmtiQkNYUlRkNWlHWCtLb3AzT3BrMTV3MlA1?=
- =?utf-8?B?Yjg1QTl1MzNYdDJHZTJ0V0FFYnRGM2JLYVdwRWoydnRpN0dhTkNSYzQ2Vzc1?=
- =?utf-8?B?MU04cE16WGNVOThmc1FSa0JmUENzcDFRWXdsTDhQQ2lJSTlFdWtYbW1oSFJz?=
- =?utf-8?Q?c83pxClczGKQBza1JCoJ?=
-X-OriginatorOrg: outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: ecb1d7b2-8e56-4f11-07dd-08dca1356805
-X-MS-Exchange-CrossTenant-AuthSource: MA0P287MB2822.INDP287.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Jul 2024 23:09:53.2804
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
-X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg:
-	00000000-0000-0000-0000-000000000000
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PN0P287MB0876
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-This build error is due to the changes about 
-"dt-bindings/clock/sophgo,sg2042-clkgen.h" are still on clk-next and 
-have not been merge in the master.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git for-neeraj.2024.07.10a
+head:   6dfea2d3ac9e0874587c0c1d05fd829f520d5458
+commit: 3e7a44e2495502599af4ac67d39b9fbbd8217557 [30/42] rcu: Summarize RCU CPU stall warnings during CSD-lock stalls
+config: s390-allnoconfig (https://download.01.org/0day-ci/archive/20240711/202407110950.SoSbeyIm-lkp@intel.com/config)
+compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project a0c6b8aef853eedaa0980f07c0a502a5a8a9740e)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240711/202407110950.SoSbeyIm-lkp@intel.com/reproduce)
 
-Thanks,
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202407110950.SoSbeyIm-lkp@intel.com/
 
-Chen
+All errors (new ones prefixed by >>):
 
-On 2024/7/10 18:56, kernel test robot wrote:
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git sophgo/dt
-> head:   b1240a39511b9206293b82ac372c5114d6e15821
-> commit: b1240a39511b9206293b82ac372c5114d6e15821 [1/1] riscv: dts: add clock generator for Sophgo SG2042 SoC
-> config: riscv-allmodconfig (https://download.01.org/0day-ci/archive/20240710/202407101850.eIQyngoV-lkp@intel.com/config)
-> compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project a0c6b8aef853eedaa0980f07c0a502a5a8a9740e)
-> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240710/202407101850.eIQyngoV-lkp@intel.com/reproduce)
->
-> If you fix the issue in a separate patch/commit (i.e. not just a new version of
-> the same patch/commit), kindly add following tags
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes: https://lore.kernel.org/oe-kbuild-all/202407101850.eIQyngoV-lkp@intel.com/
->
-> All errors (new ones prefixed by >>):
->
->     In file included from arch/riscv/boot/dts/sophgo/sg2042-milkv-pioneer.dts:6:
->>> arch/riscv/boot/dts/sophgo/sg2042.dtsi:7:10: fatal error: 'dt-bindings/clock/sophgo,sg2042-clkgen.h' file not found
->         7 | #include <dt-bindings/clock/sophgo,sg2042-clkgen.h>
->           |          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->     1 error generated.
->
->
-> vim +7 arch/riscv/boot/dts/sophgo/sg2042.dtsi
->
->     > 7	#include <dt-bindings/clock/sophgo,sg2042-clkgen.h>
->       8	#include <dt-bindings/clock/sophgo,sg2042-pll.h>
->       9	#include <dt-bindings/clock/sophgo,sg2042-rpgate.h>
->      10	#include <dt-bindings/interrupt-controller/irq.h>
->      11	#include <dt-bindings/reset/sophgo,sg2042-reset.h>
->      12	
->
+   In file included from kernel/rcu/tree.c:40:
+   In file included from include/linux/cpu.h:17:
+   In file included from include/linux/node.h:18:
+   In file included from include/linux/device.h:32:
+   In file included from include/linux/device/driver.h:21:
+   In file included from include/linux/module.h:19:
+   In file included from include/linux/elf.h:6:
+   In file included from arch/s390/include/asm/elf.h:173:
+   In file included from arch/s390/include/asm/mmu_context.h:11:
+   In file included from arch/s390/include/asm/pgalloc.h:18:
+   In file included from include/linux/mm.h:2253:
+   include/linux/vmstat.h:514:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     514 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+   In file included from kernel/rcu/tree.c:53:
+   In file included from include/linux/tick.h:8:
+   In file included from include/linux/clockchips.h:14:
+   In file included from include/linux/clocksource.h:22:
+   In file included from arch/s390/include/asm/io.h:93:
+   include/asm-generic/io.h:548:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     548 |         val = __raw_readb(PCI_IOBASE + addr);
+         |                           ~~~~~~~~~~ ^
+   include/asm-generic/io.h:561:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     561 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
+      37 | #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
+         |                                                           ^
+   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
+     102 | #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
+         |                                                      ^
+   In file included from kernel/rcu/tree.c:53:
+   In file included from include/linux/tick.h:8:
+   In file included from include/linux/clockchips.h:14:
+   In file included from include/linux/clocksource.h:22:
+   In file included from arch/s390/include/asm/io.h:93:
+   include/asm-generic/io.h:574:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     574 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
+      35 | #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
+         |                                                           ^
+   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
+     115 | #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
+         |                                                      ^
+   In file included from kernel/rcu/tree.c:53:
+   In file included from include/linux/tick.h:8:
+   In file included from include/linux/clockchips.h:14:
+   In file included from include/linux/clocksource.h:22:
+   In file included from arch/s390/include/asm/io.h:93:
+   include/asm-generic/io.h:585:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     585 |         __raw_writeb(value, PCI_IOBASE + addr);
+         |                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:595:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     595 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:605:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     605 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:693:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     693 |         readsb(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:701:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     701 |         readsw(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:709:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     709 |         readsl(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:718:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     718 |         writesb(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+   include/asm-generic/io.h:727:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     727 |         writesw(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+   include/asm-generic/io.h:736:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     736 |         writesl(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+   In file included from kernel/rcu/tree.c:5638:
+>> kernel/rcu/tree_stall.h:798:49: error: call to undeclared function 'csd_lock_is_stuck'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     798 |                 if (READ_ONCE(csd_lock_suppress_rcu_stall) && csd_lock_is_stuck()) {
+         |                                                               ^
+   13 warnings and 1 error generated.
+
+
+vim +/csd_lock_is_stuck +798 kernel/rcu/tree_stall.h
+
+   725	
+   726	static void check_cpu_stall(struct rcu_data *rdp)
+   727	{
+   728		bool self_detected;
+   729		unsigned long gs1;
+   730		unsigned long gs2;
+   731		unsigned long gps;
+   732		unsigned long j;
+   733		unsigned long jn;
+   734		unsigned long js;
+   735		struct rcu_node *rnp;
+   736	
+   737		lockdep_assert_irqs_disabled();
+   738		if ((rcu_stall_is_suppressed() && !READ_ONCE(rcu_kick_kthreads)) ||
+   739		    !rcu_gp_in_progress())
+   740			return;
+   741		rcu_stall_kick_kthreads();
+   742	
+   743		/*
+   744		 * Check if it was requested (via rcu_cpu_stall_reset()) that the FQS
+   745		 * loop has to set jiffies to ensure a non-stale jiffies value. This
+   746		 * is required to have good jiffies value after coming out of long
+   747		 * breaks of jiffies updates. Not doing so can cause false positives.
+   748		 */
+   749		if (READ_ONCE(rcu_state.nr_fqs_jiffies_stall) > 0)
+   750			return;
+   751	
+   752		j = jiffies;
+   753	
+   754		/*
+   755		 * Lots of memory barriers to reject false positives.
+   756		 *
+   757		 * The idea is to pick up rcu_state.gp_seq, then
+   758		 * rcu_state.jiffies_stall, then rcu_state.gp_start, and finally
+   759		 * another copy of rcu_state.gp_seq.  These values are updated in
+   760		 * the opposite order with memory barriers (or equivalent) during
+   761		 * grace-period initialization and cleanup.  Now, a false positive
+   762		 * can occur if we get an new value of rcu_state.gp_start and a old
+   763		 * value of rcu_state.jiffies_stall.  But given the memory barriers,
+   764		 * the only way that this can happen is if one grace period ends
+   765		 * and another starts between these two fetches.  This is detected
+   766		 * by comparing the second fetch of rcu_state.gp_seq with the
+   767		 * previous fetch from rcu_state.gp_seq.
+   768		 *
+   769		 * Given this check, comparisons of jiffies, rcu_state.jiffies_stall,
+   770		 * and rcu_state.gp_start suffice to forestall false positives.
+   771		 */
+   772		gs1 = READ_ONCE(rcu_state.gp_seq);
+   773		smp_rmb(); /* Pick up ->gp_seq first... */
+   774		js = READ_ONCE(rcu_state.jiffies_stall);
+   775		smp_rmb(); /* ...then ->jiffies_stall before the rest... */
+   776		gps = READ_ONCE(rcu_state.gp_start);
+   777		smp_rmb(); /* ...and finally ->gp_start before ->gp_seq again. */
+   778		gs2 = READ_ONCE(rcu_state.gp_seq);
+   779		if (gs1 != gs2 ||
+   780		    ULONG_CMP_LT(j, js) ||
+   781		    ULONG_CMP_GE(gps, js))
+   782			return; /* No stall or GP completed since entering function. */
+   783		rnp = rdp->mynode;
+   784		jn = jiffies + ULONG_MAX / 2;
+   785		self_detected = READ_ONCE(rnp->qsmask) & rdp->grpmask;
+   786		if (rcu_gp_in_progress() &&
+   787		    (self_detected || ULONG_CMP_GE(j, js + RCU_STALL_RAT_DELAY)) &&
+   788		    cmpxchg(&rcu_state.jiffies_stall, js, jn) == js) {
+   789			/*
+   790			 * If a virtual machine is stopped by the host it can look to
+   791			 * the watchdog like an RCU stall. Check to see if the host
+   792			 * stopped the vm.
+   793			 */
+   794			if (kvm_check_and_clear_guest_paused())
+   795				return;
+   796	
+   797			rcu_stall_notifier_call_chain(RCU_STALL_NOTIFY_NORM, (void *)j - gps);
+ > 798			if (READ_ONCE(csd_lock_suppress_rcu_stall) && csd_lock_is_stuck()) {
+   799				pr_err("INFO: %s detected stall, but suppressed full report due to a stuck CSD-lock.\n", rcu_state.name);
+   800			} else if (self_detected) {
+   801				/* We haven't checked in, so go dump stack. */
+   802				print_cpu_stall(gps);
+   803			} else {
+   804				/* They had a few time units to dump stack, so complain. */
+   805				print_other_cpu_stall(gs2, gps);
+   806			}
+   807	
+   808			if (READ_ONCE(rcu_cpu_stall_ftrace_dump))
+   809				rcu_ftrace_dump(DUMP_ALL);
+   810	
+   811			if (READ_ONCE(rcu_state.jiffies_stall) == jn) {
+   812				jn = jiffies + 3 * rcu_jiffies_till_stall_check() + 3;
+   813				WRITE_ONCE(rcu_state.jiffies_stall, jn);
+   814			}
+   815		}
+   816	}
+   817	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
