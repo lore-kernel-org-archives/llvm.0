@@ -1,86 +1,218 @@
-Received: from out30-124.freemail.mail.aliyun.com (out30-124.freemail.mail.aliyun.com [115.124.30.124])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E1535DDBE;
-	Fri, 12 Jul 2024 03:36:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A0D739B;
+	Fri, 12 Jul 2024 06:50:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720755367; cv=none; b=tQboExqkwociY2YAREOzSoq4SSUGC0kfk4hekzk/ADm+dBCXWrR6tahw523AmuCHRcyPWy6wS4zqOhVMACb/soVtQHiVzawm8th0psGHp65zhduK0AH0wVhakHvD+AuJiqm3WHKqzWADWVhLG8wg9Cer4q5mENEwkhQq0TSPetM=
+	t=1720767020; cv=none; b=dyymvxa2nO8AHZ9/4dWc91qXebBoEucTHNOBWoIRazJ5lXiJF6wF7v5ort37pOp9LC3orUUyJF5rrNAoQ6wWoZEowD/+8QVE3oe8JIiphDgd9ruk2dQBqXSRkcc4mH1jMYd4DmxOdfwnBD+NBfbnQw+KJ4jgP9HtrE+uKOIe2UI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720755367; c=relaxed/simple;
-	bh=VRyGjFQolawRZImK+IOGOg0G+EPEMAJ0J9NsIWlAf8Y=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=O8Qur+gv/E9zdTY5y9V7IEY/FlGElYaPrfzgBHkcqoDH4sEE1OCPkpb72pOizK0hSdxjdc44RAPEKr5X6kEBUN2kelkioeaUIAnaHoa9TzDW/4iDoEe7T06dko7zyiEnABetGtRq7guzNqkQUZjllhCEOnqb1r6x2TIAKHpNiPg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=b+FgFQJp; arc=none smtp.client-ip=115.124.30.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
+	s=arc-20240116; t=1720767020; c=relaxed/simple;
+	bh=eLi3fYikhmZmAiWojiYM4xhueLbPTdJEVJAlqd18vvM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ai3pVObaSkBYtHdJsjIX0flRLYmL1T93omKqO0ixyHWUNsqti4uVrhDxr/KwYM5DWqabA//8C9BRiqckleEbgRNAQlJohezWqw+7sOYoiRCW9mUfeATUuCuUHoroFJdl1NluH3isQG5G5YuOLzh/vHFOnsBmmjnePY3azQRfzSs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=jsSiJECI; arc=none smtp.client-ip=192.198.163.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="b+FgFQJp"
-DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=linux.alibaba.com; s=default;
-	t=1720755362; h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type;
-	bh=zj6wPj6Zh6XgSISd6AOm8AXZp2rbbWBD8O1Iq+f1CSU=;
-	b=b+FgFQJpFuRWIa939opc58JgHrh/GlboB31XrXbfByoFB/1+GfG8hmZXgzpefFOGVltCAu+AerAenvfBHbibsKpfYLQKi2LLedstBPiYXf+lDXnuKgHN1kslNT9JcpQuMquC0Ph0WkSaIFl3H6109S6zjw5KEBcDGpVE/Ac594w=
-X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R111e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=maildocker-contentspam033023225041;MF=baolin.wang@linux.alibaba.com;NM=1;PH=DS;RN=13;SR=0;TI=SMTPD_---0WAMhTxo_1720755361;
-Received: from 30.97.56.66(mailfrom:baolin.wang@linux.alibaba.com fp:SMTPD_---0WAMhTxo_1720755361)
-          by smtp.aliyun-inc.com;
-          Fri, 12 Jul 2024 11:36:02 +0800
-Message-ID: <8066aaff-e7df-42fa-8142-d7cb22af3835@linux.alibaba.com>
-Date: Fri, 12 Jul 2024 11:36:01 +0800
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="jsSiJECI"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1720767018; x=1752303018;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=eLi3fYikhmZmAiWojiYM4xhueLbPTdJEVJAlqd18vvM=;
+  b=jsSiJECIG9G6RiXle6UjcUB28iPH/DD/56hdg8SOgbi2mFJYHSYh4uZA
+   47cDT6NB2aj+FO7MZIvFaLLteabD+tZXIJ2/fEJtXGZ2U7GOd9pTEHe6F
+   85C0Ntf9HXoF0AWU2OtinN53m+BdPc0gJ5waayWUA7YoEAZSr5QppSU4h
+   DHP19IUXiqA+MGPhNu7apxGeUphGVnRuf9gL6XI6ZcxC1bGDK31vx8HZ3
+   3vpRzLzmd9pbrRFYlTv2Vfu1FXh4+pUarguRos+NLGxh0akzlsSK0lz2K
+   CdMR+XDiP+hUK178UHKHbhOhps7vHQZnB+vxi6tIHm4DwB9/U/IXk6n5m
+   Q==;
+X-CSE-ConnectionGUID: 7/H2QAC4QyiIesL6mFvo+Q==
+X-CSE-MsgGUID: LXqN12vWSoSCr3shTJRWxw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11130"; a="21101408"
+X-IronPort-AV: E=Sophos;i="6.09,202,1716274800"; 
+   d="scan'208";a="21101408"
+Received: from orviesa004.jf.intel.com ([10.64.159.144])
+  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jul 2024 23:50:17 -0700
+X-CSE-ConnectionGUID: LvxdULpuRNimbwC0rZ2gzA==
+X-CSE-MsgGUID: b+ApyV3URIKQWbGRuPOesg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.09,202,1716274800"; 
+   d="scan'208";a="54009317"
+Received: from lkp-server01.sh.intel.com (HELO 68891e0c336b) ([10.239.97.150])
+  by orviesa004.jf.intel.com with ESMTP; 11 Jul 2024 23:50:12 -0700
+Received: from kbuild by 68891e0c336b with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1sSA6c-000aSv-0i;
+	Fri, 12 Jul 2024 06:50:10 +0000
+Date: Fri, 12 Jul 2024 14:49:54 +0800
+From: kernel test robot <lkp@intel.com>
+To: Tao Zhang <quic_taozha@quicinc.com>,
+	Suzuki K Poulose <suzuki.poulose@arm.com>,
+	Mike Leach <mike.leach@linaro.org>,
+	James Clark <james.clark@arm.com>, Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Mathieu Poirier <mathieu.poirier@linaro.org>,
+	Leo Yan <leo.yan@linux.dev>,
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Tao Zhang <quic_taozha@quicinc.com>, coresight@lists.linaro.org,
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org
+Subject: Re: [PATCH v2 2/3] coresight: Add source filtering for multi-port
+ output
+Message-ID: <202407121454.IxYqSYDp-lkp@intel.com>
+References: <20240711081750.21792-3-quic_taozha@quicinc.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 3/3] mm: shmem: move shmem_huge_global_enabled() into
- shmem_allowable_huge_orders()
-To: kernel test robot <lkp@intel.com>, akpm@linux-foundation.org,
- hughd@google.com
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, willy@infradead.org,
- david@redhat.com, 21cnbao@gmail.com, ryan.roberts@arm.com, ziy@nvidia.com,
- ioworker0@gmail.com, linux-mm@kvack.org, linux-kernel@vger.kernel.org
-References: <6e5858d345304d0428c1c2c2a25c289c062b4ea8.1720668581.git.baolin.wang@linux.alibaba.com>
- <202407121052.Jbq6PSIi-lkp@intel.com>
-From: Baolin Wang <baolin.wang@linux.alibaba.com>
-In-Reply-To: <202407121052.Jbq6PSIi-lkp@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240711081750.21792-3-quic_taozha@quicinc.com>
+
+Hi Tao,
+
+kernel test robot noticed the following build warnings:
+
+[auto build test WARNING on robh/for-next]
+[also build test WARNING on linus/master v6.10-rc7 next-20240711]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Tao-Zhang/dt-bindings-arm-qcom-coresight-static-replicator-Add-property-for-source-filtering/20240711-162200
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
+patch link:    https://lore.kernel.org/r/20240711081750.21792-3-quic_taozha%40quicinc.com
+patch subject: [PATCH v2 2/3] coresight: Add source filtering for multi-port output
+config: arm-randconfig-004-20240712 (https://download.01.org/0day-ci/archive/20240712/202407121454.IxYqSYDp-lkp@intel.com/config)
+compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240712/202407121454.IxYqSYDp-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202407121454.IxYqSYDp-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/hwtracing/coresight/coresight-platform.c:261:23: warning: more '%' conversions than data arguments [-Wformat-insufficient-args]
+                                     "Filter source %s is not a source device\n");
+                                                    ~^
+   include/linux/dev_printk.h:156:62: note: expanded from macro 'dev_warn'
+           dev_printk_index_wrap(_dev_warn, KERN_WARNING, dev, dev_fmt(fmt), ##__VA_ARGS__)
+                                                                       ^~~
+   include/linux/dev_printk.h:19:22: note: expanded from macro 'dev_fmt'
+   #define dev_fmt(fmt) fmt
+                        ^~~
+   include/linux/dev_printk.h:110:16: note: expanded from macro 'dev_printk_index_wrap'
+                   _p_func(dev, fmt, ##__VA_ARGS__);                       \
+                                ^~~
+   1 warning generated.
 
 
+vim +261 drivers/hwtracing/coresight/coresight-platform.c
 
-On 2024/7/12 11:10, kernel test robot wrote:
-> Hi Baolin,
-> 
-> kernel test robot noticed the following build errors:
-> 
-> [auto build test ERROR on akpm-mm/mm-everything]
-> [also build test ERROR on next-20240711]
-> [cannot apply to linus/master v6.10-rc7]
-> [If your patch is applied to the wrong git tree, kindly drop us a note.
-> And when submitting patch, we suggest to use '--base' as documented in
-> https://git-scm.com/docs/git-format-patch#_base_tree_information]
-> 
-> url:    https://github.com/intel-lab-lkp/linux/commits/Baolin-Wang/mm-shmem-simplify-the-suitable-huge-orders-validation-for-tmpfs/20240711-134512
-> base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
-> patch link:    https://lore.kernel.org/r/6e5858d345304d0428c1c2c2a25c289c062b4ea8.1720668581.git.baolin.wang%40linux.alibaba.com
-> patch subject: [PATCH 3/3] mm: shmem: move shmem_huge_global_enabled() into shmem_allowable_huge_orders()
-> config: x86_64-allnoconfig (https://download.01.org/0day-ci/archive/20240712/202407121052.Jbq6PSIi-lkp@intel.com/config)
-> compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
-> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240712/202407121052.Jbq6PSIi-lkp@intel.com/reproduce)
-> 
-> If you fix the issue in a separate patch/commit (i.e. not just a new version of
-> the same patch/commit), kindly add following tags
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes: https://lore.kernel.org/oe-kbuild-all/202407121052.Jbq6PSIi-lkp@intel.com/
-> 
-> All errors (new ones prefixed by >>):
-> 
->>> mm/shmem.c:1160:6: error: call to undeclared function 'shmem_huge_global_enabled'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
->      1160 |         if (shmem_huge_global_enabled(inode, 0, false, NULL, 0))
->           |             ^
->     1 error generated.
+   185	
+   186	/*
+   187	 * of_coresight_parse_endpoint : Parse the given output endpoint @ep
+   188	 * and fill the connection information in @pdata->out_conns
+   189	 *
+   190	 * Parses the local port, remote device name and the remote port.
+   191	 *
+   192	 * Returns :
+   193	 *	 0	- If the parsing completed without any fatal errors.
+   194	 *	-Errno	- Fatal error, abort the scanning.
+   195	 */
+   196	static int of_coresight_parse_endpoint(struct device *dev,
+   197					       struct device_node *ep,
+   198					       struct coresight_platform_data *pdata)
+   199	{
+   200		int ret = 0;
+   201		struct of_endpoint endpoint, rendpoint;
+   202		struct device_node *rparent = NULL;
+   203		struct device_node *rep = NULL;
+   204		struct device *rdev = NULL;
+   205		struct fwnode_handle *rdev_fwnode;
+   206		struct coresight_connection conn = {};
+   207		struct coresight_connection *new_conn;
+   208	
+   209		do {
+   210			/* Parse the local port details */
+   211			if (of_graph_parse_endpoint(ep, &endpoint))
+   212				break;
+   213			/*
+   214			 * Get a handle on the remote endpoint and the device it is
+   215			 * attached to.
+   216			 */
+   217			rep = of_graph_get_remote_endpoint(ep);
+   218			if (!rep)
+   219				break;
+   220			rparent = of_coresight_get_port_parent(rep);
+   221			if (!rparent)
+   222				break;
+   223			if (of_graph_parse_endpoint(rep, &rendpoint))
+   224				break;
+   225	
+   226			rdev_fwnode = of_fwnode_handle(rparent);
+   227			/* If the remote device is not available, defer probing */
+   228			rdev = coresight_find_device_by_fwnode(rdev_fwnode);
+   229			if (!rdev) {
+   230				ret = -EPROBE_DEFER;
+   231				break;
+   232			}
+   233	
+   234			conn.src_port = endpoint.port;
+   235			/*
+   236			 * Hold the refcount to the target device. This could be
+   237			 * released via:
+   238			 * 1) coresight_release_platform_data() if the probe fails or
+   239			 *    this device is unregistered.
+   240			 * 2) While removing the target device via
+   241			 *    coresight_remove_match()
+   242			 */
+   243			conn.dest_fwnode = fwnode_handle_get(rdev_fwnode);
+   244			conn.dest_port = rendpoint.port;
+   245	
+   246			/*
+   247			 * Get the firmware node of the filter source through the
+   248			 * reference. This could be used to filter the source in
+   249			 * building path.
+   250			 */
+   251			conn.filter_src_fwnode =
+   252				fwnode_find_reference(&ep->fwnode, "filter-src", 0);
+   253			if (IS_ERR(conn.filter_src_fwnode))
+   254				conn.filter_src_fwnode = NULL;
+   255			else {
+   256				conn.filter_src_dev =
+   257				 coresight_find_csdev_by_fwnode(conn.filter_src_fwnode);
+   258				if (conn.filter_src_dev && (conn.filter_src_dev->type
+   259				    != CORESIGHT_DEV_TYPE_SOURCE))
+   260					dev_warn(&conn.filter_src_dev->dev,
+ > 261					  "Filter source %s is not a source device\n");
+   262			}
+   263	
+   264			new_conn = coresight_add_out_conn(dev, pdata, &conn);
+   265			if (IS_ERR_VALUE(new_conn)) {
+   266				fwnode_handle_put(conn.dest_fwnode);
+   267				return PTR_ERR(new_conn);
+   268			}
+   269			/* Connection record updated */
+   270		} while (0);
+   271	
+   272		of_node_put(rparent);
+   273		of_node_put(rep);
+   274		put_device(rdev);
+   275	
+   276		return ret;
+   277	}
+   278	
 
-Thanks for reporting. I forgot to add a dummy function in case 
-CONFIG_TRANSPARENT_HUGEPAGE is not enabled. Will fix in next version.
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
