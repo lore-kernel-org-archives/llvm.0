@@ -1,73 +1,58 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9118C4EB5E;
-	Fri, 12 Jul 2024 08:34:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 415B2635;
+	Fri, 12 Jul 2024 08:44:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720773263; cv=none; b=LzEcS4s7EewRzKlLvUAkTYamjhyLiuxOLv9evTU1IGycdl8fHeXr+JO1tdkdqR9b5bkARbTprgCbXxvb0VJAR7YJWe+Fhf+VkIotCLI8PZzlU4QOn5Y300nZBsMxp2r0cq4QOzqgHcExT3pf/t4haJnhG++P+oS/gwZLtctI7qo=
+	t=1720773863; cv=none; b=rWZlYuW+mTi3f9XcLN03NJ0/G3rG8z8RYvpK35Q96hPwX4J9n5kIAkapwnLI3Rq2cMqOAZ134nmY5csE27YwMkDt6jBykYaqhfwRQrdYVakkCrqSZXqQ8XlewUcLTr1UOOTxNjp00RmQBMVjJt9oVR8V+9ID4ZsGZjZh3RH+P/M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720773263; c=relaxed/simple;
-	bh=pq5PExVlhukFj3U0b+zsykWbjKB4zXqVv9oUhe4GayI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=oEHJ44tsxg8yl+N4dD4/yr1xSZTXiE/UwArj53+NzqvphtsEcqd+LFx39Bu4VvUEDdYTy0DQwdegH/7u45twoFfn76gByUKYNF4GaV3fXTVlGGOI9IONBkp7jCpKJQ/gkqcO2Pwx73FCU/j7MegeutI43llcLqdauZyzQ3dB5sY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=AMdXqh2k; arc=none smtp.client-ip=192.198.163.10
+	s=arc-20240116; t=1720773863; c=relaxed/simple;
+	bh=iKkVlFwmA02e74aasRggopKiM0Jyo2mPYo6/eIBCKZs=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=Xknd8hrsBh3cZMWFVXvjdt2N9Wi77PDHIO4lR17nM8euZUR/4KUIKNT8NamkIsCbf+qoW/G+ZYwAJgqd3abIO4LI/Ew9XLzx102CoJAb25ee8LuY7+M9N4SexIFkxo6fUOgYtjdlvw6bSfdIaI+IXJfm6A1BpBLFgAc/x0d+7Kc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=FkqLp6WK; arc=none smtp.client-ip=192.198.163.12
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="AMdXqh2k"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="FkqLp6WK"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1720773262; x=1752309262;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=pq5PExVlhukFj3U0b+zsykWbjKB4zXqVv9oUhe4GayI=;
-  b=AMdXqh2kAzOVGAdIKBJeVBJTQ0Vngm3IoOubG9IXYN8ikGMv9mNVili7
-   yvcn0O9r26DD9TXDqM0z1/2jpn8fvq8uONNUNBMBXEtDdTZOvLjN7etAW
-   VcFk1eN5vj7zvS4wrhhCm96TTEHrVUDjHsL5GCcQcaqzngqTVEha8CFzT
-   Ijx2C3Tb6wEXIvAFiU0RCkCa8KyCzWi8Jpv3vP8Nu60VHnQjVfmG6OqmX
-   M8DRYYnuEVpl0bwnff3DuptoanvinK3Cc7ZJROI4J+Um2kKMTGNDHvWsf
-   NF53IZFm6HDb1o7hZKrSxWlRd/ZAStSCK+0JgvKRt+buTBQ4uAdf5XwTo
+  t=1720773858; x=1752309858;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=iKkVlFwmA02e74aasRggopKiM0Jyo2mPYo6/eIBCKZs=;
+  b=FkqLp6WK9ppq9sGx4CeSBLmSrJ2AQA6j19M4WRGjMB+KwWgBziS2IbjN
+   UFKpHewKKbIitzoXIs58ljgAUngEVAkg2O5DvCpo62wTr59ijx+7wiGOD
+   TJ5djYFNxY2Tz+/j16IUe5Kw/OAGmwsCGC3P3bsZgNSWrzlssIfSsjOjY
+   2rM6Nsa/jMLmaErsn+bwZOz1hl7vKFv+cNKmg5Y/RW9o3esB2A6Pn5rkJ
+   7FDa9NDzKIYZybW4lB4KIRQxns2lwPXGO22oTpwTWIa1cRWWWDhq2rW/6
+   B8IhXSpHNA2dwd3OwgsoVFQXREOJNzJlTVGNoPRm8lLSYIkJKpLni23kk
    Q==;
-X-CSE-ConnectionGUID: Jqq4fNmrTae0fRZOb7qJgg==
-X-CSE-MsgGUID: bNBQnwYkSCGbjrZ47P0IIQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11130"; a="29611208"
+X-CSE-ConnectionGUID: b8/KiybaT1quH12JtQOo2A==
+X-CSE-MsgGUID: pWv0m+YGRWuSkhwWWizDTQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11130"; a="22074701"
 X-IronPort-AV: E=Sophos;i="6.09,202,1716274800"; 
-   d="scan'208";a="29611208"
-Received: from orviesa005.jf.intel.com ([10.64.159.145])
-  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jul 2024 01:34:21 -0700
-X-CSE-ConnectionGUID: ixOa7lDgSiKEeMgMv0eYSg==
-X-CSE-MsgGUID: AQs+thZ5SKmeKy6XedTRjQ==
+   d="scan'208";a="22074701"
+Received: from orviesa007.jf.intel.com ([10.64.159.147])
+  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jul 2024 01:44:18 -0700
+X-CSE-ConnectionGUID: q1zLVVZsShqjO+j5sZKywg==
+X-CSE-MsgGUID: AvTb28zvQLa6Y1tvK1q/bQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.09,202,1716274800"; 
-   d="scan'208";a="53774969"
+   d="scan'208";a="49506848"
 Received: from lkp-server01.sh.intel.com (HELO 68891e0c336b) ([10.239.97.150])
-  by orviesa005.jf.intel.com with ESMTP; 12 Jul 2024 01:34:16 -0700
+  by orviesa007.jf.intel.com with ESMTP; 12 Jul 2024 01:44:16 -0700
 Received: from kbuild by 68891e0c336b with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1sSBjJ-000aYE-1K;
-	Fri, 12 Jul 2024 08:34:13 +0000
-Date: Fri, 12 Jul 2024 16:33:17 +0800
+	id 1sSBsz-000aYZ-2G;
+	Fri, 12 Jul 2024 08:44:13 +0000
+Date: Fri, 12 Jul 2024 16:43:56 +0800
 From: kernel test robot <lkp@intel.com>
-To: Esben Haabendal <esben@geanix.com>,
-	Tudor Ambarus <tudor.ambarus@linaro.org>,
-	Pratyush Yadav <pratyush@kernel.org>,
-	Michael Walle <mwalle@kernel.org>,
-	Miquel Raynal <miquel.raynal@bootlin.com>,
-	Richard Weinberger <richard@nod.at>,
-	Vignesh Raghavendra <vigneshr@ti.com>,
-	Nicolas Ferre <nicolas.ferre@microchip.com>,
-	Alexandre Belloni <alexandre.belloni@bootlin.com>,
-	Claudiu Beznea <claudiu.beznea@tuxon.dev>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org,
-	Rasmus Villemoes <rasmus.villemoes@prevas.dk>,
-	linux-arm-kernel@lists.infradead.org,
-	Esben Haabendal <esben@geanix.com>
-Subject: Re: [PATCH v3 14/15] mtd: spi-nor: Drop deprecated mechanism for
- optional SFDP parsing
-Message-ID: <202407121629.O2ykn94e-lkp@intel.com>
-References: <20240711-macronix-mx25l3205d-fixups-v3-14-99353461dd2d@geanix.com>
+To: Jeff Layton <jlayton@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [jlayton:dir-deleg 29/29] fs/locks.c:1533:32: error: no member named
+ 'fl_file' in 'struct file_lock_core'; did you mean 'flc_file'?
+Message-ID: <202407121619.mxZHIOZi-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -76,150 +61,156 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240711-macronix-mx25l3205d-fixups-v3-14-99353461dd2d@geanix.com>
 
-Hi Esben,
-
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on a38297e3fb012ddfa7ce0321a7e5a8daeb1872b6]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Esben-Haabendal/mtd-spi-nor-core-add-flag-for-doing-optional-SFDP-parsing/20240711-224454
-base:   a38297e3fb012ddfa7ce0321a7e5a8daeb1872b6
-patch link:    https://lore.kernel.org/r/20240711-macronix-mx25l3205d-fixups-v3-14-99353461dd2d%40geanix.com
-patch subject: [PATCH v3 14/15] mtd: spi-nor: Drop deprecated mechanism for optional SFDP parsing
-config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20240712/202407121629.O2ykn94e-lkp@intel.com/config)
-compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project a0c6b8aef853eedaa0980f07c0a502a5a8a9740e)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240712/202407121629.O2ykn94e-lkp@intel.com/reproduce)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jlayton/linux.git dir-deleg
+head:   1a45dc4f22747fa6674e3d7d4056900a712a88fd
+commit: 1a45dc4f22747fa6674e3d7d4056900a712a88fd [29/29] fs: add support for ignoring deleg breaks for dir change events
+config: um-allnoconfig (https://download.01.org/0day-ci/archive/20240712/202407121619.mxZHIOZi-lkp@intel.com/config)
+compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240712/202407121619.mxZHIOZi-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202407121629.O2ykn94e-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202407121619.mxZHIOZi-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
-   In file included from drivers/mtd/spi-nor/core.c:13:
-   In file included from include/linux/device.h:32:
-   In file included from include/linux/device/driver.h:21:
-   In file included from include/linux/module.h:19:
-   In file included from include/linux/elf.h:6:
-   In file included from arch/s390/include/asm/elf.h:173:
-   In file included from arch/s390/include/asm/mmu_context.h:11:
-   In file included from arch/s390/include/asm/pgalloc.h:18:
-   In file included from include/linux/mm.h:2210:
-   include/linux/vmstat.h:508:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     508 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     509 |                            item];
-         |                            ~~~~
-   include/linux/vmstat.h:515:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     515 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     516 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/vmstat.h:522:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     522 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
-   include/linux/vmstat.h:527:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     527 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     528 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/vmstat.h:536:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     536 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     537 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   In file included from drivers/mtd/spi-nor/core.c:17:
-   In file included from include/linux/mtd/spi-nor.h:11:
-   In file included from include/linux/spi/spi-mem.h:14:
-   In file included from include/linux/spi/spi.h:17:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/s390/include/asm/io.h:78:
-   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     547 |         val = __raw_readb(PCI_IOBASE + addr);
+   In file included from fs/locks.c:57:
+   In file included from include/linux/security.h:35:
+   In file included from include/linux/bpf.h:31:
+   In file included from include/linux/memcontrol.h:13:
+   In file included from include/linux/cgroup.h:26:
+   In file included from include/linux/kernel_stat.h:9:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from arch/um/include/asm/hardirq.h:5:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:14:
+   In file included from arch/um/include/asm/io.h:24:
+   include/asm-generic/io.h:548:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     548 |         val = __raw_readb(PCI_IOBASE + addr);
          |                           ~~~~~~~~~~ ^
-   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     560 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+   include/asm-generic/io.h:561:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     561 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
          |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
-      37 | #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
-         |                                                           ^
-   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
-     102 | #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
-         |                                                      ^
-   In file included from drivers/mtd/spi-nor/core.c:17:
-   In file included from include/linux/mtd/spi-nor.h:11:
-   In file included from include/linux/spi/spi-mem.h:14:
-   In file included from include/linux/spi/spi.h:17:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/s390/include/asm/io.h:78:
-   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     573 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
+      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
+         |                                                   ^
+   In file included from fs/locks.c:57:
+   In file included from include/linux/security.h:35:
+   In file included from include/linux/bpf.h:31:
+   In file included from include/linux/memcontrol.h:13:
+   In file included from include/linux/cgroup.h:26:
+   In file included from include/linux/kernel_stat.h:9:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from arch/um/include/asm/hardirq.h:5:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:14:
+   In file included from arch/um/include/asm/io.h:24:
+   include/asm-generic/io.h:574:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     574 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
          |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
-      35 | #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
-         |                                                           ^
-   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
-     115 | #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
-         |                                                      ^
-   In file included from drivers/mtd/spi-nor/core.c:17:
-   In file included from include/linux/mtd/spi-nor.h:11:
-   In file included from include/linux/spi/spi-mem.h:14:
-   In file included from include/linux/spi/spi.h:17:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/s390/include/asm/io.h:78:
-   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     584 |         __raw_writeb(value, PCI_IOBASE + addr);
+   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
+      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
+         |                                                   ^
+   In file included from fs/locks.c:57:
+   In file included from include/linux/security.h:35:
+   In file included from include/linux/bpf.h:31:
+   In file included from include/linux/memcontrol.h:13:
+   In file included from include/linux/cgroup.h:26:
+   In file included from include/linux/kernel_stat.h:9:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from arch/um/include/asm/hardirq.h:5:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:14:
+   In file included from arch/um/include/asm/io.h:24:
+   include/asm-generic/io.h:585:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     585 |         __raw_writeb(value, PCI_IOBASE + addr);
          |                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     594 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+   include/asm-generic/io.h:595:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     595 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
          |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     604 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+   include/asm-generic/io.h:605:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     605 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
          |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:692:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     692 |         readsb(PCI_IOBASE + addr, buffer, count);
+   include/asm-generic/io.h:693:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     693 |         readsb(PCI_IOBASE + addr, buffer, count);
          |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:700:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     700 |         readsw(PCI_IOBASE + addr, buffer, count);
+   include/asm-generic/io.h:701:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     701 |         readsw(PCI_IOBASE + addr, buffer, count);
          |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:708:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     708 |         readsl(PCI_IOBASE + addr, buffer, count);
+   include/asm-generic/io.h:709:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     709 |         readsl(PCI_IOBASE + addr, buffer, count);
          |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:717:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     717 |         writesb(PCI_IOBASE + addr, buffer, count);
+   include/asm-generic/io.h:718:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     718 |         writesb(PCI_IOBASE + addr, buffer, count);
          |                 ~~~~~~~~~~ ^
-   include/asm-generic/io.h:726:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     726 |         writesw(PCI_IOBASE + addr, buffer, count);
+   include/asm-generic/io.h:727:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     727 |         writesw(PCI_IOBASE + addr, buffer, count);
          |                 ~~~~~~~~~~ ^
-   include/asm-generic/io.h:735:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     735 |         writesl(PCI_IOBASE + addr, buffer, count);
+   include/asm-generic/io.h:736:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     736 |         writesl(PCI_IOBASE + addr, buffer, count);
          |                 ~~~~~~~~~~ ^
-   In file included from drivers/mtd/spi-nor/core.c:25:
->> drivers/mtd/spi-nor/core.h:722:54: error: expected ';' after return statement
-     722 |         return (nor->info->no_sfdp_flags & SPI_NOR_TRY_SFDP)
-         |                                                             ^
-         |                                                             ;
-   17 warnings and 1 error generated.
+>> fs/locks.c:1533:32: error: no member named 'fl_file' in 'struct file_lock_core'; did you mean 'flc_file'?
+    1533 |         if (!S_ISDIR(file_inode(fl->c.fl_file)->i_mode))
+         |                                       ^~~~~~~
+         |                                       flc_file
+   include/uapi/linux/stat.h:23:23: note: expanded from macro 'S_ISDIR'
+      23 | #define S_ISDIR(m)      (((m) & S_IFMT) == S_IFDIR)
+         |                            ^
+   include/linux/filelock.h:126:15: note: 'flc_file' declared here
+     126 |         struct file *flc_file;
+         |                      ^
+>> fs/locks.c:1536:49: error: no member named 'fl_flags' in 'struct file_lock_core'; did you mean 'flc_flags'?
+    1536 |         if ((flags & LEASE_BREAK_DIR_CREATE) && (fl->c.fl_flags & FL_IGN_DIR_CREATE))
+         |                                                        ^~~~~~~~
+         |                                                        flc_flags
+   include/linux/filelock.h:121:15: note: 'flc_flags' declared here
+     121 |         unsigned int flc_flags;
+         |                      ^
+   fs/locks.c:1538:49: error: no member named 'fl_flags' in 'struct file_lock_core'; did you mean 'flc_flags'?
+    1538 |         if ((flags & LEASE_BREAK_DIR_DELETE) && (fl->c.fl_flags & FL_IGN_DIR_DELETE))
+         |                                                        ^~~~~~~~
+         |                                                        flc_flags
+   include/linux/filelock.h:121:15: note: 'flc_flags' declared here
+     121 |         unsigned int flc_flags;
+         |                      ^
+   fs/locks.c:1540:49: error: no member named 'fl_flags' in 'struct file_lock_core'; did you mean 'flc_flags'?
+    1540 |         if ((flags & LEASE_BREAK_DIR_RENAME) && (fl->c.fl_flags & FL_IGN_DIR_RENAME))
+         |                                                        ^~~~~~~~
+         |                                                        flc_flags
+   include/linux/filelock.h:121:15: note: 'flc_flags' declared here
+     121 |         unsigned int flc_flags;
+         |                      ^
+   12 warnings and 4 errors generated.
 
 
-vim +722 drivers/mtd/spi-nor/core.h
+vim +1533 fs/locks.c
 
-   712	
-   713	/**
-   714	 * spi_nor_try_sfdp() - returns true if optional SFDP parsing should be tried
-   715	 * for this flash, with fallback to static parameters and settings based on
-   716	 * flash ID if SFDP parsing fails.
-   717	 *
-   718	 * Return: true if optional SFDP parsing should be tried
-   719	 */
-   720	static inline bool spi_nor_try_sfdp(const struct spi_nor *nor)
-   721	{
- > 722		return (nor->info->no_sfdp_flags & SPI_NOR_TRY_SFDP)
-   723	}
-   724	
+  1528	
+  1529	static bool
+  1530	ignore_dir_deleg_break(struct file_lease *fl, unsigned int flags)
+  1531	{
+  1532		/* Not a directory inode? */
+> 1533		if (!S_ISDIR(file_inode(fl->c.fl_file)->i_mode))
+  1534			return false;
+  1535	
+> 1536		if ((flags & LEASE_BREAK_DIR_CREATE) && (fl->c.fl_flags & FL_IGN_DIR_CREATE))
+  1537			return true;
+  1538		if ((flags & LEASE_BREAK_DIR_DELETE) && (fl->c.fl_flags & FL_IGN_DIR_DELETE))
+  1539			return true;
+  1540		if ((flags & LEASE_BREAK_DIR_RENAME) && (fl->c.fl_flags & FL_IGN_DIR_RENAME))
+  1541			return true;
+  1542	
+  1543		return false;
+  1544	}
+  1545	
 
 -- 
 0-DAY CI Kernel Test Service
