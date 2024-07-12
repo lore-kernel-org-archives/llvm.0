@@ -1,66 +1,58 @@
-Received: from mail-pg1-f171.google.com (mail-pg1-f171.google.com [209.85.215.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EDA983BBF2
-	for <llvm@lists.linux.dev>; Fri, 12 Jul 2024 20:42:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B9F988F6A;
+	Fri, 12 Jul 2024 20:57:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720816946; cv=none; b=IrUM+C8KjfzqE1VlWAA0eNwhODtvEAIKFF0i4gbvlUiCgXecZ62fK8MFl3wPjS4FiqM1rsZ5athtEc3XwfYBlONy7PHnnrWfqbZ/xm9Z/JyGKNlHOVDSr9T7RdVAcmb8iZLono/+IGpdjCdA8O+pFZ/nXj0og8pCnkvBhIyCz40=
+	t=1720817870; cv=none; b=nXEwnZuJjRePot/FuAEWIeSqErU0ekeSyH/cPRM09CRhoKQ9BcFH42BvTWvHXRDl6hQg/kOjkb7H+5EiJTJqO+U49uS4EBKWkicswcKgNSmcUmSMQZghSPeuqEC7z0zWQNBJGZtyMInkezthE4KoAQfmqeypjzvBE8dbH04Iozc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720816946; c=relaxed/simple;
-	bh=k7jEmWRTi+s3vPIVbUx+yD39cMsEEr49hfKeqgI5KtY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=tsuyETL4W0068cgX7Vn05BiqUGF+Vuwt7tA8g2XV5f/7NHkK8AHXcpGWFv5DbFzkeXzsluER8wxxW+0ABTbPfmoDTiAynOTF5GugrwucA6pcPv+1Scw6B3nk7q5YWa5d+lrt7xO/WQQV/Ex8AdQ6c3bab/ZtBipw829uEK5mkKE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=cdzsFjz7; arc=none smtp.client-ip=209.85.215.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
+	s=arc-20240116; t=1720817870; c=relaxed/simple;
+	bh=sGV7xrs51dDxcdS2bvo60avrSBhSSCEJ22VFQSNBH3o=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=K0ZYkUpQnkV5HNoCkK0kd7IwyQc/YhrM/jPUU93TcKghDs/fM+/rUSoBu8n4FsD2JGd4EPoJ8iFPwxcD1uBkk3Za2rtCXUjBEgHKNO6DBa293DBT37CBanbLH7v/CSYV85doj+1FNL43kzlnhkYGeCMgLmAbEcTbemJZR7RFdpk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=iRVvAEs0; arc=none smtp.client-ip=198.175.65.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="cdzsFjz7"
-Received: by mail-pg1-f171.google.com with SMTP id 41be03b00d2f7-6bce380eb96so1606806a12.0
-        for <llvm@lists.linux.dev>; Fri, 12 Jul 2024 13:42:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1720816944; x=1721421744; darn=lists.linux.dev;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=x9wp47OYngyliTTYyLDXi2nd3567NMYaCV1L/AeO+f4=;
-        b=cdzsFjz7PMB7o5GpFaKWGQYAYWTviL2qvgkWAaHk71p43iAO5ZBNzhbs4FGrOhZ2WV
-         sfc4BkKobN5YapXrsYFbDz2C5IvUikZNDOKoLH4OURr+NIOTsgY0qKpXNFv7gO+cVm03
-         wxZ7yxgGjSCusC9sGguVkJ0gfzFus7kJx3Xgg=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1720816944; x=1721421744;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=x9wp47OYngyliTTYyLDXi2nd3567NMYaCV1L/AeO+f4=;
-        b=fuWLDW8rWZbBinqUBuUG0iFDSbMVoGY31pUzN1uUQndugGJM6t7ea2/G4Bs5PpVI3l
-         Oz0PVqFyjgMVCuAq7tAiPyCB8gzC8JkwVEJkHGdwd+RZahvxv1DjsFuN91jMEdr6pZdM
-         BF+0H1rSQR25RarfSqEws5zvtu6sCV0NRGlB3skaOxNsA/H5XginrXVhzs2ac5Z90H0o
-         kroy/0SyatHDf2/lDZpmeLPHO1aU1PlOStvMA1ngZbSXm0QqwkDLdl6tfxctmO+e+SP/
-         wjg2sQoDqT/xN0dX7Nck1U+3y0CNCr93svo8v8lAPMkOQdvDXDQWW16EsqQw85WXanGs
-         RX/w==
-X-Forwarded-Encrypted: i=1; AJvYcCWhxVqSNTFRiWJrSljPBy+0zdCgitQ6V0jr3fqFozvL8C3mMGT/NYOzMV48eSTzqSQOfZYrBz7DKJ2lbhab/6F+6HaE8w==
-X-Gm-Message-State: AOJu0YzzjprcQ9uQ6BxW3qqDlnoFey3XWso9anrrIbS7a4kG1iYZRnfR
-	T8M66qLFfrFzhkp475SZ3yXT0CV0W2MtZL3GNy5w/7nXMa9CdBIeeoiIWY/3Kg==
-X-Google-Smtp-Source: AGHT+IFr5zH5TRdT/VLvqM+j6Yr6A7tkJwV8KD3X7qbjk/0ENcQSdTA/lPpfJWLjb4epqt3DQPWS8g==
-X-Received: by 2002:a17:90b:189:b0:2c8:6793:456 with SMTP id 98e67ed59e1d1-2ca35a59631mr11588678a91.0.1720816944113;
-        Fri, 12 Jul 2024 13:42:24 -0700 (PDT)
-Received: from localhost ([2620:15c:9d:2:7546:30be:53d8:7f93])
-        by smtp.gmail.com with UTF8SMTPSA id 98e67ed59e1d1-2cacd2d08d5sm2005727a91.6.2024.07.12.13.42.23
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 12 Jul 2024 13:42:23 -0700 (PDT)
-Date: Fri, 12 Jul 2024 13:42:22 -0700
-From: Brian Norris <briannorris@chromium.org>
-To: Yury Norov <yury.norov@gmail.com>
-Cc: Nathan Chancellor <nathan@kernel.org>, llvm@lists.linux.dev,
-	linux-kernel@vger.kernel.org, Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-	Kees Cook <kees@kernel.org>
-Subject: Re: [PATCH v2] bitmap: Switch from inline to __always_inline
-Message-ID: <ZpGVLl7NQZScd8aH@google.com>
-References: <20240711163732.1837271-1-briannorris@chromium.org>
- <ZpFhv5VSYZ6jnsd4@yury-ThinkPad>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="iRVvAEs0"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1720817869; x=1752353869;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=sGV7xrs51dDxcdS2bvo60avrSBhSSCEJ22VFQSNBH3o=;
+  b=iRVvAEs0vaCtaXfymOfJ+aNzagPk+I3xbSPfHyP1LLz3X/sIJYQ0qiwV
+   JlyjG9SyJT3ydg6TMTCqO0dSWLPCb95vshzwXPAmXX13e/JT9//XE/oGI
+   0x+IZ1VKJMNTqW/9C4KTW5ur84gcAKXulwpl7nOT/RY0XcIcRB5PEwt4L
+   l2r5GAmte/49lL+xo166gqakph/uNIeJn5QVCvdxct4yF37o56dSxcU8L
+   I3BOvaHNVl/uR1g1Jv6U3KzgV8C0ZQvEzswC/Gpy6xytLGti3w6Eu4DXx
+   ka8VXeLYT60m5VRqGQ3ZzVOsI8P36EroMEmPbCCJzUj35Z28bNDSr3qch
+   w==;
+X-CSE-ConnectionGUID: uz9xWISgREOK/JpwiZVrGg==
+X-CSE-MsgGUID: qU1NJCmUR0ayHtIUd3tP/g==
+X-IronPort-AV: E=McAfee;i="6700,10204,11131"; a="40808582"
+X-IronPort-AV: E=Sophos;i="6.09,203,1716274800"; 
+   d="scan'208";a="40808582"
+Received: from fmviesa004.fm.intel.com ([10.60.135.144])
+  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jul 2024 13:57:48 -0700
+X-CSE-ConnectionGUID: V/Nbl1JLT3yJOt6M8uGEkw==
+X-CSE-MsgGUID: C699OWXHQuCLuMfAeIhLVw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.09,203,1716274800"; 
+   d="scan'208";a="53594247"
+Received: from lkp-server01.sh.intel.com (HELO 68891e0c336b) ([10.239.97.150])
+  by fmviesa004.fm.intel.com with ESMTP; 12 Jul 2024 13:57:47 -0700
+Received: from kbuild by 68891e0c336b with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1sSNKr-000bGs-05;
+	Fri, 12 Jul 2024 20:57:45 +0000
+Date: Sat, 13 Jul 2024 04:57:39 +0800
+From: kernel test robot <lkp@intel.com>
+To: Vlastimil Babka <vbabka@suse.cz>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [vbabka:slub-percpu-sheaves-v1r0 8/12] mm/slub.c:5029:9: warning:
+ variable 'i' is uninitialized when used here
+Message-ID: <202407130414.KCTJMadC-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -69,138 +61,133 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <ZpFhv5VSYZ6jnsd4@yury-ThinkPad>
 
-Hi Yury,
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/vbabka/linux.git slub-percpu-sheaves-v1r0
+head:   9cb4096680ee90fe6be1b22ff3961174fa8e3ee4
+commit: 6912a14dbbe63891a545d4cd35b60bcd3dee3d40 [8/12] mm/slub: add opt-in caching layer of percpu sheaves
+config: x86_64-buildonly-randconfig-001-20240713 (https://download.01.org/0day-ci/archive/20240713/202407130414.KCTJMadC-lkp@intel.com/config)
+compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240713/202407130414.KCTJMadC-lkp@intel.com/reproduce)
 
-On Fri, Jul 12, 2024 at 10:02:55AM -0700, Yury Norov wrote:
-> On Thu, Jul 11, 2024 at 09:37:11AM -0700, Brian Norris wrote:
-> > Based on recent discussions, it seems like a good idea to inline the
-> > bitmap functions which make up cpumask*() implementations, as well as a
-> > few other bitmap users, to ensure the inlining doesn't break in the
-> > future and produce the same problems, as well as to give the best chance
-> > that the intended small_const_nbits() optimizations carry through.
-> 
-> small_const_nbits() optimization always carries through. As far as I
-> understand this things, the problem is that inliner may make a (wrong)
-> no-go decision before unwinding the small_const_nbits() part.
-> 
-> small_const_nbits() always leads to eliminating either inline or outline
-> code, but inliner seemingly doesn't understand it. This leads to having
-> those tiny functions uninlined.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202407130414.KCTJMadC-lkp@intel.com/
 
-I think we're more or less saying the same thing -- if for whatever
-reason the compiler doesn't inline, then these will never be "small
-consts", and therefore the machinery effectively "doesn't carry
-through".
+All warnings (new ones prefixed by >>):
 
-Per previous discussions, there are many reasons a compiler may ignore
-the 'inline' hint.
+   mm/slub.c:2434:29: warning: variable 'rcu_free' set but not used [-Wunused-but-set-variable]
+    2434 |         struct slab_sheaf *spare, *rcu_free;
+         |                                    ^
+   mm/slub.c:4299:22: warning: variable 'obj_exts' set but not used [-Wunused-but-set-variable]
+    4299 |         struct slabobj_ext *obj_exts;
+         |                             ^
+>> mm/slub.c:5029:9: warning: variable 'i' is uninitialized when used here [-Wuninitialized]
+    5029 |         while (i < size) {
+         |                ^
+   mm/slub.c:5024:19: note: initialize the variable 'i' to silence this warning
+    5024 |         unsigned batch, i;
+         |                          ^
+         |                           = 0
+   3 warnings generated.
 
-> But I'm not sure about that and don't know how to check what happens
-> under the compilers' hood. Can compiler gurus please clarify?
-> 
-> > This change has been previously proposed in the past as:
-> > 
-> >   Subject: [PATCH 1/3] bitmap: switch from inline to __always_inline
-> >   https://lore.kernel.org/all/20221027043810.350460-2-yury.norov@gmail.com/
-> > 
-> > In the end, this looks like a rebase of Yury's work, although
-> > technically it's a rewrite.
-> 
-> I like it more, when it's split onto several patches. We already have
-> my bitmap.h rework and your cpumask.h one with their own reasonable
-> motivations. Can you keep that patch structure please? Then, we can add
 
-I'm not quite sure what you mean. I imitated the patch structure of your
-patch 1 that I linked, which had the following file-diff list:
+vim +/i +5029 mm/slub.c
 
- include/linux/bitmap.h   |  46 ++++++-------
- include/linux/cpumask.h  | 144 +++++++++++++++++++--------------------
- include/linux/find.h     |  40 +++++------
- include/linux/nodemask.h |  86 +++++++++++------------
+  5013	
+  5014	/*
+  5015	 * Bulk free objects to the percpu sheaves.
+  5016	 * Unlike free_to_pcs() this has includes the calls to all necessary hooks
+  5017	 * and the fallback to freeing to slab pages.
+  5018	 */
+  5019	static void free_to_pcs_bulk(struct kmem_cache *s, size_t size, void **p)
+  5020	{
+  5021		struct slub_percpu_sheaves *pcs;
+  5022		struct slab_sheaf *main;
+  5023		unsigned long flags;
+  5024		unsigned batch, i;
+  5025		bool init;
+  5026	
+  5027		init = slab_want_init_on_free(s);
+  5028	
+> 5029		while (i < size) {
+  5030			struct slab *slab = virt_to_slab(p[i]);
+  5031	
+  5032			memcg_slab_free_hook(s, slab, p[i], 1);
+  5033			alloc_tagging_slab_free_hook(s, slab, p[i], 1);
+  5034	
+  5035			if (unlikely(!slab_free_hook(s, p[i], init))) {
+  5036				p[i] = p[--size];
+  5037				if (!size)
+  5038					return;
+  5039				continue;
+  5040			}
+  5041	
+  5042			i++;
+  5043		}
+  5044	
+  5045	next_batch:
+  5046		local_lock_irqsave(&s->cpu_sheaves->lock, flags);
+  5047		pcs = this_cpu_ptr(s->cpu_sheaves);
+  5048	
+  5049		if (unlikely(pcs->main->size == s->sheaf_capacity)) {
+  5050	
+  5051			struct slab_sheaf *empty;
+  5052	
+  5053			if (!pcs->spare) {
+  5054				empty = barn_get_empty_sheaf(pcs->barn);
+  5055				if (empty) {
+  5056					pcs->spare = pcs->main;
+  5057					pcs->main = empty;
+  5058					goto do_free;
+  5059				}
+  5060				goto no_empty;
+  5061			}
+  5062	
+  5063			if (pcs->spare->size < s->sheaf_capacity) {
+  5064				stat(s, SHEAF_SWAP);
+  5065				swap(pcs->main, pcs->spare);
+  5066				goto do_free;
+  5067			}
+  5068	
+  5069			empty = barn_replace_full_sheaf(pcs->barn, pcs->main);
+  5070	
+  5071			if (!IS_ERR(empty)) {
+  5072				pcs->main = empty;
+  5073				goto do_free;
+  5074			}
+  5075	
+  5076	no_empty:
+  5077			local_unlock_irqrestore(&s->cpu_sheaves->lock, flags);
+  5078	
+  5079			/*
+  5080			 * if we depleted all empty sheafs in the barn or there are to
+  5081			 * many full sheafs, free the rest to slab pages
+  5082			 */
+  5083	
+  5084			__kmem_cache_free_bulk(s, size, p);
+  5085			return;
+  5086		}
+  5087	
+  5088	do_free:
+  5089		main = pcs->main;
+  5090		batch = min(size, s->sheaf_capacity - main->size);
+  5091	
+  5092		memcpy(main->objects + main->size, p, batch * sizeof(void *));
+  5093		main->size += batch;
+  5094	
+  5095		local_unlock_irqrestore(&s->cpu_sheaves->lock, flags);
+  5096	
+  5097		stat_add(s, FREE_PCS, batch);
+  5098	
+  5099		if (batch < size) {
+  5100			p += batch;
+  5101			size -= batch;
+  5102			goto next_batch;
+  5103		}
+  5104	}
+  5105	
 
-Are you suggesting I should split that into 2 (one for cpumask and one
-for the rest)?
-
-> separate patches for find.h and nodemask.h. If rebasing the old bitmap.h
-> patch isn't clean and takes some effort, feel free to add your
-> co-developed-by.
-
-I don't really care who gets authorship, but I did manually rewrite it,
-since there were enough conflicts, and it's basically scriptable. Feel
-free to suggest which Author/S-o-b/Co-developed combo makes sense for
-that, and I can adopt it in v3 :)
-
-> > According to bloat-o-meter, my vmlinux decreased in size by a total of
-> > 1538 bytes (-0.01%) with this change.
-> > 
-> > [0] CONFIG_HOTPLUG_PARALLEL=y ('select'ed for x86 as of [1]) and
-> >     CONFIG_GCOV_PROFILE_ALL.
-> > 
-> > [1] commit 0c7ffa32dbd6 ("x86/smpboot/64: Implement
-> >     arch_cpuhp_init_parallel_bringup() and enable it")
-> > 
-> > Cc: Yury Norov <yury.norov@gmail.com>
-> > Signed-off-by: Brian Norris <briannorris@chromium.org>
-> 
-> So... This whole optimization is only worth the reviewer's time if we
-> can prove it's sustainable across different compilers and configurations.
-> 
-> Just saying that under some particular config it works, brings little
-> value for those who are not interested in that config. Moreover, if
-> one enables GCOV, he likely doesn't care much about the .text size.
-> And for those using release configs, it only brings uncertainty.
-
-I think I partially disagree. If it's neutral for one compiler but
-helpful for the other, that's still a win. But otherwise, I agree we
-should have some accounting of diversity -- not just a single test.
-
-> Let's test it broader? We've got 2 main compilers - gcc and llvm, and
-> at least two configurations that may be relevant: defconfig and your
-> HOTPLUG_PARALLEL + GCOV_PROFILE_ALL. And it would be nice to prove
-> that the optimization is sustainable across compiler versions.
-> 
-> I have the following table in mind:
-> 
->            defconfig   your conf  
-> GCC    9 |  -1900    |           |
-> CLANG 13 |           |           |
-> GCC   13 |           |           |
-> CLANG 18 |  -100     |  -1538    |
-> 
-> The defconfig nubmers above are from my past experiments. And you can
-> add more configs/compilers, of course.
-
-Perhaps I wasn't too clear, but I was actually testing a few things:
-
-* my ChromeOS-y build, with gcov and clang -- to ensure the section
-  mismatch warning/error disappears
-* a pure mainline / semi-defaults build (which happened to use my host
-  distro's gcc 13), to do size comparisons. I also happened to enable
-  gcov in the currently-posted experiments.
-
-But agreed, I can get a larger matrix with a bit more specifity in my
-commit log. TBD on the ease of getting a Clang 13 or GCC 9 toolchain,
-but I think I can convince my distro to provide them.
-
-> > --- a/include/linux/bitmap.h
-> > +++ b/include/linux/bitmap.h
-> > @@ -203,7 +203,7 @@ unsigned long bitmap_find_next_zero_area_off(unsigned long *map,
-> >   * the bit offset of all zero areas this function finds is multiples of that
-> >   * power of 2. A @align_mask of 0 means no alignment is required.
-> >   */
-> > -static inline unsigned long
-> > +static __always_inline unsigned long
-> >  bitmap_find_next_zero_area(unsigned long *map,
-> >  			   unsigned long size,
-> >  			   unsigned long start,
-> 
-> Let's split them such that return type would be at the same line as
-> the function name. It would help to distinguish function declaration
-> from invocations in grep output:
-
-Ack. I thought I was being consistent with existing cpumask.h style, but
-I got this set wrong. Will fix.
-
-Brian
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
