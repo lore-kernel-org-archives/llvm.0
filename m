@@ -1,197 +1,196 @@
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2043.outbound.protection.outlook.com [40.107.94.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f171.google.com (mail-pf1-f171.google.com [209.85.210.171])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D5CD3A41;
-	Sat, 13 Jul 2024 00:01:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.94.43
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720828922; cv=fail; b=BgCI5MBEES4o/zo2kdUNGi+/7UPmxOFhOcjAbhhIRmgXByABxAkoYpRA6c0TifU22wRaPvTCcyo97m1wWI0jSiq+WzvfMza8txqdltKm52+RaCEmXXRQaBXN6jCV7SWLJipto7bveyYnLf7pTLupaHtoDS2UcR00ieTZrlWyoGQ=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720828922; c=relaxed/simple;
-	bh=wJXWzNqO6SzCgQ0VhpNDyiIa5GL7D969mTpi0FopQ3Q=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=IgZntJgMlWE7z3x2+BA2yyxd1lFLtZSNi5MAX/Cun+6fNYD7V2WOgugtiDVxbC/WQDk4Emiir4aK0BqRFy241ThIyP1FXPswvnHxP2/ijxXjItFwoXa5uG2+hkzh5+nK23ci0RpTur5eNAzXn2zezO0Wd9poHFw++wdMOb5QASk=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=CaEFdFOM; arc=fail smtp.client-ip=40.107.94.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 879D54C7D
+	for <llvm@lists.linux.dev>; Sat, 13 Jul 2024 00:19:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.171
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1720829969; cv=none; b=iaqjPbM9ZzJ3y+pQjl45y26TLH4HgXyupA1O5clTYbS5kWE4GUDKUcKNveNv17JBjolYtWgpM29u0YWUetSExqhtSAl4DvuHO3l9KcbQF/S/fg95zG1BO/NeJ7HNn3HsSe8c3ylXSdtyiCbdH+FDkZkjEQTzb048phHtltKOnMI=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1720829969; c=relaxed/simple;
+	bh=vLk9e6f6ZIdLgxWwuGIJRVBysmnMnaoOmXt9U6jRDOc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=cw+zNPTiFLMoIvDvxw+7ibxihCaFpo0/FAlhtHP1etvXM0f4GYKpl6iKS+KHcDEKXwz7eXPKJaWavE8BMZ75PzhkUgo+bfdGNf+QedCev5qe1J9A8Wn4FzAOEF6qdSZjqIVyrhkh9l36rJuAXxqdtQgBnLBS1lNAr1s9LZJWxq8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=k2/zgb3J; arc=none smtp.client-ip=209.85.210.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="CaEFdFOM"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=G2bJqY1HO9VLcoACjQa5rgPayYOu5F/dDW/e7s8VryWWGf+VFSRmOIy772uqdaXhW3wfEFtgHuydbnmLlnq32W32chC+FTntKOnDLBcK4wIa6E8L8U68OgA5GKHJBt01FFzhKACm5+byFt1cg9/63mgrAvpIGVmjwDty7W0iREnZhende+IMP8myrz8JvKV4wjZl/C9jh45sXIs8qGxcbdABgy+n9E1qDS0PyAeSgAAFBhvauReCV7E89W6c/Wm0VWARXRhaoHTpUwtfXXc9Y6uPZfRGYoE2Pne8nuKRZUyyX7zJ6q20RzRpiuNbHUUSkwnrhSkjUnCKZ/TJZS8qhA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=o1mT6PlMdzu79a8oj2oSMpn7lPddAo5re8ZN7EDToGo=;
- b=GYYbn+GtuAdzr7TircQxe0jjHfh9zylPa4wXhqwYWOfM9HMZeJpV+vVR6XHVqRMVncQlBy7vyERreyV0ZszGpv8djuzH8Y/I3A76+oZFFw3wkxvoYIDZdCcbZERHUptQPX+xeh90eUkwAa0dDMPrrog0ci+sXfcn34mBCVI1RFFb4DL5SKGWkOhQOAh1r1J+VC/VVoa0aAJ0pDWw5VtntE1YCnCemnluP1s0zOLHnpTdrBeTP63/ULBiojV3aDd+k7uczgMnCyNtz2GT5n3m0KptRDkzi1HbpEEwDdm8qrOPjxhNSXea3mbOoUrs8Fky3MeNnrJgIvnv+odSVnzmfQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.160) smtp.rcpttodomain=linuxfoundation.org
- smtp.mailfrom=nvidia.com; dmarc=pass (p=reject sp=reject pct=100) action=none
- header.from=nvidia.com; dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=o1mT6PlMdzu79a8oj2oSMpn7lPddAo5re8ZN7EDToGo=;
- b=CaEFdFOMPytTA0r5ZE7f9S4mSLx3DIfitz56IXN/TCBKrHnQdveKiEteZdeSWg67CCljmHDRzRgSEYfKTjcdePwvq2cbDI1zBC1DSR1uNIIF4W/GpQi7mKOHDl+xHsx92zsVrmGzvupFQoV3A9Kzhgy9J3f2Fayqq1b16MSFIfb4qhlKUHL09JQTygPbtrxYSpw7fAX6jic+2yQk1t/rrREj+2natGhmK2u3q5iwqtWz2wCsJnaXpZHM+4fYJnk1ZstewZkPmup9mnIChfBf/wXqZxZSFETuEtinlF9ywzFNPvRQOlv3Wh5mygUwBwedHzLgzd4jsOHBGGJC71Xqjg==
-Received: from BY5PR16CA0021.namprd16.prod.outlook.com (2603:10b6:a03:1a0::34)
- by MW3PR12MB4458.namprd12.prod.outlook.com (2603:10b6:303:5d::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7762.21; Sat, 13 Jul
- 2024 00:01:56 +0000
-Received: from SJ1PEPF000023D7.namprd21.prod.outlook.com
- (2603:10b6:a03:1a0:cafe::55) by BY5PR16CA0021.outlook.office365.com
- (2603:10b6:a03:1a0::34) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7741.35 via Frontend
- Transport; Sat, 13 Jul 2024 00:01:56 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.160) by
- SJ1PEPF000023D7.mail.protection.outlook.com (10.167.244.72) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.7784.5 via Frontend Transport; Sat, 13 Jul 2024 00:01:55 +0000
-Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
- (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.4; Fri, 12 Jul
- 2024 17:01:40 -0700
-Received: from [10.110.48.28] (10.126.231.35) by rnnvmail201.nvidia.com
- (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.4; Fri, 12 Jul
- 2024 17:01:39 -0700
-Message-ID: <682e293b-cc0d-4261-90a8-bc6f16df0992@nvidia.com>
-Date: Fri, 12 Jul 2024 17:01:38 -0700
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="k2/zgb3J"
+Received: by mail-pf1-f171.google.com with SMTP id d2e1a72fcca58-70b42250526so2071034b3a.1
+        for <llvm@lists.linux.dev>; Fri, 12 Jul 2024 17:19:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1720829967; x=1721434767; darn=lists.linux.dev;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=X+BjHHa++K3M8o/jlc41ALJl1/CW2inFabQbWOCaWdc=;
+        b=k2/zgb3J7oWTVOjBZTa6uqqE7H9u371rTH/vSuieqFdJ3eKql87AHxYK4xrFlp5VgV
+         QqEI67W8H8w90vf/CFZISk1aV7QLc0UlFgkxo87EW3TxANlj9VG2bDkgTJpYoSxND5xl
+         /zDbwS7GKVb9whc2gO5HqBC29J7PGaW7GwFUvpuRrU6ynKzlbj17NU4ZFnNN1FLsav70
+         DEkZgRAMbii7T+BimkS7wyBt9aTOfxk7v1dxdS6rL/Uw6MN6Y16P92ZmBo/pb1VDDLWD
+         cSTPkJvggL/6xpwU0jF0ddJgz1i0GS1nt8389MSxAP/mpsa5iZ6D8s7Vme/sP2v4L3MW
+         UPaA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1720829967; x=1721434767;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=X+BjHHa++K3M8o/jlc41ALJl1/CW2inFabQbWOCaWdc=;
+        b=wpjVnMlYW5LYAMvruyLP5PJOCqnNYbgHmOiPHnr4A2EI4hHs+1Wou4GE48IGQCO6gi
+         7dkjmz49hgbEj03I9QPyaggrKpEh+gEDLYkCyhvmJOrlxjAu3u43NnQsBTBgK1+9OTdu
+         wskUy0heA2/gnmD0kO/wC63IOy+oV/S9bismIA6bEn5MhyIKJWxqV8b0OTaInqome1Qc
+         xL4yn+OGg4MsxOTUQQEVsVnetR+C9hbVYsCo+Ay7MK3oxzeCJrNH2MiXZf5HCUnGisH/
+         CorZsLyAl5iRp3fbFB81pyFvAkHojXlOjhbPLpnDcwNp1ob2RJNuxZ3vwUg5PIExNu+b
+         1zLw==
+X-Forwarded-Encrypted: i=1; AJvYcCUf7lC2/e7TqkaCncuxF+9hPNdjXWisdn4yHpRy/+S2WfgZl6j7WtetkXcgDdOgE6cHpw+tD8I1xec7mYb1qFjkgmZf0A==
+X-Gm-Message-State: AOJu0YxEDpqFLyqFZN43kJnxj98Jku5bV64ux8jKzg0jHPctpg20NEsv
+	6iBM9yLINQv6Zh3ddty6QZ8VVHwrYPNL7SdTF6ND/QRxEREgBrEi
+X-Google-Smtp-Source: AGHT+IGtU9FFfbvKDOtrT4DOn+QwTdztE3gXGyiQe7TNdTWb0IhA/vkZNYxvhzL3u5D4LDqMeSPNeQ==
+X-Received: by 2002:a05:6a00:c95:b0:70b:5b21:6c2 with SMTP id d2e1a72fcca58-70b5b210967mr8844104b3a.31.1720829966681;
+        Fri, 12 Jul 2024 17:19:26 -0700 (PDT)
+Received: from localhost ([216.228.127.128])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-70b7ea794b7sm137312b3a.0.2024.07.12.17.19.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 12 Jul 2024 17:19:26 -0700 (PDT)
+Date: Fri, 12 Jul 2024 17:19:23 -0700
+From: Yury Norov <yury.norov@gmail.com>
+To: Brian Norris <briannorris@chromium.org>
+Cc: Nathan Chancellor <nathan@kernel.org>, llvm@lists.linux.dev,
+	linux-kernel@vger.kernel.org, Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+	Kees Cook <kees@kernel.org>
+Subject: Re: [PATCH v2] bitmap: Switch from inline to __always_inline
+Message-ID: <ZpHIC0gWwkbKGk5H@yury-ThinkPad>
+References: <20240711163732.1837271-1-briannorris@chromium.org>
+ <ZpFhv5VSYZ6jnsd4@yury-ThinkPad>
+ <ZpGVLl7NQZScd8aH@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] selftests/net: fix gro.c compilation failure due to
- non-existent opt_ipproto_off
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-CC: Shuah Khan <shuah@kernel.org>, "David S . Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, "Paolo
- Abeni" <pabeni@redhat.com>, Steffen Klassert <steffen.klassert@secunet.com>,
-	Herbert Xu <herbert@gondor.apana.org.au>, =?UTF-8?Q?Andreas_F=C3=A4rber?=
-	<afaerber@suse.de>, Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-	Matthieu Baerts <matttbe@kernel.org>, Mat Martineau <martineau@kernel.org>,
-	Geliang Tang <geliang@kernel.org>, Pravin B Shelar <pshelar@ovn.org>, "Willem
- de Bruijn" <willemdebruijn.kernel@gmail.com>, Alexander Mikhalitsyn
-	<alexander@mihalicyn.com>, zhujun2 <zhujun2@cmss.chinamobile.com>, "Petr
- Machata" <petrm@nvidia.com>, Ido Schimmel <idosch@nvidia.com>, Hangbin Liu
-	<liuhangbin@gmail.com>, Nikolay Aleksandrov <razor@blackwall.org>, "Benjamin
- Poirier" <bpoirier@nvidia.com>, Sebastian Andrzej Siewior
-	<bigeasy@linutronix.de>, Dmitry Safonov <0x7f454c46@gmail.com>,
-	<netdev@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
-	<linux-actions@lists.infradead.org>, <mptcp@lists.linux.dev>,
-	<dev@openvswitch.org>, <linux-kselftest@vger.kernel.org>, LKML
-	<linux-kernel@vger.kernel.org>, <llvm@lists.linux.dev>,
-	<stable@vger.kernel.org>, Ignat Korchagin <ignat@cloudflare.com>
-References: <20240712235150.99175-1-jhubbard@nvidia.com>
-Content-Language: en-US
-From: John Hubbard <jhubbard@nvidia.com>
-In-Reply-To: <20240712235150.99175-1-jhubbard@nvidia.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: rnnvmail202.nvidia.com (10.129.68.7) To
- rnnvmail201.nvidia.com (10.129.68.8)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SJ1PEPF000023D7:EE_|MW3PR12MB4458:EE_
-X-MS-Office365-Filtering-Correlation-Id: 1667e350-5152-4741-711a-08dca2cf0244
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|82310400026|1800799024|376014|7416014|36860700013;
-X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?QXBWV1B4dWExY082ekxQaGRjTWh0UHZwWjI0QTZtNGsveU9PREFaK2N5eWg3?=
- =?utf-8?B?MUI0RXNWVEhXUEZPbURjcVNNdnRNSjllbDIvSjdKTjllaE1MNXhFMktlM3Fa?=
- =?utf-8?B?SERYdVZsODRBUFg2TXk1U0gxSWplWWl1bEU2M2NlMTIrOEx6dVlHb01ORjd1?=
- =?utf-8?B?S2NRRUJqYnFwUU5ObkFvMURobnU4SGNESDlqY05kZksydCtmZ2x1V3lrOXJr?=
- =?utf-8?B?YlZrYzJCNmgzMjNETUZxQ05uenc1aDB0b3Z5cHo2UHlqY0xCaFVCL1FRK3JH?=
- =?utf-8?B?VG85TXgrcjVXWlB6Mk5Ja2RPanNOZ1NCKzRRaytXU3JnNkMrMk93bjdEVE9L?=
- =?utf-8?B?OG1ncm1YMXBuUUpGYmh0Z0FIVkxuK2ZuazFab1dFQzVkMnIvV1MzdWZVcnBE?=
- =?utf-8?B?QkVCb0JaejFUSllWNmp5dy9wc2N1L1M0RkhzTENLZms4YWo0dDVZaGNrR3hH?=
- =?utf-8?B?WUd5RUZOZ3BjUUtNSFRJRHJLZVE2eklUa2VIUk42K1dHRjlIRkxBRWFYc1dT?=
- =?utf-8?B?OExKanIvRkxtRmVzNGY2QVBUZ3UvUlg1K1BHR3ZLdlY0RGk2enQ0SHBiM2tC?=
- =?utf-8?B?aVlwRi8zOGV3RGpEclY2eXoyelRmTm4wT2cwd2lNUEV5blkxMnJNRGUrUnpl?=
- =?utf-8?B?Q3pFaWl1VW5kZW1KNzVPYyt4b2NvTEpKZE1HNmxEdzQwV2wxSGRqZVpTc2xN?=
- =?utf-8?B?QkRKT1FwRW0wK0h0LytsY0xnRDZyb0tqOUgwcVBWM2w3dFBhcENrVlVHYUlk?=
- =?utf-8?B?YXUrMXZMNG11ZDJQMlJJWFJORVFYRGZHT0w3QmRGVXlDdlI1MjhsV2QrbmhL?=
- =?utf-8?B?amZTc2lGbVZFaVJUelhmVzFldzNuR0JDNkQrbHVSU1VWVDBKcjV4cDVpcXAx?=
- =?utf-8?B?VGlIN2hORjJjUlF2elRoMWpySmthMnZNVndiRm5Bc2Z4YkI2NkU2UXhnaTBU?=
- =?utf-8?B?d3cxOG1maDVXeTJrTlVCNWpTWE8rYnQzaVF2M05sRDFiMUNJU09mRW0wcGJO?=
- =?utf-8?B?ZXo2cjh3OEVTcS9IcVZtb3lyUFVBZzlsWDY3N29hTVJTYWVFL1hyZmdCNHB1?=
- =?utf-8?B?SU44a2pTUXVQbmtkbENyT2cyY0NnbmV6V3poTVpFelZWV1VLVUtrMnNmZU1j?=
- =?utf-8?B?QjFTRnNzOHh5aUZvNmFiUkJLdGFnZEQxakJiQ2pLTGNPbmpCNUFRNmlBNWp5?=
- =?utf-8?B?Yk9UWm5zcnd0TmMvWFFySE1zTGNPcFRkQmpzSjFVOVJ6cW5uc1dJVzdzZmho?=
- =?utf-8?B?elJqUkxJWHlyOUVZZGptQU5mdkxpVnVReG1SUVBmNUxkZkRIUStBYUVCaWov?=
- =?utf-8?B?Z1habkFOUGhKSHMwUnNyOXF2QXdKUDVRbEo2eG5OM0tCY2l3cUcrYXdadWxT?=
- =?utf-8?B?U2hOcG1hQ3ZNbTg2aGRFVWk0K0ZYRS90eFluaE81WXFWMEdWVmxaQXhIa1Nn?=
- =?utf-8?B?c0pDMk4rZlVQSkIrdGtjZWxYeHdDUFJYQVh6ZFp4TzFya2N1NkNKVlhaVXRh?=
- =?utf-8?B?bzFPS0U1U3B3eTE4YmQ1TTVtU2VXZUJlQmd0UjYxaXJYYXVFNDlKbDZMdDgv?=
- =?utf-8?B?K29wbzNtU1hINDJTWjFCYzBmNm84ZEtITHZINFFaRXJhMzlpcEd1TG5NSHhN?=
- =?utf-8?B?amROa29meStZZFVxT0V3QmU5NVA2NUp4Z2kwR3F4c2xqK1Rjbjd5YmU3Y2ln?=
- =?utf-8?B?UHYvSS8zc3Rocno0S3kwb0tYc2pXcW5BTWFwamtGNVMxOC9UdUV4eXJRaDNU?=
- =?utf-8?B?U2FKR3ZSbzlhTkRQWGVITFR1UEkrUWkyRnJGUzgrTk1tSUQwcjVBK3FSQWxY?=
- =?utf-8?B?MStoK0YxZEV1eEtZRWNmRHJxQVpOa3pBZE5rVVdXZDVRYnh3UVNTMzgvVTdi?=
- =?utf-8?B?aWhhdEJ1MGpQRkZCVThGZUppVGNKc0Y0Nk85OEZFRitwZFE9PQ==?=
-X-Forefront-Antispam-Report:
-	CIP:216.228.117.160;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230040)(82310400026)(1800799024)(376014)(7416014)(36860700013);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Jul 2024 00:01:55.9425
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 1667e350-5152-4741-711a-08dca2cf0244
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	SJ1PEPF000023D7.namprd21.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW3PR12MB4458
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZpGVLl7NQZScd8aH@google.com>
 
-On 7/12/24 4:51 PM, John Hubbard wrote:
-> Linux 6.6 does not have an opt_ipproto_off variable in gro.c at all (it
-> was added in later kernel versions), so attempting to initialize one
-> breaks the build.
-
-This is the first time I've tried to fix something in linux-stable, and
-I'm not sure that I've made it completely clear. This is only for
-linux-6.6.y in linux-stable.
-
-thanks,
--- 
-John Hubbard
-NVIDIA
-
+> > I like it more, when it's split onto several patches. We already have
+> > my bitmap.h rework and your cpumask.h one with their own reasonable
+> > motivations. Can you keep that patch structure please? Then, we can add
 > 
-> Fixes: c80d53c484e8 ("selftests/net: fix uninitialized variables")
-> Cc: <stable@vger.kernel.org> # 6.6
-> Reported-by: Ignat Korchagin <ignat@cloudflare.com>
-> Closes: https://lore.kernel.org/all/8B1717DB-8C4A-47EE-B28C-170B630C4639@cloudflare.com/#t
-> Signed-off-by: John Hubbard <jhubbard@nvidia.com>
-> ---
->   tools/testing/selftests/net/gro.c | 3 ---
->   1 file changed, 3 deletions(-)
+> I'm not quite sure what you mean. I imitated the patch structure of your
+> patch 1 that I linked, which had the following file-diff list:
 > 
-> diff --git a/tools/testing/selftests/net/gro.c b/tools/testing/selftests/net/gro.c
-> index b204df4f3332..30024d0ed373 100644
-> --- a/tools/testing/selftests/net/gro.c
-> +++ b/tools/testing/selftests/net/gro.c
-> @@ -113,9 +113,6 @@ static void setup_sock_filter(int fd)
->   		next_off = offsetof(struct ipv6hdr, nexthdr);
->   	ipproto_off = ETH_HLEN + next_off;
->   
-> -	/* Overridden later if exthdrs are used: */
-> -	opt_ipproto_off = ipproto_off;
-> -
->   	if (strcmp(testname, "ip") == 0) {
->   		if (proto == PF_INET)
->   			optlen = sizeof(struct ip_timestamp);
+>  include/linux/bitmap.h   |  46 ++++++-------
+>  include/linux/cpumask.h  | 144 +++++++++++++++++++--------------------
+>  include/linux/find.h     |  40 +++++------
+>  include/linux/nodemask.h |  86 +++++++++++------------
 > 
-> base-commit: 2ced7518a03d002284999ed8336ffac462a358ec
+> Are you suggesting I should split that into 2 (one for cpumask and one
+> for the rest)?
 
+I think the best way would be make a separate patch for each file:
 
+1. find.h - because all others include it for find_bit() functions.
+2. bitmap.h - pick my existing patch.
+3. cpumasks.h - pick your existing patch.
+4. nodemask.h - just the last piece.
+ 
+> > separate patches for find.h and nodemask.h. If rebasing the old bitmap.h
+> > patch isn't clean and takes some effort, feel free to add your
+> > co-developed-by.
+> 
+> I don't really care who gets authorship, but I did manually rewrite it,
+
+I do care about authorship. Not for vanity reasons, but because author
+is the first person to blame in case there's a reason to blame.
+
+> since there were enough conflicts, and it's basically scriptable. Feel
+> free to suggest which Author/S-o-b/Co-developed combo makes sense for
+> that, and I can adopt it in v3 :)
+
+Can you keep my authorship and commit message for bitmap.h please, and
+make sure that all the functions are __always_inline now? If you have
+to re-write it, Co-developed-by is a proper tag.
+
+> > > According to bloat-o-meter, my vmlinux decreased in size by a total of
+> > > 1538 bytes (-0.01%) with this change.
+> > > 
+> > > [0] CONFIG_HOTPLUG_PARALLEL=y ('select'ed for x86 as of [1]) and
+> > >     CONFIG_GCOV_PROFILE_ALL.
+> > > 
+> > > [1] commit 0c7ffa32dbd6 ("x86/smpboot/64: Implement
+> > >     arch_cpuhp_init_parallel_bringup() and enable it")
+> > > 
+> > > Cc: Yury Norov <yury.norov@gmail.com>
+> > > Signed-off-by: Brian Norris <briannorris@chromium.org>
+> > 
+> > So... This whole optimization is only worth the reviewer's time if we
+> > can prove it's sustainable across different compilers and configurations.
+> > 
+> > Just saying that under some particular config it works, brings little
+> > value for those who are not interested in that config. Moreover, if
+> > one enables GCOV, he likely doesn't care much about the .text size.
+> > And for those using release configs, it only brings uncertainty.
+> 
+> I think I partially disagree. If it's neutral for one compiler but
+> helpful for the other, that's still a win. But otherwise, I agree we
+> should have some accounting of diversity -- not just a single test.
+
+Sure, I just want to make sure this wouldn't bloat common sane configs.
++/- 100 bytes is a negligible noise. +2M for defconfig is not.
+
+> > Let's test it broader? We've got 2 main compilers - gcc and llvm, and
+> > at least two configurations that may be relevant: defconfig and your
+> > HOTPLUG_PARALLEL + GCOV_PROFILE_ALL. And it would be nice to prove
+> > that the optimization is sustainable across compiler versions.
+> > 
+> > I have the following table in mind:
+> > 
+> >            defconfig   your conf  
+> > GCC    9 |  -1900    |           |
+> > CLANG 13 |           |           |
+> > GCC   13 |           |           |
+> > CLANG 18 |  -100     |  -1538    |
+> > 
+> > The defconfig nubmers above are from my past experiments. And you can
+> > add more configs/compilers, of course.
+> 
+> Perhaps I wasn't too clear, but I was actually testing a few things:
+> 
+> * my ChromeOS-y build, with gcov and clang -- to ensure the section
+>   mismatch warning/error disappears
+> * a pure mainline / semi-defaults build (which happened to use my host
+>   distro's gcc 13), to do size comparisons. I also happened to enable
+>   gcov in the currently-posted experiments.
+> 
+> But agreed, I can get a larger matrix with a bit more specifity in my
+> commit log. TBD on the ease of getting a Clang 13 or GCC 9 toolchain,
+> but I think I can convince my distro to provide them.
+
+It looks like minimum Clang version is 14. The rest is good.
+
+Thanks,
+Yury
+
+> > > --- a/include/linux/bitmap.h
+> > > +++ b/include/linux/bitmap.h
+> > > @@ -203,7 +203,7 @@ unsigned long bitmap_find_next_zero_area_off(unsigned long *map,
+> > >   * the bit offset of all zero areas this function finds is multiples of that
+> > >   * power of 2. A @align_mask of 0 means no alignment is required.
+> > >   */
+> > > -static inline unsigned long
+> > > +static __always_inline unsigned long
+> > >  bitmap_find_next_zero_area(unsigned long *map,
+> > >  			   unsigned long size,
+> > >  			   unsigned long start,
+> > 
+> > Let's split them such that return type would be at the same line as
+> > the function name. It would help to distinguish function declaration
+> > from invocations in grep output:
+> 
+> Ack. I thought I was being consistent with existing cpumask.h style, but
+> I got this set wrong. Will fix.
+> 
+> Brian
