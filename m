@@ -1,160 +1,101 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A5E412B8B;
-	Sat, 13 Jul 2024 02:43:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E841EFC0B
+	for <llvm@lists.linux.dev>; Sat, 13 Jul 2024 03:02:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720838585; cv=none; b=gIsQKSq1iNwpaFPGdT+6N8DazboSAtT+YtvdbY+RYKia5sM0vp+sv7YSfNQn4A8HxKrLaakms5Q8gxUzTA7WCFX2FWa+W2prsUedcga/HZL/ZUEaxJ7wNxTu/CfHqcrmgwpzC2m/BbTUdw3eNFX2ulSNAYySoahQKa2TJho0+3s=
+	t=1720839730; cv=none; b=e9m/yVrJNxXjp68/2RO+cKQmclElYpAKD6ze+OjBA1qqGQsy2jvjjtJiD7qUDRAGhZn1QkAQOP2EyPur45xgYRruHwvXBsug7vsXHaBfKBPNPRyH2uY1wgRxWfx7kiyyekMzvKw7RXP6iJDxd877/g1Hlk8Ow/HOmnENZWo9EiE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720838585; c=relaxed/simple;
-	bh=c0cx8eCSqK5HZVrMPn+doc9P2P0lifDncReHUUcAH3k=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=qHJQrwD8DCxOOJA8WDCt6IebigbGNDKlWp01Bm+d8uScKb+qHIwJBQ28UgVrEzcAIIcgZL5/oEhuewBmlJbX7X6Bl0EOB6KiG9GGUn5Jf4W0Ydiny4e23TfcFknluwGq8tExsLV+NXtSohNKD0v2uhe9678oZQR57ztGg6Pj3K0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=GMA9YB6w; arc=none smtp.client-ip=192.198.163.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1720839730; c=relaxed/simple;
+	bh=rfuXTLTLGjGssAe42NSb2m9kDElzcSwakuBKQvugwTo=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=orIrkTOHnX64KQY+TVgodJ5JJPBrwfC8Jcxo6EzuCE053XvtUNlyQHDYsTHAl+9mvdGa1hh5CELEyrMUEM8lxc0LxC8pazvPAUGIGtEHP4mbbLOq4nyLrX4T4xYKnBHt4n4/FrakZhS6t20AaXE2Br8VDlKq6qpj8Jt11UVxJHc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=brA6AkJu; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="GMA9YB6w"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1720838584; x=1752374584;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=c0cx8eCSqK5HZVrMPn+doc9P2P0lifDncReHUUcAH3k=;
-  b=GMA9YB6wVHdJfVeBxcTr9cc3ROHk1beXrHl/XLfsv7PEJaRjRfwryICb
-   cYUoSnGH1M95qHkGqLh37U2MjVlOTatn1Xz6yl7QI6f9S2gjI20Y4P9at
-   YFXB+1+wgOLsMya+v47xcnis4nJJMRjD1z0ErmcdLa+EE8IjbKPHpU3EH
-   kHW9qxqSWNI3ypkFQEniXDQ6G9W+5hA1NbIkYVl7+Trps6pMb5aiaygiz
-   YwbHxmGprlm0wzxlrAy0L8KW2P1a7pIn3jWMq3s+8JN5guI/BkbNeEJYs
-   ia4mMF3oLgkLWOQY/FSYw+xh3YkYt07fQQU3/LJmoOFQBkVljpEnZA5FK
-   g==;
-X-CSE-ConnectionGUID: gt6IIVQ/TLi3dfZDg8U2uA==
-X-CSE-MsgGUID: xEWINfB2TvGIDmf79gRaxw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11131"; a="22165435"
-X-IronPort-AV: E=Sophos;i="6.09,204,1716274800"; 
-   d="scan'208";a="22165435"
-Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jul 2024 19:43:03 -0700
-X-CSE-ConnectionGUID: oLHqdyb5T2yapw+C1VEJmQ==
-X-CSE-MsgGUID: tWfou8M1SO2MrgcJfikAOg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.09,204,1716274800"; 
-   d="scan'208";a="72300665"
-Received: from lkp-server01.sh.intel.com (HELO 68891e0c336b) ([10.239.97.150])
-  by fmviesa002.fm.intel.com with ESMTP; 12 Jul 2024 19:43:00 -0700
-Received: from kbuild by 68891e0c336b with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1sSSiu-000bZy-2Q;
-	Sat, 13 Jul 2024 02:42:56 +0000
-Date: Sat, 13 Jul 2024 10:42:02 +0800
-From: kernel test robot <lkp@intel.com>
-To: Dikshita Agarwal <quic_dikshita@quicinc.com>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Stanimir Varbanov <stanimir.k.varbanov@gmail.com>,
-	Vikash Garodia <quic_vgarodia@quicinc.com>,
-	Bjorn Andersson <andersson@kernel.org>,
-	Konrad Dybcio <konrad.dybcio@linaro.org>,
-	Mauro Carvalho Chehab <mchehab@kernel.org>,
-	Ulf Hansson <ulf.hansson@linaro.org>,
-	Philipp Zabel <p.zabel@pengutronix.de>,
-	Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-media@vger.kernel.org, linux-pm@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org
-Subject: Re: [PATCH 1/2] PM: domains: add device managed version of
- dev_pm_domain_attach|detach_list()
-Message-ID: <202407131034.zV21FEsV-lkp@intel.com>
-References: <1720763312-13018-2-git-send-email-quic_dikshita@quicinc.com>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="brA6AkJu"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1720839727;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=5vcQHWEg5NjvYN/OjXjTwOLZ35GlmBzATnboTVdKHVs=;
+	b=brA6AkJubsYIGxZ4G0EcsDQe5Tc+jMkcRUcEu0F//uLGp5UNoW2FtCXpLbJxUZ+cLGNInc
+	XxiWVWjdw26SQwZzVxCiZToE1VBwSpyuo18M1pMnjZPJraGUWMnL1+YN4Ehm7sgCrkVqxf
+	Evy/G2mIYAIl8fTTtx/JBXWTTuiXcQs=
+Received: from mx-prod-mc-04.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-637-l13DsGijO4K0b7cwl9TTQA-1; Fri,
+ 12 Jul 2024 23:02:06 -0400
+X-MC-Unique: l13DsGijO4K0b7cwl9TTQA-1
+Received: from mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.40])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-04.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 3CB6819560B0
+	for <llvm@lists.linux.dev>; Sat, 13 Jul 2024 03:02:05 +0000 (UTC)
+Received: from [172.64.15.30] (unknown [10.30.34.46])
+	by mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 9558B1956066;
+	Sat, 13 Jul 2024 03:02:04 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.10.0-rc7,
+ mainline.kernel.org-clang, 528dd46d)
+Date: Sat, 13 Jul 2024 03:02:04 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1720763312-13018-2-git-send-email-quic_dikshita@quicinc.com>
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.40
+Message-Id: <47979.124071223020600857@us-mta-637.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Dikshita,
+Hi, we tested your kernel and here are the results:
 
-kernel test robot noticed the following build warnings:
-
-[auto build test WARNING on rafael-pm/linux-next]
-[also build test WARNING on rafael-pm/bleeding-edge linus/master v6.10-rc7 next-20240712]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Dikshita-Agarwal/PM-domains-add-device-managed-version-of-dev_pm_domain_attach-detach_list/20240712-135151
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git linux-next
-patch link:    https://lore.kernel.org/r/1720763312-13018-2-git-send-email-quic_dikshita%40quicinc.com
-patch subject: [PATCH 1/2] PM: domains: add device managed version of dev_pm_domain_attach|detach_list()
-config: x86_64-buildonly-randconfig-001-20240713 (https://download.01.org/0day-ci/archive/20240713/202407131034.zV21FEsV-lkp@intel.com/config)
-compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240713/202407131034.zV21FEsV-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202407131034.zV21FEsV-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> drivers/base/power/common.c:288: warning: Function parameter or struct member '_list' not described in 'devm_pm_domain_detach_list'
->> drivers/base/power/common.c:288: warning: expecting prototype for dev_pm_domain_detach_list(). Prototype was for devm_pm_domain_detach_list() instead
->> drivers/base/power/common.c:307: warning: Function parameter or struct member 'dev' not described in 'devm_pm_domain_attach_list'
->> drivers/base/power/common.c:307: warning: Function parameter or struct member 'data' not described in 'devm_pm_domain_attach_list'
->> drivers/base/power/common.c:307: warning: Function parameter or struct member 'list' not described in 'devm_pm_domain_attach_list'
+    Overall result: FAILED
+             Merge: OK
+           Compile: FAILED
 
 
-vim +288 drivers/base/power/common.c
+Kernel information:
+    Commit message: Merge tag 'net-6.10-rc8-2' of git://git.kernel.org/pub/=
+scm/linux/kernel/git/netdev/net
 
-   278	
-   279	/**
-   280	 * dev_pm_domain_detach_list - devres-enabled version of dev_pm_domain_detach_list.
-   281	 * @list: The list of PM domains to detach.
-   282	 *
-   283	 * This function reverse the actions from devm_pm_domain_attach_list().
-   284	 * it will be invoked during the remove phase from drivers implicitly if driver
-   285	 * uses devm_pm_domain_attach_list() to attach the PM domains.
-   286	 */
-   287	void devm_pm_domain_detach_list(void *_list)
- > 288	{
-   289		struct dev_pm_domain_list *list = _list;
-   290	
-   291		dev_pm_domain_detach_list(list);
-   292	}
-   293	EXPORT_SYMBOL_GPL(devm_pm_domain_detach_list);
-   294	
-   295	/**
-   296	 * devm_pm_domain_attach_list - devres-enabled version of dev_pm_domain_attach_list
-   297	 *
-   298	 * NOTE: this will also handle calling devm_pm_domain_detach_list() for
-   299	 * you during remove phase.
-   300	 *
-   301	 * Returns the number of attached PM domains or a negative error code in case of
-   302	 * a failure.
-   303	 */
-   304	int devm_pm_domain_attach_list(struct device *dev,
-   305				       const struct dev_pm_domain_attach_data *data,
-   306				       struct dev_pm_domain_list **list)
- > 307	{
-   308		int ret, num_pds = 0;
-   309	
-   310		num_pds = dev_pm_domain_attach_list(dev, data, list);
-   311	
-   312		ret = devm_add_action_or_reset(dev, devm_pm_domain_detach_list, (void *)list);
-   313		if (ret)
-   314			return ret;
-   315	
-   316		return num_pds;
-   317	}
-   318	EXPORT_SYMBOL_GPL(devm_pm_domain_attach_list);
-   319	
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1372070272
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+One or more kernel builds failed:
+    Unrecognized or new issues:
+         ppc64le - https://datawarehouse.cki-project.org/kcidb/builds/redha=
+t:1372070272-ppc64le-kernel
+           s390x - https://datawarehouse.cki-project.org/kcidb/builds/redha=
+t:1372070272-s390x-kernel
+          x86_64 (debug) - https://datawarehouse.cki-project.org/kcidb/buil=
+ds/redhat:1372070272-x86_64-kernel-debug
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
