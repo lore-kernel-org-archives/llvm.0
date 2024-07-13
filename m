@@ -1,73 +1,68 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1455417557;
-	Sat, 13 Jul 2024 03:17:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC64E1BDCF;
+	Sat, 13 Jul 2024 05:30:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720840627; cv=none; b=iqYHINZHFNKw4aYdtOV67DwJd+goTDDInG++G/EeoDB8OdauSvwam/1e9Z8jUQYXjXc5MbgGEvKo1QO4saDGQ/kMe7mnXg4WpQ6S3Updjq5WTub7Fqa8QTujW6c8llMNWusaac2nzLSLTlPGkV10HXmlsyIHKwGwQhNVvn3GDQI=
+	t=1720848612; cv=none; b=Fke9OBd3XVS6i4hQ+lYKszkp9R1eImfpURZw8Fq7HYPP37xXHS4RUHq/djOT8M5eOAUG7oqC6GanBSqHQPxVwSzLWcBpsTgKNMnUvzk8/wmBFG+V/1RkZdDjtnrmgqQ3gXFwHYi/KgzrTvxtqOOpp3wqD1uUothpEqFQFIe1F1Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720840627; c=relaxed/simple;
-	bh=cqXtSMLX0z2oaB34cPC8+RoGJShzn/idNzy5wtgQHMU=;
+	s=arc-20240116; t=1720848612; c=relaxed/simple;
+	bh=jmwJ71WEXluaTqG3XovhPZ2kzJJLnXc/RYX99R4FzDw=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=EhToHtCRUNWsn2vHpnS/nn6u+JSvWv573NMyeLNYXPGoO9MMCfVnMXJcUk5TUNQzo1Ngd1ahD+v/thvgIkQ5axBc6CJS1RvJOzcFMrfBTE/+4p3rgkK2Wkjd6NnQpFLm8FZMWT5ZR3e+G5nwzc3Ld6oTQvcl333GpfWw6LWlPeg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=gIOvkEy2; arc=none smtp.client-ip=198.175.65.12
+	 Content-Type:Content-Disposition:In-Reply-To; b=mOiPnZ9hG6/G+QB3+PdvpXW7398B9yWP+yHPB7zZJ2b9nom82bZ5ibsGpX6LCw3DfIjf/P1fY4OE3rry/5soWWFN+VTew7INaFQPclw9lOChgirbGLb+A/dnyLmzeuGBzvJeYuIftq7Nd6kv95O9+kMIbrBbTeexuyHg0zVN7DQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=hVx7qC+k; arc=none smtp.client-ip=198.175.65.11
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="gIOvkEy2"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="hVx7qC+k"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1720840625; x=1752376625;
+  t=1720848610; x=1752384610;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=cqXtSMLX0z2oaB34cPC8+RoGJShzn/idNzy5wtgQHMU=;
-  b=gIOvkEy2WQh8kI1piXDrzv+D0D9cHWE0R6Z+6i/FZbatUABE2lZkx54s
-   GYjMstaxfGJfqwvpj71WIH5Pdbm2ti0gjh2R3IhthCDhmlIMENMeNaL4m
-   iPdOYnNqpkaZTaSYMsqotsQOtrZPSYFggXnsOCr49GeSlCtn+terlxMZf
-   +P7We4834T5J4LplxUjP/8vSkAF9WhAen+C5RW7s+YsVgCH3K49fdMJ7L
-   qQKQRWyl6TKZwaGrTqEiy+AS1qOMjdE0qzdVTvztW6+MF1AAmC31NE+2O
-   5q+0LD75hfpS7DHBB51p4M0xCixD25cWp+OyBsgHClgf3vN2vS97cOWGx
-   w==;
-X-CSE-ConnectionGUID: AUt8YM7dTCC6N/8GA9mDVA==
-X-CSE-MsgGUID: KN+kMerLROKw5ZLXmblv6Q==
-X-IronPort-AV: E=McAfee;i="6700,10204,11131"; a="29688425"
-X-IronPort-AV: E=Sophos;i="6.09,204,1716274800"; 
-   d="scan'208";a="29688425"
-Received: from fmviesa005.fm.intel.com ([10.60.135.145])
-  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jul 2024 20:17:05 -0700
-X-CSE-ConnectionGUID: SH/MYtNRQEeFLxhQLqofRA==
-X-CSE-MsgGUID: PG09s4KXQjidP0SrBlDbsA==
+  bh=jmwJ71WEXluaTqG3XovhPZ2kzJJLnXc/RYX99R4FzDw=;
+  b=hVx7qC+kwnMOPwchrVqZPwrH9XKOMLFqwIE5hTsCxhu08Oz5UEspDa/S
+   9SmXONrlXa8NRl7TSgUT5xg/4gvqcU1rj+WuO5Rjp9RTYbdhdsWHU7Q7d
+   zjPcBR/vWhev3/Cpj6pcvCREpGGyEra9aTG9evu84jTu0WxRVXXcEYLye
+   v8xJw/8GJnYWv0/n3IoKaLH1zBg1wjZtkJ+dOoC7sRBKB4Wir24IBNj2L
+   XtrjlFPh9vWytjoDRZifN4Yl+7Epe7+MdsvPss66QQrh8f46AFGQoGRRV
+   9sDGUR9GidCbL/nvzkLxqQZBVmj5jBink8bNAmWr3eC2lG7ZaKcB11koz
+   Q==;
+X-CSE-ConnectionGUID: B3wQCxjzRvGofY2QzosaoA==
+X-CSE-MsgGUID: yALUEidnQCOTFEAYACk5kg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11131"; a="28894533"
+X-IronPort-AV: E=Sophos;i="6.09,205,1716274800"; 
+   d="scan'208";a="28894533"
+Received: from fmviesa006.fm.intel.com ([10.60.135.146])
+  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jul 2024 22:30:10 -0700
+X-CSE-ConnectionGUID: UePz+lSnTgGDV7cxYxkupQ==
+X-CSE-MsgGUID: m0al2iJcRAGaAvPo10n2CA==
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.09,204,1716274800"; 
-   d="scan'208";a="53459510"
+X-IronPort-AV: E=Sophos;i="6.09,205,1716274800"; 
+   d="scan'208";a="48846570"
 Received: from lkp-server01.sh.intel.com (HELO 68891e0c336b) ([10.239.97.150])
-  by fmviesa005.fm.intel.com with ESMTP; 12 Jul 2024 20:17:00 -0700
+  by fmviesa006.fm.intel.com with ESMTP; 12 Jul 2024 22:30:05 -0700
 Received: from kbuild by 68891e0c336b with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1sSTFp-000bbs-2U;
-	Sat, 13 Jul 2024 03:16:57 +0000
-Date: Sat, 13 Jul 2024 11:16:01 +0800
+	id 1sSVKc-000bjX-1U;
+	Sat, 13 Jul 2024 05:30:02 +0000
+Date: Sat, 13 Jul 2024 13:29:28 +0800
 From: kernel test robot <lkp@intel.com>
-To: Dikshita Agarwal <quic_dikshita@quicinc.com>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Stanimir Varbanov <stanimir.k.varbanov@gmail.com>,
-	Vikash Garodia <quic_vgarodia@quicinc.com>,
-	Bjorn Andersson <andersson@kernel.org>,
-	Konrad Dybcio <konrad.dybcio@linaro.org>,
-	Mauro Carvalho Chehab <mchehab@kernel.org>,
-	Ulf Hansson <ulf.hansson@linaro.org>,
-	Philipp Zabel <p.zabel@pengutronix.de>,
-	Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+To: Roman Kisel <romank@linux.microsoft.com>, akpm@linux-foundation.org,
+	apais@linux.microsoft.com, ardb@kernel.org, bigeasy@linutronix.de,
+	brauner@kernel.org, ebiederm@xmission.com, jack@suse.cz,
+	keescook@chromium.org, linux-fsdevel@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+	nagvijay@microsoft.com, oleg@redhat.com, tandersen@netflix.com,
+	vincent.whitchurch@axis.com, viro@zeniv.linux.org.uk
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-media@vger.kernel.org, linux-pm@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org
-Subject: Re: [PATCH 2/2] media: venus: use device managed APIs for power
- domains
-Message-ID: <202407131046.zNlz3AxD-lkp@intel.com>
-References: <1720763312-13018-3-git-send-email-quic_dikshita@quicinc.com>
+	apais@microsoft.com, benhill@microsoft.com, ssengar@microsoft.com,
+	sunilmut@microsoft.com, vdso@hexbites.dev
+Subject: Re: [PATCH v2 1/1] binfmt_elf, coredump: Log the reason of the
+ failed core dumps
+Message-ID: <202407131345.6cPoXZGa-lkp@intel.com>
+References: <20240712215223.605363-2-romank@linux.microsoft.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -76,183 +71,110 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1720763312-13018-3-git-send-email-quic_dikshita@quicinc.com>
+In-Reply-To: <20240712215223.605363-2-romank@linux.microsoft.com>
 
-Hi Dikshita,
+Hi Roman,
 
-kernel test robot noticed the following build errors:
+kernel test robot noticed the following build warnings:
 
-[auto build test ERROR on rafael-pm/linux-next]
-[also build test ERROR on rafael-pm/bleeding-edge media-tree/master linus/master v6.10-rc7 next-20240712]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+[auto build test WARNING on 831bcbcead6668ebf20b64fdb27518f1362ace3a]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Dikshita-Agarwal/PM-domains-add-device-managed-version-of-dev_pm_domain_attach-detach_list/20240712-135151
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git linux-next
-patch link:    https://lore.kernel.org/r/1720763312-13018-3-git-send-email-quic_dikshita%40quicinc.com
-patch subject: [PATCH 2/2] media: venus: use device managed APIs for power domains
-config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20240713/202407131046.zNlz3AxD-lkp@intel.com/config)
+url:    https://github.com/intel-lab-lkp/linux/commits/Roman-Kisel/binfmt_elf-coredump-Log-the-reason-of-the-failed-core-dumps/20240713-055749
+base:   831bcbcead6668ebf20b64fdb27518f1362ace3a
+patch link:    https://lore.kernel.org/r/20240712215223.605363-2-romank%40linux.microsoft.com
+patch subject: [PATCH v2 1/1] binfmt_elf, coredump: Log the reason of the failed core dumps
+config: arm-allnoconfig (https://download.01.org/0day-ci/archive/20240713/202407131345.6cPoXZGa-lkp@intel.com/config)
 compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project a0c6b8aef853eedaa0980f07c0a502a5a8a9740e)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240713/202407131046.zNlz3AxD-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240713/202407131345.6cPoXZGa-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202407131046.zNlz3AxD-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202407131345.6cPoXZGa-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
-   In file included from drivers/media/platform/qcom/venus/pm_helpers.c:9:
-   In file included from include/linux/iopoll.h:14:
-   In file included from include/linux/io.h:14:
-   In file included from arch/s390/include/asm/io.h:93:
-   include/asm-generic/io.h:548:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     548 |         val = __raw_readb(PCI_IOBASE + addr);
-         |                           ~~~~~~~~~~ ^
-   include/asm-generic/io.h:561:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     561 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
-      37 | #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
-         |                                                           ^
-   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
-     102 | #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
-         |                                                      ^
-   In file included from drivers/media/platform/qcom/venus/pm_helpers.c:9:
-   In file included from include/linux/iopoll.h:14:
-   In file included from include/linux/io.h:14:
-   In file included from arch/s390/include/asm/io.h:93:
-   include/asm-generic/io.h:574:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     574 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
-      35 | #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
-         |                                                           ^
-   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
-     115 | #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
-         |                                                      ^
-   In file included from drivers/media/platform/qcom/venus/pm_helpers.c:9:
-   In file included from include/linux/iopoll.h:14:
-   In file included from include/linux/io.h:14:
-   In file included from arch/s390/include/asm/io.h:93:
-   include/asm-generic/io.h:585:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     585 |         __raw_writeb(value, PCI_IOBASE + addr);
-         |                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:595:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     595 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:605:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     605 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:693:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     693 |         readsb(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:701:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     701 |         readsw(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:709:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     709 |         readsl(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:718:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     718 |         writesb(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   include/asm-generic/io.h:727:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     727 |         writesw(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   include/asm-generic/io.h:736:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     736 |         writesl(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   In file included from drivers/media/platform/qcom/venus/pm_helpers.c:11:
-   In file included from include/linux/pm_domain.h:11:
-   In file included from include/linux/device.h:32:
-   In file included from include/linux/device/driver.h:21:
-   In file included from include/linux/module.h:19:
-   In file included from include/linux/elf.h:6:
-   In file included from arch/s390/include/asm/elf.h:173:
-   In file included from arch/s390/include/asm/mmu_context.h:11:
-   In file included from arch/s390/include/asm/pgalloc.h:18:
-   In file included from include/linux/mm.h:2258:
-   include/linux/vmstat.h:500:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     500 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     501 |                            item];
-         |                            ~~~~
-   include/linux/vmstat.h:507:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     507 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     508 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
+   In file included from fs/coredump.c:6:
+   In file included from include/linux/mm.h:2253:
    include/linux/vmstat.h:514:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
      514 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
          |                               ~~~~~~~~~~~ ^ ~~~
-   include/linux/vmstat.h:519:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     519 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     520 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/vmstat.h:528:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     528 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     529 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
->> drivers/media/platform/qcom/venus/pm_helpers.c:872:8: error: call to undeclared function 'devm_pm_domain_attach_list'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     872 |         ret = devm_pm_domain_attach_list(dev, &vcodec_data, &core->pmdomains);
-         |               ^
-   drivers/media/platform/qcom/venus/pm_helpers.c:872:8: note: did you mean 'dev_pm_domain_attach_list'?
-   include/linux/pm_domain.h:483:19: note: 'dev_pm_domain_attach_list' declared here
-     483 | static inline int dev_pm_domain_attach_list(struct device *dev,
-         |                   ^
-   17 warnings and 1 error generated.
+>> fs/coredump.c:875:34: warning: format specifies type 'long' but the argument has type 'ssize_t' (aka 'int') [-Wformat]
+     874 |                         pr_err_ratelimited("Core dump of %s(PID %d) failed when writing out, error %ld\n",
+         |                                                                                                    ~~~
+         |                                                                                                    %zd
+     875 |                                 current->comm, current->pid, n);
+         |                                                              ^
+   include/linux/printk.h:672:45: note: expanded from macro 'pr_err_ratelimited'
+     672 |         printk_ratelimited(KERN_ERR pr_fmt(fmt), ##__VA_ARGS__)
+         |                                            ~~~     ^~~~~~~~~~~
+   include/linux/printk.h:658:17: note: expanded from macro 'printk_ratelimited'
+     658 |                 printk(fmt, ##__VA_ARGS__);                             \
+         |                        ~~~    ^~~~~~~~~~~
+   include/linux/printk.h:464:60: note: expanded from macro 'printk'
+     464 | #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
+         |                                                     ~~~    ^~~~~~~~~~~
+   include/linux/printk.h:436:19: note: expanded from macro 'printk_index_wrap'
+     436 |                 _p_func(_fmt, ##__VA_ARGS__);                           \
+         |                         ~~~~    ^~~~~~~~~~~
+   fs/coredump.c:878:34: warning: format specifies type 'long' but the argument has type 'ssize_t' (aka 'int') [-Wformat]
+     877 |                         pr_err_ratelimited("Core dump of %s(PID %d) partially written out, only %ld(of %d) bytes written\n",
+         |                                                                                                 ~~~
+         |                                                                                                 %zd
+     878 |                                 current->comm, current->pid, n, nr);
+         |                                                              ^
+   include/linux/printk.h:672:45: note: expanded from macro 'pr_err_ratelimited'
+     672 |         printk_ratelimited(KERN_ERR pr_fmt(fmt), ##__VA_ARGS__)
+         |                                            ~~~     ^~~~~~~~~~~
+   include/linux/printk.h:658:17: note: expanded from macro 'printk_ratelimited'
+     658 |                 printk(fmt, ##__VA_ARGS__);                             \
+         |                        ~~~    ^~~~~~~~~~~
+   include/linux/printk.h:464:60: note: expanded from macro 'printk'
+     464 | #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
+         |                                                     ~~~    ^~~~~~~~~~~
+   include/linux/printk.h:436:19: note: expanded from macro 'printk_index_wrap'
+     436 |                 _p_func(_fmt, ##__VA_ARGS__);                           \
+         |                         ~~~~    ^~~~~~~~~~~
+   3 warnings generated.
 
 
-vim +/devm_pm_domain_attach_list +872 drivers/media/platform/qcom/venus/pm_helpers.c
+vim +875 fs/coredump.c
 
-   856	
-   857	static int vcodec_domains_get(struct venus_core *core)
-   858	{
-   859		int ret;
-   860		struct device **opp_virt_dev;
-   861		struct device *dev = core->dev;
-   862		const struct venus_resources *res = core->res;
-   863		struct dev_pm_domain_attach_data vcodec_data = {
-   864			.pd_names = res->vcodec_pmdomains,
-   865			.num_pd_names = res->vcodec_pmdomains_num,
-   866			.pd_flags = PD_FLAG_NO_DEV_LINK,
-   867		};
+   854	
+   855	/*
+   856	 * Core dumping helper functions.  These are the only things you should
+   857	 * do on a core-file: use only these functions to write out all the
+   858	 * necessary info.
+   859	 */
+   860	static int __dump_emit(struct coredump_params *cprm, const void *addr, int nr)
+   861	{
+   862		struct file *file = cprm->file;
+   863		loff_t pos = file->f_pos;
+   864		ssize_t n;
+   865		if (cprm->written + nr > cprm->limit)
+   866			return 0;
+   867	
    868	
-   869		if (!res->vcodec_pmdomains_num)
-   870			goto skip_pmdomains;
-   871	
- > 872		ret = devm_pm_domain_attach_list(dev, &vcodec_data, &core->pmdomains);
-   873		if (ret < 0)
-   874			return ret;
-   875	
-   876	skip_pmdomains:
-   877		if (!core->res->opp_pmdomain)
-   878			return 0;
+   869		if (dump_interrupted())
+   870			return 0;
+   871		n = __kernel_write(file, addr, nr, &pos);
+   872		if (n != nr) {
+   873			if (n < 0)
+   874				pr_err_ratelimited("Core dump of %s(PID %d) failed when writing out, error %ld\n",
+ > 875					current->comm, current->pid, n);
+   876			else
+   877				pr_err_ratelimited("Core dump of %s(PID %d) partially written out, only %ld(of %d) bytes written\n",
+   878					current->comm, current->pid, n, nr);
    879	
-   880		/* Attach the power domain for setting performance state */
-   881		ret = devm_pm_opp_attach_genpd(dev, res->opp_pmdomain, &opp_virt_dev);
-   882		if (ret)
-   883			goto opp_attach_err;
-   884	
-   885		core->opp_pmdomain = *opp_virt_dev;
-   886		core->opp_dl_venus = device_link_add(dev, core->opp_pmdomain,
-   887						     DL_FLAG_RPM_ACTIVE |
-   888						     DL_FLAG_PM_RUNTIME |
-   889						     DL_FLAG_STATELESS);
-   890		if (!core->opp_dl_venus) {
-   891			ret = -ENODEV;
-   892			goto opp_attach_err;
-   893		}
-   894	
-   895		return 0;
-   896	
-   897	opp_attach_err:
-   898		return ret;
-   899	}
-   900	
+   880			return 0;
+   881		}
+   882		file->f_pos = pos;
+   883		cprm->written += n;
+   884		cprm->pos += n;
+   885	
+   886		return 1;
+   887	}
+   888	
 
 -- 
 0-DAY CI Kernel Test Service
