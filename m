@@ -1,68 +1,63 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC64E1BDCF;
-	Sat, 13 Jul 2024 05:30:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 252F93C482;
+	Sat, 13 Jul 2024 08:51:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720848612; cv=none; b=Fke9OBd3XVS6i4hQ+lYKszkp9R1eImfpURZw8Fq7HYPP37xXHS4RUHq/djOT8M5eOAUG7oqC6GanBSqHQPxVwSzLWcBpsTgKNMnUvzk8/wmBFG+V/1RkZdDjtnrmgqQ3gXFwHYi/KgzrTvxtqOOpp3wqD1uUothpEqFQFIe1F1Q=
+	t=1720860678; cv=none; b=iaahqka3Ika/0aqEX386jNdyJxPpFxaWvgfWpgyZnMeTPymQvygipDd7LqlhOEmaSPifwCARxVJempGlMh2J1pXJi0X/qm5Ro7Qh7yM9RbOUEb1KZ5f3VJu8q1dNR6aI+IJlbYP18ZvXwwODP5qB18qkQRafMWfCQYzBxkNTuQM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720848612; c=relaxed/simple;
-	bh=jmwJ71WEXluaTqG3XovhPZ2kzJJLnXc/RYX99R4FzDw=;
+	s=arc-20240116; t=1720860678; c=relaxed/simple;
+	bh=1o1g4gZYrN8TVmq5y5JEEypnsywvx7tYdlf5nmnIfdQ=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=mOiPnZ9hG6/G+QB3+PdvpXW7398B9yWP+yHPB7zZJ2b9nom82bZ5ibsGpX6LCw3DfIjf/P1fY4OE3rry/5soWWFN+VTew7INaFQPclw9lOChgirbGLb+A/dnyLmzeuGBzvJeYuIftq7Nd6kv95O9+kMIbrBbTeexuyHg0zVN7DQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=hVx7qC+k; arc=none smtp.client-ip=198.175.65.11
+	 Content-Type:Content-Disposition:In-Reply-To; b=c1XO6HYOpmf8b4yeJgIDZdHlotgC6aOcZmbf68ljRUsdExMN+JujREWk/LkX3zoeyQZHEZbbtjqqVEH3ikKFAWAKfssfsZnDy33kU8EIwNwShdcJOJ7SubwxKJ4Trprq+FCxsh1JMdA3FgjgPj8lb3gHlOUhWBQCgy+ifWDHnfU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=P5cIyHQJ; arc=none smtp.client-ip=192.198.163.17
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="hVx7qC+k"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="P5cIyHQJ"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1720848610; x=1752384610;
+  t=1720860677; x=1752396677;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=jmwJ71WEXluaTqG3XovhPZ2kzJJLnXc/RYX99R4FzDw=;
-  b=hVx7qC+kwnMOPwchrVqZPwrH9XKOMLFqwIE5hTsCxhu08Oz5UEspDa/S
-   9SmXONrlXa8NRl7TSgUT5xg/4gvqcU1rj+WuO5Rjp9RTYbdhdsWHU7Q7d
-   zjPcBR/vWhev3/Cpj6pcvCREpGGyEra9aTG9evu84jTu0WxRVXXcEYLye
-   v8xJw/8GJnYWv0/n3IoKaLH1zBg1wjZtkJ+dOoC7sRBKB4Wir24IBNj2L
-   XtrjlFPh9vWytjoDRZifN4Yl+7Epe7+MdsvPss66QQrh8f46AFGQoGRRV
-   9sDGUR9GidCbL/nvzkLxqQZBVmj5jBink8bNAmWr3eC2lG7ZaKcB11koz
-   Q==;
-X-CSE-ConnectionGUID: B3wQCxjzRvGofY2QzosaoA==
-X-CSE-MsgGUID: yALUEidnQCOTFEAYACk5kg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11131"; a="28894533"
+  bh=1o1g4gZYrN8TVmq5y5JEEypnsywvx7tYdlf5nmnIfdQ=;
+  b=P5cIyHQJKBxsztMtfvbk9VeCEvRqXAA5Xzf0Anyi2XzyV+B+GJN1tpGR
+   3sW9ia1o3wfz5mIpJt1+ubE1WzPVh9zK098xXNmi2Zhvr1kvEUN5gGNfh
+   tHO5yJyz6oRXO7ZY7FWy6EI/pGhsK5ja46fvxTESH++O6ax1Tr7CIFaCy
+   u8ZD8Xe3q8sS3B6OlOo9XOod7+nU6dgKsHXzkR7XgNH3+gkD8Wxctk3Do
+   LsxQh47q88aBuCG8/33df+RF35tOQ1Pv/LB7fB5e1UvLVJr5bpswczE2s
+   wS94M0SETNejx6UtafGHO1WGbzN/EujQoaYoUhModRVft8U7KGHDjDrwP
+   g==;
+X-CSE-ConnectionGUID: DbCEOeyxQjinRYSHL8TAyQ==
+X-CSE-MsgGUID: LgpteDC9Qmqeto/pR49pOg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11131"; a="18175586"
 X-IronPort-AV: E=Sophos;i="6.09,205,1716274800"; 
-   d="scan'208";a="28894533"
-Received: from fmviesa006.fm.intel.com ([10.60.135.146])
-  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jul 2024 22:30:10 -0700
-X-CSE-ConnectionGUID: UePz+lSnTgGDV7cxYxkupQ==
-X-CSE-MsgGUID: m0al2iJcRAGaAvPo10n2CA==
+   d="scan'208";a="18175586"
+Received: from orviesa004.jf.intel.com ([10.64.159.144])
+  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jul 2024 01:51:14 -0700
+X-CSE-ConnectionGUID: HEQp0rVUQHy31iVMhja4CQ==
+X-CSE-MsgGUID: u7SKODaJRFin95NnL/NO4w==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.09,205,1716274800"; 
-   d="scan'208";a="48846570"
+   d="scan'208";a="54317316"
 Received: from lkp-server01.sh.intel.com (HELO 68891e0c336b) ([10.239.97.150])
-  by fmviesa006.fm.intel.com with ESMTP; 12 Jul 2024 22:30:05 -0700
+  by orviesa004.jf.intel.com with ESMTP; 13 Jul 2024 01:51:10 -0700
 Received: from kbuild by 68891e0c336b with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1sSVKc-000bjX-1U;
-	Sat, 13 Jul 2024 05:30:02 +0000
-Date: Sat, 13 Jul 2024 13:29:28 +0800
+	id 1sSYTE-000bte-0o;
+	Sat, 13 Jul 2024 08:51:08 +0000
+Date: Sat, 13 Jul 2024 16:50:18 +0800
 From: kernel test robot <lkp@intel.com>
-To: Roman Kisel <romank@linux.microsoft.com>, akpm@linux-foundation.org,
-	apais@linux.microsoft.com, ardb@kernel.org, bigeasy@linutronix.de,
-	brauner@kernel.org, ebiederm@xmission.com, jack@suse.cz,
-	keescook@chromium.org, linux-fsdevel@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-	nagvijay@microsoft.com, oleg@redhat.com, tandersen@netflix.com,
-	vincent.whitchurch@axis.com, viro@zeniv.linux.org.uk
+To: wangshuaijie@awinic.com, jic23@kernel.org, lars@metafoo.de,
+	robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
+	waqar.hameed@axis.com, linux-iio@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	apais@microsoft.com, benhill@microsoft.com, ssengar@microsoft.com,
-	sunilmut@microsoft.com, vdso@hexbites.dev
-Subject: Re: [PATCH v2 1/1] binfmt_elf, coredump: Log the reason of the
- failed core dumps
-Message-ID: <202407131345.6cPoXZGa-lkp@intel.com>
-References: <20240712215223.605363-2-romank@linux.microsoft.com>
+	wangshuaijie@awinic.com, liweilei@awinic.com, kangjiajun@awinic.com
+Subject: Re: [PATCH V3 2/2] Add support for Awinic proximity sensor
+Message-ID: <202407131612.g95L1k7k-lkp@intel.com>
+References: <20240712113200.2468249-3-wangshuaijie@awinic.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -71,110 +66,118 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240712215223.605363-2-romank@linux.microsoft.com>
+In-Reply-To: <20240712113200.2468249-3-wangshuaijie@awinic.com>
 
-Hi Roman,
+Hi,
 
-kernel test robot noticed the following build warnings:
+kernel test robot noticed the following build errors:
 
-[auto build test WARNING on 831bcbcead6668ebf20b64fdb27518f1362ace3a]
+[auto build test ERROR on 43db1e03c086ed20cc75808d3f45e780ec4ca26e]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Roman-Kisel/binfmt_elf-coredump-Log-the-reason-of-the-failed-core-dumps/20240713-055749
-base:   831bcbcead6668ebf20b64fdb27518f1362ace3a
-patch link:    https://lore.kernel.org/r/20240712215223.605363-2-romank%40linux.microsoft.com
-patch subject: [PATCH v2 1/1] binfmt_elf, coredump: Log the reason of the failed core dumps
-config: arm-allnoconfig (https://download.01.org/0day-ci/archive/20240713/202407131345.6cPoXZGa-lkp@intel.com/config)
+url:    https://github.com/intel-lab-lkp/linux/commits/wangshuaijie-awinic-com/dt-bindings-iio-Add-YAML-to-Awinic-proximity-sensor/20240712-194024
+base:   43db1e03c086ed20cc75808d3f45e780ec4ca26e
+patch link:    https://lore.kernel.org/r/20240712113200.2468249-3-wangshuaijie%40awinic.com
+patch subject: [PATCH V3 2/2] Add support for Awinic proximity sensor
+config: um-randconfig-002-20240713 (https://download.01.org/0day-ci/archive/20240713/202407131612.g95L1k7k-lkp@intel.com/config)
 compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project a0c6b8aef853eedaa0980f07c0a502a5a8a9740e)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240713/202407131345.6cPoXZGa-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240713/202407131612.g95L1k7k-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202407131345.6cPoXZGa-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202407131612.g95L1k7k-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>, old ones prefixed by <<):
 
-   In file included from fs/coredump.c:6:
-   In file included from include/linux/mm.h:2253:
-   include/linux/vmstat.h:514:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     514 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
->> fs/coredump.c:875:34: warning: format specifies type 'long' but the argument has type 'ssize_t' (aka 'int') [-Wformat]
-     874 |                         pr_err_ratelimited("Core dump of %s(PID %d) failed when writing out, error %ld\n",
-         |                                                                                                    ~~~
-         |                                                                                                    %zd
-     875 |                                 current->comm, current->pid, n);
-         |                                                              ^
-   include/linux/printk.h:672:45: note: expanded from macro 'pr_err_ratelimited'
-     672 |         printk_ratelimited(KERN_ERR pr_fmt(fmt), ##__VA_ARGS__)
-         |                                            ~~~     ^~~~~~~~~~~
-   include/linux/printk.h:658:17: note: expanded from macro 'printk_ratelimited'
-     658 |                 printk(fmt, ##__VA_ARGS__);                             \
-         |                        ~~~    ^~~~~~~~~~~
-   include/linux/printk.h:464:60: note: expanded from macro 'printk'
-     464 | #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
-         |                                                     ~~~    ^~~~~~~~~~~
-   include/linux/printk.h:436:19: note: expanded from macro 'printk_index_wrap'
-     436 |                 _p_func(_fmt, ##__VA_ARGS__);                           \
-         |                         ~~~~    ^~~~~~~~~~~
-   fs/coredump.c:878:34: warning: format specifies type 'long' but the argument has type 'ssize_t' (aka 'int') [-Wformat]
-     877 |                         pr_err_ratelimited("Core dump of %s(PID %d) partially written out, only %ld(of %d) bytes written\n",
-         |                                                                                                 ~~~
-         |                                                                                                 %zd
-     878 |                                 current->comm, current->pid, n, nr);
-         |                                                              ^
-   include/linux/printk.h:672:45: note: expanded from macro 'pr_err_ratelimited'
-     672 |         printk_ratelimited(KERN_ERR pr_fmt(fmt), ##__VA_ARGS__)
-         |                                            ~~~     ^~~~~~~~~~~
-   include/linux/printk.h:658:17: note: expanded from macro 'printk_ratelimited'
-     658 |                 printk(fmt, ##__VA_ARGS__);                             \
-         |                        ~~~    ^~~~~~~~~~~
-   include/linux/printk.h:464:60: note: expanded from macro 'printk'
-     464 | #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
-         |                                                     ~~~    ^~~~~~~~~~~
-   include/linux/printk.h:436:19: note: expanded from macro 'printk_index_wrap'
-     436 |                 _p_func(_fmt, ##__VA_ARGS__);                           \
-         |                         ~~~~    ^~~~~~~~~~~
-   3 warnings generated.
-
-
-vim +875 fs/coredump.c
-
-   854	
-   855	/*
-   856	 * Core dumping helper functions.  These are the only things you should
-   857	 * do on a core-file: use only these functions to write out all the
-   858	 * necessary info.
-   859	 */
-   860	static int __dump_emit(struct coredump_params *cprm, const void *addr, int nr)
-   861	{
-   862		struct file *file = cprm->file;
-   863		loff_t pos = file->f_pos;
-   864		ssize_t n;
-   865		if (cprm->written + nr > cprm->limit)
-   866			return 0;
-   867	
-   868	
-   869		if (dump_interrupted())
-   870			return 0;
-   871		n = __kernel_write(file, addr, nr, &pos);
-   872		if (n != nr) {
-   873			if (n < 0)
-   874				pr_err_ratelimited("Core dump of %s(PID %d) failed when writing out, error %ld\n",
- > 875					current->comm, current->pid, n);
-   876			else
-   877				pr_err_ratelimited("Core dump of %s(PID %d) partially written out, only %ld(of %d) bytes written\n",
-   878					current->comm, current->pid, n, nr);
-   879	
-   880			return 0;
-   881		}
-   882		file->f_pos = pos;
-   883		cprm->written += n;
-   884		cprm->pos += n;
-   885	
-   886		return 1;
-   887	}
-   888	
+WARNING: modpost: missing MODULE_DESCRIPTION() in kernel/locking/locktorture.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in kernel/rcu/rcuscale.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in kernel/time/time_test.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in kernel/resource_kunit.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in kernel/scftorture.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in mm/dmapool_test.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in fs/nls/nls_cp860.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in fs/nls/nls_cp865.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in fs/nls/nls_cp866.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in fs/nls/nls_cp950.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in fs/nls/nls_ascii.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in fs/nls/nls_iso8859-1.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in fs/nls/nls_iso8859-5.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in fs/nls/nls_iso8859-15.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in fs/nls/nls_koi8-r.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in fs/nls/mac-celtic.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in fs/nls/mac-centeuro.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in fs/nls/mac-croatian.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in fs/nls/mac-cyrillic.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in fs/nls/mac-gaelic.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in fs/nls/mac-greek.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in fs/nls/mac-turkish.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in security/keys/trusted-keys/trusted.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in crypto/curve25519-generic.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in lib/kunit/kunit-test.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in lib/kunit/kunit-example-test.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in lib/math/rational-test.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in lib/crypto/libdes.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in lib/find_bit_benchmark.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in lib/test_bpf.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in lib/test_firmware.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in lib/cpumask_kunit.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in lib/test_sysctl.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in lib/test_module.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in lib/test_sort.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in lib/test_static_keys.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in lib/test_static_key_base.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in lib/test_bitmap.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in lib/test_blackhole_dev.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in lib/test_meminit.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in lib/test_objpool.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in lib/atomic64_test.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in lib/asn1_encoder.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in lib/checksum_kunit.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in lib/test_linear_ranges.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in lib/test_bits.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in lib/is_signed_type_kunit.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in lib/stackinit_kunit.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in lib/fortify_kunit.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/pci/pci-stub.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/vdpa/ifcvf/ifcvf.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/regulator/max20411-regulator.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/regulator/rt4831-regulator.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/tty/serial/8250/serial_cs.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/tty/n_hdlc.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/tty/n_gsm.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/char/ppdev.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/base/regmap/regmap-kunit.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/base/regmap/regmap-ram.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/base/regmap/regmap-raw-ram.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/base/regmap/regmap-slimbus.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/base/regmap/regmap-spmi.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/mfd/timberdale.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/mtd/chips/cfi_util.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/spi/spi-altera-core.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/spmi/hisi-spmi-controller.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/auxdisplay/hd44780_common.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/media/v4l2-core/v4l2-fwnode.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/media/common/videobuf2/videobuf2-dvb.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/media/pci/saa7134/saa7134-alsa.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/media/pci/saa7134/saa7134-dvb.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/media/radio/si470x/radio-si470x-common.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/isdn/mISDN/mISDN_core.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/isdn/mISDN/mISDN_dsp.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/mmc/host/of_mmc_spi.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/mmc/core/mmc_core.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/mmc/core/sdio_uart.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/parport/parport.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/uio/uio.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/uio/uio_cif.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/uio/uio_aec.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/uio/uio_netx.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/uio/uio_mf624.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/pcmcia/pcmcia_rsrc.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/pcmcia/yenta_socket.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/greybus/greybus.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/iio/buffer/kfifo_buf.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/siox/siox-bus-gpio.o
+>> ERROR: modpost: "power_supply_unreg_notifier" [drivers/iio/proximity/awinic_sar.ko] undefined!
 
 -- 
 0-DAY CI Kernel Test Service
