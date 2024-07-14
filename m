@@ -1,149 +1,105 @@
-Received: from mail-oo1-f50.google.com (mail-oo1-f50.google.com [209.85.161.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C4A2F9C9
-	for <llvm@lists.linux.dev>; Sun, 14 Jul 2024 17:30:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C66F43BB23;
+	Sun, 14 Jul 2024 18:09:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720978230; cv=none; b=J93M9Fjeq9TZ+K1AfwMixVnarjuR9PG8WTjP11r/snrl8ZU7/rzNurc0Cygz/bPAcvmJHkvH2mE0LD5vQWZsl0Fr7jcmr2vYSW1jc9cdPsltE9oHpdriItP1Ep7nUnwJFvUfDIvghO8sydi39TZJbtUw+JF/oMvdhdfpJ7SowrY=
+	t=1720980596; cv=none; b=JbAYS4ZZeXdGQsShMrajsiLvx9LE9qqHDsRPdiVlnqnZBKX5AHyi+HgJisACBfdW+URz4CmVWehI3/TJdKEDd8EZMs6ZTpii6TVkHqJsrkmrB58VQzwV4ibTDjKUwTZVMMqgGhTmnti8eWlUqG6EGFp0wXhcaVa/28wmc5Jyjv4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720978230; c=relaxed/simple;
-	bh=eoz4ISS7d2sH2hTa7QRiAuGG1rWHxXjixXnT2ssYqnM=;
+	s=arc-20240116; t=1720980596; c=relaxed/simple;
+	bh=Dl5jmsuCn3rUPbU1p56YwE5+B5i/ZUzLYhvRRqPoSSY=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=AO3Fj0XMJKh90T00COq5XQ16IqaOB66SioCeLGAnkpqzmySy2je2+ttMsFf35wmO89Wu5QQtaXKKxnZbLHguo/VA+DIYjEzL9EiS9qx1UrU2c4RvjFp1K/yAkHqFAR7mU3sApNpOTx1syAqYeRTwgaS4sSKRVeAsSWWHV04YVHs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=X0gA+Iw3; arc=none smtp.client-ip=209.85.161.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	 To:Cc:Content-Type; b=EL7JF9EfrnILuKFfWAEZzayhwe4FGsunWpn/6REsqKgnokp4FLzJcd+PGEGP+m9aCrubtBlrNbBKKuX+xRAXQlHHrgZbYYp+7R/eP3nF5fEAUNJ6le8AXTVy2swvD5d6mNrrd4PaqIQToeEPKArVGOakDvhYwKzULolMtA3/mag=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Y7xkjT45; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="X0gA+Iw3"
-Received: by mail-oo1-f50.google.com with SMTP id 006d021491bc7-5c697fc4aa2so2555061eaf.2
-        for <llvm@lists.linux.dev>; Sun, 14 Jul 2024 10:30:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1720978228; x=1721583028; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=/cLW4DNVGNshBrBTsdLmOTS96GV7TP/xD70TwT5VJ2s=;
-        b=X0gA+Iw3fS54itkR4dp0KP9Ne1nmTty4awRLFYJL2xsuxCNV1HKCGYSZGyNrnJWHDR
-         L6bkGPY6u0Vr2MM6fLCefBf1IiCS8IvU5pAYFGidFkumm7e72KI+beMr8UHmRwtA4NLU
-         FKrwHlZjYeMlkm30h93h1B1Wihfo1ujFtrOhUtfJtEBpVt86WkB6vKZ5r0qNWELMc4Qd
-         Ogbwi4bmBSuK0uhb1PeUbu2RNlZJkrbey/ZeelAcksUfn/LQLQ8VzQMHW5P8f/TbBdsz
-         g9Xyu3Gdu3OmNh5pRYBfNJ2h6SbeuVo4noCgXpbwvRVPfPg3r1c/QM6Ot0f+Ujvfs8Jw
-         krBg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1720978228; x=1721583028;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=/cLW4DNVGNshBrBTsdLmOTS96GV7TP/xD70TwT5VJ2s=;
-        b=g0JrJmImJ67vbW3sdYR2+v0/5yy1OxBH8vFmROfvjkjF2fKjXL8d3vZXevmAWmF5+l
-         d6qzToBINJQ1bxVSOhftyJuOe0CZyP7GSK/7aijRyC6A7Cs2bRyTCm/QsVfgwxSroUrQ
-         4i++FgPlPOcQL+rbrhcutJI7K9HNinZ4JNegihOxNrMSxbiPShNQryVqI4brNUkgwC7d
-         xUs7u0CXww8yNvsPBzoG5uSn51HL3iAjN47DGfSOnnGB12HfmwJkrZ2PnXAYVBL1tlug
-         0N3H7KgFXECmshyS6iuSi+LnOy/WqJmITBETqFbhrdch9FCDYYoFEEYG7kJpSSEZtDuY
-         f4kw==
-X-Forwarded-Encrypted: i=1; AJvYcCXRg8gUvR4MRUmGS9zbSyoFBfYmJ3lJN4epzKDBahfBP5925Om9JcfIoxY2bz9I6g/55ucDmxaCTFcog5XlL9MOE1DtiA==
-X-Gm-Message-State: AOJu0YwhRZqt3uxMo1YJd69MbgH1zE3P5iIJWD76NKjdP8guXm6jc5pI
-	VAgUrDnYp3sOtI2BuA0JH+N+ifuWr6iY8h70ekJboW1d82J95nCrt5BtFPG2e9gx3PtjhfNDyms
-	OAGfKjPzlAJwa/ykebKEP4b0tDVA=
-X-Google-Smtp-Source: AGHT+IEl8QKe4NvFcBM4q9JGhb2MwGeuTO3IyYzcItTz+lIQYAUJkOIhJojhagfWcGc8DwiST3dj+mLBvjJ/MoDWQBw=
-X-Received: by 2002:a05:6358:70b:b0:1ac:6234:faaf with SMTP id
- e5c5f4694b2df-1ac6234fdc4mr496748155d.17.1720978227984; Sun, 14 Jul 2024
- 10:30:27 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Y7xkjT45"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 789DCC116B1;
+	Sun, 14 Jul 2024 18:09:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1720980596;
+	bh=Dl5jmsuCn3rUPbU1p56YwE5+B5i/ZUzLYhvRRqPoSSY=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=Y7xkjT45wa5JM5Q1pBPemg7tNyhms3PYmQmofKI8NRB+9pvrv5Zpy8VmzSj2SiF+M
+	 DxmcLeIB6z7Cr8wH+DQDipZwgYw/LoxEMu9gBH27sWcESrLsOs1G4TCah9cIGrTAUc
+	 svUukny6l1pQazjjUFwyJn3hXdKz5VCONzc1+feHpPsnb2UbTp2KB8MoDyLQh3d/KW
+	 PgMi8blPlqhR1FQv7ypMS86zDxNl6nuWXls5MdJVWx6VYkiJD04knZFX6cnRsOSqfw
+	 dRECU9fh8l/uBpzLSBdHmWCfJAej1+J/92l25G7vNVaDKc4hlLSkQPU9XoPgrpxjOH
+	 3pvHDBjMWLCfw==
+Received: by mail-lf1-f44.google.com with SMTP id 2adb3069b0e04-52ea79e6979so4019485e87.2;
+        Sun, 14 Jul 2024 11:09:56 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCXAlRyh69SuAhQ2+uNOxE66hYj2SeUnQp5OYKnM0YvXG/3axYVFpWeBzqlsKj4ZLw1ZMmKzIf1567m+5+sce9/SeR8Ivus1jb4xL3c2eIpmVI7yPTw4FoiZqsifBgo=
+X-Gm-Message-State: AOJu0YwP4ZnUhRqoudQ+oo4yk2mCtI85Ca7nq6v5zE1lxQDYpQb3nWzj
+	mVtEeDiNq96/etDfoVHIbD88mXMto7wEImw0Vju8mFDmrDl7j3A3Ngjm7WZIrz7udMcausdz/Og
+	7V1qFNL68P7WxmjDo4q7T1+seJQ8=
+X-Google-Smtp-Source: AGHT+IGeZcuJVP7EOm/o8e0bQMno/dlmDA75/UxNbxs4oEk8XH/LCKLSxfQC707gOisym50e3n5ioj3JvDZCo9S0tps=
+X-Received: by 2002:a05:6512:3d8a:b0:52c:8aa6:4e9d with SMTP id
+ 2adb3069b0e04-52eb99a2b76mr12559665e87.29.1720980595209; Sun, 14 Jul 2024
+ 11:09:55 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20240714160238.238708-1-vadorovsky@gmail.com>
-In-Reply-To: <20240714160238.238708-1-vadorovsky@gmail.com>
-From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date: Sun, 14 Jul 2024 19:30:15 +0200
-Message-ID: <CANiq72=kchSt5XjAJRVgNWG-iNXbc2E64ojwsQYnB2pshULK1Q@mail.gmail.com>
-Subject: Re: [PATCH] rust: str: Use `core::CStr`, remove the custom `CStr` implementation
-To: Michal Rostecki <vadorovsky@gmail.com>
-Cc: Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, 
-	Wedson Almeida Filho <wedsonaf@gmail.com>, Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, 
-	=?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
-	Benno Lossin <benno.lossin@proton.me>, Andreas Hindborg <a.hindborg@samsung.com>, 
-	Alice Ryhl <aliceryhl@google.com>, Brendan Higgins <brendan.higgins@linux.dev>, 
-	David Gow <davidgow@google.com>, Rae Moar <rmoar@google.com>, 
-	FUJITA Tomonori <fujita.tomonori@gmail.com>, Trevor Gross <tmgross@umich.edu>, 
-	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
-	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
-	Martin Rodriguez Reboredo <yakoyoku@gmail.com>, Finn Behrens <me@kloenk.dev>, Manmohan Shukla <manmshuk@gmail.com>, 
-	Valentin Obst <kernel@valentinobst.de>, Laine Taffin Altman <alexanderaltman@me.com>, 
-	Danilo Krummrich <dakr@redhat.com>, Yutaro Ohno <yutaro.ono.418@gmail.com>, 
-	Tiago Lam <tiagolam@gmail.com>, Charalampos Mitrodimas <charmitro@posteo.net>, 
-	Ben Gooding <ben.gooding.dev@gmail.com>, Roland Xu <mu001999@outlook.com>, 
-	rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com, 
-	netdev@vger.kernel.org, llvm@lists.linux.dev
+References: <20240707-update-ld-version-for-new-lld-ver-str-v2-1-8f24421198c0@kernel.org>
+In-Reply-To: <20240707-update-ld-version-for-new-lld-ver-str-v2-1-8f24421198c0@kernel.org>
+From: Masahiro Yamada <masahiroy@kernel.org>
+Date: Mon, 15 Jul 2024 03:09:19 +0900
+X-Gmail-Original-Message-ID: <CAK7LNARmV0BxgpOc29=-b0uPNtn2CPRW+ODvOKim=YmiO63b-g@mail.gmail.com>
+Message-ID: <CAK7LNARmV0BxgpOc29=-b0uPNtn2CPRW+ODvOKim=YmiO63b-g@mail.gmail.com>
+Subject: Re: [PATCH v2] kbuild: Make ld-version.sh more robust against version
+ string changes
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: Nicolas Schier <nicolas@fjasle.eu>, Fangrui Song <maskray@google.com>, 
+	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, linux-kbuild@vger.kernel.org, 
+	llvm@lists.linux.dev, patches@lists.linux.dev
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-Hi Michal,
-
-Thanks for the patch! Some notes below...
-
-On Sun, Jul 14, 2024 at 6:02=E2=80=AFPM Michal Rostecki <vadorovsky@gmail.c=
-om> wrote:
+On Mon, Jul 8, 2024 at 2:07=E2=80=AFPM Nathan Chancellor <nathan@kernel.org=
+> wrote:
 >
-> `CStr` became a part of `core` library in Rust 1.75, therefore there is
-> no need to keep the custom implementation.
+> After [1] in upstream LLVM, ld.lld's version output became slightly
+> different when the cmake configuration option LLVM_APPEND_VC_REV is
+> disabled.
+>
+> Before:
+>
+>   Debian LLD 19.0.0 (compatible with GNU linkers)
+>
+> After:
+>
+>   Debian LLD 19.0.0, compatible with GNU linkers
+>
+> This results in ld-version.sh failing with
+>
+>   scripts/ld-version.sh: 18: arithmetic expression: expecting EOF: "10000=
+ * 19 + 100 * 0 + 0,"
+>
+> because the trailing comma is included in the patch level part of the
+> expression. While [1] has been partially reverted in [2] to avoid this
+> breakage (as it impacts the configuration stage and it is present in all
+> LTS branches), it would be good to make ld-version.sh more robust
+> against such miniscule changes like this one.
+>
+> Use POSIX shell parameter expansion [3] to remove the largest suffix
+> after just numbers and periods, replacing of the current removal of
+> everything after a hyphen. ld-version.sh continues to work for a number
+> of distributions (Arch Linux, Debian, and Fedora) and the kernel.org
+> toolchains and no longer errors on a version of ld.lld with [1].
+>
+> Fixes: 02aff8592204 ("kbuild: check the minimum linker version in Kconfig=
+")
+> Link: https://github.com/llvm/llvm-project/commit/0f9fbbb63cfcd2069441aa2=
+ebef622c9716f8dbb [1]
+> Link: https://github.com/llvm/llvm-project/commit/649cdfc4b6781a350dfc87d=
+9b2a4b5a4c3395909 [2]
+> Link: https://pubs.opengroup.org/onlinepubs/9699919799/utilities/V3_chap0=
+2.html [3]
+> Suggested-by: Fangrui Song <maskray@google.com>
+> Reviewed-by: Fangrui Song <maskray@google.com>
+> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
 
-It would depend on the differences, right? i.e. for a reader, is this
-meant to imply there is no meaningful difference in what you point out
-below?
-
-> - It does not implement `Display` (but implements `Debug`).
-
-One question that comes up when reading this is: are we losing
-`Display`'s output form?
-
-Also, for clarity, please mention if there is a difference in the
-output of the `Debug` ones.
-
->   - Otherwise, having such a method is not really desirable. `CStr` is
->     a reference type
->     or `str` are usually not supposed to be modified.
-
-The sentence seems to be cut, and it should probably try to explain
-better why it is undesirable, i.e. if it is needed for something like
-`DerefMut`, then it seems better to have a method.
-
-> -            static CONDITION: &'static $crate::str::CStr =3D $crate::c_s=
-tr!(stringify!($condition));
-> +            static CONDITION: &'static core::ffi::CStr =3D unsafe {
-> +                core::ffi::CStr::from_bytes_with_nul_unchecked(
-> +                    core::concat!(stringify!($condition), "\0").as_bytes=
-()
-> +                )
-> +            };
-
-This looks worse after the change and requires `unsafe`. Can we do
-something to improve it?
-
-> +        // SAFETY: Casting to CStr is safe because its internal represen=
-tation
-> +        // is a [u8] too.
-> +        unsafe { &mut *(self.buf.as_mut_slice() as *mut [u8] as *mut CSt=
-r) }
-
-I see Bj=C3=B6rn commented on this already -- `CStr`'s layout is not
-guaranteed (and is a `[c_char]` instead).
-
-Also, the casting is not what is unsafe, so perhaps it may be clearer
-to reword the comment.
-
-In addition, please format comments as Markdown.
-
-> -//!             work <- new_work!("MyStruct::work"),
-> +//!             work <- new_work!(c"MyStruct::work"),
-
-I agree as well that it may make sense to simplify the callers as much
-as possible, unless there is a need to have that flexibility.
-
-Cheers,
-Miguel
+Applied to linux-kbuild.
+THanks!
