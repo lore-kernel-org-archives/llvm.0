@@ -1,60 +1,84 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A69AA2F32;
-	Sun, 14 Jul 2024 01:42:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C5BA1D51D;
+	Sun, 14 Jul 2024 04:00:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720921379; cv=none; b=tIDerp1R4UG/ub+3gOc3gX+GjX3Yo5TBqpXMo6aQZXOxfZoSevvoYsaS64MfmBkX2GyAD7oKMSH6M5eXPf7tny1G6f2B2VGUEzAqWKj/EuM9kc/llqi1vKwSET46oE3WBA8d5x3Y1HvdP7yhMtqQ/WEkIrJcZVEWLGuRLuzCrEc=
+	t=1720929609; cv=none; b=JooN3l4TG5pUQFOll1nax+5c9tmoUxWuyojnlWo2gj/qkrTvWeZ3aFUCKr5BbEu8JuR4kt9YpBxvwppIF2zgITS7mq/S21zYgNNOc/fQ814VUlv0Z085qSKpbzGNFLNzMzcJQq3nRp/Ghciix5z3zhSNJPBY3nKJFLi95Wx+Bew=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720921379; c=relaxed/simple;
-	bh=+QG46jnhBzFTYE8qi6EsFsEqzYPO9V4GSwJSELYbLcU=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=ri1K0soJW+AAE4RgAL0PO6CMDZLKn228wfSdIiaHqy+c9Hfu/LscPQAAnrOQowdFkd5jrcDnUHOg1P1nj1ccPoSquu6JIp+uWEVVU08B5Mz+zV2klNLeqjZmYPM6XjU4wJAELVcRnBG6opm3HtU+C69N8d7eViZHPsk4M/7ai3g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ACOE4P2I; arc=none smtp.client-ip=192.198.163.7
+	s=arc-20240116; t=1720929609; c=relaxed/simple;
+	bh=cCYajcD6NSynkcODow7PH3QgMSrVNxizgfr4nJfOxzs=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=uZp0X7mdHf2VSKdkwe4lqUm9yq+gq0N7U70rpMj8bItG9KRZBHoY36ysuTh3RyNEIQ9q2jADlXBI9XmBDEOd2S5OFe2eD02vljnj0+lUrJCiDSxy6X7kOICmVpqjPEHJaUbaF44lJg7mDUBNa/HGM5j7/ZksXYAaCXMkX+P0C64=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=gnsJiqPU; arc=none smtp.client-ip=192.198.163.10
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ACOE4P2I"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="gnsJiqPU"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1720921378; x=1752457378;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=+QG46jnhBzFTYE8qi6EsFsEqzYPO9V4GSwJSELYbLcU=;
-  b=ACOE4P2Ii01LBg6jVKIaQSUTA0iBy2LjXcKhfPnYbCSv3c5kzpJWzg06
-   cltPcHl48y//hcYUy6C5ujdDinR9wVjx59HwUGDQjeURQtszLLfo4HIX6
-   A/HmNfpRZ0LuCDgxBPsNmxvDcuQ7xPe6yeUeG5tmoSOvIECgbJqFxeOml
-   Lb2uSrsBXci4owOcjbdTF1gAShWdIeVt1OXT6aXyagIkxX39uuHEOK9V6
-   DscE91YTEdKg2IjbHBfxsCqGHInlsBl45rH3btMmpbN5F6WcFb3RiVFxc
-   CZNNCvSL5e9kJk9Qx+b0+5ugfN8Kb0qMcHEpzh5lJD0GHQuodRz8eFxZ6
+  t=1720929607; x=1752465607;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=cCYajcD6NSynkcODow7PH3QgMSrVNxizgfr4nJfOxzs=;
+  b=gnsJiqPUVKnkomLGjyfwUDDuUBtMhaTL70zXUET0id6XTrB9D9cpYFty
+   C3GV/WaZRqheyGR/JCc29D0FIgEujecbdhhmCW+bZNyjvMY/jU2y66DSc
+   ta+PwrpMHWDdv/QzgXe8uc4xUhHyhXc5D2FTuTO/2YoJK3qRXVE93IKqU
+   h6077CgMel8V+/VZsWj8xnJjrkjz4b8GBvXm21Hujv7kRklhqLpSYvvWn
+   PDfuFdG2wh75MUXMi/Yh50Uf8FoFfESE7w34J+tsnn1+J40MEt8TwaGqN
+   NzjGOuXoG1ZVhWkmDxaBIRzSAsjzZYyV9GxjMXOWwyPClxW3c5T1kqKAY
    Q==;
-X-CSE-ConnectionGUID: rQrkRLd0T+KtFESA3pOunw==
-X-CSE-MsgGUID: NCsDnvT8SiGfmV/4DYpmcg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11132"; a="43742338"
+X-CSE-ConnectionGUID: kdOobHWhTeS0JBU+PMK2gw==
+X-CSE-MsgGUID: UFcYxSh/SJ+UpVsNAV19XA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11132"; a="29743262"
 X-IronPort-AV: E=Sophos;i="6.09,207,1716274800"; 
-   d="scan'208";a="43742338"
-Received: from orviesa009.jf.intel.com ([10.64.159.149])
-  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jul 2024 18:42:57 -0700
-X-CSE-ConnectionGUID: jbjBfPKnQ2WG4jPrOUWkRw==
-X-CSE-MsgGUID: FSN6zRE6RiaqcVBLHSqvYA==
+   d="scan'208";a="29743262"
+Received: from orviesa008.jf.intel.com ([10.64.159.148])
+  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jul 2024 21:00:06 -0700
+X-CSE-ConnectionGUID: AcDRTHTpT4CKkJ425jtWmQ==
+X-CSE-MsgGUID: 3MUrE1aQQBO+JemCa/Efzw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.09,207,1716274800"; 
-   d="scan'208";a="49371854"
+   d="scan'208";a="50044986"
 Received: from lkp-server01.sh.intel.com (HELO 68891e0c336b) ([10.239.97.150])
-  by orviesa009.jf.intel.com with ESMTP; 13 Jul 2024 18:42:54 -0700
+  by orviesa008.jf.intel.com with ESMTP; 13 Jul 2024 20:59:58 -0700
 Received: from kbuild by 68891e0c336b with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1sSoGK-000cva-0P;
-	Sun, 14 Jul 2024 01:42:52 +0000
-Date: Sun, 14 Jul 2024 09:42:32 +0800
+	id 1sSqOx-000d1i-25;
+	Sun, 14 Jul 2024 03:59:55 +0000
+Date: Sun, 14 Jul 2024 11:59:08 +0800
 From: kernel test robot <lkp@intel.com>
-To: MD Danish Anwar <danishanwar@ti.com>
+To: Brendan Jackman <jackmanb@google.com>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	"H. Peter Anvin" <hpa@zytor.com>, Andy Lutomirski <luto@kernel.org>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Sean Christopherson <seanjc@google.com>,
+	Paolo Bonzini <pbonzini@redhat.com>,
+	Alexandre Chartre <alexandre.chartre@oracle.com>,
+	Liran Alon <liran.alon@oracle.com>,
+	Jan Setje-Eilers <jan.setjeeilers@oracle.com>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Mel Gorman <mgorman@suse.de>, Lorenzo Stoakes <lstoakes@gmail.com>,
+	David Hildenbrand <david@redhat.com>,
+	Vlastimil Babka <vbabka@suse.cz>, Michal Hocko <mhocko@kernel.org>,
+	Khalid Aziz <khalid.aziz@oracle.com>,
+	Juri Lelli <juri.lelli@redhat.com>,
+	Vincent Guittot <vincent.guittot@linaro.org>,
+	Dietmar Eggemann <dietmar.eggemann@arm.com>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Valentin Schneider <vschneid@redhat.com>,
+	Paul Turner <pjt@google.com>, Reiji Watanabe <reijiw@google.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Linux Memory Management List <linux-mm@kvack.org>,
-	Paolo Abeni <pabeni@redhat.com>, Andrew Lunn <andrew@lunn.ch>
-Subject: [linux-next:master 2316/12880] ERROR: modpost: "icssg_queue_pop"
- [drivers/net/ethernet/ti/icssg-prueth-sr1.ko] undefined!
-Message-ID: <202407140906.NlGbFeXV-lkp@intel.com>
+	Linux Memory Management List <linux-mm@kvack.org>
+Subject: Re: [PATCH 10/26] mm: asi: Avoid warning from NMI userspace accesses
+ in ASI context
+Message-ID: <202407141109.Vpmj3Sze-lkp@intel.com>
+References: <20240712-asi-rfc-24-v1-10-144b319a40d8@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -63,127 +87,56 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20240712-asi-rfc-24-v1-10-144b319a40d8@google.com>
 
-Hi MD,
+Hi Brendan,
 
-FYI, the error/warning still remains.
+kernel test robot noticed the following build warnings:
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-head:   3fe121b622825ff8cc995a1e6b026181c48188db
-commit: 487f7323f39a9d45a31c59e909de4a626f02d34f [2316/12880] net: ti: icssg-prueth: Add helper functions to configure FDB
-config: arm64-allmodconfig (https://download.01.org/0day-ci/archive/20240714/202407140906.NlGbFeXV-lkp@intel.com/config)
-compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project a0c6b8aef853eedaa0980f07c0a502a5a8a9740e)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240714/202407140906.NlGbFeXV-lkp@intel.com/reproduce)
+[auto build test WARNING on a38297e3fb012ddfa7ce0321a7e5a8daeb1872b6]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Brendan-Jackman/mm-asi-Make-some-utility-functions-noinstr-compatible/20240713-012107
+base:   a38297e3fb012ddfa7ce0321a7e5a8daeb1872b6
+patch link:    https://lore.kernel.org/r/20240712-asi-rfc-24-v1-10-144b319a40d8%40google.com
+patch subject: [PATCH 10/26] mm: asi: Avoid warning from NMI userspace accesses in ASI context
+config: i386-buildonly-randconfig-004-20240714 (https://download.01.org/0day-ci/archive/20240714/202407141109.Vpmj3Sze-lkp@intel.com/config)
+compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240714/202407141109.Vpmj3Sze-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202407140906.NlGbFeXV-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202407141109.Vpmj3Sze-lkp@intel.com/
 
-All errors (new ones prefixed by >>, old ones prefixed by <<):
+All warnings (new ones prefixed by >>):
 
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/perf/arm_cspmu/nvidia_cspmu.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/perf/arm_cspmu/ampere_cspmu.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/perf/cxl_pmu.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hwtracing/intel_th/intel_th_msu_sink.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/nvmem/nvmem-apple-efuses.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/nvmem/nvmem_brcm_nvram.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/nvmem/nvmem_u-boot-env.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/interconnect/imx/imx-interconnect.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/interconnect/imx/imx8mm-interconnect.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/interconnect/imx/imx8mq-interconnect.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/interconnect/imx/imx8mn-interconnect.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/interconnect/imx/imx8mp-interconnect.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/interconnect/qcom/interconnect_qcom.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/interconnect/qcom/icc-rpmh.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hte/hte-tegra194-test.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/vdpa/vdpa.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/vdpa/ifcvf/ifcvf.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/parport/parport.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/nvdimm/libnvdimm.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/nvdimm/nd_pmem.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/nvdimm/nd_btt.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/nvdimm/of_pmem.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/nvdimm/nd_virtio.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/mtd/parsers/brcm_u-boot.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/mtd/parsers/tplink_safeloader.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/mtd/chips/cfi_util.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/mtd/chips/cfi_cmdset_0020.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/mtd/maps/map_funcs.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/spmi/hisi-spmi-controller.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/spmi/spmi-pmic-arb.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/uio/uio.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/uio/uio_cif.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/uio/uio_aec.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/uio/uio_netx.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/uio/uio_mf624.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/pcmcia/pcmcia_rsrc.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/pcmcia/yenta_socket.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/pcmcia/i82092.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hwmon/corsair-cpro.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hwmon/mr75203.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/edac/layerscape_edac_mod.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/vhost/vringh.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/greybus/greybus.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/greybus/gb-es2.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/rpmsg/rpmsg_char.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/iio/adc/ingenic-adc.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/iio/adc/xilinx-ams.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/iio/buffer/kfifo_buf.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/fsi/fsi-core.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/fsi/fsi-master-hub.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/fsi/fsi-master-aspeed.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/fsi/fsi-master-gpio.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/fsi/fsi-master-ast-cf.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/fsi/fsi-scom.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/siox/siox-bus-gpio.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/counter/ftm-quaddec.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in sound/soc/codecs/snd-soc-wm-adsp.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in sound/soc/fsl/imx-pcm-dma.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in sound/soc/mxs/snd-soc-mxs-pcm.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in sound/soc/qcom/snd-soc-qcom-sdw.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in sound/soc/sof/intel/snd-sof-intel-atom.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in sound/soc/sof/intel/snd-sof-acpi-intel-byt.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in sound/soc/sof/intel/snd-sof-acpi-intel-bdw.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in sound/soc/sof/intel/snd-sof-intel-hda-common.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in sound/soc/sof/intel/snd-sof-intel-hda-generic.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in sound/soc/sof/intel/snd-sof-intel-hda-mlink.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in sound/soc/sof/intel/snd-sof-intel-hda.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in sound/soc/sof/intel/snd-sof-pci-intel-tng.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in sound/soc/sof/intel/snd-sof-pci-intel-skl.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in sound/soc/sof/intel/snd-sof-pci-intel-apl.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in sound/soc/sof/intel/snd-sof-pci-intel-cnl.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in sound/soc/sof/intel/snd-sof-pci-intel-icl.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in sound/soc/sof/intel/snd-sof-pci-intel-tgl.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in sound/soc/sof/intel/snd-sof-pci-intel-mtl.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in sound/soc/sof/intel/snd-sof-pci-intel-lnl.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in sound/soc/sof/imx/snd-sof-imx8.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in sound/soc/sof/imx/snd-sof-imx8m.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in sound/soc/sof/imx/snd-sof-imx8ulp.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in sound/soc/sof/imx/imx-common.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in sound/soc/sof/mediatek/mtk-adsp-common.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in sound/soc/sof/mediatek/mt8195/snd-sof-mt8195.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in sound/soc/sof/mediatek/mt8186/snd-sof-mt8186.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in sound/soc/sof/snd-sof-utils.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in sound/soc/sof/snd-sof-acpi.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in sound/soc/sof/snd-sof-of.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in sound/soc/sof/snd-sof-pci.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in samples/vfio-mdev/mtty.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in samples/vfio-mdev/mdpy.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in samples/vfio-mdev/mdpy-fb.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in samples/vfio-mdev/mbochs.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in samples/configfs/configfs_sample.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in samples/kfifo/bytestream-example.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in samples/kfifo/dma-example.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in samples/kfifo/inttype-example.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in samples/kfifo/record-example.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in samples/kobject/kobject-example.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in samples/kobject/kset-example.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in samples/kprobes/kprobe_example.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in samples/kprobes/kretprobe_example.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in samples/kmemleak/kmemleak-test.o
->> ERROR: modpost: "icssg_queue_pop" [drivers/net/ethernet/ti/icssg-prueth-sr1.ko] undefined!
->> ERROR: modpost: "icssg_queue_push" [drivers/net/ethernet/ti/icssg-prueth-sr1.ko] undefined!
+>> arch/x86/mm/tlb.c:1329:20: warning: function 'cr3_matches_current_mm' is not needed and will not be emitted [-Wunneeded-internal-declaration]
+    1329 | static inline bool cr3_matches_current_mm(void)
+         |                    ^~~~~~~~~~~~~~~~~~~~~~
+   1 warning generated.
+
+
+vim +/cr3_matches_current_mm +1329 arch/x86/mm/tlb.c
+
+  1328	
+> 1329	static inline bool cr3_matches_current_mm(void)
+  1330	{
+  1331		struct asi *asi = asi_get_current();
+  1332		pgd_t *cr3_pgd;
+  1333	
+  1334		/*
+  1335		 * Prevent read_cr3_pa -> [NMI, asi_exit] -> asi_get_current,
+  1336		 * otherwise we might find CR3 pointing to the ASI PGD but not
+  1337		 * find a current ASI domain.
+  1338		 */
+  1339		barrier();
+  1340		cr3_pgd = __va(read_cr3_pa());
+  1341	
+  1342		if (cr3_pgd == current->mm->pgd)
+  1343			return true;
+  1344		return asi && (cr3_pgd == asi_pgd(asi));
+  1345	}
+  1346	
 
 -- 
 0-DAY CI Kernel Test Service
