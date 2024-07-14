@@ -1,97 +1,124 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A7B8FC11;
-	Sun, 14 Jul 2024 19:46:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9FFF118AED
+	for <llvm@lists.linux.dev>; Sun, 14 Jul 2024 20:53:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720986389; cv=none; b=YKQARbuy/ismkOG+tFHZYab93h5CNrlCmZ1s8a62Lvj2/IXhuZs2KqYk0e1VM2yz0VDpsqIqwc+o66t4YfeJdre1EJhzNs3l5lwbNmEHd9gPd00yp/hebCZEYDdFo3H05FFHGNUgrK0YhV8fRXpHbWwYx8sHzL2AiSDavwOW9Ww=
+	t=1720990398; cv=none; b=YTplzuyRku7lw3Kww6cGxPuHhpNAx/tauWnmTY7G4h51QddlOXobfF6xJh0WXFz7lLGcVgiV0DNyFKu95TprJdN+Fz2/fzFS/8/sUIK745HVUvHEsn/05Jn0lUum1GqcngwjAc4+JybTn3h0DK/CWW+CCH95oQGIkvgJfSH8yPw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720986389; c=relaxed/simple;
-	bh=rLnEQ8o/nD03d1A0FDtz+xd65IOTgQ2jze91Tqq+sy8=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=au0znR8UaBtWf7x3FEJMrD19x8xOjXbGodPONqE3epEn6jqQL4lR6O5p3ZJoH0jtnt5zlfI8fF7VoOXPUotyANGksLPEnLxvjL7gJf5901RA3N+recELAWyWogYtkZ4HD4g5qBnCtCf+m9pl4PLfg4WCMuI/Ektqm7br82jbfm0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=SULp0JI3; arc=none smtp.client-ip=198.175.65.21
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1720990398; c=relaxed/simple;
+	bh=amvZy6QyHspU9VM28Xcr98VJSJcU+O9BsegQ8f6PtEQ=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=XHrgVcD/++yruWrmN1gETbxhVNrWXVT2LPiYgTVNH/q1yPSBY+/gP7+oHXtfXdaCukbeT4gEQaAYxD7tDhbS4MUzG5n0rY9s9AfZowK0lHGrkbU2Sqn0S5N2uvnyQJo/3j4/mhasclJoml+aDEK6Pvv1nlvFnvWfeo0CPHRbnUM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=RLyB63ds; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="SULp0JI3"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1720986388; x=1752522388;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=rLnEQ8o/nD03d1A0FDtz+xd65IOTgQ2jze91Tqq+sy8=;
-  b=SULp0JI3rVv4rPVKdDZGvuV2CnPJDXpSG+TTm8uSNLhOAuiPpL9lnQMk
-   oyg9M0zCg+dYeRdTIu2SViwnK/NpIUvxi26LOK8qdCsGhEu5PzPn0om7V
-   e7gzriA1z0uGGqRKmWPPuZOt1inoIMi19DvvWXqCCICHQKWcystwRL0gp
-   hLRmO19Hagu/ZllK7lQriFEX42jjxNFB7I9849nVuDzWSH4c5o6JSt3MD
-   0OQXrG2tgaUTW3uvSKjM68J54tSySbM3ktcttkr78pUSPSqH9rTnCe9uV
-   DMQFxyQIkvP1mzrH7DfaryqCdD4iAq4EkM9qVF4FkuSHaX8mItX9qkmle
-   Q==;
-X-CSE-ConnectionGUID: aIoTocCvR06EuY+2SiLl+w==
-X-CSE-MsgGUID: 4LnNuaYMQsiPQNQ25Pd9HA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11133"; a="18313616"
-X-IronPort-AV: E=Sophos;i="6.09,208,1716274800"; 
-   d="scan'208";a="18313616"
-Received: from orviesa010.jf.intel.com ([10.64.159.150])
-  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jul 2024 12:46:27 -0700
-X-CSE-ConnectionGUID: XXCXB4xaTwqYcQXnKpCUqg==
-X-CSE-MsgGUID: p+gQc477Qa6ORAYRsVbyGg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.09,208,1716274800"; 
-   d="scan'208";a="49293985"
-Received: from lkp-server01.sh.intel.com (HELO 68891e0c336b) ([10.239.97.150])
-  by orviesa010.jf.intel.com with ESMTP; 14 Jul 2024 12:46:26 -0700
-Received: from kbuild by 68891e0c336b with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1sT5At-000dh0-1o;
-	Sun, 14 Jul 2024 19:46:23 +0000
-Date: Mon, 15 Jul 2024 03:45:29 +0800
-From: kernel test robot <lkp@intel.com>
-To: Namjae Jeon <linkinjeon@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Steve French <stfrench@microsoft.com>
-Subject: [samba-ksmbd:ksmbd-for-next-next 4/4]
- fs/smb/server/vfs_cache.c:39:27: warning: unused variable 'dh_task'
-Message-ID: <202407150316.TZgyiAbN-lkp@intel.com>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="RLyB63ds"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1720990395;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=6o6NAiaui6dPFXpDuCVWegitZ95+pS8c/gfeGZXJqm4=;
+	b=RLyB63dsQZK5Kftb5XZZ/N6lBgmXQGFcMBgQHEcYlKKsuy6fogZ809rxH2Wdjei/YoAaFP
+	zpGvUki6yPkacGeHoM1haI8Xqm0RGhRiG6tAcOd+2p3C0mE1B8TKpCfqCn1rN3Uootb4no
+	oSBhktK6USua+31rfRxc3rN7yCOcJCs=
+Received: from mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-230-OEgMiQyfM0yK1Qu1ciPTGg-1; Sun,
+ 14 Jul 2024 16:53:13 -0400
+X-MC-Unique: OEgMiQyfM0yK1Qu1ciPTGg-1
+Received: from mx-prod-int-02.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-02.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.15])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 15846196CDF1
+	for <llvm@lists.linux.dev>; Sun, 14 Jul 2024 20:53:13 +0000 (UTC)
+Received: from [172.64.15.30] (unknown [10.30.34.46])
+	by mx-prod-int-02.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 2D0A31955F3B;
+	Sun, 14 Jul 2024 20:53:12 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL (MISSED 12 of 192): Test report for master
+ (6.10.0-rc7, mainline.kernel.org-clang, 4d145e3f)
+Date: Sun, 14 Jul 2024 20:53:11 -0000
+To: bgoncalv@redhat.com, llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.15
+Message-Id: <10921.124071416531300317@us-mta-230.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-tree:   git://git.samba.org/ksmbd.git ksmbd-for-next-next
-head:   c11a5805413bdbe0a22e94458aeeda3bac9b63a7
-commit: c11a5805413bdbe0a22e94458aeeda3bac9b63a7 [4/4] ksmbd: add durable scavenger timer
-config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20240715/202407150316.TZgyiAbN-lkp@intel.com/config)
-compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240715/202407150316.TZgyiAbN-lkp@intel.com/reproduce)
+Hi, we tested your kernel and here are the results:
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202407150316.TZgyiAbN-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> fs/smb/server/vfs_cache.c:39:27: warning: unused variable 'dh_task' [-Wunused-variable]
-      39 | static struct task_struc *dh_task;
-         |                           ^~~~~~~
-   1 warning generated.
+    Overall result: FAILED
+             Merge: OK
+           Compile: OK
+              Test: FAILED
 
 
-vim +/dh_task +39 fs/smb/server/vfs_cache.c
+Kernel information:
+    Commit message: Merge tag 'i2c-for-6.10-rc8' of git://git.kernel.org/pu=
+b/scm/linux/kernel/git/wsa/linux
 
-    36	
-    37	static bool durable_scavenger_running;
-    38	static DEFINE_MUTEX(durable_scavenger_lock);
-  > 39	static struct task_struc *dh_task;
-    40	static wait_queue_head_t dh_wq;
-    41	
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1372702027
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+One or more kernel tests failed:
+    Unrecognized or new issues:
+        Reboot test
+              x86_64
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+redhat:1372702027-x86_64-kernel_upt_35
+                   Non-passing ran subtests:
+                       =E2=9D=8C FAIL misc/reboot-test/journalctl-check
+
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1267
+            Affected tests:
+                selinux-policy: serge-testsuite [ppc64le]
+
+
+Tests that were not ran because of internal issues:=20
+    Boot test [s390x]
+    CKI/restraint [s390x]
+    machineinfo [s390x, x86_64]
+    Reboot test [s390x]
+    SELinux Custom Module Setup [s390x, x86_64]
+    Storage - blktests - blk - upstream [s390x]
+    Storage - blktests - nvme-tcp - upstream [s390x]
+    Storage - swraid scsi_raid [s390x]
+    stress: stress-ng - cpu-cache [s390x]
+    stress: stress-ng - memory [s390x]
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
