@@ -1,105 +1,133 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C66F43BB23;
-	Sun, 14 Jul 2024 18:09:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F0A0E1E494;
+	Sun, 14 Jul 2024 19:24:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720980596; cv=none; b=JbAYS4ZZeXdGQsShMrajsiLvx9LE9qqHDsRPdiVlnqnZBKX5AHyi+HgJisACBfdW+URz4CmVWehI3/TJdKEDd8EZMs6ZTpii6TVkHqJsrkmrB58VQzwV4ibTDjKUwTZVMMqgGhTmnti8eWlUqG6EGFp0wXhcaVa/28wmc5Jyjv4=
+	t=1720985068; cv=none; b=GrryrAqnHm2zPPJs7b9o37Cq1uGJ6XllHmqdp8jfUIvmCH9eOCGexyoq5s1HLhd1lZQSZMRNWRjXys5hTxTu7EDIIVnYeqMlZCbLfdXajeaniKmxY1bqnbGXbhsLC6B/Wd+DSQbzXSSlpo6EiXTSQBCatDBwKAGX/mQQG2S+dNc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720980596; c=relaxed/simple;
-	bh=Dl5jmsuCn3rUPbU1p56YwE5+B5i/ZUzLYhvRRqPoSSY=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=EL7JF9EfrnILuKFfWAEZzayhwe4FGsunWpn/6REsqKgnokp4FLzJcd+PGEGP+m9aCrubtBlrNbBKKuX+xRAXQlHHrgZbYYp+7R/eP3nF5fEAUNJ6le8AXTVy2swvD5d6mNrrd4PaqIQToeEPKArVGOakDvhYwKzULolMtA3/mag=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Y7xkjT45; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1720985068; c=relaxed/simple;
+	bh=0zAe+PU7QXqYCgPwr+yxqSzo0qvhzKMAMkFymOKQLK8=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=B5GdNDqqRkl7/rK/+o0Bo0P2UJMvzTCJMTb8nIdoo55Is91OJOyRrUnkYhT0VZQgkh49hCc3jbvcwsyZU1I/4++dhNOUOGsvsTDsT9rk7sqBdkIBqHOMNFkc3iblgyyR0r5Hhb7RQy0CokhM4MhNa40d62vCnI+3pk3HV3tj0Ys=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=I142BiQ4; arc=none smtp.client-ip=192.198.163.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Y7xkjT45"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 789DCC116B1;
-	Sun, 14 Jul 2024 18:09:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1720980596;
-	bh=Dl5jmsuCn3rUPbU1p56YwE5+B5i/ZUzLYhvRRqPoSSY=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=Y7xkjT45wa5JM5Q1pBPemg7tNyhms3PYmQmofKI8NRB+9pvrv5Zpy8VmzSj2SiF+M
-	 DxmcLeIB6z7Cr8wH+DQDipZwgYw/LoxEMu9gBH27sWcESrLsOs1G4TCah9cIGrTAUc
-	 svUukny6l1pQazjjUFwyJn3hXdKz5VCONzc1+feHpPsnb2UbTp2KB8MoDyLQh3d/KW
-	 PgMi8blPlqhR1FQv7ypMS86zDxNl6nuWXls5MdJVWx6VYkiJD04knZFX6cnRsOSqfw
-	 dRECU9fh8l/uBpzLSBdHmWCfJAej1+J/92l25G7vNVaDKc4hlLSkQPU9XoPgrpxjOH
-	 3pvHDBjMWLCfw==
-Received: by mail-lf1-f44.google.com with SMTP id 2adb3069b0e04-52ea79e6979so4019485e87.2;
-        Sun, 14 Jul 2024 11:09:56 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCXAlRyh69SuAhQ2+uNOxE66hYj2SeUnQp5OYKnM0YvXG/3axYVFpWeBzqlsKj4ZLw1ZMmKzIf1567m+5+sce9/SeR8Ivus1jb4xL3c2eIpmVI7yPTw4FoiZqsifBgo=
-X-Gm-Message-State: AOJu0YwP4ZnUhRqoudQ+oo4yk2mCtI85Ca7nq6v5zE1lxQDYpQb3nWzj
-	mVtEeDiNq96/etDfoVHIbD88mXMto7wEImw0Vju8mFDmrDl7j3A3Ngjm7WZIrz7udMcausdz/Og
-	7V1qFNL68P7WxmjDo4q7T1+seJQ8=
-X-Google-Smtp-Source: AGHT+IGeZcuJVP7EOm/o8e0bQMno/dlmDA75/UxNbxs4oEk8XH/LCKLSxfQC707gOisym50e3n5ioj3JvDZCo9S0tps=
-X-Received: by 2002:a05:6512:3d8a:b0:52c:8aa6:4e9d with SMTP id
- 2adb3069b0e04-52eb99a2b76mr12559665e87.29.1720980595209; Sun, 14 Jul 2024
- 11:09:55 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="I142BiQ4"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1720985067; x=1752521067;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=0zAe+PU7QXqYCgPwr+yxqSzo0qvhzKMAMkFymOKQLK8=;
+  b=I142BiQ4XwyW1IqEW568wxjzFgnl9st8PphDvd4O55afYNInFZmah6kO
+   PvEjYN7R/rPYutVtlT2EJQuWgMVI2ZtitWGlmzW2tLGJXDL6HmkJxFoVU
+   HS05fiL1sPokQ9obOPfPFxWyA0JQUeux/e7U02kq3QamIeaBdWkVRglq3
+   qAiO/qckMwsHx3E6o67PBYgoe3jPcWoiQUgT2F+/Lec5Z5MfZHFkm43Qe
+   P6mrHBmhEcRVHCqy92uYDX5zy1c6Qx7iV6u64WXS7BkLCJvoikWEKqRIe
+   uju27n+wxcSSqvxv3/yE723JYGEj6zKynWbgLTFYNDFJcP/NkBYqkw5o8
+   w==;
+X-CSE-ConnectionGUID: N9LepH8mSoCsCWF32VQCxg==
+X-CSE-MsgGUID: cZeQ7wZtQoafH4ZF1wNxgw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11133"; a="18512536"
+X-IronPort-AV: E=Sophos;i="6.09,208,1716274800"; 
+   d="scan'208";a="18512536"
+Received: from fmviesa004.fm.intel.com ([10.60.135.144])
+  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jul 2024 12:24:26 -0700
+X-CSE-ConnectionGUID: V8J8yr2BSOKglTZTXp+sCw==
+X-CSE-MsgGUID: FQ6w2TvaS4+52jRAK+xw7g==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.09,208,1716274800"; 
+   d="scan'208";a="53965964"
+Received: from lkp-server01.sh.intel.com (HELO 68891e0c336b) ([10.239.97.150])
+  by fmviesa004.fm.intel.com with ESMTP; 14 Jul 2024 12:24:25 -0700
+Received: from kbuild by 68891e0c336b with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1sT4pb-000dgA-0F;
+	Sun, 14 Jul 2024 19:24:23 +0000
+Date: Mon, 15 Jul 2024 03:24:18 +0800
+From: kernel test robot <lkp@intel.com>
+To: Leon Romanovsky <leonro@nvidia.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [leon-rdma:dma-static-calls-v1 2/2] kernel/dma/mapping.c:746:12:
+ warning: variable 'sgt' is used uninitialized whenever 'if' condition is
+ false
+Message-ID: <202407150312.GTJusNmx-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20240707-update-ld-version-for-new-lld-ver-str-v2-1-8f24421198c0@kernel.org>
-In-Reply-To: <20240707-update-ld-version-for-new-lld-ver-str-v2-1-8f24421198c0@kernel.org>
-From: Masahiro Yamada <masahiroy@kernel.org>
-Date: Mon, 15 Jul 2024 03:09:19 +0900
-X-Gmail-Original-Message-ID: <CAK7LNARmV0BxgpOc29=-b0uPNtn2CPRW+ODvOKim=YmiO63b-g@mail.gmail.com>
-Message-ID: <CAK7LNARmV0BxgpOc29=-b0uPNtn2CPRW+ODvOKim=YmiO63b-g@mail.gmail.com>
-Subject: Re: [PATCH v2] kbuild: Make ld-version.sh more robust against version
- string changes
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: Nicolas Schier <nicolas@fjasle.eu>, Fangrui Song <maskray@google.com>, 
-	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, linux-kbuild@vger.kernel.org, 
-	llvm@lists.linux.dev, patches@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Mon, Jul 8, 2024 at 2:07=E2=80=AFPM Nathan Chancellor <nathan@kernel.org=
-> wrote:
->
-> After [1] in upstream LLVM, ld.lld's version output became slightly
-> different when the cmake configuration option LLVM_APPEND_VC_REV is
-> disabled.
->
-> Before:
->
->   Debian LLD 19.0.0 (compatible with GNU linkers)
->
-> After:
->
->   Debian LLD 19.0.0, compatible with GNU linkers
->
-> This results in ld-version.sh failing with
->
->   scripts/ld-version.sh: 18: arithmetic expression: expecting EOF: "10000=
- * 19 + 100 * 0 + 0,"
->
-> because the trailing comma is included in the patch level part of the
-> expression. While [1] has been partially reverted in [2] to avoid this
-> breakage (as it impacts the configuration stage and it is present in all
-> LTS branches), it would be good to make ld-version.sh more robust
-> against such miniscule changes like this one.
->
-> Use POSIX shell parameter expansion [3] to remove the largest suffix
-> after just numbers and periods, replacing of the current removal of
-> everything after a hyphen. ld-version.sh continues to work for a number
-> of distributions (Arch Linux, Debian, and Fedora) and the kernel.org
-> toolchains and no longer errors on a version of ld.lld with [1].
->
-> Fixes: 02aff8592204 ("kbuild: check the minimum linker version in Kconfig=
-")
-> Link: https://github.com/llvm/llvm-project/commit/0f9fbbb63cfcd2069441aa2=
-ebef622c9716f8dbb [1]
-> Link: https://github.com/llvm/llvm-project/commit/649cdfc4b6781a350dfc87d=
-9b2a4b5a4c3395909 [2]
-> Link: https://pubs.opengroup.org/onlinepubs/9699919799/utilities/V3_chap0=
-2.html [3]
-> Suggested-by: Fangrui Song <maskray@google.com>
-> Reviewed-by: Fangrui Song <maskray@google.com>
-> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/leon/linux-rdma.git dma-static-calls-v1
+head:   3acafa88e3e0ffeb1d7d2ae1e78d5c669edb55b6
+commit: 3acafa88e3e0ffeb1d7d2ae1e78d5c669edb55b6 [2/2] dma: Add IOMMU static calls with clear default ops
+config: x86_64-allnoconfig (https://download.01.org/0day-ci/archive/20240715/202407150312.GTJusNmx-lkp@intel.com/config)
+compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240715/202407150312.GTJusNmx-lkp@intel.com/reproduce)
 
-Applied to linux-kbuild.
-THanks!
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202407150312.GTJusNmx-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> kernel/dma/mapping.c:746:12: warning: variable 'sgt' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
+     746 |                 else if (ops->alloc_noncontiguous)
+         |                          ^~~~~~~~~~~~~~~~~~~~~~~~
+   kernel/dma/mapping.c:753:6: note: uninitialized use occurs here
+     753 |         if (sgt) {
+         |             ^~~
+   kernel/dma/mapping.c:746:8: note: remove the 'if' if its condition is always true
+     746 |                 else if (ops->alloc_noncontiguous)
+         |                      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     747 |                         sgt = ops->alloc_noncontiguous(dev, size, dir, gfp,
+   kernel/dma/mapping.c:735:22: note: initialize the variable 'sgt' to silence this warning
+     735 |         struct sg_table *sgt;
+         |                             ^
+         |                              = NULL
+   1 warning generated.
+
+
+vim +746 kernel/dma/mapping.c
+
+   730	
+   731	struct sg_table *dma_alloc_noncontiguous(struct device *dev, size_t size,
+   732			enum dma_data_direction dir, gfp_t gfp, unsigned long attrs)
+   733	{
+   734		const struct dma_map_ops *ops = get_dma_ops(dev);
+   735		struct sg_table *sgt;
+   736	
+   737		if (WARN_ON_ONCE(attrs & ~DMA_ATTR_ALLOC_SINGLE_PAGES))
+   738			return NULL;
+   739		if (WARN_ON_ONCE(gfp & __GFP_COMP))
+   740			return NULL;
+   741	
+   742		if (ops) {
+   743			if (dma_is_default_iommu(ops))
+   744				sgt = iommu_dma_alloc_noncontiguous(dev, size, dir, gfp,
+   745								    attrs);
+ > 746			else if (ops->alloc_noncontiguous)
+   747				sgt = ops->alloc_noncontiguous(dev, size, dir, gfp,
+   748							       attrs);
+   749		}
+   750		else
+   751			sgt = alloc_single_sgt(dev, size, dir, gfp);
+   752	
+   753		if (sgt) {
+   754			sgt->nents = 1;
+   755			debug_dma_map_sg(dev, sgt->sgl, sgt->orig_nents, 1, dir, attrs);
+   756		}
+   757		return sgt;
+   758	}
+   759	EXPORT_SYMBOL_GPL(dma_alloc_noncontiguous);
+   760	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
