@@ -1,55 +1,55 @@
-Received: from mail-qv1-f66.google.com (mail-qv1-f66.google.com [209.85.219.66])
+Received: from mail-yw1-f195.google.com (mail-yw1-f195.google.com [209.85.128.195])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 790171CA9E
-	for <llvm@lists.linux.dev>; Mon, 15 Jul 2024 22:03:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.66
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BDE2E1CA9E
+	for <llvm@lists.linux.dev>; Mon, 15 Jul 2024 22:13:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.195
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721081008; cv=none; b=N3jU936z6YC0ZXTymesgkmIBBtlJ+dJHff63tPtsADzQImOHbbs6eaci3imRDUKMF2gU///S1hkl7eyIRZq5D78nVhtuZuw4kp7ghu/tTc5cCEr+6KeP85SH5sVdD7yWmVV+yxunRp2WLMAGfXryoAjP+m7UkGqIuk1n4i+c4Hs=
+	t=1721081637; cv=none; b=ix1AkL3sP1LCyTEbLSl130r5OdYTxzgpqc5ObVUBuVVCerGVJiB2lMEjV4XB1618+t20xfsaiC81V5tQ3qH7KapmnRAg/e0uzhNZRQGJbOV0bolvcULz4+Z+ip/rTQFQ1WbDP28sW/d+kAlM5SOpOw7zYtZ50cmOClWB+YFch9k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721081008; c=relaxed/simple;
-	bh=/Dvy4oE+Y8WIl3MAp+SvReyubXBjxUrXhquUtvCJAKg=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=LCWuCVn3fNjXEqFXvvxlY8rx9MZox19Fn7UVE84NFiLAl+XEzIES4eGUONl62N1TrlX6l8mBkCZLJ89Ts/UQ4bDluEdH9IEJYEknXQWVpN+89P/gxoX2Ukp/spwIBFetycYjFXC4nl9RUb6sIY5JgK+nwahO4mUXmLUU2AxbHp0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=BVYQ7tO1; arc=none smtp.client-ip=209.85.219.66
+	s=arc-20240116; t=1721081637; c=relaxed/simple;
+	bh=0X8qLlzJqvWrNsyR7jCFaWTqWs6pVx5QNQA8xKeAS2c=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=TgH3ZvMdoGldZeDYPEa75nJpIFKUryVxwC4GmtrjReS2/XvPTO1J9X8zIwa1qn3b/XZBoNVhjiUIbMk32g+QXlPvxE517H/0/CepdElPSyULRUoTRAZb1LLeNMfYHH/ACG15PnH5Kx1b6DxuE1COK95CTHf7/2mIXRJAYtcxRoU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=EB/kw1y8; arc=none smtp.client-ip=209.85.128.195
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BVYQ7tO1"
-Received: by mail-qv1-f66.google.com with SMTP id 6a1803df08f44-6b5f90373d4so49577856d6.0
-        for <llvm@lists.linux.dev>; Mon, 15 Jul 2024 15:03:25 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="EB/kw1y8"
+Received: by mail-yw1-f195.google.com with SMTP id 00721157ae682-65465878c1fso55205837b3.2
+        for <llvm@lists.linux.dev>; Mon, 15 Jul 2024 15:13:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1721081004; x=1721685804; darn=lists.linux.dev;
+        d=gmail.com; s=20230601; t=1721081633; x=1721686433; darn=lists.linux.dev;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=rA+i02ojNphWYTbFc4Klz4RzPhtEfgz33S5RLXVLUSo=;
-        b=BVYQ7tO1X49/c+Tmc+KkXb/hXhLammI4TyXoLdIwmecoMZ60KodvXEWJqFFNISiLOV
-         kGC2Oi8KR7f7MQbBmP5hs8RbKgGof1wYQMAj0pt2u6HfIVmhaj/pB209WNYOBpymVdIS
-         xjphqLTG4tsE/DWlRvQ2S4qTYTra1l7bsmMc1anEQMgZ/bBVrUC/4XxaXvBdmbDD8ql6
-         HC6eT8M8UXaTfwd6zILJVKRC/4MdTsjcLHQ3WM5b7f+9e7IiKDP0PNkcnXRjaNVsFQKC
-         w5OQkzsy06//hkoAIUk3S5g6XX0qO/n3wdlB3xnpvlOh177d8M1Lnq1J4Cw88i8+MqVk
-         fgMw==
+        bh=rZHCUKK+K8WgRFJdrgu4HuGCZsPE6lpsyCAqXnnCQ6s=;
+        b=EB/kw1y8r45lhNHhki+kdzpBxepGWHMSs6c7s3EANfZhk2SZf4e9yIXUIRigNIcAs5
+         M7JxS37aWFI8tp3lG0FMw+/uOGLxR4xejDgYgCt4Pyqc0uc3CD0UAnRFvE2dCfRkTIsk
+         /OSKIO29mu5UPH+1ngLKlfafrLG6D6YVP4jPeL8pGbQaqwam94z93SZ61N5NL+RongXf
+         A3DXDzA15qHMJQtfEQBiN110q3yL6YSCeEWPTJOOsJb3UTeUbIxSFnA0b3Z83aolEvI0
+         CVsBy2U50y0V9aP5HgDCPVHmvqfIFFPsYmIIF0uqtT+6qzEOsKL/sQ9JDoqC31K570J/
+         jImg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1721081004; x=1721685804;
+        d=1e100.net; s=20230601; t=1721081633; x=1721686433;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=rA+i02ojNphWYTbFc4Klz4RzPhtEfgz33S5RLXVLUSo=;
-        b=uIv+SvBtcevx92ljR7NqZONCeveudUW+XTMk/0nl+0EZr8jc/xTxgg9jjHg7AIe7hJ
-         QXIqq/FvpnwkVUaNk9uCx45tGPlYyRSxcDSBVxfEiikqFom9yMD/73PaKPIx4IZtk8ia
-         S2YntIE4OPYL6tLEQXFLZLZ1bqOwEu6L8woL3TrOLv7rg44669XooWs/uMRXyS+CMb+7
-         qbUBS5V6+vnArAzcU7pGy7y0Ek9DBKWOO1YHr47JhnbygXhzrKrspjtd07vc8BTDWsj3
-         AzM8+9WmZs26Iutpl+QQh1oUVa4t5yaj8hukXzzJmy1ozD/ExlSAZAYF0lQSmV5NO2mM
-         XVOA==
-X-Forwarded-Encrypted: i=1; AJvYcCXJ+1vIU2P/DSgnwAc8uEs8N/S0gWSIiQN8NPi2OxlhNMVFNgAcvodz4rNrJqIRaFjZdD/T0K7W241YmrsScTm0ga2Tmg==
-X-Gm-Message-State: AOJu0Ywz6ZRhmygWJKh+DpRVejzVEJ/B2x5gNBQCGbiYrTmfidd/XEFi
-	JHgXt1R/cJK/5movke34o3vS5xFb/ErSS4pN7X27ofkNCo0QRf3Y
-X-Google-Smtp-Source: AGHT+IHAZkKtbRV6xgYkSDBHXku4RNgtMO2gaznfHqz60WvcBvo+PqaP04VyWr43KrU4wKeTR2vSwA==
-X-Received: by 2002:a05:6214:29c1:b0:6b4:f979:1e03 with SMTP id 6a1803df08f44-6b7800d1fcfmr4570596d6.25.1721081003971;
-        Mon, 15 Jul 2024 15:03:23 -0700 (PDT)
+        bh=rZHCUKK+K8WgRFJdrgu4HuGCZsPE6lpsyCAqXnnCQ6s=;
+        b=dWpgVDSXmZ0mzScIfx88Chtu6RKdCrgg095au0DO8EzExFoqeRGf70Za6TjtJKDkb8
+         FY6AzkIS6CuPlTrIcsKvihqXuY1XZlIyVIqMf2H2k03SpgSTFAWoD738m/TEnnWAENyk
+         yykPm5N8VPc3Be1QIDzQFZ2hfbV5DRJ8lRN4MdBZ7khgJPNhJ7HJJuwSVBhb/fY1df2T
+         ssZrw8TU2AORb+n8A8crbE0n2YKKvaSU2MlZZpB4YdOMSmZadGmaYUpoHXrggA005kKs
+         iTtQPdsLdqULy0OpBhpCzBmrRcQTUJZ0oVZ+nKLejmpxSusUpr7yl/To0/pW5KrnU+op
+         g44w==
+X-Forwarded-Encrypted: i=1; AJvYcCUD+JhSYdRXwHZW0Hzb3OjX90NwSKlX7zIFd0Y2rxEAqmjr1vQ1LE4WutdUO2GlkO0Z60euN8hQatTNVF53XvVCJsqDVg==
+X-Gm-Message-State: AOJu0YzUH6DQ/icEK3Ip0QIlpGDP6T/XvT5sxfjm3vpOjgJ32nvIXSUU
+	7Wq2iqFHH+qgkis000XsuiI3CVGX65Mk0Lp8UFT75q5iSpHFfqL2
+X-Google-Smtp-Source: AGHT+IFfMoSL3JKzCfH6N3ijgOQL6jOmuyD9r8Z1djFwSF9KCWmY7LxayhqVkeXBBcr0+r9V9rWdoQ==
+X-Received: by 2002:a0d:c747:0:b0:65f:9f0f:7912 with SMTP id 00721157ae682-6637f69c852mr4601007b3.20.1721081633271;
+        Mon, 15 Jul 2024 15:13:53 -0700 (PDT)
 Received: from vadorovsky-macbookpro.fritz.box ([2607:fea8:fd50:8247::f272])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-6b76199f12asm25028446d6.62.2024.07.15.15.03.22
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-6b761aa050csm25506086d6.138.2024.07.15.15.13.51
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 15 Jul 2024 15:03:23 -0700 (PDT)
+        Mon, 15 Jul 2024 15:13:52 -0700 (PDT)
 From: Michal Rostecki <vadorovsky@gmail.com>
 To: 
 Cc: Michal Rostecki <vadorovsky@gmail.com>,
@@ -72,13 +72,11 @@ Cc: Michal Rostecki <vadorovsky@gmail.com>,
 	Bill Wendling <morbo@google.com>,
 	Justin Stitt <justinstitt@google.com>,
 	Martin Rodriguez Reboredo <yakoyoku@gmail.com>,
-	Finn Behrens <me@kloenk.dev>,
 	Manmohan Shukla <manmshuk@gmail.com>,
 	Valentin Obst <kernel@valentinobst.de>,
 	Asahi Lina <lina@asahilina.net>,
 	Yutaro Ohno <yutaro.ono.418@gmail.com>,
 	Danilo Krummrich <dakr@redhat.com>,
-	Tiago Lam <tiagolam@gmail.com>,
 	Charalampos Mitrodimas <charmitro@posteo.net>,
 	Ben Gooding <ben.gooding.dev@gmail.com>,
 	Tejun Heo <tj@kernel.org>,
@@ -89,9 +87,9 @@ Cc: Michal Rostecki <vadorovsky@gmail.com>,
 	kunit-dev@googlegroups.com,
 	netdev@vger.kernel.org,
 	llvm@lists.linux.dev
-Subject: [PATCH v2] rust: str: Use `core::CStr`, remove the custom `CStr` implementation
-Date: Mon, 15 Jul 2024 23:49:44 +0200
-Message-ID: <20240715214956.401687-2-vadorovsky@gmail.com>
+Subject: [PATCH v3] rust: str: Use `core::CStr`, remove the custom `CStr` implementation
+Date: Tue, 16 Jul 2024 00:11:10 +0200
+Message-ID: <20240715221126.487345-2-vadorovsky@gmail.com>
 X-Mailer: git-send-email 2.45.2
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -104,7 +102,6 @@ Content-Transfer-Encoding: 8bit
 
 `CStr` became a part of `core` library in Rust 1.75. This change replaces
 the custom `CStr` implementation with the one from `core`.
-no need to keep the custom implementation.
 
 `core::CStr` behaves generally the same as the removed implementation,
 with the following differences:
@@ -143,6 +140,10 @@ v1 -> v2:
 - Use `c_str` in kunit.rs for converting the output of `stringify!` to a
   `CStr`.
 - Remove `DerefMut` implementation for `CString`.
+
+v2 -> v3:
+- Fix the commit message.
+- Remove redundant braces in `use`, when only one item is imported.
 
  rust/kernel/error.rs        |   7 +-
  rust/kernel/kunit.rs        |  12 +-
@@ -249,7 +250,7 @@ index fd40b703d224..19f45922ec42 100644
          phy_id: T::PHY_DEVICE_ID.id,
          phy_id_mask: T::PHY_DEVICE_ID.mask_as_int(),
 diff --git a/rust/kernel/prelude.rs b/rust/kernel/prelude.rs
-index b37a0b3180fb..5efabfaa5804 100644
+index b37a0b3180fb..b0969ca78f10 100644
 --- a/rust/kernel/prelude.rs
 +++ b/rust/kernel/prelude.rs
 @@ -12,7 +12,7 @@
@@ -266,7 +267,7 @@ index b37a0b3180fb..5efabfaa5804 100644
  pub use super::error::{code::*, Error, Result};
  
 -pub use super::{str::CStr, ThisModule};
-+pub use super::{ThisModule};
++pub use super::ThisModule;
  
  pub use super::init::{InPlaceInit, Init, PinInit};
  
