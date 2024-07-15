@@ -1,124 +1,115 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9FFF118AED
-	for <llvm@lists.linux.dev>; Sun, 14 Jul 2024 20:53:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F639291E;
+	Mon, 15 Jul 2024 05:55:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720990398; cv=none; b=YTplzuyRku7lw3Kww6cGxPuHhpNAx/tauWnmTY7G4h51QddlOXobfF6xJh0WXFz7lLGcVgiV0DNyFKu95TprJdN+Fz2/fzFS/8/sUIK745HVUvHEsn/05Jn0lUum1GqcngwjAc4+JybTn3h0DK/CWW+CCH95oQGIkvgJfSH8yPw=
+	t=1721022935; cv=none; b=ZZbVgsMq5zPbS9ium1Od8pH6v6dHGnBxa4Gn8lqs2l6ewZCktdad2N0y3UX/8HUQDtq22TnMK2zx3gX3KkmRIx9rUEoURRExrUtyCr3lltpvUTVygr6yO0VM4ues/CZgOtbCflhGREiQQoviR5XgnkCbxgX+i5uXkf9j6+Z6B2s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720990398; c=relaxed/simple;
-	bh=amvZy6QyHspU9VM28Xcr98VJSJcU+O9BsegQ8f6PtEQ=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=XHrgVcD/++yruWrmN1gETbxhVNrWXVT2LPiYgTVNH/q1yPSBY+/gP7+oHXtfXdaCukbeT4gEQaAYxD7tDhbS4MUzG5n0rY9s9AfZowK0lHGrkbU2Sqn0S5N2uvnyQJo/3j4/mhasclJoml+aDEK6Pvv1nlvFnvWfeo0CPHRbnUM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=RLyB63ds; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1721022935; c=relaxed/simple;
+	bh=IUolkFBEmvcx1E57sHKTboQAZiLLaq0fvTypzUGmYTI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=gujhUtvXT6air2fTwZzaKV4/skrR1rY/wWJpYYhRfaKcnAkwdeD4qJHdpLnU29T6K3aKpJ4enIUEU4H5dxx0lnM9lJSxMiseCvLx5cMEeTKgL+7EqcxR2aotyE83ItUqhMTGznk0ZvIKGPPZHKMzStKPzFNSvLFtZPGFRhu6Pmg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=jjLyS3DZ; arc=none smtp.client-ip=198.175.65.21
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="RLyB63ds"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1720990395;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=6o6NAiaui6dPFXpDuCVWegitZ95+pS8c/gfeGZXJqm4=;
-	b=RLyB63dsQZK5Kftb5XZZ/N6lBgmXQGFcMBgQHEcYlKKsuy6fogZ809rxH2Wdjei/YoAaFP
-	zpGvUki6yPkacGeHoM1haI8Xqm0RGhRiG6tAcOd+2p3C0mE1B8TKpCfqCn1rN3Uootb4no
-	oSBhktK6USua+31rfRxc3rN7yCOcJCs=
-Received: from mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-230-OEgMiQyfM0yK1Qu1ciPTGg-1; Sun,
- 14 Jul 2024 16:53:13 -0400
-X-MC-Unique: OEgMiQyfM0yK1Qu1ciPTGg-1
-Received: from mx-prod-int-02.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-02.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.15])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 15846196CDF1
-	for <llvm@lists.linux.dev>; Sun, 14 Jul 2024 20:53:13 +0000 (UTC)
-Received: from [172.64.15.30] (unknown [10.30.34.46])
-	by mx-prod-int-02.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 2D0A31955F3B;
-	Sun, 14 Jul 2024 20:53:12 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL (MISSED 12 of 192): Test report for master
- (6.10.0-rc7, mainline.kernel.org-clang, 4d145e3f)
-Date: Sun, 14 Jul 2024 20:53:11 -0000
-To: bgoncalv@redhat.com, llvm@lists.linux.dev
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="jjLyS3DZ"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1721022933; x=1752558933;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=IUolkFBEmvcx1E57sHKTboQAZiLLaq0fvTypzUGmYTI=;
+  b=jjLyS3DZN2iNipeQyU7b/9QFnhaItMSfoRMgcZ6emF2EyTrZ+FGf8Y5w
+   8pZ3EjQlgFtn9XojIMgpJo6cPiOEepEL1dyJSHG6CEJkeCT3HxYAyLhES
+   Y/mV1eRMfh6Psf5o2JNAFMkHEujQRAalJWI4XXSCtCxXGgBVDW1Vqb3GK
+   tl7MpZJsxJI8y6zk0+7s8DK9zjI2MPMB2eZ2qRoYj2g/iS/Zpdd/pC4cf
+   40J3eqvZI9ihSb8fvqRUjdgtG918Ci7KmtUPZrC2+iZ7Fmoy5fW082hNW
+   TgxWchnTKDg0rpHAgi9FaiBl5Y7fcI9SmLgUDGSLz0EWxIgsM5LqrnftL
+   g==;
+X-CSE-ConnectionGUID: gjv31qolR5aIipLf9qAHPg==
+X-CSE-MsgGUID: t4PBE12XRZi7iEa2FcgsOA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11133"; a="18336929"
+X-IronPort-AV: E=Sophos;i="6.09,209,1716274800"; 
+   d="scan'208";a="18336929"
+Received: from orviesa002.jf.intel.com ([10.64.159.142])
+  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jul 2024 22:55:33 -0700
+X-CSE-ConnectionGUID: iwBTyI6vQiG19M85pe4i/A==
+X-CSE-MsgGUID: SWrgCtIxRo+YMdPqR+2Z4w==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.09,209,1716274800"; 
+   d="scan'208";a="80191054"
+Received: from lkp-server01.sh.intel.com (HELO 68891e0c336b) ([10.239.97.150])
+  by orviesa002.jf.intel.com with ESMTP; 14 Jul 2024 22:55:32 -0700
+Received: from kbuild by 68891e0c336b with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1sTEgK-000e2s-2H;
+	Mon, 15 Jul 2024 05:55:28 +0000
+Date: Mon, 15 Jul 2024 13:55:26 +0800
+From: kernel test robot <lkp@intel.com>
+To: Amery Hung <ameryhung@gmail.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: Re: [RFC PATCH v9 05/11] bpf: net_sched: Support implementation of
+ Qdisc_ops in bpf
+Message-ID: <202407151312.caDCQqr8-lkp@intel.com>
+References: <20240714175130.4051012-6-amery.hung@bytedance.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.15
-Message-Id: <10921.124071416531300317@us-mta-230.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240714175130.4051012-6-amery.hung@bytedance.com>
 
-Hi, we tested your kernel and here are the results:
+Hi Amery,
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: OK
-              Test: FAILED
+[This is a private test report for your RFC patch.]
+kernel test robot noticed the following build errors:
 
+[auto build test ERROR on bpf-next/master]
+[also build test ERROR on net-next/main next-20240712]
+[cannot apply to horms-ipvs/master]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Kernel information:
-    Commit message: Merge tag 'i2c-for-6.10-rc8' of git://git.kernel.org/pu=
-b/scm/linux/kernel/git/wsa/linux
+url:    https://github.com/intel-lab-lkp/linux/commits/Amery-Hung/bpf-Support-getting-referenced-kptr-from-struct_ops-argument/20240715-020211
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git master
+patch link:    https://lore.kernel.org/r/20240714175130.4051012-6-amery.hung%40bytedance.com
+patch subject: [RFC PATCH v9 05/11] bpf: net_sched: Support implementation of Qdisc_ops in bpf
+config: i386-randconfig-003-20240715 (https://download.01.org/0day-ci/archive/20240715/202407151312.caDCQqr8-lkp@intel.com/config)
+compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240715/202407151312.caDCQqr8-lkp@intel.com/reproduce)
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1372702027
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202407151312.caDCQqr8-lkp@intel.com/
 
-One or more kernel tests failed:
-    Unrecognized or new issues:
-        Reboot test
-              x86_64
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-redhat:1372702027-x86_64-kernel_upt_35
-                   Non-passing ran subtests:
-                       =E2=9D=8C FAIL misc/reboot-test/journalctl-check
+All errors (new ones prefixed by >>):
 
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1267
-            Affected tests:
-                selinux-policy: serge-testsuite [ppc64le]
+>> ld.lld: error: undefined symbol: register_qdisc
+   >>> referenced by bpf_qdisc.c:231 (net/sched/bpf_qdisc.c:231)
+   >>>               net/sched/bpf_qdisc.o:(bpf_qdisc_reg) in archive vmlinux.a
+--
+>> ld.lld: error: undefined symbol: unregister_qdisc
+   >>> referenced by bpf_qdisc.c:236 (net/sched/bpf_qdisc.c:236)
+   >>>               net/sched/bpf_qdisc.o:(bpf_qdisc_unreg) in archive vmlinux.a
+--
+>> ld.lld: error: undefined symbol: qdisc_watchdog_init
+   >>> referenced by bpf_qdisc.c:44 (net/sched/bpf_qdisc.c:44)
+   >>>               net/sched/bpf_qdisc.o:(bpf_qdisc_init_op) in archive vmlinux.a
+--
+>> ld.lld: error: undefined symbol: qdisc_watchdog_cancel
+   >>> referenced by bpf_qdisc.c:52 (net/sched/bpf_qdisc.c:52)
+   >>>               net/sched/bpf_qdisc.o:(bpf_qdisc_reset_op) in archive vmlinux.a
+   >>> referenced by bpf_qdisc.c:59 (net/sched/bpf_qdisc.c:59)
+   >>>               net/sched/bpf_qdisc.o:(bpf_qdisc_destroy_op) in archive vmlinux.a
 
-
-Tests that were not ran because of internal issues:=20
-    Boot test [s390x]
-    CKI/restraint [s390x]
-    machineinfo [s390x, x86_64]
-    Reboot test [s390x]
-    SELinux Custom Module Setup [s390x, x86_64]
-    Storage - blktests - blk - upstream [s390x]
-    Storage - blktests - nvme-tcp - upstream [s390x]
-    Storage - swraid scsi_raid [s390x]
-    stress: stress-ng - cpu-cache [s390x]
-    stress: stress-ng - memory [s390x]
-
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
