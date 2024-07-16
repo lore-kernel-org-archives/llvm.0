@@ -1,153 +1,116 @@
-Received: from mail-pg1-f181.google.com (mail-pg1-f181.google.com [209.85.215.181])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8FA7235894
-	for <llvm@lists.linux.dev>; Tue, 16 Jul 2024 07:44:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 26DF136139;
+	Tue, 16 Jul 2024 07:45:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721115901; cv=none; b=lQvswc/KIbwPnVfXkT7kLZ1TaLvj0uaofKuh3WeTEKnKyk8XdokA4dNr6qmwEIkKUFwUCZFSG4BzRnWpGQckLX4QGZ+CHvUTw6SfXmNUsepJDxiPXn76S4MpwwzMWyI8k2LrwfwYgr7SwP5k4+jx/2RvH4SeAyOdxXKgAXeuQAQ=
+	t=1721115935; cv=none; b=pmYBg8Gdc5cxNTdFgTd/VSrtWDahIS0jsGX3bd2bP0k8+aqyUBTIzOwNZZykWa0oYktRu7UB5J4uzBfbaK5+ucOFtlx+dJB/pMyjEQnYDCrsLG20aYsvSfh6izOA70q7pWMOqxLJrQt0jxf1DY6WPByjvkMfwqiYkJZPjDkDoc4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721115901; c=relaxed/simple;
-	bh=LhvDWCz+qUg7uLWIVZVAd05xhIPqDLC5aQEUa5TAj/c=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=lKLfISJUucSdnYMkdyBetrgOCWGezqzFyyIyMmGv4MArvEAbSL5mZ4SQYrFYG65Rj96+pWMo4XbhT7UBeW2sZmebeMtzdSOKIwJpxIRNyEOiqJBgkAxrTxJdXESX60mSgoLfA6eePjQNtmOg6EH9UtIeTvG1ErfjDnIsYcmDXEs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=CuxNFhn6; arc=none smtp.client-ip=209.85.215.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1721115935; c=relaxed/simple;
+	bh=QOLjTyNu9QmTi9kAURATDN/kTT2ZRnXtK1CeLFiiCIA=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=PtQ8n4CwLt6p3ao7zcZoRNYUBNg2oJQHutz0lqUa/CQuOtJWs/3lHQUnyuOBOwhyrgaKkqNRJ4hLdFTXwbltxcDGIixfP3j0H3N0jfYZFL7pet6Z10L2ixuMRgQbskIBoc8Yx4kU4tdedBTQnBXOK246D/vhirYxMGFJL/kVFy4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=bqSf6rsj; arc=none smtp.client-ip=192.198.163.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CuxNFhn6"
-Received: by mail-pg1-f181.google.com with SMTP id 41be03b00d2f7-6e7e23b42c3so3010079a12.1
-        for <llvm@lists.linux.dev>; Tue, 16 Jul 2024 00:44:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1721115899; x=1721720699; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=DbCWXGRuvzHfZO2VrOM/qCgFYRHsmheQfUlw+5FY2Pc=;
-        b=CuxNFhn6vF48pwldGU/Rz85DPLXHL0cbXFnvFH90QOnOY9nHFKUskmJSXvlhej3d+Y
-         Ck/g3VIhWkmBbHE6lGhCt+xV+dMRU+S3PK3HVLnS+jtjvOzTYDmx0bKXzG3mu/Jlpbl0
-         UmBheY9FNUj5w51M72dKuAakYLwbotdE6Mv/E/NtYmh+XBFlQDn3UvdaAq8KjzOyzIuB
-         LkO8cnr8XwHjXTHJ+edUzCtPGHtvMjp3w/shHDyHPgNrytkjM9rWDAWpf2snfgI18QJO
-         Kt1icaHrdbYDkqobb9YPsnCyCtCjRywWU7oag958WMxzj7A358TzYvCPo1RkvFhNdMNb
-         4Gmg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1721115899; x=1721720699;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=DbCWXGRuvzHfZO2VrOM/qCgFYRHsmheQfUlw+5FY2Pc=;
-        b=VqCW1lvSZ8SxC3TuWuRiBmgRzh7FqWO2fJShAlMmBAN/eAXmypKsAaQp61ObkIMUUg
-         UtGu23SHb68RGxNGCSoyfzZkVVJIgRvtbDBFBjqV3upWcOIG+/mym/amf6Bz3qv/qd61
-         wNbNOtGTElprI80/rDLENc14Bw+ohFXQ1AnrsFPtQW84HJZ+OHa/QPahx0LrM7tJZM3k
-         rUZu4QKgu8m3Rd8WOoyHFr2stns9kbeCHC3YxB2r5UOS25kxhLGkXo3Wj3ItpJSEdvsM
-         nfrJLkCpkFiyzpH306pSajHPGUXU/zQKAWeu5EAgJFUq+paYg/gKtCaPLnuWHEPBylNv
-         QhoA==
-X-Forwarded-Encrypted: i=1; AJvYcCUI4xUdQABaLhfQWByUvPk+Vtm5MRF1p608LUs+4R4S4yN+C0nMAp0lVAykFmIAFyt3Qp5Q+BoA5iuoLRsz5eOO5YKS8w==
-X-Gm-Message-State: AOJu0Yzw5112sw3nmUodwock/hrbowZHpU4X+Iy27xokRO/lx+9IAyxO
-	IkfMW8efntjNf+xVDUjPOsfEKgAFZstd9l76EzikIcVBrZlDvy0ZuoFtyzS6GUfTP9CECHWJYQu
-	dc7CAXIaOr6DFZt7knFd0UgQlEWY=
-X-Google-Smtp-Source: AGHT+IHKJ4A/6L2tAH7elOzCsqesMbEdr+mBHlIAhQKeuGXL0JGbvM+BD5UNGVOtYhJwy9ZQIVoEqnE6Pzw8x3iWzrA=
-X-Received: by 2002:a05:6a20:72a2:b0:1c0:f5be:a3ca with SMTP id
- adf61e73a8af0-1c3f124b1bdmr1554068637.30.1721115898766; Tue, 16 Jul 2024
- 00:44:58 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="bqSf6rsj"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1721115934; x=1752651934;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=QOLjTyNu9QmTi9kAURATDN/kTT2ZRnXtK1CeLFiiCIA=;
+  b=bqSf6rsjb1tq0z8kgLXjTMqZja2hfcN/OgN1jcjZl4OMi+d33aCQmr2k
+   OP//uGQthKqEP4Uj/PntUqrD06CinJcKwsCtmbAZx/kfESEpbHtGhfqEX
+   VRhg9W83DR3TYSAheZJ1APhYIhuhkkoU28iK2n9H9sctv2puqYyOLskq5
+   G99HC8NrxPkPRsPjYrtPphRbSoJCAjv2U5euTq1aowDZnJr8txgra5eUf
+   9wKd1w1JO8VinnIfbVJ0tcKu5ULAAggOA+PEWC9dh912mHjUqS9v+2P35
+   CyxbE8MWdtK7j3JTQLrnniQdkrcR6fLKNx6EkZwZVuox9e/xV79YLJaMc
+   A==;
+X-CSE-ConnectionGUID: op32xFobSHm4qyWqZgQ7nQ==
+X-CSE-MsgGUID: cfXJ9vxpT8uYPOREIznqsw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11134"; a="29948502"
+X-IronPort-AV: E=Sophos;i="6.09,211,1716274800"; 
+   d="scan'208";a="29948502"
+Received: from fmviesa002.fm.intel.com ([10.60.135.142])
+  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jul 2024 00:45:33 -0700
+X-CSE-ConnectionGUID: yVg/BbDQRyOnsBoiTZoJCQ==
+X-CSE-MsgGUID: Pmd9gcvyRaOGRnTms3N3+g==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.09,211,1716274800"; 
+   d="scan'208";a="73146095"
+Received: from lkp-server01.sh.intel.com (HELO 68891e0c336b) ([10.239.97.150])
+  by fmviesa002.fm.intel.com with ESMTP; 16 Jul 2024 00:45:31 -0700
+Received: from kbuild by 68891e0c336b with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1sTcsL-000f1W-0q;
+	Tue, 16 Jul 2024 07:45:29 +0000
+Date: Tue, 16 Jul 2024 15:45:12 +0800
+From: kernel test robot <lkp@intel.com>
+To: Stephen Boyd <sboyd@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Subject: [clk:clk-kunit 9/10] ERROR: modpost:
+ "__dtbo_kunit_clk_fixed_rate_test_begin"
+ [drivers/clk/clk-fixed-rate_test.ko] undefined!
+Message-ID: <202407161539.CA6OYeLn-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20240714160238.238708-1-vadorovsky@gmail.com> <CANiq72=kchSt5XjAJRVgNWG-iNXbc2E64ojwsQYnB2pshULK1Q@mail.gmail.com>
- <52676577-372c-4a7f-aace-4cf100f93bfb@gmail.com>
-In-Reply-To: <52676577-372c-4a7f-aace-4cf100f93bfb@gmail.com>
-From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date: Tue, 16 Jul 2024 09:44:46 +0200
-Message-ID: <CANiq72nbbtNp4vGGHkXVSgSW+WU=5Z9uGRO_LLg7+ezTqrZ_tQ@mail.gmail.com>
-Subject: Re: [PATCH] rust: str: Use `core::CStr`, remove the custom `CStr` implementation
-To: Michal Rostecki <vadorovsky@gmail.com>, Benno Lossin <benno.lossin@proton.me>
-Cc: Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, 
-	Wedson Almeida Filho <wedsonaf@gmail.com>, Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, 
-	=?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
-	Andreas Hindborg <a.hindborg@samsung.com>, Alice Ryhl <aliceryhl@google.com>, 
-	Brendan Higgins <brendan.higgins@linux.dev>, David Gow <davidgow@google.com>, 
-	Rae Moar <rmoar@google.com>, FUJITA Tomonori <fujita.tomonori@gmail.com>, 
-	Trevor Gross <tmgross@umich.edu>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, 
-	Justin Stitt <justinstitt@google.com>, Martin Rodriguez Reboredo <yakoyoku@gmail.com>, 
-	Finn Behrens <me@kloenk.dev>, Manmohan Shukla <manmshuk@gmail.com>, 
-	Valentin Obst <kernel@valentinobst.de>, Laine Taffin Altman <alexanderaltman@me.com>, 
-	Danilo Krummrich <dakr@redhat.com>, Yutaro Ohno <yutaro.ono.418@gmail.com>, 
-	Tiago Lam <tiagolam@gmail.com>, Charalampos Mitrodimas <charmitro@posteo.net>, 
-	Ben Gooding <ben.gooding.dev@gmail.com>, Roland Xu <mu001999@outlook.com>, 
-	rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com, 
-	netdev@vger.kernel.org, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Mon, Jul 15, 2024 at 6:12=E2=80=AFPM Michal Rostecki <vadorovsky@gmail.c=
-om> wrote:
->
-> @@ -71,11 +75,11 @@ macro_rules! kunit_assert {
->                   //
->                   // This mimics KUnit's failed assertion format.
->                   $crate::kunit::err(format_args!(
-> -                    "    # {}: ASSERTION FAILED at {FILE}:{LINE}\n",
-> +                    "    # {:?}: ASSERTION FAILED at {FILE:?}:{LINE:?}\n=
-",
->                       $name
->                   ));
->                   $crate::kunit::err(format_args!(
-> -                    "    Expected {CONDITION} to be true, but is false\n=
-"
-> +                    "    Expected {CONDITION:?} to be true, but is false=
-\n"
->                   ));
->
-> The only practical difference in switching from `Display` to `Debug`
-> here is that the fallback kunit error messages are going to include
-> quotation marks around conditions, files and lines.
+Hi Stephen,
 
-That is a fairly important difference -- the messages are intended to
-match the C KUnit ones.
+First bad commit (maybe != root cause):
 
-Especially the file:line notation -- I don't think a user would expect
-to have quotes there (regardless of KUnit).
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/clk/linux.git clk-kunit
+head:   9f8bbc66021282d0646d1f8422265c72e671b5d1
+commit: 077e2382fafec5681f0ca189595b63a3a4952610 [9/10] clk: Add KUnit tests for clk fixed rate basic type
+config: i386-randconfig-001-20240716 (https://download.01.org/0day-ci/archive/20240716/202407161539.CA6OYeLn-lkp@intel.com/config)
+compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240716/202407161539.CA6OYeLn-lkp@intel.com/reproduce)
 
-In general, even if we didn't need it right now, I think it is
-something we will need sooner or later.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202407161539.CA6OYeLn-lkp@intel.com/
 
-> wording. My general point is that I've never seen `&mut str` being
-> exposed in any core/std API to the external user, mutation usually
-> implies usage of an owned String.
+All errors (new ones prefixed by >>, old ones prefixed by <<):
 
-Not sure what you mean by exposed, but even if `&mut str`'s methods do
-not count (used via `String`), there is also
-`from_utf8_unchecked_mut()` that returns one, which is essentially the
-same idea as what we had here.
+WARNING: modpost: missing MODULE_DESCRIPTION() in vmlinux.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in kernel/locking/locktorture.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in kernel/locking/test-ww_mutex.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in kernel/rcu/rcutorture.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in kernel/rcu/rcuscale.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in kernel/rcu/refscale.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in kernel/time/time_test.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in kernel/torture.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in fs/ext4/ext4-inode-test.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in fs/fat/fat_test.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in fs/nfs/nfsv4.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in fs/unicode/utf8-selftest.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in fs/smb/common/cifs_arc4.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in fs/smb/common/cifs_md4.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in lib/kunit/kunit-test.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in lib/kunit/kunit-example-test.o
+ERROR: modpost: missing MODULE_LICENSE() in drivers/clk/kunit_clk_fixed_rate_test.dtbo.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/clk/kunit_clk_fixed_rate_test.dtbo.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/firewire/uapi-test.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/firewire/packet-serdes-test.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/input/tests/input_test.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/of/of_test.o
+ERROR: modpost: missing MODULE_LICENSE() in drivers/of/kunit_overlay_test.dtbo.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/of/kunit_overlay_test.dtbo.o
+>> ERROR: modpost: "__dtbo_kunit_clk_fixed_rate_test_begin" [drivers/clk/clk-fixed-rate_test.ko] undefined!
+>> ERROR: modpost: "__dtbo_kunit_clk_fixed_rate_test_end" [drivers/clk/clk-fixed-rate_test.ko] undefined!
+ERROR: modpost: "__dtbo_kunit_overlay_test_begin" [drivers/of/overlay_test.ko] undefined!
+ERROR: modpost: "__dtbo_kunit_overlay_test_end" [drivers/of/overlay_test.ko] undefined!
 
-So I am not sure about the "The rule of Rust std" part in the new
-commit messages. And, to be clear, while the Rust standard library is
-a good reference to look into, sometimes we want/need to do things
-differently anyway (which is not really the case here given
-`from_utf8_unchecked_mut()`, I would say).
-
-In this case, regardless of the standard library, personally I would
-have preferred to have a non-public function, but still have it (and
-properly documented), rather than open code the `unsafe` block with
-the casts.
-
-> I think the best solution would be leaving `c_str` macro for that. The
-> reason why I removed it is that the GitHub issue[0] mentions its
-> removal. But for that case, I think it makes sense to leave it. What do
-> you think?
-
-Perhaps the issue was only taking into account the C string literal
-case? Benno may know more.
-
-Generally speaking, replacing a clean line with a bigger `unsafe`
-block is something to be avoided.
-
-Maybe a `c_stringify!` is what we need :)
-
-Cheers,
-Miguel
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
