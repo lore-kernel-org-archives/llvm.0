@@ -1,111 +1,62 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-il1-f175.google.com (mail-il1-f175.google.com [209.85.166.175])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 01BA1C8DF;
-	Tue, 16 Jul 2024 14:00:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F2DF1E861
+	for <llvm@lists.linux.dev>; Tue, 16 Jul 2024 15:00:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721138442; cv=none; b=LwAS5kIBuR7EczRg+8w1LUXBJd+SDxj52GVaBMx4LQqLZdx7LnvnUx5grpdb9TWLOOMLmz2z5yACSguKe47Y2jmXZQiC2UJnIPa1exgpizGDaFjHzicbedbarnLaoBbVk1GQcH/xMiDHtCjp2WhdwmkuuUafsIXpVwP7wQgVqSE=
+	t=1721142055; cv=none; b=hdNs+CLL3CWW2B20cCvQWEQSUKxkY5IRryrlnfLDzXp5wTdb4kfhMevLsX3KPiuDn/84qx8g7hEy7FmkzGmPPv9Upl7Z+AeARTVVrAKg477jGXbFHOwcvEecIDdYBEqfHjUlj24pjFCqHuLutRwcCea0LEWFGZjmShAj/fHUwB0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721138442; c=relaxed/simple;
-	bh=q6G0LaBTnMOqEYsABjZwsURGHz9QWdlHe+gyWVklxts=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=E0c4fBSWhE5Qo3rD/fGV4Lp7+rTctmEppnbzVtWb46x4nKKq+6RCbmK92dacocCu917OAoMWDz5MT5fllUSAl2oyUWGeAX03BTZu+CK72RXrk5AsNNjxnLT8qYmLVKljV1XwqFlHuXSd+Hv1LdvF03QuwMQK7s6zWM+uMDe92HM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FuBb6prh; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1721142055; c=relaxed/simple;
+	bh=47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=;
+	h=MIME-Version:From:Date:Message-ID:Subject:To:Content-Type; b=OyTKy+MhHWXvNiBQbSoC0TlBd30vyeg5sN9cKHuhlXCAGXkgT8+5s/75pwoeKHrMBhpdAycZbAQqVKWuUK4DP/nudBW+p4IfZuO7pfW1dzdhlSDLcgM5F0jCi2wrZJYLPCkjh92e61BGPvTUq0auq2NPDz/N4QzgDRkLfkTCflY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=gEKrWSqm; arc=none smtp.client-ip=209.85.166.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FuBb6prh"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 405FBC116B1;
-	Tue, 16 Jul 2024 14:00:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1721138441;
-	bh=q6G0LaBTnMOqEYsABjZwsURGHz9QWdlHe+gyWVklxts=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=FuBb6prhshjfIeleU2KrheelYSh2TnxOI7dWe1G5Dd3y1F4w95HaNp1CjgnCeXkNW
-	 OR9rOeHh6duuGkkJ5a9B5+hzU+Zcd1olvWoEkNfYz71Bws4g6DG4L8z7Aa5cenrALe
-	 6D26r7/ySoliE5GFuI9+e63sLpiG32FtnKhiUAgadyy9kgEJBASbO6dTYH3hiBULVG
-	 o01Fgg3qZspZLf72CjxlxGa/zXLNpsWmPMJ0jKY5R+4I3dpTGrFGl6nBJRy9Lqwuf2
-	 ZfivNfieZL0KusjE55gOWZQ+MTgxa5TCybgmzgp02+S7nSMi5MozglZjRCUHjRgmJ8
-	 BqzAaLW5GH6JQ==
-Date: Tue, 16 Jul 2024 07:00:38 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Alexandre Ghiti <alexghiti@rivosinc.com>
-Cc: Conor Dooley <conor.dooley@microchip.com>,
-	kernel test robot <lkp@intel.com>, Jonathan Corbet <corbet@lwn.net>,
-	Paul Walmsley <paul.walmsley@sifive.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>,
-	Andrea Parri <parri.andrea@gmail.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
-	Waiman Long <longman@redhat.com>, Boqun Feng <boqun.feng@gmail.com>,
-	Arnd Bergmann <arnd@arndb.de>, Leonardo Bras <leobras@redhat.com>,
-	Guo Ren <guoren@kernel.org>, linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
-	linux-arch@vger.kernel.org, llvm@lists.linux.dev,
-	oe-kbuild-all@lists.linux.dev
-Subject: Re: [PATCH v2 01/10] riscv: Implement cmpxchg32/64() using Zacas
-Message-ID: <20240716140038.GA3272205@thelio-3990X>
-References: <20240626130347.520750-2-alexghiti@rivosinc.com>
- <202407041157.odTZAYZ6-lkp@intel.com>
- <20240705172750.GF987634@thelio-3990X>
- <CAHVXubhvk_CbBX=hWFGt+1HEM4cj=cAc1NsCEknn=B8UDcXVSQ@mail.gmail.com>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="gEKrWSqm"
+Received: by mail-il1-f175.google.com with SMTP id e9e14a558f8ab-38b3543541dso176515ab.0
+        for <llvm@lists.linux.dev>; Tue, 16 Jul 2024 08:00:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1721142053; x=1721746853; darn=lists.linux.dev;
+        h=to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=;
+        b=gEKrWSqmT6blc5/9X9JPJIES2WvF9eF/JJADL0KKh8QCsDmH7GDQzAmbTagrEgFu7E
+         eMr78QTslcyHkvupG80PxXSmHhjzuzP5pD6he+ZrzpC7gNtJ8PMbiYCmJVHxLXP9td9/
+         FyAVTvarByRQZy9QZaWEsmdbucvlFgcRbQn9+HBKG5+P3OijsWaTQvOIT6gyAecIMoyq
+         UBv/bc1Vphxcfg/g9X31Ui0Hd0lMO+tuGkRfiJKHHiJJzep7YCvzYwSAojZSzLyKlwAx
+         AiGkJzHleq3WmIyD3NWJn2nnp2NwVWqWlEBRWn5J5QBdmLuVPkfEX9iN9gYiYDOQ7RPf
+         SQqg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1721142053; x=1721746853;
+        h=to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=;
+        b=vI9xtZtMzTGOLF7SiJDVGxRs4WDSu/zZcJpvc6GXxLam9uCotLpg62Bxa5YpnChNnI
+         r6qCnGKhOhfmLZCByMxsHvfnzvCZ8ky4JXgRQNoX1Gp8rueZf4LYQlOQOl+OeHt0Y5wJ
+         T1bVV3ulG/J9jiaREMpEdb2urJP5SC2CuGXZjVf6Lp/sot48y3wIKBvRJ60cBhIHa0WZ
+         iImoxibYPps1yCO8PVmlTYveH7D5O+bKmEPOWrZaVNwA+ELZ+gbwrs0wV1jSdmHPpQW4
+         nyN2WpB2lGiyvE7/8NIEb+HdH1ELf0at22+du/qoULSY6M1Cm9E0+Zgvb6G8cYQTyANO
+         IQgA==
+X-Gm-Message-State: AOJu0YzK6xF/Sz0M6mkp2sgPfGK5fWZLjPdi1AtbjQg2vwMwzkf7+AFq
+	rIl0Nv7PnZ2ur4aJiRyteSEPxXyeyOAoOAe5qvMF3UesT62m7HzIDw1jlNPQvXRwegj8sUixoG4
+	bAyLAXrXSxHCDdYAPGd/VSiX2h6zlXL9O11Tuol/E7YKeux/jrFUg
+X-Google-Smtp-Source: AGHT+IH+uG7q/vY+iT6aAJe4ULoeZkWd5GqZ+5s54jKn68vTK/2PPinRp9HpjfUrK2rTK/oZ/HNKUTf/weYcqRvPOf8=
+X-Received: by 2002:a05:6e02:1a2b:b0:377:14ab:42ea with SMTP id
+ e9e14a558f8ab-393c11957a9mr3412175ab.16.1721142052700; Tue, 16 Jul 2024
+ 08:00:52 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAHVXubhvk_CbBX=hWFGt+1HEM4cj=cAc1NsCEknn=B8UDcXVSQ@mail.gmail.com>
+From: Ian Rogers <irogers@google.com>
+Date: Tue, 16 Jul 2024 08:00:39 -0700
+Message-ID: <CAP-5=fUss58aqUttouV1Pz=SgQzOCqN3XY5=en19cWJLF-vBLQ@mail.gmail.com>
+Subject: 
+To: llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
 
-On Tue, Jul 16, 2024 at 02:19:57PM +0200, Alexandre Ghiti wrote:
-> On Fri, Jul 5, 2024 at 7:27 PM Nathan Chancellor <nathan@kernel.org> wrote:
-> > Another alternative would be to require LLVM 17+ for RISC-V, which may
-> > not be the worst alternative, since I think most people doing serious
-> > work with clang will probably be living close to tip of tree anyways
-> > because of all the extension work that goes on upstream.
-> 
-> Stupid question but why the fix in llvm 17 was not backported to
-> previous versions?
 
-Unfortunately, LLVM releases are only supported for a few months with
-fixes, unlike GCC that supported their releases for a few years. By the
-time this issue was uncovered and resolved in LLVM main (17 at the
-time), LLVM 16 was no longer supported.
-
-I could potentially patch the kernel.org toolchains but that doesn't fix
-the issue for other versions of clang out there.
-
-> Anyway, I'd rather require llvm 17+ than add a bunch of preprocessor
-> guards in this file (IIUC what you said above) as it is complex
-> enough.
-
-Sure, this is not a super unreasonable issue to bump the minimum
-supported version for RISC-V over in my opinion, so no real objections
-from me.
-
-> @Conor Dooley @Palmer Dabbelt WDYT? Is there any interest in
-> supporting llvm < 17? We may encounter this bug again in the future so
-> I'd be in favor of moving to llvm 17+.
-
-FWIW, I would envision a diff like this (assuming it actually works to
-resolve this issue, I didn't actually test it):
-
-diff --git a/scripts/min-tool-version.sh b/scripts/min-tool-version.sh
-index 91c91201212c..e81eb7ed257d 100755
---- a/scripts/min-tool-version.sh
-+++ b/scripts/min-tool-version.sh
-@@ -28,6 +28,8 @@ llvm)
- 		echo 15.0.0
- 	elif [ "$SRCARCH" = loongarch ]; then
- 		echo 18.0.0
-+	elif [ "$SRCARCH" = riscv ]; then
-+		echo 17.0.0
- 	else
- 		echo 13.0.1
- 	fi
-
-Cheers,
-Nathan
