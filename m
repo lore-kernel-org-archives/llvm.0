@@ -1,53 +1,53 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 523874A2F;
-	Tue, 16 Jul 2024 00:54:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0351F4A24;
+	Tue, 16 Jul 2024 01:57:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721091262; cv=none; b=XFaGxAhX7XgPDMSByDn071NjAwnz4EcycC8eYkguZmG6M/zrvd4Z1GxxtsIfhYG5RtuaTKlw7S/iNwROw73j42t1uEbfeNfrrPIDkubQsit3G1F6W99Wrij1xcUftzbYnxOnhLZlO5ouSdgHkprxnUkFfteiTO+z7+nwvwyE/IE=
+	t=1721095046; cv=none; b=TH82yGT1p/akG0EMSAOeupZdrRH0lsrI6FQQJKWpVQB4NmtBZneJc4kfhaJqKK4cDbyEFBYBy/ICo8B2f14YbA/7mH/IHieigYah2SP317Uj+AnJ8zPJ7h6PCFSdkNsnoX2xqyT7nPkb/75fdNFk0jDOeUyoCesKSx4YYpzj4RQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721091262; c=relaxed/simple;
-	bh=AlcLkl3ZckSTetDqtkbewgaIlrmC0fd1HpPyOnPIDOY=;
+	s=arc-20240116; t=1721095046; c=relaxed/simple;
+	bh=t0XlaqT1tDT/nsM6KCVFb/nb2016vFMXOdVznDehQak=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=jpVPqVe7iCrlh3YDbvHd+bLgmVEf4hB12qktHNbyUuKaW84O8qkrtS2XxQc3lNXXD6lGoHczOXpfXQYaA+8RXP7kXNgD7OF0hppQnA81Kxbt3A/noe5yJA/BK+8SABhGxi7yOwgoYdIaU7X1dsusI2iXMv4AZd26EKZmHlz3m+0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=n0f7rM5L; arc=none smtp.client-ip=198.175.65.16
+	 Content-Type:Content-Disposition:In-Reply-To; b=M3bRavAj7MKI2zt6HzmyCqeufPlUJ6EB2WM1gg6BT55o1kgSnpZ/nZ30OXA8o6nyvFJOD+tC0QhxJLXKhUIZVUyQOSXVaaQG5rAXHr4pWsjwo5k9r0owi0hA8FvC5UpDw1vCiytHbTSyT8Sfw7yPTsM6leWXQ/Kbftl2x8QdDxI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=fIBKteLS; arc=none smtp.client-ip=192.198.163.17
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="n0f7rM5L"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="fIBKteLS"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1721091260; x=1752627260;
+  t=1721095043; x=1752631043;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=AlcLkl3ZckSTetDqtkbewgaIlrmC0fd1HpPyOnPIDOY=;
-  b=n0f7rM5LQCiaK+ndZzU9tQ3UPFnnfy/fVE+GcHxaCEXvgDGHqf7uE9f5
-   TuEwcr9s0FoSyulbWfBrcymhSXEZrYsCgtC+yziKavUCDoiN/oFdDnzKQ
-   b7KMtErNscRcH7KXqVIXVLUziLlUF4r8l03stUqnuMgcYzAWrC7Pm6t7f
-   adBPFNSyb4yCKmkmyj0VykUreiS80gWxGlv5EFZBw20ZYh/XuMFNOjF5i
-   yxyGi6WKUB/y5rvnnbHE/JukYlojPHCf9cDpBvTj74wd3kFGHYZPojhqU
-   44ZXpO+aPu6d0RESgj4ThGHbv6rWnKVUYPq93T0hRle40IAqpuIpeBxaq
-   A==;
-X-CSE-ConnectionGUID: 15W2N+d8TB+PXPlxkbRQUg==
-X-CSE-MsgGUID: FCGLv+HATw6GjusZzo6Mqw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11134"; a="18642255"
+  bh=t0XlaqT1tDT/nsM6KCVFb/nb2016vFMXOdVznDehQak=;
+  b=fIBKteLSPhZWakjlGU2celfaXfB845tbzVF7DeSc9j4Sr0PSgQcX2AZY
+   AXAatQ4++rRQNLDQoggDj+V/7yYXbWTLUYktD6b3sn9vwH7dVjSHTa9rX
+   ULA0ty7kDlhwH7YfF5rfg8S7E+ZiPuYx1MFh4i+dfpFsGljgSRLr3KSjd
+   yCZEEAJ8TGV/S+4KN6+TleoA+SCtHdkAKcNYGY0dUwmS5XYeY+tphP/dY
+   oR1QHRFMPTdr7ZLm3oVl4oRO4gHGED6iRYqbh4Hujhgz/E0zQDVHssjQy
+   7JNaVfraSN0tGNtoPeQFtqw1KG/F2IhMJyOQfR2VH4GDvKIHGYqkkQVZR
+   Q==;
+X-CSE-ConnectionGUID: WpzpiDI4THex67W/mnqi6Q==
+X-CSE-MsgGUID: 5mCEcgNyQcuXxr3Ys8v/KQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11134"; a="18377041"
 X-IronPort-AV: E=Sophos;i="6.09,211,1716274800"; 
-   d="scan'208";a="18642255"
-Received: from fmviesa010.fm.intel.com ([10.60.135.150])
-  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jul 2024 17:54:20 -0700
-X-CSE-ConnectionGUID: lF6M1kDsQcupE5CgB6cnNw==
-X-CSE-MsgGUID: EmctZzIbRMavmTAEQvtPpQ==
+   d="scan'208";a="18377041"
+Received: from orviesa002.jf.intel.com ([10.64.159.142])
+  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jul 2024 18:57:22 -0700
+X-CSE-ConnectionGUID: Sy4ZL5sRSuSVdTh3priDpA==
+X-CSE-MsgGUID: vtkZ1LHFRvePulM3uhH8xA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.09,211,1716274800"; 
-   d="scan'208";a="49900247"
+   d="scan'208";a="80509954"
 Received: from lkp-server01.sh.intel.com (HELO 68891e0c336b) ([10.239.97.150])
-  by fmviesa010.fm.intel.com with ESMTP; 15 Jul 2024 17:54:16 -0700
+  by orviesa002.jf.intel.com with ESMTP; 15 Jul 2024 18:57:19 -0700
 Received: from kbuild by 68891e0c336b with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1sTWSM-000eiJ-1i;
-	Tue, 16 Jul 2024 00:54:14 +0000
-Date: Tue, 16 Jul 2024 08:53:30 +0800
+	id 1sTXRM-000ekw-0M;
+	Tue, 16 Jul 2024 01:57:16 +0000
+Date: Tue, 16 Jul 2024 09:57:00 +0800
 From: kernel test robot <lkp@intel.com>
 To: alejandro.lucero-palau@amd.com, linux-cxl@vger.kernel.org,
 	netdev@vger.kernel.org, dan.j.williams@intel.com,
@@ -56,10 +56,9 @@ To: alejandro.lucero-palau@amd.com, linux-cxl@vger.kernel.org,
 	richard.hughes@amd.com
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
 	Alejandro Lucero <alucerop@amd.com>
-Subject: Re: [PATCH v2 09/15] cxl: define a driver interface for HPA free
- space enumaration
-Message-ID: <202407160818.7GrterxM-lkp@intel.com>
-References: <20240715172835.24757-10-alejandro.lucero-palau@amd.com>
+Subject: Re: [PATCH v2 01/15] cxl: add type2 device basic support
+Message-ID: <202407160957.L4mIOUtI-lkp@intel.com>
+References: <20240715172835.24757-2-alejandro.lucero-palau@amd.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -68,141 +67,148 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240715172835.24757-10-alejandro.lucero-palau@amd.com>
+In-Reply-To: <20240715172835.24757-2-alejandro.lucero-palau@amd.com>
 
 Hi,
 
 kernel test robot noticed the following build warnings:
 
 [auto build test WARNING on linus/master]
-[also build test WARNING on v6.10 next-20240715]
-[cannot apply to cxl/next cxl/pending horms-ipvs/master]
+[also build test WARNING on cxl/pending v6.10 next-20240715]
+[cannot apply to cxl/next horms-ipvs/master]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
 url:    https://github.com/intel-lab-lkp/linux/commits/alejandro-lucero-palau-amd-com/cxl-add-type2-device-basic-support/20240716-015920
 base:   linus/master
-patch link:    https://lore.kernel.org/r/20240715172835.24757-10-alejandro.lucero-palau%40amd.com
-patch subject: [PATCH v2 09/15] cxl: define a driver interface for HPA free space enumaration
-config: i386-buildonly-randconfig-004-20240716 (https://download.01.org/0day-ci/archive/20240716/202407160818.7GrterxM-lkp@intel.com/config)
-compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240716/202407160818.7GrterxM-lkp@intel.com/reproduce)
+patch link:    https://lore.kernel.org/r/20240715172835.24757-2-alejandro.lucero-palau%40amd.com
+patch subject: [PATCH v2 01/15] cxl: add type2 device basic support
+config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20240716/202407160957.L4mIOUtI-lkp@intel.com/config)
+compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project a0c6b8aef853eedaa0980f07c0a502a5a8a9740e)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240716/202407160957.L4mIOUtI-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202407160818.7GrterxM-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202407160957.L4mIOUtI-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
-   In file included from drivers/net/ethernet/sfc/efx_cxl.c:17:
-   drivers/net/ethernet/sfc/efx_cxl.h:11:9: warning: 'EFX_CXL_H' is used as a header guard here, followed by #define of a different macro [-Wheader-guard]
+   In file included from drivers/net/ethernet/sfc/efx.c:8:
+   In file included from include/linux/filter.h:9:
+   In file included from include/linux/bpf.h:20:
+   In file included from include/linux/module.h:19:
+   In file included from include/linux/elf.h:6:
+   In file included from arch/s390/include/asm/elf.h:173:
+   In file included from arch/s390/include/asm/mmu_context.h:11:
+   In file included from arch/s390/include/asm/pgalloc.h:18:
+   In file included from include/linux/mm.h:2258:
+   include/linux/vmstat.h:500:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     500 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     501 |                            item];
+         |                            ~~~~
+   include/linux/vmstat.h:507:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     507 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     508 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/vmstat.h:514:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     514 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+   include/linux/vmstat.h:519:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     519 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     520 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/vmstat.h:528:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     528 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     529 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+   In file included from drivers/net/ethernet/sfc/efx.c:8:
+   In file included from include/linux/filter.h:12:
+   In file included from include/linux/skbuff.h:28:
+   In file included from include/linux/dma-mapping.h:11:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/s390/include/asm/io.h:93:
+   include/asm-generic/io.h:548:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     548 |         val = __raw_readb(PCI_IOBASE + addr);
+         |                           ~~~~~~~~~~ ^
+   include/asm-generic/io.h:561:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     561 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
+      37 | #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
+         |                                                           ^
+   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
+     102 | #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
+         |                                                      ^
+   In file included from drivers/net/ethernet/sfc/efx.c:8:
+   In file included from include/linux/filter.h:12:
+   In file included from include/linux/skbuff.h:28:
+   In file included from include/linux/dma-mapping.h:11:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/s390/include/asm/io.h:93:
+   include/asm-generic/io.h:574:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     574 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
+      35 | #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
+         |                                                           ^
+   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
+     115 | #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
+         |                                                      ^
+   In file included from drivers/net/ethernet/sfc/efx.c:8:
+   In file included from include/linux/filter.h:12:
+   In file included from include/linux/skbuff.h:28:
+   In file included from include/linux/dma-mapping.h:11:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/s390/include/asm/io.h:93:
+   include/asm-generic/io.h:585:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     585 |         __raw_writeb(value, PCI_IOBASE + addr);
+         |                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:595:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     595 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:605:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     605 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:693:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     693 |         readsb(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:701:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     701 |         readsw(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:709:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     709 |         readsl(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:718:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     718 |         writesb(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+   include/asm-generic/io.h:727:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     727 |         writesw(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+   include/asm-generic/io.h:736:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     736 |         writesl(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+   In file included from drivers/net/ethernet/sfc/efx.c:36:
+>> drivers/net/ethernet/sfc/efx_cxl.h:11:9: warning: 'EFX_CXL_H' is used as a header guard here, followed by #define of a different macro [-Wheader-guard]
       11 | #ifndef EFX_CXL_H
          |         ^~~~~~~~~
    drivers/net/ethernet/sfc/efx_cxl.h:12:9: note: 'EFX_CLX_H' is defined here; did you mean 'EFX_CXL_H'?
       12 | #define EFX_CLX_H
          |         ^~~~~~~~~
          |         EFX_CXL_H
->> drivers/net/ethernet/sfc/efx_cxl.c:89:7: warning: format specifies type 'unsigned long long' but the argument has type 'resource_size_t' (aka 'unsigned int') [-Wformat]
-      88 |                 pci_info(pci_dev, "CXL accel not enough free HPA space %llu < %u\n",
-         |                                                                        ~~~~
-         |                                                                        %u
-      89 |                                   max, EFX_CTPIO_BUFFER_SIZE);
-         |                                   ^~~
-   include/linux/pci.h:2683:67: note: expanded from macro 'pci_info'
-    2683 | #define pci_info(pdev, fmt, arg...)     dev_info(&(pdev)->dev, fmt, ##arg)
-         |                                                                ~~~    ^~~
-   include/linux/dev_printk.h:160:67: note: expanded from macro 'dev_info'
-     160 |         dev_printk_index_wrap(_dev_info, KERN_INFO, dev, dev_fmt(fmt), ##__VA_ARGS__)
-         |                                                                  ~~~     ^~~~~~~~~~~
-   include/linux/dev_printk.h:110:23: note: expanded from macro 'dev_printk_index_wrap'
-     110 |                 _p_func(dev, fmt, ##__VA_ARGS__);                       \
-         |                              ~~~    ^~~~~~~~~~~
-   2 warnings generated.
+   18 warnings generated.
 
 
-vim +89 drivers/net/ethernet/sfc/efx_cxl.c
+vim +/EFX_CXL_H +11 drivers/net/ethernet/sfc/efx_cxl.h
 
-    15	
-    16	#include "net_driver.h"
-  > 17	#include "efx_cxl.h"
-    18	
-    19	#define EFX_CTPIO_BUFFER_SIZE	(1024*1024*256)
-    20	
-    21	void efx_cxl_init(struct efx_nic *efx)
-    22	{
-    23		struct pci_dev *pci_dev = efx->pci_dev;
-    24		struct efx_cxl *cxl = efx->cxl;
-    25		resource_size_t max = 0;
-    26		struct resource res;
-    27		u16 dvsec;
-    28	
-    29		dvsec = pci_find_dvsec_capability(pci_dev, PCI_VENDOR_ID_CXL,
-    30						  CXL_DVSEC_PCIE_DEVICE);
-    31	
-    32		if (!dvsec)
-    33			return;
-    34	
-    35		pci_info(pci_dev, "CXL CXL_DVSEC_PCIE_DEVICE capability found");
-    36	
-    37		cxl->cxlds = cxl_accel_state_create(&pci_dev->dev,
-    38						    CXL_ACCEL_DRIVER_CAP_HDM);
-    39		if (IS_ERR(cxl->cxlds)) {
-    40			pci_info(pci_dev, "CXL accel device state failed");
-    41			return;
-    42		}
-    43	
-    44		cxl_accel_set_dvsec(cxl->cxlds, dvsec);
-    45		cxl_accel_set_serial(cxl->cxlds, pci_dev->dev.id);
-    46	
-    47		res = DEFINE_RES_MEM(0, EFX_CTPIO_BUFFER_SIZE);
-    48		cxl_accel_set_resource(cxl->cxlds, res, CXL_ACCEL_RES_DPA);
-    49	
-    50		res = DEFINE_RES_MEM_NAMED(0, EFX_CTPIO_BUFFER_SIZE, "ram");
-    51		cxl_accel_set_resource(cxl->cxlds, res, CXL_ACCEL_RES_RAM);
-    52	
-    53		if (cxl_pci_accel_setup_regs(pci_dev, cxl->cxlds)) {
-    54			pci_info(pci_dev, "CXL accel setup regs failed");
-    55			return;
-    56		}
-    57	
-    58		if (cxl_accel_request_resource(cxl->cxlds, true))
-    59			pci_info(pci_dev, "CXL accel resource request failed");
-    60	
-    61		if (!cxl_await_media_ready(cxl->cxlds)) {
-    62			cxl_accel_set_media_ready(cxl->cxlds);
-    63		} else {
-    64			pci_info(pci_dev, "CXL accel media not active");
-    65			return;
-    66		}
-    67	
-    68		cxl->cxlmd = devm_cxl_add_memdev(&pci_dev->dev, cxl->cxlds);
-    69		if (IS_ERR(cxl->cxlmd)) {
-    70			pci_info(pci_dev, "CXL accel memdev creation failed");
-    71			return;
-    72		}
-    73	
-    74		cxl->endpoint = cxl_acquire_endpoint(cxl->cxlmd);
-    75		if (IS_ERR(cxl->endpoint))
-    76			pci_info(pci_dev, "CXL accel acquire endpoint failed");
-    77	
-    78		cxl->cxlrd = cxl_get_hpa_freespace(cxl->endpoint, 1,
-    79						    CXL_DECODER_F_RAM | CXL_DECODER_F_TYPE2,
-    80						    &max);
-    81	
-    82		if (IS_ERR(cxl->cxlrd)) {
-    83			pci_info(pci_dev, "CXL accel get HPA failed");
-    84			goto out;
-    85		}
-    86	
-    87		if (max < EFX_CTPIO_BUFFER_SIZE)
-    88			pci_info(pci_dev, "CXL accel not enough free HPA space %llu < %u\n",
-  > 89					  max, EFX_CTPIO_BUFFER_SIZE);
-    90	out:
-    91		cxl_release_endpoint(cxl->cxlmd, cxl->endpoint);
-    92	}
-    93	
+  > 11	#ifndef EFX_CXL_H
+    12	#define EFX_CLX_H
+    13	
 
 -- 
 0-DAY CI Kernel Test Service
