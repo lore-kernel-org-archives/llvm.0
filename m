@@ -1,249 +1,111 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D58A01E498;
-	Tue, 16 Jul 2024 12:46:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 01BA1C8DF;
+	Tue, 16 Jul 2024 14:00:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721133971; cv=none; b=QsrNMPSB1pYYoU8lsOd6eBe+L/OCfGpshsKqUuK6Lt43WXlq8y+M0NWjDjztM55giSuUmkxlPsdHGQFEzIcqdtKmpaP1vV31ytn6vjImr15bxs5xyS3TM6gcPpLrUthJ7FDKwzM1LUrBbj5IMpVdbashCYH/S948MFEfAKoS4ck=
+	t=1721138442; cv=none; b=LwAS5kIBuR7EczRg+8w1LUXBJd+SDxj52GVaBMx4LQqLZdx7LnvnUx5grpdb9TWLOOMLmz2z5yACSguKe47Y2jmXZQiC2UJnIPa1exgpizGDaFjHzicbedbarnLaoBbVk1GQcH/xMiDHtCjp2WhdwmkuuUafsIXpVwP7wQgVqSE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721133971; c=relaxed/simple;
-	bh=UaW80XjdxyTaYoTuMeCQ/FBqDlnT80EdSphwChvjpjA=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=XVqTRMYpUWjF15HexssoKPRQKyuk0r2xOipR9r9ClVtTpWanpmXbse23ny4I50pR0wCAqjkVKml8z8s35Ki9rPjw1r3eOBzM7CZUgNT1AnwZYHFcs/WjRrUlBiJNQpQDaz+99f3ERQ604SaWAhNdze0phNy3v9EXJgU4qtSf/ak=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=FBsrOdJr; arc=none smtp.client-ip=198.175.65.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1721138442; c=relaxed/simple;
+	bh=q6G0LaBTnMOqEYsABjZwsURGHz9QWdlHe+gyWVklxts=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=E0c4fBSWhE5Qo3rD/fGV4Lp7+rTctmEppnbzVtWb46x4nKKq+6RCbmK92dacocCu917OAoMWDz5MT5fllUSAl2oyUWGeAX03BTZu+CK72RXrk5AsNNjxnLT8qYmLVKljV1XwqFlHuXSd+Hv1LdvF03QuwMQK7s6zWM+uMDe92HM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FuBb6prh; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="FBsrOdJr"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1721133969; x=1752669969;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=UaW80XjdxyTaYoTuMeCQ/FBqDlnT80EdSphwChvjpjA=;
-  b=FBsrOdJr4fYvPccBIhm3H8UxsMdBLNIcwQ6R9xJ5vJOSrAwkwMLxOdRX
-   5gS0V/ZwhIzUE8YDL/iYce5pM4A/P4je3l6/xYlx1QtX4LlXB0smVV82k
-   581RoWiJwQ16AvcYj9JugviHPwEptJuY/wNnxO996O9kl0Hl2ye5ri4NO
-   E+I7AfHW8eQGMtGMQpgdhG1N/qjAghZO+iI8hELr6l24J2/vGermErQWa
-   X38kQGUCveG5d46BgaY2AGVvI4EVCOK2/gRDZCo9zspPw5g/Ce/KNvwcK
-   KAlSbfYiEDH/fqxoo5k4O25tys3fr/fK3S9CeE0bXy3EnvVn+2KrdjaFn
-   A==;
-X-CSE-ConnectionGUID: UlxrEJweSQyIeKJI/S8jHA==
-X-CSE-MsgGUID: Db7Yk6gAR1Sfv5yJ1HetXA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11134"; a="22330254"
-X-IronPort-AV: E=Sophos;i="6.09,211,1716274800"; 
-   d="scan'208";a="22330254"
-Received: from fmviesa008.fm.intel.com ([10.60.135.148])
-  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jul 2024 05:45:55 -0700
-X-CSE-ConnectionGUID: 2nw7+WKYSqasEl/3kbjUlw==
-X-CSE-MsgGUID: oGHHpydRTSO1eOpAx6P1jA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.09,211,1716274800"; 
-   d="scan'208";a="49928275"
-Received: from lkp-server01.sh.intel.com (HELO 68891e0c336b) ([10.239.97.150])
-  by fmviesa008.fm.intel.com with ESMTP; 16 Jul 2024 05:45:53 -0700
-Received: from kbuild by 68891e0c336b with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1sThZ1-000fDu-0B;
-	Tue, 16 Jul 2024 12:45:51 +0000
-Date: Tue, 16 Jul 2024 20:44:58 +0800
-From: kernel test robot <lkp@intel.com>
-To: Josh Poimboeuf <jpoimboe@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [jpoimboe:objtool-diff 8/8] arch/x86/include/asm/smp.h:83:2: error:
- expected ')'
-Message-ID: <202407162049.EEInf5SQ-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FuBb6prh"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 405FBC116B1;
+	Tue, 16 Jul 2024 14:00:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1721138441;
+	bh=q6G0LaBTnMOqEYsABjZwsURGHz9QWdlHe+gyWVklxts=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=FuBb6prhshjfIeleU2KrheelYSh2TnxOI7dWe1G5Dd3y1F4w95HaNp1CjgnCeXkNW
+	 OR9rOeHh6duuGkkJ5a9B5+hzU+Zcd1olvWoEkNfYz71Bws4g6DG4L8z7Aa5cenrALe
+	 6D26r7/ySoliE5GFuI9+e63sLpiG32FtnKhiUAgadyy9kgEJBASbO6dTYH3hiBULVG
+	 o01Fgg3qZspZLf72CjxlxGa/zXLNpsWmPMJ0jKY5R+4I3dpTGrFGl6nBJRy9Lqwuf2
+	 ZfivNfieZL0KusjE55gOWZQ+MTgxa5TCybgmzgp02+S7nSMi5MozglZjRCUHjRgmJ8
+	 BqzAaLW5GH6JQ==
+Date: Tue, 16 Jul 2024 07:00:38 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Alexandre Ghiti <alexghiti@rivosinc.com>
+Cc: Conor Dooley <conor.dooley@microchip.com>,
+	kernel test robot <lkp@intel.com>, Jonathan Corbet <corbet@lwn.net>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>,
+	Andrea Parri <parri.andrea@gmail.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
+	Waiman Long <longman@redhat.com>, Boqun Feng <boqun.feng@gmail.com>,
+	Arnd Bergmann <arnd@arndb.de>, Leonardo Bras <leobras@redhat.com>,
+	Guo Ren <guoren@kernel.org>, linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
+	linux-arch@vger.kernel.org, llvm@lists.linux.dev,
+	oe-kbuild-all@lists.linux.dev
+Subject: Re: [PATCH v2 01/10] riscv: Implement cmpxchg32/64() using Zacas
+Message-ID: <20240716140038.GA3272205@thelio-3990X>
+References: <20240626130347.520750-2-alexghiti@rivosinc.com>
+ <202407041157.odTZAYZ6-lkp@intel.com>
+ <20240705172750.GF987634@thelio-3990X>
+ <CAHVXubhvk_CbBX=hWFGt+1HEM4cj=cAc1NsCEknn=B8UDcXVSQ@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAHVXubhvk_CbBX=hWFGt+1HEM4cj=cAc1NsCEknn=B8UDcXVSQ@mail.gmail.com>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jpoimboe/linux.git objtool-diff
-head:   bc3cdfe89249cdc982760e0fb48820b399935d43
-commit: bc3cdfe89249cdc982760e0fb48820b399935d43 [8/8] working with klp-test.patch
-config: i386-buildonly-randconfig-006-20240716 (https://download.01.org/0day-ci/archive/20240716/202407162049.EEInf5SQ-lkp@intel.com/config)
-compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240716/202407162049.EEInf5SQ-lkp@intel.com/reproduce)
+On Tue, Jul 16, 2024 at 02:19:57PM +0200, Alexandre Ghiti wrote:
+> On Fri, Jul 5, 2024 at 7:27 PM Nathan Chancellor <nathan@kernel.org> wrote:
+> > Another alternative would be to require LLVM 17+ for RISC-V, which may
+> > not be the worst alternative, since I think most people doing serious
+> > work with clang will probably be living close to tip of tree anyways
+> > because of all the extension work that goes on upstream.
+> 
+> Stupid question but why the fix in llvm 17 was not backported to
+> previous versions?
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202407162049.EEInf5SQ-lkp@intel.com/
+Unfortunately, LLVM releases are only supported for a few months with
+fixes, unlike GCC that supported their releases for a few years. By the
+time this issue was uncovered and resolved in LLVM main (17 at the
+time), LLVM 16 was no longer supported.
 
-All errors (new ones prefixed by >>):
+I could potentially patch the kernel.org toolchains but that doesn't fix
+the issue for other versions of clang out there.
 
-   scripts/genksyms/parse.y: warning: 9 shift/reduce conflicts [-Wconflicts-sr]
-   scripts/genksyms/parse.y: warning: 5 reduce/reduce conflicts [-Wconflicts-rr]
-   scripts/genksyms/parse.y: note: rerun with option '-Wcounterexamples' to generate conflict counterexamples
-   In file included from arch/x86/kernel/asm-offsets.c:9:
-   In file included from include/linux/crypto.h:15:
-   In file included from include/linux/completion.h:12:
-   In file included from include/linux/swait.h:7:
-   In file included from include/linux/spinlock.h:59:
-   In file included from include/linux/irqflags.h:18:
-   In file included from arch/x86/include/asm/irqflags.h:9:
-   In file included from arch/x86/include/asm/nospec-branch.h:6:
-   In file included from include/linux/static_key.h:1:
-   In file included from include/linux/jump_label.h:112:
-   arch/x86/include/asm/jump_label.h:44:3: error: expected ':'
-      44 |                 JUMP_TABLE_ENTRY
-         |                 ^
-   arch/x86/include/asm/jump_label.h:18:2: note: expanded from macro 'JUMP_TABLE_ENTRY'
-      18 |         FAKE_SYMBOL(__jump_table_, 16)                  \
-         |         ^
-   arch/x86/include/asm/jump_label.h:58:3: error: expected ':'
-      58 |                 JUMP_TABLE_ENTRY
-         |                 ^
-   arch/x86/include/asm/jump_label.h:18:2: note: expanded from macro 'JUMP_TABLE_ENTRY'
-      18 |         FAKE_SYMBOL(__jump_table_, 16)                  \
-         |         ^
-   In file included from arch/x86/kernel/asm-offsets.c:9:
-   In file included from include/linux/crypto.h:15:
-   In file included from include/linux/completion.h:12:
-   In file included from include/linux/swait.h:7:
-   In file included from include/linux/spinlock.h:60:
-   include/linux/thread_info.h:249:6: error: expected ')'
-     249 |         if (WARN_ON_ONCE(bytes > INT_MAX))
-         |             ^
-   include/asm-generic/bug.h:113:3: note: expanded from macro 'WARN_ON_ONCE'
-     113 |                 __WARN_FLAGS(BUGFLAG_ONCE |                     \
-         |                 ^
-   arch/x86/include/asm/bug.h:85:2: note: expanded from macro '__WARN_FLAGS'
-      85 |         _BUG_FLAGS(ASM_UD2, __flags, ASM_REACHABLE);            \
-         |         ^
-   arch/x86/include/asm/bug.h:30:8: note: expanded from macro '_BUG_FLAGS'
-      30 |                      FAKE_SYMBOL(__bug_table_, 12)                      \
-         |                      ^
-   In file included from arch/x86/kernel/asm-offsets.c:9:
-   In file included from include/linux/crypto.h:15:
-   In file included from include/linux/completion.h:12:
-   In file included from include/linux/swait.h:7:
-   In file included from include/linux/spinlock.h:63:
-   In file included from include/linux/lockdep.h:14:
-   In file included from include/linux/smp.h:119:
->> arch/x86/include/asm/smp.h:83:2: error: expected ')'
-      83 |         BUG();
-         |         ^
-   arch/x86/include/asm/bug.h:71:2: note: expanded from macro 'BUG'
-      71 |         _BUG_FLAGS(ASM_UD2, 0, "");                             \
-         |         ^
-   arch/x86/include/asm/bug.h:30:8: note: expanded from macro '_BUG_FLAGS'
-      30 |                      FAKE_SYMBOL(__bug_table_, 12)                      \
-         |                      ^
-   In file included from arch/x86/kernel/asm-offsets.c:9:
-   In file included from include/linux/crypto.h:17:
-   In file included from include/linux/slab.h:16:
-   In file included from include/linux/gfp.h:7:
-   In file included from include/linux/mmzone.h:22:
-   In file included from include/linux/mm_types.h:11:
-   In file included from include/linux/rbtree.h:24:
-   include/linux/rcupdate.h:1085:2: error: expected ')'
-    1085 |         WARN_ON_ONCE(func != (rcu_callback_t)~0L);
-         |         ^
-   include/asm-generic/bug.h:113:3: note: expanded from macro 'WARN_ON_ONCE'
-     113 |                 __WARN_FLAGS(BUGFLAG_ONCE |                     \
-         |                 ^
-   arch/x86/include/asm/bug.h:85:2: note: expanded from macro '__WARN_FLAGS'
-      85 |         _BUG_FLAGS(ASM_UD2, __flags, ASM_REACHABLE);            \
-         |         ^
-   arch/x86/include/asm/bug.h:30:8: note: expanded from macro '_BUG_FLAGS'
-      30 |                      FAKE_SYMBOL(__bug_table_, 12)                      \
-         |                      ^
-   In file included from arch/x86/kernel/asm-offsets.c:9:
-   In file included from include/linux/crypto.h:17:
-   In file included from include/linux/slab.h:16:
-   In file included from include/linux/gfp.h:7:
-   In file included from include/linux/mmzone.h:22:
-   In file included from include/linux/mm_types.h:12:
-   include/linux/maple_tree.h:719:2: error: expected ')'
-     719 |         MAS_WARN_ON(mas, mas_is_active(mas) &&
-         |         ^
-   include/linux/maple_tree.h:701:34: note: expanded from macro 'MAS_WARN_ON'
-     701 | #define MAS_WARN_ON(__mas, __x)         WARN_ON(__x)
-         |                                         ^
-   include/asm-generic/bug.h:125:3: note: expanded from macro 'WARN_ON'
-     125 |                 __WARN();                                               \
-         |                 ^
-   include/asm-generic/bug.h:103:19: note: expanded from macro '__WARN'
-     103 | #define __WARN()                __WARN_FLAGS(BUGFLAG_TAINT(TAINT_WARN))
-         |                                 ^
-   arch/x86/include/asm/bug.h:85:2: note: expanded from macro '__WARN_FLAGS'
-      85 |         _BUG_FLAGS(ASM_UD2, __flags, ASM_REACHABLE);            \
-         |         ^
-   arch/x86/include/asm/bug.h:30:8: note: expanded from macro '_BUG_FLAGS'
-      30 |                      FAKE_SYMBOL(__bug_table_, 12)                      \
-         |                      ^
-   In file included from arch/x86/kernel/asm-offsets.c:9:
-   In file included from include/linux/crypto.h:17:
-   In file included from include/linux/slab.h:16:
-   In file included from include/linux/gfp.h:7:
-   In file included from include/linux/mmzone.h:22:
-   In file included from include/linux/mm_types.h:12:
-   include/linux/maple_tree.h:811:3: error: expected ')'
-     811 |                 WARN_ON(!mt_lock_is_held(mt));
-         |                 ^
-   include/asm-generic/bug.h:125:3: note: expanded from macro 'WARN_ON'
-     125 |                 __WARN();                                               \
-         |                 ^
-   include/asm-generic/bug.h:103:19: note: expanded from macro '__WARN'
-     103 | #define __WARN()                __WARN_FLAGS(BUGFLAG_TAINT(TAINT_WARN))
-         |                                 ^
-   arch/x86/include/asm/bug.h:85:2: note: expanded from macro '__WARN_FLAGS'
-      85 |         _BUG_FLAGS(ASM_UD2, __flags, ASM_REACHABLE);            \
-         |         ^
-   arch/x86/include/asm/bug.h:30:8: note: expanded from macro '_BUG_FLAGS'
-      30 |                      FAKE_SYMBOL(__bug_table_, 12)                      \
-         |                      ^
-   In file included from arch/x86/kernel/asm-offsets.c:9:
-   In file included from include/linux/crypto.h:17:
-   In file included from include/linux/slab.h:16:
-   In file included from include/linux/gfp.h:7:
-   In file included from include/linux/mmzone.h:22:
-   In file included from include/linux/mm_types.h:12:
-   include/linux/maple_tree.h:830:3: error: expected ')'
-     830 |                 WARN_ON(!mt_lock_is_held(mt));
-         |                 ^
-   include/asm-generic/bug.h:125:3: note: expanded from macro 'WARN_ON'
-     125 |                 __WARN();                                               \
-         |                 ^
-   include/asm-generic/bug.h:103:19: note: expanded from macro '__WARN'
-     103 | #define __WARN()                __WARN_FLAGS(BUGFLAG_TAINT(TAINT_WARN))
-         |                                 ^
-   arch/x86/include/asm/bug.h:85:2: note: expanded from macro '__WARN_FLAGS'
-      85 |         _BUG_FLAGS(ASM_UD2, __flags, ASM_REACHABLE);            \
-         |         ^
-   arch/x86/include/asm/bug.h:30:8: note: expanded from macro '_BUG_FLAGS'
-      30 |                      FAKE_SYMBOL(__bug_table_, 12)                      \
-         |                      ^
-   In file included from arch/x86/kernel/asm-offsets.c:9:
-   In file included from include/linux/crypto.h:17:
-   In file included from include/linux/slab.h:16:
-   In file included from include/linux/gfp.h:7:
-   In file included from include/linux/mmzone.h:22:
-   In file included from include/linux/mm_types.h:13:
-   include/linux/rwsem.h:80:2: error: expected ')'
+> Anyway, I'd rather require llvm 17+ than add a bunch of preprocessor
+> guards in this file (IIUC what you said above) as it is complex
+> enough.
 
+Sure, this is not a super unreasonable issue to bump the minimum
+supported version for RISC-V over in my opinion, so no real objections
+from me.
 
-vim +83 arch/x86/include/asm/smp.h
+> @Conor Dooley @Palmer Dabbelt WDYT? Is there any interest in
+> supporting llvm < 17? We may encounter this bug again in the future so
+> I'd be in favor of moving to llvm 17+.
 
-93be71b672f167 include/asm-x86/smp.h      Alex Nixon     2008-08-22  79  
-eab89405b6b599 arch/x86/include/asm/smp.h Josh Poimboeuf 2023-02-13  80  static inline void __noreturn play_dead(void)
-93be71b672f167 include/asm-x86/smp.h      Alex Nixon     2008-08-22  81  {
-93be71b672f167 include/asm-x86/smp.h      Alex Nixon     2008-08-22  82  	smp_ops.play_dead();
-a02f50b573b3c9 arch/x86/include/asm/smp.h Josh Poimboeuf 2023-02-13 @83  	BUG();
-93be71b672f167 include/asm-x86/smp.h      Alex Nixon     2008-08-22  84  }
-93be71b672f167 include/asm-x86/smp.h      Alex Nixon     2008-08-22  85  
+FWIW, I would envision a diff like this (assuming it actually works to
+resolve this issue, I didn't actually test it):
 
-:::::: The code at line 83 was first introduced by commit
-:::::: a02f50b573b3c90a3633a5ab67435fe4c0de144d x86/cpu: Make sure play_dead() doesn't return
+diff --git a/scripts/min-tool-version.sh b/scripts/min-tool-version.sh
+index 91c91201212c..e81eb7ed257d 100755
+--- a/scripts/min-tool-version.sh
++++ b/scripts/min-tool-version.sh
+@@ -28,6 +28,8 @@ llvm)
+ 		echo 15.0.0
+ 	elif [ "$SRCARCH" = loongarch ]; then
+ 		echo 18.0.0
++	elif [ "$SRCARCH" = riscv ]; then
++		echo 17.0.0
+ 	else
+ 		echo 13.0.1
+ 	fi
 
-:::::: TO: Josh Poimboeuf <jpoimboe@kernel.org>
-:::::: CC: Josh Poimboeuf <jpoimboe@kernel.org>
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Cheers,
+Nathan
