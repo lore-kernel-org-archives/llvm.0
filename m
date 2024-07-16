@@ -1,306 +1,255 @@
-Received: from mail-ed1-f46.google.com (mail-ed1-f46.google.com [209.85.208.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5DA50197A6C
-	for <llvm@lists.linux.dev>; Tue, 16 Jul 2024 12:20:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D2491991D4;
+	Tue, 16 Jul 2024 12:34:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721132413; cv=none; b=s6DFTJABy4e6oOZj1xEtiZWEvvFE7zPuiX/sdBlXZ51tBvXRGyCrrN6RJJIacPNrdwM1YsJYdeIy4R2qVRE/bk3Kbdg/XNHRwFvQeJO3L91IOs3Fi3mOM76cNe0TDs74SQzBwb4mbHMLzc3tCSTbNKKm1AoKxVptc6rEWGOUHVQ=
+	t=1721133296; cv=none; b=kCMDL+g3cxE3bC1OztyEaPN2703y3wN9Kn2q+Qh5Galu06IURfm69d6dKlqjmeQPiDpQxuUFC5jbQxt88e9AP8pgx5qHusPNg0mwsOCi74SJ3WUWksXJvjpxpNZRh2f6zLvlVqt9DRQEQjL6Itpuhgw3ckpLNqA6yXX+Tpdl35U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721132413; c=relaxed/simple;
-	bh=NPFmz/N6G3Ip3lB/40h8jCNz3HQpYtZd62s4Uir8yVY=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=PJtP2QKapnRuafEx0TAxZUYx9y6c1rShTnQbkvSyPuYZWvFlWcpaO4cRJjKakNEr+e9y1EnRAO3FoL9y6zQxGYsI0WaJzz1FBHz/xrmRB2vEbX8Ifcve8dobZqkLFkAPgfqMtE7uEfEdYOjcKUwq5HYgL3xtofKlL3KrBFWUbcY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=A534KACJ; arc=none smtp.client-ip=209.85.208.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
+	s=arc-20240116; t=1721133296; c=relaxed/simple;
+	bh=QjICDvd/gRvEQAtzF4IOq+WI7BM4QKyPL6iQyarpuQw=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=jD3FTcTBPHoEcY/+jxlUHc+kOdvDBRSHjtBORzxgmKt0FcYtCLqo6/+fXmCdOGKsvtFmruzGMG+m+fxNqkX8GkiCaZhCwhYkXDhcrGZmRMajfLnWyxRc69+hi2k4apan1U4CKVBW4vhrUBSLipSIt1c8Y1ezD8AEMjkPzWQ7nsU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Ij66Vnad; arc=none smtp.client-ip=198.175.65.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="A534KACJ"
-Received: by mail-ed1-f46.google.com with SMTP id 4fb4d7f45d1cf-59f9f59b827so360522a12.1
-        for <llvm@lists.linux.dev>; Tue, 16 Jul 2024 05:20:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1721132409; x=1721737209; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=/wgyK3rI/+GRYXc3I3puXIGSeacbfUlZLjUaC5dlWKs=;
-        b=A534KACJUbE4EDuTIale47cBX6fhRiY0ttx/p/cxYCdbXq/GoE1u6BylYuASdg2BIX
-         u39r7HkCUvz4CJPewyNLwB24gMorONtMCBQX7Lo7seklhWUapqniyX9xUhb35nzzFV03
-         U1R+C118rG7V3hsP2E0FC5KXVDz+2SGO5lTFgFLjQTvtrcy52AzmqdpHk8er4WP5xeSw
-         wD0NoqOX+aIW/vFELMG3PhkK3yisfTvTQdkb6eP/o4Q5y6wqFmE8geqtp1ychTPStsxh
-         Y5zoloL576vECq/HAr2a2Gf7B959JIqKqQCHrOK58L0UrAxLigJJE1lhe8AHZuEAdK47
-         fUVw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1721132409; x=1721737209;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=/wgyK3rI/+GRYXc3I3puXIGSeacbfUlZLjUaC5dlWKs=;
-        b=GJCFrXiZlzf2rfIcNAKg3NyslGbMshRC5HhTJHp+f0arlb/FZ1HCqxY3q+AxMl10Js
-         mAYHav4JNlzffcrlnYN5cE8xq8Ki56vLBj5LX1BkyO2BTto/yQ321DGkX3v2Vdi3I493
-         Nv27TyFuZKwgW0wQO3M7Pvg4lTgsE3oBZaMH4W95Fal6R/pr8W2NWFKH+WdeEPb8ctjJ
-         6RtGK//N5KrbVWmOa4zQDJCn2XEamuWI344P/+o0nWzjOZiD/DxlhAEznZqdsUjmVFQY
-         mmM0jeyLdlnHkbOq7cCbgsk/XrJYUZ9iLuA7vxuOszsjLp1IkHHv3cI54whQrDWBsH0Q
-         oAbQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVVnhK1OzKUzlkQJk61ZjwNrdz3CgUXK9k2nLSH8jBiMiW1XV5SFm9Z72O0SBkaSmvPMJuP3VDrTIFz/U9JivuOZ766Pw==
-X-Gm-Message-State: AOJu0YzRK+t/m2RSune6g9suutepMJvsRuZ5oB9rQNSJSbX6LgKBUJBi
-	TgnWJyoX2NQesEN5XzlsLTMOZpm/gb2fScRGRcKPZd1QeKuNDI4A917CY9nZ6MHhLKqpwXuGnzG
-	LygespYPNU+qVe+5ls0Nn2b/zqsbDdaifsMC2gg==
-X-Google-Smtp-Source: AGHT+IG9FrD1fBVgqj60WTDAt3AQCQU/Sf+dX7Y3PES5xjXq+TMnTztj457Qr4E/dPajDDm9BXML7CFjSdsFPn+WNxQ=
-X-Received: by 2002:a17:906:2409:b0:a6f:c268:ff2e with SMTP id
- a640c23a62f3a-a79ea3d7952mr139799466b.5.1721132408420; Tue, 16 Jul 2024
- 05:20:08 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Ij66Vnad"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1721133295; x=1752669295;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=QjICDvd/gRvEQAtzF4IOq+WI7BM4QKyPL6iQyarpuQw=;
+  b=Ij66Vnadh+b66SKqsxmP5S1Tum5tCMZv/ZemTeDJZ5z+LbQgKB8u/HYE
+   OWYKgsyej/HAkgAf6umsRhy9U5mtgT7a8QT/IPTGJGtEpdeyXeQaoEBqX
+   APNXLUHM+qtyDP3pytwl4VnZfqj+KdBxjaPm1lamTfC8X2SLwQ3fAY0+X
+   paPpfvNHn0Y8fN0j9GYXThPBH7cFsCHkjEf0E9NdzAv1fG8YAMn+vLfMM
+   niXhuN1rnO7vYfGUYRhA0/SFl19FBIvawh54SguM7LxIdvkMh34Jpp2GV
+   yCsgqKlzE2Mk+66ks/Fxoxp38p0Myaq+Kj/m89xt7ia967dydo1KH2bcI
+   Q==;
+X-CSE-ConnectionGUID: kBJzKZevROuNtQ/dYsZY3Q==
+X-CSE-MsgGUID: AmD9pYsFQYyfS5PZhwjwMA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11134"; a="36003159"
+X-IronPort-AV: E=Sophos;i="6.09,211,1716274800"; 
+   d="scan'208";a="36003159"
+Received: from fmviesa002.fm.intel.com ([10.60.135.142])
+  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jul 2024 05:34:54 -0700
+X-CSE-ConnectionGUID: 5yU9PaNRQiijOuIVeZmK1A==
+X-CSE-MsgGUID: rfIgL77yTu+DkrsoaU5Tzw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.09,211,1716274800"; 
+   d="scan'208";a="73220563"
+Received: from lkp-server01.sh.intel.com (HELO 68891e0c336b) ([10.239.97.150])
+  by fmviesa002.fm.intel.com with ESMTP; 16 Jul 2024 05:34:52 -0700
+Received: from kbuild by 68891e0c336b with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1sThOM-000fCn-1K;
+	Tue, 16 Jul 2024 12:34:50 +0000
+Date: Tue, 16 Jul 2024 20:34:12 +0800
+From: kernel test robot <lkp@intel.com>
+To: Josh Poimboeuf <jpoimboe@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [jpoimboe:objtool-diff 8/8] include/linux/page-flags.h:868:2: error:
+ expected ')'
+Message-ID: <202407162038.HFakGUjj-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20240626130347.520750-2-alexghiti@rivosinc.com>
- <202407041157.odTZAYZ6-lkp@intel.com> <20240705172750.GF987634@thelio-3990X>
-In-Reply-To: <20240705172750.GF987634@thelio-3990X>
-From: Alexandre Ghiti <alexghiti@rivosinc.com>
-Date: Tue, 16 Jul 2024 14:19:57 +0200
-Message-ID: <CAHVXubhvk_CbBX=hWFGt+1HEM4cj=cAc1NsCEknn=B8UDcXVSQ@mail.gmail.com>
-Subject: Re: [PATCH v2 01/10] riscv: Implement cmpxchg32/64() using Zacas
-To: Nathan Chancellor <nathan@kernel.org>, Conor Dooley <conor.dooley@microchip.com>
-Cc: kernel test robot <lkp@intel.com>, Jonathan Corbet <corbet@lwn.net>, 
-	Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>, 
-	Albert Ou <aou@eecs.berkeley.edu>, Andrea Parri <parri.andrea@gmail.com>, 
-	Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>, 
-	Waiman Long <longman@redhat.com>, Boqun Feng <boqun.feng@gmail.com>, Arnd Bergmann <arnd@arndb.de>, 
-	Leonardo Bras <leobras@redhat.com>, Guo Ren <guoren@kernel.org>, linux-doc@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org, 
-	linux-arch@vger.kernel.org, llvm@lists.linux.dev, 
-	oe-kbuild-all@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Hi Nathan,
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jpoimboe/linux.git objtool-diff
+head:   bc3cdfe89249cdc982760e0fb48820b399935d43
+commit: bc3cdfe89249cdc982760e0fb48820b399935d43 [8/8] working with klp-test.patch
+config: i386-buildonly-randconfig-004-20240716 (https://download.01.org/0day-ci/archive/20240716/202407162038.HFakGUjj-lkp@intel.com/config)
+compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240716/202407162038.HFakGUjj-lkp@intel.com/reproduce)
 
-On Fri, Jul 5, 2024 at 7:27=E2=80=AFPM Nathan Chancellor <nathan@kernel.org=
-> wrote:
->
-> On Thu, Jul 04, 2024 at 11:38:46AM +0800, kernel test robot wrote:
-> > Hi Alexandre,
-> >
-> > kernel test robot noticed the following build errors:
-> >
-> > [auto build test ERROR on soc/for-next]
-> > [also build test ERROR on linus/master v6.10-rc6 next-20240703]
-> > [cannot apply to arnd-asm-generic/master robh/for-next tip/locking/core=
-]
-> > [If your patch is applied to the wrong git tree, kindly drop us a note.
-> > And when submitting patch, we suggest to use '--base' as documented in
-> > https://git-scm.com/docs/git-format-patch#_base_tree_information]
-> >
-> > url:    https://github.com/intel-lab-lkp/linux/commits/Alexandre-Ghiti/=
-riscv-Implement-cmpxchg32-64-using-Zacas/20240627-034946
-> > base:   https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git for=
--next
-> > patch link:    https://lore.kernel.org/r/20240626130347.520750-2-alexgh=
-iti%40rivosinc.com
-> > patch subject: [PATCH v2 01/10] riscv: Implement cmpxchg32/64() using Z=
-acas
-> > config: riscv-randconfig-002-20240704 (https://download.01.org/0day-ci/=
-archive/20240704/202407041157.odTZAYZ6-lkp@intel.com/config)
-> > compiler: clang version 16.0.6 (https://github.com/llvm/llvm-project 7c=
-bf1a2591520c2491aa35339f227775f4d3adf6)
-> > reproduce (this is a W=3D1 build): (https://download.01.org/0day-ci/arc=
-hive/20240704/202407041157.odTZAYZ6-lkp@intel.com/reproduce)
-> >
-> > If you fix the issue in a separate patch/commit (i.e. not just a new ve=
-rsion of
-> > the same patch/commit), kindly add following tags
-> > | Reported-by: kernel test robot <lkp@intel.com>
-> > | Closes: https://lore.kernel.org/oe-kbuild-all/202407041157.odTZAYZ6-l=
-kp@intel.com/
-> >
-> > All errors (new ones prefixed by >>):
-> >
-> > >> kernel/sched/core.c:11873:7: error: cannot jump from this asm goto s=
-tatement to one of its possible targets
-> >                    if (try_cmpxchg(&pcpu_cid->cid, &lazy_cid, MM_CID_UN=
-SET))
-> >                        ^
-> >    include/linux/atomic/atomic-instrumented.h:4880:2: note: expanded fr=
-om macro 'try_cmpxchg'
-> >            raw_try_cmpxchg(__ai_ptr, __ai_oldp, __VA_ARGS__); \
-> >            ^
-> >    include/linux/atomic/atomic-arch-fallback.h:192:9: note: expanded fr=
-om macro 'raw_try_cmpxchg'
-> >            ___r =3D raw_cmpxchg((_ptr), ___o, (_new)); \
-> >                   ^
-> >    include/linux/atomic/atomic-arch-fallback.h:55:21: note: expanded fr=
-om macro 'raw_cmpxchg'
-> >    #define raw_cmpxchg arch_cmpxchg
-> >                        ^
-> >    arch/riscv/include/asm/cmpxchg.h:212:2: note: expanded from macro 'a=
-rch_cmpxchg'
-> >            _arch_cmpxchg((ptr), (o), (n), ".rl", "", "     fence rw, rw=
-\n")
-> >            ^
-> >    arch/riscv/include/asm/cmpxchg.h:189:3: note: expanded from macro '_=
-arch_cmpxchg'
-> >                    __arch_cmpxchg(".w", ".w" sc_sfx, prepend, append,  =
-    \
-> >                    ^
-> >    arch/riscv/include/asm/cmpxchg.h:144:3: note: expanded from macro '_=
-_arch_cmpxchg'
-> >                    asm goto(ALTERNATIVE("nop", "j %[zacas]", 0,        =
-    \
-> >                    ^
-> >    kernel/sched/core.c:11840:7: note: possible target of asm goto state=
-ment
-> >            if (!try_cmpxchg(&pcpu_cid->cid, &cid, lazy_cid))
-> >                 ^
-> >    include/linux/atomic/atomic-instrumented.h:4880:2: note: expanded fr=
-om macro 'try_cmpxchg'
-> >            raw_try_cmpxchg(__ai_ptr, __ai_oldp, __VA_ARGS__); \
-> >            ^
-> >    include/linux/atomic/atomic-arch-fallback.h:192:9: note: expanded fr=
-om macro 'raw_try_cmpxchg'
-> >            ___r =3D raw_cmpxchg((_ptr), ___o, (_new)); \
-> >                   ^
-> >    include/linux/atomic/atomic-arch-fallback.h:55:21: note: expanded fr=
-om macro 'raw_cmpxchg'
-> >    #define raw_cmpxchg arch_cmpxchg
-> >                        ^
-> >    arch/riscv/include/asm/cmpxchg.h:212:2: note: expanded from macro 'a=
-rch_cmpxchg'
-> >            _arch_cmpxchg((ptr), (o), (n), ".rl", "", "     fence rw, rw=
-\n")
-> >            ^
-> >    arch/riscv/include/asm/cmpxchg.h:189:3: note: expanded from macro '_=
-arch_cmpxchg'
-> >                    __arch_cmpxchg(".w", ".w" sc_sfx, prepend, append,  =
-    \
-> >                    ^
-> >    arch/riscv/include/asm/cmpxchg.h:161:10: note: expanded from macro '=
-__arch_cmpxchg'
-> >                                                                        =
-    \
-> >                                                                        =
-    ^
-> >    kernel/sched/core.c:11872:2: note: jump exits scope of variable with=
- __attribute__((cleanup))
-> >            scoped_guard (irqsave) {
-> >            ^
-> >    include/linux/cleanup.h:169:20: note: expanded from macro 'scoped_gu=
-ard'
-> >            for (CLASS(_name, scope)(args),                             =
-    \
-> >                              ^
-> >    kernel/sched/core.c:11840:7: error: cannot jump from this asm goto s=
-tatement to one of its possible targets
-> >            if (!try_cmpxchg(&pcpu_cid->cid, &cid, lazy_cid))
-> >                 ^
-> >    include/linux/atomic/atomic-instrumented.h:4880:2: note: expanded fr=
-om macro 'try_cmpxchg'
-> >            raw_try_cmpxchg(__ai_ptr, __ai_oldp, __VA_ARGS__); \
-> >            ^
-> >    include/linux/atomic/atomic-arch-fallback.h:192:9: note: expanded fr=
-om macro 'raw_try_cmpxchg'
-> >            ___r =3D raw_cmpxchg((_ptr), ___o, (_new)); \
-> >                   ^
-> >    include/linux/atomic/atomic-arch-fallback.h:55:21: note: expanded fr=
-om macro 'raw_cmpxchg'
-> >    #define raw_cmpxchg arch_cmpxchg
-> >                        ^
-> >    arch/riscv/include/asm/cmpxchg.h:212:2: note: expanded from macro 'a=
-rch_cmpxchg'
-> >            _arch_cmpxchg((ptr), (o), (n), ".rl", "", "     fence rw, rw=
-\n")
-> >            ^
-> >    arch/riscv/include/asm/cmpxchg.h:189:3: note: expanded from macro '_=
-arch_cmpxchg'
-> >                    __arch_cmpxchg(".w", ".w" sc_sfx, prepend, append,  =
-    \
-> >                    ^
-> >    arch/riscv/include/asm/cmpxchg.h:144:3: note: expanded from macro '_=
-_arch_cmpxchg'
-> >                    asm goto(ALTERNATIVE("nop", "j %[zacas]", 0,        =
-    \
-> >                    ^
-> >    kernel/sched/core.c:11873:7: note: possible target of asm goto state=
-ment
-> >                    if (try_cmpxchg(&pcpu_cid->cid, &lazy_cid, MM_CID_UN=
-SET))
-> >                        ^
-> >    include/linux/atomic/atomic-instrumented.h:4880:2: note: expanded fr=
-om macro 'try_cmpxchg'
-> >            raw_try_cmpxchg(__ai_ptr, __ai_oldp, __VA_ARGS__); \
-> >            ^
-> >    include/linux/atomic/atomic-arch-fallback.h:192:9: note: expanded fr=
-om macro 'raw_try_cmpxchg'
-> >            ___r =3D raw_cmpxchg((_ptr), ___o, (_new)); \
-> >                   ^
-> >    include/linux/atomic/atomic-arch-fallback.h:55:21: note: expanded fr=
-om macro 'raw_cmpxchg'
-> >    #define raw_cmpxchg arch_cmpxchg
-> >                        ^
-> >    arch/riscv/include/asm/cmpxchg.h:212:2: note: expanded from macro 'a=
-rch_cmpxchg'
-> >            _arch_cmpxchg((ptr), (o), (n), ".rl", "", "     fence rw, rw=
-\n")
-> >            ^
-> >    arch/riscv/include/asm/cmpxchg.h:189:3: note: expanded from macro '_=
-arch_cmpxchg'
-> >                    __arch_cmpxchg(".w", ".w" sc_sfx, prepend, append,  =
-    \
-> >                    ^
-> >    arch/riscv/include/asm/cmpxchg.h:161:10: note: expanded from macro '=
-__arch_cmpxchg'
-> >                                                                        =
-    \
-> >                                                                        =
-    ^
-> >    kernel/sched/core.c:11872:2: note: jump bypasses initialization of v=
-ariable with __attribute__((cleanup))
-> >            scoped_guard (irqsave) {
-> >            ^
-> >    include/linux/cleanup.h:169:20: note: expanded from macro 'scoped_gu=
-ard'
-> >            for (CLASS(_name, scope)(args),                             =
-    \
-> >                              ^
-> >    2 errors generated.
->
-> Ugh, this is an unfortunate interaction with clang's jump scope analysis
-> and asm goto in LLVM releases prior to 17 :/
->
-> https://github.com/ClangBuiltLinux/linux/issues/1886#issuecomment-1645979=
-992
->
-> Unfortunately, 'if (0)' does not prevent this (the analysis runs early
-> in the front end as far as I understand it), we would need to workaround
-> this with full preprocessor guards...
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202407162038.HFakGUjj-lkp@intel.com/
 
-Thanks for jumping in on this one, I was quite puzzled :)
+All errors (new ones prefixed by >>):
 
->
-> Another alternative would be to require LLVM 17+ for RISC-V, which may
-> not be the worst alternative, since I think most people doing serious
-> work with clang will probably be living close to tip of tree anyways
-> because of all the extension work that goes on upstream.
+     270 |         WARN_ON_ONCE(in_nmi());
+         |         ^
+   include/asm-generic/bug.h:113:3: note: expanded from macro 'WARN_ON_ONCE'
+     113 |                 __WARN_FLAGS(BUGFLAG_ONCE |                     \
+         |                 ^
+   arch/x86/include/asm/bug.h:85:2: note: expanded from macro '__WARN_FLAGS'
+      85 |         _BUG_FLAGS(ASM_UD2, __flags, ASM_REACHABLE);            \
+         |         ^
+   arch/x86/include/asm/bug.h:30:8: note: expanded from macro '_BUG_FLAGS'
+      30 |                      FAKE_SYMBOL(__bug_table_, 12)                      \
+         |                      ^
+   In file included from arch/x86/kernel/asm-offsets.c:9:
+   In file included from include/linux/crypto.h:17:
+   In file included from include/linux/slab.h:16:
+   In file included from include/linux/gfp.h:7:
+   In file included from include/linux/mmzone.h:22:
+   In file included from include/linux/mm_types.h:16:
+   In file included from include/linux/uprobes.h:49:
+   In file included from arch/x86/include/asm/uprobes.h:13:
+   In file included from include/linux/notifier.h:16:
+   include/linux/srcu.h:285:2: error: expected ')'
+     285 |         WARN_ON_ONCE(idx & ~0x1);
+         |         ^
+   include/asm-generic/bug.h:113:3: note: expanded from macro 'WARN_ON_ONCE'
+     113 |                 __WARN_FLAGS(BUGFLAG_ONCE |                     \
+         |                 ^
+   arch/x86/include/asm/bug.h:85:2: note: expanded from macro '__WARN_FLAGS'
+      85 |         _BUG_FLAGS(ASM_UD2, __flags, ASM_REACHABLE);            \
+         |         ^
+   arch/x86/include/asm/bug.h:30:8: note: expanded from macro '_BUG_FLAGS'
+      30 |                      FAKE_SYMBOL(__bug_table_, 12)                      \
+         |                      ^
+   In file included from arch/x86/kernel/asm-offsets.c:9:
+   In file included from include/linux/crypto.h:17:
+   In file included from include/linux/slab.h:16:
+   In file included from include/linux/gfp.h:7:
+   In file included from include/linux/mmzone.h:22:
+   In file included from include/linux/mm_types.h:16:
+   In file included from include/linux/uprobes.h:49:
+   In file included from arch/x86/include/asm/uprobes.h:13:
+   In file included from include/linux/notifier.h:16:
+   include/linux/srcu.h:301:2: error: expected ')'
+     301 |         WARN_ON_ONCE(idx & ~0x1);
+         |         ^
+   include/asm-generic/bug.h:113:3: note: expanded from macro 'WARN_ON_ONCE'
+     113 |                 __WARN_FLAGS(BUGFLAG_ONCE |                     \
+         |                 ^
+   arch/x86/include/asm/bug.h:85:2: note: expanded from macro '__WARN_FLAGS'
+      85 |         _BUG_FLAGS(ASM_UD2, __flags, ASM_REACHABLE);            \
+         |         ^
+   arch/x86/include/asm/bug.h:30:8: note: expanded from macro '_BUG_FLAGS'
+      30 |                      FAKE_SYMBOL(__bug_table_, 12)                      \
+         |                      ^
+   In file included from arch/x86/kernel/asm-offsets.c:9:
+   In file included from include/linux/crypto.h:17:
+   In file included from include/linux/slab.h:16:
+   In file included from include/linux/gfp.h:7:
+   In file included from include/linux/mmzone.h:22:
+   In file included from include/linux/mm_types.h:16:
+   In file included from include/linux/uprobes.h:49:
+   In file included from arch/x86/include/asm/uprobes.h:13:
+   In file included from include/linux/notifier.h:16:
+   include/linux/srcu.h:326:2: error: expected ')'
+     326 |         WARN_ON_ONCE(idx & ~0x1);
+         |         ^
+   include/asm-generic/bug.h:113:3: note: expanded from macro 'WARN_ON_ONCE'
+     113 |                 __WARN_FLAGS(BUGFLAG_ONCE |                     \
+         |                 ^
+   arch/x86/include/asm/bug.h:85:2: note: expanded from macro '__WARN_FLAGS'
+      85 |         _BUG_FLAGS(ASM_UD2, __flags, ASM_REACHABLE);            \
+         |         ^
+   arch/x86/include/asm/bug.h:30:8: note: expanded from macro '_BUG_FLAGS'
+      30 |                      FAKE_SYMBOL(__bug_table_, 12)                      \
+         |                      ^
+   In file included from arch/x86/kernel/asm-offsets.c:9:
+   In file included from include/linux/crypto.h:17:
+   In file included from include/linux/slab.h:16:
+   In file included from include/linux/gfp.h:7:
+   In file included from include/linux/mmzone.h:22:
+   In file included from include/linux/mm_types.h:16:
+   In file included from include/linux/uprobes.h:49:
+   In file included from arch/x86/include/asm/uprobes.h:13:
+   In file included from include/linux/notifier.h:16:
+   include/linux/srcu.h:327:2: error: expected ')'
+     327 |         WARN_ON_ONCE(in_nmi());
+         |         ^
+   include/asm-generic/bug.h:113:3: note: expanded from macro 'WARN_ON_ONCE'
+     113 |                 __WARN_FLAGS(BUGFLAG_ONCE |                     \
+         |                 ^
+   arch/x86/include/asm/bug.h:85:2: note: expanded from macro '__WARN_FLAGS'
+      85 |         _BUG_FLAGS(ASM_UD2, __flags, ASM_REACHABLE);            \
+         |         ^
+   arch/x86/include/asm/bug.h:30:8: note: expanded from macro '_BUG_FLAGS'
+      30 |                      FAKE_SYMBOL(__bug_table_, 12)                      \
+         |                      ^
+   In file included from arch/x86/kernel/asm-offsets.c:9:
+   In file included from include/linux/crypto.h:17:
+   In file included from include/linux/slab.h:16:
+   In file included from include/linux/gfp.h:7:
+   In file included from include/linux/mmzone.h:23:
+>> include/linux/page-flags.h:868:2: error: expected ')'
+     868 |         BUG_ON(!PageHead(page));
+         |         ^
+   include/asm-generic/bug.h:71:57: note: expanded from macro 'BUG_ON'
+      71 | #define BUG_ON(condition) do { if (unlikely(condition)) BUG(); } while (0)
+         |                                                         ^
+   arch/x86/include/asm/bug.h:71:2: note: expanded from macro 'BUG'
+      71 |         _BUG_FLAGS(ASM_UD2, 0, "");                             \
+         |         ^
+   arch/x86/include/asm/bug.h:30:8: note: expanded from macro '_BUG_FLAGS'
+      30 |                      FAKE_SYMBOL(__bug_table_, 12)                      \
+         |                      ^
+   In file included from arch/x86/kernel/asm-offsets.c:9:
+   In file included from include/linux/crypto.h:17:
+   In file included from include/linux/slab.h:16:
+   In file included from include/linux/gfp.h:7:
+   In file included from include/linux/mmzone.h:1428:
+   include/linux/memory_hotplug.h:58:2: error: expected ')'
+      58 |         BUG();
+         |         ^
+   arch/x86/include/asm/bug.h:71:2: note: expanded from macro 'BUG'
+      71 |         _BUG_FLAGS(ASM_UD2, 0, "");                             \
+         |         ^
+   arch/x86/include/asm/bug.h:30:8: note: expanded from macro '_BUG_FLAGS'
+      30 |                      FAKE_SYMBOL(__bug_table_, 12)                      \
+         |                      ^
+   In file included from arch/x86/kernel/asm-offsets.c:9:
+   In file included from include/linux/crypto.h:17:
+   In file included from include/linux/slab.h:16:
+   include/linux/gfp.h:323:2: error: expected ')'
+     323 |         WARN_ON_ONCE(!is_power_of_2(align));
+         |         ^
+   include/asm-generic/bug.h:113:3: note: expanded from macro 'WARN_ON_ONCE'
+     113 |                 __WARN_FLAGS(BUGFLAG_ONCE |                     \
+         |                 ^
+   arch/x86/include/asm/bug.h:85:2: note: expanded from macro '__WARN_FLAGS'
+      85 |         _BUG_FLAGS(ASM_UD2, __flags, ASM_REACHABLE);            \
+         |         ^
+   arch/x86/include/asm/bug.h:30:8: note: expanded from macro '_BUG_FLAGS'
+      30 |                      FAKE_SYMBOL(__bug_table_, 12)                      \
+         |                      ^
+   fatal error: too many errors emitted, stopping now [-ferror-limit=]
+   20 errors generated.
+   make[3]: *** [scripts/Makefile.build:117: arch/x86/kernel/asm-offsets.s] Error 1 shuffle=174437929
+   make[3]: Target 'prepare' not remade because of errors.
+   make[2]: *** [Makefile:1203: prepare0] Error 2 shuffle=174437929
+   make[2]: Target 'prepare' not remade because of errors.
+   make[1]: *** [Makefile:240: __sub-make] Error 2 shuffle=174437929
+   make[1]: Target 'prepare' not remade because of errors.
+   make: *** [Makefile:240: __sub-make] Error 2 shuffle=174437929
+   make: Target 'prepare' not remade because of errors.
 
-Stupid question but why the fix in llvm 17 was not backported to
-previous versions?
 
-Anyway, I'd rather require llvm 17+ than add a bunch of preprocessor
-guards in this file (IIUC what you said above) as it is complex
-enough.
+vim +868 include/linux/page-flags.h
 
-@Conor Dooley @Palmer Dabbelt WDYT? Is there any interest in
-supporting llvm < 17? We may encounter this bug again in the future so
-I'd be in favor of moving to llvm 17+.
+6d7779538f7659 Christoph Lameter       2007-05-06  864  
+4e6af67e970a2a Andrea Arcangeli        2011-01-13  865  #ifdef CONFIG_TRANSPARENT_HUGEPAGE
+4e6af67e970a2a Andrea Arcangeli        2011-01-13  866  static inline void ClearPageCompound(struct page *page)
+4e6af67e970a2a Andrea Arcangeli        2011-01-13  867  {
+1d798ca3f16437 Kirill A. Shutemov      2015-11-06 @868  	BUG_ON(!PageHead(page));
+1d798ca3f16437 Kirill A. Shutemov      2015-11-06  869  	ClearPageHead(page);
+4e6af67e970a2a Andrea Arcangeli        2011-01-13  870  }
+de53c05f2ae3d4 Matthew Wilcox (Oracle  2023-08-16  871) PAGEFLAG(LargeRmappable, large_rmappable, PF_SECOND)
+de53c05f2ae3d4 Matthew Wilcox (Oracle  2023-08-16  872) #else
+de53c05f2ae3d4 Matthew Wilcox (Oracle  2023-08-16  873) TESTPAGEFLAG_FALSE(LargeRmappable, large_rmappable)
+4e6af67e970a2a Andrea Arcangeli        2011-01-13  874  #endif
+4e6af67e970a2a Andrea Arcangeli        2011-01-13  875  
 
-Thanks again Nathan,
+:::::: The code at line 868 was first introduced by commit
+:::::: 1d798ca3f16437c71ff63e36597ff07f9c12e4d6 mm: make compound_head() robust
 
-Alex
+:::::: TO: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
+:::::: CC: Linus Torvalds <torvalds@linux-foundation.org>
 
->
-> I am open to other thoughts though.
->
-> Cheers,
-> Nathan
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
