@@ -1,62 +1,60 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E03D1A0723;
-	Tue, 16 Jul 2024 20:11:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E687B1DDCE;
+	Tue, 16 Jul 2024 21:18:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721160679; cv=none; b=JpjpP+KxEdxxUy56540EvoK5f4czc2s5sNZWS8r0WQVA4qHzmBeWAtlPr8uppEavw+MBHf5QcGh8nSKTOHklqJVgzbxDN9txp3DItSaPC3qINcNMMUwOwoA11ikm3Q9NH2FVPURb0MiIbgpCZg+FewLJgxtEskS4fCocl4tkxqo=
+	t=1721164700; cv=none; b=XDiL9fc/gSix7mS85FKlwr8NZcMFlIBuSDw6GOxpn21rP/Xwkb9+TyE/sPQQD9K1jk9bcQvbLIF+P4riVS85V+x/QuizBK4LvGlzQpNjpu/CaWJxQ17GVGWKMTYq1dA6Q7GORTN9g6R63FekCjZ5VeSDprr26i6XxKLIzHpjnFE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721160679; c=relaxed/simple;
-	bh=3jM8t40qOFyxFS78Zi2CYfl8ubirpcWV7c2SZUVeNJY=;
+	s=arc-20240116; t=1721164700; c=relaxed/simple;
+	bh=E0ZAl51tbgLA6yD4ZVBfNBYA6dwIepuOn86kPiOiKzE=;
 	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=FwVYZP7DVE4SqB1mhRwaOpKb+KDcSwHNpAo3WwvB9HZXtLt9QIW/cuVl6B3VFjat0maac5OQnQRv19ElD7s1Ku+B4vx7nQ3miQNiKfN+M/Lx4gVGHnmEUZOfGvPVJgf0QxPU94u3rklI6lp335IiT1nCKw5ELAlbTBf85KJekxE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Y/tKeSM6; arc=none smtp.client-ip=192.198.163.10
+	 Content-Disposition; b=AOslmlCqb5rLFw1YzDb9uMS/08bvVZ0brfKDB9iKjcs3LGWtX3wB9FzwAPvc9RA0U1+r/TMoO9xh7A5HVmq2wAoGEjq6HRJ87l8D6dztB68hUpLtLYUjBP4mFqaiGM1DTbPq7nS9fu3pq1sIzwkEmz6KjOEcqPiWHCzUF9cmDtI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=QKLY9ble; arc=none smtp.client-ip=198.175.65.21
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Y/tKeSM6"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="QKLY9ble"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1721160677; x=1752696677;
+  t=1721164700; x=1752700700;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=3jM8t40qOFyxFS78Zi2CYfl8ubirpcWV7c2SZUVeNJY=;
-  b=Y/tKeSM696qlfYhW/LDzHa+1MPTeovapxHAUdoLL6ONohXQsR540GBFV
-   9en8aQM1fhtQuU0hbaIdeTz19s82GRFzp6yZlBFnNw2qamWUE7WuFNes/
-   uyYxy36IZc3w+j1LVEqkawUIsmDAcS5njtYX3GyQfkFs+oYHJACc5rwZp
-   bq9OAeyOzp0pMZ/odC+LU54LKpqPvLEYeyeVH7Z6DCa32BssSBgS+4Lsw
-   +VnOuh7Z3+obfs3xK9JiofhuFw59irUELcyKgReVccQk7v5IKSAj57enb
-   Z/slJt4hyoZWK49NEsDTu4NSqwnVCm26cYwTfx7xACxaIc70GbGLNLLH2
-   Q==;
-X-CSE-ConnectionGUID: w6vajWCaTb+OgN/3zWQ21A==
-X-CSE-MsgGUID: XW+gCxlWSJmbUkDH4wT2rw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11135"; a="30040808"
+  bh=E0ZAl51tbgLA6yD4ZVBfNBYA6dwIepuOn86kPiOiKzE=;
+  b=QKLY9bleKMz+MS4eM3t2KAyKddK3fg0cK3bx+cnQFh9GgDx3HSFvqBzT
+   ypLgGzr+aaBnEP+m6S4orW3ZV2z4b2tDElOWAp89TRtxPkmuM2XWOBkyV
+   SZcwQOO+f4bzJ6FwIuxuq3y4+pFuFPjHnbZbbtZq0eZdWiQ0D/DM8PbjX
+   uCDJQEpzFnEurX2V1ic9FzOt5IMM/yPKPkLP+ZdkEBsDuCeQqNbo1F+VR
+   lOzM77ISyJOR8URbuQCtXOkB3ii7x9aC+S0Zt4BzYZBHlo7v/sVpVmceH
+   ankV/YRVC63E+ujRxJ5hYt7MgaxQ3Rm9zdF40xo+spHOVAkyDY6MUwqd0
+   w==;
+X-CSE-ConnectionGUID: vTJRHUNfQeaKK6ULyQDo3g==
+X-CSE-MsgGUID: o8mecekiRkCRDknyiyF+kA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11135"; a="18591803"
 X-IronPort-AV: E=Sophos;i="6.09,212,1716274800"; 
-   d="scan'208";a="30040808"
-Received: from fmviesa010.fm.intel.com ([10.60.135.150])
-  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jul 2024 13:11:17 -0700
-X-CSE-ConnectionGUID: bOvK86TuTgmZ5VBuQFfo9g==
-X-CSE-MsgGUID: SL634WCgT+qJjPTZgLuPjA==
+   d="scan'208";a="18591803"
+Received: from fmviesa003.fm.intel.com ([10.60.135.143])
+  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jul 2024 14:18:19 -0700
+X-CSE-ConnectionGUID: JUDMqCOJSMSsZFApxAhzug==
+X-CSE-MsgGUID: 76LAPAoyRgurVjZ/vqldBg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.09,212,1716274800"; 
-   d="scan'208";a="50206356"
+   d="scan'208";a="54377631"
 Received: from lkp-server01.sh.intel.com (HELO 68891e0c336b) ([10.239.97.150])
-  by fmviesa010.fm.intel.com with ESMTP; 16 Jul 2024 13:11:15 -0700
+  by fmviesa003.fm.intel.com with ESMTP; 16 Jul 2024 14:18:17 -0700
 Received: from kbuild by 68891e0c336b with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1sToW0-000fd4-39;
-	Tue, 16 Jul 2024 20:11:12 +0000
-Date: Wed, 17 Jul 2024 04:11:02 +0800
+	id 1sTpYs-000fg2-2h;
+	Tue, 16 Jul 2024 21:18:14 +0000
+Date: Wed, 17 Jul 2024 05:17:39 +0800
 From: kernel test robot <lkp@intel.com>
-To: Alexander Duyck <alexanderduyck@fb.com>
+To: "Mike Rapoport (Microsoft)" <rppt@kernel.org>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Linux Memory Management List <linux-mm@kvack.org>,
-	Jakub Kicinski <kuba@kernel.org>
-Subject: [linux-next:master 12947/13217]
- drivers/net/ethernet/meta/fbnic/fbnic_txrx.c:1088:6: error: call to
- '__compiletime_assert_749' declared with 'error' attribute: FIELD_PREP:
- value too large for the field
-Message-ID: <202407170432.dYJQOWVz-lkp@intel.com>
+	Mike Rapoport <rppt@kernel.org>
+Subject: [rppt:numa/memblks/v0.1 16/17] WARNING: modpost: vmlinux: section
+ mismatch in reference: numa_add_cpu+0x40 (section: .text) ->
+ early_cpu_to_node (section: .init.text)
+Message-ID: <202407170507.BRlm9YyZ-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -66,156 +64,122 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-head:   4f40be61af99a67d5580c1448acd9b74c0376389
-commit: 0cb4c0a13723ef6dd06be8f913443897a0ffccb5 [12947/13217] eth: fbnic: Implement Rx queue alloc/start/stop/free
-config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20240717/202407170432.dYJQOWVz-lkp@intel.com/config)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/rppt/linux.git numa/memblks/v0.1
+head:   f4c3c723b3a514f59883073667f1ec5c97f7f5b1
+commit: 4be72fa454a73b3001d105e6d9bfe32f59af94eb [16/17] arch_numa: switch over to numa_memblks
+config: arm64-allmodconfig (https://download.01.org/0day-ci/archive/20240717/202407170507.BRlm9YyZ-lkp@intel.com/config)
 compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project a0c6b8aef853eedaa0980f07c0a502a5a8a9740e)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240717/202407170432.dYJQOWVz-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240717/202407170507.BRlm9YyZ-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202407170432.dYJQOWVz-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202407170507.BRlm9YyZ-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>, old ones prefixed by <<):
 
-   In file included from drivers/net/ethernet/meta/fbnic/fbnic_txrx.c:4:
-   In file included from include/linux/iopoll.h:14:
-   In file included from include/linux/io.h:14:
-   In file included from arch/s390/include/asm/io.h:93:
-   include/asm-generic/io.h:548:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     548 |         val = __raw_readb(PCI_IOBASE + addr);
-         |                           ~~~~~~~~~~ ^
-   include/asm-generic/io.h:561:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     561 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
-      37 | #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
-         |                                                           ^
-   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
-     102 | #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
-         |                                                      ^
-   In file included from drivers/net/ethernet/meta/fbnic/fbnic_txrx.c:4:
-   In file included from include/linux/iopoll.h:14:
-   In file included from include/linux/io.h:14:
-   In file included from arch/s390/include/asm/io.h:93:
-   include/asm-generic/io.h:574:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     574 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
-      35 | #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
-         |                                                           ^
-   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
-     115 | #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
-         |                                                      ^
-   In file included from drivers/net/ethernet/meta/fbnic/fbnic_txrx.c:4:
-   In file included from include/linux/iopoll.h:14:
-   In file included from include/linux/io.h:14:
-   In file included from arch/s390/include/asm/io.h:93:
-   include/asm-generic/io.h:585:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     585 |         __raw_writeb(value, PCI_IOBASE + addr);
-         |                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:595:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     595 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:605:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     605 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:693:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     693 |         readsb(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:701:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     701 |         readsw(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:709:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     709 |         readsl(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:718:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     718 |         writesb(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   include/asm-generic/io.h:727:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     727 |         writesw(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   include/asm-generic/io.h:736:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     736 |         writesl(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   In file included from drivers/net/ethernet/meta/fbnic/fbnic_txrx.c:5:
-   In file included from include/linux/pci.h:37:
-   In file included from include/linux/device.h:32:
-   In file included from include/linux/device/driver.h:21:
-   In file included from include/linux/module.h:19:
-   In file included from include/linux/elf.h:6:
-   In file included from arch/s390/include/asm/elf.h:173:
-   In file included from arch/s390/include/asm/mmu_context.h:11:
-   In file included from arch/s390/include/asm/pgalloc.h:18:
-   In file included from include/linux/mm.h:2258:
-   include/linux/vmstat.h:500:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     500 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     501 |                            item];
-         |                            ~~~~
-   include/linux/vmstat.h:507:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     507 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     508 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/vmstat.h:514:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     514 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
-   include/linux/vmstat.h:519:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     519 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     520 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/vmstat.h:528:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     528 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     529 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
->> drivers/net/ethernet/meta/fbnic/fbnic_txrx.c:1088:6: error: call to '__compiletime_assert_749' declared with 'error' attribute: FIELD_PREP: value too large for the field
-    1088 |             FIELD_PREP(FBNIC_QUEUE_RDE_CTL0_MIN_TROOM_MASK, FBNIC_RX_TROOM);
-         |             ^
-   include/linux/bitfield.h:115:3: note: expanded from macro 'FIELD_PREP'
-     115 |                 __BF_FIELD_CHECK(_mask, 0ULL, _val, "FIELD_PREP: ");    \
-         |                 ^
-   include/linux/bitfield.h:68:3: note: expanded from macro '__BF_FIELD_CHECK'
-      68 |                 BUILD_BUG_ON_MSG(__builtin_constant_p(_val) ?           \
-         |                 ^
-   include/linux/build_bug.h:39:37: note: expanded from macro 'BUILD_BUG_ON_MSG'
-      39 | #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
-         |                                     ^
-   note: (skipping 1 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
-   include/linux/compiler_types.h:498:2: note: expanded from macro '_compiletime_assert'
-     498 |         __compiletime_assert(condition, msg, prefix, suffix)
-         |         ^
-   include/linux/compiler_types.h:491:4: note: expanded from macro '__compiletime_assert'
-     491 |                         prefix ## suffix();                             \
-         |                         ^
-   <scratch space>:8:1: note: expanded from here
-       8 | __compiletime_assert_749
-         | ^
-   17 warnings and 1 error generated.
-
-
-vim +1088 drivers/net/ethernet/meta/fbnic/fbnic_txrx.c
-
-  1077	
-  1078	static void fbnic_config_drop_mode_rcq(struct fbnic_napi_vector *nv,
-  1079					       struct fbnic_ring *rcq)
-  1080	{
-  1081		u32 drop_mode, rcq_ctl;
-  1082	
-  1083		drop_mode = FBNIC_QUEUE_RDE_CTL0_DROP_IMMEDIATE;
-  1084	
-  1085		/* Specify packet layout */
-  1086		rcq_ctl = FIELD_PREP(FBNIC_QUEUE_RDE_CTL0_DROP_MODE_MASK, drop_mode) |
-  1087		    FIELD_PREP(FBNIC_QUEUE_RDE_CTL0_MIN_HROOM_MASK, FBNIC_RX_HROOM) |
-> 1088		    FIELD_PREP(FBNIC_QUEUE_RDE_CTL0_MIN_TROOM_MASK, FBNIC_RX_TROOM);
-  1089	
-  1090		fbnic_ring_wr32(rcq, FBNIC_QUEUE_RDE_CTL0, rcq_ctl);
-  1091	}
-  1092	
+>> WARNING: modpost: vmlinux: section mismatch in reference: numa_add_cpu+0x40 (section: .text) -> early_cpu_to_node (section: .init.text)
+>> WARNING: modpost: vmlinux: section mismatch in reference: numa_remove_cpu+0x40 (section: .text) -> early_cpu_to_node (section: .init.text)
+WARNING: modpost: missing MODULE_DESCRIPTION() in arch/arm64/kernel/arm64-reloc-test.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in arch/arm64/crypto/crct10dif-ce.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in arch/arm64/crypto/poly1305-neon.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in arch/arm64/crypto/aes-neon-bs.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in kernel/locking/locktorture.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in kernel/locking/test-ww_mutex.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in kernel/rcu/rcutorture.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in kernel/rcu/rcuscale.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in kernel/rcu/refscale.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in kernel/time/test_udelay.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in kernel/time/time_test.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in kernel/kcsan/kcsan_test.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in kernel/backtracetest.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in kernel/torture.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in kernel/resource_kunit.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in kernel/sysctl-test.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in kernel/scftorture.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in mm/kfence/kfence_test.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in mm/dmapool_test.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in mm/hwpoison-inject.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in fs/nfs_common/nfs_acl.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in fs/nfs_common/grace.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in fs/nls/nls_cp437.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in fs/nls/nls_cp737.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in fs/nls/nls_cp775.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in fs/nls/nls_cp850.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in fs/nls/nls_cp852.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in fs/nls/nls_cp855.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in fs/nls/nls_cp857.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in fs/nls/nls_cp860.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in fs/nls/nls_cp861.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in fs/nls/nls_cp862.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in fs/nls/nls_cp863.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in fs/nls/nls_cp864.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in fs/nls/nls_cp865.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in fs/nls/nls_cp866.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in fs/nls/nls_cp869.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in fs/nls/nls_cp874.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in fs/nls/nls_cp932.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in fs/nls/nls_euc-jp.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in fs/nls/nls_cp936.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in fs/nls/nls_cp949.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in fs/nls/nls_cp950.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in fs/nls/nls_cp1250.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in fs/nls/nls_cp1251.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in fs/nls/nls_ascii.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in fs/nls/nls_iso8859-1.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in fs/nls/nls_iso8859-2.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in fs/nls/nls_iso8859-3.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in fs/nls/nls_iso8859-4.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in fs/nls/nls_iso8859-5.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in fs/nls/nls_iso8859-6.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in fs/nls/nls_iso8859-7.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in fs/nls/nls_cp1255.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in fs/nls/nls_iso8859-9.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in fs/nls/nls_iso8859-13.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in fs/nls/nls_iso8859-14.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in fs/nls/nls_iso8859-15.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in fs/nls/nls_koi8-r.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in fs/nls/nls_koi8-u.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in fs/nls/nls_koi8-ru.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in fs/nls/nls_utf8.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in fs/nls/mac-celtic.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in fs/nls/mac-centeuro.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in fs/nls/mac-croatian.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in fs/nls/mac-cyrillic.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in fs/nls/mac-gaelic.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in fs/nls/mac-greek.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in fs/nls/mac-iceland.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in fs/nls/mac-inuit.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in fs/nls/mac-romanian.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in fs/nls/mac-roman.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in fs/nls/mac-turkish.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in fs/nls/nls_ucs2_utils.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in fs/unicode/utf8data.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in fs/unicode/utf8-selftest.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in fs/binfmt_misc.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in fs/binfmt_script.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in fs/ext4/ext4-inode-test.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in fs/jbd2/jbd2.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in fs/cramfs/cramfs.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in fs/minix/minix.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in fs/fat/fat.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in fs/fat/fat_test.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in fs/isofs/isofs.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in fs/hfs/hfs.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in fs/nfs/nfs.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in fs/nfs/nfsv2.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in fs/nfs/nfsv3.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in fs/nfs/nfsv4.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in fs/sysv/sysv.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in fs/hpfs/hpfs.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in fs/ufs/ufs.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in fs/efs/efs.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in fs/qnx4/qnx4.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in fs/qnx6/qnx6.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in fs/autofs/autofs4.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in fs/adfs/adfs.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in fs/btrfs/btrfs.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in security/keys/trusted-keys/trusted.o
 
 -- 
 0-DAY CI Kernel Test Service
