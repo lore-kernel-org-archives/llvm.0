@@ -1,31 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 324A61A4F2B;
-	Tue, 16 Jul 2024 18:33:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7812F1A2C14;
+	Tue, 16 Jul 2024 18:34:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721154825; cv=none; b=ttf6TjWYFDvyiO14SBCaSU7L9Eu9Kae+5ELJq9G/eviFWKaPS6JV4h9taUC4vPRDx/JJhdyZ32edSHucAVuxqIOEsMFOoyu0AU79e166aHOOkLhv8bVfJ53BjRUA9934b25yOAXxygaRWYlQ43bWXppgcwWJk/fY9Funush7aE4=
+	t=1721154859; cv=none; b=nf897SXjDOsdCINikKDh3VzSTSCciHsNM+xMqcR+urDAP8KQYyA3JTga8evpt3dLpgqbaifaVfIvZnY5C0AXtm1eLn3PLfVCd+bde8E3BeYSQuEbzyo/U59u3mDqVB+OAiZRxCt2QVHyHInpo/iZOW8ULes8NTysVHAlT9Ez5vE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721154825; c=relaxed/simple;
+	s=arc-20240116; t=1721154859; c=relaxed/simple;
 	bh=2K0g1t7SFFmyFpHBYCQZgT7kd2mByMFkUCTErHVQcs8=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=QLuj2lvsN6GpDjSlX1kGcFdhLb+8aNCH6MXToJIoxUYwzBsJnsJrACyf5Zdz6Z31o0nL3GpFG5Xv9o5FKXkSoxdbNSuArh1BAsFR60UfoRAxqhxEzsHLk70lZdO1n6LXcZjPnNL6IAtm1zAUj4msdAoZMUqZdjvE4Slg7dHNLbk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TDGuC15L; arc=none smtp.client-ip=10.30.226.201
+	 MIME-Version; b=hXfsbNGMyrxddW+JqvqP7gMjmzNEKgOWTr88KAdv3ljUJwRiKuE6wPuDVYMV7kDpbHltAff1/RlcdjM+qVQ++yA7IPAi5Pl1VX19QrA0WJjLohAPU781WgZIZ/MOugP9CvoxgXDcerh8goIf2lNH1qdMEN4s2Gf/7k6DlpJa0/0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=m4zOxb3Q; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TDGuC15L"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 87E18C4AF0E;
-	Tue, 16 Jul 2024 18:33:43 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="m4zOxb3Q"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 93948C4AF0B;
+	Tue, 16 Jul 2024 18:34:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1721154825;
+	s=k20201202; t=1721154859;
 	bh=2K0g1t7SFFmyFpHBYCQZgT7kd2mByMFkUCTErHVQcs8=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=TDGuC15L3GzFVerv/IS6gTCchH6qi3GYrFHf/Qbwjbx+8/VgcThgfZQxW84UL8/2q
-	 uQyd1LM9n5CpjKuIdCIDye1ALzlsE29rlXUd9Oz26yDQfAV0e4TqF0iAo1lCS5unwb
-	 ABA+3lLwizxpbkEaO0jraEUkQbsb+WqKNnFmZRoQBBrgRrkGaBErtSp4rUqmcfLBnr
-	 HWAlNHucMscSnPbrIkmPJboxpf7jAd6jbR6XhieuxFJrdHWq0wciRaBQ5saV/tLXAI
-	 Nb49uVVJMHgRqwYerj8zSmK927XWvY8ecDlvsd+u7PmwU3DwDSVHkHzIfLzcwyS22X
-	 oY7pjpPVae/Hg==
+	b=m4zOxb3Qnz/Z32Dyweyl2vkwBKSXhq7ntBfQQ90aDMRfx11w6xnW26OGYwzvpGZmc
+	 b7GQQEg7lIqTKmddPPEfpoTNnBOeDVXpj7Ww/e9PTWADX9pFb8loGsGGozkT65GVNi
+	 B7lFYCLGyN7L6BZz9tqMuZbRj7Jec01RD1HWUUXfJFdnyiVB73FyPXygd02RlHBcTD
+	 GszcFKWQfZ+UZUJYAIFvFtWJf6285Cv+IeAZvI1fUowJPULgtz6+hLQ+o2ER1TxOnc
+	 f14mb7uuJRSgvCZFrWfDAw0wQWh9LNAIAC+dZDN7PjMvtGriGebiUYA0SUh7bYCZ5w
+	 jGYvrY8ZO4G2A==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
@@ -39,12 +39,12 @@ Cc: John Hubbard <jhubbard@nvidia.com>,
 	nathan@kernel.org,
 	linux-kselftest@vger.kernel.org,
 	llvm@lists.linux.dev
-Subject: [PATCH AUTOSEL 6.6 5/8] selftests/vDSO: fix clang build errors and warnings
-Date: Tue, 16 Jul 2024 14:33:02 -0400
-Message-ID: <20240716183324.2814275-5-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 6.1 3/5] selftests/vDSO: fix clang build errors and warnings
+Date: Tue, 16 Jul 2024 14:34:00 -0400
+Message-ID: <20240716183409.2814531-3-sashal@kernel.org>
 X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20240716183324.2814275-1-sashal@kernel.org>
-References: <20240716183324.2814275-1-sashal@kernel.org>
+In-Reply-To: <20240716183409.2814531-1-sashal@kernel.org>
+References: <20240716183409.2814531-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -53,7 +53,7 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
-X-stable-base: Linux 6.6.40
+X-stable-base: Linux 6.1.99
 Content-Transfer-Encoding: 8bit
 
 From: John Hubbard <jhubbard@nvidia.com>
