@@ -1,186 +1,153 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f181.google.com (mail-pg1-f181.google.com [209.85.215.181])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D61D621A04;
-	Tue, 16 Jul 2024 06:59:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8FA7235894
+	for <llvm@lists.linux.dev>; Tue, 16 Jul 2024 07:44:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721113175; cv=none; b=RIH7tSWSxePZ8vEEgvgaURLrk4X51+lzcUO7nyim/CnZzD8JfXzQJqg6IogwCKMZl6kxD7El55HwKyPbbbSCuxtA0wIzvPoLS8Iz+g9NdcQv5M3WyPW4ihUQ4qcFM2lF2D1WOb+F/ElWHfusVsEEELKY0Wdzg2Elj/w22lwEc/A=
+	t=1721115901; cv=none; b=lQvswc/KIbwPnVfXkT7kLZ1TaLvj0uaofKuh3WeTEKnKyk8XdokA4dNr6qmwEIkKUFwUCZFSG4BzRnWpGQckLX4QGZ+CHvUTw6SfXmNUsepJDxiPXn76S4MpwwzMWyI8k2LrwfwYgr7SwP5k4+jx/2RvH4SeAyOdxXKgAXeuQAQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721113175; c=relaxed/simple;
-	bh=1qo2TWXVwyMAZAgfKZLwbwSxsvs92nKcG5kAt6X8kKM=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=OhzqLxNJ4/ecJ+zWbfiwoS2RM51EvUulBBA+rhbEgiYilObeY/oMfdU+dVBNwQtmST6oR+yq6k9Sv/6fgnAZyh4LTTG69SzR6BhKzX1pEnaFSfTtma5RZ3UDiM8pLbe2vUlNhkmSOmiwRENl3WYDKOWA1/pZi+TTPsTlUCWy+3E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=gP2NahHC; arc=none smtp.client-ip=198.175.65.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1721115901; c=relaxed/simple;
+	bh=LhvDWCz+qUg7uLWIVZVAd05xhIPqDLC5aQEUa5TAj/c=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=lKLfISJUucSdnYMkdyBetrgOCWGezqzFyyIyMmGv4MArvEAbSL5mZ4SQYrFYG65Rj96+pWMo4XbhT7UBeW2sZmebeMtzdSOKIwJpxIRNyEOiqJBgkAxrTxJdXESX60mSgoLfA6eePjQNtmOg6EH9UtIeTvG1ErfjDnIsYcmDXEs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=CuxNFhn6; arc=none smtp.client-ip=209.85.215.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="gP2NahHC"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1721113173; x=1752649173;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=1qo2TWXVwyMAZAgfKZLwbwSxsvs92nKcG5kAt6X8kKM=;
-  b=gP2NahHCuJzLKMiVyindvgt+YL8Ladn+m6DPXgn0YHEGt+ReyaW9J/RD
-   7kNuKshWkV+eWHYlX+sbvOw4uobhfiYBmbCB7Da42dWSTi0kd0v9bvNAm
-   Y0nfGxUyXpq5FKxZTY3olRd3gtrBVeXKRdG+Twge9tyJecbJXwcPIwydF
-   v3d3qXI1leP6E3w9Dct5xxaFYsXvP8SgEx4IZK9/e4KQssmDZwOoQvHx4
-   7zD+p2gQZHuXzgXZ+ZZO/XIhTRSmm7ndlnVQ26SZ7Gn3oUcEoAM8UMkLK
-   LAilUsIaKfC4lvrbV4MKpLKxdzP7TRICt3RiGSD8jg/9bYZp5J37yTzM5
-   A==;
-X-CSE-ConnectionGUID: +U99Cfw9SRe9blEBTAyWQQ==
-X-CSE-MsgGUID: X3GYfH3JQu6T1B/PSbPolg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11134"; a="41054877"
-X-IronPort-AV: E=Sophos;i="6.09,211,1716274800"; 
-   d="scan'208";a="41054877"
-Received: from fmviesa008.fm.intel.com ([10.60.135.148])
-  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jul 2024 23:59:32 -0700
-X-CSE-ConnectionGUID: w/hNLAdXQP6c+mbRUt8tJg==
-X-CSE-MsgGUID: BY8G12poRoK7/x4ak252vA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.09,211,1716274800"; 
-   d="scan'208";a="49830623"
-Received: from lkp-server01.sh.intel.com (HELO 68891e0c336b) ([10.239.97.150])
-  by fmviesa008.fm.intel.com with ESMTP; 15 Jul 2024 23:59:30 -0700
-Received: from kbuild by 68891e0c336b with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1sTc9n-000ezq-2b;
-	Tue, 16 Jul 2024 06:59:27 +0000
-Date: Tue, 16 Jul 2024 14:59:08 +0800
-From: kernel test robot <lkp@intel.com>
-To: Stephen Boyd <sboyd@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	David Gow <davidgow@google.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: [clk:clk-kunit 7/10] ERROR: modpost: "device_is_bound"
- [lib/kunit/kunit.ko] undefined!
-Message-ID: <202407161459.gvqMtx9y-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CuxNFhn6"
+Received: by mail-pg1-f181.google.com with SMTP id 41be03b00d2f7-6e7e23b42c3so3010079a12.1
+        for <llvm@lists.linux.dev>; Tue, 16 Jul 2024 00:44:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1721115899; x=1721720699; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=DbCWXGRuvzHfZO2VrOM/qCgFYRHsmheQfUlw+5FY2Pc=;
+        b=CuxNFhn6vF48pwldGU/Rz85DPLXHL0cbXFnvFH90QOnOY9nHFKUskmJSXvlhej3d+Y
+         Ck/g3VIhWkmBbHE6lGhCt+xV+dMRU+S3PK3HVLnS+jtjvOzTYDmx0bKXzG3mu/Jlpbl0
+         UmBheY9FNUj5w51M72dKuAakYLwbotdE6Mv/E/NtYmh+XBFlQDn3UvdaAq8KjzOyzIuB
+         LkO8cnr8XwHjXTHJ+edUzCtPGHtvMjp3w/shHDyHPgNrytkjM9rWDAWpf2snfgI18QJO
+         Kt1icaHrdbYDkqobb9YPsnCyCtCjRywWU7oag958WMxzj7A358TzYvCPo1RkvFhNdMNb
+         4Gmg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1721115899; x=1721720699;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=DbCWXGRuvzHfZO2VrOM/qCgFYRHsmheQfUlw+5FY2Pc=;
+        b=VqCW1lvSZ8SxC3TuWuRiBmgRzh7FqWO2fJShAlMmBAN/eAXmypKsAaQp61ObkIMUUg
+         UtGu23SHb68RGxNGCSoyfzZkVVJIgRvtbDBFBjqV3upWcOIG+/mym/amf6Bz3qv/qd61
+         wNbNOtGTElprI80/rDLENc14Bw+ohFXQ1AnrsFPtQW84HJZ+OHa/QPahx0LrM7tJZM3k
+         rUZu4QKgu8m3Rd8WOoyHFr2stns9kbeCHC3YxB2r5UOS25kxhLGkXo3Wj3ItpJSEdvsM
+         nfrJLkCpkFiyzpH306pSajHPGUXU/zQKAWeu5EAgJFUq+paYg/gKtCaPLnuWHEPBylNv
+         QhoA==
+X-Forwarded-Encrypted: i=1; AJvYcCUI4xUdQABaLhfQWByUvPk+Vtm5MRF1p608LUs+4R4S4yN+C0nMAp0lVAykFmIAFyt3Qp5Q+BoA5iuoLRsz5eOO5YKS8w==
+X-Gm-Message-State: AOJu0Yzw5112sw3nmUodwock/hrbowZHpU4X+Iy27xokRO/lx+9IAyxO
+	IkfMW8efntjNf+xVDUjPOsfEKgAFZstd9l76EzikIcVBrZlDvy0ZuoFtyzS6GUfTP9CECHWJYQu
+	dc7CAXIaOr6DFZt7knFd0UgQlEWY=
+X-Google-Smtp-Source: AGHT+IHKJ4A/6L2tAH7elOzCsqesMbEdr+mBHlIAhQKeuGXL0JGbvM+BD5UNGVOtYhJwy9ZQIVoEqnE6Pzw8x3iWzrA=
+X-Received: by 2002:a05:6a20:72a2:b0:1c0:f5be:a3ca with SMTP id
+ adf61e73a8af0-1c3f124b1bdmr1554068637.30.1721115898766; Tue, 16 Jul 2024
+ 00:44:58 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+References: <20240714160238.238708-1-vadorovsky@gmail.com> <CANiq72=kchSt5XjAJRVgNWG-iNXbc2E64ojwsQYnB2pshULK1Q@mail.gmail.com>
+ <52676577-372c-4a7f-aace-4cf100f93bfb@gmail.com>
+In-Reply-To: <52676577-372c-4a7f-aace-4cf100f93bfb@gmail.com>
+From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date: Tue, 16 Jul 2024 09:44:46 +0200
+Message-ID: <CANiq72nbbtNp4vGGHkXVSgSW+WU=5Z9uGRO_LLg7+ezTqrZ_tQ@mail.gmail.com>
+Subject: Re: [PATCH] rust: str: Use `core::CStr`, remove the custom `CStr` implementation
+To: Michal Rostecki <vadorovsky@gmail.com>, Benno Lossin <benno.lossin@proton.me>
+Cc: Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, 
+	Wedson Almeida Filho <wedsonaf@gmail.com>, Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, 
+	=?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
+	Andreas Hindborg <a.hindborg@samsung.com>, Alice Ryhl <aliceryhl@google.com>, 
+	Brendan Higgins <brendan.higgins@linux.dev>, David Gow <davidgow@google.com>, 
+	Rae Moar <rmoar@google.com>, FUJITA Tomonori <fujita.tomonori@gmail.com>, 
+	Trevor Gross <tmgross@umich.edu>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, 
+	Justin Stitt <justinstitt@google.com>, Martin Rodriguez Reboredo <yakoyoku@gmail.com>, 
+	Finn Behrens <me@kloenk.dev>, Manmohan Shukla <manmshuk@gmail.com>, 
+	Valentin Obst <kernel@valentinobst.de>, Laine Taffin Altman <alexanderaltman@me.com>, 
+	Danilo Krummrich <dakr@redhat.com>, Yutaro Ohno <yutaro.ono.418@gmail.com>, 
+	Tiago Lam <tiagolam@gmail.com>, Charalampos Mitrodimas <charmitro@posteo.net>, 
+	Ben Gooding <ben.gooding.dev@gmail.com>, Roland Xu <mu001999@outlook.com>, 
+	rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com, 
+	netdev@vger.kernel.org, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/clk/linux.git clk-kunit
-head:   9f8bbc66021282d0646d1f8422265c72e671b5d1
-commit: e1c20fc91c396384a8063063b32fce76c10dcdd8 [7/10] platform: Add test managed platform_device/driver APIs
-config: i386-buildonly-randconfig-006-20240716 (https://download.01.org/0day-ci/archive/20240716/202407161459.gvqMtx9y-lkp@intel.com/config)
-compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240716/202407161459.gvqMtx9y-lkp@intel.com/reproduce)
+On Mon, Jul 15, 2024 at 6:12=E2=80=AFPM Michal Rostecki <vadorovsky@gmail.c=
+om> wrote:
+>
+> @@ -71,11 +75,11 @@ macro_rules! kunit_assert {
+>                   //
+>                   // This mimics KUnit's failed assertion format.
+>                   $crate::kunit::err(format_args!(
+> -                    "    # {}: ASSERTION FAILED at {FILE}:{LINE}\n",
+> +                    "    # {:?}: ASSERTION FAILED at {FILE:?}:{LINE:?}\n=
+",
+>                       $name
+>                   ));
+>                   $crate::kunit::err(format_args!(
+> -                    "    Expected {CONDITION} to be true, but is false\n=
+"
+> +                    "    Expected {CONDITION:?} to be true, but is false=
+\n"
+>                   ));
+>
+> The only practical difference in switching from `Display` to `Debug`
+> here is that the fallback kunit error messages are going to include
+> quotation marks around conditions, files and lines.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202407161459.gvqMtx9y-lkp@intel.com/
+That is a fairly important difference -- the messages are intended to
+match the C KUnit ones.
 
-All errors (new ones prefixed by >>, old ones prefixed by <<):
+Especially the file:line notation -- I don't think a user would expect
+to have quotes there (regardless of KUnit).
 
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/clk/mediatek/clk-mt2712-mfg.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/clk/mediatek/clk-mt2712-mm.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/clk/mediatek/clk-mt2712-vdec.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/clk/mediatek/clk-mt2712-venc.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/clk/mediatek/clk-mt8167-apmixedsys.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/clk/mediatek/clk-mt8167.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/clk/mediatek/clk-mt8167-aud.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/clk/mediatek/clk-mt8167-img.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/clk/mediatek/clk-mt8167-mfgcfg.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/clk/mediatek/clk-mt8167-mm.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/clk/mediatek/clk-mt8167-vdec.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/clk/mediatek/clk-mt8188-apmixedsys.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/clk/mediatek/clk-mt8188-topckgen.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/clk/mediatek/clk-mt8188-peri_ao.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/clk/mediatek/clk-mt8188-infra_ao.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/clk/mediatek/clk-mt8188-adsp_audio26m.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/clk/mediatek/clk-mt8188-cam.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/clk/mediatek/clk-mt8188-ccu.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/clk/mediatek/clk-mt8188-img.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/clk/mediatek/clk-mt8188-imp_iic_wrap.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/clk/mediatek/clk-mt8188-ipe.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/clk/mediatek/clk-mt8188-mfg.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/clk/mediatek/clk-mt8188-vdec.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/clk/mediatek/clk-mt8188-vdo0.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/clk/mediatek/clk-mt8188-vdo1.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/clk/mediatek/clk-mt8188-venc.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/clk/mediatek/clk-mt8188-vpp0.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/clk/mediatek/clk-mt8188-vpp1.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/clk/mediatek/clk-mt8192.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/clk/mediatek/clk-mt8192-aud.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/clk/mediatek/clk-mt8192-cam.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/clk/mediatek/clk-mt8192-img.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/clk/mediatek/clk-mt8192-imp_iic_wrap.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/clk/mediatek/clk-mt8192-mfg.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/clk/mediatek/clk-mt8192-mm.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/clk/mediatek/clk-mt8192-msdc.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/clk/mediatek/clk-mt8192-scp_adsp.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/clk/mediatek/clk-mt8192-vdec.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/clk/mediatek/clk-mt8192-venc.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/clk/mediatek/clk-mt8365-apu.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/clk/sunxi-ng/sunxi-ccu.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/clk/sunxi-ng/suniv-f1c100s-ccu.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/clk/sunxi-ng/sun20i-d1-ccu.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/clk/sunxi-ng/sun20i-d1-r-ccu.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/clk/sunxi-ng/sun50i-h616-ccu.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/clk/sunxi-ng/sun6i-rtc-ccu.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/clk/sunxi-ng/sun8i-a23-ccu.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/clk/sunxi-ng/sun8i-a33-ccu.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/clk/sunxi-ng/sun8i-a83t-ccu.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/clk/sunxi-ng/sun8i-h3-ccu.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/clk/sunxi-ng/sun8i-r40-ccu.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/clk/sunxi-ng/sun8i-v3s-ccu.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/clk/sunxi-ng/sun8i-de2-ccu.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/clk/sunxi-ng/sun8i-r-ccu.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/clk/sunxi-ng/sun9i-a80-ccu.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/clk/sunxi-ng/sun9i-a80-de-ccu.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/clk/sunxi-ng/sun9i-a80-usb-ccu.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/soc/ixp4xx/ixp4xx-qmgr.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/soc/ixp4xx/ixp4xx-npe.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/soc/qcom/spm.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/regulator/max20411-regulator.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/reset/hisilicon/hi6220_reset.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/tty/n_hdlc.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/tty/n_gsm.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/tty/goldfish.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/char/hw_random/omap-rng.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/char/nvram.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/char/ppdev.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/base/regmap/regmap-kunit.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/base/regmap/regmap-ram.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/base/regmap/regmap-raw-ram.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/base/regmap/regmap-spmi.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/block/loop.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/misc/fastrpc.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/mfd/ssbi.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/dax/dax.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/dax/device_dax.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/scsi/scsi_common.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/mtd/parsers/tplink_safeloader.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/mtd/chips/cfi_util.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/input/vivaldi-fmap.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/input/tests/input_test.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/i2c/busses/i2c-qup.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/media/rc/rc-core.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hwmon/mr75203.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/crypto/sa2ul.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/platform/x86/amilo-rfkill.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/platform/x86/xo1-rfkill.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/perf/fsl_imx8_ddr_perf.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/perf/arm_cspmu/arm_cspmu_module.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hwtracing/intel_th/intel_th_msu_sink.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/interconnect/imx/imx-interconnect.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/interconnect/imx/imx8mn-interconnect.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/interconnect/imx/imx8mp-interconnect.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/spmi/hisi-spmi-controller.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/spmi/spmi-pmic-arb.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/greybus/greybus.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/rpmsg/rpmsg_char.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/iio/buffer/kfifo_buf.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/siox/siox-bus-gpio.o
->> ERROR: modpost: "device_is_bound" [lib/kunit/kunit.ko] undefined!
+In general, even if we didn't need it right now, I think it is
+something we will need sooner or later.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+> wording. My general point is that I've never seen `&mut str` being
+> exposed in any core/std API to the external user, mutation usually
+> implies usage of an owned String.
+
+Not sure what you mean by exposed, but even if `&mut str`'s methods do
+not count (used via `String`), there is also
+`from_utf8_unchecked_mut()` that returns one, which is essentially the
+same idea as what we had here.
+
+So I am not sure about the "The rule of Rust std" part in the new
+commit messages. And, to be clear, while the Rust standard library is
+a good reference to look into, sometimes we want/need to do things
+differently anyway (which is not really the case here given
+`from_utf8_unchecked_mut()`, I would say).
+
+In this case, regardless of the standard library, personally I would
+have preferred to have a non-public function, but still have it (and
+properly documented), rather than open code the `unsafe` block with
+the casts.
+
+> I think the best solution would be leaving `c_str` macro for that. The
+> reason why I removed it is that the GitHub issue[0] mentions its
+> removal. But for that case, I think it makes sense to leave it. What do
+> you think?
+
+Perhaps the issue was only taking into account the C string literal
+case? Benno may know more.
+
+Generally speaking, replacing a clean line with a bigger `unsafe`
+block is something to be avoided.
+
+Maybe a `c_stringify!` is what we need :)
+
+Cheers,
+Miguel
