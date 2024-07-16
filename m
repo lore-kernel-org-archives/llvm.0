@@ -1,176 +1,91 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E6A7E1A0AF2;
-	Tue, 16 Jul 2024 18:35:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3CAEC1643A;
+	Tue, 16 Jul 2024 18:55:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721154920; cv=none; b=jviCURXfLLVHhuhPNKtU//MuFOIkq1dAAvKuJrXl7fu1P8b5FEkf8fh3pe4MhVWs4iAQCm1Di8Naa8duA2X4Od1BcPLasOS8cNAR6oKrmqbcugr5fIgRU+0r9ZO53pLmeKSW1kZitx/iOjL0SugQah97VSJXwJInGBbwv/BMZE8=
+	t=1721156118; cv=none; b=ZoOB0SMsUBrkJZjlA/VSbypSS+8ceYUTokrz0AMqKOsH+BWKrmQ50ylCHffAfCyWzWf3D0gCH8Tro0OMS5TPz7ncpVHb994F9fP01ny+4w7yRZhFPbZeW33M+QONymoZfFFVpQyREClVl52yw+IX7XoCJU6VfoYTZB7paBcAT38=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721154920; c=relaxed/simple;
-	bh=4cr3frS2fJLcGXPWeACtPtdj2rQhQgAAGq2J8rr+Mbs=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=lqHxUfA41PM0MQ2hb/OZiBEA/n7AMSGW7kMECtIZHdEHx98FwQ/rT0AbSvHez7ouJujZl8EqifZ2aRec2KIgijgsKwnOH5SM9r/hOt6BwEqG4S5uo0WO3b7nwUQOX/CoamRWfv8LD5OguLol76Cg+HL+05ugMQBZUKF2GiY2yq8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HMxRaJJe; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1721156118; c=relaxed/simple;
+	bh=6Hbux0N7M6pMB005K7wDKLTV5DAQ3bpn+v80VPcPfiA=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=ptS8yeTlhG6t5SjgUmYpOSafL6A2dbEcwajbmffcZ4xUPbcLm9Qj+gfMs2m/Obopw+FW5UWWvSPx6+9MdPbvWuLtqn3O+SZ6l+G8FIPnmTmjJSI06s+YcpPaHc5wyemwv53ueC5gV9nnZZfIAf8h9h7yfm70kb6vbW4Wmz0gNBU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=YopOD2zA; arc=none smtp.client-ip=198.175.65.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HMxRaJJe"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4F22BC116B1;
-	Tue, 16 Jul 2024 18:35:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1721154919;
-	bh=4cr3frS2fJLcGXPWeACtPtdj2rQhQgAAGq2J8rr+Mbs=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=HMxRaJJe3HoBWe2fQV48iZpDORuO1eZT2LAbPUGYs+9Mv0pBT+JuGwq+znaGOm/sZ
-	 4Lr0vRQ7wlb/7JYWY8qSwS9d/1sIC9wPoPGXRIEt3R80VInk3DPB9UPbqQ3ntcaNGP
-	 rsd/vrizvUd+u8lOpZh5HUiwDiguuGoXgL5EOeBFnCIAFft8TfyK0qKJDbt/FUSs+G
-	 T6AZQ071qMSOn61ypl9MyxEIVx+0HwIFpvUEKp52750wYS8fz4tE3qGUOAyg8Yx69U
-	 kAFpbxnFVI/MyPhVpMKjVgcdBapVPg3kwzTakSsl23AuGhsP1PZTOr6aM49C/4Ae3j
-	 k0PgXyU1idY2g==
-From: Sasha Levin <sashal@kernel.org>
-To: linux-kernel@vger.kernel.org,
-	stable@vger.kernel.org
-Cc: John Hubbard <jhubbard@nvidia.com>,
-	Carlos Llamas <cmllamas@google.com>,
-	Edward Liaw <edliaw@google.com>,
-	Muhammad Usama Anjum <usama.anjum@collabora.com>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	Sasha Levin <sashal@kernel.org>,
-	shuah@kernel.org,
-	nathan@kernel.org,
-	linux-kselftest@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: [PATCH AUTOSEL 4.19 2/3] selftests/vDSO: fix clang build errors and warnings
-Date: Tue, 16 Jul 2024 14:35:08 -0400
-Message-ID: <20240716183513.2814965-2-sashal@kernel.org>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20240716183513.2814965-1-sashal@kernel.org>
-References: <20240716183513.2814965-1-sashal@kernel.org>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="YopOD2zA"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1721156116; x=1752692116;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=6Hbux0N7M6pMB005K7wDKLTV5DAQ3bpn+v80VPcPfiA=;
+  b=YopOD2zAP+90dsb6Yodj8cs3rXbFK+gnnsqyqKDlJvRPKG8O41gNQLzu
+   f8rss5sjr1tu7DSiyrh3MqMyWWXEztVWL7NmcPTKckosDqXRmzQCcggvP
+   /EkfrpX+zzpRLqjctKy1rNKCkPH6rZkFNTyHANLNXZdgx0zdVZWRJE+tf
+   EQ94SPfI7unebt2NEHc4w94KvZ2loeQThW8X1HpgEdfOg9khwuSmvHiAg
+   6nt29DWlvQT+w7dh0vy7pleKUflrUMB6og5/NOhmanX+wU4P+1PXf5/3o
+   edIBWGlapEpWLLjAmIE0LFT4rFvfYg3VByAi8MYZGyBZJCVujYBsB8rDg
+   A==;
+X-CSE-ConnectionGUID: YauJ7cYoR6K6z1RLo6WqMw==
+X-CSE-MsgGUID: H+Z/3H7uSU6FruwpQKOo4g==
+X-IronPort-AV: E=McAfee;i="6700,10204,11135"; a="36060713"
+X-IronPort-AV: E=Sophos;i="6.09,212,1716274800"; 
+   d="scan'208";a="36060713"
+Received: from orviesa006.jf.intel.com ([10.64.159.146])
+  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jul 2024 11:55:14 -0700
+X-CSE-ConnectionGUID: 2yyVFAh2QbO55QhzcBldBw==
+X-CSE-MsgGUID: 57H7ShSTTVul3PZmwQWwwg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.09,212,1716274800"; 
+   d="scan'208";a="50476111"
+Received: from lkp-server01.sh.intel.com (HELO 68891e0c336b) ([10.239.97.150])
+  by orviesa006.jf.intel.com with ESMTP; 16 Jul 2024 11:55:14 -0700
+Received: from kbuild by 68891e0c336b with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1sTnKQ-000fYA-2E;
+	Tue, 16 Jul 2024 18:55:10 +0000
+Date: Wed, 17 Jul 2024 02:54:38 +0800
+From: kernel test robot <lkp@intel.com>
+To: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Linux Memory Management List <linux-mm@kvack.org>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Linus Walleij <linus.walleij@linaro.org>
+Subject: [linux-next:master 11036/13217] ld.lld: error: undefined symbol:
+ gpio_set_wake
+Message-ID: <202407170241.yBgRPvz0-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-X-stable-base: Linux 4.19.317
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-From: John Hubbard <jhubbard@nvidia.com>
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+head:   4f40be61af99a67d5580c1448acd9b74c0376389
+commit: 917195d6f8293c35fcf9ed4bfe18f52cc1c9d2e6 [11036/13217] ARM: pxa: consolidate GPIO chip platform data
+config: arm-pxa3xx_defconfig (https://download.01.org/0day-ci/archive/20240717/202407170241.yBgRPvz0-lkp@intel.com/config)
+compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project a0c6b8aef853eedaa0980f07c0a502a5a8a9740e)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240717/202407170241.yBgRPvz0-lkp@intel.com/reproduce)
 
-[ Upstream commit 73810cd45b99c6c418e1c6a487b52c1e74edb20d ]
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202407170241.yBgRPvz0-lkp@intel.com/
 
-When building with clang, via:
+Note: the linux-next/master HEAD 4f40be61af99a67d5580c1448acd9b74c0376389 builds fine.
+      It may have been fixed somewhere.
 
-    make LLVM=1 -C tools/testing/selftests
+All errors (new ones prefixed by >>):
 
-...there are several warnings, and an error. This fixes all of those and
-allows these tests to run and pass.
+>> ld.lld: error: undefined symbol: gpio_set_wake
+   >>> referenced by devices.c
+   >>>               arch/arm/mach-pxa/devices.o:(pxa2xx_gpio_info) in archive vmlinux.a
 
-1. Fix linker error (undefined reference to memcpy) by providing a local
-   version of memcpy.
-
-2. clang complains about using this form:
-
-    if (g = h & 0xf0000000)
-
-...so factor out the assignment into a separate step.
-
-3. The code is passing a signed const char* to elf_hash(), which expects
-   a const unsigned char *. There are several callers, so fix this at
-   the source by allowing the function to accept a signed argument, and
-   then converting to unsigned operations, once inside the function.
-
-4. clang doesn't have __attribute__((externally_visible)) and generates
-   a warning to that effect. Fortunately, gcc 12 and gcc 13 do not seem
-   to require that attribute in order to build, run and pass tests here,
-   so remove it.
-
-Reviewed-by: Carlos Llamas <cmllamas@google.com>
-Reviewed-by: Edward Liaw <edliaw@google.com>
-Reviewed-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
-Tested-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
-Signed-off-by: John Hubbard <jhubbard@nvidia.com>
-Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- tools/testing/selftests/vDSO/parse_vdso.c      | 16 +++++++++++-----
- .../selftests/vDSO/vdso_standalone_test_x86.c  | 18 ++++++++++++++++--
- 2 files changed, 27 insertions(+), 7 deletions(-)
-
-diff --git a/tools/testing/selftests/vDSO/parse_vdso.c b/tools/testing/selftests/vDSO/parse_vdso.c
-index 1dbb4b87268fa..9ef3ad3789c17 100644
---- a/tools/testing/selftests/vDSO/parse_vdso.c
-+++ b/tools/testing/selftests/vDSO/parse_vdso.c
-@@ -77,14 +77,20 @@ static struct vdso_info
- 	ELF(Verdef) *verdef;
- } vdso_info;
- 
--/* Straight from the ELF specification. */
--static unsigned long elf_hash(const unsigned char *name)
-+/*
-+ * Straight from the ELF specification...and then tweaked slightly, in order to
-+ * avoid a few clang warnings.
-+ */
-+static unsigned long elf_hash(const char *name)
- {
- 	unsigned long h = 0, g;
--	while (*name)
-+	const unsigned char *uch_name = (const unsigned char *)name;
-+
-+	while (*uch_name)
- 	{
--		h = (h << 4) + *name++;
--		if (g = h & 0xf0000000)
-+		h = (h << 4) + *uch_name++;
-+		g = h & 0xf0000000;
-+		if (g)
- 			h ^= g >> 24;
- 		h &= ~g;
- 	}
-diff --git a/tools/testing/selftests/vDSO/vdso_standalone_test_x86.c b/tools/testing/selftests/vDSO/vdso_standalone_test_x86.c
-index 93b0ebf8cc38d..805e8c1892764 100644
---- a/tools/testing/selftests/vDSO/vdso_standalone_test_x86.c
-+++ b/tools/testing/selftests/vDSO/vdso_standalone_test_x86.c
-@@ -20,7 +20,7 @@ extern void *vdso_sym(const char *version, const char *name);
- extern void vdso_init_from_sysinfo_ehdr(uintptr_t base);
- extern void vdso_init_from_auxv(void *auxv);
- 
--/* We need a libc functions... */
-+/* We need some libc functions... */
- int strcmp(const char *a, const char *b)
- {
- 	/* This implementation is buggy: it never returns -1. */
-@@ -36,6 +36,20 @@ int strcmp(const char *a, const char *b)
- 	return 0;
- }
- 
-+/*
-+ * The clang build needs this, although gcc does not.
-+ * Stolen from lib/string.c.
-+ */
-+void *memcpy(void *dest, const void *src, size_t count)
-+{
-+	char *tmp = dest;
-+	const char *s = src;
-+
-+	while (count--)
-+		*tmp++ = *s++;
-+	return dest;
-+}
-+
- /* ...and two syscalls.  This is x86-specific. */
- static inline long x86_syscall3(long nr, long a0, long a1, long a2)
- {
-@@ -72,7 +86,7 @@ void to_base10(char *lastdig, time_t n)
- 	}
- }
- 
--__attribute__((externally_visible)) void c_main(void **stack)
-+void c_main(void **stack)
- {
- 	/* Parse the stack */
- 	long argc = (long)*stack;
 -- 
-2.43.0
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
