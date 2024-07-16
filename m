@@ -1,80 +1,169 @@
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5441319AA40
-	for <llvm@lists.linux.dev>; Tue, 16 Jul 2024 15:42:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EED0819B3EC;
+	Tue, 16 Jul 2024 15:42:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721144523; cv=none; b=PBNi8Bscw+itXPgLd8EwJgZrRa1XcdmeNx/YwhWV63f6HsaWhO4VetgxYny4Mx0fwknPcwY4TT6NXFMTc7fGGr0ugnMfKdOv6lHZMfejqlsGWGfLTUGLaGgiUtPGcQxfHIf0xM7jz64dXPgrEDgkhkGrefTfP4p5wq9/XZwdyiU=
+	t=1721144529; cv=none; b=cO/YZLXQZShHtd+9DM6RrayQOpQVqhuRN17Uyir5hSApScKQ58zmzJgjjwJXEDGHxjkDeXdJ61bLIFaohHb835tDNDglvtuJWrxvhaA8C4AKa2MqLULDHbLxfzSuOs7MCGC4Xa4YzQX4LlT0gwrxsCa5E1Wh0ln66M4ebJKgwbI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721144523; c=relaxed/simple;
-	bh=YDRfs8TeH7tguac1ZOsghS+/wUkkP+SkbqwvhONt+QU=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=mydCwueidazWI5QYZX98W/mwea0Bx2WKD64x+tlCSxVghBmICjzR10M2p1l2NRpVIBbeHmsWsDxoTRWlAQB9xfoc+zEH5uFbdeodltDGzz9n37R0bTksFKD56LH+Fw4PTU22ZrLJOreneccMk2cghMDrNknJZ4hStMXs36Jnlfk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id AA3051063;
-	Tue, 16 Jul 2024 08:42:25 -0700 (PDT)
-Received: from [10.1.34.31] (PF4Q20KV.arm.com [10.1.34.31])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 4E3403F766;
-	Tue, 16 Jul 2024 08:41:58 -0700 (PDT)
-Message-ID: <88887095-fd7d-4428-b96f-27e18b547b2c@arm.com>
-Date: Tue, 16 Jul 2024 16:41:55 +0100
+	s=arc-20240116; t=1721144529; c=relaxed/simple;
+	bh=3K3HETqJm/ZpKc+V9IVxrUF1fl+PRjx9X/4MZOmKgiI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Xqghypbe1VZteRfUsOX1wjJfc4ZBnTKqucZG7yRzEVBSA5qa3syWofBQEYW8gssEMZQlqD9bs+kIE2awLqMyGR4k6JSvU3/6+sXYlzFp5secNU0+WxvJb7oR+xCVnHqbXGrjVRRBqStT2rIuL4lBJXJunZ+yyD21kEhJOOC+MhU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=YnSaJsGD; arc=none smtp.client-ip=192.198.163.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="YnSaJsGD"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1721144528; x=1752680528;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=3K3HETqJm/ZpKc+V9IVxrUF1fl+PRjx9X/4MZOmKgiI=;
+  b=YnSaJsGDct8n9k5I33VKgPskUIx89iftfDhcZPu141UhNcofXMYq5PJv
+   8FSBPDRrxMzLNFgJc7GUC3ZFf1wPRkixe30boTvLZM92oXJQakG+Wozzc
+   gcbcZcpByRv/X2zqjKOEokBatc9ltuWuBdY0rtjArL4w9pAsLPNPxi8QX
+   SWFHsCYU7Z4dhB/PK2cWLj63HtwYtwkJPeTRHOtmuhXIid9Z6zXkwlAVi
+   RCRZRShE7u6KLMshUobwzN9C4h0enNLnawrBEa/dQYxsI1RR5cwvCtm0k
+   Y9S6KqytgLsaBiHwvC23GsJeiqxekOAUV3aMBE7iuZxoSwi31mouTF/eK
+   Q==;
+X-CSE-ConnectionGUID: BlFAaDSVRTi6RmCIbEqBGA==
+X-CSE-MsgGUID: P95jIEKtRSyjCg68xg4oIQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11135"; a="29200479"
+X-IronPort-AV: E=Sophos;i="6.09,211,1716274800"; 
+   d="scan'208";a="29200479"
+Received: from fmviesa010.fm.intel.com ([10.60.135.150])
+  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jul 2024 08:42:07 -0700
+X-CSE-ConnectionGUID: RIs+OzhpQTufLz9ioQbl6A==
+X-CSE-MsgGUID: 6ifkXvsmSRiAbDvZ718bpA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.09,211,1716274800"; 
+   d="scan'208";a="50136221"
+Received: from lkp-server01.sh.intel.com (HELO 68891e0c336b) ([10.239.97.150])
+  by fmviesa010.fm.intel.com with ESMTP; 16 Jul 2024 08:42:04 -0700
+Received: from kbuild by 68891e0c336b with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1sTkJV-000fOs-1x;
+	Tue, 16 Jul 2024 15:42:01 +0000
+Date: Tue, 16 Jul 2024 23:41:08 +0800
+From: kernel test robot <lkp@intel.com>
+To: Manivannan Sadhasivam via B4 Relay <devnull+manivannan.sadhasivam.linaro.org@kernel.org>,
+	Lorenzo Pieralisi <lpieralisi@kernel.org>,
+	Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+	Rob Herring <robh@kernel.org>, Bjorn Helgaas <helgaas@kernel.org>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Kishon Vijay Abraham I <kishon@kernel.org>,
+	Bjorn Andersson <andersson@kernel.org>,
+	Konrad Dybcio <konrad.dybcio@linaro.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-pci@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+	linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+	Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Subject: Re: [PATCH 06/14] PCI: endpoint: Assign PCI domain number for
+ endpoint controllers
+Message-ID: <202407162357.A9pxRKuo-lkp@intel.com>
+References: <20240715-pci-qcom-hotplug-v1-6-5f3765cc873a@linaro.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2] perf docs: Mark the Android document as obsolete
-To: Ian Rogers <irogers@google.com>, llvm@lists.linux.dev
-Cc: Arnaldo Carvalho de Melo <acme@kernel.org>,
- Namhyung Kim <namhyung@kernel.org>, Jiri Olsa <jolsa@kernel.org>,
- Adrian Hunter <adrian.hunter@intel.com>,
- "Liang, Kan" <kan.liang@linux.intel.com>,
- Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling
- <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
- James Clark <james.clark@linaro.org>, linux-perf-users@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20240715143342.52236-1-leo.yan@arm.com>
- <CAP-5=fVd9pO7kKvZX7PZ6sJ+GHOV7aF=Ry98a=vknimuSTp9Lg@mail.gmail.com>
- <1487da55-24dc-40ef-a6e8-4bf4b153fdc3@arm.com>
- <CAP-5=fUGJmOr9XcsVWWCREjr1A7rUFaMk0VPkQAKDAEjTLKJVQ@mail.gmail.com>
- <CAP-5=fWY4AeMxfNGh_jB4gss_qtGSgfX4pvv-D-fpCWuqamVfA@mail.gmail.com>
- <f316e3ce-e1e3-45f0-ac78-9af590b58706@arm.com>
- <CAP-5=fU=LguHNi861L4gmgZWXrrgZtG1w5cdw7hXDxnfWyJyMQ@mail.gmail.com>
- <a17e6701-4195-4132-8518-fe4b10403f7e@arm.com>
- <CAP-5=fVi8RJVokVBQtin8xSAq7uxN=GB7zcC4OiT=SzqWB+V0w@mail.gmail.com>
- <0c20b4b7-c1f6-4c0e-9f89-a99c25555640@arm.com>
- <CAP-5=fVvg=5SE29_SUW0MWmLADL477vpP2DBid2kKZ8kNqxXiA@mail.gmail.com>
-Content-Language: en-US
-From: Leo Yan <leo.yan@arm.com>
-In-Reply-To: <CAP-5=fVvg=5SE29_SUW0MWmLADL477vpP2DBid2kKZ8kNqxXiA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240715-pci-qcom-hotplug-v1-6-5f3765cc873a@linaro.org>
 
-On 7/16/2024 4:05 PM, Ian Rogers wrote:
+Hi Manivannan,
 
-[...]
+kernel test robot noticed the following build errors:
 
->>> I'm not sure how we detect
->>> in the build that we're using clang, I suspect there is an approach in
->>> a different kernel Makefile/Build that already tackles this but my
->>> quick searching didn't yield anything - perhaps the change would be
->>> better suited to the location the CROSS_COMPILE prefix is added to
->>> gcc.
->>
->> Should we follow up the steps in the Documentation/kbuild/llvm.rst?
->> The document uses the flag 'LLVM=1' for selecting LLVM/Clang.
-> 
-> Fix clang-built-linux email to llvm@lists.linux.dev
-> 
-> I'm not sure as the kernel build and the tools build differ in certain
-> ways. Perhaps look at the selftests build to see what they do, as they
-> are under tools and share the build files.
+[auto build test ERROR on 91e3b24eb7d297d9d99030800ed96944b8652eaf]
 
-Okay. thanks for suggestion.
+url:    https://github.com/intel-lab-lkp/linux/commits/Manivannan-Sadhasivam-via-B4-Relay/PCI-qcom-ep-Drop-the-redundant-masking-of-global-IRQ-events/20240716-014703
+base:   91e3b24eb7d297d9d99030800ed96944b8652eaf
+patch link:    https://lore.kernel.org/r/20240715-pci-qcom-hotplug-v1-6-5f3765cc873a%40linaro.org
+patch subject: [PATCH 06/14] PCI: endpoint: Assign PCI domain number for endpoint controllers
+config: i386-randconfig-001-20240716 (https://download.01.org/0day-ci/archive/20240716/202407162357.A9pxRKuo-lkp@intel.com/config)
+compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240716/202407162357.A9pxRKuo-lkp@intel.com/reproduce)
 
-Leo
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202407162357.A9pxRKuo-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> drivers/pci/endpoint/pci-epc-core.c:902:19: error: call to undeclared function 'pci_bus_find_domain_nr'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     902 |         epc->domain_nr = pci_bus_find_domain_nr(NULL, dev);
+         |                          ^
+   1 error generated.
+
+
+vim +/pci_bus_find_domain_nr +902 drivers/pci/endpoint/pci-epc-core.c
+
+   866	
+   867	/**
+   868	 * __pci_epc_create() - create a new endpoint controller (EPC) device
+   869	 * @dev: device that is creating the new EPC
+   870	 * @ops: function pointers for performing EPC operations
+   871	 * @owner: the owner of the module that creates the EPC device
+   872	 *
+   873	 * Invoke to create a new EPC device and add it to pci_epc class.
+   874	 */
+   875	struct pci_epc *
+   876	__pci_epc_create(struct device *dev, const struct pci_epc_ops *ops,
+   877			 struct module *owner)
+   878	{
+   879		int ret;
+   880		struct pci_epc *epc;
+   881	
+   882		if (WARN_ON(!dev)) {
+   883			ret = -EINVAL;
+   884			goto err_ret;
+   885		}
+   886	
+   887		epc = kzalloc(sizeof(*epc), GFP_KERNEL);
+   888		if (!epc) {
+   889			ret = -ENOMEM;
+   890			goto err_ret;
+   891		}
+   892	
+   893		mutex_init(&epc->lock);
+   894		mutex_init(&epc->list_lock);
+   895		INIT_LIST_HEAD(&epc->pci_epf);
+   896	
+   897		device_initialize(&epc->dev);
+   898		epc->dev.class = &pci_epc_class;
+   899		epc->dev.parent = dev;
+   900		epc->dev.release = pci_epc_release;
+   901		epc->ops = ops;
+ > 902		epc->domain_nr = pci_bus_find_domain_nr(NULL, dev);
+   903	
+   904		ret = dev_set_name(&epc->dev, "%s", dev_name(dev));
+   905		if (ret)
+   906			goto put_dev;
+   907	
+   908		ret = device_add(&epc->dev);
+   909		if (ret)
+   910			goto put_dev;
+   911	
+   912		epc->group = pci_ep_cfs_add_epc_group(dev_name(dev));
+   913	
+   914		return epc;
+   915	
+   916	put_dev:
+   917		put_device(&epc->dev);
+   918	
+   919	err_ret:
+   920		return ERR_PTR(ret);
+   921	}
+   922	EXPORT_SYMBOL_GPL(__pci_epc_create);
+   923	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
