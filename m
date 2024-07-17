@@ -1,48 +1,48 @@
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C7D5538DC3
-	for <llvm@lists.linux.dev>; Wed, 17 Jul 2024 12:52:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2FD4F38DC3
+	for <llvm@lists.linux.dev>; Wed, 17 Jul 2024 12:52:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721220748; cv=none; b=f7IbmwxW0VR3HkssDef0HusmoZx+3vQ5UTqaLC7Xa2UslqJPmFdQa0CLZPj7TJrL1b6PnGL/Oa49WW7gU+f/sh96rVdknxHzzW7FdNK7/9Abe+9aHDztl1Pm7YfY2zF8YvIRiDtbPf5eY0buN12qWyoGnYmgdeHmwRwzlvxJleA=
+	t=1721220762; cv=none; b=RA4Xe0CR15C5NR4SC/Jn1T+AzhNERiIqzUZl01EQlJfE5zYHRka5mbHvQvTd1k14DLWquJlKji2ez5Gs9mh3YzgAQIujpzsrevOIzOyOvrIjNmHgVIAQXoVTXcW/lBVOBcAqeSXyENaDwRpZDg99bh57P89SU6OmPDi9v7wZheo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721220748; c=relaxed/simple;
-	bh=V7lueRk7vJ3HpCngEh0Ckfdz1QvZir3o8OwagcATQKk=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=Phf3rTXkycY/ZIH9Bb7Pu2mwWK9xPg/sJJpadkUafOt88MNrZYWgkPutiXS0Pu7Ru/PLT8PH90cl9hs+in4yx59EAWhuAf11VX9/UF/J9RaMUZZ9HsTocp+YVTVCQUGo0HQ8+kJMCOHt7hBxHsRYQOGu60r8rk6vROCjEDryM0A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=RQX9I746; arc=none smtp.client-ip=170.10.133.124
+	s=arc-20240116; t=1721220762; c=relaxed/simple;
+	bh=UGskNVnm4KWFAVucvchfHJw3Gu4e3HyaQ/YJRMYNqrk=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=lZ6S3zsfVAlHfEWbkoJIB9QT3ZKmEBesK/tewr4ocZNDkVDnQW+5qnyWRRvfcl+1iqXOftdbdpIL94IrtZH4FpciGea+A/HhgHuvvm4D1pV+GYhQq5wMD44ZB5aZiU109+1PjRkLmyOy811LCL9e71Fx8++dUmhte6XsEe+PoaU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=X+GrUlxO; arc=none smtp.client-ip=170.10.133.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="RQX9I746"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="X+GrUlxO"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1721220745;
+	s=mimecast20190719; t=1721220760;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding;
-	bh=j7FV1Egx+GtxA5vdvHTSrxiCrThM3D6Eog8Ucy0c+gc=;
-	b=RQX9I7469lul7lqf9FqEwhY1iAyDEtdcjEbT8pPTYrhN4p8lBgXp/Qwzk5DkhoTFgvlhf1
-	eHBGUm2a+/y5XXNiZq+fOfPfyW9zCJSqrs0oA0otxx4TqQ0/Il+8PIz/zHzaH6wLr16sS4
-	+TsiNqxTNCcVmvE9/hcAV03VPbeHGCw=
-Received: from mx-prod-mc-04.mail-002.prod.us-west-2.aws.redhat.com
+	bh=LUrIzbwWLM0xatZzGuJLuoih8Wcbc3FSXOKxn7p4luo=;
+	b=X+GrUlxO18gxTj6zDJFW8c5F0Rjl+MSH+A/zdeicNt7EezLjnO0oWiA8tq2P4ZiNJTt98y
+	lUECLqFgrJyzQfUFk+NT31O427O+/FBHSlCyBVrGQ2qn2dQERGTMurF08eeTebbjN1M801
+	Ri+S0FbvratyFSHwlRLqOq1colZCwFw=
+Received: from mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com
  (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
  relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-146-NQPvkgYvOeGx72LHwU7H1Q-1; Wed,
- 17 Jul 2024 08:52:24 -0400
-X-MC-Unique: NQPvkgYvOeGx72LHwU7H1Q-1
-Received: from mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.4])
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-250-ZGVnhQjUOZqWcx0hg64KCw-1; Wed,
+ 17 Jul 2024 08:52:38 -0400
+X-MC-Unique: ZGVnhQjUOZqWcx0hg64KCw-1
+Received: from mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.17])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mx-prod-mc-04.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 82A631955D4C
-	for <llvm@lists.linux.dev>; Wed, 17 Jul 2024 12:52:23 +0000 (UTC)
+	by mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id A910A1955D4D
+	for <llvm@lists.linux.dev>; Wed, 17 Jul 2024 12:52:37 +0000 (UTC)
 Received: from [172.64.10.23] (unknown [10.30.34.11])
-	by mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 872033000192;
-	Wed, 17 Jul 2024 12:52:22 +0000 (UTC)
+	by mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 1FEE81955F40;
+	Wed, 17 Jul 2024 12:52:36 +0000 (UTC)
 From: cki-project@redhat.com
 Subject: =?utf-8?b?4p2M?= FAIL (MISSED 13 of 192): Test report for master
- (6.10.0, mainline.kernel.org-clang, d80f2996)
-Date: Wed, 17 Jul 2024 12:52:22 -0000
+ (6.10.0, mainline.kernel.org-clang, 40832358)
+Date: Wed, 17 Jul 2024 12:52:36 -0000
 To: bgoncalv@redhat.com, llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -50,8 +50,8 @@ List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.4
-Message-Id: <56816.124071708522400837@us-mta-146.us.mimecast.lan>
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.17
+Message-Id: <80868.124071708523800641@us-mta-250.us.mimecast.lan>
 X-Mimecast-Spam-Score: 0
 X-Mimecast-Originator: redhat.com
 Content-Type: text/plain; charset="utf-8"
@@ -66,18 +66,18 @@ Hi, we tested your kernel and here are the results:
 
 
 Kernel information:
-    Commit message: Merge tag 'asm-generic-6.11' of git://git.kernel.org/pu=
-b/scm/linux/kernel/git/arnd/asm-generic
+    Commit message: Merge tag 'x86_sev_for_v6.11_rc1' of git://git.kernel.o=
+rg/pub/scm/linux/kernel/git/tip/tip
 
 You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1376233782
+    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1376171018
 
 One or more kernel tests failed:
     Unrecognized or new issues:
         Reboot test
               x86_64
                    Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-redhat:1376233782-x86_64-kernel_upt_35
+redhat:1376171018-x86_64-kernel_upt_35
                    Non-passing ran subtests:
                        =E2=9D=8C FAIL misc/reboot-test/journalctl-check
 
