@@ -1,101 +1,287 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5452C18733D
-	for <llvm@lists.linux.dev>; Wed, 17 Jul 2024 21:53:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F3B14249F9;
+	Wed, 17 Jul 2024 22:23:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721253190; cv=none; b=NdD3IUVAAnzMgX2IL8dTzRt8L14PYclHH2j0WMRrKx2wK9kyDbVAHue6YOH8XCpdgb2gk5zJJHxnT100hq8m3AoMVeH1GrZB+5RT4biSsqad1LXl7CXaxeCmBRse+1baZ4wRkW7zc1aG8DnxtLlEYsuWwQ36WvZmZkO99GAq4Y0=
+	t=1721255040; cv=none; b=Nb0MvzJdf656XTMHEbDkO7zuKCSmCmv0B5TK+SOd8XB1K78430eK6HZzVsu5n6GsYUsXL7s35ANR+1zNgjm4BL/qdVWVrLbUwdfGz2PtJQnZ0IAh6gb6MgkNk/rrPLU3TmyKbisQKdOZ4XSWxNj919A2shuvFgx7cp9Ae7+B/1Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721253190; c=relaxed/simple;
-	bh=mSYIk/vApkjdQ+q3OdciYovUX4MWgFc38auV1nW02lU=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=s3YDbTPRzJ0gy40R6VuRJLcBenqkTox9KD2cUDkwT7+L1wQW/y1Kf3Gij4GUIoSREvwuPtNGwbRalMoyn5WP2BkYDpUuws3zZ31RZk7ZJBV+0xykmihWaj6WqT1SnuxQnRaBo+8fnx40gW196fdG7tpEQzXSKQXbqkBz9N8Uo8w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=c3goDX6V; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1721255040; c=relaxed/simple;
+	bh=KhQdKRK+nE1da60iAIN2V9+g3FlBbHVB80lmL/9PKR0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=NILHgw5ZAuweA40Y1SBniGysgoPHZNgFri6Kc8kgX0qZsptx7VrYoprmGXW1Xn8QA4JZN01SMFoP0kxEbjze4oHAt/R2foQXG/SM6o/Jt3BaSFFoL9CTJMFW6pV0fG2HgkCeYjVjEwXRl5V7/5QS+42gP17eWN0ODV1gU65KVfc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=I8u0vUq/; arc=none smtp.client-ip=198.175.65.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="c3goDX6V"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1721253187;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=+QSYdArPXyY/blK1yK3073bsE28xk0ni7yP7CvvcWKY=;
-	b=c3goDX6VPm3UGthH7HlY0m2jNo8elgc9BbnqlGJNPzWZopMXNwoZeKt6kHjULlKxjJY1AP
-	POFzidQf1BVAjavcXfdn4PEoLG+tnojn6HG65MmaHXkA6vl6UFJtqTwv1myur07728tRhb
-	qZSGXz03kOowZEi5+jVr0KAwc7XQBoE=
-Received: from mx-prod-mc-02.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-586-Tw5Jxj6iPByloBUz89-NcQ-1; Wed,
- 17 Jul 2024 17:53:05 -0400
-X-MC-Unique: Tw5Jxj6iPByloBUz89-NcQ-1
-Received: from mx-prod-int-02.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-02.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.15])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-02.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 3AFE41955D47
-	for <llvm@lists.linux.dev>; Wed, 17 Jul 2024 21:53:04 +0000 (UTC)
-Received: from [172.64.10.23] (unknown [10.30.34.11])
-	by mx-prod-int-02.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 97AF31955D42;
-	Wed, 17 Jul 2024 21:53:03 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.10.0,
- mainline.kernel.org-clang, e2f710f9)
-Date: Wed, 17 Jul 2024 21:53:03 -0000
-To: llvm@lists.linux.dev
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="I8u0vUq/"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1721255035; x=1752791035;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=KhQdKRK+nE1da60iAIN2V9+g3FlBbHVB80lmL/9PKR0=;
+  b=I8u0vUq/Epzb3zUPbjarqm53V6UztK2mm46Whupw+FfIJHRzHfpA31II
+   9JRwRpFMY+32JKJL5kA3CdCc0KDFvix6oH0xyesNPdoDqkSY7fww2tlsI
+   JTSwUl7HdmlQO1Ke1p5w6+a7323UgqBJnYaHmfn0sNiw+QnGZIp5uX6HX
+   WWHUlOys6THmgJc0m84Y2Qe2sTa55HwBKsAHyROx/f4xyT8hKdN3y8Dv1
+   Y/h9WhlI84asGcGXSLDydX8pgSvxqoZRxIdXHw/+r+OIwCE0KnW4IBd+T
+   8pOLxJz9sVhXEwvHrIZs6gFVom6spxA32c8CytbTIToJSq25dp7ocgNzV
+   A==;
+X-CSE-ConnectionGUID: 2WTbwrjlTpuEUgsXns5Czw==
+X-CSE-MsgGUID: d97z45/tT5+MNQwaHIRfJQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11136"; a="29946484"
+X-IronPort-AV: E=Sophos;i="6.09,215,1716274800"; 
+   d="scan'208";a="29946484"
+Received: from fmviesa005.fm.intel.com ([10.60.135.145])
+  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jul 2024 15:23:55 -0700
+X-CSE-ConnectionGUID: bUkjAXm+R6S1PKCVY2qKwg==
+X-CSE-MsgGUID: g4r8hmz2TVCkIHsUgLrWWA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.09,215,1716274800"; 
+   d="scan'208";a="54869811"
+Received: from lkp-server01.sh.intel.com (HELO 68891e0c336b) ([10.239.97.150])
+  by fmviesa005.fm.intel.com with ESMTP; 17 Jul 2024 15:23:53 -0700
+Received: from kbuild by 68891e0c336b with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1sUD3u-000gj2-2e;
+	Wed, 17 Jul 2024 22:23:50 +0000
+Date: Thu, 18 Jul 2024 06:23:37 +0800
+From: kernel test robot <lkp@intel.com>
+To: Lingbo Kong <quic_lingbok@quicinc.com>, ath12k@lists.infradead.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-wireless@vger.kernel.org, quic_lingbok@quicinc.com
+Subject: Re: [PATCH 2/4] wifi: ath12k: Add Support for enabling or disabling
+ specific features based on ACPI bitflag
+Message-ID: <202407180617.CiqV9Bdm-lkp@intel.com>
+References: <20240717111023.78798-3-quic_lingbok@quicinc.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.15
-Message-Id: <71836.124071717530500418@us-mta-586.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240717111023.78798-3-quic_lingbok@quicinc.com>
 
-Hi, we tested your kernel and here are the results:
+Hi Lingbo,
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: FAILED
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on db1ce56e6e1d395dd42a3cd6332a871d9be59c45]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Lingbo-Kong/wifi-ath12k-Add-support-for-obtaining-the-buffer-type-ACPI-function-bitmap/20240717-211701
+base:   db1ce56e6e1d395dd42a3cd6332a871d9be59c45
+patch link:    https://lore.kernel.org/r/20240717111023.78798-3-quic_lingbok%40quicinc.com
+patch subject: [PATCH 2/4] wifi: ath12k: Add Support for enabling or disabling specific features based on ACPI bitflag
+config: um-allmodconfig (https://download.01.org/0day-ci/archive/20240718/202407180617.CiqV9Bdm-lkp@intel.com/config)
+compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project a0c6b8aef853eedaa0980f07c0a502a5a8a9740e)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240718/202407180617.CiqV9Bdm-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202407180617.CiqV9Bdm-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+   In file included from drivers/net/wireless/ath/ath12k/core.c:9:
+   In file included from include/linux/remoteproc.h:40:
+   In file included from include/linux/virtio.h:7:
+   In file included from include/linux/scatterlist.h:8:
+   In file included from include/linux/mm.h:2258:
+   include/linux/vmstat.h:514:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     514 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+   In file included from drivers/net/wireless/ath/ath12k/core.c:9:
+   In file included from include/linux/remoteproc.h:40:
+   In file included from include/linux/virtio.h:7:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/um/include/asm/io.h:24:
+   include/asm-generic/io.h:548:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     548 |         val = __raw_readb(PCI_IOBASE + addr);
+         |                           ~~~~~~~~~~ ^
+   include/asm-generic/io.h:561:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     561 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
+      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
+         |                                                   ^
+   In file included from drivers/net/wireless/ath/ath12k/core.c:9:
+   In file included from include/linux/remoteproc.h:40:
+   In file included from include/linux/virtio.h:7:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/um/include/asm/io.h:24:
+   include/asm-generic/io.h:574:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     574 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
+      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
+         |                                                   ^
+   In file included from drivers/net/wireless/ath/ath12k/core.c:9:
+   In file included from include/linux/remoteproc.h:40:
+   In file included from include/linux/virtio.h:7:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/um/include/asm/io.h:24:
+   include/asm-generic/io.h:585:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     585 |         __raw_writeb(value, PCI_IOBASE + addr);
+         |                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:595:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     595 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:605:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     605 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:693:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     693 |         readsb(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:701:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     701 |         readsw(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:709:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     709 |         readsl(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:718:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     718 |         writesb(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+   include/asm-generic/io.h:727:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     727 |         writesw(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+   include/asm-generic/io.h:736:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     736 |         writesl(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+>> drivers/net/wireless/ath/ath12k/core.c:33:10: error: no member named 'acpi' in 'struct ath12k_base'
+      33 |         if (ab->acpi.acpi_disable_rfkill)
+         |             ~~  ^
+   13 warnings and 1 error generated.
+--
+   In file included from drivers/net/wireless/ath/ath12k/mac.c:7:
+   In file included from include/net/mac80211.h:18:
+   In file included from include/linux/if_ether.h:19:
+   In file included from include/linux/skbuff.h:17:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:8:
+   In file included from include/linux/cacheflush.h:5:
+   In file included from arch/um/include/asm/cacheflush.h:4:
+   In file included from arch/um/include/asm/tlbflush.h:9:
+   In file included from include/linux/mm.h:2258:
+   include/linux/vmstat.h:514:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     514 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+   In file included from drivers/net/wireless/ath/ath12k/mac.c:7:
+   In file included from include/net/mac80211.h:18:
+   In file included from include/linux/if_ether.h:19:
+   In file included from include/linux/skbuff.h:17:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:12:
+   In file included from include/linux/hardirq.h:11:
+   In file included from arch/um/include/asm/hardirq.h:5:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:14:
+   In file included from arch/um/include/asm/io.h:24:
+   include/asm-generic/io.h:548:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     548 |         val = __raw_readb(PCI_IOBASE + addr);
+         |                           ~~~~~~~~~~ ^
+   include/asm-generic/io.h:561:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     561 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
+      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
+         |                                                   ^
+   In file included from drivers/net/wireless/ath/ath12k/mac.c:7:
+   In file included from include/net/mac80211.h:18:
+   In file included from include/linux/if_ether.h:19:
+   In file included from include/linux/skbuff.h:17:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:12:
+   In file included from include/linux/hardirq.h:11:
+   In file included from arch/um/include/asm/hardirq.h:5:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:14:
+   In file included from arch/um/include/asm/io.h:24:
+   include/asm-generic/io.h:574:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     574 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
+      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
+         |                                                   ^
+   In file included from drivers/net/wireless/ath/ath12k/mac.c:7:
+   In file included from include/net/mac80211.h:18:
+   In file included from include/linux/if_ether.h:19:
+   In file included from include/linux/skbuff.h:17:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:12:
+   In file included from include/linux/hardirq.h:11:
+   In file included from arch/um/include/asm/hardirq.h:5:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:14:
+   In file included from arch/um/include/asm/io.h:24:
+   include/asm-generic/io.h:585:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     585 |         __raw_writeb(value, PCI_IOBASE + addr);
+         |                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:595:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     595 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:605:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     605 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:693:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     693 |         readsb(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:701:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     701 |         readsw(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:709:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     709 |         readsl(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:718:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     718 |         writesb(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+   include/asm-generic/io.h:727:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     727 |         writesw(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+   include/asm-generic/io.h:736:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     736 |         writesl(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+>> drivers/net/wireless/ath/ath12k/mac.c:5488:14: error: no member named 'acpi' in 'struct ath12k_base'
+    5488 |             ar->ab->acpi.acpi_disable_11be)
+         |             ~~~~~~  ^
+   13 warnings and 1 error generated.
 
 
-Kernel information:
-    Commit message: Merge tag 'ata-6.11-rc1' of git://git.kernel.org/pub/sc=
-m/linux/kernel/git/libata/linux
+vim +33 drivers/net/wireless/ath/ath12k/core.c
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1377856123
+    24	
+    25	static int ath12k_core_rfkill_config(struct ath12k_base *ab)
+    26	{
+    27		struct ath12k *ar;
+    28		int ret = 0, i;
+    29	
+    30		if (!(ab->target_caps.sys_cap_info & WMI_SYS_CAP_INFO_RFKILL))
+    31			return 0;
+    32	
+  > 33		if (ab->acpi.acpi_disable_rfkill)
+    34			return 0;
+    35	
+    36		for (i = 0; i < ab->num_radios; i++) {
+    37			ar = ab->pdevs[i].ar;
+    38	
+    39			ret = ath12k_mac_rfkill_config(ar);
+    40			if (ret && ret != -EOPNOTSUPP) {
+    41				ath12k_warn(ab, "failed to configure rfkill: %d", ret);
+    42				return ret;
+    43			}
+    44		}
+    45	
+    46		return ret;
+    47	}
+    48	
 
-One or more kernel builds failed:
-    Unrecognized or new issues:
-         ppc64le - https://datawarehouse.cki-project.org/kcidb/builds/redha=
-t:1377856123-ppc64le-kernel
-           s390x - https://datawarehouse.cki-project.org/kcidb/builds/redha=
-t:1377856123-s390x-kernel
-          x86_64 (debug) - https://datawarehouse.cki-project.org/kcidb/buil=
-ds/redhat:1377856123-x86_64-kernel-debug
-
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
