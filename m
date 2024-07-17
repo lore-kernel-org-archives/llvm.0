@@ -1,60 +1,60 @@
-Received: from mail-qv1-f68.google.com (mail-qv1-f68.google.com [209.85.219.68])
+Received: from mail-qv1-f67.google.com (mail-qv1-f67.google.com [209.85.219.67])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B8FB181BAB
-	for <llvm@lists.linux.dev>; Wed, 17 Jul 2024 15:10:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.68
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E65EED8
+	for <llvm@lists.linux.dev>; Wed, 17 Jul 2024 15:22:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.67
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721229010; cv=none; b=GEA9iGApdn7M+GGik0gbDnAFV0jGI7+suyVCNJOImy6v8QPP9cqQQca78VEFXsXj5Oee5eGOF3B1jAeRO1bUjbrwzbpkzb7A14cXIAw4nxs6/czAwgXPQvd2tPPrQCI16Ez3WVjFZCBNsMeRU4btAiaHRzD97IuR3ZvwlxByOGg=
+	t=1721229764; cv=none; b=dMqSeDG6O+R9jaK+Qb9v5Cl+s/I9EDNNg6uEYhYLLkg2l71+HP4LLN+Wi2JHhtoTyT3HtEc97fTvstoRIEOpD/SoTzVrunBmOuYhzbbLK6YwkHc8KRi1ZSQohe3f7QNdCriVVF+XYoqzji6lRICjwCg13yDtIsPKlORODDavU7s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721229010; c=relaxed/simple;
-	bh=9AeB1Cld1cJEMg5GVGQ0RSv/VK08VTbFq5Y6/MY8Fvo=;
+	s=arc-20240116; t=1721229764; c=relaxed/simple;
+	bh=DlZBDGEE6rsw2BleIQnyaOUNz0azkcrEXDjsAnoaN78=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=doc+LOTEDh1BCnliXwsqP4eieHXcLRUS4lQ7DrruCMN9EalvWusrUG92DmljrQUco/mIjMgpvmfE6ajpIempMUWW6zaPBbMWQ4FjEBmC4aIgnSqbT84Gaxi4ItuySVBIjXmTXsz1RLWHd1y9Y/V3hO+d4Ifm185mFiAWXhT+joQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=IIxMOErL; arc=none smtp.client-ip=209.85.219.68
+	 In-Reply-To:Content-Type; b=TyD62w7qUpVHW76YiSqLbK+ZxiT3IQ4RqQHJnfA9OfHGKXqt0+lJJ0FaqOcPAZ9Rye/l8a5hyvssH3k8MrFsHuCV3U6u1YiN/1xqhvqwMsIZyJNVfSEXi8cRvjbkggCctjPJtpvTXEEr+DkiEj1W6RqZ/iWHFvoPPUgqlvBaqSY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=c1VbjWgl; arc=none smtp.client-ip=209.85.219.67
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IIxMOErL"
-Received: by mail-qv1-f68.google.com with SMTP id 6a1803df08f44-6b5e760eb36so39361356d6.2
-        for <llvm@lists.linux.dev>; Wed, 17 Jul 2024 08:10:09 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="c1VbjWgl"
+Received: by mail-qv1-f67.google.com with SMTP id 6a1803df08f44-6b78c3670d0so4420336d6.1
+        for <llvm@lists.linux.dev>; Wed, 17 Jul 2024 08:22:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1721229008; x=1721833808; darn=lists.linux.dev;
+        d=gmail.com; s=20230601; t=1721229762; x=1721834562; darn=lists.linux.dev;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=yimWTa4m4zoMnZ3DEB5KnSaVlkJzZMUAmC/Q4ehMeE4=;
-        b=IIxMOErL7sXQ88SPgvgD6Du1QmzCAEXv9i+FkGqtA5EfEdSokaaVRu0eXLudO2bT7s
-         fHEdnd8+ML+H1W7wAbWO2r7AJVEsxbJND6O/uZXzDQSwdctlKJPFylxNbdYJJ+blS5i8
-         RhSqDO6jY2itLmhrDMNZiKoz3QJL9612JcEX3MAh9mK7dhIa7tQ+ZDEkXYAn2Ozd4Eu7
-         pVyDTUBwzwz7KinQcW0qh7q3GCfgdX8ECFYLePqh/quT4uzTOGiBLUGQRR+fgd4jTIEN
-         bxkxnFVV1zxrD8iqDiioOGKxAI6Ag8e58vscIV+R3ayr6XxhJGeU4M/wpSvnMpLuzP+H
-         5dNw==
+        bh=3eEdGd2VnoTge1W0GucF77sPRByUJDFTcPDf9F0DoH0=;
+        b=c1VbjWglrj0Sa8+ZpQnoKnFWj18mhn2cSQPzTpHEz3xqvgrW4oHmB/fkPpRZsQsL6w
+         rwu8R+EQE5FnV1lsr7VL60JADHZBiUxTcJOiKq1QBfoGs03hQ4o36fJEd7plclolMw8g
+         rASXHGgZ54SMw2iCc/iE2l+gBE/gj6b1RfJ7ow+YXLztMezF3GIJsp9h5CFdt7vE5Q7O
+         Vva4R5PtdYBuTzcsdZNhmXOFkVHf/eFVNobIMx/SdRLmVYERg0dj4IxpBVdINu3FXCD4
+         4xYlHvm7aXQwY/gwsaAof5pAGWcbDkdXZG1JTtvJe645LjpaqNqWiFrqABYW52h2b9Qa
+         bXIw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1721229008; x=1721833808;
+        d=1e100.net; s=20230601; t=1721229762; x=1721834562;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=yimWTa4m4zoMnZ3DEB5KnSaVlkJzZMUAmC/Q4ehMeE4=;
-        b=iCr4P3+QnWiYc5TpE7yOe9jHG/jmEBS7YrC+Cm0yqONq3BosTOK+2FfJOVqbheqG5W
-         OWgge32R4lxR2S2RWf+87T329L5O5uKJcjX7Hb7umvn1ORvpqbBAQE2M2BpUEpqss3aP
-         jX8zBZnYD7/fbAPU0aLTh3cQcsS8BY81UvnADk8Yw/opTT5zoYcb5WHeY2ViZXjsfTHp
-         UKnL6gJoMsvlBwhqGfdv9H4512RngztzTCzXszw31TPUMie77mwskNAI3yOCbHZiGOhv
-         KCbRhaX5QsbgI+ocwohweIxMgyA2cBmlChwoH/Vm/iyeaP9wMXfrHPAv/Dwg6KYUFlWY
-         SUHw==
-X-Forwarded-Encrypted: i=1; AJvYcCX9JnxckTOw/PpHdMgBdUY20L5OyDJVvVLFfo2GFk2c6XRnMuVABIKnn2Pj+JOgaaDBiRXY3FYK1vzmdTyedkSNJsGiJg==
-X-Gm-Message-State: AOJu0YxuF/ZAq2m25HXjTrRcKPGewGSgZ8gGlp1Rky+U2E7RoGJlDevF
-	4o4JJVPBfO7OH9VLPgXMNtaiW5bFLbDxxIMPVOwrmA19WVBDsduZ
-X-Google-Smtp-Source: AGHT+IExgG9Z3pY5PUuoW3p5dU/ApHsjWPWX01eIx0K5DEQCTwWudRCZqlY3wTag1iQr78dEqgcDRg==
-X-Received: by 2002:a05:6214:1cc8:b0:6b5:e3b7:46f5 with SMTP id 6a1803df08f44-6b78ca624c7mr26524626d6.20.1721229008237;
-        Wed, 17 Jul 2024 08:10:08 -0700 (PDT)
+        bh=3eEdGd2VnoTge1W0GucF77sPRByUJDFTcPDf9F0DoH0=;
+        b=IutZgqQxbEpH++ZW9/vhFm83MM+D8HOta7jq0sCQCBXft3212Nuj45f7rvTvoz9waJ
+         1B4yblL++B3HH44noewOUNS2SVWoPxanZl3EdoRmRv6VsWl2gARrVDCgBdjsW8Gbo3ao
+         1EG+WAAx243DXfjhPqM0VD3FoB1f2OTa5Uly7EhEbICSLbBAcyTGFpdrd8tdUmmAst6F
+         VWyMNQdeOfmY/fWL+ffzJuCfYm3uOzraY0rxWCd/QKlfs2h5LF32rTerxbT8p3McCo9O
+         xZ8J7oHBaz8YXqwSllsJrpWqvkITVMyM2i/BeBbMYZtdzMQLWFV6sZ59WJU+rBcov0cn
+         OBxw==
+X-Forwarded-Encrypted: i=1; AJvYcCVGkeRfCkTrHh/RBP7i5Lz5aVfIpPUThcxCr05yUvzo2JvAg2tcDF2cs2F7Vs6RCBK898w51VOhuNvEkMyabbYpXbNthA==
+X-Gm-Message-State: AOJu0YwjqblQsYYC2zpuS5hKNczVRE19qqCM/gueIOni+CIzjHEkRpvb
+	9XmPiBTj73Af+gyfnj7Egn91Jz9qGwsRuuqAQf/npitCM9TgZzF8
+X-Google-Smtp-Source: AGHT+IF5CrrOa+jt+poegxq6FKrEqcYei7xwwuAPqnkmw08Qsn2PNEs5PLxrWWYeqPuVf4H8IwYuAg==
+X-Received: by 2002:a05:6214:300d:b0:6b0:7413:e0e9 with SMTP id 6a1803df08f44-6b78ca515demr23395236d6.5.1721229762060;
+        Wed, 17 Jul 2024 08:22:42 -0700 (PDT)
 Received: from [192.168.158.7] ([207.35.255.94])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-6b76199f60csm42590336d6.66.2024.07.17.08.10.06
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-6b76199f055sm42385176d6.65.2024.07.17.08.22.39
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 17 Jul 2024 08:10:07 -0700 (PDT)
-Message-ID: <0a4dd531-f075-4cce-9c15-30dfa1d0876d@gmail.com>
-Date: Wed, 17 Jul 2024 17:10:06 +0200
+        Wed, 17 Jul 2024 08:22:41 -0700 (PDT)
+Message-ID: <604c64b6-2eff-42a0-91fe-211f7763ba6a@gmail.com>
+Date: Wed, 17 Jul 2024 17:22:39 +0200
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -62,32 +62,35 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3] rust: str: Use `core::CStr`, remove the custom `CStr`
+Subject: Re: [PATCH] rust: str: Use `core::CStr`, remove the custom `CStr`
  implementation
-To: Trevor Gross <tmgross@umich.edu>
+To: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>,
+ Benno Lossin <benno.lossin@proton.me>
 Cc: Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>,
  Wedson Almeida Filho <wedsonaf@gmail.com>, Boqun Feng
  <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
  =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
- Benno Lossin <benno.lossin@proton.me>,
  Andreas Hindborg <a.hindborg@samsung.com>, Alice Ryhl
  <aliceryhl@google.com>, Brendan Higgins <brendan.higgins@linux.dev>,
  David Gow <davidgow@google.com>, Rae Moar <rmoar@google.com>,
- FUJITA Tomonori <fujita.tomonori@gmail.com>,
- Nathan Chancellor <nathan@kernel.org>,
+ FUJITA Tomonori <fujita.tomonori@gmail.com>, Trevor Gross
+ <tmgross@umich.edu>, Nathan Chancellor <nathan@kernel.org>,
  Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling
  <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
- Martin Rodriguez Reboredo <yakoyoku@gmail.com>,
- Manmohan Shukla <manmshuk@gmail.com>, Valentin Obst
- <kernel@valentinobst.de>, Asahi Lina <lina@asahilina.net>,
- Yutaro Ohno <yutaro.ono.418@gmail.com>, Danilo Krummrich <dakr@redhat.com>,
- Charalampos Mitrodimas <charmitro@posteo.net>,
- Ben Gooding <ben.gooding.dev@gmail.com>, Tejun Heo <tj@kernel.org>,
+ Martin Rodriguez Reboredo <yakoyoku@gmail.com>, Finn Behrens
+ <me@kloenk.dev>, Manmohan Shukla <manmshuk@gmail.com>,
+ Valentin Obst <kernel@valentinobst.de>,
+ Laine Taffin Altman <alexanderaltman@me.com>,
+ Danilo Krummrich <dakr@redhat.com>, Yutaro Ohno <yutaro.ono.418@gmail.com>,
+ Tiago Lam <tiagolam@gmail.com>, Charalampos Mitrodimas
+ <charmitro@posteo.net>, Ben Gooding <ben.gooding.dev@gmail.com>,
  Roland Xu <mu001999@outlook.com>, rust-for-linux@vger.kernel.org,
  linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
  kunit-dev@googlegroups.com, netdev@vger.kernel.org, llvm@lists.linux.dev
-References: <20240715221126.487345-2-vadorovsky@gmail.com>
- <CALNs47t=YQX+UP_ekq_Ue=BrA4JscDbU1qNDoKFar3yUbOSZ5g@mail.gmail.com>
+References: <20240714160238.238708-1-vadorovsky@gmail.com>
+ <CANiq72=kchSt5XjAJRVgNWG-iNXbc2E64ojwsQYnB2pshULK1Q@mail.gmail.com>
+ <52676577-372c-4a7f-aace-4cf100f93bfb@gmail.com>
+ <CANiq72nbbtNp4vGGHkXVSgSW+WU=5Z9uGRO_LLg7+ezTqrZ_tQ@mail.gmail.com>
 Content-Language: en-US
 From: Michal Rostecki <vadorovsky@gmail.com>
 Autocrypt: addr=vadorovsky@gmail.com; keydata=
@@ -115,16 +118,102 @@ Autocrypt: addr=vadorovsky@gmail.com; keydata=
  g9PmXb1BMZdw8gWghPAbYg5bfCzXF9iZp4bmjuCENfwG4zmnYJzR6uTI0reqECo6Ee7NjOQ7
  qKy29wW+kVnEjX481iCEUmqKHEaQB08Ueb45If09fThw1baHLAk6bFk5cabMtD3JbWEifa6M
  RS+eXZNwwQ==
-In-Reply-To: <CALNs47t=YQX+UP_ekq_Ue=BrA4JscDbU1qNDoKFar3yUbOSZ5g@mail.gmail.com>
+In-Reply-To: <CANiq72nbbtNp4vGGHkXVSgSW+WU=5Z9uGRO_LLg7+ezTqrZ_tQ@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 16.07.24 02:45, Trevor Gross wrote:
-> (also, v2 and v3 are appearing in different threads on lore (as they
-> should), but they're in the same thread as v1 in my email client - any
-> idea if there is a reason for this?)
+On 16.07.24 09:44, Miguel Ojeda wrote:
+> On Mon, Jul 15, 2024 at 6:12 PM Michal Rostecki <vadorovsky@gmail.com> wrote:
+>>
+>> @@ -71,11 +75,11 @@ macro_rules! kunit_assert {
+>>                    //
+>>                    // This mimics KUnit's failed assertion format.
+>>                    $crate::kunit::err(format_args!(
+>> -                    "    # {}: ASSERTION FAILED at {FILE}:{LINE}\n",
+>> +                    "    # {:?}: ASSERTION FAILED at {FILE:?}:{LINE:?}\n",
+>>                        $name
+>>                    ));
+>>                    $crate::kunit::err(format_args!(
+>> -                    "    Expected {CONDITION} to be true, but is false\n"
+>> +                    "    Expected {CONDITION:?} to be true, but is false\n"
+>>                    ));
+>>
+>> The only practical difference in switching from `Display` to `Debug`
+>> here is that the fallback kunit error messages are going to include
+>> quotation marks around conditions, files and lines.
+> 
+> That is a fairly important difference -- the messages are intended to
+> match the C KUnit ones.
+> 
+> Especially the file:line notation -- I don't think a user would expect
+> to have quotes there (regardless of KUnit).
+> 
+> In general, even if we didn't need it right now, I think it is
+> something we will need sooner or later.
+> 
 
-No idea, I've sent both patches with:
+Alright, I will go with Trevor's suggestion and provide a `display()` 
+method via an extension trait.
 
-git send-email --cc-cmd='./scripts/get_maintainer.pl --norolestats' 
--v${VERSION} -1
+>> wording. My general point is that I've never seen `&mut str` being
+>> exposed in any core/std API to the external user, mutation usually
+>> implies usage of an owned String.
+> 
+> Not sure what you mean by exposed, but even if `&mut str`'s methods do
+> not count (used via `String`), there is also
+> `from_utf8_unchecked_mut()` that returns one, which is essentially the
+> same idea as what we had here.
+> 
+> So I am not sure about the "The rule of Rust std" part in the new
+> commit messages. And, to be clear, while the Rust standard library is
+> a good reference to look into, sometimes we want/need to do things
+> differently anyway (which is not really the case here given
+> `from_utf8_unchecked_mut()`, I would say).
+> 
+> In this case, regardless of the standard library, personally I would
+> have preferred to have a non-public function, but still have it (and
+> properly documented), rather than open code the `unsafe` block with
+> the casts.
+> 
+
+Fair enough. I will provide `from_utf8_unchecked_mut()` as a part of 
+`CStrExt` in the next version.
+
+>> I think the best solution would be leaving `c_str` macro for that. The
+>> reason why I removed it is that the GitHub issue[0] mentions its
+>> removal. But for that case, I think it makes sense to leave it. What do
+>> you think?
+> 
+> Perhaps the issue was only taking into account the C string literal
+> case? Benno may know more.
+> 
+> Generally speaking, replacing a clean line with a bigger `unsafe`
+> block is something to be avoided.
+> 
+> Maybe a `c_stringify!` is what we need :)
+> 
+
+`stringify!` is not the only case where I ended up using `c_str!`. After 
+addressing Björn's suggestion about taking Rust strings as arguments in 
+`new_mutex!`, `new_condvar!` etc., `optional_name!` is also using 
+`c_str!` in the following way:
+
+   macro_rules! optional_name {
+       () => {
+           $crate::c_str!(::core::concat!(::core::file!(), ":", 
+::core::line!()))
+       };
+       ($name:literal) => {
+           $crate::c_str!($name)
+       };
+   }
+
+
+So I think that leaving `c_str!` still makes sense, unless you have 
+other suggestions, which are still easily applicable there. :)
+
+> Cheers,
+> Miguel
+
+Cheers,
+Michal
