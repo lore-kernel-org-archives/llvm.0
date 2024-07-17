@@ -1,98 +1,124 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 90D2417E8FF;
-	Wed, 17 Jul 2024 11:43:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C7D5538DC3
+	for <llvm@lists.linux.dev>; Wed, 17 Jul 2024 12:52:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721216631; cv=none; b=KjV9hyBWjPum/AsFypiZvfkycok0l6UX6llJFHK9QuCL08nTWM5l4uoOT2fMD/b3y6zAYf+KvIUhdStjEG3nGlft5ZOviOdIPTGPoah9wuEclnzzc0hFkFEIkpCicZB1Sy3ypVmN7giAccNyXW6QEP0vV1IrpfyYPOlZc4FZI70=
+	t=1721220748; cv=none; b=f7IbmwxW0VR3HkssDef0HusmoZx+3vQ5UTqaLC7Xa2UslqJPmFdQa0CLZPj7TJrL1b6PnGL/Oa49WW7gU+f/sh96rVdknxHzzW7FdNK7/9Abe+9aHDztl1Pm7YfY2zF8YvIRiDtbPf5eY0buN12qWyoGnYmgdeHmwRwzlvxJleA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721216631; c=relaxed/simple;
-	bh=4pGBLaVUdxkJUjKPJVohtmmrqGQumPWgEp0RcGinKkM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=E2myj8x9uvAI5fBWa+mBRDvts4JxZEkGogjyHyqjeEHl+HwCzdccHHjf1Xx7mh4KXgA9+H5krhKUJE+CTUzrAnsAwWSugaMo+l2I7SexjBXJ5zx4vI/5niffz45aTmhnH8sKyS0Y0KlKmm7eKkEcly3FfOKpsCegO3KZpySjweU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Hyo6bFlp; arc=none smtp.client-ip=198.175.65.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+	s=arc-20240116; t=1721220748; c=relaxed/simple;
+	bh=V7lueRk7vJ3HpCngEh0Ckfdz1QvZir3o8OwagcATQKk=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=Phf3rTXkycY/ZIH9Bb7Pu2mwWK9xPg/sJJpadkUafOt88MNrZYWgkPutiXS0Pu7Ru/PLT8PH90cl9hs+in4yx59EAWhuAf11VX9/UF/J9RaMUZZ9HsTocp+YVTVCQUGo0HQ8+kJMCOHt7hBxHsRYQOGu60r8rk6vROCjEDryM0A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=RQX9I746; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Hyo6bFlp"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1721216630; x=1752752630;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=4pGBLaVUdxkJUjKPJVohtmmrqGQumPWgEp0RcGinKkM=;
-  b=Hyo6bFlpbe2Ldha/OfOKJxwkcls5eKFcvU0nNz7uExvfCIh0LEcgBoAr
-   Y//8yITZFwbiC2+H5umA/QXqByKgJH5J7LoeWrGp+1vL6L258QeWnLedT
-   98WP0fzkJPdoE1vHDeqPUpddjR1AoEhx1eMCIe/5Hi31Y+DTmVDxrwmXf
-   rQmWru9h5+SfWbJmyRUnznY+rn8m80+or7ZYOuxZ11B77pAF6Z4W/rPpf
-   tSnLWwi7xf4dXSJ75pvGkLi5mITgKAZ5GFdkwRw3e4+EtkO1gyeuftDHu
-   On9Y0D4ABvw5eyQmde3X39w9Eg3J6Q0v0iAPKFkpTG2rupQd8EaijW5TV
-   A==;
-X-CSE-ConnectionGUID: axkd0zaNScuCy7d6B2objw==
-X-CSE-MsgGUID: R3JbxtKrTcaomCKhP/ngLQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11135"; a="22526887"
-X-IronPort-AV: E=Sophos;i="6.09,214,1716274800"; 
-   d="scan'208";a="22526887"
-Received: from fmviesa007.fm.intel.com ([10.60.135.147])
-  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jul 2024 04:43:41 -0700
-X-CSE-ConnectionGUID: Xd7Mz7UaR6C/EPOp0OUsMw==
-X-CSE-MsgGUID: 5ydpkAkZSpCCHXd8SpIcAQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.09,214,1716274800"; 
-   d="scan'208";a="50157202"
-Received: from sbutnari-mobl1.ti.intel.com (HELO [10.245.246.16]) ([10.245.246.16])
-  by fmviesa007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jul 2024 04:43:38 -0700
-Message-ID: <05954a59-2bef-4262-bd91-cfe21d2381f2@linux.intel.com>
-Date: Wed, 17 Jul 2024 13:43:35 +0200
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="RQX9I746"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1721220745;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=j7FV1Egx+GtxA5vdvHTSrxiCrThM3D6Eog8Ucy0c+gc=;
+	b=RQX9I7469lul7lqf9FqEwhY1iAyDEtdcjEbT8pPTYrhN4p8lBgXp/Qwzk5DkhoTFgvlhf1
+	eHBGUm2a+/y5XXNiZq+fOfPfyW9zCJSqrs0oA0otxx4TqQ0/Il+8PIz/zHzaH6wLr16sS4
+	+TsiNqxTNCcVmvE9/hcAV03VPbeHGCw=
+Received: from mx-prod-mc-04.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-146-NQPvkgYvOeGx72LHwU7H1Q-1; Wed,
+ 17 Jul 2024 08:52:24 -0400
+X-MC-Unique: NQPvkgYvOeGx72LHwU7H1Q-1
+Received: from mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.4])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-04.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 82A631955D4C
+	for <llvm@lists.linux.dev>; Wed, 17 Jul 2024 12:52:23 +0000 (UTC)
+Received: from [172.64.10.23] (unknown [10.30.34.11])
+	by mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 872033000192;
+	Wed, 17 Jul 2024 12:52:22 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL (MISSED 13 of 192): Test report for master
+ (6.10.0, mainline.kernel.org-clang, d80f2996)
+Date: Wed, 17 Jul 2024 12:52:22 -0000
+To: bgoncalv@redhat.com, llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: ld.lld: error: undefined symbol: iosf_mbi_available
-To: kernel test robot <lkp@intel.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
- linux-kernel@vger.kernel.org, Takashi Iwai <tiwai@suse.de>,
- Kai Vehmanen <kai.vehmanen@linux.intel.com>,
- Guennadi Liakhovetski <guennadi.liakhovetski@linux.intel.com>,
- Bard Liao <bard.liao@intel.com>
-References: <202407160704.zpdhJ8da-lkp@intel.com>
-Content-Language: en-US
-From: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-In-Reply-To: <202407160704.zpdhJ8da-lkp@intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.4
+Message-Id: <56816.124071708522400837@us-mta-146.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+
+Hi, we tested your kernel and here are the results:
+
+    Overall result: FAILED
+             Merge: OK
+           Compile: OK
+              Test: FAILED
 
 
+Kernel information:
+    Commit message: Merge tag 'asm-generic-6.11' of git://git.kernel.org/pu=
+b/scm/linux/kernel/git/arnd/asm-generic
 
-On 7/16/24 01:07, kernel test robot wrote:
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-> head:   3e7819886281e077e82006fe4804b0d6b0f5643b
-> commit: 8d4ba1be3d2257606e04aff412829d8972670750 ASoC: SOF: pci: split PCI into different drivers
-> date:   3 years, 4 months ago
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1376233782
 
-This doesn't seem to be a problem on the latest code? was it intentional
-to report a problem on such an old commit?
+One or more kernel tests failed:
+    Unrecognized or new issues:
+        Reboot test
+              x86_64
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+redhat:1376233782-x86_64-kernel_upt_35
+                   Non-passing ran subtests:
+                       =E2=9D=8C FAIL misc/reboot-test/journalctl-check
 
-> config: i386-buildonly-randconfig-004-20240716 (https://download.01.org/0day-ci/archive/20240716/202407160704.zpdhJ8da-lkp@intel.com/config)
-> compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
-> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240716/202407160704.zpdhJ8da-lkp@intel.com/reproduce)
-> 
-> If you fix the issue in a separate patch/commit (i.e. not just a new version of
-> the same patch/commit), kindly add following tags
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes: https://lore.kernel.org/oe-kbuild-all/202407160704.zpdhJ8da-lkp@intel.com/
-> 
-> All errors (new ones prefixed by >>):
-> 
->>> ld.lld: error: undefined symbol: iosf_mbi_available
->    >>> referenced by byt.c
->    >>>               soc/sof/intel/byt.o:(byt_machine_select) in archive sound/built-in.a
-> --
->>> ld.lld: error: undefined symbol: iosf_mbi_read
->    >>> referenced by byt.c
->    >>>               soc/sof/intel/byt.o:(byt_machine_select) in archive sound/built-in.a
-> 
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1267
+            Affected tests:
+                selinux-policy: serge-testsuite [ppc64le]
+
+
+Tests that were not ran because of internal issues:=20
+    Boot test [s390x]
+    CKI/restraint [s390x]
+    machineinfo [s390x]
+    Reboot test [s390x]
+    SELinux Custom Module Setup [ppc64le, s390x]
+    Storage - blktests - blk - upstream [s390x]
+    Storage - blktests - nvme-tcp - upstream [s390x]
+    Storage - swraid scsi_raid [s390x]
+    stress: stress-ng - cpu-cache [s390x]
+    stress: stress-ng - memory [s390x]
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
