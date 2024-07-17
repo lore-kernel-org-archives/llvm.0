@@ -1,43 +1,74 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lj1-f176.google.com (mail-lj1-f176.google.com [209.85.208.176])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 32ABC11CA1;
-	Wed, 17 Jul 2024 14:30:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 73B121109
+	for <llvm@lists.linux.dev>; Wed, 17 Jul 2024 14:40:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721226621; cv=none; b=PnQ9AJY1aebhCEDWQQnAD2ymFdlicIOsjUUSL2uDo2j1CxQSoykKmo8Iq3KSCYK8yG8hKDSKtiwwvTgstzfRix+cpyzC6HGFTVzZNYc5yOzZdGHrnD0J6SALurxaV8onnVpIwvZ43ILTROlI/MgTLCWvuORpI1Cmhg1bvk/2GwE=
+	t=1721227240; cv=none; b=J56oBf+Ya46OPflm3yc/OrIxLPRKbwJ4zsj3w6urdPIFpNuL9/e3h+JowQtEzBs+RG3iG3xSN6aIQq+64GvqEtGqwb04ESgzFRyHz2vg93wKWV8CiObifWjzJ/wCVCajqdTWZJLIg5dznOftqWokFotZIc5V+oFOyOiPDpwMQJE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721226621; c=relaxed/simple;
-	bh=/zn4tteDqX0JeA0DTq/7nXr1r8NWERtQ7F7z5Am12qo=;
+	s=arc-20240116; t=1721227240; c=relaxed/simple;
+	bh=+cqM+pZK352HwU5frTpgb4pjngsVXMFRVEWBIdM9+Vc=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Xxwyq6kdmFFtoW3rsTWHimX+FShNp1XrGozcbdt2Bb6YPMnQyRq9naA0VUkmpozSu/u+J92xTY1UFaIxNu4nzqBR6xtE/k0c2fLyJj4R8SWyKgu4Uo3PvqsuBJsphBJWzmTR9KsS3WywgCZ8CLCWplfZAP5qF6XIYnPvkv7AEdU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BQNSrnzu; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=a/D6gfw6cM31KYBpV7Ac1n3hvUm6QV9TNOeib3Rop99wcdSsiZfytk6p4zKh2QcP9N+Wm5Cvt8/RVO2bSCBezqfbTBNRa9fJyHaGn8nThjL6FZhHmhivR3pnz/8yNEhamnygg2yUCOsmEcwaou/vQGMUcFbUAplL+o3quF7El10=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FM8kbjXd; arc=none smtp.client-ip=209.85.208.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BQNSrnzu"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 39A69C32782;
-	Wed, 17 Jul 2024 14:30:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1721226618;
-	bh=/zn4tteDqX0JeA0DTq/7nXr1r8NWERtQ7F7z5Am12qo=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=BQNSrnzuJ1azOAOC4vUX8rUeURdzLA04lL9+DbJSosA49Bceg8mOG4lyPx3Nn9WWk
-	 oCUI1+Ia+8t8Dw40xMXPJ48LXcbqluRgFnZ7WbF6tRKoQwus6EA4eikDRHCOCSGmuF
-	 Es2lh3wfxNhM45+wUoYrUw+AIqRNK6G8sywR41JBn4oHTGh9U3zWh2FQPrM4Iu9c/Y
-	 kGSZj1YbdTiQGW1aeJStReRPRVT9Fk4m+5f1+vyVycYZ817vYPHPvKzfsfYKHtiv45
-	 Qwxfx+6QlamJHag54OsBdKO8FuCr8fDMucZhRBnt4Up2o8xvzmcFFjsIKBaAH2BncV
-	 4IxU60WDKzl2A==
-Date: Wed, 17 Jul 2024 07:30:16 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Chen Wang <unicorn_wang@outlook.com>
-Cc: kernel test robot <lkp@intel.com>, llvm@lists.linux.dev,
-	oe-kbuild-all@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
-	arm@kernel.org, Guo Ren <guoren@kernel.org>, arnd@arndb.de,
-	conor@kernel.org
-Subject: Re: [soc:sophgo/dt 1/1] arch/riscv/boot/dts/sophgo/sg2042.dtsi:7:10:
- fatal error: 'dt-bindings/clock/sophgo,sg2042-clkgen.h' file not found
-Message-ID: <20240717143016.GA94990@thelio-3990X>
-References: <202407101850.eIQyngoV-lkp@intel.com>
- <MA0P287MB2822C48F3DF670881D26E801FEA42@MA0P287MB2822.INDP287.PROD.OUTLOOK.COM>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FM8kbjXd"
+Received: by mail-lj1-f176.google.com with SMTP id 38308e7fff4ca-2eedebccfa4so51312221fa.1
+        for <llvm@lists.linux.dev>; Wed, 17 Jul 2024 07:40:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1721227235; x=1721832035; darn=lists.linux.dev;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=exCaK8M+IVOutz8AA1dE561HuzN3r+WbizxFtXswF5Y=;
+        b=FM8kbjXdslg7cYjJ3bhFiZ8+nDgOMA4ZOJajnRzFokKFqUPZfh4S5ADrNRAKLxCS6k
+         UFDcpH881LMZfgyIb/W6EWCfl17sRt8NegM4P9Xfp9stmia+reIzAzAzsAg2BE7us033
+         cQN8Eq2hymk6HfE9r/BVvLW4n24YwXgKs6w3wUMi9pXI/cI8AYfHE15lIi6JmTNEdMN4
+         DKcfWDnDgnUYkSuRs2cGar9NCcxUEwzaNVw/lOgTtdCvWs4OVlFFemVu/nrFXcl3qkYE
+         ACfyhCvc+z17uRjYAsFKzEIsAsxVvf1281E2AkWKPyH4N2/ND169P6KEXxL6oTYjgnEL
+         Xkvw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1721227235; x=1721832035;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=exCaK8M+IVOutz8AA1dE561HuzN3r+WbizxFtXswF5Y=;
+        b=u4j96sIEBaCBlh5hkwnCO7henFQd1pxLZ1nGz5IjLvXULzEtFTH2rLl7VgltYGxCN8
+         Ge1kk5BE68J74bWZB+z0AEn3WX4gW/EBu7W0IJbM4yJ2y34WenUe4Y1bOM6/c2C/tonn
+         Lw0pBmUfFa3tESNqqoIxngQmA94xwE/Dl6Xzrh31EyQc4Nj/1hIVGkM4bevdqZDiFulJ
+         +EElGzCYDgWnqmKW4w9pPDe8acrDta0Nr5amXwV4rNS0O1YEhcZvPbXVylhmjIMKzdwo
+         TBt99+EugGK7qBbLnxD7OCjabHF/znZkERCw491Ey0+uo6yF+R0WDYDoY9tfqYKTVWne
+         z+Nw==
+X-Forwarded-Encrypted: i=1; AJvYcCWiem8GvB6HjVFzgG+Ww8L2QY+bG6V0nFphcO4hpqFT/MZpq0HcT02m1WruWzthF4ZKWxaUaEvz+TihdiTF52+x01591w==
+X-Gm-Message-State: AOJu0YyByGIZi1CTgfH5OHn9LfyfdGgxVVxNMOkDLBYfp98cecEKj8xl
+	hO89hhF2lmOG5V26UvZlga9XN/3poUqst5PhvlD5H+qe/bcMl1xk
+X-Google-Smtp-Source: AGHT+IGlFB/5u6bBosn/exSsjgVwwLykPI+2u+YZGoEyoIoszW9DKCvlegrjxtJe81bngK8nvhddCA==
+X-Received: by 2002:a05:6512:2803:b0:52e:9951:7881 with SMTP id 2adb3069b0e04-52ee5411e4amr1515180e87.52.1721227235116;
+        Wed, 17 Jul 2024 07:40:35 -0700 (PDT)
+Received: from gmail.com (84-236-112-196.pool.digikabel.hu. [84.236.112.196])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-427c78076f7sm241275e9.37.2024.07.17.07.40.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 17 Jul 2024 07:40:34 -0700 (PDT)
+Sender: Ingo Molnar <mingo.kernel.org@gmail.com>
+Date: Wed, 17 Jul 2024 16:40:32 +0200
+From: Ingo Molnar <mingo@kernel.org>
+To: Uros Bizjak <ubizjak@gmail.com>
+Cc: x86@kernel.org, llvm@lists.linux.dev, linux-kernel@vger.kernel.org,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	"H. Peter Anvin" <hpa@zytor.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>
+Subject: Re: [PATCH 1/2] x86/percpu: Fix "multiple identical address spaces
+ specified for type" clang warning
+Message-ID: <ZpfX4KelYaXsHlHe@gmail.com>
+References: <20240526175655.227798-1-ubizjak@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -46,55 +77,53 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <MA0P287MB2822C48F3DF670881D26E801FEA42@MA0P287MB2822.INDP287.PROD.OUTLOOK.COM>
+In-Reply-To: <20240526175655.227798-1-ubizjak@gmail.com>
 
-On Thu, Jul 11, 2024 at 07:09:48AM +0800, Chen Wang wrote:
-> This build error is due to the changes about
-> "dt-bindings/clock/sophgo,sg2042-clkgen.h" are still on clk-next and have
-> not been merge in the master.
 
-A tree needs to build by itself, so changes like this need to be made
-atomically. Mainline is now broken because this change went in before
-clk-next:
+* Uros Bizjak <ubizjak@gmail.com> wrote:
 
-https://github.com/ClangBuiltLinux/continuous-integration2/actions/runs/9966522897
-https://github.com/ClangBuiltLinux/continuous-integration2/actions/runs/9966319154
+> The clang build with named address spaces enabled currently fails with:
+> 
+> error: multiple identical address spaces specified for type [-Werror,-Wduplicate-decl-specifier]
+> 
+> The warning is emitted when accessing const_pcpu_hot structure,
+> which is already declared in __seg_gs named address space.
+> 
+> Use specialized accessor for __raw_cpu_read_const() instead, avoiding
+> redeclaring __seg_gs named address space via __raw_cpu_read().
+> 
+> Signed-off-by: Uros Bizjak <ubizjak@gmail.com>
+> Cc: Thomas Gleixner <tglx@linutronix.de>
+> Cc: Ingo Molnar <mingo@kernel.org>
+> Cc: Borislav Petkov <bp@alien8.de>
+> Cc: Dave Hansen <dave.hansen@linux.intel.com>
+> Cc: "H. Peter Anvin" <hpa@zytor.com>
+> Cc: Nathan Chancellor <nathan@kernel.org>
+> Cc: Nick Desaulniers <ndesaulniers@google.com>
+> Cc: Bill Wendling <morbo@google.com>
+> Cc: Justin Stitt <justinstitt@google.com>
+> ---
+>  arch/x86/include/asm/percpu.h | 5 ++++-
+>  1 file changed, 4 insertions(+), 1 deletion(-)
+> 
+> diff --git a/arch/x86/include/asm/percpu.h b/arch/x86/include/asm/percpu.h
+> index c55a79d5feae..aeea5c8a17de 100644
+> --- a/arch/x86/include/asm/percpu.h
+> +++ b/arch/x86/include/asm/percpu.h
+> @@ -160,7 +160,10 @@ do {									\
+>  	*(qual __my_cpu_type(pcp) *)__my_cpu_ptr(&(pcp)) = (val);	\
+>  } while (0)
+>  
+> -#define __raw_cpu_read_const(pcp)	__raw_cpu_read(, , pcp)
+> +#define __raw_cpu_read_const(pcp)					\
+> +({									\
+> +	*(typeof(pcp) *)(__force uintptr_t)(&(pcp));			\
+> +})
 
-Please ensure this does not happen again, it is really disruptive for
-people who test the whole tree, especially during the merge window when
-we are trying to catch breakage that went in without being in -next.
+So shouldn't this be carried together with the patch that enables named 
+address spaces on Clang? Is it possible that this patch might not be needed 
+in a Clang version where named address spaces work as expected?
 
-Cheers,
-Nathan
+Thanks,
 
-> On 2024/7/10 18:56, kernel test robot wrote:
-> > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git sophgo/dt
-> > head:   b1240a39511b9206293b82ac372c5114d6e15821
-> > commit: b1240a39511b9206293b82ac372c5114d6e15821 [1/1] riscv: dts: add clock generator for Sophgo SG2042 SoC
-> > config: riscv-allmodconfig (https://download.01.org/0day-ci/archive/20240710/202407101850.eIQyngoV-lkp@intel.com/config)
-> > compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project a0c6b8aef853eedaa0980f07c0a502a5a8a9740e)
-> > reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240710/202407101850.eIQyngoV-lkp@intel.com/reproduce)
-> > 
-> > If you fix the issue in a separate patch/commit (i.e. not just a new version of
-> > the same patch/commit), kindly add following tags
-> > | Reported-by: kernel test robot <lkp@intel.com>
-> > | Closes: https://lore.kernel.org/oe-kbuild-all/202407101850.eIQyngoV-lkp@intel.com/
-> > 
-> > All errors (new ones prefixed by >>):
-> > 
-> >     In file included from arch/riscv/boot/dts/sophgo/sg2042-milkv-pioneer.dts:6:
-> > > > arch/riscv/boot/dts/sophgo/sg2042.dtsi:7:10: fatal error: 'dt-bindings/clock/sophgo,sg2042-clkgen.h' file not found
-> >         7 | #include <dt-bindings/clock/sophgo,sg2042-clkgen.h>
-> >           |          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> >     1 error generated.
-> > 
-> > 
-> > vim +7 arch/riscv/boot/dts/sophgo/sg2042.dtsi
-> > 
-> >     > 7	#include <dt-bindings/clock/sophgo,sg2042-clkgen.h>
-> >       8	#include <dt-bindings/clock/sophgo,sg2042-pll.h>
-> >       9	#include <dt-bindings/clock/sophgo,sg2042-rpgate.h>
-> >      10	#include <dt-bindings/interrupt-controller/irq.h>
-> >      11	#include <dt-bindings/reset/sophgo,sg2042-reset.h>
-> >      12	
-> > 
+	Ingo
