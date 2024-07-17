@@ -1,129 +1,112 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6320018EBF;
-	Wed, 17 Jul 2024 23:33:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 505E76F2E0;
+	Wed, 17 Jul 2024 23:59:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721259217; cv=none; b=fRfYZUcdXXi0t3lLUdiTUHeWEDlggNi7Hj14pp00RH70U4Cd13AvA3dHS3EZVN4HvEPG9U0KvVKkYAPfw7nABuESTbU1pu60TjkhvnStESUqh3bRwvuIFRBCbIXJ61Hcu+uHQbConDKW4gS4qdMrhNxpp19mbIWwBlUJOvptN/k=
+	t=1721260744; cv=none; b=JEhjw36Scn3Rgc9bNP0h2Y4v4rWpnBlV2pqjVh72meVvby35kHcMqbIAfRjHgg6beMRwQX3bdlEuBwJ7abkl/2T0yS6Ce4amqBMfELfD2O3/dq87pU/gIaqNpSgztfpPGDQEIaC9bMQIUGDAP3DE7y97/tzOHARLRjsboQtG5dU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721259217; c=relaxed/simple;
-	bh=/vntp9yziGCzvLchAgMHXkRgHgytqWIKu6wEIUPrxlQ=;
-	h=Message-ID:Content-Type:MIME-Version:In-Reply-To:References:
-	 Subject:From:Cc:To:Date; b=I50lv1Kqj5NSMeWUI/RxfLgvaOT/bjzYxs5YFYqh5viv3r2OTB0xp2uxNR1QGTFPnQh/1nkp4ZMZ274iyQ2DzsJFbhzO+AKWXPUp2/irJIIEtZEbnImKhbuiObOlztCb55V1E6FhPbXGWxuJpcQJwRpVpaKf+l0ldX9EKoG8K/4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=m/tYahsI; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1721260744; c=relaxed/simple;
+	bh=5a3HfBAENG9pyJGCiy81RBYBle1GBgu9xnR1NecS2L8=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=a99cn4tzJlxMnIiqd21AsXp2PGsPFTuo7mZunPSdbtRP6cXbCR+22O/ER4c+1d4L36nfWa0vpWOwDdDeXe7ANQHGdoYkMY4pRXa+46ZNYUSgWn+9QQBlIfgC5bUt8wVM+TM+uK8xlPfos0vekJZoKfsOLspXgEu5DIYVvgZJVRc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=mdTBQvFf; arc=none smtp.client-ip=198.175.65.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="m/tYahsI"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A59E2C2BD10;
-	Wed, 17 Jul 2024 23:33:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1721259216;
-	bh=/vntp9yziGCzvLchAgMHXkRgHgytqWIKu6wEIUPrxlQ=;
-	h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-	b=m/tYahsI7GcAsn0eTT4WF3W3BC90QDmQbipyzN62A8EQrxsGjJuDHvLvxJTe9ClPb
-	 SxfN7qFIZCngz7gztSRBpz2eEzrUCy4jUV1ydb6l65kKp+wAq1QWNBsZy5KABTYVQR
-	 tq+sCrNewY9i6SpEr8eZIOLHRCKt7Ey7NF7M1f0KLVQ+ZcrJeHrDZjeNPd1EsmFr+5
-	 4zTlnoxdZoC9fCxuCKnodh5r8fGggVstFE9nygPb3O0rvXh68bBkRq/sZ9W1kFT6Vp
-	 PNOejeGFpQtHdc4Q11bbXLpU6fBG4A6iIgpFlB92tbnMPPxy5xVe6T52lr0cg39ZBV
-	 sbhS/c+mN45rg==
-Message-ID: <1e36b1ba8af3584128550822a70cb072.sboyd@kernel.org>
-Content-Type: text/plain; charset="utf-8"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="mdTBQvFf"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1721260743; x=1752796743;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=5a3HfBAENG9pyJGCiy81RBYBle1GBgu9xnR1NecS2L8=;
+  b=mdTBQvFfV034DcVvxfZKKv5AohSoiDgBRx5h1/CBimK77R0xGp+RdL0m
+   UgPXk9X0qbRFoN/6/zwPqO5692c5KRJxD69IC7OFtzAnZ/5PLXH+frsrV
+   PbZ7s3Roq6v83e/PNnHw8y2dI1+2DeXkSPwYEcrc30xQrvjk6OTcviZ2Y
+   nGMoP1wsaY9GNrcojquteVnu/z5mnUzqDLLqsE4+7KiUzujKcf2hmxTGw
+   ChTc0XyP8eOskxHl9KXeXbLBjgT+9/li9TL00Q1xeUIx8g9CsIugOhd37
+   q/mmxRuqJ6r/KST4QHeb9hxjH/MUwGpLSmnGB0nrZ3WCft8a3HAIvoirM
+   g==;
+X-CSE-ConnectionGUID: 7AGU5+38SKOH+TrFLwE41g==
+X-CSE-MsgGUID: VeJn0shZTbym/O+YtNFUtg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11136"; a="18937387"
+X-IronPort-AV: E=Sophos;i="6.09,216,1716274800"; 
+   d="scan'208";a="18937387"
+Received: from orviesa003.jf.intel.com ([10.64.159.143])
+  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jul 2024 16:59:02 -0700
+X-CSE-ConnectionGUID: egxL4XWDQ+SnV9Sv6gDt9g==
+X-CSE-MsgGUID: K3X8QGe/TVilxfq2PRQuDw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.09,216,1716274800"; 
+   d="scan'208";a="55413100"
+Received: from lkp-server01.sh.intel.com (HELO 68891e0c336b) ([10.239.97.150])
+  by orviesa003.jf.intel.com with ESMTP; 17 Jul 2024 16:59:01 -0700
+Received: from kbuild by 68891e0c336b with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1sUEXy-000gly-1T;
+	Wed, 17 Jul 2024 23:58:58 +0000
+Date: Thu, 18 Jul 2024 07:58:03 +0800
+From: kernel test robot <lkp@intel.com>
+To: Arnd Bergmann <arnd@arndb.de>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-arch@vger.kernel.org
+Subject: [arnd-asm-generic:syscall-tbl-6.11 80/98]
+ arch/x86/include/asm/syscalls.h:27:76: warning: declaration of 'struct
+ stat64' will not be visible outside of this function
+Message-ID: <202407180723.rk3cGZ41-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20240717-of_property_for_each_u32-v2-1-4060990f49c9@bootlin.com>
-References: <20240717-of_property_for_each_u32-v2-1-4060990f49c9@bootlin.com>
-Subject: Re: [PATCH v2] of: remove internal arguments from of_property_for_each_u32()
-From: Stephen Boyd <sboyd@kernel.org>
-Cc: Peng Fan (OSS) <peng.fan@oss.nxp.com>, Thomas Petazzoni <thomas.petazzoni@bootlin.com>, linux-kernel@vger.kernel.org, devicetree@vger.kernel.org, llvm@lists.linux.dev, linux-clk@vger.kernel.org, linux-omap@vger.kernel.org, linux-arm-msm@vger.kernel.org, linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev, linux-samsung-soc@vger.kernel.org, linux-gpio@vger.kernel.org, linux-iio@vger.kernel.org, linux-pwm@vger.kernel.org, linux-serial@vger.kernel.org, linux-usb@vger.kernel.org, patches@opensource.cirrus.com, linux-sound@vger.kernel.org, linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org, Luca Ceresoli <luca.ceresoli@bootlin.com>, Andre Przywara <andre.przywara@arm.com>, Bartosz Golaszewski <bartosz.golaszewski@linaro.org>, Jonathan Cameron <Jonathan.Cameron@huawei.com>, Uwe =?utf-8?q?Kleine-K=C3=B6nig?= <u.kleine-koenig@baylibre.com>, Richard Fitzgerald <rf@opensource.cirrus.com>
-To: Aaro Koskinen <aaro.koskinen@iki.fi>, Alexandre Belloni <alexandre.belloni@bootlin.com>, Alim Akhtar <alim.akhtar@samsung.com>, Andreas Kemnade <andreas@kemnade.info>, Bartosz Golaszewski <brgl@bgdev.pl>, Bjorn Andersson <andersson@kernel.org>, Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>, Chen-Yu Tsai <wens@csie.org>, Chester Lin <chester62515@gmail.com>, Christophe Leroy <christophe.leroy@csgroup.eu>, Claudiu Beznea <claudiu.beznea@tuxon.dev>, Damien Le Moal <dlemoal@kernel.org>, Daniel Lezcano <daniel.lezcano@linaro.org>, Dong Aisheng <aisheng.dong@nxp.com>, Doug Berger <opendmb@gmail.com>, Emilio =?utf-8?q?L=C3=B3pez?= <emilio@elopez.com.ar>, Fabio Estevam <festevam@gmail.com>, Florian Fainelli <florian.fainelli@broadcom.com>, Ghennadi Procopciuc <ghennadi.procopciuc@oss.nxp.com>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Jacky Bai <ping.bai@nxp.com>, Jaroslav Kysela <perex@perex.cz>, Jernej Skrabec <jernej.skrabec@gmail.com>, Jiri Slaby <jirislaby@kernel.org>, Jonathan Cameron <jic23@kernel.org>, Kevin Hilman <khilman@baylibre.com>, Krzysztof Kozlowski <krzk@kernel.org>, Lars-Peter Clausen <lars@metafoo.de>, Lee Jones <lee@kernel.org>, Liam Girdwood <lgirdwood@gmail.com>, Linus Walleij <linus.walleij@linaro.org>, Luca Ceresoli <luca.ceresoli@bootlin.com>, Mark Brown <broonie@kernel.org>, Matthias Brugger <mbrugger@suse.com>, Michael Ellerman <mpe@ellerman.id.au>, Michael Turquette <mturquette@baylibre.com>, Miguel Ojeda <ojeda@kernel.org>, Nathan Chancellor <nathan@kernel.org>, Naveen N. Rao <naveen.n.rao@linux.ibm.com>, Nicholas Piggin <npiggin@gmail.com>, Nicolas Ferre <nicolas.ferre@microchip.com>, Pengutronix Kernel Team <kernel@pengutronix.de>, Richard Leitner <richard.leitner@linux.dev>, Rob Herring <robh@kernel.org>, Roger Quadros <rogerq@kernel.org>, Samuel Holland <samuel@sholland.org>, Saravana Kannan <saravanak@google.com>, Shawn Guo <shawnguo@kernel.org>, Takashi Iwai <tiwai@suse.com>, Thomas Gleixner <tglx@linutronix.de>, Tony Lindgren <tony@atomide.com>, Uwe =?utf-8?q?Kleine-K=C3=B6nig?= <ukleinek@kernel.org>
-Date: Wed, 17 Jul 2024 16:33:34 -0700
-User-Agent: alot/0.10
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Quoting Luca Ceresoli (2024-07-17 09:16:32)
-> diff --git a/drivers/clk/clk-si5351.c b/drivers/clk/clk-si5351.c
-> index 4ce83c5265b8..d4904f59f83f 100644
-> --- a/drivers/clk/clk-si5351.c
-> +++ b/drivers/clk/clk-si5351.c
-> @@ -1175,8 +1175,8 @@ static int si5351_dt_parse(struct i2c_client *clien=
-t,
->  {
->         struct device_node *child, *np =3D client->dev.of_node;
->         struct si5351_platform_data *pdata;
-> -       struct property *prop;
-> -       const __be32 *p;
-> +       u32 array[4];
-> +       int sz, i;
->         int num =3D 0;
->         u32 val;
-> =20
-> @@ -1191,20 +1191,24 @@ static int si5351_dt_parse(struct i2c_client *cli=
-ent,
->          * property silabs,pll-source : <num src>, [<..>]
->          * allow to selectively set pll source
->          */
-> -       of_property_for_each_u32(np, "silabs,pll-source", prop, p, num) {
-> +       sz =3D of_property_read_variable_u32_array(np, "silabs,pll-source=
-", array, 2, 4);
-> +       sz =3D (sz =3D=3D -EINVAL) ? 0 : sz; /* Missing property is OK */
-> +       if (sz < 0)
-> +               return dev_err_probe(&client->dev, sz, "invalid pll-sourc=
-e");
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/arnd/asm-generic.git syscall-tbl-6.11
+head:   9a99991d90521113a738c2a4761a4147fe4b31ca
+commit: 57f3cf21bbe2d779a7d7a23fb863b4b51d865fdd [80/98] x86: add missing syscall prototypes
+config: x86_64-allnoconfig (https://download.01.org/0day-ci/archive/20240718/202407180723.rk3cGZ41-lkp@intel.com/config)
+compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240718/202407180723.rk3cGZ41-lkp@intel.com/reproduce)
 
-Needs a newline on the printk message.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202407180723.rk3cGZ41-lkp@intel.com/
 
-> +       if (sz % 2)
-> +               return dev_err_probe(&client->dev, -EINVAL,
-> +                                    "missing pll-source for pll %d\n", a=
-rray[sz - 1]);
-> +
-> +       for (i =3D 0; i < sz; i +=3D 2) {
-> +               num =3D array[i];
-> +               val =3D array[i + 1];
-> +
->                 if (num >=3D 2) {
->                         dev_err(&client->dev,
->                                 "invalid pll %d on pll-source prop\n", nu=
-m);
->                         return -EINVAL;
->                 }
-> =20
-> -               p =3D of_prop_next_u32(prop, p, &val);
-> -               if (!p) {
-> -                       dev_err(&client->dev,
-> -                               "missing pll-source for pll %d\n", num);
-> -                       return -EINVAL;
-> -               }
-> -
->                 switch (val) {
->                 case 0:
->                         pdata->pll_src[num] =3D SI5351_PLL_SRC_XTAL;
-> @@ -1232,19 +1236,24 @@ static int si5351_dt_parse(struct i2c_client *cli=
-ent,
->         pdata->pll_reset[0] =3D true;
->         pdata->pll_reset[1] =3D true;
-> =20
-> -       of_property_for_each_u32(np, "silabs,pll-reset-mode", prop, p, nu=
-m) {
-> +       sz =3D of_property_read_variable_u32_array(np, "silabs,pll-reset-=
-mode", array, 2, 4);
-> +       sz =3D (sz =3D=3D -EINVAL) ? 0 : sz; /* Missing property is OK */
-> +       if (sz < 0)
-> +               return dev_err_probe(&client->dev, sz, "invalid pll-reset=
--mode");
+All warnings (new ones prefixed by >>):
 
-Needs a newline on the printk message.
+   In file included from drivers/tty/vt/vt_ioctl.c:83:
+>> arch/x86/include/asm/syscalls.h:27:76: warning: declaration of 'struct stat64' will not be visible outside of this function [-Wvisibility]
+      27 | asmlinkage long compat_sys_ia32_stat64(const char __user *filename, struct stat64 __user *statbuf);
+         |                                                                            ^
+   arch/x86/include/asm/syscalls.h:28:77: warning: declaration of 'struct stat64' will not be visible outside of this function [-Wvisibility]
+      28 | asmlinkage long compat_sys_ia32_lstat64(const char __user *filename, struct stat64 __user *statbuf);
+         |                                                                             ^
+   arch/x86/include/asm/syscalls.h:29:65: warning: declaration of 'struct stat64' will not be visible outside of this function [-Wvisibility]
+      29 | asmlinkage long compat_sys_ia32_fstat64(unsigned int fd, struct stat64 __user *statbuf);
+         |                                                                 ^
+   arch/x86/include/asm/syscalls.h:30:97: warning: declaration of 'struct stat64' will not be visible outside of this function [-Wvisibility]
+      30 | asmlinkage long compat_sys_ia32_fstatat64(unsigned int dfd, const char __user *filename, struct stat64 __user *statbuf, int flag);
+         |                                                                                                 ^
+   4 warnings generated.
 
-> +       if (sz % 2)
-> +               return dev_err_probe(&client->dev, -EINVAL,
-> +                                    "missing pll-reset-mode for pll %d\n=
-", array[sz - 1]);
-> +
 
-With those fixed
+vim +27 arch/x86/include/asm/syscalls.h
 
-Acked-by: Stephen Boyd <sboyd@kernel.org> # clk
+    24	
+    25	asmlinkage long compat_sys_arch_prctl(int option, unsigned long arg2);
+    26	struct mmap_arg_struct32;
+  > 27	asmlinkage long compat_sys_ia32_stat64(const char __user *filename, struct stat64 __user *statbuf);
+    28	asmlinkage long compat_sys_ia32_lstat64(const char __user *filename, struct stat64 __user *statbuf);
+    29	asmlinkage long compat_sys_ia32_fstat64(unsigned int fd, struct stat64 __user *statbuf);
+    30	asmlinkage long compat_sys_ia32_fstatat64(unsigned int dfd, const char __user *filename, struct stat64 __user *statbuf, int flag);
+    31	asmlinkage long compat_sys_ia32_mmap(struct mmap_arg_struct32 __user *arg);
+    32	asmlinkage long compat_sys_ia32_clone(unsigned long clone_flags, unsigned long newsp, int __user *parent_tidptr, unsigned long tls_val, int __user *child_tidptr);
+    33	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
