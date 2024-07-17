@@ -1,136 +1,124 @@
-Received: from mail-lj1-f173.google.com (mail-lj1-f173.google.com [209.85.208.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D6D291E526
-	for <llvm@lists.linux.dev>; Wed, 17 Jul 2024 15:53:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 79DCA1878
+	for <llvm@lists.linux.dev>; Wed, 17 Jul 2024 16:03:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721231640; cv=none; b=tBnHVIAptMQfNof6W/EOoRbhD7ehxJ7GCX3/tYI3jtms1q1gFY0Yb35w/gdDqmmz977dHL6lrlumbci6e9LepU5fFgK7VrT+tPsTw/8EdLfHokvJqTDEo91l5212hvv0TI3J2xeAIdATkp+vsKewlT50iqmGe6lxN6xNABkeQvM=
+	t=1721232205; cv=none; b=d5yJ1S7lz94cvTmyk+kv9jt6pxpEHI8mZVuIVucbhlgLQyz0KnFIGr2PaL8zcmvRna+5Hur5kjJNZs4ZgMi3NdKwiY8AiNedCE8u5/7HvA176GN8zOcqKDeeaM8b95XohI4XrwYEy9pVtykpPkqlHOxCwsWsVwUTQa1V7icwETo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721231640; c=relaxed/simple;
-	bh=Wp07UcAhRL1R8uio7WTjm5z67oRHHmiAHs6r7E4fMQg=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=OYf3IqR4jxRTvtlVBJ9ELVTLePxHeB5s2p2Q9XlwQOxbQEaVcMSKhsJ+PFf9UZM8x6mOUZwhV3Av2pRvtVN0niKskg9wfq94USnDnhvKWH+cPNqQ22Ry8xbb69rRKuR2YHvDSDdO0AqP7sdRb5q6+1fXMVEmJ32F5AG1TUScAiM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=WjMiCW5z; arc=none smtp.client-ip=209.85.208.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1721232205; c=relaxed/simple;
+	bh=VBSXDsc1eAIG/fpeGylHaCfDqPRGhDEl/SlTrZaC6bg=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=k8wv2cMQ3mjKa6L1B+1tQrTt4YUg1rbbdX7+dQcUuA13Axg1r25SGIm2hI6bCdq/Nav34AqPu6DHoOdVl0hFhQ5po+re0PM96e6kWqQjI+kBDz3UFWNubSTd19zhyWdJc6VZUSqZLr3wzbklN901xbTgpVvNnhARPBulFiNFu4c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=JxL8XK8e; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="WjMiCW5z"
-Received: by mail-lj1-f173.google.com with SMTP id 38308e7fff4ca-2eee298bd2eso50571801fa.3
-        for <llvm@lists.linux.dev>; Wed, 17 Jul 2024 08:53:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1721231637; x=1721836437; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=U0TYXvXsyKDm9Gm/9jOvNezoSc7ZaWUr4fn7rE/8S8Y=;
-        b=WjMiCW5zu3d7KlBOWVB+BfGQghMiFgObvlq8lGJPtWIyF/6vsIJ5EzHYE6CINZ+KyM
-         UlRSeTzG45C/wAumal0Hu7QU7OecaBz2UZZCMkG2PwzXRIbS3TC/HD+ufujVZxGq5Ymv
-         98J+B+eIAqewNMjT9v0VdImSKGzrAUQqbg3evGRxfHiVFBYQgjigx98oTw3urlFlB331
-         8/I+l3DCHQoHHTCWDG/JNOiUH6cDmJ1XjB4GM/pUr4Qb50MGFUCyj4TrXE71yPy5aXBD
-         sgsU0reKFdmEp9haQtj88BQUHl1xHf6Pw9vZvUbm+9rlp8hOkJgpSW4kzLs1DZgx/B3/
-         irVw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1721231637; x=1721836437;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=U0TYXvXsyKDm9Gm/9jOvNezoSc7ZaWUr4fn7rE/8S8Y=;
-        b=lSXIc+IRxIrIiJpVz98K35PDD/LxescP5H6gFSwAd3JXU7ljOcEmN1a8YFDSRAJ/Fj
-         xvHv7zVhu0gePziDdIOelVbttv4R8T9vJ2Gp82R/171xdJGOpEZDDJlNoOvJy78ZNm+P
-         esLXO1D/BuLj63LVYKcHLf5HVQ0XyijudAgtGcq5ES7dVSy6E6doHiWXFWNi/qIhsUzS
-         ZcLgvT7Y3qlVHaNG7J0a7Wzor3hIFdqQte42MqfWDhCyR2w1WM4dgYQZw98kG1vm8lJS
-         otLYUOk7b1c47+f8EljwbhqZWhSaDdvnOmK7gwTnKH2jsqqnh/EWASdH7LXz3Icnyoaj
-         ywAA==
-X-Forwarded-Encrypted: i=1; AJvYcCWb9d7ZYyvRCYofMO9tNtOdn0Zz0ffuk3n7t+8MP/BvcBLH00BzGCJ5g2l50bZOvCSQAW3IBs/jTEz7Z/BbBiFMH5XcPA==
-X-Gm-Message-State: AOJu0YxSIDBlQxk79HkVfa8lxCo5fZMRix2ozt6+V62jIMLDm7EL7136
-	sg1c3TzT6Pp1+1Pgf9vRzwM8TjZRN3fyk1ynlybz4JkTE5arpHOIQYw5M61+poPI4Vmt6gZRNmT
-	wJVLmL5d2CLL2jrv6QTYC/PTjn93v1+0B+cw=
-X-Google-Smtp-Source: AGHT+IFNav3o99G1G2XxxGKHijLrtShRGKEGj6GgPTIRzOWdanAGWRINlj3DG/YMJbdC5qahMmsK20OvTUaf4xOp83w=
-X-Received: by 2002:a2e:7304:0:b0:2ee:7b7d:66df with SMTP id
- 38308e7fff4ca-2eefd0c3f91mr14440341fa.9.1721231636473; Wed, 17 Jul 2024
- 08:53:56 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="JxL8XK8e"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1721232202;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=0wfSSD+1D1xsCWMqp9/TBhga/r0561gYpxlS9tfanOs=;
+	b=JxL8XK8exy8Tzsbahz2KUD1aJ01Seqqhvf5aJIye5NPJzRG8trjcj8wRDtD356Gu8s8DzH
+	Y1gSMxqP+cknLECtaW2kKsLwRuf/MIywbPPzS4l4tfgJHXo6UCFrFopaMMl4Hs7+2lwc+T
+	eEv2qQ1bysnHotfnuaVFRM82ekHUNJE=
+Received: from mx-prod-mc-04.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-583-8gm4t1I3MyuUGD4vYt0ydQ-1; Wed,
+ 17 Jul 2024 12:03:20 -0400
+X-MC-Unique: 8gm4t1I3MyuUGD4vYt0ydQ-1
+Received: from mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.40])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-04.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id A92FD1944A8B
+	for <llvm@lists.linux.dev>; Wed, 17 Jul 2024 16:03:19 +0000 (UTC)
+Received: from [172.64.10.23] (unknown [10.30.34.11])
+	by mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id E417E195605A;
+	Wed, 17 Jul 2024 16:03:18 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL (MISSED 15 of 192): Test report for master
+ (6.10.0, mainline.kernel.org-clang, f83e38fc)
+Date: Wed, 17 Jul 2024 16:03:18 -0000
+To: bgoncalv@redhat.com, llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20240526175655.227798-1-ubizjak@gmail.com> <ZpfX4KelYaXsHlHe@gmail.com>
-In-Reply-To: <ZpfX4KelYaXsHlHe@gmail.com>
-From: Uros Bizjak <ubizjak@gmail.com>
-Date: Wed, 17 Jul 2024 17:53:44 +0200
-Message-ID: <CAFULd4YyoVvM3BnF8Ln3XD-kacavERjMCpw=1hXwCACvTPF1gg@mail.gmail.com>
-Subject: Re: [PATCH 1/2] x86/percpu: Fix "multiple identical address spaces
- specified for type" clang warning
-To: Ingo Molnar <mingo@kernel.org>
-Cc: x86@kernel.org, llvm@lists.linux.dev, linux-kernel@vger.kernel.org, 
-	Thomas Gleixner <tglx@linutronix.de>, Borislav Petkov <bp@alien8.de>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, "H. Peter Anvin" <hpa@zytor.com>, 
-	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
-	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>
-Content-Type: text/plain; charset="UTF-8"
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.40
+Message-Id: <64606.124071712032001612@us-mta-583.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Jul 17, 2024 at 4:40=E2=80=AFPM Ingo Molnar <mingo@kernel.org> wrot=
-e:
->
->
-> * Uros Bizjak <ubizjak@gmail.com> wrote:
->
-> > The clang build with named address spaces enabled currently fails with:
-> >
-> > error: multiple identical address spaces specified for type [-Werror,-W=
-duplicate-decl-specifier]
-> >
-> > The warning is emitted when accessing const_pcpu_hot structure,
-> > which is already declared in __seg_gs named address space.
-> >
-> > Use specialized accessor for __raw_cpu_read_const() instead, avoiding
-> > redeclaring __seg_gs named address space via __raw_cpu_read().
-> >
-> > Signed-off-by: Uros Bizjak <ubizjak@gmail.com>
-> > Cc: Thomas Gleixner <tglx@linutronix.de>
-> > Cc: Ingo Molnar <mingo@kernel.org>
-> > Cc: Borislav Petkov <bp@alien8.de>
-> > Cc: Dave Hansen <dave.hansen@linux.intel.com>
-> > Cc: "H. Peter Anvin" <hpa@zytor.com>
-> > Cc: Nathan Chancellor <nathan@kernel.org>
-> > Cc: Nick Desaulniers <ndesaulniers@google.com>
-> > Cc: Bill Wendling <morbo@google.com>
-> > Cc: Justin Stitt <justinstitt@google.com>
-> > ---
-> >  arch/x86/include/asm/percpu.h | 5 ++++-
-> >  1 file changed, 4 insertions(+), 1 deletion(-)
-> >
-> > diff --git a/arch/x86/include/asm/percpu.h b/arch/x86/include/asm/percp=
-u.h
-> > index c55a79d5feae..aeea5c8a17de 100644
-> > --- a/arch/x86/include/asm/percpu.h
-> > +++ b/arch/x86/include/asm/percpu.h
-> > @@ -160,7 +160,10 @@ do {                                              =
-                       \
-> >       *(qual __my_cpu_type(pcp) *)__my_cpu_ptr(&(pcp)) =3D (val);      =
- \
-> >  } while (0)
-> >
-> > -#define __raw_cpu_read_const(pcp)    __raw_cpu_read(, , pcp)
-> > +#define __raw_cpu_read_const(pcp)                                    \
-> > +({                                                                   \
-> > +     *(typeof(pcp) *)(__force uintptr_t)(&(pcp));                    \
-> > +})
->
-> So shouldn't this be carried together with the patch that enables named
-> address spaces on Clang? Is it possible that this patch might not be need=
-ed
-> in a Clang version where named address spaces work as expected?
+Hi, we tested your kernel and here are the results:
 
-No, as diagnosed by Clang, there are indeed two identical specifiers,
-so the patch also applies as a general patch.
+    Overall result: FAILED
+             Merge: OK
+           Compile: OK
+              Test: FAILED
 
-Regarding Clang, before enabling the feature, issue #93449 [1]
-(internal compiler error) has to be fixed.
 
-[1] https://github.com/llvm/llvm-project/issues/93449
+Kernel information:
+    Commit message: Merge tag 'for-linus-6.11-rc1-tag' of git://git.kernel.=
+org/pub/scm/linux/kernel/git/xen/tip
 
-Uros.
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1376247042
+
+One or more kernel tests failed:
+    Unrecognized or new issues:
+        Reboot test
+              x86_64
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+redhat:1376247042-x86_64-kernel_upt_35
+                   Non-passing ran subtests:
+                       =E2=9D=8C FAIL misc/reboot-test/journalctl-check
+
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1267
+            Affected tests:
+                selinux-policy: serge-testsuite [ppc64le]
+
+
+Tests that were not ran because of internal issues:=20
+    Boot test [s390x]
+    CKI/restraint [s390x]
+    machineinfo [ppc64le, s390x]
+    Reboot test [s390x]
+    SELinux Custom Module Setup [ppc64le, s390x]
+    Storage - blktests - blk - upstream [s390x]
+    Storage - blktests - nvme-tcp - upstream [s390x]
+    Storage - swraid scsi_raid [s390x]
+    stress: stress-ng - cpu-cache [s390x]
+    stress: stress-ng - memory [s390x]
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
