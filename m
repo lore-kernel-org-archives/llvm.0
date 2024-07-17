@@ -1,102 +1,135 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25D6118EBF;
-	Wed, 17 Jul 2024 22:34:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 96C9218EBF
+	for <llvm@lists.linux.dev>; Wed, 17 Jul 2024 22:53:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721255700; cv=none; b=euJTB6K00xa/izNlC1p13L9pWtt4bVkt+8pyY0k1GwQuZb3ZFOCCOdrD3gaJ8NY0qRscZPT84gFu0cDpMnnw/GiB7xzLCkYP/XDhqgjiS4OKGP7UOFHlJ86oZsNolUpVM44leQSjE2Ym/6T9oHoNv4mzmzlNYYZbnnbw1vJeb8U=
+	t=1721256817; cv=none; b=Taw+aMdrRityAP8VlcLqvzPfsOmiNtWDqj4cTDJYJ/Zz9wVDGiAPG2RiyHmKokKeDB8raLVubqoxyDBkPfAMXJstprSGSXMjhR4ypCpTwgve9dYT8z+gzGpW2q37Camf5F7qYwHFu9eKck6ZiTUKHS3e6I9YbBd9VCw02gTVE0Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721255700; c=relaxed/simple;
-	bh=LkVgTT4X+NHgfabFc4N6LCxrN+0BvoAGIX3YwKJbeWc=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=iBKFrZPxBoiuLnQ6S7dEhuTMaxM+Od5Ld/lQCua+YitR4hGFz4R9g0HOS+a3g64m1u9+o9jIaLeSDXCobp0d2/B5BzSB6W9wBcHKJclJyLWc+Xqse3iTL+TT7jFRhREEFDegl+Z4GOSP5SPDV3NyHfsOr+5FyLJnj84bxfM9y6w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=A/K3hDdB; arc=none smtp.client-ip=192.198.163.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1721256817; c=relaxed/simple;
+	bh=h11XGhD269A9FNUAwdgDpeiofOCtaiBvo9KYZUNyPW0=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=I1JhmRFZjnK5I22KWdK63ITKRpqyV09AX7Jx6n2PVI3TBfVWCryqmp3Bd/NEtDvfa757YY0LtJOSwpoIt9jcyzO0ms5Uhd5ou54kiN6L2NR/9CVvGTjJ3Y3Hbo5x4ZtYXEKhVLgjwJDQR/OgiR/qjefff3S+M9n9ICv6LbLq33U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=h7eCYpYl; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="A/K3hDdB"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1721255695; x=1752791695;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=LkVgTT4X+NHgfabFc4N6LCxrN+0BvoAGIX3YwKJbeWc=;
-  b=A/K3hDdB1NRc+1vplGqs7whdhT9M4cUeHyAeDGMSZdYp67AqFXBJpSnq
-   0dOH6UrdmzLfbHBraDesXlGtDxsKfDh/YQci681/oTdIqI96LWVR/Ejfm
-   dqcFI0PTSfYQTPQDzw+XkQhn2rzU1cy3M03R/SOUWRi5WyLY5NE32boP0
-   jEHTMIRdPFPhKvM8qpAMzH8l88Cno0zh8nwnoQJI+KngEt1CKaz2g6TJa
-   VJQeEKw3VS9M1QEc7kZegqiAArf041mlNm98cCLJ615+Pl9lUKmzq6C/+
-   UF3zN4sT7j/VXfF1KZva2cIFex0i6zoIB70cayjSxa4fs63ViIror0eee
-   g==;
-X-CSE-ConnectionGUID: SHOgjplESPGaRz68cyDXtg==
-X-CSE-MsgGUID: YdG76JNIQ+KdvAH4BjVL3g==
-X-IronPort-AV: E=McAfee;i="6700,10204,11136"; a="29403801"
-X-IronPort-AV: E=Sophos;i="6.09,215,1716274800"; 
-   d="scan'208";a="29403801"
-Received: from fmviesa003.fm.intel.com ([10.60.135.143])
-  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jul 2024 15:34:55 -0700
-X-CSE-ConnectionGUID: oK+ljtPhTYuFEXNwLXcRPA==
-X-CSE-MsgGUID: 5d82JamESxGT13J2CwDT4g==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.09,215,1716274800"; 
-   d="scan'208";a="54733129"
-Received: from lkp-server01.sh.intel.com (HELO 68891e0c336b) ([10.239.97.150])
-  by fmviesa003.fm.intel.com with ESMTP; 17 Jul 2024 15:34:53 -0700
-Received: from kbuild by 68891e0c336b with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1sUDEZ-000gjO-08;
-	Wed, 17 Jul 2024 22:34:51 +0000
-Date: Thu, 18 Jul 2024 06:34:21 +0800
-From: kernel test robot <lkp@intel.com>
-To: Arnd Bergmann <arnd@arndb.de>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-arch@vger.kernel.org
-Subject: [arnd-asm-generic:syscall-tbl-6.11 32/98]
- arch/x86/um/sys_call_table_32.c:27:10: fatal error: 'asm/syscalls_32.h' file
- not found
-Message-ID: <202407180608.OqFajxwV-lkp@intel.com>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="h7eCYpYl"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1721256810;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=pmdRYqkKKe6X0xTIkVXM40VOqrLiY/t1RuFdDkYG8/8=;
+	b=h7eCYpYlgmPs6p+kRXQiZ9SBd3IwjqU0DwDDhTBtMlLRcuzXp8l0hHxmCimbZ0U8aFGBnp
+	MdawQtKqGYsF7p8tau8NbBIpqNX8/urE0/0eceN8U5Zj3C9LmSWm0nkt4SLNozmIv9PO6l
+	CEGYLEinagV/MIDOFwYzXZvTLHfmKiE=
+Received: from mx-prod-mc-04.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-6-JnY-FSNWMXKNLTBB7krxKQ-1; Wed,
+ 17 Jul 2024 18:53:28 -0400
+X-MC-Unique: JnY-FSNWMXKNLTBB7krxKQ-1
+Received: from mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.40])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-04.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id BB9D11955D50
+	for <llvm@lists.linux.dev>; Wed, 17 Jul 2024 22:53:27 +0000 (UTC)
+Received: from [172.64.10.23] (unknown [10.30.34.11])
+	by mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id CC94619560AA;
+	Wed, 17 Jul 2024 22:53:26 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL (MISSED 13 of 192): Test report for master
+ (6.10.0, mainline.kernel.org-clang, 0434dbe3)
+Date: Wed, 17 Jul 2024 22:53:26 -0000
+To: xzhou@redhat.com, bgoncalv@redhat.com, llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.40
+Message-Id: <07603.124071718532800506@us-mta-6.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/arnd/asm-generic.git syscall-tbl-6.11
-head:   9a99991d90521113a738c2a4761a4147fe4b31ca
-commit: 824c915b5b0011418f9000ee1c2b4299b842595a [32/98] x86: rename some syscall table generation identifiers
-config: um-allnoconfig (https://download.01.org/0day-ci/archive/20240718/202407180608.OqFajxwV-lkp@intel.com/config)
-compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240718/202407180608.OqFajxwV-lkp@intel.com/reproduce)
+Hi, we tested your kernel and here are the results:
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202407180608.OqFajxwV-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> arch/x86/um/sys_call_table_32.c:27:10: fatal error: 'asm/syscalls_32.h' file not found
-      27 | #include <asm/syscalls_32.h>
-         |          ^~~~~~~~~~~~~~~~~~~
-   1 error generated.
+    Overall result: FAILED
+             Merge: OK
+           Compile: OK
+              Test: FAILED
 
 
-vim +27 arch/x86/um/sys_call_table_32.c
+Kernel information:
+    Commit message: Merge tag 'linux_kselftest-next-6.11-rc1' of git://git.=
+kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest
 
-6218d0f6b8dece Masahiro Yamada 2021-05-17  25  
-6218d0f6b8dece Masahiro Yamada 2021-05-17  26  #define __SYSCALL(nr, sym) extern asmlinkage long sym(unsigned long, unsigned long, unsigned long, unsigned long, unsigned long, unsigned long);
-45db1c6176c817 H. Peter Anvin  2011-12-05 @27  #include <asm/syscalls_32.h>
-45db1c6176c817 H. Peter Anvin  2011-12-05  28  
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1376473453
 
-:::::: The code at line 27 was first introduced by commit
-:::::: 45db1c6176c8171d9ae6fa6d82e07d115a5950ca x86, um: Use the same style generated syscall tables as native
+One or more kernel tests failed:
+    Unrecognized or new issues:
+        Reboot test
+              x86_64
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+redhat:1376473453-x86_64-kernel_upt_35
+                   Non-passing ran subtests:
+                       =E2=9D=8C FAIL misc/reboot-test/journalctl-check
+        xfstests - cifsv3.11
+              x86_64 (debug)
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+redhat:1376473453-x86_64-kernel-debug_upt_32
+                   Non-passing ran subtests:
+                       =E2=9D=8C FAIL generic/248
+                       =E2=9D=8C FAIL generic/590
+        xfstests - nfsv4.2
+              x86_64 (debug)
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+redhat:1376473453-x86_64-kernel-debug_upt_31
 
-:::::: TO: H. Peter Anvin <hpa@linux.intel.com>
-:::::: CC: H. Peter Anvin <hpa@linux.intel.com>
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
+rch/powerpc/lib/crtsavres.o: No such file or directory
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1267
+            Affected tests:
+                selinux-policy: serge-testsuite [ppc64le]
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+
+Tests that were not ran because of internal issues:=20
+    Boot test [s390x]
+    CKI/restraint [s390x]
+    machineinfo [s390x]
+    Reboot test [s390x]
+    SELinux Custom Module Setup [ppc64le, s390x]
+    Storage - blktests - blk - upstream [s390x]
+    Storage - blktests - nvme-tcp - upstream [s390x]
+    Storage - swraid scsi_raid [s390x]
+    stress: stress-ng - cpu-cache [s390x]
+    stress: stress-ng - memory [s390x]
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
