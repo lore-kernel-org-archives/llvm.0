@@ -1,135 +1,129 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 96C9218EBF
-	for <llvm@lists.linux.dev>; Wed, 17 Jul 2024 22:53:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6320018EBF;
+	Wed, 17 Jul 2024 23:33:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721256817; cv=none; b=Taw+aMdrRityAP8VlcLqvzPfsOmiNtWDqj4cTDJYJ/Zz9wVDGiAPG2RiyHmKokKeDB8raLVubqoxyDBkPfAMXJstprSGSXMjhR4ypCpTwgve9dYT8z+gzGpW2q37Camf5F7qYwHFu9eKck6ZiTUKHS3e6I9YbBd9VCw02gTVE0Y=
+	t=1721259217; cv=none; b=fRfYZUcdXXi0t3lLUdiTUHeWEDlggNi7Hj14pp00RH70U4Cd13AvA3dHS3EZVN4HvEPG9U0KvVKkYAPfw7nABuESTbU1pu60TjkhvnStESUqh3bRwvuIFRBCbIXJ61Hcu+uHQbConDKW4gS4qdMrhNxpp19mbIWwBlUJOvptN/k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721256817; c=relaxed/simple;
-	bh=h11XGhD269A9FNUAwdgDpeiofOCtaiBvo9KYZUNyPW0=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=I1JhmRFZjnK5I22KWdK63ITKRpqyV09AX7Jx6n2PVI3TBfVWCryqmp3Bd/NEtDvfa757YY0LtJOSwpoIt9jcyzO0ms5Uhd5ou54kiN6L2NR/9CVvGTjJ3Y3Hbo5x4ZtYXEKhVLgjwJDQR/OgiR/qjefff3S+M9n9ICv6LbLq33U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=h7eCYpYl; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1721259217; c=relaxed/simple;
+	bh=/vntp9yziGCzvLchAgMHXkRgHgytqWIKu6wEIUPrxlQ=;
+	h=Message-ID:Content-Type:MIME-Version:In-Reply-To:References:
+	 Subject:From:Cc:To:Date; b=I50lv1Kqj5NSMeWUI/RxfLgvaOT/bjzYxs5YFYqh5viv3r2OTB0xp2uxNR1QGTFPnQh/1nkp4ZMZ274iyQ2DzsJFbhzO+AKWXPUp2/irJIIEtZEbnImKhbuiObOlztCb55V1E6FhPbXGWxuJpcQJwRpVpaKf+l0ldX9EKoG8K/4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=m/tYahsI; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="h7eCYpYl"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1721256810;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=pmdRYqkKKe6X0xTIkVXM40VOqrLiY/t1RuFdDkYG8/8=;
-	b=h7eCYpYlgmPs6p+kRXQiZ9SBd3IwjqU0DwDDhTBtMlLRcuzXp8l0hHxmCimbZ0U8aFGBnp
-	MdawQtKqGYsF7p8tau8NbBIpqNX8/urE0/0eceN8U5Zj3C9LmSWm0nkt4SLNozmIv9PO6l
-	CEGYLEinagV/MIDOFwYzXZvTLHfmKiE=
-Received: from mx-prod-mc-04.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-6-JnY-FSNWMXKNLTBB7krxKQ-1; Wed,
- 17 Jul 2024 18:53:28 -0400
-X-MC-Unique: JnY-FSNWMXKNLTBB7krxKQ-1
-Received: from mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.40])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-04.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id BB9D11955D50
-	for <llvm@lists.linux.dev>; Wed, 17 Jul 2024 22:53:27 +0000 (UTC)
-Received: from [172.64.10.23] (unknown [10.30.34.11])
-	by mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id CC94619560AA;
-	Wed, 17 Jul 2024 22:53:26 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL (MISSED 13 of 192): Test report for master
- (6.10.0, mainline.kernel.org-clang, 0434dbe3)
-Date: Wed, 17 Jul 2024 22:53:26 -0000
-To: xzhou@redhat.com, bgoncalv@redhat.com, llvm@lists.linux.dev
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="m/tYahsI"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A59E2C2BD10;
+	Wed, 17 Jul 2024 23:33:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1721259216;
+	bh=/vntp9yziGCzvLchAgMHXkRgHgytqWIKu6wEIUPrxlQ=;
+	h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
+	b=m/tYahsI7GcAsn0eTT4WF3W3BC90QDmQbipyzN62A8EQrxsGjJuDHvLvxJTe9ClPb
+	 SxfN7qFIZCngz7gztSRBpz2eEzrUCy4jUV1ydb6l65kKp+wAq1QWNBsZy5KABTYVQR
+	 tq+sCrNewY9i6SpEr8eZIOLHRCKt7Ey7NF7M1f0KLVQ+ZcrJeHrDZjeNPd1EsmFr+5
+	 4zTlnoxdZoC9fCxuCKnodh5r8fGggVstFE9nygPb3O0rvXh68bBkRq/sZ9W1kFT6Vp
+	 PNOejeGFpQtHdc4Q11bbXLpU6fBG4A6iIgpFlB92tbnMPPxy5xVe6T52lr0cg39ZBV
+	 sbhS/c+mN45rg==
+Message-ID: <1e36b1ba8af3584128550822a70cb072.sboyd@kernel.org>
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.40
-Message-Id: <07603.124071718532800506@us-mta-6.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20240717-of_property_for_each_u32-v2-1-4060990f49c9@bootlin.com>
+References: <20240717-of_property_for_each_u32-v2-1-4060990f49c9@bootlin.com>
+Subject: Re: [PATCH v2] of: remove internal arguments from of_property_for_each_u32()
+From: Stephen Boyd <sboyd@kernel.org>
+Cc: Peng Fan (OSS) <peng.fan@oss.nxp.com>, Thomas Petazzoni <thomas.petazzoni@bootlin.com>, linux-kernel@vger.kernel.org, devicetree@vger.kernel.org, llvm@lists.linux.dev, linux-clk@vger.kernel.org, linux-omap@vger.kernel.org, linux-arm-msm@vger.kernel.org, linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev, linux-samsung-soc@vger.kernel.org, linux-gpio@vger.kernel.org, linux-iio@vger.kernel.org, linux-pwm@vger.kernel.org, linux-serial@vger.kernel.org, linux-usb@vger.kernel.org, patches@opensource.cirrus.com, linux-sound@vger.kernel.org, linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org, Luca Ceresoli <luca.ceresoli@bootlin.com>, Andre Przywara <andre.przywara@arm.com>, Bartosz Golaszewski <bartosz.golaszewski@linaro.org>, Jonathan Cameron <Jonathan.Cameron@huawei.com>, Uwe =?utf-8?q?Kleine-K=C3=B6nig?= <u.kleine-koenig@baylibre.com>, Richard Fitzgerald <rf@opensource.cirrus.com>
+To: Aaro Koskinen <aaro.koskinen@iki.fi>, Alexandre Belloni <alexandre.belloni@bootlin.com>, Alim Akhtar <alim.akhtar@samsung.com>, Andreas Kemnade <andreas@kemnade.info>, Bartosz Golaszewski <brgl@bgdev.pl>, Bjorn Andersson <andersson@kernel.org>, Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>, Chen-Yu Tsai <wens@csie.org>, Chester Lin <chester62515@gmail.com>, Christophe Leroy <christophe.leroy@csgroup.eu>, Claudiu Beznea <claudiu.beznea@tuxon.dev>, Damien Le Moal <dlemoal@kernel.org>, Daniel Lezcano <daniel.lezcano@linaro.org>, Dong Aisheng <aisheng.dong@nxp.com>, Doug Berger <opendmb@gmail.com>, Emilio =?utf-8?q?L=C3=B3pez?= <emilio@elopez.com.ar>, Fabio Estevam <festevam@gmail.com>, Florian Fainelli <florian.fainelli@broadcom.com>, Ghennadi Procopciuc <ghennadi.procopciuc@oss.nxp.com>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Jacky Bai <ping.bai@nxp.com>, Jaroslav Kysela <perex@perex.cz>, Jernej Skrabec <jernej.skrabec@gmail.com>, Jiri Slaby <jirislaby@kernel.org>, Jonathan Cameron <jic23@kernel.org>, Kevin Hilman <khilman@baylibre.com>, Krzysztof Kozlowski <krzk@kernel.org>, Lars-Peter Clausen <lars@metafoo.de>, Lee Jones <lee@kernel.org>, Liam Girdwood <lgirdwood@gmail.com>, Linus Walleij <linus.walleij@linaro.org>, Luca Ceresoli <luca.ceresoli@bootlin.com>, Mark Brown <broonie@kernel.org>, Matthias Brugger <mbrugger@suse.com>, Michael Ellerman <mpe@ellerman.id.au>, Michael Turquette <mturquette@baylibre.com>, Miguel Ojeda <ojeda@kernel.org>, Nathan Chancellor <nathan@kernel.org>, Naveen N. Rao <naveen.n.rao@linux.ibm.com>, Nicholas Piggin <npiggin@gmail.com>, Nicolas Ferre <nicolas.ferre@microchip.com>, Pengutronix Kernel Team <kernel@pengutronix.de>, Richard Leitner <richard.leitner@linux.dev>, Rob Herring <robh@kernel.org>, Roger Quadros <rogerq@kernel.org>, Samuel Holland <samuel@sholland.org>, Saravana Kannan <saravanak@google.com>, Shawn Guo <shawnguo@kernel.org>, Takashi Iwai <tiwai@suse.com>, Thomas Gleixner <tglx@linutronix.de>, Tony Lindgren <tony@atomide.com>, Uwe =?utf-8?q?Kleine-K=C3=B6nig?= <ukleinek@kernel.org>
+Date: Wed, 17 Jul 2024 16:33:34 -0700
+User-Agent: alot/0.10
 
-Hi, we tested your kernel and here are the results:
+Quoting Luca Ceresoli (2024-07-17 09:16:32)
+> diff --git a/drivers/clk/clk-si5351.c b/drivers/clk/clk-si5351.c
+> index 4ce83c5265b8..d4904f59f83f 100644
+> --- a/drivers/clk/clk-si5351.c
+> +++ b/drivers/clk/clk-si5351.c
+> @@ -1175,8 +1175,8 @@ static int si5351_dt_parse(struct i2c_client *clien=
+t,
+>  {
+>         struct device_node *child, *np =3D client->dev.of_node;
+>         struct si5351_platform_data *pdata;
+> -       struct property *prop;
+> -       const __be32 *p;
+> +       u32 array[4];
+> +       int sz, i;
+>         int num =3D 0;
+>         u32 val;
+> =20
+> @@ -1191,20 +1191,24 @@ static int si5351_dt_parse(struct i2c_client *cli=
+ent,
+>          * property silabs,pll-source : <num src>, [<..>]
+>          * allow to selectively set pll source
+>          */
+> -       of_property_for_each_u32(np, "silabs,pll-source", prop, p, num) {
+> +       sz =3D of_property_read_variable_u32_array(np, "silabs,pll-source=
+", array, 2, 4);
+> +       sz =3D (sz =3D=3D -EINVAL) ? 0 : sz; /* Missing property is OK */
+> +       if (sz < 0)
+> +               return dev_err_probe(&client->dev, sz, "invalid pll-sourc=
+e");
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: OK
-              Test: FAILED
+Needs a newline on the printk message.
 
+> +       if (sz % 2)
+> +               return dev_err_probe(&client->dev, -EINVAL,
+> +                                    "missing pll-source for pll %d\n", a=
+rray[sz - 1]);
+> +
+> +       for (i =3D 0; i < sz; i +=3D 2) {
+> +               num =3D array[i];
+> +               val =3D array[i + 1];
+> +
+>                 if (num >=3D 2) {
+>                         dev_err(&client->dev,
+>                                 "invalid pll %d on pll-source prop\n", nu=
+m);
+>                         return -EINVAL;
+>                 }
+> =20
+> -               p =3D of_prop_next_u32(prop, p, &val);
+> -               if (!p) {
+> -                       dev_err(&client->dev,
+> -                               "missing pll-source for pll %d\n", num);
+> -                       return -EINVAL;
+> -               }
+> -
+>                 switch (val) {
+>                 case 0:
+>                         pdata->pll_src[num] =3D SI5351_PLL_SRC_XTAL;
+> @@ -1232,19 +1236,24 @@ static int si5351_dt_parse(struct i2c_client *cli=
+ent,
+>         pdata->pll_reset[0] =3D true;
+>         pdata->pll_reset[1] =3D true;
+> =20
+> -       of_property_for_each_u32(np, "silabs,pll-reset-mode", prop, p, nu=
+m) {
+> +       sz =3D of_property_read_variable_u32_array(np, "silabs,pll-reset-=
+mode", array, 2, 4);
+> +       sz =3D (sz =3D=3D -EINVAL) ? 0 : sz; /* Missing property is OK */
+> +       if (sz < 0)
+> +               return dev_err_probe(&client->dev, sz, "invalid pll-reset=
+-mode");
 
-Kernel information:
-    Commit message: Merge tag 'linux_kselftest-next-6.11-rc1' of git://git.=
-kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest
+Needs a newline on the printk message.
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1376473453
+> +       if (sz % 2)
+> +               return dev_err_probe(&client->dev, -EINVAL,
+> +                                    "missing pll-reset-mode for pll %d\n=
+", array[sz - 1]);
+> +
 
-One or more kernel tests failed:
-    Unrecognized or new issues:
-        Reboot test
-              x86_64
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-redhat:1376473453-x86_64-kernel_upt_35
-                   Non-passing ran subtests:
-                       =E2=9D=8C FAIL misc/reboot-test/journalctl-check
-        xfstests - cifsv3.11
-              x86_64 (debug)
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-redhat:1376473453-x86_64-kernel-debug_upt_32
-                   Non-passing ran subtests:
-                       =E2=9D=8C FAIL generic/248
-                       =E2=9D=8C FAIL generic/590
-        xfstests - nfsv4.2
-              x86_64 (debug)
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-redhat:1376473453-x86_64-kernel-debug_upt_31
+With those fixed
 
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: (ppc64le) selinux-policy: serge-testsuite: ld: cannot find a=
-rch/powerpc/lib/crtsavres.o: No such file or directory
-            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
-l-tests/-/issues/1267
-            Affected tests:
-                selinux-policy: serge-testsuite [ppc64le]
-
-
-Tests that were not ran because of internal issues:=20
-    Boot test [s390x]
-    CKI/restraint [s390x]
-    machineinfo [s390x]
-    Reboot test [s390x]
-    SELinux Custom Module Setup [ppc64le, s390x]
-    Storage - blktests - blk - upstream [s390x]
-    Storage - blktests - nvme-tcp - upstream [s390x]
-    Storage - swraid scsi_raid [s390x]
-    stress: stress-ng - cpu-cache [s390x]
-    stress: stress-ng - memory [s390x]
-
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+Acked-by: Stephen Boyd <sboyd@kernel.org> # clk
