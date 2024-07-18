@@ -1,124 +1,180 @@
-Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net [217.70.183.198])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A00E03D0AD;
-	Thu, 18 Jul 2024 06:57:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.198
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 350CC74058;
+	Thu, 18 Jul 2024 07:25:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721285831; cv=none; b=HODNZskKMNX99dhV7owxCEXXnS3aVR2VT1Zri88be9HSxPy73RvyomUVEfqU/zxtBuQiyTdiJyAE4y6X6PLkLSjWQvXntTrxo1yHHxP5G6Xg2Gtd9EZ7YiyxNsHearhhc9nG3Shd2jxN84tXhstGNk/Wfg074B5fSWHGoClHHTY=
+	t=1721287548; cv=none; b=FgB6sEIXxv4BALIU92BsDef83COCTo/t/gBiLdQ8HpdkwXUcJeQXp8srO/q89C6q+bE3/qyl9dpZfPpkg8s+xOjMjm4EAy1ESM7joPkR5+1TxMzLG31KWhZF2ZYxaHagLgEmso2mFqTBdKRZntimGzsW6m70xxravcL4CfFwKX0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721285831; c=relaxed/simple;
-	bh=z+aCMhKYfdvSH3LqcS7QRiHX5Ygt46joT7nhNjNOLXA=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=B3osjfSE/it3xzciKMbgI5lETFTQv2bBNueVMnhmqn9eXs0zUXETnbuDALv4ptEMNLa58YmGAMIniLN0iWoVBcJtH6KLwM+LJr7Z7pwBWWSSl9NWmlr1gerlHzfgPlFpvtT96gpGD1k9caG3xuIWD2PrNx14zuTQl9kPgTGRBO4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=OlB6nsD5; arc=none smtp.client-ip=217.70.183.198
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+	s=arc-20240116; t=1721287548; c=relaxed/simple;
+	bh=0H4XV8TOISM3Gt1+8SMaDb8bfqGOnzwUgxRHRqrmJTE=;
+	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=ZOAkdWrOOrEGY2wxo00rY17Lh8gzWoOTtxgXC3J4QN7s3SCXcTo8BkHFuLi5scS4gs2W0oBQtR3hxIupHm3dEOK58uKVAdzCQjHF51xnNXQueEs6PvN6ZP4lN3h64mfBFQMVIxXgdx157PCJ/z+fY3lu7SsDGJxOBhvKvwhDFPI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=poFAvwBd; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=oRN5uQXj; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=poFAvwBd; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=oRN5uQXj; arc=none smtp.client-ip=195.135.223.130
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="OlB6nsD5"
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 66B00C0011;
-	Thu, 18 Jul 2024 06:56:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1721285821;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="poFAvwBd";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="oRN5uQXj";
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="poFAvwBd";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="oRN5uQXj"
+Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out1.suse.de (Postfix) with ESMTPS id 686A621A80;
+	Thu, 18 Jul 2024 07:25:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1721287545; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
 	 in-reply-to:in-reply-to:references:references;
-	bh=TgZHkXL2FGs1/bjZPDSboGR72yBe//NfgloPvNTjUQ0=;
-	b=OlB6nsD5RtGZmYjd7bhjEoZx7QMkbbOT8V45YhxxCFz4y2iiCJe+cf2PVPl+VsXD6UUMqk
-	Yc28bGhZQ13OubzP5CW/pjPqqFo91MRM0eVoREVGLvn0MLgNZy6pPxquFKWhNBkv4SbFT2
-	sax9ioW5vC5M5bokQz4XncM9ZdU0GCDemzBwA+l1XJdTnXTEUKHI48dxPqMAjv00+G3aQG
-	rBXI5/ojqb79XSjovNP74Rn6wSf1My85vfzfK9OmlUEoc3d8vGPg+knHhqSD5yHTRQLUcZ
-	BDxiKiWHxBRawYhcLiwX+N2Krj0xmgk4IRTokaqbJaztXMntEG+p6mo1v3ON7A==
-Date: Thu, 18 Jul 2024 08:56:51 +0200
-From: Luca Ceresoli <luca.ceresoli@bootlin.com>
-To: Stephen Boyd <sboyd@kernel.org>
-Cc: Aaro Koskinen <aaro.koskinen@iki.fi>, Alexandre Belloni
- <alexandre.belloni@bootlin.com>, Alim Akhtar <alim.akhtar@samsung.com>,
- Andreas Kemnade <andreas@kemnade.info>, Bartosz Golaszewski
- <brgl@bgdev.pl>, Bjorn Andersson <andersson@kernel.org>, Broadcom internal
- kernel review list <bcm-kernel-feedback-list@broadcom.com>, Chen-Yu Tsai
- <wens@csie.org>, Chester Lin <chester62515@gmail.com>, Christophe Leroy
- <christophe.leroy@csgroup.eu>, Claudiu Beznea <claudiu.beznea@tuxon.dev>,
- Damien Le Moal <dlemoal@kernel.org>, Daniel Lezcano
- <daniel.lezcano@linaro.org>, Dong Aisheng <aisheng.dong@nxp.com>, Doug
- Berger <opendmb@gmail.com>, Emilio =?UTF-8?Q?L=C3=B3pez?=
- <emilio@elopez.com.ar>, Fabio Estevam <festevam@gmail.com>, Florian
- Fainelli <florian.fainelli@broadcom.com>, Ghennadi Procopciuc
- <ghennadi.procopciuc@oss.nxp.com>, Greg Kroah-Hartman
- <gregkh@linuxfoundation.org>, Jacky Bai <ping.bai@nxp.com>, Jaroslav Kysela
- <perex@perex.cz>, Jernej Skrabec <jernej.skrabec@gmail.com>, Jiri Slaby 
- <jirislaby@kernel.org>, Jonathan Cameron <jic23@kernel.org>, Kevin Hilman
- <khilman@baylibre.com>, Krzysztof Kozlowski <krzk@kernel.org>, Lars-Peter
- Clausen <lars@metafoo.de>, Lee Jones <lee@kernel.org>, Liam Girdwood
- <lgirdwood@gmail.com>, Linus Walleij <linus.walleij@linaro.org>, Mark Brown
- <broonie@kernel.org>, Matthias Brugger <mbrugger@suse.com>, Michael
- Ellerman <mpe@ellerman.id.au>, Michael Turquette <mturquette@baylibre.com>,
- Miguel Ojeda <ojeda@kernel.org>, Nathan Chancellor <nathan@kernel.org>,
- "Naveen N. Rao" <naveen.n.rao@linux.ibm.com>, Nicholas Piggin
- <npiggin@gmail.com>, Nicolas Ferre <nicolas.ferre@microchip.com>,
- Pengutronix Kernel Team <kernel@pengutronix.de>, Richard Leitner
- <richard.leitner@linux.dev>, Rob Herring <robh@kernel.org>, Roger Quadros
- <rogerq@kernel.org>, Samuel Holland <samuel@sholland.org>, Saravana Kannan
- <saravanak@google.com>, Shawn Guo <shawnguo@kernel.org>, Takashi Iwai
- <tiwai@suse.com>, Thomas Gleixner  <tglx@linutronix.de>, Tony Lindgren
- <tony@atomide.com>, Uwe =?UTF-8?Q?Kleine-K=C3=B6nig?=
- <ukleinek@kernel.org>, "Peng Fan (OSS)" <peng.fan@oss.nxp.com>, Thomas
- Petazzoni <thomas.petazzoni@bootlin.com>, linux-kernel@vger.kernel.org,
- devicetree@vger.kernel.org, llvm@lists.linux.dev,
- linux-clk@vger.kernel.org, linux-omap@vger.kernel.org,
- linux-arm-msm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-sunxi@lists.linux.dev, linux-samsung-soc@vger.kernel.org,
- linux-gpio@vger.kernel.org, linux-iio@vger.kernel.org,
- linux-pwm@vger.kernel.org, linux-serial@vger.kernel.org,
- linux-usb@vger.kernel.org, patches@opensource.cirrus.com,
- linux-sound@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
- linux-riscv@lists.infradead.org, Andre Przywara <andre.przywara@arm.com>,
- Bartosz Golaszewski <bartosz.golaszewski@linaro.org>, Jonathan Cameron
- <Jonathan.Cameron@huawei.com>, Uwe =?UTF-8?Q?Kleine-K=C3=B6nig?=
- <u.kleine-koenig@baylibre.com>, Richard Fitzgerald
- <rf@opensource.cirrus.com>
-Subject: Re: [PATCH v2] of: remove internal arguments from
- of_property_for_each_u32()
-Message-ID: <20240718085651.63ddfb20@booty>
-In-Reply-To: <1e36b1ba8af3584128550822a70cb072.sboyd@kernel.org>
-References: <20240717-of_property_for_each_u32-v2-1-4060990f49c9@bootlin.com>
-	<1e36b1ba8af3584128550822a70cb072.sboyd@kernel.org>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
+	bh=Mq/1yoSlo6cu8qdLhhM1bAep0Jfw5LSOtI55xWrH4fg=;
+	b=poFAvwBdFdvIjnhpANGHGAjF+VZTGg/xJTb4lE5UhxoMQRfCNO0RHtXFKEGXCOJpDUD+Uk
+	AWGtggcEcwduSuQd2Pb5btF/vxtpcpy2w7Sg8TdqmvW4vC6cvf0Lg84gje3fFiQ8eEq1T/
+	jHpGCtyEJb2P4VmRvftqucD9+pgkWsM=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1721287545;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=Mq/1yoSlo6cu8qdLhhM1bAep0Jfw5LSOtI55xWrH4fg=;
+	b=oRN5uQXjXNTqmxAvZNARP1zp8p/uVJifhqXhBGP4A3I5X+Vakn7gmjX39KDshqvrxH8vVV
+	sJ4ayCWiSYN3XhBg==
+Authentication-Results: smtp-out1.suse.de;
+	none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1721287545; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=Mq/1yoSlo6cu8qdLhhM1bAep0Jfw5LSOtI55xWrH4fg=;
+	b=poFAvwBdFdvIjnhpANGHGAjF+VZTGg/xJTb4lE5UhxoMQRfCNO0RHtXFKEGXCOJpDUD+Uk
+	AWGtggcEcwduSuQd2Pb5btF/vxtpcpy2w7Sg8TdqmvW4vC6cvf0Lg84gje3fFiQ8eEq1T/
+	jHpGCtyEJb2P4VmRvftqucD9+pgkWsM=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1721287545;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=Mq/1yoSlo6cu8qdLhhM1bAep0Jfw5LSOtI55xWrH4fg=;
+	b=oRN5uQXjXNTqmxAvZNARP1zp8p/uVJifhqXhBGP4A3I5X+Vakn7gmjX39KDshqvrxH8vVV
+	sJ4ayCWiSYN3XhBg==
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 1F7F81379D;
+	Thu, 18 Jul 2024 07:25:45 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id jA96BnnDmGZwEAAAD6G6ig
+	(envelope-from <tiwai@suse.de>); Thu, 18 Jul 2024 07:25:45 +0000
+Date: Thu, 18 Jul 2024 09:26:18 +0200
+Message-ID: <87wmljw485.wl-tiwai@suse.de>
+From: Takashi Iwai <tiwai@suse.de>
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+	kernel test robot <lkp@intel.com>,
+	llvm@lists.linux.dev,
+	oe-kbuild-all@lists.linux.dev,
+	linux-kernel@vger.kernel.org,
+	Takashi Iwai <tiwai@suse.de>,
+	Kai Vehmanen <kai.vehmanen@linux.intel.com>,
+	Guennadi Liakhovetski <guennadi.liakhovetski@linux.intel.com>,
+	Bard Liao <bard.liao@intel.com>
+Subject: Re: ld.lld: error: undefined symbol: iosf_mbi_available
+In-Reply-To: <20240717202806.GA728411@thelio-3990X>
+References: <202407160704.zpdhJ8da-lkp@intel.com>
+	<05954a59-2bef-4262-bd91-cfe21d2381f2@linux.intel.com>
+	<20240717202806.GA728411@thelio-3990X>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
 Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-GND-Sasl: luca.ceresoli@bootlin.com
+X-Spamd-Result: default: False [-3.30 / 50.00];
+	BAYES_HAM(-3.00)[100.00%];
+	MID_CONTAINS_FROM(1.00)[];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	NEURAL_HAM_SHORT(-0.20)[-0.999];
+	MIME_GOOD(-0.10)[text/plain];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	ARC_NA(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	RCPT_COUNT_SEVEN(0.00)[10];
+	RCVD_TLS_ALL(0.00)[];
+	FUZZY_BLOCKED(0.00)[rspamd.com];
+	TO_DN_SOME(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
+	FROM_EQ_ENVFROM(0.00)[];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	RCVD_COUNT_TWO(0.00)[2];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[imap1.dmz-prg2.suse.org:helo]
+X-Spam-Flag: NO
+X-Spam-Score: -3.30
+X-Spam-Level: 
 
-Hello Stephen,
-
-On Wed, 17 Jul 2024 16:33:34 -0700
-Stephen Boyd <sboyd@kernel.org> wrote:
-
-> > @@ -1191,20 +1191,24 @@ static int si5351_dt_parse(struct i2c_client *client,
-> >          * property silabs,pll-source : <num src>, [<..>]
-> >          * allow to selectively set pll source
-> >          */
-> > -       of_property_for_each_u32(np, "silabs,pll-source", prop, p, num) {
-> > +       sz = of_property_read_variable_u32_array(np, "silabs,pll-source", array, 2, 4);
-> > +       sz = (sz == -EINVAL) ? 0 : sz; /* Missing property is OK */
-> > +       if (sz < 0)
-> > +               return dev_err_probe(&client->dev, sz, "invalid pll-source");  
+On Wed, 17 Jul 2024 22:28:06 +0200,
+Nathan Chancellor wrote:
 > 
-> Needs a newline on the printk message.
+> On Wed, Jul 17, 2024 at 01:43:35PM +0200, Pierre-Louis Bossart wrote:
+> > 
+> > 
+> > On 7/16/24 01:07, kernel test robot wrote:
+> > > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+> > > head:   3e7819886281e077e82006fe4804b0d6b0f5643b
+> > > commit: 8d4ba1be3d2257606e04aff412829d8972670750 ASoC: SOF: pci: split PCI into different drivers
+> > > date:   3 years, 4 months ago
+> > 
+> > This doesn't seem to be a problem on the latest code? was it intentional
+> > to report a problem on such an old commit?
+> 
+> It's still reproducible at commit 8b0f0bb27c32 ("Merge tag
+> 'fs_for_v6.11-rc1' of
+> git://git.kernel.org/pub/scm/linux/kernel/git/jack/linux-fs") for me,
+> using either LLVM or GCC with the configuration linked below:
+> 
+>   ld.lld: error: undefined symbol: iosf_mbi_available
+>   >>> referenced by atom.c
+>   >>>               sound/soc/sof/intel/atom.o:(atom_machine_select) in archive vmlinux.a
+> 
+>   ld.lld: error: undefined symbol: iosf_mbi_read
+>   >>> referenced by atom.c
+>   >>>               sound/soc/sof/intel/atom.o:(atom_machine_select) in archive vmlinux.a
+> 
+>   .../gcc/14.1.0/bin/i386-linux-ld: sound/soc/sof/intel/atom.o: in function `atom_machine_select':
+>   atom.c:(.text+0x1b9): undefined reference to `iosf_mbi_available'
+>   .../gcc/14.1.0/bin/i386-linux-ld: atom.c:(.text+0x1e3): undefined reference to `iosf_mbi_read'
 
-Ouch! Fix queued for v3.
+Yours looks different from the original report, and indeed this must
+be a missing fix.
 
-Thanks,
-Luca
+Does the following change cover it?
 
--- 
-Luca Ceresoli, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+
+thanks,
+
+Takashi
+
+--- a/sound/soc/sof/intel/Kconfig
++++ b/sound/soc/sof/intel/Kconfig
+@@ -19,6 +19,7 @@ config SND_SOC_SOF_INTEL_ATOM_HIFI_EP
+ 	tristate
+ 	select SND_SOC_SOF_INTEL_COMMON
+ 	select SND_SOC_SOF_INTEL_HIFI_EP_IPC
++	select IOSF_MBI if X86 && PCI
+ 	help
+ 	  This option is not user-selectable but automagically handled by
+ 	  'select' statements at a higher level.
+@@ -44,7 +45,6 @@ config SND_SOC_SOF_BAYTRAIL
+ 	select SND_SOC_SOF_INTEL_COMMON
+ 	select SND_SOC_SOF_INTEL_ATOM_HIFI_EP
+ 	select SND_SOC_SOF_ACPI_DEV
+-	select IOSF_MBI if X86 && PCI
+ 	help
+ 	  This adds support for Sound Open Firmware for Intel(R) platforms
+ 	  using the Baytrail, Braswell or Cherrytrail processors.
