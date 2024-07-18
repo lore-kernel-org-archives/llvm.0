@@ -1,207 +1,221 @@
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F18011442FD;
-	Thu, 18 Jul 2024 15:36:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 59E5F13C676
+	for <llvm@lists.linux.dev>; Thu, 18 Jul 2024 17:02:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721316972; cv=none; b=WKeb1owEL9wQIyOp74phftAOZ9L7Vo6tiW1+kQ8ktu2LJERvdDeFlLiTuJGLL0cH/R2YD10aXPjvU3LswrB41S1pfQpFMVGuz7hsSjlLQjHaEyT1THmEmOfwgHJ3YfjdheOE+eP3QkBo+vi8tb51IvY5Z0tEX0mdkkwNRlDy2tU=
+	t=1721322149; cv=none; b=IvMDGhYOow09BXyek9bv6tAd5sh1BC+E+Gqci7cqXzYAhDulDetZJGBGzniklzoeQz4VHINi0yIiC+ZcSfLIq202LaF6n4RDTakBVxDPAf+Oym9+vNX8Zte5oOLRJhmRhVLapgW6KndjUkFd2V6u+ixFi4tbQ9RxQZjpClNLDaE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721316972; c=relaxed/simple;
-	bh=EPk55vtVVOGG0WBDbaVEAZ0EcmpdcpX8XphKJSpydSg=;
-	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=mZnWKHPjfMrA5rchzbfSOCETj3hQ5Xt7BaC6y15E7nMUmkwQH8I5bnrU2D8q5RzL7rLgvIrMYhmcFvTY4EQ9ZFn8X9kbjpnsUBE+izWXaOBhBQ3pv23OqCW47HDghabaIS+SaysBz1RgTbQEN1J4DvavE2xw+zujLdd2/8VtNy8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=aGughunY; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=6KlUwaHt; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=aGughunY; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=6KlUwaHt; arc=none smtp.client-ip=195.135.223.130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
+	s=arc-20240116; t=1721322149; c=relaxed/simple;
+	bh=MYK8Iqf70n3GxpdTVH1IK5e5KAoR7Wbbpr8B36x5udk=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=LR7L/lLj4pO1bLM64sHnnzcU0SWPuX7F8As3uCcFbgmaipXeJcSPY4YBWAjoNOkMT8YYZ6R11OBclBX362w5HD9DUD9cGfoynLC7pKoBPO94OyxMabVZFbPfb1bIO4wDR2v/PQoQ5qa1LX3/OtnFWsc//JVMyh9Gzj2iEGmXc2k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=BvUhQcGu; arc=none smtp.client-ip=192.198.163.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="aGughunY";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="6KlUwaHt";
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="aGughunY";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="6KlUwaHt"
-Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out1.suse.de (Postfix) with ESMTPS id 3501B219F7;
-	Thu, 18 Jul 2024 15:36:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1721316969; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=yCQGOCdj0k9IIWZ/dv2P5anlkuuHGnwdNdth1ScTvAY=;
-	b=aGughunYPBWnQPly93A2947/SJsWfm0RFc2mD1oATnyP9ahPOPARd6viGCcy+kBxvYDu8N
-	D0HCQlAVJPudZJ1pik/QYtE4o840DPnLpMVMTUwvuv36YGe3QlZoRw4CkvV0p98RJXAQfo
-	HG9a+RT3RGwIjSw/4s2F/FBYpixBccg=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1721316969;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=yCQGOCdj0k9IIWZ/dv2P5anlkuuHGnwdNdth1ScTvAY=;
-	b=6KlUwaHtFro6zJpzJ0UsVwX6sL+SCCHgS2lhcueQ6dTL/dd3oUXYIfpxN9cmyKRvAO+ti+
-	RuOlwq/3E+1+U2CQ==
-Authentication-Results: smtp-out1.suse.de;
-	dkim=pass header.d=suse.de header.s=susede2_rsa header.b=aGughunY;
-	dkim=pass header.d=suse.de header.s=susede2_ed25519 header.b=6KlUwaHt
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1721316969; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=yCQGOCdj0k9IIWZ/dv2P5anlkuuHGnwdNdth1ScTvAY=;
-	b=aGughunYPBWnQPly93A2947/SJsWfm0RFc2mD1oATnyP9ahPOPARd6viGCcy+kBxvYDu8N
-	D0HCQlAVJPudZJ1pik/QYtE4o840DPnLpMVMTUwvuv36YGe3QlZoRw4CkvV0p98RJXAQfo
-	HG9a+RT3RGwIjSw/4s2F/FBYpixBccg=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1721316969;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=yCQGOCdj0k9IIWZ/dv2P5anlkuuHGnwdNdth1ScTvAY=;
-	b=6KlUwaHtFro6zJpzJ0UsVwX6sL+SCCHgS2lhcueQ6dTL/dd3oUXYIfpxN9cmyKRvAO+ti+
-	RuOlwq/3E+1+U2CQ==
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id D9E201379D;
-	Thu, 18 Jul 2024 15:36:08 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id vjLYM2g2mWbNLgAAD6G6ig
-	(envelope-from <tiwai@suse.de>); Thu, 18 Jul 2024 15:36:08 +0000
-Date: Thu, 18 Jul 2024 17:36:42 +0200
-Message-ID: <878qxyvhit.wl-tiwai@suse.de>
-From: Takashi Iwai <tiwai@suse.de>
-To: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-Cc: Takashi Iwai <tiwai@suse.de>,
-	Nathan Chancellor <nathan@kernel.org>,
-	kernel test robot <lkp@intel.com>,
-	llvm@lists.linux.dev,
-	oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org,
-	Kai Vehmanen <kai.vehmanen@linux.intel.com>,
-	Guennadi Liakhovetski <guennadi.liakhovetski@linux.intel.com>,
-	Bard Liao <bard.liao@intel.com>
-Subject: Re: ld.lld: error: undefined symbol: iosf_mbi_available
-In-Reply-To: <69dfb1e2-eac6-4cd4-a9d3-caaa7f36f9b9@linux.intel.com>
-References: <202407160704.zpdhJ8da-lkp@intel.com>
-	<05954a59-2bef-4262-bd91-cfe21d2381f2@linux.intel.com>
-	<20240717202806.GA728411@thelio-3990X>
-	<87wmljw485.wl-tiwai@suse.de>
-	<d121ec31-0861-4324-8f53-6e06eaf60233@linux.intel.com>
-	<87le1zvzw9.wl-tiwai@suse.de>
-	<9a0eba2e-9933-43bb-ab3b-0480bf1d34a4@linux.intel.com>
-	<87frs6vj4m.wl-tiwai@suse.de>
-	<69dfb1e2-eac6-4cd4-a9d3-caaa7f36f9b9@linux.intel.com>
-User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="BvUhQcGu"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1721322148; x=1752858148;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=MYK8Iqf70n3GxpdTVH1IK5e5KAoR7Wbbpr8B36x5udk=;
+  b=BvUhQcGud+W3QTh7i4lTzDUNUd+cNaS/Qx3O5yj3Rjtc/HsOLJGbx3Dh
+   StW81Cz1ZMMAWrw2nHjMGoO5Tb5jadBmQpljArC8UMi8YbeILwE04P7ic
+   9BhWO3p/2MZs7ywNpCxcvAsEnR4rh3zVYb3Pf+VQag/OS2w1oNC+IRP4q
+   sksX4y1/OYyvK8wnW4RMuHqe7zfywrdknO/egOsGuMZOdO41WERN7yhdE
+   3Rl+AHL9/fQgRBNX00Rr6UDEFE+ZEzRfO9O8P89E3h3xIN8HqYvZ8EHOk
+   sQK5pbL498y9IGLCN/OgPbaNHFozkXtCKs0Tpg1EpkHKNgTbIpkr5sdu6
+   A==;
+X-CSE-ConnectionGUID: qXwqyrp2SjSJMUFEkvtQ5Q==
+X-CSE-MsgGUID: qpmNVa3CRGGKz4uiSCswqg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11137"; a="12611790"
+X-IronPort-AV: E=Sophos;i="6.09,218,1716274800"; 
+   d="scan'208";a="12611790"
+Received: from orviesa001.jf.intel.com ([10.64.159.141])
+  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jul 2024 10:02:27 -0700
+X-CSE-ConnectionGUID: kQZGkZijTee4MhtT4mDzSw==
+X-CSE-MsgGUID: QmhNHGV0QTy8TxEi0wscUQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.09,218,1716274800"; 
+   d="scan'208";a="88320990"
+Received: from ahunter6-mobl1.ger.corp.intel.com (HELO [10.0.2.15]) ([10.94.249.84])
+  by smtpauth.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jul 2024 10:02:22 -0700
+Message-ID: <4ddbcd4a-bbf1-4773-94da-0a2ad63469dc@intel.com>
+Date: Thu, 18 Jul 2024 20:02:16 +0300
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
-Content-Type: text/plain; charset=US-ASCII
-X-Spamd-Result: default: False [-3.51 / 50.00];
-	BAYES_HAM(-3.00)[100.00%];
-	MID_CONTAINS_FROM(1.00)[];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	R_DKIM_ALLOW(-0.20)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
-	NEURAL_HAM_SHORT(-0.20)[-1.000];
-	MIME_GOOD(-0.10)[text/plain];
-	MX_GOOD(-0.01)[];
-	RBL_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:104:10:150:64:97:from];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	ARC_NA(0.00)[];
-	RECEIVED_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:106:10:150:64:167:received];
-	TO_DN_SOME(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	FUZZY_BLOCKED(0.00)[rspamd.com];
-	RCVD_TLS_ALL(0.00)[];
-	SPAMHAUS_XBL(0.00)[2a07:de40:b281:104:10:150:64:97:from];
-	FROM_EQ_ENVFROM(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	RCPT_COUNT_SEVEN(0.00)[10];
-	RCVD_COUNT_TWO(0.00)[2];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.de:dkim,imap1.dmz-prg2.suse.org:helo,imap1.dmz-prg2.suse.org:rdns];
-	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
-	DKIM_TRACE(0.00)[suse.de:+]
-X-Spam-Flag: NO
-X-Rspamd-Server: rspamd1.dmz-prg2.suse.org
-X-Rspamd-Action: no action
-X-Spam-Score: -3.51
-X-Spam-Level: 
-X-Rspamd-Queue-Id: 3501B219F7
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v5 1/8] perf: support specify vdso path in cmdline
+To: Changbin Du <changbin.du@huawei.com>,
+ Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>,
+ Arnaldo Carvalho de Melo <acme@kernel.org>,
+ Namhyung Kim <namhyung@kernel.org>, Nathan Chancellor <nathan@kernel.org>
+Cc: Mark Rutland <mark.rutland@arm.com>,
+ Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+ Jiri Olsa <jolsa@kernel.org>, Ian Rogers <irogers@google.com>,
+ "Liang, Kan" <kan.liang@linux.intel.com>,
+ Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling
+ <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
+ linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+ llvm@lists.linux.dev, Hui Wang <hw.huiwang@huawei.com>
+References: <20240702041837.5306-1-changbin.du@huawei.com>
+ <20240702041837.5306-2-changbin.du@huawei.com>
+Content-Language: en-US
+From: Adrian Hunter <adrian.hunter@intel.com>
+Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
+ Business Identity Code: 0357606 - 4, Domiciled in Helsinki
+In-Reply-To: <20240702041837.5306-2-changbin.du@huawei.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Thu, 18 Jul 2024 17:16:54 +0200,
-Pierre-Louis Bossart wrote:
+On 2/07/24 07:18, Changbin Du wrote:
+> The vdso dumped from process memory (in buildid-cache) lacks debugging
+> info. To annotate vdso symbols with source lines we need specify a
+> debugging version.
 > 
+> For x86, we can find them from your local build as
+> arch/x86/entry/vdso/vdso{32,64}.so.dbg. Or they may reside in
+> /lib/modules/<version>/vdso/vdso{32,64}.so on Ubuntu. But notice that
+> the buildid has to match.
 > 
-> >>>> diff --git a/sound/soc/intel/common/soc-intel-quirks.h
-> >>>> b/sound/soc/intel/common/soc-intel-quirks.h
-> >>>> index de4e550c5b34..ae67853f7e2e 100644
-> >>>> --- a/sound/soc/intel/common/soc-intel-quirks.h
-> >>>> +++ b/sound/soc/intel/common/soc-intel-quirks.h
-> >>>> @@ -11,7 +11,9 @@
-> >>>>
-> >>>>  #include <linux/platform_data/x86/soc.h>
-> >>>>
-> >>>> -#if IS_ENABLED(CONFIG_X86)
-> >>>> +#if IS_ENABLED(CONFIG_X86) && \
-> >>>> +       (IS_ENABLED(CONFIG_SND_SOC_SOF_BAYTRAIL) || \
-> >>>> +        IS_ENABLED(CONFIG_SND_SST_ATOM_HIFI2_PLATFORM_ACPI))
-> >>>>
-> >>>>  #include <linux/dmi.h>
-> >>>>  #include <asm/iosf_mbi.h>
-> >>>>
-> >>>> also at https://github.com/thesofproject/linux/pull/5114
-> >>>
-> >>> I'm afraid it's not enough, either.  It's included in
-> >>> sound/soc/sof/intel/atom.c, and this one can be built-in by selected
-> >>> from others while CONFIG_SND_SOC_SOF_BAYTRAIL=m.  And, the reverse
-> >>> selection is done from CONFIG_SND_SOC_SOF_BAYTRAIL -- so
-> >>> CONFIG_IOSF_MBI can be m as well, and this can lead to the unresolved
-> >>> symbol from the built-in atom.c.
-> >>
-> >> Fair point, I was only looking at the reported failure where Baytrail
-> >> was completely disabled.
-> >>
-> >> I am not sure though if it makes sense to split hair in N dimensions.
-> >> Building Merrifield as y and Baytrail as m is a corner case that
-> >> shouldn't exist at all. And it's only an academic compilation issue, in
-> >> practice using 'y' would fail at run-time due to the usual firmware load
-> >> dependencies...
-> > 
-> > Surely this kind of bug won't hit anyone in practical use, but it's
-> > only about the randconfig failures.  The original report is in the
-> > same category, after all.
-> > 
-> > Maybe another (rather easier) workaround would be to use
-> > IS_REACHABLE(), something like below.  This should fix the original
-> > issue and the potential mess-up of kconfig dependencies.
+> $ sudo perf record -a
+> $ sudo perf report --objdump=llvm-objdump \
+>   --vdso arch/x86/entry/vdso/vdso64.so.dbg,arch/x86/entry/vdso/vdso32.so.dbg
 > 
-> The simplest solution works for me :-)
+> Samples: 17K of event 'cycles:P', 4000 Hz, Event count (approx.): 1760
+> __vdso_clock_gettime  /work/linux-host/arch/x86/entry/vdso/vdso64.so.d
+> Percent│       movq    -48(%rbp),%rsi
+>        │       testq   %rax,%rax
+>        │     ;               return vread_hvclock();
+>        │       movq    %rax,%rdx
+>        │     ;               if (unlikely(!vdso_cycles_ok(cycles)))
+>        │     ↑ js      eb
+>        │     ↑ jmp     74
+>        │     ;               ts->tv_sec = vdso_ts->sec;
+>   0.02 │147:   leaq    2(%rbx),%rax
+>        │       shlq    $4, %rax
+>        │       addq    %r10,%rax
+>        │     ;               while ((seq = READ_ONCE(vd->seq)) & 1) {
+>   9.38 │152:   movl    (%r10),%ecx
 > 
-> Do you want me to send a patch with your Suggested-by: tag or do it
-> yourself?
-
-If you can send from your side, it'd be more appreciated ;)
-
-
-thanks,
-
-Takashi
-
+> When doing cross platform analysis, we also need specify the vdso path if
+> we are interested in its symbols.
 > 
-> > --- a/sound/soc/intel/common/soc-intel-quirks.h
-> > +++ b/sound/soc/intel/common/soc-intel-quirks.h
-> > @@ -11,7 +11,7 @@
-> >  
-> >  #include <linux/platform_data/x86/soc.h>
-> >  
-> > -#if IS_ENABLED(CONFIG_X86)
-> > +#if IS_REACHABLE(CONFIG_IOSF_MBI)
-> >  
-> >  #include <linux/dmi.h>
-> >  #include <asm/iosf_mbi.h>
+
+Just realized this is about objdump.  Sorry for not getting that
+earlier.
+
+Like perf tools, objdump follows the paradigm of attempting to
+locate and use debug info transparently.  However, objdump looks
+at the installed debug info in /usr/lib/debug/.build-id/
+
+For example, if the debug file is copied (or linked) there, then
+objdump or llvm-objdump will find it:
+
+$ llvm-objdump-18 -dS ~/.debug/\[vdso\]/cf702469f4637840fd6ba1a8d8a628ff83253d04/vdso | head -20
+
+~/.debug/[vdso]/cf702469f4637840fd6ba1a8d8a628ff83253d04/vdso:      file format elf64-x86-64
+
+Disassembly of section .text:
+
+00000000000006d0 <.text>:
+    6d0: 48 8d 3d 29 d9 ff ff          leaq    -0x26d7(%rip), %rdi     # 0xffffffffffffe000
+    6d7: eb 19                         jmp     0x6f2 <.text+0x22>
+    6d9: 4c 8b 0d 28 d9 ff ff          movq    -0x26d8(%rip), %r9      # 0xffffffffffffe008
+    6e0: 4c 8b 05 29 d9 ff ff          movq    -0x26d7(%rip), %r8      # 0xffffffffffffe010
+    6e7: 0f 01 f9                      rdtscp
+    6ea: 66 90                         nop
+    6ec: 8b 0f                         movl    (%rdi), %ecx
+    6ee: 39 ce                         cmpl    %ecx, %esi
+    6f0: 74 0e                         je      0x700 <.text+0x30>
+    6f2: 8b 37                         movl    (%rdi), %esi
+    6f4: 85 f6                         testl   %esi, %esi
+    6f6: 75 e1                         jne     0x6d9 <.text+0x9>
+    6f8: 48 c7 c0 ff ff ff ff          movq    $-0x1, %rax
+    6ff: c3                            retq
+$ sudo ln -s /lib/modules/6.9.2-local/build/arch/x86/entry/vdso/vdso64.so.dbg /usr/lib/debug/.build-id/cf/702469f4637840fd6ba1a8d8a628ff83253d04.debug
+$ llvm-objdump-18 -dS ~/.debug/\[vdso\]/cf702469f4637840fd6ba1a8d8a628ff83253d04/vdso | head -20                                                       
+
+~/.debug/[vdso]/cf702469f4637840fd6ba1a8d8a628ff83253d04/vdso:      file format elf64-x86-64
+
+Disassembly of section .text:
+
+00000000000006d0 <vread_hvclock>:
+; hv_read_tsc_page_tsc(const struct ms_hyperv_tsc_page *tsc_pg,
+    6d0: 48 8d 3d 29 d9 ff ff          leaq    -0x26d7(%rip), %rdi     # 0xffffffffffffe000 <hvclock_page>
+    6d7: eb 19                         jmp     0x6f2 <vread_hvclock+0x22>
+;               scale = READ_ONCE(tsc_pg->tsc_scale);
+    6d9: 4c 8b 0d 28 d9 ff ff          movq    -0x26d8(%rip), %r9      # 0xffffffffffffe008 <hvclock_page+0x8>
+;               offset = READ_ONCE(tsc_pg->tsc_offset);
+    6e0: 4c 8b 05 29 d9 ff ff          movq    -0x26d7(%rip), %r8      # 0xffffffffffffe010 <hvclock_page+0x10>
+;       asm volatile(ALTERNATIVE_2("rdtsc",
+    6e7: 0f 31                         rdtsc
+    6e9: 90                            nop
+    6ea: 90                            nop
+    6eb: 90                            nop
+;       } while (READ_ONCE(tsc_pg->tsc_sequence) != sequence);
+    6ec: 8b 0f                         movl    (%rdi), %ecx
+$
+
+Would that solve your problem?
+
+Notably, later versions of llvm-objdump have an option
+--debug-file-directory which makes it possible to
+have the debug info in a directory owned by the user,
+for example:
+
+$ sudo rm /usr/lib/debug/.build-id/cf/702469f4637840fd6ba1a8d8a628ff83253d04.debug
+$ llvm-objdump-18 -dS ~/.debug/\[vdso\]/cf702469f4637840fd6ba1a8d8a628ff83253d04/vdso | head -20
+
+~/.debug/[vdso]/cf702469f4637840fd6ba1a8d8a628ff83253d04/vdso:      file format elf64-x86-64
+
+Disassembly of section .text:
+
+00000000000006d0 <.text>:
+    6d0: 48 8d 3d 29 d9 ff ff          leaq    -0x26d7(%rip), %rdi     # 0xffffffffffffe000
+    6d7: eb 19                         jmp     0x6f2 <.text+0x22>
+    6d9: 4c 8b 0d 28 d9 ff ff          movq    -0x26d8(%rip), %r9      # 0xffffffffffffe008
+    6e0: 4c 8b 05 29 d9 ff ff          movq    -0x26d7(%rip), %r8      # 0xffffffffffffe010
+    6e7: 0f 01 f9                      rdtscp
+    6ea: 66 90                         nop
+    6ec: 8b 0f                         movl    (%rdi), %ecx
+    6ee: 39 ce                         cmpl    %ecx, %esi
+    6f0: 74 0e                         je      0x700 <.text+0x30>
+    6f2: 8b 37                         movl    (%rdi), %esi
+    6f4: 85 f6                         testl   %esi, %esi
+    6f6: 75 e1                         jne     0x6d9 <.text+0x9>
+    6f8: 48 c7 c0 ff ff ff ff          movq    $-0x1, %rax
+    6ff: c3                            retq
+$ mkdir -p /tmp/debug/.build-id/cf/
+$ ln -s /lib/modules/6.9.2-local/build/arch/x86/entry/vdso/vdso64.so.dbg /tmp/debug/.build-id/cf/702469f4637840fd6ba1a8d8a628ff83253d04.debug        
+$ llvm-objdump-18 --debug-file-directory /tmp/debug -dS ~/.debug/\[vdso\]/cf702469f4637840fd6ba1a8d8a628ff83253d04/vdso | head -20
+
+~/.debug/[vdso]/cf702469f4637840fd6ba1a8d8a628ff83253d04/vdso:      file format elf64-x86-64
+
+Disassembly of section .text:
+
+00000000000006d0 <vread_hvclock>:
+; hv_read_tsc_page_tsc(const struct ms_hyperv_tsc_page *tsc_pg,
+    6d0: 48 8d 3d 29 d9 ff ff          leaq    -0x26d7(%rip), %rdi     # 0xffffffffffffe000 <hvclock_page>
+    6d7: eb 19                         jmp     0x6f2 <vread_hvclock+0x22>
+;               scale = READ_ONCE(tsc_pg->tsc_scale);
+    6d9: 4c 8b 0d 28 d9 ff ff          movq    -0x26d8(%rip), %r9      # 0xffffffffffffe008 <hvclock_page+0x8>
+;               offset = READ_ONCE(tsc_pg->tsc_offset);
+    6e0: 4c 8b 05 29 d9 ff ff          movq    -0x26d7(%rip), %r8      # 0xffffffffffffe010 <hvclock_page+0x10>
+;       asm volatile(ALTERNATIVE_2("rdtsc",
+    6e7: 0f 31                         rdtsc
+    6e9: 90                            nop
+    6ea: 90                            nop
+    6eb: 90                            nop
+;       } while (READ_ONCE(tsc_pg->tsc_sequence) != sequence);
+    6ec: 8b 0f                         movl    (%rdi), %ecx
+$
+
+
