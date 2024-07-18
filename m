@@ -1,105 +1,224 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E1FE9457;
-	Thu, 18 Jul 2024 13:51:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5953284DF5;
+	Thu, 18 Jul 2024 15:01:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721310705; cv=none; b=jIukuHBfrMFDp9IFf2KdEpFQjgc7d+JvlzpEIkfeFUmGLWmLOFR7DLDQjUtqA5eWC7IH3de8UdpVTOqHZZYzXOOBxldrDfM2d8e12ycNYD6QI21WGSIFp3a6dIiQgUeVclhl68g4iPyXzk+NAb/PsAT7CbfylIwYk4rmAg+qZD8=
+	t=1721314897; cv=none; b=rRFHAEu6fWHgp2PRMdPzsMvzjmM33CZC28PxUCBrQX05LKx/RaFmQosChYr6b4mWXBJ6/9RyJJKtuBEXzbMLvqTkRR3nWg2AKMiJlaKnt91F82xkqw8inhEh6KG1a5iiyN0TIgVDyblwGOp2NsF+AkRHpBuXFhhHvDGxHoQsrhg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721310705; c=relaxed/simple;
-	bh=ldLUFz7lG8I5hhAgpkg5sriaBzHcvpg5AuTzTuEsB1g=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=uW4GopImbnqNBlJ+cyL04v/9sg/D6xhS9c9bdd2ibFUO8MpJEVrAt6Vy6JZbq8Ua2sLtJGx1aXKmXQmQ/x42/UbCUGH32UHi76WMMRho/V73pvpIBr1h3PJHzoSp6A8RqC0cIvEE4uK9s0tgYvd50MDVkeAwfu6bkr0MFfWF6cs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=BfcWdAmN; arc=none smtp.client-ip=192.198.163.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1721314897; c=relaxed/simple;
+	bh=LMyhhQF6X29lnijo5ftYnRiTUvjB5YGCygk9+VWK5zw=;
+	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=fZhcc0ApWVSCoIf34gUvg36DnWyX0cz5pJiiJH+FOJ92ZIiA+NUR2Y9RKuqm0GEQRd2LlDbAWx5QIiFl8XFfR4ANNmH/fgFkG9TAxYcBq9wWn1fureNCFkErSC3LuCwvmt7+tifanH1rbQSR/Y/83W1GSueOjK1U8iH1HioJ0lo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=lIBACKp5; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=Pq7ppfVz; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=lIBACKp5; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=Pq7ppfVz; arc=none smtp.client-ip=195.135.223.130
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="BfcWdAmN"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1721310704; x=1752846704;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=ldLUFz7lG8I5hhAgpkg5sriaBzHcvpg5AuTzTuEsB1g=;
-  b=BfcWdAmNlq3qaq0pyHifWpYXYiQMNqETljje8FUhKxTnnm0sP+TlSna9
-   tCGKIilX84vf561V+zXfBgXr6FLHGMW0kCxn+64W62RSxxW/oIwcqSlPR
-   ycQKhlmTohuDcKu2qorXcUP9beYqc+tso/dLk1u17Kyni7V6mDuM2G+ta
-   Vg4f70S4ZlJ4836pei66zQRe9Hu42skgPaRqw2TW75nOmo3polABKRMQY
-   xu3u4MSSZNAsEH9gZwTLy6kg6glhicnH0EsHcu57QQfsw9GE4OHO9KpM9
-   Dc3oshphFHod6xTK9+1Qfm7RhCzxYxh1zcrm2NDr9qm3Y2ke4b9uYX7ut
-   Q==;
-X-CSE-ConnectionGUID: 9vPx7yoRSvm7/VPmmicHzg==
-X-CSE-MsgGUID: ID7Of87pRiCOl9yWSsyFyg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11137"; a="19053655"
-X-IronPort-AV: E=Sophos;i="6.09,218,1716274800"; 
-   d="scan'208";a="19053655"
-Received: from orviesa007.jf.intel.com ([10.64.159.147])
-  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jul 2024 06:51:43 -0700
-X-CSE-ConnectionGUID: bnYLQPanQv65HBY1TWKSgA==
-X-CSE-MsgGUID: MBlssHA0SN2VwunoM44Czg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.09,218,1716274800"; 
-   d="scan'208";a="51388460"
-Received: from lkp-server01.sh.intel.com (HELO 68891e0c336b) ([10.239.97.150])
-  by orviesa007.jf.intel.com with ESMTP; 18 Jul 2024 06:51:41 -0700
-Received: from kbuild by 68891e0c336b with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1sURXm-000hJG-1q;
-	Thu, 18 Jul 2024 13:51:38 +0000
-Date: Thu, 18 Jul 2024 21:50:42 +0800
-From: kernel test robot <lkp@intel.com>
-To: Kevin Hilman <khilman@baylibre.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Vibhore Vardhan <vibhore@ti.com>, Dhruva Gole <d-gole@ti.com>
-Subject: [khilman-omap:lpm-v6.10/constraints 9/15]
- drivers/pmdomain/ti/ti_sci_pm_domains.c:135:26: error: called object type
- 'void *' is not a function or function pointer
-Message-ID: <202407182123.SoC03BGG-lkp@intel.com>
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="lIBACKp5";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="Pq7ppfVz";
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="lIBACKp5";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="Pq7ppfVz"
+Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out1.suse.de (Postfix) with ESMTPS id A6F5921C42;
+	Thu, 18 Jul 2024 15:01:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1721314887; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=yV4TeQugCl71IXXzVmHUMoZ/I9+FLfvcjsxLKdbeKco=;
+	b=lIBACKp5slAD5BD3DrgOI1SALDfjWWHfQq536hK0w3/BbZw/hP8TewVrg0PTSzP+SI0LrX
+	A7dyGTLMGisTmZjr1NwopdyuVrHSSpz/Ef27aE+j4YN+9teGgbiI4PUFGWcYFzYs80MA8S
+	RJMeSntmmPtOb3o3PKb5QEu5ZqJVlYw=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1721314887;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=yV4TeQugCl71IXXzVmHUMoZ/I9+FLfvcjsxLKdbeKco=;
+	b=Pq7ppfVzgL8iqg3BBnoutEo+RqbWsl51Fh+KffZeBrb1R4WzeLloiBdsh6YXFIigT82zJN
+	MELimildw9EmP2DQ==
+Authentication-Results: smtp-out1.suse.de;
+	dkim=pass header.d=suse.de header.s=susede2_rsa header.b=lIBACKp5;
+	dkim=pass header.d=suse.de header.s=susede2_ed25519 header.b=Pq7ppfVz
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1721314887; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=yV4TeQugCl71IXXzVmHUMoZ/I9+FLfvcjsxLKdbeKco=;
+	b=lIBACKp5slAD5BD3DrgOI1SALDfjWWHfQq536hK0w3/BbZw/hP8TewVrg0PTSzP+SI0LrX
+	A7dyGTLMGisTmZjr1NwopdyuVrHSSpz/Ef27aE+j4YN+9teGgbiI4PUFGWcYFzYs80MA8S
+	RJMeSntmmPtOb3o3PKb5QEu5ZqJVlYw=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1721314887;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=yV4TeQugCl71IXXzVmHUMoZ/I9+FLfvcjsxLKdbeKco=;
+	b=Pq7ppfVzgL8iqg3BBnoutEo+RqbWsl51Fh+KffZeBrb1R4WzeLloiBdsh6YXFIigT82zJN
+	MELimildw9EmP2DQ==
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 67294136F7;
+	Thu, 18 Jul 2024 15:01:27 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id rfjSF0cumWY1JAAAD6G6ig
+	(envelope-from <tiwai@suse.de>); Thu, 18 Jul 2024 15:01:27 +0000
+Date: Thu, 18 Jul 2024 17:02:01 +0200
+Message-ID: <87frs6vj4m.wl-tiwai@suse.de>
+From: Takashi Iwai <tiwai@suse.de>
+To: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+Cc: Takashi Iwai <tiwai@suse.de>,
+	Nathan Chancellor <nathan@kernel.org>,
+	kernel test robot <lkp@intel.com>,
+	llvm@lists.linux.dev,
+	oe-kbuild-all@lists.linux.dev,
+	linux-kernel@vger.kernel.org,
+	Kai Vehmanen <kai.vehmanen@linux.intel.com>,
+	Guennadi Liakhovetski <guennadi.liakhovetski@linux.intel.com>,
+	Bard Liao <bard.liao@intel.com>
+Subject: Re: ld.lld: error: undefined symbol: iosf_mbi_available
+In-Reply-To: <9a0eba2e-9933-43bb-ab3b-0480bf1d34a4@linux.intel.com>
+References: <202407160704.zpdhJ8da-lkp@intel.com>
+	<05954a59-2bef-4262-bd91-cfe21d2381f2@linux.intel.com>
+	<20240717202806.GA728411@thelio-3990X>
+	<87wmljw485.wl-tiwai@suse.de>
+	<d121ec31-0861-4324-8f53-6e06eaf60233@linux.intel.com>
+	<87le1zvzw9.wl-tiwai@suse.de>
+	<9a0eba2e-9933-43bb-ab3b-0480bf1d34a4@linux.intel.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-Rspamd-Queue-Id: A6F5921C42
+X-Spam-Flag: NO
+X-Spam-Score: 0.49
+X-Rspamd-Action: no action
+X-Rspamd-Server: rspamd2.dmz-prg2.suse.org
+X-Spamd-Result: default: False [0.49 / 50.00];
+	MID_CONTAINS_FROM(1.00)[];
+	R_DKIM_ALLOW(-0.20)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
+	NEURAL_HAM_SHORT(-0.20)[-1.000];
+	MIME_GOOD(-0.10)[text/plain];
+	MX_GOOD(-0.01)[];
+	DWL_DNSWL_BLOCKED(0.00)[suse.de:dkim];
+	RCPT_COUNT_SEVEN(0.00)[10];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	ARC_NA(0.00)[];
+	FUZZY_BLOCKED(0.00)[rspamd.com];
+	RCVD_TLS_ALL(0.00)[];
+	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
+	FROM_EQ_ENVFROM(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	TO_DN_SOME(0.00)[];
+	RCVD_COUNT_TWO(0.00)[2];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.de:dkim,imap1.dmz-prg2.suse.org:helo,imap1.dmz-prg2.suse.org:rdns];
+	DKIM_TRACE(0.00)[suse.de:+]
+X-Spam-Level: 
+X-Spamd-Bar: /
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/khilman/linux-omap.git lpm-v6.10/constraints
-head:   e2d1fd7e6367d7aa0db506b7d3794eb61553d29c
-commit: 7a2a54738aa64954989f42a22bcc087bbc8b3c48 [9/15] pmdomain: ti_sci: add per-device latency constraint management
-config: arm64-randconfig-001-20240718 (https://download.01.org/0day-ci/archive/20240718/202407182123.SoC03BGG-lkp@intel.com/config)
-compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240718/202407182123.SoC03BGG-lkp@intel.com/reproduce)
+On Thu, 18 Jul 2024 11:12:24 +0200,
+Pierre-Louis Bossart wrote:
+> 
+> 
+> 
+> >>> --- a/sound/soc/sof/intel/Kconfig
+> >>> +++ b/sound/soc/sof/intel/Kconfig
+> >>> @@ -19,6 +19,7 @@ config SND_SOC_SOF_INTEL_ATOM_HIFI_EP
+> >>>  	tristate
+> >>>  	select SND_SOC_SOF_INTEL_COMMON
+> >>>  	select SND_SOC_SOF_INTEL_HIFI_EP_IPC
+> >>> +	select IOSF_MBI if X86 && PCI
+> >>>  	help
+> >>>  	  This option is not user-selectable but automagically handled by
+> >>>  	  'select' statements at a higher level.
+> >>> @@ -44,7 +45,6 @@ config SND_SOC_SOF_BAYTRAIL
+> >>>  	select SND_SOC_SOF_INTEL_COMMON
+> >>>  	select SND_SOC_SOF_INTEL_ATOM_HIFI_EP
+> >>>  	select SND_SOC_SOF_ACPI_DEV
+> >>> -	select IOSF_MBI if X86 && PCI
+> >>>  	help
+> >>>  	  This adds support for Sound Open Firmware for Intel(R) platforms
+> >>>  	  using the Baytrail, Braswell or Cherrytrail processors.
+> >>
+> >> I don't think it's the 'right' fix Takashi.
+> >>
+> >> The problem is that we end-up using the iosf_mbi_read() routine by
+> >> including the soc-intel-quirks.h header file blindly for all X66
+> >> platforms - even when Baytrail is not used.
+> >>
+> >> Adding IOSF support for Tangiger doesn't seem right to me, it's not a
+> >> real dependency.
+> >>
+> >> We can be more restrictive and only use the helper for Baytrail, and use
+> >> a fallback if Baytrail is not used.
+> >>
+> >> diff --git a/sound/soc/intel/common/soc-intel-quirks.h
+> >> b/sound/soc/intel/common/soc-intel-quirks.h
+> >> index de4e550c5b34..ae67853f7e2e 100644
+> >> --- a/sound/soc/intel/common/soc-intel-quirks.h
+> >> +++ b/sound/soc/intel/common/soc-intel-quirks.h
+> >> @@ -11,7 +11,9 @@
+> >>
+> >>  #include <linux/platform_data/x86/soc.h>
+> >>
+> >> -#if IS_ENABLED(CONFIG_X86)
+> >> +#if IS_ENABLED(CONFIG_X86) && \
+> >> +       (IS_ENABLED(CONFIG_SND_SOC_SOF_BAYTRAIL) || \
+> >> +        IS_ENABLED(CONFIG_SND_SST_ATOM_HIFI2_PLATFORM_ACPI))
+> >>
+> >>  #include <linux/dmi.h>
+> >>  #include <asm/iosf_mbi.h>
+> >>
+> >> also at https://github.com/thesofproject/linux/pull/5114
+> > 
+> > I'm afraid it's not enough, either.  It's included in
+> > sound/soc/sof/intel/atom.c, and this one can be built-in by selected
+> > from others while CONFIG_SND_SOC_SOF_BAYTRAIL=m.  And, the reverse
+> > selection is done from CONFIG_SND_SOC_SOF_BAYTRAIL -- so
+> > CONFIG_IOSF_MBI can be m as well, and this can lead to the unresolved
+> > symbol from the built-in atom.c.
+> 
+> Fair point, I was only looking at the reported failure where Baytrail
+> was completely disabled.
+> 
+> I am not sure though if it makes sense to split hair in N dimensions.
+> Building Merrifield as y and Baytrail as m is a corner case that
+> shouldn't exist at all. And it's only an academic compilation issue, in
+> practice using 'y' would fail at run-time due to the usual firmware load
+> dependencies...
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202407182123.SoC03BGG-lkp@intel.com/
+Surely this kind of bug won't hit anyone in practical use, but it's
+only about the randconfig failures.  The original report is in the
+same category, after all.
 
-All errors (new ones prefixed by >>):
-
->> drivers/pmdomain/ti/ti_sci_pm_domains.c:135:26: error: called object type 'void *' is not a function or function pointer
-           return pm_generic_resume(dev);
-                  ~~~~~~~~~~~~~~~~~^
-   drivers/pmdomain/ti/ti_sci_pm_domains.c:156:27: error: called object type 'void *' is not a function or function pointer
-           return pm_generic_suspend(dev);
-                  ~~~~~~~~~~~~~~~~~~^
-   drivers/pmdomain/ti/ti_sci_pm_domains.c:175:32: error: called object type 'void *' is not a function or function pointer
-           return pm_generic_suspend_late(dev);
-                  ~~~~~~~~~~~~~~~~~~~~~~~^
-   3 errors generated.
+Maybe another (rather easier) workaround would be to use
+IS_REACHABLE(), something like below.  This should fix the original
+issue and the potential mess-up of kconfig dependencies.
 
 
-vim +135 drivers/pmdomain/ti/ti_sci_pm_domains.c
+Takashi
 
-   131	
-   132	static int ti_sci_pd_resume(struct device *dev)
-   133	{
-   134		ti_sci_pd_clear_constraints(dev);
- > 135		return pm_generic_resume(dev);
-   136	}
-   137	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+--- a/sound/soc/intel/common/soc-intel-quirks.h
++++ b/sound/soc/intel/common/soc-intel-quirks.h
+@@ -11,7 +11,7 @@
+ 
+ #include <linux/platform_data/x86/soc.h>
+ 
+-#if IS_ENABLED(CONFIG_X86)
++#if IS_REACHABLE(CONFIG_IOSF_MBI)
+ 
+ #include <linux/dmi.h>
+ #include <asm/iosf_mbi.h>
