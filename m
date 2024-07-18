@@ -1,101 +1,167 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5CFBA69D31
-	for <llvm@lists.linux.dev>; Thu, 18 Jul 2024 20:12:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF2B679949;
+	Thu, 18 Jul 2024 21:30:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721333528; cv=none; b=C6DkY/z4aIWzw5+jWx8wxoZn93qGJtSw1ja3Z9Puhd+/jKwmn52GztFcR4x4QZneL5Kjkk4HtMNsSLnhUhwqly04S+qm+PRfWfHdzmxgQKewrgqiVbDkNw95w1zd+WFTZhaPX6JbNdq563k/acZ/c2Gzfs63SqZwa9Xehf+o6ho=
+	t=1721338259; cv=none; b=II3zyjugjvVYAAngDM+Rb8REt+DzMIJsfTfGFCXRHcExou6BfHqkMvhJB8F0EXs0A5VPvAApOnhz9EQKfJy6jOqfviCBZNmg1k55sOTki0FQjKVQtrnnpJZSbhdph8xpfIHKt0sZA7+++M+AxsftN7lrLAEjWzwS+Tii4RO8dvY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721333528; c=relaxed/simple;
-	bh=Jrdla7Gt8RwjWnB1bJKynOaVUDaUN62zXTuwHyg+kD8=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=q6tmpx/Gdr6Nc+XKdFkeFhfHFrnpl8dcotOYz3RigV9ZvzzQA160XV6ZCIXw4OxXS2jSck0Px9JVsal8bu8jIAKOiEmo0dUXaFzVaBdF+mojjYGWwTDtXCvvtU5EMCl0CTpJCzsPN0j8j3A9C15kSgy0kPSfuVIqFFQ0AQeoPrY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=ZN5ts2g4; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1721338259; c=relaxed/simple;
+	bh=Tx3vbFhrmR74Mo+yVO1RuPytyxQt0qEc8MWkHFogyzk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=DFb6RsKwysGAimYX8+p7mWMwfX6HiQ1gthgpgSvKTLtl2v1BeGDjxBosmtZgNN4MBvRuq4TGBMgXe3X2BhQOaGKZ2zKOa8hf8bRHpbeWmXQMOECZf/D7gUJVw9Tba5M4YWpleWnmQxKtW2wu65WnysJD3XqmqB5gweGvEJF0FEE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=AJJt0OWK; arc=none smtp.client-ip=198.175.65.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="ZN5ts2g4"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1721333526;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=Xx95WM6TObmSXdP0VNFoEZV0r1zGjRFGPTYlfG3lYm4=;
-	b=ZN5ts2g4x7l62wmswlkw4nb6JcTttR4jYt3XE6iols1iNNmXnw/aybVvUa45wSUR7WOlLt
-	LjTF65hRvcKsFKpy5horFR9x/w8cUY7DDERFPUOb6Tbl5H+UFd81UsnW5wxLTAyx3G/squ
-	b7C3/XxG1EkumFijSaDld4yiy3nmjVs=
-Received: from mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-125-gere5Ct4OdmPVGw1l50HlA-1; Thu,
- 18 Jul 2024 16:12:05 -0400
-X-MC-Unique: gere5Ct4OdmPVGw1l50HlA-1
-Received: from mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.4])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 5DF471944A84
-	for <llvm@lists.linux.dev>; Thu, 18 Jul 2024 20:12:04 +0000 (UTC)
-Received: from [172.64.3.44] (unknown [10.30.33.101])
-	by mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id B483D3000189;
-	Thu, 18 Jul 2024 20:12:03 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.10.0,
- mainline.kernel.org-clang, cb273eb7)
-Date: Thu, 18 Jul 2024 20:12:03 -0000
-To: llvm@lists.linux.dev
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="AJJt0OWK"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1721338257; x=1752874257;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Tx3vbFhrmR74Mo+yVO1RuPytyxQt0qEc8MWkHFogyzk=;
+  b=AJJt0OWK237JPBjGpYlRQ9zTjj+QsPW6tQAS3beBzVDEwUIbQqCOAbwv
+   oZKdaLAIyjsvXbhqbvQUPXaM4CBxccbiJLNdTroMjXsGT/sLF8TJ1BEoD
+   UAXs6dt7/k+zOPu7OnXxy3XHTD6S8nNf+Q5ayiVnVK3UUQNWViUswkE0E
+   x8vzYszOJ4vWQ9YrTIg7MR5aYZAeNUUvjeT4MXpGbP2sGaA81sDH8LKN5
+   qzbCpe787PmAzonTfSqWcUJ+EDyYcD0d67d+SDRBmkLLKCyq6dqDH2hGl
+   4/HHiM46mSX2scqNZBdyuALnVyo1ctuzIaCIUoVU/1B6kb2dUyfUS6tn7
+   w==;
+X-CSE-ConnectionGUID: kM84s25DRiSg/V70n0xElg==
+X-CSE-MsgGUID: Ad1pNxd7QXaBZhJ9EYwcHg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11137"; a="30317534"
+X-IronPort-AV: E=Sophos;i="6.09,218,1716274800"; 
+   d="scan'208";a="30317534"
+Received: from fmviesa002.fm.intel.com ([10.60.135.142])
+  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jul 2024 14:30:57 -0700
+X-CSE-ConnectionGUID: i3QYZPFzSxOhjfU8cU0hIQ==
+X-CSE-MsgGUID: 65iEtUY1QtKyed0c/P1rOw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.09,218,1716274800"; 
+   d="scan'208";a="74130488"
+Received: from lkp-server01.sh.intel.com (HELO 68891e0c336b) ([10.239.97.150])
+  by fmviesa002.fm.intel.com with ESMTP; 18 Jul 2024 14:30:53 -0700
+Received: from kbuild by 68891e0c336b with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1sUYiA-000has-2H;
+	Thu, 18 Jul 2024 21:30:50 +0000
+Date: Fri, 19 Jul 2024 05:30:22 +0800
+From: kernel test robot <lkp@intel.com>
+To: Cryolitia PukNgae via B4 Relay <devnull+Cryolitia.gmail.com@kernel.org>,
+	Jean Delvare <jdelvare@suse.com>,
+	Guenter Roeck <linux@roeck-us.net>,
+	Cryolitia PukNgae <Cryolitia@gmail.com>,
+	Jonathan Corbet <corbet@lwn.net>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
+	linux-doc@vger.kernel.org, Celeste Liu <CoelacanthusHex@gmail.com>,
+	Yao Zi <ziyao@disroot.org>,
+	Marcin =?utf-8?Q?Str=C4=85gowski?= <marcin@stragowski.com>
+Subject: Re: [PATCH v4 1/2] hwmon: add GPD devices sensor driver
+Message-ID: <202407190547.V7oIPiBV-lkp@intel.com>
+References: <20240718-gpd_fan-v4-1-116e5431a9fe@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.4
-Message-Id: <16276.124071816120500617@us-mta-125.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240718-gpd_fan-v4-1-116e5431a9fe@gmail.com>
 
-Hi, we tested your kernel and here are the results:
+Hi Cryolitia,
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: FAILED
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on d67978318827d06f1c0fa4c31343a279e9df6fde]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Cryolitia-PukNgae-via-B4-Relay/hwmon-add-GPD-devices-sensor-driver/20240718-104420
+base:   d67978318827d06f1c0fa4c31343a279e9df6fde
+patch link:    https://lore.kernel.org/r/20240718-gpd_fan-v4-1-116e5431a9fe%40gmail.com
+patch subject: [PATCH v4 1/2] hwmon: add GPD devices sensor driver
+config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20240719/202407190547.V7oIPiBV-lkp@intel.com/config)
+compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240719/202407190547.V7oIPiBV-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202407190547.V7oIPiBV-lkp@intel.com/
+
+All error/warnings (new ones prefixed by >>):
+
+>> drivers/hwmon/gpd-fan.c:153:18: error: initializing 'void *' with an expression of type 'const struct gpd_model_quirk *' discards qualifiers [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
+     153 |                 .driver_data    = &gpd_win_mini_quirk,
+         |                                   ^~~~~~~~~~~~~~~~~~~
+   drivers/hwmon/gpd-fan.c:162:18: error: initializing 'void *' with an expression of type 'const struct gpd_model_quirk *' discards qualifiers [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
+     162 |                 .driver_data    = &gpd_win4_quirk,
+         |                                   ^~~~~~~~~~~~~~~
+   drivers/hwmon/gpd-fan.c:171:18: error: initializing 'void *' with an expression of type 'const struct gpd_model_quirk *' discards qualifiers [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
+     171 |                 .driver_data    = &gpd_wm2_quirk,
+         |                                   ^~~~~~~~~~~~~~
+   drivers/hwmon/gpd-fan.c:181:18: error: initializing 'void *' with an expression of type 'const struct gpd_model_quirk *' discards qualifiers [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
+     181 |                 .driver_data    = &gpd_wm2_quirk,
+         |                                   ^~~~~~~~~~~~~~
+>> drivers/hwmon/gpd-fan.c:496:4: warning: label followed by a declaration is a C23 extension [-Wc23-extensions]
+     496 |                         s32 ret = data->quirk->read_rpm(data);
+         |                         ^
+   drivers/hwmon/gpd-fan.c:513:4: warning: label followed by a declaration is a C23 extension [-Wc23-extensions]
+     513 |                         s16 ret = data->quirk->read_pwm(data);
+         |                         ^
+   drivers/hwmon/gpd-fan.c:541:4: warning: label followed by a declaration is a C23 extension [-Wc23-extensions]
+     541 |                         u8 var = clamp_val(val, 0, 255);
+         |                         ^
+   3 warnings and 4 errors generated.
 
 
-Kernel information:
-    Commit message: Merge tag 'fbdev-for-6.11-rc1' of git://git.kernel.org/=
-pub/scm/linux/kernel/git/deller/linux-fbdev
+vim +153 drivers/hwmon/gpd-fan.c
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1379390753
+   144	
+   145	static const struct dmi_system_id gpd_devices[] = {
+   146		{
+   147			// GPD Win Mini
+   148			// GPD Win Mini with AMD Ryzen 8840U
+   149			.matches	= {
+   150						DMI_MATCH(DMI_SYS_VENDOR, "GPD"),
+   151						DMI_MATCH(DMI_PRODUCT_NAME, "G1617-01")
+   152					},
+ > 153			.driver_data	= &gpd_win_mini_quirk,
+   154		},
+   155		{
+   156			// GPD Win 4 with AMD Ryzen 6800U
+   157			.matches	= {
+   158						DMI_MATCH(DMI_SYS_VENDOR, "GPD"),
+   159						DMI_MATCH(DMI_PRODUCT_NAME, "G1618-04"),
+   160						DMI_MATCH(DMI_BOARD_VERSION, "Default string"),
+   161					},
+ > 162			.driver_data	= &gpd_win4_quirk,
+   163		},
+   164		{
+   165			// GPD Win 4 with Ryzen 7840U
+   166			.matches	= {
+   167						DMI_MATCH(DMI_SYS_VENDOR, "GPD"),
+   168						DMI_MATCH(DMI_PRODUCT_NAME, "G1618-04"),
+   169						DMI_MATCH(DMI_BOARD_VERSION, "Ver. 1.0"),
+   170					},
+   171			.driver_data	= &gpd_wm2_quirk,
+   172		},
+   173		{
+   174			// GPD Win Max 2 with Ryzen 6800U
+   175			// GPD Win Max 2 2023 with Ryzen 7840U
+   176			// GPD Win Max 2 2024 with Ryzen 8840U
+   177			.matches	= {
+   178						DMI_MATCH(DMI_SYS_VENDOR, "GPD"),
+   179						DMI_MATCH(DMI_PRODUCT_NAME, "G1619-04"),
+   180					},
+   181			.driver_data	= &gpd_wm2_quirk,
+   182		},
+   183		{}
+   184	};
+   185	
 
-One or more kernel builds failed:
-    Unrecognized or new issues:
-         ppc64le - https://datawarehouse.cki-project.org/kcidb/builds/redha=
-t:1379390753-ppc64le-kernel
-           s390x - https://datawarehouse.cki-project.org/kcidb/builds/redha=
-t:1379390753-s390x-kernel
-          x86_64 (debug) - https://datawarehouse.cki-project.org/kcidb/buil=
-ds/redhat:1379390753-x86_64-kernel-debug
-
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
