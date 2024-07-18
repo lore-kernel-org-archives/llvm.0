@@ -1,50 +1,48 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7192A3BB30;
-	Thu, 18 Jul 2024 09:12:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 43ED23A1B0;
+	Thu, 18 Jul 2024 09:49:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721293963; cv=none; b=H4rlWBEjNv/NRHQF8Z5+fYX34O5y3H3TQ9lm5W96yrqVUpK7MrfyR0GG6YLUJdR+91wGVdPrx0ayr6RxNb543jybPYK1iPfSFqrZr3FBE75JaNyRR+jj0rNzsaCuOHgVX9HQT0vhEaMQWowNmbNV9X7iD+RB7voq1+T8ylY/SFE=
+	t=1721296165; cv=none; b=B4i6rUo7DfnoGKY7r+4wqy5xbYeffYDgP2ZvSu/bBGY78+2CEADtiY4irnuEQ/NsXjXMAXMEPm+Ieq01yojma4P1Cb/yF6Sj7cq7vnykCCFnG8vgWkWzPsB/mWWW7ESvLGY65qTdGpptMzZ3wvDoE0UWe0L+YWlXR7ORqxzFCNM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721293963; c=relaxed/simple;
-	bh=QYe0N5asl+jIDbTVeVE7d9My/QO1y/ezNH3N+O5/sw4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=iRkQM+RU8TfwCRIzPdzu26TurdK48Sns3wDMbXkuG2v7EpY3hAlXfZEr263RveZXOpJySHiJWeXwe+m+90Gc5zR0+g+InjIJDKi92hXLl72bKNoxVjQJTQJjEUI5bIR8/k4G2DGiwvnbcThOD7MnmwWBuuqJcrFRxnvoiFzL9Vw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=cnFHGrNp; arc=none smtp.client-ip=198.175.65.21
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+	s=arc-20240116; t=1721296165; c=relaxed/simple;
+	bh=EogEFIFm1pGmSPSAIiH69J7xaAnZJigRylou0Bvfx9U=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=j0dqLuYfMO2flbLd5SJsLX1OClEZdi3SniM+RCUDYOIW4C7avw6rJygKCjpp1n+jsWDEzZeDCkrNg4P+EDiVtFqyXCJ2XdZx9Ye/QMNpVlUCWMveiy8RRUesA0Jw9qT3OBikTP3KqyaP37aYbUfuBzfHiFrUZKKfr3KonQeRS7c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=osE978QI; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="cnFHGrNp"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1721293963; x=1752829963;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=QYe0N5asl+jIDbTVeVE7d9My/QO1y/ezNH3N+O5/sw4=;
-  b=cnFHGrNpXZFO/SY6KIUD8dXJvM4SOsuYc3WdT/DixghrYQBQU3HGk0FY
-   2dR1VBwwNoAQnN5h5RjjJcdpsqGlQmPqoW3UdDjAmNr6ZAXpuCZ9aZ711
-   fQru3ktSDTCQazI9nQzw/dfIp3zf6sOcwrQYv0uj9Ib/J4/j+qDcaCRK9
-   P0fxcoS78CFOEICuRaQthEcTYfqtvb46Sns4n2p19uafb5R919ggfAe2r
-   j6kd8Ok0szibdcqo5btjolCcyHx/irQy3R0Ue1Pqo9S8xPBXeZXvK8nkg
-   eYf5pgewyws+B4190MNWCBDcemvKF/eE0xZjYjjeANVnk9C9zJ9MDIqwI
-   g==;
-X-CSE-ConnectionGUID: 9bmQd92GRO6NmDDdbDc4KA==
-X-CSE-MsgGUID: G4CKY4dxRFi0kc5zkH3kYA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11136"; a="18800802"
-X-IronPort-AV: E=Sophos;i="6.09,217,1716274800"; 
-   d="scan'208";a="18800802"
-Received: from orviesa009.jf.intel.com ([10.64.159.149])
-  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jul 2024 02:12:30 -0700
-X-CSE-ConnectionGUID: ceCJIchsQI+TWOPMFFF9/g==
-X-CSE-MsgGUID: 2Dmhh3EmQWaE2ilNHYqILA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.09,217,1716274800"; 
-   d="scan'208";a="50747716"
-Received: from sbutnari-mobl1.ti.intel.com (HELO [10.245.246.71]) ([10.245.246.71])
-  by orviesa009-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jul 2024 02:12:27 -0700
-Message-ID: <9a0eba2e-9933-43bb-ab3b-0480bf1d34a4@linux.intel.com>
-Date: Thu, 18 Jul 2024 11:12:24 +0200
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="osE978QI"
+Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 46I9OnsR031888;
+	Thu, 18 Jul 2024 09:49:09 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	WxIGlUH25cr67qIsLSBnWblmw8oifFsdfiBGOgKuQnQ=; b=osE978QICJiOTolm
+	C/vgLC9ZJ1kZ2s9NucVq3gNHFnZQQ7ABV7ovF/mK1+10KLVUloYMsjr1OsWAswbY
+	efpj/Ltkdl0bej4L4URDK3rH+TGHt8bZ1MBU/m7zIZ99842+2m4BLx9xdjcNmJvh
+	vcir3lPTbhefutCfbGuhG11hHcmr2m+dygpak5Fd5TyqgB1JSexxb4xeGxMvil7M
+	PoazuAU+VB2AnO2CO5RRMX5LZ/BpMsfqGlAYT2oR0qnoU29LLfyBdDxc6/EROclB
+	o4TI3EH3+HPaSgruXEHlaF7pKQ+86kJtfVMPCd3tPW/Zrkph2uPuP1b61C0q8dmM
+	SWoHxA==
+Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 40dwfpn115-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 18 Jul 2024 09:49:09 +0000 (GMT)
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+	by NALASPPMTA02.qualcomm.com (8.17.1.19/8.17.1.19) with ESMTPS id 46I9n71K017962
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 18 Jul 2024 09:49:07 GMT
+Received: from [10.217.216.47] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Thu, 18 Jul
+ 2024 02:49:03 -0700
+Message-ID: <ca6b403b-60ce-491f-8254-39e9d8e2eeba@quicinc.com>
+Date: Thu, 18 Jul 2024 15:18:47 +0530
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -52,88 +50,116 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: ld.lld: error: undefined symbol: iosf_mbi_available
-To: Takashi Iwai <tiwai@suse.de>
-Cc: Nathan Chancellor <nathan@kernel.org>, kernel test robot <lkp@intel.com>,
- llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
- linux-kernel@vger.kernel.org, Kai Vehmanen <kai.vehmanen@linux.intel.com>,
- Guennadi Liakhovetski <guennadi.liakhovetski@linux.intel.com>,
- Bard Liao <bard.liao@intel.com>
-References: <202407160704.zpdhJ8da-lkp@intel.com>
- <05954a59-2bef-4262-bd91-cfe21d2381f2@linux.intel.com>
- <20240717202806.GA728411@thelio-3990X> <87wmljw485.wl-tiwai@suse.de>
- <d121ec31-0861-4324-8f53-6e06eaf60233@linux.intel.com>
- <87le1zvzw9.wl-tiwai@suse.de>
+Subject: Re: [linux-next:master 7766/10451]
+ drivers/clk/qcom/camcc-sm8650.c:3573:29: error: incompatible pointer types
+ passing 'struct device *' to parameter of type 'struct platform_device *'
+To: Krzysztof Kozlowski <krzk@kernel.org>, kernel test robot <lkp@intel.com>
+CC: <llvm@lists.linux.dev>, <oe-kbuild-all@lists.linux.dev>,
+        "Linux Memory
+ Management List" <linux-mm@kvack.org>,
+        Bjorn Andersson
+	<andersson@kernel.org>,
+        Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
+        Dmitry
+ Baryshkov <dmitry.baryshkov@linaro.org>,
+        Vladimir Zapolskiy
+	<vladimir.zapolskiy@linaro.org>,
+        Taniya Das <quic_tdas@quicinc.com>,
+        "Ajit
+ Pandey" <quic_ajipan@quicinc.com>,
+        Imran Shaik <quic_imrashai@quicinc.com>
+References: <202407072331.baglL4Sd-lkp@intel.com>
+ <edfd90b7-b94b-4b1d-a625-a240a8446f1e@kernel.org>
 Content-Language: en-US
-From: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-In-Reply-To: <87le1zvzw9.wl-tiwai@suse.de>
-Content-Type: text/plain; charset=UTF-8
+From: Jagadeesh Kona <quic_jkona@quicinc.com>
+In-Reply-To: <edfd90b7-b94b-4b1d-a625-a240a8446f1e@kernel.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: N2C0xfEls1-y_3w29hChjKm-EIM-Djkx
+X-Proofpoint-GUID: N2C0xfEls1-y_3w29hChjKm-EIM-Djkx
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
+ definitions=2024-07-18_06,2024-07-17_02,2024-05-17_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 adultscore=0
+ phishscore=0 spamscore=0 mlxscore=0 lowpriorityscore=0 impostorscore=0
+ suspectscore=0 mlxlogscore=999 priorityscore=1501 bulkscore=0
+ clxscore=1011 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2407110000 definitions=main-2407180063
 
 
 
->>> --- a/sound/soc/sof/intel/Kconfig
->>> +++ b/sound/soc/sof/intel/Kconfig
->>> @@ -19,6 +19,7 @@ config SND_SOC_SOF_INTEL_ATOM_HIFI_EP
->>>  	tristate
->>>  	select SND_SOC_SOF_INTEL_COMMON
->>>  	select SND_SOC_SOF_INTEL_HIFI_EP_IPC
->>> +	select IOSF_MBI if X86 && PCI
->>>  	help
->>>  	  This option is not user-selectable but automagically handled by
->>>  	  'select' statements at a higher level.
->>> @@ -44,7 +45,6 @@ config SND_SOC_SOF_BAYTRAIL
->>>  	select SND_SOC_SOF_INTEL_COMMON
->>>  	select SND_SOC_SOF_INTEL_ATOM_HIFI_EP
->>>  	select SND_SOC_SOF_ACPI_DEV
->>> -	select IOSF_MBI if X86 && PCI
->>>  	help
->>>  	  This adds support for Sound Open Firmware for Intel(R) platforms
->>>  	  using the Baytrail, Braswell or Cherrytrail processors.
->>
->> I don't think it's the 'right' fix Takashi.
->>
->> The problem is that we end-up using the iosf_mbi_read() routine by
->> including the soc-intel-quirks.h header file blindly for all X66
->> platforms - even when Baytrail is not used.
->>
->> Adding IOSF support for Tangiger doesn't seem right to me, it's not a
->> real dependency.
->>
->> We can be more restrictive and only use the helper for Baytrail, and use
->> a fallback if Baytrail is not used.
->>
->> diff --git a/sound/soc/intel/common/soc-intel-quirks.h
->> b/sound/soc/intel/common/soc-intel-quirks.h
->> index de4e550c5b34..ae67853f7e2e 100644
->> --- a/sound/soc/intel/common/soc-intel-quirks.h
->> +++ b/sound/soc/intel/common/soc-intel-quirks.h
->> @@ -11,7 +11,9 @@
->>
->>  #include <linux/platform_data/x86/soc.h>
->>
->> -#if IS_ENABLED(CONFIG_X86)
->> +#if IS_ENABLED(CONFIG_X86) && \
->> +       (IS_ENABLED(CONFIG_SND_SOC_SOF_BAYTRAIL) || \
->> +        IS_ENABLED(CONFIG_SND_SST_ATOM_HIFI2_PLATFORM_ACPI))
->>
->>  #include <linux/dmi.h>
->>  #include <asm/iosf_mbi.h>
->>
->> also at https://github.com/thesofproject/linux/pull/5114
+On 7/18/2024 12:18 PM, Krzysztof Kozlowski wrote:
+> On 07/07/2024 17:20, kernel test robot wrote:
+>> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+>> head:   0b58e108042b0ed28a71cd7edf5175999955b233
+>> commit: 09ea421652a832083ea380a72addf383965f3682 [7766/10451] clk: qcom: camcc-sm8650: Add SM8650 camera clock controller driver
+>> config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20240707/202407072331.baglL4Sd-lkp@intel.com/config)
+>> compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
+>> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240707/202407072331.baglL4Sd-lkp@intel.com/reproduce)
 > 
-> I'm afraid it's not enough, either.  It's included in
-> sound/soc/sof/intel/atom.c, and this one can be built-in by selected
-> from others while CONFIG_SND_SOC_SOF_BAYTRAIL=m.  And, the reverse
-> selection is done from CONFIG_SND_SOC_SOF_BAYTRAIL -- so
-> CONFIG_IOSF_MBI can be m as well, and this can lead to the unresolved
-> symbol from the built-in atom.c.
+> This and this:
+> https://lore.kernel.org/all/202407072212.WptVaUDt-lkp@intel.com/
+> 
+> are reports on linux-next. They were addressed to you/
+> 
+> Jagadeesh, how did you respond to public reports that your commit has
+> build failures in linux-next?
+> 
+> It reached now Linus' tree causing huge rant, unfortunately not in the
+> direction we would like that rant to go.
+> 
+> If you receive a report that your code does not even compile, it is YOUR
+> DAMN MOST IMPORTANT TASK to address it IMMEDIATELY.
+> 
+> I don't think such code should be ever accepted if contributors do not
+> take responsibility for their commits.
+> 
+> Krzysztof
+> 
 
-Fair point, I was only looking at the reported failure where Baytrail
-was completely disabled.
+I initially submitted my change [1] by passing pdev to 
+qcom_cc_really_probe(). Seems like due to [2] which changed the 
+qcom_cc_really_probe() parameters from pdev to dev, my change was 
+updated from pdev to &pdev->dev while applying.
 
-I am not sure though if it makes sense to split hair in N dimensions.
-Building Merrifield as y and Baytrail as m is a corner case that
-shouldn't exist at all. And it's only an academic compilation issue, in
-practice using 'y' would fail at run-time due to the usual firmware load
-dependencies...
+When this issue was reported by kernel bot, I checked out the linux-next 
+tree but I didn't see this failure since the common change [2] was 
+already merged into linux-next. I apologize for not reverting the same 
+over the email thread.
+
+But change [2] was somehow missed and only my change [1] landed up in 
+Linus's tree, which led to this failure as Arnd described in [3].
+
+[1] 
+https://lore.kernel.org/all/20240602114439.1611-8-quic_jkona@quicinc.com/
+[2] 
+https://lore.kernel.org/all/20240507130531.3286999-4-quic_luoj@quicinc.com/#Z31drivers:clk:qcom:common.c
+[3] 
+https://lore.kernel.org/lkml/ed757bc4-38ba-420a-9da8-d7de1f1123f6@app.fastmail.com/#t
+
+Thanks,
+Jagadeesh
+
+>>
+>> If you fix the issue in a separate patch/commit (i.e. not just a new version of
+>> the same patch/commit), kindly add following tags
+>> | Reported-by: kernel test robot <lkp@intel.com>
+>> | Closes: https://lore.kernel.org/oe-kbuild-all/202407072331.baglL4Sd-lkp@intel.com/
+>>
+>> Note: the linux-next/master HEAD 0b58e108042b0ed28a71cd7edf5175999955b233 builds fine.
+>>        It may have been fixed somewhere.
+>>
+>> All errors (new ones prefixed by >>):
+>>
+>>>> drivers/clk/qcom/camcc-sm8650.c:3573:29: error: incompatible pointer types passing 'struct device *' to parameter of type 'struct platform_device *' [-Werror,-Wincompatible-pointer-types]
+>>      3573 |         ret = qcom_cc_really_probe(&pdev->dev, &cam_cc_sm8650_desc, regmap);
+>>           |                                    ^~~~~~~~~~
+>>     drivers/clk/qcom/common.h:63:57: note: passing argument to parameter 'pdev' here
+>>        63 | extern int qcom_cc_really_probe(struct platform_device *pdev,
+>>           |                                                         ^
+>>     1 error generated.
+>>
