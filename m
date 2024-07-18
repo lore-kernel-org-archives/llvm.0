@@ -1,146 +1,173 @@
 Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 538DE143755
-	for <llvm@lists.linux.dev>; Thu, 18 Jul 2024 17:03:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 69547144D10;
+	Thu, 18 Jul 2024 17:10:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721322199; cv=none; b=ZObw6Gr8ct5flroNMd9xvYDvZk0XfpLFo8OaaZ1rys9Oscc7AaxRbCYakkZn2oPlCOuDiYMqJLAp4Wi5sYKYjAv3Jz87aLQMdBPGb3fbMRUR4WOmxEKbjjCfHM84ZAmSg+gDCdWrpx5DyaKEb8h+3zF7eNWpusVowQnnQwNn0ak=
+	t=1721322654; cv=none; b=pVS1g7a9yjLobi/xBjAVGwex09eLck1EhliEIEkuY7KxMonQd+uDNHPQ9/nhH2W8HIfKGdfe+xIYa+GTQClAwIE0PV253resz1dPYdY4Lo/riq+tIIZre+e5k7N9a7m+7jSLwXVd+hzcDSjgKcgEQgwoPtkKToKQsjfSqJ6gWxA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721322199; c=relaxed/simple;
-	bh=kXuz3qRFrW50MAZWB/izpJVzaQHmcV5FvcpcNWcO9Gk=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=lgUwIh2gkHpUNPpl/8lbnykqJVA6IpkMxSu2gRzWDJ2X+b2rs21x1yOxfNzSNK5Gd/P8Y7T/wI7yIc9h+r9B6CCXM5FDEvwEYDEp1/OJHKAIxQbGNejgbosvye78ITxR77o2Qa52xf6MEn2nvfgmfebi4KsWCuDEzy5uUSUCsp4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=aWeTvEng; arc=none smtp.client-ip=192.198.163.16
+	s=arc-20240116; t=1721322654; c=relaxed/simple;
+	bh=n33IQJIKmhz52gVW94yS+nDVo20lt9j5mcPLmaVzON4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=FgAB9qajNR7gZkYBMcAH6/SGjzQlPeqS8w/o2YAS56rz4hW79RgehO4H1rSx0nAf6Magnd57R1AIxtRj8Qep+/MAs1PuvTZMsYcts8rPr6QwXVZZEELYK3WuJHh4ejyrF93uAZiAYeHylc7XDdVSgSIYCvjZRX/nC99fHzHAd6E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=PPPtoIzQ; arc=none smtp.client-ip=192.198.163.16
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="aWeTvEng"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="PPPtoIzQ"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1721322199; x=1752858199;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=kXuz3qRFrW50MAZWB/izpJVzaQHmcV5FvcpcNWcO9Gk=;
-  b=aWeTvEngemj7FSG9j7/PoJSxow5JSGhJ9TcIr2k+TvYNikvLY1ippzE6
-   Ekf1BWOn0YQaQmHflJ19UaR/aZfVBuodehbLPPh8em7CQRb5S99/BngsN
-   nR0DdF5M/4gL4Ehw1nue2u7w2MCBzCdk1x57NnghqpaEkL8TmF6SAaZBT
-   RV4nk3vmM5Ci2gLXXEE/fO1RfcWfPPklZJkBa9+CSmVI5whsn6aUANFMY
-   GcA2DoG81AfoLK4MQMr5ETe00EwMBJBcYHv+z/4mOTO8qyrFqDof5krN5
-   P6xa/ndHtWvWK4e7oDt8EZaf6u6yD8JJvNMIWK26n/jZAIx1130HEdaw+
-   A==;
-X-CSE-ConnectionGUID: UZ5lTd1yQO6obiFHRq2DtQ==
-X-CSE-MsgGUID: XIDdTzDdQfqaN/hmRpYiTg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11137"; a="12611802"
+  t=1721322652; x=1752858652;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=n33IQJIKmhz52gVW94yS+nDVo20lt9j5mcPLmaVzON4=;
+  b=PPPtoIzQHnRNhTmogWfiPIq82Ae1Fs9z8jTMvDX26t7KPR1X8YyxtTBC
+   myUDX89AcQCuisNrYq7XNSE2Q7kggQxuZ8FIXe81nJANgpzmuPVAwe4iK
+   HhuHSitye1XAAfj0wvx357+HeTV7TQHsuwkBWny2zSmR0N/6xrboKJ9cZ
+   d2uqn+qkWkovvU2tnIf/8WsmOse1OMakAqL9tBWnkF/MgfxPYIaYNiykz
+   gKs21FKzKcekI4AY+dRHCkcISQedQIwiquww3iaUyumwy5ZJtBra4z+n/
+   XLB2SvF4hfwqQ2kUODqM/JNppZhOPnDg95ttL1gzmNgBfAltvxEvKtFIs
+   w==;
+X-CSE-ConnectionGUID: RbLwjSOUTO+HYokm3wLnVg==
+X-CSE-MsgGUID: DRwUE+PuRSygiucAq7pKcQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11137"; a="12612525"
 X-IronPort-AV: E=Sophos;i="6.09,218,1716274800"; 
-   d="scan'208";a="12611802"
-Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jul 2024 10:03:18 -0700
-X-CSE-ConnectionGUID: SiojpKQkS3OAeUhQKLHs9A==
-X-CSE-MsgGUID: xB6c0hV4RzGi/CzTvoZtZA==
+   d="scan'208";a="12612525"
+Received: from fmviesa001.fm.intel.com ([10.60.135.141])
+  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jul 2024 10:10:51 -0700
+X-CSE-ConnectionGUID: cw1Mc/AbQ7yBC0ZFnkEc2A==
+X-CSE-MsgGUID: zxFxd2nNTDGm9ENgS2X6Vg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.09,218,1716274800"; 
-   d="scan'208";a="88321245"
-Received: from ahunter6-mobl1.ger.corp.intel.com (HELO [10.0.2.15]) ([10.94.249.84])
-  by smtpauth.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jul 2024 10:03:13 -0700
-Message-ID: <14afba8e-cb85-4d7d-96e4-d65fd8ebc2d5@intel.com>
-Date: Thu, 18 Jul 2024 20:03:07 +0300
+   d="scan'208";a="81862218"
+Received: from lkp-server01.sh.intel.com (HELO 68891e0c336b) ([10.239.97.150])
+  by fmviesa001.fm.intel.com with ESMTP; 18 Jul 2024 10:10:48 -0700
+Received: from kbuild by 68891e0c336b with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1sUUeT-000hSM-1g;
+	Thu, 18 Jul 2024 17:10:45 +0000
+Date: Fri, 19 Jul 2024 01:10:35 +0800
+From: kernel test robot <lkp@intel.com>
+To: LeoLiu-oc <LeoLiu-oc@zhaoxin.com>, rafael@kernel.org, lenb@kernel.org,
+	james.morse@arm.com, tony.luck@intel.com, bp@alien8.de,
+	bhelgaas@google.com, robert.moore@intel.com, yazen.ghannam@amd.com,
+	avadhut.naik@amd.com, linux-acpi@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
+	acpica-devel@lists.linux.dev
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	CobeChen@zhaoxin.com, TimGuo@zhaoxin.com, TonyWWang-oc@zhaoxin.com,
+	leoliu-oc@zhaoxin.com
+Subject: Re: [PATCH v3 1/3] ACPI/APEI: Add hest_parse_pcie_aer()
+Message-ID: <202407190015.eutiIYQp-lkp@intel.com>
+References: <20240718062405.30571-2-LeoLiu-oc@zhaoxin.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5 4/8] perf: build-id: name debugging vdso as "debug"
-To: Changbin Du <changbin.du@huawei.com>,
- Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>,
- Arnaldo Carvalho de Melo <acme@kernel.org>,
- Namhyung Kim <namhyung@kernel.org>, Nathan Chancellor <nathan@kernel.org>
-Cc: Mark Rutland <mark.rutland@arm.com>,
- Alexander Shishkin <alexander.shishkin@linux.intel.com>,
- Jiri Olsa <jolsa@kernel.org>, Ian Rogers <irogers@google.com>,
- "Liang, Kan" <kan.liang@linux.intel.com>,
- Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling
- <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
- linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
- llvm@lists.linux.dev, Hui Wang <hw.huiwang@huawei.com>
-References: <20240702041837.5306-1-changbin.du@huawei.com>
- <20240702041837.5306-5-changbin.du@huawei.com>
-Content-Language: en-US
-From: Adrian Hunter <adrian.hunter@intel.com>
-Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
- Business Identity Code: 0357606 - 4, Domiciled in Helsinki
-In-Reply-To: <20240702041837.5306-5-changbin.du@huawei.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240718062405.30571-2-LeoLiu-oc@zhaoxin.com>
 
-On 2/07/24 07:18, Changbin Du wrote:
-> As normal objects, we will add debugging vdso elf to build-id cache later.
-> Here we name the debugging one as "debug".
-> 
-> Signed-off-by: Changbin Du <changbin.du@huawei.com>
-> ---
->  tools/perf/util/build-id.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/tools/perf/util/build-id.c b/tools/perf/util/build-id.c
-> index 83a1581e8cf1..15530af2bad9 100644
-> --- a/tools/perf/util/build-id.c
-> +++ b/tools/perf/util/build-id.c
-> @@ -259,8 +259,8 @@ static bool build_id_cache__valid_id(char *sbuild_id)
->  static const char *build_id_cache__basename(bool is_kallsyms, bool is_vdso,
->  					    bool is_debug)
->  {
-> -	return is_kallsyms ? "kallsyms" : (is_vdso ? "vdso" : (is_debug ?
-> -	    "debug" : "elf"));
-> +	return is_kallsyms ? "kallsyms" : (is_debug ? "debug" : (is_vdso ?
-> +		"vdso" : "elf"));
->  }
->  
->  char *__dso__build_id_filename(const struct dso *dso, char *bf, size_t size,
+Hi LeoLiu-oc,
 
-To actually add "debug", this also needs:
+kernel test robot noticed the following build warnings:
 
-diff --git a/tools/perf/util/build-id.c b/tools/perf/util/build-id.c
-index 15530af2bad9..b5bd02a1ad0f 100644
---- a/tools/perf/util/build-id.c
-+++ b/tools/perf/util/build-id.c
-@@ -701,7 +701,7 @@ build_id_cache__add(const char *sbuild_id, const char *name, const char *realnam
- 	 * file itself may not be very useful to users of our tools without a
- 	 * symtab.
- 	 */
--	if (!is_kallsyms && !is_vdso &&
-+	if (!is_kallsyms &&
- 	    strncmp(".ko", name + strlen(name) - 3, 3)) {
- 		debugfile = build_id_cache__find_debug(sbuild_id, nsi, root_dir);
- 		if (debugfile) {
+[auto build test WARNING on pci/for-linus]
+[also build test WARNING on rafael-pm/linux-next rafael-pm/bleeding-edge linus/master v6.10 next-20240718]
+[cannot apply to pci/next]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
+url:    https://github.com/intel-lab-lkp/linux/commits/LeoLiu-oc/ACPI-APEI-Add-hest_parse_pcie_aer/20240718-144218
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/pci/pci.git for-linus
+patch link:    https://lore.kernel.org/r/20240718062405.30571-2-LeoLiu-oc%40zhaoxin.com
+patch subject: [PATCH v3 1/3] ACPI/APEI: Add hest_parse_pcie_aer()
+config: x86_64-rhel-8.3-rust (https://download.01.org/0day-ci/archive/20240719/202407190015.eutiIYQp-lkp@intel.com/config)
+compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240719/202407190015.eutiIYQp-lkp@intel.com/reproduce)
 
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202407190015.eutiIYQp-lkp@intel.com/
 
-With that perf will populated the "debug" entry in the build-id cache.
-Currently, when adding to the build-id cache, perf only looks in
-/usr/lib/debug/.build-id (refer build_id_cache__find_debug()), for
-example:
+All warnings (new ones prefixed by >>):
+
+>> drivers/acpi/apei/hest.c:157:2: warning: unannotated fall-through between switch labels [-Wimplicit-fallthrough]
+     157 |         case ACPI_HEST_TYPE_AER_ENDPOINT:
+         |         ^
+   drivers/acpi/apei/hest.c:157:2: note: insert '__attribute__((fallthrough));' to silence this warning
+     157 |         case ACPI_HEST_TYPE_AER_ENDPOINT:
+         |         ^
+         |         __attribute__((fallthrough)); 
+   drivers/acpi/apei/hest.c:157:2: note: insert 'break;' to avoid fall-through
+     157 |         case ACPI_HEST_TYPE_AER_ENDPOINT:
+         |         ^
+         |         break; 
+   drivers/acpi/apei/hest.c:160:2: warning: unannotated fall-through between switch labels [-Wimplicit-fallthrough]
+     160 |         case ACPI_HEST_TYPE_AER_BRIDGE:
+         |         ^
+   drivers/acpi/apei/hest.c:160:2: note: insert '__attribute__((fallthrough));' to silence this warning
+     160 |         case ACPI_HEST_TYPE_AER_BRIDGE:
+         |         ^
+         |         __attribute__((fallthrough)); 
+   drivers/acpi/apei/hest.c:160:2: note: insert 'break;' to avoid fall-through
+     160 |         case ACPI_HEST_TYPE_AER_BRIDGE:
+         |         ^
+         |         break; 
+   drivers/acpi/apei/hest.c:163:2: warning: unannotated fall-through between switch labels [-Wimplicit-fallthrough]
+     163 |         default:
+         |         ^
+   drivers/acpi/apei/hest.c:163:2: note: insert '__attribute__((fallthrough));' to silence this warning
+     163 |         default:
+         |         ^
+         |         __attribute__((fallthrough)); 
+   drivers/acpi/apei/hest.c:163:2: note: insert 'break;' to avoid fall-through
+     163 |         default:
+         |         ^
+         |         break; 
+   3 warnings generated.
 
 
-$ sudo ln -s /lib/modules/6.9.2-local/build/arch/x86/entry/vdso/vdso64.so.dbg /usr/lib/debug/.build-id/cf/702469f4637840fd6ba1a8d8a628ff83253d04.debug
-$ ls -l ~/.debug/\[vdso\]/cf702469f4637840fd6ba1a8d8a628ff83253d04/
-total 8
--rw-r--r-- 1 ahunter ahunter    0 Jul 18 13:33 probes
--rw------- 1 ahunter ahunter 8192 Jul 18 13:33 vdso
-$ perf record uname
-Linux
-[ perf record: Woken up 1 times to write data ]
-[ perf record: Captured and wrote 0.010 MB perf.data (2 samples) ]
-$ ls -l ~/.debug/\[vdso\]/cf702469f4637840fd6ba1a8d8a628ff83253d04/
-total 40
--rwxrwxr-x 2 ahunter ahunter 32760 May 27 17:42 debug
--rw-r--r-- 1 ahunter ahunter     0 Jul 18 13:33 probes
--rw------- 1 ahunter ahunter  8192 Jul 18 13:33 vdso
+vim +157 drivers/acpi/apei/hest.c
 
+   144	
+   145	static bool hest_source_is_pcie_aer(struct acpi_hest_header *hest_hdr, struct pci_dev *dev)
+   146	{
+   147		u16 hest_type = hest_hdr->type;
+   148		u8 pcie_type = pci_pcie_type(dev);
+   149		struct acpi_hest_aer_common *common;
+   150	
+   151		common = (struct acpi_hest_aer_common *)(hest_hdr + 1);
+   152	
+   153		switch (hest_type) {
+   154		case ACPI_HEST_TYPE_AER_ROOT_PORT:
+   155			if (pcie_type != PCI_EXP_TYPE_ROOT_PORT)
+   156				return false;
+ > 157		case ACPI_HEST_TYPE_AER_ENDPOINT:
+   158			if (pcie_type != PCI_EXP_TYPE_ENDPOINT)
+   159				return false;
+   160		case ACPI_HEST_TYPE_AER_BRIDGE:
+   161			if (pcie_type != PCI_EXP_TYPE_PCI_BRIDGE && pcie_type != PCI_EXP_TYPE_PCIE_BRIDGE)
+   162				return false;
+   163		default:
+   164			return false;
+   165		}
+   166	
+   167		if (common->flags & ACPI_HEST_GLOBAL)
+   168			return true;
+   169	
+   170		if (hest_match_pci_devfn(common, dev))
+   171			return true;
+   172	
+   173		return false;
+   174	}
+   175	
 
-Note, perf will anyway find the debug object in /usr/lib/debug/.build-id
-so the benefit is if perf-archive is used to copy from the buildid-cache
-to take to another machine.
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
