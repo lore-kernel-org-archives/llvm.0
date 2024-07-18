@@ -1,173 +1,101 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 69547144D10;
-	Thu, 18 Jul 2024 17:10:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6FFE5144D18
+	for <llvm@lists.linux.dev>; Thu, 18 Jul 2024 19:22:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721322654; cv=none; b=pVS1g7a9yjLobi/xBjAVGwex09eLck1EhliEIEkuY7KxMonQd+uDNHPQ9/nhH2W8HIfKGdfe+xIYa+GTQClAwIE0PV253resz1dPYdY4Lo/riq+tIIZre+e5k7N9a7m+7jSLwXVd+hzcDSjgKcgEQgwoPtkKToKQsjfSqJ6gWxA=
+	t=1721330529; cv=none; b=nEHp6kXBnuq1+xXxYneqrjubkYIQu0vseJAoTS6SCGDqJ0PfN6pknPwQ4wOf3Qklg+LRMLlObG465jP7OB6FMlOnnNqUyt497ozuqDVqgM0Ta4R3pt9PMREMA5T2VlzvvDsN7jC/Hj0sAjkwXb4uN05dNT+uqpBaTsim1zyGWUk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721322654; c=relaxed/simple;
-	bh=n33IQJIKmhz52gVW94yS+nDVo20lt9j5mcPLmaVzON4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=FgAB9qajNR7gZkYBMcAH6/SGjzQlPeqS8w/o2YAS56rz4hW79RgehO4H1rSx0nAf6Magnd57R1AIxtRj8Qep+/MAs1PuvTZMsYcts8rPr6QwXVZZEELYK3WuJHh4ejyrF93uAZiAYeHylc7XDdVSgSIYCvjZRX/nC99fHzHAd6E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=PPPtoIzQ; arc=none smtp.client-ip=192.198.163.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1721330529; c=relaxed/simple;
+	bh=kvlN74fxpRfxXlN5nto+uvrtIHHILf8oMv7rG4L/ZOs=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=VLTKKiaDYpaYNPoWvbsVJ4UkmRGjIwEWiwrmDx9uj3YPbofCAV1bzrkhqf/ApSzcfjCSOQoUDFcHajsmH3jg4V2PXd6zWPA9y+GHHPbz/Qfp7h9GaOjYIcKumL7sokGcoy4mkoKwEjoGyrmVeE3NZUcB5PLVfVxT/7s9TFxXu7M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=A+WTjScX; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="PPPtoIzQ"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1721322652; x=1752858652;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=n33IQJIKmhz52gVW94yS+nDVo20lt9j5mcPLmaVzON4=;
-  b=PPPtoIzQHnRNhTmogWfiPIq82Ae1Fs9z8jTMvDX26t7KPR1X8YyxtTBC
-   myUDX89AcQCuisNrYq7XNSE2Q7kggQxuZ8FIXe81nJANgpzmuPVAwe4iK
-   HhuHSitye1XAAfj0wvx357+HeTV7TQHsuwkBWny2zSmR0N/6xrboKJ9cZ
-   d2uqn+qkWkovvU2tnIf/8WsmOse1OMakAqL9tBWnkF/MgfxPYIaYNiykz
-   gKs21FKzKcekI4AY+dRHCkcISQedQIwiquww3iaUyumwy5ZJtBra4z+n/
-   XLB2SvF4hfwqQ2kUODqM/JNppZhOPnDg95ttL1gzmNgBfAltvxEvKtFIs
-   w==;
-X-CSE-ConnectionGUID: RbLwjSOUTO+HYokm3wLnVg==
-X-CSE-MsgGUID: DRwUE+PuRSygiucAq7pKcQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11137"; a="12612525"
-X-IronPort-AV: E=Sophos;i="6.09,218,1716274800"; 
-   d="scan'208";a="12612525"
-Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jul 2024 10:10:51 -0700
-X-CSE-ConnectionGUID: cw1Mc/AbQ7yBC0ZFnkEc2A==
-X-CSE-MsgGUID: zxFxd2nNTDGm9ENgS2X6Vg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.09,218,1716274800"; 
-   d="scan'208";a="81862218"
-Received: from lkp-server01.sh.intel.com (HELO 68891e0c336b) ([10.239.97.150])
-  by fmviesa001.fm.intel.com with ESMTP; 18 Jul 2024 10:10:48 -0700
-Received: from kbuild by 68891e0c336b with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1sUUeT-000hSM-1g;
-	Thu, 18 Jul 2024 17:10:45 +0000
-Date: Fri, 19 Jul 2024 01:10:35 +0800
-From: kernel test robot <lkp@intel.com>
-To: LeoLiu-oc <LeoLiu-oc@zhaoxin.com>, rafael@kernel.org, lenb@kernel.org,
-	james.morse@arm.com, tony.luck@intel.com, bp@alien8.de,
-	bhelgaas@google.com, robert.moore@intel.com, yazen.ghannam@amd.com,
-	avadhut.naik@amd.com, linux-acpi@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
-	acpica-devel@lists.linux.dev
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	CobeChen@zhaoxin.com, TimGuo@zhaoxin.com, TonyWWang-oc@zhaoxin.com,
-	leoliu-oc@zhaoxin.com
-Subject: Re: [PATCH v3 1/3] ACPI/APEI: Add hest_parse_pcie_aer()
-Message-ID: <202407190015.eutiIYQp-lkp@intel.com>
-References: <20240718062405.30571-2-LeoLiu-oc@zhaoxin.com>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="A+WTjScX"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1721330526;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=YOcMfQStvsFXf+4P7DP0Pk2Bb9kh+zA4ROCgcxroZOU=;
+	b=A+WTjScXqsVnopKf/mXT1sXlxu8uNCVIYjw1etCPuAeGfB4freFSq9DnGfNIUjeLdwNO7N
+	L3M5nrSSnj55aA8fpkL6CI03RtHPHVTeRh0IvUnRLpq2nZX5Y7VjzTjZYbcYa5adbZAkCa
+	jgDzmFJl75I/Aetwr0Hb633HPU1CoZY=
+Received: from mx-prod-mc-04.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-330-ZUPvq8wUOyqpfF6qavwuGg-1; Thu,
+ 18 Jul 2024 15:22:05 -0400
+X-MC-Unique: ZUPvq8wUOyqpfF6qavwuGg-1
+Received: from mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.17])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-04.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 365C219560B3
+	for <llvm@lists.linux.dev>; Thu, 18 Jul 2024 19:22:04 +0000 (UTC)
+Received: from [172.64.3.44] (unknown [10.30.33.101])
+	by mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 900DB1955F40;
+	Thu, 18 Jul 2024 19:22:03 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.10.0,
+ mainline.kernel.org-clang, 24777bac)
+Date: Thu, 18 Jul 2024 19:22:03 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240718062405.30571-2-LeoLiu-oc@zhaoxin.com>
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.17
+Message-Id: <96189.124071815220500617@us-mta-330.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi LeoLiu-oc,
+Hi, we tested your kernel and here are the results:
 
-kernel test robot noticed the following build warnings:
-
-[auto build test WARNING on pci/for-linus]
-[also build test WARNING on rafael-pm/linux-next rafael-pm/bleeding-edge linus/master v6.10 next-20240718]
-[cannot apply to pci/next]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/LeoLiu-oc/ACPI-APEI-Add-hest_parse_pcie_aer/20240718-144218
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/pci/pci.git for-linus
-patch link:    https://lore.kernel.org/r/20240718062405.30571-2-LeoLiu-oc%40zhaoxin.com
-patch subject: [PATCH v3 1/3] ACPI/APEI: Add hest_parse_pcie_aer()
-config: x86_64-rhel-8.3-rust (https://download.01.org/0day-ci/archive/20240719/202407190015.eutiIYQp-lkp@intel.com/config)
-compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240719/202407190015.eutiIYQp-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202407190015.eutiIYQp-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> drivers/acpi/apei/hest.c:157:2: warning: unannotated fall-through between switch labels [-Wimplicit-fallthrough]
-     157 |         case ACPI_HEST_TYPE_AER_ENDPOINT:
-         |         ^
-   drivers/acpi/apei/hest.c:157:2: note: insert '__attribute__((fallthrough));' to silence this warning
-     157 |         case ACPI_HEST_TYPE_AER_ENDPOINT:
-         |         ^
-         |         __attribute__((fallthrough)); 
-   drivers/acpi/apei/hest.c:157:2: note: insert 'break;' to avoid fall-through
-     157 |         case ACPI_HEST_TYPE_AER_ENDPOINT:
-         |         ^
-         |         break; 
-   drivers/acpi/apei/hest.c:160:2: warning: unannotated fall-through between switch labels [-Wimplicit-fallthrough]
-     160 |         case ACPI_HEST_TYPE_AER_BRIDGE:
-         |         ^
-   drivers/acpi/apei/hest.c:160:2: note: insert '__attribute__((fallthrough));' to silence this warning
-     160 |         case ACPI_HEST_TYPE_AER_BRIDGE:
-         |         ^
-         |         __attribute__((fallthrough)); 
-   drivers/acpi/apei/hest.c:160:2: note: insert 'break;' to avoid fall-through
-     160 |         case ACPI_HEST_TYPE_AER_BRIDGE:
-         |         ^
-         |         break; 
-   drivers/acpi/apei/hest.c:163:2: warning: unannotated fall-through between switch labels [-Wimplicit-fallthrough]
-     163 |         default:
-         |         ^
-   drivers/acpi/apei/hest.c:163:2: note: insert '__attribute__((fallthrough));' to silence this warning
-     163 |         default:
-         |         ^
-         |         __attribute__((fallthrough)); 
-   drivers/acpi/apei/hest.c:163:2: note: insert 'break;' to avoid fall-through
-     163 |         default:
-         |         ^
-         |         break; 
-   3 warnings generated.
+    Overall result: FAILED
+             Merge: OK
+           Compile: FAILED
 
 
-vim +157 drivers/acpi/apei/hest.c
+Kernel information:
+    Commit message: PCI: Check for the existence of 'dev.of_node' before ca=
+lling of_platform_populate()
 
-   144	
-   145	static bool hest_source_is_pcie_aer(struct acpi_hest_header *hest_hdr, struct pci_dev *dev)
-   146	{
-   147		u16 hest_type = hest_hdr->type;
-   148		u8 pcie_type = pci_pcie_type(dev);
-   149		struct acpi_hest_aer_common *common;
-   150	
-   151		common = (struct acpi_hest_aer_common *)(hest_hdr + 1);
-   152	
-   153		switch (hest_type) {
-   154		case ACPI_HEST_TYPE_AER_ROOT_PORT:
-   155			if (pcie_type != PCI_EXP_TYPE_ROOT_PORT)
-   156				return false;
- > 157		case ACPI_HEST_TYPE_AER_ENDPOINT:
-   158			if (pcie_type != PCI_EXP_TYPE_ENDPOINT)
-   159				return false;
-   160		case ACPI_HEST_TYPE_AER_BRIDGE:
-   161			if (pcie_type != PCI_EXP_TYPE_PCI_BRIDGE && pcie_type != PCI_EXP_TYPE_PCIE_BRIDGE)
-   162				return false;
-   163		default:
-   164			return false;
-   165		}
-   166	
-   167		if (common->flags & ACPI_HEST_GLOBAL)
-   168			return true;
-   169	
-   170		if (hest_match_pci_devfn(common, dev))
-   171			return true;
-   172	
-   173		return false;
-   174	}
-   175	
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1379349860
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+One or more kernel builds failed:
+    Unrecognized or new issues:
+         ppc64le - https://datawarehouse.cki-project.org/kcidb/builds/redha=
+t:1379349860-ppc64le-kernel
+           s390x - https://datawarehouse.cki-project.org/kcidb/builds/redha=
+t:1379349860-s390x-kernel
+          x86_64 (debug) - https://datawarehouse.cki-project.org/kcidb/buil=
+ds/redhat:1379349860-x86_64-kernel-debug
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
