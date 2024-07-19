@@ -1,190 +1,101 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6ED4B148827;
-	Fri, 19 Jul 2024 19:27:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D806D3C39
+	for <llvm@lists.linux.dev>; Fri, 19 Jul 2024 21:02:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721417272; cv=none; b=nXnZnRHeNB0ENecvDXDzw8I9+nTUx1r2vGyXhalNYcN7CAlgkTjDFjYEqtSHFANb1Kv7cm87l2Wzdw0w+5VjRmxKTCZCxwb7SnF2pITmxx+AXsaFTInvev19RFPuWmy2QUR/lz2a5e4t1pc8xUBxlqJEv+RkLIU+JdKsWCoiugU=
+	t=1721422930; cv=none; b=i0rym6/4HZfiO7cNOwgJCWlM/cEVR82ygn3EFSah3GY+F9I7+EI0hCpkQb/c1Knk3VqZtZcGGqemik8loz+mQwtr14OtFZ8Ju7jad6Vmv7oDk7GQhgnDopyWJ2cqrOe9YWLuXePLxJjR4PcMctceoIqujuA5Ut+P0hSdFXLNXvI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721417272; c=relaxed/simple;
-	bh=PEDczIo+N1zc3HDWBH6pVQlbE4VTMIsKTmLki2Kgujg=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=k0IaZWkefACu64VVeLmb2NzwJuFRxk2XW6UVH/oh/CP6K6qG+TcYWfxgTvFL8cOtviZdsnHpa4gEhvIfM+KjkW/NU3f/9plRJh/0n7wVw9800VZ6Yx7sAawBgcBCjMQRV94Q66ITmgh+et1g6mnaTPnAPZr7Pwaz9/2rbPmXRoI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aATqaNws; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1721422930; c=relaxed/simple;
+	bh=x4JIL0P9X9HqZ06LuIt/264me4NTYWxursr0OM4QLEs=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=Jj4SDKeu6evGhHszuHZq93PKQRDn0yX6UvSSnkucmYj+3+qBgOPf6WSD88ltUK99FU1j2w4dRyqyUQviBmj9Bo9kCWz9M8SXGxo7fuYe+iVaeXa/7hnOEWDwpHTI+hUvxNOQH8yrA0odHF+blyZ9dnijQHnc3b38Bkth2BLxq1A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=VJt2ljHS; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aATqaNws"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DEC5DC32782;
-	Fri, 19 Jul 2024 19:27:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1721417271;
-	bh=PEDczIo+N1zc3HDWBH6pVQlbE4VTMIsKTmLki2Kgujg=;
-	h=From:To:Cc:Subject:Date:From;
-	b=aATqaNwsw7zUhMSCxIzcS+PaFt7EMdmq6f1ISFbvRp9EinIRdkadj3apjqOBPt8H2
-	 mM0qZAaRZoW5GGrFgw5BDjxaIEdA+kbr/XkWb35AhKJvwa4bTteCdgeDzoZhyRMGIT
-	 y/z/SlqoLUFgV6a1ZbQpcGlrV/AiQMHHmrNiEQH5OzHBAOTEfp0ECgFNmbl3E6W8ZW
-	 FcYOWtx3rfm0p4Ftko/7YNZZ3CTMrX10LY5lt0STJ7XD4QG+hL8f9qOXm34N4YWWTO
-	 nmtdVtY27l1/HNFMGfZR4MxORr/Ax0LSVDPkhAB4TV+EQBB+t7xl/V7TGhLSYlTkEp
-	 ATOrwcoqPg1/g==
-From: Kees Cook <kees@kernel.org>
-To: Vlastimil Babka <vbabka@suse.cz>
-Cc: Kees Cook <kees@kernel.org>,
-	Christoph Lameter <cl@linux.com>,
-	Pekka Enberg <penberg@kernel.org>,
-	David Rientjes <rientjes@google.com>,
-	Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Roman Gushchin <roman.gushchin@linux.dev>,
-	Hyeonggon Yoo <42.hyeyoo@gmail.com>,
-	"Gustavo A . R . Silva" <gustavoars@kernel.org>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Jann Horn <jannh@google.com>,
-	Przemek Kitszel <przemyslaw.kitszel@intel.com>,
-	Marco Elver <elver@google.com>,
-	linux-mm@kvack.org,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev,
-	linux-hardening@vger.kernel.org
-Subject: [PATCH] slab: Introduce kmalloc_obj() and family
-Date: Fri, 19 Jul 2024 12:27:48 -0700
-Message-Id: <20240719192744.work.264-kees@kernel.org>
-X-Mailer: git-send-email 2.34.1
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="VJt2ljHS"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1721422927;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=oThqL9rNduDZvO4w+WTsNRpsGk4hKQWhww02tYRiatw=;
+	b=VJt2ljHSJB3NOllYwx66GVQQjBogTe9ZU3xAOr737IeycSY+YLJLTj2+0kF5k9A/ziY485
+	cpOrFSxNaIDcrPdzeOpKoD4uuaYwE/vnHWPIxkaOpaZzHzo5eSEkRTifLjxKPdbT4wX/xS
+	xAmNgUvjH9iDfas5/b1v1i8Mf96LPhg=
+Received: from mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-353-OLjKvezsMFi0SerhHrH9pw-1; Fri,
+ 19 Jul 2024 17:02:05 -0400
+X-MC-Unique: OLjKvezsMFi0SerhHrH9pw-1
+Received: from mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.12])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 2004B1955D42
+	for <llvm@lists.linux.dev>; Fri, 19 Jul 2024 21:02:05 +0000 (UTC)
+Received: from [172.64.3.44] (unknown [10.30.33.101])
+	by mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id AC73019560B2;
+	Fri, 19 Jul 2024 21:02:04 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.10.0,
+ mainline.kernel.org-clang, a4f92855)
+Date: Fri, 19 Jul 2024 21:02:04 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=4424; i=kees@kernel.org; h=from:subject:message-id; bh=PEDczIo+N1zc3HDWBH6pVQlbE4VTMIsKTmLki2Kgujg=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBmmr4zWEhFKb72H7UArt9Y4HKLkvwrT5DByCcol rkyOA/7hJOJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCZpq+MwAKCRCJcvTf3G3A JkwGEACSNPqi1z0Rbac2tYergCeVTF0BJw90KpQW+JJlLlAtU2q0NcSYmIby+hoV48sYHqwXx2A Te/n3DVId2VY9yV5H9HxORKzXngzVwqHW8L99nwMOPI3ejdy6RGIIg91yLUlDbxY+Ay53ZdFOTF kbFwFSdV7axOIGilb4VWMUJuzG7ioL71ugBTnHfFYEUE2Uw8ssVP0YmAS21oG9XF+wPtOKBisXu PDhtf3/qjvmz6JJcuvNYgb/dig0DqpCxltP+WHVkRzqMgwgxMiTRO6MPJW19yi9CF4aQQtn9JMy 9dvAJ4HhfPfqreSBv9YYMbfapsqqz0X8SKSK+hqtMBFycURsav39aRivbGwi35G+yLFqRXOo8yw ImlwApj+1gUMDuHRwjmMxURyz3pQ1Vtsgwh0MXaNpCiohe5cy9vlhFfvEq86Z/9i4Rh1uRfGyMZ hrpNwb5SIdfzUzGRQs5MNOynY7gCryY+X4ph1qHv0KIXIfEmDhSJSquyoqrstq+SI1sJbJKhSyH kF7p6SDPe8nbj8MmNLMY8Wmpg4Vcujj9MUnuxhIYAwRhn5rY9Mqlf6S43rJ2uMHez4lx99rkaWv YGY4rn/XKmx3u9FzS4N4kQfcDNmLevNyvlVy+QxnEYxSKwxXcrrYjZ/AcrrrHzjSD9UK/n/r4ig gahzpHb6u7Elb
- 0w==
-X-Developer-Key: i=kees@kernel.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
-Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.12
+Message-Id: <06760.124071917020600205@us-mta-353.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-Introduce type-aware kmalloc-family helpers to replace the common
-idioms for single, array, and flexible object allocations:
+Hi, we tested your kernel and here are the results:
 
-	ptr = kmalloc(sizeof(*ptr), gfp);
-	ptr = kcalloc(count, sizeof(*ptr), gfp);
-	ptr = kmalloc_array(count, sizeof(*ptr), gfp);
-	ptr = kcalloc(count, sizeof(*ptr), gfp);
-	ptr = kmalloc(struct_size(ptr, flex_member, count), gfp);
+    Overall result: FAILED
+             Merge: OK
+           Compile: FAILED
 
-These become, respectively:
 
-	kmalloc_obj(p, gfp);
-	kzalloc_obj(p, count, gfp);
-	kmalloc_obj(p, count, gfp);
-	kzalloc_obj(p, count, gfp);
-	kmalloc_obj(p, flex_member, count, gfp);
+Kernel information:
+    Commit message: Merge tag 'clk-for-linus' of git://git.kernel.org/pub/s=
+cm/linux/kernel/git/clk/linux
 
-These each return the size of the allocation, so that other common
-idioms can be converted easily as well. For example:
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1380855509
 
-	info->size = struct_size(ptr, flex_member, count);
-	ptr = kmalloc(info->size, gfp);
+One or more kernel builds failed:
+    Unrecognized or new issues:
+         ppc64le - https://datawarehouse.cki-project.org/kcidb/builds/redha=
+t:1380855509-ppc64le-kernel
+           s390x - https://datawarehouse.cki-project.org/kcidb/builds/redha=
+t:1380855509-s390x-kernel
+          x86_64 (debug) - https://datawarehouse.cki-project.org/kcidb/buil=
+ds/redhat:1380855509-x86_64-kernel-debug
 
-becomes:
 
-	info->size = kmalloc_obj(ptr, flex_member, count, gfp);
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
 
-Internal introspection of allocated type also becomes possible, allowing
-for alignment-aware choices and future hardening work. For example,
-adding __alignof(*ptr) as an argument to the internal allocators so that
-appropriate/efficient alignment choices can be made, or being able to
-correctly choose per-allocation offset randomization within a bucket
-that does not break alignment requirements.
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
 
-Additionally, once __builtin_set_counted_by() (or equivalent) is added
-by GCC and Clang, it will be possible to automatically set the counted
-member of a struct with a counted_by FAM, further eliminating open-coded
-redundant initializations:
-
-	info->size = struct_size(ptr, flex_member, count);
-	ptr = kmalloc(info->size, gfp);
-	ptr->flex_count = count;
-
-becomes (i.e. unchanged from earlier example):
-
-	info->size = kmalloc_obj(ptr, flex_member, count, gfp);
-
-Replacing all existing simple code patterns via Coccinelle[1] shows what
-could be replaced immediately (saving roughly 1,500 lines):
-
- 7040 files changed, 14128 insertions(+), 15557 deletions(-)
-
-Link: https://github.com/kees/kernel-tools/blob/trunk/coccinelle/examples/kmalloc_obj-assign-size.cocci [1]
-Signed-off-by: Kees Cook <kees@kernel.org>
----
-Cc: Vlastimil Babka <vbabka@suse.cz>
-Cc: Christoph Lameter <cl@linux.com>
-Cc: Pekka Enberg <penberg@kernel.org>
-Cc: David Rientjes <rientjes@google.com>
-Cc: Joonsoo Kim <iamjoonsoo.kim@lge.com>
-Cc: Andrew Morton <akpm@linux-foundation.org>
-Cc: Roman Gushchin <roman.gushchin@linux.dev>
-Cc: Hyeonggon Yoo <42.hyeyoo@gmail.com>
-Cc: Gustavo A. R. Silva <gustavoars@kernel.org>
-Cc: Bill Wendling <morbo@google.com>
-Cc: Justin Stitt <justinstitt@google.com>
-Cc: Jann Horn <jannh@google.com>
-Cc: Przemek Kitszel <przemyslaw.kitszel@intel.com>
-Cc: Marco Elver <elver@google.com>
-Cc: linux-mm@kvack.org
----
- include/linux/slab.h | 38 ++++++++++++++++++++++++++++++++++++++
- 1 file changed, 38 insertions(+)
-
-diff --git a/include/linux/slab.h b/include/linux/slab.h
-index 7247e217e21b..3817554f2d51 100644
---- a/include/linux/slab.h
-+++ b/include/linux/slab.h
-@@ -665,6 +665,44 @@ static __always_inline __alloc_size(1) void *kmalloc_noprof(size_t size, gfp_t f
- }
- #define kmalloc(...)				alloc_hooks(kmalloc_noprof(__VA_ARGS__))
- 
-+#define __alloc_obj3(ALLOC, P, COUNT, FLAGS)			\
-+({								\
-+	size_t __obj_size = size_mul(sizeof(*P), COUNT);	\
-+	void *__obj_ptr;					\
-+	(P) = __obj_ptr = ALLOC(__obj_size, FLAGS);		\
-+	if (!__obj_ptr)						\
-+		__obj_size = 0;					\
-+	__obj_size;						\
-+})
-+
-+#define __alloc_obj2(ALLOC, P, FLAGS)	__alloc_obj3(ALLOC, P, 1, FLAGS)
-+
-+#define __alloc_obj4(ALLOC, P, FAM, COUNT, FLAGS)		\
-+({								\
-+	size_t __obj_size = struct_size(P, FAM, COUNT);		\
-+	void *__obj_ptr;					\
-+	(P) = __obj_ptr = ALLOC(__obj_size, FLAGS);		\
-+	if (!__obj_ptr)						\
-+		__obj_size = 0;					\
-+	__obj_size;						\
-+})
-+
-+#define kmalloc_obj(...)					\
-+	CONCATENATE(__alloc_obj,				\
-+		    COUNT_ARGS(__VA_ARGS__))(kmalloc, __VA_ARGS__)
-+
-+#define kzalloc_obj(...)					\
-+	CONCATENATE(__alloc_obj,				\
-+		    COUNT_ARGS(__VA_ARGS__))(kzalloc, __VA_ARGS__)
-+
-+#define kvmalloc_obj(...)					\
-+	CONCATENATE(__alloc_obj,				\
-+		    COUNT_ARGS(__VA_ARGS__))(kvmalloc, __VA_ARGS__)
-+
-+#define kvzalloc_obj(...)					\
-+	CONCATENATE(__alloc_obj,				\
-+		    COUNT_ARGS(__VA_ARGS__))(kvzalloc, __VA_ARGS__)
-+
- static __always_inline __alloc_size(1) void *kmalloc_node_noprof(size_t size, gfp_t flags, int node)
- {
- 	if (__builtin_constant_p(size) && size) {
--- 
-2.34.1
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
 
