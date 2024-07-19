@@ -1,167 +1,305 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f178.google.com (mail-pf1-f178.google.com [209.85.210.178])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF2B679949;
-	Thu, 18 Jul 2024 21:30:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 85679137E
+	for <llvm@lists.linux.dev>; Fri, 19 Jul 2024 00:51:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721338259; cv=none; b=II3zyjugjvVYAAngDM+Rb8REt+DzMIJsfTfGFCXRHcExou6BfHqkMvhJB8F0EXs0A5VPvAApOnhz9EQKfJy6jOqfviCBZNmg1k55sOTki0FQjKVQtrnnpJZSbhdph8xpfIHKt0sZA7+++M+AxsftN7lrLAEjWzwS+Tii4RO8dvY=
+	t=1721350297; cv=none; b=KaT+MLzKa9fGCQsmPGBcD8viuJo+IfAjW553mvcWN9tnmqNfqB3psSuZ5VtokxJbW+T2FAi8gS0haXB/Nw19Eqok52R6Sh+rESRYJSo+NXRytHr6Y0ZZIG70FtuDZJnECOfmL4mGi6qJgs2fIcwF2oxSRGe8rmt2wL40QmtlK2M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721338259; c=relaxed/simple;
-	bh=Tx3vbFhrmR74Mo+yVO1RuPytyxQt0qEc8MWkHFogyzk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=DFb6RsKwysGAimYX8+p7mWMwfX6HiQ1gthgpgSvKTLtl2v1BeGDjxBosmtZgNN4MBvRuq4TGBMgXe3X2BhQOaGKZ2zKOa8hf8bRHpbeWmXQMOECZf/D7gUJVw9Tba5M4YWpleWnmQxKtW2wu65WnysJD3XqmqB5gweGvEJF0FEE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=AJJt0OWK; arc=none smtp.client-ip=198.175.65.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1721350297; c=relaxed/simple;
+	bh=FeisRwuZph9dsqVELybpXvsFp0hEbNQ9L1U0P9roCq0=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=hhWNqIpJLyNsCisIke3B5as5KpNwoP6humXrK9eMPZqITNkk8ocRZq7gNAwyySb9Xpqx+76+8dLTcSNjjYOmi4WZ6OF1ZrRottpdecfL/dLAo8cDJxR0H/xiUm8w4LCnjaXbjawzRt+rv+R8Nhv5ILIC0MRsE2Ew63qOzs2TfaE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=TCPbx8rd; arc=none smtp.client-ip=209.85.210.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="AJJt0OWK"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1721338257; x=1752874257;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Tx3vbFhrmR74Mo+yVO1RuPytyxQt0qEc8MWkHFogyzk=;
-  b=AJJt0OWK237JPBjGpYlRQ9zTjj+QsPW6tQAS3beBzVDEwUIbQqCOAbwv
-   oZKdaLAIyjsvXbhqbvQUPXaM4CBxccbiJLNdTroMjXsGT/sLF8TJ1BEoD
-   UAXs6dt7/k+zOPu7OnXxy3XHTD6S8nNf+Q5ayiVnVK3UUQNWViUswkE0E
-   x8vzYszOJ4vWQ9YrTIg7MR5aYZAeNUUvjeT4MXpGbP2sGaA81sDH8LKN5
-   qzbCpe787PmAzonTfSqWcUJ+EDyYcD0d67d+SDRBmkLLKCyq6dqDH2hGl
-   4/HHiM46mSX2scqNZBdyuALnVyo1ctuzIaCIUoVU/1B6kb2dUyfUS6tn7
-   w==;
-X-CSE-ConnectionGUID: kM84s25DRiSg/V70n0xElg==
-X-CSE-MsgGUID: Ad1pNxd7QXaBZhJ9EYwcHg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11137"; a="30317534"
-X-IronPort-AV: E=Sophos;i="6.09,218,1716274800"; 
-   d="scan'208";a="30317534"
-Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jul 2024 14:30:57 -0700
-X-CSE-ConnectionGUID: i3QYZPFzSxOhjfU8cU0hIQ==
-X-CSE-MsgGUID: 65iEtUY1QtKyed0c/P1rOw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.09,218,1716274800"; 
-   d="scan'208";a="74130488"
-Received: from lkp-server01.sh.intel.com (HELO 68891e0c336b) ([10.239.97.150])
-  by fmviesa002.fm.intel.com with ESMTP; 18 Jul 2024 14:30:53 -0700
-Received: from kbuild by 68891e0c336b with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1sUYiA-000has-2H;
-	Thu, 18 Jul 2024 21:30:50 +0000
-Date: Fri, 19 Jul 2024 05:30:22 +0800
-From: kernel test robot <lkp@intel.com>
-To: Cryolitia PukNgae via B4 Relay <devnull+Cryolitia.gmail.com@kernel.org>,
-	Jean Delvare <jdelvare@suse.com>,
-	Guenter Roeck <linux@roeck-us.net>,
-	Cryolitia PukNgae <Cryolitia@gmail.com>,
-	Jonathan Corbet <corbet@lwn.net>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
-	linux-doc@vger.kernel.org, Celeste Liu <CoelacanthusHex@gmail.com>,
-	Yao Zi <ziyao@disroot.org>,
-	Marcin =?utf-8?Q?Str=C4=85gowski?= <marcin@stragowski.com>
-Subject: Re: [PATCH v4 1/2] hwmon: add GPD devices sensor driver
-Message-ID: <202407190547.V7oIPiBV-lkp@intel.com>
-References: <20240718-gpd_fan-v4-1-116e5431a9fe@gmail.com>
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="TCPbx8rd"
+Received: by mail-pf1-f178.google.com with SMTP id d2e1a72fcca58-70b3c0a00f2so294456b3a.3
+        for <llvm@lists.linux.dev>; Thu, 18 Jul 2024 17:51:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1721350295; x=1721955095; darn=lists.linux.dev;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=KruBUfG4EXE06kCHW9TtZ6QQTPJGRmAoTMKXZnLtXCU=;
+        b=TCPbx8rdAxqwoiJBpn2uEcBbJhjmFWbvCvypjIOFEVHJhtn+XaZkulYL0NMOKlkvKJ
+         bCDnhpWeDciGYJgOLMFeRV63FoBRuZjMn9CYW2+E0kCOG5JuTNaTSJnRA/lLT+bjwwCL
+         CWDi5/jJUtQqEwq7Fg0yKBkERwtltKLVUwEZ8=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1721350295; x=1721955095;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=KruBUfG4EXE06kCHW9TtZ6QQTPJGRmAoTMKXZnLtXCU=;
+        b=tAyxOHOj7kLF9UISaoBRUJmgJU+y/Az013mI8JFlmPKpcvYZOHPnBga4JOoDNjj77N
+         9qirErSvyVeX2J2a1FJpEFfkYu+gnE5XvRmNW7qG2VJgD/JSLiBp+wSb6BOHxu9/epxs
+         tmRtWo4gTldPyBobBg7iFz1lXmyRezw3PU2JnKql+Ghh6A1xJD0aBtzmoc+H0OW3Kvus
+         LPNwQCWT9wddt571fkmHQV6bqnZkxFCEKw5618d2xop0KVZCUY4vAqS0Zg5l3Egt/lyt
+         VvLqd6KYIZHNBzzfyXeTWIlEU4d0kWNEuJ5n/0SfA0gO41ibYUD7EuqyXFMZYr6qzLvG
+         SD9A==
+X-Forwarded-Encrypted: i=1; AJvYcCUcIMTY8JXwA/WbE4/c/48KgatiFxU/EdSa46Tn2lt4yMXJV2/HGayawA0P5xDZ7BJhsZ+BjPsqpw9qx6Ay8QwXHvmNJw==
+X-Gm-Message-State: AOJu0Yz7uiTildjL1T1VA+tjbAVN9wRFC6FOQLdQ4oRVEdS0ZMtAkK/q
+	achLPQqz6/5wZu7ss1bnLYVvxYdmLKPRsnqCifIqY1aYvC+irsaxucq8DdbzbQ==
+X-Google-Smtp-Source: AGHT+IHlWInhZx75758Fxg94xf/sk3Liomtf1n6K/PVKk6RWxdNBsrOfpQfzHFBOkuhmTHmxjOmb6w==
+X-Received: by 2002:a05:6a20:841e:b0:1c2:8c32:1392 with SMTP id adf61e73a8af0-1c3fdcf886emr9004244637.22.1721350294667;
+        Thu, 18 Jul 2024 17:51:34 -0700 (PDT)
+Received: from localhost ([2620:15c:9d:2:35aa:f87d:7549:3938])
+        by smtp.gmail.com with UTF8SMTPSA id 98e67ed59e1d1-2cb77540a84sm1385207a91.52.2024.07.18.17.51.33
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 18 Jul 2024 17:51:34 -0700 (PDT)
+From: Brian Norris <briannorris@chromium.org>
+To: Yury Norov <yury.norov@gmail.com>
+Cc: linux-kernel@vger.kernel.org,
+	Bill Wendling <morbo@google.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Justin Stitt <justinstitt@google.com>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	llvm@lists.linux.dev,
+	Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+	Brian Norris <briannorris@chromium.org>,
+	Kees Cook <kees@kernel.org>
+Subject: [PATCH v3 1/4] find: Switch from inline to __always_inline
+Date: Thu, 18 Jul 2024 17:50:37 -0700
+Message-ID: <20240719005127.2449328-1-briannorris@chromium.org>
+X-Mailer: git-send-email 2.45.2.1089.g2a221341d9-goog
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240718-gpd_fan-v4-1-116e5431a9fe@gmail.com>
+Content-Transfer-Encoding: 8bit
 
-Hi Cryolitia,
+From: Yury Norov <yury.norov@gmail.com>
 
-kernel test robot noticed the following build errors:
+'inline' keyword is only a recommendation for compiler. If it decides to
+not inline find_bit nodemask functions, the whole small_const_nbits()
+machinery doesn't work.
 
-[auto build test ERROR on d67978318827d06f1c0fa4c31343a279e9df6fde]
+This is how a standard GCC 11.3.0 does for my x86_64 build now. This patch
+replaces 'inline' directive with unconditional '__always_inline' to make
+sure that there's always a chance for compile-time optimization. It doesn't
+change size of kernel image, according to bloat-o-meter.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Cryolitia-PukNgae-via-B4-Relay/hwmon-add-GPD-devices-sensor-driver/20240718-104420
-base:   d67978318827d06f1c0fa4c31343a279e9df6fde
-patch link:    https://lore.kernel.org/r/20240718-gpd_fan-v4-1-116e5431a9fe%40gmail.com
-patch subject: [PATCH v4 1/2] hwmon: add GPD devices sensor driver
-config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20240719/202407190547.V7oIPiBV-lkp@intel.com/config)
-compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240719/202407190547.V7oIPiBV-lkp@intel.com/reproduce)
+[[ Brian: split out from:
+      Subject: [PATCH 1/3] bitmap: switch from inline to __always_inline
+      https://lore.kernel.org/all/20221027043810.350460-2-yury.norov@gmail.com/
+   But rewritten, as there were too many conflicts. ]]
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202407190547.V7oIPiBV-lkp@intel.com/
+Signed-off-by: Yury Norov <yury.norov@gmail.com>
+Co-developed-by: Brian Norris <briannorris@chromium.org>
+Signed-off-by: Brian Norris <briannorris@chromium.org>
+Reviewed-by: Kees Cook <kees@kernel.org>
+---
 
-All error/warnings (new ones prefixed by >>):
+Changes in v3:
+ - newly split out in v3
 
->> drivers/hwmon/gpd-fan.c:153:18: error: initializing 'void *' with an expression of type 'const struct gpd_model_quirk *' discards qualifiers [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
-     153 |                 .driver_data    = &gpd_win_mini_quirk,
-         |                                   ^~~~~~~~~~~~~~~~~~~
-   drivers/hwmon/gpd-fan.c:162:18: error: initializing 'void *' with an expression of type 'const struct gpd_model_quirk *' discards qualifiers [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
-     162 |                 .driver_data    = &gpd_win4_quirk,
-         |                                   ^~~~~~~~~~~~~~~
-   drivers/hwmon/gpd-fan.c:171:18: error: initializing 'void *' with an expression of type 'const struct gpd_model_quirk *' discards qualifiers [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
-     171 |                 .driver_data    = &gpd_wm2_quirk,
-         |                                   ^~~~~~~~~~~~~~
-   drivers/hwmon/gpd-fan.c:181:18: error: initializing 'void *' with an expression of type 'const struct gpd_model_quirk *' discards qualifiers [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
-     181 |                 .driver_data    = &gpd_wm2_quirk,
-         |                                   ^~~~~~~~~~~~~~
->> drivers/hwmon/gpd-fan.c:496:4: warning: label followed by a declaration is a C23 extension [-Wc23-extensions]
-     496 |                         s32 ret = data->quirk->read_rpm(data);
-         |                         ^
-   drivers/hwmon/gpd-fan.c:513:4: warning: label followed by a declaration is a C23 extension [-Wc23-extensions]
-     513 |                         s16 ret = data->quirk->read_pwm(data);
-         |                         ^
-   drivers/hwmon/gpd-fan.c:541:4: warning: label followed by a declaration is a C23 extension [-Wc23-extensions]
-     541 |                         u8 var = clamp_val(val, 0, 255);
-         |                         ^
-   3 warnings and 4 errors generated.
+ include/linux/find.h | 50 ++++++++++++++++++++++----------------------
+ 1 file changed, 25 insertions(+), 25 deletions(-)
 
-
-vim +153 drivers/hwmon/gpd-fan.c
-
-   144	
-   145	static const struct dmi_system_id gpd_devices[] = {
-   146		{
-   147			// GPD Win Mini
-   148			// GPD Win Mini with AMD Ryzen 8840U
-   149			.matches	= {
-   150						DMI_MATCH(DMI_SYS_VENDOR, "GPD"),
-   151						DMI_MATCH(DMI_PRODUCT_NAME, "G1617-01")
-   152					},
- > 153			.driver_data	= &gpd_win_mini_quirk,
-   154		},
-   155		{
-   156			// GPD Win 4 with AMD Ryzen 6800U
-   157			.matches	= {
-   158						DMI_MATCH(DMI_SYS_VENDOR, "GPD"),
-   159						DMI_MATCH(DMI_PRODUCT_NAME, "G1618-04"),
-   160						DMI_MATCH(DMI_BOARD_VERSION, "Default string"),
-   161					},
- > 162			.driver_data	= &gpd_win4_quirk,
-   163		},
-   164		{
-   165			// GPD Win 4 with Ryzen 7840U
-   166			.matches	= {
-   167						DMI_MATCH(DMI_SYS_VENDOR, "GPD"),
-   168						DMI_MATCH(DMI_PRODUCT_NAME, "G1618-04"),
-   169						DMI_MATCH(DMI_BOARD_VERSION, "Ver. 1.0"),
-   170					},
-   171			.driver_data	= &gpd_wm2_quirk,
-   172		},
-   173		{
-   174			// GPD Win Max 2 with Ryzen 6800U
-   175			// GPD Win Max 2 2023 with Ryzen 7840U
-   176			// GPD Win Max 2 2024 with Ryzen 8840U
-   177			.matches	= {
-   178						DMI_MATCH(DMI_SYS_VENDOR, "GPD"),
-   179						DMI_MATCH(DMI_PRODUCT_NAME, "G1619-04"),
-   180					},
-   181			.driver_data	= &gpd_wm2_quirk,
-   182		},
-   183		{}
-   184	};
-   185	
-
+diff --git a/include/linux/find.h b/include/linux/find.h
+index 5dfca4225fef..68685714bc18 100644
+--- a/include/linux/find.h
++++ b/include/linux/find.h
+@@ -52,7 +52,7 @@ unsigned long _find_next_bit_le(const unsigned long *addr, unsigned
+  * Returns the bit number for the next set bit
+  * If no bits are set, returns @size.
+  */
+-static inline
++static __always_inline
+ unsigned long find_next_bit(const unsigned long *addr, unsigned long size,
+ 			    unsigned long offset)
+ {
+@@ -81,7 +81,7 @@ unsigned long find_next_bit(const unsigned long *addr, unsigned long size,
+  * Returns the bit number for the next set bit
+  * If no bits are set, returns @size.
+  */
+-static inline
++static __always_inline
+ unsigned long find_next_and_bit(const unsigned long *addr1,
+ 		const unsigned long *addr2, unsigned long size,
+ 		unsigned long offset)
+@@ -112,7 +112,7 @@ unsigned long find_next_and_bit(const unsigned long *addr1,
+  * Returns the bit number for the next set bit
+  * If no bits are set, returns @size.
+  */
+-static inline
++static __always_inline
+ unsigned long find_next_andnot_bit(const unsigned long *addr1,
+ 		const unsigned long *addr2, unsigned long size,
+ 		unsigned long offset)
+@@ -142,7 +142,7 @@ unsigned long find_next_andnot_bit(const unsigned long *addr1,
+  * Returns the bit number for the next set bit
+  * If no bits are set, returns @size.
+  */
+-static inline
++static __always_inline
+ unsigned long find_next_or_bit(const unsigned long *addr1,
+ 		const unsigned long *addr2, unsigned long size,
+ 		unsigned long offset)
+@@ -171,7 +171,7 @@ unsigned long find_next_or_bit(const unsigned long *addr1,
+  * Returns the bit number of the next zero bit
+  * If no bits are zero, returns @size.
+  */
+-static inline
++static __always_inline
+ unsigned long find_next_zero_bit(const unsigned long *addr, unsigned long size,
+ 				 unsigned long offset)
+ {
+@@ -198,7 +198,7 @@ unsigned long find_next_zero_bit(const unsigned long *addr, unsigned long size,
+  * Returns the bit number of the first set bit.
+  * If no bits are set, returns @size.
+  */
+-static inline
++static __always_inline
+ unsigned long find_first_bit(const unsigned long *addr, unsigned long size)
+ {
+ 	if (small_const_nbits(size)) {
+@@ -224,7 +224,7 @@ unsigned long find_first_bit(const unsigned long *addr, unsigned long size)
+  * Returns the bit number of the N'th set bit.
+  * If no such, returns >= @size.
+  */
+-static inline
++static __always_inline
+ unsigned long find_nth_bit(const unsigned long *addr, unsigned long size, unsigned long n)
+ {
+ 	if (n >= size)
+@@ -249,7 +249,7 @@ unsigned long find_nth_bit(const unsigned long *addr, unsigned long size, unsign
+  * Returns the bit number of the N'th set bit.
+  * If no such, returns @size.
+  */
+-static inline
++static __always_inline
+ unsigned long find_nth_and_bit(const unsigned long *addr1, const unsigned long *addr2,
+ 				unsigned long size, unsigned long n)
+ {
+@@ -276,7 +276,7 @@ unsigned long find_nth_and_bit(const unsigned long *addr1, const unsigned long *
+  * Returns the bit number of the N'th set bit.
+  * If no such, returns @size.
+  */
+-static inline
++static __always_inline
+ unsigned long find_nth_andnot_bit(const unsigned long *addr1, const unsigned long *addr2,
+ 				unsigned long size, unsigned long n)
+ {
+@@ -332,7 +332,7 @@ unsigned long find_nth_and_andnot_bit(const unsigned long *addr1,
+  * Returns the bit number for the next set bit
+  * If no bits are set, returns @size.
+  */
+-static inline
++static __always_inline
+ unsigned long find_first_and_bit(const unsigned long *addr1,
+ 				 const unsigned long *addr2,
+ 				 unsigned long size)
+@@ -357,7 +357,7 @@ unsigned long find_first_and_bit(const unsigned long *addr1,
+  * Returns the bit number for the first set bit
+  * If no bits are set, returns @size.
+  */
+-static inline
++static __always_inline
+ unsigned long find_first_and_and_bit(const unsigned long *addr1,
+ 				     const unsigned long *addr2,
+ 				     const unsigned long *addr3,
+@@ -381,7 +381,7 @@ unsigned long find_first_and_and_bit(const unsigned long *addr1,
+  * Returns the bit number of the first cleared bit.
+  * If no bits are zero, returns @size.
+  */
+-static inline
++static __always_inline
+ unsigned long find_first_zero_bit(const unsigned long *addr, unsigned long size)
+ {
+ 	if (small_const_nbits(size)) {
+@@ -402,7 +402,7 @@ unsigned long find_first_zero_bit(const unsigned long *addr, unsigned long size)
+  *
+  * Returns the bit number of the last set bit, or size.
+  */
+-static inline
++static __always_inline
+ unsigned long find_last_bit(const unsigned long *addr, unsigned long size)
+ {
+ 	if (small_const_nbits(size)) {
+@@ -425,7 +425,7 @@ unsigned long find_last_bit(const unsigned long *addr, unsigned long size)
+  * Returns the bit number for the next set bit, or first set bit up to @offset
+  * If no bits are set, returns @size.
+  */
+-static inline
++static __always_inline
+ unsigned long find_next_and_bit_wrap(const unsigned long *addr1,
+ 					const unsigned long *addr2,
+ 					unsigned long size, unsigned long offset)
+@@ -448,7 +448,7 @@ unsigned long find_next_and_bit_wrap(const unsigned long *addr1,
+  * Returns the bit number for the next set bit, or first set bit up to @offset
+  * If no bits are set, returns @size.
+  */
+-static inline
++static __always_inline
+ unsigned long find_next_bit_wrap(const unsigned long *addr,
+ 					unsigned long size, unsigned long offset)
+ {
+@@ -465,7 +465,7 @@ unsigned long find_next_bit_wrap(const unsigned long *addr,
+  * Helper for for_each_set_bit_wrap(). Make sure you're doing right thing
+  * before using it alone.
+  */
+-static inline
++static __always_inline
+ unsigned long __for_each_wrap(const unsigned long *bitmap, unsigned long size,
+ 				 unsigned long start, unsigned long n)
+ {
+@@ -506,20 +506,20 @@ extern unsigned long find_next_clump8(unsigned long *clump,
+ 
+ #if defined(__LITTLE_ENDIAN)
+ 
+-static inline unsigned long find_next_zero_bit_le(const void *addr,
+-		unsigned long size, unsigned long offset)
++static __always_inline
++unsigned long find_next_zero_bit_le(const void *addr, unsigned long size, unsigned long offset)
+ {
+ 	return find_next_zero_bit(addr, size, offset);
+ }
+ 
+-static inline unsigned long find_next_bit_le(const void *addr,
+-		unsigned long size, unsigned long offset)
++static __always_inline
++unsigned long find_next_bit_le(const void *addr, unsigned long size, unsigned long offset)
+ {
+ 	return find_next_bit(addr, size, offset);
+ }
+ 
+-static inline unsigned long find_first_zero_bit_le(const void *addr,
+-		unsigned long size)
++static __always_inline
++unsigned long find_first_zero_bit_le(const void *addr, unsigned long size)
+ {
+ 	return find_first_zero_bit(addr, size);
+ }
+@@ -527,7 +527,7 @@ static inline unsigned long find_first_zero_bit_le(const void *addr,
+ #elif defined(__BIG_ENDIAN)
+ 
+ #ifndef find_next_zero_bit_le
+-static inline
++static __always_inline
+ unsigned long find_next_zero_bit_le(const void *addr, unsigned
+ 		long size, unsigned long offset)
+ {
+@@ -546,7 +546,7 @@ unsigned long find_next_zero_bit_le(const void *addr, unsigned
+ #endif
+ 
+ #ifndef find_first_zero_bit_le
+-static inline
++static __always_inline
+ unsigned long find_first_zero_bit_le(const void *addr, unsigned long size)
+ {
+ 	if (small_const_nbits(size)) {
+@@ -560,7 +560,7 @@ unsigned long find_first_zero_bit_le(const void *addr, unsigned long size)
+ #endif
+ 
+ #ifndef find_next_bit_le
+-static inline
++static __always_inline
+ unsigned long find_next_bit_le(const void *addr, unsigned
+ 		long size, unsigned long offset)
+ {
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.45.2.1089.g2a221341d9-goog
+
