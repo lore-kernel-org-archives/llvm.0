@@ -1,141 +1,101 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 909681B86FD;
-	Fri, 19 Jul 2024 21:49:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC8E3C8C7
+	for <llvm@lists.linux.dev>; Fri, 19 Jul 2024 23:02:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721425790; cv=none; b=HcattR4/TiN0atgg7q79KXpqIxQEDg6Vp7rXYPKVZ2IVu3BJlD3H15mXr67Hjglku7mJFco4laoRMb1oRZ80bnh1Fnx/7V1/ZpExO4OoQSrtMFymB6dL2TEGqRfSOKj0+SsvWSngXlo5FvtpTAILiBPVraQh4akm63TQsylXJ5c=
+	t=1721430129; cv=none; b=VK031CpXwQ1exe17oG45SkqdPht2mbTZbFZ9ay/4tXN5A8sNxnd4TA6t9Kv6V0SvUJ6BQgAHEhT16za0TYI3ITuhj4Tk1yJvI2WjsFLXFncBSKPOQ3ACY+1Wi6CfQeu05QKLc+EHDmB+Jx8SntVcGoEBcP7BBbUVCiC3FU/egbY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721425790; c=relaxed/simple;
-	bh=bRESBqr+QmZej4x/QIzifLd9hpEoAXyFGjN/yOaVbOo=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=OgeDFLBbKQ/r6pkgImCmOKAkf/1qZRh5q3ZXeS32V9RUxZuBBTrMAsg6Ce+OaT0GmboQUemZU0TNXHGWHMAI9+RxbSN47sWGv36ReBjvtlNJJhSJVAO8az7Xx63LJB84QxA1MKknDwn3L/7pBX2M16kiqUWIgdSwsTpIj2r82oU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=nrz1xH53; arc=none smtp.client-ip=192.198.163.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1721430129; c=relaxed/simple;
+	bh=AszoS7kOGC1Qup5KqxxVFB6RUfgxmlB8W7lrRcnDttA=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=o5/r7CBQGNCA7Z4fbnseJUiOiJZoE9WMu5YRleN4kSkDY5hKKzXSYOEvvdRuVicy2QDclNv04zhHvAt1SO1d+r1vMgfzXham/m4380POkdu8pGQnHnEu1b22mxj93Z6Kx2fjMI6SrA/RI3smacEJrhOkMt7sntfrtN+N5ghxl8I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=LDS1AZyA; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="nrz1xH53"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1721425789; x=1752961789;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=bRESBqr+QmZej4x/QIzifLd9hpEoAXyFGjN/yOaVbOo=;
-  b=nrz1xH53aAmrGRvrUbpKBsBEuygxV2d/XWXtM7Tc3cw2C/hcpzO55MZs
-   lcqF4XdcxuKQRzQ0nQnlujsRIpxVdZRJkhI3EK3E7grtAF4GJoVDblnxE
-   wi3XXfGmrj0Xsei6nrDnJZulnqFiK1Xy8fEDmjmTXaiYOXIDuuc0OHpW+
-   DM2IYH/DYc3knXABLVXW0XQPj0UIODGv2q7PDvIrkwfAJtN9chxdTJhD1
-   IlJIdBJnxIgq5pwZEBsZkS8xvCaY8pfrNG9KXfJwMM3VvRrHnEg5uyxKn
-   niuQSBSryjJEWMtagYde9lBGSBWHCaTuJCnvqjI+UGTbJ7927OFgL9WWF
-   w==;
-X-CSE-ConnectionGUID: CBq0TJzNQUStKEnq4d7iJw==
-X-CSE-MsgGUID: Qa+HKL9RTES/AmXvuIM9KA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11138"; a="19241133"
-X-IronPort-AV: E=Sophos;i="6.09,221,1716274800"; 
-   d="scan'208";a="19241133"
-Received: from orviesa008.jf.intel.com ([10.64.159.148])
-  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jul 2024 14:49:48 -0700
-X-CSE-ConnectionGUID: CX+R0HC9TfCV4GketZQm8w==
-X-CSE-MsgGUID: roXzXDIPRPKmVRdqP0sG4g==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.09,221,1716274800"; 
-   d="scan'208";a="51968747"
-Received: from lkp-server01.sh.intel.com (HELO 68891e0c336b) ([10.239.97.150])
-  by orviesa008.jf.intel.com with ESMTP; 19 Jul 2024 14:49:47 -0700
-Received: from kbuild by 68891e0c336b with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1sUvU0-000ibm-1i;
-	Fri, 19 Jul 2024 21:49:44 +0000
-Date: Sat, 20 Jul 2024 05:48:45 +0800
-From: kernel test robot <lkp@intel.com>
-To: David Hildenbrand <david@redhat.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [davidhildenbrand:folio_walk 1/10] mm/pagewalk.c:739:35: error: too
- many arguments to function call, expected single argument 'ptep', have 3
- arguments
-Message-ID: <202407200547.1AzxjkST-lkp@intel.com>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="LDS1AZyA"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1721430126;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=WvZ6yaQbU3nXVbdC0gx9RuNz3Q20YcbrMT/Y/tqfQfI=;
+	b=LDS1AZyAAbzzcXrhBkrMxis73/uUaKZ0haQ6OnETVDYxwrK8nnRJ5fBo6Tl8e2wVa8vWSQ
+	WEqCE0VwYLjI47AtspYHQh8zyOuxuw3JXRph846o97NOWsrnKeSVQVJszCvDSnUHXjnn8S
+	tsD7dSx9pcuBKbHmtcn5qzh7RFM7YNw=
+Received: from mx-prod-mc-04.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-617-KePCMnpDNwmIk6I4f1dPGg-1; Fri,
+ 19 Jul 2024 19:02:05 -0400
+X-MC-Unique: KePCMnpDNwmIk6I4f1dPGg-1
+Received: from mx-prod-int-02.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-02.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.15])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-04.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 74C0619560B0
+	for <llvm@lists.linux.dev>; Fri, 19 Jul 2024 23:02:04 +0000 (UTC)
+Received: from [172.64.3.44] (unknown [10.30.33.101])
+	by mx-prod-int-02.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id C71C61955D4D;
+	Fri, 19 Jul 2024 23:02:03 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.10.0,
+ mainline.kernel.org-clang, 53a5182c)
+Date: Fri, 19 Jul 2024 23:02:03 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.15
+Message-Id: <89297.124071919020500722@us-mta-617.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-tree:   https://github.com/davidhildenbrand/linux folio_walk
-head:   22d5156a61b8f9783984a24990a8a40d3993a513
-commit: d80a4597b25823d1bcf9d253452fcbcbef4d5c68 [1/10] mm/pagewalk: introduce folio_walk_start() + folio_walk_end()
-config: i386-buildonly-randconfig-001-20240720 (https://download.01.org/0day-ci/archive/20240720/202407200547.1AzxjkST-lkp@intel.com/config)
-compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240720/202407200547.1AzxjkST-lkp@intel.com/reproduce)
+Hi, we tested your kernel and here are the results:
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202407200547.1AzxjkST-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> mm/pagewalk.c:739:35: error: too many arguments to function call, expected single argument 'ptep', have 3 arguments
-     739 |                 pte = huge_ptep_get(vma->vm_mm, addr, ptep);
-         |                       ~~~~~~~~~~~~~             ^~~~~~~~~~
-   include/asm-generic/hugetlb.h:147:21: note: 'huge_ptep_get' declared here
-     147 | static inline pte_t huge_ptep_get(pte_t *ptep)
-         |                     ^             ~~~~~~~~~~~
-   1 error generated.
+    Overall result: FAILED
+             Merge: OK
+           Compile: FAILED
 
 
-vim +/ptep +739 mm/pagewalk.c
+Kernel information:
+    Commit message: Merge tag 'for-6.11-tag' of git://git.kernel.org/pub/sc=
+m/linux/kernel/git/kdave/linux
 
-   723	
-   724	static struct folio *folio_walk_start_hugetlb(struct vm_area_struct *vma,
-   725			unsigned long addr, struct folio_walk *fw,
-   726			folio_walk_flags_t flags)
-   727	{
-   728	#ifdef CONFIG_HUGETLB_PAGE
-   729		struct hstate *h = hstate_vma(vma);
-   730		unsigned long hmask = huge_page_mask(h);
-   731		unsigned long sz = huge_page_size(h);
-   732		struct page *page;
-   733		pte_t *ptep, pte;
-   734		spinlock_t *ptl;
-   735	
-   736		ptep = hugetlb_walk(vma, addr & hmask, sz);
-   737		if (ptep) {
-   738			ptl = huge_pte_lock(hstate_vma(vma), vma->vm_mm, ptep);
- > 739			pte = huge_ptep_get(vma->vm_mm, addr, ptep);
-   740			if (pte_present(pte)) {
-   741				page = pte_page(pte);
-   742				goto found;
-   743			} else if (!huge_pte_none(pte)) {
-   744				swp_entry_t entry = pte_to_swp_entry(pte);
-   745	
-   746				if ((flags & FW_MIGRATION_ENTRIES) &&
-   747				    is_migration_entry(entry)) {
-   748					page = pfn_swap_entry_to_page(entry);
-   749					goto found;
-   750				}
-   751			}
-   752			spin_unlock(ptl);
-   753		}
-   754		hugetlb_vma_unlock_read(vma);
-   755		return NULL;
-   756	found:
-   757		if (sz < PMD_SIZE)
-   758			fw->level = FW_LEVEL_PTE;
-   759		else if (sz < PUD_SIZE)
-   760			fw->level = FW_LEVEL_PMD;
-   761		else
-   762			fw->level = FW_LEVEL_PUD;
-   763		fw->ptep = ptep;
-   764		fw->pte = pte;
-   765		return __folio_walk_fill(fw, page, addr & (sz - 1), vma, ptl);
-   766	#endif /* CONFIG_HUGETLB_PAGE */
-   767		return NULL;
-   768	}
-   769	
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1380969367
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+One or more kernel builds failed:
+    Unrecognized or new issues:
+         ppc64le - https://datawarehouse.cki-project.org/kcidb/builds/redha=
+t:1380969367-ppc64le-kernel
+           s390x - https://datawarehouse.cki-project.org/kcidb/builds/redha=
+t:1380969367-s390x-kernel
+          x86_64 (debug) - https://datawarehouse.cki-project.org/kcidb/buil=
+ds/redhat:1380969367-x86_64-kernel-debug
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
