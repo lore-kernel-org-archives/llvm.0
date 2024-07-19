@@ -1,453 +1,235 @@
-Received: from mail-pj1-f50.google.com (mail-pj1-f50.google.com [209.85.216.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B0044404
-	for <llvm@lists.linux.dev>; Fri, 19 Jul 2024 00:51:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 57B57FBF0;
+	Fri, 19 Jul 2024 03:29:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721350302; cv=none; b=aqskBcyaItxl3il9lE9tFh1SY3/mfhXjyt6umaCtomLzWXzOzKdhEI+JcLDd7SQ3I+Zhbwu5pNmCTqfctLdFhNP8rfC12m/UdQgaArsaG7AONAoA6qEDTib/m6yLGk3m28tMOCwHfr32J/4YXllhCIXS7E11sdfnfJcgPZh+Z3o=
+	t=1721359751; cv=none; b=T57/L/lp41T5XWZtVTOxKdPQVQZTBp7H5ZSKbXhAQJrgT4LGfdhB4qvzrV3bcQYq7cl38+LB9xfOidkQ09dc/t46FyQBvq6OOAB4FU3IhVJefCtQIQyt77zW7G8vfqshPLxwFmTr2+enQQrnAhtgwtQ8UMSwr5xoQdqsB1V+rwU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721350302; c=relaxed/simple;
-	bh=qiZox51DGBS2qMiOoTjlhNjpZ4ULnupvB7GAExfwAAw=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Xf9uXNuiEiCKBBiKtwKpdImkheXIG7/JhDflxkgOFDlyrhTBaVxC+iEbjVXHfQ5g7QGF3kzvtwuJEoUVImbVpTc2G85LScBMPokzZ9m/+ctF52i72KJAFuePgxdgFqA7782hb+EdgIOUN6VfS1Y7QD0XX3oL8E442o4aVerZDEs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=ghUcJvi5; arc=none smtp.client-ip=209.85.216.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
+	s=arc-20240116; t=1721359751; c=relaxed/simple;
+	bh=p0UYlXZ5KxjXXwnf7VwGSnBq8RKpWMeA4U4IRIUfl8A=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=n8HHzfhPj+2r8+2Fa2rA7QPxfKl3mma5I08CkD6j6fF0Qy2CkyGo5y0wdBUfhQjo2SaOWQ/P8ipBI6HeJAT+/5pcQe1JyG8Oa6NgDLQbpG7dCpiNrtaq8CJHDufKX9G2fJDp77wm29E8CNbiuYyx9r5Bbqw+4lZuI/OQSrbULxM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=VLn/mw/O; arc=none smtp.client-ip=198.175.65.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="ghUcJvi5"
-Received: by mail-pj1-f50.google.com with SMTP id 98e67ed59e1d1-2cb4c4de4cbso665130a91.1
-        for <llvm@lists.linux.dev>; Thu, 18 Jul 2024 17:51:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1721350300; x=1721955100; darn=lists.linux.dev;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=N+il5TBCbKPADDYuyA31kaFvQuyqKF3Hw67HCUliJLk=;
-        b=ghUcJvi5+OGN8eOXNbX+hGcpEZ7ifkY/+gTvkPq2zlZ49y92OYzRedrZUjl/L1eNTd
-         8N+qADtSoxjhVnuzNkStdWpN1O4HCYP+BTAnaUioXDvJz9Q8Dw1ySPClNaFNzzDgX17v
-         zl0aun44FXax4oW/630/ImXtUAdzNpDzB2WFw=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1721350300; x=1721955100;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=N+il5TBCbKPADDYuyA31kaFvQuyqKF3Hw67HCUliJLk=;
-        b=dMnZ/zTcbxmwgal+sVvA7PAMNdFTVxPRtWCbv2Wry3wBarsWrIK8RCCbGTikv2Ln+z
-         3BGfX/LFh78n9HH426l0GhaCiz6gZr02sxzZyoL+cnACRwHDk9DzPSQKYK5Gx6Ms09IW
-         ht8xy4GbEqzleQ3IbqWAPy/rf+Wns1F4No8ZS9Re3zrWTunknMpCu3lyZN4mCuXz17mX
-         GqUNNnVj5CrJq3CFKaV0fVZwIyxlU97di4GTqqqxR2Zu+spXGFNyYHJG5PsbF8Y3LO8j
-         YhhFmLTEdI7ANXm3FIRPYPgztCSp3Dx7UozIuthWRt5PrA4XZkrfht332o4Qc1QUbLrm
-         /30A==
-X-Forwarded-Encrypted: i=1; AJvYcCVRLWVAmVyBWPg+oQXwJ6fqGJ4gBlTAUfDx5+OAd7jyJLRADDDxKXRFt4RLotEa2KSvdrkjymAVPhuOTSiYDBAJ4JdkZw==
-X-Gm-Message-State: AOJu0YzINTEs0wx0BUvK/snBVlpaTFtL7V+qPk4ERf7Sd83snuWYzKCf
-	58zgUZDCZEiB4IwiKbtV9OyT/+vn2o8sPHENt7cudKa+rTKZzONyD4dnX0/xAw==
-X-Google-Smtp-Source: AGHT+IFN2viMYNu3ga063nvQxfoJJltCNTXu0gxArU22Q4+5wrgtOa9pod59jNBJ+wyjlm9V//fY3Q==
-X-Received: by 2002:a17:90a:fa03:b0:2c9:7e6e:3578 with SMTP id 98e67ed59e1d1-2cb52431900mr4919172a91.7.1721350299799;
-        Thu, 18 Jul 2024 17:51:39 -0700 (PDT)
-Received: from localhost ([2620:15c:9d:2:35aa:f87d:7549:3938])
-        by smtp.gmail.com with UTF8SMTPSA id 98e67ed59e1d1-2cb77504fadsm1393633a91.45.2024.07.18.17.51.38
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 18 Jul 2024 17:51:39 -0700 (PDT)
-From: Brian Norris <briannorris@chromium.org>
-To: Yury Norov <yury.norov@gmail.com>
-Cc: linux-kernel@vger.kernel.org,
-	Bill Wendling <morbo@google.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Justin Stitt <justinstitt@google.com>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	llvm@lists.linux.dev,
-	Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-	Brian Norris <briannorris@chromium.org>,
-	Kees Cook <kees@kernel.org>
-Subject: [PATCH v3 4/4] nodemask: Switch from inline to __always_inline
-Date: Thu, 18 Jul 2024 17:50:40 -0700
-Message-ID: <20240719005127.2449328-4-briannorris@chromium.org>
-X-Mailer: git-send-email 2.45.2.1089.g2a221341d9-goog
-In-Reply-To: <20240719005127.2449328-1-briannorris@chromium.org>
-References: <20240719005127.2449328-1-briannorris@chromium.org>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="VLn/mw/O"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1721359749; x=1752895749;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=p0UYlXZ5KxjXXwnf7VwGSnBq8RKpWMeA4U4IRIUfl8A=;
+  b=VLn/mw/OotfI+SF5THxi6/ts0WAONo98aiA1JxhX0WUy5JF3KXuA3Tg7
+   i1PSLP+j9R2m2dqcTfoUfA+RMlsFcLEwHP7+jLtmFu16tzd354mtEeOlV
+   elKLQkLmzSkFgxFKdAJ/CXL2xzTgFGD81xDsAqtwpL7tlJhlJ5kCPRllT
+   Qu1+Gzxi9E4w/nH5eDyPLFUcHc+TSlDpTiBUUZEkm8q+fAn9sx58adg3J
+   CbslrlIY1NxBhlIzc8nQEGDWqXs32XftvLIvb82dLbZjJa1n2NXrAMPIP
+   KYn8F3uHVowKUSdJwReeZHM5K10O0ltpGWSzL4+FMrRNGwATEGQElE0hB
+   A==;
+X-CSE-ConnectionGUID: pkcqM8hKRmS3xiSrvzOW7w==
+X-CSE-MsgGUID: 3nMYqoOsQhCG3fb+bg845w==
+X-IronPort-AV: E=McAfee;i="6700,10204,11137"; a="22768882"
+X-IronPort-AV: E=Sophos;i="6.09,219,1716274800"; 
+   d="scan'208";a="22768882"
+Received: from orviesa003.jf.intel.com ([10.64.159.143])
+  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jul 2024 20:29:09 -0700
+X-CSE-ConnectionGUID: WVUNQpIJQkmMjfqeAak7Hw==
+X-CSE-MsgGUID: PgF5ppTRQQ6noa1BWQoxlw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.09,219,1716274800"; 
+   d="scan'208";a="55832565"
+Received: from lkp-server01.sh.intel.com (HELO 68891e0c336b) ([10.239.97.150])
+  by orviesa003.jf.intel.com with ESMTP; 18 Jul 2024 20:29:04 -0700
+Received: from kbuild by 68891e0c336b with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1sUeIn-000hoA-0R;
+	Fri, 19 Jul 2024 03:29:01 +0000
+Date: Fri, 19 Jul 2024 11:28:49 +0800
+From: kernel test robot <lkp@intel.com>
+To: Claudiu <claudiu.beznea@tuxon.dev>, lee@kernel.org, robh@kernel.org,
+	krzk+dt@kernel.org, conor+dt@kernel.org,
+	alexandre.belloni@bootlin.com, geert+renesas@glider.be,
+	magnus.damm@gmail.com, mturquette@baylibre.com, sboyd@kernel.org,
+	p.zabel@pengutronix.de
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-rtc@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
+	claudiu.beznea@tuxon.dev,
+	Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+Subject: Re: [PATCH v2 05/11] rtc: renesas-rtca3: Add driver for RTCA-3
+ available on Renesas RZ/G3S SoC
+Message-ID: <202407191156.wJPjHtKG-lkp@intel.com>
+References: <20240716103025.1198495-6-claudiu.beznea.uj@bp.renesas.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240716103025.1198495-6-claudiu.beznea.uj@bp.renesas.com>
 
-From: Yury Norov <yury.norov@gmail.com>
+Hi Claudiu,
 
-'inline' keyword is only a recommendation for compiler. If it decides to
-not inline nodemask functions, the whole small_const_nbits() machinery
-doesn't work.
+kernel test robot noticed the following build errors:
 
-This is how a standard GCC 11.3.0 does for my x86_64 build now. This patch
-replaces 'inline' directive with unconditional '__always_inline' to make
-sure that there's always a chance for compile-time optimization. It doesn't
-change size of kernel image, according to bloat-o-meter.
+[auto build test ERROR on next-20240716]
+[also build test ERROR on v6.10]
+[cannot apply to geert-renesas-devel/next lee-mfd/for-mfd-next lee-mfd/for-mfd-fixes abelloni/rtc-next linus/master v6.10 v6.10-rc7 v6.10-rc6]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-[[ Brian: split out from:
-      Subject: [PATCH 1/3] bitmap: switch from inline to __always_inline
-      https://lore.kernel.org/all/20221027043810.350460-2-yury.norov@gmail.com/
-   But rewritten, as there were too many conflicts. ]]
+url:    https://github.com/intel-lab-lkp/linux/commits/Claudiu/dt-bindings-mfd-renesas-r9a08g045-vbattb-Document-VBATTB/20240716-190833
+base:   next-20240716
+patch link:    https://lore.kernel.org/r/20240716103025.1198495-6-claudiu.beznea.uj%40bp.renesas.com
+patch subject: [PATCH v2 05/11] rtc: renesas-rtca3: Add driver for RTCA-3 available on Renesas RZ/G3S SoC
+config: arm64-allmodconfig (https://download.01.org/0day-ci/archive/20240719/202407191156.wJPjHtKG-lkp@intel.com/config)
+compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project ad154281230d83ee551e12d5be48bb956ef47ed3)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240719/202407191156.wJPjHtKG-lkp@intel.com/reproduce)
 
-Signed-off-by: Yury Norov <yury.norov@gmail.com>
-Co-developed-by: Brian Norris <briannorris@chromium.org>
-Signed-off-by: Brian Norris <briannorris@chromium.org>
-Reviewed-by: Kees Cook <kees@kernel.org>
----
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202407191156.wJPjHtKG-lkp@intel.com/
 
-Changes in v3:
- - newly split out in v3
+All errors (new ones prefixed by >>):
 
- include/linux/nodemask.h | 86 ++++++++++++++++++++--------------------
- 1 file changed, 43 insertions(+), 43 deletions(-)
+>> drivers/rtc/rtc-renesas-rtca3.c:433:3: error: cannot jump from this goto statement to its label
+     433 |                 goto setup_failed;
+         |                 ^
+   drivers/rtc/rtc-renesas-rtca3.c:436:2: note: jump bypasses initialization of variable with __attribute__((cleanup))
+     436 |         guard(spinlock_irqsave)(&priv->lock);
+         |         ^
+   include/linux/cleanup.h:167:15: note: expanded from macro 'guard'
+     167 |         CLASS(_name, __UNIQUE_ID(guard))
+         |                      ^
+   include/linux/compiler.h:189:29: note: expanded from macro '__UNIQUE_ID'
+     189 | #define __UNIQUE_ID(prefix) __PASTE(__PASTE(__UNIQUE_ID_, prefix), __COUNTER__)
+         |                             ^
+   include/linux/compiler_types.h:84:22: note: expanded from macro '__PASTE'
+      84 | #define __PASTE(a,b) ___PASTE(a,b)
+         |                      ^
+   include/linux/compiler_types.h:83:23: note: expanded from macro '___PASTE'
+      83 | #define ___PASTE(a,b) a##b
+         |                       ^
+   <scratch space>:67:1: note: expanded from here
+      67 | __UNIQUE_ID_guard738
+         | ^
+   drivers/rtc/rtc-renesas-rtca3.c:426:3: error: cannot jump from this goto statement to its label
+     426 |                 goto setup_failed;
+         |                 ^
+   drivers/rtc/rtc-renesas-rtca3.c:436:2: note: jump bypasses initialization of variable with __attribute__((cleanup))
+     436 |         guard(spinlock_irqsave)(&priv->lock);
+         |         ^
+   include/linux/cleanup.h:167:15: note: expanded from macro 'guard'
+     167 |         CLASS(_name, __UNIQUE_ID(guard))
+         |                      ^
+   include/linux/compiler.h:189:29: note: expanded from macro '__UNIQUE_ID'
+     189 | #define __UNIQUE_ID(prefix) __PASTE(__PASTE(__UNIQUE_ID_, prefix), __COUNTER__)
+         |                             ^
+   include/linux/compiler_types.h:84:22: note: expanded from macro '__PASTE'
+      84 | #define __PASTE(a,b) ___PASTE(a,b)
+         |                      ^
+   include/linux/compiler_types.h:83:23: note: expanded from macro '___PASTE'
+      83 | #define ___PASTE(a,b) a##b
+         |                       ^
+   <scratch space>:67:1: note: expanded from here
+      67 | __UNIQUE_ID_guard738
+         | ^
+   2 errors generated.
 
-diff --git a/include/linux/nodemask.h b/include/linux/nodemask.h
-index b61438313a73..9fd7a0ce9c1a 100644
---- a/include/linux/nodemask.h
-+++ b/include/linux/nodemask.h
-@@ -107,11 +107,11 @@ extern nodemask_t _unused_nodemask_arg_;
-  */
- #define nodemask_pr_args(maskp)	__nodemask_pr_numnodes(maskp), \
- 				__nodemask_pr_bits(maskp)
--static inline unsigned int __nodemask_pr_numnodes(const nodemask_t *m)
-+static __always_inline unsigned int __nodemask_pr_numnodes(const nodemask_t *m)
- {
- 	return m ? MAX_NUMNODES : 0;
- }
--static inline const unsigned long *__nodemask_pr_bits(const nodemask_t *m)
-+static __always_inline const unsigned long *__nodemask_pr_bits(const nodemask_t *m)
- {
- 	return m ? m->bits : NULL;
- }
-@@ -132,19 +132,19 @@ static __always_inline void __node_set(int node, volatile nodemask_t *dstp)
- }
- 
- #define node_clear(node, dst) __node_clear((node), &(dst))
--static inline void __node_clear(int node, volatile nodemask_t *dstp)
-+static __always_inline void __node_clear(int node, volatile nodemask_t *dstp)
- {
- 	clear_bit(node, dstp->bits);
- }
- 
- #define nodes_setall(dst) __nodes_setall(&(dst), MAX_NUMNODES)
--static inline void __nodes_setall(nodemask_t *dstp, unsigned int nbits)
-+static __always_inline void __nodes_setall(nodemask_t *dstp, unsigned int nbits)
- {
- 	bitmap_fill(dstp->bits, nbits);
- }
- 
- #define nodes_clear(dst) __nodes_clear(&(dst), MAX_NUMNODES)
--static inline void __nodes_clear(nodemask_t *dstp, unsigned int nbits)
-+static __always_inline void __nodes_clear(nodemask_t *dstp, unsigned int nbits)
- {
- 	bitmap_zero(dstp->bits, nbits);
- }
-@@ -154,14 +154,14 @@ static inline void __nodes_clear(nodemask_t *dstp, unsigned int nbits)
- 
- #define node_test_and_set(node, nodemask) \
- 			__node_test_and_set((node), &(nodemask))
--static inline bool __node_test_and_set(int node, nodemask_t *addr)
-+static __always_inline bool __node_test_and_set(int node, nodemask_t *addr)
- {
- 	return test_and_set_bit(node, addr->bits);
- }
- 
- #define nodes_and(dst, src1, src2) \
- 			__nodes_and(&(dst), &(src1), &(src2), MAX_NUMNODES)
--static inline void __nodes_and(nodemask_t *dstp, const nodemask_t *src1p,
-+static __always_inline void __nodes_and(nodemask_t *dstp, const nodemask_t *src1p,
- 					const nodemask_t *src2p, unsigned int nbits)
- {
- 	bitmap_and(dstp->bits, src1p->bits, src2p->bits, nbits);
-@@ -169,7 +169,7 @@ static inline void __nodes_and(nodemask_t *dstp, const nodemask_t *src1p,
- 
- #define nodes_or(dst, src1, src2) \
- 			__nodes_or(&(dst), &(src1), &(src2), MAX_NUMNODES)
--static inline void __nodes_or(nodemask_t *dstp, const nodemask_t *src1p,
-+static __always_inline void __nodes_or(nodemask_t *dstp, const nodemask_t *src1p,
- 					const nodemask_t *src2p, unsigned int nbits)
- {
- 	bitmap_or(dstp->bits, src1p->bits, src2p->bits, nbits);
-@@ -177,7 +177,7 @@ static inline void __nodes_or(nodemask_t *dstp, const nodemask_t *src1p,
- 
- #define nodes_xor(dst, src1, src2) \
- 			__nodes_xor(&(dst), &(src1), &(src2), MAX_NUMNODES)
--static inline void __nodes_xor(nodemask_t *dstp, const nodemask_t *src1p,
-+static __always_inline void __nodes_xor(nodemask_t *dstp, const nodemask_t *src1p,
- 					const nodemask_t *src2p, unsigned int nbits)
- {
- 	bitmap_xor(dstp->bits, src1p->bits, src2p->bits, nbits);
-@@ -185,7 +185,7 @@ static inline void __nodes_xor(nodemask_t *dstp, const nodemask_t *src1p,
- 
- #define nodes_andnot(dst, src1, src2) \
- 			__nodes_andnot(&(dst), &(src1), &(src2), MAX_NUMNODES)
--static inline void __nodes_andnot(nodemask_t *dstp, const nodemask_t *src1p,
-+static __always_inline void __nodes_andnot(nodemask_t *dstp, const nodemask_t *src1p,
- 					const nodemask_t *src2p, unsigned int nbits)
- {
- 	bitmap_andnot(dstp->bits, src1p->bits, src2p->bits, nbits);
-@@ -193,7 +193,7 @@ static inline void __nodes_andnot(nodemask_t *dstp, const nodemask_t *src1p,
- 
- #define nodes_complement(dst, src) \
- 			__nodes_complement(&(dst), &(src), MAX_NUMNODES)
--static inline void __nodes_complement(nodemask_t *dstp,
-+static __always_inline void __nodes_complement(nodemask_t *dstp,
- 					const nodemask_t *srcp, unsigned int nbits)
- {
- 	bitmap_complement(dstp->bits, srcp->bits, nbits);
-@@ -201,7 +201,7 @@ static inline void __nodes_complement(nodemask_t *dstp,
- 
- #define nodes_equal(src1, src2) \
- 			__nodes_equal(&(src1), &(src2), MAX_NUMNODES)
--static inline bool __nodes_equal(const nodemask_t *src1p,
-+static __always_inline bool __nodes_equal(const nodemask_t *src1p,
- 					const nodemask_t *src2p, unsigned int nbits)
- {
- 	return bitmap_equal(src1p->bits, src2p->bits, nbits);
-@@ -209,7 +209,7 @@ static inline bool __nodes_equal(const nodemask_t *src1p,
- 
- #define nodes_intersects(src1, src2) \
- 			__nodes_intersects(&(src1), &(src2), MAX_NUMNODES)
--static inline bool __nodes_intersects(const nodemask_t *src1p,
-+static __always_inline bool __nodes_intersects(const nodemask_t *src1p,
- 					const nodemask_t *src2p, unsigned int nbits)
- {
- 	return bitmap_intersects(src1p->bits, src2p->bits, nbits);
-@@ -217,33 +217,33 @@ static inline bool __nodes_intersects(const nodemask_t *src1p,
- 
- #define nodes_subset(src1, src2) \
- 			__nodes_subset(&(src1), &(src2), MAX_NUMNODES)
--static inline bool __nodes_subset(const nodemask_t *src1p,
-+static __always_inline bool __nodes_subset(const nodemask_t *src1p,
- 					const nodemask_t *src2p, unsigned int nbits)
- {
- 	return bitmap_subset(src1p->bits, src2p->bits, nbits);
- }
- 
- #define nodes_empty(src) __nodes_empty(&(src), MAX_NUMNODES)
--static inline bool __nodes_empty(const nodemask_t *srcp, unsigned int nbits)
-+static __always_inline bool __nodes_empty(const nodemask_t *srcp, unsigned int nbits)
- {
- 	return bitmap_empty(srcp->bits, nbits);
- }
- 
- #define nodes_full(nodemask) __nodes_full(&(nodemask), MAX_NUMNODES)
--static inline bool __nodes_full(const nodemask_t *srcp, unsigned int nbits)
-+static __always_inline bool __nodes_full(const nodemask_t *srcp, unsigned int nbits)
- {
- 	return bitmap_full(srcp->bits, nbits);
- }
- 
- #define nodes_weight(nodemask) __nodes_weight(&(nodemask), MAX_NUMNODES)
--static inline int __nodes_weight(const nodemask_t *srcp, unsigned int nbits)
-+static __always_inline int __nodes_weight(const nodemask_t *srcp, unsigned int nbits)
- {
- 	return bitmap_weight(srcp->bits, nbits);
- }
- 
- #define nodes_shift_right(dst, src, n) \
- 			__nodes_shift_right(&(dst), &(src), (n), MAX_NUMNODES)
--static inline void __nodes_shift_right(nodemask_t *dstp,
-+static __always_inline void __nodes_shift_right(nodemask_t *dstp,
- 					const nodemask_t *srcp, int n, int nbits)
- {
- 	bitmap_shift_right(dstp->bits, srcp->bits, n, nbits);
-@@ -251,7 +251,7 @@ static inline void __nodes_shift_right(nodemask_t *dstp,
- 
- #define nodes_shift_left(dst, src, n) \
- 			__nodes_shift_left(&(dst), &(src), (n), MAX_NUMNODES)
--static inline void __nodes_shift_left(nodemask_t *dstp,
-+static __always_inline void __nodes_shift_left(nodemask_t *dstp,
- 					const nodemask_t *srcp, int n, int nbits)
- {
- 	bitmap_shift_left(dstp->bits, srcp->bits, n, nbits);
-@@ -261,13 +261,13 @@ static inline void __nodes_shift_left(nodemask_t *dstp,
-           > MAX_NUMNODES, then the silly min_ts could be dropped. */
- 
- #define first_node(src) __first_node(&(src))
--static inline unsigned int __first_node(const nodemask_t *srcp)
-+static __always_inline unsigned int __first_node(const nodemask_t *srcp)
- {
- 	return min_t(unsigned int, MAX_NUMNODES, find_first_bit(srcp->bits, MAX_NUMNODES));
- }
- 
- #define next_node(n, src) __next_node((n), &(src))
--static inline unsigned int __next_node(int n, const nodemask_t *srcp)
-+static __always_inline unsigned int __next_node(int n, const nodemask_t *srcp)
- {
- 	return min_t(unsigned int, MAX_NUMNODES, find_next_bit(srcp->bits, MAX_NUMNODES, n+1));
- }
-@@ -277,7 +277,7 @@ static inline unsigned int __next_node(int n, const nodemask_t *srcp)
-  * the first node in src if needed.  Returns MAX_NUMNODES if src is empty.
-  */
- #define next_node_in(n, src) __next_node_in((n), &(src))
--static inline unsigned int __next_node_in(int node, const nodemask_t *srcp)
-+static __always_inline unsigned int __next_node_in(int node, const nodemask_t *srcp)
- {
- 	unsigned int ret = __next_node(node, srcp);
- 
-@@ -286,7 +286,7 @@ static inline unsigned int __next_node_in(int node, const nodemask_t *srcp)
- 	return ret;
- }
- 
--static inline void init_nodemask_of_node(nodemask_t *mask, int node)
-+static __always_inline void init_nodemask_of_node(nodemask_t *mask, int node)
- {
- 	nodes_clear(*mask);
- 	node_set(node, *mask);
-@@ -304,7 +304,7 @@ static inline void init_nodemask_of_node(nodemask_t *mask, int node)
- })
- 
- #define first_unset_node(mask) __first_unset_node(&(mask))
--static inline unsigned int __first_unset_node(const nodemask_t *maskp)
-+static __always_inline unsigned int __first_unset_node(const nodemask_t *maskp)
- {
- 	return min_t(unsigned int, MAX_NUMNODES,
- 			find_first_zero_bit(maskp->bits, MAX_NUMNODES));
-@@ -338,21 +338,21 @@ static inline unsigned int __first_unset_node(const nodemask_t *maskp)
- 
- #define nodemask_parse_user(ubuf, ulen, dst) \
- 		__nodemask_parse_user((ubuf), (ulen), &(dst), MAX_NUMNODES)
--static inline int __nodemask_parse_user(const char __user *buf, int len,
-+static __always_inline int __nodemask_parse_user(const char __user *buf, int len,
- 					nodemask_t *dstp, int nbits)
- {
- 	return bitmap_parse_user(buf, len, dstp->bits, nbits);
- }
- 
- #define nodelist_parse(buf, dst) __nodelist_parse((buf), &(dst), MAX_NUMNODES)
--static inline int __nodelist_parse(const char *buf, nodemask_t *dstp, int nbits)
-+static __always_inline int __nodelist_parse(const char *buf, nodemask_t *dstp, int nbits)
- {
- 	return bitmap_parselist(buf, dstp->bits, nbits);
- }
- 
- #define node_remap(oldbit, old, new) \
- 		__node_remap((oldbit), &(old), &(new), MAX_NUMNODES)
--static inline int __node_remap(int oldbit,
-+static __always_inline int __node_remap(int oldbit,
- 		const nodemask_t *oldp, const nodemask_t *newp, int nbits)
- {
- 	return bitmap_bitremap(oldbit, oldp->bits, newp->bits, nbits);
-@@ -360,7 +360,7 @@ static inline int __node_remap(int oldbit,
- 
- #define nodes_remap(dst, src, old, new) \
- 		__nodes_remap(&(dst), &(src), &(old), &(new), MAX_NUMNODES)
--static inline void __nodes_remap(nodemask_t *dstp, const nodemask_t *srcp,
-+static __always_inline void __nodes_remap(nodemask_t *dstp, const nodemask_t *srcp,
- 		const nodemask_t *oldp, const nodemask_t *newp, int nbits)
- {
- 	bitmap_remap(dstp->bits, srcp->bits, oldp->bits, newp->bits, nbits);
-@@ -368,7 +368,7 @@ static inline void __nodes_remap(nodemask_t *dstp, const nodemask_t *srcp,
- 
- #define nodes_onto(dst, orig, relmap) \
- 		__nodes_onto(&(dst), &(orig), &(relmap), MAX_NUMNODES)
--static inline void __nodes_onto(nodemask_t *dstp, const nodemask_t *origp,
-+static __always_inline void __nodes_onto(nodemask_t *dstp, const nodemask_t *origp,
- 		const nodemask_t *relmapp, int nbits)
- {
- 	bitmap_onto(dstp->bits, origp->bits, relmapp->bits, nbits);
-@@ -376,7 +376,7 @@ static inline void __nodes_onto(nodemask_t *dstp, const nodemask_t *origp,
- 
- #define nodes_fold(dst, orig, sz) \
- 		__nodes_fold(&(dst), &(orig), sz, MAX_NUMNODES)
--static inline void __nodes_fold(nodemask_t *dstp, const nodemask_t *origp,
-+static __always_inline void __nodes_fold(nodemask_t *dstp, const nodemask_t *origp,
- 		int sz, int nbits)
- {
- 	bitmap_fold(dstp->bits, origp->bits, sz, nbits);
-@@ -418,22 +418,22 @@ enum node_states {
- extern nodemask_t node_states[NR_NODE_STATES];
- 
- #if MAX_NUMNODES > 1
--static inline int node_state(int node, enum node_states state)
-+static __always_inline int node_state(int node, enum node_states state)
- {
- 	return node_isset(node, node_states[state]);
- }
- 
--static inline void node_set_state(int node, enum node_states state)
-+static __always_inline void node_set_state(int node, enum node_states state)
- {
- 	__node_set(node, &node_states[state]);
- }
- 
--static inline void node_clear_state(int node, enum node_states state)
-+static __always_inline void node_clear_state(int node, enum node_states state)
- {
- 	__node_clear(node, &node_states[state]);
- }
- 
--static inline int num_node_state(enum node_states state)
-+static __always_inline int num_node_state(enum node_states state)
- {
- 	return nodes_weight(node_states[state]);
- }
-@@ -443,11 +443,11 @@ static inline int num_node_state(enum node_states state)
- 
- #define first_online_node	first_node(node_states[N_ONLINE])
- #define first_memory_node	first_node(node_states[N_MEMORY])
--static inline unsigned int next_online_node(int nid)
-+static __always_inline unsigned int next_online_node(int nid)
- {
- 	return next_node(nid, node_states[N_ONLINE]);
- }
--static inline unsigned int next_memory_node(int nid)
-+static __always_inline unsigned int next_memory_node(int nid)
- {
- 	return next_node(nid, node_states[N_MEMORY]);
- }
-@@ -455,13 +455,13 @@ static inline unsigned int next_memory_node(int nid)
- extern unsigned int nr_node_ids;
- extern unsigned int nr_online_nodes;
- 
--static inline void node_set_online(int nid)
-+static __always_inline void node_set_online(int nid)
- {
- 	node_set_state(nid, N_ONLINE);
- 	nr_online_nodes = num_node_state(N_ONLINE);
- }
- 
--static inline void node_set_offline(int nid)
-+static __always_inline void node_set_offline(int nid)
- {
- 	node_clear_state(nid, N_ONLINE);
- 	nr_online_nodes = num_node_state(N_ONLINE);
-@@ -469,20 +469,20 @@ static inline void node_set_offline(int nid)
- 
- #else
- 
--static inline int node_state(int node, enum node_states state)
-+static __always_inline int node_state(int node, enum node_states state)
- {
- 	return node == 0;
- }
- 
--static inline void node_set_state(int node, enum node_states state)
-+static __always_inline void node_set_state(int node, enum node_states state)
- {
- }
- 
--static inline void node_clear_state(int node, enum node_states state)
-+static __always_inline void node_clear_state(int node, enum node_states state)
- {
- }
- 
--static inline int num_node_state(enum node_states state)
-+static __always_inline int num_node_state(enum node_states state)
- {
- 	return 1;
- }
-@@ -502,7 +502,7 @@ static inline int num_node_state(enum node_states state)
- 
- #endif
- 
--static inline int node_random(const nodemask_t *maskp)
-+static __always_inline int node_random(const nodemask_t *maskp)
- {
- #if defined(CONFIG_NUMA) && (MAX_NUMNODES > 1)
- 	int w, bit;
+
+vim +433 drivers/rtc/rtc-renesas-rtca3.c
+
+   376	
+   377	static int rtca3_set_alarm(struct device *dev, struct rtc_wkalrm *wkalrm)
+   378	{
+   379		struct rtca3_priv *priv = dev_get_drvdata(dev);
+   380		struct rtc_time *tm = &wkalrm->time;
+   381		u8 rcr1, tmp;
+   382		int ret;
+   383	
+   384		scoped_guard(spinlock_irqsave, &priv->lock) {
+   385			tmp = readb(priv->base + RTCA3_RCR2);
+   386			if (!(tmp & RTCA3_RCR2_START))
+   387				return -EPERM;
+   388	
+   389			/* Disable AIE to prevent false interrupts. */
+   390			rcr1 = readb(priv->base + RTCA3_RCR1);
+   391			rcr1 &= ~RTCA3_RCR1_AIE;
+   392			writeb(rcr1, priv->base + RTCA3_RCR1);
+   393			ret = readb_poll_timeout_atomic(priv->base + RTCA3_RCR1, tmp,
+   394							!(tmp & RTCA3_RCR1_AIE),
+   395							10, RTCA3_DEFAULT_TIMEOUT_US);
+   396			if (ret)
+   397				return ret;
+   398	
+   399			/* Set the time and enable the alarm. */
+   400			writeb(RTCA3_AR_ENB | bin2bcd(tm->tm_sec), priv->base + RTCA3_RSECAR);
+   401			writeb(RTCA3_AR_ENB | bin2bcd(tm->tm_min), priv->base + RTCA3_RMINAR);
+   402			writeb(RTCA3_AR_ENB | bin2bcd(tm->tm_hour), priv->base + RTCA3_RHRAR);
+   403			writeb(RTCA3_AR_ENB | bin2bcd(tm->tm_wday), priv->base + RTCA3_RWKAR);
+   404			writeb(RTCA3_AR_ENB | bin2bcd(tm->tm_mday), priv->base + RTCA3_RDAYAR);
+   405			writeb(RTCA3_AR_ENB | bin2bcd(tm->tm_mon + 1), priv->base + RTCA3_RMONAR);
+   406	
+   407			writew(bin2bcd(tm->tm_year % 100), priv->base + RTCA3_RYRAR);
+   408			writeb(RTCA3_AR_ENB, priv->base + RTCA3_RYRAREN);
+   409	
+   410			/* Make sure we can read back the counters. */
+   411			rtca3_prepare_cntalrm_regs_for_read(priv, false);
+   412	
+   413			/* Need to wait for 2 * 1/64 periodic interrupts to be generated. */
+   414			atomic_set(&priv->alrm_sstep, RTCA3_ALRM_SSTEP_INIT);
+   415			reinit_completion(&priv->set_alarm_completion);
+   416	
+   417			/* Enable periodic interrupt. */
+   418			rcr1 |= RTCA3_RCR1_PIE;
+   419			writeb(rcr1, priv->base + RTCA3_RCR1);
+   420			ret = readb_poll_timeout_atomic(priv->base + RTCA3_RCR1, tmp,
+   421							(tmp & RTCA3_RCR1_PIE),
+   422							10, RTCA3_IRQSET_TIMEOUT_US);
+   423		}
+   424	
+   425		if (ret)
+   426			goto setup_failed;
+   427	
+   428		/* Wait for the 2 * 1/64 periodic interrupts. */
+   429		ret = wait_for_completion_interruptible_timeout(&priv->set_alarm_completion,
+   430								msecs_to_jiffies(500));
+   431		if (ret <= 0) {
+   432			ret = -ETIMEDOUT;
+ > 433			goto setup_failed;
+   434		}
+   435	
+   436		guard(spinlock_irqsave)(&priv->lock);
+   437	
+   438		ret = rtca3_alarm_irq_enable_helper(priv, wkalrm->enabled);
+   439		atomic_set(&priv->alrm_sstep, RTCA3_ALRM_SSTEP_DONE);
+   440	
+   441		return ret;
+   442	
+   443	setup_failed:
+   444		scoped_guard(spinlock_irqsave, &priv->lock) {
+   445			/*
+   446			 * Disable PIE to avoid interrupt storm in case HW needed more than
+   447			 * specified timeout for setup.
+   448			 */
+   449			writeb(rcr1 & ~RTCA3_RCR1_PIE, priv->base + RTCA3_RCR1);
+   450			readb_poll_timeout_atomic(priv->base + RTCA3_RCR1, tmp, !(tmp & ~RTCA3_RCR1_PIE),
+   451						  10, RTCA3_DEFAULT_TIMEOUT_US);
+   452			atomic_set(&priv->alrm_sstep, RTCA3_ALRM_SSTEP_DONE);
+   453		}
+   454	
+   455		return ret;
+   456	}
+   457	
+
 -- 
-2.45.2.1089.g2a221341d9-goog
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
