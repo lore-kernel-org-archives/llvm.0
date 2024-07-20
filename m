@@ -1,53 +1,59 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25D55145FEA;
-	Sat, 20 Jul 2024 16:44:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8BFF513775E;
+	Sat, 20 Jul 2024 17:23:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721493858; cv=none; b=sprfYuDEbWCzqVCskjxbo+AXezWd59psp35a6Fvojo6NYWJ4exApF+C3IJEtD26r9L72YRU3mlQm1pIGIal0RDg/PbVmKXRFOBiyktIqTPY8VJqQ4IyJkNqQXmr2aoYDHb5Cm+nKJCkZl32hbpcNiWqempOIi2/43y9AheuMHhA=
+	t=1721496220; cv=none; b=qMV43d6B83zEXlBui5GS1ffUldjMsrpPraszPnkUrOMk4XL9jlluXnVodQCk+ubiejHbmxD+mPg2K63D/4BcmkVV1HpsxvhK+4inDv2shCNIbWfAlJ8Mt27GbgCu836kS/cvY4iuBZMmsBk2Sk2KExdkuu+EuQxG/A8L6gdcNG0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721493858; c=relaxed/simple;
-	bh=co3eFJoJmB8r16P3eCUweHLirAF/oqq5JYSMK7J3rvI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=MBtuYwTk/HS0v//mk++8Z0qTtyw4EQH7ed/KlkL6HDjE3aKISTwzLZF40freJgIWCdS09gfSQzm93d5urozI4uJY/3bjkD87A0x9VXegxJYEFpXyKR+tO69Nw4cZBpnb4CvqD9ABUqPe3bH/tmygf6Idxumgsq6Wi/71GT3BwUc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=i/sZqTPX; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1721496220; c=relaxed/simple;
+	bh=CmRf8xfUoue/OsP80j08hXpw8hkr9GdEqPwF/fPzxHs=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=kAnrQOb0BQa86OC3lWhOZ5YaCZeKtj/xqfLoChPyab8vDmSMc7FICsbdLzTCyrXhG7sGgE4U638wxa4o+wEYmAXh+mf1ahcTxAQYyQ8el0nJ6JMQgnhSqcq/a+7xp9+6r1POGldVQPYLn6tqtFc1HXFVj5KezF6Bu+PmvxxDMek=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Xx4HiIao; arc=none smtp.client-ip=198.175.65.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="i/sZqTPX"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 86282C2BD10;
-	Sat, 20 Jul 2024 16:44:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1721493857;
-	bh=co3eFJoJmB8r16P3eCUweHLirAF/oqq5JYSMK7J3rvI=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=i/sZqTPXVLOFI6rgsgCp/etM54zIrGYuMA3K+hWkWKK2kCBwgFYsHvPq/YP34/b5o
-	 SIB0Ooco5ZznJM9uWe2WEaz1xLnyx+qYzp8ZmqvZrYz9FwYcHppEHcZzUavksQRF1L
-	 rGGsS2oC3xr0T74mxTkyacLGmi6isLALLSPV8BboHdVlCaok8yYm37k7x2OvsMWz2x
-	 YYKsaC1Nr1j+b24GxTGXLDBTIyfH6zk3arY0HG7K7odOXhMsR86vj6/Zpal4chbLHh
-	 iq81QIv6RbT+IwYcaGkxMWzjvPldkWcGqhfN1RJOqdxs11gK1NtDcOxE+8Zxu0ceVQ
-	 H6mn3KAEv3Mdw==
-Date: Sat, 20 Jul 2024 09:44:17 -0700
-From: Kees Cook <kees@kernel.org>
-To: David Rientjes <rientjes@google.com>
-Cc: Vlastimil Babka <vbabka@suse.cz>, Christoph Lameter <cl@linux.com>,
-	Pekka Enberg <penberg@kernel.org>,
-	Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Roman Gushchin <roman.gushchin@linux.dev>,
-	Hyeonggon Yoo <42.hyeyoo@gmail.com>,
-	"Gustavo A . R . Silva" <gustavoars@kernel.org>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>, Jann Horn <jannh@google.com>,
-	Przemek Kitszel <przemyslaw.kitszel@intel.com>,
-	Marco Elver <elver@google.com>, linux-mm@kvack.org,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-	linux-hardening@vger.kernel.org
-Subject: Re: [PATCH] slab: Introduce kmalloc_obj() and family
-Message-ID: <202407200942.ECB06F1@keescook>
-References: <20240719192744.work.264-kees@kernel.org>
- <cd446dfc-d6b6-781f-3a07-5af1edbf2230@google.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Xx4HiIao"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1721496218; x=1753032218;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=CmRf8xfUoue/OsP80j08hXpw8hkr9GdEqPwF/fPzxHs=;
+  b=Xx4HiIaoJkk4+ea71e5zrg/tyilW1GLRFEx0O6NxBcqeY2il0IKtZG7J
+   wkORbYJ6yU0iBLHZvnkAcj6uA1wCWNspwrVlEjab/EOLdp2gFaCcVA4Lq
+   75zNxifyBAUcfCnUCk670L2gs0mOGleFZ6ar6NxNs2lAlMkrGlgdoF7el
+   Ej4C4yIpnGLdc+XSnMJWuqN0gfUs2YIijU+On7YUmQMxTIrVjQiGvN0W2
+   vqIqL8xi+k5TumLrETFWUis6gcO1U7J5Ymx8eQzVLZ/6elBXdssOgPOUs
+   mKNF0ST3heERZY8+FBvNFU8S3jpsj7V/m8izMvDYjIYihYj5/aszIhuxb
+   g==;
+X-CSE-ConnectionGUID: IbtKBBWpRcSYS9wApLjaTA==
+X-CSE-MsgGUID: MI/9Z14vQkyJWqe5lxXczg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11139"; a="29689763"
+X-IronPort-AV: E=Sophos;i="6.09,224,1716274800"; 
+   d="scan'208";a="29689763"
+Received: from fmviesa005.fm.intel.com ([10.60.135.145])
+  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jul 2024 10:23:37 -0700
+X-CSE-ConnectionGUID: ebp+H30sSWKp6kyEKBKuYQ==
+X-CSE-MsgGUID: v77bShUETYuKJlX9ldXYLA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.09,224,1716274800"; 
+   d="scan'208";a="55709668"
+Received: from lkp-server01.sh.intel.com (HELO 68891e0c336b) ([10.239.97.150])
+  by fmviesa005.fm.intel.com with ESMTP; 20 Jul 2024 10:23:35 -0700
+Received: from kbuild by 68891e0c336b with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1sVDnx-000jT8-0v;
+	Sat, 20 Jul 2024 17:23:33 +0000
+Date: Sun, 21 Jul 2024 01:23:07 +0800
+From: kernel test robot <lkp@intel.com>
+To: Alex Deucher <alexander.deucher@amd.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [agd5f:amd-staging-drm-next-queue-reset 60/60]
+ drivers/gpu/drm/amd/amdgpu/gfx_v7_0.c:2139:11: warning: operator '?:' has
+ lower precedence than '|'; '|' will be evaluated first
+Message-ID: <202407210134.PApSunS1-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -56,72 +62,100 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <cd446dfc-d6b6-781f-3a07-5af1edbf2230@google.com>
 
-On Fri, Jul 19, 2024 at 08:50:41PM -0700, David Rientjes wrote:
-> On Fri, 19 Jul 2024, Kees Cook wrote:
-> 
-> > diff --git a/include/linux/slab.h b/include/linux/slab.h
-> > index 7247e217e21b..3817554f2d51 100644
-> > --- a/include/linux/slab.h
-> > +++ b/include/linux/slab.h
-> > @@ -665,6 +665,44 @@ static __always_inline __alloc_size(1) void *kmalloc_noprof(size_t size, gfp_t f
-> >  }
-> >  #define kmalloc(...)				alloc_hooks(kmalloc_noprof(__VA_ARGS__))
-> >  
-> > +#define __alloc_obj3(ALLOC, P, COUNT, FLAGS)			\
-> > +({								\
-> > +	size_t __obj_size = size_mul(sizeof(*P), COUNT);	\
-> > +	void *__obj_ptr;					\
-> > +	(P) = __obj_ptr = ALLOC(__obj_size, FLAGS);		\
-> > +	if (!__obj_ptr)						\
-> > +		__obj_size = 0;					\
-> > +	__obj_size;						\
-> > +})
-> > +
-> > +#define __alloc_obj2(ALLOC, P, FLAGS)	__alloc_obj3(ALLOC, P, 1, FLAGS)
-> > +
-> > +#define __alloc_obj4(ALLOC, P, FAM, COUNT, FLAGS)		\
-> > +({								\
-> > +	size_t __obj_size = struct_size(P, FAM, COUNT);		\
-> > +	void *__obj_ptr;					\
-> > +	(P) = __obj_ptr = ALLOC(__obj_size, FLAGS);		\
-> > +	if (!__obj_ptr)						\
-> > +		__obj_size = 0;					\
-> > +	__obj_size;						\
-> > +})
-> > +
-> > +#define kmalloc_obj(...)					\
-> > +	CONCATENATE(__alloc_obj,				\
-> > +		    COUNT_ARGS(__VA_ARGS__))(kmalloc, __VA_ARGS__)
-> > +
-> > +#define kzalloc_obj(...)					\
-> > +	CONCATENATE(__alloc_obj,				\
-> > +		    COUNT_ARGS(__VA_ARGS__))(kzalloc, __VA_ARGS__)
-> > +
-> > +#define kvmalloc_obj(...)					\
-> > +	CONCATENATE(__alloc_obj,				\
-> > +		    COUNT_ARGS(__VA_ARGS__))(kvmalloc, __VA_ARGS__)
-> > +
-> > +#define kvzalloc_obj(...)					\
-> > +	CONCATENATE(__alloc_obj,				\
-> > +		    COUNT_ARGS(__VA_ARGS__))(kvzalloc, __VA_ARGS__)
-> > +
-> >  static __always_inline __alloc_size(1) void *kmalloc_node_noprof(size_t size, gfp_t flags, int node)
-> >  {
-> >  	if (__builtin_constant_p(size) && size) {
-> 
-> I'm supportive of this especially because it will pave a pathway toward 
-> future hardening work.  Request: could we get an addition to 
+tree:   https://gitlab.freedesktop.org/agd5f/linux.git amd-staging-drm-next-queue-reset
+head:   a5bdae426e5b6593ac3ac0814950110bec1dda31
+commit: a5bdae426e5b6593ac3ac0814950110bec1dda31 [60/60] drm/amdgpu/gfx7: add ring reset callback for gfx
+config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20240721/202407210134.PApSunS1-lkp@intel.com/config)
+compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240721/202407210134.PApSunS1-lkp@intel.com/reproduce)
 
-Thanks!
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202407210134.PApSunS1-lkp@intel.com/
 
-> Documentation/ that explains how common idioms today can be converted to 
-> these new macros for future users?  The above makes sense only when 
-> accompanied by your commit description :)
+All warnings (new ones prefixed by >>):
 
-Oh, yes. Very good point! I will figure out a place to add this. I'm not
-sure if kerndoc would be best here.
+>> drivers/gpu/drm/amd/amdgpu/gfx_v7_0.c:2139:11: warning: operator '?:' has lower precedence than '|'; '|' will be evaluated first [-Wbitwise-conditional-parentheses]
+    2135 |         amdgpu_ring_write(ring, (EOP_TCL1_ACTION_EN |
+         |                                  ~~~~~~~~~~~~~~~~~~~~
+    2136 |                                  EOP_TC_ACTION_EN |
+         |                                  ~~~~~~~~~~~~~~~~~~
+    2137 |                                  EVENT_TYPE(CACHE_FLUSH_AND_INV_TS_EVENT) |
+         |                                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    2138 |                                  EVENT_INDEX(5) |
+         |                                  ~~~~~~~~~~~~~~~~
+    2139 |                                  exec ? EOP_EXEC : 0));
+         |                                  ~~~~ ^
+   drivers/gpu/drm/amd/amdgpu/gfx_v7_0.c:2139:11: note: place parentheses around the '|' expression to silence this warning
+    2135 |         amdgpu_ring_write(ring, (EOP_TCL1_ACTION_EN |
+         |                                  ~~~~~~~~~~~~~~~~~~~~
+    2136 |                                  EOP_TC_ACTION_EN |
+         |                                  ~~~~~~~~~~~~~~~~~~
+    2137 |                                  EVENT_TYPE(CACHE_FLUSH_AND_INV_TS_EVENT) |
+         |                                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    2138 |                                  EVENT_INDEX(5) |
+         |                                  ~~~~~~~~~~~~~~~~
+    2139 |                                  exec ? EOP_EXEC : 0));
+         |                                  ~~~~ ^
+   drivers/gpu/drm/amd/amdgpu/gfx_v7_0.c:2139:11: note: place parentheses around the '?:' expression to evaluate it first
+    2139 |                                  exec ? EOP_EXEC : 0));
+         |                                       ^             
+         |                                  (                  )
+   1 warning generated.
+
+
+vim +2139 drivers/gpu/drm/amd/amdgpu/gfx_v7_0.c
+
+  2100	
+  2101	/**
+  2102	 * gfx_v7_0_ring_emit_fence_gfx - emit a fence on the gfx ring
+  2103	 *
+  2104	 * @ring: amdgpu_ring structure holding ring information
+  2105	 * @addr: address
+  2106	 * @seq: sequence number
+  2107	 * @flags: fence related flags
+  2108	 *
+  2109	 * Emits a fence sequence number on the gfx ring and flushes
+  2110	 * GPU caches.
+  2111	 */
+  2112	static void gfx_v7_0_ring_emit_fence_gfx(struct amdgpu_ring *ring, u64 addr,
+  2113						 u64 seq, unsigned flags)
+  2114	{
+  2115		bool write64bit = flags & AMDGPU_FENCE_FLAG_64BIT;
+  2116		bool int_sel = flags & AMDGPU_FENCE_FLAG_INT;
+  2117		bool exec = flags & AMDGPU_FENCE_FLAG_EXEC;
+  2118	
+  2119		/* Workaround for cache flush problems. First send a dummy EOP
+  2120		 * event down the pipe with seq one below.
+  2121		 */
+  2122		amdgpu_ring_write(ring, PACKET3(PACKET3_EVENT_WRITE_EOP, 4));
+  2123		amdgpu_ring_write(ring, (EOP_TCL1_ACTION_EN |
+  2124					 EOP_TC_ACTION_EN |
+  2125					 EVENT_TYPE(CACHE_FLUSH_AND_INV_TS_EVENT) |
+  2126					 EVENT_INDEX(5)));
+  2127		amdgpu_ring_write(ring, addr & 0xfffffffc);
+  2128		amdgpu_ring_write(ring, (upper_32_bits(addr) & 0xffff) |
+  2129					DATA_SEL(1) | INT_SEL(0));
+  2130		amdgpu_ring_write(ring, lower_32_bits(seq - 1));
+  2131		amdgpu_ring_write(ring, upper_32_bits(seq - 1));
+  2132	
+  2133		/* Then send the real EOP event down the pipe. */
+  2134		amdgpu_ring_write(ring, PACKET3(PACKET3_EVENT_WRITE_EOP, 4));
+  2135		amdgpu_ring_write(ring, (EOP_TCL1_ACTION_EN |
+  2136					 EOP_TC_ACTION_EN |
+  2137					 EVENT_TYPE(CACHE_FLUSH_AND_INV_TS_EVENT) |
+  2138					 EVENT_INDEX(5) |
+> 2139					 exec ? EOP_EXEC : 0));
+  2140		amdgpu_ring_write(ring, addr & 0xfffffffc);
+  2141		amdgpu_ring_write(ring, (upper_32_bits(addr) & 0xffff) |
+  2142					DATA_SEL(write64bit ? 2 : 1) | INT_SEL(int_sel ? 2 : 0));
+  2143		amdgpu_ring_write(ring, lower_32_bits(seq));
+  2144		amdgpu_ring_write(ring, upper_32_bits(seq));
+  2145	}
+  2146	
 
 -- 
-Kees Cook
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
