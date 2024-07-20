@@ -1,63 +1,58 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B509D12D1E9;
-	Sat, 20 Jul 2024 13:41:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F33FC13AA35;
+	Sat, 20 Jul 2024 15:16:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721482902; cv=none; b=FfXozQCnizXnW/5pjIg7mGpWSsNhkUEFsdirGpXQj+gSDj+xSZfPEmHV8ahDqnMuf8J3kitcbq3Jfzh0I0eKWUxjSN0g/ZPvfY9FdL/kUcLAsfzIf03pyMbmGi7f8fmwOpE3p9DvJ/DW3QVDeQlkU+i5skY/aQYEXT/xeJ95EbI=
+	t=1721488592; cv=none; b=mahwm10wYtO6Gj3eIkcIHX0xhZ1stF3Lnu2GEZ9k15FTrz9MhUdNQFdfBj1jpUvJ5H5OtsK95gHnNEImxtP1HFftcv9uheSHbXu5geN60hO4TralGz7UdKm2U9UC6G9YcawZZy2UNRxc5Ul6y7TM/Jlo8DAn47RshPZ67OKq82U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721482902; c=relaxed/simple;
-	bh=xApXq3YmfH8vE1Zs7BhLfJVd4upponZo1zhYmDwEI8A=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=rzBIN2lih/C9kaTJtF5LmZQIGu5YdFNL0NnOe/iJGdcJ9UcsxW8cAUBrkIQb+L+UlHQ8Xk+MjKqWGek95mhyWrJ8o6yMbwPCcJjdM1IkqfDLpuMc7YN6KDU9oFvFX9GdcQJ4cRQXD/BkyOSWdsniOMyXE5Wg6xWiGIedPG0EIEo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=nfQQtzax; arc=none smtp.client-ip=198.175.65.10
+	s=arc-20240116; t=1721488592; c=relaxed/simple;
+	bh=VfHHwG90riVulejEb8imt9hPI0kE9VjxQiK6L9TNPjg=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=I8tX8c3v16qBU8CP7edvQpHj7dx/yDghKY5EcCOpA1s36VSC7FFkWC0tspYbAf+jaOxoJ9cVW9Gg2dXxj+1kx0CYK8lGTO16N0pHjTv1k8WfODBZY/lZqrOhCl2hCew8+bicIWrP91GYnZKLAkR0IvRWfkA6XPgRMC4Apu555IY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=joiOQlqA; arc=none smtp.client-ip=198.175.65.18
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="nfQQtzax"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="joiOQlqA"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1721482900; x=1753018900;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=xApXq3YmfH8vE1Zs7BhLfJVd4upponZo1zhYmDwEI8A=;
-  b=nfQQtzaxuf3wOSkq2NfQZMRXh/A5pFEfT5NHPkYev7zSgBKYJcwOZiz8
-   QgOH6DJAy+V84o300fvBp4zHbAPoTERGTaGjKsdbM/iahuclBcMgzCUN/
-   X4Bb1Xo7eGPRilivp+YKhNNRzepKY4VrRBB33FxnSicLIwI08ajKgVfJy
-   JqS/Tu5t4rc0FEveFwscaEZIRqlTQU5lbm/UiOFvRDbZRG9YyYo2Sgd3B
-   kkCr2y3ekRHBPYTU2PhnXFIxmymTs0h3BDocye31HrzCjc/MFw5ESsseP
-   EJ1VZ1UomWTKYz85/TUBDeE2HhaW3DVA3WupuIAos6UtzkPwoUOcA73dM
-   Q==;
-X-CSE-ConnectionGUID: lS7ilVN0QGKRryko+1dixA==
-X-CSE-MsgGUID: Uh9sHW1fQCWva4en88jeJA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11139"; a="36535103"
-X-IronPort-AV: E=Sophos;i="6.09,223,1716274800"; 
-   d="scan'208";a="36535103"
-Received: from fmviesa009.fm.intel.com ([10.60.135.149])
-  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jul 2024 06:41:40 -0700
-X-CSE-ConnectionGUID: d3sXdrzzRkmNWtPpjfhoww==
-X-CSE-MsgGUID: qQ4djHPGT0qnkknKbDDnkQ==
+  t=1721488592; x=1753024592;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=VfHHwG90riVulejEb8imt9hPI0kE9VjxQiK6L9TNPjg=;
+  b=joiOQlqAgOGsSkyR8IHGL9F9IBewL/6RKJOr6urCc1njOLSyAUnGMHAF
+   ZxdE6f6EpVWatRrbyrOgS5HNkcaLVjBGmdL0XOptVKGIeopFxhFUHKR1m
+   3vEGX7ImFogC1jfKDUB6JQ8A5kSBQCwUa12LB6hSq2ScO8SfKe4w3VGyI
+   hu65EzbJrKVCnHCGHGOXkorKioKRLhDid0f0RrQv0RMT5IzPQg189V9+E
+   VvR02Yqa1ZTv5fuceWVsTxRrJmRRP/W4O5JI7ctzl5xNlHv75YMG80E0d
+   yfvsDic826f6i0S4cWLWF8Q6SsWQWLjS/SQXQnfW6fgBOFhl7IT2ONWxN
+   g==;
+X-CSE-ConnectionGUID: STFRcOUWQniR0vAbNeVOuw==
+X-CSE-MsgGUID: lAPw5VVvQkGWc27oyLsSNA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11139"; a="19232127"
+X-IronPort-AV: E=Sophos;i="6.09,224,1716274800"; 
+   d="scan'208";a="19232127"
+Received: from orviesa001.jf.intel.com ([10.64.159.141])
+  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jul 2024 08:16:28 -0700
+X-CSE-ConnectionGUID: BNqPcu1/S9yFzi/m+Q99eg==
+X-CSE-MsgGUID: /7jwRG9eTke1D7iO6o4r6Q==
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.09,223,1716274800"; 
-   d="scan'208";a="51369678"
+X-IronPort-AV: E=Sophos;i="6.09,224,1716274800"; 
+   d="scan'208";a="88871731"
 Received: from lkp-server01.sh.intel.com (HELO 68891e0c336b) ([10.239.97.150])
-  by fmviesa009.fm.intel.com with ESMTP; 20 Jul 2024 06:41:37 -0700
+  by orviesa001.jf.intel.com with ESMTP; 20 Jul 2024 08:16:26 -0700
 Received: from kbuild by 68891e0c336b with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1sVAL9-000jEw-0I;
-	Sat, 20 Jul 2024 13:41:35 +0000
-Date: Sat, 20 Jul 2024 21:40:38 +0800
+	id 1sVBou-000jKU-16;
+	Sat, 20 Jul 2024 15:16:24 +0000
+Date: Sat, 20 Jul 2024 23:16:05 +0800
 From: kernel test robot <lkp@intel.com>
-To: marius.cristea@microchip.com, jic23@kernel.org, lars@metafoo.de,
-	robh+dt@kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
-	linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, marius.cristea@microchip.com
-Subject: Re: [PATCH v1 2/2] iio: adc: adding support for PAC194X
-Message-ID: <202407202146.evcwKAKb-lkp@intel.com>
-References: <20240719173855.53261-3-marius.cristea@microchip.com>
+To: "Alex Shi (Tencent)" <alexs@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [alexshi:mmunstable2 40/42] arch/s390/include/asm/pgalloc.h:147:6:
+ error: conflicting types for 'pte_free_defer'
+Message-ID: <202407202358.uLTykVrw-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -66,127 +61,138 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240719173855.53261-3-marius.cristea@microchip.com>
 
-Hi,
-
-kernel test robot noticed the following build warnings:
-
-[auto build test WARNING on jic23-iio/togreg]
-[also build test WARNING on linus/master v6.10 next-20240719]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/marius-cristea-microchip-com/dt-bindings-iio-adc-adding-support-for-PAC194X/20240720-014249
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/jic23/iio.git togreg
-patch link:    https://lore.kernel.org/r/20240719173855.53261-3-marius.cristea%40microchip.com
-patch subject: [PATCH v1 2/2] iio: adc: adding support for PAC194X
-config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20240720/202407202146.evcwKAKb-lkp@intel.com/config)
+tree:   https://github.com/alexshi/linux.git mmunstable2
+head:   17ce8ec8001d3efaa81c659d6ec565025c3f42b0
+commit: 5977eb978554280c83da90a90ef2916b90b65a5f [40/42] mm/pgtable: pass ptdesc in pte_free_defer()
+config: s390-allnoconfig (https://download.01.org/0day-ci/archive/20240720/202407202358.uLTykVrw-lkp@intel.com/config)
 compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project ad154281230d83ee551e12d5be48bb956ef47ed3)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240720/202407202146.evcwKAKb-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240720/202407202358.uLTykVrw-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202407202146.evcwKAKb-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202407202358.uLTykVrw-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
-   In file included from drivers/iio/adc/pac1944.c:16:
-   In file included from include/linux/acpi.h:14:
+   In file included from arch/s390/kernel/asm-offsets.c:11:
+   In file included from include/linux/kvm_host.h:16:
+   In file included from include/linux/mm.h:2221:
+   include/linux/vmstat.h:514:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     514 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+   In file included from arch/s390/kernel/asm-offsets.c:11:
+   In file included from include/linux/kvm_host.h:19:
+   In file included from include/linux/msi.h:27:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:14:
+   In file included from arch/s390/include/asm/io.h:93:
+   include/asm-generic/io.h:548:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     548 |         val = __raw_readb(PCI_IOBASE + addr);
+         |                           ~~~~~~~~~~ ^
+   include/asm-generic/io.h:561:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     561 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
+      37 | #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
+         |                                                           ^
+   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
+     102 | #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
+         |                                                      ^
+   In file included from arch/s390/kernel/asm-offsets.c:11:
+   In file included from include/linux/kvm_host.h:19:
+   In file included from include/linux/msi.h:27:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:14:
+   In file included from arch/s390/include/asm/io.h:93:
+   include/asm-generic/io.h:574:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     574 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
+      35 | #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
+         |                                                           ^
+   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
+     115 | #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
+         |                                                      ^
+   In file included from arch/s390/kernel/asm-offsets.c:11:
+   In file included from include/linux/kvm_host.h:19:
+   In file included from include/linux/msi.h:27:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:14:
+   In file included from arch/s390/include/asm/io.h:93:
+   include/asm-generic/io.h:585:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     585 |         __raw_writeb(value, PCI_IOBASE + addr);
+         |                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:595:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     595 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:605:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     605 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:693:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     693 |         readsb(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:701:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     701 |         readsw(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:709:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     709 |         readsl(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:718:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     718 |         writesb(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+   include/asm-generic/io.h:727:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     727 |         writesw(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+   include/asm-generic/io.h:736:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     736 |         writesl(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+   In file included from arch/s390/kernel/asm-offsets.c:11:
+   In file included from include/linux/kvm_host.h:19:
+   In file included from include/linux/msi.h:27:
+   In file included from include/linux/irq.h:591:
+   In file included from arch/s390/include/asm/hw_irq.h:6:
+   In file included from include/linux/pci.h:37:
    In file included from include/linux/device.h:32:
    In file included from include/linux/device/driver.h:21:
    In file included from include/linux/module.h:19:
    In file included from include/linux/elf.h:6:
    In file included from arch/s390/include/asm/elf.h:173:
    In file included from arch/s390/include/asm/mmu_context.h:11:
-   In file included from arch/s390/include/asm/pgalloc.h:18:
-   In file included from include/linux/mm.h:2258:
-   include/linux/vmstat.h:500:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     500 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     501 |                            item];
-         |                            ~~~~
-   include/linux/vmstat.h:507:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     507 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     508 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/vmstat.h:514:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     514 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
-   include/linux/vmstat.h:519:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     519 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     520 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/vmstat.h:528:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     528 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     529 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
->> drivers/iio/adc/pac1944.c:1691:6: warning: variable 'ret' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
-    1691 |         if (time_after(jiffies, info->chip_reg_data.jiffies_tstamp +
-         |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    1692 |                        msecs_to_jiffies(PAC1944_MIN_POLLING_TIME_MS))) {
-         |                        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/jiffies.h:128:2: note: expanded from macro 'time_after'
-     128 |         (typecheck(unsigned long, a) && \
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     129 |          typecheck(unsigned long, b) && \
-         |          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     130 |          ((long)((b) - (a)) < 0))
-         |          ~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/iio/adc/pac1944.c:1709:9: note: uninitialized use occurs here
-    1709 |         return ret;
-         |                ^~~
-   drivers/iio/adc/pac1944.c:1691:2: note: remove the 'if' if its condition is always true
-    1691 |         if (time_after(jiffies, info->chip_reg_data.jiffies_tstamp +
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    1692 |                        msecs_to_jiffies(PAC1944_MIN_POLLING_TIME_MS))) {
-         |                        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/iio/adc/pac1944.c:1686:9: note: initialize the variable 'ret' to silence this warning
-    1686 |         int ret;
-         |                ^
-         |                 = 0
-   drivers/iio/adc/pac1944.c:2048:16: warning: variable 'idx' set but not used [-Wunused-but-set-variable]
-    2048 |         int ch, i, j, idx;
-         |                       ^
-   7 warnings generated.
+>> arch/s390/include/asm/pgalloc.h:147:6: error: conflicting types for 'pte_free_defer'
+     147 | void pte_free_defer(struct mm_struct *mm, pgtable_t pgtable);
+         |      ^
+   arch/s390/include/asm/pgalloc.h:146:24: note: expanded from macro 'pte_free_defer'
+     146 | #define pte_free_defer pte_free_defer
+         |                        ^
+   include/linux/pgtable.h:119:6: note: previous declaration is here
+     119 | void pte_free_defer(struct mm_struct *mm, struct ptdesc *ptdesc);
+         |      ^
+   13 warnings and 1 error generated.
+   make[3]: *** [scripts/Makefile.build:117: arch/s390/kernel/asm-offsets.s] Error 1
+   make[3]: Target 'prepare' not remade because of errors.
+   make[2]: *** [Makefile:1208: prepare0] Error 2
+   make[2]: Target 'prepare' not remade because of errors.
+   make[1]: *** [Makefile:240: __sub-make] Error 2
+   make[1]: Target 'prepare' not remade because of errors.
+   make: *** [Makefile:240: __sub-make] Error 2
+   make: Target 'prepare' not remade because of errors.
 
 
-vim +1691 drivers/iio/adc/pac1944.c
+vim +/pte_free_defer +147 arch/s390/include/asm/pgalloc.h
 
-  1683	
-  1684	static int pac1944_retrieve_data(struct pac1944_chip_info *info, u32 wait_time)
-  1685	{
-  1686		int ret;
-  1687		/*
-  1688		 * Check if the minimal elapsed time has passed and if so,
-  1689		 * re-read the chip, otherwise the cached info is just fine
-  1690		 */
-> 1691		if (time_after(jiffies, info->chip_reg_data.jiffies_tstamp +
-  1692			       msecs_to_jiffies(PAC1944_MIN_POLLING_TIME_MS))) {
-  1693			/*
-  1694			 * We need to re-read the chip values
-  1695			 * call the pac1944_reg_snapshot
-  1696			 */
-  1697			ret = pac1944_reg_snapshot(info, true,
-  1698						   PAC1944_REFRESH_REG_ADDR,
-  1699						   wait_time);
-  1700			/*
-  1701			 * Re-schedule the work for the read registers timeout
-  1702			 * (to prevent chip regs saturation)
-  1703			 */
-  1704			cancel_delayed_work_sync(&info->work_chip_rfsh);
-  1705			schedule_delayed_work(&info->work_chip_rfsh,
-  1706					      msecs_to_jiffies(PAC1944_MAX_RFSH_LIMIT_MS));
-  1707		}
-  1708	
-  1709		return ret;
-  1710	}
-  1711	
+^1da177e4c3f41 include/asm-s390/pgalloc.h      Linus Torvalds 2005-04-16  144  
+8211dad6279817 arch/s390/include/asm/pgalloc.h Hugh Dickins   2023-07-11  145  /* arch use pte_free_defer() implementation in arch/s390/mm/pgalloc.c */
+8211dad6279817 arch/s390/include/asm/pgalloc.h Hugh Dickins   2023-07-11  146  #define pte_free_defer pte_free_defer
+8211dad6279817 arch/s390/include/asm/pgalloc.h Hugh Dickins   2023-07-11 @147  void pte_free_defer(struct mm_struct *mm, pgtable_t pgtable);
+8211dad6279817 arch/s390/include/asm/pgalloc.h Hugh Dickins   2023-07-11  148  
+
+:::::: The code at line 147 was first introduced by commit
+:::::: 8211dad6279817a8966ff6b74c2c588dd4166f45 s390: add pte_free_defer() for pgtables sharing page
+
+:::::: TO: Hugh Dickins <hughd@google.com>
+:::::: CC: Andrew Morton <akpm@linux-foundation.org>
 
 -- 
 0-DAY CI Kernel Test Service
