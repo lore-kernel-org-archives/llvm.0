@@ -1,65 +1,58 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC0A214F90;
-	Mon, 22 Jul 2024 03:36:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C104017543;
+	Mon, 22 Jul 2024 05:12:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721619365; cv=none; b=kuRVEqensBVI7nRYwcRvbG6CM2f1c3y63+sOlyPUSgTTBhZST1U1HPoNVZTKj/MirklQmpJG0wXjYW2F5AcoMzb9ttGvYrQ5r9bQCJJEZzVfVYKfFBGQ6uSn6H2bNZYbx62uD9L85jTboCfvWO4HdUytrndIPDtguszvuGNKJvI=
+	t=1721625139; cv=none; b=aTsd8Ij9otsooF6aqQBqYShiVKZuH0OHgpBhhVIfzS36nO2mrEqZ4NfO6nViRLS1XIW9MEJ+smLG78zoxap1OCGhmbnFjDCUJUsCpqIKNJZzsTXLMy720qCYa3L/L74Tw4aoBg27uivGfzQZBTmqzxgIfka1H+FFGxwUnZ2EObs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721619365; c=relaxed/simple;
-	bh=PwFT7B1VJB/UXjjpWDCkDoQ6sX7XM3WUzIPOQ+mIUNQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=TUnbhpQvBEvvHndHLy7PGaMRjyLU34NraJqjc/uIrEaXVbk+K1c3bl234G0QsjkqRnMbctgacBlI80WlVSSr7m1a5UEj7mIpteFwlOnbo9b/OKAEo9Pzp3GuqOdwxqbDT6ud0vnMaI+jZTuMM1pGfUXC6b0g5GJK0cvK2iPd/Ps=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=nsKzc5TX; arc=none smtp.client-ip=198.175.65.12
+	s=arc-20240116; t=1721625139; c=relaxed/simple;
+	bh=WV3yiXzYxKYCv2BabFqEJvl9TEnWYLapdT1gUFSzS10=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=JncqHnFHJ7yR3Fz3bEy8MiLXsq76EEG3JcBEncf60xhU//r3F8fHdWI0pbU4O+6ox+VQ60xSD4pHx3RgCAMqs5NqgUB4oZ+vHZK7wji73QiwQyXIjU++TUDGxRCrkBzQ2s1DD2UtjnOzCeueNhtvfYNLbh4RxcXFLL/x8qEgvtw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=IpR6F0nW; arc=none smtp.client-ip=198.175.65.14
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="nsKzc5TX"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="IpR6F0nW"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1721619363; x=1753155363;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=PwFT7B1VJB/UXjjpWDCkDoQ6sX7XM3WUzIPOQ+mIUNQ=;
-  b=nsKzc5TXkodwt9K46NDMIf4LFfjOvI0OeEDsjT+0J+jWjPZPuxQYQxWC
-   KFfwUrU86SsQqrIqBtD3Krb7t64Tbs/iupk4XCrvH8c4/pl+1rHbg/yvX
-   utJmC579DF/KfAXTCxd4EAb0YMWzkzFC81CuPQjg3tdoBVohShpj5/yda
-   ZrTzIwtseIyzI+PgTABpkFnKJvxnO226unqOC+WP2MuUbI+rjSLa2jpBT
-   M5z0V7BUjqIQxco8Z0SsSoHi5Ws7cUaeciox+w6LzdmKWgrZaeWcN11nh
-   GYbaSah1H2008J/0eyQuv0vVTiu1IFZobqYJbRo9s+LIn9Hbx2HybeFlz
+  t=1721625138; x=1753161138;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=WV3yiXzYxKYCv2BabFqEJvl9TEnWYLapdT1gUFSzS10=;
+  b=IpR6F0nWxkIn38tK5xLMlKY5R2urzYJkUKUwNCiuVqlJQ8mePrCFa2Nq
+   VIoUgLUAULyYrxyxc7NeBtZlqSFJgg0bV02QUOl7usbbX8oe+ZR4fYbPK
+   aZRToOuiWNA0PfyAi+JtpjST3FjeefjYetNGfZkDBshuAo4fTCbtTzduW
+   AYmZ6x40Nit+g4W48e2zpOwMigRpClpUzGNL91qCj8cY5Rsqu2Wzmyx1j
+   1lcS3ITbXaLS8oV4M3WYnlb7icaJdt5x10zu9mI4sKtu3cYKjW+K/baE8
+   AEGFsBFOE/idQLZ1PubgkJBoIQiFDk3Z8pJBXDYtuH6L58yEt/mHW/kmt
    w==;
-X-CSE-ConnectionGUID: bzRa9WrNSqq6FcP9UviN2w==
-X-CSE-MsgGUID: uj9PH153RyaVAW+yxWJbIw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11140"; a="30554899"
+X-CSE-ConnectionGUID: JYmECd74T++5t0DlDrzLvg==
+X-CSE-MsgGUID: MjZbf+98QkK9U7aZ3A1R6A==
+X-IronPort-AV: E=McAfee;i="6700,10204,11140"; a="22982511"
 X-IronPort-AV: E=Sophos;i="6.09,227,1716274800"; 
-   d="scan'208";a="30554899"
-Received: from fmviesa007.fm.intel.com ([10.60.135.147])
-  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jul 2024 20:36:03 -0700
-X-CSE-ConnectionGUID: 2gtp3AbRQmGUQ2ZIJi9ldQ==
-X-CSE-MsgGUID: tkEtpGauSueOyIL1HE3XIA==
+   d="scan'208";a="22982511"
+Received: from fmviesa003.fm.intel.com ([10.60.135.143])
+  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jul 2024 22:12:14 -0700
+X-CSE-ConnectionGUID: s+F5OVL5QaSqXLW1lDJypQ==
+X-CSE-MsgGUID: Wia+IIagRdWnABpwJH90Ew==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.09,227,1716274800"; 
-   d="scan'208";a="51460628"
+   d="scan'208";a="55927459"
 Received: from lkp-server01.sh.intel.com (HELO 68891e0c336b) ([10.239.97.150])
-  by fmviesa007.fm.intel.com with ESMTP; 21 Jul 2024 20:35:59 -0700
+  by fmviesa003.fm.intel.com with ESMTP; 21 Jul 2024 22:12:14 -0700
 Received: from kbuild by 68891e0c336b with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1sVjq8-000kqK-3A;
-	Mon, 22 Jul 2024 03:35:56 +0000
-Date: Mon, 22 Jul 2024 11:35:55 +0800
+	id 1sVlLH-000kt4-1F;
+	Mon, 22 Jul 2024 05:12:11 +0000
+Date: Mon, 22 Jul 2024 13:12:06 +0800
 From: kernel test robot <lkp@intel.com>
-To: Chris Packham <chris.packham@alliedtelesis.co.nz>, jdelvare@suse.com,
-	linux@roeck-us.net, robh@kernel.org, krzk+dt@kernel.org,
-	conor+dt@kernel.org, ukleinek@kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-pwm@vger.kernel.org,
-	Chris Packham <chris.packham@alliedtelesis.co.nz>
-Subject: Re: [PATCH v6 3/3] hwmon: (adt7475) Add support for configuring
- initial PWM state
-Message-ID: <202407221153.LJjYD5i7-lkp@intel.com>
-References: <20240722005825.1800403-4-chris.packham@alliedtelesis.co.nz>
+To: Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [morimoto:sound-msiof-2024-07-19 16/16] sound/soc/sh/msiof.c:470:3:
+ error: use of undeclared identifier 'stop'
+Message-ID: <202407221317.aoAlPrsD-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -68,118 +61,90 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240722005825.1800403-4-chris.packham@alliedtelesis.co.nz>
 
-Hi Chris,
-
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on groeck-staging/hwmon-next]
-[also build test ERROR on linus/master v6.10 next-20240719]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Chris-Packham/dt-bindings-hwmon-Add-adt7475-fan-pwm-properties/20240722-091004
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
-patch link:    https://lore.kernel.org/r/20240722005825.1800403-4-chris.packham%40alliedtelesis.co.nz
-patch subject: [PATCH v6 3/3] hwmon: (adt7475) Add support for configuring initial PWM state
-config: arm-randconfig-002-20240722 (https://download.01.org/0day-ci/archive/20240722/202407221153.LJjYD5i7-lkp@intel.com/config)
-compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project ad154281230d83ee551e12d5be48bb956ef47ed3)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240722/202407221153.LJjYD5i7-lkp@intel.com/reproduce)
+tree:   https://github.com/morimoto/linux sound-msiof-2024-07-19
+head:   a12bc552b3fd774fec2214ece9ee022c4808d676
+commit: a12bc552b3fd774fec2214ece9ee022c4808d676 [16/16] msiof
+config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20240722/202407221317.aoAlPrsD-lkp@intel.com/config)
+compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240722/202407221317.aoAlPrsD-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202407221153.LJjYD5i7-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202407221317.aoAlPrsD-lkp@intel.com/
 
 All error/warnings (new ones prefixed by >>):
 
-   In file included from drivers/hwmon/adt7475.c:15:
-   In file included from include/linux/i2c.h:19:
-   In file included from include/linux/regulator/consumer.h:35:
-   In file included from include/linux/suspend.h:5:
-   In file included from include/linux/swap.h:9:
-   In file included from include/linux/memcontrol.h:21:
-   In file included from include/linux/mm.h:2253:
-   include/linux/vmstat.h:514:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     514 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
->> drivers/hwmon/adt7475.c:1683:2: warning: comparison of distinct pointer types ('typeof ((freq_hz)) *' (aka 'unsigned long *') and 'uint64_t *' (aka 'unsigned long long *')) [-Wcompare-distinct-pointer-types]
-    1683 |         do_div(freq_hz, args[1]);
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~
-   include/asm-generic/div64.h:222:28: note: expanded from macro 'do_div'
-     222 |         (void)(((typeof((n)) *)0) == ((uint64_t *)0));  \
-         |                ~~~~~~~~~~~~~~~~~~ ^  ~~~~~~~~~~~~~~~
->> drivers/hwmon/adt7475.c:1683:2: error: incompatible pointer types passing 'unsigned long *' to parameter of type 'uint64_t *' (aka 'unsigned long long *') [-Werror,-Wincompatible-pointer-types]
-    1683 |         do_div(freq_hz, args[1]);
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~
-   include/asm-generic/div64.h:238:22: note: expanded from macro 'do_div'
-     238 |                 __rem = __div64_32(&(n), __base);       \
-         |                                    ^~~~
-   arch/arm/include/asm/div64.h:24:45: note: passing argument to parameter 'n' here
-      24 | static inline uint32_t __div64_32(uint64_t *n, uint32_t base)
-         |                                             ^
->> drivers/hwmon/adt7475.c:1685:2: warning: comparison of distinct pointer types ('typeof ((duty)) *' (aka 'unsigned long *') and 'uint64_t *' (aka 'unsigned long long *')) [-Wcompare-distinct-pointer-types]
-    1685 |         do_div(duty, args[1]);
-         |         ^~~~~~~~~~~~~~~~~~~~~
-   include/asm-generic/div64.h:222:28: note: expanded from macro 'do_div'
-     222 |         (void)(((typeof((n)) *)0) == ((uint64_t *)0));  \
-         |                ~~~~~~~~~~~~~~~~~~ ^  ~~~~~~~~~~~~~~~
-   drivers/hwmon/adt7475.c:1685:2: error: incompatible pointer types passing 'unsigned long *' to parameter of type 'uint64_t *' (aka 'unsigned long long *') [-Werror,-Wincompatible-pointer-types]
-    1685 |         do_div(duty, args[1]);
-         |         ^~~~~~~~~~~~~~~~~~~~~
-   include/asm-generic/div64.h:238:22: note: expanded from macro 'do_div'
-     238 |                 __rem = __div64_32(&(n), __base);       \
-         |                                    ^~~~
-   arch/arm/include/asm/div64.h:24:45: note: passing argument to parameter 'n' here
-      24 | static inline uint32_t __div64_32(uint64_t *n, uint32_t base)
-         |                                             ^
->> drivers/hwmon/adt7475.c:1683:2: warning: shift count >= width of type [-Wshift-count-overflow]
-    1683 |         do_div(freq_hz, args[1]);
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~
-   include/asm-generic/div64.h:234:25: note: expanded from macro 'do_div'
-     234 |         } else if (likely(((n) >> 32) == 0)) {          \
-         |                                ^  ~~
-   include/linux/compiler.h:76:40: note: expanded from macro 'likely'
-      76 | # define likely(x)      __builtin_expect(!!(x), 1)
-         |                                             ^
-   drivers/hwmon/adt7475.c:1685:2: warning: shift count >= width of type [-Wshift-count-overflow]
-    1685 |         do_div(duty, args[1]);
-         |         ^~~~~~~~~~~~~~~~~~~~~
-   include/asm-generic/div64.h:234:25: note: expanded from macro 'do_div'
-     234 |         } else if (likely(((n) >> 32) == 0)) {          \
-         |                                ^  ~~
-   include/linux/compiler.h:76:40: note: expanded from macro 'likely'
-      76 | # define likely(x)      __builtin_expect(!!(x), 1)
-         |                                             ^
-   5 warnings and 2 errors generated.
+>> sound/soc/sh/msiof.c:470:3: error: use of undeclared identifier 'stop'
+     470 |                 stop = 1;
+         |                 ^
+   sound/soc/sh/msiof.c:477:6: error: use of undeclared identifier 'stop'; did you mean 'stac'?
+     477 |         if (stop) {
+         |             ^~~~
+         |             stac
+   arch/x86/include/asm/smap.h:36:29: note: 'stac' declared here
+      36 | static __always_inline void stac(void)
+         |                             ^
+>> sound/soc/sh/msiof.c:482:30: warning: more '%' conversions than data arguments [-Wformat-insufficient-args]
+     482 |                         dev_warn(dev, "SISTR = %08x\n");
+         |                                                ~~~^
+   include/linux/dev_printk.h:156:62: note: expanded from macro 'dev_warn'
+     156 |         dev_printk_index_wrap(_dev_warn, KERN_WARNING, dev, dev_fmt(fmt), ##__VA_ARGS__)
+         |                                                                     ^~~
+   include/linux/dev_printk.h:19:22: note: expanded from macro 'dev_fmt'
+      19 | #define dev_fmt(fmt) fmt
+         |                      ^~~
+   include/linux/dev_printk.h:110:16: note: expanded from macro 'dev_printk_index_wrap'
+     110 |                 _p_func(dev, fmt, ##__VA_ARGS__);                       \
+         |                              ^~~
+   1 warning and 2 errors generated.
 
 
-vim +1683 drivers/hwmon/adt7475.c
+vim +/stop +470 sound/soc/sh/msiof.c
 
-  1673	
-  1674	static int _adt7475_pwm_properties_parse_args(u32 args[4], struct adt7475_pwm_config *cfg)
-  1675	{
-  1676		unsigned long freq_hz;
-  1677		unsigned long duty;
-  1678	
-  1679		if (args[1] == 0)
-  1680			return -EINVAL;
-  1681	
-  1682		freq_hz = 1000000000UL;
-> 1683		do_div(freq_hz, args[1]);
-  1684		duty = 255 * args[3];
-> 1685		do_div(duty, args[1]);
-  1686	
-  1687		cfg->index = args[0];
-  1688		cfg->freq = find_closest(freq_hz, pwmfreq_table, ARRAY_SIZE(pwmfreq_table));
-  1689		cfg->flags = args[2];
-  1690		cfg->duty = clamp_val(duty, 0, 0xFF);
-  1691	
-  1692		return 0;
-  1693	}
-  1694	
+   450	
+   451	static int msiof_trigger(struct snd_soc_component *component,
+   452				 struct snd_pcm_substream *substream, int cmd)
+   453	{
+   454		struct device *dev = component->dev;
+   455		struct msiof_priv *priv = dev_get_drvdata(dev);
+   456		unsigned long flags;
+   457		int is_play = msiof_is_play(substream);
+   458		int ret = -EINVAL;
+   459	
+   460		spin_lock_irqsave(&priv->lock, flags);
+   461	
+   462		switch (cmd) {
+   463		case SNDRV_PCM_TRIGGER_START:
+   464			priv->substream[is_play] = substream;
+   465			/* fallthrough */
+   466		case SNDRV_PCM_TRIGGER_RESUME:
+   467			ret = msiof_hw_start(component, substream, cmd);
+   468			break;
+   469		case SNDRV_PCM_TRIGGER_STOP:
+ > 470			stop = 1;
+   471			/* fallthrough */
+   472		case SNDRV_PCM_TRIGGER_SUSPEND:
+   473			ret = msiof_hw_stop(component, substream, cmd);
+   474			break;
+   475		}
+   476	
+ > 477		if (stop) {
+   478			u32 sistr = msiof_read(priv, SISTR);
+   479	
+   480			/* indicate error status if exist */
+   481			if (sistr)
+ > 482				dev_warn(dev, "SISTR = %08x\n");
+   483	
+   484			priv->substream[is_play] = NULL;
+   485		}
+   486	
+   487		spin_unlock_irqrestore(&priv->lock, flags);
+   488	
+   489		return ret;
+   490	}
+   491	
 
 -- 
 0-DAY CI Kernel Test Service
