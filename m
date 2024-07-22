@@ -1,242 +1,139 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qk1-f169.google.com (mail-qk1-f169.google.com [209.85.222.169])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 35E9D16A38B
-	for <llvm@lists.linux.dev>; Mon, 22 Jul 2024 13:25:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E77816D9C6
+	for <llvm@lists.linux.dev>; Mon, 22 Jul 2024 14:13:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721654712; cv=none; b=PiyhPLoDorsmpuKgQ2R0vCnU/Wgz6jSZHMt73YJ0Zgq+lSsamWjFoKPlaDkJwFKfWfgWkBgHXYPXBU2yBYeJJ1mRRaRpLAlghLIk6h9FsU7c1u8qR9yFG8PJwMEP+ruCZhoYjXMhxO8hMx9hu718sFIImqWHF3/Ag4FFpz3Nfok=
+	t=1721657584; cv=none; b=Fal1gVnjHvqoExsQ3XnsTNqaGIZRpn0gT8NEEIR/1KYc1208W5yaPsDlZxmUXObzrVlFs73pCm45fGqw9qfDnTWC+gVMU6Hy8NSWEjU9n4Qp4bsdy7LojqXEKylTBltVO7Fy0Nz3YZAEU9uMDALKHW6N2NYCr9PNEUwYuLiGjWw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721654712; c=relaxed/simple;
-	bh=Ddo/Pu4INlCeHSxN0+EGvTgV+APPIBk8A5U9iXTKvRg=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=DQPwzexd176/hTrJqUzFCDfwvzhY5fkrR3FMrTGlYqNKg6dQvjUWaa/VmOkGCMh/+roSMfFGhEgvNLCBzcFc0Yh1EdasP+QMocG7c6hJg720pCfWPDcXkT4yg3Br6wrvRNgK53MQkH6UBf7Oz5cLenQ3sgA4rbIM6Dot80G9/Po=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=GJZGuFSr; arc=none smtp.client-ip=198.175.65.17
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1721657584; c=relaxed/simple;
+	bh=0FSuVSEBg4EdRogBAx63ue51JzP8r2IjRTIYebbugiU=;
+	h=From:Date:To:Message-ID:Subject:MIME-Version:Content-Type; b=VNHwUyG5h4+KLnjhTnYly1nL+6xhnVEw9F9CDHdJN1rcQB/EJfP8P3sPuCl8q9K49eK5dlZ+jTbd2zgH5iaaeF7hNSUQV8Zr79nfBvBjjk36T6N0xsXIy0QlHQkeu/bjkmEI6LwXgzaOwAJNbZ7M3vMks4h8uxjTIoTpzQy4Fbg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=HMwaLe28; arc=none smtp.client-ip=209.85.222.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="GJZGuFSr"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1721654710; x=1753190710;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=Ddo/Pu4INlCeHSxN0+EGvTgV+APPIBk8A5U9iXTKvRg=;
-  b=GJZGuFSrsh1vQ0//aMuu9VzRNcMIHkKkSX8S8cYDMiM721/KlkZNs4wZ
-   0fQt061W9FdspokRjf/11F3iNIGJW+R3NPNuof/YhmGXj4GKrDCUNfMY6
-   f1RNvcwpG5u15HPoaFpas4iqQeiGsgfNpk0B5fZF5FtPE0lGeKL1n3acN
-   h5baGMka6anwtwh/X4iUAqdOMAQwXTHl7Q/9KhzcWg1NBX7z2GGzselVb
-   o0+JgUTCOLOiZ8MnTsKSRce9qpBYO/gwUa0UmCloAKz6OFtmVp6N/3mvk
-   1LVr+QHDo1LbAhJgP8zWYhUHgIQzKXgIzg1evqOFGZDh1OUOPbGSysGJL
-   g==;
-X-CSE-ConnectionGUID: 10gEJ2MER76dyw4gNsETHA==
-X-CSE-MsgGUID: 1Kq6SJD7RtOJgLV3yyj+yw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11140"; a="19351415"
-X-IronPort-AV: E=Sophos;i="6.09,228,1716274800"; 
-   d="scan'208";a="19351415"
-Received: from fmviesa004.fm.intel.com ([10.60.135.144])
-  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jul 2024 06:16:06 -0700
-X-CSE-ConnectionGUID: LFVb43iXT86gG0xVaFKlmg==
-X-CSE-MsgGUID: NK0JlGZsRHKnbE9aXRgD6A==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.09,228,1716274800"; 
-   d="scan'208";a="56446122"
-Received: from ahunter6-mobl1.ger.corp.intel.com (HELO [10.0.2.15]) ([10.246.41.28])
-  by fmviesa004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jul 2024 06:16:01 -0700
-Message-ID: <02930c55-6423-4db4-b6f3-b783c572c121@intel.com>
-Date: Mon, 22 Jul 2024 16:15:56 +0300
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="HMwaLe28"
+Received: by mail-qk1-f169.google.com with SMTP id af79cd13be357-79ef8e0c294so265932085a.1
+        for <llvm@lists.linux.dev>; Mon, 22 Jul 2024 07:13:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1721657581; x=1722262381; darn=lists.linux.dev;
+        h=list-id:mime-version:subject:message-id:to:reply-to:date:from:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=23IitzNJDWbuO6UP+MW7B/hQMtxlzsAZ+NlARzrhYu0=;
+        b=HMwaLe28f42kCHe9HuBy7aDhpZIt82bChaph0iQ38hKbL9IwOpv1WAX6tCN6nYYf6A
+         P3HGFLxDdnXZCLHzR/opNgBeTIQrc/INThcUet+NWL902FKZ1chpXnA304T4cp7v8Nou
+         jyaTdD2frC8TwTkqKG0cTLkPXOEEeLrBAEK19AGf6FGmVdpN78DHRY9mEv4JEKzRD6fU
+         mTGoIHVn3gZgESYdHZseI9LBrB7uiiV4I7MTdfSCdEAkSZVBQtsn4LwAfHoBL6Wgsef9
+         F8mfhf8QhpTY0PwG0iI18o7hpyYGCoP6ppEkYQuprUcVN0FQuPd+y7iDZ1z6Wgb+nTtq
+         Vg4A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1721657581; x=1722262381;
+        h=list-id:mime-version:subject:message-id:to:reply-to:date:from
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=23IitzNJDWbuO6UP+MW7B/hQMtxlzsAZ+NlARzrhYu0=;
+        b=oguMhoMkir6PPdAVWE1hqUC7GUtQYIrBy6vIFpQKiK7b8inn1aw3A9tgOh+2W/lnPI
+         a/E90smOELdizrEN+bu/1UpHJ0ajexYRfjggBFN8F/ZTEF2rEUvrknazQlveRaz+U6cq
+         CHtScz8zMn46GQUj4UIi9RlduWhzeGWSTCSVHLgRASY+WV1DZVjAF0vJLui4YjLr3rrK
+         vkEzBRWtxW3/JiMxECInSI7aSKcKFVVAlJRD19KFFa2SwwN2epU7YtjEpR3orLQDY4eG
+         lehzRt9jk6oW31q/1eSeRuBh+7UTDTtMvYiUroKryh9bXeefGXCq7N1v9Dy81TsccrBZ
+         dHLA==
+X-Gm-Message-State: AOJu0Yx+N5yS+RzI1Yn2BiD7R4pQ5Eza68vcLW30D81IVEMhj4clEjz3
+	Burqn/6XKXuGMc/KjQjuL9p0IqgL4qzTXMlYX45BsuwMpgb5h+19DO5EYQJJb1+y2IRKqfbGFjZ
+	R
+X-Google-Smtp-Source: AGHT+IEsRX3VP4FeshmpXbOVMCdnuRM1RovkG6ZUSfxOfQtF0fPbPkpe8ZPOWdDJoNiN9TB/a0wGBw==
+X-Received: by 2002:a05:620a:29cb:b0:79d:7893:1cc with SMTP id af79cd13be357-7a1a18e98afmr1137774785a.12.1721657581442;
+        Mon, 22 Jul 2024 07:13:01 -0700 (PDT)
+Received: from jenkins.jenkins (ci.linaro.org. [88.99.136.175])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-7a1990788f3sm361913285a.99.2024.07.22.07.13.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 22 Jul 2024 07:13:01 -0700 (PDT)
+From: ci_notify@linaro.org
+X-Google-Original-From: linaro-infrastructure-errors@lists.linaro.org
+Date: Mon, 22 Jul 2024 14:12:58 +0000 (UTC)
+Reply-To: linaro-toolchain@lists.linaro.org
+To: llvm@lists.linux.dev
+Message-ID: <1017473160.129075.1721657581027@jenkins.jenkins>
+Subject: [Linaro-TCWG-CI] llvmorg-19-init-18145-g1f6f97e2b64a: Failure on
+ aarch64
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5 1/8] perf: support specify vdso path in cmdline
-To: duchangbin <changbin.du@huawei.com>
-Cc: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>,
- Arnaldo Carvalho de Melo <acme@kernel.org>,
- Namhyung Kim <namhyung@kernel.org>, Nathan Chancellor <nathan@kernel.org>,
- Mark Rutland <mark.rutland@arm.com>,
- Alexander Shishkin <alexander.shishkin@linux.intel.com>,
- Jiri Olsa <jolsa@kernel.org>, Ian Rogers <irogers@google.com>,
- "Liang, Kan" <kan.liang@linux.intel.com>,
- Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling
- <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
- "linux-perf-users@vger.kernel.org" <linux-perf-users@vger.kernel.org>,
- "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
- "llvm@lists.linux.dev" <llvm@lists.linux.dev>,
- "Wanghui (OS Kernel Lab, Beijing)" <hw.huiwang@huawei.com>
-References: <20240702041837.5306-1-changbin.du@huawei.com>
- <20240702041837.5306-2-changbin.du@huawei.com>
- <4ddbcd4a-bbf1-4773-94da-0a2ad63469dc@intel.com>
- <c8fef007dd694d0993cd007c44f458ff@huawei.com>
-Content-Language: en-US
-From: Adrian Hunter <adrian.hunter@intel.com>
-Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
- Business Identity Code: 0357606 - 4, Domiciled in Helsinki
-In-Reply-To: <c8fef007dd694d0993cd007c44f458ff@huawei.com>
+Content-Type: multipart/mixed; 
+	boundary="----=_Part_129074_646767790.1721657579005"
+X-Jenkins-Job: TCWG Build tcwg_kernel/llvm-master-aarch64-stable-allyesconfig
+X-Jenkins-Result: SUCCESS
+
+------=_Part_129074_646767790.1721657579005
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 
-On 22/07/24 15:19, duchangbin wrote:
-> On Thu, Jul 18, 2024 at 08:02:16PM +0300, Adrian Hunter wrote:
->> On 2/07/24 07:18, Changbin Du wrote:
->>> The vdso dumped from process memory (in buildid-cache) lacks debugging
->>> info. To annotate vdso symbols with source lines we need specify a
->>> debugging version.
->>>
->>> For x86, we can find them from your local build as
->>> arch/x86/entry/vdso/vdso{32,64}.so.dbg. Or they may reside in
->>> /lib/modules/<version>/vdso/vdso{32,64}.so on Ubuntu. But notice that
->>> the buildid has to match.
->>>
->>> $ sudo perf record -a
->>> $ sudo perf report --objdump=llvm-objdump \
->>>   --vdso arch/x86/entry/vdso/vdso64.so.dbg,arch/x86/entry/vdso/vdso32.so.dbg
->>>
->>> Samples: 17K of event 'cycles:P', 4000 Hz, Event count (approx.): 1760
->>> __vdso_clock_gettime  /work/linux-host/arch/x86/entry/vdso/vdso64.so.d
->>> Percent│       movq    -48(%rbp),%rsi
->>>        │       testq   %rax,%rax
->>>        │     ;               return vread_hvclock();
->>>        │       movq    %rax,%rdx
->>>        │     ;               if (unlikely(!vdso_cycles_ok(cycles)))
->>>        │     ↑ js      eb
->>>        │     ↑ jmp     74
->>>        │     ;               ts->tv_sec = vdso_ts->sec;
->>>   0.02 │147:   leaq    2(%rbx),%rax
->>>        │       shlq    $4, %rax
->>>        │       addq    %r10,%rax
->>>        │     ;               while ((seq = READ_ONCE(vd->seq)) & 1) {
->>>   9.38 │152:   movl    (%r10),%ecx
->>>
->>> When doing cross platform analysis, we also need specify the vdso path if
->>> we are interested in its symbols.
->>>
->>
->> Just realized this is about objdump.  Sorry for not getting that
->> earlier.
->>
->> Like perf tools, objdump follows the paradigm of attempting to
->> locate and use debug info transparently.  However, objdump looks
->> at the installed debug info in /usr/lib/debug/.build-id/
->>
->> For example, if the debug file is copied (or linked) there, then
->> objdump or llvm-objdump will find it:
->>
->> $ llvm-objdump-18 -dS ~/.debug/\[vdso\]/cf702469f4637840fd6ba1a8d8a628ff83253d04/vdso | head -20
->>
->> ~/.debug/[vdso]/cf702469f4637840fd6ba1a8d8a628ff83253d04/vdso:      file format elf64-x86-64
->>
->> Disassembly of section .text:
->>
->> 00000000000006d0 <.text>:
->>     6d0: 48 8d 3d 29 d9 ff ff          leaq    -0x26d7(%rip), %rdi     # 0xffffffffffffe000
->>     6d7: eb 19                         jmp     0x6f2 <.text+0x22>
->>     6d9: 4c 8b 0d 28 d9 ff ff          movq    -0x26d8(%rip), %r9      # 0xffffffffffffe008
->>     6e0: 4c 8b 05 29 d9 ff ff          movq    -0x26d7(%rip), %r8      # 0xffffffffffffe010
->>     6e7: 0f 01 f9                      rdtscp
->>     6ea: 66 90                         nop
->>     6ec: 8b 0f                         movl    (%rdi), %ecx
->>     6ee: 39 ce                         cmpl    %ecx, %esi
->>     6f0: 74 0e                         je      0x700 <.text+0x30>
->>     6f2: 8b 37                         movl    (%rdi), %esi
->>     6f4: 85 f6                         testl   %esi, %esi
->>     6f6: 75 e1                         jne     0x6d9 <.text+0x9>
->>     6f8: 48 c7 c0 ff ff ff ff          movq    $-0x1, %rax
->>     6ff: c3                            retq
->> $ sudo ln -s /lib/modules/6.9.2-local/build/arch/x86/entry/vdso/vdso64.so.dbg /usr/lib/debug/.build-id/cf/702469f4637840fd6ba1a8d8a628ff83253d04.debug
->> $ llvm-objdump-18 -dS ~/.debug/\[vdso\]/cf702469f4637840fd6ba1a8d8a628ff83253d04/vdso | head -20                                                       
->>
->> ~/.debug/[vdso]/cf702469f4637840fd6ba1a8d8a628ff83253d04/vdso:      file format elf64-x86-64
->>
->> Disassembly of section .text:
->>
->> 00000000000006d0 <vread_hvclock>:
->> ; hv_read_tsc_page_tsc(const struct ms_hyperv_tsc_page *tsc_pg,
->>     6d0: 48 8d 3d 29 d9 ff ff          leaq    -0x26d7(%rip), %rdi     # 0xffffffffffffe000 <hvclock_page>
->>     6d7: eb 19                         jmp     0x6f2 <vread_hvclock+0x22>
->> ;               scale = READ_ONCE(tsc_pg->tsc_scale);
->>     6d9: 4c 8b 0d 28 d9 ff ff          movq    -0x26d8(%rip), %r9      # 0xffffffffffffe008 <hvclock_page+0x8>
->> ;               offset = READ_ONCE(tsc_pg->tsc_offset);
->>     6e0: 4c 8b 05 29 d9 ff ff          movq    -0x26d7(%rip), %r8      # 0xffffffffffffe010 <hvclock_page+0x10>
->> ;       asm volatile(ALTERNATIVE_2("rdtsc",
->>     6e7: 0f 31                         rdtsc
->>     6e9: 90                            nop
->>     6ea: 90                            nop
->>     6eb: 90                            nop
->> ;       } while (READ_ONCE(tsc_pg->tsc_sequence) != sequence);
->>     6ec: 8b 0f                         movl    (%rdi), %ecx
->> $
->>
->> Would that solve your problem?
->>
->> Notably, later versions of llvm-objdump have an option
->> --debug-file-directory which makes it possible to
->> have the debug info in a directory owned by the user,
->> for example:
->>
->> $ sudo rm /usr/lib/debug/.build-id/cf/702469f4637840fd6ba1a8d8a628ff83253d04.debug
->> $ llvm-objdump-18 -dS ~/.debug/\[vdso\]/cf702469f4637840fd6ba1a8d8a628ff83253d04/vdso | head -20
->>
->> ~/.debug/[vdso]/cf702469f4637840fd6ba1a8d8a628ff83253d04/vdso:      file format elf64-x86-64
->>
->> Disassembly of section .text:
->>
->> 00000000000006d0 <.text>:
->>     6d0: 48 8d 3d 29 d9 ff ff          leaq    -0x26d7(%rip), %rdi     # 0xffffffffffffe000
->>     6d7: eb 19                         jmp     0x6f2 <.text+0x22>
->>     6d9: 4c 8b 0d 28 d9 ff ff          movq    -0x26d8(%rip), %r9      # 0xffffffffffffe008
->>     6e0: 4c 8b 05 29 d9 ff ff          movq    -0x26d7(%rip), %r8      # 0xffffffffffffe010
->>     6e7: 0f 01 f9                      rdtscp
->>     6ea: 66 90                         nop
->>     6ec: 8b 0f                         movl    (%rdi), %ecx
->>     6ee: 39 ce                         cmpl    %ecx, %esi
->>     6f0: 74 0e                         je      0x700 <.text+0x30>
->>     6f2: 8b 37                         movl    (%rdi), %esi
->>     6f4: 85 f6                         testl   %esi, %esi
->>     6f6: 75 e1                         jne     0x6d9 <.text+0x9>
->>     6f8: 48 c7 c0 ff ff ff ff          movq    $-0x1, %rax
->>     6ff: c3                            retq
->> $ mkdir -p /tmp/debug/.build-id/cf/
->> $ ln -s /lib/modules/6.9.2-local/build/arch/x86/entry/vdso/vdso64.so.dbg /tmp/debug/.build-id/cf/702469f4637840fd6ba1a8d8a628ff83253d04.debug        
->> $ llvm-objdump-18 --debug-file-directory /tmp/debug -dS ~/.debug/\[vdso\]/cf702469f4637840fd6ba1a8d8a628ff83253d04/vdso | head -20
->>
->> ~/.debug/[vdso]/cf702469f4637840fd6ba1a8d8a628ff83253d04/vdso:      file format elf64-x86-64
->>
->> Disassembly of section .text:
->>
->> 00000000000006d0 <vread_hvclock>:
->> ; hv_read_tsc_page_tsc(const struct ms_hyperv_tsc_page *tsc_pg,
->>     6d0: 48 8d 3d 29 d9 ff ff          leaq    -0x26d7(%rip), %rdi     # 0xffffffffffffe000 <hvclock_page>
->>     6d7: eb 19                         jmp     0x6f2 <vread_hvclock+0x22>
->> ;               scale = READ_ONCE(tsc_pg->tsc_scale);
->>     6d9: 4c 8b 0d 28 d9 ff ff          movq    -0x26d8(%rip), %r9      # 0xffffffffffffe008 <hvclock_page+0x8>
->> ;               offset = READ_ONCE(tsc_pg->tsc_offset);
->>     6e0: 4c 8b 05 29 d9 ff ff          movq    -0x26d7(%rip), %r8      # 0xffffffffffffe010 <hvclock_page+0x10>
->> ;       asm volatile(ALTERNATIVE_2("rdtsc",
->>     6e7: 0f 31                         rdtsc
->>     6e9: 90                            nop
->>     6ea: 90                            nop
->>     6eb: 90                            nop
->> ;       } while (READ_ONCE(tsc_pg->tsc_sequence) != sequence);
->>     6ec: 8b 0f                         movl    (%rdi), %ecx
->> $
->>
-> Yes, not only llvm-objdump. I can see other tools also can handle this and even
-> can download from online by Debuginfod.
->   - perf can search debugging info there if HAVE_DEBUGINFOD_SUPPORT.
->   - gdb can search debugging info there and download via Debuginfod if not exist.
-> 
-> While above requires debugging files are placed correctly in
-> /usr/lib/debug/.build-id/. For vdso mostly you need to copy it manully.
-> 
-> The target of this series is to handle it transparently, espacially for locally
-> built kernels.
+Dear contributor, our automatic CI has detected problems related to your patch(es).  Please find some details below.  If you have any questions, please follow up on linaro-toolchain@lists.linaro.org mailing list, Libera's #linaro-tcwg channel, or ping your favourite Linaro toolchain developer on the usual project channel.
 
-Passing the file name to perf tool doesn't seem transparent.
+We appreciate that it might be difficult to find the necessary logs or reproduce the issue locally. If you can't get what you need from our CI within minutes, let us know and we will be happy to help.
 
-For locally built kernels, maybe there should be a make target for it.
-There seems to be "vdso_install" for the stripped binary.
+We track this report status in https://linaro.atlassian.net/browse/LLVM-1287 , please let us know if you are looking at the problem and/or when you have a fix.
 
+In CI config tcwg_kernel/llvm-master-aarch64-stable-allyesconfig after:
+
+  | commit llvmorg-19-init-18145-g1f6f97e2b64a
+  | Author: Bill Wendling <5993918+bwendling@users.noreply.github.com>
+  | Date:   Thu Jul 18 22:11:56 2024 +0000
+  | 
+  |     [Clang] Loop over FieldDecls instead of all Decls (#99574)
+  |     
+  |     Only FieldDecls are important when determining GEP indices. A struct
+  |     defined within another struct has the same semantics as if it were
+  |     defined outside of the struct. So there's no need to look into
+  |     RecordDecls that aren't a field.
+  |     
+  | ... 4 lines of the commit log omitted.
+
+Results changed to
+# reset_artifacts:
+-10
+# build_abe binutils:
+-9
+# build_kernel_llvm:
+-5
+# build_abe qemu:
+-2
+# linux_n_obj:
+22903
+
+From
+# reset_artifacts:
+-10
+# build_abe binutils:
+-9
+# build_kernel_llvm:
+-5
+# build_abe qemu:
+-2
+# linux_n_obj:
+22904
+
+The configuration of this build is:
+CI config tcwg_kernel/llvm-master-aarch64-stable-allyesconfig
+
+-----------------8<--------------------------8<--------------------------8<--------------------------
+The information below can be used to reproduce a debug environment:
+
+Current build   : https://ci.linaro.org/job/tcwg_kernel--llvm-master-aarch64-stable-allyesconfig-build/202/artifact/artifacts
+Reference build : https://ci.linaro.org/job/tcwg_kernel--llvm-master-aarch64-stable-allyesconfig-build/201/artifact/artifacts
+
+Reproduce last good and first bad builds: https://git-us.linaro.org/toolchain/ci/interesting-commits.git/plain/llvm/sha1/1f6f97e2b64a9c4c51712d32b53e07d2a20e0cc0/tcwg_kernel/llvm-master-aarch64-stable-allyesconfig/reproduction_instructions.txt
+
+Full commit : https://github.com/llvm/llvm-project/commit/1f6f97e2b64a9c4c51712d32b53e07d2a20e0cc0
+
+List of configurations that regressed due to this commit :
+* tcwg_kernel
+** llvm-master-aarch64-stable-allyesconfig
+*** Failure
+*** https://git-us.linaro.org/toolchain/ci/interesting-commits.git/plain/llvm/sha1/1f6f97e2b64a9c4c51712d32b53e07d2a20e0cc0/tcwg_kernel/llvm-master-aarch64-stable-allyesconfig/details.txt
+*** https://ci.linaro.org/job/tcwg_kernel--llvm-master-aarch64-stable-allyesconfig-build/202/artifact/artifacts
+------=_Part_129074_646767790.1721657579005--
