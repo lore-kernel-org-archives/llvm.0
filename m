@@ -1,172 +1,167 @@
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E6C66EC2
-	for <llvm@lists.linux.dev>; Tue, 23 Jul 2024 01:51:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.188
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 31C44139CF2;
+	Tue, 23 Jul 2024 03:30:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721699481; cv=none; b=Y/sukLVtweSP/UDt5GBVuR2K7whvFzwej3FWdELZkL43WP7rj7wBtog9l9KbVKZBiu1vGNxt5FrYQ54BFqMKKYsU7aiY6MiVUni/H9JaUaYEHK8tb0YwWePTii/RnSu4Z1q/4FMUrtu6PZSSRi+pMEjtLRE4ZGpJuwYjBxoe5vw=
+	t=1721705416; cv=none; b=rGatwDRJmR0zldttaMC3rhVYlj+oaWIabJZ4/3PoaMLAiHyQEaupsLxHt9uU55QGvIiLd/mS5XhQyIB0n4iRNNkX4toSStztBRinEj+IZ05ffCAKH/TnzvPDEZsPWXCA8qWGoDUOmDZt+W+it27rlGrNO9yfhyY39CeDntQ9CdQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721699481; c=relaxed/simple;
-	bh=5LiQPHIwYBb1eBYWiM2k4mKF98UwqsjReBTe6Fg2DKE=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=PZxxC7H2uC/Bn9PtlnIwSRNChTixm+4IsV1Lpo63D9V55ymxpDXLkkxUB2qUo3DlYwDRCERkPLpOfMjwTqExHqmZ9Tthbi2s8wtCO1/nSKn3hi7uoO8YCLUAQi6loo/K1MLlhy0EaAyqAcKRmq/nYRrlhbFqVwnMsnoeRWjJpVM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.188
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.19.163.48])
-	by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4WSg8P5V8Sznc5l;
-	Tue, 23 Jul 2024 09:50:29 +0800 (CST)
-Received: from kwepemd200010.china.huawei.com (unknown [7.221.188.124])
-	by mail.maildlp.com (Postfix) with ESMTPS id 73FBE18005F;
-	Tue, 23 Jul 2024 09:51:16 +0800 (CST)
-Received: from kwepemd100011.china.huawei.com (7.221.188.204) by
- kwepemd200010.china.huawei.com (7.221.188.124) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1258.34; Tue, 23 Jul 2024 09:51:16 +0800
-Received: from kwepemd100011.china.huawei.com ([7.221.188.204]) by
- kwepemd100011.china.huawei.com ([7.221.188.204]) with mapi id 15.02.1258.034;
- Tue, 23 Jul 2024 09:51:16 +0800
-From: duchangbin <changbin.du@huawei.com>
-To: Adrian Hunter <adrian.hunter@intel.com>
-CC: duchangbin <changbin.du@huawei.com>, Peter Zijlstra
-	<peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, "Arnaldo Carvalho de
- Melo" <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, Nathan
- Chancellor <nathan@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>, Jiri Olsa
-	<jolsa@kernel.org>, "Ian Rogers" <irogers@google.com>, "Liang, Kan"
-	<kan.liang@linux.intel.com>, "Nick Desaulniers" <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
-	"linux-perf-users@vger.kernel.org" <linux-perf-users@vger.kernel.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"llvm@lists.linux.dev" <llvm@lists.linux.dev>, "Wanghui (OS Kernel Lab,
- Beijing)" <hw.huiwang@huawei.com>
-Subject: Re: [PATCH v5 4/8] perf: build-id: name debugging vdso as "debug"
-Thread-Topic: [PATCH v5 4/8] perf: build-id: name debugging vdso as "debug"
-Thread-Index: AQHazDb2iq3pHVuvbEa2f6W9l9N6m7H8Si6AgAZ9IID//45bAIABV2YA
-Date: Tue, 23 Jul 2024 01:51:15 +0000
-Message-ID: <0d7e5c9b27044e6eac89708d407c08fe@huawei.com>
-References: <20240702041837.5306-1-changbin.du@huawei.com>
- <20240702041837.5306-5-changbin.du@huawei.com>
- <14afba8e-cb85-4d7d-96e4-d65fd8ebc2d5@intel.com>
- <8a7156281b45450ebf0511373f65afa7@huawei.com>
- <22bee274-23e1-4298-a936-50bebd802482@intel.com>
-In-Reply-To: <22bee274-23e1-4298-a936-50bebd802482@intel.com>
-Accept-Language: en-US
-Content-Language: zh-CN
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-x-ms-exchange-imapappendstamp: kwepemd100011.china.huawei.com (15.02.1258.034)
-x-ms-exchange-messagesentrepresentingtype: 1
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <002BCEC86177134BB94BC88C6D86F367@huawei.com>
-Content-Transfer-Encoding: quoted-printable
+	s=arc-20240116; t=1721705416; c=relaxed/simple;
+	bh=nLnwoI7YeS9ALlvLqh0epIkBFGQRYQaAvU2pGkV1qB0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=T5J4ZkMcikhBeklTJbyWX73yFpeO3WRlVUaJFH+8PpSJBaSLvwETebYpKhc5WbZlOiOuP/ldMHQZbHkRh9lID7guHruw9NWFDD70lTOGkPfrGem0URUvNzyDUt6DoNfc3ephNSxJZX0S+ZEZ8MfIQ8LZdRfhzGR7oHepzQ6X1dg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=VNTDBx/u; arc=none smtp.client-ip=198.175.65.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="VNTDBx/u"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1721705415; x=1753241415;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=nLnwoI7YeS9ALlvLqh0epIkBFGQRYQaAvU2pGkV1qB0=;
+  b=VNTDBx/uNXwK0gef8+S35SeKo30ndEOFYCQCjYRYPVh/aABZVj1hv1oo
+   KMWfMxvYXBIihPTK2oYkRpo/eET2v3/ovUrOT9uiX8niEuFAuRajqTgcD
+   KXiOL7nxx4bPBVLIZh/9TG6n3IyCXQv8UOco+M2DkZclevJZStCsRftRg
+   5VyPi68X61BGd3HRykhkXis55XO7kjSPKvKyotvakEdoMRwDtjv/sjjQq
+   8x7vbJOZ7fDGBigHz9LPLTIGdAfa3MHlmuVvzWW/4mQq5Miw9w6hZ9YUH
+   IQy9HgE2wpl49Z4ego9cTkpVO+ykAu2S2RdzhlpF2UMyixGa++8qVPjeQ
+   A==;
+X-CSE-ConnectionGUID: 27pwmV1FT9uK4TmRKupcqg==
+X-CSE-MsgGUID: Ac+FMuGaT/+kMfulQG9ifg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11141"; a="19433686"
+X-IronPort-AV: E=Sophos;i="6.09,229,1716274800"; 
+   d="scan'208";a="19433686"
+Received: from fmviesa001.fm.intel.com ([10.60.135.141])
+  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jul 2024 20:30:14 -0700
+X-CSE-ConnectionGUID: nSvWO+nXRZCdt6ilpccYyQ==
+X-CSE-MsgGUID: g8CC6jAvQ9Gjqc+Oi9Un+w==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.09,229,1716274800"; 
+   d="scan'208";a="83108108"
+Received: from lkp-server01.sh.intel.com (HELO 68891e0c336b) ([10.239.97.150])
+  by fmviesa001.fm.intel.com with ESMTP; 22 Jul 2024 20:30:12 -0700
+Received: from kbuild by 68891e0c336b with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1sW6E6-000lbo-1g;
+	Tue, 23 Jul 2024 03:30:10 +0000
+Date: Tue, 23 Jul 2024 11:29:14 +0800
+From: kernel test robot <lkp@intel.com>
+To: John Ogness <john.ogness@linutronix.de>, Petr Mladek <pmladek@suse.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Sergey Senozhatsky <senozhatsky@chromium.org>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Thomas Gleixner <tglx@linutronix.de>, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH printk v3 07/19] printk: Add helpers for flush type logic
+Message-ID: <202407231135.jtSVw3hi-lkp@intel.com>
+References: <20240722171939.3349410-8-john.ogness@linutronix.de>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240722171939.3349410-8-john.ogness@linutronix.de>
 
-On Mon, Jul 22, 2024 at 04:21:46PM +0300, Adrian Hunter wrote:
-> On 22/07/24 15:08, duchangbin wrote:
-> > On Thu, Jul 18, 2024 at 08:03:07PM +0300, Adrian Hunter wrote:
-> >> On 2/07/24 07:18, Changbin Du wrote:
-> >>> As normal objects, we will add debugging vdso elf to build-id cache l=
-ater.
-> >>> Here we name the debugging one as "debug".
-> >>>
-> >>> Signed-off-by: Changbin Du <changbin.du@huawei.com>
-> >>> ---
-> >>>  tools/perf/util/build-id.c | 4 ++--
-> >>>  1 file changed, 2 insertions(+), 2 deletions(-)
-> >>>
-> >>> diff --git a/tools/perf/util/build-id.c b/tools/perf/util/build-id.c
-> >>> index 83a1581e8cf1..15530af2bad9 100644
-> >>> --- a/tools/perf/util/build-id.c
-> >>> +++ b/tools/perf/util/build-id.c
-> >>> @@ -259,8 +259,8 @@ static bool build_id_cache__valid_id(char *sbuild=
-_id)
-> >>>  static const char *build_id_cache__basename(bool is_kallsyms, bool i=
-s_vdso,
-> >>>  					    bool is_debug)
-> >>>  {
-> >>> -	return is_kallsyms ? "kallsyms" : (is_vdso ? "vdso" : (is_debug ?
-> >>> -	    "debug" : "elf"));
-> >>> +	return is_kallsyms ? "kallsyms" : (is_debug ? "debug" : (is_vdso ?
-> >>> +		"vdso" : "elf"));
-> >>>  }
-> >>> =20
-> >>>  char *__dso__build_id_filename(const struct dso *dso, char *bf, size=
-_t size,
-> >>
-> >> To actually add "debug", this also needs:
-> >>
-> >> diff --git a/tools/perf/util/build-id.c b/tools/perf/util/build-id.c
-> >> index 15530af2bad9..b5bd02a1ad0f 100644
-> >> --- a/tools/perf/util/build-id.c
-> >> +++ b/tools/perf/util/build-id.c
-> >> @@ -701,7 +701,7 @@ build_id_cache__add(const char *sbuild_id, const c=
-har *name, const char *realnam
-> >>  	 * file itself may not be very useful to users of our tools without =
-a
-> >>  	 * symtab.
-> >>  	 */
-> >> -	if (!is_kallsyms && !is_vdso &&
-> >> +	if (!is_kallsyms &&
-> >>  	    strncmp(".ko", name + strlen(name) - 3, 3)) {
-> >>  		debugfile =3D build_id_cache__find_debug(sbuild_id, nsi, root_dir);
-> >>  		if (debugfile) {
-> >>
-> >>
-> >>
-> > This is done by later patch named "perf: build-id: try to search debugg=
-ing vdso
-> > and add to cache". I split the changes into two patches.
->=20
-> With the above, the split is more functionally logical:
-> 	1. Add support for build-id cache vdso debug
-> 	2. For vdso, extend build_id_cache__find_debug() to find
-> 	local kernel build files
->
-Sounds good for me.
+Hi John,
 
-> >=20
-> >> With that perf will populated the "debug" entry in the build-id cache.
-> >> Currently, when adding to the build-id cache, perf only looks in
-> >> /usr/lib/debug/.build-id (refer build_id_cache__find_debug()), for
-> >> example:
-> >>
-> >>
-> >> $ sudo ln -s /lib/modules/6.9.2-local/build/arch/x86/entry/vdso/vdso64=
-.so.dbg /usr/lib/debug/.build-id/cf/702469f4637840fd6ba1a8d8a628ff83253d04.=
-debug
-> >> $ ls -l ~/.debug/\[vdso\]/cf702469f4637840fd6ba1a8d8a628ff83253d04/
-> >> total 8
-> >> -rw-r--r-- 1 ahunter ahunter    0 Jul 18 13:33 probes
-> >> -rw------- 1 ahunter ahunter 8192 Jul 18 13:33 vdso
-> >> $ perf record uname
-> >> Linux
-> >> [ perf record: Woken up 1 times to write data ]
-> >> [ perf record: Captured and wrote 0.010 MB perf.data (2 samples) ]
-> >> $ ls -l ~/.debug/\[vdso\]/cf702469f4637840fd6ba1a8d8a628ff83253d04/
-> >> total 40
-> >> -rwxrwxr-x 2 ahunter ahunter 32760 May 27 17:42 debug
-> >> -rw-r--r-- 1 ahunter ahunter     0 Jul 18 13:33 probes
-> >> -rw------- 1 ahunter ahunter  8192 Jul 18 13:33 vdso
-> >>
-> >>
-> >> Note, perf will anyway find the debug object in /usr/lib/debug/.build-=
-id
-> >> so the benefit is if perf-archive is used to copy from the buildid-cac=
-he
-> >> to take to another machine.
-> >>
-> >>
-> >=20
->=20
->=20
+kernel test robot noticed the following build errors:
 
---=20
-Cheers,
-Changbin Du
+[auto build test ERROR on b18703ea7157f62f02eb0ceb11f6fa0138e90adc]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/John-Ogness/printk-nbcon-Clarify-nbcon_get_default_prio-context/20240723-015154
+base:   b18703ea7157f62f02eb0ceb11f6fa0138e90adc
+patch link:    https://lore.kernel.org/r/20240722171939.3349410-8-john.ogness%40linutronix.de
+patch subject: [PATCH printk v3 07/19] printk: Add helpers for flush type logic
+config: arm-randconfig-004-20240723 (https://download.01.org/0day-ci/archive/20240723/202407231135.jtSVw3hi-lkp@intel.com/config)
+compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project ad154281230d83ee551e12d5be48bb956ef47ed3)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240723/202407231135.jtSVw3hi-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202407231135.jtSVw3hi-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+   In file included from kernel/printk/printk.c:23:
+   In file included from include/linux/mm.h:2253:
+   include/linux/vmstat.h:514:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     514 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+   In file included from kernel/printk/printk.c:61:
+>> kernel/printk/internal.h:188:26: error: call to undeclared function 'is_printk_deferred'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     188 |                         if (prefer_offload || is_printk_deferred())
+         |                                               ^
+   kernel/printk/internal.h:188:26: note: did you mean '_printk_deferred'?
+   include/linux/printk.h:218:5: note: '_printk_deferred' declared here
+     218 | int _printk_deferred(const char *s, ...)
+         |     ^
+   In file included from kernel/printk/printk.c:61:
+   kernel/printk/internal.h:237:8: error: call to undeclared function 'is_printk_deferred'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     237 |                         if (is_printk_deferred())
+         |                             ^
+   1 warning and 2 errors generated.
+
+
+vim +/is_printk_deferred +188 kernel/printk/internal.h
+
+   172	
+   173	/*
+   174	 * Decide while console flushing methods are to be used. Used
+   175	 * for all flushing except when flushing from emergency state.
+   176	 *
+   177	 * Set @prefer_offload to true if the context is only interested in
+   178	 * offloading. Then offloading types will be set instead of direct,
+   179	 * if appropriate.
+   180	 */
+   181	static inline void printk_get_console_flush_type(struct console_flush_type *ft, bool prefer_offload)
+   182	{
+   183		memset(ft, 0, sizeof(*ft));
+   184	
+   185		switch (nbcon_get_default_prio()) {
+   186		case NBCON_PRIO_NORMAL:
+   187			if (have_legacy_console || have_boot_console) {
+ > 188				if (prefer_offload || is_printk_deferred())
+   189					ft->legacy_offload = true;
+   190				else
+   191					ft->legacy_direct = true;
+   192			}
+   193	
+   194			if (have_nbcon_console && !have_boot_console)
+   195				ft->nbcon_atomic = true;
+   196			break;
+   197	
+   198		case NBCON_PRIO_EMERGENCY:
+   199			/*
+   200			 * Skip. The consoles will be flushed when exiting emergency
+   201			 * state. See printk_get_emergency_console_flush_type().
+   202			 */
+   203			break;
+   204	
+   205		case NBCON_PRIO_PANIC:
+   206			if (have_nbcon_console && !have_boot_console)
+   207				ft->nbcon_atomic = true;
+   208	
+   209			/*
+   210			 * In panic, if nbcon atomic printing occurs, the legacy
+   211			 * consoles must remain silent until explicitly allowed.
+   212			 */
+   213			if (legacy_allow_panic_sync || !ft->nbcon_atomic)
+   214				ft->legacy_direct = true;
+   215			break;
+   216	
+   217		default:
+   218			WARN_ON_ONCE(1);
+   219			break;
+   220		}
+   221	}
+   222	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
