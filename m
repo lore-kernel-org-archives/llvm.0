@@ -1,62 +1,62 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 743A050269;
-	Wed, 24 Jul 2024 07:24:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D5A0677102;
+	Wed, 24 Jul 2024 07:45:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721805863; cv=none; b=utGoBP0EKPBTB38ndJEF6UuIPq2g01HllqjhF6f7Q5Rk7MoIaXU7D7mqojiN5jRYg+qUHhY/HND5H42Uhs+cWM8bL7ugL+WZeIf1096VEtlFX9hE5TiV5YpmVy1yd7zFWLn1w5nD7AS8FqqTMYLQHHgJbKWVgNCQ6+bLpTHpc+w=
+	t=1721807116; cv=none; b=or3r3ug9gyXnqD6YCsILIKSUC7n1sG20TnmPWEnSaMwMw7mwNJAJx8ZNluqyHY2P1sJOyH8SbfUnWT9NmxguLzi15m2Zb/aA7msVmunOf8l3sZnwFjfmEa1LIONLPaEIc5kWuGOlF3EVNTGQcRgZCn0Id0CeGwFnE3KPuMMqv1s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721805863; c=relaxed/simple;
-	bh=3/HtXcrqBEZ8GGDm6+Bdd2jSc73UsWB5s9JTwPYCgyw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=DSIl0/JXgojC831DwoRmYt4yWY+Vti7raMZXb8gewXj7ob0QWAwzTPIh9s1t55Lx7bKqg08hmBEGVJTAQocOHGPbPJGhoEK0JRWiD/xJtErSXL+mkOsXx6EyfPnhqgJC71DLjlGgIAroD4XtbDHQLNRLoJ/Y84q2LiEkkFfQy4M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Fc9yCihZ; arc=none smtp.client-ip=198.175.65.9
+	s=arc-20240116; t=1721807116; c=relaxed/simple;
+	bh=EHSZX5YkojSNNXmBnmJCsu4S0sbiiSFHtGhpyoZakeo=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=VdErI4traMXQR0FZ6qpjNOdt69tohRkEnyqfXMWlFXC3ZRPT2/k3yGZuiyxo/mShJj8aTagYKmSYbDhmRE5pnXgFy26ztL0vg7iN+2YLb1dcm7cSv4Sw24NOKrBII0AdfySJkVd4nXQHZB0fedWgn/sI/Ca8VxRHeJJhg+CQOv4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=MlDdeDL+; arc=none smtp.client-ip=192.198.163.7
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Fc9yCihZ"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="MlDdeDL+"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1721805862; x=1753341862;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=3/HtXcrqBEZ8GGDm6+Bdd2jSc73UsWB5s9JTwPYCgyw=;
-  b=Fc9yCihZnysQqnnzc/1bF2E1HU2omI506Cz3YDDgqrepS2DhUjHGJJyM
-   5aes39yoQSOZ+D9k7OoQgiGyQaYIF17hf3135hTcnJDjOqybbU+aUOAe6
-   P+M845DuPs218mUNShsLsJGnf2wX8yHLknErdYqk12dqJ8orIGk+JxXDk
-   ExNre2nUnAMza5RE5cBJoFaAoSUnFcHINecvmEWvie1f1CcOttAjGRw/e
-   R1VyH9AkPKAcgH7iOgH9ZTjxAwhYuLbMLTpmAlwMOgysTlyTACyADBky7
-   EYfg1Cm8Xmb2v08XKztpxQMSp1XbNsAxEY0ew7TyqCCZIMKXcB0VYspg7
-   A==;
-X-CSE-ConnectionGUID: UHxzs7p5RGiFvWb+FlSqMA==
-X-CSE-MsgGUID: QEi4l2OAQ5Oh1HCgRUwBqA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11142"; a="41993539"
+  t=1721807113; x=1753343113;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=EHSZX5YkojSNNXmBnmJCsu4S0sbiiSFHtGhpyoZakeo=;
+  b=MlDdeDL+441SGmpVeyttd/8cdk4OSFPZiaCTrQuV7LaJG3EBSsYPtwAU
+   nM6Gnqy18VT8pmfaHLHvLJLQveT4xkpn7ldtJUxjDTKrgZxvBC3xsPMei
+   wjtawzejmhlaP4eOMF5LgsA9HpLdNH8wsA/JonkD/L8w0/TJ8tVQ/hvyP
+   6CBVXwct1KjdCY1wBvvwMMLukVXdKOnpFBOVDjlTXyCUcL1lKoi86zfz9
+   2j6iVUEDn3QZ3nr3PesbXCjuvv0V5Fgjgd99ftcFb5nsHohFAHggZA2GX
+   M/A+7rou8UqwAtfBKP30TmotpSqcVS0ezijnHzYI0WnFJ5pTCisovR04T
+   w==;
+X-CSE-ConnectionGUID: mn3i/LztQB279aui50uGvg==
+X-CSE-MsgGUID: Vk6+lMd4Ra21njxsS0oLoQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11142"; a="44894102"
 X-IronPort-AV: E=Sophos;i="6.09,232,1716274800"; 
-   d="scan'208";a="41993539"
-Received: from orviesa010.jf.intel.com ([10.64.159.150])
-  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jul 2024 00:24:12 -0700
-X-CSE-ConnectionGUID: S/tEA5FNQLO52w0IhKEs0A==
-X-CSE-MsgGUID: nXsRCMeRQ5aEhOtooAa8Xg==
+   d="scan'208";a="44894102"
+Received: from orviesa007.jf.intel.com ([10.64.159.147])
+  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jul 2024 00:45:12 -0700
+X-CSE-ConnectionGUID: yCiRd8aoQbeRYr1aKZdExw==
+X-CSE-MsgGUID: /fYG26j+QxqKdiQvudJq+g==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.09,232,1716274800"; 
-   d="scan'208";a="52402920"
+   d="scan'208";a="53096576"
 Received: from lkp-server01.sh.intel.com (HELO 68891e0c336b) ([10.239.97.150])
-  by orviesa010.jf.intel.com with ESMTP; 24 Jul 2024 00:24:10 -0700
+  by orviesa007.jf.intel.com with ESMTP; 24 Jul 2024 00:45:11 -0700
 Received: from kbuild by 68891e0c336b with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1sWWM3-000mlz-2R;
-	Wed, 24 Jul 2024 07:24:07 +0000
-Date: Wed, 24 Jul 2024 15:24:06 +0800
+	id 1sWWgO-000mmw-1J;
+	Wed, 24 Jul 2024 07:45:08 +0000
+Date: Wed, 24 Jul 2024 15:44:57 +0800
 From: kernel test robot <lkp@intel.com>
-To: "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-	Andrew Morton <akpm@linux-foundation.org>
+To: Arnd Bergmann <arnd@arndb.de>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Linux Memory Management List <linux-mm@kvack.org>,
-	"Matthew Wilcox (Oracle)" <willy@infradead.org>
-Subject: Re: [PATCH 3/6] mm: Convert page_to_pgoff() to page_pgoff()
-Message-ID: <202407241549.hEuWenpa-lkp@intel.com>
-References: <20240723153503.1669586-4-willy@infradead.org>
+	linux-arch@vger.kernel.org
+Subject: [arnd-asm-generic:syscall-tbl-6.11 77/80]
+ arch/arm/kernel/sys_oabi-compat.c:448:1: warning: comparison of distinct
+ pointer types ('long (*)(int, void *, size_t, unsigned int)' (aka 'long
+ (*)(int, void *, unsigned int, unsigned int)') and 'long (*)(int, void *,
+ size_t, unsigned int, struct sockadd...
+Message-ID: <202407241512.6bjBAKyO-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -65,77 +65,231 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240723153503.1669586-4-willy@infradead.org>
 
-Hi Matthew,
-
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on akpm-mm/mm-everything]
-[also build test ERROR on linus/master next-20240724]
-[cannot apply to tip/x86/mm dennis-percpu/for-next v6.10]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Matthew-Wilcox-Oracle/bootmem-Stop-using-page-index/20240723-233932
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
-patch link:    https://lore.kernel.org/r/20240723153503.1669586-4-willy%40infradead.org
-patch subject: [PATCH 3/6] mm: Convert page_to_pgoff() to page_pgoff()
-config: x86_64-allnoconfig (https://download.01.org/0day-ci/archive/20240724/202407241549.hEuWenpa-lkp@intel.com/config)
-compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240724/202407241549.hEuWenpa-lkp@intel.com/reproduce)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/arnd/asm-generic.git syscall-tbl-6.11
+head:   ece1b5ebc0b7064a8a130f64e85a81ec76381c3f
+commit: ce67487a0460367a60a68fa3de3e66b8caaa3b7c [77/80] syscalls: check syscall prototypes
+config: arm-randconfig-002-20240724 (https://download.01.org/0day-ci/archive/20240724/202407241512.6bjBAKyO-lkp@intel.com/config)
+compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project ad154281230d83ee551e12d5be48bb956ef47ed3)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240724/202407241512.6bjBAKyO-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202407241549.hEuWenpa-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202407241512.6bjBAKyO-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
-   In file included from mm/filemap.c:51:
->> mm/internal.h:899:39: error: passing 'const struct folio *' to parameter of type 'struct folio *' discards qualifiers [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
-     899 |         return folio->index + folio_page_idx(folio, page);
-         |                                              ^~~~~
-   include/linux/mm.h:216:62: note: expanded from macro 'folio_page_idx'
-     216 | #define folio_page_idx(folio, p)        (page_to_pfn(p) - folio_pfn(folio))
-         |                                                                     ^~~~~
-   include/linux/mm.h:1877:53: note: passing argument to parameter 'folio' here
-    1877 | static inline unsigned long folio_pfn(struct folio *folio)
-         |                                                     ^
-   1 error generated.
---
-   In file included from mm/rmap.c:85:
->> mm/internal.h:899:39: error: passing 'const struct folio *' to parameter of type 'struct folio *' discards qualifiers [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
-     899 |         return folio->index + folio_page_idx(folio, page);
-         |                                              ^~~~~
-   include/linux/mm.h:216:62: note: expanded from macro 'folio_page_idx'
-     216 | #define folio_page_idx(folio, p)        (page_to_pfn(p) - folio_pfn(folio))
-         |                                                                     ^~~~~
-   include/linux/mm.h:1877:53: note: passing argument to parameter 'folio' here
-    1877 | static inline unsigned long folio_pfn(struct folio *folio)
-         |                                                     ^
-   mm/rmap.c:796:40: error: passing 'const struct folio *' to parameter of type 'struct folio *' discards qualifiers [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
-     796 |         pgoff = folio->index + folio_page_idx(folio, page);
-         |                                               ^~~~~
-   include/linux/mm.h:216:62: note: expanded from macro 'folio_page_idx'
-     216 | #define folio_page_idx(folio, p)        (page_to_pfn(p) - folio_pfn(folio))
-         |                                                                     ^~~~~
-   include/linux/mm.h:1877:53: note: passing argument to parameter 'folio' here
-    1877 | static inline unsigned long folio_pfn(struct folio *folio)
-         |                                                     ^
-   2 errors generated.
+   In file included from arch/arm/kernel/sys_oabi-compat.c:75:
+   In file included from include/linux/syscalls.h:86:
+   In file included from include/trace/syscall.h:7:
+   In file included from include/linux/trace_events.h:6:
+   In file included from include/linux/ring_buffer.h:5:
+   In file included from include/linux/mm.h:2221:
+   include/linux/vmstat.h:514:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     514 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+>> arch/arm/kernel/sys_oabi-compat.c:407:1: warning: comparison of distinct pointer types ('long (*)(int, struct oabi_sembuf *, unsigned int)' and 'long (*)(int, struct oabi_sembuf *, unsigned int, const struct old_timespec32 *)') [-Wcompare-distinct-pointer-types]
+     407 | SYSCALL_DEFINE3(oabi_semtimedop, int, semid, struct oabi_sembuf __user *, tsops,
+         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     408 |                 unsigned, nsops, const struct old_timespec32 __user *, timeout)
+         |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/syscalls.h:218:36: note: expanded from macro 'SYSCALL_DEFINE3'
+     218 | #define SYSCALL_DEFINE3(name, ...) SYSCALL_DEFINEx(3, _##name, __VA_ARGS__)
+         |                                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/syscalls.h:229:2: note: expanded from macro 'SYSCALL_DEFINEx'
+     229 |         __SYSCALL_DEFINEx(x, sname, __VA_ARGS__)
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/syscalls.h:247:25: note: expanded from macro '__SYSCALL_DEFINEx'
+     247 |                 (void)(__do_sys##name == sys##name);                    \
+         |                        ~~~~~~~~~~~~~~ ^  ~~~~~~~~~
+   arch/arm/kernel/sys_oabi-compat.c:407:1: error: conflicting types for 'sys_oabi_semtimedop'
+   include/linux/syscalls.h:218:36: note: expanded from macro 'SYSCALL_DEFINE3'
+     218 | #define SYSCALL_DEFINE3(name, ...) SYSCALL_DEFINEx(3, _##name, __VA_ARGS__)
+         |                                    ^
+   include/linux/syscalls.h:229:2: note: expanded from macro 'SYSCALL_DEFINEx'
+     229 |         __SYSCALL_DEFINEx(x, sname, __VA_ARGS__)
+         |         ^
+   include/linux/syscalls.h:255:18: note: expanded from macro '__SYSCALL_DEFINEx'
+     255 |         asmlinkage long sys##name(__MAP(x,__SC_DECL,__VA_ARGS__))       \
+         |                         ^
+   <scratch space>:38:1: note: expanded from here
+      38 | sys_oabi_semtimedop
+         | ^
+   arch/arm/include/asm/syscalls.h:30:17: note: previous declaration is here
+      30 | asmlinkage long sys_oabi_semtimedop(int semid,
+         |                 ^
+>> arch/arm/kernel/sys_oabi-compat.c:419:1: warning: comparison of distinct pointer types ('long (*)(uint, int, int, int, void *)' (aka 'long (*)(unsigned int, int, int, int, void *)') and 'long (*)(uint, int, int, int, void *, long)' (aka 'long (*)(unsigned int, int, int, int, void *, long)')) [-Wcompare-distinct-pointer-types]
+     419 | SYSCALL_DEFINE5(oabi_ipc, uint, call, int, first, int, second, int, third,
+         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     420 |                 void __user *, ptr, long, fifth)
+         |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/syscalls.h:220:36: note: expanded from macro 'SYSCALL_DEFINE5'
+     220 | #define SYSCALL_DEFINE5(name, ...) SYSCALL_DEFINEx(5, _##name, __VA_ARGS__)
+         |                                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/syscalls.h:229:2: note: expanded from macro 'SYSCALL_DEFINEx'
+     229 |         __SYSCALL_DEFINEx(x, sname, __VA_ARGS__)
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/syscalls.h:247:25: note: expanded from macro '__SYSCALL_DEFINEx'
+     247 |                 (void)(__do_sys##name == sys##name);                    \
+         |                        ~~~~~~~~~~~~~~ ^  ~~~~~~~~~
+   arch/arm/kernel/sys_oabi-compat.c:419:1: error: conflicting types for 'sys_oabi_ipc'
+   include/linux/syscalls.h:220:36: note: expanded from macro 'SYSCALL_DEFINE5'
+     220 | #define SYSCALL_DEFINE5(name, ...) SYSCALL_DEFINEx(5, _##name, __VA_ARGS__)
+         |                                    ^
+   include/linux/syscalls.h:229:2: note: expanded from macro 'SYSCALL_DEFINEx'
+     229 |         __SYSCALL_DEFINEx(x, sname, __VA_ARGS__)
+         |         ^
+   include/linux/syscalls.h:255:18: note: expanded from macro '__SYSCALL_DEFINEx'
+     255 |         asmlinkage long sys##name(__MAP(x,__SC_DECL,__VA_ARGS__))       \
+         |                         ^
+   <scratch space>:158:1: note: expanded from here
+     158 | sys_oabi_ipc
+         | ^
+   arch/arm/include/asm/syscalls.h:36:17: note: previous declaration is here
+      36 | asmlinkage long sys_oabi_ipc(uint call, int first, int second, int third,
+         |                 ^
+>> arch/arm/kernel/sys_oabi-compat.c:448:1: warning: comparison of distinct pointer types ('long (*)(int, void *, size_t, unsigned int)' (aka 'long (*)(int, void *, unsigned int, unsigned int)') and 'long (*)(int, void *, size_t, unsigned int, struct sockaddr *, int)' (aka 'long (*)(int, void *, unsigned int, unsigned int, struct sockaddr *, int)')) [-Wcompare-distinct-pointer-types]
+     448 | SYSCALL_DEFINE4(oabi_sendto, int, fd, void __user *, buff, size_t, len,
+         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     449 |                 unsigned, flags, struct sockaddr __user *, addr, int, addrlen)
+         |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/syscalls.h:219:36: note: expanded from macro 'SYSCALL_DEFINE4'
+     219 | #define SYSCALL_DEFINE4(name, ...) SYSCALL_DEFINEx(4, _##name, __VA_ARGS__)
+         |                                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/syscalls.h:229:2: note: expanded from macro 'SYSCALL_DEFINEx'
+     229 |         __SYSCALL_DEFINEx(x, sname, __VA_ARGS__)
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/syscalls.h:247:25: note: expanded from macro '__SYSCALL_DEFINEx'
+     247 |                 (void)(__do_sys##name == sys##name);                    \
+         |                        ~~~~~~~~~~~~~~ ^  ~~~~~~~~~
+   arch/arm/kernel/sys_oabi-compat.c:448:1: error: conflicting types for 'sys_oabi_sendto'
+   include/linux/syscalls.h:219:36: note: expanded from macro 'SYSCALL_DEFINE4'
+     219 | #define SYSCALL_DEFINE4(name, ...) SYSCALL_DEFINEx(4, _##name, __VA_ARGS__)
+         |                                    ^
+   include/linux/syscalls.h:229:2: note: expanded from macro 'SYSCALL_DEFINEx'
+     229 |         __SYSCALL_DEFINEx(x, sname, __VA_ARGS__)
+         |         ^
+   include/linux/syscalls.h:255:18: note: expanded from macro '__SYSCALL_DEFINEx'
+     255 |         asmlinkage long sys##name(__MAP(x,__SC_DECL,__VA_ARGS__))       \
+         |                         ^
+   <scratch space>:135:1: note: expanded from here
+     135 | sys_oabi_sendto
+         | ^
+   arch/arm/include/asm/syscalls.h:41:17: note: previous declaration is here
+      41 | asmlinkage long sys_oabi_sendto(int fd, void __user *buff,
+         |                 ^
+   arch/arm/kernel/sys_oabi-compat.c:453:27: error: use of undeclared identifier 'addr'
+     453 |             get_user(sa_family, &addr->sa_family) == 0 &&
+         |                                  ^
+   arch/arm/kernel/sys_oabi-compat.c:453:27: error: use of undeclared identifier 'addr'
+   arch/arm/kernel/sys_oabi-compat.c:453:27: error: use of undeclared identifier 'addr'
+   arch/arm/kernel/sys_oabi-compat.c:452:6: error: use of undeclared identifier 'addrlen'; did you mean 'strlen'?
+     452 |         if (addrlen == 112 &&
+         |             ^~~~~~~
+         |             strlen
+   include/linux/string.h:196:24: note: 'strlen' declared here
+     196 | extern __kernel_size_t strlen(const char *);
+         |                        ^
+   arch/arm/kernel/sys_oabi-compat.c:455:4: error: use of undeclared identifier 'addrlen'
+     455 |                         addrlen = 110;
+         |                         ^
+   arch/arm/kernel/sys_oabi-compat.c:456:44: error: use of undeclared identifier 'addr'
+     456 |         return __sys_sendto(fd, buff, len, flags, addr, addrlen);
+         |                                                   ^
+   arch/arm/kernel/sys_oabi-compat.c:456:50: error: use of undeclared identifier 'addrlen'
+     456 |         return __sys_sendto(fd, buff, len, flags, addr, addrlen);
+         |                                                         ^
+   arch/arm/kernel/sys_oabi-compat.c:483:37: error: too few arguments to function call, expected 4, have 3
+     483 |         return __sys_sendmsg(fd, msg, flags);
+         |                ~~~~~~~~~~~~~               ^
+   include/linux/socket.h:411:13: note: '__sys_sendmsg' declared here
+     411 | extern long __sys_sendmsg(int fd, struct user_msghdr __user *msg,
+         |             ^             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     412 |                           unsigned int flags, bool forbid_cmsg_compat);
+         |                           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   4 warnings and 11 errors generated.
 
 
-vim +899 mm/internal.h
+vim +448 arch/arm/kernel/sys_oabi-compat.c
 
-   895	
-   896	static inline pgoff_t page_pgoff(const struct folio *folio,
-   897			const struct page *page)
-   898	{
- > 899		return folio->index + folio_page_idx(folio, page);
-   900	}
-   901	
+687ad0191488a0 Nicolas Pitre 2006-01-14  388  
+2263955b209e20 Arnd Bergmann 2024-07-05  389  SYSCALL_DEFINE6(oabi_ipc, uint, call, int, first, int, second, int, third,
+2263955b209e20 Arnd Bergmann 2024-07-05  390  		void __user *, ptr, long, fifth)
+687ad0191488a0 Nicolas Pitre 2006-01-14  391  {
+687ad0191488a0 Nicolas Pitre 2006-01-14  392  	switch (call & 0xffff) {
+687ad0191488a0 Nicolas Pitre 2006-01-14  393  	case SEMOP:
+687ad0191488a0 Nicolas Pitre 2006-01-14  394  		return  sys_oabi_semtimedop(first,
+687ad0191488a0 Nicolas Pitre 2006-01-14  395  					    (struct oabi_sembuf __user *)ptr,
+687ad0191488a0 Nicolas Pitre 2006-01-14  396  					    second, NULL);
+687ad0191488a0 Nicolas Pitre 2006-01-14  397  	case SEMTIMEDOP:
+687ad0191488a0 Nicolas Pitre 2006-01-14  398  		return  sys_oabi_semtimedop(first,
+687ad0191488a0 Nicolas Pitre 2006-01-14  399  					    (struct oabi_sembuf __user *)ptr,
+687ad0191488a0 Nicolas Pitre 2006-01-14  400  					    second,
+00bf25d693e7f6 Arnd Bergmann 2019-01-01  401  					    (const struct old_timespec32 __user *)fifth);
+687ad0191488a0 Nicolas Pitre 2006-01-14  402  	default:
+687ad0191488a0 Nicolas Pitre 2006-01-14  403  		return sys_ipc(call, first, second, third, ptr, fifth);
+687ad0191488a0 Nicolas Pitre 2006-01-14  404  	}
+687ad0191488a0 Nicolas Pitre 2006-01-14  405  }
+bdec0145286f7e Arnd Bergmann 2021-08-11  406  #else
+2263955b209e20 Arnd Bergmann 2024-07-05 @407  SYSCALL_DEFINE3(oabi_semtimedop, int, semid, struct oabi_sembuf __user *, tsops,
+2263955b209e20 Arnd Bergmann 2024-07-05  408  		unsigned, nsops, const struct old_timespec32 __user *, timeout)
+bdec0145286f7e Arnd Bergmann 2021-08-11  409  {
+bdec0145286f7e Arnd Bergmann 2021-08-11  410  	return -ENOSYS;
+bdec0145286f7e Arnd Bergmann 2021-08-11  411  }
+bdec0145286f7e Arnd Bergmann 2021-08-11  412  
+2263955b209e20 Arnd Bergmann 2024-07-05  413  SYSCALL_DEFINE3(oabi_semop, int, semid, struct oabi_sembuf __user *, tsops,
+2263955b209e20 Arnd Bergmann 2024-07-05  414  		unsigned, nsops)
+bdec0145286f7e Arnd Bergmann 2021-08-11  415  {
+bdec0145286f7e Arnd Bergmann 2021-08-11  416  	return -ENOSYS;
+bdec0145286f7e Arnd Bergmann 2021-08-11  417  }
+bdec0145286f7e Arnd Bergmann 2021-08-11  418  
+2263955b209e20 Arnd Bergmann 2024-07-05 @419  SYSCALL_DEFINE5(oabi_ipc, uint, call, int, first, int, second, int, third,
+2263955b209e20 Arnd Bergmann 2024-07-05  420  		void __user *, ptr, long, fifth)
+bdec0145286f7e Arnd Bergmann 2021-08-11  421  {
+bdec0145286f7e Arnd Bergmann 2021-08-11  422  	return -ENOSYS;
+bdec0145286f7e Arnd Bergmann 2021-08-11  423  }
+bdec0145286f7e Arnd Bergmann 2021-08-11  424  #endif
+99595d0237926b Nicolas Pitre 2006-02-08  425  
+2263955b209e20 Arnd Bergmann 2024-07-05  426  SYSCALL_DEFINE3(oabi_bind, int, fd, struct sockaddr __user *, addr,
+2263955b209e20 Arnd Bergmann 2024-07-05  427  		int, addrlen)
+99595d0237926b Nicolas Pitre 2006-02-08  428  {
+99595d0237926b Nicolas Pitre 2006-02-08  429  	sa_family_t sa_family;
+99595d0237926b Nicolas Pitre 2006-02-08  430  	if (addrlen == 112 &&
+99595d0237926b Nicolas Pitre 2006-02-08  431  	    get_user(sa_family, &addr->sa_family) == 0 &&
+99595d0237926b Nicolas Pitre 2006-02-08  432  	    sa_family == AF_UNIX)
+99595d0237926b Nicolas Pitre 2006-02-08  433  			addrlen = 110;
+2263955b209e20 Arnd Bergmann 2024-07-05  434  	return __sys_bind(fd, addr, addrlen);
+99595d0237926b Nicolas Pitre 2006-02-08  435  }
+99595d0237926b Nicolas Pitre 2006-02-08  436  
+2263955b209e20 Arnd Bergmann 2024-07-05  437  SYSCALL_DEFINE3(oabi_connect, int, fd, struct sockaddr __user *, addr,
+2263955b209e20 Arnd Bergmann 2024-07-05  438  		int, addrlen)
+99595d0237926b Nicolas Pitre 2006-02-08  439  {
+99595d0237926b Nicolas Pitre 2006-02-08  440  	sa_family_t sa_family;
+99595d0237926b Nicolas Pitre 2006-02-08  441  	if (addrlen == 112 &&
+99595d0237926b Nicolas Pitre 2006-02-08  442  	    get_user(sa_family, &addr->sa_family) == 0 &&
+99595d0237926b Nicolas Pitre 2006-02-08  443  	    sa_family == AF_UNIX)
+99595d0237926b Nicolas Pitre 2006-02-08  444  			addrlen = 110;
+2263955b209e20 Arnd Bergmann 2024-07-05  445  	return __sys_connect(fd, addr, addrlen);
+99595d0237926b Nicolas Pitre 2006-02-08  446  }
+99595d0237926b Nicolas Pitre 2006-02-08  447  
+2263955b209e20 Arnd Bergmann 2024-07-05 @448  SYSCALL_DEFINE4(oabi_sendto, int, fd, void __user *, buff, size_t, len,
+2263955b209e20 Arnd Bergmann 2024-07-05  449  		unsigned, flags, struct sockaddr __user *, addr, int, addrlen)
+99595d0237926b Nicolas Pitre 2006-02-08  450  {
+99595d0237926b Nicolas Pitre 2006-02-08  451  	sa_family_t sa_family;
+99595d0237926b Nicolas Pitre 2006-02-08  452  	if (addrlen == 112 &&
+99595d0237926b Nicolas Pitre 2006-02-08  453  	    get_user(sa_family, &addr->sa_family) == 0 &&
+99595d0237926b Nicolas Pitre 2006-02-08  454  	    sa_family == AF_UNIX)
+99595d0237926b Nicolas Pitre 2006-02-08  455  			addrlen = 110;
+2263955b209e20 Arnd Bergmann 2024-07-05  456  	return __sys_sendto(fd, buff, len, flags, addr, addrlen);
+99595d0237926b Nicolas Pitre 2006-02-08  457  }
+99595d0237926b Nicolas Pitre 2006-02-08  458  
+
+:::::: The code at line 448 was first introduced by commit
+:::::: 2263955b209e2016dc9f30d129e356f4123310d5 ARM: OABI SYSCALL_DEFINEx
+
+:::::: TO: Arnd Bergmann <arnd@arndb.de>
+:::::: CC: Arnd Bergmann <arnd@arndb.de>
 
 -- 
 0-DAY CI Kernel Test Service
