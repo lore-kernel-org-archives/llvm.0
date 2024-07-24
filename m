@@ -1,346 +1,143 @@
-Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D79E636B
-	for <llvm@lists.linux.dev>; Wed, 24 Jul 2024 00:02:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CBC1E79F3;
+	Wed, 24 Jul 2024 01:42:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721779335; cv=none; b=DWDghTgQur1FfEKKtwVO7pruv/mDZURXstp01PwBSxrZ9Gu/1uXCruaSEGoJlWcKoIpET3UwFAZBE48F/8q4Ux03zzlarXC3hiJv3Zg6BK9QQHL+6M6abTaHQjQAeIsew1NjGHG7J+ZRVW65i33fqawFb+hKKa2B5yWqZVW5Tfs=
+	t=1721785324; cv=none; b=hn4HqqivDWMR/SwLTz3ENkzlxn10wxH6pFttVJ+xCJIFITk5gqQuTikp68CfXFeiL/m3oLYKu1SAarOB60yL9GBcfDSEVFjb1XAHoNbp3edziUCL3lLVn8QLrmuXkmbljr42fkrQvRcJo2ELUz2YypcDqqiYeZEc1uMXU5WwS40=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721779335; c=relaxed/simple;
-	bh=Gv1Va0LhcK297gekJ0IRzqznjSa0jRvTerUwmZlKlbU=;
-	h=From:To:Subject:Date:Message-Id:MIME-Version; b=Zw21bvnBPsF+CWUDUjGTBpPHdGMhM0KasEVSPOt1q6yuX6DqfQMug9Ti8GQlt8QzRNrHprKKKHKR3HCnfDeb3Vo67CnyaRlrBQjfQNQu+x04F20eVk6j/8FUqU2Fc6FzBmuDiLGxga93kYxYht8tTNH+OuFoU6yU5GG1uNUdOuo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=B39gmSJW; arc=none smtp.client-ip=209.85.214.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1721785324; c=relaxed/simple;
+	bh=6iDBbKaWSr+xTmXZWXNHBqukQgY+T0PXsUqcwlXFh4A=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=sOsI40KwjhRhsKzZkG+hpV7h+VRf1VtvOZVTLNfE5UKpX68/TKh4gR+ws7vOhFzEQhDGi62AVLF1mgci/nd3O52HU33FsM8PMW7SH+HJXb8Qzciwc3Z5Bcf7E9tsUUUwLLJqOEgA7sVZzaEX+lygWUE0EL88l9DRVVCvSHVNULc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=P2XXUkpm; arc=none smtp.client-ip=198.175.65.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="B39gmSJW"
-Received: by mail-pl1-f172.google.com with SMTP id d9443c01a7336-1fc60c3ead4so10464615ad.0
-        for <llvm@lists.linux.dev>; Tue, 23 Jul 2024 17:02:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1721779332; x=1722384132; darn=lists.linux.dev;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:to
-         :from:from:to:cc:subject:date:message-id:reply-to;
-        bh=J7TczzH2tG87Dboe8Qnrv2Pil29SChCNw100rbqjvPs=;
-        b=B39gmSJW5hxp+3MzzFBypRX5OmXsE3XlzkY4yz7uGYo1xXM/imhplO2oaDmDcalNTJ
-         UFuqvE5KEKL8YUjconXGAmYQwTBukJgKcCesYY+MEUn7KrH7Yrxj9pe5qtq2MklYdrUf
-         5iI+WScwBkP+Rr6tEsYtzrardgGT1Pz7gRW1HLNGhC27rNdqbiwhQUZKb6vcKYrsM8f8
-         yCn84x4q+R7vlQ+aqWLkjPuObrC5kH/YVq5vadUKasIbSoFathFtXvk32/aQqJQBSfZ9
-         VPjAxXacmzz55PTq5PFVULi+IkGlTkpvnF36/4yYd8ijVDUJIH5rNDOtBFcb25SkKAOj
-         rF9w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1721779332; x=1722384132;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:to
-         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=J7TczzH2tG87Dboe8Qnrv2Pil29SChCNw100rbqjvPs=;
-        b=bvUCccfm45+/NWyg8+LDZUNZGFvAQCjBmAUtMbt8faRUHf4Sm2bmptI6U1Q/9hrMqh
-         uLgy+gxWhHJk4LO5s3mxx4k34jkNpjTRahTqj2aifSsENA62BQ2GU9wSNTeRiJcBsfUI
-         +OHocC/BEqzag1K0d+jyYV2tYHI9z2XUJqdlREEB1e4Na1ROL/L3pjAVFq85vXgNj4Kb
-         5Lro89vDcDEADZDdB7lDgDjXik2Glu2Ymn1jkSLXoLEQH0CVUS5mHYIRsfv27EGOnR7w
-         U5eDTzLdqbB6tw6Lehb+3218KOt8k76bAJIXMW6dNAoQ49sFI22IbEuk2Qsb1tqNnWTD
-         2F5g==
-X-Forwarded-Encrypted: i=1; AJvYcCXCSzDbhud13LnEmjw1Gq6cHEdTunITpNopzgXZdwJN0VEw+jkikgrIVphydnlctYFtrM35u20xSuLlXmc895n54AI6VQ==
-X-Gm-Message-State: AOJu0YzBHloJTpzOR8lnmyxe1c5y2yt6gbiYTi37eLNh/26MoFJgmnTL
-	kPYn206Q06UQpi5PTj1th1Ct5YyT0zB7Gfk/0xfpOIcb2H5AHhuN
-X-Google-Smtp-Source: AGHT+IEIS9WKkAuFxYQLUluS/fWnOLeeErgN4r9R/NVARCrFNuZP/cbIri/buBMIa0aZ+Mm9uzE1cA==
-X-Received: by 2002:a17:903:2346:b0:1fb:719a:28e2 with SMTP id d9443c01a7336-1fdd5512b9emr7633105ad.21.1721779331756;
-        Tue, 23 Jul 2024 17:02:11 -0700 (PDT)
-Received: from localhost.localdomain ([2604:a880:4:1d0::427:6000])
-        by smtp.googlemail.com with ESMTPSA id d9443c01a7336-1fd93d3018bsm52093745ad.69.2024.07.23.17.02.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 23 Jul 2024 17:02:11 -0700 (PDT)
-From: Gatlin Newhouse <gatlin.newhouse@gmail.com>
-To: Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@redhat.com>,
-	Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	x86@kernel.org,
-	"H. Peter Anvin" <hpa@zytor.com>,
-	Kees Cook <keescook@chromium.org>,
-	Marco Elver <elver@google.com>,
-	Andrey Konovalov <andreyknvl@gmail.com>,
-	Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Gatlin Newhouse <gatlin.newhouse@gmail.com>,
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="P2XXUkpm"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1721785322; x=1753321322;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=6iDBbKaWSr+xTmXZWXNHBqukQgY+T0PXsUqcwlXFh4A=;
+  b=P2XXUkpmPnQtYwmapPCS6wjfnYvkLlfHqB/5BqRiS8qskTwLVTqGCYid
+   XmDEq7RObU4auEY8gDsvWbMtvmRNcvrS+bOL30eEFkPidhZuDwIv2Vhi0
+   yJP6P2q5DFBxUJjDjmVf7+dwa/aeWf/tB2Dm3VhdjsxOBE5Ah9V9+BHzL
+   gw1MNqhgXcE0zOEoWWsIoi4l2hicOVvNEZKrgblqjf06mrSCWpW5Q6MXk
+   fyTT1XUHcexzjnLYooFrT9lATifPf6jQjGaqIiiXLducCJlYnPoqFxB2Q
+   15aI8Yi6qONgnDbjQlMBhQNGnmo30ULU1jtMANFtW0ZT221SWPIyo3ngh
+   Q==;
+X-CSE-ConnectionGUID: tZAUrrlgRLyOK21beTv0Dw==
+X-CSE-MsgGUID: MxvzoDl4SryhUsrwApPkbg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11142"; a="36886754"
+X-IronPort-AV: E=Sophos;i="6.09,232,1716274800"; 
+   d="scan'208";a="36886754"
+Received: from fmviesa003.fm.intel.com ([10.60.135.143])
+  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jul 2024 18:42:02 -0700
+X-CSE-ConnectionGUID: 74zJ9a8PQl2mutOrfgAfCQ==
+X-CSE-MsgGUID: +acuf8jdRn2Ex97ARx0eFQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.09,232,1716274800"; 
+   d="scan'208";a="56579101"
+Received: from lkp-server01.sh.intel.com (HELO 68891e0c336b) ([10.239.97.150])
+  by fmviesa003.fm.intel.com with ESMTP; 23 Jul 2024 18:42:00 -0700
+Received: from kbuild by 68891e0c336b with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1sWR0w-000mXk-0N;
+	Wed, 24 Jul 2024 01:41:58 +0000
+Date: Wed, 24 Jul 2024 09:41:14 +0800
+From: kernel test robot <lkp@intel.com>
+To: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
 	Andrew Morton <akpm@linux-foundation.org>,
-	Baoquan He <bhe@redhat.com>,
-	"Mike Rapoport (IBM)" <rppt@kernel.org>,
-	Josh Poimboeuf <jpoimboe@kernel.org>,
-	Changbin Du <changbin.du@huawei.com>,
-	Rick Edgecombe <rick.p.edgecombe@intel.com>,
-	Pengfei Xu <pengfei.xu@intel.com>,
-	Jason Gunthorpe <jgg@ziepe.ca>,
-	Xin Li <xin3.li@intel.com>,
-	Uros Bizjak <ubizjak@gmail.com>,
-	"Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-	linux-kernel@vger.kernel.org,
-	kasan-dev@googlegroups.com,
-	linux-hardening@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: [PATCH v5] x86/traps: Enable UBSAN traps on x86
-Date: Wed, 24 Jul 2024 00:01:55 +0000
-Message-Id: <20240724000206.451425-1-gatlin.newhouse@gmail.com>
-X-Mailer: git-send-email 2.25.1
+	Linux Memory Management List <linux-mm@kvack.org>,
+	Vlastimil Babka <vbabka@suse.cz>,
+	"Liam R. Howlett" <Liam.Howlett@oracle.com>
+Subject: [akpm-mm:mm-unstable 17/30] mm/vma_internal.h:46:10: fatal error:
+ 'asm/page_types.h' file not found
+Message-ID: <202407240947.x904ix8E-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Currently ARM architectures extract which specific sanitizer
-has caused a trap via encoded data in the trap instruction.[1]
-Clang on x86 currently encodes the same data in ud1 instructions
-but the x86 handle_bug() and is_valid_bugaddr() functions
-currently only look at ud2s.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-unstable
+head:   cecb3db438d76f7c1005fd52689809696a330474
+commit: b102945dd5b200efff9e8458946006770a513710 [17/30] mm: move internal core VMA manipulation functions to own file
+config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20240724/202407240947.x904ix8E-lkp@intel.com/config)
+compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project ad154281230d83ee551e12d5be48bb956ef47ed3)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240724/202407240947.x904ix8E-lkp@intel.com/reproduce)
 
-Bring x86 to parity with arm64, similar to commit 25b84002afb9
-("arm64: Support Clang UBSAN trap codes for better reporting").
-Enable the reporting of UBSAN sanitizer detail on x86 architectures
-compiled with clang when CONFIG_UBSAN_TRAP=y.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202407240947.x904ix8E-lkp@intel.com/
 
-[1] Details are in llvm/lib/Target/X86/X86MCInstLower.cpp. See:
-https://github.com/llvm/llvm-project/commit/c5978f42ec8e9#diff-bb68d7cd885f41cfc35843998b0f9f534adb60b415f647109e597ce448e92d9f
+All errors (new ones prefixed by >>):
 
-EmitAndCountInstruction() uses the UD1Lm template, which uses a
-OpSize32. See:
-https://github.com/llvm/llvm-project/blob/main/llvm/lib/Target/X86/X86InstrSystem.td#L27
+   In file included from mm/vma.c:7:
+   In file included from mm/vma_internal.h:12:
+   In file included from include/linux/backing-dev.h:15:
+   In file included from include/linux/device.h:32:
+   In file included from include/linux/device/driver.h:21:
+   In file included from include/linux/module.h:19:
+   In file included from include/linux/elf.h:6:
+   In file included from arch/s390/include/asm/elf.h:181:
+   In file included from arch/s390/include/asm/mmu_context.h:11:
+   In file included from arch/s390/include/asm/pgalloc.h:18:
+   In file included from include/linux/mm.h:2206:
+   include/linux/vmstat.h:500:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     500 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     501 |                            item];
+         |                            ~~~~
+   include/linux/vmstat.h:507:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     507 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     508 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/vmstat.h:514:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     514 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+   include/linux/vmstat.h:519:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     519 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     520 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/vmstat.h:528:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     528 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     529 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+   In file included from mm/vma.c:7:
+   In file included from mm/vma_internal.h:28:
+   include/linux/mm_inline.h:47:41: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+      47 |         __mod_lruvec_state(lruvec, NR_LRU_BASE + lru, nr_pages);
+         |                                    ~~~~~~~~~~~ ^ ~~~
+   include/linux/mm_inline.h:49:22: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+      49 |                                 NR_ZONE_LRU_BASE + lru, nr_pages);
+         |                                 ~~~~~~~~~~~~~~~~ ^ ~~~
+   In file included from mm/vma.c:7:
+>> mm/vma_internal.h:46:10: fatal error: 'asm/page_types.h' file not found
+      46 | #include <asm/page_types.h>
+         |          ^~~~~~~~~~~~~~~~~~
+   7 warnings and 1 error generated.
 
-Signed-off-by: Gatlin Newhouse <gatlin.newhouse@gmail.com>
----
-Changes in v5:
-  - Added references to the LLVM commits in the commit message from
-    Kees and Marco's feedback
-  - Renamed incorrect defines, and removed handle_ubsan_failure()'s
-    duplicated work per Peter's feedback
 
-Changes in v4:
-  - Implement Peter's suggestions for decode_bug(), and fix
-    inconsistent capitalization in hex values.
+vim +46 mm/vma_internal.h
 
-Changes in v3:
-  - Address Thomas's remarks about: change log structure,
-    get_ud_type() instead of is_valid_bugaddr(), handle_bug()
-    changes, and handle_ubsan_failure().
+    44	
+    45	#include <asm/current.h>
+  > 46	#include <asm/page_types.h>
+    47	#include <asm/pgtable_types.h>
+    48	#include <asm/tlb.h>
+    49	
 
-Changes in v2:
-  - Name the new constants 'LEN_ASOP' and 'INSN_ASOP' instead of
-    'LEN_REX' and 'INSN_REX'
-  - Change handle_ubsan_failure() from enum bug_trap_type to void
-    function
-
-v1: https://lore.kernel.org/linux-hardening/20240529022043.3661757-1-gatlin.newhouse@gmail.com/
-v2: https://lore.kernel.org/linux-hardening/20240601031019.3708758-1-gatlin.newhouse@gmail.com/
-v3: https://lore.kernel.org/linux-hardening/20240625032509.4155839-1-gatlin.newhouse@gmail.com/
-v4: https://lore.kernel.org/linux-hardening/20240710203250.238782-1-gatlin.newhouse@gmail.com/
----
- MAINTAINERS                  |  2 ++
- arch/x86/include/asm/bug.h   | 12 ++++++++
- arch/x86/include/asm/ubsan.h | 18 ++++++++++++
- arch/x86/kernel/Makefile     |  1 +
- arch/x86/kernel/traps.c      | 57 ++++++++++++++++++++++++++++++++----
- arch/x86/kernel/ubsan.c      | 19 ++++++++++++
- 6 files changed, 104 insertions(+), 5 deletions(-)
- create mode 100644 arch/x86/include/asm/ubsan.h
- create mode 100644 arch/x86/kernel/ubsan.c
-
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 28e20975c26f..b8512887ffb1 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -22635,6 +22635,8 @@ L:	kasan-dev@googlegroups.com
- L:	linux-hardening@vger.kernel.org
- S:	Supported
- T:	git git://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git for-next/hardening
-+F:	arch/x86/include/asm/ubsan.h
-+F:	arch/x86/kernel/ubsan.c
- F:	Documentation/dev-tools/ubsan.rst
- F:	include/linux/ubsan.h
- F:	lib/Kconfig.ubsan
-diff --git a/arch/x86/include/asm/bug.h b/arch/x86/include/asm/bug.h
-index a3ec87d198ac..751e45ea27ca 100644
---- a/arch/x86/include/asm/bug.h
-+++ b/arch/x86/include/asm/bug.h
-@@ -13,6 +13,18 @@
- #define INSN_UD2	0x0b0f
- #define LEN_UD2		2
- 
-+/*
-+ * In clang we have UD1s reporting UBSAN failures on X86, 64 and 32bit.
-+ */
-+#define INSN_ASOP	0x67
-+#define OPCODE_ESCAPE	0x0f
-+#define SECOND_BYTE_OPCODE_UD1	0xb9
-+#define SECOND_BYTE_OPCODE_UD2	0x0b
-+
-+#define BUG_NONE	0xffff
-+#define BUG_UD1		0xfffe
-+#define BUG_UD2		0xfffd
-+
- #ifdef CONFIG_GENERIC_BUG
- 
- #ifdef CONFIG_X86_32
-diff --git a/arch/x86/include/asm/ubsan.h b/arch/x86/include/asm/ubsan.h
-new file mode 100644
-index 000000000000..1d7c2b4129de
---- /dev/null
-+++ b/arch/x86/include/asm/ubsan.h
-@@ -0,0 +1,18 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+#ifndef _ASM_X86_UBSAN_H
-+#define _ASM_X86_UBSAN_H
-+
-+/*
-+ * Clang Undefined Behavior Sanitizer trap mode support.
-+ */
-+#include <linux/bug.h>
-+#include <linux/ubsan.h>
-+#include <asm/ptrace.h>
-+
-+#ifdef CONFIG_UBSAN_TRAP
-+void handle_ubsan_failure(struct pt_regs *regs, u32 type);
-+#else
-+static inline void handle_ubsan_failure(struct pt_regs *regs, u32 type) { return; }
-+#endif /* CONFIG_UBSAN_TRAP */
-+
-+#endif /* _ASM_X86_UBSAN_H */
-diff --git a/arch/x86/kernel/Makefile b/arch/x86/kernel/Makefile
-index 74077694da7d..fe1d9db27500 100644
---- a/arch/x86/kernel/Makefile
-+++ b/arch/x86/kernel/Makefile
-@@ -145,6 +145,7 @@ obj-$(CONFIG_UNWINDER_GUESS)		+= unwind_guess.o
- obj-$(CONFIG_AMD_MEM_ENCRYPT)		+= sev.o
- 
- obj-$(CONFIG_CFI_CLANG)			+= cfi.o
-+obj-$(CONFIG_UBSAN_TRAP)		+= ubsan.o
- 
- obj-$(CONFIG_CALL_THUNKS)		+= callthunks.o
- 
-diff --git a/arch/x86/kernel/traps.c b/arch/x86/kernel/traps.c
-index 4fa0b17e5043..6350d00a6555 100644
---- a/arch/x86/kernel/traps.c
-+++ b/arch/x86/kernel/traps.c
-@@ -67,6 +67,7 @@
- #include <asm/vdso.h>
- #include <asm/tdx.h>
- #include <asm/cfi.h>
-+#include <asm/ubsan.h>
- 
- #ifdef CONFIG_X86_64
- #include <asm/x86_init.h>
-@@ -91,6 +92,45 @@ __always_inline int is_valid_bugaddr(unsigned long addr)
- 	return *(unsigned short *)addr == INSN_UD2;
- }
- 
-+/*
-+ * Check for UD1 or UD2, accounting for Address Size Override Prefixes.
-+ * If it's a UD1, get the ModRM byte to pass along to UBSan.
-+ */
-+__always_inline int decode_bug(unsigned long addr, u32 *imm)
-+{
-+	u8 v;
-+
-+	if (addr < TASK_SIZE_MAX)
-+		return BUG_NONE;
-+
-+	v = *(u8 *)(addr++);
-+	if (v == INSN_ASOP)
-+		v = *(u8 *)(addr++);
-+	if (v != OPCODE_ESCAPE)
-+		return BUG_NONE;
-+
-+	v = *(u8 *)(addr++);
-+	if (v == SECOND_BYTE_OPCODE_UD2)
-+		return BUG_UD2;
-+	if (v != SECOND_BYTE_OPCODE_UD1)
-+		return BUG_NONE;
-+
-+	v = *(u8 *)(addr++);
-+	if (X86_MODRM_RM(v) == 4)
-+		addr++;
-+
-+	*imm = 0;
-+	if (X86_MODRM_MOD(v) == 1)
-+		*imm = *(u8 *)addr;
-+	else if (X86_MODRM_MOD(v) == 2)
-+		*imm = *(u32 *)addr;
-+	else
-+		WARN_ONCE(1, "Unexpected MODRM_MOD: %u\n", X86_MODRM_MOD(v));
-+
-+	return BUG_UD1;
-+}
-+
-+
- static nokprobe_inline int
- do_trap_no_signal(struct task_struct *tsk, int trapnr, const char *str,
- 		  struct pt_regs *regs,	long error_code)
-@@ -216,6 +256,8 @@ static inline void handle_invalid_op(struct pt_regs *regs)
- static noinstr bool handle_bug(struct pt_regs *regs)
- {
- 	bool handled = false;
-+	int ud_type;
-+	u32 imm;
- 
- 	/*
- 	 * Normally @regs are unpoisoned by irqentry_enter(), but handle_bug()
-@@ -223,7 +265,8 @@ static noinstr bool handle_bug(struct pt_regs *regs)
- 	 * irqentry_enter().
- 	 */
- 	kmsan_unpoison_entry_regs(regs);
--	if (!is_valid_bugaddr(regs->ip))
-+	ud_type = decode_bug(regs->ip, &imm);
-+	if (ud_type == BUG_NONE)
- 		return handled;
- 
- 	/*
-@@ -236,10 +279,14 @@ static noinstr bool handle_bug(struct pt_regs *regs)
- 	 */
- 	if (regs->flags & X86_EFLAGS_IF)
- 		raw_local_irq_enable();
--	if (report_bug(regs->ip, regs) == BUG_TRAP_TYPE_WARN ||
--	    handle_cfi_failure(regs) == BUG_TRAP_TYPE_WARN) {
--		regs->ip += LEN_UD2;
--		handled = true;
-+	if (ud_type == BUG_UD2) {
-+		if (report_bug(regs->ip, regs) == BUG_TRAP_TYPE_WARN ||
-+		    handle_cfi_failure(regs) == BUG_TRAP_TYPE_WARN) {
-+			regs->ip += LEN_UD2;
-+			handled = true;
-+		}
-+	} else {
-+		handle_ubsan_failure(regs, imm);
- 	}
- 	if (regs->flags & X86_EFLAGS_IF)
- 		raw_local_irq_disable();
-diff --git a/arch/x86/kernel/ubsan.c b/arch/x86/kernel/ubsan.c
-new file mode 100644
-index 000000000000..63f819928820
---- /dev/null
-+++ b/arch/x86/kernel/ubsan.c
-@@ -0,0 +1,19 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Clang Undefined Behavior Sanitizer trap mode support.
-+ */
-+#include <linux/bug.h>
-+#include <linux/string.h>
-+#include <linux/printk.h>
-+#include <linux/ubsan.h>
-+#include <asm/ptrace.h>
-+#include <asm/ubsan.h>
-+
-+/*
-+ * Checks for the information embedded in the UD1 trap instruction
-+ * for the UB Sanitizer in order to pass along debugging output.
-+ */
-+void handle_ubsan_failure(struct pt_regs *regs, u32 type)
-+{
-+	pr_crit("%s at %pS\n", report_ubsan_failure(regs, type), (void *)regs->ip);
-+}
 -- 
-2.25.1
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
