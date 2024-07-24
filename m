@@ -1,135 +1,101 @@
-Received: from mail-oa1-f45.google.com (mail-oa1-f45.google.com [209.85.160.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 439CA29CA;
-	Wed, 24 Jul 2024 16:53:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D1CCD481CE
+	for <llvm@lists.linux.dev>; Wed, 24 Jul 2024 18:32:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721840031; cv=none; b=QMvqk780/dTQHJKx5Hph7kk+PF4muAWJf76rwWn77gwGpwQdZ1A1vN5i/v/0nFQf3xfRmUxHm4ixIe5Ovh15yIDj26szfNe/whGhcb9HAvWP6dbVllBbUG4806Z5V/nNnLdq1x5W15KQjvWi4mPjwVYYDGZQpbNbfdf7xMrTM3U=
+	t=1721845931; cv=none; b=QkPJmR/870YNvDDhvieTQzGBAWv75LDcBVa2rQB3uTSBBQKdxT5ya38Qgng4FnG/f6VOKXPB7fEVBtoZkG22RRlaonm+qNOvYkvfcoQQTsQxOUOztdJMX69dWWJB/fA4K4ZbjOAt1648vLTy3qgAKdXbJC6ymrVHfXVuWd9VnSQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721840031; c=relaxed/simple;
-	bh=OzSYFnTbzdkzUkGP46jK7DV7EI4vEvo+Bwf/Jpdw4mw=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=NLpYdHKPdTrkK91H78i6UPdO001HVdboSNEgRBsr9c5fQmQFSfD0Tg5pJA6MIUOINp7aeA9bsgdM1EgLrZZYpwyA66F/HLrQP+GasFw5mvGOeUD3W/jpjkZn6ifDZEJMtVGQXEnHPLXITYQxeV1qNVGy5fzyESBuWPpy7ZhtPeU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=A6A1j9HQ; arc=none smtp.client-ip=209.85.160.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1721845931; c=relaxed/simple;
+	bh=dxTrUFCCk8WD+plqqRUteqW/bvziQUbc4mFv3ehIiuw=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=bMGar1BcMuBovVAb+m/+hxrfrvNTrpK6EsoZAPPudZH97hhzFPBitq28CrkbGfOWR8bLu4I4SqPBYL+FYaKPiUKYChqVrmcaut6YsbNrOYajvzctBefDqeDbDhPsleiuzx/9NkGatS1wfSsrpLRq2OuglQ04G5DFERt6gHY4ICY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=fOAT5UyG; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="A6A1j9HQ"
-Received: by mail-oa1-f45.google.com with SMTP id 586e51a60fabf-260e3e295a7so3981284fac.3;
-        Wed, 24 Jul 2024 09:53:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1721840029; x=1722444829; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=NvLHGP7NtgU2zYg3eBNSuq3Vab7Pm5T+4+N9Ml7WexE=;
-        b=A6A1j9HQAI53cwlVDjPwAK0vPMRsPnUBvQ15Vy1mPnQmzfRL6Y3UzjRh7va9NUJ3V8
-         TADiD/bafVZFIU1LfdA7bFujKp2ezAX7JixmiwE4sxXoTqY2ZY2ICEcnmuhs9Qc+L0I9
-         0pv6QaGAJBFUhCUVuqeNu6Wiz6tzuragyWEf0gYBGkj61erbDE72T15u9qdI5CyGZg7w
-         EbPDZhfmFl6X5wYjL+FjEEkJVkwOUgHfuC4i0vZbBXtvKzIKksaDPo8dqwI2hqwJgaU8
-         xluZxEBBzIhNZexkRG8Y3dLWy1TSMC9U5iwWx+FbEDO1CnIELFEYComCqC52O7+ia3w6
-         jLTQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1721840029; x=1722444829;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=NvLHGP7NtgU2zYg3eBNSuq3Vab7Pm5T+4+N9Ml7WexE=;
-        b=EDm5i46/aM8LggHtT9htU8p4Yt9M5Mcs8+VpksLqqbRQ67MxN4a/pNvhkexr9eA09W
-         t3kDSKLohH+Fr143nql4QnC3AD9+DOUyrWAVC+zalEwjBC8Z7l28VaX3PAUFf26jPgub
-         KkSEDkW7sFl58SHyFQYBkLFW3TWde45duURh2DZCkHkse6tqt3npy+F/RoVSOdM5k//G
-         VGo2N31thpP/FC/0+RnVNAHRQ5qeqOFsGS7ewlXV/F0g0Koc8oI6D7I7DqOMhmHGtPFI
-         fYrsEpDy07134Ge3gaHjVrh3Vm4GMLb3BrRdu5j9zBbFw3+S6RPxMHDtYZKFwH3Gniye
-         dtGg==
-X-Forwarded-Encrypted: i=1; AJvYcCURrgnNVYvQYVWpYFPEx+UBjkux5hLxnANLFnHsQE65MHW3MbP86vQxGIUTjUYsQX7O0pJjZaVAOR+9Pdx0r1m1XGx0iDflCEN3Pu6Juqdo4xg+vRYdcj6KW2ScqX4=
-X-Gm-Message-State: AOJu0YzR77lh7faj+CedeBhxXs2kjw3Wqvr3Jcf/3UGmpUstxxbtcKmC
-	MxezVy3Qjma2Dx9pGA9LggyldjhOK12BxhJ6RsAGBc8GhjwPsjk5MTZSGOTlP6nfy4KZnpF+u2K
-	BSUEYQO7JaR07W/8Uqfn3hzUX+dI=
-X-Google-Smtp-Source: AGHT+IEbq31zJ8FEqU0AqZdlXaLrABGr5CixketK3hxxAzSb5AIrpBGwPrOVrdCmrACNXxmgFZzx7TDERf/Ody34MtQ=
-X-Received: by 2002:a05:6871:811:b0:25e:8509:160e with SMTP id
- 586e51a60fabf-264a0c091e5mr163881fac.3.1721840029071; Wed, 24 Jul 2024
- 09:53:49 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="fOAT5UyG"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1721845928;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=OvZMVe6A/V083ndBZMXiqN/iyCPt8SM2zYKEFTzLkfA=;
+	b=fOAT5UyGI5CMPWBByPeAx9aGcft9PCE0qhrshyeNJVJLelhTc9j0RT1CKHwGDssKuqB/QT
+	rvZAvqaOmKwC78peb0d7SYRGwPv9jEyiOJHhz/rW1P8ArqbhDfFu/kQiyRkXW7RCus63qi
+	aFQtWtpYqZ2sRPGgf0XJbHuJEwI8SYg=
+Received: from mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-682-uO8vOtHJM-SMHps-ZgqC_Q-1; Wed,
+ 24 Jul 2024 14:32:05 -0400
+X-MC-Unique: uO8vOtHJM-SMHps-ZgqC_Q-1
+Received: from mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.12])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id C2CCD1956095
+	for <llvm@lists.linux.dev>; Wed, 24 Jul 2024 18:32:04 +0000 (UTC)
+Received: from [172.64.14.40] (unknown [10.30.32.10])
+	by mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 29E071955F6B;
+	Wed, 24 Jul 2024 18:32:04 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.10.0,
+ mainline.kernel.org-clang, d1e9a63d)
+Date: Wed, 24 Jul 2024 18:32:03 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20240724-amdgpu-dml2-fix-float-enum-warning-again-v1-1-740e7946f77a@kernel.org>
-In-Reply-To: <20240724-amdgpu-dml2-fix-float-enum-warning-again-v1-1-740e7946f77a@kernel.org>
-From: Alex Deucher <alexdeucher@gmail.com>
-Date: Wed, 24 Jul 2024 12:53:37 -0400
-Message-ID: <CADnq5_ModC1+noYkpBm1bQMT6heE1vLTi+6CdPKPo2DkbagOgg@mail.gmail.com>
-Subject: Re: [PATCH] drm/amd/display: Reapply 2fde4fdddc1f
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: Harry Wentland <harry.wentland@amd.com>, Leo Li <sunpeng.li@amd.com>, 
-	Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>, Alex Deucher <alexander.deucher@amd.com>, 
-	=?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>, 
-	Xinhui Pan <Xinhui.Pan@amd.com>, Aurabindo Pillai <aurabindo.pillai@amd.com>, 
-	Chaitanya Dhere <chaitanya.dhere@amd.com>, Jerry Zuo <jerry.zuo@amd.com>, 
-	amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org, 
-	llvm@lists.linux.dev, patches@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.12
+Message-Id: <11659.124072414320501429@us-mta-682.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: quoted-printable
 
-Applied.  Thanks!
+Hi, we tested your kernel and here are the results:
 
-On Wed, Jul 24, 2024 at 11:50=E2=80=AFAM Nathan Chancellor <nathan@kernel.o=
-rg> wrote:
->
-> Commit 2563391e57b5 ("drm/amd/display: DML2.1 resynchronization") blew
-> away the compiler warning fix from commit 2fde4fdddc1f
-> ("drm/amd/display: Avoid -Wenum-float-conversion in
-> add_margin_and_round_to_dfs_grainularity()"), causing the warning to
-> reappear.
->
->   drivers/gpu/drm/amd/amdgpu/../display/dc/dml2/dml21/src/dml2_dpmm/dml2_=
-dpmm_dcn4.c:183:58: error: arithmetic between enumeration type 'enum dentis=
-t_divider_range' and floating-point type 'double' [-Werror,-Wenum-float-con=
-version]
->     183 |         divider =3D (unsigned int)(DFS_DIVIDER_RANGE_SCALE_FACT=
-OR * (vco_freq_khz / clock_khz));
->         |                                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~=
- ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~
->   1 error generated.
->
-> Apply the fix again to resolve the warning.
->
-> Fixes: 2563391e57b5 ("drm/amd/display: DML2.1 resynchronization")
-> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
-> ---
->  .../gpu/drm/amd/display/dc/dml2/dml21/src/dml2_dpmm/dml2_dpmm_dcn4.c    =
-| 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/drivers/gpu/drm/amd/display/dc/dml2/dml21/src/dml2_dpmm/dml2=
-_dpmm_dcn4.c b/drivers/gpu/drm/amd/display/dc/dml2/dml21/src/dml2_dpmm/dml2=
-_dpmm_dcn4.c
-> index 0021bbaa4b91..f19f6ebaae13 100644
-> --- a/drivers/gpu/drm/amd/display/dc/dml2/dml21/src/dml2_dpmm/dml2_dpmm_d=
-cn4.c
-> +++ b/drivers/gpu/drm/amd/display/dc/dml2/dml21/src/dml2_dpmm/dml2_dpmm_d=
-cn4.c
-> @@ -180,7 +180,7 @@ static bool add_margin_and_round_to_dfs_grainularity(=
-double clock_khz, double ma
->
->         clock_khz *=3D 1.0 + margin;
->
-> -       divider =3D (unsigned int)(DFS_DIVIDER_RANGE_SCALE_FACTOR * (vco_=
-freq_khz / clock_khz));
-> +       divider =3D (unsigned int)((int)DFS_DIVIDER_RANGE_SCALE_FACTOR * =
-(vco_freq_khz / clock_khz));
->
->         /* we want to floor here to get higher clock than required rather=
- than lower */
->         if (divider < DFS_DIVIDER_RANGE_2_START) {
->
-> ---
-> base-commit: bd4bea5ab2bda37ddb092a978218c4d9b46927e6
-> change-id: 20240724-amdgpu-dml2-fix-float-enum-warning-again-647a33789138
->
-> Best regards,
-> --
-> Nathan Chancellor <nathan@kernel.org>
->
+    Overall result: FAILED
+             Merge: OK
+           Compile: FAILED
+
+
+Kernel information:
+    Commit message: Merge tag 'vfs-6.11-rc1.fixes.2' of git://git.kernel.or=
+g/pub/scm/linux/kernel/git/vfs/vfs
+
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1386711435
+
+One or more kernel builds failed:
+    Unrecognized or new issues:
+         ppc64le - https://datawarehouse.cki-project.org/kcidb/builds/redha=
+t:1386711435-ppc64le-kernel
+           s390x - https://datawarehouse.cki-project.org/kcidb/builds/redha=
+t:1386711435-s390x-kernel
+          x86_64 (debug) - https://datawarehouse.cki-project.org/kcidb/buil=
+ds/redhat:1386711435-x86_64-kernel-debug
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
