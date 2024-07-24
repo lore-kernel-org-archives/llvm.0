@@ -1,279 +1,108 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
+Received: from out198-2.us.a.mail.aliyun.com (out198-2.us.a.mail.aliyun.com [47.90.198.2])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 06BD4364A1;
-	Wed, 24 Jul 2024 06:17:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C34843150;
+	Wed, 24 Jul 2024 06:36:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=47.90.198.2
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721801833; cv=none; b=FbLwtx56BW9Bi8NEEthntSPD/Wd6BgKMnsITtY81lh+OWnC/MxJam3xrJeqpVf+zGL9P0fIIsL+mnyR6VzoE5zzjqeefz30rBpLMLp2+HjuGyvBVCe5A9cKZE8mdYUMLNlUWDR+MTF9auhAw3otLT21eLrEO2mNWoJVurCl/gi8=
+	t=1721802975; cv=none; b=ag0U7fk7GHhv0yXD14EvDvF+JKEQ/Imcf3IyBoBE8LFuTEVIUptHdWj0OMay9AgqikpJq2fcHBObEad0yCsmDUgSYtFXH84XjCMRe8Xf+fyw7La33zjaRcfuCbzRjJwH0cWcuCCSeWlkVijcAx+BCXKcvoSLk5gdSQ6lQjvmm/o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721801833; c=relaxed/simple;
-	bh=DiCy9StFkun7363ekKwZAhuwCJgO/Bk11qlQlQnKNq0=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=YuPs65UqcCBasZ8C+u5IS2VHcHvjKxbtHpIaaDpMvGGB3ejOAXrhONYmKhyTOiEYcaWJHUwJlhTqj4rhHhk9HsxmZS6tlPyRjlkG9OMI+WDZs42406hXzRdRR2nM6/9wIRnxBUOV8M8oYxPK8u2BaiA5QWbFnjp/JkfjcSKrENs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=hCsYW7+Q; arc=none smtp.client-ip=192.198.163.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="hCsYW7+Q"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1721801831; x=1753337831;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=DiCy9StFkun7363ekKwZAhuwCJgO/Bk11qlQlQnKNq0=;
-  b=hCsYW7+Q3SxQJjqyeLo852Ixovtmk2JPRuPflB5oWdK38v2/Oc9tqvbo
-   pAKM2pCkgtK+gv4mjCiklu4uNeFUMqulhdbiIaeaobDOuUrWMWrNxM17r
-   KwFBMQX+LIHstq2u7coDeTMIvOVsYhTBAxs86Z+du5MdWCo26fcwX0Geo
-   NQPpsn+8mR2b1ikUlpjvy8oBFN6mkoXxHNrqZO0Ebi6nc1Jm8iZe0huUq
-   bcjPENyTLu6PPJXL6mCrc8OtQSC5T7RkVNrU26W5AW5hpBTRPPaCRU2rN
-   4w2/GoS9CWG+0v1+OR7hecRGDltSYcQH8EVkh3KjgI26xET/kOLtaiIiU
-   A==;
-X-CSE-ConnectionGUID: C9vh9cx4RvWwju1YxfErxw==
-X-CSE-MsgGUID: SJkbTHpmSSSa4vmXSU7Z8g==
-X-IronPort-AV: E=McAfee;i="6700,10204,11142"; a="30120885"
-X-IronPort-AV: E=Sophos;i="6.09,232,1716274800"; 
-   d="scan'208";a="30120885"
-Received: from orviesa008.jf.intel.com ([10.64.159.148])
-  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jul 2024 23:17:10 -0700
-X-CSE-ConnectionGUID: nMa7u0mGTUiGfupmpEd5+Q==
-X-CSE-MsgGUID: HNvv+WY2T8uRNUp2rLk4Eg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.09,232,1716274800"; 
-   d="scan'208";a="53248693"
-Received: from lkp-server01.sh.intel.com (HELO 68891e0c336b) ([10.239.97.150])
-  by orviesa008.jf.intel.com with ESMTP; 23 Jul 2024 23:17:08 -0700
-Received: from kbuild by 68891e0c336b with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1sWVJC-000mjw-0t;
-	Wed, 24 Jul 2024 06:17:06 +0000
-Date: Wed, 24 Jul 2024 14:16:52 +0800
-From: kernel test robot <lkp@intel.com>
-To: Arnd Bergmann <arnd@arndb.de>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-arch@vger.kernel.org
-Subject: [arnd-asm-generic:syscall-tbl-6.11 44/80]
- arch/arm/kernel/sys_oabi-compat.c:407:1: error: conflicting types for
- 'sys_oabi_semtimedop'
-Message-ID: <202407241416.GGWdAKAR-lkp@intel.com>
+	s=arc-20240116; t=1721802975; c=relaxed/simple;
+	bh=Ebd14HrAYjGw8+Qc37MwbFm3fXYOaB8vE0cSnkFhrC0=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=ad4rXlNOMrE6BKfVQIcgTQ49CjvFXb7dxvouRxwmLf6LAi8tHMrnlNQg8he9S+7FM+sKFh62oGkktVU9J1yqa/V4AFRSA2ruQukh6RPc3ht47g3e/Wj/iqfeR9lA+KcXYu0XZppiLPpt2hp7nICjHWgfyVcuqVs3ffPymhZIHmI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ttyinfo.com; spf=pass smtp.mailfrom=ttyinfo.com; arc=none smtp.client-ip=47.90.198.2
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ttyinfo.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ttyinfo.com
+X-Alimail-AntiSpam:AC=CONTINUE;BC=0.07492151|-1;CH=green;DM=|CONTINUE|false|;DS=CONTINUE|ham_regular_dialog|0.00739205-0.00019925-0.992409;FP=16154132379161130174|0|0|0|0|-1|-1|-1;HT=maildocker-contentspam033038033188;MF=zhoushengqing@ttyinfo.com;NM=1;PH=DS;RN=8;RT=8;SR=0;TI=SMTPD_---.YY4fdiP_1721802955;
+Received: from tzl..(mailfrom:zhoushengqing@ttyinfo.com fp:SMTPD_---.YY4fdiP_1721802955)
+          by smtp.aliyun-inc.com;
+          Wed, 24 Jul 2024 14:35:56 +0800
+From: Zhou Shengqing <zhoushengqing@ttyinfo.com>
+To: haifeng.zhao@linux.intel.com
+Cc: helgaas@kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-pci@vger.kernel.org,
+	lkp@intel.com,
+	llvm@lists.linux.dev,
+	oe-kbuild-all@lists.linux.dev,
+	zhoushengqing@ttyinfo.com
+Subject: Re: [PATCH v4] PCI: Enable io space 1k granularity for intel cpu root port
+Date: Wed, 24 Jul 2024 06:35:55 +0000
+Message-Id: <20240724063555.3819-1-zhoushengqing@ttyinfo.com>
+X-Mailer: git-send-email 2.39.2
+In-Reply-To: <48373ac6-574b-4f72-b4f1-ddb7de8a5107@linux.intel.com>
+References: <48373ac6-574b-4f72-b4f1-ddb7de8a5107@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/arnd/asm-generic.git syscall-tbl-6.11
-head:   ece1b5ebc0b7064a8a130f64e85a81ec76381c3f
-commit: 2263955b209e2016dc9f30d129e356f4123310d5 [44/80] ARM: OABI SYSCALL_DEFINEx
-config: arm-randconfig-002-20240724 (https://download.01.org/0day-ci/archive/20240724/202407241416.GGWdAKAR-lkp@intel.com/config)
-compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project ad154281230d83ee551e12d5be48bb956ef47ed3)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240724/202407241416.GGWdAKAR-lkp@intel.com/reproduce)
+> > Do you mean it shoud be like this?
+> >
+> > 	while ((d = pci_get_device(PCI_VENDOR_ID_INTEL, 0x09a2, d))) {
+> > 		if (d->bus->number == dev->bus->number) {
+> > 			pci_read_config_word(d, 0x1c0, &en1k);
+> > 			if (en1k & 0x4) {
+> > 				pci_info(dev, "1K I/O windows enabled per %s EN1K setting\n", pci_name(d));
+> > 				dev->io_window_1k = 1;
+> > 			}
+> > 		}
+> > 	}
+> >
+> >> 00:00.0 System peripheral: Intel Corporation Device 09a2 (rev 20)
+> >> 00:0f.0 PCI bridge: Intel Corporation Device 1bbf (rev 10) (prog-if 00 [Normal decode])
+> >>
+> >>    
+> >> 15:00.0 System peripheral: Intel Corporation Device 09a2 (rev 20)
+> >> 15:01.0 PCI bridge: Intel Corporation Device 352a (rev 04) (prog-if 00 [Normal decode])
+> >>
+> >> and if you check domain number only, they might sit on different bus, perhaps that
+> >> would make thing complex, could you make sure the VT-d is on the upstream bus of the
+> >> bridge ?
+> > I checked it on ICX SPR EMR GNR, VT-d is always on the same bus with root port,
+> > and VT-d device and function number is always 0.
+> 
+> Yes, every VT-d instance in the root complex and the root port integrated are
+> on the same bus. and VT-d is the first device of that bus.
+> 
+> The EDS doesn't say if there is exception one of the VT-d instances in an
+> system its EN1K wasn't set while others were set, vice vesa. so I suggest
+> just check the VT-d and then set the root port's io_windows_1k of the same bus.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202407241416.GGWdAKAR-lkp@intel.com/
+But as Bjorn mentioned at July 12, 2024, 6:48 p.m.,
 
-All errors (new ones prefixed by >>):
+"To be safe, "d" (the [8086:09a2] device) should be on the same bus as
+"dev" (with VMD, I think we get Root Ports *below* the VMD bridge,
+which would be a different bus, and they presumably are not influenced
+by the EN1K bit."
 
-   In file included from arch/arm/kernel/sys_oabi-compat.c:75:
-   In file included from include/linux/syscalls.h:94:
-   In file included from include/trace/syscall.h:7:
-   In file included from include/linux/trace_events.h:6:
-   In file included from include/linux/ring_buffer.h:5:
-   In file included from include/linux/mm.h:2221:
-   include/linux/vmstat.h:514:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     514 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
->> arch/arm/kernel/sys_oabi-compat.c:407:1: error: conflicting types for 'sys_oabi_semtimedop'
-     407 | SYSCALL_DEFINE3(oabi_semtimedop, int, semid, struct oabi_sembuf __user *, tsops,
-         | ^
-   include/linux/syscalls.h:226:36: note: expanded from macro 'SYSCALL_DEFINE3'
-     226 | #define SYSCALL_DEFINE3(name, ...) SYSCALL_DEFINEx(3, _##name, __VA_ARGS__)
-         |                                    ^
-   include/linux/syscalls.h:237:2: note: expanded from macro 'SYSCALL_DEFINEx'
-     237 |         __SYSCALL_DEFINEx(x, sname, __VA_ARGS__)
-         |         ^
-   include/linux/syscalls.h:251:18: note: expanded from macro '__SYSCALL_DEFINEx'
-     251 |         asmlinkage long sys##name(__MAP(x,__SC_DECL,__VA_ARGS__))       \
-         |                         ^
-   <scratch space>:16:1: note: expanded from here
-      16 | sys_oabi_semtimedop
-         | ^
-   arch/arm/include/asm/syscalls.h:30:17: note: previous declaration is here
-      30 | asmlinkage long sys_oabi_semtimedop(int semid,
-         |                 ^
->> arch/arm/kernel/sys_oabi-compat.c:419:1: error: conflicting types for 'sys_oabi_ipc'
-     419 | SYSCALL_DEFINE5(oabi_ipc, uint, call, int, first, int, second, int, third,
-         | ^
-   include/linux/syscalls.h:228:36: note: expanded from macro 'SYSCALL_DEFINE5'
-     228 | #define SYSCALL_DEFINE5(name, ...) SYSCALL_DEFINEx(5, _##name, __VA_ARGS__)
-         |                                    ^
-   include/linux/syscalls.h:237:2: note: expanded from macro 'SYSCALL_DEFINEx'
-     237 |         __SYSCALL_DEFINEx(x, sname, __VA_ARGS__)
-         |         ^
-   include/linux/syscalls.h:251:18: note: expanded from macro '__SYSCALL_DEFINEx'
-     251 |         asmlinkage long sys##name(__MAP(x,__SC_DECL,__VA_ARGS__))       \
-         |                         ^
-   <scratch space>:132:1: note: expanded from here
-     132 | sys_oabi_ipc
-         | ^
-   arch/arm/include/asm/syscalls.h:36:17: note: previous declaration is here
-      36 | asmlinkage long sys_oabi_ipc(uint call, int first, int second, int third,
-         |                 ^
->> arch/arm/kernel/sys_oabi-compat.c:448:1: error: conflicting types for 'sys_oabi_sendto'
-     448 | SYSCALL_DEFINE4(oabi_sendto, int, fd, void __user *, buff, size_t, len,
-         | ^
-   include/linux/syscalls.h:227:36: note: expanded from macro 'SYSCALL_DEFINE4'
-     227 | #define SYSCALL_DEFINE4(name, ...) SYSCALL_DEFINEx(4, _##name, __VA_ARGS__)
-         |                                    ^
-   include/linux/syscalls.h:237:2: note: expanded from macro 'SYSCALL_DEFINEx'
-     237 |         __SYSCALL_DEFINEx(x, sname, __VA_ARGS__)
-         |         ^
-   include/linux/syscalls.h:251:18: note: expanded from macro '__SYSCALL_DEFINEx'
-     251 |         asmlinkage long sys##name(__MAP(x,__SC_DECL,__VA_ARGS__))       \
-         |                         ^
-   <scratch space>:89:1: note: expanded from here
-      89 | sys_oabi_sendto
-         | ^
-   arch/arm/include/asm/syscalls.h:41:17: note: previous declaration is here
-      41 | asmlinkage long sys_oabi_sendto(int fd, void __user *buff,
-         |                 ^
->> arch/arm/kernel/sys_oabi-compat.c:453:27: error: use of undeclared identifier 'addr'
-     453 |             get_user(sa_family, &addr->sa_family) == 0 &&
-         |                                  ^
->> arch/arm/kernel/sys_oabi-compat.c:453:27: error: use of undeclared identifier 'addr'
->> arch/arm/kernel/sys_oabi-compat.c:453:27: error: use of undeclared identifier 'addr'
->> arch/arm/kernel/sys_oabi-compat.c:452:6: error: use of undeclared identifier 'addrlen'; did you mean 'strlen'?
-     452 |         if (addrlen == 112 &&
-         |             ^~~~~~~
-         |             strlen
-   include/linux/string.h:196:24: note: 'strlen' declared here
-     196 | extern __kernel_size_t strlen(const char *);
-         |                        ^
-   arch/arm/kernel/sys_oabi-compat.c:455:4: error: use of undeclared identifier 'addrlen'
-     455 |                         addrlen = 110;
-         |                         ^
-   arch/arm/kernel/sys_oabi-compat.c:456:44: error: use of undeclared identifier 'addr'
-     456 |         return __sys_sendto(fd, buff, len, flags, addr, addrlen);
-         |                                                   ^
-   arch/arm/kernel/sys_oabi-compat.c:456:50: error: use of undeclared identifier 'addrlen'
-     456 |         return __sys_sendto(fd, buff, len, flags, addr, addrlen);
-         |                                                         ^
->> arch/arm/kernel/sys_oabi-compat.c:483:37: error: too few arguments to function call, expected 4, have 3
-     483 |         return __sys_sendmsg(fd, msg, flags);
-         |                ~~~~~~~~~~~~~               ^
-   include/linux/socket.h:411:13: note: '__sys_sendmsg' declared here
-     411 | extern long __sys_sendmsg(int fd, struct user_msghdr __user *msg,
-         |             ^             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     412 |                           unsigned int flags, bool forbid_cmsg_compat);
-         |                           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   1 warning and 11 errors generated.
+When VMD enabled, just check bus number identical may lead to enable
+1k io windows for VMD domain root port. E.g. 0000:80:00.0 is a 
+VT-d(09a2). If VMD enabled, there might be a root port 10000:80:01.0 present.
+this code may lead to enable 10000:80:01.0 io_window_1k = 1. 
+This is probably not expected.
 
+If I modify it like this,
 
-vim +/sys_oabi_semtimedop +407 arch/arm/kernel/sys_oabi-compat.c
+	while ((d = pci_get_device(PCI_VENDOR_ID_INTEL, 0x09a2, d))) {
+	---if (d->bus->number == dev->bus->number) {
+	+++if (d->bus == dev->bus) {
+			pci_read_config_word(d, 0x1c0, &en1k);
+			if (en1k & 0x4) {
+				pci_info(dev, "1K I/O windows enabled per %s EN1K setting\n", pci_name(d));
+				dev->io_window_1k = 1;
+			}
+		}
+	}
+    
+Can the situation mentioned above be avoided?
 
-   388	
-   389	SYSCALL_DEFINE6(oabi_ipc, uint, call, int, first, int, second, int, third,
-   390			void __user *, ptr, long, fifth)
-   391	{
-   392		switch (call & 0xffff) {
-   393		case SEMOP:
-   394			return  sys_oabi_semtimedop(first,
-   395						    (struct oabi_sembuf __user *)ptr,
-   396						    second, NULL);
-   397		case SEMTIMEDOP:
-   398			return  sys_oabi_semtimedop(first,
-   399						    (struct oabi_sembuf __user *)ptr,
-   400						    second,
-   401						    (const struct old_timespec32 __user *)fifth);
-   402		default:
-   403			return sys_ipc(call, first, second, third, ptr, fifth);
-   404		}
-   405	}
-   406	#else
- > 407	SYSCALL_DEFINE3(oabi_semtimedop, int, semid, struct oabi_sembuf __user *, tsops,
-   408			unsigned, nsops, const struct old_timespec32 __user *, timeout)
-   409	{
-   410		return -ENOSYS;
-   411	}
-   412	
-   413	SYSCALL_DEFINE3(oabi_semop, int, semid, struct oabi_sembuf __user *, tsops,
-   414			unsigned, nsops)
-   415	{
-   416		return -ENOSYS;
-   417	}
-   418	
- > 419	SYSCALL_DEFINE5(oabi_ipc, uint, call, int, first, int, second, int, third,
-   420			void __user *, ptr, long, fifth)
-   421	{
-   422		return -ENOSYS;
-   423	}
-   424	#endif
-   425	
-   426	SYSCALL_DEFINE3(oabi_bind, int, fd, struct sockaddr __user *, addr,
-   427			int, addrlen)
-   428	{
-   429		sa_family_t sa_family;
-   430		if (addrlen == 112 &&
-   431		    get_user(sa_family, &addr->sa_family) == 0 &&
-   432		    sa_family == AF_UNIX)
-   433				addrlen = 110;
-   434		return __sys_bind(fd, addr, addrlen);
-   435	}
-   436	
-   437	SYSCALL_DEFINE3(oabi_connect, int, fd, struct sockaddr __user *, addr,
-   438			int, addrlen)
-   439	{
-   440		sa_family_t sa_family;
-   441		if (addrlen == 112 &&
-   442		    get_user(sa_family, &addr->sa_family) == 0 &&
-   443		    sa_family == AF_UNIX)
-   444				addrlen = 110;
-   445		return __sys_connect(fd, addr, addrlen);
-   446	}
-   447	
- > 448	SYSCALL_DEFINE4(oabi_sendto, int, fd, void __user *, buff, size_t, len,
-   449			unsigned, flags, struct sockaddr __user *, addr, int, addrlen)
-   450	{
-   451		sa_family_t sa_family;
- > 452		if (addrlen == 112 &&
- > 453		    get_user(sa_family, &addr->sa_family) == 0 &&
-   454		    sa_family == AF_UNIX)
-   455				addrlen = 110;
-   456		return __sys_sendto(fd, buff, len, flags, addr, addrlen);
-   457	}
-   458	
-   459	SYSCALL_DEFINE3(oabi_sendmsg, int, fd, struct user_msghdr __user *, msg,
-   460			unsigned, flags)
-   461	{
-   462		struct sockaddr __user *addr;
-   463		int msg_namelen;
-   464		sa_family_t sa_family;
-   465		if (msg &&
-   466		    get_user(msg_namelen, &msg->msg_namelen) == 0 &&
-   467		    msg_namelen == 112 &&
-   468		    get_user(addr, &msg->msg_name) == 0 &&
-   469		    get_user(sa_family, &addr->sa_family) == 0 &&
-   470		    sa_family == AF_UNIX)
-   471		{
-   472			/*
-   473			 * HACK ALERT: there is a limit to how much backward bending
-   474			 * we should do for what is actually a transitional
-   475			 * compatibility layer.  This already has known flaws with
-   476			 * a few ioctls that we don't intend to fix.  Therefore
-   477			 * consider this blatent hack as another one... and take care
-   478			 * to run for cover.  In most cases it will "just work fine".
-   479			 * If it doesn't, well, tough.
-   480			 */
-   481			put_user(110, &msg->msg_namelen);
-   482		}
- > 483		return __sys_sendmsg(fd, msg, flags);
-   484	}
-   485	
+Hope for your suggestion.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+> 
+> Hope that works for your case.
+> 
