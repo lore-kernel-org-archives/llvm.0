@@ -1,108 +1,86 @@
-Received: from out198-2.us.a.mail.aliyun.com (out198-2.us.a.mail.aliyun.com [47.90.198.2])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C34843150;
-	Wed, 24 Jul 2024 06:36:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=47.90.198.2
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB1505C8FA;
+	Wed, 24 Jul 2024 07:01:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721802975; cv=none; b=ag0U7fk7GHhv0yXD14EvDvF+JKEQ/Imcf3IyBoBE8LFuTEVIUptHdWj0OMay9AgqikpJq2fcHBObEad0yCsmDUgSYtFXH84XjCMRe8Xf+fyw7La33zjaRcfuCbzRjJwH0cWcuCCSeWlkVijcAx+BCXKcvoSLk5gdSQ6lQjvmm/o=
+	t=1721804472; cv=none; b=LgF1929AD3dZ9KNu+s+VJ3tkNcGr3ZBl+t26fuExVgQwTIhOVCDwNjOB2tAyUfXRrZmMR2qJLaez+KsCHApfrTSywXkcJNLqwgOu7dwSqpf08z2UEYjbWFIrViLstQ1K/kmdJyF5zcN3nnfpaLh0ojOcRA6FwrHMl6ng1qz2qoI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721802975; c=relaxed/simple;
-	bh=Ebd14HrAYjGw8+Qc37MwbFm3fXYOaB8vE0cSnkFhrC0=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=ad4rXlNOMrE6BKfVQIcgTQ49CjvFXb7dxvouRxwmLf6LAi8tHMrnlNQg8he9S+7FM+sKFh62oGkktVU9J1yqa/V4AFRSA2ruQukh6RPc3ht47g3e/Wj/iqfeR9lA+KcXYu0XZppiLPpt2hp7nICjHWgfyVcuqVs3ffPymhZIHmI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ttyinfo.com; spf=pass smtp.mailfrom=ttyinfo.com; arc=none smtp.client-ip=47.90.198.2
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ttyinfo.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ttyinfo.com
-X-Alimail-AntiSpam:AC=CONTINUE;BC=0.07492151|-1;CH=green;DM=|CONTINUE|false|;DS=CONTINUE|ham_regular_dialog|0.00739205-0.00019925-0.992409;FP=16154132379161130174|0|0|0|0|-1|-1|-1;HT=maildocker-contentspam033038033188;MF=zhoushengqing@ttyinfo.com;NM=1;PH=DS;RN=8;RT=8;SR=0;TI=SMTPD_---.YY4fdiP_1721802955;
-Received: from tzl..(mailfrom:zhoushengqing@ttyinfo.com fp:SMTPD_---.YY4fdiP_1721802955)
-          by smtp.aliyun-inc.com;
-          Wed, 24 Jul 2024 14:35:56 +0800
-From: Zhou Shengqing <zhoushengqing@ttyinfo.com>
-To: haifeng.zhao@linux.intel.com
-Cc: helgaas@kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-pci@vger.kernel.org,
-	lkp@intel.com,
-	llvm@lists.linux.dev,
-	oe-kbuild-all@lists.linux.dev,
-	zhoushengqing@ttyinfo.com
-Subject: Re: [PATCH v4] PCI: Enable io space 1k granularity for intel cpu root port
-Date: Wed, 24 Jul 2024 06:35:55 +0000
-Message-Id: <20240724063555.3819-1-zhoushengqing@ttyinfo.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <48373ac6-574b-4f72-b4f1-ddb7de8a5107@linux.intel.com>
-References: <48373ac6-574b-4f72-b4f1-ddb7de8a5107@linux.intel.com>
+	s=arc-20240116; t=1721804472; c=relaxed/simple;
+	bh=OO0ZZDTOeR5AUlJcKeXZ+Lb9wklPBMO5SCLpnDfEU8M=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=BqfojziOBz4Xjs1/O+I85bNV+K4mxv4U+O3xYk7wWqRwI9kKEZ+Py5fo/9mfWsUSpJ5eeP3S5ouWTuWX649koN5RD/HycBtzmha/i2ljVu2nydKOi6BZRJR6yGgrP0I4wL8VZBZpd6b6cVZYNf5Zt0WVwyJwGJkLzvMkA5y5WuE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Ucfq2jcw; arc=none smtp.client-ip=192.198.163.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Ucfq2jcw"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1721804471; x=1753340471;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=OO0ZZDTOeR5AUlJcKeXZ+Lb9wklPBMO5SCLpnDfEU8M=;
+  b=Ucfq2jcwRW8qpFHz8/42bTUJWq8WwztcJyD6Gn2w05Y6Ka+Cbuf8jimZ
+   XUMR6NthGcDiKOQI09yMrGotTkOpc5fRbqyVHVRw32mj7O/qOXwdRTXgH
+   vALXHSJ1LXlA/7W9jbawonpU+r00de2jZxh/l9Zy2Oq038M3Bq1KA17EE
+   PoSzDqdJubZsOV3LnLk2Hp4UcdmqJdwNE380lxbwbLsCGoB9C/Z5yyWqN
+   Y/55qZ9kkuCDqzl6wb0uFxeubCshhnPYike6ypY0w8arnuibRLPPBIyef
+   f2qIf4LQez1mRQquZ2dkMA17DLpTMjJ8zbkHBbnDDIcvUWvIMGt/TCJra
+   g==;
+X-CSE-ConnectionGUID: 5LKF70cUSWO6Qomaab836w==
+X-CSE-MsgGUID: PpGwWw6TSxirZ6EqpvqmkQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11142"; a="19645739"
+X-IronPort-AV: E=Sophos;i="6.09,232,1716274800"; 
+   d="scan'208";a="19645739"
+Received: from fmviesa004.fm.intel.com ([10.60.135.144])
+  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jul 2024 00:01:10 -0700
+X-CSE-ConnectionGUID: FLzQNpTHTQW/OZlV1BnIbQ==
+X-CSE-MsgGUID: WhLuczHhS+WXeALgQHRWew==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.09,232,1716274800"; 
+   d="scan'208";a="57008863"
+Received: from lkp-server01.sh.intel.com (HELO 68891e0c336b) ([10.239.97.150])
+  by fmviesa004.fm.intel.com with ESMTP; 24 Jul 2024 00:01:09 -0700
+Received: from kbuild by 68891e0c336b with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1sWVzn-000mlM-0z;
+	Wed, 24 Jul 2024 07:01:07 +0000
+Date: Wed, 24 Jul 2024 15:00:42 +0800
+From: kernel test robot <lkp@intel.com>
+To: Arnd Bergmann <arnd@arndb.de>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-arch@vger.kernel.org
+Subject: [arnd-asm-generic:syscall-tbl-6.11 30/80] ld.lld: error: undefined
+ symbol: __riscv_sys_fadvise64
+Message-ID: <202407241414.kQcjV3vu-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-> > Do you mean it shoud be like this?
-> >
-> > 	while ((d = pci_get_device(PCI_VENDOR_ID_INTEL, 0x09a2, d))) {
-> > 		if (d->bus->number == dev->bus->number) {
-> > 			pci_read_config_word(d, 0x1c0, &en1k);
-> > 			if (en1k & 0x4) {
-> > 				pci_info(dev, "1K I/O windows enabled per %s EN1K setting\n", pci_name(d));
-> > 				dev->io_window_1k = 1;
-> > 			}
-> > 		}
-> > 	}
-> >
-> >> 00:00.0 System peripheral: Intel Corporation Device 09a2 (rev 20)
-> >> 00:0f.0 PCI bridge: Intel Corporation Device 1bbf (rev 10) (prog-if 00 [Normal decode])
-> >>
-> >>    
-> >> 15:00.0 System peripheral: Intel Corporation Device 09a2 (rev 20)
-> >> 15:01.0 PCI bridge: Intel Corporation Device 352a (rev 04) (prog-if 00 [Normal decode])
-> >>
-> >> and if you check domain number only, they might sit on different bus, perhaps that
-> >> would make thing complex, could you make sure the VT-d is on the upstream bus of the
-> >> bridge ?
-> > I checked it on ICX SPR EMR GNR, VT-d is always on the same bus with root port,
-> > and VT-d device and function number is always 0.
-> 
-> Yes, every VT-d instance in the root complex and the root port integrated are
-> on the same bus. and VT-d is the first device of that bus.
-> 
-> The EDS doesn't say if there is exception one of the VT-d instances in an
-> system its EN1K wasn't set while others were set, vice vesa. so I suggest
-> just check the VT-d and then set the root port's io_windows_1k of the same bus.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/arnd/asm-generic.git syscall-tbl-6.11
+head:   ece1b5ebc0b7064a8a130f64e85a81ec76381c3f
+commit: cd87002bd5fb586775035c95e92b262b22a3080a [30/80] syscalls: cleanup fadvise64_64()
+config: riscv-nommu_virt_defconfig (https://download.01.org/0day-ci/archive/20240724/202407241414.kQcjV3vu-lkp@intel.com/config)
+compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project ad154281230d83ee551e12d5be48bb956ef47ed3)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240724/202407241414.kQcjV3vu-lkp@intel.com/reproduce)
 
-But as Bjorn mentioned at July 12, 2024, 6:48 p.m.,
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202407241414.kQcjV3vu-lkp@intel.com/
 
-"To be safe, "d" (the [8086:09a2] device) should be on the same bus as
-"dev" (with VMD, I think we get Root Ports *below* the VMD bridge,
-which would be a different bus, and they presumably are not influenced
-by the EN1K bit."
+All errors (new ones prefixed by >>):
 
-When VMD enabled, just check bus number identical may lead to enable
-1k io windows for VMD domain root port. E.g. 0000:80:00.0 is a 
-VT-d(09a2). If VMD enabled, there might be a root port 10000:80:01.0 present.
-this code may lead to enable 10000:80:01.0 io_window_1k = 1. 
-This is probably not expected.
+>> ld.lld: error: undefined symbol: __riscv_sys_fadvise64
+   >>> referenced by syscall_table.c
+   >>>               arch/riscv/kernel/syscall_table.o:(sys_call_table) in archive vmlinux.a
 
-If I modify it like this,
-
-	while ((d = pci_get_device(PCI_VENDOR_ID_INTEL, 0x09a2, d))) {
-	---if (d->bus->number == dev->bus->number) {
-	+++if (d->bus == dev->bus) {
-			pci_read_config_word(d, 0x1c0, &en1k);
-			if (en1k & 0x4) {
-				pci_info(dev, "1K I/O windows enabled per %s EN1K setting\n", pci_name(d));
-				dev->io_window_1k = 1;
-			}
-		}
-	}
-    
-Can the situation mentioned above be avoided?
-
-Hope for your suggestion.
-
-> 
-> Hope that works for your case.
-> 
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
