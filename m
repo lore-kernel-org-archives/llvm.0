@@ -1,193 +1,125 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
+Received: from out28-77.mail.aliyun.com (out28-77.mail.aliyun.com [115.124.28.77])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 42A0F16D308;
-	Thu, 25 Jul 2024 06:38:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E21715FA72;
+	Thu, 25 Jul 2024 07:44:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.28.77
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721889538; cv=none; b=n3ei3/wKEwMY8q3gccrnRPxB92Ev3dyMsoWq+hGY6fKGR0aFDO7wNEG2xA4VrLYLj/dy+SzMYg50JPSv8LaKc2sdbrFrKXGvUCaDEhNWKHc0dSps+iMesQeMaM46d8d5W9qAbncosgKihpqDXqpjL0iNO6ya+L8FrtOeqfJsZrA=
+	t=1721893457; cv=none; b=ptr12mO/rxcjODoJOJt6VBe9JjApjTIvetviSBQ76f1Baasxwim2FjYF7qVFbNjN+HMmfpzmzlIvE4WJ26t1ciZX1YQFlCwrbs2Fu4iC0O22hxX2Uc5TB4Q7P44H8YqKG+ogM0dQuPx46cmVF9fJQMQd6wavPt5gLybH90gjqxQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721889538; c=relaxed/simple;
-	bh=Aky7SXoXyDv6JngM+2VvzsvtiuEL2FnDFUgffCmpclo=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=N88j7stxBWhJfDtajmG0WlDeuKOgO6pi4RMKEcaoxN87CvrGX04iN98tcOMN2iXUMBuip1xZphK3yq83RpOBZLRUNSidcFE95EKVZVnVnRXMc/Qhs0L8BUqc+xxx55xczKlgwhmmixKSEJ2CzNv+/Adk42olyFFUld4gs5g71uI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Pv4eUxqC; arc=none smtp.client-ip=198.175.65.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Pv4eUxqC"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1721889536; x=1753425536;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=Aky7SXoXyDv6JngM+2VvzsvtiuEL2FnDFUgffCmpclo=;
-  b=Pv4eUxqCNLlfPMIm1slaVY/F/EqZn1330WbTSLRG7WQMi9DWfmk4fwNb
-   2IzDVABI7Mq7/0yBVcKt94hJ3qLsgn5B9i1Al9w+Y6c5vTffiLEPACioJ
-   8UoE0P2o0Pj85hAgd175wmz9/ZPceDi9qXP1UMeeSKej+3TEF+EN4k1LZ
-   YvmpLqNr3w87uJGZ57LWjjpV42luFD8rzAKBFahbbBqL9Ox1p4quiQ9hK
-   0bagDFrtcowKU0btJGI5XntgaU7XsyA9jA1+HtO25EnogNcpm5+5cGUfL
-   45AQxTpJhWCXXSaADzUlDojtSN/dEVQRfHqKIyaUgLXEua/aMOXluiYWH
-   g==;
-X-CSE-ConnectionGUID: thG4Uk4jQb+iOwar48O8hQ==
-X-CSE-MsgGUID: kFIa//qWQAej4b+HP4xFIg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11143"; a="19730220"
-X-IronPort-AV: E=Sophos;i="6.09,235,1716274800"; 
-   d="scan'208";a="19730220"
-Received: from fmviesa005.fm.intel.com ([10.60.135.145])
-  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jul 2024 23:38:54 -0700
-X-CSE-ConnectionGUID: GdkYTEu9TJG1V/mfIZWUHg==
-X-CSE-MsgGUID: Qn31EqdVSHqk5IXK1ah2VQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.09,235,1716274800"; 
-   d="scan'208";a="57124791"
-Received: from lkp-server01.sh.intel.com (HELO 68891e0c336b) ([10.239.97.150])
-  by fmviesa005.fm.intel.com with ESMTP; 24 Jul 2024 23:38:52 -0700
-Received: from kbuild by 68891e0c336b with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1sWs7m-000nqR-0s;
-	Thu, 25 Jul 2024 06:38:50 +0000
-Date: Thu, 25 Jul 2024 14:38:06 +0800
-From: kernel test robot <lkp@intel.com>
-To: Arnd Bergmann <arnd@arndb.de>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-arch@vger.kernel.org
-Subject: [arnd-asm-generic:syscall-tbl-6.11 77/80]
- arch/x86/um/syscalls_64.c:56:1: error: use of undeclared identifier
- 'sys_mmap'
-Message-ID: <202407251452.Dcas8eTI-lkp@intel.com>
+	s=arc-20240116; t=1721893457; c=relaxed/simple;
+	bh=VsRD9RpGfNzTJeBE424wyq4lMEpvXqO7CWBLN2aG/Qw=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=GwbT6BOvNTMCU06PAbrm9zEFDFuJdnPCOJAIPW9HnebgyTrRtfhO3oKf+jVKIJGEOwSHu7R7qmOYTqnY98ivbmOWuSdSNH86ycyA2midzN3fGzLXmkikryALLE6Uet5C4/ZxRU60uMgjwyMsB83o9lHDF2WKOfJROzDX2hJ2urc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ttyinfo.com; spf=pass smtp.mailfrom=ttyinfo.com; arc=none smtp.client-ip=115.124.28.77
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ttyinfo.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ttyinfo.com
+X-Alimail-AntiSpam:AC=CONTINUE;BC=0.07440004|-1;CH=green;DM=|CONTINUE|false|;DS=CONTINUE|ham_regular_dialog|0.00729649-0.000270946-0.992433;FP=16230201195628131514|1|1|1|0|-1|-1|-1;HT=maildocker-contentspam033070021176;MF=zhoushengqing@ttyinfo.com;NM=1;PH=DS;RN=8;RT=8;SR=0;TI=SMTPD_---.YZIOBDn_1721893443;
+Received: from ubuntu..(mailfrom:zhoushengqing@ttyinfo.com fp:SMTPD_---.YZIOBDn_1721893443)
+          by smtp.aliyun-inc.com;
+          Thu, 25 Jul 2024 15:44:04 +0800
+From: Zhou Shengqing <zhoushengqing@ttyinfo.com>
+To: haifeng.zhao@linux.intel.com
+Cc: helgaas@kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-pci@vger.kernel.org,
+	lkp@intel.com,
+	llvm@lists.linux.dev,
+	oe-kbuild-all@lists.linux.dev,
+	zhoushengqing@ttyinfo.com
+Subject: Re: [PATCH v4] PCI: Enable io space 1k granularity for intel cpu root port
+Date: Thu, 25 Jul 2024 07:44:03 +0000
+Message-Id: <20240725074403.12928-1-zhoushengqing@ttyinfo.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <2912551a-b4c6-4bd4-8c1c-22de7fd8fa20@linux.intel.com>
+References: <2912551a-b4c6-4bd4-8c1c-22de7fd8fa20@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/arnd/asm-generic.git syscall-tbl-6.11
-head:   ece1b5ebc0b7064a8a130f64e85a81ec76381c3f
-commit: ce67487a0460367a60a68fa3de3e66b8caaa3b7c [77/80] syscalls: check syscall prototypes
-config: um-allmodconfig (https://download.01.org/0day-ci/archive/20240725/202407251452.Dcas8eTI-lkp@intel.com/config)
-compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project ad154281230d83ee551e12d5be48bb956ef47ed3)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240725/202407251452.Dcas8eTI-lkp@intel.com/reproduce)
+> On 7/24/2024 2:35 PM, Zhou Shengqing wrote:
+> >>> Do you mean it shoud be like this?
+> >>>
+> >>> 	while ((d = pci_get_device(PCI_VENDOR_ID_INTEL, 0x09a2, d))) {
+> >>> 		if (d->bus->number == dev->bus->number) {
+> >>> 			pci_read_config_word(d, 0x1c0, &en1k);
+> >>> 			if (en1k & 0x4) {
+> >>> 				pci_info(dev, "1K I/O windows enabled per %s EN1K setting\n", pci_name(d));
+> >>> 				dev->io_window_1k = 1;
+> >>> 			}
+> >>> 		}
+> >>> 	}
+> >>>
+> >>>> 00:00.0 System peripheral: Intel Corporation Device 09a2 (rev 20)
+> >>>> 00:0f.0 PCI bridge: Intel Corporation Device 1bbf (rev 10) (prog-if 00 [Normal decode])
+> >>>>
+> >>>>     
+> >>>> 15:00.0 System peripheral: Intel Corporation Device 09a2 (rev 20)
+> >>>> 15:01.0 PCI bridge: Intel Corporation Device 352a (rev 04) (prog-if 00 [Normal decode])
+> >>>>
+> >>>> and if you check domain number only, they might sit on different bus, perhaps that
+> >>>> would make thing complex, could you make sure the VT-d is on the upstream bus of the
+> >>>> bridge ?
+> >>> I checked it on ICX SPR EMR GNR, VT-d is always on the same bus with root port,
+> >>> and VT-d device and function number is always 0.
+> >> Yes, every VT-d instance in the root complex and the root port integrated are
+> >> on the same bus. and VT-d is the first device of that bus.
+> >>
+> >> The EDS doesn't say if there is exception one of the VT-d instances in an
+> >> system its EN1K wasn't set while others were set, vice vesa. so I suggest
+> >> just check the VT-d and then set the root port's io_windows_1k of the same bus.
+> > But as Bjorn mentioned at July 12, 2024, 6:48 p.m.,
+> >
+> > "To be safe, "d" (the [8086:09a2] device) should be on the same bus as
+> > "dev" (with VMD, I think we get Root Ports *below* the VMD bridge,
+> > which would be a different bus, and they presumably are not influenced
+> > by the EN1K bit."
+> >
+> > When VMD enabled, just check bus number identical may lead to enable
+> > 1k io windows for VMD domain root port. E.g. 0000:80:00.0 is a
+> > VT-d(09a2). If VMD enabled, there might be a root port 10000:80:01.0 present.
+> > this code may lead to enable 10000:80:01.0 io_window_1k = 1.
+> > This is probably not expected.
+> >
+> > If I modify it like this,
+> >
+> > 	while ((d = pci_get_device(PCI_VENDOR_ID_INTEL, 0x09a2, d))) {
+> 
+> BTW, don't save letters to use single letter variable 'd', please use 'vtd_dev' or
+> something else to express the VT-d device.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202407251452.Dcas8eTI-lkp@intel.com/
+Got it!
 
-All errors (new ones prefixed by >>):
+> 
+> > 	---if (d->bus->number == dev->bus->number) {
+> > 	+++if (d->bus == dev->bus) {
+> 
+> What if their 'bus' are NULL, though it is almost impossible. :)
+> 
+> > 			pci_read_config_word(d, 0x1c0, &en1k);
+> > 			if (en1k & 0x4) {
+> > 				pci_info(dev, "1K I/O windows enabled per %s EN1K setting\n", pci_name(d));
+> > 				dev->io_window_1k = 1;
+> > 			}
+> > 		}
+> > 	}
+> >      
+> > Can the situation mentioned above be avoided?
+> 
+> Yes, my understanding, as Bjorn pointed out root port extended from VMD
+> bridge not on the same bus as VT-d.
 
-   In file included from arch/x86/um/syscalls_64.c:10:
-   In file included from include/linux/syscalls.h:86:
-   In file included from include/trace/syscall.h:7:
-   In file included from include/linux/trace_events.h:6:
-   In file included from include/linux/ring_buffer.h:5:
-   In file included from include/linux/mm.h:2221:
-   include/linux/vmstat.h:514:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     514 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
-   In file included from arch/x86/um/syscalls_64.c:10:
-   In file included from include/linux/syscalls.h:86:
-   In file included from include/trace/syscall.h:7:
-   In file included from include/linux/trace_events.h:9:
-   In file included from include/linux/hardirq.h:11:
-   In file included from arch/um/include/asm/hardirq.h:5:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:14:
-   In file included from arch/um/include/asm/io.h:24:
-   include/asm-generic/io.h:548:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     548 |         val = __raw_readb(PCI_IOBASE + addr);
-         |                           ~~~~~~~~~~ ^
-   include/asm-generic/io.h:561:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     561 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
-      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-         |                                                   ^
-   In file included from arch/x86/um/syscalls_64.c:10:
-   In file included from include/linux/syscalls.h:86:
-   In file included from include/trace/syscall.h:7:
-   In file included from include/linux/trace_events.h:9:
-   In file included from include/linux/hardirq.h:11:
-   In file included from arch/um/include/asm/hardirq.h:5:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:14:
-   In file included from arch/um/include/asm/io.h:24:
-   include/asm-generic/io.h:574:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     574 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
-      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
-         |                                                   ^
-   In file included from arch/x86/um/syscalls_64.c:10:
-   In file included from include/linux/syscalls.h:86:
-   In file included from include/trace/syscall.h:7:
-   In file included from include/linux/trace_events.h:9:
-   In file included from include/linux/hardirq.h:11:
-   In file included from arch/um/include/asm/hardirq.h:5:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:14:
-   In file included from arch/um/include/asm/io.h:24:
-   include/asm-generic/io.h:585:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     585 |         __raw_writeb(value, PCI_IOBASE + addr);
-         |                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:595:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     595 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:605:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     605 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:693:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     693 |         readsb(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:701:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     701 |         readsw(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:709:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     709 |         readsl(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:718:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     718 |         writesb(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   include/asm-generic/io.h:727:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     727 |         writesw(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   include/asm-generic/io.h:736:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     736 |         writesl(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
->> arch/x86/um/syscalls_64.c:56:1: error: use of undeclared identifier 'sys_mmap'
-      56 | SYSCALL_DEFINE6(mmap, unsigned long, addr, unsigned long, len,
-         | ^
-   include/linux/syscalls.h:221:36: note: expanded from macro 'SYSCALL_DEFINE6'
-     221 | #define SYSCALL_DEFINE6(name, ...) SYSCALL_DEFINEx(6, _##name, __VA_ARGS__)
-         |                                    ^
-   include/linux/syscalls.h:229:2: note: expanded from macro 'SYSCALL_DEFINEx'
-     229 |         __SYSCALL_DEFINEx(x, sname, __VA_ARGS__)
-         |         ^
-   include/linux/syscalls.h:247:28: note: expanded from macro '__SYSCALL_DEFINEx'
-     247 |                 (void)(__do_sys##name == sys##name);                    \
-         |                                          ^
-   <scratch space>:190:1: note: expanded from here
-     190 | sys_mmap
-         | ^
-   13 warnings and 1 error generated.
+For the root port extended from VMD, should the 1k window be set
+when BIOS setup EN1K knob enabled? 
+In my case, I think  EN1K should not apply to the VMD root port.
 
+But what I'm confused about is, how can I reasonably exclude the VMD root port
+in the code?
 
-vim +/sys_mmap +56 arch/x86/um/syscalls_64.c
+> 
+> 
 
-577ade59b99e34 Al Viro 2021-09-20  55  
-577ade59b99e34 Al Viro 2021-09-20 @56  SYSCALL_DEFINE6(mmap, unsigned long, addr, unsigned long, len,
-
-:::::: The code at line 56 was first introduced by commit
-:::::: 577ade59b99e3473b2f1342b1eb9e496eed39b68 um: move amd64 variant of mmap(2) to arch/x86/um/syscalls_64.c
-
-:::::: TO: Al Viro <viro@zeniv.linux.org.uk>
-:::::: CC: Richard Weinberger <richard@nod.at>
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
