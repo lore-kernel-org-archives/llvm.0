@@ -1,197 +1,98 @@
-Received: from mail-yb1-f202.google.com (mail-yb1-f202.google.com [209.85.219.202])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A218F149C70
-	for <llvm@lists.linux.dev>; Thu, 25 Jul 2024 23:21:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.202
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4FBEB13CFBB;
+	Thu, 25 Jul 2024 23:36:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721949709; cv=none; b=r3UKG+UYwBjC5YYb8DHnnc7LVtvA8axPuthaVnKu6Fx8jkpIoDkezbhP2QQjDoSDanKBQBCbzd26bg/A2qzqdet7EckBunHb5cFu556a5ekLfWww46Zn/1spis3EOazVoplsq6O7eUqhO0E3Pg5W5sSOYHuOuKAr934W/EcoH2U=
+	t=1721950589; cv=none; b=R4uVArmscSZ1Ifsd4SbDncxgTBEC5ehQz2ReBjCeOMxerZeFB9fAMw+y4TtOXK0MevBr9sYn0EWMyaXzejJ6j98r6I7Sxxtxbxpote4V/fRNKJ4vL97eLu40g5YmUvMrLcGDS/6WxiPWJpm6I2sAs7aljHSqUzL7eTtJNrKfdes=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721949709; c=relaxed/simple;
-	bh=qH2ob/GPMxW6QjGdFk/NsUTwDcqVg3OStezb0PUZxuM=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=kfyKRqAxJUKUwVGlvWmcN6s9+s3rWSWM3TcCexLUd+n9C0fHXXJ/eVPImvupCiFsBbo1eP92LrSGb5DHyON//khk+jsbr+e75OtnxO3836SEPmyGu7fp6I5/eDIgOm4awqfbecvk59+c4AZmS7KnlR0ej7PaKAAjAt0dNzW7gGY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--mmaurer.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=11VyFJ9j; arc=none smtp.client-ip=209.85.219.202
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--mmaurer.bounces.google.com
+	s=arc-20240116; t=1721950589; c=relaxed/simple;
+	bh=WVYPihN9pxhRTBqPKGe4Q8rwSGTIZcNXSkvjvy1yx20=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=lFXaB4YMeyEuwUGHl50OUOiSaSHlFbNMzux7bePogenTIEJZlofkA9MnzMHHaaTkKKTf4v+VZy7xPxepEleoHqUNUbY+G0l7KWqD8HqW3CUpvTckJaTpJM5rYWbLgufOGLRokGKSumEb7cK97bwDwUdXZhbcWWB8M56EL5RmvGA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=m52OvqbC; arc=none smtp.client-ip=192.198.163.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="11VyFJ9j"
-Received: by mail-yb1-f202.google.com with SMTP id 3f1490d57ef6-e0b2fb62a07so1917668276.0
-        for <llvm@lists.linux.dev>; Thu, 25 Jul 2024 16:21:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1721949706; x=1722554506; darn=lists.linux.dev;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=NIeg3QD3T42p/ZQnVld0CvS5klyquBslVZ8Cnqk2AWw=;
-        b=11VyFJ9jVVfd1JgCxOkhobMX3YPpakG4d/BV73U5YZteyNIxHBvwFLyJUZoeCh99V5
-         Re7WQjg5qUi/JH4HxyKfl8igrhXh+SRuZLP068wweMvQTLhu2Vn1LJIYh4Y8xMVsznEw
-         vB7wt2BHc15Ff721Or68Pagbwt0Mue0VlaQOZ/o8gsouED6J/XGIalRLbitl51esI4ur
-         CuXA20OgfBd8sm8lGBgzg1hf4e2YSuDIC2qDO7wxDj8XPp/i+jPZK1kIM5a3tzxs+WJM
-         A/WgFn52/NNcjZsQ9A0LofNkNy96EGDGmO4UZvIF0ypaisjp1EWMc4QrtXmbUerMGu42
-         BV5A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1721949706; x=1722554506;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=NIeg3QD3T42p/ZQnVld0CvS5klyquBslVZ8Cnqk2AWw=;
-        b=bKcYXECVhma13SSD3wXTHp3oMupFtfQBbUtQeTOw6I/C6WaGsYgxUtzr7z3IgdxQzj
-         qIMUxOQuhvH/IkI3hLBKdbAgsOuS1TkVpdarMRi9va0x76iT24717Nv3zOzki62XfVP6
-         tJpsrcoCMxx+TXgdqcqnEIFdZiCdGTUxjWoulJFZCv3VXeluCJeeJKxeXq76EbuG9PtG
-         pbtAxErmgjvWXexA7Tq687ME3paqB7flzNYK8LqcoT+fmNf5MogvMQi4f12uF80qA5v5
-         vRbjcznouQpVZfHL1wIJyr5Kc3HnzJX1ruSvd02TrsEQNLArLKpw8sOxa+KkLyYpSMLU
-         LW5w==
-X-Forwarded-Encrypted: i=1; AJvYcCXwo0hxIv59J9CpJGsYc5O6pFeR4YlH/QQLMmsqYp4HQiAAUGm1EfXKycipdb+3Iere+z/TmlZFSn1mePENd7QNHvHuWw==
-X-Gm-Message-State: AOJu0YwETWhAdHfuuZ2VYcgpaPqm05uQSMMBRghdSMrX59jf9FrJI/xZ
-	ZQdk2fvaQLiOurGvqdU1wCgVTpBdh+TqRIx9I+eTW1M6wrVAWTfgidi5Dz+cCQZMpmq6+y5bahU
-	ahaUr1Q==
-X-Google-Smtp-Source: AGHT+IGFgF07K78Xk6HyAkYV734bKuaNSlYnh+LI6ONN4gJdXx4TMFBTavf54CUZ0w26vWpdASB/dVOetoAt
-X-Received: from anyblade.c.googlers.com ([fda3:e722:ac3:cc00:20:ed76:c0a8:1791])
- (user=mmaurer job=sendgmr) by 2002:a25:9bc1:0:b0:e08:6c33:7334 with SMTP id
- 3f1490d57ef6-e0b2cd29922mr30221276.8.1721949706306; Thu, 25 Jul 2024 16:21:46
- -0700 (PDT)
-Date: Thu, 25 Jul 2024 23:20:47 +0000
-In-Reply-To: <20240725232126.1996981-1-mmaurer@google.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="m52OvqbC"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1721950588; x=1753486588;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=WVYPihN9pxhRTBqPKGe4Q8rwSGTIZcNXSkvjvy1yx20=;
+  b=m52OvqbC4Ytbv28MBYHGzLtWqutkXEo2yonK61FaRn6S7qyMBCsdrFZw
+   FOTjkh3RCCym36G2eYk8kIjamWPhzeKjsu8cPUklRQ7U/8ImJL8YJNU1m
+   xlEWPQ48EmAabMNaBgvLQywB2ho7/Lycymd4+bCRUfeXiEFzi5Z5uZ6rc
+   fAZ0TrrT+JNronzqDtKKFeJcrdZLWxZug43Q1Seg5NGXz5NqhghUCBo86
+   futkRyc6BqlRHdb4hlyW+ObnEdB0CGZ4WFCXNUCp+QUuucScx3u/HmBB2
+   QbCy2OljNlwIVn8fHHw5QMr76SAne2fHyLt+/gMWmW663UYFDYaCc5Thz
+   w==;
+X-CSE-ConnectionGUID: F6GgjD3GQpyQDJRC85KPIw==
+X-CSE-MsgGUID: CG6Hv3XpQkiOLQsTz+uBag==
+X-IronPort-AV: E=McAfee;i="6700,10204,11144"; a="30345998"
+X-IronPort-AV: E=Sophos;i="6.09,237,1716274800"; 
+   d="scan'208";a="30345998"
+Received: from fmviesa005.fm.intel.com ([10.60.135.145])
+  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jul 2024 16:36:27 -0700
+X-CSE-ConnectionGUID: XxQyaRCqSXyuVIDXULKEXw==
+X-CSE-MsgGUID: C3TUiAweSGijsgzn4q6QHw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.09,237,1716274800"; 
+   d="scan'208";a="57361881"
+Received: from lkp-server01.sh.intel.com (HELO 68891e0c336b) ([10.239.97.150])
+  by fmviesa005.fm.intel.com with ESMTP; 25 Jul 2024 16:36:25 -0700
+Received: from kbuild by 68891e0c336b with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1sX80V-000oY0-2M;
+	Thu, 25 Jul 2024 23:36:23 +0000
+Date: Fri, 26 Jul 2024 07:35:45 +0800
+From: kernel test robot <lkp@intel.com>
+To: Arnd Bergmann <arnd@arndb.de>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-arch@vger.kernel.org
+Subject: [arnd-asm-generic:syscall-tbl-6.11 47/80] ld.lld: error: undefined
+ symbol: __sys_bind
+Message-ID: <202407260736.TZLqB0aJ-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
-References: <20240725232126.1996981-1-mmaurer@google.com>
-X-Mailer: git-send-email 2.46.0.rc1.232.g9752f9e123-goog
-Message-ID: <20240725232126.1996981-3-mmaurer@google.com>
-Subject: [PATCH 2/2] kbuild: rust: Enable KASAN support
-From: Matthew Maurer <mmaurer@google.com>
-To: Andrey Ryabinin <ryabinin.a.a@gmail.com>, Masahiro Yamada <masahiroy@kernel.org>, 
-	Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, 
-	Wedson Almeida Filho <wedsonaf@gmail.com>, Nathan Chancellor <nathan@kernel.org>
-Cc: Matthew Maurer <mmaurer@google.com>, Alexander Potapenko <glider@google.com>, 
-	Andrey Konovalov <andreyknvl@gmail.com>, Dmitry Vyukov <dvyukov@google.com>, 
-	Vincenzo Frascino <vincenzo.frascino@arm.com>, Nicolas Schier <nicolas@fjasle.eu>, 
-	Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, 
-	"=?UTF-8?q?Bj=C3=B6rn=20Roy=20Baron?=" <bjorn3_gh@protonmail.com>, Benno Lossin <benno.lossin@proton.me>, 
-	Andreas Hindborg <a.hindborg@samsung.com>, Alice Ryhl <aliceryhl@google.com>, 
-	Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, 
-	Justin Stitt <justinstitt@google.com>, kasan-dev@googlegroups.com, 
-	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	rust-for-linux@vger.kernel.org, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Rust supports KASAN via LLVM, but prior to this patch, the flags aren't
-set properly.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/arnd/asm-generic.git syscall-tbl-6.11
+head:   297d47a6407bea09324a4e1ba26a1735093f433f
+commit: 3a8a5eab63799a794f4ddff1de56fda059d5fc80 [47/80] ARM: OABI SYSCALL_DEFINEx
+config: arm-randconfig-004-20240726 (https://download.01.org/0day-ci/archive/20240726/202407260736.TZLqB0aJ-lkp@intel.com/config)
+compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project ccae7b461be339e717d02f99ac857cf0bc7d17fc)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240726/202407260736.TZLqB0aJ-lkp@intel.com/reproduce)
 
-Suggested-by: Miguel Ojeda <ojeda@kernel.org>
-Signed-off-by: Matthew Maurer <mmaurer@google.com>
----
- scripts/Makefile.kasan | 46 +++++++++++++++++++++++++++++++++++++++++-
- scripts/Makefile.lib   |  3 +++
- 2 files changed, 48 insertions(+), 1 deletion(-)
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202407260736.TZLqB0aJ-lkp@intel.com/
 
-diff --git a/scripts/Makefile.kasan b/scripts/Makefile.kasan
-index 390658a2d5b7..84572c473e23 100644
---- a/scripts/Makefile.kasan
-+++ b/scripts/Makefile.kasan
-@@ -12,6 +12,7 @@ endif
- KASAN_SHADOW_OFFSET ?= $(CONFIG_KASAN_SHADOW_OFFSET)
- 
- cc-param = $(call cc-option, -mllvm -$(1), $(call cc-option, --param $(1)))
-+rustc-param = $(call rustc-option, -Cllvm-args=-$(1),)
- 
- ifdef CONFIG_KASAN_STACK
- 	stack_enable := 1
-@@ -28,6 +29,7 @@ else
- endif
- 
- CFLAGS_KASAN_MINIMAL := -fsanitize=kernel-address
-+RUSTFLAGS_KASAN_MINIMAL := -Zsanitizer=kernel-address -Zsanitizer-recover=kernel-address
- 
- # -fasan-shadow-offset fails without -fsanitize
- CFLAGS_KASAN_SHADOW := $(call cc-option, -fsanitize=kernel-address \
-@@ -36,13 +38,36 @@ CFLAGS_KASAN_SHADOW := $(call cc-option, -fsanitize=kernel-address \
- 			-mllvm -asan-mapping-offset=$(KASAN_SHADOW_OFFSET)))
- 
- ifeq ($(strip $(CFLAGS_KASAN_SHADOW)),)
-+	KASAN_SHADOW_SUPPORTED := n
-+else
-+	KASAN_SHADOW_SUPPORTED := y
-+endif
-+
-+ifdef CONFIG_RUST
-+	RUSTFLAGS_KASAN_SHADOW := $(call rustc-option $(RUSTFLAGS_KASAN_MINIMAL) \
-+				  -Cllvm-args=-asan-mapping-offset=$(KASAN_SHADOW_OFFSET))
-+	ifeq ($(strip $(RUSTFLAGS_KASAN_SHADOW)),)
-+		KASAN_SHADOW_SUPPORTED := n
-+	endif
-+endif
-+
-+ifeq ($(KASAN_SHADOW_SUPPORTED),y)
- 	CFLAGS_KASAN := $(CFLAGS_KASAN_MINIMAL)
-+	ifdef CONFIG_RUST
-+		RUSTFLAGS_KASAN := $(RUSTFLAGS_KASAN_MINIMAL)
-+	endif
- else
- 	# Now add all the compiler specific options that are valid standalone
- 	CFLAGS_KASAN := $(CFLAGS_KASAN_SHADOW) \
- 	 $(call cc-param,asan-globals=1) \
- 	 $(call cc-param,asan-instrumentation-with-call-threshold=$(call_threshold)) \
- 	 $(call cc-param,asan-instrument-allocas=1)
-+	ifdef CONFIG_RUST
-+		RUSTFLAGS_KASAN := $(RUSTFLAGS_KASAN_SHADOW) \
-+		 $(call rustc-param,asan-globals=1) \
-+		 $(call rustc-param,asan-instrumentation-with-call-threshold=$(call_threshold)) \
-+		 $(call rustc-param,asan-instrument-allocas=1)
-+	endif
- endif
- 
- CFLAGS_KASAN += $(call cc-param,asan-stack=$(stack_enable))
-@@ -52,6 +77,11 @@ CFLAGS_KASAN += $(call cc-param,asan-stack=$(stack_enable))
- # memintrinsics won't be checked by KASAN on GENERIC_ENTRY architectures.
- CFLAGS_KASAN += $(call cc-param,asan-kernel-mem-intrinsic-prefix=1)
- 
-+ifdef CONFIG_RUST
-+	RUSTFLAGS_KASAN += $(call rustc-param,asan-stack=$(stack_enable))
-+	RUSTFLAGS_KASAN += $(call rustc-param,asan-kernel-mem-intrinsic-prefix=1)
-+endif
-+
- endif # CONFIG_KASAN_GENERIC
- 
- ifdef CONFIG_KASAN_SW_TAGS
-@@ -73,6 +103,20 @@ ifeq ($(call clang-min-version, 150000)$(call gcc-min-version, 130000),y)
- CFLAGS_KASAN += $(call cc-param,hwasan-kernel-mem-intrinsic-prefix=1)
- endif
- 
-+ifdef CONFIG_RUST
-+	ifdef CONFIG_KASAN_INLINE
-+		rust_instrumentation_flags := $(call rustc-param,hwasan-mapping-offset=$(KASAN_SHADOW_OFFSET))
-+	else
-+		rust_instrumentation_flags := $(call rustc-param,hwasan-instrument-with-calls=1)
-+	endif
-+	RUSTFLAGS_KASAN := -Zsanitizer=kernel-hwaddress -Zsanitizer-recover=kernel-hwaddress \
-+			   $(call rustc-param,hwasan-instrument-stack=$(stack_enable)) \
-+			   $(call rustc-param,hwasan-use-short-granules=0) \
-+			   $(call rustc-param,hwasan-inline-all-checks=0) \
-+			   $(call rustc-param,hwasan-kernel-mem-intrinsic-prefix=1) \
-+			   $(instrumentation_flags)
-+endif
-+
- endif # CONFIG_KASAN_SW_TAGS
- 
--export CFLAGS_KASAN CFLAGS_KASAN_NOSANITIZE
-+export CFLAGS_KASAN CFLAGS_KASAN_NOSANITIZE RUSTFLAGS_KASAN
-diff --git a/scripts/Makefile.lib b/scripts/Makefile.lib
-index 9f06f6aaf7fc..4a58636705e0 100644
---- a/scripts/Makefile.lib
-+++ b/scripts/Makefile.lib
-@@ -167,6 +167,9 @@ ifneq ($(CONFIG_KASAN_HW_TAGS),y)
- _c_flags += $(if $(patsubst n%,, \
- 		$(KASAN_SANITIZE_$(target-stem).o)$(KASAN_SANITIZE)$(is-kernel-object)), \
- 		$(CFLAGS_KASAN), $(CFLAGS_KASAN_NOSANITIZE))
-+_rust_flags += $(if $(patsubst n%,, \
-+		$(KASAN_SANITIZE_$(target-stem).o)$(KASAN_SANITIZE)$(is-kernel-object)), \
-+		$(RUSTFLAGS_KASAN))
- endif
- endif
- 
+All errors (new ones prefixed by >>):
+
+>> ld.lld: error: undefined symbol: __sys_bind
+   >>> referenced by sys_oabi-compat.c:434 (arch/arm/kernel/sys_oabi-compat.c:434)
+   >>>               arch/arm/kernel/sys_oabi-compat.o:(__se_sys_oabi_bind) in archive vmlinux.a
+--
+>> ld.lld: error: undefined symbol: __sys_connect
+   >>> referenced by sys_oabi-compat.c:445 (arch/arm/kernel/sys_oabi-compat.c:445)
+   >>>               arch/arm/kernel/sys_oabi-compat.o:(__se_sys_oabi_connect) in archive vmlinux.a
+--
+>> ld.lld: error: undefined symbol: __sys_sendto
+   >>> referenced by sys_oabi-compat.c:456 (arch/arm/kernel/sys_oabi-compat.c:456)
+   >>>               arch/arm/kernel/sys_oabi-compat.o:(__se_sys_oabi_sendto) in archive vmlinux.a
+--
+>> ld.lld: error: undefined symbol: __sys_sendmsg
+   >>> referenced by sys_oabi-compat.c:483 (arch/arm/kernel/sys_oabi-compat.c:483)
+   >>>               arch/arm/kernel/sys_oabi-compat.o:(__se_sys_oabi_sendmsg) in archive vmlinux.a
+
 -- 
-2.46.0.rc1.232.g9752f9e123-goog
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
