@@ -1,102 +1,149 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 90756D53B;
-	Thu, 25 Jul 2024 01:28:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 63CCB4690
+	for <llvm@lists.linux.dev>; Thu, 25 Jul 2024 02:16:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.189
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721870928; cv=none; b=beX2vMYrI+EXzdumuFE+9+9UoV2FM3kWVaB9X2Aq0WVJh/pQMNJxDX+dOSo71hgANv9C2gw0K2XLzgDbDWlLLwsT0WG+WXo785XVi8FPheDafij7fqH1BwbhqQBKhVrDkQtFZxF/Q07gvtPZzPyMTKUBPYJ6IKnAfS7rh/mMybQ=
+	t=1721873780; cv=none; b=JOw2u0HfO0POdz1xrTVdHNdYfIkfA4tqXNT9esX+9hBi0gqyXH7v+239ljdzy0W8SJzN8/nSfTmtUASA5g7H8j6TR5n7k1JN/Ge5ulkum8yZ+OZXvOUV5Ln6gmgvKP96e1pP4iS8jNObOjDte9P7hKQvaV3qBhsFfePaTS5YGI4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721870928; c=relaxed/simple;
-	bh=C5UqzjqzCZ35PlQN5LEmuhR6qEkCLUJAorrsBr1ASmk=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=AABEmrnkdhIqtdx0dbCnFpcygPk3fVMpTCZzPKtgsww8VlMvU7m03znu7CKFJ8e7pQp4g34dxH66vz0uDBvhiwXTHZjiB9iLEJ+XBb+8v5oZzEi7Tgn7sFd0ju5ND8U/xL1FtAOZOjzbTsYRw+Iwi8FzciP1LirBGMQ2R2USD6U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ahsl9PEH; arc=none smtp.client-ip=192.198.163.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ahsl9PEH"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1721870927; x=1753406927;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=C5UqzjqzCZ35PlQN5LEmuhR6qEkCLUJAorrsBr1ASmk=;
-  b=ahsl9PEHv0Uw6DIK/7TUDspVdUw7W8JKPId/qinuanB09rWw9I5r2V5f
-   YHDLYLYZjO15gH40cUJI2dckqsSRY/7KEiTvMK9o7z8H58n3ftk/OjkEa
-   zw1u5zxBmk9yqRFz59/ckfL+99INH6DIL0xddY3QKRceBctZhVLEbH2kD
-   vqhNpY3hpQvbdEnoxDsv0eHwKZp6xKI7CPaflU/krTZRwlIwHc5Pte8bL
-   kxSEMyVUUbFzGFByt+WMF3wHdE/X294z/JJtDOaOIV8WcieCmzj8S0Ixr
-   Okqramef+RHAbX/UIymU3qOSp7fWK7Q+2q9VLBVKvgdRAkzmfxSEwTla4
-   A==;
-X-CSE-ConnectionGUID: 9kwacX9RRHiymDJwLZJgZQ==
-X-CSE-MsgGUID: EZyHYyY1SEeICVtZ0aam9w==
-X-IronPort-AV: E=McAfee;i="6700,10204,11143"; a="30204026"
-X-IronPort-AV: E=Sophos;i="6.09,234,1716274800"; 
-   d="scan'208";a="30204026"
-Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jul 2024 18:28:46 -0700
-X-CSE-ConnectionGUID: h6ANiHnKRzaVHRocpMQZgw==
-X-CSE-MsgGUID: YUMNDhBeSMe9DIfMtrZx1g==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.09,234,1716274800"; 
-   d="scan'208";a="90225541"
-Received: from lkp-server01.sh.intel.com (HELO 68891e0c336b) ([10.239.97.150])
-  by orviesa001.jf.intel.com with ESMTP; 24 Jul 2024 18:28:44 -0700
-Received: from kbuild by 68891e0c336b with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1sWnHe-000ne4-1j;
-	Thu, 25 Jul 2024 01:28:42 +0000
-Date: Thu, 25 Jul 2024 09:27:53 +0800
-From: kernel test robot <lkp@intel.com>
-To: Chuck Lever <chuck.lever@oracle.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [cel:nfsd-testing 9/9] fs/nfsd/nfs4proc.c:1622:40: warning: unused
- variable 'nfsd4_cb_offload_ops'
-Message-ID: <202407250956.N03o4BlA-lkp@intel.com>
+	s=arc-20240116; t=1721873780; c=relaxed/simple;
+	bh=XuaIdgysxkYXF0pfGRwT213/rDERO44AiZG9z99Ilns=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=doDm24udalxtGIzOgR6UWCm6KHwyKHEsSzU1qnaTQxrdN5QrEtmLuNct68TbKh8c+IF3qjY8iQdBRN+GjxuRtgRVCveKbDOlxYiM+wvK6rchE4bBz5PW/ELQFcSABoElRqzj6lUges+2LBteezJJIsysVpMUmc6RhW1dE/eVs/s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.189
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.19.162.254])
+	by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4WTvXL2s9pzQn5C;
+	Thu, 25 Jul 2024 10:12:02 +0800 (CST)
+Received: from kwepemd100011.china.huawei.com (unknown [7.221.188.204])
+	by mail.maildlp.com (Postfix) with ESMTPS id 4E97A180102;
+	Thu, 25 Jul 2024 10:16:14 +0800 (CST)
+Received: from M910t.huawei.com (10.110.54.157) by
+ kwepemd100011.china.huawei.com (7.221.188.204) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1258.34; Thu, 25 Jul 2024 10:16:12 +0800
+From: Changbin Du <changbin.du@huawei.com>
+To: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>,
+	Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim
+	<namhyung@kernel.org>, Nathan Chancellor <nathan@kernel.org>
+CC: Mark Rutland <mark.rutland@arm.com>, Alexander Shishkin
+	<alexander.shishkin@linux.intel.com>, Jiri Olsa <jolsa@kernel.org>, Ian
+ Rogers <irogers@google.com>, Adrian Hunter <adrian.hunter@intel.com>, "Liang,
+ Kan" <kan.liang@linux.intel.com>, Nick Desaulniers <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
+	<linux-perf-users@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<llvm@lists.linux.dev>, Hui Wang <hw.huiwang@huawei.com>, Changbin Du
+	<changbin.du@huawei.com>
+Subject: [PATCH v6 0/8] perf: Support searching local debugging vdso or specify vdso path in cmdline
+Date: Thu, 25 Jul 2024 10:15:41 +0800
+Message-ID: <20240725021549.880167-1-changbin.du@huawei.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ kwepemd100011.china.huawei.com (7.221.188.204)
 
-tree:   git://git.kernel.org/pub/scm/linux/kernel/git/cel/linux nfsd-testing
-head:   4e7058acdd17cdaaeedf1ace203e539dd08a2689
-commit: 4e7058acdd17cdaaeedf1ace203e539dd08a2689 [9/9] NFSD: Drop CB_OFFLOAD Calls
-config: x86_64-rhel-8.3-rust (https://download.01.org/0day-ci/archive/20240725/202407250956.N03o4BlA-lkp@intel.com/config)
-compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240725/202407250956.N03o4BlA-lkp@intel.com/reproduce)
+The vdso dumped from process memory (in buildid-cache) lacks debugging
+info. To annotate vdso symbols with source lines we need a debugging
+version.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202407250956.N03o4BlA-lkp@intel.com/
+For x86, we can find them from your local build as
+'arch/x86/entry/vdso/vdso{32,64}.so.dbg'. Or they may resides in
+'/lib/modules/<version>/vdso/vdso{32,64}.so' on Ubuntu. But notice that the
+builid has to match. 
 
-All warnings (new ones prefixed by >>):
+If user doesn't specify the path, perf will search them internally as long
+as vmlinux when recording samples. The searched debugging vdso will add to
+buildid cache.
 
->> fs/nfsd/nfs4proc.c:1622:40: warning: unused variable 'nfsd4_cb_offload_ops' [-Wunused-const-variable]
-    1622 | static const struct nfsd4_callback_ops nfsd4_cb_offload_ops = {
-         |                                        ^~~~~~~~~~~~~~~~~~~~
-   1 warning generated.
+Below samples are captured on my local build kernel. perf succesfully
+find debugging version vdso and we can annotate with source without
+specifying vdso path.
 
+$ sudo perf record -a
+$ sudo perf report --objdump=llvm-objdump
 
-vim +/nfsd4_cb_offload_ops +1622 fs/nfsd/nfs4proc.c
+Samples: 17K of event 'cycles:P', 4000 Hz, Event count (approx.): 1760
+__vdso_clock_gettime  /work/linux-host/arch/x86/entry/vdso/vdso64.so.d
+Percent│       movq    -48(%rbp),%rsi
+       │       testq   %rax,%rax
+       │     ;               return vread_hvclock();
+       │       movq    %rax,%rdx
+       │     ;               if (unlikely(!vdso_cycles_ok(cycles)))
+       │     ↑ js      eb
+       │     ↑ jmp     74
+       │     ;               ts->tv_sec = vdso_ts->sec;
+  0.02 │147:   leaq    2(%rbx),%rax
+       │       shlq    $4, %rax
+       │       addq    %r10,%rax
+       │     ;               while ((seq = READ_ONCE(vd->seq)) & 1) {
+  9.38 │152:   movl    (%r10),%ecx
 
-e0639dc5805a9d4 Olga Kornievskaia 2018-07-20  1621  
-e0639dc5805a9d4 Olga Kornievskaia 2018-07-20 @1622  static const struct nfsd4_callback_ops nfsd4_cb_offload_ops = {
-e0639dc5805a9d4 Olga Kornievskaia 2018-07-20  1623  	.release = nfsd4_cb_offload_release,
-e0639dc5805a9d4 Olga Kornievskaia 2018-07-20  1624  	.done = nfsd4_cb_offload_done
-e0639dc5805a9d4 Olga Kornievskaia 2018-07-20  1625  };
-e0639dc5805a9d4 Olga Kornievskaia 2018-07-20  1626  
+When doing cross platform analysis, we need to specify the vdso path if
+we are interested in its symbols. At most two vdso can be given. Also you
+can pack your buildid cache with perf-archive if the debugging vdso can be
+found on the sampled machine.
 
-:::::: The code at line 1622 was first introduced by commit
-:::::: e0639dc5805a9d4faaa2c07ad98fa853b9529dd3 NFSD introduce async copy feature
+$ sudo perf report --objdump=llvm-objdump \
+      --vdso arch/x86/entry/vdso/vdso64.so.dbg,arch/x86/entry/vdso/vdso32.so.dbg
 
-:::::: TO: Olga Kornievskaia <kolga@netapp.com>
-:::::: CC: J. Bruce Fields <bfields@redhat.com>
+I also improved perf-buildid-cache command recognize vdso when adding files, then
+place it at correct place.
+
+v6:
+  - split "perf: build-id: try to search debugging vdso and add to cache" 
+    by functional logical. (suggested by Adrian)
+v5:
+  - Searching the vdso in record stage instead of report. So the debugging
+    vdso will be in build-id cache. This is friendly for cross-machine analysis.
+  - Improve perf-buildid-cache command recognize vdso when adding files
+v4:
+  - split the refactoring from the actual change.
+v3:
+  - update documentation.
+v2:
+  - now search vdso automatically as long as vmlinux, as suggested by Adrian.
+  - remove change 'prefer symsrc_filename for filename'.
+
+Changbin Du (8):
+  perf: support specify vdso path in cmdline
+  perf: disasm: refactor function dso__disassemble_filename
+  perf: disasm: use build_id_path if fallback failed
+  perf: symbol: generalize vmlinux path searching
+  perf: build-id: add support for build-id cache vdso debug
+  perf: build-id: extend build_id_cache__find_debug() to find local
+    debugging vdso
+  perf: disasm: prefer debugging files in build-id cache
+  perf buildid-cache: recognize vdso when adding files
+
+ tools/perf/Documentation/perf-annotate.txt |   3 +
+ tools/perf/Documentation/perf-c2c.txt      |   3 +
+ tools/perf/Documentation/perf-inject.txt   |   3 +
+ tools/perf/Documentation/perf-report.txt   |   3 +
+ tools/perf/Documentation/perf-script.txt   |   3 +
+ tools/perf/Documentation/perf-top.txt      |   3 +
+ tools/perf/builtin-annotate.c              |   2 +
+ tools/perf/builtin-buildid-cache.c         |  26 ++-
+ tools/perf/builtin-c2c.c                   |   2 +
+ tools/perf/builtin-inject.c                |   2 +
+ tools/perf/builtin-report.c                |   2 +
+ tools/perf/builtin-script.c                |   2 +
+ tools/perf/builtin-top.c                   |   2 +
+ tools/perf/util/build-id.c                 |  57 +++++-
+ tools/perf/util/disasm.c                   | 131 ++++++++-----
+ tools/perf/util/machine.c                  |   4 +-
+ tools/perf/util/symbol.c                   | 209 ++++++++++++++++-----
+ tools/perf/util/symbol.h                   |   9 +-
+ tools/perf/util/symbol_conf.h              |   5 +
+ 19 files changed, 359 insertions(+), 112 deletions(-)
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.34.1
+
