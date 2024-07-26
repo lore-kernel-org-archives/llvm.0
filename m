@@ -1,136 +1,85 @@
-Received: from mail-lf1-f44.google.com (mail-lf1-f44.google.com [209.85.167.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C19C179206
-	for <llvm@lists.linux.dev>; Fri, 26 Jul 2024 10:23:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E107B176227;
+	Fri, 26 Jul 2024 11:05:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721989396; cv=none; b=UkZZnle/OaKjb3Vsx3lsmG7eVQVy//ZWxXPPdhjkv/AiS3c5VXenA9lSCjMzBT+lAbdJ//VoQyqKsilpdVYAwe7KzeHheF7bQXd+a6CLRmVUjbLF5HRQrn6laS7yxwh67IIG+9XSObXFPHbAO31AZeZyNVDDGQX1hehUwV8YpaI=
+	t=1721991951; cv=none; b=Y2EcvcG9/GYMrZJ+X0+lPq51Lg5h/sPh4p6BF5vpsIHdZZGYOjgWjbSl/MujyfXlpA4RpAU1EZEot7Vs7k5rNpQ1d+zS6/ATHIJqD22htXYs7C6dbDlfbGsu5MyhFzUirmGizWDwCowlU29Lby3XHiBkEtG4prO0NNnqP3SaAyY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721989396; c=relaxed/simple;
-	bh=VuMF3KoncyaI8CPrPZlQbATP2kYcE2y/7t+nGV+ZexI=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=XSDH4ID8MXPQCFDlLNbKhyIn7JfBzaF9aGYE30fzCrrckB1Khffz6l+n8UXI8Bctj7T0EGCl9+7dR5sqwqWerYUMbhXURsk5FEFwI8PmijGJMqe1kXNUYJB/ByZC6lizEhFz6T1KYdQYGACcJe3BWnUMbrmQzf1spaJkQP9IAFc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Uz6kMVeN; arc=none smtp.client-ip=209.85.167.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	s=arc-20240116; t=1721991951; c=relaxed/simple;
+	bh=7kUuRX80myzHhizwNNPBWLJ0LaYLDYiepzPiI/XZiu4=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=eIj3X5NybodmgaItYIEly9U+XkSEuWuffgrLSZ9ZULt/Goe8yOyo6DLdLnFM5TbtdzFrnkfel/r6W2cGBQVAzR+hKXKeegX2kp7rSoA62mEEX5E18X7sKcpxryD50dI2htyCgIiHqQq9vXu7vbzpB92+0KaOb9JU5+GyUAiqM7Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ch0OUsTD; arc=none smtp.client-ip=198.175.65.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Uz6kMVeN"
-Received: by mail-lf1-f44.google.com with SMTP id 2adb3069b0e04-52fc14aa5f5so2692e87.0
-        for <llvm@lists.linux.dev>; Fri, 26 Jul 2024 03:23:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1721989393; x=1722594193; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=NOFadCdnFUNbKiegYZZRp810q0uwCcDa0ulZ63Y8FbI=;
-        b=Uz6kMVeNxuiXJ97nFcrh3Lbvqi3viMN1ZWUrR5MTsgVCErpIOO/KoFlqvTNxQTv541
-         NCjiZ7ZCB7c+m8eOJtmjZb7qJdhYQuhQYISx4XZcjd/Y9kzm9dyzU00OPSHh4ytiizDH
-         gxrDnqE3bHjlCnGscJrAvXFuFQiueoPNoMfe4XC0AqzhuLsr7o6UJEpO9n6r00tgSTsQ
-         COkJZQLZ2IvbYa1Kh4vC646kERvtKwkqpXfQ3GwH2xvAbGKhzNqGEPmeZc4rKPgDR6r/
-         53RpjGY5Cz84SFaAf5vvshdTK2aJP9zbZuyb3nvvSDLwvvdxeODsPEtOSKtuXoj8f1Aj
-         BQqQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1721989393; x=1722594193;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=NOFadCdnFUNbKiegYZZRp810q0uwCcDa0ulZ63Y8FbI=;
-        b=v+iviZgdtz2roFmFpDnt5YXbpd4aS9LHbOUAVosHNDL81JnlPFMK7ANlR7HfwbMeTR
-         YzGUbKs8RXUAn3MyWWVR8X7D6skOi+Wp4iHjD+5FfXJWAeMIHq3WTiMRMMEModbMvPLn
-         DrSXhN/hNlp+KDUt74J2n3VG1eKe6+1D0oemXND9KRwAdrQPQJY6oBmoZv4qX+5mjYwH
-         3rZlh4Mk+XRpRvd7c943ODIyumG6peThvLu5eZsm2CNz+zg0CJTfwmnZLaDVWoxf25SV
-         vFbou50C/eikEq5kGJ8M2Mt06En6JSVciJTfb2A0NQ+rUli6qsJhDecSBAAxH5WTYjT/
-         jsuQ==
-X-Forwarded-Encrypted: i=1; AJvYcCV1Y+xOrxbukc14+02Fd/BVGdDih6bCrAXf9eWaXMfxKTLpEm4XkROBMLEu3/IQe2YsSGTfRgQy7LQHeDB92RYGGxOUYw==
-X-Gm-Message-State: AOJu0Ywo9HDhw5wIP4EH8de94vKt6eO/JEKolbMGLG2o/G0H1STsGPd8
-	24YbxLEHNJRJg08MtIXjh7IsAM1Tf3w8t5yO3kNi6xhl3mRpQetnI/e9vq3smnaqemD7YIl7rOP
-	jXVFiJd3Tv/Hp51evObQtQJXotQ/f8z+JDakQ
-X-Google-Smtp-Source: AGHT+IF9PsWLNO3FCxU7aVV4sNWcmYQNVE+PU7vZtXlmu0uxBM72nozjBz9oOKU4fU1os2TPNEsTgE1Tex2EPNoxxSU=
-X-Received: by 2002:a05:6512:3e21:b0:52c:cc9b:be20 with SMTP id
- 2adb3069b0e04-52fdb52d825mr121406e87.1.1721989392884; Fri, 26 Jul 2024
- 03:23:12 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ch0OUsTD"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1721991950; x=1753527950;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=7kUuRX80myzHhizwNNPBWLJ0LaYLDYiepzPiI/XZiu4=;
+  b=ch0OUsTDHFcpZcW1sCZdpH8LFJgCtQlrBogha+ErTR6CX/prMVQFiJkZ
+   GcHO8GW9Wpv3HLggyusbUkUyrXgEP7q2PkV3N2njmsemvbSYkMLUL61G6
+   eUcYQ+cRR7VrQ76LExKExIwtIG2VAafIONfAjSG5+WpO/cTVArJgelc0V
+   qiHiYzKXl4gu99dN/d7/D1OHXpPFPeW+C2V8682fTv2OUL9gjl1zFK0sn
+   AWepx8J8r5SqkTaS/7akdUv091/r19MElevJZkyeMa8Zc/KGtE35oPyt8
+   TQL8nRFM7OLCPGqZIPRMk/7aYOsDefdJo/KYWjzS91acME6DquA4z1ZFc
+   A==;
+X-CSE-ConnectionGUID: 3MjOhUClSJKM7IswUxcEsA==
+X-CSE-MsgGUID: pmYhAWHPRsioJG4cltN9cA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11144"; a="23538101"
+X-IronPort-AV: E=Sophos;i="6.09,238,1716274800"; 
+   d="scan'208";a="23538101"
+Received: from orviesa006.jf.intel.com ([10.64.159.146])
+  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jul 2024 04:05:49 -0700
+X-CSE-ConnectionGUID: s0wt+0LeTRiVGyryrvuHAg==
+X-CSE-MsgGUID: uUqBvYtiQ+m8Tu0RNepA/Q==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.09,238,1716274800"; 
+   d="scan'208";a="53463000"
+Received: from lkp-server01.sh.intel.com (HELO 68891e0c336b) ([10.239.97.150])
+  by orviesa006.jf.intel.com with ESMTP; 26 Jul 2024 04:05:47 -0700
+Received: from kbuild by 68891e0c336b with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1sXIld-000p1Y-2q;
+	Fri, 26 Jul 2024 11:05:45 +0000
+Date: Fri, 26 Jul 2024 19:05:11 +0800
+From: kernel test robot <lkp@intel.com>
+To: "Ritesh Harjani (IBM)" <ritesh.list@gmail.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [riteshharjani:kfence-hash-rfcv1 8/10] WARNING: modpost: vmlinux:
+ section mismatch in reference: htab_bolt_mapping+0x5fc (section: .text) ->
+ hash_kfence_add_slot (section: .init.text)
+Message-ID: <202407261926.HcVRPugo-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20240725232126.1996981-1-mmaurer@google.com> <20240725232126.1996981-3-mmaurer@google.com>
- <CA+fCnZdwRcdOig0u-D0vnFz937hRufTQOpCqGiMeo5B+-1iRVA@mail.gmail.com>
-In-Reply-To: <CA+fCnZdwRcdOig0u-D0vnFz937hRufTQOpCqGiMeo5B+-1iRVA@mail.gmail.com>
-From: Dmitry Vyukov <dvyukov@google.com>
-Date: Fri, 26 Jul 2024 12:23:01 +0200
-Message-ID: <CACT4Y+Y+XmdNervhF5WAEyVwprJ32m7Pd8FF2fKy3K9FiTpJtQ@mail.gmail.com>
-Subject: Re: [PATCH 2/2] kbuild: rust: Enable KASAN support
-To: Andrey Konovalov <andreyknvl@gmail.com>
-Cc: Matthew Maurer <mmaurer@google.com>, Andrey Ryabinin <ryabinin.a.a@gmail.com>, 
-	Masahiro Yamada <masahiroy@kernel.org>, Miguel Ojeda <ojeda@kernel.org>, 
-	Alex Gaynor <alex.gaynor@gmail.com>, Wedson Almeida Filho <wedsonaf@gmail.com>, 
-	Nathan Chancellor <nathan@kernel.org>, Alexander Potapenko <glider@google.com>, 
-	Vincenzo Frascino <vincenzo.frascino@arm.com>, Nicolas Schier <nicolas@fjasle.eu>, 
-	Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, 
-	=?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
-	Benno Lossin <benno.lossin@proton.me>, Andreas Hindborg <a.hindborg@samsung.com>, 
-	Alice Ryhl <aliceryhl@google.com>, Nick Desaulniers <ndesaulniers@google.com>, 
-	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, kasan-dev@googlegroups.com, 
-	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	rust-for-linux@vger.kernel.org, llvm@lists.linux.dev, 
-	Brendan Higgins <brendanhiggins@google.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Fri, 26 Jul 2024 at 01:57, Andrey Konovalov <andreyknvl@gmail.com> wrote=
-:
->
-> On Fri, Jul 26, 2024 at 1:21=E2=80=AFAM Matthew Maurer <mmaurer@google.co=
-m> wrote:
-> >
-> > Rust supports KASAN via LLVM, but prior to this patch, the flags aren't
-> > set properly.
+tree:   https://github.com/riteshharjani/linux kfence-hash-rfcv1
+head:   ab870b7bbabf70b4c07abf9163a509fbfaa79fe4
+commit: a6abdbc7601fc172b2b07366f935771a2d02f284 [8/10] book3s64/hash: Add kfence functionality
+config: powerpc64-randconfig-003-20240726 (https://download.01.org/0day-ci/archive/20240726/202407261926.HcVRPugo-lkp@intel.com/config)
+compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project ccae7b461be339e717d02f99ac857cf0bc7d17fc)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240726/202407261926.HcVRPugo-lkp@intel.com/reproduce)
 
-This is great, thanks, Matthew!
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202407261926.HcVRPugo-lkp@intel.com/
 
-Does Rust support KUnit tests?
-It would be good to add at least a simple positive test similar to the
-existing ones so that the support does not get rotten soon.
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/mm/=
-kasan/kasan_test.c
+All warnings (new ones prefixed by >>, old ones prefixed by <<):
 
+WARNING: modpost: missing MODULE_DESCRIPTION() in vmlinux.o
+>> WARNING: modpost: vmlinux: section mismatch in reference: htab_bolt_mapping+0x5fc (section: .text) -> hash_kfence_add_slot (section: .init.text)
 
-
-> > Suggested-by: Miguel Ojeda <ojeda@kernel.org>
-> > Signed-off-by: Matthew Maurer <mmaurer@google.com>
->
-> Hi Matthew,
->
-> >  CFLAGS_KASAN_MINIMAL :=3D -fsanitize=3Dkernel-address
-> > +RUSTFLAGS_KASAN_MINIMAL :=3D -Zsanitizer=3Dkernel-address -Zsanitizer-=
-recover=3Dkernel-address
->
-> If I recall correctly, the reason we need CFLAGS_KASAN_MINIMAL is
-> because older compilers don't support some of the additional options.
-> With Rust, this shouldn't be needed, as it requires a modern compiler
-> that does support all needed options. E.g., for CONFIG_KASAN_SW_TAGS,
-> we also don't have the MINIMAL thing for the same reason. (Possibly,
-> we also already don't need this for GENERIC KASAN, as the GCC version
-> requirement was raised a few times since KASAN was introduced.)
->
-> >         # Now add all the compiler specific options that are valid stan=
-dalone
-> >         CFLAGS_KASAN :=3D $(CFLAGS_KASAN_SHADOW) \
-> >          $(call cc-param,asan-globals=3D1) \
-> >          $(call cc-param,asan-instrumentation-with-call-threshold=3D$(c=
-all_threshold)) \
-> >          $(call cc-param,asan-instrument-allocas=3D1)
-> > +       ifdef CONFIG_RUST
-> > +               RUSTFLAGS_KASAN :=3D $(RUSTFLAGS_KASAN_SHADOW) \
-> > +                $(call rustc-param,asan-globals=3D1) \
-> > +                $(call rustc-param,asan-instrumentation-with-call-thre=
-shold=3D$(call_threshold)) \
-> > +                $(call rustc-param,asan-instrument-allocas=3D1)
->
-> I'm wondering if there's a way to avoid duplicating all options for
-> Rust. Perhaps, some kind of macro?
->
-> Thanks!
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
