@@ -1,99 +1,185 @@
-Received: from mail-pj1-f45.google.com (mail-pj1-f45.google.com [209.85.216.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EFFA5178CFA
-	for <llvm@lists.linux.dev>; Fri, 26 Jul 2024 12:36:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.45
+Received: from zg8tmtyylji0my4xnjeumjiw.icoremail.net (zg8tmtyylji0my4xnjeumjiw.icoremail.net [162.243.161.220])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C24FB1CF9B
+	for <llvm@lists.linux.dev>; Fri, 26 Jul 2024 14:58:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=162.243.161.220
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721997404; cv=none; b=ppb03fUgZShHX+9/WGPsNcGj4OP1Cp8r3CrMGH41WBgMwR1F8YP6FjOY9YPj9GI1XCfwojo1tlH/+69OUIVHHCr1m35XM5egew2masTa9I6QwRQkuPV9IcGZFcNkyOyDY4V8BOHZmhYrukzHcpu+5zGUtMrAW3up8obvViYIq4k=
+	t=1722005900; cv=none; b=j3XZmVd1L8bpBlQVYFL/dzYPdqQMy5hbhKUpLtBJtxLM/JRel1XaYWBkh2nubD9g6ieOX5aW0BDGqNAwJkatp2ob2x5W1Cmmttyws3bs7xPe9GyK5H9KiB5nE2Lb/37aJlLh9Q//wCLvnjLMwtjuJ3OFX1cy6nTK60hPAeN9tPw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721997404; c=relaxed/simple;
-	bh=1zWDRWp+paDjK/r/9N7qgoFAesuhA/2QMW3EwgwYqcg=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Z6dLn8+VvpIE6AB+DRvcJGhKAtQm4pW0StpxkwPxuIk3D2F/Ic/Q0fhSVBoSYrCdQT4Zuabv1w6WLPmt4H62H1E2r8RhAkg1YsPlIuf6uiJxEvVKEk+qTwq7/B/RxxGswo8n266XKMDABxbs/a4T0g0caAkxT4DowTsvsAN2Lag=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=GMCndPZo; arc=none smtp.client-ip=209.85.216.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GMCndPZo"
-Received: by mail-pj1-f45.google.com with SMTP id 98e67ed59e1d1-2cb576db1c5so635042a91.1
-        for <llvm@lists.linux.dev>; Fri, 26 Jul 2024 05:36:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1721997402; x=1722602202; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=1zWDRWp+paDjK/r/9N7qgoFAesuhA/2QMW3EwgwYqcg=;
-        b=GMCndPZoaQIB07ydMV0IRjS+L9+xDsL9j0tzSo13B9w/nUwApMbTSS3Gbc5DmRcbJM
-         pax0e0cRpcOmLuPi40363xTPJCmQxNzd/KRd0WBsZG2x+Czf2BJt8SwwPABTvuVn0PV0
-         JymU+WscD55mjtA8gmpWU6LGpbekdC5g6tU4sU7QmuCTiray6qHTn3KPvvhqwg9lIHTu
-         IVahbr4/ZdRvtLC4TsYM+yCmI3HClW6bkKFv8B2cx+FYjbXv5d7a/CfoqlQBUBfSO3/Q
-         z7cofAjmc7kYVVOMKVxHq3eLxfpHDSkl6/cE6EnxIOydrZ5+dyVHkbCchC9uvNfBpKls
-         I6uw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1721997402; x=1722602202;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=1zWDRWp+paDjK/r/9N7qgoFAesuhA/2QMW3EwgwYqcg=;
-        b=Q7F8nX3vLlwv1rF+8cT/OhRC/FyaK2Fxeuu6RXmLv6/GLcLx5gzdrwRPT/qtxn0VTQ
-         koQeTiINt7ATW/OKFeMb2Tje/KafjjusUNpbzwKY7+hDdqNQxK5EG4lt+sPQ56Y7L45G
-         fUcWH63V5igXAppp9g7J/x49JnRbh4V32hS1fxQ5cYr5uvW3TYBa32PuK2XSAa5H86fN
-         yvgMSlOMo7RISpi9J1TmsivKbSmfuNRLJtur6kYkovuowF+JQsVxusP0+4I/Z4Lb/SYX
-         eqRVBq4NgBmX4GnFGaHVtgIKAPFScn9URvoAKb1uLcw7YhBTA/zI0hd3TI91moFZiZ9F
-         7n/A==
-X-Forwarded-Encrypted: i=1; AJvYcCVyvuOG0Nii8KhBz+eyQvHTy55pPzXPFoKeEOFW3WdPhgy+1jrxj4jDseHc/EyRXsz9e6b2ZGhAWbXdsec2x1uASa6Ogw==
-X-Gm-Message-State: AOJu0Yyp/dX3DNKPifsm5xBKu1uWsUIVs1gsFbA5iVBuHQbDx9N0VAKm
-	hT156NYD7bHR8APPam5lJdjuCMroeX40e82pk9vnAKJMHwMT/rWabYUNcDRbifitlawaz1PAO1Z
-	y1ipE1vk6r8olUpGAcyq398U5qUQ=
-X-Google-Smtp-Source: AGHT+IHt4VEqTzpVq8r5CzvzfWANcuIs631ikOmdea7VFGcamFNux9yi9tHxpM7rdXBU4AZ90s8oyeHEh8iuSzasv6Q=
-X-Received: by 2002:a17:90a:1fc8:b0:2c9:57a4:a8c4 with SMTP id
- 98e67ed59e1d1-2cf2ebb9251mr5312268a91.42.1721997402182; Fri, 26 Jul 2024
- 05:36:42 -0700 (PDT)
+	s=arc-20240116; t=1722005900; c=relaxed/simple;
+	bh=dzlJqty6mK3u9JfGL9aBf3nIxzEBSXB1Yp38r35/d6k=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=nuQ+EO1kd5qa5PfU6EXoK1vNmEqooHkWZn5xrph47Jry/IvhFGPsUAq7ghivwTTmzFiZncewhwkkI6XmOq8emcg7ROBSS57YqkjJ2uLoKTajfIAt9nAfEa3H+7wq2pOlZre5kx3eCAZuG0KJcfG3kJ+4lh/xjX+X7TshJq0eG3o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=hust.edu.cn; spf=pass smtp.mailfrom=hust.edu.cn; arc=none smtp.client-ip=162.243.161.220
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=hust.edu.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hust.edu.cn
+Received: from hust.edu.cn (unknown [172.16.0.52])
+	by app1 (Coremail) with SMTP id HgEQrAB312x6uaNmkbMHAg--.33883S2;
+	Fri, 26 Jul 2024 22:58:02 +0800 (CST)
+Received: from pride-PowerEdge-R740.. (unknown [222.20.126.129])
+	by gateway (Coremail) with SMTP id _____wDnOCx3uaNmQNwHAA--.3379S2;
+	Fri, 26 Jul 2024 22:58:00 +0800 (CST)
+From: Dongliang Mu <dzm91@hust.edu.cn>
+To: Alex Shi <alexs@kernel.org>,
+	Yanteng Si <siyanteng@loongson.cn>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Dongliang Mu <dzm91@hust.edu.cn>
+Cc: linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: [PATCH] docs/zh_CN: add the translation of kbuild/headers_install.rst
+Date: Fri, 26 Jul 2024 22:57:23 +0800
+Message-ID: <20240726145754.2598197-1-dzm91@hust.edu.cn>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20240725232126.1996981-1-mmaurer@google.com> <20240725232126.1996981-3-mmaurer@google.com>
- <CA+fCnZdwRcdOig0u-D0vnFz937hRufTQOpCqGiMeo5B+-1iRVA@mail.gmail.com> <CACT4Y+Y+XmdNervhF5WAEyVwprJ32m7Pd8FF2fKy3K9FiTpJtQ@mail.gmail.com>
-In-Reply-To: <CACT4Y+Y+XmdNervhF5WAEyVwprJ32m7Pd8FF2fKy3K9FiTpJtQ@mail.gmail.com>
-From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date: Fri, 26 Jul 2024 14:36:30 +0200
-Message-ID: <CANiq72kb0df5k-8njjNgfFFVj7Cfx-uiTSEtMt5Cbb8f3DkjWg@mail.gmail.com>
-Subject: Re: [PATCH 2/2] kbuild: rust: Enable KASAN support
-To: Dmitry Vyukov <dvyukov@google.com>
-Cc: Andrey Konovalov <andreyknvl@gmail.com>, Matthew Maurer <mmaurer@google.com>, 
-	Andrey Ryabinin <ryabinin.a.a@gmail.com>, Masahiro Yamada <masahiroy@kernel.org>, 
-	Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, 
-	Wedson Almeida Filho <wedsonaf@gmail.com>, Nathan Chancellor <nathan@kernel.org>, 
-	Alexander Potapenko <glider@google.com>, Vincenzo Frascino <vincenzo.frascino@arm.com>, 
-	Nicolas Schier <nicolas@fjasle.eu>, Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, 
-	=?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
-	Benno Lossin <benno.lossin@proton.me>, Andreas Hindborg <a.hindborg@samsung.com>, 
-	Alice Ryhl <aliceryhl@google.com>, Nick Desaulniers <ndesaulniers@google.com>, 
-	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, kasan-dev@googlegroups.com, 
-	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	rust-for-linux@vger.kernel.org, llvm@lists.linux.dev, 
-	Brendan Higgins <brendanhiggins@google.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:HgEQrAB312x6uaNmkbMHAg--.33883S2
+Authentication-Results: app1; spf=neutral smtp.mail=dzm91@hust.edu.cn;
+X-Coremail-Antispam: 1UD129KBjvJXoWxZF13tFW5GF1UuF47Kr1rJFb_yoWrKF1xp3
+	WqgryxKF4UJFyakFyfGFW7GF1rGan29ay7t3WxJ34aqryrJFW8trnFvrySgrn7KrW8AFyU
+	WF40qa4jkrW7A3DanT9S1TB71UUUUUJqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUQIb7Iv0xC_Zr1lb4IE77IF4wAFc2x0x2IEx4CE42xK8VAvwI8I
+	cIk0rVWrJVCq3wA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjx
+	v20xvE14v26ryj6F1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j6F4UM28EF7xvwVC2
+	z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s0DM2kKe7AKxVWUXV
+	WUAwAac4AC62xK8xCEY4vEwIxC4wAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07AI
+	YIkI8VC2zVCFFI0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VACjcxG62k0Y48FwI0_Gr
+	1j6F4UJwAv7VCjz48v1sIEY20_GFW3Jr1UJwAv7VCY1x0262k0Y48FwI0_Gr1j6F4UJwAm
+	72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lc7CjxVAaw2AFwI0_JF0_Jw1l42
+	xK82IYc2Ij64vIr41l42xK82IY6x8ErcxFaVAv8VW8uFyUJr1UMxC20s026xCaFVCjc4AY
+	6r1j6r4UMxCIbckI1I0E14v26r1Y6r17MI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7
+	xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xII
+	jxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI42IY6xAIw2
+	0EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Gr0_Cr1lIxAIcVC2z280aVCY1x02
+	67AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IUnFD73UUUUU==
+X-CM-SenderInfo: asqsiiirqrkko6kx23oohg3hdfq/
 
-On Fri, Jul 26, 2024 at 12:23=E2=80=AFPM Dmitry Vyukov <dvyukov@google.com>=
- wrote:
->
-> This is great, thanks, Matthew!
->
-> Does Rust support KUnit tests?
-> It would be good to add at least a simple positive test similar to the
-> existing ones so that the support does not get rotten soon.
-> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/m=
-m/kasan/kasan_test.c
+Finish the translation of kbuild/headers_install.rst and
+kbuild/index.rst, then add kbuild into zh_CN/index.rst.
 
-Yeah, we have Rust doctests converted into KUnit tests, as well as
-upcoming `#[test]`s support (also handled as KUnit tests). For this, I
-assume the latter would make more sense, but we have to merge it.
+Update to commit 5b67fbfc32b5 ("Merge tag 'kbuild-v5.7' of
+git://git.kernel.org/pub/scm/linux/kernel/git/masahiroy/linux-kbuild")
 
-Cheers,
-Miguel
+Signed-off-by: Dongliang Mu <dzm91@hust.edu.cn>
+---
+ Documentation/translations/zh_CN/index.rst    |  2 +-
+ .../zh_CN/kbuild/headers_install.rst          | 39 +++++++++++++++++++
+ .../translations/zh_CN/kbuild/index.rst       | 35 +++++++++++++++++
+ 3 files changed, 75 insertions(+), 1 deletion(-)
+ create mode 100644 Documentation/translations/zh_CN/kbuild/headers_install.rst
+ create mode 100644 Documentation/translations/zh_CN/kbuild/index.rst
+
+diff --git a/Documentation/translations/zh_CN/index.rst b/Documentation/translations/zh_CN/index.rst
+index 20b9d4270d1f..7574e1673180 100644
+--- a/Documentation/translations/zh_CN/index.rst
++++ b/Documentation/translations/zh_CN/index.rst
+@@ -89,10 +89,10 @@ TODOList:
+    admin-guide/index
+    admin-guide/reporting-issues.rst
+    userspace-api/index
++   内核构建系统 <kbuild/index>
+ 
+ TODOList:
+ 
+-* 内核构建系统 <kbuild/index>
+ * 用户空间工具 <tools/index>
+ 
+ 也可参考独立于内核文档的 `Linux 手册页 <https://www.kernel.org/doc/man-pages/>`_ 。
+diff --git a/Documentation/translations/zh_CN/kbuild/headers_install.rst b/Documentation/translations/zh_CN/kbuild/headers_install.rst
+new file mode 100644
+index 000000000000..50ab819a7f96
+--- /dev/null
++++ b/Documentation/translations/zh_CN/kbuild/headers_install.rst
+@@ -0,0 +1,39 @@
++.. SPDX-License-Identifier: GPL-2.0
++
++.. include:: ../disclaimer-zh_CN.rst
++
++:Original: Documentation/kbuild/headers_install.rst
++:Translator: 慕冬亮 Dongliang Mu <dzm91@hust.edu.cn>
++
++============================
++导出内核头文件供用户空间使用
++============================
++
++"make headers_install" 命令以适合于用户空间程序的形式导出内核头文件。
++
++Linux 内核导出的头文件描述了用户空间程序尝试使用内核服务的 API。这些内核
++头文件被系统的 C 库（例如 glibc 和 uClibc）用于定义可用的系统调用，以及
++与这些系统调用一起使用的常量和结构。C 库的头文件包括来自 linux 子目录的
++内核头文件。系统的 libc 头文件通常被安装在默认位置 /usr/include，而内核
++头文件在该位置的子目录中（主要是 /usr/include/linux 和 /usr/include/asm）。
++
++内核头文件向后兼容，但不向前兼容。这意味着使用旧内核头文件的 C 库构建的程序
++可以在新内核上运行（尽管它可能无法访问新特性），但使用新内核头文件构建的程序
++可能无法在旧内核上运行。
++
++"make headers_install" 命令可以在内核源代码的顶层目录中运行（或使用标准
++的树外构建）。它接受两个可选参数::
++
++  make headers_install ARCH=i386 INSTALL_HDR_PATH=/usr
++
++ARCH 表明为其生成头文件的架构，默认为当前架构。导出内核头文件的 linux/asm
++目录是基于特定平台的，要查看支持架构的完整列表，使用以下命令::
++
++  ls -d include/asm-* | sed 's/.*-//'
++
++INSTALL_HDR_PATH 表明头文件的安装位置，默认为 "./usr"。
++
++该命令会在 INSTALL_HDR_PATH 中自动创建创建一个 'include' 目录，而头文件
++会被安装在 INSTALL_HDR_PATH/include 中。
++
++内核头文件导出的基础设施由 David Woodhouse <dwmw2@infradead.org> 维护。
+\ No newline at end of file
+diff --git a/Documentation/translations/zh_CN/kbuild/index.rst b/Documentation/translations/zh_CN/kbuild/index.rst
+new file mode 100644
+index 000000000000..b9feb56b846a
+--- /dev/null
++++ b/Documentation/translations/zh_CN/kbuild/index.rst
+@@ -0,0 +1,35 @@
++.. SPDX-License-Identifier: GPL-2.0
++
++.. include:: ../disclaimer-zh_CN.rst
++
++:Original: Documentation/kbuild/index
++:Translator: 慕冬亮 Dongliang Mu <dzm91@hust.edu.cn>
++
++============
++内核编译系统
++============
++
++.. toctree::
++    :maxdepth: 1
++
++    headers_install
++
++TODO:
++
++- kconfig-language
++- kconfig-macro-language
++- kbuild
++- kconfig
++- makefiles
++- modules
++- issues
++- reproducible-builds
++- gcc-plugins
++- llvm
++
++.. only::  subproject and html
++
++   目录
++   =====
++
++   * :ref:`genindex`
+-- 
+2.43.0
+
