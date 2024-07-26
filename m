@@ -1,85 +1,99 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f45.google.com (mail-pj1-f45.google.com [209.85.216.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E107B176227;
-	Fri, 26 Jul 2024 11:05:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EFFA5178CFA
+	for <llvm@lists.linux.dev>; Fri, 26 Jul 2024 12:36:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721991951; cv=none; b=Y2EcvcG9/GYMrZJ+X0+lPq51Lg5h/sPh4p6BF5vpsIHdZZGYOjgWjbSl/MujyfXlpA4RpAU1EZEot7Vs7k5rNpQ1d+zS6/ATHIJqD22htXYs7C6dbDlfbGsu5MyhFzUirmGizWDwCowlU29Lby3XHiBkEtG4prO0NNnqP3SaAyY=
+	t=1721997404; cv=none; b=ppb03fUgZShHX+9/WGPsNcGj4OP1Cp8r3CrMGH41WBgMwR1F8YP6FjOY9YPj9GI1XCfwojo1tlH/+69OUIVHHCr1m35XM5egew2masTa9I6QwRQkuPV9IcGZFcNkyOyDY4V8BOHZmhYrukzHcpu+5zGUtMrAW3up8obvViYIq4k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721991951; c=relaxed/simple;
-	bh=7kUuRX80myzHhizwNNPBWLJ0LaYLDYiepzPiI/XZiu4=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=eIj3X5NybodmgaItYIEly9U+XkSEuWuffgrLSZ9ZULt/Goe8yOyo6DLdLnFM5TbtdzFrnkfel/r6W2cGBQVAzR+hKXKeegX2kp7rSoA62mEEX5E18X7sKcpxryD50dI2htyCgIiHqQq9vXu7vbzpB92+0KaOb9JU5+GyUAiqM7Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ch0OUsTD; arc=none smtp.client-ip=198.175.65.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1721997404; c=relaxed/simple;
+	bh=1zWDRWp+paDjK/r/9N7qgoFAesuhA/2QMW3EwgwYqcg=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Z6dLn8+VvpIE6AB+DRvcJGhKAtQm4pW0StpxkwPxuIk3D2F/Ic/Q0fhSVBoSYrCdQT4Zuabv1w6WLPmt4H62H1E2r8RhAkg1YsPlIuf6uiJxEvVKEk+qTwq7/B/RxxGswo8n266XKMDABxbs/a4T0g0caAkxT4DowTsvsAN2Lag=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=GMCndPZo; arc=none smtp.client-ip=209.85.216.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ch0OUsTD"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1721991950; x=1753527950;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=7kUuRX80myzHhizwNNPBWLJ0LaYLDYiepzPiI/XZiu4=;
-  b=ch0OUsTDHFcpZcW1sCZdpH8LFJgCtQlrBogha+ErTR6CX/prMVQFiJkZ
-   GcHO8GW9Wpv3HLggyusbUkUyrXgEP7q2PkV3N2njmsemvbSYkMLUL61G6
-   eUcYQ+cRR7VrQ76LExKExIwtIG2VAafIONfAjSG5+WpO/cTVArJgelc0V
-   qiHiYzKXl4gu99dN/d7/D1OHXpPFPeW+C2V8682fTv2OUL9gjl1zFK0sn
-   AWepx8J8r5SqkTaS/7akdUv091/r19MElevJZkyeMa8Zc/KGtE35oPyt8
-   TQL8nRFM7OLCPGqZIPRMk/7aYOsDefdJo/KYWjzS91acME6DquA4z1ZFc
-   A==;
-X-CSE-ConnectionGUID: 3MjOhUClSJKM7IswUxcEsA==
-X-CSE-MsgGUID: pmYhAWHPRsioJG4cltN9cA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11144"; a="23538101"
-X-IronPort-AV: E=Sophos;i="6.09,238,1716274800"; 
-   d="scan'208";a="23538101"
-Received: from orviesa006.jf.intel.com ([10.64.159.146])
-  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jul 2024 04:05:49 -0700
-X-CSE-ConnectionGUID: s0wt+0LeTRiVGyryrvuHAg==
-X-CSE-MsgGUID: uUqBvYtiQ+m8Tu0RNepA/Q==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.09,238,1716274800"; 
-   d="scan'208";a="53463000"
-Received: from lkp-server01.sh.intel.com (HELO 68891e0c336b) ([10.239.97.150])
-  by orviesa006.jf.intel.com with ESMTP; 26 Jul 2024 04:05:47 -0700
-Received: from kbuild by 68891e0c336b with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1sXIld-000p1Y-2q;
-	Fri, 26 Jul 2024 11:05:45 +0000
-Date: Fri, 26 Jul 2024 19:05:11 +0800
-From: kernel test robot <lkp@intel.com>
-To: "Ritesh Harjani (IBM)" <ritesh.list@gmail.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [riteshharjani:kfence-hash-rfcv1 8/10] WARNING: modpost: vmlinux:
- section mismatch in reference: htab_bolt_mapping+0x5fc (section: .text) ->
- hash_kfence_add_slot (section: .init.text)
-Message-ID: <202407261926.HcVRPugo-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GMCndPZo"
+Received: by mail-pj1-f45.google.com with SMTP id 98e67ed59e1d1-2cb576db1c5so635042a91.1
+        for <llvm@lists.linux.dev>; Fri, 26 Jul 2024 05:36:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1721997402; x=1722602202; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=1zWDRWp+paDjK/r/9N7qgoFAesuhA/2QMW3EwgwYqcg=;
+        b=GMCndPZoaQIB07ydMV0IRjS+L9+xDsL9j0tzSo13B9w/nUwApMbTSS3Gbc5DmRcbJM
+         pax0e0cRpcOmLuPi40363xTPJCmQxNzd/KRd0WBsZG2x+Czf2BJt8SwwPABTvuVn0PV0
+         JymU+WscD55mjtA8gmpWU6LGpbekdC5g6tU4sU7QmuCTiray6qHTn3KPvvhqwg9lIHTu
+         IVahbr4/ZdRvtLC4TsYM+yCmI3HClW6bkKFv8B2cx+FYjbXv5d7a/CfoqlQBUBfSO3/Q
+         z7cofAjmc7kYVVOMKVxHq3eLxfpHDSkl6/cE6EnxIOydrZ5+dyVHkbCchC9uvNfBpKls
+         I6uw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1721997402; x=1722602202;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=1zWDRWp+paDjK/r/9N7qgoFAesuhA/2QMW3EwgwYqcg=;
+        b=Q7F8nX3vLlwv1rF+8cT/OhRC/FyaK2Fxeuu6RXmLv6/GLcLx5gzdrwRPT/qtxn0VTQ
+         koQeTiINt7ATW/OKFeMb2Tje/KafjjusUNpbzwKY7+hDdqNQxK5EG4lt+sPQ56Y7L45G
+         fUcWH63V5igXAppp9g7J/x49JnRbh4V32hS1fxQ5cYr5uvW3TYBa32PuK2XSAa5H86fN
+         yvgMSlOMo7RISpi9J1TmsivKbSmfuNRLJtur6kYkovuowF+JQsVxusP0+4I/Z4Lb/SYX
+         eqRVBq4NgBmX4GnFGaHVtgIKAPFScn9URvoAKb1uLcw7YhBTA/zI0hd3TI91moFZiZ9F
+         7n/A==
+X-Forwarded-Encrypted: i=1; AJvYcCVyvuOG0Nii8KhBz+eyQvHTy55pPzXPFoKeEOFW3WdPhgy+1jrxj4jDseHc/EyRXsz9e6b2ZGhAWbXdsec2x1uASa6Ogw==
+X-Gm-Message-State: AOJu0Yyp/dX3DNKPifsm5xBKu1uWsUIVs1gsFbA5iVBuHQbDx9N0VAKm
+	hT156NYD7bHR8APPam5lJdjuCMroeX40e82pk9vnAKJMHwMT/rWabYUNcDRbifitlawaz1PAO1Z
+	y1ipE1vk6r8olUpGAcyq398U5qUQ=
+X-Google-Smtp-Source: AGHT+IHt4VEqTzpVq8r5CzvzfWANcuIs631ikOmdea7VFGcamFNux9yi9tHxpM7rdXBU4AZ90s8oyeHEh8iuSzasv6Q=
+X-Received: by 2002:a17:90a:1fc8:b0:2c9:57a4:a8c4 with SMTP id
+ 98e67ed59e1d1-2cf2ebb9251mr5312268a91.42.1721997402182; Fri, 26 Jul 2024
+ 05:36:42 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+References: <20240725232126.1996981-1-mmaurer@google.com> <20240725232126.1996981-3-mmaurer@google.com>
+ <CA+fCnZdwRcdOig0u-D0vnFz937hRufTQOpCqGiMeo5B+-1iRVA@mail.gmail.com> <CACT4Y+Y+XmdNervhF5WAEyVwprJ32m7Pd8FF2fKy3K9FiTpJtQ@mail.gmail.com>
+In-Reply-To: <CACT4Y+Y+XmdNervhF5WAEyVwprJ32m7Pd8FF2fKy3K9FiTpJtQ@mail.gmail.com>
+From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date: Fri, 26 Jul 2024 14:36:30 +0200
+Message-ID: <CANiq72kb0df5k-8njjNgfFFVj7Cfx-uiTSEtMt5Cbb8f3DkjWg@mail.gmail.com>
+Subject: Re: [PATCH 2/2] kbuild: rust: Enable KASAN support
+To: Dmitry Vyukov <dvyukov@google.com>
+Cc: Andrey Konovalov <andreyknvl@gmail.com>, Matthew Maurer <mmaurer@google.com>, 
+	Andrey Ryabinin <ryabinin.a.a@gmail.com>, Masahiro Yamada <masahiroy@kernel.org>, 
+	Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, 
+	Wedson Almeida Filho <wedsonaf@gmail.com>, Nathan Chancellor <nathan@kernel.org>, 
+	Alexander Potapenko <glider@google.com>, Vincenzo Frascino <vincenzo.frascino@arm.com>, 
+	Nicolas Schier <nicolas@fjasle.eu>, Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, 
+	=?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
+	Benno Lossin <benno.lossin@proton.me>, Andreas Hindborg <a.hindborg@samsung.com>, 
+	Alice Ryhl <aliceryhl@google.com>, Nick Desaulniers <ndesaulniers@google.com>, 
+	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, kasan-dev@googlegroups.com, 
+	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	rust-for-linux@vger.kernel.org, llvm@lists.linux.dev, 
+	Brendan Higgins <brendanhiggins@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-tree:   https://github.com/riteshharjani/linux kfence-hash-rfcv1
-head:   ab870b7bbabf70b4c07abf9163a509fbfaa79fe4
-commit: a6abdbc7601fc172b2b07366f935771a2d02f284 [8/10] book3s64/hash: Add kfence functionality
-config: powerpc64-randconfig-003-20240726 (https://download.01.org/0day-ci/archive/20240726/202407261926.HcVRPugo-lkp@intel.com/config)
-compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project ccae7b461be339e717d02f99ac857cf0bc7d17fc)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240726/202407261926.HcVRPugo-lkp@intel.com/reproduce)
+On Fri, Jul 26, 2024 at 12:23=E2=80=AFPM Dmitry Vyukov <dvyukov@google.com>=
+ wrote:
+>
+> This is great, thanks, Matthew!
+>
+> Does Rust support KUnit tests?
+> It would be good to add at least a simple positive test similar to the
+> existing ones so that the support does not get rotten soon.
+> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/m=
+m/kasan/kasan_test.c
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202407261926.HcVRPugo-lkp@intel.com/
+Yeah, we have Rust doctests converted into KUnit tests, as well as
+upcoming `#[test]`s support (also handled as KUnit tests). For this, I
+assume the latter would make more sense, but we have to merge it.
 
-All warnings (new ones prefixed by >>, old ones prefixed by <<):
-
-WARNING: modpost: missing MODULE_DESCRIPTION() in vmlinux.o
->> WARNING: modpost: vmlinux: section mismatch in reference: htab_bolt_mapping+0x5fc (section: .text) -> hash_kfence_add_slot (section: .init.text)
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Cheers,
+Miguel
