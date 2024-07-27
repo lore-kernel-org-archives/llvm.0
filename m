@@ -1,55 +1,57 @@
-Received: from mail-lj1-f178.google.com (mail-lj1-f178.google.com [209.85.208.178])
+Received: from mail-lj1-f174.google.com (mail-lj1-f174.google.com [209.85.208.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0EC0E4411
-	for <llvm@lists.linux.dev>; Sat, 27 Jul 2024 18:20:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D0033187356
+	for <llvm@lists.linux.dev>; Sat, 27 Jul 2024 18:20:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722104445; cv=none; b=d8HtD5lEG4uSrNUEQw4ZMYHzeyK+jLCJfEH9UGkGHlCHUbmsOOjLjRf+xAdzT+kF+KhvxqipEwOHqNfZlMX2ieCKeyXYN9e4tUA7dd8qJYcLbXubmcjFFSvnH4sGIl/NfHNqL6oMtchqEkKBcv1QDzk9SpkBJADgBV8qYlC4s4s=
+	t=1722104450; cv=none; b=aaz3XfZdvoe8Zc2+8JfL0YOCoRTWj42a8bQ99kKRL9TMJMBiIBgNvFPEhuTjamvSPnlnaLDD3439Y8HpYp5vua2B1dL6lJgaMBazIp9mcmJqsPiUUV5HKZXqO7iXSPE4woVYUkUC3cMOjRNOrkXzhzOIWH9Zr2euik8jyTVNz2g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722104445; c=relaxed/simple;
-	bh=3Lh1BwhVeqRnEATXFageAXiylnoLj5EisM5J8nNNO+w=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=c1E0u7KtXRFgD2nY4D0b9R1GxQ0FyIvpPzky9rf0XHyxPb7fslUJvgvfxSmQqAckY3gjTCxQxaK7AkXDcsRWv+3t76xdFIVhcRFUgFduw9nGXz0eyxe2o9hcHGN0d2Bk23qBH73xhSZCXU+kAlzE4DTtb07aO6p0si4RzXQDEBA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=cuj3KUu4; arc=none smtp.client-ip=209.85.208.178
+	s=arc-20240116; t=1722104450; c=relaxed/simple;
+	bh=PMtw6Te5sj/TrlbW9514sz7eS62gjeUYCJGHpfh1FaY=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=Oam5SAqXfK/KXgJihqgbzDLOQ0kqI8XUh23+xQ9T39R/7JnysZKomkJPGEHJ1CixezN8e9387TvM3s/3Go6edDE9fjmr/qCVkwDgE00YOTOpxDpMrHs5sEcrmIPwhNMOmt1xh1HkpNPxvj7A9SlSy0Gubkk3RVM7jVYLuRYW10w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=PcU1M0ZQ; arc=none smtp.client-ip=209.85.208.174
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cuj3KUu4"
-Received: by mail-lj1-f178.google.com with SMTP id 38308e7fff4ca-2eeb1051360so23117571fa.0
-        for <llvm@lists.linux.dev>; Sat, 27 Jul 2024 11:20:43 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PcU1M0ZQ"
+Received: by mail-lj1-f174.google.com with SMTP id 38308e7fff4ca-2f035ae0fe0so25760641fa.3
+        for <llvm@lists.linux.dev>; Sat, 27 Jul 2024 11:20:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1722104442; x=1722709242; darn=lists.linux.dev;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=WxFUyWe0lcthVY5bBYHT4KxjaYpQ0TGg/fnnCJonf3U=;
-        b=cuj3KUu4Nvrcp5Bt6Ca1cqc3HRTD/oxRYWx4bR2Sxmuez6h9uEoJntNEXFyw7xCIRB
-         Dgzo9kx5EHiYwrU7Xy38X2dC/gej3xe9zQk5O+v4sdUzzDqSQBGdGyN+ATD6TYNGU1XP
-         fpeyNzgnkfL+y6Mb1YQbk1LsIdRUHNwkGBicr3Yzhwl5EZ3tkdlTTRj0Zq5dBgO/7M/A
-         TymFN8RmUmZSXoC3E+wnvEkY7QznwFV5zTX5vNlHJkJE6GizYPwzUwrebnwwKMnpE9MW
-         mVf/zPITHHIex3XFodrRoJEeJcLoZrjmajkKjidYJcHOXfc/v7Wf4VDKfsa+Lsqlzc+Z
-         GyDg==
+        d=gmail.com; s=20230601; t=1722104447; x=1722709247; darn=lists.linux.dev;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=4zam71Ol4yolcRCdgG2yrrm07LDlzniNh9XTYbPohag=;
+        b=PcU1M0ZQpneuY3BWD/Hw4Ox+XpeFgbIrHPfI4RHMHJ0Bpp9UCd3rSiK8UH0SY+EGH9
+         QsGubdrwRWiA61iqp6aVqAjr57pWEWXmsMVlgwhXKbBlID3v0yhfj1gshV2oomlclgSg
+         BcIoyLFEakptk1/g7HkJJmOHD64ofFY6x8bfq6A9BJuMEsba+WIbBgY53RQ+pY5k1PPq
+         SusBYs61Joc/40oimUTxb+yHDvokc9WxVWmqOGXY0XVEAw7e4CsE6+i9MR2rww1DN9Bm
+         4kBSH5Azt6Mbi49Z//YZ2qEq4D1BkoqNF/iL3kU0TgnlgkM9E+7/FPyoPtT3cBmQyJo+
+         Oukg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1722104442; x=1722709242;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=WxFUyWe0lcthVY5bBYHT4KxjaYpQ0TGg/fnnCJonf3U=;
-        b=v23l98BkPraFqpKNo8jVppNIPMhbqInFxgaWFLUMyQIJz7wmGmlHggUPBFl9ekkWwj
-         UhNUiKKA7Oai6aeJ2c24SwnpTpS0g91m6oclxF1iaqnxE6JU0k2JrffkDH7p3PfkTFmT
-         Td0CXqUgYYl1UhqP17I8dUYzrwpYDtDdFoTkfyRIOKlIBMZ4yvfeJ67fEvzPthOTm098
-         2RmXUF1oNM54ZBm1CZo47H4OlS5kwoEDjLfz9e1M38JF2p0m+zxrSGuvQMVac1RPn4Mv
-         Wv5YCeVdSlKn3KXpPinZZ8Wixt8jzsykP2nxcOt5Yulnn7YhW1UeWUmS0oNqyP8MJOEi
-         5RiQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUREui8Js3fRk2Xh6UoM/hUtNMgf39GFmeHUtSWq7lwh4WDMCvE/suC4hFvovnbBTriEsEdFSi1IaBITekxpWcOQ93PDw==
-X-Gm-Message-State: AOJu0YxK8FeqryKtCyLOtdy9meSdbZ0ca6TuvBfoxC8DJ9hcL1kw27o9
-	Mma5MHayDaxiI+/WOXtxbo66HuFDbQCGpvx5757IJmiAbmcR+N3j
-X-Google-Smtp-Source: AGHT+IEu0dt6qpt6W9qSkNlLYQ68T+/D93Gf2dnEZ2mPYWT0uQCbffw2RtHL1SdmIIuqusSF1cnhUQ==
-X-Received: by 2002:a2e:9795:0:b0:2ef:2fcc:c9fb with SMTP id 38308e7fff4ca-2f12ee47152mr21852671fa.36.1722104441734;
-        Sat, 27 Jul 2024 11:20:41 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1722104447; x=1722709247;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=4zam71Ol4yolcRCdgG2yrrm07LDlzniNh9XTYbPohag=;
+        b=hLifLlAumSPP/xxaGy+a06TlQId064TwPKsVUcw1KiMouAZClHk5obRGiLozADzf5e
+         mLsyniJm57BCBc/9qgb6lJ92Qrh6AV/ffQL/+OFQD2sAQaCS5NL8QE9/VMLomBphgKAT
+         dKmb4w15ORJkoARBIA9ITwLyreXNBSXtC9hk4wPH/PVEHXs6lt5xiSM8D13B7MMpzfmT
+         tQm8CHI77vRHgM0+Tn8mk4qdkyNPnXvUYoWchrYBSr+E2adbaziDh+c3UZWfiLEmkxR8
+         YN7muIjoAMuj5lpBlY9mcKQvcWBGB6ncpfmXb651kII0MzAOXplMZfdp/fy0fGHMSo6D
+         ZJ7g==
+X-Forwarded-Encrypted: i=1; AJvYcCUAJN3UGiFtExTCIK6RA3G6JOXZlAuw/QWd+t7i8mkRU8Jj2qXlSIypMmPm2dFCq0COIaKgMjWazleYzZcqKiUIwMd1Lw==
+X-Gm-Message-State: AOJu0Yw9S8+hXbw0jq3+Wv7ue/UYvzlgwXBRtWaOpaG+J3F2US5niNXb
+	sfd+uGwPF43DbAgUsBfWj44+hTRvjNQLNv31UKXC+I238CV0gFiu
+X-Google-Smtp-Source: AGHT+IGvyLQim7JK45a/ba9q00AzQhJejT77FSBr2xSMgFq12bEECWsvmkm1dvXC4saab8Kw2Ycm7g==
+X-Received: by 2002:a2e:be8f:0:b0:2ef:228a:1b86 with SMTP id 38308e7fff4ca-2f12edd5328mr20892951fa.21.1722104446584;
+        Sat, 27 Jul 2024 11:20:46 -0700 (PDT)
 Received: from localhost.localdomain (byw127.neoplus.adsl.tpnet.pl. [83.30.42.127])
-        by smtp.gmail.com with ESMTPSA id 38308e7fff4ca-2f03d077226sm7504891fa.126.2024.07.27.11.20.38
+        by smtp.gmail.com with ESMTPSA id 38308e7fff4ca-2f03d077226sm7504891fa.126.2024.07.27.11.20.42
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 27 Jul 2024 11:20:41 -0700 (PDT)
+        Sat, 27 Jul 2024 11:20:46 -0700 (PDT)
 From: Adam Skladowski <a39.skl@gmail.com>
 To: 
 Cc: phone-devel@vger.kernel.org,
@@ -74,11 +76,14 @@ Cc: phone-devel@vger.kernel.org,
 	linux-sound@vger.kernel.org,
 	devicetree@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: [PATCH v2 0/4] MSM8953/MSM8976 ASoC support
-Date: Sat, 27 Jul 2024 20:20:23 +0200
-Message-ID: <20240727182031.35069-1-a39.skl@gmail.com>
+	llvm@lists.linux.dev,
+	Vladimir Lypak <vladimir.lypak@gmail.com>
+Subject: [PATCH v2 1/4] ASoC: qcom: apq8016_sbc.c: Add Quinary support
+Date: Sat, 27 Jul 2024 20:20:24 +0200
+Message-ID: <20240727182031.35069-2-a39.skl@gmail.com>
 X-Mailer: git-send-email 2.45.2
+In-Reply-To: <20240727182031.35069-1-a39.skl@gmail.com>
+References: <20240727182031.35069-1-a39.skl@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -87,33 +92,78 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Introduce support for basic sound card setup on MSM8953/MSM8976
-platforms, document new compatibles and introduce support for more dais.
-Most of code is sourced from msm8953-mainline fork over github
-with some changes implemented by me,some basic changes are 
-mentioned in each patch.
+From: Vladimir Lypak <vladimir.lypak@gmail.com>
 
-[1] - https://lore.kernel.org/lkml/20240723083300.35605-1-krzysztof.kozlowski@linaro.org/T/
+Add support for configuring Quinary Mi2S interface
+it will be used on MSM8953 and MSM8976 platform.
 
-Changes since v1
-================
-1. Rebased dt-bindings documentation based on Krzysztof's split patch[1]
-2. Resolved clang errors by guarding ret verification inside if
-3. Switched quin-iomux to devm_ioremap_resource to not fail on msm8916
+Signed-off-by: Vladimir Lypak <vladimir.lypak@gmail.com>
+[Adam: Split from MSM8953 support patch,add msg]
+Signed-off-by: Adam Skladowski <a39.skl@gmail.com>
+---
+ sound/soc/qcom/apq8016_sbc.c | 16 +++++++++++++++-
+ 1 file changed, 15 insertions(+), 1 deletion(-)
 
-Adam Skladowski (1):
-  ASoC: dt-bindings: apq8016-sbc: Add msm8953/msm8976-qdsp6-sndcard
-
-Vladimir Lypak (3):
-  ASoC: qcom: apq8016_sbc.c: Add Quinary support
-  ASoC: msm8916-wcd-analog: add cajon and cajon v2 support
-  ASoC: qcom: apq8016_sbc: Add support for msm8953/msm8976 SoC
-
- .../sound/qcom,apq8016-sbc-sndcard.yaml       | 51 +++++++++--
- sound/soc/codecs/msm8916-wcd-analog.c         | 63 +++++++++++++-
- sound/soc/qcom/apq8016_sbc.c                  | 84 ++++++++++++++++++-
- 3 files changed, 186 insertions(+), 12 deletions(-)
-
+diff --git a/sound/soc/qcom/apq8016_sbc.c b/sound/soc/qcom/apq8016_sbc.c
+index 3023cf180a75..303dd88206b1 100644
+--- a/sound/soc/qcom/apq8016_sbc.c
++++ b/sound/soc/qcom/apq8016_sbc.c
+@@ -20,12 +20,13 @@
+ #include "common.h"
+ #include "qdsp6/q6afe.h"
+ 
+-#define MI2S_COUNT  (MI2S_QUATERNARY + 1)
++#define MI2S_COUNT  (MI2S_QUINARY + 1)
+ 
+ struct apq8016_sbc_data {
+ 	struct snd_soc_card card;
+ 	void __iomem *mic_iomux;
+ 	void __iomem *spkr_iomux;
++	void __iomem *quin_iomux;
+ 	struct snd_soc_jack jack;
+ 	bool jack_setup;
+ 	int mi2s_clk_count[MI2S_COUNT];
+@@ -86,6 +87,12 @@ static int apq8016_dai_init(struct snd_soc_pcm_runtime *rtd, int mi2s)
+ 			SPKR_CTL_TLMM_DATA1_EN | SPKR_CTL_TLMM_WS_OUT_SEL_SEC |
+ 			SPKR_CTL_TLMM_WS_EN_SEL_SEC, pdata->spkr_iomux);
+ 		break;
++	case MI2S_QUINARY:
++		/* Configure Quinary MI2S */
++		if (!pdata->quin_iomux)
++			return -ENOENT;
++		writel(readl(pdata->quin_iomux) | 0x01, pdata->quin_iomux);
++		break;
+ 	case MI2S_TERTIARY:
+ 		writel(readl(pdata->mic_iomux) | MIC_CTRL_TER_WS_SLAVE_SEL |
+ 			MIC_CTRL_TLMM_SCLK_EN,
+@@ -177,6 +184,9 @@ static int qdsp6_dai_get_lpass_id(struct snd_soc_dai *cpu_dai)
+ 	case QUATERNARY_MI2S_RX:
+ 	case QUATERNARY_MI2S_TX:
+ 		return MI2S_QUATERNARY;
++	case QUINARY_MI2S_RX:
++	case QUINARY_MI2S_TX:
++		return MI2S_QUINARY;
+ 	default:
+ 		return -EINVAL;
+ 	}
+@@ -290,6 +300,7 @@ static int apq8016_sbc_platform_probe(struct platform_device *pdev)
+ 	struct device *dev = &pdev->dev;
+ 	struct snd_soc_card *card;
+ 	struct apq8016_sbc_data *data;
++	struct resource *res;
+ 	int ret;
+ 
+ 	add_ops = device_get_match_data(&pdev->dev);
+@@ -320,6 +331,9 @@ static int apq8016_sbc_platform_probe(struct platform_device *pdev)
+ 	if (IS_ERR(data->spkr_iomux))
+ 		return PTR_ERR(data->spkr_iomux);
+ 
++	res = platform_get_resource_byname(pdev, IORESOURCE_MEM, "quin-iomux");
++	data->quin_iomux = devm_ioremap_resource(&pdev->dev, res);
++
+ 	snd_soc_card_set_drvdata(card, data);
+ 
+ 	add_ops(card);
 -- 
 2.45.2
 
