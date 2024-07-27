@@ -1,121 +1,120 @@
-Received: from mail-lj1-f175.google.com (mail-lj1-f175.google.com [209.85.208.175])
+Received: from mail-lf1-f45.google.com (mail-lf1-f45.google.com [209.85.167.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C756228DD1
-	for <llvm@lists.linux.dev>; Sat, 27 Jul 2024 20:22:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 34AE7358A7;
+	Sat, 27 Jul 2024 20:43:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722111742; cv=none; b=G8f+Y1YHFmClyqLxQeOTF/bxgv9VVziMNkjxs8MC+buJbCUuWVmSszU3rkE1CkGky/rYNxrpJNZIwQuaC6xscqw6vrIxuGtPTs88jwPL9DCOrxYra7svq/altNP/TUKZRgT/qnLB4CMmiiUKtYOApEEBIyK5U61ylJAmMvTxF2k=
+	t=1722112995; cv=none; b=o3GAfFZFTK99xf2Qrm0omN03CLJ3maekBejTR6x3/h7r9rl3FXcvsJa9rLqEn0OouE+7X60HRsrcQmIgDWPZEMjIsIaa0usdY3Nt+AlNTBYd6TYB0vf8UqLGILFOiQH7s3VpKyAiduEBILmm05vsNJtIoAg2TILr7akbO9wvaEc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722111742; c=relaxed/simple;
-	bh=kHGL1U4vzMPjvspLRMbkYBQBI26OdTx3BOt3JS1aT1E=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=CXGoHfRQmjNGUKikJ9vwM4gsKDP7KqVwUI6UHQeVfjt/r9vkiniBeHbbQuBf1YPQt8QAnmC0L1FYNJHBBbp0AlK53NB59TuJzMLTiMIudSMBFHb189/LcPtl6doeS1TSy3Pgv/ESLa2aR1k0iUKyhwow6nFjaHgSk5Y8Vrsfnys=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=BamznoJ1; arc=none smtp.client-ip=209.85.208.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+	s=arc-20240116; t=1722112995; c=relaxed/simple;
+	bh=pCLrAC0c7kI1WPvw+F3AOPdqNfHw/TdcPzhDI1T0wGU=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=abDA6NZgDlYS9MxRQsi+biQw/t9ygowrXGW0Nkm1RH674U7gxUjLN14OgbSk/aHCrv3nNj2eVRDIONqXSiTj+m7mFQGhuiBgNd+ENEyw5r/ayhebeMTcHEIMU9+PNac/L6klxIuY6n1lxjAphcZmhr4BwgRcMqg0tgfwSsrCxk0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=eAeOyj9g; arc=none smtp.client-ip=209.85.167.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="BamznoJ1"
-Received: by mail-lj1-f175.google.com with SMTP id 38308e7fff4ca-2ef2cce8be8so29113341fa.1
-        for <llvm@lists.linux.dev>; Sat, 27 Jul 2024 13:22:18 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="eAeOyj9g"
+Received: by mail-lf1-f45.google.com with SMTP id 2adb3069b0e04-52efef496ccso2291465e87.1;
+        Sat, 27 Jul 2024 13:43:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1722111737; x=1722716537; darn=lists.linux.dev;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Huc0K8rSvsCtHtQb7ohCUWF9mvI2cqys5jRNGU3Q/E8=;
-        b=BamznoJ1S2lEe+Dko8RiKCHVORH+6JEOKH5LGFGIOOZgDbyF0EjEpMVyaGN8Cs6tZ8
-         d63DyORlpqn3IRk7MtkaOFMOBmW05p9S+6wf+7cOSLtzH2lGr5dh1EuED5oOmTe+FqN1
-         tn1LIpFy8CSE51A1J+YLsEJ97kwlRW3vVcwYUkyfb1oByvon8bQ6nHfhlFAQ8/3u1xUs
-         DBeJqtTU8Rx91SO7TzbK+5JPzngqcJwPFp4wIyQZMbT3VXicg5/GbDFxETZ10nRtFtwO
-         ELCFw8iZrooLRQooTsQ305y+G+NB7oQVYr8hl+R4rId9jARm1YsB7NWp311FC5uZhAwL
-         GjlA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1722111737; x=1722716537;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20230601; t=1722112992; x=1722717792; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Huc0K8rSvsCtHtQb7ohCUWF9mvI2cqys5jRNGU3Q/E8=;
-        b=vmxKdcK03OjIAw8gnZE22j3Av116+R16S4Usqvoyt6W89xQKXsXlFXMqTBnmJbLjx+
-         EYHp52Nwol/sBGlNcRIFX4REL6YNu5D3aBGq57sKVXAAkjXtpeK3mdVFiJsdtytCQCl3
-         YTrUxUx/Y+sS2P4MLU1o1t7jqjHZ4VvOxkd6N2qcdla6e0Q+x1+Lpe+ycLPBVPGu67Bx
-         lgUw9uSrxr7z8kx+G4wzmZBV9rmoTPfodnTvY+e5bROEuSX4MiYvLxtXE6nMQmB3kUQU
-         Z0kI9iUOlbr25PhKKixYt3vy8QBhiOB+Dsl/pLQr7SCC9l+OAbJX8LCQYzV7tZ/fMbV/
-         ogvg==
-X-Forwarded-Encrypted: i=1; AJvYcCWZj6/oo4E3FSsm4+HpYEcqtSBYwbEhEih1pgfbBrd/BECUBFCpCxgsii1xmIkINQqquAUO+5Hd4YPwzux1/NXrzMkmDg==
-X-Gm-Message-State: AOJu0Yym2JIRl6XFypZnTRsEARCeFFqFDH9edb7+7QnN6TE8u9mmu55f
-	BEu2qSFy1tQm1VjU1x/ngnHqd74tgHib4GpJjMQk8X9/s9uFIlPsYApCIYcd690=
-X-Google-Smtp-Source: AGHT+IEAM19ZrUTa03e6rXgthK0w+W59uGj7mGDLlSdELDkmYK6fX4CrolrKItgRARpBhijKL3BlCQ==
-X-Received: by 2002:a05:6512:3416:b0:52c:1d8a:9716 with SMTP id 2adb3069b0e04-5309b270b3cmr3069385e87.19.1722111736812;
-        Sat, 27 Jul 2024 13:22:16 -0700 (PDT)
-Received: from eriador.lumag.spb.ru (dzdbxzyyyyyyyyyyybrhy-3.rev.dnainternet.fi. [2001:14ba:a0c3:3a00::b8c])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-52fd5c08e9fsm843335e87.134.2024.07.27.13.22.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 27 Jul 2024 13:22:16 -0700 (PDT)
-Date: Sat, 27 Jul 2024 23:22:14 +0300
-From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-To: Adam Skladowski <a39.skl@gmail.com>
-Cc: phone-devel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht, 
-	Srinivas Kandagatla <srinivas.kandagatla@linaro.org>, Banajit Goswami <bgoswami@quicinc.com>, 
-	Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>, 
-	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
-	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
-	Stephan Gerhold <stephan@gerhold.net>, alsa-devel@alsa-project.org, linux-arm-msm@vger.kernel.org, 
-	linux-sound@vger.kernel.org, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	llvm@lists.linux.dev, Vladimir Lypak <vladimir.lypak@gmail.com>
-Subject: Re: [PATCH v2 1/4] ASoC: qcom: apq8016_sbc.c: Add Quinary support
-Message-ID: <hyjoqu6w4oqv5i4hvuewtgod3ngdkkanzokz5k2uh24gce74jw@ne5ctq7bfzv4>
-References: <20240727182031.35069-1-a39.skl@gmail.com>
- <20240727182031.35069-2-a39.skl@gmail.com>
+        bh=bv4ok3GIewx2d9Yx1/BgjuhSzkHnMJiT1FqXF1qlCKw=;
+        b=eAeOyj9gLOn8cXcmzt3MA7Zip1vn37/JELYZGhXP1vLOOXqkA3ZlgTSk5Q7tKcP4+r
+         ByKCzhdzQP/8avT2wzjw4k5UulHLFwsSeFx4DjSUhF8vle0wVSo2StdDJ5XbFU8/U4yr
+         1psVph6jpVu/1/5Yhh9viTAurh+AxipmpW61ulzxkcvuDzUAvDasoJNUpnWKTTFfSfrZ
+         DP2be0+yfUAW/ZIvu4Yg0u+8amA0M+TlIQZc7BCPX+I75NdlpaQXGQ41OcuNHweNsNSc
+         kqlp2GLlO0X8g1aXMkISw+57Qzuom049qWfZX1PHeVLJ8WSI2Hx03flinHWUoKLnEtxm
+         NCmw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1722112992; x=1722717792;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=bv4ok3GIewx2d9Yx1/BgjuhSzkHnMJiT1FqXF1qlCKw=;
+        b=EwGqViliMKFt8UHBYBH96+D1D+RK1CVJP8aJtSOB+OoXiZjVve4RulaB6B9gWYyYDA
+         z2+aXRtW6v0Y4N/MnEfTaYpJo5mTjvv1WpRw42mdmJefU0FBD9r41VmBC3SFEG5Jcul1
+         pq5XtDW7YuZilC9xaPKgrPjSSOn9H796ZW1AIT55atAMr1IUb/jvf6qm54UzXX99tgET
+         NxYUjomNxaN2+l9nft65+R8oIdHLD1QK10uKpaj9D6eHz4cmPC1XkZ9QPIyogUSv7IW8
+         oIwr9fcP+wQAKly77nyfzDE/WcA3BtwKistf4Guow2VLo9UnouXR73ywGm+eA34cntTM
+         Fjwg==
+X-Forwarded-Encrypted: i=1; AJvYcCVXd1KcQbtvWgYnC1jf5bWkHJ4SRoY62uFVcGhH7gnOviJT5nDYTg1JsQBn3jv187OrQHnUG+x63VHwHQ1Cxg89SnGVJ4J/tnhot1x0yxSgG/FK0/KpoWQckJJ2eMo=
+X-Gm-Message-State: AOJu0YwJcCiap/pWA/ar6XIaWomWQxvyOM9ie2ckpEXl/6IGy8oY7w1f
+	YguQ66iFJZQPSxMwZ4rtcKY9az4qpV2ThRUnIM0hbd/BAHpT8pAZFPITQUKNGFaiP9lYea5BtMV
+	qr296RFV+a9bd4Fu5XVPDakh/jw==
+X-Google-Smtp-Source: AGHT+IGP71xKWMKOJHw+6eAC+0bfS2GCggw5OubOUU2ooeGmpjLgTwO9dToD28ptkFTPF8afYXAbZ5d0nh1LLHWoUjg=
+X-Received: by 2002:a05:6512:3ca9:b0:52e:8161:4ce6 with SMTP id
+ 2adb3069b0e04-5309b718bebmr1011788e87.25.1722112991729; Sat, 27 Jul 2024
+ 13:43:11 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240727182031.35069-2-a39.skl@gmail.com>
+References: <20240726-fix-x86-stack-protector-tests-v1-1-a30fe80e8925@kernel.org>
+In-Reply-To: <20240726-fix-x86-stack-protector-tests-v1-1-a30fe80e8925@kernel.org>
+From: Brian Gerst <brgerst@gmail.com>
+Date: Sat, 27 Jul 2024 16:43:00 -0400
+Message-ID: <CAMzpN2hRVzWOF5YDvE8pPKfogdcuou8REsY+uXzkdORnFn=buQ@mail.gmail.com>
+Subject: Re: [PATCH] kbuild: Fix '-S -c' in x86 stack protector scripts
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: masahiroy@kernel.org, tglx@linutronix.de, mingo@redhat.com, bp@alien8.de, 
+	dave.hansen@linux.intel.com, x86@kernel.org, nicolas@fjasle.eu, 
+	maskray@google.com, morbo@google.com, justinstitt@google.com, kees@kernel.org, 
+	linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org, 
+	llvm@lists.linux.dev, patches@lists.linux.dev, stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Sat, Jul 27, 2024 at 08:20:24PM GMT, Adam Skladowski wrote:
-> From: Vladimir Lypak <vladimir.lypak@gmail.com>
-> 
-> Add support for configuring Quinary Mi2S interface
-> it will be used on MSM8953 and MSM8976 platform.
-> 
-> Signed-off-by: Vladimir Lypak <vladimir.lypak@gmail.com>
-> [Adam: Split from MSM8953 support patch,add msg]
-> Signed-off-by: Adam Skladowski <a39.skl@gmail.com>
+On Fri, Jul 26, 2024 at 2:05=E2=80=AFPM Nathan Chancellor <nathan@kernel.or=
+g> wrote:
+>
+> After a recent change in clang to stop consuming all instances of '-S'
+> and '-c' [1], the stack protector scripts break due to the kernel's use
+> of -Werror=3Dunused-command-line-argument to catch cases where flags are
+> not being properly consumed by the compiler driver:
+>
+>   $ echo | clang -o - -x c - -S -c -Werror=3Dunused-command-line-argument
+>   clang: error: argument unused during compilation: '-c' [-Werror,-Wunuse=
+d-command-line-argument]
+>
+> This results in CONFIG_STACKPROTECTOR getting disabled because
+> CONFIG_CC_HAS_SANE_STACKPROTECTOR is no longer set.
+>
+> '-c' and '-S' both instruct the compiler to stop at different stages of
+> the pipeline ('-S' after compiling, '-c' after assembling), so having
+> them present together in the same command makes little sense. In this
+> case, the test wants to stop before assembling because it is looking at
+> the textual assembly output of the compiler for either '%fs' or '%gs',
+> so remove '-c' from the list of arguments to resolve the error.
+>
+> All versions of GCC continue to work after this change, along with
+> versions of clang that do or do not contain the change mentioned above.
+>
+> Cc: stable@vger.kernel.org
+> Fixes: 4f7fd4d7a791 ("[PATCH] Add the -fstack-protector option to the CFL=
+AGS")
+> Fixes: 60a5317ff0f4 ("x86: implement x86_32 stack protector")
+> Link: https://github.com/llvm/llvm-project/commit/6461e537815f7fa68cef068=
+42505353cf5600e9c [1]
+> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
 > ---
->  sound/soc/qcom/apq8016_sbc.c | 16 +++++++++++++++-
->  1 file changed, 15 insertions(+), 1 deletion(-)
+> I think this could go via either -tip or Kbuild?
+>
+> Perhaps this is an issue in the clang commit mentioned in the message
+> above since it deviates from GCC (Fangrui is on CC here) but I think the
+> combination of these options is a little dubious to begin with, hence
+> this change.
 
+As part of my stack protector cleanup series, I found that these
+scripts can simply be removed.  I can repost those patches as a
+standalone cleanup.
 
-[...]
+https://lore.kernel.org/lkml/20240322165233.71698-1-brgerst@gmail.com/
 
-> 
-> @@ -320,6 +331,9 @@ static int apq8016_sbc_platform_probe(struct platform_device *pdev)
->  	if (IS_ERR(data->spkr_iomux))
->  		return PTR_ERR(data->spkr_iomux);
->  
-> +	res = platform_get_resource_byname(pdev, IORESOURCE_MEM, "quin-iomux");
-> +	data->quin_iomux = devm_ioremap_resource(&pdev->dev, res);
-
-
-This will still print an error if there is no quin-iomux. It's better to
-call devm_ioremap_resource() only if res is not NULL.
-
-LGTM otherwise
-
-> +
->  	snd_soc_card_set_drvdata(card, data);
->  
->  	add_ops(card);
-> -- 
-> 2.45.2
-> 
-
--- 
-With best wishes
-Dmitry
+Brian Gerst
