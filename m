@@ -1,45 +1,47 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C6E31E521;
-	Sat, 27 Jul 2024 15:03:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B19DB181BB6;
+	Sat, 27 Jul 2024 15:03:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722092592; cv=none; b=XMQAGfze+ngcFBFio30jXSf5699BKANM87wxnV7R6Gl37RvXPVI0GN+HxcpqHEWLGP1Lonxs37rjqiuUVjDM/03POx4py6cfwhECrf6UFbLr396YARj29XEdw3RG9Nrn6J4FYaWDYD9MPWK3NCSWpw1ZG/CLe2LA9XVdZJoSYaI=
+	t=1722092596; cv=none; b=r18MEhCVu12CNuGmaxYfQWKsngAthaxs66jpbjpXlg8Te6Bnj5kTAu0niF78hyFAycFkaxzxnwb2Um930b3Qr2SRq0V+3Tzs2O9ibhzPKnGaB/aMk4W6aFaINXM/vECum6XWUFY6nXT18+un5inTJs4f3ZrR8rdBFdor5EUAw54=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722092592; c=relaxed/simple;
-	bh=IXaYzZEvmKm+x/fO3YUtYsrdaMUWpLNISAK5k19hklY=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=aMeXc/9pxxI+DbYAKkB1yO1Qb6JO9twzhdyLgxFlw/IdZhCngd5Wlsr4z+DOboEzX6BSYxYjC9dZobAma/ei5iquaFHabZXKw2/mH4DrJFHCHLS7Y9A9Oajmnu8tn4XCZ2v8H1NTjeBLJNhCfkt+QPHCwLaayX2i7gRMNqefmWA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YJ7epLVB; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1722092596; c=relaxed/simple;
+	bh=2yN/VlmMFTF0afGkVkVR3CjBLMIjxBvcVSugI531oxo=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=Ne8XPWoKw0JvhZH2bsRtyPU/0cknAsHoGr9AVtZJj4SDGN9viZJ3wY7nOPh3xmoZy3BVRUqdPFqSJMZfzWooVJYQHxLFmutvHpyAPoIQ1fX/RT2Q92RinK0iqGZQC9czkUohSXpyY1IYYDvC5JGdbIVF7ks7LUjBvWaBL2au1W8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DZtkBBrq; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YJ7epLVB"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E324FC32781;
-	Sat, 27 Jul 2024 15:03:09 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DZtkBBrq"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0C65FC4AF0E;
+	Sat, 27 Jul 2024 15:03:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1722092591;
-	bh=IXaYzZEvmKm+x/fO3YUtYsrdaMUWpLNISAK5k19hklY=;
-	h=From:To:Cc:Subject:Date:From;
-	b=YJ7epLVBNJ1abu6FikBFHcLIIE2jvxfKm/31Qn75IIzh2/5M9Djp4m4Cp+iawOxRe
-	 XDUYvssX8sAW2rtJQh0JyaPdVvoNLuYIFtopdlwqL4Har6oDv8dWCF7Udx/c8schnG
-	 s49eXdGEg3WHjSbhCTNo0iEyY31bHnu9NVB5lUQmTJ2L292dEce0aMHI3C69ogfgAY
-	 hcXo5b3WXy+WVJqNFvvvJUvce2k1l0KQ60tjbqvzeZZAO0C45bR4DILP+JvpiOfh44
-	 /l+yIavxpTQ4dIh8HnoivNr+1DgukgS9qb/hylhVlAxGHi70rsFpJq8M/qRNqg4qhw
-	 leUPwe2Elm20A==
+	s=k20201202; t=1722092596;
+	bh=2yN/VlmMFTF0afGkVkVR3CjBLMIjxBvcVSugI531oxo=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=DZtkBBrqPGXadpPWuVSHyE5SQVu6SX8uQr5Az7bnSlKgCcb75L1TuNW6kYSuRNm3+
+	 75iJm3+jT8lfta+KUZgf/vT1UePanwawebFNNT6JBxoXyFjDVa/DnzvoqCHiHseVEF
+	 1+VJTzm6DzfFLkLxVzbfXIY0TfeQE6Ru3R2NopknaRVg4iJaUk7OqIKR90JR37HYVZ
+	 N9dtvA6wfxugMvEEBaN9OoRFmUcuShcMJfoW9QR3fe2177xc5Z6sZ8JxziaqmRJzGI
+	 WB0sJiRIKbA8swl6f41CUBICnJXz6Y1YW84CsjWhwvLTVqMPVQtrhOA61q373JD/TL
+	 nMPd1pIUchLYg==
 From: Masahiro Yamada <masahiroy@kernel.org>
 To: Kees Cook <kees@kernel.org>
 Cc: linux-kernel@vger.kernel.org,
 	Masahiro Yamada <masahiroy@kernel.org>,
-	Andrew Morton <akpm@linux-foundation.org>,
 	Bill Wendling <morbo@google.com>,
 	Justin Stitt <justinstitt@google.com>,
 	Nathan Chancellor <nathan@kernel.org>,
 	Nick Desaulniers <ndesaulniers@google.com>,
 	linux-hardening@vger.kernel.org,
 	llvm@lists.linux.dev
-Subject: [PATCH v2 0/3] fortify: fix various issues in test_fortify Makefile
-Date: Sun, 28 Jul 2024 00:02:35 +0900
-Message-ID: <20240727150302.1823750-1-masahiroy@kernel.org>
+Subject: [PATCH v2 3/3] fortify: use if_changed_dep to record header dependency in *.cmd files
+Date: Sun, 28 Jul 2024 00:02:38 +0900
+Message-ID: <20240727150302.1823750-4-masahiroy@kernel.org>
 X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20240727150302.1823750-1-masahiroy@kernel.org>
+References: <20240727150302.1823750-1-masahiroy@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -48,32 +50,69 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
+After building with CONFIG_FORTIFY_SOURCE=y, many .*.d files are left
+in lib/test_fortify/ because the compiler outputs header dependencies
+into *.d without fixdep being invoked.
 
-This version fixes new warnings for GCC <= 7, which were reported
-by 0 day bot.
+When compiling C files, if_changed_dep should be used so that the
+auto-generated header dependencies are recorded in .*.cmd files.
 
-I changed the patch order, as 3/3 is the most controvertial.
-I am confident with 1/3 and 2/3.
-3/3 drops the test coverage for GCC <= 7.
+Currently, if_changed is incorrectly used, and only two headers are
+hard-coded in lib/Makefile.
 
+In the previous patch version, the kbuild test robot detected new errors
+on GCC 7.
 
+GCC 7 or older does not produce test.d with the following test code:
 
-Masahiro Yamada (3):
-  fortify: refactor test_fortify Makefile to fix some build problems
-  fortify: move test_fortify.sh to lib/test_fortify/
-  fortify: use if_changed_dep to record header dependency in *.cmd files
+ $ echo 'void b(void) __attribute__((__error__(""))); void a(void) { b(); }' |
+   gcc -Wp,-MMD,test.d -c -o /dev/null -x c -
 
- MAINTAINERS                                   |  1 -
- lib/.gitignore                                |  2 -
- lib/Makefile                                  | 38 +------------------
- lib/test_fortify/.gitignore                   |  2 +
- lib/test_fortify/Makefile                     | 28 ++++++++++++++
- {scripts => lib/test_fortify}/test_fortify.sh |  0
- 6 files changed, 31 insertions(+), 40 deletions(-)
- create mode 100644 lib/test_fortify/.gitignore
- create mode 100644 lib/test_fortify/Makefile
- rename {scripts => lib/test_fortify}/test_fortify.sh (100%)
+Perhaps, this was a bug that existed in older GCC versions.
 
+Skip the tests for GCC<=7 for now, as this will be eventually solved
+when we bump the minimal supported GCC version.
+
+Link: https://lore.kernel.org/oe-kbuild-all/CAK7LNARmJcyyzL-jVJfBPi3W684LTDmuhMf1koF0TXoCpKTmcw@mail.gmail.com/T/#m13771bf78ae21adff22efc4d310c973fb4bcaf67
+Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+---
+
+Changes in v2:
+  - Skip the tests for GCC <= 7
+
+ lib/test_fortify/Makefile | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
+
+diff --git a/lib/test_fortify/Makefile b/lib/test_fortify/Makefile
+index 1826172c32d4..1c3f82ad8bb2 100644
+--- a/lib/test_fortify/Makefile
++++ b/lib/test_fortify/Makefile
+@@ -6,11 +6,8 @@ quiet_cmd_test_fortify = TEST    $@
+       cmd_test_fortify = $(CONFIG_SHELL) $(src)/test_fortify.sh \
+ 			$< $@ "$(NM)" $(CC) $(c_flags) -DKBUILD_EXTRA_WARN1
+ 
+-$(obj)/%.log: $(src)/%.c $(src)/test_fortify.sh \
+-	      $(src)/test_fortify.h \
+-	      $(srctree)/include/linux/fortify-string.h \
+-	      FORCE
+-	$(call if_changed,test_fortify)
++$(obj)/%.log: $(src)/%.c $(src)/test_fortify.sh FORCE
++	$(call if_changed_dep,test_fortify)
+ 
+ logs = $(patsubst $(src)/%.c, %.log, $(wildcard $(src)/*-*.c))
+ targets += $(logs)
+@@ -21,7 +18,10 @@ quiet_cmd_gen_fortify_log = CAT     $@
+ $(obj)/test_fortify.log: $(addprefix $(obj)/, $(logs)) FORCE
+ 	$(call if_changed,gen_fortify_log)
+ 
+-always-y += test_fortify.log
++# GCC<=7 does not always produce *.d files.
++# Run the tests only for GCC>=8 or Clang.
++always-$(call gcc-min-version, 80000) += test_fortify.log
++always-$(CONFIG_CC_IS_CLANG)          += test_fortify.log
+ 
+ # Some architectures define __NO_FORTIFY if __SANITIZE_ADDRESS__ is undefined.
+ # Pass CFLAGS_KASAN to avoid warnings.
 -- 
 2.43.0
 
