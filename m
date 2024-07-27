@@ -1,122 +1,79 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 11872481B9;
-	Sat, 27 Jul 2024 11:21:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C6E31E521;
+	Sat, 27 Jul 2024 15:03:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722079293; cv=none; b=hCbxi4u2rtiEUEpdR4yaaBYrmlaigX3MvKu6ViJ1Qg1+1RYMmyzCkgIKMZTspTVplKh2ZxEx2HoIQYVxUhgIhwFpL79Q0KqXYToXlmQOqpa4y8sedMR1AlF1Tvd9FuG5lTdvGbQorgbMW3Dy4gHu5wyAUQJgE2z3uGcJaQkd5O4=
+	t=1722092592; cv=none; b=XMQAGfze+ngcFBFio30jXSf5699BKANM87wxnV7R6Gl37RvXPVI0GN+HxcpqHEWLGP1Lonxs37rjqiuUVjDM/03POx4py6cfwhECrf6UFbLr396YARj29XEdw3RG9Nrn6J4FYaWDYD9MPWK3NCSWpw1ZG/CLe2LA9XVdZJoSYaI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722079293; c=relaxed/simple;
-	bh=Np9BXsfpZ4ED8CIWS5ZU5lyVIGmxSf2WKXevqzEFx4s=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Mq/lHkgcz9vjQ+v4toRGEuAnMGz7EpbvucBc7iiR3jGtTVDTBQDJpzr1yo63q/xfUFQzXNdoErQynfalV3C098TyOTJyT23xtJrAXnspRQuVnki5hHsBaeLNhd3AtxZG7mFGkuZKqq2YNnhbYfmk8lPHl4TNVYJs60vPMs2euN8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=nMeV99EI; arc=none smtp.client-ip=198.175.65.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1722092592; c=relaxed/simple;
+	bh=IXaYzZEvmKm+x/fO3YUtYsrdaMUWpLNISAK5k19hklY=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=aMeXc/9pxxI+DbYAKkB1yO1Qb6JO9twzhdyLgxFlw/IdZhCngd5Wlsr4z+DOboEzX6BSYxYjC9dZobAma/ei5iquaFHabZXKw2/mH4DrJFHCHLS7Y9A9Oajmnu8tn4XCZ2v8H1NTjeBLJNhCfkt+QPHCwLaayX2i7gRMNqefmWA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YJ7epLVB; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="nMeV99EI"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1722079291; x=1753615291;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Np9BXsfpZ4ED8CIWS5ZU5lyVIGmxSf2WKXevqzEFx4s=;
-  b=nMeV99EIfyCjf7mO0bDqM5qrjGX13uaIBLWnaTOwaMqyEAkNNHERKdzG
-   2D1sVjw7s/UbRoM3B19Uj6U/hAIy/0q10Hi+z1QAYsioor49U7EHXuvIk
-   YlRcMcHO/Gkhy3yxgqOUzCyhW1NA7dwcuH9HGECnpR2v1+50jNts89owe
-   yhlwpSR9z2C/0QgMpQJARNDFtUk4RGEis6KKvNL65JPf0dckSg+Vtzk/e
-   f8lrdIyZQc/LwdITo7VenxYWBBKFw48jsm7WNTJu5Ci4Qv4ccON45mEt3
-   2UfbH9SUmJ+uF/Lp711i+1IJLLyMnlKptLw/WsVICRLky5ZwcbRX66GOk
-   w==;
-X-CSE-ConnectionGUID: chPUe3gzRT6NhL1Fpp16Eg==
-X-CSE-MsgGUID: V/eRpHX4TeKXTyChPMSIFw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11145"; a="31259287"
-X-IronPort-AV: E=Sophos;i="6.09,241,1716274800"; 
-   d="scan'208";a="31259287"
-Received: from orviesa003.jf.intel.com ([10.64.159.143])
-  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jul 2024 04:21:31 -0700
-X-CSE-ConnectionGUID: uMFzfeUtQD+UFOZTZFeGgw==
-X-CSE-MsgGUID: dwocBO3IR5yf8fF7fPZ1IQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.09,241,1716274800"; 
-   d="scan'208";a="58315801"
-Received: from lkp-server01.sh.intel.com (HELO 68891e0c336b) ([10.239.97.150])
-  by orviesa003.jf.intel.com with ESMTP; 27 Jul 2024 04:21:26 -0700
-Received: from kbuild by 68891e0c336b with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1sXfUI-000ptc-2e;
-	Sat, 27 Jul 2024 11:21:22 +0000
-Date: Sat, 27 Jul 2024 19:21:09 +0800
-From: kernel test robot <lkp@intel.com>
-To: Lyude Paul <lyude@redhat.com>, rust-for-linux@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Danilo Krummrich <dakr@redhat.com>, airlied@redhat.com,
-	Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
-	Waiman Long <longman@redhat.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Miguel Ojeda <ojeda@kernel.org>,
-	Alex Gaynor <alex.gaynor@gmail.com>,
-	Wedson Almeida Filho <wedsonaf@gmail.com>,
-	Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-	=?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
-	Benno Lossin <benno.lossin@proton.me>,
-	Andreas Hindborg <a.hindborg@samsung.com>,
-	Alice Ryhl <aliceryhl@google.com>,
-	Martin Rodriguez Reboredo <yakoyoku@gmail.com>,
-	Trevor Gross <tmgross@umich.edu>,
-	Valentin Obst <kernel@valentinobst.de>,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 3/3] rust: sync: Add IrqSpinLock
-Message-ID: <202407271842.ujYe0mc0-lkp@intel.com>
-References: <20240725222822.1784931-4-lyude@redhat.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YJ7epLVB"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E324FC32781;
+	Sat, 27 Jul 2024 15:03:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1722092591;
+	bh=IXaYzZEvmKm+x/fO3YUtYsrdaMUWpLNISAK5k19hklY=;
+	h=From:To:Cc:Subject:Date:From;
+	b=YJ7epLVBNJ1abu6FikBFHcLIIE2jvxfKm/31Qn75IIzh2/5M9Djp4m4Cp+iawOxRe
+	 XDUYvssX8sAW2rtJQh0JyaPdVvoNLuYIFtopdlwqL4Har6oDv8dWCF7Udx/c8schnG
+	 s49eXdGEg3WHjSbhCTNo0iEyY31bHnu9NVB5lUQmTJ2L292dEce0aMHI3C69ogfgAY
+	 hcXo5b3WXy+WVJqNFvvvJUvce2k1l0KQ60tjbqvzeZZAO0C45bR4DILP+JvpiOfh44
+	 /l+yIavxpTQ4dIh8HnoivNr+1DgukgS9qb/hylhVlAxGHi70rsFpJq8M/qRNqg4qhw
+	 leUPwe2Elm20A==
+From: Masahiro Yamada <masahiroy@kernel.org>
+To: Kees Cook <kees@kernel.org>
+Cc: linux-kernel@vger.kernel.org,
+	Masahiro Yamada <masahiroy@kernel.org>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	linux-hardening@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: [PATCH v2 0/3] fortify: fix various issues in test_fortify Makefile
+Date: Sun, 28 Jul 2024 00:02:35 +0900
+Message-ID: <20240727150302.1823750-1-masahiroy@kernel.org>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240725222822.1784931-4-lyude@redhat.com>
+Content-Transfer-Encoding: 8bit
 
-Hi Lyude,
 
-kernel test robot noticed the following build errors:
+This version fixes new warnings for GCC <= 7, which were reported
+by 0 day bot.
 
-[auto build test ERROR on next-20240725]
-[also build test ERROR on linus/master v6.10]
-[cannot apply to rust/rust-next v6.10 v6.10-rc7 v6.10-rc6]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+I changed the patch order, as 3/3 is the most controvertial.
+I am confident with 1/3 and 2/3.
+3/3 drops the test coverage for GCC <= 7.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Lyude-Paul/rust-Introduce-irq-module/20240726-064926
-base:   next-20240725
-patch link:    https://lore.kernel.org/r/20240725222822.1784931-4-lyude%40redhat.com
-patch subject: [PATCH 3/3] rust: sync: Add IrqSpinLock
-config: x86_64-rhel-8.3-rust (https://download.01.org/0day-ci/archive/20240727/202407271842.ujYe0mc0-lkp@intel.com/config)
-compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240727/202407271842.ujYe0mc0-lkp@intel.com/reproduce)
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202407271842.ujYe0mc0-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+Masahiro Yamada (3):
+  fortify: refactor test_fortify Makefile to fix some build problems
+  fortify: move test_fortify.sh to lib/test_fortify/
+  fortify: use if_changed_dep to record header dependency in *.cmd files
 
->> error: mismatched closing delimiter: `)`
-   --> rust/doctests_kernel_generated.rs:4097:34
-   |
-   4097 | let b = with_irqs_disabled(|irq| {
-   |                           -      ^ unclosed delimiter
-   |                           |
-   |                           closing delimiter possibly meant for this
-   ...
-   4100 | );
-   | ^ mismatched closing delimiter
+ MAINTAINERS                                   |  1 -
+ lib/.gitignore                                |  2 -
+ lib/Makefile                                  | 38 +------------------
+ lib/test_fortify/.gitignore                   |  2 +
+ lib/test_fortify/Makefile                     | 28 ++++++++++++++
+ {scripts => lib/test_fortify}/test_fortify.sh |  0
+ 6 files changed, 31 insertions(+), 40 deletions(-)
+ create mode 100644 lib/test_fortify/.gitignore
+ create mode 100644 lib/test_fortify/Makefile
+ rename {scripts => lib/test_fortify}/test_fortify.sh (100%)
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.43.0
+
