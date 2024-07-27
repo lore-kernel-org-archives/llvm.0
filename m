@@ -1,67 +1,73 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lj1-f175.google.com (mail-lj1-f175.google.com [209.85.208.175])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C5291B86CB;
-	Sat, 27 Jul 2024 19:11:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C756228DD1
+	for <llvm@lists.linux.dev>; Sat, 27 Jul 2024 20:22:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722107502; cv=none; b=Wz0qPvUBxgsFLGST39sQMQp3b83MDIvVJkU7R6BJke5KLAQhMK1ai+UuQWwOX5f2Q460S3akb2CFaZyAdirIncuzPM+Hc/E7zvkj/6Oz+zN6M896yRHcgt5bhrzseFwLvuCtg6lgCk/YWfRUKca1OSIj5KGaZbrMcaeqCwlnlWI=
+	t=1722111742; cv=none; b=G8f+Y1YHFmClyqLxQeOTF/bxgv9VVziMNkjxs8MC+buJbCUuWVmSszU3rkE1CkGky/rYNxrpJNZIwQuaC6xscqw6vrIxuGtPTs88jwPL9DCOrxYra7svq/altNP/TUKZRgT/qnLB4CMmiiUKtYOApEEBIyK5U61ylJAmMvTxF2k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722107502; c=relaxed/simple;
-	bh=M8mrct+fcXWf4dQP4IR3e4KiOgK+DHB5K7VgHM1qCDM=;
+	s=arc-20240116; t=1722111742; c=relaxed/simple;
+	bh=kHGL1U4vzMPjvspLRMbkYBQBI26OdTx3BOt3JS1aT1E=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=TuxIBcqyPCBwvmWEy5XkpkPrLeg+Lix+w6zUoodxUkXFVWW/x6/WhrLc29hnHYHOIWMb7fgIi2KgzH7FQ47evlhc6q51SV7otxgmvb2huh7pwJ0kzqdSW8FN1CrcitrnI2SeJFuhCE+IuVi9EJ4hn/dCYcCyVwpdwOLuPS4Kkic=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=QGqh6HkN; arc=none smtp.client-ip=192.198.163.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=CXGoHfRQmjNGUKikJ9vwM4gsKDP7KqVwUI6UHQeVfjt/r9vkiniBeHbbQuBf1YPQt8QAnmC0L1FYNJHBBbp0AlK53NB59TuJzMLTiMIudSMBFHb189/LcPtl6doeS1TSy3Pgv/ESLa2aR1k0iUKyhwow6nFjaHgSk5Y8Vrsfnys=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=BamznoJ1; arc=none smtp.client-ip=209.85.208.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="QGqh6HkN"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1722107500; x=1753643500;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=M8mrct+fcXWf4dQP4IR3e4KiOgK+DHB5K7VgHM1qCDM=;
-  b=QGqh6HkNaLLN6pwjbKizC3hee9tPHzyCIJY2Ejh0RrUMJmgp3uguS9c+
-   XxBBr4ltNUMUB0gYkX3K9owYvSRKBR1z9emzGTlXu0PiBpGaBv0OTS+za
-   HDKGLHpMNdHK6Txsxpek6fwG8BbtXAhpui8G6AUUg1/7Pj7MKCZUfRKo4
-   wRxtK9UU6Modgse+4bDYnAhulFBixAd80rHuK+e6+kPiwNB455GiFvCsv
-   CPo/bNhXp4hhKMmSGO9XSeKD/FuDMioxoD/qorhBcmNhJ/ZNNZw6w4mrG
-   KuOShxYussF0W2bGWINGMM4IptX3b/LkghuyA6kAerp5N2oJgPy5IxxIt
-   Q==;
-X-CSE-ConnectionGUID: WNP02SwzTcWswvwhcoyCcw==
-X-CSE-MsgGUID: XSBVBwH3QqOwfrwTV1jCBQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11146"; a="23737253"
-X-IronPort-AV: E=Sophos;i="6.09,242,1716274800"; 
-   d="scan'208";a="23737253"
-Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jul 2024 12:11:39 -0700
-X-CSE-ConnectionGUID: 2Ao0g3xGS8qfccCuivH2mA==
-X-CSE-MsgGUID: QhoqwShcSuSMVXNuVVxAXA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.09,242,1716274800"; 
-   d="scan'208";a="76793712"
-Received: from lkp-server01.sh.intel.com (HELO 68891e0c336b) ([10.239.97.150])
-  by fmviesa002.fm.intel.com with ESMTP; 27 Jul 2024 12:11:37 -0700
-Received: from kbuild by 68891e0c336b with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1sXmpK-000qAq-1F;
-	Sat, 27 Jul 2024 19:11:34 +0000
-Date: Sun, 28 Jul 2024 03:11:03 +0800
-From: kernel test robot <lkp@intel.com>
-To: Keguang Zhang via B4 Relay <devnull+keguang.zhang.gmail.com@kernel.org>,
-	Keguang Zhang <keguang.zhang@gmail.com>,
-	Vinod Koul <vkoul@kernel.org>, Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-mips@vger.kernel.org, dmaengine@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Jiaxun Yang <jiaxun.yang@flygoat.com>
-Subject: Re: [PATCH v10 2/2] dmaengine: Loongson1: Add Loongson-1 APB DMA
- driver
-Message-ID: <202407280250.YTVHsCYs-lkp@intel.com>
-References: <20240726-loongson1-dma-v10-2-31bf095a6fa6@gmail.com>
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="BamznoJ1"
+Received: by mail-lj1-f175.google.com with SMTP id 38308e7fff4ca-2ef2cce8be8so29113341fa.1
+        for <llvm@lists.linux.dev>; Sat, 27 Jul 2024 13:22:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1722111737; x=1722716537; darn=lists.linux.dev;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=Huc0K8rSvsCtHtQb7ohCUWF9mvI2cqys5jRNGU3Q/E8=;
+        b=BamznoJ1S2lEe+Dko8RiKCHVORH+6JEOKH5LGFGIOOZgDbyF0EjEpMVyaGN8Cs6tZ8
+         d63DyORlpqn3IRk7MtkaOFMOBmW05p9S+6wf+7cOSLtzH2lGr5dh1EuED5oOmTe+FqN1
+         tn1LIpFy8CSE51A1J+YLsEJ97kwlRW3vVcwYUkyfb1oByvon8bQ6nHfhlFAQ8/3u1xUs
+         DBeJqtTU8Rx91SO7TzbK+5JPzngqcJwPFp4wIyQZMbT3VXicg5/GbDFxETZ10nRtFtwO
+         ELCFw8iZrooLRQooTsQ305y+G+NB7oQVYr8hl+R4rId9jARm1YsB7NWp311FC5uZhAwL
+         GjlA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1722111737; x=1722716537;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Huc0K8rSvsCtHtQb7ohCUWF9mvI2cqys5jRNGU3Q/E8=;
+        b=vmxKdcK03OjIAw8gnZE22j3Av116+R16S4Usqvoyt6W89xQKXsXlFXMqTBnmJbLjx+
+         EYHp52Nwol/sBGlNcRIFX4REL6YNu5D3aBGq57sKVXAAkjXtpeK3mdVFiJsdtytCQCl3
+         YTrUxUx/Y+sS2P4MLU1o1t7jqjHZ4VvOxkd6N2qcdla6e0Q+x1+Lpe+ycLPBVPGu67Bx
+         lgUw9uSrxr7z8kx+G4wzmZBV9rmoTPfodnTvY+e5bROEuSX4MiYvLxtXE6nMQmB3kUQU
+         Z0kI9iUOlbr25PhKKixYt3vy8QBhiOB+Dsl/pLQr7SCC9l+OAbJX8LCQYzV7tZ/fMbV/
+         ogvg==
+X-Forwarded-Encrypted: i=1; AJvYcCWZj6/oo4E3FSsm4+HpYEcqtSBYwbEhEih1pgfbBrd/BECUBFCpCxgsii1xmIkINQqquAUO+5Hd4YPwzux1/NXrzMkmDg==
+X-Gm-Message-State: AOJu0Yym2JIRl6XFypZnTRsEARCeFFqFDH9edb7+7QnN6TE8u9mmu55f
+	BEu2qSFy1tQm1VjU1x/ngnHqd74tgHib4GpJjMQk8X9/s9uFIlPsYApCIYcd690=
+X-Google-Smtp-Source: AGHT+IEAM19ZrUTa03e6rXgthK0w+W59uGj7mGDLlSdELDkmYK6fX4CrolrKItgRARpBhijKL3BlCQ==
+X-Received: by 2002:a05:6512:3416:b0:52c:1d8a:9716 with SMTP id 2adb3069b0e04-5309b270b3cmr3069385e87.19.1722111736812;
+        Sat, 27 Jul 2024 13:22:16 -0700 (PDT)
+Received: from eriador.lumag.spb.ru (dzdbxzyyyyyyyyyyybrhy-3.rev.dnainternet.fi. [2001:14ba:a0c3:3a00::b8c])
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-52fd5c08e9fsm843335e87.134.2024.07.27.13.22.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 27 Jul 2024 13:22:16 -0700 (PDT)
+Date: Sat, 27 Jul 2024 23:22:14 +0300
+From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+To: Adam Skladowski <a39.skl@gmail.com>
+Cc: phone-devel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht, 
+	Srinivas Kandagatla <srinivas.kandagatla@linaro.org>, Banajit Goswami <bgoswami@quicinc.com>, 
+	Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>, Rob Herring <robh@kernel.org>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>, 
+	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
+	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
+	Stephan Gerhold <stephan@gerhold.net>, alsa-devel@alsa-project.org, linux-arm-msm@vger.kernel.org, 
+	linux-sound@vger.kernel.org, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	llvm@lists.linux.dev, Vladimir Lypak <vladimir.lypak@gmail.com>
+Subject: Re: [PATCH v2 1/4] ASoC: qcom: apq8016_sbc.c: Add Quinary support
+Message-ID: <hyjoqu6w4oqv5i4hvuewtgod3ngdkkanzokz5k2uh24gce74jw@ne5ctq7bfzv4>
+References: <20240727182031.35069-1-a39.skl@gmail.com>
+ <20240727182031.35069-2-a39.skl@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -70,48 +76,46 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240726-loongson1-dma-v10-2-31bf095a6fa6@gmail.com>
+In-Reply-To: <20240727182031.35069-2-a39.skl@gmail.com>
 
-Hi Keguang,
-
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on 668d33c9ff922c4590c58754ab064aaf53c387dd]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Keguang-Zhang-via-B4-Relay/dt-bindings-dma-Add-Loongson-1-APB-DMA/20240726-212659
-base:   668d33c9ff922c4590c58754ab064aaf53c387dd
-patch link:    https://lore.kernel.org/r/20240726-loongson1-dma-v10-2-31bf095a6fa6%40gmail.com
-patch subject: [PATCH v10 2/2] dmaengine: Loongson1: Add Loongson-1 APB DMA driver
-config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20240728/202407280250.YTVHsCYs-lkp@intel.com/config)
-compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240728/202407280250.YTVHsCYs-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202407280250.YTVHsCYs-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> drivers/dma/loongson1-apb-dma.c:58:3: error: requested alignment must be 4294967296 bytes or smaller
-      58 | } __aligned(LS1X_DMA_LLI_ALIGNMENT);
-         |   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/compiler_attributes.h:33:56: note: expanded from macro '__aligned'
-      33 | #define __aligned(x)                    __attribute__((__aligned__(x)))
-         |                                                        ^           ~
-   1 error generated.
+On Sat, Jul 27, 2024 at 08:20:24PM GMT, Adam Skladowski wrote:
+> From: Vladimir Lypak <vladimir.lypak@gmail.com>
+> 
+> Add support for configuring Quinary Mi2S interface
+> it will be used on MSM8953 and MSM8976 platform.
+> 
+> Signed-off-by: Vladimir Lypak <vladimir.lypak@gmail.com>
+> [Adam: Split from MSM8953 support patch,add msg]
+> Signed-off-by: Adam Skladowski <a39.skl@gmail.com>
+> ---
+>  sound/soc/qcom/apq8016_sbc.c | 16 +++++++++++++++-
+>  1 file changed, 15 insertions(+), 1 deletion(-)
 
 
-vim +58 drivers/dma/loongson1-apb-dma.c
+[...]
 
-    53	
-    54	struct ls1x_dma_lli {
-    55		unsigned int hw[LS1X_DMADESC_SIZE];
-    56		dma_addr_t phys;
-    57		struct list_head node;
-  > 58	} __aligned(LS1X_DMA_LLI_ALIGNMENT);
-    59	
+> 
+> @@ -320,6 +331,9 @@ static int apq8016_sbc_platform_probe(struct platform_device *pdev)
+>  	if (IS_ERR(data->spkr_iomux))
+>  		return PTR_ERR(data->spkr_iomux);
+>  
+> +	res = platform_get_resource_byname(pdev, IORESOURCE_MEM, "quin-iomux");
+> +	data->quin_iomux = devm_ioremap_resource(&pdev->dev, res);
+
+
+This will still print an error if there is no quin-iomux. It's better to
+call devm_ioremap_resource() only if res is not NULL.
+
+LGTM otherwise
+
+> +
+>  	snd_soc_card_set_drvdata(card, data);
+>  
+>  	add_ops(card);
+> -- 
+> 2.45.2
+> 
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+With best wishes
+Dmitry
