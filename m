@@ -1,202 +1,730 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CCAF7111AD;
-	Sun, 28 Jul 2024 08:47:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6028B1B86E5;
+	Sun, 28 Jul 2024 10:43:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722156459; cv=none; b=s5UZAobwSKU4JJqFYrzkQfFErW0yJNbvntH2vgzwOegkefVnMtmQR1dw5ilybP7VGKWyEuBUNGbxtW3lo8wNc6I9vyNi0CR2B+S0edBFt3bJP50az22gW/PqUA0yDNPVJ2I7jY2AWlKNmvt1N30z9KkGDev+uwZHVgZLZtYS7b4=
+	t=1722163387; cv=none; b=ieDGqqHZ+lDsderG8fqt+5bB9anuRKmyOxWgi4pR7JuhEGuqQ5hfcyXwzaOCzBwRWqIXMp+g9mmyQFbSdEEhS7sKxViRxcI39RH/FXmsvwWz+H81N4Byb9weMwavuSTkzrt4xNoZTy81XJvYV6Ga5awWBm5U4uEWv2jVMZavdiE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722156459; c=relaxed/simple;
-	bh=R03aHgTg/jV6w3nu84n0N8Wysordsme2YV/oKsx4+tQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=EikxtzCod8W1Iu3A4bxidQQCvhxjWXG9td0ynnkqWBEO5EtaA/G/DT4DJVLwgVJFYyQnykRkRGEo2CsCwmhI+64PTiEhk0R3B2ac48+6yqeZgS/aUWKX2CQpOatEdZp6k9KHwx22JIq0Pp84SFWMaVXJ6OWZvPSJdy7SILif6ck=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=R4qQcqNZ; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1722163387; c=relaxed/simple;
+	bh=lot65y8TDmxfd/RHyrMJzEDcRCK1jQzEF5BMDHCJRtc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=cLdA33QNlkZL/+jE2xVsBiT1KA7+0tuSzWY7NsHtMysqSwBhMuoCqXHoGspBkYC4XQdgwOw6J7s82eUzpmvsj1lFGkWFYG3PXhq5Z6N0WH1n0NNTbS0nVT+HkkLfDmBsn1BIZfFymGE/YXdL8DjA+XXZeo6i0rx9PqQqnqpWJqU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=OsfhY9SS; arc=none smtp.client-ip=198.175.65.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="R4qQcqNZ"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 13209C116B1;
-	Sun, 28 Jul 2024 08:47:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1722156458;
-	bh=R03aHgTg/jV6w3nu84n0N8Wysordsme2YV/oKsx4+tQ=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=R4qQcqNZtBv3I/k0YIphQrYQ7pzTkW33mZls/b2t+ciZYrZBtMwKxbA1RiHGvqC0k
-	 qVZbiEpLLVsiIQ+JlNAranL1rpf/XXk9cvss1RMbJjYGKOu19RKHuBdPeXQfKMtwhK
-	 V645f2x0PtCCtA7NIVMs/O/rHQwb7xXnRR8i/92dr/NtQFvaRB6uiA0dtHmny3NKr4
-	 q68RvklopzLhdP31wrcHfjWPnRBAVmAgoWiRjBLPyph23IDPY+l14QERcbYIh24fvG
-	 7tFKcUz/O+OWGqFcMCaoCu24FUIgujUwfCkLTVswLOh0xRmNhIXluiK6A01UCEZBYd
-	 zironSjr/isVA==
-Message-ID: <00b6a3bf-082a-415c-b112-16b273d1af7c@kernel.org>
-Date: Sun, 28 Jul 2024 10:47:29 +0200
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="OsfhY9SS"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1722163384; x=1753699384;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=lot65y8TDmxfd/RHyrMJzEDcRCK1jQzEF5BMDHCJRtc=;
+  b=OsfhY9SS7oRDPmZN3mwpzw26IoivFdIWZ0CMDpYokcDODTUr00DgwePq
+   9So0qrOzJsQidviSh9CqubpckLcu87bfYAivYUq1KMq00XSRTJP/C69Wt
+   YuFURowXVo5kjdrUxjDdN9erV7De5ZI1RpbjEdLmPPkTfrJgxulZ7q3lK
+   i4O5OR4J9XfxvGP/kdZ29JoJbXlSI7xmHL14O3sBwJcJmf31f1oUa+fSr
+   2d1jj82f9MDR6B6lnmSm6LeSgU0kK2VHldSWAqFzL+mSst/FoW+EHajQ/
+   PIHZSk9l6u60OQRiwD6lU9qxWuFUUNYXO77XmRdZm9uuZSFjmMqhprBTC
+   A==;
+X-CSE-ConnectionGUID: IcJ8UIMdT16ps6YTmxublw==
+X-CSE-MsgGUID: qXUGM8OsTQynIaj5b9ddSg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11146"; a="31297195"
+X-IronPort-AV: E=Sophos;i="6.09,243,1716274800"; 
+   d="scan'208";a="31297195"
+Received: from orviesa007.jf.intel.com ([10.64.159.147])
+  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jul 2024 03:43:03 -0700
+X-CSE-ConnectionGUID: R9I55EuJQWu2+yt6/x9AKg==
+X-CSE-MsgGUID: wByR+TZFTAGhbm/c+WvmWQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.09,243,1716274800"; 
+   d="scan'208";a="54277184"
+Received: from lkp-server01.sh.intel.com (HELO 68891e0c336b) ([10.239.97.150])
+  by orviesa007.jf.intel.com with ESMTP; 28 Jul 2024 03:43:01 -0700
+Received: from kbuild by 68891e0c336b with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1sY1Mg-000qjC-2T;
+	Sun, 28 Jul 2024 10:42:58 +0000
+Date: Sun, 28 Jul 2024 18:42:02 +0800
+From: kernel test robot <lkp@intel.com>
+To: Avri Altman <avri.altman@wdc.com>, Ulf Hansson <ulf.hansson@linaro.org>,
+	linux-mmc@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Ricky WU <ricky_wu@realtek.com>, Avri Altman <avri.altman@wdc.com>
+Subject: Re: [PATCH 09/10] mmc: core: Add Ext memory addressing for erase
+Message-ID: <202407281841.RRgIK067-lkp@intel.com>
+References: <20240728081154.1782120-10-avri.altman@wdc.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 3/4] ASoC: dt-bindings: apq8016-sbc: Add
- msm8953/msm8976-qdsp6-sndcard
-To: Adam Skladowski <a39.skl@gmail.com>
-Cc: phone-devel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht,
- Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
- Banajit Goswami <bgoswami@quicinc.com>, Liam Girdwood <lgirdwood@gmail.com>,
- Mark Brown <broonie@kernel.org>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, Jaroslav Kysela <perex@perex.cz>,
- Takashi Iwai <tiwai@suse.com>, Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling
- <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
- Stephan Gerhold <stephan@gerhold.net>, alsa-devel@alsa-project.org,
- linux-arm-msm@vger.kernel.org, linux-sound@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- llvm@lists.linux.dev
-References: <20240727182031.35069-1-a39.skl@gmail.com>
- <20240727182031.35069-4-a39.skl@gmail.com>
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- xsFNBFVDQq4BEAC6KeLOfFsAvFMBsrCrJ2bCalhPv5+KQF2PS2+iwZI8BpRZoV+Bd5kWvN79
- cFgcqTTuNHjAvxtUG8pQgGTHAObYs6xeYJtjUH0ZX6ndJ33FJYf5V3yXqqjcZ30FgHzJCFUu
- JMp7PSyMPzpUXfU12yfcRYVEMQrmplNZssmYhiTeVicuOOypWugZKVLGNm0IweVCaZ/DJDIH
- gNbpvVwjcKYrx85m9cBVEBUGaQP6AT7qlVCkrf50v8bofSIyVa2xmubbAwwFA1oxoOusjPIE
- J3iadrwpFvsZjF5uHAKS+7wHLoW9hVzOnLbX6ajk5Hf8Pb1m+VH/E8bPBNNYKkfTtypTDUCj
- NYcd27tjnXfG+SDs/EXNUAIRefCyvaRG7oRYF3Ec+2RgQDRnmmjCjoQNbFrJvJkFHlPeHaeS
- BosGY+XWKydnmsfY7SSnjAzLUGAFhLd/XDVpb1Een2XucPpKvt9ORF+48gy12FA5GduRLhQU
- vK4tU7ojoem/G23PcowM1CwPurC8sAVsQb9KmwTGh7rVz3ks3w/zfGBy3+WmLg++C2Wct6nM
- Pd8/6CBVjEWqD06/RjI2AnjIq5fSEH/BIfXXfC68nMp9BZoy3So4ZsbOlBmtAPvMYX6U8VwD
- TNeBxJu5Ex0Izf1NV9CzC3nNaFUYOY8KfN01X5SExAoVTr09ewARAQABzSVLcnp5c3p0b2Yg
- S296bG93c2tpIDxrcnprQGtlcm5lbC5vcmc+wsGVBBMBCgA/AhsDBgsJCAcDAgYVCAIJCgsE
- FgIDAQIeAQIXgBYhBJvQfg4MUfjVlne3VBuTQ307QWKbBQJgPO8PBQkUX63hAAoJEBuTQ307
- QWKbBn8P+QFxwl7pDsAKR1InemMAmuykCHl+XgC0LDqrsWhAH5TYeTVXGSyDsuZjHvj+FRP+
- gZaEIYSw2Yf0e91U9HXo3RYhEwSmxUQ4Fjhc9qAwGKVPQf6YuQ5yy6pzI8brcKmHHOGrB3tP
- /MODPt81M1zpograAC2WTDzkICfHKj8LpXp45PylD99J9q0Y+gb04CG5/wXs+1hJy/dz0tYy
- iua4nCuSRbxnSHKBS5vvjosWWjWQXsRKd+zzXp6kfRHHpzJkhRwF6ArXi4XnQ+REnoTfM5Fk
- VmVmSQ3yFKKePEzoIriT1b2sXO0g5QXOAvFqB65LZjXG9jGJoVG6ZJrUV1MVK8vamKoVbUEe
- 0NlLl/tX96HLowHHoKhxEsbFzGzKiFLh7hyboTpy2whdonkDxpnv/H8wE9M3VW/fPgnL2nPe
- xaBLqyHxy9hA9JrZvxg3IQ61x7rtBWBUQPmEaK0azW+l3ysiNpBhISkZrsW3ZUdknWu87nh6
- eTB7mR7xBcVxnomxWwJI4B0wuMwCPdgbV6YDUKCuSgRMUEiVry10xd9KLypR9Vfyn1AhROrq
- AubRPVeJBf9zR5UW1trJNfwVt3XmbHX50HCcHdEdCKiT9O+FiEcahIaWh9lihvO0ci0TtVGZ
- MCEtaCE80Q3Ma9RdHYB3uVF930jwquplFLNF+IBCn5JRzsFNBFVDXDQBEADNkrQYSREUL4D3
- Gws46JEoZ9HEQOKtkrwjrzlw/tCmqVzERRPvz2Xg8n7+HRCrgqnodIYoUh5WsU84N03KlLue
- MNsWLJBvBaubYN4JuJIdRr4dS4oyF1/fQAQPHh8Thpiz0SAZFx6iWKB7Qrz3OrGCjTPcW6ei
- OMheesVS5hxietSmlin+SilmIAPZHx7n242u6kdHOh+/SyLImKn/dh9RzatVpUKbv34eP1wA
- GldWsRxbf3WP9pFNObSzI/Bo3kA89Xx2rO2roC+Gq4LeHvo7ptzcLcrqaHUAcZ3CgFG88CnA
- 6z6lBZn0WyewEcPOPdcUB2Q7D/NiUY+HDiV99rAYPJztjeTrBSTnHeSBPb+qn5ZZGQwIdUW9
- YegxWKvXXHTwB5eMzo/RB6vffwqcnHDoe0q7VgzRRZJwpi6aMIXLfeWZ5Wrwaw2zldFuO4Dt
- 91pFzBSOIpeMtfgb/Pfe/a1WJ/GgaIRIBE+NUqckM+3zJHGmVPqJP/h2Iwv6nw8U+7Yyl6gU
- BLHFTg2hYnLFJI4Xjg+AX1hHFVKmvl3VBHIsBv0oDcsQWXqY+NaFahT0lRPjYtrTa1v3tem/
- JoFzZ4B0p27K+qQCF2R96hVvuEyjzBmdq2esyE6zIqftdo4MOJho8uctOiWbwNNq2U9pPWmu
- 4vXVFBYIGmpyNPYzRm0QPwARAQABwsF8BBgBCgAmAhsMFiEEm9B+DgxR+NWWd7dUG5NDfTtB
- YpsFAmA872oFCRRflLYACgkQG5NDfTtBYpvScw/9GrqBrVLuJoJ52qBBKUBDo4E+5fU1bjt0
- Gv0nh/hNJuecuRY6aemU6HOPNc2t8QHMSvwbSF+Vp9ZkOvrM36yUOufctoqON+wXrliEY0J4
- ksR89ZILRRAold9Mh0YDqEJc1HmuxYLJ7lnbLYH1oui8bLbMBM8S2Uo9RKqV2GROLi44enVt
- vdrDvo+CxKj2K+d4cleCNiz5qbTxPUW/cgkwG0lJc4I4sso7l4XMDKn95c7JtNsuzqKvhEVS
- oic5by3fbUnuI0cemeizF4QdtX2uQxrP7RwHFBd+YUia7zCcz0//rv6FZmAxWZGy5arNl6Vm
- lQqNo7/Poh8WWfRS+xegBxc6hBXahpyUKphAKYkah+m+I0QToCfnGKnPqyYIMDEHCS/RfqA5
- t8F+O56+oyLBAeWX7XcmyM6TGeVfb+OZVMJnZzK0s2VYAuI0Rl87FBFYgULdgqKV7R7WHzwD
- uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
- 7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
- 5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
-In-Reply-To: <20240727182031.35069-4-a39.skl@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240728081154.1782120-10-avri.altman@wdc.com>
 
-On 27/07/2024 20:20, Adam Skladowski wrote:
-> Document MSM8953/MSM8976 QDSP6 cards.
-> 
-> Signed-off-by: Adam Skladowski <a39.skl@gmail.com>
-> ---
+Hi Avri,
 
-Your cover letter must ALWAYS clearly document the dependency.
+kernel test robot noticed the following build warnings:
 
->  .../sound/qcom,apq8016-sbc-sndcard.yaml       | 51 ++++++++++++++++---
->  1 file changed, 45 insertions(+), 6 deletions(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/sound/qcom,apq8016-sbc-sndcard.yaml b/Documentation/devicetree/bindings/sound/qcom,apq8016-sbc-sndcard.yaml
-> index 6ad451549036..1706ce334d2f 100644
-> --- a/Documentation/devicetree/bindings/sound/qcom,apq8016-sbc-sndcard.yaml
-> +++ b/Documentation/devicetree/bindings/sound/qcom,apq8016-sbc-sndcard.yaml
-> @@ -15,16 +15,16 @@ properties:
->      enum:
->        - qcom,apq8016-sbc-sndcard
->        - qcom,msm8916-qdsp6-sndcard
-> +      - qcom,msm8953-qdsp6-sndcard
-> +      - qcom,msm8976-qdsp6-sndcard
->  
->    reg:
-> -    items:
-> -      - description: Microphone I/O mux register address
-> -      - description: Speaker I/O mux register address
+[auto build test WARNING on linus/master]
+[also build test WARNING on v6.10 next-20240726]
+[cannot apply to ulf-hansson-mmc-mirror/next]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-As I explained you on IRC, grow the list here and add minItems
+url:    https://github.com/intel-lab-lkp/linux/commits/Avri-Altman/mmc-sd-SDUC-Support-Recognition/20240728-161645
+base:   linus/master
+patch link:    https://lore.kernel.org/r/20240728081154.1782120-10-avri.altman%40wdc.com
+patch subject: [PATCH 09/10] mmc: core: Add Ext memory addressing for erase
+config: i386-buildonly-randconfig-001-20240728 (https://download.01.org/0day-ci/archive/20240728/202407281841.RRgIK067-lkp@intel.com/config)
+compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240728/202407281841.RRgIK067-lkp@intel.com/reproduce)
 
-> +    minItems: 2
-> +    maxItems: 3
->  
->    reg-names:
-> -    items:
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202407281841.RRgIK067-lkp@intel.com/
 
-As I explained you on IRC, grow the list here and add minItems
+All warnings (new ones prefixed by >>):
 
-> -      - const: mic-iomux
-> -      - const: spkr-iomux
-> +    minItems: 2
-> +    maxItems: 3
->  
->    audio-routing:
->      $ref: /schemas/types.yaml#/definitions/non-unique-string-array
-> @@ -106,6 +106,45 @@ required:
->    - reg-names
->    - model
->  
-> +allOf:
-> +  - if:
-> +      properties:
-> +        compatible:
-> +          contains:
-> +            enum:
-> +              - qcom,apq8016-sbc-sndcard
-> +              - qcom,msm8916-qdsp6-sndcard
-> +    then:
-> +      properties:
-> +        reg:
+>> drivers/mmc/core/core.c:1667:27: warning: shift count >= width of type [-Wshift-count-overflow]
+    1667 |                 u8 ext_addr = FIELD_GET(SDUC_ADDR_EXT_MASK, from);
+         |                               ~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/mmc/core/sd_ops.h:14:28: note: expanded from macro 'SDUC_ADDR_EXT_MASK'
+      14 | #define SDUC_ADDR_EXT_MASK GENMASK(37, 32)
+         |                            ^
+   include/linux/bits.h:35:31: note: expanded from macro 'GENMASK'
+      35 |         (GENMASK_INPUT_CHECK(h, l) + __GENMASK(h, l))
+         |                                      ^
+   include/uapi/linux/bits.h:8:31: note: expanded from macro '__GENMASK'
+       8 |         (((~_UL(0)) - (_UL(1) << (l)) + 1) & \
+         |                               ^
+   note: (skipping 3 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/linux/compiler_types.h:510:22: note: expanded from macro 'compiletime_assert'
+     510 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+         |         ~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/compiler_types.h:498:23: note: expanded from macro '_compiletime_assert'
+     498 |         __compiletime_assert(condition, msg, prefix, suffix)
+         |         ~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/compiler_types.h:490:9: note: expanded from macro '__compiletime_assert'
+     490 |                 if (!(condition))                                       \
+         |                       ^~~~~~~~~
+>> drivers/mmc/core/core.c:1667:27: warning: shift count is negative [-Wshift-count-negative]
+    1667 |                 u8 ext_addr = FIELD_GET(SDUC_ADDR_EXT_MASK, from);
+         |                               ~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/mmc/core/sd_ops.h:14:28: note: expanded from macro 'SDUC_ADDR_EXT_MASK'
+      14 | #define SDUC_ADDR_EXT_MASK GENMASK(37, 32)
+         |                            ^
+   include/linux/bits.h:35:31: note: expanded from macro 'GENMASK'
+      35 |         (GENMASK_INPUT_CHECK(h, l) + __GENMASK(h, l))
+         |                                      ^
+   include/uapi/linux/bits.h:9:19: note: expanded from macro '__GENMASK'
+       9 |          (~_UL(0) >> (__BITS_PER_LONG - 1 - (h))))
+         |                   ^
+   note: (skipping 3 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/linux/compiler_types.h:510:22: note: expanded from macro 'compiletime_assert'
+     510 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+         |         ~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/compiler_types.h:498:23: note: expanded from macro '_compiletime_assert'
+     498 |         __compiletime_assert(condition, msg, prefix, suffix)
+         |         ~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/compiler_types.h:490:9: note: expanded from macro '__compiletime_assert'
+     490 |                 if (!(condition))                                       \
+         |                       ^~~~~~~~~
+>> drivers/mmc/core/core.c:1667:27: warning: shift count >= width of type [-Wshift-count-overflow]
+    1667 |                 u8 ext_addr = FIELD_GET(SDUC_ADDR_EXT_MASK, from);
+         |                               ~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/mmc/core/sd_ops.h:14:28: note: expanded from macro 'SDUC_ADDR_EXT_MASK'
+      14 | #define SDUC_ADDR_EXT_MASK GENMASK(37, 32)
+         |                            ^
+   include/linux/bits.h:35:31: note: expanded from macro 'GENMASK'
+      35 |         (GENMASK_INPUT_CHECK(h, l) + __GENMASK(h, l))
+         |                                      ^
+   include/uapi/linux/bits.h:8:31: note: expanded from macro '__GENMASK'
+       8 |         (((~_UL(0)) - (_UL(1) << (l)) + 1) & \
+         |                               ^
+   note: (skipping 3 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/linux/compiler_types.h:510:22: note: expanded from macro 'compiletime_assert'
+     510 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+         |         ~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/compiler_types.h:498:23: note: expanded from macro '_compiletime_assert'
+     498 |         __compiletime_assert(condition, msg, prefix, suffix)
+         |         ~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/compiler_types.h:490:9: note: expanded from macro '__compiletime_assert'
+     490 |                 if (!(condition))                                       \
+         |                       ^~~~~~~~~
+>> drivers/mmc/core/core.c:1667:27: warning: shift count is negative [-Wshift-count-negative]
+    1667 |                 u8 ext_addr = FIELD_GET(SDUC_ADDR_EXT_MASK, from);
+         |                               ~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/mmc/core/sd_ops.h:14:28: note: expanded from macro 'SDUC_ADDR_EXT_MASK'
+      14 | #define SDUC_ADDR_EXT_MASK GENMASK(37, 32)
+         |                            ^
+   include/linux/bits.h:35:31: note: expanded from macro 'GENMASK'
+      35 |         (GENMASK_INPUT_CHECK(h, l) + __GENMASK(h, l))
+         |                                      ^
+   include/uapi/linux/bits.h:9:19: note: expanded from macro '__GENMASK'
+       9 |          (~_UL(0) >> (__BITS_PER_LONG - 1 - (h))))
+         |                   ^
+   note: (skipping 3 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/linux/compiler_types.h:510:22: note: expanded from macro 'compiletime_assert'
+     510 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+         |         ~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/compiler_types.h:498:23: note: expanded from macro '_compiletime_assert'
+     498 |         __compiletime_assert(condition, msg, prefix, suffix)
+         |         ~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/compiler_types.h:490:9: note: expanded from macro '__compiletime_assert'
+     490 |                 if (!(condition))                                       \
+         |                       ^~~~~~~~~
+>> drivers/mmc/core/core.c:1667:27: warning: shift count >= width of type [-Wshift-count-overflow]
+    1667 |                 u8 ext_addr = FIELD_GET(SDUC_ADDR_EXT_MASK, from);
+         |                               ~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/mmc/core/sd_ops.h:14:28: note: expanded from macro 'SDUC_ADDR_EXT_MASK'
+      14 | #define SDUC_ADDR_EXT_MASK GENMASK(37, 32)
+         |                            ^
+   include/linux/bits.h:35:31: note: expanded from macro 'GENMASK'
+      35 |         (GENMASK_INPUT_CHECK(h, l) + __GENMASK(h, l))
+         |                                      ^
+   include/uapi/linux/bits.h:8:31: note: expanded from macro '__GENMASK'
+       8 |         (((~_UL(0)) - (_UL(1) << (l)) + 1) & \
+         |                               ^
+   note: (skipping 3 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/linux/compiler_types.h:510:22: note: expanded from macro 'compiletime_assert'
+     510 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+         |         ~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/compiler_types.h:498:23: note: expanded from macro '_compiletime_assert'
+     498 |         __compiletime_assert(condition, msg, prefix, suffix)
+         |         ~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/compiler_types.h:490:9: note: expanded from macro '__compiletime_assert'
+     490 |                 if (!(condition))                                       \
+         |                       ^~~~~~~~~
+>> drivers/mmc/core/core.c:1667:27: warning: shift count is negative [-Wshift-count-negative]
+    1667 |                 u8 ext_addr = FIELD_GET(SDUC_ADDR_EXT_MASK, from);
+         |                               ~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/mmc/core/sd_ops.h:14:28: note: expanded from macro 'SDUC_ADDR_EXT_MASK'
+      14 | #define SDUC_ADDR_EXT_MASK GENMASK(37, 32)
+         |                            ^
+   include/linux/bits.h:35:31: note: expanded from macro 'GENMASK'
+      35 |         (GENMASK_INPUT_CHECK(h, l) + __GENMASK(h, l))
+         |                                      ^
+   include/uapi/linux/bits.h:9:19: note: expanded from macro '__GENMASK'
+       9 |          (~_UL(0) >> (__BITS_PER_LONG - 1 - (h))))
+         |                   ^
+   note: (skipping 3 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/linux/compiler_types.h:510:22: note: expanded from macro 'compiletime_assert'
+     510 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+         |         ~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/compiler_types.h:498:23: note: expanded from macro '_compiletime_assert'
+     498 |         __compiletime_assert(condition, msg, prefix, suffix)
+         |         ~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/compiler_types.h:490:9: note: expanded from macro '__compiletime_assert'
+     490 |                 if (!(condition))                                       \
+         |                       ^~~~~~~~~
+>> drivers/mmc/core/core.c:1667:27: warning: shift count >= width of type [-Wshift-count-overflow]
+    1667 |                 u8 ext_addr = FIELD_GET(SDUC_ADDR_EXT_MASK, from);
+         |                               ~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/mmc/core/sd_ops.h:14:28: note: expanded from macro 'SDUC_ADDR_EXT_MASK'
+      14 | #define SDUC_ADDR_EXT_MASK GENMASK(37, 32)
+         |                            ^
+   include/linux/bits.h:35:31: note: expanded from macro 'GENMASK'
+      35 |         (GENMASK_INPUT_CHECK(h, l) + __GENMASK(h, l))
+         |                                      ^
+   include/uapi/linux/bits.h:8:31: note: expanded from macro '__GENMASK'
+       8 |         (((~_UL(0)) - (_UL(1) << (l)) + 1) & \
+         |                               ^
+   note: (skipping 4 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/linux/compiler_types.h:510:22: note: expanded from macro 'compiletime_assert'
+     510 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+         |         ~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/compiler_types.h:498:23: note: expanded from macro '_compiletime_assert'
+     498 |         __compiletime_assert(condition, msg, prefix, suffix)
+         |         ~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/compiler_types.h:490:9: note: expanded from macro '__compiletime_assert'
+     490 |                 if (!(condition))                                       \
+         |                       ^~~~~~~~~
+>> drivers/mmc/core/core.c:1667:27: warning: shift count is negative [-Wshift-count-negative]
+    1667 |                 u8 ext_addr = FIELD_GET(SDUC_ADDR_EXT_MASK, from);
+         |                               ~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/mmc/core/sd_ops.h:14:28: note: expanded from macro 'SDUC_ADDR_EXT_MASK'
+      14 | #define SDUC_ADDR_EXT_MASK GENMASK(37, 32)
+         |                            ^
+   include/linux/bits.h:35:31: note: expanded from macro 'GENMASK'
+      35 |         (GENMASK_INPUT_CHECK(h, l) + __GENMASK(h, l))
+         |                                      ^
+   include/uapi/linux/bits.h:9:19: note: expanded from macro '__GENMASK'
+       9 |          (~_UL(0) >> (__BITS_PER_LONG - 1 - (h))))
+         |                   ^
+   note: (skipping 4 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/linux/compiler_types.h:510:22: note: expanded from macro 'compiletime_assert'
+     510 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+         |         ~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/compiler_types.h:498:23: note: expanded from macro '_compiletime_assert'
+     498 |         __compiletime_assert(condition, msg, prefix, suffix)
+         |         ~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/compiler_types.h:490:9: note: expanded from macro '__compiletime_assert'
+     490 |                 if (!(condition))                                       \
+         |                       ^~~~~~~~~
+>> drivers/mmc/core/core.c:1667:27: warning: shift count >= width of type [-Wshift-count-overflow]
+    1667 |                 u8 ext_addr = FIELD_GET(SDUC_ADDR_EXT_MASK, from);
+         |                               ~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/mmc/core/sd_ops.h:14:28: note: expanded from macro 'SDUC_ADDR_EXT_MASK'
+      14 | #define SDUC_ADDR_EXT_MASK GENMASK(37, 32)
+         |                            ^
+   include/linux/bits.h:35:31: note: expanded from macro 'GENMASK'
+      35 |         (GENMASK_INPUT_CHECK(h, l) + __GENMASK(h, l))
+         |                                      ^
+   include/uapi/linux/bits.h:8:31: note: expanded from macro '__GENMASK'
+       8 |         (((~_UL(0)) - (_UL(1) << (l)) + 1) & \
+         |                               ^
+   note: (skipping 4 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/linux/compiler_types.h:510:22: note: expanded from macro 'compiletime_assert'
+     510 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+         |         ~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/compiler_types.h:498:23: note: expanded from macro '_compiletime_assert'
+     498 |         __compiletime_assert(condition, msg, prefix, suffix)
+         |         ~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/compiler_types.h:490:9: note: expanded from macro '__compiletime_assert'
+     490 |                 if (!(condition))                                       \
+         |                       ^~~~~~~~~
+>> drivers/mmc/core/core.c:1667:27: warning: shift count is negative [-Wshift-count-negative]
+    1667 |                 u8 ext_addr = FIELD_GET(SDUC_ADDR_EXT_MASK, from);
+         |                               ~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/mmc/core/sd_ops.h:14:28: note: expanded from macro 'SDUC_ADDR_EXT_MASK'
+      14 | #define SDUC_ADDR_EXT_MASK GENMASK(37, 32)
+         |                            ^
+   include/linux/bits.h:35:31: note: expanded from macro 'GENMASK'
+      35 |         (GENMASK_INPUT_CHECK(h, l) + __GENMASK(h, l))
+         |                                      ^
+   include/uapi/linux/bits.h:9:19: note: expanded from macro '__GENMASK'
+       9 |          (~_UL(0) >> (__BITS_PER_LONG - 1 - (h))))
+         |                   ^
+   note: (skipping 4 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/linux/compiler_types.h:510:22: note: expanded from macro 'compiletime_assert'
+     510 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+         |         ~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/compiler_types.h:498:23: note: expanded from macro '_compiletime_assert'
+     498 |         __compiletime_assert(condition, msg, prefix, suffix)
+         |         ~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/compiler_types.h:490:9: note: expanded from macro '__compiletime_assert'
+     490 |                 if (!(condition))                                       \
+         |                       ^~~~~~~~~
+>> drivers/mmc/core/core.c:1667:27: warning: shift count >= width of type [-Wshift-count-overflow]
+    1667 |                 u8 ext_addr = FIELD_GET(SDUC_ADDR_EXT_MASK, from);
+         |                               ~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/mmc/core/sd_ops.h:14:28: note: expanded from macro 'SDUC_ADDR_EXT_MASK'
+      14 | #define SDUC_ADDR_EXT_MASK GENMASK(37, 32)
+         |                            ^
+   include/linux/bits.h:35:31: note: expanded from macro 'GENMASK'
+      35 |         (GENMASK_INPUT_CHECK(h, l) + __GENMASK(h, l))
+         |                                      ^
+   include/uapi/linux/bits.h:8:31: note: expanded from macro '__GENMASK'
+       8 |         (((~_UL(0)) - (_UL(1) << (l)) + 1) & \
+         |                               ^
+   note: (skipping 5 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/linux/compiler_types.h:510:22: note: expanded from macro 'compiletime_assert'
+     510 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+         |         ~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/compiler_types.h:498:23: note: expanded from macro '_compiletime_assert'
+     498 |         __compiletime_assert(condition, msg, prefix, suffix)
+         |         ~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/compiler_types.h:490:9: note: expanded from macro '__compiletime_assert'
+     490 |                 if (!(condition))                                       \
+         |                       ^~~~~~~~~
+>> drivers/mmc/core/core.c:1667:27: warning: shift count is negative [-Wshift-count-negative]
+    1667 |                 u8 ext_addr = FIELD_GET(SDUC_ADDR_EXT_MASK, from);
+         |                               ~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/mmc/core/sd_ops.h:14:28: note: expanded from macro 'SDUC_ADDR_EXT_MASK'
+      14 | #define SDUC_ADDR_EXT_MASK GENMASK(37, 32)
+         |                            ^
+   include/linux/bits.h:35:31: note: expanded from macro 'GENMASK'
+      35 |         (GENMASK_INPUT_CHECK(h, l) + __GENMASK(h, l))
+         |                                      ^
+   include/uapi/linux/bits.h:9:19: note: expanded from macro '__GENMASK'
+       9 |          (~_UL(0) >> (__BITS_PER_LONG - 1 - (h))))
+         |                   ^
+   note: (skipping 5 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/linux/compiler_types.h:510:22: note: expanded from macro 'compiletime_assert'
+     510 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+         |         ~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/compiler_types.h:498:23: note: expanded from macro '_compiletime_assert'
+     498 |         __compiletime_assert(condition, msg, prefix, suffix)
+         |         ~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/compiler_types.h:490:9: note: expanded from macro '__compiletime_assert'
+     490 |                 if (!(condition))                                       \
+         |                       ^~~~~~~~~
+>> drivers/mmc/core/core.c:1667:27: warning: shift count >= width of type [-Wshift-count-overflow]
+    1667 |                 u8 ext_addr = FIELD_GET(SDUC_ADDR_EXT_MASK, from);
+         |                               ~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/mmc/core/sd_ops.h:14:28: note: expanded from macro 'SDUC_ADDR_EXT_MASK'
+      14 | #define SDUC_ADDR_EXT_MASK GENMASK(37, 32)
+         |                            ^
+   include/linux/bits.h:35:31: note: expanded from macro 'GENMASK'
+      35 |         (GENMASK_INPUT_CHECK(h, l) + __GENMASK(h, l))
+         |                                      ^
+   include/uapi/linux/bits.h:8:31: note: expanded from macro '__GENMASK'
+       8 |         (((~_UL(0)) - (_UL(1) << (l)) + 1) & \
+         |                               ^
+   note: (skipping 6 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/linux/compiler_types.h:510:22: note: expanded from macro 'compiletime_assert'
+     510 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+         |         ~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/compiler_types.h:498:23: note: expanded from macro '_compiletime_assert'
+     498 |         __compiletime_assert(condition, msg, prefix, suffix)
+         |         ~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/compiler_types.h:490:9: note: expanded from macro '__compiletime_assert'
+     490 |                 if (!(condition))                                       \
+         |                       ^~~~~~~~~
+>> drivers/mmc/core/core.c:1667:27: warning: shift count is negative [-Wshift-count-negative]
+    1667 |                 u8 ext_addr = FIELD_GET(SDUC_ADDR_EXT_MASK, from);
+         |                               ~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/mmc/core/sd_ops.h:14:28: note: expanded from macro 'SDUC_ADDR_EXT_MASK'
+      14 | #define SDUC_ADDR_EXT_MASK GENMASK(37, 32)
+         |                            ^
+   include/linux/bits.h:35:31: note: expanded from macro 'GENMASK'
+      35 |         (GENMASK_INPUT_CHECK(h, l) + __GENMASK(h, l))
+         |                                      ^
+   include/uapi/linux/bits.h:9:19: note: expanded from macro '__GENMASK'
+       9 |          (~_UL(0) >> (__BITS_PER_LONG - 1 - (h))))
+         |                   ^
+   note: (skipping 6 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/linux/compiler_types.h:510:22: note: expanded from macro 'compiletime_assert'
+     510 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+         |         ~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/compiler_types.h:498:23: note: expanded from macro '_compiletime_assert'
+     498 |         __compiletime_assert(condition, msg, prefix, suffix)
+         |         ~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/compiler_types.h:490:9: note: expanded from macro '__compiletime_assert'
+     490 |                 if (!(condition))                                       \
+         |                       ^~~~~~~~~
+>> drivers/mmc/core/core.c:1667:27: warning: shift count >= width of type [-Wshift-count-overflow]
+    1667 |                 u8 ext_addr = FIELD_GET(SDUC_ADDR_EXT_MASK, from);
+         |                               ~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/mmc/core/sd_ops.h:14:28: note: expanded from macro 'SDUC_ADDR_EXT_MASK'
+      14 | #define SDUC_ADDR_EXT_MASK GENMASK(37, 32)
+         |                            ^
+   include/linux/bits.h:35:31: note: expanded from macro 'GENMASK'
+      35 |         (GENMASK_INPUT_CHECK(h, l) + __GENMASK(h, l))
+         |                                      ^
+   include/uapi/linux/bits.h:8:31: note: expanded from macro '__GENMASK'
+       8 |         (((~_UL(0)) - (_UL(1) << (l)) + 1) & \
+         |                               ^
+   note: (skipping 5 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/linux/compiler_types.h:510:22: note: expanded from macro 'compiletime_assert'
+     510 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+         |         ~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/compiler_types.h:498:23: note: expanded from macro '_compiletime_assert'
+     498 |         __compiletime_assert(condition, msg, prefix, suffix)
+         |         ~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/compiler_types.h:490:9: note: expanded from macro '__compiletime_assert'
+     490 |                 if (!(condition))                                       \
+         |                       ^~~~~~~~~
+>> drivers/mmc/core/core.c:1667:27: warning: shift count is negative [-Wshift-count-negative]
+    1667 |                 u8 ext_addr = FIELD_GET(SDUC_ADDR_EXT_MASK, from);
+         |                               ~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/mmc/core/sd_ops.h:14:28: note: expanded from macro 'SDUC_ADDR_EXT_MASK'
+      14 | #define SDUC_ADDR_EXT_MASK GENMASK(37, 32)
+         |                            ^
+   include/linux/bits.h:35:31: note: expanded from macro 'GENMASK'
+      35 |         (GENMASK_INPUT_CHECK(h, l) + __GENMASK(h, l))
+         |                                      ^
+   include/uapi/linux/bits.h:9:19: note: expanded from macro '__GENMASK'
+       9 |          (~_UL(0) >> (__BITS_PER_LONG - 1 - (h))))
+         |                   ^
+   note: (skipping 5 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/linux/compiler_types.h:510:22: note: expanded from macro 'compiletime_assert'
+     510 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+         |         ~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/compiler_types.h:498:23: note: expanded from macro '_compiletime_assert'
+     498 |         __compiletime_assert(condition, msg, prefix, suffix)
+         |         ~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/compiler_types.h:490:9: note: expanded from macro '__compiletime_assert'
+     490 |                 if (!(condition))                                       \
+         |                       ^~~~~~~~~
+>> drivers/mmc/core/core.c:1667:27: warning: shift count >= width of type [-Wshift-count-overflow]
+    1667 |                 u8 ext_addr = FIELD_GET(SDUC_ADDR_EXT_MASK, from);
+         |                               ~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/mmc/core/sd_ops.h:14:28: note: expanded from macro 'SDUC_ADDR_EXT_MASK'
+      14 | #define SDUC_ADDR_EXT_MASK GENMASK(37, 32)
+         |                            ^
+   include/linux/bits.h:35:31: note: expanded from macro 'GENMASK'
+      35 |         (GENMASK_INPUT_CHECK(h, l) + __GENMASK(h, l))
+         |                                      ^
+   include/uapi/linux/bits.h:8:31: note: expanded from macro '__GENMASK'
+       8 |         (((~_UL(0)) - (_UL(1) << (l)) + 1) & \
+         |                               ^
+   note: (skipping 6 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/linux/compiler_types.h:510:22: note: expanded from macro 'compiletime_assert'
+     510 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+         |         ~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/compiler_types.h:498:23: note: expanded from macro '_compiletime_assert'
+     498 |         __compiletime_assert(condition, msg, prefix, suffix)
+         |         ~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/compiler_types.h:490:9: note: expanded from macro '__compiletime_assert'
+     490 |                 if (!(condition))                                       \
+         |                       ^~~~~~~~~
+>> drivers/mmc/core/core.c:1667:27: warning: shift count is negative [-Wshift-count-negative]
+    1667 |                 u8 ext_addr = FIELD_GET(SDUC_ADDR_EXT_MASK, from);
+         |                               ~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/mmc/core/sd_ops.h:14:28: note: expanded from macro 'SDUC_ADDR_EXT_MASK'
+      14 | #define SDUC_ADDR_EXT_MASK GENMASK(37, 32)
+         |                            ^
+   include/linux/bits.h:35:31: note: expanded from macro 'GENMASK'
+      35 |         (GENMASK_INPUT_CHECK(h, l) + __GENMASK(h, l))
+         |                                      ^
+   include/uapi/linux/bits.h:9:19: note: expanded from macro '__GENMASK'
+       9 |          (~_UL(0) >> (__BITS_PER_LONG - 1 - (h))))
+         |                   ^
+   note: (skipping 6 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/linux/compiler_types.h:510:22: note: expanded from macro 'compiletime_assert'
+     510 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+         |         ~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/compiler_types.h:498:23: note: expanded from macro '_compiletime_assert'
+     498 |         __compiletime_assert(condition, msg, prefix, suffix)
+         |         ~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/compiler_types.h:490:9: note: expanded from macro '__compiletime_assert'
+     490 |                 if (!(condition))                                       \
+         |                       ^~~~~~~~~
+>> drivers/mmc/core/core.c:1667:27: warning: shift count >= width of type [-Wshift-count-overflow]
+    1667 |                 u8 ext_addr = FIELD_GET(SDUC_ADDR_EXT_MASK, from);
+         |                               ~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/mmc/core/sd_ops.h:14:28: note: expanded from macro 'SDUC_ADDR_EXT_MASK'
+      14 | #define SDUC_ADDR_EXT_MASK GENMASK(37, 32)
+         |                            ^
+   include/linux/bits.h:35:31: note: expanded from macro 'GENMASK'
+      35 |         (GENMASK_INPUT_CHECK(h, l) + __GENMASK(h, l))
+         |                                      ^
+   include/uapi/linux/bits.h:8:31: note: expanded from macro '__GENMASK'
+       8 |         (((~_UL(0)) - (_UL(1) << (l)) + 1) & \
+         |                               ^
+   include/linux/bitfield.h:156:30: note: expanded from macro 'FIELD_GET'
+     156 |                 (typeof(_mask))(((_reg) & (_mask)) >> __bf_shf(_mask)); \
+         |                                            ^~~~~
+>> drivers/mmc/core/core.c:1667:27: warning: shift count is negative [-Wshift-count-negative]
+    1667 |                 u8 ext_addr = FIELD_GET(SDUC_ADDR_EXT_MASK, from);
+         |                               ~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/mmc/core/sd_ops.h:14:28: note: expanded from macro 'SDUC_ADDR_EXT_MASK'
+      14 | #define SDUC_ADDR_EXT_MASK GENMASK(37, 32)
+         |                            ^
+   include/linux/bits.h:35:31: note: expanded from macro 'GENMASK'
+      35 |         (GENMASK_INPUT_CHECK(h, l) + __GENMASK(h, l))
+         |                                      ^
+   include/uapi/linux/bits.h:9:19: note: expanded from macro '__GENMASK'
+       9 |          (~_UL(0) >> (__BITS_PER_LONG - 1 - (h))))
+         |                   ^
+   include/linux/bitfield.h:156:30: note: expanded from macro 'FIELD_GET'
+     156 |                 (typeof(_mask))(((_reg) & (_mask)) >> __bf_shf(_mask)); \
+         |                                            ^~~~~
+   drivers/mmc/core/core.c:1667:27: warning: shift count >= width of type [-Wshift-count-overflow]
+    1667 |                 u8 ext_addr = FIELD_GET(SDUC_ADDR_EXT_MASK, from);
+         |                               ~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/mmc/core/sd_ops.h:14:28: note: expanded from macro 'SDUC_ADDR_EXT_MASK'
+      14 | #define SDUC_ADDR_EXT_MASK GENMASK(37, 32)
+         |                            ^
+   include/linux/bits.h:35:31: note: expanded from macro 'GENMASK'
+      35 |         (GENMASK_INPUT_CHECK(h, l) + __GENMASK(h, l))
+         |                                      ^
+   include/uapi/linux/bits.h:8:31: note: expanded from macro '__GENMASK'
+       8 |         (((~_UL(0)) - (_UL(1) << (l)) + 1) & \
+         |                               ^
+   include/linux/bitfield.h:156:50: note: expanded from macro 'FIELD_GET'
+     156 |                 (typeof(_mask))(((_reg) & (_mask)) >> __bf_shf(_mask)); \
+         |                                                       ~~~~~~~~~^~~~~~
+   include/linux/bitfield.h:45:38: note: expanded from macro '__bf_shf'
+      45 | #define __bf_shf(x) (__builtin_ffsll(x) - 1)
+         |                                      ^
+   drivers/mmc/core/core.c:1667:27: warning: shift count is negative [-Wshift-count-negative]
+    1667 |                 u8 ext_addr = FIELD_GET(SDUC_ADDR_EXT_MASK, from);
+         |                               ~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/mmc/core/sd_ops.h:14:28: note: expanded from macro 'SDUC_ADDR_EXT_MASK'
+      14 | #define SDUC_ADDR_EXT_MASK GENMASK(37, 32)
+         |                            ^
+   include/linux/bits.h:35:31: note: expanded from macro 'GENMASK'
+      35 |         (GENMASK_INPUT_CHECK(h, l) + __GENMASK(h, l))
+         |                                      ^
+   include/uapi/linux/bits.h:9:19: note: expanded from macro '__GENMASK'
+       9 |          (~_UL(0) >> (__BITS_PER_LONG - 1 - (h))))
+         |                   ^
+   include/linux/bitfield.h:156:50: note: expanded from macro 'FIELD_GET'
+     156 |                 (typeof(_mask))(((_reg) & (_mask)) >> __bf_shf(_mask)); \
+         |                                                       ~~~~~~~~~^~~~~~
+   include/linux/bitfield.h:45:38: note: expanded from macro '__bf_shf'
+      45 | #define __bf_shf(x) (__builtin_ffsll(x) - 1)
+         |                                      ^
+   drivers/mmc/core/core.c:1689:27: warning: shift count >= width of type [-Wshift-count-overflow]
+    1689 |                 u8 ext_addr = FIELD_GET(SDUC_ADDR_EXT_MASK, to);
+         |                               ~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~
+   drivers/mmc/core/sd_ops.h:14:28: note: expanded from macro 'SDUC_ADDR_EXT_MASK'
+      14 | #define SDUC_ADDR_EXT_MASK GENMASK(37, 32)
+         |                            ^
+   include/linux/bits.h:35:31: note: expanded from macro 'GENMASK'
+      35 |         (GENMASK_INPUT_CHECK(h, l) + __GENMASK(h, l))
+         |                                      ^
+   include/uapi/linux/bits.h:8:31: note: expanded from macro '__GENMASK'
+       8 |         (((~_UL(0)) - (_UL(1) << (l)) + 1) & \
+         |                               ^
+   note: (skipping 3 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/linux/compiler_types.h:510:22: note: expanded from macro 'compiletime_assert'
+     510 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+         |         ~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/compiler_types.h:498:23: note: expanded from macro '_compiletime_assert'
+     498 |         __compiletime_assert(condition, msg, prefix, suffix)
+         |         ~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/compiler_types.h:490:9: note: expanded from macro '__compiletime_assert'
+     490 |                 if (!(condition))                                       \
+         |                       ^~~~~~~~~
+   drivers/mmc/core/core.c:1689:27: warning: shift count is negative [-Wshift-count-negative]
+    1689 |                 u8 ext_addr = FIELD_GET(SDUC_ADDR_EXT_MASK, to);
+         |                               ~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~
+   drivers/mmc/core/sd_ops.h:14:28: note: expanded from macro 'SDUC_ADDR_EXT_MASK'
+      14 | #define SDUC_ADDR_EXT_MASK GENMASK(37, 32)
+         |                            ^
+   include/linux/bits.h:35:31: note: expanded from macro 'GENMASK'
+      35 |         (GENMASK_INPUT_CHECK(h, l) + __GENMASK(h, l))
+         |                                      ^
+   include/uapi/linux/bits.h:9:19: note: expanded from macro '__GENMASK'
+       9 |          (~_UL(0) >> (__BITS_PER_LONG - 1 - (h))))
+         |                   ^
+   note: (skipping 3 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/linux/compiler_types.h:510:22: note: expanded from macro 'compiletime_assert'
+     510 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+         |         ~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/compiler_types.h:498:23: note: expanded from macro '_compiletime_assert'
+     498 |         __compiletime_assert(condition, msg, prefix, suffix)
+         |         ~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/compiler_types.h:490:9: note: expanded from macro '__compiletime_assert'
+     490 |                 if (!(condition))                                       \
+         |                       ^~~~~~~~~
+   drivers/mmc/core/core.c:1689:27: warning: shift count >= width of type [-Wshift-count-overflow]
+    1689 |                 u8 ext_addr = FIELD_GET(SDUC_ADDR_EXT_MASK, to);
+         |                               ~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~
+   drivers/mmc/core/sd_ops.h:14:28: note: expanded from macro 'SDUC_ADDR_EXT_MASK'
+      14 | #define SDUC_ADDR_EXT_MASK GENMASK(37, 32)
+         |                            ^
 
-maxItems: 2
 
-> +          items:
-> +            - description: Microphone I/O mux register address
-> +            - description: Speaker I/O mux register address
-> +        reg-names:
+vim +1667 drivers/mmc/core/core.c
 
-maxItems :2
+  1618	
+  1619	static int mmc_do_erase(struct mmc_card *card, sector_t from,
+  1620				sector_t to, unsigned int arg)
+  1621	{
+  1622		struct mmc_command cmd = {};
+  1623		unsigned int qty = 0, busy_timeout = 0;
+  1624		bool use_r1b_resp;
+  1625		int err;
+  1626	
+  1627		mmc_retune_hold(card->host);
+  1628	
+  1629		/*
+  1630		 * qty is used to calculate the erase timeout which depends on how many
+  1631		 * erase groups (or allocation units in SD terminology) are affected.
+  1632		 * We count erasing part of an erase group as one erase group.
+  1633		 * For SD, the allocation units are always a power of 2.  For MMC, the
+  1634		 * erase group size is almost certainly also power of 2, but it does not
+  1635		 * seem to insist on that in the JEDEC standard, so we fall back to
+  1636		 * division in that case.  SD may not specify an allocation unit size,
+  1637		 * in which case the timeout is based on the number of write blocks.
+  1638		 *
+  1639		 * Note that the timeout for secure trim 2 will only be correct if the
+  1640		 * number of erase groups specified is the same as the total of all
+  1641		 * preceding secure trim 1 commands.  Since the power may have been
+  1642		 * lost since the secure trim 1 commands occurred, it is generally
+  1643		 * impossible to calculate the secure trim 2 timeout correctly.
+  1644		 */
+  1645		if (card->erase_shift)
+  1646			qty += ((to >> card->erase_shift) -
+  1647				(from >> card->erase_shift)) + 1;
+  1648		else if (mmc_card_sd(card))
+  1649			qty += to - from + 1;
+  1650		else
+  1651			qty += ((to / card->erase_size) -
+  1652				(from / card->erase_size)) + 1;
+  1653	
+  1654		if (!mmc_card_blockaddr(card)) {
+  1655			from <<= 9;
+  1656			to <<= 9;
+  1657		}
+  1658	
+  1659		if (mmc_card_sd(card))
+  1660			cmd.opcode = SD_ERASE_WR_BLK_START;
+  1661		else
+  1662			cmd.opcode = MMC_ERASE_GROUP_START;
+  1663		cmd.arg = from & 0xFFFFFFFF;
+  1664		cmd.flags = MMC_RSP_SPI_R1 | MMC_RSP_R1 | MMC_CMD_AC;
+  1665	
+  1666		if (mmc_card_is_sduc(card->host)) {
+> 1667			u8 ext_addr = FIELD_GET(SDUC_ADDR_EXT_MASK, from);
+  1668	
+  1669			mmc_send_ext_addr(card->host, ext_addr);
+  1670		}
+  1671	
+  1672		err = mmc_wait_for_cmd(card->host, &cmd, 0);
+  1673		if (err) {
+  1674			pr_err("mmc_erase: group start error %d, "
+  1675			       "status %#x\n", err, cmd.resp[0]);
+  1676			err = -EIO;
+  1677			goto out;
+  1678		}
+  1679	
+  1680		memset(&cmd, 0, sizeof(struct mmc_command));
+  1681		if (mmc_card_sd(card))
+  1682			cmd.opcode = SD_ERASE_WR_BLK_END;
+  1683		else
+  1684			cmd.opcode = MMC_ERASE_GROUP_END;
+  1685		cmd.arg = to & 0xFFFFFFFF;
+  1686		cmd.flags = MMC_RSP_SPI_R1 | MMC_RSP_R1 | MMC_CMD_AC;
+  1687	
+  1688		if (mmc_card_is_sduc(card->host)) {
+  1689			u8 ext_addr = FIELD_GET(SDUC_ADDR_EXT_MASK, to);
+  1690	
+  1691			mmc_send_ext_addr(card->host, ext_addr);
+  1692		}
+  1693	
+  1694		err = mmc_wait_for_cmd(card->host, &cmd, 0);
+  1695		if (err) {
+  1696			pr_err("mmc_erase: group end error %d, status %#x\n",
+  1697			       err, cmd.resp[0]);
+  1698			err = -EIO;
+  1699			goto out;
+  1700		}
+  1701	
+  1702		memset(&cmd, 0, sizeof(struct mmc_command));
+  1703		cmd.opcode = MMC_ERASE;
+  1704		cmd.arg = arg;
+  1705		busy_timeout = mmc_erase_timeout(card, arg, qty);
+  1706		use_r1b_resp = mmc_prepare_busy_cmd(card->host, &cmd, busy_timeout);
+  1707	
+  1708		err = mmc_wait_for_cmd(card->host, &cmd, 0);
+  1709		if (err) {
+  1710			pr_err("mmc_erase: erase error %d, status %#x\n",
+  1711			       err, cmd.resp[0]);
+  1712			err = -EIO;
+  1713			goto out;
+  1714		}
+  1715	
+  1716		if (mmc_host_is_spi(card->host))
+  1717			goto out;
+  1718	
+  1719		/*
+  1720		 * In case of when R1B + MMC_CAP_WAIT_WHILE_BUSY is used, the polling
+  1721		 * shall be avoided.
+  1722		 */
+  1723		if ((card->host->caps & MMC_CAP_WAIT_WHILE_BUSY) && use_r1b_resp)
+  1724			goto out;
+  1725	
+  1726		/* Let's poll to find out when the erase operation completes. */
+  1727		err = mmc_poll_for_busy(card, busy_timeout, false, MMC_BUSY_ERASE);
+  1728	
+  1729	out:
+  1730		mmc_retune_release(card->host);
+  1731		return err;
+  1732	}
+  1733	
 
-> +          items:
-> +            - const: mic-iomux
-> +            - const: spkr-iomux
-> +
-> +  - if:
-> +      properties:
-> +        compatible:
-> +          contains:
-> +            enum:
-> +              - qcom,msm8953-qdsp6-sndcard
-> +              - qcom,msm8976-qdsp6-sndcard
-> +    then:
-> +      properties:
-> +        reg:
-
-minItems: 3
-
-> +          items:
-> +            - description: Microphone I/O mux register address
-> +            - description: Speaker I/O mux register address
-> +            - description: Quinary Mi2S I/O mux register address
-> +        reg-names:
-
-minItems: 3
-
-
-Best regards,
-Krzysztof
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
