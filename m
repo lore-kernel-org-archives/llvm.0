@@ -1,186 +1,202 @@
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
+Received: from mail-pj1-f43.google.com (mail-pj1-f43.google.com [209.85.216.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C6B9F7470
-	for <llvm@lists.linux.dev>; Sun, 28 Jul 2024 00:51:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9847E161
+	for <llvm@lists.linux.dev>; Sun, 28 Jul 2024 02:24:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722127912; cv=none; b=KiL/4oeRRvRyg3xq8alnYKKCvWDmh9QJ9tstbsQuxIF53dDQNdOeoXH2AR3I3XumeKoTHkldors0kOw5cecqClebptZ0FI3xjhK81Qo1ChbIefXUxGUkwVBf0pet797N/HICveJ6kScYRwjK9F8ACUqbTd4TVaoWTm7HD8v6DOw=
+	t=1722133442; cv=none; b=gQIbgke0W90jXFA15Uwgaf8NjlGh5GbjVZNqAnJi1LYcBI/UmRigRs0A8dWbyjKPxkbmME5gfMtD1dkUJ/6GSH+al4rln7T/Ij8rgoM0BhVCvuCPs3F9EiRG6yibCTZM3T6TvaCovuYT/+HE9Dy5H3V7QP/8qBom+UX7pKZQKjI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722127912; c=relaxed/simple;
-	bh=QuNYQ5Rxf4SFUDj6mc+dZjtjbj/x4rBn0uVU72yFcAA=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=UjYmn+C23tisBaNSv0vGkOidw4QHXx6o2gm3kaMcZCLQDf/niIZZczNaLF65lACWte92IITBeQ1R7Fs9xM3H6sL9rCeQk1Ou+roAQ3/0JgD9GEop/2E6H67FmtCXG+SFvXWhgRzIpyJ09EqvIjC0NDkvpl50zASEc7H1clJPwUc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b=C35G3yS2; dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b=mtfbOC9C; arc=none smtp.client-ip=195.135.223.130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+	s=arc-20240116; t=1722133442; c=relaxed/simple;
+	bh=1dEFsQlY+4vl8jp39r5uy2Ph6lojgCgMyFxpYlWjZsM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=FEnj63ULCEMVEoif0h2p5gPSO9fPXuvZwURCeMxGXJm3ld/JyoJzrotOL3mvDuVe17KRR2vWVM5Qi37eZ3oLAFU5PE97CS99uWSXkjJZaH6HcOoxVHYP0NI+iWZx+qZLpRpdauoBabEVYEkrXY063PKgyymNu81lLeoVWzLWnAY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=MgDPwlxg; arc=none smtp.client-ip=209.85.216.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b="C35G3yS2";
-	dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b="mtfbOC9C"
-Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out1.suse.de (Postfix) with ESMTPS id CC99B21C3B;
-	Sun, 28 Jul 2024 00:51:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-	t=1722127909; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=K5ueq3FoJocMKyR/0Hi0c1XApOql0EEmP83iDFnPsUA=;
-	b=C35G3yS2L48DItjt3laWRp9nY71pJ3iRfFfiDfzURFsgVqphD+lHbQrD5jO44U7zkr5YWP
-	muH71nIPWkuPAL3zfQ3Qg0WCezySy1ePTTlv6QYOgwi5QomDSf3wf292lnSitrOg7vgvgF
-	lX9GiPc6r7ZypEa6gvDSma4kFZnkY8s=
-Authentication-Results: smtp-out1.suse.de;
-	dkim=pass header.d=suse.com header.s=susede1 header.b=mtfbOC9C
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-	t=1722127908; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=K5ueq3FoJocMKyR/0Hi0c1XApOql0EEmP83iDFnPsUA=;
-	b=mtfbOC9CXdBCBTZc5C33RxZcISSsxRGaY33SuuMoFfwLAvEojDdXLmWCicEf27qxtj7v8C
-	huy3oVSEGDj3o8NIlJkiCLqUnuX5GcfefMB/Lm/Nyj8klSIjychT92Dvk/3HibA09+msEf
-	Nup97/6fb41NPE98asmdH6jmnj8HkVo=
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 58C801379A;
-	Sun, 28 Jul 2024 00:51:48 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id UZvZCSSWpWY5XAAAD6G6ig
-	(envelope-from <mpdesouza@suse.com>); Sun, 28 Jul 2024 00:51:48 +0000
-From: Marcos Paulo de Souza <mpdesouza@suse.com>
-Date: Sat, 27 Jul 2024 21:51:40 -0300
-Subject: [PATCH RFC] security: tomoyo: Add default builtin-policy.h for
- default policy
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MgDPwlxg"
+Received: by mail-pj1-f43.google.com with SMTP id 98e67ed59e1d1-2cb57e25387so1730563a91.3
+        for <llvm@lists.linux.dev>; Sat, 27 Jul 2024 19:24:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1722133440; x=1722738240; darn=lists.linux.dev;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=03KrJauELnCqn3OXhsRWxMpJ9KPdl1LCMT2XKA6LW2E=;
+        b=MgDPwlxgCXV4J9PUUDuL7+qdOztBzgWTXWaYHtK0PTJaYvpnWtNsKI0kj6/NTaNSvv
+         gkptdyVDPTgrzesLRmDVua81+Grpdo3+flrIVbPmpqUr8/+HecJvrzdG5FXUaHLXdjRx
+         jhr3qr6vkvUxW+/EvEOQjY2zOc6NVHNFUWLdeNHb5QQvWW6UY/fCS1+d8xHx7d5Loq4T
+         jgdWPbFsPnI4PY9xEdWK0mLLnmcD0VfDSeSPOlBuY5Agho1TQlQWnPUceAS95iL7HV1E
+         JLWJNt4UErnF0iMgg6CBAGuPYoTSG+UAjFnzpKI5XGN1cOOfi+nTExkPEIatZAwcNdAY
+         YbkA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1722133440; x=1722738240;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=03KrJauELnCqn3OXhsRWxMpJ9KPdl1LCMT2XKA6LW2E=;
+        b=AaH3+XfpQkYZ61iaNfIxz/YubgZKllrruRYO9EC0/3GIEwLyZ79403DAPDhTX2KB9Z
+         fe06SDCsEYqZPp+d1/7FLGkA5qym2iBuhi39o4gLzH7sqHjVxCDS3LNSmqNBZAhcGOBE
+         oBbuh6HU4CBUAY/cjzrbyUb9JQR4PvSkwsrbWkjPM5bUgJXlx+RKme7ve78iJRs9bcAE
+         9xsb8PFI9gk52H5cyT3vTblW+0r/8qitJklmM4Jky02YLoH806sUrmkBjIJyQwYOg8P+
+         V150wH8OyqzpkrsJ7LG99eq7RaD61JkvzPVlorFhw1vsIf3IF6OsygNyn1MhftHWkBQO
+         ytXg==
+X-Forwarded-Encrypted: i=1; AJvYcCXmTOCZNABvk0YPFSINYp6z9aWGar9g+Ac/BXVL4OP+X2vA2c/1njHlNxz8gPClIiMValVgRys4X1lWY2r2kM8mP/PbIQ==
+X-Gm-Message-State: AOJu0Yx/JCSwA6KOQoYgqAWMYjKM8g+yWj9sfBb0W2Y3J2fdVlLSuFPt
+	CigHS2aLdfihgbP4SHNfsDl7YK1E/ojiRT8LlCqt4FYofuWEptqz
+X-Google-Smtp-Source: AGHT+IGjIj4UC0mBovjZRdel01Wu7l/UPkkgIZLEqMzc2jcYaauxrVQUctnhOcAey2OuEB1LbvQrkw==
+X-Received: by 2002:a17:90b:4c10:b0:2ca:8b71:21f4 with SMTP id 98e67ed59e1d1-2cf7e1ec893mr4674920a91.18.1722133439697;
+        Sat, 27 Jul 2024 19:23:59 -0700 (PDT)
+Received: from [192.168.255.10] (23.105.223.42.16clouds.com. [23.105.223.42])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2cdb7389fafsm8048254a91.1.2024.07.27.19.23.56
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 27 Jul 2024 19:23:59 -0700 (PDT)
+Message-ID: <d5e63e2a-c203-4c55-bbfe-537f5dd0b494@gmail.com>
+Date: Sun, 28 Jul 2024 10:23:54 +0800
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20240727-tomoyo-gen-file-v1-1-eb6439e837a1@suse.com>
-X-B4-Tracking: v=1; b=H4sIABuWpWYC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
- vPSU3UzU4B8JSMDIxMDcyNz3ZL83PzKfN301DzdtMycVN205LRk40SDZIM0EzMloK6CotS0zAq
- widFKQW7OSrG1tQCJ50m4ZgAAAA==
-To: Kentaro Takeda <takedakn@nttdata.co.jp>, 
- Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>, 
- Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>, 
- "Serge E. Hallyn" <serge@hallyn.com>, Nathan Chancellor <nathan@kernel.org>, 
- Nick Desaulniers <ndesaulniers@google.com>, 
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>
-Cc: linux-kernel@vger.kernel.org, linux-security-module@vger.kernel.org, 
- llvm@lists.linux.dev, Marcos Paulo de Souza <mpdesouza@suse.com>
-X-Mailer: b4 0.14-dev
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1722127906; l=2533;
- i=mpdesouza@suse.com; s=20231031; h=from:subject:message-id;
- bh=QuNYQ5Rxf4SFUDj6mc+dZjtjbj/x4rBn0uVU72yFcAA=;
- b=GqCX4MdOTflpcoUQsgYUwn6pHWOeVY8vo5195KVBI2khlZAZtj9jNhJC4TbbyLRX//AQc1bIR
- QY2CfDoNmoTDsfvcLsNag6+mzLtzL7Xizp3FQvplE9nQnmmBVfdNOVw
-X-Developer-Key: i=mpdesouza@suse.com; a=ed25519;
- pk=/Ni/TsKkr69EOmdZXkp1Q/BlzDonbOBRsfPa18ySIwU=
-X-Rspamd-Server: rspamd1.dmz-prg2.suse.org
-X-Rspamd-Action: no action
-X-Rspamd-Queue-Id: CC99B21C3B
-X-Spam-Score: -6.31
-X-Spam-Level: 
-X-Spam-Flag: NO
-X-Spamd-Result: default: False [-6.31 / 50.00];
-	BAYES_HAM(-3.00)[100.00%];
-	DWL_DNSWL_MED(-2.00)[suse.com:dkim];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	R_DKIM_ALLOW(-0.20)[suse.com:s=susede1];
-	MIME_GOOD(-0.10)[text/plain];
-	MX_GOOD(-0.01)[];
-	ARC_NA(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[13];
-	MIME_TRACE(0.00)[0:+];
-	DKIM_SIGNED(0.00)[suse.com:s=susede1];
-	FUZZY_BLOCKED(0.00)[rspamd.com];
-	FROM_HAS_DN(0.00)[];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	RCVD_TLS_ALL(0.00)[];
-	RCVD_COUNT_TWO(0.00)[2];
-	FROM_EQ_ENVFROM(0.00)[];
-	TO_DN_SOME(0.00)[];
-	MID_RHS_MATCH_FROM(0.00)[];
-	DKIM_TRACE(0.00)[suse.com:+];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.com:email,suse.com:dkim]
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] docs/zh_CN: add the translation of
+ kbuild/headers_install.rst
+To: Dongliang Mu <dzm91@hust.edu.cn>, Alex Shi <alexs@kernel.org>,
+ Yanteng Si <siyanteng@loongson.cn>, Jonathan Corbet <corbet@lwn.net>,
+ Nathan Chancellor <nathan@kernel.org>,
+ Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling
+ <morbo@google.com>, Justin Stitt <justinstitt@google.com>
+Cc: linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+ llvm@lists.linux.dev
+References: <20240726145754.2598197-1-dzm91@hust.edu.cn>
+Content-Language: en-US
+From: Alex Shi <seakeel@gmail.com>
+In-Reply-To: <20240726145754.2598197-1-dzm91@hust.edu.cn>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-When checking tomoyo code there is an include for a file that is not
-included on kernel-source since it's generated at build time, and the
-kernel-source uses git archive to create the tarball.
 
-Having the source code referencing a file that is not included in the
-tarball can confuse tools that inspect/parse code, since the file is not
-there.
+LGTM,
+Reviewed-by: Alex Shi <alexs@kernel.org>
 
-The builtin-policy.h added is generated from the same default policy
-that already exists on policy/ directory, so it doesn't break the
-current usage of that file.
-
-Signed-off-by: Marcos Paulo de Souza <mpdesouza@suse.com>
----
-Hello, I sent this patch because we saw some issues while running
-clang-extract[1] on tomoyo given CVE 2024-26622. Since clang-extract
-parses the C files it failed to find builtin-policy.h. As a bandaid, I
-had to add
-	-DCONFIG_SECURITY_TOMOYO_INSECURE_BUILTIN_SETTING
-
-to clang-extract (we feed the gcc arguments used to compile common.c got
-from compile_commands.json on kernel-source).
-
-Per my tests it works with my patch, and I don't see why this would hurt
-to have builtin-policy.h on git, since it would regenerate the file if
-the policy scripts are changed.
-
-Please let me know if I'm missing something here.
-
-Thanks!
-
-[1]: https://github.com/SUSE/clang-extract
----
- security/tomoyo/.gitignore       |  1 -
- security/tomoyo/builtin-policy.h | 13 +++++++++++++
- 2 files changed, 13 insertions(+), 1 deletion(-)
-
-diff --git a/security/tomoyo/.gitignore b/security/tomoyo/.gitignore
-index 9f300cdce362..85d086c6502d 100644
---- a/security/tomoyo/.gitignore
-+++ b/security/tomoyo/.gitignore
-@@ -1,3 +1,2 @@
- # SPDX-License-Identifier: GPL-2.0-only
--builtin-policy.h
- policy/*.conf
-diff --git a/security/tomoyo/builtin-policy.h b/security/tomoyo/builtin-policy.h
-new file mode 100644
-index 000000000000..781d35b3ccb3
---- /dev/null
-+++ b/security/tomoyo/builtin-policy.h
-@@ -0,0 +1,13 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+static char tomoyo_builtin_profile[] __initdata =
-+	"";
-+static char tomoyo_builtin_exception_policy[] __initdata =
-+	"initialize_domain /sbin/modprobe from any\n"
-+	"initialize_domain /sbin/hotplug from any\n"
-+	"";
-+static char tomoyo_builtin_domain_policy[] __initdata =
-+	"";
-+static char tomoyo_builtin_manager[] __initdata =
-+	"";
-+static char tomoyo_builtin_stat[] __initdata =
-+	"";
-
----
-base-commit: 910bfc26d16d07df5a2bfcbc63f0aa9d1397e2ef
-change-id: 20240727-tomoyo-gen-file-fcfc3a0c0f46
-
-Best regards,
--- 
-Marcos Paulo de Souza <mpdesouza@suse.com>
-
+On 7/26/24 10:57 PM, Dongliang Mu wrote:
+> Finish the translation of kbuild/headers_install.rst and
+> kbuild/index.rst, then add kbuild into zh_CN/index.rst.
+> 
+> Update to commit 5b67fbfc32b5 ("Merge tag 'kbuild-v5.7' of
+> git://git.kernel.org/pub/scm/linux/kernel/git/masahiroy/linux-kbuild")
+> 
+> Signed-off-by: Dongliang Mu <dzm91@hust.edu.cn>
+> ---
+>  Documentation/translations/zh_CN/index.rst    |  2 +-
+>  .../zh_CN/kbuild/headers_install.rst          | 39 +++++++++++++++++++
+>  .../translations/zh_CN/kbuild/index.rst       | 35 +++++++++++++++++
+>  3 files changed, 75 insertions(+), 1 deletion(-)
+>  create mode 100644 Documentation/translations/zh_CN/kbuild/headers_install.rst
+>  create mode 100644 Documentation/translations/zh_CN/kbuild/index.rst
+> 
+> diff --git a/Documentation/translations/zh_CN/index.rst b/Documentation/translations/zh_CN/index.rst
+> index 20b9d4270d1f..7574e1673180 100644
+> --- a/Documentation/translations/zh_CN/index.rst
+> +++ b/Documentation/translations/zh_CN/index.rst
+> @@ -89,10 +89,10 @@ TODOList:
+>     admin-guide/index
+>     admin-guide/reporting-issues.rst
+>     userspace-api/index
+> +   内核构建系统 <kbuild/index>
+>  
+>  TODOList:
+>  
+> -* 内核构建系统 <kbuild/index>
+>  * 用户空间工具 <tools/index>
+>  
+>  也可参考独立于内核文档的 `Linux 手册页 <https://www.kernel.org/doc/man-pages/>`_ 。
+> diff --git a/Documentation/translations/zh_CN/kbuild/headers_install.rst b/Documentation/translations/zh_CN/kbuild/headers_install.rst
+> new file mode 100644
+> index 000000000000..50ab819a7f96
+> --- /dev/null
+> +++ b/Documentation/translations/zh_CN/kbuild/headers_install.rst
+> @@ -0,0 +1,39 @@
+> +.. SPDX-License-Identifier: GPL-2.0
+> +
+> +.. include:: ../disclaimer-zh_CN.rst
+> +
+> +:Original: Documentation/kbuild/headers_install.rst
+> +:Translator: 慕冬亮 Dongliang Mu <dzm91@hust.edu.cn>
+> +
+> +============================
+> +导出内核头文件供用户空间使用
+> +============================
+> +
+> +"make headers_install" 命令以适合于用户空间程序的形式导出内核头文件。
+> +
+> +Linux 内核导出的头文件描述了用户空间程序尝试使用内核服务的 API。这些内核
+> +头文件被系统的 C 库（例如 glibc 和 uClibc）用于定义可用的系统调用，以及
+> +与这些系统调用一起使用的常量和结构。C 库的头文件包括来自 linux 子目录的
+> +内核头文件。系统的 libc 头文件通常被安装在默认位置 /usr/include，而内核
+> +头文件在该位置的子目录中（主要是 /usr/include/linux 和 /usr/include/asm）。
+> +
+> +内核头文件向后兼容，但不向前兼容。这意味着使用旧内核头文件的 C 库构建的程序
+> +可以在新内核上运行（尽管它可能无法访问新特性），但使用新内核头文件构建的程序
+> +可能无法在旧内核上运行。
+> +
+> +"make headers_install" 命令可以在内核源代码的顶层目录中运行（或使用标准
+> +的树外构建）。它接受两个可选参数::
+> +
+> +  make headers_install ARCH=i386 INSTALL_HDR_PATH=/usr
+> +
+> +ARCH 表明为其生成头文件的架构，默认为当前架构。导出内核头文件的 linux/asm
+> +目录是基于特定平台的，要查看支持架构的完整列表，使用以下命令::
+> +
+> +  ls -d include/asm-* | sed 's/.*-//'
+> +
+> +INSTALL_HDR_PATH 表明头文件的安装位置，默认为 "./usr"。
+> +
+> +该命令会在 INSTALL_HDR_PATH 中自动创建创建一个 'include' 目录，而头文件
+> +会被安装在 INSTALL_HDR_PATH/include 中。
+> +
+> +内核头文件导出的基础设施由 David Woodhouse <dwmw2@infradead.org> 维护。
+> \ No newline at end of file
+> diff --git a/Documentation/translations/zh_CN/kbuild/index.rst b/Documentation/translations/zh_CN/kbuild/index.rst
+> new file mode 100644
+> index 000000000000..b9feb56b846a
+> --- /dev/null
+> +++ b/Documentation/translations/zh_CN/kbuild/index.rst
+> @@ -0,0 +1,35 @@
+> +.. SPDX-License-Identifier: GPL-2.0
+> +
+> +.. include:: ../disclaimer-zh_CN.rst
+> +
+> +:Original: Documentation/kbuild/index
+> +:Translator: 慕冬亮 Dongliang Mu <dzm91@hust.edu.cn>
+> +
+> +============
+> +内核编译系统
+> +============
+> +
+> +.. toctree::
+> +    :maxdepth: 1
+> +
+> +    headers_install
+> +
+> +TODO:
+> +
+> +- kconfig-language
+> +- kconfig-macro-language
+> +- kbuild
+> +- kconfig
+> +- makefiles
+> +- modules
+> +- issues
+> +- reproducible-builds
+> +- gcc-plugins
+> +- llvm
+> +
+> +.. only::  subproject and html
+> +
+> +   目录
+> +   =====
+> +
+> +   * :ref:`genindex`
