@@ -1,100 +1,141 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
+Received: from www262.sakura.ne.jp (www262.sakura.ne.jp [202.181.97.72])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B443043AAB;
-	Sun, 28 Jul 2024 12:58:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E09991B86C2
+	for <llvm@lists.linux.dev>; Sun, 28 Jul 2024 13:19:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.181.97.72
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722171488; cv=none; b=EeJbk/dMIxyP5Bx8O0hSYDL6LBYU7C7M5UUqKJxFWT1R+d5T0FWHPvvfz+JXLSTODZlbxHAPxJXd8GuYo7J4Ey0PpR512FIoG4a/GmQpVysaQw6mMtwuW24O8q/OeDgYJnEiwjfpu9DG7EV7iZE97UoJg81xkrNWr9NIBmZfVi0=
+	t=1722172767; cv=none; b=jbAE1n7tY9g35cCAmwI6Sn7VNsHmXfFOsbWO00fi/2qEatXdCZB8X2yGCkZh2RmwbNGjrweU/eHzaLQpYiM6DMdaKnR33mDzhgmcdcScspX8HCnIubSABplo2GiIl5Z81jUzS5Yblunx0inurZ13GgCxG6yaRL7WNF1/oauf1YU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722171488; c=relaxed/simple;
-	bh=2Ih5dkL1PzWSbRDfBt0lOFyfRs1wcE88ubJ84fcm2Tk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=VX/QUFo94JkhPENATNc7nZDycLGC/aV94NFIoq/Vz89giA+7lSwi+BBLTPrUuAah0R++R7tTJ+OJc4G8sE02rjfITf4p2hhrFXmG/qAl6lmaznvMqbMZu2LBdXl6yQiRvLVqPFvdJ5sL6vegVZVA8H2UeeRl+0jZ8M7+nbWY4f8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=TMkR98ye; arc=none smtp.client-ip=192.198.163.8
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="TMkR98ye"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1722171487; x=1753707487;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=2Ih5dkL1PzWSbRDfBt0lOFyfRs1wcE88ubJ84fcm2Tk=;
-  b=TMkR98yeRTMZYLs8YXd558FhKnTf4AoSK0BZuK5PChXyI2bKoQ48LzLR
-   f0Q+jM7cqJUNH5VeM3XaZMNNrXWy3LjBuBNr+MVC3eKrBWC3y2qTNUeHy
-   SYxoJqFT5P7ycKSFwosnjZvfWVpcfEeNeFdPAZDuk6pONyf5rMW0EfuYc
-   Lds03iM5tOlPcOvgaS1aNBoQ16S9KZYVE5vI2FW6q3U6tJQuZNvIFNfcY
-   4YkSEnnT8NYgsH75qSbIsUKh+6Ps6gWFuVfQ0CfDNdEfswR/Bq+pHRqVL
-   2e9hrwWo6w9V3KKy3Ofwn2Q9Nm7tv5Wz4FjhJ+YjcqIEgnYM+ugQ+uAtR
-   A==;
-X-CSE-ConnectionGUID: xxtR3DNbTkOmhBHXaioTQA==
-X-CSE-MsgGUID: ISts5OEHTXSY47pF6wE9OQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11147"; a="37421034"
-X-IronPort-AV: E=Sophos;i="6.09,243,1716274800"; 
-   d="scan'208";a="37421034"
-Received: from orviesa009.jf.intel.com ([10.64.159.149])
-  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jul 2024 05:58:06 -0700
-X-CSE-ConnectionGUID: 22X2QdalQv+3/wrbBkGMrw==
-X-CSE-MsgGUID: EpME6cwJSUqKd0NUBE1p3g==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.09,243,1716274800"; 
-   d="scan'208";a="53687396"
-Received: from lkp-server01.sh.intel.com (HELO 68891e0c336b) ([10.239.97.150])
-  by orviesa009.jf.intel.com with ESMTP; 28 Jul 2024 05:58:04 -0700
-Received: from kbuild by 68891e0c336b with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1sY3TN-000qny-2a;
-	Sun, 28 Jul 2024 12:58:01 +0000
-Date: Sun, 28 Jul 2024 20:57:41 +0800
-From: kernel test robot <lkp@intel.com>
-To: Avri Altman <avri.altman@wdc.com>, Ulf Hansson <ulf.hansson@linaro.org>,
-	linux-mmc@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Ricky WU <ricky_wu@realtek.com>, Avri Altman <avri.altman@wdc.com>
-Subject: Re: [PATCH 04/10] mmc: core: Add open-ended Ext memory addressing
-Message-ID: <202407282028.yNWpiXqJ-lkp@intel.com>
-References: <20240728081154.1782120-5-avri.altman@wdc.com>
+	s=arc-20240116; t=1722172767; c=relaxed/simple;
+	bh=4n7BlQFvNPXtWW3eAjZuvpHz9cMZXEKyncS/gLZlVPQ=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=RmnqQGXf6ixuyXjky03KNfn+H/lvOMTIW/gGsMkXAPnw1UaszyC986ZNfUK6ppvJEUQR3STo8JPg/Mpghet1qHHGcpuEXcSIRBRo5vtuIqB8T7xNNcqn3/mBRedA2L8jZrE8mI39aRC9zES8etzqkwSQbTGDgu1h1elGLnKmp9E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=I-love.SAKURA.ne.jp; spf=pass smtp.mailfrom=I-love.SAKURA.ne.jp; arc=none smtp.client-ip=202.181.97.72
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=I-love.SAKURA.ne.jp
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=I-love.SAKURA.ne.jp
+Received: from fsav118.sakura.ne.jp (fsav118.sakura.ne.jp [27.133.134.245])
+	by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 46SDIoLn098749;
+	Sun, 28 Jul 2024 22:18:50 +0900 (JST)
+	(envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
+Received: from www262.sakura.ne.jp (202.181.97.72)
+ by fsav118.sakura.ne.jp (F-Secure/fsigk_smtp/550/fsav118.sakura.ne.jp);
+ Sun, 28 Jul 2024 22:18:50 +0900 (JST)
+X-Virus-Status: clean(F-Secure/fsigk_smtp/550/fsav118.sakura.ne.jp)
+Received: from [192.168.1.6] (M106072142033.v4.enabler.ne.jp [106.72.142.33])
+	(authenticated bits=0)
+	by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 46SDIoTV098746
+	(version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NO);
+	Sun, 28 Jul 2024 22:18:50 +0900 (JST)
+	(envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
+Message-ID: <e57e3e18-4f40-462e-959a-f6a9f19b1fe9@I-love.SAKURA.ne.jp>
+Date: Sun, 28 Jul 2024 22:18:50 +0900
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240728081154.1782120-5-avri.altman@wdc.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH RFC] security: tomoyo: Add default builtin-policy.h for
+ default policy
+To: Michal Marek <mmarek@suse.cz>, Masahiro Yamada <masahiroy@kernel.org>
+Cc: linux-kernel@vger.kernel.org, linux-security-module@vger.kernel.org,
+        llvm@lists.linux.dev, Marcos Paulo de Souza <mpdesouza@suse.com>,
+        Kentaro Takeda <takedakn@nttdata.co.jp>,
+        Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Bill Wendling
+ <morbo@google.com>,
+        Justin Stitt <justinstitt@google.com>
+References: <20240727-tomoyo-gen-file-v1-1-eb6439e837a1@suse.com>
+Content-Language: en-US
+From: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
+In-Reply-To: <20240727-tomoyo-gen-file-v1-1-eb6439e837a1@suse.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Hi Avri,
+Hello, Michal and Masahiro. What do you think on this proposal?
 
-kernel test robot noticed the following build errors:
+I guess that .gitignore needs to keep builtin-policy.h included, or
+"git diff" will complain if builtin-policy.h was rebuilt due to
+changes in policy/*.conf files.
 
-[auto build test ERROR on linus/master]
-[also build test ERROR on v6.10 next-20240726]
-[cannot apply to ulf-hansson-mmc-mirror/next]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Regarding having default security/tomoyo/builtin-policy.h , is there
+a pitfall with modification time of security/tomoyo/builtin-policy.h
+and files involved in generating security/tomoyo/builtin-policy.h ?
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Avri-Altman/mmc-sd-SDUC-Support-Recognition/20240728-161645
-base:   linus/master
-patch link:    https://lore.kernel.org/r/20240728081154.1782120-5-avri.altman%40wdc.com
-patch subject: [PATCH 04/10] mmc: core: Add open-ended Ext memory addressing
-config: x86_64-rhel-8.3-rust (https://download.01.org/0day-ci/archive/20240728/202407282028.yNWpiXqJ-lkp@intel.com/config)
-compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240728/202407282028.yNWpiXqJ-lkp@intel.com/reproduce)
+On 2024/07/28 9:51, Marcos Paulo de Souza wrote:
+> When checking tomoyo code there is an include for a file that is not
+> included on kernel-source since it's generated at build time, and the
+> kernel-source uses git archive to create the tarball.
+> 
+> Having the source code referencing a file that is not included in the
+> tarball can confuse tools that inspect/parse code, since the file is not
+> there.
+> 
+> The builtin-policy.h added is generated from the same default policy
+> that already exists on policy/ directory, so it doesn't break the
+> current usage of that file.
+> 
+> Signed-off-by: Marcos Paulo de Souza <mpdesouza@suse.com>
+> ---
+> Hello, I sent this patch because we saw some issues while running
+> clang-extract[1] on tomoyo given CVE 2024-26622. Since clang-extract
+> parses the C files it failed to find builtin-policy.h. As a bandaid, I
+> had to add
+> 	-DCONFIG_SECURITY_TOMOYO_INSECURE_BUILTIN_SETTING
+> 
+> to clang-extract (we feed the gcc arguments used to compile common.c got
+> from compile_commands.json on kernel-source).
+> 
+> Per my tests it works with my patch, and I don't see why this would hurt
+> to have builtin-policy.h on git, since it would regenerate the file if
+> the policy scripts are changed.
+> 
+> Please let me know if I'm missing something here.
+> 
+> Thanks!
+> 
+> [1]: https://github.com/SUSE/clang-extract
+> ---
+>  security/tomoyo/.gitignore       |  1 -
+>  security/tomoyo/builtin-policy.h | 13 +++++++++++++
+>  2 files changed, 13 insertions(+), 1 deletion(-)
+> 
+> diff --git a/security/tomoyo/.gitignore b/security/tomoyo/.gitignore
+> index 9f300cdce362..85d086c6502d 100644
+> --- a/security/tomoyo/.gitignore
+> +++ b/security/tomoyo/.gitignore
+> @@ -1,3 +1,2 @@
+>  # SPDX-License-Identifier: GPL-2.0-only
+> -builtin-policy.h
+>  policy/*.conf
+> diff --git a/security/tomoyo/builtin-policy.h b/security/tomoyo/builtin-policy.h
+> new file mode 100644
+> index 000000000000..781d35b3ccb3
+> --- /dev/null
+> +++ b/security/tomoyo/builtin-policy.h
+> @@ -0,0 +1,13 @@
+> +/* SPDX-License-Identifier: GPL-2.0 */
+> +static char tomoyo_builtin_profile[] __initdata =
+> +	"";
+> +static char tomoyo_builtin_exception_policy[] __initdata =
+> +	"initialize_domain /sbin/modprobe from any\n"
+> +	"initialize_domain /sbin/hotplug from any\n"
+> +	"";
+> +static char tomoyo_builtin_domain_policy[] __initdata =
+> +	"";
+> +static char tomoyo_builtin_manager[] __initdata =
+> +	"";
+> +static char tomoyo_builtin_stat[] __initdata =
+> +	"";
+> 
+> ---
+> base-commit: 910bfc26d16d07df5a2bfcbc63f0aa9d1397e2ef
+> change-id: 20240727-tomoyo-gen-file-fcfc3a0c0f46
+> 
+> Best regards,
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202407282028.yNWpiXqJ-lkp@intel.com/
-
-All errors (new ones prefixed by >>, old ones prefixed by <<):
-
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/usb/serial/usb_debug.o
->> ERROR: modpost: "mmc_send_ext_addr" [drivers/mmc/core/mmc_block.ko] undefined!
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
