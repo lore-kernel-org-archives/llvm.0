@@ -1,131 +1,104 @@
-Received: from HK2PR02CU002.outbound.protection.outlook.com (mail-eastasiaazolkn19010010.outbound.protection.outlook.com [52.103.64.10])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D72871FB5
-	for <llvm@lists.linux.dev>; Sun, 28 Jul 2024 17:38:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.103.64.10
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722188332; cv=fail; b=Ib1WlPWmdkC11lnF+64ZH3rwXhWb0ok1IDOTxsrR/mJhR7elBAD0JA9IFuDNulm+kuxMI97GNwdmv2NZfR6/+PYTE63ZZZ66QHEnbgawLdiplZC2aPXiVDU9DVPlEGHzR9P7SMISu/0I5nrgt3lvmHgUzKO1ktn1N1dJCZSB/I0=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722188332; c=relaxed/simple;
-	bh=JEnqccgAGJ3aLha3CgRfTMuV2nGmKDxQRZXsgkI8ziw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=EKZjoHJzddKhBK8Nqkhja5BCUFtGRGiKMWSSChqOu4upAatrkPdaapQ6UYuVeMZ9OBdam+2kSWbvUto6g4QgJTMMm9/IxWQC1ITn7Z8+4lb+YVdNjfD4VpC7KRt74k/9+W9WC8ki3cYv64A1k36gZSsTena1uF2MhCnNnBloh9Q=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=hotmail.com; spf=pass smtp.mailfrom=hotmail.com; dkim=pass (2048-bit key) header.d=hotmail.com header.i=@hotmail.com header.b=ZgANLmfU; arc=fail smtp.client-ip=52.103.64.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=hotmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hotmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 50CC2125C1;
+	Sun, 28 Jul 2024 19:14:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1722194044; cv=none; b=I4oYpXkSYHbc4s9DtCBinXYLgpr1IMKdoNO39qrJa8pa09LhDBwQZcS+A6oTqhww0REsrJ7pjRMKpenBOsHI3TVUYnOo+44+Kxi7XbmAJPGrI1x/POrNi+YgmFDiVCLqJNMwndKECqA2/BX4pcTlOlnJaONIOCfGvks+nh9mgsY=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1722194044; c=relaxed/simple;
+	bh=sMmbh7cUTqqovrR2AT6BBqOajFBHUkdjDZtKSwNRZH8=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=IVNL/4RUqJmXzfqLCGUxgyh6gO3A/MqoGsTbXWYxoJoZNpDFoRmpeVWukwIUte2aJ658TQSWR3TarXcXUqIz4CszGpEpfkO9/eN3FwLyejrjbydw3NqlA/z+5jaDEsEFF7Z8p82b/c98u94ZOs45LtajYNsbY/VLUDBQi3zmwUM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=R+rOGDyC; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=hotmail.com header.i=@hotmail.com header.b="ZgANLmfU"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=w0jknEgbS6WkttvCy+klyAZAhY4oyqYZDco1M4u4eMRFQR5X+GPbKgqTbPiNrGQBYCsQO4w/gVAQdkxOR7my/WmJqC9FWJLYUXj+8DlCXfBHuDJkVA9XJ6dBq1jyEaRriaore9KI7oiCHv3t7g2+sqfuoUHr3XGWxPryJ2Hyv8Q8sdXG7s3Xhf6V5d/6aNX70DxutH+iT8ojJkNB1BBaRQjOOFBQMo45uw/Nl4KjvyMUAXNXSu5Dt+JJtd+0g4IRpZb7Ge+fnjKqMCL0NtF0fZxRqVqJSWX1CQVv5WnyJDBbdeYlcVa+dso4KUmEk44ErvWsJqnQ2l1QX1g9asswcA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=P4s7I6nlLIdkbGS9FoGGdBG/wv5U2ai8CPvX4zqx2pU=;
- b=tB/kw4e7kiNTpPpY90APNRRAKUgWlq1QvrH6jbRW26PjRGJ3fmmgFPEktkDRmt7JpJtkMJuYLOnCaw6VQGbhImWdFtJfPgQWLGXs90GgoYuQITnMNOPUFn4TSN3LfWBFsYogEGXX8wqjffNlFb1LQSV3xAVksLge4Y06QO8A2HUm824GV4xoYn1Xz9H65LDuG8cR7z6qBqBTJeYlPL1O+ZhoZQPRi14Ish99yPN7+vv/Aaq/qZvg3ShN3AMMlkCo4OboqZoJ5Rej/8BJplfK+ZY83EOWRihDauHqS96Cfmg/dp+if5q6ZATIyMxCOPOblbmRMlCI4z8SfDK4jlqZrA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hotmail.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=P4s7I6nlLIdkbGS9FoGGdBG/wv5U2ai8CPvX4zqx2pU=;
- b=ZgANLmfUy8cAUWZ+rRCJayRV4XdNhCIJEPPWqYEtjjkabBm1/zDnWHpEdswm5QFF1ThEeW/OyX9pH3HeIr9fy5qjzu7vyqykfbikPmRKVEm05lKmx6Jv74IzAoye/D4QD47iYa2IcNcWEiMU4jCBSxMuuujkFMSJkwE8gNp8POgH+yFJ6u+ol36EHKPQN9ksw9fYjTLH3KDf90+TUItL36dsZxgDLavdIe+SnONjSyrgK6s579r6FfehuM7ij1c6hW6UTD3XMo/8McwIQSvBVw6GDVVVPiASZaKKnjSH/TiqgCALcIfhM8kKHY8fxiKScfYImJKqNehJaMR2TOhhEw==
-Received: from SEZPR01MB5894.apcprd01.prod.exchangelabs.com
- (2603:1096:101:1eb::14) by PUZPR01MB4881.apcprd01.prod.exchangelabs.com
- (2603:1096:301:fa::14) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7807.23; Sun, 28 Jul
- 2024 17:38:45 +0000
-Received: from SEZPR01MB5894.apcprd01.prod.exchangelabs.com
- ([fe80::962:33f:7247:222f]) by SEZPR01MB5894.apcprd01.prod.exchangelabs.com
- ([fe80::962:33f:7247:222f%7]) with mapi id 15.20.7807.026; Sun, 28 Jul 2024
- 17:38:44 +0000
-Date: Sun, 28 Jul 2024 23:08:38 +0530
-From: Mukesh Kumar Chaurasiya <mchauras@hotmail.com>
-To: buckzhang1212@yeah.net
-Cc: Ingo Molnar <mingo@redhat.com>, Peter Zijlstra <peterz@infradead.org>, 
-	Juri Lelli <juri.lelli@redhat.com>, Vincent Guittot <vincent.guittot@linaro.org>, 
-	Dietmar Eggemann <dietmar.eggemann@arm.com>, Steven Rostedt <rostedt@goodmis.org>, 
-	Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>, 
-	Daniel Bristot de Oliveira <bristot@redhat.com>, Valentin Schneider <vschneid@redhat.com>, 
-	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
-	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, llvm@lists.linux.dev, 
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] sched:add panic to remind that wake_q_node should be
- WAKE_Q_TAIL when emtpy
-Message-ID:
- <SEZPR01MB5894794E69717A19DAA68BAEDDB62@SEZPR01MB5894.apcprd01.prod.exchangelabs.com>
-References: <20240717161901.2375-1-buckzhang1212@yeah.net>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240717161901.2375-1-buckzhang1212@yeah.net>
-X-TMN: [KxydXYFY2oIaEgnLAQ4upAhjqRflEY+Z]
-X-ClientProxiedBy: MA0PR01CA0078.INDPRD01.PROD.OUTLOOK.COM
- (2603:1096:a01:ad::20) To SEZPR01MB5894.apcprd01.prod.exchangelabs.com
- (2603:1096:101:1eb::14)
-X-Microsoft-Original-Message-ID:
- <ih6wfsts3ylnxfkqxt7ioz6cdfg6kio7be5opi6vomvk6isjqm@ggvdhuz3km2d>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="R+rOGDyC"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DEA25C4AF0A;
+	Sun, 28 Jul 2024 19:14:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1722194043;
+	bh=sMmbh7cUTqqovrR2AT6BBqOajFBHUkdjDZtKSwNRZH8=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=R+rOGDyCe/5nYkHqIkfoDxNCUuoXBD0w/ddqWWoF1jhS+B0Kyyuk2m3W5Q7WwKFWV
+	 HbXJ3Kegb1sa2iHUflKafhsKDBBrSjNfcZOxQmrCmqsRXuDtLezhnPmzBaeYri/RA3
+	 avGCIFWWgJX9vQri9/mHE74oVZ+ao9vDhuVVZsrPQeKzmHZ/pAd180RTlLCb2MYBXz
+	 v1JbHi8QMBQ4b5WT/KcNvvgrF8gwEhmrr3sjnfEemv8lOFspEzRQNO5IldgpTGfQX7
+	 k8aJDu0T5XZr7GDlnvV75DaOGAl+fpgBrzWXxtAqxH82LAVa4mWcwlgtcukGhKwyto
+	 u0y1ulq4tUitg==
+Received: by mail-lf1-f47.google.com with SMTP id 2adb3069b0e04-52fc4388a64so4604913e87.1;
+        Sun, 28 Jul 2024 12:14:03 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCUlWc3PqhNnSyui1C+G5Q3BIrxZ/1bBY9rSZYlsIBOk84TC1Yyy4emEVFJqNL8e1jxtxH/shgwc0I8snL+rpbYiv2+oR+eJSszZX6sv+kbgsEVpPgMTSvc7yzfebnA=
+X-Gm-Message-State: AOJu0Yx6N7Q8rzecShDMEjMiFD2rTFxDcY4hQ6JJTwd5PsiJL1cS2kTC
+	Vvy8Vo4ENjAuyboRm2eCiNwqbaO1XhAEgCuDAdtsVkfzdDtrLNWbuukh8cdBPa2A6G5F4U5DYnz
+	TfS+KwvEtJbV+6eTanZlkPLS0gCw=
+X-Google-Smtp-Source: AGHT+IEkz1TnHDlE9ler9A80e9defPOv4OL1EPJyuZN5JVOtMoef4fgodh9s71/x3g0iffQ+5rn3J1ZmWw+wvfxkaGI=
+X-Received: by 2002:a05:6512:1289:b0:52e:f95c:8b with SMTP id
+ 2adb3069b0e04-5309b279f98mr4853691e87.16.1722194042594; Sun, 28 Jul 2024
+ 12:14:02 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SEZPR01MB5894:EE_|PUZPR01MB4881:EE_
-X-MS-Office365-Filtering-Correlation-Id: 5ef4b9b7-2ce9-4713-5962-08dcaf2c20a3
-X-MS-Exchange-SLBlob-MailProps:
-	Vs63Iqe4sQmRZ8qlr/ycpgAEOPKg7MYljM6DxOKDBl03RbiwuTFXlFnq6yIhCXJevXe2VYZoj/yTpn/mKe7q+pngzJS4RDuFSPFxaDJdjUT2cR2zwfWrUuurTEo+0Z9an5vTOC8s8et99JzAbKTF3V3oHsXEqC0WVgzCb7CxehD7qdg/hoih8Cv4gjubSxTrMlQ/o6jhRFwkTuMlezrIPAFmYZWd26qfaae/ZQcGl1G3u2vgPryCp1/0z3aBj6fLx9YGC5CZ3ikCy44yI6AA+MRuFBZzOh/sTz8vh/X2F6fnxPTUZSzVc5CJjvHS73umWH50Xuo5sJSV/A9xQ+suU4C+OhAAf5a4SLM1maw4Xqf24ce0fF1k0b8+bRbSUQN/Uikir3ofhVRCsN2WPOFF4VYBZDmGom9OUmRaFNF66Itt66Pfu6gffXLYpIcmWHVZJ7Lbx3gJfnO8xwvaKMlBMYJ+bggnD15o01BrPENKikrvi1o9HJXDt0vNmFJVVa+H9p69TYpPFLH+7KEWJQ2O1se+UNCsn/r4+tYaVY+ikGJgo8YuoZeYKcxMx/9x6gq3NH+tFNC/DujFtVCUrlXk+BXuGecZm0C+YSqqXRrtZjEco8w1Jc7Wv1GexRKH2CfM414fD4rxNnp0LsPtDBQwEWGj93q5222QcDcigRQ/LTexYmv/JUbBzWTdZez4eDywgm2efPUVhkQZu9MRpifYKeGpTS23uEpIDnMq/+Ufjok=
-X-Microsoft-Antispam:
-	BCL:0;ARA:14566002|19110799003|5072599006|8060799006|461199028|440099028|3412199025|3430499032;
-X-Microsoft-Antispam-Message-Info:
-	wyJVHgrhRUlTsypa4xbUaZhn8HtsjGhuNQorP3kNhgwjVPNLgeLnltfRxa9sMKa+OAUFAmYles5tGDGZUja6AnUCu16aM45FCpzQj90xo7yYoFtNyMWiu24Dqy98z1mW641+oHXQxomVwXmstatPbzLmgSoMvvbnj/w6pHBYtE0k1aUU5TFRKzA+bOKiAaSYmoTrPzRxZontuDJzJ9KXxeHITNOUezv4zg2Tx+Q6EwXCL8XcXGYmIb8+wI9wFVIB8XlnKagQ+PyLgxuqFVr4h89G9fupefkKtzToXyH9EbRoAwsWvJH9nK3NTOVLY41pnJfSXnaiXcUuJ8qCGfkNy7a+osOjhdJJ3SlTU6yVDvGKASmzdkysslCwEB71ceSJiOWkgnQe1n8aSc9vp+cBqNSBX/v4WT9ZuIskvdvRXqqxH0gpDLwfHx1wDfzCVsRBADEeF4zeRZ+TSMwC5emYy+eY3SaABNl/9o9ZUgaB3VMRobZexyiHhoO7nStOFeE9ap/hiJu3HzuUrNJptyX7finWFxbbMuR5lkvIe2ZJacAir+se67rTqNCmeJgZVy+LzhxSR2Bw8HbVs1Q2+lZnWTDjeIG7Sf2aBp7Am2fEtOFMFNQJ7IjiB/ZZjpP7m4BLBJhChSWGwLY+0pX9Q/DJA4Tlt15ZgIP679dcitc2Ye8=
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?FgBkHWvsBpUb2Jt5lOvhvX2qtYxi/ZFWtMRXhtFPIYfucQ3TqWG1kjI/qXv+?=
- =?us-ascii?Q?vCAlZG1heBNEQTKh6JDvdY0ITNFJW+4tbjt0LyYL+rwsfAyt4JfpfQCpCezB?=
- =?us-ascii?Q?oHlj0mNSp+sV1LyoEozjzOgs5N6bd8FZDILqrVkSLSiIW/fM6biDgjX+XT0E?=
- =?us-ascii?Q?u3q3AvWErXpHEMdPNIg2bZRWTCHgk4u2yy5h4YJlbWZyx/It7UABidrGegdQ?=
- =?us-ascii?Q?OGGabbsWwIXA3ToXCdr6MdniDZxyTLpgzcj8IIBVJ4mxYZlcn6YBCA4UwBEr?=
- =?us-ascii?Q?MQ9evI62FFh3EGQ7PLJiYEUaHQJbqJhocnUTPLxekoeFHByTmCYAtItgLjnR?=
- =?us-ascii?Q?JKF00KA3OXjERCVZpiiWqL2CtTUqc5nCM4KyTkMPxnowA8fxAgNBlTDp1NKS?=
- =?us-ascii?Q?CkhMEDwLSsiZSh6EPzT5aLEJMBXsjBH8JnOBeNMSsXpQOd+c6tG4wbrV/bb9?=
- =?us-ascii?Q?nAQU4vM0EmPBio5cyGhdV4vfueQyUPvYq8WZRF9gOYMvi/5ki/O9iNRq4axu?=
- =?us-ascii?Q?/sAMmUgfY9tJsB7AxyhNi5wWpUCWArLXiKJYSipQZRaSOTq3c/ZI2SRoviSc?=
- =?us-ascii?Q?FI30WTFdHAY/HCTKN4wmhlDqkejOS8ZZpdL+jlfPZvoRI1vi90RZOYU4Nh0d?=
- =?us-ascii?Q?6sivumluBuS4uhArLcK691r5tdtY5MJLzkepKaqJUsEicK8uzwFTLyzOYQOE?=
- =?us-ascii?Q?QZjrX3dgeJLYPPwjMIT+1vQLWCgDwr/RfA/B0rivjOdbQbbrNuujgYjxEyIr?=
- =?us-ascii?Q?345neI27WnJ+ccYSte1qnD8AyMTCG9FNi22H1jaoX1lLp+L5020c5xcRkxag?=
- =?us-ascii?Q?HHZM6VBq9GQzc5jrZgCgl6r0Rw2WAEP0tlPn7SnWWkhCq4oEdSEfd9ULKWoZ?=
- =?us-ascii?Q?/pttvGbJR5ogfr92UhNW6KqTUpGCzfXEtdtRyGxqr6XuRKXV+4osQEYFIQ7i?=
- =?us-ascii?Q?x6Ork9m4jm8L3E4mwK+oYAKk7e9CKxGoIm6HAp8c4w4z33Gdor7UnhEFi4gf?=
- =?us-ascii?Q?UBpZ1z8FB6nVl0F+wdeZqBI99kJkvaCoNsoUrPvZ3rGGP+I4aTJwG9tvtHDS?=
- =?us-ascii?Q?H4cS8aayKAiwE5fwOcEuz8evR0vychaykTo/0UCUTHS2Vw7lU2KNwzid6ugQ?=
- =?us-ascii?Q?ig9JRk/IduJZ4Dqq0BMq+qfvCtfnNyhEWh0vk7T6xv4Xv0O6bIMwBUzXxEf2?=
- =?us-ascii?Q?pediJo9OZnjCoP0KMq/xsVI5nEny9sukSt9WP+tNErDsNvuG9H2I3Wu7Hfo?=
- =?us-ascii?Q?=3D?=
-X-OriginatorOrg: sct-15-20-7719-20-msonline-outlook-b4c57.templateTenant
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5ef4b9b7-2ce9-4713-5962-08dcaf2c20a3
-X-MS-Exchange-CrossTenant-AuthSource: SEZPR01MB5894.apcprd01.prod.exchangelabs.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Jul 2024 17:38:44.2788
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
-X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg:
-	00000000-0000-0000-0000-000000000000
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PUZPR01MB4881
+References: <20240726-fix-x86-stack-protector-tests-v1-1-a30fe80e8925@kernel.org>
+In-Reply-To: <20240726-fix-x86-stack-protector-tests-v1-1-a30fe80e8925@kernel.org>
+From: Masahiro Yamada <masahiroy@kernel.org>
+Date: Mon, 29 Jul 2024 04:13:26 +0900
+X-Gmail-Original-Message-ID: <CAK7LNATWv-OJM0oW8qbMk-HL0GgRkYKcRt+yZadhHB3NGR22uQ@mail.gmail.com>
+Message-ID: <CAK7LNATWv-OJM0oW8qbMk-HL0GgRkYKcRt+yZadhHB3NGR22uQ@mail.gmail.com>
+Subject: Re: [PATCH] kbuild: Fix '-S -c' in x86 stack protector scripts
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: tglx@linutronix.de, mingo@redhat.com, bp@alien8.de, 
+	dave.hansen@linux.intel.com, x86@kernel.org, nicolas@fjasle.eu, 
+	maskray@google.com, morbo@google.com, justinstitt@google.com, kees@kernel.org, 
+	linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org, 
+	llvm@lists.linux.dev, patches@lists.linux.dev, stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Wed, Jul 17, 2024 at 09:19:01AM -0700, buckzhang1212@yeah.net wrote:
-> From: "weihui.zhang" <buckzhang1212@yeah.net>
-> 
-> Here is a kernel exception ,wake_q_node is NULL.
-> when wake_q_node empty ,it must be WAKE_Q_TAIL instead of NULL Logically.
-> Maybe a hardware bitflip corrupted the node ,add panic to call attention.
+On Sat, Jul 27, 2024 at 3:05=E2=80=AFAM Nathan Chancellor <nathan@kernel.or=
+g> wrote:
+>
+> After a recent change in clang to stop consuming all instances of '-S'
+> and '-c' [1], the stack protector scripts break due to the kernel's use
+> of -Werror=3Dunused-command-line-argument to catch cases where flags are
+> not being properly consumed by the compiler driver:
+>
+>   $ echo | clang -o - -x c - -S -c -Werror=3Dunused-command-line-argument
+>   clang: error: argument unused during compilation: '-c' [-Werror,-Wunuse=
+d-command-line-argument]
+>
+> This results in CONFIG_STACKPROTECTOR getting disabled because
+> CONFIG_CC_HAS_SANE_STACKPROTECTOR is no longer set.
+>
+> '-c' and '-S' both instruct the compiler to stop at different stages of
+> the pipeline ('-S' after compiling, '-c' after assembling), so having
+> them present together in the same command makes little sense. In this
+> case, the test wants to stop before assembling because it is looking at
+> the textual assembly output of the compiler for either '%fs' or '%gs',
+> so remove '-c' from the list of arguments to resolve the error.
+>
+> All versions of GCC continue to work after this change, along with
+> versions of clang that do or do not contain the change mentioned above.
+>
+> Cc: stable@vger.kernel.org
+> Fixes: 4f7fd4d7a791 ("[PATCH] Add the -fstack-protector option to the CFL=
+AGS")
+> Fixes: 60a5317ff0f4 ("x86: implement x86_32 stack protector")
+> Link: https://github.com/llvm/llvm-project/commit/6461e537815f7fa68cef068=
+42505353cf5600e9c [1]
+> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+> ---
+> I think this could go via either -tip or Kbuild?
 
-Hey,
 
-is there a way to recreate this crash?
+Applied to linux-kbuild/fixes, and included in the pull request.
+Thanks!
 
-Regards,
-Mukesh
+
+
+--=20
+Best Regards
+Masahiro Yamada
