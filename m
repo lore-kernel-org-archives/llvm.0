@@ -1,83 +1,60 @@
-Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 74FE01422C5;
-	Mon, 29 Jul 2024 09:53:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.92.199
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 14A8F13E028;
+	Mon, 29 Jul 2024 11:05:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722246820; cv=none; b=uzSZF02cuIoxY9k4gsaTi1LPK4+alM6ybWS2N5qp7BOgpOkQzdXO+3XDNvsZGV+s73wa+rfjOQmVlxf3Po3MiKVd+CxLuorL/jjQpn74LIBOCnSA8Gyf6JYAKBu6t1Jflcg4N8TQvlh/74PIYgDFSa+CXCY4lUa2YLPP5ui8Bhw=
+	t=1722251149; cv=none; b=RVUr/dRJkeK6n9Tu3Ng6Xv1mbJnXJqgTgdrz/AH8t/otGt8MVMWaNoGAcE1GXoVR6R3t7yDXcwPIc0kCK2HunjbhYeRqwpvOTRQI5CZHgWrVSXjXBsL8py+615U6LWG9qCfyYvwc1ieAVr9h/zicD+LxVp4YGIOL7Z/h0SWSHFs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722246820; c=relaxed/simple;
-	bh=waGwMlMybwNO3CltygzQrDphXSMn46LZiyi6g/R+yFc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=eYC4tEmfx2rIXTlvcVQUtpx7Aic5seBrN47nxOtehhPIgoWUkl7tUEsCu2HhIKzox1EW/AflVt142frT0xzokB6wgG8ijsjtImpDkNG0sNG8/+mT/Lk3C9bFWR6uyo/uYsR/B5CqwGDTN0ZGuRGuPP6AQ6dNg/KKQRGgTNe7G7o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=nNxfuwMT; arc=none smtp.client-ip=90.155.92.199
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
+	s=arc-20240116; t=1722251149; c=relaxed/simple;
+	bh=WZfxjdzDxF4fUct42H8Yhj2OTGYK85mWDLxDklL4AZo=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=NEt556abjZ9Nu74v3MSSjYCzbWabEtWcp/akZmMar0tf0s4UUJTcDsrQdTQ7JxcJItqS3hubwNwUCSdX0KbBKpvnzKAk08U63+dG84KXr1DgMB7fnF0uA1gH2/j73AcJ2MHGTERjNQEFHOJy4D3pcOijXJj+5C7Nrk/zML5tXT8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=nAddYVFF; arc=none smtp.client-ip=198.175.65.19
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="nNxfuwMT"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=jjG+pKIqGn1D+6CeUBJo2nl6wL62M7n6k540Ij2MXrA=; b=nNxfuwMT+vQO2UECrfkJeM/Ij8
-	klMYiiXJ2Fe+pRKQGp8v0P+WGTRieUHCYRFial9e21r3/M5G6rlbH/Lw6Q+4zrKsi1dRBhNEZvPO3
-	fYpMrXvrRt00mrbQTlz7dHIcekYQYFM868EC29eRAdp6ChUHTx/yq4WfvHhIB24JVpxpW+aCYJpuM
-	h8aJTxiFg9bTN3JmB7twL3/lCYjjlb8cCNTn3u4b4uABIDcGApJYChhOXskIGhBHuvhekQrFcNUZE
-	TqjJ5bkzJ1/L3LKv3VQWsbldpxPjGM/bcwdAFsGotHdZIJZuTk+ouFKWSHR9458/SoxoaqEudAsZf
-	+000/EFw==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-	by desiato.infradead.org with esmtpsa (Exim 4.97.1 #2 (Red Hat Linux))
-	id 1sYN3v-00000004lAr-2tHM;
-	Mon, 29 Jul 2024 09:53:04 +0000
-Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
-	id 2D409300439; Mon, 29 Jul 2024 11:53:03 +0200 (CEST)
-Date: Mon, 29 Jul 2024 11:53:03 +0200
-From: Peter Zijlstra <peterz@infradead.org>
-To: Rong Xu <xur@google.com>
-Cc: Han Shen <shenhan@google.com>, Sriraman Tallam <tmsriram@google.com>,
-	David Li <davidxl@google.com>, Jonathan Corbet <corbet@lwn.net>,
-	Masahiro Yamada <masahiroy@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nicolas Schier <nicolas@fjasle.eu>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-	"H . Peter Anvin" <hpa@zytor.com>, Ard Biesheuvel <ardb@kernel.org>,
-	Arnd Bergmann <arnd@arndb.de>, Josh Poimboeuf <jpoimboe@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Vegard Nossum <vegard.nossum@oracle.com>,
-	John Moon <john@jmoon.dev>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Heiko Carstens <hca@linux.ibm.com>,
-	Luis Chamberlain <mcgrof@kernel.org>,
-	Samuel Holland <samuel.holland@sifive.com>,
-	Mike Rapoport <rppt@kernel.org>,
-	"Paul E . McKenney" <paulmck@kernel.org>,
-	Rafael Aquini <aquini@redhat.com>, Petr Pavlu <petr.pavlu@suse.com>,
-	Eric DeVolder <eric.devolder@oracle.com>,
-	Bjorn Helgaas <bhelgaas@google.com>,
-	Randy Dunlap <rdunlap@infradead.org>,
-	Benjamin Segall <bsegall@google.com>,
-	Breno Leitao <leitao@debian.org>,
-	Wei Yang <richard.weiyang@gmail.com>,
-	Brian Gerst <brgerst@gmail.com>, Juergen Gross <jgross@suse.com>,
-	Palmer Dabbelt <palmer@rivosinc.com>,
-	Alexandre Ghiti <alexghiti@rivosinc.com>,
-	Kees Cook <kees@kernel.org>,
-	Sami Tolvanen <samitolvanen@google.com>,
-	Xiao Wang <xiao.w.wang@intel.com>,
-	Jan Kiszka <jan.kiszka@siemens.com>, linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
-	linux-efi@vger.kernel.org, linux-arch@vger.kernel.org,
-	llvm@lists.linux.dev, Krzysztof Pszeniczny <kpszeniczny@google.com>,
-	Stephane Eranian <eranian@google.com>
-Subject: Re: [PATCH 6/6] Add Propeller configuration for kernel build.
-Message-ID: <20240729095303.GD37996@noisy.programming.kicks-ass.net>
-References: <20240728203001.2551083-1-xur@google.com>
- <20240728203001.2551083-7-xur@google.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="nAddYVFF"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1722251146; x=1753787146;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=WZfxjdzDxF4fUct42H8Yhj2OTGYK85mWDLxDklL4AZo=;
+  b=nAddYVFFVd9ZU4jWHYoED9dRQ61Ng4K7qfSQAE6ymw/s1cVP33ByOCNj
+   6688AP3vn0URVRHfqUpuDBN8s/vsJOxw5jrjcDD8qoKABQpURgu7iLdQh
+   KN3XH/wSxpdQ441XsvpSslzaLrUk7ibdgR7TI8dbYk5IBjR5hxtQqi0Tx
+   SLiK3X6V5PgIfka5Qu15Dtyr0i0XCa8soOw6rx0dyxYOXlkfRSpQ5WXql
+   EDSsxs3bYyct1S/dguPhtiLdzdcPadpe6wazyXIGMJwlK82HFRjdEDdlE
+   WPTpVYpfGwGnPVjBdmee9YCGVlDkFxafRpcrclMC93VU/xDvqfvpiZm0I
+   A==;
+X-CSE-ConnectionGUID: wFWDF3y7RVq6K3GhO1DB3A==
+X-CSE-MsgGUID: ZE0EdMLjStiqa0LZoXSH7Q==
+X-IronPort-AV: E=McAfee;i="6700,10204,11147"; a="19841650"
+X-IronPort-AV: E=Sophos;i="6.09,245,1716274800"; 
+   d="scan'208";a="19841650"
+Received: from fmviesa006.fm.intel.com ([10.60.135.146])
+  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jul 2024 04:05:46 -0700
+X-CSE-ConnectionGUID: tuz0HiEtQB+M2GmPc6/IQQ==
+X-CSE-MsgGUID: ZJguCmrTQeOKOOUWf+U9tA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.09,245,1716274800"; 
+   d="scan'208";a="53604278"
+Received: from lkp-server01.sh.intel.com (HELO 68891e0c336b) ([10.239.97.150])
+  by fmviesa006.fm.intel.com with ESMTP; 29 Jul 2024 04:05:44 -0700
+Received: from kbuild by 68891e0c336b with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1sYOCD-000reA-2I;
+	Mon, 29 Jul 2024 11:05:41 +0000
+Date: Mon, 29 Jul 2024 19:04:51 +0800
+From: kernel test robot <lkp@intel.com>
+To: Borislav Petkov <bp@alien8.de>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-kernel@vger.kernel.org, x86@kernel.org
+Subject: [tip:x86/microcode 1/1] arch/x86/kernel/cpu/microcode/amd.c:714:6:
+ warning: variable 'equiv_id' is used uninitialized whenever 'if' condition
+ is false
+Message-ID: <202407291815.gJBST0P3-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -86,22 +63,62 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240728203001.2551083-7-xur@google.com>
 
-On Sun, Jul 28, 2024 at 01:29:59PM -0700, Rong Xu wrote:
-> Add the build support for using Clang's Propeller optimizer. Like
-> AutoFDO, Propeller uses hardware sampling to gather information
-> about the frequency of execution of different code paths within a
-> binary. This information is then used to guide the compiler's
-> optimization decisions, resulting in a more efficient binary.
-> 
-> The support requires a Clang compiler LLVM 19 or later, and the
-> create_llvm_prof tool
-> (https://github.com/google/autofdo/releases/tag/v0.30.1). This
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git x86/microcode
+head:   94838d230a6c835ced1bad06b8759e0a5f19c1d3
+commit: 94838d230a6c835ced1bad06b8759e0a5f19c1d3 [1/1] x86/microcode/AMD: Use the family,model,stepping encoded in the patch ID
+config: i386-buildonly-randconfig-001-20240729 (https://download.01.org/0day-ci/archive/20240729/202407291815.gJBST0P3-lkp@intel.com/config)
+compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240729/202407291815.gJBST0P3-lkp@intel.com/reproduce)
 
-What's the relation between this and llvm-profgen? Is the above simply
-a google 'internal' proof of concept thing that will eventually make its
-way into llvm-profgen?
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202407291815.gJBST0P3-lkp@intel.com/
 
-It seems a bit weird LLVM landed propeller without the required profile
-generation tool.
+All warnings (new ones prefixed by >>):
+
+>> arch/x86/kernel/cpu/microcode/amd.c:714:6: warning: variable 'equiv_id' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
+     714 |         if (x86_family(bsp_cpuid_1_eax) < 0x17) {
+         |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/x86/kernel/cpu/microcode/amd.c:720:31: note: uninitialized use occurs here
+     720 |         return cache_find_patch(uci, equiv_id);
+         |                                      ^~~~~~~~
+   arch/x86/kernel/cpu/microcode/amd.c:714:2: note: remove the 'if' if its condition is always true
+     714 |         if (x86_family(bsp_cpuid_1_eax) < 0x17) {
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/x86/kernel/cpu/microcode/amd.c:706:14: note: initialize the variable 'equiv_id' to silence this warning
+     706 |         u16 equiv_id;
+         |                     ^
+         |                      = 0
+   1 warning generated.
+
+
+vim +714 arch/x86/kernel/cpu/microcode/amd.c
+
+   701	
+   702	static struct ucode_patch *find_patch(unsigned int cpu)
+   703	{
+   704		struct ucode_cpu_info *uci = ucode_cpu_info + cpu;
+   705		u32 rev, dummy __always_unused;
+   706		u16 equiv_id;
+   707	
+   708		/* fetch rev if not populated yet: */
+   709		if (!uci->cpu_sig.rev) {
+   710			rdmsr(MSR_AMD64_PATCH_LEVEL, rev, dummy);
+   711			uci->cpu_sig.rev = rev;
+   712		}
+   713	
+ > 714		if (x86_family(bsp_cpuid_1_eax) < 0x17) {
+   715			equiv_id = find_equiv_id(&equiv_table, uci->cpu_sig.sig);
+   716			if (!equiv_id)
+   717				return NULL;
+   718		}
+   719	
+   720		return cache_find_patch(uci, equiv_id);
+   721	}
+   722	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
