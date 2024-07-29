@@ -1,64 +1,43 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A7F9154444;
-	Mon, 29 Jul 2024 14:01:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5EC7014F9FD;
+	Mon, 29 Jul 2024 15:30:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722261715; cv=none; b=XZEi2pVZFlujq8o2XdujFbzKmloBnrxzvfcI4ZckiJcV95yjxYYxrPoRv5lsd1H1s8JQUI1ieYnk1xSIdFDhpkTuOjI+EnvMeYw5VN1227dKUhbOYtpdbWWvTeT4Oh3lp5XGVzqey0X1ZBpLb3LcnjG0Nm7LrwUQXevj5nHfjgQ=
+	t=1722267011; cv=none; b=HNfTuxo3IbYMByoCo3+57a7DqeWdOXV2Zxu3Z1nfcx8n1Nj4+h0zuqQJHxdkYMBQWz2dqVfCVGk7hCbR+1vbfn82RjaHelhNp0rNZ1rMgScPIjQCpPp0aDlJHM+nShcZV1FExNFlOk3GDHjfXTRrkGsGkkVjVnIiGh+hXmvqORM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722261715; c=relaxed/simple;
-	bh=Y1Nevpy7uyu+oEQw6udVEHNAduDwy+JCJe65utQ5wiQ=;
+	s=arc-20240116; t=1722267011; c=relaxed/simple;
+	bh=ndzDCEmWVqlMpqggu+GgSzXYK/Y1s948Sog4W6pkXyw=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=PFFA8KbDzQStTquPwmz5jLOaTBPkjhv/R293u2V+rJOczHCrJNfhwVqbCK7vyu8nyYmFVwRKxHascUOUYu5BxcyYI405q8TsubIqcZloNkjcGwvhikpxeYb8sRCCoAa2NOhLg9g7ch4GQZ1tIQqJzAX7i0y5vBzjx3FXEy1LO0E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=HFLC0eGQ; arc=none smtp.client-ip=198.175.65.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=D+tAmD4ZgVqkm0pqERl7v8dFsAmprsT+YKzBxCckJAk9dvI0C73hh2MxqIAFzKk0xoYiWr5D6SUOt2ey50GB97sweh2d5smQznHhF8SReXHbAIXMBEHZzJw4Vt0bsjQFkJad9Ye5/lPqK3WC6G2HLjkz4bkMQlK9UOEOz6B4qXY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=r3FNmVmx; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="HFLC0eGQ"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1722261712; x=1753797712;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Y1Nevpy7uyu+oEQw6udVEHNAduDwy+JCJe65utQ5wiQ=;
-  b=HFLC0eGQC+4giwxnhs1CfSRuJYVQqBfO335Vn/GdsXUWNy5fAdq6xDiA
-   WAL9T2Tuvp9PqF1RxA9wH5Wr36qwX1wTem1FaoewUkeSib70TstjeGXem
-   PdHkvZ+TyAeRCnIACkJ7iS0ipfWIpa+CXlJezDcoNEdxvPlK8R6KcwzXq
-   ZYU1wDojqN4Yxa4jG/NCLleAEKqvCLbodjB5FrRfhNzydon0BFcL9svni
-   9y7Q/wClKITcWE9lcOdv9Bbzxig9VzNCnyKd9paNIhwS1zz3ZTijjc1v3
-   N8m3AvWoeP2Fz44iIjAHUIyCCt8LQF6BMrUv9fTmKXeFeTqf1xePYkOB/
-   A==;
-X-CSE-ConnectionGUID: Mc9xHQqwSeup8cWHn+mQeQ==
-X-CSE-MsgGUID: 7gNf/cC0Rx6f72L0hmbL5g==
-X-IronPort-AV: E=McAfee;i="6700,10204,11148"; a="30603372"
-X-IronPort-AV: E=Sophos;i="6.09,246,1716274800"; 
-   d="scan'208";a="30603372"
-Received: from orviesa006.jf.intel.com ([10.64.159.146])
-  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jul 2024 07:01:52 -0700
-X-CSE-ConnectionGUID: WrsHn0OKRsq82MOfpFclQg==
-X-CSE-MsgGUID: HNG9f+BxTTS5qEhc3zVxbw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.09,246,1716274800"; 
-   d="scan'208";a="54235294"
-Received: from lkp-server01.sh.intel.com (HELO 68891e0c336b) ([10.239.97.150])
-  by orviesa006.jf.intel.com with ESMTP; 29 Jul 2024 07:01:48 -0700
-Received: from kbuild by 68891e0c336b with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1sYQwc-000rjw-1m;
-	Mon, 29 Jul 2024 14:01:46 +0000
-Date: Mon, 29 Jul 2024 22:01:10 +0800
-From: kernel test robot <lkp@intel.com>
-To: Nicolin Chen <nicolinc@nvidia.com>, will@kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	robin.murphy@arm.com, joro@8bytes.org, jgg@nvidia.com,
-	thierry.reding@gmail.com, vdumpa@nvidia.com, jonathanh@nvidia.com,
-	linux-kernel@vger.kernel.org, iommu@lists.linux.dev,
-	linux-arm-kernel@lists.infradead.org, linux-tegra@vger.kernel.org
-Subject: Re: [PATCH v10 8/9] iommu/arm-smmu-v3: Add in-kernel support for
- NVIDIA Tegra241 (Grace) CMDQV
-Message-ID: <202407292157.BauV7TPf-lkp@intel.com>
-References: <ca671f4d090546c21a0aba6fa4ddda8da26d4474.1722206275.git.nicolinc@nvidia.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="r3FNmVmx"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9557CC32786;
+	Mon, 29 Jul 2024 15:30:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1722267011;
+	bh=ndzDCEmWVqlMpqggu+GgSzXYK/Y1s948Sog4W6pkXyw=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=r3FNmVmxJSENQY/tBVzlojnsnOO/XLYOme3j10H4ISrIgxicyoteQ69TS9QDNELTQ
+	 BVx24grjry2+duu1MS1L5TYMKK5T83OyyuLQjhpIPrmDD1C8XfPD90Ajfj10+xEGe3
+	 9SBlBzaW6Ufie66kKdAHGqPf7gvzM7CgycphWWQSszX0j0PVdyfj4quoHFyMiW2xDd
+	 Ht9fuSubV6AvdmFh5XWm+Z9aR0UBM5LXjrEZ82g6s+A9GC+omYcNkx3qFutThl7jsa
+	 86ATPOv6cIbtI0eV5/O3uNqcTBWVFuRzuTzKRT2Ipz2p2rkhVkvOn8r8xlQZ3sCvqO
+	 G4YQXLxYWK4Tg==
+Date: Mon, 29 Jul 2024 08:30:08 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Borislav Petkov <bp@alien8.de>
+Cc: kernel test robot <lkp@intel.com>, llvm@lists.linux.dev,
+	oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
+	x86@kernel.org
+Subject: Re: [tip:x86/microcode 1/1]
+ arch/x86/kernel/cpu/microcode/amd.c:714:6: warning: variable 'equiv_id' is
+ used uninitialized whenever 'if' condition is false
+Message-ID: <20240729153008.GA685493@thelio-3990X>
+References: <202407291815.gJBST0P3-lkp@intel.com>
+ <20240729112614.GBZqd8Vu27mFVSHynA@fat_crate.local>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -67,69 +46,126 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <ca671f4d090546c21a0aba6fa4ddda8da26d4474.1722206275.git.nicolinc@nvidia.com>
+In-Reply-To: <20240729112614.GBZqd8Vu27mFVSHynA@fat_crate.local>
 
-Hi Nicolin,
+Hi Boris,
 
-kernel test robot noticed the following build warnings:
+On Mon, Jul 29, 2024 at 01:26:14PM +0200, Borislav Petkov wrote:
+> + Nathan.
+> 
+> On Mon, Jul 29, 2024 at 07:04:51PM +0800, kernel test robot wrote:
+> > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git x86/microcode
+> > head:   94838d230a6c835ced1bad06b8759e0a5f19c1d3
+> > commit: 94838d230a6c835ced1bad06b8759e0a5f19c1d3 [1/1] x86/microcode/AMD: Use the family,model,stepping encoded in the patch ID
+> > config: i386-buildonly-randconfig-001-20240729 (https://download.01.org/0day-ci/archive/20240729/202407291815.gJBST0P3-lkp@intel.com/config)
+> > compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
+> > reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240729/202407291815.gJBST0P3-lkp@intel.com/reproduce)
+> > 
+> > If you fix the issue in a separate patch/commit (i.e. not just a new version of
+> > the same patch/commit), kindly add following tags
+> > | Reported-by: kernel test robot <lkp@intel.com>
+> > | Closes: https://lore.kernel.org/oe-kbuild-all/202407291815.gJBST0P3-lkp@intel.com/
+> > 
+> > All warnings (new ones prefixed by >>):
+> > 
+> > >> arch/x86/kernel/cpu/microcode/amd.c:714:6: warning: variable 'equiv_id' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
+> >      714 |         if (x86_family(bsp_cpuid_1_eax) < 0x17) {
+> >          |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> >    arch/x86/kernel/cpu/microcode/amd.c:720:31: note: uninitialized use occurs here
+> >      720 |         return cache_find_patch(uci, equiv_id);
+> >          |                                      ^~~~~~~~
+> >    arch/x86/kernel/cpu/microcode/amd.c:714:2: note: remove the 'if' if its condition is always true
+> >      714 |         if (x86_family(bsp_cpuid_1_eax) < 0x17) {
+> >          |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> >    arch/x86/kernel/cpu/microcode/amd.c:706:14: note: initialize the variable 'equiv_id' to silence this warning
+> >      706 |         u16 equiv_id;
+> >          |                     ^
+> >          |                      = 0
+> >    1 warning generated.
+> > 
+> > 
+> > vim +714 arch/x86/kernel/cpu/microcode/amd.c
+> > 
+> >    701	
+> >    702	static struct ucode_patch *find_patch(unsigned int cpu)
+> >    703	{
+> >    704		struct ucode_cpu_info *uci = ucode_cpu_info + cpu;
+> >    705		u32 rev, dummy __always_unused;
+> >    706		u16 equiv_id;
+> >    707	
+> >    708		/* fetch rev if not populated yet: */
+> >    709		if (!uci->cpu_sig.rev) {
+> >    710			rdmsr(MSR_AMD64_PATCH_LEVEL, rev, dummy);
+> >    711			uci->cpu_sig.rev = rev;
+> >    712		}
+> >    713	
+> >  > 714		if (x86_family(bsp_cpuid_1_eax) < 0x17) {
+> >    715			equiv_id = find_equiv_id(&equiv_table, uci->cpu_sig.sig);
+> >    716			if (!equiv_id)
+> >    717				return NULL;
+> >    718		}
+> >    719	
+> >    720		return cache_find_patch(uci, equiv_id);
+> >    721	}
+> >    722	
+> 
+> That's a false positive, I think.
+> 
+> clang can't see that equiv_id is used in cache_find_patch() ->
+> patch_cpus_equivalent() *only* in the
+> 
+> 	if (x86_family(bsp_cpuid_1_eax) < 0x17)
+> 
+> case.
 
-[auto build test WARNING on linus/master]
-[also build test WARNING on v6.11-rc1 next-20240729]
-[cannot apply to joro-iommu/next]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Right, as clang does not perform interprocedural analysis for the sake
+of warnings. That's partly why GCC's version of this warning was
+disabled in commit 78a5255ffb6a ("Stop the ad-hoc games with
+-Wno-maybe-initialized").
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Nicolin-Chen/iommu-arm-smmu-v3-Issue-a-batch-of-commands-to-the-same-cmdq/20240729-072957
-base:   linus/master
-patch link:    https://lore.kernel.org/r/ca671f4d090546c21a0aba6fa4ddda8da26d4474.1722206275.git.nicolinc%40nvidia.com
-patch subject: [PATCH v10 8/9] iommu/arm-smmu-v3: Add in-kernel support for NVIDIA Tegra241 (Grace) CMDQV
-config: arm64-allmodconfig (https://download.01.org/0day-ci/archive/20240729/202407292157.BauV7TPf-lkp@intel.com/config)
-compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project ccae7b461be339e717d02f99ac857cf0bc7d17fc)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240729/202407292157.BauV7TPf-lkp@intel.com/reproduce)
+> And that case is handled properly in this function.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202407292157.BauV7TPf-lkp@intel.com/
+While it may be properly handled now, I think this pattern of
+conditionally avoiding using a variable uninitialized is dubious.
 
-All warnings (new ones prefixed by >>):
+> So, unless I'm missing something else, it's a good thing this warning is
+> behind a W=1. Keep it there.
 
->> drivers/iommu/arm/arm-smmu-v3/tegra241-cmdqv.c:186: warning: Function parameter or struct member 'vintfs' not described in 'tegra241_cmdqv'
->> drivers/iommu/arm/arm-smmu-v3/tegra241-cmdqv.c:186: warning: Excess struct member 'vtinfs' description in 'tegra241_cmdqv'
+It's not behind W=1, this happens in a normal build:
 
+  $ make -skj"$(nproc)" ARCH=x86_64 LLVM=1 mrproper defconfig arch/x86/kernel/cpu/microcode/amd.o
+  arch/x86/kernel/cpu/microcode/amd.c:714:6: error: variable 'equiv_id' is used uninitialized whenever 'if' condition is false [-Werror,-Wsometimes-uninitialized]
+    714 |         if (x86_family(bsp_cpuid_1_eax) < 0x17) {
+        |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  arch/x86/kernel/cpu/microcode/amd.c:720:31: note: uninitialized use occurs here
+    720 |         return cache_find_patch(uci, equiv_id);
+        |                                      ^~~~~~~~
+  arch/x86/kernel/cpu/microcode/amd.c:714:2: note: remove the 'if' if its condition is always true
+    714 |         if (x86_family(bsp_cpuid_1_eax) < 0x17) {
+        |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  arch/x86/kernel/cpu/microcode/amd.c:706:14: note: initialize the variable 'equiv_id' to silence this warning
+    706 |         u16 equiv_id;
+        |                     ^
+        |                      = 0
+  1 error generated.
 
-vim +186 drivers/iommu/arm/arm-smmu-v3/tegra241-cmdqv.c
+Even GCC would warn about this code if not for the commit I mentioned
+above:
 
-   160	
-   161	/**
-   162	 * struct tegra241_cmdqv - CMDQ-V for SMMUv3
-   163	 * @smmu: SMMUv3 device
-   164	 * @base: MMIO base address
-   165	 * @irq: IRQ number
-   166	 * @num_vintfs: Total number of VINTFs
-   167	 * @num_vcmdqs: Total number of VCMDQs
-   168	 * @num_lvcmdqs_per_vintf: Number of logical VCMDQs per VINTF
-   169	 * @vintf_ids: VINTF id allocator
-   170	 * @vtinfs: List of VINTFs
-   171	 */
-   172	struct tegra241_cmdqv {
-   173		struct arm_smmu_device smmu;
-   174	
-   175		void __iomem *base;
-   176		int irq;
-   177	
-   178		/* CMDQV Hardware Params */
-   179		u16 num_vintfs;
-   180		u16 num_vcmdqs;
-   181		u16 num_lvcmdqs_per_vintf;
-   182	
-   183		struct ida vintf_ids;
-   184	
-   185		struct tegra241_vintf **vintfs;
- > 186	};
-   187	
+  $ make -skj"$(nproc)" ARCH=x86_64 CROSS_COMPILE=x86_64-linux- KCFLAGS=-Wmaybe-uninitialized mrproper defconfig arch/x86/kernel/cpu/microcode/amd.o
+  In function 'cache_find_patch',
+      inlined from 'find_patch' at arch/x86/kernel/cpu/microcode/amd.c:720:9:
+  arch/x86/kernel/cpu/microcode/amd.c:647:20: error: 'equiv_id' may be used uninitialized [-Werror=maybe-uninitialized]
+    647 |                 if (patch_cpus_equivalent(p, &n))
+        |                    ^
+  arch/x86/kernel/cpu/microcode/amd.c: In function 'find_patch':
+  arch/x86/kernel/cpu/microcode/amd.c:706:13: note: 'equiv_id' was declared here
+    706 |         u16 equiv_id;
+        |             ^~~~~~~~
+  cc1: all warnings being treated as errors
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+So I guess you can just ignore this if you want but others (maybe even
+Linus) will likely notice this and report it as well.
+
+Cheers,
+Nathan
