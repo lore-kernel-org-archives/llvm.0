@@ -1,83 +1,153 @@
-Received: from out-175.mta0.migadu.com (out-175.mta0.migadu.com [91.218.175.175])
+Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD9BA132112
-	for <llvm@lists.linux.dev>; Mon, 29 Jul 2024 08:32:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E5CF328B6;
+	Mon, 29 Jul 2024 08:51:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722241939; cv=none; b=O3aJytpAZ/t5oQSTgvG2reBOuoN1W6gS3AXRNN+WTyhQuif04+HiXF4qy88w4UUk6dQhWxpvXpdEDg7wFUfxTFgL8SdFg9DoNsP9JF/NXGjaI1QSPF+GaPvWNkmyAvUc2r39lzNtOPgVJWzMU8aXVVVc9pK4gshpiaGs7VSHGgU=
+	t=1722243086; cv=none; b=aM+t5kr+avTijml+epLPFp6nOQYqy+i5zmNvQ5ZQ/Fson6iL1v76jdFBhKeAjMQm1TRFIBsCgUWHdfonmPJL7hptIDfAQQGHdihzb0fznKtWCFwrFUp2aZlxMBgZs6/4RB+9lNBX4RehQ7rua7TnWrWSHZTB7Vc43+898lFMPU0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722241939; c=relaxed/simple;
-	bh=RKu9KPP9FD54kybo0dRLPGyKHnBnvcdwR4F+6veHEvg=;
-	h=MIME-Version:Date:Content-Type:From:Message-ID:Subject:To:Cc:
-	 In-Reply-To:References; b=l566P2sfCJhvDkb+GUneyoKiHgNe159nRVhU51uPpR7ZBqW/7OvuNcNvdlWaOQ9NJAGNyqzzEtYZ2zK0aCzJwOfy3zCEkxgWuznHwS5ULK6nramiKx0QuAj0fE4RN6WyUKbMhreCqaSswQN0f7PO8lvU9Nr5hxrSkHVTJi4T2EM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=Z0Rl5GUh; arc=none smtp.client-ip=91.218.175.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1722243086; c=relaxed/simple;
+	bh=t036mvc+S68XKyD1LE/5fTRSY8CMezFH4ZsbUu+gbu0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=NUw2H9+mmea/EKHWyEmhAzkZkn1bpD3mYvCGq2+sJfvyijBKg/+S2o4apn3Bj0a/Lveaw4z+WK/8X4xcSWa2L9E6HJwwGSzoullfXq9ikxhHEe3WwZXtPkHM/E6+eoFKlvLqsApiwjB6lqMD+CbETvT0543fNjaEHMxx6Y4Lv14=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=leoCy3lX; arc=none smtp.client-ip=90.155.50.34
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="Z0Rl5GUh"
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="leoCy3lX"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Transfer-Encoding:
+	Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:
+	Sender:Reply-To:Content-ID:Content-Description;
+	bh=K4Jpsm5DX88VFcPkZAIC2BbJowza/7NzQCGPZM8v4Pg=; b=leoCy3lXxnAROtLduJbi58x+ak
+	vI83fhz1KRN0OKOHF9/v9rOWLljOxxQE7kKJxogxjurDjS6RQ7Gsx3t74CsbpZTpaj+k+wK9Z0LNG
+	qNga4tYbc/8WfSawf2actItMHYw04fFsFPlDzr+IRYRE1lavh/WGNDmfceEkkWRt+vs3iHiGkfeYa
+	9NnvhaB3hJ138b7JRaq92Ko7cxrCNOoneGqQUq2hEFtOwhk7AOnKCrhP4JXFlmHl3lfCb41YrS1MW
+	HVfC435p+KCfRPZQ57xdgXwVJxwCktblqaOG4l0iH99dtxLgBeAk1DfWF+YmJdFUxNld25x0vMWnD
+	S4k9Ho0g==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+	by casper.infradead.org with esmtpsa (Exim 4.97.1 #2 (Red Hat Linux))
+	id 1sYM5l-0000000DOBC-20zs;
+	Mon, 29 Jul 2024 08:50:53 +0000
+Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
+	id 4B394300439; Mon, 29 Jul 2024 10:50:52 +0200 (CEST)
+Date: Mon, 29 Jul 2024 10:50:52 +0200
+From: Peter Zijlstra <peterz@infradead.org>
+To: Rong Xu <xur@google.com>
+Cc: Han Shen <shenhan@google.com>, Sriraman Tallam <tmsriram@google.com>,
+	David Li <davidxl@google.com>, Jonathan Corbet <corbet@lwn.net>,
+	Masahiro Yamada <masahiroy@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nicolas Schier <nicolas@fjasle.eu>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+	"H . Peter Anvin" <hpa@zytor.com>, Ard Biesheuvel <ardb@kernel.org>,
+	Arnd Bergmann <arnd@arndb.de>, Josh Poimboeuf <jpoimboe@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Vegard Nossum <vegard.nossum@oracle.com>,
+	John Moon <john@jmoon.dev>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Heiko Carstens <hca@linux.ibm.com>,
+	Luis Chamberlain <mcgrof@kernel.org>,
+	Samuel Holland <samuel.holland@sifive.com>,
+	Mike Rapoport <rppt@kernel.org>,
+	"Paul E . McKenney" <paulmck@kernel.org>,
+	Rafael Aquini <aquini@redhat.com>, Petr Pavlu <petr.pavlu@suse.com>,
+	Eric DeVolder <eric.devolder@oracle.com>,
+	Bjorn Helgaas <bhelgaas@google.com>,
+	Randy Dunlap <rdunlap@infradead.org>,
+	Benjamin Segall <bsegall@google.com>,
+	Breno Leitao <leitao@debian.org>,
+	Wei Yang <richard.weiyang@gmail.com>,
+	Brian Gerst <brgerst@gmail.com>, Juergen Gross <jgross@suse.com>,
+	Palmer Dabbelt <palmer@rivosinc.com>,
+	Alexandre Ghiti <alexghiti@rivosinc.com>,
+	Kees Cook <kees@kernel.org>,
+	Sami Tolvanen <samitolvanen@google.com>,
+	Xiao Wang <xiao.w.wang@intel.com>,
+	Jan Kiszka <jan.kiszka@siemens.com>, linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
+	linux-efi@vger.kernel.org, linux-arch@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: Re: [PATCH 0/6] Add AutoFDO and Propeller support for Clang build
+Message-ID: <20240729085052.GA37996@noisy.programming.kicks-ass.net>
+References: <20240728203001.2551083-1-xur@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1722241935;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=RKu9KPP9FD54kybo0dRLPGyKHnBnvcdwR4F+6veHEvg=;
-	b=Z0Rl5GUheiAHWpBvSRXhn2yjWU6Xf1UXMa492QCi/ySK5aqmkdWKTAlSa7CsT7g1xV9n55
-	L4wRf/inDXFRdH7FF08Y1gCL/WyQEKXWAu0RQ5B5H0lr55I7FhDl+W85/nB2VVCT+L9kNu
-	Q+YfDdHgEwRjGngpqfgqS2KRbIyHdvE=
-Date: Mon, 29 Jul 2024 08:32:13 +0000
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: si.yanteng@linux.dev
-Message-ID: <ce5a146b8a1857fda90bce79934ae5f9ec2bfee9@linux.dev>
-TLS-Required: No
-Subject: Re: [PATCH v3] docs/zh_CN: Add dev-tools/kcsan Chinese translation
-To: "Haoyang Liu" <tttturtleruss@hust.edu.cn>, "Alex Shi" <alexs@kernel.org>,
- "Yanteng Si" <siyanteng@loongson.cn>, "Jonathan Corbet" <corbet@lwn.net>,
- "Nathan Chancellor" <nathan@kernel.org>, "Nick Desaulniers"
- <ndesaulniers@google.com>, "Bill Wendling" <morbo@google.com>, "Justin
- Stitt" <justinstitt@google.com>
-Cc: hust-os-kernel-patches@googlegroups.com, "Haoyang Liu"
- <tttturtleruss@hust.edu.cn>, linux-doc@vger.kernel.org,
- linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-In-Reply-To: <20240727150844.6502-1-tttturtleruss@hust.edu.cn>
-References: <20240727150844.6502-1-tttturtleruss@hust.edu.cn>
-X-Migadu-Flow: FLOW_OUT
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20240728203001.2551083-1-xur@google.com>
 
-2024=E5=B9=B47=E6=9C=8827=E6=97=A5 23:08, "Haoyang Liu" <tttturtleruss@hu=
-st.edu.cn> =E5=86=99=E5=88=B0:
+On Sun, Jul 28, 2024 at 01:29:53PM -0700, Rong Xu wrote:
+> Hi,
+> 
+> This patch series is to integrate AutoFDO and Propeller support into
+> the Linux kernel. AutoFDO is a profile-guided optimization technique
+> that leverages hardware sampling to enhance binary performance.
+> Unlike Instrumentation-based FDO (iFDO), AutoFDO offers a user-friendly
+> and straightforward application process. While iFDO generally yields
+> superior profile quality and performance, our findings reveal that
+> AutoFDO achieves remarkable effectiveness, bringing performance close
+> to iFDO for benchmark applications. Similar to AutoFDO, Propeller too
+> utilizes hardware sampling to collect profiles and apply post-link
+> optimizations to improve the benchmark’s performance over and above
+> AutoFDO.
+> 
+> Our empirical data demonstrates significant performance improvements
+> with AutoFDO and Propeller, up to 10% on microbenchmarks and up to 5%
+> on large warehouse-scale benchmarks. This makes a strong case for their
+> inclusion as supported features in the upstream kernel.
+> 
+> Background
+> 
+> A significant fraction of fleet processing cycles (excluding idle time)
+> from data center workloads are attributable to the kernel. Ware-house
+> scale workloads maximize performance by optimizing the production kernel
+> using iFDO (a.k.a instrumented PGO, Profile Guided Optimization).
+> 
+> iFDO can significantly enhance application performance but its use
+> within the kernel has raised concerns. AutoFDO is a variant of FDO that
+> uses the hardware’s Performance Monitoring Unit (PMU) to collect
+> profiling data. While AutoFDO typically yields smaller performance
+> gains than iFDO, it presents unique benefits for optimizing kernels.
+> 
+> AutoFDO eliminates the need for instrumented kernels, allowing a single
+> optimized kernel to serve both execution and profile collection. It also
+> minimizes slowdown during profile collection, potentially yielding
+> higher-fidelity profiling, especially for time-sensitive code, compared
+> to iFDO. Additionally, AutoFDO profiles can be obtained from production
+> environments via the hardware’s PMU whereas iFDO profiles require
+> carefully curated load tests that are representative of real-world
+> traffic.
+> 
+> AutoFDO facilitates profile collection across diverse targets.
+> Preliminary studies indicate significant variation in kernel hot spots
+> within Google’s infrastructure, suggesting potential performance gains
+> through target-specific kernel customization.
+> 
+> Furthermore, other advanced compiler optimization techniques, including
+> ThinLTO and Propeller can be stacked on top of AutoFDO, similar to iFDO.
+> ThinLTO achieves better runtime performance through whole-program
+> analysis and cross module optimizations. The main difference between
+> traditional LTO and ThinLTO is that the latter is scalable in time and
+> memory. 
 
+This, 
 
-Hi Haoyang,
+> Propeller is a profile-guided, post-link optimizer that improves
+> the performance of large-scale applications compiled with LLVM. It
+> operates by relinking the binary based on an additional round of runtime
+> profiles, enabling precise optimizations that are not possible at
+> compile time.
 
->=20
->=20Translate dev-tools/kcsan commit 31f605a308e6
->=20
->=20("kcsan, compiler_types: Introduce __data_racy type qualifier")
->=20
->=20into Chinese and add it in dev-tools/zh_CN/index.rst
->=20
->=20Signed-off-by: Haoyang Liu <tttturtleruss@hust.edu.cn>
->=20
->=20---
->=20
->=20v2 -> v3: Revised some sentences based on reviewer's suggestions and =
-updated the KTSAN url.
-Our comments need a clear response, and I have noticed
-that Alex has already commented on v3, so before sending
-v4, you need to reply to each of his comments one by one.
-
-BTW:
-Because you have already sent v3, you don't need to reply to v2 anymore.
-
-
-Thanks,
-Yanteng
+should be on top somewhere, not hidden away inside a giant wall of text
+somewhere at the end.
