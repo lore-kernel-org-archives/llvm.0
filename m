@@ -1,148 +1,146 @@
-Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from flow2-smtp.messagingengine.com (flow2-smtp.messagingengine.com [103.168.172.137])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EDA98824BF;
-	Mon, 29 Jul 2024 06:22:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 64FCE7406F
+	for <llvm@lists.linux.dev>; Mon, 29 Jul 2024 07:02:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.137
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722234163; cv=none; b=M+wb6zoJ9IwwJxpvJSGp2VQjtsBPtCwNPmD0dwekf9Mo9xDg9243zqdLLxdAxRedAceZZMWQADmpQ8oZIrLeSL1xSeJUdyZhCLq9MBC18NC+EnC1nms63Qw3x+8SAmzHVHOHpg8dXvApabp57H3SxizxwV5JprlMdY3MSolXES8=
+	t=1722236565; cv=none; b=fdy2qCkIQeLzMYXM6PIIe/NdzjcYD/UO/bjQBAhlet1seixK1LVI9x1XdbMygALmhZmYvkUNMsGU/E1asM7MU9g3UBUMOTcy4A1jZTw1QJy4LWf96fOC9ZCME8MiU8o/Au79b0ZSYyyQe3RGwslf1RhUWhb8/26j9CCKe8vdPz0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722234163; c=relaxed/simple;
-	bh=hjjIMtLXsRowWJTsFZFs0FGHMWuAIRn3zMKwdzFZlVw=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=IHcp2BEpdwkvvOem/1THvJPRwB51KzSFbR614T7Po8vgP7ifZxCeg7JLLArVkjdstnXlBbHTVKWFc93YHTEdBOjQ6HYzn5BcWv6E6XER7qHmWXShglZxeW3MecLfgylq7j/55rIm2g6ZXw+0B6oD37jFCtCF3w9SGdk6RLgJZBk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=grimberg.me; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.128.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=grimberg.me
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f54.google.com with SMTP id 5b1f17b1804b1-42802ddfaa6so1084945e9.1;
-        Sun, 28 Jul 2024 23:22:41 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1722234160; x=1722838960;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=BcrMmy1kl1trlyFU4fNrbFfE/gf001bjOnJ7xTNIN84=;
-        b=su/Ht2/4+OQXn2D4j/k5+mkjq0An9al3QsPW8vvpI2ACn0gUS+/a5Y4tJnXExZBlZK
-         4GbuDx2NNLLOa+Ki5awhxqa30iarAtCH6OrJEj9qvxb0Fv/0dDS0FTJ+09CeCObRf/HM
-         3JsthszRo/yeot+ihnoflOc6skeSTnSW4XxQd3atX28Uhhw4gIwCHDjEL0nuPVy5OvO9
-         j+FE2irwBdqNs565gHqMWgYqfPPZM5CH5/wG2PRZNR8CE6oShOHWU/wiJ+YEJ0EH6S01
-         MeqjoYp4v9FJwRqKPULwQcyXOKK0S85PFLr6BjoEWC4uxT8OYNPeCE8JR9sWleaMPcLI
-         wMDA==
-X-Forwarded-Encrypted: i=1; AJvYcCXhbVVVxhDEi6fv/4JcwBd6Iy2FwNXNVZY3+J9CBs9tEsCAOB052yP+KzpfKZw9gUaGCDzVoJdygkyFuIIKHa/MruHNyshe3RvsmeIYQg==
-X-Gm-Message-State: AOJu0YzuhLUs0LpcQLumjWPPhClZwZ8k0fyzTU2wWU7/WyzStRHv/CjK
-	BDz5cLf6ptu7pgneWreVzUl1nc/TKCBsld14pgLk2S0KLb4zX1W0
-X-Google-Smtp-Source: AGHT+IFYGT1k7kCPuLrOqHIqyzA2D6/4fdpD7+t3cofOCztVkirsr19TzmkJvH5ZMr0361MeWFJ8hA==
-X-Received: by 2002:a05:600c:19c7:b0:427:9f6f:4913 with SMTP id 5b1f17b1804b1-4280576b7famr58912055e9.5.1722234159977;
-        Sun, 28 Jul 2024 23:22:39 -0700 (PDT)
-Received: from [10.50.4.202] (bzq-84-110-32-226.static-ip.bezeqint.net. [84.110.32.226])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4280574003bsm161755635e9.17.2024.07.28.23.22.38
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 28 Jul 2024 23:22:39 -0700 (PDT)
-Message-ID: <aa94fd00-0a91-4924-a943-2e21e6da1df8@grimberg.me>
-Date: Mon, 29 Jul 2024 09:22:38 +0300
+	s=arc-20240116; t=1722236565; c=relaxed/simple;
+	bh=xljAVq2AI+HXD6xrKTZ/yyxJY5ISMHdHtrKDNx8zAs0=;
+	h=MIME-Version:Message-Id:In-Reply-To:References:Date:From:To:Cc:
+	 Subject:Content-Type; b=ilQYlEx3panR8YZlQ0i2JkldygWcl40XaDktQKi/v/AseHxuvpH0KXUmfiv7HIzEnq3HaiRdio5ljmnkAXXSkyuH4AGjle1OiSWbgPcdcet7hyURdfC8MZmIsM6JCUykmocwagAwYRw7RI6ufM6yNTyHRlJ5EpEeBQpoP8OiDb4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=X6sEyyDV; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=VInkPxI3; arc=none smtp.client-ip=103.168.172.137
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="X6sEyyDV";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="VInkPxI3"
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+	by mailflow.nyi.internal (Postfix) with ESMTP id 674302000ED;
+	Mon, 29 Jul 2024 03:02:42 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute4.internal (MEProxy); Mon, 29 Jul 2024 03:02:42 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-type:content-type:date:date:from:from:in-reply-to
+	:in-reply-to:message-id:mime-version:references:reply-to:subject
+	:subject:to:to; s=fm2; t=1722236562; x=1722243762; bh=hGG+ePgWzn
+	dtOiaFUWIwTWUzuqt+6sQvsZYw00TGxkU=; b=X6sEyyDVP2R0prfFfX3zKXdYCZ
+	WeYLYbsQQ9K7lAxhXT5032spSI05phsmkLSkY2BT3xaqQ2dNGE60gIoP9m+dvW8M
+	guc1NQtfaC5+SPx//VR+TUauVTVQ1VO1DKt5m/ACh6SL1shEKvP3Zj2dS09rIfRA
+	Ye3HtphwUT7LIT3XtYeONHtOsbVGN8JhykqEmKrELZNrOx5XoLNygkcV86F8HMPJ
+	uoU1PrV77xmdTKUMfGsmsm05WdaVRsz7L8IbyFTonFrp8i3ZnlmpDI7OK33AjvgP
+	/Zdc7msQ5bA4rL+Mxcax/OYkRhUaobKDveCmzPW3g6vlDIxD+ii0juqMo0oA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-type:content-type:date:date
+	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+	:message-id:mime-version:references:reply-to:subject:subject:to
+	:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+	fm3; t=1722236562; x=1722243762; bh=hGG+ePgWzndtOiaFUWIwTWUzuqt+
+	6sQvsZYw00TGxkU=; b=VInkPxI3AbZmQ/Bb6DLUoOfg+9WhiERb6BjcAy4481ue
+	cHUx1hFM2q73XsJ0jNz25wNZ3ILFsZsoU30Z+sacvVGQEdG4DOKnC/XgPk7/iVpG
+	0vzv0fLvARr8NM0XTGS1+GNleUIRihSw+LNRnr7+yPY3SRxwdPqKQjKE29J6cTJV
+	lTxNeXE60u9pqry883UNmYPhYEd2xFk/VvFtuIH3XwINgqA+Q6Fm85NTSoqoK+2y
+	1/QuwE2WQUK+/8h84noe29dGAzR68uLZp6QAPP2zcc5VWGuy0etV08iR9Hw44gXP
+	FNba82LFNVH4cCz5an5BLf76EZjP8Hq/+K9M5Nliog==
+X-ME-Sender: <xms:kT6nZoHGI9fDnNOyHkKN1VAKI0jeWw_UnFgUgHt4TuHaVWI7KXLejg>
+    <xme:kT6nZhWHdeNTsl7w0QoUspMKnrmZGAbgFqxeuUYi6Dbvtp3fH7BkVFAMqpbWMZuTN
+    s1uAQwGZUDcz4CdK3k>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeftddrjedugdduudehucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
+    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
+    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
+    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
+    hrnhgusegrrhhnuggsrdguvgdpnhgspghrtghpthhtoheptd
+X-ME-Proxy: <xmx:kT6nZiK6IyX_uKW1-DGEa6I5VkL_oAGUmnvHSfGCHJpgnebVlOFMbw>
+    <xmx:kT6nZqE4rEE_v38OJku2Y2s6-7h5xt8qVfo6jBLqkDCFShTnKEMVjw>
+    <xmx:kT6nZuWG5L9Mc9loue7ddy0zBNZh0caTfY03uElmbUTHR1X5OetaJQ>
+    <xmx:kT6nZtPJgXdejwN1ov-n-O97a1torKEmnmP_vZXz_NMnTDJQmaN9MQ>
+    <xmx:kj6nZrluBx0db4vbNToIRt_Vs9SKbkfPxfl15oyufOl6u3dEWh2NQRWy>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+	id 038B4B6008D; Mon, 29 Jul 2024 03:02:41 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.11.0-alpha0-582-g5a02f8850-fm-20240719.002-g5a02f885
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 3/3] nfsd: resolve possible conflicts of reads using
- special stateids and write delegations
-To: kernel test robot <lkp@intel.com>, Chuck Lever <chuck.lever@oracle.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
- Dai Ngo <dai.ngo@oracle.com>, Olga Kornievskaia <aglo@umich.edu>,
- Jeff Layton <jlayton@kernel.org>, linux-nfs@vger.kernel.org
-References: <20240728204104.519041-4-sagi@grimberg.me>
- <202407290814.7REsmaH7-lkp@intel.com>
-Content-Language: en-US
-From: Sagi Grimberg <sagi@grimberg.me>
-In-Reply-To: <202407290814.7REsmaH7-lkp@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Message-Id: <63eb1654-c614-4f6a-9bc5-8c8085eadf8c@app.fastmail.com>
+In-Reply-To: <20240728203001.2551083-7-xur@google.com>
+References: <20240728203001.2551083-1-xur@google.com>
+ <20240728203001.2551083-7-xur@google.com>
+Date: Mon, 29 Jul 2024 09:02:20 +0200
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "Rong Xu" <xur@google.com>, "Han Shen" <shenhan@google.com>,
+ "Sriraman Tallam" <tmsriram@google.com>, "David Li" <davidxl@google.com>,
+ "Jonathan Corbet" <corbet@lwn.net>,
+ "Masahiro Yamada" <masahiroy@kernel.org>,
+ "Nathan Chancellor" <nathan@kernel.org>,
+ "Nicolas Schier" <nicolas@fjasle.eu>,
+ "Thomas Gleixner" <tglx@linutronix.de>, "Ingo Molnar" <mingo@redhat.com>,
+ "Borislav Petkov" <bp@alien8.de>,
+ "Dave Hansen" <dave.hansen@linux.intel.com>, x86@kernel.org,
+ "H. Peter Anvin" <hpa@zytor.com>, "Ard Biesheuvel" <ardb@kernel.org>,
+ "Josh Poimboeuf" <jpoimboe@kernel.org>,
+ "Peter Zijlstra" <peterz@infradead.org>,
+ "Nick Desaulniers" <ndesaulniers@google.com>,
+ "Bill Wendling" <morbo@google.com>,
+ "Justin Stitt" <justinstitt@google.com>,
+ "Vegard Nossum" <vegard.nossum@oracle.com>, "John Moon" <john@jmoon.dev>,
+ "Andrew Morton" <akpm@linux-foundation.org>,
+ "Heiko Carstens" <hca@linux.ibm.com>,
+ "Luis Chamberlain" <mcgrof@kernel.org>,
+ "Samuel Holland" <samuel.holland@sifive.com>,
+ "Mike Rapoport" <rppt@kernel.org>,
+ "Paul E. McKenney" <paulmck@kernel.org>,
+ "Rafael Aquini" <aquini@redhat.com>, "Petr Pavlu" <petr.pavlu@suse.com>,
+ "Eric DeVolder" <eric.devolder@oracle.com>,
+ "Bjorn Helgaas" <bhelgaas@google.com>,
+ "Randy Dunlap" <rdunlap@infradead.org>,
+ "Benjamin Segall" <bsegall@google.com>,
+ "Breno Leitao" <leitao@debian.org>,
+ "Wei Yang" <richard.weiyang@gmail.com>,
+ "Brian Gerst" <brgerst@gmail.com>, "Juergen Gross" <jgross@suse.com>,
+ "Palmer Dabbelt" <palmer@rivosinc.com>,
+ "Alexandre Ghiti" <alexghiti@rivosinc.com>,
+ "Kees Cook" <kees@kernel.org>, "Sami Tolvanen" <samitolvanen@google.com>,
+ "Xiao W Wang" <xiao.w.wang@intel.com>,
+ "Jan Kiszka" <jan.kiszka@siemens.com>
+Cc: linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-kbuild@vger.kernel.org, linux-efi@vger.kernel.org,
+ Linux-Arch <linux-arch@vger.kernel.org>, llvm@lists.linux.dev,
+ "Krzysztof Pszeniczny" <kpszeniczny@google.com>,
+ "Stephane Eranian" <eranian@google.com>
+Subject: Re: [PATCH 6/6] Add Propeller configuration for kernel build.
+Content-Type: text/plain
 
+On Sun, Jul 28, 2024, at 22:29, Rong Xu wrote:
+>  Documentation/dev-tools/index.rst     |   1 +
+>  Documentation/dev-tools/propeller.rst | 188 ++++++++++++++++++++++++++
+>  MAINTAINERS                           |   7 +
+>  Makefile                              |   1 +
+>  arch/Kconfig                          |  22 +++
+>  arch/x86/Kconfig                      |   1 +
+>  arch/x86/boot/compressed/Makefile     |   3 +
+>  arch/x86/kernel/vmlinux.lds.S         |   4 +
+>  arch/x86/platform/efi/Makefile        |   1 +
+>  drivers/firmware/efi/libstub/Makefile |   2 +
+>  include/asm-generic/vmlinux.lds.h     |   8 +-
+>  scripts/Makefile.lib                  |  10 ++
+>  scripts/Makefile.propeller            |  25 ++++
+>  tools/objtool/check.c                 |   1 +
 
+I have not looked in much detail, but I see that you need
+a special case for arch/x86/boot/compressed and
+drivers/firmware/efi, which makes it likely that you
+need to also disable properller support for
+arch/x86/purgatory/Makefile, which tends to have similar
+requirements.
 
-
-On 29/07/2024 3:35, kernel test robot wrote:
-> Hi Sagi,
->
-> kernel test robot noticed the following build warnings:
->
-> [auto build test WARNING on linus/master]
-> [also build test WARNING on v6.11-rc1 next-20240726]
-> [If your patch is applied to the wrong git tree, kindly drop us a note.
-> And when submitting patch, we suggest to use '--base' as documented in
-> https://git-scm.com/docs/git-format-patch#_base_tree_information]
->
-> url:    https://github.com/intel-lab-lkp/linux/commits/Sagi-Grimberg/nfsd-don-t-assume-copy-notify-when-preprocessing-the-stateid/20240729-044834
-> base:   linus/master
-> patch link:    https://lore.kernel.org/r/20240728204104.519041-4-sagi%40grimberg.me
-> patch subject: [PATCH v2 3/3] nfsd: resolve possible conflicts of reads using special stateids and write delegations
-> config: x86_64-rhel-8.3-rust (https://download.01.org/0day-ci/archive/20240729/202407290814.7REsmaH7-lkp@intel.com/config)
-> compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
-> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240729/202407290814.7REsmaH7-lkp@intel.com/reproduce)
->
-> If you fix the issue in a separate patch/commit (i.e. not just a new version of
-> the same patch/commit), kindly add following tags
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes: https://lore.kernel.org/oe-kbuild-all/202407290814.7REsmaH7-lkp@intel.com/
->
-> All warnings (new ones prefixed by >>):
->
->>> fs/nfsd/nfs4state.c:8826: warning: Excess function parameter 'inode' description in 'nfsd4_deleg_read_conflict'
->>> fs/nfsd/nfs4state.c:8826: warning: Excess function parameter 'modified' description in 'nfsd4_deleg_read_conflict'
->>> fs/nfsd/nfs4state.c:8826: warning: Excess function parameter 'size' description in 'nfsd4_deleg_read_conflict'
->
-> vim +8826 fs/nfsd/nfs4state.c
->
->    8805	
->    8806	/**
->    8807	 * nfsd4_deleg_read_conflict - Recall if read causes conflict
->    8808	 * @rqstp: RPC transaction context
->    8809	 * @clp: nfs client
->    8810	 * @fhp: nfs file handle
->    8811	 * @inode: file to be checked for a conflict
->    8812	 * @modified: return true if file was modified
->    8813	 * @size: new size of file if modified is true
->    8814	 *
->    8815	 * This function is called when there is a conflict between a write
->    8816	 * delegation and a read that is using a special stateid where the
->    8817	 * we cannot derive the client stateid exsistence. The server
->    8818	 * must recall a conflicting delegation before allowing the read
->    8819	 * to continue.
->    8820	 *
->    8821	 * Returns 0 if there is no conflict; otherwise an nfs_stat
->    8822	 * code is returned.
->    8823	 */
->    8824	__be32 nfsd4_deleg_read_conflict(struct svc_rqst *rqstp,
->    8825			struct nfs4_client *clp, struct svc_fh *fhp)
->> 8826	{
->    8827		struct nfs4_file *fp;
->    8828		__be32 status = 0;
->    8829	
->    8830		fp = nfsd4_file_hash_lookup(fhp);
->    8831		if (!fp)
->    8832			return nfs_ok;
->    8833	
->    8834		spin_lock(&state_lock);
->    8835		spin_lock(&fp->fi_lock);
->    8836		if (!list_empty(&fp->fi_delegations) &&
->    8837		    !nfs4_delegation_exists(clp, fp)) {
->    8838			/* conflict, recall deleg */
->    8839			status = nfserrno(nfsd_open_break_lease(fp->fi_inode,
->    8840						NFSD_MAY_READ));
->    8841			if (status)
->    8842				goto out;
->    8843			if (!nfsd_wait_for_delegreturn(rqstp, fp->fi_inode))
->    8844				status = nfserr_jukebox;
->    8845		}
->    8846	out:
->    8847		spin_unlock(&fp->fi_lock);
->    8848		spin_unlock(&state_lock);
->    8849		return status;
->    8850	}
->    8851	
->
-
-Its not clear what is the warning about here...
+     Arnd
