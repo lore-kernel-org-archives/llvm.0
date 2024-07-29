@@ -1,171 +1,150 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qt1-f172.google.com (mail-qt1-f172.google.com [209.85.160.172])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5EC7014F9FD;
-	Mon, 29 Jul 2024 15:30:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1459415A853
+	for <llvm@lists.linux.dev>; Mon, 29 Jul 2024 15:54:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722267011; cv=none; b=HNfTuxo3IbYMByoCo3+57a7DqeWdOXV2Zxu3Z1nfcx8n1Nj4+h0zuqQJHxdkYMBQWz2dqVfCVGk7hCbR+1vbfn82RjaHelhNp0rNZ1rMgScPIjQCpPp0aDlJHM+nShcZV1FExNFlOk3GDHjfXTRrkGsGkkVjVnIiGh+hXmvqORM=
+	t=1722268442; cv=none; b=UsQucbZSOtkcvWpmH/u/QRx4J+4IrTuUP+JAk+yj0is8OWgbzF7LFWvze33XwhLdPsR0/2GAWROxJ7exLdD9qXkWjMuA55ws0E1S+tYmQjFa/nm0/yFPA5msDMKV4LTWN7XXCJMrB80lDMUlRZm7Sr962bJ0c/hDTptnsMdLAkg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722267011; c=relaxed/simple;
-	bh=ndzDCEmWVqlMpqggu+GgSzXYK/Y1s948Sog4W6pkXyw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=D+tAmD4ZgVqkm0pqERl7v8dFsAmprsT+YKzBxCckJAk9dvI0C73hh2MxqIAFzKk0xoYiWr5D6SUOt2ey50GB97sweh2d5smQznHhF8SReXHbAIXMBEHZzJw4Vt0bsjQFkJad9Ye5/lPqK3WC6G2HLjkz4bkMQlK9UOEOz6B4qXY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=r3FNmVmx; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1722268442; c=relaxed/simple;
+	bh=vit//5frB+Bxo4uCQ9TaphFpIjNsNOImUZUDRYyDM/I=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=dyPfRUsGzjycFKQ5xs4vPjAn2e6j7HLB4bNuXOSMqJfZl1aSch8Li1J/xoHc0nQJdxtOU5PbvydW5IVHTqxmrD/ZIBR+dk3w/EEdGZZR4MAa4nMCKZGYvtgglM4N6JormgEul6Pc6VYoJDtJwO0x2MW511fX4w2Bg5VaNOhYZKQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=2Qf+Fcx9; arc=none smtp.client-ip=209.85.160.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="r3FNmVmx"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9557CC32786;
-	Mon, 29 Jul 2024 15:30:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1722267011;
-	bh=ndzDCEmWVqlMpqggu+GgSzXYK/Y1s948Sog4W6pkXyw=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=r3FNmVmxJSENQY/tBVzlojnsnOO/XLYOme3j10H4ISrIgxicyoteQ69TS9QDNELTQ
-	 BVx24grjry2+duu1MS1L5TYMKK5T83OyyuLQjhpIPrmDD1C8XfPD90Ajfj10+xEGe3
-	 9SBlBzaW6Ufie66kKdAHGqPf7gvzM7CgycphWWQSszX0j0PVdyfj4quoHFyMiW2xDd
-	 Ht9fuSubV6AvdmFh5XWm+Z9aR0UBM5LXjrEZ82g6s+A9GC+omYcNkx3qFutThl7jsa
-	 86ATPOv6cIbtI0eV5/O3uNqcTBWVFuRzuTzKRT2Ipz2p2rkhVkvOn8r8xlQZ3sCvqO
-	 G4YQXLxYWK4Tg==
-Date: Mon, 29 Jul 2024 08:30:08 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Borislav Petkov <bp@alien8.de>
-Cc: kernel test robot <lkp@intel.com>, llvm@lists.linux.dev,
-	oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
-	x86@kernel.org
-Subject: Re: [tip:x86/microcode 1/1]
- arch/x86/kernel/cpu/microcode/amd.c:714:6: warning: variable 'equiv_id' is
- used uninitialized whenever 'if' condition is false
-Message-ID: <20240729153008.GA685493@thelio-3990X>
-References: <202407291815.gJBST0P3-lkp@intel.com>
- <20240729112614.GBZqd8Vu27mFVSHynA@fat_crate.local>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="2Qf+Fcx9"
+Received: by mail-qt1-f172.google.com with SMTP id d75a77b69052e-44fee2bfd28so428221cf.1
+        for <llvm@lists.linux.dev>; Mon, 29 Jul 2024 08:54:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1722268440; x=1722873240; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=G7NVQIGmQXJU9zMY7yOvP9B85E2qvUl+m8Pl4MaC7co=;
+        b=2Qf+Fcx92+8YaradJqPgIBmGnxx+noeTjDrQ4y/PQFObL6vuvNCVYT8LrtADdrMKUN
+         UB2wxkMyMug1mzNYb5Fhk/dj6ewgB2h5G9KicHUiN8wtoVGXc1KOy7ZA48Fr4GU8f73B
+         96yuj4EClPc8bjkMWNxtUQCGO9dc7no85vGRu2kCUVOYkU2UZewaiPSkLNe5tmBHJ+Mq
+         YBFICA/qvlDut+l9IrAq2c1OLsenJPFNQrJqdx/NYNP1UwpBRQUrZFoPHn9y+Wru6X/9
+         mVzUTzo5sr4fa+akeJfh2ZxD9IxxWClxlmLn0xSUDnnv5fXgU+zsabaovYO5xa0G2XuL
+         V4mg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1722268440; x=1722873240;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=G7NVQIGmQXJU9zMY7yOvP9B85E2qvUl+m8Pl4MaC7co=;
+        b=sO0OsUCRcSzRNNqcpBY8E8SYNb0+/6VkMyg6S8n+uN5+nGuO5Eb+RvCQT16rxSrc4g
+         BU41GaQJhqLXRyF+MatIB+gbZ0T5CC8/y4Rb6ocFD3rOA1EnDJZbTKfM3Ok90ON0obwj
+         msjnG4bj3ykwg5l0pdAupRDxxDBDpRazx5HR7O79lxK1SoXn78LmwU4xjlTG2cHqpJA2
+         izn2HS2/Kpw38DN6o+ehGeDFr4TlQA8D+hh4zlsNJL2WXrw0Iu1B5uytgTgbyFvrL4NI
+         pHT+944L3VPVVHW66h3uFn22GuDADtdWiFTXT/4yjlac2+7aBjlrkapesihKfrxkRjLo
+         LEzA==
+X-Forwarded-Encrypted: i=1; AJvYcCVRWXckZd761S7bRmy+5fzcYf3BNx46D4jL7/8X6k+1adcX4svbShjw6ShFVPg22hQul3oNknnTZdCW0lCeNX8yGRpmUQ==
+X-Gm-Message-State: AOJu0YxHL8s0lz81KlaaLCByV9f9fnunDWe3y/OhtNRwtyyYDrEX9qox
+	WpjCMLgKXaBQQCh1+Zld14pzcXw80qz1kGTbOeepIjZD5VU116MpTIQ90IRyKkz09xiDWIRZSRl
+	kEPdo5x+cDvfmVZ92wsrJtA3kS/BTSYJWJ74/
+X-Google-Smtp-Source: AGHT+IGtbd0iBqee7SwSoc94TJ7CIzVF+bo02bFcdiIhIU5AVsKcZ+YG/U7J2gyGGtrfLKplipYfybTILWWzXf+wdc0=
+X-Received: by 2002:a05:622a:303:b0:44f:e12e:3015 with SMTP id
+ d75a77b69052e-450329acd26mr220951cf.25.1722268439856; Mon, 29 Jul 2024
+ 08:53:59 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240729112614.GBZqd8Vu27mFVSHynA@fat_crate.local>
+References: <20240727175919.1041468-1-linux@treblig.org> <CAP-5=fW+VbDaFV+YQCMMKYzrraMLLuVqb=BChL0o=-D5Y=4N_w@mail.gmail.com>
+ <ZqewJ6oIprdRY8C5@gallifrey>
+In-Reply-To: <ZqewJ6oIprdRY8C5@gallifrey>
+From: Ian Rogers <irogers@google.com>
+Date: Mon, 29 Jul 2024 08:53:48 -0700
+Message-ID: <CAP-5=fUHVZDS9y4Bm=OesD5qpHHv7qqo2ALU70EPdS5WiQs1-w@mail.gmail.com>
+Subject: Re: [PATCH] perf test pmu: Remove unused test_pmus
+To: "Dr. David Alan Gilbert" <linux@treblig.org>, Nick Desaulniers <ndesaulniers@google.com>, llvm@lists.linux.dev
+Cc: kan.liang@linux.intel.com, acme@kernel.org, 
+	linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Boris,
+On Mon, Jul 29, 2024 at 8:07=E2=80=AFAM Dr. David Alan Gilbert
+<linux@treblig.org> wrote:
+>
+> * Ian Rogers (irogers@google.com) wrote:
+> > On Sat, Jul 27, 2024 at 10:59=E2=80=AFAM <linux@treblig.org> wrote:
+> > >
+> > > From: "Dr. David Alan Gilbert" <linux@treblig.org>
+> > >
+> > > Commit aa1551f299ba ("perf test pmu: Refactor format test and exposed
+> > > test APIs") added the 'test_pmus' list, but didn't use it.
+> > > (It seems to put them on the other_pmus list?)
+> > >
+> > > Remove it.
+> > >
+> > > Signed-off-by: Dr. David Alan Gilbert <linux@treblig.org>
+> >
+> > Strange that the compiler doesn't warn about unused stuff like this,
+> > we get unused variables within a function and unused static
+> > functions...
+>
+> The problem is that LIST_HEAD initialises the list to point to itself;
+> so it *is* used - but only in it's own initialiser.
+> I did file:
+>    https://gcc.gnu.org/bugzilla/show_bug.cgi?id=3D115027
 
-On Mon, Jul 29, 2024 at 01:26:14PM +0200, Borislav Petkov wrote:
-> + Nathan.
-> 
-> On Mon, Jul 29, 2024 at 07:04:51PM +0800, kernel test robot wrote:
-> > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git x86/microcode
-> > head:   94838d230a6c835ced1bad06b8759e0a5f19c1d3
-> > commit: 94838d230a6c835ced1bad06b8759e0a5f19c1d3 [1/1] x86/microcode/AMD: Use the family,model,stepping encoded in the patch ID
-> > config: i386-buildonly-randconfig-001-20240729 (https://download.01.org/0day-ci/archive/20240729/202407291815.gJBST0P3-lkp@intel.com/config)
-> > compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
-> > reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240729/202407291815.gJBST0P3-lkp@intel.com/reproduce)
-> > 
-> > If you fix the issue in a separate patch/commit (i.e. not just a new version of
-> > the same patch/commit), kindly add following tags
-> > | Reported-by: kernel test robot <lkp@intel.com>
-> > | Closes: https://lore.kernel.org/oe-kbuild-all/202407291815.gJBST0P3-lkp@intel.com/
-> > 
-> > All warnings (new ones prefixed by >>):
-> > 
-> > >> arch/x86/kernel/cpu/microcode/amd.c:714:6: warning: variable 'equiv_id' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
-> >      714 |         if (x86_family(bsp_cpuid_1_eax) < 0x17) {
-> >          |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> >    arch/x86/kernel/cpu/microcode/amd.c:720:31: note: uninitialized use occurs here
-> >      720 |         return cache_find_patch(uci, equiv_id);
-> >          |                                      ^~~~~~~~
-> >    arch/x86/kernel/cpu/microcode/amd.c:714:2: note: remove the 'if' if its condition is always true
-> >      714 |         if (x86_family(bsp_cpuid_1_eax) < 0x17) {
-> >          |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> >    arch/x86/kernel/cpu/microcode/amd.c:706:14: note: initialize the variable 'equiv_id' to silence this warning
-> >      706 |         u16 equiv_id;
-> >          |                     ^
-> >          |                      = 0
-> >    1 warning generated.
-> > 
-> > 
-> > vim +714 arch/x86/kernel/cpu/microcode/amd.c
-> > 
-> >    701	
-> >    702	static struct ucode_patch *find_patch(unsigned int cpu)
-> >    703	{
-> >    704		struct ucode_cpu_info *uci = ucode_cpu_info + cpu;
-> >    705		u32 rev, dummy __always_unused;
-> >    706		u16 equiv_id;
-> >    707	
-> >    708		/* fetch rev if not populated yet: */
-> >    709		if (!uci->cpu_sig.rev) {
-> >    710			rdmsr(MSR_AMD64_PATCH_LEVEL, rev, dummy);
-> >    711			uci->cpu_sig.rev = rev;
-> >    712		}
-> >    713	
-> >  > 714		if (x86_family(bsp_cpuid_1_eax) < 0x17) {
-> >    715			equiv_id = find_equiv_id(&equiv_table, uci->cpu_sig.sig);
-> >    716			if (!equiv_id)
-> >    717				return NULL;
-> >    718		}
-> >    719	
-> >    720		return cache_find_patch(uci, equiv_id);
-> >    721	}
-> >    722	
-> 
-> That's a false positive, I think.
-> 
-> clang can't see that equiv_id is used in cache_find_patch() ->
-> patch_cpus_equivalent() *only* in the
-> 
-> 	if (x86_family(bsp_cpuid_1_eax) < 0x17)
-> 
-> case.
+Nice, the bug already has a fix - good work! Hopefully clang can follow sui=
+t.
 
-Right, as clang does not perform interprocedural analysis for the sake
-of warnings. That's partly why GCC's version of this warning was
-disabled in commit 78a5255ffb6a ("Stop the ad-hoc games with
--Wno-maybe-initialized").
+> > Reviewed-by: Ian Rogers <irogers@google.com>
+>
+> Thanks,
+>
+> > Possibly:
+> > Fixes: aa1551f299ba ("perf test pmu: Refactor format test and exposed
+> > test APIs")
+>
+> Given it's got no actual effect other than a few bytes
+> saved, I'm not sure it's worth the Fixes.
 
-> And that case is handled properly in this function.
+Ack. I mention it so the maintainers can make a decision about fixing
+in 6.11 (still in rc stage) or whether to hold for 6.12. It seems
+pretty safe either way, but for 6.11 probably better to have a fixes
+tag. If the GCC warning becomes a thing there's a chance the code
+won't build without the fix :-)
 
-While it may be properly handled now, I think this pattern of
-conditionally avoiding using a variable uninitialized is dubious.
+Thanks,
+Ian
 
-> So, unless I'm missing something else, it's a good thing this warning is
-> behind a W=1. Keep it there.
-
-It's not behind W=1, this happens in a normal build:
-
-  $ make -skj"$(nproc)" ARCH=x86_64 LLVM=1 mrproper defconfig arch/x86/kernel/cpu/microcode/amd.o
-  arch/x86/kernel/cpu/microcode/amd.c:714:6: error: variable 'equiv_id' is used uninitialized whenever 'if' condition is false [-Werror,-Wsometimes-uninitialized]
-    714 |         if (x86_family(bsp_cpuid_1_eax) < 0x17) {
-        |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  arch/x86/kernel/cpu/microcode/amd.c:720:31: note: uninitialized use occurs here
-    720 |         return cache_find_patch(uci, equiv_id);
-        |                                      ^~~~~~~~
-  arch/x86/kernel/cpu/microcode/amd.c:714:2: note: remove the 'if' if its condition is always true
-    714 |         if (x86_family(bsp_cpuid_1_eax) < 0x17) {
-        |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  arch/x86/kernel/cpu/microcode/amd.c:706:14: note: initialize the variable 'equiv_id' to silence this warning
-    706 |         u16 equiv_id;
-        |                     ^
-        |                      = 0
-  1 error generated.
-
-Even GCC would warn about this code if not for the commit I mentioned
-above:
-
-  $ make -skj"$(nproc)" ARCH=x86_64 CROSS_COMPILE=x86_64-linux- KCFLAGS=-Wmaybe-uninitialized mrproper defconfig arch/x86/kernel/cpu/microcode/amd.o
-  In function 'cache_find_patch',
-      inlined from 'find_patch' at arch/x86/kernel/cpu/microcode/amd.c:720:9:
-  arch/x86/kernel/cpu/microcode/amd.c:647:20: error: 'equiv_id' may be used uninitialized [-Werror=maybe-uninitialized]
-    647 |                 if (patch_cpus_equivalent(p, &n))
-        |                    ^
-  arch/x86/kernel/cpu/microcode/amd.c: In function 'find_patch':
-  arch/x86/kernel/cpu/microcode/amd.c:706:13: note: 'equiv_id' was declared here
-    706 |         u16 equiv_id;
-        |             ^~~~~~~~
-  cc1: all warnings being treated as errors
-
-So I guess you can just ignore this if you want but others (maybe even
-Linus) will likely notice this and report it as well.
-
-Cheers,
-Nathan
+> Dave
+>
+> > Thanks,
+> > Ian
+> >
+> > > ---
+> > >  tools/perf/tests/pmu.c | 3 ---
+> > >  1 file changed, 3 deletions(-)
+> > >
+> > > diff --git a/tools/perf/tests/pmu.c b/tools/perf/tests/pmu.c
+> > > index 40132655ccd1..0b2f04a55d7b 100644
+> > > --- a/tools/perf/tests/pmu.c
+> > > +++ b/tools/perf/tests/pmu.c
+> > > @@ -18,9 +18,6 @@
+> > >  #include <sys/stat.h>
+> > >  #include <sys/types.h>
+> > >
+> > > -/* Fake PMUs created in temp directory. */
+> > > -static LIST_HEAD(test_pmus);
+> > > -
+> > >  /* Cleanup test PMU directory. */
+> > >  static int test_pmu_put(const char *dir, struct perf_pmu *pmu)
+> > >  {
+> > > --
+> > > 2.45.2
+> > >
+> --
+>  -----Open up your eyes, open up your mind, open up your code -------
+> / Dr. David Alan Gilbert    |       Running GNU/Linux       | Happy  \
+> \        dave @ treblig.org |                               | In Hex /
+>  \ _________________________|_____ http://www.treblig.org   |_______/
