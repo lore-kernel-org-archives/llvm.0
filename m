@@ -1,125 +1,165 @@
-Received: from mail-yw1-f173.google.com (mail-yw1-f173.google.com [209.85.128.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD95384DFE;
-	Mon, 29 Jul 2024 09:03:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4898E140369;
+	Mon, 29 Jul 2024 09:28:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722243805; cv=none; b=iJft+19gL9AckeqU1DugjNBLTly9hJkgdIxSwqeHzyIfU7IesnnddOi1y8wVFJi6qahBPwOgqBvSsPhdSVc+zs4kOkDwGfUE6f+SlU68yKFBDO4ArsVy9yrn0X80UDci5xhhuZtru6H5xsCmWL8x6iWJ189+A1jIWFDbQKGAjnk=
+	t=1722245340; cv=none; b=EdYV1q0/3prnbhHhivsy9+0LSRSfxRzKOdmg43WBRzlGVzo73TBHztMZRHk2V+Aqih/6pJm8adlYaO7N88nXXz8Gxe4IV1tHZmB048VxPo5PcL1ZXlZocu37yFUV3OekWeZSzeRRvVcBIaBHf3bMneqE/x4w8N8bT+hTCwt8wHo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722243805; c=relaxed/simple;
-	bh=/WnGTgdKzi9/ZXuEBxo7lVNZmweCt0UgfSEBUF84shE=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=PGJf0MfeP3rTw5xjribLe+Ocv/FUbNytetvaI6qGY6a3ZDZJp/+lKGUyvKLvjNrs2mQdQFkMJatvF0FVHSxnw0GmboPY9CudySMUUvX70bppgmwaMqhkJ5WuqVDuGOoJA6slQbiipU8OFFwWw9rvJwF9VntVJrlSJ6epokEAtOg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.128.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-yw1-f173.google.com with SMTP id 00721157ae682-6694b50a937so20898917b3.0;
-        Mon, 29 Jul 2024 02:03:23 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1722243802; x=1722848602;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=cLbqaqEOtB/B4lpRQBFvyP19U97Nn5fGO/VXyIeHdqM=;
-        b=wcL0kwAXyYqKOeTR2NBpruv9LlM4x/9kqRNkOuo9RkY1RrqbRUw/7qkskfRpZZJd+C
-         dPCMtTnfPNgj7bwF+Q/xBsQ5FeuMjbEYdBFITSfWtvvRSMobdQDC4RFqLfLIicloPmBQ
-         biSGCxnWJMjvQRJKv8X1gtLjKpUKLYNJ5kq8EFuB9x7w+dVRjK4y8MCR3267Q5iBjZ0r
-         uKoRdMXpWzLxBDygyRyuvfF78HB6gV8HdD694UQb7JFZTsiecsoLZLAT4NmVRF2tOi/B
-         YkwTZ+UdTuHB8hbHZAJebBkF5YLOKNW6ZPKoZW4n/y2+RmD3JGNUQCMJqyYpM/+8X7YO
-         +vgQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUYitq81HIB7OQdorLM0nZBCTP5MbfwmkkHaqGl+txJGagpcMH87xS9Mg5/8Mpz+ywXuJ9wmITBj0USe7zc6SOC+kQ5luEcnMz6B/A7pCSUnFoPOWB/n/gl9rw1ElvkcU4QFtc=
-X-Gm-Message-State: AOJu0YxNWQmbPnJZDta8vp6Bww5kgBwMBFMtMZ6vpXcvLEIPa/5pVjY8
-	pLJyrxucphtx/wt/FBqA0Afxq43Wb5GMF36M67Dms8Or2coyfVxq8SdCCV39
-X-Google-Smtp-Source: AGHT+IH0ErQ8bb5kNowzqVbqOBSWXabhnfce07XjYmKcJh+ShwNbSwR3uVX5cFo9lvKY2d8js6EzAA==
-X-Received: by 2002:a0d:e744:0:b0:650:f7a4:c70d with SMTP id 00721157ae682-67a0a3239aemr76198487b3.41.1722243801954;
-        Mon, 29 Jul 2024 02:03:21 -0700 (PDT)
-Received: from mail-yw1-f180.google.com (mail-yw1-f180.google.com. [209.85.128.180])
-        by smtp.gmail.com with ESMTPSA id 00721157ae682-67568112216sm19864077b3.59.2024.07.29.02.03.21
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 29 Jul 2024 02:03:21 -0700 (PDT)
-Received: by mail-yw1-f180.google.com with SMTP id 00721157ae682-6694b50a937so20898667b3.0;
-        Mon, 29 Jul 2024 02:03:21 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCVdQ4Z8maZUeY/zMWC5cDXXsrXA3KlpaiymUtDKZE/UKszZQBjW6ruV5MGrOpcpnJo9VPXLJZ7BR89dR3nopb0MtbUwvBUnkJiUp+yGJ/Xj7GKXFfZO2Mt6B61cjPAMVvxn4ls=
-X-Received: by 2002:a0d:ef42:0:b0:664:ad61:a487 with SMTP id
- 00721157ae682-67a0672a653mr79228637b3.13.1722243801317; Mon, 29 Jul 2024
- 02:03:21 -0700 (PDT)
+	s=arc-20240116; t=1722245340; c=relaxed/simple;
+	bh=U5EVK+j7cGMFHeZTM7A6uc78H5Q+lVyBvC6iROso8Js=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=DJKaA1e2bCnLQwJ2PVuKLxXJuj5Tgp0Ce/lh2ihVyVtRIRi0heJbROFRRLaPqYGzz/NsDKT7EbbhE1onvBEaX6aqxxCDNTeod9ifBcpvAfZEfizPtRPdUW6zHnzFVknh5YNciCphGv/Y3139cbdNPwRlBEMaB0zZ6SdY7M9DG0I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=gK9W/wTR; arc=none smtp.client-ip=90.155.50.34
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="gK9W/wTR"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=y3UrHTOhOAWYJ8gu6wnB9kvfmZNeJ4TRjNEt1t3Ty48=; b=gK9W/wTRvBy88/533TCIr09Gjq
+	qupTuOqocF/ODia6MFGrjeUcKrKp8kUD3oL+TZYaUUxaGM3Kgo5BA2peB/But6TlDYCCkGFBTXV8C
+	whTzC/wdNZ4pVn9aP85OoKOk5i1dBCWL7OxWZ4yNCD7bd/yCVPxRmLZ//e8ms+P2fbHrvdZ+Lj5hZ
+	ppVV9ple4XoFZm7FrxX02ebYlJLgfSiL11cGg2jdJ3UFY4YGa/po15qHYi6owccO/cb8+s59Bhzkp
+	GZZs6x4X0YFBqMTfGRrSLl4yrkxdGF1vLUCemld35G/sNNsqIC5uJea0BxmXUMnfM5Fz/yJ0L43VS
+	8lQr3C0g==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+	by casper.infradead.org with esmtpsa (Exim 4.97.1 #2 (Red Hat Linux))
+	id 1sYMgL-0000000DQQH-04ve;
+	Mon, 29 Jul 2024 09:28:41 +0000
+Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
+	id 41D8B300439; Mon, 29 Jul 2024 11:28:40 +0200 (CEST)
+Date: Mon, 29 Jul 2024 11:28:40 +0200
+From: Peter Zijlstra <peterz@infradead.org>
+To: Rong Xu <xur@google.com>
+Cc: Han Shen <shenhan@google.com>, Sriraman Tallam <tmsriram@google.com>,
+	David Li <davidxl@google.com>, Jonathan Corbet <corbet@lwn.net>,
+	Masahiro Yamada <masahiroy@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nicolas Schier <nicolas@fjasle.eu>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+	"H . Peter Anvin" <hpa@zytor.com>, Ard Biesheuvel <ardb@kernel.org>,
+	Arnd Bergmann <arnd@arndb.de>, Josh Poimboeuf <jpoimboe@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Vegard Nossum <vegard.nossum@oracle.com>,
+	John Moon <john@jmoon.dev>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Heiko Carstens <hca@linux.ibm.com>,
+	Luis Chamberlain <mcgrof@kernel.org>,
+	Samuel Holland <samuel.holland@sifive.com>,
+	Mike Rapoport <rppt@kernel.org>,
+	"Paul E . McKenney" <paulmck@kernel.org>,
+	Rafael Aquini <aquini@redhat.com>, Petr Pavlu <petr.pavlu@suse.com>,
+	Eric DeVolder <eric.devolder@oracle.com>,
+	Bjorn Helgaas <bhelgaas@google.com>,
+	Randy Dunlap <rdunlap@infradead.org>,
+	Benjamin Segall <bsegall@google.com>,
+	Breno Leitao <leitao@debian.org>,
+	Wei Yang <richard.weiyang@gmail.com>,
+	Brian Gerst <brgerst@gmail.com>, Juergen Gross <jgross@suse.com>,
+	Palmer Dabbelt <palmer@rivosinc.com>,
+	Alexandre Ghiti <alexghiti@rivosinc.com>,
+	Kees Cook <kees@kernel.org>,
+	Sami Tolvanen <samitolvanen@google.com>,
+	Xiao Wang <xiao.w.wang@intel.com>,
+	Jan Kiszka <jan.kiszka@siemens.com>, linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
+	linux-efi@vger.kernel.org, linux-arch@vger.kernel.org,
+	llvm@lists.linux.dev, Krzysztof Pszeniczny <kpszeniczny@google.com>
+Subject: Re: [PATCH 2/6] objtool: Fix unreachable instruction warnings for
+ weak funcitons
+Message-ID: <20240729092840.GB37996@noisy.programming.kicks-ass.net>
+References: <20240728203001.2551083-1-xur@google.com>
+ <20240728203001.2551083-3-xur@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <202407290414.8wyOYC9H-lkp@intel.com>
-In-Reply-To: <202407290414.8wyOYC9H-lkp@intel.com>
-From: Geert Uytterhoeven <geert@linux-m68k.org>
-Date: Mon, 29 Jul 2024 11:03:09 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdUgo3-LmF8-BMAL_f4xCws4EW2krYDuvAZEO0LUqb2jrQ@mail.gmail.com>
-Message-ID: <CAMuHMdUgo3-LmF8-BMAL_f4xCws4EW2krYDuvAZEO0LUqb2jrQ@mail.gmail.com>
-Subject: Re: [morimoto:renesas-bsp/v6.6-dev 282/297] ERROR: Input tree has
- errors, aborting (use -f to force output)
-To: Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>
-Cc: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>, llvm@lists.linux.dev, 
-	oe-kbuild-all@lists.linux.dev, kernel test robot <lkp@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240728203001.2551083-3-xur@google.com>
 
-Hi Morimoto-san,
+On Sun, Jul 28, 2024 at 01:29:55PM -0700, Rong Xu wrote:
+> In the presence of both weak and strong function definitions, the
+> linker drops the weak symbol in favor of a strong symbol, but
+> leaves the code in place. Code in ignore_unreachable_insn() has
+> some heuristics to suppress the warning, but it does not work when
+> -ffunction-sections is enabled.
+> 
+> Suppose function foo has both strong and weak definitions.
+> Case 1: The strong definition has an annotated section name,
+> like .init.text. Only the weak definition will be placed into
+> .text.foo. But since the section has no symbols, there will be no
+> "hole" in the section.
+> 
+> Case 2: Both sections are without an annotated section name.
+> Both will be placed into .text.foo section, but there will be only one
+> symbol (the strong one). If the weak code is before the strong code,
+> there is no "hole" as it fails to find the right-most symbol before
+> the offset.
+> 
+> The fix is to use the first node to compute the hole if hole.sym
+> is empty. If there is no symbol in the section, the first node
+> will be NULL, in which case, -1 is returned to skip the whole
+> section.
+> 
+> Co-developed-by: Han Shen <shenhan@google.com>
+> Signed-off-by: Han Shen <shenhan@google.com>
+> Signed-off-by: Rong Xu <xur@google.com>
+> Suggested-by: Sriraman Tallam <tmsriram@google.com>
+> Suggested-by: Krzysztof Pszeniczny <kpszeniczny@google.com>
+> ---
+>  tools/objtool/elf.c | 13 ++++++++-----
+>  1 file changed, 8 insertions(+), 5 deletions(-)
+> 
+> diff --git a/tools/objtool/elf.c b/tools/objtool/elf.c
+> index 3d27983dc908..fa88bb254ccc 100644
+> --- a/tools/objtool/elf.c
+> +++ b/tools/objtool/elf.c
+> @@ -224,12 +224,15 @@ int find_symbol_hole_containing(const struct section *sec, unsigned long offset)
+>  	if (n)
+>  		return 0; /* not a hole */
+>  
+> -	/* didn't find a symbol for which @offset is after it */
+> -	if (!hole.sym)
+> -		return 0; /* not a hole */
+> +	/*
+> +	 * @offset >= sym->offset + sym->len, find symbol after it.
+> +	 * Use the first node in rb_tree when hole.sym is NULL.
+> +	 */
 
-On Sun, Jul 28, 2024 at 10:47=E2=80=AFPM kernel test robot <lkp@intel.com> =
-wrote:
-> tree:   https://github.com/morimoto/linux renesas-bsp/v6.6-dev
-> head:   89c2aab123595625ced4d7e7b1c66822d503ee2c
-> commit: 370689558ac9370ca8ad49fa143da77c8aba4ef4 [282/297] arm64: dts: re=
-nesas: r9a07g043: Move interrupt-parent property to common DTSI
-> config: riscv-allmodconfig (https://download.01.org/0day-ci/archive/20240=
-729/202407290414.8wyOYC9H-lkp@intel.com/config)
-> compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project c=
-cae7b461be339e717d02f99ac857cf0bc7d17fc)
-> reproduce (this is a W=3D1 build): (https://download.01.org/0day-ci/archi=
-ve/20240729/202407290414.8wyOYC9H-lkp@intel.com/reproduce)
->
-> If you fix the issue in a separate patch/commit (i.e. not just a new vers=
-ion of
-> the same patch/commit), kindly add following tags
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes: https://lore.kernel.org/oe-kbuild-all/202407290414.8wyOYC9H-lkp=
-@intel.com/
->
-> All errors (new ones prefixed by >>):
->
->    also defined at scripts/dtc/include-prefixes/arm64/renesas/rzg2ul-smar=
-c-som.dtsi:139.10-231.3
->    also defined at scripts/dtc/include-prefixes/arm64/renesas/rzg2ul-smar=
-c-pinfunction.dtsi:11.10-132.3
-> >> ERROR: Input tree has errors, aborting (use -f to force output)
+	/*
+	 * If we are not right of any symbol, the next symbol must be
+	 * the first symbol. Either way, the next symbol -- if there is
+	 * one -- provides the rightmost boundary of the hole.
+	 */
+	if (!hole.sym)
+		n = rb_first_cached(&sec->symbol_tree);
+	else
+		n = rb_next(&hole.sym->node);
 
-Missing backport of commit 808852fa3a5e11c8 ("riscv: dts: renesas:
-r9a07g043f: Add IRQC node to RZ/Five SoC DTSI") in v6.10.
 
-To make it actually work, you also need (from  v6.8 and v6.9):
+That tells us more of why, rather than of what. Hmm?
 
-1cf0697a24ef60b3 dt-bindings: interrupt-controller:
-renesas,rzg2l-irqc: Document RZ/G3S
-392703b6a18bbecb dt-bindings: interrupt-controller:
-renesas,rzg2l-irqc: Update interrupts
-372487b295557b6c dt-bindings: interrupt-controller:
-renesas,rzg2l-irqc: Document RZ/Five SoC
-
-+ many more recent changes to drivers/irqchip/irq-renesas-rzg2l.c.
-
-Happy backporting! ;-)
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
---=20
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k=
-.org
-
-In personal conversations with technical people, I call myself a hacker. Bu=
-t
-when I'm talking to journalists I just say "programmer" or something like t=
-hat.
-                                -- Linus Torvalds
+> +	if (hole.sym)
+> +		n = rb_next(&hole.sym->node);
+> +	else
+> +		n = rb_first_cached(&sec->symbol_tree);
+>  
+> -	/* @offset >= sym->offset + sym->len, find symbol after it */
+> -	n = rb_next(&hole.sym->node);
+>  	if (!n)
+>  		return -1; /* until end of address space */
+>  
+> -- 
+> 2.46.0.rc1.232.g9752f9e123-goog
+> 
