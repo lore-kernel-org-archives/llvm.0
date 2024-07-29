@@ -1,140 +1,101 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E0E218A92F;
-	Mon, 29 Jul 2024 20:21:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A378212E1CA
+	for <llvm@lists.linux.dev>; Mon, 29 Jul 2024 20:33:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722284467; cv=none; b=F8vEAshbHqTdOm7FJnY4S7wIT1lJqLmlVd1zEfcS1RFfd91v3Qt8SNpwSVeO/dg1NZThku7dZBHNc+RIgK2CBA1Mr6cecv4PyJYWVZvKihkwbxcaHnBAUENLM90E3NRPZUvvP/Lhf246bkO87SoiNzg1Y8TwIADABLXeZIGsczI=
+	t=1722285188; cv=none; b=Xswph80S6M5uRbIrct5faaKM9FQeBX1INhLwTT5/gYlx7adSNnc3bf0SAPyAn1e8Jv99AzBjg7FJT0YWM8XDlG4F+GJEZkHlJVHdfBdOiVE9odR4QoGrt7rBaj6a5Q1yQW6xE5SEUNOqal4v6o3YnN6qvhg6pD/bV2bltdUPQGk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722284467; c=relaxed/simple;
-	bh=9MnFmbMMl4welPbAXfEJprTWfaQmhfFar1+EgR/YeEY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=b2CIAuQTkwnF9BdSojdrdrc48nJockfOtP6dEUOFwZcl7QYaAuAdzXrTJ+5WI7niINzH1jEWZySGu+1t8SkWsQj26AE8cZrpXjz0qu95oCqThKnoBT5Q1f67rD0aAdEh7TQVpAj39X/4+Y7fS45rnJW/4657NYDL67BH8AkZT18=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=hb9ok3mQ; arc=none smtp.client-ip=192.198.163.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1722285188; c=relaxed/simple;
+	bh=s5pNPqqWbqCiWhvd81pnBpprvSeZSexeWVQaXO6BFjQ=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=Gofee4IJzgIbi6N7j27L+dI0r04HvC19DQ+Rbg/tJVryV/YOZA+BYACuUeyU0MWe252FBte1gNOImDDAbXPOi1cuAdanIjv5Q3jaoPCYcGjheRRw2G9Hnp3VRPL5pP/416Xb/sVOlhZ9ViCudKmh2jwQCC+D6jc+8uOXIp/XpYQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=bzA3AwBz; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="hb9ok3mQ"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1722284465; x=1753820465;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=9MnFmbMMl4welPbAXfEJprTWfaQmhfFar1+EgR/YeEY=;
-  b=hb9ok3mQENQK+H/9ucltGEdkCYsyE6kKtgS8gkjv/sI4RXgjZsZUXlu3
-   22CbZQ7hL/ZqI/E47wvt676cI5gzuMLh1gUgOjklgqrb79FB1Z4Jec76W
-   iojp0F2wjBrso65J6a83FWyzfYuZhwbrs0fH+H/Y5BmBbNjyRE5oy/KOT
-   bfAstKt0ryujA4FyhQ3+/XxwoCv/dbqhiGVJv84IIlc+zBiXwRkttAWYz
-   mh2OLUGMU5/dIl2Q1JkZYh/IdmnkbIDSTXyl31YTWQPfWOgTGMJgPq3Ri
-   JMOm29PL8bM5Z3TRPxxoYyXqhkNL+xbkdjLKcBnIjkVBBhwa2SCdIjCsu
-   g==;
-X-CSE-ConnectionGUID: T3/YA03MSi6LVzJx0upgRw==
-X-CSE-MsgGUID: Om8TopFKS46meWH5IKb+BA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11148"; a="20222982"
-X-IronPort-AV: E=Sophos;i="6.09,246,1716274800"; 
-   d="scan'208";a="20222982"
-Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jul 2024 13:21:04 -0700
-X-CSE-ConnectionGUID: JMsHV9crROu7a5Rx0cgJEA==
-X-CSE-MsgGUID: NRpEEVfCSs2EuHroYVXk+g==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.09,246,1716274800"; 
-   d="scan'208";a="85050208"
-Received: from lkp-server01.sh.intel.com (HELO 68891e0c336b) ([10.239.97.150])
-  by fmviesa001.fm.intel.com with ESMTP; 29 Jul 2024 13:21:01 -0700
-Received: from kbuild by 68891e0c336b with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1sYWra-000s2F-2j;
-	Mon, 29 Jul 2024 20:20:58 +0000
-Date: Tue, 30 Jul 2024 04:20:51 +0800
-From: kernel test robot <lkp@intel.com>
-To: Baruch Siach <baruch@tkos.co.il>, Christoph Hellwig <hch@lst.de>,
-	Marek Szyprowski <m.szyprowski@samsung.com>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-s390@vger.kernel.org, Baruch Siach <baruch@tkos.co.il>,
-	Ramon Fried <ramon@neureality.ai>,
-	Petr =?utf-8?B?VGVzYcWZw61r?= <petr@tesarici.cz>,
-	Robin Murphy <robin.murphy@arm.com>, linux-kernel@vger.kernel.org,
-	iommu@lists.linux.dev, Elad Nachman <enachman@marvell.com>,
-	linuxppc-dev@lists.ozlabs.org, linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v3 2/3] dma-mapping: replace zone_dma_bits by
- zone_dma_limit
-Message-ID: <202407300338.oaUo6jtB-lkp@intel.com>
-References: <053fa4806a2c63efcde80caca473a8b670a2701c.1722249878.git.baruch@tkos.co.il>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="bzA3AwBz"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1722285185;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=d55oPqjSrf+snaeYbhkWsVhz17yxYipfruauchz4O/Y=;
+	b=bzA3AwBzc8aKtIlLAfOg1N8VoW0iwoNnB/Ob/29P/v0WoBPOHvChL3JWRuzIlAikHoMz7m
+	P7bbXQzSonZbvq9NB1CjtqT0qPXJC6vufehvuVeAPQTM9/wjQtP1vwuLnzWhRiysdAVD/4
+	tqgeHk8Np9/XzhSpLpmuphiV1oCv1vQ=
+Received: from mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-526-uJ42o2kfOB2S-mZ7X43APA-1; Mon,
+ 29 Jul 2024 16:33:03 -0400
+X-MC-Unique: uJ42o2kfOB2S-mZ7X43APA-1
+Received: from mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.4])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 9987E1955D44
+	for <llvm@lists.linux.dev>; Mon, 29 Jul 2024 20:33:02 +0000 (UTC)
+Received: from [172.64.1.77] (unknown [10.30.33.143])
+	by mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 107D33000198;
+	Mon, 29 Jul 2024 20:33:01 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.11.0-rc1,
+ mainline.kernel.org-clang, cec6937d)
+Date: Mon, 29 Jul 2024 20:33:01 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <053fa4806a2c63efcde80caca473a8b670a2701c.1722249878.git.baruch@tkos.co.il>
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.4
+Message-Id: <76996.124072916330305508@us-mta-526.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Baruch,
+Hi, we tested your kernel and here are the results:
 
-kernel test robot noticed the following build warnings:
-
-[auto build test WARNING on arm64/for-next/core]
-[also build test WARNING on powerpc/next powerpc/fixes s390/features linus/master v6.11-rc1 next-20240729]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Baruch-Siach/dma-mapping-improve-DMA-zone-selection/20240729-211018
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-next/core
-patch link:    https://lore.kernel.org/r/053fa4806a2c63efcde80caca473a8b670a2701c.1722249878.git.baruch%40tkos.co.il
-patch subject: [PATCH v3 2/3] dma-mapping: replace zone_dma_bits by zone_dma_limit
-config: arm-allnoconfig (https://download.01.org/0day-ci/archive/20240730/202407300338.oaUo6jtB-lkp@intel.com/config)
-compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project ccae7b461be339e717d02f99ac857cf0bc7d17fc)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240730/202407300338.oaUo6jtB-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202407300338.oaUo6jtB-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
-   In file included from kernel/dma/direct.c:7:
-   In file included from include/linux/memblock.h:12:
-   In file included from include/linux/mm.h:2253:
-   include/linux/vmstat.h:514:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     514 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
->> kernel/dma/direct.c:23:46: warning: implicit conversion from 'unsigned long long' to 'phys_addr_t' (aka 'unsigned int') changes value from 18446744073709551615 to 4294967295 [-Wconstant-conversion]
-      23 | phys_addr_t zone_dma_limit __ro_after_init = DMA_BIT_MASK(24);
-         |             ~~~~~~~~~~~~~~                   ^~~~~~~~~~~~~~~~
-   include/linux/dma-mapping.h:77:40: note: expanded from macro 'DMA_BIT_MASK'
-      77 | #define DMA_BIT_MASK(n) (((n) == 64) ? ~0ULL : ((1ULL<<(n))-1))
-         |                                        ^~~~~
-   2 warnings generated.
+    Overall result: FAILED
+             Merge: OK
+           Compile: FAILED
 
 
-vim +23 kernel/dma/direct.c
+Kernel information:
+    Commit message: task_work: make TWA_NMI_CURRENT handling conditional on=
+ IRQ_WORK
 
-   > 7	#include <linux/memblock.h>
-     8	#include <linux/export.h>
-     9	#include <linux/mm.h>
-    10	#include <linux/dma-map-ops.h>
-    11	#include <linux/scatterlist.h>
-    12	#include <linux/pfn.h>
-    13	#include <linux/vmalloc.h>
-    14	#include <linux/set_memory.h>
-    15	#include <linux/slab.h>
-    16	#include "direct.h"
-    17	
-    18	/*
-    19	 * Most architectures use ZONE_DMA for the first 16 Megabytes, but some use
-    20	 * it for entirely different regions. In that case the arch code needs to
-    21	 * override the variable below for dma-direct to work properly.
-    22	 */
-  > 23	phys_addr_t zone_dma_limit __ro_after_init = DMA_BIT_MASK(24);
-    24	
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1392617578
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+One or more kernel builds failed:
+    Unrecognized or new issues:
+         ppc64le - https://datawarehouse.cki-project.org/kcidb/builds/redha=
+t:1392617578-ppc64le-kernel
+           s390x - https://datawarehouse.cki-project.org/kcidb/builds/redha=
+t:1392617578-s390x-kernel
+          x86_64 (debug) - https://datawarehouse.cki-project.org/kcidb/buil=
+ds/redhat:1392617578-x86_64-kernel-debug
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
