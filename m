@@ -1,147 +1,222 @@
-Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BCA13145FE3;
-	Mon, 29 Jul 2024 11:26:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F41D1465BA
+	for <llvm@lists.linux.dev>; Mon, 29 Jul 2024 11:54:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722252395; cv=none; b=QkTvDNfTVZekWMYL31zVqyv1z9avcv3MsutuUxmADtKknImFZ5srytFGAd/bs4uxGiHymvX7bmBdzqArFz3j3ABsBJFbgFSwBl8tGz2uzJMI4O9wB6WXAwuIsL/vF1j5pIjJ/Knh2s19r0VCYfLyVJ1CSQ7ZEaAKNHN+wTgqtiU=
+	t=1722254066; cv=none; b=WHYLlyJNlZ8TZSRNN3NFrUCIS8VTWtZEnSVxKp02LmrtqhK1XBMrRp4UMr27nTlLt604DliaNFd2tCWDHZ0C7FzqKtUuWdJ0Cm9ijRM0/In0ZoNcbJi3KgxNf47Fl2BzX9098Oqm6FzPDSCwBvJu3GaOenO+trIiWlYWfdvXA90=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722252395; c=relaxed/simple;
-	bh=8MkwynnXFVbjdZHNToOy7lnR3zTzpWQbyXZtkGx7KBo=;
+	s=arc-20240116; t=1722254066; c=relaxed/simple;
+	bh=UrngsJxAjbcM3AqLgJFjWlmGMAo8MzvPgh7YUPnf/gk=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=tmHZdl2r5FCX97pHg0keMegzaOU2Q6err74W4OESGC3iYUkAB+UEN756DokAMk27n8WyofRgrkSUtIRL28vGk5NEtUMKVpcvWhZI5LMJAuN2tDmt3koZxYFdZ6KbcuXq5FGV8KIMB8O4LySYtCQZ0FKnpNlT5DJkQ0VqqaCz2zI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=QNpG3twY; arc=none smtp.client-ip=65.109.113.108
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
+	 Content-Type:Content-Disposition:In-Reply-To; b=LU5fHdrZGe+XvWAoNx+42iNFUk+eUhrequ5MQM3YJeYY8nlM441a8bJCz/WaSkb5OOTpjAX7MTxGHP25x8gkvLknEugFjD2DAGscU2aT7mIRiVo9uaTCiY4eMHpa/bvrDJSsCHV7pfpYla0agXwBPXP/esM+qRqmFdAnvLtWTB4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=2g3LkMPn; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=qQ4M86Hl; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=2g3LkMPn; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=qQ4M86Hl; arc=none smtp.client-ip=195.135.223.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="QNpG3twY"
-Received: from localhost (localhost.localdomain [127.0.0.1])
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id D693B40E0205;
-	Mon, 29 Jul 2024 11:26:30 +0000 (UTC)
-X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
-Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
-	header.d=alien8.de
-Received: from mail.alien8.de ([127.0.0.1])
-	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
-	with ESMTP id iqTEXWE2H-NC; Mon, 29 Jul 2024 11:26:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
-	t=1722252386; bh=GuDXkXCGhTX08yqWrA8jRr3VoIg3kntTZ1rboi0IwCI=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=QNpG3twYuf/Au+We0UtQefoCXFOMzuv5h4fOhlZV3k/5xGO0ArNOYwOjWnodKcAqY
-	 plpt1iCwkcnW5dlCaGFcSqILaNCZJydbAFlsMDJ2hXcpWbD24pl+MzplicWIH8N+b9
-	 9AKD2ORo3DKAS1Pf31lg4eILQHzo3uw2wFd5RGaPHHv2ZtAcZRBcTGn6qAkKj2j6u/
-	 NfBfJoL5JZq7kxoD7aJLghMOe4NZVvwNqYq1iG4F4YB0T1liWlJpWYB/1sCtoZLlRT
-	 DasnnEfffqVWD+RJjZGsXM/NAw4ugWptzqTk4whR2TbPJCjTnZmPQR+0F7RIR6xZTI
-	 DI4trQIqQbg5wB8pjYPggvhL0L1ti7M0z+9h4NDnybmWMjcZPhBwrvCwI2AFj6mZ75
-	 c6SbLHDykOfX6ytldGk1UymhHvBBt4P71yxr2q1cLqHHeNkNGjIYgKGP6UU2JWqEiT
-	 fbzTIfezXx5iLfZbyVY4AZo4qdD8KSBBvHQC0+zlfjKpJdtKiGxe/slqPHBC7E9WH2
-	 VPf8yEIC1w5jc+8H6HQ5HkUxbXWIEr9OlrUfAzDxQaQ+GDamvfarQBclNm8mhO+2XI
-	 B9C1L/rc4vn/+2kn3fOaG1s0PmgmDMDJkXH6dtrk8aVZnrINbpcoLjW3yhj4GZpE6x
-	 lBbrh4YQspFC0afybKHLAnJY=
-Received: from zn.tnic (p5de8ee85.dip0.t-ipconnect.de [93.232.238.133])
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="2g3LkMPn";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="qQ4M86Hl";
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="2g3LkMPn";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="qQ4M86Hl"
+Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id D4DEA40E01BB;
-	Mon, 29 Jul 2024 11:26:19 +0000 (UTC)
-Date: Mon, 29 Jul 2024 13:26:14 +0200
-From: Borislav Petkov <bp@alien8.de>
-To: kernel test robot <lkp@intel.com>,
-	Nathan Chancellor <nathan@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org, x86@kernel.org
-Subject: Re: [tip:x86/microcode 1/1]
- arch/x86/kernel/cpu/microcode/amd.c:714:6: warning: variable 'equiv_id' is
- used uninitialized whenever 'if' condition is false
-Message-ID: <20240729112614.GBZqd8Vu27mFVSHynA@fat_crate.local>
-References: <202407291815.gJBST0P3-lkp@intel.com>
+	by smtp-out2.suse.de (Postfix) with ESMTPS id 5F3941F790;
+	Mon, 29 Jul 2024 11:54:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1722254063; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=uX7eQ/l/4mqf+N2I4GzExoJxI/EcAEkLiNq+ZdMk+XE=;
+	b=2g3LkMPnPq6lrL+t2tOVYsxhaLYtJlMi12ywxUDpQuAAAIB8Z8Fnrj0/Nq/BMRHLVvonrs
+	XH+UAUS/NfqjI2ZV2z7Te5gBjhmq9nhyr6X3ERydbarvf+U1f+t67p8P9q0NCuoesghf4g
+	sr5j8I3YmMaR3oKAEi92aoxR2ISpiMw=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1722254063;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=uX7eQ/l/4mqf+N2I4GzExoJxI/EcAEkLiNq+ZdMk+XE=;
+	b=qQ4M86HlpJAvtYTKqfJxGRnzR3u7nQ533lmgZHpuMwPE0FQOfU8JfUDaAKtvEBJaEfNp+g
+	vTD5EqhAUppeoSDQ==
+Authentication-Results: smtp-out2.suse.de;
+	dkim=pass header.d=suse.cz header.s=susede2_rsa header.b=2g3LkMPn;
+	dkim=pass header.d=suse.cz header.s=susede2_ed25519 header.b=qQ4M86Hl
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1722254063; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=uX7eQ/l/4mqf+N2I4GzExoJxI/EcAEkLiNq+ZdMk+XE=;
+	b=2g3LkMPnPq6lrL+t2tOVYsxhaLYtJlMi12ywxUDpQuAAAIB8Z8Fnrj0/Nq/BMRHLVvonrs
+	XH+UAUS/NfqjI2ZV2z7Te5gBjhmq9nhyr6X3ERydbarvf+U1f+t67p8P9q0NCuoesghf4g
+	sr5j8I3YmMaR3oKAEi92aoxR2ISpiMw=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1722254063;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=uX7eQ/l/4mqf+N2I4GzExoJxI/EcAEkLiNq+ZdMk+XE=;
+	b=qQ4M86HlpJAvtYTKqfJxGRnzR3u7nQ533lmgZHpuMwPE0FQOfU8JfUDaAKtvEBJaEfNp+g
+	vTD5EqhAUppeoSDQ==
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 41618138A7;
+	Mon, 29 Jul 2024 11:54:23 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id RdDrD++Cp2bOOAAAD6G6ig
+	(envelope-from <jack@suse.cz>); Mon, 29 Jul 2024 11:54:23 +0000
+Received: by quack3.suse.cz (Postfix, from userid 1000)
+	id CFDB4A099C; Mon, 29 Jul 2024 13:54:18 +0200 (CEST)
+Date: Mon, 29 Jul 2024 13:54:18 +0200
+From: Jan Kara <jack@suse.cz>
+To: Sasha Levin <sashal@kernel.org>
+Cc: linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+	Justin Stitt <justinstitt@google.com>,
+	linux-hardening@vger.kernel.org, Kees Cook <keescook@chromium.org>,
+	Jan Kara <jack@suse.cz>, Christian Brauner <brauner@kernel.org>,
+	viro@zeniv.linux.org.uk, nathan@kernel.org,
+	linux-fsdevel@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH AUTOSEL 6.10 02/16] fs: remove accidental overflow during
+ wraparound check
+Message-ID: <20240729115418.xzfmanyqtipkuttx@quack3>
+References: <20240728004739.1698541-1-sashal@kernel.org>
+ <20240728004739.1698541-2-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <202407291815.gJBST0P3-lkp@intel.com>
+In-Reply-To: <20240728004739.1698541-2-sashal@kernel.org>
+X-Rspamd-Server: rspamd1.dmz-prg2.suse.org
+X-Rspamd-Action: no action
+X-Rspamd-Queue-Id: 5F3941F790
+X-Spam-Score: -3.81
+X-Spam-Level: 
+X-Spam-Flag: NO
+X-Spamd-Result: default: False [-3.81 / 50.00];
+	BAYES_HAM(-3.00)[100.00%];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	MID_RHS_NOT_FQDN(0.50)[];
+	R_DKIM_ALLOW(-0.20)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
+	MIME_GOOD(-0.10)[text/plain];
+	MX_GOOD(-0.01)[];
+	RBL_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:104:10:150:64:97:from];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	ARC_NA(0.00)[];
+	MISSING_XM_UA(0.00)[];
+	RECEIVED_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:106:10:150:64:167:received];
+	RCPT_COUNT_TWELVE(0.00)[12];
+	MIME_TRACE(0.00)[0:+];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.com:email,chromium.org:email,suse.cz:email,suse.cz:dkim,imap1.dmz-prg2.suse.org:rdns,imap1.dmz-prg2.suse.org:helo];
+	RCVD_COUNT_THREE(0.00)[3];
+	TO_DN_SOME(0.00)[];
+	SPAMHAUS_XBL(0.00)[2a07:de40:b281:104:10:150:64:97:from];
+	FROM_EQ_ENVFROM(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	FUZZY_BLOCKED(0.00)[rspamd.com];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
+	RCVD_TLS_LAST(0.00)[];
+	DNSWL_BLOCKED(0.00)[2a07:de40:b281:106:10:150:64:167:received];
+	DKIM_TRACE(0.00)[suse.cz:+]
 
-+ Nathan.
-
-On Mon, Jul 29, 2024 at 07:04:51PM +0800, kernel test robot wrote:
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git x86/microcode
-> head:   94838d230a6c835ced1bad06b8759e0a5f19c1d3
-> commit: 94838d230a6c835ced1bad06b8759e0a5f19c1d3 [1/1] x86/microcode/AMD: Use the family,model,stepping encoded in the patch ID
-> config: i386-buildonly-randconfig-001-20240729 (https://download.01.org/0day-ci/archive/20240729/202407291815.gJBST0P3-lkp@intel.com/config)
-> compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
-> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240729/202407291815.gJBST0P3-lkp@intel.com/reproduce)
+On Sat 27-07-24 20:47:19, Sasha Levin wrote:
+> From: Justin Stitt <justinstitt@google.com>
 > 
-> If you fix the issue in a separate patch/commit (i.e. not just a new version of
-> the same patch/commit), kindly add following tags
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes: https://lore.kernel.org/oe-kbuild-all/202407291815.gJBST0P3-lkp@intel.com/
+> [ Upstream commit 23cc6ef6fd453b13502caae23130844e7d6ed0fe ]
+
+Sasha, this commit is only about silencing false-positive UBSAN warning.
+Not sure if it is really a stable material...
+
+								Honza
+
 > 
-> All warnings (new ones prefixed by >>):
+> Running syzkaller with the newly enabled signed integer overflow
+> sanitizer produces this report:
 > 
-> >> arch/x86/kernel/cpu/microcode/amd.c:714:6: warning: variable 'equiv_id' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
->      714 |         if (x86_family(bsp_cpuid_1_eax) < 0x17) {
->          |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->    arch/x86/kernel/cpu/microcode/amd.c:720:31: note: uninitialized use occurs here
->      720 |         return cache_find_patch(uci, equiv_id);
->          |                                      ^~~~~~~~
->    arch/x86/kernel/cpu/microcode/amd.c:714:2: note: remove the 'if' if its condition is always true
->      714 |         if (x86_family(bsp_cpuid_1_eax) < 0x17) {
->          |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->    arch/x86/kernel/cpu/microcode/amd.c:706:14: note: initialize the variable 'equiv_id' to silence this warning
->      706 |         u16 equiv_id;
->          |                     ^
->          |                      = 0
->    1 warning generated.
+> [  195.401651] ------------[ cut here ]------------
+> [  195.404808] UBSAN: signed-integer-overflow in ../fs/open.c:321:15
+> [  195.408739] 9223372036854775807 + 562984447377399 cannot be represented in type 'loff_t' (aka 'long long')
+> [  195.414683] CPU: 1 PID: 703 Comm: syz-executor.0 Not tainted 6.8.0-rc2-00039-g14de58dbe653-dirty #11
+> [  195.420138] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.16.3-debian-1.16.3-2 04/01/2014
+> [  195.425804] Call Trace:
+> [  195.427360]  <TASK>
+> [  195.428791]  dump_stack_lvl+0x93/0xd0
+> [  195.431150]  handle_overflow+0x171/0x1b0
+> [  195.433640]  vfs_fallocate+0x459/0x4f0
+> ...
+> [  195.490053] ------------[ cut here ]------------
+> [  195.493146] UBSAN: signed-integer-overflow in ../fs/open.c:321:61
+> [  195.497030] 9223372036854775807 + 562984447377399 cannot be represented in type 'loff_t' (aka 'long long)
+> [  195.502940] CPU: 1 PID: 703 Comm: syz-executor.0 Not tainted 6.8.0-rc2-00039-g14de58dbe653-dirty #11
+> [  195.508395] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.16.3-debian-1.16.3-2 04/01/2014
+> [  195.514075] Call Trace:
+> [  195.515636]  <TASK>
+> [  195.517000]  dump_stack_lvl+0x93/0xd0
+> [  195.519255]  handle_overflow+0x171/0x1b0
+> [  195.521677]  vfs_fallocate+0x4cb/0x4f0
+> [  195.524033]  __x64_sys_fallocate+0xb2/0xf0
 > 
+> Historically, the signed integer overflow sanitizer did not work in the
+> kernel due to its interaction with `-fwrapv` but this has since been
+> changed [1] in the newest version of Clang. It was re-enabled in the
+> kernel with Commit 557f8c582a9ba8ab ("ubsan: Reintroduce signed overflow
+> sanitizer").
 > 
-> vim +714 arch/x86/kernel/cpu/microcode/amd.c
+> Let's use the check_add_overflow helper to first verify the addition
+> stays within the bounds of its type (long long); then we can use that
+> sum for the following check.
 > 
->    701	
->    702	static struct ucode_patch *find_patch(unsigned int cpu)
->    703	{
->    704		struct ucode_cpu_info *uci = ucode_cpu_info + cpu;
->    705		u32 rev, dummy __always_unused;
->    706		u16 equiv_id;
->    707	
->    708		/* fetch rev if not populated yet: */
->    709		if (!uci->cpu_sig.rev) {
->    710			rdmsr(MSR_AMD64_PATCH_LEVEL, rev, dummy);
->    711			uci->cpu_sig.rev = rev;
->    712		}
->    713	
->  > 714		if (x86_family(bsp_cpuid_1_eax) < 0x17) {
->    715			equiv_id = find_equiv_id(&equiv_table, uci->cpu_sig.sig);
->    716			if (!equiv_id)
->    717				return NULL;
->    718		}
->    719	
->    720		return cache_find_patch(uci, equiv_id);
->    721	}
->    722	
-
-That's a false positive, I think.
-
-clang can't see that equiv_id is used in cache_find_patch() ->
-patch_cpus_equivalent() *only* in the
-
-	if (x86_family(bsp_cpuid_1_eax) < 0x17)
-
-case.
-
-And that case is handled properly in this function.
-
-So, unless I'm missing something else, it's a good thing this warning is
-behind a W=1. Keep it there.
-
-Thx.
-
+> Link: https://github.com/llvm/llvm-project/pull/82432 [1]
+> Closes: https://github.com/KSPP/linux/issues/356
+> Cc: linux-hardening@vger.kernel.org
+> Reviewed-by: Kees Cook <keescook@chromium.org>
+> Signed-off-by: Justin Stitt <justinstitt@google.com>
+> Link: https://lore.kernel.org/r/20240513-b4-sio-vfs_fallocate-v2-1-db415872fb16@google.com
+> Reviewed-by: Jan Kara <jack@suse.cz>
+> Signed-off-by: Christian Brauner <brauner@kernel.org>
+> Signed-off-by: Sasha Levin <sashal@kernel.org>
+> ---
+>  fs/open.c | 8 ++++++--
+>  1 file changed, 6 insertions(+), 2 deletions(-)
+> 
+> diff --git a/fs/open.c b/fs/open.c
+> index 278b3edcda444..1dd123ba34ee9 100644
+> --- a/fs/open.c
+> +++ b/fs/open.c
+> @@ -247,6 +247,7 @@ int vfs_fallocate(struct file *file, int mode, loff_t offset, loff_t len)
+>  {
+>  	struct inode *inode = file_inode(file);
+>  	long ret;
+> +	loff_t sum;
+>  
+>  	if (offset < 0 || len <= 0)
+>  		return -EINVAL;
+> @@ -319,8 +320,11 @@ int vfs_fallocate(struct file *file, int mode, loff_t offset, loff_t len)
+>  	if (!S_ISREG(inode->i_mode) && !S_ISBLK(inode->i_mode))
+>  		return -ENODEV;
+>  
+> -	/* Check for wrap through zero too */
+> -	if (((offset + len) > inode->i_sb->s_maxbytes) || ((offset + len) < 0))
+> +	/* Check for wraparound */
+> +	if (check_add_overflow(offset, len, &sum))
+> +		return -EFBIG;
+> +
+> +	if (sum > inode->i_sb->s_maxbytes)
+>  		return -EFBIG;
+>  
+>  	if (!file->f_op->fallocate)
+> -- 
+> 2.43.0
+> 
 -- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+Jan Kara <jack@suse.com>
+SUSE Labs, CR
