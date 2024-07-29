@@ -1,208 +1,86 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
+Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 20986186E39;
-	Mon, 29 Jul 2024 16:43:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 928512AD22;
+	Mon, 29 Jul 2024 16:50:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722271439; cv=none; b=bQ8R3ApkK6wcNcJ7IjsiLNGJ5/n1EvDCoMU+NIrotlPNEWTtpCkmKuVUyLx1trof45gFzZN5Evlr6oOD98RQRSBGsF2xKdizx1aBq9GWmvuyEC4vMFOfx3ttBPxwSS/Tnsih7iLJtDIc0xbKqkGl0BdSz9q9XNHD1+MVFgOdq4g=
+	t=1722271855; cv=none; b=ragtce78oTNvab+qFL2UVuzON5MLoluz1a5fuejjS3AfvyDqf1vxjW49I/phEZUEpxIyVfG4NgWEe6ffUjhu89Y8xuQS9DXo+rrCwWFseZ/qFZPksx+3mrZnt0qGxF2ywZrR+gw2BeR2sRoiLsrB0ZtXP5DjBV5t3apwzOhftGM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722271439; c=relaxed/simple;
-	bh=3RnVbJ7Xp2mSnHzWgy1Sv+7m9uJ+ThcVDNDbMpd2XDI=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=tigH+p1gr3nSA4WyCThRKwPf+74XLNwhiwTTbxiM711qDwhWfYDgF0JZkvUGw/nCx6sBFk5dkqpZPlZFPKVZ2BgNBDT+7AmQXOmYkMhgIvNfw+FnWdykL5HzE4IadbQ99D6t33nvIpKagTEfSIDRjrVkCcMrleUAtQ1mpJK8LD0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Ov+Nd+CA; arc=none smtp.client-ip=192.198.163.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1722271855; c=relaxed/simple;
+	bh=Toy7gWyzSP071OPQRpR0jBICg03Pm5i6GDH38d805FI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=gZ9I2De6M19V6AyXffZRwky0zCtHFyLVgBOLotGwA/jx+0jvhFaJgh1J2gwklfWWulKleGk88WDfALSam6spBAnM00BbXgxSXjs3diCmhcDmInbB5183zOkcnIuWcHK3SmisOGCJRgyIPEy1kGOoMoqkCmu2bt4NNdg7KWBWtM4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=Gz95bVyH; arc=none smtp.client-ip=65.109.113.108
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Ov+Nd+CA"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1722271436; x=1753807436;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=3RnVbJ7Xp2mSnHzWgy1Sv+7m9uJ+ThcVDNDbMpd2XDI=;
-  b=Ov+Nd+CAlPtUgwR9EZIXXNHrXdgMOjrNiiXSrK8VSw50nl5AUGc4Tbcm
-   qVVZ2lA/Pnmkxs4L/T9pSp0XiG2welhns2kBKN2uWEJBUQh+F+IYehRb9
-   YhQSPEv2PY7281TEZXd7LYMaRA0FcZgXXAL69GP3+eANt/m2AyAaBn5J2
-   XdQgVjYJfUk2+5PWeCjVYiFFY/KnWl7/C2tKkwigDQmK87vGSKWmH57C4
-   clB/6jF5UtGUDALGlI7IpbTz0o+B2AyaryYYT1gW+gjtWIylcN/6/MAGs
-   KhymUYHUDnZCtiJ3TXOcYKS1HNmtXmvgZ+2JHQCO+Lk2JnH3fP0G8YkUn
-   w==;
-X-CSE-ConnectionGUID: QgP/rsgbT0q7HYErorwzvg==
-X-CSE-MsgGUID: TPzv9Z7XSFWhydZZDhv6eQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11148"; a="20194787"
-X-IronPort-AV: E=Sophos;i="6.09,246,1716274800"; 
-   d="scan'208";a="20194787"
-Received: from orviesa009.jf.intel.com ([10.64.159.149])
-  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jul 2024 09:43:56 -0700
-X-CSE-ConnectionGUID: dxCHd/mpT3CxmobZmpYZCA==
-X-CSE-MsgGUID: 76bPsDBrRQu8xUlSRQPoLw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.09,246,1716274800"; 
-   d="scan'208";a="54004480"
-Received: from lkp-server01.sh.intel.com (HELO 68891e0c336b) ([10.239.97.150])
-  by orviesa009.jf.intel.com with ESMTP; 29 Jul 2024 09:43:54 -0700
-Received: from kbuild by 68891e0c336b with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1sYTTT-000rre-1o;
-	Mon, 29 Jul 2024 16:43:51 +0000
-Date: Tue, 30 Jul 2024 00:43:00 +0800
-From: kernel test robot <lkp@intel.com>
-To: "Paul E. McKenney" <paulmck@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org
-Subject: [paulmck-rcu:dev.2024.07.25a 15/43] kernel/rcu/rcuscale.c:1021:2:
- error: use of undeclared identifier 'writer_done'
-Message-ID: <202407300009.05X7YXZC-lkp@intel.com>
+	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="Gz95bVyH"
+Received: from localhost (localhost.localdomain [127.0.0.1])
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id 7F58240E01A8;
+	Mon, 29 Jul 2024 16:50:51 +0000 (UTC)
+X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
+Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
+	header.d=alien8.de
+Received: from mail.alien8.de ([127.0.0.1])
+	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
+	with ESMTP id N-onDdR1Z8FD; Mon, 29 Jul 2024 16:50:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
+	t=1722271848; bh=xeyPA8OtmVuBR7zog1H3W01E+zbBHJfzvUlLf1Ecf60=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=Gz95bVyHk4Dojfw86pIvuOrUzEF8Y4JvbiZfLH56Ep+kpXCBWJv9lEYNmC9rnSC4m
+	 ee7Linan6QoTdgRqFPlbeszIXaT4RVMPUvWUmap5Xhnu+PPJa6iVl+l2f5IoI7WpVs
+	 7FOLtB04a7IuZd92DMJenqs6ExAJtm4bVlkMBEumh7v2IUjXdJnwPvYUTYV7MJyXL3
+	 +okSRqCQZQ6SAYfhdAE4UFyD8wm98EKCM2bVVxJO8VVo0pcHRYL05LAkwwS7JiteLw
+	 rXsmeD8y+7L1xiAZ6Tf9pw57R7+1t03Z//UAA8kiC3yEtZGJLdWw89Ec9Hj8Lgozzt
+	 QOIJvvZ0PHYxVkUaNLHix5Aeelr9YeOu4bwwDX6zcMQWTNLmsC64Cj886gGhxKSofq
+	 wZTk+MQkj9Bohv0WiIQ+qcU039YPfmkmhEJm6ehoPlRM+kQaHbF9YRlZgocZ4qb3vU
+	 +rJU0NjGkidcYvWC/WjZZyZG2eUFHeYufxodmigkopSN8/JvhNeGJkXvjNj8hnAk2q
+	 a4Rw9/kvwGyfy+tnL47pIAyxpviJ0mOBuv9mu5tWmejyKOlaFHLDnJRxrZ5lwvUR02
+	 vKYYu9XMYqss+qpvwQK7/RqrSAfaAE9ExBRXZmVCzYxU597yMWkoX+TaYTgOEVnGrf
+	 TOmfntDi0Vi/n/w3C1X47d/Q=
+Received: from zn.tnic (p5de8ee85.dip0.t-ipconnect.de [93.232.238.133])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
+	(No client certificate requested)
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 6189940E019C;
+	Mon, 29 Jul 2024 16:50:42 +0000 (UTC)
+Date: Mon, 29 Jul 2024 18:50:36 +0200
+From: Borislav Petkov <bp@alien8.de>
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: kernel test robot <lkp@intel.com>, llvm@lists.linux.dev,
+	oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
+	x86@kernel.org
+Subject: Re: [tip:x86/microcode 1/1]
+ arch/x86/kernel/cpu/microcode/amd.c:714:6: warning: variable 'equiv_id' is
+ used uninitialized whenever 'if' condition is false
+Message-ID: <20240729165036.GGZqfIXNZLA7l5zyRH@fat_crate.local>
+References: <202407291815.gJBST0P3-lkp@intel.com>
+ <20240729112614.GBZqd8Vu27mFVSHynA@fat_crate.local>
+ <20240729153008.GA685493@thelio-3990X>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
+In-Reply-To: <20240729153008.GA685493@thelio-3990X>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git dev.2024.07.25a
-head:   24e3bccdf4bc0ae57b0e89e0313fd4450fde12af
-commit: 54ff7b22b9062495092737217877be2bdd3dabd4 [15/43] rcuscale: Save a few lines with whitespace-only change
-config: x86_64-randconfig-071-20240728 (https://download.01.org/0day-ci/archive/20240730/202407300009.05X7YXZC-lkp@intel.com/config)
-compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240730/202407300009.05X7YXZC-lkp@intel.com/reproduce)
+On Mon, Jul 29, 2024 at 08:30:08AM -0700, Nathan Chancellor wrote:
+> It's not behind W=1, this happens in a normal build:
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202407300009.05X7YXZC-lkp@intel.com/
+"reproduce (this is a W=1 build):"
 
-Note: the paulmck-rcu/dev.2024.07.25a HEAD 24e3bccdf4bc0ae57b0e89e0313fd4450fde12af builds fine.
-      It only hurts bisectability.
+I guess that mail formulation is misleading.
 
-All errors (new ones prefixed by >>):
+Ok, lemme fix that then.
 
->> kernel/rcu/rcuscale.c:1021:2: error: use of undeclared identifier 'writer_done'
-    1021 |         writer_done = kcalloc(nrealwriters, sizeof(writer_done[0]), GFP_KERNEL);
-         |         ^
-   kernel/rcu/rcuscale.c:1021:45: error: use of undeclared identifier 'writer_done'
-    1021 |         writer_done = kcalloc(nrealwriters, sizeof(writer_done[0]), GFP_KERNEL);
-         |                                                    ^
-   kernel/rcu/rcuscale.c:1021:45: error: use of undeclared identifier 'writer_done'
-   kernel/rcu/rcuscale.c:1022:68: error: use of undeclared identifier 'writer_done'
-    1022 |         if (!writer_tasks || !writer_durations || !writer_n_durations || !writer_done) {
-         |                                                                           ^
-   4 errors generated.
-
-
-vim +/writer_done +1021 kernel/rcu/rcuscale.c
-
-   946	
-   947	static int __init
-   948	rcu_scale_init(void)
-   949	{
-   950		long i;
-   951		int firsterr = 0;
-   952		static struct rcu_scale_ops *scale_ops[] = {
-   953			&rcu_ops, &srcu_ops, &srcud_ops, TASKS_OPS TASKS_RUDE_OPS TASKS_TRACING_OPS
-   954		};
-   955	
-   956		if (!torture_init_begin(scale_type, verbose))
-   957			return -EBUSY;
-   958	
-   959		/* Process args and announce that the scalability'er is on the job. */
-   960		for (i = 0; i < ARRAY_SIZE(scale_ops); i++) {
-   961			cur_ops = scale_ops[i];
-   962			if (strcmp(scale_type, cur_ops->name) == 0)
-   963				break;
-   964		}
-   965		if (i == ARRAY_SIZE(scale_ops)) {
-   966			pr_alert("rcu-scale: invalid scale type: \"%s\"\n", scale_type);
-   967			pr_alert("rcu-scale types:");
-   968			for (i = 0; i < ARRAY_SIZE(scale_ops); i++)
-   969				pr_cont(" %s", scale_ops[i]->name);
-   970			pr_cont("\n");
-   971			firsterr = -EINVAL;
-   972			cur_ops = NULL;
-   973			goto unwind;
-   974		}
-   975		if (cur_ops->init)
-   976			cur_ops->init();
-   977	
-   978		if (cur_ops->rso_gp_kthread) {
-   979			kthread_tp = cur_ops->rso_gp_kthread();
-   980			if (kthread_tp)
-   981				kthread_stime = kthread_tp->stime;
-   982		}
-   983		if (kfree_rcu_test)
-   984			return kfree_scale_init();
-   985	
-   986		nrealwriters = compute_real(nwriters);
-   987		nrealreaders = compute_real(nreaders);
-   988		atomic_set(&n_rcu_scale_reader_started, 0);
-   989		atomic_set(&n_rcu_scale_writer_started, 0);
-   990		atomic_set(&n_rcu_scale_writer_finished, 0);
-   991		rcu_scale_print_module_parms(cur_ops, "Start of test");
-   992	
-   993		/* Start up the kthreads. */
-   994	
-   995		if (shutdown) {
-   996			init_waitqueue_head(&shutdown_wq);
-   997			firsterr = torture_create_kthread(rcu_scale_shutdown, NULL,
-   998							  shutdown_task);
-   999			if (torture_init_error(firsterr))
-  1000				goto unwind;
-  1001			schedule_timeout_uninterruptible(1);
-  1002		}
-  1003		reader_tasks = kcalloc(nrealreaders, sizeof(reader_tasks[0]),
-  1004				       GFP_KERNEL);
-  1005		if (reader_tasks == NULL) {
-  1006			SCALEOUT_ERRSTRING("out of memory");
-  1007			firsterr = -ENOMEM;
-  1008			goto unwind;
-  1009		}
-  1010		for (i = 0; i < nrealreaders; i++) {
-  1011			firsterr = torture_create_kthread(rcu_scale_reader, (void *)i,
-  1012							  reader_tasks[i]);
-  1013			if (torture_init_error(firsterr))
-  1014				goto unwind;
-  1015		}
-  1016		while (atomic_read(&n_rcu_scale_reader_started) < nrealreaders)
-  1017			schedule_timeout_uninterruptible(1);
-  1018		writer_tasks = kcalloc(nrealwriters, sizeof(writer_tasks[0]), GFP_KERNEL);
-  1019		writer_durations = kcalloc(nrealwriters, sizeof(*writer_durations), GFP_KERNEL);
-  1020		writer_n_durations = kcalloc(nrealwriters, sizeof(*writer_n_durations), GFP_KERNEL);
-> 1021		writer_done = kcalloc(nrealwriters, sizeof(writer_done[0]), GFP_KERNEL);
-  1022		if (!writer_tasks || !writer_durations || !writer_n_durations || !writer_done) {
-  1023			SCALEOUT_ERRSTRING("out of memory");
-  1024			firsterr = -ENOMEM;
-  1025			goto unwind;
-  1026		}
-  1027		for (i = 0; i < nrealwriters; i++) {
-  1028			writer_durations[i] =
-  1029				kcalloc(MAX_MEAS, sizeof(*writer_durations[i]),
-  1030					GFP_KERNEL);
-  1031			if (!writer_durations[i]) {
-  1032				firsterr = -ENOMEM;
-  1033				goto unwind;
-  1034			}
-  1035			firsterr = torture_create_kthread(rcu_scale_writer, (void *)i,
-  1036							  writer_tasks[i]);
-  1037			if (torture_init_error(firsterr))
-  1038				goto unwind;
-  1039		}
-  1040		torture_init_end();
-  1041		return 0;
-  1042	
-  1043	unwind:
-  1044		torture_init_end();
-  1045		rcu_scale_cleanup();
-  1046		if (shutdown) {
-  1047			WARN_ON(!IS_MODULE(CONFIG_RCU_SCALE_TEST));
-  1048			kernel_power_off();
-  1049		}
-  1050		return firsterr;
-  1051	}
-  1052	
+Thx.
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
