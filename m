@@ -1,113 +1,114 @@
-Received: from mail-ed1-f41.google.com (mail-ed1-f41.google.com [209.85.208.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5AAD8189F37
-	for <llvm@lists.linux.dev>; Mon, 29 Jul 2024 22:43:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB5E118FC61;
+	Mon, 29 Jul 2024 22:52:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722292984; cv=none; b=GegYp5YQz9yQRxo1ZMN6OSgqiAcelRZax2ebE5Aozo2HgQExx6EgL8tQ/wEBPiTKQHnLOsHVhWigDXXf0hv/vM0nNIS/vH9+2V3QAfqvQOnnRQyTtPBqmQ46yPtTZ+VRoo0Z4X1eVxO4IrpfKEddqo52Z8h/HEkvxc/WLImnjEI=
+	t=1722293532; cv=none; b=RYdBQuiUxjHr56A/lEx4jNQYZIbDkbGMImF9NaAMWAeV2n/FgupjpNt2W8d6pWpIqLo52po6A2u59ByJIW2XVLn9aTJC/ZeQaADMiPT6XqRNwi6RgYD0T7edYO563k/23i9nZBpnwXPqXCHgN74w9ekqtK9O6bghaE0sOeVDb0Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722292984; c=relaxed/simple;
-	bh=Aj2AIVesAG+d2/9e7x2hRMbNkueEHWxEaKjXXzGcwbk=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=g8d6cIpr8KH94rTZmkP30BdqlnW+gRthXrvZN4PkcU/322GSsTorA8ZUleX5I6rhQfSnJh4Y+07BFKPeaySUgSj6g/I6sVpzXNUuzAPf20ROfAYSsw8OPUO1JwyG4ybXu3l01JE934248B6CiKEQFfv5Gc2X2PgPSCCachezSS8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=iW1z+Cnv; arc=none smtp.client-ip=209.85.208.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1722293532; c=relaxed/simple;
+	bh=ancUfdbymKu5ygqur2XdPXpMNAsblcqDSvNTOQNnBeE=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=EAK9VGdtqV7UcTYftUeV7SsucIbQwiSjLdVWeR3MgjSdNWFtdW+urztVr7ALoR3W5dfchOFGGAsyl3t4ViVfORGi0KQ/U9ZIsx1GHomfOVsI5G0VndlheC3vYYYBMZXpovJIgVhMqbCZYCfEbXDCG4e3cS3TgpCtxkQwlgkPI+Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Zt2C0LJF; arc=none smtp.client-ip=198.175.65.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="iW1z+Cnv"
-Received: by mail-ed1-f41.google.com with SMTP id 4fb4d7f45d1cf-5af6a1afa7bso3718511a12.1
-        for <llvm@lists.linux.dev>; Mon, 29 Jul 2024 15:43:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1722292982; x=1722897782; darn=lists.linux.dev;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=0fGU2swIqhkzmFxwf58v8I5LDvCPe9Gak0+C/hrp2AA=;
-        b=iW1z+Cnvh90WgQMYQAUhXpd8M43KDhY9i/QwWWdSHc/V0odgKlBBW7bBeE5xSVNUwm
-         21kJZ6E6skbSsD+8jb1oq0IoVQQeFPnuI4WCyRnAZJZ0+cxFR+ax+dVo/pqx5BI5nZ54
-         V24iTVPmr4ua0ButO5B00p+knMvMaLFo3V3R9ZzoSAtrIvBky4mkP7U+aMl2WJkNh1mr
-         mujf5sAiYr502Badhuv9Ao5G9IlpbqzYTv7j1BLal6Z2Mm+WpFFlTKWo+/I0bE/dBnhA
-         MYzMsn3Oiw7XyO24xPa7EyL5kG+ZU2dQnRqRbXGozsb/EvIiGGxBK1+8lt7A+RukY2Fd
-         UvzQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1722292982; x=1722897782;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=0fGU2swIqhkzmFxwf58v8I5LDvCPe9Gak0+C/hrp2AA=;
-        b=ZRGmxdrGM4nGa2j8FcbuHRWVfH94WTpysB+icL61Oapt6buGUBg+rVTA2DxaVBCXum
-         mOrLFy7lXuRgoeDNgpCfQLB07qCDJHJkmVjK+pQkiZmSthn2Y99weRwn4BOrcLbOosq8
-         nuKqNhQbVBubG4hJtERjl7XO2iuHsNhJZLXPBy6g6xlSNDXtdDBA9P7d2NIkvWsyTNOI
-         2rBzLrQz5I5SHPDNJtz0gmcQwtsJIGcuHez9678JXz2iRy/XRH6q5w/gzPA6YY8fDy2g
-         lymxAWm/tXMVnPsTjRN48bihmvh7BrWI5U3mGvfSdL1UPl2aE3JnPPIIWExR1uE+/ikM
-         IKTw==
-X-Forwarded-Encrypted: i=1; AJvYcCXv1wA8jRJ2ey2S4mwW7rgWj4wJDog47FfRbITwXdw0mjNvsnKXFAm55SK+lNVIgQ+rwy8tUb26ZGCtmmviOz48GiEFGQ==
-X-Gm-Message-State: AOJu0Yy8+4wmQTxKgXOurOLoxZZj3huueZ4AcU3qBgb58AdR7Ob1NOwY
-	jhC1mYVvw+GnyZ1BoY7GqpVLvALg+xOyRC/GAaeC0oiYl+oTjCw1
-X-Google-Smtp-Source: AGHT+IGLX2TWK5psswgDXB60T97s/05VR8H5qJKBNon3tRM4nB6q0AYBnPBjzubWjdyyucSDgkJYhw==
-X-Received: by 2002:a05:6402:5207:b0:5a3:64dc:33a5 with SMTP id 4fb4d7f45d1cf-5b020ba5706mr6479546a12.17.1722292981301;
-        Mon, 29 Jul 2024 15:43:01 -0700 (PDT)
-Received: from [192.168.0.31] (84-115-213-37.cable.dynamic.surfer.at. [84.115.213.37])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-5ac631b0395sm6384148a12.20.2024.07.29.15.42.59
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 29 Jul 2024 15:43:00 -0700 (PDT)
-Message-ID: <65faaf53-ad53-4b1c-9ccf-2ed9886d4f7a@gmail.com>
-Date: Tue, 30 Jul 2024 00:42:59 +0200
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Zt2C0LJF"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1722293531; x=1753829531;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=ancUfdbymKu5ygqur2XdPXpMNAsblcqDSvNTOQNnBeE=;
+  b=Zt2C0LJFaq5Ergkk+pOo4I0F74pLz8RhT0c2+Vwbq2OmN5LVHJL+2iFW
+   tZKWYqn6aUY5rcceGzDwsi8NMiSrrLJaSLvx/EKMmlBEnfuJ75P8ACqW8
+   6BqdO8qGkp66NpmTTyng7/iIvWHI1/FHkabInqGYMnw6VszsE9EkRedYe
+   OHOJeD+12wyOTNeeX82GMe2EvYwjofDttsOMmVGgS4fccxRBx1RM+A53I
+   i+6HZvlr5ZFiLAUYRxvi6//84NGLJfMhbgVK33PEI0t2pd4r0O4r/bEa4
+   OBd2WhZFaMGeDow7WdBvWNUWOxL9UFxihjwbbdWDdA3K3JkQ3NIziJ8Cr
+   w==;
+X-CSE-ConnectionGUID: 3g6Nu6huTHGaqTL3CyNp6Q==
+X-CSE-MsgGUID: etD/MOoQR1SQBjy3TFyzyg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11148"; a="20228992"
+X-IronPort-AV: E=Sophos;i="6.09,247,1716274800"; 
+   d="scan'208";a="20228992"
+Received: from orviesa008.jf.intel.com ([10.64.159.148])
+  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jul 2024 15:52:08 -0700
+X-CSE-ConnectionGUID: FPzRSpk3Ssur722Q8WBs3Q==
+X-CSE-MsgGUID: j/maIhMDQ6CnZJZm4LxmBA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.09,247,1716274800"; 
+   d="scan'208";a="54925186"
+Received: from lkp-server01.sh.intel.com (HELO 68891e0c336b) ([10.239.97.150])
+  by orviesa008.jf.intel.com with ESMTP; 29 Jul 2024 15:52:06 -0700
+Received: from kbuild by 68891e0c336b with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1sYZDn-000s9i-2I;
+	Mon, 29 Jul 2024 22:52:03 +0000
+Date: Tue, 30 Jul 2024 06:51:56 +0800
+From: kernel test robot <lkp@intel.com>
+To: Marek =?iso-8859-1?Q?Beh=FAn?= <kabel@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-kernel@vger.kernel.org, x86@kernel.org,
+	Thomas Gleixner <tglx@linutronix.de>
+Subject: [tip:irq/core 23/30] drivers/irqchip/irq-armada-370-xp.c:263:37:
+ error: use of undeclared identifier 'd'
+Message-ID: <202407300645.8EAO5dys-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] clang-format: Update with v6.11-rc1's `for_each` macro
- list
-To: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Cc: Miguel Ojeda <ojeda@kernel.org>, Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling
- <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
- linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-References: <20240729-clang-format-for-each-macro-update-v1-1-9c554ecfec3e@gmail.com>
- <CANiq72kFpS5BE7Ea8=Z6SUi_Y2RAt5wsssHyqL3ocgR1UOHJMg@mail.gmail.com>
- <17e81b06-7778-44f4-94cd-6a2b1fe5c7e0@gmail.com>
- <CANiq72mByZfV62bXkd366GNX1ReF92=rUf9Dyh165Ce+Wc3F2Q@mail.gmail.com>
-Content-Language: en-US, de-AT
-From: Javier Carrasco <javier.carrasco.cruz@gmail.com>
-In-Reply-To: <CANiq72mByZfV62bXkd366GNX1ReF92=rUf9Dyh165Ce+Wc3F2Q@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On 29/07/2024 23:55, Miguel Ojeda wrote:
-> On Mon, Jul 29, 2024 at 11:39 PM Javier Carrasco
-> <javier.carrasco.cruz@gmail.com> wrote:
->>
->> A quick test threw 326 extra macros that are defined in internal headers
->> under drivers/ and arch/. Including internal headers would remove the
->> need to update the list if a macro is moved from inlcude/ to an internal
->> header, but the list will need to be updated much more often.
-> 
-> There would be more changes in each iteration (which is why we avoided
-> scanning everything in the beginning), but currently it is
-> best-effort. If nowadays there are subsystems that want to start
-> considering soft-enforcing `clang-format` and that is why they need
-> them updated as soon as possible, then we should discuss other
-> alternatives (please let me know if that is the case!).
-> 
-> For instance, we could try to somehow divide the list into individual
-> subsystems, so that they control it and can perform the updates at the
-> same time in their commits as needed.
-> 
-> Anyway, for the time being, we should avoid editing the list "manually".
-> 
-> Cheers,
-> Miguel
+Hi Marek,
 
-That is not my particular case, I just wanted to add some macros that
-reside under include/ (in particular, the _scoped macros).
+FYI, the error/warning was bisected to this commit, please ignore it if it's irrelevant.
 
-Given that no one came with a need for macros defined in internal
-headers, I will just drop `displayid_iter_for_each` for v2.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git irq/core
+head:   e626fcbaa9b67e4488ea437e0e8a5657e707d5f8
+commit: f72976cd7f0e16639f29398d5fe5ab1b03789b42 [23/30] irqchip/armada-370-xp: Use consistent name for struct irq_data variables
+config: arm-defconfig (https://download.01.org/0day-ci/archive/20240730/202407300645.8EAO5dys-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240730/202407300645.8EAO5dys-lkp@intel.com/reproduce)
 
-Best regards,
-Javier Carrasco
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202407300645.8EAO5dys-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> drivers/irqchip/irq-armada-370-xp.c:263:37: error: use of undeclared identifier 'd'
+           irq_data_update_effective_affinity(d, cpumask_of(cpu));
+                                              ^
+   1 error generated.
+
+
+vim +/d +263 drivers/irqchip/irq-armada-370-xp.c
+
+   250	
+   251	static int mpic_msi_set_affinity(struct irq_data *irq_data, const struct cpumask *mask, bool force)
+   252	{
+   253		unsigned int cpu;
+   254	
+   255		if (!force)
+   256			cpu = cpumask_any_and(mask, cpu_online_mask);
+   257		else
+   258			cpu = cpumask_first(mask);
+   259	
+   260		if (cpu >= nr_cpu_ids)
+   261			return -EINVAL;
+   262	
+ > 263		irq_data_update_effective_affinity(d, cpumask_of(cpu));
+   264	
+   265		return IRQ_SET_MASK_OK;
+   266	}
+   267	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
