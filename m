@@ -1,150 +1,208 @@
-Received: from mail-qt1-f172.google.com (mail-qt1-f172.google.com [209.85.160.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1459415A853
-	for <llvm@lists.linux.dev>; Mon, 29 Jul 2024 15:54:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 20986186E39;
+	Mon, 29 Jul 2024 16:43:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722268442; cv=none; b=UsQucbZSOtkcvWpmH/u/QRx4J+4IrTuUP+JAk+yj0is8OWgbzF7LFWvze33XwhLdPsR0/2GAWROxJ7exLdD9qXkWjMuA55ws0E1S+tYmQjFa/nm0/yFPA5msDMKV4LTWN7XXCJMrB80lDMUlRZm7Sr962bJ0c/hDTptnsMdLAkg=
+	t=1722271439; cv=none; b=bQ8R3ApkK6wcNcJ7IjsiLNGJ5/n1EvDCoMU+NIrotlPNEWTtpCkmKuVUyLx1trof45gFzZN5Evlr6oOD98RQRSBGsF2xKdizx1aBq9GWmvuyEC4vMFOfx3ttBPxwSS/Tnsih7iLJtDIc0xbKqkGl0BdSz9q9XNHD1+MVFgOdq4g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722268442; c=relaxed/simple;
-	bh=vit//5frB+Bxo4uCQ9TaphFpIjNsNOImUZUDRYyDM/I=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=dyPfRUsGzjycFKQ5xs4vPjAn2e6j7HLB4bNuXOSMqJfZl1aSch8Li1J/xoHc0nQJdxtOU5PbvydW5IVHTqxmrD/ZIBR+dk3w/EEdGZZR4MAa4nMCKZGYvtgglM4N6JormgEul6Pc6VYoJDtJwO0x2MW511fX4w2Bg5VaNOhYZKQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=2Qf+Fcx9; arc=none smtp.client-ip=209.85.160.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	s=arc-20240116; t=1722271439; c=relaxed/simple;
+	bh=3RnVbJ7Xp2mSnHzWgy1Sv+7m9uJ+ThcVDNDbMpd2XDI=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=tigH+p1gr3nSA4WyCThRKwPf+74XLNwhiwTTbxiM711qDwhWfYDgF0JZkvUGw/nCx6sBFk5dkqpZPlZFPKVZ2BgNBDT+7AmQXOmYkMhgIvNfw+FnWdykL5HzE4IadbQ99D6t33nvIpKagTEfSIDRjrVkCcMrleUAtQ1mpJK8LD0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Ov+Nd+CA; arc=none smtp.client-ip=192.198.163.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="2Qf+Fcx9"
-Received: by mail-qt1-f172.google.com with SMTP id d75a77b69052e-44fee2bfd28so428221cf.1
-        for <llvm@lists.linux.dev>; Mon, 29 Jul 2024 08:54:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1722268440; x=1722873240; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=G7NVQIGmQXJU9zMY7yOvP9B85E2qvUl+m8Pl4MaC7co=;
-        b=2Qf+Fcx92+8YaradJqPgIBmGnxx+noeTjDrQ4y/PQFObL6vuvNCVYT8LrtADdrMKUN
-         UB2wxkMyMug1mzNYb5Fhk/dj6ewgB2h5G9KicHUiN8wtoVGXc1KOy7ZA48Fr4GU8f73B
-         96yuj4EClPc8bjkMWNxtUQCGO9dc7no85vGRu2kCUVOYkU2UZewaiPSkLNe5tmBHJ+Mq
-         YBFICA/qvlDut+l9IrAq2c1OLsenJPFNQrJqdx/NYNP1UwpBRQUrZFoPHn9y+Wru6X/9
-         mVzUTzo5sr4fa+akeJfh2ZxD9IxxWClxlmLn0xSUDnnv5fXgU+zsabaovYO5xa0G2XuL
-         V4mg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1722268440; x=1722873240;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=G7NVQIGmQXJU9zMY7yOvP9B85E2qvUl+m8Pl4MaC7co=;
-        b=sO0OsUCRcSzRNNqcpBY8E8SYNb0+/6VkMyg6S8n+uN5+nGuO5Eb+RvCQT16rxSrc4g
-         BU41GaQJhqLXRyF+MatIB+gbZ0T5CC8/y4Rb6ocFD3rOA1EnDJZbTKfM3Ok90ON0obwj
-         msjnG4bj3ykwg5l0pdAupRDxxDBDpRazx5HR7O79lxK1SoXn78LmwU4xjlTG2cHqpJA2
-         izn2HS2/Kpw38DN6o+ehGeDFr4TlQA8D+hh4zlsNJL2WXrw0Iu1B5uytgTgbyFvrL4NI
-         pHT+944L3VPVVHW66h3uFn22GuDADtdWiFTXT/4yjlac2+7aBjlrkapesihKfrxkRjLo
-         LEzA==
-X-Forwarded-Encrypted: i=1; AJvYcCVRWXckZd761S7bRmy+5fzcYf3BNx46D4jL7/8X6k+1adcX4svbShjw6ShFVPg22hQul3oNknnTZdCW0lCeNX8yGRpmUQ==
-X-Gm-Message-State: AOJu0YxHL8s0lz81KlaaLCByV9f9fnunDWe3y/OhtNRwtyyYDrEX9qox
-	WpjCMLgKXaBQQCh1+Zld14pzcXw80qz1kGTbOeepIjZD5VU116MpTIQ90IRyKkz09xiDWIRZSRl
-	kEPdo5x+cDvfmVZ92wsrJtA3kS/BTSYJWJ74/
-X-Google-Smtp-Source: AGHT+IGtbd0iBqee7SwSoc94TJ7CIzVF+bo02bFcdiIhIU5AVsKcZ+YG/U7J2gyGGtrfLKplipYfybTILWWzXf+wdc0=
-X-Received: by 2002:a05:622a:303:b0:44f:e12e:3015 with SMTP id
- d75a77b69052e-450329acd26mr220951cf.25.1722268439856; Mon, 29 Jul 2024
- 08:53:59 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Ov+Nd+CA"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1722271436; x=1753807436;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=3RnVbJ7Xp2mSnHzWgy1Sv+7m9uJ+ThcVDNDbMpd2XDI=;
+  b=Ov+Nd+CAlPtUgwR9EZIXXNHrXdgMOjrNiiXSrK8VSw50nl5AUGc4Tbcm
+   qVVZ2lA/Pnmkxs4L/T9pSp0XiG2welhns2kBKN2uWEJBUQh+F+IYehRb9
+   YhQSPEv2PY7281TEZXd7LYMaRA0FcZgXXAL69GP3+eANt/m2AyAaBn5J2
+   XdQgVjYJfUk2+5PWeCjVYiFFY/KnWl7/C2tKkwigDQmK87vGSKWmH57C4
+   clB/6jF5UtGUDALGlI7IpbTz0o+B2AyaryYYT1gW+gjtWIylcN/6/MAGs
+   KhymUYHUDnZCtiJ3TXOcYKS1HNmtXmvgZ+2JHQCO+Lk2JnH3fP0G8YkUn
+   w==;
+X-CSE-ConnectionGUID: QgP/rsgbT0q7HYErorwzvg==
+X-CSE-MsgGUID: TPzv9Z7XSFWhydZZDhv6eQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11148"; a="20194787"
+X-IronPort-AV: E=Sophos;i="6.09,246,1716274800"; 
+   d="scan'208";a="20194787"
+Received: from orviesa009.jf.intel.com ([10.64.159.149])
+  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jul 2024 09:43:56 -0700
+X-CSE-ConnectionGUID: dxCHd/mpT3CxmobZmpYZCA==
+X-CSE-MsgGUID: 76bPsDBrRQu8xUlSRQPoLw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.09,246,1716274800"; 
+   d="scan'208";a="54004480"
+Received: from lkp-server01.sh.intel.com (HELO 68891e0c336b) ([10.239.97.150])
+  by orviesa009.jf.intel.com with ESMTP; 29 Jul 2024 09:43:54 -0700
+Received: from kbuild by 68891e0c336b with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1sYTTT-000rre-1o;
+	Mon, 29 Jul 2024 16:43:51 +0000
+Date: Tue, 30 Jul 2024 00:43:00 +0800
+From: kernel test robot <lkp@intel.com>
+To: "Paul E. McKenney" <paulmck@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-kernel@vger.kernel.org
+Subject: [paulmck-rcu:dev.2024.07.25a 15/43] kernel/rcu/rcuscale.c:1021:2:
+ error: use of undeclared identifier 'writer_done'
+Message-ID: <202407300009.05X7YXZC-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20240727175919.1041468-1-linux@treblig.org> <CAP-5=fW+VbDaFV+YQCMMKYzrraMLLuVqb=BChL0o=-D5Y=4N_w@mail.gmail.com>
- <ZqewJ6oIprdRY8C5@gallifrey>
-In-Reply-To: <ZqewJ6oIprdRY8C5@gallifrey>
-From: Ian Rogers <irogers@google.com>
-Date: Mon, 29 Jul 2024 08:53:48 -0700
-Message-ID: <CAP-5=fUHVZDS9y4Bm=OesD5qpHHv7qqo2ALU70EPdS5WiQs1-w@mail.gmail.com>
-Subject: Re: [PATCH] perf test pmu: Remove unused test_pmus
-To: "Dr. David Alan Gilbert" <linux@treblig.org>, Nick Desaulniers <ndesaulniers@google.com>, llvm@lists.linux.dev
-Cc: kan.liang@linux.intel.com, acme@kernel.org, 
-	linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Mon, Jul 29, 2024 at 8:07=E2=80=AFAM Dr. David Alan Gilbert
-<linux@treblig.org> wrote:
->
-> * Ian Rogers (irogers@google.com) wrote:
-> > On Sat, Jul 27, 2024 at 10:59=E2=80=AFAM <linux@treblig.org> wrote:
-> > >
-> > > From: "Dr. David Alan Gilbert" <linux@treblig.org>
-> > >
-> > > Commit aa1551f299ba ("perf test pmu: Refactor format test and exposed
-> > > test APIs") added the 'test_pmus' list, but didn't use it.
-> > > (It seems to put them on the other_pmus list?)
-> > >
-> > > Remove it.
-> > >
-> > > Signed-off-by: Dr. David Alan Gilbert <linux@treblig.org>
-> >
-> > Strange that the compiler doesn't warn about unused stuff like this,
-> > we get unused variables within a function and unused static
-> > functions...
->
-> The problem is that LIST_HEAD initialises the list to point to itself;
-> so it *is* used - but only in it's own initialiser.
-> I did file:
->    https://gcc.gnu.org/bugzilla/show_bug.cgi?id=3D115027
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git dev.2024.07.25a
+head:   24e3bccdf4bc0ae57b0e89e0313fd4450fde12af
+commit: 54ff7b22b9062495092737217877be2bdd3dabd4 [15/43] rcuscale: Save a few lines with whitespace-only change
+config: x86_64-randconfig-071-20240728 (https://download.01.org/0day-ci/archive/20240730/202407300009.05X7YXZC-lkp@intel.com/config)
+compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240730/202407300009.05X7YXZC-lkp@intel.com/reproduce)
 
-Nice, the bug already has a fix - good work! Hopefully clang can follow sui=
-t.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202407300009.05X7YXZC-lkp@intel.com/
 
-> > Reviewed-by: Ian Rogers <irogers@google.com>
->
-> Thanks,
->
-> > Possibly:
-> > Fixes: aa1551f299ba ("perf test pmu: Refactor format test and exposed
-> > test APIs")
->
-> Given it's got no actual effect other than a few bytes
-> saved, I'm not sure it's worth the Fixes.
+Note: the paulmck-rcu/dev.2024.07.25a HEAD 24e3bccdf4bc0ae57b0e89e0313fd4450fde12af builds fine.
+      It only hurts bisectability.
 
-Ack. I mention it so the maintainers can make a decision about fixing
-in 6.11 (still in rc stage) or whether to hold for 6.12. It seems
-pretty safe either way, but for 6.11 probably better to have a fixes
-tag. If the GCC warning becomes a thing there's a chance the code
-won't build without the fix :-)
+All errors (new ones prefixed by >>):
 
-Thanks,
-Ian
+>> kernel/rcu/rcuscale.c:1021:2: error: use of undeclared identifier 'writer_done'
+    1021 |         writer_done = kcalloc(nrealwriters, sizeof(writer_done[0]), GFP_KERNEL);
+         |         ^
+   kernel/rcu/rcuscale.c:1021:45: error: use of undeclared identifier 'writer_done'
+    1021 |         writer_done = kcalloc(nrealwriters, sizeof(writer_done[0]), GFP_KERNEL);
+         |                                                    ^
+   kernel/rcu/rcuscale.c:1021:45: error: use of undeclared identifier 'writer_done'
+   kernel/rcu/rcuscale.c:1022:68: error: use of undeclared identifier 'writer_done'
+    1022 |         if (!writer_tasks || !writer_durations || !writer_n_durations || !writer_done) {
+         |                                                                           ^
+   4 errors generated.
 
-> Dave
->
-> > Thanks,
-> > Ian
-> >
-> > > ---
-> > >  tools/perf/tests/pmu.c | 3 ---
-> > >  1 file changed, 3 deletions(-)
-> > >
-> > > diff --git a/tools/perf/tests/pmu.c b/tools/perf/tests/pmu.c
-> > > index 40132655ccd1..0b2f04a55d7b 100644
-> > > --- a/tools/perf/tests/pmu.c
-> > > +++ b/tools/perf/tests/pmu.c
-> > > @@ -18,9 +18,6 @@
-> > >  #include <sys/stat.h>
-> > >  #include <sys/types.h>
-> > >
-> > > -/* Fake PMUs created in temp directory. */
-> > > -static LIST_HEAD(test_pmus);
-> > > -
-> > >  /* Cleanup test PMU directory. */
-> > >  static int test_pmu_put(const char *dir, struct perf_pmu *pmu)
-> > >  {
-> > > --
-> > > 2.45.2
-> > >
-> --
->  -----Open up your eyes, open up your mind, open up your code -------
-> / Dr. David Alan Gilbert    |       Running GNU/Linux       | Happy  \
-> \        dave @ treblig.org |                               | In Hex /
->  \ _________________________|_____ http://www.treblig.org   |_______/
+
+vim +/writer_done +1021 kernel/rcu/rcuscale.c
+
+   946	
+   947	static int __init
+   948	rcu_scale_init(void)
+   949	{
+   950		long i;
+   951		int firsterr = 0;
+   952		static struct rcu_scale_ops *scale_ops[] = {
+   953			&rcu_ops, &srcu_ops, &srcud_ops, TASKS_OPS TASKS_RUDE_OPS TASKS_TRACING_OPS
+   954		};
+   955	
+   956		if (!torture_init_begin(scale_type, verbose))
+   957			return -EBUSY;
+   958	
+   959		/* Process args and announce that the scalability'er is on the job. */
+   960		for (i = 0; i < ARRAY_SIZE(scale_ops); i++) {
+   961			cur_ops = scale_ops[i];
+   962			if (strcmp(scale_type, cur_ops->name) == 0)
+   963				break;
+   964		}
+   965		if (i == ARRAY_SIZE(scale_ops)) {
+   966			pr_alert("rcu-scale: invalid scale type: \"%s\"\n", scale_type);
+   967			pr_alert("rcu-scale types:");
+   968			for (i = 0; i < ARRAY_SIZE(scale_ops); i++)
+   969				pr_cont(" %s", scale_ops[i]->name);
+   970			pr_cont("\n");
+   971			firsterr = -EINVAL;
+   972			cur_ops = NULL;
+   973			goto unwind;
+   974		}
+   975		if (cur_ops->init)
+   976			cur_ops->init();
+   977	
+   978		if (cur_ops->rso_gp_kthread) {
+   979			kthread_tp = cur_ops->rso_gp_kthread();
+   980			if (kthread_tp)
+   981				kthread_stime = kthread_tp->stime;
+   982		}
+   983		if (kfree_rcu_test)
+   984			return kfree_scale_init();
+   985	
+   986		nrealwriters = compute_real(nwriters);
+   987		nrealreaders = compute_real(nreaders);
+   988		atomic_set(&n_rcu_scale_reader_started, 0);
+   989		atomic_set(&n_rcu_scale_writer_started, 0);
+   990		atomic_set(&n_rcu_scale_writer_finished, 0);
+   991		rcu_scale_print_module_parms(cur_ops, "Start of test");
+   992	
+   993		/* Start up the kthreads. */
+   994	
+   995		if (shutdown) {
+   996			init_waitqueue_head(&shutdown_wq);
+   997			firsterr = torture_create_kthread(rcu_scale_shutdown, NULL,
+   998							  shutdown_task);
+   999			if (torture_init_error(firsterr))
+  1000				goto unwind;
+  1001			schedule_timeout_uninterruptible(1);
+  1002		}
+  1003		reader_tasks = kcalloc(nrealreaders, sizeof(reader_tasks[0]),
+  1004				       GFP_KERNEL);
+  1005		if (reader_tasks == NULL) {
+  1006			SCALEOUT_ERRSTRING("out of memory");
+  1007			firsterr = -ENOMEM;
+  1008			goto unwind;
+  1009		}
+  1010		for (i = 0; i < nrealreaders; i++) {
+  1011			firsterr = torture_create_kthread(rcu_scale_reader, (void *)i,
+  1012							  reader_tasks[i]);
+  1013			if (torture_init_error(firsterr))
+  1014				goto unwind;
+  1015		}
+  1016		while (atomic_read(&n_rcu_scale_reader_started) < nrealreaders)
+  1017			schedule_timeout_uninterruptible(1);
+  1018		writer_tasks = kcalloc(nrealwriters, sizeof(writer_tasks[0]), GFP_KERNEL);
+  1019		writer_durations = kcalloc(nrealwriters, sizeof(*writer_durations), GFP_KERNEL);
+  1020		writer_n_durations = kcalloc(nrealwriters, sizeof(*writer_n_durations), GFP_KERNEL);
+> 1021		writer_done = kcalloc(nrealwriters, sizeof(writer_done[0]), GFP_KERNEL);
+  1022		if (!writer_tasks || !writer_durations || !writer_n_durations || !writer_done) {
+  1023			SCALEOUT_ERRSTRING("out of memory");
+  1024			firsterr = -ENOMEM;
+  1025			goto unwind;
+  1026		}
+  1027		for (i = 0; i < nrealwriters; i++) {
+  1028			writer_durations[i] =
+  1029				kcalloc(MAX_MEAS, sizeof(*writer_durations[i]),
+  1030					GFP_KERNEL);
+  1031			if (!writer_durations[i]) {
+  1032				firsterr = -ENOMEM;
+  1033				goto unwind;
+  1034			}
+  1035			firsterr = torture_create_kthread(rcu_scale_writer, (void *)i,
+  1036							  writer_tasks[i]);
+  1037			if (torture_init_error(firsterr))
+  1038				goto unwind;
+  1039		}
+  1040		torture_init_end();
+  1041		return 0;
+  1042	
+  1043	unwind:
+  1044		torture_init_end();
+  1045		rcu_scale_cleanup();
+  1046		if (shutdown) {
+  1047			WARN_ON(!IS_MODULE(CONFIG_RCU_SCALE_TEST));
+  1048			kernel_power_off();
+  1049		}
+  1050		return firsterr;
+  1051	}
+  1052	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
