@@ -1,186 +1,127 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 838E584DEB;
-	Mon, 29 Jul 2024 07:07:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C34312BF25
+	for <llvm@lists.linux.dev>; Mon, 29 Jul 2024 07:36:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722236877; cv=none; b=P7pwPDFEQBZfseuPhHk0IuSqN0XEQs68efcMAqD13QK/umbBz2HDOxhZJnFSKI4N9c9l0jjxYKqO7GjTcQv12yEMIjhssFYTzwA9LEkggED3qPtulhQijV+4878i9IPPsZn+e6P05cL3+9nz0tFHMvk4mXJGX/fC9bzNk4574R8=
+	t=1722238587; cv=none; b=PrnVCAh71yXWJBCzz558VYmmJLQpnnGRMutyBYqiGvNZn7i8idXuCow3OEs9Yicwmn7Z39+GXTz+bZP2aAphznWVIm5x/MVjN6EUs4EKElpqecJy6HL4FQ8GlrN/Wb0M5n709f7+Ml2MCAHVvXUnbMRU36M3Ul4R8D/tFZY9VQs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722236877; c=relaxed/simple;
-	bh=QQtDhehlcWFo9AvE43GyaCoamFx3oSQ0GWxaXuRWer4=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=d3hkOAXmBP53P0u5V/B64jcHLo2DYJD315xvB0xUyTZhoW0ydcl5U57+ahyaz9PO19PDThu30DySV3J/BVkjdw6z9g/RxtICV4fIyoDxuvNRSE5ileZcNyPa5cWapvGmgY9AqAy7/7tC6u8SGsSRJabHPZZHzFusxzKxzJAcwH8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ha4OfweL; arc=none smtp.client-ip=192.198.163.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1722238587; c=relaxed/simple;
+	bh=I7SM50EkhC2nL2ONJulc7JgZPylZSIxXMjC88jHd45E=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=GmNaPuuT6l8QaQHBW4ixf+pNsAw08Z1mMGCYLr2A39SzdaEvxjlcGnt+Ulbz8JoKb2nGJw9P5fEJbKa13KPi1ejCJfFSzA5UqdOeQlXtUdulFidL4NSpsl3h9mxvG5SCF/swWYpGo0IufybH82eo8cAbcztfwaTbxa+9f0kd1VE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Fa6fveY5; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ha4OfweL"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1722236876; x=1753772876;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=QQtDhehlcWFo9AvE43GyaCoamFx3oSQ0GWxaXuRWer4=;
-  b=ha4OfweL/G9SgeXp0yknMlSJvJCANer8/aUZzbW50T0KiYebBfNoyYHd
-   aiELIIE4V551q9J9s4xVomNyh5EqQzw0ZMFOSrxnDzw1RGEbL/eHpJ4Kg
-   LDjQlwO62hlCmGIeEKLWiecnxhTLV0AOP+xBCAA2XJeBpe5Txn7llKy3k
-   s42/vu/u4fo4HP6FjGLGSBkpEWow4gUgGMX4HxnMH1YzhvulpLiIMCWsE
-   8jeQMXHWE/THzFrmrq2OLJ5hjBznzFdhJcOD9GTR4UBVLk5f+emUH/MtJ
-   6v0cc+N1Q3E2AHKzAigEBbwtTuEDOCUJHm1XXisFKmXnES/TBqlFSA4kb
-   w==;
-X-CSE-ConnectionGUID: Trs4swveSoWP6pUAD96aDA==
-X-CSE-MsgGUID: nsiK9UDUQRKzwFqUid+Bgg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11147"; a="12762824"
-X-IronPort-AV: E=Sophos;i="6.09,245,1716274800"; 
-   d="scan'208";a="12762824"
-Received: from fmviesa007.fm.intel.com ([10.60.135.147])
-  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jul 2024 00:07:55 -0700
-X-CSE-ConnectionGUID: EuvxeFMCSxWvlb3onqRjiw==
-X-CSE-MsgGUID: UlzR2TDLS+OFyu6UkjVGGg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.09,245,1716274800"; 
-   d="scan'208";a="53576823"
-Received: from lkp-server01.sh.intel.com (HELO 68891e0c336b) ([10.239.97.150])
-  by fmviesa007.fm.intel.com with ESMTP; 29 Jul 2024 00:06:36 -0700
-Received: from kbuild by 68891e0c336b with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1sYKSo-000rWA-0w;
-	Mon, 29 Jul 2024 07:06:34 +0000
-Date: Mon, 29 Jul 2024 15:06:19 +0800
-From: kernel test robot <lkp@intel.com>
-To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org,
-	Herve Codina <herve.codina@bootlin.com>
-Subject: WARNING: modpost: vmlinux: section mismatch in reference:
- bitmap_gather+0x6b (section: .text) -> sg_mask (section: .init.rodata)
-Message-ID: <202407291552.gxr1x7vB-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Fa6fveY5"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C0639C4AF14
+	for <llvm@lists.linux.dev>; Mon, 29 Jul 2024 07:36:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1722238586;
+	bh=I7SM50EkhC2nL2ONJulc7JgZPylZSIxXMjC88jHd45E=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=Fa6fveY5Ozp8Qi0n3/hPO5DEd1iGrETkxxvEaxa2i8VIOrt9BWpJ4/r9gOd+QIXwJ
+	 JO+HzPBJUvPG6z6MpyCp9NcOh+P4gPsC6BU7o+qv29WgvbVlXkZ3C29uHh6JHWex+K
+	 kIpnBY0Rpy9gQOZe3A243Hdm+DPesmd8KhhPrHyutUtjjlwMzctdHFD6/joCgVlJt7
+	 tNsLT8oUQDeu1l5kwcMRHTkqlfzD2/n20qDKMWxx+nQNyEnfb4F5izjYZv+PrGW8TA
+	 Q0iaUB92LfW7JeSUJV6MVDt+0aLs608/WwPxq41g341/jrptITnIkbkftwjWMTWYlN
+	 UzMrR5qb/yXRw==
+Received: by mail-lj1-f174.google.com with SMTP id 38308e7fff4ca-2ee920b0781so34620481fa.1
+        for <llvm@lists.linux.dev>; Mon, 29 Jul 2024 00:36:26 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCUgydvWUMiIhXTr3deaVNvnYpZVYG0qww+aB36DmzMb+KaaZes63AFhtlZ0rHw+FKIh13nUsv6IfISjjki0He7hTwJSTg==
+X-Gm-Message-State: AOJu0YygTDJxNnDk+T81TxyLf2OfY8yopxl5P4Q2DFex9/JwXttzLUnz
+	OWJlBh2ZraCddlbuRZPwPcBStT8Gjn/4c8nMwUBFPKZ21McDd3bS4MS22Uv9ECcnwMCtQybc1PV
+	zYVq3YYtEWRGTJhog2HHPixoPop0=
+X-Google-Smtp-Source: AGHT+IH5q1QJoJgi2M+CBahXKgkZVjCTvPJ0BnyNWvUsOEOWg5UXlc8Ue86En+VxK2Wx5SAGgAROLzJpHmdnKGVd0n4=
+X-Received: by 2002:a2e:b4ba:0:b0:2ef:2311:cc66 with SMTP id
+ 38308e7fff4ca-2f12ee62913mr36565691fa.44.1722238584976; Mon, 29 Jul 2024
+ 00:36:24 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+References: <20240728203001.2551083-1-xur@google.com> <20240728203001.2551083-7-xur@google.com>
+ <63eb1654-c614-4f6a-9bc5-8c8085eadf8c@app.fastmail.com>
+In-Reply-To: <63eb1654-c614-4f6a-9bc5-8c8085eadf8c@app.fastmail.com>
+From: Masahiro Yamada <masahiroy@kernel.org>
+Date: Mon, 29 Jul 2024 16:35:48 +0900
+X-Gmail-Original-Message-ID: <CAK7LNAT9EU1ZAUh9SAEQ4Ar5LY-wUstaCjGLt7=Kr=uJMNfJvQ@mail.gmail.com>
+Message-ID: <CAK7LNAT9EU1ZAUh9SAEQ4Ar5LY-wUstaCjGLt7=Kr=uJMNfJvQ@mail.gmail.com>
+Subject: Re: [PATCH 6/6] Add Propeller configuration for kernel build.
+To: Arnd Bergmann <arnd@arndb.de>
+Cc: Rong Xu <xur@google.com>, Han Shen <shenhan@google.com>, 
+	Sriraman Tallam <tmsriram@google.com>, David Li <davidxl@google.com>, 
+	Jonathan Corbet <corbet@lwn.net>, Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nicolas@fjasle.eu>, 
+	Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
+	"H. Peter Anvin" <hpa@zytor.com>, Ard Biesheuvel <ardb@kernel.org>, Josh Poimboeuf <jpoimboe@kernel.org>, 
+	Peter Zijlstra <peterz@infradead.org>, Nick Desaulniers <ndesaulniers@google.com>, 
+	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
+	Vegard Nossum <vegard.nossum@oracle.com>, John Moon <john@jmoon.dev>, 
+	Andrew Morton <akpm@linux-foundation.org>, Heiko Carstens <hca@linux.ibm.com>, 
+	Luis Chamberlain <mcgrof@kernel.org>, Samuel Holland <samuel.holland@sifive.com>, 
+	Mike Rapoport <rppt@kernel.org>, "Paul E. McKenney" <paulmck@kernel.org>, Rafael Aquini <aquini@redhat.com>, 
+	Petr Pavlu <petr.pavlu@suse.com>, Eric DeVolder <eric.devolder@oracle.com>, 
+	Bjorn Helgaas <bhelgaas@google.com>, Randy Dunlap <rdunlap@infradead.org>, 
+	Benjamin Segall <bsegall@google.com>, Breno Leitao <leitao@debian.org>, 
+	Wei Yang <richard.weiyang@gmail.com>, Brian Gerst <brgerst@gmail.com>, 
+	Juergen Gross <jgross@suse.com>, Palmer Dabbelt <palmer@rivosinc.com>, 
+	Alexandre Ghiti <alexghiti@rivosinc.com>, Kees Cook <kees@kernel.org>, 
+	Sami Tolvanen <samitolvanen@google.com>, Xiao W Wang <xiao.w.wang@intel.com>, 
+	Jan Kiszka <jan.kiszka@siemens.com>, linux-doc@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org, 
+	linux-efi@vger.kernel.org, Linux-Arch <linux-arch@vger.kernel.org>, 
+	llvm@lists.linux.dev, Krzysztof Pszeniczny <kpszeniczny@google.com>, 
+	Stephane Eranian <eranian@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Andy,
+On Mon, Jul 29, 2024 at 4:02=E2=80=AFPM Arnd Bergmann <arnd@arndb.de> wrote=
+:
+>
+> On Sun, Jul 28, 2024, at 22:29, Rong Xu wrote:
+> >  Documentation/dev-tools/index.rst     |   1 +
+> >  Documentation/dev-tools/propeller.rst | 188 ++++++++++++++++++++++++++
+> >  MAINTAINERS                           |   7 +
+> >  Makefile                              |   1 +
+> >  arch/Kconfig                          |  22 +++
+> >  arch/x86/Kconfig                      |   1 +
+> >  arch/x86/boot/compressed/Makefile     |   3 +
+> >  arch/x86/kernel/vmlinux.lds.S         |   4 +
+> >  arch/x86/platform/efi/Makefile        |   1 +
+> >  drivers/firmware/efi/libstub/Makefile |   2 +
+> >  include/asm-generic/vmlinux.lds.h     |   8 +-
+> >  scripts/Makefile.lib                  |  10 ++
+> >  scripts/Makefile.propeller            |  25 ++++
+> >  tools/objtool/check.c                 |   1 +
+>
+> I have not looked in much detail, but I see that you need
+> a special case for arch/x86/boot/compressed and
+> drivers/firmware/efi, which makes it likely that you
+> need to also disable properller support for
+> arch/x86/purgatory/Makefile, which tends to have similar
+> requirements.
+>
+>      Arnd
 
-FYI, the error/warning still remains.
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   dc1c8034e31b14a2e5e212104ec508aec44ce1b9
-commit: de5f84338970815b9fdd3497a975fb572d11e0b5 lib/bitmap: Introduce bitmap_scatter() and bitmap_gather() helpers
-date:   5 months ago
-config: um-randconfig-001-20240729 (https://download.01.org/0day-ci/archive/20240729/202407291552.gxr1x7vB-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240729/202407291552.gxr1x7vB-lkp@intel.com/reproduce)
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202407291552.gxr1x7vB-lkp@intel.com/
 
-All warnings (new ones prefixed by >>, old ones prefixed by <<):
+I applied the following commits:
 
-WARNING: modpost: missing MODULE_DESCRIPTION() in vmlinux.o
->> WARNING: modpost: vmlinux: section mismatch in reference: bitmap_gather+0x6b (section: .text) -> sg_mask (section: .init.rodata)
-WARNING: modpost: vmlinux: section mismatch in reference: bitmap_gather+0x1e2 (section: .text) -> sg_mask (section: .init.rodata)
->> WARNING: modpost: vmlinux: section mismatch in reference: bitmap_scatter+0x6b (section: .text) -> sg_mask (section: .init.rodata)
-WARNING: modpost: vmlinux: section mismatch in reference: bitmap_scatter+0x1e0 (section: .text) -> sg_mask (section: .init.rodata)
-WARNING: modpost: missing MODULE_DESCRIPTION() in kernel/locking/locktorture.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in kernel/rcu/rcuscale.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in kernel/time/time_test.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in kernel/resource_kunit.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in kernel/scftorture.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in fs/nls/nls_cp775.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in fs/nls/nls_cp850.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in fs/nls/nls_cp863.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in fs/nls/nls_cp932.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in fs/nls/nls_euc-jp.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in fs/nls/nls_cp936.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in fs/nls/nls_cp950.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in fs/nls/nls_ascii.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in fs/nls/nls_iso8859-13.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in fs/nls/nls_koi8-r.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in fs/nls/nls_koi8-u.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in fs/nls/nls_koi8-ru.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in fs/nls/mac-centeuro.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in fs/nls/mac-croatian.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in fs/nls/mac-greek.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in fs/hostfs/hostfs.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in fs/binfmt_script.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in fs/fat/fat.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in fs/fat/fat_test.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in fs/btrfs/btrfs.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in security/keys/encrypted-keys/encrypted-keys.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in crypto/cast_common.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in lib/kunit/kunit.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in lib/kunit/kunit-test.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in lib/kunit/kunit-example-test.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in lib/cpumask_kunit.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in lib/test_hash.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in lib/test_ida.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in lib/test_list_sort.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in lib/test_min_heap.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in lib/test_rhashtable.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in lib/test_user_copy.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in lib/test_printf.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in lib/test_scanf.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in lib/test_uuid.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in lib/test_objpool.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in lib/list-test.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in lib/hashtable_test.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in lib/test_bits.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in lib/cmdline_kunit.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in lib/is_signed_type_kunit.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in lib/overflow_kunit.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in lib/stackinit_kunit.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in lib/strcat_kunit.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in lib/strscpy_kunit.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in lib/siphash_kunit.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/pinctrl/pinctrl-mcp23s08_i2c.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/pinctrl/pinctrl-mcp23s08.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/gpio/gpio-pcf857x.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/virtio/virtio.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/virtio/virtio_ring.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/tty/ttynull.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/base/regmap/regmap-kunit.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/base/regmap/regmap-i2c.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/base/regmap/regmap-ram.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/base/regmap/regmap-raw-ram.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/base/regmap/regmap-mmio.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/scsi/scsi_common.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/input/tests/input_test.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-belkin.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-cypress.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-dr.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-elecom.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-evision.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-vivaldi-common.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-kensington.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-magicmouse.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-ortek.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-petalynx.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-primax.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-razer.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-semitek.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-steam.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-tivo.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hid/hid-zpff.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/iio/buffer/kfifo_buf.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in sound/core/snd-pcm-dmaengine.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in sound/drivers/snd-pcmtest.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in sound/soc/codecs/snd-soc-sigmadsp.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in sound/soc/codecs/snd-soc-wm-adsp.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in sound/soc/xilinx/snd-soc-xlnx-i2s.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in sound/soc/xilinx/snd-soc-xlnx-formatter-pcm.o
-WARNING: modpost: EXPORT symbol "csum_partial" [vmlinux] version generation failed, symbol will not be versioned.
-Is "csum_partial" prototyped in <asm/asm-prototypes.h>?
-WARNING: modpost: EXPORT symbol "csum_partial_copy_generic" [vmlinux] version generation failed, symbol will not be versioned.
-Is "csum_partial_copy_generic" prototyped in <asm/asm-prototypes.h>?
-WARNING: modpost: "csum_partial" [fs/reiserfs/reiserfs.ko] has no CRC!
+ - 9c2d1328f88adb6cbfb218163623254b96f680d3
+ - 7f7f6f7ad654b326897c9f54438a06f03454bd0d
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+
+
+This might be another case to apply a similar approach
+instead of sprinkling PROPELLER__PROFILE=3Dn.
+
+
+
+
+--=20
+Best Regards
+Masahiro Yamada
