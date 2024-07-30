@@ -1,58 +1,45 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F27AA1A76C5;
-	Tue, 30 Jul 2024 18:01:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9BFF51A76BE;
+	Tue, 30 Jul 2024 18:32:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722362516; cv=none; b=XwYx53Gd/h357AFzpIjK3IGnCuIGSx1tKqqJoqr6cwsQSw20dYCugQo5HxUbzWvIWEb6cZUZkAFXaI6S0MlTOnVrZb+H6z91aCRapA/6aU/ZUONkmWUOdxKXdY6neSGWnW9yElhw54j+VoJ60xiYyYF8rrPhX4QpP90dCfofOhc=
+	t=1722364354; cv=none; b=GWYHJ+amkVsZ8cPrg0n0ivP4scENA32XQLpECj0pQoGYr4D5FHZ58wjKTlHzx2aqxnOTKuwarpeB7+GZDcvwRWqxv068avjWRc7zvPnugTckQ6QAcBgb2fojvihhvzwtAzcRS2UZ50xZy8f7bsZlOOPWNUd5uyAohQpYeySJsWo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722362516; c=relaxed/simple;
-	bh=cQFnUmyzRL6dRhPLo+YZ4kKLc+PPFdKOIPULfZq3dB8=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=Qtp65pbUEBdxYVAPjq1wpwgkmsRcWQpRZwb/xdsMqLMduTXua0lYN+ma4gEmREb+F5pf/kHT9+di2Rolp0XUgbFa6KslaEz565/4Hd1NcQlVtSaKKYn/9sfLIEzrO1UUPWukNxnQrDC7UItK5gAmza2E/AxlGmFGWg9ovfkUNOg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=UUaBshE/; arc=none smtp.client-ip=192.198.163.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1722364354; c=relaxed/simple;
+	bh=g+OGyy+vT85w380nT0+iGcOi+FcSygg/gUut0p0k0Fg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=rsekSzPsF1QEUlPdxu5HV84vsyAHhEqUqmHdgYcv/E9mZFMKwQJcmrPCBc6G5/mrOHtnE7qHnnTJslhfejmwQyouIJa3+YbpV5r69W/M3xFtgNbAhUhndXOHrkG/DIUxb+NtNo6tUZgPmFdaS5q9ItKsPkpXSGLU6YCkFWFgs7g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iAZ2un2h; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="UUaBshE/"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1722362515; x=1753898515;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=cQFnUmyzRL6dRhPLo+YZ4kKLc+PPFdKOIPULfZq3dB8=;
-  b=UUaBshE/knsnS1ACFOg0YE24vaxZkFWzjECYfZc6+5zWo6HBre8sg0Ps
-   beAcuTV2hkHzuFCtBu5gUeHJoKYgi9EUpNG6oFRk/xruA/Vhk3rHsl5LR
-   hpTLoyOUwbaEv8Asr1fKSEqtto8/OAhqay8elJguhLxCbcPEC7UVeOQ2s
-   pfjtk5lI1mevhqblM6RVS3hYUDIoKWw38a13qL8B8c0yqOKU/YonraNKv
-   2EqYYnuUJgzJRAxHiiLu2brvmwAUdTfHUYGdF1e9pkeWe+Zyyw446zBWV
-   cfbWTC7++e/gJKaDOvikW8I2/69ZX6O6cFC2TwGkuFS89i+IAObcUcpFZ
-   Q==;
-X-CSE-ConnectionGUID: hdi3eU7JQeyyg9kCxfoykA==
-X-CSE-MsgGUID: WJfP7bktQZ6wnRDjLM9dcg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11149"; a="23119832"
-X-IronPort-AV: E=Sophos;i="6.09,248,1716274800"; 
-   d="scan'208";a="23119832"
-Received: from fmviesa010.fm.intel.com ([10.60.135.150])
-  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jul 2024 11:01:54 -0700
-X-CSE-ConnectionGUID: NuC3k2+OTimmswySozNqyw==
-X-CSE-MsgGUID: AAB1Hg6eROivl3iOH/gHNg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.09,248,1716274800"; 
-   d="scan'208";a="54461432"
-Received: from lkp-server01.sh.intel.com (HELO 68891e0c336b) ([10.239.97.150])
-  by fmviesa010.fm.intel.com with ESMTP; 30 Jul 2024 11:01:54 -0700
-Received: from kbuild by 68891e0c336b with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1sYrAV-000tDG-0s;
-	Tue, 30 Jul 2024 18:01:51 +0000
-Date: Wed, 31 Jul 2024 02:00:59 +0800
-From: kernel test robot <lkp@intel.com>
-To: Steve French <stfrench@microsoft.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [samba-ksmbd:for-next 2/2] fs/smb/client/ioctl.c:178:6: warning:
- variable 'flags' is used uninitialized whenever 'if' condition is true
-Message-ID: <202407310110.dsjyb2uc-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iAZ2un2h"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D519EC4AF0A;
+	Tue, 30 Jul 2024 18:32:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1722364354;
+	bh=g+OGyy+vT85w380nT0+iGcOi+FcSygg/gUut0p0k0Fg=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=iAZ2un2hLYorsB4Sjl+hLldJqIsVwwJ3R4Un+dzc3l/i1xHUw/S92H01WG1RXJ73U
+	 8ex5pqe5YFWQIQTygJq6lgwNByv0Hu/BLNUgvirpTi4UTx9arZmfNKTbXNU30BcTTM
+	 Qy0BXT7WCyKv6OaKWewsL/gDy2D/Q1/cjLfzMsNP+Xk2jpo9u4AJBbmOu1BzGRuGEG
+	 FgPMZoyoYhWDqXyuXjJPNLDXnsqRLxyEeIB0DS+xq1/qo0H4+PCJD2i4cOmL+FJHKR
+	 zClTy1Jgh3QIDxzCg4bRAQixcFSuOK5WqihiGDbDZlEjewmIa8HrNzrfKZF63+w00C
+	 pUhU+inxh4pyw==
+Date: Tue, 30 Jul 2024 11:32:32 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Borislav Petkov <bp@alien8.de>
+Cc: kernel test robot <lkp@intel.com>, llvm@lists.linux.dev,
+	oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
+	x86@kernel.org
+Subject: Re: [tip:x86/microcode 1/1]
+ arch/x86/kernel/cpu/microcode/amd.c:714:6: warning: variable 'equiv_id' is
+ used uninitialized whenever 'if' condition is false
+Message-ID: <20240730183232.GA2428521@thelio-3990X>
+References: <202407291815.gJBST0P3-lkp@intel.com>
+ <20240729112614.GBZqd8Vu27mFVSHynA@fat_crate.local>
+ <20240729153008.GA685493@thelio-3990X>
+ <20240730080326.GAZqieTl1Gz4RheSiI@fat_crate.local>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -61,136 +48,93 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20240730080326.GAZqieTl1Gz4RheSiI@fat_crate.local>
 
-tree:   git://git.samba.org/ksmbd.git for-next
-head:   0aeae343da69af8c0516b6650312be517d4ff6a8
-commit: 0aeae343da69af8c0516b6650312be517d4ff6a8 [2/2] smb3: add dynamic tracepoints for shutdown ioctl
-config: x86_64-rhel-8.3-rust (https://download.01.org/0day-ci/archive/20240731/202407310110.dsjyb2uc-lkp@intel.com/config)
-compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240731/202407310110.dsjyb2uc-lkp@intel.com/reproduce)
+On Tue, Jul 30, 2024 at 10:03:26AM +0200, Borislav Petkov wrote:
+> On Mon, Jul 29, 2024 at 08:30:08AM -0700, Nathan Chancellor wrote:
+> > Right, as clang does not perform interprocedural analysis for the sake
+> > of warnings. That's partly why GCC's version of this warning was
+> > disabled in commit 78a5255ffb6a ("Stop the ad-hoc games with
+> > -Wno-maybe-initialized").
+> 
+> So why aren't we shutting up clang too?
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202407310110.dsjyb2uc-lkp@intel.com/
+Because it does not suffer from the same issues. There are many more
+instances of local variables that are genuinely uninitialized when used
+that get properly flagged than instances such as this where lack of
+interprocedural analysis may cause emission of a false positive. Losing
+Clang's version of the warning means that no compiler would warn on
+instances of obviously uninitialized local variables, which still occurs
+quite frequently.
 
-All warnings (new ones prefixed by >>):
+> > While it may be properly handled now, I think this pattern of
+> > conditionally avoiding using a variable uninitialized is dubious.
+> 
+> Well, in this particular case of the microcode loader, this is the best
+> compromise I can think of - I have two different paths of handling a microcode
+> patch - Zen and newer - and before - so I need those separate flows.
+> 
+> So sometimes it makes sense.
 
->> fs/smb/client/ioctl.c:178:6: warning: variable 'flags' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
-     178 |         if (!capable(CAP_SYS_ADMIN)) {
-         |             ^~~~~~~~~~~~~~~~~~~~~~~
-   fs/smb/client/ioctl.c:236:30: note: uninitialized use occurs here
-     236 |         trace_smb3_shutdown_err(rc, flags, tcon->tid);
-         |                                     ^~~~~
-   fs/smb/client/ioctl.c:178:2: note: remove the 'if' if its condition is always false
-     178 |         if (!capable(CAP_SYS_ADMIN)) {
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     179 |                 rc = -EPERM;
-         |                 ~~~~~~~~~~~~
-     180 |                 goto shutdown_out_err;
-         |                 ~~~~~~~~~~~~~~~~~~~~~~
-     181 |         }
-         |         ~
-   fs/smb/client/ioctl.c:175:13: note: initialize the variable 'flags' to silence this warning
-     175 |         __u32 flags;
-         |                    ^
-         |                     = 0
->> fs/smb/client/ioctl.c:178:6: warning: variable 'tcon' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
-     178 |         if (!capable(CAP_SYS_ADMIN)) {
-         |             ^~~~~~~~~~~~~~~~~~~~~~~
-   fs/smb/client/ioctl.c:236:37: note: uninitialized use occurs here
-     236 |         trace_smb3_shutdown_err(rc, flags, tcon->tid);
-         |                                            ^~~~
-   fs/smb/client/ioctl.c:178:2: note: remove the 'if' if its condition is always false
-     178 |         if (!capable(CAP_SYS_ADMIN)) {
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     179 |                 rc = -EPERM;
-         |                 ~~~~~~~~~~~~
-     180 |                 goto shutdown_out_err;
-         |                 ~~~~~~~~~~~~~~~~~~~~~~
-     181 |         }
-         |         ~
-   fs/smb/client/ioctl.c:174:24: note: initialize the variable 'tcon' to silence this warning
-     174 |         struct cifs_tcon *tcon;
-         |                               ^
-         |                                = NULL
-   2 warnings generated.
+Sure, I just think it is a potential footgun waiting to happen but it's
+obviously fine now.
 
+> > So I guess you can just ignore this if you want but others (maybe even
+> > Linus) will likely notice this and report it as well.
+> 
+> I think this warning should be behind W=1 if it can trigger false positives.
 
-vim +178 fs/smb/client/ioctl.c
+I disagree, any warning can trigger false positives, as they are
+heuristics. Feel free to propose a patch if you feel strongly about it
+though and we can bring the discussion to a wider audience.
 
-   169	
-   170	static int cifs_shutdown(struct super_block *sb, unsigned long arg)
-   171	{
-   172		struct cifs_sb_info *sbi = CIFS_SB(sb);
-   173		struct tcon_link *tlink;
-   174		struct cifs_tcon *tcon;
- > 175		__u32 flags;
-   176		int rc;
-   177	
- > 178		if (!capable(CAP_SYS_ADMIN)) {
-   179			rc = -EPERM;
-   180			goto shutdown_out_err;
-   181		}
-   182	
-   183		if (get_user(flags, (__u32 __user *)arg))
-   184			return -EFAULT;
-   185	
-   186		tlink = cifs_sb_tlink(sbi);
-   187		if (IS_ERR(tlink))
-   188			return PTR_ERR(tlink);
-   189		tcon = tlink_tcon(tlink);
-   190	
-   191		trace_smb3_shutdown_enter(flags, tcon->tid);
-   192		if (flags > CIFS_GOING_FLAGS_NOLOGFLUSH) {
-   193			rc = -EINVAL;
-   194			goto shutdown_out_err;
-   195		}
-   196	
-   197		if (cifs_forced_shutdown(sbi))
-   198			goto shutdown_good;
-   199	
-   200		cifs_dbg(VFS, "shut down requested (%d)", flags);
-   201	
-   202		/*
-   203		 * see:
-   204		 *   https://man7.org/linux/man-pages/man2/ioctl_xfs_goingdown.2.html
-   205		 * for more information and description of original intent of the flags
-   206		 */
-   207		switch (flags) {
-   208		/*
-   209		 * We could add support later for default flag which requires:
-   210		 *     "Flush all dirty data and metadata to disk"
-   211		 * would need to call syncfs or equivalent to flush page cache for
-   212		 * the mount and then issue fsync to server (if nostrictsync not set)
-   213		 */
-   214		case CIFS_GOING_FLAGS_DEFAULT:
-   215			cifs_dbg(FYI, "shutdown with default flag not supported\n");
-   216			rc = -EINVAL;
-   217			goto shutdown_out_err;
-   218		/*
-   219		 * FLAGS_LOGFLUSH is easy since it asks to write out metadata (not
-   220		 * data) but metadata writes are not cached on the client, so can treat
-   221		 * it similarly to NOLOGFLUSH
-   222		 */
-   223		case CIFS_GOING_FLAGS_LOGFLUSH:
-   224		case CIFS_GOING_FLAGS_NOLOGFLUSH:
-   225			sbi->mnt_cifs_flags |= CIFS_MOUNT_SHUTDOWN;
-   226			goto shutdown_good;
-   227		default:
-   228			rc = -EINVAL;
-   229			goto shutdown_out_err;
-   230		}
-   231	
-   232	shutdown_good:
-   233		trace_smb3_shutdown_done(flags, tcon->tid);
-   234		return 0;
-   235	shutdown_out_err:
-   236		trace_smb3_shutdown_err(rc, flags, tcon->tid);
-   237		return rc;
-   238	}
-   239	
+> Anyway:
+> 
+> From: "Borislav Petkov (AMD)" <bp@alien8.de>
+> Date: Tue, 30 Jul 2024 09:52:43 +0200
+> Subject: [PATCH] x86/microcode/AMD: Fix a -Wsometimes-uninitialized clang
+>  false positive
+> 
+> Initialize equiv_id in order to shut up:
+> 
+>   arch/x86/kernel/cpu/microcode/amd.c:714:6: warning: variable 'equiv_id' is \
+>   used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
+>         if (x86_family(bsp_cpuid_1_eax) < 0x17) {
+>             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> 
+> because clang doesn't do interprocedural analysis for warnings to see
+> that this variable won't be used uninitialized.
+> 
+> Fixes: 94838d230a6c ("x86/microcode/AMD: Use the family,model,stepping encoded in the patch ID")
+> Reported-by: kernel test robot <lkp@intel.com>
+> Closes: https://lore.kernel.org/oe-kbuild-all/202407291815.gJBST0P3-lkp@intel.com/
+> Signed-off-by: Borislav Petkov (AMD) <bp@alien8.de>
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Reviewed-by: Nathan Chancellor <nathan@kernel.org>
+
+> ---
+>  arch/x86/kernel/cpu/microcode/amd.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/arch/x86/kernel/cpu/microcode/amd.c b/arch/x86/kernel/cpu/microcode/amd.c
+> index 1f5d36f92b8a..f63b051f25a0 100644
+> --- a/arch/x86/kernel/cpu/microcode/amd.c
+> +++ b/arch/x86/kernel/cpu/microcode/amd.c
+> @@ -703,7 +703,7 @@ static struct ucode_patch *find_patch(unsigned int cpu)
+>  {
+>  	struct ucode_cpu_info *uci = ucode_cpu_info + cpu;
+>  	u32 rev, dummy __always_unused;
+> -	u16 equiv_id;
+> +	u16 equiv_id = 0;
+>  
+>  	/* fetch rev if not populated yet: */
+>  	if (!uci->cpu_sig.rev) {
+> -- 
+> 2.43.0
+> 
+> 
+> -- 
+> Regards/Gruss,
+>     Boris.
+> 
+> https://people.kernel.org/tglx/notes-about-netiquette
