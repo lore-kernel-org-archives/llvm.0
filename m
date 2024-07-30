@@ -1,174 +1,305 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lj1-f171.google.com (mail-lj1-f171.google.com [209.85.208.171])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 395EA14659C;
-	Tue, 30 Jul 2024 03:11:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B45118A92D
+	for <llvm@lists.linux.dev>; Tue, 30 Jul 2024 05:54:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722309085; cv=none; b=aGSQ9JOk1qMSlktNayxxpavRmxjMryuTr1E+CxP/ZszfHcekJigQDv/Cry4e1j6alN7ZCBvU/QYKQ103LO6k7nQNdSFgsDMFn0wrkM98RQzNvHU7tpnKRj98YqI1mZGkHxJukKpViVCqr/y9YFS3anwIsdBtyBvEfJIFwlHunh8=
+	t=1722318888; cv=none; b=TrgDex1UXUItrB2XNu2lCV6u+R5W+EqqTuj/+VKO5aGxxq2C0KFNTguotpT25nvpUs9Ewx0A3Pfi3IJo2vnFafTWUE5EgzttfMdJAM8VyJLy7xJj0MJgJxCJzcXkcBsczjTJw6Tr4A/Nt5l3EEwmTFIp4woI2vtzEz9YCsAn0/4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722309085; c=relaxed/simple;
-	bh=yWuPHpd5wzMhwNUcpnURixCcHhTrI6bkp3+P6v7Ehgc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=hhzSj58UwE5oeIC4qD7Ikd0/dceJfkH3i+o2axe1wVPH04gLfbiszsmkvHP8CLYNt/Hg/FdafO5Lc7mrqcRCOwqelN25DORxywNcite8aJ4vGws9SXq/ViAzczxEK6AseseXUM4GnkDbABTVrV+Vm+4nqvGf9BJu7THiL6MJc0o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=H6whQ4QR; arc=none smtp.client-ip=198.175.65.21
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1722318888; c=relaxed/simple;
+	bh=LepwoDgIuCy+uoQzloUJnU7JY15hYNSe7w9c6cTQOwc=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=sD7LqG6GXczPYG6jCUhyKdNGyU5LQyjaIoaQcsJ+zM3BxlNBZWuZ/HvK+PUC5hc6eDZEjl4n5c9Y6RTamQd6HLbimYvFQes/wCaiPBM1d2ubZumkRa65PASm2G+Q0sxJCdJ8ctev90iwJvk6mEnZ37R/kTtURSXqvWnuUIL3bP4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=cAayBe0k; arc=none smtp.client-ip=209.85.208.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="H6whQ4QR"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1722309084; x=1753845084;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=yWuPHpd5wzMhwNUcpnURixCcHhTrI6bkp3+P6v7Ehgc=;
-  b=H6whQ4QRf6JcY8kohBqMiqEosHDfqTJIeo87rUxvnuA46FMgnWMJHKSj
-   xIs6GdB6u0I231XFrnS9YXRdUKaq1wPMCaYEHbO9qJ44rB0OgtbOeH4+9
-   XbB5J6k0Ng0TQRdfK+N3hkZeyWIKowAD0kB3n2n8dBZBndLB5+dDead6g
-   mZtpvyl6TcnIcCbqJPYXMMqhKN5DwH8N6NhFgw9TWCHdMI67WfuXmfbxQ
-   +N/cCeu+4IqIUr2MJKUdV/Q0+HzLFdaYY7AdAl1Bhf6m/RiksVLHoJqqy
-   guzV+dYdeBavdDs5Ga+kYW24A3WLCz973hwfPunt1bQGID//43Cw6/STh
-   A==;
-X-CSE-ConnectionGUID: YP7VhgEURB6GEezjyxWHoQ==
-X-CSE-MsgGUID: E7xpalDcQQ6BNyux5PYjGw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11148"; a="20050017"
-X-IronPort-AV: E=Sophos;i="6.09,247,1716274800"; 
-   d="scan'208";a="20050017"
-Received: from fmviesa009.fm.intel.com ([10.60.135.149])
-  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jul 2024 20:11:23 -0700
-X-CSE-ConnectionGUID: ENmaCYy5T1OsMD3tYIK+Bg==
-X-CSE-MsgGUID: DLWVxsHaR6S+zwNdVSyfWw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.09,247,1716274800"; 
-   d="scan'208";a="54152975"
-Received: from lkp-server01.sh.intel.com (HELO 68891e0c336b) ([10.239.97.150])
-  by fmviesa009.fm.intel.com with ESMTP; 29 Jul 2024 20:11:18 -0700
-Received: from kbuild by 68891e0c336b with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1sYdGe-000sPQ-0I;
-	Tue, 30 Jul 2024 03:11:16 +0000
-Date: Tue, 30 Jul 2024 11:10:36 +0800
-From: kernel test robot <lkp@intel.com>
-To: Herve Codina <herve.codina@bootlin.com>,
-	Christophe Leroy <christophe.leroy@csgroup.eu>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>, Qiang Zhao <qiang.zhao@nxp.com>,
-	Li Yang <leoyang.li@nxp.com>, Mark Brown <broonie@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linuxppc-dev@lists.ozlabs.org, linux-arm-kernel@lists.infradead.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Subject: Re: [PATCH v1 32/36] soc: fsl: qe: Add resource-managed muram
- allocators
-Message-ID: <202407301032.M27FlsV4-lkp@intel.com>
-References: <20240729142107.104574-33-herve.codina@bootlin.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cAayBe0k"
+Received: by mail-lj1-f171.google.com with SMTP id 38308e7fff4ca-2f025b94e07so55139531fa.0
+        for <llvm@lists.linux.dev>; Mon, 29 Jul 2024 22:54:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1722318885; x=1722923685; darn=lists.linux.dev;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=a5pPiHt6oGh1byOIgWfpIT3E6J4N4/NPdLe4lpCZVsA=;
+        b=cAayBe0kUIV+fs61C98cof6RC9sJsw8/qhS0TjOYJ9hFHWL8xDgeSitvTE0zxGQOng
+         ZoubuimyXdC5yJjGUHl17uvu1RMMEPXgB80St6X2Jps6RtP6TWB+wLRoTozXHm4aX6UY
+         QpO+WtcU7RB5xHc7P4AImSrCd8i1OERxWBw5sovh/CNS8KxctJ0xay31+jeaBW4dmtTs
+         0r48wHQ547JT3agGw7jGGvDqwICnjzMaJ2Lf2R2M8dePsfAUO53uSh25a3Sr/O69GPfU
+         7s94xmDR07yGzAiFYq1cyEof4WgEdOzhU7oFHmM75/Yz75ORmVAjPbXp35FDmc2Nuomp
+         9TIQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1722318885; x=1722923685;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=a5pPiHt6oGh1byOIgWfpIT3E6J4N4/NPdLe4lpCZVsA=;
+        b=N0MoLE+XLwGEYDAVMDkXIz5vgFf1FLyYUVOY+5F5rQFpQG+/iE3dRxysZ7ZDBpnXZI
+         DKh2c31B3gxQk8rUiHwv2Ec9ltOg/uhwuc1P/GUzDw/jQ4x4pwrca3T1w3FyGyyXW/Wr
+         FWr8ccvp6RLnV0sdLdbTgvrQewak2VZO+C2vWeD6HJOY3WmDa/CUX8C7hokoa+fN4yaF
+         NS6OE1o1fOwtP5nBc90dX4WiLvb3gq0QNa2FhyRcLkVbwnNLqYwriwVxQGKve9nB0maC
+         pXLW2Pwc03+Mki9xdbU6ojNRu5mH2SXMWuXqKQLRasJduDTpfllP84wcO7xBaX6IR2y4
+         h+aA==
+X-Forwarded-Encrypted: i=1; AJvYcCXVLVA4yPHTMa9XKth5pwCfsstfVbzLDizcedb2sPDPB35fkngMZT71SIWG15K2ughGi7c2lVD0XbBwyPyHpPMsSETx8g==
+X-Gm-Message-State: AOJu0YxjZ54zZzSqGvc0tCZtlAG1WbOa5nbq3WLKpmkrjCDInJqikoiR
+	XJPKUD70c3CSK5eW0n89mjXgJjWTbFgNnIEFqDNWGkWLYRAeY8Xn
+X-Google-Smtp-Source: AGHT+IFC/ZJDwRehfBeDBQHgs+DGb0guHlkQl0EEJRi5zcmio4d5grksjwaM9roMaqh/pRCwBGSL+g==
+X-Received: by 2002:a2e:8495:0:b0:2ef:5d1d:773f with SMTP id 38308e7fff4ca-2f12edd6cb4mr72061701fa.24.1722318884320;
+        Mon, 29 Jul 2024 22:54:44 -0700 (PDT)
+Received: from [127.0.1.1] (84-115-213-37.cable.dynamic.surfer.at. [84.115.213.37])
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-5af2f233be4sm5474560a12.41.2024.07.29.22.54.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 29 Jul 2024 22:54:43 -0700 (PDT)
+From: Javier Carrasco <javier.carrasco.cruz@gmail.com>
+Date: Tue, 30 Jul 2024 07:54:37 +0200
+Subject: [PATCH v2] clang-format: Update with v6.11-rc1's `for_each` macro
+ list
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240729142107.104574-33-herve.codina@bootlin.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20240730-clang-format-for-each-macro-update-v2-1-254fca862c97@gmail.com>
+X-B4-Tracking: v=1; b=H4sIAByAqGYC/5WNQQ6CMBBFr0Jm7RioIKkr72FYTIYBJqGUtEg0h
+ LtbuIGrn/cX720QJahEeGQbBFk1qp8SmEsGPNDUC2qbGExuyrw2FnlML3Y+OFqOQSEe0BEHj++
+ 5pUXwnpcitWUyliCJ5iCdfs7Iq0k8aFx8+J7NtTjev/RrgQVarqpSuBO+ybN3pOOVvYNm3/cfy
+ UGiI9QAAAA=
+To: Miguel Ojeda <ojeda@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
+ Nick Desaulniers <ndesaulniers@google.com>, 
+ Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>
+Cc: linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
+ Javier Carrasco <javier.carrasco.cruz@gmail.com>
+X-Mailer: b4 0.14-dev
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1722318883; l=7409;
+ i=javier.carrasco.cruz@gmail.com; s=20240312; h=from:subject:message-id;
+ bh=LepwoDgIuCy+uoQzloUJnU7JY15hYNSe7w9c6cTQOwc=;
+ b=QJfKIciAtBzlxJ0fRAjsTZHfxt+HXEAgMOFhT8Wv4SDcsenqXkx9iHa8XaYt3yKyxX7cpVKdM
+ yX/wCfG3EccBijnrLtJoZLX602AW1WnCpvxL6TnSixheU/Bak7cvWgy
+X-Developer-Key: i=javier.carrasco.cruz@gmail.com; a=ed25519;
+ pk=lzSIvIzMz0JhJrzLXI0HAdPwsNPSSmEn6RbS+PTS9aQ=
 
-Hi Herve,
+Re-run the shell fragment that generated the original list.
 
-kernel test robot noticed the following build errors:
+Signed-off-by: Javier Carrasco <javier.carrasco.cruz@gmail.com>
+---
+Note that commit 4792f9dd1293 ("clang-format: Update with the latest
+for_each macro list") added the macro `displayid_iter_for_each`, which
+is not part of include/ and tools/ (it is defined in
+drivers/gpu/drm/drm_displayid_internal.h), and the shell fragment used
+to update the list will drop it. In order to keep the macro on the list,
+manual intervention will always be required.
+---
+Changes in v2:
+- Drop `displayid_iter_for_each` (moved to internal header).
+- Link to v1: https://lore.kernel.org/r/20240729-clang-format-for-each-macro-update-v1-1-9c554ecfec3e@gmail.com
+---
+ .clang-format | 39 ++++++++++++++++++++++++++++++---------
+ 1 file changed, 30 insertions(+), 9 deletions(-)
 
-[auto build test ERROR on robh/for-next]
-[also build test ERROR on linus/master v6.11-rc1 next-20240729]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+diff --git a/.clang-format b/.clang-format
+index 252820d9c80a..fe1aa1a30d40 100644
+--- a/.clang-format
++++ b/.clang-format
+@@ -141,11 +141,13 @@ ForEachMacros:
+   - 'damon_for_each_target_safe'
+   - 'damos_for_each_filter'
+   - 'damos_for_each_filter_safe'
++  - 'damos_for_each_quota_goal'
++  - 'damos_for_each_quota_goal_safe'
+   - 'data__for_each_file'
+   - 'data__for_each_file_new'
+   - 'data__for_each_file_start'
+   - 'device_for_each_child_node'
+-  - 'displayid_iter_for_each'
++  - 'device_for_each_child_node_scoped'
+   - 'dma_fence_array_for_each'
+   - 'dma_fence_chain_for_each'
+   - 'dma_fence_unwrap_for_each'
+@@ -172,11 +174,14 @@ ForEachMacros:
+   - 'drm_for_each_plane'
+   - 'drm_for_each_plane_mask'
+   - 'drm_for_each_privobj'
+-  - 'drm_gem_for_each_gpuva'
+-  - 'drm_gem_for_each_gpuva_safe'
++  - 'drm_gem_for_each_gpuvm_bo'
++  - 'drm_gem_for_each_gpuvm_bo_safe'
+   - 'drm_gpuva_for_each_op'
+   - 'drm_gpuva_for_each_op_from_reverse'
++  - 'drm_gpuva_for_each_op_reverse'
+   - 'drm_gpuva_for_each_op_safe'
++  - 'drm_gpuvm_bo_for_each_va'
++  - 'drm_gpuvm_bo_for_each_va_safe'
+   - 'drm_gpuvm_for_each_va'
+   - 'drm_gpuvm_for_each_va_range'
+   - 'drm_gpuvm_for_each_va_range_safe'
+@@ -192,11 +197,11 @@ ForEachMacros:
+   - 'dsa_switch_for_each_port_continue_reverse'
+   - 'dsa_switch_for_each_port_safe'
+   - 'dsa_switch_for_each_user_port'
++  - 'dsa_switch_for_each_user_port_continue_reverse'
+   - 'dsa_tree_for_each_cpu_port'
+   - 'dsa_tree_for_each_user_port'
+   - 'dsa_tree_for_each_user_port_continue_reverse'
+   - 'dso__for_each_symbol'
+-  - 'dsos__for_each_with_build_id'
+   - 'elf_hash_for_each_possible'
+   - 'elf_symtab__for_each_symbol'
+   - 'evlist__for_each_cpu'
+@@ -216,6 +221,7 @@ ForEachMacros:
+   - 'for_each_and_bit'
+   - 'for_each_andnot_bit'
+   - 'for_each_available_child_of_node'
++  - 'for_each_available_child_of_node_scoped'
+   - 'for_each_bench'
+   - 'for_each_bio'
+   - 'for_each_board_func_rsrc'
+@@ -234,6 +240,7 @@ ForEachMacros:
+   - 'for_each_card_widgets_safe'
+   - 'for_each_cgroup_storage_type'
+   - 'for_each_child_of_node'
++  - 'for_each_child_of_node_scoped'
+   - 'for_each_clear_bit'
+   - 'for_each_clear_bit_from'
+   - 'for_each_clear_bitrange'
+@@ -251,6 +258,7 @@ ForEachMacros:
+   - 'for_each_cpu'
+   - 'for_each_cpu_and'
+   - 'for_each_cpu_andnot'
++  - 'for_each_cpu_from'
+   - 'for_each_cpu_or'
+   - 'for_each_cpu_wrap'
+   - 'for_each_dapm_widgets'
+@@ -269,13 +277,14 @@ ForEachMacros:
+   - 'for_each_element'
+   - 'for_each_element_extid'
+   - 'for_each_element_id'
++  - 'for_each_enabled_cpu'
+   - 'for_each_endpoint_of_node'
+   - 'for_each_event'
+   - 'for_each_event_tps'
+   - 'for_each_evictable_lru'
+   - 'for_each_fib6_node_rt_rcu'
+   - 'for_each_fib6_walker_rt'
+-  - 'for_each_free_mem_pfn_range_in_zone'
++  - 'for_each_file_lock'
+   - 'for_each_free_mem_pfn_range_in_zone_from'
+   - 'for_each_free_mem_range'
+   - 'for_each_free_mem_range_reverse'
+@@ -286,15 +295,18 @@ ForEachMacros:
+   - 'for_each_group_member'
+   - 'for_each_group_member_head'
+   - 'for_each_hstate'
++  - 'for_each_hwgpio'
+   - 'for_each_if'
+   - 'for_each_inject_fn'
+   - 'for_each_insn'
++  - 'for_each_insn_op_loc'
+   - 'for_each_insn_prefix'
+   - 'for_each_intid'
+   - 'for_each_iommu'
+   - 'for_each_ip_tunnel_rcu'
+   - 'for_each_irq_nr'
+   - 'for_each_lang'
++  - 'for_each_link_ch_maps'
+   - 'for_each_link_codecs'
+   - 'for_each_link_cpus'
+   - 'for_each_link_platforms'
+@@ -332,6 +344,9 @@ ForEachMacros:
+   - 'for_each_new_plane_in_state_reverse'
+   - 'for_each_new_private_obj_in_state'
+   - 'for_each_new_reg'
++  - 'for_each_nhlt_endpoint'
++  - 'for_each_nhlt_endpoint_fmtcfg'
++  - 'for_each_nhlt_fmtcfg'
+   - 'for_each_node'
+   - 'for_each_node_by_name'
+   - 'for_each_node_by_type'
+@@ -387,12 +402,15 @@ ForEachMacros:
+   - 'for_each_reloc_from'
+   - 'for_each_requested_gpio'
+   - 'for_each_requested_gpio_in_range'
++  - 'for_each_reserved_child_of_node'
+   - 'for_each_reserved_mem_range'
+   - 'for_each_reserved_mem_region'
++  - 'for_each_rtd_ch_maps'
+   - 'for_each_rtd_codec_dais'
+   - 'for_each_rtd_components'
+   - 'for_each_rtd_cpu_dais'
+   - 'for_each_rtd_dais'
++  - 'for_each_rtd_dais_reverse'
+   - 'for_each_sband_iftype_data'
+   - 'for_each_script'
+   - 'for_each_sec'
+@@ -533,8 +551,6 @@ ForEachMacros:
+   - 'lwq_for_each_safe'
+   - 'map__for_each_symbol'
+   - 'map__for_each_symbol_by_name'
+-  - 'maps__for_each_entry'
+-  - 'maps__for_each_entry_safe'
+   - 'mas_for_each'
+   - 'mci_for_each_dimm'
+   - 'media_device_for_each_entity'
+@@ -560,7 +576,9 @@ ForEachMacros:
+   - 'netdev_hw_addr_list_for_each'
+   - 'nft_rule_for_each_expr'
+   - 'nla_for_each_attr'
++  - 'nla_for_each_attr_type'
+   - 'nla_for_each_nested'
++  - 'nla_for_each_nested_type'
+   - 'nlmsg_for_each_attr'
+   - 'nlmsg_for_each_msg'
+   - 'nr_neigh_for_each'
+@@ -579,6 +597,7 @@ ForEachMacros:
+   - 'perf_config_sections__for_each_entry'
+   - 'perf_config_set__for_each_entry'
+   - 'perf_cpu_map__for_each_cpu'
++  - 'perf_cpu_map__for_each_cpu_skip_any'
+   - 'perf_cpu_map__for_each_idx'
+   - 'perf_evlist__for_each_entry'
+   - 'perf_evlist__for_each_entry_reverse'
+@@ -639,7 +658,6 @@ ForEachMacros:
+   - 'shost_for_each_device'
+   - 'sk_for_each'
+   - 'sk_for_each_bound'
+-  - 'sk_for_each_bound_bhash2'
+   - 'sk_for_each_entry_offset_rcu'
+   - 'sk_for_each_from'
+   - 'sk_for_each_rcu'
+@@ -653,6 +671,7 @@ ForEachMacros:
+   - 'snd_soc_dapm_widget_for_each_path_safe'
+   - 'snd_soc_dapm_widget_for_each_sink_path'
+   - 'snd_soc_dapm_widget_for_each_source_path'
++  - 'sparsebit_for_each_set_range'
+   - 'strlist__for_each_entry'
+   - 'strlist__for_each_entry_safe'
+   - 'sym_for_each_insn'
+@@ -662,7 +681,6 @@ ForEachMacros:
+   - 'tcf_act_for_each_action'
+   - 'tcf_exts_for_each_action'
+   - 'ttm_resource_manager_for_each_res'
+-  - 'twsk_for_each_bound_bhash2'
+   - 'udp_portaddr_for_each_entry'
+   - 'udp_portaddr_for_each_entry_rcu'
+   - 'usb_hub_for_each_child'
+@@ -686,6 +704,9 @@ ForEachMacros:
+   - 'xbc_node_for_each_child'
+   - 'xbc_node_for_each_key_value'
+   - 'xbc_node_for_each_subkey'
++  - 'ynl_attr_for_each'
++  - 'ynl_attr_for_each_nested'
++  - 'ynl_attr_for_each_payload'
+   - 'zorro_for_each_dev'
+ 
+ IncludeBlocks: Preserve
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Herve-Codina/soc-fsl-cpm1-qmc-Update-TRNSYNC-only-in-transparent-mode/20240730-001631
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
-patch link:    https://lore.kernel.org/r/20240729142107.104574-33-herve.codina%40bootlin.com
-patch subject: [PATCH v1 32/36] soc: fsl: qe: Add resource-managed muram allocators
-config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20240730/202407301032.M27FlsV4-lkp@intel.com/config)
-compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240730/202407301032.M27FlsV4-lkp@intel.com/reproduce)
+---
+base-commit: 8400291e289ee6b2bf9779ff1c83a291501f017b
+change-id: 20240729-clang-format-for-each-macro-update-604ee79ca29a
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202407301032.M27FlsV4-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> drivers/soc/fsl/qe/qe_common.c:217:7: error: call to undeclared function 'devres_alloc'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     217 |         dr = devres_alloc(devm_cpm_muram_release, sizeof(*dr), GFP_KERNEL);
-         |              ^
-   drivers/soc/fsl/qe/qe_common.c:217:7: note: did you mean 'msrs_alloc'?
-   arch/x86/include/asm/msr.h:328:22: note: 'msrs_alloc' declared here
-     328 | struct msr __percpu *msrs_alloc(void);
-         |                      ^
->> drivers/soc/fsl/qe/qe_common.c:217:5: error: incompatible integer to pointer conversion assigning to 's32 *' (aka 'int *') from 'int' [-Wint-conversion]
-     217 |         dr = devres_alloc(devm_cpm_muram_release, sizeof(*dr), GFP_KERNEL);
-         |            ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->> drivers/soc/fsl/qe/qe_common.c:224:3: error: call to undeclared function 'devres_add'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     224 |                 devres_add(dev, dr);
-         |                 ^
->> drivers/soc/fsl/qe/qe_common.c:226:3: error: call to undeclared function 'devres_free'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     226 |                 devres_free(dr);
-         |                 ^
-   drivers/soc/fsl/qe/qe_common.c:277:7: error: call to undeclared function 'devres_alloc'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     277 |         dr = devres_alloc(devm_cpm_muram_release, sizeof(*dr), GFP_KERNEL);
-         |              ^
-   drivers/soc/fsl/qe/qe_common.c:277:5: error: incompatible integer to pointer conversion assigning to 's32 *' (aka 'int *') from 'int' [-Wint-conversion]
-     277 |         dr = devres_alloc(devm_cpm_muram_release, sizeof(*dr), GFP_KERNEL);
-         |            ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/soc/fsl/qe/qe_common.c:284:3: error: call to undeclared function 'devres_add'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     284 |                 devres_add(dev, dr);
-         |                 ^
-   drivers/soc/fsl/qe/qe_common.c:286:3: error: call to undeclared function 'devres_free'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     286 |                 devres_free(dr);
-         |                 ^
-   8 errors generated.
-
-
-vim +/devres_alloc +217 drivers/soc/fsl/qe/qe_common.c
-
-   196	
-   197	/**
-   198	 * devm_cpm_muram_alloc - Resource-managed cpm_muram_alloc
-   199	 * @dev: Device to allocate memory for
-   200	 * @size: number of bytes to allocate
-   201	 * @align: requested alignment, in bytes
-   202	 *
-   203	 * This function returns a non-negative offset into the muram area, or
-   204	 * a negative errno on failure as cpm_muram_alloc() does.
-   205	 * Use cpm_muram_addr() to get the virtual address of the area.
-   206	 *
-   207	 * Compare against cpm_muram_alloc(), the memory allocated by this
-   208	 * resource-managed version is automatically freed on driver detach and so,
-   209	 * cpm_muram_free() must not be called to release the allocated memory.
-   210	 */
-   211	s32 devm_cpm_muram_alloc(struct device *dev, unsigned long size,
-   212				 unsigned long align)
-   213	{
-   214		s32 info;
-   215		s32 *dr;
-   216	
- > 217		dr = devres_alloc(devm_cpm_muram_release, sizeof(*dr), GFP_KERNEL);
-   218		if (!dr)
-   219			return -ENOMEM;
-   220	
-   221		info = cpm_muram_alloc(size, align);
-   222		if (info >= 0) {
-   223			*dr = info;
- > 224			devres_add(dev, dr);
-   225		} else {
- > 226			devres_free(dr);
-   227		}
-   228	
-   229		return info;
-   230	}
-   231	EXPORT_SYMBOL(devm_cpm_muram_alloc);
-   232	
-
+Best regards,
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Javier Carrasco <javier.carrasco.cruz@gmail.com>
+
