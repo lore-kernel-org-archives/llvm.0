@@ -1,94 +1,134 @@
-Received: from mail-pf1-f169.google.com (mail-pf1-f169.google.com [209.85.210.169])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C889C8C1F
-	for <llvm@lists.linux.dev>; Tue, 30 Jul 2024 01:48:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E1B5F450EE;
+	Tue, 30 Jul 2024 02:12:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722304136; cv=none; b=mHuAZkElNDaSFNll0+VqjTRv1OA27cWOg3EpEmp+6DEXQZ+3sUwrVf0fXt/AehHxIRFTfh4coRN4Wh+sJU9fxwZ0pZVRKiE/a4kPbnTBOL3x510An217Ri8ccXqEA7K0N5shE0xOLGBhLcB7QxkM7w71y0MltLV95zhCkYh1QK4=
+	t=1722305532; cv=none; b=m830IkGJTASmSu6TFVP5EXBcDdoSDsVO2gaRzFhXmf6/eXnutKQ7QxjmbC7zA1z76J314onthBlRb1anSs9qjJ4h5Viol+AITbIdHltFyAi6gMcOk3t6DzPiqWq2I0Ni0D6qXS4aPmer/Ihtp8sv2HL/jGa8ki05VWcEYg0O48A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722304136; c=relaxed/simple;
-	bh=8n1996Y8lpYFOWA5Eh8nbf6QZqyqbZ6W7WJigmpON5M=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ke/Ih2egH4MmgkCPGhuhCe/b6EVSiLUG18q5EtLGs9TQf2hQLQD4dpdcgRsPybvqaBtrs5iOeUws54kP8HUb0eWxMcZ1InWqU8/tU52sVCt0oAseHCNZJ9kucJVAWbXlaw2ihhdVV4W/dZi9+IFoIWLdkrNj9cjiF1VWDpOun78=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=TNS46FkV; arc=none smtp.client-ip=209.85.210.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1722305532; c=relaxed/simple;
+	bh=eA77p9u5560PhQ2+Qo/vv+lMkVA7visV3V6tX1tIebU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=lQDFQ4wXkGC44Avc0h7jStrQVG1RjR70h3ZGu7TABS2NKwcBKW+pdNVMX2j9n5KIqiQdgc3myCTXDuxHf+75gMn3oGlJI7soeax8QzwaT4ak25OfyaBxyL8sZnmsk7Q5NGxGWEdEGMMCqMRo2KvFF49ShcRfTBxEgqKjA2d/XKs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=r+UNl4+P; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TNS46FkV"
-Received: by mail-pf1-f169.google.com with SMTP id d2e1a72fcca58-70d18d4b94cso2777515b3a.2
-        for <llvm@lists.linux.dev>; Mon, 29 Jul 2024 18:48:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1722304134; x=1722908934; darn=lists.linux.dev;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=8n1996Y8lpYFOWA5Eh8nbf6QZqyqbZ6W7WJigmpON5M=;
-        b=TNS46FkVz/gzMg6h4SubXon2T9fF4qTBIyQOLlHTpghnMjQLMrXgFCswwlLQ76pav6
-         AdhzLp+xpQSbDRSe8NdzgmWWHj3GHJNAvIk9R922tNn/H0aLKPQttY38hkCRt9HZGXqf
-         fT8OkVN9lCPiJMngwXLx/iR8XVlYqd4bbA3YjWK2SGTDQSueELhH8CudZVglIFqRxjk4
-         yN6cE1rUSiUhPCZuSjz+oowX1Zrj7Wt/EJvEllrxleBLqriFOj8eVJKTJ4fMBmr4OiYQ
-         T8ge9KF63ZZX/Ez/yOk/hvfrzqNoE+h4LMS3S83VN6+qeswUy+EvLRXZKBaz3U3Jkqt8
-         QF1w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1722304134; x=1722908934;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=8n1996Y8lpYFOWA5Eh8nbf6QZqyqbZ6W7WJigmpON5M=;
-        b=rH9bhr/sRoVyZ7BgKaMMnav5EHhFTTYeqZPlqWmSirPiTkmivpHYabPqRfFEwn6fYE
-         2f6IGDi3mEZSNGlalw5GuFnllmUmCFSgRgEVd3nnq3KSf5sTKb2bJwjm7QJEwkKHR4cW
-         TIuOa73oGghBue2nAUHMbGsaEG+OdkF1pr7F4ByzO1SDL5vweBShcpeZmqbxWkp3vHUx
-         FgDQoV4S1JCO6ETpwa/GrWk5JcKV0Ue7qUaql5No1kWzeE4VR7HlJn3Fo4G64sIQTYhJ
-         +MQKa4tKMs1uGHivdrYBrfb9sKAun27TvpjwtbsO2NSU5xxs253kd2F2644j3jefA7wv
-         GX6Q==
-X-Forwarded-Encrypted: i=1; AJvYcCWM+sgP7vai2FTuOiF0IpzEH21ZNAcAi9R3Kj+aXB3LgJYJ3rZYI59f9qTtVWIIv080dU4yUrF3NMmHaurph3rSGu+m0Q==
-X-Gm-Message-State: AOJu0YyPfz8hkyUFXqYWTT8Ugw9+WqVyoJNbsDzUiXGVNn3Pb8HRHfCw
-	QHTLKoZY7PZmQM+mV/RAVJXBSt32E6L8uJ9r9gEcbCpbmAYMZhS6
-X-Google-Smtp-Source: AGHT+IH7sIH1zweCsioW01t/maDkdbU9IGjwQFzOiWkCdl997w0ao4hui3UQ4BFfljKQfqX+6cWd4A==
-X-Received: by 2002:a05:6a00:8597:b0:70b:2a:15da with SMTP id d2e1a72fcca58-70ece9facb3mr6515521b3a.4.1722304133953;
-        Mon, 29 Jul 2024 18:48:53 -0700 (PDT)
-Received: from [192.168.255.10] ([43.132.141.21])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-70ead890cb3sm7399127b3a.184.2024.07.29.18.48.50
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 29 Jul 2024 18:48:53 -0700 (PDT)
-Message-ID: <90b4bfb3-8fb1-4f77-b3e2-1c55605a8cbd@gmail.com>
-Date: Tue, 30 Jul 2024 09:48:49 +0800
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="r+UNl4+P"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 71295C4AF07;
+	Tue, 30 Jul 2024 02:12:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1722305531;
+	bh=eA77p9u5560PhQ2+Qo/vv+lMkVA7visV3V6tX1tIebU=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=r+UNl4+P+aBuEwCi15lh1dI0u61rlCGxvYKiC8Zrfg70eL6OZ14UxHwX5V+nkWD4z
+	 GTFvLQSr4vhQWjMHSOW4qqkck+CW+Ua6QZTZVGlIr74fy8uIKQCAONj0BFE16P3Mjf
+	 PUMPQcm2k6Ctw0LU2whXelX1qpLnAA/Mmc6qofQwdBAQEcKPH0U69fx2wYOV4BGT2f
+	 xaO+O9X8TAf6iJM4cllGx1cbjKuKnW39T/oRbBP/PwPoYidP4yvYQ/xLzsaHaVetrO
+	 M+eNYMDFWibewkBkHuLOaWbXQ0sbtQMeKcV4b+vIzgNfje4gxnYr4f3dhxaboZrIpC
+	 MwD+65uq+A1bA==
+Date: Mon, 29 Jul 2024 19:12:08 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: kernel test robot <lkp@intel.com>
+Cc: Baruch Siach <baruch@tkos.co.il>, Christoph Hellwig <hch@lst.de>,
+	Marek Szyprowski <m.szyprowski@samsung.com>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>, llvm@lists.linux.dev,
+	oe-kbuild-all@lists.linux.dev, linux-s390@vger.kernel.org,
+	Ramon Fried <ramon@neureality.ai>,
+	Petr =?utf-8?B?VGVzYcWZw61r?= <petr@tesarici.cz>,
+	Robin Murphy <robin.murphy@arm.com>, linux-kernel@vger.kernel.org,
+	iommu@lists.linux.dev, Elad Nachman <enachman@marvell.com>,
+	linuxppc-dev@lists.ozlabs.org, linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v3 2/3] dma-mapping: replace zone_dma_bits by
+ zone_dma_limit
+Message-ID: <20240730021208.GA8272@thelio-3990X>
+References: <053fa4806a2c63efcde80caca473a8b670a2701c.1722249878.git.baruch@tkos.co.il>
+ <202407300338.oaUo6jtB-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3] docs/zh_CN: Add dev-tools/kcsan Chinese translation
-To: Dongliang Mu <mudongliangabcd@gmail.com>
-Cc: Haoyang Liu <tttturtleruss@hust.edu.cn>, Alex Shi <alexs@kernel.org>,
- Yanteng Si <siyanteng@loongson.cn>, Jonathan Corbet <corbet@lwn.net>,
- Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling
- <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
- hust-os-kernel-patches@googlegroups.com, linux-doc@vger.kernel.org,
- linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-References: <20240727150844.6502-1-tttturtleruss@hust.edu.cn>
- <7670e090-92e5-48ed-9365-e611ae1d4972@gmail.com>
- <75cbc7d7-5faf-4286-a702-ac242c6f87f3@hust.edu.cn>
- <bbbc3a51-21c6-47fc-ba3e-924ad8d86b63@gmail.com>
- <CAD-N9QWBH8yZcUhSLwUCZCOBrLbS1AUONik2p5E4LWYkhyVaxQ@mail.gmail.com>
-Content-Language: en-US
-From: Alex Shi <seakeel@gmail.com>
-In-Reply-To: <CAD-N9QWBH8yZcUhSLwUCZCOBrLbS1AUONik2p5E4LWYkhyVaxQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <202407300338.oaUo6jtB-lkp@intel.com>
 
+On Tue, Jul 30, 2024 at 04:20:51AM +0800, kernel test robot wrote:
+> Hi Baruch,
+> 
+> kernel test robot noticed the following build warnings:
+> 
+> [auto build test WARNING on arm64/for-next/core]
+> [also build test WARNING on powerpc/next powerpc/fixes s390/features linus/master v6.11-rc1 next-20240729]
+> [If your patch is applied to the wrong git tree, kindly drop us a note.
+> And when submitting patch, we suggest to use '--base' as documented in
+> https://git-scm.com/docs/git-format-patch#_base_tree_information]
+> 
+> url:    https://github.com/intel-lab-lkp/linux/commits/Baruch-Siach/dma-mapping-improve-DMA-zone-selection/20240729-211018
+> base:   https://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-next/core
+> patch link:    https://lore.kernel.org/r/053fa4806a2c63efcde80caca473a8b670a2701c.1722249878.git.baruch%40tkos.co.il
+> patch subject: [PATCH v3 2/3] dma-mapping: replace zone_dma_bits by zone_dma_limit
+> config: arm-allnoconfig (https://download.01.org/0day-ci/archive/20240730/202407300338.oaUo6jtB-lkp@intel.com/config)
+> compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project ccae7b461be339e717d02f99ac857cf0bc7d17fc)
+> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240730/202407300338.oaUo6jtB-lkp@intel.com/reproduce)
+> 
+> If you fix the issue in a separate patch/commit (i.e. not just a new version of
+> the same patch/commit), kindly add following tags
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Closes: https://lore.kernel.org/oe-kbuild-all/202407300338.oaUo6jtB-lkp@intel.com/
+> 
+> All warnings (new ones prefixed by >>):
+> 
+>    In file included from kernel/dma/direct.c:7:
+>    In file included from include/linux/memblock.h:12:
+>    In file included from include/linux/mm.h:2253:
+>    include/linux/vmstat.h:514:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+>      514 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+>          |                               ~~~~~~~~~~~ ^ ~~~
+> >> kernel/dma/direct.c:23:46: warning: implicit conversion from 'unsigned long long' to 'phys_addr_t' (aka 'unsigned int') changes value from 18446744073709551615 to 4294967295 [-Wconstant-conversion]
+>       23 | phys_addr_t zone_dma_limit __ro_after_init = DMA_BIT_MASK(24);
+>          |             ~~~~~~~~~~~~~~                   ^~~~~~~~~~~~~~~~
+>    include/linux/dma-mapping.h:77:40: note: expanded from macro 'DMA_BIT_MASK'
+>       77 | #define DMA_BIT_MASK(n) (((n) == 64) ? ~0ULL : ((1ULL<<(n))-1))
+>          |                                        ^~~~~
+>    2 warnings generated.
 
+FWIW, this is likely a false positive due to an issue in Clang with the
+control flow graph for global variables:
 
-On 7/30/24 9:38 AM, Dongliang Mu wrote:
->>>> "compiler instrumenting" 为什么要翻译成插桩？
->>> 指的是“KCSAN then relies on the compiler instrumenting plain accesses.”这句吗。
->> I don't understand the details of KCSAN, but according the doc, KCSAN make a array and
->> watch the data address in the array, so is there a real stub which inserted by gcc/clang?
-> Yes, the compiler(gcc or clang) will insert a real stub, i.e. some
-> assembly code, in the generated kernel image.
+https://github.com/ClangBuiltLinux/linux/issues/92
 
-OK， then it's fine to translate like this.
+DMA_BIT_MASK() has been the biggest offender :/ If there is any way to
+refactor this code to avoid this, that would be great (as that has been
+one of our longest outstanding issues and getting it fixed in the
+compiler does not seem super easy at this point).
+
+Cheers,
+Nathan
+
+> vim +23 kernel/dma/direct.c
+> 
+>    > 7	#include <linux/memblock.h>
+>      8	#include <linux/export.h>
+>      9	#include <linux/mm.h>
+>     10	#include <linux/dma-map-ops.h>
+>     11	#include <linux/scatterlist.h>
+>     12	#include <linux/pfn.h>
+>     13	#include <linux/vmalloc.h>
+>     14	#include <linux/set_memory.h>
+>     15	#include <linux/slab.h>
+>     16	#include "direct.h"
+>     17	
+>     18	/*
+>     19	 * Most architectures use ZONE_DMA for the first 16 Megabytes, but some use
+>     20	 * it for entirely different regions. In that case the arch code needs to
+>     21	 * override the variable below for dma-direct to work properly.
+>     22	 */
+>   > 23	phys_addr_t zone_dma_limit __ro_after_init = DMA_BIT_MASK(24);
+>     24	
+> 
+> -- 
+> 0-DAY CI Kernel Test Service
+> https://github.com/intel/lkp-tests/wiki
+> 
