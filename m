@@ -1,85 +1,58 @@
-Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D6D2193066;
-	Tue, 30 Jul 2024 08:40:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F0C9A194099;
+	Tue, 30 Jul 2024 08:52:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722328851; cv=none; b=jnARQbEOmTOOrsIslwRou44p9n+w6k6NhI+6KaBXs2x+g9W6l+48+kRcBIvy4jniRXHO+eN76tEFXnwEjzSkOAQf3GKkw5iejASyZjE6TrX7cgbzmmUS+McSsXzUfgtZLiThKKBqFgWlMQj41NkA+LFlyBtDK3D5QlXILYiOWdA=
+	t=1722329555; cv=none; b=YJCFI+gnEJCDYhocguSlUnv9OOGy3WcLFoT1NlktPB7znsRfckQEsnWGTy5HnXwLj9Gug/g5A7rdyX9OZr/5WWmAHKLJXIOCkFd8cco4HIaq6tVQE6NLEd/1Jjt1593jo1o57AKZ/0bgXiNF6Y3Rj2wk1/OGHKclvA6cnG1XB50=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722328851; c=relaxed/simple;
-	bh=nZd2WFa/BFa2Wh9CCI1mPOaoBTlzNfmjCCrRhldTlNk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=l76n5n0d9C6e7vFBPGByjmBhtYqfuSMapOvpMTwix1ZgwADPiX4LsVHgZSXfcM+YiNAAinyWQT1oMKB542wuwTyjMZ0L4/qKsuZDRpSsCQWPRzdZuEec9uB6/h7l3ygUVtj1TlVScNd8LOIWlZGo9Gyr7/F5oAKdTKmeHXvMmx0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=Km9F4RaV; arc=none smtp.client-ip=90.155.50.34
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
+	s=arc-20240116; t=1722329555; c=relaxed/simple;
+	bh=Ea3ve7peZUSUgI1nGhKZ+3SYpfu8k2OjBL5nFNHsu24=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=ATqUsmViI5m8GPoXwzqFxA/ahle3foQFWBhijlb6VssdeBztffT8t4aUmIL70htCorUNO0W/4O0qbWLutiRX3nuka4Cr5f4kEn33vsiiEMhiZad/C5oiVdeIF0SNezgx3W1ODnidSv4rLaVlBczuwK0OzbnAoCw1PzlhFnzZV9E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=X6v4gkF0; arc=none smtp.client-ip=198.175.65.20
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="Km9F4RaV"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=Bo2kAWD8LuGjgNSs5tujEKf4zGPICTRSsQ2YPTNISb0=; b=Km9F4RaVi93yCBpPAUzpv+oWuh
-	QwbBMEnVHC9dgTposdKBwLTlLlaO2QHGVhhQxrGkekdNmHXeBBtjl3rggLggAPy0BERtqd1MuDIFU
-	CaOM6xVXrP2U8/xhob9Dups/x0/IPQBWEyDVUbPW6vbeCUyvAXBPwvyjD+YYX6Li0QdrVdA9xJ7qv
-	tQvKVCM3/hdIJeq4xPTqvJwSmpDudxGrfvEtjnvwPNP5me2ksKl6jO020mzi5yX7sFukNuAGfBwip
-	k65pbLJS9GQ+S9svj4fF2N9IWqlLf5/6D8fuUYHwgtJv7PNRloLCu15A8LOTIp5nH8hAYTdZhsFO9
-	6Eghtplw==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-	by casper.infradead.org with esmtpsa (Exim 4.97.1 #2 (Red Hat Linux))
-	id 1sYiP9-0000000ETfo-26LY;
-	Tue, 30 Jul 2024 08:40:23 +0000
-Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
-	id B5F303001AD; Tue, 30 Jul 2024 10:40:22 +0200 (CEST)
-Date: Tue, 30 Jul 2024 10:40:22 +0200
-From: Peter Zijlstra <peterz@infradead.org>
-To: Rong Xu <xur@google.com>
-Cc: Han Shen <shenhan@google.com>, Sriraman Tallam <tmsriram@google.com>,
-	David Li <davidxl@google.com>, Jonathan Corbet <corbet@lwn.net>,
-	Masahiro Yamada <masahiroy@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nicolas Schier <nicolas@fjasle.eu>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-	"H . Peter Anvin" <hpa@zytor.com>, Ard Biesheuvel <ardb@kernel.org>,
-	Arnd Bergmann <arnd@arndb.de>, Josh Poimboeuf <jpoimboe@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Vegard Nossum <vegard.nossum@oracle.com>,
-	John Moon <john@jmoon.dev>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Heiko Carstens <hca@linux.ibm.com>,
-	Luis Chamberlain <mcgrof@kernel.org>,
-	Samuel Holland <samuel.holland@sifive.com>,
-	Mike Rapoport <rppt@kernel.org>,
-	"Paul E . McKenney" <paulmck@kernel.org>,
-	Rafael Aquini <aquini@redhat.com>, Petr Pavlu <petr.pavlu@suse.com>,
-	Eric DeVolder <eric.devolder@oracle.com>,
-	Bjorn Helgaas <bhelgaas@google.com>,
-	Randy Dunlap <rdunlap@infradead.org>,
-	Benjamin Segall <bsegall@google.com>,
-	Breno Leitao <leitao@debian.org>,
-	Wei Yang <richard.weiyang@gmail.com>,
-	Brian Gerst <brgerst@gmail.com>, Juergen Gross <jgross@suse.com>,
-	Palmer Dabbelt <palmer@rivosinc.com>,
-	Alexandre Ghiti <alexghiti@rivosinc.com>,
-	Kees Cook <kees@kernel.org>,
-	Sami Tolvanen <samitolvanen@google.com>,
-	Xiao Wang <xiao.w.wang@intel.com>,
-	Jan Kiszka <jan.kiszka@siemens.com>, linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
-	linux-efi@vger.kernel.org, linux-arch@vger.kernel.org,
-	llvm@lists.linux.dev, Krzysztof Pszeniczny <kpszeniczny@google.com>
-Subject: Re: [PATCH 3/6] Change the symbols order when --ffuntion-sections is
- enabled
-Message-ID: <20240730084022.GH33588@noisy.programming.kicks-ass.net>
-References: <20240728203001.2551083-1-xur@google.com>
- <20240728203001.2551083-4-xur@google.com>
- <20240729093405.GC37996@noisy.programming.kicks-ass.net>
- <CAF1bQ=Ta9MyoLhUjMTx479UWbHGK-cskbTTe_OudqeZRqV6w0Q@mail.gmail.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="X6v4gkF0"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1722329552; x=1753865552;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=Ea3ve7peZUSUgI1nGhKZ+3SYpfu8k2OjBL5nFNHsu24=;
+  b=X6v4gkF0QJhx/dMt48332KmGzayRi0ynewGodHB8+srr2TDbq6cWYO7A
+   TQ2CpWOhmmot+6yI4rq+x34UpaTWPNrwUYx2bagWTVaKj4mOLcD6SajGw
+   C21ybwmPgebbn7t0PlYq9GnV5JnMr0MMGzpxEf2bZnKk7r7CjR6JGMuiE
+   dtYrIg5ziXxAT0OvH3XWFe93YnRJppCjCbTt3kL+LrofFUQHentI004k8
+   FIWPe27IrXspM8cQftklJ3342rVXx2B3CCJH8Z/pdVMVG6Xwc0YSqjc29
+   bjVOAS3zAByrb7hCDOLPFd2Xt6cUWlmfqQvwELmPiOR9/TJRD/kzde+fu
+   Q==;
+X-CSE-ConnectionGUID: 3tRaEq/QSk+4v0X362tElA==
+X-CSE-MsgGUID: KcMPjEh4Twa32oARx0TDLw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11148"; a="19932207"
+X-IronPort-AV: E=Sophos;i="6.09,248,1716274800"; 
+   d="scan'208";a="19932207"
+Received: from orviesa001.jf.intel.com ([10.64.159.141])
+  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jul 2024 01:52:32 -0700
+X-CSE-ConnectionGUID: Iirznax9QHaRVp0Tpl5m9Q==
+X-CSE-MsgGUID: qqAv4ZR1Tc+YBZbN9KiwYw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.09,248,1716274800"; 
+   d="scan'208";a="91765967"
+Received: from lkp-server01.sh.intel.com (HELO 68891e0c336b) ([10.239.97.150])
+  by orviesa001.jf.intel.com with ESMTP; 30 Jul 2024 01:52:31 -0700
+Received: from kbuild by 68891e0c336b with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1sYiaq-000sgY-2e;
+	Tue, 30 Jul 2024 08:52:28 +0000
+Date: Tue, 30 Jul 2024 16:52:06 +0800
+From: kernel test robot <lkp@intel.com>
+To: Sean Christopherson <seanjc@google.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [sean-jc:x86/fastpath_pi_nv 2/2] arch/x86/kvm/svm/svm.c:4147:39:
+ error: expected ';' after expression
+Message-ID: <202407301650.BHl33FuL-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -88,54 +61,65 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAF1bQ=Ta9MyoLhUjMTx479UWbHGK-cskbTTe_OudqeZRqV6w0Q@mail.gmail.com>
 
-On Mon, Jul 29, 2024 at 11:48:54AM -0700, Rong Xu wrote:
+tree:   https://github.com/sean-jc/linux x86/fastpath_pi_nv
+head:   b2746b169a9de85ccd1760906aadedd71e30497d
+commit: b2746b169a9de85ccd1760906aadedd71e30497d [2/2] KVM: x86: Add a fastpath HLT handler
+config: x86_64-rhel-8.3-rust (https://download.01.org/0day-ci/archive/20240730/202407301650.BHl33FuL-lkp@intel.com/config)
+compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240730/202407301650.BHl33FuL-lkp@intel.com/reproduce)
 
-> > defined(CONFIG_LTO_CLANG)
-> > > +#define TEXT_TEXT                                                    \
-> > > +             *(.text.asan.* .text.tsan.*)                            \
-> > > +             *(.text.unknown .text.unknown.*)                        \
-> > > +             *(.text.unlikely .text.unlikely.*)                      \
-> > > +             ALIGN_FUNCTION();                                       \
-> >
-> > Why leave the above text sections unaligned?
-> >
-> 
-> They are considered cold text. They are not aligned before the change. But
-> I have no objections to making it aligned.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202407301650.BHl33FuL-lkp@intel.com/
 
-At least x86 has hard assumptions about function alignment always being
-respected -- see the most horrible games we play with
-CONFIG_CALL_THUNKS.
+All error/warnings (new ones prefixed by >>):
 
-Or is this only text parts and not actual functions in these sections?
-In which case we can probably get away with not respecting the function
-call alignment, although we should probably still respect the branch
-alignment -- but I forgot if we made use of that :/
+>> arch/x86/kvm/svm/svm.c:4147:39: error: expected ';' after expression
+    4147 |         to_svm(vcpu)->vmcb->control.exit_code
+         |                                              ^
+         |                                              ;
+>> arch/x86/kvm/svm/svm.c:4151:6: error: use of undeclared identifier 'exit_code'; did you mean 'exit_creds'?
+    4151 |         if (exit_code == SVM_EXIT_MSR &&
+         |             ^~~~~~~~~
+         |             exit_creds
+   include/linux/cred.h:150:13: note: 'exit_creds' declared here
+     150 | extern void exit_creds(struct task_struct *);
+         |             ^
+   arch/x86/kvm/svm/svm.c:4155:6: error: use of undeclared identifier 'exit_code'; did you mean 'exit_creds'?
+    4155 |         if (exit_code == SVM_EXIT_HLT)
+         |             ^~~~~~~~~
+         |             exit_creds
+   include/linux/cred.h:150:13: note: 'exit_creds' declared here
+     150 | extern void exit_creds(struct task_struct *);
+         |             ^
+>> arch/x86/kvm/svm/svm.c:4147:30: warning: expression result unused [-Wunused-value]
+    4147 |         to_svm(vcpu)->vmcb->control.exit_code
+         |         ~~~~~~~~~~~~~~~~~~~~~~~~~~~ ^~~~~~~~~
+   1 warning and 3 errors generated.
 
 
-> >
-> > > +             *(.text.hot .text.hot.*)                                \
-> > > +             *(TEXT_MAIN .text.fixup)                                \
-> > > +             NOINSTR_TEXT                                            \
-> > > +             *(.ref.text)                                            \
-> > > +     MEM_KEEP(init.text*)
-> > > +#else
-> > >  #define TEXT_TEXT                                                    \
-> > >               ALIGN_FUNCTION();                                       \
-> > >               *(.text.hot .text.hot.*)                                \
-> > > @@ -594,7 +606,8 @@
-> > >               NOINSTR_TEXT                                            \
-> > >               *(.ref.text)                                            \
-> > >               *(.text.asan.* .text.tsan.*)                            \
-> > > -     MEM_KEEP(init.text*)                                            \
-> > > +     MEM_KEEP(init.text*)
-> > > +#endif
-> > >
-> > >
-> > >  /* sched.text is aling to function alignment to secure we have same
-> > > --
-> > > 2.46.0.rc1.232.g9752f9e123-goog
-> > >
-> >
+vim +4147 arch/x86/kvm/svm/svm.c
+
+  4144	
+  4145	static fastpath_t svm_exit_handlers_fastpath(struct kvm_vcpu *vcpu)
+  4146	{
+> 4147		to_svm(vcpu)->vmcb->control.exit_code
+  4148		if (is_guest_mode(vcpu))
+  4149			return EXIT_FASTPATH_NONE;
+  4150	
+> 4151		if (exit_code == SVM_EXIT_MSR &&
+  4152		    to_svm(vcpu)->vmcb->control.exit_info_1)
+  4153			return handle_fastpath_set_msr_irqoff(vcpu);
+  4154	
+  4155		if (exit_code == SVM_EXIT_HLT)
+  4156			return handle_fastpath_hlt(vcpu);
+  4157	
+  4158		return EXIT_FASTPATH_NONE;
+  4159	}
+  4160	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
