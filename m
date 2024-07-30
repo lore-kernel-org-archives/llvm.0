@@ -1,161 +1,196 @@
-Received: from mail.zytor.com (terminus.zytor.com [198.137.202.136])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 16CAD1A6195
-	for <llvm@lists.linux.dev>; Tue, 30 Jul 2024 16:33:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.136
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F27AA1A76C5;
+	Tue, 30 Jul 2024 18:01:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722357202; cv=none; b=GBqCvYWc75uu4DZbkxqoYrZFTw7pM0En55oTnY2lVwc1r8jzEmWRO9sBSmtIc0JX/R/s1PY2PoRtqjsunwO3mTEoif21zP3rtfCv77boN8FQXJOmmaCZK3tc0sUXqYsesWdlVJKwfp7rOWE67gIgK+W969XNNowAshKtZSlWQ9c=
+	t=1722362516; cv=none; b=XwYx53Gd/h357AFzpIjK3IGnCuIGSx1tKqqJoqr6cwsQSw20dYCugQo5HxUbzWvIWEb6cZUZkAFXaI6S0MlTOnVrZb+H6z91aCRapA/6aU/ZUONkmWUOdxKXdY6neSGWnW9yElhw54j+VoJ60xiYyYF8rrPhX4QpP90dCfofOhc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722357202; c=relaxed/simple;
-	bh=hpkTzTir1UIzqYFERoz4CAIIwheDvWkRwVQvt7qkb1A=;
-	h=Date:From:To:CC:Subject:In-Reply-To:References:Message-ID:
-	 MIME-Version:Content-Type; b=SlWMud6h6cbjA1QV5N/1LWUubeQt4b2ds7U8eGNfV6pd2Qozo7Uz5kbxr/OYYBrPHBCTwnNOIgBrVioor2zVNPXSGp6l8mQz4UYJyFVFsL9Xau8wQaL36gy/nLDFWMSvN8iy5dKJp3SNp2KJrhSTo+HOcB742wrjqATywmtB8c8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com; spf=pass smtp.mailfrom=zytor.com; dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b=fKW1XYqC; arc=none smtp.client-ip=198.137.202.136
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zytor.com
+	s=arc-20240116; t=1722362516; c=relaxed/simple;
+	bh=cQFnUmyzRL6dRhPLo+YZ4kKLc+PPFdKOIPULfZq3dB8=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=Qtp65pbUEBdxYVAPjq1wpwgkmsRcWQpRZwb/xdsMqLMduTXua0lYN+ma4gEmREb+F5pf/kHT9+di2Rolp0XUgbFa6KslaEz565/4Hd1NcQlVtSaKKYn/9sfLIEzrO1UUPWukNxnQrDC7UItK5gAmza2E/AxlGmFGWg9ovfkUNOg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=UUaBshE/; arc=none smtp.client-ip=192.198.163.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b="fKW1XYqC"
-Received: from [127.0.0.1] ([76.133.66.138])
-	(authenticated bits=0)
-	by mail.zytor.com (8.17.2/8.17.1) with ESMTPSA id 46UGSsN1081118
-	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NO);
-	Tue, 30 Jul 2024 09:28:54 -0700
-DKIM-Filter: OpenDKIM Filter v2.11.0 mail.zytor.com 46UGSsN1081118
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zytor.com;
-	s=2024071601; t=1722356939;
-	bh=IJHV4yrazRxuG4T6Hs72qR3GJj/8mbbgDoSvSaEnppI=;
-	h=Date:From:To:CC:Subject:In-Reply-To:References:From;
-	b=fKW1XYqC57svXidJXfs/wpveNEPwkGRexcR4eo4qo82LwpzlRuHGbCLXCJBFKpg0X
-	 /qidNA/gWwCnzrLRh7NWY1yWlrXBS0aHck0oteEOW8OGYN5Dxgzh+3GRWLUeDy0gtr
-	 CE7fBfOm5D9LRDKVwbTzZ11mMyD8rlZAsPDLat38Q52E8qx2eE0hZhQa/v56t1/2bD
-	 DVmQd7AzeJlew0vIMjb4hrwaNqLVc6TTfBd3f97MeQ9OWWfTniaVqoSWnJcBkUMEcs
-	 6N1h62SkEVmKh1cKwsHdQvEfdOYOah+6K1/XCxJkVza8AhrDcBkiNWiRgXgXFxUdLq
-	 +GOfXrd+zuD4A==
-Date: Tue, 30 Jul 2024 09:28:53 -0700
-From: "H. Peter Anvin" <hpa@zytor.com>
-To: Peter Zijlstra <peterz@infradead.org>, Rong Xu <xur@google.com>
-CC: Han Shen <shenhan@google.com>, Sriraman Tallam <tmsriram@google.com>,
-        David Li <davidxl@google.com>, Jonathan Corbet <corbet@lwn.net>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nicolas Schier <nicolas@fjasle.eu>,
-        Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        Ard Biesheuvel <ardb@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Bill Wendling <morbo@google.com>,
-        Justin Stitt <justinstitt@google.com>,
-        Vegard Nossum <vegard.nossum@oracle.com>, John Moon <john@jmoon.dev>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Samuel Holland <samuel.holland@sifive.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        "Paul E . McKenney" <paulmck@kernel.org>,
-        Rafael Aquini <aquini@redhat.com>, Petr Pavlu <petr.pavlu@suse.com>,
-        Eric DeVolder <eric.devolder@oracle.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Benjamin Segall <bsegall@google.com>, Breno Leitao <leitao@debian.org>,
-        Wei Yang <richard.weiyang@gmail.com>, Brian Gerst <brgerst@gmail.com>,
-        Juergen Gross <jgross@suse.com>, Palmer Dabbelt <palmer@rivosinc.com>,
-        Alexandre Ghiti <alexghiti@rivosinc.com>, Kees Cook <kees@kernel.org>,
-        Sami Tolvanen <samitolvanen@google.com>,
-        Xiao Wang <xiao.w.wang@intel.com>, Jan Kiszka <jan.kiszka@siemens.com>,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kbuild@vger.kernel.org, linux-efi@vger.kernel.org,
-        linux-arch@vger.kernel.org, llvm@lists.linux.dev,
-        Krzysztof Pszeniczny <kpszeniczny@google.com>
-Subject: =?US-ASCII?Q?Re=3A_=5BPATCH_3/6=5D_Change_the_symbols_ord?=
- =?US-ASCII?Q?er_when_--ffuntion-sections_is_enabled?=
-User-Agent: K-9 Mail for Android
-In-Reply-To: <20240730084022.GH33588@noisy.programming.kicks-ass.net>
-References: <20240728203001.2551083-1-xur@google.com> <20240728203001.2551083-4-xur@google.com> <20240729093405.GC37996@noisy.programming.kicks-ass.net> <CAF1bQ=Ta9MyoLhUjMTx479UWbHGK-cskbTTe_OudqeZRqV6w0Q@mail.gmail.com> <20240730084022.GH33588@noisy.programming.kicks-ass.net>
-Message-ID: <AD6EAA8F-8B93-40BA-B624-1CBBAA93DE3C@zytor.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="UUaBshE/"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1722362515; x=1753898515;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=cQFnUmyzRL6dRhPLo+YZ4kKLc+PPFdKOIPULfZq3dB8=;
+  b=UUaBshE/knsnS1ACFOg0YE24vaxZkFWzjECYfZc6+5zWo6HBre8sg0Ps
+   beAcuTV2hkHzuFCtBu5gUeHJoKYgi9EUpNG6oFRk/xruA/Vhk3rHsl5LR
+   hpTLoyOUwbaEv8Asr1fKSEqtto8/OAhqay8elJguhLxCbcPEC7UVeOQ2s
+   pfjtk5lI1mevhqblM6RVS3hYUDIoKWw38a13qL8B8c0yqOKU/YonraNKv
+   2EqYYnuUJgzJRAxHiiLu2brvmwAUdTfHUYGdF1e9pkeWe+Zyyw446zBWV
+   cfbWTC7++e/gJKaDOvikW8I2/69ZX6O6cFC2TwGkuFS89i+IAObcUcpFZ
+   Q==;
+X-CSE-ConnectionGUID: hdi3eU7JQeyyg9kCxfoykA==
+X-CSE-MsgGUID: WJfP7bktQZ6wnRDjLM9dcg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11149"; a="23119832"
+X-IronPort-AV: E=Sophos;i="6.09,248,1716274800"; 
+   d="scan'208";a="23119832"
+Received: from fmviesa010.fm.intel.com ([10.60.135.150])
+  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jul 2024 11:01:54 -0700
+X-CSE-ConnectionGUID: NuC3k2+OTimmswySozNqyw==
+X-CSE-MsgGUID: AAB1Hg6eROivl3iOH/gHNg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.09,248,1716274800"; 
+   d="scan'208";a="54461432"
+Received: from lkp-server01.sh.intel.com (HELO 68891e0c336b) ([10.239.97.150])
+  by fmviesa010.fm.intel.com with ESMTP; 30 Jul 2024 11:01:54 -0700
+Received: from kbuild by 68891e0c336b with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1sYrAV-000tDG-0s;
+	Tue, 30 Jul 2024 18:01:51 +0000
+Date: Wed, 31 Jul 2024 02:00:59 +0800
+From: kernel test robot <lkp@intel.com>
+To: Steve French <stfrench@microsoft.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [samba-ksmbd:for-next 2/2] fs/smb/client/ioctl.c:178:6: warning:
+ variable 'flags' is used uninitialized whenever 'if' condition is true
+Message-ID: <202407310110.dsjyb2uc-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On July 30, 2024 1:40:22 AM PDT, Peter Zijlstra <peterz@infradead=2Eorg> wr=
-ote:
->On Mon, Jul 29, 2024 at 11:48:54AM -0700, Rong Xu wrote:
->
->> > defined(CONFIG_LTO_CLANG)
->> > > +#define TEXT_TEXT                                                 =
-   \
->> > > +             *(=2Etext=2Easan=2E* =2Etext=2Etsan=2E*)             =
-               \
->> > > +             *(=2Etext=2Eunknown =2Etext=2Eunknown=2E*)           =
-             \
->> > > +             *(=2Etext=2Eunlikely =2Etext=2Eunlikely=2E*)         =
-             \
->> > > +             ALIGN_FUNCTION();                                    =
-   \
->> >
->> > Why leave the above text sections unaligned?
->> >
->>=20
->> They are considered cold text=2E They are not aligned before the change=
-=2E But
->> I have no objections to making it aligned=2E
->
->At least x86 has hard assumptions about function alignment always being
->respected -- see the most horrible games we play with
->CONFIG_CALL_THUNKS=2E
->
->Or is this only text parts and not actual functions in these sections?
->In which case we can probably get away with not respecting the function
->call alignment, although we should probably still respect the branch
->alignment -- but I forgot if we made use of that :/
->
->
->> >
->> > > +             *(=2Etext=2Ehot =2Etext=2Ehot=2E*)                   =
-             \
->> > > +             *(TEXT_MAIN =2Etext=2Efixup)                         =
-       \
->> > > +             NOINSTR_TEXT                                         =
-   \
->> > > +             *(=2Eref=2Etext)                                     =
-       \
->> > > +     MEM_KEEP(init=2Etext*)
->> > > +#else
->> > >  #define TEXT_TEXT                                                 =
-   \
->> > >               ALIGN_FUNCTION();                                    =
-   \
->> > >               *(=2Etext=2Ehot =2Etext=2Ehot=2E*)                   =
-             \
->> > > @@ -594,7 +606,8 @@
->> > >               NOINSTR_TEXT                                         =
-   \
->> > >               *(=2Eref=2Etext)                                     =
-       \
->> > >               *(=2Etext=2Easan=2E* =2Etext=2Etsan=2E*)             =
-               \
->> > > -     MEM_KEEP(init=2Etext*)                                       =
-     \
->> > > +     MEM_KEEP(init=2Etext*)
->> > > +#endif
->> > >
->> > >
->> > >  /* sched=2Etext is aling to function alignment to secure we have s=
-ame
->> > > --
->> > > 2=2E46=2E0=2Erc1=2E232=2Eg9752f9e123-goog
->> > >
->> >
+tree:   git://git.samba.org/ksmbd.git for-next
+head:   0aeae343da69af8c0516b6650312be517d4ff6a8
+commit: 0aeae343da69af8c0516b6650312be517d4ff6a8 [2/2] smb3: add dynamic tracepoints for shutdown ioctl
+config: x86_64-rhel-8.3-rust (https://download.01.org/0day-ci/archive/20240731/202407310110.dsjyb2uc-lkp@intel.com/config)
+compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240731/202407310110.dsjyb2uc-lkp@intel.com/reproduce)
 
-The linker should always enforce the alignment of any input section=2E If =
-we don't have proper alignment either the linker is broken or we don't have=
- the correct =2Ebalign directives in the code =E2=80=93 which is the right =
-way to fix this=2E
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202407310110.dsjyb2uc-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> fs/smb/client/ioctl.c:178:6: warning: variable 'flags' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
+     178 |         if (!capable(CAP_SYS_ADMIN)) {
+         |             ^~~~~~~~~~~~~~~~~~~~~~~
+   fs/smb/client/ioctl.c:236:30: note: uninitialized use occurs here
+     236 |         trace_smb3_shutdown_err(rc, flags, tcon->tid);
+         |                                     ^~~~~
+   fs/smb/client/ioctl.c:178:2: note: remove the 'if' if its condition is always false
+     178 |         if (!capable(CAP_SYS_ADMIN)) {
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     179 |                 rc = -EPERM;
+         |                 ~~~~~~~~~~~~
+     180 |                 goto shutdown_out_err;
+         |                 ~~~~~~~~~~~~~~~~~~~~~~
+     181 |         }
+         |         ~
+   fs/smb/client/ioctl.c:175:13: note: initialize the variable 'flags' to silence this warning
+     175 |         __u32 flags;
+         |                    ^
+         |                     = 0
+>> fs/smb/client/ioctl.c:178:6: warning: variable 'tcon' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
+     178 |         if (!capable(CAP_SYS_ADMIN)) {
+         |             ^~~~~~~~~~~~~~~~~~~~~~~
+   fs/smb/client/ioctl.c:236:37: note: uninitialized use occurs here
+     236 |         trace_smb3_shutdown_err(rc, flags, tcon->tid);
+         |                                            ^~~~
+   fs/smb/client/ioctl.c:178:2: note: remove the 'if' if its condition is always false
+     178 |         if (!capable(CAP_SYS_ADMIN)) {
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     179 |                 rc = -EPERM;
+         |                 ~~~~~~~~~~~~
+     180 |                 goto shutdown_out_err;
+         |                 ~~~~~~~~~~~~~~~~~~~~~~
+     181 |         }
+         |         ~
+   fs/smb/client/ioctl.c:174:24: note: initialize the variable 'tcon' to silence this warning
+     174 |         struct cifs_tcon *tcon;
+         |                               ^
+         |                                = NULL
+   2 warnings generated.
+
+
+vim +178 fs/smb/client/ioctl.c
+
+   169	
+   170	static int cifs_shutdown(struct super_block *sb, unsigned long arg)
+   171	{
+   172		struct cifs_sb_info *sbi = CIFS_SB(sb);
+   173		struct tcon_link *tlink;
+   174		struct cifs_tcon *tcon;
+ > 175		__u32 flags;
+   176		int rc;
+   177	
+ > 178		if (!capable(CAP_SYS_ADMIN)) {
+   179			rc = -EPERM;
+   180			goto shutdown_out_err;
+   181		}
+   182	
+   183		if (get_user(flags, (__u32 __user *)arg))
+   184			return -EFAULT;
+   185	
+   186		tlink = cifs_sb_tlink(sbi);
+   187		if (IS_ERR(tlink))
+   188			return PTR_ERR(tlink);
+   189		tcon = tlink_tcon(tlink);
+   190	
+   191		trace_smb3_shutdown_enter(flags, tcon->tid);
+   192		if (flags > CIFS_GOING_FLAGS_NOLOGFLUSH) {
+   193			rc = -EINVAL;
+   194			goto shutdown_out_err;
+   195		}
+   196	
+   197		if (cifs_forced_shutdown(sbi))
+   198			goto shutdown_good;
+   199	
+   200		cifs_dbg(VFS, "shut down requested (%d)", flags);
+   201	
+   202		/*
+   203		 * see:
+   204		 *   https://man7.org/linux/man-pages/man2/ioctl_xfs_goingdown.2.html
+   205		 * for more information and description of original intent of the flags
+   206		 */
+   207		switch (flags) {
+   208		/*
+   209		 * We could add support later for default flag which requires:
+   210		 *     "Flush all dirty data and metadata to disk"
+   211		 * would need to call syncfs or equivalent to flush page cache for
+   212		 * the mount and then issue fsync to server (if nostrictsync not set)
+   213		 */
+   214		case CIFS_GOING_FLAGS_DEFAULT:
+   215			cifs_dbg(FYI, "shutdown with default flag not supported\n");
+   216			rc = -EINVAL;
+   217			goto shutdown_out_err;
+   218		/*
+   219		 * FLAGS_LOGFLUSH is easy since it asks to write out metadata (not
+   220		 * data) but metadata writes are not cached on the client, so can treat
+   221		 * it similarly to NOLOGFLUSH
+   222		 */
+   223		case CIFS_GOING_FLAGS_LOGFLUSH:
+   224		case CIFS_GOING_FLAGS_NOLOGFLUSH:
+   225			sbi->mnt_cifs_flags |= CIFS_MOUNT_SHUTDOWN;
+   226			goto shutdown_good;
+   227		default:
+   228			rc = -EINVAL;
+   229			goto shutdown_out_err;
+   230		}
+   231	
+   232	shutdown_good:
+   233		trace_smb3_shutdown_done(flags, tcon->tid);
+   234		return 0;
+   235	shutdown_out_err:
+   236		trace_smb3_shutdown_err(rc, flags, tcon->tid);
+   237		return rc;
+   238	}
+   239	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
