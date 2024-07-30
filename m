@@ -1,58 +1,63 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F0C9A194099;
-	Tue, 30 Jul 2024 08:52:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 768A81946DA;
+	Tue, 30 Jul 2024 09:14:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722329555; cv=none; b=YJCFI+gnEJCDYhocguSlUnv9OOGy3WcLFoT1NlktPB7znsRfckQEsnWGTy5HnXwLj9Gug/g5A7rdyX9OZr/5WWmAHKLJXIOCkFd8cco4HIaq6tVQE6NLEd/1Jjt1593jo1o57AKZ/0bgXiNF6Y3Rj2wk1/OGHKclvA6cnG1XB50=
+	t=1722330894; cv=none; b=GUXfUiTF8NJPlVx2O/lnDCFn4Sx1jYMtspBSHwl9lWa/8sDcb5ELftk+JJt05RZWLEDh6/2ZV4HvZ9id4E/cXJihKbZlrJrlcQ/6/U+VxxZClXGe6wyZW3YSFEEGfjL3fFZN2z/Iy0JWSU6K6k+u4mBK7zAUoNjx2Mp30InuDXo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722329555; c=relaxed/simple;
-	bh=Ea3ve7peZUSUgI1nGhKZ+3SYpfu8k2OjBL5nFNHsu24=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=ATqUsmViI5m8GPoXwzqFxA/ahle3foQFWBhijlb6VssdeBztffT8t4aUmIL70htCorUNO0W/4O0qbWLutiRX3nuka4Cr5f4kEn33vsiiEMhiZad/C5oiVdeIF0SNezgx3W1ODnidSv4rLaVlBczuwK0OzbnAoCw1PzlhFnzZV9E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=X6v4gkF0; arc=none smtp.client-ip=198.175.65.20
+	s=arc-20240116; t=1722330894; c=relaxed/simple;
+	bh=ijWKSCdA74gjYFReCBLXJjMYhaTomAgxVlWH4j0iGqk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=tmPSWvhr23kR0tozNNy3KY2cnepjJkpavI393xX+7oT9LBsSEB5GVd/wt0DCJn+mNc/GetoVx5li/KxIcyXdDbClmootKBEUV0zii9CgsHehpw9TmVJMZMNUwXA9hedIkgdudlpm7R7ds7sM2jwbc+qY250yivmcw8bpZA4PD5k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=oCuWauIr; arc=none smtp.client-ip=192.198.163.13
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="X6v4gkF0"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="oCuWauIr"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1722329552; x=1753865552;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=Ea3ve7peZUSUgI1nGhKZ+3SYpfu8k2OjBL5nFNHsu24=;
-  b=X6v4gkF0QJhx/dMt48332KmGzayRi0ynewGodHB8+srr2TDbq6cWYO7A
-   TQ2CpWOhmmot+6yI4rq+x34UpaTWPNrwUYx2bagWTVaKj4mOLcD6SajGw
-   C21ybwmPgebbn7t0PlYq9GnV5JnMr0MMGzpxEf2bZnKk7r7CjR6JGMuiE
-   dtYrIg5ziXxAT0OvH3XWFe93YnRJppCjCbTt3kL+LrofFUQHentI004k8
-   FIWPe27IrXspM8cQftklJ3342rVXx2B3CCJH8Z/pdVMVG6Xwc0YSqjc29
-   bjVOAS3zAByrb7hCDOLPFd2Xt6cUWlmfqQvwELmPiOR9/TJRD/kzde+fu
-   Q==;
-X-CSE-ConnectionGUID: 3tRaEq/QSk+4v0X362tElA==
-X-CSE-MsgGUID: KcMPjEh4Twa32oARx0TDLw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11148"; a="19932207"
+  t=1722330892; x=1753866892;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=ijWKSCdA74gjYFReCBLXJjMYhaTomAgxVlWH4j0iGqk=;
+  b=oCuWauIrDk8Pn/+YMspWRT9cUJzBmTcEOdwKi+9txQuRmfhbwidOn4CV
+   Dui6Kzzb7rwj/9eHcEmADkM4awBpm8+SsN4FOkidemmTI24cdutRo0Vs6
+   F8HT8H0hV7bfqfe66wUYxQQ+THwaGriBbgvbpsNgKMaPdG2DUDZCOCJyH
+   /uLJBgIfp3G7Qyh5+vO3PlTu+Q6DpNN9uLBUAQ5UOycEKeaUMq80p5d1l
+   I+LFvMFM9L72YY3Fj8Pqo39vYK7Pvbix7rzLcKEpXzBJ24peFxZqcFwnk
+   IrdmiPy/sSE6qhBTtgjv/n4d87Gx/OsGqyfHoIMrHsNo9xZhnuRd7xKgo
+   g==;
+X-CSE-ConnectionGUID: WTd7fWhHQmOWIsQEX3ZyyQ==
+X-CSE-MsgGUID: uiKbcnKVTnmWxDvSJNhTyA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11148"; a="23050524"
 X-IronPort-AV: E=Sophos;i="6.09,248,1716274800"; 
-   d="scan'208";a="19932207"
-Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jul 2024 01:52:32 -0700
-X-CSE-ConnectionGUID: Iirznax9QHaRVp0Tpl5m9Q==
-X-CSE-MsgGUID: qqAv4ZR1Tc+YBZbN9KiwYw==
+   d="scan'208";a="23050524"
+Received: from fmviesa004.fm.intel.com ([10.60.135.144])
+  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jul 2024 02:14:45 -0700
+X-CSE-ConnectionGUID: bosgiiEqTdiFoSdyUr+9Sw==
+X-CSE-MsgGUID: sqr9FxHSQSeE7n0KzNcomw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.09,248,1716274800"; 
-   d="scan'208";a="91765967"
+   d="scan'208";a="58900677"
 Received: from lkp-server01.sh.intel.com (HELO 68891e0c336b) ([10.239.97.150])
-  by orviesa001.jf.intel.com with ESMTP; 30 Jul 2024 01:52:31 -0700
+  by fmviesa004.fm.intel.com with ESMTP; 30 Jul 2024 02:14:31 -0700
 Received: from kbuild by 68891e0c336b with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1sYiaq-000sgY-2e;
-	Tue, 30 Jul 2024 08:52:28 +0000
-Date: Tue, 30 Jul 2024 16:52:06 +0800
+	id 1sYiw9-000shg-1C;
+	Tue, 30 Jul 2024 09:14:29 +0000
+Date: Tue, 30 Jul 2024 17:14:09 +0800
 From: kernel test robot <lkp@intel.com>
-To: Sean Christopherson <seanjc@google.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [sean-jc:x86/fastpath_pi_nv 2/2] arch/x86/kvm/svm/svm.c:4147:39:
- error: expected ';' after expression
-Message-ID: <202407301650.BHl33FuL-lkp@intel.com>
+To: Joanne Koong <joannelkoong@gmail.com>, miklos@szeredi.hu,
+	linux-fsdevel@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	josef@toxicpanda.com, bernd.schubert@fastmail.fm,
+	laoar.shao@gmail.com, kernel-team@meta.com
+Subject: Re: [PATCH v2 2/2] fuse: add default_request_timeout and
+ max_request_timeout sysctls
+Message-ID: <202407301619.Mja5LwBe-lkp@intel.com>
+References: <20240730002348.3431931-3-joannelkoong@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -61,64 +66,71 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20240730002348.3431931-3-joannelkoong@gmail.com>
 
-tree:   https://github.com/sean-jc/linux x86/fastpath_pi_nv
-head:   b2746b169a9de85ccd1760906aadedd71e30497d
-commit: b2746b169a9de85ccd1760906aadedd71e30497d [2/2] KVM: x86: Add a fastpath HLT handler
-config: x86_64-rhel-8.3-rust (https://download.01.org/0day-ci/archive/20240730/202407301650.BHl33FuL-lkp@intel.com/config)
+Hi Joanne,
+
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on mszeredi-fuse/for-next]
+[also build test ERROR on linus/master v6.11-rc1 next-20240730]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Joanne-Koong/fuse-add-optional-kernel-enforced-timeout-for-requests/20240730-085106
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/mszeredi/fuse.git for-next
+patch link:    https://lore.kernel.org/r/20240730002348.3431931-3-joannelkoong%40gmail.com
+patch subject: [PATCH v2 2/2] fuse: add default_request_timeout and max_request_timeout sysctls
+config: i386-buildonly-randconfig-006-20240730 (https://download.01.org/0day-ci/archive/20240730/202407301619.Mja5LwBe-lkp@intel.com/config)
 compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240730/202407301650.BHl33FuL-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240730/202407301619.Mja5LwBe-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202407301650.BHl33FuL-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202407301619.Mja5LwBe-lkp@intel.com/
 
-All error/warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> arch/x86/kvm/svm/svm.c:4147:39: error: expected ';' after expression
-    4147 |         to_svm(vcpu)->vmcb->control.exit_code
-         |                                              ^
-         |                                              ;
->> arch/x86/kvm/svm/svm.c:4151:6: error: use of undeclared identifier 'exit_code'; did you mean 'exit_creds'?
-    4151 |         if (exit_code == SVM_EXIT_MSR &&
-         |             ^~~~~~~~~
-         |             exit_creds
-   include/linux/cred.h:150:13: note: 'exit_creds' declared here
-     150 | extern void exit_creds(struct task_struct *);
-         |             ^
-   arch/x86/kvm/svm/svm.c:4155:6: error: use of undeclared identifier 'exit_code'; did you mean 'exit_creds'?
-    4155 |         if (exit_code == SVM_EXIT_HLT)
-         |             ^~~~~~~~~
-         |             exit_creds
-   include/linux/cred.h:150:13: note: 'exit_creds' declared here
-     150 | extern void exit_creds(struct task_struct *);
-         |             ^
->> arch/x86/kvm/svm/svm.c:4147:30: warning: expression result unused [-Wunused-value]
-    4147 |         to_svm(vcpu)->vmcb->control.exit_code
-         |         ~~~~~~~~~~~~~~~~~~~~~~~~~~~ ^~~~~~~~~
-   1 warning and 3 errors generated.
+>> fs/fuse/sysctl.c:30:26: error: too many arguments provided to function-like macro invocation
+      30 | int fuse_sysctl_register(void)
+         |                          ^
+   fs/fuse/fuse_i.h:1501:9: note: macro 'fuse_sysctl_register' defined here
+    1501 | #define fuse_sysctl_register()          (0)
+         |         ^
+>> fs/fuse/sysctl.c:30:25: error: expected ';' after top level declarator
+      30 | int fuse_sysctl_register(void)
+         |                         ^
+         |                         ;
+   fs/fuse/sysctl.c:38:29: error: too many arguments provided to function-like macro invocation
+      38 | void fuse_sysctl_unregister(void)
+         |                             ^
+   fs/fuse/fuse_i.h:1502:9: note: macro 'fuse_sysctl_unregister' defined here
+    1502 | #define fuse_sysctl_unregister()        do { } while (0)
+         |         ^
+>> fs/fuse/sysctl.c:38:6: error: variable has incomplete type 'void'
+      38 | void fuse_sysctl_unregister(void)
+         |      ^
+   fs/fuse/sysctl.c:38:28: error: expected ';' after top level declarator
+      38 | void fuse_sysctl_unregister(void)
+         |                            ^
+         |                            ;
+   5 errors generated.
 
 
-vim +4147 arch/x86/kvm/svm/svm.c
+vim +30 fs/fuse/sysctl.c
 
-  4144	
-  4145	static fastpath_t svm_exit_handlers_fastpath(struct kvm_vcpu *vcpu)
-  4146	{
-> 4147		to_svm(vcpu)->vmcb->control.exit_code
-  4148		if (is_guest_mode(vcpu))
-  4149			return EXIT_FASTPATH_NONE;
-  4150	
-> 4151		if (exit_code == SVM_EXIT_MSR &&
-  4152		    to_svm(vcpu)->vmcb->control.exit_info_1)
-  4153			return handle_fastpath_set_msr_irqoff(vcpu);
-  4154	
-  4155		if (exit_code == SVM_EXIT_HLT)
-  4156			return handle_fastpath_hlt(vcpu);
-  4157	
-  4158		return EXIT_FASTPATH_NONE;
-  4159	}
-  4160	
+    29	
+  > 30	int fuse_sysctl_register(void)
+    31	{
+    32		fuse_table_header = register_sysctl("fs/fuse", fuse_sysctl_table);
+    33		if (!fuse_table_header)
+    34			return -ENOMEM;
+    35		return 0;
+    36	}
+    37	
+  > 38	void fuse_sysctl_unregister(void)
 
 -- 
 0-DAY CI Kernel Test Service
