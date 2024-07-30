@@ -1,173 +1,94 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f169.google.com (mail-pf1-f169.google.com [209.85.210.169])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F090F8C1F;
-	Tue, 30 Jul 2024 01:44:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C889C8C1F
+	for <llvm@lists.linux.dev>; Tue, 30 Jul 2024 01:48:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722303859; cv=none; b=eeDuyZNdeI4jgz0/mcky5c7VC+QemUQa1/mbt/N5/3jrtmW6iyevWGWyiBrpos1fcgPHGXU1LK8KiK84QsAGJo6Z3/EWRd6CeF+xVlUX9qDUmg1iAuNxC0r64ycym2yWNnKxRsnf8H2aWVN2ECi2qqPjkP2lRw4xkUZIWB3HERk=
+	t=1722304136; cv=none; b=mHuAZkElNDaSFNll0+VqjTRv1OA27cWOg3EpEmp+6DEXQZ+3sUwrVf0fXt/AehHxIRFTfh4coRN4Wh+sJU9fxwZ0pZVRKiE/a4kPbnTBOL3x510An217Ri8ccXqEA7K0N5shE0xOLGBhLcB7QxkM7w71y0MltLV95zhCkYh1QK4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722303859; c=relaxed/simple;
-	bh=yZJ4h99ImY+2oP4Sskf6keETl1QtUFHaS319Xw0QpYc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=tXi9xi4fYUpRWjAzdOeEaBvnFXWouhWHlKDZJ5wFItup6dqdW4JmjS060sZGhKrHdPUtZq4oU79YK1A6Pt8AhIP/deSOIkFlO4z8fgeKT2bwyxjX0VA/X5CeKMXAHIrXWuKaCR82VOlFsc4PX/SPuJ3Cjy6MTrcVVmgzsfIn81k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Ub5sQ/CE; arc=none smtp.client-ip=198.175.65.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1722304136; c=relaxed/simple;
+	bh=8n1996Y8lpYFOWA5Eh8nbf6QZqyqbZ6W7WJigmpON5M=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=ke/Ih2egH4MmgkCPGhuhCe/b6EVSiLUG18q5EtLGs9TQf2hQLQD4dpdcgRsPybvqaBtrs5iOeUws54kP8HUb0eWxMcZ1InWqU8/tU52sVCt0oAseHCNZJ9kucJVAWbXlaw2ihhdVV4W/dZi9+IFoIWLdkrNj9cjiF1VWDpOun78=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=TNS46FkV; arc=none smtp.client-ip=209.85.210.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Ub5sQ/CE"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1722303858; x=1753839858;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=yZJ4h99ImY+2oP4Sskf6keETl1QtUFHaS319Xw0QpYc=;
-  b=Ub5sQ/CEMwIjytv9D+V1eBOOg6ExVByHLIhyCTBVJIKffr15rQFLf4Qf
-   GhvHSx+6JtBLovFkO+H9KGXqzzhmQnA+evFcWBjWTX4qTYVtCpqJrA5Ea
-   rN48KFnpgcTmcPCxQaSs9YK9jwoUrROx0pNNdPeFb2F0coE8Dphhy+Ppl
-   dU52ehXYAZt9A6YfRsSYCyM4tG9ARoOiSiW8CIjqOggGReY//cqt13m7A
-   wtqnfzmOcg+Qna92fTJ1c2hQPbb/JUNbJk/aR+aMbQ5YFS1zYsenfttrw
-   yMPOr60Pdgk467EsxU8RbJmN65gW3ag/U08+6n5HUif4q/bN8h666SOZa
-   Q==;
-X-CSE-ConnectionGUID: 3IhvQ3eqSEG/tNpAcAleTA==
-X-CSE-MsgGUID: fFGXHKSlSoWWClXexyAR6Q==
-X-IronPort-AV: E=McAfee;i="6700,10204,11148"; a="30682533"
-X-IronPort-AV: E=Sophos;i="6.09,247,1716274800"; 
-   d="scan'208";a="30682533"
-Received: from orviesa009.jf.intel.com ([10.64.159.149])
-  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jul 2024 18:44:17 -0700
-X-CSE-ConnectionGUID: 9kb3DgLBSDSr5M0vXOVcVg==
-X-CSE-MsgGUID: 98rbFDwDS/W3iX2y4S3AyA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.09,247,1716274800"; 
-   d="scan'208";a="54136544"
-Received: from lkp-server01.sh.intel.com (HELO 68891e0c336b) ([10.239.97.150])
-  by orviesa009.jf.intel.com with ESMTP; 29 Jul 2024 18:44:13 -0700
-Received: from kbuild by 68891e0c336b with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1sYbuN-000sIi-0F;
-	Tue, 30 Jul 2024 01:44:11 +0000
-Date: Tue, 30 Jul 2024 09:43:42 +0800
-From: kernel test robot <lkp@intel.com>
-To: Herve Codina <herve.codina@bootlin.com>,
-	Christophe Leroy <christophe.leroy@csgroup.eu>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>, Qiang Zhao <qiang.zhao@nxp.com>,
-	Li Yang <leoyang.li@nxp.com>, Mark Brown <broonie@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linuxppc-dev@lists.ozlabs.org, linux-arm-kernel@lists.infradead.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Subject: Re: [PATCH v1 14/36] soc: fsl: cpm1: tsa: Add support for QUICC
- Engine (QE) implementation
-Message-ID: <202407300923.HVotne4K-lkp@intel.com>
-References: <20240729142107.104574-15-herve.codina@bootlin.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TNS46FkV"
+Received: by mail-pf1-f169.google.com with SMTP id d2e1a72fcca58-70d18d4b94cso2777515b3a.2
+        for <llvm@lists.linux.dev>; Mon, 29 Jul 2024 18:48:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1722304134; x=1722908934; darn=lists.linux.dev;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=8n1996Y8lpYFOWA5Eh8nbf6QZqyqbZ6W7WJigmpON5M=;
+        b=TNS46FkVz/gzMg6h4SubXon2T9fF4qTBIyQOLlHTpghnMjQLMrXgFCswwlLQ76pav6
+         AdhzLp+xpQSbDRSe8NdzgmWWHj3GHJNAvIk9R922tNn/H0aLKPQttY38hkCRt9HZGXqf
+         fT8OkVN9lCPiJMngwXLx/iR8XVlYqd4bbA3YjWK2SGTDQSueELhH8CudZVglIFqRxjk4
+         yN6cE1rUSiUhPCZuSjz+oowX1Zrj7Wt/EJvEllrxleBLqriFOj8eVJKTJ4fMBmr4OiYQ
+         T8ge9KF63ZZX/Ez/yOk/hvfrzqNoE+h4LMS3S83VN6+qeswUy+EvLRXZKBaz3U3Jkqt8
+         QF1w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1722304134; x=1722908934;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=8n1996Y8lpYFOWA5Eh8nbf6QZqyqbZ6W7WJigmpON5M=;
+        b=rH9bhr/sRoVyZ7BgKaMMnav5EHhFTTYeqZPlqWmSirPiTkmivpHYabPqRfFEwn6fYE
+         2f6IGDi3mEZSNGlalw5GuFnllmUmCFSgRgEVd3nnq3KSf5sTKb2bJwjm7QJEwkKHR4cW
+         TIuOa73oGghBue2nAUHMbGsaEG+OdkF1pr7F4ByzO1SDL5vweBShcpeZmqbxWkp3vHUx
+         FgDQoV4S1JCO6ETpwa/GrWk5JcKV0Ue7qUaql5No1kWzeE4VR7HlJn3Fo4G64sIQTYhJ
+         +MQKa4tKMs1uGHivdrYBrfb9sKAun27TvpjwtbsO2NSU5xxs253kd2F2644j3jefA7wv
+         GX6Q==
+X-Forwarded-Encrypted: i=1; AJvYcCWM+sgP7vai2FTuOiF0IpzEH21ZNAcAi9R3Kj+aXB3LgJYJ3rZYI59f9qTtVWIIv080dU4yUrF3NMmHaurph3rSGu+m0Q==
+X-Gm-Message-State: AOJu0YyPfz8hkyUFXqYWTT8Ugw9+WqVyoJNbsDzUiXGVNn3Pb8HRHfCw
+	QHTLKoZY7PZmQM+mV/RAVJXBSt32E6L8uJ9r9gEcbCpbmAYMZhS6
+X-Google-Smtp-Source: AGHT+IH7sIH1zweCsioW01t/maDkdbU9IGjwQFzOiWkCdl997w0ao4hui3UQ4BFfljKQfqX+6cWd4A==
+X-Received: by 2002:a05:6a00:8597:b0:70b:2a:15da with SMTP id d2e1a72fcca58-70ece9facb3mr6515521b3a.4.1722304133953;
+        Mon, 29 Jul 2024 18:48:53 -0700 (PDT)
+Received: from [192.168.255.10] ([43.132.141.21])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-70ead890cb3sm7399127b3a.184.2024.07.29.18.48.50
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 29 Jul 2024 18:48:53 -0700 (PDT)
+Message-ID: <90b4bfb3-8fb1-4f77-b3e2-1c55605a8cbd@gmail.com>
+Date: Tue, 30 Jul 2024 09:48:49 +0800
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240729142107.104574-15-herve.codina@bootlin.com>
-
-Hi Herve,
-
-kernel test robot noticed the following build warnings:
-
-[auto build test WARNING on robh/for-next]
-[also build test WARNING on linus/master v6.11-rc1 next-20240729]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Herve-Codina/soc-fsl-cpm1-qmc-Update-TRNSYNC-only-in-transparent-mode/20240730-001631
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
-patch link:    https://lore.kernel.org/r/20240729142107.104574-15-herve.codina%40bootlin.com
-patch subject: [PATCH v1 14/36] soc: fsl: cpm1: tsa: Add support for QUICC Engine (QE) implementation
-config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20240730/202407300923.HVotne4K-lkp@intel.com/config)
-compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240730/202407300923.HVotne4K-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202407300923.HVotne4K-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> drivers/soc/fsl/qe/tsa.c:984:17: warning: cast to smaller integer type 'enum tsa_version' from 'const void *' [-Wvoid-pointer-to-enum-cast]
-     984 |         tsa->version = (enum tsa_version)of_device_get_match_data(&pdev->dev);
-         |                        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   1 warning generated.
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3] docs/zh_CN: Add dev-tools/kcsan Chinese translation
+To: Dongliang Mu <mudongliangabcd@gmail.com>
+Cc: Haoyang Liu <tttturtleruss@hust.edu.cn>, Alex Shi <alexs@kernel.org>,
+ Yanteng Si <siyanteng@loongson.cn>, Jonathan Corbet <corbet@lwn.net>,
+ Nathan Chancellor <nathan@kernel.org>,
+ Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling
+ <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
+ hust-os-kernel-patches@googlegroups.com, linux-doc@vger.kernel.org,
+ linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+References: <20240727150844.6502-1-tttturtleruss@hust.edu.cn>
+ <7670e090-92e5-48ed-9365-e611ae1d4972@gmail.com>
+ <75cbc7d7-5faf-4286-a702-ac242c6f87f3@hust.edu.cn>
+ <bbbc3a51-21c6-47fc-ba3e-924ad8d86b63@gmail.com>
+ <CAD-N9QWBH8yZcUhSLwUCZCOBrLbS1AUONik2p5E4LWYkhyVaxQ@mail.gmail.com>
+Content-Language: en-US
+From: Alex Shi <seakeel@gmail.com>
+In-Reply-To: <CAD-N9QWBH8yZcUhSLwUCZCOBrLbS1AUONik2p5E4LWYkhyVaxQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
 
-vim +984 drivers/soc/fsl/qe/tsa.c
 
-7f6697511df485 Herve Codina 2024-07-29   970  
-1d4ba0b81c1cf2 Herve Codina 2023-02-17   971  static int tsa_probe(struct platform_device *pdev)
-1d4ba0b81c1cf2 Herve Codina 2023-02-17   972  {
-1d4ba0b81c1cf2 Herve Codina 2023-02-17   973  	struct device_node *np = pdev->dev.of_node;
-1d4ba0b81c1cf2 Herve Codina 2023-02-17   974  	struct resource *res;
-1d4ba0b81c1cf2 Herve Codina 2023-02-17   975  	struct tsa *tsa;
-1d4ba0b81c1cf2 Herve Codina 2023-02-17   976  	unsigned int i;
-1d4ba0b81c1cf2 Herve Codina 2023-02-17   977  	int ret;
-1d4ba0b81c1cf2 Herve Codina 2023-02-17   978  
-1d4ba0b81c1cf2 Herve Codina 2023-02-17   979  	tsa = devm_kzalloc(&pdev->dev, sizeof(*tsa), GFP_KERNEL);
-1d4ba0b81c1cf2 Herve Codina 2023-02-17   980  	if (!tsa)
-1d4ba0b81c1cf2 Herve Codina 2023-02-17   981  		return -ENOMEM;
-1d4ba0b81c1cf2 Herve Codina 2023-02-17   982  
-1d4ba0b81c1cf2 Herve Codina 2023-02-17   983  	tsa->dev = &pdev->dev;
-3d16c3ebcd1ae6 Herve Codina 2024-07-29  @984  	tsa->version = (enum tsa_version)of_device_get_match_data(&pdev->dev);
-3d16c3ebcd1ae6 Herve Codina 2024-07-29   985  	switch (tsa->version) {
-3d16c3ebcd1ae6 Herve Codina 2024-07-29   986  	case TSA_CPM1:
-3d16c3ebcd1ae6 Herve Codina 2024-07-29   987  		dev_info(tsa->dev, "CPM1 version\n");
-3d16c3ebcd1ae6 Herve Codina 2024-07-29   988  		break;
-b76939bef42d1d Herve Codina 2024-07-29   989  	case TSA_QE:
-b76939bef42d1d Herve Codina 2024-07-29   990  		dev_info(tsa->dev, "QE version\n");
-b76939bef42d1d Herve Codina 2024-07-29   991  		break;
-3d16c3ebcd1ae6 Herve Codina 2024-07-29   992  	default:
-3d16c3ebcd1ae6 Herve Codina 2024-07-29   993  		dev_err(tsa->dev, "Unknown version (%d)\n", tsa->version);
-3d16c3ebcd1ae6 Herve Codina 2024-07-29   994  		return -EINVAL;
-3d16c3ebcd1ae6 Herve Codina 2024-07-29   995  	}
-1d4ba0b81c1cf2 Herve Codina 2023-02-17   996  
-1d4ba0b81c1cf2 Herve Codina 2023-02-17   997  	for (i = 0; i < ARRAY_SIZE(tsa->serials); i++)
-1d4ba0b81c1cf2 Herve Codina 2023-02-17   998  		tsa->serials[i].id = i;
-1d4ba0b81c1cf2 Herve Codina 2023-02-17   999  
-1d4ba0b81c1cf2 Herve Codina 2023-02-17  1000  	spin_lock_init(&tsa->lock);
-1d4ba0b81c1cf2 Herve Codina 2023-02-17  1001  
-1d4ba0b81c1cf2 Herve Codina 2023-02-17  1002  	tsa->si_regs = devm_platform_ioremap_resource_byname(pdev, "si_regs");
-1d4ba0b81c1cf2 Herve Codina 2023-02-17  1003  	if (IS_ERR(tsa->si_regs))
-1d4ba0b81c1cf2 Herve Codina 2023-02-17  1004  		return PTR_ERR(tsa->si_regs);
-1d4ba0b81c1cf2 Herve Codina 2023-02-17  1005  
-1d4ba0b81c1cf2 Herve Codina 2023-02-17  1006  	res = platform_get_resource_byname(pdev, IORESOURCE_MEM, "si_ram");
-1d4ba0b81c1cf2 Herve Codina 2023-02-17  1007  	if (!res) {
-1d4ba0b81c1cf2 Herve Codina 2023-02-17  1008  		dev_err(tsa->dev, "si_ram resource missing\n");
-1d4ba0b81c1cf2 Herve Codina 2023-02-17  1009  		return -EINVAL;
-1d4ba0b81c1cf2 Herve Codina 2023-02-17  1010  	}
-1d4ba0b81c1cf2 Herve Codina 2023-02-17  1011  	tsa->si_ram_sz = resource_size(res);
-1d4ba0b81c1cf2 Herve Codina 2023-02-17  1012  	tsa->si_ram = devm_ioremap_resource(&pdev->dev, res);
-1d4ba0b81c1cf2 Herve Codina 2023-02-17  1013  	if (IS_ERR(tsa->si_ram))
-1d4ba0b81c1cf2 Herve Codina 2023-02-17  1014  		return PTR_ERR(tsa->si_ram);
-1d4ba0b81c1cf2 Herve Codina 2023-02-17  1015  
-1d4ba0b81c1cf2 Herve Codina 2023-02-17  1016  	tsa_init_si_ram(tsa);
-1d4ba0b81c1cf2 Herve Codina 2023-02-17  1017  
-1d4ba0b81c1cf2 Herve Codina 2023-02-17  1018  	ret = tsa_of_parse_tdms(tsa, np);
-1d4ba0b81c1cf2 Herve Codina 2023-02-17  1019  	if (ret)
-1d4ba0b81c1cf2 Herve Codina 2023-02-17  1020  		return ret;
-1d4ba0b81c1cf2 Herve Codina 2023-02-17  1021  
-7f6697511df485 Herve Codina 2024-07-29  1022  	ret = tsa_setup(tsa);
-7f6697511df485 Herve Codina 2024-07-29  1023  	if (ret)
-7f6697511df485 Herve Codina 2024-07-29  1024  		return ret;
-1d4ba0b81c1cf2 Herve Codina 2023-02-17  1025  
-1d4ba0b81c1cf2 Herve Codina 2023-02-17  1026  	platform_set_drvdata(pdev, tsa);
-1d4ba0b81c1cf2 Herve Codina 2023-02-17  1027  
-1d4ba0b81c1cf2 Herve Codina 2023-02-17  1028  	return 0;
-1d4ba0b81c1cf2 Herve Codina 2023-02-17  1029  }
-1d4ba0b81c1cf2 Herve Codina 2023-02-17  1030  
+On 7/30/24 9:38 AM, Dongliang Mu wrote:
+>>>> "compiler instrumenting" 为什么要翻译成插桩？
+>>> 指的是“KCSAN then relies on the compiler instrumenting plain accesses.”这句吗。
+>> I don't understand the details of KCSAN, but according the doc, KCSAN make a array and
+>> watch the data address in the array, so is there a real stub which inserted by gcc/clang?
+> Yes, the compiler(gcc or clang) will insert a real stub, i.e. some
+> assembly code, in the generated kernel image.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+OK， then it's fine to translate like this.
