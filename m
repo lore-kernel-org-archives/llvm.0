@@ -1,44 +1,61 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 555AC1684BE;
-	Tue, 30 Jul 2024 20:37:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E90491917C9;
+	Tue, 30 Jul 2024 22:42:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722371856; cv=none; b=Jaq2Vf7f6dG1dLr/Q68czUaKoX/aW68ZEu+TvikVU+NlJvvpO7ZTM+UMp29ig3S9kkHLGUVstLiJnbn2ttBFR2H5RSNn5ZCcHjMfYJPAI8vNRMeFTk88BMQ4IIxcTpXk6rq+sKplAcx9Zo8Y0wY/fjFKOpV9yzjHsD1s99xF3/A=
+	t=1722379326; cv=none; b=ggCdURZQAfxc8tAeACKrGj74t00EwJ9PI8M9rdMbodTknIkoVLuyLwu6sRGebSL6Vkh5dw3r6zXfu+2y5XmRy3Wu/VGkR9u3U5NW4yB92caycQS+aq/OXoEibUCF/OpOXnC+yB13tm+Zi1+6ZE/99zYcG51aEFIYnDBvM3C3Rq4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722371856; c=relaxed/simple;
-	bh=ar0oF94oQZfUJEc0XX0JRA1TrW1LUKKl0LTDHv+jmwo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ZMuJK8NljaUZ0DPKspFpgt+Or4GJrURUKLqqcaiJaYM8vos/NMXyiAopca2vpnygiCj4fJ87s3qPQ7sxJcCXP9EWVkztCHhQZp4SwVYW0Ye32829uwVQGnRGEnpE4sRob8o6krjBB2RlTLfjcrmemZhfQ92y7l+YVDvMpFqTQL8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=S8BOh21u; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1722379326; c=relaxed/simple;
+	bh=8sTIBm/WvjY4ZpypVHSc4+OuObYfnuYfN034KBcckBE=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=bp2drXyJfSxGweDrwBWCH5YTSgVvXB7jQjsutLMMQs2l1FyWW8I7pGEfIE0QEtsDi9IKLO3hNVsiMb6GMYCudoc7EOLy5PWI7L7NaOU5928k+9FtoK/6//QJJ9GUfxFW6p6tNX4GBobo8lB6GOYnCKzaVknpI5H+P+nyFQ2HwbE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=SDMoFE5s; arc=none smtp.client-ip=192.198.163.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="S8BOh21u"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DB3B5C32782;
-	Tue, 30 Jul 2024 20:37:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1722371855;
-	bh=ar0oF94oQZfUJEc0XX0JRA1TrW1LUKKl0LTDHv+jmwo=;
-	h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-	b=S8BOh21uGZgXbsiYQqISZYQyahx7bLDQGclKsDLOBCtf39ZjVuLb9phtLPbjE2RAJ
-	 pg1no6fM2J6lXvCzVW9KrgYsbXb/W2j+nfvqzoS7efU7T01qcS+2mqoNXmFm3e5KsU
-	 f/+uqseNOQWgNLeFx5/xhzujVokbGhlgGWei/s+Mr3pQS0EghytJqAfmBH1TuzH46R
-	 /JoFJkEmSKMOoNrBZhqM/h/BqW+jQ9v+XM8S+xqwmNTWH7ZCJo9aPv5u/aDrDbXSPA
-	 FA4fnbhRt9YUA9kwvA/FGyr5yrYZ/r+CAhjlZYr6dtUTsJXzfthW1WamT8kYA6u4U/
-	 02HuDKX38Ik1g==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-	id 7C753CE0A63; Tue, 30 Jul 2024 13:37:35 -0700 (PDT)
-Date: Tue, 30 Jul 2024 13:37:35 -0700
-From: "Paul E. McKenney" <paulmck@kernel.org>
-To: kernel test robot <lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="SDMoFE5s"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1722379325; x=1753915325;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=8sTIBm/WvjY4ZpypVHSc4+OuObYfnuYfN034KBcckBE=;
+  b=SDMoFE5s6b/uMb4u9FVXos8KblcPm2nQIDAnZ+qiPlK0/ZppL9WjSxkS
+   FfjzguTW+8nTAFRfNQO+UCuCw+03omWlimZvAz7Qb9AxSNaiaJS63xf39
+   lYRCVXFDaYUsq7modN+c24tgOdr7QCKBpHXSiyKfH77oa1PYpoxWTXRCM
+   G21VWSRmAJE4rKV46rdQndztEku6wsFU2KNIwyc4P+jheQT5iZHxFswKX
+   FyuBwGYJp0BzAm87ZnJX/7hklhH+Ag8EaInmj8fHyO8CwrcvJo4f5u8bQ
+   utvyVN/UKtoseeZoZwyo9GSdsmmcG4SElMPbqN0bX+I3Bnxnh8fKrRmdU
+   Q==;
+X-CSE-ConnectionGUID: xaXymIMbQLaXIU4LKvrLrg==
+X-CSE-MsgGUID: H/zD7YbXSYWMHpMMNNavAQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11149"; a="24097319"
+X-IronPort-AV: E=Sophos;i="6.09,248,1716274800"; 
+   d="scan'208";a="24097319"
+Received: from fmviesa003.fm.intel.com ([10.60.135.143])
+  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jul 2024 15:42:04 -0700
+X-CSE-ConnectionGUID: ASnX7ysAT7OMYWvnOZOx1g==
+X-CSE-MsgGUID: XsZlu1tfSxOQtaAfxIs3wg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.09,248,1716274800"; 
+   d="scan'208";a="58618873"
+Received: from lkp-server01.sh.intel.com (HELO 68891e0c336b) ([10.239.97.150])
+  by fmviesa003.fm.intel.com with ESMTP; 30 Jul 2024 15:42:02 -0700
+Received: from kbuild by 68891e0c336b with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1sYvXc-000tRm-2E;
+	Tue, 30 Jul 2024 22:42:00 +0000
+Date: Wed, 31 Jul 2024 06:41:59 +0800
+From: kernel test robot <lkp@intel.com>
+To: Witold Sadowski <wsadowski@marvell.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org
-Subject: Re: [paulmck-rcu:dev.2024.07.25a 15/43]
- kernel/rcu/rcuscale.c:1021:2: error: use of undeclared identifier
- 'writer_done'
-Message-ID: <00a039f5-ef33-44d3-904b-5257be898b45@paulmck-laptop>
-Reply-To: paulmck@kernel.org
-References: <202407300009.05X7YXZC-lkp@intel.com>
+	Linux Memory Management List <linux-mm@kvack.org>,
+	Mark Brown <broonie@kernel.org>
+Subject: [linux-next:master 1008/1677] drivers/spi/spi-cadence-xspi.c:529:12:
+ error: call to undeclared function 'readq'; ISO C99 and later do not support
+ implicit function declarations
+Message-ID: <202407310634.bYvT0Myc-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -47,155 +64,90 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <202407300009.05X7YXZC-lkp@intel.com>
 
-On Tue, Jul 30, 2024 at 12:43:00AM +0800, kernel test robot wrote:
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git dev.2024.07.25a
-> head:   24e3bccdf4bc0ae57b0e89e0313fd4450fde12af
-> commit: 54ff7b22b9062495092737217877be2bdd3dabd4 [15/43] rcuscale: Save a few lines with whitespace-only change
-> config: x86_64-randconfig-071-20240728 (https://download.01.org/0day-ci/archive/20240730/202407300009.05X7YXZC-lkp@intel.com/config)
-> compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
-> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240730/202407300009.05X7YXZC-lkp@intel.com/reproduce)
-> 
-> If you fix the issue in a separate patch/commit (i.e. not just a new version of
-> the same patch/commit), kindly add following tags
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes: https://lore.kernel.org/oe-kbuild-all/202407300009.05X7YXZC-lkp@intel.com/
-> 
-> Note: the paulmck-rcu/dev.2024.07.25a HEAD 24e3bccdf4bc0ae57b0e89e0313fd4450fde12af builds fine.
->       It only hurts bisectability.
-> 
-> All errors (new ones prefixed by >>):
-> 
-> >> kernel/rcu/rcuscale.c:1021:2: error: use of undeclared identifier 'writer_done'
->     1021 |         writer_done = kcalloc(nrealwriters, sizeof(writer_done[0]), GFP_KERNEL);
->          |         ^
->    kernel/rcu/rcuscale.c:1021:45: error: use of undeclared identifier 'writer_done'
->     1021 |         writer_done = kcalloc(nrealwriters, sizeof(writer_done[0]), GFP_KERNEL);
->          |                                                    ^
->    kernel/rcu/rcuscale.c:1021:45: error: use of undeclared identifier 'writer_done'
->    kernel/rcu/rcuscale.c:1022:68: error: use of undeclared identifier 'writer_done'
->     1022 |         if (!writer_tasks || !writer_durations || !writer_n_durations || !writer_done) {
->          |                                                                           ^
->    4 errors generated.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+head:   cd19ac2f903276b820f5d0d89de0c896c27036ed
+commit: 75128e2a14a9f443e8debdd30445f5934b5a7c83 [1008/1677] spi: cadence: Add Marvell SDMA operations
+config: i386-randconfig-003-20240731 (https://download.01.org/0day-ci/archive/20240731/202407310634.bYvT0Myc-lkp@intel.com/config)
+compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240731/202407310634.bYvT0Myc-lkp@intel.com/reproduce)
 
-Good catch!!!
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202407310634.bYvT0Myc-lkp@intel.com/
 
-This should be fixed by 2b65b350efe5 ("rcuscale: Save a few lines with
-whitespace-only change").  Please let me know if issues remain.
+All errors (new ones prefixed by >>):
 
-							Thanx, Paul
+>> drivers/spi/spi-cadence-xspi.c:529:12: error: call to undeclared function 'readq'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     529 |                         u64 b = readq(addr);
+         |                                 ^
+   drivers/spi/spi-cadence-xspi.c:538:13: error: call to undeclared function 'readq'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     538 |                 tmp_buf = readq(addr);
+         |                           ^
+>> drivers/spi/spi-cadence-xspi.c:555:4: error: call to undeclared function 'writeq'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     555 |                         writeq(*buffer++, addr);
+         |                         ^
+   drivers/spi/spi-cadence-xspi.c:563:3: error: call to undeclared function 'writeq'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     563 |                 writeq(tmp_buf, addr);
+         |                 ^
+   4 errors generated.
 
-> vim +/writer_done +1021 kernel/rcu/rcuscale.c
-> 
->    946	
->    947	static int __init
->    948	rcu_scale_init(void)
->    949	{
->    950		long i;
->    951		int firsterr = 0;
->    952		static struct rcu_scale_ops *scale_ops[] = {
->    953			&rcu_ops, &srcu_ops, &srcud_ops, TASKS_OPS TASKS_RUDE_OPS TASKS_TRACING_OPS
->    954		};
->    955	
->    956		if (!torture_init_begin(scale_type, verbose))
->    957			return -EBUSY;
->    958	
->    959		/* Process args and announce that the scalability'er is on the job. */
->    960		for (i = 0; i < ARRAY_SIZE(scale_ops); i++) {
->    961			cur_ops = scale_ops[i];
->    962			if (strcmp(scale_type, cur_ops->name) == 0)
->    963				break;
->    964		}
->    965		if (i == ARRAY_SIZE(scale_ops)) {
->    966			pr_alert("rcu-scale: invalid scale type: \"%s\"\n", scale_type);
->    967			pr_alert("rcu-scale types:");
->    968			for (i = 0; i < ARRAY_SIZE(scale_ops); i++)
->    969				pr_cont(" %s", scale_ops[i]->name);
->    970			pr_cont("\n");
->    971			firsterr = -EINVAL;
->    972			cur_ops = NULL;
->    973			goto unwind;
->    974		}
->    975		if (cur_ops->init)
->    976			cur_ops->init();
->    977	
->    978		if (cur_ops->rso_gp_kthread) {
->    979			kthread_tp = cur_ops->rso_gp_kthread();
->    980			if (kthread_tp)
->    981				kthread_stime = kthread_tp->stime;
->    982		}
->    983		if (kfree_rcu_test)
->    984			return kfree_scale_init();
->    985	
->    986		nrealwriters = compute_real(nwriters);
->    987		nrealreaders = compute_real(nreaders);
->    988		atomic_set(&n_rcu_scale_reader_started, 0);
->    989		atomic_set(&n_rcu_scale_writer_started, 0);
->    990		atomic_set(&n_rcu_scale_writer_finished, 0);
->    991		rcu_scale_print_module_parms(cur_ops, "Start of test");
->    992	
->    993		/* Start up the kthreads. */
->    994	
->    995		if (shutdown) {
->    996			init_waitqueue_head(&shutdown_wq);
->    997			firsterr = torture_create_kthread(rcu_scale_shutdown, NULL,
->    998							  shutdown_task);
->    999			if (torture_init_error(firsterr))
->   1000				goto unwind;
->   1001			schedule_timeout_uninterruptible(1);
->   1002		}
->   1003		reader_tasks = kcalloc(nrealreaders, sizeof(reader_tasks[0]),
->   1004				       GFP_KERNEL);
->   1005		if (reader_tasks == NULL) {
->   1006			SCALEOUT_ERRSTRING("out of memory");
->   1007			firsterr = -ENOMEM;
->   1008			goto unwind;
->   1009		}
->   1010		for (i = 0; i < nrealreaders; i++) {
->   1011			firsterr = torture_create_kthread(rcu_scale_reader, (void *)i,
->   1012							  reader_tasks[i]);
->   1013			if (torture_init_error(firsterr))
->   1014				goto unwind;
->   1015		}
->   1016		while (atomic_read(&n_rcu_scale_reader_started) < nrealreaders)
->   1017			schedule_timeout_uninterruptible(1);
->   1018		writer_tasks = kcalloc(nrealwriters, sizeof(writer_tasks[0]), GFP_KERNEL);
->   1019		writer_durations = kcalloc(nrealwriters, sizeof(*writer_durations), GFP_KERNEL);
->   1020		writer_n_durations = kcalloc(nrealwriters, sizeof(*writer_n_durations), GFP_KERNEL);
-> > 1021		writer_done = kcalloc(nrealwriters, sizeof(writer_done[0]), GFP_KERNEL);
->   1022		if (!writer_tasks || !writer_durations || !writer_n_durations || !writer_done) {
->   1023			SCALEOUT_ERRSTRING("out of memory");
->   1024			firsterr = -ENOMEM;
->   1025			goto unwind;
->   1026		}
->   1027		for (i = 0; i < nrealwriters; i++) {
->   1028			writer_durations[i] =
->   1029				kcalloc(MAX_MEAS, sizeof(*writer_durations[i]),
->   1030					GFP_KERNEL);
->   1031			if (!writer_durations[i]) {
->   1032				firsterr = -ENOMEM;
->   1033				goto unwind;
->   1034			}
->   1035			firsterr = torture_create_kthread(rcu_scale_writer, (void *)i,
->   1036							  writer_tasks[i]);
->   1037			if (torture_init_error(firsterr))
->   1038				goto unwind;
->   1039		}
->   1040		torture_init_end();
->   1041		return 0;
->   1042	
->   1043	unwind:
->   1044		torture_init_end();
->   1045		rcu_scale_cleanup();
->   1046		if (shutdown) {
->   1047			WARN_ON(!IS_MODULE(CONFIG_RCU_SCALE_TEST));
->   1048			kernel_power_off();
->   1049		}
->   1050		return firsterr;
->   1051	}
->   1052	
-> 
-> -- 
-> 0-DAY CI Kernel Test Service
-> https://github.com/intel/lkp-tests/wiki
+
+vim +/readq +529 drivers/spi/spi-cadence-xspi.c
+
+   518	
+   519	static void m_ioreadq(void __iomem  *addr, void *buf, int len)
+   520	{
+   521		if (IS_ALIGNED((long)buf, 8) && len >= 8) {
+   522			u64 full_ops = len / 8;
+   523			u64 *buffer = buf;
+   524	
+   525			len -= full_ops * 8;
+   526			buf += full_ops * 8;
+   527	
+   528			do {
+ > 529				u64 b = readq(addr);
+   530				*buffer++ = b;
+   531			} while (--full_ops);
+   532		}
+   533	
+   534	
+   535		while (len) {
+   536			u64 tmp_buf;
+   537	
+   538			tmp_buf = readq(addr);
+   539			memcpy(buf, &tmp_buf, min(len, 8));
+   540			len = len > 8 ? len - 8 : 0;
+   541			buf += 8;
+   542		}
+   543	}
+   544	
+   545	static void m_iowriteq(void __iomem *addr, const void *buf, int len)
+   546	{
+   547		if (IS_ALIGNED((long)buf, 8) && len >= 8) {
+   548			u64 full_ops = len / 8;
+   549			const u64 *buffer = buf;
+   550	
+   551			len -= full_ops * 8;
+   552			buf += full_ops * 8;
+   553	
+   554			do {
+ > 555				writeq(*buffer++, addr);
+   556			} while (--full_ops);
+   557		}
+   558	
+   559		while (len) {
+   560			u64 tmp_buf;
+   561	
+   562			memcpy(&tmp_buf, buf, min(len, 8));
+   563			writeq(tmp_buf, addr);
+   564			len = len > 8 ? len - 8 : 0;
+   565			buf += 8;
+   566		}
+   567	}
+   568	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
