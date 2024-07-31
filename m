@@ -1,60 +1,59 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AFD74D512;
-	Wed, 31 Jul 2024 01:57:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A231C1805E;
+	Wed, 31 Jul 2024 03:58:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722391033; cv=none; b=rYNU8r87PJETVrPyjTeFBbvpVkPqsnE7eOLk2GXiEr6CWVZvkcgdnkrDhKgzIDhZGMhdtwBhZ2fin9QyFPG//oZ80O+PktK0PGwhQK8hhO2dLm0blG5/uTabrEdceS3O1+SpQmFXBp5kobvOhUMME7VwImP8clqFi2khOiQB1/U=
+	t=1722398298; cv=none; b=T8r/Nlx7ElB1BM6gY/hm4sXqxisO9dycIqKNRYeFANB3GrCCmKtbwT4VBy3BoMrD37u/UF58OXcbev+wvIZ830dVGt7v3Wv0V7yBCYaSRBNu37uzDcF4Po1w4x90xGeynruCs+BJC9nAiJqMDCwRk6qUjd+k/MpMgd8/9P5gNh8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722391033; c=relaxed/simple;
-	bh=RCdNowIwLLOvGeo7UOW1THxlROaOWcSUiiLBHtq2S5o=;
+	s=arc-20240116; t=1722398298; c=relaxed/simple;
+	bh=LEhaWCJvLtZ73LaVhSfR1ZVv5BLP3SoBV3qy5RfJm28=;
 	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=TKi6E4A111XFuZsN1sPugU0wVzVA8pF5JdMiBj44zw7f2TaHWsom0xDoTkQDyTEwPrKYNPXSHXArd88nfJGuoCabGMV5T0m4gOcdtm8uVyP5yDfhHk4ILfb6jgExrZkosXx5rKEn22BriL6b9X7xW07VXdtesZH05+orDO8PZ7A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ecgcw19M; arc=none smtp.client-ip=198.175.65.17
+	 Content-Disposition; b=d4fvlyj9QzfCs2x+pC2pPDM/XjasJyOubvB7VPNsXdKneDEkyEgw8l5/Em4Bf2HGXOU+B6QA1jnL1wuwpx2SA4n4GQX2K0hAxHnI5i4oRVHdOhk85MVNNCQXUFXbRcnXmeD3GBM2CzJ2/0Lo4LKTbI2zIv6dcMj3U/lcUE04Jdc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=K3WS8hoI; arc=none smtp.client-ip=198.175.65.13
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ecgcw19M"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="K3WS8hoI"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1722391032; x=1753927032;
+  t=1722398297; x=1753934297;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=RCdNowIwLLOvGeo7UOW1THxlROaOWcSUiiLBHtq2S5o=;
-  b=ecgcw19MJ977cuK6Xw9UWL13kc0liBnRNV365xDBZNCzUjcDh/IliZSC
-   wWHfi8u01cQRRUaG4VAxcxkyU5LCrv9dTFjUaJVsUb//UDDDLGGttXoP5
-   IC/V3g3IEU2jNfxMxq5CEfUumIAFVDfPtb0g96SR8T/H++ObD/yayWvx9
-   PTG3E97JqvJNhmTy7MX0kEd6dGr1KCwt3m6Yry7zV95bbk41nuOw0Rhff
-   uF7tEIMbBHo7OI3o6COtM/3S23UHhosLZRJikxdSGH2uPIpeq36WAkGSV
-   ye5gEwt2yEzcb/vdjFBO6Z2wvdI5Ld6YFzz614oCk0oiHzV2S3IRI0mnp
+  bh=LEhaWCJvLtZ73LaVhSfR1ZVv5BLP3SoBV3qy5RfJm28=;
+  b=K3WS8hoIO0KbIYgUpsMOo3ZycB82UeCu8+ai6Z0wjuKdtyqdrdD51G31
+   u2raYtRpYN9AWh51yv2BgGWxA1aXlbe/t59MK7GzcjTAGJ1nVVSK52fTK
+   0U4d3mJXJRJPA5yH3Uu3aK3in4Js3w/Rc+Qmq13fXPLGyQBcTCnOuxrAV
+   2Z+0e2dnJkZRBDqSxHwu2Lt2DHveu4WtqE99ozwGwCEftcbZ0k0GgwGBa
+   aDY0SpS8evB287jDoLKyXjW32ygsAgEQSGfRKo+7TcfE9LRsnjQ6dWFhW
+   2FM9Ab2pNcfiLUqiydyX3Se36QjInrb2N5XUYhG2euFnAveMMmmnWOC08
    A==;
-X-CSE-ConnectionGUID: rg6GijVPTkq5EByFpG6TGA==
-X-CSE-MsgGUID: maUXBe9MRWmstzfOY0rcXg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11149"; a="20372907"
+X-CSE-ConnectionGUID: 2lYUaTJhRY+p5xhYs8Nqzw==
+X-CSE-MsgGUID: KBJyyQMWSOugwfjTJmKb1w==
+X-IronPort-AV: E=McAfee;i="6700,10204,11149"; a="31404935"
 X-IronPort-AV: E=Sophos;i="6.09,250,1716274800"; 
-   d="scan'208";a="20372907"
-Received: from orviesa006.jf.intel.com ([10.64.159.146])
-  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jul 2024 18:57:11 -0700
-X-CSE-ConnectionGUID: c3yEIM8kS+uVhdm8NzgN7w==
-X-CSE-MsgGUID: uSAYfPr9TZGm098+B58eNw==
+   d="scan'208";a="31404935"
+Received: from orviesa002.jf.intel.com ([10.64.159.142])
+  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jul 2024 20:58:15 -0700
+X-CSE-ConnectionGUID: oAhEydHWSMebjjFzoVQe0w==
+X-CSE-MsgGUID: Z4+zund4S/2vL67cb110xg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.09,250,1716274800"; 
-   d="scan'208";a="54779947"
+   d="scan'208";a="85187596"
 Received: from lkp-server01.sh.intel.com (HELO 68891e0c336b) ([10.239.97.150])
-  by orviesa006.jf.intel.com with ESMTP; 30 Jul 2024 18:57:08 -0700
+  by orviesa002.jf.intel.com with ESMTP; 30 Jul 2024 20:58:13 -0700
 Received: from kbuild by 68891e0c336b with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1sYyaQ-000tcJ-29;
-	Wed, 31 Jul 2024 01:57:06 +0000
-Date: Wed, 31 Jul 2024 09:56:27 +0800
+	id 1sZ0Ta-000tiw-2L;
+	Wed, 31 Jul 2024 03:58:10 +0000
+Date: Wed, 31 Jul 2024 11:58:09 +0800
 From: kernel test robot <lkp@intel.com>
-To: "Gustavo A. R. Silva" <gustavoars@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	"Gustavo A. R. Silva" <gustavo@embeddedor.com>,
-	LKML <linux-kernel@vger.kernel.org>
-Subject: [gustavoars:testing/wfamnae-next20240729-cbc 8/9]
- include/uapi/scsi/fc/fc_els.h:1131:15: error: expected parameter declarator
-Message-ID: <202407310922.Mkw2WfT2-lkp@intel.com>
+To: Mathias Nyman <mathias.nyman@linux.intel.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [mnyman-xhci:fix_dbc_halted_ep 1/1]
+ drivers/usb/host/xhci-dbgcap.c:854:47: warning: variable 'ctrl' is
+ uninitialized when used here
+Message-ID: <202407311141.IdcYh2WX-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -64,168 +63,141 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/gustavoars/linux.git testing/wfamnae-next20240729-cbc
-head:   303f7de5e5f60dfc378b9a32a201110936b43d83
-commit: d9b68641e04510cbd540f81b8ef4379e4d26e201 [8/9] scsi: fc: Avoid -Wflex-array-member-not-at-end warnings
-config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20240731/202407310922.Mkw2WfT2-lkp@intel.com/config)
-compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project ccae7b461be339e717d02f99ac857cf0bc7d17fc)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240731/202407310922.Mkw2WfT2-lkp@intel.com/reproduce)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/mnyman/xhci.git fix_dbc_halted_ep
+head:   8532b621314e93336535528d5d45e41974c75e01
+commit: 8532b621314e93336535528d5d45e41974c75e01 [1/1] xhci: dbc: Fix handling halted endpoints
+config: i386-buildonly-randconfig-005-20240731 (https://download.01.org/0day-ci/archive/20240731/202407311141.IdcYh2WX-lkp@intel.com/config)
+compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240731/202407311141.IdcYh2WX-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202407310922.Mkw2WfT2-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202407311141.IdcYh2WX-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
-   In file included from drivers/scsi/libfc/fc_elsct.c:16:
->> include/uapi/scsi/fc/fc_els.h:1131:15: error: expected parameter declarator
-    1131 | static_assert(offsetof(struct fc_df_desc_fpin_reg, desc_tags) == sizeof(struct fc_df_desc_fpin_reg_hdr),
-         |               ^
-   include/linux/stddef.h:16:32: note: expanded from macro 'offsetof'
-      16 | #define offsetof(TYPE, MEMBER)  __builtin_offsetof(TYPE, MEMBER)
-         |                                 ^
-   In file included from drivers/scsi/libfc/fc_elsct.c:16:
->> include/uapi/scsi/fc/fc_els.h:1131:15: error: expected ')'
-   include/linux/stddef.h:16:32: note: expanded from macro 'offsetof'
-      16 | #define offsetof(TYPE, MEMBER)  __builtin_offsetof(TYPE, MEMBER)
-         |                                 ^
-   include/uapi/scsi/fc/fc_els.h:1131:14: note: to match this '('
-    1131 | static_assert(offsetof(struct fc_df_desc_fpin_reg, desc_tags) == sizeof(struct fc_df_desc_fpin_reg_hdr),
-         |              ^
->> include/uapi/scsi/fc/fc_els.h:1131:1: error: type specifier missing, defaults to 'int'; ISO C99 and later do not support implicit int [-Wimplicit-int]
-    1131 | static_assert(offsetof(struct fc_df_desc_fpin_reg, desc_tags) == sizeof(struct fc_df_desc_fpin_reg_hdr),
-         | ^
-         | int
->> include/uapi/scsi/fc/fc_els.h:1131:14: error: a function declaration without a prototype is deprecated in all versions of C [-Werror,-Wstrict-prototypes]
-    1131 | static_assert(offsetof(struct fc_df_desc_fpin_reg, desc_tags) == sizeof(struct fc_df_desc_fpin_reg_hdr),
-         |              ^
-    1132 |               "struct member likely outside of __struct_group()");
-         |                                                                 
-         |                                                                 void
-   include/uapi/scsi/fc/fc_els.h:1149:15: error: expected parameter declarator
-    1149 | static_assert(offsetof(struct fc_els_rdf, desc) == sizeof(struct fc_els_rdf_hdr),
-         |               ^
-   include/linux/stddef.h:16:32: note: expanded from macro 'offsetof'
-      16 | #define offsetof(TYPE, MEMBER)  __builtin_offsetof(TYPE, MEMBER)
-         |                                 ^
-   In file included from drivers/scsi/libfc/fc_elsct.c:16:
-   include/uapi/scsi/fc/fc_els.h:1149:15: error: expected ')'
-   include/linux/stddef.h:16:32: note: expanded from macro 'offsetof'
-      16 | #define offsetof(TYPE, MEMBER)  __builtin_offsetof(TYPE, MEMBER)
-         |                                 ^
-   include/uapi/scsi/fc/fc_els.h:1149:14: note: to match this '('
-    1149 | static_assert(offsetof(struct fc_els_rdf, desc) == sizeof(struct fc_els_rdf_hdr),
-         |              ^
-   include/uapi/scsi/fc/fc_els.h:1149:1: error: type specifier missing, defaults to 'int'; ISO C99 and later do not support implicit int [-Wimplicit-int]
-    1149 | static_assert(offsetof(struct fc_els_rdf, desc) == sizeof(struct fc_els_rdf_hdr),
-         | ^
-         | int
-   include/uapi/scsi/fc/fc_els.h:1149:14: error: a function declaration without a prototype is deprecated in all versions of C [-Werror,-Wstrict-prototypes]
-    1149 | static_assert(offsetof(struct fc_els_rdf, desc) == sizeof(struct fc_els_rdf_hdr),
-         |              ^
-    1150 |               "struct member likely outside of __struct_group()");
-         |                                                                 
-         |                                                                 void
-   In file included from drivers/scsi/libfc/fc_elsct.c:17:
-   In file included from include/scsi/libfc.h:16:
-   In file included from include/scsi/scsi_transport.h:10:
-   In file included from include/linux/transport_class.h:11:
-   In file included from include/linux/device.h:32:
-   In file included from include/linux/device/driver.h:21:
-   In file included from include/linux/module.h:19:
-   In file included from include/linux/elf.h:6:
-   In file included from arch/s390/include/asm/elf.h:168:
-   In file included from include/linux/compat.h:17:
-   In file included from include/linux/fs.h:33:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:98:11: warning: array index 3 is past the end of the array (that has type 'unsigned long[1]') [-Warray-bounds]
-      98 |                 return (set->sig[3] | set->sig[2] |
-         |                         ^        ~
-   arch/s390/include/asm/signal.h:22:9: note: array 'sig' declared here
-      22 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   In file included from drivers/scsi/libfc/fc_elsct.c:17:
-   In file included from include/scsi/libfc.h:16:
-   In file included from include/scsi/scsi_transport.h:10:
-   In file included from include/linux/transport_class.h:11:
-   In file included from include/linux/device.h:32:
-   In file included from include/linux/device/driver.h:21:
-   In file included from include/linux/module.h:19:
-   In file included from include/linux/elf.h:6:
-   In file included from arch/s390/include/asm/elf.h:168:
-   In file included from include/linux/compat.h:17:
-   In file included from include/linux/fs.h:33:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:98:25: warning: array index 2 is past the end of the array (that has type 'unsigned long[1]') [-Warray-bounds]
-      98 |                 return (set->sig[3] | set->sig[2] |
-         |                                       ^        ~
-   arch/s390/include/asm/signal.h:22:9: note: array 'sig' declared here
-      22 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   In file included from drivers/scsi/libfc/fc_elsct.c:17:
-   In file included from include/scsi/libfc.h:16:
-   In file included from include/scsi/scsi_transport.h:10:
-   In file included from include/linux/transport_class.h:11:
-   In file included from include/linux/device.h:32:
-   In file included from include/linux/device/driver.h:21:
-   In file included from include/linux/module.h:19:
-   In file included from include/linux/elf.h:6:
-   In file included from arch/s390/include/asm/elf.h:168:
-   In file included from include/linux/compat.h:17:
-   In file included from include/linux/fs.h:33:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:99:4: warning: array index 1 is past the end of the array (that has type 'unsigned long[1]') [-Warray-bounds]
-      99 |                         set->sig[1] | set->sig[0]) == 0;
-         |                         ^        ~
-   arch/s390/include/asm/signal.h:22:9: note: array 'sig' declared here
-      22 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   In file included from drivers/scsi/libfc/fc_elsct.c:17:
-   In file included from include/scsi/libfc.h:16:
-   In file included from include/scsi/scsi_transport.h:10:
-   In file included from include/linux/transport_class.h:11:
-   In file included from include/linux/device.h:32:
-   In file included from include/linux/device/driver.h:21:
-   In file included from include/linux/module.h:19:
-   In file included from include/linux/elf.h:6:
-   In file included from arch/s390/include/asm/elf.h:168:
-   In file included from include/linux/compat.h:17:
-   In file included from include/linux/fs.h:33:
+>> drivers/usb/host/xhci-dbgcap.c:854:47: warning: variable 'ctrl' is uninitialized when used here [-Wuninitialized]
+     854 |                 handle_ep_halt_changes(dbc, get_in_ep(dbc), ctrl & DBC_CTRL_HALT_IN_TR);
+         |                                                             ^~~~
+   drivers/usb/host/xhci-dbgcap.c:803:12: note: initialize the variable 'ctrl' to silence this warning
+     803 |         u32                     ctrl, portsc;
+         |                                     ^
+         |                                      = 0
+   1 warning generated.
 
 
-vim +1131 include/uapi/scsi/fc/fc_els.h
+vim +/ctrl +854 drivers/usb/host/xhci-dbgcap.c
 
-  1110	
-  1111	/* Diagnostic Function Descriptor - FPIN Registration */
-  1112	struct fc_df_desc_fpin_reg {
-  1113		/* New members MUST be added within the __struct_group() macro below. */
-  1114		__struct_group(fc_df_desc_fpin_reg_hdr, hdr, /* no attrs */,
-  1115			__be32		desc_tag; /* FPIN Registration (0x00030001) */
-  1116			__be32		desc_len; /* Length of Descriptor (in bytes).
-  1117						   * Size of descriptor excluding
-  1118						   * desc_tag and desc_len fields.
-  1119						   */
-  1120			__be32		count;	  /* Number of desc_tags elements */
-  1121		);
-  1122		__be32		desc_tags[];	/* Array of Descriptor Tags.
-  1123						 * Each tag indicates a function
-  1124						 * supported by the N_Port (request)
-  1125						 * or by the  N_Port and Fabric
-  1126						 * Controller (reply; may be a subset
-  1127						 * of the request).
-  1128						 * See ELS_FN_DTAG_xxx for tag values.
-  1129						 */
-  1130	};
-> 1131	static_assert(offsetof(struct fc_df_desc_fpin_reg, desc_tags) == sizeof(struct fc_df_desc_fpin_reg_hdr),
-  1132		      "struct member likely outside of __struct_group()");
-  1133	
+   798	
+   799	static enum evtreturn xhci_dbc_do_handle_events(struct xhci_dbc *dbc)
+   800	{
+   801		dma_addr_t		deq;
+   802		union xhci_trb		*evt;
+   803		u32			ctrl, portsc;
+   804		bool			update_erdp = false;
+   805	
+   806		/* DbC state machine: */
+   807		switch (dbc->state) {
+   808		case DS_DISABLED:
+   809		case DS_INITIALIZED:
+   810	
+   811			return EVT_ERR;
+   812		case DS_ENABLED:
+   813			portsc = readl(&dbc->regs->portsc);
+   814			if (portsc & DBC_PORTSC_CONN_STATUS) {
+   815				dbc->state = DS_CONNECTED;
+   816				dev_info(dbc->dev, "DbC connected\n");
+   817			}
+   818	
+   819			return EVT_DONE;
+   820		case DS_CONNECTED:
+   821			ctrl = readl(&dbc->regs->control);
+   822			if (ctrl & DBC_CTRL_DBC_RUN) {
+   823				dbc->state = DS_CONFIGURED;
+   824				dev_info(dbc->dev, "DbC configured\n");
+   825				portsc = readl(&dbc->regs->portsc);
+   826				writel(portsc, &dbc->regs->portsc);
+   827				return EVT_GSER;
+   828			}
+   829	
+   830			return EVT_DONE;
+   831		case DS_CONFIGURED:
+   832			/* Handle cable unplug event: */
+   833			portsc = readl(&dbc->regs->portsc);
+   834			if (!(portsc & DBC_PORTSC_PORT_ENABLED) &&
+   835			    !(portsc & DBC_PORTSC_CONN_STATUS)) {
+   836				dev_info(dbc->dev, "DbC cable unplugged\n");
+   837				dbc->state = DS_ENABLED;
+   838				xhci_dbc_flush_requests(dbc);
+   839	
+   840				return EVT_DISC;
+   841			}
+   842	
+   843			/* Handle debug port reset event: */
+   844			if (portsc & DBC_PORTSC_RESET_CHANGE) {
+   845				dev_info(dbc->dev, "DbC port reset\n");
+   846				writel(portsc, &dbc->regs->portsc);
+   847				dbc->state = DS_ENABLED;
+   848				xhci_dbc_flush_requests(dbc);
+   849	
+   850				return EVT_DISC;
+   851			}
+   852	
+   853			/* Check and handle changes in endpoint halt status */
+ > 854			handle_ep_halt_changes(dbc, get_in_ep(dbc), ctrl & DBC_CTRL_HALT_IN_TR);
+   855			handle_ep_halt_changes(dbc, get_out_ep(dbc), ctrl & DBC_CTRL_HALT_OUT_TR);
+   856	
+   857			/* Clear DbC run change bit: */
+   858			if (ctrl & DBC_CTRL_DBC_RUN_CHANGE) {
+   859				writel(ctrl, &dbc->regs->control);
+   860				ctrl = readl(&dbc->regs->control);
+   861			}
+   862			break;
+   863		default:
+   864			dev_err(dbc->dev, "Unknown DbC state %d\n", dbc->state);
+   865			break;
+   866		}
+   867	
+   868		/* Handle the events in the event ring: */
+   869		evt = dbc->ring_evt->dequeue;
+   870		while ((le32_to_cpu(evt->event_cmd.flags) & TRB_CYCLE) ==
+   871				dbc->ring_evt->cycle_state) {
+   872			/*
+   873			 * Add a barrier between reading the cycle flag and any
+   874			 * reads of the event's flags/data below:
+   875			 */
+   876			rmb();
+   877	
+   878			trace_xhci_dbc_handle_event(dbc->ring_evt, &evt->generic);
+   879	
+   880			switch (le32_to_cpu(evt->event_cmd.flags) & TRB_TYPE_BITMASK) {
+   881			case TRB_TYPE(TRB_PORT_STATUS):
+   882				dbc_handle_port_status(dbc, evt);
+   883				break;
+   884			case TRB_TYPE(TRB_TRANSFER):
+   885				dbc_handle_xfer_event(dbc, evt);
+   886				break;
+   887			default:
+   888				break;
+   889			}
+   890	
+   891			inc_evt_deq(dbc->ring_evt);
+   892	
+   893			evt = dbc->ring_evt->dequeue;
+   894			update_erdp = true;
+   895		}
+   896	
+   897		/* Update event ring dequeue pointer: */
+   898		if (update_erdp) {
+   899			deq = xhci_trb_virt_to_dma(dbc->ring_evt->deq_seg,
+   900						   dbc->ring_evt->dequeue);
+   901			lo_hi_writeq(deq, &dbc->regs->erdp);
+   902		}
+   903	
+   904		return EVT_DONE;
+   905	}
+   906	
 
 -- 
 0-DAY CI Kernel Test Service
