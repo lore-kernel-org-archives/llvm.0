@@ -1,73 +1,101 @@
-Received: from mail-qv1-f46.google.com (mail-qv1-f46.google.com [209.85.219.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA3D413C8E8
-	for <llvm@lists.linux.dev>; Thu,  1 Aug 2024 17:45:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 808F7182D8
+	for <llvm@lists.linux.dev>; Thu,  1 Aug 2024 18:12:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722534341; cv=none; b=EnoThM3Pgx1cBinFsFgDMWIIBic0PZHELLB2WmKNYBk4RgboZQCOgezknpbaFZjwhXo+qc0DllhsVTE3sRJgu46yMjBq3WTVjV64X+hquh66n9efnlW2RHGr2qTjdKLgWQkU6qBQuAQBuKYFILLPjnSVT2N8CDW588FMMOT8mgo=
+	t=1722535930; cv=none; b=f1CTkAenWaTc471wANcBDpJ37/fdIKrJlUGVqGRWvnjEM5vmOWUVVOJ+xR4M0oMQi90JOxFng0ByY9TyZY7hwfoWElenUxqawfxmsG6N0w6gGJMmjwJ2Sidg89QHNuyXQv2IMxhl+L532bSUxKL+UqSiXkDw5OrrzMghxLzFbR4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722534341; c=relaxed/simple;
-	bh=Md+tCugX0T6DBlJwjfQAImnL31p6sihip5oruYd0jwI=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=FpwHn7A7Fzi/9cfHod4i/Ih/J/gZIY+CGnATup2PNBGKr7ehHCHQ5itUvOYUxaI0ojSaQvOJJSlWziwwit3PtAxcnn6MaiKcGi6AV7eBInnarXCXe26l4bJ5KoM0EKqdRa1FnlEQlnHETMIGSpzwOurPbuYGxfodsE6B++yWWRQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=bzzwxQ89; arc=none smtp.client-ip=209.85.219.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	s=arc-20240116; t=1722535930; c=relaxed/simple;
+	bh=x4Rc5r1orIaNEp4hLV1jq1w/qF/HTt5nF4f1imiZwCA=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=u7ZaS1ndL2/RVMfYBaadRXiKK6U4k+HXzlGXqk0YsXcR5d+PKNJ1aBq7GNLQNSD0WftomIRX8tcpPRwc0vO2X2ABveUxyF9Vk9ssUdI4iYIB1WmhrOKjN23A9ZYLNCFFmCzR1idYhTKsgjHSHUtELWZg5ycqwSPurVCCorIk23k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=h0ZSYgfW; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="bzzwxQ89"
-Received: by mail-qv1-f46.google.com with SMTP id 6a1803df08f44-6b7b23793c1so40715696d6.0
-        for <llvm@lists.linux.dev>; Thu, 01 Aug 2024 10:45:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1722534339; x=1723139139; darn=lists.linux.dev;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=Md+tCugX0T6DBlJwjfQAImnL31p6sihip5oruYd0jwI=;
-        b=bzzwxQ894eWXjo0c0ge+eXoa5rhPNCSv0u3SuIjrTZRd37bgq6EiK5BUGiQY34KOcE
-         rNX/8H8mTzJa7mJ9xrXjZKhRjOApFkyUD24c1fiaIrIRWLgsX5KSsktdEqfNBhlOoIiB
-         osEK1JbY1cPn7mNt/E6WizYox52g6xjVwTNWZ3Kkf5reaoZz1wargw0kwoZ7wIn8CGfH
-         hvM9M9vSsndxNsHi65ZuDL6MH0wzvw/naBCXBChw1TJG1VwrEazjzjp+/FY697608QlM
-         9nfQrrpxp7fVDSTrVzS2+OmM5qGyHFKnx97lP3gvWwh4T2tCH8PaVo+/vq/8RGj2RUfG
-         w7MQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1722534339; x=1723139139;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Md+tCugX0T6DBlJwjfQAImnL31p6sihip5oruYd0jwI=;
-        b=sQvotmqXBbdYWf1aJ4iv0gELMiOjLbQDq+ALMZ+0mr11DK2xd4rgLDEF/tk4QfmWgD
-         CRMJYWPJZPkUaCuydltlRhld1bSrnJjqI8MRxGkCg4DjvpQ2KUI4dfgehqGHbMyKgTPL
-         p7XEVbtKgreZC6tDqYp8zTFSD92AKMbaJ6Z9bWllT3E9mhiL3iJeKqlmQH5k6idxFxtN
-         K59k9B4+PhhlQFwOJ4qZEVQ/Q+LwcWCiH2GWTqW/v/DKF5Wf1OcloxQJvdV5fGgotXEe
-         Sc7sCH3dgbYrsGQuXo2msSz50WD0Ku33+RwM41W4ehaWZnYoitNmOOXi/LPKiUJB1wyF
-         EQGg==
-X-Forwarded-Encrypted: i=1; AJvYcCVznjF4g/W4baRdJtRHEYGCOoGi/xfaZmEB89xAdUePY4UzkxZnpajjF40TBZLW7eekmpYTlTliTkNVe9EgslZz6MYUgQ==
-X-Gm-Message-State: AOJu0YzO/e3RmjpVc9S7IvWgTB90NMDneoq2XXi5SdwJk6KHGROA7f8p
-	ohA5bKWEt0yqFCLkwxEPgagP74tKIlhxO8xJdZUIGa5MyQiC77p//JbOUvVwXIySCYBC6mVwkeD
-	+LQHjHkB6v2Bu+64tgO6qvFDQKhCa4O+l8jM7
-X-Google-Smtp-Source: AGHT+IHxqFWXrBnwwKA5uii4m8WRktVKp0ck40g4Sz01mi9eFCVRKd2tDwa3fcr6zENHmZS+RQTGRB9qTrhExEKmqA8=
-X-Received: by 2002:a05:6214:5b85:b0:6b5:e3ba:5251 with SMTP id
- 6a1803df08f44-6bb98332800mr13418176d6.8.1722534338642; Thu, 01 Aug 2024
- 10:45:38 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="h0ZSYgfW"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1722535928;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=tegIfYuMSX4rmemGTiX+w/Ho+2XdXkUpOsOb6ziorgE=;
+	b=h0ZSYgfWSUsKTVdkzsnki9Oyl6PHjpB7eZl0iez4KSoZnpRQQpFLonng08+l8izXrLbDAt
+	OMhQXZyQdovoLhkmFXQJXmBSNKNTQmlO98RuSl1D7ZMyMcfFn6wq5UbFTaw1g/b4Or8q75
+	9mqTdHG2Mbw0V4m2P70GKByCPCnNqoc=
+Received: from mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-77-3vTMCfirM56oO7hYR7CxMw-1; Thu,
+ 01 Aug 2024 14:12:06 -0400
+X-MC-Unique: 3vTMCfirM56oO7hYR7CxMw-1
+Received: from mx-prod-int-02.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-02.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.15])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id D22D61955BF8
+	for <llvm@lists.linux.dev>; Thu,  1 Aug 2024 18:12:05 +0000 (UTC)
+Received: from [172.64.4.38] (unknown [10.30.33.216])
+	by mx-prod-int-02.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 64BEB1955D42;
+	Thu,  1 Aug 2024 18:12:05 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.11.0-rc1,
+ mainline.kernel.org-clang, 183d46ff)
+Date: Thu, 01 Aug 2024 18:12:05 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20240730142802.1082627-1-arnd@kernel.org> <20240801010953.GA1835661@google.com>
-In-Reply-To: <20240801010953.GA1835661@google.com>
-From: Richard Fung <richardfung@google.com>
-Date: Thu, 1 Aug 2024 10:45:01 -0700
-Message-ID: <CAGndiTNdCGuHRmnp+G-=_PzTaLXnUZpuXAT8dK-wdoG7Mpwt4A@mail.gmail.com>
-Subject: Re: [PATCH] fuse: fs-verity: aoid out-of-range comparison
-To: Eric Biggers <ebiggers@kernel.org>
-Cc: Arnd Bergmann <arnd@kernel.org>, Miklos Szeredi <miklos@szeredi.hu>, Arnd Bergmann <arnd@arndb.de>, 
-	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
-	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, linux-fsdevel@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.15
+Message-Id: <71956.124080114120601427@us-mta-77.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-> I think this was just defensive coding to ensure that the assignment to iov_len can't overflow regardless of the type of digest_size
+Hi, we tested your kernel and here are the results:
 
-I agree with this. Removing it sounds good to me
+    Overall result: FAILED
+             Merge: OK
+           Compile: FAILED
+
+
+Kernel information:
+    Commit message: Merge tag 'net-6.11-rc2' of git://git.kernel.org/pub/sc=
+m/linux/kernel/git/netdev/net
+
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1397439924
+
+One or more kernel builds failed:
+    Unrecognized or new issues:
+         ppc64le - https://datawarehouse.cki-project.org/kcidb/builds/redha=
+t:1397439924-ppc64le-kernel
+           s390x - https://datawarehouse.cki-project.org/kcidb/builds/redha=
+t:1397439924-s390x-kernel
+          x86_64 (debug) - https://datawarehouse.cki-project.org/kcidb/buil=
+ds/redhat:1397439924-x86_64-kernel-debug
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
