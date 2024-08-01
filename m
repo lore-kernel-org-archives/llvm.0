@@ -1,46 +1,51 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 33FF8200A3;
-	Thu,  1 Aug 2024 01:09:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F56613AA2D;
+	Thu,  1 Aug 2024 01:24:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722474595; cv=none; b=HhfamAEKzlvopxum+gphajU4c/BaFW84w5PJnedu4fqJ5MJXisx3ul8xoatB68EXpbclsxD6y+Hj98Laq6HAFf+BEZEyAm0xUfpLYfaDmU94n2wP99BPnvdDdWC9cFTCp/I/lE5ofvQwHQSZaP5DS7uK5MMbQcg4uad60t35+AU=
+	t=1722475467; cv=none; b=FfxZGOYU5XiWZn0GvJKDCCvppu2SUZu9eG+Eu4AwEOJzaIaXCo7QJ98qJlOt8HeSpcK6o6B4o6d0PHX/C1/Tduj134Hkx7kQcnzxwyLL7pupUFI2NTRuRJpBijr6B4ztngbvPxIkX3az5xvVEGbmqiqT8ycpG/4687f2+Nwp6Bs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722474595; c=relaxed/simple;
-	bh=qhsAo2ibH7djtNeXhPFIuXx4A0vb5UzzHc/vePKTiLE=;
+	s=arc-20240116; t=1722475467; c=relaxed/simple;
+	bh=Pgpqo4RtxVJ1ue8DwjL2l0l2UL9ejI31ZTKHWsBrk4Q=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=OnsOHNf8xDy29zUyUsEqJbNqR7+sLr4D/6CIy54r+2q1iCGjY4XfvOjOTav9wmmDWgsW0fTzujdhATw6Hd84/ukwKowEgguPdboix8UGpxlIpWAh2tn1swTJBA4CZWWkliNhWBcJ276r60gEpD0NYjpOjIPupj0dB3pBwM4c6OA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AffpXN67; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=Dq2OwA7S1jIfir6der6dsrP8L1KAJlTfq6QP4CQ/ucCAkIGdyNRjQFrdDL11ze8csPvFx8GhHGKRDRIwHr0RnNlbohryOEbwvvmLrvEwZbdDB+sICMRjrReigMyUDo7cIfG08PjtbB5JcRzBl9SiDs3cuJE3DuVZ8qjNYtSVJO8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XVZIR7ZC; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AffpXN67"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6F288C116B1;
-	Thu,  1 Aug 2024 01:09:54 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XVZIR7ZC"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1FD22C116B1;
+	Thu,  1 Aug 2024 01:24:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1722474594;
-	bh=qhsAo2ibH7djtNeXhPFIuXx4A0vb5UzzHc/vePKTiLE=;
+	s=k20201202; t=1722475467;
+	bh=Pgpqo4RtxVJ1ue8DwjL2l0l2UL9ejI31ZTKHWsBrk4Q=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=AffpXN67+pPQRqJDhAIkSoZgijCKAAGva0tLUoypSgL6XS7H0cpF770wqaIexgCe0
-	 Lt5SYdy8RXCjcu3bIUeUJ2tsbhECHddD2nWAewBY2qzeBGgC6XVJ1fNWNURXJq4fLK
-	 VzyHwZARjs1DAh3776Angzju5NkVSuIKnN+L1D5UDxl+4zsIpiB6xasLxC4nt4nZ4t
-	 kV9lYT2QHXDmUGq+mPijY9HfDZR1F5ynsdAuyEGJ/2xRxWL10PcQg5ABe0arCIsUl5
-	 T8tbTlsLZ+eKt02R2Bk6P9QpLQYqTbvIqIovRzuv1VDpXL/O3Hp7O95J4DV6XtoLWS
-	 Pi8Hrd51H0G2A==
-Date: Thu, 1 Aug 2024 01:09:53 +0000
-From: Eric Biggers <ebiggers@kernel.org>
-To: Arnd Bergmann <arnd@kernel.org>
-Cc: Miklos Szeredi <miklos@szeredi.hu>,
-	Richard Fung <richardfung@google.com>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: Re: [PATCH] fuse: fs-verity: aoid out-of-range comparison
-Message-ID: <20240801010953.GA1835661@google.com>
-References: <20240730142802.1082627-1-arnd@kernel.org>
+	b=XVZIR7ZCGTG0w41hQSmLUNL6cZMuc0xp588STEletZW6rGg2Zw5ATIgyJNDcnVReb
+	 B3EfWzjWskItTFqdGEFqKaNkyGttT9TLBlQWyu/w8Tuxs0k3bHkwZd0cu+hd+HJiBM
+	 TLWeLNnPzjvU1idP/yzgeefl8ZzJqv2fdNIoFW2QL9yRXpPiUWdGcYIxH9/tq99yFQ
+	 xlNDkZrz9RPWiLvSDiSFXG1SG7k6RBe2KkK8hixvDn+6BA8ozx+ajPaXfsgWLA8nel
+	 7BEThuYora+MdjBceQZNxXOF5muIGxkG3oYUZNn0HCWNcoz+pncWSlk+9RsOGJ4U29
+	 oEus3plyggpmg==
+Date: Wed, 31 Jul 2024 18:24:24 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Christoph Hellwig <hch@lst.de>
+Cc: kernel test robot <lkp@intel.com>, Baruch Siach <baruch@tkos.co.il>,
+	Marek Szyprowski <m.szyprowski@samsung.com>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>, llvm@lists.linux.dev,
+	oe-kbuild-all@lists.linux.dev, linux-s390@vger.kernel.org,
+	Ramon Fried <ramon@neureality.ai>,
+	Petr =?utf-8?B?VGVzYcWZw61r?= <petr@tesarici.cz>,
+	Robin Murphy <robin.murphy@arm.com>, linux-kernel@vger.kernel.org,
+	iommu@lists.linux.dev, Elad Nachman <enachman@marvell.com>,
+	linuxppc-dev@lists.ozlabs.org, linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v3 2/3] dma-mapping: replace zone_dma_bits by
+ zone_dma_limit
+Message-ID: <20240801012424.GA1640480@thelio-3990X>
+References: <053fa4806a2c63efcde80caca473a8b670a2701c.1722249878.git.baruch@tkos.co.il>
+ <202407300338.oaUo6jtB-lkp@intel.com>
+ <20240730021208.GA8272@thelio-3990X>
+ <20240730153450.GA30021@lst.de>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -49,45 +54,46 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240730142802.1082627-1-arnd@kernel.org>
+In-Reply-To: <20240730153450.GA30021@lst.de>
 
-On Tue, Jul 30, 2024 at 04:27:52PM +0200, Arnd Bergmann wrote:
-> From: Arnd Bergmann <arnd@arndb.de>
+On Tue, Jul 30, 2024 at 05:34:50PM +0200, Christoph Hellwig wrote:
+> On Mon, Jul 29, 2024 at 07:12:08PM -0700, Nathan Chancellor wrote:
+> > >          |             ~~~~~~~~~~~~~~                   ^~~~~~~~~~~~~~~~
+> > >    include/linux/dma-mapping.h:77:40: note: expanded from macro 'DMA_BIT_MASK'
+> > >       77 | #define DMA_BIT_MASK(n) (((n) == 64) ? ~0ULL : ((1ULL<<(n))-1))
+> > >          |                                        ^~~~~
+> > >    2 warnings generated.
+> > 
+> > FWIW, this is likely a false positive due to an issue in Clang with the
+> > control flow graph for global variables:
+> > 
+> > https://github.com/ClangBuiltLinux/linux/issues/92
+> > 
+> > DMA_BIT_MASK() has been the biggest offender :/ If there is any way to
+> > refactor this code to avoid this, that would be great (as that has been
+> > one of our longest outstanding issues and getting it fixed in the
+> > compiler does not seem super easy at this point).
 > 
-> clang points out that comparing the 16-bit size of the digest against
-> SIZE_MAX is not a helpful comparison:
-> 
-> fs/fuse/ioctl.c:130:18: error: result of comparison of constant 18446744073709551611 with expression of type '__u16' (aka 'unsigned short') is always false [-Werror,-Wtautological-constant-out-of-range-compare]
->         if (digest_size > SIZE_MAX - sizeof(struct fsverity_digest))
->             ~~~~~~~~~~~ ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> 
-> This either means tha tthe check can be removed entirely, or that the
-> intended comparison was for the 16-bit range. Assuming the latter was
-> intended, compare against U16_MAX instead.
-> 
-> Fixes: 9fe2a036a23c ("fuse: Add initial support for fs-verity")
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-> ---
->  fs/fuse/ioctl.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/fs/fuse/ioctl.c b/fs/fuse/ioctl.c
-> index 572ce8a82ceb..5711d86c549d 100644
-> --- a/fs/fuse/ioctl.c
-> +++ b/fs/fuse/ioctl.c
-> @@ -127,7 +127,7 @@ static int fuse_setup_measure_verity(unsigned long arg, struct iovec *iov)
->  	if (copy_from_user(&digest_size, &uarg->digest_size, sizeof(digest_size)))
->  		return -EFAULT;
->  
-> -	if (digest_size > SIZE_MAX - sizeof(struct fsverity_digest))
-> +	if (digest_size > U16_MAX - sizeof(struct fsverity_digest))
->  		return -EINVAL;
->  
->  	iov->iov_len = sizeof(struct fsverity_digest) + digest_size;
+> I have no idea what you'd want changed here, but I'll happily take
+> patches.
 
-I think this was just defensive coding to ensure that the assignment to iov_len
-can't overflow regardless of the type of digest_size.  You can remove the check
-if you want to, though isn't the tautological comparison warning disabled by the
-kernel build system anyway?  Anyway, it does not make sense to use U16_MAX here.
+Unfortunately, I am not sure either... I do not see anything obviously,
+so perhaps it could just be avoided with the __diag() infrastructure?
 
-- Eric
+diff --git a/kernel/dma/direct.c b/kernel/dma/direct.c
+index 3dbc0b89d6fb..b58e7eb9c8f1 100644
+--- a/kernel/dma/direct.c
++++ b/kernel/dma/direct.c
+@@ -20,7 +20,12 @@
+  * it for entirely different regions. In that case the arch code needs to
+  * override the variable below for dma-direct to work properly.
+  */
++__diag_push();
++__diag_ignore(clang, 13, "-Wconstant-conversion",
++	      "Clang incorrectly thinks the n == 64 case in DMA_BIT_MASK() can happen here,"
++	      "which would truncate with a 32-bit phys_addr_t");
+ phys_addr_t zone_dma_limit __ro_after_init = DMA_BIT_MASK(24);
++__diag_pop();
+ 
+ static inline dma_addr_t phys_to_dma_direct(struct device *dev,
+ 		phys_addr_t phys)
