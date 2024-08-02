@@ -1,101 +1,121 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9776F1ABEAC
-	for <llvm@lists.linux.dev>; Fri,  2 Aug 2024 22:52:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 05DBD5258;
+	Fri,  2 Aug 2024 23:04:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722639131; cv=none; b=m/dLg5Ik3OAiC2hoHJ6qh7WKnDotTqOQwjqRR/4WVgP41tF27/2smzDthwfyecq6uIEoNmhVGod3Gx1ZXDNRnnd1o5XY4wyuE2nP5THiGqeb7MB1H2QfsTlqKoKOfV6VQTEbVhi6UhWtiO/SI1DiSVSDVr+TswF83uramxN9imk=
+	t=1722639860; cv=none; b=jkvajuFjEhl0Opet8z6ZlWYYD9osE8q8+TERyD4K6F2cWsFNa0j2HTBti0awI/pR8HUG8Ld/tQtItbVri/GEiylm7Tdg1xORcdHy6ykk4kmyRoNGFc8I9wmqp7yLQeTY1jpa0wvIhmrqYHtsNWa9KtfK9/VDoFg1njV+bQMYvFY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722639131; c=relaxed/simple;
-	bh=Iya9vgIZfGL6kUhMoCpa7gT2cVL7ivChWw0YZ3AoCSU=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=fm5q0cxeIpjHU3PMyNhHf9r10q+vlgPHepj/O98mLidfN2wgmMPsdekXNl/VUN/2dXNd3yKcL4PHMnSlW+NbZ8vok96Lqp912/ADn/utWes8niYHOccP/p5zxDzb6wd/EF+lcou/ra/jTovGjfc8VffTPTEmskEzycI1gfzDye0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Gx4Y54s6; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1722639860; c=relaxed/simple;
+	bh=iIjDB6hSxLVkrCrMpfondG5ucRaBxFNaNNgaLKgyOM0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=sEpJc4R9o0px7/r8f8QtV8Pxjhm3nObXRR+vXupLtCVmWch7U0+kXjW5maDBMVTg77rZP3SX4UiiD+w2XXcDdIQTThiK8J789Er0T98HcmouuQf17suTLj+pFc7M7ohk1+geXlRxUGMiczNueZvsccUCMwg0TFMBHID8IN1D2p4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HzpylkbS; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Gx4Y54s6"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1722639128;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=6ohly61SxybtRKg9/e/gdLmdRu2y/VZ9PJSl/QVHgAw=;
-	b=Gx4Y54s6O42GvaMrZ3vhPCwqio+vdaiF2S/+KawKLz6ALpr9LQYnjlNHY8wpOModcmGaS+
-	WOidXhHi1IKYJaPCo1jToQsTuMrZIJGEYXTQUsWnj4L679AY8lRxGsgCjNvBvlwzzV3ScO
-	k7ooAZRxWp7xXYDMTJkasUraP42DfrY=
-Received: from mx-prod-mc-02.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-413-wgKUbt5ENQu1TLiktXhFbg-1; Fri,
- 02 Aug 2024 18:52:07 -0400
-X-MC-Unique: wgKUbt5ENQu1TLiktXhFbg-1
-Received: from mx-prod-int-02.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-02.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.15])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-02.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 3E1EC1955D42
-	for <llvm@lists.linux.dev>; Fri,  2 Aug 2024 22:52:06 +0000 (UTC)
-Received: from [172.64.4.38] (unknown [10.30.33.216])
-	by mx-prod-int-02.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 8971B1955D42;
-	Fri,  2 Aug 2024 22:52:05 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.11.0-rc1,
- mainline.kernel.org-clang, 17712b7e)
-Date: Fri, 02 Aug 2024 22:52:05 -0000
-To: llvm@lists.linux.dev
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HzpylkbS"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D0346C32782;
+	Fri,  2 Aug 2024 23:04:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1722639859;
+	bh=iIjDB6hSxLVkrCrMpfondG5ucRaBxFNaNNgaLKgyOM0=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=HzpylkbS7oULAgh4yHoGZQoiNmiZKtx2nSFhfY0Ie9FEggok+KMDcsf9CC1hEsNTG
+	 Cw03IqxXtDTI3+zeOgdifUhXO76bOLzK4I23UWYkKIyYFB/m6/eOZPaRxhVNNUZ60l
+	 EUZn+QJy1MWBRVZL7RJ+K5kJXTAFNOqVGkD6tOIDQtkSWf83W/z9x5d3G2ws+kBcte
+	 KJfwVFRV6cxDChzA0jau7Js8CcbC63y9NCLca0LylbJQIoNWxQvhCs2pgkyHiopPHG
+	 yA1cUasAv5Gy6VNjS/pIaBqgGeM3pBaT+tw4pi3vPmGDesRlhG3P5qStaT9uracpI1
+	 5FszcsmhOsVpA==
+Date: Fri, 2 Aug 2024 16:04:17 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Koakuma <koachan@protonmail.com>
+Cc: "David S. Miller" <davem@davemloft.net>,
+	Andreas Larsson <andreas@gaisler.com>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>, glaubitz@physik.fu-berlin.de,
+	Masahiro Yamada <masahiroy@kernel.org>,
+	Nicolas Schier <nicolas@fjasle.eu>, sparclinux@vger.kernel.org,
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+	linux-kbuild@vger.kernel.org
+Subject: Re: [PATCH v2 1/2] sparc/build: Remove all usage of -fcall-used*
+ flags
+Message-ID: <20240802230417.GB853635@thelio-3990X>
+References: <20240717-sparc-cflags-v2-0-259407e6eb5f@protonmail.com>
+ <20240717-sparc-cflags-v2-1-259407e6eb5f@protonmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.15
-Message-Id: <25535.124080218520700191@us-mta-413.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240717-sparc-cflags-v2-1-259407e6eb5f@protonmail.com>
 
-Hi, we tested your kernel and here are the results:
+On Wed, Jul 17, 2024 at 11:10:15PM +0700, Koakuma wrote:
+> Remove all usage of -fcall-used* flags so that all flags used are
+> portable between GCC and clang.
+> 
+> The reasoning is as follows:
+> 
+> In the (normal) 32-bit ABI, %g5 and %g7 is normally reserved, and in
+> the 64-bit ABI, %g7 is the reserved one.
+> Linux turns them into volatile registers by the way of -fcall-used-*,
+> but on the other hand, omitting the flags shouldn't be harmful;
+> compilers will now simply refuse to touch them, and any assembly
+> code that happens to touch them would still work like usual (because
+> Linux' conventions already treats them as volatile anyway).
+> 
+> Signed-off-by: Koakuma <koachan@protonmail.com>
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: FAILED
+As before, I tested this series with the vDSO patch mentioned before and
+a version of LLVM that supports the -m{,no-}v8plus flags and I was able
+to successfully boot a kernel in QEMU :)
 
+Tested-by: Nathan Chancellor <nathan@kernel.org>
 
-Kernel information:
-    Commit message: Merge tag 'io_uring-6.11-20240802' of git://git.kernel.=
-dk/linux
-
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1399093886
-
-One or more kernel builds failed:
-    Unrecognized or new issues:
-         ppc64le - https://datawarehouse.cki-project.org/kcidb/builds/redha=
-t:1399093886-ppc64le-kernel
-           s390x - https://datawarehouse.cki-project.org/kcidb/builds/redha=
-t:1399093886-s390x-kernel
-          x86_64 (debug) - https://datawarehouse.cki-project.org/kcidb/buil=
-ds/redhat:1399093886-x86_64-kernel-debug
-
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+> ---
+>  arch/sparc/Makefile      | 4 ++--
+>  arch/sparc/vdso/Makefile | 2 +-
+>  2 files changed, 3 insertions(+), 3 deletions(-)
+> 
+> diff --git a/arch/sparc/Makefile b/arch/sparc/Makefile
+> index 757451c3ea1d..7318a8b452c3 100644
+> --- a/arch/sparc/Makefile
+> +++ b/arch/sparc/Makefile
+> @@ -29,7 +29,7 @@ UTS_MACHINE    := sparc
+>  # versions of gcc.  Some gcc versions won't pass -Av8 to binutils when you
+>  # give -mcpu=v8.  This silently worked with older bintutils versions but
+>  # does not any more.
+> -KBUILD_CFLAGS  += -m32 -mcpu=v8 -pipe -mno-fpu -fcall-used-g5 -fcall-used-g7
+> +KBUILD_CFLAGS  += -m32 -mcpu=v8 -pipe -mno-fpu
+>  KBUILD_CFLAGS  += -Wa,-Av8
+>  
+>  KBUILD_AFLAGS  += -m32 -Wa,-Av8
+> @@ -45,7 +45,7 @@ export BITS   := 64
+>  UTS_MACHINE   := sparc64
+>  
+>  KBUILD_CFLAGS += -m64 -pipe -mno-fpu -mcpu=ultrasparc -mcmodel=medlow
+> -KBUILD_CFLAGS += -ffixed-g4 -ffixed-g5 -fcall-used-g7 -Wno-sign-compare
+> +KBUILD_CFLAGS += -ffixed-g4 -ffixed-g5 -Wno-sign-compare
+>  KBUILD_CFLAGS += -Wa,--undeclared-regs
+>  KBUILD_CFLAGS += $(call cc-option,-mtune=ultrasparc3)
+>  KBUILD_AFLAGS += -m64 -mcpu=ultrasparc -Wa,--undeclared-regs
+> diff --git a/arch/sparc/vdso/Makefile b/arch/sparc/vdso/Makefile
+> index 243dbfc4609d..e009443145af 100644
+> --- a/arch/sparc/vdso/Makefile
+> +++ b/arch/sparc/vdso/Makefile
+> @@ -46,7 +46,7 @@ CFL := $(PROFILING) -mcmodel=medlow -fPIC -O2 -fasynchronous-unwind-tables -m64
+>         -fno-omit-frame-pointer -foptimize-sibling-calls \
+>         -DDISABLE_BRANCH_PROFILING -DBUILD_VDSO
+>  
+> -SPARC_REG_CFLAGS = -ffixed-g4 -ffixed-g5 -fcall-used-g5 -fcall-used-g7
+> +SPARC_REG_CFLAGS = -ffixed-g4 -ffixed-g5
+>  
+>  $(vobjs): KBUILD_CFLAGS := $(filter-out $(RANDSTRUCT_CFLAGS) $(GCC_PLUGINS_CFLAGS) $(SPARC_REG_CFLAGS),$(KBUILD_CFLAGS)) $(CFL)
+>  
+> 
+> -- 
+> 2.45.2
+> 
