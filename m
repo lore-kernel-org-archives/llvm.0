@@ -1,82 +1,211 @@
-Received: from mail-pg1-f181.google.com (mail-pg1-f181.google.com [209.85.215.181])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E2B01DF695
-	for <llvm@lists.linux.dev>; Fri,  2 Aug 2024 11:42:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A7A815ADAF;
+	Fri,  2 Aug 2024 13:00:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722598923; cv=none; b=uoFdUC/CtHxy/rLOurlZRgp0K9+AGq5SJzb6O4z/xTBH/PvKPPLQGT7ndiHwpmoqFqyy8kKwtKRfgbvlJq1uJcpx1YTr6cVPpERMfLPB63J6yrVyOr+fWaC6vipZOT8TSPnzTUujWlYBtbDb2RI45k7E6zxtWqyQ+UUxdAwcNMw=
+	t=1722603640; cv=none; b=lT+Sn5B9duxB+yNCXiX0cPvWblpb8dQ7lRmFmv4s50MneUNw1kEBChG82zFqDi422eU0HPDULQvNKw7GQ633QObHGW2nsTEMds3aVIhV4T/AYUuCVRnQjldnxf/MMNSvGCeuyDo5Y5OD15DCftY3GLBR+ORjny4rmSKkVeVl03U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722598923; c=relaxed/simple;
-	bh=8S6p9awCbWfTs8HBlKagADZW0s6ZNmODF23unQPAk7c=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=l+6GE0hdRHAMo3a/10yeDQGFxU+uu2CG23Rhc5vE9CSXN/yJYNBE0yCZ0U5jRt+5qqti8rYVepbKzlR09Mvc12LLY9B0sIITcmVKH9doEg918udacafw3EkleauauRqn6PF+wxlfne6Q71vWcyvzP8BC6zpnQyf578FsNQ4t44w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=RbpXRB4i; arc=none smtp.client-ip=209.85.215.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1722603640; c=relaxed/simple;
+	bh=aXtfREe21moAnsrbgFYQDqy98u7LtWvsIWud379cgK8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=dAG+jkt5Ye0zkJfcFu2yqW2Q5n3l/cRQmbx0a4TkFjEEPdfEltDH2XkxAl0PUjVF9of89C3lIYrc1k748MHob3tGIVgwjdNfvFkA2PhNOFimkf3iYh8Xst3EyMtMTQEFTe3TJfpF328EPTMj1trMnclM4bDoze87f4ttSQFvJqw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=KkziYnTN; arc=none smtp.client-ip=198.175.65.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RbpXRB4i"
-Received: by mail-pg1-f181.google.com with SMTP id 41be03b00d2f7-7a1843b4cdbso4810618a12.2
-        for <llvm@lists.linux.dev>; Fri, 02 Aug 2024 04:42:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1722598921; x=1723203721; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=8S6p9awCbWfTs8HBlKagADZW0s6ZNmODF23unQPAk7c=;
-        b=RbpXRB4iElc9Gfl6jo5y7rG8ttTXwJI3sUFuSNTp6lVV8C+KSUyq1wvJCHjw+oHVZb
-         RpCytogxyH0Yn9f2gKmIG9LOfLwf82r7X5QogEAkgIr0VYUfoo32gJvobOZkkSAtkCdg
-         YCpl2L+TaG/K0IKY6wLNToJyUKPs33SiKQXNu8BqoI7LWP8ygwBoz3vdKWPBunu+VSUP
-         RUu9YN0DdjXYuAW0rWWkaEgKSKFkpr2A4TJ2tp2QrGo9k05hWFbmyHV3fByaQ6vqSgmr
-         klqK31as8xIwx2xDUTtQz89PWkj8KB88ir7Grpa65s3fZ4XrS4Xu6gwq47mNs0J35FoK
-         G73A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1722598921; x=1723203721;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=8S6p9awCbWfTs8HBlKagADZW0s6ZNmODF23unQPAk7c=;
-        b=jERH26VjtwQfZstELMPRb46nP4EZNQeitI5MAxMmfuUxG9stq0KNGnvk9jT1L7lZqg
-         6sL1bqc3sCgjKjwZV4AIAFJSHn2VTzk79OTNvBTaR3TTamusio6QHui7FduV4Vm54EAg
-         IJJvWktnTcecAinf5IDI9NXxhUt+tT9E383nj38fEUxFa0eJhIGW8GNvYo8kVJwGBjaw
-         i4jeg0Jcf030YVTFQoKqrtlS4x291DJjgvaRTTvS02F3dkrjzWlz+ux3+EW9ELJodSLp
-         GoaU8FDpv/YpfI1KObh7qPtU3GUDAK0SOkHRCffMAItdEBh5WzhPGzaABHUNxMHSKSAx
-         IW4g==
-X-Forwarded-Encrypted: i=1; AJvYcCXlW3814cRt2ciqOYGNpzb4WMYHKO5+8mbZ/jryPk/S7bIbafMoV/VvXgibVsMsFbT0TMwcLHhhd2ue9kFmUmUbjd7c8g==
-X-Gm-Message-State: AOJu0YyZJAnYmn7FPDMQtjY+txQ46HgABAEjM0RnTBo/J/o0AdM6Q3We
-	TwWJvCRN0d12/+W0UdTLry9wWR78a73qM7NgAwhXMTpVli4eSjV4ZPxGa4iLN6SJiHv0DEf0PVn
-	7cx3DHPaXypehtEekpMS2yoMUOEI=
-X-Google-Smtp-Source: AGHT+IFfTNp9sbkfU2rlJ0CAP0uftsoVr57L2GgZMd1ai2v8/T3RPaZ6pt3iGQwfXmZUpG+qZxLYAFaOA4J6UzOiw4o=
-X-Received: by 2002:a17:90a:df13:b0:2c9:77d8:bb60 with SMTP id
- 98e67ed59e1d1-2cff95670e3mr4034882a91.35.1722598921465; Fri, 02 Aug 2024
- 04:42:01 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="KkziYnTN"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1722603638; x=1754139638;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=aXtfREe21moAnsrbgFYQDqy98u7LtWvsIWud379cgK8=;
+  b=KkziYnTNB6hYLUVb75wz9A+1mIZvvUQCYVDW0U7Ht9qRPxGByqqJs4/j
+   qNtd0yakY7eNL2p11tcFaUttk/iO7szdibis3D9qW0Eg1C+qqD8JAscv4
+   Rql0ui7tXDWq9FR4nIZqwYk98IvlVk4sTYstCh1ZMNfbQaZovAodPo530
+   N7rBsfzNnlEFXfUO/2UaQg2h+6dwsV6HM/pa6Yh5Dlk66YTjy7vslkCNo
+   3902vLUJSRwFvTSRCQGhIR+NHOP63E8Xf6sb9nRxiLkMlUtq8rQPscSym
+   cZ6NfE9I5fWiC0Ol3JtSW08ieTT0f13MjbstVkjIIkEGwdZXP36C3ng8c
+   A==;
+X-CSE-ConnectionGUID: MiAZPvCqQrmeUFcI4p9l8A==
+X-CSE-MsgGUID: /1G4iIYUS+OIarFhgFR95g==
+X-IronPort-AV: E=McAfee;i="6700,10204,11152"; a="43134633"
+X-IronPort-AV: E=Sophos;i="6.09,257,1716274800"; 
+   d="scan'208";a="43134633"
+Received: from fmviesa007.fm.intel.com ([10.60.135.147])
+  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Aug 2024 06:00:37 -0700
+X-CSE-ConnectionGUID: H+whR/nxRZ+e8SOQFSXqjA==
+X-CSE-MsgGUID: 0ZpfasOsQbyl9wjXfKU7CQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.09,257,1716274800"; 
+   d="scan'208";a="55027341"
+Received: from lkp-server01.sh.intel.com (HELO 68891e0c336b) ([10.239.97.150])
+  by fmviesa007.fm.intel.com with ESMTP; 02 Aug 2024 06:00:34 -0700
+Received: from kbuild by 68891e0c336b with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1sZrtY-000wnD-1q;
+	Fri, 02 Aug 2024 13:00:32 +0000
+Date: Fri, 2 Aug 2024 21:00:24 +0800
+From: kernel test robot <lkp@intel.com>
+To: Tom Herbert <tom@herbertland.com>, davem@davemloft.net, kuba@kernel.org,
+	edumazet@google.com, netdev@vger.kernel.org, felipe@sipanda.io
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Tom Herbert <tom@herbertland.com>
+Subject: Re: [PATCH 06/12] flow_dissector: UDP encap infrastructure
+Message-ID: <202408022046.h8kMQ01e-lkp@intel.com>
+References: <20240731172332.683815-7-tom@herbertland.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20240730-clang-format-for-each-macro-update-v2-1-254fca862c97@gmail.com>
-In-Reply-To: <20240730-clang-format-for-each-macro-update-v2-1-254fca862c97@gmail.com>
-From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date: Fri, 2 Aug 2024 13:41:49 +0200
-Message-ID: <CANiq72k+7dedfMpQUgA6ZuNmWwQJ-oQYQWzhN1JGynbxix5bPQ@mail.gmail.com>
-Subject: Re: [PATCH v2] clang-format: Update with v6.11-rc1's `for_each` macro list
-To: Javier Carrasco <javier.carrasco.cruz@gmail.com>
-Cc: Miguel Ojeda <ojeda@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, 
-	Justin Stitt <justinstitt@google.com>, linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240731172332.683815-7-tom@herbertland.com>
 
-On Tue, Jul 30, 2024 at 7:54=E2=80=AFAM Javier Carrasco
-<javier.carrasco.cruz@gmail.com> wrote:
->
-> Re-run the shell fragment that generated the original list.
->
-> Signed-off-by: Javier Carrasco <javier.carrasco.cruz@gmail.com>
+Hi Tom,
 
-Applied to `clang-format`, thanks!
+kernel test robot noticed the following build errors:
 
-Cheers,
-Miguel
+[auto build test ERROR on net-next/main]
+[also build test ERROR on net/main linus/master v6.11-rc1 next-20240802]
+[cannot apply to horms-ipvs/master]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Tom-Herbert/skbuff-Unconstantify-struct-net-argument-in-flowdis-functions/20240802-084418
+base:   net-next/main
+patch link:    https://lore.kernel.org/r/20240731172332.683815-7-tom%40herbertland.com
+patch subject: [PATCH 06/12] flow_dissector: UDP encap infrastructure
+config: um-defconfig (https://download.01.org/0day-ci/archive/20240802/202408022046.h8kMQ01e-lkp@intel.com/config)
+compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 430b90f04533b099d788db2668176038be38c53b)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240802/202408022046.h8kMQ01e-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202408022046.h8kMQ01e-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+   /usr/bin/ld: warning: .tmp_vmlinux1 has a LOAD segment with RWX permissions
+   /usr/bin/ld: net/core/flow_dissector.o: in function `__skb_flow_dissect':
+>> net/core/flow_dissector.c:874:(.ltext+0x1ff9): undefined reference to `__udp6_lib_lookup'
+   clang: error: linker command failed with exit code 1 (use -v to see invocation)
+
+
+vim +874 net/core/flow_dissector.c
+
+   809	
+   810	static enum flow_dissect_ret
+   811	__skb_flow_dissect_udp(const struct sk_buff *skb, struct net *net,
+   812			       struct flow_dissector *flow_dissector,
+   813			       void *target_container, const void *data,
+   814			       int *p_nhoff, int hlen, __be16 *p_proto,
+   815			       u8 *p_ip_proto, int bpoff, unsigned int flags)
+   816	{
+   817		enum flow_dissect_ret ret;
+   818		const struct udphdr *udph;
+   819		struct udphdr _udph;
+   820		struct sock *sk;
+   821		__u8 encap_type;
+   822		int nhoff;
+   823	
+   824		if (!(flags & FLOW_DISSECTOR_F_PARSE_UDP_ENCAPS))
+   825			return FLOW_DISSECT_RET_OUT_GOOD;
+   826	
+   827		switch (*p_proto) {
+   828		case htons(ETH_P_IP): {
+   829			const struct iphdr *iph;
+   830			struct iphdr _iph;
+   831	
+   832			iph = __skb_header_pointer(skb, bpoff, sizeof(_iph), data,
+   833						   hlen, &_iph);
+   834			if (!iph)
+   835				return FLOW_DISSECT_RET_OUT_BAD;
+   836	
+   837			udph = __skb_header_pointer(skb, *p_nhoff, sizeof(_udph), data,
+   838						    hlen, &_udph);
+   839			if (!udph)
+   840				return FLOW_DISSECT_RET_OUT_BAD;
+   841	
+   842			rcu_read_lock();
+   843			/* Look up the UDPv4 socket and get the encap_type */
+   844			sk = __udp4_lib_lookup(net, iph->saddr, udph->source,
+   845					       iph->daddr, udph->dest,
+   846					       inet_iif(skb), inet_sdif(skb),
+   847					       net->ipv4.udp_table, NULL);
+   848			if (!sk || !udp_sk(sk)->encap_type) {
+   849				rcu_read_unlock();
+   850				return FLOW_DISSECT_RET_OUT_GOOD;
+   851			}
+   852	
+   853			encap_type = udp_sk(sk)->encap_type;
+   854			rcu_read_unlock();
+   855	
+   856			break;
+   857		}
+   858		case htons(ETH_P_IPV6): {
+   859			const struct ipv6hdr *iph;
+   860			struct ipv6hdr _iph;
+   861	
+   862			iph = __skb_header_pointer(skb, bpoff, sizeof(_iph), data,
+   863						   hlen, &_iph);
+   864			if (!iph)
+   865				return FLOW_DISSECT_RET_OUT_BAD;
+   866	
+   867			udph = __skb_header_pointer(skb, *p_nhoff, sizeof(_udph), data,
+   868						    hlen, &_udph);
+   869			if (!udph)
+   870				return FLOW_DISSECT_RET_OUT_BAD;
+   871	
+   872			rcu_read_lock();
+   873			/* Look up the UDPv6 socket and get the encap_type */
+ > 874			sk = __udp6_lib_lookup(net, &iph->saddr, udph->source,
+   875					       &iph->daddr, udph->dest,
+   876					       inet_iif(skb), inet_sdif(skb),
+   877					       net->ipv4.udp_table, NULL);
+   878			if (!sk || !udp_sk(sk)->encap_type) {
+   879				rcu_read_unlock();
+   880				return FLOW_DISSECT_RET_OUT_GOOD;
+   881			}
+   882	
+   883			encap_type = udp_sk(sk)->encap_type;
+   884			rcu_read_unlock();
+   885	
+   886			break;
+   887		}
+   888		default:
+   889			return FLOW_DISSECT_RET_OUT_GOOD;
+   890		}
+   891	
+   892		nhoff = *p_nhoff + sizeof(struct udphdr);
+   893		ret = FLOW_DISSECT_RET_OUT_GOOD;
+   894	
+   895		switch (encap_type) {
+   896		default:
+   897			break;
+   898		}
+   899	
+   900		switch (ret) {
+   901		case FLOW_DISSECT_RET_PROTO_AGAIN:
+   902			*p_ip_proto = 0;
+   903			fallthrough;
+   904		case FLOW_DISSECT_RET_IPPROTO_AGAIN:
+   905			*p_nhoff = nhoff;
+   906			break;
+   907		default:
+   908			break;
+   909		}
+   910	
+   911		return ret;
+   912	}
+   913	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
