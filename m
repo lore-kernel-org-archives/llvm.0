@@ -1,59 +1,69 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E47A1C693;
-	Fri,  2 Aug 2024 01:52:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 66B3D482CA;
+	Fri,  2 Aug 2024 08:05:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722563581; cv=none; b=JpxnFHQQ0H4DOSXtA5h8YjFYKi60USqzagyEv2BFa25pRvicpYkoktoKYFky8XuLFsorOxTxCXjaPxVkuI2lwn7W69LydiPKrtcYtkgscMOdiwpd4ftv2CntJfk8wiOkDSUyTzC0rN0PW00QOGgODroNXZwzDVYHXJEcAmzGzYY=
+	t=1722585916; cv=none; b=REjS7yFZHEQ+mXgoIpI+n5Yf7bYUK8AHOc+uErfyrgiqyhV1oBZv/YcT9BHLYoiWc8jeWsfMiHrW0olaFpWYYdOHyKHD2PzqzkdKx04Mlb2M7/ayjKxRtum13xDtn+hjSZCI7iX7CRbY8Nrnv+mbgHYYdWSyICa6UjorKBRhJRo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722563581; c=relaxed/simple;
-	bh=lbNXSIuhZXRbwvuF28Thi4ODrbqHLer/uQxRyoWrvYU=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=AGojbbZT749xDoAxrSQT660uE5O+rsPrE6MCfdUp+oxbg240uOgbeTD1ln1pxyy4vAvgglSFEE1oyYiPiSL8Ft25EWA5PtmJ2Ir/Dc1gA3+eb/GkeheODEjce/tpjDGAcZpToey9Q5jVdIR/Q+N8eNa40lSYpiz+bcaUO/oItfY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=EhN6p6ok; arc=none smtp.client-ip=192.198.163.17
+	s=arc-20240116; t=1722585916; c=relaxed/simple;
+	bh=2EcGfDArf+MGK7/GjIOlC6bogSo7gt7YM540zICjH5g=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=isPqllwQC6UB2fZzPrglsC3Ux2mjgFh9IQej6NHTDn9/JRNHdvqNyHIfHumdnaJsrfXmFzMQ1Ev6JlzJRt7uxhP8XxNR1SnotXk1wx2MeN8ekjDKyUFG5ffkbqWFVAznRZprawxMxqa1JlcEzuH8/Pa2EcyaLDZoVE6An91Eonc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=JqCM53CA; arc=none smtp.client-ip=198.175.65.19
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="EhN6p6ok"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="JqCM53CA"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1722563579; x=1754099579;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=lbNXSIuhZXRbwvuF28Thi4ODrbqHLer/uQxRyoWrvYU=;
-  b=EhN6p6ok5IsKouRY+64Ifh7DSyccazx70tqDvkOuJg315KCuFBsh5Qzs
-   cI01MCU62YGWJpAtvqLnBMT8gdawyJFKzXxDp+837NbRVf4HJMfbhiYlW
-   2IxG8IxX8ALiQrFiTYxtuMaUInch70iULaBqlTPPNiU0iD22sjrfbB6qY
-   payLonLFlDRGBWY2NIF2eOeJjRo+1anJT4wq2cv22KUStKH6Y95CcGp4w
-   lMm5Es1j2D25KOMASLeOKEmHW7HkGrnCWag7+jHDGakRhC9u/E5mJMDkD
-   G7t7Lfeq36PBi1EBm0JYRNweCa0dXWPvTDBgwLYoxcZ4mzGwH9mkCM6vh
-   w==;
-X-CSE-ConnectionGUID: qMTkOHMNQTOT49i56/32IA==
-X-CSE-MsgGUID: L7bZqbI7T4iGeCxfd/CZaA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11151"; a="20448351"
-X-IronPort-AV: E=Sophos;i="6.09,256,1716274800"; 
-   d="scan'208";a="20448351"
+  t=1722585915; x=1754121915;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=2EcGfDArf+MGK7/GjIOlC6bogSo7gt7YM540zICjH5g=;
+  b=JqCM53CAkagEKjM9qFPbUyvy6D2AhebzLsILOvTWYSGofNnpxrmVK33p
+   m9/NvEpM0tfGDaKkzuBhlCu2E5lubsQSO2xnHMLxiK0zR4+i8Yxl3Qnhh
+   4dTfCgRCAV1RSo5T3QCh7pxrOcxjR1xOxSTzJ5MTwbAOX+L9MukpwAFdD
+   np9pqvWYuLR8+IASpse4hEA9ELaqlkO7yCo7MdHUEw905XDV4LfpO/dWq
+   OcFvGTDC6HACQRXu9I252Q4X/AbKii5PoN3nn2/vvEgkRdfeQUQ0I/7l5
+   qCgk71qWsyeoJd2GJvA1ZJzey+dRZsm5ObEJCj81VHb+uBEGqJNreo/xK
+   g==;
+X-CSE-ConnectionGUID: UBK3VrUmRQGcby6wr3tHmA==
+X-CSE-MsgGUID: F/TV0vGMSyKTU7+Zae6htA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11151"; a="20429986"
+X-IronPort-AV: E=Sophos;i="6.09,257,1716274800"; 
+   d="scan'208";a="20429986"
 Received: from orviesa007.jf.intel.com ([10.64.159.147])
-  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Aug 2024 18:52:58 -0700
-X-CSE-ConnectionGUID: kvkLNTqEQ9eeUmgG2QBO3Q==
-X-CSE-MsgGUID: oP+Wvl/ZS9qvCL6R4AVkIg==
+  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Aug 2024 01:05:14 -0700
+X-CSE-ConnectionGUID: KTOEGHfcSVCCsCfHzck+rQ==
+X-CSE-MsgGUID: S/dNMuleT3aCQ537zgFuWw==
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.09,256,1716274800"; 
-   d="scan'208";a="55843966"
+X-IronPort-AV: E=Sophos;i="6.09,257,1716274800"; 
+   d="scan'208";a="55922863"
 Received: from lkp-server01.sh.intel.com (HELO 68891e0c336b) ([10.239.97.150])
-  by orviesa007.jf.intel.com with ESMTP; 01 Aug 2024 18:52:57 -0700
+  by orviesa007.jf.intel.com with ESMTP; 02 Aug 2024 01:05:10 -0700
 Received: from kbuild by 68891e0c336b with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1sZhTS-000wDg-2O;
-	Fri, 02 Aug 2024 01:52:54 +0000
-Date: Fri, 2 Aug 2024 09:52:54 +0800
+	id 1sZnHf-000wYW-2W;
+	Fri, 02 Aug 2024 08:05:07 +0000
+Date: Fri, 2 Aug 2024 16:04:40 +0800
 From: kernel test robot <lkp@intel.com>
-To: Mark Rutland <mark.rutland@arm.com>
+To: Mariel Tinaco <Mariel.Tinaco@analog.com>, linux-iio@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Jonathan Cameron <jic23@kernel.org>,
+	Lars-Peter Clausen <lars@metafoo.de>, Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Michael Hennerich <Michael.Hennerich@analog.com>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Marcelo Schmitt <marcelo.schmitt1@gmail.com>,
+	Dimitri Fedrau <dima.fedrau@gmail.com>,
+	David Lechner <dlechner@baylibre.com>,
+	Nuno =?iso-8859-1?Q?S=E1?= <noname.nuno@gmail.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [mark:arm64/midr-cleanup 8/8]
- drivers/char/hw_random/cavium-rng-vf.c:41:47: error: use of undeclared
- identifier 'MIDR_THUNDERX_83XX'
-Message-ID: <202408020930.Zx8WweiI-lkp@intel.com>
+Subject: Re: [PATCH v2 2/2] iio: dac: support the ad8460 Waveform DAC
+Message-ID: <202408021509.ug75TMoS-lkp@intel.com>
+References: <20240730030509.57834-3-Mariel.Tinaco@analog.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -62,86 +72,107 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20240730030509.57834-3-Mariel.Tinaco@analog.com>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/mark/linux.git arm64/midr-cleanup
-head:   73db361e3b8efa037e9ab62740b8a67e095778f1
-commit: 73db361e3b8efa037e9ab62740b8a67e095778f1 [8/8] WIP: delete unused MIDR definitions
-config: arm64-allmodconfig (https://download.01.org/0day-ci/archive/20240802/202408020930.Zx8WweiI-lkp@intel.com/config)
-compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 430b90f04533b099d788db2668176038be38c53b)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240802/202408020930.Zx8WweiI-lkp@intel.com/reproduce)
+Hi Mariel,
+
+kernel test robot noticed the following build warnings:
+
+[auto build test WARNING on 9900e7a54764998ba3a22f06ec629f7b5fe0b422]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Mariel-Tinaco/dt-bindings-iio-dac-add-docs-for-ad8460/20240730-112724
+base:   9900e7a54764998ba3a22f06ec629f7b5fe0b422
+patch link:    https://lore.kernel.org/r/20240730030509.57834-3-Mariel.Tinaco%40analog.com
+patch subject: [PATCH v2 2/2] iio: dac: support the ad8460 Waveform DAC
+config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20240802/202408021509.ug75TMoS-lkp@intel.com/config)
+compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240802/202408021509.ug75TMoS-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202408020930.Zx8WweiI-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202408021509.ug75TMoS-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
-   In file included from drivers/char/hw_random/cavium-rng-vf.c:12:
-   In file included from include/linux/pci.h:1646:
-   In file included from include/linux/dmapool.h:14:
-   In file included from include/linux/scatterlist.h:8:
-   In file included from include/linux/mm.h:2228:
-   include/linux/vmstat.h:500:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     500 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     501 |                            item];
-         |                            ~~~~
-   include/linux/vmstat.h:507:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     507 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     508 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/vmstat.h:514:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     514 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
-   include/linux/vmstat.h:519:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     519 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     520 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/vmstat.h:528:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     528 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     529 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
->> drivers/char/hw_random/cavium-rng-vf.c:41:47: error: use of undeclared identifier 'MIDR_THUNDERX_83XX'
-      41 |         if (midr_is_cpu_model_range(read_cpuid_id(), MIDR_THUNDERX_83XX,
-         |                                                      ^
->> drivers/char/hw_random/cavium-rng-vf.c:44:47: error: use of undeclared identifier 'MIDR_THUNDERX_81XX'
-      44 |             midr_is_cpu_model_range(read_cpuid_id(), MIDR_THUNDERX_81XX,
-         |                                                      ^
->> drivers/char/hw_random/cavium-rng-vf.c:47:47: error: use of undeclared identifier 'MIDR_THUNDERX'
-      47 |             midr_is_cpu_model_range(read_cpuid_id(), MIDR_THUNDERX,
-         |                                                      ^
-   5 warnings and 3 errors generated.
+   drivers/iio/dac/ad8460.c:159:8: error: call to undeclared function 'ad8460_get_hvdac_word'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     159 |         ret = ad8460_get_hvdac_word(state, private, &reg);
+         |               ^
+>> drivers/iio/dac/ad8460.c:163:34: warning: format specifies type 'long' but the argument has type 'unsigned int' [-Wformat]
+     163 |         return sysfs_emit(buf, "%ld\n", reg);
+         |                                 ~~~     ^~~
+         |                                 %u
+   drivers/iio/dac/ad8460.c:176:27: error: too few arguments to function call, expected 3, have 2
+     176 |         ret = kstrtou32(buf, &reg);
+         |               ~~~~~~~~~          ^
+   include/linux/kstrtox.h:84:32: note: 'kstrtou32' declared here
+      84 | static inline int __must_check kstrtou32(const char *s, unsigned int base, u32 *res)
+         |                                ^         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/iio/dac/ad8460.c:182:9: error: call to undeclared function 'ad8460_set_hvdac_word'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     182 |         return ad8460_set_hvdac_word(state, private, reg);
+         |                ^
+   drivers/iio/dac/ad8460.c:211:27: error: too few arguments to function call, expected 3, have 2
+     211 |         ret = kstrtou16(buf, &sym);
+         |               ~~~~~~~~~          ^
+   include/linux/kstrtox.h:94:18: note: 'kstrtou16' declared here
+      94 | int __must_check kstrtou16(const char *s, unsigned int base, u16 *res);
+         |                  ^         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/iio/dac/ad8460.c:249:33: error: too few arguments to function call, expected 3, have 2
+     249 |         ret = kstrtou16(buf, &toggle_en);
+         |               ~~~~~~~~~                ^
+   include/linux/kstrtox.h:94:18: note: 'kstrtou16' declared here
+      94 | int __must_check kstrtou16(const char *s, unsigned int base, u16 *res);
+         |                  ^         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/iio/dac/ad8460.c:335:12: error: static declaration of 'ad8460_get_hvdac_word' follows non-static declaration
+     335 | static int ad8460_get_hvdac_word(struct ad8460_state *state,
+         |            ^
+   drivers/iio/dac/ad8460.c:159:8: note: previous implicit declaration is here
+     159 |         ret = ad8460_get_hvdac_word(state, private, &reg);
+         |               ^
+   drivers/iio/dac/ad8460.c:346:9: error: call to undeclared function 'get_unaligned_le16'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     346 |         *val = get_unaligned_le16(state->spi_tx_buf);
+         |                ^
+   drivers/iio/dac/ad8460.c:351:12: error: static declaration of 'ad8460_set_hvdac_word' follows non-static declaration
+     351 | static int ad8460_set_hvdac_word(struct ad8460_state *state,
+         |            ^
+   drivers/iio/dac/ad8460.c:182:9: note: previous implicit declaration is here
+     182 |         return ad8460_set_hvdac_word(state, private, reg);
+         |                ^
+   drivers/iio/dac/ad8460.c:355:2: error: call to undeclared function 'put_unaligned_le16'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     355 |         put_unaligned_le16(val & 0x3FFF, &state->spi_tx_buf);
+         |         ^
+   drivers/iio/dac/ad8460.c:855:8: error: call to undeclared function 'devm_regulator_get_enable_read_voltage'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     855 |         ret = devm_regulator_get_enable_read_voltage(&spi->dev, "refio_1p2v");
+         |               ^
+   drivers/iio/dac/ad8460.c:855:8: note: did you mean 'devm_regulator_get_enable_optional'?
+   include/linux/regulator/consumer.h:166:5: note: 'devm_regulator_get_enable_optional' declared here
+     166 | int devm_regulator_get_enable_optional(struct device *dev, const char *id);
+         |     ^
+   drivers/iio/dac/ad8460.c:859:43: error: use of undeclared identifier 'vrefio'
+     859 |                 return dev_err_probe(&spi->dev, PTR_ERR(vrefio),
+         |                                                         ^
+   1 warning and 11 errors generated.
 
 
-vim +/MIDR_THUNDERX_83XX +41 drivers/char/hw_random/cavium-rng-vf.c
+vim +163 drivers/iio/dac/ad8460.c
 
-cc2f1908c6b8f6 Omer Khaliq   2016-08-23  38  
-680efb33546be8 Sunil Goutham 2021-10-29  39  static inline bool is_octeontx(struct pci_dev *pdev)
-680efb33546be8 Sunil Goutham 2021-10-29  40  {
-680efb33546be8 Sunil Goutham 2021-10-29 @41  	if (midr_is_cpu_model_range(read_cpuid_id(), MIDR_THUNDERX_83XX,
-680efb33546be8 Sunil Goutham 2021-10-29  42  				    MIDR_CPU_VAR_REV(0, 0),
-680efb33546be8 Sunil Goutham 2021-10-29  43  				    MIDR_CPU_VAR_REV(3, 0)) ||
-680efb33546be8 Sunil Goutham 2021-10-29 @44  	    midr_is_cpu_model_range(read_cpuid_id(), MIDR_THUNDERX_81XX,
-680efb33546be8 Sunil Goutham 2021-10-29  45  				    MIDR_CPU_VAR_REV(0, 0),
-680efb33546be8 Sunil Goutham 2021-10-29  46  				    MIDR_CPU_VAR_REV(3, 0)) ||
-680efb33546be8 Sunil Goutham 2021-10-29 @47  	    midr_is_cpu_model_range(read_cpuid_id(), MIDR_THUNDERX,
-680efb33546be8 Sunil Goutham 2021-10-29  48  				    MIDR_CPU_VAR_REV(0, 0),
-680efb33546be8 Sunil Goutham 2021-10-29  49  				    MIDR_CPU_VAR_REV(3, 0)))
-680efb33546be8 Sunil Goutham 2021-10-29  50  		return true;
-680efb33546be8 Sunil Goutham 2021-10-29  51  
-680efb33546be8 Sunil Goutham 2021-10-29  52  	return false;
-680efb33546be8 Sunil Goutham 2021-10-29  53  }
-680efb33546be8 Sunil Goutham 2021-10-29  54  
-
-:::::: The code at line 41 was first introduced by commit
-:::::: 680efb33546be8960ccbb2f4e0e43034d9c93b30 hwrng: cavium - Check health status while reading random data
-
-:::::: TO: Sunil Goutham <sgoutham@marvell.com>
-:::::: CC: Herbert Xu <herbert@gondor.apana.org.au>
+   149	
+   150	static ssize_t ad8460_dac_input_read(struct iio_dev *indio_dev,
+   151					     uintptr_t private,
+   152					     const struct iio_chan_spec *chan,
+   153					     char *buf)
+   154	{
+   155		struct ad8460_state *state = iio_priv(indio_dev);
+   156		unsigned int reg;
+   157		int ret;
+   158	
+   159		ret = ad8460_get_hvdac_word(state, private, &reg);
+   160		if (ret)
+   161			return ret;
+   162	
+ > 163		return sysfs_emit(buf, "%ld\n", reg);
+   164	}
+   165	
 
 -- 
 0-DAY CI Kernel Test Service
