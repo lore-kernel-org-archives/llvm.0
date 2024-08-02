@@ -1,241 +1,166 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C921A47F64;
-	Fri,  2 Aug 2024 22:19:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8AAB52C9D;
+	Fri,  2 Aug 2024 22:35:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722637194; cv=none; b=uI9lhhPp86h1EyLCq2svqF1Fc2rMs1kbfTI2aNmTUR84/FecGrvpTgEkaqdfnBbm8isA134Kc1dkIDz8exDpuO7gwLtVAu0Ge/Xyo4Y+GyNRtT2U+0Q88avlEEvgAQxpauIKgSffBDr5LtoGHzWttTbie8ykYcD+Un9szst7Vws=
+	t=1722638112; cv=none; b=cH6xPFQnmQdsTcRbgk2U/D8h7iloUlx/oLzbqJxO431U7lVINhkuAvhRk1w4fqnSQb3A8z2189SiQCfyjuBc8KNVm1eBRuCHNNcvnxa2NPPzgMozU2H123PV+/sWTG0Tj5F4b7fqm5IwuJB/zcNMrLyCSD4lSlrCbOToc2Wq2I8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722637194; c=relaxed/simple;
-	bh=mcxSg+qGadL76KNrl2hpaR9JR+cq+JmpnzMW4vQqLJk=;
+	s=arc-20240116; t=1722638112; c=relaxed/simple;
+	bh=Ovb1Y8GPHaYhJfkGh6OGnZV2Zy802Bu9BlM9I8m8ZME=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=h5U/9UnUuS0KSi2kZIPmIJ2QN2KtVVXOdGWPHtOqQbMjZbgMByJdk6dU5kzVGe9pcZrNBfrQn3Wwd6qxoqqe16RMEZTFcq8MSM93x0LAqNTsHQvvE3JdvafxN8o9yXqym8li9jAr5vrjMJHWvs4EUCx2o/w1B+0ZZRQbUY8Bs1A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=axS8BAGd; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=ME6uz/YNcSXF8ch16qxmd3eeoDfBUpDo0E0E0VJITn4z8TKc+3nym5+XHMnRnqRW2KDXTq1zbKi2UN0y1q7wflDvJTcD9MbHiWrQ+7s2O5qeSlVYaejvzuL1zyjkDhUEZPIJg/O+SXheLG3qD7C8mwLFGTmEVvMeZpIaNHfaqAA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ooUWX02U; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="axS8BAGd"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EADC5C32782;
-	Fri,  2 Aug 2024 22:19:53 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ooUWX02U"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 68BB1C32782;
+	Fri,  2 Aug 2024 22:35:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1722637194;
-	bh=mcxSg+qGadL76KNrl2hpaR9JR+cq+JmpnzMW4vQqLJk=;
+	s=k20201202; t=1722638112;
+	bh=Ovb1Y8GPHaYhJfkGh6OGnZV2Zy802Bu9BlM9I8m8ZME=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=axS8BAGdIKBBiJOnu35QVEQ1ct0UdlZxaDkc6OsnMxIFpMVmuJPfSkjj7HisuhCTK
-	 LNgr5LvYCdNJYCe1iqm7wpR0fKl5FGLBsKLhE36Yq1rCWlh/8dfM8saGqJDDt0szrs
-	 gmbUTyrY3SlMT/dpkvlwBnRKtqmibUv29JjaHf3jSv9ryI1uK4XJrtdw1RwyAnD8JO
-	 dV6z+4pFx/BCgNdJYVurZMnTdmNhu0buBTKl7SZjLKKUL7KXYnkVSOk5lqiqpKUAQN
-	 /0l2LhhveEFRb64g28x/HUKtm/rT4dWcJLIehaLMv0x+td41hAYDTiONTQJFGtvAIa
-	 Ffyq+WDpzEQOw==
-Date: Fri, 2 Aug 2024 15:19:52 -0700
+	b=ooUWX02UZyqQwwV9Rpvwk70xE9QaAkHd5dYFMKRPcwE2UAslp1qIXbLPsLM/gYvTd
+	 BYx3NdNmzaDMOKWUxUKy4WBWSuE6txB3rY5RDhmL66UqjqKFR6EEeSbxW6PnCPi1Ri
+	 q4m3/0z9+rTx/SZrg3ECYP9c24puRIMup6b22CnNXvNzWM3a4J+x70aTQqhSAAzwxj
+	 NF4z55dvkH2KXpl/ilXORo96kTM4q7TDQBrWCMo3pNTCPtkzFO8redpBLIZbbFTCcD
+	 RmlqFJtGRUSNDZTwzNzB5y0hG2j+ZLAiqW0pL4xpC3J89P+DpV4gT8oGxsMiFfy1kK
+	 ZEujat4/e+pXA==
+Date: Fri, 2 Aug 2024 15:35:09 -0700
 From: Nathan Chancellor <nathan@kernel.org>
-To: "Gustavo A. R. Silva" <gustavo@embeddedor.com>
-Cc: kernel test robot <lkp@intel.com>,
-	"Gustavo A. R. Silva" <gustavoars@kernel.org>, llvm@lists.linux.dev,
-	oe-kbuild-all@lists.linux.dev, LKML <linux-kernel@vger.kernel.org>,
-	Brian Cain <bcain@quicinc.com>, linux-hexagon@vger.kernel.org
-Subject: Re: [gustavoars:testing/wfamnae-next20240729-cbc-2 11/18]
- include/rdma/uverbs_ioctl.h:643:15: error: static assertion failed due to
- requirement '__builtin_offsetof(struct uverbs_attr_bundle, attrs) ==
- sizeof(struct uverbs_attr_bundle_hdr)': struct member likely outside of
- struct_group_tagged()
-Message-ID: <20240802221952.GA737452@thelio-3990X>
-References: <202408011956.wscyBwq6-lkp@intel.com>
- <138da3e5-0e24-41a6-bb35-df5d07045eb3@embeddedor.com>
- <20240801190813.GC122261@thelio-3990X>
- <f40160aa-7cbd-4264-be44-45396b09574f@embeddedor.com>
- <20240801221427.GA3773553@thelio-3990X>
- <ca056227-30c3-47b9-a19a-fbab87778f20@embeddedor.com>
+To: =?iso-8859-1?Q?Th=E9o?= Lebrun <theo.lebrun@bootlin.com>
+Cc: Masahiro Yamada <masahiroy@kernel.org>,
+	Nicolas Schier <nicolas@fjasle.eu>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>, llvm@lists.linux.dev,
+	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Subject: Re: [PATCH] scripts: run-clang-tools: add file filtering option
+Message-ID: <20240802223509.GA781199@thelio-3990X>
+References: <20240704-clang-tidy-filter-v1-1-8d4556a35b65@bootlin.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <ca056227-30c3-47b9-a19a-fbab87778f20@embeddedor.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20240704-clang-tidy-filter-v1-1-8d4556a35b65@bootlin.com>
 
-On Thu, Aug 01, 2024 at 04:35:59PM -0600, Gustavo A. R. Silva wrote:
+Hi Théo,
+
+First of all, apologies that it has taken me so long to review this!
+
+On Thu, Jul 04, 2024 at 11:28:21AM +0200, Théo Lebrun wrote:
+> Add file filtering feature. We take zero or more filters at the end as
+> positional arguments. If none are given, the default behavior is kept
+> and we run the tool on all files in the datastore. Else, files must
+> match one or more filter to be analysed.
 > 
+> The below command runs clang-tidy on drivers/clk/clk.c and all C files
+> inside drivers/reset/.
 > 
-> On 01/08/24 16:14, Nathan Chancellor wrote:
-> > On Thu, Aug 01, 2024 at 02:17:50PM -0600, Gustavo A. R. Silva wrote:
-> > > 
-> > > 
-> > > On 01/08/24 13:08, Nathan Chancellor wrote:
-> > > > On Thu, Aug 01, 2024 at 06:47:58AM -0600, Gustavo A. R. Silva wrote:
-> > > > > 
-> > > > > 
-> > > > > On 01/08/24 05:35, kernel test robot wrote:
-> > > > > > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/gustavoars/linux.git testing/wfamnae-next20240729-cbc-2
-> > > > > > head:   df15c862c1b93b6e1f6c90b0d7971f7a6ad66751
-> > > > > > commit: e7cd9f429a852fb7e37a706c7d08fc36e7863e06 [11/18] RDMA/uverbs: Use static_assert() to check struct sizes
-> > > > > > config: hexagon-randconfig-001-20240801 (https://download.01.org/0day-ci/archive/20240801/202408011956.wscyBwq6-lkp@intel.com/config)
-> > > > > > compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 430b90f04533b099d788db2668176038be38c53b)
-> > > > > 
-> > > > > 
-> > > > > Clang 20.0.0?? (thinkingface)
-> > > > 
-> > > > Indeed, Clang 19 branched and main is now 20 :)
-> > > > 
-> > > > https://github.com/llvm/llvm-project/commit/8f701b5df0adb3a2960d78ca2ad9cf53f39ba2fe
-> > > 
-> > > Yeah, but is that a stable release?
-> > 
-> > No, but the Intel folks have tested tip of tree LLVM against the kernel
-> > for us for a few years now to try and catch issues such as this.
+>     ./scripts/clang-tools/run-clang-tools.py clang-tidy \
+>         compile_commands.json \
+>         'drivers/clk/clk.c' 'drivers/reset/*'
 > 
-> Oh, I see, fine. :)
+> The Python fnmatch builtin module is used. Matching is case-insensitive.
+> See its documentation for allowed syntax:
+> https://docs.python.org/3/library/fnmatch.html
 > 
-> > 
-> > > BTW, I don't see GCC reporting the same problem below:
-> > 
-> > Hexagon does not have a GCC backend anymore so it is not going to be
-> > possible to do an exact A/B comparison with this configuration but...
-> > 
-> > > > > > > > include/rdma/uverbs_ioctl.h:643:15: error: static assertion failed due to requirement '__builtin_offsetof(struct uverbs_attr_bundle, attrs) == sizeof(struct uverbs_attr_bundle_hdr)': struct member likely outside of struct_group_tagged()
-> > > > > >         643 | static_assert(offsetof(struct uverbs_attr_bundle, attrs) == sizeof(struct uverbs_attr_bundle_hdr),
-> > > > > >             | ~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> > > > > >         644 |               "struct member likely outside of struct_group_tagged()");
-> > > > > >             |               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> > > > > >       include/linux/stddef.h:16:32: note: expanded from macro 'offsetof'
-> > > > > >          16 | #define offsetof(TYPE, MEMBER)  __builtin_offsetof(TYPE, MEMBER)
-> > > > > >             |                                 ^
-> > > > > >       include/linux/build_bug.h:77:50: note: expanded from macro 'static_assert'
-> > > > > >          77 | #define static_assert(expr, ...) __static_assert(expr, ##__VA_ARGS__, #expr)
-> > > > > >             |                                  ~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~
-> > > > > >       include/linux/build_bug.h:78:56: note: expanded from macro '__static_assert'
-> > > > > >          78 | #define __static_assert(expr, msg, ...) _Static_assert(expr, msg)
-> > > > > >             |                                                        ^~~~
-> > > > > >       include/rdma/uverbs_ioctl.h:643:58: note: expression evaluates to '56 == 52'
-> > 
-> > This seems to give some indication that perhaps there may be some
-> > architecture specific here with padding maybe? I seem to recall ARM OABI
-> > having something similar. Adding the Hexagon folks/list to get some more
-> > clarification. Full warning and context:
-> > 
-> > https://lore.kernel.org/202408011956.wscyBwq6-lkp@intel.com/
-> > 
-> > The problematic section preprocessed since sometimes the macros
-> > obfuscate things:
-> > 
-> > struct uverbs_attr_bundle {
-> >          union {
-> >                  struct {
-> >                          struct ib_udata driver_udata;
-> >                          struct ib_udata ucore;
-> >                          struct ib_uverbs_file *ufile;
-> >                          struct ib_ucontext *context;
-> >                          struct ib_uobject *uobject;
-> >                          unsigned long attr_present[(((UVERBS_API_ATTR_BKEY_LEN) +
-> >                                                       ((sizeof(long) * 8)) - 1) /
-> >                                                      ((sizeof(long) * 8)))];
-> >                  };
-> >                  struct uverbs_attr_bundle_hdr {
-> >                          struct ib_udata driver_udata;
-> >                          struct ib_udata ucore;
-> >                          struct ib_uverbs_file *ufile;
-> >                          struct ib_ucontext *context;
-> >                          struct ib_uobject *uobject;
-> >                          unsigned long attr_present[(((UVERBS_API_ATTR_BKEY_LEN) +
-> >                                                       ((sizeof(long) * 8)) - 1) /
-> >                                                      ((sizeof(long) * 8)))];
-> >                  } hdr;
-> >          };
-> > 
-> >          struct uverbs_attr attrs[];
-> > };
-> > _Static_assert(__builtin_offsetof(struct uverbs_attr_bundle, attrs) ==
-> >                         sizeof(struct uverbs_attr_bundle_hdr),
-> >                 "struct member likely outside of struct_group_tagged()");
-> > 
-> > FWIW, I see this with all versions of Clang that the kernel supports
-> > with this configuration.
+> Signed-off-by: Théo Lebrun <theo.lebrun@bootlin.com>
+> ---
+> Currently, all files in the datastore are analysed. This is not
+> practical for grabbing errors in a subsystem, or relative to a patch
+> series. Add a file filtering feature with wildcard support.
+
+Sure, I think this is totally reasonable. In fact, I think some of this
+could be added to the commit message as further existence for this
+feature.
+
+The change itself looks good to me for the most part, I have some
+questions below just for my own understanding.
+
+Reviewed-by: Nathan Chancellor <nathan@kernel.org>
+
+One further question/comment now: Have you considered a way to
+integrate this into Kbuild with the clang-tidy and clang-analyzer
+commands? I don't think it is strictly necessary for the acceptance of
+this patch but it might be nice to have some variable that users could
+provide to do this with their regular make command + the clang-tidy
+target? Not sure if Masahiro has further thoughts on that.
+
+> Have a nice day,
+> Théo
+> ---
+>  scripts/clang-tools/run-clang-tools.py | 20 ++++++++++++++++++++
+>  1 file changed, 20 insertions(+)
 > 
-> I don't have access to a Clang compiler right now; I wonder if you could
-> help me get the output of this command:
+> diff --git a/scripts/clang-tools/run-clang-tools.py b/scripts/clang-tools/run-clang-tools.py
+> index f31ffd09e1ea..b0b3a9c8cdec 100755
+> --- a/scripts/clang-tools/run-clang-tools.py
+> +++ b/scripts/clang-tools/run-clang-tools.py
+> @@ -10,6 +10,7 @@ compile_commands.json.
+>  """
+>  
+>  import argparse
+> +import fnmatch
+>  import json
+>  import multiprocessing
+>  import subprocess
+> @@ -32,6 +33,8 @@ def parse_arguments():
+>                          help=type_help)
+>      path_help = "Path to the compilation database to parse"
+>      parser.add_argument("path", type=str, help=path_help)
+> +    file_filter_help = "Optional Unix shell-style wildcard file filters"
+> +    parser.add_argument("file_filter", type=str, nargs="*", help=file_filter_help)
+>  
+>      checks_help = "Checks to pass to the analysis"
+>      parser.add_argument("-checks", type=str, default=None, help=checks_help)
+> @@ -48,6 +51,22 @@ def init(l, a):
+>      args = a
+>  
+>  
+> +def filter_entries(datastore, filters):
+> +    for entry in datastore:
+> +        if filters == []:
+> +            yield entry
+> +            continue
+> +
+> +        assert entry['file'].startswith(entry['directory'])
+
+What is the purpose of this assertion? Will it cause AssertionError
+under normal circumstances?
+
+> +        # filepath is relative to the directory, to avoid matching on the absolute path
+> +        filepath = entry['file'][len(entry['directory']):].lstrip('/')
+> +
+> +        for pattern in filters:
+> +            if fnmatch.fnmatch(filepath, pattern):
+> +                yield entry
+> +                break
+> +
+> +
+>  def run_analysis(entry):
+>      # Disable all checks, then re-enable the ones we want
+>      global args
+> @@ -87,6 +106,7 @@ def main():
+>          # Read JSON data into the datastore variable
+>          with open(args.path, "r") as f:
+>              datastore = json.load(f)
+> +            datastore = filter_entries(datastore, args.file_filter)
+>              pool.map(run_analysis, datastore)
+>      except BrokenPipeError:
+>          # Python flushes standard streams on exit; redirect remaining output
 > 
-> pahole -C uverbs_attr_bundle drivers/infiniband/core/rdma_core.o
-
-We disabled CONFIG_DEBUG_INFO_BTF for Hexagon because elfutils does not
-support Hexagon relocations but this is built-in for this configuration
-so I removed that limitation and ended up with:
-
-$ pahole -C uverbs_attr_bundle vmlinux
-struct uverbs_attr_bundle {
-        union {
-                struct {
-                        struct ib_udata driver_udata;    /*     0    16 */
-                        struct ib_udata ucore;           /*    16    16 */
-                        struct ib_uverbs_file * ufile;   /*    32     4 */
-                        struct ib_ucontext * context;    /*    36     4 */
-                        struct ib_uobject * uobject;     /*    40     4 */
-                        unsigned long attr_present[2];   /*    44     8 */
-                };                                       /*     0    52 */
-                struct uverbs_attr_bundle_hdr hdr;       /*     0    52 */
-        };                                               /*     0    52 */
-
-        /* XXX 4 bytes hole, try to pack */
-        union {
-                struct {
-                        struct ib_udata    driver_udata;         /*     0    16 */
-                        struct ib_udata    ucore;                /*    16    16 */
-                        struct ib_uverbs_file * ufile;           /*    32     4 */
-                        struct ib_ucontext * context;            /*    36     4 */
-                        struct ib_uobject * uobject;             /*    40     4 */
-                        unsigned long      attr_present[2];      /*    44     8 */
-                };                                               /*     0    52 */
-                struct uverbs_attr_bundle_hdr hdr;               /*     0    52 */
-        };
-
-
-        struct uverbs_attr         attrs[];              /*    56     0 */
-
-        /* size: 56, cachelines: 1, members: 2 */
-        /* sum members: 52, holes: 1, sum holes: 4 */
-        /* last cacheline: 56 bytes */
-};
-
-If you want any other information or want me to test anything, I am more
-than happy to do so.
-
-Cheers,
-Nathan
-
-> > > > > >         643 | static_assert(offsetof(struct uverbs_attr_bundle, attrs) == sizeof(struct uverbs_attr_bundle_hdr),
-> > > > > >             | ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> > > > > >         644 |               "struct member likely outside of struct_group_tagged()");
-> > > > > >             |               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> > > > > >       include/linux/build_bug.h:77:50: note: expanded from macro 'static_assert'
-> > > > > >          77 | #define static_assert(expr, ...) __static_assert(expr, ##__VA_ARGS__, #expr)
-> > > > > >             |                                  ~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~
-> > > > > >       include/linux/build_bug.h:78:56: note: expanded from macro '__static_assert'
-> > > > > >          78 | #define __static_assert(expr, msg, ...) _Static_assert(expr, msg)
-> > > > > >             |                                                        ^~~~
-> > > > > >       7 warnings and 1 error generated.
-> > > > > > 
-> > > > > > 
-> > > > > > vim +643 include/rdma/uverbs_ioctl.h
-> > > > > > 
-> > > > > >       630	
-> > > > > >       631	struct uverbs_attr_bundle {
-> > > > > >       632		/* New members MUST be added within the struct_group() macro below. */
-> > > > > >       633		struct_group_tagged(uverbs_attr_bundle_hdr, hdr,
-> > > > > >       634			struct ib_udata driver_udata;
-> > > > > >       635			struct ib_udata ucore;
-> > > > > >       636			struct ib_uverbs_file *ufile;
-> > > > > >       637			struct ib_ucontext *context;
-> > > > > >       638			struct ib_uobject *uobject;
-> > > > > >       639			DECLARE_BITMAP(attr_present, UVERBS_API_ATTR_BKEY_LEN);
-> > > > > >       640		);
-> > > > > >       641		struct uverbs_attr attrs[];
-> > > > > >       642	};
-> > > > > >     > 643	static_assert(offsetof(struct uverbs_attr_bundle, attrs) == sizeof(struct uverbs_attr_bundle_hdr),
-> > > > > >       644		      "struct member likely outside of struct_group_tagged()");
-> > > > > >       645	
-> > > > > > 
-> > > > > 
-> > > 
-> > > Thanks
-> > > --
-> > > Gustavo
+> ---
+> base-commit: 22a40d14b572deb80c0648557f4bd502d7e83826
+> change-id: 20240704-clang-tidy-filter-f470377cb2b4
+> 
+> Best regards,
+> -- 
+> Théo Lebrun <theo.lebrun@bootlin.com>
+> 
