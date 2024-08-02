@@ -1,48 +1,43 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 05DBD5258;
-	Fri,  2 Aug 2024 23:04:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F00B55258;
+	Fri,  2 Aug 2024 23:07:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722639860; cv=none; b=jkvajuFjEhl0Opet8z6ZlWYYD9osE8q8+TERyD4K6F2cWsFNa0j2HTBti0awI/pR8HUG8Ld/tQtItbVri/GEiylm7Tdg1xORcdHy6ykk4kmyRoNGFc8I9wmqp7yLQeTY1jpa0wvIhmrqYHtsNWa9KtfK9/VDoFg1njV+bQMYvFY=
+	t=1722640038; cv=none; b=Q9oQrcbB8evpkJNf506eMfgK0A6M16CxxeJ56W8h2c8rM5Vwwi0aqu2XCkZjmkpqCj3clxdy+Uzxv484IcudIox7UHRNYvBz3AtInKEwEMxbMswEjt8tVTly4qAKpgeu8g2T83kr+4TO8mfQMfXvWdYFeYPacWdu1sCHLXh9zHo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722639860; c=relaxed/simple;
-	bh=iIjDB6hSxLVkrCrMpfondG5ucRaBxFNaNNgaLKgyOM0=;
+	s=arc-20240116; t=1722640038; c=relaxed/simple;
+	bh=bc/jPOXqEBJsFaUc3DCiNN63Sw3ffR3ayB1AQ2jpfKo=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=sEpJc4R9o0px7/r8f8QtV8Pxjhm3nObXRR+vXupLtCVmWch7U0+kXjW5maDBMVTg77rZP3SX4UiiD+w2XXcDdIQTThiK8J789Er0T98HcmouuQf17suTLj+pFc7M7ohk1+geXlRxUGMiczNueZvsccUCMwg0TFMBHID8IN1D2p4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HzpylkbS; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=e4c0sFBDuPFyD3Ki+dG+2b7wm/9K8qAzScMGkl4RwmciUtwBHaR2ElOGZb6eQLik5yCRWASdyU40ZQCa0DIWeF1AdxnS4RDvF93U6w7RCbw/W9OTjMeVTikJuSh7pFdOiwRN4MKUYcBPcfl8ew2psoeJd3XFpwnsXjUMeeom7Mo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qSqLimTO; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HzpylkbS"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D0346C32782;
-	Fri,  2 Aug 2024 23:04:18 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qSqLimTO"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E7AC1C32782;
+	Fri,  2 Aug 2024 23:07:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1722639859;
-	bh=iIjDB6hSxLVkrCrMpfondG5ucRaBxFNaNNgaLKgyOM0=;
+	s=k20201202; t=1722640037;
+	bh=bc/jPOXqEBJsFaUc3DCiNN63Sw3ffR3ayB1AQ2jpfKo=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=HzpylkbS7oULAgh4yHoGZQoiNmiZKtx2nSFhfY0Ie9FEggok+KMDcsf9CC1hEsNTG
-	 Cw03IqxXtDTI3+zeOgdifUhXO76bOLzK4I23UWYkKIyYFB/m6/eOZPaRxhVNNUZ60l
-	 EUZn+QJy1MWBRVZL7RJ+K5kJXTAFNOqVGkD6tOIDQtkSWf83W/z9x5d3G2ws+kBcte
-	 KJfwVFRV6cxDChzA0jau7Js8CcbC63y9NCLca0LylbJQIoNWxQvhCs2pgkyHiopPHG
-	 yA1cUasAv5Gy6VNjS/pIaBqgGeM3pBaT+tw4pi3vPmGDesRlhG3P5qStaT9uracpI1
-	 5FszcsmhOsVpA==
-Date: Fri, 2 Aug 2024 16:04:17 -0700
+	b=qSqLimTOQVOmSqPtBkKip4BolRiy+JPqr8fLxl9s9O0SZG/Xf+KTfjpCw18Mu5kQY
+	 Ue+Ac5IZ2oVamtmjWlrUidZ0njVDxpeg7GSVaTgEeVBUB+Kq2m9m6h94o8tBqOwp8S
+	 CsrkR1IF0nPSiSk2VytDJY1fVoB/3LOdF/WAw5i2xyFTTJyosVFYPq+tV5i5KFFO8x
+	 S6KDH1f94qJSjv7nnkTb5Tz8APZwpV90dyMotcQ8Yq1RYV8A2FKLpjirOxMiHJmrNo
+	 sTtfyuiMmyXj/b3ABz/Pb8H+Rm3WRPbltb4TfoQ1VEVnqmCVHx/PF9Ub0e1avLpSvm
+	 QAtLVCZwX0mLg==
+Date: Fri, 2 Aug 2024 16:07:15 -0700
 From: Nathan Chancellor <nathan@kernel.org>
-To: Koakuma <koachan@protonmail.com>
-Cc: "David S. Miller" <davem@davemloft.net>,
-	Andreas Larsson <andreas@gaisler.com>,
-	Nick Desaulniers <ndesaulniers@google.com>,
+To: Brian Norris <briannorris@chromium.org>
+Cc: Yury Norov <yury.norov@gmail.com>, linux-kernel@vger.kernel.org,
 	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>, glaubitz@physik.fu-berlin.de,
-	Masahiro Yamada <masahiroy@kernel.org>,
-	Nicolas Schier <nicolas@fjasle.eu>, sparclinux@vger.kernel.org,
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-	linux-kbuild@vger.kernel.org
-Subject: Re: [PATCH v2 1/2] sparc/build: Remove all usage of -fcall-used*
- flags
-Message-ID: <20240802230417.GB853635@thelio-3990X>
-References: <20240717-sparc-cflags-v2-0-259407e6eb5f@protonmail.com>
- <20240717-sparc-cflags-v2-1-259407e6eb5f@protonmail.com>
+	Justin Stitt <justinstitt@google.com>,
+	Nick Desaulniers <ndesaulniers@google.com>, llvm@lists.linux.dev,
+	Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+	Kees Cook <kees@kernel.org>
+Subject: Re: [PATCH v3 1/4] find: Switch from inline to __always_inline
+Message-ID: <20240802230715.GA959572@thelio-3990X>
+References: <20240719005127.2449328-1-briannorris@chromium.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -51,71 +46,251 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240717-sparc-cflags-v2-1-259407e6eb5f@protonmail.com>
+In-Reply-To: <20240719005127.2449328-1-briannorris@chromium.org>
 
-On Wed, Jul 17, 2024 at 11:10:15PM +0700, Koakuma wrote:
-> Remove all usage of -fcall-used* flags so that all flags used are
-> portable between GCC and clang.
-> 
-> The reasoning is as follows:
-> 
-> In the (normal) 32-bit ABI, %g5 and %g7 is normally reserved, and in
-> the 64-bit ABI, %g7 is the reserved one.
-> Linux turns them into volatile registers by the way of -fcall-used-*,
-> but on the other hand, omitting the flags shouldn't be harmful;
-> compilers will now simply refuse to touch them, and any assembly
-> code that happens to touch them would still work like usual (because
-> Linux' conventions already treats them as volatile anyway).
-> 
-> Signed-off-by: Koakuma <koachan@protonmail.com>
+Hi Brian,
 
-As before, I tested this series with the vDSO patch mentioned before and
-a version of LLVM that supports the -m{,no-}v8plus flags and I was able
-to successfully boot a kernel in QEMU :)
+On Thu, Jul 18, 2024 at 05:50:37PM -0700, Brian Norris wrote:
+> From: Yury Norov <yury.norov@gmail.com>
+> 
+> 'inline' keyword is only a recommendation for compiler. If it decides to
+> not inline find_bit nodemask functions, the whole small_const_nbits()
+> machinery doesn't work.
+> 
+> This is how a standard GCC 11.3.0 does for my x86_64 build now. This patch
+> replaces 'inline' directive with unconditional '__always_inline' to make
+> sure that there's always a chance for compile-time optimization. It doesn't
+> change size of kernel image, according to bloat-o-meter.
+> 
+> [[ Brian: split out from:
+>       Subject: [PATCH 1/3] bitmap: switch from inline to __always_inline
+>       https://lore.kernel.org/all/20221027043810.350460-2-yury.norov@gmail.com/
+>    But rewritten, as there were too many conflicts. ]]
+> 
+> Signed-off-by: Yury Norov <yury.norov@gmail.com>
+> Co-developed-by: Brian Norris <briannorris@chromium.org>
+> Signed-off-by: Brian Norris <briannorris@chromium.org>
+> Reviewed-by: Kees Cook <kees@kernel.org>
 
-Tested-by: Nathan Chancellor <nathan@kernel.org>
+Sorry for taking some time to review this. Overall, this seems
+reasonable, especially given the numbers that you provided in the third
+patch. I would expect the compiler to be able to optimize better at some
+callsites with this.
+
+For the series:
+
+Reviewed-by: Nathan Chancellor <nathan@kernel.org>
 
 > ---
->  arch/sparc/Makefile      | 4 ++--
->  arch/sparc/vdso/Makefile | 2 +-
->  2 files changed, 3 insertions(+), 3 deletions(-)
 > 
-> diff --git a/arch/sparc/Makefile b/arch/sparc/Makefile
-> index 757451c3ea1d..7318a8b452c3 100644
-> --- a/arch/sparc/Makefile
-> +++ b/arch/sparc/Makefile
-> @@ -29,7 +29,7 @@ UTS_MACHINE    := sparc
->  # versions of gcc.  Some gcc versions won't pass -Av8 to binutils when you
->  # give -mcpu=v8.  This silently worked with older bintutils versions but
->  # does not any more.
-> -KBUILD_CFLAGS  += -m32 -mcpu=v8 -pipe -mno-fpu -fcall-used-g5 -fcall-used-g7
-> +KBUILD_CFLAGS  += -m32 -mcpu=v8 -pipe -mno-fpu
->  KBUILD_CFLAGS  += -Wa,-Av8
->  
->  KBUILD_AFLAGS  += -m32 -Wa,-Av8
-> @@ -45,7 +45,7 @@ export BITS   := 64
->  UTS_MACHINE   := sparc64
->  
->  KBUILD_CFLAGS += -m64 -pipe -mno-fpu -mcpu=ultrasparc -mcmodel=medlow
-> -KBUILD_CFLAGS += -ffixed-g4 -ffixed-g5 -fcall-used-g7 -Wno-sign-compare
-> +KBUILD_CFLAGS += -ffixed-g4 -ffixed-g5 -Wno-sign-compare
->  KBUILD_CFLAGS += -Wa,--undeclared-regs
->  KBUILD_CFLAGS += $(call cc-option,-mtune=ultrasparc3)
->  KBUILD_AFLAGS += -m64 -mcpu=ultrasparc -Wa,--undeclared-regs
-> diff --git a/arch/sparc/vdso/Makefile b/arch/sparc/vdso/Makefile
-> index 243dbfc4609d..e009443145af 100644
-> --- a/arch/sparc/vdso/Makefile
-> +++ b/arch/sparc/vdso/Makefile
-> @@ -46,7 +46,7 @@ CFL := $(PROFILING) -mcmodel=medlow -fPIC -O2 -fasynchronous-unwind-tables -m64
->         -fno-omit-frame-pointer -foptimize-sibling-calls \
->         -DDISABLE_BRANCH_PROFILING -DBUILD_VDSO
->  
-> -SPARC_REG_CFLAGS = -ffixed-g4 -ffixed-g5 -fcall-used-g5 -fcall-used-g7
-> +SPARC_REG_CFLAGS = -ffixed-g4 -ffixed-g5
->  
->  $(vobjs): KBUILD_CFLAGS := $(filter-out $(RANDSTRUCT_CFLAGS) $(GCC_PLUGINS_CFLAGS) $(SPARC_REG_CFLAGS),$(KBUILD_CFLAGS)) $(CFL)
->  
+> Changes in v3:
+>  - newly split out in v3
 > 
+>  include/linux/find.h | 50 ++++++++++++++++++++++----------------------
+>  1 file changed, 25 insertions(+), 25 deletions(-)
+> 
+> diff --git a/include/linux/find.h b/include/linux/find.h
+> index 5dfca4225fef..68685714bc18 100644
+> --- a/include/linux/find.h
+> +++ b/include/linux/find.h
+> @@ -52,7 +52,7 @@ unsigned long _find_next_bit_le(const unsigned long *addr, unsigned
+>   * Returns the bit number for the next set bit
+>   * If no bits are set, returns @size.
+>   */
+> -static inline
+> +static __always_inline
+>  unsigned long find_next_bit(const unsigned long *addr, unsigned long size,
+>  			    unsigned long offset)
+>  {
+> @@ -81,7 +81,7 @@ unsigned long find_next_bit(const unsigned long *addr, unsigned long size,
+>   * Returns the bit number for the next set bit
+>   * If no bits are set, returns @size.
+>   */
+> -static inline
+> +static __always_inline
+>  unsigned long find_next_and_bit(const unsigned long *addr1,
+>  		const unsigned long *addr2, unsigned long size,
+>  		unsigned long offset)
+> @@ -112,7 +112,7 @@ unsigned long find_next_and_bit(const unsigned long *addr1,
+>   * Returns the bit number for the next set bit
+>   * If no bits are set, returns @size.
+>   */
+> -static inline
+> +static __always_inline
+>  unsigned long find_next_andnot_bit(const unsigned long *addr1,
+>  		const unsigned long *addr2, unsigned long size,
+>  		unsigned long offset)
+> @@ -142,7 +142,7 @@ unsigned long find_next_andnot_bit(const unsigned long *addr1,
+>   * Returns the bit number for the next set bit
+>   * If no bits are set, returns @size.
+>   */
+> -static inline
+> +static __always_inline
+>  unsigned long find_next_or_bit(const unsigned long *addr1,
+>  		const unsigned long *addr2, unsigned long size,
+>  		unsigned long offset)
+> @@ -171,7 +171,7 @@ unsigned long find_next_or_bit(const unsigned long *addr1,
+>   * Returns the bit number of the next zero bit
+>   * If no bits are zero, returns @size.
+>   */
+> -static inline
+> +static __always_inline
+>  unsigned long find_next_zero_bit(const unsigned long *addr, unsigned long size,
+>  				 unsigned long offset)
+>  {
+> @@ -198,7 +198,7 @@ unsigned long find_next_zero_bit(const unsigned long *addr, unsigned long size,
+>   * Returns the bit number of the first set bit.
+>   * If no bits are set, returns @size.
+>   */
+> -static inline
+> +static __always_inline
+>  unsigned long find_first_bit(const unsigned long *addr, unsigned long size)
+>  {
+>  	if (small_const_nbits(size)) {
+> @@ -224,7 +224,7 @@ unsigned long find_first_bit(const unsigned long *addr, unsigned long size)
+>   * Returns the bit number of the N'th set bit.
+>   * If no such, returns >= @size.
+>   */
+> -static inline
+> +static __always_inline
+>  unsigned long find_nth_bit(const unsigned long *addr, unsigned long size, unsigned long n)
+>  {
+>  	if (n >= size)
+> @@ -249,7 +249,7 @@ unsigned long find_nth_bit(const unsigned long *addr, unsigned long size, unsign
+>   * Returns the bit number of the N'th set bit.
+>   * If no such, returns @size.
+>   */
+> -static inline
+> +static __always_inline
+>  unsigned long find_nth_and_bit(const unsigned long *addr1, const unsigned long *addr2,
+>  				unsigned long size, unsigned long n)
+>  {
+> @@ -276,7 +276,7 @@ unsigned long find_nth_and_bit(const unsigned long *addr1, const unsigned long *
+>   * Returns the bit number of the N'th set bit.
+>   * If no such, returns @size.
+>   */
+> -static inline
+> +static __always_inline
+>  unsigned long find_nth_andnot_bit(const unsigned long *addr1, const unsigned long *addr2,
+>  				unsigned long size, unsigned long n)
+>  {
+> @@ -332,7 +332,7 @@ unsigned long find_nth_and_andnot_bit(const unsigned long *addr1,
+>   * Returns the bit number for the next set bit
+>   * If no bits are set, returns @size.
+>   */
+> -static inline
+> +static __always_inline
+>  unsigned long find_first_and_bit(const unsigned long *addr1,
+>  				 const unsigned long *addr2,
+>  				 unsigned long size)
+> @@ -357,7 +357,7 @@ unsigned long find_first_and_bit(const unsigned long *addr1,
+>   * Returns the bit number for the first set bit
+>   * If no bits are set, returns @size.
+>   */
+> -static inline
+> +static __always_inline
+>  unsigned long find_first_and_and_bit(const unsigned long *addr1,
+>  				     const unsigned long *addr2,
+>  				     const unsigned long *addr3,
+> @@ -381,7 +381,7 @@ unsigned long find_first_and_and_bit(const unsigned long *addr1,
+>   * Returns the bit number of the first cleared bit.
+>   * If no bits are zero, returns @size.
+>   */
+> -static inline
+> +static __always_inline
+>  unsigned long find_first_zero_bit(const unsigned long *addr, unsigned long size)
+>  {
+>  	if (small_const_nbits(size)) {
+> @@ -402,7 +402,7 @@ unsigned long find_first_zero_bit(const unsigned long *addr, unsigned long size)
+>   *
+>   * Returns the bit number of the last set bit, or size.
+>   */
+> -static inline
+> +static __always_inline
+>  unsigned long find_last_bit(const unsigned long *addr, unsigned long size)
+>  {
+>  	if (small_const_nbits(size)) {
+> @@ -425,7 +425,7 @@ unsigned long find_last_bit(const unsigned long *addr, unsigned long size)
+>   * Returns the bit number for the next set bit, or first set bit up to @offset
+>   * If no bits are set, returns @size.
+>   */
+> -static inline
+> +static __always_inline
+>  unsigned long find_next_and_bit_wrap(const unsigned long *addr1,
+>  					const unsigned long *addr2,
+>  					unsigned long size, unsigned long offset)
+> @@ -448,7 +448,7 @@ unsigned long find_next_and_bit_wrap(const unsigned long *addr1,
+>   * Returns the bit number for the next set bit, or first set bit up to @offset
+>   * If no bits are set, returns @size.
+>   */
+> -static inline
+> +static __always_inline
+>  unsigned long find_next_bit_wrap(const unsigned long *addr,
+>  					unsigned long size, unsigned long offset)
+>  {
+> @@ -465,7 +465,7 @@ unsigned long find_next_bit_wrap(const unsigned long *addr,
+>   * Helper for for_each_set_bit_wrap(). Make sure you're doing right thing
+>   * before using it alone.
+>   */
+> -static inline
+> +static __always_inline
+>  unsigned long __for_each_wrap(const unsigned long *bitmap, unsigned long size,
+>  				 unsigned long start, unsigned long n)
+>  {
+> @@ -506,20 +506,20 @@ extern unsigned long find_next_clump8(unsigned long *clump,
+>  
+>  #if defined(__LITTLE_ENDIAN)
+>  
+> -static inline unsigned long find_next_zero_bit_le(const void *addr,
+> -		unsigned long size, unsigned long offset)
+> +static __always_inline
+> +unsigned long find_next_zero_bit_le(const void *addr, unsigned long size, unsigned long offset)
+>  {
+>  	return find_next_zero_bit(addr, size, offset);
+>  }
+>  
+> -static inline unsigned long find_next_bit_le(const void *addr,
+> -		unsigned long size, unsigned long offset)
+> +static __always_inline
+> +unsigned long find_next_bit_le(const void *addr, unsigned long size, unsigned long offset)
+>  {
+>  	return find_next_bit(addr, size, offset);
+>  }
+>  
+> -static inline unsigned long find_first_zero_bit_le(const void *addr,
+> -		unsigned long size)
+> +static __always_inline
+> +unsigned long find_first_zero_bit_le(const void *addr, unsigned long size)
+>  {
+>  	return find_first_zero_bit(addr, size);
+>  }
+> @@ -527,7 +527,7 @@ static inline unsigned long find_first_zero_bit_le(const void *addr,
+>  #elif defined(__BIG_ENDIAN)
+>  
+>  #ifndef find_next_zero_bit_le
+> -static inline
+> +static __always_inline
+>  unsigned long find_next_zero_bit_le(const void *addr, unsigned
+>  		long size, unsigned long offset)
+>  {
+> @@ -546,7 +546,7 @@ unsigned long find_next_zero_bit_le(const void *addr, unsigned
+>  #endif
+>  
+>  #ifndef find_first_zero_bit_le
+> -static inline
+> +static __always_inline
+>  unsigned long find_first_zero_bit_le(const void *addr, unsigned long size)
+>  {
+>  	if (small_const_nbits(size)) {
+> @@ -560,7 +560,7 @@ unsigned long find_first_zero_bit_le(const void *addr, unsigned long size)
+>  #endif
+>  
+>  #ifndef find_next_bit_le
+> -static inline
+> +static __always_inline
+>  unsigned long find_next_bit_le(const void *addr, unsigned
+>  		long size, unsigned long offset)
+>  {
 > -- 
-> 2.45.2
+> 2.45.2.1089.g2a221341d9-goog
 > 
