@@ -1,60 +1,66 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f46.google.com (mail-pj1-f46.google.com [209.85.216.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CBF0B1ABEB9;
-	Fri,  2 Aug 2024 21:02:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 00CB51ABEDC
+	for <llvm@lists.linux.dev>; Fri,  2 Aug 2024 21:19:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722632541; cv=none; b=ZXqGh0EDyMhfYtQTysqaVyW9vdWx/+19rOKCBlWWT4amBMuCcHRENrN0+Zg/TaaGuoqJPfyQqTVfFfjQfUzQu8nts7n2cW9lTu2vdZ/vwsFHQcMLqP5SOB8VLoCwO1PGpPPzomIT1I8KaL+KZBNmc9pK5enF0HlTM17aiOZz+Go=
+	t=1722633592; cv=none; b=KtiVZRCQwzK3bdbImee1ynO0ubNhr1BDMVYbzwMP6Wposg2BmcbKBR8FBor0875ZZqzsjKmshVuhT3/I8TdL857WxdUNDSFhk4d9jf33Hn8hlk812nypj3cVbzo4KtoGTPesNi7TbJ/wI1zoJ9T1cTfRsPeJZuTPWSv3EEyj2zQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722632541; c=relaxed/simple;
-	bh=yxxmkBORmPdCQ0F+YqI+dsKeOyMfnZQoJI2xAc6/PoE=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=Lfd6VLAkozUFdx2CrqceuIxk1MT/HNVNLMqKPBwjHJiAZLjZPAITV8EZJKmHpr2io2ytqn8JSLwDG69pOexyLaP3C4o6fzpVPgOq+2xsKiA8R3OKc7hxr1pPBgYOHbYTWXJDIASarb0+r306+qAYtWMLiTe2oxNxSeeheBrRZzw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Cjc/5h07; arc=none smtp.client-ip=198.175.65.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1722633592; c=relaxed/simple;
+	bh=BdKM1YAh6SbXNwlF9dZikTa3D/XtN/zpoQ8J0VV2zG0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Rd8ey6W+C6qyuzqBaS1GEph08UGaq2ZaQtDqsgS71TLwnigF/5WocjIQfhvQKwaDxqMfBCrY0leiSz4TtATxC6MZi0nIWM6CwvTG162ALIFsavp5Mte5TESpj3iaeoR6AH1o+/fk3ShQNIpq87TTwTxLjbmfweFy7qCtxoSKRNA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=S6dNwtK6; arc=none smtp.client-ip=209.85.216.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Cjc/5h07"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1722632539; x=1754168539;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=yxxmkBORmPdCQ0F+YqI+dsKeOyMfnZQoJI2xAc6/PoE=;
-  b=Cjc/5h07Qj1IhHVHXAurYsO5t7NHaizebGONdg4l0ymXXTdXowq055iz
-   PHGlemsgcqBRBHeRERemin3WCk2M2xRFXxD4YHfKC7LS/UWH8KS+hrds0
-   H1QOQAnmZUtp0FVwyeuhu6XePltyG+MYULhXLFi9VtTEOcMNw7Jz7paHv
-   WIfo/rIiTqSFoSxl95opJ77ss+xirvRHtCHu8LavskNTJgZzHbhH9o5PF
-   o/J+VBabI7f1uSZpqzqN5eo/+azjgYa+qwUT/wK5oYYfrattmvjXR+lmx
-   5IyX1oUyG4wWDeq04gTR6lB50kez9xsC4xwdibImecswtnogtBaG11xt+
-   w==;
-X-CSE-ConnectionGUID: gbOfKbrVSFacWdd5X6leCw==
-X-CSE-MsgGUID: zbajbGozQX61aCHM57pTfQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11152"; a="24456900"
-X-IronPort-AV: E=Sophos;i="6.09,258,1716274800"; 
-   d="scan'208";a="24456900"
-Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Aug 2024 14:02:18 -0700
-X-CSE-ConnectionGUID: IsO13HSLT6GzqjqHWMFg0g==
-X-CSE-MsgGUID: xPQnrv4dQRWu1NFvfzMw4A==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.09,258,1716274800"; 
-   d="scan'208";a="78791674"
-Received: from lkp-server01.sh.intel.com (HELO 68891e0c336b) ([10.239.97.150])
-  by fmviesa002.fm.intel.com with ESMTP; 02 Aug 2024 14:02:17 -0700
-Received: from kbuild by 68891e0c336b with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1sZzPj-000xQK-18;
-	Fri, 02 Aug 2024 21:02:15 +0000
-Date: Sat, 3 Aug 2024 05:01:36 +0800
-From: kernel test robot <lkp@intel.com>
-To: "Rob Herring (Arm)" <robh@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Viresh Kumar <viresh.kumar@linaro.org>
-Subject: [vireshk-pm:cpufreq/arm/linux-next 2/2]
- drivers/cpufreq/spear-cpufreq.c:202:12: warning: variable 'i' is
- uninitialized when used here
-Message-ID: <202408030418.gnJDcCpm-lkp@intel.com>
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="S6dNwtK6"
+Received: by mail-pj1-f46.google.com with SMTP id 98e67ed59e1d1-2cb57e25387so6544336a91.3
+        for <llvm@lists.linux.dev>; Fri, 02 Aug 2024 14:19:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1722633590; x=1723238390; darn=lists.linux.dev;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=vT6rtMiXe3cVV93nXqn9P1Cf/ISdlIhsVzPvH7Eul+E=;
+        b=S6dNwtK68XTys9j/cl1UwWhvnspl73u40X4Y0BlqVBtU3whidRwHENtFvn/Agw/4R/
+         3VdpFeser51mBE2isa2h1l1BnI/It77I+qc/dxutONk3FTXqy1Cf2gCXE2vwBD8bNDgX
+         s8WssoOunSUodA2aWI/7p4bosBzAR6ind3GO4=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1722633590; x=1723238390;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=vT6rtMiXe3cVV93nXqn9P1Cf/ISdlIhsVzPvH7Eul+E=;
+        b=GQD1NRKWgB3aGdeVQybPB+DjvNTZrtEGFJJyBRBJS5ppp41sbE6Epi4ug8SqqWkiyZ
+         ET/XwthsVkVyDa63SvA/AsXRm3p0u0S4slCQTfPtKgxOJJShvcbWhFcjhPjNUsRHPlk/
+         fxEUHHvBU9exClxEZwPQ2QR4mBnD9wTJumR00LXuOCGMIKzkQX/H3rUAPtn74xoteldf
+         kfbjn7EIHffzlGm69mTB2a4KZj6+r27eaiTUHdMJkanOkxZPda7iSJIRzaN6HkttZTWA
+         ixgY+nCueh7ZCTd+/u+/i9zDehle2wY/WoTh46NH3MS/fAA1vRUb5dcuDm4q3b2HIndP
+         wtTA==
+X-Forwarded-Encrypted: i=1; AJvYcCWMA23mMTcFELqWTZuZjnLkeRwsoyJD9N1KMeR0CDz5ss2ed9Y+dzHwzn35ZHbzsGzhx5Nmg6RvMW6mgHXS0OThk9QdQQ==
+X-Gm-Message-State: AOJu0YzqaBAj4OYKjRP0RqAoqfdw6EWsHhwL6BOmEi9GbRmU7QIrLFqG
+	bLe3koYgc0WG29e5e6LX02X9b6vFRX9m3MHOc6oWnkJChswhGT8mrR0nPnSHUw==
+X-Google-Smtp-Source: AGHT+IFTYF2Do8vdPQ58bSKEPsVr4yMiIg3mBK2cU+kX+qNSL5VkCcGfb7nKSyPN1XIST90Jc3L+cA==
+X-Received: by 2002:a17:90b:489:b0:2c9:6a2d:b116 with SMTP id 98e67ed59e1d1-2cff940e469mr5948292a91.7.1722633590238;
+        Fri, 02 Aug 2024 14:19:50 -0700 (PDT)
+Received: from localhost ([2620:15c:9d:2:ac3b:d38d:edce:bf32])
+        by smtp.gmail.com with UTF8SMTPSA id 98e67ed59e1d1-2cffb091391sm2228821a91.18.2024.08.02.14.19.49
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 02 Aug 2024 14:19:49 -0700 (PDT)
+Date: Fri, 2 Aug 2024 14:19:48 -0700
+From: Brian Norris <briannorris@chromium.org>
+To: Yury Norov <yury.norov@gmail.com>
+Cc: linux-kernel@vger.kernel.org, Bill Wendling <morbo@google.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Justin Stitt <justinstitt@google.com>,
+	Nick Desaulniers <ndesaulniers@google.com>, llvm@lists.linux.dev,
+	Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+	Kees Cook <kees@kernel.org>
+Subject: Re: [PATCH v3 3/4] cpumask: Switch from inline to __always_inline
+Message-ID: <Zq1NdFXhN3IoYm3M@google.com>
+References: <20240719005127.2449328-1-briannorris@chromium.org>
+ <20240719005127.2449328-3-briannorris@chromium.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -63,97 +69,23 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20240719005127.2449328-3-briannorris@chromium.org>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/vireshk/pm.git cpufreq/arm/linux-next
-head:   dca2ef2b7d916c718c6e88084170413a8a1942d0
-commit: dca2ef2b7d916c718c6e88084170413a8a1942d0 [2/2] cpufreq: spear: Use of_property_for_each_u32() instead of open coding
-config: arm-defconfig (https://download.01.org/0day-ci/archive/20240803/202408030418.gnJDcCpm-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240803/202408030418.gnJDcCpm-lkp@intel.com/reproduce)
+On Thu, Jul 18, 2024 at 05:50:39PM -0700, Brian Norris wrote:
+> On recent (v6.6+) builds with Clang (based on Clang 18.0.0) and certain
+> configurations [0], I'm finding that (lack of) inlining decisions may
+> lead to section mismatch warnings like the following:
+> 
+>   WARNING: modpost: vmlinux.o: section mismatch in reference:
+>   cpumask_andnot (section: .text) ->
+>   cpuhp_bringup_cpus_parallel.tmp_mask (section: .init.data) ERROR:
+>   modpost: Section mismatches detected.
+...
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202408030418.gnJDcCpm-lkp@intel.com/
+Hi Yury,
 
-All warnings (new ones prefixed by >>):
+I'm wondering if you've had a chance to look at this latest series. I
+believe I refactored it the way you recommended.
 
->> drivers/cpufreq/spear-cpufreq.c:202:12: warning: variable 'i' is uninitialized when used here [-Wuninitialized]
-                   freq_tbl[i].frequency = val;
-                            ^
-   drivers/cpufreq/spear-cpufreq.c:176:12: note: initialize the variable 'i' to silence this warning
-           int cnt, i, ret;
-                     ^
-                      = 0
-   1 warning generated.
-
-
-vim +/i +202 drivers/cpufreq/spear-cpufreq.c
-
-   170	
-   171	static int spear_cpufreq_probe(struct platform_device *pdev)
-   172	{
-   173		struct device_node *np;
-   174		struct cpufreq_frequency_table *freq_tbl;
-   175		u32 val;
-   176		int cnt, i, ret;
-   177	
-   178		np = of_cpu_device_node_get(0);
-   179		if (!np) {
-   180			pr_err("No cpu node found\n");
-   181			return -ENODEV;
-   182		}
-   183	
-   184		if (of_property_read_u32(np, "clock-latency",
-   185					&spear_cpufreq.transition_latency))
-   186			spear_cpufreq.transition_latency = CPUFREQ_ETERNAL;
-   187	
-   188		cnt = of_property_count_u32_elems(np, "cpufreq_tbl");
-   189		if (cnt <= 0) {
-   190			pr_err("Invalid cpufreq_tbl\n");
-   191			ret = -ENODEV;
-   192			goto out_put_node;
-   193		}
-   194	
-   195		freq_tbl = kcalloc(cnt + 1, sizeof(*freq_tbl), GFP_KERNEL);
-   196		if (!freq_tbl) {
-   197			ret = -ENOMEM;
-   198			goto out_put_node;
-   199		}
-   200	
-   201		of_property_for_each_u32(np, "cpufreq_tbl", val)
- > 202			freq_tbl[i].frequency = val;
-   203	
-   204		freq_tbl[cnt].frequency = CPUFREQ_TABLE_END;
-   205	
-   206		spear_cpufreq.freq_tbl = freq_tbl;
-   207	
-   208		of_node_put(np);
-   209	
-   210		spear_cpufreq.clk = clk_get(NULL, "cpu_clk");
-   211		if (IS_ERR(spear_cpufreq.clk)) {
-   212			pr_err("Unable to get CPU clock\n");
-   213			ret = PTR_ERR(spear_cpufreq.clk);
-   214			goto out_put_mem;
-   215		}
-   216	
-   217		ret = cpufreq_register_driver(&spear_cpufreq_driver);
-   218		if (!ret)
-   219			return 0;
-   220	
-   221		pr_err("failed register driver: %d\n", ret);
-   222		clk_put(spear_cpufreq.clk);
-   223	
-   224	out_put_mem:
-   225		kfree(freq_tbl);
-   226		return ret;
-   227	
-   228	out_put_node:
-   229		of_node_put(np);
-   230		return ret;
-   231	}
-   232	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Regards,
+Brian
