@@ -1,66 +1,50 @@
-Received: from mail-pj1-f46.google.com (mail-pj1-f46.google.com [209.85.216.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 00CB51ABEDC
-	for <llvm@lists.linux.dev>; Fri,  2 Aug 2024 21:19:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C921A47F64;
+	Fri,  2 Aug 2024 22:19:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722633592; cv=none; b=KtiVZRCQwzK3bdbImee1ynO0ubNhr1BDMVYbzwMP6Wposg2BmcbKBR8FBor0875ZZqzsjKmshVuhT3/I8TdL857WxdUNDSFhk4d9jf33Hn8hlk812nypj3cVbzo4KtoGTPesNi7TbJ/wI1zoJ9T1cTfRsPeJZuTPWSv3EEyj2zQ=
+	t=1722637194; cv=none; b=uI9lhhPp86h1EyLCq2svqF1Fc2rMs1kbfTI2aNmTUR84/FecGrvpTgEkaqdfnBbm8isA134Kc1dkIDz8exDpuO7gwLtVAu0Ge/Xyo4Y+GyNRtT2U+0Q88avlEEvgAQxpauIKgSffBDr5LtoGHzWttTbie8ykYcD+Un9szst7Vws=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722633592; c=relaxed/simple;
-	bh=BdKM1YAh6SbXNwlF9dZikTa3D/XtN/zpoQ8J0VV2zG0=;
+	s=arc-20240116; t=1722637194; c=relaxed/simple;
+	bh=mcxSg+qGadL76KNrl2hpaR9JR+cq+JmpnzMW4vQqLJk=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Rd8ey6W+C6qyuzqBaS1GEph08UGaq2ZaQtDqsgS71TLwnigF/5WocjIQfhvQKwaDxqMfBCrY0leiSz4TtATxC6MZi0nIWM6CwvTG162ALIFsavp5Mte5TESpj3iaeoR6AH1o+/fk3ShQNIpq87TTwTxLjbmfweFy7qCtxoSKRNA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=S6dNwtK6; arc=none smtp.client-ip=209.85.216.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
+	 Content-Type:Content-Disposition:In-Reply-To; b=h5U/9UnUuS0KSi2kZIPmIJ2QN2KtVVXOdGWPHtOqQbMjZbgMByJdk6dU5kzVGe9pcZrNBfrQn3Wwd6qxoqqe16RMEZTFcq8MSM93x0LAqNTsHQvvE3JdvafxN8o9yXqym8li9jAr5vrjMJHWvs4EUCx2o/w1B+0ZZRQbUY8Bs1A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=axS8BAGd; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="S6dNwtK6"
-Received: by mail-pj1-f46.google.com with SMTP id 98e67ed59e1d1-2cb57e25387so6544336a91.3
-        for <llvm@lists.linux.dev>; Fri, 02 Aug 2024 14:19:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1722633590; x=1723238390; darn=lists.linux.dev;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=vT6rtMiXe3cVV93nXqn9P1Cf/ISdlIhsVzPvH7Eul+E=;
-        b=S6dNwtK68XTys9j/cl1UwWhvnspl73u40X4Y0BlqVBtU3whidRwHENtFvn/Agw/4R/
-         3VdpFeser51mBE2isa2h1l1BnI/It77I+qc/dxutONk3FTXqy1Cf2gCXE2vwBD8bNDgX
-         s8WssoOunSUodA2aWI/7p4bosBzAR6ind3GO4=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1722633590; x=1723238390;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=vT6rtMiXe3cVV93nXqn9P1Cf/ISdlIhsVzPvH7Eul+E=;
-        b=GQD1NRKWgB3aGdeVQybPB+DjvNTZrtEGFJJyBRBJS5ppp41sbE6Epi4ug8SqqWkiyZ
-         ET/XwthsVkVyDa63SvA/AsXRm3p0u0S4slCQTfPtKgxOJJShvcbWhFcjhPjNUsRHPlk/
-         fxEUHHvBU9exClxEZwPQ2QR4mBnD9wTJumR00LXuOCGMIKzkQX/H3rUAPtn74xoteldf
-         kfbjn7EIHffzlGm69mTB2a4KZj6+r27eaiTUHdMJkanOkxZPda7iSJIRzaN6HkttZTWA
-         ixgY+nCueh7ZCTd+/u+/i9zDehle2wY/WoTh46NH3MS/fAA1vRUb5dcuDm4q3b2HIndP
-         wtTA==
-X-Forwarded-Encrypted: i=1; AJvYcCWMA23mMTcFELqWTZuZjnLkeRwsoyJD9N1KMeR0CDz5ss2ed9Y+dzHwzn35ZHbzsGzhx5Nmg6RvMW6mgHXS0OThk9QdQQ==
-X-Gm-Message-State: AOJu0YzqaBAj4OYKjRP0RqAoqfdw6EWsHhwL6BOmEi9GbRmU7QIrLFqG
-	bLe3koYgc0WG29e5e6LX02X9b6vFRX9m3MHOc6oWnkJChswhGT8mrR0nPnSHUw==
-X-Google-Smtp-Source: AGHT+IFTYF2Do8vdPQ58bSKEPsVr4yMiIg3mBK2cU+kX+qNSL5VkCcGfb7nKSyPN1XIST90Jc3L+cA==
-X-Received: by 2002:a17:90b:489:b0:2c9:6a2d:b116 with SMTP id 98e67ed59e1d1-2cff940e469mr5948292a91.7.1722633590238;
-        Fri, 02 Aug 2024 14:19:50 -0700 (PDT)
-Received: from localhost ([2620:15c:9d:2:ac3b:d38d:edce:bf32])
-        by smtp.gmail.com with UTF8SMTPSA id 98e67ed59e1d1-2cffb091391sm2228821a91.18.2024.08.02.14.19.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 02 Aug 2024 14:19:49 -0700 (PDT)
-Date: Fri, 2 Aug 2024 14:19:48 -0700
-From: Brian Norris <briannorris@chromium.org>
-To: Yury Norov <yury.norov@gmail.com>
-Cc: linux-kernel@vger.kernel.org, Bill Wendling <morbo@google.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Justin Stitt <justinstitt@google.com>,
-	Nick Desaulniers <ndesaulniers@google.com>, llvm@lists.linux.dev,
-	Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-	Kees Cook <kees@kernel.org>
-Subject: Re: [PATCH v3 3/4] cpumask: Switch from inline to __always_inline
-Message-ID: <Zq1NdFXhN3IoYm3M@google.com>
-References: <20240719005127.2449328-1-briannorris@chromium.org>
- <20240719005127.2449328-3-briannorris@chromium.org>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="axS8BAGd"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EADC5C32782;
+	Fri,  2 Aug 2024 22:19:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1722637194;
+	bh=mcxSg+qGadL76KNrl2hpaR9JR+cq+JmpnzMW4vQqLJk=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=axS8BAGdIKBBiJOnu35QVEQ1ct0UdlZxaDkc6OsnMxIFpMVmuJPfSkjj7HisuhCTK
+	 LNgr5LvYCdNJYCe1iqm7wpR0fKl5FGLBsKLhE36Yq1rCWlh/8dfM8saGqJDDt0szrs
+	 gmbUTyrY3SlMT/dpkvlwBnRKtqmibUv29JjaHf3jSv9ryI1uK4XJrtdw1RwyAnD8JO
+	 dV6z+4pFx/BCgNdJYVurZMnTdmNhu0buBTKl7SZjLKKUL7KXYnkVSOk5lqiqpKUAQN
+	 /0l2LhhveEFRb64g28x/HUKtm/rT4dWcJLIehaLMv0x+td41hAYDTiONTQJFGtvAIa
+	 Ffyq+WDpzEQOw==
+Date: Fri, 2 Aug 2024 15:19:52 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: "Gustavo A. R. Silva" <gustavo@embeddedor.com>
+Cc: kernel test robot <lkp@intel.com>,
+	"Gustavo A. R. Silva" <gustavoars@kernel.org>, llvm@lists.linux.dev,
+	oe-kbuild-all@lists.linux.dev, LKML <linux-kernel@vger.kernel.org>,
+	Brian Cain <bcain@quicinc.com>, linux-hexagon@vger.kernel.org
+Subject: Re: [gustavoars:testing/wfamnae-next20240729-cbc-2 11/18]
+ include/rdma/uverbs_ioctl.h:643:15: error: static assertion failed due to
+ requirement '__builtin_offsetof(struct uverbs_attr_bundle, attrs) ==
+ sizeof(struct uverbs_attr_bundle_hdr)': struct member likely outside of
+ struct_group_tagged()
+Message-ID: <20240802221952.GA737452@thelio-3990X>
+References: <202408011956.wscyBwq6-lkp@intel.com>
+ <138da3e5-0e24-41a6-bb35-df5d07045eb3@embeddedor.com>
+ <20240801190813.GC122261@thelio-3990X>
+ <f40160aa-7cbd-4264-be44-45396b09574f@embeddedor.com>
+ <20240801221427.GA3773553@thelio-3990X>
+ <ca056227-30c3-47b9-a19a-fbab87778f20@embeddedor.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -69,23 +53,189 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240719005127.2449328-3-briannorris@chromium.org>
+In-Reply-To: <ca056227-30c3-47b9-a19a-fbab87778f20@embeddedor.com>
 
-On Thu, Jul 18, 2024 at 05:50:39PM -0700, Brian Norris wrote:
-> On recent (v6.6+) builds with Clang (based on Clang 18.0.0) and certain
-> configurations [0], I'm finding that (lack of) inlining decisions may
-> lead to section mismatch warnings like the following:
+On Thu, Aug 01, 2024 at 04:35:59PM -0600, Gustavo A. R. Silva wrote:
 > 
->   WARNING: modpost: vmlinux.o: section mismatch in reference:
->   cpumask_andnot (section: .text) ->
->   cpuhp_bringup_cpus_parallel.tmp_mask (section: .init.data) ERROR:
->   modpost: Section mismatches detected.
-...
+> 
+> On 01/08/24 16:14, Nathan Chancellor wrote:
+> > On Thu, Aug 01, 2024 at 02:17:50PM -0600, Gustavo A. R. Silva wrote:
+> > > 
+> > > 
+> > > On 01/08/24 13:08, Nathan Chancellor wrote:
+> > > > On Thu, Aug 01, 2024 at 06:47:58AM -0600, Gustavo A. R. Silva wrote:
+> > > > > 
+> > > > > 
+> > > > > On 01/08/24 05:35, kernel test robot wrote:
+> > > > > > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/gustavoars/linux.git testing/wfamnae-next20240729-cbc-2
+> > > > > > head:   df15c862c1b93b6e1f6c90b0d7971f7a6ad66751
+> > > > > > commit: e7cd9f429a852fb7e37a706c7d08fc36e7863e06 [11/18] RDMA/uverbs: Use static_assert() to check struct sizes
+> > > > > > config: hexagon-randconfig-001-20240801 (https://download.01.org/0day-ci/archive/20240801/202408011956.wscyBwq6-lkp@intel.com/config)
+> > > > > > compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 430b90f04533b099d788db2668176038be38c53b)
+> > > > > 
+> > > > > 
+> > > > > Clang 20.0.0?? (thinkingface)
+> > > > 
+> > > > Indeed, Clang 19 branched and main is now 20 :)
+> > > > 
+> > > > https://github.com/llvm/llvm-project/commit/8f701b5df0adb3a2960d78ca2ad9cf53f39ba2fe
+> > > 
+> > > Yeah, but is that a stable release?
+> > 
+> > No, but the Intel folks have tested tip of tree LLVM against the kernel
+> > for us for a few years now to try and catch issues such as this.
+> 
+> Oh, I see, fine. :)
+> 
+> > 
+> > > BTW, I don't see GCC reporting the same problem below:
+> > 
+> > Hexagon does not have a GCC backend anymore so it is not going to be
+> > possible to do an exact A/B comparison with this configuration but...
+> > 
+> > > > > > > > include/rdma/uverbs_ioctl.h:643:15: error: static assertion failed due to requirement '__builtin_offsetof(struct uverbs_attr_bundle, attrs) == sizeof(struct uverbs_attr_bundle_hdr)': struct member likely outside of struct_group_tagged()
+> > > > > >         643 | static_assert(offsetof(struct uverbs_attr_bundle, attrs) == sizeof(struct uverbs_attr_bundle_hdr),
+> > > > > >             | ~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> > > > > >         644 |               "struct member likely outside of struct_group_tagged()");
+> > > > > >             |               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> > > > > >       include/linux/stddef.h:16:32: note: expanded from macro 'offsetof'
+> > > > > >          16 | #define offsetof(TYPE, MEMBER)  __builtin_offsetof(TYPE, MEMBER)
+> > > > > >             |                                 ^
+> > > > > >       include/linux/build_bug.h:77:50: note: expanded from macro 'static_assert'
+> > > > > >          77 | #define static_assert(expr, ...) __static_assert(expr, ##__VA_ARGS__, #expr)
+> > > > > >             |                                  ~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~
+> > > > > >       include/linux/build_bug.h:78:56: note: expanded from macro '__static_assert'
+> > > > > >          78 | #define __static_assert(expr, msg, ...) _Static_assert(expr, msg)
+> > > > > >             |                                                        ^~~~
+> > > > > >       include/rdma/uverbs_ioctl.h:643:58: note: expression evaluates to '56 == 52'
+> > 
+> > This seems to give some indication that perhaps there may be some
+> > architecture specific here with padding maybe? I seem to recall ARM OABI
+> > having something similar. Adding the Hexagon folks/list to get some more
+> > clarification. Full warning and context:
+> > 
+> > https://lore.kernel.org/202408011956.wscyBwq6-lkp@intel.com/
+> > 
+> > The problematic section preprocessed since sometimes the macros
+> > obfuscate things:
+> > 
+> > struct uverbs_attr_bundle {
+> >          union {
+> >                  struct {
+> >                          struct ib_udata driver_udata;
+> >                          struct ib_udata ucore;
+> >                          struct ib_uverbs_file *ufile;
+> >                          struct ib_ucontext *context;
+> >                          struct ib_uobject *uobject;
+> >                          unsigned long attr_present[(((UVERBS_API_ATTR_BKEY_LEN) +
+> >                                                       ((sizeof(long) * 8)) - 1) /
+> >                                                      ((sizeof(long) * 8)))];
+> >                  };
+> >                  struct uverbs_attr_bundle_hdr {
+> >                          struct ib_udata driver_udata;
+> >                          struct ib_udata ucore;
+> >                          struct ib_uverbs_file *ufile;
+> >                          struct ib_ucontext *context;
+> >                          struct ib_uobject *uobject;
+> >                          unsigned long attr_present[(((UVERBS_API_ATTR_BKEY_LEN) +
+> >                                                       ((sizeof(long) * 8)) - 1) /
+> >                                                      ((sizeof(long) * 8)))];
+> >                  } hdr;
+> >          };
+> > 
+> >          struct uverbs_attr attrs[];
+> > };
+> > _Static_assert(__builtin_offsetof(struct uverbs_attr_bundle, attrs) ==
+> >                         sizeof(struct uverbs_attr_bundle_hdr),
+> >                 "struct member likely outside of struct_group_tagged()");
+> > 
+> > FWIW, I see this with all versions of Clang that the kernel supports
+> > with this configuration.
+> 
+> I don't have access to a Clang compiler right now; I wonder if you could
+> help me get the output of this command:
+> 
+> pahole -C uverbs_attr_bundle drivers/infiniband/core/rdma_core.o
 
-Hi Yury,
+We disabled CONFIG_DEBUG_INFO_BTF for Hexagon because elfutils does not
+support Hexagon relocations but this is built-in for this configuration
+so I removed that limitation and ended up with:
 
-I'm wondering if you've had a chance to look at this latest series. I
-believe I refactored it the way you recommended.
+$ pahole -C uverbs_attr_bundle vmlinux
+struct uverbs_attr_bundle {
+        union {
+                struct {
+                        struct ib_udata driver_udata;    /*     0    16 */
+                        struct ib_udata ucore;           /*    16    16 */
+                        struct ib_uverbs_file * ufile;   /*    32     4 */
+                        struct ib_ucontext * context;    /*    36     4 */
+                        struct ib_uobject * uobject;     /*    40     4 */
+                        unsigned long attr_present[2];   /*    44     8 */
+                };                                       /*     0    52 */
+                struct uverbs_attr_bundle_hdr hdr;       /*     0    52 */
+        };                                               /*     0    52 */
 
-Regards,
-Brian
+        /* XXX 4 bytes hole, try to pack */
+        union {
+                struct {
+                        struct ib_udata    driver_udata;         /*     0    16 */
+                        struct ib_udata    ucore;                /*    16    16 */
+                        struct ib_uverbs_file * ufile;           /*    32     4 */
+                        struct ib_ucontext * context;            /*    36     4 */
+                        struct ib_uobject * uobject;             /*    40     4 */
+                        unsigned long      attr_present[2];      /*    44     8 */
+                };                                               /*     0    52 */
+                struct uverbs_attr_bundle_hdr hdr;               /*     0    52 */
+        };
+
+
+        struct uverbs_attr         attrs[];              /*    56     0 */
+
+        /* size: 56, cachelines: 1, members: 2 */
+        /* sum members: 52, holes: 1, sum holes: 4 */
+        /* last cacheline: 56 bytes */
+};
+
+If you want any other information or want me to test anything, I am more
+than happy to do so.
+
+Cheers,
+Nathan
+
+> > > > > >         643 | static_assert(offsetof(struct uverbs_attr_bundle, attrs) == sizeof(struct uverbs_attr_bundle_hdr),
+> > > > > >             | ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> > > > > >         644 |               "struct member likely outside of struct_group_tagged()");
+> > > > > >             |               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> > > > > >       include/linux/build_bug.h:77:50: note: expanded from macro 'static_assert'
+> > > > > >          77 | #define static_assert(expr, ...) __static_assert(expr, ##__VA_ARGS__, #expr)
+> > > > > >             |                                  ~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~
+> > > > > >       include/linux/build_bug.h:78:56: note: expanded from macro '__static_assert'
+> > > > > >          78 | #define __static_assert(expr, msg, ...) _Static_assert(expr, msg)
+> > > > > >             |                                                        ^~~~
+> > > > > >       7 warnings and 1 error generated.
+> > > > > > 
+> > > > > > 
+> > > > > > vim +643 include/rdma/uverbs_ioctl.h
+> > > > > > 
+> > > > > >       630	
+> > > > > >       631	struct uverbs_attr_bundle {
+> > > > > >       632		/* New members MUST be added within the struct_group() macro below. */
+> > > > > >       633		struct_group_tagged(uverbs_attr_bundle_hdr, hdr,
+> > > > > >       634			struct ib_udata driver_udata;
+> > > > > >       635			struct ib_udata ucore;
+> > > > > >       636			struct ib_uverbs_file *ufile;
+> > > > > >       637			struct ib_ucontext *context;
+> > > > > >       638			struct ib_uobject *uobject;
+> > > > > >       639			DECLARE_BITMAP(attr_present, UVERBS_API_ATTR_BKEY_LEN);
+> > > > > >       640		);
+> > > > > >       641		struct uverbs_attr attrs[];
+> > > > > >       642	};
+> > > > > >     > 643	static_assert(offsetof(struct uverbs_attr_bundle, attrs) == sizeof(struct uverbs_attr_bundle_hdr),
+> > > > > >       644		      "struct member likely outside of struct_group_tagged()");
+> > > > > >       645	
+> > > > > > 
+> > > > > 
+> > > 
+> > > Thanks
+> > > --
+> > > Gustavo
