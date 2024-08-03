@@ -1,335 +1,202 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F0C7426286;
-	Sat,  3 Aug 2024 08:59:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 251F328376
+	for <llvm@lists.linux.dev>; Sat,  3 Aug 2024 09:16:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722675586; cv=none; b=VNK0oOwhpRKZhzT5oGM/OTVWRvbiJos3tGPYK33wDUsfVXajMYxdlZLakEkXpKl/dSYuGzoO93uz/HEy28fENkv017JMUYvB8/r7ne3lkkaSf2zbijVeb84Oyp9nObXgZpYO5RA6lydqNev6t8vvtDLOZB9BLg2XWyZV2tz6jTg=
+	t=1722676609; cv=none; b=B+38LeT2qkJ+fyL/x9Ew2EDntw5qHfF71ydb5OclnGTbTOcpTAgVLNU6rZ0NhYloWj6nSDPQtfqYfBOaIzSZBugajrCu5vI7fNUhT27Lof5x8QpMtENJLqoYkzpQ0tgQuU+yum4LgsICBLFc0dCdLknNT+R89Xo1sGF7DwQGVxs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722675586; c=relaxed/simple;
-	bh=hTax/C+mnEO33rmLlsoBMezVMPUhAjSCLNfWoqfkddw=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=nNpYoVwLHsbpE5D2v/v9+l2Mwe03jHZ30TCrM7HRup166r4pWGe5YFfD4xUg4aeHeQ2rRBOg5t37dT+qDpC2vuv64a9oNPbP5PUSlOYnY8Jyl0fbYXHIw72fxxwPw02KK/DizS/Vn3OtquQ1JAgUzbsZPSviSlh+Q3m2V9roHT4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=I26tOcFk; arc=none smtp.client-ip=192.198.163.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1722676609; c=relaxed/simple;
+	bh=1DNbf8bIlZ3NMKH/mSPiGD2CyZCIwg1XhjJae/C5U94=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=YGq2OHcyq/3XlOr/tRYIjrs+SOxn4pu2k88uDuRgHa7ZJRE/0GnpF1MniN7SexhBaOC//r+pAsjfh5RJpzCboViwMJ/5ZiSWJY/YC/4N33EoTBjjF6vtytfjwXzNJyBt1rOinzQFUTTFj+xDhFu7flsqavg5l252NzdMu4P+M98=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mRTHdFDP; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="I26tOcFk"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1722675583; x=1754211583;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=hTax/C+mnEO33rmLlsoBMezVMPUhAjSCLNfWoqfkddw=;
-  b=I26tOcFkvpHlXou1hSTSOUKgYPc2HOTABPdgB4jLM+EbxaqDpryPORL4
-   NrqOWlCXW48ztYCb2Kk4hXn249wZrXREKu1XpoN2wyieEkI79gWQMh9Na
-   I5hzaWjo0yllCbb5JuLRaFvqdofjMF/yOaXUOK9JgSq6yMFS63SqYaRRx
-   nfrGqY/7mIKt0SLNAbCe1cH0eHtAICtF+S7t/0St6JjzC5L4gPfjUo3Za
-   DNcPGZ7xRPzmyffCynW51Ar0zoCJ9M8Xbd5KPPFMtug26LRmwT3aWdWBF
-   4SrGovxoKHaVEHrWLy5mqXGqHBpc8g1EleOEZMCUUQNKF8sb/7xb89RN0
-   Q==;
-X-CSE-ConnectionGUID: cNS9WFNEQmWqBkQoLAThoQ==
-X-CSE-MsgGUID: fMq2JRP1RLOUoFBfmnKw/w==
-X-IronPort-AV: E=McAfee;i="6700,10204,11152"; a="32098499"
-X-IronPort-AV: E=Sophos;i="6.09,260,1716274800"; 
-   d="scan'208";a="32098499"
-Received: from orviesa004.jf.intel.com ([10.64.159.144])
-  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Aug 2024 01:59:42 -0700
-X-CSE-ConnectionGUID: 4fw5ZGtWSRKYZkTNtP9XVQ==
-X-CSE-MsgGUID: vYUXfYZ/QCiLzeAPBJ9USg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.09,260,1716274800"; 
-   d="scan'208";a="60670641"
-Received: from unknown (HELO b6bf6c95bbab) ([10.239.97.151])
-  by orviesa004.jf.intel.com with ESMTP; 03 Aug 2024 01:59:40 -0700
-Received: from kbuild by b6bf6c95bbab with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1saAbx-0000LC-2p;
-	Sat, 03 Aug 2024 08:59:37 +0000
-Date: Sat, 3 Aug 2024 16:58:55 +0800
-From: kernel test robot <lkp@intel.com>
-To: Kees Cook <keescook@chromium.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-cifs@vger.kernel.org, samba-technical@lists.samba.org,
-	Steve French <stfrench@microsoft.com>,
-	Namjae Jeon <linkinjeon@kernel.org>
-Subject: [cifs:5.15-backport-8-1-24 346/600]
- fs/cifs/../smbfs_common/smb2pdu.h:817:3: error: type name requires a
- specifier or qualifier
-Message-ID: <202408031613.q4FlMl2U-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mRTHdFDP"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BE5B0C116B1
+	for <llvm@lists.linux.dev>; Sat,  3 Aug 2024 09:16:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1722676608;
+	bh=1DNbf8bIlZ3NMKH/mSPiGD2CyZCIwg1XhjJae/C5U94=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=mRTHdFDPTfdYBIfymaMb9QfjgodsL/iOykhYj3m8DgpQmmSx+rU4nq3epVaiCT0zo
+	 Ii7WLpNKyj+sLlpJtscDvfvuImQPXwyrtGeHHWmXXz1H/ucpybyWPigVJAYCEyq0tT
+	 feZxjt+o77eBqyJCLyPqnGajRsxQXUI9yvRR3yCnGeowlAtGO7XPqK+E4myQrqKUvu
+	 0IkE33hCmDankbTKdSwSGX8PX9KU6veCIVVd5HvZ4Ylm4IQL/dcWKziZ16zSIDX+X8
+	 JWRSC4NBxVMY1pNyQU3DMl7ftK8dz0hMW1ZIaPiQxsubP6wuZ/60DhsE4SEuLEZV7k
+	 yoQJJ7QCRplCg==
+Received: by mail-lf1-f51.google.com with SMTP id 2adb3069b0e04-52efd530a4eso13976361e87.0
+        for <llvm@lists.linux.dev>; Sat, 03 Aug 2024 02:16:48 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCWhQ5Y2E8N/Cb/C5TZoRaa8fTPBvPexpbWxFutmX2ONlC849701r6OBQeXIP0PtOnilf4qgZHlDRg1fzopvO7GadNf56g==
+X-Gm-Message-State: AOJu0Yw+5MP3BfxZ+TZr3Ig87ajAjOJfUODmTNJrqWbrILkXqSgmPhOh
+	zvXybDsukNmsPejQ5wJxwmAKX76Bq+vp6mh/GZ6sqKNo/xFQybYNieyL4RRCbp/l14OrFb9u+UL
+	TKM7twqAmV/Kp0GoWgE6vcDlpApM=
+X-Google-Smtp-Source: AGHT+IEx6SXwfeOZ15h0vEqG1twwquqmXEedBdAZXhbDrpkmPCRu4RwDtl+IL7isPQ0DbgNpUymnIvp2QXPBx7nE95k=
+X-Received: by 2002:a05:6512:b0e:b0:530:9a14:f0a0 with SMTP id
+ 2adb3069b0e04-530bb36ba5dmr4664487e87.10.1722676607424; Sat, 03 Aug 2024
+ 02:16:47 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+References: <20240704-clang-tidy-filter-v1-1-8d4556a35b65@bootlin.com> <20240802223509.GA781199@thelio-3990X>
+In-Reply-To: <20240802223509.GA781199@thelio-3990X>
+From: Masahiro Yamada <masahiroy@kernel.org>
+Date: Sat, 3 Aug 2024 18:16:11 +0900
+X-Gmail-Original-Message-ID: <CAK7LNAR6VFT+z377NURKZs5P4+Z9zE2oeN44zQE7PRfqV0JoZQ@mail.gmail.com>
+Message-ID: <CAK7LNAR6VFT+z377NURKZs5P4+Z9zE2oeN44zQE7PRfqV0JoZQ@mail.gmail.com>
+Subject: Re: [PATCH] scripts: run-clang-tools: add file filtering option
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: =?UTF-8?B?VGjDqW8gTGVicnVu?= <theo.lebrun@bootlin.com>, 
+	Nicolas Schier <nicolas@fjasle.eu>, Nick Desaulniers <ndesaulniers@google.com>, 
+	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, llvm@lists.linux.dev, 
+	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Kees,
+On Sat, Aug 3, 2024 at 7:35=E2=80=AFAM Nathan Chancellor <nathan@kernel.org=
+> wrote:
+>
+> Hi Th=C3=A9o,
+>
+> First of all, apologies that it has taken me so long to review this!
+>
+> On Thu, Jul 04, 2024 at 11:28:21AM +0200, Th=C3=A9o Lebrun wrote:
+> > Add file filtering feature. We take zero or more filters at the end as
+> > positional arguments. If none are given, the default behavior is kept
+> > and we run the tool on all files in the datastore. Else, files must
+> > match one or more filter to be analysed.
+> >
+> > The below command runs clang-tidy on drivers/clk/clk.c and all C files
+> > inside drivers/reset/.
+> >
+> >     ./scripts/clang-tools/run-clang-tools.py clang-tidy \
+> >         compile_commands.json \
+> >         'drivers/clk/clk.c' 'drivers/reset/*'
+> >
+> > The Python fnmatch builtin module is used. Matching is case-insensitive=
+.
+> > See its documentation for allowed syntax:
+> > https://docs.python.org/3/library/fnmatch.html
+> >
+> > Signed-off-by: Th=C3=A9o Lebrun <theo.lebrun@bootlin.com>
+> > ---
+> > Currently, all files in the datastore are analysed. This is not
+> > practical for grabbing errors in a subsystem, or relative to a patch
+> > series. Add a file filtering feature with wildcard support.
+>
+> Sure, I think this is totally reasonable. In fact, I think some of this
+> could be added to the commit message as further existence for this
+> feature.
+>
+> The change itself looks good to me for the most part, I have some
+> questions below just for my own understanding.
+>
+> Reviewed-by: Nathan Chancellor <nathan@kernel.org>
+>
+> One further question/comment now: Have you considered a way to
+> integrate this into Kbuild with the clang-tidy and clang-analyzer
+> commands? I don't think it is strictly necessary for the acceptance of
+> this patch but it might be nice to have some variable that users could
+> provide to do this with their regular make command + the clang-tidy
+> target? Not sure if Masahiro has further thoughts on that.
 
-FYI, the error/warning still remains.
 
-tree:   git://git.samba.org/sfrench/cifs-2.6.git 5.15-backport-8-1-24
-head:   c931999946e12679e0adc129509a1e23a4a64b5d
-commit: cd3ad386810097de48e69cdd3c483ca1bf65c7c6 [346/600] smb3: Replace smb2pdu 1-element arrays with flex-arrays
-config: i386-randconfig-003-20240803 (https://download.01.org/0day-ci/archive/20240803/202408031613.q4FlMl2U-lkp@intel.com/config)
-compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240803/202408031613.q4FlMl2U-lkp@intel.com/reproduce)
+We can do this in a separate patch if it is desired.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202408031613.q4FlMl2U-lkp@intel.com/
+This script already supports multiple options.
+I'd like to prefer a single generic option
+like CLANG_TOOLS_FLAGS.
 
-All errors (new ones prefixed by >>):
 
-   In file included from fs/cifs/smb2ops.c:18:
-   In file included from fs/cifs/cifsglob.h:26:
->> fs/cifs/../smbfs_common/smb2pdu.h:817:3: error: type name requires a specifier or qualifier
-     817 |                 DECLARE_FLEX_ARRAY(struct smb2_lock_element, locks);
-         |                 ^
->> fs/cifs/../smbfs_common/smb2pdu.h:817:48: error: type specifier missing, defaults to 'int' [-Werror,-Wimplicit-int]
-     817 |                 DECLARE_FLEX_ARRAY(struct smb2_lock_element, locks);
-         |                                                              ^
-         |                                                              int
-   fs/cifs/../smbfs_common/smb2pdu.h:1578:3: error: type name requires a specifier or qualifier
-    1578 |                 DECLARE_FLEX_ARRAY(char, FileName);
-         |                 ^
-   fs/cifs/../smbfs_common/smb2pdu.h:1578:28: error: type specifier missing, defaults to 'int' [-Werror,-Wimplicit-int]
-    1578 |                 DECLARE_FLEX_ARRAY(char, FileName);
-         |                                          ^
-         |                                          int
-   In file included from fs/cifs/smb2ops.c:18:
-   In file included from fs/cifs/cifsglob.h:97:
-   fs/cifs/cifspdu.h:512:3: error: type name requires a specifier or qualifier
-     512 |                 DECLARE_FLEX_ARRAY(unsigned char, EncryptionKey);
-         |                 ^
-   fs/cifs/cifspdu.h:512:37: error: type specifier missing, defaults to 'int' [-Werror,-Wimplicit-int]
-     512 |                 DECLARE_FLEX_ARRAY(unsigned char, EncryptionKey);
-         |                                                   ^
-         |                                                   int
-   fs/cifs/cifspdu.h:2289:3: error: type name requires a specifier or qualifier
-    2289 |                 DECLARE_FLEX_ARRAY(char, FileName);
-         |                 ^
-   fs/cifs/cifspdu.h:2289:28: error: type specifier missing, defaults to 'int' [-Werror,-Wimplicit-int]
-    2289 |                 DECLARE_FLEX_ARRAY(char, FileName);
-         |                                          ^
-         |                                          int
-   fs/cifs/cifspdu.h:2328:2: error: type name requires a specifier or qualifier
-    2328 |         DECLARE_FLEX_ARRAY(char, LinkDest);
-         |         ^
-   fs/cifs/cifspdu.h:2328:27: error: type specifier missing, defaults to 'int' [-Werror,-Wimplicit-int]
-    2328 |         DECLARE_FLEX_ARRAY(char, LinkDest);
-         |                                  ^
-         |                                  int
-   fs/cifs/cifspdu.h:2377:2: error: type name requires a specifier or qualifier
-    2377 |         DECLARE_FLEX_ARRAY(__u8, alt_name);
-         |         ^
-   fs/cifs/cifspdu.h:2377:27: error: type specifier missing, defaults to 'int' [-Werror,-Wimplicit-int]
-    2377 |         DECLARE_FLEX_ARRAY(__u8, alt_name);
-         |                                  ^
-         |                                  int
-   fs/cifs/cifspdu.h:2488:3: error: type name requires a specifier or qualifier
-    2488 |                 DECLARE_FLEX_ARRAY(char, FileName);
-         |                 ^
-   fs/cifs/cifspdu.h:2488:28: error: type specifier missing, defaults to 'int' [-Werror,-Wimplicit-int]
-    2488 |                 DECLARE_FLEX_ARRAY(char, FileName);
-         |                                          ^
-         |                                          int
-   14 errors generated.
+
+
+
+> > Have a nice day,
+> > Th=C3=A9o
+> > ---
+> >  scripts/clang-tools/run-clang-tools.py | 20 ++++++++++++++++++++
+> >  1 file changed, 20 insertions(+)
+> >
+> > diff --git a/scripts/clang-tools/run-clang-tools.py b/scripts/clang-too=
+ls/run-clang-tools.py
+> > index f31ffd09e1ea..b0b3a9c8cdec 100755
+> > --- a/scripts/clang-tools/run-clang-tools.py
+> > +++ b/scripts/clang-tools/run-clang-tools.py
+> > @@ -10,6 +10,7 @@ compile_commands.json.
+> >  """
+> >
+> >  import argparse
+> > +import fnmatch
+> >  import json
+> >  import multiprocessing
+> >  import subprocess
+> > @@ -32,6 +33,8 @@ def parse_arguments():
+> >                          help=3Dtype_help)
+> >      path_help =3D "Path to the compilation database to parse"
+> >      parser.add_argument("path", type=3Dstr, help=3Dpath_help)
+> > +    file_filter_help =3D "Optional Unix shell-style wildcard file filt=
+ers"
+> > +    parser.add_argument("file_filter", type=3Dstr, nargs=3D"*", help=
+=3Dfile_filter_help)
+> >
+> >      checks_help =3D "Checks to pass to the analysis"
+> >      parser.add_argument("-checks", type=3Dstr, default=3DNone, help=3D=
+checks_help)
+> > @@ -48,6 +51,22 @@ def init(l, a):
+> >      args =3D a
+> >
+> >
+> > +def filter_entries(datastore, filters):
+> > +    for entry in datastore:
+> > +        if filters =3D=3D []:
+> > +            yield entry
+> > +            continue
+> > +
+> > +        assert entry['file'].startswith(entry['directory'])
+>
+> What is the purpose of this assertion? Will it cause AssertionError
+> under normal circumstances?
+>
+> > +        # filepath is relative to the directory, to avoid matching on =
+the absolute path
+> > +        filepath =3D entry['file'][len(entry['directory']):].lstrip('/=
+')
+> > +
+> > +        for pattern in filters:
+> > +            if fnmatch.fnmatch(filepath, pattern):
+> > +                yield entry
+> > +                break
+> > +
+> > +
+> >  def run_analysis(entry):
+> >      # Disable all checks, then re-enable the ones we want
+> >      global args
+> > @@ -87,6 +106,7 @@ def main():
+> >          # Read JSON data into the datastore variable
+> >          with open(args.path, "r") as f:
+> >              datastore =3D json.load(f)
+> > +            datastore =3D filter_entries(datastore, args.file_filter)
+> >              pool.map(run_analysis, datastore)
+> >      except BrokenPipeError:
+> >          # Python flushes standard streams on exit; redirect remaining =
+output
+> >
+> > ---
+> > base-commit: 22a40d14b572deb80c0648557f4bd502d7e83826
+> > change-id: 20240704-clang-tidy-filter-f470377cb2b4
+> >
+> > Best regards,
+> > --
+> > Th=C3=A9o Lebrun <theo.lebrun@bootlin.com>
+> >
+>
+
+
 --
-   In file included from fs/cifs/smb2file.c:15:
-   fs/cifs/cifspdu.h:512:3: error: type name requires a specifier or qualifier
-     512 |                 DECLARE_FLEX_ARRAY(unsigned char, EncryptionKey);
-         |                 ^
-   fs/cifs/cifspdu.h:512:37: error: type specifier missing, defaults to 'int' [-Werror,-Wimplicit-int]
-     512 |                 DECLARE_FLEX_ARRAY(unsigned char, EncryptionKey);
-         |                                                   ^
-         |                                                   int
-   fs/cifs/cifspdu.h:2289:3: error: type name requires a specifier or qualifier
-    2289 |                 DECLARE_FLEX_ARRAY(char, FileName);
-         |                 ^
-   fs/cifs/cifspdu.h:2289:28: error: type specifier missing, defaults to 'int' [-Werror,-Wimplicit-int]
-    2289 |                 DECLARE_FLEX_ARRAY(char, FileName);
-         |                                          ^
-         |                                          int
-   fs/cifs/cifspdu.h:2328:2: error: type name requires a specifier or qualifier
-    2328 |         DECLARE_FLEX_ARRAY(char, LinkDest);
-         |         ^
-   fs/cifs/cifspdu.h:2328:27: error: type specifier missing, defaults to 'int' [-Werror,-Wimplicit-int]
-    2328 |         DECLARE_FLEX_ARRAY(char, LinkDest);
-         |                                  ^
-         |                                  int
-   fs/cifs/cifspdu.h:2377:2: error: type name requires a specifier or qualifier
-    2377 |         DECLARE_FLEX_ARRAY(__u8, alt_name);
-         |         ^
-   fs/cifs/cifspdu.h:2377:27: error: type specifier missing, defaults to 'int' [-Werror,-Wimplicit-int]
-    2377 |         DECLARE_FLEX_ARRAY(__u8, alt_name);
-         |                                  ^
-         |                                  int
-   fs/cifs/cifspdu.h:2488:3: error: type name requires a specifier or qualifier
-    2488 |                 DECLARE_FLEX_ARRAY(char, FileName);
-         |                 ^
-   fs/cifs/cifspdu.h:2488:28: error: type specifier missing, defaults to 'int' [-Werror,-Wimplicit-int]
-    2488 |                 DECLARE_FLEX_ARRAY(char, FileName);
-         |                                          ^
-         |                                          int
-   In file included from fs/cifs/smb2file.c:16:
-   In file included from fs/cifs/cifsglob.h:26:
->> fs/cifs/../smbfs_common/smb2pdu.h:817:3: error: type name requires a specifier or qualifier
-     817 |                 DECLARE_FLEX_ARRAY(struct smb2_lock_element, locks);
-         |                 ^
->> fs/cifs/../smbfs_common/smb2pdu.h:817:48: error: type specifier missing, defaults to 'int' [-Werror,-Wimplicit-int]
-     817 |                 DECLARE_FLEX_ARRAY(struct smb2_lock_element, locks);
-         |                                                              ^
-         |                                                              int
-   fs/cifs/../smbfs_common/smb2pdu.h:1578:3: error: type name requires a specifier or qualifier
-    1578 |                 DECLARE_FLEX_ARRAY(char, FileName);
-         |                 ^
-   fs/cifs/../smbfs_common/smb2pdu.h:1578:28: error: type specifier missing, defaults to 'int' [-Werror,-Wimplicit-int]
-    1578 |                 DECLARE_FLEX_ARRAY(char, FileName);
-         |                                          ^
-         |                                          int
-   14 errors generated.
---
-   In file included from fs/cifs/ioctl.c:16:
-   fs/cifs/cifspdu.h:512:3: error: type name requires a specifier or qualifier
-     512 |                 DECLARE_FLEX_ARRAY(unsigned char, EncryptionKey);
-         |                 ^
-   fs/cifs/cifspdu.h:512:37: error: type specifier missing, defaults to 'int' [-Werror,-Wimplicit-int]
-     512 |                 DECLARE_FLEX_ARRAY(unsigned char, EncryptionKey);
-         |                                                   ^
-         |                                                   int
-   fs/cifs/cifspdu.h:2289:3: error: type name requires a specifier or qualifier
-    2289 |                 DECLARE_FLEX_ARRAY(char, FileName);
-         |                 ^
-   fs/cifs/cifspdu.h:2289:28: error: type specifier missing, defaults to 'int' [-Werror,-Wimplicit-int]
-    2289 |                 DECLARE_FLEX_ARRAY(char, FileName);
-         |                                          ^
-         |                                          int
-   fs/cifs/cifspdu.h:2328:2: error: type name requires a specifier or qualifier
-    2328 |         DECLARE_FLEX_ARRAY(char, LinkDest);
-         |         ^
-   fs/cifs/cifspdu.h:2328:27: error: type specifier missing, defaults to 'int' [-Werror,-Wimplicit-int]
-    2328 |         DECLARE_FLEX_ARRAY(char, LinkDest);
-         |                                  ^
-         |                                  int
-   fs/cifs/cifspdu.h:2377:2: error: type name requires a specifier or qualifier
-    2377 |         DECLARE_FLEX_ARRAY(__u8, alt_name);
-         |         ^
-   fs/cifs/cifspdu.h:2377:27: error: type specifier missing, defaults to 'int' [-Werror,-Wimplicit-int]
-    2377 |         DECLARE_FLEX_ARRAY(__u8, alt_name);
-         |                                  ^
-         |                                  int
-   fs/cifs/cifspdu.h:2488:3: error: type name requires a specifier or qualifier
-    2488 |                 DECLARE_FLEX_ARRAY(char, FileName);
-         |                 ^
-   fs/cifs/cifspdu.h:2488:28: error: type specifier missing, defaults to 'int' [-Werror,-Wimplicit-int]
-    2488 |                 DECLARE_FLEX_ARRAY(char, FileName);
-         |                                          ^
-         |                                          int
-   In file included from fs/cifs/ioctl.c:17:
-   In file included from fs/cifs/cifsglob.h:26:
->> fs/cifs/../smbfs_common/smb2pdu.h:817:3: error: type name requires a specifier or qualifier
-     817 |                 DECLARE_FLEX_ARRAY(struct smb2_lock_element, locks);
-         |                 ^
->> fs/cifs/../smbfs_common/smb2pdu.h:817:48: error: type specifier missing, defaults to 'int' [-Werror,-Wimplicit-int]
-     817 |                 DECLARE_FLEX_ARRAY(struct smb2_lock_element, locks);
-         |                                                              ^
-         |                                                              int
-   fs/cifs/../smbfs_common/smb2pdu.h:1578:3: error: type name requires a specifier or qualifier
-    1578 |                 DECLARE_FLEX_ARRAY(char, FileName);
-         |                 ^
-   fs/cifs/../smbfs_common/smb2pdu.h:1578:28: error: type specifier missing, defaults to 'int' [-Werror,-Wimplicit-int]
-    1578 |                 DECLARE_FLEX_ARRAY(char, FileName);
-         |                                          ^
-         |                                          int
-   fs/cifs/ioctl.c:324:10: warning: variable 'caps' set but not used [-Wunused-but-set-variable]
-     324 |         __u64   caps;
-         |                 ^
-   1 warning and 14 errors generated.
---
-   In file included from fs/cifs/readdir.c:15:
-   fs/cifs/cifspdu.h:512:3: error: type name requires a specifier or qualifier
-     512 |                 DECLARE_FLEX_ARRAY(unsigned char, EncryptionKey);
-         |                 ^
-   fs/cifs/cifspdu.h:512:37: error: type specifier missing, defaults to 'int' [-Werror,-Wimplicit-int]
-     512 |                 DECLARE_FLEX_ARRAY(unsigned char, EncryptionKey);
-         |                                                   ^
-         |                                                   int
-   fs/cifs/cifspdu.h:2289:3: error: type name requires a specifier or qualifier
-    2289 |                 DECLARE_FLEX_ARRAY(char, FileName);
-         |                 ^
-   fs/cifs/cifspdu.h:2289:28: error: type specifier missing, defaults to 'int' [-Werror,-Wimplicit-int]
-    2289 |                 DECLARE_FLEX_ARRAY(char, FileName);
-         |                                          ^
-         |                                          int
-   fs/cifs/cifspdu.h:2328:2: error: type name requires a specifier or qualifier
-    2328 |         DECLARE_FLEX_ARRAY(char, LinkDest);
-         |         ^
-   fs/cifs/cifspdu.h:2328:27: error: type specifier missing, defaults to 'int' [-Werror,-Wimplicit-int]
-    2328 |         DECLARE_FLEX_ARRAY(char, LinkDest);
-         |                                  ^
-         |                                  int
-   fs/cifs/cifspdu.h:2377:2: error: type name requires a specifier or qualifier
-    2377 |         DECLARE_FLEX_ARRAY(__u8, alt_name);
-         |         ^
-   fs/cifs/cifspdu.h:2377:27: error: type specifier missing, defaults to 'int' [-Werror,-Wimplicit-int]
-    2377 |         DECLARE_FLEX_ARRAY(__u8, alt_name);
-         |                                  ^
-         |                                  int
-   fs/cifs/cifspdu.h:2488:3: error: type name requires a specifier or qualifier
-    2488 |                 DECLARE_FLEX_ARRAY(char, FileName);
-         |                 ^
-   fs/cifs/cifspdu.h:2488:28: error: type specifier missing, defaults to 'int' [-Werror,-Wimplicit-int]
-    2488 |                 DECLARE_FLEX_ARRAY(char, FileName);
-         |                                          ^
-         |                                          int
-   In file included from fs/cifs/readdir.c:16:
-   In file included from fs/cifs/cifsglob.h:26:
->> fs/cifs/../smbfs_common/smb2pdu.h:817:3: error: type name requires a specifier or qualifier
-     817 |                 DECLARE_FLEX_ARRAY(struct smb2_lock_element, locks);
-         |                 ^
->> fs/cifs/../smbfs_common/smb2pdu.h:817:48: error: type specifier missing, defaults to 'int' [-Werror,-Wimplicit-int]
-     817 |                 DECLARE_FLEX_ARRAY(struct smb2_lock_element, locks);
-         |                                                              ^
-         |                                                              int
-   fs/cifs/../smbfs_common/smb2pdu.h:1578:3: error: type name requires a specifier or qualifier
-    1578 |                 DECLARE_FLEX_ARRAY(char, FileName);
-         |                 ^
-   fs/cifs/../smbfs_common/smb2pdu.h:1578:28: error: type specifier missing, defaults to 'int' [-Werror,-Wimplicit-int]
-    1578 |                 DECLARE_FLEX_ARRAY(char, FileName);
-         |                                          ^
-         |                                          int
-   fs/cifs/readdir.c:554:20: error: no member named 'FileName' in 'FILE_UNIX_INFO'
-     554 |         de->name = &info->FileName[0];
-         |                     ~~~~  ^
-   15 errors generated.
-
-
-vim +817 fs/cifs/../smbfs_common/smb2pdu.h
-
-   802	
-   803	struct smb2_lock_req {
-   804		struct smb2_hdr hdr;
-   805		__le16 StructureSize; /* Must be 48 */
-   806		__le16 LockCount;
-   807		/*
-   808		 * The least significant four bits are the index, the other 28 bits are
-   809		 * the lock sequence number (0 to 64). See MS-SMB2 2.2.26
-   810		 */
-   811		__le32 LockSequenceNumber;
-   812		__u64  PersistentFileId;
-   813		__u64  VolatileFileId;
-   814		/* Followed by at least one */
-   815		union {
-   816			struct smb2_lock_element lock;
- > 817			DECLARE_FLEX_ARRAY(struct smb2_lock_element, locks);
-   818		};
-   819	} __packed;
-   820	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Best Regards
+Masahiro Yamada
