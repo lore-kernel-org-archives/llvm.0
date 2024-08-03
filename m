@@ -1,157 +1,200 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3CD6349647;
-	Sat,  3 Aug 2024 07:58:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E195823CB
+	for <llvm@lists.linux.dev>; Sat,  3 Aug 2024 08:42:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722671924; cv=none; b=bHVvV3KSsDWIDbGlSGi+yR8kx/N1qMTNmprS8F5wAAQyH/wfhx94PwPmgfcPX04OT5pQHUFB4X/5/PlznQ2orefTYMvXq6r5440SzHF3r/Jsi8YlCdnBkydBL+23HgVqrbz50IVe1h5HqGhKVV2g5miT926VBHrCL6ktL9luY/Q=
+	t=1722674561; cv=none; b=mmEyHzLQ/QtmgmHxmrtq3nyUqtnr7XnWe0/G8KL3HAb5LabFCtnfQK+L+6XF2YU83b5Qsuis4bQvmAU6Q192rTy6aGe0JTm1dwmdD8vsgU/C1/UXbzUDDRU1VFRoROXHteleSQBATIqcJNXD6VYXeltnrU8DBKKE8SMzPKRKpZw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722671924; c=relaxed/simple;
-	bh=Tmhy9x28m4fqBFRPAkuSRtvypk1CzkzPz54QUFusO6Q=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=B8XOx2/ttFFtpEwoQU8Ak1pOmtFgKBmUVYzatm2JGvEbW2ktb0UdMHDz1bmsoJsJb2a+09/UIGAF66xbl8w6gVicrOfdj1EYCs+XrSyHlUGeBBxvnfbs+CJ+Av63kfZyfTFLR1DwtWXkwObl3I37zRXh3bmIGJJn7w3mSu5fJEA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=jTvVnCsH; arc=none smtp.client-ip=198.175.65.21
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1722674561; c=relaxed/simple;
+	bh=rL9o66+yTo07C2NUCjmx8LrF2T1qkqT0BezdaAVBoNk=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=aQhKEVK5hjN0l3i6ZBAg59NzAm5H1hHDxP4vlhFO59IW+FWgZ3OsEluM4ldSZRWDaSLna/KIpnpyPti9bgci+ZR64eSp2FgZQ+gVtNsRNnKQT3+4Yx1OfOZ4mAH2GaMS9nz9cbFwmjMibrQDZ248e1CIesqg41oI207J7G6rxGA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WoLr681Q; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="jTvVnCsH"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1722671922; x=1754207922;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=Tmhy9x28m4fqBFRPAkuSRtvypk1CzkzPz54QUFusO6Q=;
-  b=jTvVnCsHY49Pq5iGkljQMwiy4wFLZXpIzKJR5ktIEX2/UU/gc8oZpG7D
-   F2VkOqpTalx3sfmqejgkaOHOl2QP1UKULGvka28pWgRcCILQQIup+nhLG
-   RGN/POTLB531Cu3lrkyxQRMRiSbD5TXE/AHQO+ohcVgMyO1PwWIUn6gzC
-   YxKRH/c6PciexN6TRIzYH6zol+XlH34gcoykotST0nHa6Hbc2Oyea94Wc
-   3Ke5nDVxi9XOsdBeigKj2OLz/2xAR+bCK6EDr4g1NMg+mmkdwlLAVDvEU
-   lW6nhwKSzUCfYyr7W61xwVKmHH7/vRmKodZFt6ADvVUxWwOefuso8Mc4D
-   w==;
-X-CSE-ConnectionGUID: OK42pvfnQFSkXHr/LtKjpQ==
-X-CSE-MsgGUID: yEdaogJWSm+JUWCp3/fOcQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11152"; a="20642858"
-X-IronPort-AV: E=Sophos;i="6.09,260,1716274800"; 
-   d="scan'208";a="20642858"
-Received: from fmviesa007.fm.intel.com ([10.60.135.147])
-  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Aug 2024 00:58:34 -0700
-X-CSE-ConnectionGUID: Ayavin1uQwWLLq0B/yzZ6g==
-X-CSE-MsgGUID: x2mHZiK/Sy+IPb4BELHYJA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.09,260,1716274800"; 
-   d="scan'208";a="55310305"
-Received: from unknown (HELO b6bf6c95bbab) ([10.239.97.151])
-  by fmviesa007.fm.intel.com with ESMTP; 03 Aug 2024 00:58:32 -0700
-Received: from kbuild by b6bf6c95bbab with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1sa9eI-0000Ha-0Z;
-	Sat, 03 Aug 2024 07:58:09 +0000
-Date: Sat, 3 Aug 2024 15:56:51 +0800
-From: kernel test robot <lkp@intel.com>
-To: Kyle Swenson <kyle.swenson@est.tech>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Jakub Kicinski <kuba@kernel.org>,
-	Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Subject: [netdev-net:main 4/5] drivers/net/pse-pd/tps23881.c:755:6: error:
- call to undeclared function 'FIELD_GET'; ISO C99 and later do not support
- implicit function declarations
-Message-ID: <202408031528.M5Qden7Z-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WoLr681Q"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 93AB1C4AF0C
+	for <llvm@lists.linux.dev>; Sat,  3 Aug 2024 08:42:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1722674560;
+	bh=rL9o66+yTo07C2NUCjmx8LrF2T1qkqT0BezdaAVBoNk=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=WoLr681Q+aSrgmjIyAzMHpsero14HAbh8Pe2NYfC1yHBoXTIrhK/zNp22Cst1K8uS
+	 qEjtaHDlEmJV05GVvHU4iJvMAG+SD6jgKE3CA3lK0Ek31tDIBvqXWYRSHMNIWKtScM
+	 C0b7RMpf37B8XH0Nd/ZRj05l+vUkqZHFhVAi5m0caoHtGmatB9pZOMMe5o/6LDhjE2
+	 /DYaQ/yoSPEu6GUS3zE4YzIqN8Ufh7mwwX9XwRUYTlpPjy4a/QXCO7rGZdcm23vP3p
+	 qerjEX9ZZxlc73rXJITXV7b9FekKnzH5RZglqPtg0s0Xu1pmlxDn4XqhcauHWVIMfm
+	 FgKtYXGJerggg==
+Received: by mail-lf1-f43.google.com with SMTP id 2adb3069b0e04-52efd8807aaso13106930e87.3
+        for <llvm@lists.linux.dev>; Sat, 03 Aug 2024 01:42:40 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCWYVUZdWbkckviEJ5wVTRRFWmlw52Ep1NJxjTuubsu1a/n+FXRqNCmBoHSt9xMTbZyTgtnPQEsRCAZvffuK3r/DgcvXSQ==
+X-Gm-Message-State: AOJu0YzrqPW1NFRvL1HxvITfxR1EzbwLfmV4pQtSooj+ogIRWHTA3m8d
+	dIWKYBeo57PZYby9dew7Qub94QFXEq+UJxxzZkCKc+MSeJO1EtBJEM/WdSWXJ1IUNZIWN7tHlwa
+	QRmT1HfTNfG/0v7eV5InFSqAwfXM=
+X-Google-Smtp-Source: AGHT+IFF4S+80PSYnjQ7scAy9A6/Kk6hzji7GaVN17IZlXndYUp47aES2p2yhhGL0SpWFbevR9PkrNdcUGZQDwELF8Y=
+X-Received: by 2002:a05:6512:114f:b0:52b:c1cc:51f1 with SMTP id
+ 2adb3069b0e04-530bb396106mr4237148e87.23.1722674559200; Sat, 03 Aug 2024
+ 01:42:39 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+References: <20240704-clang-tidy-filter-v1-1-8d4556a35b65@bootlin.com>
+In-Reply-To: <20240704-clang-tidy-filter-v1-1-8d4556a35b65@bootlin.com>
+From: Masahiro Yamada <masahiroy@kernel.org>
+Date: Sat, 3 Aug 2024 17:42:02 +0900
+X-Gmail-Original-Message-ID: <CAK7LNARmV89PJV3sd93WwqLLQD0fg9mBOMetzECLriF8295zVA@mail.gmail.com>
+Message-ID: <CAK7LNARmV89PJV3sd93WwqLLQD0fg9mBOMetzECLriF8295zVA@mail.gmail.com>
+Subject: Re: [PATCH] scripts: run-clang-tools: add file filtering option
+To: =?UTF-8?B?VGjDqW8gTGVicnVu?= <theo.lebrun@bootlin.com>
+Cc: Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nicolas@fjasle.eu>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, 
+	Justin Stitt <justinstitt@google.com>, llvm@lists.linux.dev, linux-kbuild@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-tree:   git://git.kernel.org/pub/scm/linux/kernel/git/netdev/net.git main
-head:   fba917b169bea5f8f2ee300e19d5f7a6341a5251
-commit: 89108cb5c28527c1882df2987394e5c261a1f4aa [4/5] net: pse-pd: tps23881: Fix the device ID check
-config: i386-randconfig-003-20240803 (https://download.01.org/0day-ci/archive/20240803/202408031528.M5Qden7Z-lkp@intel.com/config)
-compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240803/202408031528.M5Qden7Z-lkp@intel.com/reproduce)
+On Thu, Jul 4, 2024 at 6:28=E2=80=AFPM Th=C3=A9o Lebrun <theo.lebrun@bootli=
+n.com> wrote:
+>
+> Add file filtering feature. We take zero or more filters at the end as
+> positional arguments. If none are given, the default behavior is kept
+> and we run the tool on all files in the datastore. Else, files must
+> match one or more filter to be analysed.
+>
+> The below command runs clang-tidy on drivers/clk/clk.c and all C files
+> inside drivers/reset/.
+>
+>     ./scripts/clang-tools/run-clang-tools.py clang-tidy \
+>         compile_commands.json \
+>         'drivers/clk/clk.c' 'drivers/reset/*'
+>
+> The Python fnmatch builtin module is used. Matching is case-insensitive.
+> See its documentation for allowed syntax:
+> https://docs.python.org/3/library/fnmatch.html
+>
+> Signed-off-by: Th=C3=A9o Lebrun <theo.lebrun@bootlin.com>
+> ---
+> Currently, all files in the datastore are analysed. This is not
+> practical for grabbing errors in a subsystem, or relative to a patch
+> series. Add a file filtering feature with wildcard support.
+>
+> Have a nice day,
+> Th=C3=A9o
+> ---
+>  scripts/clang-tools/run-clang-tools.py | 20 ++++++++++++++++++++
+>  1 file changed, 20 insertions(+)
+>
+> diff --git a/scripts/clang-tools/run-clang-tools.py b/scripts/clang-tools=
+/run-clang-tools.py
+> index f31ffd09e1ea..b0b3a9c8cdec 100755
+> --- a/scripts/clang-tools/run-clang-tools.py
+> +++ b/scripts/clang-tools/run-clang-tools.py
+> @@ -10,6 +10,7 @@ compile_commands.json.
+>  """
+>
+>  import argparse
+> +import fnmatch
+>  import json
+>  import multiprocessing
+>  import subprocess
+> @@ -32,6 +33,8 @@ def parse_arguments():
+>                          help=3Dtype_help)
+>      path_help =3D "Path to the compilation database to parse"
+>      parser.add_argument("path", type=3Dstr, help=3Dpath_help)
+> +    file_filter_help =3D "Optional Unix shell-style wildcard file filter=
+s"
+> +    parser.add_argument("file_filter", type=3Dstr, nargs=3D"*", help=3Df=
+ile_filter_help)
+>
+>      checks_help =3D "Checks to pass to the analysis"
+>      parser.add_argument("-checks", type=3Dstr, default=3DNone, help=3Dch=
+ecks_help)
+> @@ -48,6 +51,22 @@ def init(l, a):
+>      args =3D a
+>
+>
+> +def filter_entries(datastore, filters):
+> +    for entry in datastore:
+> +        if filters =3D=3D []:
+> +            yield entry
+> +            continue
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202408031528.M5Qden7Z-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
-
->> drivers/net/pse-pd/tps23881.c:755:6: error: call to undeclared function 'FIELD_GET'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     755 |         if (FIELD_GET(TPS23881_REG_DEVID_MASK, ret) != TPS23881_DEVICE_ID) {
-         |             ^
-   1 error generated.
+Maybe, this can be checked on the caller side.
+(Note, I did not test this at all)
 
 
-vim +/FIELD_GET +755 drivers/net/pse-pd/tps23881.c
+if args.file_filter:
+        datastore =3D filter_entries(datastore, args.file_filter)
 
-   734	
-   735	static int tps23881_i2c_probe(struct i2c_client *client)
-   736	{
-   737		struct device *dev = &client->dev;
-   738		struct tps23881_priv *priv;
-   739		int ret;
-   740		u8 val;
-   741	
-   742		if (!i2c_check_functionality(client->adapter, I2C_FUNC_I2C)) {
-   743			dev_err(dev, "i2c check functionality failed\n");
-   744			return -ENXIO;
-   745		}
-   746	
-   747		priv = devm_kzalloc(dev, sizeof(*priv), GFP_KERNEL);
-   748		if (!priv)
-   749			return -ENOMEM;
-   750	
-   751		ret = i2c_smbus_read_byte_data(client, TPS23881_REG_DEVID);
-   752		if (ret < 0)
-   753			return ret;
-   754	
- > 755		if (FIELD_GET(TPS23881_REG_DEVID_MASK, ret) != TPS23881_DEVICE_ID) {
-   756			dev_err(dev, "Wrong device ID\n");
-   757			return -ENXIO;
-   758		}
-   759	
-   760		ret = tps23881_flash_sram_fw(client);
-   761		if (ret < 0)
-   762			return ret;
-   763	
-   764		ret = i2c_smbus_read_byte_data(client, TPS23881_REG_FWREV);
-   765		if (ret < 0)
-   766			return ret;
-   767	
-   768		dev_info(&client->dev, "Firmware revision 0x%x\n", ret);
-   769	
-   770		/* Set configuration B, 16 bit access on a single device address */
-   771		ret = i2c_smbus_read_byte_data(client, TPS23881_REG_GEN_MASK);
-   772		if (ret < 0)
-   773			return ret;
-   774	
-   775		val = ret | TPS23881_REG_NBITACC;
-   776		ret = i2c_smbus_write_byte_data(client, TPS23881_REG_GEN_MASK, val);
-   777		if (ret)
-   778			return ret;
-   779	
-   780		priv->client = client;
-   781		i2c_set_clientdata(client, priv);
-   782		priv->np = dev->of_node;
-   783	
-   784		priv->pcdev.owner = THIS_MODULE;
-   785		priv->pcdev.ops = &tps23881_ops;
-   786		priv->pcdev.dev = dev;
-   787		priv->pcdev.types = ETHTOOL_PSE_C33;
-   788		priv->pcdev.nr_lines = TPS23881_MAX_CHANS;
-   789		ret = devm_pse_controller_register(dev, &priv->pcdev);
-   790		if (ret) {
-   791			return dev_err_probe(dev, ret,
-   792					     "failed to register PSE controller\n");
-   793		}
-   794	
-   795		return ret;
-   796	}
-   797	
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+
+
+> +
+> +        assert entry['file'].startswith(entry['directory'])
+> +        # filepath is relative to the directory, to avoid matching on th=
+e absolute path
+
+
+
+Does this assertion work with the separate output directory
+(O=3D option)?
+
+
+Just try this command:
+
+ $ make LLVM=3D1 O=3D/tmp/foo clang-tidy
+
+Check the generated /tmp/foo/compile_commands.json
+
+
+The 'file' entry starts with your source directory.
+The 'directory' entry starts with the build directory, "/tmp/foo".
+
+
+
+
+
+
+
+
+
+> +        filepath =3D entry['file'][len(entry['directory']):].lstrip('/')
+> +
+> +        for pattern in filters:
+> +            if fnmatch.fnmatch(filepath, pattern):
+> +                yield entry
+> +                break
+> +
+> +
+>  def run_analysis(entry):
+>      # Disable all checks, then re-enable the ones we want
+>      global args
+> @@ -87,6 +106,7 @@ def main():
+>          # Read JSON data into the datastore variable
+>          with open(args.path, "r") as f:
+>              datastore =3D json.load(f)
+> +            datastore =3D filter_entries(datastore, args.file_filter)
+>              pool.map(run_analysis, datastore)
+>      except BrokenPipeError:
+>          # Python flushes standard streams on exit; redirect remaining ou=
+tput
+>
+> ---
+> base-commit: 22a40d14b572deb80c0648557f4bd502d7e83826
+> change-id: 20240704-clang-tidy-filter-f470377cb2b4
+>
+> Best regards,
+> --
+> Th=C3=A9o Lebrun <theo.lebrun@bootlin.com>
+>
+>
+
+
+--=20
+Best Regards
+Masahiro Yamada
