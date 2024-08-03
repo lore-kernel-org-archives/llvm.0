@@ -1,202 +1,278 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 251F328376
-	for <llvm@lists.linux.dev>; Sat,  3 Aug 2024 09:16:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F0EF2193;
+	Sat,  3 Aug 2024 09:30:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722676609; cv=none; b=B+38LeT2qkJ+fyL/x9Ew2EDntw5qHfF71ydb5OclnGTbTOcpTAgVLNU6rZ0NhYloWj6nSDPQtfqYfBOaIzSZBugajrCu5vI7fNUhT27Lof5x8QpMtENJLqoYkzpQ0tgQuU+yum4LgsICBLFc0dCdLknNT+R89Xo1sGF7DwQGVxs=
+	t=1722677454; cv=none; b=dEzIPaonuesnvOrOqgc8dYONk9WQVfCs3lvwUFOiP5SLr7itkw+Eg0GvcbBQZSIvR2qU67pruNOqHw2JbYJIbcecIWC/dZSKKKGVnxgMGAKkJ0BSO7ukQ4+TA7VJQaO6gMaZne4f4Ic0VePK/0Ef2hq6IW3kTfxiaircEPFB6g8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722676609; c=relaxed/simple;
-	bh=1DNbf8bIlZ3NMKH/mSPiGD2CyZCIwg1XhjJae/C5U94=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=YGq2OHcyq/3XlOr/tRYIjrs+SOxn4pu2k88uDuRgHa7ZJRE/0GnpF1MniN7SexhBaOC//r+pAsjfh5RJpzCboViwMJ/5ZiSWJY/YC/4N33EoTBjjF6vtytfjwXzNJyBt1rOinzQFUTTFj+xDhFu7flsqavg5l252NzdMu4P+M98=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mRTHdFDP; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1722677454; c=relaxed/simple;
+	bh=Fjg9Pn+ZYwJbve/udsHMETjpAeIl6n+IOKDgECgDa44=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=ECR1VhZBgN4vX/ff4EzIJ53fMXK7NO3FDLgA4EPUy9HC0pTEkxh04pCasTtu9bFyC0V3s3XoJ9RvyeT5qsTTywUHkbi3qeeZe5unl8Fy0wxqMajUSeqmVFvFFZXhWFYXaItsYbKiTiOD4zczuE54vdD0qPnBg5GFD2fyGcxtXWY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=MxqnmP/y; arc=none smtp.client-ip=198.175.65.19
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mRTHdFDP"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BE5B0C116B1
-	for <llvm@lists.linux.dev>; Sat,  3 Aug 2024 09:16:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1722676608;
-	bh=1DNbf8bIlZ3NMKH/mSPiGD2CyZCIwg1XhjJae/C5U94=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=mRTHdFDPTfdYBIfymaMb9QfjgodsL/iOykhYj3m8DgpQmmSx+rU4nq3epVaiCT0zo
-	 Ii7WLpNKyj+sLlpJtscDvfvuImQPXwyrtGeHHWmXXz1H/ucpybyWPigVJAYCEyq0tT
-	 feZxjt+o77eBqyJCLyPqnGajRsxQXUI9yvRR3yCnGeowlAtGO7XPqK+E4myQrqKUvu
-	 0IkE33hCmDankbTKdSwSGX8PX9KU6veCIVVd5HvZ4Ylm4IQL/dcWKziZ16zSIDX+X8
-	 JWRSC4NBxVMY1pNyQU3DMl7ftK8dz0hMW1ZIaPiQxsubP6wuZ/60DhsE4SEuLEZV7k
-	 yoQJJ7QCRplCg==
-Received: by mail-lf1-f51.google.com with SMTP id 2adb3069b0e04-52efd530a4eso13976361e87.0
-        for <llvm@lists.linux.dev>; Sat, 03 Aug 2024 02:16:48 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCWhQ5Y2E8N/Cb/C5TZoRaa8fTPBvPexpbWxFutmX2ONlC849701r6OBQeXIP0PtOnilf4qgZHlDRg1fzopvO7GadNf56g==
-X-Gm-Message-State: AOJu0Yw+5MP3BfxZ+TZr3Ig87ajAjOJfUODmTNJrqWbrILkXqSgmPhOh
-	zvXybDsukNmsPejQ5wJxwmAKX76Bq+vp6mh/GZ6sqKNo/xFQybYNieyL4RRCbp/l14OrFb9u+UL
-	TKM7twqAmV/Kp0GoWgE6vcDlpApM=
-X-Google-Smtp-Source: AGHT+IEx6SXwfeOZ15h0vEqG1twwquqmXEedBdAZXhbDrpkmPCRu4RwDtl+IL7isPQ0DbgNpUymnIvp2QXPBx7nE95k=
-X-Received: by 2002:a05:6512:b0e:b0:530:9a14:f0a0 with SMTP id
- 2adb3069b0e04-530bb36ba5dmr4664487e87.10.1722676607424; Sat, 03 Aug 2024
- 02:16:47 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="MxqnmP/y"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1722677452; x=1754213452;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=Fjg9Pn+ZYwJbve/udsHMETjpAeIl6n+IOKDgECgDa44=;
+  b=MxqnmP/yK0FcoNofQoXpEsDArXwFoqqQMzGv0x6n5E4ORTKbicdGfc9A
+   WrFwNfy6g8+IBWj6ngQeazeBTr5TUiT0zwl6g38ZBsoKIZ+De15VWPbYu
+   QKUoD0RATaYGowMNpFNQ2/+ldjqIsxnt0hbQhpMPAQYx6klNELHjsDuGZ
+   aaKLMyh/DDDW5x5S92TeMmpLb63fve4rGNPUNcJ11DQHd0WdVSgE9koJv
+   VouNTN94+dvqou6CTFHkQ01joANz/G4WePxIJDfYVa8v5OjUMRAocZJCq
+   aadw/XkA+mO3XTehMYYmA6giMYcvplRZ8PNYuQr7kOeac6V0Ih54hM0pd
+   Q==;
+X-CSE-ConnectionGUID: kQe91UDdQw64LR9xaeOj+Q==
+X-CSE-MsgGUID: bU53C2ViQlud2UikZGR1SA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11152"; a="20537852"
+X-IronPort-AV: E=Sophos;i="6.09,260,1716274800"; 
+   d="scan'208";a="20537852"
+Received: from fmviesa004.fm.intel.com ([10.60.135.144])
+  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Aug 2024 02:30:51 -0700
+X-CSE-ConnectionGUID: y0u5W3HYTleadD4KNtyd5A==
+X-CSE-MsgGUID: +T5FzQOcRcG38wcV4UwQ2A==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.09,260,1716274800"; 
+   d="scan'208";a="60309871"
+Received: from unknown (HELO b6bf6c95bbab) ([10.239.97.151])
+  by fmviesa004.fm.intel.com with ESMTP; 03 Aug 2024 02:30:49 -0700
+Received: from kbuild by b6bf6c95bbab with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1saB62-0000Lw-36;
+	Sat, 03 Aug 2024 09:30:43 +0000
+Date: Sat, 3 Aug 2024 17:29:54 +0800
+From: kernel test robot <lkp@intel.com>
+To: James Morse <james.morse@arm.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [morse:mpam/snapshot/v6.11-rc1 78/128]
+ drivers/platform/arm64/mpam/mpam_devices.c:767:4: warning: variable
+ 'hw_managed' is used uninitialized whenever 'if' condition is true
+Message-ID: <202408031757.s4MfIY9k-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20240704-clang-tidy-filter-v1-1-8d4556a35b65@bootlin.com> <20240802223509.GA781199@thelio-3990X>
-In-Reply-To: <20240802223509.GA781199@thelio-3990X>
-From: Masahiro Yamada <masahiroy@kernel.org>
-Date: Sat, 3 Aug 2024 18:16:11 +0900
-X-Gmail-Original-Message-ID: <CAK7LNAR6VFT+z377NURKZs5P4+Z9zE2oeN44zQE7PRfqV0JoZQ@mail.gmail.com>
-Message-ID: <CAK7LNAR6VFT+z377NURKZs5P4+Z9zE2oeN44zQE7PRfqV0JoZQ@mail.gmail.com>
-Subject: Re: [PATCH] scripts: run-clang-tools: add file filtering option
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: =?UTF-8?B?VGjDqW8gTGVicnVu?= <theo.lebrun@bootlin.com>, 
-	Nicolas Schier <nicolas@fjasle.eu>, Nick Desaulniers <ndesaulniers@google.com>, 
-	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, llvm@lists.linux.dev, 
-	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Sat, Aug 3, 2024 at 7:35=E2=80=AFAM Nathan Chancellor <nathan@kernel.org=
-> wrote:
->
-> Hi Th=C3=A9o,
->
-> First of all, apologies that it has taken me so long to review this!
->
-> On Thu, Jul 04, 2024 at 11:28:21AM +0200, Th=C3=A9o Lebrun wrote:
-> > Add file filtering feature. We take zero or more filters at the end as
-> > positional arguments. If none are given, the default behavior is kept
-> > and we run the tool on all files in the datastore. Else, files must
-> > match one or more filter to be analysed.
-> >
-> > The below command runs clang-tidy on drivers/clk/clk.c and all C files
-> > inside drivers/reset/.
-> >
-> >     ./scripts/clang-tools/run-clang-tools.py clang-tidy \
-> >         compile_commands.json \
-> >         'drivers/clk/clk.c' 'drivers/reset/*'
-> >
-> > The Python fnmatch builtin module is used. Matching is case-insensitive=
-.
-> > See its documentation for allowed syntax:
-> > https://docs.python.org/3/library/fnmatch.html
-> >
-> > Signed-off-by: Th=C3=A9o Lebrun <theo.lebrun@bootlin.com>
-> > ---
-> > Currently, all files in the datastore are analysed. This is not
-> > practical for grabbing errors in a subsystem, or relative to a patch
-> > series. Add a file filtering feature with wildcard support.
->
-> Sure, I think this is totally reasonable. In fact, I think some of this
-> could be added to the commit message as further existence for this
-> feature.
->
-> The change itself looks good to me for the most part, I have some
-> questions below just for my own understanding.
->
-> Reviewed-by: Nathan Chancellor <nathan@kernel.org>
->
-> One further question/comment now: Have you considered a way to
-> integrate this into Kbuild with the clang-tidy and clang-analyzer
-> commands? I don't think it is strictly necessary for the acceptance of
-> this patch but it might be nice to have some variable that users could
-> provide to do this with their regular make command + the clang-tidy
-> target? Not sure if Masahiro has further thoughts on that.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/morse/linux.git mpam/snapshot/v6.11-rc1
+head:   063bc546005302904092c158fe3228dc8af798a9
+commit: f81756350bdbf79a9c82c04a71f3a5d64461868b [78/128] arm_mpam: Probe the hardware features resctrl supports
+config: arm64-allmodconfig (https://download.01.org/0day-ci/archive/20240803/202408031757.s4MfIY9k-lkp@intel.com/config)
+compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 423aec6573df4424f90555468128e17073ddc69e)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240803/202408031757.s4MfIY9k-lkp@intel.com/reproduce)
 
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202408031757.s4MfIY9k-lkp@intel.com/
 
-We can do this in a separate patch if it is desired.
+All warnings (new ones prefixed by >>):
 
-This script already supports multiple options.
-I'd like to prefer a single generic option
-like CLANG_TOOLS_FLAGS.
-
-
-
-
-
-> > Have a nice day,
-> > Th=C3=A9o
-> > ---
-> >  scripts/clang-tools/run-clang-tools.py | 20 ++++++++++++++++++++
-> >  1 file changed, 20 insertions(+)
-> >
-> > diff --git a/scripts/clang-tools/run-clang-tools.py b/scripts/clang-too=
-ls/run-clang-tools.py
-> > index f31ffd09e1ea..b0b3a9c8cdec 100755
-> > --- a/scripts/clang-tools/run-clang-tools.py
-> > +++ b/scripts/clang-tools/run-clang-tools.py
-> > @@ -10,6 +10,7 @@ compile_commands.json.
-> >  """
-> >
-> >  import argparse
-> > +import fnmatch
-> >  import json
-> >  import multiprocessing
-> >  import subprocess
-> > @@ -32,6 +33,8 @@ def parse_arguments():
-> >                          help=3Dtype_help)
-> >      path_help =3D "Path to the compilation database to parse"
-> >      parser.add_argument("path", type=3Dstr, help=3Dpath_help)
-> > +    file_filter_help =3D "Optional Unix shell-style wildcard file filt=
-ers"
-> > +    parser.add_argument("file_filter", type=3Dstr, nargs=3D"*", help=
-=3Dfile_filter_help)
-> >
-> >      checks_help =3D "Checks to pass to the analysis"
-> >      parser.add_argument("-checks", type=3Dstr, default=3DNone, help=3D=
-checks_help)
-> > @@ -48,6 +51,22 @@ def init(l, a):
-> >      args =3D a
-> >
-> >
-> > +def filter_entries(datastore, filters):
-> > +    for entry in datastore:
-> > +        if filters =3D=3D []:
-> > +            yield entry
-> > +            continue
-> > +
-> > +        assert entry['file'].startswith(entry['directory'])
->
-> What is the purpose of this assertion? Will it cause AssertionError
-> under normal circumstances?
->
-> > +        # filepath is relative to the directory, to avoid matching on =
-the absolute path
-> > +        filepath =3D entry['file'][len(entry['directory']):].lstrip('/=
-')
-> > +
-> > +        for pattern in filters:
-> > +            if fnmatch.fnmatch(filepath, pattern):
-> > +                yield entry
-> > +                break
-> > +
-> > +
-> >  def run_analysis(entry):
-> >      # Disable all checks, then re-enable the ones we want
-> >      global args
-> > @@ -87,6 +106,7 @@ def main():
-> >          # Read JSON data into the datastore variable
-> >          with open(args.path, "r") as f:
-> >              datastore =3D json.load(f)
-> > +            datastore =3D filter_entries(datastore, args.file_filter)
-> >              pool.map(run_analysis, datastore)
-> >      except BrokenPipeError:
-> >          # Python flushes standard streams on exit; redirect remaining =
-output
-> >
-> > ---
-> > base-commit: 22a40d14b572deb80c0648557f4bd502d7e83826
-> > change-id: 20240704-clang-tidy-filter-f470377cb2b4
-> >
-> > Best regards,
-> > --
-> > Th=C3=A9o Lebrun <theo.lebrun@bootlin.com>
-> >
->
+   In file included from drivers/platform/arm64/mpam/mpam_devices.c:6:
+   In file included from include/linux/acpi.h:39:
+   In file included from include/acpi/acpi_io.h:7:
+   In file included from arch/arm64/include/asm/acpi.h:14:
+   In file included from include/linux/memblock.h:12:
+   In file included from include/linux/mm.h:2228:
+   include/linux/vmstat.h:500:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     500 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     501 |                            item];
+         |                            ~~~~
+   include/linux/vmstat.h:507:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     507 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     508 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/vmstat.h:514:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     514 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+   include/linux/vmstat.h:519:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     519 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     520 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/vmstat.h:528:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     528 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     529 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+   drivers/platform/arm64/mpam/mpam_devices.c:473:17: warning: result of comparison of constant 18446744073709551615 with expression of type 'u32' (aka 'unsigned int') is always false [-Wtautological-constant-out-of-range-compare]
+     473 |                         if (cache_id == ~0UL) {
+         |                             ~~~~~~~~ ^  ~~~~
+>> drivers/platform/arm64/mpam/mpam_devices.c:767:4: warning: variable 'hw_managed' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
+     767 |                         mpam_ris_hw_probe_hw_nrdy(ris, MBWU, hw_managed);
+         |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/platform/arm64/mpam/mpam_devices.c:670:6: note: expanded from macro 'mpam_ris_hw_probe_hw_nrdy'
+     670 |         if (WARN_ON_ONCE(!mpam_mon_sel_inner_lock(msc)))                        \
+         |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/asm-generic/bug.h:110:33: note: expanded from macro 'WARN_ON_ONCE'
+     110 | #define WARN_ON_ONCE(condition) ({                              \
+         |                                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     111 |         int __ret_warn_on = !!(condition);                      \
+         |         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     112 |         if (unlikely(__ret_warn_on))                            \
+         |         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     113 |                 __WARN_FLAGS(BUGFLAG_ONCE |                     \
+         |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     114 |                              BUGFLAG_TAINT(TAINT_WARN));        \
+         |                              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     115 |         unlikely(__ret_warn_on);                                \
+         |         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     116 | })
+         | ~~
+   drivers/platform/arm64/mpam/mpam_devices.c:768:8: note: uninitialized use occurs here
+     768 |                         if (hw_managed)
+         |                             ^~~~~~~~~~
+   drivers/platform/arm64/mpam/mpam_devices.c:767:4: note: remove the 'if' if its condition is always false
+     767 |                         mpam_ris_hw_probe_hw_nrdy(ris, MBWU, hw_managed);
+         |                         ^
+   drivers/platform/arm64/mpam/mpam_devices.c:670:2: note: expanded from macro 'mpam_ris_hw_probe_hw_nrdy'
+     670 |         if (WARN_ON_ONCE(!mpam_mon_sel_inner_lock(msc)))                        \
+         |         ^
+   drivers/platform/arm64/mpam/mpam_devices.c:756:19: note: initialize the variable 'hw_managed' to silence this warning
+     756 |                         bool hw_managed;
+         |                                        ^
+         |                                         = 0
+   drivers/platform/arm64/mpam/mpam_devices.c:746:5: warning: variable 'hw_managed' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
+     746 |                                 mpam_ris_hw_probe_hw_nrdy(ris, CSU, hw_managed);
+         |                                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/platform/arm64/mpam/mpam_devices.c:670:6: note: expanded from macro 'mpam_ris_hw_probe_hw_nrdy'
+     670 |         if (WARN_ON_ONCE(!mpam_mon_sel_inner_lock(msc)))                        \
+         |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/asm-generic/bug.h:110:33: note: expanded from macro 'WARN_ON_ONCE'
+     110 | #define WARN_ON_ONCE(condition) ({                              \
+         |                                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     111 |         int __ret_warn_on = !!(condition);                      \
+         |         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     112 |         if (unlikely(__ret_warn_on))                            \
+         |         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     113 |                 __WARN_FLAGS(BUGFLAG_ONCE |                     \
+         |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     114 |                              BUGFLAG_TAINT(TAINT_WARN));        \
+         |                              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     115 |         unlikely(__ret_warn_on);                                \
+         |         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     116 | })
+         | ~~
+   drivers/platform/arm64/mpam/mpam_devices.c:747:9: note: uninitialized use occurs here
+     747 |                                 if (hw_managed)
+         |                                     ^~~~~~~~~~
+   drivers/platform/arm64/mpam/mpam_devices.c:746:5: note: remove the 'if' if its condition is always false
+     746 |                                 mpam_ris_hw_probe_hw_nrdy(ris, CSU, hw_managed);
+         |                                 ^
+   drivers/platform/arm64/mpam/mpam_devices.c:670:2: note: expanded from macro 'mpam_ris_hw_probe_hw_nrdy'
+     670 |         if (WARN_ON_ONCE(!mpam_mon_sel_inner_lock(msc)))                        \
+         |         ^
+   drivers/platform/arm64/mpam/mpam_devices.c:741:20: note: initialize the variable 'hw_managed' to silence this warning
+     741 |                                 bool hw_managed;
+         |                                                ^
+         |                                                 = 0
+   8 warnings generated.
 
 
---
-Best Regards
-Masahiro Yamada
+vim +767 drivers/platform/arm64/mpam/mpam_devices.c
+
+   687	
+   688	static void mpam_ris_hw_probe(struct mpam_msc_ris *ris)
+   689	{
+   690		int err;
+   691		struct mpam_msc *msc = ris->vmsc->msc;
+   692		struct mpam_props *props = &ris->props;
+   693	
+   694		lockdep_assert_held(&msc->probe_lock);
+   695		lockdep_assert_held(&msc->part_sel_lock);
+   696	
+   697		mpam_mon_sel_outer_lock(msc);
+   698	
+   699		/* Cache Portion partitioning */
+   700		if (FIELD_GET(MPAMF_IDR_HAS_CPOR_PART, ris->idr)) {
+   701			u32 cpor_features = mpam_read_partsel_reg(msc, CPOR_IDR);
+   702	
+   703			props->cpbm_wd = FIELD_GET(MPAMF_CPOR_IDR_CPBM_WD, cpor_features);
+   704			if (props->cpbm_wd)
+   705				mpam_set_feature(mpam_feat_cpor_part, props);
+   706		}
+   707	
+   708		/* Memory bandwidth partitioning */
+   709		if (FIELD_GET(MPAMF_IDR_HAS_MBW_PART, ris->idr)) {
+   710			u32 mbw_features = mpam_read_partsel_reg(msc, MBW_IDR);
+   711	
+   712			/* portion bitmap resolution */
+   713			props->mbw_pbm_bits = FIELD_GET(MPAMF_MBW_IDR_BWPBM_WD, mbw_features);
+   714			if (props->mbw_pbm_bits &&
+   715			    FIELD_GET(MPAMF_MBW_IDR_HAS_PBM, mbw_features))
+   716				mpam_set_feature(mpam_feat_mbw_part, props);
+   717	
+   718			props->bwa_wd = FIELD_GET(MPAMF_MBW_IDR_BWA_WD, mbw_features);
+   719			if (props->bwa_wd && FIELD_GET(MPAMF_MBW_IDR_HAS_MAX, mbw_features))
+   720				mpam_set_feature(mpam_feat_mbw_max, props);
+   721		}
+   722	
+   723		/* Performance Monitoring */
+   724		if (FIELD_GET(MPAMF_IDR_HAS_MSMON, ris->idr)) {
+   725			u32 msmon_features = mpam_read_partsel_reg(msc, MSMON_IDR);
+   726	
+   727			if (FIELD_GET(MPAMF_MSMON_IDR_MSMON_CSU, msmon_features)) {
+   728				u32 csumonidr;
+   729	
+   730				/*
+   731				 * If the firmware max-nrdy-us property is missing, the
+   732				 * CSU counters can't be used. Should we wait forever?
+   733				 */
+   734				err = device_property_read_u32(&msc->pdev->dev,
+   735							       "arm,not-ready-us",
+   736							       &msc->nrdy_usec);
+   737	
+   738				csumonidr = mpam_read_partsel_reg(msc, CSUMON_IDR);
+   739				props->num_csu_mon = FIELD_GET(MPAMF_CSUMON_IDR_NUM_MON, csumonidr);
+   740				if (props->num_csu_mon && !err) {
+   741					bool hw_managed;
+   742	
+   743					mpam_set_feature(mpam_feat_msmon_csu, props);
+   744	
+   745					/* Is NRDY hardware managed? */
+   746					mpam_ris_hw_probe_hw_nrdy(ris, CSU, hw_managed);
+   747					if (hw_managed)
+   748						mpam_set_feature(mpam_feat_msmon_csu_hw_nrdy, props);
+   749				}
+   750	
+   751				if (err && mpam_has_feature(mpam_feat_msmon_csu_hw_nrdy, props)) {
+   752					pr_err_once("Counters are not usable because not-ready timeout was not provided by firmware.");
+   753				}
+   754			}
+   755			if (FIELD_GET(MPAMF_MSMON_IDR_MSMON_MBWU, msmon_features)) {
+   756				bool hw_managed;
+   757				u32 mbwumonidr = mpam_read_partsel_reg(msc, MBWUMON_IDR);
+   758	
+   759				props->num_mbwu_mon = FIELD_GET(MPAMF_MBWUMON_IDR_NUM_MON, mbwumonidr);
+   760				if (props->num_mbwu_mon)
+   761					mpam_set_feature(mpam_feat_msmon_mbwu, props);
+   762	
+   763				if (FIELD_GET(MPAMF_MBWUMON_IDR_HAS_RWBW, mbwumonidr))
+   764					mpam_set_feature(mpam_feat_msmon_mbwu_rwbw, props);
+   765	
+   766				/* Is NRDY hardware managed? */
+ > 767				mpam_ris_hw_probe_hw_nrdy(ris, MBWU, hw_managed);
+   768				if (hw_managed)
+   769					mpam_set_feature(mpam_feat_msmon_mbwu_hw_nrdy, props);
+   770	
+   771			}
+   772		}
+   773	
+   774		mpam_mon_sel_outer_unlock(msc);
+   775	}
+   776	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
