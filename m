@@ -1,60 +1,62 @@
 Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B6C759445;
-	Sun,  4 Aug 2024 21:30:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D85CA12E4A;
+	Sun,  4 Aug 2024 22:31:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722807033; cv=none; b=Zx9mVqQmy1DyYkN82zgXWNYWvx2MPDLRryZLZxUscOchUzOOaJmFcSd1YgQYFTwsos/BP9wVaULWNDjlEw6nBOB47ZUaqZVv7x9Npb6MLNfsSQDYfrU8rbG5J+XlLyXM2UDG3I8HeumZDjumi2zzSbCjxKU4GzlP5EMsglPDWBY=
+	t=1722810706; cv=none; b=BKK93HwZ3vzT0Kx2q++g9t7XWFrKx9VXrBJmRRhYJzTTLIQAjMr+3zOjsaOWRxBGfDSUi9fW+SWfnu4B+9rEm0msWNIQ+m7B278gvLLBGQ7vKaIjiaO7oAtrbyBzALabKP0/eB/33wsPRhmS3wKYycCzETHt9wD1WDbWN8G2G1E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722807033; c=relaxed/simple;
-	bh=FlB9krIfnR7w2rQLv+OrXo2Lkt3zdHoGYiSpD/zHQIU=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=kjlno0+/EDNAjqkwcb6I5PjfhPsjIquMHwnOQUU7V7pTlCbcoziqg2rUcJ+dAonFDGRZabTinE+hIVRG58ax88ctMg1CsNHpJoMm2ayCof6UtMw972q0iObD0galJutAq2DwtDlBkOftwY2Fz+JLVeRaS7npncWSnwNxDNfovUU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=jNBpPyXP; arc=none smtp.client-ip=192.198.163.13
+	s=arc-20240116; t=1722810706; c=relaxed/simple;
+	bh=FLPM1VU3GQt6d9UpfsksOoBdSBBHGKFSEOHUAsYrMbM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ScgvCuS8mX+cj+HL7NV/AOAgmZ1vYF8jgNSxYJFoldHfD2AI9wYdUZSpom9dr16mZ5YJTMhFhe2EHJSq0pXKyYUOJ+pvS06aCQtb/7snkJiS4t8pIkSw9AA4WYoch4obkYpMZzPUKxs7DgSgYJt0dIN2HcFVWYCNtvJzFMO+3hU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Q4DEdzhE; arc=none smtp.client-ip=192.198.163.13
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="jNBpPyXP"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Q4DEdzhE"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1722807032; x=1754343032;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=FlB9krIfnR7w2rQLv+OrXo2Lkt3zdHoGYiSpD/zHQIU=;
-  b=jNBpPyXPtteSaOb2Ldgp7jqmcrzdGMWV2HbVxPjazKDaivZw1TfPZjXc
-   KL25Rtzw2SD1ix9l9U7l8vQK7yiR6EopIZtbJEJaH81PyeXaM8cEc/4Vq
-   WKYIM9O+yGf/WZnGeKw/hA+zzZ29coX4XH7KPExhZn3gOLJUNL/n1+if9
-   kcQK/3WTE2MZKpuErUY6YYup37aYfMXClc/V1CDWKnhnu9JrC+6OgvBoq
-   v+oubxmhEmb25GbGF65dIJ9/RnaFb66R3Oj8dXMXpVPt2sv9nEmmJvXPV
-   6SiLKq2PcChalqA6ZX3MQb5EY99FAH/rDbQHWh6XLIgy9E4QeBwH7U84R
-   g==;
-X-CSE-ConnectionGUID: xVVEXlUJT7+Hlc4+tr5Yxg==
-X-CSE-MsgGUID: T0BZQ7/CTgyRcPC3spQhyA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11154"; a="23669864"
+  t=1722810705; x=1754346705;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=FLPM1VU3GQt6d9UpfsksOoBdSBBHGKFSEOHUAsYrMbM=;
+  b=Q4DEdzhET4w4dZJadDoEYyVa/GHqqfWhC9okxDsG1Yju2HREFzcBCSUo
+   aVlacXUsZE9p9FfIeyaj0e5U4ttonk13yEt76uHQ5bBqdHiMy4IWLAX+6
+   KpH2b/g2fKK3RakqQ+dNAqWPyDa0ebh17vvZBsa98OFEkD5Uhu3FALIl1
+   QNath/bJKllLwbDIRK0N2g6rFOsVQxoAGwq2vMWhqB/3a5xSQVH2UTNRF
+   kxBbMmKvkBCXljSbK3VCZJ7DMUVQ+8reDbX7IhApmNrZw0uEIkCvSKvju
+   SkfdPscblJR3Uulwzh7Ei7FOJaA/BA4amjqMvgrccD3vyfP8s/1LVTU4H
+   Q==;
+X-CSE-ConnectionGUID: SzUlc/pQQaqnnMxiehwe6Q==
+X-CSE-MsgGUID: xxsjN/0DShmrGwEY/fvNjg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11154"; a="23671525"
 X-IronPort-AV: E=Sophos;i="6.09,263,1716274800"; 
-   d="scan'208";a="23669864"
-Received: from fmviesa006.fm.intel.com ([10.60.135.146])
-  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Aug 2024 14:30:30 -0700
-X-CSE-ConnectionGUID: 9Vjb9JFtT0url3FlT4cDJg==
-X-CSE-MsgGUID: Jqgaz0yqQd6ZKWE6I3q92Q==
+   d="scan'208";a="23671525"
+Received: from fmviesa009.fm.intel.com ([10.60.135.149])
+  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Aug 2024 15:31:44 -0700
+X-CSE-ConnectionGUID: 1Uygf4b0SQa+Z2TaaAAmOg==
+X-CSE-MsgGUID: nHS3SMEwS4SYhKLhMNLJWw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.09,263,1716274800"; 
-   d="scan'208";a="55641681"
+   d="scan'208";a="55924905"
 Received: from unknown (HELO b6bf6c95bbab) ([10.239.97.151])
-  by fmviesa006.fm.intel.com with ESMTP; 04 Aug 2024 14:30:29 -0700
+  by fmviesa009.fm.intel.com with ESMTP; 04 Aug 2024 15:31:43 -0700
 Received: from kbuild by b6bf6c95bbab with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1saio6-0001cK-1i;
-	Sun, 04 Aug 2024 21:30:26 +0000
-Date: Mon, 5 Aug 2024 05:29:58 +0800
+	id 1sajlM-0001dI-2k;
+	Sun, 04 Aug 2024 22:31:40 +0000
+Date: Mon, 5 Aug 2024 06:31:23 +0800
 From: kernel test robot <lkp@intel.com>
-To: Nathan Chancellor <nathan@kernel.org>
+To: Takashi Sakamoto <o-takashi@sakamocchi.jp>,
+	linux1394-devel@lists.sourceforge.net
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org, Palmer Dabbelt <palmer@rivosinc.com>,
-	Andy Chiu <andybnac@gmail.com>,
-	Conor Dooley <conor.dooley@microchip.com>
-Subject: ERROR: modpost: "__popcountdi2" [fs/btrfs/btrfs.ko] undefined!
-Message-ID: <202408050540.DYUJ43l0-lkp@intel.com>
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 17/17] firewire: ohci: use guard macro to serialize
+ operations for isochronous contexts
+Message-ID: <202408050633.0nI12cmo-lkp@intel.com>
+References: <20240804130225.243496-18-o-takashi@sakamocchi.jp>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -63,129 +65,145 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20240804130225.243496-18-o-takashi@sakamocchi.jp>
 
-Hi Nathan,
+Hi Takashi,
 
-First bad commit (maybe != root cause):
+kernel test robot noticed the following build warnings:
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   17712b7ea0756799635ba159cc773082230ed028
-commit: 3aff0c459e77ac0fb1c4d6884433467f797f7357 RISC-V: Drop invalid test from CONFIG_AS_HAS_OPTION_ARCH
-date:   6 months ago
-config: riscv-allmodconfig (https://download.01.org/0day-ci/archive/20240805/202408050540.DYUJ43l0-lkp@intel.com/config)
-compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 423aec6573df4424f90555468128e17073ddc69e)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240805/202408050540.DYUJ43l0-lkp@intel.com/reproduce)
+[auto build test WARNING on ieee1394-linux1394/for-next]
+[also build test WARNING on ieee1394-linux1394/for-linus linus/master v6.11-rc1 next-20240802]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Takashi-Sakamoto/firewire-core-use-guard-macro-to-maintain-static-packet-data-for-phy-configuration/20240804-210645
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/ieee1394/linux1394.git for-next
+patch link:    https://lore.kernel.org/r/20240804130225.243496-18-o-takashi%40sakamocchi.jp
+patch subject: [PATCH 17/17] firewire: ohci: use guard macro to serialize operations for isochronous contexts
+config: x86_64-rhel-8.3-rust (https://download.01.org/0day-ci/archive/20240805/202408050633.0nI12cmo-lkp@intel.com/config)
+compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240805/202408050633.0nI12cmo-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202408050540.DYUJ43l0-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202408050633.0nI12cmo-lkp@intel.com/
 
-All errors (new ones prefixed by >>, old ones prefixed by <<):
+All warnings (new ones prefixed by >>):
 
-WARNING: modpost: missing MODULE_DESCRIPTION() in sound/soc/codecs/snd-soc-wm-adsp.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in sound/soc/fsl/imx-pcm-dma.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in sound/soc/intel/avs/boards/snd-soc-avs-da7219.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in sound/soc/intel/avs/boards/snd-soc-avs-dmic.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in sound/soc/intel/avs/boards/snd-soc-avs-i2s-test.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in sound/soc/intel/avs/boards/snd-soc-avs-max98927.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in sound/soc/intel/avs/boards/snd-soc-avs-max98357a.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in sound/soc/intel/avs/boards/snd-soc-avs-max98373.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in sound/soc/intel/avs/boards/snd-soc-avs-nau8825.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in sound/soc/intel/avs/boards/snd-soc-avs-probe.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in sound/soc/intel/avs/boards/snd-soc-avs-rt274.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in sound/soc/intel/avs/boards/snd-soc-avs-rt286.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in sound/soc/intel/avs/boards/snd-soc-avs-rt298.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in sound/soc/intel/avs/boards/snd-soc-avs-rt5514.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in sound/soc/intel/avs/boards/snd-soc-avs-rt5663.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in sound/soc/intel/avs/boards/snd-soc-avs-rt5682.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in sound/soc/intel/avs/boards/snd-soc-avs-ssm4567.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in sound/soc/mxs/snd-soc-mxs-pcm.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in sound/soc/qcom/snd-soc-qcom-common.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in sound/soc/qcom/snd-soc-qcom-sdw.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in sound/soc/qcom/qdsp6/snd-q6dsp-common.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in sound/soc/sof/intel/snd-sof-intel-atom.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in sound/soc/sof/intel/snd-sof-acpi-intel-byt.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in sound/soc/sof/intel/snd-sof-acpi-intel-bdw.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in sound/soc/sof/intel/snd-sof-intel-hda-common.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in sound/soc/sof/intel/snd-sof-intel-hda-mlink.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in sound/soc/sof/intel/snd-sof-intel-hda.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in sound/soc/sof/intel/snd-sof-pci-intel-tng.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in sound/soc/sof/intel/snd-sof-pci-intel-skl.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in sound/soc/sof/intel/snd-sof-pci-intel-apl.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in sound/soc/sof/intel/snd-sof-pci-intel-cnl.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in sound/soc/sof/intel/snd-sof-pci-intel-icl.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in sound/soc/sof/intel/snd-sof-pci-intel-tgl.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in sound/soc/sof/intel/snd-sof-pci-intel-mtl.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in sound/soc/sof/intel/snd-sof-pci-intel-lnl.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in sound/soc/sof/imx/snd-sof-imx8.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in sound/soc/sof/imx/snd-sof-imx8m.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in sound/soc/sof/imx/snd-sof-imx8ulp.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in sound/soc/sof/imx/imx-common.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in sound/soc/sof/mediatek/mtk-adsp-common.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in sound/soc/sof/mediatek/mt8195/snd-sof-mt8195.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in sound/soc/sof/mediatek/mt8186/snd-sof-mt8186.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in sound/soc/sof/snd-sof-utils.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in sound/soc/sof/snd-sof-acpi.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in sound/soc/sof/snd-sof-of.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in sound/soc/sof/snd-sof-pci.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in sound/soc/xilinx/snd-soc-xlnx-i2s.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in sound/soc/xilinx/snd-soc-xlnx-formatter-pcm.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in sound/ac97_bus.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in samples/vfio-mdev/mtty.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in samples/vfio-mdev/mdpy.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in samples/vfio-mdev/mdpy-fb.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in samples/vfio-mdev/mbochs.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in samples/configfs/configfs_sample.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in samples/kfifo/bytestream-example.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in samples/kfifo/dma-example.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in samples/kfifo/inttype-example.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in samples/kfifo/record-example.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in samples/kobject/kobject-example.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in samples/kobject/kset-example.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in samples/kprobes/kprobe_example.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in samples/kprobes/kretprobe_example.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in samples/kmemleak/kmemleak-test.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in net/sched/em_cmp.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in net/sched/em_nbyte.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in net/sched/em_u32.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in net/sched/em_meta.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in net/sched/em_text.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in net/sched/em_canid.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in net/ipv4/ip_tunnel.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in net/ipv4/ipip.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in net/ipv4/ip_gre.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in net/ipv4/udp_tunnel.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in net/ipv4/ip_vti.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in net/ipv4/ah4.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in net/ipv4/esp4.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in net/ipv4/xfrm4_tunnel.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in net/ipv4/tunnel4.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in net/xfrm/xfrm_algo.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in net/xfrm/xfrm_user.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in net/ipv6/ah6.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in net/ipv6/esp6.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in net/ipv6/xfrm6_tunnel.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in net/ipv6/tunnel6.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in net/ipv6/mip6.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in net/ipv6/sit.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in net/ipv6/ip6_udp_tunnel.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in net/key/af_key.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in net/atm/mpoa.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in net/6lowpan/6lowpan.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in net/ieee802154/6lowpan/ieee802154_6lowpan.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in net/ieee802154/ieee802154_socket.o
-ERROR: modpost: "__popcountdi2" [fs/ext4/ext4.ko] undefined!
-ERROR: modpost: "__popcountdi2" [fs/jbd2/jbd2.ko] undefined!
-ERROR: modpost: "__popcountdi2" [fs/exfat/exfat.ko] undefined!
-ERROR: modpost: "__popcountdi2" [fs/nfs/nfs.ko] undefined!
-ERROR: modpost: "__popcountdi2" [fs/nfs/flexfilelayout/nfs_layout_flexfiles.ko] undefined!
-ERROR: modpost: "__popcountdi2" [fs/ntfs3/ntfs3.ko] undefined!
-ERROR: modpost: "__popcountdi2" [fs/ubifs/ubifs.ko] undefined!
-ERROR: modpost: "__popcountdi2" [fs/xfs/xfs.ko] undefined!
->> ERROR: modpost: "__popcountdi2" [fs/btrfs/btrfs.ko] undefined!
-ERROR: modpost: "__popcountdi2" [fs/f2fs/f2fs.ko] undefined!
-WARNING: modpost: suppressed 64 unresolved symbol warnings because there were too many)
+>> drivers/firewire/ohci.c:3138:2: warning: label followed by a declaration is a C23 extension [-Wc23-extensions]
+    3138 |         guard(spinlock_irq)(&ohci->lock);
+         |         ^
+   include/linux/cleanup.h:167:2: note: expanded from macro 'guard'
+     167 |         CLASS(_name, __UNIQUE_ID(guard))
+         |         ^
+   include/linux/cleanup.h:122:2: note: expanded from macro 'CLASS'
+     122 |         class_##_name##_t var __cleanup(class_##_name##_destructor) =   \
+         |         ^
+   <scratch space>:86:1: note: expanded from here
+      86 | class_spinlock_irq_t
+         | ^
+   1 warning generated.
+
+
+vim +3138 drivers/firewire/ohci.c
+
+  3059	
+  3060	static struct fw_iso_context *ohci_allocate_iso_context(struct fw_card *card,
+  3061					int type, int channel, size_t header_size)
+  3062	{
+  3063		struct fw_ohci *ohci = fw_ohci(card);
+  3064		struct iso_context *ctx;
+  3065		descriptor_callback_t callback;
+  3066		u64 *channels;
+  3067		u32 *mask, regs;
+  3068		int index, ret = -EBUSY;
+  3069	
+  3070		scoped_guard(spinlock_irq, &ohci->lock) {
+  3071			switch (type) {
+  3072			case FW_ISO_CONTEXT_TRANSMIT:
+  3073				mask     = &ohci->it_context_mask;
+  3074				callback = handle_it_packet;
+  3075				index    = ffs(*mask) - 1;
+  3076				if (index >= 0) {
+  3077					*mask &= ~(1 << index);
+  3078					regs = OHCI1394_IsoXmitContextBase(index);
+  3079					ctx  = &ohci->it_context_list[index];
+  3080				}
+  3081				break;
+  3082	
+  3083			case FW_ISO_CONTEXT_RECEIVE:
+  3084				channels = &ohci->ir_context_channels;
+  3085				mask     = &ohci->ir_context_mask;
+  3086				callback = handle_ir_packet_per_buffer;
+  3087				index    = *channels & 1ULL << channel ? ffs(*mask) - 1 : -1;
+  3088				if (index >= 0) {
+  3089					*channels &= ~(1ULL << channel);
+  3090					*mask     &= ~(1 << index);
+  3091					regs = OHCI1394_IsoRcvContextBase(index);
+  3092					ctx  = &ohci->ir_context_list[index];
+  3093				}
+  3094				break;
+  3095	
+  3096			case FW_ISO_CONTEXT_RECEIVE_MULTICHANNEL:
+  3097				mask     = &ohci->ir_context_mask;
+  3098				callback = handle_ir_buffer_fill;
+  3099				index    = !ohci->mc_allocated ? ffs(*mask) - 1 : -1;
+  3100				if (index >= 0) {
+  3101					ohci->mc_allocated = true;
+  3102					*mask &= ~(1 << index);
+  3103					regs = OHCI1394_IsoRcvContextBase(index);
+  3104					ctx  = &ohci->ir_context_list[index];
+  3105				}
+  3106				break;
+  3107	
+  3108			default:
+  3109				index = -1;
+  3110				ret = -ENOSYS;
+  3111			}
+  3112	
+  3113			if (index < 0)
+  3114				return ERR_PTR(ret);
+  3115		}
+  3116	
+  3117		memset(ctx, 0, sizeof(*ctx));
+  3118		ctx->header_length = 0;
+  3119		ctx->header = (void *) __get_free_page(GFP_KERNEL);
+  3120		if (ctx->header == NULL) {
+  3121			ret = -ENOMEM;
+  3122			goto out;
+  3123		}
+  3124		ret = context_init(&ctx->context, ohci, regs, callback);
+  3125		if (ret < 0)
+  3126			goto out_with_header;
+  3127	
+  3128		if (type == FW_ISO_CONTEXT_RECEIVE_MULTICHANNEL) {
+  3129			set_multichannel_mask(ohci, 0);
+  3130			ctx->mc_completed = 0;
+  3131		}
+  3132	
+  3133		return &ctx->base;
+  3134	
+  3135	 out_with_header:
+  3136		free_page((unsigned long)ctx->header);
+  3137	 out:
+> 3138		guard(spinlock_irq)(&ohci->lock);
+  3139	
+  3140		switch (type) {
+  3141		case FW_ISO_CONTEXT_RECEIVE:
+  3142			*channels |= 1ULL << channel;
+  3143			break;
+  3144	
+  3145		case FW_ISO_CONTEXT_RECEIVE_MULTICHANNEL:
+  3146			ohci->mc_allocated = false;
+  3147			break;
+  3148		}
+  3149		*mask |= 1 << index;
+  3150	
+  3151		return ERR_PTR(ret);
+  3152	}
+  3153	
 
 -- 
 0-DAY CI Kernel Test Service
