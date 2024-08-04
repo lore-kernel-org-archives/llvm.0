@@ -1,61 +1,65 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 54E3FB641;
-	Sun,  4 Aug 2024 11:14:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A333B61FDA;
+	Sun,  4 Aug 2024 15:11:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722770045; cv=none; b=MoXoXQHSHdWM/eIcgE0bMIT8FAYCHtGCGVrHxHZ1AAKnrpKPzjuLT56jwapsuEBxn1K4Ixol3LIkKu5ulsgYPeQWmvZIEt62oFdNzvOsHJ7iMBx+WgWiCGfVLsHLizAYWm9muYYrGjVv/1ENwfH2yR2QcyxayUgsuAd+/3nRYXY=
+	t=1722784310; cv=none; b=pjAoRCApwx2yg0v8LCbpLsZ8MIwsv6TgGBwUhMV4bjEV6LdqJezRM4zFcXr2YWzJX7bO9gGujamP351jtQvht5QV9shjQTscPQeSLabd5KvDzMTek6fnjEVOzxEFUvIZA6hPaKuOUdNg5TBWMFMdXkYCpoYslvUKa2vb0V5LtvQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722770045; c=relaxed/simple;
-	bh=ioIwD0o1sduzrWtKVUj1e8K+qYXxSjv2nF3EdoOaAco=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=et9Bs38MuV+1t0Q01vMoAoTg5RBiKEGp8c83swYUAA8Zl6dotdnXFgbhYEEnPxX7A/VO2ZdiNsVpviGijsNRGoYgOuRf7xjONgHQwzmuhhMBecSShhH5B3voNVpI6Ab5LsHMEWpAA9scRmOIXPINUIDdyVQ/gU1ia9sE9to+OkQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=BB3hgHOe; arc=none smtp.client-ip=192.198.163.19
+	s=arc-20240116; t=1722784310; c=relaxed/simple;
+	bh=Zhi1Y/og0cWe4Q4rMi/KieLjzrfywbdgNBTRJ/VZ1Cg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=PLPqDI6t535KU6kz09e+s00SzuFLpAVWQigA+6NQgTyi4KpvXoNCSjacr2d+ex6W5vzKBIX7bqEZkRZkv5uaqMFkn99gZOAL4Yh0bDRa8LUQmjrT+xPSyKVh4KKOw8NB1mIlPxWWPHoIfnkGJFEiuNXG7b10FGVGLkQPSA6puVs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=bUosQiuG; arc=none smtp.client-ip=192.198.163.13
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="BB3hgHOe"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="bUosQiuG"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1722770043; x=1754306043;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=ioIwD0o1sduzrWtKVUj1e8K+qYXxSjv2nF3EdoOaAco=;
-  b=BB3hgHOeFsdEfoWrAjRKQSM9jUniXL14Z1GNsTtqmZh/2YX9bJcBSVLu
-   Fe+Z/8joMWrLqUhbWR7ZlVvDQMQ3941xuhi9rVXDiB7CB2lDgJtX6qGP7
-   fqmkUxOg2FLzrkkzG4gzOBQXUof4dnnbBfO1TUsa8POXGutMZkStfKxID
-   nSpNiSAiScuRZKyAxBHdRz4s+0stxHUyDsSXMy/xj6gQvozKLkMLpAftI
-   ciHpatLNVVKP1M//9SXA4zM9MR6HBh+ITKayuCaoJlaOVDXlBqyrGSRen
-   wPf/y2o9/z4npJsaxjhejsK2fBRuwJZ79KiGuzvssUji8VBvtUKVDK27F
-   g==;
-X-CSE-ConnectionGUID: BjRAxv1kSKWhYT9ufJOm8w==
-X-CSE-MsgGUID: xCDkvViWS0qxlqfFamFQ1A==
-X-IronPort-AV: E=McAfee;i="6700,10204,11153"; a="20408740"
+  t=1722784308; x=1754320308;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Zhi1Y/og0cWe4Q4rMi/KieLjzrfywbdgNBTRJ/VZ1Cg=;
+  b=bUosQiuGZesceoc2Pn6lJxZxv6OepgqpvftGL6wiL5DnOLwyTDWAl2+k
+   ThAly7fvfp/lPLysXU92sO06oWhyyXkivAgBr69n/IgT/Aa8z0H/RU6Aw
+   oVcaiPOFB0UsXYzdITNoq4W5NQiUgffknioicX8xxQPuDNJ1ZXRvGngtZ
+   RF6X+qenK/7ERexVyOhK2pnPxcd5SCwOT7e4zBmgxAwNSsk+MjF7lb8wo
+   s+5HriX/2jyWxt1FdezOdTIIQjJzMJlS5le5tUzI6mywXJIarTwJ3dXhy
+   cQHLAod0LHVGCMEYw3h8j8iyTvn8LVS46EOGAYdDdtEC737Bd4AMLCtj1
+   w==;
+X-CSE-ConnectionGUID: Yy36hlkCRniDZDGypQqoow==
+X-CSE-MsgGUID: WhYpyytEQYuC6DA6rD3qrA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11154"; a="23660040"
 X-IronPort-AV: E=Sophos;i="6.09,262,1716274800"; 
-   d="scan'208";a="20408740"
-Received: from fmviesa009.fm.intel.com ([10.60.135.149])
-  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Aug 2024 04:14:02 -0700
-X-CSE-ConnectionGUID: YJM79CzaTLiTfJOXurynzA==
-X-CSE-MsgGUID: oukP7wRkSZKRIfIuWwt7lw==
+   d="scan'208";a="23660040"
+Received: from orviesa009.jf.intel.com ([10.64.159.149])
+  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Aug 2024 08:11:48 -0700
+X-CSE-ConnectionGUID: MRZcdSQqR8WQDWbR7wdhlw==
+X-CSE-MsgGUID: LNlWNa+gRM2fJwes5cZcNQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.09,262,1716274800"; 
-   d="scan'208";a="55839138"
+   d="scan'208";a="55838409"
 Received: from unknown (HELO b6bf6c95bbab) ([10.239.97.151])
-  by fmviesa009.fm.intel.com with ESMTP; 04 Aug 2024 04:14:01 -0700
+  by orviesa009.jf.intel.com with ESMTP; 04 Aug 2024 08:11:44 -0700
 Received: from kbuild by b6bf6c95bbab with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1saZBW-0001Q2-2Q;
-	Sun, 04 Aug 2024 11:13:58 +0000
-Date: Sun, 4 Aug 2024 19:13:11 +0800
+	id 1sactZ-0001Tl-2O;
+	Sun, 04 Aug 2024 15:11:41 +0000
+Date: Sun, 4 Aug 2024 23:11:03 +0800
 From: kernel test robot <lkp@intel.com>
-To: Michal Wajdeczko <michal.wajdeczko@intel.com>
+To: zhenghaowei@loongson.cn, gregkh@linuxfoundation.org,
+	jirislaby@kernel.org, robh@kernel.org, krzk+dt@kernel.org,
+	conor+dt@kernel.org, chenhuacai@kernel.org, kernel@xen0n.name,
+	p.zabel@pengutronix.de
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	David Gow <davidgow@google.com>
-Subject: ERROR: modpost: "__popcountdi2" [lib/kunit/kunit-example-test.ko]
- undefined!
-Message-ID: <202408041932.EzITeEV4-lkp@intel.com>
+	linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org,
+	devicetree@vger.kernel.org, loongarch@lists.linux.dev
+Subject: Re: [PATCH v2 2/3] tty: serial: 8250: Add loongson uart driver
+ support
+Message-ID: <202408042241.zkkSuA60-lkp@intel.com>
+References: <20240804063834.70022-2-zhenghaowei@loongson.cn>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -64,78 +68,71 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20240804063834.70022-2-zhenghaowei@loongson.cn>
 
-Hi Michal,
+Hi,
 
-First bad commit (maybe != root cause):
+kernel test robot noticed the following build errors:
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   17712b7ea0756799635ba159cc773082230ed028
-commit: ee5f8cc2770b2f0f7cfefb5bf7534e2859e39485 kunit: Reset test status on each param iteration
-date:   11 months ago
-config: riscv-randconfig-001-20240804 (https://download.01.org/0day-ci/archive/20240804/202408041932.EzITeEV4-lkp@intel.com/config)
+[auto build test ERROR on tty/tty-testing]
+[also build test ERROR on tty/tty-next tty/tty-linus robh/for-next usb/usb-testing usb/usb-next usb/usb-linus linus/master v6.11-rc1 next-20240802]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/zhenghaowei-loongson-cn/tty-serial-8250-Add-loongson-uart-driver-support/20240804-145047
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/tty.git tty-testing
+patch link:    https://lore.kernel.org/r/20240804063834.70022-2-zhenghaowei%40loongson.cn
+patch subject: [PATCH v2 2/3] tty: serial: 8250: Add loongson uart driver support
+config: mips-gpr_defconfig (https://download.01.org/0day-ci/archive/20240804/202408042241.zkkSuA60-lkp@intel.com/config)
 compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 423aec6573df4424f90555468128e17073ddc69e)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240804/202408041932.EzITeEV4-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240804/202408042241.zkkSuA60-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202408041932.EzITeEV4-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202408042241.zkkSuA60-lkp@intel.com/
 
-All errors (new ones prefixed by >>, old ones prefixed by <<):
+All errors (new ones prefixed by >>):
 
-WARNING: modpost: missing MODULE_DESCRIPTION() in vmlinux.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in kernel/locking/locktorture.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in kernel/locking/test-ww_mutex.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in kernel/rcu/rcutorture.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in kernel/rcu/rcuscale.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in kernel/rcu/refscale.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in kernel/time/time_test.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in kernel/torture.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in kernel/resource_kunit.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in kernel/sysctl-test.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in mm/dmapool_test.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in fs/nfs/nfsv4.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in fs/unicode/utf8-selftest.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in lib/kunit/kunit-test.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in lib/kunit/kunit-example-test.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in lib/math/rational-test.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in lib/test_hexdump.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in lib/find_bit_benchmark.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in lib/cpumask_kunit.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in lib/test_sysctl.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in lib/test_hash.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in lib/test_ida.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in lib/test-kstrtox.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in lib/test_list_sort.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in lib/test_sort.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in lib/test_printf.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in lib/test_scanf.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in lib/test_uuid.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in lib/test_maple_tree.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in lib/test_free_pages.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in lib/test_kprobes.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in lib/bitfield_kunit.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in lib/checksum_kunit.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in lib/list-test.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in lib/hashtable_test.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in lib/test_bits.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in lib/cmdline_kunit.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in lib/slub_kunit.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in lib/memcpy_kunit.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in lib/is_signed_type_kunit.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in lib/overflow_kunit.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in lib/stackinit_kunit.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in lib/fortify_kunit.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in lib/strcat_kunit.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in lib/strscpy_kunit.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in lib/siphash_kunit.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/clk/clk_test.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/clk/clk-gate_test.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/input/tests/input_test.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in net/core/dev_addr_lists_test.o
->> ERROR: modpost: "__popcountdi2" [lib/kunit/kunit-example-test.ko] undefined!
-ERROR: modpost: "__popcountdi2" [lib/test_hexdump.ko] undefined!
+   In file included from drivers/tty/serial/8250/8250_loongson.c:14:
+   In file included from drivers/tty/serial/8250/8250.h:11:
+   In file included from include/linux/serial_8250.h:11:
+   In file included from include/linux/serial_core.h:16:
+   In file included from include/linux/tty.h:11:
+   In file included from include/linux/tty_port.h:5:
+   In file included from include/linux/kfifo.h:40:
+   In file included from include/linux/dma-mapping.h:11:
+   In file included from include/linux/scatterlist.h:8:
+   In file included from include/linux/mm.h:2228:
+   include/linux/vmstat.h:514:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     514 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+>> drivers/tty/serial/8250/8250_loongson.c:200:21: error: call to undeclared function 'of_match_ptr'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     200 |                 .of_match_table = of_match_ptr(of_platform_serial_table),
+         |                                   ^
+>> drivers/tty/serial/8250/8250_loongson.c:200:21: error: incompatible integer to pointer conversion initializing 'const struct of_device_id *' with an expression of type 'int' [-Wint-conversion]
+     200 |                 .of_match_table = of_match_ptr(of_platform_serial_table),
+         |                                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>> drivers/tty/serial/8250/8250_loongson.c:200:21: error: initializer element is not a compile-time constant
+     200 |                 .of_match_table = of_match_ptr(of_platform_serial_table),
+         |                                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   1 warning and 3 errors generated.
+
+
+vim +/of_match_ptr +200 drivers/tty/serial/8250/8250_loongson.c
+
+   193	
+   194	static struct platform_driver loongson_uart_driver = {
+   195		.probe = loongson_uart_probe,
+   196		.remove = loongson_uart_remove,
+   197		.driver = {
+   198			.name = "ls7a-uart",
+   199			.pm = &loongson_uart_pm_ops,
+ > 200			.of_match_table = of_match_ptr(of_platform_serial_table),
+   201		},
+   202	};
+   203	
 
 -- 
 0-DAY CI Kernel Test Service
