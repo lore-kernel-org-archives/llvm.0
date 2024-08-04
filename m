@@ -1,101 +1,57 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from mail-40132.protonmail.ch (mail-40132.protonmail.ch [185.70.40.132])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0167B1DFE8
-	for <llvm@lists.linux.dev>; Sun,  4 Aug 2024 17:22:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C097C32C85
+	for <llvm@lists.linux.dev>; Sun,  4 Aug 2024 17:30:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.70.40.132
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722792131; cv=none; b=bqy83PpHirWrEo0UYBe/5w98t6xi9hNs24/lSwal+tiizSFEX+EKZwOko7Kf1tI3fLCb8snywlEeNBa5d4RyiVoXTk98hLYbmApfDngzjw0faMLGvgGQ9Qioj/yeqYhlRIWXWgO1IVgWlAIOcx1nJzeOVCQs37N3t+SLg+NjrHs=
+	t=1722792659; cv=none; b=H0wTN/mhuteaNklaUNEgrlxZL+5X+P0kUzJfSzjmPhAsv6lXkMZwUHOmM4XVnsGff4UI2gIueL8xvsMt70ejjIBuJtalRxSrR7NfM0DzE4o6VdGhXhavO/Gaitmee1F9iLoaemXSFB19OezSKolrxEd1S8BqCv1eDFwdOdQfnEI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722792131; c=relaxed/simple;
-	bh=fG6yFPkgOrKAbnfSKXhBNHQHRqLFMj6PkQ5KojSJaUI=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=VNGQASYA3Bgaj75CFGUWFgBp2kM5JSzWpEGAbACUvVEaxDoynBYfc7R1vxtfUnKcnJprAr28L6cA7d4ZCEIdSWlWE0BL26ORVIPaqhEkRiHyu0ILra3Lavgfn6fWP35OZRgqUYtJ04ftxN4CEUF96/e3eJXvWPsCv6Cvu5ursXk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=gclqyL63; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1722792659; c=relaxed/simple;
+	bh=NrpE9A7s9hUHaKVHxLNhBiSSsIr6DckW22aA06zNK4E=;
+	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=JB/i68ipBWe7cpY8j1iyv+65G6r1xGacD3YeVbTsE5wfhKmjoTT1AnyvDeA5lrHbuO56TLssfzHVpYhvUZcCcjJwwQYkr7xuC+U/qCQZKT2KnL358uwR+aC6zWUlWcePs1cIujjI9e3stxNfouU0RjYjew8CT9CAyeYoZ6HiXxE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=protonmail.com; spf=pass smtp.mailfrom=protonmail.com; dkim=pass (2048-bit key) header.d=protonmail.com header.i=@protonmail.com header.b=HSp+gB8E; arc=none smtp.client-ip=185.70.40.132
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=protonmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=protonmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="gclqyL63"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1722792128;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=gUQRzfgFbl1KHE+9NbypidqYDLoRVFXmrM4V+2F09Po=;
-	b=gclqyL63yy+OVnPSioXSO8nA9QO1+u2wgzMCk+l9g7hOQYaPodhQeLjMUxwGNHenIqJ/bh
-	R//PBajMElaatdgwPhXQ8A5/byazmMoJr9Qd3zP6U9IkQLbUfUwnlI5jrzpDJ4fOL4KQd0
-	fhM322+GmdM7sSxs77mkqGgsBsGzokM=
-Received: from mx-prod-mc-02.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-259-myxbhL9zO7Cj2gvmMckimg-1; Sun,
- 04 Aug 2024 13:22:06 -0400
-X-MC-Unique: myxbhL9zO7Cj2gvmMckimg-1
-Received: from mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.40])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-02.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id A52381955F43
-	for <llvm@lists.linux.dev>; Sun,  4 Aug 2024 17:22:05 +0000 (UTC)
-Received: from [172.64.4.38] (unknown [10.30.33.216])
-	by mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 13B50195605A;
-	Sun,  4 Aug 2024 17:22:04 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.11.0-rc1,
- mainline.kernel.org-clang, a5dbd76a)
-Date: Sun, 04 Aug 2024 17:22:04 -0000
-To: llvm@lists.linux.dev
+	dkim=pass (2048-bit key) header.d=protonmail.com header.i=@protonmail.com header.b="HSp+gB8E"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=protonmail.com;
+	s=protonmail3; t=1722792649; x=1723051849;
+	bh=NrpE9A7s9hUHaKVHxLNhBiSSsIr6DckW22aA06zNK4E=;
+	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
+	 Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
+	 Message-ID:BIMI-Selector;
+	b=HSp+gB8EyU82Vk117gQTbwX170moY/ocnxm6lT38LWWGvn/bSeax7qjo0mweBAQYv
+	 ZFZD9dIV2xtDesQrPDXeHOgVp7tIZXXz2Q1US9h7uF9hD+t3L/UN0F4qVW3pEH43Nb
+	 2AGUEzhDj18YjnaiaME6NyjKVKUc70jE5U7iUgVQY0vxT8g9S7h9/YCqoONNuwdFio
+	 pgHsf5LxyJCR37BLs6fxAhj29bpxzD2Y1rf3tlEqHgxp+UDUSSQuFbI2AVlO2OuUbU
+	 j9oOlrsFHZEK9MTVfflTswur62aBQlsWiLu33ZZY1XAgxSd2uaAcZKQ9+yYbSYV5Xn
+	 MFw8YzxsoZwGw==
+Date: Sun, 04 Aug 2024 17:30:43 +0000
+To: Thomas Gleixner <tglx@linutronix.de>
+From: Koakuma <koachan@protonmail.com>
+Cc: Koakuma via B4 Relay <devnull+koachan.protonmail.com@kernel.org>, "David S. Miller" <davem@davemloft.net>, Andreas Larsson <andreas@gaisler.com>, Andy Lutomirski <luto@kernel.org>, Vincenzo Frascino <vincenzo.frascino@arm.com>, Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, sparclinux@vger.kernel.org, linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH] sparc/vdso: Add helper function for 64-bit right shift on 32-bit target
+Message-ID: <Y5IejvnMTMbzucl5EK4C9ptWTnkPJlPJVKyCj1L1o2_2GPbmY5GZ55bKckWzKATaZcFF9SLCcvI4EMOhG3sifxCgEtkSdV2KDhv5jRBy9wk=@protonmail.com>
+In-Reply-To: <871q3470nn.ffs@tglx>
+References: <20240804-sparc-shr64-v1-1-25050968339a@protonmail.com> <871q3470nn.ffs@tglx>
+Feedback-ID: 6608610:user:proton
+X-Pm-Message-ID: 9858cf0fcd665db6b35828cfbd1ff9a85c1f0d11
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.40
-Message-Id: <60115.124080413220600533@us-mta-259.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
+Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
 
-Hi, we tested your kernel and here are the results:
+Thomas Gleixner <tglx@linutronix.de> wrote:
+> Why does this sparc'ism need to be in generic code?
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: FAILED
+Doesn't x86 also have a couple functions that live in math64.h anyway?
+That's why I thought it is fine to put it in there...
 
-
-Kernel information:
-    Commit message: Merge tag 'x86-urgent-2024-08-04' of git://git.kernel.o=
-rg/pub/scm/linux/kernel/git/tip/tip
-
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1400215885
-
-One or more kernel builds failed:
-    Unrecognized or new issues:
-         ppc64le - https://datawarehouse.cki-project.org/kcidb/builds/redha=
-t:1400215885-ppc64le-kernel
-           s390x - https://datawarehouse.cki-project.org/kcidb/builds/redha=
-t:1400215885-s390x-kernel
-          x86_64 (debug) - https://datawarehouse.cki-project.org/kcidb/buil=
-ds/redhat:1400215885-x86_64-kernel-debug
-
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+In any case, though, I am open to moving the function to sparc directory,
+if that is indeed the proper place for that function.
