@@ -1,101 +1,173 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 05DFF3C3C
-	for <llvm@lists.linux.dev>; Sun,  4 Aug 2024 02:42:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F40562F2E;
+	Sun,  4 Aug 2024 03:40:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722739331; cv=none; b=oaq4iaGjsIKZQXo/C19VJR9bGC1v1QdJq5mlklcgB8q2WEcKOHhJsQfeMuJSLD3P/ZobIPBtia1deQql09lm3WEjwt425xjg+4p+2KJNI/PCbDsKJdbol95mmDkWJJVqhyTnrZ1A7x2dfzSgjArtAQCuiF1+fVLCCuQkWvVyRBU=
+	t=1722742845; cv=none; b=OZoNkNr0iqVLSIBS2EDRdwF9lLzlSyxxs7rfgTrAZnlhx4UPVSfhAJAWWRJv2klsToePv4StQX04q0oJsQ7QTNURZxBhjiLxeHH91QiG3OjT6EOLxzEtj5WN1gdIzmGkLz/my5q8TOH4L/0W/aVQgq089TunMDblUUF2NpWUI3k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722739331; c=relaxed/simple;
-	bh=19VGXzd/mYqebQSLuufanMQNAdFiRWRoKDsc1DTFOk0=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=AqG23qNyjfVzF8vI57jXoE2olDbGgAOucXOFNYermB11rv2CnrmMy2ELnJkhBm2zJutlhebnwO4Yp9/3ZtiaHXlgpq4TWTP7+Oc9lcQGyxOCHX6d+TnZFQfVSTIj/BnIRc2dkEhGok30VZ7XybAz/1COMWjje0JeODK78X3Q38I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=AXqAnSm9; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1722742845; c=relaxed/simple;
+	bh=tTsJlsqt9PgjobXbGaWgUj5lIlY9CiKIWXIQpxm4yR8=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=ixsIXO7lT2XbwAl1nJZejK5VnkEwipkg9kNtlODpBgq3WNPQdjTDMTYsffHIhnUDPwbGwPm4A9A2BtXl63odf53GHd33preIccckSGcHCnY9F0v1PEZ64AWKFKJF9GZ9oMP7796duELEPnMqqYz9z39r6NI1Z0OCujDNnje9EQg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iAj7dy//; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="AXqAnSm9"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1722739327;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=xnOHXtmkgUesHeh4G8yKvtgS+zJmrskJ1kXtAxC8Sw0=;
-	b=AXqAnSm9ld9mU0Z1qxBDu9Ci4pmCA38pxuRYOIZXwy/zVVl6xX8y8vNjNJrm1N89GU2hy7
-	Rcpj9ihARa65VHTpW1+dRvLZ9IxoPJ6FzGsIWSeL7Y7SbXTlhNvOkfVMs9bxdlz5GWJiRj
-	bAV5i76QlXH+d3waJBSQx8ubt+/PJhs=
-Received: from mx-prod-mc-02.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-92-S4kCtuIdO0WPrBscuZqfBw-1; Sat,
- 03 Aug 2024 22:42:05 -0400
-X-MC-Unique: S4kCtuIdO0WPrBscuZqfBw-1
-Received: from mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.17])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-02.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 960A41955F3D
-	for <llvm@lists.linux.dev>; Sun,  4 Aug 2024 02:42:04 +0000 (UTC)
-Received: from [172.64.4.38] (unknown [10.30.33.216])
-	by mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 082D41955E7D;
-	Sun,  4 Aug 2024 02:42:03 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.11.0-rc1,
- mainline.kernel.org-clang, defaf1a2)
-Date: Sun, 04 Aug 2024 02:42:03 -0000
-To: llvm@lists.linux.dev
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iAj7dy//"
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 822E6C32786;
+	Sun,  4 Aug 2024 03:40:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1722742844;
+	bh=tTsJlsqt9PgjobXbGaWgUj5lIlY9CiKIWXIQpxm4yR8=;
+	h=From:Date:Subject:To:Cc:Reply-To:From;
+	b=iAj7dy//39uhNuW1ig3EEYyw5ji+po4WcI0mqcoWKEFq/0ItPjOKSiZ6FFmaGg+JU
+	 bxDfZxcbp+7IIhBWzLUqDx6Aol+eozg8TEuHCzuIPAdBH2WTBBuDfwNxCcU4d26V/P
+	 v7ERjDKk4jVQB54KRwlzhhy/roGFE3kz7lz2fgg83cgPUnNpdcNRI653g4lNwf7AsC
+	 L/QCkc4UORv3VIVVftQEJ4BO9hljiRe/+FF8aKJc0ldGWVznIQ/gALTC75EyjY7PFp
+	 c6jQs/5zlqWoBOcHjMdrkiMCXS7skFnEUsiracWQuLnnuV2KKNoxXKFRJKWiQhniat
+	 e3xc2FLHIIiYw==
+Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6F373C3DA7F;
+	Sun,  4 Aug 2024 03:40:44 +0000 (UTC)
+From: Koakuma via B4 Relay <devnull+koachan.protonmail.com@kernel.org>
+Date: Sun, 04 Aug 2024 10:39:49 +0700
+Subject: [PATCH] sparc/vdso: Add helper function for 64-bit right shift on
+ 32-bit target
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.17
-Message-Id: <10620.124080322420500217@us-mta-92.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 7bit
+Message-Id: <20240804-sparc-shr64-v1-1-25050968339a@protonmail.com>
+X-B4-Tracking: v=1; b=H4sIAAT4rmYC/x3MMQqAMAxA0atIZgtpKUa8ijgUjZpFSwIilN7d4
+ viG/wsYq7DB1BVQfsTkvhp838F6putgJ1szBAwRyZOznHR1duoQXdgRE41jJEJoRVbe5f1v81L
+ rB4OsFpBdAAAA
+To: "David S. Miller" <davem@davemloft.net>, 
+ Andreas Larsson <andreas@gaisler.com>, Andy Lutomirski <luto@kernel.org>, 
+ Thomas Gleixner <tglx@linutronix.de>, 
+ Vincenzo Frascino <vincenzo.frascino@arm.com>, 
+ Nathan Chancellor <nathan@kernel.org>, 
+ Nick Desaulniers <ndesaulniers@google.com>, 
+ Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>
+Cc: sparclinux@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ llvm@lists.linux.dev, Koakuma <koachan@protonmail.com>
+X-Mailer: b4 0.14.0
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1722742843; l=3316;
+ i=koachan@protonmail.com; s=20240620; h=from:subject:message-id;
+ bh=5vLiK7ELLqD1RRIEMvqkT4bYtvygqFoGLfpouZxp/Ns=;
+ b=VGHa0DUmTa67NoKaZwaMHf2po7TjbodTym97uTjAmdtk/iY/OmPZTEI5cVbFiZWWBQBEJKWku
+ Jhid1FM83fRAZ8JbZbH+jGYt7MRV1DsT9z8K7DrQRITNzWjcW7eIzDb
+X-Developer-Key: i=koachan@protonmail.com; a=ed25519;
+ pk=UA59FS3yiAA1cnAAUZ1rehTmr6skh95PgkNRBLcoKCg=
+X-Endpoint-Received: by B4 Relay for koachan@protonmail.com/20240620 with
+ auth_id=174
+X-Original-From: Koakuma <koachan@protonmail.com>
+Reply-To: koachan@protonmail.com
 
-Hi, we tested your kernel and here are the results:
+From: Koakuma <koachan@protonmail.com>
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: FAILED
+Add helper function for 64-bit right shift on 32-bit target so that
+clang does not emit a runtime library call.
 
+Signed-off-by: Koakuma <koachan@protonmail.com>
+---
+Hi~
 
-Kernel information:
-    Commit message: Merge tag 'scsi-fixes' of git://git.kernel.org/pub/scm/=
-linux/kernel/git/jejb/scsi
+This adds a small function to do 64-bit right shifts for use in vDSO
+code, needed so that clang does not emit a call to runtime library.
+---
+ arch/sparc/vdso/vclock_gettime.c |  8 ++++----
+ include/vdso/math64.h            | 28 ++++++++++++++++++++++++++++
+ 2 files changed, 32 insertions(+), 4 deletions(-)
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1399808145
+diff --git a/arch/sparc/vdso/vclock_gettime.c b/arch/sparc/vdso/vclock_gettime.c
+index e794edde6755..c0251a632bdb 100644
+--- a/arch/sparc/vdso/vclock_gettime.c
++++ b/arch/sparc/vdso/vclock_gettime.c
+@@ -154,7 +154,7 @@ notrace static __always_inline int do_realtime(struct vvar_data *vvar,
+ 		ts->tv_sec = vvar->wall_time_sec;
+ 		ns = vvar->wall_time_snsec;
+ 		ns += vgetsns(vvar);
+-		ns >>= vvar->clock.shift;
++		ns = __shr64(ns, vvar->clock.shift);
+ 	} while (unlikely(vvar_read_retry(vvar, seq)));
+ 
+ 	ts->tv_sec += __iter_div_u64_rem(ns, NSEC_PER_SEC, &ns);
+@@ -174,7 +174,7 @@ notrace static __always_inline int do_realtime_stick(struct vvar_data *vvar,
+ 		ts->tv_sec = vvar->wall_time_sec;
+ 		ns = vvar->wall_time_snsec;
+ 		ns += vgetsns_stick(vvar);
+-		ns >>= vvar->clock.shift;
++		ns = __shr64(ns, vvar->clock.shift);
+ 	} while (unlikely(vvar_read_retry(vvar, seq)));
+ 
+ 	ts->tv_sec += __iter_div_u64_rem(ns, NSEC_PER_SEC, &ns);
+@@ -194,7 +194,7 @@ notrace static __always_inline int do_monotonic(struct vvar_data *vvar,
+ 		ts->tv_sec = vvar->monotonic_time_sec;
+ 		ns = vvar->monotonic_time_snsec;
+ 		ns += vgetsns(vvar);
+-		ns >>= vvar->clock.shift;
++		ns = __shr64(ns, vvar->clock.shift);
+ 	} while (unlikely(vvar_read_retry(vvar, seq)));
+ 
+ 	ts->tv_sec += __iter_div_u64_rem(ns, NSEC_PER_SEC, &ns);
+@@ -214,7 +214,7 @@ notrace static __always_inline int do_monotonic_stick(struct vvar_data *vvar,
+ 		ts->tv_sec = vvar->monotonic_time_sec;
+ 		ns = vvar->monotonic_time_snsec;
+ 		ns += vgetsns_stick(vvar);
+-		ns >>= vvar->clock.shift;
++		ns = __shr64(ns, vvar->clock.shift);
+ 	} while (unlikely(vvar_read_retry(vvar, seq)));
+ 
+ 	ts->tv_sec += __iter_div_u64_rem(ns, NSEC_PER_SEC, &ns);
+diff --git a/include/vdso/math64.h b/include/vdso/math64.h
+index 22ae212f8b28..771d84faa8d7 100644
+--- a/include/vdso/math64.h
++++ b/include/vdso/math64.h
+@@ -21,6 +21,34 @@ __iter_div_u64_rem(u64 dividend, u32 divisor, u64 *remainder)
+ 	return ret;
+ }
+ 
++#if BITS_PER_LONG == 32
++/* This is to prevent the compiler from emitting a call to __lshrdi3. */
++static __always_inline u64
++__shr64(u64 val, int amt)
++{
++	u32 mask = (1U << amt) - 1;
++	u32 lo = val;
++	u32 hi = val >> 32;
++	u32 mi;
++
++	if (amt >= 32)
++		return hi >> (amt - 32);
++
++
++	mi = (hi & mask) << (32 - amt);
++	hi >>= amt;
++	lo = (lo >> amt) | mi;
++
++	return ((u64) hi) << 32 | lo;
++}
++#else
++static __always_inline u64
++__shr64(u64 val, int amt)
++{
++	return val >> amt;
++}
++#endif /* BITS_PER_LONG == 32 */
++
+ #if defined(CONFIG_ARCH_SUPPORTS_INT128) && defined(__SIZEOF_INT128__)
+ 
+ #ifndef mul_u64_u32_add_u64_shr
 
-One or more kernel builds failed:
-    Unrecognized or new issues:
-         ppc64le - https://datawarehouse.cki-project.org/kcidb/builds/redha=
-t:1399808145-ppc64le-kernel
-           s390x - https://datawarehouse.cki-project.org/kcidb/builds/redha=
-t:1399808145-s390x-kernel
-          x86_64 (debug) - https://datawarehouse.cki-project.org/kcidb/buil=
-ds/redhat:1399808145-x86_64-kernel-debug
+---
+base-commit: defaf1a2113a22b00dfa1abc0fd2014820eaf065
+change-id: 20240717-sparc-shr64-2f00a7884770
 
+Best regards,
+-- 
+Koakuma <koachan@protonmail.com>
 
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
 
