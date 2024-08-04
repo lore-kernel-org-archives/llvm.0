@@ -1,129 +1,82 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3FDAB79C2;
-	Sun,  4 Aug 2024 18:04:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D92263CB
+	for <llvm@lists.linux.dev>; Sun,  4 Aug 2024 19:16:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722794689; cv=none; b=FZCtwPDFXG0zqMM9YOPgCj3IIb64Z7D1zN0Qd3tvzQVMEDG1kjVptlfdcnyJCBbgdFDtY2VsGBxZ8NKeyCRbyrQJktj+SCiCJeTCb3ZaYaFnus/oJx+b9RZj+2hTvbctNYaatjdnC4pb1Q++GF89k924HfqSPFlsoN+85E3pQ68=
+	t=1722799009; cv=none; b=KYNC+WB2infhd1qJZvq9HbiZrtP/aQ5ClKIR8zRWfOzKObZNOC2qmphfmEHcGgL0vkEZbaQYPMvX2GDSD/I13PzyqODfJJhh6AKxAh4aId826XGXguLu0SZDD/20brvOQ1+1mhykrcv+w3jfCTM7pMvCsTibo5XipMhg7aPbwsY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722794689; c=relaxed/simple;
-	bh=elODJ8vsHIYapmcSvAT74UzNVi3bbdW6jjOI53xPYzM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=NO4qZwCu725oM5sB9ztfgCvQlKQ9+PyBMyKx4H6phJByk61IgvsrH1TCuot4Ae9N43xNZ3dvdx7eg5fnPMgqMU+gFdbkuSs4SsYw1Z6R7Or56RFnsnjWP+cr9A2uwpTWZ/T7tJGLIyGDXVTvc33i1OvN+9pGqIU5SNeLvhg28jI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=uayii9cy; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1722799009; c=relaxed/simple;
+	bh=l7+erS5UQeOqcyD+eTBREFeT9yuScxFrP8dGxndw1S0=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=OSdodH/WTGAriFT+prsFgU6IFJnsvjzwJQuPjp6HQNvH1zZL3puq4soFcW4BdQn8IOZQ4Asig/esa0X2U1RNKXBMB8dhXcXgjgpd/db3QcZLrLUIpNJFgTKyx/LPkF7ukWoB9yMNsdcwLVBFh2lpRgJLkFqzbK9iPLtetUNJwz8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=tlkPkAhe; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=ZPfLHY9p; arc=none smtp.client-ip=193.142.43.55
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="uayii9cy"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A99DDC32786;
-	Sun,  4 Aug 2024 18:04:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1722794689;
-	bh=elODJ8vsHIYapmcSvAT74UzNVi3bbdW6jjOI53xPYzM=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=uayii9cyBM5g6VF/mW2LFN1qi96/mVdyjGbPb/iClXe7g4KJsRy4tS8BuMvi+xcM3
-	 OKM/FOskw6UYwU8LEF2L0PJpP9GgiUlbZEM6KaFvoLFqr1q9rGPko5/1Fig4YYbP8U
-	 /lFOYxu6CUSHV9Ee8Qr/nzzF7SqSuk2cPAAEi2vCnlnmTi3Sg2NjVEyU3+YSVO9zcC
-	 5xzp2ttlLEWuYjJEbYi4cTACqTuTEJeQ9RHqiby4aMs2CGHOJLZim4wItv1Y5NaEFL
-	 4R/wTBz5fLahj/N5Lq19n37F34i/tUaHiqmdzY26v6ZMzKVQbqvSRGYhVg5ef0hT2r
-	 Aj2qF26YbhDjQ==
-Date: Sun, 4 Aug 2024 11:04:47 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Miguel Ojeda <ojeda@kernel.org>
-Cc: Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>, llvm@lists.linux.dev,
-	linux-kernel@vger.kernel.org, patches@lists.linux.dev
-Subject: Re: [PATCH 5/5] Compiler Attributes: make version constraints more
- consistent
-Message-ID: <20240804180447.GE2627063@thelio-3990X>
-References: <20240803171933.483316-1-ojeda@kernel.org>
- <20240803171933.483316-5-ojeda@kernel.org>
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="tlkPkAhe";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="ZPfLHY9p"
+From: Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020; t=1722799006;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=1hT4RsXjcr24UFgRDoW9KNmLIfwaA8bAOKgEc4/mRzA=;
+	b=tlkPkAheTwov5UrNWDc0Zngh5B95C2rZYC/KnX7PMRWtNTUkAdXL0dP9I6heicycrWznWq
+	gz73ZIoX0SA+8K7CznO8Wv7WpYNYSvzGJ/v5PJd3Pj0wM5pEk803wFr5UjjMF7PJoruFYm
+	pntLgd+kjYV2H4LvLCNvtTttPLH44sz3+QzuNreVLfjIQmQ0cLy78XdnfR3Vlj4gvBn/f0
+	D0J1i3XX/QmTZNqPBcMMIJQyqLpSAai0K/f+z42qPqIvP0yLw86ThhXGfUXMIe9W4Jpgru
+	JA8RIqUgXhBJ9uxjnWg0AuS/Wup+C8ef1kruvlBDMrSAmj6d0QGhmkbKOpj+Ug==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020e; t=1722799006;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=1hT4RsXjcr24UFgRDoW9KNmLIfwaA8bAOKgEc4/mRzA=;
+	b=ZPfLHY9p8dQTXBMOy6UJgEObprWxJFu0JYkNpcztf0tsbM1rmnGsvfPF1GvmJNDqUHSeh7
+	2VNJ5D+nwgpJQ+Ag==
+To: Koakuma <koachan@protonmail.com>
+Cc: Koakuma via B4 Relay <devnull+koachan.protonmail.com@kernel.org>, "David
+ S. Miller" <davem@davemloft.net>, Andreas Larsson <andreas@gaisler.com>,
+ Andy Lutomirski <luto@kernel.org>, Vincenzo Frascino
+ <vincenzo.frascino@arm.com>, Nathan Chancellor <nathan@kernel.org>, Nick
+ Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>,
+ Justin Stitt <justinstitt@google.com>, sparclinux@vger.kernel.org,
+ linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH] sparc/vdso: Add helper function for 64-bit right shift
+ on 32-bit target
+In-Reply-To: <Y5IejvnMTMbzucl5EK4C9ptWTnkPJlPJVKyCj1L1o2_2GPbmY5GZ55bKckWzKATaZcFF9SLCcvI4EMOhG3sifxCgEtkSdV2KDhv5jRBy9wk=@protonmail.com>
+References: <20240804-sparc-shr64-v1-1-25050968339a@protonmail.com>
+ <871q3470nn.ffs@tglx>
+ <Y5IejvnMTMbzucl5EK4C9ptWTnkPJlPJVKyCj1L1o2_2GPbmY5GZ55bKckWzKATaZcFF9SLCcvI4EMOhG3sifxCgEtkSdV2KDhv5jRBy9wk=@protonmail.com>
+Date: Sun, 04 Aug 2024 21:16:45 +0200
+Message-ID: <87y15c5c9u.ffs@tglx>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240803171933.483316-5-ojeda@kernel.org>
+Content-Type: text/plain
 
-On Sat, Aug 03, 2024 at 07:19:33PM +0200, Miguel Ojeda wrote:
-> Over time, some version constraints have been added that did not follow
-> the formatting of the rest. Fix it for consistency.
-> 
-> Some of the version requirements can be simplified, too.
-> 
-> Signed-off-by: Miguel Ojeda <ojeda@kernel.org>
+On Sun, Aug 04 2024 at 17:30, Koakuma wrote:
+> Thomas Gleixner <tglx@linutronix.de> wrote:
+>> Why does this sparc'ism need to be in generic code?
+>
+> Doesn't x86 also have a couple functions that live in math64.h anyway?
 
-Yeah, I think just having the major version is reasonable, especially
-since Clang has moved to GCC's version scheme of x.0 for main, x.1 for
-release.
+No. Both functions are used in the generic lib/vdso/ code.
 
-Reviewed-by: Nathan Chancellor <nathan@kernel.org>
+> That's why I thought it is fine to put it in there...
+>
+> In any case, though, I am open to moving the function to sparc directory,
+> if that is indeed the proper place for that function.
 
-> ---
->  include/linux/compiler_attributes.h | 12 ++++++------
->  1 file changed, 6 insertions(+), 6 deletions(-)
-> 
-> diff --git a/include/linux/compiler_attributes.h b/include/linux/compiler_attributes.h
-> index a6e8c9406f7a..908e59e261c0 100644
-> --- a/include/linux/compiler_attributes.h
-> +++ b/include/linux/compiler_attributes.h
-> @@ -112,7 +112,7 @@
->  
->  /*
->   * Optional: not supported by gcc
-> - * Optional: only supported since clang >= 14.0
-> + * Optional: only supported since clang >= 14
->   *
->   * clang: https://clang.llvm.org/docs/AttributeReference.html#diagnose_as_builtin
->   */
-> @@ -146,7 +146,7 @@
->  #endif
->  
->  /*
-> - * Optional: only supported since clang >= 14.0
-> + * Optional: only supported since clang >= 14
->   *
->   *   gcc: https://gcc.gnu.org/onlinedocs/gcc/Common-Function-Attributes.html#index-error-function-attribute
->   * clang: https://clang.llvm.org/docs/AttributeReference.html#error-warning
-> @@ -262,7 +262,7 @@
->  #endif
->  
->  /*
-> - * Optional: only supported since GCC >= 7.1
-> + * Optional: only supported since gcc >= 7
->   *
->   *   gcc: https://gcc.gnu.org/onlinedocs/gcc/Common-Function-Attributes.html#index-no_005fprofile_005finstrument_005ffunction-function-attribute
->   * clang: https://clang.llvm.org/docs/AttributeReference.html#no-profile-instrument-function
-> @@ -280,7 +280,7 @@
->  #define __noreturn                      __attribute__((__noreturn__))
->  
->  /*
-> - * Optional: only supported since GCC >= 11.1
-> + * Optional: only supported since gcc >= 11
->   *
->   *   gcc: https://gcc.gnu.org/onlinedocs/gcc/Common-Function-Attributes.html#index-no_005fstack_005fprotector-function-attribute
->   * clang: https://clang.llvm.org/docs/AttributeReference.html#no-stack-protector-safebuffers
-> @@ -388,7 +388,7 @@
->  #define __must_check                    __attribute__((__warn_unused_result__))
->  
->  /*
-> - * Optional: only supported since clang >= 14.0
-> + * Optional: only supported since clang >= 14
->   *
->   *   gcc: https://gcc.gnu.org/onlinedocs/gcc/Common-Function-Attributes.html#index-warning-function-attribute
->   * clang: https://clang.llvm.org/docs/AttributeReference.html#error-warning
-> @@ -400,7 +400,7 @@
->  #endif
->  
->  /*
-> - * Optional: only supported since clang >= 14.0
-> + * Optional: only supported since clang >= 14
->   *
->   * clang: https://clang.llvm.org/docs/AttributeReference.html#disable-sanitizer-instrumentation
->   *
-> -- 
-> 2.46.0
-> 
+I think so as sparc is having it's own VDSO implementation and does not
+use the generic one.
+
+Thanks,
+
+        tglx
