@@ -1,62 +1,60 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 602D16D1B9;
-	Sat,  3 Aug 2024 22:59:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 64245A34;
+	Sun,  4 Aug 2024 00:20:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722725952; cv=none; b=H76C2s+tG1klkulvDcVHbcasKIhV2c1LtOSqpsL9DZ36d8FfD42rJyfDwlJX2oK5NwKoxHUE/g0W75uU96Lrbm7kQN3sAwSIG+GM8lMYAnmsLS8bcHcOuvUh8k/tgQiw0UCZnhOmtROvC11uXFH69POoDt4XXKzE34Gs9cgDOXQ=
+	t=1722730841; cv=none; b=Q9YAu+m6TGw/qIq5FHXHqARO6ovZQT0tLjExjcsk/C0QCr6yFD4RrGkX5De50G0/8tP8VX78YQXnGICQ3Hzw2FBft6wn/wbEZZ+2BjHhkkF1eWcH5ejxWnRhibqPyOgGFNBCSyJVPhtwAD6u7USng9Q6uGRHFIDtMs+HU8FMXb4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722725952; c=relaxed/simple;
-	bh=7vd6bAHUCHPNdoz1T/kNUu0ljp7Jwf7gWlE8XxSW/Vk=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=UFG8nkADhD1BVyQxjAnYzdBCRpr89r887NsIYO034e/FQwy/A967zHsEAgju7OUEi6oTUmMnswPRBPuHIKQwcNtA1TCQv//XVPGZJzLyY/UkFhABxB6BQ/wZ1cmnLM3XeDcYCPsVW00n/PrsKwf2Cxfu7OPCmi595kg0dtpl/Lc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=WwOCS5c/; arc=none smtp.client-ip=192.198.163.16
+	s=arc-20240116; t=1722730841; c=relaxed/simple;
+	bh=kzpuoBaFLAJSQoNJN1WQ03FgQ2X2daLpqvaGqAL3XHQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=olEPyGf+ncSRZI9eH23p+w/j7Z0aumdlA+zErUQ1LQtBoqeQAa2vk7/mqrTNp3++1aKRffS9XZ4eLx3mCJ5eJZyK1U+aKoikA5mtwvJkXeThz+Jw/uE6hD1nzMIn4gGV2W4k8aZlVDFzKOWOnc/c32tFwhX1dj013brt23FKQ2E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=GmrQ3Jbi; arc=none smtp.client-ip=192.198.163.19
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="WwOCS5c/"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="GmrQ3Jbi"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1722725951; x=1754261951;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=7vd6bAHUCHPNdoz1T/kNUu0ljp7Jwf7gWlE8XxSW/Vk=;
-  b=WwOCS5c/sBzDXjFBr66VWSXGbkNivHplEb8e1b4bYNthzmWI9/Ytx0o1
-   WmkvI9MxKuqL46FA1LlBIxmCvTysKVLVYade3VDaMs80nmdVeXKSU8f25
-   2rkyQP70DHZLUOw1Htu5kkd4CFj2abrP63pYkCzy5HsCcmR3R/KObCe+W
-   a+K+2Z80PPqHixFHHD5nuK8Yozmc117pGNt0HkT7glqf2Ny02mITzqjwa
-   fnTc9p3Ghh6xsdGVy1ekNMr0Y/SZnW6wzK/CLkwvW9kS+GWRhXlWwJ8NA
-   zftR2CJxc+EsvCcw/rNKPgG4BdXUrWcsChs1wdmGPQFSL9jscSP+m97kY
-   Q==;
-X-CSE-ConnectionGUID: HNxa0q9uQCqxqYHsj7VR8A==
-X-CSE-MsgGUID: iZStMQodR42UyCkPW/ymdA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11153"; a="12860597"
+  t=1722730838; x=1754266838;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=kzpuoBaFLAJSQoNJN1WQ03FgQ2X2daLpqvaGqAL3XHQ=;
+  b=GmrQ3Jbi2zR7wK2w0/BSNaVOc5B5GAHegn8nzfxuKoBY7g72LwhMUWf+
+   8cSTDZ/R16p/Vr5b6JrOIABVdKMjGSJeKYZ+hYaggD6bIIi6wIEAEDfzW
+   UPaWstKv/ebZgVk96d0gWqNxTFxiGdN0fvijo8P5vcULopBTPvGVxUXjN
+   nzWDvAmMm6dpQtzkhT6Uz2WV1ORqBEPaVLep0Yc/dVg4MrztZvrnTk5Fh
+   EVtvEtDjuzVUot/mx3wTs4Qtrh7+ykJ9nmWuA+VOktUcox/yGvzAC+1IP
+   E8pooPxZbqDyU+nF8yqj4WxtlFg3SBWh0vq36XZqLe10434yC+76Nkiee
+   g==;
+X-CSE-ConnectionGUID: mjcHke8yQjGXDWGr8HywJA==
+X-CSE-MsgGUID: JrZqSyWBScieXu0kMiN01g==
+X-IronPort-AV: E=McAfee;i="6700,10204,11153"; a="20392068"
 X-IronPort-AV: E=Sophos;i="6.09,261,1716274800"; 
-   d="scan'208";a="12860597"
-Received: from orviesa007.jf.intel.com ([10.64.159.147])
-  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Aug 2024 15:59:10 -0700
-X-CSE-ConnectionGUID: KKSv+4XuSUS5gBxAo5DiNw==
-X-CSE-MsgGUID: XMKLH5vmQOis/XOZjpa9rg==
+   d="scan'208";a="20392068"
+Received: from fmviesa003.fm.intel.com ([10.60.135.143])
+  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Aug 2024 17:20:37 -0700
+X-CSE-ConnectionGUID: wPnI9P3gR1ucjhfOOoC6tA==
+X-CSE-MsgGUID: Jm8EQ4kjT9iF+UUDwN14MA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.09,261,1716274800"; 
-   d="scan'208";a="56375841"
+   d="scan'208";a="59930598"
 Received: from unknown (HELO b6bf6c95bbab) ([10.239.97.151])
-  by orviesa007.jf.intel.com with ESMTP; 03 Aug 2024 15:59:08 -0700
+  by fmviesa003.fm.intel.com with ESMTP; 03 Aug 2024 17:20:37 -0700
 Received: from kbuild by b6bf6c95bbab with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1saNiL-00010o-0F;
-	Sat, 03 Aug 2024 22:59:05 +0000
-Date: Sun, 4 Aug 2024 06:58:48 +0800
+	id 1saOzC-000126-2j;
+	Sun, 04 Aug 2024 00:20:34 +0000
+Date: Sun, 4 Aug 2024 08:20:34 +0800
 From: kernel test robot <lkp@intel.com>
-To: Mounik Katikala <mounik.katikala@amd.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, git@amd.com,
-	Michal Simek <monstr@monstr.eu>,
-	Vishal Sagar <vishal.sagar@amd.com>
-Subject: [xilinx-xlnx:xlnx_rebase_v6.6_LTS 1076/1093]
- drivers/media/platform/xilinx/xilinx-isppipeline.c:582:11: error: call to
- undeclared function 'FIELD_PREP'; ISO C99 and later do not support implicit
- function declarations
-Message-ID: <202408040604.GRM891tZ-lkp@intel.com>
+To: Bartosz Golaszewski <brgl@bgdev.pl>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: Re: [PATCH RFC 2/2] Bluetooth: hci_qca: use
+ devm_clk_get_optional_enabled_with_rate()
+Message-ID: <202408040825.VVKPcQKv-lkp@intel.com>
+References: <20240801-clk-new-helper-v1-2-81e9338b7b17@linaro.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -65,242 +63,213 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20240801-clk-new-helper-v1-2-81e9338b7b17@linaro.org>
 
-tree:   https://github.com/Xilinx/linux-xlnx xlnx_rebase_v6.6_LTS
-head:   868286d51b5753a66ab89c1c899510c6047b998d
-commit: 4bb3a1e83a07aa7e02851f53298c1102fa37a28e [1076/1093] v4l: xilinx: isppipeline: Add support for Gain Control
-config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20240804/202408040604.GRM891tZ-lkp@intel.com/config)
+Hi Bartosz,
+
+[This is a private test report for your RFC patch.]
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on 048d8cb65cde9fe7534eb4440bcfddcf406bb49c]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Bartosz-Golaszewski/clk-provide-devm_clk_get_optional_enabled_with_rate/20240803-013509
+base:   048d8cb65cde9fe7534eb4440bcfddcf406bb49c
+patch link:    https://lore.kernel.org/r/20240801-clk-new-helper-v1-2-81e9338b7b17%40linaro.org
+patch subject: [PATCH RFC 2/2] Bluetooth: hci_qca: use devm_clk_get_optional_enabled_with_rate()
+config: i386-randconfig-013-20240804 (https://download.01.org/0day-ci/archive/20240804/202408040825.VVKPcQKv-lkp@intel.com/config)
 compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240804/202408040604.GRM891tZ-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240804/202408040825.VVKPcQKv-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202408040604.GRM891tZ-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202408040825.VVKPcQKv-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
-   drivers/media/platform/xilinx/xilinx-isppipeline.c:477:27: error: call to undeclared function 'FIELD_GET'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     477 |         bool in_type_conf_gain = XGET_BIT(XISP_IN_TYPE_INDEX, xisp->module_conf);
+>> drivers/bluetooth/hci_qca.c:2429:20: error: call to undeclared function 'devm_clk_get_optional_enabled_with_rate'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+    2429 |                 qcadev->susclk = devm_clk_get_optional_enabled_with_rate(
          |                                  ^
-   drivers/media/platform/xilinx/xilinx-isppipeline.c:153:36: note: expanded from macro 'XGET_BIT'
-     153 | #define XGET_BIT(bitmask, reg)    (FIELD_GET(BIT(bitmask), (reg)))
-         |                                    ^
->> drivers/media/platform/xilinx/xilinx-isppipeline.c:582:11: error: call to undeclared function 'FIELD_PREP'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     582 |                                      (FIELD_PREP(GENMASK(XISP_UPPER_WORD_MSB,
-         |                                       ^
-   drivers/media/platform/xilinx/xilinx-isppipeline.c:592:11: error: call to undeclared function 'FIELD_PREP'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     592 |                                      (FIELD_PREP(GENMASK(XISP_UPPER_WORD_MSB,
-         |                                       ^
-   drivers/media/platform/xilinx/xilinx-isppipeline.c:602:11: error: call to undeclared function 'FIELD_PREP'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     602 |                                      (FIELD_PREP(GENMASK(XISP_UPPER_WORD_MSB,
-         |                                       ^
-   drivers/media/platform/xilinx/xilinx-isppipeline.c:1094:7: error: call to undeclared function 'FIELD_GET'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-    1094 |                 if (FIELD_GET(BIT(XISP_RGBIR_INDEX), xisp->module_en))
-         |                     ^
-   drivers/media/platform/xilinx/xilinx-isppipeline.c:1435:18: error: call to undeclared function 'FIELD_GET'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-    1435 |         bool en_index = XGET_BIT(index, xisp->module_en);
-         |                         ^
-   drivers/media/platform/xilinx/xilinx-isppipeline.c:153:36: note: expanded from macro 'XGET_BIT'
-     153 | #define XGET_BIT(bitmask, reg)    (FIELD_GET(BIT(bitmask), (reg)))
-         |                                    ^
-   drivers/media/platform/xilinx/xilinx-isppipeline.c:1557:7: error: call to undeclared function 'FIELD_GET'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-    1557 |                 if (XGET_BIT(XISP_CCM_INDEX, xisp->module_en))
-         |                     ^
-   drivers/media/platform/xilinx/xilinx-isppipeline.c:153:36: note: expanded from macro 'XGET_BIT'
-     153 | #define XGET_BIT(bitmask, reg)    (FIELD_GET(BIT(bitmask), (reg)))
-         |                                    ^
-   7 errors generated.
+   drivers/bluetooth/hci_qca.c:2429:20: note: did you mean 'devm_clk_get_optional_enabled'?
+   include/linux/clk.h:1005:27: note: 'devm_clk_get_optional_enabled' declared here
+    1005 | static inline struct clk *devm_clk_get_optional_enabled(struct device *dev,
+         |                           ^
+>> drivers/bluetooth/hci_qca.c:2429:18: error: incompatible integer to pointer conversion assigning to 'struct clk *' from 'int' [-Wint-conversion]
+    2429 |                 qcadev->susclk = devm_clk_get_optional_enabled_with_rate(
+         |                                ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    2430 |                                         &serdev->dev, NULL, SUSCLK_RATE_32KHZ);
+         |                                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   2 errors generated.
 
 
-vim +/FIELD_PREP +582 drivers/media/platform/xilinx/xilinx-isppipeline.c
+vim +/devm_clk_get_optional_enabled_with_rate +2429 drivers/bluetooth/hci_qca.c
 
-   469	
-   470	static int xisp_s_ctrl(struct v4l2_ctrl *ctrl)
-   471	{
-   472		struct xisp_dev *xisp =
-   473			container_of(ctrl->handler,
-   474				     struct xisp_dev, ctrl_handler);
-   475		bool degamma_enabled, degamma_bypass_enabled, degamma_bypass;
-   476		bool ccm_enabled, ccm_bypass_enabled, ccm_bypass;
-   477		bool in_type_conf_gain = XGET_BIT(XISP_IN_TYPE_INDEX, xisp->module_conf);
-   478	
-   479		switch (ctrl->id) {
-   480		case V4L2_CID_XILINX_ISP_AEC_EN:
-   481			xisp->module_bypass = xisp_module_bypass(xisp->module_bypass,
-   482								 XISP_AEC_INDEX, ctrl->val);
-   483			xvip_write(&xisp->xvip, XISP_FUNCS_BYPASS_CONFIG_REG, xisp->module_bypass);
-   484			break;
-   485		case V4L2_CID_XILINX_ISP_AEC_THRESHOLD:
-   486			xisp->threshold_aec = ctrl->val;
-   487			XISP_SET_CFG(XISP_AEC_INDEX, XISP_AEC_CONFIG_REG, xisp->threshold_aec);
-   488			break;
-   489		case V4L2_CID_XILINX_ISP_AWB_EN:
-   490			xisp->module_bypass = xisp_module_bypass(xisp->module_bypass,
-   491								 XISP_AWB_INDEX, ctrl->val);
-   492			xvip_write(&xisp->xvip, XISP_FUNCS_BYPASS_CONFIG_REG, xisp->module_bypass);
-   493			break;
-   494		case V4L2_CID_XILINX_ISP_AWB_THRESHOLD:
-   495			xisp->threshold_awb = ctrl->val;
-   496			XISP_SET_CFG(XISP_AWB_INDEX, XISP_AWB_CONFIG_REG, xisp->threshold_awb);
-   497			break;
-   498		case V4L2_CID_XILINX_ISP_BLC_EN:
-   499			xisp->module_bypass = xisp_module_bypass(xisp->module_bypass,
-   500								 XISP_BLC_INDEX, ctrl->val);
-   501			xvip_write(&xisp->xvip, XISP_FUNCS_BYPASS_CONFIG_REG, xisp->module_bypass);
-   502			break;
-   503		case V4L2_CID_XILINX_ISP_MULTI_FACTOR:
-   504			xisp->mult_factor = ctrl->val;
-   505			XISP_SET_CFG(XISP_BLC_INDEX, XISP_BLC_CONFIG_1_REG, xisp->mult_factor);
-   506			break;
-   507		case V4L2_CID_BLACK_LEVEL:
-   508			xisp->black_level = ctrl->val;
-   509			XISP_SET_CFG(XISP_BLC_INDEX, XISP_BLC_CONFIG_2_REG, xisp->black_level);
-   510			break;
-   511		case V4L2_CID_XILINX_ISP_BPC_EN:
-   512			xisp->module_bypass = xisp_module_bypass(xisp->module_bypass,
-   513								 XISP_BPC_INDEX, ctrl->val);
-   514			xvip_write(&xisp->xvip, XISP_FUNCS_BYPASS_CONFIG_REG, xisp->module_bypass);
-   515			break;
-   516		case V4L2_CID_XILINX_ISP_RGBIR_EN:
-   517			xisp->module_bypass = xisp_module_bypass(xisp->module_bypass,
-   518								 XISP_RGBIR_INDEX, ctrl->val);
-   519			xvip_write(&xisp->xvip, XISP_FUNCS_BYPASS_CONFIG_REG, xisp->module_bypass);
-   520			break;
-   521		case V4L2_CID_XILINX_ISP_DEGAMMA_EN:
-   522			xisp->module_bypass = xisp_module_bypass(xisp->module_bypass,
-   523								 XISP_DEGAMMA_INDEX, ctrl->val);
-   524			xvip_write(&xisp->xvip, XISP_FUNCS_BYPASS_CONFIG_REG, xisp->module_bypass);
-   525			break;
-   526		case V4L2_CID_XILINX_ISP_DEGAMMA_PARAMS:
-   527			xisp->degamma_select = ctrl->val;
-   528			degamma_enabled = XGET_BIT(XISP_DEGAMMA_INDEX, xisp->module_en);
-   529			degamma_bypass_enabled = XGET_BIT(XISP_DEGAMMA_INDEX, xisp->module_bypass_en);
-   530			degamma_bypass = XGET_BIT(XISP_DEGAMMA_INDEX, xisp->module_bypass);
-   531	
-   532			if (degamma_enabled)
-   533				if (!degamma_bypass_enabled || !(degamma_bypass_enabled &&
-   534								 degamma_bypass)) {
-   535					xisp->degamma_lut = xisp_degamma_choices[xisp->degamma_select];
-   536					xisp_set_degamma_entries(xisp, XISP_DEGAMMA_CONFIG_BASE,
-   537								 xisp->degamma_lut);
-   538				}
-   539			break;
-   540		case V4L2_CID_XILINX_ISP_LSC_EN:
-   541			xisp->module_bypass = xisp_module_bypass(xisp->module_bypass,
-   542								 XISP_LSC_INDEX, ctrl->val);
-   543			xvip_write(&xisp->xvip, XISP_FUNCS_BYPASS_CONFIG_REG, xisp->module_bypass);
-   544			break;
-   545		case V4L2_CID_XILINX_ISP_DEMOSAIC_EN:
-   546			xisp->module_bypass = xisp_module_bypass(xisp->module_bypass,
-   547								 XISP_DEMOSAIC_INDEX, ctrl->val);
-   548			xvip_write(&xisp->xvip, XISP_FUNCS_BYPASS_CONFIG_REG, xisp->module_bypass);
-   549			break;
-   550		case V4L2_CID_XILINX_ISP_CCM_EN:
-   551			xisp->module_bypass = xisp_module_bypass(xisp->module_bypass,
-   552								 XISP_CCM_INDEX, ctrl->val);
-   553			xvip_write(&xisp->xvip, XISP_FUNCS_BYPASS_CONFIG_REG, xisp->module_bypass);
-   554			break;
-   555		case V4L2_CID_XILINX_ISP_CCM_PARAMS:
-   556			xisp->ccm_select = ctrl->val;
-   557	
-   558			ccm_enabled = XGET_BIT(XISP_CCM_INDEX, xisp->module_en);
-   559			ccm_bypass_enabled = XGET_BIT(XISP_CCM_INDEX, xisp->module_bypass_en);
-   560			ccm_bypass = XGET_BIT(XISP_CCM_INDEX, xisp->module_bypass);
-   561	
-   562			if (ccm_enabled)
-   563				if (!ccm_bypass_enabled || !(ccm_bypass_enabled && ccm_bypass)) {
-   564					xisp->ccm_matrix_lut = xisp_ccm_matrix_choices[xisp->ccm_select];
-   565					xisp->ccm_offsetarray_lut =
-   566					xisp_ccm_offsetarray_choices[xisp->ccm_select];
-   567					xisp_set_ccm_matrix_entries(xisp, XISP_CCM_CONFIG_1_BASE,
-   568								    XISP_CCM_CONFIG_2_BASE,
-   569								    xisp->ccm_matrix_lut,
-   570								    xisp->ccm_offsetarray_lut);
-   571				}
-   572			break;
-   573		case V4L2_CID_XILINX_ISP_GAIN_EN:
-   574			xisp->module_bypass = xisp_module_bypass(xisp->module_bypass,
-   575								 XISP_GAIN_INDEX, ctrl->val);
-   576			xvip_write(&xisp->xvip, XISP_FUNCS_BYPASS_CONFIG_REG, xisp->module_bypass);
-   577			break;
-   578		case V4L2_CID_XILINX_ISP_GAIN_CONTROL_RED_GAIN:
-   579			xisp->rgain = ctrl->val;
-   580			if (in_type_conf_gain) {
-   581				XISP_SET_CFG(XISP_GAIN_INDEX, XISP_GAIN_CONTROL_CONFIG_1_REG,
- > 582					     (FIELD_PREP(GENMASK(XISP_UPPER_WORD_MSB,
-   583								 XISP_UPPER_WORD_LSB),
-   584								 xisp->bgain)) |
-   585								 xisp->rgain);
-   586			}
-   587			break;
-   588		case V4L2_CID_XILINX_ISP_GAIN_CONTROL_BLUE_GAIN:
-   589			xisp->bgain = ctrl->val;
-   590			if (in_type_conf_gain) {
-   591				XISP_SET_CFG(XISP_GAIN_INDEX, XISP_GAIN_CONTROL_CONFIG_1_REG,
-   592					     (FIELD_PREP(GENMASK(XISP_UPPER_WORD_MSB,
-   593								 XISP_UPPER_WORD_LSB),
-   594								 xisp->bgain)) |
-   595								 xisp->rgain);
-   596			}
-   597			break;
-   598		case V4L2_CID_XILINX_ISP_GAIN_CONTROL_GREEN_GAIN:
-   599			xisp->ggain = ctrl->val;
-   600			if (in_type_conf_gain) {
-   601				XISP_SET_CFG(XISP_GAIN_INDEX, XISP_GAIN_CONTROL_CONFIG_2_REG,
-   602					     (FIELD_PREP(GENMASK(XISP_UPPER_WORD_MSB,
-   603								 XISP_UPPER_WORD_LSB),
-   604								 xisp->bayer_fmt)) |
-   605								 xisp->ggain);
-   606			}
-   607			break;
-   608		case V4L2_CID_XILINX_ISP_LUMA_GAIN:
-   609			xisp->luma_gain = ctrl->val;
-   610			if (!in_type_conf_gain)
-   611				XISP_SET_CFG(XISP_GAIN_INDEX, XISP_GAIN_CONTROL_CONFIG_1_REG,
-   612					     xisp->luma_gain);
-   613			break;
-   614		case V4L2_CID_XILINX_ISP_RED_GAIN:
-   615			xisp->rgain = ctrl->val;
-   616			xvip_write(&xisp->xvip, XISP_RGAIN_REG, xisp->rgain);
-   617			break;
-   618		case V4L2_CID_XILINX_ISP_BLUE_GAIN:
-   619			xisp->bgain = ctrl->val;
-   620			xvip_write(&xisp->xvip, XISP_BGAIN_REG, xisp->bgain);
-   621			break;
-   622		case V4L2_CID_XILINX_ISP_AWB:
-   623			xisp->mode_reg = ctrl->val;
-   624			xvip_write(&xisp->xvip, XISP_MODE_REG, xisp->mode_reg);
-   625			break;
-   626		case V4L2_CID_XILINX_ISP_THRESHOLD:
-   627			xisp->pawb = ctrl->val;
-   628			xvip_write(&xisp->xvip, XISP_PAWB_REG, xisp->pawb);
-   629			break;
-   630		case V4L2_CID_XILINX_ISP_RED_GAMMA:
-   631			select_gamma(ctrl->val, &xisp->red_lut, xisp->gamma_table);
-   632			dev_dbg(xisp->xvip.dev, "Setting Red Gamma to %d.%d",
-   633				ctrl->val / 10, ctrl->val % 10);
-   634			xisp_set_lut_entries(xisp, xisp->red_lut, XISP_GAMMA_RED_REG);
-   635			break;
-   636		case V4L2_CID_XILINX_ISP_GREEN_GAMMA:
-   637			select_gamma(ctrl->val, &xisp->green_lut, xisp->gamma_table);
-   638			dev_dbg(xisp->xvip.dev, "Setting Green Gamma to %d.%d",
-   639				ctrl->val / 10, ctrl->val % 10);
-   640			xisp_set_lut_entries(xisp, xisp->green_lut, XISP_GAMMA_GREEN_REG);
-   641			break;
-   642		case V4L2_CID_XILINX_ISP_BLUE_GAMMA:
-   643			select_gamma(ctrl->val, &xisp->blue_lut, xisp->gamma_table);
-   644			dev_dbg(xisp->xvip.dev, "Setting Blue Gamma to %d.%d",
-   645				ctrl->val / 10, ctrl->val % 10);
-   646			xisp_set_lut_entries(xisp, xisp->blue_lut, XISP_GAMMA_BLUE_REG);
-   647			break;
-   648		default:
-   649			return -EINVAL;
-   650		}
-   651	
-   652		return 0;
-   653	}
-   654	
+  2299	
+  2300	static int qca_serdev_probe(struct serdev_device *serdev)
+  2301	{
+  2302		struct qca_serdev *qcadev;
+  2303		struct hci_dev *hdev;
+  2304		const struct qca_device_data *data;
+  2305		int err;
+  2306		bool power_ctrl_enabled = true;
+  2307	
+  2308		qcadev = devm_kzalloc(&serdev->dev, sizeof(*qcadev), GFP_KERNEL);
+  2309		if (!qcadev)
+  2310			return -ENOMEM;
+  2311	
+  2312		qcadev->serdev_hu.serdev = serdev;
+  2313		data = device_get_match_data(&serdev->dev);
+  2314		serdev_device_set_drvdata(serdev, qcadev);
+  2315		device_property_read_string(&serdev->dev, "firmware-name",
+  2316						 &qcadev->firmware_name);
+  2317		device_property_read_u32(&serdev->dev, "max-speed",
+  2318					 &qcadev->oper_speed);
+  2319		if (!qcadev->oper_speed)
+  2320			BT_DBG("UART will pick default operating speed");
+  2321	
+  2322		qcadev->bdaddr_property_broken = device_property_read_bool(&serdev->dev,
+  2323				"qcom,local-bd-address-broken");
+  2324	
+  2325		if (data)
+  2326			qcadev->btsoc_type = data->soc_type;
+  2327		else
+  2328			qcadev->btsoc_type = QCA_ROME;
+  2329	
+  2330		switch (qcadev->btsoc_type) {
+  2331		case QCA_WCN3988:
+  2332		case QCA_WCN3990:
+  2333		case QCA_WCN3991:
+  2334		case QCA_WCN3998:
+  2335		case QCA_WCN6750:
+  2336		case QCA_WCN6855:
+  2337		case QCA_WCN7850:
+  2338		case QCA_QCA6390:
+  2339			qcadev->bt_power = devm_kzalloc(&serdev->dev,
+  2340							sizeof(struct qca_power),
+  2341							GFP_KERNEL);
+  2342			if (!qcadev->bt_power)
+  2343				return -ENOMEM;
+  2344			break;
+  2345		default:
+  2346			break;
+  2347		}
+  2348	
+  2349		switch (qcadev->btsoc_type) {
+  2350		case QCA_WCN6855:
+  2351		case QCA_WCN7850:
+  2352			if (!device_property_present(&serdev->dev, "enable-gpios")) {
+  2353				/*
+  2354				 * Backward compatibility with old DT sources. If the
+  2355				 * node doesn't have the 'enable-gpios' property then
+  2356				 * let's use the power sequencer. Otherwise, let's
+  2357				 * drive everything outselves.
+  2358				 */
+  2359				qcadev->bt_power->pwrseq = devm_pwrseq_get(&serdev->dev,
+  2360									   "bluetooth");
+  2361				if (IS_ERR(qcadev->bt_power->pwrseq))
+  2362					return PTR_ERR(qcadev->bt_power->pwrseq);
+  2363	
+  2364				break;
+  2365			}
+  2366			fallthrough;
+  2367		case QCA_WCN3988:
+  2368		case QCA_WCN3990:
+  2369		case QCA_WCN3991:
+  2370		case QCA_WCN3998:
+  2371		case QCA_WCN6750:
+  2372			qcadev->bt_power->dev = &serdev->dev;
+  2373			err = qca_init_regulators(qcadev->bt_power, data->vregs,
+  2374						  data->num_vregs);
+  2375			if (err) {
+  2376				BT_ERR("Failed to init regulators:%d", err);
+  2377				return err;
+  2378			}
+  2379	
+  2380			qcadev->bt_power->vregs_on = false;
+  2381	
+  2382			qcadev->bt_en = devm_gpiod_get_optional(&serdev->dev, "enable",
+  2383						       GPIOD_OUT_LOW);
+  2384			if (IS_ERR(qcadev->bt_en) &&
+  2385			    (data->soc_type == QCA_WCN6750 ||
+  2386			     data->soc_type == QCA_WCN6855)) {
+  2387				dev_err(&serdev->dev, "failed to acquire BT_EN gpio\n");
+  2388				return PTR_ERR(qcadev->bt_en);
+  2389			}
+  2390	
+  2391			if (!qcadev->bt_en)
+  2392				power_ctrl_enabled = false;
+  2393	
+  2394			qcadev->sw_ctrl = devm_gpiod_get_optional(&serdev->dev, "swctrl",
+  2395						       GPIOD_IN);
+  2396			if (IS_ERR(qcadev->sw_ctrl) &&
+  2397			    (data->soc_type == QCA_WCN6750 ||
+  2398			     data->soc_type == QCA_WCN6855 ||
+  2399			     data->soc_type == QCA_WCN7850)) {
+  2400				dev_err(&serdev->dev, "failed to acquire SW_CTRL gpio\n");
+  2401				return PTR_ERR(qcadev->sw_ctrl);
+  2402			}
+  2403	
+  2404			qcadev->susclk = devm_clk_get_optional(&serdev->dev, NULL);
+  2405			if (IS_ERR(qcadev->susclk)) {
+  2406				dev_err(&serdev->dev, "failed to acquire clk\n");
+  2407				return PTR_ERR(qcadev->susclk);
+  2408			}
+  2409			break;
+  2410	
+  2411		case QCA_QCA6390:
+  2412			qcadev->bt_power->pwrseq = devm_pwrseq_get(&serdev->dev,
+  2413								   "bluetooth");
+  2414			if (IS_ERR(qcadev->bt_power->pwrseq))
+  2415				return PTR_ERR(qcadev->bt_power->pwrseq);
+  2416			break;
+  2417	
+  2418		default:
+  2419			qcadev->bt_en = devm_gpiod_get_optional(&serdev->dev, "enable",
+  2420						       GPIOD_OUT_LOW);
+  2421			if (IS_ERR(qcadev->bt_en)) {
+  2422				dev_err(&serdev->dev, "failed to acquire enable gpio\n");
+  2423				return PTR_ERR(qcadev->bt_en);
+  2424			}
+  2425	
+  2426			if (!qcadev->bt_en)
+  2427				power_ctrl_enabled = false;
+  2428	
+> 2429			qcadev->susclk = devm_clk_get_optional_enabled_with_rate(
+  2430						&serdev->dev, NULL, SUSCLK_RATE_32KHZ);
+  2431			if (IS_ERR(qcadev->susclk)) {
+  2432				dev_warn(&serdev->dev, "failed to acquire clk\n");
+  2433				return PTR_ERR(qcadev->susclk);
+  2434			}
+  2435		}
+  2436		
+  2437		err = hci_uart_register_device(&qcadev->serdev_hu, &qca_proto);
+  2438		if (err) {
+  2439			BT_ERR("serdev registration failed");
+  2440			return err;
+  2441		}
+  2442	
+  2443		hdev = qcadev->serdev_hu.hdev;
+  2444	
+  2445		if (power_ctrl_enabled) {
+  2446			set_bit(HCI_QUIRK_NON_PERSISTENT_SETUP, &hdev->quirks);
+  2447			hdev->shutdown = qca_power_off;
+  2448		}
+  2449	
+  2450		if (data) {
+  2451			/* Wideband speech support must be set per driver since it can't
+  2452			 * be queried via hci. Same with the valid le states quirk.
+  2453			 */
+  2454			if (data->capabilities & QCA_CAP_WIDEBAND_SPEECH)
+  2455				set_bit(HCI_QUIRK_WIDEBAND_SPEECH_SUPPORTED,
+  2456					&hdev->quirks);
+  2457	
+  2458			if (data->capabilities & QCA_CAP_VALID_LE_STATES)
+  2459				set_bit(HCI_QUIRK_VALID_LE_STATES, &hdev->quirks);
+  2460		}
+  2461	
+  2462		return 0;
+  2463	}
+  2464	
 
 -- 
 0-DAY CI Kernel Test Service
