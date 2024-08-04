@@ -1,57 +1,84 @@
-Received: from mail-40132.protonmail.ch (mail-40132.protonmail.ch [185.70.40.132])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C097C32C85
-	for <llvm@lists.linux.dev>; Sun,  4 Aug 2024 17:30:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.70.40.132
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D2EF379C2;
+	Sun,  4 Aug 2024 17:54:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722792659; cv=none; b=H0wTN/mhuteaNklaUNEgrlxZL+5X+P0kUzJfSzjmPhAsv6lXkMZwUHOmM4XVnsGff4UI2gIueL8xvsMt70ejjIBuJtalRxSrR7NfM0DzE4o6VdGhXhavO/Gaitmee1F9iLoaemXSFB19OezSKolrxEd1S8BqCv1eDFwdOdQfnEI=
+	t=1722794086; cv=none; b=t1QnXRxHUlALMF3Chg+UIz8J7qdlAsFA7FbfDF4CUgGUGN60IlP0EFptywXFcnGs67KgUQ/VCCr+BQNumA4/N2tgIRWMxO5M1MJx1HDP/UhRprQUWt52nS/yABxrnNOULXsXWgE+a7Ez0SnWf16Sjj6FkKShzktu+5qQTszww5s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722792659; c=relaxed/simple;
-	bh=NrpE9A7s9hUHaKVHxLNhBiSSsIr6DckW22aA06zNK4E=;
-	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=JB/i68ipBWe7cpY8j1iyv+65G6r1xGacD3YeVbTsE5wfhKmjoTT1AnyvDeA5lrHbuO56TLssfzHVpYhvUZcCcjJwwQYkr7xuC+U/qCQZKT2KnL358uwR+aC6zWUlWcePs1cIujjI9e3stxNfouU0RjYjew8CT9CAyeYoZ6HiXxE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=protonmail.com; spf=pass smtp.mailfrom=protonmail.com; dkim=pass (2048-bit key) header.d=protonmail.com header.i=@protonmail.com header.b=HSp+gB8E; arc=none smtp.client-ip=185.70.40.132
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=protonmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=protonmail.com
+	s=arc-20240116; t=1722794086; c=relaxed/simple;
+	bh=CiZr9g0FV8fPACr6xthb7JjGo6m95xlIky84HIGH0NE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=J/6E0HIFPAqGhN/6k2CjorRwajR6HQWZdJlThvIqXNOPeJP3KgmCOU41W3TBICDrXsyUKeio9Uj0tODgODxxNHcb8V5/k7nI5lFSV1OD+Ad8jjMsWmZcAokYV8dFqWTVW3ge6hbjBF/ts512Vm/yZX4w9m/GdvT7Iq9enmSq30k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=rlRkwqE9; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=protonmail.com header.i=@protonmail.com header.b="HSp+gB8E"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=protonmail.com;
-	s=protonmail3; t=1722792649; x=1723051849;
-	bh=NrpE9A7s9hUHaKVHxLNhBiSSsIr6DckW22aA06zNK4E=;
-	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
-	 Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
-	 Message-ID:BIMI-Selector;
-	b=HSp+gB8EyU82Vk117gQTbwX170moY/ocnxm6lT38LWWGvn/bSeax7qjo0mweBAQYv
-	 ZFZD9dIV2xtDesQrPDXeHOgVp7tIZXXz2Q1US9h7uF9hD+t3L/UN0F4qVW3pEH43Nb
-	 2AGUEzhDj18YjnaiaME6NyjKVKUc70jE5U7iUgVQY0vxT8g9S7h9/YCqoONNuwdFio
-	 pgHsf5LxyJCR37BLs6fxAhj29bpxzD2Y1rf3tlEqHgxp+UDUSSQuFbI2AVlO2OuUbU
-	 j9oOlrsFHZEK9MTVfflTswur62aBQlsWiLu33ZZY1XAgxSd2uaAcZKQ9+yYbSYV5Xn
-	 MFw8YzxsoZwGw==
-Date: Sun, 04 Aug 2024 17:30:43 +0000
-To: Thomas Gleixner <tglx@linutronix.de>
-From: Koakuma <koachan@protonmail.com>
-Cc: Koakuma via B4 Relay <devnull+koachan.protonmail.com@kernel.org>, "David S. Miller" <davem@davemloft.net>, Andreas Larsson <andreas@gaisler.com>, Andy Lutomirski <luto@kernel.org>, Vincenzo Frascino <vincenzo.frascino@arm.com>, Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, sparclinux@vger.kernel.org, linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH] sparc/vdso: Add helper function for 64-bit right shift on 32-bit target
-Message-ID: <Y5IejvnMTMbzucl5EK4C9ptWTnkPJlPJVKyCj1L1o2_2GPbmY5GZ55bKckWzKATaZcFF9SLCcvI4EMOhG3sifxCgEtkSdV2KDhv5jRBy9wk=@protonmail.com>
-In-Reply-To: <871q3470nn.ffs@tglx>
-References: <20240804-sparc-shr64-v1-1-25050968339a@protonmail.com> <871q3470nn.ffs@tglx>
-Feedback-ID: 6608610:user:proton
-X-Pm-Message-ID: 9858cf0fcd665db6b35828cfbd1ff9a85c1f0d11
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="rlRkwqE9"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4678AC32786;
+	Sun,  4 Aug 2024 17:54:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1722794085;
+	bh=CiZr9g0FV8fPACr6xthb7JjGo6m95xlIky84HIGH0NE=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=rlRkwqE9XJor4TjmfM8E5NuhU5zMgaEKFsoFYuA52Y27VVChXATSX4jYYyx0p5Zdg
+	 4glpsGU9A/W0pGGvRfhztSYi1M3jhBPptB+os8gDA5SByQs9n5YZNiFsHztHjYr1kT
+	 udmDb9eujXaL88YzoQc2D8rxn+ldYRvUFjowMl0GxSFq/mq4/yjagzNrhYuFOtywZx
+	 JrZ4OWGQvtfcqnSVv1wdJ4ZaIkX8mU8VhV3TMd33S22hS/ZHAud50DP7lh1C5V7385
+	 xGiRQvbaXqCAlwOqKzWhSg7VcZIaaxzbx/zI6673egnziRTiFEcblUAAoNX5RtUUvC
+	 N3x382hZeysLA==
+Date: Sun, 4 Aug 2024 10:54:43 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Miguel Ojeda <ojeda@kernel.org>
+Cc: Nick Desaulniers <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>, llvm@lists.linux.dev,
+	linux-kernel@vger.kernel.org, patches@lists.linux.dev
+Subject: Re: [PATCH 1/5] Compiler Attributes: update GCC and Clang's
+ `counted_by` URLs
+Message-ID: <20240804175443.GA2627063@thelio-3990X>
+References: <20240803171933.483316-1-ojeda@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240803171933.483316-1-ojeda@kernel.org>
 
-Thomas Gleixner <tglx@linutronix.de> wrote:
-> Why does this sparc'ism need to be in generic code?
+On Sat, Aug 03, 2024 at 07:19:29PM +0200, Miguel Ojeda wrote:
+> Clang 18 was released with support for `counted_by`, thus point to the
+> documentation now instead of the implementation PR.
+> 
+> Similarly, GCC's bugzilla issue is now closed and GCC has a documentation
+> page for it.
+> 
+> Signed-off-by: Miguel Ojeda <ojeda@kernel.org>
 
-Doesn't x86 also have a couple functions that live in math64.h anyway?
-That's why I thought it is fine to put it in there...
+Reviewed-by: Nathan Chancellor <nathan@kernel.org>
 
-In any case, though, I am open to moving the function to sparc directory,
-if that is indeed the proper place for that function.
+> ---
+>  include/linux/compiler_attributes.h | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/include/linux/compiler_attributes.h b/include/linux/compiler_attributes.h
+> index 32284cd26d52..b658136e6cda 100644
+> --- a/include/linux/compiler_attributes.h
+> +++ b/include/linux/compiler_attributes.h
+> @@ -98,8 +98,8 @@
+>   * Optional: only supported since gcc >= 15
+>   * Optional: only supported since clang >= 18
+>   *
+> - *   gcc: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=108896
+> - * clang: https://github.com/llvm/llvm-project/pull/76348
+> + *   gcc: https://gcc.gnu.org/onlinedocs/gcc/Common-Variable-Attributes.html#index-counted_005fby-variable-attribute
+> + * clang: https://clang.llvm.org/docs/AttributeReference.html#counted-by
+>   */
+>  #if __has_attribute(__counted_by__)
+>  # define __counted_by(member)		__attribute__((__counted_by__(member)))
+> 
+> base-commit: 8400291e289ee6b2bf9779ff1c83a291501f017b
+> -- 
+> 2.46.0
+> 
