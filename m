@@ -1,58 +1,58 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A674F131BDF;
-	Mon,  5 Aug 2024 16:33:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1BF6515EFBD;
+	Mon,  5 Aug 2024 17:26:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722875592; cv=none; b=R/IxZOMNI0nP1Y+FE4b4vX5pShakbzxnwkqmQMqfFP0dp57h3TcuOUEvsy3W1X7I9mveMSlGJZc3Dc7xtKZZRuDoXnkC9NEP1vWnDmN47poa7414m6VxMDixIGztXt+LQ92DRTALr2I6VDQlgw1Xl6bpBX42FlwVK+LowsnPVqg=
+	t=1722878802; cv=none; b=qOHzugujk52FEF5340yS4gICryUKm5oCR7JZAiaLM0lIB2dVBNNbgajU0uBTdGMjM0xH2OCRsf/sPP23Azw1im8uqh4klmG7lzeRO93YMJZo1I78/CsYqHH/MzXp/vUpZs8L+4BlWKv7G5IU4Bkod+N+8qvOD/RrQFTiYR4dDw8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722875592; c=relaxed/simple;
-	bh=HLra3pOX4rLuYZsE8N+OeO0Hvt3DmFzvBG3GfN2GKTk=;
+	s=arc-20240116; t=1722878802; c=relaxed/simple;
+	bh=uj/lzg9Ic52LjVCjBfzRv99OxofUNAoJUju8cbg43bs=;
 	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=AL50gYgCbldYRtmnBSW6012t+AURlLAldvZwpDohUtYGQ1O7tYOiYFP+9/UuQ90gVot45HaTEuXzU9FojLbIQoe5/LT1U71txrKqiVnANL7T7my2aKUH/LD79B5R7dqcuyv1j6Zv2g6mjpJZIkZiNMRUDgDp59RkKtxlZvJb/7k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=PYJALKRI; arc=none smtp.client-ip=192.198.163.9
+	 Content-Disposition; b=qO/gz2umH5OmJsl+vKTO+is7s6BhWC5/js6pjYkc+EC2mUsg7q2dR/IKFwHzraQShgUjTboMtBHwvSZTlvQnrBr1737vzNlVJdEAA0Mn/L88mEW0WzH+okUx8UOwElnXa6wTNIJVFcamN4+bl1hSsbwCh9zkC6j9yfy0LZNh5MI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=l37EVoqV; arc=none smtp.client-ip=192.198.163.11
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="PYJALKRI"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="l37EVoqV"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1722875591; x=1754411591;
+  t=1722878800; x=1754414800;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=HLra3pOX4rLuYZsE8N+OeO0Hvt3DmFzvBG3GfN2GKTk=;
-  b=PYJALKRINJG+gSxBZFNAwsXahNm5ZyH6PfcjNMDQQQg1WSZAuc/KR+cb
-   dcphWo/g/tH9FZBt7dTlw7FvqFYtvXmmLERRneI9/QEBJ1xtb8hKrE1Sg
-   mMVeFux8+ClgLKv9/3ZxZxoiJ9nvqonMP17Uieu6BNLa2L2S3a5chLBOv
-   GD5kixNo7DSdL04fqVLlsCv06eTKNsxlydlldKiio5pFEOM9aMeZxGYuw
-   zZC2OxKnJX0DJIhVQwwvegcLTdVswsue14EpDEO2mqybeRa14SA9hYciy
-   BxC/mXTonMOiiTI4aauvuUD/nKWH9bywSnXVV8qXt/EM1xiQ56EXSydUr
-   Q==;
-X-CSE-ConnectionGUID: 0wDiTWkvSiuvq1V4GxRzBw==
-X-CSE-MsgGUID: rrlB/pmHRYmACv/U4cDHYA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11155"; a="31512667"
+  bh=uj/lzg9Ic52LjVCjBfzRv99OxofUNAoJUju8cbg43bs=;
+  b=l37EVoqVCJwfDMBCepTRkOqgF8x9VnmJ+2Bon3gCH3Vlv2rLY/P4kfcs
+   0dwti9be63SeBmJ8Yt/leJItyVtFMepwiFzVWdApV0QlXtW9axmgeCAKf
+   5ljyzFnD1IaxKm7mTVoFTyoDgYhcJcs176sOcieufM4xumNeknMNE/doY
+   UKxjX1194E82xoAN/6wysxKEajENXg8NJGDTxT6iiAwGXJqtSKDb2ju5S
+   6dzAyvLjiJh7AStSjdreBbAwfc5mGJ4YXia7L/fa424RZKtJS8aJmd+lL
+   wXbVu8S1GHTfMQi+x0DijlcJX/+5tLiJj7R3x9jWVxXENuWMMEKKRJZcL
+   w==;
+X-CSE-ConnectionGUID: q2BPg7O2R0WiG/swI62lxQ==
+X-CSE-MsgGUID: KlstLIPvT6+XGSvGTcA1JA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11155"; a="31491755"
 X-IronPort-AV: E=Sophos;i="6.09,265,1716274800"; 
-   d="scan'208";a="31512667"
-Received: from orviesa004.jf.intel.com ([10.64.159.144])
-  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Aug 2024 09:33:10 -0700
-X-CSE-ConnectionGUID: l/bVIwbnTm+Qhew7r+XvTg==
-X-CSE-MsgGUID: y4YP57iDROmfyTLmT1oQ2A==
+   d="scan'208";a="31491755"
+Received: from orviesa003.jf.intel.com ([10.64.159.143])
+  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Aug 2024 10:26:39 -0700
+X-CSE-ConnectionGUID: CpcVIdDURCSY+AkA1Vy0SQ==
+X-CSE-MsgGUID: RJv/9UWYRBePjnhBILo7ww==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.09,265,1716274800"; 
-   d="scan'208";a="61179639"
+   d="scan'208";a="61036436"
 Received: from unknown (HELO b6bf6c95bbab) ([10.239.97.151])
-  by orviesa004.jf.intel.com with ESMTP; 05 Aug 2024 09:33:09 -0700
+  by orviesa003.jf.intel.com with ESMTP; 05 Aug 2024 10:26:37 -0700
 Received: from kbuild by b6bf6c95bbab with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1sb0dp-0003BE-2d;
-	Mon, 05 Aug 2024 16:33:03 +0000
-Date: Tue, 6 Aug 2024 00:31:38 +0800
+	id 1sb1Ta-0003Jj-2q;
+	Mon, 05 Aug 2024 17:26:32 +0000
+Date: Tue, 6 Aug 2024 01:25:37 +0800
 From: kernel test robot <lkp@intel.com>
 To: Jens Axboe <axboe@kernel.dk>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [axboe-block:rw_iter 332/442] arch/x86/kernel/apm_32.c:1446:28:
- error: use of undeclared identifier 'fp'
-Message-ID: <202408060005.Ab59iVi3-lkp@intel.com>
+Subject: [axboe-block:rw_iter 151/442] drivers/gpu/drm/drm_panic.c:681:29:
+ error: use of undeclared identifier 'file'
+Message-ID: <202408060134.3qrCi0eI-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -63,77 +63,61 @@ Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
 tree:   https://git.kernel.org/pub/scm/linux/kernel/git/axboe/linux-block.git rw_iter
-head:   51036f9719aad90aa0e0ca1aa9443e6ce79c0fd2
-commit: 3da08857bbcbd903db68fc36c7a2f79f8fecbadb [332/442] x86/kernel: convert to read/write iterators
-config: i386-buildonly-randconfig-002-20240805 (https://download.01.org/0day-ci/archive/20240806/202408060005.Ab59iVi3-lkp@intel.com/config)
-compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240806/202408060005.Ab59iVi3-lkp@intel.com/reproduce)
+head:   449894f5917ad62cb4083d1df948f4f5c92a01da
+commit: 8790307566bc72d6fda9b3b49a3a075644b395fd [151/442] drm: panic: convert to read/write iterators
+config: arm-randconfig-002-20240805 (https://download.01.org/0day-ci/archive/20240806/202408060134.3qrCi0eI-lkp@intel.com/config)
+compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 423aec6573df4424f90555468128e17073ddc69e)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240806/202408060134.3qrCi0eI-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202408060005.Ab59iVi3-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202408060134.3qrCi0eI-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> arch/x86/kernel/apm_32.c:1446:28: error: use of undeclared identifier 'fp'
-    1446 |         if ((queue_empty(as)) && (fp->f_flags & O_NONBLOCK))
-         |                                   ^
-   1 error generated.
+   In file included from drivers/gpu/drm/drm_panic.c:25:
+   In file included from include/drm/drm_modeset_helper_vtables.h:32:
+   In file included from include/drm/drm_crtc.h:32:
+   In file included from include/drm/drm_modes.h:33:
+   In file included from include/drm/drm_connector.h:32:
+   In file included from include/drm/drm_util.h:36:
+   In file included from include/linux/kgdb.h:19:
+   In file included from include/linux/kprobes.h:28:
+   In file included from include/linux/ftrace.h:13:
+   In file included from include/linux/kallsyms.h:13:
+   In file included from include/linux/mm.h:2228:
+   include/linux/vmstat.h:514:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     514 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+>> drivers/gpu/drm/drm_panic.c:681:29: error: use of undeclared identifier 'file'
+     681 |                 struct drm_plane *plane = file->private_data;
+         |                                           ^
+   1 warning and 1 error generated.
 
 
-vim +/fp +1446 arch/x86/kernel/apm_32.c
+vim +/file +681 drivers/gpu/drm/drm_panic.c
 
-^1da177e4c3f41 arch/i386/kernel/apm.c   Linus Torvalds 2005-04-16  1433  
-3da08857bbcbd9 arch/x86/kernel/apm_32.c Jens Axboe     2024-04-11  1434  static ssize_t do_read(struct kiocb *iocb, struct iov_iter *to)
-^1da177e4c3f41 arch/i386/kernel/apm.c   Linus Torvalds 2005-04-16  1435  {
-3da08857bbcbd9 arch/x86/kernel/apm_32.c Jens Axboe     2024-04-11  1436  	size_t count = iov_iter_count(to);
-^1da177e4c3f41 arch/i386/kernel/apm.c   Linus Torvalds 2005-04-16  1437  	struct apm_user *as;
-^1da177e4c3f41 arch/i386/kernel/apm.c   Linus Torvalds 2005-04-16  1438  	int i;
-^1da177e4c3f41 arch/i386/kernel/apm.c   Linus Torvalds 2005-04-16  1439  	apm_event_t event;
-^1da177e4c3f41 arch/i386/kernel/apm.c   Linus Torvalds 2005-04-16  1440  
-3da08857bbcbd9 arch/x86/kernel/apm_32.c Jens Axboe     2024-04-11  1441  	as = iocb->ki_filp->private_data;
-^1da177e4c3f41 arch/i386/kernel/apm.c   Linus Torvalds 2005-04-16  1442  	if (check_apm_user(as, "read"))
-^1da177e4c3f41 arch/i386/kernel/apm.c   Linus Torvalds 2005-04-16  1443  		return -EIO;
-^1da177e4c3f41 arch/i386/kernel/apm.c   Linus Torvalds 2005-04-16  1444  	if ((int)count < sizeof(apm_event_t))
-^1da177e4c3f41 arch/i386/kernel/apm.c   Linus Torvalds 2005-04-16  1445  		return -EINVAL;
-^1da177e4c3f41 arch/i386/kernel/apm.c   Linus Torvalds 2005-04-16 @1446  	if ((queue_empty(as)) && (fp->f_flags & O_NONBLOCK))
-^1da177e4c3f41 arch/i386/kernel/apm.c   Linus Torvalds 2005-04-16  1447  		return -EAGAIN;
-^1da177e4c3f41 arch/i386/kernel/apm.c   Linus Torvalds 2005-04-16  1448  	wait_event_interruptible(apm_waitqueue, !queue_empty(as));
-^1da177e4c3f41 arch/i386/kernel/apm.c   Linus Torvalds 2005-04-16  1449  	i = count;
-^1da177e4c3f41 arch/i386/kernel/apm.c   Linus Torvalds 2005-04-16  1450  	while ((i >= sizeof(event)) && !queue_empty(as)) {
-^1da177e4c3f41 arch/i386/kernel/apm.c   Linus Torvalds 2005-04-16  1451  		event = get_queued_event(as);
-3da08857bbcbd9 arch/x86/kernel/apm_32.c Jens Axboe     2024-04-11  1452  		if (!copy_to_iter_full(&event, sizeof(event), to)) {
-^1da177e4c3f41 arch/i386/kernel/apm.c   Linus Torvalds 2005-04-16  1453  			if (i < count)
-^1da177e4c3f41 arch/i386/kernel/apm.c   Linus Torvalds 2005-04-16  1454  				break;
-^1da177e4c3f41 arch/i386/kernel/apm.c   Linus Torvalds 2005-04-16  1455  			return -EFAULT;
-^1da177e4c3f41 arch/i386/kernel/apm.c   Linus Torvalds 2005-04-16  1456  		}
-^1da177e4c3f41 arch/i386/kernel/apm.c   Linus Torvalds 2005-04-16  1457  		switch (event) {
-^1da177e4c3f41 arch/i386/kernel/apm.c   Linus Torvalds 2005-04-16  1458  		case APM_SYS_SUSPEND:
-^1da177e4c3f41 arch/i386/kernel/apm.c   Linus Torvalds 2005-04-16  1459  		case APM_USER_SUSPEND:
-^1da177e4c3f41 arch/i386/kernel/apm.c   Linus Torvalds 2005-04-16  1460  			as->suspends_read++;
-^1da177e4c3f41 arch/i386/kernel/apm.c   Linus Torvalds 2005-04-16  1461  			break;
-^1da177e4c3f41 arch/i386/kernel/apm.c   Linus Torvalds 2005-04-16  1462  
-^1da177e4c3f41 arch/i386/kernel/apm.c   Linus Torvalds 2005-04-16  1463  		case APM_SYS_STANDBY:
-^1da177e4c3f41 arch/i386/kernel/apm.c   Linus Torvalds 2005-04-16  1464  		case APM_USER_STANDBY:
-^1da177e4c3f41 arch/i386/kernel/apm.c   Linus Torvalds 2005-04-16  1465  			as->standbys_read++;
-^1da177e4c3f41 arch/i386/kernel/apm.c   Linus Torvalds 2005-04-16  1466  			break;
-^1da177e4c3f41 arch/i386/kernel/apm.c   Linus Torvalds 2005-04-16  1467  		}
-^1da177e4c3f41 arch/i386/kernel/apm.c   Linus Torvalds 2005-04-16  1468  		i -= sizeof(event);
-^1da177e4c3f41 arch/i386/kernel/apm.c   Linus Torvalds 2005-04-16  1469  	}
-^1da177e4c3f41 arch/i386/kernel/apm.c   Linus Torvalds 2005-04-16  1470  	if (i < count)
-^1da177e4c3f41 arch/i386/kernel/apm.c   Linus Torvalds 2005-04-16  1471  		return count - i;
-^1da177e4c3f41 arch/i386/kernel/apm.c   Linus Torvalds 2005-04-16  1472  	if (signal_pending(current))
-^1da177e4c3f41 arch/i386/kernel/apm.c   Linus Torvalds 2005-04-16  1473  		return -ERESTARTSYS;
-^1da177e4c3f41 arch/i386/kernel/apm.c   Linus Torvalds 2005-04-16  1474  	return 0;
-^1da177e4c3f41 arch/i386/kernel/apm.c   Linus Torvalds 2005-04-16  1475  }
-^1da177e4c3f41 arch/i386/kernel/apm.c   Linus Torvalds 2005-04-16  1476  
+813ca3aa8fecac Jocelyn Falempe 2024-04-09  674  
+8790307566bc72 Jens Axboe      2024-08-03  675  static ssize_t debugfs_trigger_write(struct kiocb *iocb, struct iov_iter *from)
+813ca3aa8fecac Jocelyn Falempe 2024-04-09  676  {
+8790307566bc72 Jens Axboe      2024-08-03  677  	size_t count = iov_iter_count(from);
+813ca3aa8fecac Jocelyn Falempe 2024-04-09  678  	bool run;
+813ca3aa8fecac Jocelyn Falempe 2024-04-09  679  
+8790307566bc72 Jens Axboe      2024-08-03  680  	if (kstrtobool_from_iter(from, count, &run) == 0 && run) {
+813ca3aa8fecac Jocelyn Falempe 2024-04-09 @681  		struct drm_plane *plane = file->private_data;
+813ca3aa8fecac Jocelyn Falempe 2024-04-09  682  
+813ca3aa8fecac Jocelyn Falempe 2024-04-09  683  		draw_panic_plane(plane);
+813ca3aa8fecac Jocelyn Falempe 2024-04-09  684  	}
+813ca3aa8fecac Jocelyn Falempe 2024-04-09  685  	return count;
+813ca3aa8fecac Jocelyn Falempe 2024-04-09  686  }
+813ca3aa8fecac Jocelyn Falempe 2024-04-09  687  
 
-:::::: The code at line 1446 was first introduced by commit
-:::::: 1da177e4c3f41524e886b7f1b8a0c1fc7321cac2 Linux-2.6.12-rc2
+:::::: The code at line 681 was first introduced by commit
+:::::: 813ca3aa8fecaca9cf81f831d2e036d997ac3ee7 drm/panic: Add debugfs entry to test without triggering panic.
 
-:::::: TO: Linus Torvalds <torvalds@ppc970.osdl.org>
-:::::: CC: Linus Torvalds <torvalds@ppc970.osdl.org>
+:::::: TO: Jocelyn Falempe <jfalempe@redhat.com>
+:::::: CC: Jocelyn Falempe <jfalempe@redhat.com>
 
 -- 
 0-DAY CI Kernel Test Service
