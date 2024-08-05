@@ -1,130 +1,180 @@
-Received: from fhigh4-smtp.messagingengine.com (fhigh4-smtp.messagingengine.com [103.168.172.155])
+Received: from mslow1.mail.gandi.net (mslow1.mail.gandi.net [217.70.178.240])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B243A14F9EB;
-	Mon,  5 Aug 2024 08:33:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.155
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B773C14A627
+	for <llvm@lists.linux.dev>; Mon,  5 Aug 2024 08:41:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.178.240
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722846832; cv=none; b=BDi/dbtxWxcMqvoZKzf9hxb95emVaeFkx8LJ1B1/F729PnyDBMq0etSfQVcNXZdNDVAbrIZjbtv2XBabVGbM8xcfV9ocw8UHw8CqlNa07gwWB6lJSInr2n9SHXp1k82EpShvQ0eAuYgPELEmGL5RffvKtT9XmsxKArSnxAZM8BY=
+	t=1722847306; cv=none; b=DMf6LgbCgW5tqVmO6bMGDW5DeaH+799MwufpcfljIopS730etnu0FV4CBS+ay3cGaZHBvM7FQ3i8qUsRp7E/zRZNT3+3/DPQkR8HBwrC7W2RYbv3LoNc2J/L3XL8t/q6v+tQdgHa2OQQBiXUZMtphtZ9LWtPAs/whvZeafNdmbk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722846832; c=relaxed/simple;
-	bh=E91a+VTwhceaSODgrHkbHHr5BYlJ7t1Ysj7YhU/h+bY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=O4xrNMuej3bRzvU+UeKzEDaXLQs9T5qz354N5y6hj+YQwv0CIyiZDh34oeLFO5o/pdXk2UmvwK0mu17eLje9n10OImlhPspnYhON2KAVMmHNeotT7eX60fUwagkAymJX7UyXjsWLAE9RIhzweVjLxeRwLXAWmg92sED+p4+gf4s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sakamocchi.jp; spf=pass smtp.mailfrom=sakamocchi.jp; dkim=pass (2048-bit key) header.d=sakamocchi.jp header.i=@sakamocchi.jp header.b=c1xn301e; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=SeD4BYcx; arc=none smtp.client-ip=103.168.172.155
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sakamocchi.jp
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sakamocchi.jp
+	s=arc-20240116; t=1722847306; c=relaxed/simple;
+	bh=AkAzzbrcb/m3hxXb3vpTYpWqfppvXm0Abz7cFdk1vMk=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Subject:Cc:To:From:
+	 References:In-Reply-To; b=aCDqxIt7LO95bbPsWyeCe6O1B0tenOiNe96xWpG50KYBmsbrp5HQtTvPbF2bq8hPUJmvyBslbGBg5Kxb9a7/GaDimCy7uczQSK9KDcuOQkvAmQHcqUL79UKGFI6PadOcWpYgRExuF+j0trrTorAKZlTFzXdPtK2AvfpR8n7grzA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=J1n7bIyf; arc=none smtp.client-ip=217.70.178.240
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sakamocchi.jp header.i=@sakamocchi.jp header.b="c1xn301e";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="SeD4BYcx"
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-	by mailfhigh.nyi.internal (Postfix) with ESMTP id DC4C51151DC2;
-	Mon,  5 Aug 2024 04:33:49 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute3.internal (MEProxy); Mon, 05 Aug 2024 04:33:49 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sakamocchi.jp;
-	 h=cc:cc:content-type:content-type:date:date:from:from
-	:in-reply-to:in-reply-to:message-id:mime-version:references
-	:reply-to:subject:subject:to:to; s=fm3; t=1722846829; x=
-	1722933229; bh=zJ9UFW3JNgRiKo3q812jCKGIld512jGf9/66Tll64Ls=; b=c
-	1xn301eGytn+wVO1yDQK7keAg51KkyefkwH7umZ/HpnpT34xYA1IkNaB3yMOGUNj
-	WYuV9aAKj91S4rnDu9sVYy3ZVDtt9T7bafSwW5nWmzFt7oaOqz8NDuEAAhTmi3/B
-	I4nRCrY1hWoutdn559YzWyIsVuTbMDPNrX8aqHNN6oOlkTQUs/TedrJy5elpzTKG
-	wkzMhwrX0xF+zN0ZOSQBGx/ooRnNdD8CZbyL/J97uOD95fs9RkRbGn/6vN90SnD5
-	DJDn2BMWHXG/CyFDOGqtT2b4K0y2dT/3b3NUeKNu3/CKzzm4kucfQ7BklXWfWk3k
-	jHDixHmoqugSeSi0OthRQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:content-type:date:date
-	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:subject:subject:to
-	:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-	fm3; t=1722846829; x=1722933229; bh=zJ9UFW3JNgRiKo3q812jCKGIld51
-	2jGf9/66Tll64Ls=; b=SeD4BYcxOLcdEs4eGIo4ctBaMjlGxDgRPHyUERRUd2sy
-	2m6bAtjpv86yMUcbFy0zf4MAIQKYNS72ZyzfBA2XmFxKMQfOOT4kCAg8c457e6nf
-	/5kRdmgoJYoShFN9G2pRSuYkxMbCW9YsIPJz6VdPf11r5Cn2ss9JEy+m6iHk8Wji
-	paJViiJhGtMkatlEJXZtgfVc+OBEh/vpldpQ2OA5AV4c6bwqMj7qhUZzM9NLSYsO
-	ZRuPQgdwZkGkvj1i417xhyD6pIWMhavNvuv3wmN+yvopMjQgjLbVZTP3AIDFIOkf
-	4otq5ieKzMTspcd4BbfLGCJGdtoZBEBKAIokjqw8JA==
-X-ME-Sender: <xms:bY6wZuW6MrqXscaKw96EOb09DPNSNZ2F8-PY1mNQwNgwoDO3Q1Mddw>
-    <xme:bY6wZqltlQSjtmcKH2AFgoIrat0L7puMtpAKLR_joOHXCDD9RvrjVBN35OZO9DU2w
-    wjkLG3KeXu2wzOFtms>
-X-ME-Received: <xmr:bY6wZibfUdEzWvs66yiMn9QTiRa8ulogjtgIW6Tr_pP0Kvcz9hrcgO86gEcc-dMKDKzl_3IuE0tGaS6h8icJFUjoUM7BOH-t>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeftddrkeeigddthecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecunecujfgurhepfffhvfevuffkfhggtggujgesthdtre
-    dttddtvdenucfhrhhomhepvfgrkhgrshhhihcuufgrkhgrmhhothhouceoohdqthgrkhgr
-    shhhihesshgrkhgrmhhotggthhhirdhjpheqnecuggftrfgrthhtvghrnhepuedvffegge
-    egfeevheehlefhgfevfedtgfffgeelhefghffhvdetheefhffggfefnecuffhomhgrihhn
-    pehgihhthhhusgdrtghomhdpkhgvrhhnvghlrdhorhhgpddtuddrohhrghenucevlhhush
-    htvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehoqdhtrghkrghshhhi
-    sehsrghkrghmohgttghhihdrjhhppdhnsggprhgtphhtthhopedt
-X-ME-Proxy: <xmx:bY6wZlWTQ547DS4fWmLXjwiIoby65VXO52Z_LbjYyeuBx_lEI86DnA>
-    <xmx:bY6wZondw92IWsNK9FMn2WQsO__X_1HBICUvAtUNUgH8CRNrkdupUw>
-    <xmx:bY6wZqcFoe6J9m34l78kpaT5HnuJq_Mo4W49YUG00w3jc2BZ4wqxPQ>
-    <xmx:bY6wZqEDNcC63EOcAdKDflUcaZag9oIzUe4IdJ1vXdkfHueQCMVFDg>
-    <xmx:bY6wZnu00_6EF5ZhaP14cmFuDlIzVPv_d-ML7vLJiXjeYKmo2yysEHzO>
-Feedback-ID: ie8e14432:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 5 Aug 2024 04:33:48 -0400 (EDT)
-Date: Mon, 5 Aug 2024 17:33:45 +0900
-From: Takashi Sakamoto <o-takashi@sakamocchi.jp>
-To: kernel test robot <lkp@intel.com>
-Cc: linux1394-devel@lists.sourceforge.net, llvm@lists.linux.dev,
-	oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 17/17] firewire: ohci: use guard macro to serialize
- operations for isochronous contexts
-Message-ID: <20240805083345.GA248096@workstation.local>
-Mail-Followup-To: kernel test robot <lkp@intel.com>,
-	linux1394-devel@lists.sourceforge.net, llvm@lists.linux.dev,
-	oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org
-References: <20240804130225.243496-18-o-takashi@sakamocchi.jp>
- <202408050730.y1eyRcTv-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="J1n7bIyf"
+Received: from relay1-d.mail.gandi.net (unknown [IPv6:2001:4b98:dc4:8::221])
+	by mslow1.mail.gandi.net (Postfix) with ESMTP id 00EEAC383A
+	for <llvm@lists.linux.dev>; Mon,  5 Aug 2024 08:12:19 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 01A4824000B;
+	Mon,  5 Aug 2024 08:12:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+	t=1722845531;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=HY6OU3chSqD3rf/2ebEU6wUI9+o+/0b7R7NY5T40ViI=;
+	b=J1n7bIyfeChYNvKosoaYVVNqh/Xrlh9CwfwnUk2KlwTa8Gt7wTYcggcx54dbvDxCcV2gu4
+	4/PiLPXFkawDwWhDhKNmdQD73u3s+UowIG6vpWnrMo5KkTjUyk+qNTeaQEs91vR2lJYfTt
+	SRLjPV0sMvtjVfDmq71R1rwnupkDwxP0GHJuPidIqxw3H9aVaxE5SJGCWGJNhmYEp7sE+6
+	25izkLi+iLJOCuEWBA8cDSOIx9v+TzfpjrRC2POuTaBqYzIdjcPvqLi2BORrIl3URuweWn
+	3ikOxZiIE1avnfe5Qc1ASLSZdia1a08d7xXVNTNd13W9/VTashZODD251NEdHQ==
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <202408050730.y1eyRcTv-lkp@intel.com>
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Mon, 05 Aug 2024 10:12:10 +0200
+Message-Id: <D37TRQF5HP6J.ODHONYD6DF59@bootlin.com>
+Subject: Re: [PATCH] scripts: run-clang-tools: add file filtering option
+Cc: "Masahiro Yamada" <masahiroy@kernel.org>, "Nicolas Schier"
+ <nicolas@fjasle.eu>, "Nick Desaulniers" <ndesaulniers@google.com>, "Bill
+ Wendling" <morbo@google.com>, "Justin Stitt" <justinstitt@google.com>,
+ <llvm@lists.linux.dev>, <linux-kbuild@vger.kernel.org>,
+ <linux-kernel@vger.kernel.org>, "Thomas Petazzoni"
+ <thomas.petazzoni@bootlin.com>
+To: "Nathan Chancellor" <nathan@kernel.org>
+From: =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>
+X-Mailer: aerc 0.18.1-0-gaa8319bc591f
+References: <20240704-clang-tidy-filter-v1-1-8d4556a35b65@bootlin.com>
+ <20240802223509.GA781199@thelio-3990X>
+In-Reply-To: <20240802223509.GA781199@thelio-3990X>
+X-GND-Sasl: theo.lebrun@bootlin.com
 
-On Mon, Aug 05, 2024 at 07:33:01AM +0800, kernel test robot wrote:
-> url:    https://github.com/intel-lab-lkp/linux/commits/Takashi-Sakamoto/firewire-core-use-guard-macro-to-maintain-static-packet-data-for-phy-configuration/20240804-210645
-> base:   https://git.kernel.org/pub/scm/linux/kernel/git/ieee1394/linux1394.git for-next
-> patch link:    https://lore.kernel.org/r/20240804130225.243496-18-o-takashi%40sakamocchi.jp
-> patch subject: [PATCH 17/17] firewire: ohci: use guard macro to serialize operations for isochronous contexts
-> config: arm64-randconfig-003-20240805 (https://download.01.org/0day-ci/archive/20240805/202408050730.y1eyRcTv-lkp@intel.com/config)
-> compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240805/202408050730.y1eyRcTv-lkp@intel.com/reproduce)
-> 
-> If you fix the issue in a separate patch/commit (i.e. not just a new version of
-> the same patch/commit), kindly add following tags
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes: https://lore.kernel.org/oe-kbuild-all/202408050730.y1eyRcTv-lkp@intel.com/
-> 
-> All errors (new ones prefixed by >>):
-> 
-> >> drivers/firewire/ohci.c:3138:2: error: expected expression
->     3138 |         guard(spinlock_irq)(&ohci->lock);
->          |         ^
->    include/linux/cleanup.h:167:2: note: expanded from macro 'guard'
->      167 |         CLASS(_name, __UNIQUE_ID(guard))
->          |         ^
->    include/linux/cleanup.h:122:2: note: expanded from macro 'CLASS'
->      122 |         class_##_name##_t var __cleanup(class_##_name##_destructor) =   \
->          |         ^
->    <scratch space>:133:1: note: expanded from here
->      133 | class_spinlock_irq_t
->          | ^
->    1 error generated.
+Hello Nathan,
 
-The macro expands a declaration, while the line just after the label
-should be still any statement in C11.
+On Sat Aug 3, 2024 at 12:35 AM CEST, Nathan Chancellor wrote:
+> First of all, apologies that it has taken me so long to review this!
 
-I'll post take 2 patchset.
+No worries, there is no rush!
 
+> On Thu, Jul 04, 2024 at 11:28:21AM +0200, Th=C3=A9o Lebrun wrote:
+> > Add file filtering feature. We take zero or more filters at the end as
+> > positional arguments. If none are given, the default behavior is kept
+> > and we run the tool on all files in the datastore. Else, files must
+> > match one or more filter to be analysed.
+> >=20
+> > The below command runs clang-tidy on drivers/clk/clk.c and all C files
+> > inside drivers/reset/.
+> >=20
+> >     ./scripts/clang-tools/run-clang-tools.py clang-tidy \
+> >         compile_commands.json \
+> >         'drivers/clk/clk.c' 'drivers/reset/*'
+> >=20
+> > The Python fnmatch builtin module is used. Matching is case-insensitive=
+.
+> > See its documentation for allowed syntax:
+> > https://docs.python.org/3/library/fnmatch.html
+> >=20
+> > Signed-off-by: Th=C3=A9o Lebrun <theo.lebrun@bootlin.com>
+> > ---
+> > Currently, all files in the datastore are analysed. This is not
+> > practical for grabbing errors in a subsystem, or relative to a patch
+> > series. Add a file filtering feature with wildcard support.
+>
+> Sure, I think this is totally reasonable. In fact, I think some of this
+> could be added to the commit message as further existence for this
+> feature.
 
-Thanks
+Indeed, it can be added to the commit message directly.
 
-Takashi Sakamoto
+> The change itself looks good to me for the most part, I have some
+> questions below just for my own understanding.
+>
+> Reviewed-by: Nathan Chancellor <nathan@kernel.org>
+>
+> One further question/comment now: Have you considered a way to
+> integrate this into Kbuild with the clang-tidy and clang-analyzer
+> commands? I don't think it is strictly necessary for the acceptance of
+> this patch but it might be nice to have some variable that users could
+> provide to do this with their regular make command + the clang-tidy
+> target? Not sure if Masahiro has further thoughts on that.
+
+I have not as I am using this script by calling it directly.
+It will either way be a separate patch.
+
+>
+> > Have a nice day,
+> > Th=C3=A9o
+> > ---
+> >  scripts/clang-tools/run-clang-tools.py | 20 ++++++++++++++++++++
+> >  1 file changed, 20 insertions(+)
+> >=20
+> > diff --git a/scripts/clang-tools/run-clang-tools.py b/scripts/clang-too=
+ls/run-clang-tools.py
+> > index f31ffd09e1ea..b0b3a9c8cdec 100755
+> > --- a/scripts/clang-tools/run-clang-tools.py
+> > +++ b/scripts/clang-tools/run-clang-tools.py
+> > @@ -10,6 +10,7 @@ compile_commands.json.
+> >  """
+> > =20
+> >  import argparse
+> > +import fnmatch
+> >  import json
+> >  import multiprocessing
+> >  import subprocess
+> > @@ -32,6 +33,8 @@ def parse_arguments():
+> >                          help=3Dtype_help)
+> >      path_help =3D "Path to the compilation database to parse"
+> >      parser.add_argument("path", type=3Dstr, help=3Dpath_help)
+> > +    file_filter_help =3D "Optional Unix shell-style wildcard file filt=
+ers"
+> > +    parser.add_argument("file_filter", type=3Dstr, nargs=3D"*", help=
+=3Dfile_filter_help)
+> > =20
+> >      checks_help =3D "Checks to pass to the analysis"
+> >      parser.add_argument("-checks", type=3Dstr, default=3DNone, help=3D=
+checks_help)
+> > @@ -48,6 +51,22 @@ def init(l, a):
+> >      args =3D a
+> > =20
+> > =20
+> > +def filter_entries(datastore, filters):
+> > +    for entry in datastore:
+> > +        if filters =3D=3D []:
+> > +            yield entry
+> > +            continue
+> > +
+> > +        assert entry['file'].startswith(entry['directory'])
+>
+> What is the purpose of this assertion? Will it cause AssertionError
+> under normal circumstances?
+
+Just below we extract `filepath` from entry["file"] by removing at its
+start the length of entry["directory"]. We expect entry["file"] to
+start with entry["directory"], so we document that with an assertion.
+
+If this assertion triggers, it means the line below would do something
+weird and would silently break the program. Silently because `filepath`
+is used for pattern matching and is never displayed.
+
+>
+> > +        # filepath is relative to the directory, to avoid matching on =
+the absolute path
+> > +        filepath =3D entry['file'][len(entry['directory']):].lstrip('/=
+')
+
+Regards,
+
+--
+Th=C3=A9o Lebrun, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
+
