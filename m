@@ -1,104 +1,158 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 091B517C64;
-	Mon,  5 Aug 2024 14:01:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1051134CD8;
+	Mon,  5 Aug 2024 15:06:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722866467; cv=none; b=C954ws2cykE+eeasIV9DcCcjrPeJq5kpwSGxVXcH/j28c6Ea2u7umIO3ucW4cdNfvisIxBAK7p+W6aETZ1kR5OgRCMYuGNeWM3j0bLjZVRy3mc9NHzUS5TDzqm3kTimN1eVgsJ5r+ORxoKTnEK3maHfI6Vb5EveYcE/EK0cV+mE=
+	t=1722870381; cv=none; b=aZ/Qq3tZggiVXDeINwsTuxglQQRNaotort/WMNUt2WASWiS1o0HD4D/2DY1VRkaI+2i9Vs+2PtcSLBJzIgnRFMFa3fkLNqSPuz2jiSwILqzgm1HQHLgidQ9aPO183OWsGA2VFko2VVKSHKhYgt9TpU6gLeY9MB+8iLruYQMbDF4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722866467; c=relaxed/simple;
-	bh=LYmlMc0K44iOMRb+22Ri63E0Ka9FGH2swdZtgwIlNjE=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=O5NXW/DX6vVS5dw63hOG1ZAWsdB92DaY0z9g5TEv7caQjRIDnRfEUSf9niI4/7/HGglFPqSp0ypokPeitRDHCORWG7HrEHYoU11fEAo3kywxio7QXTedO3lbieEkGEP9tdGtFxn/pvPa4dZzUy7zpeSWhQbaB8LD+WY4ehRC8cA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=u5mpwWtW; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1722870381; c=relaxed/simple;
+	bh=j9pVi1haEyKvjtYmkWH1sxVBzws4x/02E4t0vRM4zws=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=RIxtmpgvWpUyIbcv1KV1kjwCeNXzhuafBEKzArGCYrNclxWKCS2ByR02+WyxtWqYSn7YkwJMHsRgu3NMB0UpUMtp4iKBxO3ftXuz0fJZSZhCrz8EnQ/HVUaWTcxuUcg5OnwIV8kGdoixg5rAWp46MlGLYqb3TBGU69pXhmeKapc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=AkGSkI2a; arc=none smtp.client-ip=198.175.65.20
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="u5mpwWtW"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D98E5C4AF0B;
-	Mon,  5 Aug 2024 14:01:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1722866466;
-	bh=LYmlMc0K44iOMRb+22Ri63E0Ka9FGH2swdZtgwIlNjE=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=u5mpwWtWrpjVGdQGkSKQ+K//rJzjh2kPlaHq2cxCl86PXoPkx5o7bthDDjN7CxuE9
-	 T8BMSFGKdHb2OWE+4cwdz8xoRuDKyXyXKDMrGV7bOq2TLyq9/X5Rvl1rgnxO3ie1Yf
-	 ml/rfg9Kc4kmQ9zn8uBs9REkHfO37LIZ+jHE0uQx1R7G+cqYbPpso/Yt4r4E+Uo/wn
-	 /BSxCSqStxro7xjaqnwuikcELs6aKsDwN7LZW0WmTr6kYfTn2/K/1rgAS3F8Lv64Az
-	 SzRWKJSQF01pmb/ACQqxBredOqPSf+oDTOBu3BN57gveHAQhDWjxV43IsJTKNZxlae
-	 b6xybCMKjHEZQ==
-Received: by mail-lj1-f177.google.com with SMTP id 38308e7fff4ca-2ef2fccca2cso119552881fa.1;
-        Mon, 05 Aug 2024 07:01:06 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCVxb2jVLMZz4ANZB0fcTZXywCVgg92868seANvz59FsK6mlWh4umW7yWOFCFPTXQzwOC4iKqpuGOECA7SK63rvsRbckS1UKzJDtbc9jCigmUSw5hNKxNJmg1jxGnJZpbfRiJXU=
-X-Gm-Message-State: AOJu0Yyr1ywoxp6HuVQFGBH8a4nLF/KcuFARfgHZIaD4HJ4DviptegZ5
-	Q9ojV5ySLsns2EOsfQxZUobWxJK7iJUSsOCVcsOLbqh1oj/uvNfUTj63nitz1xZQI4PeY+7Bl2M
-	sn1CFHTolXUZ/swf3slbD3nfR+g==
-X-Google-Smtp-Source: AGHT+IEFbHCFnmoshA0WuXQphEnKNAn8UOd2m4R9GOBZska+HGyTOU5Gorn/3hrzQccKkomlkjUwq/uyVynmJwkC2Ig=
-X-Received: by 2002:a2e:330e:0:b0:2ef:2472:300c with SMTP id
- 38308e7fff4ca-2f15aab0abfmr70075191fa.25.1722866465250; Mon, 05 Aug 2024
- 07:01:05 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="AkGSkI2a"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1722870380; x=1754406380;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=j9pVi1haEyKvjtYmkWH1sxVBzws4x/02E4t0vRM4zws=;
+  b=AkGSkI2aQR1UjmYGcQGnKcjtwLQu52dGY5c8dJAN64qVAcDLs2ld/edM
+   wkYjWr1LmGJ+3Wk+BTRkBWkCwJVD3K9W5nh9BJThKNPde5wMtaBYgv1M9
+   kjJCbCHlCbX8ojFh3hV1L3sWJLavKMGnRlKvuY7YOdnV29fPI8KL2ZCzU
+   o/WODO/9eR30pbtbeJQONKrK4K6Bt+gw5yWzKTH8S1lcvP7rx+/lO0zhQ
+   NgIsNZU5Xk0OrIaQnKNJ3vRyKNiPp7Zu8ewswCylRXHWHxfd65QpkSC6b
+   5qHHRMBE6s221pY9kZBGm274YFNO9iPIaEx+2Sc3K08uwtw266C6n1wbv
+   g==;
+X-CSE-ConnectionGUID: GMBpGXeUSLiq3usP/0TLjg==
+X-CSE-MsgGUID: ZR/wOboCRdmDIgY0LdcDpA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11155"; a="20654093"
+X-IronPort-AV: E=Sophos;i="6.09,264,1716274800"; 
+   d="scan'208";a="20654093"
+Received: from fmviesa004.fm.intel.com ([10.60.135.144])
+  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Aug 2024 08:06:03 -0700
+X-CSE-ConnectionGUID: A+IfD5IsSGSHVBoKM4MStA==
+X-CSE-MsgGUID: DrwoNvpTTwKHuvytqLE2wQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.09,264,1716274800"; 
+   d="scan'208";a="60813702"
+Received: from unknown (HELO b6bf6c95bbab) ([10.239.97.151])
+  by fmviesa004.fm.intel.com with ESMTP; 05 Aug 2024 08:05:53 -0700
+Received: from kbuild by b6bf6c95bbab with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1sazHS-0002t6-1Q;
+	Mon, 05 Aug 2024 15:05:50 +0000
+Date: Mon, 5 Aug 2024 23:04:56 +0800
+From: kernel test robot <lkp@intel.com>
+To: Linus Walleij <linus.walleij@linaro.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-gpio@vger.kernel.org
+Subject: [linusw-gpio:b4/asoc-tas-gpios 2/4]
+ sound/soc/codecs/tas2781-i2c.c:786:13: error: no member named 'irq_info' in
+ 'struct tasdevice_priv'
+Message-ID: <202408052250.05n5ih5t-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <202408030418.gnJDcCpm-lkp@intel.com> <20240805104758.52obllbjvuvtmd4n@vireshk-i7>
-In-Reply-To: <20240805104758.52obllbjvuvtmd4n@vireshk-i7>
-From: Rob Herring <robh@kernel.org>
-Date: Mon, 5 Aug 2024 08:00:53 -0600
-X-Gmail-Original-Message-ID: <CAL_Jsq+evBH2+XVeMAGXy9Ucof=G574+sFKcG94MqSUdgzFSgw@mail.gmail.com>
-Message-ID: <CAL_Jsq+evBH2+XVeMAGXy9Ucof=G574+sFKcG94MqSUdgzFSgw@mail.gmail.com>
-Subject: Re: [vireshk-pm:cpufreq/arm/linux-next 2/2] drivers/cpufreq/spear-cpufreq.c:202:12:
- warning: variable 'i' is uninitialized when used here
-To: Viresh Kumar <viresh.kumar@linaro.org>
-Cc: kernel test robot <lkp@intel.com>, llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Mon, Aug 5, 2024 at 4:48=E2=80=AFAM Viresh Kumar <viresh.kumar@linaro.or=
-g> wrote:
->
-> On 03-08-24, 05:01, kernel test robot wrote:
-> > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/vireshk/pm.git =
-cpufreq/arm/linux-next
-> > head:   dca2ef2b7d916c718c6e88084170413a8a1942d0
-> > commit: dca2ef2b7d916c718c6e88084170413a8a1942d0 [2/2] cpufreq: spear: =
-Use of_property_for_each_u32() instead of open coding
-> > config: arm-defconfig (https://download.01.org/0day-ci/archive/20240803=
-/202408030418.gnJDcCpm-lkp@intel.com/config)
-> > compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f2=
-8c006a5895fc0e329fe15fead81e37457cb1d1)
-> > reproduce (this is a W=3D1 build): (https://download.01.org/0day-ci/arc=
-hive/20240803/202408030418.gnJDcCpm-lkp@intel.com/reproduce)
-> >
-> > If you fix the issue in a separate patch/commit (i.e. not just a new ve=
-rsion of
-> > the same patch/commit), kindly add following tags
-> > | Reported-by: kernel test robot <lkp@intel.com>
-> > | Closes: https://lore.kernel.org/oe-kbuild-all/202408030418.gnJDcCpm-l=
-kp@intel.com/
-> >
-> > All warnings (new ones prefixed by >>):
-> >
-> > >> drivers/cpufreq/spear-cpufreq.c:202:12: warning: variable 'i' is uni=
-nitialized when used here [-Wuninitialized]
-> >                    freq_tbl[i].frequency =3D val;
-> >                             ^
-> >    drivers/cpufreq/spear-cpufreq.c:176:12: note: initialize the variabl=
-e 'i' to silence this warning
-> >            int cnt, i, ret;
-> >                      ^
-> >                       =3D 0
-> >    1 warning generated.
-> >
-> >
-> > vim +/i +202 drivers/cpufreq/spear-cpufreq.c
->
-> Rob, can you please send a fix for this ?
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-gpio.git b4/asoc-tas-gpios
+head:   fdef6b7abff7f4cfe98c3bc496210885c9b26292
+commit: 30316639286278a6d196a3f71c0f6e09c5850bbe [2/4] ASoC: tas2781-i2c: Drop weird GPIO code
+config: arm-randconfig-003-20240805 (https://download.01.org/0day-ci/archive/20240805/202408052250.05n5ih5t-lkp@intel.com/config)
+compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 423aec6573df4424f90555468128e17073ddc69e)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240805/202408052250.05n5ih5t-lkp@intel.com/reproduce)
 
-Will do. Looks like it is only with clang...
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202408052250.05n5ih5t-lkp@intel.com/
 
-Is there some reason COMPILE_TEST is not enabled for almost everything
-in cpufreq/?
+All errors (new ones prefixed by >>):
 
-Rob
+   In file included from sound/soc/codecs/tas2781-i2c.c:19:
+   In file included from include/linux/i2c.h:19:
+   In file included from include/linux/regulator/consumer.h:35:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:21:
+   In file included from include/linux/mm.h:2228:
+   include/linux/vmstat.h:514:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     514 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+>> sound/soc/codecs/tas2781-i2c.c:786:13: error: no member named 'irq_info' in 'struct tasdevice_priv'
+     786 |                 tas_priv->irq_info.irq_gpio = of_irq_get(np, 0);
+         |                 ~~~~~~~~  ^
+   1 warning and 1 error generated.
+
+
+vim +786 sound/soc/codecs/tas2781-i2c.c
+
+ef3bcde75d06d6 Shenghao Ding     2023-06-18  754  
+ef3bcde75d06d6 Shenghao Ding     2023-06-18  755  static void tasdevice_parse_dt(struct tasdevice_priv *tas_priv)
+ef3bcde75d06d6 Shenghao Ding     2023-06-18  756  {
+ef3bcde75d06d6 Shenghao Ding     2023-06-18  757  	struct i2c_client *client = (struct i2c_client *)tas_priv->client;
+ef3bcde75d06d6 Shenghao Ding     2023-06-18  758  	unsigned int dev_addrs[TASDEVICE_MAX_CHANNELS];
+30316639286278 Linus Walleij     2024-06-30  759  	int i, ndev = 0;
+ef3bcde75d06d6 Shenghao Ding     2023-06-18  760  
+ef3bcde75d06d6 Shenghao Ding     2023-06-18  761  	if (tas_priv->isacpi) {
+ef3bcde75d06d6 Shenghao Ding     2023-06-18  762  		ndev = device_property_read_u32_array(&client->dev,
+ef3bcde75d06d6 Shenghao Ding     2023-06-18  763  			"ti,audio-slots", NULL, 0);
+ef3bcde75d06d6 Shenghao Ding     2023-06-18  764  		if (ndev <= 0) {
+ef3bcde75d06d6 Shenghao Ding     2023-06-18  765  			ndev = 1;
+ef3bcde75d06d6 Shenghao Ding     2023-06-18  766  			dev_addrs[0] = client->addr;
+ef3bcde75d06d6 Shenghao Ding     2023-06-18  767  		} else {
+ef3bcde75d06d6 Shenghao Ding     2023-06-18  768  			ndev = (ndev < ARRAY_SIZE(dev_addrs))
+ef3bcde75d06d6 Shenghao Ding     2023-06-18  769  				? ndev : ARRAY_SIZE(dev_addrs);
+ef3bcde75d06d6 Shenghao Ding     2023-06-18  770  			ndev = device_property_read_u32_array(&client->dev,
+ef3bcde75d06d6 Shenghao Ding     2023-06-18  771  				"ti,audio-slots", dev_addrs, ndev);
+ef3bcde75d06d6 Shenghao Ding     2023-06-18  772  		}
+ef3bcde75d06d6 Shenghao Ding     2023-06-18  773  
+30316639286278 Linus Walleij     2024-06-30  774  		tas_priv->irq =
+ef3bcde75d06d6 Shenghao Ding     2023-06-18  775  			acpi_dev_gpio_irq_get(ACPI_COMPANION(&client->dev), 0);
+31a45f9190b5b4 Rob Herring (Arm  2024-07-02  776) 	} else if (IS_ENABLED(CONFIG_OF)) {
+ef3bcde75d06d6 Shenghao Ding     2023-06-18  777  		struct device_node *np = tas_priv->dev->of_node;
+31a45f9190b5b4 Rob Herring (Arm  2024-07-02  778) 		u64 addr;
+31a45f9190b5b4 Rob Herring (Arm  2024-07-02  779) 
+31a45f9190b5b4 Rob Herring (Arm  2024-07-02  780) 		for (i = 0; i < TASDEVICE_MAX_CHANNELS; i++) {
+31a45f9190b5b4 Rob Herring (Arm  2024-07-02  781) 			if (of_property_read_reg(np, i, &addr, NULL))
+31a45f9190b5b4 Rob Herring (Arm  2024-07-02  782) 				break;
+31a45f9190b5b4 Rob Herring (Arm  2024-07-02  783) 			dev_addrs[ndev++] = addr;
+ef3bcde75d06d6 Shenghao Ding     2023-06-18  784  		}
+31a45f9190b5b4 Rob Herring (Arm  2024-07-02  785) 
+31a45f9190b5b4 Rob Herring (Arm  2024-07-02 @786) 		tas_priv->irq_info.irq_gpio = of_irq_get(np, 0);
+31a45f9190b5b4 Rob Herring (Arm  2024-07-02  787) 	} else {
+ef3bcde75d06d6 Shenghao Ding     2023-06-18  788  		ndev = 1;
+ef3bcde75d06d6 Shenghao Ding     2023-06-18  789  		dev_addrs[0] = client->addr;
+ef3bcde75d06d6 Shenghao Ding     2023-06-18  790  	}
+ef3bcde75d06d6 Shenghao Ding     2023-06-18  791  	tas_priv->ndev = ndev;
+ef3bcde75d06d6 Shenghao Ding     2023-06-18  792  	for (i = 0; i < ndev; i++)
+ef3bcde75d06d6 Shenghao Ding     2023-06-18  793  		tas_priv->tasdevice[i].dev_addr = dev_addrs[i];
+ef3bcde75d06d6 Shenghao Ding     2023-06-18  794  
+ef3bcde75d06d6 Shenghao Ding     2023-06-18  795  	tas_priv->reset = devm_gpiod_get_optional(&client->dev,
+ef3bcde75d06d6 Shenghao Ding     2023-06-18  796  			"reset-gpios", GPIOD_OUT_HIGH);
+ef3bcde75d06d6 Shenghao Ding     2023-06-18  797  	if (IS_ERR(tas_priv->reset))
+ef3bcde75d06d6 Shenghao Ding     2023-06-18  798  		dev_err(tas_priv->dev, "%s Can't get reset GPIO\n",
+ef3bcde75d06d6 Shenghao Ding     2023-06-18  799  			__func__);
+ef3bcde75d06d6 Shenghao Ding     2023-06-18  800  
+ef3bcde75d06d6 Shenghao Ding     2023-06-18  801  	strcpy(tas_priv->dev_name, tasdevice_id[tas_priv->chip_id].name);
+ef3bcde75d06d6 Shenghao Ding     2023-06-18  802  }
+ef3bcde75d06d6 Shenghao Ding     2023-06-18  803  
+
+:::::: The code at line 786 was first introduced by commit
+:::::: 31a45f9190b5b4f5cd8cdec8471babd5215eee04 ASoC: tas2781: Use of_property_read_reg()
+
+:::::: TO: Rob Herring (Arm) <robh@kernel.org>
+:::::: CC: Mark Brown <broonie@kernel.org>
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
