@@ -1,104 +1,104 @@
-Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 11D3B13A271
-	for <llvm@lists.linux.dev>; Mon,  5 Aug 2024 10:48:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 091B517C64;
+	Mon,  5 Aug 2024 14:01:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722854883; cv=none; b=ff4YW67NtcfMEFieIEkzFpCC0CNZW0m0nuB1bPcNhnTjB8Ml1ubfsV40vX/6hXiYWuixu1M1DWgChZsH/pK65tKGvI4M483IZLSihkYmnnOK+8tSGSadyerC4D73mzDYF9oXqjD0+adocNVf74tt12vYV5MQN/eGS/RTzGpkqN0=
+	t=1722866467; cv=none; b=C954ws2cykE+eeasIV9DcCcjrPeJq5kpwSGxVXcH/j28c6Ea2u7umIO3ucW4cdNfvisIxBAK7p+W6aETZ1kR5OgRCMYuGNeWM3j0bLjZVRy3mc9NHzUS5TDzqm3kTimN1eVgsJ5r+ORxoKTnEK3maHfI6Vb5EveYcE/EK0cV+mE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722854883; c=relaxed/simple;
-	bh=1erOG6BD+UVqmjSzqgy0UeFWC6Qbup+YMTG/351ock8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ZkgT2OBnu44U4ZzaKhXbtd90kPQ0TBnENKd3bLGRrIUtEZvQoUa9BJbJ2+s37MyKkMx21NYm/0ysjW4cDWE/nbAcZEf5gYSF+cc5JAz5gbd5o86LnDCsqGbkbRzpV3LQzs8B5htOzzARi8LgpOQ7QdsT3DY22miCyL+c3DsD+8Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=oXjSHM0C; arc=none smtp.client-ip=209.85.214.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+	s=arc-20240116; t=1722866467; c=relaxed/simple;
+	bh=LYmlMc0K44iOMRb+22Ri63E0Ka9FGH2swdZtgwIlNjE=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=O5NXW/DX6vVS5dw63hOG1ZAWsdB92DaY0z9g5TEv7caQjRIDnRfEUSf9niI4/7/HGglFPqSp0ypokPeitRDHCORWG7HrEHYoU11fEAo3kywxio7QXTedO3lbieEkGEP9tdGtFxn/pvPa4dZzUy7zpeSWhQbaB8LD+WY4ehRC8cA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=u5mpwWtW; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="oXjSHM0C"
-Received: by mail-pl1-f172.google.com with SMTP id d9443c01a7336-1fb3b7d0d56so56008155ad.1
-        for <llvm@lists.linux.dev>; Mon, 05 Aug 2024 03:48:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1722854881; x=1723459681; darn=lists.linux.dev;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=bZ4eC6aco2OMzLZcW32lNcwJ0jDMMtztuSf2DOiIEmU=;
-        b=oXjSHM0CpVuabVEDVc6RRLSIMn7xoVyEinRoxr4POJI1wAil0D34vTaag3FVQ6VYUe
-         mrdHZXTb21tPi5jig0CCw6iWbXumEVcIhLYh6q+QRvP1TP41Zpq4/F14czQNuB13ARBN
-         7wM+KiazcY9ekZfS+2bJJIVStXZ1LaOEV3QBu3hKYdM7kRau8s/aydRIjOi6zrnLOxnH
-         iG+ScJP3IzGFTfvQdXMrWXwNcrgzNzEBN6GiSnBjm6wx/PTGX9HB+VWqxsfl90Xd1tIH
-         B2jG2AbESFQMsIOxo6b2lPh9oUq5Vd5VrJ7eMg2vj+FHSKSui0jq2aAYNcVRCvgUKdkC
-         u8RQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1722854881; x=1723459681;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=bZ4eC6aco2OMzLZcW32lNcwJ0jDMMtztuSf2DOiIEmU=;
-        b=qXH23/JvQKfDYPDjxbTZnws+iq1scAE69yTfYcB/N/SKJ8x0F0nbVkmDNl46ihs+Pz
-         f29BwPPSgq6ggzIyWsmYcrBDQaJpq0FCYFw9tz9EgcW6veddMCPPaNet+UkPucuPH/9p
-         tYtHFas/lLudLEEUOJVwkKRExLJsKGLz0/fGVPVyIp4qWKWXBH4+oQxiGcs8rLPHZRbB
-         13UgVme0KjL3FgeLe8j27foaPMHSm2MmGytQ0H9+crqiatI5FSRnnFkXdJMC3QpG7/ee
-         Rti0w1nCo/g2OablDi/z7lRWIYT6YGNnroU5ZsQKSrpuGaJhbAZhGVgkc/wWVH5cwflO
-         qocA==
-X-Forwarded-Encrypted: i=1; AJvYcCWYJ+x+Nm6aLPioe5s/EGTt3fHT6KryhIZmh5GNrp4mFeaQbJfsATbK+GmbKz8EiBiRRJUZcxTa64ez8kGzOl4oq0TNqA==
-X-Gm-Message-State: AOJu0YwOvezG1P4hQotkPy7rcoOeIFPZB93/NnK1hZOrUo40cr1gA83P
-	FHnaUaEr+pBkkCqQxH7hOVmggletUEeqt3ofDLfLNY0t03B4omBGmqUtiHVEObU=
-X-Google-Smtp-Source: AGHT+IHspederY56HLknhhlUUMxPp2/ot8UlLUewi1mzpD8jqzWyRsMD9OvpzVtKoiLvrCnVYGjDng==
-X-Received: by 2002:a17:903:234b:b0:1fb:984c:555a with SMTP id d9443c01a7336-1ff574ba872mr107623905ad.52.1722854881353;
-        Mon, 05 Aug 2024 03:48:01 -0700 (PDT)
-Received: from localhost ([122.172.84.129])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1ff591797f6sm64592435ad.208.2024.08.05.03.48.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 05 Aug 2024 03:48:00 -0700 (PDT)
-Date: Mon, 5 Aug 2024 16:17:58 +0530
-From: Viresh Kumar <viresh.kumar@linaro.org>
-To: kernel test robot <lkp@intel.com>
-Cc: "Rob Herring (Arm)" <robh@kernel.org>, llvm@lists.linux.dev,
-	oe-kbuild-all@lists.linux.dev
-Subject: Re: [vireshk-pm:cpufreq/arm/linux-next 2/2]
- drivers/cpufreq/spear-cpufreq.c:202:12: warning: variable 'i' is
- uninitialized when used here
-Message-ID: <20240805104758.52obllbjvuvtmd4n@vireshk-i7>
-References: <202408030418.gnJDcCpm-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="u5mpwWtW"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D98E5C4AF0B;
+	Mon,  5 Aug 2024 14:01:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1722866466;
+	bh=LYmlMc0K44iOMRb+22Ri63E0Ka9FGH2swdZtgwIlNjE=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=u5mpwWtWrpjVGdQGkSKQ+K//rJzjh2kPlaHq2cxCl86PXoPkx5o7bthDDjN7CxuE9
+	 T8BMSFGKdHb2OWE+4cwdz8xoRuDKyXyXKDMrGV7bOq2TLyq9/X5Rvl1rgnxO3ie1Yf
+	 ml/rfg9Kc4kmQ9zn8uBs9REkHfO37LIZ+jHE0uQx1R7G+cqYbPpso/Yt4r4E+Uo/wn
+	 /BSxCSqStxro7xjaqnwuikcELs6aKsDwN7LZW0WmTr6kYfTn2/K/1rgAS3F8Lv64Az
+	 SzRWKJSQF01pmb/ACQqxBredOqPSf+oDTOBu3BN57gveHAQhDWjxV43IsJTKNZxlae
+	 b6xybCMKjHEZQ==
+Received: by mail-lj1-f177.google.com with SMTP id 38308e7fff4ca-2ef2fccca2cso119552881fa.1;
+        Mon, 05 Aug 2024 07:01:06 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCVxb2jVLMZz4ANZB0fcTZXywCVgg92868seANvz59FsK6mlWh4umW7yWOFCFPTXQzwOC4iKqpuGOECA7SK63rvsRbckS1UKzJDtbc9jCigmUSw5hNKxNJmg1jxGnJZpbfRiJXU=
+X-Gm-Message-State: AOJu0Yyr1ywoxp6HuVQFGBH8a4nLF/KcuFARfgHZIaD4HJ4DviptegZ5
+	Q9ojV5ySLsns2EOsfQxZUobWxJK7iJUSsOCVcsOLbqh1oj/uvNfUTj63nitz1xZQI4PeY+7Bl2M
+	sn1CFHTolXUZ/swf3slbD3nfR+g==
+X-Google-Smtp-Source: AGHT+IEFbHCFnmoshA0WuXQphEnKNAn8UOd2m4R9GOBZska+HGyTOU5Gorn/3hrzQccKkomlkjUwq/uyVynmJwkC2Ig=
+X-Received: by 2002:a2e:330e:0:b0:2ef:2472:300c with SMTP id
+ 38308e7fff4ca-2f15aab0abfmr70075191fa.25.1722866465250; Mon, 05 Aug 2024
+ 07:01:05 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <202408030418.gnJDcCpm-lkp@intel.com>
+References: <202408030418.gnJDcCpm-lkp@intel.com> <20240805104758.52obllbjvuvtmd4n@vireshk-i7>
+In-Reply-To: <20240805104758.52obllbjvuvtmd4n@vireshk-i7>
+From: Rob Herring <robh@kernel.org>
+Date: Mon, 5 Aug 2024 08:00:53 -0600
+X-Gmail-Original-Message-ID: <CAL_Jsq+evBH2+XVeMAGXy9Ucof=G574+sFKcG94MqSUdgzFSgw@mail.gmail.com>
+Message-ID: <CAL_Jsq+evBH2+XVeMAGXy9Ucof=G574+sFKcG94MqSUdgzFSgw@mail.gmail.com>
+Subject: Re: [vireshk-pm:cpufreq/arm/linux-next 2/2] drivers/cpufreq/spear-cpufreq.c:202:12:
+ warning: variable 'i' is uninitialized when used here
+To: Viresh Kumar <viresh.kumar@linaro.org>
+Cc: kernel test robot <lkp@intel.com>, llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 03-08-24, 05:01, kernel test robot wrote:
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/vireshk/pm.git cpufreq/arm/linux-next
-> head:   dca2ef2b7d916c718c6e88084170413a8a1942d0
-> commit: dca2ef2b7d916c718c6e88084170413a8a1942d0 [2/2] cpufreq: spear: Use of_property_for_each_u32() instead of open coding
-> config: arm-defconfig (https://download.01.org/0day-ci/archive/20240803/202408030418.gnJDcCpm-lkp@intel.com/config)
-> compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
-> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240803/202408030418.gnJDcCpm-lkp@intel.com/reproduce)
-> 
-> If you fix the issue in a separate patch/commit (i.e. not just a new version of
-> the same patch/commit), kindly add following tags
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes: https://lore.kernel.org/oe-kbuild-all/202408030418.gnJDcCpm-lkp@intel.com/
-> 
-> All warnings (new ones prefixed by >>):
-> 
-> >> drivers/cpufreq/spear-cpufreq.c:202:12: warning: variable 'i' is uninitialized when used here [-Wuninitialized]
->                    freq_tbl[i].frequency = val;
->                             ^
->    drivers/cpufreq/spear-cpufreq.c:176:12: note: initialize the variable 'i' to silence this warning
->            int cnt, i, ret;
->                      ^
->                       = 0
->    1 warning generated.
-> 
-> 
-> vim +/i +202 drivers/cpufreq/spear-cpufreq.c
+On Mon, Aug 5, 2024 at 4:48=E2=80=AFAM Viresh Kumar <viresh.kumar@linaro.or=
+g> wrote:
+>
+> On 03-08-24, 05:01, kernel test robot wrote:
+> > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/vireshk/pm.git =
+cpufreq/arm/linux-next
+> > head:   dca2ef2b7d916c718c6e88084170413a8a1942d0
+> > commit: dca2ef2b7d916c718c6e88084170413a8a1942d0 [2/2] cpufreq: spear: =
+Use of_property_for_each_u32() instead of open coding
+> > config: arm-defconfig (https://download.01.org/0day-ci/archive/20240803=
+/202408030418.gnJDcCpm-lkp@intel.com/config)
+> > compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f2=
+8c006a5895fc0e329fe15fead81e37457cb1d1)
+> > reproduce (this is a W=3D1 build): (https://download.01.org/0day-ci/arc=
+hive/20240803/202408030418.gnJDcCpm-lkp@intel.com/reproduce)
+> >
+> > If you fix the issue in a separate patch/commit (i.e. not just a new ve=
+rsion of
+> > the same patch/commit), kindly add following tags
+> > | Reported-by: kernel test robot <lkp@intel.com>
+> > | Closes: https://lore.kernel.org/oe-kbuild-all/202408030418.gnJDcCpm-l=
+kp@intel.com/
+> >
+> > All warnings (new ones prefixed by >>):
+> >
+> > >> drivers/cpufreq/spear-cpufreq.c:202:12: warning: variable 'i' is uni=
+nitialized when used here [-Wuninitialized]
+> >                    freq_tbl[i].frequency =3D val;
+> >                             ^
+> >    drivers/cpufreq/spear-cpufreq.c:176:12: note: initialize the variabl=
+e 'i' to silence this warning
+> >            int cnt, i, ret;
+> >                      ^
+> >                       =3D 0
+> >    1 warning generated.
+> >
+> >
+> > vim +/i +202 drivers/cpufreq/spear-cpufreq.c
+>
+> Rob, can you please send a fix for this ?
 
-Rob, can you please send a fix for this ?
+Will do. Looks like it is only with clang...
 
--- 
-viresh
+Is there some reason COMPILE_TEST is not enabled for almost everything
+in cpufreq/?
+
+Rob
