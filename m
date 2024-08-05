@@ -1,80 +1,101 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4CEAF13C809;
-	Mon,  5 Aug 2024 20:21:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5141816A938
+	for <llvm@lists.linux.dev>; Mon,  5 Aug 2024 21:02:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722889266; cv=none; b=X+EApLl+YKwRYlwpnO1yxJOBNwe1x7bPgnKh62VqK6q3lgN6FfdUujdOq/oey/7HuVplHFsj82AvUPRswpngSvkhm0C9dd/ltjcozxnt3s15mp8PXT/sri6VjuL4G121LK/o7+BVHLM/C23pUCsds0bOARrlaD/hAtVDOcwPDG8=
+	t=1722891733; cv=none; b=bhA7zNdk+rGEoiVH0TrwulJ/qzfXfcbHEOUT6P6fEBFEx1dG8HY+yarfgyC23NRngEOs0JRC8Gwkh/4LhqoQzeg9HZTxinzcHKafgE4y/7iCuK5OC4IhfevTGjsJvGhN5TSOWYrOsmfFjq2xuU4OOJyU1Cjc6dMlalskI+0saoQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722889266; c=relaxed/simple;
-	bh=aSsOKcHWrL7OYpaiilqQDg8DY+BVww7YDCEqeu+txpg=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=f0g8cmXylicOJ3jk4ZeO2Qd8DSKxQVQ08Ae8R6jiNKnzYheLG092LjZIYgyLDNTwkeTs0nm5TmeBzU6nGepCgAypJWz9ARBBYVwhY8NjhUefMOJ8urkuKH3PWPtQ9/KPU0j7lLhPnG2csuYIyu66bGVgncgelZ2XFfuA/V197Lw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QHfICOL/; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1722891733; c=relaxed/simple;
+	bh=jT4ZFpLOgJp6WDy+xualrSn4q8s9yhmSj9q/wORTCnI=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=DkIXLrRmKhewSqksy/tWDN7cBiNYuwEiojkYc11SD7yGLoEQgrXmyBV1yJXJSk0iudOZrWVJgk/P7iMByaBJNsZSBAwZXkhj1yksbhkNamIfNdAuXsGZSJrA///Endb5CwiZzr3AOyL2gn+6lU408tY9UxUghJKuAIxQBgF2E9c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=XQkUU+BP; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QHfICOL/"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AEE1FC32782;
-	Mon,  5 Aug 2024 20:21:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1722889265;
-	bh=aSsOKcHWrL7OYpaiilqQDg8DY+BVww7YDCEqeu+txpg=;
-	h=From:To:Cc:Subject:Date:From;
-	b=QHfICOL/l0EGSBKfixpcy5rxrg/laYgHcSiWfX9HaY0pYI3nxTTzgQpr6i/2vptjM
-	 f1F4XoLKA917AIWeB2tjmFKL2Qu8Di+3dmBE97A50OaEM+m2QVHxvaxl4qxia1nd4e
-	 EPWBNAFaXMG4ruJBzvDmyOgkzsRn5J7D/r3zDIuyee/x+9dfw67LpGaLcAiyRwRRhx
-	 oA2Up2yOYcN5/jIwpARakN971a8JgpiKv6/mG0/R8B2PsBZjt+F5VYGx2YVTuOFpgd
-	 jFjcuiWeo5lzEIqxcCwb0xVGx4U73Jt5jLFunWAoC2MhSVvEp5hOb8VMldk0D+UmQt
-	 y5wV+/Dv/RNTQ==
-From: "Rob Herring (Arm)" <robh@kernel.org>
-To: "Rafael J. Wysocki" <rafael@kernel.org>,
-	Viresh Kumar <viresh.kumar@linaro.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>
-Cc: kernel test robot <lkp@intel.com>,
-	linux-pm@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: [PATCH] cpufreq: spear: Fix uninitialized variable "i"
-Date: Mon,  5 Aug 2024 14:20:41 -0600
-Message-ID: <20240805202042.3229190-1-robh@kernel.org>
-X-Mailer: git-send-email 2.43.0
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="XQkUU+BP"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1722891729;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=MRr018opauMWBCctRY6RxzvDRUHxsiseCr+vDdz3LEA=;
+	b=XQkUU+BP513h70LIKv4L8lhWVLTO/2MAKxHjJa4C2L0v2VVi3s9zx0YzT/nlP9x9PN7cSF
+	lYhXjWOtxSMEMHPrClrwlZ0eeX634KkeflAMMwmj5TW+ovUcyScUJRF9GJmuYuUyBGQ2bX
+	18g2Igz3DR1E69mNfxzioQUchX4FzVw=
+Received: from mx-prod-mc-02.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-376-ntFniVxNOi2QKkH65SXnWQ-1; Mon,
+ 05 Aug 2024 17:02:07 -0400
+X-MC-Unique: ntFniVxNOi2QKkH65SXnWQ-1
+Received: from mx-prod-int-02.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-02.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.15])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-02.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 50A671955D42
+	for <llvm@lists.linux.dev>; Mon,  5 Aug 2024 21:02:06 +0000 (UTC)
+Received: from [172.64.15.28] (unknown [10.30.34.46])
+	by mx-prod-int-02.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 9885F1955D42;
+	Mon,  5 Aug 2024 21:02:05 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.11.0-rc2,
+ mainline.kernel.org-clang, c813111d)
+Date: Mon, 05 Aug 2024 21:02:05 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.15
+Message-Id: <76150.124080517020700823@us-mta-376.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-The refactoring in commit dca2ef2b7d91 ("cpufreq: spear: Use
-of_property_for_each_u32() instead of open coding") left "i"
-uninitialized. Initialize it to 0.
+Hi, we tested your kernel and here are the results:
 
-Note that gcc doesn't detect this, only clang does.
+    Overall result: FAILED
+             Merge: OK
+           Compile: FAILED
 
-Fixes: dca2ef2b7d91 ("cpufreq: spear: Use of_property_for_each_u32() instead of open coding")
-Reported-by: kernel test robot <lkp@intel.com>
-Closes: https://lore.kernel.org/oe-kbuild-all/202408030418.gnJDcCpm-lkp@intel.com/
-Signed-off-by: Rob Herring (Arm) <robh@kernel.org>
----
- drivers/cpufreq/spear-cpufreq.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/cpufreq/spear-cpufreq.c b/drivers/cpufreq/spear-cpufreq.c
-index 4d28147c23f1..f8c16699a68d 100644
---- a/drivers/cpufreq/spear-cpufreq.c
-+++ b/drivers/cpufreq/spear-cpufreq.c
-@@ -173,7 +173,7 @@ static int spear_cpufreq_probe(struct platform_device *pdev)
- 	struct device_node *np;
- 	struct cpufreq_frequency_table *freq_tbl;
- 	u32 val;
--	int cnt, i, ret;
-+	int cnt, i = 0, ret;
- 
- 	np = of_cpu_device_node_get(0);
- 	if (!np) {
--- 
-2.43.0
+Kernel information:
+    Commit message: Merge tag 'slab-fixes-for-6.11-rc2' of git://git.kernel=
+.org/pub/scm/linux/kernel/git/vbabka/slab
+
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1401653500
+
+One or more kernel builds failed:
+    Unrecognized or new issues:
+         ppc64le - https://datawarehouse.cki-project.org/kcidb/builds/redha=
+t:1401653500-ppc64le-kernel
+           s390x - https://datawarehouse.cki-project.org/kcidb/builds/redha=
+t:1401653500-s390x-kernel
+          x86_64 (debug) - https://datawarehouse.cki-project.org/kcidb/buil=
+ds/redhat:1401653500-x86_64-kernel-debug
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
 
