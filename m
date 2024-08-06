@@ -1,133 +1,101 @@
-Received: from mail-yw1-f182.google.com (mail-yw1-f182.google.com [209.85.128.182])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F40B74E26
-	for <llvm@lists.linux.dev>; Tue,  6 Aug 2024 18:30:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C37E8145A0C
+	for <llvm@lists.linux.dev>; Tue,  6 Aug 2024 19:22:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722969049; cv=none; b=goPXwTQFs96MonZi0pHAd7PTmAG4zo7bmOCtbQC8V1++PBOkiqEH8jBTcW5j0UgP7kqmGa6LGxNN2aWVb14fztYaCcRV+ZvSa0E7/1YjvK3DA8D1xAkOH+pZP66L3z5+6ZkbSFaPgRBpsCIuftLiJNpDND47wpFo93ZtBCZsuEw=
+	t=1722972131; cv=none; b=Gx+J3tXcMLnk8up5e/dNjDpHz5SQYLMq1+oikpL+C7/k2dj1UJCP0UzAym+aDTMAp40WRoUT3f/ignq7qLTaEc2Vjhf5pSqZoAECeAbCAhza0nFnSY+WQN6zZ+DiPJ+WxwtFdLg4/p1l8/HBOHfevwcLu1SyG3+hRkkkoF8k2uo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722969049; c=relaxed/simple;
-	bh=oe38/BA3I3GPzGRZcA4tK3QobjJz3lxhxxE69sqobgM=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=KxtrWtmSCAKm3URQlTop17+F4D3P/f5qd+m9KQKAQf6m4/cZQzVIEkk/N6OE6jvCT4s8ANTN3ZLktlcNPZ1ZdZGhTp9EAcNep627xWQwDirglJqL+orxqBaDPUMiqtB6RbXymfXim0OntDJ6CmrQJdnJySLfMU0cexyLNRap+L4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=umich.edu; spf=pass smtp.mailfrom=umich.edu; dkim=pass (2048-bit key) header.d=umich.edu header.i=@umich.edu header.b=EBQZWnRO; arc=none smtp.client-ip=209.85.128.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=umich.edu
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=umich.edu
+	s=arc-20240116; t=1722972131; c=relaxed/simple;
+	bh=obekCJMH9hjZiOsyCJjq1SGLhEy+KSx3KxZM8u4O1g4=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=EmJz0oPTTk84ruI+47pLh5D92EzBs7+1FRVZ6B8SaNES8cVkPJmRi5XNbKYxo9HFRfwx3nhYnlc6DWBjHm0cvuZ42Gldx0jLRkhCLZlpBaCIfHDUoBe0OfMTgMNE9RyPhIvR3Ey1SImdJv4oWs5+npSQ+dIyWuOe5qEVoeSk/Jw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Enl1TbVI; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=umich.edu header.i=@umich.edu header.b="EBQZWnRO"
-Received: by mail-yw1-f182.google.com with SMTP id 00721157ae682-6512866fa87so10195277b3.2
-        for <llvm@lists.linux.dev>; Tue, 06 Aug 2024 11:30:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=umich.edu; s=google-2016-06-03; t=1722969045; x=1723573845; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=AJcjEsELElj17ftf1H3NNxeE2XuKAN8uQ1oS0Kp4OuE=;
-        b=EBQZWnROFH2TmQ/C8W1LjjF33v0uHgmALblqwqjj9QVCKqyJiV6cMe7iIbtWkaNLHg
-         GDiVHCFutPXCy1h7ZmBQE3h3lZyMkBOwaVPj0BIdmQYf1plbuOznnmgMgffpYRlVEUJP
-         atbf+hUfBF8FhSAli8qhRsMFv/f9Hr04QkCdVsmWLwR8Xe0fjtTYyIdbxraoFlsvYDJf
-         8PajRInYzYbcv5vMe0pP3qmugYWKcrZTpVFPjbR76RLyxZc8jJGVUbjr0UZPrnAEjmG9
-         3gJH3ZovmNz8wPuK80lkheKKysiqr23C9R2wiDhEZR+k0sD76LNxxCMJIA28JL4IVtjW
-         hKVw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1722969045; x=1723573845;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=AJcjEsELElj17ftf1H3NNxeE2XuKAN8uQ1oS0Kp4OuE=;
-        b=XocDoMsYZO85e4+ZgqVRBQYV6P2EQCkd9UrrR5Yrb7O0SdZfORkoxOyD9qA3sFT4sT
-         2BHp/bine3iGvnTwGcijh0XOPOVfdXhqKi3mnGBzgrvP2KDnYMhpXsm5ebMxduUnDKnd
-         F6odN8ofLI/9vG4bZIzojFGqAU/8jLB9iymJ4dJKh9Z4ymx/WmdGw4Q6IiYplpbnb6iI
-         WUHFonxo2CpBQBGbG933tcc7FwcOYEKuyXw1drbbZIdZI5BJO66bduV/CrIBMIxabiB1
-         SFXj0NrghXlHXfckqXSfZchGMYJ2dmVr3t83Mlr5t50NGhs5Xn5Da0ya/i6Xuq7ntU6i
-         FUoA==
-X-Forwarded-Encrypted: i=1; AJvYcCXuxnvErejAHT6P8hLGkYcG9w/7rtrcgGKTc943hsIOpdSvpL58cMQ/XXNxYqGRXDkSOSBfmOF53+GorExxaR7XksixEg==
-X-Gm-Message-State: AOJu0YyUdDLthjXFcEc2QiCeUq2xIR0Z4kznTF+aJ1yA2MfMuGNakMY0
-	YDNvzL3HPUPq09rEGNXPcSrBDsGUCOluZoe+LZz3/+N7Ld2mlRZrPAwjaFBXL2uc2/7Mp/R4vUZ
-	4LUyTN2m2Wepwi7OV6ivV532BqYuvphT3QO78IQ==
-X-Google-Smtp-Source: AGHT+IEi5wEKcxYijrCG9lZ62HVarFC1N/dov62z2Vvk1px7mbW2C3yfR+rXHXlo0cHub/OfafmZkMejgkYcoEw+XE8=
-X-Received: by 2002:a81:5b06:0:b0:65f:9e35:af1a with SMTP id
- 00721157ae682-68964590c97mr153755347b3.41.1722969045434; Tue, 06 Aug 2024
- 11:30:45 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Enl1TbVI"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1722972128;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=AorMNVrBWthTp7KUrAEpOR5M6amABUMMjVELRffrrBo=;
+	b=Enl1TbVIPkygRf7Rc5gOuhiasZg/biP/NaDNcVhSjeqAU9LHJXQtpb2LVUWQ+DhB2KUKnq
+	ZzWCRhZMSRypatluO9K2hCsgHTu6co3TKGhmGc4Yh5kFuBlKjU89Al00FOhVpX9G029NEE
+	9VsEAe+fxMBKTQS54/r1fpWIBkpYY2Q=
+Received: from mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-507-1UliTVcPPveC6phggxruCA-1; Tue,
+ 06 Aug 2024 15:22:05 -0400
+X-MC-Unique: 1UliTVcPPveC6phggxruCA-1
+Received: from mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.4])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 7DAD0195608A
+	for <llvm@lists.linux.dev>; Tue,  6 Aug 2024 19:22:04 +0000 (UTC)
+Received: from [172.64.15.28] (unknown [10.30.34.46])
+	by mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id DAA3D300022B;
+	Tue,  6 Aug 2024 19:22:03 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.11.0-rc2,
+ mainline.kernel.org-clang, d4560686)
+Date: Tue, 06 Aug 2024 19:22:03 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20240806150619.192882-1-ojeda@kernel.org>
-In-Reply-To: <20240806150619.192882-1-ojeda@kernel.org>
-From: Trevor Gross <tmgross@umich.edu>
-Date: Tue, 6 Aug 2024 14:30:33 -0400
-Message-ID: <CALNs47swnK6je1o+LOLUFCDEZJmQmZx8vZ+7MPvUbNKdFr_Q_Q@mail.gmail.com>
-Subject: Re: [PATCH] rust: add intrinsics to fix `-Os` builds
-To: Miguel Ojeda <ojeda@kernel.org>
-Cc: Alex Gaynor <alex.gaynor@gmail.com>, Wedson Almeida Filho <wedsonaf@gmail.com>, 
-	Nathan Chancellor <nathan@kernel.org>, Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, 
-	=?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
-	Benno Lossin <benno.lossin@proton.me>, Andreas Hindborg <a.hindborg@samsung.com>, 
-	Alice Ryhl <aliceryhl@google.com>, rust-for-linux@vger.kernel.org, 
-	Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, 
-	Justin Stitt <justinstitt@google.com>, llvm@lists.linux.dev, linux-kernel@vger.kernel.org, 
-	patches@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.4
+Message-Id: <96855.124080615220501723@us-mta-507.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Aug 6, 2024 at 11:06=E2=80=AFAM Miguel Ojeda <ojeda@kernel.org> wro=
-te:
->
-> Alice reported [1] that an arm64 build failed with:
->
->     ld.lld: error: undefined symbol: __extendsfdf2
->     >>> referenced by core.a6f5fc5794e7b7b3-cgu.0
->     >>>               rust/core.o:(<f32>::midpoint) in archive vmlinux.a
->     >>> referenced by core.a6f5fc5794e7b7b3-cgu.0
->     >>>               rust/core.o:(<f32>::midpoint) in archive vmlinux.a
->
->     ld.lld: error: undefined symbol: __truncdfsf2
->     >>> referenced by core.a6f5fc5794e7b7b3-cgu.0
->     >>>               rust/core.o:(<f32>::midpoint) in archive vmlinux.a
->
-> Rust 1.80.0 or later together with `CONFIG_CC_OPTIMIZE_FOR_SIZE=3Dy`
-> is what triggers it.
->
-> In addition, x86_64 builds also fail the same way.
->
-> Similarly, compiling with Rust 1.82.0 (currently in nightly) makes
-> another one appear, possibly due to the LLVM 19 upgrade there:
->
->     ld.lld: error: undefined symbol: __eqdf2
->     >>> referenced by core.20495ea57a9f069d-cgu.0
->     >>>               rust/core.o:(<f64>::next_up) in archive vmlinux.a
->     >>> referenced by core.20495ea57a9f069d-cgu.0
->     >>>               rust/core.o:(<f64>::next_down) in archive vmlinux.a
->
-> Gary adds [1]:
->
-> > Usually the fix on rustc side is to mark those functions as `#[inline]`
-> >
-> > All of {midpoint,next_up,next_down} are indeed unstable functions not
-> > marked as inline...
->
-> Fix all those by adding those intrinsics to our usual workaround.
->
-> Cc: Gary Guo <gary@garyguo.net>
-> Reported-by: Alice Ryhl <aliceryhl@google.com>
-> Closes: https://rust-for-linux.zulipchat.com/#narrow/stream/288089-Genera=
-l/topic/v6.2E11-rc1.20doesn't.20build.20for.20arm64/near/455637364
+Hi, we tested your kernel and here are the results:
 
-Should this link have the `[1]`?
+    Overall result: FAILED
+             Merge: OK
+           Compile: FAILED
 
-> Signed-off-by: Miguel Ojeda <ojeda@kernel.org>
-> ---
->  rust/Makefile             | 4 ++--
->  rust/compiler_builtins.rs | 3 +++
->  2 files changed, 5 insertions(+), 2 deletions(-)
 
-Reviewed-by: Trevor Gross <tmgross@umich.edu>
+Kernel information:
+    Commit message: Merge tag 'for_linus' of git://git.kernel.org/pub/scm/l=
+inux/kernel/git/mst/vhost
 
-Also submitted a fix upstream https://github.com/rust-lang/rust/pull/128749=
-.
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1403108841
 
-- Trevor
+One or more kernel builds failed:
+    Unrecognized or new issues:
+         ppc64le - https://datawarehouse.cki-project.org/kcidb/builds/redha=
+t:1403108841-ppc64le-kernel
+           s390x - https://datawarehouse.cki-project.org/kcidb/builds/redha=
+t:1403108841-s390x-kernel
+          x86_64 (debug) - https://datawarehouse.cki-project.org/kcidb/buil=
+ds/redhat:1403108841-x86_64-kernel-debug
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
