@@ -1,168 +1,234 @@
-Received: from flow4-smtp.messagingengine.com (flow4-smtp.messagingengine.com [103.168.172.139])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB59A171E61
-	for <llvm@lists.linux.dev>; Tue,  6 Aug 2024 22:43:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.139
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C414175D36;
+	Tue,  6 Aug 2024 23:10:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722984216; cv=none; b=ZoCbFp7BHx9ZPYII/+Ns/sIKWotli4jksunDSILsNCXA1o6dlTT4/CO5UaLnBpCSnkkTUD9QNH/aLVGSDJpYSyjwU0eKTc8B2fBpTqTvsPLaG27Vl+ewldlzR+uHFaR6Lr52a2rSSZCl1tASrKA4ZIAhxKvwIHXnt/5uP33ML8U=
+	t=1722985803; cv=none; b=C9Co98XRZCnGA7XDLLJs+3PgZitmSxvlZ+PwO3xWFjojlTbLYMipEaveWo3oGck79bIz0aLmDipxGQEcjy1EfJdgku21R7ak8KanTIVClW4oR+zHCr6rfrPYAXkJljEGOVpIhmcOWxi72W6I6yOvjeL1N+ZQYFIqFhLvGtY+uzw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722984216; c=relaxed/simple;
-	bh=J40VHMMWkh0kl6kCZd8XyxdOnEYP0+e9B8ZAIHuW8rA=;
-	h=From:To:cc:Subject:In-reply-to:References:MIME-Version:
-	 Content-Type:Date:Message-ID; b=PIVX6ocHG8zfg1HYyxxBX4t3ktYxMzo6vokkH0t5Bhpq8wrOZAmJaqJfoQQ49bnv1XQZPUwdxsZ9S1N7zrBnrlrh7iq+Bgw1Zgpz0ekXcgndnr6PhCQmLNOvPLguQ7EAkzthF8HeZpNDtISNAd0OXRnegAtuj7WIGZBZLydRBVM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=jvosburgh.net; spf=pass smtp.mailfrom=jvosburgh.net; dkim=pass (2048-bit key) header.d=jvosburgh.net header.i=@jvosburgh.net header.b=JDXTHnKO; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=hyqm8j8E; arc=none smtp.client-ip=103.168.172.139
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=jvosburgh.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=jvosburgh.net
+	s=arc-20240116; t=1722985803; c=relaxed/simple;
+	bh=srDtPMkx+3Ib/2vxXDsh66x8GKusBSCFnXcAPZ0/fJs=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=NrX/0vj3hSccTxNv+2yDRxsRnitgFZAmoDvOv39JapwOuQdSGag4A2uW+OnOHFI52IX7n3/g9b7XrV4cZ6GigjXXVYfDZwt5H2ZA0jKfLhXZNX13U5fzpkIFEJyWpTFzQCIB0gSeC8Z6EU3aMfvIkba/AwHhbCfvpkjkknlkC78=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XyM4t6ui; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=jvosburgh.net header.i=@jvosburgh.net header.b="JDXTHnKO";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="hyqm8j8E"
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-	by mailflow.nyi.internal (Postfix) with ESMTP id DE0CD201012;
-	Tue,  6 Aug 2024 18:43:33 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute3.internal (MEProxy); Tue, 06 Aug 2024 18:43:33 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=jvosburgh.net;
-	 h=cc:cc:content-id:content-transfer-encoding:content-type
-	:content-type:date:date:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:subject:subject:to
-	:to; s=fm1; t=1722984213; x=1722987813; bh=IuiNZDC4U1bd3gBKrqgwl
-	Txcb4/QWZaEfGNRECGqOyQ=; b=JDXTHnKOyxwCXnsogrYDFwk5HOp/yD3sJSr6F
-	NSVVlaPuFp3tJtDOiZ2A7PRAdKetUe35Ol3gByaPOPBk7gXl0QPv1NVmK0QXBHGP
-	rvYQAVg1g8MwHj7WLwPOTki7yOpzIvehRvzbHa6no9J7M9MJ8jrhnOa880mBaIaW
-	MBbza2B7kNDO9DGj9DYDHuI76Ye73scvONYYogRyMExrNUNR6NBuRm+Rsd8Xlz6T
-	inU63q0Us0Y1XbY43RodQGxvL144lEwUIXwNkACxeWyXWkvNBT2/FcM9qs5O8mRf
-	zx22G1fZpw56vPyEXmnUmM7Mx1ut3oqBdMF1R81Q0/oGNvCEA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-id
-	:content-transfer-encoding:content-type:content-type:date:date
-	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:subject:subject:to
-	:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-	fm3; t=1722984213; x=1722987813; bh=IuiNZDC4U1bd3gBKrqgwlTxcb4/Q
-	WZaEfGNRECGqOyQ=; b=hyqm8j8EwMUBxzFq69nKybB0giG2yaqllyxmUfhUsquG
-	K7h/xHj6Ng3PaKtASMah4UFcNyH5Nz+MsvTKQ7RW1AvJh+Dm0eOdef2uaYz93mhA
-	H+iFy3EMwPKOEzwnETdfb+2AryUD0K8ElO1QUhRHA19AXXzyzyrW3xYED7907NrB
-	rOLLBQToKorSZVtc6dm01ITBEhvRTR/KUmmaYsCUdrDk+R1I2lpY4V2Go9izcZk+
-	PSsDjnggWRVFg3lCQrFy3rv3iZzvY6kjcFjB32zvRJMjeoOD03aHukp1VA/HCHJD
-	Zr2FALpi14whuxuyXbBX1zBlVSU6a5fkIzhA0L4e6g==
-X-ME-Sender: <xms:FaeyZlCpv_z5EJZ6-CKIT0bUvxM7QpyTHkPOPI6GFagoCufhug5FFA>
-    <xme:FaeyZjgTb43H7hHU4Up7gBxEB54BOilhUQn7WTS2JrImgNF3ePoBQJ_tFu0aPGjmr
-    unWh3zyTpalmhSqSso>
-X-ME-Received: <xmr:FaeyZgnXj0IlFpwg5_LcdI7gMF_s3umfyFGSIkCs6EmvBAsy7WvtnzESy3bMDe-hgw_SJQ>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeftddrkeelgdduhecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefhvfevufgjfhfogggtgfffkfesthhqredtredtvdenucfhrhhomheplfgrhicu
-    gghoshgsuhhrghhhuceojhhvsehjvhhoshgsuhhrghhhrdhnvghtqeenucggtffrrghtth
-    gvrhhnpeeifedvleefleejveethfefieduueeivdefieevleffuddvveeftdehffffteef
-    ffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehjvh
-    esjhhvohhssghurhhghhdrnhgvthdpnhgspghrtghpthhtoheptd
-X-ME-Proxy: <xmx:FaeyZvwQoOEkzpxX-gD7z_NYutGylRJMUxL3sPWVjKemWlZH0-MyHQ>
-    <xmx:FaeyZqRn_UxuiqwjxWoNboWM3UnAKOq5FJxcLk0qivhA6GOkqTehzw>
-    <xmx:FaeyZiYVGbcLZNqLS96RhEkjXKtRj9wjRZFDEgJmexlRjNppx9UbOg>
-    <xmx:FaeyZrS2U2Qcp-sRLbFBcNrrdJorQH1tb3L1tIulaI7E5alH7NzRNA>
-    <xmx:FaeyZoBPa3xmm9Y4U_-NZgnGPlWGDC95e0uE61ERcdiCQF--MvqJX6kp>
-Feedback-ID: i53714940:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 6 Aug 2024 18:43:33 -0400 (EDT)
-Received: by famine.localdomain (Postfix, from userid 1000)
-	id 3661B9FCB8; Tue,  6 Aug 2024 15:43:32 -0700 (PDT)
-Received: from famine (localhost [127.0.0.1])
-	by famine.localdomain (Postfix) with ESMTP id 356739FBA2;
-	Tue,  6 Aug 2024 15:43:32 -0700 (PDT)
-From: Jay Vosburgh <jv@jvosburgh.net>
-To: Simon Horman <horms@kernel.org>
-cc: "David S. Miller" <davem@davemloft.net>,
-    Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
-    Paolo Abeni <pabeni@redhat.com>,
-    Andy Gospodarek <andy@greyhouse.net>,
-    Nathan Chancellor <nathan@kernel.org>,
-    Nick Desaulniers <ndesaulniers@google.com>,
-    Bill Wendling <morbo@google.com>,
-    Justin Stitt <justinstitt@google.com>, netdev@vger.kernel.org,
-    llvm@lists.linux.dev
-Subject: Re: [PATCH net-next] bonding: Pass string literal as format argument
- of alloc_ordered_workqueue()
-In-reply-to: <20240806-bonding-fmt-v1-1-e75027e45775@kernel.org>
-References: <20240806-bonding-fmt-v1-1-e75027e45775@kernel.org>
-Comments: In-reply-to Simon Horman <horms@kernel.org>
-   message dated "Tue, 06 Aug 2024 10:56:52 +0100."
-X-Mailer: MH-E 8.6+git; nmh 1.8+dev; Emacs 29.3
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XyM4t6ui"
+Received: by smtp.kernel.org (Postfix) with ESMTPS id B3CB0C32786;
+	Tue,  6 Aug 2024 23:10:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1722985802;
+	bh=srDtPMkx+3Ib/2vxXDsh66x8GKusBSCFnXcAPZ0/fJs=;
+	h=From:Subject:Date:To:Cc:Reply-To:From;
+	b=XyM4t6uixRdVtkkTDbe0NOXLXZ37CozxQGFZMrfsO/1RoZeoVND7Z91irbEFkZG1o
+	 QK9utNoPH7ktjzxgS9PHoD3qn/DNgqvVdZsgReOQMjUrT2TlQWFkqaNximTlbkANJw
+	 fwIaCs8OsL+5RpaxQ7RQgnnJNhR2sK1DHuPhkA26DmsSHTA9hDidEKUXDf1733zm99
+	 S42u2FVCM/ikVhxmWNb19aaYerJ5H8KgfmYrOTZTuTaNNyjHX7w/yoQnm1GFvnWvt/
+	 BEBQiXjUFnQg6HPQgb/LURhqtACOPKxOuV9p3+Gjq6Aluocc6VajyOLbdkqKccoIPM
+	 bvFunUNgxUrOA==
+Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 96120C49EA1;
+	Tue,  6 Aug 2024 23:10:02 +0000 (UTC)
+From: Daniel Gomez via B4 Relay <devnull+da.gomez.samsung.com@kernel.org>
+Subject: [PATCH 00/12] Enable build system on macOS hosts
+Date: Wed, 07 Aug 2024 01:09:14 +0200
+Message-Id: <20240807-macos-build-support-v1-0-4cd1ded85694@samsung.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <3239344.1722984212.1@famine>
-Content-Transfer-Encoding: quoted-printable
-Date: Tue, 06 Aug 2024 15:43:32 -0700
-Message-ID: <3239345.1722984212@famine>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-B4-Tracking: v=1; b=H4sIABqtsmYC/x3MQQqAIBBA0avErBuwCKyuEi1MpxqoFCcjiO6et
+ HyL/x8QikwCffFApIuF/ZFRlQXY1RwLIbtsqFXdqFZp3I31glPizaGkEHw8sbNGOa2NmyoNuQy
+ RZr7/6zC+7wcg7OjoZQAAAA==
+To: Masahiro Yamada <masahiroy@kernel.org>, 
+ Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nicolas@fjasle.eu>, 
+ Lucas De Marchi <lucas.demarchi@intel.com>, 
+ =?utf-8?q?Thomas_Hellstr=C3=B6m?= <thomas.hellstrom@linux.intel.com>, 
+ Rodrigo Vivi <rodrigo.vivi@intel.com>, 
+ Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
+ Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>, 
+ David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>, 
+ William Hubbs <w.d.hubbs@gmail.com>, Chris Brannon <chris@the-brannons.com>, 
+ Kirk Reiser <kirk@reisers.ca>, 
+ Samuel Thibault <samuel.thibault@ens-lyon.org>, 
+ Paul Moore <paul@paul-moore.com>, 
+ Stephen Smalley <stephen.smalley.work@gmail.com>, 
+ Ondrej Mosnacek <omosnace@redhat.com>, 
+ Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
+ Marc Zyngier <maz@kernel.org>, Oliver Upton <oliver.upton@linux.dev>, 
+ James Morse <james.morse@arm.com>, 
+ Suzuki K Poulose <suzuki.poulose@arm.com>, 
+ Zenghui Yu <yuzenghui@huawei.com>, 
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+ Jiri Slaby <jirislaby@kernel.org>, 
+ Nick Desaulniers <ndesaulniers@google.com>, 
+ Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>
+Cc: linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org, 
+ intel-xe@lists.freedesktop.org, dri-devel@lists.freedesktop.org, 
+ speakup@linux-speakup.org, selinux@vger.kernel.org, 
+ linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev, 
+ linux-serial@vger.kernel.org, llvm@lists.linux.dev, 
+ Finn Behrens <me@kloenk.dev>, 
+ "Daniel Gomez (Samsung)" <d+samsung@kruces.com>, gost.dev@samsung.com, 
+ Daniel Gomez <da.gomez@samsung.com>, 
+ Nick Desaulniers <nick.desaulniers@gmail.com>
+X-Mailer: b4 0.14.1
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1722985800; l=5760;
+ i=da.gomez@samsung.com; s=20240621; h=from:subject:message-id;
+ bh=srDtPMkx+3Ib/2vxXDsh66x8GKusBSCFnXcAPZ0/fJs=;
+ b=LiLIkclk6gyjYUEvcQG/jWd8xczYA+IguM7XsmOaFyvBmuk7FzB0cX6xsiSYYX3g4q3i4pKTn
+ rvltGN/7ZboBznQAO+ngrBCel8MYDLLj7yJ1vi5dIVQBZPHBahIv5wm
+X-Developer-Key: i=da.gomez@samsung.com; a=ed25519;
+ pk=BqYk31UHkmv0WZShES6pIZcdmPPGay5LbzifAdZ2Ia4=
+X-Endpoint-Received: by B4 Relay for da.gomez@samsung.com/20240621 with
+ auth_id=175
+X-Original-From: Daniel Gomez <da.gomez@samsung.com>
+Reply-To: da.gomez@samsung.com
 
-Simon Horman <horms@kernel.org> wrote:
+This patch set allows for building the Linux kernel for arm64 in macOS with
+LLVM.
 
->Recently I noticed that both gcc-14 and clang-18 report that passing
->a non-string literal as the format argument of alloc_ordered_workqueue
->is potentially insecure.
->
->F.e. clang-18 says:
->
->.../bond_main.c:6384:37: warning: format string is not a string literal (=
-potentially insecure) [-Wformat-security]
-> 6384 |         bond->wq =3D alloc_ordered_workqueue(bond_dev->name, WQ_M=
-EM_RECLAIM);
->      |                                            ^~~~~~~~~~~~~~
->.../workqueue.h:524:18: note: expanded from macro 'alloc_ordered_workqueu=
-e'
->  524 |         alloc_workqueue(fmt, WQ_UNBOUND | __WQ_ORDERED | (flags),=
- 1, ##args)
->      |                         ^~~
->.../bond_main.c:6384:37: note: treat the string as an argument to avoid t=
-his
-> 6384 |         bond->wq =3D alloc_ordered_workqueue(bond_dev->name, WQ_M=
-EM_RECLAIM);
->      |                                            ^
->      |                                            "%s",
->..../workqueue.h:524:18: note: expanded from macro 'alloc_ordered_workque=
-ue'
->  524 |         alloc_workqueue(fmt, WQ_UNBOUND | __WQ_ORDERED | (flags),=
- 1, ##args)
->      |                         ^
->
->Perhaps it is always the case where the contents of bond_dev->name is
->safe to pass as the format argument. That is, in my understanding, it
->never contains any format escape sequences.
->
->But, it seems better to be safe than sorry. And, as a bonus, compiler
->output becomes less verbose by addressing this issue as suggested by
->clang-18.
->
->Signed-off-by: Simon Horman <horms@kernel.org>
+Patches are based on previous Nick's work and suggestions [1][2][3] to
+enable build system in macOS hosts.
 
-Acked-by: Jay Vosburgh <jv@jvosburgh.net>
+Since macOS does not provide some of the headers available in the GNU
+C Library (glibc), the patches include a copy of these headers from
+glibc-2.40, with minor modifications detailed in the commit message.
 
->---
-> drivers/net/bonding/bond_main.c | 3 ++-
-> 1 file changed, 2 insertions(+), 1 deletion(-)
->
->diff --git a/drivers/net/bonding/bond_main.c b/drivers/net/bonding/bond_m=
-ain.c
->index 1cd92c12e782..f9633a6f8571 100644
->--- a/drivers/net/bonding/bond_main.c
->+++ b/drivers/net/bonding/bond_main.c
->@@ -6338,7 +6338,8 @@ static int bond_init(struct net_device *bond_dev)
-> =
+To set up the environment:
 
-> 	netdev_dbg(bond_dev, "Begin bond_init\n");
-> =
+* Provide build dependencies (installed via Homebrew):
 
->-	bond->wq =3D alloc_ordered_workqueue(bond_dev->name, WQ_MEM_RECLAIM);
->+	bond->wq =3D alloc_ordered_workqueue("%s", WQ_MEM_RECLAIM,
->+					   bond_dev->name);
-> 	if (!bond->wq)
-> 		return -ENOMEM;
-> =
+	coreutils, findutils, gnu-sed, gnu-tar, grep, llvm, make and pkg-config.
 
->
+* A case sensitive volume for building:
+
+	diskutil apfs addVolume /dev/disk<N> "Case-sensitive APFS" linux
+
+* And include in your PATH all GNU tools required by the Linux kernel as
+well as LLVM:
+
+	PATH="/opt/homebrew/opt/coreutils/libexec/gnubin:$PATH"
+	PATH="/opt/homebrew/opt/findutils/libexec/gnubin:$PATH"
+	PATH="/opt/homebrew/opt/gnu-sed/libexec/gnubin:$PATH"
+	PATH="/opt/homebrew/opt/gnu-tar/libexec/gnubin:$PATH"
+	PATH="/opt/homebrew/opt/grep/libexec/gnubin:$PATH"
+	PATH="/opt/homebrew/opt/make/libexec/gnubin:$PATH"
+	PATH="/opt/homebrew/opt/llvm/bin:$PATH"
+
+* Start the build using LLVM:
+
+	make LLVM=1 allyesconfig
+	make LLVM=1 -j$(nproc)
+
+I believe other architectures could also be supported if we can move
+forward this initiative. Additionally, we could incorporate Rust
+support. I understand that Finn Behrens has some patches [4][5] based on
+Nick's previous work.
+
+[1]: WIP: build Linux on MacOS
+https://github.com/ClangBuiltLinux/linux/commit/f06333e29addbc3d714adb340355f471c1dfe95a
+
+[2] Subject: [PATCH] scripts: subarch.include: fix SUBARCH on MacOS hosts
+https://lore.kernel.org/all/20221113233812.36784-1-nick.desaulniers@gmail.com/
+
+[3] Subject: Any interest in building the Linux kernel from a MacOS host?
+https://lore.kernel.org/all/CAH7mPvj64Scp6_Nbaj8KOfkoV5f7_N5L=Tv5Z9zGyn5SS+gsUw@mail.gmail.com/
+
+[4] https://github.com/kloenk/linux/commits/rust-project_macos-dylib/
+
+[5] https://kloenk.eu/posts/build-linux-on-m1-macos/
+
+To: Masahiro Yamada <masahiroy@kernel.org>
+To: Nathan Chancellor <nathan@kernel.org>
+To: Nicolas Schier <nicolas@fjasle.eu>
+To: Lucas De Marchi <lucas.demarchi@intel.com>
+To: Thomas Hellström <thomas.hellstrom@linux.intel.com>
+To: Rodrigo Vivi <rodrigo.vivi@intel.com>
+To: Maarten Lankhorst <maarten.lankhorst@linux.intel.com>
+To: Maxime Ripard <mripard@kernel.org>
+To: Thomas Zimmermann <tzimmermann@suse.de>
+To: David Airlie <airlied@gmail.com>
+To: Daniel Vetter <daniel@ffwll.ch>
+To: William Hubbs <w.d.hubbs@gmail.com>
+To: Chris Brannon <chris@the-brannons.com>
+To: Kirk Reiser <kirk@reisers.ca>
+To: Samuel Thibault <samuel.thibault@ens-lyon.org>
+To: Paul Moore <paul@paul-moore.com>
+To: Stephen Smalley <stephen.smalley.work@gmail.com>
+To: Ondrej Mosnacek <omosnace@redhat.com>
+To: Catalin Marinas <catalin.marinas@arm.com>
+To: Will Deacon <will@kernel.org>
+To: Marc Zyngier <maz@kernel.org>
+To: Oliver Upton <oliver.upton@linux.dev>
+To: James Morse <james.morse@arm.com>
+To: Suzuki K Poulose <suzuki.poulose@arm.com>
+To: Zenghui Yu <yuzenghui@huawei.com>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To: Jiri Slaby <jirislaby@kernel.org>
+To: Nick Desaulniers <ndesaulniers@google.com>
+To: Bill Wendling <morbo@google.com>
+To: Justin Stitt <justinstitt@google.com>
+Cc: linux-kernel@vger.kernel.org
+Cc: linux-kbuild@vger.kernel.org
+Cc: intel-xe@lists.freedesktop.org
+Cc: dri-devel@lists.freedesktop.org
+Cc: speakup@linux-speakup.org
+Cc: selinux@vger.kernel.org
+Cc: linux-arm-kernel@lists.infradead.org
+Cc: kvmarm@lists.linux.dev
+Cc: linux-serial@vger.kernel.org
+Cc: llvm@lists.linux.dev
+Cc: Finn Behrens <me@kloenk.dev>
+Cc: Daniel Gomez (Samsung) <d+samsung@kruces.com>
+Cc: gost.dev@samsung.com
+
+Signed-off-by: Daniel Gomez <da.gomez@samsung.com>
+---
+Daniel Gomez (11):
+      kbuild: add header_install dependency to scripts
+      file2alias: fix uuid_t definitions for macos
+      drm/xe: xe_gen_wa_oob: fix program_invocation_short_name for macos
+      accessiblity/speakup: genmap and makemapdata require linux/version.h
+      selinux/genheaders: include bitsperlong and posix_types headers
+      selinux/mdp: include bitsperlong and posix_types headers
+      include: add elf.h support
+      include: add endian.h support
+      scripts/mod: add byteswap support
+      tty/vt: conmakehash requires linux/limits.h
+      scripts/kallsyms: add compatibility support for macos
+
+Nick Desaulniers (1):
+      scripts: subarch.include: fix SUBARCH on MacOS hosts
+
+ Makefile                               |    2 +-
+ arch/arm64/kernel/pi/Makefile          |    1 +
+ arch/arm64/kernel/vdso32/Makefile      |    1 +
+ arch/arm64/kvm/hyp/nvhe/Makefile       |    2 +-
+ drivers/accessibility/speakup/Makefile |    2 +
+ drivers/gpu/drm/xe/xe_gen_wa_oob.c     |    8 +-
+ drivers/tty/vt/Makefile                |    1 +
+ include/byteswap/byteswap.h            |   35 +
+ include/elf/elf.h                      | 4491 ++++++++++++++++++++++++++++++++
+ include/endian/bits/uintn-identity.h   |   48 +
+ include/endian/endian.h                |   63 +
+ scripts/Makefile                       |    3 +-
+ scripts/kallsyms.c                     |    4 +
+ scripts/mod/Makefile                   |    6 +
+ scripts/mod/file2alias.c               |    3 +
+ scripts/selinux/genheaders/Makefile    |    3 +-
+ scripts/selinux/mdp/Makefile           |    3 +-
+ scripts/subarch.include                |    3 +-
+ 18 files changed, 4672 insertions(+), 7 deletions(-)
+---
+base-commit: 1e391b34f6aa043c7afa40a2103163a0ef06d179
+change-id: 20240807-macos-build-support-9ca0d77adb17
+
+Best regards,
+-- 
+Daniel Gomez <da.gomez@samsung.com>
+
+
