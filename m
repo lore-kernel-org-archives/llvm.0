@@ -1,102 +1,101 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF27915CB
-	for <llvm@lists.linux.dev>; Tue,  6 Aug 2024 16:08:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 326892D057
+	for <llvm@lists.linux.dev>; Tue,  6 Aug 2024 16:22:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722960529; cv=none; b=fUAjTFt7i7tGCymNhA/LJ1VeOMsXV/utKIVBcaKuK8ccQrLkbmTDfz0B1u6RCGFA4BhUf7bAhPwAWhYHieOJOSwQ3TuLDgVaFT9w0WJEDQnvUi86NzUsk1E6gj16VG95tkLsnI4/HWsQ09C2E7gxoipxjHYlEyRhpYRGrn4f70Q=
+	t=1722961331; cv=none; b=fClg5sEj6jFVDtVXIHyo0HvHWkWV6O84ZJaYxuYUauNjKGwrdsLoUbjbZjl/7L1e+G1RU/2b+UNxxLXZ6VExkPIwrrLA3DSMkHa0YPN2KyfYbR9h3pU6SbQsXxgY0U3e06ZEolQUZqGuSTj+PjSaLW5D3CPBYAdIS6Kz+cjjmWs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722960529; c=relaxed/simple;
-	bh=zleTztI71bR1VV4Zd7JrcyASC2gGE5G/CC5AYm4vrpY=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Grg4XwlhZlbZBXt7/vtD+A6yF/Fmqc8d5C+usTj0c+hI0WtZ3ZAlkpaE6i4VuDxTZWaC8G0CJWTFDsv6XAr8l5rFePrtYHBUyuvUJ9+EEC2fC9qc9wPpgmk5hQcq3Nliyf5QNA+rwl+g46dszz9YiWw/wDlvZSMoYumCkK/WHxw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=F+vshGM+; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1722961331; c=relaxed/simple;
+	bh=fkmmvyuJLeg9IHjzePPGhfZ0aciZoHmk6Uu1tqb3bdM=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=Zkau0ZscrZp7atFCLWLdnPvXPGuHS8PtenfDdzYpSg9LxKyoRXb5cp20YFCHjHR+YzUUbP+F5fwjtxrCnugon9bu+AAGGbHozmJ/+ba+narWkvkUBWBdGWVsnOrBouf002QlwyYEmRMvGvSNERpuekXEHU4JT6owFPgQj6qf6PI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Ih61KjLK; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="F+vshGM+"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 49A26C32786
-	for <llvm@lists.linux.dev>; Tue,  6 Aug 2024 16:08:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1722960529;
-	bh=zleTztI71bR1VV4Zd7JrcyASC2gGE5G/CC5AYm4vrpY=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=F+vshGM+0ebvKnXUGkH1sr9W9as/nny881xJ+w6cYDz9EQwStLrtloZNZx2fUWmgh
-	 n0ODDEKbhq/m6Bz6XyuhxgiYdob4AxP7o76DFSTkdIYkwr6jVhH9/2+6ObVEp+yPYZ
-	 RntkplLtMMHrb71L086pvX52+73Cx5NMC0M7Fa3cSLvhU51LL6gfciP7QngozgxVLy
-	 hXBpZW4FFNjOMVvN/z+Mogu/pGTJdj7WC7XZYeaXx8QDEfA5h8TAxP3zJ8RxzwByKc
-	 bNtA2SIc5bhlCSLOA5RGkjtCtMa4/lfQx/cFoIEK437bZFG5Um8l1yTllXz8IXiOpR
-	 6KMtOQJ41IN7g==
-Received: by mail-lj1-f182.google.com with SMTP id 38308e7fff4ca-2f183f4fa63so9520591fa.1
-        for <llvm@lists.linux.dev>; Tue, 06 Aug 2024 09:08:49 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCUXfsjxuUWvtGWARld6zPZD+pDu+tItcRbyDVaJj+mjATwAZjTksxyAwqgIi/rfnK2Eh76HVnisrk4ZEWu8EHKtnv8jDg==
-X-Gm-Message-State: AOJu0YzNxvTVQgtCbTavx+ECJvtxhZADd0ywUd6oxPfIhQIqiEvS291p
-	RM+80iY9lRfjwpFJZBVPBUSdAmjDuLpBsPa6mUb6zi84p9aI7UT11Wbkc6krK8M8856BOpzi8p2
-	dmEDlCD+BQZAcOSrPwpyv1aB0uA==
-X-Google-Smtp-Source: AGHT+IEEvIvp/KP9FxUMY15tzLmsM9A3gLkk1/eG9Nu8oa6/kQAQeFXGkAT3KG0Ks16DKyBfq45lT3A45Jf4iTbLChQ=
-X-Received: by 2002:a05:651c:10b8:b0:2ee:811e:757c with SMTP id
- 38308e7fff4ca-2f1576ddda5mr45044911fa.21.1722960527685; Tue, 06 Aug 2024
- 09:08:47 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Ih61KjLK"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1722961328;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=1BQ7LOfvVpzWl8XbZJdYBQ5P7U1x/8XhsH7XS5pNwQk=;
+	b=Ih61KjLKM+QHGIw23miCkZdcYfRIvWSADKPOGbMmT/InM+SZ9e7LYOI9AVaAPxKcrYXdd1
+	vukwF9bDJE0RuM2LqtwQWrozw0d0gD4lovTk8oI70iWjp7Ep18przi3YOSR3ye9Cb2oJ9X
+	Wt2lMIOW6E1Wbjye2w1QAmrl6xt+mvE=
+Received: from mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-377-l34JhBViP2qrfK67lLCS8A-1; Tue,
+ 06 Aug 2024 12:22:07 -0400
+X-MC-Unique: l34JhBViP2qrfK67lLCS8A-1
+Received: from mx-prod-int-02.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-02.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.15])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 94873195421B
+	for <llvm@lists.linux.dev>; Tue,  6 Aug 2024 16:22:06 +0000 (UTC)
+Received: from [172.64.15.28] (unknown [10.30.34.46])
+	by mx-prod-int-02.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id A78701955D45;
+	Tue,  6 Aug 2024 16:22:05 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.11.0-rc2,
+ mainline.kernel.org-clang, eb5e56d1)
+Date: Tue, 06 Aug 2024 16:22:05 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20240805202042.3229190-1-robh@kernel.org> <20240806044928.2j6z2ucnzk6lg5y3@vireshk-i7>
-In-Reply-To: <20240806044928.2j6z2ucnzk6lg5y3@vireshk-i7>
-From: Rob Herring <robh@kernel.org>
-Date: Tue, 6 Aug 2024 10:08:32 -0600
-X-Gmail-Original-Message-ID: <CAL_JsqLVj2sCuQFYFwR8QnB9jHq_9z4axeNzid1d7+ZrWzmgYA@mail.gmail.com>
-Message-ID: <CAL_JsqLVj2sCuQFYFwR8QnB9jHq_9z4axeNzid1d7+ZrWzmgYA@mail.gmail.com>
-Subject: Re: [PATCH] cpufreq: spear: Fix uninitialized variable "i"
-To: Viresh Kumar <viresh.kumar@linaro.org>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, 
-	Justin Stitt <justinstitt@google.com>, kernel test robot <lkp@intel.com>, linux-pm@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.15
+Message-Id: <19411.124080612220700511@us-mta-377.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, Aug 5, 2024 at 10:49=E2=80=AFPM Viresh Kumar <viresh.kumar@linaro.o=
-rg> wrote:
->
-> On 05-08-24, 14:20, Rob Herring (Arm) wrote:
-> > The refactoring in commit dca2ef2b7d91 ("cpufreq: spear: Use
-> > of_property_for_each_u32() instead of open coding") left "i"
-> > uninitialized. Initialize it to 0.
-> >
-> > Note that gcc doesn't detect this, only clang does.
-> >
-> > Fixes: dca2ef2b7d91 ("cpufreq: spear: Use of_property_for_each_u32() in=
-stead of open coding")
-> > Reported-by: kernel test robot <lkp@intel.com>
-> > Closes: https://lore.kernel.org/oe-kbuild-all/202408030418.gnJDcCpm-lkp=
-@intel.com/
-> > Signed-off-by: Rob Herring (Arm) <robh@kernel.org>
-> > ---
-> >  drivers/cpufreq/spear-cpufreq.c | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> >
-> > diff --git a/drivers/cpufreq/spear-cpufreq.c b/drivers/cpufreq/spear-cp=
-ufreq.c
-> > index 4d28147c23f1..f8c16699a68d 100644
-> > --- a/drivers/cpufreq/spear-cpufreq.c
-> > +++ b/drivers/cpufreq/spear-cpufreq.c
-> > @@ -173,7 +173,7 @@ static int spear_cpufreq_probe(struct platform_devi=
-ce *pdev)
-> >       struct device_node *np;
-> >       struct cpufreq_frequency_table *freq_tbl;
-> >       u32 val;
-> > -     int cnt, i, ret;
-> > +     int cnt, i =3D 0, ret;
->
-> We don't increment 'i' anymore, don't we need an i++ in:
->
->         freq_tbl[i].frequency =3D val;
->
-> ?
+Hi, we tested your kernel and here are the results:
 
-Sigh. Yes.
+    Overall result: FAILED
+             Merge: OK
+           Compile: FAILED
 
 
-Rob
+Kernel information:
+    Commit message: Merge tag 'platform-drivers-x86-v6.11-2' of git://git.k=
+ernel.org/pub/scm/linux/kernel/git/pdx86/platform-drivers-x86
+
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1402904477
+
+One or more kernel builds failed:
+    Unrecognized or new issues:
+         ppc64le - https://datawarehouse.cki-project.org/kcidb/builds/redha=
+t:1402904477-ppc64le-kernel
+           s390x - https://datawarehouse.cki-project.org/kcidb/builds/redha=
+t:1402904477-s390x-kernel
+          x86_64 (debug) - https://datawarehouse.cki-project.org/kcidb/buil=
+ds/redhat:1402904477-x86_64-kernel-debug
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
