@@ -1,134 +1,101 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 10E4B14F12D
-	for <llvm@lists.linux.dev>; Tue,  6 Aug 2024 09:50:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 598A7F4FA;
+	Tue,  6 Aug 2024 09:56:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722937814; cv=none; b=WfS+IuzmX/ydoyXm6oXuDrcjqnYWa1FR5jXQ6SXyGBnjzQ9/grkKDa1GU6ucS7NFwDcltcN8htoMrfOpnpD577Db4jpnOn2J/k0ADhU27yNV+5MQtZngbEllb76YGYU8wnXmipu3TXxs0Zkbkdzpt5EtKB5EiCsJhG4FVt6zsig=
+	t=1722938219; cv=none; b=CKuHg9EHe9hijyiHBEJLzaFtq6d6vOqiHsDMMSjs4ifXA0OSHG63MP1oMzZBgSc+1EXpU65PEsDXwPAuf//4JOqfH8fmd/4OWV+WMsQ/flJ7kuqrvgBSmzTuf9jr5FrmSCd7mMek5rFi36EjaC0exFWaiDZILjzsoXpL09wpqgM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722937814; c=relaxed/simple;
-	bh=ucoo6f54KwSD5SeHMZYpmPjZO4xNne7BCWHjR3gCdxw=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=MYQ7wv+6syKAsgBD1IX45QcuE/lXcdw4SDQFyLmnVggPTCaLFNUZejW2L0PBOEQtQuh4eNNdACbLwDNqJ31jx0dOfnHLe38pAd2u4FkEHXFewforBgsfPwhnAg0T8klV51x4vmBsOrH3PbJ0pE0R7H1WRql6pzpXJqt14msgIzY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oKW1L90T; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1722938219; c=relaxed/simple;
+	bh=Y7qmUm2fyhlr2MjYWvtsU58bqvlx201bjXy0X8uU6Ok=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=L7jlD1W+QvYfngEQ4MGvUfffmxGwMNtN/cATjnL457q7uRumuVHKE9OQ52GM6lH86c5lde496XHMmZ5RwR5VgnMVjYUgyhuKl/6KqGFRFjEcJ97XafE+SKR3Nl2cgAOr8zDLOxpHpGx+FJl2pTfetYTXUIcdNXlq4V7lL+xjl44=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lFXa+M1D; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oKW1L90T"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A092FC4AF0F
-	for <llvm@lists.linux.dev>; Tue,  6 Aug 2024 09:50:13 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lFXa+M1D"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BFD07C4AF09;
+	Tue,  6 Aug 2024 09:56:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1722937813;
-	bh=ucoo6f54KwSD5SeHMZYpmPjZO4xNne7BCWHjR3gCdxw=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=oKW1L90TT5GCzFpxh34akZfkqpNPIUTKVhOQq0b8YnrBM7RoQsK76KzSl1zavr1px
-	 fe24f91L8gDRrTGd38mM70jhqWKvfozVirArbgNZe8BrfMWoU6nKw5eWEj1Ch2Ikxu
-	 Soi2xQgd441iCtHJiz6kZY9usmuGsE2OogE078LSZzbwm+t+KGO5Ivr4qxMQHjIvH+
-	 mUk+SVxmYrlcZDuoRJCZEVLS4j/POjjjzFx+9IFC6wxFqKvl66WudqBmnpp/gvTgSE
-	 kzWQ7x7RiJObZFICWyJ6AonUDaAveEAqIzHw7CjoTCXssRoW2aFEIsVXH2BA9xlRTg
-	 hjbdFi64YG4eA==
-Received: by mail-lf1-f46.google.com with SMTP id 2adb3069b0e04-52f025ab3a7so686342e87.2
-        for <llvm@lists.linux.dev>; Tue, 06 Aug 2024 02:50:13 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCWSYFBeBVvCSNX0sZYBWcoxgRbFmp+5HSwanAehb85zyHY8imTyu8JhJURjHSqBlNGTn1nR12JXNaEl/Rt8HcU4ao2+Tg==
-X-Gm-Message-State: AOJu0Yyjqlfvj5LcAActYeEs2aLlZ0HAmeGZQ5LBhHrxGbdkViLxB+hK
-	vV94ayVoovRz5rVEljUOqp8IUwvsWqhNFlIQ7P2RPd6I3TE4UNHDfr0GbyM9MTL5Pg4cJyNuCeZ
-	xrt0XTKRkvKcLlCN/CAiFJNtZ9Ns=
-X-Google-Smtp-Source: AGHT+IHDmfEeaoMHn9wSEgbMyVwhE3oUE5/IxWnyUsHffsPs2/DlCmJRrk40n4zbU0A1zN9iMt7Y1obwj4hOYJAxV3A=
-X-Received: by 2002:a05:6512:1310:b0:52c:d943:300f with SMTP id
- 2adb3069b0e04-530bb3bd90cmr10650159e87.38.1722937812334; Tue, 06 Aug 2024
- 02:50:12 -0700 (PDT)
+	s=k20201202; t=1722938218;
+	bh=Y7qmUm2fyhlr2MjYWvtsU58bqvlx201bjXy0X8uU6Ok=;
+	h=From:Date:Subject:To:Cc:From;
+	b=lFXa+M1D3Tk4hxWfAQYDmrijNrDC9T4zCexcKVpVkQ0/+uJOEGsvC0YtdhG4V42ce
+	 FRiH8quGRsQqye6MADCSSPUwym6MMKkawuPwtPJquW9sseQKSBtSPyy3FgL1XM3V/U
+	 /2E4iqDaZSj0VxFuCETsd+uSUfRN1JPEN/AOkjAM1upA0NtNNuY4wAshTnSdbIK910
+	 09ZTIYnfNl0G9GT4c/5uXmDHshDysQVx9ah7PVdHWmUAjqLfUkQ2cZTWhdjwjD9NAG
+	 gCU9eGievH7JfELVN87r0noyjPbazVdF5zQKCLkvQrw0UOm8b8OHYafSdmYvaTM6pv
+	 duUrHOAXqPbbA==
+From: Simon Horman <horms@kernel.org>
+Date: Tue, 06 Aug 2024 10:56:52 +0100
+Subject: [PATCH net-next] bonding: Pass string literal as format argument
+ of alloc_ordered_workqueue()
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20240704-clang-tidy-filter-v1-1-8d4556a35b65@bootlin.com>
- <CAK7LNARmV89PJV3sd93WwqLLQD0fg9mBOMetzECLriF8295zVA@mail.gmail.com> <D37UCSKCEVI5.100JF8WJR9DNY@bootlin.com>
-In-Reply-To: <D37UCSKCEVI5.100JF8WJR9DNY@bootlin.com>
-From: Masahiro Yamada <masahiroy@kernel.org>
-Date: Tue, 6 Aug 2024 18:49:35 +0900
-X-Gmail-Original-Message-ID: <CAK7LNASQEXB2bnH1+yj8Xg-Xyb7x4Fi4KJrkowA8dyccyfvfPQ@mail.gmail.com>
-Message-ID: <CAK7LNASQEXB2bnH1+yj8Xg-Xyb7x4Fi4KJrkowA8dyccyfvfPQ@mail.gmail.com>
-Subject: Re: [PATCH] scripts: run-clang-tools: add file filtering option
-To: =?UTF-8?B?VGjDqW8gTGVicnVu?= <theo.lebrun@bootlin.com>
-Cc: Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nicolas@fjasle.eu>, 
-	Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, 
-	Justin Stitt <justinstitt@google.com>, llvm@lists.linux.dev, linux-kbuild@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20240806-bonding-fmt-v1-1-e75027e45775@kernel.org>
+X-B4-Tracking: v=1; b=H4sIAGPzsWYC/x2MywqAIBAAfyX23ILag+pXokPmVntoDZUIon9PO
+ s7AzAORAlOEoXgg0MWRvWTQZQHLPstGyC4zGGVq1akWrRfHsuF6JLRVVq63XWM05OIMtPL930Y
+ QSih0J5je9wMGX+H5ZwAAAA==
+To: "David S. Miller" <davem@davemloft.net>, 
+ Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, 
+ Paolo Abeni <pabeni@redhat.com>
+Cc: Jay Vosburgh <jv@jvosburgh.net>, Andy Gospodarek <andy@greyhouse.net>, 
+ Nathan Chancellor <nathan@kernel.org>, 
+ Nick Desaulniers <ndesaulniers@google.com>, 
+ Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
+ netdev@vger.kernel.org, llvm@lists.linux.dev
+X-Mailer: b4 0.14.0
 
-On Mon, Aug 5, 2024 at 5:39=E2=80=AFPM Th=C3=A9o Lebrun <theo.lebrun@bootli=
-n.com> wrote:
->
-> Hello Masahiro,
->
-> On Sat Aug 3, 2024 at 10:42 AM CEST, Masahiro Yamada wrote:
-> > On Thu, Jul 4, 2024 at 6:28=E2=80=AFPM Th=C3=A9o Lebrun <theo.lebrun@bo=
-otlin.com> wrote:
-> > > +def filter_entries(datastore, filters):
-> > > +    for entry in datastore:
-> > > +        if filters =3D=3D []:
-> > > +            yield entry
-> > > +            continue
-> >
-> > Maybe, this can be checked on the caller side.
-> > (Note, I did not test this at all)
-> >
-> > if args.file_filter:
-> >         datastore =3D filter_entries(datastore, args.file_filter)
->
-> Agreed.
->
-> > > +
-> > > +        assert entry['file'].startswith(entry['directory'])
-> > > +        # filepath is relative to the directory, to avoid matching o=
-n the absolute path
-> >
-> > Does this assertion work with the separate output directory
-> > (O=3D option)?
-> >
-> > Just try this command:
-> >
-> >  $ make LLVM=3D1 O=3D/tmp/foo clang-tidy
->
-> Indeed this does not work. It requires some changes to Makefiles to see
-> that it does not work, as this assertion is only used when a filter is
-> passed (which current cmd_clang_tools cannot do).
->
-> What would you recommend to fix that? If we take the first entry:
->
->   {
->     "command": "clang ...",
->     "directory": "/tmp/foo",
->     "file": "/ABSOLUTE/PATH/linux-clang-tidy/arch/mips/crypto/crc32-mips.=
-c"
->   },
->
-> I don't see an easy way to know that "/ABSOLUTE/PATH/linux-clang-tidy/"
-> should be removed. We could probably compute it from the command value
-> but that isn't a great way forward.
->
-> There are some entries that look like this. Those are easy to deal with.
->
->   {
->     "command": "clang ...",
->     "directory": "/tmp/foo",
->     "file": "/tmp/foo/drivers/tty/vt/defkeymap.c"
->   }
+Recently I noticed that both gcc-14 and clang-18 report that passing
+a non-string literal as the format argument of alloc_ordered_workqueue
+is potentially insecure.
 
+F.e. clang-18 says:
 
-The top of the source tree is derived from __file__
+.../bond_main.c:6384:37: warning: format string is not a string literal (potentially insecure) [-Wformat-security]
+ 6384 |         bond->wq = alloc_ordered_workqueue(bond_dev->name, WQ_MEM_RECLAIM);
+      |                                            ^~~~~~~~~~~~~~
+.../workqueue.h:524:18: note: expanded from macro 'alloc_ordered_workqueue'
+  524 |         alloc_workqueue(fmt, WQ_UNBOUND | __WQ_ORDERED | (flags), 1, ##args)
+      |                         ^~~
+.../bond_main.c:6384:37: note: treat the string as an argument to avoid this
+ 6384 |         bond->wq = alloc_ordered_workqueue(bond_dev->name, WQ_MEM_RECLAIM);
+      |                                            ^
+      |                                            "%s",
+..../workqueue.h:524:18: note: expanded from macro 'alloc_ordered_workqueue'
+  524 |         alloc_workqueue(fmt, WQ_UNBOUND | __WQ_ORDERED | (flags), 1, ##args)
+      |                         ^
 
-  srctree =3D str(pathlib.Path(__file__).parents[2].resolve())
+Perhaps it is always the case where the contents of bond_dev->name is
+safe to pass as the format argument. That is, in my understanding, it
+never contains any format escape sequences.
 
+But, it seems better to be safe than sorry. And, as a bonus, compiler
+output becomes less verbose by addressing this issue as suggested by
+clang-18.
 
+Signed-off-by: Simon Horman <horms@kernel.org>
+---
+ drivers/net/bonding/bond_main.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
+diff --git a/drivers/net/bonding/bond_main.c b/drivers/net/bonding/bond_main.c
+index 1cd92c12e782..f9633a6f8571 100644
+--- a/drivers/net/bonding/bond_main.c
++++ b/drivers/net/bonding/bond_main.c
+@@ -6338,7 +6338,8 @@ static int bond_init(struct net_device *bond_dev)
+ 
+ 	netdev_dbg(bond_dev, "Begin bond_init\n");
+ 
+-	bond->wq = alloc_ordered_workqueue(bond_dev->name, WQ_MEM_RECLAIM);
++	bond->wq = alloc_ordered_workqueue("%s", WQ_MEM_RECLAIM,
++					   bond_dev->name);
+ 	if (!bond->wq)
+ 		return -ENOMEM;
+ 
 
-
-
-
-
---
-Best Regards
-Masahiro Yamada
