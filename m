@@ -1,232 +1,531 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6AC268F6C;
-	Tue,  6 Aug 2024 15:16:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
+Received: from zg8tmja2lje4os4yms4ymjma.icoremail.net (zg8tmja2lje4os4yms4ymjma.icoremail.net [206.189.21.223])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 019AA17BD9
+	for <llvm@lists.linux.dev>; Tue,  6 Aug 2024 15:24:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=206.189.21.223
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722957371; cv=none; b=Dm8DqS9i4oOl7bhyZS6oUDLRseXcRWRN9Nuu86bt6lciBd/077GOPj+hQUM/Ke8U5DIupf0DVjDHRkt/WHlRQEMv1QToyZGaOLWBd5tr2aMj9Z5N7+1Z5FQQWZgkI4tIduopWxc6j89Y4AUzBcjRNlnG6oQ6KyL05tuISqKSsDA=
+	t=1722957848; cv=none; b=HAIsFHMiEUktQFfe3k8fNpUKvvV5O0dYYkayZS042pvMxchh2Y6YcTp7rQag3L1ztJYP1JV/773fciA7hnhvl8GnmyMw4UBwrjpqk3g4FUGfiylHhx3ZDa9XFsit9bkZvIB+fOM+MUG0fthauySLByG95wh7LTj4I8VKEnLpeso=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722957371; c=relaxed/simple;
-	bh=3MlkYy6g36sLgZpc3PWyAkbXfVEleD3+rQVgjcMz2Co=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=oi1NEVcl95ap0j4xc/y+ccqCVz3pN1e6/ujp9lDsgBDMxErwFPMRykjOc74KgoAbSktCqgGvMhD+gSeyFhaf7lWhUgqIz/6oj4BRH/xvupfGBPkqfiGT/a8L3/ezc90NojhBLM14TIR+aHyEPDhoSPjjCU1Ppx09Xvr0VUSk+ww=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=J4zxx7M5; arc=none smtp.client-ip=192.198.163.17
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="J4zxx7M5"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1722957368; x=1754493368;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=3MlkYy6g36sLgZpc3PWyAkbXfVEleD3+rQVgjcMz2Co=;
-  b=J4zxx7M55RQu3O52RYmcv6ROgfcpNksgCIn38KTnAozxyo7wYCRMWAqP
-   J9hyUEaGOCg5Hd7qe4kCT8DGg9S0t2894Ov5q51M8/ZpkTMrq1Qu/9Z9u
-   zzDGVRdEHCIioT+cmKoHlT7knPWImG3YCiS39X+ixcpc/+WIYCtNXMX97
-   W3bt7KIRens3bVi1Td7vht/wxRsuc3yyRqtYL74LQrkZLrXhpLbE/Ps79
-   o4z0mQek82cRsJgWXML8x2JdI3mLChgGS2tziz2Jf3TxK4qV0zXECbrB1
-   FfgGTHxp+jv58pOlJlrGjrLipfFPmt2qeR9yVnkgU/3Wr6pwCfh+FHPoY
-   g==;
-X-CSE-ConnectionGUID: 2bVPLyOLQcio+EJEONkvzQ==
-X-CSE-MsgGUID: /eX5u0GqTNqv85MV2OaTxA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11156"; a="20858435"
-X-IronPort-AV: E=Sophos;i="6.09,268,1716274800"; 
-   d="scan'208";a="20858435"
-Received: from fmviesa008.fm.intel.com ([10.60.135.148])
-  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Aug 2024 08:16:07 -0700
-X-CSE-ConnectionGUID: chAZ4jaIRXW3tiOcmWle4g==
-X-CSE-MsgGUID: cTr0BnKSQXuSMG/bQ9gFsQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.09,268,1716274800"; 
-   d="scan'208";a="56481914"
-Received: from unknown (HELO b6bf6c95bbab) ([10.239.97.151])
-  by fmviesa008.fm.intel.com with ESMTP; 06 Aug 2024 08:16:04 -0700
-Received: from kbuild by b6bf6c95bbab with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1sbLus-0004bS-00;
-	Tue, 06 Aug 2024 15:16:02 +0000
-Date: Tue, 6 Aug 2024 23:15:16 +0800
-From: kernel test robot <lkp@intel.com>
-To: Song Liu <song@kernel.org>, linux-kernel@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Song Liu <song@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
-	Thomas Gleixner <tglx@linutronix.de>, Rob Herring <robh@kernel.org>,
-	Will Deacon <will@kernel.org>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Ingo Molnar <mingo@redhat.com>,
-	Arnaldo Carvalho de Melo <acme@kernel.org>,
-	Namhyung Kim <namhyung@kernel.org>
-Subject: Re: [PATCH] Revert "perf: Add a counter for number of user access
- events in context"
-Message-ID: <202408062245.C5TeYWiV-lkp@intel.com>
-References: <20240805231031.1760371-1-song@kernel.org>
+	s=arc-20240116; t=1722957848; c=relaxed/simple;
+	bh=WTyF3gHGH/iQaGcAvmph5Yx+f6EvDmsTD1Pw2QCb3MM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=NrvkMTCd5vCEOpKg3kbwk1AF9Tc1JylyZ7VgIuT00qv8PVo9pjGjV7vdzoLWeFLiNFszMBxZSNv8G/+M8IIrOuM7hfkBQIAjE+12PhEnRn1/pTOc77yuVENP03fT2JrVHeh1i8vXRqxCykbJqx/S7J0rx7vyHltMGVZ65X+eTLg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=hust.edu.cn; spf=pass smtp.mailfrom=hust.edu.cn; arc=none smtp.client-ip=206.189.21.223
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=hust.edu.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hust.edu.cn
+Received: from hust.edu.cn (unknown [172.16.0.50])
+	by app2 (Coremail) with SMTP id HwEQrACHjs4EQLJmqt9rAA--.39245S2;
+	Tue, 06 Aug 2024 23:23:48 +0800 (CST)
+Received: from [192.168.1.111] (unknown [10.12.177.116])
+	by gateway (Coremail) with SMTP id _____wCHEHMCQLJmsufYAA--.29934S2;
+	Tue, 06 Aug 2024 23:23:47 +0800 (CST)
+Message-ID: <1d0cfce3-cf65-4d3a-b8af-73c3bc5d2d45@hust.edu.cn>
+Date: Tue, 6 Aug 2024 23:23:45 +0800
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240805231031.1760371-1-song@kernel.org>
-
-Hi Song,
-
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on perf-tools-next/perf-tools-next]
-[also build test ERROR on tip/perf/core perf-tools/perf-tools linus/master v6.11-rc2 next-20240806]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Song-Liu/Revert-perf-Add-a-counter-for-number-of-user-access-events-in-context/20240806-071159
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/perf/perf-tools-next.git perf-tools-next
-patch link:    https://lore.kernel.org/r/20240805231031.1760371-1-song%40kernel.org
-patch subject: [PATCH] Revert "perf: Add a counter for number of user access events in context"
-config: arm64-randconfig-001-20240806 (https://download.01.org/0day-ci/archive/20240806/202408062245.C5TeYWiV-lkp@intel.com/config)
-compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 423aec6573df4424f90555468128e17073ddc69e)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240806/202408062245.C5TeYWiV-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202408062245.C5TeYWiV-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
-         |                                                                 ^~~~~~
-   drivers/perf/arm_pmuv3.c:140:2: note: previous initialization is here
-     140 |         PERF_CACHE_MAP_ALL_UNSUPPORTED,
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/perf/arm_pmu.h:45:31: note: expanded from macro 'PERF_CACHE_MAP_ALL_UNSUPPORTED'
-      45 |                 [0 ... C(RESULT_MAX) - 1] = CACHE_OP_UNSUPPORTED,       \
-         |                                             ^~~~~~~~~~~~~~~~~~~~
-   include/linux/perf/arm_pmu.h:37:31: note: expanded from macro 'CACHE_OP_UNSUPPORTED'
-      37 | #define CACHE_OP_UNSUPPORTED            0xFFFF
-         |                                         ^~~~~~
-   drivers/perf/arm_pmuv3.c:147:44: warning: initializer overrides prior initialization of this subobject [-Winitializer-overrides]
-     147 |         [C(DTLB)][C(OP_READ)][C(RESULT_ACCESS)] = ARMV8_IMPDEF_PERFCTR_L1D_TLB_RD,
-         |                                                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/perf/arm_pmuv3.h:133:44: note: expanded from macro 'ARMV8_IMPDEF_PERFCTR_L1D_TLB_RD'
-     133 | #define ARMV8_IMPDEF_PERFCTR_L1D_TLB_RD                         0x004E
-         |                                                                 ^~~~~~
-   drivers/perf/arm_pmuv3.c:140:2: note: previous initialization is here
-     140 |         PERF_CACHE_MAP_ALL_UNSUPPORTED,
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/perf/arm_pmu.h:45:31: note: expanded from macro 'PERF_CACHE_MAP_ALL_UNSUPPORTED'
-      45 |                 [0 ... C(RESULT_MAX) - 1] = CACHE_OP_UNSUPPORTED,       \
-         |                                             ^~~~~~~~~~~~~~~~~~~~
-   include/linux/perf/arm_pmu.h:37:31: note: expanded from macro 'CACHE_OP_UNSUPPORTED'
-      37 | #define CACHE_OP_UNSUPPORTED            0xFFFF
-         |                                         ^~~~~~
-   drivers/perf/arm_pmuv3.c:148:45: warning: initializer overrides prior initialization of this subobject [-Winitializer-overrides]
-     148 |         [C(DTLB)][C(OP_WRITE)][C(RESULT_ACCESS)] = ARMV8_IMPDEF_PERFCTR_L1D_TLB_WR,
-         |                                                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/perf/arm_pmuv3.h:134:44: note: expanded from macro 'ARMV8_IMPDEF_PERFCTR_L1D_TLB_WR'
-     134 | #define ARMV8_IMPDEF_PERFCTR_L1D_TLB_WR                         0x004F
-         |                                                                 ^~~~~~
-   drivers/perf/arm_pmuv3.c:140:2: note: previous initialization is here
-     140 |         PERF_CACHE_MAP_ALL_UNSUPPORTED,
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/perf/arm_pmu.h:45:31: note: expanded from macro 'PERF_CACHE_MAP_ALL_UNSUPPORTED'
-      45 |                 [0 ... C(RESULT_MAX) - 1] = CACHE_OP_UNSUPPORTED,       \
-         |                                             ^~~~~~~~~~~~~~~~~~~~
-   include/linux/perf/arm_pmu.h:37:31: note: expanded from macro 'CACHE_OP_UNSUPPORTED'
-      37 | #define CACHE_OP_UNSUPPORTED            0xFFFF
-         |                                         ^~~~~~
-   drivers/perf/arm_pmuv3.c:149:42: warning: initializer overrides prior initialization of this subobject [-Winitializer-overrides]
-     149 |         [C(DTLB)][C(OP_READ)][C(RESULT_MISS)]   = ARMV8_IMPDEF_PERFCTR_L1D_TLB_REFILL_RD,
-         |                                                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/perf/arm_pmuv3.h:131:50: note: expanded from macro 'ARMV8_IMPDEF_PERFCTR_L1D_TLB_REFILL_RD'
-     131 | #define ARMV8_IMPDEF_PERFCTR_L1D_TLB_REFILL_RD                  0x004C
-         |                                                                 ^~~~~~
-   drivers/perf/arm_pmuv3.c:140:2: note: previous initialization is here
-     140 |         PERF_CACHE_MAP_ALL_UNSUPPORTED,
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/perf/arm_pmu.h:45:31: note: expanded from macro 'PERF_CACHE_MAP_ALL_UNSUPPORTED'
-      45 |                 [0 ... C(RESULT_MAX) - 1] = CACHE_OP_UNSUPPORTED,       \
-         |                                             ^~~~~~~~~~~~~~~~~~~~
-   include/linux/perf/arm_pmu.h:37:31: note: expanded from macro 'CACHE_OP_UNSUPPORTED'
-      37 | #define CACHE_OP_UNSUPPORTED            0xFFFF
-         |                                         ^~~~~~
-   drivers/perf/arm_pmuv3.c:150:43: warning: initializer overrides prior initialization of this subobject [-Winitializer-overrides]
-     150 |         [C(DTLB)][C(OP_WRITE)][C(RESULT_MISS)]  = ARMV8_IMPDEF_PERFCTR_L1D_TLB_REFILL_WR,
-         |                                                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/perf/arm_pmuv3.h:132:50: note: expanded from macro 'ARMV8_IMPDEF_PERFCTR_L1D_TLB_REFILL_WR'
-     132 | #define ARMV8_IMPDEF_PERFCTR_L1D_TLB_REFILL_WR                  0x004D
-         |                                                                 ^~~~~~
-   drivers/perf/arm_pmuv3.c:140:2: note: previous initialization is here
-     140 |         PERF_CACHE_MAP_ALL_UNSUPPORTED,
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/perf/arm_pmu.h:45:31: note: expanded from macro 'PERF_CACHE_MAP_ALL_UNSUPPORTED'
-      45 |                 [0 ... C(RESULT_MAX) - 1] = CACHE_OP_UNSUPPORTED,       \
-         |                                             ^~~~~~~~~~~~~~~~~~~~
-   include/linux/perf/arm_pmu.h:37:31: note: expanded from macro 'CACHE_OP_UNSUPPORTED'
-      37 | #define CACHE_OP_UNSUPPORTED            0xFFFF
-         |                                         ^~~~~~
-   drivers/perf/arm_pmuv3.c:152:44: warning: initializer overrides prior initialization of this subobject [-Winitializer-overrides]
-     152 |         [C(NODE)][C(OP_READ)][C(RESULT_ACCESS)] = ARMV8_IMPDEF_PERFCTR_BUS_ACCESS_RD,
-         |                                                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/perf/arm_pmuv3.h:148:46: note: expanded from macro 'ARMV8_IMPDEF_PERFCTR_BUS_ACCESS_RD'
-     148 | #define ARMV8_IMPDEF_PERFCTR_BUS_ACCESS_RD                      0x0060
-         |                                                                 ^~~~~~
-   drivers/perf/arm_pmuv3.c:140:2: note: previous initialization is here
-     140 |         PERF_CACHE_MAP_ALL_UNSUPPORTED,
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/perf/arm_pmu.h:45:31: note: expanded from macro 'PERF_CACHE_MAP_ALL_UNSUPPORTED'
-      45 |                 [0 ... C(RESULT_MAX) - 1] = CACHE_OP_UNSUPPORTED,       \
-         |                                             ^~~~~~~~~~~~~~~~~~~~
-   include/linux/perf/arm_pmu.h:37:31: note: expanded from macro 'CACHE_OP_UNSUPPORTED'
-      37 | #define CACHE_OP_UNSUPPORTED            0xFFFF
-         |                                         ^~~~~~
-   drivers/perf/arm_pmuv3.c:153:45: warning: initializer overrides prior initialization of this subobject [-Winitializer-overrides]
-     153 |         [C(NODE)][C(OP_WRITE)][C(RESULT_ACCESS)] = ARMV8_IMPDEF_PERFCTR_BUS_ACCESS_WR,
-         |                                                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/perf/arm_pmuv3.h:149:46: note: expanded from macro 'ARMV8_IMPDEF_PERFCTR_BUS_ACCESS_WR'
-     149 | #define ARMV8_IMPDEF_PERFCTR_BUS_ACCESS_WR                      0x0061
-         |                                                                 ^~~~~~
-   drivers/perf/arm_pmuv3.c:140:2: note: previous initialization is here
-     140 |         PERF_CACHE_MAP_ALL_UNSUPPORTED,
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/perf/arm_pmu.h:45:31: note: expanded from macro 'PERF_CACHE_MAP_ALL_UNSUPPORTED'
-      45 |                 [0 ... C(RESULT_MAX) - 1] = CACHE_OP_UNSUPPORTED,       \
-         |                                             ^~~~~~~~~~~~~~~~~~~~
-   include/linux/perf/arm_pmu.h:37:31: note: expanded from macro 'CACHE_OP_UNSUPPORTED'
-      37 | #define CACHE_OP_UNSUPPORTED            0xFFFF
-         |                                         ^~~~~~
->> drivers/perf/arm_pmuv3.c:824:18: error: no member named 'nr_user' in 'struct perf_event_context'
-     824 |                 nr_user = ctx->nr_user;
-         |                           ~~~  ^
-   60 warnings and 1 error generated.
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v4] docs/zh_CN: Add dev-tools/kcsan Chinese translation
+To: si.yanteng@linux.dev, Alex Shi <alexs@kernel.org>,
+ Yanteng Si <siyanteng@loongson.cn>, Jonathan Corbet <corbet@lwn.net>,
+ Nathan Chancellor <nathan@kernel.org>,
+ Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling
+ <morbo@google.com>, Justin Stitt <justinstitt@google.com>
+Cc: hust-os-kernel-patches@googlegroups.com, linux-doc@vger.kernel.org,
+ linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+References: <20240731180916.36617-1-tttturtleruss@hust.edu.cn>
+ <074662fa2977a708d7a9a4545ffad26612514dc2@linux.dev>
+From: Haoyang Liu <tttturtleruss@hust.edu.cn>
+In-Reply-To: <074662fa2977a708d7a9a4545ffad26612514dc2@linux.dev>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:HwEQrACHjs4EQLJmqt9rAA--.39245S2
+Authentication-Results: app2; spf=neutral smtp.mail=tttturtleruss@hust
+	.edu.cn;
+X-Coremail-Antispam: 1UD129KBjvAXoWfGF18tr4xGF47tw47Kw4kJFb_yoW8Jr4DWo
+	W5Kr4fCr48Gr15Xr15C3yDJayYy3WUCFnrJrZIkrsxAryUK3WFy3WUAw15Jr4UCrW5J3W3
+	JFy2qr17AayUXas3n29KB7ZKAUJUUUU7529EdanIXcx71UUUUU7v73VFW2AGmfu7bjvjm3
+	AaLaJ3UjIYCTnIWjp_UUUOz7k0a2IF6w4xM7kC6x804xWl1xkIjI8I6I8E6xAIw20EY4v2
+	0xvaj40_Wr0E3s1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7
+	IYx2IY67AKxVW5JVW7JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwA2z4x0Y4vE
+	x4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oVCq3wAaw2AFwI0_Jr
+	v_JF1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqjxCEc2xF0cIa020Ex4CE44I27wAqx4xG
+	64xvF2IEw4CE5I8CrVC2j2WlYx0EF7xvrVAajcxG14v26r4UJVWxJr1lYx0E74AGY7Cv6c
+	x26r4fZr1UJr1lYx0Ec7CjxVAajcxG14v26r4UJVWxJr1lOx8S6xCaFVCjc4AY6r1j6r4U
+	M4x0Y48IcVAKI48JMxkF7I0En4kS14v26r126r1DMxAIw28IcxkI7VAKI48JMxAIw28IcV
+	Cjz48v1sIEY20_GFW3Jr1UJwCFx2IqxVCFs4IE7xkEbVWUJVW8JwCFI7km07C267AKxVWU
+	XVWUAwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67
+	kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY
+	6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0x
+	vEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Jr0_GrUvcSsGvfC2Kfnx
+	nUUI43ZEXa7IUnbtxDUUUUU==
+X-CM-SenderInfo: rxsqjiqrssiko6kx23oohg3hdfq/1tbiAQsBAmaxmbIv-wABsk
 
 
-vim +824 drivers/perf/arm_pmuv3.c
+在 2024/8/6 10:20, si.yanteng@linux.dev 写道:
+> 2024年8月1日 02:09, "Haoyang Liu" <tttturtleruss@hust.edu.cn> 写到:
+>
+>
+>
+>> Translate dev-tools/kcsan commit 31f605a308e6
+>>
+>> ("kcsan, compiler_types: Introduce __data_racy type qualifier")
+>>
+>> into Chinese and add it in dev-tools/zh_CN/index.rst
+>>
+>> Signed-off-by: Haoyang Liu <tttturtleruss@hust.edu.cn>
+>>
+>> ---
+>>
+>> v3 -> v4: Added original English text for proper nouns and modified some unclear experessions.
+>>
+>> v2 -> v3: Revised some sentences based on reviewer's suggestions and updated the KTSAN url.
+>>
+>> v1 -> v2: Added commit tag and fixed style problems according to reviewer's suggestions.
+>>
+>>   .../translations/zh_CN/dev-tools/index.rst | 2 +-
+>>
+>>   .../translations/zh_CN/dev-tools/kcsan.rst | 321 ++++++++++++++++++
+>>
+>>   2 files changed, 322 insertions(+), 1 deletion(-)
+>>
+>>   create mode 100644 Documentation/translations/zh_CN/dev-tools/kcsan.rst
+>>
+>> diff --git a/Documentation/translations/zh_CN/dev-tools/index.rst b/Documentation/translations/zh_CN/dev-tools/index.rst
+>>
+>> index c540e4a7d5db..6a8c637c0be1 100644
+>>
+>> --- a/Documentation/translations/zh_CN/dev-tools/index.rst
+>>
+>> +++ b/Documentation/translations/zh_CN/dev-tools/index.rst
+>>
+>> @@ -21,6 +21,7 @@ Documentation/translations/zh_CN/dev-tools/testing-overview.rst
+>>
+>>   testing-overview
+>>
+>>   sparse
+>>
+>>   kcov
+>>
+>> + kcsan
+>>
+>>   gcov
+>>
+>>   kasan
+>>
+>>   ubsan
+>>
+>> @@ -32,7 +33,6 @@ Todolist:
+>>
+>>   - checkpatch
+>>
+>>   - coccinelle
+>>
+>>   - kmsan
+>>
+>> - - kcsan
+>>
+>>   - kfence
+>>
+>>   - kgdb
+>>
+>>   - kselftest
+>>
+>> diff --git a/Documentation/translations/zh_CN/dev-tools/kcsan.rst b/Documentation/translations/zh_CN/dev-tools/kcsan.rst
+>>
+>> new file mode 100644
+>>
+>> index 000000000000..39fa43d8c414
+>>
+>> --- /dev/null
+>>
+>> +++ b/Documentation/translations/zh_CN/dev-tools/kcsan.rst
+>>
+>> @@ -0,0 +1,321 @@
+>>
+>> +.. SPDX-License-Identifier: GPL-2.0
+>>
+>> +
+>>
+>> +.. include:: ../disclaimer-zh_CN.rst
+>>
+>> +
+>>
+>> +:Original: Documentation/dev-tools/kcsan.rst
+>>
+>> +:Translator: 刘浩阳 Haoyang Liu <tttturtleruss@hust.edu.cn>
+>>
+>> +
+>>
+>> +内核并发消毒剂(KCSAN)
+>>
+>> +=====================
+>>
+>> +
+>>
+>> +内核并发消毒剂（KCSAN）是一个动态竞争检测器，依赖编译时插桩，并且使用基于观察
+>>
+>> +点的采样方法来检测竞争。KCSAN 的主要目的是检测 `数据竞争`_。
+>>
+>> +
+>>
+>> +使用
+>>
+>> +----
+>>
+>> +
+>>
+>> +KCSAN 受 GCC 和 Clang 支持。使用 GCC 需要版本 11 或更高，使用 Clang 也需要
+>>
+>> +版本 11 或更高。
+>>
+>> +
+>>
+>> +为了启用 KCSAN，用如下参数配置内核::
+>>
+>> +
+>>
+>> + CONFIG_KCSAN = y
+>>
+>> +
+>>
+>> +KCSAN 提供了几个其他的配置选项来自定义行为（见 ``lib/Kconfig.kcsan`` 中的各自的
+>>
+>> +帮助文档以获取更多信息）。
+>>
+>> +
+>>
+>> +错误报告
+>>
+>> +~~~~~~~~
+>>
+>> +
+>>
+>> +一个典型数据竞争的报告如下所示::
+>>
+>> +
+>>
+>> + ==================================================================
+>>
+>> + BUG: KCSAN: data-race in test_kernel_read / test_kernel_write
+>>
+>> +
+>>
+>> + write to 0xffffffffc009a628 of 8 bytes by task 487 on cpu 0:
+>>
+>> + test_kernel_write+0x1d/0x30
+>>
+>> + access_thread+0x89/0xd0
+>>
+>> + kthread+0x23e/0x260
+>>
+>> + ret_from_fork+0x22/0x30
+>>
+>> +
+>>
+>> + read to 0xffffffffc009a628 of 8 bytes by task 488 on cpu 6:
+>>
+>> + test_kernel_read+0x10/0x20
+>>
+>> + access_thread+0x89/0xd0
+>>
+>> + kthread+0x23e/0x260
+>>
+>> + ret_from_fork+0x22/0x30
+>>
+>> +
+>>
+>> + value changed: 0x00000000000009a6 -> 0x00000000000009b2
+>>
+>> +
+>>
+>> + Reported by Kernel Concurrency Sanitizer on:
+>>
+>> + CPU: 6 PID: 488 Comm: access_thread Not tainted 5.12.0-rc2+ #1
+>>
+>> + Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.14.0-2 04/01/2014
+>>
+>> + ==================================================================
+>>
+>> +
+>>
+>> +报告的头部提供了一个关于竞争中涉及到的函数的简短总结。随后是竞争中的两个线程的
+>>
+>> +访问类型和堆栈信息。如果 KCSAN 发现了一个值的变化，那么那个值的旧值和新值会在
+>>
+>> +“value changed”这一行单独显示。
+>>
+>> +
+>>
+>> +另一个不太常见的数据竞争类型的报告如下所示::
+>>
+>> +
+>>
+>> + ==================================================================
+>>
+>> + BUG: KCSAN: data-race in test_kernel_rmw_array+0x71/0xd0
+>>
+>> +
+>>
+>> + race at unknown origin, with read to 0xffffffffc009bdb0 of 8 bytes by task 515 on cpu 2:
+>>
+>> + test_kernel_rmw_array+0x71/0xd0
+>>
+>> + access_thread+0x89/0xd0
+>>
+>> + kthread+0x23e/0x260
+>>
+>> + ret_from_fork+0x22/0x30
+>>
+>> +
+>>
+>> + value changed: 0x0000000000002328 -> 0x0000000000002329
+>>
+>> +
+>>
+>> + Reported by Kernel Concurrency Sanitizer on:
+>>
+>> + CPU: 2 PID: 515 Comm: access_thread Not tainted 5.12.0-rc2+ #1
+>>
+>> + Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.14.0-2 04/01/2014
+>>
+>> + ==================================================================
+>>
+>> +
+>>
+>> +这个报告是当另一个竞争线程不可能被发现，但是可以从观测的内存地址的值改变而推断
+>>
+>> +出来的时候生成的。这类报告总是会带有“value changed”行。这类报告的出现通常是因
+>>
+>> +为在竞争线程中缺少插桩，也可能是因为其他原因，比如 DMA 访问。这类报告只会在
+>>
+>> +设置了内核参数 ``CONFIG_KCSAN_REPORT_RACE_UNKNOWN_ORIGIN=y`` 时才会出现，而这
+>>
+>> +个参数是默认启用的。
+>>
+>> +
+>>
+>> +选择性分析
+>>
+>> +~~~~~~~~~~
+>>
+>> +
+>>
+>> +对于一些特定的访问，函数，编译单元或者整个子系统，可能需要禁用数据竞争检测。
+>>
+>> +对于静态黑名单，有如下可用的参数：
+>>
+>> +
+>>
+>> +* KCSAN 支持使用 ``data_race(expr)`` 注解，这个注解告诉 KCSAN 任何由访问
+>>
+>> + ``expr`` 所引起的数据竞争都应该被忽略，其产生的行为后果被认为是安全的。请查阅
+>>
+>> + `"Marking Shared-Memory Accesses" in the LKMM`_ 获得更多信息。
+>>
+>> +
+>>
+>> +* 与 ``data_race(...)`` 相似，可以使用类型限定符 ``__data_racy`` 来标记一个变量
+>>
+>> + ，所有访问该变量而导致的数据竞争都是故意为之并且应该被 KCSAN 忽略::
+>>
+>> +
+>>
+>> + struct foo {
+>>
+>> + ...
+>>
+>> + int __data_racy stats_counter;
+>>
+>> + ...
+>>
+>> + };
+>>
+>> +
+>>
+>> +* 使用函数属性 ``__no_kcsan`` 可以对整个函数禁用数据竞争检测::
+>>
+>> +
+>>
+>> + __no_kcsan
+>>
+>> + void foo(void) {
+>>
+>> + ...
+>>
+>> +
+>>
+>> + 为了动态限制该为哪些函数生成报告，查阅 `Debug 文件系统接口`_ 黑名单/白名单特性。
+>>
+>> +
+>>
+>> +* 为特定的编译单元禁用数据竞争检测，将下列参数加入到 ``Makefile`` 中::
+>>
+>> +
+>>
+>> + KCSAN_SANITIZE_file.o := n
+>>
+>> +
+>>
+>> +* 为 ``Makefile`` 中的所有编译单元禁用数据竞争检测，将下列参数添加到相应的
+>>
+>> + ``Makefile`` 中::
+>>
+>> +
+>>
+>> + KCSAN_SANITIZE := n
+>>
+>> +
+>>
+>> +.. _"Marking Shared-Memory Accesses" in the LKMM: https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/tools/memory-model/Documentation/access-marking.txt
+>>
+>> +
+>>
+>> +此外，KCSAN 可以根据偏好设置显示或隐藏整个类别的数据竞争。可以使用如下
+>>
+>> +Kconfig 参数进行更改:
+>>
+>> +
+>>
+>> +* ``CONFIG_KCSAN_REPORT_VALUE_CHANGE_ONLY``: 如果启用了该参数并且通过观测点
+>>
+>> + (watchpoint) 观测到一个有冲突的写操作，但是对应的内存地址中存储的值没有改变，
+>>
+>> + 则不会报告这起数据竞争。
+>>
+>> +
+>>
+>> +* ``CONFIG_KCSAN_ASSUME_PLAIN_WRITES_ATOMIC``: 假设默认情况下，不超过字大小的简
+>>
+>> + 单对齐写入操作是原子的。假设这些写入操作不会受到不安全的编译器优化影响，从而导
+>>
+>> + 致数据竞争。该选项使 KCSAN 不报告仅由不超过字大小的简单对齐写入操作引起
+>>
+>> + 的冲突所导致的数据竞争。
+>>
+>> +
+>>
+>> +* ``CONFIG_KCSAN_PERMISSIVE``: 启用额外的宽松规则来忽略某些常见类型的数据竞争。
+>>
+>> + 与上面的规则不同，这条规则更加复杂，涉及到值改变模式，访问类型和地址。这个
+>>
+>> + 选项依赖编译选项 ``CONFIG_KCSAN_REPORT_VALUE_CHANGE_ONLY=y``。请查看
+>>
+>> + ``kernel/kcsan/permissive.h`` 获取更多细节。对于只侧重于特定子系统而不是整个
+>>
+>> + 内核报告的测试者和维护者，建议禁用该选项。
+>>
+>> +
+>>
+>> +要使用尽可能严格的规则，选择 ``CONFIG_KCSAN_STRICT=y``，这将配置 KCSAN 尽可
+>>
+>> +能紧密地遵循 Linux 内核内存一致性模型（LKMM）。
+>>
+>> +
+>>
+>> +Debug 文件系统接口
+>>
+>> +~~~~~~~~~~~~~~~~~~
+>>
+>> +
+>>
+>> +文件 ``/sys/kernel/debug/kcsan`` 提供了如下接口：
+>>
+>> +
+>>
+>> +* 读 ``/sys/kernel/debug/kcsan`` 返回不同的运行时统计数据。
+>>
+>> +
+>>
+>> +* 将 ``on`` 或 ``off`` 写入 ``/sys/kernel/debug/kcsan`` 允许打开或关闭 KCSAN。
+>>
+>> +
+>>
+>> +* 将 ``!some_func_name`` 写入 ``/sys/kernel/debug/kcsan`` 会将
+>>
+>> + ``some_func_name`` 添加到报告过滤列表中，该列表（默认）会将数据竞争报告中的顶
+>>
+>> + 层堆栈帧是列表中函数的情况列入黑名单。
+>>
+>> +
+>>
+>> +* 将 ``blacklist`` 或 ``whitelist`` 写入 ``/sys/kernel/debug/kcsan`` 会改变报告
+>>
+>> + 过滤行为。例如，黑名单的特性可以用来过滤掉经常发生的数据竞争。白名单特性可以帮
+>>
+>> + 助复现和修复测试。
+>>
+>> +
+>>
+>> +性能调优
+>>
+>> +~~~~~~~~
+>>
+>> +
+>>
+>> +影响 KCSAN 整体的性能和 bug 检测能力的核心参数是作为内核命令行参数公开的，其默认
+>>
+>> +值也可以通过相应的 Kconfig 选项更改。
+>>
+>> +
+>>
+>> +* ``kcsan.skip_watch`` (``CONFIG_KCSAN_SKIP_WATCH``): 在另一个观测点设置之前每
+>>
+>> + 个 CPU 要跳过的内存操作次数。更加频繁的设置观测点将增加观察到竞争情况的可能性
+>>
+>> + 。这个参数对系统整体的性能和竞争检测能力影响最显著。
+>>
+>> +
+>>
+>> +* ``kcsan.udelay_task`` (``CONFIG_KCSAN_UDELAY_TASK``): 对于任务，观测点设置之
+>>
+>> + 后暂停执行的微秒延迟。值越大，检测到竞争情况的可能性越高。
+>>
+>> +
+>>
+>> +* ``kcsan.udelay_interrupt`` (``CONFIG_KCSAN_UDELAY_INTERRUPT``): 对于中断，
+>>
+>> + 观测点设置之后暂停执行的微秒延迟。中断对于延迟的要求更加严格，其延迟通常应该小
+>>
+>> + 于为任务选择的延迟。
+>>
+>> +
+>>
+>> +它们可以通过 ``/sys/module/kcsan/parameters/`` 在运行时进行调整。
+>>
+>> +
+>>
+>> +数据竞争
+>>
+>> +--------
+>>
+>> +
+>>
+>> +在一次执行中，如果两个内存访问存在 *冲突*，在不同的线程中并发执行，并且至少
+>>
+>> +有一个访问是 *简单访问*，则它们就形成了 *数据竞争*。如果它们访问了同一个内存地址并且
+>>
+>> +至少有一个是写操作，则称它们存在 *冲突*。有关更详细的讨论和定义，见
+>> +`"Plain Accesses and Data Races" in the LKMM`_。
+>>
+>> +
+>>
+>> +.. _"Plain Accesses and Data Races" in the LKMM:
+> Sorry for the delay for so long, how about
+> translating it into Chinese as well?
 
-030896885ade0a arch/arm64/kernel/perf_event.c Will Deacon      2012-03-05  816  
-3cce50dfec4a5b arch/arm64/kernel/perf_event.c Suzuki K Poulose 2018-07-10  817  static void armv8pmu_start(struct arm_pmu *cpu_pmu)
-3cce50dfec4a5b arch/arm64/kernel/perf_event.c Suzuki K Poulose 2018-07-10  818  {
-bd27568117664b arch/arm64/kernel/perf_event.c Peter Zijlstra   2022-10-08  819  	struct perf_event_context *ctx;
-bd27568117664b arch/arm64/kernel/perf_event.c Peter Zijlstra   2022-10-08  820  	int nr_user = 0;
-83a7a4d643d33a arch/arm64/kernel/perf_event.c Rob Herring      2021-12-08  821  
-bd27568117664b arch/arm64/kernel/perf_event.c Peter Zijlstra   2022-10-08  822  	ctx = perf_cpu_task_ctx();
-bd27568117664b arch/arm64/kernel/perf_event.c Peter Zijlstra   2022-10-08  823  	if (ctx)
-bd27568117664b arch/arm64/kernel/perf_event.c Peter Zijlstra   2022-10-08 @824  		nr_user = ctx->nr_user;
-bd27568117664b arch/arm64/kernel/perf_event.c Peter Zijlstra   2022-10-08  825  
-bd27568117664b arch/arm64/kernel/perf_event.c Peter Zijlstra   2022-10-08  826  	if (sysctl_perf_user_access && nr_user)
-83a7a4d643d33a arch/arm64/kernel/perf_event.c Rob Herring      2021-12-08  827  		armv8pmu_enable_user_access(cpu_pmu);
-83a7a4d643d33a arch/arm64/kernel/perf_event.c Rob Herring      2021-12-08  828  	else
-83a7a4d643d33a arch/arm64/kernel/perf_event.c Rob Herring      2021-12-08  829  		armv8pmu_disable_user_access();
-83a7a4d643d33a arch/arm64/kernel/perf_event.c Rob Herring      2021-12-08  830  
-3cce50dfec4a5b arch/arm64/kernel/perf_event.c Suzuki K Poulose 2018-07-10  831  	/* Enable all counters */
-3cce50dfec4a5b arch/arm64/kernel/perf_event.c Suzuki K Poulose 2018-07-10  832  	armv8pmu_pmcr_write(armv8pmu_pmcr_read() | ARMV8_PMU_PMCR_E);
-b1f778a223a2a8 drivers/perf/arm_pmuv3.c       Marc Zyngier     2023-08-20  833  
-b1f778a223a2a8 drivers/perf/arm_pmuv3.c       Marc Zyngier     2023-08-20  834  	kvm_vcpu_pmu_resync_el0();
-3cce50dfec4a5b arch/arm64/kernel/perf_event.c Suzuki K Poulose 2018-07-10  835  }
-3cce50dfec4a5b arch/arm64/kernel/perf_event.c Suzuki K Poulose 2018-07-10  836  
+Sure.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+
+Thanks,
+
+Haoyang
+
+>   
+>
+>
+> Thanks,
+> Yanteng
+
