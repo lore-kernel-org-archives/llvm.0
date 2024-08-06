@@ -1,110 +1,186 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 111DA136330;
-	Mon,  5 Aug 2024 23:02:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7357CA20;
+	Tue,  6 Aug 2024 00:07:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722898968; cv=none; b=QkPnEoCIUchNE8fRlcrnDEBopgGjkRUk8Mjexwh1E/dO2QDhhSrXX7MHvHNoySOy15tKjY1RRgBvni0xW6vP91YdUQFcPzgxa6h4W9uBTZXmKI6xT5XkcjMuX4zGLYKEvPkBvvh6bfKSXZ/2nxxmrxU5vAAgNlZ+G6aI6655M7A=
+	t=1722902881; cv=none; b=OD5s5R32yMP4/Myv9mQ8k4becSTVpefB4kECma1VplE0x1izl5qJ43CVJVfuISKxo2tk4J7wMc6IoQpztt3OxXYL35Pk27bvGjly/jx54hXdFeAD6JjasOqAfNnuTXDsAFxDFtFk+MFukT4cFqL1FjASlxefzxTUHrSM1kETo4E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722898968; c=relaxed/simple;
-	bh=0Gdo3nqq540CcL7ibzeEufeGCXxLYGPGMYHqMRwmTRs=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Kqx03QbQm1YgDS8fHyN0WthZFdvgQvbFlwZQBXCs8/0P3zQMg02jTJmB/+iYgXih4hYx6FXGYWQ5UGy6JKvxt0EYzYTZr/68qdwTEKnV3GvXJe6AwyynMMP7lztC2LIK7+a4Tp88acBT9wxDqDiaiUiJvIaCRoHqt/KG4PXtRPY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Ljl3GFCb; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1722902881; c=relaxed/simple;
+	bh=thR6OOGr+0F4UYfRH+AD/RbFolIxu2wFlZmTFiqn3Uw=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=PRF/o4yCfhYTzcha6r9HoLuVtBTiclsQXslJkAmVbOE9/MbsFRp8XhDulHCAI2sDo8hBjPYlLYMuZ6niQ3lsKxqio6gqm2LxZNLtdePfh4dXpm0qC99tK72yAy5lnjHhRys5lNB3QUFDau7MDN4yh/86qweocw2AGyRsbOuOsm4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=GzLF7u5l; arc=none smtp.client-ip=198.175.65.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Ljl3GFCb"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9AC0CC4AF0B;
-	Mon,  5 Aug 2024 23:02:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1722898967;
-	bh=0Gdo3nqq540CcL7ibzeEufeGCXxLYGPGMYHqMRwmTRs=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=Ljl3GFCbllR+AUqgxto9ZIuPsuUSl+fPJ1c06Tv8gHVvZXoMES+wrjYutBNJ021F2
-	 OsaUE5jE3NCAoA71+yYiBpw7P+LZB6nHlcMuqFAx5SZS2XySbmSRMjE8HzhyUz5Lda
-	 XCFQhMbO9ZVHz75FH6fZgrZe9t3iQWs1UAbPcskpaHp/x0guNDDDim6dLQP3AL8Uii
-	 aul1kT26Crp0OUZPMW6RXAWrik4jUk0N0UtmEGYYyHNSgU/+lRCX24iKjyMIYhTk5H
-	 tG3CwsJ9nxWehNeSGdQCiuodKE5YYxf5CEPy1fwCyP/UjO3xBFwzJ4cpAYqNek2Jzx
-	 /DpfnVhqDUv3w==
-Received: by mail-lj1-f174.google.com with SMTP id 38308e7fff4ca-2ef2cce8be8so133668811fa.1;
-        Mon, 05 Aug 2024 16:02:47 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCWMmamQsupBD5TZdVL7oXq5gB1lsP0VP2NvnPLvx/Y6qNN1OuzLvhyB0RRrrDuuexbWTBn7C800XmHX1DuiIMRXkDthM7PWlsmJqOSWrCdtycYoddmPK3d5yxQRcSarhpOXupA=
-X-Gm-Message-State: AOJu0YzpQKXF2oY5/Ini9UMvqeh635VT7q/NAD7p92zCLPvQ0ygsmAFL
-	wvC9qE4zOU+EqM55somGhevAFxsPhPwJA3Zy+bGdecYFZyPP8B+nLhTA+b2CHhBM1I35uUYFnk3
-	sduXvmtLj9PFAdRFjl5//NK34sw==
-X-Google-Smtp-Source: AGHT+IE5UpL2i4KpdFQOQEkLIa7k+4ENdHDQfrjNsLeWhbg/3HLPQs//pjnhx3TTitjgRK4reX+wiHVeBzqLw5GCe9A=
-X-Received: by 2002:a2e:9b0b:0:b0:2f0:2a55:8c4a with SMTP id
- 38308e7fff4ca-2f15ab53707mr89313251fa.49.1722898965951; Mon, 05 Aug 2024
- 16:02:45 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="GzLF7u5l"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1722902880; x=1754438880;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=thR6OOGr+0F4UYfRH+AD/RbFolIxu2wFlZmTFiqn3Uw=;
+  b=GzLF7u5llcw6qHaQEt+EpHd1rzFmOo822pqiG7Gua9Q9b802TuA4bj3u
+   0SnaTLBc1m+STf0LMWAeO7ah9sAWpWxKuk/upwQvYn6NNqa7BKDQL/W4J
+   +TgEAtxyj7pvMi8y3wNKk1Ih7fdAIhhnMPHXVOULnOkEEmqTQxyKWtcKn
+   fKHF2wB5g4LcM0+pu96lG0AfYBrR8CcvIT0PRL8beqJpjteNw3HgWZwqH
+   vRqV3He1Hv18KgjIW9/M7sCUXPgTJ7kiZ+jNQpl7tEkwKzSJx4hfIZicX
+   4Mqhfl6+idDj7Re0plTiIcRT5hb4OOGFDL9EQttAU3rQhlOiMBaKA9cNN
+   g==;
+X-CSE-ConnectionGUID: DXTUagQJRguDlROMYe56pA==
+X-CSE-MsgGUID: pJcbzgaASgSg9Zmch2TgtA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11155"; a="32275414"
+X-IronPort-AV: E=Sophos;i="6.09,266,1716274800"; 
+   d="scan'208";a="32275414"
+Received: from orviesa005.jf.intel.com ([10.64.159.145])
+  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Aug 2024 17:07:58 -0700
+X-CSE-ConnectionGUID: FKbOnLYGQa6Mm9M97UdlQg==
+X-CSE-MsgGUID: qZx+ReOGRP6ZmcjJgISOHw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.09,266,1716274800"; 
+   d="scan'208";a="61183720"
+Received: from unknown (HELO b6bf6c95bbab) ([10.239.97.151])
+  by orviesa005.jf.intel.com with ESMTP; 05 Aug 2024 17:07:57 -0700
+Received: from kbuild by b6bf6c95bbab with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1sb7k2-0003uG-2H;
+	Tue, 06 Aug 2024 00:07:54 +0000
+Date: Tue, 6 Aug 2024 08:06:49 +0800
+From: kernel test robot <lkp@intel.com>
+To: Jeff Layton <jlayton@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [jlayton:dir-deleg 29/30] fs/namei.c:3265:31: error: use of
+ undeclared identifier 'LEASE_BREAK_DIR_CREATE'
+Message-ID: <202408060822.O9ARU7V1-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <202408030418.gnJDcCpm-lkp@intel.com> <20240805104758.52obllbjvuvtmd4n@vireshk-i7>
- <CAL_Jsq+evBH2+XVeMAGXy9Ucof=G574+sFKcG94MqSUdgzFSgw@mail.gmail.com>
-In-Reply-To: <CAL_Jsq+evBH2+XVeMAGXy9Ucof=G574+sFKcG94MqSUdgzFSgw@mail.gmail.com>
-From: Rob Herring <robh@kernel.org>
-Date: Mon, 5 Aug 2024 17:02:33 -0600
-X-Gmail-Original-Message-ID: <CAL_JsqK6rY7S3X9sNSZFqhKPqz1wYz3QdgaQu42pnaKVA0HrwA@mail.gmail.com>
-Message-ID: <CAL_JsqK6rY7S3X9sNSZFqhKPqz1wYz3QdgaQu42pnaKVA0HrwA@mail.gmail.com>
-Subject: Re: [vireshk-pm:cpufreq/arm/linux-next 2/2] drivers/cpufreq/spear-cpufreq.c:202:12:
- warning: variable 'i' is uninitialized when used here
-To: Viresh Kumar <viresh.kumar@linaro.org>
-Cc: kernel test robot <lkp@intel.com>, llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Mon, Aug 5, 2024 at 8:00=E2=80=AFAM Rob Herring <robh@kernel.org> wrote:
->
-> On Mon, Aug 5, 2024 at 4:48=E2=80=AFAM Viresh Kumar <viresh.kumar@linaro.=
-org> wrote:
-> >
-> > On 03-08-24, 05:01, kernel test robot wrote:
-> > > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/vireshk/pm.gi=
-t cpufreq/arm/linux-next
-> > > head:   dca2ef2b7d916c718c6e88084170413a8a1942d0
-> > > commit: dca2ef2b7d916c718c6e88084170413a8a1942d0 [2/2] cpufreq: spear=
-: Use of_property_for_each_u32() instead of open coding
-> > > config: arm-defconfig (https://download.01.org/0day-ci/archive/202408=
-03/202408030418.gnJDcCpm-lkp@intel.com/config)
-> > > compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project =
-f28c006a5895fc0e329fe15fead81e37457cb1d1)
-> > > reproduce (this is a W=3D1 build): (https://download.01.org/0day-ci/a=
-rchive/20240803/202408030418.gnJDcCpm-lkp@intel.com/reproduce)
-> > >
-> > > If you fix the issue in a separate patch/commit (i.e. not just a new =
-version of
-> > > the same patch/commit), kindly add following tags
-> > > | Reported-by: kernel test robot <lkp@intel.com>
-> > > | Closes: https://lore.kernel.org/oe-kbuild-all/202408030418.gnJDcCpm=
--lkp@intel.com/
-> > >
-> > > All warnings (new ones prefixed by >>):
-> > >
-> > > >> drivers/cpufreq/spear-cpufreq.c:202:12: warning: variable 'i' is u=
-ninitialized when used here [-Wuninitialized]
-> > >                    freq_tbl[i].frequency =3D val;
-> > >                             ^
-> > >    drivers/cpufreq/spear-cpufreq.c:176:12: note: initialize the varia=
-ble 'i' to silence this warning
-> > >            int cnt, i, ret;
-> > >                      ^
-> > >                       =3D 0
-> > >    1 warning generated.
-> > >
-> > >
-> > > vim +/i +202 drivers/cpufreq/spear-cpufreq.c
-> >
-> > Rob, can you please send a fix for this ?
->
-> Will do. Looks like it is only with clang...
->
-> Is there some reason COMPILE_TEST is not enabled for almost everything
-> in cpufreq/?
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jlayton/linux.git dir-deleg
+head:   3ef3065a07c0fc797ef9b034216f09d8b324e0b1
+commit: 121ae7108b842f3ca7dc5dfd771ae94fe41fcecb [29/30] fs: add a "reason" parameter to try_break_deleg
+config: x86_64-buildonly-randconfig-002-20240806 (https://download.01.org/0day-ci/archive/20240806/202408060822.O9ARU7V1-lkp@intel.com/config)
+compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240806/202408060822.O9ARU7V1-lkp@intel.com/reproduce)
 
-Pushed this out for builders to test:
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202408060822.O9ARU7V1-lkp@intel.com/
 
-https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git/log/?h=3Dcpu=
-freq-compile-test
+All errors (new ones prefixed by >>):
+
+>> fs/namei.c:3265:31: error: use of undeclared identifier 'LEASE_BREAK_DIR_CREATE'
+    3265 |         error = try_break_deleg(dir, LEASE_BREAK_DIR_CREATE, delegated_inode);
+         |                                      ^
+   fs/namei.c:3582:38: error: use of undeclared identifier 'LEASE_BREAK_DIR_CREATE'
+    3582 |                 error = try_break_deleg(dir_inode, LEASE_BREAK_DIR_CREATE, delegated_inode);
+         |                                                    ^
+   fs/namei.c:3613:25: error: variable has incomplete type 'struct delegated_inode'
+    3613 |         struct delegated_inode delegated_inode = { };
+         |                                ^
+   include/linux/fs.h:82:8: note: forward declaration of 'struct delegated_inode'
+      82 | struct delegated_inode;
+         |        ^
+   fs/namei.c:4097:31: error: use of undeclared identifier 'LEASE_BREAK_DIR_CREATE'
+    4097 |         error = try_break_deleg(dir, LEASE_BREAK_DIR_CREATE, delegated_inode);
+         |                                      ^
+   fs/namei.c:4155:25: error: variable has incomplete type 'struct delegated_inode'
+    4155 |         struct delegated_inode delegated_inode = { };
+         |                                ^
+   include/linux/fs.h:82:8: note: forward declaration of 'struct delegated_inode'
+      82 | struct delegated_inode;
+         |        ^
+   fs/namei.c:4240:31: error: use of undeclared identifier 'LEASE_BREAK_DIR_CREATE'
+    4240 |         error = try_break_deleg(dir, LEASE_BREAK_DIR_CREATE, delegated_inode);
+         |                                      ^
+   fs/namei.c:4278:25: error: variable has incomplete type 'struct delegated_inode'
+    4278 |         struct delegated_inode delegated_inode = { };
+         |                                ^
+   include/linux/fs.h:82:8: note: forward declaration of 'struct delegated_inode'
+      82 | struct delegated_inode;
+         |        ^
+>> fs/namei.c:4339:31: error: use of undeclared identifier 'LEASE_BREAK_DIR_DELETE'
+    4339 |         error = try_break_deleg(dir, LEASE_BREAK_DIR_DELETE, delegated_inode);
+         |                                      ^
+   fs/namei.c:4389:25: error: variable has incomplete type 'struct delegated_inode'
+    4389 |         struct delegated_inode delegated_inode = { };
+         |                                ^
+   include/linux/fs.h:82:8: note: forward declaration of 'struct delegated_inode'
+      82 | struct delegated_inode;
+         |        ^
+   fs/namei.c:4496:33: error: use of undeclared identifier 'LEASE_BREAK_DIR_DELETE'
+    4496 |                         error = try_break_deleg(dir, LEASE_BREAK_DIR_DELETE, delegated_inode);
+         |                                                      ^
+   fs/namei.c:4538:25: error: variable has incomplete type 'struct delegated_inode'
+    4538 |         struct delegated_inode delegated_inode = { };
+         |                                ^
+   include/linux/fs.h:82:8: note: forward declaration of 'struct delegated_inode'
+      82 | struct delegated_inode;
+         |        ^
+   fs/namei.c:4770:32: error: use of undeclared identifier 'LEASE_BREAK_DIR_CREATE'
+    4770 |                 error = try_break_deleg(dir, LEASE_BREAK_DIR_CREATE, delegated_inode);
+         |                                              ^
+   fs/namei.c:4804:25: error: variable has incomplete type 'struct delegated_inode'
+    4804 |         struct delegated_inode delegated_inode = { };
+         |                                ^
+   include/linux/fs.h:82:8: note: forward declaration of 'struct delegated_inode'
+      82 | struct delegated_inode;
+         |        ^
+>> fs/namei.c:5039:26: error: use of undeclared identifier 'LEASE_BREAK_DIR_RENAME'
+    5039 |                                 old_dir == new_dir ? LEASE_BREAK_DIR_RENAME :
+         |                                                      ^
+   fs/namei.c:5040:12: error: use of undeclared identifier 'LEASE_BREAK_DIR_DELETE'
+    5040 |                                                      LEASE_BREAK_DIR_DELETE,
+         |                                                      ^
+   fs/namei.c:5045:36: error: use of undeclared identifier 'LEASE_BREAK_DIR_CREATE'
+    5045 |                 error = try_break_deleg(new_dir, LEASE_BREAK_DIR_CREATE, delegated_inode);
+         |                                                  ^
+   fs/namei.c:5107:25: error: variable has incomplete type 'struct delegated_inode'
+    5107 |         struct delegated_inode delegated_inode = { };
+         |                                ^
+   include/linux/fs.h:82:8: note: forward declaration of 'struct delegated_inode'
+      82 | struct delegated_inode;
+         |        ^
+   17 errors generated.
+
+
+vim +/LEASE_BREAK_DIR_CREATE +3265 fs/namei.c
+
+  3247	
+  3248	static int __vfs_create(struct mnt_idmap *idmap, struct inode *dir,
+  3249				struct dentry *dentry, umode_t mode, bool want_excl,
+  3250				struct delegated_inode *delegated_inode)
+  3251	{
+  3252		int error;
+  3253	
+  3254		error = may_create(idmap, dir, dentry);
+  3255		if (error)
+  3256			return error;
+  3257	
+  3258		if (!dir->i_op->create)
+  3259			return -EACCES;	/* shouldn't it be ENOSYS? */
+  3260	
+  3261		mode = vfs_prepare_mode(idmap, dir, mode, S_IALLUGO, S_IFREG);
+  3262		error = security_inode_create(dir, dentry, mode);
+  3263		if (error)
+  3264			return error;
+> 3265		error = try_break_deleg(dir, LEASE_BREAK_DIR_CREATE, delegated_inode);
+  3266		if (error)
+  3267			return error;
+  3268		error = dir->i_op->create(idmap, dir, dentry, mode, want_excl);
+  3269		if (!error)
+  3270			fsnotify_create(dir, dentry);
+  3271		return error;
+  3272	}
+  3273	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
