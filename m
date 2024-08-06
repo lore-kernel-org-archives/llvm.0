@@ -1,110 +1,93 @@
-Received: from mail-pj1-f46.google.com (mail-pj1-f46.google.com [209.85.216.46])
+Received: from mail-pf1-f176.google.com (mail-pf1-f176.google.com [209.85.210.176])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A116EA35
-	for <llvm@lists.linux.dev>; Tue,  6 Aug 2024 04:49:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D1A3415C12F
+	for <llvm@lists.linux.dev>; Tue,  6 Aug 2024 04:51:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722919774; cv=none; b=ofMZrO2/zVkBbb6Bvqszg1nxuj6ozZeonTxWnVqjJaxZl24Uf6diLL9QBnFUCd+ht2x6Pe2EImI5pX59T6oTnhpuvRnPz55ISMVjxEKF1tY5kKWqdhL58z3cbR+lqeOJ1ribhGdr4caJ3is4+d8FKVqRQDhPEpW1b+e0ZL9EGeg=
+	t=1722919917; cv=none; b=YAsDuCQ0oSxSYvg/D2hX1vdi2vXacQC1F27qnA/hrhMRMuIb019uZ3EseDzndh1lEBigwxpCnc+JIVqyR9cRiZLEDFIRgl3eu88/wKUWRiIpttTz4JI+8wVdwKF78ly5j3hH1tFm0CVUS38jCh8mP4nw5oMNaFELfwqqxzB0xjY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722919774; c=relaxed/simple;
-	bh=zTCOmw6gISVXSp48IiCz6bMdu5nKagmz8qJ2lcvbZyk=;
+	s=arc-20240116; t=1722919917; c=relaxed/simple;
+	bh=OiMv1fqLHwMe/meg9xscd4zfQKOekgsO4UZ5+YCHlIM=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Nl0EpNQ4ubcyQCxx/YQ8qGQx97Ln9NqmVrTnNHRhAwMvmX6W4CnSsgRA5YrRZOVCBrOp2phO/1O+MEYMrLBAs0+JoN8/ZT34O4CHzRsZwf41zHEyGP+WyoSkxTpB1QR4trDRq91wepnxUUmtpay9/rGLqWTR7m1NwmFhX99AX9E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=wHb2o2Zz; arc=none smtp.client-ip=209.85.216.46
+	 Content-Type:Content-Disposition:In-Reply-To; b=pcFjQr32FQk7LnT8qTJBOiozMK0tJGIpoLUNsUG3ln13brALrCdcwOVRhLQ4Gfs/W04tz7u5fL+oiDGe1VBQpicCqGAKoaHly4TNiLQiGKhIwuPacg045pUhAljjwsGlTR6gLE+LNLqLNoKHAIY00TjB2VqhUjrLGfC01BSvWbQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=rte6IwKv; arc=none smtp.client-ip=209.85.210.176
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="wHb2o2Zz"
-Received: by mail-pj1-f46.google.com with SMTP id 98e67ed59e1d1-2cd48ad7f0dso151778a91.0
-        for <llvm@lists.linux.dev>; Mon, 05 Aug 2024 21:49:32 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="rte6IwKv"
+Received: by mail-pf1-f176.google.com with SMTP id d2e1a72fcca58-7104f939aa7so176624b3a.1
+        for <llvm@lists.linux.dev>; Mon, 05 Aug 2024 21:51:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1722919772; x=1723524572; darn=lists.linux.dev;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=GHH2ZM2ZbaCsMqJvKElXG0mbw5W5n4WMRbqy0wJyJXY=;
-        b=wHb2o2Zz66/FR1lYBxn5nCv7UU0hBTgxddg3QGgPIFUNxDWEYBLTJd5aev6benTq2x
-         AkDlrb9/eQDXoyk490rT9bUCZCjIXNHUEIdaYarM0wVy5H2UC0bRdN+oEK2gA9//xsu1
-         R8roQLPinUddPHcREqT64pQymgDJQiRePjt368WqazJsvRzCn9WZcSR8g0umHHO6u/DI
-         WJU3zOMIhGgqBmor8q/VaIGe7FVX/TAzu476Swo6q7jFl9aIcbt9gt5ncnPvhnZrSi9D
-         fHZukyeO0dVqGN1AYepduC1n4uV+qjU62vsHQ++RvaBZUPbKVtQ8GCLs4mRDRC2eIHCc
-         yLqw==
+        d=linaro.org; s=google; t=1722919915; x=1723524715; darn=lists.linux.dev;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=t9lT0XdB5mcDq9zC4EQAHNJ7RkoUaPk1qdyqjjuk+Mc=;
+        b=rte6IwKvyqP316VqOaDYwm5H7PwFE3skRFILm8bGjc4eWFCGdIcrMaK/Hv6M3CFD/a
+         BEXdqwNrd7Ddfy2DKvVwojqfg2eHT1HfDj1C59rzQTYmgsDW9uFJDoIID9aBovwAjA3i
+         erxd3nIxbuHvigjnNyxpKTVX0TWbBmUfRi5+XLwMQnNMOiEq/V1vn2zefO7S2Sc5ST/K
+         MlhJfr9nFo8scBhRiLtJVakoc4kQkMEIyYwyj1999ssR0JkZd7OV5X8YjP2xcleP+6yl
+         c8Ysw8FmWgytLGgfzsfmjBJH6AjL884OBXJcwkpgAPSNoUka++p2ZwIrHKXxHTt8OH90
+         NUyw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1722919772; x=1723524572;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=GHH2ZM2ZbaCsMqJvKElXG0mbw5W5n4WMRbqy0wJyJXY=;
-        b=unR93D/mxQydUttn+w+oXhX4NjCyANijaYR5wFymOjfhvjkE9EYg/nqe9VbLtXtabV
-         YkwMkI+S39c8Rwpqa8AvLNRAER8Mp23bm3rS9QIOKXZveM0ABiMJHx/EeGTIZnKJmcDr
-         ya6odQ3RIkK6toAiMG9zho60ynZYeG4U1kSPKnlgJ4YNkUXrKkGHXkCrkRksXs/KmFJ0
-         t+FfsWk2Ltk7uAVXJ5lbW6C41v+Ihs3Szg86yNy691N+5bNaV/5egU/E32Pbz27b8fmd
-         WzPu7E53XZuOO0hc28DPJeazdPHD7Mik0XjjJ9xacCh/xoL/wJEMa/0zubIAjFxCd5ye
-         ZPqw==
-X-Forwarded-Encrypted: i=1; AJvYcCXUJ+Zcufl0nxDOt1qVaHZmhA0ok8JunQIstcY7h075+pytFKhIbOMNNsx+Y3KXi9tKUWqbh5NBLYjC2PxWjHhMHUIAnA==
-X-Gm-Message-State: AOJu0YzmQ3W0au0zVfrlSOkz1RtYJjPF+bqVJZ93MGV9TaM46TZlvfhn
-	JbBnKywPU5BzJyXqWf4DZ4YO66b2RbU4KstElKSEpiU3E6Y3Rb60K8MXLY9CyMs=
-X-Google-Smtp-Source: AGHT+IGIufVjk3jVXDFP+ZPCWH1xn0RILusDbBQ8tTUG4kEpwICOp9qYPfj0joz3IsRdV9VFGoKiNQ==
-X-Received: by 2002:a17:90b:2307:b0:2ca:7636:2214 with SMTP id 98e67ed59e1d1-2cff9414339mr17227568a91.4.1722919771767;
-        Mon, 05 Aug 2024 21:49:31 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1722919915; x=1723524715;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=t9lT0XdB5mcDq9zC4EQAHNJ7RkoUaPk1qdyqjjuk+Mc=;
+        b=S1y5owpQECBoG7OXFy0HU9y07hLbJCSjK4+Ai68T3sOaSjLd+OPuEN5XtTCWKNIq/+
+         qySE5ayk4b0S9X+WiUu6UODuFuO6eMZtkzgtrL+JwAHG3UlWFjiF5dkrcrON/ssmkVZv
+         f0VWAPAc6UpWpBy5nKHVqOxAtpHoQmx36fuVSQgOPN92AOc1xIfacmpXL9iy3ZuHqQvX
+         jKfYwm+PpkSS7mWTibM0uzLINcmz2up32UZZSpruzDKTAtsPZXdyea6lR2fS7cmhAed+
+         YsmvB7cbgGQckUG1Wv9DU3Ui8IClVHzO8yocQY9zBDEjCzwu4kV74xK/DLVmwNF47G6e
+         CxEg==
+X-Forwarded-Encrypted: i=1; AJvYcCUaPnDiikEWQxGc+3n3DIXQe2vV+GKCJaCE2jbeAbptqkZvWe6Dm7mstvA89ACsVjHizrJxbHCz7pGU+Kg3kqUPiooQjA==
+X-Gm-Message-State: AOJu0YzDxU53e2tdOHyrtPOAYsiiTrONhafQp/m+oYzE1ViJwU5hipeJ
+	hyWD4pT3s/n5UyMP7nA4qbgdM/rVeVHP5/UOpR96+jzROykuoczQriGOpZy54oY=
+X-Google-Smtp-Source: AGHT+IGMW9pFn8MBD0M6wG6DiJhwIDtq1qEITbJ7PtGwS4U+HOetoCD2Lm6eaLPi3qLOwjgegXo48w==
+X-Received: by 2002:a05:6a20:1588:b0:1c4:986a:ddb8 with SMTP id adf61e73a8af0-1c69966b784mr21687022637.43.1722919915127;
+        Mon, 05 Aug 2024 21:51:55 -0700 (PDT)
 Received: from localhost ([122.172.84.129])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2cfdc406468sm11668707a91.1.2024.08.05.21.49.30
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7106ec40f5asm6241853b3a.51.2024.08.05.21.51.54
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 05 Aug 2024 21:49:30 -0700 (PDT)
-Date: Tue, 6 Aug 2024 10:19:28 +0530
+        Mon, 05 Aug 2024 21:51:54 -0700 (PDT)
+Date: Tue, 6 Aug 2024 10:21:52 +0530
 From: Viresh Kumar <viresh.kumar@linaro.org>
-To: "Rob Herring (Arm)" <robh@kernel.org>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	kernel test robot <lkp@intel.com>, linux-pm@vger.kernel.org,
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH] cpufreq: spear: Fix uninitialized variable "i"
-Message-ID: <20240806044928.2j6z2ucnzk6lg5y3@vireshk-i7>
-References: <20240805202042.3229190-1-robh@kernel.org>
+To: Rob Herring <robh@kernel.org>
+Cc: kernel test robot <lkp@intel.com>, llvm@lists.linux.dev,
+	oe-kbuild-all@lists.linux.dev
+Subject: Re: [vireshk-pm:cpufreq/arm/linux-next 2/2]
+ drivers/cpufreq/spear-cpufreq.c:202:12: warning: variable 'i' is
+ uninitialized when used here
+Message-ID: <20240806045152.g5xker6gy2ad6jxt@vireshk-i7>
+References: <202408030418.gnJDcCpm-lkp@intel.com>
+ <20240805104758.52obllbjvuvtmd4n@vireshk-i7>
+ <CAL_Jsq+evBH2+XVeMAGXy9Ucof=G574+sFKcG94MqSUdgzFSgw@mail.gmail.com>
+ <CAL_JsqK6rY7S3X9sNSZFqhKPqz1wYz3QdgaQu42pnaKVA0HrwA@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20240805202042.3229190-1-robh@kernel.org>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAL_JsqK6rY7S3X9sNSZFqhKPqz1wYz3QdgaQu42pnaKVA0HrwA@mail.gmail.com>
 
-On 05-08-24, 14:20, Rob Herring (Arm) wrote:
-> The refactoring in commit dca2ef2b7d91 ("cpufreq: spear: Use
-> of_property_for_each_u32() instead of open coding") left "i"
-> uninitialized. Initialize it to 0.
+On 05-08-24, 17:02, Rob Herring wrote:
+> On Mon, Aug 5, 2024 at 8:00 AM Rob Herring <robh@kernel.org> wrote:
+> > Is there some reason COMPILE_TEST is not enabled for almost everything
+> > in cpufreq/?
+
+Not sure why.
+
+> Pushed this out for builders to test:
 > 
-> Note that gcc doesn't detect this, only clang does.
-> 
-> Fixes: dca2ef2b7d91 ("cpufreq: spear: Use of_property_for_each_u32() instead of open coding")
-> Reported-by: kernel test robot <lkp@intel.com>
-> Closes: https://lore.kernel.org/oe-kbuild-all/202408030418.gnJDcCpm-lkp@intel.com/
-> Signed-off-by: Rob Herring (Arm) <robh@kernel.org>
-> ---
->  drivers/cpufreq/spear-cpufreq.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/cpufreq/spear-cpufreq.c b/drivers/cpufreq/spear-cpufreq.c
-> index 4d28147c23f1..f8c16699a68d 100644
-> --- a/drivers/cpufreq/spear-cpufreq.c
-> +++ b/drivers/cpufreq/spear-cpufreq.c
-> @@ -173,7 +173,7 @@ static int spear_cpufreq_probe(struct platform_device *pdev)
->  	struct device_node *np;
->  	struct cpufreq_frequency_table *freq_tbl;
->  	u32 val;
-> -	int cnt, i, ret;
-> +	int cnt, i = 0, ret;
+> https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git/log/?h=cpufreq-compile-test
 
-We don't increment 'i' anymore, don't we need an i++ in:
-
-        freq_tbl[i].frequency = val;
-
-?
+Thanks. Would be good to get these merged.
 
 -- 
 viresh
