@@ -1,144 +1,232 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7660D41C72;
-	Tue,  6 Aug 2024 15:06:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6AC268F6C;
+	Tue,  6 Aug 2024 15:16:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722956795; cv=none; b=VF+WxT2VTAin3SqpPpqllUtNx/SI2xt1sg/BsOFiBzZLoHLDJJvgni9Ls7DXPVD4Vecs/WalDIx7pdjIWCwEORgy5S3MXkFz/tDivonqBAweuyKFPX4yVgvPjnN5X6TL1RNAvg0iO2k/iaukTt6hBby62BJ3UZ25udh15Ux/bac=
+	t=1722957371; cv=none; b=Dm8DqS9i4oOl7bhyZS6oUDLRseXcRWRN9Nuu86bt6lciBd/077GOPj+hQUM/Ke8U5DIupf0DVjDHRkt/WHlRQEMv1QToyZGaOLWBd5tr2aMj9Z5N7+1Z5FQQWZgkI4tIduopWxc6j89Y4AUzBcjRNlnG6oQ6KyL05tuISqKSsDA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722956795; c=relaxed/simple;
-	bh=Ah6jgHgNtK5AriN+1EmUXXERGaccivbbBhGIB4QgMR8=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=gcLkIKz6kaZbZHPHkfwmCNoh1GVZ9LdHw3V4H2A6PddYbWNqH/4wazq30xYol8vxD69FxTCpLHPMEoOW8jVtRcwgdYVo5TiNKiyDrrE8hkIReAOwPqJxRfGDrCfUbvcQJTUdtx81qw0ypWM8tvd9GEvpAISIvLAzLbEMSeWBF8Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OAacxxOc; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1722957371; c=relaxed/simple;
+	bh=3MlkYy6g36sLgZpc3PWyAkbXfVEleD3+rQVgjcMz2Co=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=oi1NEVcl95ap0j4xc/y+ccqCVz3pN1e6/ujp9lDsgBDMxErwFPMRykjOc74KgoAbSktCqgGvMhD+gSeyFhaf7lWhUgqIz/6oj4BRH/xvupfGBPkqfiGT/a8L3/ezc90NojhBLM14TIR+aHyEPDhoSPjjCU1Ppx09Xvr0VUSk+ww=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=J4zxx7M5; arc=none smtp.client-ip=192.198.163.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OAacxxOc"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0B8D0C32786;
-	Tue,  6 Aug 2024 15:06:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1722956795;
-	bh=Ah6jgHgNtK5AriN+1EmUXXERGaccivbbBhGIB4QgMR8=;
-	h=From:To:Cc:Subject:Date:From;
-	b=OAacxxOc1ipNL39a1PJiYKNCY8SYdicuwtfqqwt9bl/ULwsw7GQvmD/7hifJ5tqKk
-	 qiV9N1YyzofNx+KRkcfJopGyWSI9syKErXgg+uU36fzIghJjTCbLUQXCF2kCrG2zwq
-	 IkK8BthOgdtVh7rRk2nITllA7R4bPrYtdO8EBldmUtYX/95i37TA0lWhQ0UStAIWJP
-	 H0cmmGq5eEFtU/+bmUxgSrLQgOdaH+PMZGeo2HN/NiHQhkbuJ+xMNQXhKXDGh0evBz
-	 +jv80sorqXWC9IbFroFqAiGuCRMyE7fQzuF/B2WhpqouWaiOZRt1rk7UZtVt/Fp/5e
-	 O5wxz3PmqA3PQ==
-From: Miguel Ojeda <ojeda@kernel.org>
-To: Miguel Ojeda <ojeda@kernel.org>,
-	Alex Gaynor <alex.gaynor@gmail.com>,
-	Wedson Almeida Filho <wedsonaf@gmail.com>,
-	Nathan Chancellor <nathan@kernel.org>
-Cc: Boqun Feng <boqun.feng@gmail.com>,
-	Gary Guo <gary@garyguo.net>,
-	=?UTF-8?q?Bj=C3=B6rn=20Roy=20Baron?= <bjorn3_gh@protonmail.com>,
-	Benno Lossin <benno.lossin@proton.me>,
-	Andreas Hindborg <a.hindborg@samsung.com>,
-	Alice Ryhl <aliceryhl@google.com>,
-	rust-for-linux@vger.kernel.org,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	llvm@lists.linux.dev,
-	linux-kernel@vger.kernel.org,
-	patches@lists.linux.dev
-Subject: [PATCH] rust: add intrinsics to fix `-Os` builds
-Date: Tue,  6 Aug 2024 17:06:19 +0200
-Message-ID: <20240806150619.192882-1-ojeda@kernel.org>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="J4zxx7M5"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1722957368; x=1754493368;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=3MlkYy6g36sLgZpc3PWyAkbXfVEleD3+rQVgjcMz2Co=;
+  b=J4zxx7M55RQu3O52RYmcv6ROgfcpNksgCIn38KTnAozxyo7wYCRMWAqP
+   J9hyUEaGOCg5Hd7qe4kCT8DGg9S0t2894Ov5q51M8/ZpkTMrq1Qu/9Z9u
+   zzDGVRdEHCIioT+cmKoHlT7knPWImG3YCiS39X+ixcpc/+WIYCtNXMX97
+   W3bt7KIRens3bVi1Td7vht/wxRsuc3yyRqtYL74LQrkZLrXhpLbE/Ps79
+   o4z0mQek82cRsJgWXML8x2JdI3mLChgGS2tziz2Jf3TxK4qV0zXECbrB1
+   FfgGTHxp+jv58pOlJlrGjrLipfFPmt2qeR9yVnkgU/3Wr6pwCfh+FHPoY
+   g==;
+X-CSE-ConnectionGUID: 2bVPLyOLQcio+EJEONkvzQ==
+X-CSE-MsgGUID: /eX5u0GqTNqv85MV2OaTxA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11156"; a="20858435"
+X-IronPort-AV: E=Sophos;i="6.09,268,1716274800"; 
+   d="scan'208";a="20858435"
+Received: from fmviesa008.fm.intel.com ([10.60.135.148])
+  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Aug 2024 08:16:07 -0700
+X-CSE-ConnectionGUID: chAZ4jaIRXW3tiOcmWle4g==
+X-CSE-MsgGUID: cTr0BnKSQXuSMG/bQ9gFsQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.09,268,1716274800"; 
+   d="scan'208";a="56481914"
+Received: from unknown (HELO b6bf6c95bbab) ([10.239.97.151])
+  by fmviesa008.fm.intel.com with ESMTP; 06 Aug 2024 08:16:04 -0700
+Received: from kbuild by b6bf6c95bbab with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1sbLus-0004bS-00;
+	Tue, 06 Aug 2024 15:16:02 +0000
+Date: Tue, 6 Aug 2024 23:15:16 +0800
+From: kernel test robot <lkp@intel.com>
+To: Song Liu <song@kernel.org>, linux-kernel@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Song Liu <song@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
+	Thomas Gleixner <tglx@linutronix.de>, Rob Herring <robh@kernel.org>,
+	Will Deacon <will@kernel.org>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Ingo Molnar <mingo@redhat.com>,
+	Arnaldo Carvalho de Melo <acme@kernel.org>,
+	Namhyung Kim <namhyung@kernel.org>
+Subject: Re: [PATCH] Revert "perf: Add a counter for number of user access
+ events in context"
+Message-ID: <202408062245.C5TeYWiV-lkp@intel.com>
+References: <20240805231031.1760371-1-song@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240805231031.1760371-1-song@kernel.org>
 
-Alice reported [1] that an arm64 build failed with:
+Hi Song,
 
-    ld.lld: error: undefined symbol: __extendsfdf2
-    >>> referenced by core.a6f5fc5794e7b7b3-cgu.0
-    >>>               rust/core.o:(<f32>::midpoint) in archive vmlinux.a
-    >>> referenced by core.a6f5fc5794e7b7b3-cgu.0
-    >>>               rust/core.o:(<f32>::midpoint) in archive vmlinux.a
+kernel test robot noticed the following build errors:
 
-    ld.lld: error: undefined symbol: __truncdfsf2
-    >>> referenced by core.a6f5fc5794e7b7b3-cgu.0
-    >>>               rust/core.o:(<f32>::midpoint) in archive vmlinux.a
+[auto build test ERROR on perf-tools-next/perf-tools-next]
+[also build test ERROR on tip/perf/core perf-tools/perf-tools linus/master v6.11-rc2 next-20240806]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Rust 1.80.0 or later together with `CONFIG_CC_OPTIMIZE_FOR_SIZE=y`
-is what triggers it.
+url:    https://github.com/intel-lab-lkp/linux/commits/Song-Liu/Revert-perf-Add-a-counter-for-number-of-user-access-events-in-context/20240806-071159
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/perf/perf-tools-next.git perf-tools-next
+patch link:    https://lore.kernel.org/r/20240805231031.1760371-1-song%40kernel.org
+patch subject: [PATCH] Revert "perf: Add a counter for number of user access events in context"
+config: arm64-randconfig-001-20240806 (https://download.01.org/0day-ci/archive/20240806/202408062245.C5TeYWiV-lkp@intel.com/config)
+compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 423aec6573df4424f90555468128e17073ddc69e)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240806/202408062245.C5TeYWiV-lkp@intel.com/reproduce)
 
-In addition, x86_64 builds also fail the same way.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202408062245.C5TeYWiV-lkp@intel.com/
 
-Similarly, compiling with Rust 1.82.0 (currently in nightly) makes
-another one appear, possibly due to the LLVM 19 upgrade there:
+All errors (new ones prefixed by >>):
 
-    ld.lld: error: undefined symbol: __eqdf2
-    >>> referenced by core.20495ea57a9f069d-cgu.0
-    >>>               rust/core.o:(<f64>::next_up) in archive vmlinux.a
-    >>> referenced by core.20495ea57a9f069d-cgu.0
-    >>>               rust/core.o:(<f64>::next_down) in archive vmlinux.a
+         |                                                                 ^~~~~~
+   drivers/perf/arm_pmuv3.c:140:2: note: previous initialization is here
+     140 |         PERF_CACHE_MAP_ALL_UNSUPPORTED,
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/perf/arm_pmu.h:45:31: note: expanded from macro 'PERF_CACHE_MAP_ALL_UNSUPPORTED'
+      45 |                 [0 ... C(RESULT_MAX) - 1] = CACHE_OP_UNSUPPORTED,       \
+         |                                             ^~~~~~~~~~~~~~~~~~~~
+   include/linux/perf/arm_pmu.h:37:31: note: expanded from macro 'CACHE_OP_UNSUPPORTED'
+      37 | #define CACHE_OP_UNSUPPORTED            0xFFFF
+         |                                         ^~~~~~
+   drivers/perf/arm_pmuv3.c:147:44: warning: initializer overrides prior initialization of this subobject [-Winitializer-overrides]
+     147 |         [C(DTLB)][C(OP_READ)][C(RESULT_ACCESS)] = ARMV8_IMPDEF_PERFCTR_L1D_TLB_RD,
+         |                                                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/perf/arm_pmuv3.h:133:44: note: expanded from macro 'ARMV8_IMPDEF_PERFCTR_L1D_TLB_RD'
+     133 | #define ARMV8_IMPDEF_PERFCTR_L1D_TLB_RD                         0x004E
+         |                                                                 ^~~~~~
+   drivers/perf/arm_pmuv3.c:140:2: note: previous initialization is here
+     140 |         PERF_CACHE_MAP_ALL_UNSUPPORTED,
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/perf/arm_pmu.h:45:31: note: expanded from macro 'PERF_CACHE_MAP_ALL_UNSUPPORTED'
+      45 |                 [0 ... C(RESULT_MAX) - 1] = CACHE_OP_UNSUPPORTED,       \
+         |                                             ^~~~~~~~~~~~~~~~~~~~
+   include/linux/perf/arm_pmu.h:37:31: note: expanded from macro 'CACHE_OP_UNSUPPORTED'
+      37 | #define CACHE_OP_UNSUPPORTED            0xFFFF
+         |                                         ^~~~~~
+   drivers/perf/arm_pmuv3.c:148:45: warning: initializer overrides prior initialization of this subobject [-Winitializer-overrides]
+     148 |         [C(DTLB)][C(OP_WRITE)][C(RESULT_ACCESS)] = ARMV8_IMPDEF_PERFCTR_L1D_TLB_WR,
+         |                                                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/perf/arm_pmuv3.h:134:44: note: expanded from macro 'ARMV8_IMPDEF_PERFCTR_L1D_TLB_WR'
+     134 | #define ARMV8_IMPDEF_PERFCTR_L1D_TLB_WR                         0x004F
+         |                                                                 ^~~~~~
+   drivers/perf/arm_pmuv3.c:140:2: note: previous initialization is here
+     140 |         PERF_CACHE_MAP_ALL_UNSUPPORTED,
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/perf/arm_pmu.h:45:31: note: expanded from macro 'PERF_CACHE_MAP_ALL_UNSUPPORTED'
+      45 |                 [0 ... C(RESULT_MAX) - 1] = CACHE_OP_UNSUPPORTED,       \
+         |                                             ^~~~~~~~~~~~~~~~~~~~
+   include/linux/perf/arm_pmu.h:37:31: note: expanded from macro 'CACHE_OP_UNSUPPORTED'
+      37 | #define CACHE_OP_UNSUPPORTED            0xFFFF
+         |                                         ^~~~~~
+   drivers/perf/arm_pmuv3.c:149:42: warning: initializer overrides prior initialization of this subobject [-Winitializer-overrides]
+     149 |         [C(DTLB)][C(OP_READ)][C(RESULT_MISS)]   = ARMV8_IMPDEF_PERFCTR_L1D_TLB_REFILL_RD,
+         |                                                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/perf/arm_pmuv3.h:131:50: note: expanded from macro 'ARMV8_IMPDEF_PERFCTR_L1D_TLB_REFILL_RD'
+     131 | #define ARMV8_IMPDEF_PERFCTR_L1D_TLB_REFILL_RD                  0x004C
+         |                                                                 ^~~~~~
+   drivers/perf/arm_pmuv3.c:140:2: note: previous initialization is here
+     140 |         PERF_CACHE_MAP_ALL_UNSUPPORTED,
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/perf/arm_pmu.h:45:31: note: expanded from macro 'PERF_CACHE_MAP_ALL_UNSUPPORTED'
+      45 |                 [0 ... C(RESULT_MAX) - 1] = CACHE_OP_UNSUPPORTED,       \
+         |                                             ^~~~~~~~~~~~~~~~~~~~
+   include/linux/perf/arm_pmu.h:37:31: note: expanded from macro 'CACHE_OP_UNSUPPORTED'
+      37 | #define CACHE_OP_UNSUPPORTED            0xFFFF
+         |                                         ^~~~~~
+   drivers/perf/arm_pmuv3.c:150:43: warning: initializer overrides prior initialization of this subobject [-Winitializer-overrides]
+     150 |         [C(DTLB)][C(OP_WRITE)][C(RESULT_MISS)]  = ARMV8_IMPDEF_PERFCTR_L1D_TLB_REFILL_WR,
+         |                                                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/perf/arm_pmuv3.h:132:50: note: expanded from macro 'ARMV8_IMPDEF_PERFCTR_L1D_TLB_REFILL_WR'
+     132 | #define ARMV8_IMPDEF_PERFCTR_L1D_TLB_REFILL_WR                  0x004D
+         |                                                                 ^~~~~~
+   drivers/perf/arm_pmuv3.c:140:2: note: previous initialization is here
+     140 |         PERF_CACHE_MAP_ALL_UNSUPPORTED,
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/perf/arm_pmu.h:45:31: note: expanded from macro 'PERF_CACHE_MAP_ALL_UNSUPPORTED'
+      45 |                 [0 ... C(RESULT_MAX) - 1] = CACHE_OP_UNSUPPORTED,       \
+         |                                             ^~~~~~~~~~~~~~~~~~~~
+   include/linux/perf/arm_pmu.h:37:31: note: expanded from macro 'CACHE_OP_UNSUPPORTED'
+      37 | #define CACHE_OP_UNSUPPORTED            0xFFFF
+         |                                         ^~~~~~
+   drivers/perf/arm_pmuv3.c:152:44: warning: initializer overrides prior initialization of this subobject [-Winitializer-overrides]
+     152 |         [C(NODE)][C(OP_READ)][C(RESULT_ACCESS)] = ARMV8_IMPDEF_PERFCTR_BUS_ACCESS_RD,
+         |                                                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/perf/arm_pmuv3.h:148:46: note: expanded from macro 'ARMV8_IMPDEF_PERFCTR_BUS_ACCESS_RD'
+     148 | #define ARMV8_IMPDEF_PERFCTR_BUS_ACCESS_RD                      0x0060
+         |                                                                 ^~~~~~
+   drivers/perf/arm_pmuv3.c:140:2: note: previous initialization is here
+     140 |         PERF_CACHE_MAP_ALL_UNSUPPORTED,
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/perf/arm_pmu.h:45:31: note: expanded from macro 'PERF_CACHE_MAP_ALL_UNSUPPORTED'
+      45 |                 [0 ... C(RESULT_MAX) - 1] = CACHE_OP_UNSUPPORTED,       \
+         |                                             ^~~~~~~~~~~~~~~~~~~~
+   include/linux/perf/arm_pmu.h:37:31: note: expanded from macro 'CACHE_OP_UNSUPPORTED'
+      37 | #define CACHE_OP_UNSUPPORTED            0xFFFF
+         |                                         ^~~~~~
+   drivers/perf/arm_pmuv3.c:153:45: warning: initializer overrides prior initialization of this subobject [-Winitializer-overrides]
+     153 |         [C(NODE)][C(OP_WRITE)][C(RESULT_ACCESS)] = ARMV8_IMPDEF_PERFCTR_BUS_ACCESS_WR,
+         |                                                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/perf/arm_pmuv3.h:149:46: note: expanded from macro 'ARMV8_IMPDEF_PERFCTR_BUS_ACCESS_WR'
+     149 | #define ARMV8_IMPDEF_PERFCTR_BUS_ACCESS_WR                      0x0061
+         |                                                                 ^~~~~~
+   drivers/perf/arm_pmuv3.c:140:2: note: previous initialization is here
+     140 |         PERF_CACHE_MAP_ALL_UNSUPPORTED,
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/perf/arm_pmu.h:45:31: note: expanded from macro 'PERF_CACHE_MAP_ALL_UNSUPPORTED'
+      45 |                 [0 ... C(RESULT_MAX) - 1] = CACHE_OP_UNSUPPORTED,       \
+         |                                             ^~~~~~~~~~~~~~~~~~~~
+   include/linux/perf/arm_pmu.h:37:31: note: expanded from macro 'CACHE_OP_UNSUPPORTED'
+      37 | #define CACHE_OP_UNSUPPORTED            0xFFFF
+         |                                         ^~~~~~
+>> drivers/perf/arm_pmuv3.c:824:18: error: no member named 'nr_user' in 'struct perf_event_context'
+     824 |                 nr_user = ctx->nr_user;
+         |                           ~~~  ^
+   60 warnings and 1 error generated.
 
-Gary adds [1]:
 
-> Usually the fix on rustc side is to mark those functions as `#[inline]`
->
-> All of {midpoint,next_up,next_down} are indeed unstable functions not
-> marked as inline...
+vim +824 drivers/perf/arm_pmuv3.c
 
-Fix all those by adding those intrinsics to our usual workaround.
+030896885ade0a arch/arm64/kernel/perf_event.c Will Deacon      2012-03-05  816  
+3cce50dfec4a5b arch/arm64/kernel/perf_event.c Suzuki K Poulose 2018-07-10  817  static void armv8pmu_start(struct arm_pmu *cpu_pmu)
+3cce50dfec4a5b arch/arm64/kernel/perf_event.c Suzuki K Poulose 2018-07-10  818  {
+bd27568117664b arch/arm64/kernel/perf_event.c Peter Zijlstra   2022-10-08  819  	struct perf_event_context *ctx;
+bd27568117664b arch/arm64/kernel/perf_event.c Peter Zijlstra   2022-10-08  820  	int nr_user = 0;
+83a7a4d643d33a arch/arm64/kernel/perf_event.c Rob Herring      2021-12-08  821  
+bd27568117664b arch/arm64/kernel/perf_event.c Peter Zijlstra   2022-10-08  822  	ctx = perf_cpu_task_ctx();
+bd27568117664b arch/arm64/kernel/perf_event.c Peter Zijlstra   2022-10-08  823  	if (ctx)
+bd27568117664b arch/arm64/kernel/perf_event.c Peter Zijlstra   2022-10-08 @824  		nr_user = ctx->nr_user;
+bd27568117664b arch/arm64/kernel/perf_event.c Peter Zijlstra   2022-10-08  825  
+bd27568117664b arch/arm64/kernel/perf_event.c Peter Zijlstra   2022-10-08  826  	if (sysctl_perf_user_access && nr_user)
+83a7a4d643d33a arch/arm64/kernel/perf_event.c Rob Herring      2021-12-08  827  		armv8pmu_enable_user_access(cpu_pmu);
+83a7a4d643d33a arch/arm64/kernel/perf_event.c Rob Herring      2021-12-08  828  	else
+83a7a4d643d33a arch/arm64/kernel/perf_event.c Rob Herring      2021-12-08  829  		armv8pmu_disable_user_access();
+83a7a4d643d33a arch/arm64/kernel/perf_event.c Rob Herring      2021-12-08  830  
+3cce50dfec4a5b arch/arm64/kernel/perf_event.c Suzuki K Poulose 2018-07-10  831  	/* Enable all counters */
+3cce50dfec4a5b arch/arm64/kernel/perf_event.c Suzuki K Poulose 2018-07-10  832  	armv8pmu_pmcr_write(armv8pmu_pmcr_read() | ARMV8_PMU_PMCR_E);
+b1f778a223a2a8 drivers/perf/arm_pmuv3.c       Marc Zyngier     2023-08-20  833  
+b1f778a223a2a8 drivers/perf/arm_pmuv3.c       Marc Zyngier     2023-08-20  834  	kvm_vcpu_pmu_resync_el0();
+3cce50dfec4a5b arch/arm64/kernel/perf_event.c Suzuki K Poulose 2018-07-10  835  }
+3cce50dfec4a5b arch/arm64/kernel/perf_event.c Suzuki K Poulose 2018-07-10  836  
 
-Cc: Gary Guo <gary@garyguo.net>
-Reported-by: Alice Ryhl <aliceryhl@google.com>
-Closes: https://rust-for-linux.zulipchat.com/#narrow/stream/288089-General/topic/v6.2E11-rc1.20doesn't.20build.20for.20arm64/near/455637364
-Signed-off-by: Miguel Ojeda <ojeda@kernel.org>
----
- rust/Makefile             | 4 ++--
- rust/compiler_builtins.rs | 3 +++
- 2 files changed, 5 insertions(+), 2 deletions(-)
-
-diff --git a/rust/Makefile b/rust/Makefile
-index 1f10f92737f2..77836388377d 100644
---- a/rust/Makefile
-+++ b/rust/Makefile
-@@ -354,8 +354,8 @@ rust-analyzer:
- 		$(if $(KBUILD_EXTMOD),$(extmod_prefix),$(objtree))/rust-project.json
- 
- redirect-intrinsics = \
--	__addsf3 __eqsf2 __gesf2 __lesf2 __ltsf2 __mulsf3 __nesf2 __unordsf2 \
--	__adddf3 __ledf2 __ltdf2 __muldf3 __unorddf2 \
-+	__addsf3 __eqsf2 __extendsfdf2 __gesf2 __lesf2 __ltsf2 __mulsf3 __nesf2 __truncdfsf2 __unordsf2 \
-+	__adddf3 __eqdf2 __ledf2 __ltdf2 __muldf3 __unorddf2 \
- 	__muloti4 __multi3 \
- 	__udivmodti4 __udivti3 __umodti3
- 
-diff --git a/rust/compiler_builtins.rs b/rust/compiler_builtins.rs
-index bba2922c6ef7..f14b8d7caf89 100644
---- a/rust/compiler_builtins.rs
-+++ b/rust/compiler_builtins.rs
-@@ -40,16 +40,19 @@ pub extern "C" fn $ident() {
- define_panicking_intrinsics!("`f32` should not be used", {
-     __addsf3,
-     __eqsf2,
-+    __extendsfdf2,
-     __gesf2,
-     __lesf2,
-     __ltsf2,
-     __mulsf3,
-     __nesf2,
-+    __truncdfsf2,
-     __unordsf2,
- });
- 
- define_panicking_intrinsics!("`f64` should not be used", {
-     __adddf3,
-+    __eqdf2,
-     __ledf2,
-     __ltdf2,
-     __muldf3,
-
-base-commit: de9c2c66ad8e787abec7c9d7eff4f8c3cdd28aed
 -- 
-2.46.0
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
