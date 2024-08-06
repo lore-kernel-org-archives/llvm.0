@@ -1,136 +1,106 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 55FC017A931;
-	Tue,  6 Aug 2024 23:10:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1192F175D54;
+	Tue,  6 Aug 2024 23:37:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722985804; cv=none; b=ugv9zDJsowP1m2EwOJRmeanz4y07XmUZ8NDvbh60HhnUPv7oUWfVTAD7bBQyFml1RKN7MlD5mkcN6jJqrzRmjpZJZwq+z+xAL+HDFENNhztlbyngw1SqqrGkqMwyTWWpOFQ2pADt+7ec/YAJaPyt6w96Xcntr4R35N/pTPMRT8Q=
+	t=1722987473; cv=none; b=eQw1dDv3Ofk/hZNAMgMxRI34Tc0ifPb2+Lyy23VIRqFw1+CU+7ZSy4Sn/iZphYlG1bg4v4nlw9rUm1pUb6ezNe0DSxYfXonONDm1wf3i1VhURIOBmC/3hmJlY3IKv2E0fRWwLLCwZfK+BcZHW3jNUS0C/IPc3bfGFXrTTVatYEM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722985804; c=relaxed/simple;
-	bh=JOwNCNr3/IEbe6BdNnnrPTwJINMvSZj5yZCINdET7DM=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=E2MXNK/YWdfyXIWsiU7bqfe7wakufUCkRrB/fxSZktD0H0LQ5+Fn6YEJHuuJ1wd3y1YZZ+QaB2AQ6hH4a96aeTHGS6XVXnvFKtla5b/m5THobPrz9cCOye8XHtAsptYjAtbW+Sxz53EjYgIO8/+Gq88YqnLXmqkXbGLbUNIboYY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=d1tdHXXG; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1722987473; c=relaxed/simple;
+	bh=QQem/7ix+rF/krZnyfwpRhr5WE3PESIoqQ4YBeS/Eww=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=GtEG1mwLiUriCxeAZQIEOulP6ccNNb4P4yEcpiOOFI1+DJo6wVGNooCa3OWKTGbbZ25QBgtO3gfsaokBEvUMWGz/dc04w2ITfsBqsDZduTlK7VOw16DI1pUFRB3qjF3u2QMGiYmtRK4elE7bzKZAbmOFErUnCVt9toao3OcwTOM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=WehKlM3c; arc=none smtp.client-ip=198.175.65.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="d1tdHXXG"
-Received: by smtp.kernel.org (Postfix) with ESMTPS id BC8D9C4AF1C;
-	Tue,  6 Aug 2024 23:10:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1722985803;
-	bh=JOwNCNr3/IEbe6BdNnnrPTwJINMvSZj5yZCINdET7DM=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
-	b=d1tdHXXGxre4WSP+5XHhbrZaAFl9Q1axTlOCxWPyt0PC+zHC5BPvvBMCXPxJ5VQPQ
-	 D/MKgQHR6vbSQV3xdkFAZ/FjkZFAGbq2Mhb5PonaeTYS7pTdpS3TKqZcqo+TzgG+Uw
-	 fpzPYYvGH8RF4B8nDZDoBPruy+MECvLKlGrh/gif7Kofoz15Xs5ofSpukwv4A6lgXC
-	 6b0fkVNKMKXF5pf05LOBnSUX58K9ml4QGZ+UQUC/UJzNI7jmYDK+UoOJgLqDwPCBrh
-	 +uomJrEsMpLCrEGtUP6Kk1JIJ65rwcpNSVxo+XEvqZ93peIKWNNwnPJdTWXcKGtneW
-	 aF6P7uexYQfhA==
-Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AF56DC49EA1;
-	Tue,  6 Aug 2024 23:10:03 +0000 (UTC)
-From: Daniel Gomez via B4 Relay <devnull+da.gomez.samsung.com@kernel.org>
-Date: Wed, 07 Aug 2024 01:09:25 +0200
-Subject: [PATCH 11/12] tty/vt: conmakehash requires linux/limits.h
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="WehKlM3c"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1722987471; x=1754523471;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=QQem/7ix+rF/krZnyfwpRhr5WE3PESIoqQ4YBeS/Eww=;
+  b=WehKlM3cJUqHFnik5GyixUqYgPiYdlH7lXZvF8lLtfeb/9uRSHqKiwX6
+   +44knamEel8Yy14QRXG6PyF5F3vhKD4k1yUMx3dJ5o8g/5UWxh2zclOpA
+   qrlgtM/4W0+0l38IAVdt7RrLGfTuONnqzeIE0xIdzKOLThDWem35Hl5jT
+   mfqCDKz8B64k/jjGmSfRZonJhJNh84XmGFzFcDEOo3Khxa1ZdMX2TA5Zk
+   vWe50/oF8CDprN/wygNH8fjnYIIOjpZP43jmqB8MH1gzIKzgqx5lKALWN
+   7Ic2K0He2q15dcuRYkVjX4++jtyfv3XF8fY5BG3BYU9K6IJJWTpdO5X6e
+   A==;
+X-CSE-ConnectionGUID: FfcOJdLjS628NXJN/Ab4yg==
+X-CSE-MsgGUID: UxFT2JUHTxyE9tUdU/tX5A==
+X-IronPort-AV: E=McAfee;i="6700,10204,11156"; a="32184581"
+X-IronPort-AV: E=Sophos;i="6.09,268,1716274800"; 
+   d="scan'208";a="32184581"
+Received: from fmviesa001.fm.intel.com ([10.60.135.141])
+  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Aug 2024 16:37:51 -0700
+X-CSE-ConnectionGUID: Dr4ab4qVQOWNW6dInnPB8g==
+X-CSE-MsgGUID: +XelNfyLS5Kc7TPHq7rDYA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.09,268,1716274800"; 
+   d="scan'208";a="87606859"
+Received: from unknown (HELO b6bf6c95bbab) ([10.239.97.151])
+  by fmviesa001.fm.intel.com with ESMTP; 06 Aug 2024 16:37:48 -0700
+Received: from kbuild by b6bf6c95bbab with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1sbTkN-0004ui-0S;
+	Tue, 06 Aug 2024 23:37:44 +0000
+Date: Wed, 7 Aug 2024 07:37:11 +0800
+From: kernel test robot <lkp@intel.com>
+To: Shyam Sundar S K <Shyam-sundar.S-k@amd.com>,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	Jarkko Nikula <jarkko.nikula@linux.intel.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Guruvendra Punugupati <Guruvendra.Punugupati@amd.com>,
+	Krishnamoorthi M <krishnamoorthi.m@amd.com>,
+	linux-i3c@lists.infradead.org, linux-kernel@vger.kernel.org,
+	Shyam Sundar S K <Shyam-sundar.S-k@amd.com>
+Subject: Re: [PATCH v3 1/5] i3c: mipi-i3c-hci: Add MIPI0100 ACPI ID to the
+ I3C Support List
+Message-ID: <202408070758.Twn4OAwy-lkp@intel.com>
+References: <20240806075843.277969-2-Shyam-sundar.S-k@amd.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20240807-macos-build-support-v1-11-4cd1ded85694@samsung.com>
-References: <20240807-macos-build-support-v1-0-4cd1ded85694@samsung.com>
-In-Reply-To: <20240807-macos-build-support-v1-0-4cd1ded85694@samsung.com>
-To: Masahiro Yamada <masahiroy@kernel.org>, 
- Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nicolas@fjasle.eu>, 
- Lucas De Marchi <lucas.demarchi@intel.com>, 
- =?utf-8?q?Thomas_Hellstr=C3=B6m?= <thomas.hellstrom@linux.intel.com>, 
- Rodrigo Vivi <rodrigo.vivi@intel.com>, 
- Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
- Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>, 
- David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>, 
- William Hubbs <w.d.hubbs@gmail.com>, Chris Brannon <chris@the-brannons.com>, 
- Kirk Reiser <kirk@reisers.ca>, 
- Samuel Thibault <samuel.thibault@ens-lyon.org>, 
- Paul Moore <paul@paul-moore.com>, 
- Stephen Smalley <stephen.smalley.work@gmail.com>, 
- Ondrej Mosnacek <omosnace@redhat.com>, 
- Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
- Marc Zyngier <maz@kernel.org>, Oliver Upton <oliver.upton@linux.dev>, 
- James Morse <james.morse@arm.com>, 
- Suzuki K Poulose <suzuki.poulose@arm.com>, 
- Zenghui Yu <yuzenghui@huawei.com>, 
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
- Jiri Slaby <jirislaby@kernel.org>, 
- Nick Desaulniers <ndesaulniers@google.com>, 
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>
-Cc: linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org, 
- intel-xe@lists.freedesktop.org, dri-devel@lists.freedesktop.org, 
- speakup@linux-speakup.org, selinux@vger.kernel.org, 
- linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev, 
- linux-serial@vger.kernel.org, llvm@lists.linux.dev, 
- Finn Behrens <me@kloenk.dev>, 
- "Daniel Gomez (Samsung)" <d+samsung@kruces.com>, gost.dev@samsung.com, 
- Daniel Gomez <da.gomez@samsung.com>
-X-Mailer: b4 0.14.1
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1722985800; l=1705;
- i=da.gomez@samsung.com; s=20240621; h=from:subject:message-id;
- bh=GlY+ZLQcYSKSN3SyY915ZDHwX28gVnVDJorFIIf1+Jo=;
- b=TXC+qEwbi6LwhRfspoNf9uCJM5mS5rpVYHpZ3bnRG1KFrfzm+UI/apLoI43ShxbZHbpUUEVBL
- CkbYZiLdsfUA4G8wSWyMc3cIK3tGKT6BD0jGlYhjBBXl1eg0MflhqKS
-X-Developer-Key: i=da.gomez@samsung.com; a=ed25519;
- pk=BqYk31UHkmv0WZShES6pIZcdmPPGay5LbzifAdZ2Ia4=
-X-Endpoint-Received: by B4 Relay for da.gomez@samsung.com/20240621 with
- auth_id=175
-X-Original-From: Daniel Gomez <da.gomez@samsung.com>
-Reply-To: da.gomez@samsung.com
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240806075843.277969-2-Shyam-sundar.S-k@amd.com>
 
-From: Daniel Gomez <da.gomez@samsung.com>
+Hi Shyam,
 
-macOS hosts do not provide the linux/limits.h header required for
-conmakehash. To address this, ensure that usr/include is included in
-the conmakehash HOSTCFLAGS. This will provide the necessary header for
-successful compilation on macOS.
+kernel test robot noticed the following build errors:
 
-Fixes error:
-HOSTCC  drivers/tty/vt/conmakehash - due to target missing
-  clang -Wp,-MMD,drivers/tty/vt/.conmakehash.d -Wall
--Wmissing-prototypes -Wstrict-prototypes -O2 -fomit-frame-pointer
--std=gnu11   -I ./scripts/include     -o drivers/tty/vt/conmakehash
-drivers/tty/vt/conmakehash.c
-drivers/tty/vt/conmakehash.c:15:10: fatal error: 'linux/
-   limits.h' file not found 15 | #include <linux/limits.h>    |
-   ^~~~~~~~~~~~~~~~
-1 error generated.
-make[5]: *** [scripts/Makefile.host:116: drivers/tty/vt/conmakehash]
-Error 1
-make[4]: *** [scripts/Makefile.build:485: drivers/tty/vt] Error 2
-make[3]: *** [scripts/Makefile.build:485: drivers/tty] Error 2
-make[2]: *** [scripts/Makefile.build:485: drivers] Error 2
-make[1]: *** [/Volumes/src/kernel/linux-next/Makefile:1925: .] Error 2
-make: *** [Makefile:224: __sub-make] Error 2
+[auto build test ERROR on linus/master]
+[also build test ERROR on v6.11-rc2 next-20240806]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Signed-off-by: Daniel Gomez <da.gomez@samsung.com>
----
- drivers/tty/vt/Makefile | 1 +
- 1 file changed, 1 insertion(+)
+url:    https://github.com/intel-lab-lkp/linux/commits/Shyam-Sundar-S-K/i3c-mipi-i3c-hci-Add-MIPI0100-ACPI-ID-to-the-I3C-Support-List/20240806-165640
+base:   linus/master
+patch link:    https://lore.kernel.org/r/20240806075843.277969-2-Shyam-sundar.S-k%40amd.com
+patch subject: [PATCH v3 1/5] i3c: mipi-i3c-hci: Add MIPI0100 ACPI ID to the I3C Support List
+config: hexagon-randconfig-001-20240806 (https://download.01.org/0day-ci/archive/20240807/202408070758.Twn4OAwy-lkp@intel.com/config)
+compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 423aec6573df4424f90555468128e17073ddc69e)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240807/202408070758.Twn4OAwy-lkp@intel.com/reproduce)
 
-diff --git a/drivers/tty/vt/Makefile b/drivers/tty/vt/Makefile
-index 2c8ce8b592ed..d266895357e5 100644
---- a/drivers/tty/vt/Makefile
-+++ b/drivers/tty/vt/Makefile
-@@ -13,6 +13,7 @@ obj-$(CONFIG_CONSOLE_TRANSLATIONS)	+= consolemap.o consolemap_deftbl.o
- clean-files := consolemap_deftbl.c defkeymap.c
- 
- hostprogs += conmakehash
-+HOSTCFLAGS_conmakehash.o = -I$(srctree)/usr/include
- 
- quiet_cmd_conmk = CONMK   $@
-       cmd_conmk = $(obj)/conmakehash $< > $@
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202408070758.Twn4OAwy-lkp@intel.com/
+
+All errors (new ones prefixed by >>, old ones prefixed by <<):
+
+WARNING: modpost: missing MODULE_DESCRIPTION() in lib/test_objpool.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in lib/zlib_inflate/zlib_inflate.o
+>> ERROR: modpost: drivers/i3c/master/mipi-i3c-hci/mipi-i3c-hci: sizeof(struct platform_device_id)=24 is not a modulo of the size of section __mod_platform__<identifier>_device_table=56.
+>> Fix definition of struct platform_device_id in mod_devicetable.h
 
 -- 
-Git-146)
-
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
