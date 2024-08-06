@@ -1,122 +1,102 @@
-Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB33C2C182
-	for <llvm@lists.linux.dev>; Tue,  6 Aug 2024 15:42:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF27915CB
+	for <llvm@lists.linux.dev>; Tue,  6 Aug 2024 16:08:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722958934; cv=none; b=syDpnIM/rOq/NvflSo1q6n/wCroH+KF3l/P2ltlDwLAPypgEIXId06DfEyKstPqbYxrh4rh9kgVFxCmUCRKpF06jeSPE5ruZRmlFUSBbmxZLjb11BU30nlI8cNp1XI2g29NdC+jCqr1CHQKuc9rvSE/h8xMHMuBn3Rir4AkYAds=
+	t=1722960529; cv=none; b=fUAjTFt7i7tGCymNhA/LJ1VeOMsXV/utKIVBcaKuK8ccQrLkbmTDfz0B1u6RCGFA4BhUf7bAhPwAWhYHieOJOSwQ3TuLDgVaFT9w0WJEDQnvUi86NzUsk1E6gj16VG95tkLsnI4/HWsQ09C2E7gxoipxjHYlEyRhpYRGrn4f70Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722958934; c=relaxed/simple;
-	bh=2F97gembZB7Ph+t8UMlLUN/RaEUIDWcSTRDhoreN85k=;
+	s=arc-20240116; t=1722960529; c=relaxed/simple;
+	bh=zleTztI71bR1VV4Zd7JrcyASC2gGE5G/CC5AYm4vrpY=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=gtMJElNfvngUhOI5/jVW4fa4VuvcAfhr1c//+QiLjFl46nBrLQ/NaXeGSTHViBf7gtuQQiDcFPg9AGj7Be5X9iD/WfAWtKsrQRUBbVsNIcvMLjLjXq9NPQONBQvSQDdkBBwsrQeLHrXbhFnHJp0M1MRRkNjRrkwgjHLb3X8XPYU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=XoT+a34P; arc=none smtp.client-ip=209.85.128.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	 To:Cc:Content-Type; b=Grg4XwlhZlbZBXt7/vtD+A6yF/Fmqc8d5C+usTj0c+hI0WtZ3ZAlkpaE6i4VuDxTZWaC8G0CJWTFDsv6XAr8l5rFePrtYHBUyuvUJ9+EEC2fC9qc9wPpgmk5hQcq3Nliyf5QNA+rwl+g46dszz9YiWw/wDlvZSMoYumCkK/WHxw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=F+vshGM+; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="XoT+a34P"
-Received: by mail-wm1-f43.google.com with SMTP id 5b1f17b1804b1-4266dc7591fso5550745e9.0
-        for <llvm@lists.linux.dev>; Tue, 06 Aug 2024 08:42:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1722958930; x=1723563730; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=THccCsa9d44/a7k4O9weE7Ak3VSX2fq1wLCNhXJEyK4=;
-        b=XoT+a34P/S90+ag+Jxz+VlWhV26HuZVwO40l6W4h5lFJFMQoS5n08J2RDNIhvRL+g/
-         BOKo1XONmHeiD8CHexvaxBaN1jQPYt/OQ01pqmZQKmLSJrrM8KvIOUVQAkB1XxGMQ+hJ
-         G6WoE53PERY/WVBe4UFAm8FqJarpdkIajAcfs1QnxqRPR0pkeaKzcqQQ8u6Yt9XnIbMT
-         XJCpZ61i7C0wKNyzwkKm9hwctVkK2qK9lRFzuYFY177cmIRqBDcv+KLOTXmxYFIhh5yy
-         eq4blR8AoWzefj6VMrL7tfIa5Uf+/AEHEg7Em2CC0USHl+iqX/RSQFIAeeU4sKIFjow4
-         iZVg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1722958930; x=1723563730;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=THccCsa9d44/a7k4O9weE7Ak3VSX2fq1wLCNhXJEyK4=;
-        b=rsUdpfqi/4j7T+IvNRh1f/w148EiDZf3+4uf2uDO7mCVnO+Qdnec8C/Mafm8KIBMIS
-         +A7Lw6+zTvcdUwAWr7jcvbFF94lE1jNLUelcGwo8rvilHjPlluYbn219CCKo7ChdY13U
-         od22Pz7TXNd63k6tMOCrPxhHoz9T5Ob61/y8h+RFbppE4QzV5pAX6TcI2HPsQgjQFqKc
-         6XYFDj1fMOFjXb+cKQ6U1/GinDVoWmh35u+oXkks0qLgJwsrQRBzQn/lpxyoLexvNPHU
-         nKcqIbksbwDRxl6TkCwd35DGD14y1ZVj7+hEND+NXob6iQ2EIyJUy3tmfhMrb9HsjSIw
-         bE4Q==
-X-Forwarded-Encrypted: i=1; AJvYcCVe6jO1yjpDUT+6wuDXmsuzomUdx9YqqcESI0XLnwOuzHiHHdRu1grfRVNWoBWYza82HTaT@lists.linux.dev
-X-Gm-Message-State: AOJu0YycFddlW8tg/8vXHfkfynRL3HIIAGagYdDku7uWUcRNLOZ8rayi
-	TWlCNZGlvAbeu6ISRhNXxo1TT4FM5zhFDenlTywfILXZ+h1f6zHl44DmTC1k7k3JkS1AsuP73tc
-	Ul/628yBvGPX2EVJsS3I0x1KIeatZ5L9e66pE
-X-Google-Smtp-Source: AGHT+IFy1q1xSU6pQqfOY13ZKc31YixugPXTYoG2iOCjOHiY5xXt+yoxINs0iVcTVHkdmSjbDCF8Z08VAJ3+o8YTt88=
-X-Received: by 2002:a5d:67d0:0:b0:360:7c4b:58c3 with SMTP id
- ffacd0b85a97d-36bbc17ec0emr11080309f8f.54.1722958929954; Tue, 06 Aug 2024
- 08:42:09 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="F+vshGM+"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 49A26C32786
+	for <llvm@lists.linux.dev>; Tue,  6 Aug 2024 16:08:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1722960529;
+	bh=zleTztI71bR1VV4Zd7JrcyASC2gGE5G/CC5AYm4vrpY=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=F+vshGM+0ebvKnXUGkH1sr9W9as/nny881xJ+w6cYDz9EQwStLrtloZNZx2fUWmgh
+	 n0ODDEKbhq/m6Bz6XyuhxgiYdob4AxP7o76DFSTkdIYkwr6jVhH9/2+6ObVEp+yPYZ
+	 RntkplLtMMHrb71L086pvX52+73Cx5NMC0M7Fa3cSLvhU51LL6gfciP7QngozgxVLy
+	 hXBpZW4FFNjOMVvN/z+Mogu/pGTJdj7WC7XZYeaXx8QDEfA5h8TAxP3zJ8RxzwByKc
+	 bNtA2SIc5bhlCSLOA5RGkjtCtMa4/lfQx/cFoIEK437bZFG5Um8l1yTllXz8IXiOpR
+	 6KMtOQJ41IN7g==
+Received: by mail-lj1-f182.google.com with SMTP id 38308e7fff4ca-2f183f4fa63so9520591fa.1
+        for <llvm@lists.linux.dev>; Tue, 06 Aug 2024 09:08:49 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCUXfsjxuUWvtGWARld6zPZD+pDu+tItcRbyDVaJj+mjATwAZjTksxyAwqgIi/rfnK2Eh76HVnisrk4ZEWu8EHKtnv8jDg==
+X-Gm-Message-State: AOJu0YzNxvTVQgtCbTavx+ECJvtxhZADd0ywUd6oxPfIhQIqiEvS291p
+	RM+80iY9lRfjwpFJZBVPBUSdAmjDuLpBsPa6mUb6zi84p9aI7UT11Wbkc6krK8M8856BOpzi8p2
+	dmEDlCD+BQZAcOSrPwpyv1aB0uA==
+X-Google-Smtp-Source: AGHT+IEEvIvp/KP9FxUMY15tzLmsM9A3gLkk1/eG9Nu8oa6/kQAQeFXGkAT3KG0Ks16DKyBfq45lT3A45Jf4iTbLChQ=
+X-Received: by 2002:a05:651c:10b8:b0:2ee:811e:757c with SMTP id
+ 38308e7fff4ca-2f1576ddda5mr45044911fa.21.1722960527685; Tue, 06 Aug 2024
+ 09:08:47 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20240806150619.192882-1-ojeda@kernel.org>
-In-Reply-To: <20240806150619.192882-1-ojeda@kernel.org>
-From: Alice Ryhl <aliceryhl@google.com>
-Date: Tue, 6 Aug 2024 17:41:57 +0200
-Message-ID: <CAH5fLgiPS9ByFPU+4GoLUwgH=GTD0xkCp2mi9zvaC6XzLpP03g@mail.gmail.com>
-Subject: Re: [PATCH] rust: add intrinsics to fix `-Os` builds
-To: Miguel Ojeda <ojeda@kernel.org>
-Cc: Alex Gaynor <alex.gaynor@gmail.com>, Wedson Almeida Filho <wedsonaf@gmail.com>, 
-	Nathan Chancellor <nathan@kernel.org>, Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, 
-	=?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
-	Benno Lossin <benno.lossin@proton.me>, Andreas Hindborg <a.hindborg@samsung.com>, 
-	rust-for-linux@vger.kernel.org, Nick Desaulniers <ndesaulniers@google.com>, 
-	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, llvm@lists.linux.dev, 
-	linux-kernel@vger.kernel.org, patches@lists.linux.dev
+References: <20240805202042.3229190-1-robh@kernel.org> <20240806044928.2j6z2ucnzk6lg5y3@vireshk-i7>
+In-Reply-To: <20240806044928.2j6z2ucnzk6lg5y3@vireshk-i7>
+From: Rob Herring <robh@kernel.org>
+Date: Tue, 6 Aug 2024 10:08:32 -0600
+X-Gmail-Original-Message-ID: <CAL_JsqLVj2sCuQFYFwR8QnB9jHq_9z4axeNzid1d7+ZrWzmgYA@mail.gmail.com>
+Message-ID: <CAL_JsqLVj2sCuQFYFwR8QnB9jHq_9z4axeNzid1d7+ZrWzmgYA@mail.gmail.com>
+Subject: Re: [PATCH] cpufreq: spear: Fix uninitialized variable "i"
+To: Viresh Kumar <viresh.kumar@linaro.org>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, 
+	Justin Stitt <justinstitt@google.com>, kernel test robot <lkp@intel.com>, linux-pm@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Aug 6, 2024 at 5:06=E2=80=AFPM Miguel Ojeda <ojeda@kernel.org> wrot=
-e:
+On Mon, Aug 5, 2024 at 10:49=E2=80=AFPM Viresh Kumar <viresh.kumar@linaro.o=
+rg> wrote:
 >
-> Alice reported [1] that an arm64 build failed with:
->
->     ld.lld: error: undefined symbol: __extendsfdf2
->     >>> referenced by core.a6f5fc5794e7b7b3-cgu.0
->     >>>               rust/core.o:(<f32>::midpoint) in archive vmlinux.a
->     >>> referenced by core.a6f5fc5794e7b7b3-cgu.0
->     >>>               rust/core.o:(<f32>::midpoint) in archive vmlinux.a
->
->     ld.lld: error: undefined symbol: __truncdfsf2
->     >>> referenced by core.a6f5fc5794e7b7b3-cgu.0
->     >>>               rust/core.o:(<f32>::midpoint) in archive vmlinux.a
->
-> Rust 1.80.0 or later together with `CONFIG_CC_OPTIMIZE_FOR_SIZE=3Dy`
-> is what triggers it.
->
-> In addition, x86_64 builds also fail the same way.
->
-> Similarly, compiling with Rust 1.82.0 (currently in nightly) makes
-> another one appear, possibly due to the LLVM 19 upgrade there:
->
->     ld.lld: error: undefined symbol: __eqdf2
->     >>> referenced by core.20495ea57a9f069d-cgu.0
->     >>>               rust/core.o:(<f64>::next_up) in archive vmlinux.a
->     >>> referenced by core.20495ea57a9f069d-cgu.0
->     >>>               rust/core.o:(<f64>::next_down) in archive vmlinux.a
->
-> Gary adds [1]:
->
-> > Usually the fix on rustc side is to mark those functions as `#[inline]`
+> On 05-08-24, 14:20, Rob Herring (Arm) wrote:
+> > The refactoring in commit dca2ef2b7d91 ("cpufreq: spear: Use
+> > of_property_for_each_u32() instead of open coding") left "i"
+> > uninitialized. Initialize it to 0.
 > >
-> > All of {midpoint,next_up,next_down} are indeed unstable functions not
-> > marked as inline...
+> > Note that gcc doesn't detect this, only clang does.
+> >
+> > Fixes: dca2ef2b7d91 ("cpufreq: spear: Use of_property_for_each_u32() in=
+stead of open coding")
+> > Reported-by: kernel test robot <lkp@intel.com>
+> > Closes: https://lore.kernel.org/oe-kbuild-all/202408030418.gnJDcCpm-lkp=
+@intel.com/
+> > Signed-off-by: Rob Herring (Arm) <robh@kernel.org>
+> > ---
+> >  drivers/cpufreq/spear-cpufreq.c | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> >
+> > diff --git a/drivers/cpufreq/spear-cpufreq.c b/drivers/cpufreq/spear-cp=
+ufreq.c
+> > index 4d28147c23f1..f8c16699a68d 100644
+> > --- a/drivers/cpufreq/spear-cpufreq.c
+> > +++ b/drivers/cpufreq/spear-cpufreq.c
+> > @@ -173,7 +173,7 @@ static int spear_cpufreq_probe(struct platform_devi=
+ce *pdev)
+> >       struct device_node *np;
+> >       struct cpufreq_frequency_table *freq_tbl;
+> >       u32 val;
+> > -     int cnt, i, ret;
+> > +     int cnt, i =3D 0, ret;
 >
-> Fix all those by adding those intrinsics to our usual workaround.
+> We don't increment 'i' anymore, don't we need an i++ in:
 >
-> Cc: Gary Guo <gary@garyguo.net>
-> Reported-by: Alice Ryhl <aliceryhl@google.com>
-> Closes: https://rust-for-linux.zulipchat.com/#narrow/stream/288089-Genera=
-l/topic/v6.2E11-rc1.20doesn't.20build.20for.20arm64/near/455637364
-> Signed-off-by: Miguel Ojeda <ojeda@kernel.org>
+>         freq_tbl[i].frequency =3D val;
+>
+> ?
 
-This fixes the issue I ran into.
+Sigh. Yes.
 
-Tested-by: Alice Ryhl <aliceryhl@google.com>
+
+Rob
