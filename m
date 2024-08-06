@@ -1,540 +1,488 @@
-Received: from zg8tmja5ljk3lje4ms43mwaa.icoremail.net (zg8tmja5ljk3lje4ms43mwaa.icoremail.net [209.97.181.73])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 300061EB2A
-	for <llvm@lists.linux.dev>; Tue,  6 Aug 2024 15:25:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.97.181.73
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722957963; cv=none; b=TNv/0ULw0cwvm2jnpMpqjbvoTZeBVFx8icUVkNJ9i8QRtQGlbqlccRXds5eAP91TKUuSAQAotfLH9vem/Hw2fQdtIY7ExFQUQ/3r3cFEeL3CQ4SZHZTFvaaoyA7BUk0zLm9YB/G5tx4UqJ1DAULF+4O0Se2vQIm/I/ze3/+RRfg=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722957963; c=relaxed/simple;
-	bh=B/qLJA3wF+hP04Do5OVMccPDyi10MP4gvOPDqJTlnSU=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=LbuUrY1flmuwSHKGPoaggdsXyXd0yjoV/iU+jcWBWIbZSFeyYzFWIvGodRWWB5apNwXyXpAsY5WQSWNc1iXCUajr3ovlfo5tF++YfR/IUtNmfi8JrFJtNEA8Zii2okBvMoVrln3hJ/6TIpN31kvS9m8JCCqVpJ97xv4p6pIPdGk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=hust.edu.cn; spf=pass smtp.mailfrom=hust.edu.cn; arc=none smtp.client-ip=209.97.181.73
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=hust.edu.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hust.edu.cn
-Received: from hust.edu.cn (unknown [172.16.0.50])
-	by app2 (Coremail) with SMTP id HwEQrABHTc1EQLJmEuBrAA--.26835S2;
-	Tue, 06 Aug 2024 23:24:52 +0800 (CST)
-Received: from [192.168.1.111] (unknown [10.12.177.116])
-	by gateway (Coremail) with SMTP id _____wBX0HFDQLJmOOrYAA--.29714S2;
-	Tue, 06 Aug 2024 23:24:51 +0800 (CST)
-Message-ID: <502bcb7a-83d5-49c8-b2e2-a908900281ee@hust.edu.cn>
-Date: Tue, 6 Aug 2024 23:24:50 +0800
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 79455F9E6;
+	Tue,  6 Aug 2024 15:36:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=205.220.168.131
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1722958583; cv=fail; b=XTwxTE9pFMCIeOmVhkbGhSdZk9+Yl2S77/rgfBzw6fxZ6EgGJB+q7u+OUNcAimWqQFQVFznLdF00oKkuSy6IcXRb8fcbHfZ9YbBF7IEw5XND2flcbRp9OUJGAqtmGQLXUk3342mbcLKV4B+MmHw7CKNXaFtnbfm8sBrlk7qUmWU=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1722958583; c=relaxed/simple;
+	bh=OzUF4LTVMa9Mdc06023IkY89n6iP+GlFDWsJrhjdKnc=;
+	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=ZYS7HL+Da6skv7G2vfBL0pRltXogn6SOZb7ga0gb0TPTyDAw/szMEbVsBR7EDGMLjyd5rGO34f0KJckNA24aW4Waql2gwnDSPSvpioRHc3AAGqSGwA7ilyAICEkTWeOVyyOyQyp1yH3B30YC5tHbVlrz9Yln6hVLk7cYt39svzo=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=e3b6BB/s; arc=fail smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="e3b6BB/s"
+Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4768WDj2025788;
+	Tue, 6 Aug 2024 15:36:06 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	atvXeNIzoUqhIBsQLqtuFqracRS/Dpxuj8IkwymhPsw=; b=e3b6BB/sPZ7JFTOq
+	a11CV3XJdbLAUv5wzAylmNLzpdLZiayuwUv10h5j4YqkQF6x7o3PXYU2MXf/CfAM
+	0Au8/P3013e10rVENfQULdQU+0OMsozf5PWBtSyc8kW2jKfgFO7T/8LtkVeX6QR8
+	t/3pui8msEa2246zaAI+zfh7EHJfOQ5EcOsVh7TQe37el/ACzg6htVtC7I56BLan
+	7ydP5pcG2S6Hpp7SrssQ6Hh23Z1MLoDzQlCVWSqQPWl+RZHQm65HOO+bwePw5Nuo
+	MCkSjovuDJw37ihdIZzmSn+M9EX/LtDnnnNBAYxCzSnDrUZd/K33UwTgR4p/5aW1
+	OM6bAA==
+Received: from bn8pr05cu002.outbound.protection.outlook.com (mail-eastus2azlp17011028.outbound.protection.outlook.com [40.93.12.28])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 40u4cpjuaw-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 06 Aug 2024 15:36:06 +0000 (GMT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=YPQXTw3OiKWhF/MqKcYTWtcTrkCrzYKaseDpyKOEWd1HynqyagImNk7Z8NtbqSpW6sGAu+39tNecnCirpmo5GO8e/SyxexAjG+z+/M+cQ28sFeoQqJFq732WKfOQMoel4Xu04ZJUkQz1z1+r6fgeTPrgL+0tVgw/KLLGqyx6DsMGUeeDDz7o/AcmOIxbpJ5MJtbzy0RuRbaG3oEc/wh4YTb1JkSD732zwzV7dEXRWMbhU0e7hSlr0Pup+Yn+MiBcrnXQ+2Nm/fekTnZL/jFBZHh2VkTCJwGaK77rdPGYH8gUQ7Z7+Arp+5o0RBVW07hhjyy4gosuY9HhVT84jPONdQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=atvXeNIzoUqhIBsQLqtuFqracRS/Dpxuj8IkwymhPsw=;
+ b=oswrSq5TO/YL0PFZTPMDZEacJ3jEd6UWSgVVIfduf4eVFVkzS6t+kHDgfwIiBb9NoEfBWhxOmTRfttCra92TGQocctdTBGbNoF/9YbcJTgGdSVd4kV7dJJEzdEDqZWgYqCtzq/YK7SwttTelVD0wCFwTHPu8ZoL2bg1w1ghPavKUfFQScHBBa1b8hBPxDpDcruwCTUyyQc5exqG32FsfvBVOhVoEJFclcjKy3LAGM04bdZA/oZrrhzhWuAEek77dPtPKTPG6TyMZGx0mpyk3JGEnAFgWSemff012q1j4Uvmolo8ETJOw3UDLgUfumu5wsxKXpQPLVF/YGdpaTigYiQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=quicinc.com; dmarc=pass action=none header.from=quicinc.com;
+ dkim=pass header.d=quicinc.com; arc=none
+Received: from CH3PR02MB10247.namprd02.prod.outlook.com
+ (2603:10b6:610:1c2::10) by SA0PR02MB7274.namprd02.prod.outlook.com
+ (2603:10b6:806:e8::24) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7828.22; Tue, 6 Aug
+ 2024 15:36:02 +0000
+Received: from CH3PR02MB10247.namprd02.prod.outlook.com
+ ([fe80::2980:17c4:6e92:2b11]) by CH3PR02MB10247.namprd02.prod.outlook.com
+ ([fe80::2980:17c4:6e92:2b11%6]) with mapi id 15.20.7828.023; Tue, 6 Aug 2024
+ 15:36:01 +0000
+From: Brian Cain <bcain@quicinc.com>
+To: Nathan Chancellor <nathan@kernel.org>,
+        "Gustavo A. R. Silva"
+	<gustavo@embeddedor.com>
+CC: kernel test robot <lkp@intel.com>,
+        "Gustavo A. R. Silva"
+	<gustavoars@kernel.org>,
+        "llvm@lists.linux.dev" <llvm@lists.linux.dev>,
+        "oe-kbuild-all@lists.linux.dev" <oe-kbuild-all@lists.linux.dev>,
+        LKML
+	<linux-kernel@vger.kernel.org>,
+        "linux-hexagon@vger.kernel.org"
+	<linux-hexagon@vger.kernel.org>,
+        Sid Manning <sidneym@quicinc.com>,
+        Sundeep
+ Kushwaha <sundeepk@quicinc.com>
+Subject: RE: [gustavoars:testing/wfamnae-next20240729-cbc-2 11/18]
+ include/rdma/uverbs_ioctl.h:643:15: error: static assertion failed due to
+ requirement '__builtin_offsetof(struct uverbs_attr_bundle, attrs) ==
+ sizeof(struct uverbs_attr_bundle_hdr)': struct memb...
+Thread-Topic: [gustavoars:testing/wfamnae-next20240729-cbc-2 11/18]
+ include/rdma/uverbs_ioctl.h:643:15: error: static assertion failed due to
+ requirement '__builtin_offsetof(struct uverbs_attr_bundle, attrs) ==
+ sizeof(struct uverbs_attr_bundle_hdr)': struct memb...
+Thread-Index: AQHa5GAx8pxBq9usEUCI4KlonF1oTLIS/ZyAgAGN1ACABdgR0A==
+Date: Tue, 6 Aug 2024 15:36:01 +0000
+Message-ID:
+ <CH3PR02MB10247E2B6524ACA52F747A0C0B8BF2@CH3PR02MB10247.namprd02.prod.outlook.com>
+References: <202408011956.wscyBwq6-lkp@intel.com>
+ <138da3e5-0e24-41a6-bb35-df5d07045eb3@embeddedor.com>
+ <20240801190813.GC122261@thelio-3990X>
+ <f40160aa-7cbd-4264-be44-45396b09574f@embeddedor.com>
+ <20240801221427.GA3773553@thelio-3990X>
+ <ca056227-30c3-47b9-a19a-fbab87778f20@embeddedor.com>
+ <20240802221952.GA737452@thelio-3990X>
+In-Reply-To: <20240802221952.GA737452@thelio-3990X>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: CH3PR02MB10247:EE_|SA0PR02MB7274:EE_
+x-ms-office365-filtering-correlation-id: 566db375-367d-4823-73de-08dcb62d7a27
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;ARA:13230040|1800799024|366016|376014|38070700018;
+x-microsoft-antispam-message-info:
+ =?us-ascii?Q?+e5Q4n2XKraFtGLJnjcStmPnIyq0btxU/mS5sXXMWvRnaUWPXZdE4LHT1eBH?=
+ =?us-ascii?Q?17U/zgxk+QD3dm4bX7gXx5q+j3dsg0GAQkgiJMlxX66RnLnIjsFQ0A1bJVac?=
+ =?us-ascii?Q?BYt1+XAxs5kkAq3/YJ71skP6GzmD7xN59UVzmM5Z0uzQruXbi9tD6HPjiO7U?=
+ =?us-ascii?Q?P+MQvCILJPjSi/6OZspC9fLrcae94wsiTIfg++IDOBpR/uXRDkJ2zZ3W3jZY?=
+ =?us-ascii?Q?TonsOCR45HxmccyDC/em+4Ck07iiVhzxJ3n63MstqBCRDNNiV1q0FK2rT4Ka?=
+ =?us-ascii?Q?SsiUpd+bk1EKWarYLgR5mhkt0CjFCjucvDf84e6tU8r5l6/uevtjYyD3o5J/?=
+ =?us-ascii?Q?Vxuj1QZyFv8wIpQtgREP019PoiN+qAN7g+uMZHHaOOGcSWD2Cy5S+IMdEpbP?=
+ =?us-ascii?Q?Smt+/Grv3NrOk3UeO/VjKpJPA4xFdJ6Zl3N9aH+1J5AOaWxUHtPoYNCn2qyx?=
+ =?us-ascii?Q?q+SI6FY+Z0kjtPOEPhKiYTOI55IjBkUaL45F6QEnLUnDqD8WH+A1vTpXSEk0?=
+ =?us-ascii?Q?YFlwRpSXNSSDDew0oYy4r21PJhRDaawLnWI8MmBRKJaadqdCnNnPrzswUJOP?=
+ =?us-ascii?Q?t94e4nQn6fwn6CWAOUp5nEb9sZhhntcWnSy9hXFOGijdLYukz/VisFZPr5m5?=
+ =?us-ascii?Q?nEoDMLY1ngWE/H8RGX6/0DY4l3aiikeDa5h11gp/+w4dAbyL/qH3g+lLtIUG?=
+ =?us-ascii?Q?ALlMOVf5F0cCnXik2d9GJzsTSzowMB7fpMC/EOIPUI8NNqegLuTWXp45MeSP?=
+ =?us-ascii?Q?sUKzojGtckOasJNQMbkAKQm+eLBlmi0qQlW8PBR5DxliRXbZ0vimI82Xr89h?=
+ =?us-ascii?Q?42f91DaJ006rzgR8/QidZtoivzXVi0ibQL9XKkwGmtVh60pUOIfYYx3SUUg1?=
+ =?us-ascii?Q?nlbuzQKBuZg4gdvAbcycMYdNwSWYfbmv8m4MEfNG+hauOqN3ECK5Iv9hokq+?=
+ =?us-ascii?Q?9o/qWTnjp2JPqtERkISdKfNRJl5CmgUVlM2QG88UkdSNkQjdD5td57ErpqKG?=
+ =?us-ascii?Q?PcaZWLKckIGsxpzGqQ64BvMOFKjmrs4Fa6qnBJblhfCiu/bB63TESDH2DByp?=
+ =?us-ascii?Q?PzgRb4LcjnKcOGUzg6n1rq0oeDpxnCIzJ+o0+xoDA7NguB1nZ5pTdc6cr3ah?=
+ =?us-ascii?Q?o88nXMx78zMxQZWv3l3jCMTVQRZS1oQCDg26aRIOC8dYU9am0T1JfZ9KeS6t?=
+ =?us-ascii?Q?U1dCVRgZoTSe0eSdMQwyM9QvS2wrpFeOXcx6Jl2uMrVEiuw1smjr4ocCJlo3?=
+ =?us-ascii?Q?YB11SMY2RgTso2J4NYlSg3G9iImkOfxnY2ZMO6hhLjAj6ww553lv/9gh6067?=
+ =?us-ascii?Q?OJPYXnkPorL6uojdePMzVJGl18wpLaaJJVG/x1YV5A22G2WmZD0G9rvnlkfG?=
+ =?us-ascii?Q?uE1vR4M=3D?=
+x-forefront-antispam-report:
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CH3PR02MB10247.namprd02.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(376014)(38070700018);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0:
+ =?us-ascii?Q?KF9pwsuf1/HpNaWOXPvOfk3zULqGm2YsSu71/oz4lj74wU1VRbUw+v6/w4lP?=
+ =?us-ascii?Q?SHx+JRPnmV5R4GRgfAHyAjeEBvPH0xrO89JZvhF7qyvfOSRsqHzIMzrAcg/M?=
+ =?us-ascii?Q?pogCN40tqhm94MiAaPvl6a0w6pflqp0BM4jaRaHmMhhc2nVu+GjgnnV/l8d9?=
+ =?us-ascii?Q?p9ie2QXK4aHB/7EwXP2N6VNktzD93wswYfbQ5Il+z0LZmZzJr8EvutkXvyf1?=
+ =?us-ascii?Q?8XWlN+67nfA9xkRas5s4cwRVFQeifRlZ/MvhvNj32d10m4A6KEJ3jJxicPJn?=
+ =?us-ascii?Q?Y6m/yQU3bZf3IzRKK9u8HYNaFhnhao8BcWBsMqu+cmSv8ghPuQHhGmW7MID8?=
+ =?us-ascii?Q?A6KF5qdxmk3JCja+8xS1M6c8VT5rsThEHVsbu/ZXErHxHVh4B0l3XHHW5Q91?=
+ =?us-ascii?Q?9iIyEK6Ra79lO0MAbTTMP5TZjT8H4jrSdEs3L/a0exyQpXbHZ+fOc4+a1Vps?=
+ =?us-ascii?Q?BZulKhkvPL2BEk+Z8Q66PZXG+5DrjDG9ohhERkZx86G2dLRO+Xagj28Kodvp?=
+ =?us-ascii?Q?mMzCAn59ASNdyFPtrUAZn3ApUBuzqVOg5Fr8+vMoRz0sNsWC2IPdyEJLPd4q?=
+ =?us-ascii?Q?edvQOx25BiCfEkXOnl0IxkoRL/DetdRSbIwQey+dWUPnxrSRxZkSLQ/v93Zt?=
+ =?us-ascii?Q?J+FrHXcN2LGgsrkRg1etitWdqx+PFJn9CzVpLZ/fUDLE2U6nA9cnmtDKYVBn?=
+ =?us-ascii?Q?kaN1bsxBUXQIMrFpJtvlStieftI71tgzP5hAtwn3+/IBDu/dHcumvSyOumir?=
+ =?us-ascii?Q?XvpwyQvs1ARrCy1IhI/dzrV3e0svncGD61faBNJd67LVjXpplvyatePADGU7?=
+ =?us-ascii?Q?XO0wU18JWwxAIPH+WY5asLzV2TY/OBeCse+3WMIsbuJTT0x5o98nwLxIvyuj?=
+ =?us-ascii?Q?Lh9Vj91Me9uDQFp50lw8W1hZFs5dwjOtUTHA0qZ9p8WbnUBaMkTisCWfXGSX?=
+ =?us-ascii?Q?yjOlvc8wDIUyCe9lTWYFGJuHGKJOkrkiM4ZCrC+i8N+Epo0BxeoMhF3rTlMH?=
+ =?us-ascii?Q?QqYFxzfUOPpmxzwMP6TyXI6YCvZyFtnfEfIRq/WqUCj+riqnkUEt4Qt8WMjn?=
+ =?us-ascii?Q?r4t00UwrkzhNg4uUk0pQNHJE2frqOnMvYkP/j/MhO876sdi8zogV3ZzNwj48?=
+ =?us-ascii?Q?RPJ7Gu/OaeJIud8Q7hNXNvKCyXqhGO8fE/AQs2M9JV56eGI2e6df+L8T3esJ?=
+ =?us-ascii?Q?pJsXxbNUpMfk61gS6l0SXvaY+W3/hMQMAu9mFMH/8a1Cn1svYexHvltoS4Gu?=
+ =?us-ascii?Q?Pmb3Wrqj9+BomFFad3gh5GhK4gUlMPD5IBZ88sRHyER5+p2m1VQVqBguWAL/?=
+ =?us-ascii?Q?F1XrWS4/lFGV9hFAOPdKSgkkuMTPjVcVUnw0RYEt6QdQGw/XLQLhQeDRH/0a?=
+ =?us-ascii?Q?lG4aSXd98k0PPkMydgttZCYr3IesQWB3oPvojW77lkeZVZK2umJSoZhkhsco?=
+ =?us-ascii?Q?m3A/UvQ1nPygZ/HBGYkLzXZMeUXWLA+sd8/MN2av7/Agq94CF9dDNG1cc0pf?=
+ =?us-ascii?Q?DDISIBzS3iiCkPp9Mibn/XYBDQxGNRKBA1HePdRoOGcxewDkpbWK93XPfUPJ?=
+ =?us-ascii?Q?D/ka9RZYALPEjBIZXUYICrKdd3I9vqrC5/t67Hti?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4] docs/zh_CN: Add dev-tools/kcsan Chinese translation
-To: Alex Shi <seakeel@gmail.com>, si.yanteng@linux.dev,
- Alex Shi <alexs@kernel.org>, Yanteng Si <siyanteng@loongson.cn>,
- Jonathan Corbet <corbet@lwn.net>, Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling
- <morbo@google.com>, Justin Stitt <justinstitt@google.com>
-Cc: hust-os-kernel-patches@googlegroups.com, linux-doc@vger.kernel.org,
- linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-References: <20240731180916.36617-1-tttturtleruss@hust.edu.cn>
- <074662fa2977a708d7a9a4545ffad26612514dc2@linux.dev>
- <b59dbfef-35a9-41e7-b995-655446d503f0@gmail.com>
-From: Haoyang Liu <tttturtleruss@hust.edu.cn>
-In-Reply-To: <b59dbfef-35a9-41e7-b995-655446d503f0@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:HwEQrABHTc1EQLJmEuBrAA--.26835S2
-Authentication-Results: app2; spf=neutral smtp.mail=tttturtleruss@hust
-	.edu.cn;
-X-Coremail-Antispam: 1UD129KBjvAXoW3ZrW3Xry3GF13JrWDuFW3Wrg_yoW8Jw18to
-	W5Kr4fCr48Gr15Jr15A3yDJrWYy3WUGFnrJrWakrn8JryUKw10y3WUJw15Jr4UGr45JF13
-	JFy7Jr17Aa4UXas5n29KB7ZKAUJUUUU7529EdanIXcx71UUUUU7v73VFW2AGmfu7bjvjm3
-	AaLaJ3UjIYCTnIWjp_UUUO27k0a2IF6FyUM7kC6x804xWl1xkIjI8I6I8E6xAIw20EY4v2
-	0xvaj40_Wr0E3s1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7
-	IYx2IY67AKxVW7JVWDJwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVWxJVW8Jr1l84ACjcxK
-	6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_GcCE3s1ln4kS14v26r
-	1Y6r17M2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12xvs2x26I8E6xACxx1l5I8C
-	rVACY4xI64kE6c02F40Ex7xfMcIj64x0Y40En7xvr7AKxVW8Jr0_Cr1UMcIj6x8ErcxFaV
-	Av8VW8uFyUJr1UMcIj6xkF7I0En7xvr7AKxVW8Jr0_Cr1UMcvjeVCFs4IE7xkEbVWUJVW8
-	JwACjcxG0xvEwIxGrwCY1x0262kKe7AKxVWUAVWUtwCF04k20xvY0x0EwIxGrwCF04k20x
-	vE74AGY7Cv6cx26r4fZr1UJr1l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1l4IxYO2xFxVAFwI0_
-	GFv_Wrylx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1V
-	AY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Gr0_Xr1lIxAI
-	cVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42
-	IY6I8E87Iv67AKxVW8JVWxJwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIev
-	Ja73UjIFyTuYvjxU3BT5DUUUU
-X-CM-SenderInfo: rxsqjiqrssiko6kx23oohg3hdfq/1tbiAQoBAmaxmbIwDwAAsL
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0:
+	Pd3fnEqzYPNKV2Cl79gpJHqUqbfUPpKnJ+fY+OZC79NATjvnKUCeqhtFyzZPYRrMu71AwmgWBMcfMtroxjtRgcOYzGNdT6sn7hkq7hjngsxGpfzjwSWmINegxCnoyGJGzZ8dfS/cBpFYyJcA1Ph2g/q2Wm+oKfzh5RZuKtyNEdJ9XhRZAJkSR/ykxKz1B9KGNWC6uEjA1jFX0eRAesFnHjsNIw41Quc7dr4d6mB8xO1zm8XH0y+W+DrJ9R3N2So8p5IbmW4mNi9aM8tOyibPla3sTsZoYJHxLf9+7LQ5A9YD16DDjWcuGDtshPNEllS5W0IsgxQOAimAEPnjgfzZYCiPTqAqv1/WL7OYpypJUH8wIyFeUOavNsI8TrzUPpJ7eJ6qbefldjxD9axFKH7n5QwvXYlWI5kQPMVus+vL57tn38CahmZSvw3Uo7gNkwFTkglfnZVa6HdUcEavLgkbtZ5qGhPLu8iHeR4+ppqvw8DqaDhLCk6w8+DjIUBnj8BgD7Na3jW9ErL/qBQ8oxyUkSiIjiGg8xpR+erd58846G+OMaPwz0NTh2s6tjtTtjq9DmIISBUaPQTMLTTz3Uph5PDXtBo+Zd9dpz1kmA69QckI6Z/Otj6M92y0WG/D0ID3
+X-OriginatorOrg: quicinc.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: CH3PR02MB10247.namprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 566db375-367d-4823-73de-08dcb62d7a27
+X-MS-Exchange-CrossTenant-originalarrivaltime: 06 Aug 2024 15:36:01.8745
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 98e9ba89-e1a1-4e38-9007-8bdabc25de1d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: k0wEsXhO+1KLR+11xdkuv/QJ9Cyf6BnvupMcWVORpvgS06wb4xZ1AWv4E2cCVRUSPWWPcXuprRrZMwLd5ENIKA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA0PR02MB7274
+X-Proofpoint-ORIG-GUID: KtfPOfQ3rselVjaKKkLadkaTpwyCzl4n
+X-Proofpoint-GUID: KtfPOfQ3rselVjaKKkLadkaTpwyCzl4n
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
+ definitions=2024-08-06_12,2024-08-06_01,2024-05-17_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
+ suspectscore=0 phishscore=0 malwarescore=0 bulkscore=0 spamscore=0
+ lowpriorityscore=0 mlxscore=0 clxscore=1011 adultscore=0
+ priorityscore=1501 mlxlogscore=999 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.19.0-2407110000 definitions=main-2408060109
 
 
-在 2024/8/6 11:19, Alex Shi 写道:
-> Please don't use HTML format to send emails.
-OK.
-> Does this file look great in web browser after 'make htmldocs'?
 
-Yes, I check the output html file and it looks all right.
+> -----Original Message-----
+> From: Nathan Chancellor <nathan@kernel.org>
+> Sent: Friday, August 2, 2024 5:20 PM
+> To: Gustavo A. R. Silva <gustavo@embeddedor.com>
+> Cc: kernel test robot <lkp@intel.com>; Gustavo A. R. Silva
+> <gustavoars@kernel.org>; llvm@lists.linux.dev; oe-kbuild-all@lists.linux.=
+dev;
+> LKML <linux-kernel@vger.kernel.org>; Brian Cain <bcain@quicinc.com>; linu=
+x-
+> hexagon@vger.kernel.org
+> Subject: Re: [gustavoars:testing/wfamnae-next20240729-cbc-2 11/18]
+> include/rdma/uverbs_ioctl.h:643:15: error: static assertion failed due to
+> requirement '__builtin_offsetof(struct uverbs_attr_bundle, attrs) =3D=3D
+> sizeof(struct uverbs_attr_bundle_hdr)': struct memb...
+>=20
+> WARNING: This email originated from outside of Qualcomm. Please be wary o=
+f
+> any links or attachments, and do not enable macros.
+>=20
+> On Thu, Aug 01, 2024 at 04:35:59PM -0600, Gustavo A. R. Silva wrote:
+> >
+> >
+> > On 01/08/24 16:14, Nathan Chancellor wrote:
+> > > On Thu, Aug 01, 2024 at 02:17:50PM -0600, Gustavo A. R. Silva wrote:
+> > > >
+> > > >
+> > > > On 01/08/24 13:08, Nathan Chancellor wrote:
+> > > > > On Thu, Aug 01, 2024 at 06:47:58AM -0600, Gustavo A. R. Silva wro=
+te:
+> > > > > >
+> > > > > >
+> > > > > > On 01/08/24 05:35, kernel test robot wrote:
+> > > > > > > tree:
+> https://git.kernel.org/pub/scm/linux/kernel/git/gustavoars/linux.git
+> testing/wfamnae-next20240729-cbc-2
+> > > > > > > head:   df15c862c1b93b6e1f6c90b0d7971f7a6ad66751
+> > > > > > > commit: e7cd9f429a852fb7e37a706c7d08fc36e7863e06 [11/18]
+> RDMA/uverbs: Use static_assert() to check struct sizes
+> > > > > > > config: hexagon-randconfig-001-20240801
+> (https://download.01.org/0day-ci/archive/20240801/202408011956.wscyBwq6-
+> lkp@intel.com/config)
+> > > > > > > compiler: clang version 20.0.0git (https://github.com/llvm/ll=
+vm-
+> project 430b90f04533b099d788db2668176038be38c53b)
+> > > > > >
+> > > > > >
+> > > > > > Clang 20.0.0?? (thinkingface)
+> > > > >
+> > > > > Indeed, Clang 19 branched and main is now 20 :)
+> > > > >
+> > > > > https://github.com/llvm/llvm-
+> project/commit/8f701b5df0adb3a2960d78ca2ad9cf53f39ba2fe
+> > > >
+> > > > Yeah, but is that a stable release?
+> > >
+> > > No, but the Intel folks have tested tip of tree LLVM against the kern=
+el
+> > > for us for a few years now to try and catch issues such as this.
+> >
+> > Oh, I see, fine. :)
+> >
+> > >
+> > > > BTW, I don't see GCC reporting the same problem below:
+> > >
+> > > Hexagon does not have a GCC backend anymore so it is not going to be
+> > > possible to do an exact A/B comparison with this configuration but...
+> > >
+> > > > > > > > > include/rdma/uverbs_ioctl.h:643:15: error: static asserti=
+on failed
+> due to requirement '__builtin_offsetof(struct uverbs_attr_bundle, attrs) =
+=3D=3D
+> sizeof(struct uverbs_attr_bundle_hdr)': struct member likely outside of
+> struct_group_tagged()
+> > > > > > >         643 | static_assert(offsetof(struct uverbs_attr_bundl=
+e, attrs) =3D=3D
+> sizeof(struct uverbs_attr_bundle_hdr),
+> > > > > > >             |
+> ~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> > > > > > >         644 |               "struct member likely outside of
+> struct_group_tagged()");
+> > > > > > >             |
+> ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> > > > > > >       include/linux/stddef.h:16:32: note: expanded from macro
+> 'offsetof'
+> > > > > > >          16 | #define offsetof(TYPE, MEMBER)  __builtin_offse=
+tof(TYPE,
+> MEMBER)
+> > > > > > >             |                                 ^
+> > > > > > >       include/linux/build_bug.h:77:50: note: expanded from ma=
+cro
+> 'static_assert'
+> > > > > > >          77 | #define static_assert(expr, ...) __static_asser=
+t(expr,
+> ##__VA_ARGS__, #expr)
+> > > > > > >             |
+> ~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~
+> > > > > > >       include/linux/build_bug.h:78:56: note: expanded from ma=
+cro
+> '__static_assert'
+> > > > > > >          78 | #define __static_assert(expr, msg, ...) _Static=
+_assert(expr,
+> msg)
+> > > > > > >             |                                                =
+        ^~~~
+> > > > > > >       include/rdma/uverbs_ioctl.h:643:58: note: expression ev=
+aluates
+> to '56 =3D=3D 52'
+> > >
+> > > This seems to give some indication that perhaps there may be some
+> > > architecture specific here with padding maybe? I seem to recall ARM O=
+ABI
+> > > having something similar. Adding the Hexagon folks/list to get some m=
+ore
+> > > clarification. Full warning and context:
+> > >
+> > > https://lore.kernel.org/202408011956.wscyBwq6-lkp@intel.com/
+> > >
 
+There might be hexagon-specific padding requirements, but not ones that I'v=
+e stumbled across before.  I've added Sundeep from the compiler team who ma=
+y be able to help.
 
-Thanks,
-
-Haoyang
-
->
-> Thanks
-> Alex
->
-> On 8/6/24 10:20 AM, si.yanteng@linux.dev wrote:
->> 2024年8月1日 02:09, "Haoyang Liu" <tttturtleruss@hust.edu.cn> 写到:
->>
->>
->>
->>> Translate dev-tools/kcsan commit 31f605a308e6
->>>
->>> ("kcsan, compiler_types: Introduce __data_racy type qualifier")
->>>
->>> into Chinese and add it in dev-tools/zh_CN/index.rst
->>>
->>> Signed-off-by: Haoyang Liu <tttturtleruss@hust.edu.cn>
->>>
->>> ---
->>>
->>> v3 -> v4: Added original English text for proper nouns and modified some unclear experessions.
->>>
->>> v2 -> v3: Revised some sentences based on reviewer's suggestions and updated the KTSAN url.
->>>
->>> v1 -> v2: Added commit tag and fixed style problems according to reviewer's suggestions.
->>>
->>>   .../translations/zh_CN/dev-tools/index.rst | 2 +-
->>>
->>>   .../translations/zh_CN/dev-tools/kcsan.rst | 321 ++++++++++++++++++
->>>
->>>   2 files changed, 322 insertions(+), 1 deletion(-)
->>>
->>>   create mode 100644 Documentation/translations/zh_CN/dev-tools/kcsan.rst
->>>
->>> diff --git a/Documentation/translations/zh_CN/dev-tools/index.rst b/Documentation/translations/zh_CN/dev-tools/index.rst
->>>
->>> index c540e4a7d5db..6a8c637c0be1 100644
->>>
->>> --- a/Documentation/translations/zh_CN/dev-tools/index.rst
->>>
->>> +++ b/Documentation/translations/zh_CN/dev-tools/index.rst
->>>
->>> @@ -21,6 +21,7 @@ Documentation/translations/zh_CN/dev-tools/testing-overview.rst
->>>
->>>   testing-overview
->>>
->>>   sparse
->>>
->>>   kcov
->>>
->>> + kcsan
->>>
->>>   gcov
->>>
->>>   kasan
->>>
->>>   ubsan
->>>
->>> @@ -32,7 +33,6 @@ Todolist:
->>>
->>>   - checkpatch
->>>
->>>   - coccinelle
->>>
->>>   - kmsan
->>>
->>> - - kcsan
->>>
->>>   - kfence
->>>
->>>   - kgdb
->>>
->>>   - kselftest
->>>
->>> diff --git a/Documentation/translations/zh_CN/dev-tools/kcsan.rst b/Documentation/translations/zh_CN/dev-tools/kcsan.rst
->>>
->>> new file mode 100644
->>>
->>> index 000000000000..39fa43d8c414
->>>
->>> --- /dev/null
->>>
->>> +++ b/Documentation/translations/zh_CN/dev-tools/kcsan.rst
->>>
->>> @@ -0,0 +1,321 @@
->>>
->>> +.. SPDX-License-Identifier: GPL-2.0
->>>
->>> +
->>>
->>> +.. include:: ../disclaimer-zh_CN.rst
->>>
->>> +
->>>
->>> +:Original: Documentation/dev-tools/kcsan.rst
->>>
->>> +:Translator: 刘浩阳 Haoyang Liu <tttturtleruss@hust.edu.cn>
->>>
->>> +
->>>
->>> +内核并发消毒剂(KCSAN)
->>>
->>> +=====================
->>>
->>> +
->>>
->>> +内核并发消毒剂（KCSAN）是一个动态竞争检测器，依赖编译时插桩，并且使用基于观察
->>>
->>> +点的采样方法来检测竞争。KCSAN 的主要目的是检测 `数据竞争`_。
->>>
->>> +
->>>
->>> +使用
->>>
->>> +----
->>>
->>> +
->>>
->>> +KCSAN 受 GCC 和 Clang 支持。使用 GCC 需要版本 11 或更高，使用 Clang 也需要
->>>
->>> +版本 11 或更高。
->>>
->>> +
->>>
->>> +为了启用 KCSAN，用如下参数配置内核::
->>>
->>> +
->>>
->>> + CONFIG_KCSAN = y
->>>
->>> +
->>>
->>> +KCSAN 提供了几个其他的配置选项来自定义行为（见 ``lib/Kconfig.kcsan`` 中的各自的
->>>
->>> +帮助文档以获取更多信息）。
->>>
->>> +
->>>
->>> +错误报告
->>>
->>> +~~~~~~~~
->>>
->>> +
->>>
->>> +一个典型数据竞争的报告如下所示::
->>>
->>> +
->>>
->>> + ==================================================================
->>>
->>> + BUG: KCSAN: data-race in test_kernel_read / test_kernel_write
->>>
->>> +
->>>
->>> + write to 0xffffffffc009a628 of 8 bytes by task 487 on cpu 0:
->>>
->>> + test_kernel_write+0x1d/0x30
->>>
->>> + access_thread+0x89/0xd0
->>>
->>> + kthread+0x23e/0x260
->>>
->>> + ret_from_fork+0x22/0x30
->>>
->>> +
->>>
->>> + read to 0xffffffffc009a628 of 8 bytes by task 488 on cpu 6:
->>>
->>> + test_kernel_read+0x10/0x20
->>>
->>> + access_thread+0x89/0xd0
->>>
->>> + kthread+0x23e/0x260
->>>
->>> + ret_from_fork+0x22/0x30
->>>
->>> +
->>>
->>> + value changed: 0x00000000000009a6 -> 0x00000000000009b2
->>>
->>> +
->>>
->>> + Reported by Kernel Concurrency Sanitizer on:
->>>
->>> + CPU: 6 PID: 488 Comm: access_thread Not tainted 5.12.0-rc2+ #1
->>>
->>> + Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.14.0-2 04/01/2014
->>>
->>> + ==================================================================
->>>
->>> +
->>>
->>> +报告的头部提供了一个关于竞争中涉及到的函数的简短总结。随后是竞争中的两个线程的
->>>
->>> +访问类型和堆栈信息。如果 KCSAN 发现了一个值的变化，那么那个值的旧值和新值会在
->>>
->>> +“value changed”这一行单独显示。
->>>
->>> +
->>>
->>> +另一个不太常见的数据竞争类型的报告如下所示::
->>>
->>> +
->>>
->>> + ==================================================================
->>>
->>> + BUG: KCSAN: data-race in test_kernel_rmw_array+0x71/0xd0
->>>
->>> +
->>>
->>> + race at unknown origin, with read to 0xffffffffc009bdb0 of 8 bytes by task 515 on cpu 2:
->>>
->>> + test_kernel_rmw_array+0x71/0xd0
->>>
->>> + access_thread+0x89/0xd0
->>>
->>> + kthread+0x23e/0x260
->>>
->>> + ret_from_fork+0x22/0x30
->>>
->>> +
->>>
->>> + value changed: 0x0000000000002328 -> 0x0000000000002329
->>>
->>> +
->>>
->>> + Reported by Kernel Concurrency Sanitizer on:
->>>
->>> + CPU: 2 PID: 515 Comm: access_thread Not tainted 5.12.0-rc2+ #1
->>>
->>> + Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.14.0-2 04/01/2014
->>>
->>> + ==================================================================
->>>
->>> +
->>>
->>> +这个报告是当另一个竞争线程不可能被发现，但是可以从观测的内存地址的值改变而推断
->>>
->>> +出来的时候生成的。这类报告总是会带有“value changed”行。这类报告的出现通常是因
->>>
->>> +为在竞争线程中缺少插桩，也可能是因为其他原因，比如 DMA 访问。这类报告只会在
->>>
->>> +设置了内核参数 ``CONFIG_KCSAN_REPORT_RACE_UNKNOWN_ORIGIN=y`` 时才会出现，而这
->>>
->>> +个参数是默认启用的。
->>>
->>> +
->>>
->>> +选择性分析
->>>
->>> +~~~~~~~~~~
->>>
->>> +
->>>
->>> +对于一些特定的访问，函数，编译单元或者整个子系统，可能需要禁用数据竞争检测。
->>>
->>> +对于静态黑名单，有如下可用的参数：
->>>
->>> +
->>>
->>> +* KCSAN 支持使用 ``data_race(expr)`` 注解，这个注解告诉 KCSAN 任何由访问
->>>
->>> + ``expr`` 所引起的数据竞争都应该被忽略，其产生的行为后果被认为是安全的。请查阅
->>>
->>> + `"Marking Shared-Memory Accesses" in the LKMM`_ 获得更多信息。
->>>
->>> +
->>>
->>> +* 与 ``data_race(...)`` 相似，可以使用类型限定符 ``__data_racy`` 来标记一个变量
->>>
->>> + ，所有访问该变量而导致的数据竞争都是故意为之并且应该被 KCSAN 忽略::
->>>
->>> +
->>>
->>> + struct foo {
->>>
->>> + ...
->>>
->>> + int __data_racy stats_counter;
->>>
->>> + ...
->>>
->>> + };
->>>
->>> +
->>>
->>> +* 使用函数属性 ``__no_kcsan`` 可以对整个函数禁用数据竞争检测::
->>>
->>> +
->>>
->>> + __no_kcsan
->>>
->>> + void foo(void) {
->>>
->>> + ...
->>>
->>> +
->>>
->>> + 为了动态限制该为哪些函数生成报告，查阅 `Debug 文件系统接口`_ 黑名单/白名单特性。
->>>
->>> +
->>>
->>> +* 为特定的编译单元禁用数据竞争检测，将下列参数加入到 ``Makefile`` 中::
->>>
->>> +
->>>
->>> + KCSAN_SANITIZE_file.o := n
->>>
->>> +
->>>
->>> +* 为 ``Makefile`` 中的所有编译单元禁用数据竞争检测，将下列参数添加到相应的
->>>
->>> + ``Makefile`` 中::
->>>
->>> +
->>>
->>> + KCSAN_SANITIZE := n
->>>
->>> +
->>>
->>> +.. _"Marking Shared-Memory Accesses" in the LKMM: https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/tools/memory-model/Documentation/access-marking.txt
->>>
->>> +
->>>
->>> +此外，KCSAN 可以根据偏好设置显示或隐藏整个类别的数据竞争。可以使用如下
->>>
->>> +Kconfig 参数进行更改:
->>>
->>> +
->>>
->>> +* ``CONFIG_KCSAN_REPORT_VALUE_CHANGE_ONLY``: 如果启用了该参数并且通过观测点
->>>
->>> + (watchpoint) 观测到一个有冲突的写操作，但是对应的内存地址中存储的值没有改变，
->>>
->>> + 则不会报告这起数据竞争。
->>>
->>> +
->>>
->>> +* ``CONFIG_KCSAN_ASSUME_PLAIN_WRITES_ATOMIC``: 假设默认情况下，不超过字大小的简
->>>
->>> + 单对齐写入操作是原子的。假设这些写入操作不会受到不安全的编译器优化影响，从而导
->>>
->>> + 致数据竞争。该选项使 KCSAN 不报告仅由不超过字大小的简单对齐写入操作引起
->>>
->>> + 的冲突所导致的数据竞争。
->>>
->>> +
->>>
->>> +* ``CONFIG_KCSAN_PERMISSIVE``: 启用额外的宽松规则来忽略某些常见类型的数据竞争。
->>>
->>> + 与上面的规则不同，这条规则更加复杂，涉及到值改变模式，访问类型和地址。这个
->>>
->>> + 选项依赖编译选项 ``CONFIG_KCSAN_REPORT_VALUE_CHANGE_ONLY=y``。请查看
->>>
->>> + ``kernel/kcsan/permissive.h`` 获取更多细节。对于只侧重于特定子系统而不是整个
->>>
->>> + 内核报告的测试者和维护者，建议禁用该选项。
->>>
->>> +
->>>
->>> +要使用尽可能严格的规则，选择 ``CONFIG_KCSAN_STRICT=y``，这将配置 KCSAN 尽可
->>>
->>> +能紧密地遵循 Linux 内核内存一致性模型（LKMM）。
->>>
->>> +
->>>
->>> +Debug 文件系统接口
->>>
->>> +~~~~~~~~~~~~~~~~~~
->>>
->>> +
->>>
->>> +文件 ``/sys/kernel/debug/kcsan`` 提供了如下接口：
->>>
->>> +
->>>
->>> +* 读 ``/sys/kernel/debug/kcsan`` 返回不同的运行时统计数据。
->>>
->>> +
->>>
->>> +* 将 ``on`` 或 ``off`` 写入 ``/sys/kernel/debug/kcsan`` 允许打开或关闭 KCSAN。
->>>
->>> +
->>>
->>> +* 将 ``!some_func_name`` 写入 ``/sys/kernel/debug/kcsan`` 会将
->>>
->>> + ``some_func_name`` 添加到报告过滤列表中，该列表（默认）会将数据竞争报告中的顶
->>>
->>> + 层堆栈帧是列表中函数的情况列入黑名单。
->>>
->>> +
->>>
->>> +* 将 ``blacklist`` 或 ``whitelist`` 写入 ``/sys/kernel/debug/kcsan`` 会改变报告
->>>
->>> + 过滤行为。例如，黑名单的特性可以用来过滤掉经常发生的数据竞争。白名单特性可以帮
->>>
->>> + 助复现和修复测试。
->>>
->>> +
->>>
->>> +性能调优
->>>
->>> +~~~~~~~~
->>>
->>> +
->>>
->>> +影响 KCSAN 整体的性能和 bug 检测能力的核心参数是作为内核命令行参数公开的，其默认
->>>
->>> +值也可以通过相应的 Kconfig 选项更改。
->>>
->>> +
->>>
->>> +* ``kcsan.skip_watch`` (``CONFIG_KCSAN_SKIP_WATCH``): 在另一个观测点设置之前每
->>>
->>> + 个 CPU 要跳过的内存操作次数。更加频繁的设置观测点将增加观察到竞争情况的可能性
->>>
->>> + 。这个参数对系统整体的性能和竞争检测能力影响最显著。
->>>
->>> +
->>>
->>> +* ``kcsan.udelay_task`` (``CONFIG_KCSAN_UDELAY_TASK``): 对于任务，观测点设置之
->>>
->>> + 后暂停执行的微秒延迟。值越大，检测到竞争情况的可能性越高。
->>>
->>> +
->>>
->>> +* ``kcsan.udelay_interrupt`` (``CONFIG_KCSAN_UDELAY_INTERRUPT``): 对于中断，
->>>
->>> + 观测点设置之后暂停执行的微秒延迟。中断对于延迟的要求更加严格，其延迟通常应该小
->>>
->>> + 于为任务选择的延迟。
->>>
->>> +
->>>
->>> +它们可以通过 ``/sys/module/kcsan/parameters/`` 在运行时进行调整。
->>>
->>> +
->>>
->>> +数据竞争
->>>
->>> +--------
->>>
->>> +
->>>
->>> +在一次执行中，如果两个内存访问存在 *冲突*，在不同的线程中并发执行，并且至少
->>>
->>> +有一个访问是 *简单访问*，则它们就形成了 *数据竞争*。如果它们访问了同一个内存地址并且
->>>
->>> +至少有一个是写操作，则称它们存在 *冲突*。有关更详细的讨论和定义，见
->>> +`"Plain Accesses and Data Races" in the LKMM`_。
->>>
->>> +
->>>
->>> +.. _"Plain Accesses and Data Races" in the LKMM:
->> Sorry for the delay for so long, how about
->> translating it into Chinese as well?
->>   
->>
->>
->> Thanks,
->> Yanteng
-
+> > > The problematic section preprocessed since sometimes the macros
+> > > obfuscate things:
+> > >
+> > > struct uverbs_attr_bundle {
+> > >          union {
+> > >                  struct {
+> > >                          struct ib_udata driver_udata;
+> > >                          struct ib_udata ucore;
+> > >                          struct ib_uverbs_file *ufile;
+> > >                          struct ib_ucontext *context;
+> > >                          struct ib_uobject *uobject;
+> > >                          unsigned long attr_present[(((UVERBS_API_ATT=
+R_BKEY_LEN)
+> +
+> > >                                                       ((sizeof(long) =
+* 8)) - 1) /
+> > >                                                      ((sizeof(long) *=
+ 8)))];
+> > >                  };
+> > >                  struct uverbs_attr_bundle_hdr {
+> > >                          struct ib_udata driver_udata;
+> > >                          struct ib_udata ucore;
+> > >                          struct ib_uverbs_file *ufile;
+> > >                          struct ib_ucontext *context;
+> > >                          struct ib_uobject *uobject;
+> > >                          unsigned long attr_present[(((UVERBS_API_ATT=
+R_BKEY_LEN)
+> +
+> > >                                                       ((sizeof(long) =
+* 8)) - 1) /
+> > >                                                      ((sizeof(long) *=
+ 8)))];
+> > >                  } hdr;
+> > >          };
+> > >
+> > >          struct uverbs_attr attrs[];
+> > > };
+> > > _Static_assert(__builtin_offsetof(struct uverbs_attr_bundle, attrs) =
+=3D=3D
+> > >                         sizeof(struct uverbs_attr_bundle_hdr),
+> > >                 "struct member likely outside of struct_group_tagged(=
+)");
+> > >
+> > > FWIW, I see this with all versions of Clang that the kernel supports
+> > > with this configuration.
+> >
+> > I don't have access to a Clang compiler right now; I wonder if you coul=
+d
+> > help me get the output of this command:
+> >
+> > pahole -C uverbs_attr_bundle drivers/infiniband/core/rdma_core.o
+>=20
+> We disabled CONFIG_DEBUG_INFO_BTF for Hexagon because elfutils does not
+> support Hexagon relocations but this is built-in for this configuration
+> so I removed that limitation and ended up with:
+>=20
+> $ pahole -C uverbs_attr_bundle vmlinux
+> struct uverbs_attr_bundle {
+>         union {
+>                 struct {
+>                         struct ib_udata driver_udata;    /*     0    16 *=
+/
+>                         struct ib_udata ucore;           /*    16    16 *=
+/
+>                         struct ib_uverbs_file * ufile;   /*    32     4 *=
+/
+>                         struct ib_ucontext * context;    /*    36     4 *=
+/
+>                         struct ib_uobject * uobject;     /*    40     4 *=
+/
+>                         unsigned long attr_present[2];   /*    44     8 *=
+/
+>                 };                                       /*     0    52 *=
+/
+>                 struct uverbs_attr_bundle_hdr hdr;       /*     0    52 *=
+/
+>         };                                               /*     0    52 *=
+/
+>=20
+>         /* XXX 4 bytes hole, try to pack */
+>         union {
+>                 struct {
+>                         struct ib_udata    driver_udata;         /*     0=
+    16 */
+>                         struct ib_udata    ucore;                /*    16=
+    16 */
+>                         struct ib_uverbs_file * ufile;           /*    32=
+     4 */
+>                         struct ib_ucontext * context;            /*    36=
+     4 */
+>                         struct ib_uobject * uobject;             /*    40=
+     4 */
+>                         unsigned long      attr_present[2];      /*    44=
+     8 */
+>                 };                                               /*     0=
+    52 */
+>                 struct uverbs_attr_bundle_hdr hdr;               /*     0=
+    52 */
+>         };
+>=20
+>=20
+>         struct uverbs_attr         attrs[];              /*    56     0 *=
+/
+>=20
+>         /* size: 56, cachelines: 1, members: 2 */
+>         /* sum members: 52, holes: 1, sum holes: 4 */
+>         /* last cacheline: 56 bytes */
+> };
+>=20
+> If you want any other information or want me to test anything, I am more
+> than happy to do so.
+>=20
+> Cheers,
+> Nathan
+>=20
+> > > > > > >         643 | static_assert(offsetof(struct uverbs_attr_bundl=
+e, attrs) =3D=3D
+> sizeof(struct uverbs_attr_bundle_hdr),
+> > > > > > >             |
+> ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~
+> ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> > > > > > >         644 |               "struct member likely outside of
+> struct_group_tagged()");
+> > > > > > >             |
+> ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> > > > > > >       include/linux/build_bug.h:77:50: note: expanded from ma=
+cro
+> 'static_assert'
+> > > > > > >          77 | #define static_assert(expr, ...) __static_asser=
+t(expr,
+> ##__VA_ARGS__, #expr)
+> > > > > > >             |
+> ~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~
+> > > > > > >       include/linux/build_bug.h:78:56: note: expanded from ma=
+cro
+> '__static_assert'
+> > > > > > >          78 | #define __static_assert(expr, msg, ...) _Static=
+_assert(expr,
+> msg)
+> > > > > > >             |                                                =
+        ^~~~
+> > > > > > >       7 warnings and 1 error generated.
+> > > > > > >
+> > > > > > >
+> > > > > > > vim +643 include/rdma/uverbs_ioctl.h
+> > > > > > >
+> > > > > > >       630
+> > > > > > >       631   struct uverbs_attr_bundle {
+> > > > > > >       632           /* New members MUST be added within the
+> struct_group() macro below. */
+> > > > > > >       633           struct_group_tagged(uverbs_attr_bundle_hd=
+r, hdr,
+> > > > > > >       634                   struct ib_udata driver_udata;
+> > > > > > >       635                   struct ib_udata ucore;
+> > > > > > >       636                   struct ib_uverbs_file *ufile;
+> > > > > > >       637                   struct ib_ucontext *context;
+> > > > > > >       638                   struct ib_uobject *uobject;
+> > > > > > >       639                   DECLARE_BITMAP(attr_present,
+> UVERBS_API_ATTR_BKEY_LEN);
+> > > > > > >       640           );
+> > > > > > >       641           struct uverbs_attr attrs[];
+> > > > > > >       642   };
+> > > > > > >     > 643   static_assert(offsetof(struct uverbs_attr_bundle,=
+ attrs) =3D=3D
+> sizeof(struct uverbs_attr_bundle_hdr),
+> > > > > > >       644                 "struct member likely outside of
+> struct_group_tagged()");
+> > > > > > >       645
+> > > > > > >
+> > > > > >
+> > > >
+> > > > Thanks
+> > > > --
+> > > > Gustavo
