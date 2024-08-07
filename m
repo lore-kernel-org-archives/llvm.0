@@ -1,212 +1,279 @@
-Received: from mailout2.w1.samsung.com (mailout2.w1.samsung.com [210.118.77.12])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2EAC984D25;
-	Wed,  7 Aug 2024 21:41:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.118.77.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 01293155336;
+	Wed,  7 Aug 2024 22:19:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723066868; cv=none; b=Pv6F3fFTRbNixZNuIfjI/CfhxHCt7+aseFZcDDl9wsqFjXpmnIQyP+eLJEBbI/AyYdKz8lJIssSg32FYJvEQE6BfpGZaB3hQ1KJtxR7VAMnsCZ3UgQ6ZxOnLayZDviB6qnKA7ZdomubEkPrRZ8OQXpCenjTdcZH4K/DHY6lEftQ=
+	t=1723069177; cv=none; b=ui+mx4/bRtjY4af6w2OPMoDiV6VzFjyRMeirhi6M4q2QxWx+ZFN/tyMM8OwuCagqIYd/aORWRIvezkSG6Clba7ThEWTw0oArOG4t/u+TykPdsnYD1u2SNJ0FGD5fzh1gP+uptVwtI73b2hhJTnzksWgPqnRzTgOxu0dGjscmO6g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723066868; c=relaxed/simple;
-	bh=U9b5NJ/d7sXrqDLaTOjIBs7J8P7i5Yr/Qh8TY3t8pYk=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:Content-Type:
-	 MIME-Version:References; b=oZZX5uahTSAmaYkkjzLLMiMIIydHa91DFcyes8SYkeZ+lshBDVEKJEk1RP7Nstlm5E+DsXPCAo38CGstfXnbedDQnCCIZfZeXOemZYN4xJvQGKJakVj9SfdFzy2VI9LvQ0Ix56KYZUBm5xDkqZ1ByLiB0K3B7CunDaQYmYkV5d8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=eoh+y125; arc=none smtp.client-ip=210.118.77.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
+	s=arc-20240116; t=1723069177; c=relaxed/simple;
+	bh=IVYXIWKGlvai2Nw4bIQ4c+3y+TNTnHUC1vLvdJPUyXM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=dUv696+Mb/p5+hsRYG/1x8ZyfhrCcVPnt0BKTCnhI+qwah7KXzpedsvOyCB5AFmGJveHe1LJw42ccGf7frj+ZB8tSl7I9O2jY/m589N/syBkDfmIL7kuUAdXxUisnkS6ibAo2mL0TljLUeCQgst1hCPV04UHX0CbuLSibeEZMWc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=S8tywplG; arc=none smtp.client-ip=192.198.163.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="eoh+y125"
-Received: from eucas1p1.samsung.com (unknown [182.198.249.206])
-	by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20240807214103euoutp0286d834639ba8aa714d9556f0b19d04e6~pkC7SmCzn2897028970euoutp02G;
-	Wed,  7 Aug 2024 21:41:03 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20240807214103euoutp0286d834639ba8aa714d9556f0b19d04e6~pkC7SmCzn2897028970euoutp02G
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-	s=mail20170921; t=1723066863;
-	bh=U9b5NJ/d7sXrqDLaTOjIBs7J8P7i5Yr/Qh8TY3t8pYk=;
-	h=From:To:CC:Subject:Date:In-Reply-To:References:From;
-	b=eoh+y125LSEMhYWv1XSGfR8uf+fg0vQ5+ng+xaHOSd1yamPNhVdoqnD4hED9Tz7CL
-	 4Wkj4mby3HaIBs2swODgu+PynhEcEiL84JjZJx4VBKsW22ajJWte8/NFcCFhjtC06g
-	 dpU6dpi7jEpVgX0EaWUsHHDcZYw6qdb2B7vJyt+k=
-Received: from eusmges3new.samsung.com (unknown [203.254.199.245]) by
-	eucas1p2.samsung.com (KnoxPortal) with ESMTP id
-	20240807214102eucas1p2ec508ef133b6ed8e34a02166a1a2b3c7~pkC65jyIg1274012740eucas1p2z;
-	Wed,  7 Aug 2024 21:41:02 +0000 (GMT)
-Received: from eucas1p2.samsung.com ( [182.198.249.207]) by
-	eusmges3new.samsung.com (EUCPMTA) with SMTP id 6F.54.09620.EE9E3B66; Wed,  7
-	Aug 2024 22:41:02 +0100 (BST)
-Received: from eusmtrp1.samsung.com (unknown [182.198.249.138]) by
-	eucas1p2.samsung.com (KnoxPortal) with ESMTPA id
-	20240807214101eucas1p217cf97d4159f939dfc39c3d5ac474679~pkC5oDN_T1290512905eucas1p2n;
-	Wed,  7 Aug 2024 21:41:01 +0000 (GMT)
-Received: from eusmgms1.samsung.com (unknown [182.198.249.179]) by
-	eusmtrp1.samsung.com (KnoxPortal) with ESMTP id
-	20240807214101eusmtrp1022fa8100d0cb6d066eda8ae0bcf4a83~pkC5nD7SL0518405184eusmtrp1s;
-	Wed,  7 Aug 2024 21:41:01 +0000 (GMT)
-X-AuditID: cbfec7f5-d1bff70000002594-f8-66b3e9ee1a8e
-Received: from eusmtip2.samsung.com ( [203.254.199.222]) by
-	eusmgms1.samsung.com (EUCPMTA) with SMTP id 8C.D8.08810.DE9E3B66; Wed,  7
-	Aug 2024 22:41:01 +0100 (BST)
-Received: from CAMSVWEXC01.scsc.local (unknown [106.1.227.71]) by
-	eusmtip2.samsung.com (KnoxPortal) with ESMTPA id
-	20240807214101eusmtip238d094010ef43e294429215ff51615e4~pkC5Uswv90288002880eusmtip2x;
-	Wed,  7 Aug 2024 21:41:01 +0000 (GMT)
-Received: from CAMSVWEXC02.scsc.local (2002:6a01:e348::6a01:e348) by
-	CAMSVWEXC01.scsc.local (2002:6a01:e347::6a01:e347) with Microsoft SMTP
-	Server (TLS) id 15.0.1497.2; Wed, 7 Aug 2024 22:41:00 +0100
-Received: from CAMSVWEXC02.scsc.local ([::1]) by CAMSVWEXC02.scsc.local
-	([fe80::3c08:6c51:fa0a:6384%13]) with mapi id 15.00.1497.012; Wed, 7 Aug
-	2024 22:41:00 +0100
-From: Daniel Gomez <da.gomez@samsung.com>
-To: Nicolas Schier <nicolas@fjasle.eu>
-CC: Masahiro Yamada <masahiroy@kernel.org>, Nathan Chancellor
-	<nathan@kernel.org>, Lucas De Marchi <lucas.demarchi@intel.com>,
-	=?utf-8?B?VGhvbWFzIEhlbGxzdHLDtm0=?= <thomas.hellstrom@linux.intel.com>,
-	Rodrigo Vivi <rodrigo.vivi@intel.com>, Maarten Lankhorst
-	<maarten.lankhorst@linux.intel.com>, Maxime Ripard <mripard@kernel.org>,
-	Thomas Zimmermann <tzimmermann@suse.de>, David Airlie <airlied@gmail.com>,
-	Daniel Vetter <daniel@ffwll.ch>, William Hubbs <w.d.hubbs@gmail.com>, "Chris
- Brannon" <chris@the-brannons.com>, Kirk Reiser <kirk@reisers.ca>, "Samuel
- Thibault" <samuel.thibault@ens-lyon.org>, Paul Moore <paul@paul-moore.com>,
-	Stephen Smalley <stephen.smalley.work@gmail.com>, Ondrej Mosnacek
-	<omosnace@redhat.com>, Catalin Marinas <catalin.marinas@arm.com>, Will
-	Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>, Oliver Upton
-	<oliver.upton@linux.dev>, James Morse <james.morse@arm.com>, Suzuki K
-	Poulose <suzuki.poulose@arm.com>, Zenghui Yu <yuzenghui@huawei.com>, "Greg
- Kroah-Hartman" <gregkh@linuxfoundation.org>, Jiri Slaby
-	<jirislaby@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, "Bill
- Wendling" <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"linux-kbuild@vger.kernel.org" <linux-kbuild@vger.kernel.org>,
-	"intel-xe@lists.freedesktop.org" <intel-xe@lists.freedesktop.org>,
-	"dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
-	"speakup@linux-speakup.org" <speakup@linux-speakup.org>,
-	"selinux@vger.kernel.org" <selinux@vger.kernel.org>,
-	"linux-arm-kernel@lists.infradead.org"
-	<linux-arm-kernel@lists.infradead.org>, "kvmarm@lists.linux.dev"
-	<kvmarm@lists.linux.dev>, "linux-serial@vger.kernel.org"
-	<linux-serial@vger.kernel.org>, "llvm@lists.linux.dev"
-	<llvm@lists.linux.dev>, Finn Behrens <me@kloenk.dev>, "Daniel Gomez
- (Samsung)" <d+samsung@kruces.com>, "gost.dev@samsung.com"
-	<gost.dev@samsung.com>
-Subject: Re: [PATCH 06/12] selinux/genheaders: include bitsperlong and
- posix_types headers
-Thread-Topic: [PATCH 06/12] selinux/genheaders: include bitsperlong and
-	posix_types headers
-Thread-Index: AQHa6FXbkJm8qubdXUykvjPm57XXT7Ib3kMAgABlSYA=
-Date: Wed, 7 Aug 2024 21:41:00 +0000
-Message-ID: <sbj3c3tlafewy2n4pylbnpb4gwylpnyxovdykfy3dhk2wqmpry@ekhhe3mgqnd6>
-In-Reply-To: <20240807-outgoing-charcoal-collie-0ee37e@lindesnes>
-Accept-Language: en-US, en-GB
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-messagesentrepresentingtype: 1
-x-ms-exchange-transport-fromentityheader: Hosted
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <0CB3C3B719E6BE4EB7218E0F9C092221@scsc.local>
-Content-Transfer-Encoding: base64
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="S8tywplG"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1723069175; x=1754605175;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=IVYXIWKGlvai2Nw4bIQ4c+3y+TNTnHUC1vLvdJPUyXM=;
+  b=S8tywplGGdl3peO6oDWDImHmDDVaaCYLkHOnbMXjPnM31d19vXAzrQYv
+   t0DAZqX7WjAO7wpZO2ZYhog9oCp4dTYjOzGbUEzenZIvuRuV0ss7qAz5u
+   E3rvg3czVEQMZOSO8mv6GgnZm0iy0gvs6jSahcQM/B+tD5s+cQtnTKsMl
+   Vhz+i91pajNES8Fh1H3FDczNJPMgARoG1wLdjeXOjmVESAHmD1VGagICe
+   Wp9vY2Mc0C20XwQh13pPtpPEhth+ksz0kyKi04+Jn9IHQJz4O2EWYbluN
+   fF4f4Ha1vGh/yNlZBq1IpugOJznjPApUZVu9NxAoDL2JWqRi+Az0W+m7x
+   A==;
+X-CSE-ConnectionGUID: 9tiBTm4jR7Kya4T3MjmbJg==
+X-CSE-MsgGUID: VgefrXbXS/qCQ3rWN+5ygg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11157"; a="31839790"
+X-IronPort-AV: E=Sophos;i="6.09,271,1716274800"; 
+   d="scan'208";a="31839790"
+Received: from fmviesa006.fm.intel.com ([10.60.135.146])
+  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Aug 2024 15:19:26 -0700
+X-CSE-ConnectionGUID: JCRXln45QsOASf/GHJjkFg==
+X-CSE-MsgGUID: Mr1BAUkySh6+SJtqhfgZ9A==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.09,271,1716274800"; 
+   d="scan'208";a="56686251"
+Received: from unknown (HELO b6bf6c95bbab) ([10.239.97.151])
+  by fmviesa006.fm.intel.com with ESMTP; 07 Aug 2024 15:19:23 -0700
+Received: from kbuild by b6bf6c95bbab with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1sbp05-0005lG-0M;
+	Wed, 07 Aug 2024 22:19:21 +0000
+Date: Thu, 8 Aug 2024 06:18:26 +0800
+From: kernel test robot <lkp@intel.com>
+To: Jianhua Lin <jianhua.lin@mediatek.com>, daniel.almeida@collabora.com,
+	mchehab@kernel.org, angelogioacchino.delregno@collabora.com
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-mediatek@lists.infradead.org,
+	Project_Global_Chrome_Upstream_Group@mediatek.com,
+	Jianhua Lin <jianhua.lin@mediatek.com>
+Subject: Re: [PATCH v5 1/1] media: mediatek: jpeg: support 34bits
+Message-ID: <202408080501.8b0EGVQW-lkp@intel.com>
+References: <20240807130835.26739-1-jianhua.lin@mediatek.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Brightmail-Tracker: H4sIAAAAAAAAA02Ta1BUZRjHfc+ey0Jix4WRNwTLHdORYIVB4wWcUsI6Y+N0mSmLyWwHDujE
-	bXahzA8NuYIBauCCxsIu9zu1dWAZWLkI6MLKLQYCFBVWwGABgQwQB9lgjxe+/Z73+T////N8
-	eIUC0XnKSXgyIpqVRUjDxKQtXmVY6nJ/OFER4vE0cxdq7c/F0EzheYAMpeMCdNVyV4AsVSkC
-	1Ds/QyJFnpZEjyvGMTRUX4Shh2pndLksj0SabiOOzJXNOOJG+gi0rK/GUI8+k0TteRcoNJra
-	QKKxkUIS5czpcGQaHiBQTaaRQHXaHhJxPY8IFJ9QSKBzJWMkmk22YOhBXSuB0pamSDSdfINC
-	g5eu4KhB1Ueh4sdXAOpqMVCoqroDoH+6lAClDw4CNFm9alo5lUKg3HhvdPbOPnSr4A/qgCtT
-	rikHTK2hg2TqFrJxRt9UQTI1qrsUk83FMGevTxNMXu0ExnClCSSjSdBgjOXCMMFct+RSTE5s
-	moDRGD9hGtTlFDOU1IJ9DANt9wezYSe/Y2V73vnG9kTbzDIW1el8Sr1YgseC2a2JwEYI6b2Q
-	Uy4JEoGtUEQXA5hh/Jvii/8AnMm8ivHFIwDV/5qp5yPzkxU43yhaVT3oxV+oLqpLyTWViG4D
-	cNAU+sK4d/mOdZykd8N6I2dlB3onXJ47Q66JBHTNq/Dy1G9grWFPfwXb4jpxXnQMFpmGAM++
-	UKFQWhNwegdsaFy0vtvRR6B21GBlG/og1C/xPoB2gfdLnljDBLQjvD2ahfE3bIa5GbUCnrfA
-	Fb2J5NkNdvSPAp49oK6gHudZDNUD6at64arPbqjV7+HRB/bdD+Hdt8PUJBPFb7MZGtNHn03G
-	b4TXOsN5DoC6+Lln7vbQ3FJJJQM31brlVC8DVC8DVOsCVOsCsgFRChzZGHl4KCv3imC/l8il
-	4fKYiFBJUGQ4B1Y/TNtKy3w1KDbPSZoAJgRNAAoFYgc7xVEuRGQXLP3hNCuLPC6LCWPlTWCr
-	EBc72r0Z/DorokOl0ey3LBvFyp53MaGNUyyWT7pFafEsT7czAcfcHXwizNGer5niM5CreTbS
-	vXFngNew6tz2/BSP1rj2Mot9SLZ/Hf0hd2Smfdr90I+f30wrnuQ+5RZcdm3AppTBrbrmQ8mx
-	LiFfqgMMqf7DyuTCRD/he6f3PlW+QW7bEXuzoUThN3FvwenP6NR5v5UsTcZx8duBQZ0b93tJ
-	yaGRe6hjhR7Qe/912DkwxXFsWja+bSm3v+zGpaSvb435+nsPvg+D4kbyPV8ZePfXUJ+Ri6eK
-	3HIyOo8e/N3+I+qAqblb2xFdpqMls4fzTFt+bly5VmD3wYZNkuG2Lt/irqKfPoNfOG8iFE/2
-	sWW/5Be+Jer2ua1bDJNMinH5Camnq0Aml/4PNR3JhJ8EAAA=
-X-Brightmail-Tracker: H4sIAAAAAAAAA02TeVDUZRjHe3/ngrP5k0PeOAw3D7RaWM53jQijqR/dTKVOiLjiChTX7EJT
-	1h8gXoAYlzAssCCXXAUth4DAFtLCtiGj4oKRqLAYh4QMEGzDQAs/G/nv88z7/T7P831nHh5u
-	kUXb8sKjYqWyKEmEgDIndCvdw69OT9SfcOmcfR71DBRjaKb8AkCaqnEcXVu9h6PVpnQc9S/M
-	UCixpJZCS/XjGLrfcQVDfxfYo+zqEgopb2oJNNlwnUCqUT2JllubMXS7NZ9Cv5ek0siQpabQ
-	2Gg5hS7PNhLo4YNBErXka0nUXnubQqrbcyQ6m1ROonOVYxR6kraKoUftPSS6ZHxMoem0X2k0
-	lJFDILVCT6OKpRyA+ro1NGpq7gXor75MgHKHhgCaajY1bXicTqLis17o9J8e6G5ZHe27l61R
-	1gC2TdNLse3/FBFsa2c9xbYo7tFskSqOPd01TbIlbRMYq6pKolhlkhJjV1MfkGzXajHNXo6/
-	hLNKbQCrLqih2fsp3djH8HOhtyw6LlbqGBYtj31dEChCrkKRGAld3cVCkZtX0D5XD4Gzj/dx
-	aUT4V1KZs89RYZhuZhmLuWH/dcFiJREPntglAzMeZNzhwlQ9kQzMeRZMGYAJdzoA92APf5q/
-	Q3JsCZf1yRQnmgWwYjyB5AodgMamc0+LCgBP5S4QaxaK2QM7tCp6ja2YXXB59hS1xjjTshnq
-	G15bY0vmMNSduWHS80yaINij9+bk+2BiYua6nGB2QPUvi+sb8ZkPYK1BA7hZGRic7K9ZfzBj
-	9sNW4w/rDBgHOFL5L83NsoF/GAoxLgIDS9v6cI6t4cToytNor8DeAcPTyC6wsayD4FgACwZz
-	8bXdcFOW2lZnDsVQP3KC674dZqU8pLnVtkBtroFIA/aKDYMVz8yKZ2bFBrNig7kIkFXAShon
-	jwyNlIuEckmkPC4qVBgSHakCpvNo0hjrm4FyclbYCTAe6ASQhwus+IkHVScs+Mcl35yUyqKD
-	ZXERUnkn8DB9XDpuax0SbbqvqNhgkaeLh8jdU+ziIfZ0E9jw/WPOSyyYUEms9EupNEYq+9+H
-	8cxs47Ezgp0Ols7IXL/4XOCsnn/9wKbf1BNWTi8uaFfcbhL2X/TxcT9CUSs3+6yhsW/u6P4h
-	JzenY/PioCOKQouUW1bx6WkD1Q7JzVezyTeMYSsXtr5tGH7r2/6Xd86M3O02TLV/dHHLdo04
-	UxksfL96bIf3YPWttpV5TR0vxTevMW+315HFk+/M+Qbu7nlXZ5PvJ8g61Lu0uEn9ScB4Biqd
-	+DTxoh+/Ir9X2umYnt3dFa7LeSHysI96Fx1lrdFf+/HqlW125TAk3e5Q64fzkqkwf2brwc1R
-	WqfhbS/lrdjldCUU+Tt5v7mHTAr4rlDsmHf+vVLdAf33ytHQweq608cCFD8bDamPlgSEPEwi
-	2ovL5JL/AKfD4POnBAAA
-X-CMS-MailID: 20240807214101eucas1p217cf97d4159f939dfc39c3d5ac474679
-X-Msg-Generator: CA
-X-RootMTR: 20240807153904eucas1p2264f7363ae2474c20c6dc1b84a232815
-X-EPHeader: CA
-CMS-TYPE: 201P
-X-CMS-RootMailID: 20240807153904eucas1p2264f7363ae2474c20c6dc1b84a232815
-References: <20240807-macos-build-support-v1-0-4cd1ded85694@samsung.com>
-	<20240807-macos-build-support-v1-6-4cd1ded85694@samsung.com>
-	<CGME20240807153904eucas1p2264f7363ae2474c20c6dc1b84a232815@eucas1p2.samsung.com>
-	<20240807-outgoing-charcoal-collie-0ee37e@lindesnes>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240807130835.26739-1-jianhua.lin@mediatek.com>
 
-T24gV2VkLCBBdWcgMDcsIDIwMjQgYXQgMDU6Mzg6MjhQTSBHTVQsIE5pY29sYXMgU2NoaWVyIHdy
-b3RlOg0KPiBPbiBXZWQsIEF1ZyAwNywgMjAyNCBhdCAwMTowOToyMEFNICswMjAwLCBEYW5pZWwg
-R29tZXogdmlhIEI0IFJlbGF5IHdyb3RlOg0KPiA+IEZyb206IERhbmllbCBHb21leiA8ZGEuZ29t
-ZXpAc2Ftc3VuZy5jb20+DQo+ID4gDQo+ID4gVGhlIGdlbmhlYWRlcnMgcmVxdWlyZXMgdGhlIGJp
-dHNwZXJsb25nLmggYW5kIHBvc2l4X3R5cGVzLmggaGVhZGVycy4NCj4gPiBUbyBlbnN1cmUgdGhl
-c2UgaGVhZGVycyBhcmUgZm91bmQgZHVyaW5nIGNvbXBpbGF0aW9uIG9uIG1hY09TIGhvc3RzLA0K
-PiA+IGFkZCB1c3IvaW5jbHVkZSB0byBIT1NUX0VYVFJBQ0ZMQUdTIGluIHRoZSBnZW5oZWFkZXJz
-IE1ha2VmaWxlLiBUaGlzDQo+ID4gYWRqdXN0bWVudCBhbGxvd3MgdGhlIGNvbXBpbGVyIHRvIGxv
-Y2F0ZSBhbGwgbmVjZXNzYXJ5IGhlYWRlcnMgd2hlbiB0aGV5DQo+ID4gYXJlIG5vdCBhdmFpbGFi
-bGUgYnkgZGVmYXVsdCBvbiBtYWNPUy4NCj4gPiANCj4gPiBTaWduZWQtb2ZmLWJ5OiBEYW5pZWwg
-R29tZXogPGRhLmdvbWV6QHNhbXN1bmcuY29tPg0KPiA+IC0tLQ0KPiA+ICBzY3JpcHRzL3NlbGlu
-dXgvZ2VuaGVhZGVycy9NYWtlZmlsZSB8IDMgKystDQo+ID4gIDEgZmlsZSBjaGFuZ2VkLCAyIGlu
-c2VydGlvbnMoKyksIDEgZGVsZXRpb24oLSkNCj4gPiANCj4gPiBkaWZmIC0tZ2l0IGEvc2NyaXB0
-cy9zZWxpbnV4L2dlbmhlYWRlcnMvTWFrZWZpbGUgYi9zY3JpcHRzL3NlbGludXgvZ2VuaGVhZGVy
-cy9NYWtlZmlsZQ0KPiA+IGluZGV4IDFmYWY3ZjA3ZThkYi4uMDE3MTQ5YzkwZjhlIDEwMDY0NA0K
-PiA+IC0tLSBhL3NjcmlwdHMvc2VsaW51eC9nZW5oZWFkZXJzL01ha2VmaWxlDQo+ID4gKysrIGIv
-c2NyaXB0cy9zZWxpbnV4L2dlbmhlYWRlcnMvTWFrZWZpbGUNCj4gPiBAQCAtMiw0ICsyLDUgQEAN
-Cj4gPiAgaG9zdHByb2dzLWFsd2F5cy15ICs9IGdlbmhlYWRlcnMNCj4gPiAgSE9TVF9FWFRSQUNG
-TEFHUyArPSBcDQo+ID4gIAktSSQoc3JjdHJlZSkvaW5jbHVkZS91YXBpIC1JJChzcmN0cmVlKS9p
-bmNsdWRlIFwNCj4gPiAtCS1JJChzcmN0cmVlKS9zZWN1cml0eS9zZWxpbnV4L2luY2x1ZGUNCj4g
-PiArCS1JJChzcmN0cmVlKS9zZWN1cml0eS9zZWxpbnV4L2luY2x1ZGUgXA0KPiA+ICsJLUkkKHNy
-Y3RyZWUpL3Vzci9pbmNsdWRlDQo+IA0KPiAnbWFrZSBoZWFkZXJzJyBjb21wb3NlcyB0aGUgVUFQ
-SSBoZWFkZXIgdHJlZSBpbiAkKG9ianRyZWUpL3Vzci9pbmNsdWRlLg0KPiBTbywgaWYgeW91IGJ1
-aWxkIG91dC1vZi1zb3VyY2UsIC1JJChzcmN0cmVlKS91c3IvaW5jbHVkZSB3aWxsIG5vdCBtYXRj
-aC4NCj4gSnVzdCByZW1vdmUgdGhlICckKHNyY3RyZWUpLycgcHJlZml4IGFzICckKG9ianRyZWUp
-LycgaXMgYWx3YXlzICcuJy4NCg0KVGhlICdoZWFkZXJzJyB0YXJnZXQgYWxzbyBkZXBsb3lzIGlu
-c3RhbGxzIHRoZSBoZWFkZXJzIGluIGFyY2gvJChTUkNBUkNIKS8NCmluY2x1ZGUvdWFwaSwgc28g
-SSd2ZSB1cGRhdGVkIHNlbGludXgvZ2VuaGVhZGVycy9NYWtlZmlsZSB0byB0aGUgZm9sbG93aW5n
-Og0KDQpkaWZmIC0tZ2l0IGEvc2NyaXB0cy9zZWxpbnV4L2dlbmhlYWRlcnMvTWFrZWZpbGUgYi9z
-Y3JpcHRzL3NlbGludXgvZ2VuaGVhZGVycy9NYWtlZmlsZQ0KaW5kZXggMWZhZjdmMDdlOGRiLi5h
-ZTFmMTk1YjZmNjcgMTAwNjQ0DQotLS0gYS9zY3JpcHRzL3NlbGludXgvZ2VuaGVhZGVycy9NYWtl
-ZmlsZQ0KKysrIGIvc2NyaXB0cy9zZWxpbnV4L2dlbmhlYWRlcnMvTWFrZWZpbGUNCkBAIC0yLDQg
-KzIsNiBAQA0KIGhvc3Rwcm9ncy1hbHdheXMteSArPSBnZW5oZWFkZXJzDQogSE9TVF9FWFRSQUNG
-TEFHUyArPSBcDQogICAgICAgIC1JJChzcmN0cmVlKS9pbmNsdWRlL3VhcGkgLUkkKHNyY3RyZWUp
-L2luY2x1ZGUgXA0KLSAgICAgICAtSSQoc3JjdHJlZSkvc2VjdXJpdHkvc2VsaW51eC9pbmNsdWRl
-DQorICAgICAgIC1JJChzcmN0cmVlKS9zZWN1cml0eS9zZWxpbnV4L2luY2x1ZGUgXA0KKyAgICAg
-ICAtSSQob2JqdHJlZSkvYXJjaC8kKFNSQ0FSQ0gpL2luY2x1ZGUvZ2VuZXJhdGVkL3VhcGkgXA0K
-KyAgICAgICAtSSQob2JqdHJlZSkvYXJjaC8kKFNSQ0FSQ0gpL2luY2x1ZGUvdWFwaQ0KDQpUaGUg
-aW5jbHVkZSBwYXRoIC1JJChvYmp0cmVlKS9hcmNoLyQoU1JDQVJDSCkvaW5jbHVkZS9nZW5lcmF0
-ZWQvdWFwaQ0KZW5hYmxlcyBsb2NhdGluZyB0aGUgYXNtL3R5cGVzLmguDQoNClRoZSBpbmNsdWRl
-IHBhdGggLUkkKG9ianRyZWUpL2FyY2gvJChTUkNBUkNIKS9pbmNsdWRlL3VhcGkgZW5hYmxlcw0K
-bG9jYXRpbmcgdGhlIGFzbS9iaXRzcGVybG9uZy5oIGFuZCBhc20vcG9zaXhfdHlwZXMuaC4NCg0K
-PiANCj4gQnV0IEkgYW0gc3VzcGVjdGluZyB0aGF0IHRoaXMgYnJlYWsgY3Jvc3MtYnVpbGRpbmcu
-DQoNCknigJl2ZSB0ZXN0ZWQgdGhpcyBjaGFuZ2Ugb24gbWFjT1Mgd2l0aCBBUkNIPWFybTY0LCBh
-cyB3ZWxsIGFzIG9uIERlYmlhbiB3aXRoDQpBUkNIPWFybTY0IGFuZCBBUkNIPXg4Nl82NC4gSXMg
-aXQgZW5vdWdoIHRvIGp1c3QgY29uZmlybSB0aGF0IGNyb3NzLWJ1aWxkaW5nDQpzdGlsbCB3b3Jr
-cyBhZnRlciB0aGlzIGNoYW5nZT8NCg0KPiANCj4gS2luZCByZWdhcmRzLA0KPiBOaWNvbGFz
+Hi Jianhua,
+
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on media-tree/master]
+[also build test ERROR on linuxtv-media-stage/master sailus-media-tree/master linus/master v6.11-rc2 next-20240807]
+[cannot apply to sailus-media-tree/streams]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Jianhua-Lin/media-mediatek-jpeg-support-34bits/20240807-211309
+base:   git://linuxtv.org/media_tree.git master
+patch link:    https://lore.kernel.org/r/20240807130835.26739-1-jianhua.lin%40mediatek.com
+patch subject: [PATCH v5 1/1] media: mediatek: jpeg: support 34bits
+config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20240808/202408080501.8b0EGVQW-lkp@intel.com/config)
+compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 423aec6573df4424f90555468128e17073ddc69e)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240808/202408080501.8b0EGVQW-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202408080501.8b0EGVQW-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+   In file included from drivers/media/platform/mediatek/jpeg/mtk_jpeg_enc_hw.c:9:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:14:
+   In file included from arch/hexagon/include/asm/io.h:328:
+   include/asm-generic/io.h:548:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     548 |         val = __raw_readb(PCI_IOBASE + addr);
+         |                           ~~~~~~~~~~ ^
+   include/asm-generic/io.h:561:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     561 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
+      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
+         |                                                   ^
+   In file included from drivers/media/platform/mediatek/jpeg/mtk_jpeg_enc_hw.c:9:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:14:
+   In file included from arch/hexagon/include/asm/io.h:328:
+   include/asm-generic/io.h:574:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     574 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
+      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
+         |                                                   ^
+   In file included from drivers/media/platform/mediatek/jpeg/mtk_jpeg_enc_hw.c:9:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:14:
+   In file included from arch/hexagon/include/asm/io.h:328:
+   include/asm-generic/io.h:585:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     585 |         __raw_writeb(value, PCI_IOBASE + addr);
+         |                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:595:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     595 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:605:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     605 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   In file included from drivers/media/platform/mediatek/jpeg/mtk_jpeg_enc_hw.c:18:
+   In file included from include/media/media-device.h:16:
+   In file included from include/linux/pci.h:2669:
+   In file included from include/linux/dma-mapping.h:11:
+   In file included from include/linux/scatterlist.h:8:
+   In file included from include/linux/mm.h:2228:
+   include/linux/vmstat.h:514:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     514 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+>> drivers/media/platform/mediatek/jpeg/mtk_jpeg_enc_hw.c:104:11: error: call to undeclared function 'FIELD_PREP'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     104 |                                 val = FIELD_PREP(MTK_JPEG_ADDR_MASK, upper);
+         |                                       ^
+   drivers/media/platform/mediatek/jpeg/mtk_jpeg_enc_hw.c:111:11: error: call to undeclared function 'FIELD_PREP'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     111 |                                 val = FIELD_PREP(MTK_JPEG_ADDR_MASK, upper);
+         |                                       ^
+   drivers/media/platform/mediatek/jpeg/mtk_jpeg_enc_hw.c:138:9: error: call to undeclared function 'FIELD_PREP'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     138 |                 val = FIELD_PREP(MTK_JPEG_ADDR_MASK, upper_32_bits(dma_addr));
+         |                       ^
+   drivers/media/platform/mediatek/jpeg/mtk_jpeg_enc_hw.c:144:9: error: call to undeclared function 'FIELD_PREP'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     144 |                 val = FIELD_PREP(MTK_JPEG_ADDR_MASK, upper_32_bits(dma_addr));
+         |                       ^
+   7 warnings and 4 errors generated.
+--
+   In file included from drivers/media/platform/mediatek/jpeg/mtk_jpeg_dec_hw.c:9:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:14:
+   In file included from arch/hexagon/include/asm/io.h:328:
+   include/asm-generic/io.h:548:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     548 |         val = __raw_readb(PCI_IOBASE + addr);
+         |                           ~~~~~~~~~~ ^
+   include/asm-generic/io.h:561:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     561 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
+      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
+         |                                                   ^
+   In file included from drivers/media/platform/mediatek/jpeg/mtk_jpeg_dec_hw.c:9:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:14:
+   In file included from arch/hexagon/include/asm/io.h:328:
+   include/asm-generic/io.h:574:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     574 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
+      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
+         |                                                   ^
+   In file included from drivers/media/platform/mediatek/jpeg/mtk_jpeg_dec_hw.c:9:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:14:
+   In file included from arch/hexagon/include/asm/io.h:328:
+   include/asm-generic/io.h:585:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     585 |         __raw_writeb(value, PCI_IOBASE + addr);
+         |                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:595:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     595 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:605:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     605 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   In file included from drivers/media/platform/mediatek/jpeg/mtk_jpeg_dec_hw.c:18:
+   In file included from include/media/media-device.h:16:
+   In file included from include/linux/pci.h:2669:
+   In file included from include/linux/dma-mapping.h:11:
+   In file included from include/linux/scatterlist.h:8:
+   In file included from include/linux/mm.h:2228:
+   include/linux/vmstat.h:514:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     514 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+>> drivers/media/platform/mediatek/jpeg/mtk_jpeg_dec_hw.c:294:9: error: call to undeclared function 'FIELD_PREP'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     294 |                 val = FIELD_PREP(MTK_JPEG_ADDR_MASK, upper_32_bits(addr_y));
+         |                       ^
+   drivers/media/platform/mediatek/jpeg/mtk_jpeg_dec_hw.c:312:9: error: call to undeclared function 'FIELD_PREP'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     312 |                 val = FIELD_PREP(MTK_JPEG_ADDR_MASK, upper_32_bits(addr_y));
+         |                       ^
+   drivers/media/platform/mediatek/jpeg/mtk_jpeg_dec_hw.c:353:9: error: call to undeclared function 'FIELD_PREP'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     353 |                 val = FIELD_PREP(MTK_JPEG_ADDR_MASK, upper_32_bits(ptr));
+         |                       ^
+   drivers/media/platform/mediatek/jpeg/mtk_jpeg_dec_hw.c:367:9: error: call to undeclared function 'FIELD_PREP'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     367 |                 val = FIELD_PREP(MTK_JPEG_ADDR_MASK, upper_32_bits(addr));
+         |                       ^
+   7 warnings and 4 errors generated.
+
+
+vim +/FIELD_PREP +104 drivers/media/platform/mediatek/jpeg/mtk_jpeg_enc_hw.c
+
+    87	
+    88	void mtk_jpeg_set_enc_src(struct mtk_jpeg_ctx *ctx,  void __iomem *base,
+    89				  struct vb2_buffer *src_buf)
+    90	{
+    91		int i;
+    92		dma_addr_t dma_addr;
+    93		u32 val;
+    94		u32 upper;
+    95		bool support_34bit = ctx->jpeg->variant->support_34bit;
+    96	
+    97		for (i = 0; i < src_buf->num_planes; i++) {
+    98			dma_addr = vb2_dma_contig_plane_dma_addr(src_buf, i) +
+    99				   src_buf->planes[i].data_offset;
+   100			if (!i) {
+   101				writel(dma_addr, base + JPEG_ENC_SRC_LUMA_ADDR);
+   102				if (support_34bit) {
+   103					upper = upper_32_bits(dma_addr);
+ > 104					val = FIELD_PREP(MTK_JPEG_ADDR_MASK, upper);
+   105					writel(val, base + JPEG_ENC_SRC_LUMA_ADDR_EXT);
+   106				}
+   107			} else {
+   108				writel(dma_addr, base + JPEG_ENC_SRC_CHROMA_ADDR);
+   109				if (support_34bit) {
+   110					upper = upper_32_bits(dma_addr);
+   111					val = FIELD_PREP(MTK_JPEG_ADDR_MASK, upper);
+   112					writel(val, base + JPEG_ENC_SRC_CHRO_ADDR_EXT);
+   113				}
+   114			}
+   115		}
+   116	}
+   117	EXPORT_SYMBOL_GPL(mtk_jpeg_set_enc_src);
+   118	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
