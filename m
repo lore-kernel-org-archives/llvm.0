@@ -1,128 +1,68 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
+Received: from GBR01-CWX-obe.outbound.protection.outlook.com (mail-cwxgbr01on2092.outbound.protection.outlook.com [40.107.121.92])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E7891C689B;
-	Wed,  7 Aug 2024 11:26:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=192.198.163.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C83BF1DF666;
+	Wed,  7 Aug 2024 13:03:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.121.92
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723029969; cv=fail; b=Dw4YR7Wvz9PJ2YN0pcH7FH+PU2B64f2pSKfcQxeprwKPnPRW8vqFaIr6MY0YrxEXps466Z4xzO117XyoqWepMeQNSWd/1kGih2nijxGfumjsCQsjiqccDZNhw6EmO++4IfDZ2L4qpKQ3MbbJ4hNGWz7IlE+hCsZjkLxonc2KaUk=
+	t=1723035838; cv=fail; b=Go0JhVKdfdftBCeu9p6nuA1k41CCXPeHiIOmcfqOqS5mpDSDSIPUA8XPfgOAJw+rLst5TAaW9PAqOvayKTnRtPLNuItm1rUpsNHQ6MCUKopcYRkQr4K2G8b7jJ6EXFHoRyTSb8jShEmkgjwwZ4hCrmOvqW7KoPepX0WitdokMXY=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723029969; c=relaxed/simple;
-	bh=xPAnNZViRMQ5TZ0qGuNjO0Z8NyokCUVNpFP8qz4f2Tk=;
-	h=Date:From:To:CC:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=tJ3rH3BCBx/y2iU3a7h7BIASrL+8H1hfOkr8c0wqWi2cih2pqSinOW/3PGBUm5nOIkdceoxAxK1wwIPT4EdIMnXXG69yl79SlzvxKuVvH1SUSCAYRFanvN47Y6K0pOCHWlIaDB4pH74ue9zTB+LZI7V+WfHT0fp5tioDpYLYGgE=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=lbn6Dm+Q; arc=fail smtp.client-ip=192.198.163.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1723035838; c=relaxed/simple;
+	bh=m5aa/cXnNGotUsD6xGeKBE1gOIPzCBgiNRJECh+SDt8=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=FR8Gh0oBtTsNim4P3Yosh8rK9p4k5QDOLYXZokA9uh3LxX8i4PBJtI+aTtlLXljCkWtET7+b/7xUcbXvcnrpEeZE1fANAKLeEI3xZ+6b3aIJvE5erWfGLZ4r+gy1K81EUtadD6AAj1labKY2vhD2mtdmJQJ8q+y8pcHCcnJRkXI=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=garyguo.net; spf=pass smtp.mailfrom=garyguo.net; dkim=pass (1024-bit key) header.d=garyguo.net header.i=@garyguo.net header.b=eOqttmCe; arc=fail smtp.client-ip=40.107.121.92
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=garyguo.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=garyguo.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="lbn6Dm+Q"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1723029967; x=1754565967;
-  h=date:from:to:cc:subject:message-id:references:
-   in-reply-to:mime-version;
-  bh=xPAnNZViRMQ5TZ0qGuNjO0Z8NyokCUVNpFP8qz4f2Tk=;
-  b=lbn6Dm+QVLiY14NxTXZverWtoX2ZUSplypcFJAslQDSBHBWvA+8JpetT
-   6U/6hmoGnShsCiSHSL2sH00oum2npdoADV8ZlIIhLdkI8Xn7aFafZXik8
-   GOsm/SaPdHjcdfTZm3laEc7gCia3jGUPwIdK3c8Mcnhd9AIl2PyIqYqI3
-   O5txXBJ3U9zR8azVnmLr183Y3AK5ymbT16Tt6BfrtL+SKn1bsmhoc62+7
-   1P1v+WwKAr0gPfj5jEmb4XS9gWcuv2UHN6MJcZlilB3r3TXA07sydWdC6
-   +ATz4xGi7I114LPiePfTT2O5VARi39ZuqyGIwRo6wSNS3LkIzsVg4LZol
-   Q==;
-X-CSE-ConnectionGUID: lHogyBxQT86hunHW89M5vg==
-X-CSE-MsgGUID: QR5mo6lpRoikY/Q2x5mt8Q==
-X-IronPort-AV: E=McAfee;i="6700,10204,11156"; a="20673490"
-X-IronPort-AV: E=Sophos;i="6.09,269,1716274800"; 
-   d="scan'208";a="20673490"
-Received: from orviesa009.jf.intel.com ([10.64.159.149])
-  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Aug 2024 04:26:06 -0700
-X-CSE-ConnectionGUID: LWupY3cBSb+wYh9iDv/c/g==
-X-CSE-MsgGUID: BmtQ2JbeS6a7EmNYv4mSEQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.09,269,1716274800"; 
-   d="scan'208";a="56769821"
-Received: from orsmsx602.amr.corp.intel.com ([10.22.229.15])
-  by orviesa009.jf.intel.com with ESMTP/TLS/AES256-GCM-SHA384; 07 Aug 2024 04:26:07 -0700
-Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
- ORSMSX602.amr.corp.intel.com (10.22.229.15) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.39; Wed, 7 Aug 2024 04:26:05 -0700
-Received: from ORSEDG602.ED.cps.intel.com (10.7.248.7) by
- orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.39 via Frontend Transport; Wed, 7 Aug 2024 04:26:05 -0700
-Received: from NAM04-BN8-obe.outbound.protection.outlook.com (104.47.74.47) by
- edgegateway.intel.com (134.134.137.103) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.39; Wed, 7 Aug 2024 04:26:05 -0700
+	dkim=pass (1024-bit key) header.d=garyguo.net header.i=@garyguo.net header.b="eOqttmCe"
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=c80Zp0rNZWUfKwswX8xZGzZp6BoNXYJxUNKowAN9hPA31Mqg/PX8HZ3z3Yl5DEnN/T8qmw4uLHnz3baTCx4YF+8DEu3aLcmcWP7zHjyXBG3x8lY3w2YBUGOUNsiVBvZKFX3stJnJW11XOLLFPQMVNQ8o4+/862X+pFDN7V83nP7cG/CvFeUP0rkibqurD9y0nEuHvaA8eUPlWxoY9GcuJb21+HgGWMhxVDFCRVaG2q+AsIpn1UGdAN4nXXt+ZJY7G3O2oPqFU3LTzQtJzs7eDhS2Fl4n/tKiX60x3F7RaGSyVH3Ii+C+fdxF5BnRrH90MwwaJyy1RxspOOkBk1cVdQ==
+ b=Y2X1ZUpEXyAPz6/tBs5EYppdZ6P1XLzkWwxlGOBmnZo4CElAlHdpKQRYDM9j5JQ0NLJSZNj6aYgUKyz+ryoM7X+VWVkRjk/uz6TXO6NYxZUCadUjiOM1FVwBcw9Nlt+qOvw5aPNJccLdkx//gNrQc+dqGKrxQlDfA380u8s8++ehnuHiI1Jsm4By53EasrvEpFvTyGzIrlEIRp5/sVOrKPLP7wioMS4KpIvVAk7h/hF9BxaX4JBC1yLxhs/vm9Q75+qbwWKFej2giPVl8VIqyH1AGd2vYt5J868WNzcDZZ3l5EQA7VxhjCw9HMfr0lZcz3KDg5F/1/7YY9VvsRt/sg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=SSrJW/wKyg8D3uN8knQJB4L0kO0vNRxAwk6IXTAyTvI=;
- b=Ck+jcuFmeSCG7mC8hX7suZlPG9PIBL2Ou/fQbio2XTWl99Fq/i36siQGudBojFZB6C6GoW78QE/FFs9vAkMhjeP4R1GV0uYlX6kTNDJccQqgTCRFFO4FMCXGOwNSKGTbGReW37MEnsmQQ1OIvERyPbGBHrkRfNhubYFx51K5L258Q2ZRWBudIpVn2AyMYhXazpvkIJC0+6WDFnDSBA+WfCyErUCskJJlvgpPBc+IPxYxwvocmEoQ+vwmLkWNLMYzbi0vjl6utNr2LIAdhv9pt8HW4jjlKEIsbQHxwkrQND5XGCnvQWm6ojz9BsYS6POVH5yo4yaI1gtXdZLs3b21vg==
+ bh=g0kG1PA8SwmVwaYvEAA6QEA9WCCZK8nDO6JzSLD42r4=;
+ b=nJHdahp8uBKCRNt56lCRy/mJ78q1HcTnfPd5j8FY11E2JK9lR/MVSbQ3ZR4A03NnwPOgse9PfzcQDAutb5MV015ubkwo/l3ewW6N2u4D7k3xjxyR9PlA/lCVuzErz854QMpGZXkVxwZhplichkokWf4XPB/BBLrCb4y1iz+7cSE3ZBMDtYZwd0X87jwfI60aOMNYQn1NXfFbCJ47vHWXx9O7buNVN4HAkZgt5ZxxAQ0BUW3CUaBbasL5Wv0XYWNn6Wgk5e1RGtFzsLmE6OepU8h7Hzt24KDPv//Y7JEf4N2omyjRQgrIQDalLIi4pbEzRjMxJbNORmk0veS/3SEyVw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
+ smtp.mailfrom=garyguo.net; dmarc=pass action=none header.from=garyguo.net;
+ dkim=pass header.d=garyguo.net; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=garyguo.net;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=g0kG1PA8SwmVwaYvEAA6QEA9WCCZK8nDO6JzSLD42r4=;
+ b=eOqttmCeAJ6r59Jed7Fq7upueb1xyLQxatqnuxCvWUaGLdhKWF8eF6e9ylshxltmX4TGopcrAAQVs2EIxAKP7ong1SytMzaIdiShpVK87FJ4mUetdYfdRW05yJveYYGhqWCDL1YqD/CCE63edeIXg9y89Z76nbSc+HdSEwRNsBA=
 Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from CY5PR11MB6139.namprd11.prod.outlook.com (2603:10b6:930:29::17)
- by DS7PR11MB7692.namprd11.prod.outlook.com (2603:10b6:8:ef::15) with
+ header.d=none;dmarc=none action=none header.from=garyguo.net;
+Received: from LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM (2603:10a6:600:253::10)
+ by LO0P265MB6146.GBRP265.PROD.OUTLOOK.COM (2603:10a6:600:247::13) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7828.27; Wed, 7 Aug
- 2024 11:26:01 +0000
-Received: from CY5PR11MB6139.namprd11.prod.outlook.com
- ([fe80::7141:316f:77a0:9c44]) by CY5PR11MB6139.namprd11.prod.outlook.com
- ([fe80::7141:316f:77a0:9c44%7]) with mapi id 15.20.7828.023; Wed, 7 Aug 2024
- 11:26:01 +0000
-Date: Wed, 7 Aug 2024 06:25:53 -0500
-From: Lucas De Marchi <lucas.demarchi@intel.com>
-To: Daniel Gomez <da.gomez@samsung.com>
-CC: Masahiro Yamada <masahiroy@kernel.org>, Nathan Chancellor
-	<nathan@kernel.org>, Nicolas Schier <nicolas@fjasle.eu>, Thomas
- =?utf-8?Q?Hellstr=C3=B6m?= <thomas.hellstrom@linux.intel.com>, Rodrigo Vivi
-	<rodrigo.vivi@intel.com>, Maarten Lankhorst
-	<maarten.lankhorst@linux.intel.com>, Maxime Ripard <mripard@kernel.org>,
-	Thomas Zimmermann <tzimmermann@suse.de>, David Airlie <airlied@gmail.com>,
-	Daniel Vetter <daniel@ffwll.ch>, William Hubbs <w.d.hubbs@gmail.com>, "Chris
- Brannon" <chris@the-brannons.com>, Kirk Reiser <kirk@reisers.ca>, "Samuel
- Thibault" <samuel.thibault@ens-lyon.org>, Paul Moore <paul@paul-moore.com>,
-	Stephen Smalley <stephen.smalley.work@gmail.com>, Ondrej Mosnacek
-	<omosnace@redhat.com>, Catalin Marinas <catalin.marinas@arm.com>, Will Deacon
-	<will@kernel.org>, Marc Zyngier <maz@kernel.org>, Oliver Upton
-	<oliver.upton@linux.dev>, James Morse <james.morse@arm.com>, Suzuki K Poulose
-	<suzuki.poulose@arm.com>, Zenghui Yu <yuzenghui@huawei.com>, "Greg
- Kroah-Hartman" <gregkh@linuxfoundation.org>, Jiri Slaby
-	<jirislaby@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, "Bill
- Wendling" <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"linux-kbuild@vger.kernel.org" <linux-kbuild@vger.kernel.org>,
-	"intel-xe@lists.freedesktop.org" <intel-xe@lists.freedesktop.org>,
-	"dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
-	"speakup@linux-speakup.org" <speakup@linux-speakup.org>,
-	"selinux@vger.kernel.org" <selinux@vger.kernel.org>,
-	"linux-arm-kernel@lists.infradead.org"
-	<linux-arm-kernel@lists.infradead.org>, "kvmarm@lists.linux.dev"
-	<kvmarm@lists.linux.dev>, "linux-serial@vger.kernel.org"
-	<linux-serial@vger.kernel.org>, "llvm@lists.linux.dev"
-	<llvm@lists.linux.dev>, Finn Behrens <me@kloenk.dev>, "Daniel Gomez
- (Samsung)" <d+samsung@kruces.com>, "gost.dev@samsung.com"
-	<gost.dev@samsung.com>
-Subject: Re: [PATCH 04/12] drm/xe: xe_gen_wa_oob: fix
- program_invocation_short_name for macos
-Message-ID: <qdirhnr5fhey4zyraeymvyy3zkglg33fgjiigmsn34nwcuoir4@bxcnqgolwakw>
-References: <20240807-macos-build-support-v1-0-4cd1ded85694@samsung.com>
- <20240807-macos-build-support-v1-4-4cd1ded85694@samsung.com>
- <CGME20240807015044eucas1p1998fac358d6afafce6c58478c2834d26@eucas1p1.samsung.com>
- <67ahzgfa63gs7ybbunthdiwodlaihzqerb5xmkrgfgrbmghjmw@d57hhuwaf53i>
- <mhrznemgfocotpgkyze7l73e6237wygja6lrvmodeka6ehbkgc@h6fzyrcsmci2>
-Content-Type: text/plain; charset="us-ascii"; format=flowed
-Content-Disposition: inline
-In-Reply-To: <mhrznemgfocotpgkyze7l73e6237wygja6lrvmodeka6ehbkgc@h6fzyrcsmci2>
-X-ClientProxiedBy: MW3PR06CA0002.namprd06.prod.outlook.com
- (2603:10b6:303:2a::7) To CY5PR11MB6139.namprd11.prod.outlook.com
- (2603:10b6:930:29::17)
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7849.13; Wed, 7 Aug
+ 2024 13:03:52 +0000
+Received: from LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM
+ ([fe80::1818:a2bf:38a7:a1e7]) by LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM
+ ([fe80::1818:a2bf:38a7:a1e7%7]) with mapi id 15.20.7849.008; Wed, 7 Aug 2024
+ 13:03:52 +0000
+Date: Wed, 7 Aug 2024 14:03:47 +0100
+From: Gary Guo <gary@garyguo.net>
+To: Miguel Ojeda <ojeda@kernel.org>
+Cc: Alex Gaynor <alex.gaynor@gmail.com>, Wedson Almeida Filho
+ <wedsonaf@gmail.com>, Nathan Chancellor <nathan@kernel.org>, Boqun Feng
+ <boqun.feng@gmail.com>, =?UTF-8?B?QmrDtnJu?= Roy Baron
+ <bjorn3_gh@protonmail.com>, Benno Lossin <benno.lossin@proton.me>, Andreas
+ Hindborg <a.hindborg@samsung.com>, Alice Ryhl <aliceryhl@google.com>,
+ rust-for-linux@vger.kernel.org, Nick Desaulniers <ndesaulniers@google.com>,
+ Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
+ llvm@lists.linux.dev, linux-kernel@vger.kernel.org, patches@lists.linux.dev
+Subject: Re: [PATCH] rust: add intrinsics to fix `-Os` builds
+Message-ID: <20240807140347.1fafe382@eugeo>
+In-Reply-To: <20240806150619.192882-1-ojeda@kernel.org>
+References: <20240806150619.192882-1-ojeda@kernel.org>
+X-Mailer: Claws Mail 4.2.0 (GTK 3.24.42; x86_64-pc-linux-gnu)
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: LO6P123CA0034.GBRP123.PROD.OUTLOOK.COM
+ (2603:10a6:600:2fe::16) To LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM
+ (2603:10a6:600:253::10)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -130,190 +70,124 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CY5PR11MB6139:EE_|DS7PR11MB7692:EE_
-X-MS-Office365-Filtering-Correlation-Id: e905c79e-4023-4e26-884e-08dcb6d3b783
+X-MS-TrafficTypeDiagnostic: LO2P265MB5183:EE_|LO0P265MB6146:EE_
+X-MS-Office365-Filtering-Correlation-Id: 85a15817-a192-456d-af2f-08dcb6e16218
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|1800799024|7416014|376014|366016|27256017;
-X-Microsoft-Antispam-Message-Info: =?us-ascii?Q?8XzpQQ+/L9ZseZtjcpx1quqWC87ge6mQCjcfzW+UESuVfX026cq5PdCiqVuz?=
- =?us-ascii?Q?83oWgrGgoc8bjmBjVpYdyQydgncYfU1dHFxcl/CLkmXCQ9JjfLjV2Sq8X2NR?=
- =?us-ascii?Q?WpEBzBEzeNBr6CAuyA1OTCSM7V/D7w9koDAlMAjejTLPi9NnoqIBcglUkErB?=
- =?us-ascii?Q?+h9QARJUhDVYyzlqeu3qDnPXN0ajBK2EcdDZY/rUwd9V3UldrSZ68/Bjpjx/?=
- =?us-ascii?Q?WhKo/i+681MlOx4XUxVUwEYltWLnjzj2EJJinR+hIDIE7iyb85inOh4xbLUi?=
- =?us-ascii?Q?o8ddVPal3VDunf3srUDiDPCevRpPOQt7bvEqY0lFfAElJ1cmB/tlifYsNxWf?=
- =?us-ascii?Q?z4RxA03ZVi3nRprsAt/QTGO2tq4NUBq60wCT0BdUMnTS4TOjFQAkT9rqwryz?=
- =?us-ascii?Q?20ScoYOfmgTaW+MioGcy0cI8aYw4H97cMPkWGkXoKK1q7+0MdduOTN0vfPdW?=
- =?us-ascii?Q?/xEKTbPR1BuzrQXstSHrv4KPBT8wq+a5A6xz3HcWHQx7fPID11XURQsebBQQ?=
- =?us-ascii?Q?ZpNNzhZ8uAtp51w7GZ5YZHa0hrCSUWl1Rjnsvn4+vTdrY4m3epqM3xcorrTG?=
- =?us-ascii?Q?gbDYV5+eP2CiKf6xI4ojHq/pbt1IRQnPA7tDMlAhT3TNdO7v7mekEUy+fV7D?=
- =?us-ascii?Q?pRpuRTvjFWzQ0JHnBbTtDTIK5ZO0tHuMKHD6wPksp7OfxPh9sD0uN2xB43Cm?=
- =?us-ascii?Q?GXxEciMivKav3HmXF6dOwSYkD5GXrsizjJrQmvcVTLAAXNsmdRyszTsdPkdA?=
- =?us-ascii?Q?3DoM2ZwX0pcqhIUuwSpecc43NHvJeEpNs1EwisrlXwjOsY5HdXP+oCVoVIL3?=
- =?us-ascii?Q?HFfPHASA5DaLP+lZVhueO560X/U+YNNJiE56kXdgNaN5/YzJ9vH2ZKxUUdGo?=
- =?us-ascii?Q?og26ldZpPixyhHIZppCN/NntpmNK+THKFtmSMb4pUmm5/+PljNFvSHY4AAKU?=
- =?us-ascii?Q?fuqBwMnU7bzCj5fCcB/l8qAnergj9kYVKd0HqzjVxe2RNaiMM9EBMCAqf8Xg?=
- =?us-ascii?Q?OrtU6VVniP2ilCfLyveY+kQxtmt3nqTeABn1XnW3EFlPOwagW8wy3HUTT9wG?=
- =?us-ascii?Q?PMrPv1wBSNSlbDoOwNe22hcby9JeEQM7tIhdDY11Bwn50sQIxscnAl7ETr9r?=
- =?us-ascii?Q?2bI7mUpwIm+jU5j9FAnpNCcSPdqsalFp/5OiArZ+iR3aKcYaAm8dXFCfRL0n?=
- =?us-ascii?Q?8Tdk+bBakxN2pWSUvyr6PC8YXqjHRCJFOilaakpHtwJPUxktGLxUOFK8nwpM?=
- =?us-ascii?Q?JNu3lSABH5n70wyTqvNwAMhcK/dS+UuWqaSkUqdAJEvFXkLNWKqY+geGc6CD?=
- =?us-ascii?Q?Cjwlk4coTOiTlDRa2882jJdUXk4LQYZZ/T8DjXgTmDa9Tr9NB0YQ+5I8Kblu?=
- =?us-ascii?Q?F78dCXMHxgeA47uK3FAUyOPwdrlkpPy2C8rUrjQ5yosMjaRy9A=3D=3D?=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CY5PR11MB6139.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(7416014)(376014)(366016)(27256017);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam: BCL:0;ARA:13230040|376014|1800799024|7416014|366016;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?PTqeXAMoJUkV1DgryUlawHrGmmkKqE7LNP+xLr6GkeaMwoePzaHSmFQ6BFty?=
+ =?us-ascii?Q?JAgPWzVv0Zy5MkuMDIUvjWwiFRdp55AuPciOHVyLQS9Wd7SJsXx3Dzh/EF6G?=
+ =?us-ascii?Q?VYFQNxnFsHISAdDO+8WFgltdbafBgS52/xyMQU6O2/r8sfQk/zzRfU8AlXo5?=
+ =?us-ascii?Q?QYwkiC+fBzvuNuV7vXAuruBdZ9lLs+Euc8xoJHTRjP+Lp1l3K9at53rize+A?=
+ =?us-ascii?Q?4SGSvyiyoWQ6Mn8xx08en3PIfM5WVBxPWtZ6TAkcFQMppAsFj5e0oPu3OkSX?=
+ =?us-ascii?Q?eObsgf01PtycoeFb/CvPTU+uR9yf1fiMzsC1KjXYAmqAt4uzjsgYhnW0W0RT?=
+ =?us-ascii?Q?UmNAw8TyoYvHc8sUXzmIG7KJmGguQ8wiHcNfiBCWAe8T7nYjq+De0Q4bBd76?=
+ =?us-ascii?Q?TDZrMgnyJ1/m1HrwGvtTFo5uC6hKxrfo7vgDhziC7BO7kZDQFDvSZer5/0Bw?=
+ =?us-ascii?Q?ouRasysdcOkxP52c6ba6rSGpNsd48PdvdCId81bttKMhaBpX7fMfg1ghxNZw?=
+ =?us-ascii?Q?uLcCHbiAk7NTZLXX3KQDEnFtCpra+pV5Rop8rdDqWrCsc9GjegYOndlgPOAT?=
+ =?us-ascii?Q?e0oSOWhcuXjjYVTQhQvztx/67t0Yhzl9htFBx5DrhMhaawHQCi4n0NB8zkNo?=
+ =?us-ascii?Q?rIS/ojCUvFr33gRD+QJHd45CF9m10HyFEza4+cyUXAd6FG9ceM906DIWy8tX?=
+ =?us-ascii?Q?rY56raipi07YFtdv2w5xUiDPc+ZjvcM7je+HCUyfMiADxsdU1dq/BMy5owwz?=
+ =?us-ascii?Q?aVRcUmYUjcKpizrexzDJ32J7i4jOwaeJMBZXNeLj+iyZ7C9z+n46Y/m80+gV?=
+ =?us-ascii?Q?TOCzDDcgNf0CrjMjY1Yv6Etw+FRgp0j7FYvre35hKVApexDaInNxFEf3AjLk?=
+ =?us-ascii?Q?+rbzFqKxIqjoDHKS/V9TzOhH06A/fXLrdehEep1S8xOs7oARMdxfMpsydKI3?=
+ =?us-ascii?Q?CZlFhs4ubJNXZfQuty0xmC6R2v5pfkW0ln0aGzLACqIkFiRMlLixdq99Jzb1?=
+ =?us-ascii?Q?gVgp44qXisYmazDqeO47h44b4v5XdpBTdpkaPb98/A1lBorgE8eNo4qczONT?=
+ =?us-ascii?Q?8EeoXOoDo2RJpUYaBmHJaVmNKIWKQ44uS+4OOmqbCRDr5G62XR13jhv0KGuf?=
+ =?us-ascii?Q?6a5viElBLv5Y8I/zdHeZzMzsOd7iPBm8A60sGO8q3k7mc5LxnwqyGe2ztYUZ?=
+ =?us-ascii?Q?apFbcWYvSdZgbdjPPYtGQcAppvd9MRgaE93jZB5DF9kaXbVzQjeIL+Q0bfea?=
+ =?us-ascii?Q?CW33+AMzEfDDCzEqU2kfFUSNy/8Ha6S59FzFZZ3zJ8l8W4odj7mUyfWdMH5v?=
+ =?us-ascii?Q?BEg=3D?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(376014)(1800799024)(7416014)(366016);DIR:OUT;SFP:1102;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?KoWGkOzpF0YMP6shCOhxGJi9FVOkoxteRkFIJHN00wQKqf9w6JAhdta+A2F8?=
- =?us-ascii?Q?9GsvlkXzYFV1dm44M9C/Ln/mb9fEjvWs256YTXy/Vcl59coM6vkoNTDnVnIQ?=
- =?us-ascii?Q?ZLHQ/62gTG4VjZW8kkgHUa1HjSx6mxV/X1Kw+niYKV82fYrqMDQcT/QXlCVB?=
- =?us-ascii?Q?422SPaAhKsw4/M6g1l1qEnc/nTsrD0MxLjWhiJ3LjWzOOU2UmE8Yivs+5+xx?=
- =?us-ascii?Q?5/Hp9ki/8ML4mcMeB5pVXvmuTrDy/6ls0bIB9gz71PSw2GDVz0mHJ+Q1RVEh?=
- =?us-ascii?Q?UacvShQdsz4j8td7ADbx9ucYOE+2QixoPUJbiI1D0n5/soRCQ7lpPTYh002/?=
- =?us-ascii?Q?hgnI/rV/4zODzpRkTb8JOHUnrEEft2NW27C5RMuslp7ObclNoNYgtwps4upu?=
- =?us-ascii?Q?53+a3hdLLpzx/gaU2Lwaq+9A/K7VLlCEVEKqZ82aflSNv4BfmbV6qgThkCfp?=
- =?us-ascii?Q?CK0utOITlj47KkrLO19pxUwXSxynWj6coE++QAk14DOvmSFbxm/o7orrvPK5?=
- =?us-ascii?Q?A6Jm7mj9EkMvTpjNUBxgpnfD3KZo0ozjyMJYPHjRFe+vp1HHYt3UoSAS6970?=
- =?us-ascii?Q?ucpZJ2DOTq9UWH5iAhGff/MhoEjkpluDIUX6aUOCiJAX5zixi/KMdOBaapqK?=
- =?us-ascii?Q?3+rVdCOes3tOx1jKnEYg+edFRctP+jmKakCb3fg6N62GiGB8PWlrsTwpunkC?=
- =?us-ascii?Q?OMbABD8VSFMCRQZmhE0e4KAtEoCuF8sb6kWGPEYOSAvQVEWV/Hd0AvT8Ady7?=
- =?us-ascii?Q?87pC6R7yTMYbP/bARrLy/6bRK+mCS447lU6MjKRfzUSdJQ76zV0brdvFb97P?=
- =?us-ascii?Q?0yAIKa9idBBCjb+q2PxJPiTCIazUtBJ2fOAhpTAVRbMfeWP4m8KgSaVdr0mF?=
- =?us-ascii?Q?eArWlqxwG92007Qm9bcVfWwdPOxr/cWD0RedU7pBTeK42ainA7G0D9B5GbwW?=
- =?us-ascii?Q?Jw/H7k74gibyi/Dcm7SMw24n4tOqw5vo19TfXfw0+K+I55KeZszk0tNhDLjm?=
- =?us-ascii?Q?GVYchn5HQOdZ5FClVFuJ0w2OblzleoN5BRQ4albEV0FbLPdf4ppcYj3fhbmh?=
- =?us-ascii?Q?Dy5om313kTrGVZKlEqIRIDsMjEmwxkY5udbEB7BUM4acLS3HByeZjdVNzi+X?=
- =?us-ascii?Q?0U0Peo09F9igDW0pZ6sqxuUmp1gVjk1KgiHHyyWiacFi7pE+933f8tTpba6W?=
- =?us-ascii?Q?JdQcJaGUwCkHWRYmcAHsHbeyqraN4wa+y5m8UT4Z64C0QlEf3ApbtJmsGVB9?=
- =?us-ascii?Q?Xzw6Y0s6roh73Y7csA8kTvYxmgciVtWWFY9mkamghN35cwYi9B1yUY05xsk2?=
- =?us-ascii?Q?h0l1BIykwNXb7Y7QaVV/yINk9sS3WAcUKSsluHIZE5FzWLmZSs5kM8rlbtNR?=
- =?us-ascii?Q?Bk4fcFDNTd8FMgnvE89JeRSWa+0pPP4Rj3FKDAn6N54iDwnYS0wXOb3V212M?=
- =?us-ascii?Q?6hmk24A34N5VaJZiDIIExwVFLqahsSHAHUrlIdopmPzDOPBNrEAU9fQU1M2j?=
- =?us-ascii?Q?SE8x8/+i87yxwbiz1K9dwZfitR1gFgR1xYMJ3EK/sMSGqLST74dycU6x4z8+?=
- =?us-ascii?Q?z98i7W8t9aZhN4YY4zdnhHpOKZG3nTF7+YjmGFvfrsrWl12IS367VpmekjIW?=
- =?us-ascii?Q?GA=3D=3D?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: e905c79e-4023-4e26-884e-08dcb6d3b783
-X-MS-Exchange-CrossTenant-AuthSource: CY5PR11MB6139.namprd11.prod.outlook.com
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?i3Hna3A4E3Rw2UxeB354gXcJWIazxcPaK6utK3JwNzVoyWIONdiaHeitmRH4?=
+ =?us-ascii?Q?FY+w6TAYvWviM3aGkJ2XcWajnZKpkEKW9D3F5RYn7njHJu0dnpWalG8BKHe7?=
+ =?us-ascii?Q?9pHy0mq9yilrzTLbXsRYFKTAsrBF57teq74LWIrtJ1JCKTwhg4B/Zo/YCzxG?=
+ =?us-ascii?Q?Q4upAaJJyZjIBetbcgCex2VvfLOyXJDTsHxYDhpFs64Rf8/DmqY0JUVuhQ3d?=
+ =?us-ascii?Q?2MKR431GJAMPvfRZYauy3wpNIT1zOG62dTiwZ5VBEIJsVcFbn7G5vqqklamX?=
+ =?us-ascii?Q?ihqXXMBeHLaHMySINg36svzUwRTZO+7MAEM7BCjf8BX4I2qLZQXM1VZ5HyAm?=
+ =?us-ascii?Q?iK6v5lftXWv8Foupx2HWoFJBXx/0WtolDnuz1OJgJ1QGGDmB1D3Xg5wOLgbI?=
+ =?us-ascii?Q?XjoSYl4wRiQAGwLRTrDoCK47e516jdR4EsFbPidbXDlAtdJJIKJOz+6XeMWT?=
+ =?us-ascii?Q?Mlx3iriEydUj7ywJWI038j1riRA3V5+DH+W54tCvryK/3Yn621gPkmRuO0m3?=
+ =?us-ascii?Q?OExFHOCwAcA+Pgd+QxIzZuIvPQaVFFRarAsSPk4EGEPEBC1xbZU/akqbU4lZ?=
+ =?us-ascii?Q?WNOxvW+1x8zDtIjfS681VH8lOwQiUHrefgrb+GEgghhI3fjW+w6/0WK+mp/N?=
+ =?us-ascii?Q?PGu7te4nOY9vQcbTlqabr0+Rm0cMCgZ22V9F6oH56Zrl3zD4V61cslhVZHQm?=
+ =?us-ascii?Q?jULuXWPSW/2n4CsBnaLIgZv5D3rvxI6orQhYt02DwOQ0kUwRG8KEzWVreaDn?=
+ =?us-ascii?Q?mwT8zB1ajC5WX+8DSbbAXbU/s8V94t5II3YY3Rqk148oOuBaL67mBkKMRBri?=
+ =?us-ascii?Q?iXHM1AWgDoC9kTQk6JwtM9fRp9yXlQaOtbTbWP/EGBLM0c4r+vbetrCRP1nu?=
+ =?us-ascii?Q?tdjnH8QRxEvUYdzuMe0W4aPee5YNg8rH4SO7QlneUpAfMAkr5raeyVhHbLsF?=
+ =?us-ascii?Q?BgJveGAwYaeN6Dg8u2qrxco/Reu+EdO5thdtpJJAzJ634Mkf+uKhLbiK3wKV?=
+ =?us-ascii?Q?ss3XuI2NatW63voUOlKQZi1/hQpzmLVyYrd7MwELtRWiHdkdsT76B2wWj3OR?=
+ =?us-ascii?Q?Tm0lxfqvUYCwyTNng4oQML57eWnqVtwCFGTChrSUSPEDWvvBQWBy19SLg+Ma?=
+ =?us-ascii?Q?n0iYUP+F1m3ggJlsd+4efDklvEV9Zr0UbhH2tKItB10b3aE/g1tyFC8s25dg?=
+ =?us-ascii?Q?UQ0aWkBzuMInQodrDhOzMKHHtYjnkwKFuaepOGlX4ACKP3PgGZoNaRU12EgF?=
+ =?us-ascii?Q?9P1m0qPIQ8e1tEGOlI1vOe3Z3n1AyVxTqvEJevYMmbHgRwHFhKwpKK7LqVfE?=
+ =?us-ascii?Q?NPz3h480Q883hJtb/KzilZW4Cmm9WsGNpb6AmSUpX04wneHsvBcXF6nE23hk?=
+ =?us-ascii?Q?QkYbLQqwAQVqvtLI+J6KpY4YQmVLSXDdHt0gfQNErgs8aIp2JxdCdjm9NAyH?=
+ =?us-ascii?Q?IOTRzDci/kijT9dl/uJ89zdY2eoj8XOBAmRrW0eMBo/sh/nHuEtfKXCWRAwv?=
+ =?us-ascii?Q?frV5g8uwPBhHcfil3LbA2ngYlrrZKdwY0FGlgMhhoJYycFkK+rFiDSZtmOMZ?=
+ =?us-ascii?Q?FJ99FRD/98/hntg7z6dMlNNmWYirM/NoG4Zg8keq?=
+X-OriginatorOrg: garyguo.net
+X-MS-Exchange-CrossTenant-Network-Message-Id: 85a15817-a192-456d-af2f-08dcb6e16218
+X-MS-Exchange-CrossTenant-AuthSource: LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Aug 2024 11:26:01.5460
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Aug 2024 13:03:52.1710
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-Id: bbc898ad-b10f-4e10-8552-d9377b823d45
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: CbOEwf7b7/LCHVszQ4RKzaE5QnhCIScLQPfGetqeljuNyZJBp216ZpjvYlCmqiXtkVOXaPKY7WkLtwTSPP4zoVCAEOSe/gCDm917liQGB4o=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR11MB7692
-X-OriginatorOrg: intel.com
+X-MS-Exchange-CrossTenant-UserPrincipalName: 8K509Yjvx/QTsOTHDkZ+N7sHM2TivHP/9tE21vWDqJDfos8F1V2QAK9lrz/KeLxmcop69fWJm2rwEEW5IT6ArA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: LO0P265MB6146
 
-On Wed, Aug 07, 2024 at 08:13:51AM GMT, Daniel Gomez wrote:
->On Tue, Aug 06, 2024 at 08:50:09PM GMT, Lucas De Marchi wrote:
->> On Wed, Aug 07, 2024 at 01:09:18AM GMT, Daniel Gomez via B4 Relay wrote:
->> > From: Daniel Gomez <da.gomez@samsung.com>
->> >
->> > Use getprogname() [1] instead of program_invocation_short_name() [2]
->> > for macOS hosts.
->> >
->> > [1]:
->> > https://www.gnu.org/software/gnulib/manual/html_node/
->> > program_005finvocation_005fshort_005fname.html
->> >
->> > [2]:
->> > https://developer.apple.com/library/archive/documentation/System/
->> > Conceptual/ManPages_iPhoneOS/man3/getprogname.3.html
->> >
->> > Fixes build error for macOS hosts:
->> >
->> > drivers/gpu/drm/xe/xe_gen_wa_oob.c:34:3: error: use of
->> > undeclared identifier 'program_invocation_short_name'    34 |
->> > program_invocation_short_name);       |                 ^ 1 error
->> > generated.
->> >
->> > Signed-off-by: Daniel Gomez <da.gomez@samsung.com>
->> > ---
->> > drivers/gpu/drm/xe/xe_gen_wa_oob.c | 8 +++++++-
->> > 1 file changed, 7 insertions(+), 1 deletion(-)
->> >
->> > diff --git a/drivers/gpu/drm/xe/xe_gen_wa_oob.c b/drivers/gpu/drm/xe/xe_gen_wa_oob.c
->> > index 904cf47925aa..079b8870c461 100644
->> > --- a/drivers/gpu/drm/xe/xe_gen_wa_oob.c
->> > +++ b/drivers/gpu/drm/xe/xe_gen_wa_oob.c
->> > @@ -9,6 +9,12 @@
->> > #include <stdbool.h>
->> > #include <stdio.h>
->> > #include <string.h>
->> > +#define PROG_INV_NAME program_invocation_short_name
->> > +
->> > +#ifdef __APPLE__
->> > +#include <stdlib.h>
->> > +#define PROG_INV_NAME getprogname()
->> > +#endif
->> >
->> > #define HEADER \
->> > 	"// SPDX-License-Identifier: MIT\n" \
->> > @@ -31,7 +37,7 @@
->> > static void print_usage(FILE *f)
->> > {
->> > 	fprintf(f, "usage: %s <input-rule-file> <generated-c-source-file> <generated-c-header-file>\n",
->> > -		program_invocation_short_name);
->> > +		PROG_INV_NAME);
->>
->> instead of doing that, can we a) include stdlib.h unconditionally and b)
->> add here a
->> `static const char *program_invocation_short_name = getprogname()` so we
->> don't need to change the common case and just handle the "build on
->> macos" as a compat layer?
->
->Does this align with your suggestion (v1 diff)?
+On Tue,  6 Aug 2024 17:06:19 +0200
+Miguel Ojeda <ojeda@kernel.org> wrote:
 
-yes, just a nit that in xe we keep the includes sorted alphabetically,
-so the stdlib.h include should move up one line. Other than that,
+> Alice reported [1] that an arm64 build failed with:
+> 
+>     ld.lld: error: undefined symbol: __extendsfdf2
+>     >>> referenced by core.a6f5fc5794e7b7b3-cgu.0
+>     >>>               rust/core.o:(<f32>::midpoint) in archive vmlinux.a
+>     >>> referenced by core.a6f5fc5794e7b7b3-cgu.0
+>     >>>               rust/core.o:(<f32>::midpoint) in archive vmlinux.a  
+> 
+>     ld.lld: error: undefined symbol: __truncdfsf2
+>     >>> referenced by core.a6f5fc5794e7b7b3-cgu.0
+>     >>>               rust/core.o:(<f32>::midpoint) in archive vmlinux.a  
+> 
+> Rust 1.80.0 or later together with `CONFIG_CC_OPTIMIZE_FOR_SIZE=y`
+> is what triggers it.
+> 
+> In addition, x86_64 builds also fail the same way.
+> 
+> Similarly, compiling with Rust 1.82.0 (currently in nightly) makes
+> another one appear, possibly due to the LLVM 19 upgrade there:
+> 
+>     ld.lld: error: undefined symbol: __eqdf2
+>     >>> referenced by core.20495ea57a9f069d-cgu.0
+>     >>>               rust/core.o:(<f64>::next_up) in archive vmlinux.a
+>     >>> referenced by core.20495ea57a9f069d-cgu.0
+>     >>>               rust/core.o:(<f64>::next_down) in archive vmlinux.a  
+> 
+> Gary adds [1]:
+> 
+> > Usually the fix on rustc side is to mark those functions as `#[inline]`
+> >
+> > All of {midpoint,next_up,next_down} are indeed unstable functions not
+> > marked as inline...  
+> 
+> Fix all those by adding those intrinsics to our usual workaround.
+> 
+> Cc: Gary Guo <gary@garyguo.net>
+> Reported-by: Alice Ryhl <aliceryhl@google.com>
+> Closes: https://rust-for-linux.zulipchat.com/#narrow/stream/288089-General/topic/v6.2E11-rc1.20doesn't.20build.20for.20arm64/near/455637364
+> Signed-off-by: Miguel Ojeda <ojeda@kernel.org>
 
-// Reviewed-by: Lucas De Marchi <lucas.demarchi@intel.com>
+Reviewed-by: Gary Guo <gary@garyguo.net>
 
-... assuming the rest of the series and idea about building the kernel
-on macOS is not pushed back.
-
-Lucas De Marchi
-
-
->
->Note that static cannot be use here.
->
->diff --git a/drivers/gpu/drm/xe/xe_gen_wa_oob.c b/drivers/gpu/drm/xe/xe_gen_wa_oob.c
->index 079b8870c461..b3add20ccb01 100644
->--- a/drivers/gpu/drm/xe/xe_gen_wa_oob.c
->+++ b/drivers/gpu/drm/xe/xe_gen_wa_oob.c
->@@ -9,12 +9,7 @@
-> #include <stdbool.h>
-> #include <stdio.h>
-> #include <string.h>
->-#define PROG_INV_NAME program_invocation_short_name
->-
->-#ifdef __APPLE__
-> #include <stdlib.h>
->-#define PROG_INV_NAME getprogname()
->-#endif
->
-> #define HEADER \
->        "// SPDX-License-Identifier: MIT\n" \
->@@ -36,8 +31,11 @@
->
-> static void print_usage(FILE *f)
-> {
->+#ifdef __APPLE__
->+       const char *program_invocation_short_name = getprogname();
->+#endif
->        fprintf(f, "usage: %s <input-rule-file> <generated-c-source-file> <generated-c-header-file>\n",
->-               PROG_INV_NAME);
->+               program_invocation_short_name);
-> }
->
-> static void print_parse_error(const char *err_msg, const char *line,
->
->>
->> Lucas De Marchi
->>
->> > }
->> >
->> > static void print_parse_error(const char *err_msg, const char *line,
->> >
->> > --
->> > Git-146)
->> >
->> >
+> ---
+>  rust/Makefile             | 4 ++--
+>  rust/compiler_builtins.rs | 3 +++
+>  2 files changed, 5 insertions(+), 2 deletions(-)
