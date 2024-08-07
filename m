@@ -1,157 +1,562 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f174.google.com (mail-pf1-f174.google.com [209.85.210.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0798817625F;
-	Tue,  6 Aug 2024 23:37:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B50015D5BB
+	for <llvm@lists.linux.dev>; Wed,  7 Aug 2024 01:45:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722987475; cv=none; b=gRlXXqmfMftZorEWTd71EpbgQqlyR7uT8ZMyI8cHnrp7uB0BbMgsxr11gtT8MtrhfzadAmVyy18qz05Mv9jFVxeLWcj6O4UZ+ghf8c59KIV6eg8wzlk1eMAFX5nQm0pjH2qbt+lJQEAiFBAG34TnowfxbMmrrB4eeqOIy6Q99fM=
+	t=1722995105; cv=none; b=AcIeOKBX9lFuSIHikGJBSgWRFlF/2ch63xjw1ZF4vhMf2uIfQNuc9qpfV95KjbjgqJ3OKXaAms17h+qwwXaDeTOqiSpeztP3RoaKiFgHxltxyoRxRhIO690cSKUUbo0mgRaRGbWF+PHqv8OadyZk1aCXLt3mFCr6wvfTo4eRqww=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722987475; c=relaxed/simple;
-	bh=pVU0n7ci3F6+UFfQP8dV4uYLwTh32rVMpJkGCk06Uc0=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=LeUX9EBByovN3PXJntzkCMw3sBOC/dsdLeUatm1T1Pg/tcfpsZZvHUPBQFBY/2r+/lhqzhznGxvI23HRFuhGs9g3rJIaAKPdJTdKhBE2KOl/cQBVQwtWjhzw4d/k5RMYzWqsWZXA/qDjUtaNCQIoTWApZMRSZ03DzrXhOmNlZTU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=nGRSrd5Z; arc=none smtp.client-ip=198.175.65.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1722995105; c=relaxed/simple;
+	bh=3WSsm4Kp/4+EDcGgxwGBWaGhseS7A3EVK9Gh7GSaX2Q=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=n+20jAzhvuVFHU7QRAHCGDJx1Ji16oSIBsyQvqyuPCL0Kj3eTwBrMgYtOu90iuIg1xL40lN0H4bcE/ekJbtyfz3T+4CFwpbpxBZdWweiJMXOxAMc4jVl21UtGZynszU/jDweSi5xyocLkuGm8tZoiu2SpS4uhk+Sz6OL21cxFZk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=f+Y0U7kw; arc=none smtp.client-ip=209.85.210.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="nGRSrd5Z"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1722987474; x=1754523474;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=pVU0n7ci3F6+UFfQP8dV4uYLwTh32rVMpJkGCk06Uc0=;
-  b=nGRSrd5ZowMBpEMgDMHbCtLbprSDWRgE5vxp7fWgEQECww9fOnPMShs3
-   l3hUPrQWF9Iqj2td8N+W5Nqk9z5u92dFU4miuB9E1bJvKOpWX200ZaJUg
-   5haMfzpzZVUdZ8csbReFXU2hs3RA3wmw2p0SV02PB+YhynCGmTHXUQEGa
-   gxRkd04e1io+Ijh0Cq/Kr2n5EZvjaSxwrBaIq8/Du7VuDOY/vdMGQfXbu
-   +y8MSMXlSWLerEL3zt2WZirmcwSmnuSczhmstvxOsBNqnxGOXrDYFB6im
-   aNYBVL+j/Vl9kahgjrssdzk1MwAE/+I43izG+oTNjUDvrP0WdAqcDJtb1
-   g==;
-X-CSE-ConnectionGUID: x1uH6xp+T6CyAtbSpT3a4Q==
-X-CSE-MsgGUID: WZ3y5jFnTE+JbXDobiKETw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11156"; a="21179042"
-X-IronPort-AV: E=Sophos;i="6.09,268,1716274800"; 
-   d="scan'208";a="21179042"
-Received: from orviesa004.jf.intel.com ([10.64.159.144])
-  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Aug 2024 16:37:53 -0700
-X-CSE-ConnectionGUID: rvOtBKaZSYe6IZxrgsCYgA==
-X-CSE-MsgGUID: Z7QUpPY8Tp2UJQrmC83HoA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.09,268,1716274800"; 
-   d="scan'208";a="61611107"
-Received: from unknown (HELO b6bf6c95bbab) ([10.239.97.151])
-  by orviesa004.jf.intel.com with ESMTP; 06 Aug 2024 16:37:51 -0700
-Received: from kbuild by b6bf6c95bbab with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1sbTkQ-0004uk-16;
-	Tue, 06 Aug 2024 23:37:47 +0000
-Date: Wed, 7 Aug 2024 07:37:11 +0800
-From: kernel test robot <lkp@intel.com>
-To: Kyle Swenson <kyle.swenson@est.tech>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Linux Memory Management List <linux-mm@kvack.org>,
-	Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Subject: [linux-next:master 2649/3348] drivers/net/pse-pd/tps23881.c:755:6:
- error: call to undeclared function 'FIELD_GET'; ISO C99 and later do not
- support implicit function declarations
-Message-ID: <202408070727.jLebkEWg-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="f+Y0U7kw"
+Received: by mail-pf1-f174.google.com with SMTP id d2e1a72fcca58-70d2ae44790so999362b3a.2
+        for <llvm@lists.linux.dev>; Tue, 06 Aug 2024 18:45:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1722995103; x=1723599903; darn=lists.linux.dev;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=03oYSga+Kz9JzPfPDLq8EGGJLXDN/OEFD/9AE5kPe0E=;
+        b=f+Y0U7kwhS29A+ZTngUrIwgATSLbjZCkmNqVLvlEii7/QytXM8qO5Pzby452Zv4czs
+         dM1KyJTxHU/qtEqLMjFkAVo7By+ToZcvlwhFKLlBoeXTRUsZxAO2JLUrqxw1YJfYK2WF
+         kpDiJOuWC1doA9Patcw6hBuF6aZQS0uXNCmL3ZScZo1D2fMqJBYIGArwuK6BDrgDqG/2
+         atI5sFSGxUNnGYfPj04b49Zl6r/T+WU9vqRvda5GzeqKHhtTWFNlzbOOAJIfr3ip2luI
+         2eSbbV+g5lXcbGY8KVKxg2ntz04P/vMk1uTm2diSnk1Vr6gDIkPToTZXtsmptzKQZ2fP
+         z9Dw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1722995103; x=1723599903;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=03oYSga+Kz9JzPfPDLq8EGGJLXDN/OEFD/9AE5kPe0E=;
+        b=UYG812aq4y6WZvbg6/2Sk4y0Gru+vkOroybEDVxyJd/7GMlPndhkAi6ubH/jCX1N7G
+         a9yO5J9oxs9/y++Vv07HhamPL1QqIm3PTRbjuWUlCeBpZB/O3O269dnyF9UDIPQ1d3f4
+         p3ohS/rMlCmi9dRzV12sHXTbZPFNXFEpFtbful9fG/0jl4ZFJT86ByKobBXUGnq8eLrs
+         iPxtcwRWuUHMRtMh50WGXR/tbeaDS4ghe2URbemKqtPVZOEsy99+JM7n1NSV9Ht5idcT
+         YUcxVprYF7durEzUNl3Ky7rbiwTYbboyZ6P29mCWjBSTADWMImxmOOcohahYik5LCujI
+         M/2A==
+X-Forwarded-Encrypted: i=1; AJvYcCUNPbJ8JG894UjrXv5YdPU3JGSuIECK6YtnZzsEbOkOjTGUP1W3LOsE2cHpPbnLw+oH66ucWCPjYObtfmN7N4stV6jxyw==
+X-Gm-Message-State: AOJu0YyWoEzYx/vOVdmIBF5T6MDkoy1CfGAXx58cWyQ8zgh2kKVeODN7
+	M0GcAfybzQQkvPCIbdx6r0vUhBNBiZLVXGC8KlRovnBnlnwigwuW
+X-Google-Smtp-Source: AGHT+IEvHxOs3NRbPfHJA/oJk7SXQsfTAUR3rLHSpEQScA//qfoTaJLlwkCc0X6grlIg0GMVSEJ4ew==
+X-Received: by 2002:a05:6a00:b8d:b0:70d:244b:cad9 with SMTP id d2e1a72fcca58-7106d047414mr18684493b3a.28.1722995102925;
+        Tue, 06 Aug 2024 18:45:02 -0700 (PDT)
+Received: from [192.168.255.10] ([43.132.141.25])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7106ec0612bsm7537176b3a.41.2024.08.06.18.44.59
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 06 Aug 2024 18:45:02 -0700 (PDT)
+Message-ID: <5c24f18b-dcf7-436e-aba7-0f5c145702b2@gmail.com>
+Date: Wed, 7 Aug 2024 09:44:57 +0800
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-head:   1e391b34f6aa043c7afa40a2103163a0ef06d179
-commit: c4b28e5699d2a789fc9464e7ce89f2a1e9d5085d [2649/3348] net: pse-pd: tps23881: Fix the device ID check
-config: powerpc64-randconfig-001-20240807 (https://download.01.org/0day-ci/archive/20240807/202408070727.jLebkEWg-lkp@intel.com/config)
-compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240807/202408070727.jLebkEWg-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202408070727.jLebkEWg-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> drivers/net/pse-pd/tps23881.c:755:6: error: call to undeclared function 'FIELD_GET'; ISO C99 and later do not support implicit function declarations [-Werror,-Wimplicit-function-declaration]
-           if (FIELD_GET(TPS23881_REG_DEVID_MASK, ret) != TPS23881_DEVICE_ID) {
-               ^
-   1 error generated.
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v4] docs/zh_CN: Add dev-tools/kcsan Chinese translation
+To: Haoyang Liu <tttturtleruss@hust.edu.cn>, si.yanteng@linux.dev,
+ Alex Shi <alexs@kernel.org>, Yanteng Si <siyanteng@loongson.cn>,
+ Jonathan Corbet <corbet@lwn.net>, Nathan Chancellor <nathan@kernel.org>,
+ Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling
+ <morbo@google.com>, Justin Stitt <justinstitt@google.com>
+Cc: hust-os-kernel-patches@googlegroups.com, linux-doc@vger.kernel.org,
+ linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+References: <20240731180916.36617-1-tttturtleruss@hust.edu.cn>
+ <074662fa2977a708d7a9a4545ffad26612514dc2@linux.dev>
+ <b59dbfef-35a9-41e7-b995-655446d503f0@gmail.com>
+ <502bcb7a-83d5-49c8-b2e2-a908900281ee@hust.edu.cn>
+Content-Language: en-US
+From: Alex Shi <seakeel@gmail.com>
+In-Reply-To: <502bcb7a-83d5-49c8-b2e2-a908900281ee@hust.edu.cn>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
 
-vim +/FIELD_GET +755 drivers/net/pse-pd/tps23881.c
 
-   734	
-   735	static int tps23881_i2c_probe(struct i2c_client *client)
-   736	{
-   737		struct device *dev = &client->dev;
-   738		struct tps23881_priv *priv;
-   739		int ret;
-   740		u8 val;
-   741	
-   742		if (!i2c_check_functionality(client->adapter, I2C_FUNC_I2C)) {
-   743			dev_err(dev, "i2c check functionality failed\n");
-   744			return -ENXIO;
-   745		}
-   746	
-   747		priv = devm_kzalloc(dev, sizeof(*priv), GFP_KERNEL);
-   748		if (!priv)
-   749			return -ENOMEM;
-   750	
-   751		ret = i2c_smbus_read_byte_data(client, TPS23881_REG_DEVID);
-   752		if (ret < 0)
-   753			return ret;
-   754	
- > 755		if (FIELD_GET(TPS23881_REG_DEVID_MASK, ret) != TPS23881_DEVICE_ID) {
-   756			dev_err(dev, "Wrong device ID\n");
-   757			return -ENXIO;
-   758		}
-   759	
-   760		ret = tps23881_flash_sram_fw(client);
-   761		if (ret < 0)
-   762			return ret;
-   763	
-   764		ret = i2c_smbus_read_byte_data(client, TPS23881_REG_FWREV);
-   765		if (ret < 0)
-   766			return ret;
-   767	
-   768		dev_info(&client->dev, "Firmware revision 0x%x\n", ret);
-   769	
-   770		/* Set configuration B, 16 bit access on a single device address */
-   771		ret = i2c_smbus_read_byte_data(client, TPS23881_REG_GEN_MASK);
-   772		if (ret < 0)
-   773			return ret;
-   774	
-   775		val = ret | TPS23881_REG_NBITACC;
-   776		ret = i2c_smbus_write_byte_data(client, TPS23881_REG_GEN_MASK, val);
-   777		if (ret)
-   778			return ret;
-   779	
-   780		priv->client = client;
-   781		i2c_set_clientdata(client, priv);
-   782		priv->np = dev->of_node;
-   783	
-   784		priv->pcdev.owner = THIS_MODULE;
-   785		priv->pcdev.ops = &tps23881_ops;
-   786		priv->pcdev.dev = dev;
-   787		priv->pcdev.types = ETHTOOL_PSE_C33;
-   788		priv->pcdev.nr_lines = TPS23881_MAX_CHANS;
-   789		ret = devm_pse_controller_register(dev, &priv->pcdev);
-   790		if (ret) {
-   791			return dev_err_probe(dev, ret,
-   792					     "failed to register PSE controller\n");
-   793		}
-   794	
-   795		return ret;
-   796	}
-   797	
+On 8/6/24 11:24 PM, Haoyang Liu wrote:
+> 
+> 在 2024/8/6 11:19, Alex Shi 写道:
+>> Please don't use HTML format to send emails.
+> OK.
+>> Does this file look great in web browser after 'make htmldocs'?
+> 
+> Yes, I check the output html file and it looks all right.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Great!
+
+Reviewed-by: Alex Shi <alexs@kernel.org>
+
+> 
+> 
+> Thanks,
+> 
+> Haoyang
+> 
+>>
+>> Thanks
+>> Alex
+>>
+>> On 8/6/24 10:20 AM, si.yanteng@linux.dev wrote:
+>>> 2024年8月1日 02:09, "Haoyang Liu" <tttturtleruss@hust.edu.cn> 写到:
+>>>
+>>>
+>>>
+>>>> Translate dev-tools/kcsan commit 31f605a308e6
+>>>>
+>>>> ("kcsan, compiler_types: Introduce __data_racy type qualifier")
+>>>>
+>>>> into Chinese and add it in dev-tools/zh_CN/index.rst
+>>>>
+>>>> Signed-off-by: Haoyang Liu <tttturtleruss@hust.edu.cn>
+>>>>
+>>>> ---
+>>>>
+>>>> v3 -> v4: Added original English text for proper nouns and modified some unclear experessions.
+>>>>
+>>>> v2 -> v3: Revised some sentences based on reviewer's suggestions and updated the KTSAN url.
+>>>>
+>>>> v1 -> v2: Added commit tag and fixed style problems according to reviewer's suggestions.
+>>>>
+>>>>   .../translations/zh_CN/dev-tools/index.rst | 2 +-
+>>>>
+>>>>   .../translations/zh_CN/dev-tools/kcsan.rst | 321 ++++++++++++++++++
+>>>>
+>>>>   2 files changed, 322 insertions(+), 1 deletion(-)
+>>>>
+>>>>   create mode 100644 Documentation/translations/zh_CN/dev-tools/kcsan.rst
+>>>>
+>>>> diff --git a/Documentation/translations/zh_CN/dev-tools/index.rst b/Documentation/translations/zh_CN/dev-tools/index.rst
+>>>>
+>>>> index c540e4a7d5db..6a8c637c0be1 100644
+>>>>
+>>>> --- a/Documentation/translations/zh_CN/dev-tools/index.rst
+>>>>
+>>>> +++ b/Documentation/translations/zh_CN/dev-tools/index.rst
+>>>>
+>>>> @@ -21,6 +21,7 @@ Documentation/translations/zh_CN/dev-tools/testing-overview.rst
+>>>>
+>>>>   testing-overview
+>>>>
+>>>>   sparse
+>>>>
+>>>>   kcov
+>>>>
+>>>> + kcsan
+>>>>
+>>>>   gcov
+>>>>
+>>>>   kasan
+>>>>
+>>>>   ubsan
+>>>>
+>>>> @@ -32,7 +33,6 @@ Todolist:
+>>>>
+>>>>   - checkpatch
+>>>>
+>>>>   - coccinelle
+>>>>
+>>>>   - kmsan
+>>>>
+>>>> - - kcsan
+>>>>
+>>>>   - kfence
+>>>>
+>>>>   - kgdb
+>>>>
+>>>>   - kselftest
+>>>>
+>>>> diff --git a/Documentation/translations/zh_CN/dev-tools/kcsan.rst b/Documentation/translations/zh_CN/dev-tools/kcsan.rst
+>>>>
+>>>> new file mode 100644
+>>>>
+>>>> index 000000000000..39fa43d8c414
+>>>>
+>>>> --- /dev/null
+>>>>
+>>>> +++ b/Documentation/translations/zh_CN/dev-tools/kcsan.rst
+>>>>
+>>>> @@ -0,0 +1,321 @@
+>>>>
+>>>> +.. SPDX-License-Identifier: GPL-2.0
+>>>>
+>>>> +
+>>>>
+>>>> +.. include:: ../disclaimer-zh_CN.rst
+>>>>
+>>>> +
+>>>>
+>>>> +:Original: Documentation/dev-tools/kcsan.rst
+>>>>
+>>>> +:Translator: 刘浩阳 Haoyang Liu <tttturtleruss@hust.edu.cn>
+>>>>
+>>>> +
+>>>>
+>>>> +内核并发消毒剂(KCSAN)
+>>>>
+>>>> +=====================
+>>>>
+>>>> +
+>>>>
+>>>> +内核并发消毒剂（KCSAN）是一个动态竞争检测器，依赖编译时插桩，并且使用基于观察
+>>>>
+>>>> +点的采样方法来检测竞争。KCSAN 的主要目的是检测 `数据竞争`_。
+>>>>
+>>>> +
+>>>>
+>>>> +使用
+>>>>
+>>>> +----
+>>>>
+>>>> +
+>>>>
+>>>> +KCSAN 受 GCC 和 Clang 支持。使用 GCC 需要版本 11 或更高，使用 Clang 也需要
+>>>>
+>>>> +版本 11 或更高。
+>>>>
+>>>> +
+>>>>
+>>>> +为了启用 KCSAN，用如下参数配置内核::
+>>>>
+>>>> +
+>>>>
+>>>> + CONFIG_KCSAN = y
+>>>>
+>>>> +
+>>>>
+>>>> +KCSAN 提供了几个其他的配置选项来自定义行为（见 ``lib/Kconfig.kcsan`` 中的各自的
+>>>>
+>>>> +帮助文档以获取更多信息）。
+>>>>
+>>>> +
+>>>>
+>>>> +错误报告
+>>>>
+>>>> +~~~~~~~~
+>>>>
+>>>> +
+>>>>
+>>>> +一个典型数据竞争的报告如下所示::
+>>>>
+>>>> +
+>>>>
+>>>> + ==================================================================
+>>>>
+>>>> + BUG: KCSAN: data-race in test_kernel_read / test_kernel_write
+>>>>
+>>>> +
+>>>>
+>>>> + write to 0xffffffffc009a628 of 8 bytes by task 487 on cpu 0:
+>>>>
+>>>> + test_kernel_write+0x1d/0x30
+>>>>
+>>>> + access_thread+0x89/0xd0
+>>>>
+>>>> + kthread+0x23e/0x260
+>>>>
+>>>> + ret_from_fork+0x22/0x30
+>>>>
+>>>> +
+>>>>
+>>>> + read to 0xffffffffc009a628 of 8 bytes by task 488 on cpu 6:
+>>>>
+>>>> + test_kernel_read+0x10/0x20
+>>>>
+>>>> + access_thread+0x89/0xd0
+>>>>
+>>>> + kthread+0x23e/0x260
+>>>>
+>>>> + ret_from_fork+0x22/0x30
+>>>>
+>>>> +
+>>>>
+>>>> + value changed: 0x00000000000009a6 -> 0x00000000000009b2
+>>>>
+>>>> +
+>>>>
+>>>> + Reported by Kernel Concurrency Sanitizer on:
+>>>>
+>>>> + CPU: 6 PID: 488 Comm: access_thread Not tainted 5.12.0-rc2+ #1
+>>>>
+>>>> + Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.14.0-2 04/01/2014
+>>>>
+>>>> + ==================================================================
+>>>>
+>>>> +
+>>>>
+>>>> +报告的头部提供了一个关于竞争中涉及到的函数的简短总结。随后是竞争中的两个线程的
+>>>>
+>>>> +访问类型和堆栈信息。如果 KCSAN 发现了一个值的变化，那么那个值的旧值和新值会在
+>>>>
+>>>> +“value changed”这一行单独显示。
+>>>>
+>>>> +
+>>>>
+>>>> +另一个不太常见的数据竞争类型的报告如下所示::
+>>>>
+>>>> +
+>>>>
+>>>> + ==================================================================
+>>>>
+>>>> + BUG: KCSAN: data-race in test_kernel_rmw_array+0x71/0xd0
+>>>>
+>>>> +
+>>>>
+>>>> + race at unknown origin, with read to 0xffffffffc009bdb0 of 8 bytes by task 515 on cpu 2:
+>>>>
+>>>> + test_kernel_rmw_array+0x71/0xd0
+>>>>
+>>>> + access_thread+0x89/0xd0
+>>>>
+>>>> + kthread+0x23e/0x260
+>>>>
+>>>> + ret_from_fork+0x22/0x30
+>>>>
+>>>> +
+>>>>
+>>>> + value changed: 0x0000000000002328 -> 0x0000000000002329
+>>>>
+>>>> +
+>>>>
+>>>> + Reported by Kernel Concurrency Sanitizer on:
+>>>>
+>>>> + CPU: 2 PID: 515 Comm: access_thread Not tainted 5.12.0-rc2+ #1
+>>>>
+>>>> + Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.14.0-2 04/01/2014
+>>>>
+>>>> + ==================================================================
+>>>>
+>>>> +
+>>>>
+>>>> +这个报告是当另一个竞争线程不可能被发现，但是可以从观测的内存地址的值改变而推断
+>>>>
+>>>> +出来的时候生成的。这类报告总是会带有“value changed”行。这类报告的出现通常是因
+>>>>
+>>>> +为在竞争线程中缺少插桩，也可能是因为其他原因，比如 DMA 访问。这类报告只会在
+>>>>
+>>>> +设置了内核参数 ``CONFIG_KCSAN_REPORT_RACE_UNKNOWN_ORIGIN=y`` 时才会出现，而这
+>>>>
+>>>> +个参数是默认启用的。
+>>>>
+>>>> +
+>>>>
+>>>> +选择性分析
+>>>>
+>>>> +~~~~~~~~~~
+>>>>
+>>>> +
+>>>>
+>>>> +对于一些特定的访问，函数，编译单元或者整个子系统，可能需要禁用数据竞争检测。
+>>>>
+>>>> +对于静态黑名单，有如下可用的参数：
+>>>>
+>>>> +
+>>>>
+>>>> +* KCSAN 支持使用 ``data_race(expr)`` 注解，这个注解告诉 KCSAN 任何由访问
+>>>>
+>>>> + ``expr`` 所引起的数据竞争都应该被忽略，其产生的行为后果被认为是安全的。请查阅
+>>>>
+>>>> + `"Marking Shared-Memory Accesses" in the LKMM`_ 获得更多信息。
+>>>>
+>>>> +
+>>>>
+>>>> +* 与 ``data_race(...)`` 相似，可以使用类型限定符 ``__data_racy`` 来标记一个变量
+>>>>
+>>>> + ，所有访问该变量而导致的数据竞争都是故意为之并且应该被 KCSAN 忽略::
+>>>>
+>>>> +
+>>>>
+>>>> + struct foo {
+>>>>
+>>>> + ...
+>>>>
+>>>> + int __data_racy stats_counter;
+>>>>
+>>>> + ...
+>>>>
+>>>> + };
+>>>>
+>>>> +
+>>>>
+>>>> +* 使用函数属性 ``__no_kcsan`` 可以对整个函数禁用数据竞争检测::
+>>>>
+>>>> +
+>>>>
+>>>> + __no_kcsan
+>>>>
+>>>> + void foo(void) {
+>>>>
+>>>> + ...
+>>>>
+>>>> +
+>>>>
+>>>> + 为了动态限制该为哪些函数生成报告，查阅 `Debug 文件系统接口`_ 黑名单/白名单特性。
+>>>>
+>>>> +
+>>>>
+>>>> +* 为特定的编译单元禁用数据竞争检测，将下列参数加入到 ``Makefile`` 中::
+>>>>
+>>>> +
+>>>>
+>>>> + KCSAN_SANITIZE_file.o := n
+>>>>
+>>>> +
+>>>>
+>>>> +* 为 ``Makefile`` 中的所有编译单元禁用数据竞争检测，将下列参数添加到相应的
+>>>>
+>>>> + ``Makefile`` 中::
+>>>>
+>>>> +
+>>>>
+>>>> + KCSAN_SANITIZE := n
+>>>>
+>>>> +
+>>>>
+>>>> +.. _"Marking Shared-Memory Accesses" in the LKMM: https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/tools/memory-model/Documentation/access-marking.txt
+>>>>
+>>>> +
+>>>>
+>>>> +此外，KCSAN 可以根据偏好设置显示或隐藏整个类别的数据竞争。可以使用如下
+>>>>
+>>>> +Kconfig 参数进行更改:
+>>>>
+>>>> +
+>>>>
+>>>> +* ``CONFIG_KCSAN_REPORT_VALUE_CHANGE_ONLY``: 如果启用了该参数并且通过观测点
+>>>>
+>>>> + (watchpoint) 观测到一个有冲突的写操作，但是对应的内存地址中存储的值没有改变，
+>>>>
+>>>> + 则不会报告这起数据竞争。
+>>>>
+>>>> +
+>>>>
+>>>> +* ``CONFIG_KCSAN_ASSUME_PLAIN_WRITES_ATOMIC``: 假设默认情况下，不超过字大小的简
+>>>>
+>>>> + 单对齐写入操作是原子的。假设这些写入操作不会受到不安全的编译器优化影响，从而导
+>>>>
+>>>> + 致数据竞争。该选项使 KCSAN 不报告仅由不超过字大小的简单对齐写入操作引起
+>>>>
+>>>> + 的冲突所导致的数据竞争。
+>>>>
+>>>> +
+>>>>
+>>>> +* ``CONFIG_KCSAN_PERMISSIVE``: 启用额外的宽松规则来忽略某些常见类型的数据竞争。
+>>>>
+>>>> + 与上面的规则不同，这条规则更加复杂，涉及到值改变模式，访问类型和地址。这个
+>>>>
+>>>> + 选项依赖编译选项 ``CONFIG_KCSAN_REPORT_VALUE_CHANGE_ONLY=y``。请查看
+>>>>
+>>>> + ``kernel/kcsan/permissive.h`` 获取更多细节。对于只侧重于特定子系统而不是整个
+>>>>
+>>>> + 内核报告的测试者和维护者，建议禁用该选项。
+>>>>
+>>>> +
+>>>>
+>>>> +要使用尽可能严格的规则，选择 ``CONFIG_KCSAN_STRICT=y``，这将配置 KCSAN 尽可
+>>>>
+>>>> +能紧密地遵循 Linux 内核内存一致性模型（LKMM）。
+>>>>
+>>>> +
+>>>>
+>>>> +Debug 文件系统接口
+>>>>
+>>>> +~~~~~~~~~~~~~~~~~~
+>>>>
+>>>> +
+>>>>
+>>>> +文件 ``/sys/kernel/debug/kcsan`` 提供了如下接口：
+>>>>
+>>>> +
+>>>>
+>>>> +* 读 ``/sys/kernel/debug/kcsan`` 返回不同的运行时统计数据。
+>>>>
+>>>> +
+>>>>
+>>>> +* 将 ``on`` 或 ``off`` 写入 ``/sys/kernel/debug/kcsan`` 允许打开或关闭 KCSAN。
+>>>>
+>>>> +
+>>>>
+>>>> +* 将 ``!some_func_name`` 写入 ``/sys/kernel/debug/kcsan`` 会将
+>>>>
+>>>> + ``some_func_name`` 添加到报告过滤列表中，该列表（默认）会将数据竞争报告中的顶
+>>>>
+>>>> + 层堆栈帧是列表中函数的情况列入黑名单。
+>>>>
+>>>> +
+>>>>
+>>>> +* 将 ``blacklist`` 或 ``whitelist`` 写入 ``/sys/kernel/debug/kcsan`` 会改变报告
+>>>>
+>>>> + 过滤行为。例如，黑名单的特性可以用来过滤掉经常发生的数据竞争。白名单特性可以帮
+>>>>
+>>>> + 助复现和修复测试。
+>>>>
+>>>> +
+>>>>
+>>>> +性能调优
+>>>>
+>>>> +~~~~~~~~
+>>>>
+>>>> +
+>>>>
+>>>> +影响 KCSAN 整体的性能和 bug 检测能力的核心参数是作为内核命令行参数公开的，其默认
+>>>>
+>>>> +值也可以通过相应的 Kconfig 选项更改。
+>>>>
+>>>> +
+>>>>
+>>>> +* ``kcsan.skip_watch`` (``CONFIG_KCSAN_SKIP_WATCH``): 在另一个观测点设置之前每
+>>>>
+>>>> + 个 CPU 要跳过的内存操作次数。更加频繁的设置观测点将增加观察到竞争情况的可能性
+>>>>
+>>>> + 。这个参数对系统整体的性能和竞争检测能力影响最显著。
+>>>>
+>>>> +
+>>>>
+>>>> +* ``kcsan.udelay_task`` (``CONFIG_KCSAN_UDELAY_TASK``): 对于任务，观测点设置之
+>>>>
+>>>> + 后暂停执行的微秒延迟。值越大，检测到竞争情况的可能性越高。
+>>>>
+>>>> +
+>>>>
+>>>> +* ``kcsan.udelay_interrupt`` (``CONFIG_KCSAN_UDELAY_INTERRUPT``): 对于中断，
+>>>>
+>>>> + 观测点设置之后暂停执行的微秒延迟。中断对于延迟的要求更加严格，其延迟通常应该小
+>>>>
+>>>> + 于为任务选择的延迟。
+>>>>
+>>>> +
+>>>>
+>>>> +它们可以通过 ``/sys/module/kcsan/parameters/`` 在运行时进行调整。
+>>>>
+>>>> +
+>>>>
+>>>> +数据竞争
+>>>>
+>>>> +--------
+>>>>
+>>>> +
+>>>>
+>>>> +在一次执行中，如果两个内存访问存在 *冲突*，在不同的线程中并发执行，并且至少
+>>>>
+>>>> +有一个访问是 *简单访问*，则它们就形成了 *数据竞争*。如果它们访问了同一个内存地址并且
+>>>>
+>>>> +至少有一个是写操作，则称它们存在 *冲突*。有关更详细的讨论和定义，见
+>>>> +`"Plain Accesses and Data Races" in the LKMM`_。
+>>>>
+>>>> +
+>>>>
+>>>> +.. _"Plain Accesses and Data Races" in the LKMM:
+>>> Sorry for the delay for so long, how about
+>>> translating it into Chinese as well?
+>>>  
+>>>
+>>> Thanks,
+>>> Yanteng
+> 
