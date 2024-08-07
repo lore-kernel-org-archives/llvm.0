@@ -1,192 +1,139 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
+Received: from fout5-smtp.messagingengine.com (fout5-smtp.messagingengine.com [103.168.172.148])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 44F9E18D640
-	for <llvm@lists.linux.dev>; Wed,  7 Aug 2024 08:37:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A08B51C9ED2
+	for <llvm@lists.linux.dev>; Wed,  7 Aug 2024 08:47:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.148
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723019863; cv=none; b=Bee4ON2ckP2dIeUs5h1gUDWcsQEztxqQNR7VVqSDMiAeA8YDaAU96kXLiLRCuVgMUxu+t2NfXkTZEN5MNFb2VXnsxBY/aWoZpxPvMNtVwlYhLzeBfR+2plBaKr2H/m+JpOMPrXSTR0QHgR2bNcs2ZyadA+4ikqsaUoBTvsru24k=
+	t=1723020477; cv=none; b=k8769VljREpr2HPI9OAxDqBMt/LKgiUqYKwmeVRottNbkgJo6mFUPcLJxPUWtq49ws5oMXE744petkLy2bb23Ma29pLx+xmZ+Eabbqj459Hg11t81gYcvb4rtjnnggcCMOAOx/AaSGswhnqyfLOumevGYJOxuWZpAdAdAGlSUJE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723019863; c=relaxed/simple;
-	bh=Ym4OPXtKdhKHOTqeu78sJOTOFNAnj/r5Rrje4PmiUa4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=b5xnFenbLML3+7jRHy4jLHlZWVd5jevrqfUIuKzmP6zo05BendTRg+3Jqob3uqv2pgu0uadyxsDUbC0p2XdWDoUGm2yJdBxZcAFty7SFxTnx0aKpHxAKzwhy61ftgOs0/G9dk/ZzoUvXIYoN1+yRRHfc+zIAlJ9hgX5XoNQRN+g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=PBxyLdto; arc=none smtp.client-ip=192.198.163.8
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+	s=arc-20240116; t=1723020477; c=relaxed/simple;
+	bh=D/4g9iSpdCu9/6X1854okWB4SvxpMW9c9SdjmIf3uLo=;
+	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
+	 Subject:Content-Type; b=gmoMKz9qra41NqF17LKuk7L+2rHTxHbyillIV4fX/hV9O2XsxVa9GnCW5aD3DixIat9TbmVaFMuNnPfHkn9p1vnQo7D9iEnxDah3paeLrEd9ZFQr92f83mXRaR48x2gP2eTgLebnnNRIAUrUJRC+mwo/Btgm0ScRXuQ5SCnUoYU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=mt1ISLtg; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=MWKyLLBt; arc=none smtp.client-ip=103.168.172.148
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="PBxyLdto"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1723019862; x=1754555862;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=Ym4OPXtKdhKHOTqeu78sJOTOFNAnj/r5Rrje4PmiUa4=;
-  b=PBxyLdtoLPHCv0PZ8bN390XpWvwi81ocz4E7sfvEy1Ne7zxZkRmUCeVy
-   y8Z9COGrZsNOa6i1OmdK+7iU+4gkRSQXh2KlugpAZxSDsNFeBw5QDBmqN
-   B27MC/O21eDZrKTav9F2gxhS/0P82lIXm/VhXMLuNdSvzrqhYz1+EK3oF
-   wHDeULDjZ9Xzcx6eUAYBsTZpkoh++uDYwoW0/ylNSs0NjTPhho4b4Q5k1
-   BLZ3zBpzllY4RZxbWDi9gHitdJnI01Rg0pOtDrJ+tqOgm/KFbuD2NDWUK
-   jCYkX20IoaKaRXHdz9LJIcmZ7bEsy/3UuyxFnk8HWeeYhUY2g+32UtBnS
-   A==;
-X-CSE-ConnectionGUID: pd/ESQtSRCOmasuvC6SChA==
-X-CSE-MsgGUID: fnnCtjx/Q66mI0KzSEs91A==
-X-IronPort-AV: E=McAfee;i="6700,10204,11156"; a="38586015"
-X-IronPort-AV: E=Sophos;i="6.09,269,1716274800"; 
-   d="scan'208";a="38586015"
-Received: from orviesa007.jf.intel.com ([10.64.159.147])
-  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Aug 2024 01:37:41 -0700
-X-CSE-ConnectionGUID: sUAmBQVmTL66Lo8BUjrCDQ==
-X-CSE-MsgGUID: TA0z/V6BRsKxsWNQzy/bTg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.09,269,1716274800"; 
-   d="scan'208";a="57330741"
-Received: from fdefranc-mobl3.ger.corp.intel.com (HELO [10.245.246.75]) ([10.245.246.75])
-  by orviesa007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Aug 2024 01:37:35 -0700
-Message-ID: <250c63d7-d81e-49ea-ac8f-2e3496075f20@linux.intel.com>
-Date: Wed, 7 Aug 2024 10:37:31 +0200
+	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="mt1ISLtg";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="MWKyLLBt"
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+	by mailfout.nyi.internal (Postfix) with ESMTP id BB9F5138FCCB;
+	Wed,  7 Aug 2024 04:47:54 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute4.internal (MEProxy); Wed, 07 Aug 2024 04:47:54 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm2; t=1723020474;
+	 x=1723106874; bh=8cdJSPVUAdCYHD4i9n6JllUQ32KC29sx+ZdNKg4EM2Q=; b=
+	mt1ISLtgJ4wPrVpN8XOSY6V2fc7T6NL6YDE28T+dgv6vXmLuLOJcU5pz4woOUb3e
+	ReAGYhEeIVSshGhHWA8im6UczAR20Yy0qsW396qqDYQ1iEq887CcCjf2h2nUqhNh
+	fI6WzUvbA3RTvKZhpeQVIuYn/rjW8dicjN6F2MSpIphADJRDpv1qI64P5rUt42dj
+	WBpdiL+jiQrS8f65MKmhcxCjld4NfGxCwp9RrMhzRkrPv4ChWQH2kRiqR9Il9IxW
+	Nn5BxJhaJuSe9PbDTu4zLZI17axf+uSxYClqL9OgD8bQ2uhEM4mOjY4lA8m7P5Fy
+	P34cR+Q6iPmQUY2ndccOJA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1723020474; x=
+	1723106874; bh=8cdJSPVUAdCYHD4i9n6JllUQ32KC29sx+ZdNKg4EM2Q=; b=M
+	WKyLLBtl8lMsgJgcxKinlxOEhOA/emue/bwI8nkTo4b6++1Zsj+oBAzZAj6ghV6Q
+	+Cq4UyDgJyz3m99EwTF+TAga2FlY0XJqG75hZ8AYwR2meRV2S3D0FtEs9nL3aNbz
+	RS2JWWnxhHHyPTPaRlu1Y8MONGmFM3mh+1tCKWM8+hFZRmKx5pJmkug3Ap00hhpr
+	FXwZmmTstnOnGdiJInx79jS33NBXp1hWUq60loFHrkWTHKHU9W9RiliHMNkXzum8
+	ea40B36uDsS7CYUZQoIXcxVOHDoydNQ/2bP9vH4uqij3sO0kR6c1AQ8pM61BhpbC
+	662+4+Lkj92YFArgGMEJw==
+X-ME-Sender: <xms:ujSzZkbyLShVvafvELKLrQJ8LU_Il43rjUcyQ13XW2yH1i1xFYSRqw>
+    <xme:ujSzZvYnubeJ9o-xkvo0uhyxKJjcZ98jAwjzHsUSKFlNCCFJ5FEAl-5_dkkL81CJ9
+    d-grAHgLTjVYzTAhBk>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeftddrledtgddtkecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpefoggffhffvvefkjghfufgtgfesthejredtredttdenucfhrhhomhepfdetrhhn
+    ugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrghtth
+    gvrhhnpefhtdfhvddtfeehudekteeggffghfejgeegteefgffgvedugeduveelvdekhfdv
+    ieenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrh
+    hnugesrghrnhgusgdruggvpdhnsggprhgtphhtthhopedt
+X-ME-Proxy: <xmx:ujSzZu9f5bXwwafSDSWl3osS70qcTCiNjITSjd91_Nf3Ljy0vS4hEA>
+    <xmx:ujSzZur-EX7Rkrt8W-SjNq_hXfdncDFDBoARU450Dgwqwl4egT2n1g>
+    <xmx:ujSzZvqJqwBhjuDoGEr1U3QeEf9P8ccTsFNl8vEkZw-N9GxZPXd4cQ>
+    <xmx:ujSzZsT3XubuL_13vJq_7MV2WtO1wisvJieE0MkuvI2pEHbk1dCEug>
+    <xmx:ujSzZrowJb6m6X8hk1pnkU-pyGTzSCwheNommCjWwymBfNHN60yugiKS>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+	id 17D47B6008D; Wed,  7 Aug 2024 04:47:53 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] sound: sof: ioc4-topology: avoid extra dai_params copy
-To: Arnd Bergmann <arnd@kernel.org>, Liam Girdwood <lgirdwood@gmail.com>,
- Peter Ujfalusi <peter.ujfalusi@linux.intel.com>,
- Bard Liao <yung-chuan.liao@linux.intel.com>,
- Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
- Daniel Baluta <daniel.baluta@nxp.com>,
- Seppo Ingalsuo <seppo.ingalsuo@linux.intel.com>
-Cc: Arnd Bergmann <arnd@arndb.de>, Kai Vehmanen
- <kai.vehmanen@linux.intel.com>, Mark Brown <broonie@kernel.org>,
- Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
- Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling
- <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
- Brent Lu <brent.lu@intel.com>, sound-open-firmware@alsa-project.org,
+Date: Wed, 07 Aug 2024 10:47:28 +0200
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "Pierre-Louis Bossart" <pierre-louis.bossart@linux.intel.com>,
+ "Arnd Bergmann" <arnd@kernel.org>, "Liam Girdwood" <lgirdwood@gmail.com>,
+ "Peter Ujfalusi" <peter.ujfalusi@linux.intel.com>,
+ "Bard Liao" <yung-chuan.liao@linux.intel.com>,
+ "Ranjani Sridharan" <ranjani.sridharan@linux.intel.com>,
+ "Daniel Baluta" <daniel.baluta@nxp.com>,
+ "Seppo Ingalsuo" <seppo.ingalsuo@linux.intel.com>
+Cc: "Kai Vehmanen" <kai.vehmanen@linux.intel.com>,
+ "Mark Brown" <broonie@kernel.org>, "Jaroslav Kysela" <perex@perex.cz>,
+ "Takashi Iwai" <tiwai@suse.com>, "Nathan Chancellor" <nathan@kernel.org>,
+ "Nick Desaulniers" <ndesaulniers@google.com>,
+ "Bill Wendling" <morbo@google.com>, "Justin Stitt" <justinstitt@google.com>,
+ "Brent Lu" <brent.lu@intel.com>, sound-open-firmware@alsa-project.org,
  linux-sound@vger.kernel.org, linux-kernel@vger.kernel.org,
  llvm@lists.linux.dev
+Message-Id: <b821f357-8a11-4814-8ae0-e0e8d8cd4afb@app.fastmail.com>
+In-Reply-To: <250c63d7-d81e-49ea-ac8f-2e3496075f20@linux.intel.com>
 References: <20240807080302.2372297-1-arnd@kernel.org>
-Content-Language: en-US
-From: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-In-Reply-To: <20240807080302.2372297-1-arnd@kernel.org>
-Content-Type: text/plain; charset=UTF-8
+ <250c63d7-d81e-49ea-ac8f-2e3496075f20@linux.intel.com>
+Subject: Re: [PATCH] sound: sof: ioc4-topology: avoid extra dai_params copy
+Content-Type: text/plain
 Content-Transfer-Encoding: 7bit
 
+On Wed, Aug 7, 2024, at 10:37, Pierre-Louis Bossart wrote:
+> On 8/7/24 10:02, Arnd Bergmann wrote:
+>> From: Arnd Bergmann <arnd@arndb.de>
+>> 
+>> The snd_pcm_hw_params structure is really too large to fit on the
+>> stack. Because of the way that clang inlines functions, it ends up
+>> twice in one function, which exceeds the 1024 byte limit for 32-bit
+>> architecutes:
+>> 
+>> sound/soc/sof/ipc4-topology.c:1700:1: error: stack frame size (1304) exceeds limit (1024) in 'sof_ipc4_prepare_copier_module' [-Werror,-Wframe-larger-than]
+>> sof_ipc4_prepare_copier_module(struct snd_sof_widget *swidget,
+>> 
+>>>From what I can tell, this was unintentional, as both
+>> sof_ipc4_prepare_dai_copier() and sof_ipc4_prepare_copier_module() make a
+>> copy for the same purpose, but copying it once has the exact same effect.
+>
+> Humm, not sure. I think the copy was intentional so that if one of the
+> fixups fails, then the initial hw_params structure is not modified.
 
+It's clear that one of the two copies was intentional, however
+the same logic exists in the caller, which passes the copied
+ref_params into sof_ipc4_prepare_dai_copier() instead of the live
+'fe_params'. If sof_ipc4_prepare_dai_copier() fails, the copy
+is discarded by returning the error, and otherwise it gets
+passed on to sof_ipc4_init_input_audio_fmt().
 
-On 8/7/24 10:02, Arnd Bergmann wrote:
-> From: Arnd Bergmann <arnd@arndb.de>
-> 
-> The snd_pcm_hw_params structure is really too large to fit on the
-> stack. Because of the way that clang inlines functions, it ends up
-> twice in one function, which exceeds the 1024 byte limit for 32-bit
-> architecutes:
-> 
-> sound/soc/sof/ipc4-topology.c:1700:1: error: stack frame size (1304) exceeds limit (1024) in 'sof_ipc4_prepare_copier_module' [-Werror,-Wframe-larger-than]
-> sof_ipc4_prepare_copier_module(struct snd_sof_widget *swidget,
-> 
->>From what I can tell, this was unintentional, as both
-> sof_ipc4_prepare_dai_copier() and sof_ipc4_prepare_copier_module() make a
-> copy for the same purpose, but copying it once has the exact same effect.
+> Also not sure why a compiler would think inlining such a large function
+> is a good idea?
 
-Humm, not sure. I think the copy was intentional so that if one of the
-fixups fails, then the initial hw_params structure is not modified.
+I think clang prefers to inline large functions in order to better
+do larger scale optimizations. gcc starts by inlining small leaf
+functions and doesn't get to this one.
 
-Also not sure why a compiler would think inlining such a large function
-is a good idea?
+Note that the actual problem of having two giant structures on the
+stack does not change through inlining, the risk of overflowing
+the 8kb thread stack and the cost of maintaining these variables
+is the same. The only difference is that clang triggers the warning
+because it sees the total stack size where gcc doesn't see it.
 
-Probably need Ranjani, Peter and Bard to comment on the format handling.
-
-
-> Remove the extra copy and change the direct struct assignment to
-> an explicit memcpy() call to make it clearer to the reader that this
-> is what happens. Note that gcc treats struct assignment as a memcpy()
-> that may be inlined anyway, so the resulting object code is the same.
-> 
-> Fixes: f9209644ae76 ("ASoC: SOF: ipc4-topology: Correct DAI copier config and NHLT blob request")
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-> ---
->  sound/soc/sof/ipc4-topology.c | 19 +++++++------------
->  1 file changed, 7 insertions(+), 12 deletions(-)
-> 
-> diff --git a/sound/soc/sof/ipc4-topology.c b/sound/soc/sof/ipc4-topology.c
-> index 87be7f16e8c2..77f6850010f6 100644
-> --- a/sound/soc/sof/ipc4-topology.c
-> +++ b/sound/soc/sof/ipc4-topology.c
-> @@ -1651,7 +1651,6 @@ sof_ipc4_prepare_dai_copier(struct snd_sof_dev *sdev, struct snd_sof_dai *dai,
->  			    struct snd_pcm_hw_params *params, int dir)
->  {
->  	struct sof_ipc4_available_audio_format *available_fmt;
-> -	struct snd_pcm_hw_params dai_params = *params;
->  	struct sof_ipc4_copier_data *copier_data;
->  	struct sof_ipc4_pin_format *pin_fmts;
->  	struct sof_ipc4_copier *ipc4_copier;
-> @@ -1676,7 +1675,7 @@ sof_ipc4_prepare_dai_copier(struct snd_sof_dev *sdev, struct snd_sof_dai *dai,
->  		num_pin_fmts = available_fmt->num_input_formats;
->  	}
->  
-> -	ret = sof_ipc4_adjust_params_to_dai_format(sdev, &dai_params, pin_fmts,
-> +	ret = sof_ipc4_adjust_params_to_dai_format(sdev, params, pin_fmts,
->  						   num_pin_fmts);
->  	if (ret)
->  		return ret;
-> @@ -1684,15 +1683,11 @@ sof_ipc4_prepare_dai_copier(struct snd_sof_dev *sdev, struct snd_sof_dai *dai,
->  	single_bitdepth = sof_ipc4_copier_is_single_bitdepth(sdev, pin_fmts,
->  							     num_pin_fmts);
->  	ret = snd_sof_get_nhlt_endpoint_data(sdev, dai, single_bitdepth,
-> -					     &dai_params,
-> +					     params,
->  					     ipc4_copier->dai_index,
->  					     ipc4_copier->dai_type, dir,
->  					     &ipc4_copier->copier_config,
->  					     &copier_data->gtw_cfg.config_length);
-> -	/* Update the params to reflect the changes made in this function */
-> -	if (!ret)
-> -		*params = dai_params;
-> -
->  	return ret;
->  }
->  
-> @@ -1784,9 +1779,9 @@ sof_ipc4_prepare_copier_module(struct snd_sof_widget *swidget,
->  		 * for capture.
->  		 */
->  		if (dir == SNDRV_PCM_STREAM_PLAYBACK)
-> -			ref_params = *fe_params;
-> +			memcpy(&ref_params, fe_params, sizeof(ref_params));
->  		else
-> -			ref_params = *pipeline_params;
-> +			memcpy(&ref_params, pipeline_params, sizeof(ref_params));
->  
->  		copier_data->gtw_cfg.node_id &= ~SOF_IPC4_NODE_INDEX_MASK;
->  		copier_data->gtw_cfg.node_id |=
-> @@ -1819,7 +1814,7 @@ sof_ipc4_prepare_copier_module(struct snd_sof_widget *swidget,
->  		 * In case of capture the ref_params returned will be used to
->  		 * find the input configuration of the copier.
->  		 */
-> -		ref_params = *fe_params;
-> +		memcpy(&ref_params, fe_params, sizeof(ref_params));
->  		ret = sof_ipc4_prepare_dai_copier(sdev, dai, &ref_params, dir);
->  		if (ret < 0)
->  			return ret;
-> @@ -1829,7 +1824,7 @@ sof_ipc4_prepare_copier_module(struct snd_sof_widget *swidget,
->  		 * input configuration of the copier.
->  		 */
->  		if (dir == SNDRV_PCM_STREAM_PLAYBACK)
-> -			ref_params = *pipeline_params;
-> +			memcpy(&ref_params, pipeline_params, sizeof(ref_params));
->  
->  		break;
->  	}
-> @@ -1838,7 +1833,7 @@ sof_ipc4_prepare_copier_module(struct snd_sof_widget *swidget,
->  		ipc4_copier = (struct sof_ipc4_copier *)swidget->private;
->  		copier_data = &ipc4_copier->data;
->  		available_fmt = &ipc4_copier->available_fmt;
-> -		ref_params = *pipeline_params;
-> +		memcpy(&ref_params, pipeline_params, sizeof(ref_params));
->  
->  		break;
->  	}
-
+    Arnd
