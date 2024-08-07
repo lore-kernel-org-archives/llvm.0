@@ -1,117 +1,150 @@
-Received: from mail-pf1-f172.google.com (mail-pf1-f172.google.com [209.85.210.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 04CA51B32A8
-	for <llvm@lists.linux.dev>; Wed,  7 Aug 2024 06:26:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EBF90144D29;
+	Wed,  7 Aug 2024 07:37:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723012000; cv=none; b=qtCBlkTGYaC5o0s3kWyYe9QZctn0JHtXyu+z3S3mQg+54M8W3jo8T899MBPzfXb14wT0MuPhtuQlJWxILysbPHLWwOYZ/1VCTr7y2ITLe2WVXM7p8hoM5CdQDkZsi5jC6yvyWXXqX9MFoAPpVe11nme559YQBupfJHb64sQHXPY=
+	t=1723016278; cv=none; b=RlzAzIUHZeeNJwp4qJnfG+vb1hdpROMlN0ScVmRUS8q01jaoQBfOIliCqx7UaQ6TOuvoMXFsjqCPYKwPkonU1ZzQ+KLLzufTPDZ+gzAz5dyNOOrtlPNmQSRTaXD75UgEMSn2AhXkU4ok7EIMdNI+Y4Itfsk8KjOr0EKNyfx5wT8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723012000; c=relaxed/simple;
-	bh=SmflkcuMDJIW8naPbm/v9DBM5XF4zog+gRlw/8dQf7w=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=gW/uJCugUwGO52OYduTK23IWwqlD+nfT9IJamIX7d3zANIICqJl/owVFlPnk1YL4tKr7/9hzNMLH9HxwkODI0ddg7ZhbDMQRzomI1WW1naA6G5gGrEdm6igGxYqQVsHJjuWz5NVCFm92VAOWUqJxJ0eg56RGjOkBB0hHpgNmYeQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=K+YX0VAG; arc=none smtp.client-ip=209.85.210.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+	s=arc-20240116; t=1723016278; c=relaxed/simple;
+	bh=EZ777pVRETbbSscsu0Pck2kieW2om42eY7YHGyrVbew=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=oNpCe2atgQ7PCKLNF4pJkUsn03uRgzZF9MQFRCZ1MiQV+A/i1mPjCRHen+r18j8p/3GE5UtErIdcFFumX4KUuKl+3LrfXwo5AbiCeqr4QrQN5GC2clEf780CCVPdOkir5L8vmvWVU++sNVg6iv0GOFqRpjBNPWF3MhJyUTCds4c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=O+mAjYTW; arc=none smtp.client-ip=192.198.163.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="K+YX0VAG"
-Received: by mail-pf1-f172.google.com with SMTP id d2e1a72fcca58-7107b16be12so1148235b3a.3
-        for <llvm@lists.linux.dev>; Tue, 06 Aug 2024 23:26:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1723011997; x=1723616797; darn=lists.linux.dev;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=Xgv4Lz4y4hdpusu1y11h6gCcVe+Xzav2jc2y5Yt+/PU=;
-        b=K+YX0VAGQ6LOjkS2ygdbaAL1wWPIMGVTlAt29GE9i5YixsvVi0Wc3GDSCK0Io4m93I
-         I3Qij0dJDEU5gsTzmHWKYikb1DMk457aKleKWUjaueaZYY/TmhX0+aMLhERuGa3oNsjt
-         j8O0WHKGnd3Y4sfhMROxKelXXEgm410deIm0MpF3XU+j9LXHBX0Bq4/XaJCRHDlayae5
-         K97RTc2AADTYSB8hI52PWqCUoCFowyFKR+tJB0xSo6G2k2k0XcvmuTJQycMOFEFnJBBr
-         SDxFJEBYJlx+pUzTW9oFYQ33lNUQ+l0Lj0cYyspA96lmnp3fTe/gfRDPzRMwDLdPbvmp
-         Qw/A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1723011997; x=1723616797;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Xgv4Lz4y4hdpusu1y11h6gCcVe+Xzav2jc2y5Yt+/PU=;
-        b=gg515yCDGR98CLyisvxtNFSY9BDv8L2nmKMfu9sC71kE2WBhUw7j8UpptT79/Pu+lT
-         2+FPbKJyVkI7BKz7ZSMAOHJ3LN/h9Igm691rikY6N9zvyCdTVrvz0bdDMVIJcR0IIpbE
-         5zAXuBrVfiPbKjxt9h4w0ARb+SzoXNP0B0nqKCR1aqZlS0nBcThXTH/xO0a1PvuvrRqV
-         lixK+HFLMVWj0dE0TPwXF/71p25ugZnffugQmp0ZXtwmUwanr3kE712EPWyJfgrOF9gf
-         mOpL02sKoUY2oRl44VtIIciaXdLcVrCUgfnWnWCOh7kD7ZtD+/c9bvU5kodjteNkOBA9
-         actQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWmLv7IMCNWC8smbpvqLMEDfNqGS/BFafez3teI6s+3H4V4Dh9UDYIE3HKAh3V4hYvinTyYovMX6Iq1bdSh+4k0Gouz7Q==
-X-Gm-Message-State: AOJu0YziB1lD8gZvFFUYUKeeCVBxIggSHlbRiR0mkbza0SjwFCEaf7K+
-	zaP6NsSu6uNGnm+29MeZdB/CgP2Y7+i1ZprzS2BEPOJaBtZ9Pko2ZBh9HUT9Ww0=
-X-Google-Smtp-Source: AGHT+IG20fXp71pe3D6UGQgRh1rVmAZGcmBn1yO/PMuCn4PndSdnVchYjgLooIp6izXKPApmK0kzPg==
-X-Received: by 2002:a05:6a20:4323:b0:1c4:8492:88a8 with SMTP id adf61e73a8af0-1c699580a57mr19116232637.19.1723011997207;
-        Tue, 06 Aug 2024 23:26:37 -0700 (PDT)
-Received: from localhost ([122.172.84.129])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2d1b372e028sm640455a91.45.2024.08.06.23.26.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 06 Aug 2024 23:26:36 -0700 (PDT)
-Date: Wed, 7 Aug 2024 11:56:34 +0530
-From: Viresh Kumar <viresh.kumar@linaro.org>
-To: Rob Herring <robh@kernel.org>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	kernel test robot <lkp@intel.com>, linux-pm@vger.kernel.org,
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH] cpufreq: spear: Fix uninitialized variable "i"
-Message-ID: <20240807062634.egqwyeqwjpvwjwsb@vireshk-i7>
-References: <20240805202042.3229190-1-robh@kernel.org>
- <20240806044928.2j6z2ucnzk6lg5y3@vireshk-i7>
- <CAL_JsqLVj2sCuQFYFwR8QnB9jHq_9z4axeNzid1d7+ZrWzmgYA@mail.gmail.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="O+mAjYTW"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1723016277; x=1754552277;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=EZ777pVRETbbSscsu0Pck2kieW2om42eY7YHGyrVbew=;
+  b=O+mAjYTWI4RWSHpnjXW075AvOfaAzflpX9PeI1G8/JDjzLo2JtZyU0iG
+   NYJB/F4HV4c5M2gnBvGMlFjRIGAn1z9e2RXwepWtIqnR8H6qJy4fps86W
+   53sVzgGduvm/3BpOsu73bQn9w49mGjsNVRfk2YvXK8KnyIJvbiVA0F+z0
+   D66MICp+sQA3OIelX8sxElyNpLfYpGKMyaUJ2sQsO0HlqnCUmH3L+B+NS
+   WoegOjxtvDFI1amoyumVMBDaeq839VeuMcL7lepj62PTykodV4LdiefyZ
+   gNqcePx3ZdDQenO0l0dogYIh6z6c6bMxlEeQ7dZoAtc/GYF+xI0zoJV/s
+   g==;
+X-CSE-ConnectionGUID: IpeRwirgQfKFZ+dPThl3rQ==
+X-CSE-MsgGUID: 4HqjxpHJQN+HQgiuCJxrGw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11156"; a="24949348"
+X-IronPort-AV: E=Sophos;i="6.09,269,1716274800"; 
+   d="scan'208";a="24949348"
+Received: from orviesa003.jf.intel.com ([10.64.159.143])
+  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Aug 2024 00:37:56 -0700
+X-CSE-ConnectionGUID: lkfnWvb2TQGqg+2Kvxsc/g==
+X-CSE-MsgGUID: gSYcUW9PTq6zv5kDwSLkfg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.09,269,1716274800"; 
+   d="scan'208";a="61588880"
+Received: from unknown (HELO b6bf6c95bbab) ([10.239.97.151])
+  by orviesa003.jf.intel.com with ESMTP; 07 Aug 2024 00:37:54 -0700
+Received: from kbuild by b6bf6c95bbab with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1sbbF2-0005DQ-0k;
+	Wed, 07 Aug 2024 07:37:52 +0000
+Date: Wed, 7 Aug 2024 15:37:27 +0800
+From: kernel test robot <lkp@intel.com>
+To: David Woodhouse <dwmw@amazon.co.uk>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [dwmw2:pfncache-2 27/27]
+ arch/x86/kvm/../../../virt/kvm/kvm_main.c:778:51: error: expected ')'
+Message-ID: <202408071531.vysfKwdN-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAL_JsqLVj2sCuQFYFwR8QnB9jHq_9z4axeNzid1d7+ZrWzmgYA@mail.gmail.com>
 
-On 06-08-24, 10:08, Rob Herring wrote:
-> On Mon, Aug 5, 2024 at 10:49 PM Viresh Kumar <viresh.kumar@linaro.org> wrote:
-> > We don't increment 'i' anymore, don't we need an i++ in:
-> >
-> >         freq_tbl[i].frequency = val;
-> >
-> > ?
-> 
-> Sigh. Yes.
+tree:   git://git.infradead.org/users/dwmw2/linux pfncache-2
+head:   137c4fcbf73fb8797363cbb89e63f31504443ddc
+commit: 137c4fcbf73fb8797363cbb89e63f31504443ddc [27/27] KVM: pfncache: Protect against GPC becoming active while invalidation is active
+config: x86_64-rhel-8.3-rust (https://download.01.org/0day-ci/archive/20240807/202408071531.vysfKwdN-lkp@intel.com/config)
+compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240807/202408071531.vysfKwdN-lkp@intel.com/reproduce)
 
-Fixed the original commit with this, hope this doesn't add any new
-bugs:
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202408071531.vysfKwdN-lkp@intel.com/
 
-diff --git a/drivers/cpufreq/spear-cpufreq.c b/drivers/cpufreq/spear-cpufreq.c
-index 777f7f5b3671..d8ab5b01d46d 100644
---- a/drivers/cpufreq/spear-cpufreq.c
-+++ b/drivers/cpufreq/spear-cpufreq.c
-@@ -173,7 +173,7 @@ static int spear_cpufreq_probe(struct platform_device *pdev)
-        struct device_node *np;
-        struct cpufreq_frequency_table *freq_tbl;
-        u32 val;
--       int cnt, i, ret;
-+       int cnt, ret, i = 0;
+All errors (new ones prefixed by >>):
 
-        np = of_cpu_device_node_get(0);
-        if (!np) {
-@@ -199,7 +199,7 @@ static int spear_cpufreq_probe(struct platform_device *pdev)
-        }
+>> arch/x86/kvm/../../../virt/kvm/kvm_main.c:778:51: error: expected ')'
+     778 |         if (likely(kvm->mn_active_invalidate_count == 1) {
+         |                                                          ^
+   arch/x86/kvm/../../../virt/kvm/kvm_main.c:778:5: note: to match this '('
+     778 |         if (likely(kvm->mn_active_invalidate_count == 1) {
+         |            ^
+   1 error generated.
 
-        of_property_for_each_u32(np, "cpufreq_tbl", val)
--               freq_tbl[i].frequency = val;
-+               freq_tbl[i++].frequency = val;
 
-        freq_tbl[cnt].frequency = CPUFREQ_TABLE_END;
+vim +778 arch/x86/kvm/../../../virt/kvm/kvm_main.c
+
+   752	
+   753	static int kvm_mmu_notifier_invalidate_range_start(struct mmu_notifier *mn,
+   754						const struct mmu_notifier_range *range)
+   755	{
+   756		struct kvm *kvm = mmu_notifier_to_kvm(mn);
+   757		const struct kvm_mmu_notifier_range hva_range = {
+   758			.start		= range->start,
+   759			.end		= range->end,
+   760			.handler	= kvm_mmu_unmap_gfn_range,
+   761			.on_lock	= kvm_mmu_invalidate_begin,
+   762			.flush_on_ret	= true,
+   763			.may_block	= mmu_notifier_range_blockable(range),
+   764		};
+   765	
+   766		trace_kvm_unmap_hva_range(range->start, range->end);
+   767	
+   768		/*
+   769		 * Prevent memslot modification between range_start() and range_end()
+   770		 * so that conditionally locking provides the same result in both
+   771		 * functions.  Without that guarantee, the mmu_invalidate_in_progress
+   772		 * adjustments will be imbalanced.
+   773		 *
+   774		 * Pairs with the decrement in range_end().
+   775		 */
+   776		spin_lock(&kvm->mn_invalidate_lock);
+   777		kvm->mn_active_invalidate_count++;
+ > 778		if (likely(kvm->mn_active_invalidate_count == 1) {
+   779			kvm->mmu_gpc_invalidate_range_start = range->start;
+   780			kvm->mmu_gpc_invalidate_range_end = range->end;
+   781		} else {
+   782			/*
+   783			 * Fully tracking multiple concurrent ranges has diminishing
+   784			 * returns. Keep things simple and just find the minimal range
+   785			 * which includes the current and new ranges. As there won't be
+   786			 * enough information to subtract a range after its invalidate
+   787			 * completes, any ranges invalidated concurrently will
+   788			 * accumulate and persist until all outstanding invalidates
+   789			 * complete.
+   790			 */
+   791			kvm->mmu_gpc_invalidate_range_start =
+   792				min(kvm->mmu_gpc_invalidate_range_start, range->start);
+   793			kvm->mmu_gpc_invalidate_range_end =
+   794				max(kvm->mmu_gpc_invalidate_range_end, range->end);
+   795		}
+   796		spin_unlock(&kvm->mn_invalidate_lock);
+   797	
+   798		/*
+   799		 * If one or more memslots were found and thus zapped, notify arch code
+   800		 * that guest memory has been reclaimed.  This needs to be done *after*
+   801		 * dropping mmu_lock, as x86's reclaim path is slooooow.
+   802		 */
+   803		if (__kvm_handle_hva_range(kvm, &hva_range).found_memslot)
+   804			kvm_arch_guest_memory_reclaimed(kvm);
+   805	
+   806		return 0;
+   807	}
+   808	
 
 -- 
-viresh
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
