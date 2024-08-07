@@ -1,273 +1,192 @@
-Received: from mailout2.w1.samsung.com (mailout2.w1.samsung.com [210.118.77.12])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C35DB2868D;
-	Wed,  7 Aug 2024 08:22:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.118.77.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 44F9E18D640
+	for <llvm@lists.linux.dev>; Wed,  7 Aug 2024 08:37:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723018923; cv=none; b=oDjme7GjFfyAPRpcE/a3rtlUk5NSrNSmh8G4EMyaK0OwDjYrOYubnOsRourpqfDj7qo0VJ+sEdWlxc/BEfXLbasSjTkYgFLHS0fH5C8y2hbJ3pFVHlsjdIRJtkL+26mIvYXPFQ3+4q++XnYbicuiUzWZLKicxYCG6iAzO+uFPmM=
+	t=1723019863; cv=none; b=Bee4ON2ckP2dIeUs5h1gUDWcsQEztxqQNR7VVqSDMiAeA8YDaAU96kXLiLRCuVgMUxu+t2NfXkTZEN5MNFb2VXnsxBY/aWoZpxPvMNtVwlYhLzeBfR+2plBaKr2H/m+JpOMPrXSTR0QHgR2bNcs2ZyadA+4ikqsaUoBTvsru24k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723018923; c=relaxed/simple;
-	bh=GyhHa6ad3n3aoeuBPXbI8Y2yKlsKfERayuRlts9uSUQ=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:Content-Type:
-	 MIME-Version:References; b=TbnCKyE6Vddp/oJaC7kVLbvOXjSeQPfkeoGEi9YkpXDfxFn4XbngJJZlbEQ+sIpUk3L4ODIBiiGS7LRR7k9cykfIuLrRpZm1sDFj+LqsXHM9wyDm+veFMvPwXOb5UMnBvizk2kvEhfLyt0nWQ5ZmsZ3jfd9Jhte1dsugNGQ/0RU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=PJaOcnyV; arc=none smtp.client-ip=210.118.77.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
+	s=arc-20240116; t=1723019863; c=relaxed/simple;
+	bh=Ym4OPXtKdhKHOTqeu78sJOTOFNAnj/r5Rrje4PmiUa4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=b5xnFenbLML3+7jRHy4jLHlZWVd5jevrqfUIuKzmP6zo05BendTRg+3Jqob3uqv2pgu0uadyxsDUbC0p2XdWDoUGm2yJdBxZcAFty7SFxTnx0aKpHxAKzwhy61ftgOs0/G9dk/ZzoUvXIYoN1+yRRHfc+zIAlJ9hgX5XoNQRN+g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=PBxyLdto; arc=none smtp.client-ip=192.198.163.8
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="PJaOcnyV"
-Received: from eucas1p2.samsung.com (unknown [182.198.249.207])
-	by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20240807081355euoutp0246daebd629ca2d671dfec80d6afd0ebe~pZCNRNIiO2254122541euoutp02w;
-	Wed,  7 Aug 2024 08:13:55 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20240807081355euoutp0246daebd629ca2d671dfec80d6afd0ebe~pZCNRNIiO2254122541euoutp02w
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-	s=mail20170921; t=1723018435;
-	bh=n9u13BLc1/Av6vacu5XOn99roQyFwYtJJqhaCiMmdoc=;
-	h=From:To:CC:Subject:Date:In-Reply-To:References:From;
-	b=PJaOcnyV+4yJ/to0LVbznuSw5dhddOhL6L4/n6sSOf3fwG7DLXMyQqSauzTvgkp54
-	 K1V5wNK1VLrUXpm3o53az2ZBvWL6eu3lL/qM9ndeHs5lDjVYc0twciZa4Yf0TBj4uM
-	 Zsf1ivcXr+aFXkVJD5ENOO60XHi6YWhnwp+qs+6Q=
-Received: from eusmges3new.samsung.com (unknown [203.254.199.245]) by
-	eucas1p1.samsung.com (KnoxPortal) with ESMTP id
-	20240807081355eucas1p192b35d483bbc7c0f5fd8f98537b5d916~pZCNAwd7D2938229382eucas1p1q;
-	Wed,  7 Aug 2024 08:13:55 +0000 (GMT)
-Received: from eucas1p1.samsung.com ( [182.198.249.206]) by
-	eusmges3new.samsung.com (EUCPMTA) with SMTP id E2.24.09620.2CC23B66; Wed,  7
-	Aug 2024 09:13:54 +0100 (BST)
-Received: from eusmtrp2.samsung.com (unknown [182.198.249.139]) by
-	eucas1p1.samsung.com (KnoxPortal) with ESMTPA id
-	20240807081354eucas1p175713174856919970a701a2b8738b9c7~pZCMU_e8-2943329433eucas1p1e;
-	Wed,  7 Aug 2024 08:13:54 +0000 (GMT)
-Received: from eusmgms1.samsung.com (unknown [182.198.249.179]) by
-	eusmtrp2.samsung.com (KnoxPortal) with ESMTP id
-	20240807081354eusmtrp23393ddf9d4e20be6fcc4c78e46cb51ae~pZCMSOqwl0317503175eusmtrp2p;
-	Wed,  7 Aug 2024 08:13:54 +0000 (GMT)
-X-AuditID: cbfec7f5-d1bff70000002594-2b-66b32cc2be5f
-Received: from eusmtip1.samsung.com ( [203.254.199.221]) by
-	eusmgms1.samsung.com (EUCPMTA) with SMTP id DC.39.08810.1CC23B66; Wed,  7
-	Aug 2024 09:13:54 +0100 (BST)
-Received: from CAMSVWEXC01.scsc.local (unknown [106.1.227.71]) by
-	eusmtip1.samsung.com (KnoxPortal) with ESMTPA id
-	20240807081353eusmtip154691cfcb25d38d126937c3750e07f54~pZCL9A4av2830328303eusmtip1U;
-	Wed,  7 Aug 2024 08:13:53 +0000 (GMT)
-Received: from CAMSVWEXC02.scsc.local (2002:6a01:e348::6a01:e348) by
-	CAMSVWEXC01.scsc.local (2002:6a01:e347::6a01:e347) with Microsoft SMTP
-	Server (TLS) id 15.0.1497.2; Wed, 7 Aug 2024 09:13:52 +0100
-Received: from CAMSVWEXC02.scsc.local ([::1]) by CAMSVWEXC02.scsc.local
-	([fe80::3c08:6c51:fa0a:6384%13]) with mapi id 15.00.1497.012; Wed, 7 Aug
-	2024 09:13:52 +0100
-From: Daniel Gomez <da.gomez@samsung.com>
-To: Lucas De Marchi <lucas.demarchi@intel.com>
-CC: Masahiro Yamada <masahiroy@kernel.org>, Nathan Chancellor
-	<nathan@kernel.org>, Nicolas Schier <nicolas@fjasle.eu>,
-	=?iso-8859-1?Q?Thomas_Hellstr=F6m?= <thomas.hellstrom@linux.intel.com>,
-	Rodrigo Vivi <rodrigo.vivi@intel.com>, Maarten Lankhorst
-	<maarten.lankhorst@linux.intel.com>, Maxime Ripard <mripard@kernel.org>,
-	Thomas Zimmermann <tzimmermann@suse.de>, David Airlie <airlied@gmail.com>,
-	Daniel Vetter <daniel@ffwll.ch>, William Hubbs <w.d.hubbs@gmail.com>, "Chris
- Brannon" <chris@the-brannons.com>, Kirk Reiser <kirk@reisers.ca>, "Samuel
- Thibault" <samuel.thibault@ens-lyon.org>, Paul Moore <paul@paul-moore.com>,
-	Stephen Smalley <stephen.smalley.work@gmail.com>, Ondrej Mosnacek
-	<omosnace@redhat.com>, Catalin Marinas <catalin.marinas@arm.com>, Will
-	Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>, Oliver Upton
-	<oliver.upton@linux.dev>, James Morse <james.morse@arm.com>, Suzuki K
-	Poulose <suzuki.poulose@arm.com>, Zenghui Yu <yuzenghui@huawei.com>, "Greg
- Kroah-Hartman" <gregkh@linuxfoundation.org>, Jiri Slaby
-	<jirislaby@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, "Bill
- Wendling" <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"linux-kbuild@vger.kernel.org" <linux-kbuild@vger.kernel.org>,
-	"intel-xe@lists.freedesktop.org" <intel-xe@lists.freedesktop.org>,
-	"dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
-	"speakup@linux-speakup.org" <speakup@linux-speakup.org>,
-	"selinux@vger.kernel.org" <selinux@vger.kernel.org>,
-	"linux-arm-kernel@lists.infradead.org"
-	<linux-arm-kernel@lists.infradead.org>, "kvmarm@lists.linux.dev"
-	<kvmarm@lists.linux.dev>, "linux-serial@vger.kernel.org"
-	<linux-serial@vger.kernel.org>, "llvm@lists.linux.dev"
-	<llvm@lists.linux.dev>, Finn Behrens <me@kloenk.dev>, "Daniel Gomez
- (Samsung)" <d+samsung@kruces.com>, "gost.dev@samsung.com"
-	<gost.dev@samsung.com>
-Subject: Re: [PATCH 04/12] drm/xe: xe_gen_wa_oob: fix
- program_invocation_short_name for macos
-Thread-Topic: [PATCH 04/12] drm/xe: xe_gen_wa_oob: fix
-	program_invocation_short_name for macos
-Thread-Index: AQHa6FXbw2zXqVW9ckie+aU8ZAXkwrIa9tWAgABrNIA=
-Date: Wed, 7 Aug 2024 08:13:51 +0000
-Message-ID: <mhrznemgfocotpgkyze7l73e6237wygja6lrvmodeka6ehbkgc@h6fzyrcsmci2>
-In-Reply-To: <67ahzgfa63gs7ybbunthdiwodlaihzqerb5xmkrgfgrbmghjmw@d57hhuwaf53i>
-Accept-Language: en-US, en-GB
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-messagesentrepresentingtype: 1
-x-ms-exchange-transport-fromentityheader: Hosted
-Content-Type: text/plain; charset="iso-8859-1"
-Content-ID: <6061A4101764934EA47CBCA8181EF747@scsc.local>
-Content-Transfer-Encoding: quoted-printable
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="PBxyLdto"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1723019862; x=1754555862;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=Ym4OPXtKdhKHOTqeu78sJOTOFNAnj/r5Rrje4PmiUa4=;
+  b=PBxyLdtoLPHCv0PZ8bN390XpWvwi81ocz4E7sfvEy1Ne7zxZkRmUCeVy
+   y8Z9COGrZsNOa6i1OmdK+7iU+4gkRSQXh2KlugpAZxSDsNFeBw5QDBmqN
+   B27MC/O21eDZrKTav9F2gxhS/0P82lIXm/VhXMLuNdSvzrqhYz1+EK3oF
+   wHDeULDjZ9Xzcx6eUAYBsTZpkoh++uDYwoW0/ylNSs0NjTPhho4b4Q5k1
+   BLZ3zBpzllY4RZxbWDi9gHitdJnI01Rg0pOtDrJ+tqOgm/KFbuD2NDWUK
+   jCYkX20IoaKaRXHdz9LJIcmZ7bEsy/3UuyxFnk8HWeeYhUY2g+32UtBnS
+   A==;
+X-CSE-ConnectionGUID: pd/ESQtSRCOmasuvC6SChA==
+X-CSE-MsgGUID: fnnCtjx/Q66mI0KzSEs91A==
+X-IronPort-AV: E=McAfee;i="6700,10204,11156"; a="38586015"
+X-IronPort-AV: E=Sophos;i="6.09,269,1716274800"; 
+   d="scan'208";a="38586015"
+Received: from orviesa007.jf.intel.com ([10.64.159.147])
+  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Aug 2024 01:37:41 -0700
+X-CSE-ConnectionGUID: sUAmBQVmTL66Lo8BUjrCDQ==
+X-CSE-MsgGUID: TA0z/V6BRsKxsWNQzy/bTg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.09,269,1716274800"; 
+   d="scan'208";a="57330741"
+Received: from fdefranc-mobl3.ger.corp.intel.com (HELO [10.245.246.75]) ([10.245.246.75])
+  by orviesa007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Aug 2024 01:37:35 -0700
+Message-ID: <250c63d7-d81e-49ea-ac8f-2e3496075f20@linux.intel.com>
+Date: Wed, 7 Aug 2024 10:37:31 +0200
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Brightmail-Tracker: H4sIAAAAAAAAA02TfUxTVxjGPff23lsQ3F0hcmAYYodzOuhwzu04jRhm4s0yNsxIHMwFO7h8
-	bFBICxNZokQYWBApCkMqMCjjGwMp0EH5ks9SPjQMKSgyC8LEohQCGiSOjlJc+O/35nnO87zv
-	H4eL89IpJ26YKJoVi4ThfNKao+p5dce9w6022GOgyR31jiowZCy5AlBPxSyOmkwTODKpMnB0
-	74WRRAlF1SRaqZ3F0KPWUgzN5zmj3yqLSJQ/pOUgQ10nBykf6wj0Wt2AoWF1LokGitIoNJ3Z
-	RqKZxyUkKlys56BJ/RiBGnO1BGqpHiaRcniJQEnSEgIll8+QaEFmwtA/Lb0Eynr1jETPZd0U
-	Gr+WzUFtch2FylayAbqr6aGQqmEQoCd3rwOUMz4O0FzDemjdswwCKZI+RYkPD6H7xTXU8f1M
-	VX4VYJp7Bkmm5WUBh1F31JJMo3yCYgqUMUxi13OCKWp+ijHKCinJ5EvzMcaUpieYLpOCYgrj
-	s3AmX3uKacurophHqRrMB/pbHw1iw8N+ZsUfHjtrHXqjUUVGGRxj1ww5nHiwZp8CrLiQ/hjm
-	ypKxFGDN5dFlAP75tIG0DMsALi6qN4clAEvnjfibJx163aZQCmB3UxpmFjZc+iSRRehfzzLK
-	qP+D9avDhNlF0vtgq1ZJmdmeFkB11+hGO07XvAUX2keBWbCjA2B/0QhpMZ2FtxRS3MKfwUrD
-	2IaHQ7vCxobU9SAu15b2hjOXD5jRiv4KXjJdNDsAvQtOla9uVOG0A3ww/TtmueBtqLjZvHnN
-	TrimniQt7AYHR6eBhT1gfXErx8K74eWe+6QlRwDHsjI3+TDMudGIW/gDWFI4t8G26/nanGmO
-	+SxIp9jAl73JhCXoBJy63bJZbAcNmjpKBtzkW/aTb+mQb+mQb+mQb+koAEQFcGBjJBEhrOSg
-	iD0nkAgjJDGiEEFgZIQSrP+Z/jXNiwZQZlgUdACMCzoA5OJ8e9uE08pgnm2Q8HwcK44MEMeE
-	s5IO8A6Xw3ew3RPkwvLoEGE0+xPLRrHiNyrGtXKKx+wU5JGB7vIRf7T35B+ykazevMrjzt+v
-	6FHcX++W3zScmtfEkts1d3a8f+GYlyzbD+0+YrNd7Oosb0/5ljf6d9c2L897cbcop2075247
-	f+ey4p+Q3jdu8rwYtHqm+AtV5LUl4RAYeu2cahN+9UKJLES2Y/mXc6HSWKeiuLT3PvKtOezT
-	y17N9PHomvYjJhXBKkF1y2hn4J7P+5y0dmk/1p9eMMIUR88zwL30k4C9fdUhet2v/qGHRhyv
-	RzXH42TG8vz5fSKdd6bgG5crT9IdHyaZLk0lSpUPond5l0xE+waC8R9mXRN4Xw/pgm18+9rV
-	EUav7i+DDkrCTvKP/tvs59LE7+RzJKHCA/txsUT4Hzj2n2iiBAAA
-X-Brightmail-Tracker: H4sIAAAAAAAAA02Te1CUZRTGe7/bLjZMX4jyRjTVxthEtLLcfBcUHVP7sJSwBicZgk1WoIBl
-	dlmQnGoHxLg2gHJbEYEV4jaByyVArgstMoS0cRcQEDDkEqHExWHYdv1shv9+57zPc54578zh
-	4maZHEtuUGi4WBoqCuZRu4ju7c7xDzS2VRfssrNxdHeoAEPLRUkAaUvncHRHP44jfW0qjvr/
-	XaZQjKqCQhtVcxiaaP4ZQ3/fsEIZZSoK5eq6CDRf3U4g9fQgibYa6jDU15BDod9VyRw0c62F
-	QrPTRRTKX6kh0NTkMInqc7pI1FTRRyF131MSXYkvItGPJbMU+idFj6FHTXdJlL65SKGllN84
-	aDQtk0AtykEOKt7IBKi3U8tBtXU9AP3VexWg7NFRgBbqDEOrF1NJVHDlALo85oRGCis5R2yY
-	8txywDRqeyimaS2PYBo0VRRTrxznMHlqOXO5Y4lkVI2PMUZdGk8xufG5GKNPniSZDn0Bh8lX
-	pONMbpcn03KjnMNMJHZin8Jz/INSiTxc/FagRBZ+iOctQPZ8gRDx7R2FfIHDAR8XeyfefreD
-	/uLgoAixdL+bHz8wq76WCpt/7eL2fDahANvmCcCEC2lHqJkcpIxsRhcC2F71Ltu3grdXB0iW
-	d8OtwQSDZpdBswLgQnE7yRbdAG4VRnPYohjA1pw5zGih6Pdgc5eaY2Rzmg8bOoYwowinK1+B
-	bZox3Piwm/aF3aoBihX5weuKGYJlF1g2PwyMTNDWsL4u0TCIyzWlT8HZOAEbdhODG0+qMWPf
-	hD4No/U/GOWAfgM+LHn2PBenLeD9mZsYuwINbzX24izvgY+nt1+sZgt7hmYAy3awprCZYPlt
-	GKcdodg5fDicfu0FC2F2Vj3O8vuwKH/hOZvSr8Ku7BkiBVgpd0Qrd9iVO+zKHXblDnseIEuB
-	uVguCwkIkQn4MlGITB4awD8vCVEDw4XUajer6kDu/ApfAzAu0ADIxXnmpjFn1RfMTP1FUd+K
-	pRJfqTxYLNMAJ8PXpeKWe85LDCcWGu4rcLZzEjg6C+2chM4OPAtT97A4kRkdIAoXfyMWh4ml
-	//swromlAou795LWNi0pbu+A8pOVlKt/8KzjVWuHLfwrpta92idg4rGlE6AMj6xN+9xGqw4q
-	ifHYnI6N+uo6WTEamOVSxPjfCvduuyiJ+H6vU5JOcSx+zRTbOu2Q+LFOEn242cVV+YVrYY2X
-	25k3v7wUFWluWeMjVmzZ3LuELxwaf+J1fMtj1XnfUH+5Z9O5PnmCjfejpDIu/GzEY8kz7FQO
-	ZS1sTWiP904+4vPRTyd4JplH+7+LyOjHYqVEU9/J6NWpwQdSHal7MPrnYmxL6PqHsl+jUtZv
-	Ry133OG6O559+Po+9+m2jmc9TyeSo+xcvU7aHH0nMvN+q0o1NjB25uuXf/HTFY9XZoTU8AhZ
-	oEhgg0tlov8AOGy1gaoEAAA=
-X-CMS-MailID: 20240807081354eucas1p175713174856919970a701a2b8738b9c7
-X-Msg-Generator: CA
-X-RootMTR: 20240807015044eucas1p1998fac358d6afafce6c58478c2834d26
-X-EPHeader: CA
-CMS-TYPE: 201P
-X-CMS-RootMailID: 20240807015044eucas1p1998fac358d6afafce6c58478c2834d26
-References: <20240807-macos-build-support-v1-0-4cd1ded85694@samsung.com>
-	<20240807-macos-build-support-v1-4-4cd1ded85694@samsung.com>
-	<CGME20240807015044eucas1p1998fac358d6afafce6c58478c2834d26@eucas1p1.samsung.com>
-	<67ahzgfa63gs7ybbunthdiwodlaihzqerb5xmkrgfgrbmghjmw@d57hhuwaf53i>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] sound: sof: ioc4-topology: avoid extra dai_params copy
+To: Arnd Bergmann <arnd@kernel.org>, Liam Girdwood <lgirdwood@gmail.com>,
+ Peter Ujfalusi <peter.ujfalusi@linux.intel.com>,
+ Bard Liao <yung-chuan.liao@linux.intel.com>,
+ Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
+ Daniel Baluta <daniel.baluta@nxp.com>,
+ Seppo Ingalsuo <seppo.ingalsuo@linux.intel.com>
+Cc: Arnd Bergmann <arnd@arndb.de>, Kai Vehmanen
+ <kai.vehmanen@linux.intel.com>, Mark Brown <broonie@kernel.org>,
+ Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
+ Nathan Chancellor <nathan@kernel.org>,
+ Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling
+ <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
+ Brent Lu <brent.lu@intel.com>, sound-open-firmware@alsa-project.org,
+ linux-sound@vger.kernel.org, linux-kernel@vger.kernel.org,
+ llvm@lists.linux.dev
+References: <20240807080302.2372297-1-arnd@kernel.org>
+Content-Language: en-US
+From: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+In-Reply-To: <20240807080302.2372297-1-arnd@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Tue, Aug 06, 2024 at 08:50:09PM GMT, Lucas De Marchi wrote:
-> On Wed, Aug 07, 2024 at 01:09:18AM GMT, Daniel Gomez via B4 Relay wrote:
-> > From: Daniel Gomez <da.gomez@samsung.com>
-> >=20
-> > Use getprogname() [1] instead of program_invocation_short_name() [2]
-> > for macOS hosts.
-> >=20
-> > [1]:
-> > https://www.gnu.org/software/gnulib/manual/html_node/
-> > program_005finvocation_005fshort_005fname.html
-> >=20
-> > [2]:
-> > https://developer.apple.com/library/archive/documentation/System/
-> > Conceptual/ManPages_iPhoneOS/man3/getprogname.3.html
-> >=20
-> > Fixes build error for macOS hosts:
-> >=20
-> > drivers/gpu/drm/xe/xe_gen_wa_oob.c:34:3: error: use of
-> > undeclared identifier 'program_invocation_short_name'    34 |
-> > program_invocation_short_name);       |                 ^ 1 error
-> > generated.
-> >=20
-> > Signed-off-by: Daniel Gomez <da.gomez@samsung.com>
-> > ---
-> > drivers/gpu/drm/xe/xe_gen_wa_oob.c | 8 +++++++-
-> > 1 file changed, 7 insertions(+), 1 deletion(-)
-> >=20
-> > diff --git a/drivers/gpu/drm/xe/xe_gen_wa_oob.c b/drivers/gpu/drm/xe/xe=
-_gen_wa_oob.c
-> > index 904cf47925aa..079b8870c461 100644
-> > --- a/drivers/gpu/drm/xe/xe_gen_wa_oob.c
-> > +++ b/drivers/gpu/drm/xe/xe_gen_wa_oob.c
-> > @@ -9,6 +9,12 @@
-> > #include <stdbool.h>
-> > #include <stdio.h>
-> > #include <string.h>
-> > +#define PROG_INV_NAME program_invocation_short_name
-> > +
-> > +#ifdef __APPLE__
-> > +#include <stdlib.h>
-> > +#define PROG_INV_NAME getprogname()
-> > +#endif
-> >=20
-> > #define HEADER \
-> > 	"// SPDX-License-Identifier: MIT\n" \
-> > @@ -31,7 +37,7 @@
-> > static void print_usage(FILE *f)
-> > {
-> > 	fprintf(f, "usage: %s <input-rule-file> <generated-c-source-file> <gen=
-erated-c-header-file>\n",
-> > -		program_invocation_short_name);
-> > +		PROG_INV_NAME);
->=20
-> instead of doing that, can we a) include stdlib.h unconditionally and b)
-> add here a
-> `static const char *program_invocation_short_name =3D getprogname()` so w=
-e
-> don't need to change the common case and just handle the "build on
-> macos" as a compat layer?
 
-Does this align with your suggestion (v1 diff)?
 
-Note that static cannot be use here.
+On 8/7/24 10:02, Arnd Bergmann wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
+> 
+> The snd_pcm_hw_params structure is really too large to fit on the
+> stack. Because of the way that clang inlines functions, it ends up
+> twice in one function, which exceeds the 1024 byte limit for 32-bit
+> architecutes:
+> 
+> sound/soc/sof/ipc4-topology.c:1700:1: error: stack frame size (1304) exceeds limit (1024) in 'sof_ipc4_prepare_copier_module' [-Werror,-Wframe-larger-than]
+> sof_ipc4_prepare_copier_module(struct snd_sof_widget *swidget,
+> 
+>>From what I can tell, this was unintentional, as both
+> sof_ipc4_prepare_dai_copier() and sof_ipc4_prepare_copier_module() make a
+> copy for the same purpose, but copying it once has the exact same effect.
 
-diff --git a/drivers/gpu/drm/xe/xe_gen_wa_oob.c b/drivers/gpu/drm/xe/xe_gen=
-_wa_oob.c
-index 079b8870c461..b3add20ccb01 100644
---- a/drivers/gpu/drm/xe/xe_gen_wa_oob.c
-+++ b/drivers/gpu/drm/xe/xe_gen_wa_oob.c
-@@ -9,12 +9,7 @@
- #include <stdbool.h>
- #include <stdio.h>
- #include <string.h>
--#define PROG_INV_NAME program_invocation_short_name
--
--#ifdef __APPLE__
- #include <stdlib.h>
--#define PROG_INV_NAME getprogname()
--#endif
+Humm, not sure. I think the copy was intentional so that if one of the
+fixups fails, then the initial hw_params structure is not modified.
 
- #define HEADER \
-        "// SPDX-License-Identifier: MIT\n" \
-@@ -36,8 +31,11 @@
+Also not sure why a compiler would think inlining such a large function
+is a good idea?
 
- static void print_usage(FILE *f)
- {
-+#ifdef __APPLE__
-+       const char *program_invocation_short_name =3D getprogname();
-+#endif
-        fprintf(f, "usage: %s <input-rule-file> <generated-c-source-file> <=
-generated-c-header-file>\n",
--               PROG_INV_NAME);
-+               program_invocation_short_name);
- }
+Probably need Ranjani, Peter and Bard to comment on the format handling.
 
- static void print_parse_error(const char *err_msg, const char *line,
 
->=20
-> Lucas De Marchi
->=20
-> > }
-> >=20
-> > static void print_parse_error(const char *err_msg, const char *line,
-> >=20
-> > --=20
-> > Git-146)
-> >=20
-> > =
+> Remove the extra copy and change the direct struct assignment to
+> an explicit memcpy() call to make it clearer to the reader that this
+> is what happens. Note that gcc treats struct assignment as a memcpy()
+> that may be inlined anyway, so the resulting object code is the same.
+> 
+> Fixes: f9209644ae76 ("ASoC: SOF: ipc4-topology: Correct DAI copier config and NHLT blob request")
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> ---
+>  sound/soc/sof/ipc4-topology.c | 19 +++++++------------
+>  1 file changed, 7 insertions(+), 12 deletions(-)
+> 
+> diff --git a/sound/soc/sof/ipc4-topology.c b/sound/soc/sof/ipc4-topology.c
+> index 87be7f16e8c2..77f6850010f6 100644
+> --- a/sound/soc/sof/ipc4-topology.c
+> +++ b/sound/soc/sof/ipc4-topology.c
+> @@ -1651,7 +1651,6 @@ sof_ipc4_prepare_dai_copier(struct snd_sof_dev *sdev, struct snd_sof_dai *dai,
+>  			    struct snd_pcm_hw_params *params, int dir)
+>  {
+>  	struct sof_ipc4_available_audio_format *available_fmt;
+> -	struct snd_pcm_hw_params dai_params = *params;
+>  	struct sof_ipc4_copier_data *copier_data;
+>  	struct sof_ipc4_pin_format *pin_fmts;
+>  	struct sof_ipc4_copier *ipc4_copier;
+> @@ -1676,7 +1675,7 @@ sof_ipc4_prepare_dai_copier(struct snd_sof_dev *sdev, struct snd_sof_dai *dai,
+>  		num_pin_fmts = available_fmt->num_input_formats;
+>  	}
+>  
+> -	ret = sof_ipc4_adjust_params_to_dai_format(sdev, &dai_params, pin_fmts,
+> +	ret = sof_ipc4_adjust_params_to_dai_format(sdev, params, pin_fmts,
+>  						   num_pin_fmts);
+>  	if (ret)
+>  		return ret;
+> @@ -1684,15 +1683,11 @@ sof_ipc4_prepare_dai_copier(struct snd_sof_dev *sdev, struct snd_sof_dai *dai,
+>  	single_bitdepth = sof_ipc4_copier_is_single_bitdepth(sdev, pin_fmts,
+>  							     num_pin_fmts);
+>  	ret = snd_sof_get_nhlt_endpoint_data(sdev, dai, single_bitdepth,
+> -					     &dai_params,
+> +					     params,
+>  					     ipc4_copier->dai_index,
+>  					     ipc4_copier->dai_type, dir,
+>  					     &ipc4_copier->copier_config,
+>  					     &copier_data->gtw_cfg.config_length);
+> -	/* Update the params to reflect the changes made in this function */
+> -	if (!ret)
+> -		*params = dai_params;
+> -
+>  	return ret;
+>  }
+>  
+> @@ -1784,9 +1779,9 @@ sof_ipc4_prepare_copier_module(struct snd_sof_widget *swidget,
+>  		 * for capture.
+>  		 */
+>  		if (dir == SNDRV_PCM_STREAM_PLAYBACK)
+> -			ref_params = *fe_params;
+> +			memcpy(&ref_params, fe_params, sizeof(ref_params));
+>  		else
+> -			ref_params = *pipeline_params;
+> +			memcpy(&ref_params, pipeline_params, sizeof(ref_params));
+>  
+>  		copier_data->gtw_cfg.node_id &= ~SOF_IPC4_NODE_INDEX_MASK;
+>  		copier_data->gtw_cfg.node_id |=
+> @@ -1819,7 +1814,7 @@ sof_ipc4_prepare_copier_module(struct snd_sof_widget *swidget,
+>  		 * In case of capture the ref_params returned will be used to
+>  		 * find the input configuration of the copier.
+>  		 */
+> -		ref_params = *fe_params;
+> +		memcpy(&ref_params, fe_params, sizeof(ref_params));
+>  		ret = sof_ipc4_prepare_dai_copier(sdev, dai, &ref_params, dir);
+>  		if (ret < 0)
+>  			return ret;
+> @@ -1829,7 +1824,7 @@ sof_ipc4_prepare_copier_module(struct snd_sof_widget *swidget,
+>  		 * input configuration of the copier.
+>  		 */
+>  		if (dir == SNDRV_PCM_STREAM_PLAYBACK)
+> -			ref_params = *pipeline_params;
+> +			memcpy(&ref_params, pipeline_params, sizeof(ref_params));
+>  
+>  		break;
+>  	}
+> @@ -1838,7 +1833,7 @@ sof_ipc4_prepare_copier_module(struct snd_sof_widget *swidget,
+>  		ipc4_copier = (struct sof_ipc4_copier *)swidget->private;
+>  		copier_data = &ipc4_copier->data;
+>  		available_fmt = &ipc4_copier->available_fmt;
+> -		ref_params = *pipeline_params;
+> +		memcpy(&ref_params, pipeline_params, sizeof(ref_params));
+>  
+>  		break;
+>  	}
+
