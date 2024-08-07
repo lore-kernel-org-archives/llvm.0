@@ -1,562 +1,260 @@
-Received: from mail-pf1-f174.google.com (mail-pf1-f174.google.com [209.85.210.174])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B50015D5BB
-	for <llvm@lists.linux.dev>; Wed,  7 Aug 2024 01:45:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.174
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722995105; cv=none; b=AcIeOKBX9lFuSIHikGJBSgWRFlF/2ch63xjw1ZF4vhMf2uIfQNuc9qpfV95KjbjgqJ3OKXaAms17h+qwwXaDeTOqiSpeztP3RoaKiFgHxltxyoRxRhIO690cSKUUbo0mgRaRGbWF+PHqv8OadyZk1aCXLt3mFCr6wvfTo4eRqww=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722995105; c=relaxed/simple;
-	bh=3WSsm4Kp/4+EDcGgxwGBWaGhseS7A3EVK9Gh7GSaX2Q=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=n+20jAzhvuVFHU7QRAHCGDJx1Ji16oSIBsyQvqyuPCL0Kj3eTwBrMgYtOu90iuIg1xL40lN0H4bcE/ekJbtyfz3T+4CFwpbpxBZdWweiJMXOxAMc4jVl21UtGZynszU/jDweSi5xyocLkuGm8tZoiu2SpS4uhk+Sz6OL21cxFZk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=f+Y0U7kw; arc=none smtp.client-ip=209.85.210.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F37DD18FC91;
+	Wed,  7 Aug 2024 01:50:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=192.198.163.14
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1722995442; cv=fail; b=J6bKkq3AbcBA+pFBw5g1F/rSfK1tzqBWpys4nHSz+547pM+9Y/t04DCQct0v90rleBTArNloJbo/Ce4GuuumhqEu7mmFNFuYZs1ylAFXQJs/hPo1hAWdWpxocKAjXF031ncSXY4zBK+UO7vPMB7g9XOQnE8/zpeLsXiC3RdwqYQ=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1722995442; c=relaxed/simple;
+	bh=r2F+wNs2ZqdTcpQEIB3xDV/kNRnNuRkrIrSPba1TQH0=;
+	h=Date:From:To:CC:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=JluVcXOvxC/6lVWoTN5rAINp5GgSYnFitJ4jJsEm+xRvUT2sq2S0/J5jL8AopSIO3f43z0Ro5LUjxFzRUsEijrUlf265zeLkKbXR7rSaOfgYIW/P1720wE2rlLXnrVVATay5FqLP3Mg6DBo19c3auGDhfB/KUFytIbOXOaLdpQE=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ME7j1qqY; arc=fail smtp.client-ip=192.198.163.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="f+Y0U7kw"
-Received: by mail-pf1-f174.google.com with SMTP id d2e1a72fcca58-70d2ae44790so999362b3a.2
-        for <llvm@lists.linux.dev>; Tue, 06 Aug 2024 18:45:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1722995103; x=1723599903; darn=lists.linux.dev;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=03oYSga+Kz9JzPfPDLq8EGGJLXDN/OEFD/9AE5kPe0E=;
-        b=f+Y0U7kwhS29A+ZTngUrIwgATSLbjZCkmNqVLvlEii7/QytXM8qO5Pzby452Zv4czs
-         dM1KyJTxHU/qtEqLMjFkAVo7By+ToZcvlwhFKLlBoeXTRUsZxAO2JLUrqxw1YJfYK2WF
-         kpDiJOuWC1doA9Patcw6hBuF6aZQS0uXNCmL3ZScZo1D2fMqJBYIGArwuK6BDrgDqG/2
-         atI5sFSGxUNnGYfPj04b49Zl6r/T+WU9vqRvda5GzeqKHhtTWFNlzbOOAJIfr3ip2luI
-         2eSbbV+g5lXcbGY8KVKxg2ntz04P/vMk1uTm2diSnk1Vr6gDIkPToTZXtsmptzKQZ2fP
-         z9Dw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1722995103; x=1723599903;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=03oYSga+Kz9JzPfPDLq8EGGJLXDN/OEFD/9AE5kPe0E=;
-        b=UYG812aq4y6WZvbg6/2Sk4y0Gru+vkOroybEDVxyJd/7GMlPndhkAi6ubH/jCX1N7G
-         a9yO5J9oxs9/y++Vv07HhamPL1QqIm3PTRbjuWUlCeBpZB/O3O269dnyF9UDIPQ1d3f4
-         p3ohS/rMlCmi9dRzV12sHXTbZPFNXFEpFtbful9fG/0jl4ZFJT86ByKobBXUGnq8eLrs
-         iPxtcwRWuUHMRtMh50WGXR/tbeaDS4ghe2URbemKqtPVZOEsy99+JM7n1NSV9Ht5idcT
-         YUcxVprYF7durEzUNl3Ky7rbiwTYbboyZ6P29mCWjBSTADWMImxmOOcohahYik5LCujI
-         M/2A==
-X-Forwarded-Encrypted: i=1; AJvYcCUNPbJ8JG894UjrXv5YdPU3JGSuIECK6YtnZzsEbOkOjTGUP1W3LOsE2cHpPbnLw+oH66ucWCPjYObtfmN7N4stV6jxyw==
-X-Gm-Message-State: AOJu0YyWoEzYx/vOVdmIBF5T6MDkoy1CfGAXx58cWyQ8zgh2kKVeODN7
-	M0GcAfybzQQkvPCIbdx6r0vUhBNBiZLVXGC8KlRovnBnlnwigwuW
-X-Google-Smtp-Source: AGHT+IEvHxOs3NRbPfHJA/oJk7SXQsfTAUR3rLHSpEQScA//qfoTaJLlwkCc0X6grlIg0GMVSEJ4ew==
-X-Received: by 2002:a05:6a00:b8d:b0:70d:244b:cad9 with SMTP id d2e1a72fcca58-7106d047414mr18684493b3a.28.1722995102925;
-        Tue, 06 Aug 2024 18:45:02 -0700 (PDT)
-Received: from [192.168.255.10] ([43.132.141.25])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7106ec0612bsm7537176b3a.41.2024.08.06.18.44.59
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 06 Aug 2024 18:45:02 -0700 (PDT)
-Message-ID: <5c24f18b-dcf7-436e-aba7-0f5c145702b2@gmail.com>
-Date: Wed, 7 Aug 2024 09:44:57 +0800
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ME7j1qqY"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1722995441; x=1754531441;
+  h=date:from:to:cc:subject:message-id:references:
+   in-reply-to:mime-version;
+  bh=r2F+wNs2ZqdTcpQEIB3xDV/kNRnNuRkrIrSPba1TQH0=;
+  b=ME7j1qqY26mCUz/AFAXkAbypFQdryl3nwXQZjUSo8iiOHcmN24WHqPn8
+   3E7LiP/+X+/IS2Is7vQi6auE1uU9qA8h0+qbBd/l6m17hhTee8K+XXUWc
+   Pe6SkUT/eVy4MIMNtnn7vXevmXlWaaf1etCp6000w9YCW4Mic2x+Teu0w
+   3bX/HF6L0KFzxfTauaEgQJjP4r57q7lxFl5a6RvWEizNAgkEUj3hpjoHt
+   wtWjgD5eEDvNXTJshmdxLm5hCd83mD3C0M/i4ogDewCMWPdkgmsk8qVeY
+   dpXxYJqDXmExl6nwCTP60TLBrnRQPS7TRoVVBKBVL6ix2AVQW2FNLmMF2
+   A==;
+X-CSE-ConnectionGUID: Zuin+NE1Sv2APv3qTgCFcw==
+X-CSE-MsgGUID: b0u/nmc6TwerDQrJ0rWigw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11156"; a="21217544"
+X-IronPort-AV: E=Sophos;i="6.09,268,1716274800"; 
+   d="scan'208";a="21217544"
+Received: from fmviesa003.fm.intel.com ([10.60.135.143])
+  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Aug 2024 18:50:40 -0700
+X-CSE-ConnectionGUID: 2JBP9BZdS2+i1ylaVAglDw==
+X-CSE-MsgGUID: HV4KmzsaSzmGWkD7YtjU4A==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.09,268,1716274800"; 
+   d="scan'208";a="60806003"
+Received: from fmsmsx603.amr.corp.intel.com ([10.18.126.83])
+  by fmviesa003.fm.intel.com with ESMTP/TLS/AES256-GCM-SHA384; 06 Aug 2024 18:50:40 -0700
+Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
+ fmsmsx603.amr.corp.intel.com (10.18.126.83) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.39; Tue, 6 Aug 2024 18:50:39 -0700
+Received: from FMSEDG603.ED.cps.intel.com (10.1.192.133) by
+ fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.39 via Frontend Transport; Tue, 6 Aug 2024 18:50:39 -0700
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (104.47.58.169)
+ by edgegateway.intel.com (192.55.55.68) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.39; Tue, 6 Aug 2024 18:50:39 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=yC9DGRmFyucs/VoROK6PN961OSe+6dzy8ov8x9+8qzvPO0ODOgOZS9TqTVSsXF9ulo1ZQMdG6pcuLOlvtp3q4TkQ/T8j+LyOfZllh69OMTlLXRyz0zKPOgZCVYo4GRWlrw6zbFr4gQt4xAnQPXgFR+w6PUeQusjWqFih6Z3S/pYP6F4lnOznygD4/NSH+NPBTM2mdZDJcoSMK38IkSyOYGjEnXLigU4xZsG4dMV20JXGxQAImMPqRB19AWA8ww3VYTBpjWH7j23a/vrB+pVuN+oEPDufkeIGEH5WYjaCisxsJmD8uuTkQRnEiG6eV/Z/Jn5zV25zWnvfl0uQHdrJgQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=QhVncpsGvFTh82oVXIBJVIQ1wtA/7uxwA00xIB0+AvM=;
+ b=lXxp0meRYv+q5OitaE/ImaIN7cX3L6ZCQfPH+D6LtwW0Yv5BvgjpfXNnPLNQAgeMuePqGAdLJ0B/5TUieAtMmne4wO6RQTy7L/d/o1w9DnisI9ysc2uioM+IvwIeZJI7chkY9Bexk2Eu74TWk84SHbB6LGNrMZaoIiGiSvx+4ATUD66HhZ7MI1So1BgefyPmHUTQ/wf/jZIia7F5Oki1WDhJb96MMyCrOtf16NiuW6L+AdmDXDMFt+SZxQrBEYMkf7XBLHgnvRV3u7aABG0nDao6g2Qviot/YS5s1mRBBCNaCiwjlFMXkZgzLaWvJhf04CQEMQ87p06LuMXXA5fmWg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from CY5PR11MB6139.namprd11.prod.outlook.com (2603:10b6:930:29::17)
+ by SJ2PR11MB7425.namprd11.prod.outlook.com (2603:10b6:a03:4c0::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7828.22; Wed, 7 Aug
+ 2024 01:50:36 +0000
+Received: from CY5PR11MB6139.namprd11.prod.outlook.com
+ ([fe80::7141:316f:77a0:9c44]) by CY5PR11MB6139.namprd11.prod.outlook.com
+ ([fe80::7141:316f:77a0:9c44%7]) with mapi id 15.20.7828.023; Wed, 7 Aug 2024
+ 01:50:35 +0000
+Date: Tue, 6 Aug 2024 20:50:09 -0500
+From: Lucas De Marchi <lucas.demarchi@intel.com>
+To: <da.gomez@samsung.com>
+CC: Masahiro Yamada <masahiroy@kernel.org>, Nathan Chancellor
+	<nathan@kernel.org>, Nicolas Schier <nicolas@fjasle.eu>, Thomas
+ =?utf-8?Q?Hellstr=C3=B6m?= <thomas.hellstrom@linux.intel.com>, Rodrigo Vivi
+	<rodrigo.vivi@intel.com>, Maarten Lankhorst
+	<maarten.lankhorst@linux.intel.com>, Maxime Ripard <mripard@kernel.org>,
+	Thomas Zimmermann <tzimmermann@suse.de>, David Airlie <airlied@gmail.com>,
+	Daniel Vetter <daniel@ffwll.ch>, William Hubbs <w.d.hubbs@gmail.com>, "Chris
+ Brannon" <chris@the-brannons.com>, Kirk Reiser <kirk@reisers.ca>, "Samuel
+ Thibault" <samuel.thibault@ens-lyon.org>, Paul Moore <paul@paul-moore.com>,
+	Stephen Smalley <stephen.smalley.work@gmail.com>, Ondrej Mosnacek
+	<omosnace@redhat.com>, Catalin Marinas <catalin.marinas@arm.com>, Will Deacon
+	<will@kernel.org>, Marc Zyngier <maz@kernel.org>, Oliver Upton
+	<oliver.upton@linux.dev>, James Morse <james.morse@arm.com>, Suzuki K Poulose
+	<suzuki.poulose@arm.com>, Zenghui Yu <yuzenghui@huawei.com>, "Greg
+ Kroah-Hartman" <gregkh@linuxfoundation.org>, Jiri Slaby
+	<jirislaby@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, "Bill
+ Wendling" <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
+	<linux-kernel@vger.kernel.org>, <linux-kbuild@vger.kernel.org>,
+	<intel-xe@lists.freedesktop.org>, <dri-devel@lists.freedesktop.org>,
+	<speakup@linux-speakup.org>, <selinux@vger.kernel.org>,
+	<linux-arm-kernel@lists.infradead.org>, <kvmarm@lists.linux.dev>,
+	<linux-serial@vger.kernel.org>, <llvm@lists.linux.dev>, Finn Behrens
+	<me@kloenk.dev>, "Daniel Gomez (Samsung)" <d+samsung@kruces.com>,
+	<gost.dev@samsung.com>
+Subject: Re: [PATCH 04/12] drm/xe: xe_gen_wa_oob: fix
+ program_invocation_short_name for macos
+Message-ID: <67ahzgfa63gs7ybbunthdiwodlaihzqerb5xmkrgfgrbmghjmw@d57hhuwaf53i>
+References: <20240807-macos-build-support-v1-0-4cd1ded85694@samsung.com>
+ <20240807-macos-build-support-v1-4-4cd1ded85694@samsung.com>
+Content-Type: text/plain; charset="us-ascii"; format=flowed
+Content-Disposition: inline
+In-Reply-To: <20240807-macos-build-support-v1-4-4cd1ded85694@samsung.com>
+X-ClientProxiedBy: SCZP215CA0010.LAMP215.PROD.OUTLOOK.COM
+ (2603:10d6:300:50::18) To CY5PR11MB6139.namprd11.prod.outlook.com
+ (2603:10b6:930:29::17)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4] docs/zh_CN: Add dev-tools/kcsan Chinese translation
-To: Haoyang Liu <tttturtleruss@hust.edu.cn>, si.yanteng@linux.dev,
- Alex Shi <alexs@kernel.org>, Yanteng Si <siyanteng@loongson.cn>,
- Jonathan Corbet <corbet@lwn.net>, Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling
- <morbo@google.com>, Justin Stitt <justinstitt@google.com>
-Cc: hust-os-kernel-patches@googlegroups.com, linux-doc@vger.kernel.org,
- linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-References: <20240731180916.36617-1-tttturtleruss@hust.edu.cn>
- <074662fa2977a708d7a9a4545ffad26612514dc2@linux.dev>
- <b59dbfef-35a9-41e7-b995-655446d503f0@gmail.com>
- <502bcb7a-83d5-49c8-b2e2-a908900281ee@hust.edu.cn>
-Content-Language: en-US
-From: Alex Shi <seakeel@gmail.com>
-In-Reply-To: <502bcb7a-83d5-49c8-b2e2-a908900281ee@hust.edu.cn>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CY5PR11MB6139:EE_|SJ2PR11MB7425:EE_
+X-MS-Office365-Filtering-Correlation-Id: 82e887cd-f18c-4e82-eb78-08dcb683544c
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|376014|1800799024|7416014|366016;
+X-Microsoft-Antispam-Message-Info: =?us-ascii?Q?tBoj694IRsbZPlTg/P2vm4o5WoG7zUulPG99SNILzJlKEmscDlHTtUQIQg51?=
+ =?us-ascii?Q?YVO0tZtVusj91IW/cbc1Cbnp24Kchv3QS20JROYxfzrwZNTylzbOWr1qMbbC?=
+ =?us-ascii?Q?gQvqbA3X0an8dKSrsojut9/X3S8Kn6vvxUnXmqi0djApMhgA45qjp0IlZgZ0?=
+ =?us-ascii?Q?5nLdwoknGvbapU6zR42Gng8VQWagEiUR9xrdF1U2VWFpOi+PDMEx7+1aVmKl?=
+ =?us-ascii?Q?SZYAmZEZWkzKPKFE89iWXRgZMwluQ7WFnfp1nVCBpv4fJPvqiPl7OHDJb8Ok?=
+ =?us-ascii?Q?FoBjdBZRfw8lEPkMtzuCKwhxS5GXpZiBs3IOPJDa8rDa1lRjnfJOupkk2ofm?=
+ =?us-ascii?Q?5Qbw6WbdhJvx2wkoo9PP2JrQC3MlGQtwQQHsR4fK+wYD32dpQsviaSul2bdD?=
+ =?us-ascii?Q?Id7fL6ZAKgXFhIAeltaeuRrYksChpJTUT02FeXrszvqqiULy65wAFS5nRX0E?=
+ =?us-ascii?Q?0et1J4D90RhSEO8El0VLgDrftOpVlkSOcgjx3SPIJi2X0IPg+D7VgbciPGb5?=
+ =?us-ascii?Q?IIBTUBxinQBx7ZKb/kunJE20s3ecn61Hdli+DCfdwvjLlldCgPq6UY2TE1/h?=
+ =?us-ascii?Q?l1hSlilWpjqPzNvsoV2Y3Q8HlT35Kaqn4hlA3Ig9hPGO7jOgCknOHlPKB+Fh?=
+ =?us-ascii?Q?BJSZqaNHw+ciAV6TcegbaAkuN0AuW0j7hkUORIMdi56ExJ7EOvRUA66Bvf+H?=
+ =?us-ascii?Q?JVfZGRX1jdhFXXhC9+Vb5OMJQJtC4NrRQgEDsSGXfQrocrszKZF/rS3uAae0?=
+ =?us-ascii?Q?KibYECaWGWo6Sds5vV+kpOvcbyrpHHNZln6Zk+0YwV0ER7BTVMr0G9VjBz9E?=
+ =?us-ascii?Q?dh5NusE3lh8nY4Jj3eFj9zzl8lIxxiUsQJs9CY5yaOGfv/CsEm4DiOU9Eu4W?=
+ =?us-ascii?Q?VEzxobaVC9K9zbMYNf0UZtaWPNx+pvaJMLDqKajvGnSyz/jb4BaJkkXqAnt5?=
+ =?us-ascii?Q?QOT7OOtGma8R4czZSTCUszlYUKw0qtmLLDac7+Bb5CWfX6PM6mOl3GZko5h1?=
+ =?us-ascii?Q?P5r3Vqa6Ys3fRa5OfbBkOmUVCDELBInp4HmhjR5U82lufl4VsGEHwVwgAgzz?=
+ =?us-ascii?Q?rVdHTXCsjjpsSRu5ZVN6RU9N/tv3ktE7/a2qavx9oslVH9iRSqCdrddSnTaa?=
+ =?us-ascii?Q?/rJF5VSFTHS2GdMqgJ31iPw8VVDxmNvaWbZGr89B1G11LLPyDxd7CmhdYNFw?=
+ =?us-ascii?Q?+gEL94pNJGpOXJqNqizEuzoIstqu61tvYJLSbyg6jeUrLnKDuaIIYVKeAgsY?=
+ =?us-ascii?Q?pfBzDfS6caPrEMugl57ddIZ0whXN4oAuzeWCiKUkxdlWZw6d5Wr9lOgco3yc?=
+ =?us-ascii?Q?Tx/GnaP/QIE+up8ctKcYtOt4irpl4y6MulIBEwL22iqOvrrTHUvCLj06Vj+H?=
+ =?us-ascii?Q?i6QCMYk=3D?=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CY5PR11MB6139.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(1800799024)(7416014)(366016);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?55J7iHsC6y/5JavvJ9EECNnb9U5w0YGUN9xYOq2YC8V4UHuorMlayrHo4kQc?=
+ =?us-ascii?Q?vyUJw1n2AmJuRP6aGVMw7AwNYUUDfXNIE41rAgp9RXEdHl8zqodWnFFclZwM?=
+ =?us-ascii?Q?/a15QrSSwSE9oYpjlXE1Hb6/6V5ZMWiWIvZXJZ7bdRrthoGt/c3PcvPPkQ+e?=
+ =?us-ascii?Q?4JWgS6Sdlz8AO67DaAh7Ajx4RaHfVtWytJT/CI+RIsk1bQQFrcG3H6hf5vtD?=
+ =?us-ascii?Q?PtDIZoPhXEtLvnkH+LilS86LA6Qynq0R3/zwQhbcSamS+vNy3ADsxIT+ndFD?=
+ =?us-ascii?Q?siNfxEdUYDrAazUpDg3WAk+YB7wPPdpWFJLLSV8Q07mboQWrf4uTw/S6ADpm?=
+ =?us-ascii?Q?G411FQF8djBIuMHXhLxuaFr0Hg6SgcrqXzn+tVlEGtblL0731jvIqLL0r2Ae?=
+ =?us-ascii?Q?Pg22QmhFwaWPUgsiH25e53oVtuDNL3ptin2boCNpRPhDSglEkv2o8lN8L7aV?=
+ =?us-ascii?Q?RCl0+dhPTMCmIUSgIQvXrgfkUar0S5cgXFnGbZjm8n7FobnTBmvsHsrqR1jA?=
+ =?us-ascii?Q?o5lctyCecbxz82mBiiDXFPNW2ItXtaG1wfTC7qw4F9mxGnmq+qS1eiPz/IY4?=
+ =?us-ascii?Q?EvSDp8gcPLp3wkm7JkqyTKbPcaA2PFej+hGHUxir6SBZslhGfTILEt54ETVG?=
+ =?us-ascii?Q?cTipe3gktSt1mgVMDxdIvgz99NEeWvi7UP332PYtF8b46Rdyuz7Xr79rlVTg?=
+ =?us-ascii?Q?my5FhLEbr8YuZcVP1UqOQy9Pi/U3wuuMVQaK/BPq5xF54T32b9PPRgmrlzAG?=
+ =?us-ascii?Q?Li6JnjcPIvxtumjVCma8QCaOTjhqv8DeU6W/BFCyQUjcM6ecv1SPhZkddU/6?=
+ =?us-ascii?Q?FvJAEkuSWNH2UnJrU/e/Eok6ufhhVo5cuwHe2rE0xBpINXgQEOhNZn66QbL+?=
+ =?us-ascii?Q?069COhqgvGsI9AtDatjv9GviGIX3o5XVSf+euBQzy+euHJPNj2MRV7RjOYei?=
+ =?us-ascii?Q?ElPkGe4KaA+35Dbc/6BLw3ONiwyOzWPXdGlNIMgWEOUgYu8WaPo6cmX7911T?=
+ =?us-ascii?Q?kxMwrt69/r/vtwUe41FQPI+fWWGnftEwvpcwnorMQOXxmx6wYg8T4DwKuaUy?=
+ =?us-ascii?Q?+1X6MZd0pR90Zk/VR/AfYi24gIFDoRbpHybqqHjyInhDgxIZnUwsyVVh/Ue5?=
+ =?us-ascii?Q?1DZIVhpCdNYsBZE1/tjpt8xIV/xyJHJqjTfDKRGM9yJS95Yv7LJeqtcl4BL+?=
+ =?us-ascii?Q?SquUTW0I+b6pBOdMxcH29O/bOdKAte2+geuwulhDTuOgeOFbdEtukknnpFyZ?=
+ =?us-ascii?Q?rI1fz+qgj/FIGALIxZWDgwIanFuoFCBuiBVcfZ63mFfcsbbQzWvvam3BMS3+?=
+ =?us-ascii?Q?MUC4Yt9++b2Srtgp3CzYHqvir6vOsuJnOA9FDnXlYwSTpA1sPCsIsAZqG1xv?=
+ =?us-ascii?Q?j0vNLGXv9cXKKGImGEhSude+IdhokCKNhHO/MR5L+zQyNqNxrJY48/SGRlHl?=
+ =?us-ascii?Q?Ri8gvFAoBaWqqXfT3Oeu3mnQOZPL2GSYVfJ6dcZZX1REpFrg8N9rG1vXS/uh?=
+ =?us-ascii?Q?oIgb7eIgWR8QjxW2o3b1Mvl+BHLFe+jJT6l5Ap/7qxTvhxjWvE7TTgZWBFIk?=
+ =?us-ascii?Q?PFOVrRvQ8fLGHe+XJc60PIkailbG5zTrFJnQgV69vuireuE67RV7UCfe1t8m?=
+ =?us-ascii?Q?oQ=3D=3D?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 82e887cd-f18c-4e82-eb78-08dcb683544c
+X-MS-Exchange-CrossTenant-AuthSource: CY5PR11MB6139.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Aug 2024 01:50:35.4401
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: uF5SP0fhCAZg3B9lXxHBu/nutI8DuiuUXp5SuCwlriwO7EjJ7yPJtEyuSUbLeMHNwZ/bRbhgu2c3JKvZj2im7IKJCXmBDlwLMmg1oXNjIrg=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ2PR11MB7425
+X-OriginatorOrg: intel.com
 
+On Wed, Aug 07, 2024 at 01:09:18AM GMT, Daniel Gomez via B4 Relay wrote:
+>From: Daniel Gomez <da.gomez@samsung.com>
+>
+>Use getprogname() [1] instead of program_invocation_short_name() [2]
+>for macOS hosts.
+>
+>[1]:
+>https://www.gnu.org/software/gnulib/manual/html_node/
+>program_005finvocation_005fshort_005fname.html
+>
+>[2]:
+>https://developer.apple.com/library/archive/documentation/System/
+>Conceptual/ManPages_iPhoneOS/man3/getprogname.3.html
+>
+>Fixes build error for macOS hosts:
+>
+>drivers/gpu/drm/xe/xe_gen_wa_oob.c:34:3: error: use of
+>undeclared identifier 'program_invocation_short_name'    34 |
+>program_invocation_short_name);       |                 ^ 1 error
+>generated.
+>
+>Signed-off-by: Daniel Gomez <da.gomez@samsung.com>
+>---
+> drivers/gpu/drm/xe/xe_gen_wa_oob.c | 8 +++++++-
+> 1 file changed, 7 insertions(+), 1 deletion(-)
+>
+>diff --git a/drivers/gpu/drm/xe/xe_gen_wa_oob.c b/drivers/gpu/drm/xe/xe_gen_wa_oob.c
+>index 904cf47925aa..079b8870c461 100644
+>--- a/drivers/gpu/drm/xe/xe_gen_wa_oob.c
+>+++ b/drivers/gpu/drm/xe/xe_gen_wa_oob.c
+>@@ -9,6 +9,12 @@
+> #include <stdbool.h>
+> #include <stdio.h>
+> #include <string.h>
+>+#define PROG_INV_NAME program_invocation_short_name
+>+
+>+#ifdef __APPLE__
+>+#include <stdlib.h>
+>+#define PROG_INV_NAME getprogname()
+>+#endif
+>
+> #define HEADER \
+> 	"// SPDX-License-Identifier: MIT\n" \
+>@@ -31,7 +37,7 @@
+> static void print_usage(FILE *f)
+> {
+> 	fprintf(f, "usage: %s <input-rule-file> <generated-c-source-file> <generated-c-header-file>\n",
+>-		program_invocation_short_name);
+>+		PROG_INV_NAME);
 
+instead of doing that, can we a) include stdlib.h unconditionally and b)
+add here a
+`static const char *program_invocation_short_name = getprogname()` so we
+don't need to change the common case and just handle the "build on
+macos" as a compat layer?
 
-On 8/6/24 11:24 PM, Haoyang Liu wrote:
-> 
-> 在 2024/8/6 11:19, Alex Shi 写道:
->> Please don't use HTML format to send emails.
-> OK.
->> Does this file look great in web browser after 'make htmldocs'?
-> 
-> Yes, I check the output html file and it looks all right.
+Lucas De Marchi
 
-Great!
-
-Reviewed-by: Alex Shi <alexs@kernel.org>
-
-> 
-> 
-> Thanks,
-> 
-> Haoyang
-> 
->>
->> Thanks
->> Alex
->>
->> On 8/6/24 10:20 AM, si.yanteng@linux.dev wrote:
->>> 2024年8月1日 02:09, "Haoyang Liu" <tttturtleruss@hust.edu.cn> 写到:
->>>
->>>
->>>
->>>> Translate dev-tools/kcsan commit 31f605a308e6
->>>>
->>>> ("kcsan, compiler_types: Introduce __data_racy type qualifier")
->>>>
->>>> into Chinese and add it in dev-tools/zh_CN/index.rst
->>>>
->>>> Signed-off-by: Haoyang Liu <tttturtleruss@hust.edu.cn>
->>>>
->>>> ---
->>>>
->>>> v3 -> v4: Added original English text for proper nouns and modified some unclear experessions.
->>>>
->>>> v2 -> v3: Revised some sentences based on reviewer's suggestions and updated the KTSAN url.
->>>>
->>>> v1 -> v2: Added commit tag and fixed style problems according to reviewer's suggestions.
->>>>
->>>>   .../translations/zh_CN/dev-tools/index.rst | 2 +-
->>>>
->>>>   .../translations/zh_CN/dev-tools/kcsan.rst | 321 ++++++++++++++++++
->>>>
->>>>   2 files changed, 322 insertions(+), 1 deletion(-)
->>>>
->>>>   create mode 100644 Documentation/translations/zh_CN/dev-tools/kcsan.rst
->>>>
->>>> diff --git a/Documentation/translations/zh_CN/dev-tools/index.rst b/Documentation/translations/zh_CN/dev-tools/index.rst
->>>>
->>>> index c540e4a7d5db..6a8c637c0be1 100644
->>>>
->>>> --- a/Documentation/translations/zh_CN/dev-tools/index.rst
->>>>
->>>> +++ b/Documentation/translations/zh_CN/dev-tools/index.rst
->>>>
->>>> @@ -21,6 +21,7 @@ Documentation/translations/zh_CN/dev-tools/testing-overview.rst
->>>>
->>>>   testing-overview
->>>>
->>>>   sparse
->>>>
->>>>   kcov
->>>>
->>>> + kcsan
->>>>
->>>>   gcov
->>>>
->>>>   kasan
->>>>
->>>>   ubsan
->>>>
->>>> @@ -32,7 +33,6 @@ Todolist:
->>>>
->>>>   - checkpatch
->>>>
->>>>   - coccinelle
->>>>
->>>>   - kmsan
->>>>
->>>> - - kcsan
->>>>
->>>>   - kfence
->>>>
->>>>   - kgdb
->>>>
->>>>   - kselftest
->>>>
->>>> diff --git a/Documentation/translations/zh_CN/dev-tools/kcsan.rst b/Documentation/translations/zh_CN/dev-tools/kcsan.rst
->>>>
->>>> new file mode 100644
->>>>
->>>> index 000000000000..39fa43d8c414
->>>>
->>>> --- /dev/null
->>>>
->>>> +++ b/Documentation/translations/zh_CN/dev-tools/kcsan.rst
->>>>
->>>> @@ -0,0 +1,321 @@
->>>>
->>>> +.. SPDX-License-Identifier: GPL-2.0
->>>>
->>>> +
->>>>
->>>> +.. include:: ../disclaimer-zh_CN.rst
->>>>
->>>> +
->>>>
->>>> +:Original: Documentation/dev-tools/kcsan.rst
->>>>
->>>> +:Translator: 刘浩阳 Haoyang Liu <tttturtleruss@hust.edu.cn>
->>>>
->>>> +
->>>>
->>>> +内核并发消毒剂(KCSAN)
->>>>
->>>> +=====================
->>>>
->>>> +
->>>>
->>>> +内核并发消毒剂（KCSAN）是一个动态竞争检测器，依赖编译时插桩，并且使用基于观察
->>>>
->>>> +点的采样方法来检测竞争。KCSAN 的主要目的是检测 `数据竞争`_。
->>>>
->>>> +
->>>>
->>>> +使用
->>>>
->>>> +----
->>>>
->>>> +
->>>>
->>>> +KCSAN 受 GCC 和 Clang 支持。使用 GCC 需要版本 11 或更高，使用 Clang 也需要
->>>>
->>>> +版本 11 或更高。
->>>>
->>>> +
->>>>
->>>> +为了启用 KCSAN，用如下参数配置内核::
->>>>
->>>> +
->>>>
->>>> + CONFIG_KCSAN = y
->>>>
->>>> +
->>>>
->>>> +KCSAN 提供了几个其他的配置选项来自定义行为（见 ``lib/Kconfig.kcsan`` 中的各自的
->>>>
->>>> +帮助文档以获取更多信息）。
->>>>
->>>> +
->>>>
->>>> +错误报告
->>>>
->>>> +~~~~~~~~
->>>>
->>>> +
->>>>
->>>> +一个典型数据竞争的报告如下所示::
->>>>
->>>> +
->>>>
->>>> + ==================================================================
->>>>
->>>> + BUG: KCSAN: data-race in test_kernel_read / test_kernel_write
->>>>
->>>> +
->>>>
->>>> + write to 0xffffffffc009a628 of 8 bytes by task 487 on cpu 0:
->>>>
->>>> + test_kernel_write+0x1d/0x30
->>>>
->>>> + access_thread+0x89/0xd0
->>>>
->>>> + kthread+0x23e/0x260
->>>>
->>>> + ret_from_fork+0x22/0x30
->>>>
->>>> +
->>>>
->>>> + read to 0xffffffffc009a628 of 8 bytes by task 488 on cpu 6:
->>>>
->>>> + test_kernel_read+0x10/0x20
->>>>
->>>> + access_thread+0x89/0xd0
->>>>
->>>> + kthread+0x23e/0x260
->>>>
->>>> + ret_from_fork+0x22/0x30
->>>>
->>>> +
->>>>
->>>> + value changed: 0x00000000000009a6 -> 0x00000000000009b2
->>>>
->>>> +
->>>>
->>>> + Reported by Kernel Concurrency Sanitizer on:
->>>>
->>>> + CPU: 6 PID: 488 Comm: access_thread Not tainted 5.12.0-rc2+ #1
->>>>
->>>> + Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.14.0-2 04/01/2014
->>>>
->>>> + ==================================================================
->>>>
->>>> +
->>>>
->>>> +报告的头部提供了一个关于竞争中涉及到的函数的简短总结。随后是竞争中的两个线程的
->>>>
->>>> +访问类型和堆栈信息。如果 KCSAN 发现了一个值的变化，那么那个值的旧值和新值会在
->>>>
->>>> +“value changed”这一行单独显示。
->>>>
->>>> +
->>>>
->>>> +另一个不太常见的数据竞争类型的报告如下所示::
->>>>
->>>> +
->>>>
->>>> + ==================================================================
->>>>
->>>> + BUG: KCSAN: data-race in test_kernel_rmw_array+0x71/0xd0
->>>>
->>>> +
->>>>
->>>> + race at unknown origin, with read to 0xffffffffc009bdb0 of 8 bytes by task 515 on cpu 2:
->>>>
->>>> + test_kernel_rmw_array+0x71/0xd0
->>>>
->>>> + access_thread+0x89/0xd0
->>>>
->>>> + kthread+0x23e/0x260
->>>>
->>>> + ret_from_fork+0x22/0x30
->>>>
->>>> +
->>>>
->>>> + value changed: 0x0000000000002328 -> 0x0000000000002329
->>>>
->>>> +
->>>>
->>>> + Reported by Kernel Concurrency Sanitizer on:
->>>>
->>>> + CPU: 2 PID: 515 Comm: access_thread Not tainted 5.12.0-rc2+ #1
->>>>
->>>> + Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.14.0-2 04/01/2014
->>>>
->>>> + ==================================================================
->>>>
->>>> +
->>>>
->>>> +这个报告是当另一个竞争线程不可能被发现，但是可以从观测的内存地址的值改变而推断
->>>>
->>>> +出来的时候生成的。这类报告总是会带有“value changed”行。这类报告的出现通常是因
->>>>
->>>> +为在竞争线程中缺少插桩，也可能是因为其他原因，比如 DMA 访问。这类报告只会在
->>>>
->>>> +设置了内核参数 ``CONFIG_KCSAN_REPORT_RACE_UNKNOWN_ORIGIN=y`` 时才会出现，而这
->>>>
->>>> +个参数是默认启用的。
->>>>
->>>> +
->>>>
->>>> +选择性分析
->>>>
->>>> +~~~~~~~~~~
->>>>
->>>> +
->>>>
->>>> +对于一些特定的访问，函数，编译单元或者整个子系统，可能需要禁用数据竞争检测。
->>>>
->>>> +对于静态黑名单，有如下可用的参数：
->>>>
->>>> +
->>>>
->>>> +* KCSAN 支持使用 ``data_race(expr)`` 注解，这个注解告诉 KCSAN 任何由访问
->>>>
->>>> + ``expr`` 所引起的数据竞争都应该被忽略，其产生的行为后果被认为是安全的。请查阅
->>>>
->>>> + `"Marking Shared-Memory Accesses" in the LKMM`_ 获得更多信息。
->>>>
->>>> +
->>>>
->>>> +* 与 ``data_race(...)`` 相似，可以使用类型限定符 ``__data_racy`` 来标记一个变量
->>>>
->>>> + ，所有访问该变量而导致的数据竞争都是故意为之并且应该被 KCSAN 忽略::
->>>>
->>>> +
->>>>
->>>> + struct foo {
->>>>
->>>> + ...
->>>>
->>>> + int __data_racy stats_counter;
->>>>
->>>> + ...
->>>>
->>>> + };
->>>>
->>>> +
->>>>
->>>> +* 使用函数属性 ``__no_kcsan`` 可以对整个函数禁用数据竞争检测::
->>>>
->>>> +
->>>>
->>>> + __no_kcsan
->>>>
->>>> + void foo(void) {
->>>>
->>>> + ...
->>>>
->>>> +
->>>>
->>>> + 为了动态限制该为哪些函数生成报告，查阅 `Debug 文件系统接口`_ 黑名单/白名单特性。
->>>>
->>>> +
->>>>
->>>> +* 为特定的编译单元禁用数据竞争检测，将下列参数加入到 ``Makefile`` 中::
->>>>
->>>> +
->>>>
->>>> + KCSAN_SANITIZE_file.o := n
->>>>
->>>> +
->>>>
->>>> +* 为 ``Makefile`` 中的所有编译单元禁用数据竞争检测，将下列参数添加到相应的
->>>>
->>>> + ``Makefile`` 中::
->>>>
->>>> +
->>>>
->>>> + KCSAN_SANITIZE := n
->>>>
->>>> +
->>>>
->>>> +.. _"Marking Shared-Memory Accesses" in the LKMM: https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/tools/memory-model/Documentation/access-marking.txt
->>>>
->>>> +
->>>>
->>>> +此外，KCSAN 可以根据偏好设置显示或隐藏整个类别的数据竞争。可以使用如下
->>>>
->>>> +Kconfig 参数进行更改:
->>>>
->>>> +
->>>>
->>>> +* ``CONFIG_KCSAN_REPORT_VALUE_CHANGE_ONLY``: 如果启用了该参数并且通过观测点
->>>>
->>>> + (watchpoint) 观测到一个有冲突的写操作，但是对应的内存地址中存储的值没有改变，
->>>>
->>>> + 则不会报告这起数据竞争。
->>>>
->>>> +
->>>>
->>>> +* ``CONFIG_KCSAN_ASSUME_PLAIN_WRITES_ATOMIC``: 假设默认情况下，不超过字大小的简
->>>>
->>>> + 单对齐写入操作是原子的。假设这些写入操作不会受到不安全的编译器优化影响，从而导
->>>>
->>>> + 致数据竞争。该选项使 KCSAN 不报告仅由不超过字大小的简单对齐写入操作引起
->>>>
->>>> + 的冲突所导致的数据竞争。
->>>>
->>>> +
->>>>
->>>> +* ``CONFIG_KCSAN_PERMISSIVE``: 启用额外的宽松规则来忽略某些常见类型的数据竞争。
->>>>
->>>> + 与上面的规则不同，这条规则更加复杂，涉及到值改变模式，访问类型和地址。这个
->>>>
->>>> + 选项依赖编译选项 ``CONFIG_KCSAN_REPORT_VALUE_CHANGE_ONLY=y``。请查看
->>>>
->>>> + ``kernel/kcsan/permissive.h`` 获取更多细节。对于只侧重于特定子系统而不是整个
->>>>
->>>> + 内核报告的测试者和维护者，建议禁用该选项。
->>>>
->>>> +
->>>>
->>>> +要使用尽可能严格的规则，选择 ``CONFIG_KCSAN_STRICT=y``，这将配置 KCSAN 尽可
->>>>
->>>> +能紧密地遵循 Linux 内核内存一致性模型（LKMM）。
->>>>
->>>> +
->>>>
->>>> +Debug 文件系统接口
->>>>
->>>> +~~~~~~~~~~~~~~~~~~
->>>>
->>>> +
->>>>
->>>> +文件 ``/sys/kernel/debug/kcsan`` 提供了如下接口：
->>>>
->>>> +
->>>>
->>>> +* 读 ``/sys/kernel/debug/kcsan`` 返回不同的运行时统计数据。
->>>>
->>>> +
->>>>
->>>> +* 将 ``on`` 或 ``off`` 写入 ``/sys/kernel/debug/kcsan`` 允许打开或关闭 KCSAN。
->>>>
->>>> +
->>>>
->>>> +* 将 ``!some_func_name`` 写入 ``/sys/kernel/debug/kcsan`` 会将
->>>>
->>>> + ``some_func_name`` 添加到报告过滤列表中，该列表（默认）会将数据竞争报告中的顶
->>>>
->>>> + 层堆栈帧是列表中函数的情况列入黑名单。
->>>>
->>>> +
->>>>
->>>> +* 将 ``blacklist`` 或 ``whitelist`` 写入 ``/sys/kernel/debug/kcsan`` 会改变报告
->>>>
->>>> + 过滤行为。例如，黑名单的特性可以用来过滤掉经常发生的数据竞争。白名单特性可以帮
->>>>
->>>> + 助复现和修复测试。
->>>>
->>>> +
->>>>
->>>> +性能调优
->>>>
->>>> +~~~~~~~~
->>>>
->>>> +
->>>>
->>>> +影响 KCSAN 整体的性能和 bug 检测能力的核心参数是作为内核命令行参数公开的，其默认
->>>>
->>>> +值也可以通过相应的 Kconfig 选项更改。
->>>>
->>>> +
->>>>
->>>> +* ``kcsan.skip_watch`` (``CONFIG_KCSAN_SKIP_WATCH``): 在另一个观测点设置之前每
->>>>
->>>> + 个 CPU 要跳过的内存操作次数。更加频繁的设置观测点将增加观察到竞争情况的可能性
->>>>
->>>> + 。这个参数对系统整体的性能和竞争检测能力影响最显著。
->>>>
->>>> +
->>>>
->>>> +* ``kcsan.udelay_task`` (``CONFIG_KCSAN_UDELAY_TASK``): 对于任务，观测点设置之
->>>>
->>>> + 后暂停执行的微秒延迟。值越大，检测到竞争情况的可能性越高。
->>>>
->>>> +
->>>>
->>>> +* ``kcsan.udelay_interrupt`` (``CONFIG_KCSAN_UDELAY_INTERRUPT``): 对于中断，
->>>>
->>>> + 观测点设置之后暂停执行的微秒延迟。中断对于延迟的要求更加严格，其延迟通常应该小
->>>>
->>>> + 于为任务选择的延迟。
->>>>
->>>> +
->>>>
->>>> +它们可以通过 ``/sys/module/kcsan/parameters/`` 在运行时进行调整。
->>>>
->>>> +
->>>>
->>>> +数据竞争
->>>>
->>>> +--------
->>>>
->>>> +
->>>>
->>>> +在一次执行中，如果两个内存访问存在 *冲突*，在不同的线程中并发执行，并且至少
->>>>
->>>> +有一个访问是 *简单访问*，则它们就形成了 *数据竞争*。如果它们访问了同一个内存地址并且
->>>>
->>>> +至少有一个是写操作，则称它们存在 *冲突*。有关更详细的讨论和定义，见
->>>> +`"Plain Accesses and Data Races" in the LKMM`_。
->>>>
->>>> +
->>>>
->>>> +.. _"Plain Accesses and Data Races" in the LKMM:
->>> Sorry for the delay for so long, how about
->>> translating it into Chinese as well?
->>>  
->>>
->>> Thanks,
->>> Yanteng
-> 
+> }
+>
+> static void print_parse_error(const char *err_msg, const char *line,
+>
+>-- 
+>Git-146)
+>
+>
