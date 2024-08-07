@@ -1,100 +1,141 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from fhigh6-smtp.messagingengine.com (fhigh6-smtp.messagingengine.com [103.168.172.157])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0AFCC27448;
-	Wed,  7 Aug 2024 15:09:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2729384A3F
+	for <llvm@lists.linux.dev>; Wed,  7 Aug 2024 15:18:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.157
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723043366; cv=none; b=i/AjG7cuOZbCpn6wOzXto0f3VgsRZ0xcXJ0e2eCyNJFPMxMDNacyOhsGJx5XCfzti0Ql0Y6rnKKu2RD8syw2UNwUYcpEB9skCdkcjLaR5voNg51wkmEOcxbk17ctPFaheuduk7X3w5CAR5DSNjopbBaXBFqLnd1ko45oX7mpFEQ=
+	t=1723043939; cv=none; b=bP0ZdZ07X1100KurWGmU62QpKmhK+D776dVE/yRpWYR9JYJe7xv+HeyGwAM8pGd3oDOZzOEAH70uHN7Q9DbazqTrYycy7C3zL63Km9OjoYPv3An/QClGYzZ+wdIM7oyb8RSUuw8RqIh6hRJxUcUmufH7wpT4CUBqQ1zdCmpPnw0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723043366; c=relaxed/simple;
-	bh=1ZoMg3Nw5YU6eDtyDLGwfU4jQwDXQut9kygF6jGLe+0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=fK/N/oPoxM9RqbNYzFKe0L87GtvmePNVWLrSQHqTyX1klyHW2zOdej7Nmm7/srQhO+K1gn9FrzuLdYmkanV43z8MJHTM8tWObtNKSlzB4QKlttFaVJGbl5plCH5sVVq3isqAEduXrg+m8G58ictSzAH/WhSCgKijxN+SXnSKbsg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=l7ztl3Re; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1723043939; c=relaxed/simple;
+	bh=+qZZeT927FOmxfKXQK6ON0ULbpMZirg+jrl3U78lHNc=;
+	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
+	 Subject:Content-Type; b=uuBfNOYg3IAkbygoRP6QiwBt5+/9w2VAcZkYOhEKqiA6uuTb8RCRdqL7WqL2ym4uit+ODyk66eARzPAmS5qrXOGjcuzUrenLyNOzfmWjhZ3M87odveaiMoaIsEL/rLJHgV32Q6PlCxAoz9QBYcu9yU60Lr6mc5JuBSleC/KSwXc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=CJ2cnmwe; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=DOGYOilJ; arc=none smtp.client-ip=103.168.172.157
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="l7ztl3Re"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C4C0BC4AF0B;
-	Wed,  7 Aug 2024 15:09:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1723043365;
-	bh=1ZoMg3Nw5YU6eDtyDLGwfU4jQwDXQut9kygF6jGLe+0=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=l7ztl3ReQajwfAuSM08RqGPhoaDrtGXILt6ia24Pv/RKaH6ycPIb/FrpamotwpHfS
-	 FpReu3q3+NH7FSy4RuXaV5i8PzVwrwZV7JwEME/C8zYl9Q0liLCKURJ5H+AMrIxcTc
-	 W4NylVT0eDHOsMeTu4OgTvFBqXLoCE+fYGpBXbZE2lAajEk0u+LSS/eKB692qllskA
-	 8tezOY9b8dyHxBob1aXbl4aX8G9jscAmJiecs7CEdY6kLhQXDbCfGdc1LbdBkFswxL
-	 wYwojrVviJ9kbAxidB6Qgvn9dUmOc3DGCCJdxuB8BHZZ6XBnsS7mKcg7hYB7iJP6lI
-	 eFdN3VntDCHWQ==
-Date: Wed, 7 Aug 2024 16:09:18 +0100
-From: Mark Brown <broonie@kernel.org>
-To: Arnd Bergmann <arnd@kernel.org>
-Cc: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-	Liam Girdwood <lgirdwood@gmail.com>,
-	Peter Ujfalusi <peter.ujfalusi@linux.intel.com>,
-	Bard Liao <yung-chuan.liao@linux.intel.com>,
-	Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
-	Daniel Baluta <daniel.baluta@nxp.com>,
-	Seppo Ingalsuo <seppo.ingalsuo@linux.intel.com>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Kai Vehmanen <kai.vehmanen@linux.intel.com>,
-	Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Brent Lu <brent.lu@intel.com>, sound-open-firmware@alsa-project.org,
-	linux-sound@vger.kernel.org, linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: Re: [PATCH] sound: sof: ioc4-topology: avoid extra dai_params copy
-Message-ID: <731fa66a-bed7-45fb-9187-a9263612eac4@sirena.org.uk>
-References: <20240807080302.2372297-1-arnd@kernel.org>
+	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="CJ2cnmwe";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="DOGYOilJ"
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+	by mailfhigh.nyi.internal (Postfix) with ESMTP id 532E3114E9CF;
+	Wed,  7 Aug 2024 11:18:56 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute4.internal (MEProxy); Wed, 07 Aug 2024 11:18:56 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm2; t=1723043936;
+	 x=1723130336; bh=Ix+ORU9sOaSfeu9FweBXTe9+ziQO/CxzpJRM5DUlm8A=; b=
+	CJ2cnmwelvl+f0+2nfTlWZyfWx6chPZYvcPyYDMM9/33xMqUoRfaUYyRzaIONpgM
+	cac4R7mP4kwm+M235pj85+/bwSj35dJtS86E7jLi8zR5p1QWVkwK6NoGhr0rvKZ8
+	c948Ind/enDh/zGFXz31Avt1TLotK5EoypBP6x3qHu4XzH/409VUB3dwRinEVN6M
+	LsTmJBwsdKYKN/RRArexdQq9j04yAtTEJaHtTLy8kTdmjdLGF71dQSev1qnSjtNq
+	v0bdMz17jAFE/N9bAVv1K5ceo/UPOYKfQR9F+tujROO4EfCnqzM8FGDeFq3oMStQ
+	hUKfMWXXqWYNUSNtZqftOw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1723043936; x=
+	1723130336; bh=Ix+ORU9sOaSfeu9FweBXTe9+ziQO/CxzpJRM5DUlm8A=; b=D
+	OGYOilJz7Ue/2OWXiAvO9CmLfqJ6pN9pK+f2W9GSaxQ54Zl3Tp52Dh/r6WMUdUXq
+	3glu+NorPJGZpbyAnrk/vgztvCNj2/MsFr9xit0qEWp2Y08PN5Iphl0hKcCJcIv5
+	vp0xgXoBd9sLba8GCFFb452cmG7g65/4uEVZbEeY+SSOGR5+niS/85tG8X4kt7zC
+	5agm46kYotOjLivVjjMyp6e2OBTia4DQBqOoEz2dKmTVPjtyfLOnOaJh8B5NnMMj
+	mYbms75bEz2/c0KFuIVybDflMEnkSWxdB+cVil2ZJDsyJepujv+kEwdVZhEbaj+/
+	QZ2SlKhT/63o1mjMRHvUg==
+X-ME-Sender: <xms:X5CzZpiiaku8TDBO1Z-0Gi5ur1eu29VZVSIFDCr03W7mgmKYYvxRVA>
+    <xme:X5CzZuDmkeaiLNxmb_MlsRnc2pUaxEOLlcsVehacHYkZ9CeMy5nayhe6QpRIrsHnz
+    eGUsvs9J_L9r-JX2Pk>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeftddrledtgdekiecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpefoggffhffvvefkjghfufgtgfesthejredtredttdenucfhrhhomhepfdetrhhn
+    ugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrghtth
+    gvrhhnpefhtdfhvddtfeehudekteeggffghfejgeegteefgffgvedugeduveelvdekhfdv
+    ieenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrh
+    hnugesrghrnhgusgdruggvpdhnsggprhgtphhtthhopedt
+X-ME-Proxy: <xmx:X5CzZpHlbE-cswoUrIg3I2hTMMOn2optOwEcOlU9Q6d_2aNm9sG8mg>
+    <xmx:X5CzZuRwLUxSF6xomnxPwbRfCqLz1dhhkxOOemWTrc0OvgGYzqAEwA>
+    <xmx:X5CzZmytOUmjxoKs5Nvn7yDsBE8-wYGiJzOTtxVQ66vWGJFYumjX3Q>
+    <xmx:X5CzZk571AeiwoDIr5nYApYxhdbKXr8hskkXao0t4GiuRpArD10Vqw>
+    <xmx:YJCzZjxpdt8poRk8wTp-W4bear_X24aYLJlhWjods_wFGXVz43o6UqQt>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+	id B28E0B6008D; Wed,  7 Aug 2024 11:18:55 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="4XGELTP9/4XoJJVs"
-Content-Disposition: inline
-In-Reply-To: <20240807080302.2372297-1-arnd@kernel.org>
-X-Cookie: Offer may end without notice.
+Date: Wed, 07 Aug 2024 17:18:35 +0200
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "Mark Brown" <broonie@kernel.org>, "Arnd Bergmann" <arnd@kernel.org>
+Cc: "Pierre-Louis Bossart" <pierre-louis.bossart@linux.intel.com>,
+ "Liam Girdwood" <lgirdwood@gmail.com>,
+ "Peter Ujfalusi" <peter.ujfalusi@linux.intel.com>,
+ "Bard Liao" <yung-chuan.liao@linux.intel.com>,
+ "Ranjani Sridharan" <ranjani.sridharan@linux.intel.com>,
+ "Daniel Baluta" <daniel.baluta@nxp.com>,
+ "Seppo Ingalsuo" <seppo.ingalsuo@linux.intel.com>,
+ "Kai Vehmanen" <kai.vehmanen@linux.intel.com>,
+ "Jaroslav Kysela" <perex@perex.cz>, "Takashi Iwai" <tiwai@suse.com>,
+ "Nathan Chancellor" <nathan@kernel.org>,
+ "Nick Desaulniers" <ndesaulniers@google.com>,
+ "Bill Wendling" <morbo@google.com>, "Justin Stitt" <justinstitt@google.com>,
+ "Brent Lu" <brent.lu@intel.com>, sound-open-firmware@alsa-project.org,
+ linux-sound@vger.kernel.org, linux-kernel@vger.kernel.org,
+ llvm@lists.linux.dev
+Message-Id: <d988fe89-104e-46ce-94b7-6754f2c7a455@app.fastmail.com>
+In-Reply-To: <731fa66a-bed7-45fb-9187-a9263612eac4@sirena.org.uk>
+References: <20240807080302.2372297-1-arnd@kernel.org>
+ <731fa66a-bed7-45fb-9187-a9263612eac4@sirena.org.uk>
+Subject: Re: [PATCH] sound: sof: ioc4-topology: avoid extra dai_params copy
+Content-Type: text/plain
+Content-Transfer-Encoding: 7bit
 
+On Wed, Aug 7, 2024, at 17:09, Mark Brown wrote:
+> On Wed, Aug 07, 2024 at 10:02:27AM +0200, Arnd Bergmann wrote:
+>
+>> From what I can tell, this was unintentional, as both
+>> sof_ipc4_prepare_dai_copier() and sof_ipc4_prepare_copier_module() make a
+>> copy for the same purpose, but copying it once has the exact same effect.
+>
+>> Remove the extra copy and change the direct struct assignment to
+>> an explicit memcpy() call to make it clearer to the reader that this
+>> is what happens. Note that gcc treats struct assignment as a memcpy()
+>> that may be inlined anyway, so the resulting object code is the same.
+>
+> The effect of the copy is to ensure that if the function fails the
+> argument is unmodified - did you do the analysis to check that it's OK
+> to modify on error?  Your commit log says "the same purpose" but never
+> specifies what that purpose is.
 
---4XGELTP9/4XoJJVs
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+There is always a chance that I misunderstood the code, but
+yes, I did understand that the idea is to not modify the
+parameters inside of sof_ipc4_prepare_dai_copier.
 
-On Wed, Aug 07, 2024 at 10:02:27AM +0200, Arnd Bergmann wrote:
+The only caller is in sof_ipc4_prepare_copier_module(), which
+achieves the exact same bit by doing the same:
 
-> From what I can tell, this was unintentional, as both
-> sof_ipc4_prepare_dai_copier() and sof_ipc4_prepare_copier_module() make a
-> copy for the same purpose, but copying it once has the exact same effect.
+         /*
+          * Use the fe_params as a base for the copier configuration.
+          * The ref_params might get updated to reflect what format is
+          * supported by the copier on the DAI side.
+          *
+          * In case of capture the ref_params returned will be used to
+          * find the input configuration of the copier.
+          */
+         memcpy(&ref_params, fe_params, sizeof(ref_params));
+         ret = sof_ipc4_prepare_dai_copier(sdev, dai, &ref_params, dir);
+         if (ret < 0)
+                  return ret;
 
-> Remove the extra copy and change the direct struct assignment to
-> an explicit memcpy() call to make it clearer to the reader that this
-> is what happens. Note that gcc treats struct assignment as a memcpy()
-> that may be inlined anyway, so the resulting object code is the same.
+So when sof_ipc4_prepare_dai_copier() fails, the caller's
+local 'ref_params' structure is no longer used anywhere.
 
-The effect of the copy is to ensure that if the function fails the
-argument is unmodified - did you do the analysis to check that it's OK
-to modify on error?  Your commit log says "the same purpose" but never
-specifies what that purpose is.
-
---4XGELTP9/4XoJJVs
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmazjh0ACgkQJNaLcl1U
-h9CH0Qf+PkIAJuaXgW2ZlB/lV0c9qstd5NqOjIDa9douc4XYdRJhkO+ttJPleTv7
-TzTjE4b9DsnjLpaikE7U1csAfX6T4id03Cs7O8kShNdw8lX7pxyYoN5NXx7GNJFj
-EFA11ugixS5CP1wWlAbizjKM7T9YPxO2cFoif2BjQFLwFrlXP+tkpBmIGB4Dyhse
-Z+PQRQvxd92ljQWMvQMNzne6ypp8B9IqMOHPny9OC+MAacHc404S53Ad4lLaQXk+
-ssA9WcpNW7tNorWlIN7Y4quQiJyBxYffnhO8kUYTN3kkmJ2a6f3uUdFdv+EpRnyz
-g3YqQ/j57+3QIdnDb75kxo8pugNYYg==
-=TXp9
------END PGP SIGNATURE-----
-
---4XGELTP9/4XoJJVs--
+     Arnd
