@@ -1,99 +1,86 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A41C1CCB35;
-	Wed,  7 Aug 2024 10:00:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D8FB91D174B;
+	Wed,  7 Aug 2024 11:01:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723024843; cv=none; b=EoiWGj4DOeYoAAzXuuUMxDZbQsCHOMjKSPha9NcLo1d8rCkAELVOcRpFu34KeOYPTxBO3D79BYNTA/3+BPUtzDUDj9a4rNGSaEBOEQjuV18tFoubmfyfFis9WTuy1wukEyd6W61JiyjfH7Xxa4XS+c7LuAbWMFcdEpHPWF40jLA=
+	t=1723028471; cv=none; b=d8ZRe+gXJefduPJRo9U+s3lfNrrm3tUC6CBXdrvEdhFOCmyfjJAiwfLlk0tDwZcYBGEmC6lPjWtkSzu6mlTaDbe/sARBWROcvDJ9LhOtYljCN8nJN/j0W8syT5S/eV9eQYSmf2DSF3x8beQtM63J3lP7/XKAqbqMQXeAapdUMww=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723024843; c=relaxed/simple;
-	bh=GYOdhohoWSTAlECirRhTbMhtu4F/Qp2FJ9KwXEWuheI=;
+	s=arc-20240116; t=1723028471; c=relaxed/simple;
+	bh=k6GWvSmzs8fww5dKho7yB+WRfQj5+Coz0kDkKHV5yck=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=YZu8tQECl9KmosoxsQwzvLhhzWRFZOsImPo3XyotQCWQZrERRYF1crHWaghRqsDDIdujJmCkgDOUKEnvp956acn8gAp+nT1z2JVU4tBW+q01zMned+vVsGxoDB4YFBe0U7CNj64WHjpJPH5XAh7ysdUjF70I9DBC74klPsBfyEQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=j28K3tku; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=F9rg6A2Zrs+ZMtDIDT7AsJNUU/RyZiWTXH/dag0lD9qfJhZimKFJUr9Qr5OuJJKLkCi5X+jbfpvRoBjT9DvbbjUTswYMM6VbfEvX4r4S07TSaA16tMeLHqwV+oZXDIXKm7iwwdlsrX9mKzD+rbf/qrbx0vuw7+JDtxqsb/cxLY8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=oKMx0VBf; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="j28K3tku"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E90FDC32782;
-	Wed,  7 Aug 2024 10:00:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1723024843;
-	bh=GYOdhohoWSTAlECirRhTbMhtu4F/Qp2FJ9KwXEWuheI=;
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="oKMx0VBf"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 028E6C32782;
+	Wed,  7 Aug 2024 11:01:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1723028470;
+	bh=k6GWvSmzs8fww5dKho7yB+WRfQj5+Coz0kDkKHV5yck=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=j28K3tkuqO/kIgwQvpVAsL5q34iez39cNmTnhtvVEBvaU3KqGUFLWljW8mwAyqx8J
-	 89VuvjQMJX7G5kTZRS2jeVuBwvsVq0mRD9KfA22gEM96PltSDsFTQ3R6Rc85rpybvJ
-	 F/ikbJaEpBg//80I1w6fIog3MWe4jBqGifBuD5hQsa8maYS0v/p3URM7ZMUSa+K32o
-	 FYaSd8QUFVN1OAc2S6UhRfcNORBOznkbE++aZuF/gliCzvypYiVcQAK9jmtnJaLPGK
-	 8rv6O7hQUoPg2qk5BnZlG4q3cTQxkTbt9Hg4LTgVH80JLXsjuAMUhUoPhCxwHI7L3j
-	 Z8jGpLgv03OEA==
-Date: Wed, 7 Aug 2024 11:00:35 +0100
-From: Mark Brown <broonie@kernel.org>
-To: Arnd Bergmann <arnd@kernel.org>
-Cc: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-	Liam Girdwood <lgirdwood@gmail.com>,
-	Peter Ujfalusi <peter.ujfalusi@linux.intel.com>,
-	Bard Liao <yung-chuan.liao@linux.intel.com>,
-	Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
-	Daniel Baluta <daniel.baluta@nxp.com>,
-	Seppo Ingalsuo <seppo.ingalsuo@linux.intel.com>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Kai Vehmanen <kai.vehmanen@linux.intel.com>,
-	Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
+	b=oKMx0VBfuW0ZbA+q8N88Z8je7UdEVeFR/J7DKZhgUWWtGzsKzmv/2IIIw/MBY5DQ8
+	 9KM/R9OjyiCqg2rMxtzzGjaJfozNrmvFkIqkny5F2S99dF+tg1jAxrLnYhbJCD7EYS
+	 gz/rMkISr6xHiE/WD7KM9ygxBx8JRYFghLRZ1S8w=
+Date: Wed, 7 Aug 2024 13:01:08 +0200
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To: da.gomez@samsung.com
+Cc: Masahiro Yamada <masahiroy@kernel.org>,
 	Nathan Chancellor <nathan@kernel.org>,
+	Nicolas Schier <nicolas@fjasle.eu>,
+	Lucas De Marchi <lucas.demarchi@intel.com>,
+	Thomas =?iso-8859-1?Q?Hellstr=F6m?= <thomas.hellstrom@linux.intel.com>,
+	Rodrigo Vivi <rodrigo.vivi@intel.com>,
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+	Maxime Ripard <mripard@kernel.org>,
+	Thomas Zimmermann <tzimmermann@suse.de>,
+	David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
+	William Hubbs <w.d.hubbs@gmail.com>,
+	Chris Brannon <chris@the-brannons.com>,
+	Kirk Reiser <kirk@reisers.ca>,
+	Samuel Thibault <samuel.thibault@ens-lyon.org>,
+	Paul Moore <paul@paul-moore.com>,
+	Stephen Smalley <stephen.smalley.work@gmail.com>,
+	Ondrej Mosnacek <omosnace@redhat.com>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
+	Oliver Upton <oliver.upton@linux.dev>,
+	James Morse <james.morse@arm.com>,
+	Suzuki K Poulose <suzuki.poulose@arm.com>,
+	Zenghui Yu <yuzenghui@huawei.com>,
+	Jiri Slaby <jirislaby@kernel.org>,
 	Nick Desaulniers <ndesaulniers@google.com>,
 	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Brent Lu <brent.lu@intel.com>, sound-open-firmware@alsa-project.org,
-	linux-sound@vger.kernel.org, linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: Re: [PATCH] sound: sof: ioc4-topology: avoid extra dai_params copy
-Message-ID: <f1d65326-e671-44f1-bc10-0e1ec33c30ce@sirena.org.uk>
-References: <20240807080302.2372297-1-arnd@kernel.org>
+	Justin Stitt <justinstitt@google.com>, linux-kernel@vger.kernel.org,
+	linux-kbuild@vger.kernel.org, intel-xe@lists.freedesktop.org,
+	dri-devel@lists.freedesktop.org, speakup@linux-speakup.org,
+	selinux@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	kvmarm@lists.linux.dev, linux-serial@vger.kernel.org,
+	llvm@lists.linux.dev, Finn Behrens <me@kloenk.dev>,
+	"Daniel Gomez (Samsung)" <d+samsung@kruces.com>,
+	gost.dev@samsung.com, Nick Desaulniers <nick.desaulniers@gmail.com>
+Subject: Re: [PATCH 00/12] Enable build system on macOS hosts
+Message-ID: <2024080753-debug-roulette-8cb1@gregkh>
+References: <20240807-macos-build-support-v1-0-4cd1ded85694@samsung.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="tj0N6rkUapViYW72"
-Content-Disposition: inline
-In-Reply-To: <20240807080302.2372297-1-arnd@kernel.org>
-X-Cookie: Offer may end without notice.
-
-
---tj0N6rkUapViYW72
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20240807-macos-build-support-v1-0-4cd1ded85694@samsung.com>
 
-On Wed, Aug 07, 2024 at 10:02:27AM +0200, Arnd Bergmann wrote:
-> From: Arnd Bergmann <arnd@arndb.de>
->=20
-> The snd_pcm_hw_params structure is really too large to fit on the
-> stack. Because of the way that clang inlines functions, it ends up
-> twice in one function, which exceeds the 1024 byte limit for 32-bit
-> architecutes:
+On Wed, Aug 07, 2024 at 01:09:14AM +0200, Daniel Gomez via B4 Relay wrote:
+> This patch set allows for building the Linux kernel for arm64 in macOS with
+> LLVM.
 
-Please submit patches using subject lines reflecting the style for the
-subsystem, this makes it easier for people to identify relevant patches.
-Look at what existing commits in the area you're changing are doing and
-make sure your subject lines visually resemble what they're doing.
-There's no need to resubmit to fix this alone.
+Is this a requirement somewhere that this must work?  It seems like an
+odd request, what workflows require cross-operating-system builds like
+this?
 
---tj0N6rkUapViYW72
-Content-Type: application/pgp-signature; name="signature.asc"
+thanks,
 
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmazRcMACgkQJNaLcl1U
-h9CF4Qf+Odlon1G/8fg6R//jYM1cLs/S2fc/r/6YmRgmBsaMl8WG/XWiUWHD7I43
-jFfc+MQeQn27U37A0p22iblDjx7nAuo0fK0HwoPu6oHm+5TyeW9x+aXeGQYzyyvg
-WDthIEXhk2vB4pfFb6H9s2z2hZ1I6Q19HKS8HMtWLLaU/m6PP5pDw4iWP0qG1Ji5
-MQeDNTc1zbiZgz0vPgczuBkAUZtnrXJW2/46uXESwQzOEiXd4gp5e/b/qdGj1MZ3
-ob+W79ECNyRaSkmhN9EcggyN0ugZ6E3Nm71ZX2QtKkE5Swuy6MqV+hqNvie3A+NZ
-81CHvb2TLQobkgSF1WVSyMOolV89JA==
-=l80j
------END PGP SIGNATURE-----
-
---tj0N6rkUapViYW72--
+greg k-h
