@@ -1,132 +1,139 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f53.google.com (mail-lf1-f53.google.com [209.85.167.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1CF5A1474A5;
-	Thu,  8 Aug 2024 18:45:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DFF4D15D5A1
+	for <llvm@lists.linux.dev>; Thu,  8 Aug 2024 21:51:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723142702; cv=none; b=cgj6VAUqpMEOtSB9o0zVQ2G1Hc1nBjz6JqElQ7njzQRfA9Ne79aqWdq5nxxkzyEQ9bbGMvPysHbElYG9C+m0D+5e0n6KuQxsn9kGtqDpR0Lc9eTEl1uIL9jc7a2bB4PL6K2ISV8ofMCUiWKISa/dAQa8kyvXnacn0tgnnVm0dck=
+	t=1723153913; cv=none; b=irkgr+EHqMsCDTBFlmYEHEV3+4DflGzdgqvV0mo0gzofJL3S8vM9WXe4nXwDZc7mEe62BZQC8DoAaLJ9EuADOlYt7hREafsDJMQ48kjwmsnE2t1gr/P1GuqvGFI40Er/BwkWu7oIASBBFxMnSFxHLSr2b6ByajQdGTKrExdXdBQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723142702; c=relaxed/simple;
-	bh=r0ZhTNzOP1agXGemyLuigwrRTNe3MWey8x2YH9mXEjM=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=niKiEqXyctBfQrC9dV12fRCXWj2O0Lov2TIIRyVSqb8B1appTA4MiTVsva0mJFwFF4VhOshr2Th/oZigkBzNr5JPx9vJdAYVu8FgiTV1V3Asuh3MOwxxGwukgOxCnMqqXXRi7RC6Vk4emhl4XliJewk5RlTXntXHfwvC1msrUS4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=a1rKEWx1; arc=none smtp.client-ip=192.198.163.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1723153913; c=relaxed/simple;
+	bh=DTz30EgiQatv3b3Mf5x670oIHDaDHPcPkrLDKRckk8I=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=V7SAvRB9YPOtOvBtxSQQdr6TjVWwDQPYqxiiTNvJAluCe0xg5MPdecrWogUEB1Eckw+cal3H9h5C6IKgdERAgUD9jUGL2hSWd02SRDscyHYh5lVTt/AlkjvEK0Kraj12q+/qGGmioc+9LXKOro665TVd54EySbhnnPwLLXoA5+s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LpLgBRC9; arc=none smtp.client-ip=209.85.167.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="a1rKEWx1"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1723142701; x=1754678701;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=r0ZhTNzOP1agXGemyLuigwrRTNe3MWey8x2YH9mXEjM=;
-  b=a1rKEWx18bbG5k0rTiqK8cQve1jYhsl6elwWLddyzn/EmYLywz3d9bnh
-   oVy96gCwA3lDLo+vm5tOPl0pSrk91MhWt1X1z5Gl4beBnMBL4a+VrdlX8
-   T3t5Iz8H3qgentrti7GgQgAjsihsHqKeciwQT1/k2/hFu5s7aUPI3hJeq
-   lDqFr20I4p2s/qimpcaMXZVqc6Oc62Pq7yuzFgLL+hIHAD/AKpvDTxGou
-   rp6Yj8sPXoFlPyJZ2dFeFgcJlOmXZ6evJX7BJSsRzbHLRlFfwJoGN6UgD
-   j4xa6sTSn6KWM8486zwQPn3Hgv/y9tZUZMD4RBtJwbllUALhbdo1tq35v
-   A==;
-X-CSE-ConnectionGUID: SFAONJduTzSDwr8aPJZPXA==
-X-CSE-MsgGUID: rkDk2+nFSBCJk21BP0jtwg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11158"; a="31921784"
-X-IronPort-AV: E=Sophos;i="6.09,273,1716274800"; 
-   d="scan'208";a="31921784"
-Received: from orviesa007.jf.intel.com ([10.64.159.147])
-  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Aug 2024 11:45:00 -0700
-X-CSE-ConnectionGUID: xRlmvjBdQJCjv0ns0WXCpQ==
-X-CSE-MsgGUID: RmqM06BDRZW0dySbI9WBww==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.09,273,1716274800"; 
-   d="scan'208";a="57870142"
-Received: from unknown (HELO b6bf6c95bbab) ([10.239.97.151])
-  by orviesa007.jf.intel.com with ESMTP; 08 Aug 2024 11:44:58 -0700
-Received: from kbuild by b6bf6c95bbab with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1sc87y-0006Q2-0O;
-	Thu, 08 Aug 2024 18:44:50 +0000
-Date: Fri, 9 Aug 2024 02:44:11 +0800
-From: kernel test robot <lkp@intel.com>
-To: Ira Weiny <ira.weiny@intel.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Navneet Singh <navneet.singh@intel.com>
-Subject: [weiny2:dcd-v4-2024-08-07 22/26] drivers/dax/bus.c:380:1: error:
- conflicting types for 'dax_avail_size'
-Message-ID: <202408090208.rkZELnym-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LpLgBRC9"
+Received: by mail-lf1-f53.google.com with SMTP id 2adb3069b0e04-530e2548dfdso1499260e87.1
+        for <llvm@lists.linux.dev>; Thu, 08 Aug 2024 14:51:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1723153910; x=1723758710; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=zTilJSTMzzmTUfM8PwyjqnLeW2jPuc+7Tc/WpwcfYso=;
+        b=LpLgBRC9RJ4P2bI38XIICDub8lopReSFZNc9KHR5tESHQyWgghj+sGd9ZCu1eoZgdX
+         ZdP/tir1WIaXffju569RCPzk2VW9bb+AeQuPI9MbjY59G61Q5eD9K/xy2wwThmTcx552
+         ojUUG/KNrB5Jwk+F7DKPshE4fzsOH5XX0daP8FJ8OxWTbsaBK3BQikV50KoBJz6TCH9b
+         703s/gCp9NnDZw+oovcVjZaDNipQtkaRZ1tb4xcEJ68riqJK0CXzoRtuxV8JOtlgqi1y
+         DZep8ov+Jiph2rOdM7YNvVmP2r6ELtufi+ZsR33sz76Y63AovVnOmtIn4iuvB7yr57Jy
+         NI1A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1723153910; x=1723758710;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=zTilJSTMzzmTUfM8PwyjqnLeW2jPuc+7Tc/WpwcfYso=;
+        b=Lv0SPMMGGYIvlNiiVfSuYoT4+huLNuouz6Cvj6WhUWFhfkn6r8bN2FA6vHTskXew18
+         yD9atKE+M26ZSnCfkOrnsR7gBxE0rAi7g2MvcQr++hqBqAq2K572d3+nv/DoneeYCEqw
+         kPNGn/JsDB0XMQb7QF3nm2KF//QnayaMS1gQCxlLGqWG3J4TIzOPJvEWrkV0CR2abjyZ
+         /HXZlJoNWTp1OsKi8V/RK4BGUZDQGLTbXeJEwuLoQueyG/yyX85UwLrfR1L+O/jHXv2h
+         5/NxO5fKXNugpZf0pDWQe9pinKLKgUb18zs6mEOH9HzZ4oii7dSz4tKtSFMda8njZhV9
+         Jn6A==
+X-Forwarded-Encrypted: i=1; AJvYcCVrYkvXNPzRZgQW2IGlmAG2rWrmTu9nvrTC5HBYik36EpfYaMueXJ5wUEiSAAzzrdPZ/Jx43jbjP95s3Q4bHuL6aDwaJw==
+X-Gm-Message-State: AOJu0Yw8JBwk+nJQL2lWeuwDP3/bo3I+DhH/CloFFOL0assUibSKssop
+	Bz4Zx/FdQiBmWPBbOPuWMACP2BJQpT2SUeOHp6FuIe0NFkN03BvBZLKpR8Il1FMT3aGrsuuZa75
+	O7MU+bmupd0Fw1OJb2sLgPQOCODk=
+X-Google-Smtp-Source: AGHT+IGES8fNHsGvpYv7uRV9s1I4pkbSiW25z5WmM1/EEFB1wRmanyCXIXI8O8RexuT7mqGHIaX1FSuWqO2mBT4epPY=
+X-Received: by 2002:a05:6512:15aa:b0:52e:987f:cfe4 with SMTP id
+ 2adb3069b0e04-530e5876b8fmr2151699e87.30.1723153909723; Thu, 08 Aug 2024
+ 14:51:49 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+References: <20240808122331.342473-1-suhui@nfschina.com>
+In-Reply-To: <20240808122331.342473-1-suhui@nfschina.com>
+From: Steve French <smfrench@gmail.com>
+Date: Thu, 8 Aug 2024 16:51:37 -0500
+Message-ID: <CAH2r5mshFXCMO38WMZP0NzrugKZn1QexLSH+2aEMcZnB2S0+zA@mail.gmail.com>
+Subject: Re: [PATCH] smb/client: avoid possible NULL dereference in cifs_free_subrequest()
+To: Su Hui <suhui@nfschina.com>
+Cc: pc@manguebit.com, ronniesahlberg@gmail.com, sprasad@microsoft.com, 
+	tom@talpey.com, bharathsm@microsoft.com, nathan@kernel.org, 
+	ndesaulniers@google.com, morbo@google.com, justinstitt@google.com, 
+	linux-cifs@vger.kernel.org, samba-technical@lists.samba.org, 
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
+	kernel-janitors@vger.kernel.org, David Howells <dhowells@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-tree:   https://github.com/weiny2/linux-kernel.git dcd-v4-2024-08-07
-head:   9e6891fa14e880557d502a78bae03e40402b41c6
-commit: 1874987c4cb741ce38fdb344fac74222296dd55d [22/26] dax/region: Create resources on sparse DAX regions
-config: i386-buildonly-randconfig-001-20240808 (https://download.01.org/0day-ci/archive/20240809/202408090208.rkZELnym-lkp@intel.com/config)
-compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240809/202408090208.rkZELnym-lkp@intel.com/reproduce)
+Tentatively merged into cifs-2.6.git pending review/testing
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202408090208.rkZELnym-lkp@intel.com/
+Did minor update to add Cc: stable
 
-All errors (new ones prefixed by >>):
+On Thu, Aug 8, 2024 at 7:26=E2=80=AFAM Su Hui <suhui@nfschina.com> wrote:
+>
+> Clang static checker (scan-build) warning:
+>         cifsglob.h:line 890, column 3
+>         Access to field 'ops' results in a dereference of a null pointer.
+>
+> Commit 519be989717c ("cifs: Add a tracepoint to track credits involved in
+> R/W requests") adds a check for 'rdata->server', and let clang throw this
+> warning about NULL dereference.
+>
+> When 'rdata->credits.value !=3D 0 && rdata->server =3D=3D NULL' happens,
+> add_credits_and_wake_if() will call rdata->server->ops->add_credits().
+> This will cause NULL dereference problem. Add a check for 'rdata->server'
+> to avoid NULL dereference.
+>
+> Signed-off-by: Su Hui <suhui@nfschina.com>
+> ---
+>  fs/smb/client/file.c | 8 ++++++--
+>  1 file changed, 6 insertions(+), 2 deletions(-)
+>
+> diff --git a/fs/smb/client/file.c b/fs/smb/client/file.c
+> index b2405dd4d4d4..45459af5044d 100644
+> --- a/fs/smb/client/file.c
+> +++ b/fs/smb/client/file.c
+> @@ -315,7 +315,7 @@ static void cifs_free_subrequest(struct netfs_io_subr=
+equest *subreq)
+>  #endif
+>         }
+>
+> -       if (rdata->credits.value !=3D 0)
+> +       if (rdata->credits.value !=3D 0) {
+>                 trace_smb3_rw_credits(rdata->rreq->debug_id,
+>                                       rdata->subreq.debug_index,
+>                                       rdata->credits.value,
+> @@ -323,8 +323,12 @@ static void cifs_free_subrequest(struct netfs_io_sub=
+request *subreq)
+>                                       rdata->server ? rdata->server->in_f=
+light : 0,
+>                                       -rdata->credits.value,
+>                                       cifs_trace_rw_credits_free_subreq);
+> +               if (rdata->server)
+> +                       add_credits_and_wake_if(rdata->server, &rdata->cr=
+edits, 0);
+> +               else
+> +                       rdata->credits.value =3D 0;
+> +       }
+>
+> -       add_credits_and_wake_if(rdata->server, &rdata->credits, 0);
+>         if (rdata->have_xid)
+>                 free_xid(rdata->xid);
+>  }
+> --
+> 2.30.2
+>
+>
 
->> drivers/dax/bus.c:380:1: error: conflicting types for 'dax_avail_size'
-     380 | dax_avail_size(struct resource *dax_resource)
-         | ^
-   drivers/dax/dax-private.h:37:20: note: previous declaration is here
-      37 | unsigned long long dax_avail_size(struct resource *dax_resource);
-         |                    ^
-   1 error generated.
 
+--=20
+Thanks,
 
-vim +/dax_avail_size +380 drivers/dax/bus.c
-
-   354	
-   355	static ssize_t region_size_show(struct device *dev,
-   356			struct device_attribute *attr, char *buf)
-   357	{
-   358		struct dax_region *dax_region = dev_get_drvdata(dev);
-   359	
-   360		return sysfs_emit(buf, "%llu\n",
-   361				  (unsigned long long)resource_size(&dax_region->res));
-   362	}
-   363	static struct device_attribute dev_attr_region_size = __ATTR(size, 0444,
-   364			region_size_show, NULL);
-   365	
-   366	static ssize_t region_align_show(struct device *dev,
-   367			struct device_attribute *attr, char *buf)
-   368	{
-   369		struct dax_region *dax_region = dev_get_drvdata(dev);
-   370	
-   371		return sysfs_emit(buf, "%u\n", dax_region->align);
-   372	}
-   373	static struct device_attribute dev_attr_region_align =
-   374			__ATTR(align, 0400, region_align_show, NULL);
-   375	
-   376	#define for_each_child_resource(extent, res) \
-   377		for (res = (extent)->child; res; res = res->sibling)
-   378	
-   379	resource_size_t
- > 380	dax_avail_size(struct resource *dax_resource)
-   381	{
-   382		resource_size_t rc;
-   383		struct resource *used_res;
-   384	
-   385		rc = resource_size(dax_resource);
-   386		for_each_child_resource(dax_resource, used_res)
-   387			rc -= resource_size(used_res);
-   388		return rc;
-   389	}
-   390	EXPORT_SYMBOL_GPL(dax_avail_size);
-   391	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Steve
