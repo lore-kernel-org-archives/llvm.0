@@ -1,59 +1,59 @@
 Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB5C515B11D;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0FCF5155C8E;
 	Thu,  8 Aug 2024 22:17:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723155470; cv=none; b=AMQBRRrfQwtjaU08TWw8kFwV2vwuq0yr96BRYV0PqgtaT9zQDYbGHW2BcfMAR9+hz1MwCFAW4QBnD5p3ZoYP4TH81hs3QTiGABEnYGcXEkRgO5std5QR/sSquAnZbG5nnO2kmB74Tx2jqje+HS0VmQR/daKgbSq9QnTrX+I4gPI=
+	t=1723155470; cv=none; b=WikIh+c7DS4QDkIeTPDJm5aRZh0EgUflHeHnjq967qrV07mgm2j5LCOZgNSD5Tohk5JEhywDWX35WqfVfrIjry9VmhlunqnGTg/oKIuUS0Vau9VL1t9b0D+CkzQxtgPMKjtakXmShktG4GPs+xQnTl2BMoEl7hZl+iQv52OSxdk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1723155470; c=relaxed/simple;
-	bh=C2HnxQGSVhLVyQROl959iMgFNs5mvx8cONd2x3MySZg=;
+	bh=IMOYnJQGDlZxOfjjWcL78ah825a4ZixqHX1gxvBkpog=;
 	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=o8KtCEfhPU5G8ggjeFfY8apiGudvxPvxLcA2BzL3IOn6Qhy0Eq4t+GdpvQJZSXPAAu6+cexT3ce7gHqoUD3gzItQCJDjGTn+SLp0fWukY2aXleVf8k3I4rzfO2VFWWYh4h6vNadX96CXSAe9nuhFXROH4jtMkw5VTIN04O4Zm9E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ipcR9b2K; arc=none smtp.client-ip=198.175.65.9
+	 Content-Disposition; b=AOt0iDgy4GKT8Ur9JXU0r7lnHcWA2ejwHD1NyRrFzqlsbKzg5NOplngjx+AuPXC620ze2Bk8wcHlURgih7dMnu5Ri2cyl8i5o9Do9ztB88xOYYSs7zaNqdwgZOa09J7JvsQXgiDUnW9fuih6LlvVzQxN+T4iHYS15wym0bCgs8E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=HH0N/Sb2; arc=none smtp.client-ip=198.175.65.9
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ipcR9b2K"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="HH0N/Sb2"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
   t=1723155469; x=1754691469;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=C2HnxQGSVhLVyQROl959iMgFNs5mvx8cONd2x3MySZg=;
-  b=ipcR9b2Kgj+epbr1uNHKqGmRd/bQguq3wPRvwaTAFawZa+A9ZfXu/LNF
-   /O5G86TtED3aPFIRKgCS2ubH4XkSu7Pn4jWIvJtfstKMRNSMpf/1WmB5R
-   wygxtgodiOM5uTcBRUCTmhkytW9K4HBWx8Dar0cSRXMdV1P3GkDJEzgYp
-   7wAs2rRRNr8KaTkK8syGsUcxHc9oRituCRqURWIJuw1x2/arv/8YQuL1C
-   b5oeAkLGK8iTT8gt9C/n9HRcLocWreoQW9uPOknL5oHn7Xfgcsge0hXSs
-   V23nbGotx0YLDiwU5F36AZnWLBmQXhi+g601VQvpTtLKtI8Aj6DSrMsgT
-   w==;
-X-CSE-ConnectionGUID: 6riG/W5pTOaCVoIuJYltxQ==
-X-CSE-MsgGUID: NGR1xc6ZROy2YJFM9pjbcA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11158"; a="43827890"
+  bh=IMOYnJQGDlZxOfjjWcL78ah825a4ZixqHX1gxvBkpog=;
+  b=HH0N/Sb2pp4UCkJIzOgpcLXefFyXSKgj5l7gVvvHjKxZRAT8HHm0+NyW
+   FrodOfEJs7VjTWiRagnVAsMXhDAIEvtfvcAmnpRG/puRKyfAiEluiEa4g
+   GgsarNWu13iHRCQCCQehyssk+d4hmp9vZ8wXW5AWMUb1vT3p7KeIQET3+
+   xWsU739kSmVvANBkQW4e8pzI6UPuhZNoisLrG9d2RzQO3wW5nW1xmqPzs
+   agfjRgtNruZttBvqTCQ3WibqSWyI2P+KLyZpK40ZOXdjt5d07sgllPCdx
+   K6UdHX4FN/FMoMHL692agangCKzNx1P39E44PDuVuV+lcKyCAGFEbIXeX
+   A==;
+X-CSE-ConnectionGUID: V4nxsJZSTE6FzkTCXNwy1g==
+X-CSE-MsgGUID: wUbwDjTVTxO8Hm5y2+YSCA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11158"; a="43827899"
 X-IronPort-AV: E=Sophos;i="6.09,274,1716274800"; 
-   d="scan'208";a="43827890"
+   d="scan'208";a="43827899"
 Received: from orviesa006.jf.intel.com ([10.64.159.146])
-  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Aug 2024 15:17:46 -0700
-X-CSE-ConnectionGUID: FteGkWEmSKOBgWj4hZaPjQ==
-X-CSE-MsgGUID: ecAIS4JmRoS6ZLpiDGTfNw==
+  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Aug 2024 15:17:47 -0700
+X-CSE-ConnectionGUID: Flx4yJtPQIGIrgg21KSXow==
+X-CSE-MsgGUID: 7kCWkeLuTNS4db+3d489ig==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.09,274,1716274800"; 
-   d="scan'208";a="57604306"
+   d="scan'208";a="57604308"
 Received: from unknown (HELO b6bf6c95bbab) ([10.239.97.151])
   by orviesa006.jf.intel.com with ESMTP; 08 Aug 2024 15:17:45 -0700
 Received: from kbuild by b6bf6c95bbab with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1scBS2-0006Yu-1r;
+	id 1scBS2-0006Z2-23;
 	Thu, 08 Aug 2024 22:17:42 +0000
-Date: Fri, 9 Aug 2024 06:17:14 +0800
+Date: Fri, 9 Aug 2024 06:17:16 +0800
 From: kernel test robot <lkp@intel.com>
-To: Chiara Meiohas <cmeiohas@nvidia.com>
+To: Takashi Iwai <tiwai@suse.de>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Leon Romanovsky <leon@kernel.org>
-Subject: [leon-rdma:rdma-next 25/37] drivers/infiniband/core/nldev.c:2782:2:
- warning: unannotated fall-through between switch labels
-Message-ID: <202408090634.vvrFPOUe-lkp@intel.com>
+	alsa-devel@alsa-project.org, Jaroslav Kysela <perex@perex.cz>
+Subject: [tiwai-sound:for-next 32/83] sound/pcmcia/vx/vxpocket.c:208:8:
+ error: no member named 'dev' in 'struct vx_core'
+Message-ID: <202408090607.58bm8VK5-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -63,63 +63,90 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/leon/linux-rdma.git rdma-next
-head:   8f867b8b95b4aab452108f77167fae8d7e0d5056
-commit: 917eed2ac05a89c1c663e22dc744b8ae64d84ac7 [25/37] RDMA/nldev: Add support for RDMA monitoring
-config: i386-buildonly-randconfig-004-20240809 (https://download.01.org/0day-ci/archive/20240809/202408090634.vvrFPOUe-lkp@intel.com/config)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/tiwai/sound.git for-next
+head:   c46fc83e3f3c89f18962e43890de90b1c304747a
+commit: b426b3ba9f6fe17990893c5324727dd217d420b6 [32/83] ALSA: vx_core: Drop unused dev field
+config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20240809/202408090607.58bm8VK5-lkp@intel.com/config)
 compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240809/202408090634.vvrFPOUe-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240809/202408090607.58bm8VK5-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202408090634.vvrFPOUe-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202408090607.58bm8VK5-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+Note: the tiwai-sound/for-next HEAD c46fc83e3f3c89f18962e43890de90b1c304747a builds fine.
+      It only hurts bisectability.
 
->> drivers/infiniband/core/nldev.c:2782:2: warning: unannotated fall-through between switch labels [-Wimplicit-fallthrough]
-    2782 |         default:
-         |         ^
-   drivers/infiniband/core/nldev.c:2782:2: note: insert 'break;' to avoid fall-through
-    2782 |         default:
-         |         ^
-         |         break; 
-   1 warning generated.
+All errors (new ones prefixed by >>):
+
+>> sound/pcmcia/vx/vxpocket.c:208:8: error: no member named 'dev' in 'struct vx_core'
+     208 |         chip->dev = &link->dev;
+         |         ~~~~  ^
+   1 error generated.
 
 
-vim +2782 drivers/infiniband/core/nldev.c
+vim +208 sound/pcmcia/vx/vxpocket.c
 
-  2756	
-  2757	static void rdma_nl_notify_err_msg(struct ib_device *device, u32 port_num,
-  2758					    enum rdma_nl_notify_event_type type)
-  2759	{
-  2760		struct net_device *netdev;
-  2761	
-  2762		switch (type) {
-  2763		case RDMA_REGISTER_EVENT:
-  2764			dev_warn_ratelimited(&device->dev,
-  2765					     "Failed to send RDMA monitor register device event\n");
-  2766			break;
-  2767		case RDMA_UNREGISTER_EVENT:
-  2768			dev_warn_ratelimited(&device->dev,
-  2769					     "Failed to send RDMA monitor unregister device event\n");
-  2770			break;
-  2771		case RDMA_NETDEV_ATTACH_EVENT:
-  2772			netdev = ib_device_get_netdev(device, port_num);
-  2773			dev_warn_ratelimited(&device->dev,
-  2774					     "Failed to send RDMA monitor netdev attach event: port %d netdev %d\n",
-  2775					     port_num, netdev->ifindex);
-  2776			dev_put(netdev);
-  2777			break;
-  2778		case RDMA_NETDEV_DETACH_EVENT:
-  2779			dev_warn_ratelimited(&device->dev,
-  2780					     "Failed to send RDMA monitor netdev detach event: port %d\n",
-  2781					     port_num);
-> 2782		default:
-  2783			break;
-  2784		};
-  2785	}
-  2786	
+6d00a3127972e7 Takashi Iwai      2005-06-30  170  
+6d00a3127972e7 Takashi Iwai      2005-06-30  171  
+6d00a3127972e7 Takashi Iwai      2005-06-30  172  /*
+6d00a3127972e7 Takashi Iwai      2005-06-30  173   * configuration callback
+6d00a3127972e7 Takashi Iwai      2005-06-30  174   */
+6d00a3127972e7 Takashi Iwai      2005-06-30  175  
+15b99ac1729503 Dominik Brodowski 2006-03-31  176  static int vxpocket_config(struct pcmcia_device *link)
+6d00a3127972e7 Takashi Iwai      2005-06-30  177  {
+af26367f69a474 Takashi Iwai      2005-11-17  178  	struct vx_core *chip = link->priv;
+7c5af6ffd69bb2 Dominik Brodowski 2009-10-24  179  	int ret;
+6d00a3127972e7 Takashi Iwai      2005-06-30  180  
+6d00a3127972e7 Takashi Iwai      2005-06-30  181  	snd_printdd(KERN_DEBUG "vxpocket_config called\n");
+6d00a3127972e7 Takashi Iwai      2005-06-30  182  
+6d00a3127972e7 Takashi Iwai      2005-06-30  183  	/* redefine hardware record according to the VERSION1 string */
+af2b3b503ad1b0 Dominik Brodowski 2006-10-25  184  	if (!strcmp(link->prod_id[1], "VX-POCKET")) {
+6d00a3127972e7 Takashi Iwai      2005-06-30  185  		snd_printdd("VX-pocket is detected\n");
+6d00a3127972e7 Takashi Iwai      2005-06-30  186  	} else {
+6d00a3127972e7 Takashi Iwai      2005-06-30  187  		snd_printdd("VX-pocket 440 is detected\n");
+6d00a3127972e7 Takashi Iwai      2005-06-30  188  		/* overwrite the hardware information */
+6d00a3127972e7 Takashi Iwai      2005-06-30  189  		chip->hw = &vxp440_hw;
+6d00a3127972e7 Takashi Iwai      2005-06-30  190  		chip->type = vxp440_hw.type;
+6d00a3127972e7 Takashi Iwai      2005-06-30  191  		strcpy(chip->card->driver, vxp440_hw.name);
+6d00a3127972e7 Takashi Iwai      2005-06-30  192  	}
+6d00a3127972e7 Takashi Iwai      2005-06-30  193  
+90abdc3b973229 Dominik Brodowski 2010-07-24  194  	ret = pcmcia_request_io(link);
+7c5af6ffd69bb2 Dominik Brodowski 2009-10-24  195  	if (ret)
+db0a5214b8d6cc Takashi Iwai      2014-09-09  196  		goto failed_preirq;
+7c5af6ffd69bb2 Dominik Brodowski 2009-10-24  197  
+db0a5214b8d6cc Takashi Iwai      2014-09-09  198  	ret = request_threaded_irq(link->irq, snd_vx_irq_handler,
+db0a5214b8d6cc Takashi Iwai      2014-09-09  199  				   snd_vx_threaded_irq_handler,
+db0a5214b8d6cc Takashi Iwai      2014-09-09  200  				   IRQF_SHARED, link->devname, link->priv);
+7c5af6ffd69bb2 Dominik Brodowski 2009-10-24  201  	if (ret)
+db0a5214b8d6cc Takashi Iwai      2014-09-09  202  		goto failed_preirq;
+7c5af6ffd69bb2 Dominik Brodowski 2009-10-24  203  
+1ac71e5a35eebe Dominik Brodowski 2010-07-29  204  	ret = pcmcia_enable_device(link);
+7c5af6ffd69bb2 Dominik Brodowski 2009-10-24  205  	if (ret)
+7c5af6ffd69bb2 Dominik Brodowski 2009-10-24  206  		goto failed;
+6d00a3127972e7 Takashi Iwai      2005-06-30  207  
+dd2e5a156525f1 Dominik Brodowski 2009-11-03 @208  	chip->dev = &link->dev;
+6d00a3127972e7 Takashi Iwai      2005-06-30  209  
+9a017a910346af Dominik Brodowski 2010-07-24  210  	if (snd_vxpocket_assign_resources(chip, link->resource[0]->start,
+9a017a910346af Dominik Brodowski 2010-07-24  211  						link->irq) < 0)
+6d00a3127972e7 Takashi Iwai      2005-06-30  212  		goto failed;
+6d00a3127972e7 Takashi Iwai      2005-06-30  213  
+79ca4f3f625e14 Takashi Iwai      2006-04-12  214  	return 0;
+6d00a3127972e7 Takashi Iwai      2005-06-30  215  
+6d00a3127972e7 Takashi Iwai      2005-06-30  216   failed:
+db0a5214b8d6cc Takashi Iwai      2014-09-09  217  	free_irq(link->irq, link->priv);
+db0a5214b8d6cc Takashi Iwai      2014-09-09  218  failed_preirq:
+fba395eee7d3f3 Dominik Brodowski 2006-03-31  219  	pcmcia_disable_device(link);
+15b99ac1729503 Dominik Brodowski 2006-03-31  220  	return -ENODEV;
+6d00a3127972e7 Takashi Iwai      2005-06-30  221  }
+6d00a3127972e7 Takashi Iwai      2005-06-30  222  
+
+:::::: The code at line 208 was first introduced by commit
+:::::: dd2e5a156525f11754d9b1e0583f6bb49c253d62 pcmcia: remove deprecated handle_to_dev() macro
+
+:::::: TO: Dominik Brodowski <linux@dominikbrodowski.net>
+:::::: CC: Dominik Brodowski <linux@dominikbrodowski.net>
 
 -- 
 0-DAY CI Kernel Test Service
