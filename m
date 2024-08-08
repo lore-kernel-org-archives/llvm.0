@@ -1,139 +1,126 @@
-Received: from mail-lf1-f53.google.com (mail-lf1-f53.google.com [209.85.167.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DFF4D15D5A1
-	for <llvm@lists.linux.dev>; Thu,  8 Aug 2024 21:51:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB5C515B11D;
+	Thu,  8 Aug 2024 22:17:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723153913; cv=none; b=irkgr+EHqMsCDTBFlmYEHEV3+4DflGzdgqvV0mo0gzofJL3S8vM9WXe4nXwDZc7mEe62BZQC8DoAaLJ9EuADOlYt7hREafsDJMQ48kjwmsnE2t1gr/P1GuqvGFI40Er/BwkWu7oIASBBFxMnSFxHLSr2b6ByajQdGTKrExdXdBQ=
+	t=1723155470; cv=none; b=AMQBRRrfQwtjaU08TWw8kFwV2vwuq0yr96BRYV0PqgtaT9zQDYbGHW2BcfMAR9+hz1MwCFAW4QBnD5p3ZoYP4TH81hs3QTiGABEnYGcXEkRgO5std5QR/sSquAnZbG5nnO2kmB74Tx2jqje+HS0VmQR/daKgbSq9QnTrX+I4gPI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723153913; c=relaxed/simple;
-	bh=DTz30EgiQatv3b3Mf5x670oIHDaDHPcPkrLDKRckk8I=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=V7SAvRB9YPOtOvBtxSQQdr6TjVWwDQPYqxiiTNvJAluCe0xg5MPdecrWogUEB1Eckw+cal3H9h5C6IKgdERAgUD9jUGL2hSWd02SRDscyHYh5lVTt/AlkjvEK0Kraj12q+/qGGmioc+9LXKOro665TVd54EySbhnnPwLLXoA5+s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LpLgBRC9; arc=none smtp.client-ip=209.85.167.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1723155470; c=relaxed/simple;
+	bh=C2HnxQGSVhLVyQROl959iMgFNs5mvx8cONd2x3MySZg=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=o8KtCEfhPU5G8ggjeFfY8apiGudvxPvxLcA2BzL3IOn6Qhy0Eq4t+GdpvQJZSXPAAu6+cexT3ce7gHqoUD3gzItQCJDjGTn+SLp0fWukY2aXleVf8k3I4rzfO2VFWWYh4h6vNadX96CXSAe9nuhFXROH4jtMkw5VTIN04O4Zm9E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ipcR9b2K; arc=none smtp.client-ip=198.175.65.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LpLgBRC9"
-Received: by mail-lf1-f53.google.com with SMTP id 2adb3069b0e04-530e2548dfdso1499260e87.1
-        for <llvm@lists.linux.dev>; Thu, 08 Aug 2024 14:51:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1723153910; x=1723758710; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=zTilJSTMzzmTUfM8PwyjqnLeW2jPuc+7Tc/WpwcfYso=;
-        b=LpLgBRC9RJ4P2bI38XIICDub8lopReSFZNc9KHR5tESHQyWgghj+sGd9ZCu1eoZgdX
-         ZdP/tir1WIaXffju569RCPzk2VW9bb+AeQuPI9MbjY59G61Q5eD9K/xy2wwThmTcx552
-         ojUUG/KNrB5Jwk+F7DKPshE4fzsOH5XX0daP8FJ8OxWTbsaBK3BQikV50KoBJz6TCH9b
-         703s/gCp9NnDZw+oovcVjZaDNipQtkaRZ1tb4xcEJ68riqJK0CXzoRtuxV8JOtlgqi1y
-         DZep8ov+Jiph2rOdM7YNvVmP2r6ELtufi+ZsR33sz76Y63AovVnOmtIn4iuvB7yr57Jy
-         NI1A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1723153910; x=1723758710;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=zTilJSTMzzmTUfM8PwyjqnLeW2jPuc+7Tc/WpwcfYso=;
-        b=Lv0SPMMGGYIvlNiiVfSuYoT4+huLNuouz6Cvj6WhUWFhfkn6r8bN2FA6vHTskXew18
-         yD9atKE+M26ZSnCfkOrnsR7gBxE0rAi7g2MvcQr++hqBqAq2K572d3+nv/DoneeYCEqw
-         kPNGn/JsDB0XMQb7QF3nm2KF//QnayaMS1gQCxlLGqWG3J4TIzOPJvEWrkV0CR2abjyZ
-         /HXZlJoNWTp1OsKi8V/RK4BGUZDQGLTbXeJEwuLoQueyG/yyX85UwLrfR1L+O/jHXv2h
-         5/NxO5fKXNugpZf0pDWQe9pinKLKgUb18zs6mEOH9HzZ4oii7dSz4tKtSFMda8njZhV9
-         Jn6A==
-X-Forwarded-Encrypted: i=1; AJvYcCVrYkvXNPzRZgQW2IGlmAG2rWrmTu9nvrTC5HBYik36EpfYaMueXJ5wUEiSAAzzrdPZ/Jx43jbjP95s3Q4bHuL6aDwaJw==
-X-Gm-Message-State: AOJu0Yw8JBwk+nJQL2lWeuwDP3/bo3I+DhH/CloFFOL0assUibSKssop
-	Bz4Zx/FdQiBmWPBbOPuWMACP2BJQpT2SUeOHp6FuIe0NFkN03BvBZLKpR8Il1FMT3aGrsuuZa75
-	O7MU+bmupd0Fw1OJb2sLgPQOCODk=
-X-Google-Smtp-Source: AGHT+IGES8fNHsGvpYv7uRV9s1I4pkbSiW25z5WmM1/EEFB1wRmanyCXIXI8O8RexuT7mqGHIaX1FSuWqO2mBT4epPY=
-X-Received: by 2002:a05:6512:15aa:b0:52e:987f:cfe4 with SMTP id
- 2adb3069b0e04-530e5876b8fmr2151699e87.30.1723153909723; Thu, 08 Aug 2024
- 14:51:49 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ipcR9b2K"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1723155469; x=1754691469;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=C2HnxQGSVhLVyQROl959iMgFNs5mvx8cONd2x3MySZg=;
+  b=ipcR9b2Kgj+epbr1uNHKqGmRd/bQguq3wPRvwaTAFawZa+A9ZfXu/LNF
+   /O5G86TtED3aPFIRKgCS2ubH4XkSu7Pn4jWIvJtfstKMRNSMpf/1WmB5R
+   wygxtgodiOM5uTcBRUCTmhkytW9K4HBWx8Dar0cSRXMdV1P3GkDJEzgYp
+   7wAs2rRRNr8KaTkK8syGsUcxHc9oRituCRqURWIJuw1x2/arv/8YQuL1C
+   b5oeAkLGK8iTT8gt9C/n9HRcLocWreoQW9uPOknL5oHn7Xfgcsge0hXSs
+   V23nbGotx0YLDiwU5F36AZnWLBmQXhi+g601VQvpTtLKtI8Aj6DSrMsgT
+   w==;
+X-CSE-ConnectionGUID: 6riG/W5pTOaCVoIuJYltxQ==
+X-CSE-MsgGUID: NGR1xc6ZROy2YJFM9pjbcA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11158"; a="43827890"
+X-IronPort-AV: E=Sophos;i="6.09,274,1716274800"; 
+   d="scan'208";a="43827890"
+Received: from orviesa006.jf.intel.com ([10.64.159.146])
+  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Aug 2024 15:17:46 -0700
+X-CSE-ConnectionGUID: FteGkWEmSKOBgWj4hZaPjQ==
+X-CSE-MsgGUID: ecAIS4JmRoS6ZLpiDGTfNw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.09,274,1716274800"; 
+   d="scan'208";a="57604306"
+Received: from unknown (HELO b6bf6c95bbab) ([10.239.97.151])
+  by orviesa006.jf.intel.com with ESMTP; 08 Aug 2024 15:17:45 -0700
+Received: from kbuild by b6bf6c95bbab with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1scBS2-0006Yu-1r;
+	Thu, 08 Aug 2024 22:17:42 +0000
+Date: Fri, 9 Aug 2024 06:17:14 +0800
+From: kernel test robot <lkp@intel.com>
+To: Chiara Meiohas <cmeiohas@nvidia.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Leon Romanovsky <leon@kernel.org>
+Subject: [leon-rdma:rdma-next 25/37] drivers/infiniband/core/nldev.c:2782:2:
+ warning: unannotated fall-through between switch labels
+Message-ID: <202408090634.vvrFPOUe-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20240808122331.342473-1-suhui@nfschina.com>
-In-Reply-To: <20240808122331.342473-1-suhui@nfschina.com>
-From: Steve French <smfrench@gmail.com>
-Date: Thu, 8 Aug 2024 16:51:37 -0500
-Message-ID: <CAH2r5mshFXCMO38WMZP0NzrugKZn1QexLSH+2aEMcZnB2S0+zA@mail.gmail.com>
-Subject: Re: [PATCH] smb/client: avoid possible NULL dereference in cifs_free_subrequest()
-To: Su Hui <suhui@nfschina.com>
-Cc: pc@manguebit.com, ronniesahlberg@gmail.com, sprasad@microsoft.com, 
-	tom@talpey.com, bharathsm@microsoft.com, nathan@kernel.org, 
-	ndesaulniers@google.com, morbo@google.com, justinstitt@google.com, 
-	linux-cifs@vger.kernel.org, samba-technical@lists.samba.org, 
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
-	kernel-janitors@vger.kernel.org, David Howells <dhowells@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Tentatively merged into cifs-2.6.git pending review/testing
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/leon/linux-rdma.git rdma-next
+head:   8f867b8b95b4aab452108f77167fae8d7e0d5056
+commit: 917eed2ac05a89c1c663e22dc744b8ae64d84ac7 [25/37] RDMA/nldev: Add support for RDMA monitoring
+config: i386-buildonly-randconfig-004-20240809 (https://download.01.org/0day-ci/archive/20240809/202408090634.vvrFPOUe-lkp@intel.com/config)
+compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240809/202408090634.vvrFPOUe-lkp@intel.com/reproduce)
 
-Did minor update to add Cc: stable
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202408090634.vvrFPOUe-lkp@intel.com/
 
-On Thu, Aug 8, 2024 at 7:26=E2=80=AFAM Su Hui <suhui@nfschina.com> wrote:
->
-> Clang static checker (scan-build) warning:
->         cifsglob.h:line 890, column 3
->         Access to field 'ops' results in a dereference of a null pointer.
->
-> Commit 519be989717c ("cifs: Add a tracepoint to track credits involved in
-> R/W requests") adds a check for 'rdata->server', and let clang throw this
-> warning about NULL dereference.
->
-> When 'rdata->credits.value !=3D 0 && rdata->server =3D=3D NULL' happens,
-> add_credits_and_wake_if() will call rdata->server->ops->add_credits().
-> This will cause NULL dereference problem. Add a check for 'rdata->server'
-> to avoid NULL dereference.
->
-> Signed-off-by: Su Hui <suhui@nfschina.com>
-> ---
->  fs/smb/client/file.c | 8 ++++++--
->  1 file changed, 6 insertions(+), 2 deletions(-)
->
-> diff --git a/fs/smb/client/file.c b/fs/smb/client/file.c
-> index b2405dd4d4d4..45459af5044d 100644
-> --- a/fs/smb/client/file.c
-> +++ b/fs/smb/client/file.c
-> @@ -315,7 +315,7 @@ static void cifs_free_subrequest(struct netfs_io_subr=
-equest *subreq)
->  #endif
->         }
->
-> -       if (rdata->credits.value !=3D 0)
-> +       if (rdata->credits.value !=3D 0) {
->                 trace_smb3_rw_credits(rdata->rreq->debug_id,
->                                       rdata->subreq.debug_index,
->                                       rdata->credits.value,
-> @@ -323,8 +323,12 @@ static void cifs_free_subrequest(struct netfs_io_sub=
-request *subreq)
->                                       rdata->server ? rdata->server->in_f=
-light : 0,
->                                       -rdata->credits.value,
->                                       cifs_trace_rw_credits_free_subreq);
-> +               if (rdata->server)
-> +                       add_credits_and_wake_if(rdata->server, &rdata->cr=
-edits, 0);
-> +               else
-> +                       rdata->credits.value =3D 0;
-> +       }
->
-> -       add_credits_and_wake_if(rdata->server, &rdata->credits, 0);
->         if (rdata->have_xid)
->                 free_xid(rdata->xid);
->  }
-> --
-> 2.30.2
->
->
+All warnings (new ones prefixed by >>):
+
+>> drivers/infiniband/core/nldev.c:2782:2: warning: unannotated fall-through between switch labels [-Wimplicit-fallthrough]
+    2782 |         default:
+         |         ^
+   drivers/infiniband/core/nldev.c:2782:2: note: insert 'break;' to avoid fall-through
+    2782 |         default:
+         |         ^
+         |         break; 
+   1 warning generated.
 
 
---=20
-Thanks,
+vim +2782 drivers/infiniband/core/nldev.c
 
-Steve
+  2756	
+  2757	static void rdma_nl_notify_err_msg(struct ib_device *device, u32 port_num,
+  2758					    enum rdma_nl_notify_event_type type)
+  2759	{
+  2760		struct net_device *netdev;
+  2761	
+  2762		switch (type) {
+  2763		case RDMA_REGISTER_EVENT:
+  2764			dev_warn_ratelimited(&device->dev,
+  2765					     "Failed to send RDMA monitor register device event\n");
+  2766			break;
+  2767		case RDMA_UNREGISTER_EVENT:
+  2768			dev_warn_ratelimited(&device->dev,
+  2769					     "Failed to send RDMA monitor unregister device event\n");
+  2770			break;
+  2771		case RDMA_NETDEV_ATTACH_EVENT:
+  2772			netdev = ib_device_get_netdev(device, port_num);
+  2773			dev_warn_ratelimited(&device->dev,
+  2774					     "Failed to send RDMA monitor netdev attach event: port %d netdev %d\n",
+  2775					     port_num, netdev->ifindex);
+  2776			dev_put(netdev);
+  2777			break;
+  2778		case RDMA_NETDEV_DETACH_EVENT:
+  2779			dev_warn_ratelimited(&device->dev,
+  2780					     "Failed to send RDMA monitor netdev detach event: port %d\n",
+  2781					     port_num);
+> 2782		default:
+  2783			break;
+  2784		};
+  2785	}
+  2786	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
