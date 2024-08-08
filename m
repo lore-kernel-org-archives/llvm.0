@@ -1,101 +1,157 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 41A0015A85E
-	for <llvm@lists.linux.dev>; Thu,  8 Aug 2024 22:23:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 43FE0157466;
+	Thu,  8 Aug 2024 23:08:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723155787; cv=none; b=XA/AfCMYJDyoxHdh8pfqlA4Uwhmei8hrQQTUGXlk+TZLXDCiJku0b8CijDmGBXjkRDadqpLMGtMaemqY7cDOexJ+i9UH+feSLDo0H6/BDsoGeXl5DLFPabCPvqG8vWm6BNpASQJOOS/Hq7dgKKujpPuy5OGdVJ1kpSPZWiMK070=
+	t=1723158527; cv=none; b=PEiJ/YrOdNDxdKWGYBn6Vta04WZXjNSyXLN9w0lbOxeEDWkO+OtjcipTmeqvMiPHd3qMIukP5sT+PWN2k0ay6ZeY6a31Kzj9EMLKmjOsju8+YBTTHWpcEIpeDlxu6dWPA5CaVT8GN3kA+tRKppedT2CrX+QcqG0eM/K1EZQhMtU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723155787; c=relaxed/simple;
-	bh=tmIQ/DlTH1V7T2luScUTWd798g6yBR+q+8Bbi5YXvfc=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=V0vtVIZWMMz0+fjgChIxrVwIHE4zk0ziplkXmfDWjpwwJtGYnx83gT651PC7A7Kju3LZMulef14Fm7Ve42Dzdseo/s35MMorgGGayH4OHWfFiAUn9oW0mlnxhJ6jHgcixou2DC89QguvETVgZd12I+9MX1HI2OyeW/zqMam1wkY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=HG3rr2sN; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1723158527; c=relaxed/simple;
+	bh=T7KdUeo7zRdu2V4NwX3BnZOQDuovZf6qEZiSGn3VOz8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=XTMMlO7FQ+MGv6fItxwHYdZmldUWipqOMXo+NmZGM4a+EDzzq4l0Gdozhnt7G21ZHnQkz54KaO5INctaen63q8HEfKDCgn30M56D46rLmkgwOLAjTnNIZxDpp9+WaFQIfxL8zfBG83+YUs+wJlSOfG4SmoAXtNoz4ivyG6tMpjQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=lVP8ZVeX; arc=none smtp.client-ip=192.198.163.19
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="HG3rr2sN"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1723155784;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=XHk0x5FtMLq6WfQs8xdqYQN/hfXzcw6KcN2izkKBVj8=;
-	b=HG3rr2sNk3hafDu+/0EQN5s3rxaVuWt1WqGJ2QDm0pfuMgJhfpvHZPOqX8J2ncKzwx/K6J
-	msyK+AY7QsDHfE2Y/TvhDL0112w70Zw3GNw1mZe1UafDX82ye8MNnyxaSPQoNV4jyv2SNn
-	JAUFT/wVZkvXGr+jbNjh2uxVvZH/FwU=
-Received: from mx-prod-mc-02.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-586-FZztJ0JmMu6oV3PlnrY2Fw-1; Thu,
- 08 Aug 2024 18:23:03 -0400
-X-MC-Unique: FZztJ0JmMu6oV3PlnrY2Fw-1
-Received: from mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.17])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-02.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id ECC221955D45
-	for <llvm@lists.linux.dev>; Thu,  8 Aug 2024 22:23:01 +0000 (UTC)
-Received: from [172.64.1.78] (unknown [10.30.33.143])
-	by mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 522FC1956052;
-	Thu,  8 Aug 2024 22:23:01 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.11.0-rc2,
- mainline.kernel.org-clang, ee9a43b7)
-Date: Thu, 08 Aug 2024 22:23:01 -0000
-To: llvm@lists.linux.dev
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="lVP8ZVeX"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1723158527; x=1754694527;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=T7KdUeo7zRdu2V4NwX3BnZOQDuovZf6qEZiSGn3VOz8=;
+  b=lVP8ZVeXbOKsO2q4p12OhTkTdzJf2JTjBOqswY3ml71m2qzbr2zAs/mG
+   2l9crPFVeQmCDIZ4ddQuj3pcTld/340nb+3gEQ73krBksviBS3nWrTf5b
+   8pI3i9N5n5grtcjf4gK6n7lTMHC88LlaW5WR4MzfiNoFMv1EgTPW/Ssd+
+   KYsuoCgmhw+ywLYaZwnCtFbFqw6y6HZftzp+MaP73YZ1HUhqGkYX+P2Sg
+   GAvpBdSitY5fNiHpzzP2L/EO+EbwsLmIrjPFIDPq+OwqNq8u59VNsQ/44
+   8AwwvmKsiqpR7qFMV23Gez+y5nWc45tj0OUGWpgvPcVxdCMRyMkRrPHyU
+   g==;
+X-CSE-ConnectionGUID: pT4ta4rNR6aRZHV8RpgusQ==
+X-CSE-MsgGUID: swAgNs4ZSk+Di37vmG14Yg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11158"; a="20977161"
+X-IronPort-AV: E=Sophos;i="6.09,274,1716274800"; 
+   d="scan'208";a="20977161"
+Received: from fmviesa004.fm.intel.com ([10.60.135.144])
+  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Aug 2024 16:08:46 -0700
+X-CSE-ConnectionGUID: yiARJAgUSQ6iMi70uo66VQ==
+X-CSE-MsgGUID: X00cbstkRRO3ElG4P2oYeQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.09,274,1716274800"; 
+   d="scan'208";a="62015850"
+Received: from unknown (HELO b6bf6c95bbab) ([10.239.97.151])
+  by fmviesa004.fm.intel.com with ESMTP; 08 Aug 2024 16:08:41 -0700
+Received: from kbuild by b6bf6c95bbab with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1scCFK-0006bW-1v;
+	Thu, 08 Aug 2024 23:08:38 +0000
+Date: Fri, 9 Aug 2024 07:08:16 +0800
+From: kernel test robot <lkp@intel.com>
+To: Jinjian Song <jinjian.song@fibocom.com>,
+	chandrashekar.devegowda@intel.com,
+	chiranjeevi.rapolu@linux.intel.com, haijun.liu@mediatek.com,
+	m.chetan.kumar@linux.intel.com, ricardo.martinez@linux.intel.com,
+	loic.poulain@linaro.org, ryazanov.s.a@gmail.com,
+	johannes@sipsolutions.net, davem@davemloft.net, edumazet@google.com,
+	kuba@kernel.org, pabeni@redhat.com
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+	linux-doc@vger.kernel.org, angelogioacchino.delregno@collabora.com,
+	linux-arm-kernel@lists.infradead.org, matthias.bgg@gmail.com,
+	corbet@lwn.net, linux-mediatek@lists.infradead.org,
+	danielwinkler@google.com, korneld@google.com,
+	Jinjian Song <jinjian.song@fibocom.com>
+Subject: Re: [net-next v1] net: wwan: t7xx: PCIe reset rescan
+Message-ID: <202408090610.w01C56AC-lkp@intel.com>
+References: <20240808111801.8514-1-jinjian.song@fibocom.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.17
-Message-Id: <94324.124080818230300718@us-mta-586.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240808111801.8514-1-jinjian.song@fibocom.com>
 
-Hi, we tested your kernel and here are the results:
+Hi Jinjian,
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: FAILED
+kernel test robot noticed the following build warnings:
+
+[auto build test WARNING on net-next/main]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Jinjian-Song/net-wwan-t7xx-PCIe-reset-rescan/20240808-192313
+base:   net-next/main
+patch link:    https://lore.kernel.org/r/20240808111801.8514-1-jinjian.song%40fibocom.com
+patch subject: [net-next v1] net: wwan: t7xx: PCIe reset rescan
+config: i386-buildonly-randconfig-004-20240809 (https://download.01.org/0day-ci/archive/20240809/202408090610.w01C56AC-lkp@intel.com/config)
+compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240809/202408090610.w01C56AC-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202408090610.w01C56AC-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/net/wwan/t7xx/t7xx_modem_ops.c:204:13: warning: variable 'ret' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
+     204 |         } else if (type == PLDR) {
+         |                    ^~~~~~~~~~~~
+   drivers/net/wwan/t7xx/t7xx_modem_ops.c:215:9: note: uninitialized use occurs here
+     215 |         return ret;
+         |                ^~~
+   drivers/net/wwan/t7xx/t7xx_modem_ops.c:204:9: note: remove the 'if' if its condition is always true
+     204 |         } else if (type == PLDR) {
+         |                ^~~~~~~~~~~~~~~~~
+     205 |                 ret = t7xx_acpi_reset(t7xx_dev, "MRST._RST");
+     206 |         } else if (type == FASTBOOT) {
+         |           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     207 |                 t7xx_host_event_notify(t7xx_dev, FASTBOOT_DL_NOTIFY);
+         |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     208 |                 t7xx_mhccif_h2d_swint_trigger(t7xx_dev, H2D_CH_DEVICE_RESET);
+         |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     209 |                 msleep(FASTBOOT_RESET_DELAY_MS);
+         |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     210 |         }
+         |         ~
+   drivers/net/wwan/t7xx/t7xx_modem_ops.c:196:9: note: initialize the variable 'ret' to silence this warning
+     196 |         int ret;
+         |                ^
+         |                 = 0
+   1 warning generated.
 
 
-Kernel information:
-    Commit message: Merge tag 'net-6.11-rc3' of git://git.kernel.org/pub/sc=
-m/linux/kernel/git/netdev/net
+vim +204 drivers/net/wwan/t7xx/t7xx_modem_ops.c
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1406410739
+   193	
+   194	int t7xx_reset_device(struct t7xx_pci_dev *t7xx_dev, enum reset_type type)
+   195	{
+   196		int ret;
+   197	
+   198		pci_save_state(t7xx_dev->pdev);
+   199		t7xx_pci_reprobe_early(t7xx_dev);
+   200		t7xx_mode_update(t7xx_dev, T7XX_RESET);
+   201	
+   202		if (type == FLDR) {
+   203			ret = t7xx_acpi_reset(t7xx_dev, "_RST");
+ > 204		} else if (type == PLDR) {
+   205			ret = t7xx_acpi_reset(t7xx_dev, "MRST._RST");
+   206		} else if (type == FASTBOOT) {
+   207			t7xx_host_event_notify(t7xx_dev, FASTBOOT_DL_NOTIFY);
+   208			t7xx_mhccif_h2d_swint_trigger(t7xx_dev, H2D_CH_DEVICE_RESET);
+   209			msleep(FASTBOOT_RESET_DELAY_MS);
+   210		}
+   211	
+   212		pci_restore_state(t7xx_dev->pdev);
+   213		t7xx_pci_reprobe(t7xx_dev, true);
+   214	
+   215		return ret;
+   216	}
+   217	
 
-One or more kernel builds failed:
-    Unrecognized or new issues:
-         ppc64le - https://datawarehouse.cki-project.org/kcidb/builds/redha=
-t:1406410739-ppc64le-kernel
-           s390x - https://datawarehouse.cki-project.org/kcidb/builds/redha=
-t:1406410739-s390x-kernel
-          x86_64 (debug) - https://datawarehouse.cki-project.org/kcidb/buil=
-ds/redhat:1406410739-x86_64-kernel-debug
-
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
