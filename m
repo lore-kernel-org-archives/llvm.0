@@ -1,61 +1,61 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 535DD63D;
-	Thu,  8 Aug 2024 12:36:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 24F0A149DFA;
+	Thu,  8 Aug 2024 12:57:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723120590; cv=none; b=XQ5259h7Pc5vk8qal+29xN1FidUv5bSpbqoByAlJwIkhRIVac70TSzVKd743gzhj+WnNIYUoX3DASnyc1GX6mFuM5MMZj+Z0nfKkWaBAtohpV3rU1TGlCJU7SIQY5yEFZy5Og4Vuepqj1uvOwfXWAiND5FJaX8jFQDvYVrkB/jI=
+	t=1723121826; cv=none; b=JPeLwxIWjGgpLs+5gegbhzi4f0E5MGkCxutWry5o4dIaCV7QpWaIydgP5EoAC3jONDFGbXucJt8qQeFpAspqTDV8VPP1Nn+LcP2WKHLgz0cLGCFtDqpg5mUrsjYsVIB963XTooJ+L6rm8hMbrU6zAwrHy3/SlxkhGq484ShXFko=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723120590; c=relaxed/simple;
-	bh=uDopJ27T5DtRRFmAf3KSNmeY1tR1UbbmyILobet9304=;
+	s=arc-20240116; t=1723121826; c=relaxed/simple;
+	bh=1QfMDkXz3SybKpANXzV2Tl/fsoJPU4ZTvhQDZXGhWE8=;
 	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=fuJ0R0dt3p98NevZx4b6MjqCRHEkqCTSAwttIfE9VvKX25pfInyvf+Ogpy67Au97+Sbg51DWt4THVdaJgfBY2/nQnjEGWu32XZGmxnOt/IFpYTwDJr3g62BhN9UDH5ZdX/lCQM+OBjbiPfKJzAGCaWYRxsQh4WGAZNyjNKb1Duo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=GJjKGfOx; arc=none smtp.client-ip=198.175.65.21
+	 Content-Disposition; b=SQHUbkHkU1swTfUeKd6Ynk3qvti/FvJAKnnv/awg/4oTcjNkwFaJUeO41noY4dTXo6OByQiKmPj7u0hab3HvAUrwlqV+G8BMQbwdaXt68108RmbfJwDn58pyNsoXmXlk/Osposi0RgYkP2f0bZ0H0jEnQGbHSbyzDsqqlFdAjR0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=W2xJuQ5O; arc=none smtp.client-ip=198.175.65.12
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="GJjKGfOx"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="W2xJuQ5O"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1723120588; x=1754656588;
+  t=1723121824; x=1754657824;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=uDopJ27T5DtRRFmAf3KSNmeY1tR1UbbmyILobet9304=;
-  b=GJjKGfOx11/ceD4I+ZMlTb1BJAMZ4/D8mO1K773fY4H1dt5g0L2Dk96a
-   XDR5Ypdux+NWFmfbtqTZQgzeceeLkRaYKPnn0osWPfV1q+qb/2D0etc0k
-   xMbrJOdvHvPUI65aMcDWCAxtddlrgYavdyeYBaQg8wTYMgGzkVf/t3n1/
-   OPOhFzvLIEktPRvLMUf0zpiqsbMiomtzDgQyY9sI7qZwre/xdasysQvNo
-   K09dWHocFHzKVTFElNQMF7E/mo005kxpPHKsbg25qThZqGfaqXFQKdl/5
-   Aq6lI2rq5pkXeV73Jp64FmkW8mfcCOgGEOPCfledBxScedgcYHA/cNeEB
-   Q==;
-X-CSE-ConnectionGUID: B0VCkgwrTG+GYv6DJGl0DQ==
-X-CSE-MsgGUID: Il5lMMBxSBKaqjuwT7gglQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11157"; a="21213161"
+  bh=1QfMDkXz3SybKpANXzV2Tl/fsoJPU4ZTvhQDZXGhWE8=;
+  b=W2xJuQ5OEFXEmz1IaA+/E8+ehgZb3SZLM4mougwynPxtqC0CbOKyni4t
+   CtFc/SpW93qm5GeesWHNaVdmY0/zN7CiiwDEO7ji8GBRwNyEdvAmqT6Ka
+   0J9mfuX4SuzFvqVmYYw0f8L3sTQw/I2AFFMbRnJjr5IXKctKcBcAIZWqh
+   0zR2DCJNqO0939gD4yMJ4ScddxcVi/FR8rKjuYlG7e+TglEQeGvODVyp5
+   t+13arIOfR5z8QWtL8EaaQMQ8XTOJESiBV4QAiscrlo5dbBLp1bQuy5Z0
+   UE069iKHj+asQxrOZc1zPmHmPCNfrqEq7wXvJMiCh3+xB6yMQpR4HAvZG
+   w==;
+X-CSE-ConnectionGUID: hhccG0h1TImZ+/Ku7Qg83w==
+X-CSE-MsgGUID: LKpd756uTaC9FANf9Fmbsw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11158"; a="32636517"
 X-IronPort-AV: E=Sophos;i="6.09,273,1716274800"; 
-   d="scan'208";a="21213161"
-Received: from orviesa009.jf.intel.com ([10.64.159.149])
-  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Aug 2024 05:36:28 -0700
-X-CSE-ConnectionGUID: pU6cwp+sQbWis1UXGYgnoA==
-X-CSE-MsgGUID: NxLBJgmqRzWcjcX/8HO5RQ==
+   d="scan'208";a="32636517"
+Received: from orviesa002.jf.intel.com ([10.64.159.142])
+  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Aug 2024 05:57:03 -0700
+X-CSE-ConnectionGUID: iNZjTy18TxeDHLT0VyKtNw==
+X-CSE-MsgGUID: Gm7uC8UpT3mliq/D3iuMhA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.09,273,1716274800"; 
-   d="scan'208";a="57126305"
+   d="scan'208";a="87861526"
 Received: from unknown (HELO b6bf6c95bbab) ([10.239.97.151])
-  by orviesa009.jf.intel.com with ESMTP; 08 Aug 2024 05:36:26 -0700
+  by orviesa002.jf.intel.com with ESMTP; 08 Aug 2024 05:57:02 -0700
 Received: from kbuild by b6bf6c95bbab with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1sc2NN-0006Au-1W;
-	Thu, 08 Aug 2024 12:36:19 +0000
-Date: Thu, 8 Aug 2024 20:35:16 +0800
+	id 1sc2hO-0006Ba-2G;
+	Thu, 08 Aug 2024 12:56:58 +0000
+Date: Thu, 8 Aug 2024 20:56:21 +0800
 From: kernel test robot <lkp@intel.com>
-To: Waiman Long <longman@redhat.com>
+To: Vijendar Mukunda <Vijendar.Mukunda@amd.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Linux Memory Management List <linux-mm@kvack.org>
-Subject: [akpm-mm:mm-unstable 18/225] lib/stackdepot.c:66:26: error: call to
- undeclared function 'MIN'; ISO C99 and later do not support implicit
- function declarations
-Message-ID: <202408082056.0xMOdtbe-lkp@intel.com>
+	Mark Brown <broonie@kernel.org>,
+	Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
+	Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+Subject: [broonie-ci:fileZMvsMi 36/37] sound/soc/sof/amd/acp.c:277:12: error:
+ no member named 'rev' in 'struct sof_amd_acp_desc'
+Message-ID: <202408082001.IkvZrxTk-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -65,137 +65,110 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-unstable
-head:   275d686abcb590d862b74e2670533d93fd10e58c
-commit: 2900cb53f7d7d47f73c4c368c0db15a2c6df3e72 [18/225] lib/stackdepot: double DEPOT_POOLS_CAP if KASAN is enabled
-config: um-allnoconfig (https://download.01.org/0day-ci/archive/20240808/202408082056.0xMOdtbe-lkp@intel.com/config)
-compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240808/202408082056.0xMOdtbe-lkp@intel.com/reproduce)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/ci.git fileZMvsMi
+head:   43e41a7c8601d155489d208c40809f96727ea7fe
+commit: 1b18e9f7176f8bec6673befed88068f03fa6d254 [36/37] ASoC: SOF: amd: remove unused variable from sof_amd_acp_desc structure
+config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20240808/202408082001.IkvZrxTk-lkp@intel.com/config)
+compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240808/202408082001.IkvZrxTk-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202408082056.0xMOdtbe-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202408082001.IkvZrxTk-lkp@intel.com/
 
-All error/warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
-   In file included from lib/stackdepot.c:36:
-   In file included from include/linux/memblock.h:13:
-   In file included from arch/um/include/asm/dma.h:5:
-   In file included from arch/um/include/asm/io.h:24:
-   include/asm-generic/io.h:548:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     548 |         val = __raw_readb(PCI_IOBASE + addr);
-         |                           ~~~~~~~~~~ ^
-   include/asm-generic/io.h:561:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     561 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
-      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-         |                                                   ^
-   In file included from lib/stackdepot.c:36:
-   In file included from include/linux/memblock.h:13:
-   In file included from arch/um/include/asm/dma.h:5:
-   In file included from arch/um/include/asm/io.h:24:
-   include/asm-generic/io.h:574:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     574 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
-      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
-         |                                                   ^
-   In file included from lib/stackdepot.c:36:
-   In file included from include/linux/memblock.h:13:
-   In file included from arch/um/include/asm/dma.h:5:
-   In file included from arch/um/include/asm/io.h:24:
-   include/asm-generic/io.h:585:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     585 |         __raw_writeb(value, PCI_IOBASE + addr);
-         |                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:595:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     595 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:605:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     605 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:693:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     693 |         readsb(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:701:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     701 |         readsw(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:709:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     709 |         readsl(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:718:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     718 |         writesb(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   include/asm-generic/io.h:727:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     727 |         writesw(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   include/asm-generic/io.h:736:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     736 |         writesl(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
->> lib/stackdepot.c:66:26: error: call to undeclared function 'MIN'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-      66 | static void *stack_pools[DEPOT_MAX_POOLS];
-         |                          ^
-   lib/stackdepot.c:44:2: note: expanded from macro 'DEPOT_MAX_POOLS'
-      44 |         MIN((1LL << (DEPOT_POOL_INDEX_BITS)) - 1, DEPOT_POOLS_CAP)
-         |         ^
->> lib/stackdepot.c:66:26: warning: variable length array used [-Wvla]
-      66 | static void *stack_pools[DEPOT_MAX_POOLS];
-         |                          ^~~~~~~~~~~~~~~
-   lib/stackdepot.c:44:2: note: expanded from macro 'DEPOT_MAX_POOLS'
-      44 |         MIN((1LL << (DEPOT_POOL_INDEX_BITS)) - 1, DEPOT_POOLS_CAP)
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->> lib/stackdepot.c:66:14: error: variable length array declaration not allowed at file scope
-      66 | static void *stack_pools[DEPOT_MAX_POOLS];
-         |              ^           ~~~~~~~~~~~~~~~
-   13 warnings and 2 errors generated.
+>> sound/soc/sof/amd/acp.c:277:12: error: no member named 'rev' in 'struct sof_amd_acp_desc'
+     277 |         if (desc->rev == 3) {
+         |             ~~~~  ^
+   sound/soc/sof/amd/acp.c:284:12: error: no member named 'rev' in 'struct sof_amd_acp_desc'
+     284 |         if (desc->rev == 5 && !(adata->quirks && adata->quirks->skip_iram_dram_size_mod)) {
+         |             ~~~~  ^
+   2 errors generated.
 
 
-vim +/MIN +66 lib/stackdepot.c
+vim +277 sound/soc/sof/amd/acp.c
 
-2900cb53f7d7d4 Waiman Long         2024-08-07  41  
-3ee34eabac2abb Oscar Salvador      2024-02-15  42  /* The pool_index is offset by 1 so the first record does not have a 0 handle. */
-424cafee4a9c66 Andrey Konovalov    2023-02-10  43  #define DEPOT_MAX_POOLS \
-2900cb53f7d7d4 Waiman Long         2024-08-07 @44  	MIN((1LL << (DEPOT_POOL_INDEX_BITS)) - 1, DEPOT_POOLS_CAP)
-cd11016e5f5212 Alexander Potapenko 2016-03-25  45  
-735df3c3a3493c Andrey Konovalov    2023-02-10  46  static bool stack_depot_disabled;
-1c0310add78e7e Andrey Konovalov    2023-02-10  47  static bool __stack_depot_early_init_requested __initdata = IS_ENABLED(CONFIG_STACKDEPOT_ALWAYS_INIT);
-a5f1783be29ada Vlastimil Babka     2022-03-02  48  static bool __stack_depot_early_init_passed __initdata;
-a5f1783be29ada Vlastimil Babka     2022-03-02  49  
-0d249ac0e07680 Andrey Konovalov    2023-02-10  50  /* Use one hash table bucket per 16 KB of memory. */
-4c2e9a679468a5 Andrey Konovalov    2023-02-10  51  #define STACK_HASH_TABLE_SCALE 14
-0d249ac0e07680 Andrey Konovalov    2023-02-10  52  /* Limit the number of buckets between 4K and 1M. */
-4c2e9a679468a5 Andrey Konovalov    2023-02-10  53  #define STACK_BUCKET_NUMBER_ORDER_MIN 12
-4c2e9a679468a5 Andrey Konovalov    2023-02-10  54  #define STACK_BUCKET_NUMBER_ORDER_MAX 20
-0d249ac0e07680 Andrey Konovalov    2023-02-10  55  /* Initial seed for jhash2. */
-cd11016e5f5212 Alexander Potapenko 2016-03-25  56  #define STACK_HASH_SEED 0x9747b28c
-cd11016e5f5212 Alexander Potapenko 2016-03-25  57  
-4805180bc16523 Andrey Konovalov    2023-11-20  58  /* Hash table of stored stack records. */
-4805180bc16523 Andrey Konovalov    2023-11-20  59  static struct list_head *stack_table;
-0d249ac0e07680 Andrey Konovalov    2023-02-10  60  /* Fixed order of the number of table buckets. Used when KASAN is enabled. */
-4c2e9a679468a5 Andrey Konovalov    2023-02-10  61  static unsigned int stack_bucket_number_order;
-0d249ac0e07680 Andrey Konovalov    2023-02-10  62  /* Hash mask for indexing the table. */
-f9987921cb541b Vlastimil Babka     2022-06-20  63  static unsigned int stack_hash_mask;
-f9987921cb541b Vlastimil Babka     2022-06-20  64  
-4805180bc16523 Andrey Konovalov    2023-11-20  65  /* Array of memory regions that store stack records. */
-424cafee4a9c66 Andrey Konovalov    2023-02-10 @66  static void *stack_pools[DEPOT_MAX_POOLS];
-a5d21f71715a04 Andrey Konovalov    2023-11-20  67  /* Newly allocated pool that is not yet added to stack_pools. */
-a5d21f71715a04 Andrey Konovalov    2023-11-20  68  static void *new_pool;
-b29d3188581400 Andrey Konovalov    2023-11-20  69  /* Number of pools in stack_pools. */
-b29d3188581400 Andrey Konovalov    2023-11-20  70  static int pools_num;
-31639fd6cebd4f Marco Elver         2024-01-29  71  /* Offset to the unused space in the currently used pool. */
-31639fd6cebd4f Marco Elver         2024-01-29  72  static size_t pool_offset = DEPOT_POOL_SIZE;
-4805180bc16523 Andrey Konovalov    2023-11-20  73  /* Freelist of stack records within stack_pools. */
-4805180bc16523 Andrey Konovalov    2023-11-20  74  static LIST_HEAD(free_stacks);
-4434a56ec20925 Marco Elver         2024-01-18  75  /* The lock must be held when performing pool or freelist modifications. */
-4434a56ec20925 Marco Elver         2024-01-18  76  static DEFINE_RAW_SPINLOCK(pool_lock);
-e1fdc403349c64 Vijayanand Jitta    2021-02-25  77  
+f063eba3e7a6ae Ajit Kumar Pandey      2021-11-17  232  
+0e44572a28a491 Ajit Kumar Pandey      2021-11-17  233  int configure_and_run_sha_dma(struct acp_dev_data *adata, void *image_addr,
+0e44572a28a491 Ajit Kumar Pandey      2021-11-17  234  			      unsigned int start_addr, unsigned int dest_addr,
+0e44572a28a491 Ajit Kumar Pandey      2021-11-17  235  			      unsigned int image_length)
+0e44572a28a491 Ajit Kumar Pandey      2021-11-17  236  {
+0e44572a28a491 Ajit Kumar Pandey      2021-11-17  237  	struct snd_sof_dev *sdev = adata->dev;
+b1db244c716fe3 Mastan Katragadda      2023-06-30  238  	const struct sof_amd_acp_desc *desc = get_chip_info(sdev->pdata);
+0e44572a28a491 Ajit Kumar Pandey      2021-11-17  239  	unsigned int tx_count, fw_qualifier, val;
+0e44572a28a491 Ajit Kumar Pandey      2021-11-17  240  	int ret;
+0e44572a28a491 Ajit Kumar Pandey      2021-11-17  241  
+0e44572a28a491 Ajit Kumar Pandey      2021-11-17  242  	if (!image_addr) {
+0e44572a28a491 Ajit Kumar Pandey      2021-11-17  243  		dev_err(sdev->dev, "SHA DMA image address is NULL\n");
+0e44572a28a491 Ajit Kumar Pandey      2021-11-17  244  		return -EINVAL;
+0e44572a28a491 Ajit Kumar Pandey      2021-11-17  245  	}
+0e44572a28a491 Ajit Kumar Pandey      2021-11-17  246  
+0e44572a28a491 Ajit Kumar Pandey      2021-11-17  247  	val = snd_sof_dsp_read(sdev, ACP_DSP_BAR, ACP_SHA_DMA_CMD);
+0e44572a28a491 Ajit Kumar Pandey      2021-11-17  248  	if (val & ACP_SHA_RUN) {
+0e44572a28a491 Ajit Kumar Pandey      2021-11-17  249  		snd_sof_dsp_write(sdev, ACP_DSP_BAR, ACP_SHA_DMA_CMD, ACP_SHA_RESET);
+0e44572a28a491 Ajit Kumar Pandey      2021-11-17  250  		ret = snd_sof_dsp_read_poll_timeout(sdev, ACP_DSP_BAR, ACP_SHA_DMA_CMD_STS,
+0e44572a28a491 Ajit Kumar Pandey      2021-11-17  251  						    val, val & ACP_SHA_RESET,
+0e44572a28a491 Ajit Kumar Pandey      2021-11-17  252  						    ACP_REG_POLL_INTERVAL,
+0e44572a28a491 Ajit Kumar Pandey      2021-11-17  253  						    ACP_REG_POLL_TIMEOUT_US);
+0e44572a28a491 Ajit Kumar Pandey      2021-11-17  254  		if (ret < 0) {
+0e44572a28a491 Ajit Kumar Pandey      2021-11-17  255  			dev_err(sdev->dev, "SHA DMA Failed to Reset\n");
+0e44572a28a491 Ajit Kumar Pandey      2021-11-17  256  			return ret;
+0e44572a28a491 Ajit Kumar Pandey      2021-11-17  257  		}
+0e44572a28a491 Ajit Kumar Pandey      2021-11-17  258  	}
+0e44572a28a491 Ajit Kumar Pandey      2021-11-17  259  
+33c3d813330718 Cristian Ciocaltea     2024-02-20  260  	if (adata->quirks && adata->quirks->signed_fw_image)
+6a69b724b2f82b Venkata Prasad Potturu 2023-08-09  261  		snd_sof_dsp_write(sdev, ACP_DSP_BAR, ACP_SHA_DMA_INCLUDE_HDR, ACP_SHA_HEADER);
+6a69b724b2f82b Venkata Prasad Potturu 2023-08-09  262  
+0e44572a28a491 Ajit Kumar Pandey      2021-11-17  263  	snd_sof_dsp_write(sdev, ACP_DSP_BAR, ACP_SHA_DMA_STRT_ADDR, start_addr);
+0e44572a28a491 Ajit Kumar Pandey      2021-11-17  264  	snd_sof_dsp_write(sdev, ACP_DSP_BAR, ACP_SHA_DMA_DESTINATION_ADDR, dest_addr);
+0e44572a28a491 Ajit Kumar Pandey      2021-11-17  265  	snd_sof_dsp_write(sdev, ACP_DSP_BAR, ACP_SHA_MSG_LENGTH, image_length);
+0e44572a28a491 Ajit Kumar Pandey      2021-11-17  266  	snd_sof_dsp_write(sdev, ACP_DSP_BAR, ACP_SHA_DMA_CMD, ACP_SHA_RUN);
+0e44572a28a491 Ajit Kumar Pandey      2021-11-17  267  
+0e44572a28a491 Ajit Kumar Pandey      2021-11-17  268  	ret = snd_sof_dsp_read_poll_timeout(sdev, ACP_DSP_BAR, ACP_SHA_TRANSFER_BYTE_CNT,
+0e44572a28a491 Ajit Kumar Pandey      2021-11-17  269  					    tx_count, tx_count == image_length,
+0e44572a28a491 Ajit Kumar Pandey      2021-11-17  270  					    ACP_REG_POLL_INTERVAL, ACP_DMA_COMPLETE_TIMEOUT_US);
+0e44572a28a491 Ajit Kumar Pandey      2021-11-17  271  	if (ret < 0) {
+0e44572a28a491 Ajit Kumar Pandey      2021-11-17  272  		dev_err(sdev->dev, "SHA DMA Failed to Transfer Length %x\n", tx_count);
+0e44572a28a491 Ajit Kumar Pandey      2021-11-17  273  		return ret;
+0e44572a28a491 Ajit Kumar Pandey      2021-11-17  274  	}
+0e44572a28a491 Ajit Kumar Pandey      2021-11-17  275  
+b1db244c716fe3 Mastan Katragadda      2023-06-30  276  	/* psp_send_cmd only required for renoir platform (rev - 3) */
+b1db244c716fe3 Mastan Katragadda      2023-06-30 @277  	if (desc->rev == 3) {
+bbdcd3d590cad7 Ajit Kumar Pandey      2022-04-21  278  		ret = psp_send_cmd(adata, MBOX_ACP_SHA_DMA_COMMAND);
+f063eba3e7a6ae Ajit Kumar Pandey      2021-11-17  279  		if (ret)
+f063eba3e7a6ae Ajit Kumar Pandey      2021-11-17  280  			return ret;
+b1db244c716fe3 Mastan Katragadda      2023-06-30  281  	}
+0e44572a28a491 Ajit Kumar Pandey      2021-11-17  282  
+55d7bbe433467a Venkata Prasad Potturu 2023-12-19  283  	/* psp_send_cmd only required for vangogh platform (rev - 5) */
+094d11768f740f Cristian Ciocaltea     2024-02-20  284  	if (desc->rev == 5 && !(adata->quirks && adata->quirks->skip_iram_dram_size_mod)) {
+55d7bbe433467a Venkata Prasad Potturu 2023-12-19  285  		/* Modify IRAM and DRAM size */
+55d7bbe433467a Venkata Prasad Potturu 2023-12-19  286  		ret = psp_send_cmd(adata, MBOX_ACP_IRAM_DRAM_FENCE_COMMAND | IRAM_DRAM_FENCE_2);
+55d7bbe433467a Venkata Prasad Potturu 2023-12-19  287  		if (ret)
+55d7bbe433467a Venkata Prasad Potturu 2023-12-19  288  			return ret;
+55d7bbe433467a Venkata Prasad Potturu 2023-12-19  289  		ret = psp_send_cmd(adata, MBOX_ACP_IRAM_DRAM_FENCE_COMMAND | MBOX_ISREADY_FLAG);
+55d7bbe433467a Venkata Prasad Potturu 2023-12-19  290  		if (ret)
+55d7bbe433467a Venkata Prasad Potturu 2023-12-19  291  			return ret;
+55d7bbe433467a Venkata Prasad Potturu 2023-12-19  292  	}
+55d7bbe433467a Venkata Prasad Potturu 2023-12-19  293  
+2a2f5f2384b979 Ajye Huang             2022-12-05  294  	ret = snd_sof_dsp_read_poll_timeout(sdev, ACP_DSP_BAR, ACP_SHA_DSP_FW_QUALIFIER,
+2a2f5f2384b979 Ajye Huang             2022-12-05  295  					    fw_qualifier, fw_qualifier & DSP_FW_RUN_ENABLE,
+2a2f5f2384b979 Ajye Huang             2022-12-05  296  					    ACP_REG_POLL_INTERVAL, ACP_DMA_COMPLETE_TIMEOUT_US);
+2a2f5f2384b979 Ajye Huang             2022-12-05  297  	if (ret < 0) {
+0e44572a28a491 Ajit Kumar Pandey      2021-11-17  298  		dev_err(sdev->dev, "PSP validation failed\n");
+2a2f5f2384b979 Ajye Huang             2022-12-05  299  		return ret;
+0e44572a28a491 Ajit Kumar Pandey      2021-11-17  300  	}
+0e44572a28a491 Ajit Kumar Pandey      2021-11-17  301  
+2dc643cd756398 Pierre-Louis Bossart   2021-12-21  302  	return 0;
+0e44572a28a491 Ajit Kumar Pandey      2021-11-17  303  }
+0e44572a28a491 Ajit Kumar Pandey      2021-11-17  304  
 
-:::::: The code at line 66 was first introduced by commit
-:::::: 424cafee4a9c66435d8b86e7edbc794c116b52a5 lib/stackdepot: rename handle and pool constants
+:::::: The code at line 277 was first introduced by commit
+:::::: b1db244c716fe300e36428aeb0874913d2e0a91d ASoC: SOF: amd: add revision check for sending sha dma completion command
 
-:::::: TO: Andrey Konovalov <andreyknvl@google.com>
-:::::: CC: Andrew Morton <akpm@linux-foundation.org>
+:::::: TO: Mastan Katragadda <Mastan.Katragadda@amd.com>
+:::::: CC: Mark Brown <broonie@kernel.org>
 
 -- 
 0-DAY CI Kernel Test Service
