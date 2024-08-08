@@ -1,71 +1,66 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 43FE0157466;
-	Thu,  8 Aug 2024 23:08:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E9F1155A59;
+	Thu,  8 Aug 2024 23:50:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723158527; cv=none; b=PEiJ/YrOdNDxdKWGYBn6Vta04WZXjNSyXLN9w0lbOxeEDWkO+OtjcipTmeqvMiPHd3qMIukP5sT+PWN2k0ay6ZeY6a31Kzj9EMLKmjOsju8+YBTTHWpcEIpeDlxu6dWPA5CaVT8GN3kA+tRKppedT2CrX+QcqG0eM/K1EZQhMtU=
+	t=1723161049; cv=none; b=Y7+dUkgav9Xwob/GF8Mfpm1chVLXHmItTPFqPzm7vktdTLQx2iIgQHmVslDbLuqOFSjcc83ROrW7gm5AjHqE/8AU0js/v+TM8vFV/PKIz+91Zn0ZUOGi1nKEwYkdhbe0EzFcTYugMFLgLJ7Dre2qMmRFjBjwAqMVw7WhMLwvltM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723158527; c=relaxed/simple;
-	bh=T7KdUeo7zRdu2V4NwX3BnZOQDuovZf6qEZiSGn3VOz8=;
+	s=arc-20240116; t=1723161049; c=relaxed/simple;
+	bh=msStPv78tQHsgiFR+ibTiL1MtKZ9jSJTczTEuZULeAI=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=XTMMlO7FQ+MGv6fItxwHYdZmldUWipqOMXo+NmZGM4a+EDzzq4l0Gdozhnt7G21ZHnQkz54KaO5INctaen63q8HEfKDCgn30M56D46rLmkgwOLAjTnNIZxDpp9+WaFQIfxL8zfBG83+YUs+wJlSOfG4SmoAXtNoz4ivyG6tMpjQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=lVP8ZVeX; arc=none smtp.client-ip=192.198.163.19
+	 Content-Type:Content-Disposition:In-Reply-To; b=mm23eW1o+o/Yse/jqZx199PluVfpwilESM/goElMifzB5i/fYF4GIvQdEJKHU4M1nE8Xeu3Va1B2UIa93mBCBBex6MvaM+O66df7Er7OR4+R4pOLBnCtYeLnuOxwkQwWY4ApkRp8I9QJKIO2/R4uBqol9fJ+9l3vARRpmmrBgnA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Yauq01mz; arc=none smtp.client-ip=198.175.65.12
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="lVP8ZVeX"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Yauq01mz"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1723158527; x=1754694527;
+  t=1723161047; x=1754697047;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=T7KdUeo7zRdu2V4NwX3BnZOQDuovZf6qEZiSGn3VOz8=;
-  b=lVP8ZVeXbOKsO2q4p12OhTkTdzJf2JTjBOqswY3ml71m2qzbr2zAs/mG
-   2l9crPFVeQmCDIZ4ddQuj3pcTld/340nb+3gEQ73krBksviBS3nWrTf5b
-   8pI3i9N5n5grtcjf4gK6n7lTMHC88LlaW5WR4MzfiNoFMv1EgTPW/Ssd+
-   KYsuoCgmhw+ywLYaZwnCtFbFqw6y6HZftzp+MaP73YZ1HUhqGkYX+P2Sg
-   GAvpBdSitY5fNiHpzzP2L/EO+EbwsLmIrjPFIDPq+OwqNq8u59VNsQ/44
-   8AwwvmKsiqpR7qFMV23Gez+y5nWc45tj0OUGWpgvPcVxdCMRyMkRrPHyU
-   g==;
-X-CSE-ConnectionGUID: pT4ta4rNR6aRZHV8RpgusQ==
-X-CSE-MsgGUID: swAgNs4ZSk+Di37vmG14Yg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11158"; a="20977161"
+  bh=msStPv78tQHsgiFR+ibTiL1MtKZ9jSJTczTEuZULeAI=;
+  b=Yauq01mz3KMvcE0nkpwBYV3qCgPH6JKs9GYemo9WwZuakbMynhJinvpH
+   njedIKoXsncCciOBfiU/DMqiur9jCg0VfZouYk5l71ca2f5TndcxqMyKC
+   kfC/K4aVWkMeJltxNztkJb9HHdrGjD5wzI54LCIKQwEjOfxbej/sQg1mh
+   xFj9BUGvz5apIYRLr4DV0LppyVJFi7orrZbwhrorpdZUdAoh3xqB0fRa8
+   ULVgiGpJ6h38+tV/8LmX/wOwxrEvotbUQo/NxlIlD3HYRKauexnx3FKRs
+   eWSfct2rB8wmMwXIvy0q7sFxHuvDKEUDuh6macyrvT+N5GGa/3os6M20G
+   A==;
+X-CSE-ConnectionGUID: axnVF6BaR6+w8KPFaffX1g==
+X-CSE-MsgGUID: fXo99yeQRYK9v0Z1+BgXGQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11158"; a="32711964"
 X-IronPort-AV: E=Sophos;i="6.09,274,1716274800"; 
-   d="scan'208";a="20977161"
-Received: from fmviesa004.fm.intel.com ([10.60.135.144])
-  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Aug 2024 16:08:46 -0700
-X-CSE-ConnectionGUID: yiARJAgUSQ6iMi70uo66VQ==
-X-CSE-MsgGUID: X00cbstkRRO3ElG4P2oYeQ==
+   d="scan'208";a="32711964"
+Received: from fmviesa005.fm.intel.com ([10.60.135.145])
+  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Aug 2024 16:50:20 -0700
+X-CSE-ConnectionGUID: VAU9Z6MPSQqj9ETSNKLMjg==
+X-CSE-MsgGUID: Ecc3zQWtTPGhvCQPzzVwWw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.09,274,1716274800"; 
-   d="scan'208";a="62015850"
+   d="scan'208";a="61778876"
 Received: from unknown (HELO b6bf6c95bbab) ([10.239.97.151])
-  by fmviesa004.fm.intel.com with ESMTP; 08 Aug 2024 16:08:41 -0700
+  by fmviesa005.fm.intel.com with ESMTP; 08 Aug 2024 16:50:14 -0700
 Received: from kbuild by b6bf6c95bbab with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1scCFK-0006bW-1v;
-	Thu, 08 Aug 2024 23:08:38 +0000
-Date: Fri, 9 Aug 2024 07:08:16 +0800
+	id 1scCtX-0006d4-0r;
+	Thu, 08 Aug 2024 23:50:11 +0000
+Date: Fri, 9 Aug 2024 07:49:39 +0800
 From: kernel test robot <lkp@intel.com>
-To: Jinjian Song <jinjian.song@fibocom.com>,
-	chandrashekar.devegowda@intel.com,
-	chiranjeevi.rapolu@linux.intel.com, haijun.liu@mediatek.com,
-	m.chetan.kumar@linux.intel.com, ricardo.martinez@linux.intel.com,
-	loic.poulain@linaro.org, ryazanov.s.a@gmail.com,
-	johannes@sipsolutions.net, davem@davemloft.net, edumazet@google.com,
-	kuba@kernel.org, pabeni@redhat.com
+To: Hanjun Guo <guohanjun@huawei.com>, Sudeep Holla <sudeep.holla@arm.com>,
+	Lorenzo Pieralisi <lpieralisi@kernel.org>,
+	"Rafael J . Wysocki" <rafael@kernel.org>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-	linux-doc@vger.kernel.org, angelogioacchino.delregno@collabora.com,
-	linux-arm-kernel@lists.infradead.org, matthias.bgg@gmail.com,
-	corbet@lwn.net, linux-mediatek@lists.infradead.org,
-	danielwinkler@google.com, korneld@google.com,
-	Jinjian Song <jinjian.song@fibocom.com>
-Subject: Re: [net-next v1] net: wwan: t7xx: PCIe reset rescan
-Message-ID: <202408090610.w01C56AC-lkp@intel.com>
-References: <20240808111801.8514-1-jinjian.song@fibocom.com>
+	Will Deacon <will@kernel.org>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	linux-acpi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	Hanjun Guo <guohanjun@huawei.com>
+Subject: Re: [PATCH 3/3] ARM64: ACPI: Move the NUMA code to
+ drivers/acpi/arm64/
+Message-ID: <202408090735.Oa78ciK8-lkp@intel.com>
+References: <20240808131522.1032431-4-guohanjun@huawei.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -74,83 +69,75 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240808111801.8514-1-jinjian.song@fibocom.com>
+In-Reply-To: <20240808131522.1032431-4-guohanjun@huawei.com>
 
-Hi Jinjian,
+Hi Hanjun,
 
-kernel test robot noticed the following build warnings:
+kernel test robot noticed the following build errors:
 
-[auto build test WARNING on net-next/main]
+[auto build test ERROR on arm64/for-next/core]
+[also build test ERROR on rafael-pm/linux-next rafael-pm/bleeding-edge linus/master v6.11-rc2 next-20240808]
+[cannot apply to arm-perf/for-next/perf]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Jinjian-Song/net-wwan-t7xx-PCIe-reset-rescan/20240808-192313
-base:   net-next/main
-patch link:    https://lore.kernel.org/r/20240808111801.8514-1-jinjian.song%40fibocom.com
-patch subject: [net-next v1] net: wwan: t7xx: PCIe reset rescan
-config: i386-buildonly-randconfig-004-20240809 (https://download.01.org/0day-ci/archive/20240809/202408090610.w01C56AC-lkp@intel.com/config)
-compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240809/202408090610.w01C56AC-lkp@intel.com/reproduce)
+url:    https://github.com/intel-lab-lkp/linux/commits/Hanjun-Guo/ARM64-ACPI-Remove-the-leftover-acpi_init_cpus/20240808-212154
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-next/core
+patch link:    https://lore.kernel.org/r/20240808131522.1032431-4-guohanjun%40huawei.com
+patch subject: [PATCH 3/3] ARM64: ACPI: Move the NUMA code to drivers/acpi/arm64/
+config: riscv-defconfig (https://download.01.org/0day-ci/archive/20240809/202408090735.Oa78ciK8-lkp@intel.com/config)
+compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 4527fba9ad6bc682eceda603150bfaec65ec6916)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240809/202408090735.Oa78ciK8-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202408090610.w01C56AC-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202408090735.Oa78ciK8-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> drivers/net/wwan/t7xx/t7xx_modem_ops.c:204:13: warning: variable 'ret' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
-     204 |         } else if (type == PLDR) {
-         |                    ^~~~~~~~~~~~
-   drivers/net/wwan/t7xx/t7xx_modem_ops.c:215:9: note: uninitialized use occurs here
-     215 |         return ret;
-         |                ^~~
-   drivers/net/wwan/t7xx/t7xx_modem_ops.c:204:9: note: remove the 'if' if its condition is always true
-     204 |         } else if (type == PLDR) {
-         |                ^~~~~~~~~~~~~~~~~
-     205 |                 ret = t7xx_acpi_reset(t7xx_dev, "MRST._RST");
-     206 |         } else if (type == FASTBOOT) {
-         |           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     207 |                 t7xx_host_event_notify(t7xx_dev, FASTBOOT_DL_NOTIFY);
-         |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     208 |                 t7xx_mhccif_h2d_swint_trigger(t7xx_dev, H2D_CH_DEVICE_RESET);
-         |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     209 |                 msleep(FASTBOOT_RESET_DELAY_MS);
-         |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     210 |         }
-         |         ~
-   drivers/net/wwan/t7xx/t7xx_modem_ops.c:196:9: note: initialize the variable 'ret' to silence this warning
-     196 |         int ret;
-         |                ^
-         |                 = 0
-   1 warning generated.
+   In file included from drivers/nvme/host/pci.c:7:
+>> include/linux/acpi.h:260:19: error: redefinition of 'acpi_numa_get_nid'
+     260 | static inline int acpi_numa_get_nid(unsigned int cpu) { return NUMA_NO_NODE; }
+         |                   ^
+   arch/riscv/include/asm/acpi.h:68:19: note: previous definition is here
+      68 | static inline int acpi_numa_get_nid(unsigned int cpu) { return NUMA_NO_NODE; }
+         |                   ^
+   In file included from drivers/nvme/host/pci.c:9:
+   In file included from include/linux/blkdev.h:9:
+   In file included from include/linux/blk_types.h:10:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:8:
+   In file included from include/linux/cacheflush.h:5:
+   In file included from arch/riscv/include/asm/cacheflush.h:9:
+   In file included from include/linux/mm.h:2253:
+   include/linux/vmstat.h:514:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     514 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+   drivers/nvme/host/pci.c:2982:41: warning: shift count >= width of type [-Wshift-count-overflow]
+    2982 |                 dma_set_mask_and_coherent(&pdev->dev, DMA_BIT_MASK(64));
+         |                                                       ^~~~~~~~~~~~~~~~
+   include/linux/dma-mapping.h:77:54: note: expanded from macro 'DMA_BIT_MASK'
+      77 | #define DMA_BIT_MASK(n) (((n) == 64) ? ~0ULL : ((1ULL<<(n))-1))
+         |                                                      ^ ~~~
+   2 warnings and 1 error generated.
 
 
-vim +204 drivers/net/wwan/t7xx/t7xx_modem_ops.c
+vim +/acpi_numa_get_nid +260 include/linux/acpi.h
 
-   193	
-   194	int t7xx_reset_device(struct t7xx_pci_dev *t7xx_dev, enum reset_type type)
-   195	{
-   196		int ret;
-   197	
-   198		pci_save_state(t7xx_dev->pdev);
-   199		t7xx_pci_reprobe_early(t7xx_dev);
-   200		t7xx_mode_update(t7xx_dev, T7XX_RESET);
-   201	
-   202		if (type == FLDR) {
-   203			ret = t7xx_acpi_reset(t7xx_dev, "_RST");
- > 204		} else if (type == PLDR) {
-   205			ret = t7xx_acpi_reset(t7xx_dev, "MRST._RST");
-   206		} else if (type == FASTBOOT) {
-   207			t7xx_host_event_notify(t7xx_dev, FASTBOOT_DL_NOTIFY);
-   208			t7xx_mhccif_h2d_swint_trigger(t7xx_dev, H2D_CH_DEVICE_RESET);
-   209			msleep(FASTBOOT_RESET_DELAY_MS);
-   210		}
-   211	
-   212		pci_restore_state(t7xx_dev->pdev);
-   213		t7xx_pci_reprobe(t7xx_dev, true);
-   214	
-   215		return ret;
-   216	}
-   217	
+   254	
+   255	#ifdef CONFIG_ARM64
+   256	int acpi_numa_get_nid(unsigned int cpu);
+   257	void acpi_map_cpus_to_nodes(void);
+   258	void acpi_numa_gicc_affinity_init(struct acpi_srat_gicc_affinity *pa);
+   259	#else
+ > 260	static inline int acpi_numa_get_nid(unsigned int cpu) { return NUMA_NO_NODE; }
+   261	static inline void acpi_map_cpus_to_nodes(void) { }
+   262	static inline void
+   263	acpi_numa_gicc_affinity_init(struct acpi_srat_gicc_affinity *pa) { }
+   264	#endif
+   265	
 
 -- 
 0-DAY CI Kernel Test Service
