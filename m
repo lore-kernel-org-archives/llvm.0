@@ -1,194 +1,191 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 33B9D145FF5;
-	Wed,  7 Aug 2024 23:54:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C77C2107;
+	Thu,  8 Aug 2024 00:43:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723074887; cv=none; b=J4v6Ip195NrAUEy1Tvb/rvh6D1j3nffAkJbaIUJCEjexfgwibI9obFjtMdjUM516gcLVdCQt2QwQ/hY+7n04OglhmPXv6X7Bmnq+CX7YfbZYRDVQXgdReHAyzJGBMenzu36gPlZe38E90jzivVMri4Pi7h9/AH3JfkD4tmWFA9k=
+	t=1723077808; cv=none; b=o6dHGwLIJ59McX/ousi4PMR18EVBTRhzU1Hd4hZhUr5AzVxu/w5ONm9kQ9JydIu2cIHXGWDiN94Y83Yt1uofSNdfx8faTmVD8XR0yJvKW5GCGiVjL4gWA2TvW4Cpa50pwUqkpk4nGxv9S8Hwl222t5UdNCzk9QPiwX2amiTcVOw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723074887; c=relaxed/simple;
-	bh=NAdP41DihZcu/8i1gtQGWAr6Z7t9lMz25DMefhKAAk4=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=Y/O/14dx86YsdrRLzxHYvwjtMSZXzrq4k6lMN2c18yh9f2lPxFmhSa3uX50jo1aGnR/0Ok72YPnW8/J+wxOlKmJuAEUGXq92ekWWety2hPPZz9piKa8aa3AtrRTfSOJBaEV+3A94jDgABlI8762DbI5dafZRQY6KRIv21kOE9HI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HLqJnFlQ; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1723077808; c=relaxed/simple;
+	bh=feWacHYaPnIbpAOajEpd3LHUQ+7MZKIahPasyzDrR1o=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=QzoFXw1dIvoBSyqlb5P7q5WCKaVfZAzKG73wPdu28LI10hkelEcMpX+Qm4lZV69Vdxsg7HagJs+cwNmp5IodHaApHGVmRKFHBBs0wWEc6BpL6x1wytQ1gqWI98XgW30rFn4cZR4ObbTV1G9rnKZfPDTQK+l3rMO3PFoaCZ2RfN8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=IhodNeVS; arc=none smtp.client-ip=192.198.163.19
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HLqJnFlQ"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BEB59C32781;
-	Wed,  7 Aug 2024 23:54:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1723074886;
-	bh=NAdP41DihZcu/8i1gtQGWAr6Z7t9lMz25DMefhKAAk4=;
-	h=From:To:Cc:Subject:Date:From;
-	b=HLqJnFlQYbwjfw6dPy4VIL14sLtSjr8Q/FcP/JtJdHSMObinDUxv2v0YUTuSgiZef
-	 by/s9PRL47Pnka7rPzHhdIVE6jkaJwcmW7wRqCBOt4SkKBxnChP2cMp+jwgnn6/xmj
-	 L+Kn1LEac/ttW6611/R6bAQ5zDl0SGodi1i3ucBNh4YIl2yV4ZJgUbE1AkdWcmqXWu
-	 BO8D8ZrWtnIwUDCSHFYjmbRrQMOqg8NE0+zS2j5Dyml0HfaUu3WnpQt1Qfqy0pHI7B
-	 gOERu64lbIe9LUKt7Q+4A97JpqujBE4ZIESrqceFcYcPekGvhv7wultNOttFFELkMJ
-	 EHn0hzJzIfUEA==
-From: Kees Cook <kees@kernel.org>
-To: Vlastimil Babka <vbabka@suse.cz>
-Cc: Kees Cook <kees@kernel.org>,
-	Christoph Lameter <cl@linux.com>,
-	Pekka Enberg <penberg@kernel.org>,
-	David Rientjes <rientjes@google.com>,
-	Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Roman Gushchin <roman.gushchin@linux.dev>,
-	Hyeonggon Yoo <42.hyeyoo@gmail.com>,
-	"Gustavo A . R . Silva" <gustavoars@kernel.org>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Jann Horn <jannh@google.com>,
-	Przemek Kitszel <przemyslaw.kitszel@intel.com>,
-	Marco Elver <elver@google.com>,
-	linux-mm@kvack.org,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev,
-	linux-hardening@vger.kernel.org
-Subject: [PATCH] slab: Introduce kmalloc_obj() and family
-Date: Wed,  7 Aug 2024 16:54:41 -0700
-Message-Id: <20240807235433.work.317-kees@kernel.org>
-X-Mailer: git-send-email 2.34.1
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="IhodNeVS"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1723077806; x=1754613806;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=feWacHYaPnIbpAOajEpd3LHUQ+7MZKIahPasyzDrR1o=;
+  b=IhodNeVSfcwSP00eBL6MCvP8TfsZhqeMNv3yjpbvCabLFf3PuOh/xc1w
+   VmlzKO7L0PKjdyDvmRGCOXsvZcAXwgqoVem1CLAf2LsI1MTE+BftXqAVw
+   ZgrqGp/s2LnT6J+eb9Cq0e495/8CUtKkyqXHollMLHOD06Yhs0+mYWsD5
+   UoCX56p5V/N84GW37eNEz9BxEghoa9p8w4gNdGKEjyCIfXgQAYh1jNwVr
+   xgCBBa5qGq1rOXUO7l+km+30KbUJq+LOtOZsnhXtPKrvsFKZeOmlQl4S+
+   nX/uEIPGDS+yiJUAVmSAhj8eJi33k9B61c1D6z2VcGgfVhg7+Gl0s0oeP
+   Q==;
+X-CSE-ConnectionGUID: KcBqWQvaQ5WSNZH1RzrvKg==
+X-CSE-MsgGUID: SNKHP6PBR36S1Aa8ZlUTfQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11157"; a="20844368"
+X-IronPort-AV: E=Sophos;i="6.09,271,1716274800"; 
+   d="scan'208";a="20844368"
+Received: from fmviesa009.fm.intel.com ([10.60.135.149])
+  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Aug 2024 17:43:26 -0700
+X-CSE-ConnectionGUID: YJCq9+jkTTaPj1f0roGVpQ==
+X-CSE-MsgGUID: oWQmbrKORhWLZQIh8ShSbA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.09,271,1716274800"; 
+   d="scan'208";a="57003374"
+Received: from unknown (HELO b6bf6c95bbab) ([10.239.97.151])
+  by fmviesa009.fm.intel.com with ESMTP; 07 Aug 2024 17:43:23 -0700
+Received: from kbuild by b6bf6c95bbab with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1sbrFQ-0005p4-2p;
+	Thu, 08 Aug 2024 00:43:20 +0000
+Date: Thu, 8 Aug 2024 08:42:28 +0800
+From: kernel test robot <lkp@intel.com>
+To: Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+	kernel-janitors@vger.kernel.org,
+	Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Subject: Re: [PATCH net-next] net: ibm/emac: Constify struct mii_phy_def
+Message-ID: <202408080850.QKqTbf5o-lkp@intel.com>
+References: <dfc7876d660d700a840e64c35de0a6519e117539.1723031352.git.christophe.jaillet@wanadoo.fr>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=4691; i=kees@kernel.org; h=from:subject:message-id; bh=NAdP41DihZcu/8i1gtQGWAr6Z7t9lMz25DMefhKAAk4=; b=owGbwMvMwCVmps19z/KJym7G02pJDGlbOB2V2i0e3zKTabc8yFu/afqs6TNiFY1a974NtLgQY 2Jw69+bjlIWBjEuBlkxRZYgO/c4F4+37eHucxVh5rAygQxh4OIUgIl85mX4n3J2k8ahi90ss3Uu 5xn4+G3f9XjPqvN7cxIcbSoO1hwo+MfIsLHuLUtUdnzjqRVf5U0vHElhPyfJMkXxsvpvxnvnWvv F2QA=
-X-Developer-Key: i=kees@kernel.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <dfc7876d660d700a840e64c35de0a6519e117539.1723031352.git.christophe.jaillet@wanadoo.fr>
 
-Introduce type-aware kmalloc-family helpers to replace the common
-idioms for single, array, and flexible object allocations:
+Hi Christophe,
 
-	ptr = kmalloc(sizeof(*ptr), gfp);
-	ptr = kcalloc(count, sizeof(*ptr), gfp);
-	ptr = kmalloc_array(count, sizeof(*ptr), gfp);
-	ptr = kcalloc(count, sizeof(*ptr), gfp);
-	ptr = kmalloc(struct_size(ptr, flex_member, count), gfp);
+kernel test robot noticed the following build errors:
 
-These become, respectively:
+[auto build test ERROR on net-next/main]
 
-	kmalloc_obj(p, gfp);
-	kzalloc_obj(p, count, gfp);
-	kmalloc_obj(p, count, gfp);
-	kzalloc_obj(p, count, gfp);
-	kmalloc_obj(p, flex_member, count, gfp);
+url:    https://github.com/intel-lab-lkp/linux/commits/Christophe-JAILLET/net-ibm-emac-Constify-struct-mii_phy_def/20240807-195146
+base:   net-next/main
+patch link:    https://lore.kernel.org/r/dfc7876d660d700a840e64c35de0a6519e117539.1723031352.git.christophe.jaillet%40wanadoo.fr
+patch subject: [PATCH net-next] net: ibm/emac: Constify struct mii_phy_def
+config: powerpc-allyesconfig (https://download.01.org/0day-ci/archive/20240808/202408080850.QKqTbf5o-lkp@intel.com/config)
+compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 423aec6573df4424f90555468128e17073ddc69e)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240808/202408080850.QKqTbf5o-lkp@intel.com/reproduce)
 
-These each return the size of the allocation, so that other common
-idioms can be converted easily as well. For example:
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202408080850.QKqTbf5o-lkp@intel.com/
 
-	info->size = struct_size(ptr, flex_member, count);
-	ptr = kmalloc(info->size, gfp);
+All errors (new ones prefixed by >>):
 
-becomes:
+   In file included from drivers/net/ethernet/ibm/emac/core.c:28:
+   In file included from include/linux/pci.h:38:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from arch/powerpc/include/asm/hardirq.h:6:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:14:
+   In file included from arch/powerpc/include/asm/io.h:24:
+   In file included from include/linux/mm.h:2228:
+   include/linux/vmstat.h:500:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     500 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     501 |                            item];
+         |                            ~~~~
+   include/linux/vmstat.h:507:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     507 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     508 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/vmstat.h:514:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     514 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+   include/linux/vmstat.h:519:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     519 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     520 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/vmstat.h:528:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     528 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     529 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+>> drivers/net/ethernet/ibm/emac/core.c:2648:23: error: cannot assign to non-static data member 'def' with const-qualified type 'const struct mii_phy_def *'
+    2648 |         dev->phy.def->phy_id = dev->phy_dev->drv->phy_id;
+         |         ~~~~~~~~~~~~~~~~~~~~ ^
+   drivers/net/ethernet/ibm/emac/phy.h:50:28: note: non-static data member 'def' declared const here
+      50 |         const struct mii_phy_def *def;
+         |         ~~~~~~~~~~~~~~~~~~~~~~~~~~^~~
+   drivers/net/ethernet/ibm/emac/core.c:2649:28: error: cannot assign to non-static data member 'def' with const-qualified type 'const struct mii_phy_def *'
+    2649 |         dev->phy.def->phy_id_mask = dev->phy_dev->drv->phy_id_mask;
+         |         ~~~~~~~~~~~~~~~~~~~~~~~~~ ^
+   drivers/net/ethernet/ibm/emac/phy.h:50:28: note: non-static data member 'def' declared const here
+      50 |         const struct mii_phy_def *def;
+         |         ~~~~~~~~~~~~~~~~~~~~~~~~~~^~~
+   drivers/net/ethernet/ibm/emac/core.c:2650:21: error: cannot assign to non-static data member 'def' with const-qualified type 'const struct mii_phy_def *'
+    2650 |         dev->phy.def->name = dev->phy_dev->drv->name;
+         |         ~~~~~~~~~~~~~~~~~~ ^
+   drivers/net/ethernet/ibm/emac/phy.h:50:28: note: non-static data member 'def' declared const here
+      50 |         const struct mii_phy_def *def;
+         |         ~~~~~~~~~~~~~~~~~~~~~~~~~~^~~
+   drivers/net/ethernet/ibm/emac/core.c:2651:20: error: cannot assign to non-static data member 'def' with const-qualified type 'const struct mii_phy_def *'
+    2651 |         dev->phy.def->ops = &emac_dt_mdio_phy_ops;
+         |         ~~~~~~~~~~~~~~~~~ ^
+   drivers/net/ethernet/ibm/emac/phy.h:50:28: note: non-static data member 'def' declared const here
+      50 |         const struct mii_phy_def *def;
+         |         ~~~~~~~~~~~~~~~~~~~~~~~~~~^~~
+   drivers/net/ethernet/ibm/emac/core.c:2818:25: error: cannot assign to non-static data member 'def' with const-qualified type 'const struct mii_phy_def *'
+    2818 |         dev->phy.def->features &= ~dev->phy_feat_exc;
+         |         ~~~~~~~~~~~~~~~~~~~~~~ ^
+   drivers/net/ethernet/ibm/emac/phy.h:50:28: note: non-static data member 'def' declared const here
+      50 |         const struct mii_phy_def *def;
+         |         ~~~~~~~~~~~~~~~~~~~~~~~~~~^~~
+   5 warnings and 5 errors generated.
 
-	info->size = kmalloc_obj(ptr, flex_member, count, gfp);
 
-Internal introspection of allocated type also becomes possible, allowing
-for alignment-aware choices and future hardening work. For example,
-adding __alignof(*ptr) as an argument to the internal allocators so that
-appropriate/efficient alignment choices can be made, or being able to
-correctly choose per-allocation offset randomization within a bucket
-that does not break alignment requirements.
+vim +2648 drivers/net/ethernet/ibm/emac/core.c
 
-Additionally, once __builtin_get_counted_by() is added by GCC[1] and
-Clang[2], it will be possible to automatically set the counted member of
-a struct with a counted_by FAM, further eliminating open-coded redundant
-initializations, and can internally check for "too large" allocations
-based on the type size of the counter variable:
+a577ca6badb526 Christian Lamparter 2017-02-20  2632  
+a577ca6badb526 Christian Lamparter 2017-02-20  2633  static int emac_dt_phy_connect(struct emac_instance *dev,
+a577ca6badb526 Christian Lamparter 2017-02-20  2634  			       struct device_node *phy_handle)
+a577ca6badb526 Christian Lamparter 2017-02-20  2635  {
+a577ca6badb526 Christian Lamparter 2017-02-20  2636  	dev->phy.def = devm_kzalloc(&dev->ofdev->dev, sizeof(*dev->phy.def),
+a577ca6badb526 Christian Lamparter 2017-02-20  2637  				    GFP_KERNEL);
+a577ca6badb526 Christian Lamparter 2017-02-20  2638  	if (!dev->phy.def)
+a577ca6badb526 Christian Lamparter 2017-02-20  2639  		return -ENOMEM;
+a577ca6badb526 Christian Lamparter 2017-02-20  2640  
+a577ca6badb526 Christian Lamparter 2017-02-20  2641  	dev->phy_dev = of_phy_connect(dev->ndev, phy_handle, &emac_adjust_link,
+a577ca6badb526 Christian Lamparter 2017-02-20  2642  				      0, dev->phy_mode);
+a577ca6badb526 Christian Lamparter 2017-02-20  2643  	if (!dev->phy_dev) {
+a577ca6badb526 Christian Lamparter 2017-02-20  2644  		dev_err(&dev->ofdev->dev, "failed to connect to PHY.\n");
+a577ca6badb526 Christian Lamparter 2017-02-20  2645  		return -ENODEV;
+a577ca6badb526 Christian Lamparter 2017-02-20  2646  	}
+a577ca6badb526 Christian Lamparter 2017-02-20  2647  
+a577ca6badb526 Christian Lamparter 2017-02-20 @2648  	dev->phy.def->phy_id = dev->phy_dev->drv->phy_id;
+a577ca6badb526 Christian Lamparter 2017-02-20  2649  	dev->phy.def->phy_id_mask = dev->phy_dev->drv->phy_id_mask;
+a577ca6badb526 Christian Lamparter 2017-02-20  2650  	dev->phy.def->name = dev->phy_dev->drv->name;
+a577ca6badb526 Christian Lamparter 2017-02-20  2651  	dev->phy.def->ops = &emac_dt_mdio_phy_ops;
+3c1bcc8614db10 Andrew Lunn         2018-11-10  2652  	ethtool_convert_link_mode_to_legacy_u32(&dev->phy.features,
+3c1bcc8614db10 Andrew Lunn         2018-11-10  2653  						dev->phy_dev->supported);
+a577ca6badb526 Christian Lamparter 2017-02-20  2654  	dev->phy.address = dev->phy_dev->mdio.addr;
+a577ca6badb526 Christian Lamparter 2017-02-20  2655  	dev->phy.mode = dev->phy_dev->interface;
+a577ca6badb526 Christian Lamparter 2017-02-20  2656  	return 0;
+a577ca6badb526 Christian Lamparter 2017-02-20  2657  }
+a577ca6badb526 Christian Lamparter 2017-02-20  2658  
 
-	if (count > type_max(ptr->flex_count))
-		fail...;
-	info->size = struct_size(ptr, flex_member, count);
-	ptr = kmalloc(info->size, gfp);
-	ptr->flex_count = count;
-
-becomes (i.e. unchanged from earlier example):
-
-	info->size = kmalloc_obj(ptr, flex_member, count, gfp);
-
-Replacing all existing simple code patterns found via Coccinelle[3]
-shows what could be replaced immediately (saving roughly 1,500 lines):
-
- 7040 files changed, 14128 insertions(+), 15557 deletions(-)
-
-Link: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=116016 [1]
-Link: https://github.com/llvm/llvm-project/issues/99774 [2]
-Link: https://github.com/kees/kernel-tools/blob/trunk/coccinelle/examples/kmalloc_obj-assign-size.cocci [3]
-Signed-off-by: Kees Cook <kees@kernel.org>
----
-Cc: Vlastimil Babka <vbabka@suse.cz>
-Cc: Christoph Lameter <cl@linux.com>
-Cc: Pekka Enberg <penberg@kernel.org>
-Cc: David Rientjes <rientjes@google.com>
-Cc: Joonsoo Kim <iamjoonsoo.kim@lge.com>
-Cc: Andrew Morton <akpm@linux-foundation.org>
-Cc: Roman Gushchin <roman.gushchin@linux.dev>
-Cc: Hyeonggon Yoo <42.hyeyoo@gmail.com>
-Cc: Gustavo A. R. Silva <gustavoars@kernel.org>
-Cc: Bill Wendling <morbo@google.com>
-Cc: Justin Stitt <justinstitt@google.com>
-Cc: Jann Horn <jannh@google.com>
-Cc: Przemek Kitszel <przemyslaw.kitszel@intel.com>
-Cc: Marco Elver <elver@google.com>
-Cc: linux-mm@kvack.org
----
- include/linux/slab.h | 38 ++++++++++++++++++++++++++++++++++++++
- 1 file changed, 38 insertions(+)
-
-diff --git a/include/linux/slab.h b/include/linux/slab.h
-index eb2bf4629157..46801c28908e 100644
---- a/include/linux/slab.h
-+++ b/include/linux/slab.h
-@@ -686,6 +686,44 @@ static __always_inline __alloc_size(1) void *kmalloc_noprof(size_t size, gfp_t f
- }
- #define kmalloc(...)				alloc_hooks(kmalloc_noprof(__VA_ARGS__))
- 
-+#define __alloc_obj3(ALLOC, P, COUNT, FLAGS)			\
-+({								\
-+	size_t __obj_size = size_mul(sizeof(*P), COUNT);	\
-+	void *__obj_ptr;					\
-+	(P) = __obj_ptr = ALLOC(__obj_size, FLAGS);		\
-+	if (!__obj_ptr)						\
-+		__obj_size = 0;					\
-+	__obj_size;						\
-+})
-+
-+#define __alloc_obj2(ALLOC, P, FLAGS)	__alloc_obj3(ALLOC, P, 1, FLAGS)
-+
-+#define __alloc_obj4(ALLOC, P, FAM, COUNT, FLAGS)		\
-+({								\
-+	size_t __obj_size = struct_size(P, FAM, COUNT);		\
-+	void *__obj_ptr;					\
-+	(P) = __obj_ptr = ALLOC(__obj_size, FLAGS);		\
-+	if (!__obj_ptr)						\
-+		__obj_size = 0;					\
-+	__obj_size;						\
-+})
-+
-+#define kmalloc_obj(...)					\
-+	CONCATENATE(__alloc_obj,				\
-+		    COUNT_ARGS(__VA_ARGS__))(kmalloc, __VA_ARGS__)
-+
-+#define kzalloc_obj(...)					\
-+	CONCATENATE(__alloc_obj,				\
-+		    COUNT_ARGS(__VA_ARGS__))(kzalloc, __VA_ARGS__)
-+
-+#define kvmalloc_obj(...)					\
-+	CONCATENATE(__alloc_obj,				\
-+		    COUNT_ARGS(__VA_ARGS__))(kvmalloc, __VA_ARGS__)
-+
-+#define kvzalloc_obj(...)					\
-+	CONCATENATE(__alloc_obj,				\
-+		    COUNT_ARGS(__VA_ARGS__))(kvzalloc, __VA_ARGS__)
-+
- #define kmem_buckets_alloc(_b, _size, _flags)	\
- 	alloc_hooks(__kmalloc_node_noprof(PASS_BUCKET_PARAMS(_size, _b), _flags, NUMA_NO_NODE))
- 
 -- 
-2.34.1
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
