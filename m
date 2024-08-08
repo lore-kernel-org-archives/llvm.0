@@ -1,182 +1,135 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f47.google.com (mail-wr1-f47.google.com [209.85.221.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 76138EEA9;
-	Thu,  8 Aug 2024 13:08:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD57F18EFF0
+	for <llvm@lists.linux.dev>; Thu,  8 Aug 2024 15:58:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723122482; cv=none; b=qJqUQe9rdWUpnzQ40uumaUyryMrpT7icLrJIMagv6UKB6TMxLEtV6GRJOrXQhQUz0k3AGd+kcp061nVSYlMRHK65fQ+huus2PYatlw2BPuEjYgHuCkwK0wsHM7ozUgB6PjMQK/gXtQAhe7d8z4MfnLmWy8Hye8WB4rFLRn5J6G0=
+	t=1723132707; cv=none; b=lsEztNZ7gE4D18EjbQFUC+8AOCr6JWyoohgs8mjvSCm9wMpifIvN0tznuLgIH70s9FGgDD5cQn8tlyFYPqOsdYxBMLgIjwitxxtFAQAL574TtJ3+rPh2MG4Gs+R+I77XnhrF0/UWscwYxIGqi8DvCJRcq3f0avgV/HnDA1Vy9Ns=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723122482; c=relaxed/simple;
-	bh=lzYQGR1Hu3LSf5dJINnbLZ3RZxG01ilpRAY9+tniPyw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=W49nwo3+3mFHMMHpwPFuDnkLomD0JMo7Fb2jM5BETR0GjM8MNNacsNmwd89ak5Fvh1g4AVa9C7u5/QAkVGI1at2C/WlQlSgroEMYBvHCSR0QKTrNNciroNfRbHKaR1s67V7qBxXRnwUqbWTyGEEgVmnt2nlH3fu2wKuuy29MALo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=NmWdeWOa; arc=none smtp.client-ip=198.175.65.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1723132707; c=relaxed/simple;
+	bh=xJKc7zMMZinLoeAED3ynhwUt0GK66QI5w/EJt/HBNU0=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=EBCgh4t933bSQzrWCAe5Isd480z4m3Dt6Jma4r7IfNkBbep7/aTslEsNuU6jeR8Cx7/+VY5tR95rT616T3iizc1wLNHx5izG6gvH3rwdJdYoJ3su9rYNHk0cOChmG9p7PmLanCq73qfM6PwQuD+8wu2AFxxsLl2+RvFSaHd/zf4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=HOf7MXo/; arc=none smtp.client-ip=209.85.221.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="NmWdeWOa"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1723122481; x=1754658481;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=lzYQGR1Hu3LSf5dJINnbLZ3RZxG01ilpRAY9+tniPyw=;
-  b=NmWdeWOas83g6s00KmoBC8G3Oc1f9Ks9d3x9vrmv3Fc+qLp3hJ1D1hTH
-   laALNhI0HawBCv23J1dUozYrD8RKq0/bUuDRxpeT8OFgEHDWhs2VRH/ZR
-   iOvVRvvwAMGNw/6YzZZzmWVdDGeGXJKsSpIMH01V5NQQTE7cA/5CLk+RW
-   /X/B7RY8H1GNfnBg6EaHJ37xJ4efK11Y/2vU89rHpno/e+MKVBcYhG/Ue
-   nJSZW1g0pALX+AjOJ/4sP11NLfW8PtThdOcr46Aq7saMyRPLxMggNZhxp
-   6QZ9VNUZScYSHdG+KA5vPhkk0QpFRxSoVblBg83ma5Mr89TWdsGUSc1+7
-   g==;
-X-CSE-ConnectionGUID: 7TMJTOHDRg+TWQ/kGOnfYw==
-X-CSE-MsgGUID: dFKwrQWSQJmFFsoQCEd65w==
-X-IronPort-AV: E=McAfee;i="6700,10204,11158"; a="43765133"
-X-IronPort-AV: E=Sophos;i="6.09,273,1716274800"; 
-   d="scan'208";a="43765133"
-Received: from fmviesa005.fm.intel.com ([10.60.135.145])
-  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Aug 2024 06:08:00 -0700
-X-CSE-ConnectionGUID: TBcWyZj/Rxya97pGCEdlsg==
-X-CSE-MsgGUID: aD5CtOBCSJCKDWZvfLaQYQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.09,273,1716274800"; 
-   d="scan'208";a="61596104"
-Received: from unknown (HELO b6bf6c95bbab) ([10.239.97.151])
-  by fmviesa005.fm.intel.com with ESMTP; 08 Aug 2024 06:07:56 -0700
-Received: from kbuild by b6bf6c95bbab with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1sc2rm-0006C2-2p;
-	Thu, 08 Aug 2024 13:07:45 +0000
-Date: Thu, 8 Aug 2024 21:06:40 +0800
-From: kernel test robot <lkp@intel.com>
-To: Mary Guillemard <mary.guillemard@collabora.com>,
-	linux-kernel@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	dri-devel@lists.freedesktop.org, kernel@collabora.com,
-	Mary Guillemard <mary.guillemard@collabora.com>,
-	Boris Brezillon <bbrezillon@kernel.org>,
-	Rob Herring <robh@kernel.org>, Steven Price <steven.price@arm.com>,
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-	Maxime Ripard <mripard@kernel.org>,
-	Thomas Zimmermann <tzimmermann@suse.de>,
-	David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>
-Subject: Re: [PATCH 1/3] drm/panfrost: Add SYSTEM_TIMESTAMP and
- SYSTEM_TIMESTAMP_FREQUENCY parameters
-Message-ID: <202408082014.XKxle32n-lkp@intel.com>
-References: <20240807160900.149154-2-mary.guillemard@collabora.com>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="HOf7MXo/"
+Received: by mail-wr1-f47.google.com with SMTP id ffacd0b85a97d-3683f56b9bdso743008f8f.1
+        for <llvm@lists.linux.dev>; Thu, 08 Aug 2024 08:58:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1723132703; x=1723737503; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=EmuPsD4ykB+uFQrqKl/Jcu6p7dcw9XK2yyyIv/rvLfQ=;
+        b=HOf7MXo/3L/rvFd9pU3XcDRqm/G36hOkpJcHrw4vLhsbid2MFyHFGJjlyIinf2Udew
+         8CjQpbopA0uronNme8TtEbWuyz04Rh34phjKkPpUvr2IjpHAYIXuf0hF7zR26+CeUiDh
+         f9PDhp3pwCTS4/qidXdg3gHxH2TXL4tqCpshFk78KTSLK6L0osTvcNrNFGHq8BGIAGZQ
+         7pfOuzGmFBdKlcNkySafTk6OF0lbi+XZ5ODMV3crqPCuaK8lMvlCT9fjvloJDx446zc3
+         2jA0ir6qiOwAQE49QZs2LkM7cDlMERNVycpZDUMr25s55glirWH4RVmCxBGH5uPGT5T+
+         1r2Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1723132703; x=1723737503;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=EmuPsD4ykB+uFQrqKl/Jcu6p7dcw9XK2yyyIv/rvLfQ=;
+        b=FIeGnlPjz3DEIAUnx/fJwk2DDlPlGPqV3m6JMXH/BWjxybr9rJLFSZ124KyhVadQSo
+         35sphWPWBrQo7FWaSpnZgEyZHQJKSDjEKEUuOfs0M2Y20vmTdrqCpjSeDrqWFS1Mp6+0
+         nlPUnx5Ivfi3GtlSuIlY1crJfv7Z1z5ZnzbbCiuGCKjk2g9BStJnf9DhbkhmnnmjpUDE
+         IA7izyo/4ER1azN0KKYLiz2NVSf7bi/9Gs3CzS4HKwPjgUlh2bSYIjzZ2QgurL36mdb+
+         nlhmvRjA5xUyX4LoejKzFuIWv6BWKX7JxWSZzX/8myqjKNfjSFu+8gPX13i0NO+Pe/lh
+         oq5g==
+X-Forwarded-Encrypted: i=1; AJvYcCW68g0Gr9nBq9/9q8ioMCHsb75AWXZmbnPiqbPvZLo8N43DsdlAoDJpCGlbW9SQhHP6CVN1@lists.linux.dev
+X-Gm-Message-State: AOJu0YykkMIcBA3rsfem2RIncQkBgVqsH/VflMtUd33EZ4oTFZgPLv+8
+	IEnq+p/jzSDN1ur24EvQHXbF9ww1LYnOY4N+wV8BtQBAwYYJIX/QeSaUul+r4IpCpHTh7cV6DqO
+	2oN2HeD8oK95l631hhdbIklXgUc3TauS3BYl/
+X-Google-Smtp-Source: AGHT+IFl5P1EQ04a2WEzWAlamIFO3bFNVG7GOWDyYdMGFdgiL+aGAC7M+K/zThfbi085VvFqTLq/8QQLXoznu7gLtmc=
+X-Received: by 2002:a5d:4ec9:0:b0:367:8a87:ada2 with SMTP id
+ ffacd0b85a97d-36d274daff5mr1545945f8f.26.1723132702779; Thu, 08 Aug 2024
+ 08:58:22 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240807160900.149154-2-mary.guillemard@collabora.com>
+References: <20240806144558.114461-1-ojeda@kernel.org>
+In-Reply-To: <20240806144558.114461-1-ojeda@kernel.org>
+From: Alice Ryhl <aliceryhl@google.com>
+Date: Thu, 8 Aug 2024 17:58:10 +0200
+Message-ID: <CAH5fLghc6xs=YEdaVz7dBgzsEyEjs1CK-fkDCL5KTp51dGJaXA@mail.gmail.com>
+Subject: Re: [PATCH] rust: x86: remove `-3dnow{,a}` from target features
+To: Miguel Ojeda <ojeda@kernel.org>
+Cc: Alex Gaynor <alex.gaynor@gmail.com>, Wedson Almeida Filho <wedsonaf@gmail.com>, 
+	Nathan Chancellor <nathan@kernel.org>, Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, 
+	Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
+	Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, 
+	=?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
+	Benno Lossin <benno.lossin@proton.me>, Andreas Hindborg <a.hindborg@samsung.com>, 
+	rust-for-linux@vger.kernel.org, Nick Desaulniers <ndesaulniers@google.com>, 
+	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, llvm@lists.linux.dev, 
+	"H. Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org, patches@lists.linux.dev, 
+	Nikita Popov <github@npopov.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Mary,
+On Tue, Aug 6, 2024 at 4:47=E2=80=AFPM Miguel Ojeda <ojeda@kernel.org> wrot=
+e:
+>
+> LLVM 19 is dropping support for 3DNow! in commit f0eb5587ceeb ("Remove
+> support for 3DNow!, both intrinsics and builtins. (#96246)"):
+>
+>     Remove support for 3DNow!, both intrinsics and builtins. (#96246)
+>
+>     This set of instructions was only supported by AMD chips starting in
+>     the K6-2 (introduced 1998), and before the "Bulldozer" family
+>     (2011). They were never much used, as they were effectively supersede=
+d
+>     by the more-widely-implemented SSE (first implemented on the AMD side
+>     in Athlon XP in 2001).
+>
+>     This is being done as a predecessor towards general removal of MMX
+>     register usage. Since there is almost no usage of the 3DNow!
+>     intrinsics, and no modern hardware even implements them, simple
+>     removal seems like the best option.
+>
+> Thus we should avoid passing these to the backend, since otherwise we
+> get a diagnostic about it:
+>
+>     '-3dnow' is not a recognized feature for this target (ignoring featur=
+e)
+>     '-3dnowa' is not a recognized feature for this target (ignoring featu=
+re)
+>
+> We could try to disable them only up to LLVM 19 (not the C side one,
+> but the one used by `rustc`, which may be built with a range of
+> LLVMs). However, to avoid more complexity, we can likely just remove
+> them altogether. According to Nikita [2]:
+>
+> > I don't think it's needed because LLVM should not generate 3dnow
+> instructions unless specifically asked to, using intrinsics that Rust
+> does not provide in the first place.
+>
+> Thus do so, like Rust did for one of their builtin targets [3].
+>
+> For those curious: Clang will warn only about trying to enable them
+> (`-m3dnow{,a}`), but not about disabling them (`-mno-3dnow{,a}`), so
+> there is no change needed there.
+>
+> Cc: Nikita Popov <github@npopov.com>
+> Cc: Nathan Chancellor <nathan@kernel.org>
+> Cc: x86@kernel.org
+> Link: https://github.com/llvm/llvm-project/commit/f0eb5587ceeb641445b64cb=
+264c822b4751de04a [1]
+> Link: https://github.com/rust-lang/rust/pull/127864#issuecomment-22358987=
+60 [2]
+> Link: https://github.com/rust-lang/rust/pull/127864 [3]
+> Closes: https://github.com/Rust-for-Linux/linux/issues/1094
+> Signed-off-by: Miguel Ojeda <ojeda@kernel.org>
 
-kernel test robot noticed the following build errors:
+Works with Rust Binder on the x86 cuttlefish emulator.
 
-[auto build test ERROR on f7f3ddb6e5c8dc7b621fd8c0903ea42190d67452]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Mary-Guillemard/drm-panfrost-Add-SYSTEM_TIMESTAMP-and-SYSTEM_TIMESTAMP_FREQUENCY-parameters/20240808-032938
-base:   f7f3ddb6e5c8dc7b621fd8c0903ea42190d67452
-patch link:    https://lore.kernel.org/r/20240807160900.149154-2-mary.guillemard%40collabora.com
-patch subject: [PATCH 1/3] drm/panfrost: Add SYSTEM_TIMESTAMP and SYSTEM_TIMESTAMP_FREQUENCY parameters
-config: arm-defconfig (https://download.01.org/0day-ci/archive/20240808/202408082014.XKxle32n-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240808/202408082014.XKxle32n-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202408082014.XKxle32n-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> drivers/gpu/drm/panfrost/panfrost_drv.c:75:18: error: implicit declaration of function '__arch_counter_get_cntvct' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
-                   param->value = __arch_counter_get_cntvct();
-                                  ^
->> drivers/gpu/drm/panfrost/panfrost_drv.c:83:18: error: implicit declaration of function 'arch_timer_get_cntfrq' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
-                   param->value = arch_timer_get_cntfrq();
-                                  ^
-   2 errors generated.
-
-
-vim +/__arch_counter_get_cntvct +75 drivers/gpu/drm/panfrost/panfrost_drv.c
-
-    26	
-    27	static int panfrost_ioctl_get_param(struct drm_device *ddev, void *data, struct drm_file *file)
-    28	{
-    29		struct drm_panfrost_get_param *param = data;
-    30		struct panfrost_device *pfdev = ddev->dev_private;
-    31	
-    32		if (param->pad != 0)
-    33			return -EINVAL;
-    34	
-    35	#define PANFROST_FEATURE(name, member)			\
-    36		case DRM_PANFROST_PARAM_ ## name:		\
-    37			param->value = pfdev->features.member;	\
-    38			break
-    39	#define PANFROST_FEATURE_ARRAY(name, member, max)			\
-    40		case DRM_PANFROST_PARAM_ ## name ## 0 ...			\
-    41			DRM_PANFROST_PARAM_ ## name ## max:			\
-    42			param->value = pfdev->features.member[param->param -	\
-    43				DRM_PANFROST_PARAM_ ## name ## 0];		\
-    44			break
-    45	
-    46		switch (param->param) {
-    47			PANFROST_FEATURE(GPU_PROD_ID, id);
-    48			PANFROST_FEATURE(GPU_REVISION, revision);
-    49			PANFROST_FEATURE(SHADER_PRESENT, shader_present);
-    50			PANFROST_FEATURE(TILER_PRESENT, tiler_present);
-    51			PANFROST_FEATURE(L2_PRESENT, l2_present);
-    52			PANFROST_FEATURE(STACK_PRESENT, stack_present);
-    53			PANFROST_FEATURE(AS_PRESENT, as_present);
-    54			PANFROST_FEATURE(JS_PRESENT, js_present);
-    55			PANFROST_FEATURE(L2_FEATURES, l2_features);
-    56			PANFROST_FEATURE(CORE_FEATURES, core_features);
-    57			PANFROST_FEATURE(TILER_FEATURES, tiler_features);
-    58			PANFROST_FEATURE(MEM_FEATURES, mem_features);
-    59			PANFROST_FEATURE(MMU_FEATURES, mmu_features);
-    60			PANFROST_FEATURE(THREAD_FEATURES, thread_features);
-    61			PANFROST_FEATURE(MAX_THREADS, max_threads);
-    62			PANFROST_FEATURE(THREAD_MAX_WORKGROUP_SZ,
-    63					thread_max_workgroup_sz);
-    64			PANFROST_FEATURE(THREAD_MAX_BARRIER_SZ,
-    65					thread_max_barrier_sz);
-    66			PANFROST_FEATURE(COHERENCY_FEATURES, coherency_features);
-    67			PANFROST_FEATURE(AFBC_FEATURES, afbc_features);
-    68			PANFROST_FEATURE_ARRAY(TEXTURE_FEATURES, texture_features, 3);
-    69			PANFROST_FEATURE_ARRAY(JS_FEATURES, js_features, 15);
-    70			PANFROST_FEATURE(NR_CORE_GROUPS, nr_core_groups);
-    71			PANFROST_FEATURE(THREAD_TLS_ALLOC, thread_tls_alloc);
-    72	
-    73		case DRM_PANFROST_PARAM_SYSTEM_TIMESTAMP:
-    74	#ifdef CONFIG_ARM_ARCH_TIMER
-  > 75			param->value = __arch_counter_get_cntvct();
-    76	#else
-    77			param->value = 0;
-    78	#endif
-    79			break;
-    80	
-    81		case DRM_PANFROST_PARAM_SYSTEM_TIMESTAMP_FREQUENCY:
-    82	#ifdef CONFIG_ARM_ARCH_TIMER
-  > 83			param->value = arch_timer_get_cntfrq();
-    84	#else
-    85			param->value = 0;
-    86	#endif
-    87			break;
-    88	
-    89		default:
-    90			return -EINVAL;
-    91		}
-    92	
-    93		return 0;
-    94	}
-    95	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Tested-by: Alice Ryhl <aliceryhl@google.com>
