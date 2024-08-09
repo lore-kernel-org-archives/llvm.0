@@ -1,58 +1,67 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9655C14831F;
-	Fri,  9 Aug 2024 17:55:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D9BB9148FF3;
+	Fri,  9 Aug 2024 17:55:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723226150; cv=none; b=WI2P/4i7CsIqlXSaOINhSIhgLvwM2wyH0SfNOXDbxifG52D6kUPpF649Wvj3+XWzdNyFVsRs7SqmFPHi8BYTVdYTMim5q1xbNr8I55TCF++DuJkGLL2075OEPsj2YTWwEy99jFz//bq7iyGOsst2fs1wE1y/Qwr2j4RbyE7MDnM=
+	t=1723226151; cv=none; b=SAi7QS65P9h8Rw0iTymyukR91gvBJkoHAZ2ApGNpvGoZZCmstfz7zYHeuX5mwazRtWPEujZfi6NqHqEx01sBBJ6aJQCdZzzIOgcbU6txIsOrxzevQnBmkwdwT07uawA6oMf9LXJK5KyHrFCAEa51UU0Gq8U2JStnxEYVO2XL324=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723226150; c=relaxed/simple;
-	bh=+iXpuPgid6DxBYa77w6sggo41fe1Ace0EXgPhx7Xwpk=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=blJUmmLlfsi4Voy6Z7iJwzddv/3u+lFbcOY9q+261mn1OFcGrARSpNPXChYpF8zvjHiNfO0epodXopJMGwti/y/QxjUDm1IT+Xxx7q/CWW2aL9WKkYsaRp8OO4iEghNOT2vt+oPo4+WaOAziof6qRm0Topo4PQ02VfZbaJQjZno=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=mzfJ1d+L; arc=none smtp.client-ip=192.198.163.12
+	s=arc-20240116; t=1723226151; c=relaxed/simple;
+	bh=lZ+RBQBmLrdgxulilt9piDrRQT9wvO+NFi9nGvNqpJo=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=aX4X4yJVi8pYhOoO1rvpis75aXuvuzsxzgGwAABdf+3VCN/iYM7FPK2OMCYNkbQofNt/gYe2C65cMSAq9k3xulefJDv8KMUERXqQ9qDUvlR8P1B4NWkOKEixI+/r2Khkfkj4lh92KCOGSJpRT74Kz77h5lkzh3dkdvusjldaXVQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Y0zgXt6m; arc=none smtp.client-ip=198.175.65.19
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="mzfJ1d+L"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Y0zgXt6m"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1723226147; x=1754762147;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=+iXpuPgid6DxBYa77w6sggo41fe1Ace0EXgPhx7Xwpk=;
-  b=mzfJ1d+LuloCItp33Xqka6T4FCNgreSt+Md0D3um0WYbsUsjoRLKRkas
-   OR5noap/xAxlhSbfwRJ2l59mFkevffGsZ9AU1v7GZ4eR+3kqdOEy+86KR
-   CWNUS/0pnKzjnPn8vRFM20XpJ60TBCzQtWt/dDM5bJNCEmYS7/4z5NpRk
-   CZvzopd6yF3siTES3QzLb5F8nN559Xf8GzUSJVZHb/iiHVShZggxvYmQx
-   G06EklHpyeOEJTyARvW1DCNYNo4TrSXiAd9n01HxeQGwaTm2rWLycanoG
-   z6Ot/okAwfd4GD0QxjWtqh8v1Pg6oNf5/1oF1hz1z2dz09YeeTemH2J28
-   Q==;
-X-CSE-ConnectionGUID: R/3p0M9UQgu127caKyA/lg==
-X-CSE-MsgGUID: WxSyZfhFQMm7O3zcLIqPJg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11159"; a="25276723"
+  t=1723226150; x=1754762150;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=lZ+RBQBmLrdgxulilt9piDrRQT9wvO+NFi9nGvNqpJo=;
+  b=Y0zgXt6mMU8VDNrlecEoB6dvgoK6sTchsqnsCE5glirwNeQUsdkqrnn7
+   o6ASiU4USq9TW3zFUC9XBy/C3LpZUHfYiR2ZHNPAR6nCzq0gTw3BRY24J
+   W8IRcUo/2kd41+LZT9o8ldMVzg0tnVfynRigfUwFF+e5XcnZZv7zDTECm
+   tNl2Asyu5n3ZNEv+u+kY2VbWjCBgEER0PRJb8ogAO5dPh9fqxb7YSWPBp
+   JDdVfhUegH4vHikR25F02fThnoxDSGhv7P4ADvrRt6XmHMOSs8FQDVE31
+   aJ/xk4FSN+RQ8YTymV9IUNBiMfZ0KmyqZmgreJKo6E9dUR590cctPbreH
+   w==;
+X-CSE-ConnectionGUID: gexKDVI/SIKX1lTNhCU+0w==
+X-CSE-MsgGUID: hZSjxt5BTySmuqTxiqKtrw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11159"; a="21268507"
 X-IronPort-AV: E=Sophos;i="6.09,276,1716274800"; 
-   d="scan'208";a="25276723"
-Received: from fmviesa005.fm.intel.com ([10.60.135.145])
-  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Aug 2024 10:55:46 -0700
-X-CSE-ConnectionGUID: bwO5QsAGQDy27iTyCy9gwA==
-X-CSE-MsgGUID: kau1XRtIRo+XBCQPN6dzow==
+   d="scan'208";a="21268507"
+Received: from orviesa002.jf.intel.com ([10.64.159.142])
+  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Aug 2024 10:55:49 -0700
+X-CSE-ConnectionGUID: NiZaaY8zTdOet7QTygHTvg==
+X-CSE-MsgGUID: Ohk5d/AqS1GSWL9/wy713g==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.09,276,1716274800"; 
-   d="scan'208";a="62034555"
+   d="scan'208";a="88278913"
 Received: from unknown (HELO b6bf6c95bbab) ([10.239.97.151])
-  by fmviesa005.fm.intel.com with ESMTP; 09 Aug 2024 10:55:45 -0700
+  by orviesa002.jf.intel.com with ESMTP; 09 Aug 2024 10:55:46 -0700
 Received: from kbuild by b6bf6c95bbab with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1scTq3-00097z-2M;
+	id 1scTq3-000981-2R;
 	Fri, 09 Aug 2024 17:55:43 +0000
-Date: Sat, 10 Aug 2024 01:55:18 +0800
+Date: Sat, 10 Aug 2024 01:55:19 +0800
 From: kernel test robot <lkp@intel.com>
-To: Kees Cook <kees@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [kees:dev/v6.11-rc2/alloc-per-call-site 5/5] mm/slub.c:4143:35:
- error: no member named 'alloc_tag' in 'struct task_struct'
-Message-ID: <202408100156.mj7EpsVv-lkp@intel.com>
+To: Oleksij Rempel <o.rempel@pengutronix.de>, Andrew Lunn <andrew@lunn.ch>,
+	Heiner Kallweit <hkallweit1@gmail.com>,
+	Russell King <linux@armlinux.org.uk>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	netdev@vger.kernel.org, Oleksij Rempel <o.rempel@pengutronix.de>,
+	kernel@pengutronix.de, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net-next v3 3/3] net: phy: dp83tg720: Add cable testing
+ support
+Message-ID: <202408100138.gwg3Yuur-lkp@intel.com>
+References: <20240809072440.3477125-3-o.rempel@pengutronix.de>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -61,65 +70,73 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20240809072440.3477125-3-o.rempel@pengutronix.de>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git dev/v6.11-rc2/alloc-per-call-site
-head:   d6fc9b7195894f3cdbef0bb406efa3b376b6c0f7
-commit: d6fc9b7195894f3cdbef0bb406efa3b376b6c0f7 [5/5] slab: Allocate and use per-call-site caches
-config: x86_64-buildonly-randconfig-002-20240810 (https://download.01.org/0day-ci/archive/20240810/202408100156.mj7EpsVv-lkp@intel.com/config)
+Hi Oleksij,
+
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on net-next/main]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Oleksij-Rempel/phy-Add-Open-Alliance-helpers-for-the-PHY-framework/20240809-172119
+base:   net-next/main
+patch link:    https://lore.kernel.org/r/20240809072440.3477125-3-o.rempel%40pengutronix.de
+patch subject: [PATCH net-next v3 3/3] net: phy: dp83tg720: Add cable testing support
+config: i386-buildonly-randconfig-004-20240809 (https://download.01.org/0day-ci/archive/20240810/202408100138.gwg3Yuur-lkp@intel.com/config)
 compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240810/202408100156.mj7EpsVv-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240810/202408100138.gwg3Yuur-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202408100156.mj7EpsVv-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202408100138.gwg3Yuur-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> mm/slub.c:4143:35: error: no member named 'alloc_tag' in 'struct task_struct'
-    4143 |         struct alloc_tag *tag = current->alloc_tag;
-         |                                 ~~~~~~~  ^
->> mm/slub.c:4148:9: error: initializing 'void *' with an expression of incompatible type 'void'
-    4148 |                 void *p = READ_ONCE(tag->meta.cache);
-         |                       ^   ~~~~~~~~~~~~~~~~~~~~~~~~~~
->> mm/slub.c:4152:6: error: assigning to 'void *' from incompatible type 'void'
-    4152 |                         p = READ_ONCE(tag->meta.cache);
-         |                           ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~
-   3 errors generated.
+>> drivers/net/phy/open_alliance_helpers.c:34:18: error: call to undeclared function 'FIELD_GET'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+      34 |         u8 tdr_status = FIELD_GET(OA_1000BT1_HDD_TDR_STATUS_MASK, reg_value);
+         |                         ^
+   drivers/net/phy/open_alliance_helpers.c:69:16: error: call to undeclared function 'FIELD_GET'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+      69 |         u8 dist_val = FIELD_GET(OA_1000BT1_HDD_TDR_DISTANCE_MASK, reg_value);
+         |                       ^
+   2 errors generated.
 
 
-vim +4143 mm/slub.c
+vim +/FIELD_GET +34 drivers/net/phy/open_alliance_helpers.c
 
-  4137	
-  4138	static __always_inline
-  4139	struct kmem_cache *choose_slab(size_t size, kmem_buckets *b, gfp_t flags,
-  4140				       unsigned long caller)
-  4141	{
-  4142	#ifdef CONFIG_SLAB_PER_SITE
-> 4143		struct alloc_tag *tag = current->alloc_tag;
-  4144	
-  4145		if (!b && tag && tag->meta.sized &&
-  4146		    kmalloc_type(flags, caller) == KMALLOC_NORMAL &&
-  4147		    (flags & GFP_ATOMIC) != GFP_ATOMIC) {
-> 4148			void *p = READ_ONCE(tag->meta.cache);
-  4149	
-  4150			if (!p && slab_state >= UP) {
-  4151				alloc_tag_site_init(&tag->ct, true);
-> 4152				p = READ_ONCE(tag->meta.cache);
-  4153			}
-  4154	
-  4155			if (tag->meta.sized < SIZE_MAX) {
-  4156				if (p)
-  4157					return p;
-  4158				/* Otherwise continue with default buckets. */
-  4159			} else {
-  4160				b = p;
-  4161			}
-  4162		}
-  4163	#endif
-  4164		return kmalloc_slab(size, b, flags, caller);
-  4165	}
-  4166	
+f4eee3aa678aeb Oleksij Rempel 2024-08-09  21  
+f4eee3aa678aeb Oleksij Rempel 2024-08-09  22  /**
+f4eee3aa678aeb Oleksij Rempel 2024-08-09  23   * oa_1000bt1_get_ethtool_cable_result_code - Convert TDR status to ethtool
+f4eee3aa678aeb Oleksij Rempel 2024-08-09  24   *					      result code
+f4eee3aa678aeb Oleksij Rempel 2024-08-09  25   * @reg_value: Value read from the TDR register
+f4eee3aa678aeb Oleksij Rempel 2024-08-09  26   *
+f4eee3aa678aeb Oleksij Rempel 2024-08-09  27   * This function takes a register value from the HDD.TDR register and converts
+f4eee3aa678aeb Oleksij Rempel 2024-08-09  28   * the TDR status to the corresponding ethtool cable test result code.
+f4eee3aa678aeb Oleksij Rempel 2024-08-09  29   *
+f4eee3aa678aeb Oleksij Rempel 2024-08-09  30   * Return: The appropriate ethtool result code based on the TDR status
+f4eee3aa678aeb Oleksij Rempel 2024-08-09  31   */
+f4eee3aa678aeb Oleksij Rempel 2024-08-09  32  int oa_1000bt1_get_ethtool_cable_result_code(u16 reg_value)
+f4eee3aa678aeb Oleksij Rempel 2024-08-09  33  {
+f4eee3aa678aeb Oleksij Rempel 2024-08-09 @34  	u8 tdr_status = FIELD_GET(OA_1000BT1_HDD_TDR_STATUS_MASK, reg_value);
+f4eee3aa678aeb Oleksij Rempel 2024-08-09  35  	u8 dist_val = FIELD_GET(OA_1000BT1_HDD_TDR_DISTANCE_MASK, reg_value);
+f4eee3aa678aeb Oleksij Rempel 2024-08-09  36  
+f4eee3aa678aeb Oleksij Rempel 2024-08-09  37  	switch (tdr_status) {
+f4eee3aa678aeb Oleksij Rempel 2024-08-09  38  	case OA_1000BT1_HDD_TDR_STATUS_CABLE_OK:
+f4eee3aa678aeb Oleksij Rempel 2024-08-09  39  		return ETHTOOL_A_CABLE_RESULT_CODE_OK;
+f4eee3aa678aeb Oleksij Rempel 2024-08-09  40  	case OA_1000BT1_HDD_TDR_STATUS_OPEN:
+f4eee3aa678aeb Oleksij Rempel 2024-08-09  41  		return ETHTOOL_A_CABLE_RESULT_CODE_OPEN;
+f4eee3aa678aeb Oleksij Rempel 2024-08-09  42  	case OA_1000BT1_HDD_TDR_STATUS_SHORT:
+f4eee3aa678aeb Oleksij Rempel 2024-08-09  43  		return ETHTOOL_A_CABLE_RESULT_CODE_SAME_SHORT;
+f4eee3aa678aeb Oleksij Rempel 2024-08-09  44  	case OA_1000BT1_HDD_TDR_STATUS_NOISE:
+f4eee3aa678aeb Oleksij Rempel 2024-08-09  45  		return ETHTOOL_A_CABLE_RESULT_CODE_NOISE;
+f4eee3aa678aeb Oleksij Rempel 2024-08-09  46  	default:
+f4eee3aa678aeb Oleksij Rempel 2024-08-09  47  		if (dist_val == OA_1000BT1_HDD_TDR_DISTANCE_RESOLUTION_NOT_POSSIBLE)
+f4eee3aa678aeb Oleksij Rempel 2024-08-09  48  			return ETHTOOL_A_CABLE_RESULT_CODE_RESOLUTION_NOT_POSSIBLE;
+f4eee3aa678aeb Oleksij Rempel 2024-08-09  49  		return ETHTOOL_A_CABLE_RESULT_CODE_UNSPEC;
+f4eee3aa678aeb Oleksij Rempel 2024-08-09  50  	}
+f4eee3aa678aeb Oleksij Rempel 2024-08-09  51  }
+f4eee3aa678aeb Oleksij Rempel 2024-08-09  52  EXPORT_SYMBOL_GPL(oa_1000bt1_get_ethtool_cable_result_code);
+f4eee3aa678aeb Oleksij Rempel 2024-08-09  53  
 
 -- 
 0-DAY CI Kernel Test Service
