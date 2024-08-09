@@ -1,165 +1,131 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8493015EFCD;
-	Fri,  9 Aug 2024 12:15:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC13E17BBF;
+	Fri,  9 Aug 2024 13:04:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723205754; cv=none; b=rvgutAaVDLYHGwThMRbQoWwn3YwImYQuWZrjIBb/uAnc7FHzd7vG03kHEMOkA7qpEmDjOtMjL1qRLoBYevf6lipOOcqCPQ/OFhb52jVPs1b7AXwMJqHFk/Gbz977ymSgJB6+GejFyGbVXtBdexZEgLVBjjHroQV6M618uNzSkbE=
+	t=1723208644; cv=none; b=RcfiRZeLgKXpHbTnME62rT2/dOdzMWI3J0pwW1mAnZUPt/qtBRm+6rUNvhGprYlmmzYXLmDci2MbnHmo6yiRx0znlyxlhCtBqf4wgLZKMymALEO8pfdWg0qU9f1r9RDPWm4WOX0To9a+TV90A5f0c3gMsxpATO1xn4Ap4ipEFNI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723205754; c=relaxed/simple;
-	bh=YmzphMja6XXmXFsRDikB4wVg7CMV9XsA3fHfiK6varY=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=qshsMgUTJs6RgoRo0sS0PW/HblWgP2MrNw8xIqGyKtUPE8lKS3p3yzftWqwp4Wg/AhNEH0J+TERBjwnQDTNWG+7XzRILYP2oSVzPT3hA+SFCUkfUBz0mlXV8F2hShjQwc+Acd8x+9wxWBET6+uWIiYC0i3wFRNHQXiO/kBG1ZzE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fRN/2jYx; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1723208644; c=relaxed/simple;
+	bh=Iu9g4cXXQfyRBajjpYj9YppWW91EA9ZF/wnThkZr79Y=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=cRMeanPeCsHR7nOWCmNwDSm+E7hWk2C9xrYraaoT+maiAbyN8dyZ+qrv8dVEwVM1BXf1WNWSnjxo14ek0AKHInkoeJijzpGguUDkAGtUyAHK1wtULvlrZdRlh5/ucl+H6OaYbIV5NCcQbMCDCJzj0ApADHmc2EKKyJRjaQc0Ll4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=d5ksVXEx; arc=none smtp.client-ip=198.175.65.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fRN/2jYx"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 251AFC4AF0D;
-	Fri,  9 Aug 2024 12:15:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1723205754;
-	bh=YmzphMja6XXmXFsRDikB4wVg7CMV9XsA3fHfiK6varY=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=fRN/2jYxvxAK2rPD3+0naMbaZ/DnT37y8CwrQvdGhQ5zxh/2Z+G0bnaEdZKNDyS3l
-	 yBGIzBnKK5I66olifKJ+Xe3c70z15ijiIrBrEwB8qDXOFo1cXjMwLfbE1HwtSELDcr
-	 cr3NGFHumQf2V5oaCmKYbFErdr17fgRqOndlWO6eoZG9HF+4kHn0PRVEaR2u64sl7w
-	 6+nHVpfU8Y9irVsV+NuCz95HvmH+bk0DRm7Hiqr7Ca/EProf7zoSean45ouoNR9xqX
-	 WvQT1EfO599+KS8CWjkHm6uEsz2r2ssdlmB3ttsSVZ4xxM6fFpReUasLUCFVn8H5O8
-	 rE0BWb9/quglQ==
-Received: by mail-lf1-f42.google.com with SMTP id 2adb3069b0e04-52efbb55d24so3597467e87.1;
-        Fri, 09 Aug 2024 05:15:54 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCUuCh7pFctCXTdjWVk6dkNrJyNJycpcgkPqO9/cqSwPdfdJiJqVYgyMBe/WgJYfY19zSEwDsyIcJDluLjVQdbnYCXnOGpqpZly7PQ7DBQyhban8Ay2DAbuXTceUOA==
-X-Gm-Message-State: AOJu0YyJf22KOW13O1WQCGDBJrLMqrUEasTQxguftmGvhAy0VWBKxSbK
-	tNdil2DuCfShrAaK6JWDNG1X13mMy9st+GhM4TbOkU8pxdtmYduoKN/UqhXeGnqfDY2K2F2/X4h
-	nfnilh1qBK9qRgFNAuXoK6OuQNYY=
-X-Google-Smtp-Source: AGHT+IGlPsd9qpxK+kaW4uaKRNj+aYSzSne6anO3DKhp0I4fJNAaAhyO1zxPErAVmUP4wrg91CYucQo7Gmyudhjr2sM=
-X-Received: by 2002:a05:6512:2311:b0:52c:db76:2a7a with SMTP id
- 2adb3069b0e04-530ee9b76bemr1127480e87.34.1723205752741; Fri, 09 Aug 2024
- 05:15:52 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="d5ksVXEx"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1723208643; x=1754744643;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Iu9g4cXXQfyRBajjpYj9YppWW91EA9ZF/wnThkZr79Y=;
+  b=d5ksVXExHwmFomxlUJlt9HZanGMMlro/p5M45owm1veFXG/GOKO3EtTR
+   ayh8iRrv8I8Cj3kgXfza/Wy/ToqjDTx0Sp9iH4+NnDQORx5nW01NXPOSR
+   ojm5vU5xU8EH9aaLy4LCWWtMvdrv5Q6df1KrVM+RnEw0MPXwN5+hy4JCZ
+   bLLfzqY7NT6TT6lgLsll/8+7+TAsbF6gndNT4p8sxz8YLIzfV72iM2bkg
+   AtEmFIL3cxtTNh6cv5uFhZsq378RbWNNiPwvHfO0fJirTk5XOO9Pm2p+W
+   Z9OzvbNYOzw/4TV0ebAl0ipd2LgfX1X1LEWFmw8hCrbwc6uLVeuRQ/kqV
+   Q==;
+X-CSE-ConnectionGUID: MbiATAKoRf665a140Icurg==
+X-CSE-MsgGUID: dTE43loHTvG3MhXoJM+Tfg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11158"; a="21507892"
+X-IronPort-AV: E=Sophos;i="6.09,276,1716274800"; 
+   d="scan'208";a="21507892"
+Received: from orviesa010.jf.intel.com ([10.64.159.150])
+  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Aug 2024 06:04:02 -0700
+X-CSE-ConnectionGUID: tyr/c8aoRLmCsE+IMHkZEA==
+X-CSE-MsgGUID: ee4Kc0tlTYGPM+DYHbq6qg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.09,276,1716274800"; 
+   d="scan'208";a="57443158"
+Received: from unknown (HELO b6bf6c95bbab) ([10.239.97.151])
+  by orviesa010.jf.intel.com with ESMTP; 09 Aug 2024 06:04:00 -0700
+Received: from kbuild by b6bf6c95bbab with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1scPH8-00082a-25;
+	Fri, 09 Aug 2024 13:03:49 +0000
+Date: Fri, 9 Aug 2024 21:00:03 +0800
+From: kernel test robot <lkp@intel.com>
+To: Venkat Jayaraman <venkat.jayaraman@intel.com>,
+	linux-usb@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	gregkh@linuxfoundation.org, venkat.jayaraman@intel.com,
+	Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+	Przemek Kitszel <przemyslaw.kitszel@intel.com>
+Subject: Re: [PATCH] usb: typec: ucsi: Add DATA_RESET option of Connector
+ Reset command
+Message-ID: <202408092049.X5fsVaNn-lkp@intel.com>
+References: <20240808231443.1772374-1-venkat.jayaraman@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20240807-macos-build-support-v1-0-4cd1ded85694@samsung.com> <20240807-macos-build-support-v1-11-4cd1ded85694@samsung.com>
-In-Reply-To: <20240807-macos-build-support-v1-11-4cd1ded85694@samsung.com>
-From: Masahiro Yamada <masahiroy@kernel.org>
-Date: Fri, 9 Aug 2024 21:15:16 +0900
-X-Gmail-Original-Message-ID: <CAK7LNARafZ=zFMeoDdiMh=ZRU_XiJ08Naf=oAdYpOiUN02HizQ@mail.gmail.com>
-Message-ID: <CAK7LNARafZ=zFMeoDdiMh=ZRU_XiJ08Naf=oAdYpOiUN02HizQ@mail.gmail.com>
-Subject: Re: [PATCH 11/12] tty/vt: conmakehash requires linux/limits.h
-To: da.gomez@samsung.com
-Cc: Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nicolas@fjasle.eu>, 
-	Lucas De Marchi <lucas.demarchi@intel.com>, 
-	=?UTF-8?Q?Thomas_Hellstr=C3=B6m?= <thomas.hellstrom@linux.intel.com>, 
-	Rodrigo Vivi <rodrigo.vivi@intel.com>, 
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, Maxime Ripard <mripard@kernel.org>, 
-	Thomas Zimmermann <tzimmermann@suse.de>, David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>, 
-	William Hubbs <w.d.hubbs@gmail.com>, Chris Brannon <chris@the-brannons.com>, 
-	Kirk Reiser <kirk@reisers.ca>, Samuel Thibault <samuel.thibault@ens-lyon.org>, 
-	Paul Moore <paul@paul-moore.com>, Stephen Smalley <stephen.smalley.work@gmail.com>, 
-	Ondrej Mosnacek <omosnace@redhat.com>, Catalin Marinas <catalin.marinas@arm.com>, 
-	Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>, Oliver Upton <oliver.upton@linux.dev>, 
-	James Morse <james.morse@arm.com>, Suzuki K Poulose <suzuki.poulose@arm.com>, 
-	Zenghui Yu <yuzenghui@huawei.com>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	Jiri Slaby <jirislaby@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
-	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, linux-kernel@vger.kernel.org, 
-	linux-kbuild@vger.kernel.org, intel-xe@lists.freedesktop.org, 
-	dri-devel@lists.freedesktop.org, speakup@linux-speakup.org, 
-	selinux@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	kvmarm@lists.linux.dev, linux-serial@vger.kernel.org, llvm@lists.linux.dev, 
-	Finn Behrens <me@kloenk.dev>, "Daniel Gomez (Samsung)" <d+samsung@kruces.com>, gost.dev@samsung.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240808231443.1772374-1-venkat.jayaraman@intel.com>
 
-On Wed, Aug 7, 2024 at 8:10=E2=80=AFAM Daniel Gomez via B4 Relay
-<devnull+da.gomez.samsung.com@kernel.org> wrote:
->
-> From: Daniel Gomez <da.gomez@samsung.com>
->
-> macOS hosts do not provide the linux/limits.h header required for
-> conmakehash. To address this, ensure that usr/include is included in
-> the conmakehash HOSTCFLAGS. This will provide the necessary header for
-> successful compilation on macOS.
->
-> Fixes error:
-> HOSTCC  drivers/tty/vt/conmakehash - due to target missing
->   clang -Wp,-MMD,drivers/tty/vt/.conmakehash.d -Wall
-> -Wmissing-prototypes -Wstrict-prototypes -O2 -fomit-frame-pointer
-> -std=3Dgnu11   -I ./scripts/include     -o drivers/tty/vt/conmakehash
-> drivers/tty/vt/conmakehash.c
-> drivers/tty/vt/conmakehash.c:15:10: fatal error: 'linux/
->    limits.h' file not found 15 | #include <linux/limits.h>    |
->    ^~~~~~~~~~~~~~~~
+Hi Venkat,
+
+kernel test robot noticed the following build warnings:
+
+[auto build test WARNING on usb/usb-testing]
+[also build test WARNING on usb/usb-next usb/usb-linus westeri-thunderbolt/next linus/master v6.11-rc2 next-20240809]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Venkat-Jayaraman/usb-typec-ucsi-Add-DATA_RESET-option-of-Connector-Reset-command/20240809-122908
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+patch link:    https://lore.kernel.org/r/20240808231443.1772374-1-venkat.jayaraman%40intel.com
+patch subject: [PATCH] usb: typec: ucsi: Add DATA_RESET option of Connector Reset command
+config: i386-buildonly-randconfig-005-20240809 (https://download.01.org/0day-ci/archive/20240809/202408092049.X5fsVaNn-lkp@intel.com/config)
+compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240809/202408092049.X5fsVaNn-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202408092049.X5fsVaNn-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/usb/typec/ucsi/ucsi.c:1347: warning: This comment starts with '/**', but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
+    * Hard Reset bit field was defined with value 1 in UCSI spec version 1.0.
 
 
-The error is reported at line 15 of drivers/tty/vt/conmakehash.c
+vim +1347 drivers/usb/typec/ucsi/ucsi.c
 
+  1345	
+  1346	/**
+> 1347	 * Hard Reset bit field was defined with value 1 in UCSI spec version 1.0.
+  1348	 * Starting with spec version 1.1, Hard Reset bit field was removed from the
+  1349	 * CONNECTOR_RESET command, until spec 2.0 reintroduced it with value 0, so, in effect,
+  1350	 * the value to pass in to the command for a Hard Reset is different depending
+  1351	 * on the supported UCSI version by the LPM.
+  1352	 *
+  1353	 * For performing a Data Reset on LPMs supporting version 2.0 and greater,
+  1354	 * this function needs to be called with the second argument set to 0.
+  1355	 */
+  1356	static int ucsi_reset_connector(struct ucsi_connector *con, bool hard)
+  1357	{
+  1358		u64 command;
+  1359	
+  1360		command = UCSI_CONNECTOR_RESET | UCSI_CONNECTOR_NUMBER(con->num);
+  1361	
+  1362		if (con->ucsi->version < UCSI_VERSION_1_1)
+  1363			command |= hard ? UCSI_CONNECTOR_RESET_HARD_VER_1_0 : 0;
+  1364		else if (con->ucsi->version >= UCSI_VERSION_2_0)
+  1365			command |= hard ? 0 : UCSI_CONNECTOR_RESET_DATA_VER_2_0;
+  1366	
+  1367		return ucsi_send_command(con->ucsi, command, NULL, 0);
+  1368	}
+  1369	
 
-The line 15 is #include <stdlib.h>:
-
-https://github.com/torvalds/linux/blob/v6.11-rc1/drivers/tty/vt/conmakehash=
-.c#L15
-
-
-So, host programs cannot include <stdlib.h> on your build machine.
-
-
-
-drivers/tty/vt/conmakehash.c has only 5 include directives:
-
-#include <stdio.h>
-#include <stdlib.h>
-#include <sysexits.h>
-#include <string.h>
-#include <ctype.h>
-
-
-You cannot build this, your build machine cannot build anything.
-
-
-
-
-
-
-
-
-
-> 1 error generated.
-> make[5]: *** [scripts/Makefile.host:116: drivers/tty/vt/conmakehash]
-> Error 1
-> make[4]: *** [scripts/Makefile.build:485: drivers/tty/vt] Error 2
-> make[3]: *** [scripts/Makefile.build:485: drivers/tty] Error 2
-> make[2]: *** [scripts/Makefile.build:485: drivers] Error 2
-> make[1]: *** [/Volumes/src/kernel/linux-next/Makefile:1925: .] Error 2
-> make: *** [Makefile:224: __sub-make] Error 2
->
-> Signed-off-by: Daniel Gomez <da.gomez@samsung.com>
-> ---
->  drivers/tty/vt/Makefile | 1 +
->  1 file changed, 1 insertion(+)
->
-> diff --git a/drivers/tty/vt/Makefile b/drivers/tty/vt/Makefile
-> index 2c8ce8b592ed..d266895357e5 100644
-> --- a/drivers/tty/vt/Makefile
-> +++ b/drivers/tty/vt/Makefile
-> @@ -13,6 +13,7 @@ obj-$(CONFIG_CONSOLE_TRANSLATIONS)    +=3D consolemap.o=
- consolemap_deftbl.o
->  clean-files :=3D consolemap_deftbl.c defkeymap.c
->
->  hostprogs +=3D conmakehash
-> +HOSTCFLAGS_conmakehash.o =3D -I$(srctree)/usr/include
->
->  quiet_cmd_conmk =3D CONMK   $@
->        cmd_conmk =3D $(obj)/conmakehash $< > $@
->
-> --
-> Git-146)
->
->
-
-
---
-Best Regards
-Masahiro Yamada
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
