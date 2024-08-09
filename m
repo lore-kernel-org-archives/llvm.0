@@ -1,140 +1,146 @@
-Received: from mail-pj1-f43.google.com (mail-pj1-f43.google.com [209.85.216.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 482651667CD;
-	Fri,  9 Aug 2024 22:16:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F0C212232A;
+	Fri,  9 Aug 2024 22:51:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723241764; cv=none; b=FR0A+gNB50vw3H9tyjPuKtniHaPfgWbxzqqjyP4HQjvz1sz0f3nFT/JFAQiKNLIjhpfNTtfjBcDSpYXAd8cJuNkkya33KkdDNFlIAKsh7FshQDayVlzphY8/6F8VO6NbqLYJzc+WkAxFqWquyNo2rAtjPVYruklziCXYXhyv8Ag=
+	t=1723243885; cv=none; b=lMNoKCe/4vtQ9/vYG9ptclzIh/b1AD22qdN0jmC9FzkjAHzhz1GRhmgbkDOGV7ocgGan8+lDPm2L1B5+CGBG8p89fDa7srPUNX0utUISXwFAI9I0e34vcBst++kHkXfXCKTWoj92fdfMug5sJBDff1hRFYPLDnRtsM7GREwuvd0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723241764; c=relaxed/simple;
-	bh=Vyz7mOQSobTax2GI/PV4PZxzi76IZVTiDNoNh8/txbE=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Hu00S4SULewESbMb6VcLJ1d/6qQCP1NGgMVcK4FsseHHmS1nvOf8YbuS9kK1uvNrjUoVLACRNaPz0tQB6MbZVKQ+AYdQjadyjwhFd60Gn06SCAtWvdRIRPSKkURrfzt0Wo4YX8ye8eyKRXHAGDKC94DMNCa6tqPi2SeV94XtUew=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=WHqSk3hu; arc=none smtp.client-ip=209.85.216.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1723243885; c=relaxed/simple;
+	bh=ff71TyjvUq72CZ4XIBiGTj9t4pjbdgCKYZjYq3pBK9U=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=iHs8B6HWN2T5GsLqU2T0SlebBVH0oHrTi5q6u3jKe/4N5HGHTfn85OI37JrbhlnCrmh48A7H59IuYK4rUJ7RiQ3Is6E39QQPtP21cGoOXJjGmG+D4Xt0Rlk037eNVqMJ9Aeip4S9D+fs2kkZmzurCfOPAB4y8d60yHo0ltwM+bg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=NETc29xs; arc=none smtp.client-ip=192.198.163.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="WHqSk3hu"
-Received: by mail-pj1-f43.google.com with SMTP id 98e67ed59e1d1-2d1c1fb5cafso1800675a91.2;
-        Fri, 09 Aug 2024 15:16:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1723241762; x=1723846562; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=7QajCiM9J1gZRiKmQalSp88+y2PjJcBm2h12qCDW+tY=;
-        b=WHqSk3huQTQ4I9ORO7fpe/QD0o589T0ouqqC+0vBW2+Fnfuwf6nnPHKuxqhY1KmWtY
-         a8KQAbGBIgLoWKWwBRuLU2cQwR5ZufKh8gAiv2ZaiZ2/IzmHo27qBjpeJr6tH9oOSh9P
-         /u4fpFOS35Enwnu3Pv72X3U3nQsbibtULxNN0E5EYjX216H9XZv3oqYlEkztoeGTqX9/
-         8FajRX7wBSwVPAkLEUKKXAV2EbzrxQvYP9t3uh6w3IBF/qIJ7VLnZaz4iEEapVeO/rbG
-         WIhVEb7qX4HCgVB16XeSEmyseFiDKQDhTIDKMukoYvtGRh9bzmBn/E5YhMzAERZClFGQ
-         SP4w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1723241762; x=1723846562;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=7QajCiM9J1gZRiKmQalSp88+y2PjJcBm2h12qCDW+tY=;
-        b=UzvE95bxH5UX0IzX9UgMHm4vCWiiumRQ9CyuOK8F6I398fb5VtcBMURyc+kwZ1jaVP
-         BqhgRdzTCgwYHm0IBw8AKj9WUGXPnXv8ANjksYv4FzvyMblWf8uAkAYymEDCjr7gQX+J
-         4fej4BEUBpLW+YuttJRMrhQK7VG1J0NHAQa8VBK3UVDTaAbOw8nD1YJ1ichhpIxOy94Z
-         9TQsFbmUOu0+RDiDMhwu8CW1r4L8dRS15Vu0q2/DCuUActo9OAsu3NZlt648lbuI/7tx
-         L3blASxRRc253uzSilCW7uJSaHfNVHxMqGd/H/RFDxq9PLVV+nRISgcyza9xs/MqX/nG
-         KVTA==
-X-Forwarded-Encrypted: i=1; AJvYcCVxjzJOF+u1IT6hPYeyoXPvPP//kPHkTofejAW/d/gpNgD6ZJ4ne5PJbV3CTMnGUGy8TbnddDJDMfZCdRy69+W7MxHFphbJ8rus6yqaaoZMJzD0YwWT3dWDVaPTQjY=
-X-Gm-Message-State: AOJu0YzLHQ9x7YGJ/VlEUK+xEmz3dwTXK89du7B5VeAGDXXi/xlXR7y1
-	6r2iIYOVlkmFD8dbd+uJ+nBuIB9Kq2yYtt+YBNuNDKrVRlD91DsphFLTYNBf3H1fa9WutOt/XSi
-	fUadadJPr0yTDyvuBF4ChTnP7yuw=
-X-Google-Smtp-Source: AGHT+IGqhAIMpdcPgTvG4Lm0bG1VLto7lgkIz+dlldbt0bpWrxp0o616hdq+TZ0DclexAS+zwSJY7UTJsSeXk+LcnK0=
-X-Received: by 2002:a17:90a:b113:b0:2cd:b915:c80b with SMTP id
- 98e67ed59e1d1-2d1e8082b97mr3276313a91.27.1723241762470; Fri, 09 Aug 2024
- 15:16:02 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="NETc29xs"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1723243884; x=1754779884;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=ff71TyjvUq72CZ4XIBiGTj9t4pjbdgCKYZjYq3pBK9U=;
+  b=NETc29xsdH/BNCOe67MhXJCUxPCsExMyEhsDvP4Y+QDXwSlQpmp2bsp6
+   MKK3GpBEnX/Teeav9PqyvVWTF6V49hyLg/IxhpzJkoobCyAHlcCC1ACbL
+   Uw5F6mF/7593dTpQmoeIkd1TY62DPQDBrZk6akKBt6iBlgKWTLuoFbYnC
+   13s7nfdhnqMHrmk1Jh3m5IIDFdFkdyeeRVQRpSMRV457I7JFJme9jO2Ra
+   r/0JAb2c8SA/XuPjs8mE6309JWV8RWMvuLFpKb9xyfAZYLbT/9nDiaLUF
+   +3Q4FQDWDnEl1ONS9XNTPADF7yJsB6oatpKFCtuJ2LmvwgU1bZfq5p91l
+   Q==;
+X-CSE-ConnectionGUID: I4bUXLzbTyuqhf3onp1srQ==
+X-CSE-MsgGUID: HDFd12xBRRq0qp+x2LIpPg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11159"; a="46840109"
+X-IronPort-AV: E=Sophos;i="6.09,277,1716274800"; 
+   d="scan'208";a="46840109"
+Received: from fmviesa006.fm.intel.com ([10.60.135.146])
+  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Aug 2024 15:51:24 -0700
+X-CSE-ConnectionGUID: rGXfYhOvQ920MdgB+7amYg==
+X-CSE-MsgGUID: dLE4mvakTqmbroOgygKikA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.09,277,1716274800"; 
+   d="scan'208";a="57359075"
+Received: from unknown (HELO b6bf6c95bbab) ([10.239.97.151])
+  by fmviesa006.fm.intel.com with ESMTP; 09 Aug 2024 15:51:23 -0700
+Received: from kbuild by b6bf6c95bbab with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1scYS7-0009K3-1k;
+	Fri, 09 Aug 2024 22:51:19 +0000
+Date: Sat, 10 Aug 2024 06:51:12 +0800
+From: kernel test robot <lkp@intel.com>
+To: Vijendar Mukunda <Vijendar.Mukunda@amd.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Mark Brown <broonie@kernel.org>,
+	Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
+	Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+Subject: [broonie-ci:filehZ3h8g 26/28] sound/soc/sof/amd/acp.c:407:14: error:
+ no member named 'pci_rev' in 'struct acp_dev_data'
+Message-ID: <202408100634.3r9TDvav-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20240806144558.114461-1-ojeda@kernel.org>
-In-Reply-To: <20240806144558.114461-1-ojeda@kernel.org>
-From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date: Sat, 10 Aug 2024 00:15:50 +0200
-Message-ID: <CANiq72nH9KZZKtDsMkfosmHpgVjvGM6=yy7fRyNP2NrDFUrkvQ@mail.gmail.com>
-Subject: Re: [PATCH] rust: x86: remove `-3dnow{,a}` from target features
-To: Miguel Ojeda <ojeda@kernel.org>
-Cc: Alex Gaynor <alex.gaynor@gmail.com>, Wedson Almeida Filho <wedsonaf@gmail.com>, 
-	Nathan Chancellor <nathan@kernel.org>, Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, 
-	Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
-	Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, 
-	=?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
-	Benno Lossin <benno.lossin@proton.me>, Andreas Hindborg <a.hindborg@samsung.com>, 
-	Alice Ryhl <aliceryhl@google.com>, rust-for-linux@vger.kernel.org, 
-	Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, 
-	Justin Stitt <justinstitt@google.com>, llvm@lists.linux.dev, 
-	"H. Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org, patches@lists.linux.dev, 
-	Nikita Popov <github@npopov.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Tue, Aug 6, 2024 at 4:47=E2=80=AFPM Miguel Ojeda <ojeda@kernel.org> wrot=
-e:
->
-> LLVM 19 is dropping support for 3DNow! in commit f0eb5587ceeb ("Remove
-> support for 3DNow!, both intrinsics and builtins. (#96246)"):
->
->     Remove support for 3DNow!, both intrinsics and builtins. (#96246)
->
->     This set of instructions was only supported by AMD chips starting in
->     the K6-2 (introduced 1998), and before the "Bulldozer" family
->     (2011). They were never much used, as they were effectively supersede=
-d
->     by the more-widely-implemented SSE (first implemented on the AMD side
->     in Athlon XP in 2001).
->
->     This is being done as a predecessor towards general removal of MMX
->     register usage. Since there is almost no usage of the 3DNow!
->     intrinsics, and no modern hardware even implements them, simple
->     removal seems like the best option.
->
-> Thus we should avoid passing these to the backend, since otherwise we
-> get a diagnostic about it:
->
->     '-3dnow' is not a recognized feature for this target (ignoring featur=
-e)
->     '-3dnowa' is not a recognized feature for this target (ignoring featu=
-re)
->
-> We could try to disable them only up to LLVM 19 (not the C side one,
-> but the one used by `rustc`, which may be built with a range of
-> LLVMs). However, to avoid more complexity, we can likely just remove
-> them altogether. According to Nikita [2]:
->
-> > I don't think it's needed because LLVM should not generate 3dnow
-> instructions unless specifically asked to, using intrinsics that Rust
-> does not provide in the first place.
->
-> Thus do so, like Rust did for one of their builtin targets [3].
->
-> For those curious: Clang will warn only about trying to enable them
-> (`-m3dnow{,a}`), but not about disabling them (`-mno-3dnow{,a}`), so
-> there is no change needed there.
->
-> Cc: Nikita Popov <github@npopov.com>
-> Cc: Nathan Chancellor <nathan@kernel.org>
-> Cc: x86@kernel.org
-> Link: https://github.com/llvm/llvm-project/commit/f0eb5587ceeb641445b64cb=
-264c822b4751de04a [1]
-> Link: https://github.com/rust-lang/rust/pull/127864#issuecomment-22358987=
-60 [2]
-> Link: https://github.com/rust-lang/rust/pull/127864 [3]
-> Closes: https://github.com/Rust-for-Linux/linux/issues/1094
-> Signed-off-by: Miguel Ojeda <ojeda@kernel.org>
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/ci.git filehZ3h8g
+head:   45576eb691a6ad128c577d4b904380458359e3e5
+commit: a8d93b9b3a43cbb342fb6d37c0f0ad5a1a0e503f [26/28] ASoC: SOF: amd: fix for acp error reason registers wrong offset
+config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20240810/202408100634.3r9TDvav-lkp@intel.com/config)
+compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240810/202408100634.3r9TDvav-lkp@intel.com/reproduce)
 
-Applied to `rust-fixes` -- thanks everyone!
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202408100634.3r9TDvav-lkp@intel.com/
 
-(If someone from x86 still wants to take a look / Ack it, please let me kno=
-w!)
+All errors (new ones prefixed by >>):
 
-Cheers,
-Miguel
+>> sound/soc/sof/amd/acp.c:407:14: error: no member named 'pci_rev' in 'struct acp_dev_data'
+     407 |                 if (adata->pci_rev >= ACP_RMB_PCI_ID)
+         |                     ~~~~~  ^
+   1 error generated.
+
+
+vim +407 sound/soc/sof/amd/acp.c
+
+   377	
+   378	static irqreturn_t acp_irq_handler(int irq, void *dev_id)
+   379	{
+   380		struct amd_sdw_manager *amd_manager;
+   381		struct snd_sof_dev *sdev = dev_id;
+   382		const struct sof_amd_acp_desc *desc = get_chip_info(sdev->pdata);
+   383		struct acp_dev_data *adata = sdev->pdata->hw_pdata;
+   384		unsigned int base = desc->dsp_intr_base;
+   385		unsigned int val;
+   386		int irq_flag = 0;
+   387	
+   388		val = snd_sof_dsp_read(sdev, ACP_DSP_BAR, base + DSP_SW_INTR_STAT_OFFSET);
+   389		if (val & ACP_DSP_TO_HOST_IRQ) {
+   390			snd_sof_dsp_write(sdev, ACP_DSP_BAR, base + DSP_SW_INTR_STAT_OFFSET,
+   391					  ACP_DSP_TO_HOST_IRQ);
+   392			return IRQ_WAKE_THREAD;
+   393		}
+   394	
+   395		val = snd_sof_dsp_read(sdev, ACP_DSP_BAR, desc->ext_intr_stat);
+   396		if (val & ACP_SDW0_IRQ_MASK) {
+   397			amd_manager = dev_get_drvdata(&adata->sdw->pdev[0]->dev);
+   398			snd_sof_dsp_write(sdev, ACP_DSP_BAR, desc->ext_intr_stat, ACP_SDW0_IRQ_MASK);
+   399			if (amd_manager)
+   400				schedule_work(&amd_manager->amd_sdw_irq_thread);
+   401			irq_flag = 1;
+   402		}
+   403	
+   404		if (val & ACP_ERROR_IRQ_MASK) {
+   405			snd_sof_dsp_write(sdev, ACP_DSP_BAR, desc->ext_intr_stat, ACP_ERROR_IRQ_MASK);
+   406			snd_sof_dsp_write(sdev, ACP_DSP_BAR, desc->acp_sw0_i2s_err_reason, 0);
+ > 407			if (adata->pci_rev >= ACP_RMB_PCI_ID)
+   408				snd_sof_dsp_write(sdev, ACP_DSP_BAR, ACP_SW1_I2S_ERROR_REASON, 0);
+   409			snd_sof_dsp_write(sdev, ACP_DSP_BAR, desc->acp_error_stat, 0);
+   410			irq_flag = 1;
+   411		}
+   412	
+   413		if (desc->ext_intr_stat1) {
+   414			val = snd_sof_dsp_read(sdev, ACP_DSP_BAR, desc->ext_intr_stat1);
+   415			if (val & ACP_SDW1_IRQ_MASK) {
+   416				amd_manager = dev_get_drvdata(&adata->sdw->pdev[1]->dev);
+   417				snd_sof_dsp_write(sdev, ACP_DSP_BAR, desc->ext_intr_stat1,
+   418						  ACP_SDW1_IRQ_MASK);
+   419				if (amd_manager)
+   420					schedule_work(&amd_manager->amd_sdw_irq_thread);
+   421				irq_flag = 1;
+   422			}
+   423		}
+   424		if (irq_flag)
+   425			return IRQ_HANDLED;
+   426		else
+   427			return IRQ_NONE;
+   428	}
+   429	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
