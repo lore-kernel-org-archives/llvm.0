@@ -1,110 +1,165 @@
-Received: from out-185.mta0.migadu.com (out-185.mta0.migadu.com [91.218.175.185])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F91717993
-	for <llvm@lists.linux.dev>; Fri,  9 Aug 2024 10:57:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.185
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8493015EFCD;
+	Fri,  9 Aug 2024 12:15:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723201049; cv=none; b=h1qjhuLf3bdM4YFWT8mwZ5raTw8Sm3a7CRQwWMmKgM0B4g7i0KA1BhKs9pb3HBVQ+q0UzFEfyL2LmNTWR6ek3eomLQciLR4gdIJj8GqzdrOoJvUROWuBEXg7rx7BLjMvkzSWhYK6ublVCX91751ONHUZ7gwMxn3hNpbYi3pIrNQ=
+	t=1723205754; cv=none; b=rvgutAaVDLYHGwThMRbQoWwn3YwImYQuWZrjIBb/uAnc7FHzd7vG03kHEMOkA7qpEmDjOtMjL1qRLoBYevf6lipOOcqCPQ/OFhb52jVPs1b7AXwMJqHFk/Gbz977ymSgJB6+GejFyGbVXtBdexZEgLVBjjHroQV6M618uNzSkbE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723201049; c=relaxed/simple;
-	bh=rRARvcG+2Al0eIMIoJkC8CozOn2+Z5Rz8JRqyOI7mlw=;
-	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
-	 In-Reply-To:Content-Type; b=du+rg6GLdlhxkSU7rBccLA0RybtK3b8MN8Vl0ZX/4rv0mOY9XgyX2ZGBFdJfAmXA77QKm/0f5b9rdS0+3HTAD3X2J5H+7atMYMt8BaxLZKAoZtaY49ZJ36dzvqkb4oFFlpCc+6jh2qvzXLZSeoxdoQqj+zwSDRYOfMVayUVrHKs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=ZJBY2S0I; arc=none smtp.client-ip=91.218.175.185
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1723205754; c=relaxed/simple;
+	bh=YmzphMja6XXmXFsRDikB4wVg7CMV9XsA3fHfiK6varY=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=qshsMgUTJs6RgoRo0sS0PW/HblWgP2MrNw8xIqGyKtUPE8lKS3p3yzftWqwp4Wg/AhNEH0J+TERBjwnQDTNWG+7XzRILYP2oSVzPT3hA+SFCUkfUBz0mlXV8F2hShjQwc+Acd8x+9wxWBET6+uWIiYC0i3wFRNHQXiO/kBG1ZzE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fRN/2jYx; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="ZJBY2S0I"
-Message-ID: <2e27c607-713f-48f2-9a2e-41f7c61f7e73@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1723201041;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=vH3hZWIQ9XnTGjjmOOu/3hwi/2Bg1Nf5U7LfZS0ooSc=;
-	b=ZJBY2S0I4ixsq7RqAI8lsJq0ZUW3akgNnAIoxv9dkBHDmFx8XuTBgopyNgdgxsy0PSwzhI
-	7XGtEyflwpqpBwrEz0phkmVIU1KiO1CcqsKze+gqHLaEE2UCdL9/n2dz7/ufIVV6asCuxi
-	LGEo5L0a8WDqKRMElQxMSmFdAhEaOS0=
-Date: Fri, 9 Aug 2024 18:57:11 +0800
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fRN/2jYx"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 251AFC4AF0D;
+	Fri,  9 Aug 2024 12:15:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1723205754;
+	bh=YmzphMja6XXmXFsRDikB4wVg7CMV9XsA3fHfiK6varY=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=fRN/2jYxvxAK2rPD3+0naMbaZ/DnT37y8CwrQvdGhQ5zxh/2Z+G0bnaEdZKNDyS3l
+	 yBGIzBnKK5I66olifKJ+Xe3c70z15ijiIrBrEwB8qDXOFo1cXjMwLfbE1HwtSELDcr
+	 cr3NGFHumQf2V5oaCmKYbFErdr17fgRqOndlWO6eoZG9HF+4kHn0PRVEaR2u64sl7w
+	 6+nHVpfU8Y9irVsV+NuCz95HvmH+bk0DRm7Hiqr7Ca/EProf7zoSean45ouoNR9xqX
+	 WvQT1EfO599+KS8CWjkHm6uEsz2r2ssdlmB3ttsSVZ4xxM6fFpReUasLUCFVn8H5O8
+	 rE0BWb9/quglQ==
+Received: by mail-lf1-f42.google.com with SMTP id 2adb3069b0e04-52efbb55d24so3597467e87.1;
+        Fri, 09 Aug 2024 05:15:54 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCUuCh7pFctCXTdjWVk6dkNrJyNJycpcgkPqO9/cqSwPdfdJiJqVYgyMBe/WgJYfY19zSEwDsyIcJDluLjVQdbnYCXnOGpqpZly7PQ7DBQyhban8Ay2DAbuXTceUOA==
+X-Gm-Message-State: AOJu0YyJf22KOW13O1WQCGDBJrLMqrUEasTQxguftmGvhAy0VWBKxSbK
+	tNdil2DuCfShrAaK6JWDNG1X13mMy9st+GhM4TbOkU8pxdtmYduoKN/UqhXeGnqfDY2K2F2/X4h
+	nfnilh1qBK9qRgFNAuXoK6OuQNYY=
+X-Google-Smtp-Source: AGHT+IGlPsd9qpxK+kaW4uaKRNj+aYSzSne6anO3DKhp0I4fJNAaAhyO1zxPErAVmUP4wrg91CYucQo7Gmyudhjr2sM=
+X-Received: by 2002:a05:6512:2311:b0:52c:db76:2a7a with SMTP id
+ 2adb3069b0e04-530ee9b76bemr1127480e87.34.1723205752741; Fri, 09 Aug 2024
+ 05:15:52 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Subject: Re: [PATCH v5] docs/zh_CN: Add dev-tools/kcsan Chinese translation
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: YanTeng Si <si.yanteng@linux.dev>
-To: Haoyang Liu <tttturtleruss@hust.edu.cn>, Jonathan Corbet
- <corbet@lwn.net>, Alex Shi <alexs@kernel.org>,
- Yanteng Si <siyanteng@loongson.cn>, Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling
- <morbo@google.com>, Justin Stitt <justinstitt@google.com>
-Cc: hust-os-kernel-patches@googlegroups.com, linux-doc@vger.kernel.org,
- linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-References: <20240807162720.46588-1-tttturtleruss@hust.edu.cn>
- <d6eec1da-0e79-432f-a5cf-7dc8c59f28c1@hust.edu.cn>
- <87r0b0th7l.fsf@trenco.lwn.net>
- <c4ffaae1-59a0-4837-a965-441af4851d2a@hust.edu.cn>
- <25b4c3e0-784d-41ea-8ff3-8cb175983676@linux.dev>
-Content-Language: en-US
-In-Reply-To: <25b4c3e0-784d-41ea-8ff3-8cb175983676@linux.dev>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+References: <20240807-macos-build-support-v1-0-4cd1ded85694@samsung.com> <20240807-macos-build-support-v1-11-4cd1ded85694@samsung.com>
+In-Reply-To: <20240807-macos-build-support-v1-11-4cd1ded85694@samsung.com>
+From: Masahiro Yamada <masahiroy@kernel.org>
+Date: Fri, 9 Aug 2024 21:15:16 +0900
+X-Gmail-Original-Message-ID: <CAK7LNARafZ=zFMeoDdiMh=ZRU_XiJ08Naf=oAdYpOiUN02HizQ@mail.gmail.com>
+Message-ID: <CAK7LNARafZ=zFMeoDdiMh=ZRU_XiJ08Naf=oAdYpOiUN02HizQ@mail.gmail.com>
+Subject: Re: [PATCH 11/12] tty/vt: conmakehash requires linux/limits.h
+To: da.gomez@samsung.com
+Cc: Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nicolas@fjasle.eu>, 
+	Lucas De Marchi <lucas.demarchi@intel.com>, 
+	=?UTF-8?Q?Thomas_Hellstr=C3=B6m?= <thomas.hellstrom@linux.intel.com>, 
+	Rodrigo Vivi <rodrigo.vivi@intel.com>, 
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, Maxime Ripard <mripard@kernel.org>, 
+	Thomas Zimmermann <tzimmermann@suse.de>, David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>, 
+	William Hubbs <w.d.hubbs@gmail.com>, Chris Brannon <chris@the-brannons.com>, 
+	Kirk Reiser <kirk@reisers.ca>, Samuel Thibault <samuel.thibault@ens-lyon.org>, 
+	Paul Moore <paul@paul-moore.com>, Stephen Smalley <stephen.smalley.work@gmail.com>, 
+	Ondrej Mosnacek <omosnace@redhat.com>, Catalin Marinas <catalin.marinas@arm.com>, 
+	Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>, Oliver Upton <oliver.upton@linux.dev>, 
+	James Morse <james.morse@arm.com>, Suzuki K Poulose <suzuki.poulose@arm.com>, 
+	Zenghui Yu <yuzenghui@huawei.com>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	Jiri Slaby <jirislaby@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
+	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, linux-kernel@vger.kernel.org, 
+	linux-kbuild@vger.kernel.org, intel-xe@lists.freedesktop.org, 
+	dri-devel@lists.freedesktop.org, speakup@linux-speakup.org, 
+	selinux@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+	kvmarm@lists.linux.dev, linux-serial@vger.kernel.org, llvm@lists.linux.dev, 
+	Finn Behrens <me@kloenk.dev>, "Daniel Gomez (Samsung)" <d+samsung@kruces.com>, gost.dev@samsung.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+On Wed, Aug 7, 2024 at 8:10=E2=80=AFAM Daniel Gomez via B4 Relay
+<devnull+da.gomez.samsung.com@kernel.org> wrote:
+>
+> From: Daniel Gomez <da.gomez@samsung.com>
+>
+> macOS hosts do not provide the linux/limits.h header required for
+> conmakehash. To address this, ensure that usr/include is included in
+> the conmakehash HOSTCFLAGS. This will provide the necessary header for
+> successful compilation on macOS.
+>
+> Fixes error:
+> HOSTCC  drivers/tty/vt/conmakehash - due to target missing
+>   clang -Wp,-MMD,drivers/tty/vt/.conmakehash.d -Wall
+> -Wmissing-prototypes -Wstrict-prototypes -O2 -fomit-frame-pointer
+> -std=3Dgnu11   -I ./scripts/include     -o drivers/tty/vt/conmakehash
+> drivers/tty/vt/conmakehash.c
+> drivers/tty/vt/conmakehash.c:15:10: fatal error: 'linux/
+>    limits.h' file not found 15 | #include <linux/limits.h>    |
+>    ^~~~~~~~~~~~~~~~
 
 
-在 2024/8/9 18:44, YanTeng Si 写道:
-> Hi Haoyang,
->
-> 在 2024/8/8 0:48, Haoyang Liu 写道:
->>
->> 在 2024/8/8 0:45, Jonathan Corbet 写道:
->>> Haoyang Liu <tttturtleruss@hust.edu.cn> writes:
->>>
->>>> This is a mistake but I missed it before sending this patch.
->>>>
->>>> What should I do to revert or correct this patch?
->>>>
->>>> Thanks for your help and patience.
->>> Send a v6 with the correction made - but wait a while for other reviews
->>> first.
->>
->> OK.
->>
-> The doc is good enough for me, so you can send a v6 after fix the typo.
->
->
-> Reviewed-by: Yanteng Si <siyanteng@loongson.cn>
-
-I am Sorry! It seems that I've permanently lost access to 
-siyanteng@loongson.cn account,
-
-So you need use  --suppress-cc=sob when you send-email and pick my 
-Reviewed-by tag.
+The error is reported at line 15 of drivers/tty/vt/conmakehash.c
 
 
-Thanks,
+The line 15 is #include <stdlib.h>:
 
-Yanteng
+https://github.com/torvalds/linux/blob/v6.11-rc1/drivers/tty/vt/conmakehash=
+.c#L15
 
+
+So, host programs cannot include <stdlib.h> on your build machine.
+
+
+
+drivers/tty/vt/conmakehash.c has only 5 include directives:
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <sysexits.h>
+#include <string.h>
+#include <ctype.h>
+
+
+You cannot build this, your build machine cannot build anything.
+
+
+
+
+
+
+
+
+
+> 1 error generated.
+> make[5]: *** [scripts/Makefile.host:116: drivers/tty/vt/conmakehash]
+> Error 1
+> make[4]: *** [scripts/Makefile.build:485: drivers/tty/vt] Error 2
+> make[3]: *** [scripts/Makefile.build:485: drivers/tty] Error 2
+> make[2]: *** [scripts/Makefile.build:485: drivers] Error 2
+> make[1]: *** [/Volumes/src/kernel/linux-next/Makefile:1925: .] Error 2
+> make: *** [Makefile:224: __sub-make] Error 2
+>
+> Signed-off-by: Daniel Gomez <da.gomez@samsung.com>
+> ---
+>  drivers/tty/vt/Makefile | 1 +
+>  1 file changed, 1 insertion(+)
+>
+> diff --git a/drivers/tty/vt/Makefile b/drivers/tty/vt/Makefile
+> index 2c8ce8b592ed..d266895357e5 100644
+> --- a/drivers/tty/vt/Makefile
+> +++ b/drivers/tty/vt/Makefile
+> @@ -13,6 +13,7 @@ obj-$(CONFIG_CONSOLE_TRANSLATIONS)    +=3D consolemap.o=
+ consolemap_deftbl.o
+>  clean-files :=3D consolemap_deftbl.c defkeymap.c
+>
+>  hostprogs +=3D conmakehash
+> +HOSTCFLAGS_conmakehash.o =3D -I$(srctree)/usr/include
+>
+>  quiet_cmd_conmk =3D CONMK   $@
+>        cmd_conmk =3D $(obj)/conmakehash $< > $@
+>
+> --
+> Git-146)
 >
 >
-> Thanks,
->
-> Yanteng
->
->>
->> Thank you,
->>
->> Haoyang
->>
->>>
->>> Thanks,
->>>
->>> jon
->>
->>
->
+
+
+--
+Best Regards
+Masahiro Yamada
