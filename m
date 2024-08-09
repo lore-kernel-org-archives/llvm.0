@@ -1,66 +1,59 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E9F1155A59;
-	Thu,  8 Aug 2024 23:50:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CEF5E79F5;
+	Fri,  9 Aug 2024 00:21:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723161049; cv=none; b=Y7+dUkgav9Xwob/GF8Mfpm1chVLXHmItTPFqPzm7vktdTLQx2iIgQHmVslDbLuqOFSjcc83ROrW7gm5AjHqE/8AU0js/v+TM8vFV/PKIz+91Zn0ZUOGi1nKEwYkdhbe0EzFcTYugMFLgLJ7Dre2qMmRFjBjwAqMVw7WhMLwvltM=
+	t=1723162906; cv=none; b=dUpxe1fs8mpiV8mDNnlV2VU74bfKaex2kLAU+1AM5vzgNM3K6isYvHYjzyqnLaM9BQ07YKKnkegXZmot5w1AhvvET2QRd0HtGsQF/y+PBopRpcl3gp5Vq51P03USG7TXNrg8dageR1ygsQeRV9mglpq2C7z6Unez9ui/IFPJoPA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723161049; c=relaxed/simple;
-	bh=msStPv78tQHsgiFR+ibTiL1MtKZ9jSJTczTEuZULeAI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=mm23eW1o+o/Yse/jqZx199PluVfpwilESM/goElMifzB5i/fYF4GIvQdEJKHU4M1nE8Xeu3Va1B2UIa93mBCBBex6MvaM+O66df7Er7OR4+R4pOLBnCtYeLnuOxwkQwWY4ApkRp8I9QJKIO2/R4uBqol9fJ+9l3vARRpmmrBgnA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Yauq01mz; arc=none smtp.client-ip=198.175.65.12
+	s=arc-20240116; t=1723162906; c=relaxed/simple;
+	bh=bMznVnDMGvYpVK4JpHzlDbtBreyy9F5i3xs/YZaXzmc=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=b2DFXZMCGm9rLlMsPBsL25euszHw+5aDeh+/4RdQVU+Wrlli9xmWOXam/Oh9vjOEbfjYftdLzwx0faVqO3UaEJDCuI9HmCEFIowWPvQhuEuv/ZlQwgJzpMd52eHBQFNJkHGFovYmSLlzzJ//6NZaSN60CwdTgLcwOeHHcrhjabI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Bg8PDjmA; arc=none smtp.client-ip=198.175.65.19
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Yauq01mz"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Bg8PDjmA"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1723161047; x=1754697047;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=msStPv78tQHsgiFR+ibTiL1MtKZ9jSJTczTEuZULeAI=;
-  b=Yauq01mz3KMvcE0nkpwBYV3qCgPH6JKs9GYemo9WwZuakbMynhJinvpH
-   njedIKoXsncCciOBfiU/DMqiur9jCg0VfZouYk5l71ca2f5TndcxqMyKC
-   kfC/K4aVWkMeJltxNztkJb9HHdrGjD5wzI54LCIKQwEjOfxbej/sQg1mh
-   xFj9BUGvz5apIYRLr4DV0LppyVJFi7orrZbwhrorpdZUdAoh3xqB0fRa8
-   ULVgiGpJ6h38+tV/8LmX/wOwxrEvotbUQo/NxlIlD3HYRKauexnx3FKRs
-   eWSfct2rB8wmMwXIvy0q7sFxHuvDKEUDuh6macyrvT+N5GGa/3os6M20G
-   A==;
-X-CSE-ConnectionGUID: axnVF6BaR6+w8KPFaffX1g==
-X-CSE-MsgGUID: fXo99yeQRYK9v0Z1+BgXGQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11158"; a="32711964"
+  t=1723162905; x=1754698905;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=bMznVnDMGvYpVK4JpHzlDbtBreyy9F5i3xs/YZaXzmc=;
+  b=Bg8PDjmAcExUQpA2r7v2NZOnukkcQ588SoM08mZAVzZrqbEcrGCm7Iaw
+   7zYCf7liaVgFXZGCfi9c1H+WRUZb9BisQWKB1XvExfDpxf7t6qGis4c22
+   cDPiGwSt0aEFIlfXxqc9qC5N5xD7sXXCG0dCj3U56bFlCPfhfgfhKTiWN
+   71TrykJUSuqibBOf19CBQwlvZc4dfy8AS5ontWOUfgjXb0OmVHYg20yJU
+   yzwGhQ/BarJBBGoj8tP/soOb27D1iA8lPArQLiFhyAMqRq7/pZ/Ah/Kie
+   6fgaViNDJTIWMK4/6Pa6xQtU+/IOnirR3FQ6/8brVjT3akAeU6n+XXK1V
+   g==;
+X-CSE-ConnectionGUID: T/IUDMW7TB+n5Jk41V3ADw==
+X-CSE-MsgGUID: eEMPdJkhSR2ncAly9DsWfA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11158"; a="21180457"
 X-IronPort-AV: E=Sophos;i="6.09,274,1716274800"; 
-   d="scan'208";a="32711964"
-Received: from fmviesa005.fm.intel.com ([10.60.135.145])
-  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Aug 2024 16:50:20 -0700
-X-CSE-ConnectionGUID: VAU9Z6MPSQqj9ETSNKLMjg==
-X-CSE-MsgGUID: Ecc3zQWtTPGhvCQPzzVwWw==
+   d="scan'208";a="21180457"
+Received: from fmviesa004.fm.intel.com ([10.60.135.144])
+  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Aug 2024 17:21:45 -0700
+X-CSE-ConnectionGUID: 712Tz4NlRR+W/+TcQ7JXig==
+X-CSE-MsgGUID: 0YZY4I9LQiCuW72BMq9psg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.09,274,1716274800"; 
-   d="scan'208";a="61778876"
+   d="scan'208";a="62035655"
 Received: from unknown (HELO b6bf6c95bbab) ([10.239.97.151])
-  by fmviesa005.fm.intel.com with ESMTP; 08 Aug 2024 16:50:14 -0700
+  by fmviesa004.fm.intel.com with ESMTP; 08 Aug 2024 17:21:43 -0700
 Received: from kbuild by b6bf6c95bbab with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1scCtX-0006d4-0r;
-	Thu, 08 Aug 2024 23:50:11 +0000
-Date: Fri, 9 Aug 2024 07:49:39 +0800
+	id 1scDNp-0006fo-2K;
+	Fri, 09 Aug 2024 00:21:33 +0000
+Date: Fri, 9 Aug 2024 08:20:25 +0800
 From: kernel test robot <lkp@intel.com>
-To: Hanjun Guo <guohanjun@huawei.com>, Sudeep Holla <sudeep.holla@arm.com>,
-	Lorenzo Pieralisi <lpieralisi@kernel.org>,
-	"Rafael J . Wysocki" <rafael@kernel.org>
+To: Takashi Iwai <tiwai@suse.de>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Will Deacon <will@kernel.org>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	linux-acpi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	Hanjun Guo <guohanjun@huawei.com>
-Subject: Re: [PATCH 3/3] ARM64: ACPI: Move the NUMA code to
- drivers/acpi/arm64/
-Message-ID: <202408090735.Oa78ciK8-lkp@intel.com>
-References: <20240808131522.1032431-4-guohanjun@huawei.com>
+	alsa-devel@alsa-project.org, Jaroslav Kysela <perex@perex.cz>
+Subject: [tiwai-sound:for-next 69/83] sound/pcmcia/vx/vxpocket.c:273:12:
+ error: use of undeclared identifier 'pdev'; did you mean 'p_dev'?
+Message-ID: <202408090809.TAYiyrqJ-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -69,75 +62,90 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240808131522.1032431-4-guohanjun@huawei.com>
 
-Hi Hanjun,
-
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on arm64/for-next/core]
-[also build test ERROR on rafael-pm/linux-next rafael-pm/bleeding-edge linus/master v6.11-rc2 next-20240808]
-[cannot apply to arm-perf/for-next/perf]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Hanjun-Guo/ARM64-ACPI-Remove-the-leftover-acpi_init_cpus/20240808-212154
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-next/core
-patch link:    https://lore.kernel.org/r/20240808131522.1032431-4-guohanjun%40huawei.com
-patch subject: [PATCH 3/3] ARM64: ACPI: Move the NUMA code to drivers/acpi/arm64/
-config: riscv-defconfig (https://download.01.org/0day-ci/archive/20240809/202408090735.Oa78ciK8-lkp@intel.com/config)
-compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 4527fba9ad6bc682eceda603150bfaec65ec6916)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240809/202408090735.Oa78ciK8-lkp@intel.com/reproduce)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/tiwai/sound.git for-next
+head:   c46fc83e3f3c89f18962e43890de90b1c304747a
+commit: 2acbb5e57230830016e0fb2d61886e7a8c7f59ce [69/83] ALSA: vxpocket: Use standard print API
+config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20240809/202408090809.TAYiyrqJ-lkp@intel.com/config)
+compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240809/202408090809.TAYiyrqJ-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202408090735.Oa78ciK8-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202408090809.TAYiyrqJ-lkp@intel.com/
+
+Note: the tiwai-sound/for-next HEAD c46fc83e3f3c89f18962e43890de90b1c304747a builds fine.
+      It only hurts bisectability.
 
 All errors (new ones prefixed by >>):
 
-   In file included from drivers/nvme/host/pci.c:7:
->> include/linux/acpi.h:260:19: error: redefinition of 'acpi_numa_get_nid'
-     260 | static inline int acpi_numa_get_nid(unsigned int cpu) { return NUMA_NO_NODE; }
-         |                   ^
-   arch/riscv/include/asm/acpi.h:68:19: note: previous definition is here
-      68 | static inline int acpi_numa_get_nid(unsigned int cpu) { return NUMA_NO_NODE; }
-         |                   ^
-   In file included from drivers/nvme/host/pci.c:9:
-   In file included from include/linux/blkdev.h:9:
-   In file included from include/linux/blk_types.h:10:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:8:
-   In file included from include/linux/cacheflush.h:5:
-   In file included from arch/riscv/include/asm/cacheflush.h:9:
-   In file included from include/linux/mm.h:2253:
-   include/linux/vmstat.h:514:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     514 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
-   drivers/nvme/host/pci.c:2982:41: warning: shift count >= width of type [-Wshift-count-overflow]
-    2982 |                 dma_set_mask_and_coherent(&pdev->dev, DMA_BIT_MASK(64));
-         |                                                       ^~~~~~~~~~~~~~~~
-   include/linux/dma-mapping.h:77:54: note: expanded from macro 'DMA_BIT_MASK'
-      77 | #define DMA_BIT_MASK(n) (((n) == 64) ? ~0ULL : ((1ULL<<(n))-1))
-         |                                                      ^ ~~~
-   2 warnings and 1 error generated.
+   sound/pcmcia/vx/vxpocket.c:207:8: error: no member named 'dev' in 'struct vx_core'
+     207 |         chip->dev = &link->dev;
+         |         ~~~~  ^
+>> sound/pcmcia/vx/vxpocket.c:273:12: error: use of undeclared identifier 'pdev'; did you mean 'p_dev'?
+     273 |                 dev_err(&pdev->dev, "vxpocket: cannot create a card instance\n");
+         |                          ^~~~
+         |                          p_dev
+   include/linux/dev_printk.h:154:44: note: expanded from macro 'dev_err'
+     154 |         dev_printk_index_wrap(_dev_err, KERN_ERR, dev, dev_fmt(fmt), ##__VA_ARGS__)
+         |                                                   ^
+   include/linux/dev_printk.h:110:11: note: expanded from macro 'dev_printk_index_wrap'
+     110 |                 _p_func(dev, fmt, ##__VA_ARGS__);                       \
+         |                         ^
+   sound/pcmcia/vx/vxpocket.c:251:49: note: 'p_dev' declared here
+     251 | static int vxpocket_probe(struct pcmcia_device *p_dev)
+         |                                                 ^
+   2 errors generated.
 
 
-vim +/acpi_numa_get_nid +260 include/linux/acpi.h
+vim +273 sound/pcmcia/vx/vxpocket.c
 
-   254	
-   255	#ifdef CONFIG_ARM64
-   256	int acpi_numa_get_nid(unsigned int cpu);
-   257	void acpi_map_cpus_to_nodes(void);
-   258	void acpi_numa_gicc_affinity_init(struct acpi_srat_gicc_affinity *pa);
-   259	#else
- > 260	static inline int acpi_numa_get_nid(unsigned int cpu) { return NUMA_NO_NODE; }
-   261	static inline void acpi_map_cpus_to_nodes(void) { }
-   262	static inline void
-   263	acpi_numa_gicc_affinity_init(struct acpi_srat_gicc_affinity *pa) { }
-   264	#endif
-   265	
+   247	
+   248	
+   249	/*
+   250	 */
+   251	static int vxpocket_probe(struct pcmcia_device *p_dev)
+   252	{
+   253		struct snd_card *card;
+   254		struct snd_vxpocket *vxp;
+   255		int i, err;
+   256	
+   257		/* find an empty slot from the card list */
+   258		for (i = 0; i < SNDRV_CARDS; i++) {
+   259			if (!(card_alloc & (1 << i)))
+   260				break;
+   261		}
+   262		if (i >= SNDRV_CARDS) {
+   263			dev_err(&p_dev->dev, "vxpocket: too many cards found\n");
+   264			return -EINVAL;
+   265		}
+   266		if (! enable[i])
+   267			return -ENODEV; /* disabled explicitly */
+   268	
+   269		/* ok, create a card instance */
+   270		err = snd_card_new(&p_dev->dev, index[i], id[i], THIS_MODULE,
+   271				   0, &card);
+   272		if (err < 0) {
+ > 273			dev_err(&pdev->dev, "vxpocket: cannot create a card instance\n");
+   274			return err;
+   275		}
+   276	
+   277		err = snd_vxpocket_new(card, ibl[i], p_dev, &vxp);
+   278		if (err < 0) {
+   279			snd_card_free(card);
+   280			return err;
+   281		}
+   282		card->private_data = vxp;
+   283	
+   284		vxp->index = i;
+   285		card_alloc |= 1 << i;
+   286	
+   287		vxp->p_dev = p_dev;
+   288	
+   289		return vxpocket_config(p_dev);
+   290	}
+   291	
 
 -- 
 0-DAY CI Kernel Test Service
