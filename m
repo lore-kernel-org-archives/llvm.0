@@ -1,276 +1,113 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AFF4B4436E;
-	Sat, 10 Aug 2024 09:20:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A4D7182D8;
+	Sat, 10 Aug 2024 11:34:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723281630; cv=none; b=jS5D3IIodsKJI0QVyswd78WPmYCSzyZIdabQfaeOfekcZKaV43zD1pAkrcINt0cB6x7bwDgURuBhjvNOJXn8OFqrkXNOmjRmkxnDJ96C6Eq2Z3ozngUOTN9NNtiDBFwyRxQvBaH+5JSYixls1K6RfQ0mC1dnA7rdT8N+TxEbbZg=
+	t=1723289649; cv=none; b=OyKQt5Mc5Y0dDxjW2YnPYMjROll60LQQnR51D4JSSZWjPmQJQZa9IXiLI+ENB26EYvGrSbeAFzQhF2pQcVAv1sYqhmb7npHXaNjSgC5OFOObZXJ9B7tAWSJfSG2bFE+VcyhcbXtbuinw4G9u+IE8JctMpV0qsT7iPaA9lQMl4Z4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723281630; c=relaxed/simple;
-	bh=hqbfNiQf/FaCYgIkBoBfBp6pDygQSbNfVoLQ+CBarrU=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=f7KPOyGdeDb5wSSDY6nQye2R7DeIshxl0vAHcbuj+QvVi8xVQUZUpRpGpQpsUPQolH0MhAbQqDakPvAdlYx6eUg+8d35xRiRBF64xGMGsaGm/Tq38yynDkzhSilLxmBS8bEzG0v3Nnpw9Iz4f9wzeTpEqtU60hwc67KCKU+eN3c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Z0T+oCSU; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1723289649; c=relaxed/simple;
+	bh=kvUDhPNk5BpwSl3wEh5gwuoCRoQjyGlpCb954t6/yN0=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=Xgz088ZKHSwDDz22K8Muti1gVPmxCJeHVZwCPvRcxeX9Cb3t4Rqp/GlQi+aqXjltRx8qYMs+s4ETwwhnTwbZZ09H2BzPWvs4+wdNtSlVY9jVia67tHd0vO36rENfrywcHQO9zUAKo7YqkhSrVDbXSVCyGPite6TxDLMxCR4U6gA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=It1SanDj; arc=none smtp.client-ip=192.198.163.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Z0T+oCSU"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 62501C32781;
-	Sat, 10 Aug 2024 09:20:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1723281630;
-	bh=hqbfNiQf/FaCYgIkBoBfBp6pDygQSbNfVoLQ+CBarrU=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=Z0T+oCSUmgLxjYAk3/y0g6IEqzTkRedT2bEHQyizq/Simd52NlpYl/B+64q+ZI1/4
-	 nKDIz4A8tEm7B6o+wuOmI5opqXU8bCONHxN8kEDcgOz08Jn2OgkN1iIXubAqJMmtul
-	 loV3sUKqKOp7UwEHGV98OvdxZDMrsrFbmodXmZ0ZjVJ8ta1SEw7mSgf4jax2lCiPQG
-	 YpUioXbPH/icGEhYaIbD+z0WrJU2S4HTCmGN1s6DyCfRq2pzzn8ENQ882iid6FG2SF
-	 IQ2lhXm0t0ymc6QRLIWfI2liOnyUcxU5s2vTewojys0+/5xF3KTTPfiXNiNjF/CGZG
-	 FAaqdHCl58DJw==
-Date: Sat, 10 Aug 2024 10:20:21 +0100
-From: Jonathan Cameron <jic23@kernel.org>
-To: kernel test robot <lkp@intel.com>
-Cc: David Lechner <dlechner@baylibre.com>, llvm@lists.linux.dev,
- oe-kbuild-all@lists.linux.dev, Michael Hennerich
- <Michael.Hennerich@analog.com>, Nuno =?UTF-8?B?U8Oh?= <nuno.sa@analog.com>,
- Jonathan Corbet <corbet@lwn.net>, linux-iio@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org
-Subject: Re: [PATCH 1/2] iio: adc: ad4695: implement triggered buffer
-Message-ID: <20240810102021.45b35e59@jic23-huawei>
-In-Reply-To: <202408081623.ua9EBfoZ-lkp@intel.com>
-References: <20240807-iio-adc-ad4695-buffered-read-v1-1-bdafc39b2283@baylibre.com>
-	<202408081623.ua9EBfoZ-lkp@intel.com>
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-pc-linux-gnu)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="It1SanDj"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1723289648; x=1754825648;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=kvUDhPNk5BpwSl3wEh5gwuoCRoQjyGlpCb954t6/yN0=;
+  b=It1SanDjKtVGEfgAY2bGUZItcJsm7ryszw9htriSqYRvLsHsw/dRMhJo
+   dP7F8Zek7aFTivzWL73FgYhxnvOdHFA570h9usWztR79poYbJq9ZLxlD2
+   rzwXBj66w5HM/9Xqn5bDWNb4nG5BteFsLja9yja5ZmpZ0kpnLNBVkI+Kn
+   dW1COfpc8EkUjolg37us87QbELEfGr9kHXS8demQiQNG0VIg2poMM/R/k
+   ZEiwgnuGyPmhmlZGU1GgprHGb8WXLJNKciuoh1tcgoKh7LYYFT1P1sqNc
+   0xUBXt6tbrl1mRx501bYFUXsGteDGkEtg4Wsue8eetFTsG43ge1EwqE7J
+   w==;
+X-CSE-ConnectionGUID: w2/dd6NmRqqKR4zbGXGwTQ==
+X-CSE-MsgGUID: IF8+wWgHQ12q8H07WE6kkw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11159"; a="32868875"
+X-IronPort-AV: E=Sophos;i="6.09,279,1716274800"; 
+   d="scan'208";a="32868875"
+Received: from orviesa009.jf.intel.com ([10.64.159.149])
+  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Aug 2024 04:34:07 -0700
+X-CSE-ConnectionGUID: 8FtRWophSLytCWZO3FSaMQ==
+X-CSE-MsgGUID: mbaM6RRDShyHaAPqLp01wA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.09,279,1716274800"; 
+   d="scan'208";a="57710533"
+Received: from unknown (HELO b6bf6c95bbab) ([10.239.97.151])
+  by orviesa009.jf.intel.com with ESMTP; 10 Aug 2024 04:34:05 -0700
+Received: from kbuild by b6bf6c95bbab with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1sckMA-0009tQ-0o;
+	Sat, 10 Aug 2024 11:33:59 +0000
+Date: Sat, 10 Aug 2024 19:33:39 +0800
+From: kernel test robot <lkp@intel.com>
+To: Fabien Parent <fabien.parent@linaro.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Miguel Ojeda <ojeda@kernel.org>, Asahi Lina <lina@asahilina.net>
+Subject: [rust:pr/1040 11/23] error[E0432]: unresolved import
+ `kernel::define_id_table`
+Message-ID: <202408101913.EhszKOP0-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Thu, 8 Aug 2024 16:52:09 +0800
-kernel test robot <lkp@intel.com> wrote:
+tree:   https://github.com/Rust-for-Linux/linux pr/1040
+head:   2419018fe244d9eaee250fc03cb145b474c575b8
+commit: e890268fddcfb88b4a5378a59fd06b0ba5b02a46 [11/23] ASAHI: rust: device_id: Support passing ID tables to modpost for alias generation
+config: x86_64-rhel-8.3-rust (https://download.01.org/0day-ci/archive/20240810/202408101913.EhszKOP0-lkp@intel.com/config)
+compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240810/202408101913.EhszKOP0-lkp@intel.com/reproduce)
 
-> Hi David,
-> 
-> kernel test robot noticed the following build warnings:
-> 
-> [auto build test WARNING on 7cad163c39cb642ed587d3eeb37a5637ee02740f]
-> 
-> url:    https://github.com/intel-lab-lkp/linux/commits/David-Lechner/iio-adc-ad4695-implement-triggered-buffer/20240808-063333
-> base:   7cad163c39cb642ed587d3eeb37a5637ee02740f
-> patch link:    https://lore.kernel.org/r/20240807-iio-adc-ad4695-buffered-read-v1-1-bdafc39b2283%40baylibre.com
-> patch subject: [PATCH 1/2] iio: adc: ad4695: implement triggered buffer
-> config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20240808/202408081623.ua9EBfoZ-lkp@intel.com/config)
-> compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 408d82d352eb98e2d0a804c66d359cd7a49228fe)
-> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240808/202408081623.ua9EBfoZ-lkp@intel.com/reproduce)
-> 
-> If you fix the issue in a separate patch/commit (i.e. not just a new version of
-> the same patch/commit), kindly add following tags
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes: https://lore.kernel.org/oe-kbuild-all/202408081623.ua9EBfoZ-lkp@intel.com/
-> 
-> All warnings (new ones prefixed by >>):
-> 
->    In file included from drivers/iio/adc/ad4695.c:24:
->    In file included from include/linux/iio/triggered_buffer.h:6:
->    In file included from include/linux/interrupt.h:11:
->    In file included from include/linux/hardirq.h:11:
->    In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
->    In file included from include/asm-generic/hardirq.h:17:
->    In file included from include/linux/irq.h:20:
->    In file included from include/linux/io.h:14:
->    In file included from arch/hexagon/include/asm/io.h:328:
->    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
->      548 |         val = __raw_readb(PCI_IOBASE + addr);
->          |                           ~~~~~~~~~~ ^
->    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
->      561 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
->          |                                                         ~~~~~~~~~~ ^
->    include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
->       37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
->          |                                                   ^
->    In file included from drivers/iio/adc/ad4695.c:24:
->    In file included from include/linux/iio/triggered_buffer.h:6:
->    In file included from include/linux/interrupt.h:11:
->    In file included from include/linux/hardirq.h:11:
->    In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
->    In file included from include/asm-generic/hardirq.h:17:
->    In file included from include/linux/irq.h:20:
->    In file included from include/linux/io.h:14:
->    In file included from arch/hexagon/include/asm/io.h:328:
->    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
->      574 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
->          |                                                         ~~~~~~~~~~ ^
->    include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
->       35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
->          |                                                   ^
->    In file included from drivers/iio/adc/ad4695.c:24:
->    In file included from include/linux/iio/triggered_buffer.h:6:
->    In file included from include/linux/interrupt.h:11:
->    In file included from include/linux/hardirq.h:11:
->    In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
->    In file included from include/asm-generic/hardirq.h:17:
->    In file included from include/linux/irq.h:20:
->    In file included from include/linux/io.h:14:
->    In file included from arch/hexagon/include/asm/io.h:328:
->    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
->      585 |         __raw_writeb(value, PCI_IOBASE + addr);
->          |                             ~~~~~~~~~~ ^
->    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
->      595 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
->          |                                                       ~~~~~~~~~~ ^
->    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
->      605 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
->          |                                                       ~~~~~~~~~~ ^
->    In file included from drivers/iio/adc/ad4695.c:28:
->    In file included from include/linux/regulator/consumer.h:35:
->    In file included from include/linux/suspend.h:5:
->    In file included from include/linux/swap.h:9:
->    In file included from include/linux/memcontrol.h:21:
->    In file included from include/linux/mm.h:2228:
->    include/linux/vmstat.h:514:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
->      514 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
->          |                               ~~~~~~~~~~~ ^ ~~~
-> >> drivers/iio/adc/ad4695.c:454:8: warning: result of comparison of constant 18446744073709551615 with expression of type 'typeof (_Generic((mask), char: (unsigned char)0, unsigned char: (unsigned char)0, signed char: (unsigned char)0, unsigned short: (unsigned short)0, short: (unsigned short)0, unsigned int: (unsigned int)0, int: (unsigned int)0, unsigned long: (unsigned long)0, long: (unsigned long)0, unsigned long long: (unsigned long long)0, long long: (unsigned long long)0, default: (mask)))' (aka 'unsigned int') is always false [-Wtautological-constant-out-of-range-compare]  
->      454 |         val = FIELD_PREP(mask, temp_chan_en ? 1 : 0);
->          |               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->    include/linux/bitfield.h:115:3: note: expanded from macro 'FIELD_PREP'
->      115 |                 __BF_FIELD_CHECK(_mask, 0ULL, _val, "FIELD_PREP: ");    \
->          |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->    include/linux/bitfield.h:72:53: note: expanded from macro '__BF_FIELD_CHECK'
->       72 |                 BUILD_BUG_ON_MSG(__bf_cast_unsigned(_mask, _mask) >     \
->          |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~
->       73 |                                  __bf_cast_unsigned(_reg, ~0ull),       \
->          |                                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->       74 |                                  _pfx "type of reg too small for mask"); \
->          |                                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->    include/linux/build_bug.h:39:58: note: expanded from macro 'BUILD_BUG_ON_MSG'
->       39 | #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
->          |                                     ~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~
->    include/linux/compiler_types.h:510:22: note: expanded from macro 'compiletime_assert'
->      510 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
->          |         ~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->    include/linux/compiler_types.h:498:23: note: expanded from macro '_compiletime_assert'
->      498 |         __compiletime_assert(condition, msg, prefix, suffix)
->          |         ~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->    include/linux/compiler_types.h:490:9: note: expanded from macro '__compiletime_assert'
->      490 |                 if (!(condition))                                       \
->          |                       ^~~~~~~~~
->    8 warnings generated.
-> 
-> 
-> vim +454 drivers/iio/adc/ad4695.c
-> 
->    373	
->    374	static int ad4695_buffer_preenable(struct iio_dev *indio_dev)
->    375	{
->    376		struct ad4695_state *st = iio_priv(indio_dev);
->    377		struct spi_transfer *xfer;
->    378		u8 temp_chan_bit = st->chip_info->num_voltage_inputs;
->    379		bool temp_chan_en = false;
->    380		u32 reg, mask, val, bit, num_xfer, num_slots;
->    381		int ret;
->    382	
->    383		/*
->    384		 * We are using the advanced sequencer since it is the only way to read
->    385		 * multiple channels that allows individual configuration of each
->    386		 * voltage input channel. Slot 0 in the advanced sequencer is used to
->    387		 * account for the gap between trigger polls - we don't read data from
->    388		 * this slot. Each enabled voltage channel is assigned a slot starting
->    389		 * with slot 1.
->    390		 */
->    391		num_slots = 1;
->    392	
->    393		memset(st->buf_read_xfer, 0, sizeof(st->buf_read_xfer));
->    394	
->    395		/* First xfer is only to trigger conversion of slot 1, so no rx. */
->    396		xfer = &st->buf_read_xfer[0];
->    397		xfer->cs_change = 1;
->    398		xfer->delay.value = AD4695_T_CNVL_NS;
->    399		xfer->delay.unit = SPI_DELAY_UNIT_NSECS;
->    400		xfer->cs_change_delay.value = AD4695_T_CONVERT_NS;
->    401		xfer->cs_change_delay.unit = SPI_DELAY_UNIT_NSECS;
->    402		num_xfer = 1;
->    403	
->    404		iio_for_each_active_channel(indio_dev, bit) {
->    405			xfer = &st->buf_read_xfer[num_xfer];
->    406			xfer->bits_per_word = 16;
->    407			xfer->rx_buf = &st->buf[(num_xfer - 1) * 2];
->    408			xfer->len = 2;
->    409			xfer->cs_change = 1;
->    410			xfer->cs_change_delay.value = AD4695_T_CONVERT_NS;
->    411			xfer->cs_change_delay.unit = SPI_DELAY_UNIT_NSECS;
->    412	
->    413			if (bit == temp_chan_bit) {
->    414				temp_chan_en = true;
->    415			} else {
->    416				reg = AD4695_REG_AS_SLOT(num_slots);
->    417				val = FIELD_PREP(AD4695_REG_AS_SLOT_INX, bit);
->    418	
->    419				ret = regmap_write(st->regmap, reg, val);
->    420				if (ret)
->    421					return ret;
->    422	
->    423				num_slots++;
->    424			}
->    425	
->    426			num_xfer++;
->    427		}
->    428	
->    429		/*
->    430		 * Don't keep CS asserted after last xfer. Also triggers conversion of
->    431		 * slot 0.
->    432		 */
->    433		xfer->cs_change = 0;
->    434	
->    435		/**
->    436		 * The advanced sequencer requires that at least 2 slots are enabled.
->    437		 * Since slot 0 is always used for other purposes, we need only 1
->    438		 * enabled voltage channel to meet this requirement. This error will
->    439		 * only happen if only the temperature channel is enabled.
->    440		 */
->    441		if (num_slots < 2) {
->    442			dev_err_ratelimited(&indio_dev->dev,
->    443				"Buffered read requires at least 1 voltage channel enabled\n");
->    444			return -EINVAL;
->    445		}
->    446	
->    447		/*
->    448		 * Temperature channel isn't included in the sequence, but rather
->    449		 * controlled by setting a bit in the TEMP_CTRL register.
->    450		 */
->    451	
->    452		reg = AD4695_REG_TEMP_CTRL;
->    453		mask = AD4695_REG_TEMP_CTRL_TEMP_EN;
->  > 454		val = FIELD_PREP(mask, temp_chan_en ? 1 : 0);
-  
-Probably a case of the compiler somehow failing to squash the local variable.
-I'd just go with
-			val = FIELD_PREP(AD4695_REG_TEMP_CTRL_TEMP_EN,
-					 temp_chan_en ? 1 : 0);
->    455	
->    456		ret = regmap_update_bits(st->regmap, reg, mask, val);
->    457		if (ret)
->    458			return ret;
->    459	
->    460		spi_message_init_with_transfers(&st->buf_read_msg, st->buf_read_xfer,
->    461						num_xfer);
->    462	
->    463		ret = spi_optimize_message(st->spi, &st->buf_read_msg);
->    464		if (ret)
->    465			return ret;
->    466	
->    467		/* This triggers conversion of slot 0. */
->    468		ret = ad4695_enter_advanced_sequencer_mode(st, num_slots);
->    469		if (ret) {
->    470			spi_unoptimize_message(&st->buf_read_msg);
->    471			return ret;
->    472		}
->    473	
->    474		return 0;
->    475	}
->    476	
-> 
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202408101913.EhszKOP0-lkp@intel.com/
 
+All errors (new ones prefixed by >>):
+
+>> error[E0432]: unresolved import `kernel::define_id_table`
+   --> rust/doctests_kernel_generated.rs:715:14
+   |
+   715 | use kernel::{define_id_table, device_id::RawDeviceId};
+   |              ^^^^^^^^^^^^^^^
+   |              |
+   |              no `define_id_table` in the root
+   |              help: a similar name exists in the module: `driver_id_table`
+--
+>> error: cannot find macro `driver_id_table` in this scope
+   --> rust/doctests_kernel_generated.rs:665:1
+   |
+   665 | driver_id_table!(BUS_ID_TABLE, Id, &'static [u8], A1);
+   | ^^^^^^^^^^^^^^^
+   |
+   help: consider importing this macro
+   |
+   3   + use kernel::driver_id_table;
+   |
+--
+>> error: cannot find macro `module_id_table` in this scope
+   --> rust/doctests_kernel_generated.rs:667:1
+   |
+   667 | module_id_table!(MODULE_ID_TABLE, "mybus", Id, A1);
+   | ^^^^^^^^^^^^^^^
+   |
+   help: consider importing this macro
+   |
+   3   + use kernel::module_id_table;
+   |
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
