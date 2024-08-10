@@ -1,61 +1,70 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 29E32107A0;
-	Sat, 10 Aug 2024 19:56:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB0C813D279;
+	Sat, 10 Aug 2024 20:26:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723319801; cv=none; b=QTZGXmJXyhtP4yUNCT8Os7pLXzhwlBBPTsGqZD7AmecTKQTXTXsxNapv4SUfjmSMRKJYnZ4MrYxYeaR85gmTTemIwjUhKmBc3Eo2JayD0Yt9VV2FEAjjJV5iTpIMJfg4BllE6oh0AebaMVY1rDwKKHadHoDupV6iVmvHV0oP+lA=
+	t=1723321620; cv=none; b=Wu3+ObGG5YfuiBF3Ay0YyQ0C7wOsK9ALFz4ahYhzxy5FpBAaLDmbuy1f9egvKgrB9dPjSl75ovaqfdQS9HgUniEHZRaVBC9omCsSO7Y8T0e/1sRk03HWvXrgXNU4H5aQUXOd0WjuwmKlUOvfEJStoA1IPGzgnva88SOR+DZHWo4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723319801; c=relaxed/simple;
-	bh=hjf0zaaue5hnkX6kGEqoO30G79ZAJaRPHHNuZaq2Mks=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=JRFj+ddgbflWehYP6zLzhcV4pL3ghHuuTCF5DOpMSsBPnDW5TFBejgSAWOnuYdvdm/F9MtE3ZsRZoRH2sK4gb++yfxYxSzFm7VNoODJqn+ed1S0kv4ehaaD2Y3kwV4yfGwQWUeLzZmjxxURtPr3x8sbUWt2LSosvopSFjemqXJE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=leY7d8/+; arc=none smtp.client-ip=198.175.65.16
+	s=arc-20240116; t=1723321620; c=relaxed/simple;
+	bh=PvcelU/bNYejzU1CBAvFCW412MVtwEgLhYcwggEXHh4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=KCRs7WYKoJBi0B1cM8Gf/VzSah/pPzVfK1KsCxcYPLBWhFn/3LYbwTmaE+kRE7wXst4+b2EcOERKyc72T1j8187WrIlc3+C+8bUz/g0HDI4e1yq2wOJeSqTAM1MUNN+vxV36TOWYHn6YtCl7wTovBC95aaATcGjZObLlHMUFH/s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ndvahX+R; arc=none smtp.client-ip=192.198.163.16
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="leY7d8/+"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ndvahX+R"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1723319800; x=1754855800;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=hjf0zaaue5hnkX6kGEqoO30G79ZAJaRPHHNuZaq2Mks=;
-  b=leY7d8/+/RBCW4HkHPZzRNlGWFM95/i8PW9BdvuVj/EZQYG7oaxIMZOT
-   JFUN1iu9YCrPqXOWzDXXupeRCU20zquG6A7elOeGbjckvlkrYyWqf8b+C
-   4e5+D2sIzeTFuSV8Em7KM2puUG3rIZavTh9AC2OwYWyRwFgLP0wifsMbZ
-   3TFKk+GIBYgLpOT8okpGaSjAcwTkH2KyYOFv3Sw6MeBoCe3pHBXlRFnoY
-   AfwSjQeye6nssreG1XP7x1KWenlCGtklG6zM3KystSP8FjlkQ9U5AELlz
-   tCrwKP0LfMGDcr19YwW7Xe4zZG2BJ5Y4DCNgaIthbdXuT0A2/m5NbC4M1
-   g==;
-X-CSE-ConnectionGUID: LBsDrAAVQMaWp+AJ71pUFg==
-X-CSE-MsgGUID: kePSrvDVSKqLLSE1uL1+rQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11160"; a="21623916"
+  t=1723321618; x=1754857618;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=PvcelU/bNYejzU1CBAvFCW412MVtwEgLhYcwggEXHh4=;
+  b=ndvahX+RkbQyzwPjugehcaJW7NlvYmwuRsgk1bFZFHmGKmQAXojThbcA
+   /RzunwzfrMtMap8wTWSIHzVPB4QWktF0pLeu5ovn6Jhc06pEKyqhgeHGn
+   ipsIQzPwwR33dfu8OhqipZja78quIQUMXznyxL1vwZLuAcq0Sd97i3t9M
+   r1ioXGeP/Yj2QwWEKkKV1+jQI95ikYy3ag+OXfhN6bmU8+l4jRBJQ4FrX
+   FLTcQVOe4VjtIiTvbG9BFVP81qwYOYGvRQvnHnWwvt4tovMIAUz1gffMj
+   cadDGskWP5EnQSUzPzsZNDTz1onR6ea1x130DjJKT4RwkTqUri0o1T43x
+   Q==;
+X-CSE-ConnectionGUID: UU5IXbiTREOaNjr8FOjGAw==
+X-CSE-MsgGUID: uRuGAVcKTiem+gXdDWDTkA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11160"; a="12949244"
 X-IronPort-AV: E=Sophos;i="6.09,279,1716274800"; 
-   d="scan'208";a="21623916"
-Received: from orviesa004.jf.intel.com ([10.64.159.144])
-  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Aug 2024 12:56:39 -0700
-X-CSE-ConnectionGUID: N5yViwjpTKKqRYTbCxPpDw==
-X-CSE-MsgGUID: OQ1nreOeQgK48Ft6DZr9Ng==
+   d="scan'208";a="12949244"
+Received: from fmviesa001.fm.intel.com ([10.60.135.141])
+  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Aug 2024 13:26:57 -0700
+X-CSE-ConnectionGUID: QvxAfgq/SG2ey7h0sSLnAA==
+X-CSE-MsgGUID: HJktMLTpT829khMLu3uJEw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.09,279,1716274800"; 
-   d="scan'208";a="62812222"
+   d="scan'208";a="88728902"
 Received: from unknown (HELO b6bf6c95bbab) ([10.239.97.151])
-  by orviesa004.jf.intel.com with ESMTP; 10 Aug 2024 12:56:37 -0700
+  by fmviesa001.fm.intel.com with ESMTP; 10 Aug 2024 13:26:53 -0700
 Received: from kbuild by b6bf6c95bbab with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1scsCY-000AFJ-1k;
-	Sat, 10 Aug 2024 19:56:34 +0000
-Date: Sun, 11 Aug 2024 03:55:37 +0800
+	id 1scsfr-000AGv-1R;
+	Sat, 10 Aug 2024 20:26:51 +0000
+Date: Sun, 11 Aug 2024 04:26:07 +0800
 From: kernel test robot <lkp@intel.com>
-To: "Paul E. McKenney" <paulmck@kernel.org>
+To: "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+	Miri Korenblit <miriam.rachel.korenblit@intel.com>,
+	Kalle Valo <kvalo@kernel.org>,
+	Johannes Berg <johannes@sipsolutions.net>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Linux Memory Management List <linux-mm@kvack.org>,
-	Neeraj Upadhyay <neeraj.upadhyay@kernel.org>
-Subject: [linux-next:master 3246/3984] kernel/rcu/rcuscale.c:303:2: error:
- call to undeclared function 'rcu_tasks_torture_stats_print'; ISO C99 and
- later do not support implicit function declarations
-Message-ID: <202408110343.A2yLpRdP-lkp@intel.com>
+	netdev@vger.kernel.org, linux-wireless@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	"Gustavo A. R. Silva" <gustavoars@kernel.org>,
+	linux-hardening@vger.kernel.org
+Subject: Re: [PATCH v2][next] wifi: iwlwifi: mvm: Use __counted_by() and
+ avoid -Wfamnae warnings
+Message-ID: <202408110634.V68RFEtW-lkp@intel.com>
+References: <ZrZs5KL5Pz9tIinr@cute>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -64,138 +73,174 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <ZrZs5KL5Pz9tIinr@cute>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-head:   61c01d2e181adfba02fe09764f9fca1de2be0dbe
-commit: 628ea78b8d1057d4709b38730a1f181e9607ad23 [3246/3984] rcuscale: Print detailed grace-period and barrier diagnostics
-config: x86_64-randconfig-074-20240809 (https://download.01.org/0day-ci/archive/20240811/202408110343.A2yLpRdP-lkp@intel.com/config)
-compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240811/202408110343.A2yLpRdP-lkp@intel.com/reproduce)
+Hi Gustavo,
+
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on wireless-next/main]
+[also build test ERROR on wireless/main linus/master v6.11-rc2 next-20240809]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Gustavo-A-R-Silva/wifi-iwlwifi-mvm-Use-__counted_by-and-avoid-Wfamnae-warnings/20240810-103759
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/wireless/wireless-next.git main
+patch link:    https://lore.kernel.org/r/ZrZs5KL5Pz9tIinr%40cute
+patch subject: [PATCH v2][next] wifi: iwlwifi: mvm: Use __counted_by() and avoid -Wfamnae warnings
+config: riscv-allmodconfig (https://download.01.org/0day-ci/archive/20240811/202408110634.V68RFEtW-lkp@intel.com/config)
+compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project f86594788ce93b696675c94f54016d27a6c21d18)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240811/202408110634.V68RFEtW-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202408110343.A2yLpRdP-lkp@intel.com/
-
-Note: the linux-next/master HEAD 61c01d2e181adfba02fe09764f9fca1de2be0dbe builds fine.
-      It may have been fixed somewhere.
+| Closes: https://lore.kernel.org/oe-kbuild-all/202408110634.V68RFEtW-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> kernel/rcu/rcuscale.c:303:2: error: call to undeclared function 'rcu_tasks_torture_stats_print'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     303 |         rcu_tasks_torture_stats_print(scale_type, SCALE_FLAG);
+   In file included from drivers/net/wireless/intel/iwlwifi/mvm/d3.c:7:
+   In file included from include/linux/etherdevice.h:20:
+   In file included from include/linux/if_ether.h:19:
+   In file included from include/linux/skbuff.h:17:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:8:
+   In file included from include/linux/cacheflush.h:5:
+   In file included from arch/riscv/include/asm/cacheflush.h:9:
+   In file included from include/linux/mm.h:2228:
+   include/linux/vmstat.h:500:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     500 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     501 |                            item];
+         |                            ~~~~
+   include/linux/vmstat.h:507:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     507 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     508 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/vmstat.h:514:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     514 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+   include/linux/vmstat.h:519:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     519 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     520 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/vmstat.h:528:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     528 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     529 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+>> drivers/net/wireless/intel/iwlwifi/mvm/d3.c:2149:2: error: call to '__compiletime_assert_1044' declared with 'error' attribute: BUILD_BUG_ON failed: conf->keylen < WLAN_KEY_LEN_GCMP_256
+    2149 |         BUILD_BUG_ON(conf->keylen < WLAN_KEY_LEN_GCMP_256);
          |         ^
-   kernel/rcu/rcuscale.c:303:2: note: did you mean 'srcu_torture_stats_print'?
-   include/linux/srcutree.h:192:6: note: 'srcu_torture_stats_print' declared here
-     192 | void srcu_torture_stats_print(struct srcu_struct *ssp, char *tt, char *tf);
-         |      ^
->> kernel/rcu/rcuscale.c:347:2: error: call to undeclared function 'rcu_tasks_rude_torture_stats_print'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     347 |         rcu_tasks_rude_torture_stats_print(scale_type, SCALE_FLAG);
+   include/linux/build_bug.h:50:2: note: expanded from macro 'BUILD_BUG_ON'
+      50 |         BUILD_BUG_ON_MSG(condition, "BUILD_BUG_ON failed: " #condition)
          |         ^
->> kernel/rcu/rcuscale.c:393:2: error: call to undeclared function 'rcu_tasks_trace_torture_stats_print'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     393 |         rcu_tasks_trace_torture_stats_print(scale_type, SCALE_FLAG);
+   include/linux/build_bug.h:39:37: note: expanded from macro 'BUILD_BUG_ON_MSG'
+      39 | #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
+         |                                     ^
+   include/linux/compiler_types.h:510:2: note: expanded from macro 'compiletime_assert'
+     510 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
          |         ^
-   3 errors generated.
+   include/linux/compiler_types.h:498:2: note: expanded from macro '_compiletime_assert'
+     498 |         __compiletime_assert(condition, msg, prefix, suffix)
+         |         ^
+   include/linux/compiler_types.h:491:4: note: expanded from macro '__compiletime_assert'
+     491 |                         prefix ## suffix();                             \
+         |                         ^
+   <scratch space>:38:1: note: expanded from here
+      38 | __compiletime_assert_1044
+         | ^
+>> drivers/net/wireless/intel/iwlwifi/mvm/d3.c:2148:2: error: call to '__compiletime_assert_1043' declared with 'error' attribute: BUILD_BUG_ON failed: conf->keylen < WLAN_KEY_LEN_CCMP
+    2148 |         BUILD_BUG_ON(conf->keylen < WLAN_KEY_LEN_CCMP);
+         |         ^
+   include/linux/build_bug.h:50:2: note: expanded from macro 'BUILD_BUG_ON'
+      50 |         BUILD_BUG_ON_MSG(condition, "BUILD_BUG_ON failed: " #condition)
+         |         ^
+   include/linux/build_bug.h:39:37: note: expanded from macro 'BUILD_BUG_ON_MSG'
+      39 | #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
+         |                                     ^
+   include/linux/compiler_types.h:510:2: note: expanded from macro 'compiletime_assert'
+     510 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+         |         ^
+   include/linux/compiler_types.h:498:2: note: expanded from macro '_compiletime_assert'
+     498 |         __compiletime_assert(condition, msg, prefix, suffix)
+         |         ^
+   include/linux/compiler_types.h:491:4: note: expanded from macro '__compiletime_assert'
+     491 |                         prefix ## suffix();                             \
+         |                         ^
+   <scratch space>:34:1: note: expanded from here
+      34 | __compiletime_assert_1043
+         | ^
+   5 warnings and 2 errors generated.
 
 
-vim +/rcu_tasks_torture_stats_print +303 kernel/rcu/rcuscale.c
+vim +2149 drivers/net/wireless/intel/iwlwifi/mvm/d3.c
 
-   300	
-   301	static void rcu_tasks_scale_stats(void)
-   302	{
- > 303		rcu_tasks_torture_stats_print(scale_type, SCALE_FLAG);
-   304	}
-   305	
-   306	static struct rcu_scale_ops tasks_ops = {
-   307		.ptype		= RCU_TASKS_FLAVOR,
-   308		.init		= rcu_sync_scale_init,
-   309		.readlock	= tasks_scale_read_lock,
-   310		.readunlock	= tasks_scale_read_unlock,
-   311		.get_gp_seq	= rcu_no_completed,
-   312		.gp_diff	= rcu_seq_diff,
-   313		.async		= call_rcu_tasks,
-   314		.gp_barrier	= rcu_barrier_tasks,
-   315		.sync		= synchronize_rcu_tasks,
-   316		.exp_sync	= synchronize_rcu_tasks,
-   317		.rso_gp_kthread	= get_rcu_tasks_gp_kthread,
-   318		.stats		= IS_ENABLED(CONFIG_TINY_RCU) ? NULL : rcu_tasks_scale_stats,
-   319		.name		= "tasks"
-   320	};
-   321	
-   322	#define TASKS_OPS &tasks_ops,
-   323	
-   324	#else // #ifdef CONFIG_TASKS_RCU
-   325	
-   326	#define TASKS_OPS
-   327	
-   328	#endif // #else // #ifdef CONFIG_TASKS_RCU
-   329	
-   330	#ifdef CONFIG_TASKS_RUDE_RCU
-   331	
-   332	/*
-   333	 * Definitions for RCU-tasks-rude scalability testing.
-   334	 */
-   335	
-   336	static int tasks_rude_scale_read_lock(void)
-   337	{
-   338		return 0;
-   339	}
-   340	
-   341	static void tasks_rude_scale_read_unlock(int idx)
-   342	{
-   343	}
-   344	
-   345	static void rcu_tasks_rude_scale_stats(void)
-   346	{
- > 347		rcu_tasks_rude_torture_stats_print(scale_type, SCALE_FLAG);
-   348	}
-   349	
-   350	static struct rcu_scale_ops tasks_rude_ops = {
-   351		.ptype		= RCU_TASKS_RUDE_FLAVOR,
-   352		.init		= rcu_sync_scale_init,
-   353		.readlock	= tasks_rude_scale_read_lock,
-   354		.readunlock	= tasks_rude_scale_read_unlock,
-   355		.get_gp_seq	= rcu_no_completed,
-   356		.gp_diff	= rcu_seq_diff,
-   357		.async		= call_rcu_tasks_rude,
-   358		.gp_barrier	= rcu_barrier_tasks_rude,
-   359		.sync		= synchronize_rcu_tasks_rude,
-   360		.exp_sync	= synchronize_rcu_tasks_rude,
-   361		.rso_gp_kthread	= get_rcu_tasks_rude_gp_kthread,
-   362		.stats		= IS_ENABLED(CONFIG_TINY_RCU) ? NULL : rcu_tasks_rude_scale_stats,
-   363		.name		= "tasks-rude"
-   364	};
-   365	
-   366	#define TASKS_RUDE_OPS &tasks_rude_ops,
-   367	
-   368	#else // #ifdef CONFIG_TASKS_RUDE_RCU
-   369	
-   370	#define TASKS_RUDE_OPS
-   371	
-   372	#endif // #else // #ifdef CONFIG_TASKS_RUDE_RCU
-   373	
-   374	#ifdef CONFIG_TASKS_TRACE_RCU
-   375	
-   376	/*
-   377	 * Definitions for RCU-tasks-trace scalability testing.
-   378	 */
-   379	
-   380	static int tasks_trace_scale_read_lock(void)
-   381	{
-   382		rcu_read_lock_trace();
-   383		return 0;
-   384	}
-   385	
-   386	static void tasks_trace_scale_read_unlock(int idx)
-   387	{
-   388		rcu_read_unlock_trace();
-   389	}
-   390	
-   391	static void rcu_tasks_trace_scale_stats(void)
-   392	{
- > 393		rcu_tasks_trace_torture_stats_print(scale_type, SCALE_FLAG);
-   394	}
-   395	
+  2134	
+  2135	static bool iwl_mvm_gtk_rekey(struct iwl_wowlan_status_data *status,
+  2136				      struct ieee80211_vif *vif,
+  2137				      struct iwl_mvm *mvm, u32 gtk_cipher)
+  2138	{
+  2139		int i, j;
+  2140		struct ieee80211_key_conf *key;
+  2141		DEFINE_FLEX(struct ieee80211_key_conf, conf, key, keylen,
+  2142			    WOWLAN_KEY_MAX_SIZE);
+  2143		int link_id = vif->active_links ? __ffs(vif->active_links) : -1;
+  2144	
+  2145		conf->cipher = gtk_cipher;
+  2146	
+  2147		BUILD_BUG_ON(WLAN_KEY_LEN_CCMP != WLAN_KEY_LEN_GCMP);
+> 2148		BUILD_BUG_ON(conf->keylen < WLAN_KEY_LEN_CCMP);
+> 2149		BUILD_BUG_ON(conf->keylen < WLAN_KEY_LEN_GCMP_256);
+  2150		BUILD_BUG_ON(conf->keylen < WLAN_KEY_LEN_TKIP);
+  2151		BUILD_BUG_ON(conf->keylen < sizeof(status->gtk[0].key));
+  2152	
+  2153		switch (gtk_cipher) {
+  2154		case WLAN_CIPHER_SUITE_CCMP:
+  2155		case WLAN_CIPHER_SUITE_GCMP:
+  2156			conf->keylen = WLAN_KEY_LEN_CCMP;
+  2157			break;
+  2158		case WLAN_CIPHER_SUITE_GCMP_256:
+  2159			conf->keylen = WLAN_KEY_LEN_GCMP_256;
+  2160			break;
+  2161		case WLAN_CIPHER_SUITE_TKIP:
+  2162			conf->keylen = WLAN_KEY_LEN_TKIP;
+  2163			break;
+  2164		default:
+  2165			WARN_ON(1);
+  2166		}
+  2167	
+  2168		for (i = 0; i < ARRAY_SIZE(status->gtk); i++) {
+  2169			if (!status->gtk[i].len)
+  2170				continue;
+  2171	
+  2172			conf->keyidx = status->gtk[i].id;
+  2173			IWL_DEBUG_WOWLAN(mvm,
+  2174					 "Received from FW GTK cipher %d, key index %d\n",
+  2175					 conf->cipher, conf->keyidx);
+  2176			memcpy(conf->key, status->gtk[i].key,
+  2177			       sizeof(status->gtk[i].key));
+  2178	
+  2179			key = ieee80211_gtk_rekey_add(vif, conf, link_id);
+  2180			if (IS_ERR(key))
+  2181				return false;
+  2182	
+  2183			for (j = 0; j < ARRAY_SIZE(status->gtk_seq); j++) {
+  2184				if (!status->gtk_seq[j].valid ||
+  2185				    status->gtk_seq[j].key_id != key->keyidx)
+  2186					continue;
+  2187				iwl_mvm_set_key_rx_seq_idx(key, status, j);
+  2188				break;
+  2189			}
+  2190			WARN_ON(j == ARRAY_SIZE(status->gtk_seq));
+  2191		}
+  2192	
+  2193		return true;
+  2194	}
+  2195	
 
 -- 
 0-DAY CI Kernel Test Service
