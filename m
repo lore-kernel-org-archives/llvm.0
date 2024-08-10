@@ -1,70 +1,59 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB0C813D279;
-	Sat, 10 Aug 2024 20:26:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9FD1B22083;
+	Sat, 10 Aug 2024 20:36:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723321620; cv=none; b=Wu3+ObGG5YfuiBF3Ay0YyQ0C7wOsK9ALFz4ahYhzxy5FpBAaLDmbuy1f9egvKgrB9dPjSl75ovaqfdQS9HgUniEHZRaVBC9omCsSO7Y8T0e/1sRk03HWvXrgXNU4H5aQUXOd0WjuwmKlUOvfEJStoA1IPGzgnva88SOR+DZHWo4=
+	t=1723322217; cv=none; b=dVjvRlKPSIO4AdEKPfV1UXrfoFljE5SxHsvtOFlaOBMKYCLPVLjoPiKsogc5C9lMRvRGZSZ1FsKr76+Z8S3OIsAvKKYbmyedoAgicC4v1aMPPLJh99T/2w/SV7bsbEv8ylkpDy8lR26VjtLUhyEjljeO9a4PcaoM5SZixWXNGyw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723321620; c=relaxed/simple;
-	bh=PvcelU/bNYejzU1CBAvFCW412MVtwEgLhYcwggEXHh4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=KCRs7WYKoJBi0B1cM8Gf/VzSah/pPzVfK1KsCxcYPLBWhFn/3LYbwTmaE+kRE7wXst4+b2EcOERKyc72T1j8187WrIlc3+C+8bUz/g0HDI4e1yq2wOJeSqTAM1MUNN+vxV36TOWYHn6YtCl7wTovBC95aaATcGjZObLlHMUFH/s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ndvahX+R; arc=none smtp.client-ip=192.198.163.16
+	s=arc-20240116; t=1723322217; c=relaxed/simple;
+	bh=PTOJcH7pH3ih4Hd0fwChpy8C1RPFYOVZo486bSHNO1U=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=esYCj832MpvgDUdGCEMWysFGo2lecdsDfTN7SMDRb8pfXEk/Qggiy6fwW7cdWnwkOkYXt60GNAt2PnCKE1DcqI0SDA8tEYc8V2AfvYGZarX4u0uP+NTBm31j+ofrU43SSh7mYrxd2AwgbYmHLR+aHglgn9ClcqUhp00a5eCiGPI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=JaJdFwiM; arc=none smtp.client-ip=198.175.65.15
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ndvahX+R"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="JaJdFwiM"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1723321618; x=1754857618;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=PvcelU/bNYejzU1CBAvFCW412MVtwEgLhYcwggEXHh4=;
-  b=ndvahX+RkbQyzwPjugehcaJW7NlvYmwuRsgk1bFZFHmGKmQAXojThbcA
-   /RzunwzfrMtMap8wTWSIHzVPB4QWktF0pLeu5ovn6Jhc06pEKyqhgeHGn
-   ipsIQzPwwR33dfu8OhqipZja78quIQUMXznyxL1vwZLuAcq0Sd97i3t9M
-   r1ioXGeP/Yj2QwWEKkKV1+jQI95ikYy3ag+OXfhN6bmU8+l4jRBJQ4FrX
-   FLTcQVOe4VjtIiTvbG9BFVP81qwYOYGvRQvnHnWwvt4tovMIAUz1gffMj
-   cadDGskWP5EnQSUzPzsZNDTz1onR6ea1x130DjJKT4RwkTqUri0o1T43x
+  t=1723322216; x=1754858216;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=PTOJcH7pH3ih4Hd0fwChpy8C1RPFYOVZo486bSHNO1U=;
+  b=JaJdFwiMW0qqpcY32Jdwxjpuiy6mRHCaBo/BeeR1wlya09qlT1RL1Eyc
+   MUHWPgM0nd7KyzefqXTdRvwp/QHfV0YA+/UFhZvPO5Sti52wDY2Socadr
+   D2mvvORWJADnappZIdLxTDSyvG9mVbe3ui6s6b6N7qt/1AY4kP0xGUvRg
+   QN9xKqCvRGcVrwztLAANYwzZIhspMJFsFQ6v7qtzeDs7WgReAdVd3tJyc
+   wpFTe36TgHD/yGGgFNJxI3+jRSWDgdq6NlWvCt0CjQ5HwIxyRpip+zN2C
+   jL61xQuCuGEAZTK7V4WL7/uZIxgMvsCLDOuWpE2btd+KDZyRRA76EJ18O
    Q==;
-X-CSE-ConnectionGUID: UU5IXbiTREOaNjr8FOjGAw==
-X-CSE-MsgGUID: uRuGAVcKTiem+gXdDWDTkA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11160"; a="12949244"
+X-CSE-ConnectionGUID: /wdYPUVvTpG7t/LSECB/Bw==
+X-CSE-MsgGUID: bOq/qidsQT6Bv4TreVYBnw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11160"; a="25241578"
 X-IronPort-AV: E=Sophos;i="6.09,279,1716274800"; 
-   d="scan'208";a="12949244"
-Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Aug 2024 13:26:57 -0700
-X-CSE-ConnectionGUID: QvxAfgq/SG2ey7h0sSLnAA==
-X-CSE-MsgGUID: HJktMLTpT829khMLu3uJEw==
+   d="scan'208";a="25241578"
+Received: from fmviesa010.fm.intel.com ([10.60.135.150])
+  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Aug 2024 13:36:55 -0700
+X-CSE-ConnectionGUID: O7I0MMzjRfG2PnO4b2dmzw==
+X-CSE-MsgGUID: nN4TB/0wSbKbMgJePJuHwA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.09,279,1716274800"; 
-   d="scan'208";a="88728902"
+   d="scan'208";a="57954580"
 Received: from unknown (HELO b6bf6c95bbab) ([10.239.97.151])
-  by fmviesa001.fm.intel.com with ESMTP; 10 Aug 2024 13:26:53 -0700
+  by fmviesa010.fm.intel.com with ESMTP; 10 Aug 2024 13:36:53 -0700
 Received: from kbuild by b6bf6c95bbab with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1scsfr-000AGv-1R;
-	Sat, 10 Aug 2024 20:26:51 +0000
-Date: Sun, 11 Aug 2024 04:26:07 +0800
+	id 1scspX-000AH5-1k;
+	Sat, 10 Aug 2024 20:36:51 +0000
+Date: Sun, 11 Aug 2024 04:36:48 +0800
 From: kernel test robot <lkp@intel.com>
-To: "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-	Miri Korenblit <miriam.rachel.korenblit@intel.com>,
-	Kalle Valo <kvalo@kernel.org>,
-	Johannes Berg <johannes@sipsolutions.net>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	netdev@vger.kernel.org, linux-wireless@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	"Gustavo A. R. Silva" <gustavoars@kernel.org>,
-	linux-hardening@vger.kernel.org
-Subject: Re: [PATCH v2][next] wifi: iwlwifi: mvm: Use __counted_by() and
- avoid -Wfamnae warnings
-Message-ID: <202408110634.V68RFEtW-lkp@intel.com>
-References: <ZrZs5KL5Pz9tIinr@cute>
+To: Chun-Kuang Hu <chunkuang.hu@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [chunkuang-hu:mediatek-cmdq11 3/5]
+ drivers/media/platform/mediatek/mdp3/mtk-mdp3-core.c:317:54: error: member
+ reference base type 'struct cmdq_client *' is not a structure or union
+Message-ID: <202408110426.qXOFX95X-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -73,174 +62,186 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <ZrZs5KL5Pz9tIinr@cute>
 
-Hi Gustavo,
-
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on wireless-next/main]
-[also build test ERROR on wireless/main linus/master v6.11-rc2 next-20240809]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Gustavo-A-R-Silva/wifi-iwlwifi-mvm-Use-__counted_by-and-avoid-Wfamnae-warnings/20240810-103759
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/wireless/wireless-next.git main
-patch link:    https://lore.kernel.org/r/ZrZs5KL5Pz9tIinr%40cute
-patch subject: [PATCH v2][next] wifi: iwlwifi: mvm: Use __counted_by() and avoid -Wfamnae warnings
-config: riscv-allmodconfig (https://download.01.org/0day-ci/archive/20240811/202408110634.V68RFEtW-lkp@intel.com/config)
-compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project f86594788ce93b696675c94f54016d27a6c21d18)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240811/202408110634.V68RFEtW-lkp@intel.com/reproduce)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/chunkuang.hu/linux.git mediatek-cmdq11
+head:   e9ea7ca7912d1950de8e4427d644379321a1dbcb
+commit: e049aa93ad2a983301a86570199d254379732d2d [3/5] media: platform: mtk-mdp3: Get fine-grain control of cmdq_pkt_finalize()
+config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20240811/202408110426.qXOFX95X-lkp@intel.com/config)
+compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240811/202408110426.qXOFX95X-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202408110634.V68RFEtW-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202408110426.qXOFX95X-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
-   In file included from drivers/net/wireless/intel/iwlwifi/mvm/d3.c:7:
-   In file included from include/linux/etherdevice.h:20:
-   In file included from include/linux/if_ether.h:19:
-   In file included from include/linux/skbuff.h:17:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:8:
-   In file included from include/linux/cacheflush.h:5:
-   In file included from arch/riscv/include/asm/cacheflush.h:9:
-   In file included from include/linux/mm.h:2228:
-   include/linux/vmstat.h:500:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     500 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     501 |                            item];
-         |                            ~~~~
-   include/linux/vmstat.h:507:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     507 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     508 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/vmstat.h:514:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     514 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
-   include/linux/vmstat.h:519:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     519 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     520 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/vmstat.h:528:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     528 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     529 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
->> drivers/net/wireless/intel/iwlwifi/mvm/d3.c:2149:2: error: call to '__compiletime_assert_1044' declared with 'error' attribute: BUILD_BUG_ON failed: conf->keylen < WLAN_KEY_LEN_GCMP_256
-    2149 |         BUILD_BUG_ON(conf->keylen < WLAN_KEY_LEN_GCMP_256);
-         |         ^
-   include/linux/build_bug.h:50:2: note: expanded from macro 'BUILD_BUG_ON'
-      50 |         BUILD_BUG_ON_MSG(condition, "BUILD_BUG_ON failed: " #condition)
-         |         ^
-   include/linux/build_bug.h:39:37: note: expanded from macro 'BUILD_BUG_ON_MSG'
-      39 | #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
-         |                                     ^
-   include/linux/compiler_types.h:510:2: note: expanded from macro 'compiletime_assert'
-     510 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-         |         ^
-   include/linux/compiler_types.h:498:2: note: expanded from macro '_compiletime_assert'
-     498 |         __compiletime_assert(condition, msg, prefix, suffix)
-         |         ^
-   include/linux/compiler_types.h:491:4: note: expanded from macro '__compiletime_assert'
-     491 |                         prefix ## suffix();                             \
-         |                         ^
-   <scratch space>:38:1: note: expanded from here
-      38 | __compiletime_assert_1044
-         | ^
->> drivers/net/wireless/intel/iwlwifi/mvm/d3.c:2148:2: error: call to '__compiletime_assert_1043' declared with 'error' attribute: BUILD_BUG_ON failed: conf->keylen < WLAN_KEY_LEN_CCMP
-    2148 |         BUILD_BUG_ON(conf->keylen < WLAN_KEY_LEN_CCMP);
-         |         ^
-   include/linux/build_bug.h:50:2: note: expanded from macro 'BUILD_BUG_ON'
-      50 |         BUILD_BUG_ON_MSG(condition, "BUILD_BUG_ON failed: " #condition)
-         |         ^
-   include/linux/build_bug.h:39:37: note: expanded from macro 'BUILD_BUG_ON_MSG'
-      39 | #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
-         |                                     ^
-   include/linux/compiler_types.h:510:2: note: expanded from macro 'compiletime_assert'
-     510 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-         |         ^
-   include/linux/compiler_types.h:498:2: note: expanded from macro '_compiletime_assert'
-     498 |         __compiletime_assert(condition, msg, prefix, suffix)
-         |         ^
-   include/linux/compiler_types.h:491:4: note: expanded from macro '__compiletime_assert'
-     491 |                         prefix ## suffix();                             \
-         |                         ^
-   <scratch space>:34:1: note: expanded from here
-      34 | __compiletime_assert_1043
-         | ^
-   5 warnings and 2 errors generated.
+>> drivers/media/platform/mediatek/mdp3/mtk-mdp3-core.c:317:54: error: member reference base type 'struct cmdq_client *' is not a structure or union
+     317 |         mdp->cmdq_shift_pa = cmdq_get_shift_pa(mdp->cmdq_clt->chan);
+         |                                                ~~~~~~~~~~~~~^ ~~~~
+   drivers/media/platform/mediatek/mdp3/mtk-mdp3-core.c:323:46: warning: implicit conversion from 'unsigned long long' to 'unsigned int' changes value from 18446744073709551615 to 4294967295 [-Wconstant-conversion]
+     323 |         vb2_dma_contig_set_max_seg_size(&pdev->dev, DMA_BIT_MASK(32));
+         |         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~             ^~~~~~~~~~~~~~~~
+   include/linux/dma-mapping.h:77:40: note: expanded from macro 'DMA_BIT_MASK'
+      77 | #define DMA_BIT_MASK(n) (((n) == 64) ? ~0ULL : ((1ULL<<(n))-1))
+         |                                        ^~~~~
+   1 warning and 1 error generated.
 
 
-vim +2149 drivers/net/wireless/intel/iwlwifi/mvm/d3.c
+vim +317 drivers/media/platform/mediatek/mdp3/mtk-mdp3-core.c
 
-  2134	
-  2135	static bool iwl_mvm_gtk_rekey(struct iwl_wowlan_status_data *status,
-  2136				      struct ieee80211_vif *vif,
-  2137				      struct iwl_mvm *mvm, u32 gtk_cipher)
-  2138	{
-  2139		int i, j;
-  2140		struct ieee80211_key_conf *key;
-  2141		DEFINE_FLEX(struct ieee80211_key_conf, conf, key, keylen,
-  2142			    WOWLAN_KEY_MAX_SIZE);
-  2143		int link_id = vif->active_links ? __ffs(vif->active_links) : -1;
-  2144	
-  2145		conf->cipher = gtk_cipher;
-  2146	
-  2147		BUILD_BUG_ON(WLAN_KEY_LEN_CCMP != WLAN_KEY_LEN_GCMP);
-> 2148		BUILD_BUG_ON(conf->keylen < WLAN_KEY_LEN_CCMP);
-> 2149		BUILD_BUG_ON(conf->keylen < WLAN_KEY_LEN_GCMP_256);
-  2150		BUILD_BUG_ON(conf->keylen < WLAN_KEY_LEN_TKIP);
-  2151		BUILD_BUG_ON(conf->keylen < sizeof(status->gtk[0].key));
-  2152	
-  2153		switch (gtk_cipher) {
-  2154		case WLAN_CIPHER_SUITE_CCMP:
-  2155		case WLAN_CIPHER_SUITE_GCMP:
-  2156			conf->keylen = WLAN_KEY_LEN_CCMP;
-  2157			break;
-  2158		case WLAN_CIPHER_SUITE_GCMP_256:
-  2159			conf->keylen = WLAN_KEY_LEN_GCMP_256;
-  2160			break;
-  2161		case WLAN_CIPHER_SUITE_TKIP:
-  2162			conf->keylen = WLAN_KEY_LEN_TKIP;
-  2163			break;
-  2164		default:
-  2165			WARN_ON(1);
-  2166		}
-  2167	
-  2168		for (i = 0; i < ARRAY_SIZE(status->gtk); i++) {
-  2169			if (!status->gtk[i].len)
-  2170				continue;
-  2171	
-  2172			conf->keyidx = status->gtk[i].id;
-  2173			IWL_DEBUG_WOWLAN(mvm,
-  2174					 "Received from FW GTK cipher %d, key index %d\n",
-  2175					 conf->cipher, conf->keyidx);
-  2176			memcpy(conf->key, status->gtk[i].key,
-  2177			       sizeof(status->gtk[i].key));
-  2178	
-  2179			key = ieee80211_gtk_rekey_add(vif, conf, link_id);
-  2180			if (IS_ERR(key))
-  2181				return false;
-  2182	
-  2183			for (j = 0; j < ARRAY_SIZE(status->gtk_seq); j++) {
-  2184				if (!status->gtk_seq[j].valid ||
-  2185				    status->gtk_seq[j].key_id != key->keyidx)
-  2186					continue;
-  2187				iwl_mvm_set_key_rx_seq_idx(key, status, j);
-  2188				break;
-  2189			}
-  2190			WARN_ON(j == ARRAY_SIZE(status->gtk_seq));
-  2191		}
-  2192	
-  2193		return true;
-  2194	}
-  2195	
+   221	
+   222	static int mdp_probe(struct platform_device *pdev)
+   223	{
+   224		struct device *dev = &pdev->dev;
+   225		struct mdp_dev *mdp;
+   226		struct platform_device *mm_pdev;
+   227		struct resource *res;
+   228		int ret, i, mutex_id;
+   229	
+   230		mdp = kzalloc(sizeof(*mdp), GFP_KERNEL);
+   231		if (!mdp) {
+   232			ret = -ENOMEM;
+   233			goto err_return;
+   234		}
+   235	
+   236		mdp->pdev = pdev;
+   237		mdp->mdp_data = of_device_get_match_data(&pdev->dev);
+   238	
+   239		res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+   240		if (res->start != mdp->mdp_data->mdp_con_res) {
+   241			platform_set_drvdata(pdev, mdp);
+   242			goto success_return;
+   243		}
+   244	
+   245		ret = mdp_mm_subsys_deploy(mdp, MDP_INFRA_MMSYS);
+   246		if (ret)
+   247			goto err_destroy_device;
+   248	
+   249		ret = mdp_mm_subsys_deploy(mdp, MDP_INFRA_MUTEX);
+   250		if (ret)
+   251			goto err_destroy_device;
+   252	
+   253		for (i = 0; i < mdp->mdp_data->pipe_info_len; i++) {
+   254			enum mdp_mm_subsys_id idx;
+   255			struct mtk_mutex **m;
+   256	
+   257			idx = mdp->mdp_data->pipe_info[i].sub_id;
+   258			mutex_id = mdp->mdp_data->pipe_info[i].mutex_id;
+   259			m = &mdp->mm_subsys[idx].mdp_mutex[mutex_id];
+   260	
+   261			if (!IS_ERR_OR_NULL(*m))
+   262				continue;
+   263	
+   264			*m = mtk_mutex_get(mdp->mm_subsys[idx].mutex);
+   265			if (IS_ERR(*m)) {
+   266				ret = PTR_ERR(*m);
+   267				goto err_free_mutex;
+   268			}
+   269		}
+   270	
+   271		ret = mdp_comp_config(mdp);
+   272		if (ret) {
+   273			dev_err(dev, "Failed to config mdp components\n");
+   274			goto err_free_mutex;
+   275		}
+   276	
+   277		mdp->job_wq = alloc_workqueue(MDP_MODULE_NAME, WQ_FREEZABLE, 0);
+   278		if (!mdp->job_wq) {
+   279			dev_err(dev, "Unable to create job workqueue\n");
+   280			ret = -ENOMEM;
+   281			goto err_deinit_comp;
+   282		}
+   283	
+   284		mdp->clock_wq = alloc_workqueue(MDP_MODULE_NAME "-clock", WQ_FREEZABLE,
+   285						0);
+   286		if (!mdp->clock_wq) {
+   287			dev_err(dev, "Unable to create clock workqueue\n");
+   288			ret = -ENOMEM;
+   289			goto err_destroy_job_wq;
+   290		}
+   291	
+   292		mdp->scp = scp_get(pdev);
+   293		if (!mdp->scp) {
+   294			mm_pdev = __get_pdev_by_id(pdev, NULL, MDP_INFRA_SCP);
+   295			if (WARN_ON(!mm_pdev)) {
+   296				dev_err(&pdev->dev, "Could not get scp device\n");
+   297				ret = -ENODEV;
+   298				goto err_destroy_clock_wq;
+   299			}
+   300			mdp->scp = platform_get_drvdata(mm_pdev);
+   301		}
+   302	
+   303		mdp->rproc_handle = scp_get_rproc(mdp->scp);
+   304		dev_dbg(&pdev->dev, "MDP rproc_handle: %pK", mdp->rproc_handle);
+   305	
+   306		mutex_init(&mdp->vpu_lock);
+   307		mutex_init(&mdp->m2m_lock);
+   308	
+   309		for (i = 0; i < mdp->mdp_data->pp_used; i++) {
+   310			mdp->cmdq_clt[i] = cmdq_mbox_create(dev, i);
+   311			if (IS_ERR(mdp->cmdq_clt[i])) {
+   312				ret = PTR_ERR(mdp->cmdq_clt[i]);
+   313				goto err_mbox_destroy;
+   314			}
+   315		}
+   316	
+ > 317		mdp->cmdq_shift_pa = cmdq_get_shift_pa(mdp->cmdq_clt->chan);
+   318	
+   319		init_waitqueue_head(&mdp->callback_wq);
+   320		ida_init(&mdp->mdp_ida);
+   321		platform_set_drvdata(pdev, mdp);
+   322	
+   323		vb2_dma_contig_set_max_seg_size(&pdev->dev, DMA_BIT_MASK(32));
+   324	
+   325		ret = v4l2_device_register(dev, &mdp->v4l2_dev);
+   326		if (ret) {
+   327			dev_err(dev, "Failed to register v4l2 device\n");
+   328			ret = -EINVAL;
+   329			goto err_mbox_destroy;
+   330		}
+   331	
+   332		ret = mdp_m2m_device_register(mdp);
+   333		if (ret) {
+   334			v4l2_err(&mdp->v4l2_dev, "Failed to register m2m device\n");
+   335			goto err_unregister_device;
+   336		}
+   337	
+   338	success_return:
+   339		dev_dbg(dev, "mdp-%d registered successfully\n", pdev->id);
+   340		return 0;
+   341	
+   342	err_unregister_device:
+   343		v4l2_device_unregister(&mdp->v4l2_dev);
+   344	err_mbox_destroy:
+   345		while (--i >= 0)
+   346			cmdq_mbox_destroy(mdp->cmdq_clt[i]);
+   347		scp_put(mdp->scp);
+   348	err_destroy_clock_wq:
+   349		destroy_workqueue(mdp->clock_wq);
+   350	err_destroy_job_wq:
+   351		destroy_workqueue(mdp->job_wq);
+   352	err_deinit_comp:
+   353		mdp_comp_destroy(mdp);
+   354	err_free_mutex:
+   355		for (i = 0; i < mdp->mdp_data->pipe_info_len; i++) {
+   356			enum mdp_mm_subsys_id idx;
+   357			struct mtk_mutex *m;
+   358	
+   359			idx = mdp->mdp_data->pipe_info[i].sub_id;
+   360			mutex_id = mdp->mdp_data->pipe_info[i].mutex_id;
+   361			m = mdp->mm_subsys[idx].mdp_mutex[mutex_id];
+   362			if (!IS_ERR_OR_NULL(m))
+   363				mtk_mutex_put(m);
+   364		}
+   365	err_destroy_device:
+   366		kfree(mdp);
+   367	err_return:
+   368		dev_dbg(dev, "Errno %d\n", ret);
+   369		return ret;
+   370	}
+   371	
 
 -- 
 0-DAY CI Kernel Test Service
