@@ -1,225 +1,101 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0321849626;
-	Sun, 11 Aug 2024 12:18:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EAE3ABE71
+	for <llvm@lists.linux.dev>; Sun, 11 Aug 2024 18:22:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723378689; cv=none; b=tpZKZBSTnTp++fgnGjmd+++pzmUjCQwCCBF7quXtB60ReIVuPKhsZRw9gNSLfonuHMaXhoOp0345+9qk9UqRWLCuhBMQtyGaal4GZkiTbbl1uR4+DXxn1OGuUgzXEf14RYHVRy45umOgzHyWRmBj4U1Oy8MB2qbKP3uiVOeihuU=
+	t=1723400528; cv=none; b=Zd/sk+KzawMHInKgK8WBOCuEIADm+GhlbRKhdjH4OkK94lgzxTkUmSYTZEh04IDLdSPsVfc9xxISiakKF0rmqEyre4lrb8EaRTFtp2jlMIah1cW469VVJVsrCx/qFMo497EDPWKEJb64SnxX2VfBeoLwEArHhc500kypkYcfBss=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723378689; c=relaxed/simple;
-	bh=hHwWR9mdrr1F86wPJmxJ+Z+hpsFfE7JK/YLabgBSPHc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=BN9JR0l4Zw6ZmzVUFadx4CnSLQxmRYE2CdDneZFrojP+G6SyKyEfkZIAWV0HDyG/YYCYEf8c8Nyyi1FYcjwc84USi107MQUpV3fLmJiegm3AFyiMkDQAU0pWnYCSWHdf5ZvqKFVWhDZ5/r9qpJ/hlG3ikQ+nleVkWZFIISe5wK0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=iEBdcy4x; arc=none smtp.client-ip=198.175.65.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1723400528; c=relaxed/simple;
+	bh=VUgmLu5fxeGeWdzwq/L+WE2RYQoYipTvtWCUaqiNvPk=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=ENT0vBDCkFYbPnEF3gkKV8FaUDfSxjGo7OOEFAkwMH6WV7+q43cUxDo44y3L2XsuWRwT1myDX2c3EjQlxRs/irEIp8JDL0uPaJ8avdSB5zK5IMgFIm90FwV0j9U8o+XRrdAKBOCA6DTda78Oe6187GMAkYHbmGntZMdTswOE2dw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=ge7WdBUT; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="iEBdcy4x"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1723378688; x=1754914688;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=hHwWR9mdrr1F86wPJmxJ+Z+hpsFfE7JK/YLabgBSPHc=;
-  b=iEBdcy4xTKhzv1x5a48df+bDWFOG8H8q9j7Fy63K2+MwK0w2jgSh5DDo
-   SRlqFE6cAtT7ez+9BcN/S1KVa+QnrfTtFkGk4+5N1JdezlcqqH8VCLRQ/
-   M0YuBTubHdMaecg3Q9jaju0xQl1rps6wNXNmkq19N0wbtMldqbeKS8Oct
-   IMjcIwz9PiaOPLN/lRe2+UZN8+36f+htmVe8yBNtLb7p1Cwr0p5VJbFdD
-   TA9xllZ70jkU+uY/awkaurl4tjnF6h7OLSHo4a7hIdw4etxD1y1B0nHwP
-   RN0luhnnc13EOGTpNrfaISpP/z+6iIcvxvslD+ohalO6tlzgJ+cUm6Z0x
-   Q==;
-X-CSE-ConnectionGUID: rqr8UOC0RFO27PF7J60RRQ==
-X-CSE-MsgGUID: 59mn6mUgSgKSgpJOiOqVvw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11161"; a="44012924"
-X-IronPort-AV: E=Sophos;i="6.09,281,1716274800"; 
-   d="scan'208";a="44012924"
-Received: from fmviesa004.fm.intel.com ([10.60.135.144])
-  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Aug 2024 05:18:07 -0700
-X-CSE-ConnectionGUID: bdThaog8TSmmVcTT7UQGHw==
-X-CSE-MsgGUID: aUUBDBetRYS5ZabXVNtqXw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.09,281,1716274800"; 
-   d="scan'208";a="62663202"
-Received: from unknown (HELO b6bf6c95bbab) ([10.239.97.151])
-  by fmviesa004.fm.intel.com with ESMTP; 11 Aug 2024 05:18:03 -0700
-Received: from kbuild by b6bf6c95bbab with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1sd7WL-000AoV-1D;
-	Sun, 11 Aug 2024 12:18:01 +0000
-Date: Sun, 11 Aug 2024 20:17:24 +0800
-From: kernel test robot <lkp@intel.com>
-To: Florian Fainelli <florian.fainelli@broadcom.com>,
-	linux-arm-kernel@lists.infradead.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Florian Fainelli <florian.fainelli@broadcom.com>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Sudeep Holla <sudeep.holla@arm.com>,
-	Cristian Marussi <cristian.marussi@arm.com>,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	arm-scmi@vger.kernel.org, james.quinlan@broadcom.com,
-	justin.chen@broadcom.com, kapil.hali@broadcom.com,
-	bcm-kernel-feedback-list@broadcom.com
-Subject: Re: [PATCH 2/2] firmware: arm_scmi: Support 'reg-io-width' property
- for shared memory
-Message-ID: <202408112059.XkTMhslU-lkp@intel.com>
-References: <20240810214621.14417-3-florian.fainelli@broadcom.com>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="ge7WdBUT"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1723400525;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=cUFz5IbZyFJbOSBqRWowiqP1FmcK0/pVpQ9OMVJ5NyI=;
+	b=ge7WdBUTKvFpSD9b4zRR5gv7bBqsUnG1D3jQRr46SYOBN8T+nQRt2b/eIpv6xlAd5RWgNU
+	uZp910hL8nsCV25YdNQ5/lC4gWduqZJ/oYNFe+uIjMtbQYIvsvqOdjpoaLYvl8+JebbHpW
+	Mmw5++mm1BI8UwVhKn3oDHs7+6pfCfM=
+Received: from mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-277-rdiEfSw-OZONL9LQnjXK2w-1; Sun,
+ 11 Aug 2024 14:22:04 -0400
+X-MC-Unique: rdiEfSw-OZONL9LQnjXK2w-1
+Received: from mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.17])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 573071955F3D
+	for <llvm@lists.linux.dev>; Sun, 11 Aug 2024 18:22:03 +0000 (UTC)
+Received: from [172.64.0.80] (unknown [10.30.33.131])
+	by mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 78E831955F3C;
+	Sun, 11 Aug 2024 18:22:02 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.11.0-rc2,
+ mainline.kernel.org-clang, cb2e5ee8)
+Date: Sun, 11 Aug 2024 18:22:02 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240810214621.14417-3-florian.fainelli@broadcom.com>
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.17
+Message-Id: <28102.124081114220400175@us-mta-277.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Florian,
+Hi, we tested your kernel and here are the results:
 
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on next-20240809]
-[cannot apply to robh/for-next soc/for-next linus/master v6.11-rc2 v6.11-rc1 v6.10 v6.11-rc2]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Florian-Fainelli/dt-bindings-sram-Document-reg-io-width-property/20240811-055659
-base:   next-20240809
-patch link:    https://lore.kernel.org/r/20240810214621.14417-3-florian.fainelli%40broadcom.com
-patch subject: [PATCH 2/2] firmware: arm_scmi: Support 'reg-io-width' property for shared memory
-config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20240811/202408112059.XkTMhslU-lkp@intel.com/config)
-compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project f86594788ce93b696675c94f54016d27a6c21d18)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240811/202408112059.XkTMhslU-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202408112059.XkTMhslU-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
-   In file included from drivers/firmware/arm_scmi/shmem.c:9:
-   In file included from include/linux/io.h:14:
-   In file included from arch/hexagon/include/asm/io.h:328:
-   include/asm-generic/io.h:548:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     548 |         val = __raw_readb(PCI_IOBASE + addr);
-         |                           ~~~~~~~~~~ ^
-   include/asm-generic/io.h:561:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     561 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
-      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-         |                                                   ^
-   In file included from drivers/firmware/arm_scmi/shmem.c:9:
-   In file included from include/linux/io.h:14:
-   In file included from arch/hexagon/include/asm/io.h:328:
-   include/asm-generic/io.h:574:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     574 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
-      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
-         |                                                   ^
-   In file included from drivers/firmware/arm_scmi/shmem.c:9:
-   In file included from include/linux/io.h:14:
-   In file included from arch/hexagon/include/asm/io.h:328:
-   include/asm-generic/io.h:585:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     585 |         __raw_writeb(value, PCI_IOBASE + addr);
-         |                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:595:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     595 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:605:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     605 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
->> drivers/firmware/arm_scmi/shmem.c:98:4: error: call to undeclared function 'iowrite64'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-      98 |                         __shmem_copy_toio_tpl(64);
-         |                         ^
-   drivers/firmware/arm_scmi/shmem.c:39:3: note: expanded from macro '__shmem_copy_toio_tpl'
-      39 |                 iowrite##s(((u##s *)(xfer->tx.buf))[i / shmem_io_width],        \
-         |                 ^
-   <scratch space>:43:1: note: expanded from here
-      43 | iowrite64
-         | ^
-   6 warnings and 1 error generated.
+    Overall result: FAILED
+             Merge: OK
+           Compile: FAILED
 
 
-vim +/iowrite64 +98 drivers/firmware/arm_scmi/shmem.c
+Kernel information:
+    Commit message: Merge tag 'usb-6.11-rc3' of git://git.kernel.org/pub/sc=
+m/linux/kernel/git/gregkh/usb
 
-    36	
-    37	#define __shmem_copy_toio_tpl(s)			\
-    38		for (unsigned int i = 0; i < xfer->tx.len; i += shmem_io_width)		\
-    39			iowrite##s(((u##s *)(xfer->tx.buf))[i / shmem_io_width],	\
-    40				   shmem->msg_payload + i);
-    41	
-    42	#define __shmem_copy_fromio_tpl(s)			\
-    43		for (unsigned int i = 0; i < xfer->rx.len; i += shmem_io_width)		\
-    44			((u##s *)(xfer->rx.buf))[i / shmem_io_width] = 			\
-    45				 ioread##s(shmem->msg_payload + shmem_io_width + i);
-    46	
-    47	static void shmem_tx_prepare(struct scmi_shared_mem __iomem *shmem,
-    48				     struct scmi_xfer *xfer,
-    49				     struct scmi_chan_info *cinfo,
-    50				     u32 shmem_io_width)
-    51	{
-    52		ktime_t stop;
-    53	
-    54		/*
-    55		 * Ideally channel must be free by now unless OS timeout last
-    56		 * request and platform continued to process the same, wait
-    57		 * until it releases the shared memory, otherwise we may endup
-    58		 * overwriting its response with new message payload or vice-versa.
-    59		 * Giving up anyway after twice the expected channel timeout so as
-    60		 * not to bail-out on intermittent issues where the platform is
-    61		 * occasionally a bit slower to answer.
-    62		 *
-    63		 * Note that after a timeout is detected we bail-out and carry on but
-    64		 * the transport functionality is probably permanently compromised:
-    65		 * this is just to ease debugging and avoid complete hangs on boot
-    66		 * due to a misbehaving SCMI firmware.
-    67		 */
-    68		stop = ktime_add_ms(ktime_get(), 2 * cinfo->rx_timeout_ms);
-    69		spin_until_cond((ioread32(&shmem->channel_status) &
-    70				 SCMI_SHMEM_CHAN_STAT_CHANNEL_FREE) ||
-    71				 ktime_after(ktime_get(), stop));
-    72		if (!(ioread32(&shmem->channel_status) &
-    73		      SCMI_SHMEM_CHAN_STAT_CHANNEL_FREE)) {
-    74			WARN_ON_ONCE(1);
-    75			dev_err(cinfo->dev,
-    76				"Timeout waiting for a free TX channel !\n");
-    77			return;
-    78		}
-    79	
-    80		/* Mark channel busy + clear error */
-    81		iowrite32(0x0, &shmem->channel_status);
-    82		iowrite32(xfer->hdr.poll_completion ? 0 : SCMI_SHMEM_FLAG_INTR_ENABLED,
-    83			  &shmem->flags);
-    84		iowrite32(sizeof(shmem->msg_header) + xfer->tx.len, &shmem->length);
-    85		iowrite32(pack_scmi_header(&xfer->hdr), &shmem->msg_header);
-    86		if (xfer->tx.buf) {
-    87			switch (shmem_io_width) {
-    88			case 1:
-    89				__shmem_copy_toio_tpl(8);
-    90				break;
-    91			case 2:
-    92				__shmem_copy_toio_tpl(16);
-    93				break;
-    94			case 4:
-    95				__shmem_copy_toio_tpl(32);
-    96				break;
-    97			case 8:
-  > 98				__shmem_copy_toio_tpl(64);
-    99				break;
-   100			default:
-   101				memcpy_toio(shmem->msg_payload, xfer->tx.buf, xfer->tx.len);
-   102				break;
-   103			}
-   104		}
-   105	}
-   106	
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1408963384
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+One or more kernel builds failed:
+    Unrecognized or new issues:
+         ppc64le - https://datawarehouse.cki-project.org/kcidb/builds/redha=
+t:1408963384-ppc64le-kernel
+           s390x - https://datawarehouse.cki-project.org/kcidb/builds/redha=
+t:1408963384-s390x-kernel
+          x86_64 (debug) - https://datawarehouse.cki-project.org/kcidb/buil=
+ds/redhat:1408963384-x86_64-kernel-debug
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
