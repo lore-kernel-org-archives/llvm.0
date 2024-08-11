@@ -1,56 +1,43 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 996A3199A2;
-	Sun, 11 Aug 2024 06:21:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E286200A3;
+	Sun, 11 Aug 2024 07:09:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723357263; cv=none; b=V2id6DYFiJrQAfhh+hfw3m7ModZv8P6ael2/6viJgp1cJc9eQNp5EG3Oib6uRCFHXLD1ilRJQxryaGe6IqiNdpeNKCpdObErHhLIFUquQbrzUEYWTPwiyKUAu+VjDIBkdotTkGvh2XRKkzOn5veKtKRQn8B3yivKEr26oVJgexk=
+	t=1723360148; cv=none; b=niw504V0OCIWJmmhENbnv/X3vRYk4Qo/INU4tWMNviGggIpfBZSSRlLCCQeGcPukNM3of+pdAm5VDO7S9+Zxpa4ILQakSCvXzNGbvQzXasYSAegcM3GT4geLSOjU1ubRWC3IcPPA+ZCXZESdByRnNCHJISAO1RAOoy6I3OFf8yo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723357263; c=relaxed/simple;
-	bh=m2rTSP4NwmfzViDA/E00kqm6iPh4PW9UTFBI3P3ixW8=;
-	h=Date:From:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=Mine1PhFNX1OyWduiUo59raxSEMiz14Wk/MwomEM1yaNTaFKe29tx1c94klKeHfwXaxikoHJwNukJPcIl1d68AFdJZBM0voKdJHPaoh97Td+N2oXpVXwn2VNdLlQs9RZYDOLLRpysSXb7nB7wCIli7wdQYHsrFQXpddM20pAXvo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=kc06o6WH; arc=none smtp.client-ip=198.175.65.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1723360148; c=relaxed/simple;
+	bh=HzUn46edg0BlXhUZG0jfiBG5N65tmpo0nKxL2EGqm8I=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=UDq4FAdSMi/nudAyJBYUUDbrPc/G2rzFeigMOUvSYBLbH2NFJJKCAuQ1pLygfjvrW3B5qeyjvAJzlAYF0diENpICWm5LbqW8pkc4SQua34a+NzVdQT+gcPU/pj3Fds17G1sPqJEXX6T4BoOl4Mizpq1HH8I6Ky8rvKDxv7RcS1Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HnNS/Pp9; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="kc06o6WH"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1723357261; x=1754893261;
-  h=date:from:cc:subject:message-id:mime-version;
-  bh=m2rTSP4NwmfzViDA/E00kqm6iPh4PW9UTFBI3P3ixW8=;
-  b=kc06o6WHKjbmTHcDv2ae3j8qzrwT3DwLyTCyZHQDImH1gIaRgxF7+KuJ
-   B+7nvjkrEsIuEN5T3lMk2dI1Alet67Nm92sywOKkMU1oXkidc46vXwSXd
-   vKb5b4xqW++NiZ79mJ8Iq2OWY2+wd2zAVEefh/fvnmVK5f4cRHr59w7jw
-   w//971/zhxH7ZfJJFSy6jwVbrq+vnTvlIv8XGWT/sRKaT1cVXKtKy6RlZ
-   evCvyyBl3wB7RTzSVsjlMXJ97gMjLorDHMkoRaZFbP6IwrTBJVU10xt9G
-   JHnExD3ome8oT+WFp6MAidIZkMYPPxjxARpOSHvasyeosbgjaoRkFIXC1
-   g==;
-X-CSE-ConnectionGUID: zFzPUXUWQWmBE3BG5tVCsQ==
-X-CSE-MsgGUID: XWHnCAOsQCWZpLuou2xHJA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11160"; a="21627078"
-X-IronPort-AV: E=Sophos;i="6.09,280,1716274800"; 
-   d="scan'208";a="21627078"
-Received: from orviesa010.jf.intel.com ([10.64.159.150])
-  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Aug 2024 23:21:00 -0700
-X-CSE-ConnectionGUID: JFMe1zGnTCK8j4G710UQiw==
-X-CSE-MsgGUID: gPmmY3KSR2WUEmyycINbxg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.09,280,1716274800"; 
-   d="scan'208";a="57853168"
-Received: from unknown (HELO b6bf6c95bbab) ([10.239.97.151])
-  by orviesa010.jf.intel.com with ESMTP; 10 Aug 2024 23:20:58 -0700
-Received: from kbuild by b6bf6c95bbab with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1sd1wm-000Adn-2L;
-	Sun, 11 Aug 2024 06:20:56 +0000
-Date: Sun, 11 Aug 2024 14:20:05 +0800
-From: kernel test robot <lkp@intel.com>
-Cc: oe-kbuild-all@lists.linux.dev, llvm@lists.linux.dev
-Subject: vmlinux.o: warning: objtool: BUG_func+0x7: unreachable instruction
-Message-ID: <202408111417.aHzPZj0w-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HnNS/Pp9"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4C5D0C4AF0C;
+	Sun, 11 Aug 2024 07:09:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1723360147;
+	bh=HzUn46edg0BlXhUZG0jfiBG5N65tmpo0nKxL2EGqm8I=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=HnNS/Pp9HIymhgFSOgcObB4Q/EjwnCSKaXwbmVW+C7wegY7oidb0Ze1LRWk+6upl9
+	 PYboGeq3l1vsj3vfjD4KSqmNDuFBAduw+esO+dzvOxiFHthXsZqx04CZyAUpQc/VwJ
+	 kgN0kmuW1riZ97c9mzj5ZGH3LGZ25QxJFvQRJ6QlYM0TLZBHe4ZAkO1sxDDvckpmGZ
+	 L+iJ0fQoeAi5vjzPeX2V75i4/tkXTsGBwP9lIPZ2P/4t2p48FOZColc+e3nFoLcLa0
+	 9z5kynvHCxIQ75t6wFusdgLpH08xeU+SBCwepQfFaIFeTq1xWUO94A+vKRSrfL2q6H
+	 UYngiEgA8lrSA==
+Date: Sun, 11 Aug 2024 12:38:59 +0530
+From: Neeraj Upadhyay <Neeraj.Upadhyay@kernel.org>
+To: kernel test robot <lkp@intel.com>
+Cc: "Paul E. McKenney" <paulmck@kernel.org>, llvm@lists.linux.dev,
+	oe-kbuild-all@lists.linux.dev,
+	Linux Memory Management List <linux-mm@kvack.org>,
+	Neeraj Upadhyay <neeraj.upadhyay@kernel.org>
+Subject: Re: [linux-next:master 3246/3984] kernel/rcu/rcuscale.c:303:2:
+ error: call to undeclared function 'rcu_tasks_torture_stats_print'; ISO C99
+ and later do not support implicit function declarations
+Message-ID: <20240811070859.GA977168@neeraj.linux>
+References: <202408110343.A2yLpRdP-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -59,49 +46,153 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <202408110343.A2yLpRdP-lkp@intel.com>
 
-CC: linux-kernel@vger.kernel.org
-TO: Juergen Gross <jgross@suse.com>
-CC: "Borislav Petkov (AMD)" <bp@alien8.de>
+On Sun, Aug 11, 2024 at 03:55:37AM +0800, kernel test robot wrote:
+> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+> head:   61c01d2e181adfba02fe09764f9fca1de2be0dbe
+> commit: 628ea78b8d1057d4709b38730a1f181e9607ad23 [3246/3984] rcuscale: Print detailed grace-period and barrier diagnostics
+> config: x86_64-randconfig-074-20240809 (https://download.01.org/0day-ci/archive/20240811/202408110343.A2yLpRdP-lkp@intel.com/config)
+> compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
+> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240811/202408110343.A2yLpRdP-lkp@intel.com/reproduce)
+> 
+> If you fix the issue in a separate patch/commit (i.e. not just a new version of
+> the same patch/commit), kindly add following tags
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Closes: https://lore.kernel.org/oe-kbuild-all/202408110343.A2yLpRdP-lkp@intel.com/
+> 
+> Note: the linux-next/master HEAD 61c01d2e181adfba02fe09764f9fca1de2be0dbe builds fine.
+>       It may have been fixed somewhere.
+> 
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   5189dafa4cf950e675f02ee04b577dfbbad0d9b1
-commit: 9824b00c2b58f9e1072ef3ece571a2cfc71089d4 x86/paravirt: Move some functions and defines to alternative.c
-date:   8 months ago
-config: x86_64-buildonly-randconfig-002-20240811 (https://download.01.org/0day-ci/archive/20240811/202408111417.aHzPZj0w-lkp@intel.com/config)
-compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240811/202408111417.aHzPZj0w-lkp@intel.com/reproduce)
+Thanks for reporting this! I have fixed the order of below 2 commits here
+[1]
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202408111417.aHzPZj0w-lkp@intel.com/
+cb4b877e9d5f rcu/tasks: Add detailed grace-period and barrier diagnostics
+d9562675f501 rcuscale: Print detailed grace-period and barrier diagnostics
 
-All warnings (new ones prefixed by >>):
-
-   vmlinux.o: warning: objtool: do_user_addr_fault+0xd5b: unreachable instruction
-   vmlinux.o: warning: objtool: abort+0xc: unreachable instruction
-   vmlinux.o: warning: objtool: prio_changed_idle+0xc: unreachable instruction
-   vmlinux.o: warning: objtool: switched_to_idle+0xc: unreachable instruction
-   vmlinux.o: warning: objtool: prio_changed_stop+0xc: unreachable instruction
-   vmlinux.o: warning: objtool: yield_task_stop+0xc: unreachable instruction
-   vmlinux.o: warning: objtool: switched_to_stop+0xc: unreachable instruction
-   vmlinux.o: warning: objtool: hugetlb_vm_op_fault+0xc: unreachable instruction
-   vmlinux.o: warning: objtool: hugetlbfs_write_end+0xc: unreachable instruction
-   vmlinux.o: warning: objtool: r100_semaphore_ring_emit+0xc: unreachable instruction
-   vmlinux.o: warning: objtool: lkdtm_BUG+0xc: unreachable instruction
-   vmlinux.o: warning: objtool: omap_dm_timer_modify_idlect_mask+0xc: unreachable instruction
->> vmlinux.o: warning: objtool: BUG_func+0x7: unreachable instruction
+[1] https://git.kernel.org/pub/scm/linux/kernel/git/rcu/linux.git/log/?h=next
 
 
-objdump-func vmlinux.o BUG_func:
-0000 0000000000003de0 <BUG_func>:
-0000     3de0:	f3 0f 1e fa          	endbr64
-0004     3de4:	55                   	push   %rbp
-0005     3de5:	0f 0b                	ud2
-0007     3de7:	48 89 e5             	mov    %rsp,%rbp
-000a     3dea:	66 0f 1f 44 00 00    	nopw   0x0(%rax,%rax,1)
+- Neeraj
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+> All errors (new ones prefixed by >>):
+> 
+> >> kernel/rcu/rcuscale.c:303:2: error: call to undeclared function 'rcu_tasks_torture_stats_print'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+>      303 |         rcu_tasks_torture_stats_print(scale_type, SCALE_FLAG);
+>          |         ^
+>    kernel/rcu/rcuscale.c:303:2: note: did you mean 'srcu_torture_stats_print'?
+>    include/linux/srcutree.h:192:6: note: 'srcu_torture_stats_print' declared here
+>      192 | void srcu_torture_stats_print(struct srcu_struct *ssp, char *tt, char *tf);
+>          |      ^
+> >> kernel/rcu/rcuscale.c:347:2: error: call to undeclared function 'rcu_tasks_rude_torture_stats_print'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+>      347 |         rcu_tasks_rude_torture_stats_print(scale_type, SCALE_FLAG);
+>          |         ^
+> >> kernel/rcu/rcuscale.c:393:2: error: call to undeclared function 'rcu_tasks_trace_torture_stats_print'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+>      393 |         rcu_tasks_trace_torture_stats_print(scale_type, SCALE_FLAG);
+>          |         ^
+>    3 errors generated.
+> 
+> 
+> vim +/rcu_tasks_torture_stats_print +303 kernel/rcu/rcuscale.c
+> 
+>    300	
+>    301	static void rcu_tasks_scale_stats(void)
+>    302	{
+>  > 303		rcu_tasks_torture_stats_print(scale_type, SCALE_FLAG);
+>    304	}
+>    305	
+>    306	static struct rcu_scale_ops tasks_ops = {
+>    307		.ptype		= RCU_TASKS_FLAVOR,
+>    308		.init		= rcu_sync_scale_init,
+>    309		.readlock	= tasks_scale_read_lock,
+>    310		.readunlock	= tasks_scale_read_unlock,
+>    311		.get_gp_seq	= rcu_no_completed,
+>    312		.gp_diff	= rcu_seq_diff,
+>    313		.async		= call_rcu_tasks,
+>    314		.gp_barrier	= rcu_barrier_tasks,
+>    315		.sync		= synchronize_rcu_tasks,
+>    316		.exp_sync	= synchronize_rcu_tasks,
+>    317		.rso_gp_kthread	= get_rcu_tasks_gp_kthread,
+>    318		.stats		= IS_ENABLED(CONFIG_TINY_RCU) ? NULL : rcu_tasks_scale_stats,
+>    319		.name		= "tasks"
+>    320	};
+>    321	
+>    322	#define TASKS_OPS &tasks_ops,
+>    323	
+>    324	#else // #ifdef CONFIG_TASKS_RCU
+>    325	
+>    326	#define TASKS_OPS
+>    327	
+>    328	#endif // #else // #ifdef CONFIG_TASKS_RCU
+>    329	
+>    330	#ifdef CONFIG_TASKS_RUDE_RCU
+>    331	
+>    332	/*
+>    333	 * Definitions for RCU-tasks-rude scalability testing.
+>    334	 */
+>    335	
+>    336	static int tasks_rude_scale_read_lock(void)
+>    337	{
+>    338		return 0;
+>    339	}
+>    340	
+>    341	static void tasks_rude_scale_read_unlock(int idx)
+>    342	{
+>    343	}
+>    344	
+>    345	static void rcu_tasks_rude_scale_stats(void)
+>    346	{
+>  > 347		rcu_tasks_rude_torture_stats_print(scale_type, SCALE_FLAG);
+>    348	}
+>    349	
+>    350	static struct rcu_scale_ops tasks_rude_ops = {
+>    351		.ptype		= RCU_TASKS_RUDE_FLAVOR,
+>    352		.init		= rcu_sync_scale_init,
+>    353		.readlock	= tasks_rude_scale_read_lock,
+>    354		.readunlock	= tasks_rude_scale_read_unlock,
+>    355		.get_gp_seq	= rcu_no_completed,
+>    356		.gp_diff	= rcu_seq_diff,
+>    357		.async		= call_rcu_tasks_rude,
+>    358		.gp_barrier	= rcu_barrier_tasks_rude,
+>    359		.sync		= synchronize_rcu_tasks_rude,
+>    360		.exp_sync	= synchronize_rcu_tasks_rude,
+>    361		.rso_gp_kthread	= get_rcu_tasks_rude_gp_kthread,
+>    362		.stats		= IS_ENABLED(CONFIG_TINY_RCU) ? NULL : rcu_tasks_rude_scale_stats,
+>    363		.name		= "tasks-rude"
+>    364	};
+>    365	
+>    366	#define TASKS_RUDE_OPS &tasks_rude_ops,
+>    367	
+>    368	#else // #ifdef CONFIG_TASKS_RUDE_RCU
+>    369	
+>    370	#define TASKS_RUDE_OPS
+>    371	
+>    372	#endif // #else // #ifdef CONFIG_TASKS_RUDE_RCU
+>    373	
+>    374	#ifdef CONFIG_TASKS_TRACE_RCU
+>    375	
+>    376	/*
+>    377	 * Definitions for RCU-tasks-trace scalability testing.
+>    378	 */
+>    379	
+>    380	static int tasks_trace_scale_read_lock(void)
+>    381	{
+>    382		rcu_read_lock_trace();
+>    383		return 0;
+>    384	}
+>    385	
+>    386	static void tasks_trace_scale_read_unlock(int idx)
+>    387	{
+>    388		rcu_read_unlock_trace();
+>    389	}
+>    390	
+>    391	static void rcu_tasks_trace_scale_stats(void)
+>    392	{
+>  > 393		rcu_tasks_trace_torture_stats_print(scale_type, SCALE_FLAG);
+>    394	}
+>    395	
+> 
+> -- 
+> 0-DAY CI Kernel Test Service
+> https://github.com/intel/lkp-tests/wiki
