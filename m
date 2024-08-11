@@ -1,60 +1,65 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 53BCF4C91;
-	Sun, 11 Aug 2024 00:45:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 869D328F0;
+	Sun, 11 Aug 2024 01:16:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723337118; cv=none; b=L3AiQQpWnradVN2Hsrffj13N51vPlkcAzVBMMEICC3/J2mHDkTFbP/r9J3St8qnwefqJCR8vWI+91AY5JAtMgvYYXzWLnfCgrH/ypRUDKpRYGwIpmG1PfmK7DXzopWN9vLYdZIgQvqeMTQunUQ8VtRzyfN8spZ3wtqQT8Sj/0dM=
+	t=1723338985; cv=none; b=M/PCBGC1yvUuJm689+3Vz9mTGtrz+3PUWXfePHLJq+dLTW8e4ti+Ufomf+wNlpbWve7DCtuj++cTTELCSFGUpc2LAeK9wTcBMdItBpnx52ME8JozddTLm/Y8Pf201T0eniRDsCysklkCxGqgg9oWSUmtoM56KCe5XMJBbr4GWvI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723337118; c=relaxed/simple;
-	bh=xSHkNpceV7ObDugqg8oknR1un6Pjsf2zL7bd0FnF2j8=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=dodApeXA2LWENm+Zm6jDbPttCNCj94A4Hp5zIhq2PKztv3Zp975Z6IDzaAPPVntJ3mRzbJk0jmaRLyM7RyuChJg2eFU/WX86KWQ2omAV6ZFfofEsAGd97ZEANoGGq5veW5jV3RLTukLEc/WaiAlZ7Fd4j3iC/rBtc8nAPtQWxL4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=FPU0np+v; arc=none smtp.client-ip=192.198.163.12
+	s=arc-20240116; t=1723338985; c=relaxed/simple;
+	bh=3TC40Bj7SfvFrdCPW3F0lPZBq4YcUtzaKyXJ1rYP0II=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=bQbLqNKGqqc6bx//NbyV+hRxb9l5BtKnQe7xSkbmMsh0XxEM+et7SJ9c/cA6CqFwu51Y78N5oAXZBWHyLNb77Y+96wcifTnkKF6WD9qVCxrvRSmv7N8tH36n+Mx3MqH3CSeIZ3DZAfl6yto+OU3fpHDcX0SMeEHQVIYdh2cCDng=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=bd/zs+97; arc=none smtp.client-ip=198.175.65.20
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="FPU0np+v"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="bd/zs+97"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1723337117; x=1754873117;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=xSHkNpceV7ObDugqg8oknR1un6Pjsf2zL7bd0FnF2j8=;
-  b=FPU0np+vaQVPCiVfxBnwAqoaX12t/FCR4Up9tQn8xjDrTHI6jXZ2Qdcq
-   eeRBoa4UwcmQVqYEvrljnzOUVAF+a89GKG2XkWj4Y6AUlJBHh1A3BnYny
-   lnSFf5DNBolzxspxI3pnywi0YV2UQhWQ9GkMlTgRI4oEEp7v7MptoFB8J
-   qcY1OiXWQlK93gmTlIWwoIR7W/R/zQZjQgVN8N0HKFpFvQBrHqrCYiXls
-   ULqxXRVhnNRR/MD9p83aZU/S+8O2VKPed4iJKx9J0+LrPJ95xuxq0WWNi
-   +NMDsw14ct4C5nVK8yrfeFO39iCB/OUvKPDJ42ucFrCD+TLlbWNUnSK/1
+  t=1723338983; x=1754874983;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=3TC40Bj7SfvFrdCPW3F0lPZBq4YcUtzaKyXJ1rYP0II=;
+  b=bd/zs+97G8cH4Vz9IT9x1hPd2Sum2fwMU22MpPXd3DAxFmwTGLIwD4qP
+   iW3RW1yChBGmh4qJ29NathtqEm9oBoSrc7fpDKM8DV5N9IoSx0c0quOg9
+   IVLRbCndOA28STmArWjCImyfbH5+xxptRfRJCi3iJUeH/ooFX71LzS18F
+   DOf/LZuNxsHJB43wJK01QTHmP8A1WLVU+lgyZlpciz4gflG0vVDwyfh70
+   be7LabcJoXHaSVGKKosWd+TOQLHAvTNmYcxkxw90NWpFqOvsYjXvhAIlU
+   CAzOllRdo3y43E32xXxvmlZZq99AS/LOHuu2beLJ98ExutWPyANw3/2KX
    A==;
-X-CSE-ConnectionGUID: cFyRjMCkQX6nVYQMNlcu4Q==
-X-CSE-MsgGUID: mXhmvQgeQcWg9CC0OYUuvQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11160"; a="25343249"
+X-CSE-ConnectionGUID: KfJoGWpBQXu4MzNy9SnGsw==
+X-CSE-MsgGUID: ZTua9pP5S+CtL4HIpv5N4g==
+X-IronPort-AV: E=McAfee;i="6700,10204,11160"; a="21289869"
 X-IronPort-AV: E=Sophos;i="6.09,280,1716274800"; 
-   d="scan'208";a="25343249"
-Received: from orviesa006.jf.intel.com ([10.64.159.146])
-  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Aug 2024 17:45:16 -0700
-X-CSE-ConnectionGUID: BQTX4ffORcutAsZhT91pmA==
-X-CSE-MsgGUID: ZqV0/cjXSpu84L1oObL1Wg==
+   d="scan'208";a="21289869"
+Received: from fmviesa002.fm.intel.com ([10.60.135.142])
+  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Aug 2024 18:16:22 -0700
+X-CSE-ConnectionGUID: xeTS7v2OSYGPJ3Y8wISTDA==
+X-CSE-MsgGUID: r+CI+Az8TjmyOGPYlCSUwg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.09,280,1716274800"; 
-   d="scan'208";a="58138265"
+   d="scan'208";a="81144904"
 Received: from unknown (HELO b6bf6c95bbab) ([10.239.97.151])
-  by orviesa006.jf.intel.com with ESMTP; 10 Aug 2024 17:45:14 -0700
+  by fmviesa002.fm.intel.com with ESMTP; 10 Aug 2024 18:16:18 -0700
 Received: from kbuild by b6bf6c95bbab with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1scwhr-000AR9-0R;
-	Sun, 11 Aug 2024 00:45:11 +0000
-Date: Sun, 11 Aug 2024 08:44:36 +0800
+	id 1scxBw-000ASL-0R;
+	Sun, 11 Aug 2024 01:16:16 +0000
+Date: Sun, 11 Aug 2024 09:15:37 +0800
 From: kernel test robot <lkp@intel.com>
-To: Saurabh Sengar <ssengar@linux.microsoft.com>
+To: Lorenzo Bianconi <lorenzo@kernel.org>, linux-pwm@vger.kernel.org
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Linux Memory Management List <linux-mm@kvack.org>
-Subject: [akpm-mm:mm-unstable 229/232] mm/vmstat.c:34:12: warning: unused
- variable 'vmstat_late_init_done'
-Message-ID: <202408110818.uMXNyvXl-lkp@intel.com>
+	ukleinek@kernel.org, lorenzo.bianconi83@gmail.com,
+	krzk+dt@kernel.org, robh@kernel.org, devicetree@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, upstream@airoha.com,
+	angelogioacchino.delregno@collabora.com,
+	benjamin.larsson@genexis.eu, conor+dt@kernel.org,
+	ansuelsmth@gmail.com
+Subject: Re: [PATCH 2/2] pwm: airoha: Add support for EN7581 SoC
+Message-ID: <202408110920.KEW33sRE-lkp@intel.com>
+References: <a03f5ea9291e39eab303696eb03fdd44cf04e8d9.1723264979.git.lorenzo@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -63,32 +68,36 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <a03f5ea9291e39eab303696eb03fdd44cf04e8d9.1723264979.git.lorenzo@kernel.org>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-unstable
-head:   7d7894afcca68b40bfca49f4d1303167d224919e
-commit: 7da9318235d78e554e033d28c5cde2b4f9c675ff [229/232] mm/vmstat: defer the refresh_zone_stat_thresholds after all CPUs bringup
-config: um-allnoconfig (https://download.01.org/0day-ci/archive/20240811/202408110818.uMXNyvXl-lkp@intel.com/config)
-compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240811/202408110818.uMXNyvXl-lkp@intel.com/reproduce)
+Hi Lorenzo,
+
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on robh/for-next]
+[also build test ERROR on linus/master thierry-reding-pwm/for-next v6.11-rc2 next-20240809]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Lorenzo-Bianconi/dt-bindings-pwm-Document-Airoha-EN7581-PWM/20240810-143716
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
+patch link:    https://lore.kernel.org/r/a03f5ea9291e39eab303696eb03fdd44cf04e8d9.1723264979.git.lorenzo%40kernel.org
+patch subject: [PATCH 2/2] pwm: airoha: Add support for EN7581 SoC
+config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20240811/202408110920.KEW33sRE-lkp@intel.com/config)
+compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project f86594788ce93b696675c94f54016d27a6c21d18)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240811/202408110920.KEW33sRE-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202408110818.uMXNyvXl-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202408110920.KEW33sRE-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
-   In file included from mm/vmstat.c:26:
-   In file included from include/linux/writeback.h:13:
-   In file included from include/linux/blk_types.h:10:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:12:
-   In file included from include/linux/hardirq.h:11:
-   In file included from arch/um/include/asm/hardirq.h:5:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
+   In file included from drivers/pwm/pwm-airoha.c:7:
    In file included from include/linux/io.h:14:
-   In file included from arch/um/include/asm/io.h:24:
+   In file included from arch/hexagon/include/asm/io.h:328:
    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
      548 |         val = __raw_readb(PCI_IOBASE + addr);
          |                           ~~~~~~~~~~ ^
@@ -98,34 +107,18 @@ All warnings (new ones prefixed by >>):
    include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
       37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
          |                                                   ^
-   In file included from mm/vmstat.c:26:
-   In file included from include/linux/writeback.h:13:
-   In file included from include/linux/blk_types.h:10:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:12:
-   In file included from include/linux/hardirq.h:11:
-   In file included from arch/um/include/asm/hardirq.h:5:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
+   In file included from drivers/pwm/pwm-airoha.c:7:
    In file included from include/linux/io.h:14:
-   In file included from arch/um/include/asm/io.h:24:
+   In file included from arch/hexagon/include/asm/io.h:328:
    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
      574 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
          |                                                         ~~~~~~~~~~ ^
    include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
       35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
          |                                                   ^
-   In file included from mm/vmstat.c:26:
-   In file included from include/linux/writeback.h:13:
-   In file included from include/linux/blk_types.h:10:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:12:
-   In file included from include/linux/hardirq.h:11:
-   In file included from arch/um/include/asm/hardirq.h:5:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
+   In file included from drivers/pwm/pwm-airoha.c:7:
    In file included from include/linux/io.h:14:
-   In file included from arch/um/include/asm/io.h:24:
+   In file included from arch/hexagon/include/asm/io.h:328:
    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
      585 |         __raw_writeb(value, PCI_IOBASE + addr);
          |                             ~~~~~~~~~~ ^
@@ -135,37 +128,35 @@ All warnings (new ones prefixed by >>):
    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
      605 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
          |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:693:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     693 |         readsb(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:701:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     701 |         readsw(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:709:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     709 |         readsl(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:718:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     718 |         writesb(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   include/asm-generic/io.h:727:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     727 |         writesw(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   include/asm-generic/io.h:736:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     736 |         writesl(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
->> mm/vmstat.c:34:12: warning: unused variable 'vmstat_late_init_done' [-Wunused-variable]
-      34 | static int vmstat_late_init_done;
-         |            ^~~~~~~~~~~~~~~~~~~~~
-   13 warnings generated.
+>> drivers/pwm/pwm-airoha.c:239:19: error: call to undeclared function '__bf_shf'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     239 |         val = (period << __bf_shf(mask)) & mask;
+         |                          ^
+   drivers/pwm/pwm-airoha.c:271:24: error: call to undeclared function '__bf_shf'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     271 |         val = ((index & 7) << __bf_shf(mask)) & mask;
+         |                               ^
+   6 warnings and 2 errors generated.
 
 
-vim +/vmstat_late_init_done +34 mm/vmstat.c
+vim +/__bf_shf +239 drivers/pwm/pwm-airoha.c
 
-    33	
-  > 34	static int vmstat_late_init_done;
-    35	#ifdef CONFIG_NUMA
-    36	int sysctl_vm_numa_stat = ENABLE_NUMA_STAT;
-    37	
+   231	
+   232	static void airoha_pwm_config_waveform(struct airoha_pwm *pc, int index,
+   233					       u32 duty, u32 period)
+   234	{
+   235		u32 mask, val;
+   236	
+   237		/* Configure frequency divisor */
+   238		mask = WAVE_GEN_CYCLE_MASK(index % 4);
+ > 239		val = (period << __bf_shf(mask)) & mask;
+   240		airoha_pwm_cycle_rmw(pc, REG_CYCLE_CFG_VALUE(index / 4), mask, val);
+   241	
+   242		/* Configure duty cycle */
+   243		duty = ((DUTY_FULL - duty) << 8) | duty;
+   244		mask = GPIO_FLASH_PRD_MASK(index % 2);
+   245		val = (duty << __bf_shf(mask)) & mask;
+   246		airoha_pwm_flash_rmw(pc, REG_GPIO_FLASH_PRD_SET(index / 2), mask, val);
+   247	}
+   248	
 
 -- 
 0-DAY CI Kernel Test Service
