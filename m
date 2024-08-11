@@ -1,43 +1,61 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E286200A3;
-	Sun, 11 Aug 2024 07:09:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7EA0425632;
+	Sun, 11 Aug 2024 10:15:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723360148; cv=none; b=niw504V0OCIWJmmhENbnv/X3vRYk4Qo/INU4tWMNviGggIpfBZSSRlLCCQeGcPukNM3of+pdAm5VDO7S9+Zxpa4ILQakSCvXzNGbvQzXasYSAegcM3GT4geLSOjU1ubRWC3IcPPA+ZCXZESdByRnNCHJISAO1RAOoy6I3OFf8yo=
+	t=1723371334; cv=none; b=Vmy7g1nO0b+/4XekNC10uNd6Jb3HXs29tep1TEfoyI+80msO62RmuohqA0EIhw/E3phXF9DfA023drh40CHuG9BVKEaKFMNAdALe6AGwTx1aD0i+hEoQ+gIas6Z8Qc/1Ctmn7Rq6ZLR+JNHHAdEIfX4wwh+w1vnLcXo6JSBQnzQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723360148; c=relaxed/simple;
-	bh=HzUn46edg0BlXhUZG0jfiBG5N65tmpo0nKxL2EGqm8I=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=UDq4FAdSMi/nudAyJBYUUDbrPc/G2rzFeigMOUvSYBLbH2NFJJKCAuQ1pLygfjvrW3B5qeyjvAJzlAYF0diENpICWm5LbqW8pkc4SQua34a+NzVdQT+gcPU/pj3Fds17G1sPqJEXX6T4BoOl4Mizpq1HH8I6Ky8rvKDxv7RcS1Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HnNS/Pp9; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1723371334; c=relaxed/simple;
+	bh=sDT/P1iCUDpjZ5gGE68o9cvEd1FaqaLTZXocAFZ0CcQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=LH8cwYLt3ftLYJ4DRIVPYrUN82TPPC2pWTCuQ5uklvfJ69n0P61etFVYQ1Qc/t+8WT2uBcioNCNcJQhfgBJ7XvGy4v0+i4uAWpkF5yl12eOiWEdPXZalzvVCGTw3gxZU55yvUTWK+/hY5sjOpdWjaXBvmGRXuWCnvALymdLeLQg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=jgcMbI+y; arc=none smtp.client-ip=198.175.65.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HnNS/Pp9"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4C5D0C4AF0C;
-	Sun, 11 Aug 2024 07:09:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1723360147;
-	bh=HzUn46edg0BlXhUZG0jfiBG5N65tmpo0nKxL2EGqm8I=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=HnNS/Pp9HIymhgFSOgcObB4Q/EjwnCSKaXwbmVW+C7wegY7oidb0Ze1LRWk+6upl9
-	 PYboGeq3l1vsj3vfjD4KSqmNDuFBAduw+esO+dzvOxiFHthXsZqx04CZyAUpQc/VwJ
-	 kgN0kmuW1riZ97c9mzj5ZGH3LGZ25QxJFvQRJ6QlYM0TLZBHe4ZAkO1sxDDvckpmGZ
-	 L+iJ0fQoeAi5vjzPeX2V75i4/tkXTsGBwP9lIPZ2P/4t2p48FOZColc+e3nFoLcLa0
-	 9z5kynvHCxIQ75t6wFusdgLpH08xeU+SBCwepQfFaIFeTq1xWUO94A+vKRSrfL2q6H
-	 UYngiEgA8lrSA==
-Date: Sun, 11 Aug 2024 12:38:59 +0530
-From: Neeraj Upadhyay <Neeraj.Upadhyay@kernel.org>
-To: kernel test robot <lkp@intel.com>
-Cc: "Paul E. McKenney" <paulmck@kernel.org>, llvm@lists.linux.dev,
-	oe-kbuild-all@lists.linux.dev,
-	Linux Memory Management List <linux-mm@kvack.org>,
-	Neeraj Upadhyay <neeraj.upadhyay@kernel.org>
-Subject: Re: [linux-next:master 3246/3984] kernel/rcu/rcuscale.c:303:2:
- error: call to undeclared function 'rcu_tasks_torture_stats_print'; ISO C99
- and later do not support implicit function declarations
-Message-ID: <20240811070859.GA977168@neeraj.linux>
-References: <202408110343.A2yLpRdP-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="jgcMbI+y"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1723371333; x=1754907333;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=sDT/P1iCUDpjZ5gGE68o9cvEd1FaqaLTZXocAFZ0CcQ=;
+  b=jgcMbI+ybkcK2/22gor6+Vs89CuhXfyzctk1qAiY2N4Mxn7ZgxmidHAv
+   zzjZ2ReiaLgXYrR2PTHXoOH3NCmUOV4x8YdUOrsr3VU/jgZuhked0/hA6
+   BpQpE2VBUz3z3swUoTvxUzjYFchLPkAeaORDOEpyrZV1z3xsbT6iN+Z1D
+   JFoJh9ocxsQDtjC0N6N+mAkKVVDmLTSQNtLVFSltY9ED8CHjz447Isi6T
+   wJ7REOz3vx6p4zByzP8WmAzmmgNp3iKKArDfJRCeVMTVH4RGtEzQu2f9V
+   3Yb4B8ow02pd3lVDvd3ZxRnfCdrTMMXsgUlFx4R7LnQ8MEn82sCyY4mL7
+   g==;
+X-CSE-ConnectionGUID: xesqHo3yRIiZGjPKdwEPKQ==
+X-CSE-MsgGUID: A+gfQRy6SdabSdWt4Ejnfg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11160"; a="32071127"
+X-IronPort-AV: E=Sophos;i="6.09,281,1716274800"; 
+   d="scan'208";a="32071127"
+Received: from fmviesa004.fm.intel.com ([10.60.135.144])
+  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Aug 2024 03:15:32 -0700
+X-CSE-ConnectionGUID: GCt2bzYkSBeM/ZwqqcW6pQ==
+X-CSE-MsgGUID: BGAA+5QaTI+Dkv/6wl+t2A==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.09,281,1716274800"; 
+   d="scan'208";a="62647671"
+Received: from unknown (HELO b6bf6c95bbab) ([10.239.97.151])
+  by fmviesa004.fm.intel.com with ESMTP; 11 Aug 2024 03:15:30 -0700
+Received: from kbuild by b6bf6c95bbab with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1sd5bh-000Akp-2w;
+	Sun, 11 Aug 2024 10:15:26 +0000
+Date: Sun, 11 Aug 2024 18:14:39 +0800
+From: kernel test robot <lkp@intel.com>
+To: Peter Xu <peterx@redhat.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Linux Memory Management List <linux-mm@kvack.org>
+Subject: [akpm-mm:mm-unstable 206/222]
+ arch/x86/include/asm/pgtable.h:1420:10: error: invalid output size for
+ constraint '+q'
+Message-ID: <202408111850.Y7rbVXOo-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -46,153 +64,77 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <202408110343.A2yLpRdP-lkp@intel.com>
 
-On Sun, Aug 11, 2024 at 03:55:37AM +0800, kernel test robot wrote:
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-> head:   61c01d2e181adfba02fe09764f9fca1de2be0dbe
-> commit: 628ea78b8d1057d4709b38730a1f181e9607ad23 [3246/3984] rcuscale: Print detailed grace-period and barrier diagnostics
-> config: x86_64-randconfig-074-20240809 (https://download.01.org/0day-ci/archive/20240811/202408110343.A2yLpRdP-lkp@intel.com/config)
-> compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
-> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240811/202408110343.A2yLpRdP-lkp@intel.com/reproduce)
-> 
-> If you fix the issue in a separate patch/commit (i.e. not just a new version of
-> the same patch/commit), kindly add following tags
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes: https://lore.kernel.org/oe-kbuild-all/202408110343.A2yLpRdP-lkp@intel.com/
-> 
-> Note: the linux-next/master HEAD 61c01d2e181adfba02fe09764f9fca1de2be0dbe builds fine.
->       It may have been fixed somewhere.
-> 
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-unstable
+head:   7d7894afcca68b40bfca49f4d1303167d224919e
+commit: a5c1d6b162e7568305f50186568d6e033ad6d81f [206/222] mm/x86: add missing pud helpers
+config: i386-randconfig-002-20240811 (https://download.01.org/0day-ci/archive/20240811/202408111850.Y7rbVXOo-lkp@intel.com/config)
+compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240811/202408111850.Y7rbVXOo-lkp@intel.com/reproduce)
 
-Thanks for reporting this! I have fixed the order of below 2 commits here
-[1]
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202408111850.Y7rbVXOo-lkp@intel.com/
 
-cb4b877e9d5f rcu/tasks: Add detailed grace-period and barrier diagnostics
-d9562675f501 rcuscale: Print detailed grace-period and barrier diagnostics
+All errors (new ones prefixed by >>):
 
-[1] https://git.kernel.org/pub/scm/linux/kernel/git/rcu/linux.git/log/?h=next
+   In file included from arch/x86/kernel/asm-offsets.c:14:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:13:
+   In file included from include/linux/cgroup.h:17:
+   In file included from include/linux/fs.h:33:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:9:
+   In file included from include/linux/sched/task.h:13:
+   In file included from include/linux/uaccess.h:12:
+   In file included from arch/x86/include/asm/uaccess.h:17:
+   In file included from arch/x86/include/asm/tlbflush.h:16:
+>> arch/x86/include/asm/pgtable.h:1420:10: error: invalid output size for constraint '+q'
+    1420 |                 return xchg(pudp, pud);
+         |                        ^
+   include/linux/atomic/atomic-instrumented.h:4758:2: note: expanded from macro 'xchg'
+    4758 |         raw_xchg(__ai_ptr, __VA_ARGS__); \
+         |         ^
+   include/linux/atomic/atomic-arch-fallback.h:12:18: note: expanded from macro 'raw_xchg'
+      12 | #define raw_xchg arch_xchg
+         |                  ^
+   arch/x86/include/asm/cmpxchg.h:78:27: note: expanded from macro 'arch_xchg'
+      78 | #define arch_xchg(ptr, v)       __xchg_op((ptr), (v), xchg, "")
+         |                                 ^
+   arch/x86/include/asm/cmpxchg.h:48:19: note: expanded from macro '__xchg_op'
+      48 |                                       : "+q" (__ret), "+m" (*(ptr))     \
+         |                                               ^
+   1 error generated.
+   make[3]: *** [scripts/Makefile.build:117: arch/x86/kernel/asm-offsets.s] Error 1 shuffle=3464415616
+   make[3]: Target 'prepare' not remade because of errors.
+   make[2]: *** [Makefile:1193: prepare0] Error 2 shuffle=3464415616
+   make[2]: Target 'prepare' not remade because of errors.
+   make[1]: *** [Makefile:224: __sub-make] Error 2 shuffle=3464415616
+   make[1]: Target 'prepare' not remade because of errors.
+   make: *** [Makefile:224: __sub-make] Error 2 shuffle=3464415616
+   make: Target 'prepare' not remade because of errors.
 
 
-- Neeraj
+vim +1420 arch/x86/include/asm/pgtable.h
 
-> All errors (new ones prefixed by >>):
-> 
-> >> kernel/rcu/rcuscale.c:303:2: error: call to undeclared function 'rcu_tasks_torture_stats_print'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
->      303 |         rcu_tasks_torture_stats_print(scale_type, SCALE_FLAG);
->          |         ^
->    kernel/rcu/rcuscale.c:303:2: note: did you mean 'srcu_torture_stats_print'?
->    include/linux/srcutree.h:192:6: note: 'srcu_torture_stats_print' declared here
->      192 | void srcu_torture_stats_print(struct srcu_struct *ssp, char *tt, char *tf);
->          |      ^
-> >> kernel/rcu/rcuscale.c:347:2: error: call to undeclared function 'rcu_tasks_rude_torture_stats_print'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
->      347 |         rcu_tasks_rude_torture_stats_print(scale_type, SCALE_FLAG);
->          |         ^
-> >> kernel/rcu/rcuscale.c:393:2: error: call to undeclared function 'rcu_tasks_trace_torture_stats_print'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
->      393 |         rcu_tasks_trace_torture_stats_print(scale_type, SCALE_FLAG);
->          |         ^
->    3 errors generated.
-> 
-> 
-> vim +/rcu_tasks_torture_stats_print +303 kernel/rcu/rcuscale.c
-> 
->    300	
->    301	static void rcu_tasks_scale_stats(void)
->    302	{
->  > 303		rcu_tasks_torture_stats_print(scale_type, SCALE_FLAG);
->    304	}
->    305	
->    306	static struct rcu_scale_ops tasks_ops = {
->    307		.ptype		= RCU_TASKS_FLAVOR,
->    308		.init		= rcu_sync_scale_init,
->    309		.readlock	= tasks_scale_read_lock,
->    310		.readunlock	= tasks_scale_read_unlock,
->    311		.get_gp_seq	= rcu_no_completed,
->    312		.gp_diff	= rcu_seq_diff,
->    313		.async		= call_rcu_tasks,
->    314		.gp_barrier	= rcu_barrier_tasks,
->    315		.sync		= synchronize_rcu_tasks,
->    316		.exp_sync	= synchronize_rcu_tasks,
->    317		.rso_gp_kthread	= get_rcu_tasks_gp_kthread,
->    318		.stats		= IS_ENABLED(CONFIG_TINY_RCU) ? NULL : rcu_tasks_scale_stats,
->    319		.name		= "tasks"
->    320	};
->    321	
->    322	#define TASKS_OPS &tasks_ops,
->    323	
->    324	#else // #ifdef CONFIG_TASKS_RCU
->    325	
->    326	#define TASKS_OPS
->    327	
->    328	#endif // #else // #ifdef CONFIG_TASKS_RCU
->    329	
->    330	#ifdef CONFIG_TASKS_RUDE_RCU
->    331	
->    332	/*
->    333	 * Definitions for RCU-tasks-rude scalability testing.
->    334	 */
->    335	
->    336	static int tasks_rude_scale_read_lock(void)
->    337	{
->    338		return 0;
->    339	}
->    340	
->    341	static void tasks_rude_scale_read_unlock(int idx)
->    342	{
->    343	}
->    344	
->    345	static void rcu_tasks_rude_scale_stats(void)
->    346	{
->  > 347		rcu_tasks_rude_torture_stats_print(scale_type, SCALE_FLAG);
->    348	}
->    349	
->    350	static struct rcu_scale_ops tasks_rude_ops = {
->    351		.ptype		= RCU_TASKS_RUDE_FLAVOR,
->    352		.init		= rcu_sync_scale_init,
->    353		.readlock	= tasks_rude_scale_read_lock,
->    354		.readunlock	= tasks_rude_scale_read_unlock,
->    355		.get_gp_seq	= rcu_no_completed,
->    356		.gp_diff	= rcu_seq_diff,
->    357		.async		= call_rcu_tasks_rude,
->    358		.gp_barrier	= rcu_barrier_tasks_rude,
->    359		.sync		= synchronize_rcu_tasks_rude,
->    360		.exp_sync	= synchronize_rcu_tasks_rude,
->    361		.rso_gp_kthread	= get_rcu_tasks_rude_gp_kthread,
->    362		.stats		= IS_ENABLED(CONFIG_TINY_RCU) ? NULL : rcu_tasks_rude_scale_stats,
->    363		.name		= "tasks-rude"
->    364	};
->    365	
->    366	#define TASKS_RUDE_OPS &tasks_rude_ops,
->    367	
->    368	#else // #ifdef CONFIG_TASKS_RUDE_RCU
->    369	
->    370	#define TASKS_RUDE_OPS
->    371	
->    372	#endif // #else // #ifdef CONFIG_TASKS_RUDE_RCU
->    373	
->    374	#ifdef CONFIG_TASKS_TRACE_RCU
->    375	
->    376	/*
->    377	 * Definitions for RCU-tasks-trace scalability testing.
->    378	 */
->    379	
->    380	static int tasks_trace_scale_read_lock(void)
->    381	{
->    382		rcu_read_lock_trace();
->    383		return 0;
->    384	}
->    385	
->    386	static void tasks_trace_scale_read_unlock(int idx)
->    387	{
->    388		rcu_read_unlock_trace();
->    389	}
->    390	
->    391	static void rcu_tasks_trace_scale_stats(void)
->    392	{
->  > 393		rcu_tasks_trace_torture_stats_print(scale_type, SCALE_FLAG);
->    394	}
->    395	
-> 
-> -- 
-> 0-DAY CI Kernel Test Service
-> https://github.com/intel/lkp-tests/wiki
+  1414	
+  1415	static inline pud_t pudp_establish(struct vm_area_struct *vma,
+  1416			unsigned long address, pud_t *pudp, pud_t pud)
+  1417	{
+  1418		page_table_check_pud_set(vma->vm_mm, pudp, pud);
+  1419		if (IS_ENABLED(CONFIG_SMP)) {
+> 1420			return xchg(pudp, pud);
+  1421		} else {
+  1422			pud_t old = *pudp;
+  1423			WRITE_ONCE(*pudp, pud);
+  1424			return old;
+  1425		}
+  1426	}
+  1427	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
