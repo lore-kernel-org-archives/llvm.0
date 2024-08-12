@@ -1,92 +1,118 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f202.google.com (mail-yw1-f202.google.com [209.85.128.202])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8554314EC59;
-	Mon, 12 Aug 2024 21:36:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B8E72192B69
+	for <llvm@lists.linux.dev>; Mon, 12 Aug 2024 23:29:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723498606; cv=none; b=RlyjGHj7yUwbJvWrtoPXf6M+JpvzXuiAzNqPrthGj7uMXRIO8OOdOCNjDcvMZw3z7Hr9uiAdmLrrJYaZFkiMdWiyPMH+1FrpdtuMQs0iajNPwWTXPCUT3PmXCbYAgeVmr+QOy1Fzy1L0iiF2SuoLtnJGV59A2ixvlY5TStfIHcE=
+	t=1723505358; cv=none; b=ajgQjn0KtNrD6ER+ZylSbMgjYu6voOX+Oa/apw8SJKb5CYiY9f/73suwOxtCdW2C3Kchldx8DIl4QpvYv8iMEvROJ9+mcKJR4C8ZaLtaRDHKOkt8f7ABuZ/cWbEaVekmGDd/fbBrRGi+I2PQA+Fyt7Id+Gi0uyd6IyP1jYMQRLU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723498606; c=relaxed/simple;
-	bh=8z9+1PzvP+5Q68yaNgYtA5o3wmc3B+8FhmL6Cqq9EyI=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=Trwqd/W/ztPGQq93krVjcjv/1Uvv+ObUZXQn9cjdmhc6h3vc7gRVwZOXlD+McjVAO6GvWSFvIKnD9c0LIXTrv7bYndLeyWUQ7SkC/xuNGqbpnDaP5fWYr5zgWl0QkpbgOdXqhsil/0Ss+S3/bX5N++RGwmNtwPPzTkCHa3+EnNw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=cFsAIJhw; arc=none smtp.client-ip=198.175.65.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1723505358; c=relaxed/simple;
+	bh=C1Zz0ScPP1mFsCHtubcJdynvh3BR6CmJLqAON/Xqs9k=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=QXQC7DkRb0LRrjd9WIjEf+YCKItH82rXxHMfKAWkAcHXDHmHlWPn3ktDArdIZ5zbC0o1Xp/Y2MCIUbRcktMNn25nmlEo6rpTzUoVpyCpfkj0sSQxDhWkxyQZY7Zvmsg45c27CDofftrg/Ro9XnHhhtd3cS36QjlQSy2VWsuukSU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--mmaurer.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=VIUiJEsp; arc=none smtp.client-ip=209.85.128.202
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--mmaurer.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="cFsAIJhw"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1723498605; x=1755034605;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=8z9+1PzvP+5Q68yaNgYtA5o3wmc3B+8FhmL6Cqq9EyI=;
-  b=cFsAIJhwAvB/ueQ2s5R/edQBUtEWLnTs8skdrXByZQzecbVpZhyoHmSj
-   eU/B1eqVuFa01qGHiWHzFM3s7C8zsmJvwV+3oyz+s2Yc47h8J6u9C24El
-   vR5jZig84eSFNDzvz8WNXe9nfOfkAHn2lCbbWE9w61JlrCl1fQPc4Xvhj
-   co1KQkhnvaXrZePfLINsFXPGRXypPtnabxPafXaiPsAcuZZtHLYfar/VJ
-   KIBahqXetq2BoMdsC+MFVLXP9jkMAxexyRPiFOsAQ/+0QwT6lteVHh/XB
-   Z8tqcmqytyNFzqSW01gpxb1dzut3DC2qCbU1HXQcURnIgfZrsm3Xv1Eyn
-   g==;
-X-CSE-ConnectionGUID: QuDfA03ISjiUp+cS/ck/1g==
-X-CSE-MsgGUID: PlI8Nku6Q8iSocmw0OBkOA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11162"; a="21777015"
-X-IronPort-AV: E=Sophos;i="6.09,284,1716274800"; 
-   d="scan'208";a="21777015"
-Received: from fmviesa005.fm.intel.com ([10.60.135.145])
-  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Aug 2024 14:36:44 -0700
-X-CSE-ConnectionGUID: mkiYyRcyRxioi6OB1+WImQ==
-X-CSE-MsgGUID: mKQH8xRkRcuCdo+r16JGNw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.09,284,1716274800"; 
-   d="scan'208";a="62830310"
-Received: from unknown (HELO b6bf6c95bbab) ([10.239.97.151])
-  by fmviesa005.fm.intel.com with ESMTP; 12 Aug 2024 14:36:41 -0700
-Received: from kbuild by b6bf6c95bbab with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1sdciV-000CCd-2L;
-	Mon, 12 Aug 2024 21:36:39 +0000
-Date: Tue, 13 Aug 2024 05:36:19 +0800
-From: kernel test robot <lkp@intel.com>
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org,
-	Alex Deucher <alexander.deucher@amd.com>,
-	Aurabindo Pillai <aurabindo.pillai@amd.com>
-Subject: ld.lld: warning:
- src/consumer/drivers/gpu/drm/amd/amdgpu/../display/dc/dml2/dml21/src/dml2_core/dml2_core_shared.c:755:0:
- stack frame size (3432) exceeds limit (3072) in function
- 'dml2_core_shared_mode_support'
-Message-ID: <202408130537.amQPXvmF-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="VIUiJEsp"
+Received: by mail-yw1-f202.google.com with SMTP id 00721157ae682-68d1d966ef7so107770877b3.1
+        for <llvm@lists.linux.dev>; Mon, 12 Aug 2024 16:29:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1723505355; x=1724110155; darn=lists.linux.dev;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=lfUjMO5M0SniqX/0k9KLAB5KRodEfFiCSNK+c2KjkqM=;
+        b=VIUiJEsp6uINAyiKW/qnyKH5HmfDQnDRZrWPh7dcymemuzZOTnCdo6/puui+Jo1baL
+         URevGqeXy8VmYTW74MdQB5gw2L9P0pbCZL3SUEQKl7v4/ITlyA0/lLsMCTgv2jgrPo9o
+         VZF33NXXpcc18wK018RwiqLxdAMTF0ZvQkHlybVBlMlqq47daJw4fSK0MCkIpyUnmW6q
+         G2tCUlJHUX+nz9PsqF9Tgd872Btk8103fHXXVj7gLrM1k5+CZlGQcwN9cThufQUxr4qT
+         iLmilRH8sHb5OmUsQsYZDBpCKpRbRROEROY1uoI6W+TIGy7z+2ykGwspfb0PCf7ZoNMd
+         Am0w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1723505355; x=1724110155;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=lfUjMO5M0SniqX/0k9KLAB5KRodEfFiCSNK+c2KjkqM=;
+        b=k13kbXaPKfWms/DGpF6HLfWyX6XsWhouaE7BBiWCeQU0VKHCMBZO/K+B28d68fGthB
+         4xg5+tHcgTnlpzTlr8aQttXHEy6rpRHEtlNrL0tyQxiRP6s4JICPM0F7WElwIow+wi0P
+         DpDF27cb++2yroAZ7YbaZ96XgtTVVhW/rLz6keFPE3HUnU6diBMfuCEiOvqfdC/hw4T6
+         xS/JWk9fJIwApOy6Y5WFGf5ViuG1JCkcSZ6jfY8+Ll+YkaGYVI/+hjzzgk+3OLAuwWVU
+         TskYa8DbQvalKjH3ZK6Ro8RdIu7O1LRshSAi9rmXt+LoeJ27KI5F5YnT1CdtD85284uE
+         wx7Q==
+X-Forwarded-Encrypted: i=1; AJvYcCXN6WxEDG9QAnaymP9hWjsl0dPoIfWVxKSP97DnGUskHXBdTirqSnwCY/QJ2qijTCO4IAnukBP+y9CaIRKQrT/dlKGWgg==
+X-Gm-Message-State: AOJu0YzjEpzpblq/cUBTwn5UnxtSVmr0Ufptv/icjwPBKrRUqweVWGJD
+	o7ntUv7qFcvSvNcDUaiuhg8fgpyaYTtza5ZldqBD33FfK0fHss6ay8+Lf2fGwrWjhw6Ss+Zle3m
+	rU/3O2A==
+X-Google-Smtp-Source: AGHT+IEtuA7T7bE3cMa+Y4GHIfGRVLpMnVTFC18O4stjZtcv2quBfVTmtnD2+DUMiz8gWjxsLfiWTH/j2Jqa
+X-Received: from anyblade.c.googlers.com ([fda3:e722:ac3:cc00:20:ed76:c0a8:1791])
+ (user=mmaurer job=sendgmr) by 2002:a05:690c:b9e:b0:66b:fb2f:1b7 with SMTP id
+ 00721157ae682-6a976751ab0mr1067257b3.6.1723505355655; Mon, 12 Aug 2024
+ 16:29:15 -0700 (PDT)
+Date: Mon, 12 Aug 2024 23:29:00 +0000
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.46.0.76.ge559c4bf1a-goog
+Message-ID: <20240812232910.2026387-1-mmaurer@google.com>
+Subject: [PATCH v2 0/3] Rust KASAN Support
+From: Matthew Maurer <mmaurer@google.com>
+To: dvyukov@google.com, ojeda@kernel.org, Alex Gaynor <alex.gaynor@gmail.com>, 
+	Wedson Almeida Filho <wedsonaf@gmail.com>, Nathan Chancellor <nathan@kernel.org>
+Cc: aliceryhl@google.com, samitolvanen@google.com, 
+	Matthew Maurer <mmaurer@google.com>, Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, 
+	"=?UTF-8?q?Bj=C3=B6rn=20Roy=20Baron?=" <bjorn3_gh@protonmail.com>, Benno Lossin <benno.lossin@proton.me>, 
+	Andreas Hindborg <a.hindborg@samsung.com>, Nick Desaulniers <ndesaulniers@google.com>, 
+	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
+	rust-for-linux@vger.kernel.org, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   d74da846046aeec9333e802f5918bd3261fb5509
-commit: 9f4c6256d0cf887ef64fe87a48a34d50b4bde493 drm/amd/display: Add frame_warn_flag to dml2_core_shared.o
-date:   4 months ago
-config: x86_64-randconfig-002-20240810 (https://download.01.org/0day-ci/archive/20240813/202408130537.amQPXvmF-lkp@intel.com/config)
-compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240813/202408130537.amQPXvmF-lkp@intel.com/reproduce)
+Right now, if we turn on KASAN, Rust code will cause violations because
+it's not enabled properly.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202408130537.amQPXvmF-lkp@intel.com/
+This series:
+1. Adds flag probe macros for Rust - now that we're setting a minimum rustc
+   version instead of an exact one, these could be useful in general. We need
+   them in this patch because we don't set a restriction on which LLVM rustc
+   is using, which is what KASAN actually cares about.
+2. Makes `rustc` enable the relevant KASAN sanitizer flags when C does.
+3. Adds a smoke test to the `kasan_test` KUnit suite to check basic
+   integration.
 
-All warnings (new ones prefixed by >>):
+This patch series requires the target.json array support patch [1] as
+the x86_64 target.json file currently produced does not mark itself as KASAN
+capable.
 
-   ld.lld: warning: src/consumer/drivers/gpu/drm/amd/amdgpu/../display/dc/dml2/display_mode_core.c:6711:0: stack frame size (4888) exceeds limit (3072) in function 'dml_core_mode_support'
-   ld.lld: warning: src/consumer/drivers/gpu/drm/amd/amdgpu/../display/dc/dml2/display_mode_core.c:8280:0: stack frame size (3264) exceeds limit (3072) in function 'dml_core_mode_programming'
->> ld.lld: warning: src/consumer/drivers/gpu/drm/amd/amdgpu/../display/dc/dml2/dml21/src/dml2_core/dml2_core_shared.c:755:0: stack frame size (3432) exceeds limit (3072) in function 'dml2_core_shared_mode_support'
-   vmlinux.o: warning: objtool: .text.jffs2_erase_pending_blocks: unexpected end of section
+Differences from v1 [2] :
+1. Reworked KASAN Makefile to avoid repetition, as requested [3]
+2. Added a KUnit smoke test to avoid bitrot, as requested [4]
+3. Added `kernel-address` to the target.json (my local base-tree had this
+   from another patch series)
+
+[1] https://lore.kernel.org/lkml/20240730-target-json-arrays-v1-1-2b376fd0ecf4@google.com/
+[2] https://lore.kernel.org/llvm/20240725232126.1996981-1-mmaurer@google.com/
+[3] https://lore.kernel.org/llvm/CA+fCnZdwRcdOig0u-D0vnFz937hRufTQOpCqGiMeo5B+-1iRVA@mail.gmail.com/
+[4] https://lore.kernel.org/llvm/CACT4Y+Y+XmdNervhF5WAEyVwprJ32m7Pd8FF2fKy3K9FiTpJtQ@mail.gmail.com/
+
+Matthew Maurer (3):
+  kbuild: rust: Define probing macros for rustc
+  kbuild: rust: Enable KASAN support
+  kasan: rust: Add KASAN smoke test via UAF
+
+ mm/kasan/Makefile                         |  9 +++-
+ mm/kasan/{kasan_test.c => kasan_test_c.c} | 13 ++++++
+ mm/kasan/kasan_test_rust.rs               | 17 ++++++++
+ scripts/Kconfig.include                   |  8 ++++
+ scripts/Makefile.compiler                 | 15 +++++++
+ scripts/Makefile.kasan                    | 51 ++++++++++++++++-------
+ scripts/Makefile.lib                      |  3 ++
+ scripts/generate_rust_target.rs           |  1 +
+ 8 files changed, 101 insertions(+), 16 deletions(-)
+ rename mm/kasan/{kasan_test.c => kasan_test_c.c} (99%)
+ create mode 100644 mm/kasan/kasan_test_rust.rs
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.46.0.76.ge559c4bf1a-goog
+
