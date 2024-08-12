@@ -1,64 +1,71 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 96D061757E;
-	Sun, 11 Aug 2024 23:42:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C87B04690;
+	Mon, 12 Aug 2024 02:16:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723419763; cv=none; b=M9B109uhB8kvNg5K3h3z5GsHomaQAW+awkfu+mGhO3d0rrV9GC+6lhEdY8mebRSWXXlLoKZAVM0uk3gvB6B4CZyOgTzLTB0X0A/ukKnX0ui5iCeMsBlrWAPxW3wM/fgg97E24c9pIyOS0qtN7h2dVTZZEEFFdf0MDSQw7F4xC+8=
+	t=1723429006; cv=none; b=nD1mO7ubwZN47ihhkdnyKJvcPFmAz1d6ekQR4XaDJUINN9xqMedkRjVCS2TNnpqeqN+aRBoRJKudUbbq+PgmmvwNNCR4TbmmCYhChkixnQxtO/jp8BfwnR2TuwZQTYerwZHnjZ5CgCu+/SAdUCGgyqD5hRltGoFSUuJQ2THqxSQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723419763; c=relaxed/simple;
-	bh=bOzVc66EOtribw7hYUCqgq+ialPqt+EWyQe7S+D2QEM=;
+	s=arc-20240116; t=1723429006; c=relaxed/simple;
+	bh=5MYDHW8Ntrx9JK0iCo47kgCMiUvn00RyAYS0dDizyb4=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=VKzHNJ8Yy3ZDQJQcbqjozDP0GUmtWoWK5plKTn/SU56kBjsabIe2AGYLAyS2HbwdEtGTes3OXuSmoL16KLIDWYt7ysVF3jvelChh5M1jGZMym532delKx6QAodyR5dnuKWW+hvRDtAZG7eLSKbx+kGSrAevjI/BorKInPCsDFWU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=JIWZjKAn; arc=none smtp.client-ip=192.198.163.7
+	 Content-Type:Content-Disposition:In-Reply-To; b=fSIIzgPuPGonczu0X8Ptb5c+2qt8at6+34ldIPJGjWiObRjNEwuT5YxD+KH/DJVbxWK/ON12Zzy3QjMuobiCRkH+8Qm5sgBFFm7GCWu1otlDLvSEr+HmIJO74kpA6lYsNg6UlXroeEJrcPgxjJCYC5kwvKFn5L1IOWhdJoWsFp8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=AfUWab1O; arc=none smtp.client-ip=192.198.163.19
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="JIWZjKAn"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="AfUWab1O"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1723419762; x=1754955762;
+  t=1723429003; x=1754965003;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=bOzVc66EOtribw7hYUCqgq+ialPqt+EWyQe7S+D2QEM=;
-  b=JIWZjKAnElgv+WQFCmyMHiiAiNfPWFgRxd+8LKjh53i1n+B9H57xXMFl
-   X6VdVxa/F2MSKemzoy0fWcqE+DYl8Og45lu1KMNn5zfnXEynD/on4CLZm
-   9JpzO2xN78bZS//hPj228uqXJ9yBzvU/g+q9Oz0LPGTiZ74kMi3oNxQve
-   iT9Y76SLQHG3f8XPTD8Ui9oa7JuwkMW7V5p+9PaUg29F8kAK50ywhFZuO
-   telfcRmSCES0raAwr9CmSh/Nwv+I/DQWgJtNycJdQBITQNXw9b2BAKViH
-   vIk/d08PDFOFoSOrvUZM6k5JoKv76iGF1CvaML1cb7fPaUk/tMSQ8J970
+  bh=5MYDHW8Ntrx9JK0iCo47kgCMiUvn00RyAYS0dDizyb4=;
+  b=AfUWab1OK8TKFnCWbsQ/ut5uMVzGj93zhorX5v05MZHhYsY6X3v3U8Zp
+   Nzg5CA5b02AaW0iKWx9B9y89dv03013dDE1nRtiEva1S/RCgmo+RZ99Xa
+   YNlmLucbN7aThq3Y0gosZcZtGUCWYED9MHlF2fV3KjZ85lIyjA3nDr+L1
+   bQGmMBCZxskkFoJMd+pBkoo4TI7Lxr8uJqA/wurFS5aqJGWtwWfL3vN1Q
+   cKTxjuJqSfPJ+l/d1Ich1LfmVunTgS4snT4HvE6W99Cf09nhfJaxnJIS9
+   zyGvf7yipEgVXNSYk80gWbAaxu//9OgyIB2InjH+/oq1vno0KcfCid78/
    w==;
-X-CSE-ConnectionGUID: TR+6G3MdQSmrb9+lnYkc7A==
-X-CSE-MsgGUID: JP5TEcOWSFe8ql/Dgvn6cA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11161"; a="46917016"
+X-CSE-ConnectionGUID: AepaZUi8SeGHFqXqCY1ICg==
+X-CSE-MsgGUID: 29nNaqJ0Qt+ns5u4fxJrtg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11161"; a="21178617"
 X-IronPort-AV: E=Sophos;i="6.09,282,1716274800"; 
-   d="scan'208";a="46917016"
-Received: from orviesa006.jf.intel.com ([10.64.159.146])
-  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Aug 2024 16:42:41 -0700
-X-CSE-ConnectionGUID: OQizJ+//SK6T5FdwL88LyQ==
-X-CSE-MsgGUID: ffABVu1dSjiwg1Ihcm5OaA==
+   d="scan'208";a="21178617"
+Received: from orviesa005.jf.intel.com ([10.64.159.145])
+  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Aug 2024 19:16:43 -0700
+X-CSE-ConnectionGUID: wSCFL66dQdOmgnaUlzfcYQ==
+X-CSE-MsgGUID: C39OJgj3S8+gxxwICPkdgA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.09,282,1716274800"; 
-   d="scan'208";a="58335888"
+   d="scan'208";a="62957247"
 Received: from unknown (HELO b6bf6c95bbab) ([10.239.97.151])
-  by orviesa006.jf.intel.com with ESMTP; 11 Aug 2024 16:42:37 -0700
+  by orviesa005.jf.intel.com with ESMTP; 11 Aug 2024 19:16:39 -0700
 Received: from kbuild by b6bf6c95bbab with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1sdICk-000BEB-0h;
-	Sun, 11 Aug 2024 23:42:31 +0000
-Date: Mon, 12 Aug 2024 07:42:00 +0800
+	id 1sdKbf-000BJm-0j;
+	Mon, 12 Aug 2024 02:16:28 +0000
+Date: Mon, 12 Aug 2024 10:15:26 +0800
 From: kernel test robot <lkp@intel.com>
-To: Abhinav Jain <jain.abhinav177@gmail.com>, idryomov@gmail.com,
-	xiubli@redhat.com, davem@davemloft.net, edumazet@google.com,
-	kuba@kernel.org, pabeni@redhat.com, ceph-devel@vger.kernel.org,
-	netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	skhan@linuxfoundation.org, javier.carrasco.cruz@gmail.com,
-	Abhinav Jain <jain.abhinav177@gmail.com>
-Subject: Re: [PATCH net] libceph: Make the input const as per the TODO
-Message-ID: <202408120724.pyUdMxWP-lkp@intel.com>
-References: <20240811193645.1082042-1-jain.abhinav177@gmail.com>
+To: Elad Yifee <eladwf@gmail.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, eladwf@gmail.com,
+	daniel@makrotopia.org, Felix Fietkau <nbd@nbd.name>,
+	Sean Wang <sean.wang@mediatek.com>,
+	Mark Lee <Mark-MC.Lee@mediatek.com>,
+	Lorenzo Bianconi <lorenzo@kernel.org>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Matthias Brugger <matthias.bgg@gmail.com>,
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+	Chen Lin <chen45464546@163.com>, netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-mediatek@lists.infradead.org
+Subject: Re: [PATCH net] net: ethernet: mtk_eth_soc: fix memory leak in LRO
+ rings release
+Message-ID: <202408120923.HUpL6sBp-lkp@intel.com>
+References: <20240811184949.2799-1-eladwf@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -67,150 +74,52 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240811193645.1082042-1-jain.abhinav177@gmail.com>
+In-Reply-To: <20240811184949.2799-1-eladwf@gmail.com>
 
-Hi Abhinav,
+Hi Elad,
 
 kernel test robot noticed the following build errors:
 
 [auto build test ERROR on net/main]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Abhinav-Jain/libceph-Make-the-input-const-as-per-the-TODO/20240812-033900
+url:    https://github.com/intel-lab-lkp/linux/commits/Elad-Yifee/net-ethernet-mtk_eth_soc-fix-memory-leak-in-LRO-rings-release/20240812-025108
 base:   net/main
-patch link:    https://lore.kernel.org/r/20240811193645.1082042-1-jain.abhinav177%40gmail.com
-patch subject: [PATCH net] libceph: Make the input const as per the TODO
-config: i386-buildonly-randconfig-002-20240812 (https://download.01.org/0day-ci/archive/20240812/202408120724.pyUdMxWP-lkp@intel.com/config)
+patch link:    https://lore.kernel.org/r/20240811184949.2799-1-eladwf%40gmail.com
+patch subject: [PATCH net] net: ethernet: mtk_eth_soc: fix memory leak in LRO rings release
+config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20240812/202408120923.HUpL6sBp-lkp@intel.com/config)
 compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240812/202408120724.pyUdMxWP-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240812/202408120923.HUpL6sBp-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202408120724.pyUdMxWP-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202408120923.HUpL6sBp-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> net/ceph/crypto.c:89:5: error: conflicting types for 'ceph_crypto_key_decode'
-      89 | int ceph_crypto_key_decode(struct ceph_crypto_key *key, const void **p, const void *end)
-         |     ^
-   net/ceph/crypto.h:25:5: note: previous declaration is here
-      25 | int ceph_crypto_key_decode(struct ceph_crypto_key *key, void **p, void *end);
-         |     ^
->> net/ceph/crypto.c:93:19: error: passing 'const void **' to parameter of type 'void **' discards qualifiers in nested pointer types [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
-      93 |         ceph_decode_need(p, end, 2*sizeof(u16) + sizeof(key->created), bad);
-         |                          ^
-   include/linux/ceph/decode.h:59:29: note: expanded from macro 'ceph_decode_need'
-      59 |                 if (!likely(ceph_has_room(p, end, n)))          \
-         |                                           ^
-   include/linux/compiler.h:76:40: note: expanded from macro 'likely'
-      76 | # define likely(x)      __builtin_expect(!!(x), 1)
-         |                                             ^
-   include/linux/ceph/decode.h:52:41: note: passing argument to parameter 'p' here
-      52 | static inline bool ceph_has_room(void **p, void *end, size_t n)
-         |                                         ^
->> net/ceph/crypto.c:93:22: error: passing 'const void *' to parameter of type 'void *' discards qualifiers [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
-      93 |         ceph_decode_need(p, end, 2*sizeof(u16) + sizeof(key->created), bad);
-         |                             ^~~
-   include/linux/ceph/decode.h:59:32: note: expanded from macro 'ceph_decode_need'
-      59 |                 if (!likely(ceph_has_room(p, end, n)))          \
-         |                                              ^~~
-   include/linux/compiler.h:76:40: note: expanded from macro 'likely'
-      76 | # define likely(x)      __builtin_expect(!!(x), 1)
-         |                                             ^
-   include/linux/ceph/decode.h:52:50: note: passing argument to parameter 'end' here
-      52 | static inline bool ceph_has_room(void **p, void *end, size_t n)
-         |                                                  ^
-   net/ceph/crypto.c:94:29: error: passing 'const void **' to parameter of type 'void **' discards qualifiers in nested pointer types [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
-      94 |         key->type = ceph_decode_16(p);
-         |                                    ^
-   include/linux/ceph/decode.h:31:41: note: passing argument to parameter 'p' here
-      31 | static inline u16 ceph_decode_16(void **p)
-         |                                         ^
-   net/ceph/crypto.c:95:19: error: passing 'const void **' to parameter of type 'void **' discards qualifiers in nested pointer types [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
-      95 |         ceph_decode_copy(p, &key->created, sizeof(key->created));
-         |                          ^
-   include/linux/ceph/decode.h:43:44: note: passing argument to parameter 'p' here
-      43 | static inline void ceph_decode_copy(void **p, void *pv, size_t n)
-         |                                            ^
-   net/ceph/crypto.c:96:28: error: passing 'const void **' to parameter of type 'void **' discards qualifiers in nested pointer types [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
-      96 |         key->len = ceph_decode_16(p);
-         |                                   ^
-   include/linux/ceph/decode.h:31:41: note: passing argument to parameter 'p' here
-      31 | static inline u16 ceph_decode_16(void **p)
-         |                                         ^
-   net/ceph/crypto.c:97:19: error: passing 'const void **' to parameter of type 'void **' discards qualifiers in nested pointer types [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
-      97 |         ceph_decode_need(p, end, key->len, bad);
-         |                          ^
-   include/linux/ceph/decode.h:59:29: note: expanded from macro 'ceph_decode_need'
-      59 |                 if (!likely(ceph_has_room(p, end, n)))          \
-         |                                           ^
-   include/linux/compiler.h:76:40: note: expanded from macro 'likely'
-      76 | # define likely(x)      __builtin_expect(!!(x), 1)
-         |                                             ^
-   include/linux/ceph/decode.h:52:41: note: passing argument to parameter 'p' here
-      52 | static inline bool ceph_has_room(void **p, void *end, size_t n)
-         |                                         ^
-   net/ceph/crypto.c:97:22: error: passing 'const void *' to parameter of type 'void *' discards qualifiers [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
-      97 |         ceph_decode_need(p, end, key->len, bad);
-         |                             ^~~
-   include/linux/ceph/decode.h:59:32: note: expanded from macro 'ceph_decode_need'
-      59 |                 if (!likely(ceph_has_room(p, end, n)))          \
-         |                                              ^~~
-   include/linux/compiler.h:76:40: note: expanded from macro 'likely'
-      76 | # define likely(x)      __builtin_expect(!!(x), 1)
-         |                                             ^
-   include/linux/ceph/decode.h:52:50: note: passing argument to parameter 'end' here
-      52 | static inline bool ceph_has_room(void **p, void *end, size_t n)
-         |                                                  ^
-   net/ceph/crypto.c:98:24: error: passing 'const void *' to parameter of type 'void *' discards qualifiers [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
-      98 |         ret = set_secret(key, *p);
-         |                               ^~
-   net/ceph/crypto.c:23:58: note: passing argument to parameter 'buf' here
-      23 | static int set_secret(struct ceph_crypto_key *key, void *buf)
-         |                                                          ^
-   net/ceph/crypto.c:99:19: error: passing 'const void *' to parameter of type 'void *' discards qualifiers [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
-      99 |         memzero_explicit(*p, key->len);
-         |                          ^~
-   include/linux/string.h:356:43: note: passing argument to parameter 's' here
-     356 | static inline void memzero_explicit(void *s, size_t count)
-         |                                           ^
-   net/ceph/crypto.c:315:37: error: passing 'const void **' to parameter of type 'void **' discards qualifiers in nested pointer types [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
-     315 |         ret = ceph_crypto_key_decode(ckey, &p, (const char *)prep->data + datalen);
-         |                                            ^~
-   net/ceph/crypto.h:25:64: note: passing argument to parameter 'p' here
-      25 | int ceph_crypto_key_decode(struct ceph_crypto_key *key, void **p, void *end);
-         |                                                                ^
->> net/ceph/crypto.c:315:41: error: passing 'const char *' to parameter of type 'void *' discards qualifiers [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
-     315 |         ret = ceph_crypto_key_decode(ckey, &p, (const char *)prep->data + datalen);
-         |                                                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   net/ceph/crypto.h:25:73: note: passing argument to parameter 'end' here
-      25 | int ceph_crypto_key_decode(struct ceph_crypto_key *key, void **p, void *end);
-         |                                                                         ^
-   12 errors generated.
+>> drivers/net/ethernet/mediatek/mtk_eth_soc.c:1768:14: error: incompatible pointer to integer conversion passing 'void *' to parameter of type 'unsigned long' [-Wint-conversion]
+    1768 |                 free_pages(data, get_order(mtk_max_frag_size(ring->frag_size)));
+         |                            ^~~~
+   include/linux/gfp.h:372:38: note: passing argument to parameter 'addr' here
+     372 | extern void free_pages(unsigned long addr, unsigned int order);
+         |                                      ^
+   1 error generated.
 
 
-vim +/ceph_crypto_key_decode +89 net/ceph/crypto.c
+vim +1768 drivers/net/ethernet/mediatek/mtk_eth_soc.c
 
-    88	
-  > 89	int ceph_crypto_key_decode(struct ceph_crypto_key *key, const void **p, const void *end)
-    90	{
-    91		int ret;
-    92	
-  > 93		ceph_decode_need(p, end, 2*sizeof(u16) + sizeof(key->created), bad);
-    94		key->type = ceph_decode_16(p);
-    95		ceph_decode_copy(p, &key->created, sizeof(key->created));
-    96		key->len = ceph_decode_16(p);
-    97		ceph_decode_need(p, end, key->len, bad);
-    98		ret = set_secret(key, *p);
-    99		memzero_explicit(*p, key->len);
-   100		*p += key->len;
-   101		return ret;
-   102	
-   103	bad:
-   104		dout("failed to decode crypto key\n");
-   105		return -EINVAL;
-   106	}
-   107	
+  1759	
+  1760	static void mtk_rx_put_buff(struct mtk_rx_ring *ring, void *data, bool napi)
+  1761	{
+  1762		if (ring->page_pool)
+  1763			page_pool_put_full_page(ring->page_pool,
+  1764						virt_to_head_page(data), napi);
+  1765		else if (ring->frag_size <= PAGE_SIZE)
+  1766			skb_free_frag(data);
+  1767		else
+> 1768			free_pages(data, get_order(mtk_max_frag_size(ring->frag_size)));
+  1769	}
+  1770	
 
 -- 
 0-DAY CI Kernel Test Service
