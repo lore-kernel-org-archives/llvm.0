@@ -1,219 +1,376 @@
-Received: from mail-yb1-f202.google.com (mail-yb1-f202.google.com [209.85.219.202])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C9BBE19A294
-	for <llvm@lists.linux.dev>; Mon, 12 Aug 2024 23:29:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.202
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 466288467;
+	Tue, 13 Aug 2024 01:43:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723505362; cv=none; b=rKdyvCDvAq1WuvnG6i4ZnPa6JvWSizI5y5xv2t3EdXhZTStQjTYsJQYr/tBkPioatMhR2YVL7cZBwIzNVF1QTTW3cR7HDdQJ7trlzZFWQRMGriqcVoFsF8wSpXut6SqYloQQLZYZKB6CrYC0/zAsMPXF94Dx0NtB5hbVUIyjLQc=
+	t=1723513383; cv=none; b=sjHx8cyTyzxXMCmEF1n7pFyH2pVZMhA36I0PbZDwbBnXNXt2MY4XKIdWPaOufzWGtcgVCivAPR9yI348zFXYVCFnD1bDDfZITFvOZ0SG+FE7HCIXivy6vO+5Ra/Cxpn+Id3W51mgrEEsu92FBv+uhz5Q/GSB7LDWNmbvZkaID2c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723505362; c=relaxed/simple;
-	bh=7F7SE7aoRT7voG2xQs8VDom1T/z2v/0g5da5noTFJXA=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=SaA2uuFDwza3lo8yHKcI1QzSjFNn6YLv2o87G+wwwSNPWBB8xl1t32Tx1Vn+nC4F2RF0tXvYG0I1TgauVNtmYzswDQ0U3HWipS5m6INjzp4PH3mURcGzMWIbk/gxpB757CyBPc4DShyIjCI0/gWGaBR8gMJkbT1TtjwvQh6VnMo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--mmaurer.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=P4hfws6I; arc=none smtp.client-ip=209.85.219.202
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--mmaurer.bounces.google.com
+	s=arc-20240116; t=1723513383; c=relaxed/simple;
+	bh=X98D4Hrp5gavWx2LzLv+TL5jOo0DwAnTckze8fwwUI0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Aql/U5YYCBRh5geIVZRPvdbPsjOk33cODYTuXK+JlJ00pjOlRpEVjx6HDOrsGmaj5wlidTX1dZK1+5A/c21tFb22nLIlyzAa2rbfUUwYnou7CKlmOXneej+9kPqoHRY31dN03DuoXL40SDQtwptzdryAeAlg1xxppwetmnL5O9c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=mATUPb69; arc=none smtp.client-ip=192.198.163.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="P4hfws6I"
-Received: by mail-yb1-f202.google.com with SMTP id 3f1490d57ef6-e035949cc4eso9421381276.1
-        for <llvm@lists.linux.dev>; Mon, 12 Aug 2024 16:29:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1723505360; x=1724110160; darn=lists.linux.dev;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=NYZAmb95Zdt4FYIjmbgakWRAyFL76pOHkgozh+PgbQY=;
-        b=P4hfws6IhoKoCS6X5WXaaIbeUT88E+1QN/WWi1zpO4j8XC1/dSfzrJmQW+YNJSApAh
-         pb2ZsmWLBfb2spCdhOql/ipexP9q/UncNBuVrpVP88jBlDaExUwS/JssPGByk6aqWPw2
-         O029U3aBryaoaU72mF9OaEDH59gDW3pcHJLW5q5dUx5cWKt6rlZedhTF51MaNJBtsFEm
-         qcG+BJaAGIpzHXGBkMdhlQ6/pzAYvVm98pO3Zzh+h03NnLBTQEKUXI5stdRrCOg9RrYX
-         NILHX2Xe4B8jlYlNBnmMyEDD4iwrUkOKhIpXOQIOTQBK/ywmh1Hxdk60NkmNoVMCrMxd
-         tZuA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1723505360; x=1724110160;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=NYZAmb95Zdt4FYIjmbgakWRAyFL76pOHkgozh+PgbQY=;
-        b=vwg2Ww/9VCzCYK6dDVHsqN6fyt/1XdVGZ4/L6Xd04SEDORqMqCMh6SVCWo3tLwTAoZ
-         FZx0Gf3iO/xGaM+KPkm1geL4uR3r4W7laved1YvgkU4D1PovjqyTEhgXu0OwxJOsfTaT
-         SxUlb0+jyO6w05eq6hEIswXkSXtHNv2XurhnyZYgQABM7sU6c8Do+dVOULxt69+qJT7u
-         a2o9yB/cN/QF3tNJaIg6Qe7N4U4Yja8QJX0TBiocnqdd/w1QK5WN9pnT9qaXW57XlIZ4
-         0kYW77OGewikxGoZVwo0TOX69hfkzcBFiUDOE+k3t2H2PFd2P9NhXHRJ4SKR/u0g6VrJ
-         vCCg==
-X-Forwarded-Encrypted: i=1; AJvYcCVHrGKaNkgUXEZu2Bpuwo2fzzu8d0nKyeiLomtlItf5UfCPbsi/aDAxSML+AcKpwUH0iC7R@lists.linux.dev
-X-Gm-Message-State: AOJu0YxCz+8eCMGxptUaSDJPJWWPCkIgoe5kg0DLiUSPwdn8blpMapws
-	TZ2sKeQRTWbwpoelH37BKfjo2TyH9C3NTbFYwRuCMlq3lPXpuN10T/appin1uQr64Q76OQ74n/A
-	z7lSP1A==
-X-Google-Smtp-Source: AGHT+IE1MApIbnBSlutXKaHC7CEgt9yRvSYQdwzC6dANObTA6whJsq38wsLYhU4NYJw1r2PDYod/5O8g467o
-X-Received: from anyblade.c.googlers.com ([fda3:e722:ac3:cc00:20:ed76:c0a8:1791])
- (user=mmaurer job=sendgmr) by 2002:a05:6902:145:b0:e03:2f90:e81d with SMTP id
- 3f1490d57ef6-e113d2867a6mr91705276.11.1723505359845; Mon, 12 Aug 2024
- 16:29:19 -0700 (PDT)
-Date: Mon, 12 Aug 2024 23:29:02 +0000
-In-Reply-To: <20240812232910.2026387-1-mmaurer@google.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="mATUPb69"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1723513381; x=1755049381;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=X98D4Hrp5gavWx2LzLv+TL5jOo0DwAnTckze8fwwUI0=;
+  b=mATUPb69D7qHkNTl34Rjj3VNFHHjJDCNrvVNLk2wdZRe329g31Fmv3bZ
+   6p3xHI2FZg0cIlhYTzhdCBLGQdanmd8atbU6U6gADjt4RSi+lUe9kDBaa
+   Wekj8JXxqmEWXaVeiTaAKTLZvPb1wxAQTPn+TfiU9PHBIbhEQKTQjn3X7
+   WXR4zape0i6JS1ILEm2sSC5m4hqQtxGJyB2IyVdNXBXyAM3AydW25kkuN
+   Tk9hjD/bfJ5bV5sFNwHA6QyI2xQOYnfJzaocxmRzE0MBpoznk6375xTCf
+   DFdBjRE9Ta1E4Q2KWJyggEAxuJ+c+cxoIbcw8UeimJDj/d0X0acZw/q7W
+   A==;
+X-CSE-ConnectionGUID: 7upGlPcSSCyJmtCBaFGXtA==
+X-CSE-MsgGUID: qig4UtShSgeMfpTIoo19xw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11162"; a="21523514"
+X-IronPort-AV: E=Sophos;i="6.09,284,1716274800"; 
+   d="scan'208";a="21523514"
+Received: from fmviesa002.fm.intel.com ([10.60.135.142])
+  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Aug 2024 18:42:59 -0700
+X-CSE-ConnectionGUID: Jfpnp7LUSI+t5ms0ej9Jnw==
+X-CSE-MsgGUID: NufWMK8ARDG0V1gu4xElxQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.09,284,1716274800"; 
+   d="scan'208";a="81733530"
+Received: from unknown (HELO b6bf6c95bbab) ([10.239.97.151])
+  by fmviesa002.fm.intel.com with ESMTP; 12 Aug 2024 18:42:56 -0700
+Received: from kbuild by b6bf6c95bbab with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1sdgYm-000CJ5-2G;
+	Tue, 13 Aug 2024 01:42:52 +0000
+Date: Tue, 13 Aug 2024 09:42:28 +0800
+From: kernel test robot <lkp@intel.com>
+To: =?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>,
+	Christian Brauner <brauner@kernel.org>,
+	Paul Moore <paul@paul-moore.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	=?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>,
+	linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
+	Jan Kara <jack@suse.cz>, Al Viro <viro@zeniv.linux.org.uk>,
+	Casey Schaufler <casey@schaufler-ca.com>,
+	James Morris <jmorris@namei.org>, Jann Horn <jannh@google.com>,
+	Ondrej Mosnacek <omosnace@redhat.com>,
+	"Serge E . Hallyn" <serge@hallyn.com>,
+	Stephen Smalley <stephen.smalley.work@gmail.com>
+Subject: Re: [PATCH] fs,security: Fix file_set_fowner LSM hook inconsistencies
+Message-ID: <202408130900.y6a7Si8X-lkp@intel.com>
+References: <20240812144936.1616628-1-mic@digikod.net>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
-References: <20240812232910.2026387-1-mmaurer@google.com>
-X-Mailer: git-send-email 2.46.0.76.ge559c4bf1a-goog
-Message-ID: <20240812232910.2026387-3-mmaurer@google.com>
-Subject: [PATCH v2 2/3] kbuild: rust: Enable KASAN support
-From: Matthew Maurer <mmaurer@google.com>
-To: dvyukov@google.com, ojeda@kernel.org, 
-	Masahiro Yamada <masahiroy@kernel.org>, Andrey Ryabinin <ryabinin.a.a@gmail.com>, 
-	Alex Gaynor <alex.gaynor@gmail.com>, Wedson Almeida Filho <wedsonaf@gmail.com>, 
-	Nathan Chancellor <nathan@kernel.org>
-Cc: aliceryhl@google.com, samitolvanen@google.com, 
-	Matthew Maurer <mmaurer@google.com>, Nicolas Schier <nicolas@fjasle.eu>, 
-	Alexander Potapenko <glider@google.com>, Andrey Konovalov <andreyknvl@gmail.com>, 
-	Vincenzo Frascino <vincenzo.frascino@arm.com>, Boqun Feng <boqun.feng@gmail.com>, 
-	Gary Guo <gary@garyguo.net>, 
-	"=?UTF-8?q?Bj=C3=B6rn=20Roy=20Baron?=" <bjorn3_gh@protonmail.com>, Benno Lossin <benno.lossin@proton.me>, 
-	Andreas Hindborg <a.hindborg@samsung.com>, Nick Desaulniers <ndesaulniers@google.com>, 
-	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, linux-kbuild@vger.kernel.org, 
-	kasan-dev@googlegroups.com, linux-kernel@vger.kernel.org, 
-	rust-for-linux@vger.kernel.org, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20240812144936.1616628-1-mic@digikod.net>
 
-Rust supports KASAN via LLVM, but prior to this patch, the flags aren't
-set properly.
+Hi Mickaël,
 
-Suggested-by: Miguel Ojeda <ojeda@kernel.org>
-Signed-off-by: Matthew Maurer <mmaurer@google.com>
----
- scripts/Makefile.kasan          | 51 +++++++++++++++++++++++----------
- scripts/Makefile.lib            |  3 ++
- scripts/generate_rust_target.rs |  1 +
- 3 files changed, 40 insertions(+), 15 deletions(-)
+kernel test robot noticed the following build errors:
 
-diff --git a/scripts/Makefile.kasan b/scripts/Makefile.kasan
-index 390658a2d5b7..bfd37be9cc45 100644
---- a/scripts/Makefile.kasan
-+++ b/scripts/Makefile.kasan
-@@ -12,6 +12,9 @@ endif
- KASAN_SHADOW_OFFSET ?= $(CONFIG_KASAN_SHADOW_OFFSET)
- 
- cc-param = $(call cc-option, -mllvm -$(1), $(call cc-option, --param $(1)))
-+rustc-param = $(call rustc-option, -Cllvm-args=-$(1),)
-+
-+check-args = $(foreach arg,$(2),$(call $(1),$(arg)))
- 
- ifdef CONFIG_KASAN_STACK
- 	stack_enable := 1
-@@ -28,6 +31,7 @@ else
- endif
- 
- CFLAGS_KASAN_MINIMAL := -fsanitize=kernel-address
-+RUSTFLAGS_KASAN_MINIMAL := -Zsanitizer=kernel-address -Zsanitizer-recover=kernel-address
- 
- # -fasan-shadow-offset fails without -fsanitize
- CFLAGS_KASAN_SHADOW := $(call cc-option, -fsanitize=kernel-address \
-@@ -35,44 +39,61 @@ CFLAGS_KASAN_SHADOW := $(call cc-option, -fsanitize=kernel-address \
- 			$(call cc-option, -fsanitize=kernel-address \
- 			-mllvm -asan-mapping-offset=$(KASAN_SHADOW_OFFSET)))
- 
-+# The minimum supported `rustc` version has a minimum supported LLVM
-+# version late enough that we can assume support for -asan-mapping-offset
-+RUSTFLAGS_KASAN_SHADOW := $(RUSTFLAGS_KASAN_MINIMAL) \
-+			  -Cllvm-args=-asan-mapping-offset=$(KASAN_SHADOW_OFFSET)
-+
-+KASAN_PARAMS :=
-+
- ifeq ($(strip $(CFLAGS_KASAN_SHADOW)),)
- 	CFLAGS_KASAN := $(CFLAGS_KASAN_MINIMAL)
-+	# We still need to consider this case for Rust because we want Rust code
-+	# to match the behavior of possibly old C compilers when linked together.
-+	ifdef CONFIG_RUST
-+		RUSTFLAGS_KASAN := $(RUSTFLAGS_KASAN_MINIMAL)
-+	endif
- else
--	# Now add all the compiler specific options that are valid standalone
--	CFLAGS_KASAN := $(CFLAGS_KASAN_SHADOW) \
--	 $(call cc-param,asan-globals=1) \
--	 $(call cc-param,asan-instrumentation-with-call-threshold=$(call_threshold)) \
--	 $(call cc-param,asan-instrument-allocas=1)
-+	KASAN_PARAMS += asan-globals=1 asan-instrumentation-with-call-threshold=$(call_threshold) asan-instrument-allocas=1
-+	CFLAGS_KASAN := $(CFLAGS_KASAN_SHADOW)
-+	ifdef CONFIG_RUST
-+		RUSTFLAGS_KASAN := $(RUSTFLAGS_KASAN_SHADOW)
-+	endif
- endif
- 
--CFLAGS_KASAN += $(call cc-param,asan-stack=$(stack_enable))
-+KASAN_PARAMS += asan-stack=$(stack_enable)
- 
- # Instrument memcpy/memset/memmove calls by using instrumented __asan_mem*()
- # instead. With compilers that don't support this option, compiler-inserted
- # memintrinsics won't be checked by KASAN on GENERIC_ENTRY architectures.
--CFLAGS_KASAN += $(call cc-param,asan-kernel-mem-intrinsic-prefix=1)
-+KASAN_PARAMS += asan-kernel-mem-intrinsic-prefix=1
- 
- endif # CONFIG_KASAN_GENERIC
- 
- ifdef CONFIG_KASAN_SW_TAGS
- 
- ifdef CONFIG_KASAN_INLINE
--    instrumentation_flags := $(call cc-param,hwasan-mapping-offset=$(KASAN_SHADOW_OFFSET))
-+    KASAN_PARAMS += hwasan-mapping-offset=$(KASAN_SHADOW_OFFSET)
- else
--    instrumentation_flags := $(call cc-param,hwasan-instrument-with-calls=1)
-+    KASAN_PARAMS += hwasan-instrument-with-calls=1
- endif
- 
--CFLAGS_KASAN := -fsanitize=kernel-hwaddress \
--		$(call cc-param,hwasan-instrument-stack=$(stack_enable)) \
--		$(call cc-param,hwasan-use-short-granules=0) \
--		$(call cc-param,hwasan-inline-all-checks=0) \
--		$(instrumentation_flags)
-+KASAN_PARAMS += hwasan-instrument-stack=$(stack_enable) hwasan-use-short-granules=0 hwasan-inline-all-checks=0 $(instrumentation_params)
-+CFLAGS_KASAN := -fsanitize=kernel-hwaddress
- 
- # Instrument memcpy/memset/memmove calls by using instrumented __hwasan_mem*().
- ifeq ($(call clang-min-version, 150000)$(call gcc-min-version, 130000),y)
- CFLAGS_KASAN += $(call cc-param,hwasan-kernel-mem-intrinsic-prefix=1)
- endif
- 
-+ifdef CONFIG_RUST
-+	RUSTFLAGS_KASAN := -Zsanitizer=kernel-hwaddress -Zsanitizer-recover=kernel-hwaddress
-+endif
-+
- endif # CONFIG_KASAN_SW_TAGS
- 
--export CFLAGS_KASAN CFLAGS_KASAN_NOSANITIZE
-+# Add all as-supported KASAN LLVM parameters requested by the configuration
-+CFLAGS_KASAN += $(call check-args, cc-param, $(KASAN_PARAMS))
-+RUSTFLAGS_KASAN += $(call check-args, rustc-param, $(KASAN_PARAMS))
-+
-+export CFLAGS_KASAN CFLAGS_KASAN_NOSANITIZE RUSTFLAGS_KASAN
-diff --git a/scripts/Makefile.lib b/scripts/Makefile.lib
-index fe3668dc4954..27999da3d382 100644
---- a/scripts/Makefile.lib
-+++ b/scripts/Makefile.lib
-@@ -167,6 +167,9 @@ ifneq ($(CONFIG_KASAN_HW_TAGS),y)
- _c_flags += $(if $(patsubst n%,, \
- 		$(KASAN_SANITIZE_$(target-stem).o)$(KASAN_SANITIZE)$(is-kernel-object)), \
- 		$(CFLAGS_KASAN), $(CFLAGS_KASAN_NOSANITIZE))
-+_rust_flags += $(if $(patsubst n%,, \
-+		$(KASAN_SANITIZE_$(target-stem).o)$(KASAN_SANITIZE)$(is-kernel-object)), \
-+		$(RUSTFLAGS_KASAN))
- endif
- endif
- 
-diff --git a/scripts/generate_rust_target.rs b/scripts/generate_rust_target.rs
-index 8a0644c0beed..1a4d468c575f 100644
---- a/scripts/generate_rust_target.rs
-+++ b/scripts/generate_rust_target.rs
-@@ -187,6 +187,7 @@ fn main() {
-         }
-         ts.push("features", features);
-         ts.push("llvm-target", "x86_64-linux-gnu");
-+        ts.push("supported-sanitizers", ["kernel-address"]);
-         ts.push("target-pointer-width", "64");
-     } else if cfg.has("X86_32") {
-         // This only works on UML, as i386 otherwise needs regparm support in rustc
+[auto build test ERROR on pcmoore-selinux/next]
+[also build test ERROR on linus/master v6.11-rc3 next-20240812]
+[cannot apply to brauner-vfs/vfs.all]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Micka-l-Sala-n/fs-security-Fix-file_set_fowner-LSM-hook-inconsistencies/20240813-004648
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/pcmoore/selinux.git next
+patch link:    https://lore.kernel.org/r/20240812144936.1616628-1-mic%40digikod.net
+patch subject: [PATCH] fs,security: Fix file_set_fowner LSM hook inconsistencies
+config: x86_64-buildonly-randconfig-003-20240813 (https://download.01.org/0day-ci/archive/20240813/202408130900.y6a7Si8X-lkp@intel.com/config)
+compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240813/202408130900.y6a7Si8X-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202408130900.y6a7Si8X-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> fs/fcntl.c:250:43: error: member reference type 'struct fown_struct' is not a pointer; did you mean to use '.'?
+     250 |         fown_cred = rcu_dereference(filp->f_owner->cred);
+         |                                     ~~~~~~~~~~~~~^~
+         |                                                  .
+   include/linux/rcupdate.h:747:50: note: expanded from macro 'rcu_dereference'
+     747 | #define rcu_dereference(p) rcu_dereference_check(p, 0)
+         |                                                  ^
+   include/linux/rcupdate.h:675:27: note: expanded from macro 'rcu_dereference_check'
+     675 |         __rcu_dereference_check((p), __UNIQUE_ID(rcu), \
+         |                                  ^
+   include/linux/rcupdate.h:527:10: note: expanded from macro '__rcu_dereference_check'
+     527 |         typeof(*p) *local = (typeof(*p) *__force)READ_ONCE(p); \
+         |                 ^
+>> fs/fcntl.c:250:43: error: member reference type 'struct fown_struct' is not a pointer; did you mean to use '.'?
+     250 |         fown_cred = rcu_dereference(filp->f_owner->cred);
+         |                                     ~~~~~~~~~~~~~^~
+         |                                                  .
+   include/linux/rcupdate.h:747:50: note: expanded from macro 'rcu_dereference'
+     747 | #define rcu_dereference(p) rcu_dereference_check(p, 0)
+         |                                                  ^
+   include/linux/rcupdate.h:675:27: note: expanded from macro 'rcu_dereference_check'
+     675 |         __rcu_dereference_check((p), __UNIQUE_ID(rcu), \
+         |                                  ^
+   include/linux/rcupdate.h:527:31: note: expanded from macro '__rcu_dereference_check'
+     527 |         typeof(*p) *local = (typeof(*p) *__force)READ_ONCE(p); \
+         |                                      ^
+>> fs/fcntl.c:250:43: error: member reference type 'struct fown_struct' is not a pointer; did you mean to use '.'?
+     250 |         fown_cred = rcu_dereference(filp->f_owner->cred);
+         |                                     ~~~~~~~~~~~~~^~
+         |                                                  .
+   include/linux/rcupdate.h:747:50: note: expanded from macro 'rcu_dereference'
+     747 | #define rcu_dereference(p) rcu_dereference_check(p, 0)
+         |                                                  ^
+   include/linux/rcupdate.h:675:27: note: expanded from macro 'rcu_dereference_check'
+     675 |         __rcu_dereference_check((p), __UNIQUE_ID(rcu), \
+         |                                  ^
+   include/linux/rcupdate.h:527:53: note: expanded from macro '__rcu_dereference_check'
+     527 |         typeof(*p) *local = (typeof(*p) *__force)READ_ONCE(p); \
+         |                                                            ^
+   note: (skipping 3 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/linux/compiler_types.h:510:22: note: expanded from macro 'compiletime_assert'
+     510 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+         |                             ^~~~~~~~~
+   include/linux/compiler_types.h:498:23: note: expanded from macro '_compiletime_assert'
+     498 |         __compiletime_assert(condition, msg, prefix, suffix)
+         |                              ^~~~~~~~~
+   include/linux/compiler_types.h:490:9: note: expanded from macro '__compiletime_assert'
+     490 |                 if (!(condition))                                       \
+         |                       ^~~~~~~~~
+>> fs/fcntl.c:250:43: error: member reference type 'struct fown_struct' is not a pointer; did you mean to use '.'?
+     250 |         fown_cred = rcu_dereference(filp->f_owner->cred);
+         |                                     ~~~~~~~~~~~~~^~
+         |                                                  .
+   include/linux/rcupdate.h:747:50: note: expanded from macro 'rcu_dereference'
+     747 | #define rcu_dereference(p) rcu_dereference_check(p, 0)
+         |                                                  ^
+   include/linux/rcupdate.h:675:27: note: expanded from macro 'rcu_dereference_check'
+     675 |         __rcu_dereference_check((p), __UNIQUE_ID(rcu), \
+         |                                  ^
+   include/linux/rcupdate.h:527:53: note: expanded from macro '__rcu_dereference_check'
+     527 |         typeof(*p) *local = (typeof(*p) *__force)READ_ONCE(p); \
+         |                                                            ^
+   note: (skipping 3 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/linux/compiler_types.h:510:22: note: expanded from macro 'compiletime_assert'
+     510 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+         |                             ^~~~~~~~~
+   include/linux/compiler_types.h:498:23: note: expanded from macro '_compiletime_assert'
+     498 |         __compiletime_assert(condition, msg, prefix, suffix)
+         |                              ^~~~~~~~~
+   include/linux/compiler_types.h:490:9: note: expanded from macro '__compiletime_assert'
+     490 |                 if (!(condition))                                       \
+         |                       ^~~~~~~~~
+>> fs/fcntl.c:250:43: error: member reference type 'struct fown_struct' is not a pointer; did you mean to use '.'?
+     250 |         fown_cred = rcu_dereference(filp->f_owner->cred);
+         |                                     ~~~~~~~~~~~~~^~
+         |                                                  .
+   include/linux/rcupdate.h:747:50: note: expanded from macro 'rcu_dereference'
+     747 | #define rcu_dereference(p) rcu_dereference_check(p, 0)
+         |                                                  ^
+   include/linux/rcupdate.h:675:27: note: expanded from macro 'rcu_dereference_check'
+     675 |         __rcu_dereference_check((p), __UNIQUE_ID(rcu), \
+         |                                  ^
+   include/linux/rcupdate.h:527:53: note: expanded from macro '__rcu_dereference_check'
+     527 |         typeof(*p) *local = (typeof(*p) *__force)READ_ONCE(p); \
+         |                                                            ^
+   note: (skipping 3 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/linux/compiler_types.h:510:22: note: expanded from macro 'compiletime_assert'
+     510 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+         |                             ^~~~~~~~~
+   include/linux/compiler_types.h:498:23: note: expanded from macro '_compiletime_assert'
+     498 |         __compiletime_assert(condition, msg, prefix, suffix)
+         |                              ^~~~~~~~~
+   include/linux/compiler_types.h:490:9: note: expanded from macro '__compiletime_assert'
+     490 |                 if (!(condition))                                       \
+         |                       ^~~~~~~~~
+>> fs/fcntl.c:250:43: error: member reference type 'struct fown_struct' is not a pointer; did you mean to use '.'?
+     250 |         fown_cred = rcu_dereference(filp->f_owner->cred);
+         |                                     ~~~~~~~~~~~~~^~
+         |                                                  .
+   include/linux/rcupdate.h:747:50: note: expanded from macro 'rcu_dereference'
+     747 | #define rcu_dereference(p) rcu_dereference_check(p, 0)
+         |                                                  ^
+   include/linux/rcupdate.h:675:27: note: expanded from macro 'rcu_dereference_check'
+     675 |         __rcu_dereference_check((p), __UNIQUE_ID(rcu), \
+         |                                  ^
+   include/linux/rcupdate.h:527:53: note: expanded from macro '__rcu_dereference_check'
+     527 |         typeof(*p) *local = (typeof(*p) *__force)READ_ONCE(p); \
+         |                                                            ^
+   note: (skipping 3 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/linux/compiler_types.h:510:22: note: expanded from macro 'compiletime_assert'
+     510 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+         |                             ^~~~~~~~~
+   include/linux/compiler_types.h:498:23: note: expanded from macro '_compiletime_assert'
+     498 |         __compiletime_assert(condition, msg, prefix, suffix)
+         |                              ^~~~~~~~~
+   include/linux/compiler_types.h:490:9: note: expanded from macro '__compiletime_assert'
+     490 |                 if (!(condition))                                       \
+         |                       ^~~~~~~~~
+>> fs/fcntl.c:250:43: error: member reference type 'struct fown_struct' is not a pointer; did you mean to use '.'?
+     250 |         fown_cred = rcu_dereference(filp->f_owner->cred);
+         |                                     ~~~~~~~~~~~~~^~
+         |                                                  .
+   include/linux/rcupdate.h:747:50: note: expanded from macro 'rcu_dereference'
+     747 | #define rcu_dereference(p) rcu_dereference_check(p, 0)
+         |                                                  ^
+   include/linux/rcupdate.h:675:27: note: expanded from macro 'rcu_dereference_check'
+     675 |         __rcu_dereference_check((p), __UNIQUE_ID(rcu), \
+         |                                  ^
+   include/linux/rcupdate.h:527:53: note: expanded from macro '__rcu_dereference_check'
+     527 |         typeof(*p) *local = (typeof(*p) *__force)READ_ONCE(p); \
+         |                                                            ^
+   note: (skipping 2 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/linux/compiler_types.h:510:22: note: expanded from macro 'compiletime_assert'
+     510 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+         |                             ^~~~~~~~~
+   include/linux/compiler_types.h:498:23: note: expanded from macro '_compiletime_assert'
+     498 |         __compiletime_assert(condition, msg, prefix, suffix)
+         |                              ^~~~~~~~~
+   include/linux/compiler_types.h:490:9: note: expanded from macro '__compiletime_assert'
+     490 |                 if (!(condition))                                       \
+         |                       ^~~~~~~~~
+>> fs/fcntl.c:250:43: error: member reference type 'struct fown_struct' is not a pointer; did you mean to use '.'?
+     250 |         fown_cred = rcu_dereference(filp->f_owner->cred);
+         |                                     ~~~~~~~~~~~~~^~
+         |                                                  .
+   include/linux/rcupdate.h:747:50: note: expanded from macro 'rcu_dereference'
+     747 | #define rcu_dereference(p) rcu_dereference_check(p, 0)
+         |                                                  ^
+   include/linux/rcupdate.h:675:27: note: expanded from macro 'rcu_dereference_check'
+     675 |         __rcu_dereference_check((p), __UNIQUE_ID(rcu), \
+         |                                  ^
+   include/linux/rcupdate.h:527:53: note: expanded from macro '__rcu_dereference_check'
+     527 |         typeof(*p) *local = (typeof(*p) *__force)READ_ONCE(p); \
+         |                                                            ^
+   include/asm-generic/rwonce.h:50:14: note: expanded from macro 'READ_ONCE'
+      50 |         __READ_ONCE(x);                                                 \
+         |                     ^
+   include/asm-generic/rwonce.h:44:65: note: expanded from macro '__READ_ONCE'
+      44 | #define __READ_ONCE(x)  (*(const volatile __unqual_scalar_typeof(x) *)&(x))
+         |                                                                  ^
+   include/linux/compiler_types.h:466:13: note: expanded from macro '__unqual_scalar_typeof'
+     466 |                 _Generic((x),                                           \
+         |                           ^
+>> fs/fcntl.c:250:43: error: member reference type 'struct fown_struct' is not a pointer; did you mean to use '.'?
+     250 |         fown_cred = rcu_dereference(filp->f_owner->cred);
+         |                                     ~~~~~~~~~~~~~^~
+         |                                                  .
+   include/linux/rcupdate.h:747:50: note: expanded from macro 'rcu_dereference'
+     747 | #define rcu_dereference(p) rcu_dereference_check(p, 0)
+         |                                                  ^
+   include/linux/rcupdate.h:675:27: note: expanded from macro 'rcu_dereference_check'
+     675 |         __rcu_dereference_check((p), __UNIQUE_ID(rcu), \
+         |                                  ^
+   include/linux/rcupdate.h:527:53: note: expanded from macro '__rcu_dereference_check'
+     527 |         typeof(*p) *local = (typeof(*p) *__force)READ_ONCE(p); \
+         |                                                            ^
+   include/asm-generic/rwonce.h:50:14: note: expanded from macro 'READ_ONCE'
+      50 |         __READ_ONCE(x);                                                 \
+         |                     ^
+   include/asm-generic/rwonce.h:44:65: note: expanded from macro '__READ_ONCE'
+      44 | #define __READ_ONCE(x)  (*(const volatile __unqual_scalar_typeof(x) *)&(x))
+         |                                                                  ^
+   include/linux/compiler_types.h:473:15: note: expanded from macro '__unqual_scalar_typeof'
+     473 |                          default: (x)))
+         |                                    ^
+>> fs/fcntl.c:250:43: error: member reference type 'struct fown_struct' is not a pointer; did you mean to use '.'?
+     250 |         fown_cred = rcu_dereference(filp->f_owner->cred);
+         |                                     ~~~~~~~~~~~~~^~
+         |                                                  .
+   include/linux/rcupdate.h:747:50: note: expanded from macro 'rcu_dereference'
+     747 | #define rcu_dereference(p) rcu_dereference_check(p, 0)
+         |                                                  ^
+   include/linux/rcupdate.h:675:27: note: expanded from macro 'rcu_dereference_check'
+     675 |         __rcu_dereference_check((p), __UNIQUE_ID(rcu), \
+         |                                  ^
+   include/linux/rcupdate.h:527:53: note: expanded from macro '__rcu_dereference_check'
+     527 |         typeof(*p) *local = (typeof(*p) *__force)READ_ONCE(p); \
+         |                                                            ^
+   include/asm-generic/rwonce.h:50:14: note: expanded from macro 'READ_ONCE'
+      50 |         __READ_ONCE(x);                                                 \
+         |                     ^
+   include/asm-generic/rwonce.h:44:72: note: expanded from macro '__READ_ONCE'
+      44 | #define __READ_ONCE(x)  (*(const volatile __unqual_scalar_typeof(x) *)&(x))
+         |                                                                         ^
+>> fs/fcntl.c:250:14: error: cannot take the address of an rvalue of type 'const struct cred *'
+     250 |         fown_cred = rcu_dereference(filp->f_owner->cred);
+         |                     ^               ~~~~~~~~~~~~~~~~~~~
+   include/linux/rcupdate.h:747:28: note: expanded from macro 'rcu_dereference'
+     747 | #define rcu_dereference(p) rcu_dereference_check(p, 0)
+         |                            ^                     ~
+   include/linux/rcupdate.h:675:2: note: expanded from macro 'rcu_dereference_check'
+     675 |         __rcu_dereference_check((p), __UNIQUE_ID(rcu), \
+         |         ^                        ~
+   include/linux/rcupdate.h:527:43: note: expanded from macro '__rcu_dereference_check'
+     527 |         typeof(*p) *local = (typeof(*p) *__force)READ_ONCE(p); \
+         |                                                  ^         ~
+   include/asm-generic/rwonce.h:50:2: note: expanded from macro 'READ_ONCE'
+      50 |         __READ_ONCE(x);                                                 \
+         |         ^           ~
+   include/asm-generic/rwonce.h:44:70: note: expanded from macro '__READ_ONCE'
+      44 | #define __READ_ONCE(x)  (*(const volatile __unqual_scalar_typeof(x) *)&(x))
+         |                                                                       ^ ~
+>> fs/fcntl.c:250:43: error: member reference type 'struct fown_struct' is not a pointer; did you mean to use '.'?
+     250 |         fown_cred = rcu_dereference(filp->f_owner->cred);
+         |                                     ~~~~~~~~~~~~~^~
+         |                                                  .
+   include/linux/rcupdate.h:747:50: note: expanded from macro 'rcu_dereference'
+     747 | #define rcu_dereference(p) rcu_dereference_check(p, 0)
+         |                                                  ^
+   include/linux/rcupdate.h:675:27: note: expanded from macro 'rcu_dereference_check'
+     675 |         __rcu_dereference_check((p), __UNIQUE_ID(rcu), \
+         |                                  ^
+   include/linux/rcupdate.h:530:12: note: expanded from macro '__rcu_dereference_check'
+     530 |         ((typeof(*p) __force __kernel *)(local)); \
+         |                   ^
+   12 errors generated.
+
+
+vim +250 fs/fcntl.c
+
+   239	
+   240	#ifdef CONFIG_CHECKPOINT_RESTORE
+   241	static int f_getowner_uids(struct file *filp, unsigned long arg)
+   242	{
+   243		struct user_namespace *user_ns = current_user_ns();
+   244		uid_t __user *dst = (void __user *)arg;
+   245		const struct cred *fown_cred;
+   246		uid_t src[2];
+   247		int err;
+   248	
+   249		rcu_read_lock();
+ > 250		fown_cred = rcu_dereference(filp->f_owner->cred);
+   251		src[0] = from_kuid(user_ns, fown_cred->uid);
+   252		src[1] = from_kuid(user_ns, fown_cred->euid);
+   253		rcu_read_unlock();
+   254	
+   255		err  = put_user(src[0], &dst[0]);
+   256		err |= put_user(src[1], &dst[1]);
+   257	
+   258		return err;
+   259	}
+   260	#else
+   261	static int f_getowner_uids(struct file *filp, unsigned long arg)
+   262	{
+   263		return -EINVAL;
+   264	}
+   265	#endif
+   266	
+
 -- 
-2.46.0.76.ge559c4bf1a-goog
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
