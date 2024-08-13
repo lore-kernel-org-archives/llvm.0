@@ -1,70 +1,63 @@
-Received: from mail-pj1-f46.google.com (mail-pj1-f46.google.com [209.85.216.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 591B91A2560;
-	Tue, 13 Aug 2024 19:47:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 372E41A38D3;
+	Tue, 13 Aug 2024 20:57:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723578452; cv=none; b=LIO066+BG3THsoqqQbMbRCCRu2vWK/zTHSSxXDHEn/DJw1zezKyr1/Quxd7RxQiNxf89QNWjlM9K+AhvZ0s9AhICWvx8g3YI9dGxb4Ijl5KgXvuVWVK2Qn8i5FARPwFNBRPY9wl2ny++tO+FgFDZYhVj/wj3KbEorcOS/YoWuUY=
+	t=1723582665; cv=none; b=FPey3mvqRZLQXqmBx8Qv61T0ZjnbLtR1un70jKz2MOQ5aBvsJFYoUMPoFPD4K2ZrWBx1cjyV5DtjhReu/S2JL2S54rQvjSOmGubsn3lXcAAs8W66qz/oq/dblq3btI7/U0wvKFUDbA2voPcJGdOXhhFVyuttX1p8O+gM19OigY8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723578452; c=relaxed/simple;
-	bh=D9EmZGcYIFN8nYMccR92qu5/EAch3Hfp/dc2IkePFKY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ODWBNYqJ1FDTr8pAsF2WfPHuMRaejMswtONNLSjwOmlK3WW+2pT0q9Gj2yC6+WK1lAfBIfwk9tvW5VM6X5JM6siVdPK251boTYmU5CgNIu7j2JSMajvT3Xn7zezKGc7/pME6yPRm706JQpkLeITNGXFYByT9rHmlC2zzmLoUGig=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=j32K/454; arc=none smtp.client-ip=209.85.216.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1723582665; c=relaxed/simple;
+	bh=QQb+yoLfcbSuHiQDh6IBowxVUFi4AdCKYv7lkzs4ibs=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=PHSdcZjWVTGsDhfe1B15ATIVN+sBfnRXBcOABcVJgoUTVtC5G0NMGnUnTax+6yrtpNSUnffZlI6geHDgsDsK6pXgsLF/I+Z/Mc8b3COiBB77ReM5soNMcUfXXi97SJuUDejHchjMm/BpuozFqgGQxawapEeJZe2iUyYkSFwKvq0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ZuSCHYIp; arc=none smtp.client-ip=192.198.163.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="j32K/454"
-Received: by mail-pj1-f46.google.com with SMTP id 98e67ed59e1d1-2cb4c4de4cbso3878945a91.1;
-        Tue, 13 Aug 2024 12:47:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1723578451; x=1724183251; darn=lists.linux.dev;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=5Q3nYgmk8Cs4TQTo24ByTlBnkZOowuAYQrFozF+3KiU=;
-        b=j32K/454JYhY8DgmE+pwB+9CKZVE3tkQ4SaB7qOV6QDhMOyN3FqYUMTXndljSDtQrX
-         JkFlgnJQEk0Rde0l+yne1XNfdDroclJ1B66oNLe/V0NlAPmLsHeouwBRkcEgAfxBFogN
-         VbFd+W/JXG4H7tqi4iMHqCSM0REWaE41HJ2ui0keZEHhxMayqqcJit7d1/EmzaE90Gpf
-         HclZG05xwO5F3t+ghB68AkNhROiHnkkRKN2HCAgR9tgeHfDXnQ2YzV2FvMIh7k7+OjHB
-         CeffgluxKXkQeP4wA26NHo8PIMMgVSuwApPIGrix5Ot+7tfxMTKkPhtEoVx+UmgSvfHe
-         bc2w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1723578451; x=1724183251;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=5Q3nYgmk8Cs4TQTo24ByTlBnkZOowuAYQrFozF+3KiU=;
-        b=aazwfkFMHwicymHsoMeh/uGXYXbiugVIp17Ikos/ntv6Ce69ww76USV//Zdn0uzXp6
-         WkgvPXiK2sfIKRmzs7JXSlrE7mkG6evsUDyMPVIRvMuSpvoQEsrts/Cu8OGCb45pc6Cu
-         AYXAjvT8R85rqqJW9cPUZ/tk09xKYCRwugzcytJnCyYNhy9ucNlkYP4tzszcfm0XEeWm
-         9jgPl9K3cPA9Nc6TIRMAjBATuTxOhJBINMpojfoO625ANhwaQLQnciugwUrz2mPHUvd8
-         d3K1MvruCVKH2cQFcoqlCrAnfFFVtnn2vClZoAdSKgHnBSnlX0QZCN14mXzyteR5hyc/
-         PDRw==
-X-Forwarded-Encrypted: i=1; AJvYcCUfJwDT43o7YxPReIAgmcMNYZ9cLxq6JJSrTppyymFwPIJILAkCEf4y6QD7IZcUT+DAt5oox5KDNEfsIOUNuEjPtSUzjfegMmk3l+GauXAIfLefve6lfPPSxl31HfAGQcVD07g=
-X-Gm-Message-State: AOJu0YzVA8ckEPaDOb3uN29IXkNkBJiUNJAWvv5AJx6X7eqjmuMjTRC2
-	Udj+WloLUtls0VWOeO53YN5aDwNmfgpQGyrW2+rEqDpyJZq0HZhB
-X-Google-Smtp-Source: AGHT+IG8lCzp7wbUsXu/ZQE/fHDUHeqmPZEqw7QhDJ3UBx2HARa4UT5RJdLBClplYVQC2+1y95B9yA==
-X-Received: by 2002:a17:90a:668b:b0:2ca:f39c:8d76 with SMTP id 98e67ed59e1d1-2d3aab7b382mr688666a91.39.1723578450490;
-        Tue, 13 Aug 2024 12:47:30 -0700 (PDT)
-Received: from localhost ([216.228.127.128])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2d1fcfe3e12sm7736720a91.41.2024.08.13.12.47.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 13 Aug 2024 12:47:29 -0700 (PDT)
-Date: Tue, 13 Aug 2024 12:47:27 -0700
-From: Yury Norov <yury.norov@gmail.com>
-To: Alexander Lobakin <aleksander.lobakin@intel.com>
-Cc: Kees Cook <kees@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>,
-	oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
-	Przemek Kitszel <przemyslaw.kitszel@intel.com>,
-	kernel test robot <lkp@intel.com>, llvm@lists.linux.dev,
-	llvm-bugs@lists.llvm.org
-Subject: Re: lib/test_bitmap.c:1278:2: error: call to
- '__compiletime_assert_127' declared with 'error' attribute: BUILD_BUG_ON
- failed: !__builtin_constant_p(~var)
-Message-ID: <Zru4T-aIsqeM9Fxk@yury-ThinkPad>
-References: <202408131601.Aj9JmK7K-lkp@intel.com>
- <2690861a-e726-4149-98ff-d26ec6d595ac@intel.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ZuSCHYIp"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1723582662; x=1755118662;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=QQb+yoLfcbSuHiQDh6IBowxVUFi4AdCKYv7lkzs4ibs=;
+  b=ZuSCHYIpCP46ei8CdFgXYkY/pWFI0xmW29DeeFX7mfcKdWiax+/CdX5H
+   UrzFUgQLsGbCxuicPil62AONbkZjkr9OI2RCin7tXZajjeXal2TN9zOEj
+   SiYnamOHRmvbmhOct75TvMzxpklf5sFKRnklHLGg47+98K2uQOMqmTnWh
+   dfDh5OAY4P8A0uIpsKur1wxew7tggjP9ZTm3dFNLgaqMXagrIhV8Hz4ku
+   UWXLn7ZZbgM7U+pmaq9ZQ/lNEr7/x0la/6xKvFdPpcSVOL794mLXcQzq/
+   +9Q25OM1A9wi37gHYKyru+Juk8o5Q3E5dDs5rLOzK1uRHzhcGfDVkBKfK
+   A==;
+X-CSE-ConnectionGUID: LMjKvK9xSJiRXasBUdrAvQ==
+X-CSE-MsgGUID: 4Yk6E4nmSMS4XutitrSsUg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11163"; a="32451618"
+X-IronPort-AV: E=Sophos;i="6.09,287,1716274800"; 
+   d="scan'208";a="32451618"
+Received: from orviesa006.jf.intel.com ([10.64.159.146])
+  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Aug 2024 13:57:41 -0700
+X-CSE-ConnectionGUID: tyoaJ9HUR1imQSi7hQLr8w==
+X-CSE-MsgGUID: 7E88kVq3Rii7wBX0OV9ikw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.09,287,1716274800"; 
+   d="scan'208";a="59095734"
+Received: from lkp-server01.sh.intel.com (HELO 9a732dc145d3) ([10.239.97.150])
+  by orviesa006.jf.intel.com with ESMTP; 13 Aug 2024 13:57:39 -0700
+Received: from kbuild by 9a732dc145d3 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1sdyaG-0000iw-2X;
+	Tue, 13 Aug 2024 20:57:36 +0000
+Date: Wed, 14 Aug 2024 04:56:54 +0800
+From: kernel test robot <lkp@intel.com>
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-kernel@vger.kernel.org,
+	Alex Deucher <alexander.deucher@amd.com>,
+	Aurabindo Pillai <aurabindo.pillai@amd.com>
+Subject: ld.lld: warning:
+ src/consumer/drivers/gpu/drm/amd/amdgpu/../display/dc/dml2/dml21/src/dml2_core/dml2_core_dcn4_calcs.c:6544:0:
+ stack frame size (3416) exceeds limit (3072) in function
+ 'dml_core_mode_support.138133'
+Message-ID: <202408140456.k2UqhEiG-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -73,132 +66,28 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <2690861a-e726-4149-98ff-d26ec6d595ac@intel.com>
 
-On Tue, Aug 13, 2024 at 04:38:10PM +0200, Alexander Lobakin wrote:
-> From: Kernel Test Robot <lkp@intel.com>
-> Date: Tue, 13 Aug 2024 17:00:56 +0800
-> 
-> > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-> > head:   d74da846046aeec9333e802f5918bd3261fb5509
-> > commit: 7adaf37f7f104a7ee5f150af491674ccbbfc4114 lib/bitmap: add compile-time test for __assign_bit() optimization
-> > date:   4 months ago
-> > config: um-randconfig-r132-20240812 (https://download.01.org/0day-ci/archive/20240813/202408131601.Aj9JmK7K-lkp@intel.com/config)
-> > compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project f86594788ce93b696675c94f54016d27a6c21d18)
-> > reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240813/202408131601.Aj9JmK7K-lkp@intel.com/reproduce)
-> > 
-> > If you fix the issue in a separate patch/commit (i.e. not just a new version of
-> > the same patch/commit), kindly add following tags
-> > | Reported-by: kernel test robot <lkp@intel.com>
-> > | Closes: https://lore.kernel.org/oe-kbuild-all/202408131601.Aj9JmK7K-lkp@intel.com/
-> > 
-> > All errors (new ones prefixed by >>):
-> > 
-> >>> lib/test_bitmap.c:1278:2: error: call to '__compiletime_assert_127' declared with 'error' attribute: BUILD_BUG_ON failed: !__builtin_constant_p(~var)
-> >     1278 |         BUILD_BUG_ON(!__builtin_constant_p(~var));
-> >          |         ^
-> >    include/linux/build_bug.h:50:2: note: expanded from macro 'BUILD_BUG_ON'
-> >       50 |         BUILD_BUG_ON_MSG(condition, "BUILD_BUG_ON failed: " #condition)
-> >          |         ^
-> >    include/linux/build_bug.h:39:37: note: expanded from macro 'BUILD_BUG_ON_MSG'
-> >       39 | #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
-> >          |                                     ^
-> >    include/linux/compiler_types.h:460:2: note: expanded from macro 'compiletime_assert'
-> >      460 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-> >          |         ^
-> >    include/linux/compiler_types.h:448:2: note: expanded from macro '_compiletime_assert'
-> >      448 |         __compiletime_assert(condition, msg, prefix, suffix)
-> >          |         ^
-> >    include/linux/compiler_types.h:441:4: note: expanded from macro '__compiletime_assert'
-> >      441 |                         prefix ## suffix();                             \
-> >          |                         ^
-> >    <scratch space>:193:1: note: expanded from here
-> >      193 | __compiletime_assert_127
-> >          | ^
-> >    1 error generated.
-> > 
-> > 
-> > vim +1278 lib/test_bitmap.c
-> > 
-> > 291f93ca339f5b Barry Song        2021-08-06  1227  
-> > 2356d198d2b4dd Yury Norov        2023-07-17  1228  /*
-> > 2356d198d2b4dd Yury Norov        2023-07-17  1229   * FIXME: Clang breaks compile-time evaluations when KASAN and GCOV are enabled.
-> > 2356d198d2b4dd Yury Norov        2023-07-17  1230   * To workaround it, GCOV is force-disabled in Makefile for this configuration.
-> > 2356d198d2b4dd Yury Norov        2023-07-17  1231   */
-> > dc34d5036692c6 Alexander Lobakin 2022-06-24  1232  static void __init test_bitmap_const_eval(void)
-> > dc34d5036692c6 Alexander Lobakin 2022-06-24  1233  {
-> > dc34d5036692c6 Alexander Lobakin 2022-06-24  1234  	DECLARE_BITMAP(bitmap, BITS_PER_LONG);
-> > dc34d5036692c6 Alexander Lobakin 2022-06-24  1235  	unsigned long initvar = BIT(2);
-> > dc34d5036692c6 Alexander Lobakin 2022-06-24  1236  	unsigned long bitopvar = 0;
-> > dc34d5036692c6 Alexander Lobakin 2022-06-24  1237  	unsigned long var = 0;
-> > dc34d5036692c6 Alexander Lobakin 2022-06-24  1238  	int res;
-> > dc34d5036692c6 Alexander Lobakin 2022-06-24  1239  
-> > dc34d5036692c6 Alexander Lobakin 2022-06-24  1240  	/*
-> > dc34d5036692c6 Alexander Lobakin 2022-06-24  1241  	 * Compilers must be able to optimize all of those to compile-time
-> > dc34d5036692c6 Alexander Lobakin 2022-06-24  1242  	 * constants on any supported optimization level (-O2, -Os) and any
-> > dc34d5036692c6 Alexander Lobakin 2022-06-24  1243  	 * architecture. Otherwise, trigger a build bug.
-> > dc34d5036692c6 Alexander Lobakin 2022-06-24  1244  	 * The whole function gets optimized out then, there's nothing to do
-> > dc34d5036692c6 Alexander Lobakin 2022-06-24  1245  	 * in runtime.
-> > dc34d5036692c6 Alexander Lobakin 2022-06-24  1246  	 */
-> > dc34d5036692c6 Alexander Lobakin 2022-06-24  1247  
-> > 7adaf37f7f104a Alexander Lobakin 2024-03-27  1248  	/* Equals to `unsigned long bitmap[1] = { GENMASK(6, 5), }` */
-> > dc34d5036692c6 Alexander Lobakin 2022-06-24  1249  	bitmap_clear(bitmap, 0, BITS_PER_LONG);
-> > dc34d5036692c6 Alexander Lobakin 2022-06-24  1250  	if (!test_bit(7, bitmap))
-> > dc34d5036692c6 Alexander Lobakin 2022-06-24  1251  		bitmap_set(bitmap, 5, 2);
-> > dc34d5036692c6 Alexander Lobakin 2022-06-24  1252  
-> > dc34d5036692c6 Alexander Lobakin 2022-06-24  1253  	/* Equals to `unsigned long bitopvar = BIT(20)` */
-> > dc34d5036692c6 Alexander Lobakin 2022-06-24  1254  	__change_bit(31, &bitopvar);
-> > dc34d5036692c6 Alexander Lobakin 2022-06-24  1255  	bitmap_shift_right(&bitopvar, &bitopvar, 11, BITS_PER_LONG);
-> > dc34d5036692c6 Alexander Lobakin 2022-06-24  1256  
-> > dc34d5036692c6 Alexander Lobakin 2022-06-24  1257  	/* Equals to `unsigned long var = BIT(25)` */
-> > dc34d5036692c6 Alexander Lobakin 2022-06-24  1258  	var |= BIT(25);
-> > dc34d5036692c6 Alexander Lobakin 2022-06-24  1259  	if (var & BIT(0))
-> > dc34d5036692c6 Alexander Lobakin 2022-06-24  1260  		var ^= GENMASK(9, 6);
-> > dc34d5036692c6 Alexander Lobakin 2022-06-24  1261  
-> > dc34d5036692c6 Alexander Lobakin 2022-06-24  1262  	/* __const_hweight<32|64>(GENMASK(6, 5)) == 2 */
-> > dc34d5036692c6 Alexander Lobakin 2022-06-24  1263  	res = bitmap_weight(bitmap, 20);
-> > dc34d5036692c6 Alexander Lobakin 2022-06-24  1264  	BUILD_BUG_ON(!__builtin_constant_p(res));
-> > dc34d5036692c6 Alexander Lobakin 2022-06-24  1265  	BUILD_BUG_ON(res != 2);
-> > dc34d5036692c6 Alexander Lobakin 2022-06-24  1266  
-> > dc34d5036692c6 Alexander Lobakin 2022-06-24  1267  	/* !(BIT(31) & BIT(18)) == 1 */
-> > dc34d5036692c6 Alexander Lobakin 2022-06-24  1268  	res = !test_bit(18, &bitopvar);
-> > dc34d5036692c6 Alexander Lobakin 2022-06-24  1269  	BUILD_BUG_ON(!__builtin_constant_p(res));
-> > dc34d5036692c6 Alexander Lobakin 2022-06-24  1270  	BUILD_BUG_ON(!res);
-> > dc34d5036692c6 Alexander Lobakin 2022-06-24  1271  
-> > dc34d5036692c6 Alexander Lobakin 2022-06-24  1272  	/* BIT(2) & GENMASK(14, 8) == 0 */
-> > dc34d5036692c6 Alexander Lobakin 2022-06-24  1273  	res = initvar & GENMASK(14, 8);
-> > dc34d5036692c6 Alexander Lobakin 2022-06-24  1274  	BUILD_BUG_ON(!__builtin_constant_p(res));
-> > dc34d5036692c6 Alexander Lobakin 2022-06-24  1275  	BUILD_BUG_ON(res);
-> > dc34d5036692c6 Alexander Lobakin 2022-06-24  1276  
-> > dc34d5036692c6 Alexander Lobakin 2022-06-24  1277  	/* ~BIT(25) */
-> > dc34d5036692c6 Alexander Lobakin 2022-06-24 @1278  	BUILD_BUG_ON(!__builtin_constant_p(~var));
-> > dc34d5036692c6 Alexander Lobakin 2022-06-24  1279  	BUILD_BUG_ON(~var != ~BIT(25));
-> > 7adaf37f7f104a Alexander Lobakin 2024-03-27  1280  
-> > 7adaf37f7f104a Alexander Lobakin 2024-03-27  1281  	/* ~BIT(25) | BIT(25) == ~0UL */
-> > 7adaf37f7f104a Alexander Lobakin 2024-03-27  1282  	bitmap_complement(&var, &var, BITS_PER_LONG);
-> > 7adaf37f7f104a Alexander Lobakin 2024-03-27  1283  	__assign_bit(25, &var, true);
-> > 7adaf37f7f104a Alexander Lobakin 2024-03-27  1284  
-> > 7adaf37f7f104a Alexander Lobakin 2024-03-27  1285  	/* !(~(~0UL)) == 1 */
-> > 7adaf37f7f104a Alexander Lobakin 2024-03-27  1286  	res = bitmap_full(&var, BITS_PER_LONG);
-> > 7adaf37f7f104a Alexander Lobakin 2024-03-27  1287  	BUILD_BUG_ON(!__builtin_constant_p(res));
-> > 7adaf37f7f104a Alexander Lobakin 2024-03-27  1288  	BUILD_BUG_ON(!res);
-> > dc34d5036692c6 Alexander Lobakin 2022-06-24  1289  }
-> > dc34d5036692c6 Alexander Lobakin 2022-06-24  1290  
-> > 
-> > :::::: The code at line 1278 was first introduced by commit
-> > :::::: dc34d5036692c614eef23c1130ee42a201c316bf lib: test_bitmap: add compile-time optimization/evaluations assertions
-> > 
-> > :::::: TO: Alexander Lobakin <alexandr.lobakin@intel.com>
-> > :::::: CC: Yury Norov <yury.norov@gmail.com>
-> 
-> + Cc Clang folks.
-> 
-> clang-dev 20 issue?
-> 
-> Thanks,
-> Olek
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   6b4aa469f04999c3f244515fa7491b4d093c5167
+commit: aa463cc850c464091cb749317372b70415d3e7d9 drm/amd/display: Fix CFLAGS for dml2_core_dcn4_calcs.o
+date:   4 months ago
+config: x86_64-randconfig-002-20240810 (https://download.01.org/0day-ci/archive/20240814/202408140456.k2UqhEiG-lkp@intel.com/config)
+compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240814/202408140456.k2UqhEiG-lkp@intel.com/reproduce)
 
-Seems like that. Looping LLVM-bugs <llvm-bugs@lists.llvm.org>.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202408140456.k2UqhEiG-lkp@intel.com/
 
-Thanks,
-Yury
+All warnings (new ones prefixed by >>):
+
+   ld.lld: warning: src/consumer/drivers/gpu/drm/amd/amdgpu/../display/dc/dml2/display_mode_core.c:6711:0: stack frame size (4888) exceeds limit (3072) in function 'dml_core_mode_support'
+   ld.lld: warning: src/consumer/drivers/gpu/drm/amd/amdgpu/../display/dc/dml2/display_mode_core.c:8280:0: stack frame size (3264) exceeds limit (3072) in function 'dml_core_mode_programming'
+>> ld.lld: warning: src/consumer/drivers/gpu/drm/amd/amdgpu/../display/dc/dml2/dml21/src/dml2_core/dml2_core_dcn4_calcs.c:6544:0: stack frame size (3416) exceeds limit (3072) in function 'dml_core_mode_support.138133'
+   ld.lld: warning: src/consumer/drivers/gpu/drm/amd/amdgpu/../display/dc/dml2/dml21/src/dml2_core/dml2_core_shared.c:755:0: stack frame size (3432) exceeds limit (3072) in function 'dml2_core_shared_mode_support'
+   vmlinux.o: warning: objtool: .text.jffs2_erase_pending_blocks: unexpected end of section
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
