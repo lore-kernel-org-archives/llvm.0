@@ -1,199 +1,265 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D49326AFB;
-	Tue, 13 Aug 2024 22:12:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 522561ABED7
+	for <llvm@lists.linux.dev>; Tue, 13 Aug 2024 22:53:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723587146; cv=none; b=tsiD9R03OUoZ5m9RCRmJ5XdE6MIvI5OORlZ3EyXgHqzEz3PsFwhwWa1n7BtS9k534GISbkJwR18lKn8bh6+1eBmGHsQ5wYEAw90DfqbVeE+dJZxav6cHuoWIDVGBLF19EgHoG9RnOaFrlUGmqRTUmf8lzeCnUKv/9TSZ3oT/pA8=
+	t=1723589606; cv=none; b=U+XoMvwcCwb0uOWYEQV4/vr7Alf8yk9zguCEet41RgCIfGwczmA8BV0NgobXB95I2jFimOg6+Z81iW/eLzXcoDnR2X4uaaFqE6XUBxyWOy499pCK/oR0G352Dc17mPOGcZBHm8k6ZsP22i2H4g3aQaEfEABHuD8jXydYJCjEIjc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723587146; c=relaxed/simple;
-	bh=nNhcw7GB8NcDgN2OIa/5pzlGkqY40T6fJOTJq7Kn/28=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=sE4mxUXbDucxoCV3FxIbBBC7yeDpClF8VbHv0ytxWhcjVl5NTEn9uUgVb3YSh67Ql7yI/VrhAA5guC0y2hmbSuTYZ58FLe9EyHSuLcdxKA4fNHWnexVkX8KXTA5tDd4JpwEbfU84YYiSu8KdKYe280aMQ2m2ZCsVDaCz/lXkISQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fhrM7kIN; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1723589606; c=relaxed/simple;
+	bh=QVB3XUtCbjsyZ5tiC/QmcApx8zSusE9/0Ek8LzR86O0=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=k1hILSgdXhZYHs0vOD9oTIVJ6cSJ9mphgZ+8wFn0UAiJNpJfEcsw9xpORyntZOc6my8hvSLgAWoHiY+2aivcsU4WXVHSvsfFgPbwzS6KVVH1TqSsOsoWZ9H2rbHdR6h6AvLlXwcLmvCw+JamLuFY/m73ypS9+HHtk8AfmUW848A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NMGbFqd6; arc=none smtp.client-ip=209.85.128.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fhrM7kIN"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 701E6C32782;
-	Tue, 13 Aug 2024 22:12:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1723587144;
-	bh=nNhcw7GB8NcDgN2OIa/5pzlGkqY40T6fJOTJq7Kn/28=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=fhrM7kINDPMWXeggXL9i/Sehk6QeQkOlY6YuW3N0PCtlBBKKPIdacuVrDOiMpuc9R
-	 JzyV4H8XiE5h1T9b1SD6N6CiM+tRiKKT3e4rmNioBE5Qm2Bnv425bIBn3QxnpAOBsL
-	 sm+mUcJLQsA+XYULobmzec4iA5hB+F+6/VSADvIDq4DWPrGliU2+zf8pXIfovm1xhP
-	 X0cY2G+XPjBl0fMqkfYOnif8907g4bvwWg335XqYg1O2NM5mSod3aaFXtHk7hHmOGj
-	 gxLsC0ERARklGslq/Rc6ocX3dwA4dujazUkb9x4koaLeDd9GILrVoZnAVrKzonVUuK
-	 ioyfv7Jzerbyg==
-Date: Tue, 13 Aug 2024 15:12:21 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Yury Norov <yury.norov@gmail.com>
-Cc: Alexander Lobakin <aleksander.lobakin@intel.com>,
-	Kees Cook <kees@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
-	Przemek Kitszel <przemyslaw.kitszel@intel.com>,
-	kernel test robot <lkp@intel.com>, llvm@lists.linux.dev,
-	llvm-bugs@lists.llvm.org
-Subject: Re: lib/test_bitmap.c:1278:2: error: call to
- '__compiletime_assert_127' declared with 'error' attribute: BUILD_BUG_ON
- failed: !__builtin_constant_p(~var)
-Message-ID: <20240813221221.GA798176@thelio-3990X>
-References: <202408131601.Aj9JmK7K-lkp@intel.com>
- <2690861a-e726-4149-98ff-d26ec6d595ac@intel.com>
- <Zru4T-aIsqeM9Fxk@yury-ThinkPad>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NMGbFqd6"
+Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-428ec6c190eso46090795e9.1
+        for <llvm@lists.linux.dev>; Tue, 13 Aug 2024 15:53:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1723589603; x=1724194403; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=otYKhkTTVwFrNMc4y8Lo3x+9H/dZK04aKqqwJVfyjXE=;
+        b=NMGbFqd6E6W9zu0ncB59oZz0iacijSCNkkD7EkHkl6mUhxyDiD2V+qV+Kwf3KNLtv4
+         t4PAa/r1O/3EO9xtcPuDs60RND+WLhnd7kT3C1uJm88nkHfs4kFKcYFG8Q9AOlLeXxKE
+         s4Be6AP35lQAHFGkQpS9d9zaMj4IumV0ZBBR2B9UwQ2FosJ/uoK4/SMvUMsMLlbsoSZk
+         H9pz1MreHWOaQ488wrF2KSGeMpGozJ4upteF02SjaXZ0XUF+m2mbs5G8eM79I/PDZBqP
+         MjKbfcHh+b6PBbuNtqc+MOCABmwyq1vQYLu1hqKq4N4PhdhKq1Onc6ceOqibwgC+o4cf
+         5Wzw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1723589603; x=1724194403;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=otYKhkTTVwFrNMc4y8Lo3x+9H/dZK04aKqqwJVfyjXE=;
+        b=caz5KZrbFGDzlgKryKf1ur88Y3SEFS+ImXgAYwEnMUjI8nmhL+/o6ah2sNR6E1C4l8
+         zIty+i1FGXtX92UL9CwPYY5BgdvWOQ7RR9PujBIKuUFBCMqbhkPwMR8lufPbIW/IS8ca
+         feMCh3SGtnyNqJ2H+QL8TEjeaLCVcoNvPr3Ks76Kywqi3y+kaJdpCIe3pCFYAz0a4cVt
+         g1HvCzdP44CfR5bmKBilK5OLn8n7N/Z/TdkCtfrgt6W4kiqwGuOCDfleQCduc2xwhbpF
+         kSpitpz0/I5gRjolZRHql1dP0TwcgjR0YaxCt9EMNj913QdsS6QWBaz/AZ1XK7w8e5dG
+         264Q==
+X-Forwarded-Encrypted: i=1; AJvYcCX+T8nVq7yli1Z9nnVUeWkvKmtPNsm9ZbhXLgtzD/75ind2Z6/FlWvQMn0/SAf6rX5emoDF@lists.linux.dev
+X-Gm-Message-State: AOJu0YyM55ANS7AL8CGdjbgnk/4nD1hDi81RfZutsXIS1DYMSBHmN06J
+	jT455BMKivUERm4Hj7lbO946fdaRdtAq1EoL3TloM9MUTROJNhynSECt50ObOFdG+CyRVKtlwjo
+	oIcjMix5RoqtcWUwRnAoixdSM424=
+X-Google-Smtp-Source: AGHT+IGR7W98LzFxhKyi9BaEIe7h8jPyiH/V3S9wInwVZhrMgTjU/0iYdt5GZWW7enBCnRaiuqbjtcqyMdrB9Mhfe94=
+X-Received: by 2002:a05:600c:3b18:b0:426:60bc:8f4e with SMTP id
+ 5b1f17b1804b1-429dd22ee6amr5734115e9.5.1723589602277; Tue, 13 Aug 2024
+ 15:53:22 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Zru4T-aIsqeM9Fxk@yury-ThinkPad>
+References: <20240812232910.2026387-1-mmaurer@google.com> <20240812232910.2026387-3-mmaurer@google.com>
+In-Reply-To: <20240812232910.2026387-3-mmaurer@google.com>
+From: Andrey Konovalov <andreyknvl@gmail.com>
+Date: Wed, 14 Aug 2024 00:53:11 +0200
+Message-ID: <CA+fCnZcVEp7Jc3kKPv59oqOxjGguV54ZaCcb1eX=Gx6ehSWHUw@mail.gmail.com>
+Subject: Re: [PATCH v2 2/3] kbuild: rust: Enable KASAN support
+To: Matthew Maurer <mmaurer@google.com>
+Cc: dvyukov@google.com, ojeda@kernel.org, 
+	Masahiro Yamada <masahiroy@kernel.org>, Andrey Ryabinin <ryabinin.a.a@gmail.com>, 
+	Alex Gaynor <alex.gaynor@gmail.com>, Wedson Almeida Filho <wedsonaf@gmail.com>, 
+	Nathan Chancellor <nathan@kernel.org>, aliceryhl@google.com, samitolvanen@google.com, 
+	Nicolas Schier <nicolas@fjasle.eu>, Alexander Potapenko <glider@google.com>, 
+	Vincenzo Frascino <vincenzo.frascino@arm.com>, Boqun Feng <boqun.feng@gmail.com>, 
+	Gary Guo <gary@garyguo.net>, =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
+	Benno Lossin <benno.lossin@proton.me>, Andreas Hindborg <a.hindborg@samsung.com>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, 
+	Justin Stitt <justinstitt@google.com>, linux-kbuild@vger.kernel.org, 
+	kasan-dev@googlegroups.com, linux-kernel@vger.kernel.org, 
+	rust-for-linux@vger.kernel.org, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Tue, Aug 13, 2024 at 12:47:27PM -0700, Yury Norov wrote:
-> On Tue, Aug 13, 2024 at 04:38:10PM +0200, Alexander Lobakin wrote:
-> > From: Kernel Test Robot <lkp@intel.com>
-> > Date: Tue, 13 Aug 2024 17:00:56 +0800
-> > 
-> > > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-> > > head:   d74da846046aeec9333e802f5918bd3261fb5509
-> > > commit: 7adaf37f7f104a7ee5f150af491674ccbbfc4114 lib/bitmap: add compile-time test for __assign_bit() optimization
-> > > date:   4 months ago
-> > > config: um-randconfig-r132-20240812 (https://download.01.org/0day-ci/archive/20240813/202408131601.Aj9JmK7K-lkp@intel.com/config)
-> > > compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project f86594788ce93b696675c94f54016d27a6c21d18)
-> > > reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240813/202408131601.Aj9JmK7K-lkp@intel.com/reproduce)
-> > > 
-> > > If you fix the issue in a separate patch/commit (i.e. not just a new version of
-> > > the same patch/commit), kindly add following tags
-> > > | Reported-by: kernel test robot <lkp@intel.com>
-> > > | Closes: https://lore.kernel.org/oe-kbuild-all/202408131601.Aj9JmK7K-lkp@intel.com/
-> > > 
-> > > All errors (new ones prefixed by >>):
-> > > 
-> > >>> lib/test_bitmap.c:1278:2: error: call to '__compiletime_assert_127' declared with 'error' attribute: BUILD_BUG_ON failed: !__builtin_constant_p(~var)
-> > >     1278 |         BUILD_BUG_ON(!__builtin_constant_p(~var));
-> > >          |         ^
-> > >    include/linux/build_bug.h:50:2: note: expanded from macro 'BUILD_BUG_ON'
-> > >       50 |         BUILD_BUG_ON_MSG(condition, "BUILD_BUG_ON failed: " #condition)
-> > >          |         ^
-> > >    include/linux/build_bug.h:39:37: note: expanded from macro 'BUILD_BUG_ON_MSG'
-> > >       39 | #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
-> > >          |                                     ^
-> > >    include/linux/compiler_types.h:460:2: note: expanded from macro 'compiletime_assert'
-> > >      460 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-> > >          |         ^
-> > >    include/linux/compiler_types.h:448:2: note: expanded from macro '_compiletime_assert'
-> > >      448 |         __compiletime_assert(condition, msg, prefix, suffix)
-> > >          |         ^
-> > >    include/linux/compiler_types.h:441:4: note: expanded from macro '__compiletime_assert'
-> > >      441 |                         prefix ## suffix();                             \
-> > >          |                         ^
-> > >    <scratch space>:193:1: note: expanded from here
-> > >      193 | __compiletime_assert_127
-> > >          | ^
-> > >    1 error generated.
-> > > 
-> > > 
-> > > vim +1278 lib/test_bitmap.c
-> > > 
-> > > 291f93ca339f5b Barry Song        2021-08-06  1227  
-> > > 2356d198d2b4dd Yury Norov        2023-07-17  1228  /*
-> > > 2356d198d2b4dd Yury Norov        2023-07-17  1229   * FIXME: Clang breaks compile-time evaluations when KASAN and GCOV are enabled.
-> > > 2356d198d2b4dd Yury Norov        2023-07-17  1230   * To workaround it, GCOV is force-disabled in Makefile for this configuration.
-> > > 2356d198d2b4dd Yury Norov        2023-07-17  1231   */
-> > > dc34d5036692c6 Alexander Lobakin 2022-06-24  1232  static void __init test_bitmap_const_eval(void)
-> > > dc34d5036692c6 Alexander Lobakin 2022-06-24  1233  {
-> > > dc34d5036692c6 Alexander Lobakin 2022-06-24  1234  	DECLARE_BITMAP(bitmap, BITS_PER_LONG);
-> > > dc34d5036692c6 Alexander Lobakin 2022-06-24  1235  	unsigned long initvar = BIT(2);
-> > > dc34d5036692c6 Alexander Lobakin 2022-06-24  1236  	unsigned long bitopvar = 0;
-> > > dc34d5036692c6 Alexander Lobakin 2022-06-24  1237  	unsigned long var = 0;
-> > > dc34d5036692c6 Alexander Lobakin 2022-06-24  1238  	int res;
-> > > dc34d5036692c6 Alexander Lobakin 2022-06-24  1239  
-> > > dc34d5036692c6 Alexander Lobakin 2022-06-24  1240  	/*
-> > > dc34d5036692c6 Alexander Lobakin 2022-06-24  1241  	 * Compilers must be able to optimize all of those to compile-time
-> > > dc34d5036692c6 Alexander Lobakin 2022-06-24  1242  	 * constants on any supported optimization level (-O2, -Os) and any
-> > > dc34d5036692c6 Alexander Lobakin 2022-06-24  1243  	 * architecture. Otherwise, trigger a build bug.
-> > > dc34d5036692c6 Alexander Lobakin 2022-06-24  1244  	 * The whole function gets optimized out then, there's nothing to do
-> > > dc34d5036692c6 Alexander Lobakin 2022-06-24  1245  	 * in runtime.
-> > > dc34d5036692c6 Alexander Lobakin 2022-06-24  1246  	 */
-> > > dc34d5036692c6 Alexander Lobakin 2022-06-24  1247  
-> > > 7adaf37f7f104a Alexander Lobakin 2024-03-27  1248  	/* Equals to `unsigned long bitmap[1] = { GENMASK(6, 5), }` */
-> > > dc34d5036692c6 Alexander Lobakin 2022-06-24  1249  	bitmap_clear(bitmap, 0, BITS_PER_LONG);
-> > > dc34d5036692c6 Alexander Lobakin 2022-06-24  1250  	if (!test_bit(7, bitmap))
-> > > dc34d5036692c6 Alexander Lobakin 2022-06-24  1251  		bitmap_set(bitmap, 5, 2);
-> > > dc34d5036692c6 Alexander Lobakin 2022-06-24  1252  
-> > > dc34d5036692c6 Alexander Lobakin 2022-06-24  1253  	/* Equals to `unsigned long bitopvar = BIT(20)` */
-> > > dc34d5036692c6 Alexander Lobakin 2022-06-24  1254  	__change_bit(31, &bitopvar);
-> > > dc34d5036692c6 Alexander Lobakin 2022-06-24  1255  	bitmap_shift_right(&bitopvar, &bitopvar, 11, BITS_PER_LONG);
-> > > dc34d5036692c6 Alexander Lobakin 2022-06-24  1256  
-> > > dc34d5036692c6 Alexander Lobakin 2022-06-24  1257  	/* Equals to `unsigned long var = BIT(25)` */
-> > > dc34d5036692c6 Alexander Lobakin 2022-06-24  1258  	var |= BIT(25);
-> > > dc34d5036692c6 Alexander Lobakin 2022-06-24  1259  	if (var & BIT(0))
-> > > dc34d5036692c6 Alexander Lobakin 2022-06-24  1260  		var ^= GENMASK(9, 6);
-> > > dc34d5036692c6 Alexander Lobakin 2022-06-24  1261  
-> > > dc34d5036692c6 Alexander Lobakin 2022-06-24  1262  	/* __const_hweight<32|64>(GENMASK(6, 5)) == 2 */
-> > > dc34d5036692c6 Alexander Lobakin 2022-06-24  1263  	res = bitmap_weight(bitmap, 20);
-> > > dc34d5036692c6 Alexander Lobakin 2022-06-24  1264  	BUILD_BUG_ON(!__builtin_constant_p(res));
-> > > dc34d5036692c6 Alexander Lobakin 2022-06-24  1265  	BUILD_BUG_ON(res != 2);
-> > > dc34d5036692c6 Alexander Lobakin 2022-06-24  1266  
-> > > dc34d5036692c6 Alexander Lobakin 2022-06-24  1267  	/* !(BIT(31) & BIT(18)) == 1 */
-> > > dc34d5036692c6 Alexander Lobakin 2022-06-24  1268  	res = !test_bit(18, &bitopvar);
-> > > dc34d5036692c6 Alexander Lobakin 2022-06-24  1269  	BUILD_BUG_ON(!__builtin_constant_p(res));
-> > > dc34d5036692c6 Alexander Lobakin 2022-06-24  1270  	BUILD_BUG_ON(!res);
-> > > dc34d5036692c6 Alexander Lobakin 2022-06-24  1271  
-> > > dc34d5036692c6 Alexander Lobakin 2022-06-24  1272  	/* BIT(2) & GENMASK(14, 8) == 0 */
-> > > dc34d5036692c6 Alexander Lobakin 2022-06-24  1273  	res = initvar & GENMASK(14, 8);
-> > > dc34d5036692c6 Alexander Lobakin 2022-06-24  1274  	BUILD_BUG_ON(!__builtin_constant_p(res));
-> > > dc34d5036692c6 Alexander Lobakin 2022-06-24  1275  	BUILD_BUG_ON(res);
-> > > dc34d5036692c6 Alexander Lobakin 2022-06-24  1276  
-> > > dc34d5036692c6 Alexander Lobakin 2022-06-24  1277  	/* ~BIT(25) */
-> > > dc34d5036692c6 Alexander Lobakin 2022-06-24 @1278  	BUILD_BUG_ON(!__builtin_constant_p(~var));
-> > > dc34d5036692c6 Alexander Lobakin 2022-06-24  1279  	BUILD_BUG_ON(~var != ~BIT(25));
-> > > 7adaf37f7f104a Alexander Lobakin 2024-03-27  1280  
-> > > 7adaf37f7f104a Alexander Lobakin 2024-03-27  1281  	/* ~BIT(25) | BIT(25) == ~0UL */
-> > > 7adaf37f7f104a Alexander Lobakin 2024-03-27  1282  	bitmap_complement(&var, &var, BITS_PER_LONG);
-> > > 7adaf37f7f104a Alexander Lobakin 2024-03-27  1283  	__assign_bit(25, &var, true);
-> > > 7adaf37f7f104a Alexander Lobakin 2024-03-27  1284  
-> > > 7adaf37f7f104a Alexander Lobakin 2024-03-27  1285  	/* !(~(~0UL)) == 1 */
-> > > 7adaf37f7f104a Alexander Lobakin 2024-03-27  1286  	res = bitmap_full(&var, BITS_PER_LONG);
-> > > 7adaf37f7f104a Alexander Lobakin 2024-03-27  1287  	BUILD_BUG_ON(!__builtin_constant_p(res));
-> > > 7adaf37f7f104a Alexander Lobakin 2024-03-27  1288  	BUILD_BUG_ON(!res);
-> > > dc34d5036692c6 Alexander Lobakin 2022-06-24  1289  }
-> > > dc34d5036692c6 Alexander Lobakin 2022-06-24  1290  
-> > > 
-> > > :::::: The code at line 1278 was first introduced by commit
-> > > :::::: dc34d5036692c614eef23c1130ee42a201c316bf lib: test_bitmap: add compile-time optimization/evaluations assertions
-> > > 
-> > > :::::: TO: Alexander Lobakin <alexandr.lobakin@intel.com>
-> > > :::::: CC: Yury Norov <yury.norov@gmail.com>
-> > 
-> > + Cc Clang folks.
-> > 
-> > clang-dev 20 issue?
-> > 
-> > Thanks,
-> > Olek
-> 
-> Seems like that. Looping LLVM-bugs <llvm-bugs@lists.llvm.org>.
+On Tue, Aug 13, 2024 at 1:29=E2=80=AFAM Matthew Maurer <mmaurer@google.com>=
+ wrote:
+>
+> Rust supports KASAN via LLVM, but prior to this patch, the flags aren't
+> set properly.
+>
+> Suggested-by: Miguel Ojeda <ojeda@kernel.org>
+> Signed-off-by: Matthew Maurer <mmaurer@google.com>
+> ---
+>  scripts/Makefile.kasan          | 51 +++++++++++++++++++++++----------
+>  scripts/Makefile.lib            |  3 ++
+>  scripts/generate_rust_target.rs |  1 +
+>  3 files changed, 40 insertions(+), 15 deletions(-)
+>
+> diff --git a/scripts/Makefile.kasan b/scripts/Makefile.kasan
+> index 390658a2d5b7..bfd37be9cc45 100644
+> --- a/scripts/Makefile.kasan
+> +++ b/scripts/Makefile.kasan
+> @@ -12,6 +12,9 @@ endif
+>  KASAN_SHADOW_OFFSET ?=3D $(CONFIG_KASAN_SHADOW_OFFSET)
+>
+>  cc-param =3D $(call cc-option, -mllvm -$(1), $(call cc-option, --param $=
+(1)))
+> +rustc-param =3D $(call rustc-option, -Cllvm-args=3D-$(1),)
+> +
+> +check-args =3D $(foreach arg,$(2),$(call $(1),$(arg)))
+>
+>  ifdef CONFIG_KASAN_STACK
+>         stack_enable :=3D 1
+> @@ -28,6 +31,7 @@ else
+>  endif
+>
+>  CFLAGS_KASAN_MINIMAL :=3D -fsanitize=3Dkernel-address
+> +RUSTFLAGS_KASAN_MINIMAL :=3D -Zsanitizer=3Dkernel-address -Zsanitizer-re=
+cover=3Dkernel-address
+>
+>  # -fasan-shadow-offset fails without -fsanitize
+>  CFLAGS_KASAN_SHADOW :=3D $(call cc-option, -fsanitize=3Dkernel-address \
+> @@ -35,44 +39,61 @@ CFLAGS_KASAN_SHADOW :=3D $(call cc-option, -fsanitize=
+=3Dkernel-address \
+>                         $(call cc-option, -fsanitize=3Dkernel-address \
+>                         -mllvm -asan-mapping-offset=3D$(KASAN_SHADOW_OFFS=
+ET)))
+>
+> +# The minimum supported `rustc` version has a minimum supported LLVM
+> +# version late enough that we can assume support for -asan-mapping-offse=
+t
+> +RUSTFLAGS_KASAN_SHADOW :=3D $(RUSTFLAGS_KASAN_MINIMAL) \
+> +                         -Cllvm-args=3D-asan-mapping-offset=3D$(KASAN_SH=
+ADOW_OFFSET)
+> +
+> +KASAN_PARAMS :=3D
+> +
+>  ifeq ($(strip $(CFLAGS_KASAN_SHADOW)),)
+>         CFLAGS_KASAN :=3D $(CFLAGS_KASAN_MINIMAL)
+> +       # We still need to consider this case for Rust because we want Ru=
+st code
+> +       # to match the behavior of possibly old C compilers when linked t=
+ogether.
+> +       ifdef CONFIG_RUST
+> +               RUSTFLAGS_KASAN :=3D $(RUSTFLAGS_KASAN_MINIMAL)
+> +       endif
 
-It's not, I bisected it to a change in the 17 release. I think this only
-shows up with this change because of '-fprofile-instr-generate', which
-ARCH=um uses for GCOV, which was only added in commit 32a84cfc6caf
-("arch: um: Add Clang coverage support") from 6.8.
+Eh, this is getting ugly. I sent a patch that simplifies the KASAN
+Makefile, please rebase your changes on top of it.
 
-I reported this upstream (I don't think llvm-bugs is really monitored
-for traffic like this) and cc'd the author of the change that broke
-this:
+>  else
+> -       # Now add all the compiler specific options that are valid standa=
+lone
+> -       CFLAGS_KASAN :=3D $(CFLAGS_KASAN_SHADOW) \
+> -        $(call cc-param,asan-globals=3D1) \
+> -        $(call cc-param,asan-instrumentation-with-call-threshold=3D$(cal=
+l_threshold)) \
+> -        $(call cc-param,asan-instrument-allocas=3D1)
+> +       KASAN_PARAMS +=3D asan-globals=3D1 asan-instrumentation-with-call=
+-threshold=3D$(call_threshold) asan-instrument-allocas=3D1
+> +       CFLAGS_KASAN :=3D $(CFLAGS_KASAN_SHADOW)
+> +       ifdef CONFIG_RUST
+> +               RUSTFLAGS_KASAN :=3D $(RUSTFLAGS_KASAN_SHADOW)
+> +       endif
+>  endif
+>
+> -CFLAGS_KASAN +=3D $(call cc-param,asan-stack=3D$(stack_enable))
+> +KASAN_PARAMS +=3D asan-stack=3D$(stack_enable)
+>
+>  # Instrument memcpy/memset/memmove calls by using instrumented __asan_me=
+m*()
+>  # instead. With compilers that don't support this option, compiler-inser=
+ted
+>  # memintrinsics won't be checked by KASAN on GENERIC_ENTRY architectures=
+.
+> -CFLAGS_KASAN +=3D $(call cc-param,asan-kernel-mem-intrinsic-prefix=3D1)
+> +KASAN_PARAMS +=3D asan-kernel-mem-intrinsic-prefix=3D1
+>
+>  endif # CONFIG_KASAN_GENERIC
+>
+>  ifdef CONFIG_KASAN_SW_TAGS
+>
+>  ifdef CONFIG_KASAN_INLINE
+> -    instrumentation_flags :=3D $(call cc-param,hwasan-mapping-offset=3D$=
+(KASAN_SHADOW_OFFSET))
+> +    KASAN_PARAMS +=3D hwasan-mapping-offset=3D$(KASAN_SHADOW_OFFSET)
+>  else
+> -    instrumentation_flags :=3D $(call cc-param,hwasan-instrument-with-ca=
+lls=3D1)
+> +    KASAN_PARAMS +=3D hwasan-instrument-with-calls=3D1
+>  endif
+>
+> -CFLAGS_KASAN :=3D -fsanitize=3Dkernel-hwaddress \
+> -               $(call cc-param,hwasan-instrument-stack=3D$(stack_enable)=
+) \
+> -               $(call cc-param,hwasan-use-short-granules=3D0) \
+> -               $(call cc-param,hwasan-inline-all-checks=3D0) \
+> -               $(instrumentation_flags)
+> +KASAN_PARAMS +=3D hwasan-instrument-stack=3D$(stack_enable) hwasan-use-s=
+hort-granules=3D0 hwasan-inline-all-checks=3D0 $(instrumentation_params)
 
-https://github.com/llvm/llvm-project/issues/103479
+What are instrumentation_params? instrumentation_flags? They are not
+defined in the Makefile anymore.
 
-I think there is a tangential issue with ARCH=um doing its own thing
-with the GCOV flags (such that it does not appear to respect
-GCOV_PROFILE_... := n) but that just results in not being able to remove
-the flags from test_bitmap.o's command.
+> +CFLAGS_KASAN :=3D -fsanitize=3Dkernel-hwaddress
+>
+>  # Instrument memcpy/memset/memmove calls by using instrumented __hwasan_=
+mem*().
+>  ifeq ($(call clang-min-version, 150000)$(call gcc-min-version, 130000),y=
+)
+>  CFLAGS_KASAN +=3D $(call cc-param,hwasan-kernel-mem-intrinsic-prefix=3D1=
+)
+>  endif
+>
+> +ifdef CONFIG_RUST
+> +       RUSTFLAGS_KASAN :=3D -Zsanitizer=3Dkernel-hwaddress -Zsanitizer-r=
+ecover=3Dkernel-hwaddress
+> +endif
 
-Cheers,
-Nathan
+Let's change the order of the definitions to:
+
+1. CFLAGS_KASAN
+2. RUSTFLAGS_KASAN
+3. KASAN_PARAMS
+
+
+> +
+>  endif # CONFIG_KASAN_SW_TAGS
+>
+> -export CFLAGS_KASAN CFLAGS_KASAN_NOSANITIZE
+> +# Add all as-supported KASAN LLVM parameters requested by the configurat=
+ion
+> +CFLAGS_KASAN +=3D $(call check-args, cc-param, $(KASAN_PARAMS))
+> +RUSTFLAGS_KASAN +=3D $(call check-args, rustc-param, $(KASAN_PARAMS))
+> +
+> +export CFLAGS_KASAN CFLAGS_KASAN_NOSANITIZE RUSTFLAGS_KASAN
+> diff --git a/scripts/Makefile.lib b/scripts/Makefile.lib
+> index fe3668dc4954..27999da3d382 100644
+> --- a/scripts/Makefile.lib
+> +++ b/scripts/Makefile.lib
+> @@ -167,6 +167,9 @@ ifneq ($(CONFIG_KASAN_HW_TAGS),y)
+>  _c_flags +=3D $(if $(patsubst n%,, \
+>                 $(KASAN_SANITIZE_$(target-stem).o)$(KASAN_SANITIZE)$(is-k=
+ernel-object)), \
+>                 $(CFLAGS_KASAN), $(CFLAGS_KASAN_NOSANITIZE))
+> +_rust_flags +=3D $(if $(patsubst n%,, \
+> +               $(KASAN_SANITIZE_$(target-stem).o)$(KASAN_SANITIZE)$(is-k=
+ernel-object)), \
+> +               $(RUSTFLAGS_KASAN))
+>  endif
+>  endif
+>
+> diff --git a/scripts/generate_rust_target.rs b/scripts/generate_rust_targ=
+et.rs
+> index 8a0644c0beed..1a4d468c575f 100644
+> --- a/scripts/generate_rust_target.rs
+> +++ b/scripts/generate_rust_target.rs
+> @@ -187,6 +187,7 @@ fn main() {
+>          }
+>          ts.push("features", features);
+>          ts.push("llvm-target", "x86_64-linux-gnu");
+> +        ts.push("supported-sanitizers", ["kernel-address"]);
+>          ts.push("target-pointer-width", "64");
+>      } else if cfg.has("X86_32") {
+>          // This only works on UML, as i386 otherwise needs regparm suppo=
+rt in rustc
+> --
+> 2.46.0.76.ge559c4bf1a-goog
+>
