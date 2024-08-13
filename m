@@ -1,60 +1,48 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 055F526AFB;
-	Tue, 13 Aug 2024 22:09:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D49326AFB;
+	Tue, 13 Aug 2024 22:12:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723586985; cv=none; b=Nsn+qLd77WN1HBFVOdY8Dv2TwanBurHLIMrfGcyWth/vf+eQSC4B1i4YAabGvpWDzGiaIFDZzRZ0PyM2zC/oJInoLt7aU0jpasQzch+vkjp772kRUrEWGI4RBN63WIQ++cJAlfJCR/ktk+zHoUrNr9Qpspfxslb+4/EPu6VX4gA=
+	t=1723587146; cv=none; b=tsiD9R03OUoZ5m9RCRmJ5XdE6MIvI5OORlZ3EyXgHqzEz3PsFwhwWa1n7BtS9k534GISbkJwR18lKn8bh6+1eBmGHsQ5wYEAw90DfqbVeE+dJZxav6cHuoWIDVGBLF19EgHoG9RnOaFrlUGmqRTUmf8lzeCnUKv/9TSZ3oT/pA8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723586985; c=relaxed/simple;
-	bh=28QJopmkZo/a5KnJzroThZlBt+sNEzF4xoTdgoVY1sA=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=VzvXQYt5wNrRkqEeWapzf3VG5pYph8gpgy0ZwR/ZQ2HuhK2jajjdO6j+MVdanKhyYP7/TXN71mcdqkA5IgOb/zSooY+iio6xlzkv+KBGgv0G4j5rBC5rMvkX7Dizn3ECXklirW7i30mEYGwAaHOHc/TxvmqyA4AMLqEzb0WaaCc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=KPOgB+WD; arc=none smtp.client-ip=192.198.163.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1723587146; c=relaxed/simple;
+	bh=nNhcw7GB8NcDgN2OIa/5pzlGkqY40T6fJOTJq7Kn/28=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=sE4mxUXbDucxoCV3FxIbBBC7yeDpClF8VbHv0ytxWhcjVl5NTEn9uUgVb3YSh67Ql7yI/VrhAA5guC0y2hmbSuTYZ58FLe9EyHSuLcdxKA4fNHWnexVkX8KXTA5tDd4JpwEbfU84YYiSu8KdKYe280aMQ2m2ZCsVDaCz/lXkISQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fhrM7kIN; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="KPOgB+WD"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1723586983; x=1755122983;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=28QJopmkZo/a5KnJzroThZlBt+sNEzF4xoTdgoVY1sA=;
-  b=KPOgB+WDVWGhI0xMdy/IGVu2zPd8O3Xqm8eQ+8EihTCJzFmKFDwfiii4
-   ZwmSCq0aD+XE/HVh00KnXO/wMwcHyCr0r+Cz1r3afTJ8vYHeKO991GJVc
-   5AKDD5cb3Q1Ya8sB4hC0Elp0Jpxd7S5cYt2FaOad6B9Ox2WUomlEmzblu
-   C97cLqBonqBqJJfoU585Mp15SPK6OqZoi/F0tI6B5tx6dW770sgtBBjAc
-   O98P7fKDvAM9zDqtouEwqJzEQszkhWza1LaK2gJ0mJGixqWYPUWYW7y5U
-   S6zYlgu1aTa1fpqCQQNrPmkV6vht0gxfzy0VW6eib49OIRIeshBIUcr2V
-   A==;
-X-CSE-ConnectionGUID: aUzHn7tURvGLuQEDDfKI7Q==
-X-CSE-MsgGUID: qX2TpJDWSMSk6nH4fRbEXA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11163"; a="47178587"
-X-IronPort-AV: E=Sophos;i="6.09,287,1716274800"; 
-   d="scan'208";a="47178587"
-Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Aug 2024 15:09:42 -0700
-X-CSE-ConnectionGUID: qWsgBQIlTW2TY+oiuQUnQg==
-X-CSE-MsgGUID: htvzsQntRey6XfDrII8CXQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.09,287,1716274800"; 
-   d="scan'208";a="96327370"
-Received: from lkp-server01.sh.intel.com (HELO 9a732dc145d3) ([10.239.97.150])
-  by orviesa001.jf.intel.com with ESMTP; 13 Aug 2024 15:09:41 -0700
-Received: from kbuild by 9a732dc145d3 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1sdzhx-0000kI-32;
-	Tue, 13 Aug 2024 22:09:37 +0000
-Date: Wed, 14 Aug 2024 06:09:17 +0800
-From: kernel test robot <lkp@intel.com>
-To: Cezary Rojewski <cezary.rojewski@intel.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Mark Brown <broonie@kernel.org>
-Subject: [broonie-ci:20240812_cezary_rojewski_asoc_intel_remove_skylake_driver
- 48/49] sound/soc/intel/common/soc-acpi-intel-skl-match.c:11:10: fatal error:
- '../skylake/skl.h' file not found
-Message-ID: <202408140627.19qYBYFa-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fhrM7kIN"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 701E6C32782;
+	Tue, 13 Aug 2024 22:12:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1723587144;
+	bh=nNhcw7GB8NcDgN2OIa/5pzlGkqY40T6fJOTJq7Kn/28=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=fhrM7kINDPMWXeggXL9i/Sehk6QeQkOlY6YuW3N0PCtlBBKKPIdacuVrDOiMpuc9R
+	 JzyV4H8XiE5h1T9b1SD6N6CiM+tRiKKT3e4rmNioBE5Qm2Bnv425bIBn3QxnpAOBsL
+	 sm+mUcJLQsA+XYULobmzec4iA5hB+F+6/VSADvIDq4DWPrGliU2+zf8pXIfovm1xhP
+	 X0cY2G+XPjBl0fMqkfYOnif8907g4bvwWg335XqYg1O2NM5mSod3aaFXtHk7hHmOGj
+	 gxLsC0ERARklGslq/Rc6ocX3dwA4dujazUkb9x4koaLeDd9GILrVoZnAVrKzonVUuK
+	 ioyfv7Jzerbyg==
+Date: Tue, 13 Aug 2024 15:12:21 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Yury Norov <yury.norov@gmail.com>
+Cc: Alexander Lobakin <aleksander.lobakin@intel.com>,
+	Kees Cook <kees@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
+	Przemek Kitszel <przemyslaw.kitszel@intel.com>,
+	kernel test robot <lkp@intel.com>, llvm@lists.linux.dev,
+	llvm-bugs@lists.llvm.org
+Subject: Re: lib/test_bitmap.c:1278:2: error: call to
+ '__compiletime_assert_127' declared with 'error' attribute: BUILD_BUG_ON
+ failed: !__builtin_constant_p(~var)
+Message-ID: <20240813221221.GA798176@thelio-3990X>
+References: <202408131601.Aj9JmK7K-lkp@intel.com>
+ <2690861a-e726-4149-98ff-d26ec6d595ac@intel.com>
+ <Zru4T-aIsqeM9Fxk@yury-ThinkPad>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -63,315 +51,149 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <Zru4T-aIsqeM9Fxk@yury-ThinkPad>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/ci.git 20240812_cezary_rojewski_asoc_intel_remove_skylake_driver
-head:   d46748ce77e33d6a219e9e7bca25d53cbf78d518
-commit: a8d5559a180c437332cf1b697776287165fdceca [48/49] ASoC: Intel: Remove skylake driver
-config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20240814/202408140627.19qYBYFa-lkp@intel.com/config)
-compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project f86594788ce93b696675c94f54016d27a6c21d18)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240814/202408140627.19qYBYFa-lkp@intel.com/reproduce)
+On Tue, Aug 13, 2024 at 12:47:27PM -0700, Yury Norov wrote:
+> On Tue, Aug 13, 2024 at 04:38:10PM +0200, Alexander Lobakin wrote:
+> > From: Kernel Test Robot <lkp@intel.com>
+> > Date: Tue, 13 Aug 2024 17:00:56 +0800
+> > 
+> > > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+> > > head:   d74da846046aeec9333e802f5918bd3261fb5509
+> > > commit: 7adaf37f7f104a7ee5f150af491674ccbbfc4114 lib/bitmap: add compile-time test for __assign_bit() optimization
+> > > date:   4 months ago
+> > > config: um-randconfig-r132-20240812 (https://download.01.org/0day-ci/archive/20240813/202408131601.Aj9JmK7K-lkp@intel.com/config)
+> > > compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project f86594788ce93b696675c94f54016d27a6c21d18)
+> > > reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240813/202408131601.Aj9JmK7K-lkp@intel.com/reproduce)
+> > > 
+> > > If you fix the issue in a separate patch/commit (i.e. not just a new version of
+> > > the same patch/commit), kindly add following tags
+> > > | Reported-by: kernel test robot <lkp@intel.com>
+> > > | Closes: https://lore.kernel.org/oe-kbuild-all/202408131601.Aj9JmK7K-lkp@intel.com/
+> > > 
+> > > All errors (new ones prefixed by >>):
+> > > 
+> > >>> lib/test_bitmap.c:1278:2: error: call to '__compiletime_assert_127' declared with 'error' attribute: BUILD_BUG_ON failed: !__builtin_constant_p(~var)
+> > >     1278 |         BUILD_BUG_ON(!__builtin_constant_p(~var));
+> > >          |         ^
+> > >    include/linux/build_bug.h:50:2: note: expanded from macro 'BUILD_BUG_ON'
+> > >       50 |         BUILD_BUG_ON_MSG(condition, "BUILD_BUG_ON failed: " #condition)
+> > >          |         ^
+> > >    include/linux/build_bug.h:39:37: note: expanded from macro 'BUILD_BUG_ON_MSG'
+> > >       39 | #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
+> > >          |                                     ^
+> > >    include/linux/compiler_types.h:460:2: note: expanded from macro 'compiletime_assert'
+> > >      460 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+> > >          |         ^
+> > >    include/linux/compiler_types.h:448:2: note: expanded from macro '_compiletime_assert'
+> > >      448 |         __compiletime_assert(condition, msg, prefix, suffix)
+> > >          |         ^
+> > >    include/linux/compiler_types.h:441:4: note: expanded from macro '__compiletime_assert'
+> > >      441 |                         prefix ## suffix();                             \
+> > >          |                         ^
+> > >    <scratch space>:193:1: note: expanded from here
+> > >      193 | __compiletime_assert_127
+> > >          | ^
+> > >    1 error generated.
+> > > 
+> > > 
+> > > vim +1278 lib/test_bitmap.c
+> > > 
+> > > 291f93ca339f5b Barry Song        2021-08-06  1227  
+> > > 2356d198d2b4dd Yury Norov        2023-07-17  1228  /*
+> > > 2356d198d2b4dd Yury Norov        2023-07-17  1229   * FIXME: Clang breaks compile-time evaluations when KASAN and GCOV are enabled.
+> > > 2356d198d2b4dd Yury Norov        2023-07-17  1230   * To workaround it, GCOV is force-disabled in Makefile for this configuration.
+> > > 2356d198d2b4dd Yury Norov        2023-07-17  1231   */
+> > > dc34d5036692c6 Alexander Lobakin 2022-06-24  1232  static void __init test_bitmap_const_eval(void)
+> > > dc34d5036692c6 Alexander Lobakin 2022-06-24  1233  {
+> > > dc34d5036692c6 Alexander Lobakin 2022-06-24  1234  	DECLARE_BITMAP(bitmap, BITS_PER_LONG);
+> > > dc34d5036692c6 Alexander Lobakin 2022-06-24  1235  	unsigned long initvar = BIT(2);
+> > > dc34d5036692c6 Alexander Lobakin 2022-06-24  1236  	unsigned long bitopvar = 0;
+> > > dc34d5036692c6 Alexander Lobakin 2022-06-24  1237  	unsigned long var = 0;
+> > > dc34d5036692c6 Alexander Lobakin 2022-06-24  1238  	int res;
+> > > dc34d5036692c6 Alexander Lobakin 2022-06-24  1239  
+> > > dc34d5036692c6 Alexander Lobakin 2022-06-24  1240  	/*
+> > > dc34d5036692c6 Alexander Lobakin 2022-06-24  1241  	 * Compilers must be able to optimize all of those to compile-time
+> > > dc34d5036692c6 Alexander Lobakin 2022-06-24  1242  	 * constants on any supported optimization level (-O2, -Os) and any
+> > > dc34d5036692c6 Alexander Lobakin 2022-06-24  1243  	 * architecture. Otherwise, trigger a build bug.
+> > > dc34d5036692c6 Alexander Lobakin 2022-06-24  1244  	 * The whole function gets optimized out then, there's nothing to do
+> > > dc34d5036692c6 Alexander Lobakin 2022-06-24  1245  	 * in runtime.
+> > > dc34d5036692c6 Alexander Lobakin 2022-06-24  1246  	 */
+> > > dc34d5036692c6 Alexander Lobakin 2022-06-24  1247  
+> > > 7adaf37f7f104a Alexander Lobakin 2024-03-27  1248  	/* Equals to `unsigned long bitmap[1] = { GENMASK(6, 5), }` */
+> > > dc34d5036692c6 Alexander Lobakin 2022-06-24  1249  	bitmap_clear(bitmap, 0, BITS_PER_LONG);
+> > > dc34d5036692c6 Alexander Lobakin 2022-06-24  1250  	if (!test_bit(7, bitmap))
+> > > dc34d5036692c6 Alexander Lobakin 2022-06-24  1251  		bitmap_set(bitmap, 5, 2);
+> > > dc34d5036692c6 Alexander Lobakin 2022-06-24  1252  
+> > > dc34d5036692c6 Alexander Lobakin 2022-06-24  1253  	/* Equals to `unsigned long bitopvar = BIT(20)` */
+> > > dc34d5036692c6 Alexander Lobakin 2022-06-24  1254  	__change_bit(31, &bitopvar);
+> > > dc34d5036692c6 Alexander Lobakin 2022-06-24  1255  	bitmap_shift_right(&bitopvar, &bitopvar, 11, BITS_PER_LONG);
+> > > dc34d5036692c6 Alexander Lobakin 2022-06-24  1256  
+> > > dc34d5036692c6 Alexander Lobakin 2022-06-24  1257  	/* Equals to `unsigned long var = BIT(25)` */
+> > > dc34d5036692c6 Alexander Lobakin 2022-06-24  1258  	var |= BIT(25);
+> > > dc34d5036692c6 Alexander Lobakin 2022-06-24  1259  	if (var & BIT(0))
+> > > dc34d5036692c6 Alexander Lobakin 2022-06-24  1260  		var ^= GENMASK(9, 6);
+> > > dc34d5036692c6 Alexander Lobakin 2022-06-24  1261  
+> > > dc34d5036692c6 Alexander Lobakin 2022-06-24  1262  	/* __const_hweight<32|64>(GENMASK(6, 5)) == 2 */
+> > > dc34d5036692c6 Alexander Lobakin 2022-06-24  1263  	res = bitmap_weight(bitmap, 20);
+> > > dc34d5036692c6 Alexander Lobakin 2022-06-24  1264  	BUILD_BUG_ON(!__builtin_constant_p(res));
+> > > dc34d5036692c6 Alexander Lobakin 2022-06-24  1265  	BUILD_BUG_ON(res != 2);
+> > > dc34d5036692c6 Alexander Lobakin 2022-06-24  1266  
+> > > dc34d5036692c6 Alexander Lobakin 2022-06-24  1267  	/* !(BIT(31) & BIT(18)) == 1 */
+> > > dc34d5036692c6 Alexander Lobakin 2022-06-24  1268  	res = !test_bit(18, &bitopvar);
+> > > dc34d5036692c6 Alexander Lobakin 2022-06-24  1269  	BUILD_BUG_ON(!__builtin_constant_p(res));
+> > > dc34d5036692c6 Alexander Lobakin 2022-06-24  1270  	BUILD_BUG_ON(!res);
+> > > dc34d5036692c6 Alexander Lobakin 2022-06-24  1271  
+> > > dc34d5036692c6 Alexander Lobakin 2022-06-24  1272  	/* BIT(2) & GENMASK(14, 8) == 0 */
+> > > dc34d5036692c6 Alexander Lobakin 2022-06-24  1273  	res = initvar & GENMASK(14, 8);
+> > > dc34d5036692c6 Alexander Lobakin 2022-06-24  1274  	BUILD_BUG_ON(!__builtin_constant_p(res));
+> > > dc34d5036692c6 Alexander Lobakin 2022-06-24  1275  	BUILD_BUG_ON(res);
+> > > dc34d5036692c6 Alexander Lobakin 2022-06-24  1276  
+> > > dc34d5036692c6 Alexander Lobakin 2022-06-24  1277  	/* ~BIT(25) */
+> > > dc34d5036692c6 Alexander Lobakin 2022-06-24 @1278  	BUILD_BUG_ON(!__builtin_constant_p(~var));
+> > > dc34d5036692c6 Alexander Lobakin 2022-06-24  1279  	BUILD_BUG_ON(~var != ~BIT(25));
+> > > 7adaf37f7f104a Alexander Lobakin 2024-03-27  1280  
+> > > 7adaf37f7f104a Alexander Lobakin 2024-03-27  1281  	/* ~BIT(25) | BIT(25) == ~0UL */
+> > > 7adaf37f7f104a Alexander Lobakin 2024-03-27  1282  	bitmap_complement(&var, &var, BITS_PER_LONG);
+> > > 7adaf37f7f104a Alexander Lobakin 2024-03-27  1283  	__assign_bit(25, &var, true);
+> > > 7adaf37f7f104a Alexander Lobakin 2024-03-27  1284  
+> > > 7adaf37f7f104a Alexander Lobakin 2024-03-27  1285  	/* !(~(~0UL)) == 1 */
+> > > 7adaf37f7f104a Alexander Lobakin 2024-03-27  1286  	res = bitmap_full(&var, BITS_PER_LONG);
+> > > 7adaf37f7f104a Alexander Lobakin 2024-03-27  1287  	BUILD_BUG_ON(!__builtin_constant_p(res));
+> > > 7adaf37f7f104a Alexander Lobakin 2024-03-27  1288  	BUILD_BUG_ON(!res);
+> > > dc34d5036692c6 Alexander Lobakin 2022-06-24  1289  }
+> > > dc34d5036692c6 Alexander Lobakin 2022-06-24  1290  
+> > > 
+> > > :::::: The code at line 1278 was first introduced by commit
+> > > :::::: dc34d5036692c614eef23c1130ee42a201c316bf lib: test_bitmap: add compile-time optimization/evaluations assertions
+> > > 
+> > > :::::: TO: Alexander Lobakin <alexandr.lobakin@intel.com>
+> > > :::::: CC: Yury Norov <yury.norov@gmail.com>
+> > 
+> > + Cc Clang folks.
+> > 
+> > clang-dev 20 issue?
+> > 
+> > Thanks,
+> > Olek
+> 
+> Seems like that. Looping LLVM-bugs <llvm-bugs@lists.llvm.org>.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202408140627.19qYBYFa-lkp@intel.com/
+It's not, I bisected it to a change in the 17 release. I think this only
+shows up with this change because of '-fprofile-instr-generate', which
+ARCH=um uses for GCOV, which was only added in commit 32a84cfc6caf
+("arch: um: Add Clang coverage support") from 6.8.
 
-All errors (new ones prefixed by >>):
+I reported this upstream (I don't think llvm-bugs is really monitored
+for traffic like this) and cc'd the author of the change that broke
+this:
 
-   In file included from sound/soc/intel/common/soc-acpi-intel-skl-match.c:9:
-   In file included from include/sound/soc-acpi.h:12:
-   In file included from include/linux/soundwire/sdw.h:9:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:14:
-   In file included from arch/hexagon/include/asm/io.h:328:
-   include/asm-generic/io.h:548:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     548 |         val = __raw_readb(PCI_IOBASE + addr);
-         |                           ~~~~~~~~~~ ^
-   include/asm-generic/io.h:561:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     561 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
-      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-         |                                                   ^
-   In file included from sound/soc/intel/common/soc-acpi-intel-skl-match.c:9:
-   In file included from include/sound/soc-acpi.h:12:
-   In file included from include/linux/soundwire/sdw.h:9:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:14:
-   In file included from arch/hexagon/include/asm/io.h:328:
-   include/asm-generic/io.h:574:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     574 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
-      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
-         |                                                   ^
-   In file included from sound/soc/intel/common/soc-acpi-intel-skl-match.c:9:
-   In file included from include/sound/soc-acpi.h:12:
-   In file included from include/linux/soundwire/sdw.h:9:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:14:
-   In file included from arch/hexagon/include/asm/io.h:328:
-   include/asm-generic/io.h:585:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     585 |         __raw_writeb(value, PCI_IOBASE + addr);
-         |                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:595:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     595 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:605:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     605 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
->> sound/soc/intel/common/soc-acpi-intel-skl-match.c:11:10: fatal error: '../skylake/skl.h' file not found
-      11 | #include "../skylake/skl.h"
-         |          ^~~~~~~~~~~~~~~~~~
-   6 warnings and 1 error generated.
---
-   In file included from sound/soc/intel/common/soc-acpi-intel-kbl-match.c:9:
-   In file included from include/sound/soc-acpi.h:12:
-   In file included from include/linux/soundwire/sdw.h:9:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:14:
-   In file included from arch/hexagon/include/asm/io.h:328:
-   include/asm-generic/io.h:548:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     548 |         val = __raw_readb(PCI_IOBASE + addr);
-         |                           ~~~~~~~~~~ ^
-   include/asm-generic/io.h:561:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     561 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
-      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-         |                                                   ^
-   In file included from sound/soc/intel/common/soc-acpi-intel-kbl-match.c:9:
-   In file included from include/sound/soc-acpi.h:12:
-   In file included from include/linux/soundwire/sdw.h:9:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:14:
-   In file included from arch/hexagon/include/asm/io.h:328:
-   include/asm-generic/io.h:574:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     574 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
-      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
-         |                                                   ^
-   In file included from sound/soc/intel/common/soc-acpi-intel-kbl-match.c:9:
-   In file included from include/sound/soc-acpi.h:12:
-   In file included from include/linux/soundwire/sdw.h:9:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:14:
-   In file included from arch/hexagon/include/asm/io.h:328:
-   include/asm-generic/io.h:585:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     585 |         __raw_writeb(value, PCI_IOBASE + addr);
-         |                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:595:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     595 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:605:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     605 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
->> sound/soc/intel/common/soc-acpi-intel-kbl-match.c:11:10: fatal error: '../skylake/skl.h' file not found
-      11 | #include "../skylake/skl.h"
-         |          ^~~~~~~~~~~~~~~~~~
-   6 warnings and 1 error generated.
---
-   In file included from sound/soc/intel/common/soc-acpi-intel-cnl-match.c:9:
-   In file included from include/sound/soc-acpi.h:12:
-   In file included from include/linux/soundwire/sdw.h:9:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:14:
-   In file included from arch/hexagon/include/asm/io.h:328:
-   include/asm-generic/io.h:548:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     548 |         val = __raw_readb(PCI_IOBASE + addr);
-         |                           ~~~~~~~~~~ ^
-   include/asm-generic/io.h:561:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     561 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
-      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-         |                                                   ^
-   In file included from sound/soc/intel/common/soc-acpi-intel-cnl-match.c:9:
-   In file included from include/sound/soc-acpi.h:12:
-   In file included from include/linux/soundwire/sdw.h:9:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:14:
-   In file included from arch/hexagon/include/asm/io.h:328:
-   include/asm-generic/io.h:574:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     574 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
-      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
-         |                                                   ^
-   In file included from sound/soc/intel/common/soc-acpi-intel-cnl-match.c:9:
-   In file included from include/sound/soc-acpi.h:12:
-   In file included from include/linux/soundwire/sdw.h:9:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:14:
-   In file included from arch/hexagon/include/asm/io.h:328:
-   include/asm-generic/io.h:585:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     585 |         __raw_writeb(value, PCI_IOBASE + addr);
-         |                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:595:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     595 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:605:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     605 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
->> sound/soc/intel/common/soc-acpi-intel-cnl-match.c:11:10: fatal error: '../skylake/skl.h' file not found
-      11 | #include "../skylake/skl.h"
-         |          ^~~~~~~~~~~~~~~~~~
-   6 warnings and 1 error generated.
---
-   In file included from sound/soc/intel/common/soc-acpi-intel-icl-match.c:9:
-   In file included from include/sound/soc-acpi.h:12:
-   In file included from include/linux/soundwire/sdw.h:9:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:14:
-   In file included from arch/hexagon/include/asm/io.h:328:
-   include/asm-generic/io.h:548:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     548 |         val = __raw_readb(PCI_IOBASE + addr);
-         |                           ~~~~~~~~~~ ^
-   include/asm-generic/io.h:561:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     561 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
-      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-         |                                                   ^
-   In file included from sound/soc/intel/common/soc-acpi-intel-icl-match.c:9:
-   In file included from include/sound/soc-acpi.h:12:
-   In file included from include/linux/soundwire/sdw.h:9:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:14:
-   In file included from arch/hexagon/include/asm/io.h:328:
-   include/asm-generic/io.h:574:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     574 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
-      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
-         |                                                   ^
-   In file included from sound/soc/intel/common/soc-acpi-intel-icl-match.c:9:
-   In file included from include/sound/soc-acpi.h:12:
-   In file included from include/linux/soundwire/sdw.h:9:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:14:
-   In file included from arch/hexagon/include/asm/io.h:328:
-   include/asm-generic/io.h:585:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     585 |         __raw_writeb(value, PCI_IOBASE + addr);
-         |                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:595:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     595 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:605:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     605 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
->> sound/soc/intel/common/soc-acpi-intel-icl-match.c:11:10: fatal error: '../skylake/skl.h' file not found
-      11 | #include "../skylake/skl.h"
-         |          ^~~~~~~~~~~~~~~~~~
-   6 warnings and 1 error generated.
---
-   In file included from sound/soc/intel/common/soc-acpi-intel-ehl-match.c:9:
-   In file included from include/sound/soc-acpi.h:12:
-   In file included from include/linux/soundwire/sdw.h:9:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:14:
-   In file included from arch/hexagon/include/asm/io.h:328:
-   include/asm-generic/io.h:548:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     548 |         val = __raw_readb(PCI_IOBASE + addr);
-         |                           ~~~~~~~~~~ ^
-   include/asm-generic/io.h:561:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     561 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
-      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-         |                                                   ^
-   In file included from sound/soc/intel/common/soc-acpi-intel-ehl-match.c:9:
-   In file included from include/sound/soc-acpi.h:12:
-   In file included from include/linux/soundwire/sdw.h:9:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:14:
-   In file included from arch/hexagon/include/asm/io.h:328:
-   include/asm-generic/io.h:574:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     574 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
-      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
-         |                                                   ^
-   In file included from sound/soc/intel/common/soc-acpi-intel-ehl-match.c:9:
-   In file included from include/sound/soc-acpi.h:12:
-   In file included from include/linux/soundwire/sdw.h:9:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:14:
-   In file included from arch/hexagon/include/asm/io.h:328:
-   include/asm-generic/io.h:585:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     585 |         __raw_writeb(value, PCI_IOBASE + addr);
-         |                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:595:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     595 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:605:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     605 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
->> sound/soc/intel/common/soc-acpi-intel-ehl-match.c:11:10: fatal error: '../skylake/skl.h' file not found
-      11 | #include "../skylake/skl.h"
-         |          ^~~~~~~~~~~~~~~~~~
-   6 warnings and 1 error generated.
---
-   In file included from sound/soc/intel/common/soc-acpi-intel-hda-match.c:9:
-   In file included from include/sound/soc-acpi.h:12:
-   In file included from include/linux/soundwire/sdw.h:9:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:14:
-   In file included from arch/hexagon/include/asm/io.h:328:
-   include/asm-generic/io.h:548:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     548 |         val = __raw_readb(PCI_IOBASE + addr);
-         |                           ~~~~~~~~~~ ^
-   include/asm-generic/io.h:561:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     561 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
-      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-         |                                                   ^
-   In file included from sound/soc/intel/common/soc-acpi-intel-hda-match.c:9:
-   In file included from include/sound/soc-acpi.h:12:
-   In file included from include/linux/soundwire/sdw.h:9:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:14:
-   In file included from arch/hexagon/include/asm/io.h:328:
-   include/asm-generic/io.h:574:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     574 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
-      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
-         |                                                   ^
-   In file included from sound/soc/intel/common/soc-acpi-intel-hda-match.c:9:
-   In file included from include/sound/soc-acpi.h:12:
-   In file included from include/linux/soundwire/sdw.h:9:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:14:
-   In file included from arch/hexagon/include/asm/io.h:328:
-   include/asm-generic/io.h:585:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     585 |         __raw_writeb(value, PCI_IOBASE + addr);
-         |                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:595:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     595 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:605:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     605 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
->> sound/soc/intel/common/soc-acpi-intel-hda-match.c:11:10: fatal error: '../skylake/skl.h' file not found
-      11 | #include "../skylake/skl.h"
-         |          ^~~~~~~~~~~~~~~~~~
-   6 warnings and 1 error generated.
+https://github.com/llvm/llvm-project/issues/103479
 
+I think there is a tangential issue with ARCH=um doing its own thing
+with the GCOV flags (such that it does not appear to respect
+GCOV_PROFILE_... := n) but that just results in not being able to remove
+the flags from test_bitmap.o's command.
 
-vim +11 sound/soc/intel/common/soc-acpi-intel-skl-match.c
-
-cbaa7f0bdbee19 Pierre-Louis Bossart 2018-06-18 @11  #include "../skylake/skl.h"
-cbaa7f0bdbee19 Pierre-Louis Bossart 2018-06-18  12  
-
-:::::: The code at line 11 was first introduced by commit
-:::::: cbaa7f0bdbee1969bb311c641abbd0d2af6ba861 ASoC: Intel: move SKL+ codec ACPI tables to common directory
-
-:::::: TO: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-:::::: CC: Mark Brown <broonie@kernel.org>
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Cheers,
+Nathan
