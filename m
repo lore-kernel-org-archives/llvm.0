@@ -1,146 +1,93 @@
-Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-001ae601.pphosted.com (mx0a-001ae601.pphosted.com [67.231.149.25])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E4001494D6
-	for <llvm@lists.linux.dev>; Wed, 14 Aug 2024 08:56:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA8961AE851;
+	Wed, 14 Aug 2024 10:59:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=67.231.149.25
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723625794; cv=none; b=UGo75k54vN7dWteIGc9yY99fSAb6zvk8LlwZ24+XHxvWpDWOYpySUbn0h900AmZVBHKBXxZnDKozs2gJy4bvZLjUUOM11G2FJiIc44VBlmiyoBCiPtVQFTTTbfaJqRLt22459fbcwP3EAdjte28kvdmpBGmD+OpbtO5DGdampZs=
+	t=1723633175; cv=none; b=Py8H39PLMdxAibWtgj8jSWkXIw1xhxYqY79z0d4yPSVfkV8kpgCur8S/OZcFoV0ydz9luXB7Bbp7Wm2exe8XBwV/XcAvjxmIodt5F5wOM8iOIYgGhkHDWtvn6KJwQXH6lRGWw0/t8gyXGpBrUTymxgWXd6UnsuygMxzRrS7mWYg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723625794; c=relaxed/simple;
-	bh=geArp4vYpOuxeLfSy4kt6ZtrgC6/R3zfTRXVcdxhuWI=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=gsSu9VOEIDTohZJ/q022VuohelfYk55vKlX0Cgqz0czc2qijOTE2M29RFtIaQC2Rz7Zycl6BWIoHLHQkQv+yXHdoXmw7BNGa54CqmfEpwln+lEpS10X6sNXqodtngff58X0YVc4p9B7hGMvpOMOxGI6XIJuem00Uyzqey99rcfY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sifive.com; spf=pass smtp.mailfrom=sifive.com; dkim=pass (2048-bit key) header.d=sifive.com header.i=@sifive.com header.b=SFgzPTYF; arc=none smtp.client-ip=209.85.214.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sifive.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sifive.com
+	s=arc-20240116; t=1723633175; c=relaxed/simple;
+	bh=+qzqXOCXksMPS4Y1uQDXb+Hw//NwCn9OgHYtA0Pd3gg=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=o1JVKITn7BWzMIlsTKd0kC6usjpVv6DgAjrdC8JFELkfWa/Uw0J2QdBptRU8/Nv0x3+i47WbBEdPCAsQfnGW+0nMoUqHEvfKae2wuBlAGqxAc4+XjT898mRQaD7mGBeGltOZby+v3a+TfwxhH2CXvT3FJUpKqSgpXrqjQ6NH4Xw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=opensource.cirrus.com; spf=pass smtp.mailfrom=opensource.cirrus.com; dkim=pass (2048-bit key) header.d=cirrus.com header.i=@cirrus.com header.b=ntHVdeXG; arc=none smtp.client-ip=67.231.149.25
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=opensource.cirrus.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=opensource.cirrus.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sifive.com header.i=@sifive.com header.b="SFgzPTYF"
-Received: by mail-pl1-f179.google.com with SMTP id d9443c01a7336-1fc5296e214so61386825ad.0
-        for <llvm@lists.linux.dev>; Wed, 14 Aug 2024 01:56:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=sifive.com; s=google; t=1723625793; x=1724230593; darn=lists.linux.dev;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=9hz49lwxt/ore9sEZ/uYZptf0bZHlG9fVMF8g6BZbdk=;
-        b=SFgzPTYFNW+L/WSuoNhN3RgsWNsD6c775NVHXbIKzWZoPMkVPaDiBtUqPVCg1iIOPg
-         Y5+WXhIRBOTtS+xUVmBiNKeiP9cFGJ/Nb4Y65/yLmrZiA9P4QlmfCFZmVqcMAhEXrWpX
-         OtradfjvzRowvMlpBHSg3UNudzDfRvxNTyqZ67HJfq+GNgyS04VWOHji6HR9oPX9Mh7f
-         8YbGS+QqyEsMrJZssqJxHzqb71U00sXqsmwHM52scO5J3HrLWIexPV0kpNBHLsfzmuEY
-         Vox2PeJbb1l5tpxAGFbjSXE6o1jjxsDPnXb1x7Wia6euOqncTeV5Yi+5c3oYwqsy4sVG
-         RVWw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1723625793; x=1724230593;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=9hz49lwxt/ore9sEZ/uYZptf0bZHlG9fVMF8g6BZbdk=;
-        b=esJHJKldc6BE/S65tlNpCRDib2z2DsGnIBDrFnDY89d69pJH+y+EPiHd4FBt2gjuCa
-         1sozAcfA9oUIKpe7vh00Ydiw2xY0zjph39WLhdlPGN4YG0gCvsQbQqu4zB/3zyHbZ/dL
-         gSLiaq0Wn/UdjAd254cofrqiJfYyoBGuCSq+FprIpjAjlIG/e8Fuj3kdP8CXpq6s5fTn
-         y3ly3ID6Jcq+POmosLg7a283SQSorcp2qq9YiUsenyNcARuvk53qJ6+Rt5l4EqWpHb29
-         rhjj+iPAXA/no72VTaLFOD/I+/ghJOEjavo/3RhoVr/eGqWmAsD46FhVFQIb3uujcj9w
-         czFQ==
-X-Gm-Message-State: AOJu0YwrfKxC7tmYhrWQPADHbz6B+p/khvjixnUMWBuXlEjDlv+niUdp
-	zyjFM8LGxkI33X9Tr5QrQQIFCEhS3pX7kQhxT0nVTP1sXzQYFzUssGGlqtVXRoY=
-X-Google-Smtp-Source: AGHT+IEjBmXCU7mNTlJDHLEXVaA9qjlxh2UbxM2PLdod3xVt/jyJ0BnNxQ5PpAdVoFfN1q2eB+NLCQ==
-X-Received: by 2002:a17:903:1c9:b0:1fc:2ee3:d46f with SMTP id d9443c01a7336-201d638d797mr29420295ad.11.1723625792838;
-        Wed, 14 Aug 2024 01:56:32 -0700 (PDT)
-Received: from sw06.internal.sifive.com ([4.53.31.132])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-201cd14a7b8sm25439615ad.100.2024.08.14.01.56.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 14 Aug 2024 01:56:32 -0700 (PDT)
-From: Samuel Holland <samuel.holland@sifive.com>
-To: Palmer Dabbelt <palmer@dabbelt.com>,
-	linux-riscv@lists.infradead.org,
-	Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-	Alexander Potapenko <glider@google.com>,
-	Andrey Konovalov <andreyknvl@gmail.com>,
-	Dmitry Vyukov <dvyukov@google.com>,
-	Vincenzo Frascino <vincenzo.frascino@arm.com>,
-	kasan-dev@googlegroups.com
-Cc: llvm@lists.linux.dev,
-	linux-kernel@vger.kernel.org,
-	Alexandre Ghiti <alexghiti@rivosinc.com>,
-	Evgenii Stepanov <eugenis@google.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	linux-arm-kernel@lists.infradead.org,
-	Samuel Holland <samuel.holland@sifive.com>
-Subject: [RFC PATCH 7/7] kasan: sw_tags: Support runtime stack tagging control for RISC-V
-Date: Wed, 14 Aug 2024 01:55:35 -0700
-Message-ID: <20240814085618.968833-8-samuel.holland@sifive.com>
-X-Mailer: git-send-email 2.45.1
-In-Reply-To: <20240814085618.968833-1-samuel.holland@sifive.com>
-References: <20240814085618.968833-1-samuel.holland@sifive.com>
+	dkim=pass (2048-bit key) header.d=cirrus.com header.i=@cirrus.com header.b="ntHVdeXG"
+Received: from pps.filterd (m0077473.ppops.net [127.0.0.1])
+	by mx0a-001ae601.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 47E5j9ch020215;
+	Wed, 14 Aug 2024 05:59:32 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=
+	PODMain02222019; bh=XSwe9riWP+5wqjSrpRpNfYDY6LkOSBAzHkBT0fVjPbM=; b=
+	ntHVdeXGKQQDgFvAgrJd+Ob0laucVJkWfmE8hHYE9VYuQFJpHceRBgyCeOwYJjMW
+	vRJpYCE8OiR92XApWuoGgDp5M5MOq3LI9Dc+lxcy1Ep4q8TWq8EKaPQE6dx/mZ4m
+	XUppVhrlU9jY0hySwn93S/g3Ek2rR7FMlFf9nDlZ+k1E95ADtPOsFdPyI9uY0DAJ
+	X+dPTQyY3Ddn3DoSURIbdVUPPsWGEpktmOR8I876vCvACHvbb90ctoTszhRjhgDS
+	l5vxRlhXHZcxrjP9Pa1qyIKTHNLSqoSassgI3xGoM2xLQPnRpQGrGisxfGEAmWjo
+	8iAhQCQMgSv9BFMRpX7pmg==
+Received: from ediex01.ad.cirrus.com ([84.19.233.68])
+	by mx0a-001ae601.pphosted.com (PPS) with ESMTPS id 40x5kwmeg9-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 14 Aug 2024 05:59:32 -0500 (CDT)
+Received: from ediex02.ad.cirrus.com (198.61.84.81) by ediex01.ad.cirrus.com
+ (198.61.84.80) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Wed, 14 Aug
+ 2024 11:59:29 +0100
+Received: from ediswmail9.ad.cirrus.com (198.61.86.93) by
+ anon-ediex02.ad.cirrus.com (198.61.84.81) with Microsoft SMTP Server id
+ 15.2.1544.9 via Frontend Transport; Wed, 14 Aug 2024 11:59:29 +0100
+Received: from [198.90.208.18] (ediswws06.ad.cirrus.com [198.90.208.18])
+	by ediswmail9.ad.cirrus.com (Postfix) with ESMTP id CFB55820241;
+	Wed, 14 Aug 2024 10:59:29 +0000 (UTC)
+Message-ID: <5681baf9-af8e-49e1-bf64-fc4ac4e28618@opensource.cirrus.com>
+Date: Wed, 14 Aug 2024 11:59:29 +0100
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [tiwai-sound:for-linus 2/7] ld.lld: error: undefined symbol:
+ i2c_acpi_client_count
+To: Takashi Iwai <tiwai@suse.com>
+CC: <llvm@lists.linux.dev>, <oe-kbuild-all@lists.linux.dev>,
+        <linux-sound@vger.kernel.org>
+References: <202408141333.gYnaitcV-lkp@intel.com>
+Content-Language: en-GB
+From: Richard Fitzgerald <rf@opensource.cirrus.com>
+In-Reply-To: <202408141333.gYnaitcV-lkp@intel.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-ORIG-GUID: 8yjg7XDpAv-cXnF9UZcl96ECfaVo-oxD
+X-Proofpoint-GUID: 8yjg7XDpAv-cXnF9UZcl96ECfaVo-oxD
+X-Proofpoint-Spam-Reason: safe
 
-This allows the kernel to boot on systems without pointer masking
-support when stack tagging is enabled.
+On 14/08/2024 06:08, kernel test robot wrote:
+> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/tiwai/sound.git for-linus
+> head:   8475a1d9bb7acf1cb15842dd24baab0e8ea4e4ff
+> commit: 03c5c350e38d9346b69357d0e52c3c40495c14a0 [2/7] ALSA: hda/realtek: Add support for new HP G12 laptops
+> config: i386-randconfig-013-20240811 (https://download.01.org/0day-ci/archive/20240814/202408141333.gYnaitcV-lkp@intel.com/config)
+> compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
+> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240814/202408141333.gYnaitcV-lkp@intel.com/reproduce)
+> 
+> If you fix the issue in a separate patch/commit (i.e. not just a new version of
+> the same patch/commit), kindly add following tags
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Closes: https://lore.kernel.org/oe-kbuild-all/202408141333.gYnaitcV-lkp@intel.com/
+> 
+> All errors (new ones prefixed by >>):
+> 
+>>> ld.lld: error: undefined symbol: i2c_acpi_client_count
+>     >>> referenced by patch_realtek.c:6891 (sound/pci/hda/patch_realtek.c:6891)
+>     >>>               sound/pci/hda/patch_realtek.o:(cs35lxx_autodet_fixup) in archive vmlinux.a
+> 
 
-Signed-off-by: Samuel Holland <samuel.holland@sifive.com>
----
-
- mm/kasan/kasan.h       | 2 ++
- mm/kasan/sw_tags.c     | 9 +++++++++
- scripts/Makefile.kasan | 5 +++++
- 3 files changed, 16 insertions(+)
-
-diff --git a/mm/kasan/kasan.h b/mm/kasan/kasan.h
-index fb2b9ac0659a..01e945cb111d 100644
---- a/mm/kasan/kasan.h
-+++ b/mm/kasan/kasan.h
-@@ -630,6 +630,8 @@ void *__asan_memset(void *addr, int c, ssize_t len);
- void *__asan_memmove(void *dest, const void *src, ssize_t len);
- void *__asan_memcpy(void *dest, const void *src, ssize_t len);
- 
-+u8 __hwasan_generate_tag(void);
-+
- void __hwasan_load1_noabort(void *);
- void __hwasan_store1_noabort(void *);
- void __hwasan_load2_noabort(void *);
-diff --git a/mm/kasan/sw_tags.c b/mm/kasan/sw_tags.c
-index 220b5d4c6876..32435d33583a 100644
---- a/mm/kasan/sw_tags.c
-+++ b/mm/kasan/sw_tags.c
-@@ -70,6 +70,15 @@ u8 kasan_random_tag(void)
- 	return (u8)(state % (KASAN_TAG_MAX + 1));
- }
- 
-+u8 __hwasan_generate_tag(void)
-+{
-+	if (!kasan_enabled())
-+		return KASAN_TAG_KERNEL;
-+
-+	return kasan_random_tag();
-+}
-+EXPORT_SYMBOL(__hwasan_generate_tag);
-+
- bool kasan_check_range(const void *addr, size_t size, bool write,
- 			unsigned long ret_ip)
- {
-diff --git a/scripts/Makefile.kasan b/scripts/Makefile.kasan
-index 390658a2d5b7..f64c1aca3e97 100644
---- a/scripts/Makefile.kasan
-+++ b/scripts/Makefile.kasan
-@@ -73,6 +73,11 @@ ifeq ($(call clang-min-version, 150000)$(call gcc-min-version, 130000),y)
- CFLAGS_KASAN += $(call cc-param,hwasan-kernel-mem-intrinsic-prefix=1)
- endif
- 
-+# RISC-V requires dynamically determining if stack tagging can be enabled.
-+ifdef CONFIG_RISCV
-+CFLAGS_KASAN += $(call cc-param,hwasan-generate-tags-with-calls=1)
-+endif
-+
- endif # CONFIG_KASAN_SW_TAGS
- 
- export CFLAGS_KASAN CFLAGS_KASAN_NOSANITIZE
--- 
-2.45.1
-
+I'll be sending a fix for this soon, I'm just testing it.
+Despite our testing of various combinations we missed CONFIG_I2C=m,
+CONFIG_ACPI=y. For reasons I can't explain I thought that CONFIG_I2C
+is a boolean.
