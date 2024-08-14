@@ -1,107 +1,94 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E1434142651;
-	Wed, 14 Aug 2024 12:57:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B5721B374B;
+	Wed, 14 Aug 2024 14:10:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723640277; cv=none; b=N5MILkjdErhtZ9CksMxTi6CM4PocvYYZh1zi7oWdp0MHfI5Ds68oWXn4Li8AtiE+bjlyABvRAyjTK8h+ZDODnoncBu1qlx0x0UzATxxYb6sHB15v4xzaGhUxefosPuUdfE9HL0pK/igor2RPYoZAisetQkhZsBAgYkViIVTUZjQ=
+	t=1723644633; cv=none; b=VLkcATL5/rh8TZ779LH1U27GUUVWnoypux1RnOnMsy9U3L6yx/6s74oVSrrTSFBO0jMxn932SQ0KpDDml/zDlTbigYGi2uZGTpv0j1KB6DpzZmOE9zuDZ+k6tQ9QlzPCuDUDtpHPCMNGATfcU5bC1eaXr96PJ/MSfkMoNDRjKm4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723640277; c=relaxed/simple;
-	bh=62rmftprAKZAo0HKLAGpaiq0jqQ0eGkDk+lNEURWyY0=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=GJC2MMsRLIhWDH/0391NnB7WUEXqmiZOpoz4+QM6XRUs3JvmyPAk/XrWUwThfpi5VcDcS7EPkWDJQztKFyRq4agROBRXnlUQPaJ1JHTra9QddX9JOnY9VMlmpyTGC+5y4bTXCcubn5jGGB8myKZEkjUW4oCNaGec0kimbNEDLik=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DZxuK9t1; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1723644633; c=relaxed/simple;
+	bh=KdgwpVZN4uMBbr71j9vE0petOsSpXyckYOOAL7K8sQ4=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=l4wNav0BkBYEWcPyNZgwtZJVuCNmgPfJKsjvvhATxEystf2ldCvqSZWUgI8LSh6r1pfDradAU5KtkfhfnZbT6/oO5Ai8kI6pbgT+WwMuBymyiJoC9Qz8XcZ0WMMZdU22L/zLrjR/hw8QlRd7jYFYiPHZlAf/T4g8Mn+gXusi0QA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=exksjn/E; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DZxuK9t1"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E6E4EC4AF09;
-	Wed, 14 Aug 2024 12:57:55 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="exksjn/E"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1472DC4AF11;
+	Wed, 14 Aug 2024 14:10:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1723640276;
-	bh=62rmftprAKZAo0HKLAGpaiq0jqQ0eGkDk+lNEURWyY0=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-	b=DZxuK9t1AiQBhXl71gUtYTmcXow0xAl9+Rtwq2PwcSVrMolUPtYBeEoJv8pW5Kwbp
-	 uB/5OqxAUlVK38MMgNwZBIv1CS1l03zP4UQBxaXc00xejgvL3fLz/ZdGuHdLwl1z32
-	 zH4UdzD7lFCkUJU6+xUPXZik7DoXWyisqLSHF/2jhkmqqhhUyQ6TXEH+KFb6xZ2OMM
-	 gxsnB1/JxsmZZX1tqmY+csHgi0PCKiiDDylJ7r7sAFbSpYa7cscLQli7dvO5QsdLrK
-	 /jtrLd9jUgUw/5K5UWkgtCHEw7AGcH3ua1vKHMd/RedQKBENpeuNN4Vdnl8XJqYhXy
-	 T+KP/xwhfzr3Q==
-From: =?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>
-To: Andy Chiu <andy.chiu@sifive.com>, Paul Walmsley
- <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou
- <aou@eecs.berkeley.edu>, Alexandre Ghiti <alexghiti@rivosinc.com>, Zong Li
- <zong.li@sifive.com>, Steven Rostedt <rostedt@goodmis.org>, Masami
- Hiramatsu <mhiramat@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
- Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers
- <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, Justin Stitt
- <justinstitt@google.com>, Puranjay Mohan <puranjay@kernel.org>
-Cc: Palmer Dabbelt <palmer@rivosinc.com>, linux-riscv@lists.infradead.org,
- linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
- llvm@lists.linux.dev, Andy Chiu <andy.chiu@sifive.com>
-Subject: Re: [PATCH v2 3/6] riscv: ftrace: prepare ftrace for atomic code
- patching
-In-Reply-To: <87wmkk8toq.fsf@all.your.base.are.belong.to.us>
-References: <20240628-dev-andyc-dyn-ftrace-v4-v2-0-1e5f4cb1f049@sifive.com>
- <20240628-dev-andyc-dyn-ftrace-v4-v2-3-1e5f4cb1f049@sifive.com>
- <87wmkk8toq.fsf@all.your.base.are.belong.to.us>
-Date: Wed, 14 Aug 2024 14:57:52 +0200
-Message-ID: <87sev78dnz.fsf@all.your.base.are.belong.to.us>
+	s=k20201202; t=1723644633;
+	bh=KdgwpVZN4uMBbr71j9vE0petOsSpXyckYOOAL7K8sQ4=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=exksjn/Enaqn+WwSi1BZlTscDfpk98P3YHgxVXlHEQa83TlfoYkiYsdAHid2XdVVA
+	 QIgEGMuoySCw69KG+0LfeZCem8NspAHXtUw6G4S3F9s6BeEA+xOPgWf0XMhfrgX3Zb
+	 dSbPiituiEm127KRnrdO2JhJPMPoEgcP6l4cGItVJCbroNVD3ASDTNPkCO7TZVk7AC
+	 MenuL1z2ndl5AKRGeg0+TMNnrY4U60ocblER3+OojkFAa02v6QHrBv99Y0ux0N7HvX
+	 Dgeoqb5ZFzlTxgRnnyBxDBXZI3mWxGMeaeIlwXnimAqU3LbcPcyxQu4p6KFkTueof7
+	 J7YIjOSnOpanQ==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 70EB138232A8;
+	Wed, 14 Aug 2024 14:10:33 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH v4 0/4] RISC-V: Parse DT for Zkr to seed KASLR
+From: patchwork-bot+linux-riscv@kernel.org
+Message-Id: 
+ <172364463227.2278280.4833968885789479932.git-patchwork-notify@kernel.org>
+Date: Wed, 14 Aug 2024 14:10:32 +0000
+References: <20240709173937.510084-1-jesse@rivosinc.com>
+In-Reply-To: <20240709173937.510084-1-jesse@rivosinc.com>
+To: Jesse Taube <jesse@rivosinc.com>
+Cc: linux-riscv@lists.infradead.org, ardb@kernel.org,
+ paul.walmsley@sifive.com, palmer@dabbelt.com, aou@eecs.berkeley.edu,
+ nathan@kernel.org, ndesaulniers@google.com, morbo@google.com,
+ justinstitt@google.com, alexghiti@rivosinc.com, conor.dooley@microchip.com,
+ masahiroy@kernel.org, twd2.me@gmail.com, christophe.jaillet@wanadoo.fr,
+ samitolvanen@google.com, akpm@linux-foundation.org, bhe@redhat.com,
+ rppt@kernel.org, vishal.moola@gmail.com, linux-kernel@vger.kernel.org,
+ llvm@lists.linux.dev
 
-Bj=C3=B6rn T=C3=B6pel <bjorn@kernel.org> writes:
+Hello:
 
-> Andy Chiu <andy.chiu@sifive.com> writes:
->
->> We use an AUIPC+JALR pair to jump into a ftrace trampoline. Since
->> instruction fetch can break down to 4 byte at a time, it is impossible
->> to update two instructions without a race. In order to mitigate it, we
->> initialize the patchable entry to AUIPC + NOP4. Then, the run-time code
->> patching can change NOP4 to JALR to eable/disable ftrcae from a
->                                       enable        ftrace
->
->> function. This limits the reach of each ftrace entry to +-2KB displacing
->> from ftrace_caller.
->>
->> Starting from the trampoline, we add a level of indirection for it to
->> reach ftrace caller target. Now, it loads the target address from a
->> memory location, then perform the jump. This enable the kernel to update
->> the target atomically.
->
-> The +-2K limit is for direct calls, right?
->
-> ...and this I would say breaks DIRECT_CALLS (which should be implemented
-> using call_ops later)?
+This series was applied to riscv/linux.git (for-next)
+by Palmer Dabbelt <palmer@rivosinc.com>:
 
-Thinking a bit more, and re-reading the series.
+On Tue,  9 Jul 2024 13:39:33 -0400 you wrote:
+> Add functions to pi/fdt_early.c to help parse the FDT to check if
+> the isa string has the Zkr extension. Then use the Zkr extension to
+> seed the KASLR base address.
+> 
+> The first two patches fix the visibility of symbols.
+> 
+> V1 -> V2:
+>  - Add RISC-V: pi: Force hidden visibility for all symbol references
+>  - Add RISC-V: pi: Add kernel/pi/pi.h
+>  - Rewrite archrandom_early.c to parse DT over checking the csr
+> V2 -> V3:
+>  - Add RISC-V: lib: Add pi aliases for string functions
+>  - Rewrite isa_string_contains in third patch
+> 
+> [...]
 
-This series is good work, and it's a big improvement for DYNAMIC_FTRACE,
-but
+Here is the summary with links:
+  - [v4,1/4] RISC-V: pi: Force hidden visibility for all symbol references
+    https://git.kernel.org/riscv/c/14c3ec67236b
+  - [v4,2/4] RISC-V: lib: Add pi aliases for string functions
+    https://git.kernel.org/riscv/c/d57e19fcbf3f
+  - [v4,3/4] RISC-V: pi: Add kernel/pi/pi.h
+    https://git.kernel.org/riscv/c/b3311827155a
+  - [v4,4/4] RISC-V: Use Zkr to seed KASLR base address
+    https://git.kernel.org/riscv/c/945302df3de1
 
-+int ftrace_make_call(struct dyn_ftrace *rec, unsigned long addr)
-+{
-+	unsigned long distance, orig_addr;
-+
-+	orig_addr =3D (unsigned long)&ftrace_caller;
-+	distance =3D addr > orig_addr ? addr - orig_addr : orig_addr - addr;
-+	if (distance > JALR_RANGE)
-+		return -EINVAL;
-+
-+	return __ftrace_modify_call(rec->ip, addr, false);
-+}
-+
-
-breaks WITH_DIRECT_CALLS. The direct trampoline will *never* be within
-the JALR_RANGE.
-
-Unless we're happy with a break (I'm not) -- I really think Puranjay's
-CALL_OPS patch needs to be baked in in the series!
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
 
-Bj=C3=B6rn
