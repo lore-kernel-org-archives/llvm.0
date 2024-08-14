@@ -1,265 +1,101 @@
-Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 522561ABED7
-	for <llvm@lists.linux.dev>; Tue, 13 Aug 2024 22:53:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F31D156CE
+	for <llvm@lists.linux.dev>; Wed, 14 Aug 2024 00:42:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723589606; cv=none; b=U+XoMvwcCwb0uOWYEQV4/vr7Alf8yk9zguCEet41RgCIfGwczmA8BV0NgobXB95I2jFimOg6+Z81iW/eLzXcoDnR2X4uaaFqE6XUBxyWOy499pCK/oR0G352Dc17mPOGcZBHm8k6ZsP22i2H4g3aQaEfEABHuD8jXydYJCjEIjc=
+	t=1723596131; cv=none; b=TSfHNbH86GXQQJX1/eZ63RuX7sE/U/tQNCAQZmp3+dnAMnPsfeOcAAiSNCBFlqY1ckL7yau98ayFSm8NhxvGOGVQam82U82CW5UMBCzOyNxIDwA9fQdrg/1fj8sRFkv/d5Ot9VI2hh9zNE6bfPr7nHdM3oD4d8qpSflQSKhVS9A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723589606; c=relaxed/simple;
-	bh=QVB3XUtCbjsyZ5tiC/QmcApx8zSusE9/0Ek8LzR86O0=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=k1hILSgdXhZYHs0vOD9oTIVJ6cSJ9mphgZ+8wFn0UAiJNpJfEcsw9xpORyntZOc6my8hvSLgAWoHiY+2aivcsU4WXVHSvsfFgPbwzS6KVVH1TqSsOsoWZ9H2rbHdR6h6AvLlXwcLmvCw+JamLuFY/m73ypS9+HHtk8AfmUW848A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NMGbFqd6; arc=none smtp.client-ip=209.85.128.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1723596131; c=relaxed/simple;
+	bh=Pcx0B12AH4BlLSgj5f8hBjq0/d9ZJhuf6BWNIlZ9Yfk=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=I4GV5tmjIVuJoFkqlHKfyrLPLzM+D83iX7LRMxl+q8lANBJctmMJMv868dzruUvuuj5ylQUP5JwWQaYZpLrfnBgNPSUn0RIr/1o1DgIW2EiqnAvI074joq4TY7myQLjwfEV7xzhZN6baCNpSSc56HCAFiyFgYqWW3tvmxU0orls=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=TCiaJUk5; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NMGbFqd6"
-Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-428ec6c190eso46090795e9.1
-        for <llvm@lists.linux.dev>; Tue, 13 Aug 2024 15:53:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1723589603; x=1724194403; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=otYKhkTTVwFrNMc4y8Lo3x+9H/dZK04aKqqwJVfyjXE=;
-        b=NMGbFqd6E6W9zu0ncB59oZz0iacijSCNkkD7EkHkl6mUhxyDiD2V+qV+Kwf3KNLtv4
-         t4PAa/r1O/3EO9xtcPuDs60RND+WLhnd7kT3C1uJm88nkHfs4kFKcYFG8Q9AOlLeXxKE
-         s4Be6AP35lQAHFGkQpS9d9zaMj4IumV0ZBBR2B9UwQ2FosJ/uoK4/SMvUMsMLlbsoSZk
-         H9pz1MreHWOaQ488wrF2KSGeMpGozJ4upteF02SjaXZ0XUF+m2mbs5G8eM79I/PDZBqP
-         MjKbfcHh+b6PBbuNtqc+MOCABmwyq1vQYLu1hqKq4N4PhdhKq1Onc6ceOqibwgC+o4cf
-         5Wzw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1723589603; x=1724194403;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=otYKhkTTVwFrNMc4y8Lo3x+9H/dZK04aKqqwJVfyjXE=;
-        b=caz5KZrbFGDzlgKryKf1ur88Y3SEFS+ImXgAYwEnMUjI8nmhL+/o6ah2sNR6E1C4l8
-         zIty+i1FGXtX92UL9CwPYY5BgdvWOQ7RR9PujBIKuUFBCMqbhkPwMR8lufPbIW/IS8ca
-         feMCh3SGtnyNqJ2H+QL8TEjeaLCVcoNvPr3Ks76Kywqi3y+kaJdpCIe3pCFYAz0a4cVt
-         g1HvCzdP44CfR5bmKBilK5OLn8n7N/Z/TdkCtfrgt6W4kiqwGuOCDfleQCduc2xwhbpF
-         kSpitpz0/I5gRjolZRHql1dP0TwcgjR0YaxCt9EMNj913QdsS6QWBaz/AZ1XK7w8e5dG
-         264Q==
-X-Forwarded-Encrypted: i=1; AJvYcCX+T8nVq7yli1Z9nnVUeWkvKmtPNsm9ZbhXLgtzD/75ind2Z6/FlWvQMn0/SAf6rX5emoDF@lists.linux.dev
-X-Gm-Message-State: AOJu0YyM55ANS7AL8CGdjbgnk/4nD1hDi81RfZutsXIS1DYMSBHmN06J
-	jT455BMKivUERm4Hj7lbO946fdaRdtAq1EoL3TloM9MUTROJNhynSECt50ObOFdG+CyRVKtlwjo
-	oIcjMix5RoqtcWUwRnAoixdSM424=
-X-Google-Smtp-Source: AGHT+IGR7W98LzFxhKyi9BaEIe7h8jPyiH/V3S9wInwVZhrMgTjU/0iYdt5GZWW7enBCnRaiuqbjtcqyMdrB9Mhfe94=
-X-Received: by 2002:a05:600c:3b18:b0:426:60bc:8f4e with SMTP id
- 5b1f17b1804b1-429dd22ee6amr5734115e9.5.1723589602277; Tue, 13 Aug 2024
- 15:53:22 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="TCiaJUk5"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1723596128;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=hLCP2Jz5NpiqpX4uHps3fsWJzLFsdkVeRzQ7eM5kEVM=;
+	b=TCiaJUk5Y9bsHEUrLOFt20V6OyBZXcbx6PJHyub14lgtADYFVuCUID2rVzn5ImN+QE2FSH
+	u8N0O044ZVRmT8PpCe13NFolMXfecku/ehiHbFoYdzs0ROZYkV99FpWbT+MLQ5Yfyfvhcq
+	nwdjlrpp2LLgFDLPkRTwxG+FbLA203g=
+Received: from mx-prod-mc-04.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-414-LeRaxbndMDWzuACvS5ftGQ-1; Tue,
+ 13 Aug 2024 20:42:06 -0400
+X-MC-Unique: LeRaxbndMDWzuACvS5ftGQ-1
+Received: from mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.12])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-04.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 286E11925380
+	for <llvm@lists.linux.dev>; Wed, 14 Aug 2024 00:42:06 +0000 (UTC)
+Received: from [172.64.4.23] (unknown [10.30.33.216])
+	by mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 1273C1955F6B;
+	Wed, 14 Aug 2024 00:42:04 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.11.0-rc3,
+ mainline.kernel.org-clang, 6b0f8db9)
+Date: Wed, 14 Aug 2024 00:42:04 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20240812232910.2026387-1-mmaurer@google.com> <20240812232910.2026387-3-mmaurer@google.com>
-In-Reply-To: <20240812232910.2026387-3-mmaurer@google.com>
-From: Andrey Konovalov <andreyknvl@gmail.com>
-Date: Wed, 14 Aug 2024 00:53:11 +0200
-Message-ID: <CA+fCnZcVEp7Jc3kKPv59oqOxjGguV54ZaCcb1eX=Gx6ehSWHUw@mail.gmail.com>
-Subject: Re: [PATCH v2 2/3] kbuild: rust: Enable KASAN support
-To: Matthew Maurer <mmaurer@google.com>
-Cc: dvyukov@google.com, ojeda@kernel.org, 
-	Masahiro Yamada <masahiroy@kernel.org>, Andrey Ryabinin <ryabinin.a.a@gmail.com>, 
-	Alex Gaynor <alex.gaynor@gmail.com>, Wedson Almeida Filho <wedsonaf@gmail.com>, 
-	Nathan Chancellor <nathan@kernel.org>, aliceryhl@google.com, samitolvanen@google.com, 
-	Nicolas Schier <nicolas@fjasle.eu>, Alexander Potapenko <glider@google.com>, 
-	Vincenzo Frascino <vincenzo.frascino@arm.com>, Boqun Feng <boqun.feng@gmail.com>, 
-	Gary Guo <gary@garyguo.net>, =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
-	Benno Lossin <benno.lossin@proton.me>, Andreas Hindborg <a.hindborg@samsung.com>, 
-	Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, 
-	Justin Stitt <justinstitt@google.com>, linux-kbuild@vger.kernel.org, 
-	kasan-dev@googlegroups.com, linux-kernel@vger.kernel.org, 
-	rust-for-linux@vger.kernel.org, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.12
+Message-Id: <74068.124081320420700114@us-mta-414.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Aug 13, 2024 at 1:29=E2=80=AFAM Matthew Maurer <mmaurer@google.com>=
- wrote:
->
-> Rust supports KASAN via LLVM, but prior to this patch, the flags aren't
-> set properly.
->
-> Suggested-by: Miguel Ojeda <ojeda@kernel.org>
-> Signed-off-by: Matthew Maurer <mmaurer@google.com>
-> ---
->  scripts/Makefile.kasan          | 51 +++++++++++++++++++++++----------
->  scripts/Makefile.lib            |  3 ++
->  scripts/generate_rust_target.rs |  1 +
->  3 files changed, 40 insertions(+), 15 deletions(-)
->
-> diff --git a/scripts/Makefile.kasan b/scripts/Makefile.kasan
-> index 390658a2d5b7..bfd37be9cc45 100644
-> --- a/scripts/Makefile.kasan
-> +++ b/scripts/Makefile.kasan
-> @@ -12,6 +12,9 @@ endif
->  KASAN_SHADOW_OFFSET ?=3D $(CONFIG_KASAN_SHADOW_OFFSET)
->
->  cc-param =3D $(call cc-option, -mllvm -$(1), $(call cc-option, --param $=
-(1)))
-> +rustc-param =3D $(call rustc-option, -Cllvm-args=3D-$(1),)
-> +
-> +check-args =3D $(foreach arg,$(2),$(call $(1),$(arg)))
->
->  ifdef CONFIG_KASAN_STACK
->         stack_enable :=3D 1
-> @@ -28,6 +31,7 @@ else
->  endif
->
->  CFLAGS_KASAN_MINIMAL :=3D -fsanitize=3Dkernel-address
-> +RUSTFLAGS_KASAN_MINIMAL :=3D -Zsanitizer=3Dkernel-address -Zsanitizer-re=
-cover=3Dkernel-address
->
->  # -fasan-shadow-offset fails without -fsanitize
->  CFLAGS_KASAN_SHADOW :=3D $(call cc-option, -fsanitize=3Dkernel-address \
-> @@ -35,44 +39,61 @@ CFLAGS_KASAN_SHADOW :=3D $(call cc-option, -fsanitize=
-=3Dkernel-address \
->                         $(call cc-option, -fsanitize=3Dkernel-address \
->                         -mllvm -asan-mapping-offset=3D$(KASAN_SHADOW_OFFS=
-ET)))
->
-> +# The minimum supported `rustc` version has a minimum supported LLVM
-> +# version late enough that we can assume support for -asan-mapping-offse=
-t
-> +RUSTFLAGS_KASAN_SHADOW :=3D $(RUSTFLAGS_KASAN_MINIMAL) \
-> +                         -Cllvm-args=3D-asan-mapping-offset=3D$(KASAN_SH=
-ADOW_OFFSET)
-> +
-> +KASAN_PARAMS :=3D
-> +
->  ifeq ($(strip $(CFLAGS_KASAN_SHADOW)),)
->         CFLAGS_KASAN :=3D $(CFLAGS_KASAN_MINIMAL)
-> +       # We still need to consider this case for Rust because we want Ru=
-st code
-> +       # to match the behavior of possibly old C compilers when linked t=
-ogether.
-> +       ifdef CONFIG_RUST
-> +               RUSTFLAGS_KASAN :=3D $(RUSTFLAGS_KASAN_MINIMAL)
-> +       endif
+Hi, we tested your kernel and here are the results:
 
-Eh, this is getting ugly. I sent a patch that simplifies the KASAN
-Makefile, please rebase your changes on top of it.
-
->  else
-> -       # Now add all the compiler specific options that are valid standa=
-lone
-> -       CFLAGS_KASAN :=3D $(CFLAGS_KASAN_SHADOW) \
-> -        $(call cc-param,asan-globals=3D1) \
-> -        $(call cc-param,asan-instrumentation-with-call-threshold=3D$(cal=
-l_threshold)) \
-> -        $(call cc-param,asan-instrument-allocas=3D1)
-> +       KASAN_PARAMS +=3D asan-globals=3D1 asan-instrumentation-with-call=
--threshold=3D$(call_threshold) asan-instrument-allocas=3D1
-> +       CFLAGS_KASAN :=3D $(CFLAGS_KASAN_SHADOW)
-> +       ifdef CONFIG_RUST
-> +               RUSTFLAGS_KASAN :=3D $(RUSTFLAGS_KASAN_SHADOW)
-> +       endif
->  endif
->
-> -CFLAGS_KASAN +=3D $(call cc-param,asan-stack=3D$(stack_enable))
-> +KASAN_PARAMS +=3D asan-stack=3D$(stack_enable)
->
->  # Instrument memcpy/memset/memmove calls by using instrumented __asan_me=
-m*()
->  # instead. With compilers that don't support this option, compiler-inser=
-ted
->  # memintrinsics won't be checked by KASAN on GENERIC_ENTRY architectures=
-.
-> -CFLAGS_KASAN +=3D $(call cc-param,asan-kernel-mem-intrinsic-prefix=3D1)
-> +KASAN_PARAMS +=3D asan-kernel-mem-intrinsic-prefix=3D1
->
->  endif # CONFIG_KASAN_GENERIC
->
->  ifdef CONFIG_KASAN_SW_TAGS
->
->  ifdef CONFIG_KASAN_INLINE
-> -    instrumentation_flags :=3D $(call cc-param,hwasan-mapping-offset=3D$=
-(KASAN_SHADOW_OFFSET))
-> +    KASAN_PARAMS +=3D hwasan-mapping-offset=3D$(KASAN_SHADOW_OFFSET)
->  else
-> -    instrumentation_flags :=3D $(call cc-param,hwasan-instrument-with-ca=
-lls=3D1)
-> +    KASAN_PARAMS +=3D hwasan-instrument-with-calls=3D1
->  endif
->
-> -CFLAGS_KASAN :=3D -fsanitize=3Dkernel-hwaddress \
-> -               $(call cc-param,hwasan-instrument-stack=3D$(stack_enable)=
-) \
-> -               $(call cc-param,hwasan-use-short-granules=3D0) \
-> -               $(call cc-param,hwasan-inline-all-checks=3D0) \
-> -               $(instrumentation_flags)
-> +KASAN_PARAMS +=3D hwasan-instrument-stack=3D$(stack_enable) hwasan-use-s=
-hort-granules=3D0 hwasan-inline-all-checks=3D0 $(instrumentation_params)
-
-What are instrumentation_params? instrumentation_flags? They are not
-defined in the Makefile anymore.
-
-> +CFLAGS_KASAN :=3D -fsanitize=3Dkernel-hwaddress
->
->  # Instrument memcpy/memset/memmove calls by using instrumented __hwasan_=
-mem*().
->  ifeq ($(call clang-min-version, 150000)$(call gcc-min-version, 130000),y=
-)
->  CFLAGS_KASAN +=3D $(call cc-param,hwasan-kernel-mem-intrinsic-prefix=3D1=
-)
->  endif
->
-> +ifdef CONFIG_RUST
-> +       RUSTFLAGS_KASAN :=3D -Zsanitizer=3Dkernel-hwaddress -Zsanitizer-r=
-ecover=3Dkernel-hwaddress
-> +endif
-
-Let's change the order of the definitions to:
-
-1. CFLAGS_KASAN
-2. RUSTFLAGS_KASAN
-3. KASAN_PARAMS
+    Overall result: FAILED
+             Merge: OK
+           Compile: FAILED
 
 
-> +
->  endif # CONFIG_KASAN_SW_TAGS
->
-> -export CFLAGS_KASAN CFLAGS_KASAN_NOSANITIZE
-> +# Add all as-supported KASAN LLVM parameters requested by the configurat=
-ion
-> +CFLAGS_KASAN +=3D $(call check-args, cc-param, $(KASAN_PARAMS))
-> +RUSTFLAGS_KASAN +=3D $(call check-args, rustc-param, $(KASAN_PARAMS))
-> +
-> +export CFLAGS_KASAN CFLAGS_KASAN_NOSANITIZE RUSTFLAGS_KASAN
-> diff --git a/scripts/Makefile.lib b/scripts/Makefile.lib
-> index fe3668dc4954..27999da3d382 100644
-> --- a/scripts/Makefile.lib
-> +++ b/scripts/Makefile.lib
-> @@ -167,6 +167,9 @@ ifneq ($(CONFIG_KASAN_HW_TAGS),y)
->  _c_flags +=3D $(if $(patsubst n%,, \
->                 $(KASAN_SANITIZE_$(target-stem).o)$(KASAN_SANITIZE)$(is-k=
-ernel-object)), \
->                 $(CFLAGS_KASAN), $(CFLAGS_KASAN_NOSANITIZE))
-> +_rust_flags +=3D $(if $(patsubst n%,, \
-> +               $(KASAN_SANITIZE_$(target-stem).o)$(KASAN_SANITIZE)$(is-k=
-ernel-object)), \
-> +               $(RUSTFLAGS_KASAN))
->  endif
->  endif
->
-> diff --git a/scripts/generate_rust_target.rs b/scripts/generate_rust_targ=
-et.rs
-> index 8a0644c0beed..1a4d468c575f 100644
-> --- a/scripts/generate_rust_target.rs
-> +++ b/scripts/generate_rust_target.rs
-> @@ -187,6 +187,7 @@ fn main() {
->          }
->          ts.push("features", features);
->          ts.push("llvm-target", "x86_64-linux-gnu");
-> +        ts.push("supported-sanitizers", ["kernel-address"]);
->          ts.push("target-pointer-width", "64");
->      } else if cfg.has("X86_32") {
->          // This only works on UML, as i386 otherwise needs regparm suppo=
-rt in rustc
-> --
-> 2.46.0.76.ge559c4bf1a-goog
->
+Kernel information:
+    Commit message: Merge tag 'execve-v6.11-rc4' of git://git.kernel.org/pu=
+b/scm/linux/kernel/git/kees/linux
+
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1412403813
+
+One or more kernel builds failed:
+    Unrecognized or new issues:
+         ppc64le - https://datawarehouse.cki-project.org/kcidb/builds/redha=
+t:1412403813-ppc64le-kernel
+           s390x - https://datawarehouse.cki-project.org/kcidb/builds/redha=
+t:1412403813-s390x-kernel
+          x86_64 (debug) - https://datawarehouse.cki-project.org/kcidb/buil=
+ds/redhat:1412403813-x86_64-kernel-debug
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
