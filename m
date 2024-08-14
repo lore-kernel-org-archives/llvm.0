@@ -1,55 +1,55 @@
-Received: from mail-pj1-f52.google.com (mail-pj1-f52.google.com [209.85.216.52])
+Received: from mail-pj1-f43.google.com (mail-pj1-f43.google.com [209.85.216.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9ED6C1AE874
-	for <llvm@lists.linux.dev>; Wed, 14 Aug 2024 11:27:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D0CE91AED3C
+	for <llvm@lists.linux.dev>; Wed, 14 Aug 2024 11:31:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723634854; cv=none; b=rwJ46m2AjieOqhAarJlcJU7ncZj2vSmrob59842ohwuFPih/qqWGq/b6Eh2uB2RnCLPgdkpf01QvW/pVAKUhrJME2A2Ex1mMH0hD9r2SgnCsFe0HUC6+m+disssipj/qceuGOwx5uo96zYbJA98NbqmuvrwOL/WSIybDqT6neJ4=
+	t=1723635062; cv=none; b=i6ZovnfFTov0sTmwbwYUbf42VM0QbgdjqKPm7iuoJwSugPLl9nZP2vyUMasNtDvKgsiKGpWLGVMehqlpbLBlne9cZwwUULciJ/bW//km3WG0EgxjR9jbiql+vGKfBqOFJeLbte3ky26eIQ4f+T2Mc8qekIGelTRm7doUWOdKsNM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723634854; c=relaxed/simple;
-	bh=WhU+e2jgq65ehnrJrXCUVJzjobCEAHClPzzdVgzZ17Y=;
+	s=arc-20240116; t=1723635062; c=relaxed/simple;
+	bh=InUtdB5UpKfrtYqYOgnR4uD76Y1IegLDBX2+qnakvBQ=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=gQiFhWvAQ9QUqr/lgVmOK+Rt6Y3gQcfdRAK3V7m0Jwszd6nIWmxm7v8+hyUkhKvkJrjAILApBaEM09YUa3uT19nkbV/MrWKcPLzQHlfA5m1lqae9cf1eLJF59C8zkzZgUWqdYHSwsP5V54IVZDnr8s8+rjittgGIh6B4MqWfGQ4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=AICSMAXD; arc=none smtp.client-ip=209.85.216.52
+	 To:Cc:Content-Type; b=acbK2ewCXEauvwPbpEXKUV8+zJOA7e8wmFhlyVxtgy/XXUzNuXCfDKgek0jrlZi/tZs8xlylMIrLdOoRK85Fu/n7zMyQfQdWp0fiATwRs7bWwfj59BmhU0E33Ml+epkmF3hPzin94TPpTYTvS+xXt3hI842D3y/eQKcsoswxbVU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=lZHaH6cR; arc=none smtp.client-ip=209.85.216.43
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="AICSMAXD"
-Received: by mail-pj1-f52.google.com with SMTP id 98e67ed59e1d1-2d3b36f5366so202573a91.0
-        for <llvm@lists.linux.dev>; Wed, 14 Aug 2024 04:27:32 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lZHaH6cR"
+Received: by mail-pj1-f43.google.com with SMTP id 98e67ed59e1d1-2d3bc043e81so30765a91.2
+        for <llvm@lists.linux.dev>; Wed, 14 Aug 2024 04:31:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1723634852; x=1724239652; darn=lists.linux.dev;
+        d=gmail.com; s=20230601; t=1723635060; x=1724239860; darn=lists.linux.dev;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=WhU+e2jgq65ehnrJrXCUVJzjobCEAHClPzzdVgzZ17Y=;
-        b=AICSMAXDNayldpL6pM6UiFSUESsIIemjd0Q/uSkrgt8m/NMlF9GghI+aPDDqZH/Mui
-         8oC2oMvBxX7+tO/Vz29Yjohs9BQfXsCpqu4DrnqA/TVvyAfdSbepRKhV/Vo23e6xJzQe
-         x78ZKiP5JGif22djbKu3kiKxv4xtVVXdkF9GphQARmd62HDxHy1new2l+6zwZRL9qIOf
-         k5/lTTNHBmoCSwoR/qS14VoddwZY/p6DYL6H/7x1EExWk2VCkR2dd/GX5f1X2/XT+k45
-         Czh7LqnxVmV0enOJwfh7GSceeen9pkItZI2b9b3DagjESYtHgyBCIGCLX8BPcnH4x0l3
-         k44Q==
+        bh=InUtdB5UpKfrtYqYOgnR4uD76Y1IegLDBX2+qnakvBQ=;
+        b=lZHaH6cRpUazenHyyGnbvmJG2+8HA3xdnognJP8aBxNBr1I6fhbIm87mNXjJwIB+TL
+         3SD8J3+cZp8g0HjjPTxzJM/ssS+RVgzMl/BeDXwQ3JKX3Y0dc/BQ+/hjbtgU0YKWjziG
+         bYF+5FkynaMzhS+WLMNSmoiRWjYaW5QuNn2PSid8W4h5cNzIWzSZ6c1hnrHub1f75/lK
+         kkq1Hw8rhWA5oIB465OZxMRIctxv4KBpoNKlznfp5nDYOClr5z2e6e+BMbdDX6nm5Q1+
+         tEuxLRv4/FSbkLoQ4tqAh+FcNFJtmHAHoVoixtZn9Y37CQnODAfefFWmzk2lpv8GKqXW
+         k2NQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1723634852; x=1724239652;
+        d=1e100.net; s=20230601; t=1723635060; x=1724239860;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=WhU+e2jgq65ehnrJrXCUVJzjobCEAHClPzzdVgzZ17Y=;
-        b=iSKMWHypJfgfvIQYBVtWBqQiFqm7HGk4fHihI6y0SkHoZPNFVu/XQfEmvxoj6vN9Xu
-         BU/RS/NqqUbtuMKbjlU31TCONMZ/je895/KaTPXr1d/c/A290iziE7AMgQn4LAOik0bt
-         fBs6y1Z4LWToG0v4a3UEp3g6NKIwOvd++R9IAgHVrgLwnMkKOxfOcoP9/xF+/Casdmdf
-         HqP3jK6VAN0npn7WxQdO4VfY/xMU0ujZXjnIIhv/ccfz7ImxdPf8vWNtezzvzWLAc2Fz
-         0lGA86l3+lI3NwxkyxbNlW3fvcp0YbYWrWAAnx5qWQxj49zLpMYbLRhVK9Gu6OPxyxvG
-         +kig==
-X-Forwarded-Encrypted: i=1; AJvYcCUtQw9RYETqVbOTYafQ1dbMHIQdfKZGSZ6JOj539zsaFSSOihZh1fB7ZolUODuMjIrG0DYVKZigo0B7lUK6yC8imkJ4og==
-X-Gm-Message-State: AOJu0Yy2p01RD7xodomjGJUcIeGGcHzlGVTK1cWUdLFJsNh7PwNpTXRK
-	tgozPlvL9VNAn9o8PgIPCzjMO0aUKNCvqqe+qi1oExSoJYqBGKVc2Q8xbczOobBOy2kMyM/eQlN
-	b0uSX2etNhEVbFu+vyFghE+AURD0=
-X-Google-Smtp-Source: AGHT+IELKdSoSWG2UnYMmakzdFiUo5k7VT5bKKAkwEl/PovcViSJbpFA/Q4ffrafWGIOvcGXFiTjP48gn1Htq58EQOQ=
-X-Received: by 2002:a17:90b:1949:b0:2c9:9ad5:7ca2 with SMTP id
- 98e67ed59e1d1-2d3aaa8d177mr2841773a91.13.1723634851943; Wed, 14 Aug 2024
- 04:27:31 -0700 (PDT)
+        bh=InUtdB5UpKfrtYqYOgnR4uD76Y1IegLDBX2+qnakvBQ=;
+        b=BnP6Y8hP/stKvXcJYe4nnfywU2lUhZU2Uvi0UFT6tEbdDaUGCoS8yxmUEBS1MHn4FW
+         pgkEnGCkgS1UNMI9IzkFBy1rvDoYnKG6H+YKbSqVYy+bgF/4G2rrjBra6E4D3Wh1DBxl
+         HfSn+LOFub253PnmB84U8a+bmXcXvgwrZyq0BYi6q26uMX9YxEFiztubZT9M9kjsoo5G
+         /gH+fHtkupfMrqvRx1G9l/VJdmuwrVOpB6dx4RBLUIo0TF0uiYlPYSgJ7/vAfh4H4ZWY
+         vbLrdAHIfSNkSFuBdEb7CcWHf0fL4Gq6UJJ7BRroXLOnrvHh99kn10nphZAddPwP30CB
+         Ta8w==
+X-Forwarded-Encrypted: i=1; AJvYcCX5tujSU0raqPxZi+AZyNOq5fs5XmrauE56VLl2V+Brm27JVR48u5Gobi9jgyOBI463w6F16jP8cZPL/IRRWSixyYdICw==
+X-Gm-Message-State: AOJu0Yy8P/oiJugniWG1qjNegU8c2+fwX+obxzFTcXExtfQg4oFCK5bM
+	mIDQ/fEPuFVYuwpBORzZ0u3+Ql8b40ZwmZyvldQ3D91/Xij011TeW9Xf1wSBxRyuZC66D90fPVw
+	mgtEHLO0T8Psa5qjj9yaVzoiFNVo=
+X-Google-Smtp-Source: AGHT+IGHqVVY7AZWrBMuOmVDEc8fUS5b6xT/BMfprxxksFMS7/qwt/78Na8gyK8oNQBGsC23z/3ZryBjtIb+Fxr04As=
+X-Received: by 2002:a17:90b:1196:b0:2d3:b49f:acdd with SMTP id
+ 98e67ed59e1d1-2d3b49fbaa3mr728717a91.21.1723635060040; Wed, 14 Aug 2024
+ 04:31:00 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -57,10 +57,11 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 References: <20240812232910.2026387-1-mmaurer@google.com> <20240812232910.2026387-2-mmaurer@google.com>
-In-Reply-To: <20240812232910.2026387-2-mmaurer@google.com>
+ <CANiq72khUrha-a+59KYZgc63w-3P9=Dp_fs=+sgmV_A17q+PTA@mail.gmail.com>
+In-Reply-To: <CANiq72khUrha-a+59KYZgc63w-3P9=Dp_fs=+sgmV_A17q+PTA@mail.gmail.com>
 From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date: Wed, 14 Aug 2024 13:27:19 +0200
-Message-ID: <CANiq72khUrha-a+59KYZgc63w-3P9=Dp_fs=+sgmV_A17q+PTA@mail.gmail.com>
+Date: Wed, 14 Aug 2024 13:30:47 +0200
+Message-ID: <CANiq72mJ75ktX_n8jxALM4cVFcwm-OKVK3e6r8+-0AYbEGHk8w@mail.gmail.com>
 Subject: Re: [PATCH v2 1/3] kbuild: rust: Define probing macros for rustc
 To: Matthew Maurer <mmaurer@google.com>
 Cc: dvyukov@google.com, ojeda@kernel.org, 
@@ -77,51 +78,16 @@ Cc: dvyukov@google.com, ojeda@kernel.org,
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Aug 13, 2024 at 1:29=E2=80=AFAM Matthew Maurer <mmaurer@google.com>=
- wrote:
+On Wed, Aug 14, 2024 at 1:27=E2=80=AFPM Miguel Ojeda
+<miguel.ojeda.sandonis@gmail.com> wrote:
 >
-> 1. `rustc` support will soon be a minimum rather than a pinned version.
+> I also had `out-dir` [1] since, if I remember correctly, `rustc` may
+> create temporary files in a potentially read-only location even in
+> this case.
 
-In the meantime, this happened, so we should update this sentence.
-
-> 2. We already support multiple LLVMs linked into `rustc`, and these are
-
-I guess you mean `rustc` is able to use multiple major versions of
-LLVM -- or what do you mean by "multiple LLVMs linked"?
-
-> +# $(rustc-option,<flag>)
-> +# Return y if the Rust compiler supports <flag>, n otherwise
-> +# Calls to this should be guarded so that they are not evaluated if
-> +# CONFIG_HAVE_RUST is not set.
-
-Hmm... why `HAVE_RUST`? Should that be `RUST_IS_AVAILABLE`? Or what is
-the intention? Perhaps a comment would help here -- e.g. something
-like the comment I used in the original approach [1]. Otherwise we
-will forget... :)
-
-Also, I guess you wanted to relax the precondition as much as
-possible, which is great, just to double check, do we expect a case
-outside `RUST=3Dy`?
-
-> rustc-option =3D $(success,trap "rm -rf .tmp_$$" EXIT; mkdir .tmp_$$; $(R=
-USTC) $(1) --crate-type=3Drlib /dev/null -o .tmp_$$/tmp.rlib)
-
-I also had `out-dir` [1] since, if I remember correctly, `rustc` may
-create temporary files in a potentially read-only location even in
-this case.
-
-Also, should we do `-Dwarnings` here?
-
-> +# If you are testing for unstable features, consider `rustc-min-version`
-> +# instead, as features may have different completeness while available.
-
-`rustc-min-version` is not mainline yet -- we don't have a user yet,
-but I can send it if so.
-
-Thanks!
-
-[1] https://github.com/Rust-for-Linux/linux/pull/1087#issuecomment-22184453=
-03
+Ah, wait, you are avoiding `try-run` -- is it because of that? I think
+we should try to reuse it, even if we have to add the `TMPOUT`. Or
+what is the reason for not reusing it?
 
 Cheers,
 Miguel
