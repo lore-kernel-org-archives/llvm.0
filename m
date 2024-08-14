@@ -1,93 +1,107 @@
-Received: from mail-pj1-f43.google.com (mail-pj1-f43.google.com [209.85.216.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D0CE91AED3C
-	for <llvm@lists.linux.dev>; Wed, 14 Aug 2024 11:31:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E1434142651;
+	Wed, 14 Aug 2024 12:57:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723635062; cv=none; b=i6ZovnfFTov0sTmwbwYUbf42VM0QbgdjqKPm7iuoJwSugPLl9nZP2vyUMasNtDvKgsiKGpWLGVMehqlpbLBlne9cZwwUULciJ/bW//km3WG0EgxjR9jbiql+vGKfBqOFJeLbte3ky26eIQ4f+T2Mc8qekIGelTRm7doUWOdKsNM=
+	t=1723640277; cv=none; b=N5MILkjdErhtZ9CksMxTi6CM4PocvYYZh1zi7oWdp0MHfI5Ds68oWXn4Li8AtiE+bjlyABvRAyjTK8h+ZDODnoncBu1qlx0x0UzATxxYb6sHB15v4xzaGhUxefosPuUdfE9HL0pK/igor2RPYoZAisetQkhZsBAgYkViIVTUZjQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723635062; c=relaxed/simple;
-	bh=InUtdB5UpKfrtYqYOgnR4uD76Y1IegLDBX2+qnakvBQ=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=acbK2ewCXEauvwPbpEXKUV8+zJOA7e8wmFhlyVxtgy/XXUzNuXCfDKgek0jrlZi/tZs8xlylMIrLdOoRK85Fu/n7zMyQfQdWp0fiATwRs7bWwfj59BmhU0E33Ml+epkmF3hPzin94TPpTYTvS+xXt3hI842D3y/eQKcsoswxbVU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=lZHaH6cR; arc=none smtp.client-ip=209.85.216.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1723640277; c=relaxed/simple;
+	bh=62rmftprAKZAo0HKLAGpaiq0jqQ0eGkDk+lNEURWyY0=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=GJC2MMsRLIhWDH/0391NnB7WUEXqmiZOpoz4+QM6XRUs3JvmyPAk/XrWUwThfpi5VcDcS7EPkWDJQztKFyRq4agROBRXnlUQPaJ1JHTra9QddX9JOnY9VMlmpyTGC+5y4bTXCcubn5jGGB8myKZEkjUW4oCNaGec0kimbNEDLik=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DZxuK9t1; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lZHaH6cR"
-Received: by mail-pj1-f43.google.com with SMTP id 98e67ed59e1d1-2d3bc043e81so30765a91.2
-        for <llvm@lists.linux.dev>; Wed, 14 Aug 2024 04:31:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1723635060; x=1724239860; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=InUtdB5UpKfrtYqYOgnR4uD76Y1IegLDBX2+qnakvBQ=;
-        b=lZHaH6cRpUazenHyyGnbvmJG2+8HA3xdnognJP8aBxNBr1I6fhbIm87mNXjJwIB+TL
-         3SD8J3+cZp8g0HjjPTxzJM/ssS+RVgzMl/BeDXwQ3JKX3Y0dc/BQ+/hjbtgU0YKWjziG
-         bYF+5FkynaMzhS+WLMNSmoiRWjYaW5QuNn2PSid8W4h5cNzIWzSZ6c1hnrHub1f75/lK
-         kkq1Hw8rhWA5oIB465OZxMRIctxv4KBpoNKlznfp5nDYOClr5z2e6e+BMbdDX6nm5Q1+
-         tEuxLRv4/FSbkLoQ4tqAh+FcNFJtmHAHoVoixtZn9Y37CQnODAfefFWmzk2lpv8GKqXW
-         k2NQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1723635060; x=1724239860;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=InUtdB5UpKfrtYqYOgnR4uD76Y1IegLDBX2+qnakvBQ=;
-        b=BnP6Y8hP/stKvXcJYe4nnfywU2lUhZU2Uvi0UFT6tEbdDaUGCoS8yxmUEBS1MHn4FW
-         pgkEnGCkgS1UNMI9IzkFBy1rvDoYnKG6H+YKbSqVYy+bgF/4G2rrjBra6E4D3Wh1DBxl
-         HfSn+LOFub253PnmB84U8a+bmXcXvgwrZyq0BYi6q26uMX9YxEFiztubZT9M9kjsoo5G
-         /gH+fHtkupfMrqvRx1G9l/VJdmuwrVOpB6dx4RBLUIo0TF0uiYlPYSgJ7/vAfh4H4ZWY
-         vbLrdAHIfSNkSFuBdEb7CcWHf0fL4Gq6UJJ7BRroXLOnrvHh99kn10nphZAddPwP30CB
-         Ta8w==
-X-Forwarded-Encrypted: i=1; AJvYcCX5tujSU0raqPxZi+AZyNOq5fs5XmrauE56VLl2V+Brm27JVR48u5Gobi9jgyOBI463w6F16jP8cZPL/IRRWSixyYdICw==
-X-Gm-Message-State: AOJu0Yy8P/oiJugniWG1qjNegU8c2+fwX+obxzFTcXExtfQg4oFCK5bM
-	mIDQ/fEPuFVYuwpBORzZ0u3+Ql8b40ZwmZyvldQ3D91/Xij011TeW9Xf1wSBxRyuZC66D90fPVw
-	mgtEHLO0T8Psa5qjj9yaVzoiFNVo=
-X-Google-Smtp-Source: AGHT+IGHqVVY7AZWrBMuOmVDEc8fUS5b6xT/BMfprxxksFMS7/qwt/78Na8gyK8oNQBGsC23z/3ZryBjtIb+Fxr04As=
-X-Received: by 2002:a17:90b:1196:b0:2d3:b49f:acdd with SMTP id
- 98e67ed59e1d1-2d3b49fbaa3mr728717a91.21.1723635060040; Wed, 14 Aug 2024
- 04:31:00 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DZxuK9t1"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E6E4EC4AF09;
+	Wed, 14 Aug 2024 12:57:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1723640276;
+	bh=62rmftprAKZAo0HKLAGpaiq0jqQ0eGkDk+lNEURWyY0=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+	b=DZxuK9t1AiQBhXl71gUtYTmcXow0xAl9+Rtwq2PwcSVrMolUPtYBeEoJv8pW5Kwbp
+	 uB/5OqxAUlVK38MMgNwZBIv1CS1l03zP4UQBxaXc00xejgvL3fLz/ZdGuHdLwl1z32
+	 zH4UdzD7lFCkUJU6+xUPXZik7DoXWyisqLSHF/2jhkmqqhhUyQ6TXEH+KFb6xZ2OMM
+	 gxsnB1/JxsmZZX1tqmY+csHgi0PCKiiDDylJ7r7sAFbSpYa7cscLQli7dvO5QsdLrK
+	 /jtrLd9jUgUw/5K5UWkgtCHEw7AGcH3ua1vKHMd/RedQKBENpeuNN4Vdnl8XJqYhXy
+	 T+KP/xwhfzr3Q==
+From: =?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>
+To: Andy Chiu <andy.chiu@sifive.com>, Paul Walmsley
+ <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou
+ <aou@eecs.berkeley.edu>, Alexandre Ghiti <alexghiti@rivosinc.com>, Zong Li
+ <zong.li@sifive.com>, Steven Rostedt <rostedt@goodmis.org>, Masami
+ Hiramatsu <mhiramat@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
+ Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers
+ <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, Justin Stitt
+ <justinstitt@google.com>, Puranjay Mohan <puranjay@kernel.org>
+Cc: Palmer Dabbelt <palmer@rivosinc.com>, linux-riscv@lists.infradead.org,
+ linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+ llvm@lists.linux.dev, Andy Chiu <andy.chiu@sifive.com>
+Subject: Re: [PATCH v2 3/6] riscv: ftrace: prepare ftrace for atomic code
+ patching
+In-Reply-To: <87wmkk8toq.fsf@all.your.base.are.belong.to.us>
+References: <20240628-dev-andyc-dyn-ftrace-v4-v2-0-1e5f4cb1f049@sifive.com>
+ <20240628-dev-andyc-dyn-ftrace-v4-v2-3-1e5f4cb1f049@sifive.com>
+ <87wmkk8toq.fsf@all.your.base.are.belong.to.us>
+Date: Wed, 14 Aug 2024 14:57:52 +0200
+Message-ID: <87sev78dnz.fsf@all.your.base.are.belong.to.us>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20240812232910.2026387-1-mmaurer@google.com> <20240812232910.2026387-2-mmaurer@google.com>
- <CANiq72khUrha-a+59KYZgc63w-3P9=Dp_fs=+sgmV_A17q+PTA@mail.gmail.com>
-In-Reply-To: <CANiq72khUrha-a+59KYZgc63w-3P9=Dp_fs=+sgmV_A17q+PTA@mail.gmail.com>
-From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date: Wed, 14 Aug 2024 13:30:47 +0200
-Message-ID: <CANiq72mJ75ktX_n8jxALM4cVFcwm-OKVK3e6r8+-0AYbEGHk8w@mail.gmail.com>
-Subject: Re: [PATCH v2 1/3] kbuild: rust: Define probing macros for rustc
-To: Matthew Maurer <mmaurer@google.com>
-Cc: dvyukov@google.com, ojeda@kernel.org, 
-	Masahiro Yamada <masahiroy@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, 
-	Wedson Almeida Filho <wedsonaf@gmail.com>, Nathan Chancellor <nathan@kernel.org>, aliceryhl@google.com, 
-	samitolvanen@google.com, Nicolas Schier <nicolas@fjasle.eu>, 
-	Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, 
-	=?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
-	Benno Lossin <benno.lossin@proton.me>, Andreas Hindborg <a.hindborg@samsung.com>, 
-	Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, 
-	Justin Stitt <justinstitt@google.com>, linux-kbuild@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, rust-for-linux@vger.kernel.org, 
-	llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Aug 14, 2024 at 1:27=E2=80=AFPM Miguel Ojeda
-<miguel.ojeda.sandonis@gmail.com> wrote:
+Bj=C3=B6rn T=C3=B6pel <bjorn@kernel.org> writes:
+
+> Andy Chiu <andy.chiu@sifive.com> writes:
 >
-> I also had `out-dir` [1] since, if I remember correctly, `rustc` may
-> create temporary files in a potentially read-only location even in
-> this case.
+>> We use an AUIPC+JALR pair to jump into a ftrace trampoline. Since
+>> instruction fetch can break down to 4 byte at a time, it is impossible
+>> to update two instructions without a race. In order to mitigate it, we
+>> initialize the patchable entry to AUIPC + NOP4. Then, the run-time code
+>> patching can change NOP4 to JALR to eable/disable ftrcae from a
+>                                       enable        ftrace
+>
+>> function. This limits the reach of each ftrace entry to +-2KB displacing
+>> from ftrace_caller.
+>>
+>> Starting from the trampoline, we add a level of indirection for it to
+>> reach ftrace caller target. Now, it loads the target address from a
+>> memory location, then perform the jump. This enable the kernel to update
+>> the target atomically.
+>
+> The +-2K limit is for direct calls, right?
+>
+> ...and this I would say breaks DIRECT_CALLS (which should be implemented
+> using call_ops later)?
 
-Ah, wait, you are avoiding `try-run` -- is it because of that? I think
-we should try to reuse it, even if we have to add the `TMPOUT`. Or
-what is the reason for not reusing it?
+Thinking a bit more, and re-reading the series.
 
-Cheers,
-Miguel
+This series is good work, and it's a big improvement for DYNAMIC_FTRACE,
+but
+
++int ftrace_make_call(struct dyn_ftrace *rec, unsigned long addr)
++{
++	unsigned long distance, orig_addr;
++
++	orig_addr =3D (unsigned long)&ftrace_caller;
++	distance =3D addr > orig_addr ? addr - orig_addr : orig_addr - addr;
++	if (distance > JALR_RANGE)
++		return -EINVAL;
++
++	return __ftrace_modify_call(rec->ip, addr, false);
++}
++
+
+breaks WITH_DIRECT_CALLS. The direct trampoline will *never* be within
+the JALR_RANGE.
+
+Unless we're happy with a break (I'm not) -- I really think Puranjay's
+CALL_OPS patch needs to be baked in in the series!
+
+
+Bj=C3=B6rn
