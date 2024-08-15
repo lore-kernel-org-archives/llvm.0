@@ -1,128 +1,116 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
+Received: from mail.simonwunderlich.de (mail.simonwunderlich.de [23.88.38.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 40FAA1AC885;
-	Thu, 15 Aug 2024 10:59:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E1D9E7DA70;
+	Thu, 15 Aug 2024 11:32:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=23.88.38.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723719558; cv=none; b=NwsFOmnAMZ9PwsyXKnWc/uisnVsYoVP/RrSOsdFn0uI+Mu6xoTtqC6SEYCrP4jwCngmJ0kM84QjN9CAvg7wsWWF8iQ9YISQk9ki3KJ2nCcXSMSkTRWuYePI0GK9Dws320ADRWigjm7hnQzvBQW69rZrz79u3bzdtu9m8aD4lrCY=
+	t=1723721541; cv=none; b=rcDyK6z0nMplpOrnuQCglDRE5zmaNpK2wRhEWQcmi1tOqwq2i/lT9Ux4kM9nLITVYvKAYV5msITRCMjEIVwzGMKd4AmcTpxtt8DotaU9frCOwU6DCY7fR48+nytGnETHVYPq56v3wWMjXiEpufAusruYmNRXgH1ay0/BRyglNDs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723719558; c=relaxed/simple;
-	bh=0of4YWi2zamE88OpBywL8TGTpjRvyD+J2toQMrWrplE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=MC8l+tl4I+HNNUunxBpFAoaMj5aQbyfLs/rrPn/h8H9UTC4qGJQZtH3GeUMM6wnpYmdZHtpagGuhv/TKlTAOL9h7qkjQj3Xe8udHcR/nZL0cy+dzILAzoXRj5U3dePmebTWHgCZC5DQYT1TFL5+hSbW+6xoCGdil+6krhQpFt70=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Vlss4NGz; arc=none smtp.client-ip=198.175.65.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Vlss4NGz"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1723719557; x=1755255557;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=0of4YWi2zamE88OpBywL8TGTpjRvyD+J2toQMrWrplE=;
-  b=Vlss4NGzfAGUEzuORe633dKT9MAdEN0dsDSj6qXfFphJGa8aVAefTtmW
-   I4Ois/YRN9NqwdLK+w+XqACttRcAu72+VlTjeDwTuRmoa1SiBTxpAB3eh
-   oV7t/NLWvzpP38qC1sQr3+WpXDJuoXOXyUI/OG4W9EjXSZwUrpiMXKXsr
-   66cnB6Gw1sSZXtEkYWvYDrlwiwKHqYxw4SszHUeIlVFL1tEPwFUA4FLT4
-   IAnfgYTgJ9FIz/5DE6uT6cqxqdFH7jQNvZBE3+N+zyzVsGcQEdVn3NVtM
-   cypLl4Dflmsh3ZKHBZFsjjWQAXb3U9cf241SzAVRhdJJwdZOIW0SRYO9l
-   Q==;
-X-CSE-ConnectionGUID: Yg6mMOQQQ8S4++igdaPrWw==
-X-CSE-MsgGUID: ZXTSoakKRJGaOCMQFe6MTQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11164"; a="33358447"
-X-IronPort-AV: E=Sophos;i="6.10,148,1719903600"; 
-   d="scan'208";a="33358447"
-Received: from fmviesa006.fm.intel.com ([10.60.135.146])
-  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Aug 2024 03:59:16 -0700
-X-CSE-ConnectionGUID: VcTn9ComRKWXEB9EXoUg6A==
-X-CSE-MsgGUID: a1fq+HxqRD+K5cRMMUMp1A==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.10,148,1719903600"; 
-   d="scan'208";a="58949049"
-Received: from lkp-server01.sh.intel.com (HELO 9a732dc145d3) ([10.239.97.150])
-  by fmviesa006.fm.intel.com with ESMTP; 15 Aug 2024 03:59:14 -0700
-Received: from kbuild by 9a732dc145d3 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1seYCF-0003UU-16;
-	Thu, 15 Aug 2024 10:59:11 +0000
-Date: Thu, 15 Aug 2024 18:58:39 +0800
-From: kernel test robot <lkp@intel.com>
-To: Alexey Makhalov <alexey.makhalov@broadcom.com>,
-	linux-kernel@vger.kernel.org, virtualization@lists.linux.dev,
-	bp@alien8.de, hpa@zytor.com, dave.hansen@linux.intel.com,
-	mingo@redhat.com, tglx@linutronix.de
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, x86@kernel.org,
-	ajay.kaher@broadcom.com, bo.gan@broadcom.com,
-	bcm-kernel-feedback-list@broadcom.com,
-	Alexey Makhalov <alexey.makhalov@broadcom.com>
-Subject: Re: [PATCH 2/2] x86/vmware: Fix steal time clock under SEV
-Message-ID: <202408151826.9369lzwV-lkp@intel.com>
-References: <20240814210731.761010-2-alexey.makhalov@broadcom.com>
+	s=arc-20240116; t=1723721541; c=relaxed/simple;
+	bh=uMx55GtCQ/0r4apC4BWuJdoJ3VrEdoLM5jiMAd8HD0g=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=fc/kc8X/fbh2S43apW/KahwjwuE2TII3MvU3iYn+bGUo8rdtzLLLIErlfNHW6+iANKB4ELdYKoDPfdz++8pyi9qyP17xHjJoEoTehtGHdlKawAW1bTrWiEMRfOM/kVx9r1CSmumYRxhihH99Q4Nhj5kkwq54RqzCywGARw3E/lA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=simonwunderlich.de; spf=pass smtp.mailfrom=simonwunderlich.de; arc=none smtp.client-ip=23.88.38.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=simonwunderlich.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=simonwunderlich.de
+Received: from localhost (p200300C5970CA890000000000000032B.dip0.t-ipconnect.de [IPv6:2003:c5:970c:a890::32b])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mail.simonwunderlich.de (Postfix) with ESMTPSA id B04DCFA131;
+	Thu, 15 Aug 2024 13:32:15 +0200 (CEST)
+From: Issam Hamdi <ih@simonwunderlich.de>
+To: kvalo@kernel.org
+Cc: ih@simonwunderlich.de,
+	johannes@sipsolutions.net,
+	linux-wireless@vger.kernel.org,
+	lkp@intel.com,
+	llvm@lists.linux.dev,
+	mathias.kretschmer@fit.fraunhofer.de,
+	oe-kbuild-all@lists.linux.dev
+Subject: [PATCH v2] wifi: cfg80211: Set the channel definition for the different Wi-Fi modes when starting CAC
+Date: Thu, 15 Aug 2024 13:32:13 +0200
+Message-Id: <20240815113213.3237491-1-ih@simonwunderlich.de>
+X-Mailer: git-send-email 2.39.2
+In-Reply-To: <87jzgiyxob.fsf@kernel.org>
+References: <87jzgiyxob.fsf@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240814210731.761010-2-alexey.makhalov@broadcom.com>
+Content-Transfer-Encoding: 8bit
 
-Hi Alexey,
+When starting CAC in a mode other than AP mode, it return a
+"WARNING: CPU: 0 PID: 63 at cfg80211_chandef_dfs_usable+0x20/0xaf [cfg80211]"
+caused by the chandef.chan being null at the end of CAC.
 
-kernel test robot noticed the following build errors:
+Solution: Ensure the channel definition is set for the different modes
+when starting CAC to avoid getting a NULL 'chan' at the end of CAC.
 
-[auto build test ERROR on tip/x86/vmware]
-[also build test ERROR on linus/master v6.11-rc3 next-20240815]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+ Call Trace:
+  ? show_regs.part.0+0x14/0x16
+  ? __warn+0x67/0xc0
+  ? cfg80211_chandef_dfs_usable+0x20/0xaf [cfg80211]
+  ? report_bug+0xa7/0x130
+  ? exc_overflow+0x30/0x30
+  ? handle_bug+0x27/0x50
+  ? exc_invalid_op+0x18/0x60
+  ? handle_exception+0xf6/0xf6
+  ? exc_overflow+0x30/0x30
+  ? cfg80211_chandef_dfs_usable+0x20/0xaf [cfg80211]
+  ? exc_overflow+0x30/0x30
+  ? cfg80211_chandef_dfs_usable+0x20/0xaf [cfg80211]
+  ? regulatory_propagate_dfs_state.cold+0x1b/0x4c [cfg80211]
+  ? cfg80211_propagate_cac_done_wk+0x1a/0x30 [cfg80211]
+  ? process_one_work+0x165/0x280
+  ? worker_thread+0x120/0x3f0
+  ? kthread+0xc2/0xf0
+  ? process_one_work+0x280/0x280
+  ? kthread_complete_and_exit+0x20/0x20
+  ? ret_from_fork+0x19/0x24
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Alexey-Makhalov/x86-vmware-Fix-steal-time-clock-under-SEV/20240815-050918
-base:   tip/x86/vmware
-patch link:    https://lore.kernel.org/r/20240814210731.761010-2-alexey.makhalov%40broadcom.com
-patch subject: [PATCH 2/2] x86/vmware: Fix steal time clock under SEV
-config: i386-randconfig-003-20240815 (https://download.01.org/0day-ci/archive/20240815/202408151826.9369lzwV-lkp@intel.com/config)
-compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240815/202408151826.9369lzwV-lkp@intel.com/reproduce)
+Signed-off-by: Issam Hamdi <ih@simonwunderlich.de>
+Signed-off-by: Kretschmer Mathias <mathias.kretschmer@fit.fraunhofer.de>
+---
+v2: update the subject
+---
+ net/wireless/nl80211.c | 18 +++++++++++++++++-
+ 1 file changed, 17 insertions(+), 1 deletion(-)
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202408151826.9369lzwV-lkp@intel.com/
+diff --git a/net/wireless/nl80211.c b/net/wireless/nl80211.c
+index 7397a372c78e..36ae2594753e 100644
+--- a/net/wireless/nl80211.c
++++ b/net/wireless/nl80211.c
+@@ -10143,7 +10143,23 @@ static int nl80211_start_radar_detection(struct sk_buff *skb,
+ 
+ 	err = rdev_start_radar_detection(rdev, dev, &chandef, cac_time_ms);
+ 	if (!err) {
+-		wdev->links[0].ap.chandef = chandef;
++		switch (wdev->iftype) {
++		case NL80211_IFTYPE_MESH_POINT:
++			wdev->u.mesh.chandef = chandef;
++			break;
++		case NL80211_IFTYPE_ADHOC:
++			wdev->u.ibss.chandef = chandef;
++			break;
++		case NL80211_IFTYPE_OCB:
++			wdev->u.ocb.chandef = chandef;
++			break;
++		case NL80211_IFTYPE_AP:
++		case NL80211_IFTYPE_P2P_GO:
++			wdev->links[0].ap.chandef = chandef;
++			break;
++		default:
++			break;
++		}
+ 		wdev->cac_started = true;
+ 		wdev->cac_start_time = jiffies;
+ 		wdev->cac_time_ms = cac_time_ms;
 
-All errors (new ones prefixed by >>):
-
->> arch/x86/kernel/cpu/vmware.c:313:6: error: use of undeclared identifier 'cc_vendor'
-     313 |         if (cc_vendor != CC_VENDOR_AMD ||
-         |             ^
->> arch/x86/kernel/cpu/vmware.c:313:19: error: use of undeclared identifier 'CC_VENDOR_AMD'
-     313 |         if (cc_vendor != CC_VENDOR_AMD ||
-         |                          ^
-   2 errors generated.
-
-
-vim +/cc_vendor +313 arch/x86/kernel/cpu/vmware.c
-
-   308	
-   309	static void __init sev_map_percpu_data(void)
-   310	{
-   311		int cpu;
-   312	
- > 313		if (cc_vendor != CC_VENDOR_AMD ||
-   314		    !cc_platform_has(CC_ATTR_GUEST_MEM_ENCRYPT))
-   315			return;
-   316	
-   317		for_each_possible_cpu(cpu) {
-   318			early_set_memory_decrypted(
-   319				(unsigned long)&per_cpu(vmw_steal_time, cpu),
-   320				sizeof(vmw_steal_time));
-   321		}
-   322	}
-   323	
-
+base-commit: cc32e9fb380d8afdbf3486d7063d5520bfb0f071
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.39.2
+
