@@ -1,158 +1,120 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F1B111AAE07;
-	Thu, 15 Aug 2024 15:35:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D71E85B1FB;
+	Thu, 15 Aug 2024 17:43:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723736132; cv=none; b=NkhAXDWIakseGIVZ/TsiZMtIslsvHBnpP7bfu0ESBocQI4I58NV8zehlIZIMhQEYhEPrC2QF937qWjEsK4WO8dloMasEy2fpwe4MWpeERgzklS6q5jYBm6/nUOYVvH4hanTok3Q4knnGL1JSQIpQm+8gDo7qdLY8EsNzh/CN6Go=
+	t=1723743788; cv=none; b=Fj5e5owiNBAcYyadrNI92Zrzv5S+sajszBMZXG4IDTbMncwfGPXR3LgHtsDQ9wtARbogmo3hSxnoODucgV+rio2oEk+Q5qBi8/iPcWu6s1MY9RHg0tY/ClYMti2pTHp4tLQszq3ySXUzg8Hb5Ud3YGAn7V5VWIJil942ejLqa7I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723736132; c=relaxed/simple;
-	bh=tSeyrBGRinttEc/Bl0KMHkbu8ZYMzTjZeV1UyXwP8BM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=jaGvEASHgK1eD3w0rd9P+OUhpJ5LtBWNl4HXTsvkQwzJIX0i8KSyip8iV9oEacz+bsFGSpgWxSodtWv/R6naNuRhIGgzGkUEC5B5M/WbGwXBi8tEKnSqhXJ5D0GsyAdm4Z0zMtvrcoz9rBU6dqI4geDj8+MBhiFTRhUCP05YLac=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=K1SLqnN7; arc=none smtp.client-ip=192.198.163.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1723743788; c=relaxed/simple;
+	bh=Fw0aVYsUrnbaPkgclFP3+g5LLOu0UpBlKbkPnh9OEK4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=F/V8OTVXvjh67W5REBaCIR8H0TjSz9KAfXY8YhBuvu7DBVH5ZyqJZYQvhdpNzv3rknPJl6UNhH6Wlhnf/kIDBV0UuCvBK0d6Pozmx8bgk6TJ75sEK6CsWqsdftpzpC05UA83sUnz9fOc8li602KCzzwb4DAOhoGx9Mb4hohElEg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=l8pULNb9; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="K1SLqnN7"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1723736131; x=1755272131;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=tSeyrBGRinttEc/Bl0KMHkbu8ZYMzTjZeV1UyXwP8BM=;
-  b=K1SLqnN7a/xF7bUpsPYvqdlJag9cIsUdYAbX2T7AWsQxG26uwEWYnMTk
-   oPPYcoa8sdSpBt1TmD2d/GN+XqeOwDW5TA/B5YJZCTvDgMf9f8Bi9kmst
-   QOy4YBDxZ+V8cp0LxPF2FeQVjX8c+vawguzg4rJJ1pDKWuXpDQqHDGl66
-   /s/7y2PhE5mUTAGL7vMLPpposWJMjbeyjhsSiiH2U3wb8dXlwqLJmYy9O
-   +0SvF+45krgELhqJUfI3vL9rZ8IzEiobqIiCWy2wu4Tzp+ZAEcHxY93cO
-   GT01/eUpobzsh/7x+ycp7qB87ZtHQL7zrgB5mTgA/namTqT4N48X9h8Z0
-   Q==;
-X-CSE-ConnectionGUID: 0eEmEGKcRamWnPgJ4671pw==
-X-CSE-MsgGUID: t249F8HsTmWnqsSgcO6zCg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11165"; a="22170742"
-X-IronPort-AV: E=Sophos;i="6.10,149,1719903600"; 
-   d="scan'208";a="22170742"
-Received: from fmviesa007.fm.intel.com ([10.60.135.147])
-  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Aug 2024 08:35:30 -0700
-X-CSE-ConnectionGUID: QeVF/QH+QjGKenuqCcgRMQ==
-X-CSE-MsgGUID: ttB0uM89R6+YujKGUAEinA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.10,149,1719903600"; 
-   d="scan'208";a="59051723"
-Received: from lkp-server01.sh.intel.com (HELO 9a732dc145d3) ([10.239.97.150])
-  by fmviesa007.fm.intel.com with ESMTP; 15 Aug 2024 08:35:28 -0700
-Received: from kbuild by 9a732dc145d3 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1secVa-0003mW-1c;
-	Thu, 15 Aug 2024 15:35:26 +0000
-Date: Thu, 15 Aug 2024 23:34:26 +0800
-From: kernel test robot <lkp@intel.com>
-To: bingbu.cao@intel.com, linux-media@vger.kernel.org,
-	sakari.ailus@linux.intel.com
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	jianhui.j.dai@intel.com, tfiga@chromium.org, bingbu.cao@intel.com,
-	bingbu.cao@linux.intel.com
-Subject: Re: [PATCH] media: intel/ipu6: optimize the IPU6 MMU mapping and
- unmapping flow
-Message-ID: <202408152355.Qx4KRzRh-lkp@intel.com>
-References: <20240815030829.1608953-1-bingbu.cao@intel.com>
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="l8pULNb9"
+Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 47FBQWUR016519;
+	Thu, 15 Aug 2024 17:42:59 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	YU6l76peEOp8nvrzVe7v+0EcAYbfKcRMcNVu2KltyXA=; b=l8pULNb9Z3egNXiC
+	FP99yp+9jC6JZfNQ1q/DBmDTMEIpggjfaS3L6FnyuVdqCseBdQ1lTt5RxEJqfsQF
+	caYvM+9DoFl+HW76Dq/RxiLOLurnOhXZandTMGWfJtWnWeNNeV2+U1w6jYJkwSTS
+	xi0z0+WOlheJrecffO3MLttcyK/I6VAeGiDc6rUsdkdoK/TG5618/GYxKdraxUrt
+	qb6BSy2dYw8EJnlSrODqk11RWvRQaAkqSZYKC67tb1qIQk0YsAGuCWGYRufz1Y/3
+	1uy6ZN77BlYTkjUaAhRe/vvcsHV5MwtdAHrl9x4gD4OFtk88v37vjpouna37W9lS
+	0v/xhA==
+Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 41134ejj2j-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 15 Aug 2024 17:42:58 +0000 (GMT)
+Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
+	by NALASPPMTA04.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 47FHgvhT013319
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 15 Aug 2024 17:42:58 GMT
+Received: from [10.227.110.203] (10.80.80.8) by nalasex01b.na.qualcomm.com
+ (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Thu, 15 Aug
+ 2024 10:42:57 -0700
+Message-ID: <9809b165-8d25-4984-a1dd-6fca28f1dda9@quicinc.com>
+Date: Thu, 15 Aug 2024 10:42:56 -0700
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240815030829.1608953-1-bingbu.cao@intel.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2] wifi: cfg80211: Set the channel definition for the
+ different Wi-Fi modes when starting CAC
+To: Issam Hamdi <ih@simonwunderlich.de>, <kvalo@kernel.org>
+CC: <johannes@sipsolutions.net>, <linux-wireless@vger.kernel.org>,
+        <lkp@intel.com>, <llvm@lists.linux.dev>,
+        <mathias.kretschmer@fit.fraunhofer.de>,
+        <oe-kbuild-all@lists.linux.dev>
+References: <87jzgiyxob.fsf@kernel.org>
+ <20240815113213.3237491-1-ih@simonwunderlich.de>
+From: Jeff Johnson <quic_jjohnson@quicinc.com>
+Content-Language: en-US
+In-Reply-To: <20240815113213.3237491-1-ih@simonwunderlich.de>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01b.na.qualcomm.com (10.47.209.197)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: C34UADG99p0aQXKFmQJscYmpx-yKH_2v
+X-Proofpoint-GUID: C34UADG99p0aQXKFmQJscYmpx-yKH_2v
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
+ definitions=2024-08-15_10,2024-08-15_01,2024-05-17_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=1 lowpriorityscore=0
+ priorityscore=1501 bulkscore=0 phishscore=0 impostorscore=0 suspectscore=0
+ mlxlogscore=203 clxscore=1011 mlxscore=1 spamscore=1 adultscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2407110000 definitions=main-2408150129
 
-Hi,
+On 8/15/2024 4:32 AM, Issam Hamdi wrote:
+> When starting CAC in a mode other than AP mode, it return a
+> "WARNING: CPU: 0 PID: 63 at cfg80211_chandef_dfs_usable+0x20/0xaf [cfg80211]"
+> caused by the chandef.chan being null at the end of CAC.
+> 
+> Solution: Ensure the channel definition is set for the different modes
+> when starting CAC to avoid getting a NULL 'chan' at the end of CAC.
+> 
+>  Call Trace:
+>   ? show_regs.part.0+0x14/0x16
+>   ? __warn+0x67/0xc0
+>   ? cfg80211_chandef_dfs_usable+0x20/0xaf [cfg80211]
+>   ? report_bug+0xa7/0x130
+>   ? exc_overflow+0x30/0x30
+>   ? handle_bug+0x27/0x50
+>   ? exc_invalid_op+0x18/0x60
+>   ? handle_exception+0xf6/0xf6
+>   ? exc_overflow+0x30/0x30
+>   ? cfg80211_chandef_dfs_usable+0x20/0xaf [cfg80211]
+>   ? exc_overflow+0x30/0x30
+>   ? cfg80211_chandef_dfs_usable+0x20/0xaf [cfg80211]
+>   ? regulatory_propagate_dfs_state.cold+0x1b/0x4c [cfg80211]
+>   ? cfg80211_propagate_cac_done_wk+0x1a/0x30 [cfg80211]
+>   ? process_one_work+0x165/0x280
+>   ? worker_thread+0x120/0x3f0
+>   ? kthread+0xc2/0xf0
+>   ? process_one_work+0x280/0x280
+>   ? kthread_complete_and_exit+0x20/0x20
+>   ? ret_from_fork+0x19/0x24
+> 
+> Signed-off-by: Issam Hamdi <ih@simonwunderlich.de>
+> Signed-off-by: Kretschmer Mathias <mathias.kretschmer@fit.fraunhofer.de>
 
-kernel test robot noticed the following build warnings:
+who is this and why is their S-O-B here?
+the last S-O-B should be the person who last touched the patch, which is you
 
-[auto build test WARNING on media-tree/master]
-[also build test WARNING on sailus-media-tree/master linuxtv-media-stage/master linus/master v6.11-rc3 next-20240815]
-[cannot apply to sailus-media-tree/streams]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/bingbu-cao-intel-com/media-intel-ipu6-optimize-the-IPU6-MMU-mapping-and-unmapping-flow/20240815-111022
-base:   git://linuxtv.org/media_tree.git master
-patch link:    https://lore.kernel.org/r/20240815030829.1608953-1-bingbu.cao%40intel.com
-patch subject: [PATCH] media: intel/ipu6: optimize the IPU6 MMU mapping and unmapping flow
-config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20240815/202408152355.Qx4KRzRh-lkp@intel.com/config)
-compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240815/202408152355.Qx4KRzRh-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202408152355.Qx4KRzRh-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> drivers/media/pci/intel/ipu6/ipu6-mmu.c:261:9: warning: variable 'unmapped' set but not used [-Wunused-but-set-variable]
-     261 |         size_t unmapped = 0;
-         |                ^
-   1 warning generated.
-
-
-vim +/unmapped +261 drivers/media/pci/intel/ipu6/ipu6-mmu.c
-
-   254	
-   255	static void l2_unmap(struct ipu6_mmu_info *mmu_info, unsigned long iova,
-   256			     phys_addr_t dummy, size_t size)
-   257	{
-   258		unsigned int l2_entries;
-   259		unsigned int l2_idx;
-   260		unsigned long flags;
- > 261		size_t unmapped = 0;
-   262		u32 l1_idx;
-   263		u32 *l2_pt;
-   264	
-   265		spin_lock_irqsave(&mmu_info->lock, flags);
-   266		for (l1_idx = iova >> ISP_L1PT_SHIFT;
-   267		     size > 0 && l1_idx < ISP_L1PT_PTES; l1_idx++) {
-   268			dev_dbg(mmu_info->dev,
-   269				"unmapping l2 pgtable (l1 index %u (iova 0x%8.8lx))\n",
-   270				l1_idx, iova);
-   271	
-   272			if (mmu_info->l1_pt[l1_idx] == mmu_info->dummy_l2_pteval) {
-   273				dev_err(mmu_info->dev,
-   274					"unmap not mapped iova 0x%8.8lx l1 index %u\n",
-   275					iova, l1_idx);
-   276				continue;
-   277			}
-   278			l2_pt = mmu_info->l2_pts[l1_idx];
-   279	
-   280			l2_entries = 0;
-   281			for (l2_idx = (iova & ISP_L2PT_MASK) >> ISP_L2PT_SHIFT;
-   282			     size > 0 && l2_idx < ISP_L2PT_PTES; l2_idx++) {
-   283				dev_dbg(mmu_info->dev,
-   284					"unmap l2 index %u with pteval 0x%10.10llx\n",
-   285					l2_idx, TBL_PHYS_ADDR(l2_pt[l2_idx]));
-   286				l2_pt[l2_idx] = mmu_info->dummy_page_pteval;
-   287	
-   288				iova += ISP_PAGE_SIZE;
-   289				unmapped += ISP_PAGE_SIZE;
-   290				size -= ISP_PAGE_SIZE;
-   291	
-   292				l2_entries++;
-   293			}
-   294	
-   295			WARN_ON_ONCE(!l2_entries);
-   296			clflush_cache_range(&l2_pt[l2_idx - l2_entries],
-   297					    sizeof(l2_pt[0]) * l2_entries);
-   298		}
-   299	
-   300		WARN_ON_ONCE(size);
-   301		spin_unlock_irqrestore(&mmu_info->lock, flags);
-   302	}
-   303	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+please see:
+https://www.kernel.org/doc/html/latest/process/submitting-patches.html#sign-your-work-the-developer-s-certificate-of-origin
+https://www.kernel.org/doc/html/latest/process/submitting-patches.html#when-to-use-acked-by-cc-and-co-developed-by
