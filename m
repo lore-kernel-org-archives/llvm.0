@@ -1,238 +1,101 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC3B157333;
-	Thu, 15 Aug 2024 20:02:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F52014D2B3
+	for <llvm@lists.linux.dev>; Thu, 15 Aug 2024 20:52:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723752146; cv=none; b=DkksLa1R0+KrKuVvp9m9kgIwGmWh5jSEY+clBzUKiQmoKQ8eXOGACGQ0HxYU6UMzixwLf/Nf+lNdmGZqFKjDKYm8yRHB3KoZQK7qGmGLujJ5BspKAbFUNZSEL0vzxX4E+4fR5mSP82wdiQilU5/O7NGTv4fkLSeK2Rfp0KCN+jI=
+	t=1723755134; cv=none; b=oURSUQpNfI2estZyAzjk8MMB4bFxjaTVJiuS7mrOaTn1OqpLQIFuoAEB7s6aB9hdijepiH79X7PczkbvVz6vg4Vrtqk5HT1PJl3VuZef+yfDrjxIUY36pcRTzMTQUuUvVS4HsVIX/yXxqczE2Pa/8XRlN9X9idNP7byZkZGhyIQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723752146; c=relaxed/simple;
-	bh=Una/csjFvk8Y03/HoOMMntul75tfxF/Fl5iMXVtNLo4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=sitTTiFiN9W5OHFQSPt8kiFV3brWaNFsA0L9ACobX04UuxKUCxPp2n3yx5rIanaumMQESmfpvZUXOWYRtD45iHPJdvBqX18ocn/Y2Et73SR7tBdjN8bsexrhFqs4rJrNXPl45u1ZOIW9e8pf1dbetpKkjGQIkFneHdmx9PwDjDs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Eh/tyzHb; arc=none smtp.client-ip=198.175.65.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1723755134; c=relaxed/simple;
+	bh=g3EEasCHzDhEFY0TzI2PlCEo91hocycaH11MZpLmVoU=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=RKRcZJdr8T98NhRGkdmt4FYQcviGOrUP8RONRZOI55hAnn/u3vw3xwMBzbTQBdzW1AeFnT1yUbLHM6mw54R48Mvv34m2mokwcBa6aXQ5Wxa5qZ8BCdGlZUkbQna9oBLpbu9ZwUtezz+e9lgbvbMdfegzUoA7jrMYhAv5QrcTwOI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=UJ8uMV82; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Eh/tyzHb"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1723752145; x=1755288145;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Una/csjFvk8Y03/HoOMMntul75tfxF/Fl5iMXVtNLo4=;
-  b=Eh/tyzHbRy/rMbC9zHkGBeZM2Qkw6bpXAGT5zqbMYeRDDn1svToFZMm7
-   M4bfGHWRuBMmdnmjDF2Jh+Y15+7YFhampvwChTqFXnXrrsNw+szDWSJmp
-   45s3sW6iOqIhRP/jg3kTKj7Osr7mT34w5SrCdYUgK4x/f824LKen16G30
-   n/liakxF4ouqZ313YsxQGdbySYimVaV67v6PrX7D0m9C7n7xLzcaM7ON9
-   kg75Ms09OqkhzWWpnZ0z9xzfcJJBQXIkZYbeYzXbRcD0S5eSMDPdQ9S7V
-   GsgFSSRjpCYGuiMHA6FsBBDPmlBI0i26ZvRlkA8n9SbGkdG0YH7DZgt+6
-   Q==;
-X-CSE-ConnectionGUID: CqNuj6qLR46Nqje0SQ0Lkw==
-X-CSE-MsgGUID: EKOnFpV3TbGthF3Pli/OKQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11165"; a="32605451"
-X-IronPort-AV: E=Sophos;i="6.10,149,1719903600"; 
-   d="scan'208";a="32605451"
-Received: from fmviesa007.fm.intel.com ([10.60.135.147])
-  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Aug 2024 13:02:24 -0700
-X-CSE-ConnectionGUID: BQ4Ed6q6Qw2zdK7U38N6BA==
-X-CSE-MsgGUID: bpAKtS9nR9ODn/gWIi+NuQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.10,149,1719903600"; 
-   d="scan'208";a="59133924"
-Received: from lkp-server01.sh.intel.com (HELO 9a732dc145d3) ([10.239.97.150])
-  by fmviesa007.fm.intel.com with ESMTP; 15 Aug 2024 13:02:21 -0700
-Received: from kbuild by 9a732dc145d3 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1segfr-0005YM-0X;
-	Thu, 15 Aug 2024 20:02:19 +0000
-Date: Fri, 16 Aug 2024 04:01:39 +0800
-From: kernel test robot <lkp@intel.com>
-To: "Derek J. Clark" <derekjohn.clark@gmail.com>,
-	Guenter Roeck <linux@roeck-us.net>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Jean Delvare <jdelvare@suse.com>, Jonathan Corbet <corbet@lwn.net>,
-	=?iso-8859-1?Q?Joaqu=EDn_Ignacio_Aramend=EDa?= <samsagax@gmail.com>,
-	"Derek J . Clark" <derekjohn.clark@gmail.com>,
-	linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/1] hwmon: (oxp-sensors) Add support for multiple new
- devices.
-Message-ID: <202408160329.TLNbIwRC-lkp@intel.com>
-References: <20240815031358.21027-2-derekjohn.clark@gmail.com>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="UJ8uMV82"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1723755131;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=QeOzXDhNBO5YJ+s2XQPNRmq1qDQ4K345W5XG7QNFXxY=;
+	b=UJ8uMV824l66wg2/RE/moy/6aOvpf6NDP1uT9r2eg4MVwSHvPkA85aAWJvksJmcJ4M4HDY
+	dDZ75RbsiCl8FGPhhhO5HpAVyt87g7M8KzXiGY7+4jxHXoTJ6Gee67KybPzW8YxYWW8YGf
+	hBYnNaHdays4TFWLbcNuiKtHbUCy+SA=
+Received: from mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-624-Rn-JvXVNO_SzrGaa2jeVuA-1; Thu,
+ 15 Aug 2024 16:52:09 -0400
+X-MC-Unique: Rn-JvXVNO_SzrGaa2jeVuA-1
+Received: from mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.4])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id E0D5F1955D56
+	for <llvm@lists.linux.dev>; Thu, 15 Aug 2024 20:52:05 +0000 (UTC)
+Received: from [172.64.15.52] (unknown [10.30.34.46])
+	by mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 888303001FE5;
+	Thu, 15 Aug 2024 20:52:05 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.11.0-rc3,
+ mainline.kernel.org-clang, e724918b)
+Date: Thu, 15 Aug 2024 20:52:05 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240815031358.21027-2-derekjohn.clark@gmail.com>
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.4
+Message-Id: <03066.124081516521000429@us-mta-624.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Derek,
+Hi, we tested your kernel and here are the results:
 
-kernel test robot noticed the following build warnings:
-
-[auto build test WARNING on groeck-staging/hwmon-next]
-[also build test WARNING on linus/master v6.11-rc3 next-20240815]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Derek-J-Clark/hwmon-oxp-sensors-Add-support-for-multiple-new-devices/20240815-111550
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
-patch link:    https://lore.kernel.org/r/20240815031358.21027-2-derekjohn.clark%40gmail.com
-patch subject: [PATCH 1/1] hwmon: (oxp-sensors) Add support for multiple new devices.
-config: i386-buildonly-randconfig-005-20240815 (https://download.01.org/0day-ci/archive/20240816/202408160329.TLNbIwRC-lkp@intel.com/config)
-compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240816/202408160329.TLNbIwRC-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202408160329.TLNbIwRC-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> drivers/hwmon/oxp-sensors.c:497:3: warning: unannotated fall-through between switch labels [-Wimplicit-fallthrough]
-     497 |                 default:
-         |                 ^
-   drivers/hwmon/oxp-sensors.c:497:3: note: insert 'break;' to avoid fall-through
-     497 |                 default:
-         |                 ^
-         |                 break; 
-   drivers/hwmon/oxp-sensors.c:564:3: warning: unannotated fall-through between switch labels [-Wimplicit-fallthrough]
-     564 |                 default:
-         |                 ^
-   drivers/hwmon/oxp-sensors.c:564:3: note: insert 'break;' to avoid fall-through
-     564 |                 default:
-         |                 ^
-         |                 break; 
-   drivers/hwmon/oxp-sensors.c:616:3: warning: unannotated fall-through between switch labels [-Wimplicit-fallthrough]
-     616 |                 default:
-         |                 ^
-   drivers/hwmon/oxp-sensors.c:616:3: note: insert 'break;' to avoid fall-through
-     616 |                 default:
-         |                 ^
-         |                 break; 
-   3 warnings generated.
+    Overall result: FAILED
+             Merge: OK
+           Compile: FAILED
 
 
-vim +497 drivers/hwmon/oxp-sensors.c
+Kernel information:
+    Commit message: Merge tag 'hardening-v6.11-rc4' of git://git.kernel.org=
+/pub/scm/linux/kernel/git/kees/linux
 
-   464	
-   465	static int oxp_platform_read(struct device *dev, enum hwmon_sensor_types type,
-   466				     u32 attr, int channel, long *val)
-   467	{
-   468		int ret;
-   469	
-   470		switch (type) {
-   471		case hwmon_fan:
-   472			switch (attr) {
-   473			case hwmon_fan_input:
-   474				switch (board) {
-   475				case orange_pi_neo:
-   476					return read_from_ec(ORANGEPI_SENSOR_FAN_REG, 2, val);
-   477				case aok_zoe_a1:
-   478				case aya_neo_2:
-   479				case aya_neo_2s:
-   480				case aya_neo_air:
-   481				case aya_neo_air_1s:
-   482				case aya_neo_air_plus_mendo:
-   483				case aya_neo_air_pro:
-   484				case aya_neo_flip:
-   485				case aya_neo_geek:
-   486				case aya_neo_geek_1s:
-   487				case aya_neo_kun:
-   488				case oxp_mini_amd:
-   489				case oxp_mini_amd_a07:
-   490				case oxp_2:
-   491				case oxp_fly:
-   492				case oxp_mini_amd_pro:
-   493					return read_from_ec(OXP_SENSOR_FAN_REG, 2, val);
-   494				default:
-   495					break;
-   496				}
- > 497			default:
-   498				break;
-   499			}
-   500			break;
-   501		case hwmon_pwm:
-   502			switch (attr) {
-   503			case hwmon_pwm_input:
-   504				switch (board) {
-   505				case orange_pi_neo:
-   506					ret = read_from_ec(ORANGEPI_SENSOR_PWM_REG, 1, val);
-   507					if (ret)
-   508						return ret;
-   509					/* scale from range [1-244] */
-   510					*val = ((*val - 1) * 254 / 243) + 1;
-   511					break;
-   512				case aya_neo_2:
-   513				case aya_neo_2s:
-   514				case aya_neo_air:
-   515				case aya_neo_air_1s:
-   516				case aya_neo_air_plus_mendo:
-   517				case aya_neo_air_pro:
-   518				case aya_neo_flip:
-   519				case aya_neo_geek:
-   520				case aya_neo_geek_1s:
-   521				case aya_neo_kun:
-   522				case oxp_mini_amd:
-   523				case oxp_mini_amd_a07:
-   524					ret = read_from_ec(OXP_SENSOR_PWM_REG, 1, val);
-   525					if (ret)
-   526						return ret;
-   527					*val = (*val * 255) / 100;
-   528					break;
-   529				case aok_zoe_a1:
-   530				case oxp_2:
-   531				case oxp_fly:
-   532				case oxp_mini_amd_pro:
-   533				default:
-   534					ret = read_from_ec(OXP_SENSOR_PWM_REG, 1, val);
-   535					if (ret)
-   536						return ret;
-   537					break;
-   538				}
-   539				return 0;
-   540			case hwmon_pwm_enable:
-   541				switch (board) {
-   542				case orange_pi_neo:
-   543					return read_from_ec(ORANGEPI_SENSOR_PWM_ENABLE_REG, 1, val);
-   544				case aok_zoe_a1:
-   545				case aya_neo_2:
-   546				case aya_neo_2s:
-   547				case aya_neo_air:
-   548				case aya_neo_air_1s:
-   549				case aya_neo_air_plus_mendo:
-   550				case aya_neo_air_pro:
-   551				case aya_neo_flip:
-   552				case aya_neo_geek:
-   553				case aya_neo_geek_1s:
-   554				case aya_neo_kun:
-   555				case oxp_mini_amd:
-   556				case oxp_mini_amd_a07:
-   557				case oxp_2:
-   558				case oxp_fly:
-   559				case oxp_mini_amd_pro:
-   560					return read_from_ec(OXP_SENSOR_PWM_ENABLE_REG, 1, val);
-   561				default:
-   562					break;
-   563				}
-   564			default:
-   565				break;
-   566			}
-   567			break;
-   568		default:
-   569			break;
-   570		}
-   571		return -EOPNOTSUPP;
-   572	}
-   573	
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1415126369
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+One or more kernel builds failed:
+    Unrecognized or new issues:
+         ppc64le - https://datawarehouse.cki-project.org/kcidb/builds/redha=
+t:1415126369-ppc64le-kernel
+           s390x - https://datawarehouse.cki-project.org/kcidb/builds/redha=
+t:1415126369-s390x-kernel
+          x86_64 (debug) - https://datawarehouse.cki-project.org/kcidb/buil=
+ds/redhat:1415126369-x86_64-kernel-debug
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
