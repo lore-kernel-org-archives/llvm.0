@@ -1,114 +1,95 @@
-Received: from mail.simonwunderlich.de (mail.simonwunderlich.de [23.88.38.48])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF65B19D884;
-	Thu, 15 Aug 2024 07:54:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=23.88.38.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED73129CFB;
+	Thu, 15 Aug 2024 08:53:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723708492; cv=none; b=l1LOR8gJLPFmIGvSW4eug72Qbzyon4a8psYxwHGbgPXMxSo5obVrT8c+qyYADtkIcTuodjt8+Ay1bxIwm8WFQf8fGZsnFqVGcigXsF/GluzbycWrygIqHTv8DbaJPXVg/awrKS2GDgh1ZO0wgJJahMmST7ISUAlpnss9YCoIKpg=
+	t=1723712009; cv=none; b=ZJ5keZ9UzfYUOXL0r9desp4+OZz+nSUUtDbKHJzMYkacRnfbdLHI9PgF/lET7VqJSv73Tt8dUQsE6o3UFH8kmUVDBcjSBNCZnILwxw1eCOEZRPxlqjwm3bBLfMqWh1W2iabXFjZse+ymhKJMIm7ha6ud4xj/a28fWv1XIA12vtY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723708492; c=relaxed/simple;
-	bh=4zXgQ0sSmMdLqoRN+Pp9KL1vMd+ZRt7Dyf40GUJGDww=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=k7Z7BZFpRpUihUSIYhrKTfMiBDCwfkOpV9OyHTooiofgtiU9QLeXVBb3exYS1jAhjnGP5acqGb1RPbanrh7VdStu5qqLKmy7OEnFRTjJ3DV76p227TQYOARSrs2xRZy+YAEpPQdPyS+R8aKSpnlIvc/m1TrkXx9xZWpt+Zby21w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=simonwunderlich.de; spf=pass smtp.mailfrom=simonwunderlich.de; arc=none smtp.client-ip=23.88.38.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=simonwunderlich.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=simonwunderlich.de
-Received: from localhost (p200300C5970cA890000000000000032b.dip0.t-ipconnect.de [IPv6:2003:c5:970c:a890::32b])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mail.simonwunderlich.de (Postfix) with ESMTPSA id DEDFFFA131;
-	Thu, 15 Aug 2024 09:54:41 +0200 (CEST)
-From: Issam Hamdi <ih@simonwunderlich.de>
-To: kvalo@kernel.org
-Cc: ih@simonwunderlich.de,
-	johannes@sipsolutions.net,
-	linux-wireless@vger.kernel.org,
-	lkp@intel.com,
-	llvm@lists.linux.dev,
-	mathias.kretschmer@fit.fraunhofer.de,
-	oe-kbuild-all@lists.linux.dev
-Subject: [PATCH] wifi: cfg80211: Set the channel definition for the different Wi-Fi modes when starting CAC
-Date: Thu, 15 Aug 2024 09:54:39 +0200
-Message-Id: <20240815075439.2198346-1-ih@simonwunderlich.de>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <87o75ugup7.fsf@kernel.org>
+	s=arc-20240116; t=1723712009; c=relaxed/simple;
+	bh=uvWuZMpoU48JcHOeJrAEactdukPHmQFQcCZXV9R72Iw=;
+	h=From:To:Cc:Subject:References:Date:In-Reply-To:Message-ID:
+	 MIME-Version:Content-Type; b=CoUQhA1QtREQSoxeTZP2XFco45Dobto4ta+Zk880E5WHb9ih/oRCOUK70A2hgmoP035jb+WKRd8g83gaIxV9jdT4g4ZOaHB5OtcLZyG9EClAaCp10U77fw+5tY6WOCdWqWvrqivktF/13l4cRPtXBzg4c+ieon2R69x+hc9IxNg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=T0ngCW3i; arc=none smtp.client-ip=10.30.226.201
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="T0ngCW3i"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EA2A2C32786;
+	Thu, 15 Aug 2024 08:53:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1723712008;
+	bh=uvWuZMpoU48JcHOeJrAEactdukPHmQFQcCZXV9R72Iw=;
+	h=From:To:Cc:Subject:References:Date:In-Reply-To:From;
+	b=T0ngCW3iUiTlGPBlsjJxAbhdz7gvOonRcp3Fpy4fDirFjmg7EaoMqTwCCqVH4zHMZ
+	 /GYY3UzHAZT/xwSX4NSY5JbTLNpoY92XuJ6TyKJ4f+UNKjBNKiM7iDfKxRz2imwGx0
+	 JxcylDWzOTfl6AaNgQpHp5fKBm3e1bZx1wOPX0zPXdQGoYEm14VFelEcuT/PgGpsBx
+	 M8yNJrpjPgyd3o1jjmADmbSg7Ra6MwP2jtzKAIScKJ1nPcfe0+MkngL3zwYqaIOqlo
+	 patR7vrTpMfdxlU/nFbV6WXzz/nR8s7PshuHA7L+GmLuEYdK/IR0U63YkcX26ZQKGc
+	 I1l4iEKgWtbrQ==
+From: Kalle Valo <kvalo@kernel.org>
+To: Issam Hamdi <ih@simonwunderlich.de>
+Cc: johannes@sipsolutions.net,  linux-wireless@vger.kernel.org,
+  lkp@intel.com,  llvm@lists.linux.dev,
+  mathias.kretschmer@fit.fraunhofer.de,  oe-kbuild-all@lists.linux.dev
+Subject: Re: [PATCH] wifi: cfg80211: Set the channel definition for the
+ different Wi-Fi modes when starting CAC
 References: <87o75ugup7.fsf@kernel.org>
+	<20240815075439.2198346-1-ih@simonwunderlich.de>
+Date: Thu, 15 Aug 2024 11:53:24 +0300
+In-Reply-To: <20240815075439.2198346-1-ih@simonwunderlich.de> (Issam Hamdi's
+	message of "Thu, 15 Aug 2024 09:54:39 +0200")
+Message-ID: <87jzgiyxob.fsf@kernel.org>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 
-When starting CAC in a mode other than AP mode, it return a
-"WARNING: CPU: 0 PID: 63 at cfg80211_chandef_dfs_usable+0x20/0xaf [cfg80211]"
-caused by the chandef.chan being null at the end of CAC.
+Issam Hamdi <ih@simonwunderlich.de> writes:
 
-Solution: Ensure the channel definition is set for the different modes
-when starting CAC to avoid getting a NULL 'chan' at the end of CAC.
+> When starting CAC in a mode other than AP mode, it return a
+> "WARNING: CPU: 0 PID: 63 at cfg80211_chandef_dfs_usable+0x20/0xaf [cfg80211]"
+> caused by the chandef.chan being null at the end of CAC.
+>
+> Solution: Ensure the channel definition is set for the different modes
+> when starting CAC to avoid getting a NULL 'chan' at the end of CAC.
+>
+>  Call Trace:
+>   ? show_regs.part.0+0x14/0x16
+>   ? __warn+0x67/0xc0
+>   ? cfg80211_chandef_dfs_usable+0x20/0xaf [cfg80211]
+>   ? report_bug+0xa7/0x130
+>   ? exc_overflow+0x30/0x30
+>   ? handle_bug+0x27/0x50
+>   ? exc_invalid_op+0x18/0x60
+>   ? handle_exception+0xf6/0xf6
+>   ? exc_overflow+0x30/0x30
+>   ? cfg80211_chandef_dfs_usable+0x20/0xaf [cfg80211]
+>   ? exc_overflow+0x30/0x30
+>   ? cfg80211_chandef_dfs_usable+0x20/0xaf [cfg80211]
+>   ? regulatory_propagate_dfs_state.cold+0x1b/0x4c [cfg80211]
+>   ? cfg80211_propagate_cac_done_wk+0x1a/0x30 [cfg80211]
+>   ? process_one_work+0x165/0x280
+>   ? worker_thread+0x120/0x3f0
+>   ? kthread+0xc2/0xf0
+>   ? process_one_work+0x280/0x280
+>   ? kthread_complete_and_exit+0x20/0x20
+>   ? ret_from_fork+0x19/0x24
+>
+> Signed-off-by: Issam Hamdi <ih@simonwunderlich.de>
+> Signed-off-by: Kretschmer Mathias <mathias.kretschmer@fit.fraunhofer.de>
 
- Call Trace:
-  ? show_regs.part.0+0x14/0x16
-  ? __warn+0x67/0xc0
-  ? cfg80211_chandef_dfs_usable+0x20/0xaf [cfg80211]
-  ? report_bug+0xa7/0x130
-  ? exc_overflow+0x30/0x30
-  ? handle_bug+0x27/0x50
-  ? exc_invalid_op+0x18/0x60
-  ? handle_exception+0xf6/0xf6
-  ? exc_overflow+0x30/0x30
-  ? cfg80211_chandef_dfs_usable+0x20/0xaf [cfg80211]
-  ? exc_overflow+0x30/0x30
-  ? cfg80211_chandef_dfs_usable+0x20/0xaf [cfg80211]
-  ? regulatory_propagate_dfs_state.cold+0x1b/0x4c [cfg80211]
-  ? cfg80211_propagate_cac_done_wk+0x1a/0x30 [cfg80211]
-  ? process_one_work+0x165/0x280
-  ? worker_thread+0x120/0x3f0
-  ? kthread+0xc2/0xf0
-  ? process_one_work+0x280/0x280
-  ? kthread_complete_and_exit+0x20/0x20
-  ? ret_from_fork+0x19/0x24
+When you submit a new version you should mark it as v2 and include a
+change log what has changed from v1. More info:
 
-Signed-off-by: Issam Hamdi <ih@simonwunderlich.de>
-Signed-off-by: Kretschmer Mathias <mathias.kretschmer@fit.fraunhofer.de>
----
- net/wireless/nl80211.c | 18 +++++++++++++++++-
- 1 file changed, 17 insertions(+), 1 deletion(-)
+https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches#changelog_missing
 
-diff --git a/net/wireless/nl80211.c b/net/wireless/nl80211.c
-index 7397a372c78e..36ae2594753e 100644
---- a/net/wireless/nl80211.c
-+++ b/net/wireless/nl80211.c
-@@ -10143,7 +10143,23 @@ static int nl80211_start_radar_detection(struct sk_buff *skb,
- 
- 	err = rdev_start_radar_detection(rdev, dev, &chandef, cac_time_ms);
- 	if (!err) {
--		wdev->links[0].ap.chandef = chandef;
-+		switch (wdev->iftype) {
-+		case NL80211_IFTYPE_MESH_POINT:
-+			wdev->u.mesh.chandef = chandef;
-+			break;
-+		case NL80211_IFTYPE_ADHOC:
-+			wdev->u.ibss.chandef = chandef;
-+			break;
-+		case NL80211_IFTYPE_OCB:
-+			wdev->u.ocb.chandef = chandef;
-+			break;
-+		case NL80211_IFTYPE_AP:
-+		case NL80211_IFTYPE_P2P_GO:
-+			wdev->links[0].ap.chandef = chandef;
-+			break;
-+		default:
-+			break;
-+		}
- 		wdev->cac_started = true;
- 		wdev->cac_start_time = jiffies;
- 		wdev->cac_time_ms = cac_time_ms;
+And please read the whole wiki page.
 
-base-commit: cc32e9fb380d8afdbf3486d7063d5520bfb0f071
 -- 
-2.39.2
+https://patchwork.kernel.org/project/linux-wireless/list/
 
+https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
