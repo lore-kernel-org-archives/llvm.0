@@ -1,120 +1,238 @@
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D71E85B1FB;
-	Thu, 15 Aug 2024 17:43:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC3B157333;
+	Thu, 15 Aug 2024 20:02:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723743788; cv=none; b=Fj5e5owiNBAcYyadrNI92Zrzv5S+sajszBMZXG4IDTbMncwfGPXR3LgHtsDQ9wtARbogmo3hSxnoODucgV+rio2oEk+Q5qBi8/iPcWu6s1MY9RHg0tY/ClYMti2pTHp4tLQszq3ySXUzg8Hb5Ud3YGAn7V5VWIJil942ejLqa7I=
+	t=1723752146; cv=none; b=DkksLa1R0+KrKuVvp9m9kgIwGmWh5jSEY+clBzUKiQmoKQ8eXOGACGQ0HxYU6UMzixwLf/Nf+lNdmGZqFKjDKYm8yRHB3KoZQK7qGmGLujJ5BspKAbFUNZSEL0vzxX4E+4fR5mSP82wdiQilU5/O7NGTv4fkLSeK2Rfp0KCN+jI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723743788; c=relaxed/simple;
-	bh=Fw0aVYsUrnbaPkgclFP3+g5LLOu0UpBlKbkPnh9OEK4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=F/V8OTVXvjh67W5REBaCIR8H0TjSz9KAfXY8YhBuvu7DBVH5ZyqJZYQvhdpNzv3rknPJl6UNhH6Wlhnf/kIDBV0UuCvBK0d6Pozmx8bgk6TJ75sEK6CsWqsdftpzpC05UA83sUnz9fOc8li602KCzzwb4DAOhoGx9Mb4hohElEg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=l8pULNb9; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+	s=arc-20240116; t=1723752146; c=relaxed/simple;
+	bh=Una/csjFvk8Y03/HoOMMntul75tfxF/Fl5iMXVtNLo4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=sitTTiFiN9W5OHFQSPt8kiFV3brWaNFsA0L9ACobX04UuxKUCxPp2n3yx5rIanaumMQESmfpvZUXOWYRtD45iHPJdvBqX18ocn/Y2Et73SR7tBdjN8bsexrhFqs4rJrNXPl45u1ZOIW9e8pf1dbetpKkjGQIkFneHdmx9PwDjDs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Eh/tyzHb; arc=none smtp.client-ip=198.175.65.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="l8pULNb9"
-Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 47FBQWUR016519;
-	Thu, 15 Aug 2024 17:42:59 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	YU6l76peEOp8nvrzVe7v+0EcAYbfKcRMcNVu2KltyXA=; b=l8pULNb9Z3egNXiC
-	FP99yp+9jC6JZfNQ1q/DBmDTMEIpggjfaS3L6FnyuVdqCseBdQ1lTt5RxEJqfsQF
-	caYvM+9DoFl+HW76Dq/RxiLOLurnOhXZandTMGWfJtWnWeNNeV2+U1w6jYJkwSTS
-	xi0z0+WOlheJrecffO3MLttcyK/I6VAeGiDc6rUsdkdoK/TG5618/GYxKdraxUrt
-	qb6BSy2dYw8EJnlSrODqk11RWvRQaAkqSZYKC67tb1qIQk0YsAGuCWGYRufz1Y/3
-	1uy6ZN77BlYTkjUaAhRe/vvcsHV5MwtdAHrl9x4gD4OFtk88v37vjpouna37W9lS
-	0v/xhA==
-Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 41134ejj2j-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 15 Aug 2024 17:42:58 +0000 (GMT)
-Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
-	by NALASPPMTA04.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 47FHgvhT013319
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 15 Aug 2024 17:42:58 GMT
-Received: from [10.227.110.203] (10.80.80.8) by nalasex01b.na.qualcomm.com
- (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Thu, 15 Aug
- 2024 10:42:57 -0700
-Message-ID: <9809b165-8d25-4984-a1dd-6fca28f1dda9@quicinc.com>
-Date: Thu, 15 Aug 2024 10:42:56 -0700
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Eh/tyzHb"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1723752145; x=1755288145;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Una/csjFvk8Y03/HoOMMntul75tfxF/Fl5iMXVtNLo4=;
+  b=Eh/tyzHbRy/rMbC9zHkGBeZM2Qkw6bpXAGT5zqbMYeRDDn1svToFZMm7
+   M4bfGHWRuBMmdnmjDF2Jh+Y15+7YFhampvwChTqFXnXrrsNw+szDWSJmp
+   45s3sW6iOqIhRP/jg3kTKj7Osr7mT34w5SrCdYUgK4x/f824LKen16G30
+   n/liakxF4ouqZ313YsxQGdbySYimVaV67v6PrX7D0m9C7n7xLzcaM7ON9
+   kg75Ms09OqkhzWWpnZ0z9xzfcJJBQXIkZYbeYzXbRcD0S5eSMDPdQ9S7V
+   GsgFSSRjpCYGuiMHA6FsBBDPmlBI0i26ZvRlkA8n9SbGkdG0YH7DZgt+6
+   Q==;
+X-CSE-ConnectionGUID: CqNuj6qLR46Nqje0SQ0Lkw==
+X-CSE-MsgGUID: EKOnFpV3TbGthF3Pli/OKQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11165"; a="32605451"
+X-IronPort-AV: E=Sophos;i="6.10,149,1719903600"; 
+   d="scan'208";a="32605451"
+Received: from fmviesa007.fm.intel.com ([10.60.135.147])
+  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Aug 2024 13:02:24 -0700
+X-CSE-ConnectionGUID: BQ4Ed6q6Qw2zdK7U38N6BA==
+X-CSE-MsgGUID: bpAKtS9nR9ODn/gWIi+NuQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.10,149,1719903600"; 
+   d="scan'208";a="59133924"
+Received: from lkp-server01.sh.intel.com (HELO 9a732dc145d3) ([10.239.97.150])
+  by fmviesa007.fm.intel.com with ESMTP; 15 Aug 2024 13:02:21 -0700
+Received: from kbuild by 9a732dc145d3 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1segfr-0005YM-0X;
+	Thu, 15 Aug 2024 20:02:19 +0000
+Date: Fri, 16 Aug 2024 04:01:39 +0800
+From: kernel test robot <lkp@intel.com>
+To: "Derek J. Clark" <derekjohn.clark@gmail.com>,
+	Guenter Roeck <linux@roeck-us.net>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Jean Delvare <jdelvare@suse.com>, Jonathan Corbet <corbet@lwn.net>,
+	=?iso-8859-1?Q?Joaqu=EDn_Ignacio_Aramend=EDa?= <samsagax@gmail.com>,
+	"Derek J . Clark" <derekjohn.clark@gmail.com>,
+	linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/1] hwmon: (oxp-sensors) Add support for multiple new
+ devices.
+Message-ID: <202408160329.TLNbIwRC-lkp@intel.com>
+References: <20240815031358.21027-2-derekjohn.clark@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2] wifi: cfg80211: Set the channel definition for the
- different Wi-Fi modes when starting CAC
-To: Issam Hamdi <ih@simonwunderlich.de>, <kvalo@kernel.org>
-CC: <johannes@sipsolutions.net>, <linux-wireless@vger.kernel.org>,
-        <lkp@intel.com>, <llvm@lists.linux.dev>,
-        <mathias.kretschmer@fit.fraunhofer.de>,
-        <oe-kbuild-all@lists.linux.dev>
-References: <87jzgiyxob.fsf@kernel.org>
- <20240815113213.3237491-1-ih@simonwunderlich.de>
-From: Jeff Johnson <quic_jjohnson@quicinc.com>
-Content-Language: en-US
-In-Reply-To: <20240815113213.3237491-1-ih@simonwunderlich.de>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01b.na.qualcomm.com (10.47.209.197)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: C34UADG99p0aQXKFmQJscYmpx-yKH_2v
-X-Proofpoint-GUID: C34UADG99p0aQXKFmQJscYmpx-yKH_2v
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
- definitions=2024-08-15_10,2024-08-15_01,2024-05-17_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=1 lowpriorityscore=0
- priorityscore=1501 bulkscore=0 phishscore=0 impostorscore=0 suspectscore=0
- mlxlogscore=203 clxscore=1011 mlxscore=1 spamscore=1 adultscore=0
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2407110000 definitions=main-2408150129
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240815031358.21027-2-derekjohn.clark@gmail.com>
 
-On 8/15/2024 4:32 AM, Issam Hamdi wrote:
-> When starting CAC in a mode other than AP mode, it return a
-> "WARNING: CPU: 0 PID: 63 at cfg80211_chandef_dfs_usable+0x20/0xaf [cfg80211]"
-> caused by the chandef.chan being null at the end of CAC.
-> 
-> Solution: Ensure the channel definition is set for the different modes
-> when starting CAC to avoid getting a NULL 'chan' at the end of CAC.
-> 
->  Call Trace:
->   ? show_regs.part.0+0x14/0x16
->   ? __warn+0x67/0xc0
->   ? cfg80211_chandef_dfs_usable+0x20/0xaf [cfg80211]
->   ? report_bug+0xa7/0x130
->   ? exc_overflow+0x30/0x30
->   ? handle_bug+0x27/0x50
->   ? exc_invalid_op+0x18/0x60
->   ? handle_exception+0xf6/0xf6
->   ? exc_overflow+0x30/0x30
->   ? cfg80211_chandef_dfs_usable+0x20/0xaf [cfg80211]
->   ? exc_overflow+0x30/0x30
->   ? cfg80211_chandef_dfs_usable+0x20/0xaf [cfg80211]
->   ? regulatory_propagate_dfs_state.cold+0x1b/0x4c [cfg80211]
->   ? cfg80211_propagate_cac_done_wk+0x1a/0x30 [cfg80211]
->   ? process_one_work+0x165/0x280
->   ? worker_thread+0x120/0x3f0
->   ? kthread+0xc2/0xf0
->   ? process_one_work+0x280/0x280
->   ? kthread_complete_and_exit+0x20/0x20
->   ? ret_from_fork+0x19/0x24
-> 
-> Signed-off-by: Issam Hamdi <ih@simonwunderlich.de>
-> Signed-off-by: Kretschmer Mathias <mathias.kretschmer@fit.fraunhofer.de>
+Hi Derek,
 
-who is this and why is their S-O-B here?
-the last S-O-B should be the person who last touched the patch, which is you
+kernel test robot noticed the following build warnings:
 
-please see:
-https://www.kernel.org/doc/html/latest/process/submitting-patches.html#sign-your-work-the-developer-s-certificate-of-origin
-https://www.kernel.org/doc/html/latest/process/submitting-patches.html#when-to-use-acked-by-cc-and-co-developed-by
+[auto build test WARNING on groeck-staging/hwmon-next]
+[also build test WARNING on linus/master v6.11-rc3 next-20240815]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Derek-J-Clark/hwmon-oxp-sensors-Add-support-for-multiple-new-devices/20240815-111550
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
+patch link:    https://lore.kernel.org/r/20240815031358.21027-2-derekjohn.clark%40gmail.com
+patch subject: [PATCH 1/1] hwmon: (oxp-sensors) Add support for multiple new devices.
+config: i386-buildonly-randconfig-005-20240815 (https://download.01.org/0day-ci/archive/20240816/202408160329.TLNbIwRC-lkp@intel.com/config)
+compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240816/202408160329.TLNbIwRC-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202408160329.TLNbIwRC-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/hwmon/oxp-sensors.c:497:3: warning: unannotated fall-through between switch labels [-Wimplicit-fallthrough]
+     497 |                 default:
+         |                 ^
+   drivers/hwmon/oxp-sensors.c:497:3: note: insert 'break;' to avoid fall-through
+     497 |                 default:
+         |                 ^
+         |                 break; 
+   drivers/hwmon/oxp-sensors.c:564:3: warning: unannotated fall-through between switch labels [-Wimplicit-fallthrough]
+     564 |                 default:
+         |                 ^
+   drivers/hwmon/oxp-sensors.c:564:3: note: insert 'break;' to avoid fall-through
+     564 |                 default:
+         |                 ^
+         |                 break; 
+   drivers/hwmon/oxp-sensors.c:616:3: warning: unannotated fall-through between switch labels [-Wimplicit-fallthrough]
+     616 |                 default:
+         |                 ^
+   drivers/hwmon/oxp-sensors.c:616:3: note: insert 'break;' to avoid fall-through
+     616 |                 default:
+         |                 ^
+         |                 break; 
+   3 warnings generated.
+
+
+vim +497 drivers/hwmon/oxp-sensors.c
+
+   464	
+   465	static int oxp_platform_read(struct device *dev, enum hwmon_sensor_types type,
+   466				     u32 attr, int channel, long *val)
+   467	{
+   468		int ret;
+   469	
+   470		switch (type) {
+   471		case hwmon_fan:
+   472			switch (attr) {
+   473			case hwmon_fan_input:
+   474				switch (board) {
+   475				case orange_pi_neo:
+   476					return read_from_ec(ORANGEPI_SENSOR_FAN_REG, 2, val);
+   477				case aok_zoe_a1:
+   478				case aya_neo_2:
+   479				case aya_neo_2s:
+   480				case aya_neo_air:
+   481				case aya_neo_air_1s:
+   482				case aya_neo_air_plus_mendo:
+   483				case aya_neo_air_pro:
+   484				case aya_neo_flip:
+   485				case aya_neo_geek:
+   486				case aya_neo_geek_1s:
+   487				case aya_neo_kun:
+   488				case oxp_mini_amd:
+   489				case oxp_mini_amd_a07:
+   490				case oxp_2:
+   491				case oxp_fly:
+   492				case oxp_mini_amd_pro:
+   493					return read_from_ec(OXP_SENSOR_FAN_REG, 2, val);
+   494				default:
+   495					break;
+   496				}
+ > 497			default:
+   498				break;
+   499			}
+   500			break;
+   501		case hwmon_pwm:
+   502			switch (attr) {
+   503			case hwmon_pwm_input:
+   504				switch (board) {
+   505				case orange_pi_neo:
+   506					ret = read_from_ec(ORANGEPI_SENSOR_PWM_REG, 1, val);
+   507					if (ret)
+   508						return ret;
+   509					/* scale from range [1-244] */
+   510					*val = ((*val - 1) * 254 / 243) + 1;
+   511					break;
+   512				case aya_neo_2:
+   513				case aya_neo_2s:
+   514				case aya_neo_air:
+   515				case aya_neo_air_1s:
+   516				case aya_neo_air_plus_mendo:
+   517				case aya_neo_air_pro:
+   518				case aya_neo_flip:
+   519				case aya_neo_geek:
+   520				case aya_neo_geek_1s:
+   521				case aya_neo_kun:
+   522				case oxp_mini_amd:
+   523				case oxp_mini_amd_a07:
+   524					ret = read_from_ec(OXP_SENSOR_PWM_REG, 1, val);
+   525					if (ret)
+   526						return ret;
+   527					*val = (*val * 255) / 100;
+   528					break;
+   529				case aok_zoe_a1:
+   530				case oxp_2:
+   531				case oxp_fly:
+   532				case oxp_mini_amd_pro:
+   533				default:
+   534					ret = read_from_ec(OXP_SENSOR_PWM_REG, 1, val);
+   535					if (ret)
+   536						return ret;
+   537					break;
+   538				}
+   539				return 0;
+   540			case hwmon_pwm_enable:
+   541				switch (board) {
+   542				case orange_pi_neo:
+   543					return read_from_ec(ORANGEPI_SENSOR_PWM_ENABLE_REG, 1, val);
+   544				case aok_zoe_a1:
+   545				case aya_neo_2:
+   546				case aya_neo_2s:
+   547				case aya_neo_air:
+   548				case aya_neo_air_1s:
+   549				case aya_neo_air_plus_mendo:
+   550				case aya_neo_air_pro:
+   551				case aya_neo_flip:
+   552				case aya_neo_geek:
+   553				case aya_neo_geek_1s:
+   554				case aya_neo_kun:
+   555				case oxp_mini_amd:
+   556				case oxp_mini_amd_a07:
+   557				case oxp_2:
+   558				case oxp_fly:
+   559				case oxp_mini_amd_pro:
+   560					return read_from_ec(OXP_SENSOR_PWM_ENABLE_REG, 1, val);
+   561				default:
+   562					break;
+   563				}
+   564			default:
+   565				break;
+   566			}
+   567			break;
+   568		default:
+   569			break;
+   570		}
+   571		return -EOPNOTSUPP;
+   572	}
+   573	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
