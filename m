@@ -1,55 +1,118 @@
-Received: from mail.hotelshavens.com (mail.hotelshavens.com [217.156.64.234])
+Received: from mail.simonwunderlich.de (mail.simonwunderlich.de [23.88.38.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 43E9A12AAC6
-	for <llvm@lists.linux.dev>; Fri, 16 Aug 2024 13:12:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.156.64.234
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 089771E520;
+	Fri, 16 Aug 2024 14:24:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=23.88.38.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723813929; cv=none; b=INs76dm2PgDEnA43KMXrwOSxPge1dmKgJa7WNsU1bGcf/OyB/k7X5W1DJ12BQKXlA6VOoARtcfZYbVnGwkp0h4xPahhMvp+H1rFvVaLqme7MS7BhgXJhLXqGePqL1HPA3F3whKuKY1YUcnENWtf5OCHcUazIPn1cg4yISSD22iQ=
+	t=1723818272; cv=none; b=rUnN587FZkj6r5XWolEmN6p7link+fzImHLVo2W/2gNTCQ3CiyPbdl/Z69ONNRa3huz4x0EBa1wPcaNhgsDqT3m1mj+rJkelxg17Dth45qbu7gk/4jpxrLu/j+QcWcM8AQeK/uAEQYd+L0jlIm9x5SEMPwqJdlRd59eu7dOro+s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723813929; c=relaxed/simple;
-	bh=JF0sDr3q6/xiGGghKq46xR0eW0nazP+VzvHupEO9Q58=;
-	h=From:To:Subject:Date:Message-ID:MIME-Version:Content-Type; b=M+i+if8yiSUktZLW6MehRrKYYX20aYdqVz0f+d9ROPImIb9pSq4h1ohaxkCIm0sumtW3TJckwXK3/P/goCgr4KprKO+WfeYVL8o8GFigP8dXg6hShXuhbxa2uefGx1V88SruIPq5lgi4zhSdP8PojFUIQM6ibZkeMhFVvJbz7/s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=hotelshavens.com; spf=pass smtp.mailfrom=hotelshavens.com; dkim=pass (4096-bit key) header.d=hotelshavens.com header.i=admin@hotelshavens.com header.b=Jj2NSZHS; arc=none smtp.client-ip=217.156.64.234
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=hotelshavens.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hotelshavens.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (4096-bit key) header.d=hotelshavens.com header.i=admin@hotelshavens.com header.b="Jj2NSZHS"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; s=dkim; d=hotelshavens.com;
- h=Reply-To:From:To:Subject:Date:Message-ID:MIME-Version:Content-Type:
- Content-Transfer-Encoding; i=admin@hotelshavens.com;
- bh=JF0sDr3q6/xiGGghKq46xR0eW0nazP+VzvHupEO9Q58=;
- b=Jj2NSZHSEB5RvZG4mjvskndIBZv7fHUbd6IRJjR6J/QyKglBrL/FQafB5ENV1Q/VzabjQaruG+5O
-   WMchpDeJv8zMaWa4t83PSBxiNFx9JiivMv+g/gbRcxXpION05TC+Cq8N/ON2RtdgBfu3pO8W0cES
-   FYbydikF2SkWcO4XgOUIsKwqFCMrqzL8ePpytrK3dXOTMO/M0dhVEJiydZ51S0vqLAczAmVcVX9c
-   nmx/NrRdIcf2WTvNSs7bk4G986F7b9NtWk95U8p1a23vNC+Qa7WPY3ScF2d5IjODsxkOJCBnzXHF
-   kLhGDF/IeFcq9zqEwBC5b67kzQyEWPol3yHjjjsTd7cJsCQoIS23bQ+FJJnpLL5CbCpZNbOIOIAO
-   zHclNvHbJbEwQW/uy4P5GLaivqdCjc/biHSXGTW55OZdMzAqmXWoDKEuiHD/reZrpoUEjbwwthfH
-   SmqNDGXCwjfbouS8V4qq6Mz53pUjsq096J8UP72amXSYv84oROwRCe4Bq3gBKgJAzVFwjW5JMwt1
-   nnStioN4xQYQHPpQdR1ByPoHO1iB3OOrMHerEv6w7g3QYHRCaAsp2KCsdA5rElBm7EYUpSiu9goj
-   mrdBBVBUmhCpXyVgQUWggAkOej8tnf/LdL7IlwCKnNCimnllkUPcwIcAOrUN6dMlxHJxBgW85LQ=
-Reply-To: boris@undpkh.com
-From: Boris Soroka <admin@hotelshavens.com>
-To: llvm@lists.linux.dev
-Subject: HI DEAR !
-Date: 16 Aug 2024 15:15:31 +0200
-Message-ID: <20240816134828.499EC76BCD4148F8@hotelshavens.com>
+	s=arc-20240116; t=1723818272; c=relaxed/simple;
+	bh=aoY2IcLLuPhJSY+lwOSnO2cpaPaskquNCjLWNK8ruxc=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=qMn77P+Yi2lDgRitGX+7Bsq+fe0jF4lA/NUJGimeq43mmmsbvE0LHophlvFB/ZWptLMnBn2zsCqyS1l3hWeAEZo4Op5yquK6qt0UehBc9hxsxyVpvVollbZwjad/Cr/RJE+aiXKorA9kMzLAnVYRZvC7HyQgk094BbApPDm9aV0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=simonwunderlich.de; spf=pass smtp.mailfrom=simonwunderlich.de; arc=none smtp.client-ip=23.88.38.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=simonwunderlich.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=simonwunderlich.de
+Received: from localhost (p200300c59701d290000000000000032b.dip0.t-ipconnect.de [IPv6:2003:c5:9701:d290::32b])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mail.simonwunderlich.de (Postfix) with ESMTPSA id BC7C2FA131;
+	Fri, 16 Aug 2024 16:24:20 +0200 (CEST)
+From: Issam Hamdi <ih@simonwunderlich.de>
+To: quic_jjohnson@quicinc.com
+Cc: ih@simonwunderlich.de,
+	johannes@sipsolutions.net,
+	kvalo@kernel.org,
+	linux-wireless@vger.kernel.org,
+	lkp@intel.com,
+	llvm@lists.linux.dev,
+	mathias.kretschmer@fit.fraunhofer.de,
+	oe-kbuild-all@lists.linux.dev
+Subject: [PATCH v3] wifi: cfg80211: Set the channel definition for the different Wi-Fi modes when starting CAC
+Date: Fri, 16 Aug 2024 16:24:18 +0200
+Message-Id: <20240816142418.3381951-1-ih@simonwunderlich.de>
+X-Mailer: git-send-email 2.39.2
+In-Reply-To: <9809b165-8d25-4984-a1dd-6fca28f1dda9@quicinc.com>
+References: <9809b165-8d25-4984-a1dd-6fca28f1dda9@quicinc.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain;
-	charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-Greetings,
+When starting CAC in a mode other than AP mode, it return a
+"WARNING: CPU: 0 PID: 63 at cfg80211_chandef_dfs_usable+0x20/0xaf [cfg80211]"
+caused by the chandef.chan being null at the end of CAC.
 
-Did you receive my last email message I sent to this Email=20
-address: ( llvm@lists.linux.dev ) concerning relocating my=20
-investment to your country due to the on going war in my country=20
-Russia.
+Solution: Ensure the channel definition is set for the different modes
+when starting CAC to avoid getting a NULL 'chan' at the end of CAC.
 
-Best Regards,
-Mr.Boris Soroka.
+ Call Trace:
+  ? show_regs.part.0+0x14/0x16
+  ? __warn+0x67/0xc0
+  ? cfg80211_chandef_dfs_usable+0x20/0xaf [cfg80211]
+  ? report_bug+0xa7/0x130
+  ? exc_overflow+0x30/0x30
+  ? handle_bug+0x27/0x50
+  ? exc_invalid_op+0x18/0x60
+  ? handle_exception+0xf6/0xf6
+  ? exc_overflow+0x30/0x30
+  ? cfg80211_chandef_dfs_usable+0x20/0xaf [cfg80211]
+  ? exc_overflow+0x30/0x30
+  ? cfg80211_chandef_dfs_usable+0x20/0xaf [cfg80211]
+  ? regulatory_propagate_dfs_state.cold+0x1b/0x4c [cfg80211]
+  ? cfg80211_propagate_cac_done_wk+0x1a/0x30 [cfg80211]
+  ? process_one_work+0x165/0x280
+  ? worker_thread+0x120/0x3f0
+  ? kthread+0xc2/0xf0
+  ? process_one_work+0x280/0x280
+  ? kthread_complete_and_exit+0x20/0x20
+  ? ret_from_fork+0x19/0x24
+
+Reported-by: Kretschmer Mathias <mathias.kretschmer@fit.fraunhofer.de>
+Signed-off-by: Issam Hamdi <ih@simonwunderlich.de>
+---
+v2: update the subject
+v3: update the second Signed-off-by to Reported-by
+---
+ net/wireless/nl80211.c | 18 +++++++++++++++++-
+ 1 file changed, 17 insertions(+), 1 deletion(-)
+
+diff --git a/net/wireless/nl80211.c b/net/wireless/nl80211.c
+index 7397a372c78e..36ae2594753e 100644
+--- a/net/wireless/nl80211.c
++++ b/net/wireless/nl80211.c
+@@ -10143,7 +10143,23 @@ static int nl80211_start_radar_detection(struct sk_buff *skb,
+ 
+ 	err = rdev_start_radar_detection(rdev, dev, &chandef, cac_time_ms);
+ 	if (!err) {
+-		wdev->links[0].ap.chandef = chandef;
++		switch (wdev->iftype) {
++		case NL80211_IFTYPE_MESH_POINT:
++			wdev->u.mesh.chandef = chandef;
++			break;
++		case NL80211_IFTYPE_ADHOC:
++			wdev->u.ibss.chandef = chandef;
++			break;
++		case NL80211_IFTYPE_OCB:
++			wdev->u.ocb.chandef = chandef;
++			break;
++		case NL80211_IFTYPE_AP:
++		case NL80211_IFTYPE_P2P_GO:
++			wdev->links[0].ap.chandef = chandef;
++			break;
++		default:
++			break;
++		}
+ 		wdev->cac_started = true;
+ 		wdev->cac_start_time = jiffies;
+ 		wdev->cac_time_ms = cac_time_ms;
+
+base-commit: cc32e9fb380d8afdbf3486d7063d5520bfb0f071
+-- 
+2.39.2
+
