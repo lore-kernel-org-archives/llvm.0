@@ -1,118 +1,168 @@
-Received: from mail.simonwunderlich.de (mail.simonwunderlich.de [23.88.38.48])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 089771E520;
-	Fri, 16 Aug 2024 14:24:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=23.88.38.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3761D1BF322;
+	Fri, 16 Aug 2024 16:33:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723818272; cv=none; b=rUnN587FZkj6r5XWolEmN6p7link+fzImHLVo2W/2gNTCQ3CiyPbdl/Z69ONNRa3huz4x0EBa1wPcaNhgsDqT3m1mj+rJkelxg17Dth45qbu7gk/4jpxrLu/j+QcWcM8AQeK/uAEQYd+L0jlIm9x5SEMPwqJdlRd59eu7dOro+s=
+	t=1723825991; cv=none; b=GhTcX28ZkpX0bElKdd0Q/nEtasuDyQFChxa5g6pb1RfYKrjrtzbtyUVyGi6AkER0/Elu+ufTyVL49YIzH0RaXsEGvMIjKb0rDYdI/85ASr38a2o8onSWyacDY8hwX4mpBsrrey0VKHQotm8WkJ0V74yq7hDODJMeehvI51ElJ00=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723818272; c=relaxed/simple;
-	bh=aoY2IcLLuPhJSY+lwOSnO2cpaPaskquNCjLWNK8ruxc=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=qMn77P+Yi2lDgRitGX+7Bsq+fe0jF4lA/NUJGimeq43mmmsbvE0LHophlvFB/ZWptLMnBn2zsCqyS1l3hWeAEZo4Op5yquK6qt0UehBc9hxsxyVpvVollbZwjad/Cr/RJE+aiXKorA9kMzLAnVYRZvC7HyQgk094BbApPDm9aV0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=simonwunderlich.de; spf=pass smtp.mailfrom=simonwunderlich.de; arc=none smtp.client-ip=23.88.38.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=simonwunderlich.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=simonwunderlich.de
-Received: from localhost (p200300c59701d290000000000000032b.dip0.t-ipconnect.de [IPv6:2003:c5:9701:d290::32b])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mail.simonwunderlich.de (Postfix) with ESMTPSA id BC7C2FA131;
-	Fri, 16 Aug 2024 16:24:20 +0200 (CEST)
-From: Issam Hamdi <ih@simonwunderlich.de>
-To: quic_jjohnson@quicinc.com
-Cc: ih@simonwunderlich.de,
-	johannes@sipsolutions.net,
-	kvalo@kernel.org,
-	linux-wireless@vger.kernel.org,
-	lkp@intel.com,
-	llvm@lists.linux.dev,
-	mathias.kretschmer@fit.fraunhofer.de,
-	oe-kbuild-all@lists.linux.dev
-Subject: [PATCH v3] wifi: cfg80211: Set the channel definition for the different Wi-Fi modes when starting CAC
-Date: Fri, 16 Aug 2024 16:24:18 +0200
-Message-Id: <20240816142418.3381951-1-ih@simonwunderlich.de>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <9809b165-8d25-4984-a1dd-6fca28f1dda9@quicinc.com>
-References: <9809b165-8d25-4984-a1dd-6fca28f1dda9@quicinc.com>
+	s=arc-20240116; t=1723825991; c=relaxed/simple;
+	bh=a+GazqQj0H0hND+mdHAKbt7nto5jHAAJxyknn+frBv0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=otmUfXWyFepMDpBMyKJfPktlq42XL8zhpMXjSO8GVyH4FuvzR8xQRCDbsdOrM/+Xca8mkWnftmSLkvI0u1SCwufMaEd42BSGzQGUiPu+Jp8GMNGiJ4/slkc10Csw3rSK2QmRyv91dCQmL8dlyk7ihG3MqPr2TIHdQm7IQSD/qBw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=CRus0j6S; arc=none smtp.client-ip=198.175.65.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="CRus0j6S"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1723825990; x=1755361990;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=a+GazqQj0H0hND+mdHAKbt7nto5jHAAJxyknn+frBv0=;
+  b=CRus0j6SNFPyl8h4emJZylD1sZ2GmyXCo/bpEkTk4HEg3rVVB+9fs+FK
+   W5ZpSHGt2DVgjE4spucKKh5eLNyomZI7ftlabmP+jKTtaYqzTH89xSQyE
+   0X3eTKaoogs5Swr0VomdEEs44TTdS4df9JS89npU8u+kzYFLt/khMNYpF
+   mBDHZjSDsKeoxQrqbbvJg7UaJDaGh/Wo1hjCA5V3tg+Ls18grdFEZSDcL
+   XWfZY0Ab7wvhu/20QLLql4WyhodboLwucyjZIZmpwHulg9zLMhH0VYpjq
+   uzH/BhQn9zUJxLnJsElAJLbQV2SXJAvJjhRGLTsEe9WOknv3Aiav1se4h
+   Q==;
+X-CSE-ConnectionGUID: HhJxBuJCQQi2SuDQewMkXA==
+X-CSE-MsgGUID: LI23o0UMR76+dROYbsPpJQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11166"; a="39582284"
+X-IronPort-AV: E=Sophos;i="6.10,152,1719903600"; 
+   d="scan'208";a="39582284"
+Received: from orviesa006.jf.intel.com ([10.64.159.146])
+  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Aug 2024 09:33:07 -0700
+X-CSE-ConnectionGUID: Qn9qCAtGSS6R5q93QrfwOw==
+X-CSE-MsgGUID: htCLX/cfSZeb4sx/845cDg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.10,152,1719903600"; 
+   d="scan'208";a="60001770"
+Received: from lkp-server01.sh.intel.com (HELO 9a732dc145d3) ([10.239.97.150])
+  by orviesa006.jf.intel.com with ESMTP; 16 Aug 2024 09:33:05 -0700
+Received: from kbuild by 9a732dc145d3 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1sezss-0006e6-0Q;
+	Fri, 16 Aug 2024 16:33:02 +0000
+Date: Sat, 17 Aug 2024 00:32:18 +0800
+From: kernel test robot <lkp@intel.com>
+To: Zack Rusin <zack.rusin@broadcom.com>, dri-devel@lists.freedesktop.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>,
+	ian.forbes@broadcom.com, martin.krastev@broadcom.com,
+	maaz.mombasawala@broadcom.com, Zack Rusin <zack.rusin@broadcom.com>,
+	stable@vger.kernel.org
+Subject: Re: [PATCH v3 2/2] drm/vmwgfx: Fix prime with external buffers
+Message-ID: <202408170033.rkCwgtSp-lkp@intel.com>
+References: <20240815153404.630214-2-zack.rusin@broadcom.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240815153404.630214-2-zack.rusin@broadcom.com>
 
-When starting CAC in a mode other than AP mode, it return a
-"WARNING: CPU: 0 PID: 63 at cfg80211_chandef_dfs_usable+0x20/0xaf [cfg80211]"
-caused by the chandef.chan being null at the end of CAC.
+Hi Zack,
 
-Solution: Ensure the channel definition is set for the different modes
-when starting CAC to avoid getting a NULL 'chan' at the end of CAC.
+kernel test robot noticed the following build errors:
 
- Call Trace:
-  ? show_regs.part.0+0x14/0x16
-  ? __warn+0x67/0xc0
-  ? cfg80211_chandef_dfs_usable+0x20/0xaf [cfg80211]
-  ? report_bug+0xa7/0x130
-  ? exc_overflow+0x30/0x30
-  ? handle_bug+0x27/0x50
-  ? exc_invalid_op+0x18/0x60
-  ? handle_exception+0xf6/0xf6
-  ? exc_overflow+0x30/0x30
-  ? cfg80211_chandef_dfs_usable+0x20/0xaf [cfg80211]
-  ? exc_overflow+0x30/0x30
-  ? cfg80211_chandef_dfs_usable+0x20/0xaf [cfg80211]
-  ? regulatory_propagate_dfs_state.cold+0x1b/0x4c [cfg80211]
-  ? cfg80211_propagate_cac_done_wk+0x1a/0x30 [cfg80211]
-  ? process_one_work+0x165/0x280
-  ? worker_thread+0x120/0x3f0
-  ? kthread+0xc2/0xf0
-  ? process_one_work+0x280/0x280
-  ? kthread_complete_and_exit+0x20/0x20
-  ? ret_from_fork+0x19/0x24
+[auto build test ERROR on drm/drm-next]
+[also build test ERROR on drm-intel/for-linux-next-fixes drm-misc/drm-misc-next drm-tip/drm-tip linus/master v6.11-rc3 next-20240816]
+[cannot apply to drm-exynos/exynos-drm-next drm-intel/for-linux-next]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Reported-by: Kretschmer Mathias <mathias.kretschmer@fit.fraunhofer.de>
-Signed-off-by: Issam Hamdi <ih@simonwunderlich.de>
----
-v2: update the subject
-v3: update the second Signed-off-by to Reported-by
----
- net/wireless/nl80211.c | 18 +++++++++++++++++-
- 1 file changed, 17 insertions(+), 1 deletion(-)
+url:    https://github.com/intel-lab-lkp/linux/commits/Zack-Rusin/drm-vmwgfx-Fix-prime-with-external-buffers/20240815-234842
+base:   git://anongit.freedesktop.org/drm/drm drm-next
+patch link:    https://lore.kernel.org/r/20240815153404.630214-2-zack.rusin%40broadcom.com
+patch subject: [PATCH v3 2/2] drm/vmwgfx: Fix prime with external buffers
+config: i386-randconfig-013-20240816 (https://download.01.org/0day-ci/archive/20240817/202408170033.rkCwgtSp-lkp@intel.com/config)
+compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240817/202408170033.rkCwgtSp-lkp@intel.com/reproduce)
 
-diff --git a/net/wireless/nl80211.c b/net/wireless/nl80211.c
-index 7397a372c78e..36ae2594753e 100644
---- a/net/wireless/nl80211.c
-+++ b/net/wireless/nl80211.c
-@@ -10143,7 +10143,23 @@ static int nl80211_start_radar_detection(struct sk_buff *skb,
- 
- 	err = rdev_start_radar_detection(rdev, dev, &chandef, cac_time_ms);
- 	if (!err) {
--		wdev->links[0].ap.chandef = chandef;
-+		switch (wdev->iftype) {
-+		case NL80211_IFTYPE_MESH_POINT:
-+			wdev->u.mesh.chandef = chandef;
-+			break;
-+		case NL80211_IFTYPE_ADHOC:
-+			wdev->u.ibss.chandef = chandef;
-+			break;
-+		case NL80211_IFTYPE_OCB:
-+			wdev->u.ocb.chandef = chandef;
-+			break;
-+		case NL80211_IFTYPE_AP:
-+		case NL80211_IFTYPE_P2P_GO:
-+			wdev->links[0].ap.chandef = chandef;
-+			break;
-+		default:
-+			break;
-+		}
- 		wdev->cac_started = true;
- 		wdev->cac_start_time = jiffies;
- 		wdev->cac_time_ms = cac_time_ms;
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202408170033.rkCwgtSp-lkp@intel.com/
 
-base-commit: cc32e9fb380d8afdbf3486d7063d5520bfb0f071
+All errors (new ones prefixed by >>):
+
+>> drivers/gpu/drm/vmwgfx/vmwgfx_blit.c:503:18: error: call to undeclared function 'floor'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     503 |         diff->rect.y1 = floor(dst_offset / dst_stride);
+         |                         ^
+   1 error generated.
+
+
+vim +/floor +503 drivers/gpu/drm/vmwgfx/vmwgfx_blit.c
+
+   455	
+   456	static int vmw_external_bo_copy(struct vmw_bo *dst, u32 dst_offset,
+   457					u32 dst_stride, struct vmw_bo *src,
+   458					u32 src_offset, u32 src_stride,
+   459					u32 width_in_bytes, u32 height,
+   460					struct vmw_diff_cpy *diff)
+   461	{
+   462		struct vmw_private *vmw =
+   463			container_of(dst->tbo.bdev, struct vmw_private, bdev);
+   464		size_t dst_size = dst->tbo.resource->size;
+   465		size_t src_size = src->tbo.resource->size;
+   466		struct iosys_map dst_map = {0};
+   467		struct iosys_map src_map = {0};
+   468		int ret, i;
+   469		u8 *vsrc;
+   470		u8 *vdst;
+   471	
+   472		vsrc = map_external(src, &src_map);
+   473		if (!vsrc) {
+   474			drm_dbg_driver(&vmw->drm, "Wasn't able to map src\n");
+   475			ret = -ENOMEM;
+   476			goto out;
+   477		}
+   478	
+   479		vdst = map_external(dst, &dst_map);
+   480		if (!vdst) {
+   481			drm_dbg_driver(&vmw->drm, "Wasn't able to map dst\n");
+   482			ret = -ENOMEM;
+   483			goto out;
+   484		}
+   485	
+   486		vsrc += src_offset;
+   487		vdst += dst_offset;
+   488		if (src_stride == dst_stride) {
+   489			dst_size -= dst_offset;
+   490			src_size -= src_offset;
+   491			memcpy(vdst, vsrc,
+   492			       min(dst_stride * height, min(dst_size, src_size)));
+   493		} else {
+   494			WARN_ON(dst_stride < width_in_bytes);
+   495			for (i = 0; i < height; ++i) {
+   496				memcpy(vdst, vsrc, width_in_bytes);
+   497				vsrc += src_stride;
+   498				vdst += dst_stride;
+   499			}
+   500		}
+   501	
+   502		diff->rect.x1 = (dst_offset % dst_stride) / diff->cpp;
+ > 503		diff->rect.y1 = floor(dst_offset / dst_stride);
+   504		diff->rect.x2 = diff->rect.x1 + width_in_bytes / diff->cpp;
+   505		diff->rect.y2 = diff->rect.y1 + height;
+   506	
+   507		ret = 0;
+   508	out:
+   509		unmap_external(src, &src_map);
+   510		unmap_external(dst, &dst_map);
+   511	
+   512		return ret;
+   513	}
+   514	
+
 -- 
-2.39.2
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
