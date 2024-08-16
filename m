@@ -1,67 +1,60 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E145C10FF;
-	Fri, 16 Aug 2024 05:45:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 94CCA1D69E;
+	Fri, 16 Aug 2024 08:40:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723787151; cv=none; b=mrVejBpmzMS0K9a+Bfa/n+7Oge6jbxze6MnBqPpHEvbBybrKzOKEgv1K6fibXk6nT88tEBd10g32mZDO+wJjXBFpQeI0nLMFm37il7cgOKKGQI7ONWfQIx7gaTPMGnKAy/DoP+7fMQzeIdooEjXz5cIcq8v+2+i877AW/VsVjvE=
+	t=1723797605; cv=none; b=sS1Bnmd1bJShRMeyPq8xyYKgAGMC1J33epQXKBik19wCCxR56Y7FON14vuOQsy31wiZeMeqtzwVrdZ2wK1mI1xyyPECjGIr+Rm+fDn8urzKNz2gcn20H0GcE5vsZ8yVWYc40Q9vu9Og7M7KFuUJD+5Q3WLJb7YmjOWIASP7r/Bk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723787151; c=relaxed/simple;
-	bh=5seieGYLmbA90NpyoiI/UcDh1TfyaAxPOaZ9VCPNLLQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=DGvqH+U5hMiETZhnF4nr4LT+O+pbctTAsbp6lsfIkM5LFrSS0Z0jul6/d0MwvEZks1nW7hsPEp4VxsQJewUxUuNKK8eDqL0ipzAmH4jhI9ejUcuSIoCT8YT0R1HUn7TeX1tyPaOxE/7ePnItouXL1G6fmpXXvMTAHSEiEKJVn8s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=DAAvv3vA; arc=none smtp.client-ip=198.175.65.14
+	s=arc-20240116; t=1723797605; c=relaxed/simple;
+	bh=zgJdPsQuIzKATwJaxGKsEk+ujOluJwitq3QTp5gV358=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=rWY0FM19CVi24MvxkgKLqvpaMnQb1MaX/ZJ/2uI1uSzWqiewzmoo6LNKX0VhlC8WrkLWTzHr3qAwyvRxaQoJRczlJUKQNWFrMj3W24f/fYWikU+Hh9sdc2NcbAPCRE+9/77UJh+BlvkSQw94A4SAZNSAvqlMyvULhD2b0/qbzvQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=VIDJelX4; arc=none smtp.client-ip=198.175.65.18
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="DAAvv3vA"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="VIDJelX4"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1723787150; x=1755323150;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=5seieGYLmbA90NpyoiI/UcDh1TfyaAxPOaZ9VCPNLLQ=;
-  b=DAAvv3vAPm3CXnPJjG7Avnr7ahB/YPlerXw4jC1Kiohc5lzJMXIsV2zS
-   B7xUEV78/0s1VxkEuYCX7HLqdEhXbaiowF2ljq+pGfHgu3I5NXrfTy3Vb
-   kOZvjUeNQEgVqAbSPpBgyxuR1N9bdRis2j1oSC4QrCOa7sM8tyCNlvyu8
-   Pp5wU9iDPJ/eCPKb32Ooj9a8Mcid+wZaCLSM+QxLRnw/j+ahKShhRhJkt
-   0B2os4ge9fSlE1yc+XWvQjlyWuJrF8YuORnt2zyXfDkWJxcUmjtpDUjYO
-   gfXNuVNAv3/VAuBar0IEwDOJC5rYW6qtHGaHvwtz1ESy429SjnYLkxJVX
+  t=1723797603; x=1755333603;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=zgJdPsQuIzKATwJaxGKsEk+ujOluJwitq3QTp5gV358=;
+  b=VIDJelX4ELmJQOp6bZh1/YZtbYHKF56irygXjiL8413BuuXaK2K1oujO
+   1/9JL6KJ9CuwxE77Az4cPesflBZ1DifUYKtQKW6O+wcWUnVPFJm4gfWr5
+   QoaK4kNV0POh2RSbp5+StVWyT57rcV2rBt5t8Vq/t11yquGbb5KU63A57
+   BI1Rqu9eTcIh7NzPp/RbCmLzEH2JXcDsxcImUPothtS3bDRRlSo9nouNI
+   MrtYVZUgvcW9V8tE6MRjj2WE713bfFFmg5TNrT9OPGG6Dl7FKRs1h9RL7
+   rrK31Uen4Dgrv6Ns1CbnSrOYOD4aU6vF65gE3298wnKreUcVpzELU+/CP
    Q==;
-X-CSE-ConnectionGUID: iZGtCp0MQoOHe5mAKHUgPg==
-X-CSE-MsgGUID: H4ZKh/RpSH2ErUUKuoMFsg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11165"; a="25872744"
-X-IronPort-AV: E=Sophos;i="6.10,150,1719903600"; 
-   d="scan'208";a="25872744"
-Received: from fmviesa004.fm.intel.com ([10.60.135.144])
-  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Aug 2024 22:45:49 -0700
-X-CSE-ConnectionGUID: lfSsCFwWRk2AQj11KnsSuQ==
-X-CSE-MsgGUID: eyAXFNBhRPmlaKlfnpYbag==
+X-CSE-ConnectionGUID: dAT1jQxXTVK2lsL8DPMVaw==
+X-CSE-MsgGUID: yrPU+ktiQdqyGvr6ioSsDA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11165"; a="22231238"
+X-IronPort-AV: E=Sophos;i="6.10,151,1719903600"; 
+   d="scan'208";a="22231238"
+Received: from orviesa003.jf.intel.com ([10.64.159.143])
+  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Aug 2024 01:40:01 -0700
+X-CSE-ConnectionGUID: KFGomDEIRVqHeQSBZisN9w==
+X-CSE-MsgGUID: VDRb+2X+SROvDpBZxcXH9w==
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.10,150,1719903600"; 
-   d="scan'208";a="64251228"
+X-IronPort-AV: E=Sophos;i="6.10,151,1719903600"; 
+   d="scan'208";a="64457497"
 Received: from lkp-server01.sh.intel.com (HELO 9a732dc145d3) ([10.239.97.150])
-  by fmviesa004.fm.intel.com with ESMTP; 15 Aug 2024 22:45:46 -0700
+  by orviesa003.jf.intel.com with ESMTP; 16 Aug 2024 01:40:00 -0700
 Received: from kbuild by 9a732dc145d3 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1sepmR-00063K-32;
-	Fri, 16 Aug 2024 05:45:43 +0000
-Date: Fri, 16 Aug 2024 13:45:36 +0800
+	id 1sesV4-0006B7-0P;
+	Fri, 16 Aug 2024 08:39:58 +0000
+Date: Fri, 16 Aug 2024 16:39:05 +0800
 From: kernel test robot <lkp@intel.com>
-To: Matteo Croce <technoboy85@gmail.com>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Masami Hiramatsu <mhiramat@kernel.org>, bpf@vger.kernel.org,
-	linux-trace-kernel@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org, Matteo Croce <teknoraver@meta.com>
-Subject: Re: [PATCH bpf-next v5 2/2] bpf: allow
- bpf_current_task_under_cgroup() with BPF_CGROUP_*
-Message-ID: <202408161356.OvFB1jZi-lkp@intel.com>
-References: <20240813132831.184362-3-technoboy85@gmail.com>
+To: "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [mhiramat:topic/fprobe-on-fgraph 10/19]
+ include/linux/ftrace.h:264:28: error: call to undeclared function
+ 'ftrace_regs_get_stack_pointer'; ISO C99 and later do not support implicit
+ function declarations
+Message-ID: <202408161636.mIm5W04D-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -70,32 +63,168 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240813132831.184362-3-technoboy85@gmail.com>
 
-Hi Matteo,
-
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on bpf-next/master]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Matteo-Croce/bpf-enable-generic-kfuncs-for-BPF_CGROUP_-programs/20240815-000517
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git master
-patch link:    https://lore.kernel.org/r/20240813132831.184362-3-technoboy85%40gmail.com
-patch subject: [PATCH bpf-next v5 2/2] bpf: allow bpf_current_task_under_cgroup() with BPF_CGROUP_*
-config: i386-buildonly-randconfig-002-20240816 (https://download.01.org/0day-ci/archive/20240816/202408161356.OvFB1jZi-lkp@intel.com/config)
-compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240816/202408161356.OvFB1jZi-lkp@intel.com/reproduce)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/mhiramat/linux.git topic/fprobe-on-fgraph
+head:   d00cdb5960eaccf07cb9c52d10c67ddb44035e52
+commit: 64dcf89f4462f3bb3bf5a39ddfd8c2689bbe2b88 [10/19] tracing/fprobe: Enable fprobe events with CONFIG_DYNAMIC_FTRACE_WITH_ARGS
+config: riscv-randconfig-001-20240816 (https://download.01.org/0day-ci/archive/20240816/202408161636.mIm5W04D-lkp@intel.com/config)
+compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 26670e7fa4f032a019d23d56c6a02926e854e8af)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240816/202408161636.mIm5W04D-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202408161356.OvFB1jZi-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202408161636.mIm5W04D-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All error/warnings (new ones prefixed by >>):
 
->> ld.lld: error: undefined symbol: bpf_current_task_under_cgroup_proto
-   >>> referenced by bpf_trace.c
-   >>>               kernel/trace/bpf_trace.o:(bpf_tracing_func_proto) in archive vmlinux.a
+   In file included from arch/riscv/kernel/asm-offsets.c:10:
+   In file included from include/linux/mm.h:2228:
+   include/linux/vmstat.h:514:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     514 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+   In file included from arch/riscv/kernel/asm-offsets.c:12:
+   include/linux/ftrace.h:176:9: error: call to undeclared function 'arch_ftrace_get_regs'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     176 |         return arch_ftrace_get_regs(fregs);
+         |                ^
+   include/linux/ftrace.h:176:9: note: did you mean 'ftrace_get_regs'?
+   include/linux/ftrace.h:171:40: note: 'ftrace_get_regs' declared here
+     171 | static __always_inline struct pt_regs *ftrace_get_regs(struct ftrace_regs *fregs)
+         |                                        ^
+     172 | {
+     173 |         if (!fregs)
+     174 |                 return NULL;
+     175 | 
+     176 |         return arch_ftrace_get_regs(fregs);
+         |                ~~~~~~~~~~~~~~~~~~~~
+         |                ftrace_get_regs
+   include/linux/ftrace.h:176:9: error: incompatible integer to pointer conversion returning 'int' from a function with result type 'struct pt_regs *' [-Wint-conversion]
+     176 |         return arch_ftrace_get_regs(fregs);
+         |                ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+>> include/linux/ftrace.h:264:28: error: call to undeclared function 'ftrace_regs_get_stack_pointer'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     264 |         stackp = (unsigned long *)ftrace_regs_get_stack_pointer(fregs);
+         |                                   ^
+>> include/linux/ftrace.h:264:11: warning: cast to 'unsigned long *' from smaller integer type 'int' [-Wint-to-pointer-cast]
+     264 |         stackp = (unsigned long *)ftrace_regs_get_stack_pointer(fregs);
+         |                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   2 warnings and 3 errors generated.
+   make[3]: *** [scripts/Makefile.build:117: arch/riscv/kernel/asm-offsets.s] Error 1 shuffle=3949777697
+   make[3]: Target 'prepare' not remade because of errors.
+   make[2]: *** [Makefile:1193: prepare0] Error 2 shuffle=3949777697
+   make[2]: Target 'prepare' not remade because of errors.
+   make[1]: *** [Makefile:224: __sub-make] Error 2 shuffle=3949777697
+   make[1]: Target 'prepare' not remade because of errors.
+   make: *** [Makefile:224: __sub-make] Error 2 shuffle=3949777697
+   make: Target 'prepare' not remade because of errors.
+
+
+vim +/ftrace_regs_get_stack_pointer +264 include/linux/ftrace.h
+
+   170	
+   171	static __always_inline struct pt_regs *ftrace_get_regs(struct ftrace_regs *fregs)
+   172	{
+   173		if (!fregs)
+   174			return NULL;
+   175	
+ > 176		return arch_ftrace_get_regs(fregs);
+   177	}
+   178	
+   179	#if !defined(CONFIG_HAVE_DYNAMIC_FTRACE_WITH_ARGS) || \
+   180		defined(CONFIG_HAVE_PT_REGS_TO_FTRACE_REGS_CAST)
+   181	
+   182	static __always_inline struct pt_regs *
+   183	ftrace_partial_regs(struct ftrace_regs *fregs, struct pt_regs *regs)
+   184	{
+   185		/*
+   186		 * If CONFIG_HAVE_PT_REGS_TO_FTRACE_REGS_CAST=y, ftrace_regs memory
+   187		 * layout is the same as pt_regs. So always returns that address.
+   188		 * Since arch_ftrace_get_regs() will check some members and may return
+   189		 * NULL, we can not use it.
+   190		 */
+   191		return &fregs->regs;
+   192	}
+   193	
+   194	#endif /* !CONFIG_HAVE_DYNAMIC_FTRACE_WITH_ARGS || CONFIG_HAVE_PT_REGS_TO_FTRACE_REGS_CAST */
+   195	
+   196	#ifdef CONFIG_HAVE_DYNAMIC_FTRACE_WITH_ARGS
+   197	
+   198	/*
+   199	 * Please define arch dependent pt_regs which compatible to the
+   200	 * perf_arch_fetch_caller_regs() but based on ftrace_regs.
+   201	 * This requires
+   202	 *   - user_mode(_regs) returns false (always kernel mode).
+   203	 *   - able to use the _regs for stack trace.
+   204	 */
+   205	#ifndef arch_ftrace_fill_perf_regs
+   206	/* As same as perf_arch_fetch_caller_regs(), do nothing by default */
+   207	#define arch_ftrace_fill_perf_regs(fregs, _regs) do {} while (0)
+   208	#endif
+   209	
+   210	static __always_inline struct pt_regs *
+   211	ftrace_fill_perf_regs(struct ftrace_regs *fregs, struct pt_regs *regs)
+   212	{
+   213		arch_ftrace_fill_perf_regs(fregs, regs);
+   214		return regs;
+   215	}
+   216	
+   217	#else /* !CONFIG_HAVE_DYNAMIC_FTRACE_WITH_ARGS */
+   218	
+   219	static __always_inline struct pt_regs *
+   220	ftrace_fill_perf_regs(struct ftrace_regs *fregs, struct pt_regs *regs)
+   221	{
+   222		return &fregs->regs;
+   223	}
+   224	
+   225	#endif
+   226	
+   227	/*
+   228	 * When true, the ftrace_regs_{get,set}_*() functions may be used on fregs.
+   229	 * Note: this can be true even when ftrace_get_regs() cannot provide a pt_regs.
+   230	 */
+   231	static __always_inline bool ftrace_regs_has_args(struct ftrace_regs *fregs)
+   232	{
+   233		if (IS_ENABLED(CONFIG_HAVE_DYNAMIC_FTRACE_WITH_ARGS))
+   234			return true;
+   235	
+   236		return ftrace_get_regs(fregs) != NULL;
+   237	}
+   238	
+   239	#ifndef CONFIG_HAVE_DYNAMIC_FTRACE_WITH_ARGS
+   240	#define ftrace_regs_get_instruction_pointer(fregs) \
+   241		instruction_pointer(ftrace_get_regs(fregs))
+   242	#define ftrace_regs_get_argument(fregs, n) \
+   243		regs_get_kernel_argument(ftrace_get_regs(fregs), n)
+   244	#define ftrace_regs_get_stack_pointer(fregs) \
+   245		kernel_stack_pointer(ftrace_get_regs(fregs))
+   246	#define ftrace_regs_get_return_value(fregs) \
+   247		regs_return_value(ftrace_get_regs(fregs))
+   248	#define ftrace_regs_set_return_value(fregs, ret) \
+   249		regs_set_return_value(ftrace_get_regs(fregs), ret)
+   250	#define ftrace_override_function_with_return(fregs) \
+   251		override_function_with_return(ftrace_get_regs(fregs))
+   252	#define ftrace_regs_query_register_offset(name) \
+   253		regs_query_register_offset(name)
+   254	#define ftrace_regs_get_frame_pointer(fregs) \
+   255		frame_pointer(&(fregs)->regs)
+   256	#endif
+   257	
+   258	#ifdef CONFIG_HAVE_REGS_AND_STACK_ACCESS_API
+   259	static __always_inline unsigned long
+   260	ftrace_regs_get_kernel_stack_nth(struct ftrace_regs *fregs, unsigned int nth)
+   261	{
+   262		unsigned long *stackp;
+   263	
+ > 264		stackp = (unsigned long *)ftrace_regs_get_stack_pointer(fregs);
+   265		if (((unsigned long)(stackp + nth) & ~(THREAD_SIZE - 1)) ==
+   266		    ((unsigned long)stackp & ~(THREAD_SIZE - 1)))
+   267			return *(stackp + nth);
+   268	
+   269		return 0;
+   270	}
+   271	#else /* !CONFIG_HAVE_REGS_AND_STACK_ACCESS_API */
+   272	#define ftrace_regs_get_kernel_stack_nth(fregs, nth)	(0L)
+   273	#endif /* CONFIG_HAVE_REGS_AND_STACK_ACCESS_API */
+   274	
 
 -- 
 0-DAY CI Kernel Test Service
