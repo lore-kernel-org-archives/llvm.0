@@ -1,70 +1,58 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C3D029D06;
-	Fri, 16 Aug 2024 01:40:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 70ED6219E4;
+	Fri, 16 Aug 2024 02:11:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723772442; cv=none; b=YU/vQU0bhZ3ZeogxV6FrvjaEPkY/8xj0+oVh/oOwiJQqYRtSKxyl+Vt0Rvco26sDAkwmAm4j0zB9pyHXeakRFs/YDdYM9euSZskxvtNQaGsRc0PQPRmRotT6mefSV6yv9KUCbfUAex1xCog255vjeWbCo0PZYs09Sx53Ms6Fp20=
+	t=1723774299; cv=none; b=oYhlKW4ZfqUcReaQmYNnGQbAqRJFeJx0XNr3dUVkKDxS1fmizffxgAk3V+1JE5tTAA3mwl0sUXeGYJv+xkybY84nELchwU0cOy+D3Q/N33PH0X1/eM8/yMZTQpLobPDYhW+kM6UNby/bXc/xWMToIJ/XCKsfJg15Kf+Df8E5i1Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723772442; c=relaxed/simple;
-	bh=FHJRwW+7bRBSKWk7JuaJ+Xkom00qKybRQe8ByoTp8xM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=CjB8sw4Iji6j3Dut8Jsl08FFRX84LAfyiSSWf7hnzWPfl5wFD2krYY2cXKzUAK998vrp2EctDxC2x+d3Q1xrxucoec54CuudWLdlRZU8YRznWnzWs+RW6G9+7YOV4tzuG7p82/+HsDMkCye1oEu01wfR2TKzwgP49t40a1b7o08=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=G/QR4Wdr; arc=none smtp.client-ip=192.198.163.9
+	s=arc-20240116; t=1723774299; c=relaxed/simple;
+	bh=97DcGFerCZEKJUukiMYNhR9zeP/HeFPpqU8SZnKiHzc=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=PhZzu3gB4DfcfKa33tw0bZgSWNs4xDfQUWAhx+U64cTSLUagVHelsDkIYq8k/mq5bXPWU29mYyo59yxaifO+cjT1cU15a6YoXva1vtd6Bz1uYASaZ7MXte1vnjagNTOSPG9uTReEgB98n/ifp+/9iUOKZshLyoqiQmZTKvDQ2a4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=VMKNNktD; arc=none smtp.client-ip=192.198.163.17
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="G/QR4Wdr"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="VMKNNktD"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1723772439; x=1755308439;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=FHJRwW+7bRBSKWk7JuaJ+Xkom00qKybRQe8ByoTp8xM=;
-  b=G/QR4WdrBXvt9h2oa/e7eO/QG99tpH7FTVsKteBmqrJM+ODkGvGuTBf4
-   CdmTMasvr5YRvA0zoZqXPJw4YgjSqP6MXsmuZpacSCIn+tvwHRK5oOLUF
-   LpMc2uQ8M8IepbBGPOSRUJyLJhNQ9DD6ZF+aTijgQIOwSQ7hsfOA1+eG+
-   5p/CJyng9dNTMlnL4osU2jwJzuVYapEqQ1WcgkJnH20wLEvYBR0kuJ1mm
-   KVbBo+5knyNbni5VjzH5Vtm9Uw1U2l8Za4K2AWZgOe0lVF31gstWTLM08
-   9c6O/pYRjWzT2gFr0ar0/GhbK15j1BW4ObuIWWTXjd1wTsQzcjIGjum52
+  t=1723774297; x=1755310297;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=97DcGFerCZEKJUukiMYNhR9zeP/HeFPpqU8SZnKiHzc=;
+  b=VMKNNktDDyM0k09mP4/2eWsgpxA1EuqKZ/h9iYT79LsMECxlLZnAVJl7
+   42/oOg4VkPu+b8D18M+fjGm3zGTGUg/UbHj5vIXge+aXEsi516epI21tM
+   CvRI+prxmmvlBsgV8lSvml1JA8dGijLJaBStZ+uFxMgMfs2pPoiVb6C3Y
+   AYF9XY7eWQbcT9VzR7X1xiSceQTe1sKRba7Zo8SFG/f8DyOH4ckiYlDTB
+   b7Q+SFZKQohSqltdl0qJuIY/+ET1ZvOUQZ//P89x2JwLhZMcCbcqih0bt
+   WXMGMHF+usdfztwH12nfJs1xrGJ7vN61yfnpYZJBZGDmCECSkj2vWv4IY
    w==;
-X-CSE-ConnectionGUID: dCgCfcICSDiuELyOumu7WA==
-X-CSE-MsgGUID: mqsXAXYmTBqqNVoG59yyMQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11165"; a="32730634"
+X-CSE-ConnectionGUID: NT4Ca5FYSwS3n02SwYrAyQ==
+X-CSE-MsgGUID: +hlJiqHFSoy5lQfN194yuA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11165"; a="21938473"
 X-IronPort-AV: E=Sophos;i="6.10,150,1719903600"; 
-   d="scan'208";a="32730634"
-Received: from orviesa004.jf.intel.com ([10.64.159.144])
-  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Aug 2024 18:40:39 -0700
-X-CSE-ConnectionGUID: okgIv29iR2C0m373nz4+0A==
-X-CSE-MsgGUID: lgC3fOkuQpWCFIwLNk6d5g==
+   d="scan'208";a="21938473"
+Received: from fmviesa002.fm.intel.com ([10.60.135.142])
+  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Aug 2024 19:11:36 -0700
+X-CSE-ConnectionGUID: 8X/+XEEMRTyvGH+tWbJBRA==
+X-CSE-MsgGUID: j0FUQkPhQu232+t+wrMfVw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.10,150,1719903600"; 
-   d="scan'208";a="64472897"
+   d="scan'208";a="82737227"
 Received: from lkp-server01.sh.intel.com (HELO 9a732dc145d3) ([10.239.97.150])
-  by orviesa004.jf.intel.com with ESMTP; 15 Aug 2024 18:40:33 -0700
+  by fmviesa002.fm.intel.com with ESMTP; 15 Aug 2024 19:11:36 -0700
 Received: from kbuild by 9a732dc145d3 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1selx8-0005n0-2f;
-	Fri, 16 Aug 2024 01:40:30 +0000
-Date: Fri, 16 Aug 2024 09:39:40 +0800
+	id 1semRB-0005rC-1o;
+	Fri, 16 Aug 2024 02:11:33 +0000
+Date: Fri, 16 Aug 2024 10:10:58 +0800
 From: kernel test robot <lkp@intel.com>
-To: Jason Andryuk <jason.andryuk@amd.com>, Juergen Gross <jgross@suse.com>,
-	Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-	"H. Peter Anvin" <hpa@zytor.com>,
-	Stefano Stabellini <sstabellini@kernel.org>,
-	Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
-	Paolo Bonzini <pbonzini@redhat.com>,
-	Brian Gerst <brgerst@gmail.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	xen-devel@lists.xenproject.org, linux-kernel@vger.kernel.org,
-	Jason Andryuk <jason.andryuk@amd.com>
-Subject: Re: [PATCH v2 5/5] x86/pvh: Add 64bit relocation page tables
-Message-ID: <202408160955.iKtoU4kP-lkp@intel.com>
-References: <20240814195053.5564-6-jason.andryuk@amd.com>
+To: Jeff Layton <jlayton@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [jlayton:dir-deleg 29/32] fs/namei.c:3265:31: error: use of
+ undeclared identifier 'LEASE_BREAK_DIR_CREATE'
+Message-ID: <202408161001.kPZw71qp-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -73,254 +61,131 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240814195053.5564-6-jason.andryuk@amd.com>
 
-Hi Jason,
-
-kernel test robot noticed the following build warnings:
-
-[auto build test WARNING on tip/x86/core]
-[also build test WARNING on xen-tip/linux-next tip/master linus/master v6.11-rc3 next-20240815]
-[cannot apply to tip/auto-latest]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Jason-Andryuk/xen-sync-elfnote-h-from-xen-tree/20240815-035238
-base:   tip/x86/core
-patch link:    https://lore.kernel.org/r/20240814195053.5564-6-jason.andryuk%40amd.com
-patch subject: [PATCH v2 5/5] x86/pvh: Add 64bit relocation page tables
-config: i386-randconfig-011-20240815 (https://download.01.org/0day-ci/archive/20240816/202408160955.iKtoU4kP-lkp@intel.com/config)
-compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240816/202408160955.iKtoU4kP-lkp@intel.com/reproduce)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jlayton/linux.git dir-deleg
+head:   da853062185ac54cb004d8ca64c0e1267fc2630b
+commit: 34826b13bd039382f5cd5b6a9155121ddb65fe08 [29/32] fs: add a "reason" parameter to try_break_deleg
+config: arm-randconfig-003-20240816 (https://download.01.org/0day-ci/archive/20240816/202408161001.kPZw71qp-lkp@intel.com/config)
+compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project f86594788ce93b696675c94f54016d27a6c21d18)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240816/202408161001.kPZw71qp-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202408160955.iKtoU4kP-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202408161001.kPZw71qp-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
-   In file included from arch/x86/platform/pvh/head.S:19:
-   In file included from arch/x86/include/asm/pgtable_64.h:6:
->> arch/x86/include/asm/pgtable_64_types.h:49:9: warning: 'SHARED_KERNEL_PMD' macro redefined [-Wmacro-redefined]
-      49 | #define SHARED_KERNEL_PMD       0
-         |         ^
-   arch/x86/include/asm/pgtable-3level_types.h:30:9: note: previous definition is here
-      30 | #define SHARED_KERNEL_PMD       (!static_cpu_has(X86_FEATURE_PTI))
-         |         ^
-   In file included from arch/x86/platform/pvh/head.S:19:
-   In file included from arch/x86/include/asm/pgtable_64.h:6:
-   arch/x86/include/asm/pgtable_64_types.h:75:9: warning: 'PGDIR_SHIFT' macro redefined [-Wmacro-redefined]
-      75 | #define PGDIR_SHIFT             39
-         |         ^
-   arch/x86/include/asm/pgtable-3level_types.h:37:9: note: previous definition is here
-      37 | #define PGDIR_SHIFT     30
-         |         ^
-   In file included from arch/x86/platform/pvh/head.S:19:
-   In file included from arch/x86/include/asm/pgtable_64.h:6:
->> arch/x86/include/asm/pgtable_64_types.h:76:9: warning: 'PTRS_PER_PGD' macro redefined [-Wmacro-redefined]
-      76 | #define PTRS_PER_PGD            512
-         |         ^
-   arch/x86/include/asm/pgtable-3level_types.h:38:9: note: previous definition is here
-      38 | #define PTRS_PER_PGD    4
-         |         ^
-   In file included from arch/x86/platform/pvh/head.S:19:
-   In file included from arch/x86/include/asm/pgtable_64.h:6:
-   arch/x86/include/asm/pgtable_64_types.h:99:9: warning: 'PMD_SIZE' macro redefined [-Wmacro-redefined]
-      99 | #define PMD_SIZE        (_AC(1, UL) << PMD_SHIFT)
-         |         ^
-   arch/x86/include/asm/pgtable_32_types.h:12:10: note: previous definition is here
-      12 | # define PMD_SIZE       (1UL << PMD_SHIFT)
-         |          ^
-   In file included from arch/x86/platform/pvh/head.S:19:
-   In file included from arch/x86/include/asm/pgtable_64.h:6:
-   arch/x86/include/asm/pgtable_64_types.h:103:9: warning: 'PGDIR_SIZE' macro redefined [-Wmacro-redefined]
-     103 | #define PGDIR_SIZE      (_AC(1, UL) << PGDIR_SHIFT)
-         |         ^
-   arch/x86/include/asm/pgtable_32_types.h:20:9: note: previous definition is here
-      20 | #define PGDIR_SIZE      (1UL << PGDIR_SHIFT)
-         |         ^
-   In file included from arch/x86/platform/pvh/head.S:19:
-   In file included from arch/x86/include/asm/pgtable_64.h:6:
->> arch/x86/include/asm/pgtable_64_types.h:210:9: warning: 'PGD_KERNEL_START' macro redefined [-Wmacro-redefined]
-     210 | #define PGD_KERNEL_START        ((PAGE_SIZE / 2) / sizeof(pgd_t))
-         |         ^
-   arch/x86/include/asm/pgtable-3level_types.h:53:9: note: previous definition is here
-      53 | #define PGD_KERNEL_START        (CONFIG_PAGE_OFFSET >> PGDIR_SHIFT)
-         |         ^
-   6 warnings generated.
-   /tmp/head-582305.s:252:51: error: expression could not be evaluated
-   L4_PAGE_OFFSET = (((__PAGE_OFFSET_BASE_L4) >> 39) & 511)
-                                                     ^
+   In file included from fs/namei.c:25:
+   In file included from include/linux/pagemap.h:8:
+   In file included from include/linux/mm.h:2228:
+   include/linux/vmstat.h:514:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     514 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+>> fs/namei.c:3265:31: error: use of undeclared identifier 'LEASE_BREAK_DIR_CREATE'
+    3265 |         error = try_break_deleg(dir, LEASE_BREAK_DIR_CREATE, delegated_inode);
+         |                                      ^
+   fs/namei.c:3582:38: error: use of undeclared identifier 'LEASE_BREAK_DIR_CREATE'
+    3582 |                 error = try_break_deleg(dir_inode, LEASE_BREAK_DIR_CREATE, delegated_inode);
+         |                                                    ^
+   fs/namei.c:3613:25: error: variable has incomplete type 'struct delegated_inode'
+    3613 |         struct delegated_inode delegated_inode = { };
+         |                                ^
+   include/linux/fs.h:82:8: note: forward declaration of 'struct delegated_inode'
+      82 | struct delegated_inode;
+         |        ^
+   fs/namei.c:4097:31: error: use of undeclared identifier 'LEASE_BREAK_DIR_CREATE'
+    4097 |         error = try_break_deleg(dir, LEASE_BREAK_DIR_CREATE, delegated_inode);
+         |                                      ^
+   fs/namei.c:4155:25: error: variable has incomplete type 'struct delegated_inode'
+    4155 |         struct delegated_inode delegated_inode = { };
+         |                                ^
+   include/linux/fs.h:82:8: note: forward declaration of 'struct delegated_inode'
+      82 | struct delegated_inode;
+         |        ^
+   fs/namei.c:4240:31: error: use of undeclared identifier 'LEASE_BREAK_DIR_CREATE'
+    4240 |         error = try_break_deleg(dir, LEASE_BREAK_DIR_CREATE, delegated_inode);
+         |                                      ^
+   fs/namei.c:4278:25: error: variable has incomplete type 'struct delegated_inode'
+    4278 |         struct delegated_inode delegated_inode = { };
+         |                                ^
+   include/linux/fs.h:82:8: note: forward declaration of 'struct delegated_inode'
+      82 | struct delegated_inode;
+         |        ^
+>> fs/namei.c:4339:31: error: use of undeclared identifier 'LEASE_BREAK_DIR_DELETE'
+    4339 |         error = try_break_deleg(dir, LEASE_BREAK_DIR_DELETE, delegated_inode);
+         |                                      ^
+   fs/namei.c:4389:25: error: variable has incomplete type 'struct delegated_inode'
+    4389 |         struct delegated_inode delegated_inode = { };
+         |                                ^
+   include/linux/fs.h:82:8: note: forward declaration of 'struct delegated_inode'
+      82 | struct delegated_inode;
+         |        ^
+   fs/namei.c:4496:33: error: use of undeclared identifier 'LEASE_BREAK_DIR_DELETE'
+    4496 |                         error = try_break_deleg(dir, LEASE_BREAK_DIR_DELETE, delegated_inode);
+         |                                                      ^
+   fs/namei.c:4538:25: error: variable has incomplete type 'struct delegated_inode'
+    4538 |         struct delegated_inode delegated_inode = { };
+         |                                ^
+   include/linux/fs.h:82:8: note: forward declaration of 'struct delegated_inode'
+      82 | struct delegated_inode;
+         |        ^
+   fs/namei.c:4770:32: error: use of undeclared identifier 'LEASE_BREAK_DIR_CREATE'
+    4770 |                 error = try_break_deleg(dir, LEASE_BREAK_DIR_CREATE, delegated_inode);
+         |                                              ^
+   fs/namei.c:4804:25: error: variable has incomplete type 'struct delegated_inode'
+    4804 |         struct delegated_inode delegated_inode = { };
+         |                                ^
+   include/linux/fs.h:82:8: note: forward declaration of 'struct delegated_inode'
+      82 | struct delegated_inode;
+         |        ^
+>> fs/namei.c:5039:26: error: use of undeclared identifier 'LEASE_BREAK_DIR_RENAME'
+    5039 |                                 old_dir == new_dir ? LEASE_BREAK_DIR_RENAME :
+         |                                                      ^
+   fs/namei.c:5040:12: error: use of undeclared identifier 'LEASE_BREAK_DIR_DELETE'
+    5040 |                                                      LEASE_BREAK_DIR_DELETE,
+         |                                                      ^
+   fs/namei.c:5045:36: error: use of undeclared identifier 'LEASE_BREAK_DIR_CREATE'
+    5045 |                 error = try_break_deleg(new_dir, LEASE_BREAK_DIR_CREATE, delegated_inode);
+         |                                                  ^
+   fs/namei.c:5107:25: error: variable has incomplete type 'struct delegated_inode'
+    5107 |         struct delegated_inode delegated_inode = { };
+         |                                ^
+   include/linux/fs.h:82:8: note: forward declaration of 'struct delegated_inode'
+      82 | struct delegated_inode;
+         |        ^
+   1 warning and 17 errors generated.
 
 
-vim +/PTRS_PER_PGD +76 arch/x86/include/asm/pgtable_64_types.h
+vim +/LEASE_BREAK_DIR_CREATE +3265 fs/namei.c
 
-54321d947ae9d6 Jeremy Fitzhardinge 2009-02-11   48  
-fb3551491b2044 Jeremy Fitzhardinge 2009-02-08  @49  #define SHARED_KERNEL_PMD	0
-fb3551491b2044 Jeremy Fitzhardinge 2009-02-08   50  
-b8504058a06bd1 Kirill A. Shutemov  2017-03-30   51  #ifdef CONFIG_X86_5LEVEL
-b8504058a06bd1 Kirill A. Shutemov  2017-03-30   52  
-b8504058a06bd1 Kirill A. Shutemov  2017-03-30   53  /*
-b8504058a06bd1 Kirill A. Shutemov  2017-03-30   54   * PGDIR_SHIFT determines what a top-level page table entry can map
-b8504058a06bd1 Kirill A. Shutemov  2017-03-30   55   */
-c65e774fb3f6af Kirill A. Shutemov  2018-02-14   56  #define PGDIR_SHIFT	pgdir_shift
-b8504058a06bd1 Kirill A. Shutemov  2017-03-30   57  #define PTRS_PER_PGD	512
-b8504058a06bd1 Kirill A. Shutemov  2017-03-30   58  
-b8504058a06bd1 Kirill A. Shutemov  2017-03-30   59  /*
-b8504058a06bd1 Kirill A. Shutemov  2017-03-30   60   * 4th level page in 5-level paging case
-b8504058a06bd1 Kirill A. Shutemov  2017-03-30   61   */
-b8504058a06bd1 Kirill A. Shutemov  2017-03-30   62  #define P4D_SHIFT		39
-c65e774fb3f6af Kirill A. Shutemov  2018-02-14   63  #define MAX_PTRS_PER_P4D	512
-c65e774fb3f6af Kirill A. Shutemov  2018-02-14   64  #define PTRS_PER_P4D		ptrs_per_p4d
-b8504058a06bd1 Kirill A. Shutemov  2017-03-30   65  #define P4D_SIZE		(_AC(1, UL) << P4D_SHIFT)
-b8504058a06bd1 Kirill A. Shutemov  2017-03-30   66  #define P4D_MASK		(~(P4D_SIZE - 1))
-b8504058a06bd1 Kirill A. Shutemov  2017-03-30   67  
-02390b87a94599 Kirill A. Shutemov  2018-02-14   68  #define MAX_POSSIBLE_PHYSMEM_BITS	52
-02390b87a94599 Kirill A. Shutemov  2018-02-14   69  
-b8504058a06bd1 Kirill A. Shutemov  2017-03-30   70  #else /* CONFIG_X86_5LEVEL */
-b8504058a06bd1 Kirill A. Shutemov  2017-03-30   71  
-fb3551491b2044 Jeremy Fitzhardinge 2009-02-08   72  /*
-fb3551491b2044 Jeremy Fitzhardinge 2009-02-08   73   * PGDIR_SHIFT determines what a top-level page table entry can map
-fb3551491b2044 Jeremy Fitzhardinge 2009-02-08   74   */
-fb3551491b2044 Jeremy Fitzhardinge 2009-02-08   75  #define PGDIR_SHIFT		39
-fb3551491b2044 Jeremy Fitzhardinge 2009-02-08  @76  #define PTRS_PER_PGD		512
-c65e774fb3f6af Kirill A. Shutemov  2018-02-14   77  #define MAX_PTRS_PER_P4D	1
-fb3551491b2044 Jeremy Fitzhardinge 2009-02-08   78  
-b8504058a06bd1 Kirill A. Shutemov  2017-03-30   79  #endif /* CONFIG_X86_5LEVEL */
-b8504058a06bd1 Kirill A. Shutemov  2017-03-30   80  
-fb3551491b2044 Jeremy Fitzhardinge 2009-02-08   81  /*
-fb3551491b2044 Jeremy Fitzhardinge 2009-02-08   82   * 3rd level page
-fb3551491b2044 Jeremy Fitzhardinge 2009-02-08   83   */
-fb3551491b2044 Jeremy Fitzhardinge 2009-02-08   84  #define PUD_SHIFT	30
-fb3551491b2044 Jeremy Fitzhardinge 2009-02-08   85  #define PTRS_PER_PUD	512
-fb3551491b2044 Jeremy Fitzhardinge 2009-02-08   86  
-fb3551491b2044 Jeremy Fitzhardinge 2009-02-08   87  /*
-fb3551491b2044 Jeremy Fitzhardinge 2009-02-08   88   * PMD_SHIFT determines the size of the area a middle-level
-fb3551491b2044 Jeremy Fitzhardinge 2009-02-08   89   * page table can map
-fb3551491b2044 Jeremy Fitzhardinge 2009-02-08   90   */
-fb3551491b2044 Jeremy Fitzhardinge 2009-02-08   91  #define PMD_SHIFT	21
-fb3551491b2044 Jeremy Fitzhardinge 2009-02-08   92  #define PTRS_PER_PMD	512
-fb3551491b2044 Jeremy Fitzhardinge 2009-02-08   93  
-fb3551491b2044 Jeremy Fitzhardinge 2009-02-08   94  /*
-fb3551491b2044 Jeremy Fitzhardinge 2009-02-08   95   * entries per page directory level
-fb3551491b2044 Jeremy Fitzhardinge 2009-02-08   96   */
-fb3551491b2044 Jeremy Fitzhardinge 2009-02-08   97  #define PTRS_PER_PTE	512
-fb3551491b2044 Jeremy Fitzhardinge 2009-02-08   98  
-fb3551491b2044 Jeremy Fitzhardinge 2009-02-08   99  #define PMD_SIZE	(_AC(1, UL) << PMD_SHIFT)
-fb3551491b2044 Jeremy Fitzhardinge 2009-02-08  100  #define PMD_MASK	(~(PMD_SIZE - 1))
-fb3551491b2044 Jeremy Fitzhardinge 2009-02-08  101  #define PUD_SIZE	(_AC(1, UL) << PUD_SHIFT)
-fb3551491b2044 Jeremy Fitzhardinge 2009-02-08  102  #define PUD_MASK	(~(PUD_SIZE - 1))
-fb3551491b2044 Jeremy Fitzhardinge 2009-02-08  103  #define PGDIR_SIZE	(_AC(1, UL) << PGDIR_SHIFT)
-fb3551491b2044 Jeremy Fitzhardinge 2009-02-08  104  #define PGDIR_MASK	(~(PGDIR_SIZE - 1))
-fb3551491b2044 Jeremy Fitzhardinge 2009-02-08  105  
-1dddd25125112b Thomas Gleixner     2018-01-04  106  /*
-ff61f0791ce969 Jonathan Corbet     2023-03-14  107   * See Documentation/arch/x86/x86_64/mm.rst for a description of the memory map.
-1dddd25125112b Thomas Gleixner     2018-01-04  108   *
-1dddd25125112b Thomas Gleixner     2018-01-04  109   * Be very careful vs. KASLR when changing anything here. The KASLR address
-1dddd25125112b Thomas Gleixner     2018-01-04  110   * range must not overlap with anything except the KASAN shadow area, which
-1dddd25125112b Thomas Gleixner     2018-01-04  111   * is correct as KASAN disables KASLR.
-1dddd25125112b Thomas Gleixner     2018-01-04  112   */
-162434e7f58b21 Kirill A. Shutemov  2018-02-14  113  #define MAXMEM			(1UL << MAX_PHYSMEM_BITS)
-92a0f81d89571e Thomas Gleixner     2017-12-20  114  
-16877a5570e0c5 Kirill A. Shutemov  2018-11-30  115  #define GUARD_HOLE_PGD_ENTRY	-256UL
-16877a5570e0c5 Kirill A. Shutemov  2018-11-30  116  #define GUARD_HOLE_SIZE		(16UL << PGDIR_SHIFT)
-16877a5570e0c5 Kirill A. Shutemov  2018-11-30  117  #define GUARD_HOLE_BASE_ADDR	(GUARD_HOLE_PGD_ENTRY << PGDIR_SHIFT)
-16877a5570e0c5 Kirill A. Shutemov  2018-11-30  118  #define GUARD_HOLE_END_ADDR	(GUARD_HOLE_BASE_ADDR + GUARD_HOLE_SIZE)
-16877a5570e0c5 Kirill A. Shutemov  2018-11-30  119  
-d52888aa2753e3 Kirill A. Shutemov  2018-10-26  120  #define LDT_PGD_ENTRY		-240UL
-5c7919bb1994f8 Kirill A. Shutemov  2018-02-14  121  #define LDT_BASE_ADDR		(LDT_PGD_ENTRY << PGDIR_SHIFT)
-8195d869d118bc Joerg Roedel        2018-07-18  122  #define LDT_END_ADDR		(LDT_BASE_ADDR + PGDIR_SIZE)
-5c7919bb1994f8 Kirill A. Shutemov  2018-02-14  123  
-14d12bb8582e15 Jiri Kosina         2018-04-12  124  #define __VMALLOC_BASE_L4	0xffffc90000000000UL
-14d12bb8582e15 Jiri Kosina         2018-04-12  125  #define __VMALLOC_BASE_L5 	0xffa0000000000000UL
-a7412546d8cb5a Kirill A. Shutemov  2018-02-14  126  
-a7412546d8cb5a Kirill A. Shutemov  2018-02-14  127  #define VMALLOC_SIZE_TB_L4	32UL
-a7412546d8cb5a Kirill A. Shutemov  2018-02-14  128  #define VMALLOC_SIZE_TB_L5	12800UL
-a7412546d8cb5a Kirill A. Shutemov  2018-02-14  129  
-14d12bb8582e15 Jiri Kosina         2018-04-12  130  #define __VMEMMAP_BASE_L4	0xffffea0000000000UL
-14d12bb8582e15 Jiri Kosina         2018-04-12  131  #define __VMEMMAP_BASE_L5	0xffd4000000000000UL
-92a0f81d89571e Thomas Gleixner     2017-12-20  132  
-eedb92abb9bb03 Kirill A. Shutemov  2018-02-14  133  #ifdef CONFIG_DYNAMIC_MEMORY_LAYOUT
-a95ae27c2ee1cb Thomas Garnier      2016-06-21  134  # define VMALLOC_START		vmalloc_base
-ed7588d5dc6f5e Kirill A. Shutemov  2018-05-18  135  # define VMALLOC_SIZE_TB	(pgtable_l5_enabled() ? VMALLOC_SIZE_TB_L5 : VMALLOC_SIZE_TB_L4)
-25dfe478533272 Thomas Garnier      2016-07-27  136  # define VMEMMAP_START		vmemmap_base
-a95ae27c2ee1cb Thomas Garnier      2016-06-21  137  #else
-a7412546d8cb5a Kirill A. Shutemov  2018-02-14  138  # define VMALLOC_START		__VMALLOC_BASE_L4
-a7412546d8cb5a Kirill A. Shutemov  2018-02-14  139  # define VMALLOC_SIZE_TB	VMALLOC_SIZE_TB_L4
-9b46a051e43461 Kirill A. Shutemov  2018-02-14  140  # define VMEMMAP_START		__VMEMMAP_BASE_L4
-eedb92abb9bb03 Kirill A. Shutemov  2018-02-14  141  #endif /* CONFIG_DYNAMIC_MEMORY_LAYOUT */
-92a0f81d89571e Thomas Gleixner     2017-12-20  142  
-1a167ddd3c561b Alexander Potapenko 2022-09-15  143  /*
-1a167ddd3c561b Alexander Potapenko 2022-09-15  144   * End of the region for which vmalloc page tables are pre-allocated.
-1a167ddd3c561b Alexander Potapenko 2022-09-15  145   * For non-KMSAN builds, this is the same as VMALLOC_END.
-1a167ddd3c561b Alexander Potapenko 2022-09-15  146   * For KMSAN builds, VMALLOC_START..VMEMORY_END is 4 times bigger than
-1a167ddd3c561b Alexander Potapenko 2022-09-15  147   * VMALLOC_START..VMALLOC_END (see below).
-1a167ddd3c561b Alexander Potapenko 2022-09-15  148   */
-1a167ddd3c561b Alexander Potapenko 2022-09-15  149  #define VMEMORY_END		(VMALLOC_START + (VMALLOC_SIZE_TB << 40) - 1)
-1a167ddd3c561b Alexander Potapenko 2022-09-15  150  
-1a167ddd3c561b Alexander Potapenko 2022-09-15  151  #ifndef CONFIG_KMSAN
-1a167ddd3c561b Alexander Potapenko 2022-09-15  152  #define VMALLOC_END		VMEMORY_END
-1a167ddd3c561b Alexander Potapenko 2022-09-15  153  #else
-1a167ddd3c561b Alexander Potapenko 2022-09-15  154  /*
-1a167ddd3c561b Alexander Potapenko 2022-09-15  155   * In KMSAN builds vmalloc area is four times smaller, and the remaining 3/4
-1a167ddd3c561b Alexander Potapenko 2022-09-15  156   * are used to keep the metadata for virtual pages. The memory formerly
-1a167ddd3c561b Alexander Potapenko 2022-09-15  157   * belonging to vmalloc area is now laid out as follows:
-1a167ddd3c561b Alexander Potapenko 2022-09-15  158   *
-1a167ddd3c561b Alexander Potapenko 2022-09-15  159   * 1st quarter: VMALLOC_START to VMALLOC_END - new vmalloc area
-1a167ddd3c561b Alexander Potapenko 2022-09-15  160   * 2nd quarter: KMSAN_VMALLOC_SHADOW_START to
-1a167ddd3c561b Alexander Potapenko 2022-09-15  161   *              VMALLOC_END+KMSAN_VMALLOC_SHADOW_OFFSET - vmalloc area shadow
-1a167ddd3c561b Alexander Potapenko 2022-09-15  162   * 3rd quarter: KMSAN_VMALLOC_ORIGIN_START to
-1a167ddd3c561b Alexander Potapenko 2022-09-15  163   *              VMALLOC_END+KMSAN_VMALLOC_ORIGIN_OFFSET - vmalloc area origins
-1a167ddd3c561b Alexander Potapenko 2022-09-15  164   * 4th quarter: KMSAN_MODULES_SHADOW_START to KMSAN_MODULES_ORIGIN_START
-1a167ddd3c561b Alexander Potapenko 2022-09-15  165   *              - shadow for modules,
-1a167ddd3c561b Alexander Potapenko 2022-09-15  166   *              KMSAN_MODULES_ORIGIN_START to
-1a167ddd3c561b Alexander Potapenko 2022-09-15  167   *              KMSAN_MODULES_ORIGIN_START + MODULES_LEN - origins for modules.
-1a167ddd3c561b Alexander Potapenko 2022-09-15  168   */
-1a167ddd3c561b Alexander Potapenko 2022-09-15  169  #define VMALLOC_QUARTER_SIZE	((VMALLOC_SIZE_TB << 40) >> 2)
-1a167ddd3c561b Alexander Potapenko 2022-09-15  170  #define VMALLOC_END		(VMALLOC_START + VMALLOC_QUARTER_SIZE - 1)
-1a167ddd3c561b Alexander Potapenko 2022-09-15  171  
-1a167ddd3c561b Alexander Potapenko 2022-09-15  172  /*
-1a167ddd3c561b Alexander Potapenko 2022-09-15  173   * vmalloc metadata addresses are calculated by adding shadow/origin offsets
-1a167ddd3c561b Alexander Potapenko 2022-09-15  174   * to vmalloc address.
-1a167ddd3c561b Alexander Potapenko 2022-09-15  175   */
-1a167ddd3c561b Alexander Potapenko 2022-09-15  176  #define KMSAN_VMALLOC_SHADOW_OFFSET	VMALLOC_QUARTER_SIZE
-1a167ddd3c561b Alexander Potapenko 2022-09-15  177  #define KMSAN_VMALLOC_ORIGIN_OFFSET	(VMALLOC_QUARTER_SIZE << 1)
-1a167ddd3c561b Alexander Potapenko 2022-09-15  178  
-1a167ddd3c561b Alexander Potapenko 2022-09-15  179  #define KMSAN_VMALLOC_SHADOW_START	(VMALLOC_START + KMSAN_VMALLOC_SHADOW_OFFSET)
-1a167ddd3c561b Alexander Potapenko 2022-09-15  180  #define KMSAN_VMALLOC_ORIGIN_START	(VMALLOC_START + KMSAN_VMALLOC_ORIGIN_OFFSET)
-1a167ddd3c561b Alexander Potapenko 2022-09-15  181  
-1a167ddd3c561b Alexander Potapenko 2022-09-15  182  /*
-1a167ddd3c561b Alexander Potapenko 2022-09-15  183   * The shadow/origin for modules are placed one by one in the last 1/4 of
-1a167ddd3c561b Alexander Potapenko 2022-09-15  184   * vmalloc space.
-1a167ddd3c561b Alexander Potapenko 2022-09-15  185   */
-1a167ddd3c561b Alexander Potapenko 2022-09-15  186  #define KMSAN_MODULES_SHADOW_START	(VMALLOC_END + KMSAN_VMALLOC_ORIGIN_OFFSET + 1)
-1a167ddd3c561b Alexander Potapenko 2022-09-15  187  #define KMSAN_MODULES_ORIGIN_START	(KMSAN_MODULES_SHADOW_START + MODULES_LEN)
-1a167ddd3c561b Alexander Potapenko 2022-09-15  188  #endif /* CONFIG_KMSAN */
-92a0f81d89571e Thomas Gleixner     2017-12-20  189  
-6145cfe394a7f1 Kees Cook           2013-10-10  190  #define MODULES_VADDR		(__START_KERNEL_map + KERNEL_IMAGE_SIZE)
-f06bdd4001c257 Thomas Garnier      2017-03-14  191  /* The module sections ends with the start of the fixmap */
-14df3267029158 Thomas Gleixner     2020-11-18  192  #ifndef CONFIG_DEBUG_KMAP_LOCAL_FORCE_MAP
-f5a40711fa58f1 Andrey Ryabinin     2017-12-28  193  # define MODULES_END		_AC(0xffffffffff000000, UL)
-14df3267029158 Thomas Gleixner     2020-11-18  194  #else
-14df3267029158 Thomas Gleixner     2020-11-18  195  # define MODULES_END		_AC(0xfffffffffe000000, UL)
-14df3267029158 Thomas Gleixner     2020-11-18  196  #endif
-fb3551491b2044 Jeremy Fitzhardinge 2009-02-08  197  #define MODULES_LEN		(MODULES_END - MODULES_VADDR)
-92a0f81d89571e Thomas Gleixner     2017-12-20  198  
-3891a04aafd668 H. Peter Anvin      2014-04-29  199  #define ESPFIX_PGD_ENTRY	_AC(-2, UL)
-1d33b219563fb9 Kirill A. Shutemov  2017-03-30  200  #define ESPFIX_BASE_ADDR	(ESPFIX_PGD_ENTRY << P4D_SHIFT)
-92a0f81d89571e Thomas Gleixner     2017-12-20  201  
-f2078904810373 Thomas Gleixner     2018-01-04  202  #define CPU_ENTRY_AREA_PGD	_AC(-4, UL)
-92a0f81d89571e Thomas Gleixner     2017-12-20  203  #define CPU_ENTRY_AREA_BASE	(CPU_ENTRY_AREA_PGD << P4D_SHIFT)
-92a0f81d89571e Thomas Gleixner     2017-12-20  204  
-8266e31ed0fedb Mathias Krause      2014-09-21  205  #define EFI_VA_START		( -4 * (_AC(1, UL) << 30))
-8266e31ed0fedb Mathias Krause      2014-09-21  206  #define EFI_VA_END		(-68 * (_AC(1, UL) << 30))
-fb3551491b2044 Jeremy Fitzhardinge 2009-02-08  207  
-8170e6bed465b4 H. Peter Anvin      2013-01-24  208  #define EARLY_DYNAMIC_PAGE_TABLES	64
-8170e6bed465b4 H. Peter Anvin      2013-01-24  209  
-76e258add7b653 Joerg Roedel        2018-07-18 @210  #define PGD_KERNEL_START	((PAGE_SIZE / 2) / sizeof(pgd_t))
-76e258add7b653 Joerg Roedel        2018-07-18  211  
+  3247	
+  3248	static int __vfs_create(struct mnt_idmap *idmap, struct inode *dir,
+  3249				struct dentry *dentry, umode_t mode, bool want_excl,
+  3250				struct delegated_inode *delegated_inode)
+  3251	{
+  3252		int error;
+  3253	
+  3254		error = may_create(idmap, dir, dentry);
+  3255		if (error)
+  3256			return error;
+  3257	
+  3258		if (!dir->i_op->create)
+  3259			return -EACCES;	/* shouldn't it be ENOSYS? */
+  3260	
+  3261		mode = vfs_prepare_mode(idmap, dir, mode, S_IALLUGO, S_IFREG);
+  3262		error = security_inode_create(dir, dentry, mode);
+  3263		if (error)
+  3264			return error;
+> 3265		error = try_break_deleg(dir, LEASE_BREAK_DIR_CREATE, delegated_inode);
+  3266		if (error)
+  3267			return error;
+  3268		error = dir->i_op->create(idmap, dir, dentry, mode, want_excl);
+  3269		if (!error)
+  3270			fsnotify_create(dir, dentry);
+  3271		return error;
+  3272	}
+  3273	
 
 -- 
 0-DAY CI Kernel Test Service
