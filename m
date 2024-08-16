@@ -1,231 +1,153 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
+Received: from szxga07-in.huawei.com (szxga07-in.huawei.com [45.249.212.35])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 94CCA1D69E;
-	Fri, 16 Aug 2024 08:40:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C110217BEB7
+	for <llvm@lists.linux.dev>; Fri, 16 Aug 2024 10:58:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.35
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723797605; cv=none; b=sS1Bnmd1bJShRMeyPq8xyYKgAGMC1J33epQXKBik19wCCxR56Y7FON14vuOQsy31wiZeMeqtzwVrdZ2wK1mI1xyyPECjGIr+Rm+fDn8urzKNz2gcn20H0GcE5vsZ8yVWYc40Q9vu9Og7M7KFuUJD+5Q3WLJb7YmjOWIASP7r/Bk=
+	t=1723805920; cv=none; b=jk46zdRhDNbCrQtKcAL4WE1sLADvXeDey6UuG82sC13wqQq3d2yNzu4sCnGgpwcDytE1uPvUseFW9I/F7UXLQreCX+4fjLaJw1JcCk4hDLKLzHuqkFHRBkBnJqlz1GCOxLEqr6yxP7Dv1uS/Egf37gKreEfHGVpbhZLygjSVAfE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723797605; c=relaxed/simple;
-	bh=zgJdPsQuIzKATwJaxGKsEk+ujOluJwitq3QTp5gV358=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=rWY0FM19CVi24MvxkgKLqvpaMnQb1MaX/ZJ/2uI1uSzWqiewzmoo6LNKX0VhlC8WrkLWTzHr3qAwyvRxaQoJRczlJUKQNWFrMj3W24f/fYWikU+Hh9sdc2NcbAPCRE+9/77UJh+BlvkSQw94A4SAZNSAvqlMyvULhD2b0/qbzvQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=VIDJelX4; arc=none smtp.client-ip=198.175.65.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="VIDJelX4"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1723797603; x=1755333603;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=zgJdPsQuIzKATwJaxGKsEk+ujOluJwitq3QTp5gV358=;
-  b=VIDJelX4ELmJQOp6bZh1/YZtbYHKF56irygXjiL8413BuuXaK2K1oujO
-   1/9JL6KJ9CuwxE77Az4cPesflBZ1DifUYKtQKW6O+wcWUnVPFJm4gfWr5
-   QoaK4kNV0POh2RSbp5+StVWyT57rcV2rBt5t8Vq/t11yquGbb5KU63A57
-   BI1Rqu9eTcIh7NzPp/RbCmLzEH2JXcDsxcImUPothtS3bDRRlSo9nouNI
-   MrtYVZUgvcW9V8tE6MRjj2WE713bfFFmg5TNrT9OPGG6Dl7FKRs1h9RL7
-   rrK31Uen4Dgrv6Ns1CbnSrOYOD4aU6vF65gE3298wnKreUcVpzELU+/CP
-   Q==;
-X-CSE-ConnectionGUID: dAT1jQxXTVK2lsL8DPMVaw==
-X-CSE-MsgGUID: yrPU+ktiQdqyGvr6ioSsDA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11165"; a="22231238"
-X-IronPort-AV: E=Sophos;i="6.10,151,1719903600"; 
-   d="scan'208";a="22231238"
-Received: from orviesa003.jf.intel.com ([10.64.159.143])
-  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Aug 2024 01:40:01 -0700
-X-CSE-ConnectionGUID: KFGomDEIRVqHeQSBZisN9w==
-X-CSE-MsgGUID: VDRb+2X+SROvDpBZxcXH9w==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.10,151,1719903600"; 
-   d="scan'208";a="64457497"
-Received: from lkp-server01.sh.intel.com (HELO 9a732dc145d3) ([10.239.97.150])
-  by orviesa003.jf.intel.com with ESMTP; 16 Aug 2024 01:40:00 -0700
-Received: from kbuild by 9a732dc145d3 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1sesV4-0006B7-0P;
-	Fri, 16 Aug 2024 08:39:58 +0000
-Date: Fri, 16 Aug 2024 16:39:05 +0800
-From: kernel test robot <lkp@intel.com>
-To: "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [mhiramat:topic/fprobe-on-fgraph 10/19]
- include/linux/ftrace.h:264:28: error: call to undeclared function
- 'ftrace_regs_get_stack_pointer'; ISO C99 and later do not support implicit
- function declarations
-Message-ID: <202408161636.mIm5W04D-lkp@intel.com>
+	s=arc-20240116; t=1723805920; c=relaxed/simple;
+	bh=5MKMiHqNYxOWYkERmuriknP4XxB271ms588YEXuYO9I=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=gskAc9qBC93fOa6duUZO4oZ11YaBc4Ju3pP4+vLRee33Ht+Bqks3d+Oop5ZjCvY63Zqhf+PZ+ZnpGo5Fb0QJ35vJmdNQF11HrwqWOxLNoOO+HxYJrzSQYBra5R8/nZfX/wK+4nmXEcLbaU6Pbx21FnR9JYcES1B4m+fM5IA0AtU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.35
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.19.88.163])
+	by szxga07-in.huawei.com (SkyGuard) with ESMTP id 4Wlf4309Sxz1S82c;
+	Fri, 16 Aug 2024 18:53:39 +0800 (CST)
+Received: from kwepemd100011.china.huawei.com (unknown [7.221.188.204])
+	by mail.maildlp.com (Postfix) with ESMTPS id E5471180019;
+	Fri, 16 Aug 2024 18:58:33 +0800 (CST)
+Received: from M910t.huawei.com (10.110.54.157) by
+ kwepemd100011.china.huawei.com (7.221.188.204) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1258.34; Fri, 16 Aug 2024 18:58:32 +0800
+From: Changbin Du <changbin.du@huawei.com>
+To: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>,
+	Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim
+	<namhyung@kernel.org>, Nathan Chancellor <nathan@kernel.org>
+CC: Mark Rutland <mark.rutland@arm.com>, Alexander Shishkin
+	<alexander.shishkin@linux.intel.com>, Jiri Olsa <jolsa@kernel.org>, Ian
+ Rogers <irogers@google.com>, Adrian Hunter <adrian.hunter@intel.com>, "Liang,
+ Kan" <kan.liang@linux.intel.com>, Nick Desaulniers <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
+	<linux-perf-users@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<llvm@lists.linux.dev>, Hui Wang <hw.huiwang@huawei.com>, Changbin Du
+	<changbin.du@huawei.com>
+Subject: [RESEND PATCH v6 0/8] perf: Support searching local debugging vdso or specify vdso path in cmdline
+Date: Fri, 16 Aug 2024 18:58:03 +0800
+Message-ID: <20240816105811.1812897-1-changbin.du@huawei.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ kwepemd100011.china.huawei.com (7.221.188.204)
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/mhiramat/linux.git topic/fprobe-on-fgraph
-head:   d00cdb5960eaccf07cb9c52d10c67ddb44035e52
-commit: 64dcf89f4462f3bb3bf5a39ddfd8c2689bbe2b88 [10/19] tracing/fprobe: Enable fprobe events with CONFIG_DYNAMIC_FTRACE_WITH_ARGS
-config: riscv-randconfig-001-20240816 (https://download.01.org/0day-ci/archive/20240816/202408161636.mIm5W04D-lkp@intel.com/config)
-compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 26670e7fa4f032a019d23d56c6a02926e854e8af)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240816/202408161636.mIm5W04D-lkp@intel.com/reproduce)
+The vdso dumped from process memory (in buildid-cache) lacks debugging
+info. To annotate vdso symbols with source lines we need a debugging
+version.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202408161636.mIm5W04D-lkp@intel.com/
+For x86, we can find them from your local build as
+'arch/x86/entry/vdso/vdso{32,64}.so.dbg'. Or they may resides in
+'/lib/modules/<version>/vdso/vdso{32,64}.so' on Ubuntu. But notice that the
+builid has to match.
 
-All error/warnings (new ones prefixed by >>):
+If user doesn't specify the path, perf will search them internally as long
+as vmlinux when recording samples. The searched debugging vdso will add to
+buildid cache as ~/.debug/[vdso]/debug.
 
-   In file included from arch/riscv/kernel/asm-offsets.c:10:
-   In file included from include/linux/mm.h:2228:
-   include/linux/vmstat.h:514:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     514 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
-   In file included from arch/riscv/kernel/asm-offsets.c:12:
-   include/linux/ftrace.h:176:9: error: call to undeclared function 'arch_ftrace_get_regs'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     176 |         return arch_ftrace_get_regs(fregs);
-         |                ^
-   include/linux/ftrace.h:176:9: note: did you mean 'ftrace_get_regs'?
-   include/linux/ftrace.h:171:40: note: 'ftrace_get_regs' declared here
-     171 | static __always_inline struct pt_regs *ftrace_get_regs(struct ftrace_regs *fregs)
-         |                                        ^
-     172 | {
-     173 |         if (!fregs)
-     174 |                 return NULL;
-     175 | 
-     176 |         return arch_ftrace_get_regs(fregs);
-         |                ~~~~~~~~~~~~~~~~~~~~
-         |                ftrace_get_regs
-   include/linux/ftrace.h:176:9: error: incompatible integer to pointer conversion returning 'int' from a function with result type 'struct pt_regs *' [-Wint-conversion]
-     176 |         return arch_ftrace_get_regs(fregs);
-         |                ^~~~~~~~~~~~~~~~~~~~~~~~~~~
->> include/linux/ftrace.h:264:28: error: call to undeclared function 'ftrace_regs_get_stack_pointer'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     264 |         stackp = (unsigned long *)ftrace_regs_get_stack_pointer(fregs);
-         |                                   ^
->> include/linux/ftrace.h:264:11: warning: cast to 'unsigned long *' from smaller integer type 'int' [-Wint-to-pointer-cast]
-     264 |         stackp = (unsigned long *)ftrace_regs_get_stack_pointer(fregs);
-         |                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   2 warnings and 3 errors generated.
-   make[3]: *** [scripts/Makefile.build:117: arch/riscv/kernel/asm-offsets.s] Error 1 shuffle=3949777697
-   make[3]: Target 'prepare' not remade because of errors.
-   make[2]: *** [Makefile:1193: prepare0] Error 2 shuffle=3949777697
-   make[2]: Target 'prepare' not remade because of errors.
-   make[1]: *** [Makefile:224: __sub-make] Error 2 shuffle=3949777697
-   make[1]: Target 'prepare' not remade because of errors.
-   make: *** [Makefile:224: __sub-make] Error 2 shuffle=3949777697
-   make: Target 'prepare' not remade because of errors.
+Below samples are captured on my local build kernel. perf succesfully
+find debugging version vdso and we can annotate with source without
+specifying vdso path.
 
+$ sudo perf record -a
+$ sudo perf report --objdump=llvm-objdump
 
-vim +/ftrace_regs_get_stack_pointer +264 include/linux/ftrace.h
+Samples: 17K of event 'cycles:P', 4000 Hz, Event count (approx.): 1760
+__vdso_clock_gettime  /work/linux-host/arch/x86/entry/vdso/vdso64.so.d
+Percent│       movq    -48(%rbp),%rsi
+       │       testq   %rax,%rax
+       │     ;               return vread_hvclock();
+       │       movq    %rax,%rdx
+       │     ;               if (unlikely(!vdso_cycles_ok(cycles)))
+       │     ↑ js      eb
+       │     ↑ jmp     74
+       │     ;               ts->tv_sec = vdso_ts->sec;
+  0.02 │147:   leaq    2(%rbx),%rax
+       │       shlq    $4, %rax
+       │       addq    %r10,%rax
+       │     ;               while ((seq = READ_ONCE(vd->seq)) & 1) {
+  9.38 │152:   movl    (%r10),%ecx
 
-   170	
-   171	static __always_inline struct pt_regs *ftrace_get_regs(struct ftrace_regs *fregs)
-   172	{
-   173		if (!fregs)
-   174			return NULL;
-   175	
- > 176		return arch_ftrace_get_regs(fregs);
-   177	}
-   178	
-   179	#if !defined(CONFIG_HAVE_DYNAMIC_FTRACE_WITH_ARGS) || \
-   180		defined(CONFIG_HAVE_PT_REGS_TO_FTRACE_REGS_CAST)
-   181	
-   182	static __always_inline struct pt_regs *
-   183	ftrace_partial_regs(struct ftrace_regs *fregs, struct pt_regs *regs)
-   184	{
-   185		/*
-   186		 * If CONFIG_HAVE_PT_REGS_TO_FTRACE_REGS_CAST=y, ftrace_regs memory
-   187		 * layout is the same as pt_regs. So always returns that address.
-   188		 * Since arch_ftrace_get_regs() will check some members and may return
-   189		 * NULL, we can not use it.
-   190		 */
-   191		return &fregs->regs;
-   192	}
-   193	
-   194	#endif /* !CONFIG_HAVE_DYNAMIC_FTRACE_WITH_ARGS || CONFIG_HAVE_PT_REGS_TO_FTRACE_REGS_CAST */
-   195	
-   196	#ifdef CONFIG_HAVE_DYNAMIC_FTRACE_WITH_ARGS
-   197	
-   198	/*
-   199	 * Please define arch dependent pt_regs which compatible to the
-   200	 * perf_arch_fetch_caller_regs() but based on ftrace_regs.
-   201	 * This requires
-   202	 *   - user_mode(_regs) returns false (always kernel mode).
-   203	 *   - able to use the _regs for stack trace.
-   204	 */
-   205	#ifndef arch_ftrace_fill_perf_regs
-   206	/* As same as perf_arch_fetch_caller_regs(), do nothing by default */
-   207	#define arch_ftrace_fill_perf_regs(fregs, _regs) do {} while (0)
-   208	#endif
-   209	
-   210	static __always_inline struct pt_regs *
-   211	ftrace_fill_perf_regs(struct ftrace_regs *fregs, struct pt_regs *regs)
-   212	{
-   213		arch_ftrace_fill_perf_regs(fregs, regs);
-   214		return regs;
-   215	}
-   216	
-   217	#else /* !CONFIG_HAVE_DYNAMIC_FTRACE_WITH_ARGS */
-   218	
-   219	static __always_inline struct pt_regs *
-   220	ftrace_fill_perf_regs(struct ftrace_regs *fregs, struct pt_regs *regs)
-   221	{
-   222		return &fregs->regs;
-   223	}
-   224	
-   225	#endif
-   226	
-   227	/*
-   228	 * When true, the ftrace_regs_{get,set}_*() functions may be used on fregs.
-   229	 * Note: this can be true even when ftrace_get_regs() cannot provide a pt_regs.
-   230	 */
-   231	static __always_inline bool ftrace_regs_has_args(struct ftrace_regs *fregs)
-   232	{
-   233		if (IS_ENABLED(CONFIG_HAVE_DYNAMIC_FTRACE_WITH_ARGS))
-   234			return true;
-   235	
-   236		return ftrace_get_regs(fregs) != NULL;
-   237	}
-   238	
-   239	#ifndef CONFIG_HAVE_DYNAMIC_FTRACE_WITH_ARGS
-   240	#define ftrace_regs_get_instruction_pointer(fregs) \
-   241		instruction_pointer(ftrace_get_regs(fregs))
-   242	#define ftrace_regs_get_argument(fregs, n) \
-   243		regs_get_kernel_argument(ftrace_get_regs(fregs), n)
-   244	#define ftrace_regs_get_stack_pointer(fregs) \
-   245		kernel_stack_pointer(ftrace_get_regs(fregs))
-   246	#define ftrace_regs_get_return_value(fregs) \
-   247		regs_return_value(ftrace_get_regs(fregs))
-   248	#define ftrace_regs_set_return_value(fregs, ret) \
-   249		regs_set_return_value(ftrace_get_regs(fregs), ret)
-   250	#define ftrace_override_function_with_return(fregs) \
-   251		override_function_with_return(ftrace_get_regs(fregs))
-   252	#define ftrace_regs_query_register_offset(name) \
-   253		regs_query_register_offset(name)
-   254	#define ftrace_regs_get_frame_pointer(fregs) \
-   255		frame_pointer(&(fregs)->regs)
-   256	#endif
-   257	
-   258	#ifdef CONFIG_HAVE_REGS_AND_STACK_ACCESS_API
-   259	static __always_inline unsigned long
-   260	ftrace_regs_get_kernel_stack_nth(struct ftrace_regs *fregs, unsigned int nth)
-   261	{
-   262		unsigned long *stackp;
-   263	
- > 264		stackp = (unsigned long *)ftrace_regs_get_stack_pointer(fregs);
-   265		if (((unsigned long)(stackp + nth) & ~(THREAD_SIZE - 1)) ==
-   266		    ((unsigned long)stackp & ~(THREAD_SIZE - 1)))
-   267			return *(stackp + nth);
-   268	
-   269		return 0;
-   270	}
-   271	#else /* !CONFIG_HAVE_REGS_AND_STACK_ACCESS_API */
-   272	#define ftrace_regs_get_kernel_stack_nth(fregs, nth)	(0L)
-   273	#endif /* CONFIG_HAVE_REGS_AND_STACK_ACCESS_API */
-   274	
+When doing cross platform analysis, we need to specify the vdso path manually if
+we are interested in its symbols, because they are not installed on local
+machine. At most two vdso can be given. Also you can pack your buildid cache with
+perf-archive if the debugging vdso can be found on the sampled machine.
+
+$ sudo perf report --objdump=llvm-objdump \
+      --vdso arch/x86/entry/vdso/vdso64.so.dbg,arch/x86/entry/vdso/vdso32.so.dbg
+
+I also improved perf-buildid-cache command to recognize vdso when adding files,
+then place it at correct place.
+
+$ sudo perf buildid-cache --add /work/linux/arch/x86/entry/vdso/vdso64.so.dbg
+
+Then it will be copied to ~/.debug/[vdso]/debug.
+
+v6:
+  - split "perf: build-id: try to search debugging vdso and add to cache" 
+    by functional logical. (suggested by Adrian)
+v5:
+  - Searching the vdso in record stage instead of report. So the debugging
+    vdso will be in build-id cache. This is friendly for cross-machine analysis.
+  - Improve perf-buildid-cache command recognize vdso when adding files
+v4:
+  - split the refactoring from the actual change.
+v3:
+  - update documentation.
+v2:
+  - now search vdso automatically as long as vmlinux, as suggested by Adrian.
+  - remove change 'prefer symsrc_filename for filename'.
+
+Changbin Du (8):
+  perf: support specify vdso path in cmdline
+  perf: disasm: refactor function dso__disassemble_filename
+  perf: disasm: use build_id_path if fallback failed
+  perf: symbol: generalize vmlinux path searching
+  perf: build-id: add support for build-id cache vdso debug
+  perf: build-id: extend build_id_cache__find_debug() to find local
+    debugging vdso
+  perf: disasm: prefer debugging files in build-id cache
+  perf buildid-cache: recognize vdso when adding files
+
+ tools/perf/Documentation/perf-annotate.txt |   3 +
+ tools/perf/Documentation/perf-c2c.txt      |   3 +
+ tools/perf/Documentation/perf-inject.txt   |   3 +
+ tools/perf/Documentation/perf-report.txt   |   3 +
+ tools/perf/Documentation/perf-script.txt   |   3 +
+ tools/perf/Documentation/perf-top.txt      |   3 +
+ tools/perf/builtin-annotate.c              |   2 +
+ tools/perf/builtin-buildid-cache.c         |  26 ++-
+ tools/perf/builtin-c2c.c                   |   2 +
+ tools/perf/builtin-inject.c                |   2 +
+ tools/perf/builtin-report.c                |   2 +
+ tools/perf/builtin-script.c                |   2 +
+ tools/perf/builtin-top.c                   |   2 +
+ tools/perf/util/build-id.c                 |  57 +++++-
+ tools/perf/util/disasm.c                   | 131 ++++++++-----
+ tools/perf/util/machine.c                  |   4 +-
+ tools/perf/util/symbol.c                   | 209 ++++++++++++++++-----
+ tools/perf/util/symbol.h                   |   9 +-
+ tools/perf/util/symbol_conf.h              |   5 +
+ 19 files changed, 359 insertions(+), 112 deletions(-)
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.34.1
+
