@@ -1,101 +1,140 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yb1-f175.google.com (mail-yb1-f175.google.com [209.85.219.175])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C6FD13C80F
-	for <llvm@lists.linux.dev>; Fri, 16 Aug 2024 22:52:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9CE891C32;
+	Sat, 17 Aug 2024 01:11:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723848731; cv=none; b=qBEDz0wh/nvLSXqDY1G+NsxBn9TEExzBx7NJ/raGEOifSGMVnq4tprv76/3p/6ACTR8lXm6FzhwqpahD6Zv+42z8niyEQpn8IKFN2p6O/iy6U+gpTi0p6BCFV9dyYwAfZXX9vbxBlme8OMjTuZy68LiTFDc5/Wn2Gt6eAMjko0I=
+	t=1723857085; cv=none; b=fcBpJ2Z41mwxG8nK8oVhp+MrWspGazc83z4ozxC90+sVh8UcsBY9zax9YET7ewv2SN32mh7DX672Ka3YV2DmnyFGWDTC/fZtmCESK4Hz+RnzQdLIEOy2T4N1ish5oC5rjPXbzEFfwYEkNW+FP6RUpHG5rHsa99DTU8YittkSPvY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723848731; c=relaxed/simple;
-	bh=Ee+SNLDnDQ9+Z6IAm4+d8rL4sxTbntKeWj8nwDB2Fb8=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=tguuxrEhBBaBaBCS0hEiPCUtGJOKxSAmJOqh91elzIqX49HziM+bOk4EYAie3EzZ3i6+hzi4ZNEKd/b1EXbySorZiBBXxuaWXvAiZ4PVVWd4T5hVq3iQJFpOyH6yl1pUm8R3G/P64ERwJDbxaARoREDyBoZjlQZZ71VRaLh53U0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=dS7lIv4V; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1723857085; c=relaxed/simple;
+	bh=g8Geri2XNbL38pyOWzp7d2MgOy9oPpFutYakSLbV27M=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=RPS2hwXnXpnG0yi4B4aQ8mYcCQpP1xMdURL7UATKekAlHJtWK0Xk1Gbr4E88HwhG+HbsDWGr2DtJ9i0rSBo62FLtsKFFVGk3lB+Jl3fDyBiJvbM+bUQpDtYuJy1GgrNQdBtEYxYPfme+KAXQIE+UhO8dQdvGGxUE2S7UvfSxAY4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=aHrdNdxq; arc=none smtp.client-ip=209.85.219.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="dS7lIv4V"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1723848728;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=ernk6bPKZGb9tGmlhMP09ZL3/wsIcJLsGnaCW3YlnOE=;
-	b=dS7lIv4VDYl5xT0k1JkzFp7GDq/H/3fgN6BqyXa5NEyHtI0y1pxX4qjlB6/bzzrZ+cEkhd
-	5FHi11SdJQwDr/C9uFY0/3CrX+DSOxBayMx4ivsXM1gH35pVtAcj9NjodN86efb//RVGAd
-	gUkDknJtKXeUYCO2bKuDNQIT0dPlG2o=
-Received: from mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-266-BV9SWur8O-eKdgBEyIHqag-1; Fri,
- 16 Aug 2024 18:52:06 -0400
-X-MC-Unique: BV9SWur8O-eKdgBEyIHqag-1
-Received: from mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.4])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 0CF671955F3D
-	for <llvm@lists.linux.dev>; Fri, 16 Aug 2024 22:52:06 +0000 (UTC)
-Received: from [172.64.15.52] (unknown [10.30.34.46])
-	by mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 70C7C3001FD6;
-	Fri, 16 Aug 2024 22:52:05 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.11.0-rc3,
- mainline.kernel.org-clang, 85652baa)
-Date: Fri, 16 Aug 2024 22:52:05 -0000
-To: llvm@lists.linux.dev
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="aHrdNdxq"
+Received: by mail-yb1-f175.google.com with SMTP id 3f1490d57ef6-e0875f1e9edso2536948276.1;
+        Fri, 16 Aug 2024 18:11:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1723857082; x=1724461882; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ug8rihSZJE889SueAoqTX9ZWSfO/z3Gsu452Tq7F+6A=;
+        b=aHrdNdxqC9MFVHgDgszrpoqsZXUIAWBtsHu5PPTRHB+MdmVtyEpaf9ZVYMXusu27Ac
+         3Wzh7+s30FKpt7vVhmbSxxU8c3WZI9CRX5+9AP/O3kyaTmFwWtzs0ZfZETKdNVeyQbxF
+         TumXhjq9upQIllRP7UpcYhax1SkP5S6K/ohaUB+3meqoKWGsNpXDwxagfc3llQKR0d4G
+         C9ureEm2D335x0y+i2m+TXQEtpzksXwYWS/usPMDEpTt5crHOLi3nVQGN/jhC0H4hOOI
+         I8TaLFEpvkmMW7RX3s3OrXFgBx9JldIk20lmp/X5OhA/SdHBox528vUXzbNg7cno0vjA
+         oeAA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1723857082; x=1724461882;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ug8rihSZJE889SueAoqTX9ZWSfO/z3Gsu452Tq7F+6A=;
+        b=QQE4NobXvD+7I2Tsip3xdNy6sFZ4y+FXokbogL1cdIfB/+GftvgIDShH1oZY1zNutG
+         N8PBDSPRkr3mR1xebS9/jV4Bj+dA0n46LhfZlvWFlDMoaBbYsPPE9fFteapZ6G9lJC7G
+         4t9Cr2VKNjwmECgq30i84clTbHDsoVpt5KwYN2ZpC6FXIQSitF0W/f71Jv2niVfyov+G
+         q4pvLY1Cbnx10TWivaAmOqp6GWXohnwAuNAtxl9JgrkAm8EQT3sHeu+NgTN/9rN2YSfD
+         PrHmhIGhkm8RFU1MY4aZk1tBMFHDMTNCefy+CCrnEZu2jrafMQT/4k9XZSf8EnCs9Tyw
+         XGww==
+X-Forwarded-Encrypted: i=1; AJvYcCU+ovaDe8UsmWjuD07x+t84O0AwT5TWXPIyTOkN0zeEE+eIVz5uQ+1MNNXx2zoCXIUY/XFx5P0SbG+YO0e68T7pM703vT2cFuAirIjYzXD8DDDGfPjE4eO0FousOw==
+X-Gm-Message-State: AOJu0YyiuNQQt5jbeplojkeCKrbxxcJlJQn1U9RvOvavuX/uKuJebMPa
+	Dy9Hef++p3qT7zRQr9bIlSEi2pb3G4Z5N4Mfea+JyQ2QCqyVlz7ZCDKiv5UJb3e2YK0nr4ApAeK
+	w3bc2julHURw3GWO73UJw3vQPlNQ=
+X-Google-Smtp-Source: AGHT+IEM2mdGVjOsGnMz8WXTnI9118qcDH2jUCIIbDZ4rPiQ10iGBBlTUuDxRR73hnxLfbHp9nYn32+CIgpvlrRB+hI=
+X-Received: by 2002:a05:6902:701:b0:e08:5e73:cdf3 with SMTP id
+ 3f1490d57ef6-e1180e6c54emr4739180276.9.1723857082428; Fri, 16 Aug 2024
+ 18:11:22 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.4
-Message-Id: <35370.124081618520700193@us-mta-266.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
+References: <20240807-macos-build-support-v1-0-4cd1ded85694@samsung.com>
+ <CGME20240807110114eucas1p2e1ca4cbd352c6cd9d60688b1570df8d4@eucas1p2.samsung.com>
+ <2024080753-debug-roulette-8cb1@gregkh> <3jnp6tnkjpvnisefomxagazu2u3uzzt7rcon3r5jssraxzwegb@gsxc7c5sfh7v>
+ <2024080758-dedicator-smoky-44be@gregkh>
+In-Reply-To: <2024080758-dedicator-smoky-44be@gregkh>
+From: Barry Song <21cnbao@gmail.com>
+Date: Sat, 17 Aug 2024 13:11:11 +1200
+Message-ID: <CAGsJ_4zA6=ajoOgAm9kweeiBFKz4TJxxjYFGHHd3HQY8dxHpWA@mail.gmail.com>
+Subject: Re: [PATCH 00/12] Enable build system on macOS hosts
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Daniel Gomez <da.gomez@samsung.com>, Masahiro Yamada <masahiroy@kernel.org>, 
+	Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nicolas@fjasle.eu>, 
+	Lucas De Marchi <lucas.demarchi@intel.com>, 
+	=?UTF-8?Q?Thomas_Hellstr=C3=B6m?= <thomas.hellstrom@linux.intel.com>, 
+	Rodrigo Vivi <rodrigo.vivi@intel.com>, 
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, Maxime Ripard <mripard@kernel.org>, 
+	Thomas Zimmermann <tzimmermann@suse.de>, David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>, 
+	William Hubbs <w.d.hubbs@gmail.com>, Chris Brannon <chris@the-brannons.com>, 
+	Kirk Reiser <kirk@reisers.ca>, Samuel Thibault <samuel.thibault@ens-lyon.org>, 
+	Paul Moore <paul@paul-moore.com>, Stephen Smalley <stephen.smalley.work@gmail.com>, 
+	Ondrej Mosnacek <omosnace@redhat.com>, Catalin Marinas <catalin.marinas@arm.com>, 
+	Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>, Oliver Upton <oliver.upton@linux.dev>, 
+	James Morse <james.morse@arm.com>, Suzuki K Poulose <suzuki.poulose@arm.com>, 
+	Zenghui Yu <yuzenghui@huawei.com>, Jiri Slaby <jirislaby@kernel.org>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, 
+	Justin Stitt <justinstitt@google.com>, 
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, 
+	"linux-kbuild@vger.kernel.org" <linux-kbuild@vger.kernel.org>, 
+	"intel-xe@lists.freedesktop.org" <intel-xe@lists.freedesktop.org>, 
+	"dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>, 
+	"speakup@linux-speakup.org" <speakup@linux-speakup.org>, 
+	"selinux@vger.kernel.org" <selinux@vger.kernel.org>, 
+	"linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>, 
+	"kvmarm@lists.linux.dev" <kvmarm@lists.linux.dev>, 
+	"linux-serial@vger.kernel.org" <linux-serial@vger.kernel.org>, 
+	"llvm@lists.linux.dev" <llvm@lists.linux.dev>, Finn Behrens <me@kloenk.dev>, 
+	"Daniel Gomez (Samsung)" <d+samsung@kruces.com>, "gost.dev@samsung.com" <gost.dev@samsung.com>, 
+	Nick Desaulniers <nick.desaulniers@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-Hi, we tested your kernel and here are the results:
-
-    Overall result: FAILED
-             Merge: OK
-           Compile: FAILED
-
-
-Kernel information:
-    Commit message: Merge tag 'block-6.11-20240824' of git://git.kernel.dk/=
-linux
-
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1416510727
-
-One or more kernel builds failed:
-    Unrecognized or new issues:
-         ppc64le - https://datawarehouse.cki-project.org/kcidb/builds/redha=
-t:1416510727-ppc64le-kernel
-           s390x - https://datawarehouse.cki-project.org/kcidb/builds/redha=
-t:1416510727-s390x-kernel
-          x86_64 (debug) - https://datawarehouse.cki-project.org/kcidb/buil=
-ds/redhat:1416510727-x86_64-kernel-debug
-
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
+On Thu, Aug 8, 2024 at 2:20=E2=80=AFAM Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> On Wed, Aug 07, 2024 at 01:56:38PM +0000, Daniel Gomez wrote:
+> > On Wed, Aug 07, 2024 at 01:01:08PM GMT, Greg Kroah-Hartman wrote:
+> > > On Wed, Aug 07, 2024 at 01:09:14AM +0200, Daniel Gomez via B4 Relay w=
+rote:
+> > > > This patch set allows for building the Linux kernel for arm64 in ma=
+cOS with
+> > > > LLVM.
+> > >
+> > > Is this a requirement somewhere that this must work?  It seems like a=
+n
+> > > odd request, what workflows require cross-operating-system builds lik=
 e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
+> > > this?
+> >
+> > This isn't a requirement, but it would, for example, support workflows =
+for QEMU
+> > users and developers on macOS. They could build/compile the kernel nati=
+vely and
+> > use it to launch QEMU instances, simplifying their process.
+>
+> But that's not a real workload of anyone?  How often does this ever come
+> up?  Who is going to maintain this cross-build functionality over time?
 
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
+it is a real workload of me,  i was running qemu-system-aarch64 on x86
+and it was
+pretty slow. so got a M3 pro to accelerate my development. frequently chang=
+ing
+kernel's source code, i am using qemu-system-aarch64 to do quick verificati=
+on.
 
+>
+> thanks,
+>
+> greg k-h
+>
+
+Thanks
+Barry
