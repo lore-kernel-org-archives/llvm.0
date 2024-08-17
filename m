@@ -1,206 +1,101 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A4EE012CDB6;
-	Sat, 17 Aug 2024 19:28:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E9E17F7CA
+	for <llvm@lists.linux.dev>; Sat, 17 Aug 2024 19:33:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723922934; cv=none; b=qotg/sJGNOGkGKB2PQDm7QNn0TOUV7v5WVR4lPQOubIk0JdHw9MLt3fRLhsShDqyy4n59mcRxRas5YnBVNgWUfZa7p4bjdeRFyrOwBaq4g547xHKOl0JO5Saycz7HzaQFZHaqUf/uDkXoqppxOPF4OWcfnqaOj0iudVnnnCLyAk=
+	t=1723923189; cv=none; b=G3KnFsFIkpz90S9ja4wdA84JAOaO+h5nepHhUvooRgn3z/8bqeSHMw9kgRYuRC5X+dsvE7uMYCY3g3JDet5WZvUQ9V2FBRIKHNBxkDyhRH69jSGPeJ04qOc2FjfV9JIlQJg8oth+4FCc7TKmR5zV28/g8F4j3fgGsvtHStn8Xq8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723922934; c=relaxed/simple;
-	bh=6HQ0WGJcmVET/dBNfe/9B1i9QMQMAm40jSwUoX4bitw=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=TRi2yra7cVIhoNFdg07bNs/FlQknNlvLVsvEXe5K+DNr6B4i31omkZ+PGtgk8SAHZBOLl4sQicI8TH2ekBFTlMEbuvflhnyLD5E8x3fYOsDsVHhx6EeRXa18/8NdmxkdKgZxZ8jO6Di2WKeDXiPahaKk/EDL5EN2QzINz++XRIA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=dfL5LWLk; arc=none smtp.client-ip=192.198.163.17
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1723923189; c=relaxed/simple;
+	bh=pntGPRVKxOWMjYKw5pCYXP0DgiC4jJtNNnvoFeotM9s=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=fytR6dNIVjUSIWrFwqZIV19fSnLY01brQDIxBPLh5hQvxIg84kcXPV4qlgRgJ2d/A3HUgPZty/oPlV2Qkd/+mtkJ7tU2GmncHzMdMG1YASnhCUrXBG/bRBJG0vDZbYhmLdts+/kEUFTFqCJd1qrkDfqz7t2Kt3aRurM9UeqBrBU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Ja7faIU4; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="dfL5LWLk"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1723922931; x=1755458931;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=6HQ0WGJcmVET/dBNfe/9B1i9QMQMAm40jSwUoX4bitw=;
-  b=dfL5LWLkEML0/XylJTObaff27sI0PANZLUo5zpBfAXdJwP2EbtSSzye9
-   OR56pZlJxpsY0ghfyku+U4/lyGxwVCH+qC+wHOJi1M3PwfZZc0AZe56YZ
-   A4/b1HIapvzFMFJfCVlCAQBtit5ZBJT1rtTsX/7222/QRDddQKby6PrGb
-   BKqMG6IfvuwmhIcLpCR6TcXewoY7IebaepyLMltSlX99XaekGvgWTlm7s
-   VtUR8jbdJxQGHzE/OgtpJj5dCK/ixiyhxbY9pApLR9LkSNZGh/RAP61nS
-   CohhPWIxEghhVdWglV1fYH0Sm9MzFVRaDVyeUi3Huriy5hPB6KDzGk9S4
-   A==;
-X-CSE-ConnectionGUID: shMaoFc9QwKZDZs3wLlOlw==
-X-CSE-MsgGUID: gMIWrzuZRQaIwP23Vorthw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11167"; a="22080507"
-X-IronPort-AV: E=Sophos;i="6.10,155,1719903600"; 
-   d="scan'208";a="22080507"
-Received: from orviesa003.jf.intel.com ([10.64.159.143])
-  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Aug 2024 12:28:51 -0700
-X-CSE-ConnectionGUID: rPo8GZPOTKC01ViTQP/W3Q==
-X-CSE-MsgGUID: +RVso1xFT7iURlU1FA+szQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.10,155,1719903600"; 
-   d="scan'208";a="64804879"
-Received: from lkp-server01.sh.intel.com (HELO 9a732dc145d3) ([10.239.97.150])
-  by orviesa003.jf.intel.com with ESMTP; 17 Aug 2024 12:28:50 -0700
-Received: from kbuild by 9a732dc145d3 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1sfP6V-0007k6-24;
-	Sat, 17 Aug 2024 19:28:47 +0000
-Date: Sun, 18 Aug 2024 03:28:30 +0800
-From: kernel test robot <lkp@intel.com>
-To: Mark Brown <broonie@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [broonie-ci:clone3-shadow-stack 5/9]
- include/linux/sched/task.h:242:17: warning: declaration of 'struct
- vm_area_struct' will not be visible outside of this function
-Message-ID: <202408180324.gJq8Xel2-lkp@intel.com>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Ja7faIU4"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1723923185;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=ZAb7eiKNBEusx0uHgorrA3ZJQW1Kv2vZq4UcYD/5VKQ=;
+	b=Ja7faIU4absfjYpAwEOEvD750NXsD26gASsUhDUFpNh5C7S7SHGHFTc7zOWTYAccW3NSpf
+	zUC6hZldQdxFH3NsMSoBDELJT8NphF7ZAOVqz30jb0z36kgfoc6nk+MDAl30R68wGO72s5
+	1DjcotXNKkY1AJRwy83jFPYrKnw3RXE=
+Received: from mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-452-5snULD4wOtaDfDSdrnJoAw-1; Sat,
+ 17 Aug 2024 15:33:04 -0400
+X-MC-Unique: 5snULD4wOtaDfDSdrnJoAw-1
+Received: from mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.40])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 91D731955BED
+	for <llvm@lists.linux.dev>; Sat, 17 Aug 2024 19:33:03 +0000 (UTC)
+Received: from [172.64.15.52] (unknown [10.30.34.46])
+	by mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id D453F1956054;
+	Sat, 17 Aug 2024 19:33:02 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.11.0-rc3,
+ mainline.kernel.org-clang, df6cbc62)
+Date: Sat, 17 Aug 2024 19:33:02 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.40
+Message-Id: <76569.124081715330400150@us-mta-452.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/ci.git clone3-shadow-stack
-head:   9afed14a987147f3e45980fa0b962ca96de453dd
-commit: 8c4502a4854ffb82bd6711413e5908812fdea4aa [5/9] fork: Add shadow stack support to clone3()
-config: um-allnoconfig (https://download.01.org/0day-ci/archive/20240818/202408180324.gJq8Xel2-lkp@intel.com/config)
-compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240818/202408180324.gJq8Xel2-lkp@intel.com/reproduce)
+Hi, we tested your kernel and here are the results:
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202408180324.gJq8Xel2-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
-   In file included from arch/x86/um/signal.c:9:
-   In file included from include/linux/ptrace.h:7:
-   In file included from include/linux/sched/signal.h:9:
->> include/linux/sched/task.h:242:17: warning: declaration of 'struct vm_area_struct' will not be visible outside of this function [-Wvisibility]
-     242 |                                             struct vm_area_struct *vma,
-         |                                                    ^
-   In file included from arch/x86/um/signal.c:11:
-   In file included from include/linux/syscalls.h:93:
-   In file included from include/trace/syscall.h:7:
-   In file included from include/linux/trace_events.h:9:
-   In file included from include/linux/hardirq.h:11:
-   In file included from arch/um/include/asm/hardirq.h:5:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:14:
-   In file included from arch/um/include/asm/io.h:24:
-   include/asm-generic/io.h:548:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     548 |         val = __raw_readb(PCI_IOBASE + addr);
-         |                           ~~~~~~~~~~ ^
-   include/asm-generic/io.h:561:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     561 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
-      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-         |                                                   ^
-   In file included from arch/x86/um/signal.c:11:
-   In file included from include/linux/syscalls.h:93:
-   In file included from include/trace/syscall.h:7:
-   In file included from include/linux/trace_events.h:9:
-   In file included from include/linux/hardirq.h:11:
-   In file included from arch/um/include/asm/hardirq.h:5:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:14:
-   In file included from arch/um/include/asm/io.h:24:
-   include/asm-generic/io.h:574:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     574 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
-      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
-         |                                                   ^
-   In file included from arch/x86/um/signal.c:11:
-   In file included from include/linux/syscalls.h:93:
-   In file included from include/trace/syscall.h:7:
-   In file included from include/linux/trace_events.h:9:
-   In file included from include/linux/hardirq.h:11:
-   In file included from arch/um/include/asm/hardirq.h:5:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:14:
-   In file included from arch/um/include/asm/io.h:24:
-   include/asm-generic/io.h:585:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     585 |         __raw_writeb(value, PCI_IOBASE + addr);
-         |                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:595:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     595 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:605:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     605 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:693:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     693 |         readsb(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:701:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     701 |         readsw(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:709:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     709 |         readsl(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:718:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     718 |         writesb(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   include/asm-generic/io.h:727:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     727 |         writesw(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   include/asm-generic/io.h:736:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     736 |         writesl(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   13 warnings generated.
---
-   In file included from arch/x86/um/elfcore.c:3:
-   In file included from include/linux/elfcore.h:11:
-   In file included from include/linux/ptrace.h:7:
-   In file included from include/linux/sched/signal.h:9:
->> include/linux/sched/task.h:242:17: warning: declaration of 'struct vm_area_struct' will not be visible outside of this function [-Wvisibility]
-     242 |                                             struct vm_area_struct *vma,
-         |                                                    ^
-   1 warning generated.
---
-   In file included from kernel/locking/rwsem.c:22:
->> include/linux/sched/task.h:242:17: warning: declaration of 'struct vm_area_struct' will not be visible outside of this function [-Wvisibility]
-     242 |                                             struct vm_area_struct *vma,
-         |                                                    ^
-   kernel/locking/rwsem.c:187:20: warning: unused function 'is_rwsem_reader_owned' [-Wunused-function]
-     187 | static inline bool is_rwsem_reader_owned(struct rw_semaphore *sem)
-         |                    ^~~~~~~~~~~~~~~~~~~~~
-   kernel/locking/rwsem.c:271:35: warning: unused function 'rwsem_owner' [-Wunused-function]
-     271 | static inline struct task_struct *rwsem_owner(struct rw_semaphore *sem)
-         |                                   ^~~~~~~~~~~
-   kernel/locking/rwsem.c:282:1: warning: unused function 'rwsem_owner_flags' [-Wunused-function]
-     282 | rwsem_owner_flags(struct rw_semaphore *sem, unsigned long *pflags)
-         | ^~~~~~~~~~~~~~~~~
-   4 warnings generated.
+    Overall result: FAILED
+             Merge: OK
+           Compile: FAILED
 
 
-vim +242 include/linux/sched/task.h
+Kernel information:
+    Commit message: Merge tag 'scsi-fixes' of git://git.kernel.org/pub/scm/=
+linux/kernel/git/jejb/scsi
 
-   234	
-   235	#ifdef CONFIG_ARCH_HAS_USER_SHADOW_STACK
-   236	int arch_shstk_validate_clone(struct task_struct *p,
-   237				      struct vm_area_struct *vma,
-   238				      struct page *page,
-   239				      struct kernel_clone_args *args);
-   240	#else
-   241	static inline int arch_shstk_validate_clone(struct task_struct *p,
- > 242						    struct vm_area_struct *vma,
-   243						    struct page *page,
-   244						    struct kernel_clone_args *args)
-   245	{
-   246		return 0;
-   247	}
-   248	#endif
-   249	
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1417008942
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+One or more kernel builds failed:
+    Unrecognized or new issues:
+         ppc64le - https://datawarehouse.cki-project.org/kcidb/builds/redha=
+t:1417008942-ppc64le-kernel
+           s390x - https://datawarehouse.cki-project.org/kcidb/builds/redha=
+t:1417008942-s390x-kernel
+          x86_64 (debug) - https://datawarehouse.cki-project.org/kcidb/buil=
+ds/redhat:1417008942-x86_64-kernel-debug
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
