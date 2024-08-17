@@ -1,60 +1,59 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E5568F40;
-	Sat, 17 Aug 2024 15:43:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F3661E511;
+	Sat, 17 Aug 2024 16:35:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723909427; cv=none; b=EHeRKUELh2oH1TvrCnVpPxKsS5YDpmCIXs624eHWgHe0CEpEKjrN4XR/HrVa0hsIUGwaYNJKhJoIJP7gfLSLnvlnEBATbgbYlDXoJ+bGn/f6Ibez3L1d3iMya/TZTQZr5KIIMuNaOqDNQm3lt5x10cNaA0n3GRMiSvJJ95SdAz0=
+	t=1723912549; cv=none; b=HkGciisSWnJEufSybqWViAt7ws4ltgff/VPvLtmQR7dxrSZ5uzlAoEfGJOqPP8lcX2bW4/dSIAnh0OYc6P6p958uywhSicIQot/xILboN22aZgSJi+vIPvYHEr0TI+ywbv6Epxx17Aw+v3VI0u31wAaAUotu1H4h/BPQzAFrf/8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723909427; c=relaxed/simple;
-	bh=WkfSqgIGfHofCvLTS8B+PiV5vIEBJJiNNLH18/6XX1I=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=jxAC0BGCNGYg9XSc98nCSlGDh7k0G+WaYAIJ7gUBXhODxjmLOM9gZfygpdzZGHuYmoERPjwdwbh+FE3AowtJjeMY8PktGtcbXu4wCA1PNaNh1OXTPdNuG+5pRi1XToHaFxFdB2gL+D3EsshSoRKmgz99FTNc2s+gIqIXSVoOXe0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=HUP194TD; arc=none smtp.client-ip=192.198.163.7
+	s=arc-20240116; t=1723912549; c=relaxed/simple;
+	bh=Tc8LeqccCQfgkJcaQ2AWG/dEn6zVo0I1D5X2ZhiTemI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=rrAZ1nNNSyDpt8Q428kUVI/B8az649hO0eyxUzSq03c2l/k0kujzvVSCjSEftnuLYUA0aMjXrpg9pQQL/DDCsHDgSGkinkVazvUld2zSu2HeaWRxbiIu5+wuisky9dFrNben2ezeC6A+VsN9UnkG1FYnOrE5uje1z7kzUAtVzIw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=EEA73//Q; arc=none smtp.client-ip=192.198.163.14
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="HUP194TD"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="EEA73//Q"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1723909426; x=1755445426;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=WkfSqgIGfHofCvLTS8B+PiV5vIEBJJiNNLH18/6XX1I=;
-  b=HUP194TDg9NnPfNRYVqHqFS7kgWS5n0AlL8loPZ7g/SKbo08wtzbHANq
-   Xztbc6Xhsx1J0tQf0Dr2SbsX9ZIQsyNx39P6lObWv7tisNDbvvf7audzH
-   IFUQXzvFZ1cyMGcyzAe/S1kI3bAx1Fpgt5RfDl7GWWIBwJIFklH021onW
-   8xMCETlx8e1HWLG9jyUQ5uNuoYW0ta0QJOyXs3er/s7Q/OQvrPSJuDG9U
-   cNs81DCSbSh6GiNYJYZxo2EZKbPpRgqaq3adh3XricEg5KJIX9J6qM3oy
-   E3QITA9DO+Q+5tZGElaRQi/4fUyZ6rHUGx7n2hTJqyacFxveUihTYtoS7
-   Q==;
-X-CSE-ConnectionGUID: ceu5c/CgRlqBlYqbHjh+mQ==
-X-CSE-MsgGUID: gbBwmaHSRwOlccFjpzoj/g==
-X-IronPort-AV: E=McAfee;i="6700,10204,11167"; a="47591018"
+  t=1723912547; x=1755448547;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Tc8LeqccCQfgkJcaQ2AWG/dEn6zVo0I1D5X2ZhiTemI=;
+  b=EEA73//QoJr3ieAQiwxa1DulJcbnnH1VdEXypYAmeJ6KIY+1jXuRHf05
+   mrAfVg07vma0c07iDCzU+uqo5OMwTVWO8w6gjQpE3CGa7g/iBWw3zrqDW
+   rphv4RYLESuF1NTXQeEAfVhhSxG5RV0cvyfq6DkhWt+h2WX/nQR/9aqde
+   VRFQjqivdMOGhBCnD1N7EvI1+vb2/EJnqOFRzhvUGSMDK93EB21P4Rbvn
+   Dc+ELtPaHBz6DNu7mQ8m1q5vK8WDQSHhH9v3rqWMUkMH9t6DUfjEILxbm
+   TL2gn/i+aO2OaOvFuEkFv5zd64KatQeD0RtmKh6+oFzJgwsw6LyDaI6OU
+   g==;
+X-CSE-ConnectionGUID: paMn39bESVWt39ms5VpcaA==
+X-CSE-MsgGUID: 7bcm4V/5SCGawqi0lOI0Tg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11167"; a="22363863"
 X-IronPort-AV: E=Sophos;i="6.10,155,1719903600"; 
-   d="scan'208";a="47591018"
-Received: from fmviesa010.fm.intel.com ([10.60.135.150])
-  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Aug 2024 08:43:45 -0700
-X-CSE-ConnectionGUID: iLEplIe8RRuHLvtUuZIt+w==
-X-CSE-MsgGUID: cuQMsHXTQpKQj4gX3ywy2Q==
+   d="scan'208";a="22363863"
+Received: from fmviesa009.fm.intel.com ([10.60.135.149])
+  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Aug 2024 09:35:46 -0700
+X-CSE-ConnectionGUID: Nz/IargfQI+iH/XZCNkYgg==
+X-CSE-MsgGUID: YB/DhZSqTdy2fUS3FqFyFg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.10,155,1719903600"; 
-   d="scan'208";a="60121174"
+   d="scan'208";a="59993581"
 Received: from lkp-server01.sh.intel.com (HELO 9a732dc145d3) ([10.239.97.150])
-  by fmviesa010.fm.intel.com with ESMTP; 17 Aug 2024 08:43:43 -0700
+  by fmviesa009.fm.intel.com with ESMTP; 17 Aug 2024 09:35:45 -0700
 Received: from kbuild by 9a732dc145d3 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1sfLaf-0007ba-0J;
-	Sat, 17 Aug 2024 15:43:41 +0000
-Date: Sat, 17 Aug 2024 23:43:30 +0800
+	id 1sfMP1-0007e8-18;
+	Sat, 17 Aug 2024 16:35:43 +0000
+Date: Sun, 18 Aug 2024 00:34:44 +0800
 From: kernel test robot <lkp@intel.com>
-To: David Howells <dhowells@redhat.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Roberto Sassu <roberto.sassu@huawei.com>
-Subject: [dhowells-fs:pgplib 6/14]
- crypto/asymmetric_keys/pgp_public_key.c:179:31: warning: format specifies
- type 'unsigned long' but the argument has type 'size_t' (aka 'unsigned int')
-Message-ID: <202408172349.ppLqGxkN-lkp@intel.com>
+To: Wentao Guan <guanwentao@uniontech.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: Re: [RFC net] net: phy: fix may not suspend when phy has WoL
+Message-ID: <202408180032.wL6gc9ou-lkp@intel.com>
+References: <20240815110907.609-1-guanwentao@uniontech.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -63,164 +62,90 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20240815110907.609-1-guanwentao@uniontech.com>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/dhowells/linux-fs.git pgplib
-head:   f5bc37208146cc7ce38c4ad5a403e00904c0b6d2
-commit: c1830c5e36f2b94bba3653adf9771c9dcab75dd3 [6/14] KEYS: PGP data parser
-config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20240817/202408172349.ppLqGxkN-lkp@intel.com/config)
-compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 26670e7fa4f032a019d23d56c6a02926e854e8af)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240817/202408172349.ppLqGxkN-lkp@intel.com/reproduce)
+Hi Wentao,
+
+[This is a private test report for your RFC patch.]
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on net/main]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Wentao-Guan/net-phy-fix-may-not-suspend-when-phy-has-WoL/20240815-191124
+base:   net/main
+patch link:    https://lore.kernel.org/r/20240815110907.609-1-guanwentao%40uniontech.com
+patch subject: [RFC net] net: phy: fix may not suspend when phy has WoL
+config: i386-defconfig (https://download.01.org/0day-ci/archive/20240818/202408180032.wL6gc9ou-lkp@intel.com/config)
+compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240818/202408180032.wL6gc9ou-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202408172349.ppLqGxkN-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202408180032.wL6gc9ou-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
-   In file included from crypto/asymmetric_keys/pgp_public_key.c:12:
-   In file included from include/linux/mpi.h:21:
-   In file included from include/linux/scatterlist.h:8:
-   In file included from include/linux/mm.h:2228:
-   include/linux/vmstat.h:514:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     514 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
-   In file included from crypto/asymmetric_keys/pgp_public_key.c:12:
-   In file included from include/linux/mpi.h:21:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/hexagon/include/asm/io.h:328:
-   include/asm-generic/io.h:548:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     548 |         val = __raw_readb(PCI_IOBASE + addr);
-         |                           ~~~~~~~~~~ ^
-   include/asm-generic/io.h:561:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     561 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
-      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-         |                                                   ^
-   In file included from crypto/asymmetric_keys/pgp_public_key.c:12:
-   In file included from include/linux/mpi.h:21:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/hexagon/include/asm/io.h:328:
-   include/asm-generic/io.h:574:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     574 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
-      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
-         |                                                   ^
-   In file included from crypto/asymmetric_keys/pgp_public_key.c:12:
-   In file included from include/linux/mpi.h:21:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/hexagon/include/asm/io.h:328:
-   include/asm-generic/io.h:585:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     585 |         __raw_writeb(value, PCI_IOBASE + addr);
-         |                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:595:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     595 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:605:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     605 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
->> crypto/asymmetric_keys/pgp_public_key.c:179:31: warning: format specifies type 'unsigned long' but the argument has type 'size_t' (aka 'unsigned int') [-Wformat]
-     179 |         pr_debug("offset %lu/%lu\n", offset, ctx->raw_fingerprint_len);
-         |                          ~~~         ^~~~~~
-         |                          %zu
-   include/linux/printk.h:589:26: note: expanded from macro 'pr_debug'
-     589 |         dynamic_pr_debug(fmt, ##__VA_ARGS__)
-         |                          ~~~    ^~~~~~~~~~~
-   include/linux/dynamic_debug.h:270:22: note: expanded from macro 'dynamic_pr_debug'
-     270 |                            pr_fmt(fmt), ##__VA_ARGS__)
-         |                                   ~~~     ^~~~~~~~~~~
-   include/linux/dynamic_debug.h:250:59: note: expanded from macro '_dynamic_func_call'
-     250 |         _dynamic_func_call_cls(_DPRINTK_CLASS_DFLT, fmt, func, ##__VA_ARGS__)
-         |                                                                  ^~~~~~~~~~~
-   include/linux/dynamic_debug.h:248:65: note: expanded from macro '_dynamic_func_call_cls'
-     248 |         __dynamic_func_call_cls(__UNIQUE_ID(ddebug), cls, fmt, func, ##__VA_ARGS__)
-         |                                                                        ^~~~~~~~~~~
-   include/linux/dynamic_debug.h:224:15: note: expanded from macro '__dynamic_func_call_cls'
-     224 |                 func(&id, ##__VA_ARGS__);                       \
-         |                             ^~~~~~~~~~~
-   crypto/asymmetric_keys/pgp_public_key.c:179:39: warning: format specifies type 'unsigned long' but the argument has type 'size_t' (aka 'unsigned int') [-Wformat]
-     179 |         pr_debug("offset %lu/%lu\n", offset, ctx->raw_fingerprint_len);
-         |                              ~~~             ^~~~~~~~~~~~~~~~~~~~~~~~
-         |                              %zu
-   include/linux/printk.h:589:26: note: expanded from macro 'pr_debug'
-     589 |         dynamic_pr_debug(fmt, ##__VA_ARGS__)
-         |                          ~~~    ^~~~~~~~~~~
-   include/linux/dynamic_debug.h:270:22: note: expanded from macro 'dynamic_pr_debug'
-     270 |                            pr_fmt(fmt), ##__VA_ARGS__)
-         |                                   ~~~     ^~~~~~~~~~~
-   include/linux/dynamic_debug.h:250:59: note: expanded from macro '_dynamic_func_call'
-     250 |         _dynamic_func_call_cls(_DPRINTK_CLASS_DFLT, fmt, func, ##__VA_ARGS__)
-         |                                                                  ^~~~~~~~~~~
-   include/linux/dynamic_debug.h:248:65: note: expanded from macro '_dynamic_func_call_cls'
-     248 |         __dynamic_func_call_cls(__UNIQUE_ID(ddebug), cls, fmt, func, ##__VA_ARGS__)
-         |                                                                        ^~~~~~~~~~~
-   include/linux/dynamic_debug.h:224:15: note: expanded from macro '__dynamic_func_call_cls'
-     224 |                 func(&id, ##__VA_ARGS__);                       \
-         |                             ^~~~~~~~~~~
-   9 warnings generated.
+>> drivers/net/phy/phy_device.c:310:13: error: use of undeclared identifier 'dev'
+     310 |                 dev_info(&dev->dev, "phy wol enabled,cannot suspend\n");
+         |                           ^
+   1 error generated.
 
 
-vim +179 crypto/asymmetric_keys/pgp_public_key.c
+vim +/dev +310 drivers/net/phy/phy_device.c
 
-   137	
-   138	/*
-   139	 * Calculate the public key ID fingerprint
-   140	 */
-   141	static int pgp_generate_fingerprint(struct pgp_key_data_parse_context *ctx,
-   142					    struct pgp_parse_pubkey *pgp,
-   143					    struct public_key *pub)
-   144	{
-   145		struct crypto_shash *tfm;
-   146		struct shash_desc *digest;
-   147		char fingerprint[HASH_MAX_DIGESTSIZE * 2 + 1] = { 0 };
-   148		size_t offset;
-   149		int ret;
-   150	
-   151		ret = -ENOMEM;
-   152		tfm = crypto_alloc_shash(pgp->version < PGP_KEY_VERSION_4 ?
-   153					 "md5" : "sha1", 0, 0);
-   154		if (!tfm)
-   155			goto cleanup;
-   156	
-   157		digest = kmalloc(sizeof(*digest) + crypto_shash_descsize(tfm),
-   158				 GFP_KERNEL);
-   159		if (!digest)
-   160			goto cleanup_tfm;
-   161	
-   162		digest->tfm = tfm;
-   163		crypto_shash_set_flags(digest->tfm, CRYPTO_TFM_REQ_MAY_SLEEP);
-   164		ret = crypto_shash_init(digest);
-   165		if (ret < 0)
-   166			goto cleanup_hash;
-   167	
-   168		ret = pgp_calc_pkey_keyid(digest, pgp, pub);
-   169		if (ret < 0)
-   170			goto cleanup_hash;
-   171	
-   172		ctx->raw_fingerprint_len = crypto_shash_digestsize(tfm);
-   173	
-   174		ret = crypto_shash_final(digest, ctx->raw_fingerprint);
-   175		if (ret < 0)
-   176			goto cleanup_hash;
-   177	
-   178		offset = ctx->raw_fingerprint_len - 8;
- > 179		pr_debug("offset %lu/%lu\n", offset, ctx->raw_fingerprint_len);
-   180	
-   181		bin2hex(fingerprint, ctx->raw_fingerprint, ctx->raw_fingerprint_len);
-   182		pr_debug("fingerprint %s\n", fingerprint);
-   183	
-   184		ret = 0;
-   185	cleanup_hash:
-   186		kfree(digest);
-   187	cleanup_tfm:
-   188		crypto_free_shash(tfm);
-   189	cleanup:
-   190		kleave(" = %d", ret);
-   191		return ret;
-   192	}
-   193	
+   281	
+   282	static bool mdio_bus_phy_may_suspend(struct phy_device *phydev)
+   283	{
+   284		struct device_driver *drv = phydev->mdio.dev.driver;
+   285		struct phy_driver *phydrv = to_phy_driver(drv);
+   286		struct net_device *netdev = phydev->attached_dev;
+   287	
+   288		if (!drv || !phydrv->suspend)
+   289			return false;
+   290	
+   291		/* PHY not attached? May suspend if the PHY has not already been
+   292		 * suspended as part of a prior call to phy_disconnect() ->
+   293		 * phy_detach() -> phy_suspend() because the parent netdev might be the
+   294		 * MDIO bus driver and clock gated at this point.
+   295		 */
+   296		if (!netdev)
+   297			goto out;
+   298	
+   299		if (netdev->ethtool->wol_enabled)
+   300			return false;
+   301	
+   302		/* Ethernet and phy device wol state may not same, netdev->wol_enabled
+   303		 * disabled,and phydev set wol_enabled enabled, so netdev->wol_enabled
+   304		 * is not enough, so check phydev->wol_enabled.
+   305		 */
+   306		struct ethtool_wolinfo wol = { .cmd = ETHTOOL_GWOL };
+   307	
+   308		phy_ethtool_get_wol(phydev, &wol);
+   309		if (wol.wolopts) {
+ > 310			dev_info(&dev->dev, "phy wol enabled,cannot suspend\n");
+   311			return false;
+   312		}
+   313	
+   314		/* As long as not all affected network drivers support the
+   315		 * wol_enabled flag, let's check for hints that WoL is enabled.
+   316		 * Don't suspend PHY if the attached netdev parent may wake up.
+   317		 * The parent may point to a PCI device, as in tg3 driver.
+   318		 */
+   319		if (netdev->dev.parent && device_may_wakeup(netdev->dev.parent))
+   320			return false;
+   321	
+   322		/* Also don't suspend PHY if the netdev itself may wakeup. This
+   323		 * is the case for devices w/o underlaying pwr. mgmt. aware bus,
+   324		 * e.g. SoC devices.
+   325		 */
+   326		if (device_may_wakeup(&netdev->dev))
+   327			return false;
+   328	
+   329	out:
+   330		return !phydev->suspended;
+   331	}
+   332	
 
 -- 
 0-DAY CI Kernel Test Service
