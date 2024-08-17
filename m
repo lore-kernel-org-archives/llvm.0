@@ -1,202 +1,115 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E1BD149DE8;
-	Sat, 17 Aug 2024 11:36:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 99F84143C67;
+	Sat, 17 Aug 2024 11:47:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723894601; cv=none; b=hJgXzcJyl2VTsPStm4FHupcOk0SM0PFhpOTjreNjhpG2SiHqG12/JcYmuj2XzfSCkK4MjBkbKJ7MDjaYxJ8FawBFZ9W1ix4kBS7a8sz3bkf+uXQGD4jCAY4Yu/lWhJ8t0nqmUlAsNrKbRnyzzm2DfmQTsl93ceT1G/CkubC4zEs=
+	t=1723895259; cv=none; b=M7mNxOVII56Z5QodK/GavRUE+8xnI3mact1uJ6D3mS8ZHD/33/F7B0kRs5NALYaA7H6dUynW1EEPD5nnTkIk8/v2ePUZYKHzohUG809FMUCHfPR22uSsjREshTr5Idnic4bciYYS99AMSFV8JzFw9EQqujSP1mV/1erZe7QI4RY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723894601; c=relaxed/simple;
-	bh=9yTAN+FJALJO5RPttZwsbiiUQgEuBJUfPRhzN5sTCz8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Wf1Cnkq/MgujBPlDWt2jZ5qTaEQa4+5/gAeLP0QcUGowKSrkupJg/8FiNbbcFKY0uH7oVNi4pqXfClvBXUx6iRk4RVZe3GHWqm9FUxPoL+qffgyUke/M51VJ1dINU6vsUJaiVV6c9LuQMnKqcsif10+gvN+y+T2J17qUbjw28V4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=bMeQcnp8; arc=none smtp.client-ip=198.175.65.16
+	s=arc-20240116; t=1723895259; c=relaxed/simple;
+	bh=AZUAbIc24oH/VzXd5phoRH4eID2p1Ohn6zjI85Owo7U=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=Cm78z9PDm0VseNq3Z817AlvIBZ1NZ6RUpI/y4XxCWAVQzuG6w3FkAho4lWLdUOX7RPkBVsQYXt7425HYxp7Mdso+s4bUzCwsDhSZxgQGytTN4wGwZGZllqhBtXcxg8NJM+mlBMsuJHDUnoUZsHtKuhfAwNwVpC6QgX5RWN0kuv4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=SIhh0MEc; arc=none smtp.client-ip=198.175.65.15
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="bMeQcnp8"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="SIhh0MEc"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1723894600; x=1755430600;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=9yTAN+FJALJO5RPttZwsbiiUQgEuBJUfPRhzN5sTCz8=;
-  b=bMeQcnp8mzJx8WK+2aSw5Cag33uzeN0OA0GhS5NBjTzid5IQjINHT40O
-   LpP3EwjkQQLUwDqmRpWGthXl1omzd2FYm8+6kioZM1T7YI0eSv+U2mjBg
-   jEfNDZMNMpIBW6a+hH/0lkWFmglCU43+lDJoo1aMXd6R/GPAvvH4x7VY2
-   fX8Emhh4WBtamvsnmSFzKk+YQqDi+FoIXGIWgu6ryl1GCvf5eQZgTJZOB
-   n/1D21dsss0K9IyTSeHRbWBxZZ8ifvb5U8m64y9pSkcjhnnLagrfS8Itw
-   VZntTzsAnDr1JaHj6lOs8bF94IWeaCUDBhQbBFkkJG9AHnxRQxZXxAuFN
+  t=1723895257; x=1755431257;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=AZUAbIc24oH/VzXd5phoRH4eID2p1Ohn6zjI85Owo7U=;
+  b=SIhh0MEcLD9VPdUN0rvjhDjKWP+t9xNLVkGfBkEJMbdC/mYDHYAH1+55
+   VbllvUFKBPTowkMOzb5ZFR8MC7mPl3edCxmWXYG1pYnojRROFQ6LKQeC4
+   cZUfhTAnmXxMfP6kWHS9PwnrdEJTwUUrHwWp7OFpAKIBAFSFm7SqUnCIq
+   aQKwKZ4TcZqEREiYL1Sn0M3E6YkB3JBdbBH912liyjAQdv+QnGbqzDMOh
+   p7t8JUn6vFE/xA+7mqaCoJS++ySZ9LJg15nix0EAm84AefSbNG6LVHbI6
+   0aNgXikNGQYA+yn6a2+HTYIZ1mo1pIhSShgQddOPZ1q/fBLMnPznPlqXq
    Q==;
-X-CSE-ConnectionGUID: C+2QAogWSNe7bhL8KCqKxw==
-X-CSE-MsgGUID: 6/w6DxeAQFChfTuRxDyq3A==
-X-IronPort-AV: E=McAfee;i="6700,10204,11166"; a="22325218"
+X-CSE-ConnectionGUID: qXNrIXdJQKe8UpUbNepsKA==
+X-CSE-MsgGUID: Yr6+w33kSf2gm52E2cESTw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11166"; a="25939108"
 X-IronPort-AV: E=Sophos;i="6.10,154,1719903600"; 
-   d="scan'208";a="22325218"
-Received: from orviesa007.jf.intel.com ([10.64.159.147])
-  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Aug 2024 04:36:38 -0700
-X-CSE-ConnectionGUID: ozeieMuATguo4VUGdbJcow==
-X-CSE-MsgGUID: Llap0mEITnuubxdbbocKcA==
+   d="scan'208";a="25939108"
+Received: from orviesa006.jf.intel.com ([10.64.159.146])
+  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Aug 2024 04:47:37 -0700
+X-CSE-ConnectionGUID: Z6cu5aJURiuIZCQZMf1tCg==
+X-CSE-MsgGUID: cU+1avdmR6ye9q1d+7oqzQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.10,154,1719903600"; 
-   d="scan'208";a="60471721"
+   d="scan'208";a="60196666"
 Received: from lkp-server01.sh.intel.com (HELO 9a732dc145d3) ([10.239.97.150])
-  by orviesa007.jf.intel.com with ESMTP; 17 Aug 2024 04:36:34 -0700
+  by orviesa006.jf.intel.com with ESMTP; 17 Aug 2024 04:47:35 -0700
 Received: from kbuild by 9a732dc145d3 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1sfHjU-0007Oy-1B;
-	Sat, 17 Aug 2024 11:36:32 +0000
-Date: Sat, 17 Aug 2024 19:36:32 +0800
+	id 1sfHu8-0007Pe-29;
+	Sat, 17 Aug 2024 11:47:32 +0000
+Date: Sat, 17 Aug 2024 19:46:49 +0800
 From: kernel test robot <lkp@intel.com>
-To: Thorsten Blum <thorsten.blum@toblux.com>, chaotian.jing@mediatek.com,
-	ulf.hansson@linaro.org, matthias.bgg@gmail.com,
-	angelogioacchino.delregno@collabora.com
+To: Mario Limonciello <mario.limonciello@amd.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-mmc@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-mediatek@lists.infradead.org,
-	Thorsten Blum <thorsten.blum@toblux.com>
-Subject: Re: [PATCH] mmc: mtk-sd: Improve data type in msdc_timeout_cal()
-Message-ID: <202408171942.A1TKwW7h-lkp@intel.com>
-References: <20240815234602.59684-1-thorsten.blum@toblux.com>
+	linux-pm@vger.kernel.org
+Subject: [amd-pstate:superm1/runtime-pm-screen-on-off 5/5]
+ drivers/platform/x86/asus-wmi.c:4915:18: error: use of undeclared identifier
+ 'asus_hotk_resume_early'; did you mean 'asus_hotk_resume'?
+Message-ID: <202408171906.JvqE9BvI-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20240815234602.59684-1-thorsten.blum@toblux.com>
+Content-Transfer-Encoding: 8bit
 
-Hi Thorsten,
-
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on linus/master]
-[also build test ERROR on v6.11-rc3 next-20240816]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Thorsten-Blum/mmc-mtk-sd-Improve-data-type-in-msdc_timeout_cal/20240816-102400
-base:   linus/master
-patch link:    https://lore.kernel.org/r/20240815234602.59684-1-thorsten.blum%40toblux.com
-patch subject: [PATCH] mmc: mtk-sd: Improve data type in msdc_timeout_cal()
-config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20240817/202408171942.A1TKwW7h-lkp@intel.com/config)
-compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 26670e7fa4f032a019d23d56c6a02926e854e8af)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240817/202408171942.A1TKwW7h-lkp@intel.com/reproduce)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/superm1/linux.git superm1/runtime-pm-screen-on-off
+head:   09020cb8f4063731baa98c5f0fd9f1785597c989
+commit: 09020cb8f4063731baa98c5f0fd9f1785597c989 [5/5] platform/x86: asus-wmi: Drop CSEE quirks
+config: x86_64-rhel-8.3-rust (https://download.01.org/0day-ci/archive/20240817/202408171906.JvqE9BvI-lkp@intel.com/config)
+compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240817/202408171906.JvqE9BvI-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202408171942.A1TKwW7h-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202408171906.JvqE9BvI-lkp@intel.com/
 
-All error/warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
-   In file included from drivers/mmc/host/mtk-sd.c:11:
-   In file included from include/linux/dma-mapping.h:11:
-   In file included from include/linux/scatterlist.h:8:
-   In file included from include/linux/mm.h:2228:
-   include/linux/vmstat.h:514:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     514 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
-   In file included from drivers/mmc/host/mtk-sd.c:11:
-   In file included from include/linux/dma-mapping.h:11:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/hexagon/include/asm/io.h:328:
-   include/asm-generic/io.h:548:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     548 |         val = __raw_readb(PCI_IOBASE + addr);
-         |                           ~~~~~~~~~~ ^
-   include/asm-generic/io.h:561:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     561 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
-      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-         |                                                   ^
-   In file included from drivers/mmc/host/mtk-sd.c:11:
-   In file included from include/linux/dma-mapping.h:11:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/hexagon/include/asm/io.h:328:
-   include/asm-generic/io.h:574:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     574 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
-      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
-         |                                                   ^
-   In file included from drivers/mmc/host/mtk-sd.c:11:
-   In file included from include/linux/dma-mapping.h:11:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/hexagon/include/asm/io.h:328:
-   include/asm-generic/io.h:585:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     585 |         __raw_writeb(value, PCI_IOBASE + addr);
-         |                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:595:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     595 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:605:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     605 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
->> drivers/mmc/host/mtk-sd.c:805:3: warning: comparison of distinct pointer types ('typeof ((clk_ns)) *' (aka 'unsigned int *') and 'uint64_t *' (aka 'unsigned long long *')) [-Wcompare-distinct-pointer-types]
-     805 |                 do_div(clk_ns, mmc->actual_clock);
-         |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/asm-generic/div64.h:222:28: note: expanded from macro 'do_div'
-     222 |         (void)(((typeof((n)) *)0) == ((uint64_t *)0));  \
-         |                ~~~~~~~~~~~~~~~~~~ ^  ~~~~~~~~~~~~~~~
->> drivers/mmc/host/mtk-sd.c:805:3: error: incompatible pointer types passing 'u32 *' (aka 'unsigned int *') to parameter of type 'uint64_t *' (aka 'unsigned long long *') [-Werror,-Wincompatible-pointer-types]
-     805 |                 do_div(clk_ns, mmc->actual_clock);
-         |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/asm-generic/div64.h:238:22: note: expanded from macro 'do_div'
-     238 |                 __rem = __div64_32(&(n), __base);       \
-         |                                    ^~~~
-   include/asm-generic/div64.h:213:38: note: passing argument to parameter 'dividend' here
-     213 | extern uint32_t __div64_32(uint64_t *dividend, uint32_t divisor);
-         |                                      ^
->> drivers/mmc/host/mtk-sd.c:805:3: warning: shift count >= width of type [-Wshift-count-overflow]
-     805 |                 do_div(clk_ns, mmc->actual_clock);
-         |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/asm-generic/div64.h:234:25: note: expanded from macro 'do_div'
-     234 |         } else if (likely(((n) >> 32) == 0)) {          \
-         |                                ^  ~~
-   include/linux/compiler.h:76:40: note: expanded from macro 'likely'
-      76 | # define likely(x)      __builtin_expect(!!(x), 1)
-         |                                             ^
-   9 warnings and 1 error generated.
+>> drivers/platform/x86/asus-wmi.c:4915:18: error: use of undeclared identifier 'asus_hotk_resume_early'; did you mean 'asus_hotk_resume'?
+    4915 |         .resume_early = asus_hotk_resume_early,
+         |                         ^~~~~~~~~~~~~~~~~~~~~~
+         |                         asus_hotk_resume
+   drivers/platform/x86/asus-wmi.c:4856:12: note: 'asus_hotk_resume' declared here
+    4856 | static int asus_hotk_resume(struct device *device)
+         |            ^
+>> drivers/platform/x86/asus-wmi.c:4916:13: error: use of undeclared identifier 'asus_hotk_prepare'
+    4916 |         .prepare = asus_hotk_prepare,
+         |                    ^
+   2 errors generated.
 
 
-vim +805 drivers/mmc/host/mtk-sd.c
+vim +4915 drivers/platform/x86/asus-wmi.c
 
-208489032bdd8d Chaotian Jing              2015-06-15  794  
-557011b6b8c87c Chun-Hung Wu               2020-07-20  795  static u64 msdc_timeout_cal(struct msdc_host *host, u64 ns, u64 clks)
-208489032bdd8d Chaotian Jing              2015-06-15  796  {
-0caf60c4b110b5 Amey Narkhede              2020-09-18  797  	struct mmc_host *mmc = mmc_from_priv(host);
-d5c9ac0e2eb203 Thorsten Blum              2024-08-16  798  	u64 timeout;
-d5c9ac0e2eb203 Thorsten Blum              2024-08-16  799  	u32 clk_ns, mode = 0;
-208489032bdd8d Chaotian Jing              2015-06-15  800  
-0caf60c4b110b5 Amey Narkhede              2020-09-18  801  	if (mmc->actual_clock == 0) {
-208489032bdd8d Chaotian Jing              2015-06-15  802  		timeout = 0;
-208489032bdd8d Chaotian Jing              2015-06-15  803  	} else {
-d5c9ac0e2eb203 Thorsten Blum              2024-08-16  804  		clk_ns  = 1000000000U;
-0caf60c4b110b5 Amey Narkhede              2020-09-18 @805  		do_div(clk_ns, mmc->actual_clock);
-557011b6b8c87c Chun-Hung Wu               2020-07-20  806  		timeout = ns + clk_ns - 1;
-557011b6b8c87c Chun-Hung Wu               2020-07-20  807  		do_div(timeout, clk_ns);
-557011b6b8c87c Chun-Hung Wu               2020-07-20  808  		timeout += clks;
-208489032bdd8d Chaotian Jing              2015-06-15  809  		/* in 1048576 sclk cycle unit */
-4fe54318496004 AngeloGioacchino Del Regno 2021-12-16  810  		timeout = DIV_ROUND_UP(timeout, BIT(20));
-762d491a8bff7a Chaotian Jing              2017-10-16  811  		if (host->dev_comp->clk_div_bits == 8)
-762d491a8bff7a Chaotian Jing              2017-10-16  812  			sdr_get_field(host->base + MSDC_CFG,
-762d491a8bff7a Chaotian Jing              2017-10-16  813  				      MSDC_CFG_CKMOD, &mode);
-762d491a8bff7a Chaotian Jing              2017-10-16  814  		else
-762d491a8bff7a Chaotian Jing              2017-10-16  815  			sdr_get_field(host->base + MSDC_CFG,
-762d491a8bff7a Chaotian Jing              2017-10-16  816  				      MSDC_CFG_CKMOD_EXTRA, &mode);
-208489032bdd8d Chaotian Jing              2015-06-15  817  		/*DDR mode will double the clk cycles for data timeout */
-208489032bdd8d Chaotian Jing              2015-06-15  818  		timeout = mode >= 2 ? timeout * 2 : timeout;
-208489032bdd8d Chaotian Jing              2015-06-15  819  		timeout = timeout > 1 ? timeout - 1 : 0;
-208489032bdd8d Chaotian Jing              2015-06-15  820  	}
-557011b6b8c87c Chun-Hung Wu               2020-07-20  821  	return timeout;
-557011b6b8c87c Chun-Hung Wu               2020-07-20  822  }
-557011b6b8c87c Chun-Hung Wu               2020-07-20  823  
+0773d7f9f1c0ad5 drivers/platform/x86/eeepc-wmi.c Corentin Chary 2011-02-06  4910  
+e12e6d94db24e90 drivers/platform/x86/asus-wmi.c  Corentin Chary 2011-02-26  4911  static const struct dev_pm_ops asus_pm_ops = {
+e12e6d94db24e90 drivers/platform/x86/asus-wmi.c  Corentin Chary 2011-02-26  4912  	.thaw = asus_hotk_thaw,
+e12e6d94db24e90 drivers/platform/x86/asus-wmi.c  Corentin Chary 2011-02-26  4913  	.restore = asus_hotk_restore,
+307340493f3d629 drivers/platform/x86/asus-wmi.c  Oleksij Rempel 2015-09-14  4914  	.resume = asus_hotk_resume,
+e0894ff038d86f3 drivers/platform/x86/asus-wmi.c  Luke D. Jones  2023-11-27 @4915  	.resume_early = asus_hotk_resume_early,
+e0894ff038d86f3 drivers/platform/x86/asus-wmi.c  Luke D. Jones  2023-11-27 @4916  	.prepare = asus_hotk_prepare,
+45f2c6937ed6066 drivers/platform/x86/eeepc-wmi.c Yong Wang      2010-04-11  4917  };
+45f2c6937ed6066 drivers/platform/x86/eeepc-wmi.c Yong Wang      2010-04-11  4918  
+
+:::::: The code at line 4915 was first introduced by commit
+:::::: e0894ff038d86f30614ec16ec26dacb88c8d2bd4 platform/x86: asus-wmi: disable USB0 hub on ROG Ally before suspend
+
+:::::: TO: Luke D. Jones <luke@ljones.dev>
+:::::: CC: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
 
 -- 
 0-DAY CI Kernel Test Service
