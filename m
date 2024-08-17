@@ -1,382 +1,131 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 15ACF43178;
-	Sat, 17 Aug 2024 04:50:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
+Received: from zg8tmtyylji0my4xnjeumjiw.icoremail.net (zg8tmtyylji0my4xnjeumjiw.icoremail.net [162.243.161.220])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AD08A78C92
+	for <llvm@lists.linux.dev>; Sat, 17 Aug 2024 04:59:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=162.243.161.220
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723870232; cv=none; b=TRfdzsx6kfmBbpiAYlHBnKxdISlMGjFC9PS6xvhAfPmiiM2AcaFbLvFTBd+qjKACasYCmCxiqrexrp9Iv6GSToxzznuDqQ2+h2whqvlA9WBVNhi+5gn+28mKTqaXCzM30kbYz9zAxhHQWKo413AP9y9PWv98QqUyemZcxxPm+4g=
+	t=1723870790; cv=none; b=eibHQj6owbFqIF0XYN2m6O/l+m/Cz0rT3UxVAtmriSrwvPR2jpOVZDgq6qW+0FmKv3Ru9dT3lU4iOGJkqDfAHGZvgbd55FNhEzzMHskZ/zB5mnSYuelzz5WlcPBiac2R9lL03SVnHolKKyxu3J4SyGO18YA74G7NjU1CMs6FzEg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723870232; c=relaxed/simple;
-	bh=ZWnVAHDkeoGyigZ2zdcriUWFCgUhYBqN//kzLmyKI9I=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=gtzsvxhG02xtOZh2oFeJVlJqOd6cHupt6EgWCRCqb4du3dHTmOjdHRI5P4ecxbttiKvnBZ2AIIAsV/OR3wAqSHSopt3BF7b1WyPKQjv01YWy0HizhKijYQ4H9/+0JsmpAlQx9x1bDzgaJIkpvXJkuxQluFH8yuY0yWupj6zxJO0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=HXGJRWmM; arc=none smtp.client-ip=192.198.163.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="HXGJRWmM"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1723870229; x=1755406229;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=ZWnVAHDkeoGyigZ2zdcriUWFCgUhYBqN//kzLmyKI9I=;
-  b=HXGJRWmM2mr0NewG5aZYPiPABFmeg8pTP+hpMUzAVyKpjL2QqKE8rNlj
-   GnCBHUI9sTCWzODFKDah+2vF/YRhqgepYREPLDB/A4knSNCRG6W0U80h1
-   2IdU7q+X2x2vZKmo5uQFmYUc2zKZ18gVx+lKSh8k7r+p372DBFXWj8KG6
-   fVBhJh/Je4RXlvZwuBId7T0G/IEnYd20Ib+g51JgfW2tl2uOt8SID0MCb
-   7KAdOTuTfULm3/Z7U2pJ6OkDU8XD6daTxwuHuy0zcH5RXn46f12NKW3IN
-   ZEIYtpmdothJ9z92UT9SLmMvfPnn81ARsjUbbkUceqoykeYobP9BjzrH+
-   w==;
-X-CSE-ConnectionGUID: roMEFMohTY63O179wWZR4A==
-X-CSE-MsgGUID: WBI9uK5ZR42mXA540UwVzg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11166"; a="21802140"
-X-IronPort-AV: E=Sophos;i="6.10,153,1719903600"; 
-   d="scan'208";a="21802140"
-Received: from fmviesa003.fm.intel.com ([10.60.135.143])
-  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Aug 2024 21:50:29 -0700
-X-CSE-ConnectionGUID: SnZuBdHcRnO4HTj4zFKXxQ==
-X-CSE-MsgGUID: mI2kXrAqT/mHGQuqynPpaw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.10,153,1719903600"; 
-   d="scan'208";a="64037848"
-Received: from lkp-server01.sh.intel.com (HELO 9a732dc145d3) ([10.239.97.150])
-  by fmviesa003.fm.intel.com with ESMTP; 16 Aug 2024 21:50:27 -0700
-Received: from kbuild by 9a732dc145d3 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1sfBOS-0007Bu-2W;
-	Sat, 17 Aug 2024 04:50:24 +0000
-Date: Sat, 17 Aug 2024 12:49:42 +0800
-From: kernel test robot <lkp@intel.com>
-To: Mario Limonciello <mario.limonciello@amd.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-pm@vger.kernel.org
-Subject: [amd-pstate:superm1/runtime-pm-screen-on-off 2/5]
- include/linux/suspend.h:304:69: error: expected ';' after return statement
-Message-ID: <202408171217.AWVyM0SK-lkp@intel.com>
+	s=arc-20240116; t=1723870790; c=relaxed/simple;
+	bh=2S+QbEWGme4zIg1L2rhpubtJ7u7R8DG0G9w8lDVn/oA=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=tndmpSTPDSb/X1+rfvdUB0hlEeFVfKQzAxdIPzJX6LX00da+kyufV5MRgBaraSZwjY6UiiUVO3UkZfNFtBqsTglKwRoGPBKMi11tVGOgtulRYj7lhB+KNMzkPtmVrk+I9HDoNzp8JcOL8j6LJcwgvc07ZdVrgQzZJELcHM9h8hs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=hust.edu.cn; spf=pass smtp.mailfrom=hust.edu.cn; arc=none smtp.client-ip=162.243.161.220
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=hust.edu.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hust.edu.cn
+Received: from hust.edu.cn (unknown [172.16.0.50])
+	by app1 (Coremail) with SMTP id HgEQrAC3vzspLsBmq_XPAw--.30524S2;
+	Sat, 17 Aug 2024 12:59:21 +0800 (CST)
+Received: from [172.20.10.4] (unknown [1.48.198.69])
+	by gateway (Coremail) with SMTP id _____wCHlXglLsBmXC9KAQ--.38422S2;
+	Sat, 17 Aug 2024 12:59:21 +0800 (CST)
+Message-ID: <64426130-d59a-47a1-8bf2-3b72fb0cc030@hust.edu.cn>
+Date: Sat, 17 Aug 2024 12:59:16 +0800
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/superm1/linux.git superm1/runtime-pm-screen-on-off
-head:   09020cb8f4063731baa98c5f0fd9f1785597c989
-commit: b932cdf52b629330f537863edcd0075b23facf63 [2/5] acpi/x86: s2idle: add support for screen off and screen on callbacks
-config: s390-allnoconfig (https://download.01.org/0day-ci/archive/20240817/202408171217.AWVyM0SK-lkp@intel.com/config)
-compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 26670e7fa4f032a019d23d56c6a02926e854e8af)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240817/202408171217.AWVyM0SK-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202408171217.AWVyM0SK-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
-   In file included from kernel/cpu.c:13:
-   In file included from include/linux/sched/isolation.h:5:
-   In file included from include/linux/cpuset.h:17:
-   In file included from include/linux/mm.h:2228:
-   include/linux/vmstat.h:514:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     514 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
-   In file included from kernel/cpu.c:13:
-   In file included from include/linux/sched/isolation.h:7:
-   In file included from include/linux/tick.h:8:
-   In file included from include/linux/clockchips.h:14:
-   In file included from include/linux/clocksource.h:22:
-   In file included from arch/s390/include/asm/io.h:93:
-   include/asm-generic/io.h:548:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     548 |         val = __raw_readb(PCI_IOBASE + addr);
-         |                           ~~~~~~~~~~ ^
-   include/asm-generic/io.h:561:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     561 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
-      37 | #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
-         |                                                           ^
-   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
-     102 | #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
-         |                                                      ^
-   In file included from kernel/cpu.c:13:
-   In file included from include/linux/sched/isolation.h:7:
-   In file included from include/linux/tick.h:8:
-   In file included from include/linux/clockchips.h:14:
-   In file included from include/linux/clocksource.h:22:
-   In file included from arch/s390/include/asm/io.h:93:
-   include/asm-generic/io.h:574:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     574 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
-      35 | #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
-         |                                                           ^
-   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
-     115 | #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
-         |                                                      ^
-   In file included from kernel/cpu.c:13:
-   In file included from include/linux/sched/isolation.h:7:
-   In file included from include/linux/tick.h:8:
-   In file included from include/linux/clockchips.h:14:
-   In file included from include/linux/clocksource.h:22:
-   In file included from arch/s390/include/asm/io.h:93:
-   include/asm-generic/io.h:585:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     585 |         __raw_writeb(value, PCI_IOBASE + addr);
-         |                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:595:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     595 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:605:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     605 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:693:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     693 |         readsb(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:701:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     701 |         readsw(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:709:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     709 |         readsl(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:718:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     718 |         writesb(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   include/asm-generic/io.h:727:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     727 |         writesw(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   include/asm-generic/io.h:736:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     736 |         writesl(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   In file included from kernel/cpu.c:27:
->> include/linux/suspend.h:304:69: error: expected ';' after return statement
-     304 | static inline int platform_suspend_screen_off(void) { return -ENODEV };
-         |                                                                     ^
-         |                                                                     ;
-   include/linux/suspend.h:305:68: error: expected ';' after return statement
-     305 | static inline int platform_suspend_screen_on(void) { return -ENODEV };
-         |                                                                    ^
-         |                                                                    ;
-   13 warnings and 2 errors generated.
---
-   In file included from kernel/sys.c:9:
-   In file included from include/linux/mm.h:2228:
-   include/linux/vmstat.h:514:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     514 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
-   In file included from kernel/sys.c:10:
-   include/linux/mm_inline.h:47:41: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-      47 |         __mod_lruvec_state(lruvec, NR_LRU_BASE + lru, nr_pages);
-         |                                    ~~~~~~~~~~~ ^ ~~~
-   include/linux/mm_inline.h:49:22: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-      49 |                                 NR_ZONE_LRU_BASE + lru, nr_pages);
-         |                                 ~~~~~~~~~~~~~~~~ ^ ~~~
-   In file included from kernel/sys.c:30:
->> include/linux/suspend.h:304:69: error: expected ';' after return statement
-     304 | static inline int platform_suspend_screen_off(void) { return -ENODEV };
-         |                                                                     ^
-         |                                                                     ;
-   include/linux/suspend.h:305:68: error: expected ';' after return statement
-     305 | static inline int platform_suspend_screen_on(void) { return -ENODEV };
-         |                                                                    ^
-         |                                                                    ;
-   In file included from kernel/sys.c:31:
-   In file included from include/linux/tty.h:11:
-   In file included from include/linux/tty_port.h:5:
-   In file included from include/linux/kfifo.h:40:
-   In file included from include/linux/dma-mapping.h:11:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/s390/include/asm/io.h:93:
-   include/asm-generic/io.h:548:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     548 |         val = __raw_readb(PCI_IOBASE + addr);
-         |                           ~~~~~~~~~~ ^
-   include/asm-generic/io.h:561:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     561 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
-      37 | #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
-         |                                                           ^
-   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
-     102 | #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
-         |                                                      ^
-   In file included from kernel/sys.c:31:
-   In file included from include/linux/tty.h:11:
-   In file included from include/linux/tty_port.h:5:
-   In file included from include/linux/kfifo.h:40:
-   In file included from include/linux/dma-mapping.h:11:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/s390/include/asm/io.h:93:
-   include/asm-generic/io.h:574:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     574 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
-      35 | #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
-         |                                                           ^
-   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
-     115 | #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
-         |                                                      ^
-   In file included from kernel/sys.c:31:
-   In file included from include/linux/tty.h:11:
-   In file included from include/linux/tty_port.h:5:
-   In file included from include/linux/kfifo.h:40:
-   In file included from include/linux/dma-mapping.h:11:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/s390/include/asm/io.h:93:
-   include/asm-generic/io.h:585:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     585 |         __raw_writeb(value, PCI_IOBASE + addr);
-         |                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:595:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     595 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:605:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     605 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:693:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     693 |         readsb(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:701:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     701 |         readsw(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:709:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     709 |         readsl(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:718:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     718 |         writesb(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   include/asm-generic/io.h:727:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     727 |         writesw(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   include/asm-generic/io.h:736:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     736 |         writesl(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   15 warnings and 2 errors generated.
---
-   In file included from kernel/umh.c:5:
-   In file included from include/linux/module.h:19:
-   In file included from include/linux/elf.h:6:
-   In file included from arch/s390/include/asm/elf.h:181:
-   In file included from arch/s390/include/asm/mmu_context.h:11:
-   In file included from arch/s390/include/asm/pgalloc.h:18:
-   In file included from include/linux/mm.h:2228:
-   include/linux/vmstat.h:514:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     514 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
-   In file included from kernel/umh.c:25:
->> include/linux/suspend.h:304:69: error: expected ';' after return statement
-     304 | static inline int platform_suspend_screen_off(void) { return -ENODEV };
-         |                                                                     ^
-         |                                                                     ;
-   include/linux/suspend.h:305:68: error: expected ';' after return statement
-     305 | static inline int platform_suspend_screen_on(void) { return -ENODEV };
-         |                                                                    ^
-         |                                                                    ;
-   1 warning and 2 errors generated.
---
-   In file included from kernel/sched/build_policy.c:24:
-   In file included from include/linux/livepatch.h:12:
-   In file included from include/linux/module.h:19:
-   In file included from include/linux/elf.h:6:
-   In file included from arch/s390/include/asm/elf.h:181:
-   In file included from arch/s390/include/asm/mmu_context.h:11:
-   In file included from arch/s390/include/asm/pgalloc.h:18:
-   In file included from include/linux/mm.h:2228:
-   include/linux/vmstat.h:514:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     514 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
-   In file included from kernel/sched/build_policy.c:28:
->> include/linux/suspend.h:304:69: error: expected ';' after return statement
-     304 | static inline int platform_suspend_screen_off(void) { return -ENODEV };
-         |                                                                     ^
-         |                                                                     ;
-   include/linux/suspend.h:305:68: error: expected ';' after return statement
-     305 | static inline int platform_suspend_screen_on(void) { return -ENODEV };
-         |                                                                    ^
-         |                                                                    ;
-   In file included from kernel/sched/build_policy.c:34:
-   In file included from kernel/sched/sched.h:63:
-   In file included from include/linux/tick.h:8:
-   In file included from include/linux/clockchips.h:14:
-   In file included from include/linux/clocksource.h:22:
-   In file included from arch/s390/include/asm/io.h:93:
-   include/asm-generic/io.h:548:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     548 |         val = __raw_readb(PCI_IOBASE + addr);
-         |                           ~~~~~~~~~~ ^
-   include/asm-generic/io.h:561:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     561 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
-      37 | #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
-         |                                                           ^
-   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
-     102 | #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
-         |                                                      ^
-   In file included from kernel/sched/build_policy.c:34:
-   In file included from kernel/sched/sched.h:63:
-   In file included from include/linux/tick.h:8:
-   In file included from include/linux/clockchips.h:14:
-   In file included from include/linux/clocksource.h:22:
-   In file included from arch/s390/include/asm/io.h:93:
-   include/asm-generic/io.h:574:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     574 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
-      35 | #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
-         |                                                           ^
-   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
-     115 | #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
-         |                                                      ^
-   In file included from kernel/sched/build_policy.c:34:
-   In file included from kernel/sched/sched.h:63:
-   In file included from include/linux/tick.h:8:
-   In file included from include/linux/clockchips.h:14:
-   In file included from include/linux/clocksource.h:22:
-   In file included from arch/s390/include/asm/io.h:93:
-   include/asm-generic/io.h:585:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     585 |         __raw_writeb(value, PCI_IOBASE + addr);
-         |                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:595:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     595 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:605:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     605 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:693:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     693 |         readsb(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:701:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     701 |         readsw(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:709:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     709 |         readsl(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:718:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     718 |         writesb(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   include/asm-generic/io.h:727:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     727 |         writesw(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   include/asm-generic/io.h:736:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     736 |         writesl(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   13 warnings and 2 errors generated.
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v6] docs/zh_CN: Add dev-tools/kcsan Chinese translation
+To: Jonathan Corbet <corbet@lwn.net>, Alex Shi <alexs@kernel.org>,
+ Yanteng Si <siyanteng@loongson.cn>, Nathan Chancellor <nathan@kernel.org>,
+ Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling
+ <morbo@google.com>, Justin Stitt <justinstitt@google.com>
+Cc: hust-os-kernel-patches@googlegroups.com, linux-doc@vger.kernel.org,
+ linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+References: <20240810082245.5934-1-tttturtleruss@hust.edu.cn>
+ <87ttfkhzl2.fsf@trenco.lwn.net>
+From: Haoyang Liu <tttturtleruss@hust.edu.cn>
+In-Reply-To: <87ttfkhzl2.fsf@trenco.lwn.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:HgEQrAC3vzspLsBmq_XPAw--.30524S2
+Authentication-Results: app1; spf=neutral smtp.mail=tttturtleruss@hust
+	.edu.cn;
+X-Coremail-Antispam: 1UD129KBjvJXoWxuF1kAF4kKr43Gw4fAw4Dtwb_yoW5Ww4fpF
+	WvgrySka1DZr43Cw4Ig3W8Ar1FkFZ7Gr4UGFWagw1Fqwn8Kr4Syrs0qryjgayxXrWxAan8
+	Xw15KFyDWw4YyaDanT9S1TB71UUUUUJqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUm0b7Iv0xC_Zr1lb4IE77IF4wAFc2x0x2IEx4CE42xK8VAvwI8I
+	cIk0rVWrJVCq3wA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjx
+	v20xvE14v26ryj6F1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4UJVWxJr1l84ACjcxK
+	6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_GcCE3s1ln4kS14v26r
+	1Y6r17M2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12xvs2x26I8E6xACxx1l5I8C
+	rVACY4xI64kE6c02F40Ex7xfMcIj64x0Y40En7xvr7AKxVW8Jr0_Cr1UMcIj6x8ErcxFaV
+	Av8VW8uFyUJr1UMcIj6xkF7I0En7xvr7AKxVW8Jr0_Cr1UMcvjeVCFs4IE7xkEbVWUJVW8
+	JwACjcxG0xvEwIxGrwCY1x0262kKe7AKxVWUAVWUtwCF04k20xvY0x0EwIxGrwCF04k20x
+	vE74AGY7Cv6cx26r4fZr1UJr1l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1l4IxYO2xFxVAFwI0_
+	Jrv_JF1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1V
+	AY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAI
+	cVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42
+	IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r1j6r4UYxBIdaVFxhVj
+	vjDU0xZFpf9x07jgSdgUUUUU=
+X-CM-SenderInfo: rxsqjiqrssiko6kx23oohg3hdfq/1tbiAQkMAmbAGjQDgwACsM
 
 
-vim +304 include/linux/suspend.h
+在 2024/8/17 6:28, Jonathan Corbet 写道:
+> Haoyang Liu <tttturtleruss@hust.edu.cn> writes:
+>
+>> Translate dev-tools/kcsan commit 31f605a308e6
+>> ("kcsan, compiler_types: Introduce __data_racy type qualifier")
+>> into Chinese and add it in dev-tools/zh_CN/index.rst
+>>
+>> Signed-off-by: Haoyang Liu <tttturtleruss@hust.edu.cn>
+>> Reviewed-by: Yanteng Si <siyanteng@loongson.cn>
+>> ---
+>> v5 -> v6: Fix a typo.
+>> v4 -> v5: Translate link into Chinese as well according to reviewer's advice.
+>> v3 -> v4: Added original English text for proper nouns and modified some unclear experessions.
+>> v2 -> v3: Revised some sentences based on reviewer's suggestions and updated the KTSAN url.
+>> v1 -> v2: Added commit tag and fixed style problems according to reviewer's suggestions.
+>>
+>>   .../translations/zh_CN/dev-tools/index.rst    |   2 +-
+>>   .../translations/zh_CN/dev-tools/kcsan.rst    | 321 ++++++++++++++++++
+>>   2 files changed, 322 insertions(+), 1 deletion(-)
+>>   create mode 100644 Documentation/translations/zh_CN/dev-tools/kcsan.rst
+> So I applied this, but ended up unapplying it.  It adds a whole pile of
+> docs build warnings:
+>
+> Documentation/translations/zh_CN/dev-tools/kcsan:223: ./include/linux/kcsan-checks.h:370: WARNING: Duplicate C declaration, also defined at dev-tools/kcsan:370.
+> Declaration is '.. c:macro:: ASSERT_EXCLUSIVE_WRITER'.
+> Documentation/translations/zh_CN/dev-tools/kcsan:223: ./include/linux/kcsan-checks.h:419: WARNING: Duplicate C declaration, also defined at dev-tools/kcsan:419.
+> Declaration is '.. c:macro:: ASSERT_EXCLUSIVE_WRITER_SCOPED'.
+> Documentation/translations/zh_CN/dev-tools/kcsan:223: ./include/linux/kcsan-checks.h:451: WARNING: Duplicate C declaration, also defined at dev-tools/kcsan:451.
+> Declaration is '.. c:macro:: ASSERT_EXCLUSIVE_ACCESS'.
+>
+> [...]
+>
+> You really do need to do a build test before sending changes like this.
+>
+> The problem is the duplicated inclusion caused by the kernel-doc
+> directive:
+>
+>> +.. kernel-doc:: include/linux/kcsan-checks.h
+>> +    :functions: ASSERT_EXCLUSIVE_WRITER ASSERT_EXCLUSIVE_WRITER_SCOPED
+>> +                ASSERT_EXCLUSIVE_ACCESS ASSERT_EXCLUSIVE_ACCESS_SCOPED
+>> +                ASSERT_EXCLUSIVE_BITS
+>>
+> We really just can't do that with the current build system; the best
+> thing is to put in a note saying to see the original document for those
+> declarations.
 
-   296	
-   297	static inline void suspend_set_ops(const struct platform_suspend_ops *ops) {}
-   298	static inline int pm_suspend(suspend_state_t state) { return -ENOSYS; }
-   299	static inline bool sync_on_suspend_enabled(void) { return true; }
-   300	static inline bool idle_should_enter_s2idle(void) { return false; }
-   301	static inline void __init pm_states_init(void) {}
-   302	static inline void s2idle_set_ops(const struct platform_s2idle_ops *ops) {}
-   303	static inline void s2idle_wake(void) {}
- > 304	static inline int platform_suspend_screen_off(void) { return -ENODEV };
-   305	static inline int platform_suspend_screen_on(void) { return -ENODEV };
-   306	
+I'm sorry for the warnings my patch introduced. I thought they were 
+harmless so I ignored them. I will replace the duplicated inclusion with 
+a note and a link to the original document.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+I apologize for my mistake.
+
+
+Thanks,
+
+Haoyang
+
+>
+> This would be good to fix, perhaps with a variant of kernel-doc that
+> doesn't generate the duplicated declarations, but until somebody does
+> that we have to work around it.
+>
+> Thanks,
+>
+> jon
+
