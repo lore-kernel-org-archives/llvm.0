@@ -1,140 +1,127 @@
-Received: from mail-yb1-f175.google.com (mail-yb1-f175.google.com [209.85.219.175])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9CE891C32;
-	Sat, 17 Aug 2024 01:11:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 02C7A6FD3;
+	Sat, 17 Aug 2024 03:38:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723857085; cv=none; b=fcBpJ2Z41mwxG8nK8oVhp+MrWspGazc83z4ozxC90+sVh8UcsBY9zax9YET7ewv2SN32mh7DX672Ka3YV2DmnyFGWDTC/fZtmCESK4Hz+RnzQdLIEOy2T4N1ish5oC5rjPXbzEFfwYEkNW+FP6RUpHG5rHsa99DTU8YittkSPvY=
+	t=1723865908; cv=none; b=XxTpbs/hrlCRQMFMMm7p61QEYhR4bii74mDgVoD8N/ykkNvFBJ77Oyg880/5cykeMMPrxh8DakmXQl4KRkGQcZ5yTi/6MgMzpmy9cPnG02J2tRU4GmUwyH4jeUCwCXqvv1I1wwqcAMdgFQeIOSyUVTf48TqjRNmSHtveXqy+jAg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723857085; c=relaxed/simple;
-	bh=g8Geri2XNbL38pyOWzp7d2MgOy9oPpFutYakSLbV27M=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=RPS2hwXnXpnG0yi4B4aQ8mYcCQpP1xMdURL7UATKekAlHJtWK0Xk1Gbr4E88HwhG+HbsDWGr2DtJ9i0rSBo62FLtsKFFVGk3lB+Jl3fDyBiJvbM+bUQpDtYuJy1GgrNQdBtEYxYPfme+KAXQIE+UhO8dQdvGGxUE2S7UvfSxAY4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=aHrdNdxq; arc=none smtp.client-ip=209.85.219.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1723865908; c=relaxed/simple;
+	bh=/S0fVhjL8e2047b9QgJCX6dfg8ItmW4KtR/sH1WyGIU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=VXxfc06qQe1UFAHYwZT028uIZxz+mA3iHoGNUS5ebHIT2ET1veaB4HG2RXmx2Ce+C1FjgHNu5MKhFfssRJm0Sik7M9sp6jaOgmj03BXjKTJ13lJNXdxPujwxwl8+xFBOhohmoUM/xCfW2WTDPsHLpWjM4O0BTJIHe2qFZqTQXq8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=I8d1Txq6; arc=none smtp.client-ip=198.175.65.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="aHrdNdxq"
-Received: by mail-yb1-f175.google.com with SMTP id 3f1490d57ef6-e0875f1e9edso2536948276.1;
-        Fri, 16 Aug 2024 18:11:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1723857082; x=1724461882; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ug8rihSZJE889SueAoqTX9ZWSfO/z3Gsu452Tq7F+6A=;
-        b=aHrdNdxqC9MFVHgDgszrpoqsZXUIAWBtsHu5PPTRHB+MdmVtyEpaf9ZVYMXusu27Ac
-         3Wzh7+s30FKpt7vVhmbSxxU8c3WZI9CRX5+9AP/O3kyaTmFwWtzs0ZfZETKdNVeyQbxF
-         TumXhjq9upQIllRP7UpcYhax1SkP5S6K/ohaUB+3meqoKWGsNpXDwxagfc3llQKR0d4G
-         C9ureEm2D335x0y+i2m+TXQEtpzksXwYWS/usPMDEpTt5crHOLi3nVQGN/jhC0H4hOOI
-         I8TaLFEpvkmMW7RX3s3OrXFgBx9JldIk20lmp/X5OhA/SdHBox528vUXzbNg7cno0vjA
-         oeAA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1723857082; x=1724461882;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ug8rihSZJE889SueAoqTX9ZWSfO/z3Gsu452Tq7F+6A=;
-        b=QQE4NobXvD+7I2Tsip3xdNy6sFZ4y+FXokbogL1cdIfB/+GftvgIDShH1oZY1zNutG
-         N8PBDSPRkr3mR1xebS9/jV4Bj+dA0n46LhfZlvWFlDMoaBbYsPPE9fFteapZ6G9lJC7G
-         4t9Cr2VKNjwmECgq30i84clTbHDsoVpt5KwYN2ZpC6FXIQSitF0W/f71Jv2niVfyov+G
-         q4pvLY1Cbnx10TWivaAmOqp6GWXohnwAuNAtxl9JgrkAm8EQT3sHeu+NgTN/9rN2YSfD
-         PrHmhIGhkm8RFU1MY4aZk1tBMFHDMTNCefy+CCrnEZu2jrafMQT/4k9XZSf8EnCs9Tyw
-         XGww==
-X-Forwarded-Encrypted: i=1; AJvYcCU+ovaDe8UsmWjuD07x+t84O0AwT5TWXPIyTOkN0zeEE+eIVz5uQ+1MNNXx2zoCXIUY/XFx5P0SbG+YO0e68T7pM703vT2cFuAirIjYzXD8DDDGfPjE4eO0FousOw==
-X-Gm-Message-State: AOJu0YyiuNQQt5jbeplojkeCKrbxxcJlJQn1U9RvOvavuX/uKuJebMPa
-	Dy9Hef++p3qT7zRQr9bIlSEi2pb3G4Z5N4Mfea+JyQ2QCqyVlz7ZCDKiv5UJb3e2YK0nr4ApAeK
-	w3bc2julHURw3GWO73UJw3vQPlNQ=
-X-Google-Smtp-Source: AGHT+IEM2mdGVjOsGnMz8WXTnI9118qcDH2jUCIIbDZ4rPiQ10iGBBlTUuDxRR73hnxLfbHp9nYn32+CIgpvlrRB+hI=
-X-Received: by 2002:a05:6902:701:b0:e08:5e73:cdf3 with SMTP id
- 3f1490d57ef6-e1180e6c54emr4739180276.9.1723857082428; Fri, 16 Aug 2024
- 18:11:22 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="I8d1Txq6"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1723865907; x=1755401907;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=/S0fVhjL8e2047b9QgJCX6dfg8ItmW4KtR/sH1WyGIU=;
+  b=I8d1Txq6qanmL9U0hKQHX5j3c4llR6jBsC2ip4rI5FyYO94GrTXtoKPk
+   y7Ai0UvPX4kAZyrmCENAHNfAdRinMUL+uUWK3YO5caTs04EKqr8Hodnrq
+   oCT1SNESeAxBzzaiz97H/kgkkDd+PkVoYasvKuQHxQlzHHMRX2WDXe8UY
+   lkS5yIDHN6C2kg5ShCI/5Pu6E6Fx+1wjQ/XLZNn0HyMgU6GCikUIaUlR0
+   JUgRfdbu7yc1VShQzbDCpLJ29QkzxXqlJqzRhSffz9Fzvh8xO3JroD+vl
+   UcIkhD6wccniwzL0bmzY+Tz+17+wNWQR8OwfYhmN/4RAzfTZKeNGusBLi
+   w==;
+X-CSE-ConnectionGUID: xtVh/KR+TBaC5rwcgVAoyA==
+X-CSE-MsgGUID: V3JAYkPsT/2zXc+uhFLpmw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11166"; a="22314093"
+X-IronPort-AV: E=Sophos;i="6.10,153,1719903600"; 
+   d="scan'208";a="22314093"
+Received: from orviesa002.jf.intel.com ([10.64.159.142])
+  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Aug 2024 20:38:27 -0700
+X-CSE-ConnectionGUID: f1GGdFW3TbqrHyAJCFoE1w==
+X-CSE-MsgGUID: 0bgWTKGjSWOOpYQjRM2ZOA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.10,153,1719903600"; 
+   d="scan'208";a="90588614"
+Received: from lkp-server01.sh.intel.com (HELO 9a732dc145d3) ([10.239.97.150])
+  by orviesa002.jf.intel.com with ESMTP; 16 Aug 2024 20:38:25 -0700
+Received: from kbuild by 9a732dc145d3 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1sfAGl-00079W-01;
+	Sat, 17 Aug 2024 03:38:23 +0000
+Date: Sat, 17 Aug 2024 11:38:17 +0800
+From: kernel test robot <lkp@intel.com>
+To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: Re: [PATCH v1 5/7] i2c: designware: Always provide device ID tables
+Message-ID: <202408171121.ZQyCK3P1-lkp@intel.com>
+References: <20240816171225.3506844-6-andriy.shevchenko@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20240807-macos-build-support-v1-0-4cd1ded85694@samsung.com>
- <CGME20240807110114eucas1p2e1ca4cbd352c6cd9d60688b1570df8d4@eucas1p2.samsung.com>
- <2024080753-debug-roulette-8cb1@gregkh> <3jnp6tnkjpvnisefomxagazu2u3uzzt7rcon3r5jssraxzwegb@gsxc7c5sfh7v>
- <2024080758-dedicator-smoky-44be@gregkh>
-In-Reply-To: <2024080758-dedicator-smoky-44be@gregkh>
-From: Barry Song <21cnbao@gmail.com>
-Date: Sat, 17 Aug 2024 13:11:11 +1200
-Message-ID: <CAGsJ_4zA6=ajoOgAm9kweeiBFKz4TJxxjYFGHHd3HQY8dxHpWA@mail.gmail.com>
-Subject: Re: [PATCH 00/12] Enable build system on macOS hosts
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Daniel Gomez <da.gomez@samsung.com>, Masahiro Yamada <masahiroy@kernel.org>, 
-	Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nicolas@fjasle.eu>, 
-	Lucas De Marchi <lucas.demarchi@intel.com>, 
-	=?UTF-8?Q?Thomas_Hellstr=C3=B6m?= <thomas.hellstrom@linux.intel.com>, 
-	Rodrigo Vivi <rodrigo.vivi@intel.com>, 
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, Maxime Ripard <mripard@kernel.org>, 
-	Thomas Zimmermann <tzimmermann@suse.de>, David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>, 
-	William Hubbs <w.d.hubbs@gmail.com>, Chris Brannon <chris@the-brannons.com>, 
-	Kirk Reiser <kirk@reisers.ca>, Samuel Thibault <samuel.thibault@ens-lyon.org>, 
-	Paul Moore <paul@paul-moore.com>, Stephen Smalley <stephen.smalley.work@gmail.com>, 
-	Ondrej Mosnacek <omosnace@redhat.com>, Catalin Marinas <catalin.marinas@arm.com>, 
-	Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>, Oliver Upton <oliver.upton@linux.dev>, 
-	James Morse <james.morse@arm.com>, Suzuki K Poulose <suzuki.poulose@arm.com>, 
-	Zenghui Yu <yuzenghui@huawei.com>, Jiri Slaby <jirislaby@kernel.org>, 
-	Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, 
-	Justin Stitt <justinstitt@google.com>, 
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, 
-	"linux-kbuild@vger.kernel.org" <linux-kbuild@vger.kernel.org>, 
-	"intel-xe@lists.freedesktop.org" <intel-xe@lists.freedesktop.org>, 
-	"dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>, 
-	"speakup@linux-speakup.org" <speakup@linux-speakup.org>, 
-	"selinux@vger.kernel.org" <selinux@vger.kernel.org>, 
-	"linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>, 
-	"kvmarm@lists.linux.dev" <kvmarm@lists.linux.dev>, 
-	"linux-serial@vger.kernel.org" <linux-serial@vger.kernel.org>, 
-	"llvm@lists.linux.dev" <llvm@lists.linux.dev>, Finn Behrens <me@kloenk.dev>, 
-	"Daniel Gomez (Samsung)" <d+samsung@kruces.com>, "gost.dev@samsung.com" <gost.dev@samsung.com>, 
-	Nick Desaulniers <nick.desaulniers@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240816171225.3506844-6-andriy.shevchenko@linux.intel.com>
 
-On Thu, Aug 8, 2024 at 2:20=E2=80=AFAM Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> On Wed, Aug 07, 2024 at 01:56:38PM +0000, Daniel Gomez wrote:
-> > On Wed, Aug 07, 2024 at 01:01:08PM GMT, Greg Kroah-Hartman wrote:
-> > > On Wed, Aug 07, 2024 at 01:09:14AM +0200, Daniel Gomez via B4 Relay w=
-rote:
-> > > > This patch set allows for building the Linux kernel for arm64 in ma=
-cOS with
-> > > > LLVM.
-> > >
-> > > Is this a requirement somewhere that this must work?  It seems like a=
-n
-> > > odd request, what workflows require cross-operating-system builds lik=
-e
-> > > this?
-> >
-> > This isn't a requirement, but it would, for example, support workflows =
-for QEMU
-> > users and developers on macOS. They could build/compile the kernel nati=
-vely and
-> > use it to launch QEMU instances, simplifying their process.
->
-> But that's not a real workload of anyone?  How often does this ever come
-> up?  Who is going to maintain this cross-build functionality over time?
+Hi Andy,
 
-it is a real workload of me,  i was running qemu-system-aarch64 on x86
-and it was
-pretty slow. so got a M3 pro to accelerate my development. frequently chang=
-ing
-kernel's source code, i am using qemu-system-aarch64 to do quick verificati=
-on.
+kernel test robot noticed the following build errors:
 
->
-> thanks,
->
-> greg k-h
->
+[auto build test ERROR on andi-shyti/i2c/i2c-host]
+[also build test ERROR on linus/master v6.11-rc3 next-20240816]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Thanks
-Barry
+url:    https://github.com/intel-lab-lkp/linux/commits/Andy-Shevchenko/i2c-designware-Replace-a-while-loop-by-for-loop/20240817-011616
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/andi.shyti/linux.git i2c/i2c-host
+patch link:    https://lore.kernel.org/r/20240816171225.3506844-6-andriy.shevchenko%40linux.intel.com
+patch subject: [PATCH v1 5/7] i2c: designware: Always provide device ID tables
+config: x86_64-rhel-8.3-rust (https://download.01.org/0day-ci/archive/20240817/202408171121.ZQyCK3P1-lkp@intel.com/config)
+compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240817/202408171121.ZQyCK3P1-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202408171121.ZQyCK3P1-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> drivers/i2c/busses/i2c-designware-platdrv.c:480:36: error: redefinition of 'dw_i2c_acpi_match'
+     480 | static const struct acpi_device_id dw_i2c_acpi_match[] = {
+         |                                    ^
+   drivers/i2c/busses/i2c-designware-platdrv.c:44:36: note: previous definition is here
+      44 | static const struct acpi_device_id dw_i2c_acpi_match[] = {
+         |                                    ^
+   1 error generated.
+
+
+vim +/dw_i2c_acpi_match +480 drivers/i2c/busses/i2c-designware-platdrv.c
+
+   479	
+ > 480	static const struct acpi_device_id dw_i2c_acpi_match[] = {
+   481		{ "80860F41", ACCESS_NO_IRQ_SUSPEND },
+   482		{ "808622C1", ACCESS_NO_IRQ_SUSPEND },
+   483		{ "AMD0010", ACCESS_INTR_MASK },
+   484		{ "AMDI0010", ACCESS_INTR_MASK },
+   485		{ "AMDI0019", ACCESS_INTR_MASK | ARBITRATION_SEMAPHORE },
+   486		{ "AMDI0510", 0 },
+   487		{ "APMC0D0F", 0 },
+   488		{ "HISI02A1", 0 },
+   489		{ "HISI02A2", 0 },
+   490		{ "HISI02A3", 0 },
+   491		{ "HYGO0010", ACCESS_INTR_MASK },
+   492		{ "INT33C2", 0 },
+   493		{ "INT33C3", 0 },
+   494		{ "INT3432", 0 },
+   495		{ "INT3433", 0 },
+   496		{}
+   497	};
+   498	MODULE_DEVICE_TABLE(acpi, dw_i2c_acpi_match);
+   499	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
