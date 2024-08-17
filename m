@@ -1,69 +1,94 @@
-Received: from ms.lwn.net (ms.lwn.net [45.79.88.28])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6FE971E511
-	for <llvm@lists.linux.dev>; Sat, 17 Aug 2024 13:59:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.79.88.28
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 539E61E481;
+	Sat, 17 Aug 2024 14:21:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723903196; cv=none; b=kb/sHGCFNIBqz0hRzrN1Mm1njMOkwos4P6kxkjoZuaC/hE914/OVbN0xP+SmJQIPUHaSf3O34EqHGSh1Mw5g3rwaUYXAunRD2Et4bMY4wqkR2ejCdRyoqIntGEGBfdERFnReaU3dy7Qp3eNR+cNRQHvaSr+H2x4jLMjiVN5/KJM=
+	t=1723904505; cv=none; b=WkZPVYh9RoIbQMWL3U8dULB4KK201pnHjGK81ZXGRwFh2p9ovOfvE2naSPUIQ4NBso18OfslzEbFwn8prNX+PQImf51EOTcSFB/Z2tisyyu1DGR81o5z5MOZmbGj1VAl93Tu1kQiCOifPUHmTpJCcbVDc6iMn3eBqO9NeHLmUrw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723903196; c=relaxed/simple;
-	bh=hJEqTiSdRGD77P0iUW66tLZRf62k9GMot5GWstyJnSo=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=DkYNlHLpTglybxYcfZO5iLllf7XQQv8sY9GGLKH7qKsRr3Yl7gd5g5dPSC7GlhXBnP0K9Rt4J9W3n06qsYb0GhJcR6RTxf2/U9g88V+MVLka4zUOFoeLENYL7BRyEX6rlrS0HUvlbk+nEjzUO6Cu/ANGXcscccSj26DghKL9U0U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lwn.net; spf=pass smtp.mailfrom=lwn.net; dkim=pass (2048-bit key) header.d=lwn.net header.i=@lwn.net header.b=bwz7ZyLO; arc=none smtp.client-ip=45.79.88.28
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lwn.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lwn.net
+	s=arc-20240116; t=1723904505; c=relaxed/simple;
+	bh=htRSgoh4HeAnINgrPfrRqDXF/tbWN8laKhf4x5ETh14=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=tyLYDPS+BscgpoW2RZj8lZMQPLysjURI/oeqCcr37QS3w/JBIA1JCFGRoXfIRLxpWzkFctOowdFoWmaAL0sHFPZyTBRXUeRk/zT1uZ225MgGL7SEgcOF+ZwRAO8gmAqWMsK1vR9LP5hp58oHXSTGhlVtv+WkfjwdOyfJKqzhgmU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=U6ve/loF; arc=none smtp.client-ip=192.198.163.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=lwn.net header.i=@lwn.net header.b="bwz7ZyLO"
-DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net 5498841A87
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
-	t=1723903194; bh=g/7uCImxhrpsfdclZNlVGGCCwv21FyVoGk0Z26mZ7PQ=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-	b=bwz7ZyLOTXNdhs2KDcFkvA4VbKL1Ec/F6DkJ+eAYDTQC9tJ1acfO/t/GDO69EO/y1
-	 ASbdIU81EcCrvOZJ/bMuVL4MJnL2zBPEdfj+jglZZHBdNKKAj6o+ZN3Q90pS9/pbLy
-	 SUhQODrk3zHQ+6CD3ccv7AfKVfS/GUWvCUgRbTnjJEW2T2s3WWEw+Egkx9u7yD014A
-	 lgmcjcUIPuVEpkHKUTciLOFprASj9vdMyiGv7wjaKzYNYDGg2LVp3zOiQJp+C4eBBX
-	 oSw+I1z50D/4GZ6VDSxZ7bUgi5C2j8prIafKCaRfqpQ5AzbNAwVhRZn+b9R9lG+mXz
-	 QBYRRq2kqdjcw==
-Received: from localhost (unknown [IPv6:2601:280:5e00:625::1fe])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by ms.lwn.net (Postfix) with ESMTPSA id 5498841A87;
-	Sat, 17 Aug 2024 13:59:54 +0000 (UTC)
-From: Jonathan Corbet <corbet@lwn.net>
-To: Haoyang Liu <tttturtleruss@hust.edu.cn>, Alex Shi <alexs@kernel.org>,
- Yanteng Si <siyanteng@loongson.cn>, Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling
- <morbo@google.com>, Justin Stitt <justinstitt@google.com>
-Cc: hust-os-kernel-patches@googlegroups.com, linux-doc@vger.kernel.org,
- linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH v6] docs/zh_CN: Add dev-tools/kcsan Chinese translation
-In-Reply-To: <64426130-d59a-47a1-8bf2-3b72fb0cc030@hust.edu.cn>
-References: <20240810082245.5934-1-tttturtleruss@hust.edu.cn>
- <87ttfkhzl2.fsf@trenco.lwn.net>
- <64426130-d59a-47a1-8bf2-3b72fb0cc030@hust.edu.cn>
-Date: Sat, 17 Aug 2024 07:59:53 -0600
-Message-ID: <871q2ni71i.fsf@trenco.lwn.net>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="U6ve/loF"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1723904503; x=1755440503;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=htRSgoh4HeAnINgrPfrRqDXF/tbWN8laKhf4x5ETh14=;
+  b=U6ve/loFALXdUg4VYgZZT6Yo9YkPrMeVj8Eo7c8/NkZljJAX94wvnnKn
+   0ttftRQTiWzp+fYlGMMp+eEt0MqBdN7Swt4PAYvSjhtlECHyw95DI2Sv6
+   YiW93KOvPzugjigEnGQZgchPlMvJPytP3g3Czi+g/GFh8usjdTqWHDSKs
+   ZaleM28HKbJ4P3Ad3OcDooKicYSSQGe1QG9B2iEIA61eRe5vcYPG+G+Z3
+   LA4Y1DR1mxeNL2MkYz+YYgOO2eWXZcHVnyMJEPSR2XUV1jmjx4/VnOQCZ
+   AKN51i0w1QWYvF/iqLMEVWWMJ13m24Fh5nqE8NLzJhh32wS8M97SIMty2
+   g==;
+X-CSE-ConnectionGUID: MZ2fkDIzQvSTuvI4Bxk5zA==
+X-CSE-MsgGUID: GiICgGQJSwm0gciVyx1wJw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11167"; a="26055015"
+X-IronPort-AV: E=Sophos;i="6.10,155,1719903600"; 
+   d="scan'208";a="26055015"
+Received: from orviesa009.jf.intel.com ([10.64.159.149])
+  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Aug 2024 07:21:43 -0700
+X-CSE-ConnectionGUID: NQDKtBghSU2WdzZWqgGrrA==
+X-CSE-MsgGUID: DP/XN7snQpCAvd3zsZf+wA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.10,155,1719903600"; 
+   d="scan'208";a="59918083"
+Received: from lkp-server01.sh.intel.com (HELO 9a732dc145d3) ([10.239.97.150])
+  by orviesa009.jf.intel.com with ESMTP; 17 Aug 2024 07:21:42 -0700
+Received: from kbuild by 9a732dc145d3 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1sfKJG-0007Xk-2O;
+	Sat, 17 Aug 2024 14:21:38 +0000
+Date: Sat, 17 Aug 2024 22:21:33 +0800
+From: kernel test robot <lkp@intel.com>
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-kernel@vger.kernel.org,
+	Alex Deucher <alexander.deucher@amd.com>,
+	Aurabindo Pillai <aurabindo.pillai@amd.com>
+Subject: ld.lld: warning:
+ src/consumer/drivers/gpu/drm/amd/amdgpu/../display/dc/dml2/dml21/src/dml2_core/dml2_core_dcn4_calcs.c:6544:0:
+ stack frame size (3416) exceeds limit (3072) in function
+ 'dml_core_mode_support'
+Message-ID: <202408172241.anNeqaHq-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Haoyang Liu <tttturtleruss@hust.edu.cn> writes:
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   e5fa841af679cb830da6c609c740a37bdc0b8b35
+commit: aa463cc850c464091cb749317372b70415d3e7d9 drm/amd/display: Fix CFLAGS for dml2_core_dcn4_calcs.o
+date:   4 months ago
+config: x86_64-randconfig-102-20240817 (https://download.01.org/0day-ci/archive/20240817/202408172241.anNeqaHq-lkp@intel.com/config)
+compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240817/202408172241.anNeqaHq-lkp@intel.com/reproduce)
 
-> I'm sorry for the warnings my patch introduced. I thought they were 
-> harmless so I ignored them. I will replace the duplicated inclusion with 
-> a note and a link to the original document.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202408172241.anNeqaHq-lkp@intel.com/
 
-The problem with "harmless" warnings is that they bury the real
-warnings, which are then not noticed.  Trying to get the warnings out of
-the docs build is an ongoing battle; it is important not to add more.
+All warnings (new ones prefixed by >>):
 
-Thanks,
+   ld.lld: warning: src/consumer/drivers/gpu/drm/amd/amdgpu/../display/dc/dml2/display_mode_core.c:6711:0: stack frame size (4912) exceeds limit (3072) in function 'dml_core_mode_support'
+>> ld.lld: warning: src/consumer/drivers/gpu/drm/amd/amdgpu/../display/dc/dml2/dml21/src/dml2_core/dml2_core_dcn4_calcs.c:6544:0: stack frame size (3416) exceeds limit (3072) in function 'dml_core_mode_support'
+   ld.lld: warning: src/consumer/drivers/gpu/drm/amd/amdgpu/../display/dc/dml2/dml21/src/dml2_core/dml2_core_shared.c:755:0: stack frame size (3384) exceeds limit (3072) in function 'dml2_core_shared_mode_support'
+   ld.lld: warning: src/consumer/drivers/gpu/drm/amd/amdgpu/../display/dc/dml2/display_mode_core.c:8280:0: stack frame size (3120) exceeds limit (3072) in function 'dml_core_mode_programming'
+   vmlinux.o: warning: objtool: .text.jffs2_erase_pending_blocks: unexpected end of section
+   vmlinux.o: warning: objtool: bad call to elf_init_reloc_text_sym() for data symbol .rodata
 
-jon
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
