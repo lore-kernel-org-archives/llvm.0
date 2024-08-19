@@ -1,64 +1,60 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 12F7515B97C;
-	Mon, 19 Aug 2024 10:21:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E02116B753;
+	Mon, 19 Aug 2024 13:55:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724062903; cv=none; b=pByfrP4jGAtaNat2ImjYTzfGyUMu474Gvx7LcEzFpKvTI3x6PYgNWGOlG+9fJzBK0X6a4Am7qd/iggrBZaO8ENPlU+iNSdlfqbGgGLfs012cJcsMYhebOKHolNjF2TXDAZHmC6WwEEc++mY/WVQn96+w3RcT1bXU25SZ7WRTLeE=
+	t=1724075749; cv=none; b=QN+7OXtnCL8vEiq+VWsp7DwnEgEiF+DN0RmQFAhzV9/FPYoSGlZCWono8P9E+cSAYw3va8SXtMIButtZfhYBZbPxoi5K5O7Lvu3s/y28ZzD6i5DK+RhRz7rlqzw1rBArDE5At2jFQ0M+a6iK5JkbFHoeJS502QlJdYfR3/qpOdc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724062903; c=relaxed/simple;
-	bh=lMB3ZG3s5QhQax0iPZTRA/YO04UStL4JIwcWP2MwrEo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=DQ2RZ/jFD/VIeoSOR94ly99iMIq4D9JpvzE6oBbNwYG/aDW5N3+Hr99DIuzOiTxRZefwc5kFi7zwWt7bFh9UkKM2JYHF2haHmFNrqybMBRWXBgzuwC+SS+oBW9bczCDFouDPgQ/P6+OoIc4Shy0jWIPJTduzOq+LLjyibFGphKs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=bHfO9Qu3; arc=none smtp.client-ip=192.198.163.11
+	s=arc-20240116; t=1724075749; c=relaxed/simple;
+	bh=WUNrRHqmSsLxXpn67ARAQf22SPte6CU0HDAC1zhNoSs=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=sYxkrgx12y+HGzJnITXsksbOIxGoQLswxFuJ9NQmT3+CT3Tn7pIKXuPVTqR+XI08/M6DLyMXRdu+DNMZMT6p2ReNLpavbSoscMSDEsl74QAWaJOJTronBK5yshyLpMUDXSVYF3AGr0mw4zJ6Vj8KnaHE41Sr2em1rTA01O+VkMo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=gjiJ/zR3; arc=none smtp.client-ip=198.175.65.11
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="bHfO9Qu3"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="gjiJ/zR3"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1724062902; x=1755598902;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=lMB3ZG3s5QhQax0iPZTRA/YO04UStL4JIwcWP2MwrEo=;
-  b=bHfO9Qu3VcsIZk/dHClbZUPvnxB7WOK32ynpuL1pgm4WuFih0o21JRma
-   0y6gf7kDUcAnLAc+3eehMSAzVQGq66x6pYI5teLhevrR8lce8ZBQ5sNfT
-   UtcIV7L4yMLgYlnTFgPV2wx+C0Q3U8+hi0Mn/yRXhdJ5/WdOwugHjb40G
-   7akWx3+CAx6BYBLOcti0mIGIOoqgv/b9k4M3OZdXoj0IsKTOtNmfHyzJE
-   xCz4InRDV0j3nliQX/zpzc8ZDaML0ak74WaMnRwKXZcRzREG1yK3Yu3ki
-   GENGI0SMM/ie85gtg6Rpslo19muABO37I5DC5OPSt34ZeG4gEPz7sjJXc
+  t=1724075747; x=1755611747;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=WUNrRHqmSsLxXpn67ARAQf22SPte6CU0HDAC1zhNoSs=;
+  b=gjiJ/zR33zg3h0dgakrmW7zgGGsVHM7UV4f34BiBDZX8iLrdx8d+e58e
+   FswBG/JW7uwWqgfGzQGGlfNVTN51JOxzvOzoIBlVs1es2A/s0A4UTsWwH
+   MaP6zZ/x7k+AKgvSh3vLSAMIdZ0ycJojip+kA/rzfzKe4wW5z/Idq8d8G
+   CTTqQSi5wDEVRQah5ucb1COk2qd8XWLGjbasxM91ZFfjn21O1FFBDeCvo
+   WHnS6R+q4uKxmZqay3/zOMJohRKvwIL97aJKcucqvV0vEqWvfG1ma+VBo
+   GqcclmOSKfQe8DObZ3ndGM1c5toR5YN9F8csWRjCa6tQQjSAZx3EbBxti
    g==;
-X-CSE-ConnectionGUID: xKHYFKCMR5mP1yGa3pkLBQ==
-X-CSE-MsgGUID: +2w8XUVxSJyrGnY2+nl25w==
-X-IronPort-AV: E=McAfee;i="6700,10204,11168"; a="32921441"
-X-IronPort-AV: E=Sophos;i="6.10,158,1719903600"; 
-   d="scan'208";a="32921441"
-Received: from orviesa008.jf.intel.com ([10.64.159.148])
-  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Aug 2024 03:21:40 -0700
-X-CSE-ConnectionGUID: oYdsRvbgQo+PZKBviBso5Q==
-X-CSE-MsgGUID: +laIDPhiQzGP+M4t0nmrxA==
+X-CSE-ConnectionGUID: f3FvM7jCRry02pYHJ64qfA==
+X-CSE-MsgGUID: /tsicqVvSc28jFSMTX87ZA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11169"; a="32895343"
+X-IronPort-AV: E=Sophos;i="6.10,159,1719903600"; 
+   d="scan'208";a="32895343"
+Received: from fmviesa005.fm.intel.com ([10.60.135.145])
+  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Aug 2024 06:55:46 -0700
+X-CSE-ConnectionGUID: A/XrSvN7TfuVcQd3TKuGww==
+X-CSE-MsgGUID: l+kl596LRmylYDbG1a9r6A==
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.10,158,1719903600"; 
-   d="scan'208";a="61101153"
+X-IronPort-AV: E=Sophos;i="6.10,159,1719903600"; 
+   d="scan'208";a="64773287"
 Received: from lkp-server01.sh.intel.com (HELO 9a732dc145d3) ([10.239.97.150])
-  by orviesa008.jf.intel.com with ESMTP; 19 Aug 2024 03:21:37 -0700
+  by fmviesa005.fm.intel.com with ESMTP; 19 Aug 2024 06:55:44 -0700
 Received: from kbuild by 9a732dc145d3 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1sfzW3-0008t2-1B;
-	Mon, 19 Aug 2024 10:21:35 +0000
-Date: Mon, 19 Aug 2024 18:21:27 +0800
+	id 1sg2rG-00091y-0H;
+	Mon, 19 Aug 2024 13:55:42 +0000
+Date: Mon, 19 Aug 2024 21:55:35 +0800
 From: kernel test robot <lkp@intel.com>
-To: Luis Felipe Hernandez <luis.hernandez093@gmail.com>,
-	brendan.higgins@linux.dev, davidgow@google.com, rmoar@google.com
+To: Chris Lu <chris.lu@mediatek.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Luis Felipe Hernandez <luis.hernandez093@gmail.com>,
-	linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
-	skhan@linuxfoundation.org,
-	linux-kernel-mentees@lists.linuxfoundation.org
-Subject: Re: [PATCH v2] lib/math: Add int_pow test suite
-Message-ID: <202408191754.tO9UUD0n-lkp@intel.com>
-References: <20240819014115.221135-1-luis.hernandez093@gmail.com>
+	linux-kernel@vger.kernel.org,
+	Luiz Augusto von Dentz <luiz.von.dentz@intel.com>
+Subject: ld.lld: error: relocation R_RISCV_HI20 cannot be used against symbol
+ 'errata_list'; recompile with -fPIC
+Message-ID: <202408192115.CLzfNikL-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -67,55 +63,71 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240819014115.221135-1-luis.hernandez093@gmail.com>
 
-Hi Luis,
-
-kernel test robot noticed the following build warnings:
-
-[auto build test WARNING on v6.11-rc4]
-[also build test WARNING on linus/master next-20240819]
-[cannot apply to akpm-mm/mm-nonmm-unstable]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Luis-Felipe-Hernandez/lib-math-Add-int_pow-test-suite/20240819-094252
-base:   v6.11-rc4
-patch link:    https://lore.kernel.org/r/20240819014115.221135-1-luis.hernandez093%40gmail.com
-patch subject: [PATCH v2] lib/math: Add int_pow test suite
-config: i386-buildonly-randconfig-004-20240819 (https://download.01.org/0day-ci/archive/20240819/202408191754.tO9UUD0n-lkp@intel.com/config)
-compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240819/202408191754.tO9UUD0n-lkp@intel.com/reproduce)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   47ac09b91befbb6a235ab620c32af719f8208399
+commit: f0c83a23fcbb424fdff5b38fbcdda3c04003a210 Bluetooth: btmtk: Fix btmtk.c undefined reference build error
+date:   3 weeks ago
+config: riscv-randconfig-001-20240819 (https://download.01.org/0day-ci/archive/20240819/202408192115.CLzfNikL-lkp@intel.com/config)
+compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 26670e7fa4f032a019d23d56c6a02926e854e8af)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240819/202408192115.CLzfNikL-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202408191754.tO9UUD0n-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202408192115.CLzfNikL-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> lib/math/tests/int_pow_kunit.c:22:11: warning: integer literal is too large to be represented in a signed integer type, interpreting as unsigned [-Wimplicitly-unsigned-literal]
-      22 |         { 2, 63, 9223372036854775808, "Large result"},
-         |                  ^
-   1 warning generated.
-
-
-vim +22 lib/math/tests/int_pow_kunit.c
-
-    12	
-    13	static const struct test_case_params params[] = {
-    14		{ 64, 0, 1, "Power of zero" },
-    15		{ 64, 1, 64, "Power of one"},
-    16		{ 0, 5, 0, "Base zero" },
-    17		{ 1, 64, 1, "Base one" },
-    18		{ 2, 2, 4, "Two squared"},
-    19		{ 2, 3, 8, "Two cubed"},
-    20		{ 5, 5, 3125, "Five raised to the fith power" },
-    21		{ U64_MAX, 1, U64_MAX, "Max base" },
-  > 22		{ 2, 63, 9223372036854775808, "Large result"},
-    23	};
-    24	
+>> ld.lld: error: relocation R_RISCV_HI20 cannot be used against symbol 'errata_list'; recompile with -fPIC
+   >>> defined in vmlinux.a(arch/riscv/errata/sifive/errata.o)
+   >>> referenced by errata.c:0 (arch/riscv/errata/sifive/errata.c:0)
+   >>>               arch/riscv/errata/sifive/errata.o:(sifive_errata_patch_func) in archive vmlinux.a
+--
+>> ld.lld: error: relocation R_RISCV_LO12_I cannot be used against symbol 'errata_list'; recompile with -fPIC
+   >>> defined in vmlinux.a(arch/riscv/errata/sifive/errata.o)
+   >>> referenced by errata.c:0 (arch/riscv/errata/sifive/errata.c:0)
+   >>>               arch/riscv/errata/sifive/errata.o:(sifive_errata_patch_func) in archive vmlinux.a
+--
+>> ld.lld: error: relocation R_RISCV_HI20 cannot be used against symbol '.L.str.4'; recompile with -fPIC
+   >>> defined in vmlinux.a(arch/riscv/errata/sifive/errata.o)
+   >>> referenced by errata.c:71 (arch/riscv/errata/sifive/errata.c:71)
+   >>>               arch/riscv/errata/sifive/errata.o:(sifive_errata_patch_func) in archive vmlinux.a
+--
+>> ld.lld: error: relocation R_RISCV_LO12_I cannot be used against symbol '.L.str.4'; recompile with -fPIC
+   >>> defined in vmlinux.a(arch/riscv/errata/sifive/errata.o)
+   >>> referenced by errata.c:71 (arch/riscv/errata/sifive/errata.c:71)
+   >>>               arch/riscv/errata/sifive/errata.o:(sifive_errata_patch_func) in archive vmlinux.a
+--
+>> ld.lld: error: relocation R_RISCV_HI20 cannot be used against symbol 'riscv_cbom_block_size'; recompile with -fPIC
+   >>> defined in vmlinux.a(arch/riscv/mm/cacheflush.o)
+   >>> referenced by errata.c:113 (arch/riscv/errata/thead/errata.c:113)
+   >>>               arch/riscv/errata/thead/errata.o:(thead_errata_patch_func) in archive vmlinux.a
+--
+>> ld.lld: error: relocation R_RISCV_LO12_S cannot be used against symbol 'riscv_cbom_block_size'; recompile with -fPIC
+   >>> defined in vmlinux.a(arch/riscv/mm/cacheflush.o)
+   >>> referenced by errata.c:120 (arch/riscv/errata/thead/errata.c:120)
+   >>>               arch/riscv/errata/thead/errata.o:(thead_errata_patch_func) in archive vmlinux.a
+--
+>> ld.lld: error: relocation R_RISCV_HI20 cannot be used against symbol 'text_mutex'; recompile with -fPIC
+   >>> defined in vmlinux.a(kernel/extable.o)
+   >>> referenced by errata.c:71 (arch/riscv/errata/sifive/errata.c:71)
+   >>>               arch/riscv/errata/sifive/errata.o:(sifive_errata_patch_func) in archive vmlinux.a
+--
+>> ld.lld: error: relocation R_RISCV_LO12_I cannot be used against symbol 'text_mutex'; recompile with -fPIC
+   >>> defined in vmlinux.a(kernel/extable.o)
+   >>> referenced by errata.c:71 (arch/riscv/errata/sifive/errata.c:71)
+   >>>               arch/riscv/errata/sifive/errata.o:(sifive_errata_patch_func) in archive vmlinux.a
+--
+>> ld.lld: error: relocation R_RISCV_HI20 cannot be used against symbol '.L.str'; recompile with -fPIC
+   >>> defined in vmlinux.a(arch/riscv/errata/sifive/errata.o)
+   >>> referenced by errata.c:71 (arch/riscv/errata/sifive/errata.c:71)
+   >>>               arch/riscv/errata/sifive/errata.o:(sifive_errata_patch_func) in archive vmlinux.a
+--
+>> ld.lld: error: relocation R_RISCV_LO12_I cannot be used against symbol '.L.str'; recompile with -fPIC
+   >>> defined in vmlinux.a(arch/riscv/errata/sifive/errata.o)
+   >>> referenced by errata.c:71 (arch/riscv/errata/sifive/errata.c:71)
+   >>>               arch/riscv/errata/sifive/errata.o:(sifive_errata_patch_func) in archive vmlinux.a
 
 -- 
 0-DAY CI Kernel Test Service
