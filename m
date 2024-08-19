@@ -1,119 +1,129 @@
-Received: from mail-ua1-f51.google.com (mail-ua1-f51.google.com [209.85.222.51])
+Received: from mail-yw1-f202.google.com (mail-yw1-f202.google.com [209.85.128.202])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD0DD188CB3
-	for <llvm@lists.linux.dev>; Mon, 19 Aug 2024 21:24:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A5F5161FD7
+	for <llvm@lists.linux.dev>; Mon, 19 Aug 2024 21:35:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724102670; cv=none; b=LXLV1cKp7cf+ktxawQ8/EIFXKx3iR0kVnhQTioK4XxP/GdpSacORw4mq3trHiIXw6uFvBzdmtyZkl4cOfmEJeCa5aC+jhPgIYTejLAj3xnb95TWlhxk8OK+WJ57uDLDKPNFcC2PGcM2OW3xXqwaEmGQS3qFexrkZbz3vBabF9gg=
+	t=1724103344; cv=none; b=nmYm05ceIQTpKt7GGFHvh766v9HkHvqu9cyvow6UF6MHGG6z9LpmkTJeOdNjKXMo/wYhvW2ujnnRj/cPLYVAm8H5wg3GSd+9aKeYsZSwdLJieQhftBri4lB9R59qrdCIXVPom1MjTVUZpQzn3qEhBUnq/AogeKrRWFpYJ5xmz8I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724102670; c=relaxed/simple;
-	bh=u+0m0US3QFw84sTqEbjna9w6FE0gpMTeeaVLynF5j9c=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=MajA5CgaLZm6mxghF0qnZcTxA90pFhjUFbop+JEUIv/zwRbmcxSbstSrdmqDloAHf8SG+Hd2Fj0J0PPWXq0SQQdyTmIrt3WL0u8I+eNsnZUpcDVbm1EBhAxKkB/rwER5B3xZ2sr5HLyxeMJPXNiqSivrNxEHfA4pHzbY3YWjT5U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=PEPKdMmo; arc=none smtp.client-ip=209.85.222.51
+	s=arc-20240116; t=1724103344; c=relaxed/simple;
+	bh=W+4z+9HWRgx7SMhB8z3ozZSOSuMGdyeH4bjUydY93d8=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=f9GHwbHQySDi9YuwNgEn0UnbT7OOAwKyXsbCGMBCiOO1Fu9n7VQ27t2O98zMp7OnE1Io0ra4QkawW57eDUHPsgIzuvH9CkOHJmoT7qq/OP/cxDzsKqjKpBE/yVhvopTxV44RkexbvYW+OPD95iDV1OdwgdRlyyAM4+Y/uXFLPz8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--mmaurer.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=zZiJ8LjU; arc=none smtp.client-ip=209.85.128.202
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--mmaurer.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="PEPKdMmo"
-Received: by mail-ua1-f51.google.com with SMTP id a1e0cc1a2514c-842fdb1afb1so1610550241.1
-        for <llvm@lists.linux.dev>; Mon, 19 Aug 2024 14:24:28 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="zZiJ8LjU"
+Received: by mail-yw1-f202.google.com with SMTP id 00721157ae682-6b46d8bc153so36809987b3.2
+        for <llvm@lists.linux.dev>; Mon, 19 Aug 2024 14:35:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1724102668; x=1724707468; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=JiPuVEIARbs7nZfPRgac3ucMDQpztOtq3lJp2GBYRco=;
-        b=PEPKdMmo42W5efSa5F1qlUHwK5DHGXmXJrPrhqa6h0g1146kkJQmX6SQKtDO1VWgy1
-         wgfKBHD3v6FSeL3An8B5+IM3YmbJxRKFFHti7mzMDf+JjR9jQrYNgHNF/8nrxG2sYxcZ
-         ABiDdK0kUHH7oufOGvJpjfR7NEiMgwHqFs9FrmVahVM6CeiY4ICcwMD8uzdER64IIu9E
-         VM6AwRHRAqya+ZFn6JK2QZUJ/g4eHRHycgKUrc9d9Q2ARelh5PE4gb3Fxz7QjV8odVM7
-         qa2TmbpXOWzFOOf8i+cTz6hEMHAZKW2kE+mCceP714M6xIDHj1LcsAff9Z5jT6Z1aBa+
-         AhqQ==
+        d=google.com; s=20230601; t=1724103341; x=1724708141; darn=lists.linux.dev;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=NHr+d6UmIU/9IG30FNpxZ6Aa0eu/YiD/uhxdbWXAtq0=;
+        b=zZiJ8LjUkIWFPSwrNXlZdKddqRYYKAmvxi9PKRZCEmKQ1y57jg4ly1nd6PjIYZEuos
+         +BIHg6nhELtyQ+vIbzdISwIG52zd2hW0pP92GXAIBIXuxBimM6LI/1+ISByKUqn3vZhW
+         G8mnRoekyDUl1nErVaL+GuHLKabkc8bNskJIjzIaMzkValHJm8sZ+wKG3Z49rtSBIpuz
+         ykqt8N9btqGbp8FrCTy3tMQ3X12W6EqAMopuiR9YxVwHFxkj+ZWKkRsLlcgaQCJManDg
+         Se+Utlq711nchp2U+FNiPjOWxbWClAJY4GHCfkiSAwGm4WDnn1CKlIkSDKQdYFh8RYE5
+         qT4A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1724102668; x=1724707468;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=JiPuVEIARbs7nZfPRgac3ucMDQpztOtq3lJp2GBYRco=;
-        b=qFZaRUTyAdyAO9u63TYe5S/7AcLNdvgDQ+i0bSs0Bm+PnU4NXQVf7SFJIjHGsejwZY
-         LDSp0+XQQB2k7m3aTPyLdrea045zpocqEQmX3ZlK2Xsf351i0MGhXJWMHSTvFfAh1Qov
-         OsyKhze+hoz48QUTbkXvw5Pzr+xBMea0X2Jq8KiYxm0xlPsVFDvXPv1Rfnauflnst3Pc
-         ovfNPKdqCZPrS/9sn57zc6+ahQZz2H91JA3TZIzVdOOianxNImm8k+2vFxzyUUutJS1m
-         cVvG4ohV3MrntTikRQbI2T/MyX3EAVZVuLqlkxTIvdz+9zO/GjcKdYbiQyCcwrGcGmv3
-         eXdQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVC0iTM7mv3wKLp4zJypXLWfk314RgfqcAHTtxgoQAOzpOTlNPcOQfi/l0RZKUZJIWrT+mq72Pq0zphupQhyRCtw+Rr4Q==
-X-Gm-Message-State: AOJu0YzCp91mQnbhQd6yK6eNCcShqW25J/1yiuHeLE3kqMt9UPjuH/rh
-	o6biy23xoy7bru2X8bdyBTa3gAsMnhiEzOtUVNt6hCSZKHNgTRDe+JTkB5QFloMvjCAmeoZeIdH
-	whqDHEay7EkukPsukhsWV6XZPKOJjNAJNvbE3
-X-Google-Smtp-Source: AGHT+IE+E6VJ5JvA7Lqq7iQmAIRzeQu5arI3TDl9cLtuS06laSaYx2Gcf5jbf18gxD5V1/WytLtXiNijQYFV+DdrRxA=
-X-Received: by 2002:a05:6102:304d:b0:48f:8ead:7b7 with SMTP id
- ada2fe7eead31-4977997fc1fmr14487889137.21.1724102667560; Mon, 19 Aug 2024
- 14:24:27 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1724103341; x=1724708141;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=NHr+d6UmIU/9IG30FNpxZ6Aa0eu/YiD/uhxdbWXAtq0=;
+        b=X0fvuM7rfun6i6avR6BcS/BgLpKIpB4PPrWDmGU2cBOdNS1t3JuIanRb4kl/1FEjsM
+         xdhlbFB5M2rLwD46ex9Z+GpCD355TXyu3JMnOl1dBhcgx2Ueasv3n+6tusfdHnm7R9OZ
+         LIzU1wgknitRIShQ08sXn/SWsxWgfkV/XQOuVp/jfQhRNNlh4vM5KEvxJ0CGelaUxdbu
+         UFYWIHbR+pRYOyqx51tCdhfUafOdNnV8DXaM7TPYVpdlhWA3QkZ97SN9X/PqIkfZuoet
+         tlEhonDwA3h9H9ECGaFGcVmuIbK8vHqoDut9brvdH3sGSQVZ/HlJqxbDVx9iuxRfNTZ/
+         qokg==
+X-Forwarded-Encrypted: i=1; AJvYcCUWh2uFc7gguFUXmrH05uK+sdFYvfF0N/H32hgUsI7alVQdsg2QJ5qZRjxtXSqaBUQGp7M5@lists.linux.dev
+X-Gm-Message-State: AOJu0YzxG0hcaroZXPuq4NEWv6hSvF9N/VqJ0+y30Dj6DicaPC0I1A7g
+	sudPQ84d7F9KUaOMpe0FAXxGosqEn4dcwaJWCMm69eNpUjp5K/iVI+hItnaQ80hVYVgeNuKXS1c
+	rteip7A==
+X-Google-Smtp-Source: AGHT+IFPFz0ZC/TObmbtIW+FNYagPR0uj4bw/LTpIWyJXejA9x5eEzGFXKmI7mbSTIJ28oCMdsYOHWMIix2S
+X-Received: from anyblade.c.googlers.com ([fda3:e722:ac3:cc00:20:ed76:c0a8:1791])
+ (user=mmaurer job=sendgmr) by 2002:a05:690c:688d:b0:69f:9a1d:a04e with SMTP
+ id 00721157ae682-6b1bb099b4fmr445507b3.4.1724103341547; Mon, 19 Aug 2024
+ 14:35:41 -0700 (PDT)
+Date: Mon, 19 Aug 2024 21:35:18 +0000
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-References: <20240819-acpi-platform_profile-fix-cfi-violation-v1-1-479365d848f6@kernel.org>
-In-Reply-To: <20240819-acpi-platform_profile-fix-cfi-violation-v1-1-479365d848f6@kernel.org>
-From: Sami Tolvanen <samitolvanen@google.com>
-Date: Mon, 19 Aug 2024 14:23:49 -0700
-Message-ID: <CABCJKue4NgOVxfjcU=oE23rogqgfiiJMqLHp-NSoSs=o1=22kg@mail.gmail.com>
-Subject: Re: [PATCH] ACPI: platform-profile: Fix CFI violation when accessing
- sysfs files
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Len Brown <lenb@kernel.org>, 
-	Hans de Goede <hdegoede@redhat.com>, Mark Pearson <markpearson@lenovo.com>, 
-	Kees Cook <kees@kernel.org>, linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	llvm@lists.linux.dev, patches@lists.linux.dev, stable@vger.kernel.org, 
-	John Rowley <lkml@johnrowley.me>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.46.0.184.g6999bdac58-goog
+Message-ID: <20240819213534.4080408-1-mmaurer@google.com>
+Subject: [PATCH v3 0/4] Rust KASAN Support
+From: Matthew Maurer <mmaurer@google.com>
+To: dvyukov@google.com, ojeda@kernel.org, andreyknvl@gmail.com, 
+	Alex Gaynor <alex.gaynor@gmail.com>, Wedson Almeida Filho <wedsonaf@gmail.com>, 
+	Nathan Chancellor <nathan@kernel.org>
+Cc: aliceryhl@google.com, samitolvanen@google.com, kasan-dev@googlegroups.com, 
+	linux-mm@kvack.org, glider@google.com, ryabinin.a.a@gmail.com, 
+	Matthew Maurer <mmaurer@google.com>, Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, 
+	"=?UTF-8?q?Bj=C3=B6rn=20Roy=20Baron?=" <bjorn3_gh@protonmail.com>, Benno Lossin <benno.lossin@proton.me>, 
+	Andreas Hindborg <a.hindborg@samsung.com>, Nick Desaulniers <ndesaulniers@google.com>, 
+	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
+	rust-for-linux@vger.kernel.org, llvm@lists.linux.dev
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-Hi Nathan,
+Right now, if we turn on KASAN, Rust code will cause violations because
+it's not enabled properly.
 
-On Mon, Aug 19, 2024 at 12:09=E2=80=AFPM Nathan Chancellor <nathan@kernel.o=
-rg> wrote:
->
-> When an attribute group is created with sysfs_create_group(), the
-> ->sysfs_ops() callback is set to kobj_sysfs_ops, which sets the ->show()
-> and ->store() callbacks to kobj_attr_show() and kobj_attr_store()
-> respectively. These functions use container_of() to get the respective
-> callback from the passed attribute, meaning that these callbacks need to
-> be the same type as the callbacks in 'struct kobj_attribute'.
->
-> However, the platform_profile sysfs functions have the type of the
-> ->show() and ->store() callbacks in 'struct device_attribute', which
-> results a CFI violation when accessing platform_profile or
-> platform_profile_choices under /sys/firmware/acpi because the types do
-> not match:
->
->   CFI failure at kobj_attr_show+0x19/0x30 (target: platform_profile_choic=
-es_show+0x0/0x140; expected type: 0x7a69590c)
->
-> This happens to work because the layout of 'struct kobj_attribute' and
-> 'struct device_attribute' are the same, so the container_of() cast
-> happens to allow the callbacks to still work.
->
-> Change the type of platform_profile_choices_show() and
-> platform_profile_{show,store}() to match the callbacks in
-> 'struct kobj_attribute' and update the attribute variables to match,
-> which resolves the CFI violation.
->
-> Cc: stable@vger.kernel.org
-> Fixes: a2ff95e018f1 ("ACPI: platform: Add platform profile support")
-> Reported-by: John Rowley <lkml@johnrowley.me>
-> Closes: https://github.com/ClangBuiltLinux/linux/issues/2047
-> Tested-by: John Rowley <lkml@johnrowley.me>
-> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
-> ---
->  drivers/acpi/platform_profile.c | 20 ++++++++++----------
->  1 file changed, 10 insertions(+), 10 deletions(-)
+This series:
+1. Adds flag probe macros for Rust - now that we're setting a minimum rustc
+   version instead of an exact one, these could be useful in general. We need
+   them in this patch because we don't set a restriction on which LLVM rustc
+   is using, which is what KASAN actually cares about.
+2. Makes `rustc` enable the relevant KASAN sanitizer flags when C does.
+3. Adds a smoke test to the `kasan_test` KUnit suite to check basic
+   integration.
 
-Looks good to me, thanks for fixing this!
+This patch series requires the target.json array support patch [1] as
+the x86_64 target.json file currently produced does not mark itself as KASAN
+capable, and is rebased on top of the KASAN Makefile rewrite [2].
 
-Reviewed-by: Sami Tolvanen <samitolvanen@google.com>
+Differences from v2 [3]:
+1. Rebased on top of the maintainer's cleanup of the Makefile.
+2. Cleaned up the UaF test based on feedback.
+3. Calls out that KASAN_SW_TAGS is not yet supported in the config.
 
-Sami
+The notable piece of feedback I have not followed is in the renaming of
+kasan_test.c to kasan_test_c.c - this was done in order to allow the
+module to be named kasan_test but consist of two .o files. The other
+options I see are renaming the test suite or creating a separate Rust
+test suite, but both of those seemed more invasive than the rename. Let
+me know if you have another approach you'd prefer there.
+
+[1] https://lore.kernel.org/lkml/20240730-target-json-arrays-v1-1-2b376fd0ecf4@google.com/
+[2] https://lore.kernel.org/all/20240813224027.84503-1-andrey.konovalov@linux.dev
+[3] https://lore.kernel.org/all/20240812232910.2026387-1-mmaurer@google.com/
+
+
+Matthew Maurer (4):
+  kbuild: rust: Define probing macros for rustc
+  kbuild: rust: Enable KASAN support
+  rust: kasan: Rust does not support KHWASAN
+  kasan: rust: Add KASAN smoke test via UAF
+
+ init/Kconfig                              |  1 +
+ mm/kasan/Makefile                         |  9 +++-
+ mm/kasan/kasan.h                          |  1 +
+ mm/kasan/{kasan_test.c => kasan_test_c.c} | 11 +++++
+ mm/kasan/kasan_test_rust.rs               | 19 ++++++++
+ scripts/Kconfig.include                   |  8 ++++
+ scripts/Makefile.compiler                 | 15 +++++++
+ scripts/Makefile.kasan                    | 54 ++++++++++++++++-------
+ scripts/Makefile.lib                      |  3 ++
+ scripts/generate_rust_target.rs           |  1 +
+ 10 files changed, 105 insertions(+), 17 deletions(-)
+ rename mm/kasan/{kasan_test.c => kasan_test_c.c} (99%)
+ create mode 100644 mm/kasan/kasan_test_rust.rs
+
+-- 
+2.46.0.184.g6999bdac58-goog
+
