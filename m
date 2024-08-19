@@ -1,157 +1,116 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E372F26AD3;
-	Mon, 19 Aug 2024 19:09:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 50840175D46;
+	Mon, 19 Aug 2024 19:14:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724094572; cv=none; b=EjVJs8S6g3rnAkS9OmGqEpo9G4UgwjVhipqPP0thyHyOnv+PNYmEfFIZDq5TLuopCBgGP/BdpTml5Sh+qa5AS1A5a+5VXo4mLOUm8mVkGVLr5EAIMirRfgFPLqoGX2/rEZY9U5aAQKOnfZOf4Z/Td/eFsIfvFGQrpY/CmWua8ec=
+	t=1724094902; cv=none; b=SIjx51+JmQBoqKn2Iq1W77BH98xxT/QNvG0EYWurxK0UJxjftKRkDYwnapqPTm4vnYWucKIm+kYd3lkQmI62vmbcHXCV/1vEEHYOCnKqPMgEjDrIxx5yukyw6IZAQ/ZRUrp4HdnjLGpD6Z/tfH4EqGmRr0x94tIQLjue/XMsrII=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724094572; c=relaxed/simple;
-	bh=l1fQ+yTpICnSE9dSKG3BDMX4w4n0NCxmJvBhJmEGqB4=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=YfmKR2vLYolwXbpssIP3hMZZMPEeluOd9BbKrl035u+OkzhFo6MH/X9ts4aXofWzqL9FYe06vrDqP87jrvFJ02sZUP1N656SOlDGnAFyhUv2e2zlTQEDqpURSLsgwrvK5LJ+w/2iG2EYcn2Dd1yrP6pXLnN9TaIl2E01l/ZRQlM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=K23Tcdhw; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1724094902; c=relaxed/simple;
+	bh=lZXYtOdOmZ6ORLbI1KAZypHMsgBhnkWs7livrES3pP4=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=Yo8HslcPrK0HYprLNhH8u0K5+3GgWK9W1u1nEYphAgO6jqhFLAKwt3DVChjfJ8YM/OXvfhlJE1BMUmQFwOSS7IPQ1IGEHzTfWdrbB7JCNAG1ziqfIk8BsDbm2hVaSqR2uyc0LyojISeTMX3UNpZXUwZKxI86+6V0PWxGzQYhEFQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=PmHaHzKf; arc=none smtp.client-ip=198.175.65.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="K23Tcdhw"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DA725C32782;
-	Mon, 19 Aug 2024 19:09:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1724094570;
-	bh=l1fQ+yTpICnSE9dSKG3BDMX4w4n0NCxmJvBhJmEGqB4=;
-	h=From:Date:Subject:To:Cc:From;
-	b=K23Tcdhww1EkxB49+rm3W650EQEZDN1DZ4pOCr70a90bg1W+mWxNTIBGEWrzOsxdQ
-	 /EMvooiFf+IIqBl8ZSoQCK8gk7stYV/9fyjK02RANiVANd/6bgf7+Q5IrHJjrna605
-	 3sfHSfexgVMRk/2N4SkoZbxhj8+tC6DqFIWHxeBXqQycXeOOgo/FgAXugNSB5QqnQd
-	 BGm7TQf7Psk8yCRfi2AJ47B1ggcOG9vOBhF0CqU7QPKErO3V2LFOMe5HDklGyEDSNZ
-	 eDL8qvPfw/Z5Alg22hFsgjYJiusCxk9w5Ue/Q5gJ7AZag2sYHD3Sl9TdjiH5tIFs9a
-	 1v5qjV10mlL+A==
-From: Nathan Chancellor <nathan@kernel.org>
-Date: Mon, 19 Aug 2024 12:09:22 -0700
-Subject: [PATCH] ACPI: platform-profile: Fix CFI violation when accessing
- sysfs files
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="PmHaHzKf"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1724094900; x=1755630900;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=lZXYtOdOmZ6ORLbI1KAZypHMsgBhnkWs7livrES3pP4=;
+  b=PmHaHzKfXYFLdz/xDj1i1wzKLTLRp33XRNrXZgnTch2SpM3dolJuIXpA
+   GnCVLJtuM4JQo8mUwopQr+jZgexjlxwCdcOsy/6YSX0FK6DYIsfAoBmN5
+   iXs/cRk4vzdzW33JHyCmGD8P550IUE4gmiLWqo11CpZBK7iRb5HQH3qoh
+   kfAU0LQxLDcR7PXEKxdeio1cR7DrR57ugEQgMafpmj+WRxZJZ/4dKrgXB
+   KKizNNM7Ldg4P5L8mwO0qxFN9/9b+G9NkLULsWceV0aX6p7DUjX6KcxDq
+   pcoFwVpfH72n5LxFeb4/um4LNOlmh7xb7ir0DKtb6VKCZ6pwGB91MeTfk
+   w==;
+X-CSE-ConnectionGUID: 0P6nEY4WQYuYOQ7716VWAA==
+X-CSE-MsgGUID: hMPs/vNdTMKiUFk8fQ1NYQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11169"; a="26120618"
+X-IronPort-AV: E=Sophos;i="6.10,159,1719903600"; 
+   d="scan'208";a="26120618"
+Received: from fmviesa009.fm.intel.com ([10.60.135.149])
+  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Aug 2024 12:14:59 -0700
+X-CSE-ConnectionGUID: cTZjV0feTze9FJIz5ZjQhw==
+X-CSE-MsgGUID: fMGqNo7jRjqhbKNuLAy5YQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.10,159,1719903600"; 
+   d="scan'208";a="60526817"
+Received: from lkp-server01.sh.intel.com (HELO 9a732dc145d3) ([10.239.97.150])
+  by fmviesa009.fm.intel.com with ESMTP; 19 Aug 2024 12:14:58 -0700
+Received: from kbuild by 9a732dc145d3 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1sg7qC-0009LW-0g;
+	Mon, 19 Aug 2024 19:14:56 +0000
+Date: Tue, 20 Aug 2024 03:14:06 +0800
+From: kernel test robot <lkp@intel.com>
+To: Hannes Reinecke <hare@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Sagi Grimberg <sagi@grimberg.me>
+Subject: [hare-nvme:secure-concat.v9 3/10] include/crypto/hkdf.h:25:10:
+ error: use of undeclared identifier 'ENOTSUP'
+Message-ID: <202408200307.yPvUJ1sm-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20240819-acpi-platform_profile-fix-cfi-violation-v1-1-479365d848f6@kernel.org>
-X-B4-Tracking: v=1; b=H4sIAGGYw2YC/x2N0QqDMAxFf0XyvIB2E52/Msbo2sQF1JZ0iCD+u
- 8HHw7mcu0MhFSowVDsorVIkLQbNrYLw88tIKNEYXO0edd880YcsmCf/56TzJ2timQhZNgwsuEo
- yZQ2M5Lq+a+/f2DJYLSvZ6Hp6vY/jBPDv3sd5AAAA
-To: "Rafael J. Wysocki" <rafael@kernel.org>, Len Brown <lenb@kernel.org>
-Cc: Hans de Goede <hdegoede@redhat.com>, 
- Mark Pearson <markpearson@lenovo.com>, Kees Cook <kees@kernel.org>, 
- Sami Tolvanen <samitolvanen@google.com>, linux-acpi@vger.kernel.org, 
- linux-kernel@vger.kernel.org, llvm@lists.linux.dev, patches@lists.linux.dev, 
- stable@vger.kernel.org, John Rowley <lkml@johnrowley.me>, 
- Nathan Chancellor <nathan@kernel.org>
-X-Mailer: b4 0.15-dev
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3849; i=nathan@kernel.org;
- h=from:subject:message-id; bh=l1fQ+yTpICnSE9dSKG3BDMX4w4n0NCxmJvBhJmEGqB4=;
- b=owGbwMvMwCUmm602sfCA1DTG02pJDGmHZ2T2TtC8LPzCnU3tVVZbYM1K5QeVO3XXH7z8tl5qm
- ZXRmVnrO0pZGMS4GGTFFFmqH6seNzScc5bxxqlJMHNYmUCGMHBxCsBEToQzMlzhUrrvE5x5tJHp
- V6pu56JiJXVdg/zMql8a0md81XYt+M/IsLj3AuOdt5MmRYmFBQg+OKRncsTvgeXsCesluSUjrvv
- P4AQA
-X-Developer-Key: i=nathan@kernel.org; a=openpgp;
- fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-When an attribute group is created with sysfs_create_group(), the
-->sysfs_ops() callback is set to kobj_sysfs_ops, which sets the ->show()
-and ->store() callbacks to kobj_attr_show() and kobj_attr_store()
-respectively. These functions use container_of() to get the respective
-callback from the passed attribute, meaning that these callbacks need to
-be the same type as the callbacks in 'struct kobj_attribute'.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/hare/nvme.git secure-concat.v9
+head:   24817e66fba53d9e2722aec6abd8a00b29bf108a
+commit: 07a5113f110b146bff44efafd623d3c0e87d9118 [3/10] nvme: add nvme_auth_generate_psk()
+config: powerpc64-randconfig-001-20240819 (https://download.01.org/0day-ci/archive/20240820/202408200307.yPvUJ1sm-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240820/202408200307.yPvUJ1sm-lkp@intel.com/reproduce)
 
-However, the platform_profile sysfs functions have the type of the
-->show() and ->store() callbacks in 'struct device_attribute', which
-results a CFI violation when accessing platform_profile or
-platform_profile_choices under /sys/firmware/acpi because the types do
-not match:
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202408200307.yPvUJ1sm-lkp@intel.com/
 
-  CFI failure at kobj_attr_show+0x19/0x30 (target: platform_profile_choices_show+0x0/0x140; expected type: 0x7a69590c)
+All errors (new ones prefixed by >>):
 
-This happens to work because the layout of 'struct kobj_attribute' and
-'struct device_attribute' are the same, so the container_of() cast
-happens to allow the callbacks to still work.
+   In file included from drivers/nvme/common/auth.c:14:
+>> include/crypto/hkdf.h:25:10: error: use of undeclared identifier 'ENOTSUP'
+           return -ENOTSUP;
+                   ^
+   include/crypto/hkdf.h:31:10: error: use of undeclared identifier 'ENOTSUP'
+           return -ENOTSUP;
+                   ^
+   2 errors generated.
 
-Change the type of platform_profile_choices_show() and
-platform_profile_{show,store}() to match the callbacks in
-'struct kobj_attribute' and update the attribute variables to match,
-which resolves the CFI violation.
 
-Cc: stable@vger.kernel.org
-Fixes: a2ff95e018f1 ("ACPI: platform: Add platform profile support")
-Reported-by: John Rowley <lkml@johnrowley.me>
-Closes: https://github.com/ClangBuiltLinux/linux/issues/2047
-Tested-by: John Rowley <lkml@johnrowley.me>
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
----
- drivers/acpi/platform_profile.c | 20 ++++++++++----------
- 1 file changed, 10 insertions(+), 10 deletions(-)
+vim +/ENOTSUP +25 include/crypto/hkdf.h
 
-diff --git a/drivers/acpi/platform_profile.c b/drivers/acpi/platform_profile.c
-index d2f7fd7743a1..11278f785526 100644
---- a/drivers/acpi/platform_profile.c
-+++ b/drivers/acpi/platform_profile.c
-@@ -22,8 +22,8 @@ static const char * const profile_names[] = {
- };
- static_assert(ARRAY_SIZE(profile_names) == PLATFORM_PROFILE_LAST);
- 
--static ssize_t platform_profile_choices_show(struct device *dev,
--					struct device_attribute *attr,
-+static ssize_t platform_profile_choices_show(struct kobject *kobj,
-+					struct kobj_attribute *attr,
- 					char *buf)
- {
- 	int len = 0;
-@@ -49,8 +49,8 @@ static ssize_t platform_profile_choices_show(struct device *dev,
- 	return len;
- }
- 
--static ssize_t platform_profile_show(struct device *dev,
--					struct device_attribute *attr,
-+static ssize_t platform_profile_show(struct kobject *kobj,
-+					struct kobj_attribute *attr,
- 					char *buf)
- {
- 	enum platform_profile_option profile = PLATFORM_PROFILE_BALANCED;
-@@ -77,8 +77,8 @@ static ssize_t platform_profile_show(struct device *dev,
- 	return sysfs_emit(buf, "%s\n", profile_names[profile]);
- }
- 
--static ssize_t platform_profile_store(struct device *dev,
--			    struct device_attribute *attr,
-+static ssize_t platform_profile_store(struct kobject *kobj,
-+			    struct kobj_attribute *attr,
- 			    const char *buf, size_t count)
- {
- 	int err, i;
-@@ -115,12 +115,12 @@ static ssize_t platform_profile_store(struct device *dev,
- 	return count;
- }
- 
--static DEVICE_ATTR_RO(platform_profile_choices);
--static DEVICE_ATTR_RW(platform_profile);
-+static struct kobj_attribute attr_platform_profile_choices = __ATTR_RO(platform_profile_choices);
-+static struct kobj_attribute attr_platform_profile = __ATTR_RW(platform_profile);
- 
- static struct attribute *platform_profile_attrs[] = {
--	&dev_attr_platform_profile_choices.attr,
--	&dev_attr_platform_profile.attr,
-+	&attr_platform_profile_choices.attr,
-+	&attr_platform_profile.attr,
- 	NULL
- };
- 
+7cdb18431a4b69 Hannes Reinecke 2024-07-18  11  
+7cdb18431a4b69 Hannes Reinecke 2024-07-18  12  #ifdef CONFIG_CRYPTO_HKDF
+7cdb18431a4b69 Hannes Reinecke 2024-07-18  13  int hkdf_extract(struct crypto_shash *hmac_tfm, const u8 *ikm,
+7cdb18431a4b69 Hannes Reinecke 2024-07-18  14  		 unsigned int ikmlen, const u8 *salt, unsigned int saltlen,
+7cdb18431a4b69 Hannes Reinecke 2024-07-18  15  		 u8 *prk);
+7cdb18431a4b69 Hannes Reinecke 2024-07-18  16  int hkdf_expand(struct crypto_shash *hmac_tfm,
+7cdb18431a4b69 Hannes Reinecke 2024-07-18  17  		const u8 *info, unsigned int infolen,
+7cdb18431a4b69 Hannes Reinecke 2024-07-18  18  		u8 *okm, unsigned int okmlen);
+7cdb18431a4b69 Hannes Reinecke 2024-07-18  19  #else
+7cdb18431a4b69 Hannes Reinecke 2024-07-18  20  static inline int hkdf_extract(struct crypto_shash *hmac_tfm,
+7cdb18431a4b69 Hannes Reinecke 2024-07-18  21  			       const u8 *ikm, unsigned int ikmlen,
+7cdb18431a4b69 Hannes Reinecke 2024-07-18  22  			       const u8 *salt, unsigned int saltlen,
+7cdb18431a4b69 Hannes Reinecke 2024-07-18  23  			       u8 *prk)
+7cdb18431a4b69 Hannes Reinecke 2024-07-18  24  {
+7cdb18431a4b69 Hannes Reinecke 2024-07-18 @25  	return -ENOTSUP;
 
----
-base-commit: 47ac09b91befbb6a235ab620c32af719f8208399
-change-id: 20240819-acpi-platform_profile-fix-cfi-violation-de278753bd5f
+:::::: The code at line 25 was first introduced by commit
+:::::: 7cdb18431a4b69e4912fa880449c256e92f3a30d crypto,fs: Separate out hkdf_extract() and hkdf_expand()
 
-Best regards,
+:::::: TO: Hannes Reinecke <hare@kernel.org>
+:::::: CC: Hannes Reinecke <hare@kernel.org>
+
 -- 
-Nathan Chancellor <nathan@kernel.org>
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
