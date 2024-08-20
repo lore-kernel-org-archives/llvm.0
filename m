@@ -1,42 +1,70 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 101DD2F5E;
-	Tue, 20 Aug 2024 04:16:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 479A845C14;
+	Tue, 20 Aug 2024 04:26:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724127365; cv=none; b=TVAl4QcWwRvVA7QpJ76jUUXN2kIR3lK2+sx18gRnE2IjgRPSsffdWuO7GVDy7zE7wJnVK4ht4LVPORBf7trlLgGFD5vUCmQbpHcuqLXjWzjG1VQvtdDN11byiB33+0euYbgrZaYLni113MrI2JPh5/ORF0cnNFcczuAdMhwvHlQ=
+	t=1724127984; cv=none; b=s5ADOKwx3yfwkEP64rfSw0BSzcT9IIUL+8QT3gtXiwcyg/47c4qsC2hp6fV5gMFEOGXwypU4tIN2khMFz9qSxsjsHgAOOyUesQQtLnQ7XxtAkKu93TJP0/DA+z3+5gJMx9jalTaK3p7tH3DTlfp+O/n7ouuwC2w5XCHxUNMyopU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724127365; c=relaxed/simple;
-	bh=AGa3YhfBqQHIC8r3pvSt8hZ1jUBw1AJBBqGQCs2wo98=;
+	s=arc-20240116; t=1724127984; c=relaxed/simple;
+	bh=EPhEMjY7bJqv3OgXaq6MdbBJoS9xZMpbdW6dSGjRQqs=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=QsY8IDDm05Ru/HObBEad6Phnhon6PpgniNf9/BOHa98YQiabKluZi4dNQeoIVmgrzxhnyINM+iGRPpGf+IelplcBuPw2jdkLUZC34FLrT4qYjgg0Ujz12bZK9SIVfkiGi8Mklz8Noa+qQJ+qi6S9UiyNgNDPRh5TpX/QA22wL1I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=ib9BUAFd; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=aUvW+6iA8TfvPn1lanjC2GIdO2SdNC9xLtaygrmF37Wk5j9ztBc7PCfqdehWlQozTvOEtx3Fr3+uGWV372vHqo2+x0I7OAedqmLXKd5za5ugSEMOHnfpFMdVayy3RA58YGOkDgVkXPyjunR8GLA0O0Mw5Uw/TSEmHDq0No89GMM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=iBrG3K7A; arc=none smtp.client-ip=198.175.65.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="ib9BUAFd"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 91C98C4AF09;
-	Tue, 20 Aug 2024 04:16:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1724127364;
-	bh=AGa3YhfBqQHIC8r3pvSt8hZ1jUBw1AJBBqGQCs2wo98=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=ib9BUAFdVkVdBgf92ngVXaz9/zKAZE+WtXLpxOj5r/PuW0XRmqPX8rTqYGWkv0MC7
-	 sgk8KQo/vj6VGCdUkMkZfY3D7OVXThlaPhtqY4AM3Vv+hY4Cn15RpD6mhz8shSGIDb
-	 gi/nHa3aFCQwyI2yentY9SjEj4nIuSkYpkrfX/OQ=
-Date: Tue, 20 Aug 2024 06:15:52 +0200
-From: Greg KH <gregkh@linuxfoundation.org>
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Len Brown <lenb@kernel.org>,
-	Hans de Goede <hdegoede@redhat.com>,
-	Mark Pearson <markpearson@lenovo.com>, Kees Cook <kees@kernel.org>,
-	Sami Tolvanen <samitolvanen@google.com>, linux-acpi@vger.kernel.org,
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-	patches@lists.linux.dev, stable@vger.kernel.org,
-	John Rowley <lkml@johnrowley.me>
-Subject: Re: [PATCH] ACPI: platform-profile: Fix CFI violation when accessing
- sysfs files
-Message-ID: <2024082034-bullfight-pureness-3ada@gregkh>
-References: <20240819-acpi-platform_profile-fix-cfi-violation-v1-1-479365d848f6@kernel.org>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="iBrG3K7A"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1724127982; x=1755663982;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=EPhEMjY7bJqv3OgXaq6MdbBJoS9xZMpbdW6dSGjRQqs=;
+  b=iBrG3K7A5D1E/CklMiQ12vUS7a5QE8cGpQ8TxvNnXfZrwt9uwZSVhvw3
+   OEWDv50s1idnyfRXGr8yGc7Fu9gQCyznYsEH2YZn18YjNkFn17C8RRaae
+   oWu8IUl8/sC0F+lHS5NCEbzSaIFR+81Agug/MPUobtmKEdsM5fc3Uajdz
+   MXE/OvMW5RzIx72DrCcr30lV2CUbKhKthaKcd0iPzzZ6Dl2QbE/GRyaLh
+   1gCfRCFNWcmrP46jJoFjLf/nSLpF7vci76mbFmYuTVbbGYq8Kfc4aeM5F
+   gsnzwX8NpKTA59D/PF8Q3ADMkNK3NtnxuwVVzN+ZhqOXH0bt+BDYDhQkg
+   g==;
+X-CSE-ConnectionGUID: IQTE5AfDRPG76JRAKULDZA==
+X-CSE-MsgGUID: jSduZ3ecTvS/TkJO6e7oHw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11169"; a="22543927"
+X-IronPort-AV: E=Sophos;i="6.10,161,1719903600"; 
+   d="scan'208";a="22543927"
+Received: from fmviesa007.fm.intel.com ([10.60.135.147])
+  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Aug 2024 21:26:22 -0700
+X-CSE-ConnectionGUID: 5fcy/7axQQSIx4VehcG9EA==
+X-CSE-MsgGUID: fXqC33NVTqWsQaFZeFxYKA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.10,161,1719903600"; 
+   d="scan'208";a="60284429"
+Received: from lkp-server01.sh.intel.com (HELO 9a732dc145d3) ([10.239.97.150])
+  by fmviesa007.fm.intel.com with ESMTP; 19 Aug 2024 21:26:15 -0700
+Received: from kbuild by 9a732dc145d3 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1sgGRh-0009iQ-1k;
+	Tue, 20 Aug 2024 04:26:13 +0000
+Date: Tue, 20 Aug 2024 12:25:45 +0800
+From: kernel test robot <lkp@intel.com>
+To: Chris Morgan <macroalpha82@gmail.com>, linux-sunxi@lists.linux.dev
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	devicetree@vger.kernel.org, linux-iio@vger.kernel.org,
+	quentin.schulz@free-electrons.com, mripard@kernel.org,
+	tgamblin@baylibre.com, aidanmacdonald.0x0@gmail.com,
+	u.kleine-koenig@pengutronix.de, lee@kernel.org, samuel@sholland.org,
+	jernej.skrabec@gmail.com, sre@kernel.org, wens@csie.org,
+	conor+dt@kernel.org, krzk+dt@kernel.org, robh@kernel.org,
+	lars@metafoo.de, jic23@kernel.org, jonathan.cameron@huawei.com,
+	Chris Morgan <macromorgan@hotmail.com>,
+	Philippe Simons <simons.philippe@gmail.com>
+Subject: Re: [PATCH V3 14/15] power: supply: axp20x_battery: add support for
+ AXP717
+Message-ID: <202408201228.Hee4eSYl-lkp@intel.com>
+References: <20240819164619.556309-15-macroalpha82@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -45,98 +73,62 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240819-acpi-platform_profile-fix-cfi-violation-v1-1-479365d848f6@kernel.org>
+In-Reply-To: <20240819164619.556309-15-macroalpha82@gmail.com>
 
-On Mon, Aug 19, 2024 at 12:09:22PM -0700, Nathan Chancellor wrote:
-> When an attribute group is created with sysfs_create_group(), the
-> ->sysfs_ops() callback is set to kobj_sysfs_ops, which sets the ->show()
-> and ->store() callbacks to kobj_attr_show() and kobj_attr_store()
-> respectively. These functions use container_of() to get the respective
-> callback from the passed attribute, meaning that these callbacks need to
-> be the same type as the callbacks in 'struct kobj_attribute'.
-> 
-> However, the platform_profile sysfs functions have the type of the
-> ->show() and ->store() callbacks in 'struct device_attribute', which
-> results a CFI violation when accessing platform_profile or
-> platform_profile_choices under /sys/firmware/acpi because the types do
-> not match:
-> 
->   CFI failure at kobj_attr_show+0x19/0x30 (target: platform_profile_choices_show+0x0/0x140; expected type: 0x7a69590c)
-> 
-> This happens to work because the layout of 'struct kobj_attribute' and
-> 'struct device_attribute' are the same, so the container_of() cast
-> happens to allow the callbacks to still work.
+Hi Chris,
 
-Please note that this was an explicit design decision all those years
-ago, it's not just "happening" to work by some accident.  It was just
-done way before anyone thought of CFI-like things.
+kernel test robot noticed the following build errors:
 
-> 
-> Change the type of platform_profile_choices_show() and
-> platform_profile_{show,store}() to match the callbacks in
-> 'struct kobj_attribute' and update the attribute variables to match,
-> which resolves the CFI violation.
-> 
-> Cc: stable@vger.kernel.org
-> Fixes: a2ff95e018f1 ("ACPI: platform: Add platform profile support")
-> Reported-by: John Rowley <lkml@johnrowley.me>
-> Closes: https://github.com/ClangBuiltLinux/linux/issues/2047
-> Tested-by: John Rowley <lkml@johnrowley.me>
-> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
-> ---
->  drivers/acpi/platform_profile.c | 20 ++++++++++----------
->  1 file changed, 10 insertions(+), 10 deletions(-)
-> 
-> diff --git a/drivers/acpi/platform_profile.c b/drivers/acpi/platform_profile.c
-> index d2f7fd7743a1..11278f785526 100644
-> --- a/drivers/acpi/platform_profile.c
-> +++ b/drivers/acpi/platform_profile.c
-> @@ -22,8 +22,8 @@ static const char * const profile_names[] = {
->  };
->  static_assert(ARRAY_SIZE(profile_names) == PLATFORM_PROFILE_LAST);
->  
-> -static ssize_t platform_profile_choices_show(struct device *dev,
-> -					struct device_attribute *attr,
-> +static ssize_t platform_profile_choices_show(struct kobject *kobj,
-> +					struct kobj_attribute *attr,
->  					char *buf)
->  {
->  	int len = 0;
-> @@ -49,8 +49,8 @@ static ssize_t platform_profile_choices_show(struct device *dev,
->  	return len;
->  }
->  
-> -static ssize_t platform_profile_show(struct device *dev,
-> -					struct device_attribute *attr,
-> +static ssize_t platform_profile_show(struct kobject *kobj,
-> +					struct kobj_attribute *attr,
->  					char *buf)
->  {
->  	enum platform_profile_option profile = PLATFORM_PROFILE_BALANCED;
-> @@ -77,8 +77,8 @@ static ssize_t platform_profile_show(struct device *dev,
->  	return sysfs_emit(buf, "%s\n", profile_names[profile]);
->  }
->  
-> -static ssize_t platform_profile_store(struct device *dev,
-> -			    struct device_attribute *attr,
-> +static ssize_t platform_profile_store(struct kobject *kobj,
-> +			    struct kobj_attribute *attr,
->  			    const char *buf, size_t count)
->  {
->  	int err, i;
-> @@ -115,12 +115,12 @@ static ssize_t platform_profile_store(struct device *dev,
->  	return count;
->  }
->  
-> -static DEVICE_ATTR_RO(platform_profile_choices);
-> -static DEVICE_ATTR_RW(platform_profile);
-> +static struct kobj_attribute attr_platform_profile_choices = __ATTR_RO(platform_profile_choices);
-> +static struct kobj_attribute attr_platform_profile = __ATTR_RW(platform_profile);
+[auto build test ERROR on sre-power-supply/for-next]
+[also build test ERROR on jic23-iio/togreg lee-mfd/for-mfd-next linus/master v6.11-rc4 next-20240819]
+[cannot apply to lee-mfd/for-mfd-fixes]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-I understand your need/want for this, but ick, is there any way to get
-back to using 'struct device' and not "raw" kobjects here?  That's what
-the code should be using really.
+url:    https://github.com/intel-lab-lkp/linux/commits/Chris-Morgan/iio-adc-axp20x_adc-Add-adc_en1-and-adc_en1-to-axp_data/20240820-005144
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/sre/linux-power-supply.git for-next
+patch link:    https://lore.kernel.org/r/20240819164619.556309-15-macroalpha82%40gmail.com
+patch subject: [PATCH V3 14/15] power: supply: axp20x_battery: add support for AXP717
+config: i386-buildonly-randconfig-005-20240820 (https://download.01.org/0day-ci/archive/20240820/202408201228.Hee4eSYl-lkp@intel.com/config)
+compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240820/202408201228.Hee4eSYl-lkp@intel.com/reproduce)
 
-thanks,
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202408201228.Hee4eSYl-lkp@intel.com/
 
-greg k-h
+All errors (new ones prefixed by >>):
+
+>> drivers/power/supply/axp20x_battery.c:266:9: error: call to undeclared function 'FIELD_GET'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     266 |         *val = FIELD_GET(AXP717_ICC_CHARGER_LIM_MASK, *val) *
+         |                ^
+   drivers/power/supply/axp20x_battery.c:439:17: error: call to undeclared function 'FIELD_GET'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     439 |                 val->intval = FIELD_GET(AXP717_PWR_OP_BATT_PRESENT, reg);
+         |                               ^
+   2 errors generated.
+
+
+vim +/FIELD_GET +266 drivers/power/supply/axp20x_battery.c
+
+   256	
+   257	static int axp717_get_constant_charge_current(struct axp20x_batt_ps *axp,
+   258						      int *val)
+   259	{
+   260		int ret;
+   261	
+   262		ret = regmap_read(axp->regmap, AXP717_ICC_CHG_SET, val);
+   263		if (ret)
+   264			return ret;
+   265	
+ > 266		*val = FIELD_GET(AXP717_ICC_CHARGER_LIM_MASK, *val) *
+   267			axp->data->ccc_scale;
+   268	
+   269		return 0;
+   270	}
+   271	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
