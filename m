@@ -1,128 +1,101 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f41.google.com (mail-pj1-f41.google.com [209.85.216.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E26B188CC5;
-	Tue, 20 Aug 2024 10:27:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 503AD35280
+	for <llvm@lists.linux.dev>; Tue, 20 Aug 2024 14:20:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724149652; cv=none; b=bQ0KJOiPeIM1j3emUgKR5HF0Cs44KRBeuvIMhjT7fiQLOnIE6sCH6pV92N8DYmJuNnAxFlSgisf3EFrkMAXGuDXwVQU5VAbkq12ZtldORFFcS+3ezmma5VfX6fZZOBqOXte/87XDM5iUe1KDcHRuCApMhKCEuAuhXHQo+NoWNME=
+	t=1724163606; cv=none; b=E3a9kbCjhfGFjyOELvJrZ45B1gbML1jFYtEseKYy0IB3b9l51c9jE86fCo3hSbn0LfoC0cnsfBfEQdvC6Euekrr7B/l4O7I0yBUX9PxSCHZE9hUYrE++SDdeDu9nVS4jpsp7uje/EqUz/76Xwwbrd9jsiUlKTaN1lfR0kD3zPME=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724149652; c=relaxed/simple;
-	bh=GdUhYnWUSpHo2Uj+GU3GKy4GV/YLV/ySEKo+EbguywI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=W+sj4v1WPutObkZ3dnEaZ21wXHOfvS1sWYZGkYSAfU0M8FNCs0W6iROC/q7gy0xGlgUT7R+KYvVx0oWNizTjFvyuJkIjnyKUh/nqEwa5G9Z8VLu2nTaOfYu4JyruRo334JT06XrBShRm61eFM2+aNU3kskles7InjAsyLwYjLf0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=BT+8PXGu; arc=none smtp.client-ip=198.175.65.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1724163606; c=relaxed/simple;
+	bh=DxvtxL+Ke8K6Pv8l2dm3nQAgwg0QSGFXf5KSkc+OWOI=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=E0xnRAlq3E5hz+DMh6RESw7JOQEt26d44vdr8+O0lm1l27GXggTKxq5tIxgVvPll8E/w2BH4hHbWyuBNGNUdvfVdcrTXqCdLNmlqXK4NhNlf1IXA6/Lft2nOFvfxxnyNenxPmTA/gymWz2ub4BwLF4GlJ7BQkGpwF7Hrbe+krwg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NWi76qd9; arc=none smtp.client-ip=209.85.216.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="BT+8PXGu"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1724149651; x=1755685651;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=GdUhYnWUSpHo2Uj+GU3GKy4GV/YLV/ySEKo+EbguywI=;
-  b=BT+8PXGu3xmVYx0fECv42itVE33xnDYS6JpF6EpIcjfxnO8Fqtg4Ua4Q
-   cwvmbdHpJWDmcVKXfzVDuvLs3Q6UKfTnAv1Hg8lw1jpJg+/oxJfiDi/g2
-   ih9u65kBAn8awNQ2UvdAl2NvP3856jD+fNpioNh0DerOCvJUe8f8E9Pnd
-   3u94qPshgwkGuCZJG9UoohYA9qmpIFxL2Bs8bkltzEPGR6bb9ENOR8AHR
-   2Rfg2hjND9upX9tV98JYA5AHI/660pc6ZYrzP6c85+WwJAh2u+gQ0NQeA
-   8SEPFqTwGviJbocoAeHudczRaEtCw2fPVfg+HFr9tr7gQ+xxBo5GzWm3s
-   Q==;
-X-CSE-ConnectionGUID: 36YuqJtCQJCMgtnziFPQ/g==
-X-CSE-MsgGUID: oJDn7FnCQuiOg+J28z643g==
-X-IronPort-AV: E=McAfee;i="6700,10204,11169"; a="39896241"
-X-IronPort-AV: E=Sophos;i="6.10,161,1719903600"; 
-   d="scan'208";a="39896241"
-Received: from orviesa008.jf.intel.com ([10.64.159.148])
-  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Aug 2024 03:27:31 -0700
-X-CSE-ConnectionGUID: D68TYDe/SC2Lkac4zMYjyw==
-X-CSE-MsgGUID: 6W5JroNcQhONBLYTwOdOLQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.10,161,1719903600"; 
-   d="scan'208";a="61443510"
-Received: from lkp-server01.sh.intel.com (HELO 9a732dc145d3) ([10.239.97.150])
-  by orviesa008.jf.intel.com with ESMTP; 20 Aug 2024 03:27:29 -0700
-Received: from kbuild by 9a732dc145d3 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1sgM5G-000A2g-2d;
-	Tue, 20 Aug 2024 10:27:26 +0000
-Date: Tue, 20 Aug 2024 18:27:22 +0800
-From: kernel test robot <lkp@intel.com>
-To: Kevin Hilman <khilman@baylibre.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [PATCH v2 1/3] pmdomain: ti_sci: add per-device latency
- constraint management
-Message-ID: <202408201832.dBeZprIs-lkp@intel.com>
-References: <20240819-lpm-v6-10-constraints-pmdomain-v2-1-461325a6008f@baylibre.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NWi76qd9"
+Received: by mail-pj1-f41.google.com with SMTP id 98e67ed59e1d1-2d3d486d8bdso810482a91.3
+        for <llvm@lists.linux.dev>; Tue, 20 Aug 2024 07:20:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1724163604; x=1724768404; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=DxvtxL+Ke8K6Pv8l2dm3nQAgwg0QSGFXf5KSkc+OWOI=;
+        b=NWi76qd9rhMLpwLqP49+gWCG+BhCyYqvDQS65RfqZEJQKUeKScLmcjMXQk8OxuR6qC
+         MibYyc835NTC4YzdDo/V5s3eg0BiKJRg417gJ8L1EmRE3GYG+TwnD552z3pTPmBFRHo3
+         73pJmUK8t7MYODRLQOhO8MIQKl8X2k/jemGW93ilzL/SoPMw8Lc3NdS3P7TiehoH8aaE
+         0UBwQXYJRqqvKQqA3U4Keco4bFTuWbEQ1xmoMUZakwl/E/JoqvxeTwi4jqM5ixKb4/UB
+         Ztf+aupMc4ORvMqKEZdAlU73+FYNZbb01pXwWnmfBr8UXck6dybd/Vq4NruCDhL8CjYJ
+         2Mjw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1724163604; x=1724768404;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=DxvtxL+Ke8K6Pv8l2dm3nQAgwg0QSGFXf5KSkc+OWOI=;
+        b=A5BgdZmK7VN0rLu1zfW6nxRLj6yF0kzjQIBZJP9nbxfr2+caVUJeeZu9phj628fmNt
+         nl5SlPbplqjeL9Yvhhx6+UViNLGcoZW/UHzumO7NYUH8v4C37V//AUwZ4pttve3Xm9RE
+         LXxL7YeJrMGJDV3XYrWIpCS4PwMt2RsnfPtnIv6G/xv6h/ZGEx3o1KksWy0T+kS14CVK
+         QQUF6N/6+43hahfzHqvO5RH5+TXBoUp8tKWR88XjA+NC6oroEiHdWDIufgyQr88lYV52
+         LKBmZW8Oq8qqCQDCV8t3YW82FWnCJhLL2PoID1PbdKtCXRk9GCMlbVWDR8hIWM4s8YPv
+         5ccg==
+X-Forwarded-Encrypted: i=1; AJvYcCVl+hGBZ72KmWL4iWpprQbKWe7Adx32DEkn6/qOpIE6CYO1j8fawuxj+yjhMLWGEJ8YZEQIEsk6imq/Nj1RJifAnhkRVQ==
+X-Gm-Message-State: AOJu0YxNk9ra76zfoKnl/IpKrhhD8tQzZh0jEw2/9D7UmZCS3pdpo6Cy
+	rJPN8lNrkYBAXVM9+nhB6i536iRNr9OFFVUsocZ7JQ15tpO1x7hGNvgzbOf78zKWitZgIRfc5/b
+	T9lnQYoCMMuEyVoQ2m40WDAxxVYU=
+X-Google-Smtp-Source: AGHT+IGcjKB+JSUz6XR3WY1V11DyPhrE/IyS4AaYf/2qlwuLxWDuMQ9CXaBD7CrEUv4damSxx/lF1wlKrveyCZDI6Zo=
+X-Received: by 2002:a17:90a:9a9:b0:2c4:cd15:3e4b with SMTP id
+ 98e67ed59e1d1-2d3e086417amr9595929a91.4.1724163604537; Tue, 20 Aug 2024
+ 07:20:04 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240819-lpm-v6-10-constraints-pmdomain-v2-1-461325a6008f@baylibre.com>
+References: <20240819213534.4080408-1-mmaurer@google.com>
+In-Reply-To: <20240819213534.4080408-1-mmaurer@google.com>
+From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date: Tue, 20 Aug 2024 16:19:51 +0200
+Message-ID: <CANiq72=jxS-LtTMPdtFCmO0T2ajNZO+XLywqeevE4FyNhtyNBA@mail.gmail.com>
+Subject: Re: [PATCH v3 0/4] Rust KASAN Support
+To: Matthew Maurer <mmaurer@google.com>
+Cc: dvyukov@google.com, ojeda@kernel.org, andreyknvl@gmail.com, 
+	Alex Gaynor <alex.gaynor@gmail.com>, Wedson Almeida Filho <wedsonaf@gmail.com>, 
+	Nathan Chancellor <nathan@kernel.org>, aliceryhl@google.com, samitolvanen@google.com, 
+	kasan-dev@googlegroups.com, linux-mm@kvack.org, glider@google.com, 
+	ryabinin.a.a@gmail.com, Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, 
+	=?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
+	Benno Lossin <benno.lossin@proton.me>, Andreas Hindborg <a.hindborg@samsung.com>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, 
+	Justin Stitt <justinstitt@google.com>, rust-for-linux@vger.kernel.org, 
+	llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Kevin,
+On Mon, Aug 19, 2024 at 11:35=E2=80=AFPM Matthew Maurer <mmaurer@google.com=
+> wrote:
+>
+> This patch series requires the target.json array support patch [1] as
+> the x86_64 target.json file currently produced does not mark itself as KA=
+SAN
+> capable, and is rebased on top of the KASAN Makefile rewrite [2].
+>
+> Differences from v2 [3]:
+> 1. Rebased on top of the maintainer's cleanup of the Makefile.
 
-kernel test robot noticed the following build errors:
+Andrey/KASAN: whenever you are happy with this series, assuming it
+happens for this cycle, do you have a preference/constraint where to
+land this through? I am asking since we will likely need the
+target.json patch for another series that may land this cycle too
+(Rust KCFI). I asked Masahiro as well what he preferred to do, e.g. if
+he wants to take everything (KCFI, KASAN, SCS) through Kbuild, that is
+great too.
 
-[auto build test ERROR on ad7eb1b6b92ee0c959a0a6ae846ddadd7a79ea64]
+Thanks!
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Kevin-Hilman/pmdomain-ti_sci-add-per-device-latency-constraint-management/20240820-080207
-base:   ad7eb1b6b92ee0c959a0a6ae846ddadd7a79ea64
-patch link:    https://lore.kernel.org/r/20240819-lpm-v6-10-constraints-pmdomain-v2-1-461325a6008f%40baylibre.com
-patch subject: [PATCH v2 1/3] pmdomain: ti_sci: add per-device latency constraint management
-config: arm-defconfig (https://download.01.org/0day-ci/archive/20240820/202408201832.dBeZprIs-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240820/202408201832.dBeZprIs-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202408201832.dBeZprIs-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> drivers/pmdomain/ti/ti_sci_pm_domains.c:68:20: error: no member named 'pm_ops' in 'struct ti_sci_ops'
-           ret = ti_sci->ops.pm_ops.set_latency_constraint(ti_sci, val, TISCI_MSG_CONSTRAINT_SET);
-                 ~~~~~~~~~~~ ^
->> drivers/pmdomain/ti/ti_sci_pm_domains.c:68:63: error: use of undeclared identifier 'TISCI_MSG_CONSTRAINT_SET'
-           ret = ti_sci->ops.pm_ops.set_latency_constraint(ti_sci, val, TISCI_MSG_CONSTRAINT_SET);
-                                                                        ^
-   drivers/pmdomain/ti/ti_sci_pm_domains.c:236:34: error: no member named 'pm_ops' in 'struct ti_sci_ops'
-                                   if (pd_provider->ti_sci->ops.pm_ops.set_device_constraint &&
-                                       ~~~~~~~~~~~~~~~~~~~~~~~~ ^
-   drivers/pmdomain/ti/ti_sci_pm_domains.c:237:34: error: no member named 'pm_ops' in 'struct ti_sci_ops'
-                                       pd_provider->ti_sci->ops.pm_ops.set_latency_constraint)
-                                       ~~~~~~~~~~~~~~~~~~~~~~~~ ^
-   4 errors generated.
-
-
-vim +68 drivers/pmdomain/ti/ti_sci_pm_domains.c
-
-    60	
-    61	static int ti_sci_pd_set_lat_constraint(struct device *dev, s32 val)
-    62	{
-    63		struct generic_pm_domain *genpd = pd_to_genpd(dev->pm_domain);
-    64		struct ti_sci_pm_domain *pd = genpd_to_ti_sci_pd(genpd);
-    65		const struct ti_sci_handle *ti_sci = pd->parent->ti_sci;
-    66		int ret;
-    67	
-  > 68		ret = ti_sci->ops.pm_ops.set_latency_constraint(ti_sci, val, TISCI_MSG_CONSTRAINT_SET);
-    69		if (ret)
-    70			dev_err(dev, "ti_sci_pd: set latency constraint failed: ret=%d\n",
-    71				ret);
-    72		else
-    73			dev_dbg(dev, "ti_sci_pd: ID:%d set latency constraint %d\n",
-    74				pd->idx, val);
-    75	
-    76		return ret;
-    77	}
-    78	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Cheers,
+Miguel
