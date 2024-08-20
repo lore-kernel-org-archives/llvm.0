@@ -1,67 +1,85 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0EBD2149005;
-	Tue, 20 Aug 2024 07:40:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D5B018B48A;
+	Tue, 20 Aug 2024 09:25:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724139628; cv=none; b=SmrbbYP9xNyfHOASDP8ASoP1nIXYFRxyzx4YWlP3eCqlB9XXrK0yFoAZSjslzST02auuumiefjAeEnj5mXUPg9/8vE4Uf4J1XZQZPGGudfOBhSmGbAwBhfz0FJ4W9Kz8o7pMfFUyJXeRsmds85iXPUs0v2k5Irz4Rag0WBpj69M=
+	t=1724145935; cv=none; b=V+FW9T/yaA3RKN7vpqUW5wN0kjwemehO97ERV4jTDTF+HUWFcmtW13iF5bpN/5euktmnkiWlkZfNKUh2JyjJypcCixGbCHsNcSl5ziOvjX80XL7jh+5LfKCBM4CS9fAXqq+5p+WQS8VHZOWHNhXgNZaJc3VrQudPI0kqNRfDnG4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724139628; c=relaxed/simple;
-	bh=hawFFnGsZ8QIvUfjOYbiKz9xBDXapD08x6QGiLvAwPs=;
+	s=arc-20240116; t=1724145935; c=relaxed/simple;
+	bh=THweWyUnKikOWA2A+WsOKdmg2rS+0jZaR0q7DErdGs8=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=XJJ4JsGoZ2b6oV2Hxh0TRa8gk1Xcjpic3GGo0l/sY6vWYB0ihIR/7CeGl719VL0hwba20gD8kT1+dUL8zvqvdAGgsQu6/X+o9033CgFjweRbphrMNhD4gOCS4yhhQpAJDOinOdLfwkQ4c5NqCiCfiWatBxcgfMCjJgSDiK7HVTg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=frH76/Tv; arc=none smtp.client-ip=192.198.163.8
+	 Content-Type:Content-Disposition:In-Reply-To; b=S8nlDIEYoauMn/MzWM6D1O3adBbyINPKkbyXIBIXWBe7CUMsFFz/1aao5C/41FoH1B6fAvqD4RL8iyq/XFYL5BDbYCuu6gbjdhJpvlvMWamceVsxL9zZG6MfLet/OfL2sJORIXwkcQxHMZ8Cq9dxb70b/TWDA4gMPZfQ5CkSfMw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=aoge4Aoc; arc=none smtp.client-ip=198.175.65.19
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="frH76/Tv"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="aoge4Aoc"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1724139627; x=1755675627;
+  t=1724145934; x=1755681934;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=hawFFnGsZ8QIvUfjOYbiKz9xBDXapD08x6QGiLvAwPs=;
-  b=frH76/Tv+9ifIDSxpBY3VH9ps0y884t7IF5Ex8vS36mYiIv2KrTqe5Ak
-   a68PyDpHcufaHPlMTPcQX3Cgl0T/DeDmKMLNTovUNz503NMPSqwzB3JFw
-   +3PAlVG20arGqaehpl1fqE0KaZgC/FjbXJutzb7iJ/sebRYb9QAX4lNmJ
-   0a1875KkqgGUs1CpgyYtUxbkQQJhPgxGHCyEMnthvX/HFP8snkBXIK03L
-   oMaymjYIkHQTJk08dOndFwDGlCeahbaNbAd/oc4Jcbv51mrKnMiuG8aU7
-   MRgy3gxvSHrUcf/P0EpZx0XNsJQLYqyohYQFJ44TYAzl+CRTlqknh2p+1
+  bh=THweWyUnKikOWA2A+WsOKdmg2rS+0jZaR0q7DErdGs8=;
+  b=aoge4Aoc1i3uX4EAhJOxafixsqN3Uq+jF5sJkSXt5W8CctqzjpeyHV6Y
+   GCWsWNkQiTE5GMljXdzcIteDx/dtHBrUdCFKXbLLHg3L0Up2gg2YT7kYn
+   7mWuy+1edTjHUzp1yf+vmk/WB0nCO2x8fIMWRHWq8iEMgHGvr3A3DJirY
+   zVOzxPOGIYSZCYkXu3Zq1Fb9v2Vh98eNEc83r6IXbCM8SxXJ9IooLSa9E
+   3kgwnrO8QZNnmCJWcLv4GoY38QDnu8H2+YiRvhREIQiDOGxlunVeW5oT4
+   FgT2h/t7/bihwxfyuAWs8XrFb68O8D9FVnbfwC9DquEdGBriU9im8T/BH
    g==;
-X-CSE-ConnectionGUID: scJOoLEnS3yDGcrImuoP0A==
-X-CSE-MsgGUID: lv0Cx7yiRameHnzwWvYjGw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11169"; a="39926456"
+X-CSE-ConnectionGUID: sIJgxArdTG2TNHOnUpPEzQ==
+X-CSE-MsgGUID: WPdulMMcQRef+s6haj0d/Q==
+X-IronPort-AV: E=McAfee;i="6700,10204,11169"; a="22282115"
 X-IronPort-AV: E=Sophos;i="6.10,161,1719903600"; 
-   d="scan'208";a="39926456"
-Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Aug 2024 00:40:25 -0700
-X-CSE-ConnectionGUID: u+Uf2G9mTouWtcLGx/72Lw==
-X-CSE-MsgGUID: Ni+zAIHISxyEEUBu7A5x+g==
+   d="scan'208";a="22282115"
+Received: from fmviesa003.fm.intel.com ([10.60.135.143])
+  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Aug 2024 02:25:33 -0700
+X-CSE-ConnectionGUID: uKJSlvzWTU+N3dv/t9vFdA==
+X-CSE-MsgGUID: M23/lFdcQLSJJU+C9YW+0Q==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.10,161,1719903600"; 
-   d="scan'208";a="91406661"
+   d="scan'208";a="64850206"
 Received: from lkp-server01.sh.intel.com (HELO 9a732dc145d3) ([10.239.97.150])
-  by fmviesa001.fm.intel.com with ESMTP; 20 Aug 2024 00:40:21 -0700
+  by fmviesa003.fm.intel.com with ESMTP; 20 Aug 2024 02:25:26 -0700
 Received: from kbuild by 9a732dc145d3 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1sgJTW-0009r2-39;
-	Tue, 20 Aug 2024 07:40:18 +0000
-Date: Tue, 20 Aug 2024 15:40:09 +0800
+	id 1sgL7E-0009y0-1o;
+	Tue, 20 Aug 2024 09:25:24 +0000
+Date: Tue, 20 Aug 2024 17:25:24 +0800
 From: kernel test robot <lkp@intel.com>
-To: Alexander Aring <aahringo@redhat.com>, teigland@redhat.com
+To: Jesse Taube <jesse@rivosinc.com>, linux-riscv@lists.infradead.org
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	gfs2@lists.linux.dev, song@kernel.org, yukuai3@huawei.com,
-	agruenba@redhat.com, mark@fasheh.com, jlbec@evilplan.org,
-	joseph.qi@linux.alibaba.com, gregkh@linuxfoundation.org,
-	rafael@kernel.org, akpm@linux-foundation.org,
-	linux-kernel@vger.kernel.org, linux-raid@vger.kernel.org,
-	ocfs2-devel@lists.linux.dev, netdev@vger.kernel.org,
-	vvidic@valentin-vidic.from.hr, heming.zhao@suse.com,
-	lucien.xin@gmail.com, aahringo@redhat.com
-Subject: Re: [PATCH dlm/next 11/12] dlm: add nldlm net-namespace aware UAPI
-Message-ID: <202408201509.g1VKeeOl-lkp@intel.com>
-References: <20240819183742.2263895-12-aahringo@redhat.com>
+	Jonathan Corbet <corbet@lwn.net>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>, Conor Dooley <conor@kernel.org>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	=?iso-8859-1?Q?Cl=E9ment_L=E9ger?= <cleger@rivosinc.com>,
+	Evan Green <evan@rivosinc.com>,
+	Andrew Jones <ajones@ventanamicro.com>,
+	Jesse Taube <jesse@rivosinc.com>,
+	Charlie Jenkins <charlie@rivosinc.com>,
+	Xiao Wang <xiao.w.wang@intel.com>, Andy Chiu <andy.chiu@sifive.com>,
+	Eric Biggers <ebiggers@google.com>,
+	Greentime Hu <greentime.hu@sifive.com>,
+	=?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn@rivosinc.com>,
+	Heiko Stuebner <heiko@sntech.de>,
+	Costa Shulyupin <costa.shul@redhat.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Linux Memory Management List <linux-mm@kvack.org>,
+	Baoquan He <bhe@redhat.com>, Anup Patel <apatel@ventanamicro.com>,
+	Zong Li <zong.li@sifive.com>,
+	Sami Tolvanen <samitolvanen@google.com>,
+	Ben Dooks <ben.dooks@codethink.co.uk>,
+	Alexandre Ghiti <alexghiti@rivosinc.com>,
+	"Gustavo A. R. Silva" <gustavoars@kernel.org>,
+	Erick Archer <erick.archer@gmx.com>
+Subject: Re: [PATCH v8 4/6] RISC-V: Detect unaligned vector accesses supported
+Message-ID: <202408201720.u8SfprDk-lkp@intel.com>
+References: <20240819212605.1837175-5-jesse@rivosinc.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -70,118 +88,104 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240819183742.2263895-12-aahringo@redhat.com>
+In-Reply-To: <20240819212605.1837175-5-jesse@rivosinc.com>
 
-Hi Alexander,
+Hi Jesse,
 
-kernel test robot noticed the following build warnings:
+kernel test robot noticed the following build errors:
 
-[auto build test WARNING on teigland-dlm/next]
-[also build test WARNING on next-20240820]
-[cannot apply to gfs2/for-next driver-core/driver-core-testing driver-core/driver-core-next driver-core/driver-core-linus linus/master v6.11-rc4]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+[auto build test ERROR on 32d5f7add080a936e28ab4142bfeea6b06999789]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Alexander-Aring/dlm-introduce-dlm_find_lockspace_name/20240820-024440
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/teigland/linux-dlm.git next
-patch link:    https://lore.kernel.org/r/20240819183742.2263895-12-aahringo%40redhat.com
-patch subject: [PATCH dlm/next 11/12] dlm: add nldlm net-namespace aware UAPI
-config: x86_64-buildonly-randconfig-001-20240820 (https://download.01.org/0day-ci/archive/20240820/202408201509.g1VKeeOl-lkp@intel.com/config)
-compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240820/202408201509.g1VKeeOl-lkp@intel.com/reproduce)
+url:    https://github.com/intel-lab-lkp/linux/commits/Jesse-Taube/RISC-V-Check-scalar-unaligned-access-on-all-CPUs/20240820-052900
+base:   32d5f7add080a936e28ab4142bfeea6b06999789
+patch link:    https://lore.kernel.org/r/20240819212605.1837175-5-jesse%40rivosinc.com
+patch subject: [PATCH v8 4/6] RISC-V: Detect unaligned vector accesses supported
+config: riscv-defconfig (https://download.01.org/0day-ci/archive/20240820/202408201720.u8SfprDk-lkp@intel.com/config)
+compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 26670e7fa4f032a019d23d56c6a02926e854e8af)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240820/202408201720.u8SfprDk-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202408201509.g1VKeeOl-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202408201720.u8SfprDk-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> fs/dlm/nldlm.c:195:2: warning: variable 'ls' is used uninitialized whenever 'for' loop exits because its condition is false [-Wsometimes-uninitialized]
-     195 |         list_for_each_entry(ls_iter, &dn->lockspaces, list) {
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/list.h:779:7: note: expanded from macro 'list_for_each_entry'
-     779 |              !list_entry_is_head(pos, head, member);                    \
-         |              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   fs/dlm/nldlm.c:202:7: note: uninitialized use occurs here
-     202 |         if (!ls) {
-         |              ^~
-   fs/dlm/nldlm.c:195:2: note: remove the condition if it is always true
-     195 |         list_for_each_entry(ls_iter, &dn->lockspaces, list) {
-         |         ^
-   include/linux/list.h:779:7: note: expanded from macro 'list_for_each_entry'
-     779 |              !list_entry_is_head(pos, head, member);                    \
+   In file included from arch/riscv/kernel/sys_hwprobe.c:7:
+   In file included from include/linux/syscalls.h:93:
+   In file included from include/trace/syscall.h:7:
+   In file included from include/linux/trace_events.h:6:
+   In file included from include/linux/ring_buffer.h:5:
+   In file included from include/linux/mm.h:2228:
+   include/linux/vmstat.h:514:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     514 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+>> arch/riscv/kernel/sys_hwprobe.c:263:7: error: use of undeclared identifier 'RISCV_HWPROBE_KEY_VECTOR_MISALIGNED_PERF'
+     263 |         case RISCV_HWPROBE_KEY_VECTOR_MISALIGNED_PERF:
          |              ^
-   fs/dlm/nldlm.c:185:23: note: initialize the variable 'ls' to silence this warning
-     185 |         struct dlm_cfg_ls *ls, *ls_iter = NULL;
-         |                              ^
-         |                               = NULL
->> fs/dlm/nldlm.c:918:11: warning: variable 'log_level' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
-     918 |         else if (dn->config.ci_log_debug)
-         |                  ^~~~~~~~~~~~~~~~~~~~~~~
-   fs/dlm/nldlm.c:921:50: note: uninitialized use occurs here
-     921 |         rv = nla_put_u32(skb, NLDLM_CFG_ATTR_LOG_LEVEL, log_level);
-         |                                                         ^~~~~~~~~
-   fs/dlm/nldlm.c:918:7: note: remove the 'if' if its condition is always true
-     918 |         else if (dn->config.ci_log_debug)
-         |              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     919 |                 log_level = NLDLM_LOG_LEVEL_DEBUG;
-   fs/dlm/nldlm.c:868:20: note: initialize the variable 'log_level' to silence this warning
-     868 |         uint32_t log_level;
-         |                           ^
-         |                            = 0
-   2 warnings generated.
+   1 warning and 1 error generated.
 
 
-vim +195 fs/dlm/nldlm.c
+vim +/RISCV_HWPROBE_KEY_VECTOR_MISALIGNED_PERF +263 arch/riscv/kernel/sys_hwprobe.c
 
-   181	
-   182	static int nldlm_get_ls(struct sk_buff *msg, struct genl_info *info)
-   183	{
-   184		struct dlm_net *dn = dlm_pernet(sock_net(msg->sk));
- > 185		struct dlm_cfg_ls *ls, *ls_iter = NULL;
-   186		char lsname[DLM_LOCKSPACE_LEN];
-   187		struct sk_buff *skb;
-   188		int rv;
-   189	
-   190		rv = nldlm_parse_ls(info->attrs[NLDLM_ATTR_LS], lsname);
-   191		if (rv < 0)
-   192			return rv;
-   193	
-   194		mutex_lock(&dn->cfg_lock);
- > 195		list_for_each_entry(ls_iter, &dn->lockspaces, list) {
-   196			if (!strncmp(ls_iter->name, lsname, DLM_LOCKSPACE_LEN)) {
-   197				ls = ls_iter;
-   198				break;
-   199			}
-   200		}
-   201	
-   202		if (!ls) {
-   203			rv = -ENOENT;
-   204			goto err;
-   205		}
-   206	
-   207		skb = nlmsg_new(NLMSG_DEFAULT_SIZE, GFP_ATOMIC);
-   208		if (!skb) {
-   209			rv = -ENOMEM;
-   210			goto err;
-   211		}
-   212	
-   213		rv = __nldlm_get_ls(skb, ls, info->snd_portid,
-   214				    info->snd_seq, NULL, 0);
-   215		if (rv < 0) {
-   216			nlmsg_free(skb);
-   217			goto err;
-   218		}
-   219	
-   220		rv = genlmsg_reply(skb, info);
-   221	
-   222	err:
-   223		mutex_unlock(&dn->cfg_lock);
-   224		return rv;
-   225	}
-   226	
+   234	
+   235	static void hwprobe_one_pair(struct riscv_hwprobe *pair,
+   236				     const struct cpumask *cpus)
+   237	{
+   238		switch (pair->key) {
+   239		case RISCV_HWPROBE_KEY_MVENDORID:
+   240		case RISCV_HWPROBE_KEY_MARCHID:
+   241		case RISCV_HWPROBE_KEY_MIMPID:
+   242			hwprobe_arch_id(pair, cpus);
+   243			break;
+   244		/*
+   245		 * The kernel already assumes that the base single-letter ISA
+   246		 * extensions are supported on all harts, and only supports the
+   247		 * IMA base, so just cheat a bit here and tell that to
+   248		 * userspace.
+   249		 */
+   250		case RISCV_HWPROBE_KEY_BASE_BEHAVIOR:
+   251			pair->value = RISCV_HWPROBE_BASE_BEHAVIOR_IMA;
+   252			break;
+   253	
+   254		case RISCV_HWPROBE_KEY_IMA_EXT_0:
+   255			hwprobe_isa_ext0(pair, cpus);
+   256			break;
+   257	
+   258		case RISCV_HWPROBE_KEY_CPUPERF_0:
+   259		case RISCV_HWPROBE_KEY_MISALIGNED_SCALAR_PERF:
+   260			pair->value = hwprobe_misaligned(cpus);
+   261			break;
+   262	
+ > 263		case RISCV_HWPROBE_KEY_VECTOR_MISALIGNED_PERF:
+   264			pair->value = hwprobe_vec_misaligned(cpus);
+   265			break;
+   266	
+   267		case RISCV_HWPROBE_KEY_ZICBOZ_BLOCK_SIZE:
+   268			pair->value = 0;
+   269			if (hwprobe_ext0_has(cpus, RISCV_HWPROBE_EXT_ZICBOZ))
+   270				pair->value = riscv_cboz_block_size;
+   271			break;
+   272		case RISCV_HWPROBE_KEY_HIGHEST_VIRT_ADDRESS:
+   273			pair->value = user_max_virt_addr();
+   274			break;
+   275	
+   276		case RISCV_HWPROBE_KEY_TIME_CSR_FREQ:
+   277			pair->value = riscv_timebase;
+   278			break;
+   279	
+   280		/*
+   281		 * For forward compatibility, unknown keys don't fail the whole
+   282		 * call, but get their element key set to -1 and value set to 0
+   283		 * indicating they're unrecognized.
+   284		 */
+   285		default:
+   286			pair->key = -1;
+   287			pair->value = 0;
+   288			break;
+   289		}
+   290	}
+   291	
 
 -- 
 0-DAY CI Kernel Test Service
