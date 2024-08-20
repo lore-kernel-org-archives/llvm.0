@@ -1,258 +1,185 @@
-Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BFCD11917F0
-	for <llvm@lists.linux.dev>; Tue, 20 Aug 2024 17:30:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E66761917E7;
+	Tue, 20 Aug 2024 17:38:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724175056; cv=none; b=YjNpQ/nkkJe2cvrPj/kC3Fh7DPZLF7L5GjiL+TT0pY78tNu14o9GeyoKSGNc+O9UTwl6MDc12BE+yS913tSMjflqTrzvwdvZerqlpluV29pzHr5ITOP1Zo+ggvV0FI6yPLrMK/mXyn8ndySq6oZaXkt65818yrI/8SMoKjz/bSQ=
+	t=1724175501; cv=none; b=NcNBwQ1QJjrJDW7sg4+LbjBOalYu9pOyjfOKjpyevVsrnIrxQyPqu+W+IA9Bi1dYiulXi/tglGFuWF9bTpz0z+kcaT4yZV4wGjk8nKki+IGHI2HDJ6o1vO1W6NkLcAuR7T4WXGohMhHIJZt7RyK0nitvdlKYcEj0ps8tftRzABM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724175056; c=relaxed/simple;
-	bh=fFqJ9FHhdqc5EiDj+/EgS54hgZ2Qvxvrhj0vFRrhVl0=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=skWT4zwdmpy8YAZ9RY6Kmr33xhxrJe/hk5QDzH2tWgB/RmDTj2xZPfuHSR1Fa/++58fx+GIKo0W0a5X0buMa4rvp1uofZMAn3C8QWNFa60ZVlxHIjxh/OgU1Z+YLNR4N4pfvh17h5NxIASJZvEr7Zlwgd7ogePjuqvYqQe4qDv0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=R/RBTJ6Y; arc=none smtp.client-ip=209.85.128.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1724175501; c=relaxed/simple;
+	bh=F9ys5UlU389ee3QRFRy0ljWKUhgX8RwxMcVWiy3W9E4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=QVi0VwTN1zkvspPEfS9I4iPIdujOye50+KthYsfGO4HmGjl/5m56JRE7YQZjKYThAz+awUybJbd8e+QhEOpgIftO4aCLQxDIDIKYy1tMr/sOy2SPbCgqXFzV7GdF2nAPBnbzd+xwvjPL9A7XHT8/w0QT6UdEpMgY8ZuOVciofvY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=aDqRJY1S; arc=none smtp.client-ip=198.175.65.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="R/RBTJ6Y"
-Received: by mail-wm1-f43.google.com with SMTP id 5b1f17b1804b1-427fc97a88cso49155245e9.0
-        for <llvm@lists.linux.dev>; Tue, 20 Aug 2024 10:30:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1724175053; x=1724779853; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=7wISXuCBhmhFmaFFKaHK4h6CHKUfKYQSgO+IzNbasqs=;
-        b=R/RBTJ6YWwCOAWpnFFkLyFkjFNLU5/XDfgfPNTOfA0D3bX75Ddr1N7vyyEumGRtmZo
-         ClvKf9tzps3UYg9ufRz7QuO8okEZtNcH7xgnhEH082dcwzcDhw6MLEWJEHv1HJ/CbXG2
-         28l4qQlRLJwCEfP846vBSXQzB0bUl2Y+uQxajQhECe8kW7fjYAesGjpthnFSFKuRYVzX
-         PX9pSf8oVRjIs3sicAu3wtymGGzy/mK6qv14fU0/k76nAj2knpeDIVzItYaJBR9zZuyH
-         1b84EaHQ4tzuVJIrQwxyUYbYZxh/I4+JoOCmyikYdcEzJhRDaVAoLFA8gfJudzV93EbA
-         hvcA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1724175053; x=1724779853;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=7wISXuCBhmhFmaFFKaHK4h6CHKUfKYQSgO+IzNbasqs=;
-        b=koddVEiBfSIhP/qOb0SSBONCuK8knEAmqLD7Fg7WPMUnxurx+3Hc+QNnHoiyI4Op9u
-         QyyQx2jbgiNZKw7HfnFTfA4jXVloUFJjyxC99qwYSnO0cLlCLeSLG2z+3rKZRfV3w+mb
-         xjqXZuwKL+8JUX3V/njae7Nz8g8ATHe4CkfYlb0SlML9QV5tSt16Xng/o7fctL3czQN4
-         OpfW2LhtXTOXzSD0jDblzHnfnbu0Wm+zLJAtr0d3KfJGYbtPH4hsyuTlXLJKJMBoGyKi
-         dBLxay0S81nku3Ol/Exttl01rVRwgncGhh519i2Mk7D8qL0ZEAdo99SuXPqEEIcfwMNS
-         tpiA==
-X-Forwarded-Encrypted: i=1; AJvYcCWsHoM/UYS/7SyVRa0a+J0rx99T5xkh7d42ROus2kylriXpy5JNCbID/LRw4zkIkLVMJfkXbVQy6+OwvgYvdB+YHdJxcA==
-X-Gm-Message-State: AOJu0YzlzsfzWvh/KfK6VebP7MgSs9CYVlL7HNi1EHI6mnHGwP0oSani
-	FlhDNJnzzaw6vAJknX9cPp+Gm+WE/HygrDeQ/nuyjhaDfJFT96vIKsOxCeF887HCqC7Sbgd79Br
-	FwDAqfwwZalxKbP7GHMkpVorOa5Y=
-X-Google-Smtp-Source: AGHT+IEAtX244iYeZYPk7sy9TeAceSFJTN5yXWToK5PNGBrEPxv2PkC7QDXiz5Fnm4hlwP9R1e29NsFLdm/qMR+Mbbs=
-X-Received: by 2002:a5d:4386:0:b0:362:b906:99c4 with SMTP id
- ffacd0b85a97d-371c6060c90mr1694765f8f.58.1724175052539; Tue, 20 Aug 2024
- 10:30:52 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="aDqRJY1S"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1724175500; x=1755711500;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=F9ys5UlU389ee3QRFRy0ljWKUhgX8RwxMcVWiy3W9E4=;
+  b=aDqRJY1STuqD1K4KECXu1RRsrJqog+3DZmXLQ5gWj4tkF7wPRbE7Ziw9
+   7fVTRFlyV1R6UHF6W4vntqG7d8ySt8j2g/074B4ARGQxwwWsLZt/In3dP
+   +CJExPv4dr9+Sjljnl6jamzvhHseS9PNfVA9PRVB6NvahE8HsdqiTeLDl
+   1rPdizg3nOE8ej8zSo1/EEQEOrABSWCkFCERwxXJd4evR3l8k2m76NXur
+   aSUA3x0twKKiUfYKAWPzTBKYy7kL1SSlpAYflO0t4KeYexj30LSugAlCJ
+   Co2n0Bw6uH4ouhgYuQbJ5W7325RwNXi2s+PQs7Wh9G8/gsMxUgPHyPiAa
+   Q==;
+X-CSE-ConnectionGUID: NMhGB64US4isRfy5jI8NcQ==
+X-CSE-MsgGUID: ULkk2pEpRZKRSgqd7AI4yw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11170"; a="45019403"
+X-IronPort-AV: E=Sophos;i="6.10,162,1719903600"; 
+   d="scan'208";a="45019403"
+Received: from fmviesa010.fm.intel.com ([10.60.135.150])
+  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Aug 2024 10:38:19 -0700
+X-CSE-ConnectionGUID: L51FrettSbecQ6z0Q2BVTQ==
+X-CSE-MsgGUID: lA8PK9nmTUyeERQjg4edhg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.10,162,1719903600"; 
+   d="scan'208";a="60958613"
+Received: from lkp-server01.sh.intel.com (HELO 9a732dc145d3) ([10.239.97.150])
+  by fmviesa010.fm.intel.com with ESMTP; 20 Aug 2024 10:37:47 -0700
+Received: from kbuild by 9a732dc145d3 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1sgSng-000ASU-1e;
+	Tue, 20 Aug 2024 17:37:44 +0000
+Date: Wed, 21 Aug 2024 01:37:11 +0800
+From: kernel test robot <lkp@intel.com>
+To: Juergen Gross <jgross@suse.com>, linux-kernel@vger.kernel.org,
+	x86@kernel.org, linux-acpi@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Juergen Gross <jgross@suse.com>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	"H. Peter Anvin" <hpa@zytor.com>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Len Brown <lenb@kernel.org>,
+	Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+	xen-devel@lists.xenproject.org
+Subject: Re: [PATCH v2 6/7] xen: allow mapping ACPI data using a different
+ physical address
+Message-ID: <202408210000.e7XA8iNs-lkp@intel.com>
+References: <20240820082012.31316-7-jgross@suse.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20240819213534.4080408-1-mmaurer@google.com> <20240819213534.4080408-3-mmaurer@google.com>
-In-Reply-To: <20240819213534.4080408-3-mmaurer@google.com>
-From: Andrey Konovalov <andreyknvl@gmail.com>
-Date: Tue, 20 Aug 2024 19:30:41 +0200
-Message-ID: <CA+fCnZeA_GOdqidEhP81TvwiSSgJNEoXa85ooqVpfPOk3v4S0w@mail.gmail.com>
-Subject: Re: [PATCH v3 2/4] kbuild: rust: Enable KASAN support
-To: Matthew Maurer <mmaurer@google.com>
-Cc: dvyukov@google.com, ojeda@kernel.org, 
-	Andrey Ryabinin <ryabinin.a.a@gmail.com>, Masahiro Yamada <masahiroy@kernel.org>, 
-	Alex Gaynor <alex.gaynor@gmail.com>, Wedson Almeida Filho <wedsonaf@gmail.com>, 
-	Nathan Chancellor <nathan@kernel.org>, aliceryhl@google.com, samitolvanen@google.com, 
-	kasan-dev@googlegroups.com, linux-mm@kvack.org, glider@google.com, 
-	Nicolas Schier <nicolas@fjasle.eu>, Vincenzo Frascino <vincenzo.frascino@arm.com>, 
-	Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, 
-	=?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
-	Benno Lossin <benno.lossin@proton.me>, Andreas Hindborg <a.hindborg@samsung.com>, 
-	Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, 
-	Justin Stitt <justinstitt@google.com>, linux-kbuild@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, rust-for-linux@vger.kernel.org, 
-	llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240820082012.31316-7-jgross@suse.com>
 
-On Mon, Aug 19, 2024 at 11:35=E2=80=AFPM Matthew Maurer <mmaurer@google.com=
-> wrote:
->
-> Rust supports KASAN via LLVM, but prior to this patch, the flags aren't
-> set properly.
->
-> Rust hasn't yet enabled software-tagged KWHASAN (only regular HWASAN),
-> so explicitly prevent Rust from being selected when it is enabled.
+Hi Juergen,
 
-This is done in the next patch, not in this one.
+kernel test robot noticed the following build errors:
 
-> Suggested-by: Miguel Ojeda <ojeda@kernel.org>
-> Signed-off-by: Matthew Maurer <mmaurer@google.com>
-> ---
->  scripts/Makefile.kasan          | 54 +++++++++++++++++++++++----------
->  scripts/Makefile.lib            |  3 ++
->  scripts/generate_rust_target.rs |  1 +
->  3 files changed, 42 insertions(+), 16 deletions(-)
->
-> diff --git a/scripts/Makefile.kasan b/scripts/Makefile.kasan
-> index aab4154af00a..163640fdefa0 100644
-> --- a/scripts/Makefile.kasan
-> +++ b/scripts/Makefile.kasan
-> @@ -12,6 +12,11 @@ endif
->  KASAN_SHADOW_OFFSET ?=3D $(CONFIG_KASAN_SHADOW_OFFSET)
->
->  cc-param =3D $(call cc-option, -mllvm -$(1), $(call cc-option, --param $=
-(1)))
-> +rustc-param =3D $(call rustc-option, -Cllvm-args=3D-$(1),)
-> +
-> +check-args =3D $(foreach arg,$(2),$(call $(1),$(arg)))
-> +
-> +kasan_params :=3D
->
->  ifdef CONFIG_KASAN_STACK
->         stack_enable :=3D 1
-> @@ -41,39 +46,56 @@ CFLAGS_KASAN :=3D $(call cc-option, -fsanitize=3Dkern=
-el-address \
->                 $(call cc-option, -fsanitize=3Dkernel-address \
->                 -mllvm -asan-mapping-offset=3D$(KASAN_SHADOW_OFFSET)))
->
-> -# Now, add other parameters enabled similarly in both GCC and Clang.
-> -# As some of them are not supported by older compilers, use cc-param.
-> -CFLAGS_KASAN +=3D $(call cc-param,asan-instrumentation-with-call-thresho=
-ld=3D$(call_threshold)) \
-> -               $(call cc-param,asan-stack=3D$(stack_enable)) \
-> -               $(call cc-param,asan-instrument-allocas=3D1) \
-> -               $(call cc-param,asan-globals=3D1)
-> +# The minimum supported `rustc` version has a minimum supported LLVM
-> +# version late enough that we can assume support for -asan-mapping-offse=
-t
+[auto build test ERROR on tip/x86/core]
+[also build test ERROR on rafael-pm/linux-next rafael-pm/bleeding-edge linus/master v6.11-rc4 next-20240820]
+[cannot apply to xen-tip/linux-next]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Nit: dot at the end.
+url:    https://github.com/intel-lab-lkp/linux/commits/Juergen-Gross/xen-use-correct-end-address-of-kernel-for-conflict-checking/20240820-162344
+base:   tip/x86/core
+patch link:    https://lore.kernel.org/r/20240820082012.31316-7-jgross%40suse.com
+patch subject: [PATCH v2 6/7] xen: allow mapping ACPI data using a different physical address
+config: i386-buildonly-randconfig-002-20240820 (https://download.01.org/0day-ci/archive/20240821/202408210000.e7XA8iNs-lkp@intel.com/config)
+compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240821/202408210000.e7XA8iNs-lkp@intel.com/reproduce)
 
-> +RUSTFLAGS_KASAN :=3D -Zsanitizer=3Dkernel-address \
-> +                  -Zsanitizer-recover=3Dkernel-address \
-> +                  -Cllvm-args=3D-asan-mapping-offset=3D$(KASAN_SHADOW_OF=
-FSET)
-> +
-> +# Now, add other parameters enabled similarly in GCC, Clang, and rustc.
-> +# As some of them are not supported by older compilers, these will be fi=
-ltered
-> +# through `cc-param` or `rust-param` as applicable.
-> +kasan_params +=3D asan-instrumentation-with-call-threshold=3D$(call_thre=
-shold) \
-> +               asan-stack=3D$(stack_enable) \
-> +               asan-instrument-allocas=3D1 \
-> +               asan-globals=3D1
->
->  # Instrument memcpy/memset/memmove calls by using instrumented __asan_me=
-m*()
->  # instead. With compilers that don't support this option, compiler-inser=
-ted
->  # memintrinsics won't be checked by KASAN on GENERIC_ENTRY architectures=
-.
-> -CFLAGS_KASAN +=3D $(call cc-param,asan-kernel-mem-intrinsic-prefix=3D1)
-> +kasan_params +=3D asan-kernel-mem-intrinsic-prefix=3D1
->
->  endif # CONFIG_KASAN_GENERIC
->
->  ifdef CONFIG_KASAN_SW_TAGS
->
->  ifdef CONFIG_KASAN_INLINE
-> -       instrumentation_flags :=3D $(call cc-param,hwasan-mapping-offset=
-=3D$(KASAN_SHADOW_OFFSET))
-> +       kasan_params +=3D hwasan-mapping-offset=3D$(KASAN_SHADOW_OFFSET)
->  else
-> -       instrumentation_flags :=3D $(call cc-param,hwasan-instrument-with=
--calls=3D1)
-> +       kasan_params +=3D hwasan-instrument-with-calls=3D1
->  endif
->
-> -CFLAGS_KASAN :=3D -fsanitize=3Dkernel-hwaddress \
-> -               $(call cc-param,hwasan-instrument-stack=3D$(stack_enable)=
-) \
-> -               $(call cc-param,hwasan-use-short-granules=3D0) \
-> -               $(call cc-param,hwasan-inline-all-checks=3D0) \
-> -               $(instrumentation_flags)
-> +kasan_params +=3D hwasan-instrument-stack=3D$(stack_enable) \
-> +               hwasan-use-short-granules=3D0 \
-> +               hwasan-inline-all-checks=3D0
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202408210000.e7XA8iNs-lkp@intel.com/
 
-Let's put these kasan_params parts after CFLAGS_KASAN.
+All errors (new ones prefixed by >>):
 
-> +
-> +CFLAGS_KASAN :=3D -fsanitize=3Dkernel-hwaddress
-> +RUSTFLAGS_KASAN :=3D -Zsanitizer=3Dkernel-hwaddress \
-> +                  -Zsanitizer-recover=3Dkernel-hwaddress
-
-What's the intention of defining RUSTFLAGS_KASAN for SW_TAGS if it's
-not supported by Rust? Should this be removed?
-
-If this is just a foundation for potential future support of
-Rust+SW_TAGS, please add a comment explaining this. And also please
-put the patch that disallows Rust+SW_TAGS before this one, if you keep
-RUSTFLAGS_KASAN.
-
->  # Instrument memcpy/memset/memmove calls by using instrumented __hwasan_=
-mem*().
->  ifeq ($(call clang-min-version, 150000)$(call gcc-min-version, 130000),y=
-)
-> -       CFLAGS_KASAN +=3D $(call cc-param,hwasan-kernel-mem-intrinsic-pre=
-fix=3D1)
-> +       kasan_params +=3D hwasan-kernel-mem-intrinsic-prefix=3D1
->  endif
->
->  endif # CONFIG_KASAN_SW_TAGS
->
-> -export CFLAGS_KASAN CFLAGS_KASAN_NOSANITIZE
-> +# Add all as-supported KASAN LLVM parameters requested by the configurat=
-ion
-
-Nit: dot at the end.
+>> arch/x86/kernel/x86_init.c:123:23: error: use of undeclared identifier 'x86_default_set_root_pointer'
+     123 |                 .set_root_pointer       = x86_default_set_root_pointer,
+         |                                           ^
+>> arch/x86/kernel/x86_init.c:124:23: error: use of undeclared identifier 'x86_default_get_root_pointer'
+     124 |                 .get_root_pointer       = x86_default_get_root_pointer,
+         |                                           ^
+>> arch/x86/kernel/x86_init.c:125:28: error: use of undeclared identifier 'acpi_generic_reduced_hw_init'
+     125 |                 .reduced_hw_early_init  = acpi_generic_reduced_hw_init,
+         |                                           ^
+   3 errors generated.
 
 
-> +CFLAGS_KASAN +=3D $(call check-args, cc-param, $(kasan_params))
-> +
-> +ifdef CONFIG_RUST
-> +       # Avoid calling `rustc-param` unless Rust is enabled.
-> +       RUSTFLAGS_KASAN +=3D $(call check-args, rustc-param, $(kasan_para=
-ms))
-> +endif # CONFIG_RUST
-> +
-> +export CFLAGS_KASAN CFLAGS_KASAN_NOSANITIZE RUSTFLAGS_KASAN
-> diff --git a/scripts/Makefile.lib b/scripts/Makefile.lib
-> index 9f06f6aaf7fc..4a58636705e0 100644
-> --- a/scripts/Makefile.lib
-> +++ b/scripts/Makefile.lib
-> @@ -167,6 +167,9 @@ ifneq ($(CONFIG_KASAN_HW_TAGS),y)
->  _c_flags +=3D $(if $(patsubst n%,, \
->                 $(KASAN_SANITIZE_$(target-stem).o)$(KASAN_SANITIZE)$(is-k=
-ernel-object)), \
->                 $(CFLAGS_KASAN), $(CFLAGS_KASAN_NOSANITIZE))
-> +_rust_flags +=3D $(if $(patsubst n%,, \
-> +               $(KASAN_SANITIZE_$(target-stem).o)$(KASAN_SANITIZE)$(is-k=
-ernel-object)), \
-> +               $(RUSTFLAGS_KASAN))
->  endif
->  endif
->
-> diff --git a/scripts/generate_rust_target.rs b/scripts/generate_rust_targ=
-et.rs
-> index ced405d35c5d..c24c2abd67db 100644
-> --- a/scripts/generate_rust_target.rs
-> +++ b/scripts/generate_rust_target.rs
-> @@ -192,6 +192,7 @@ fn main() {
->          }
->          ts.push("features", features);
->          ts.push("llvm-target", "x86_64-linux-gnu");
-> +        ts.push("supported-sanitizers", ["kernel-address"]);
->          ts.push("target-pointer-width", "64");
->      } else if cfg.has("LOONGARCH") {
->          panic!("loongarch uses the builtin rustc loongarch64-unknown-non=
-e-softfloat target");
-> --
-> 2.46.0.184.g6999bdac58-goog
->
+vim +/x86_default_set_root_pointer +123 arch/x86/kernel/x86_init.c
+
+f7cf5a5b8c0e59 Thomas Gleixner 2009-08-19   65  
+f7cf5a5b8c0e59 Thomas Gleixner 2009-08-19   66  	.resources = {
+5d94e81f69d4b1 Dan Williams    2011-03-08   67  		.probe_roms		= probe_roms,
+8fee697d990c54 Thomas Gleixner 2009-08-19   68  		.reserve_resources	= reserve_standard_io_resources,
+103e206309639b Ingo Molnar     2017-01-28   69  		.memory_setup		= e820__memory_setup_default,
+0f4a1e80989aca Kevin Loughlin  2024-03-13   70  		.dmi_setup		= dmi_setup,
+f7cf5a5b8c0e59 Thomas Gleixner 2009-08-19   71  	},
+f4848472cd9948 Thomas Gleixner 2009-08-20   72  
+f4848472cd9948 Thomas Gleixner 2009-08-20   73  	.mpparse = {
+de93410310952f Thomas Gleixner 2009-08-20   74  		.setup_ioapic_ids	= x86_init_noop,
+e061c7ae0830ff Thomas Gleixner 2024-02-13   75  		.find_mptable		= mpparse_find_mptable,
+dcb7600849ce9b Thomas Gleixner 2024-02-13   76  		.early_parse_smp_cfg	= mpparse_parse_early_smp_config,
+dcb7600849ce9b Thomas Gleixner 2024-02-13   77  		.parse_smp_cfg		= mpparse_parse_smp_config,
+f4848472cd9948 Thomas Gleixner 2009-08-20   78  	},
+d9112f43021554 Thomas Gleixner 2009-08-20   79  
+d9112f43021554 Thomas Gleixner 2009-08-20   80  	.irqs = {
+d9112f43021554 Thomas Gleixner 2009-08-20   81  		.pre_vector_init	= init_ISA_irqs,
+66bcaf0bde100a Thomas Gleixner 2009-08-20   82  		.intr_init		= native_init_IRQ,
+979923871f69a4 Thomas Gleixner 2020-01-23   83  		.intr_mode_select	= apic_intr_mode_select,
+6b15ffa07dc325 Thomas Gleixner 2020-08-26   84  		.intr_mode_init		= apic_intr_mode_init,
+6b15ffa07dc325 Thomas Gleixner 2020-08-26   85  		.create_pci_msi_domain	= native_create_pci_msi_domain,
+d9112f43021554 Thomas Gleixner 2009-08-20   86  	},
+42bbdb43b16d23 Thomas Gleixner 2009-08-20   87  
+42bbdb43b16d23 Thomas Gleixner 2009-08-20   88  	.oem = {
+42bbdb43b16d23 Thomas Gleixner 2009-08-20   89  		.arch_setup		= x86_init_noop,
+6f30c1ac3fcf11 Thomas Gleixner 2009-08-20   90  		.banner			= default_banner,
+42bbdb43b16d23 Thomas Gleixner 2009-08-20   91  	},
+030cb6c00d242c Thomas Gleixner 2009-08-20   92  
+030cb6c00d242c Thomas Gleixner 2009-08-20   93  	.paging = {
+7737b215ad0f94 Attilio Rao     2012-08-21   94  		.pagetable_init		= native_pagetable_init,
+030cb6c00d242c Thomas Gleixner 2009-08-20   95  	},
+736decac643e89 Thomas Gleixner 2009-08-19   96  
+736decac643e89 Thomas Gleixner 2009-08-19   97  	.timers = {
+736decac643e89 Thomas Gleixner 2009-08-19   98  		.setup_percpu_clockev	= setup_boot_APIC_clock,
+845b3944bbdf9e Thomas Gleixner 2009-08-19   99  		.timer_init		= hpet_time_init,
+c311ed6183f4fd Rahul Tanwar    2019-10-10  100  		.wallclock_init		= x86_wallclock_init,
+736decac643e89 Thomas Gleixner 2009-08-19  101  	},
+d07c1be0693e09 FUJITA Tomonori 2009-11-10  102  
+d07c1be0693e09 FUJITA Tomonori 2009-11-10  103  	.iommu = {
+d07c1be0693e09 FUJITA Tomonori 2009-11-10  104  		.iommu_init		= iommu_init_noop,
+d07c1be0693e09 FUJITA Tomonori 2009-11-10  105  	},
+b72d0db9dd41da Thomas Gleixner 2009-08-29  106  
+b72d0db9dd41da Thomas Gleixner 2009-08-29  107  	.pci = {
+b72d0db9dd41da Thomas Gleixner 2009-08-29  108  		.init			= x86_default_pci_init,
+ab3b37937e8f4f Thomas Gleixner 2009-08-29  109  		.init_irq		= x86_default_pci_init_irq,
+9325a28ce2fa7c Thomas Gleixner 2009-08-29  110  		.fixup_irqs		= x86_default_pci_fixup_irqs,
+b72d0db9dd41da Thomas Gleixner 2009-08-29  111  	},
+f72e38e8ec8869 Juergen Gross   2017-11-09  112  
+f72e38e8ec8869 Juergen Gross   2017-11-09  113  	.hyper = {
+f72e38e8ec8869 Juergen Gross   2017-11-09  114  		.init_platform		= x86_init_noop,
+f3614646005a1b Juergen Gross   2017-11-09  115  		.guest_late_init	= x86_init_noop,
+f72e38e8ec8869 Juergen Gross   2017-11-09  116  		.x2apic_available	= bool_x86_init_noop,
+ab0f59c6f13528 David Woodhouse 2020-10-24  117  		.msi_ext_dest_id	= bool_x86_init_noop,
+f72e38e8ec8869 Juergen Gross   2017-11-09  118  		.init_mem_mapping	= x86_init_noop,
+6f84f8d1587f20 Pavel Tatashin  2018-04-10  119  		.init_after_bootmem	= x86_init_noop,
+f72e38e8ec8869 Juergen Gross   2017-11-09  120  	},
+038bac2b02989a Juergen Gross   2018-02-19  121  
+038bac2b02989a Juergen Gross   2018-02-19  122  	.acpi = {
+41fa1ee9c6d687 Josh Boyer      2019-08-19 @123  		.set_root_pointer	= x86_default_set_root_pointer,
+e7b66d16fe4172 Juergen Gross   2018-10-10 @124  		.get_root_pointer	= x86_default_get_root_pointer,
+81b53e5ff21e09 Andy Shevchenko 2018-02-20 @125  		.reduced_hw_early_init	= acpi_generic_reduced_hw_init,
+038bac2b02989a Juergen Gross   2018-02-19  126  	},
+736decac643e89 Thomas Gleixner 2009-08-19  127  };
+736decac643e89 Thomas Gleixner 2009-08-19  128  
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
