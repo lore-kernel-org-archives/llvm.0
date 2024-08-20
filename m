@@ -1,85 +1,60 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D5B018B48A;
-	Tue, 20 Aug 2024 09:25:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E26B188CC5;
+	Tue, 20 Aug 2024 10:27:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724145935; cv=none; b=V+FW9T/yaA3RKN7vpqUW5wN0kjwemehO97ERV4jTDTF+HUWFcmtW13iF5bpN/5euktmnkiWlkZfNKUh2JyjJypcCixGbCHsNcSl5ziOvjX80XL7jh+5LfKCBM4CS9fAXqq+5p+WQS8VHZOWHNhXgNZaJc3VrQudPI0kqNRfDnG4=
+	t=1724149652; cv=none; b=bQ0KJOiPeIM1j3emUgKR5HF0Cs44KRBeuvIMhjT7fiQLOnIE6sCH6pV92N8DYmJuNnAxFlSgisf3EFrkMAXGuDXwVQU5VAbkq12ZtldORFFcS+3ezmma5VfX6fZZOBqOXte/87XDM5iUe1KDcHRuCApMhKCEuAuhXHQo+NoWNME=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724145935; c=relaxed/simple;
-	bh=THweWyUnKikOWA2A+WsOKdmg2rS+0jZaR0q7DErdGs8=;
+	s=arc-20240116; t=1724149652; c=relaxed/simple;
+	bh=GdUhYnWUSpHo2Uj+GU3GKy4GV/YLV/ySEKo+EbguywI=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=S8nlDIEYoauMn/MzWM6D1O3adBbyINPKkbyXIBIXWBe7CUMsFFz/1aao5C/41FoH1B6fAvqD4RL8iyq/XFYL5BDbYCuu6gbjdhJpvlvMWamceVsxL9zZG6MfLet/OfL2sJORIXwkcQxHMZ8Cq9dxb70b/TWDA4gMPZfQ5CkSfMw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=aoge4Aoc; arc=none smtp.client-ip=198.175.65.19
+	 Content-Type:Content-Disposition:In-Reply-To; b=W+sj4v1WPutObkZ3dnEaZ21wXHOfvS1sWYZGkYSAfU0M8FNCs0W6iROC/q7gy0xGlgUT7R+KYvVx0oWNizTjFvyuJkIjnyKUh/nqEwa5G9Z8VLu2nTaOfYu4JyruRo334JT06XrBShRm61eFM2+aNU3kskles7InjAsyLwYjLf0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=BT+8PXGu; arc=none smtp.client-ip=198.175.65.10
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="aoge4Aoc"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="BT+8PXGu"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1724145934; x=1755681934;
+  t=1724149651; x=1755685651;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=THweWyUnKikOWA2A+WsOKdmg2rS+0jZaR0q7DErdGs8=;
-  b=aoge4Aoc1i3uX4EAhJOxafixsqN3Uq+jF5sJkSXt5W8CctqzjpeyHV6Y
-   GCWsWNkQiTE5GMljXdzcIteDx/dtHBrUdCFKXbLLHg3L0Up2gg2YT7kYn
-   7mWuy+1edTjHUzp1yf+vmk/WB0nCO2x8fIMWRHWq8iEMgHGvr3A3DJirY
-   zVOzxPOGIYSZCYkXu3Zq1Fb9v2Vh98eNEc83r6IXbCM8SxXJ9IooLSa9E
-   3kgwnrO8QZNnmCJWcLv4GoY38QDnu8H2+YiRvhREIQiDOGxlunVeW5oT4
-   FgT2h/t7/bihwxfyuAWs8XrFb68O8D9FVnbfwC9DquEdGBriU9im8T/BH
-   g==;
-X-CSE-ConnectionGUID: sIJgxArdTG2TNHOnUpPEzQ==
-X-CSE-MsgGUID: WPdulMMcQRef+s6haj0d/Q==
-X-IronPort-AV: E=McAfee;i="6700,10204,11169"; a="22282115"
+  bh=GdUhYnWUSpHo2Uj+GU3GKy4GV/YLV/ySEKo+EbguywI=;
+  b=BT+8PXGu3xmVYx0fECv42itVE33xnDYS6JpF6EpIcjfxnO8Fqtg4Ua4Q
+   cwvmbdHpJWDmcVKXfzVDuvLs3Q6UKfTnAv1Hg8lw1jpJg+/oxJfiDi/g2
+   ih9u65kBAn8awNQ2UvdAl2NvP3856jD+fNpioNh0DerOCvJUe8f8E9Pnd
+   3u94qPshgwkGuCZJG9UoohYA9qmpIFxL2Bs8bkltzEPGR6bb9ENOR8AHR
+   2Rfg2hjND9upX9tV98JYA5AHI/660pc6ZYrzP6c85+WwJAh2u+gQ0NQeA
+   8SEPFqTwGviJbocoAeHudczRaEtCw2fPVfg+HFr9tr7gQ+xxBo5GzWm3s
+   Q==;
+X-CSE-ConnectionGUID: 36YuqJtCQJCMgtnziFPQ/g==
+X-CSE-MsgGUID: oJDn7FnCQuiOg+J28z643g==
+X-IronPort-AV: E=McAfee;i="6700,10204,11169"; a="39896241"
 X-IronPort-AV: E=Sophos;i="6.10,161,1719903600"; 
-   d="scan'208";a="22282115"
-Received: from fmviesa003.fm.intel.com ([10.60.135.143])
-  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Aug 2024 02:25:33 -0700
-X-CSE-ConnectionGUID: uKJSlvzWTU+N3dv/t9vFdA==
-X-CSE-MsgGUID: M23/lFdcQLSJJU+C9YW+0Q==
+   d="scan'208";a="39896241"
+Received: from orviesa008.jf.intel.com ([10.64.159.148])
+  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Aug 2024 03:27:31 -0700
+X-CSE-ConnectionGUID: D68TYDe/SC2Lkac4zMYjyw==
+X-CSE-MsgGUID: 6W5JroNcQhONBLYTwOdOLQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.10,161,1719903600"; 
-   d="scan'208";a="64850206"
+   d="scan'208";a="61443510"
 Received: from lkp-server01.sh.intel.com (HELO 9a732dc145d3) ([10.239.97.150])
-  by fmviesa003.fm.intel.com with ESMTP; 20 Aug 2024 02:25:26 -0700
+  by orviesa008.jf.intel.com with ESMTP; 20 Aug 2024 03:27:29 -0700
 Received: from kbuild by 9a732dc145d3 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1sgL7E-0009y0-1o;
-	Tue, 20 Aug 2024 09:25:24 +0000
-Date: Tue, 20 Aug 2024 17:25:24 +0800
+	id 1sgM5G-000A2g-2d;
+	Tue, 20 Aug 2024 10:27:26 +0000
+Date: Tue, 20 Aug 2024 18:27:22 +0800
 From: kernel test robot <lkp@intel.com>
-To: Jesse Taube <jesse@rivosinc.com>, linux-riscv@lists.infradead.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Jonathan Corbet <corbet@lwn.net>,
-	Paul Walmsley <paul.walmsley@sifive.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>, Conor Dooley <conor@kernel.org>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	=?iso-8859-1?Q?Cl=E9ment_L=E9ger?= <cleger@rivosinc.com>,
-	Evan Green <evan@rivosinc.com>,
-	Andrew Jones <ajones@ventanamicro.com>,
-	Jesse Taube <jesse@rivosinc.com>,
-	Charlie Jenkins <charlie@rivosinc.com>,
-	Xiao Wang <xiao.w.wang@intel.com>, Andy Chiu <andy.chiu@sifive.com>,
-	Eric Biggers <ebiggers@google.com>,
-	Greentime Hu <greentime.hu@sifive.com>,
-	=?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn@rivosinc.com>,
-	Heiko Stuebner <heiko@sntech.de>,
-	Costa Shulyupin <costa.shul@redhat.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Linux Memory Management List <linux-mm@kvack.org>,
-	Baoquan He <bhe@redhat.com>, Anup Patel <apatel@ventanamicro.com>,
-	Zong Li <zong.li@sifive.com>,
-	Sami Tolvanen <samitolvanen@google.com>,
-	Ben Dooks <ben.dooks@codethink.co.uk>,
-	Alexandre Ghiti <alexghiti@rivosinc.com>,
-	"Gustavo A. R. Silva" <gustavoars@kernel.org>,
-	Erick Archer <erick.archer@gmx.com>
-Subject: Re: [PATCH v8 4/6] RISC-V: Detect unaligned vector accesses supported
-Message-ID: <202408201720.u8SfprDk-lkp@intel.com>
-References: <20240819212605.1837175-5-jesse@rivosinc.com>
+To: Kevin Hilman <khilman@baylibre.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: Re: [PATCH v2 1/3] pmdomain: ti_sci: add per-device latency
+ constraint management
+Message-ID: <202408201832.dBeZprIs-lkp@intel.com>
+References: <20240819-lpm-v6-10-constraints-pmdomain-v2-1-461325a6008f@baylibre.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -88,104 +63,65 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240819212605.1837175-5-jesse@rivosinc.com>
+In-Reply-To: <20240819-lpm-v6-10-constraints-pmdomain-v2-1-461325a6008f@baylibre.com>
 
-Hi Jesse,
+Hi Kevin,
 
 kernel test robot noticed the following build errors:
 
-[auto build test ERROR on 32d5f7add080a936e28ab4142bfeea6b06999789]
+[auto build test ERROR on ad7eb1b6b92ee0c959a0a6ae846ddadd7a79ea64]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Jesse-Taube/RISC-V-Check-scalar-unaligned-access-on-all-CPUs/20240820-052900
-base:   32d5f7add080a936e28ab4142bfeea6b06999789
-patch link:    https://lore.kernel.org/r/20240819212605.1837175-5-jesse%40rivosinc.com
-patch subject: [PATCH v8 4/6] RISC-V: Detect unaligned vector accesses supported
-config: riscv-defconfig (https://download.01.org/0day-ci/archive/20240820/202408201720.u8SfprDk-lkp@intel.com/config)
-compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 26670e7fa4f032a019d23d56c6a02926e854e8af)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240820/202408201720.u8SfprDk-lkp@intel.com/reproduce)
+url:    https://github.com/intel-lab-lkp/linux/commits/Kevin-Hilman/pmdomain-ti_sci-add-per-device-latency-constraint-management/20240820-080207
+base:   ad7eb1b6b92ee0c959a0a6ae846ddadd7a79ea64
+patch link:    https://lore.kernel.org/r/20240819-lpm-v6-10-constraints-pmdomain-v2-1-461325a6008f%40baylibre.com
+patch subject: [PATCH v2 1/3] pmdomain: ti_sci: add per-device latency constraint management
+config: arm-defconfig (https://download.01.org/0day-ci/archive/20240820/202408201832.dBeZprIs-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240820/202408201832.dBeZprIs-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202408201720.u8SfprDk-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202408201832.dBeZprIs-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
-   In file included from arch/riscv/kernel/sys_hwprobe.c:7:
-   In file included from include/linux/syscalls.h:93:
-   In file included from include/trace/syscall.h:7:
-   In file included from include/linux/trace_events.h:6:
-   In file included from include/linux/ring_buffer.h:5:
-   In file included from include/linux/mm.h:2228:
-   include/linux/vmstat.h:514:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     514 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
->> arch/riscv/kernel/sys_hwprobe.c:263:7: error: use of undeclared identifier 'RISCV_HWPROBE_KEY_VECTOR_MISALIGNED_PERF'
-     263 |         case RISCV_HWPROBE_KEY_VECTOR_MISALIGNED_PERF:
-         |              ^
-   1 warning and 1 error generated.
+>> drivers/pmdomain/ti/ti_sci_pm_domains.c:68:20: error: no member named 'pm_ops' in 'struct ti_sci_ops'
+           ret = ti_sci->ops.pm_ops.set_latency_constraint(ti_sci, val, TISCI_MSG_CONSTRAINT_SET);
+                 ~~~~~~~~~~~ ^
+>> drivers/pmdomain/ti/ti_sci_pm_domains.c:68:63: error: use of undeclared identifier 'TISCI_MSG_CONSTRAINT_SET'
+           ret = ti_sci->ops.pm_ops.set_latency_constraint(ti_sci, val, TISCI_MSG_CONSTRAINT_SET);
+                                                                        ^
+   drivers/pmdomain/ti/ti_sci_pm_domains.c:236:34: error: no member named 'pm_ops' in 'struct ti_sci_ops'
+                                   if (pd_provider->ti_sci->ops.pm_ops.set_device_constraint &&
+                                       ~~~~~~~~~~~~~~~~~~~~~~~~ ^
+   drivers/pmdomain/ti/ti_sci_pm_domains.c:237:34: error: no member named 'pm_ops' in 'struct ti_sci_ops'
+                                       pd_provider->ti_sci->ops.pm_ops.set_latency_constraint)
+                                       ~~~~~~~~~~~~~~~~~~~~~~~~ ^
+   4 errors generated.
 
 
-vim +/RISCV_HWPROBE_KEY_VECTOR_MISALIGNED_PERF +263 arch/riscv/kernel/sys_hwprobe.c
+vim +68 drivers/pmdomain/ti/ti_sci_pm_domains.c
 
-   234	
-   235	static void hwprobe_one_pair(struct riscv_hwprobe *pair,
-   236				     const struct cpumask *cpus)
-   237	{
-   238		switch (pair->key) {
-   239		case RISCV_HWPROBE_KEY_MVENDORID:
-   240		case RISCV_HWPROBE_KEY_MARCHID:
-   241		case RISCV_HWPROBE_KEY_MIMPID:
-   242			hwprobe_arch_id(pair, cpus);
-   243			break;
-   244		/*
-   245		 * The kernel already assumes that the base single-letter ISA
-   246		 * extensions are supported on all harts, and only supports the
-   247		 * IMA base, so just cheat a bit here and tell that to
-   248		 * userspace.
-   249		 */
-   250		case RISCV_HWPROBE_KEY_BASE_BEHAVIOR:
-   251			pair->value = RISCV_HWPROBE_BASE_BEHAVIOR_IMA;
-   252			break;
-   253	
-   254		case RISCV_HWPROBE_KEY_IMA_EXT_0:
-   255			hwprobe_isa_ext0(pair, cpus);
-   256			break;
-   257	
-   258		case RISCV_HWPROBE_KEY_CPUPERF_0:
-   259		case RISCV_HWPROBE_KEY_MISALIGNED_SCALAR_PERF:
-   260			pair->value = hwprobe_misaligned(cpus);
-   261			break;
-   262	
- > 263		case RISCV_HWPROBE_KEY_VECTOR_MISALIGNED_PERF:
-   264			pair->value = hwprobe_vec_misaligned(cpus);
-   265			break;
-   266	
-   267		case RISCV_HWPROBE_KEY_ZICBOZ_BLOCK_SIZE:
-   268			pair->value = 0;
-   269			if (hwprobe_ext0_has(cpus, RISCV_HWPROBE_EXT_ZICBOZ))
-   270				pair->value = riscv_cboz_block_size;
-   271			break;
-   272		case RISCV_HWPROBE_KEY_HIGHEST_VIRT_ADDRESS:
-   273			pair->value = user_max_virt_addr();
-   274			break;
-   275	
-   276		case RISCV_HWPROBE_KEY_TIME_CSR_FREQ:
-   277			pair->value = riscv_timebase;
-   278			break;
-   279	
-   280		/*
-   281		 * For forward compatibility, unknown keys don't fail the whole
-   282		 * call, but get their element key set to -1 and value set to 0
-   283		 * indicating they're unrecognized.
-   284		 */
-   285		default:
-   286			pair->key = -1;
-   287			pair->value = 0;
-   288			break;
-   289		}
-   290	}
-   291	
+    60	
+    61	static int ti_sci_pd_set_lat_constraint(struct device *dev, s32 val)
+    62	{
+    63		struct generic_pm_domain *genpd = pd_to_genpd(dev->pm_domain);
+    64		struct ti_sci_pm_domain *pd = genpd_to_ti_sci_pd(genpd);
+    65		const struct ti_sci_handle *ti_sci = pd->parent->ti_sci;
+    66		int ret;
+    67	
+  > 68		ret = ti_sci->ops.pm_ops.set_latency_constraint(ti_sci, val, TISCI_MSG_CONSTRAINT_SET);
+    69		if (ret)
+    70			dev_err(dev, "ti_sci_pd: set latency constraint failed: ret=%d\n",
+    71				ret);
+    72		else
+    73			dev_dbg(dev, "ti_sci_pd: ID:%d set latency constraint %d\n",
+    74				pd->idx, val);
+    75	
+    76		return ret;
+    77	}
+    78	
 
 -- 
 0-DAY CI Kernel Test Service
