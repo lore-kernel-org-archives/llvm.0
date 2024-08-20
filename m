@@ -1,169 +1,150 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f44.google.com (mail-ed1-f44.google.com [209.85.208.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ABED11BA87C;
-	Tue, 20 Aug 2024 17:18:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 403371B8E8A
+	for <llvm@lists.linux.dev>; Tue, 20 Aug 2024 17:22:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724174290; cv=none; b=qdqHOCI0SlJwscZWW4GnTXLjAnVYBgQr8r7hOQB03DB6nUtcbrZXAycIgVhSPqSGi51K/rNEeVpXNuORZ/bnAU8CualQpT/5GGXZXxOZCjBRbX1RZmLS5NHSA/sUavgqPthOXRSBQZ7q34SGTu+BeR7pNXJdHhz/rTn7ifuFsD0=
+	t=1724174576; cv=none; b=r/lvF8YI+vF1icypJsno4hmlbanuTrqekU+Mj2bWoehwt/tb8numnxHMt6t9nGEx2zwl/OOpluSFfkBEYHTZ4iTia1xrDmBmlN0xdQtIh6IKEnfC6im35glhLTtX5lADJJvoouryiagWjZcyYRQyGZ/f4FrnS8nhlJ3kvMQmWso=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724174290; c=relaxed/simple;
-	bh=slz9l2RX+N0FmQXjCf6NH6EUr44XL+MqY2t/iaXXVa4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=PpXHC8oMoWvBaDUD9i5s+cZQgtPoM/NXMa6BTIY6uRnlp3zPnZS3aDKZrDknigqxmUdisUdtA8ZLLsO/R534K0FJN/hlXRRg7v/93p+ejE6HwIEKj6aNHgsbZvFwL/eAEnIdKTPL3aT7V8Wk1CTq5NAE0d5D9YvlCcsa0/YapWQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=H+9Ng/g4; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1724174576; c=relaxed/simple;
+	bh=Yk067SnRDTB/yWZvQw5AoltCb9lkUfMXeEMYixaFhDY=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=e8I6rOSXziG9df5TgSF/TYQ7/lUjTJds0hKC/x+WYItSzbnnP3+E1zbbkop/X1In89BKCJWc8tB/MdunrHTxC2JbI6XZh2/0xJHqUHaeoLXNVzYk8rd+J7g8bYyWWKbkVUjesPV8+nW7PWCAA67D+1pZInGcuv9r+ogv697LIUE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=x5iF9mMs; arc=none smtp.client-ip=209.85.208.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="H+9Ng/g4"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6B5AFC4AF0E;
-	Tue, 20 Aug 2024 17:18:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1724174289;
-	bh=slz9l2RX+N0FmQXjCf6NH6EUr44XL+MqY2t/iaXXVa4=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=H+9Ng/g4B4rsICd68chNTDeL5s7L1YFbZ/Fd/tCMJVQHCM8wN0AAMSIC9qH1yBAt5
-	 +J5HcY0lntOU4Ea4jTTpVPWeo6h9+Of3J78Zz9mSqWiQszVjLFGtAspjN5ZpiXgD05
-	 r+0sitG/UC+gvt22Ommdtae8oDXSdhp2adT5o6kgUDvsQaEJuu4MhhPIAqet5nqssR
-	 CIvp8+vDMLrYPr9Zz/Vz6gO2FTrnEQNvtqJraR9yhb4Dt6adBkbUXEcXLXCn/Txiu1
-	 55snEzTBLR8afBJwT88ibIZzwW1w3iKjjYJWgfYAkJjok3kEOhMGFQ3uPtvv5MzPcZ
-	 Tvx6v6p1kzaOQ==
-Date: Tue, 20 Aug 2024 10:18:06 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Greg KH <gregkh@linuxfoundation.org>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Len Brown <lenb@kernel.org>,
-	Hans de Goede <hdegoede@redhat.com>,
-	Mark Pearson <markpearson@lenovo.com>, Kees Cook <kees@kernel.org>,
-	Sami Tolvanen <samitolvanen@google.com>, linux-acpi@vger.kernel.org,
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-	patches@lists.linux.dev, stable@vger.kernel.org,
-	John Rowley <lkml@johnrowley.me>
-Subject: Re: [PATCH] ACPI: platform-profile: Fix CFI violation when accessing
- sysfs files
-Message-ID: <20240820171806.GA4065547@thelio-3990X>
-References: <20240819-acpi-platform_profile-fix-cfi-violation-v1-1-479365d848f6@kernel.org>
- <2024082034-bullfight-pureness-3ada@gregkh>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="x5iF9mMs"
+Received: by mail-ed1-f44.google.com with SMTP id 4fb4d7f45d1cf-5bec507f4ddso833a12.0
+        for <llvm@lists.linux.dev>; Tue, 20 Aug 2024 10:22:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1724174572; x=1724779372; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=T/1WG/9ldCtAUxEKSi+2OpNUvCL9Q6L1YzxrQLiosWY=;
+        b=x5iF9mMspHbOoXu95L7wO1sfR0GAsFdfcSC1pe7AmHPuV1+eY/YBMvKIiP8X+mexIK
+         FgIzJDBnwDMKadDGv9eed9wN+YcjlpqpImDkbkvJf48d01jognMjonezdeutfqXTehg7
+         OpreAz8JQyaHU38Qyy7XDfE0P3U14qPtEcFAIYWjakioqMAht+vboqNVociI9DC5Uuec
+         A8JoLVMqc8NuZrnsz41FLS5kWX1qPP1uz1L4HtOAbdMzWgzr8Y0gWUGfMbXlTkzK9FaZ
+         k6TwboeCb3Bwqm+33O40bH0iP0m0MrUOKXz2mumngWto+46E3HC9BBwc0O11VZ1PeBtg
+         9Ulg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1724174572; x=1724779372;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=T/1WG/9ldCtAUxEKSi+2OpNUvCL9Q6L1YzxrQLiosWY=;
+        b=mSMqQxivdaNmQcYtT9m5TFjyCU/Vpmd8CDNsU5x3/7NRbPVp6moCfXf4Pw0yq3m9bV
+         MDsWzLT3vYDywrxXSY2qAc/6EjCgDvwDRrDahLTkc799Miksep17ldE3pmOjd61Txeya
+         I3cw0Pc1/bdhfBYvbxdUzW5uDAOx5C6E3YJVtJWeP6Jdg1BNLwpwB9pREyeHR2/Bp/dH
+         +iBRtSqVpzgbTiwlUEOPJpGAS3QQ7UoW0kGWCYin/2DthL6iCL/YJdqpthGeW+xZvauO
+         VuystB8+qC8wYvF3qgWd9yBERUzGm80itbV2DUoxd6DCx91jbnc6jGuGt5YLB/oK0Oaw
+         z9fQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVdUZ8BcjVDdcnPlb1ubz3MgQBzUb/TjXD+wHLuxfTp4Qjvc6mrKw2CNCC7hPOwL8pLlvoW@lists.linux.dev
+X-Gm-Message-State: AOJu0YxvYnKJrlV+26gz2bNWDzI6roqKLOzXKb1+m0XeOdLUh1tC5wwk
+	zzHPYsZYXgWSNoDXIO0BQeImOQ1Bo+zJACZp3+RCxRR8lleoKpZFIKI4EMhQSkUClEMjHhxZjM/
+	X4OJYZebG3HrYw6HfaK5Z/GgOcGD2YKXrOCfu
+X-Google-Smtp-Source: AGHT+IHnzEjfKJoOP6zSpqnlVKYAp79gjJZtHxgxIKFwml3ILU+99PRFpoeiHBZGo2fYFeU5opRvNpd5SUSI7TMWSrI=
+X-Received: by 2002:a05:6402:35c4:b0:5be:9bb0:1189 with SMTP id
+ 4fb4d7f45d1cf-5bf0be0c727mr163175a12.2.1724174572142; Tue, 20 Aug 2024
+ 10:22:52 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <2024082034-bullfight-pureness-3ada@gregkh>
+References: <20240819213534.4080408-1-mmaurer@google.com> <20240819213534.4080408-2-mmaurer@google.com>
+ <CANiq72k8UVa5py5Cg=1+NuVjV6DRqvN7Y-TNRkkzohAA=AdxmA@mail.gmail.com>
+In-Reply-To: <CANiq72k8UVa5py5Cg=1+NuVjV6DRqvN7Y-TNRkkzohAA=AdxmA@mail.gmail.com>
+From: Matthew Maurer <mmaurer@google.com>
+Date: Tue, 20 Aug 2024 10:22:39 -0700
+Message-ID: <CAGSQo03GVik5_yXFmCUnNUnPUwuwk-YFA0kqBd640PUjFOXcGA@mail.gmail.com>
+Subject: Re: [PATCH v3 1/4] kbuild: rust: Define probing macros for rustc
+To: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Cc: dvyukov@google.com, ojeda@kernel.org, andreyknvl@gmail.com, 
+	Masahiro Yamada <masahiroy@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, 
+	Wedson Almeida Filho <wedsonaf@gmail.com>, Nathan Chancellor <nathan@kernel.org>, aliceryhl@google.com, 
+	samitolvanen@google.com, kasan-dev@googlegroups.com, linux-mm@kvack.org, 
+	glider@google.com, ryabinin.a.a@gmail.com, Nicolas Schier <nicolas@fjasle.eu>, 
+	Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, 
+	=?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
+	Benno Lossin <benno.lossin@proton.me>, Andreas Hindborg <a.hindborg@samsung.com>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, 
+	Justin Stitt <justinstitt@google.com>, linux-kbuild@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, rust-for-linux@vger.kernel.org, 
+	llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Greg,
+On Tue, Aug 20, 2024 at 7:20=E2=80=AFAM Miguel Ojeda
+<miguel.ojeda.sandonis@gmail.com> wrote:
 
-On Tue, Aug 20, 2024 at 06:15:52AM +0200, Greg KH wrote:
-> On Mon, Aug 19, 2024 at 12:09:22PM -0700, Nathan Chancellor wrote:
-> > When an attribute group is created with sysfs_create_group(), the
-> > ->sysfs_ops() callback is set to kobj_sysfs_ops, which sets the ->show()
-> > and ->store() callbacks to kobj_attr_show() and kobj_attr_store()
-> > respectively. These functions use container_of() to get the respective
-> > callback from the passed attribute, meaning that these callbacks need to
-> > be the same type as the callbacks in 'struct kobj_attribute'.
-> > 
-> > However, the platform_profile sysfs functions have the type of the
-> > ->show() and ->store() callbacks in 'struct device_attribute', which
-> > results a CFI violation when accessing platform_profile or
-> > platform_profile_choices under /sys/firmware/acpi because the types do
-> > not match:
-> > 
-> >   CFI failure at kobj_attr_show+0x19/0x30 (target: platform_profile_choices_show+0x0/0x140; expected type: 0x7a69590c)
-> > 
-> > This happens to work because the layout of 'struct kobj_attribute' and
-> > 'struct device_attribute' are the same, so the container_of() cast
-> > happens to allow the callbacks to still work.
-> 
-> Please note that this was an explicit design decision all those years
-> ago, it's not just "happening" to work by some accident.  It was just
-> done way before anyone thought of CFI-like things.
+>
+> I had some feedback on v2 -- was it missed?
+>
+>     https://lore.kernel.org/rust-for-linux/CANiq72khUrha-a+59KYZgc63w-3P9=
+=3DDp_fs=3D+sgmV_A17q+PTA@mail.gmail.com/
 
-Ack, thanks for the additional context! I can shore up this block with
-something like (wording improvements welcome):
+Sorry, I did miss that in the refresh. To respond to a few points
+before I send up a replacement for this patch:
 
-  There is no functional issue from the type mismatch because the layout
-  of 'struct kobj_attribute' and 'struct device_attribute' are the same,
-  so the container_of() cast does not break anything aside from CFI.
+>>
+>> 1. `rustc` support will soon be a minimum rather than a pinned version.
+> In the meantime, this happened, so we should update this sentence.
 
-which might sound less accusatory (not my intention). I just remember
-getting feedback on a patch similar to this a long time ago (perhaps
-from Kees?) around "why does this even work as is if the types are
-wrong?".
+Will update.
 
-> > 
-> > Change the type of platform_profile_choices_show() and
-> > platform_profile_{show,store}() to match the callbacks in
-> > 'struct kobj_attribute' and update the attribute variables to match,
-> > which resolves the CFI violation.
-> > 
-> > Cc: stable@vger.kernel.org
-> > Fixes: a2ff95e018f1 ("ACPI: platform: Add platform profile support")
-> > Reported-by: John Rowley <lkml@johnrowley.me>
-> > Closes: https://github.com/ClangBuiltLinux/linux/issues/2047
-> > Tested-by: John Rowley <lkml@johnrowley.me>
-> > Signed-off-by: Nathan Chancellor <nathan@kernel.org>
-> > ---
-> >  drivers/acpi/platform_profile.c | 20 ++++++++++----------
-> >  1 file changed, 10 insertions(+), 10 deletions(-)
-> > 
-> > diff --git a/drivers/acpi/platform_profile.c b/drivers/acpi/platform_profile.c
-> > index d2f7fd7743a1..11278f785526 100644
-> > --- a/drivers/acpi/platform_profile.c
-> > +++ b/drivers/acpi/platform_profile.c
-> > @@ -22,8 +22,8 @@ static const char * const profile_names[] = {
-> >  };
-> >  static_assert(ARRAY_SIZE(profile_names) == PLATFORM_PROFILE_LAST);
-> >  
-> > -static ssize_t platform_profile_choices_show(struct device *dev,
-> > -					struct device_attribute *attr,
-> > +static ssize_t platform_profile_choices_show(struct kobject *kobj,
-> > +					struct kobj_attribute *attr,
-> >  					char *buf)
-> >  {
-> >  	int len = 0;
-> > @@ -49,8 +49,8 @@ static ssize_t platform_profile_choices_show(struct device *dev,
-> >  	return len;
-> >  }
-> >  
-> > -static ssize_t platform_profile_show(struct device *dev,
-> > -					struct device_attribute *attr,
-> > +static ssize_t platform_profile_show(struct kobject *kobj,
-> > +					struct kobj_attribute *attr,
-> >  					char *buf)
-> >  {
-> >  	enum platform_profile_option profile = PLATFORM_PROFILE_BALANCED;
-> > @@ -77,8 +77,8 @@ static ssize_t platform_profile_show(struct device *dev,
-> >  	return sysfs_emit(buf, "%s\n", profile_names[profile]);
-> >  }
-> >  
-> > -static ssize_t platform_profile_store(struct device *dev,
-> > -			    struct device_attribute *attr,
-> > +static ssize_t platform_profile_store(struct kobject *kobj,
-> > +			    struct kobj_attribute *attr,
-> >  			    const char *buf, size_t count)
-> >  {
-> >  	int err, i;
-> > @@ -115,12 +115,12 @@ static ssize_t platform_profile_store(struct device *dev,
-> >  	return count;
-> >  }
-> >  
-> > -static DEVICE_ATTR_RO(platform_profile_choices);
-> > -static DEVICE_ATTR_RW(platform_profile);
-> > +static struct kobj_attribute attr_platform_profile_choices = __ATTR_RO(platform_profile_choices);
-> > +static struct kobj_attribute attr_platform_profile = __ATTR_RW(platform_profile);
-> 
-> I understand your need/want for this, but ick, is there any way to get
-> back to using 'struct device' and not "raw" kobjects here?  That's what
-> the code should be using really.
+>> 2. We already support multiple LLVMs linked into `rustc`, and these are
+> I guess you mean `rustc` is able to use multiple major versions of
+> LLVM -- or what do you mean by "multiple LLVMs linked"?
 
-Not sure, I did not write this driver and I am unfamiliar with the
-'struct device' infrastructure. I see some other drivers in drivers/acpi
-and drivers/firmware that use raw kobjects due to sysfs_create_group()
-under firmware_kobj, so this does not necessarily feel out of place. If
-I got some hints, I could potentially try to do that conversion and have
-John test it with CFI (since I do not have this hardware) but I would
-think this could still be necessary for stable depending on how that
-conversion turns out.
+I meant that the `rustc` consumed by the kernel build may use a wide
+range of different LLVMs, including unreleased ones. This means that
+which options are valid fundamentally needs to be probed - there's not
+necessarily a clean "LLVM version" for us to use. I'll rephrase.
 
-Cheers,
-Nathan
+>> +# $(rustc-option,<flag>)
+>> +# Return y if the Rust compiler supports <flag>, n otherwise
+>> +# Calls to this should be guarded so that they are not evaluated if
+>> +# CONFIG_HAVE_RUST is not set.
+
+>Hmm... why `HAVE_RUST`? Should that be `RUST_IS_AVAILABLE`? Or what is
+t>he intention? Perhaps a comment would help here -- e.g. something
+>like the comment I used in the original approach [1]. Otherwise we
+>will forget... :)
+
+Yes, this should be RUST_IS_AVAILABLE, will update.
+
+>Also, I guess you wanted to relax the precondition as much as
+>possible, which is great, just to double check, do we expect a case
+>outside `RUST=3Dy`?
+
+I expect this to be potentially used for whether you're *allowed* to
+set `RUST=3Dy` - for example, if a particular sanitizer is enabled, you
+may need to probe whether Rust+LLVM supports that sanitizer before
+allowing RUST to be set to y.
+
+>> rustc-option =3D $(success,trap "rm -rf .tmp_$$" EXIT; mkdir .tmp_$$; $(=
+RUSTC) $(1) --crate-type=3Drlib /dev/null -o .tmp_$$/tmp.rlib)
+
+>I also had `out-dir` [1] since, if I remember correctly, `rustc` may
+>create temporary files in a potentially read-only location even in
+>this case.
+
+OK, I will add that.
+
+>> Also, should we do `-Dwarnings` here?
+
+I don't think so - I can't think of a case where we'd want to error on
+a warning from an empty crate (though that may be a failure of
+imagination.) Do you have an example of a warning we might trip that
+we'd want to make the build reject an option's availability?
+
+>
+> Thanks!
+>
+> Cheers,
+> Miguel
