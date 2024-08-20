@@ -1,103 +1,107 @@
-Received: from mail-pj1-f41.google.com (mail-pj1-f41.google.com [209.85.216.41])
+Received: from mail-qt1-f174.google.com (mail-qt1-f174.google.com [209.85.160.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 13B1D17BB7
-	for <llvm@lists.linux.dev>; Tue, 20 Aug 2024 14:20:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E107847781
+	for <llvm@lists.linux.dev>; Tue, 20 Aug 2024 15:11:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724163626; cv=none; b=NpA+ZWV+KbX9pD9vKORhajImLK6g4PTGqG0cuyTJttZtEv3B4zzFxMIGuwZZmzxMWYIN9G7Y/kMr8Xoh2qPaaqWtTFrRvq1lOnM+9p6Ij6aROl6X/CPc37/CXtJvBBQ0LNUXHdr9HhEaC3bJ2vTZQdQzVjHSKo/6mOFuvl9czQE=
+	t=1724166684; cv=none; b=Qrwu6WQ7I09DbYabTcm/MJRp3y5ZuV7bPhBVZD+Z8EWFOkGV7TDq+XvGeXaJpMsOk+K3Y8eUhtOConx7z4dVgVu5lr7NGSIv9q2RqWs2znajFOKzxPLRrF3+D0t5oKAu7715O+lHb9Xaz5Ji7WT3bFf7NH0smYikJBTusk4aa6E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724163626; c=relaxed/simple;
-	bh=GBVk/hGzblmCoSDe2TbxWbPRIZfoDYNoIyTDzuwIC6Y=;
+	s=arc-20240116; t=1724166684; c=relaxed/simple;
+	bh=M98b0uho/6L9HJYyuZo8mAFH2lRRpS/KAZXa09S69zo=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Szw2FTUdrL9o/SsJ+TZ3MNEGoQoRg7UMypVobWrc3OX6wE8QmsiuwOlDaAZrEwQ3ZQiLN91hhU/p3+nFCvbq+6OgG4XeOki+M8yIJIBKLayuQNUkoI2h4JR0NTllmO6UYtcwVrCfBGrEmj1eNLPvReN+ELKtn92NPtc4S0lVE1k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=mHrHMREo; arc=none smtp.client-ip=209.85.216.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	 To:Cc:Content-Type; b=MR3nxPd4AaHfOqRfmT7gnQtnSSpeZAIKOYt6vQwbFYY30qNyVsqRZ3RdwZoSoThtfjsM6T7YXL/uxU5Yk+U3Qz5FGgePWJSRjaLbUuc5+wcGZevKoOnQDH2So2HwymumblXy881ca9OoZEcscQd71hovqP5dkqAWcq6S7qbOg6o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=XZ3Y2IFn; arc=none smtp.client-ip=209.85.160.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mHrHMREo"
-Received: by mail-pj1-f41.google.com with SMTP id 98e67ed59e1d1-2d3f39e7155so708045a91.0
-        for <llvm@lists.linux.dev>; Tue, 20 Aug 2024 07:20:24 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="XZ3Y2IFn"
+Received: by mail-qt1-f174.google.com with SMTP id d75a77b69052e-4518d9fa2f4so199271cf.0
+        for <llvm@lists.linux.dev>; Tue, 20 Aug 2024 08:11:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1724163624; x=1724768424; darn=lists.linux.dev;
+        d=google.com; s=20230601; t=1724166682; x=1724771482; darn=lists.linux.dev;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Wswv5PurLM6P5IjETHMLu6CnN+eBPmZTsMYIqJvimvQ=;
-        b=mHrHMREoEUSsoAGN+DPtjhpqesE0zC2Lvs5AgaEKfmx0182NufRY5q+/pQmqU8CsTV
-         QQ2My1rStDFQQ1hVhbBQwb9sVmrpf87bRXMSnjTMuxcVm4FGGv/y4OY/YEY721w5jCf3
-         gjIJuo/F1GFjvM+FoH0xQIOfl18TqtRJI7afmhiHEXij71Tr+eRONEvUlfYxT2iEGdrD
-         PVb1jaTv9eSP4TO1zMpy7S49zlzj071fjWa4B65Em/T/bbz5WDepLn/b+wy6tppAgM7G
-         wBXxXWQ8pkukNbqnhpZpkFBVNciAh+h1bVV8VpgS1FL7JEbGPWEGniKpO5wqBEvMqvq4
-         RUCA==
+        bh=M98b0uho/6L9HJYyuZo8mAFH2lRRpS/KAZXa09S69zo=;
+        b=XZ3Y2IFnm/xgG6OvQms8AXUtsuR7uXV91UlP8F61WY6S4wU3jYSEQwH4rO1PC0dYtZ
+         6UpH79tYzuOvSA65HqgAfo4/aNZzHCIJ8ds4zzskt2qOQv4ps+qT5dBrRXGZJKlwEaYd
+         Inb7gmvzyl5U4sGywHB1Ogqc40S5YoYJLrUqWXYSacSDRqiJlq5B5JZHaK6KRi7Mh1UF
+         pBQeReO2FjZ2762vOjUswBnSu/3LqQjwm2zcYDezS3WQc0d0DSICs4M1Et1rTE4E32ny
+         dysJDc5c+td5mMq+xBQerF63Wx6netfW/bSAM9HPKa7DHSEUkRSvPLJVX1kAtktPciJt
+         ntig==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1724163624; x=1724768424;
+        d=1e100.net; s=20230601; t=1724166682; x=1724771482;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=Wswv5PurLM6P5IjETHMLu6CnN+eBPmZTsMYIqJvimvQ=;
-        b=WcOU1LkQLCgvAVhyhT0tIn15E/j66xkCQmNgsZmZrfAB8WLsL2g/xseZK2/oj0fQRC
-         0cp7R+PDJ1zcvx8mD3wH3bdZLK75ng7Jn4I9QB3fHYtVYeMBw8rjLptoLnOrjkoM0JIn
-         8rqbl3WOrgrvNgs4KZF+h6lvUKCw7fq9cae4Mbi5j1fuCbbqV+4HphpjEtPLmM2VzJYp
-         Ng+QMigIUEgugTxsPOCjdSOhBtkfeV7d+8Hhkd3qDZpVtYM3vQS7rqe5CRgbeHGhkZRf
-         bi4h5PcOKLFDPex7t9mJI495AyEWLE80+YylLvB4sViT1ExnCgXKlmB00CeO5oNF3Mqw
-         6CqQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVMXK3pMVUSF3byGQ/gSAJYcfPOFmgBydimZP/plIEy0CcZxWfX46TP7pESuNPvhSK1QVocQAMRx0soqtPMa1SbROS5YA==
-X-Gm-Message-State: AOJu0YweP+/n6OhKH0+9UOePe2J120H/xpBCGvvoiauEGFtAXpQITcBr
-	YI41l5ZNILrj5WdN3I3lxfRLi0nbKff1GoHRgx3p8z0FszOypHGKjHAF/0UTk8GFE9kE2SfcIjr
-	A5uS4cEbs6k9sRh3GFGYLzeHFklU=
-X-Google-Smtp-Source: AGHT+IF5iZvjFecygopv3tUhYCm+cRSOvD49UmMopVX0LjUh6PHHcP2By59cm37l0E634tMo+WI4IO/ZFx3Zyl/v7RE=
-X-Received: by 2002:a17:90b:3d7:b0:2d3:c2a3:2383 with SMTP id
- 98e67ed59e1d1-2d3e1733fe9mr9282006a91.0.1724163624163; Tue, 20 Aug 2024
- 07:20:24 -0700 (PDT)
+        bh=M98b0uho/6L9HJYyuZo8mAFH2lRRpS/KAZXa09S69zo=;
+        b=lNc7miRJnc/K1XWX6sK3xU5aGbtNcUyDg3k28rGZLY3qBV4KQ87LaTgSB1qeBM3pUv
+         BzT4eI9SJBYgCB84TzaRk7Jc5EkTioP7aKGYfrSdWu/mZRlXbMv/V/74WhyGsNkg5luJ
+         6LLrzn5szWnGBidWg5MopynSTznox/4QhvLEGFwgc0tIPkuGJHLKYWSuyolVFcv0G2in
+         EMBmxD9FJdlfYAs2pKM/+OTd66t0ivZ6Pj0WQiSKnXWe4eajuHkHhzy90EiyAmiOZqQp
+         Age3pN0bDEQzsAwn2C2/QDFlDJNJSlAFKmVPDCc8s5HSXlLJW0tf0QFmDUWUdILdLKf4
+         J6Ow==
+X-Forwarded-Encrypted: i=1; AJvYcCX+IaKDpSnoh9K0UofEgNYHYmiZbi5hMS6N+9hjeenCpXFs18dZF+KiibWCP1m1ts0ozAciws8po7NHVdPsCIvMUBR/Tg==
+X-Gm-Message-State: AOJu0YwJMManisuvw17qviLLjDRJUP4K7uOqoBbbM7hLcJH7h182yf9i
+	oKLgiy2IV5X/YZTh7nB+b4W5Ze8SMlVaXNMUl5xvB9uU8lj/6PZn/Uy37LrWq0efb6D9cdLiERF
+	rMl+2tq2/sZwnGCh7GticEkoTsWsz//wwaNas
+X-Google-Smtp-Source: AGHT+IGxHrWvwxkET5G9KFHE2OTgjBHj0rFGE1objVdIM7lhI5d9VSUlLjMmyoZSbxU87Ybr//Q4mqrhQSjJsbsz524=
+X-Received: by 2002:a05:622a:245:b0:447:e728:d9b with SMTP id
+ d75a77b69052e-454e6ac44b5mr1928511cf.26.1724166681458; Tue, 20 Aug 2024
+ 08:11:21 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20240819213534.4080408-1-mmaurer@google.com> <20240819213534.4080408-2-mmaurer@google.com>
-In-Reply-To: <20240819213534.4080408-2-mmaurer@google.com>
-From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date: Tue, 20 Aug 2024 16:20:11 +0200
-Message-ID: <CANiq72k8UVa5py5Cg=1+NuVjV6DRqvN7Y-TNRkkzohAA=AdxmA@mail.gmail.com>
-Subject: Re: [PATCH v3 1/4] kbuild: rust: Define probing macros for rustc
-To: Matthew Maurer <mmaurer@google.com>
-Cc: dvyukov@google.com, ojeda@kernel.org, andreyknvl@gmail.com, 
-	Masahiro Yamada <masahiroy@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, 
-	Wedson Almeida Filho <wedsonaf@gmail.com>, Nathan Chancellor <nathan@kernel.org>, aliceryhl@google.com, 
-	samitolvanen@google.com, kasan-dev@googlegroups.com, linux-mm@kvack.org, 
-	glider@google.com, ryabinin.a.a@gmail.com, Nicolas Schier <nicolas@fjasle.eu>, 
-	Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, 
-	=?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
-	Benno Lossin <benno.lossin@proton.me>, Andreas Hindborg <a.hindborg@samsung.com>, 
-	Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, 
-	Justin Stitt <justinstitt@google.com>, linux-kbuild@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, rust-for-linux@vger.kernel.org, 
-	llvm@lists.linux.dev
+References: <20240819171152.12f05e0ae5c9472004d1b00a@kernel.org>
+ <20240819112902.11451fe8@gandalf.local.home> <20240820005649.dd019cfa70a8955d91cf85a0@kernel.org>
+ <20240819120244.5657eb2f@gandalf.local.home> <20240820100330.9ee6f3d51f22bb9bab7c4b83@kernel.org>
+ <ZsR0Z6DxSHOI-wNj@J2N7QTR9R3>
+In-Reply-To: <ZsR0Z6DxSHOI-wNj@J2N7QTR9R3>
+From: Sami Tolvanen <samitolvanen@google.com>
+Date: Tue, 20 Aug 2024 08:10:42 -0700
+Message-ID: <CABCJKueKhDVarco4mgNeR0hkAhxDtxBjdpu=QaYVi+TGoiqd2g@mail.gmail.com>
+Subject: Re: [BUG] tracing: dynamic ftrace selftest detected failures
+To: Mark Rutland <mark.rutland@arm.com>
+Cc: Masami Hiramatsu <mhiramat@kernel.org>, Steven Rostedt <rostedt@goodmis.org>, 
+	Linux Trace Kernel <linux-trace-kernel@vger.kernel.org>, linux-kernel@vger.kernel.org, 
+	clang-built-linux <llvm@lists.linux.dev>, Nathan Chancellor <nathan@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-Hi Matthew,
-
-On Mon, Aug 19, 2024 at 11:35=E2=80=AFPM Matthew Maurer <mmaurer@google.com=
-> wrote:
+On Tue, Aug 20, 2024 at 3:48=E2=80=AFAM Mark Rutland <mark.rutland@arm.com>=
+ wrote:
 >
-> Creates flag probe macro variants for `rustc`. These are helpful
-> because:
+> On Tue, Aug 20, 2024 at 10:03:30AM +0900, Masami Hiramatsu wrote:
+> > On Mon, 19 Aug 2024 12:02:44 -0400
+> > Steven Rostedt <rostedt@goodmis.org> wrote:
+> >
+> > > On Tue, 20 Aug 2024 00:56:49 +0900
+> > > Masami Hiramatsu (Google) <mhiramat@kernel.org> wrote:
+> > > >
+> > > > >
+> > > > > We may need to add "noinline" or something to make sure those fun=
+ctions
+> > > > > don't get inlined for LTO.
+> > > >
+> > > > Yeah, we need such option at least for function call test.
+> > >
+> > > Could you add the noinline, and if it fixes the issue send a patch?
+> >
+> > I found the target function already has "noinline". I tried to add noin=
+line
+> > to the testing function (callsite), but it also did not work.
+> > I think "noinline" is for the compiler, but LTO is done by the linker.
 >
-> 1. `rustc` support will soon be a minimum rather than a pinned version.
-> 2. We already support multiple LLVMs linked into `rustc`, and these are
->    needed to probe what LLVM parameters `rustc` will accept.
->
-> Signed-off-by: Matthew Maurer <mmaurer@google.com>
+> If LTO is breaking noinline, then that has much larger implications for
+> noinstr code and similar, and means that LTO is unsound...
 
-I had some feedback on v2 -- was it missed?
+The noinline attribute is preserved in LLVM IR, so it should continue
+to work with LTO. Which function are we talking about here? Are you
+sure the function was inlined instead of being dropped completely?
+Does marking the function __used help?
 
-    https://lore.kernel.org/rust-for-linux/CANiq72khUrha-a+59KYZgc63w-3P9=
-=3DDp_fs=3D+sgmV_A17q+PTA@mail.gmail.com/
-
-Thanks!
-
-Cheers,
-Miguel
+Sami
