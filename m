@@ -1,68 +1,62 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 16EB01C2304;
-	Tue, 20 Aug 2024 17:38:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F29A2F5E;
+	Tue, 20 Aug 2024 17:47:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724175503; cv=none; b=CkDITlBpET8glKs5Eap0h48ec693G89A0PmT6WxdQS5fjRvTCTKImxrs9mGIVrmNcceHth+kUd4gBodI4hsYnXl7Pgv9t9fx1lDyasHwF2HCatadK7+rGROTYiyI7la3uQDJbfAmGIWgx9ZzM6ge+lJWccUCLtGd2Xs3xTGoJWQ=
+	t=1724176071; cv=none; b=qKJ+K405tXSvC+WYWRnSp00v+2BOlDYBrbxBBaHH2PaU2EGYYIPrPkeSnVe3w3QeTRHeIccaBKB1l/Oyynktewb+jCOTcAZ/2uq3R/zXOYQS3EupP3xFWNpH65mgD5NroRXTjo1xrt6v+vuU3edt097qtXmFl01Wpn3HaAqFqKQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724175503; c=relaxed/simple;
-	bh=EjvuXTL9RY4eoTb19RgzBjMa+cSksThBbZqhx5M18sU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=lgamD5gQGICA5G8bS6dtNFBGCK7vsMgzoFrydBwuZyk6WRIGX6ndcXlXZukA+i8aK6/bfjdOUpS1kSEAUjOQFB1JnPEdKrV97HsMr96EzG//gr5djvI5r/BMRw3MI3YQeYybupQfISj5XIt2oPdqrKXbV21Cf4FdyidulsFnGVU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=YGtpswnz; arc=none smtp.client-ip=198.175.65.9
+	s=arc-20240116; t=1724176071; c=relaxed/simple;
+	bh=lV8rmjO4hLMpn/UxpnIbsL+kqZIKrIzLho5/o0LzaZ4=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=ck9IksRb753tQHv4CQU2SWwerb74mW+Ny+ha/WJrhPkb5ILmmjWE+SlzR2+RwnBKCtElqIdPQ7DwVDG3ppcIe7QzA6qZlUSH23bAX2Pn5hhW/eoF3rTAsHgP19JAmWg8c0ayiS2tg0Fl5mk4uz9H5SPW3GM+hUhTwEsZufvTYws=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Fy6veXEf; arc=none smtp.client-ip=198.175.65.14
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="YGtpswnz"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Fy6veXEf"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1724175502; x=1755711502;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=EjvuXTL9RY4eoTb19RgzBjMa+cSksThBbZqhx5M18sU=;
-  b=YGtpswnzjt5XjxPqJEJHom1YuCkGQQqY8ynQan2VS5N4ruJLUVmvPrNS
-   ZmemPlwC0rK+2R2CXT/spwlXe15fZsxjaqMllWUccwvlwHLTkLNZQ3Z+A
-   ZmT6XOJHwrz6YSRoMIWkvejmdYMN00cag5YpdfOIdmOhOa5Jm1jtIrbYt
-   mf6+jd1h9CvrepJNljcSb+2DEgCX53Dddw+ilJNWFpTFnNG+rYnBC5/Oh
-   W25SrpP2h/yg8A4xlzE0CijU3PRg171T0p9oPgCOdGbFXwcvmmkyOlZi9
-   I/+0YLgGUDe06k5qK1yBegdNwGj5c6zu/awJNsgE9/VyJh2OsGW3lux/c
+  t=1724176070; x=1755712070;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=lV8rmjO4hLMpn/UxpnIbsL+kqZIKrIzLho5/o0LzaZ4=;
+  b=Fy6veXEfn4M0LMs9SltsUJto8bV7qDN2oeHE2/bdHKAS832bof7zJQx4
+   uQVZVlxUpdWokchp13/UmmhoEV71mf3nJxmL+M8kkSTnw8E8R6XDiKH0g
+   yqdP7fE9JTr36F/wGLWmCMj2dTcAth5Khjc/Oh2HdUOAln4uxLi7UaENU
+   6HKrQkRagv87FN8DKx6uKpfmQ4S4jQLEuupnG7LiDcim1xs6qMwWjLpFn
+   DLSdlpkAOssm/jzKrK2txfNooRic/FmY/kg9pbDWxStVu1SwAwYRUb/FI
+   n+gLN8e/UQWyj5ncnUS8oEW3aROk3cXLZTeMAUdpgXngMRVm8GFHa1Dn7
    A==;
-X-CSE-ConnectionGUID: KGXvWfYRSFOntW55kDwe8Q==
-X-CSE-MsgGUID: 0FePTS1mQOSe/jHIL/qu+w==
-X-IronPort-AV: E=McAfee;i="6700,10204,11170"; a="45019412"
+X-CSE-ConnectionGUID: QpiGTnOzSxaWIB3VdznKgQ==
+X-CSE-MsgGUID: uNN/ZDvoSTa1fDXXUNOeJg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11170"; a="26298630"
 X-IronPort-AV: E=Sophos;i="6.10,162,1719903600"; 
-   d="scan'208";a="45019412"
-Received: from fmviesa010.fm.intel.com ([10.60.135.150])
-  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Aug 2024 10:38:19 -0700
-X-CSE-ConnectionGUID: tDt3CZioSPenDd/CKCawug==
-X-CSE-MsgGUID: gJVKAoFgSk2q9I9WF7cSbQ==
+   d="scan'208";a="26298630"
+Received: from orviesa007.jf.intel.com ([10.64.159.147])
+  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Aug 2024 10:47:49 -0700
+X-CSE-ConnectionGUID: 2WiI3xgsQzq7G9CpVq+1Cw==
+X-CSE-MsgGUID: wdcdvHVITJaoIXuNke4tkA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.10,162,1719903600"; 
-   d="scan'208";a="60958615"
+   d="scan'208";a="61342394"
 Received: from lkp-server01.sh.intel.com (HELO 9a732dc145d3) ([10.239.97.150])
-  by fmviesa010.fm.intel.com with ESMTP; 20 Aug 2024 10:37:47 -0700
+  by orviesa007.jf.intel.com with ESMTP; 20 Aug 2024 10:47:47 -0700
 Received: from kbuild by 9a732dc145d3 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1sgSng-000ASW-1h;
-	Tue, 20 Aug 2024 17:37:44 +0000
-Date: Wed, 21 Aug 2024 01:37:10 +0800
+	id 1sgSxM-000AT0-37;
+	Tue, 20 Aug 2024 17:47:44 +0000
+Date: Wed, 21 Aug 2024 01:47:23 +0800
 From: kernel test robot <lkp@intel.com>
-To: Alexander Aring <aahringo@redhat.com>, teigland@redhat.com
+To: Akshata Jahagirdar <akshata.jahagirdar@intel.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	gfs2@lists.linux.dev, song@kernel.org, yukuai3@huawei.com,
-	agruenba@redhat.com, mark@fasheh.com, jlbec@evilplan.org,
-	joseph.qi@linux.alibaba.com, gregkh@linuxfoundation.org,
-	rafael@kernel.org, akpm@linux-foundation.org,
-	linux-kernel@vger.kernel.org, linux-raid@vger.kernel.org,
-	ocfs2-devel@lists.linux.dev, netdev@vger.kernel.org,
-	vvidic@valentin-vidic.from.hr, heming.zhao@suse.com,
-	lucien.xin@gmail.com, aahringo@redhat.com
-Subject: Re: [PATCH dlm/next 12/12] gfs2: separate mount context by
- net-namespaces
-Message-ID: <202408210153.9Dofqzlb-lkp@intel.com>
-References: <20240819183742.2263895-13-aahringo@redhat.com>
+	Linux Memory Management List <linux-mm@kvack.org>,
+	Matt Roper <matthew.d.roper@intel.com>,
+	Matthew Brost <matthew.brost@intel.com>
+Subject: [linux-next:master 400/5508] drivers/gpu/drm/xe/xe_migrate.c:304:52:
+ error: result of comparison of constant 274877906944 with expression of type
+ 'resource_size_t' (aka 'unsigned int') is always true
+Message-ID: <202408210141.HdA7oipm-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -71,39 +65,282 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240819183742.2263895-13-aahringo@redhat.com>
 
-Hi Alexander,
+Hi Akshata,
 
-kernel test robot noticed the following build errors:
+FYI, the error/warning still remains.
 
-[auto build test ERROR on teigland-dlm/next]
-[also build test ERROR on next-20240820]
-[cannot apply to gfs2/for-next driver-core/driver-core-testing driver-core/driver-core-next driver-core/driver-core-linus linus/master v6.11-rc4]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Alexander-Aring/dlm-introduce-dlm_find_lockspace_name/20240820-024440
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/teigland/linux-dlm.git next
-patch link:    https://lore.kernel.org/r/20240819183742.2263895-13-aahringo%40redhat.com
-patch subject: [PATCH dlm/next 12/12] gfs2: separate mount context by net-namespaces
-config: arm-randconfig-003-20240820 (https://download.01.org/0day-ci/archive/20240821/202408210153.9Dofqzlb-lkp@intel.com/config)
-compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 26670e7fa4f032a019d23d56c6a02926e854e8af)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240821/202408210153.9Dofqzlb-lkp@intel.com/reproduce)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+head:   bb1b0acdcd66e0d8eedee3570d249e076b89ab32
+commit: 8d79acd567db183e675cccc6cc737d2959e2a2d9 [400/5508] drm/xe/migrate: Add helper function to program identity map
+config: i386-randconfig-001-20240820 (https://download.01.org/0day-ci/archive/20240821/202408210141.HdA7oipm-lkp@intel.com/config)
+compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240821/202408210141.HdA7oipm-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202408210153.9Dofqzlb-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202408210141.HdA7oipm-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> ld.lld: error: undefined symbol: net_ns_type_operations
-   >>> referenced by sys.c:65 (fs/gfs2/sys.c:65)
-   >>>               fs/gfs2/sys.o:(gfs2_uevent) in archive vmlinux.a
-   >>> referenced by sys.c:65 (fs/gfs2/sys.c:65)
-   >>>               fs/gfs2/sys.o:(gfs2_sysfs_object_child_ns_type) in archive vmlinux.a
+>> drivers/gpu/drm/xe/xe_migrate.c:304:52: error: result of comparison of constant 274877906944 with expression of type 'resource_size_t' (aka 'unsigned int') is always true [-Werror,-Wtautological-constant-out-of-range-compare]
+     304 |                 xe_assert(xe, (xe->mem.vram.actual_physical_size <= SZ_256G));
+         |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~
+   drivers/gpu/drm/xe/xe_assert.h:108:54: note: expanded from macro 'xe_assert'
+     108 | #define xe_assert(xe, condition) xe_assert_msg((xe), condition, "")
+         |                                  ~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~
+   drivers/gpu/drm/xe/xe_assert.h:111:24: note: expanded from macro 'xe_assert_msg'
+     111 |         __xe_assert_msg(__xe, condition,                                                        \
+         |         ~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     112 |                         "platform: %s subplatform: %d\n"                                        \
+         |                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     113 |                         "graphics: %s %u.%02u step %s\n"                                        \
+         |                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     114 |                         "media: %s %u.%02u step %s\n"                                           \
+         |                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     115 |                         msg,                                                                    \
+         |                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     116 |                         __xe->info.platform_name, __xe->info.subplatform,                       \
+         |                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     117 |                         __xe->info.graphics_name,                                               \
+         |                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     118 |                         __xe->info.graphics_verx100 / 100,                                      \
+         |                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     119 |                         __xe->info.graphics_verx100 % 100,                                      \
+         |                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     120 |                         xe_step_name(__xe->info.step.graphics),                                 \
+         |                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     121 |                         __xe->info.media_name,                                                  \
+         |                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     122 |                         __xe->info.media_verx100 / 100,                                         \
+         |                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     123 |                         __xe->info.media_verx100 % 100,                                         \
+         |                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     124 |                         xe_step_name(__xe->info.step.media),                                    \
+         |                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     125 |                         ## arg);                                                                \
+         |                         ~~~~~~~
+   drivers/gpu/drm/xe/xe_assert.h:84:31: note: expanded from macro '__xe_assert_msg'
+      84 |         (void)drm_WARN(&(xe)->drm, !(condition), "[" DRM_NAME "] Assertion `%s` failed!\n" msg, \
+         |               ~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      85 |                        __stringify(condition), ## arg);                                         \
+         |                        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/drm/drm_print.h:635:7: note: expanded from macro 'drm_WARN'
+     635 |         WARN(condition, "%s %s: [drm] " format,                         \
+         |         ~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     636 |                         dev_driver_string((drm)->dev),                  \
+         |                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     637 |                         dev_name((drm)->dev), ## arg)
+         |                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/asm-generic/bug.h:132:25: note: expanded from macro 'WARN'
+     132 |         int __ret_warn_on = !!(condition);                              \
+         |                                ^~~~~~~~~
+   In file included from drivers/gpu/drm/xe/xe_migrate.c:1494:
+   drivers/gpu/drm/xe/tests/xe_migrate.c:404:12: error: too many arguments to function call, expected 10, have 11
+     402 |                 batch_size += pte_update_size(m, src_is_vram, src_is_vram, src, &src_it, &src_L0,
+         |                               ~~~~~~~~~~~~~~~
+     403 |                                               &src_L0_ofs, &src_L0_pt, 0, 0,
+     404 |                                               avail_pts);
+         |                                               ^~~~~~~~~
+   drivers/gpu/drm/xe/xe_migrate.c:490:12: note: 'pte_update_size' declared here
+     490 | static u32 pte_update_size(struct xe_migrate *m,
+         |            ^               ~~~~~~~~~~~~~~~~~~~~~
+     491 |                            bool is_vram,
+         |                            ~~~~~~~~~~~~~
+     492 |                            struct ttm_resource *res,
+         |                            ~~~~~~~~~~~~~~~~~~~~~~~~~
+     493 |                            struct xe_res_cursor *cur,
+         |                            ~~~~~~~~~~~~~~~~~~~~~~~~~~
+     494 |                            u64 *L0, u64 *L0_ofs, u32 *L0_pt,
+         |                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     495 |                            u32 cmd_size, u32 pt_ofs, u32 avail_pts)
+         |                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   In file included from drivers/gpu/drm/xe/xe_migrate.c:1494:
+   drivers/gpu/drm/xe/tests/xe_migrate.c:408:23: error: too many arguments to function call, expected 10, have 11
+     406 |                 batch_size += pte_update_size(m, dst_is_vram, dst_is_vram, dst, &dst_it, &src_L0,
+         |                               ~~~~~~~~~~~~~~~
+     407 |                                               &dst_L0_ofs, &dst_L0_pt, 0,
+     408 |                                               avail_pts, avail_pts);
+         |                                                          ^~~~~~~~~
+   drivers/gpu/drm/xe/xe_migrate.c:490:12: note: 'pte_update_size' declared here
+     490 | static u32 pte_update_size(struct xe_migrate *m,
+         |            ^               ~~~~~~~~~~~~~~~~~~~~~
+     491 |                            bool is_vram,
+         |                            ~~~~~~~~~~~~~
+     492 |                            struct ttm_resource *res,
+         |                            ~~~~~~~~~~~~~~~~~~~~~~~~~
+     493 |                            struct xe_res_cursor *cur,
+         |                            ~~~~~~~~~~~~~~~~~~~~~~~~~~
+     494 |                            u64 *L0, u64 *L0_ofs, u32 *L0_pt,
+         |                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     495 |                            u32 cmd_size, u32 pt_ofs, u32 avail_pts)
+         |                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   3 errors generated.
+
+
+vim +304 drivers/gpu/drm/xe/xe_migrate.c
+
+   177	
+   178	static int xe_migrate_prepare_vm(struct xe_tile *tile, struct xe_migrate *m,
+   179					 struct xe_vm *vm)
+   180	{
+   181		struct xe_device *xe = tile_to_xe(tile);
+   182		u16 pat_index = xe->pat.idx[XE_CACHE_WB];
+   183		u8 id = tile->id;
+   184		u32 num_entries = NUM_PT_SLOTS, num_level = vm->pt_root[id]->level,
+   185		    num_setup = num_level + 1;
+   186		u32 map_ofs, level, i;
+   187		struct xe_bo *bo, *batch = tile->mem.kernel_bb_pool->bo;
+   188		u64 entry, pt30_ofs;
+   189	
+   190		/* Can't bump NUM_PT_SLOTS too high */
+   191		BUILD_BUG_ON(NUM_PT_SLOTS > SZ_2M/XE_PAGE_SIZE);
+   192		/* Must be a multiple of 64K to support all platforms */
+   193		BUILD_BUG_ON(NUM_PT_SLOTS * XE_PAGE_SIZE % SZ_64K);
+   194		/* And one slot reserved for the 4KiB page table updates */
+   195		BUILD_BUG_ON(!(NUM_KERNEL_PDE & 1));
+   196	
+   197		/* Need to be sure everything fits in the first PT, or create more */
+   198		xe_tile_assert(tile, m->batch_base_ofs + batch->size < SZ_2M);
+   199	
+   200		bo = xe_bo_create_pin_map(vm->xe, tile, vm,
+   201					  num_entries * XE_PAGE_SIZE,
+   202					  ttm_bo_type_kernel,
+   203					  XE_BO_FLAG_VRAM_IF_DGFX(tile) |
+   204					  XE_BO_FLAG_PINNED);
+   205		if (IS_ERR(bo))
+   206			return PTR_ERR(bo);
+   207	
+   208		/* PT31 reserved for 2M identity map */
+   209		pt30_ofs = bo->size - 2 * XE_PAGE_SIZE;
+   210		entry = vm->pt_ops->pde_encode_bo(bo, pt30_ofs, pat_index);
+   211		xe_pt_write(xe, &vm->pt_root[id]->bo->vmap, 0, entry);
+   212	
+   213		map_ofs = (num_entries - num_setup) * XE_PAGE_SIZE;
+   214	
+   215		/* Map the entire BO in our level 0 pt */
+   216		for (i = 0, level = 0; i < num_entries; level++) {
+   217			entry = vm->pt_ops->pte_encode_bo(bo, i * XE_PAGE_SIZE,
+   218							  pat_index, 0);
+   219	
+   220			xe_map_wr(xe, &bo->vmap, map_ofs + level * 8, u64, entry);
+   221	
+   222			if (vm->flags & XE_VM_FLAG_64K)
+   223				i += 16;
+   224			else
+   225				i += 1;
+   226		}
+   227	
+   228		if (!IS_DGFX(xe)) {
+   229			/* Write out batch too */
+   230			m->batch_base_ofs = NUM_PT_SLOTS * XE_PAGE_SIZE;
+   231			for (i = 0; i < batch->size;
+   232			     i += vm->flags & XE_VM_FLAG_64K ? XE_64K_PAGE_SIZE :
+   233			     XE_PAGE_SIZE) {
+   234				entry = vm->pt_ops->pte_encode_bo(batch, i,
+   235								  pat_index, 0);
+   236	
+   237				xe_map_wr(xe, &bo->vmap, map_ofs + level * 8, u64,
+   238					  entry);
+   239				level++;
+   240			}
+   241			if (xe->info.has_usm) {
+   242				xe_tile_assert(tile, batch->size == SZ_1M);
+   243	
+   244				batch = tile->primary_gt->usm.bb_pool->bo;
+   245				m->usm_batch_base_ofs = m->batch_base_ofs + SZ_1M;
+   246				xe_tile_assert(tile, batch->size == SZ_512K);
+   247	
+   248				for (i = 0; i < batch->size;
+   249				     i += vm->flags & XE_VM_FLAG_64K ? XE_64K_PAGE_SIZE :
+   250				     XE_PAGE_SIZE) {
+   251					entry = vm->pt_ops->pte_encode_bo(batch, i,
+   252									  pat_index, 0);
+   253	
+   254					xe_map_wr(xe, &bo->vmap, map_ofs + level * 8, u64,
+   255						  entry);
+   256					level++;
+   257				}
+   258			}
+   259		} else {
+   260			u64 batch_addr = xe_bo_addr(batch, 0, XE_PAGE_SIZE);
+   261	
+   262			m->batch_base_ofs = xe_migrate_vram_ofs(xe, batch_addr);
+   263	
+   264			if (xe->info.has_usm) {
+   265				batch = tile->primary_gt->usm.bb_pool->bo;
+   266				batch_addr = xe_bo_addr(batch, 0, XE_PAGE_SIZE);
+   267				m->usm_batch_base_ofs = xe_migrate_vram_ofs(xe, batch_addr);
+   268			}
+   269		}
+   270	
+   271		for (level = 1; level < num_level; level++) {
+   272			u32 flags = 0;
+   273	
+   274			if (vm->flags & XE_VM_FLAG_64K && level == 1)
+   275				flags = XE_PDE_64K;
+   276	
+   277			entry = vm->pt_ops->pde_encode_bo(bo, map_ofs + (u64)(level - 1) *
+   278							  XE_PAGE_SIZE, pat_index);
+   279			xe_map_wr(xe, &bo->vmap, map_ofs + XE_PAGE_SIZE * level, u64,
+   280				  entry | flags);
+   281		}
+   282	
+   283		/* Write PDE's that point to our BO. */
+   284		for (i = 0; i < map_ofs / PAGE_SIZE; i++) {
+   285			entry = vm->pt_ops->pde_encode_bo(bo, (u64)i * XE_PAGE_SIZE,
+   286							  pat_index);
+   287	
+   288			xe_map_wr(xe, &bo->vmap, map_ofs + XE_PAGE_SIZE +
+   289				  (i + 1) * 8, u64, entry);
+   290		}
+   291	
+   292		/* Set up a 1GiB NULL mapping at 255GiB offset. */
+   293		level = 2;
+   294		xe_map_wr(xe, &bo->vmap, map_ofs + XE_PAGE_SIZE * level + 255 * 8, u64,
+   295			  vm->pt_ops->pte_encode_addr(xe, 0, pat_index, level, IS_DGFX(xe), 0)
+   296			  | XE_PTE_NULL);
+   297		m->cleared_mem_ofs = (255ULL << xe_pt_shift(level));
+   298	
+   299		/* Identity map the entire vram at 256GiB offset */
+   300		if (IS_DGFX(xe)) {
+   301			u64 pt31_ofs = bo->size - XE_PAGE_SIZE;
+   302	
+   303			xe_migrate_program_identity(xe, vm, bo, map_ofs, 256, pat_index, pt31_ofs);
+ > 304			xe_assert(xe, (xe->mem.vram.actual_physical_size <= SZ_256G));
+   305		}
+   306	
+   307		/*
+   308		 * Example layout created above, with root level = 3:
+   309		 * [PT0...PT7]: kernel PT's for copy/clear; 64 or 4KiB PTE's
+   310		 * [PT8]: Kernel PT for VM_BIND, 4 KiB PTE's
+   311		 * [PT9...PT27]: Userspace PT's for VM_BIND, 4 KiB PTE's
+   312		 * [PT28 = PDE 0] [PT29 = PDE 1] [PT30 = PDE 2] [PT31 = 2M vram identity map]
+   313		 *
+   314		 * This makes the lowest part of the VM point to the pagetables.
+   315		 * Hence the lowest 2M in the vm should point to itself, with a few writes
+   316		 * and flushes, other parts of the VM can be used either for copying and
+   317		 * clearing.
+   318		 *
+   319		 * For performance, the kernel reserves PDE's, so about 20 are left
+   320		 * for async VM updates.
+   321		 *
+   322		 * To make it easier to work, each scratch PT is put in slot (1 + PT #)
+   323		 * everywhere, this allows lockless updates to scratch pages by using
+   324		 * the different addresses in VM.
+   325		 */
+   326	#define NUM_VMUSA_UNIT_PER_PAGE	32
+   327	#define VM_SA_UPDATE_UNIT_SIZE		(XE_PAGE_SIZE / NUM_VMUSA_UNIT_PER_PAGE)
+   328	#define NUM_VMUSA_WRITES_PER_UNIT	(VM_SA_UPDATE_UNIT_SIZE / sizeof(u64))
+   329		drm_suballoc_manager_init(&m->vm_update_sa,
+   330					  (size_t)(map_ofs / XE_PAGE_SIZE - NUM_KERNEL_PDE) *
+   331					  NUM_VMUSA_UNIT_PER_PAGE, 0);
+   332	
+   333		m->pt_bo = bo;
+   334		return 0;
+   335	}
+   336	
 
 -- 
 0-DAY CI Kernel Test Service
