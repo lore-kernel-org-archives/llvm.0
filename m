@@ -1,147 +1,111 @@
-Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
+Received: from mail-lf1-f54.google.com (mail-lf1-f54.google.com [209.85.167.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F83015CD64
-	for <llvm@lists.linux.dev>; Tue, 20 Aug 2024 19:57:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9818F49651
+	for <llvm@lists.linux.dev>; Tue, 20 Aug 2024 20:50:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724183865; cv=none; b=n08f6XQwzfDE5fRUzdq2w6JSyJepLJm8JFtAj9af6TmuAdDf2CEUr3h38CQKgTG079MtCRiPk8Ex/vv8fb02gR4FcHbggw+7eL+sBSD+7hbu7vi4wBq0AJMztFKoXigFth+38/wGeAB0MABS5urCRC613doSRzfHBgCTAfmHMVU=
+	t=1724187009; cv=none; b=eR983t3pBiwXBVgQEVisaxRhVjjW9qT0cWe7uCBGZ5Cf83llIyco5mFtyuRWlaC5b75OqaKJYgkUVUgh3sIqUYYXpbVOI67Nti852s8MEaNU5F3IvJH6f3Q2lgwaFu+ca2klRlpgbxKhL9FtUKbBOiBOLgJYNlJNjyVJE24tpI0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724183865; c=relaxed/simple;
-	bh=gYtGpgv6WrPH8c3CiYf0hVAGgsEyBUaSZhsVYkRtZOY=;
+	s=arc-20240116; t=1724187009; c=relaxed/simple;
+	bh=VzJFd4bvLYVyrRq91pLVKMp6cHYmymXxbjKHf0cCDsY=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=daZ4hqgU3egDU8gxvVFHe4ya3vWTdnPzvI9O2vxA3TjU/zA1H4EOjURzVbZQ4B9w3jMa1JCrgKtqQHc/2ZXjIQ1ORcpDvAzfMXrWEAjkJDDxZKIs5XkXbRNhUjGamQy3mrHF2QiNHASUepuOtris3naAsqlpA+/Hwj1BGIOSO/Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=lBqj/Se0; arc=none smtp.client-ip=209.85.128.44
+	 To:Cc:Content-Type; b=kg78Sw3HNUCVJdw34tAiP1APO5/D2qwTrxoUooi5QtTEvhh5YCu45qPu2sr/BWeu8zUzGrFfBlhPtdLbFmApu4FgfpCO4v9AUlYMUG4h0Vn+pP1CNI/aezLy+hj+RXZ7Yt3jJI7vlI7NfE+w3dzdChFTRsJJVi266lInAu372+0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OCAnfAGF; arc=none smtp.client-ip=209.85.167.54
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lBqj/Se0"
-Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-42816ca782dso50008085e9.2
-        for <llvm@lists.linux.dev>; Tue, 20 Aug 2024 12:57:43 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OCAnfAGF"
+Received: by mail-lf1-f54.google.com with SMTP id 2adb3069b0e04-53345676179so17284e87.0
+        for <llvm@lists.linux.dev>; Tue, 20 Aug 2024 13:50:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1724183862; x=1724788662; darn=lists.linux.dev;
+        d=gmail.com; s=20230601; t=1724187006; x=1724791806; darn=lists.linux.dev;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=I04d+UCyEJKSGzYujs6lGhbuTD9A1sKvAATpdsPOPRs=;
-        b=lBqj/Se0RkpvfDBqJriLbBr8KPQKINu41Hz1u4j+ACwGPGmBLnMzHguni1dj6Jop/z
-         Mcsi11IOOU9BOBiEKkddrIyZAeZhh5eyzj+raegJ94MB3pVtquhxzWm4KBRthe3dNQ8z
-         9wCff5rHQsYE5BgEplKvQUCXhxXD8Gj/YiJdMnuGm92nt23iHdB3yqqnfCNV+1al076Y
-         WibvjZsh3f641rFlhuemqRuQa1IDsd4WoWbYjfHP44u4I395HsQDEUzkCcis3IPZHDjN
-         QofAki8z28/dIKwQNoFNYa3NKl759BiQ4U8FeDjyuHsOqekQiUPoygAzAAx2MMhTJ1LO
-         xjHA==
+        bh=VzJFd4bvLYVyrRq91pLVKMp6cHYmymXxbjKHf0cCDsY=;
+        b=OCAnfAGFz/+3mBUbxNWpIcVsmeXytfyQjyjQS5jok1DmOA52WQAq8IgUBeoUPGQaAs
+         eW33Vy+5yWQBoAjbNNSqkNveFDFKMsihrjH91Ee5Df3c9eDTPMtXppPiX9tMAgFJUhZ7
+         HOq14H0WUeVMA7AE6w0riK5neQHmxu64FA4ba/+6hZ2Ya8ly9TMQP7aCb6KcsaUfJBOJ
+         euC706sPeUvQfHMpNZQExWvhk0R3xhQp6bTXijq7MQoTHowS57FatiG/eh0UM9w7NWie
+         g55rEy41AM5rlapeTR7Xri5OcXajW/tlahbydwUXZ9hxBfJ3UwyDNyH8J811iKlM8CfS
+         dxSw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1724183862; x=1724788662;
+        d=1e100.net; s=20230601; t=1724187006; x=1724791806;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=I04d+UCyEJKSGzYujs6lGhbuTD9A1sKvAATpdsPOPRs=;
-        b=iTUKzRpLhLCVhP+fAGqcuQhNJOjfvu7Ux059cIqAay3SC/jdLGdmb1jJFnJr73rvKD
-         IPKxoMm+w9bTOBkRx+iUiHhyePRMX5s1JVQcK1XhqAgTOq2iYE0W80jgrpT9fKomPMK9
-         sydLw5zgSC/4x12vOOSWl6QBMFf9RhSfN8PxXR50PJIWzj/dq4WTAJNM5K7Yc2qphSFd
-         HSDSCoLLxPMOVdAwryul6kyvv4fY9jVObiwZh4stcTqENFRBLPrz9RyPtm3Mh3K1YaEK
-         sfrWZbxsevtFKE6Yubzq5kxdl2eKoianAkRkyptJw/KzkZwE+/kt/Z23bQvRfgt3iupi
-         gqFg==
-X-Forwarded-Encrypted: i=1; AJvYcCUYmxw/1wiTrB+UvRMtlcupCbGiKfZbONnKR3dpIGiEGBKHnLK6ovCq1IYF+rOMwVIAzhOP@lists.linux.dev
-X-Gm-Message-State: AOJu0Yw0pcxxpUEEFK51zK82lGprRHjDPL37CzMROQAd4ODFjlHZRFLS
-	jFbYMMK/FzPYX1oUbzLt/qYXBWaXZQ+5Y3DQMTQGGjYlWSo9+eFDuKoSC64sjrKfepUBI+iGJEo
-	5LGlTKcyKQerLgx0wXfdFtBpzPg4=
-X-Google-Smtp-Source: AGHT+IElLP3U6GC5jiblsqfmTGvnchVDzLv7QwlAycsREo1k3dgNT3ZyETsIYu2PzzvOhij5top8TkrmV+tZLhPVzvY=
-X-Received: by 2002:a05:600c:3b83:b0:426:5ee3:728b with SMTP id
- 5b1f17b1804b1-42abd2300d2mr2526935e9.13.1724183861809; Tue, 20 Aug 2024
- 12:57:41 -0700 (PDT)
+        bh=VzJFd4bvLYVyrRq91pLVKMp6cHYmymXxbjKHf0cCDsY=;
+        b=EdTUInsLVVEoktpKtskSUA1Pk3ERC3ltVyl+3YbKmqcWga/r3CwaS+XyfzashhGvJk
+         eZ5RmxnfBvJKs6P+UbRZ8V/8UU1mNUodG/KbETyItW8WbzAtfgxuU1TDwTyfHTaGRXK7
+         Rb7HC3BHoJv3/TM0K9d2TIuDaKdDKgfol9GNUjRrBN7HvnjScns9FEmCH1LUF/3MuKJa
+         cMPfR7fqX1elDz9CQ9Zxm5L6tsWCqkRYj9nW+FO+Lu0kYvTqOdR9fX0eQ1sVIrutv7w/
+         qHz/ErgeHx3PllROLlZC4grT/QhiGaZNkXG+kjwPguJWe1gJAnbzRv8KAzcolyJH2xCe
+         jzmQ==
+X-Forwarded-Encrypted: i=1; AJvYcCW8P9Nt+ZzuUWtJQGi4zq7MtfWslLHjcZj4GVuAn2iQ9u3ohBtd4TaHf2t2xz+bYON9/Pol@lists.linux.dev
+X-Gm-Message-State: AOJu0YzCS39QKVMzWovoQi/LLr51HUVMJp0BVBTIuKjCU/xSwYtALp1R
+	aK6XkVs3XdagfGlSt4RCmpNhd285WRNtznWLBNqvuE2Dgbi/eWHlDyoJG9nYKhuGrNA2zc2EC15
+	WT5kxonA+/iLeFzRw9kSvwn9CvMQ=
+X-Google-Smtp-Source: AGHT+IF4A2X5DHiMp2y/ISoHY4+FoDb2VARi23ScSmyW+z0nIW9IUdjYL2vjnS5voFYAV9Yn/hORkomSr0zeq2FvaaE=
+X-Received: by 2002:a05:6512:b99:b0:52f:c337:4c1f with SMTP id
+ 2adb3069b0e04-533484ee187mr12476e87.0.1724187005190; Tue, 20 Aug 2024
+ 13:50:05 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20240820194910.187826-1-mmaurer@google.com>
-In-Reply-To: <20240820194910.187826-1-mmaurer@google.com>
-From: Andrey Konovalov <andreyknvl@gmail.com>
-Date: Tue, 20 Aug 2024 21:57:31 +0200
-Message-ID: <CA+fCnZcowB4=AQO=mEDNgKb8ES5unewQdHkPMLXYwvcxaDMthg@mail.gmail.com>
-Subject: Re: [PATCH v4 0/4] Rust KASAN Support
+References: <20240819213534.4080408-1-mmaurer@google.com> <20240819213534.4080408-2-mmaurer@google.com>
+ <CANiq72k8UVa5py5Cg=1+NuVjV6DRqvN7Y-TNRkkzohAA=AdxmA@mail.gmail.com> <CAGSQo03GVik5_yXFmCUnNUnPUwuwk-YFA0kqBd640PUjFOXcGA@mail.gmail.com>
+In-Reply-To: <CAGSQo03GVik5_yXFmCUnNUnPUwuwk-YFA0kqBd640PUjFOXcGA@mail.gmail.com>
+From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date: Tue, 20 Aug 2024 22:49:51 +0200
+Message-ID: <CANiq72kgw8YA_1yFrCbo-=okFC8Y5R1rc+QGhE0e7pVJ0bV=2Q@mail.gmail.com>
+Subject: Re: [PATCH v3 1/4] kbuild: rust: Define probing macros for rustc
 To: Matthew Maurer <mmaurer@google.com>
-Cc: ojeda@kernel.org, Alex Gaynor <alex.gaynor@gmail.com>, 
-	Wedson Almeida Filho <wedsonaf@gmail.com>, Nathan Chancellor <nathan@kernel.org>, dvyukov@google.com, 
-	aliceryhl@google.com, samitolvanen@google.com, kasan-dev@googlegroups.com, 
-	linux-mm@kvack.org, glider@google.com, ryabinin.a.a@gmail.com, 
+Cc: dvyukov@google.com, ojeda@kernel.org, andreyknvl@gmail.com, 
+	Masahiro Yamada <masahiroy@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, 
+	Wedson Almeida Filho <wedsonaf@gmail.com>, Nathan Chancellor <nathan@kernel.org>, aliceryhl@google.com, 
+	samitolvanen@google.com, kasan-dev@googlegroups.com, linux-mm@kvack.org, 
+	glider@google.com, ryabinin.a.a@gmail.com, Nicolas Schier <nicolas@fjasle.eu>, 
 	Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, 
 	=?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
 	Benno Lossin <benno.lossin@proton.me>, Andreas Hindborg <a.hindborg@samsung.com>, 
 	Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, 
-	Justin Stitt <justinstitt@google.com>, rust-for-linux@vger.kernel.org, 
+	Justin Stitt <justinstitt@google.com>, linux-kbuild@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, rust-for-linux@vger.kernel.org, 
 	llvm@lists.linux.dev
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Aug 20, 2024 at 9:49=E2=80=AFPM Matthew Maurer <mmaurer@google.com>=
+On Tue, Aug 20, 2024 at 7:22=E2=80=AFPM Matthew Maurer <mmaurer@google.com>=
  wrote:
 >
-> Right now, if we turn on KASAN, Rust code will cause violations because
-> it's not enabled properly.
->
-> This series:
-> 1. Adds flag probe macros for Rust - now that we're setting a minimum rus=
-tc
->    version instead of an exact one, these could be useful in general. We =
-need
->    them in this patch because we don't set a restriction on which LLVM ru=
-stc
->    is using, which is what KASAN actually cares about.
-> 2. Makes `rustc` enable the relevant KASAN sanitizer flags when C does.
-> 3. Adds a smoke test to the `kasan_test` KUnit suite to check basic
->    integration.
->
-> This patch series requires the target.json array support patch [1] as
-> the x86_64 target.json file currently produced does not mark itself as KA=
-SAN
-> capable, and is rebased on top of the KASAN Makefile rewrite [2].
->
-> Differences from v3 [3]:
-> * Probing macro comments made more accurate
-> * Probing macros now set --out-dir to avoid potential read-only fs
->   issues
-> * Reordered KHWASAN explicit disablement patch to come before KASAN
->   enablement
-> * Comment/ordering cleanup in KASAN makefile
-> * Ensured KASAN tests work with and without CONFIG_RUST enabled
->
-> [1] https://lore.kernel.org/lkml/20240730-target-json-arrays-v1-1-2b376fd=
-0ecf4@google.com/
-> [2] https://lore.kernel.org/all/20240813224027.84503-1-andrey.konovalov@l=
-inux.dev
-> [3] https://lore.kernel.org/all/20240819213534.4080408-1-mmaurer@google.c=
-om/
->
-> Matthew Maurer (4):
->   kbuild: rust: Define probing macros for rustc
->   rust: kasan: Rust does not support KHWASAN
->   kbuild: rust: Enable KASAN support
->   kasan: rust: Add KASAN smoke test via UAF
->
->  init/Kconfig                              |  1 +
->  mm/kasan/Makefile                         |  7 ++-
->  mm/kasan/kasan.h                          |  6 +++
->  mm/kasan/{kasan_test.c =3D> kasan_test_c.c} | 12 +++++
->  mm/kasan/kasan_test_rust.rs               | 19 ++++++++
->  scripts/Kconfig.include                   |  8 ++++
->  scripts/Makefile.compiler                 | 15 ++++++
->  scripts/Makefile.kasan                    | 57 ++++++++++++++++-------
->  scripts/Makefile.lib                      |  3 ++
->  scripts/generate_rust_target.rs           |  1 +
->  10 files changed, 112 insertions(+), 17 deletions(-)
->  rename mm/kasan/{kasan_test.c =3D> kasan_test_c.c} (99%)
->  create mode 100644 mm/kasan/kasan_test_rust.rs
->
-> --
-> 2.46.0.184.g6999bdac58-goog
->
+> Sorry, I did miss that in the refresh. To respond to a few points
+> before I send up a replacement for this patch:
 
-Left a couple of nit comments - feel free to ignore if you don't end
-up sending v5.
+No problem at all -- thanks!
 
-Otherwise, for patches 2-4:
+> I expect this to be potentially used for whether you're *allowed* to
+> set `RUST=3Dy` - for example, if a particular sanitizer is enabled, you
+> may need to probe whether Rust+LLVM supports that sanitizer before
+> allowing RUST to be set to y.
 
-Reviewed-by: Andrey Konovalov <andreyknvl@gmail.com>
+Yeah, makes sense if we do the dependency that way.
+
+> I don't think so - I can't think of a case where we'd want to error on
+> a warning from an empty crate (though that may be a failure of
+> imagination.) Do you have an example of a warning we might trip that
+> we'd want to make the build reject an option's availability?
+
+IIRC back then I was thinking about something like the "unknown target
+feature forwarded to backend" one, i.e. to identify whether a target
+feature was supported or not. However, that is not a warning even
+under `-Dwarning`s (https://github.com/rust-lang/rust/issues/91262)
+unless something recently changed.
+
+We can add it if/when we need it.
+
+Cheers,
+Miguel
