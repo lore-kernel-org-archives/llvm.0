@@ -1,126 +1,101 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 54FAD33C5;
-	Wed, 21 Aug 2024 00:26:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 902A23EA98
+	for <llvm@lists.linux.dev>; Wed, 21 Aug 2024 02:03:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724199973; cv=none; b=dL5pHyyYqLKmt1hS26Sq2A4wBjou9C56VTFEbrf1df60qgEJEG1qDMLUdtx2dn9vHQUBp3hzWymFPl7der3EVF3uWX13G3CbIZjqjRvMoPECH05R6PaJGtuZPjWH1U8oY9zeGGInufUsDOsBRoLWqVPiwB5mtYcKNfp9unzKNBU=
+	t=1724205787; cv=none; b=ham30HkrvrgtHGLz9GReoWmvZfLLyK5qXV0Jh+cR/m40CRloAo1XNFLyS2MD5hCt5O+IZYOFAD1gjCl2tUrr4I1DxDHUK6xtGLzdNngTQ1KpTZMW98xj/IYc31hoOoHRTBwk9MnfvUyrfDCNhzF3VgAUvnsg/oBXjV8MofyR+Pc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724199973; c=relaxed/simple;
-	bh=CJIRiNwm7uwI5y07ByutZfo3/ptSFwLJ4eprJVUi6t4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=e8/AMxdLQzzkqfHX6U8LaIrqPQdwSaSIPAOhfVW07Z3w3TjtZnelFfJp9/mjD5kyu0u9r1/INh/kGUklv2dLu9p1gZVMiaLQzuiEoyuc0LCCVaRwD8OfAMKcKMh8f7GUIE1SUZRbORQfSxNQOsSZsWPr11r4egUZmbjL2mKC4Rw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=aFqY1k5J; arc=none smtp.client-ip=198.175.65.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1724205787; c=relaxed/simple;
+	bh=gzvQdhqXlVqEdYiWOOyNursEA2b60q9YSwyAAmoFtu4=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=iJUOmFYiekMpjYc2daJ+TkpWfrZ/G3dVZ6vM1sma7alAF2nemQ5VIC5vjLDHim6a96l0Jw6gBC35oeDDQMUPWjTBarJDm5Xsz8c0Py4bNGpbwGOXbz+N0lk7bJ0XBcaO1+MfCRRWX5jPW7KuqgZLMemCDyvqjvXWgfm19r4C3n8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=O4pyRRj4; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="aFqY1k5J"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1724199973; x=1755735973;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=CJIRiNwm7uwI5y07ByutZfo3/ptSFwLJ4eprJVUi6t4=;
-  b=aFqY1k5JDpyAv/GFDKAFmvj2T9NrmBzYdsYL6KZl09C3sglkQmBk/AD4
-   /7c5e4MbYKLKLqTCnrMEheNOxTjEeiQn9E5oBMdzivNNkvaLiQ/Uf5Ntl
-   dBUYAb3cZPRWXgAS0RMp/kvqS+yh+2GCsqIKJxaTPXirQiZZnorufeQns
-   EBHpz+GhPyXgzda+vyPcf1ewJesq2o4qf/HDHfu37Y8Ejiow0RGweD8sH
-   eNwW04YBB2J2KakdaJdGVdExf8chAFrLykIK/iaxGZFTYDyDofx8jVWRE
-   cqYEvaTm4ARBRCS6N9JHK2RIy+YBNq4glhWjXPbC2yqHCSwXeQW1w3rUu
-   w==;
-X-CSE-ConnectionGUID: 0whGXhY0ROW0J+UgFDPtgg==
-X-CSE-MsgGUID: FDTyri7tQ4uuC72nc3DK7A==
-X-IronPort-AV: E=McAfee;i="6700,10204,11170"; a="33102252"
-X-IronPort-AV: E=Sophos;i="6.10,163,1719903600"; 
-   d="scan'208";a="33102252"
-Received: from orviesa008.jf.intel.com ([10.64.159.148])
-  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Aug 2024 17:26:10 -0700
-X-CSE-ConnectionGUID: QYpm+HL7Rt+vlbg+hWK2Tw==
-X-CSE-MsgGUID: e/41dBwxQO+o7TlyHWjfxg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.10,163,1719903600"; 
-   d="scan'208";a="61679440"
-Received: from lkp-server01.sh.intel.com (HELO 9a732dc145d3) ([10.239.97.150])
-  by orviesa008.jf.intel.com with ESMTP; 20 Aug 2024 17:25:58 -0700
-Received: from kbuild by 9a732dc145d3 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1sgZAi-000Aiq-0Q;
-	Wed, 21 Aug 2024 00:25:56 +0000
-Date: Wed, 21 Aug 2024 08:25:16 +0800
-From: kernel test robot <lkp@intel.com>
-To: Jeongjun Park <aha310510@gmail.com>, wenjia@linux.ibm.com,
-	jaka@linux.ibm.com, alibuda@linux.alibaba.com,
-	tonylu@linux.alibaba.com, guwen@linux.alibaba.com
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-	pabeni@redhat.com, utz.bacher@de.ibm.com, dust.li@linux.alibaba.com,
-	linux-s390@vger.kernel.org, netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	syzkaller <syzkaller@googlegroups.com>,
-	Jeongjun Park <aha310510@gmail.com>
-Subject: Re: [PATCH net,v6,2/2] net/smc: initialize ipv6_pinfo_offset in
- smc_inet6_prot and add smc6_sock structure
-Message-ID: <202408210856.G9xvGcdD-lkp@intel.com>
-References: <20240820121548.380342-1-aha310510@gmail.com>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="O4pyRRj4"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1724205784;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=zskPI0txAzPzOrjVks6Ff/2c6oY3pKw3PlTRdyXXLYI=;
+	b=O4pyRRj4bHxYYM8uCKlR4uHOxTcHGom82EyUM6VxFXtj/88yaveogZiCo29VLkf1QlYUzw
+	68a3lW0q6WoVl2YJ9bkkYmyRwlPkHcHsS/1KgpWJbvzUm8pVNX13NvOcXGpPB8R6ghH/gO
+	G1Fw9rLCF18NPNxB39+k8sei5T3v8wY=
+Received: from mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-538-_8pWr56ZPLWhNM-p9opWzw-1; Tue,
+ 20 Aug 2024 22:03:03 -0400
+X-MC-Unique: _8pWr56ZPLWhNM-p9opWzw-1
+Received: from mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.12])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 4A9D11956080
+	for <llvm@lists.linux.dev>; Wed, 21 Aug 2024 02:03:02 +0000 (UTC)
+Received: from [172.64.0.35] (unknown [10.30.32.160])
+	by mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 74AC31955F45;
+	Wed, 21 Aug 2024 02:03:01 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.11.0-rc4,
+ mainline.kernel.org-clang, 0108b7be)
+Date: Wed, 21 Aug 2024 02:03:01 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240820121548.380342-1-aha310510@gmail.com>
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.12
+Message-Id: <84344.124082022030300284@us-mta-538.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Jeongjun,
+Hi, we tested your kernel and here are the results:
 
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on linus/master]
-[also build test ERROR on v6.11-rc4 next-20240820]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Jeongjun-Park/net-smc-modify-smc_sock-structure/20240820-201856
-base:   linus/master
-patch link:    https://lore.kernel.org/r/20240820121548.380342-1-aha310510%40gmail.com
-patch subject: [PATCH net,v6,2/2] net/smc: initialize ipv6_pinfo_offset in smc_inet6_prot and add smc6_sock structure
-config: i386-randconfig-003-20240821 (https://download.01.org/0day-ci/archive/20240821/202408210856.G9xvGcdD-lkp@intel.com/config)
-compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240821/202408210856.G9xvGcdD-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202408210856.G9xvGcdD-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> net/smc/smc_inet.c:78:56: error: unexpected ';' before '}'
-      78 |         .ipv6_pinfo_offset      = offsetof(struct smc6_sock, inet6);
-         |                                                                    ^
-   1 error generated.
+    Overall result: FAILED
+             Merge: OK
+           Compile: FAILED
 
 
-vim +78 net/smc/smc_inet.c
+Kernel information:
+    Commit message: Merge tag 'for-linus-iommufd' of git://git.kernel.org/p=
+ub/scm/linux/kernel/git/jgg/iommufd
 
-    67	
-    68	static struct proto smc_inet6_prot = {
-    69		.name		= "INET6_SMC",
-    70		.owner		= THIS_MODULE,
-    71		.init		= smc_inet_init_sock,
-    72		.hash		= smc_hash_sk,
-    73		.unhash		= smc_unhash_sk,
-    74		.release_cb	= smc_release_cb,
-    75		.obj_size	= sizeof(struct smc6_sock),
-    76		.h.smc_hash	= &smc_v6_hashinfo,
-    77		.slab_flags	= SLAB_TYPESAFE_BY_RCU,
-  > 78		.ipv6_pinfo_offset	= offsetof(struct smc6_sock, inet6);
-    79	};
-    80	
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1420675793
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+One or more kernel builds failed:
+    Unrecognized or new issues:
+         ppc64le - https://datawarehouse.cki-project.org/kcidb/builds/redha=
+t:1420675793-ppc64le-kernel
+           s390x - https://datawarehouse.cki-project.org/kcidb/builds/redha=
+t:1420675793-s390x-kernel
+          x86_64 (debug) - https://datawarehouse.cki-project.org/kcidb/buil=
+ds/redhat:1420675793-x86_64-kernel-debug
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
