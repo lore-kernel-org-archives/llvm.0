@@ -1,128 +1,136 @@
-Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
+Received: from mail-ed1-f51.google.com (mail-ed1-f51.google.com [209.85.208.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9499F1A4B6D
-	for <llvm@lists.linux.dev>; Wed, 21 Aug 2024 13:47:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1FB141AF4DB
+	for <llvm@lists.linux.dev>; Wed, 21 Aug 2024 13:56:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724248067; cv=none; b=suqc9LTYmlyVD/qxP46lY3IDfRbdg3eiEzV0wcy6S5g7QvicP6d2AVLP6wtEMNGUbplw6UPq2zCPRVNt5klfFiUS5an99VlELjFtvnZFJlPNbuCrmvkkxT5a9kaCwbQU/7QacRaOA4qEJCsiyoKHWPQLBUPgbYTE3xsOh5alg80=
+	t=1724248613; cv=none; b=tmh14qJzU3Lvcq+J7uPJMymbExTJCjcN7ImKv415tnSb01gPMPqg8Yscwp6CvcxvLjD4Rr9G+2uBt7U1cBwtI67Z8HCCgDy2qIlyYyxLRSq41NUM4gteVIm0B6tdTKBHDAYfuFRrgbv0GVyVakvb6orRXGwwN9OsDwtBO9AtkIg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724248067; c=relaxed/simple;
-	bh=gwLjHNTsXHMmlKgeIfCrG8pO4t2Y8x/pcVf6IX7HJS0=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=N2Gx3jp14gTp/VkAs81aM2zt41N4M3QtIiTgj1g+xVv8ldMeLo+DkgJYn/Yb8A9CVt3pw3lQoqx6P1K2vZsvekwU/AwlCvqcuSAhiaC5CSbJwnA3k0naMMUMKphelHYcUFWhZeruzX4uanCdiJLQpInPsodk+4ePrSxpa5t8Frg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=bVAmfe42; arc=none smtp.client-ip=209.85.128.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	s=arc-20240116; t=1724248613; c=relaxed/simple;
+	bh=GXPXKykwPABiuAnfK3d7eSUnxqwZCesoixLXier58IE=;
+	h=Message-ID:Date:MIME-Version:Subject:To:References:From:Cc:
+	 In-Reply-To:Content-Type; b=SF2qdFH6imiaJWFXp/ySQm1cBPomWSE6PR1zvHyQbpRsXGNTtfjh/0qTg8ub8xUd7A+/DqaIZ0ghd8Q7cKUcdkgSceto8u3/ZCph9J7GMHPf6UpLAms8gm2gCgLFfx6BKteXRacQlbUTu6oHGm//JJ9Wvh8j6WiZdofpKn9d3a8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=ewAQV5O/; arc=none smtp.client-ip=209.85.208.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="bVAmfe42"
-Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-428119da952so54501755e9.0
-        for <llvm@lists.linux.dev>; Wed, 21 Aug 2024 06:47:45 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="ewAQV5O/"
+Received: by mail-ed1-f51.google.com with SMTP id 4fb4d7f45d1cf-5beccb39961so126314a12.3
+        for <llvm@lists.linux.dev>; Wed, 21 Aug 2024 06:56:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1724248064; x=1724852864; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=+ZR2V02XpqNEW9fvu30UGOqjOdE3SQr9bcH8M/YKkZE=;
-        b=bVAmfe42gro10OyHvP0XW+sLLvm4tFmrMCBP97uMbztns0Bxiw46DRCaeGZGNjtUbp
-         rO7HJavJwbFrBkjDYpwPEGM2/UDiuAZeAK0zkbuZBwLInOZy+5z4byhb2JwF+PF1TYdr
-         UKWr8e6FrFY8S19c8Z/8z9Pblbz+dCcgjLYrA+ZLiAhkG9SxaLkgVScaI9peIsqctiHL
-         46sojjWOukC9I3xxko9A/lh2N59Efa1dKrcKzGCyVqzIBQ6DiwPg/nCHDKojAbOQCGPe
-         6O9UgFOtw9zJQTLO2K87/WD5hITtbwQPonfwWtUccNQV50qrbAhnIqaDa5h8iC5YxMsS
-         AFvw==
+        d=linaro.org; s=google; t=1724248609; x=1724853409; darn=lists.linux.dev;
+        h=content-transfer-encoding:in-reply-to:autocrypt:cc:content-language
+         :from:references:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=G0SUgrAj1P9jl38Ec9SiZC4ikEI//LLt/sY7olQPFBs=;
+        b=ewAQV5O/zxL0kOd8+lAEa1Nf0QFvxzRtV5nqT4uq9b+1BEv62VXScjcvvfsDm3yaMr
+         3yTc78T823fFwTHFtfqEiop8s0YHLipF++D6S9tANOHO6pBLiXMCh721aaZfFAZ2O4e6
+         b2YiKSeVeVlaoLcWiP69CpLV+N+aHfZE7QwCaeSa/uljIBtwGniRo7NQc7u+3SvWoR78
+         VJzcZwkppZGUz6kKv4syEBRKulk2mY12AiaYJ3VLdN+D6I+9XOw9ur8tL/V4bJQAIRZ8
+         LS6/Stu3YlF/gEHmRhre6yRIz39+cuvu+obIATpDGl9eUzPhZzn2Yy3dhwXDhJDMiL49
+         4TcQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1724248064; x=1724852864;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=+ZR2V02XpqNEW9fvu30UGOqjOdE3SQr9bcH8M/YKkZE=;
-        b=wkEfrvr8Wcw+Vjvd73Sap39NvK7Ir5EfvmfgNG5tEklUt0K/rDGC8R6RNl/OJNZAwF
-         95Pkyr6uMqL1GtlA64eZkHZDzijIgRuYZ9CasXMQY64ywqKHEkXysJ8MLCsKRMO6yJIC
-         kmisbeA8gyHsKVObr7x2cYyYTRLq//wu6Ec0fpbSeIlUJptOg517wjyPWgAsHDh9VdCw
-         0lhXDLEmyUQw+OuWtUiMh69xczQWwHGxOifVuAcp26rYIwiwP9D3r+fRqBlwBDM+ekOS
-         IhRBSGni9q3qLgpZhAXj4uMW+tT4IEqSmmiNk0lRKdGrgdhn4R6BUsEkRqAPXBkl0wQ0
-         9nkQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWNg66UPFtBAbrWEqrypZ/dWQHSc6iiLDoVmBVf6ouommqfKX/V8XwK9k2TXAfSur4XRf5u@lists.linux.dev
-X-Gm-Message-State: AOJu0Ywkmwr0/gNLzRYkYIjDiz/aORv9f13gqvccwA2VwJppczgfW3s4
-	DWwbtGpdrQnRlONlClk+phuwIb2H4Dj7j+hDoma9P9fQCir+k8ohz/T2Ilz6lO/BeWQQqUjmgHX
-	lzblk/WcI2qkbOLefd6fIpAcDjH3DKTdyutP+
-X-Google-Smtp-Source: AGHT+IE+WRPQ5cxJkts/8lQ1Pyrz4IDfgbmZOe9kRkxkJ6+Ctq49hnrFtuGR4cuPoH3txY4c4UXweZZ+1LQnmVHuF+A=
-X-Received: by 2002:a05:600c:4e91:b0:426:6f5f:9da6 with SMTP id
- 5b1f17b1804b1-42abf096794mr15321995e9.27.1724248063553; Wed, 21 Aug 2024
- 06:47:43 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1724248609; x=1724853409;
+        h=content-transfer-encoding:in-reply-to:autocrypt:cc:content-language
+         :from:references:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=G0SUgrAj1P9jl38Ec9SiZC4ikEI//LLt/sY7olQPFBs=;
+        b=IS5rmEc9qJMKjmhP0ZDjqzKnAW9chtfo57jz0MWt3qCxrv8FV56nZ8Z3ZJ7AQxTZ5e
+         FWFHqHNqgrqM/rCMo7OAlzJeNpau4gR19WSOFQ/QldybWGck/W1dI5Hwoo+ZUd0EOQ4X
+         Pgn4rLzecSQQKSn1uhfimzsvaKBdDZkeN0DinZbMCEEmyCKTO1/MVdhIyK1mlePFu/r2
+         gkiGoC4rsmH9AHF5m8kkiE6gQiZzBfOybPYum3p4k583kn4I3P/aDqgXBC+uRjXoOhnW
+         F34hjo5NWCJNd6NnPrbF1YOKgjdt9BSGiSE0KnywKHT7E4I8VuORPAcX0rGBbThvQonK
+         oDZQ==
+X-Gm-Message-State: AOJu0Yy/Fbi7/lxlwN4v/Za02D486b1PpUfQTzk7IG9wqui+uWqCjccu
+	4oDL1GQASOHCgUd+Xz7D7dR7Gb4zDvoGg3eN8u7PrdHrqDagop2ACYbwoKbAdLo=
+X-Google-Smtp-Source: AGHT+IFGBS4+c0s+HJirz+NbgXK7PLtkffoszdufHpAU43Ooy1eYIgPyUOO5RS0mHJe4xoboOvWalA==
+X-Received: by 2002:a17:906:c151:b0:a83:a86a:549a with SMTP id a640c23a62f3a-a866f11bfd3mr95655566b.1.1724248609274;
+        Wed, 21 Aug 2024 06:56:49 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.215.209])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a83838eef05sm903593466b.96.2024.08.21.06.56.48
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 21 Aug 2024 06:56:48 -0700 (PDT)
+Message-ID: <7807531d-e35a-4973-810e-ca4c3f96250c@linaro.org>
+Date: Wed, 21 Aug 2024 15:56:47 +0200
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20240819153656.28807-2-vadorovsky@protonmail.com> <CAH5fLghOFYxwCOGrk8NYX0V9rgrJJ70YOa+dY1O0pbNB-CoK=w@mail.gmail.com>
-In-Reply-To: <CAH5fLghOFYxwCOGrk8NYX0V9rgrJJ70YOa+dY1O0pbNB-CoK=w@mail.gmail.com>
-From: Alice Ryhl <aliceryhl@google.com>
-Date: Wed, 21 Aug 2024 15:47:31 +0200
-Message-ID: <CAH5fLgiRPOVRsF5yz6d-fOciHg1EcwjD21eAgu4sSynSSsgf5A@mail.gmail.com>
-Subject: Re: [PATCH RESEND v5] rust: str: Use `core::CStr`, remove the custom
- `CStr` implementation
-To: Michal Rostecki <vadorovsky@gmail.com>
-Cc: Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, 
-	Wedson Almeida Filho <wedsonaf@gmail.com>, Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, 
-	=?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
-	Benno Lossin <benno.lossin@proton.me>, Andreas Hindborg <a.hindborg@samsung.com>, 
-	Brendan Higgins <brendan.higgins@linux.dev>, David Gow <davidgow@google.com>, 
-	Rae Moar <rmoar@google.com>, FUJITA Tomonori <fujita.tomonori@gmail.com>, 
-	Trevor Gross <tmgross@umich.edu>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, 
-	Justin Stitt <justinstitt@google.com>, Martin Rodriguez Reboredo <yakoyoku@gmail.com>, 
-	Finn Behrens <me@kloenk.dev>, Manmohan Shukla <manmshuk@gmail.com>, 
-	Valentin Obst <kernel@valentinobst.de>, Yutaro Ohno <yutaro.ono.418@gmail.com>, 
-	Asahi Lina <lina@asahilina.net>, Danilo Krummrich <dakr@redhat.com>, Tiago Lam <tiagolam@gmail.com>, 
-	Charalampos Mitrodimas <charmitro@posteo.net>, Tejun Heo <tj@kernel.org>, Roland Xu <mu001999@outlook.com>, 
-	rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com, 
-	netdev@vger.kernel.org, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 1/2] power: supply: core: simplify with cleanup.h
+To: Sebastian Reichel <sre@kernel.org>
+References: <20240705113113.42851-1-krzysztof.kozlowski@linaro.org>
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Content-Language: en-US
+Cc: llvm@lists.linux.dev, linux-kernel@vger.kernel.org,
+ Bill Wendling <morbo@google.com>, Nathan Chancellor <nathan@kernel.org>,
+ linux-pm@vger.kernel.org, Nick Desaulniers <ndesaulniers@google.com>,
+ Justin Stitt <justinstitt@google.com>
+Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
+ 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
+ D2GYIS41Kv4Isx2dEFh+/Q==
+In-Reply-To: <20240705113113.42851-1-krzysztof.kozlowski@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Wed, Aug 21, 2024 at 2:08=E2=80=AFPM Alice Ryhl <aliceryhl@google.com> w=
-rote:
->
-> On Mon, Aug 19, 2024 at 5:39=E2=80=AFPM Michal Rostecki <vadorovsky@gmail=
-.com> wrote:
-> >
-> > From: Michal Rostecki <vadorovsky@gmail.com>
-> >
-> > `CStr` became a part of `core` library in Rust 1.75. This change replac=
-es
-> > the custom `CStr` implementation with the one from `core`.
-> >
-> > `core::CStr` behaves generally the same as the removed implementation,
-> > with the following differences:
-> >
-> > - It does not implement `Display`.
-> > - It does not provide `from_bytes_with_nul_unchecked_mut` method.
-> > - It has `as_ptr()` method instead of `as_char_ptr()`, which also retur=
-ns
-> >   `*const c_char`.
-> >
-> > The first two differences are handled by providing the `CStrExt` trait,
-> > with `display()` and `from_bytes_with_nul_unchecked_mut()` methods.
-> > `display()` returns a `CStrDisplay` wrapper, with a custom `Display`
-> > implementation.
-> >
-> > `DerefMut` implementation for `CString` is removed here, as it's not
-> > being used anywhere.
-> >
-> > Signed-off-by: Michal Rostecki <vadorovsky@gmail.com>
->
-> A few comments:
->
-> * I would probably add CStrExt to the kernel prelude.
-> * I would probably remove `from_bytes_with_nul_unchecked_mut` and keep
-> `DerefMut for CString` instead of the other way around.
-> * Perhaps we should remove the `c_str!` macro and use c"" instead?
+On 05/07/2024 13:31, Krzysztof Kozlowski wrote:
+> Allocate the memory with scoped/cleanup.h to reduce error handling and
+> make the code a bit simpler.
+> 
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> ---
+>  drivers/power/supply/power_supply_core.c | 7 +++----
+>  1 file changed, 3 insertions(+), 4 deletions(-)
+> 
 
-Ah, also, please add this tag:
+Sebastian,
 
-Closes: https://github.com/Rust-for-Linux/linux/issues/1075
+Any comments on these patches?
 
-Alice
+Best regards,
+Krzysztof
+
