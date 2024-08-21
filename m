@@ -1,134 +1,100 @@
-Received: from mail-qt1-f172.google.com (mail-qt1-f172.google.com [209.85.160.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4976384E1C
-	for <llvm@lists.linux.dev>; Wed, 21 Aug 2024 15:06:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.172
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CBB1E13A243
+	for <llvm@lists.linux.dev>; Wed, 21 Aug 2024 15:32:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724252808; cv=none; b=cjFo88B3FuBbAudhRzPYI3ddp4BcvV3CetlVm5Xn9ogwRRnOEvJsrN2qbKy4v5ThtBUXE92vauqRlDSEa2fL8LZuIWLJ2ms9pEU9/ljCwNcQyJ9CHKFuRJBuwCjZbM+AHPk80M0rwA/GacHJQhRXUk1aDMKcRldEN0GNWE56EJs=
+	t=1724254374; cv=none; b=BzHcppj7yz8zUTDJmk55raEKcYjvMqGTGNJptjRhZjtndRw4HAJS6SCl5M4iovylZfZgkaJYiPJkde923jKIIK2No7V4uRDSzocUOT5j05FgZrr592FDzis5cSz3WWJDrf+jIunMjBu+TBRoEO03yfZrT/64ihaBwszBgEprgIY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724252808; c=relaxed/simple;
-	bh=e60pcqqEQWhVJkjGgiAn6KAQ4psQHcr9lb2LxGz/VHk=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=f53HQt8DgmhobOOBBxVn9cBDd/cciy/eBx3YnaVH7sCdS6cCPPA28I8JfSJpSwF90OL8+ejRoXROP2y8T3KcnVU+2RsttuuGqD0v+t/HiBoiHJVdUjFNH+KEpWwlrk+tFJRWNnrE6Mwuj+t4uq+WykTY89V61r/BU3pWHN9AuwE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=LZdXntGZ; arc=none smtp.client-ip=209.85.160.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="LZdXntGZ"
-Received: by mail-qt1-f172.google.com with SMTP id d75a77b69052e-45029af1408so257201cf.1
-        for <llvm@lists.linux.dev>; Wed, 21 Aug 2024 08:06:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1724252805; x=1724857605; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=b217j7C4Tggz1DzCx9BorR6jM0+OIdocUTHDXz3fh6c=;
-        b=LZdXntGZFgFip7L9wO4BMBAhX9f90qjLgOzq4tsPgJMs0syEzFUVye8oYXLXVN9ufw
-         Sjl1h+pWkEpgbJFelH/f77+Ra9mBYbbsJbKze/V6yas+NtLTGY2kP4+GU/Z08x7MI0oT
-         hh6xOl/PYLxjVfGsHBPBVtzXlpq+e5nHajDv6jA3FafRsAiD/WFUkCm72cL4v227rexA
-         LbTI/bGmCsvMQ4VKy3pq1YbR8heJZKbM0VfBL3NThoHZnbl4NzrsMg4tpiJSNjBj09PX
-         YAnyyt80XLGrf7+w8N/ywr7odZfFDK9/Gggr33q6qfaOQ1rIEmgeLfQv49AW//v0cBNF
-         ggXw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1724252805; x=1724857605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=b217j7C4Tggz1DzCx9BorR6jM0+OIdocUTHDXz3fh6c=;
-        b=MgiIre84InHRrDdsBCsRJqanyUDzfcLoZsFxyW/hRBhjxdKaqN1hqI1R3v48p4+CPy
-         v96PUdQQqIUiY9rzkNkCFu0ylZkAkpPpsjQATwq1RC+LElevumWaGnOFD48kdxSvCBm2
-         yQdRNhKzv2xpaEHTzWWgYsYbNXyr5+9gLgF8vQpvVSOUD9+ffKDoNJWnb8kvmTwX5QtV
-         n7K7iSt77jq4viboi+Cv9+3n+zmH7DAzNIZTu8Zk/jnwABOmAfkHGQT2XisI+tg88qcs
-         xEYXPCu+Lcc+wnSTXGKoRz4sh0epBF1JNZHfKV08GwR5pJze111fDvk54jnD4HH/ISBj
-         QJOw==
-X-Forwarded-Encrypted: i=1; AJvYcCVe+8nDciJ1Ycw1atQCfiLkXS6t7d2WaVKJrVFgltOl7Z2s02T4fxVq9GCCM1vpy6A8oEbQ@lists.linux.dev
-X-Gm-Message-State: AOJu0YwayIsRhG9XlGB/Pbjm/oRutf2ICxb9pWVQ++5g/YTqmWpqOzqG
-	GaKrPzfN5tOobIYNdUrKehvETwWe2b16fPIFtaKB7PNT0wIlvZcptb9b7XbtPfQoLv+2HSJz+/U
-	I5VyuCteX/Tv+duqV+11r07bismRTOU8AadRa
-X-Google-Smtp-Source: AGHT+IHDmneMaZKzP/SecJXBvNUGVxswsVHqQQAOiP+buH6ZIBmjD75NyZuDElWo7kDNWqfn8UIgootfNrrbNRKLgLg=
-X-Received: by 2002:a05:622a:1825:b0:447:f5de:bd18 with SMTP id
- d75a77b69052e-454e86e97a7mr6218511cf.9.1724252804689; Wed, 21 Aug 2024
- 08:06:44 -0700 (PDT)
+	s=arc-20240116; t=1724254374; c=relaxed/simple;
+	bh=p08qfXx88+C2uK3at4V8AcuVG2KeujrJ8pmJ0PzvQuQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=OA19awHLemoKzThL0xrdTuYeEc8KWTALg8pxuRnDiLGMpAbn8xBJ0txx+zlALxvq88dxfKIPTTCE8o8NE24EzAL2DlIzZlG8DH50ZXj9QxrF0uTTFe2O0IMXr+NXK7wNNgawo29f27lb+tIWs5QSX5PLKW3Si/MdUz7MTEFTIwU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 4F5BEDA7;
+	Wed, 21 Aug 2024 08:33:18 -0700 (PDT)
+Received: from J2N7QTR9R3.cambridge.arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 44BF43F73B;
+	Wed, 21 Aug 2024 08:32:51 -0700 (PDT)
+Date: Wed, 21 Aug 2024 16:32:46 +0100
+From: Mark Rutland <mark.rutland@arm.com>
+To: Masami Hiramatsu <mhiramat@kernel.org>
+Cc: Sami Tolvanen <samitolvanen@google.com>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Linux Trace Kernel <linux-trace-kernel@vger.kernel.org>,
+	linux-kernel@vger.kernel.org,
+	clang-built-linux <llvm@lists.linux.dev>,
+	Nathan Chancellor <nathan@kernel.org>
+Subject: Re: [BUG] tracing: dynamic ftrace selftest detected failures
+Message-ID: <ZsYInqSc-WS4UldP@J2N7QTR9R3.cambridge.arm.com>
+References: <20240819171152.12f05e0ae5c9472004d1b00a@kernel.org>
+ <20240819112902.11451fe8@gandalf.local.home>
+ <20240820005649.dd019cfa70a8955d91cf85a0@kernel.org>
+ <20240819120244.5657eb2f@gandalf.local.home>
+ <20240820100330.9ee6f3d51f22bb9bab7c4b83@kernel.org>
+ <ZsR0Z6DxSHOI-wNj@J2N7QTR9R3>
+ <CABCJKueKhDVarco4mgNeR0hkAhxDtxBjdpu=QaYVi+TGoiqd2g@mail.gmail.com>
+ <20240821070539.981b42e5f3b939c5ce5e3a71@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20240819171152.12f05e0ae5c9472004d1b00a@kernel.org>
- <20240819112902.11451fe8@gandalf.local.home> <20240820005649.dd019cfa70a8955d91cf85a0@kernel.org>
- <20240819120244.5657eb2f@gandalf.local.home> <20240820100330.9ee6f3d51f22bb9bab7c4b83@kernel.org>
- <ZsR0Z6DxSHOI-wNj@J2N7QTR9R3> <CABCJKueKhDVarco4mgNeR0hkAhxDtxBjdpu=QaYVi+TGoiqd2g@mail.gmail.com>
- <20240821070539.981b42e5f3b939c5ce5e3a71@kernel.org> <20240820181109.4203158d@gandalf.local.home>
- <20240821084351.4b1c9d4d52b5aa7e07681d69@kernel.org> <20240821092147.ff26a09cb0a72b8621abe750@kernel.org>
-In-Reply-To: <20240821092147.ff26a09cb0a72b8621abe750@kernel.org>
-From: Sami Tolvanen <samitolvanen@google.com>
-Date: Wed, 21 Aug 2024 08:06:05 -0700
-Message-ID: <CABCJKucLewqpZjckFy4mptUq4k_O75ce7f8MXzqoERXGs9UUVg@mail.gmail.com>
-Subject: Re: [BUG] tracing: dynamic ftrace selftest detected failures
-To: Masami Hiramatsu <mhiramat@kernel.org>
-Cc: Steven Rostedt <rostedt@goodmis.org>, Mark Rutland <mark.rutland@arm.com>, 
-	Linux Trace Kernel <linux-trace-kernel@vger.kernel.org>, linux-kernel@vger.kernel.org, 
-	clang-built-linux <llvm@lists.linux.dev>, Nathan Chancellor <nathan@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20240821070539.981b42e5f3b939c5ce5e3a71@kernel.org>
 
-On Tue, Aug 20, 2024 at 5:21=E2=80=AFPM Masami Hiramatsu <mhiramat@kernel.o=
-rg> wrote:
->
-> On Wed, 21 Aug 2024 08:43:51 +0900
-> Masami Hiramatsu (Google) <mhiramat@kernel.org> wrote:
->
-> > On Tue, 20 Aug 2024 18:11:09 -0400
-> > Steven Rostedt <rostedt@goodmis.org> wrote:
-> >
-> > > On Wed, 21 Aug 2024 07:05:39 +0900
-> > > Masami Hiramatsu (Google) <mhiramat@kernel.org> wrote:
+On Wed, Aug 21, 2024 at 07:05:39AM +0900, Masami Hiramatsu wrote:
+> On Tue, 20 Aug 2024 08:10:42 -0700
+> Sami Tolvanen <samitolvanen@google.com> wrote:
+> 
+> > On Tue, Aug 20, 2024 at 3:48 AM Mark Rutland <mark.rutland@arm.com> wrote:
 > > >
+> > > On Tue, Aug 20, 2024 at 10:03:30AM +0900, Masami Hiramatsu wrote:
+> > > > On Mon, 19 Aug 2024 12:02:44 -0400
+> > > > Steven Rostedt <rostedt@goodmis.org> wrote:
+> > > >
+> > > > > On Tue, 20 Aug 2024 00:56:49 +0900
+> > > > > Masami Hiramatsu (Google) <mhiramat@kernel.org> wrote:
+> > > > > >
+> > > > > > >
+> > > > > > > We may need to add "noinline" or something to make sure those functions
+> > > > > > > don't get inlined for LTO.
+> > > > > >
+> > > > > > Yeah, we need such option at least for function call test.
+> > > > >
+> > > > > Could you add the noinline, and if it fixes the issue send a patch?
+> > > >
+> > > > I found the target function already has "noinline". I tried to add noinline
+> > > > to the testing function (callsite), but it also did not work.
+> > > > I think "noinline" is for the compiler, but LTO is done by the linker.
 > > >
-> > > > Does the noinline attribute prevent embedding callsite too? I mean
-> > > >
-> > > > extern callee()
-> > > >
-> > > > noinline callee()
-> > > > {
-> > > > ...
-> > > > }
-> > > >
-> > > > caller()
-> > > > {
-> > > >   callee() // (*)
-> > > > }
-> > > >
-> > > > In this case, does noinline prevent LTO to embed the callee at the =
-callsite(*)
-> > > > or prevent LTO remove the callee() symbol?
-> > > >
-> > >
-> > > Even though we have it passed as a parameter, I think the compiler an=
-d
-> > > linker is smart enough to see that and notice its use, and that the
-> > > function passed in is a nop, which doesn't break the flow.
-> > >
-> > > Can you add the __used and see if it fixes it?
-> >
-> > Adding __used to DYN_FTRACE_TEST_NAME() and DYN_FTRACE_TEST_NAME2() doe=
-s
-> > not change, the test still fails. Hmm, what about makes the caller
-> > (trace_selftest_startup_dynamic_tracing()) called via a function pointe=
-r?
-> > In that case, wouldn't it be subject to constant propagetion?
-> >
-> > Let me try.
->
-> OK, it is succeeded! Calling `caller` via global function pointer makes
-> it run as we expected. It passed the dynamic_ftrace test, but other tests
-> still fails. Those need to be called via function pointer too.
+> > > If LTO is breaking noinline, then that has much larger implications for
+> > > noinstr code and similar, and means that LTO is unsound...
+> > 
+> > The noinline attribute is preserved in LLVM IR, so it should continue
+> > to work with LTO. Which function are we talking about here? Are you
+> > sure the function was inlined instead of being dropped completely?
+> > Does marking the function __used help?
+> 
+> We are talking about trace_selftest_startup_dynamic_tracing() in
+> kernel/trace/trace_selftest.c. The callee is func() which is actually
+> DYN_FTRACE_TEST_NAME() in kernel/trace/trace_selftest_dynamic.c.
+> That function passed as pointer (but the compiler can embed it by constant
+> propagation.)
 
-I was able to reproduce this with LTO_CLANG_FULL, and it indeed
-optimizes away the direct calls to the empty stubs, but the functions
-are still there. LTO_CLANG_THIN doesn't perform this optimization,
-presumably because it doesn't have full visibility to the other TU.
+Ah, so IIUC the function isn't being inlined; the call is being
+optimized away becase callee() has no side-effects.
 
-Sami
+That can happen without LTO if the caller is in the same compilation
+unit, and I have worked around that in the past by adding a barrier()
+into the callee.
+
+If you add a barrier() into the callee, does it work? I suspect that's a
+reasonable workaround.
+
+Mark.
