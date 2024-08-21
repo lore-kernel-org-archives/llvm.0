@@ -1,95 +1,160 @@
-Received: from mail-4322.protonmail.ch (mail-4322.protonmail.ch [185.70.43.22])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67E7C16DEBA
-	for <llvm@lists.linux.dev>; Wed, 21 Aug 2024 19:08:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.70.43.22
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B6ACC14D2B1;
+	Wed, 21 Aug 2024 19:18:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724267290; cv=none; b=e5ovFa4LcqQip0sLap/JgTh2907hpdEG6DKkgFpg8x9fm6vrK6sjg7Dga3nSM4Uc+/CjqUZY3sY433oLSkEpjGqpxmp/VGZenDmwknvBb4+sFH/OxSR2pu+RfxeDzlNHEv5/mwr34o4MYqrl+NRzVliLhUs6qdSHwqw8MKsKNZY=
+	t=1724267939; cv=none; b=j1fCQh3HlxXHLmZQJyHNT4kg+eEH5sarCeXU6cV6uH0AVcbIcII7NLTKvdgmZO7p4laH/wiHJHRu/H7SSn4hTbrbPnAFltpHLICb4RuFu1ExPpv9gHioPQ1JSW4gAZhRn5ATYVsfFcrql6EZHutyI3jrl2oAhZR6KynOVGOIisw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724267290; c=relaxed/simple;
-	bh=eSnoDkOEETH/kxtFM7c/k2wcmWasyCaFGRLbcCH8WoI=;
-	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=o00L/cX1GBulUsbKqPqJwHAGJoBs7ywHv9GxXZ015qkf57q0GnAN9cGFV/bMZpbKR0Ly/22Xm8geaySWJg3zUl170EXEIutAX0rpmUR4FvH2trA3GAdsD+ZhcVLUe0jWY7faViKXJVwlwJU/1rwHL4VhxriA8YyxZo064S5im8I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=proton.me; spf=pass smtp.mailfrom=proton.me; dkim=pass (2048-bit key) header.d=proton.me header.i=@proton.me header.b=VMRw2/hr; arc=none smtp.client-ip=185.70.43.22
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=proton.me
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=proton.me
+	s=arc-20240116; t=1724267939; c=relaxed/simple;
+	bh=/HGn/HgpYHGtVC6vfSV8eUlIobosvrnFmtrlKUaogSc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=XF5UfbAqR0rpuwTLGiIpRLruvy/qV2vgkxEKyWtiPZH9qbAWT32ipdWtSxfPf+ZI+LGPipPM4rAmr1pNHWaEb2JNms0bItHSH50FJ61dTCB+zP6vVsrBpq674cnQl3VhxXnmjQwQw2gx+XGqJpTDzEtC2bci71M7N0aFOCR149k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=UKks3S9P; arc=none smtp.client-ip=198.175.65.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=proton.me header.i=@proton.me header.b="VMRw2/hr"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=proton.me;
-	s=protonmail; t=1724267285; x=1724526485;
-	bh=rCxvXIb781j8vgc7b5+8ypCKkI7TCpYuwsGqlM6QVlA=;
-	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
-	 Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
-	 Message-ID:BIMI-Selector;
-	b=VMRw2/hrzKuIyrcdl8eDGZtonj2CAkv7xBuOWt7+VdSYXcKbf549YeoR7d70TzNAh
-	 1gA3Fnc9diVQV5Xx8LlIHFtCQaIKF5hzqQ7RvwD0Q1/aecmw2g9yGBW0gS87+VUnud
-	 KfUrjYt5eWVPO+RzaQiQ1tJ+ajMrS0T66+3WBBP6qA4wMzNfNggLPzdRKpSR5hKegQ
-	 +xJ3tLaiznGJWin24YsbEbDQqLow7oJe2eyFFMBFK/G2ne79BDz76ny+9M2oCT2/LO
-	 /JcTSjIAhLwby6rlMFE7OucobGaoWY+ipOO3AAHXmKIhDLS9FPTrRyLHrokRFg3u1L
-	 8oLSrpLamConQ==
-Date: Wed, 21 Aug 2024 19:07:58 +0000
-To: Alice Ryhl <aliceryhl@google.com>, Michal Rostecki <vadorovsky@gmail.com>
-From: Benno Lossin <benno.lossin@proton.me>
-Cc: Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, Wedson Almeida Filho <wedsonaf@gmail.com>, Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, =?utf-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, Andreas Hindborg <a.hindborg@samsung.com>, Brendan Higgins <brendan.higgins@linux.dev>, David Gow <davidgow@google.com>, Rae Moar <rmoar@google.com>, FUJITA Tomonori <fujita.tomonori@gmail.com>, Trevor Gross <tmgross@umich.edu>, Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, Martin Rodriguez Reboredo <yakoyoku@gmail.com>, Finn Behrens <me@kloenk.dev>, Manmohan Shukla <manmshuk@gmail.com>, Valentin Obst <kernel@valentinobst.de>, Yutaro Ohno <yutaro.ono.418@gmail.com>, Asahi Lina <lina@asahilina.net>, Danilo Krummrich <dakr@redhat.com>, Tiago Lam <tiagolam@gmail.com>, Charalampos Mitrodimas <charmitro@posteo.net>, Tejun Heo <tj@kernel.org>,
-	Roland Xu <mu001999@outlook.com>, rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com, netdev@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH RESEND v5] rust: str: Use `core::CStr`, remove the custom `CStr` implementation
-Message-ID: <9f55bb2d-f963-44f6-941c-2bf9923c8beb@proton.me>
-In-Reply-To: <CAH5fLghOFYxwCOGrk8NYX0V9rgrJJ70YOa+dY1O0pbNB-CoK=w@mail.gmail.com>
-References: <20240819153656.28807-2-vadorovsky@protonmail.com> <CAH5fLghOFYxwCOGrk8NYX0V9rgrJJ70YOa+dY1O0pbNB-CoK=w@mail.gmail.com>
-Feedback-ID: 71780778:user:proton
-X-Pm-Message-ID: 356fd5e2a98d52a6d72da75783ff7c3df57197fe
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="UKks3S9P"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1724267937; x=1755803937;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=/HGn/HgpYHGtVC6vfSV8eUlIobosvrnFmtrlKUaogSc=;
+  b=UKks3S9P9aeZNyX/xiTeVri/zwr7pv7wIcWIXDpAtjxAaViymudS+Htr
+   vpBEvq3rV+V0C268Z7vdbvVoPF7U+GApournWoCF1SJU28O4jilb93bYZ
+   r/ni7dMiKKwJAW10/yP6BAancFuRBo/VpCubqxUN97+F/jFRkrYIvD5WU
+   jo3kMnvWejQ9wDXKJBBqHtq/OQ67p/4kOUVO8r9B7P6241IqFOjvIVHIB
+   fNXm/l7Q5fVFlK2UlOeODfvfaebUG4nOp8HBWhzI+1MJAQgsaCGjpNeLu
+   hzOGBh3Lf5j3VSzbB6moSwg7HuXLjz217AnTbWNgJu2NByJqVZ8+js46T
+   w==;
+X-CSE-ConnectionGUID: 8KTyne+mR5WLged7DxHbtA==
+X-CSE-MsgGUID: HXMlZRUnQ8euTXLYgNWC+Q==
+X-IronPort-AV: E=McAfee;i="6700,10204,11171"; a="26403426"
+X-IronPort-AV: E=Sophos;i="6.10,164,1719903600"; 
+   d="scan'208";a="26403426"
+Received: from orviesa005.jf.intel.com ([10.64.159.145])
+  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Aug 2024 12:18:56 -0700
+X-CSE-ConnectionGUID: FgUeWDQISHiAdL3I5GF6RQ==
+X-CSE-MsgGUID: 57gFyWUZQ52FJCMd7D+Q/A==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.10,164,1719903600"; 
+   d="scan'208";a="66071041"
+Received: from lkp-server01.sh.intel.com (HELO 9a732dc145d3) ([10.239.97.150])
+  by orviesa005.jf.intel.com with ESMTP; 21 Aug 2024 12:18:55 -0700
+Received: from kbuild by 9a732dc145d3 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1sgqr7-000BrG-00;
+	Wed, 21 Aug 2024 19:18:53 +0000
+Date: Thu, 22 Aug 2024 03:18:36 +0800
+From: kernel test robot <lkp@intel.com>
+To: Michael Guralnik <michaelgur@nvidia.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: Re: [PATCH rdma-next 6/7] RDMA/nldev: Add support for RDMA monitoring
+Message-ID: <202408220229.aRX7ynjF-lkp@intel.com>
+References: <20240821051017.7730-7-michaelgur@nvidia.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240821051017.7730-7-michaelgur@nvidia.com>
 
-On 21.08.24 14:08, Alice Ryhl wrote:
-> On Mon, Aug 19, 2024 at 5:39=E2=80=AFPM Michal Rostecki <vadorovsky@gmail=
-.com> wrote:
->>
->> From: Michal Rostecki <vadorovsky@gmail.com>
->>
->> `CStr` became a part of `core` library in Rust 1.75. This change replace=
-s
->> the custom `CStr` implementation with the one from `core`.
->>
->> `core::CStr` behaves generally the same as the removed implementation,
->> with the following differences:
->>
->> - It does not implement `Display`.
->> - It does not provide `from_bytes_with_nul_unchecked_mut` method.
->> - It has `as_ptr()` method instead of `as_char_ptr()`, which also return=
-s
->>   `*const c_char`.
->>
->> The first two differences are handled by providing the `CStrExt` trait,
->> with `display()` and `from_bytes_with_nul_unchecked_mut()` methods.
->> `display()` returns a `CStrDisplay` wrapper, with a custom `Display`
->> implementation.
->>
->> `DerefMut` implementation for `CString` is removed here, as it's not
->> being used anywhere.
->>
->> Signed-off-by: Michal Rostecki <vadorovsky@gmail.com>
->=20
-> A few comments:
->=20
-> * I would probably add CStrExt to the kernel prelude.
-> * I would probably remove `from_bytes_with_nul_unchecked_mut` and keep
-> `DerefMut for CString` instead of the other way around.
-> * Perhaps we should remove the `c_str!` macro and use c"" instead?
+Hi Michael,
 
-Read [1], it is needed, because there is no `c_stringify!` macro.
+kernel test robot noticed the following build errors:
 
-[1]: https://lore.kernel.org/rust-for-linux/52676577-372c-4a7f-aace-4cf100f=
-93bfb@gmail.com/
+[auto build test ERROR on rdma/for-next]
+[also build test ERROR on linus/master v6.11-rc4 next-20240821]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
----
-Cheers,
-Benno
+url:    https://github.com/intel-lab-lkp/linux/commits/Michael-Guralnik/RDMA-mlx5-Check-RoCE-LAG-status-before-getting-netdev/20240821-131236
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/rdma/rdma.git for-next
+patch link:    https://lore.kernel.org/r/20240821051017.7730-7-michaelgur%40nvidia.com
+patch subject: [PATCH rdma-next 6/7] RDMA/nldev: Add support for RDMA monitoring
+config: i386-randconfig-003-20240821 (https://download.01.org/0day-ci/archive/20240822/202408220229.aRX7ynjF-lkp@intel.com/config)
+compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240822/202408220229.aRX7ynjF-lkp@intel.com/reproduce)
 
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202408220229.aRX7ynjF-lkp@intel.com/
+
+All error/warnings (new ones prefixed by >>):
+
+   In file included from drivers/infiniband/core/device.c:45:
+>> include/rdma/rdma_netlink.h:120:33: warning: declaration of 'struct ib_device' will not be visible outside of this function [-Wvisibility]
+     120 | int rdma_nl_notify_event(struct ib_device *ib, u32 port_num,
+         |                                 ^
+>> drivers/infiniband/core/device.c:1360:29: error: incompatible pointer types passing 'struct ib_device *' to parameter of type 'struct ib_device *' [-Werror,-Wincompatible-pointer-types]
+    1360 |         ret = rdma_nl_notify_event(device, 0, RDMA_REGISTER_EVENT);
+         |                                    ^~~~~~
+   include/rdma/rdma_netlink.h:120:44: note: passing argument to parameter 'ib' here
+     120 | int rdma_nl_notify_event(struct ib_device *ib, u32 port_num,
+         |                                            ^
+   drivers/infiniband/core/device.c:1369:30: error: incompatible pointer types passing 'struct ib_device *' to parameter of type 'struct ib_device *' [-Werror,-Wincompatible-pointer-types]
+    1369 |                 ret = rdma_nl_notify_event(device, port,
+         |                                            ^~~~~~
+   include/rdma/rdma_netlink.h:120:44: note: passing argument to parameter 'ib' here
+     120 | int rdma_nl_notify_event(struct ib_device *ib, u32 port_num,
+         |                                            ^
+   drivers/infiniband/core/device.c:1520:23: error: incompatible pointer types passing 'struct ib_device *' to parameter of type 'struct ib_device *' [-Werror,-Wincompatible-pointer-types]
+    1520 |         rdma_nl_notify_event(ib_dev, 0, RDMA_UNREGISTER_EVENT);
+         |                              ^~~~~~
+   include/rdma/rdma_netlink.h:120:44: note: passing argument to parameter 'ib' here
+     120 | int rdma_nl_notify_event(struct ib_device *ib, u32 port_num,
+         |                                            ^
+   drivers/infiniband/core/device.c:2227:24: error: incompatible pointer types passing 'struct ib_device *' to parameter of type 'struct ib_device *' [-Werror,-Wincompatible-pointer-types]
+    2227 |                 rdma_nl_notify_event(ib_dev, port, etype);
+         |                                      ^~~~~~
+   include/rdma/rdma_netlink.h:120:44: note: passing argument to parameter 'ib' here
+     120 | int rdma_nl_notify_event(struct ib_device *ib, u32 port_num,
+         |                                            ^
+   1 warning and 4 errors generated.
+--
+   In file included from drivers/infiniband/core/iwpm_msg.c:34:
+   In file included from drivers/infiniband/core/iwpm_util.h:50:
+>> include/rdma/rdma_netlink.h:120:33: warning: declaration of 'struct ib_device' will not be visible outside of this function [-Wvisibility]
+     120 | int rdma_nl_notify_event(struct ib_device *ib, u32 port_num,
+         |                                 ^
+   1 warning generated.
+
+
+vim +1360 drivers/infiniband/core/device.c
+
+  1353	
+  1354	static void ib_device_notify_register(struct ib_device *device)
+  1355	{
+  1356		struct net_device *netdev;
+  1357		u32 port;
+  1358		int ret;
+  1359	
+> 1360		ret = rdma_nl_notify_event(device, 0, RDMA_REGISTER_EVENT);
+  1361		if (ret)
+  1362			return;
+  1363	
+  1364		rdma_for_each_port(device, port) {
+  1365			netdev = ib_device_get_netdev(device, port);
+  1366			if (!netdev)
+  1367				continue;
+  1368	
+  1369			ret = rdma_nl_notify_event(device, port,
+  1370						   RDMA_NETDEV_ATTACH_EVENT);
+  1371			dev_put(netdev);
+  1372			if (ret)
+  1373				return;
+  1374		}
+  1375		return;
+  1376	}
+  1377	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
