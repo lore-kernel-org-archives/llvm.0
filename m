@@ -1,167 +1,126 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E57ED23B1;
-	Wed, 21 Aug 2024 00:21:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 54FAD33C5;
+	Wed, 21 Aug 2024 00:26:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724199711; cv=none; b=Cw0HtgHn9+/x4TCV19OHXB3M2uk5OK/JT/EQHWBzJ7L5j1o1nDaoQwl7DRnGNdITYwL+gvVRNayD5Ko9hYrdhbEUeSuzXWeOZu/NhPeZZKY6lgDQlEA2yVMeOGvW3SboyBRGlMavKLGylhx3KQhQn//9+RGrJX0bPAhOgxZjVS8=
+	t=1724199973; cv=none; b=dL5pHyyYqLKmt1hS26Sq2A4wBjou9C56VTFEbrf1df60qgEJEG1qDMLUdtx2dn9vHQUBp3hzWymFPl7der3EVF3uWX13G3CbIZjqjRvMoPECH05R6PaJGtuZPjWH1U8oY9zeGGInufUsDOsBRoLWqVPiwB5mtYcKNfp9unzKNBU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724199711; c=relaxed/simple;
-	bh=tO9lHjbgHTw7NCXp7c9FX69Zqx7Omwhqitb3z3Ge52M=;
-	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
-	 Mime-Version:Content-Type; b=fQqQ1k5PH5JmL8NghO4gSJ8pEf0BE984acTfnvg5q1RFm9zaX9uPpSwMZE16wjDfVtGb8ytlrKLKFSSr2FuXZ7mfY5E/zqkCqWy2JDLrY8Y1TU8owrtTuizBY42UzjD1HJkXxyaRIGZnLtEzeQ97vJsy15oWysJahKBlsfC8/Is=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YV2ke3H0; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1724199973; c=relaxed/simple;
+	bh=CJIRiNwm7uwI5y07ByutZfo3/ptSFwLJ4eprJVUi6t4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=e8/AMxdLQzzkqfHX6U8LaIrqPQdwSaSIPAOhfVW07Z3w3TjtZnelFfJp9/mjD5kyu0u9r1/INh/kGUklv2dLu9p1gZVMiaLQzuiEoyuc0LCCVaRwD8OfAMKcKMh8f7GUIE1SUZRbORQfSxNQOsSZsWPr11r4egUZmbjL2mKC4Rw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=aFqY1k5J; arc=none smtp.client-ip=198.175.65.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YV2ke3H0"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 109C4C4AF0B;
-	Wed, 21 Aug 2024 00:21:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1724199710;
-	bh=tO9lHjbgHTw7NCXp7c9FX69Zqx7Omwhqitb3z3Ge52M=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=YV2ke3H0jUy5+yks0gciA5hsVagnl3sM2CFk7mcbLuS1mHmo+tS543FBqpFXQToZZ
-	 Badgq3gGFJNaA3MQCMP+jpf3TRuLHscJEh8fpOh9bQAkIA3YIaY3SZvZmcLAbgfJTt
-	 N9ik+VFtOr4tvTMDK/O3fBWq1acfi/ZU5ruYj36ZSDxHUnMRx/CWZHX1h6t/Vw4RV+
-	 /a7CHCstsiw3qMjOObRkxTVWr6DAWQ8kQWtTsgaNSgaWrRf3nd6ZPXxSKi9bumZc7x
-	 sEpZHOXFYqqqdXl/fi+HZPGfcXuciRfmVQgilqV0zm2jIcCoqJTuSpfrsstH7n7pzX
-	 Jv4H1VDuVlNjA==
-Date: Wed, 21 Aug 2024 09:21:47 +0900
-From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-To: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-Cc: Steven Rostedt <rostedt@goodmis.org>, Sami Tolvanen
- <samitolvanen@google.com>, Mark Rutland <mark.rutland@arm.com>, Linux Trace
- Kernel <linux-trace-kernel@vger.kernel.org>, linux-kernel@vger.kernel.org,
- clang-built-linux <llvm@lists.linux.dev>, Nathan Chancellor
- <nathan@kernel.org>
-Subject: Re: [BUG] tracing: dynamic ftrace selftest detected failures
-Message-Id: <20240821092147.ff26a09cb0a72b8621abe750@kernel.org>
-In-Reply-To: <20240821084351.4b1c9d4d52b5aa7e07681d69@kernel.org>
-References: <20240819171152.12f05e0ae5c9472004d1b00a@kernel.org>
-	<20240819112902.11451fe8@gandalf.local.home>
-	<20240820005649.dd019cfa70a8955d91cf85a0@kernel.org>
-	<20240819120244.5657eb2f@gandalf.local.home>
-	<20240820100330.9ee6f3d51f22bb9bab7c4b83@kernel.org>
-	<ZsR0Z6DxSHOI-wNj@J2N7QTR9R3>
-	<CABCJKueKhDVarco4mgNeR0hkAhxDtxBjdpu=QaYVi+TGoiqd2g@mail.gmail.com>
-	<20240821070539.981b42e5f3b939c5ce5e3a71@kernel.org>
-	<20240820181109.4203158d@gandalf.local.home>
-	<20240821084351.4b1c9d4d52b5aa7e07681d69@kernel.org>
-X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="aFqY1k5J"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1724199973; x=1755735973;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=CJIRiNwm7uwI5y07ByutZfo3/ptSFwLJ4eprJVUi6t4=;
+  b=aFqY1k5JDpyAv/GFDKAFmvj2T9NrmBzYdsYL6KZl09C3sglkQmBk/AD4
+   /7c5e4MbYKLKLqTCnrMEheNOxTjEeiQn9E5oBMdzivNNkvaLiQ/Uf5Ntl
+   dBUYAb3cZPRWXgAS0RMp/kvqS+yh+2GCsqIKJxaTPXirQiZZnorufeQns
+   EBHpz+GhPyXgzda+vyPcf1ewJesq2o4qf/HDHfu37Y8Ejiow0RGweD8sH
+   eNwW04YBB2J2KakdaJdGVdExf8chAFrLykIK/iaxGZFTYDyDofx8jVWRE
+   cqYEvaTm4ARBRCS6N9JHK2RIy+YBNq4glhWjXPbC2yqHCSwXeQW1w3rUu
+   w==;
+X-CSE-ConnectionGUID: 0whGXhY0ROW0J+UgFDPtgg==
+X-CSE-MsgGUID: FDTyri7tQ4uuC72nc3DK7A==
+X-IronPort-AV: E=McAfee;i="6700,10204,11170"; a="33102252"
+X-IronPort-AV: E=Sophos;i="6.10,163,1719903600"; 
+   d="scan'208";a="33102252"
+Received: from orviesa008.jf.intel.com ([10.64.159.148])
+  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Aug 2024 17:26:10 -0700
+X-CSE-ConnectionGUID: QYpm+HL7Rt+vlbg+hWK2Tw==
+X-CSE-MsgGUID: e/41dBwxQO+o7TlyHWjfxg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.10,163,1719903600"; 
+   d="scan'208";a="61679440"
+Received: from lkp-server01.sh.intel.com (HELO 9a732dc145d3) ([10.239.97.150])
+  by orviesa008.jf.intel.com with ESMTP; 20 Aug 2024 17:25:58 -0700
+Received: from kbuild by 9a732dc145d3 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1sgZAi-000Aiq-0Q;
+	Wed, 21 Aug 2024 00:25:56 +0000
+Date: Wed, 21 Aug 2024 08:25:16 +0800
+From: kernel test robot <lkp@intel.com>
+To: Jeongjun Park <aha310510@gmail.com>, wenjia@linux.ibm.com,
+	jaka@linux.ibm.com, alibuda@linux.alibaba.com,
+	tonylu@linux.alibaba.com, guwen@linux.alibaba.com
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+	pabeni@redhat.com, utz.bacher@de.ibm.com, dust.li@linux.alibaba.com,
+	linux-s390@vger.kernel.org, netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	syzkaller <syzkaller@googlegroups.com>,
+	Jeongjun Park <aha310510@gmail.com>
+Subject: Re: [PATCH net,v6,2/2] net/smc: initialize ipv6_pinfo_offset in
+ smc_inet6_prot and add smc6_sock structure
+Message-ID: <202408210856.G9xvGcdD-lkp@intel.com>
+References: <20240820121548.380342-1-aha310510@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240820121548.380342-1-aha310510@gmail.com>
 
-On Wed, 21 Aug 2024 08:43:51 +0900
-Masami Hiramatsu (Google) <mhiramat@kernel.org> wrote:
+Hi Jeongjun,
 
-> On Tue, 20 Aug 2024 18:11:09 -0400
-> Steven Rostedt <rostedt@goodmis.org> wrote:
-> 
-> > On Wed, 21 Aug 2024 07:05:39 +0900
-> > Masami Hiramatsu (Google) <mhiramat@kernel.org> wrote:
-> > 
-> > 
-> > > Does the noinline attribute prevent embedding callsite too? I mean
-> > > 
-> > > extern callee()
-> > > 
-> > > noinline callee()
-> > > {
-> > > ...
-> > > }
-> > > 
-> > > caller()
-> > > {
-> > > 	callee() // (*)
-> > > }
-> > > 
-> > > In this case, does noinline prevent LTO to embed the callee at the callsite(*)
-> > > or prevent LTO remove the callee() symbol?
-> > >
-> > 
-> > Even though we have it passed as a parameter, I think the compiler and
-> > linker is smart enough to see that and notice its use, and that the
-> > function passed in is a nop, which doesn't break the flow.
-> > 
-> > Can you add the __used and see if it fixes it?
-> 
-> Adding __used to DYN_FTRACE_TEST_NAME() and DYN_FTRACE_TEST_NAME2() does
-> not change, the test still fails. Hmm, what about makes the caller
-> (trace_selftest_startup_dynamic_tracing()) called via a function pointer?
-> In that case, wouldn't it be subject to constant propagetion?
-> 
-> Let me try.
+kernel test robot noticed the following build errors:
 
-OK, it is succeeded! Calling `caller` via global function pointer makes
-it run as we expected. It passed the dynamic_ftrace test, but other tests
-still fails. Those need to be called via function pointer too.
-                             
-[    1.851324] Testing dynamic ftrace: PASSED                                     
-[    2.083329] Testing dynamic ftrace ops #1:                                     
-[    2.173751] (0 0 0 0 0) FAILED!                                                
-[    2.182337] ------------[ cut here ]------------                               
-[    2.183323] WARNING: CPU: 0 PID: 1 at kernel/trace/trace.c:2143 run_tracer_sel0
-[    2.184323] Modules linked in:                              
+[auto build test ERROR on linus/master]
+[also build test ERROR on v6.11-rc4 next-20240820]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Anyway, here is what I did.
+url:    https://github.com/intel-lab-lkp/linux/commits/Jeongjun-Park/net-smc-modify-smc_sock-structure/20240820-201856
+base:   linus/master
+patch link:    https://lore.kernel.org/r/20240820121548.380342-1-aha310510%40gmail.com
+patch subject: [PATCH net,v6,2/2] net/smc: initialize ipv6_pinfo_offset in smc_inet6_prot and add smc6_sock structure
+config: i386-randconfig-003-20240821 (https://download.01.org/0day-ci/archive/20240821/202408210856.G9xvGcdD-lkp@intel.com/config)
+compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240821/202408210856.G9xvGcdD-lkp@intel.com/reproduce)
 
-diff --git a/kernel/trace/trace_selftest.c b/kernel/trace/trace_selftest.c
-index 97f1e4bc47dc..9663bc777888 100644
---- a/kernel/trace/trace_selftest.c
-+++ b/kernel/trace/trace_selftest.c
-@@ -353,9 +353,10 @@ static int trace_selftest_ops(struct trace_array *tr, int cnt)
- }
- 
- /* Test dynamic code modification and ftrace filters */
--static int trace_selftest_startup_dynamic_tracing(struct tracer *trace,
--						  struct trace_array *tr,
--						  int (*func)(void))
-+static int noinline
-+trace_selftest_startup_dynamic_tracing(struct tracer *trace,
-+					struct trace_array *tr,
-+					int (*func)(void))
- {
- 	int save_ftrace_enabled = ftrace_enabled;
- 	unsigned long count;
-@@ -569,10 +570,22 @@ trace_selftest_function_recursion(void)
- 	return ret;
- }
- #else
--# define trace_selftest_startup_dynamic_tracing(trace, tr, func) ({ 0; })
-+static int trace_selftest_startup_dynamic_tracing(struct tracer *trace,
-+					struct trace_array *tr,
-+					int (*func)(void))
-+{
-+	if (!trace || !tr || !func)
-+		return -EINVAL;
-+	return 0;
-+}
- # define trace_selftest_function_recursion() ({ 0; })
- #endif /* CONFIG_DYNAMIC_FTRACE */
- 
-+int (*global_trace_selftest_startup_dynamic_tracing)(struct tracer *trace,
-+					struct trace_array *tr,
-+					int (*func)(void))
-+	= trace_selftest_startup_dynamic_tracing;
-+
- static enum {
- 	TRACE_SELFTEST_REGS_START,
- 	TRACE_SELFTEST_REGS_FOUND,
-@@ -732,7 +745,7 @@ trace_selftest_startup_function(struct tracer *trace, struct trace_array *tr)
- 		goto out;
- 	}
- 
--	ret = trace_selftest_startup_dynamic_tracing(trace, tr,
-+	ret = global_trace_selftest_startup_dynamic_tracing(trace, tr,
- 						     DYN_FTRACE_TEST_NAME);
- 	if (ret)
- 		goto out;
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202408210856.G9xvGcdD-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> net/smc/smc_inet.c:78:56: error: unexpected ';' before '}'
+      78 |         .ipv6_pinfo_offset      = offsetof(struct smc6_sock, inet6);
+         |                                                                    ^
+   1 error generated.
+
+
+vim +78 net/smc/smc_inet.c
+
+    67	
+    68	static struct proto smc_inet6_prot = {
+    69		.name		= "INET6_SMC",
+    70		.owner		= THIS_MODULE,
+    71		.init		= smc_inet_init_sock,
+    72		.hash		= smc_hash_sk,
+    73		.unhash		= smc_unhash_sk,
+    74		.release_cb	= smc_release_cb,
+    75		.obj_size	= sizeof(struct smc6_sock),
+    76		.h.smc_hash	= &smc_v6_hashinfo,
+    77		.slab_flags	= SLAB_TYPESAFE_BY_RCU,
+  > 78		.ipv6_pinfo_offset	= offsetof(struct smc6_sock, inet6);
+    79	};
+    80	
 
 -- 
-Masami Hiramatsu (Google) <mhiramat@kernel.org>
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
