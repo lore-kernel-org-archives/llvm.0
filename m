@@ -1,189 +1,91 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
+Received: from 009.lax.mailroute.net (009.lax.mailroute.net [199.89.1.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0574F1D12E4;
-	Thu, 22 Aug 2024 17:32:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD3F01CB138;
+	Thu, 22 Aug 2024 17:46:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=199.89.1.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724347948; cv=none; b=FMPlhOBCtU9teh1RrmNvlECTvGLRtAWs1CCJ7imKCUAT1VAgGAQQWu1JtvE9Z8Hs6qpp4YFV5dD86D5m7+Ta4Zce3SRq90IKrO35Fiy7lLCFeFAfnfQqdChonffSNTDrllO9VNwOWSEQq6jer20YU5inj7Yi5R93IFjQ2HlKVx4=
+	t=1724348776; cv=none; b=PmGGe3EseExb1SrdF4yT5oqfTOkW9VeL+NePbUPh8ayxy2Ff79XTQzj60apyvn0iWKEFQ+LK2kpgYdTW0LvbLOI1zgAdhi+DRZMTOkz3jPjEJYHjx0yoYZB7uttzlN+irOGhtRSY2x2gD4AawbFC+Q0DurbabuKKU0Ffi8BvqoQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724347948; c=relaxed/simple;
-	bh=AfTrLWvJzP6sg0GLoYe91VEO5f6pKvEjMe1OPa+oUw0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=NdvPIjF6cpSRfhiueFxfyhl2XHEdR3gcPtW/jST7Qz0OBeMEw4r1qJi6L5SrlgkxMFb5O2Jeq3H+75KYE9Eg81p5fa/MVw9wRsJsou6HX1noVAYvTHHSMqtbpImEnJgh1f/V/vwRo4azqte9iple7xMH6TW8h5G9yqWQWwh6Tqs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=IOSwlKoI; arc=none smtp.client-ip=198.175.65.20
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1724348776; c=relaxed/simple;
+	bh=7EQIYt13u1ufOn0dF1PhuSW3G9j8s6yiwX8zR1k49pA=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=THeniguDQr9vQCEZW7MAmH56sSxp1A2uQimnGkTZ4qq4rq9qLbL1UvrRkCuGyY6O0QLv6yNrE0zupEEOvvJIv80cWCXlAt0zUQyU7eGtEBWRqqOa66BABVjbr2dj1ifcUZohnTXui/7bhCvpfgNckJgr4qpzduHDNA+xHEalnlc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org; spf=pass smtp.mailfrom=acm.org; dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b=rjIRlRAW; arc=none smtp.client-ip=199.89.1.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=acm.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="IOSwlKoI"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1724347947; x=1755883947;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=AfTrLWvJzP6sg0GLoYe91VEO5f6pKvEjMe1OPa+oUw0=;
-  b=IOSwlKoIwYJQTG3paphGTL9nK/D4w8/NHpEvsWHee5iURk5jun6FU/Cd
-   Lgde/l+s3ME6qJlcZsPBBfVBGllLomcBulJzRfHV5R2WLQyqDc7g/m34f
-   ARP93z77wSFVwZuuN2R210BiiyPnmzGS3L7RIJGCi5arVDYeRXRIARBGw
-   u8/9U5LfTSQPy/UsSsue1+lkPilggXXB6ddZJOjgjTI7D5IPTe5QKuShm
-   4LWrevZyvYK8Zmgio9M1KMmH4yo36MhvTqUXnb42Ike93N9ph9gD9gB8Y
-   07YyWjghF9gD1+cd0kv6c7+ZIkHBNfxWO8yWkOfc/N8Y9LvsVafwT0aES
-   A==;
-X-CSE-ConnectionGUID: Oa1d6AYqSiu+YmLeeVZpoA==
-X-CSE-MsgGUID: ym2swJARR5+6O+xm+eOARQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11172"; a="22595773"
-X-IronPort-AV: E=Sophos;i="6.10,167,1719903600"; 
-   d="scan'208";a="22595773"
-Received: from fmviesa009.fm.intel.com ([10.60.135.149])
-  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Aug 2024 10:32:24 -0700
-X-CSE-ConnectionGUID: pok33G5YSpq47c0tk1gJfw==
-X-CSE-MsgGUID: XIKRcKBiTQiu2PljvX415Q==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.10,167,1719903600"; 
-   d="scan'208";a="61552883"
-Received: from lkp-server01.sh.intel.com (HELO 9a732dc145d3) ([10.239.97.150])
-  by fmviesa009.fm.intel.com with ESMTP; 22 Aug 2024 10:32:23 -0700
-Received: from kbuild by 9a732dc145d3 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1shBfZ-000D2P-0g;
-	Thu, 22 Aug 2024 17:32:21 +0000
-Date: Fri, 23 Aug 2024 01:31:24 +0800
-From: kernel test robot <lkp@intel.com>
-To: Heiner Kallweit <hkallweit1@gmail.com>,
-	Wolfram Sang <wsa-dev@sang-engineering.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	"linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>
-Subject: Re: [PATCH 1/3] i2c: Replace list-based mechanism for handling
- auto-detected clients
-Message-ID: <202408230125.uTXoWaqi-lkp@intel.com>
-References: <9eb8879b-f975-41fc-a098-0ad189cc583d@gmail.com>
+	dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b="rjIRlRAW"
+Received: from localhost (localhost [127.0.0.1])
+	by 009.lax.mailroute.net (Postfix) with ESMTP id 4WqVxL0s38zlgVnK;
+	Thu, 22 Aug 2024 17:46:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=acm.org; h=
+	content-transfer-encoding:content-type:content-type:in-reply-to
+	:from:from:content-language:references:subject:subject
+	:user-agent:mime-version:date:date:message-id:received:received;
+	 s=mr01; t=1724348770; x=1726940771; bh=qVK2FiFnMtuvYu+bq3EtpqrT
+	EJKTYCISPvN6V8lWiH0=; b=rjIRlRAWMp1mLl8huNJw04AxzHjl8qwfa60jFyHX
+	y5QMl5Y23U5WyZt4AxAvW5v4JIQziLCey34xh1sz/GNi3XZ887wXsc+tZexp5QU8
+	s7SZWCWNO56uaizkMImAJMYQLE/zqJY6OGJwAJ5gL5vb2pmjoakdUavO3zp/mETS
+	LKXEsZk4SnkGu/L5KjjySZNQSYS0ZeEM3zUZ7gols6pyrJXIcakcnO+LpKtiVtTL
+	6sDMUxLPtv/RfkUlR1Loh4f8fCfc3xBXRo0XLVERhWuhtrmf43gLbh+ETrSh9kZw
+	3YpmDtTPL1oSBpxTL3YSAUPhcymnr4X6S1rYpDk6mbGk1Q==
+X-Virus-Scanned: by MailRoute
+Received: from 009.lax.mailroute.net ([127.0.0.1])
+ by localhost (009.lax [127.0.0.1]) (mroute_mailscanner, port 10029) with LMTP
+ id nJM9SFjvr3SX; Thu, 22 Aug 2024 17:46:10 +0000 (UTC)
+Received: from [100.66.154.22] (unknown [104.135.204.82])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: bvanassche@acm.org)
+	by 009.lax.mailroute.net (Postfix) with ESMTPSA id 4WqVxF02qtzlgVnF;
+	Thu, 22 Aug 2024 17:46:08 +0000 (UTC)
+Message-ID: <f67e8c72-2413-444e-b8c3-745ae78fb38c@acm.org>
+Date: Thu, 22 Aug 2024 10:46:07 -0700
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <9eb8879b-f975-41fc-a098-0ad189cc583d@gmail.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 5/9] ufs: core: Move the ufshcd_device_init() call
+To: kernel test robot <lkp@intel.com>,
+ "Martin K . Petersen" <martin.petersen@oracle.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+ linux-scsi@vger.kernel.org,
+ "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+ Peter Wang <peter.wang@mediatek.com>,
+ Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+ Avri Altman <avri.altman@wdc.com>, Bean Huo <beanhuo@micron.com>,
+ Andrew Halaney <ahalaney@redhat.com>
+References: <20240819225102.2437307-6-bvanassche@acm.org>
+ <202408222305.wOhpxPXn-lkp@intel.com>
+Content-Language: en-US
+From: Bart Van Assche <bvanassche@acm.org>
+In-Reply-To: <202408222305.wOhpxPXn-lkp@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Hi Heiner,
+On 8/22/24 9:07 AM, kernel test robot wrote:
+>>> drivers/ufs/core/ufshcd.c:8871:6: warning: variable 'ret' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
 
-kernel test robot noticed the following build errors:
+I plan to fix this compiler warning by combining the following change
+into patch 5/9:
 
-[auto build test ERROR on wsa/i2c/for-next]
-[also build test ERROR on linus/master v6.11-rc4 next-20240822]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+diff --git a/drivers/ufs/core/ufshcd.c b/drivers/ufs/core/ufshcd.c
+index 9af293b39672..313b62509162 100644
+--- a/drivers/ufs/core/ufshcd.c
++++ b/drivers/ufs/core/ufshcd.c
+@@ -8832,7 +8832,7 @@ static int ufshcd_probe_hba(struct ufs_hba *hba)
+  {
+         ktime_t start = ktime_get();
+         unsigned long flags;
+-       int ret;
++       int ret = 0;
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Heiner-Kallweit/i2c-Replace-list-based-mechanism-for-handling-auto-detected-clients/20240822-044950
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git i2c/for-next
-patch link:    https://lore.kernel.org/r/9eb8879b-f975-41fc-a098-0ad189cc583d%40gmail.com
-patch subject: [PATCH 1/3] i2c: Replace list-based mechanism for handling auto-detected clients
-config: powerpc-allyesconfig (https://download.01.org/0day-ci/archive/20240823/202408230125.uTXoWaqi-lkp@intel.com/config)
-compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 26670e7fa4f032a019d23d56c6a02926e854e8af)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240823/202408230125.uTXoWaqi-lkp@intel.com/reproduce)
+         if (!hba->pm_op_in_progress &&
+             (hba->quirks & UFSHCD_QUIRK_REINIT_AFTER_MAX_GEAR_SWITCH)) {
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202408230125.uTXoWaqi-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
-   In file included from sound/ppc/keywest.c:10:
-   In file included from include/linux/i2c.h:19:
-   In file included from include/linux/regulator/consumer.h:35:
-   In file included from include/linux/suspend.h:5:
-   In file included from include/linux/swap.h:9:
-   In file included from include/linux/memcontrol.h:13:
-   In file included from include/linux/cgroup.h:25:
-   In file included from include/linux/kernel_stat.h:8:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from arch/powerpc/include/asm/hardirq.h:6:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:14:
-   In file included from arch/powerpc/include/asm/io.h:24:
-   In file included from include/linux/mm.h:2228:
-   include/linux/vmstat.h:500:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     500 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     501 |                            item];
-         |                            ~~~~
-   include/linux/vmstat.h:507:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     507 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     508 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/vmstat.h:514:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     514 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
-   include/linux/vmstat.h:519:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     519 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     520 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/vmstat.h:528:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     528 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     529 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
->> sound/ppc/keywest.c:69:58: error: no member named 'clients' in 'struct i2c_driver'
-      69 |                       &to_i2c_driver(keywest_ctx->client->dev.driver)->clients);
-         |                        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~  ^
-   5 warnings and 1 error generated.
-
-
-vim +69 sound/ppc/keywest.c
-
-5de4155bb3760f Jean Delvare       2009-04-20  28  
-5de4155bb3760f Jean Delvare       2009-04-20  29  /*
-5de4155bb3760f Jean Delvare       2009-04-20  30   * This is kind of a hack, best would be to turn powermac to fixed i2c
-5de4155bb3760f Jean Delvare       2009-04-20  31   * bus numbers and declare the sound device as part of platform
-5de4155bb3760f Jean Delvare       2009-04-20  32   * initialization
-5de4155bb3760f Jean Delvare       2009-04-20  33   */
-^1da177e4c3f41 Linus Torvalds     2005-04-16  34  static int keywest_attach_adapter(struct i2c_adapter *adapter)
-^1da177e4c3f41 Linus Torvalds     2005-04-16  35  {
-5de4155bb3760f Jean Delvare       2009-04-20  36  	struct i2c_board_info info;
-04a9af2e038423 Wolfram Sang       2020-03-26  37  	struct i2c_client *client;
-^1da177e4c3f41 Linus Torvalds     2005-04-16  38  
-^1da177e4c3f41 Linus Torvalds     2005-04-16  39  	if (! keywest_ctx)
-^1da177e4c3f41 Linus Torvalds     2005-04-16  40  		return -EINVAL;
-^1da177e4c3f41 Linus Torvalds     2005-04-16  41  
-903dba1eae4927 Jean Delvare       2009-05-14  42  	if (strncmp(adapter->name, "mac-io", 6))
-ac397c80de8950 Wolfram Sang       2015-05-09  43  		return -EINVAL; /* ignored */
-^1da177e4c3f41 Linus Torvalds     2005-04-16  44  
-5de4155bb3760f Jean Delvare       2009-04-20  45  	memset(&info, 0, sizeof(struct i2c_board_info));
-75b1a8f9d62e50 Joe Perches        2021-01-04  46  	strscpy(info.type, "keywest", I2C_NAME_SIZE);
-5de4155bb3760f Jean Delvare       2009-04-20  47  	info.addr = keywest_ctx->addr;
-04a9af2e038423 Wolfram Sang       2020-03-26  48  	client = i2c_new_client_device(adapter, &info);
-04a9af2e038423 Wolfram Sang       2020-03-26  49  	if (IS_ERR(client))
-04a9af2e038423 Wolfram Sang       2020-03-26  50  		return PTR_ERR(client);
-04a9af2e038423 Wolfram Sang       2020-03-26  51  	keywest_ctx->client = client;
-04a9af2e038423 Wolfram Sang       2020-03-26  52  
-18c4078489fe06 Takashi Iwai       2009-10-01  53  	/*
-18c4078489fe06 Takashi Iwai       2009-10-01  54  	 * We know the driver is already loaded, so the device should be
-18c4078489fe06 Takashi Iwai       2009-10-01  55  	 * already bound. If not it means binding failed, and then there
-18c4078489fe06 Takashi Iwai       2009-10-01  56  	 * is no point in keeping the device instantiated.
-18c4078489fe06 Takashi Iwai       2009-10-01  57  	 */
-a7cde6d25c494e Lars-Peter Clausen 2013-09-29  58  	if (!keywest_ctx->client->dev.driver) {
-18c4078489fe06 Takashi Iwai       2009-10-01  59  		i2c_unregister_device(keywest_ctx->client);
-18c4078489fe06 Takashi Iwai       2009-10-01  60  		keywest_ctx->client = NULL;
-18c4078489fe06 Takashi Iwai       2009-10-01  61  		return -ENODEV;
-18c4078489fe06 Takashi Iwai       2009-10-01  62  	}
-^1da177e4c3f41 Linus Torvalds     2005-04-16  63  	
-5de4155bb3760f Jean Delvare       2009-04-20  64  	/*
-5de4155bb3760f Jean Delvare       2009-04-20  65  	 * Let i2c-core delete that device on driver removal.
-5de4155bb3760f Jean Delvare       2009-04-20  66  	 * This is safe because i2c-core holds the core_lock mutex for us.
-5de4155bb3760f Jean Delvare       2009-04-20  67  	 */
-5de4155bb3760f Jean Delvare       2009-04-20  68  	list_add_tail(&keywest_ctx->client->detected,
-a7cde6d25c494e Lars-Peter Clausen 2013-09-29 @69  		      &to_i2c_driver(keywest_ctx->client->dev.driver)->clients);
-^1da177e4c3f41 Linus Torvalds     2005-04-16  70  	return 0;
-^1da177e4c3f41 Linus Torvalds     2005-04-16  71  }
-^1da177e4c3f41 Linus Torvalds     2005-04-16  72  
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Bart.
