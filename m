@@ -1,202 +1,430 @@
-Received: from mail-qt1-f170.google.com (mail-qt1-f170.google.com [209.85.160.170])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB89F1CDFD5
-	for <llvm@lists.linux.dev>; Thu, 22 Aug 2024 20:39:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF799168C20;
+	Thu, 22 Aug 2024 23:13:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724359191; cv=none; b=ZBc2MzgHaWXmHLNQJe8IozjPowGfIt9Okdw3ubB9AFfedq0sHTQfIekgxBWq/LgvuLpQ4AhR1xx/1igcgMJfuDgFw6DNogm63Cq0g0HbEKg7QUxz8iMyHEt5Xv31jA7ZVgVJLQLgipvO0rGViLZ8jntCorgiypChT5eYO5WPJoc=
+	t=1724368413; cv=none; b=kAvIbyPeT9n3cnveBbjDTeCHL85UNkUMgtOI53IsC1BbKMmfKrNPWtUDcZhETILTxY+BMmy+qtaF3kUkLtxW9bk24S3BD5s7BDGUp4C2DNtn+Zm2Kc2MCEofPl4db9hReNOt/xVSE5178DfEZSw/FIL7VBw92ttjB6qqFq/kf4g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724359191; c=relaxed/simple;
-	bh=JS0v38HV8Wg7E55STInBy8yWP26ksAQEwkItOSrWyEk=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=jQ5cFKx7JyqxSKrhkcyeypj4/XZAVmrhcmn4tfF7B7WpTMiuSyIOF9cIZ20vYW5/zgp8yti/vNUwEdlRzJhFROH/T2R4ZgsHO8UgvFFhP4S3pxjrzv2yyYBFWJ13GSa1xzY9EWLoeyrFlMq5CtR3qMRQq9xLlgrzAlnrGBnIn9w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=ltZcbdSb; arc=none smtp.client-ip=209.85.160.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	s=arc-20240116; t=1724368413; c=relaxed/simple;
+	bh=TAMX8QsL8uiGQwqtkfnQTvM5gnjyCIZExznlqwceoRA=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=jp99a2SmCyW3vAG4Pdj7mfBnRKq3PGkawJ0K12sP1PQlsQkIvFPulVDHoLtLygkHcFIWXyyPIvegv7bVVoAFgilLr8RxP7Qbepo3NB/3V7OOylcsXIeDIjLrsF7X8gRfJQzjLA3amzF8Ch02F2Yh8QRReOJeITKA8hCnrMzToKg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JzP/gGLA; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="ltZcbdSb"
-Received: by mail-qt1-f170.google.com with SMTP id d75a77b69052e-4518d9fa2f4so94301cf.0
-        for <llvm@lists.linux.dev>; Thu, 22 Aug 2024 13:39:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1724359189; x=1724963989; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=NkYWMas3iG5xbkxW9s1JpA1hKS4hH3nB7s5U37ETy4k=;
-        b=ltZcbdSbX9hmp/hTCN0v1CjKF7DVrmcaXmlXqQxokqhYEkw+ZDC83XJNhfSsT4HULf
-         4qrOitYm5YmAV9G5Wo0jVFVUCVLLnVTx7GDL/WqP80b4BvaBOhxGx+ra/y4eF0GFNtf3
-         4C9BT7TbpUp3CWAeIcYfU2blaVN7wguHgp7PrVvPpqODsUAxng2sctNkGqsbnoEY/pG+
-         W/nQVmrHkho85RCk5rjEzoJMXmoFQs0axHl4jKSzp0y3JsJDcsT+79I50Gw262j3KYcY
-         hoP6u4EN/w8JTZdiKjrVHocddYBREZ3gkKQHU8tHI8it2sKEXS1QuX1kHdpl1ARAOZ2a
-         R3PQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1724359189; x=1724963989;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=NkYWMas3iG5xbkxW9s1JpA1hKS4hH3nB7s5U37ETy4k=;
-        b=Fcaqz6/KLLBD9uBTpd0LEPF5dWVMQDPYowqFzatLqSijmWQ5SYcseyEsBxZcabj+Ph
-         dpV47QQaJ1hvPIqco5fcsT8BZ9mPZRfckg3vAokE02nOTmAi/domI+KTD/uF7bnWXuEX
-         JcB9vhY3zoo9y1xEG0T8xVU/eGJN2EuqJ6bE60n+TJLawdj/2ynXNtNLe7h2vdS/6v37
-         ul+Kg0K5mRnuBPDvb9ntMz42zc9mQx3IKuKQ4j0MOmJZ4Cbb3GQXrSOHi5x/TVF9dsIm
-         g+w4ZDzrbCB73oUgEMKmcLJ91tq1kYfG56LLuUiK0QYkqESoIzQROX6cD1QJMjwhv8nA
-         88og==
-X-Forwarded-Encrypted: i=1; AJvYcCVdIUxXFRoBS39ildp3X7UJmugOiUGGGjseqMXwF5xkk96Jen0dw33KhRd8YbOIUoF/vVwm@lists.linux.dev
-X-Gm-Message-State: AOJu0YxoW+mw8dW1VBPyoLKHULrftdXuke2B03E8G1PwvhgoBRhos1KR
-	Xkwpc2Bux57PF0fvBd68FnbAVhNgAxak/q8LNkcoDckAig4BKOzFmg+PP8m059paGxeScO9Lpuy
-	fLVF0p90UOOpZMfem9eKsZ82deeHyKna+O1kB
-X-Google-Smtp-Source: AGHT+IFtNH2xvRxz7FD74vkPbGXgg5sqxHKyw5vloUG+ZQNfoD1itfQBUsLqEqIVhUxSr89ba/R4FfOegUItvIMBJTg=
-X-Received: by 2002:a05:622a:5b05:b0:447:d78d:773b with SMTP id
- d75a77b69052e-4550813540amr917951cf.6.1724359188351; Thu, 22 Aug 2024
- 13:39:48 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JzP/gGLA"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 42494C32782;
+	Thu, 22 Aug 2024 23:13:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1724368411;
+	bh=TAMX8QsL8uiGQwqtkfnQTvM5gnjyCIZExznlqwceoRA=;
+	h=From:To:Cc:Subject:Date:From;
+	b=JzP/gGLA5YDMA58IOT1SDJU7jwf+zCJch5lIg3m/Y6e/QZCtCadWqXiEHyuiEGHss
+	 9peWmFvp6HX4cn/p+o/7diyBnu9YPKQeoVOXvgfe4ypJg3aWcX9qS548jtLImkXIoO
+	 jNdixRTkAebLsqTkNgTJ1TtohV8SStjiN34FprDMpSJN6K7bcKfTYwVjcsoDBQw2t7
+	 gBjKaJ8nNj7dyfi1VXtDr14cikLb4zC1MkWeheg+L3HtMSRQVbqVwMEPEOLncPwvvA
+	 YMLw8vcBmmFiIEuorlevB2MSOFktNZB5FNnNyAFFG1EgHR8Xy2VGrc7n0mjzYqfruz
+	 Zqz7WqTyWk9RQ==
+From: Kees Cook <kees@kernel.org>
+To: Vlastimil Babka <vbabka@suse.cz>
+Cc: Kees Cook <kees@kernel.org>,
+	Christoph Lameter <cl@linux.com>,
+	Pekka Enberg <penberg@kernel.org>,
+	David Rientjes <rientjes@google.com>,
+	Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Roman Gushchin <roman.gushchin@linux.dev>,
+	Hyeonggon Yoo <42.hyeyoo@gmail.com>,
+	"Gustavo A . R . Silva" <gustavoars@kernel.org>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Jann Horn <jannh@google.com>,
+	Przemek Kitszel <przemyslaw.kitszel@intel.com>,
+	Marco Elver <elver@google.com>,
+	linux-mm@kvack.org,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev,
+	linux-hardening@vger.kernel.org
+Subject: [PATCH v3] slab: Introduce kmalloc_obj() and family
+Date: Thu, 22 Aug 2024 16:13:28 -0700
+Message-Id: <20240822231324.make.666-kees@kernel.org>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20240819151512.2363698-2-surenb@google.com> <202408230020.U02tOvjb-lkp@intel.com>
-In-Reply-To: <202408230020.U02tOvjb-lkp@intel.com>
-From: Suren Baghdasaryan <surenb@google.com>
-Date: Thu, 22 Aug 2024 13:39:37 -0700
-Message-ID: <CAJuCfpFQ=BQrv3o9gheZ8wXyQEk6bbEw0DLeBVFHfPKw0cufAA@mail.gmail.com>
-Subject: Re: [PATCH 1/5] alloc_tag: load module tags into separate continuous memory
-To: kernel test robot <lkp@intel.com>
-Cc: akpm@linux-foundation.org, llvm@lists.linux.dev, 
-	oe-kbuild-all@lists.linux.dev, kent.overstreet@linux.dev, corbet@lwn.net, 
-	arnd@arndb.de, mcgrof@kernel.org, rppt@kernel.org, paulmck@kernel.org, 
-	thuth@redhat.com, tglx@linutronix.de, bp@alien8.de, 
-	xiongwei.song@windriver.com, ardb@kernel.org, david@redhat.com, 
-	vbabka@suse.cz, mhocko@suse.com, hannes@cmpxchg.org, roman.gushchin@linux.dev, 
-	dave@stgolabs.net, willy@infradead.org, liam.howlett@oracle.com, 
-	pasha.tatashin@soleen.com, souravpanda@google.com, keescook@chromium.org, 
-	dennis@kernel.org, jhubbard@nvidia.com, yuzhao@google.com, vvvvvv@google.com, 
-	rostedt@goodmis.org, iamjoonsoo.kim@lge.com, rientjes@google.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-Developer-Signature: v=1; a=openpgp-sha256; l=15177; i=kees@kernel.org; h=from:subject:message-id; bh=TAMX8QsL8uiGQwqtkfnQTvM5gnjyCIZExznlqwceoRA=; b=owGbwMvMwCVmps19z/KJym7G02pJDGnHj0nsn5XNE7b7V3nIbX6X/Wq6xzdU1T6f2qJg8TP42 zOOsLeXO0pZGMS4GGTFFFmC7NzjXDzetoe7z1WEmcPKBDKEgYtTACai9p6R4Zep6y75CbrmKyb5 ryhjf6isubfGf/li7vMfPp6+vjbrqTojw/Lyi/97123mmqLlmH/L82A9M+uiSIU7C0M5zew7TCU f8QEA
+X-Developer-Key: i=kees@kernel.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
+Content-Transfer-Encoding: 8bit
 
-On Thu, Aug 22, 2024 at 10:10=E2=80=AFAM kernel test robot <lkp@intel.com> =
-wrote:
->
-> Hi Suren,
->
-> kernel test robot noticed the following build errors:
->
-> [auto build test ERROR on 651c8c1d735983040bec4f71d0e2e690f3c0fc2d]
->
-> url:    https://github.com/intel-lab-lkp/linux/commits/Suren-Baghdasaryan=
-/alloc_tag-load-module-tags-into-separate-continuous-memory/20240819-231747
-> base:   651c8c1d735983040bec4f71d0e2e690f3c0fc2d
-> patch link:    https://lore.kernel.org/r/20240819151512.2363698-2-surenb%=
-40google.com
-> patch subject: [PATCH 1/5] alloc_tag: load module tags into separate cont=
-inuous memory
-> config: s390-randconfig-001-20240822 (https://download.01.org/0day-ci/arc=
-hive/20240823/202408230020.U02tOvjb-lkp@intel.com/config)
-> compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 2=
-6670e7fa4f032a019d23d56c6a02926e854e8af)
-> reproduce (this is a W=3D1 build): (https://download.01.org/0day-ci/archi=
-ve/20240823/202408230020.U02tOvjb-lkp@intel.com/reproduce)
->
-> If you fix the issue in a separate patch/commit (i.e. not just a new vers=
-ion of
-> the same patch/commit), kindly add following tags
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes: https://lore.kernel.org/oe-kbuild-all/202408230020.U02tOvjb-lkp=
-@intel.com/
->
-> All error/warnings (new ones prefixed by >>):
->
->    In file included from lib/alloc_tag.c:3:
->    In file included from include/linux/execmem.h:6:
->    In file included from include/linux/moduleloader.h:6:
->    In file included from include/linux/module.h:19:
->    In file included from include/linux/elf.h:6:
->    In file included from arch/s390/include/asm/elf.h:181:
->    In file included from arch/s390/include/asm/mmu_context.h:11:
->    In file included from arch/s390/include/asm/pgalloc.h:18:
->    In file included from include/linux/mm.h:2199:
->    include/linux/vmstat.h:504:43: warning: arithmetic between different e=
-numeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-=
-enum-conversion]
->      504 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
->          |                            ~~~~~~~~~~~~~~~~~~~~~ ^
->      505 |                            item];
->          |                            ~~~~
->    include/linux/vmstat.h:511:43: warning: arithmetic between different e=
-numeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-=
-enum-conversion]
->      511 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
->          |                            ~~~~~~~~~~~~~~~~~~~~~ ^
->      512 |                            NR_VM_NUMA_EVENT_ITEMS +
->          |                            ~~~~~~~~~~~~~~~~~~~~~~
->    include/linux/vmstat.h:518:36: warning: arithmetic between different e=
-numeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-c=
-onversion]
->      518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip =
-"nr_"
->          |                               ~~~~~~~~~~~ ^ ~~~
->    include/linux/vmstat.h:524:43: warning: arithmetic between different e=
-numeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-=
-enum-conversion]
->      524 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
->          |                            ~~~~~~~~~~~~~~~~~~~~~ ^
->      525 |                            NR_VM_NUMA_EVENT_ITEMS +
->          |                            ~~~~~~~~~~~~~~~~~~~~~~
-> >> lib/alloc_tag.c:16:22: warning: tentative definition of variable with =
-internal linkage has incomplete non-array type 'struct module' [-Wtentative=
--definition-incomplete-type]
->       16 | static struct module unloaded_mod;
+Introduce type-aware kmalloc-family helpers to replace the common
+idioms for single, array, and flexible object allocations:
 
-Same issue here. I need to fix CONFIG_MODULES=3Dn config.
+	ptr = kmalloc(sizeof(*ptr), gfp);
+	ptr = kzalloc(sizeof(*ptr), gfp);
+	ptr = kmalloc_array(count, sizeof(*ptr), gfp);
+	ptr = kcalloc(count, sizeof(*ptr), gfp);
+	ptr = kmalloc(struct_size(ptr, flex_member, count), gfp);
 
->          |                      ^
->    include/linux/printk.h:358:8: note: forward declaration of 'struct mod=
-ule'
->      358 | struct module;
->          |        ^
->    lib/alloc_tag.c:18:22: warning: tentative definition of variable with =
-internal linkage has incomplete non-array type 'struct module' [-Wtentative=
--definition-incomplete-type]
->       18 | static struct module prepend_mod;
->          |                      ^
->    include/linux/printk.h:358:8: note: forward declaration of 'struct mod=
-ule'
->      358 | struct module;
->          |        ^
-> >> lib/alloc_tag.c:16:22: error: tentative definition has type 'struct mo=
-dule' that is never completed
->       16 | static struct module unloaded_mod;
->          |                      ^
->    include/linux/printk.h:358:8: note: forward declaration of 'struct mod=
-ule'
->      358 | struct module;
->          |        ^
->    lib/alloc_tag.c:18:22: error: tentative definition has type 'struct mo=
-dule' that is never completed
->       18 | static struct module prepend_mod;
->          |                      ^
->    include/linux/printk.h:358:8: note: forward declaration of 'struct mod=
-ule'
->      358 | struct module;
->          |        ^
->    6 warnings and 2 errors generated.
->
->
-> vim +16 lib/alloc_tag.c
->
->     11
->     12  static struct codetag_type *alloc_tag_cttype;
->     13  static struct alloc_tag_module_section module_tags;
->     14  static struct maple_tree mod_area_mt =3D MTREE_INIT(mod_area_mt, =
-MT_FLAGS_ALLOC_RANGE);
->     15  /* A dummy object used to indicate an unloaded module */
->   > 16  static struct module unloaded_mod;
->     17  /* A dummy object used to indicate a module prepended area */
->     18  static struct module prepend_mod;
->     19
->
-> --
-> 0-DAY CI Kernel Test Service
-> https://github.com/intel/lkp-tests/wiki
+These become, respectively:
+
+	kmalloc_obj(ptr, gfp);
+	kzalloc_obj(ptr, gfp);
+	kmalloc_objs(ptr, count, gfp);
+	kzalloc_objs(ptr, count, gfp);
+	kmalloc_flex(ptr, flex_member, count, gfp);
+
+These each return the assigned value of ptr (which may be NULL on
+failure). For cases where the total size of the allocation is needed,
+the kmalloc_obj_sz(), kmalloc_objs_sz(), and kmalloc_flex_sz() family
+of macros can be used. For example:
+
+	info->size = struct_size(ptr, flex_member, count);
+	ptr = kmalloc(info->size, gfp);
+
+becomes:
+
+	kmalloc_flex_sz(ptr, flex_member, count, gfp, &info->size);
+
+Internal introspection of allocated type now becomes possible, allowing
+for future alignment-aware choices and hardening work. For example,
+adding __alignof(*ptr) as an argument to the internal allocators so that
+appropriate/efficient alignment choices can be made, or being able to
+correctly choose per-allocation offset randomization within a bucket
+that does not break alignment requirements.
+
+Introduces __flex_count() for when __builtin_get_counted_by() is added
+by GCC[1] and Clang[2]. The internal use of __flex_count() allows for
+automatically setting the counter member of a struct's flexible array
+member when it has been annotated with __counted_by(), avoiding any
+missed early size initializations while __counted_by() annotations are
+added to the kernel. Additionally, this also checks for "too large"
+allocations based on the type size of the counter variable. For example:
+
+	if (count > type_max(ptr->flex_count))
+		fail...;
+	info->size = struct_size(ptr, flex_member, count);
+	ptr = kmalloc(info->size, gfp);
+	ptr->flex_count = count;
+
+becomes (i.e. unchanged from earlier example):
+
+	kmalloc_flex_sz(ptr, flex_member, count, gfp, &info->size);
+
+Replacing all existing simple code patterns found via Coccinelle[3]
+shows what could be replaced immediately (saving roughly 1,500 lines):
+
+ 7040 files changed, 14128 insertions(+), 15557 deletions(-)
+
+Link: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=116016 [1]
+Link: https://github.com/llvm/llvm-project/issues/99774 [2]
+Link: https://github.com/kees/kernel-tools/blob/trunk/coccinelle/examples/kmalloc_obj-assign-size.cocci [3]
+Signed-off-by: Kees Cook <kees@kernel.org>
+---
+Initial testing looks good. Before I write all the self-tests, I just
+wanted to validate that the new API is reasonable (i.e. it is no longer
+using optional argument counts for choosing the internal API).
+
+ v3:
+  - Add .rst documentation
+  - Add kern-doc
+  - Return ptr instead of size by default
+  - Add *_sz() variants that provide allocation size output
+  - Implement __flex_counter() logic
+ v2: https://lore.kernel.org/linux-hardening/20240807235433.work.317-kees@kernel.org/
+ v1: https://lore.kernel.org/linux-hardening/20240719192744.work.264-kees@kernel.org/
+Cc: Vlastimil Babka <vbabka@suse.cz>
+Cc: Christoph Lameter <cl@linux.com>
+Cc: Pekka Enberg <penberg@kernel.org>
+Cc: David Rientjes <rientjes@google.com>
+Cc: Joonsoo Kim <iamjoonsoo.kim@lge.com>
+Cc: Andrew Morton <akpm@linux-foundation.org>
+Cc: Roman Gushchin <roman.gushchin@linux.dev>
+Cc: Hyeonggon Yoo <42.hyeyoo@gmail.com>
+Cc: Gustavo A. R. Silva <gustavoars@kernel.org>
+Cc: Bill Wendling <morbo@google.com>
+Cc: Justin Stitt <justinstitt@google.com>
+Cc: Jann Horn <jannh@google.com>
+Cc: Przemek Kitszel <przemyslaw.kitszel@intel.com>
+Cc: Marco Elver <elver@google.com>
+Cc: linux-mm@kvack.org
+---
+ Documentation/process/deprecated.rst |  41 +++++++
+ include/linux/compiler_types.h       |  22 ++++
+ include/linux/slab.h                 | 174 +++++++++++++++++++++++++++
+ 3 files changed, 237 insertions(+)
+
+diff --git a/Documentation/process/deprecated.rst b/Documentation/process/deprecated.rst
+index 1f7f3e6c9cda..b22ec088a044 100644
+--- a/Documentation/process/deprecated.rst
++++ b/Documentation/process/deprecated.rst
+@@ -372,3 +372,44 @@ The helper must be used::
+ 			DECLARE_FLEX_ARRAY(struct type2, two);
+ 		};
+ 	};
++
++Open-coded kmalloc assignments
++------------------------------
++Performing open-coded kmalloc()-family allocation assignments prevents
++the kernel (and compiler) from being able to examine the type of the
++variable being assigned, which limits any related introspection that
++may help with alignment, wrap-around, or additional hardening. The
++kmalloc_obj()-family of macros provide this introspection, which can be
++used for the common code patterns for single, array, and flexible object
++allocations. For example, these open coded assignments::
++
++	ptr = kmalloc(sizeof(*ptr), gfp);
++	ptr = kzalloc(sizeof(*ptr), gfp);
++	ptr = kmalloc_array(count, sizeof(*ptr), gfp);
++	ptr = kcalloc(count, sizeof(*ptr), gfp);
++	ptr = kmalloc(struct_size(ptr, flex_member, count), gfp);
++
++become, respectively::
++
++	kmalloc_obj(ptr, gfp);
++	kzalloc_obj(ptr, gfp);
++	kmalloc_objs(ptr, count, gfp);
++	kzalloc_objs(ptr, count, gfp);
++	kmalloc_flex(ptr, flex_member, count, gfp);
++
++For the cases where the total size of the allocation is also needed,
++the kmalloc_obj_size(), kmalloc_objs_sz(), and kmalloc_flex_sz() family of
++macros can be used. For example, converting these assignments::
++
++	total_size = struct_size(ptr, flex_member, count);
++	ptr = kmalloc(total_size, gfp);
++
++becomes::
++
++	kmalloc_flex_sz(ptr, flex_member, count, gfp, &total_size);
++
++If `ptr->flex_member` is annotated with __counted_by(), the allocation
++will automatically fail if `count` is larger than the maximum
++representable value that can be stored in the counter member associated
++with `flex_member`. Similarly, the allocation will fail if the total
++size of the allocation exceeds the maximum value `*total_size` can hold.
+diff --git a/include/linux/compiler_types.h b/include/linux/compiler_types.h
+index f14c275950b5..b99deae45210 100644
+--- a/include/linux/compiler_types.h
++++ b/include/linux/compiler_types.h
+@@ -421,6 +421,28 @@ struct ftrace_likely_data {
+ #define __member_size(p)	__builtin_object_size(p, 1)
+ #endif
+ 
++#if __has_builtin(__builtin_get_counted_by)
++/**
++ * __flex_counter - Get pointer to counter member for the given
++ *		    flexible array, if it was annotated with __counted_by()
++ * @flex: Pointer to flexible array member of an addressable struct instance
++ *
++ * For example, with:
++ *
++ *	struct foo {
++ *		int counter;
++ *		short array[] __counted_by(counter);
++ *	} *p;
++ *
++ * __flex_counter(p->array) will resolve to &p->counter.
++ *
++ * If p->array is unannotated, this returns (void *)NULL.
++ */
++#define __flex_counter(flex)	__builtin_get_counted_by(flex)
++#else
++#define __flex_counter(flex)	((void *)NULL)
++#endif
++
+ /*
+  * Some versions of gcc do not mark 'asm goto' volatile:
+  *
+diff --git a/include/linux/slab.h b/include/linux/slab.h
+index eb2bf4629157..c37606b9e248 100644
+--- a/include/linux/slab.h
++++ b/include/linux/slab.h
+@@ -686,6 +686,180 @@ static __always_inline __alloc_size(1) void *kmalloc_noprof(size_t size, gfp_t f
+ }
+ #define kmalloc(...)				alloc_hooks(kmalloc_noprof(__VA_ARGS__))
+ 
++#define __alloc_objs(ALLOC, P, COUNT, FLAGS, SIZE)		\
++({								\
++	size_t __obj_size = size_mul(sizeof(*P), COUNT);	\
++	const typeof(_Generic(SIZE,				\
++			void *: (size_t *)NULL,			\
++			default: SIZE)) __size_ptr = (SIZE);	\
++	typeof(P) __obj_ptr = NULL;				\
++	/* Does the total size fit in the *SIZE variable? */	\
++	if (!__size_ptr || __obj_size <= type_max(*__size_ptr))	\
++		__obj_ptr = ALLOC(__obj_size, FLAGS);		\
++	if (!__obj_ptr)						\
++		__obj_size = 0;					\
++	if (__size_ptr)						\
++		*__size_ptr = __obj_size;			\
++	(P) = __obj_ptr;					\
++})
++
++#define __alloc_flex(ALLOC, P, FAM, COUNT, FLAGS, SIZE)			\
++({									\
++	size_t __count = (COUNT);					\
++	size_t __obj_size = struct_size(P, FAM, __count);		\
++	const typeof(_Generic(SIZE,					\
++			void *: (size_t *)NULL,				\
++			default: SIZE)) __size_ptr = (SIZE);		\
++	typeof(P) __obj_ptr = NULL;					\
++	/* Just query the counter type for type_max checking. */	\
++	typeof(_Generic(__flex_counter(__obj_ptr->FAM),			\
++			void *: (size_t *)NULL,				\
++			default: __flex_counter(__obj_ptr->FAM)))	\
++		__counter_type_ptr = NULL;				\
++	/* Does the count fit in the __counted_by counter member? */	\
++	if ((__count <= type_max(*__counter_type_ptr)) &&		\
++	    /* Does the total size fit in the *SIZE variable? */	\
++	    (!__size_ptr || __obj_size <= type_max(*__size_ptr)))	\
++		__obj_ptr = ALLOC(__obj_size, FLAGS);			\
++	if (__obj_ptr) {						\
++		/* __obj_ptr now allocated so get real counter ptr. */	\
++		typeof(_Generic(__flex_counter(__obj_ptr->FAM),		\
++				void *: (size_t *)NULL,			\
++				default: __flex_counter(__obj_ptr->FAM))) \
++			__counter_ptr = __flex_counter(__obj_ptr->FAM);	\
++		if (__counter_ptr)					\
++			*__counter_ptr = __count;			\
++	} else {							\
++		__obj_size = 0;						\
++	}								\
++	if (__size_ptr)							\
++		*__size_ptr = __obj_size;				\
++	(P) = __obj_ptr;						\
++})
++
++/**
++ * kmalloc_obj - Allocate a single instance of the given structure
++ * @P: Pointer to hold allocation of the structure
++ * @FLAGS: GFP flags for the allocation
++ *
++ * Returns the newly allocated value of @P on success, NULL on failure.
++ * @P is assigned the result, either way.
++ */
++#define kmalloc_obj(P, FLAGS)				\
++	__alloc_objs(kmalloc, P, 1, FLAGS, NULL)
++/**
++ * kmalloc_obj_sz - Allocate a single instance of the given structure and
++ *		 store total size
++ * @P: Pointer to hold allocation of the structure
++ * @FLAGS: GFP flags for the allocation
++ * @SIZE: Pointer to variable to hold the total allocation size
++ *
++ * Returns the newly allocated value of @P on success, NULL on failure.
++ * @P is assigned the result, either way. If @SIZE is non-NULL, the
++ * allocation will immediately fail if the total allocation size is larger
++ * than what the type of *@SIZE can represent.
++ */
++#define kmalloc_obj_sz(P, FLAGS, SIZE)			\
++	__alloc_objs(kmalloc, P, 1, FLAGS, SIZE)
++/**
++ * kmalloc_objs - Allocate an array of the given structure
++ * @P: Pointer to hold allocation of the structure array
++ * @COUNT: How many elements in the array
++ * @FLAGS: GFP flags for the allocation
++ *
++ * Returns the newly allocated value of @P on success, NULL on failure.
++ * @P is assigned the result, either way.
++ */
++#define kmalloc_objs(P, COUNT, FLAGS)			\
++	__alloc_objs(kmalloc, P, COUNT, FLAGS, NULL)
++/**
++ * kmalloc_objs_sz - Allocate an array of the given structure and store
++ *		     total size
++ * @P: Pointer to hold allocation of the structure array
++ * @COUNT: How many elements in the array
++ * @FLAGS: GFP flags for the allocation
++ * @SIZE: Pointer to variable to hold the total allocation size
++ *
++ * Returns the newly allocated value of @P on success, NULL on failure.
++ * @P is assigned the result, either way. If @SIZE is non-NULL, the
++ * allocation will immediately fail if the total allocation size is larger
++ * than what the type of *@SIZE can represent.
++ */
++#define kmalloc_objs_sz(P, COUNT, FLAGS, SIZE)		\
++	__alloc_objs(kmalloc, P, COUNT, FLAGS, SIZE)
++/**
++ * kmalloc_flex - Allocate a single instance of the given flexible structure
++ * @P: Pointer to hold allocation of the structure
++ * @FAM: The name of the flexible array member of the structure
++ * @COUNT: How many flexible array member elements are desired
++ * @FLAGS: GFP flags for the allocation
++ *
++ * Returns the newly allocated value of @P on success, NULL on failure.
++ * @P is assigned the result, either way. If @FAM has been annotated with
++ * __counted_by(), the allocation will immediately fail if @COUNT is larger
++ * than what the type of the struct's counter variable can represent.
++ */
++#define kmalloc_flex(P, FAM, COUNT, FLAGS)		\
++	__alloc_flex(kmalloc, P, FAM, COUNT, FLAGS, NULL)
++
++/**
++ * kmalloc_flex_sz - Allocate a single instance of the given flexible
++ *		     structure and store total size
++ * @P: Pointer to hold allocation of the structure
++ * @FAM: The name of the flexible array member of the structure
++ * @COUNT: How many flexible array member elements are desired
++ * @FLAGS: GFP flags for the allocation
++ * @SIZE: Pointer to variable to hold the total allocation size
++ *
++ * Returns the newly allocated value of @P on success, NULL on failure.
++ * @P is assigned the result, either way. If @FAM has been annotated with
++ * __counted_by(), the allocation will immediately fail if @COUNT is larger
++ * than what the type of the struct's counter variable can represent. If
++ * @SIZE is non-NULL, the allocation will immediately fail if the total
++ * allocation size is larger than what the type of *@SIZE can represent.
++ */
++#define kmalloc_flex_sz(P, FAM, COUNT, FLAGS, SIZE)	\
++	__alloc_flex(kmalloc, P, FAM, COUNT, FLAGS, SIZE)
++
++#define kzalloc_obj(P, FLAGS)				\
++	__alloc_objs(kzalloc, P, 1, FLAGS, NULL)
++#define kzalloc_obj_sz(P, FLAGS, SIZE)			\
++	__alloc_objs(kzalloc, P, 1, FLAGS, SIZE)
++#define kzalloc_objs(P, COUNT, FLAGS)			\
++	__alloc_objs(kzalloc, P, COUNT, FLAGS, NULL)
++#define kzalloc_objs_sz(P, COUNT, FLAGS, SIZE)		\
++	__alloc_objs(kzalloc, P, COUNT, FLAGS, SIZE)
++#define kzalloc_flex(P, FAM, COUNT, FLAGS)		\
++	__alloc_flex(kzalloc, P, FAM, COUNT, FLAGS, NULL)
++#define kzalloc_flex_sz(P, FAM, COUNT, FLAGS, SIZE)	\
++	__alloc_flex(kzalloc, P, FAM, COUNT, FLAGS, SIZE)
++
++#define kvmalloc_obj(P, FLAGS)				\
++	__alloc_objs(kvmalloc, P, 1, FLAGS, NULL)
++#define kvmalloc_obj_sz(P, FLAGS, SIZE)			\
++	__alloc_objs(kvmalloc, P, 1, FLAGS, SIZE)
++#define kvmalloc_objs(P, COUNT, FLAGS)			\
++	__alloc_objs(kvmalloc, P, COUNT, FLAGS, NULL)
++#define kvmalloc_objs_sz(P, COUNT, FLAGS, SIZE)		\
++	__alloc_objs(kvmalloc, P, COUNT, FLAGS, SIZE)
++#define kvmalloc_flex(P, FAM, COUNT, FLAGS)		\
++	__alloc_flex(kvmalloc, P, FAM, COUNT, FLAGS, NULL)
++#define kvmalloc_flex_sz(P, FAM, COUNT, FLAGS, SIZE)	\
++	__alloc_flex(kvmalloc, P, FAM, COUNT, FLAGS, SIZE)
++
++#define kvzalloc_obj(P, FLAGS)				\
++	__alloc_objs(kvzalloc, P, 1, FLAGS, NULL)
++#define kvzalloc_obj_sz(P, FLAGS, SIZE)			\
++	__alloc_objs(kvzalloc, P, 1, FLAGS, SIZE)
++#define kvzalloc_objs(P, COUNT, FLAGS)			\
++	__alloc_objs(kvzalloc, P, COUNT, FLAGS, NULL)
++#define kvzalloc_objs_sz(P, COUNT, FLAGS, SIZE)		\
++	__alloc_objs(kvzalloc, P, COUNT, FLAGS, SIZE)
++#define kvzalloc_flex(P, FAM, COUNT, FLAGS)		\
++	__alloc_flex(kvzalloc, P, FAM, COUNT, FLAGS, NULL)
++#define kvzalloc_flex_sz(P, FAM, COUNT, FLAGS, SIZE)	\
++	__alloc_flex(kvzalloc, P, FAM, COUNT, FLAGS, SIZE)
++
+ #define kmem_buckets_alloc(_b, _size, _flags)	\
+ 	alloc_hooks(__kmalloc_node_noprof(PASS_BUCKET_PARAMS(_size, _b), _flags, NUMA_NO_NODE))
+ 
+-- 
+2.34.1
+
