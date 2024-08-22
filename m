@@ -1,60 +1,62 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C2FB517A584;
-	Thu, 22 Aug 2024 11:51:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1925C1CBEAA;
+	Thu, 22 Aug 2024 13:33:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724327467; cv=none; b=L6+i/FM7AUl+mUg7aArX8PW4wvuLNU3cWBpCAzAqSzY788LdnlIlKKNYYFAsvLgBfSfE92TVHj6LjDG+9T1FefTyhpTdR3NoLeX5Nsn/vNSMoh0G4Mil70zECfuYshPV22ZmEc3ZRERtljYZFY9MCRPd+LQ4FzEi/2azhh6vqd4=
+	t=1724333594; cv=none; b=MRGKE0GhXiRIsIvySxLfqwJo1WSZ8I/nmt4Qk4lxE665fwPPwBzf2k40sW50y4QNqDg8QuC0YpVLD7tSE2B9b8ThOTQ2lsVbI4zwsXfvQFoguFuilxu4ft2xCyiqvBrMis3JMSDxzl7iRc7hxxNAB71UpDMbxT5QdxAcOEfO8cc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724327467; c=relaxed/simple;
-	bh=y5Ll5IV/gSUArRW04LkRMe1VRJkY1p4ESwfOUOSn3uQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=jfrY5LMuvSBdI8MWtBVHE3rC7x/qo3COnqPx0qKNzWbxSsmd/FaUp2EZ8vQqbjzmR4x3MW7l5tuKLzx2GtKCI7vUiNIQgD/J6wcEYBa6vJLTtljn0clKhIp+7abrWjxxAxo7zkEDAmi0XsXY6MFgajaTn3j2f7p/gr2DFSVv+5M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=kXQfNc6L; arc=none smtp.client-ip=192.198.163.12
+	s=arc-20240116; t=1724333594; c=relaxed/simple;
+	bh=YOQpzuPpXnB6FLMYSxu8prpD2kqwsQoJZlJ9qa6UWSw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=L60GdIRoDtorOEzin5HL64Ku26fs2Z0EIfQtCMzZJfR3Y/eUOS7Lu+eFX+6WZ/KeeMB8OihMiZFCTNW+XiYQS+01+OLJ8YqBVx8PtahQLDUWf67y6Me1v2D3uM7qdWlCKgginHjQvIqNxMMx+mGn8Re3tVg8VTko2Ka/wOosl+8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Jub/uZZ1; arc=none smtp.client-ip=198.175.65.14
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="kXQfNc6L"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Jub/uZZ1"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1724327466; x=1755863466;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=y5Ll5IV/gSUArRW04LkRMe1VRJkY1p4ESwfOUOSn3uQ=;
-  b=kXQfNc6L7KkcDAPTN/PerkiswbhgzUiUaxfeBXuvSRSFfPGaQgeVh53O
-   Pr2xTWlqDBQJTI7P0iER7dU5CqvdbX6liKndSkKSEeg0TAWsRS0lfvf2+
-   ZiXRBOBUGDFjpHbjLWLe2yDiO0O3LLWXj0u+xyODVTrY+jouL2nlmTu9k
-   3AWz8hbX44CqgEbPTyBETDc/J/mNPL1aI0RYLwLjjN8HK60jaMtfxBMsR
-   nqwjZd3F6BjCLycFgbRDDpVs9/vAsKlx5XPln1ZuVB2UcdwwKGLG79cG0
-   NAyOuHBO7hJ3sGsMPzsEWAqbJtIpRu9haldSJ6PAiIerUnOSRsOmY+HYC
-   w==;
-X-CSE-ConnectionGUID: JHJscDjsS9q8D/PLYC9j6Q==
-X-CSE-MsgGUID: 47Es8tvURPis/xoxRln5Ow==
-X-IronPort-AV: E=McAfee;i="6700,10204,11171"; a="26601893"
-X-IronPort-AV: E=Sophos;i="6.10,166,1719903600"; 
-   d="scan'208";a="26601893"
-Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Aug 2024 04:51:05 -0700
-X-CSE-ConnectionGUID: ycs3A8WJRYmUMFInBkXF2A==
-X-CSE-MsgGUID: pV3s+zmHQAegkZ5IiVQmdw==
+  t=1724333592; x=1755869592;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=YOQpzuPpXnB6FLMYSxu8prpD2kqwsQoJZlJ9qa6UWSw=;
+  b=Jub/uZZ1v/VXXkByls0m2YGFtB/3/W531JmadGyhLUsuo3NLcVC2IGuS
+   pmOOkwUplNqWm5bdPi+VS796S4pEoWJybsUHUcXWy5RF6OMtkJXjanRVD
+   K4zfDW9jXncWgildhMZ6i2D7MbtD+ZZnainOMpkOsDeAX4Tv5cHxthZ2p
+   S1tYrD+g/fyAoiE1B+kqHd8N3LQ0Dy8uzIipgBDMKl+kuOMVxxDAIQRpn
+   82kHEDSfmFuLPom3AxK3ixzvzukq8QnpGXlnWBE0PXHgAKJk3ZYCQi0//
+   Oj8wQUQzKzsjAzUjxhllbuPYFO6Up28j5N+s/E4Fp2IMRoJE4tOlbK5KR
+   A==;
+X-CSE-ConnectionGUID: LMU5BCe1T4+QQo6gQN5Hwg==
+X-CSE-MsgGUID: zbDA5v+oRBmQXZcg14r1Yw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11172"; a="26543135"
+X-IronPort-AV: E=Sophos;i="6.10,167,1719903600"; 
+   d="scan'208";a="26543135"
+Received: from fmviesa002.fm.intel.com ([10.60.135.142])
+  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Aug 2024 06:33:12 -0700
+X-CSE-ConnectionGUID: mZuSZ+AmQ0WSvzHpq1dwAQ==
+X-CSE-MsgGUID: HcwZRDhLQf6xVVmAv3B3bw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.10,167,1719903600"; 
-   d="scan'208";a="92167483"
+   d="scan'208";a="84615922"
 Received: from lkp-server01.sh.intel.com (HELO 9a732dc145d3) ([10.239.97.150])
-  by orviesa002.jf.intel.com with ESMTP; 22 Aug 2024 04:51:04 -0700
+  by fmviesa002.fm.intel.com with ESMTP; 22 Aug 2024 06:33:08 -0700
 Received: from kbuild by 9a732dc145d3 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1sh6LF-000CiC-1L;
-	Thu, 22 Aug 2024 11:51:01 +0000
-Date: Thu, 22 Aug 2024 19:50:11 +0800
+	id 1sh7w2-000Cn6-2S;
+	Thu, 22 Aug 2024 13:33:06 +0000
+Date: Thu, 22 Aug 2024 21:32:59 +0800
 From: kernel test robot <lkp@intel.com>
-To: AlvinZhou <alvinzhou@mxic.com.tw>
+To: "hongchi.peng" <hongchi.peng@siengine.com>, liviu.dudau@arm.com
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Miquel Raynal <miquel.raynal@bootlin.com>
-Subject: [miquelraynal:macronix/nand-next/spi-nand-cont-read 3/19]
- drivers/spi/spi-mxic-uefc.c:983:25: error: use of undeclared identifier
- 'mxic_uefc_of_ids'; did you mean 'mxic_uefc_spi_of_ids'?
-Message-ID: <202408221934.ia5BiDkx-lkp@intel.com>
+	maarten.lankhorst@linux.intel.com, mripard@kernel.org,
+	tzimmermann@suse.de, airlied@gmail.com, daniel@ffwll.ch,
+	dri-devel@lists.freedesktop.org, hongchi.peng@siengine.com
+Subject: Re: [PATCH] drm: komeda: Fix an issue related to normalized zpos
+Message-ID: <202408222146.r7E6lCGh-lkp@intel.com>
+References: <20240821085613.5408-1-hongchi.peng@siengine.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -63,22 +65,39 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20240821085613.5408-1-hongchi.peng@siengine.com>
 
-tree:   https://github.com/miquelraynal/linux-0day.git macronix/nand-next/spi-nand-cont-read
-head:   fadbfba401d2b839e573b267e4380bedc055da2c
-commit: 3a117622bcdd9cc7e4747224858f669a5209a35d [3/19] spi: Add support for MXIC UEFC SPI controller
-config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20240822/202408221934.ia5BiDkx-lkp@intel.com/config)
+Hi hongchi.peng,
+
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on drm-misc/drm-misc-next]
+[also build test ERROR on linus/master v6.11-rc4 next-20240822]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/hongchi-peng/drm-komeda-Fix-an-issue-related-to-normalized-zpos/20240822-045334
+base:   git://anongit.freedesktop.org/drm/drm-misc drm-misc-next
+patch link:    https://lore.kernel.org/r/20240821085613.5408-1-hongchi.peng%40siengine.com
+patch subject: [PATCH] drm: komeda: Fix an issue related to normalized zpos
+config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20240822/202408222146.r7E6lCGh-lkp@intel.com/config)
 compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 26670e7fa4f032a019d23d56c6a02926e854e8af)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240822/202408221934.ia5BiDkx-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240822/202408222146.r7E6lCGh-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202408221934.ia5BiDkx-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202408222146.r7E6lCGh-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
-   In file included from drivers/spi/spi-mxic-uefc.c:6:
+   In file included from drivers/gpu/drm/arm/display/komeda/komeda_kms.c:7:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
    In file included from include/linux/io.h:14:
    In file included from arch/hexagon/include/asm/io.h:328:
    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
@@ -90,7 +109,12 @@ All errors (new ones prefixed by >>):
    include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
       37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
          |                                                   ^
-   In file included from drivers/spi/spi-mxic-uefc.c:6:
+   In file included from drivers/gpu/drm/arm/display/komeda/komeda_kms.c:7:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
    In file included from include/linux/io.h:14:
    In file included from arch/hexagon/include/asm/io.h:328:
    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
@@ -99,7 +123,12 @@ All errors (new ones prefixed by >>):
    include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
       35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
          |                                                   ^
-   In file included from drivers/spi/spi-mxic-uefc.c:6:
+   In file included from drivers/gpu/drm/arm/display/komeda/komeda_kms.c:7:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
    In file included from include/linux/io.h:14:
    In file included from arch/hexagon/include/asm/io.h:328:
    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
@@ -111,35 +140,112 @@ All errors (new ones prefixed by >>):
    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
      605 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
          |                                                       ~~~~~~~~~~ ^
-   In file included from drivers/spi/spi-mxic-uefc.c:13:
-   In file included from include/linux/spi/spi.h:17:
-   In file included from include/linux/scatterlist.h:8:
+   In file included from drivers/gpu/drm/arm/display/komeda/komeda_kms.c:9:
+   In file included from include/drm/drm_atomic.h:31:
+   In file included from include/drm/drm_crtc.h:32:
+   In file included from include/drm/drm_modes.h:33:
+   In file included from include/drm/drm_connector.h:32:
+   In file included from include/drm/drm_util.h:36:
+   In file included from include/linux/kgdb.h:19:
+   In file included from include/linux/kprobes.h:28:
+   In file included from include/linux/ftrace.h:13:
+   In file included from include/linux/kallsyms.h:13:
    In file included from include/linux/mm.h:2228:
    include/linux/vmstat.h:514:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
      514 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
          |                               ~~~~~~~~~~~ ^ ~~~
->> drivers/spi/spi-mxic-uefc.c:983:25: error: use of undeclared identifier 'mxic_uefc_of_ids'; did you mean 'mxic_uefc_spi_of_ids'?
-     983 | MODULE_DEVICE_TABLE(of, mxic_uefc_of_ids);
-         |                         ^~~~~~~~~~~~~~~~
-         |                         mxic_uefc_spi_of_ids
-   include/linux/module.h:250:15: note: expanded from macro 'MODULE_DEVICE_TABLE'
-     250 | extern typeof(name) __mod_##type##__##name##_device_table               \
-         |               ^
-   drivers/spi/spi-mxic-uefc.c:979:34: note: 'mxic_uefc_spi_of_ids' declared here
-     979 | static const struct of_device_id mxic_uefc_spi_of_ids[] = {
-         |                                  ^
+>> drivers/gpu/drm/arm/display/komeda/komeda_kms.c:207:5: error: call to '__compiletime_assert_310' declared with 'error' attribute: max(slave_zpos, kcrtc_st->max_slave_zorder) signedness error
+     207 |                                 max(slave_zpos, kcrtc_st->max_slave_zorder);
+         |                                 ^
+   include/linux/minmax.h:136:19: note: expanded from macro 'max'
+     136 | #define max(x, y)       __careful_cmp(max, x, y)
+         |                         ^
+   include/linux/minmax.h:105:2: note: expanded from macro '__careful_cmp'
+     105 |         __careful_cmp_once(op, x, y, __UNIQUE_ID(x_), __UNIQUE_ID(y_))
+         |         ^
+   include/linux/minmax.h:100:2: note: expanded from macro '__careful_cmp_once'
+     100 |         BUILD_BUG_ON_MSG(!__types_ok(x,y,ux,uy),        \
+         |         ^
+   note: (skipping 2 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/linux/compiler_types.h:498:2: note: expanded from macro '_compiletime_assert'
+     498 |         __compiletime_assert(condition, msg, prefix, suffix)
+         |         ^
+   include/linux/compiler_types.h:491:4: note: expanded from macro '__compiletime_assert'
+     491 |                         prefix ## suffix();                             \
+         |                         ^
+   <scratch space>:79:1: note: expanded from here
+      79 | __compiletime_assert_310
+         | ^
    7 warnings and 1 error generated.
 
 
-vim +983 drivers/spi/spi-mxic-uefc.c
+vim +207 drivers/gpu/drm/arm/display/komeda/komeda_kms.c
 
-   978	
-   979	static const struct of_device_id mxic_uefc_spi_of_ids[] = {
-   980	    { .compatible = "mxic-uefc,uefc-spi", },
-   981	    { /* sentinel */ }
-   982	};
- > 983	MODULE_DEVICE_TABLE(of, mxic_uefc_of_ids);
-   984	
+   151	
+   152	static int komeda_crtc_normalize_zpos(struct drm_crtc *crtc,
+   153					      struct drm_crtc_state *crtc_st)
+   154	{
+   155		struct drm_atomic_state *state = crtc_st->state;
+   156		struct komeda_crtc *kcrtc = to_kcrtc(crtc);
+   157		struct komeda_crtc_state *kcrtc_st = to_kcrtc_st(crtc_st);
+   158		struct komeda_plane_state *kplane_st;
+   159		struct drm_plane_state *plane_st;
+   160		struct drm_plane *plane;
+   161		struct list_head zorder_list;
+   162		int order = 0, slave_zpos, err;
+   163	
+   164		DRM_DEBUG_ATOMIC("[CRTC:%d:%s] calculating normalized zpos values\n",
+   165				 crtc->base.id, crtc->name);
+   166	
+   167		INIT_LIST_HEAD(&zorder_list);
+   168	
+   169		/* This loop also added all effected planes into the new state */
+   170		drm_for_each_plane_mask(plane, crtc->dev, crtc_st->plane_mask) {
+   171			plane_st = drm_atomic_get_plane_state(state, plane);
+   172			if (IS_ERR(plane_st))
+   173				return PTR_ERR(plane_st);
+   174	
+   175			/* Build a list by zpos increasing */
+   176			err = komeda_plane_state_list_add(plane_st, &zorder_list);
+   177			if (err)
+   178				return err;
+   179		}
+   180	
+   181		kcrtc_st->max_slave_zorder = 0;
+   182	
+   183		list_for_each_entry(kplane_st, &zorder_list, zlist_node) {
+   184			plane_st = &kplane_st->base;
+   185			plane = plane_st->plane;
+   186	
+   187			plane_st->normalized_zpos = order++;
+   188			/* When layer_split has been enabled, one plane will be handled
+   189			 * by two separated komeda layers (left/right), which may needs
+   190			 * two zorders.
+   191			 * - zorder: for left_layer for left display part.
+   192			 * - zorder + 1: will be reserved for right layer.
+   193			 */
+   194			if (to_kplane_st(plane_st)->layer_split)
+   195				order++;
+   196	
+   197			DRM_DEBUG_ATOMIC("[PLANE:%d:%s] zpos:%d, normalized zpos: %d\n",
+   198					 plane->base.id, plane->name,
+   199					 plane_st->zpos, plane_st->normalized_zpos);
+   200	
+   201			/* calculate max slave zorder */
+   202			if (has_bit(drm_plane_index(plane), kcrtc->slave_planes)) {
+   203				slave_zpos = plane_st->normalized_zpos;
+   204				if (to_kplane_st(plane_st)->layer_split)
+   205					slave_zpos++;
+   206				kcrtc_st->max_slave_zorder =
+ > 207					max(slave_zpos, kcrtc_st->max_slave_zorder);
+   208			}
+   209		}
+   210	
+   211		crtc_st->zpos_changed = true;
+   212	
+   213		return 0;
+   214	}
+   215	
 
 -- 
 0-DAY CI Kernel Test Service
