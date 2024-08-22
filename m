@@ -1,219 +1,106 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yb1-f170.google.com (mail-yb1-f170.google.com [209.85.219.170])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E43A115C159;
-	Thu, 22 Aug 2024 08:05:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 127B616D4EF
+	for <llvm@lists.linux.dev>; Thu, 22 Aug 2024 08:39:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724313904; cv=none; b=JHu99tR+uncovyt3uA7v6/syzADm+1/HbqRfArI+f/1GBTJhQ5PZ4F7B8iyfiY/6kdK/duto/EWqOz3X4eNTzj9JQuLpRcADb194Oz2GdySK8Ql1oXbPSpKj0OP/9g3s98BSbrTQZRmfR3xe3mDBMgEfZwTrFBU7J95bqBooXyY=
+	t=1724315977; cv=none; b=c5tJRiEx1oFiNf+P167+HmDXn/663WgFtsIJ+EiiYC+MjaZtHPigQiplOEU4T6ssPbDpUUqXuK7ty3yCQYCPATMSgwjBUXSZvygnNm4NCr6Q33l4jF2XqfdrQgV+5IlytiPjkokeNsah+JcTZD5zW1bPQm92oYVXAicBkyMZds0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724313904; c=relaxed/simple;
-	bh=fm6pQUwUxuBv+6oy62hhbqM1OC8Ag4JBgdutDL6RhYA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=fiJQOVWoGzWu9Ek/R+T0D2f2eV/ohmlDZ7uydQJsJ6zA0Dj/MzyxN/7TWNQbJEZCleAR/AHeYoYWzOedNixaagj1uEKzb52AC8iwPnFsi4RyVCIT09n2ECVEMEyqm/8s/LwgBzzvbrefvpmoVAmSkU7d4GPZn+oSKhPFPqWKea4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=F5dSuazd; arc=none smtp.client-ip=192.198.163.8
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1724315977; c=relaxed/simple;
+	bh=/eQ4p2wkfuEw0Nha5S3OKTT7W6j71aVIFBzaGsaDr1A=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Q8uJHlZJiVr78TgzYTK+JKCR0glcOQQtgxm0AxZw5XM0JZ1ZG8GvooKp+fKjb0KN3pKmiSpvFcClvBY6C0HUhFPj8+/AbMH9CMvj0oFGmEtQqhy1+zY/vSsCisO6qkMDuhCGgE+vKarGaouHonU+ApmequcpWVTiYWJXd7O308Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sifive.com; spf=pass smtp.mailfrom=sifive.com; dkim=pass (2048-bit key) header.d=sifive.com header.i=@sifive.com header.b=DnPfic/S; arc=none smtp.client-ip=209.85.219.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sifive.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sifive.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="F5dSuazd"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1724313903; x=1755849903;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=fm6pQUwUxuBv+6oy62hhbqM1OC8Ag4JBgdutDL6RhYA=;
-  b=F5dSuazd8BiB4VOoty4IWF2WxBSo/rCWJfsLi9BPxYDp9yMCXsbNkAu0
-   5yYjdYoFKicPnaxayGA0LlaCj5LZeNBdUYNrOwNu54FKhFjE2gYw15GtU
-   TTsrDYCfCFWJU/QORpeEqHJIdRmTGk7I6/hd0NeCdT/TbDPqBSVDx1qnn
-   FDbhKKojbezuoh6tZ83pMjvAedDUl11QrqtulkwpfKwVXrwLm4PELZJ0j
-   Je2ScG4NIQQ0/f4IzRA3vzNEf9QOlcn5FJVfK81Fbuc4AnRFjHiaVfseD
-   LB/DDNDzuRujqEfNLPCvpodDKjap5PSYDC/LyRKD2Aj/NYYDbo+WzyJsA
-   g==;
-X-CSE-ConnectionGUID: fzvVWc7VTtimGX23VcdyZw==
-X-CSE-MsgGUID: GtOwp3dERgaXSVCFI7H0gg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11171"; a="40224144"
-X-IronPort-AV: E=Sophos;i="6.10,166,1719903600"; 
-   d="scan'208";a="40224144"
-Received: from fmviesa007.fm.intel.com ([10.60.135.147])
-  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Aug 2024 01:05:02 -0700
-X-CSE-ConnectionGUID: 4t9MExnhS2qk7cgpNILH6A==
-X-CSE-MsgGUID: LCYVEev5R5i8tBQYMiAqSQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.10,166,1719903600"; 
-   d="scan'208";a="61071853"
-Received: from lkp-server01.sh.intel.com (HELO 9a732dc145d3) ([10.239.97.150])
-  by fmviesa007.fm.intel.com with ESMTP; 22 Aug 2024 01:04:57 -0700
-Received: from kbuild by 9a732dc145d3 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1sh2oQ-000CYo-2z;
-	Thu, 22 Aug 2024 08:04:54 +0000
-Date: Thu, 22 Aug 2024 16:04:32 +0800
-From: kernel test robot <lkp@intel.com>
-To: Daniel Golle <daniel@makrotopia.org>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>, Andrew Lunn <andrew@lunn.ch>,
-	Heiner Kallweit <hkallweit1@gmail.com>,
-	Russell King <linux@armlinux.org.uk>,
-	Christian Marangi <ansuelsmth@gmail.com>,
-	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
-	Robert Marko <robimarko@gmail.com>,
-	Chad Monroe <chad.monroe@adtran.com>,
-	John Crispin <john@phrozen.org>, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	netdev@vger.kernel.org
-Subject: Re: [PATCH net-next 2/2] net: phy: aquantia: allow forcing order of
- MDI pairs
-Message-ID: <202408221523.6Cc0ADf9-lkp@intel.com>
-References: <ed46220cc4c52d630fc481c8148fc749242c368d.1724244281.git.daniel@makrotopia.org>
+	dkim=pass (2048-bit key) header.d=sifive.com header.i=@sifive.com header.b="DnPfic/S"
+Received: by mail-yb1-f170.google.com with SMTP id 3f1490d57ef6-e162df8bab4so558907276.0
+        for <llvm@lists.linux.dev>; Thu, 22 Aug 2024 01:39:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=sifive.com; s=google; t=1724315975; x=1724920775; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=/eQ4p2wkfuEw0Nha5S3OKTT7W6j71aVIFBzaGsaDr1A=;
+        b=DnPfic/Sqz/A0ScnOVRXlw6Ar1J/2I9OEbRqHjQC2wiOw0AVW3Dd1EPYpUfGptFTsm
+         JAZYyAA8cqcznzrtG4bD+gWRfB6a4w57jxrRwVA6m54v6UjV7KKIlucUt8BBayrvtwzw
+         jLMtk2nKYVp6i0U0SLIR91G4cZbUS9MeqB0bUX2mjm5zEgjsnNckGgS+T4p+TeaWW46d
+         uZlvEu0HTOmqjaokKDlsSunZpP0v+YX8s3FJsgMFVIgrilZHgbfHIJk31jAp0eYun4hq
+         n+pPma/o1ug9McU+trjVwVh2ZHY9wgFstk9+HicUqFxHJz+2e+nNJZYatMYQkUJG6KsI
+         UjsQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1724315975; x=1724920775;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=/eQ4p2wkfuEw0Nha5S3OKTT7W6j71aVIFBzaGsaDr1A=;
+        b=HJsP60io0+H0XoIE9VqV3QC2VkxIyswHke/fM8hxtrbDpzt1pPfdCpErTVpJClA6rR
+         cx0HnDQJYytR+zV3xvT8CJOtiwXkG8yMBE9vZqPEzfnOxCa3hqxGhnqgTyvhbzQzwTgj
+         ppOuptzek8QhhXP2+cRNlW0ulQiYP+Rcpjch5JjBM2M00R+BhfgOl9rotBpXCDgrqfZ8
+         CpYojVyR/Wna6c9xLepgiDGDFSb5TPFurdmYrz3Gb5M2lKFgy5G8dnSWB/Vsi49b3NqX
+         8S0vKEH8X6FCRInpGJhuRsZakicU1GaPoZuvG1bBx3aVjyZUMTFLc14jytx6pUojU14I
+         9+7g==
+X-Forwarded-Encrypted: i=1; AJvYcCUoXVmi/aDnH83ARfw7r9QClFiOME20uLJrfeQhk3WQx3kbWJZX2i1hgYzzjwZljxFsQd8G@lists.linux.dev
+X-Gm-Message-State: AOJu0YzvlcGmhafJah2j5QPNY8EMrJxqoO/yW3qiZfH67//6W4hPeelg
+	tDQsiDrGkNGKAZOFgRq+oygSh07V01ONo3nFaglxCv5rXxsYocp6sTIcAwGUqHT3F8yD7zGKRV+
+	kIcYnKyf+bbzPSIrlChmj53zf8VTfwlOpkxTo5g==
+X-Google-Smtp-Source: AGHT+IHkFdJeVV+WqzmMGZrvSF/bGpFOy2vIodVP1TRyAky2+0nTxS+aXkYfl2LkMvbDx6kyhrF2nGcG5PB1NQylZEg=
+X-Received: by 2002:a05:6902:2607:b0:e13:c8e7:5bcb with SMTP id
+ 3f1490d57ef6-e1665555b3emr6002370276.53.1724315974761; Thu, 22 Aug 2024
+ 01:39:34 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ed46220cc4c52d630fc481c8148fc749242c368d.1724244281.git.daniel@makrotopia.org>
+References: <20240628-dev-andyc-dyn-ftrace-v4-v2-0-1e5f4cb1f049@sifive.com>
+ <20240628-dev-andyc-dyn-ftrace-v4-v2-1-1e5f4cb1f049@sifive.com> <877cckadci.fsf@all.your.base.are.belong.to.us>
+In-Reply-To: <877cckadci.fsf@all.your.base.are.belong.to.us>
+From: Andy Chiu <andy.chiu@sifive.com>
+Date: Thu, 22 Aug 2024 16:39:23 +0800
+Message-ID: <CABgGipV9R_=Sy1uJ3YMXzm3S9W=yHWxRD1J=drFaw8-Jesym0w@mail.gmail.com>
+Subject: Re: [PATCH v2 1/6] riscv: ftrace: support fastcc in Clang for WITH_ARGS
+To: =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>
+Cc: Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>, 
+	Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti <alexghiti@rivosinc.com>, 
+	Zong Li <zong.li@sifive.com>, Steven Rostedt <rostedt@goodmis.org>, 
+	Masami Hiramatsu <mhiramat@kernel.org>, Mark Rutland <mark.rutland@arm.com>, 
+	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
+	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
+	Puranjay Mohan <puranjay@kernel.org>, Palmer Dabbelt <palmer@rivosinc.com>, 
+	linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org, 
+	linux-trace-kernel@vger.kernel.org, llvm@lists.linux.dev, 
+	Evgenii Shatokhin <e.shatokhin@yadro.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Daniel,
+On Tue, Aug 13, 2024 at 7:09=E2=80=AFPM Bj=C3=B6rn T=C3=B6pel <bjorn@kernel=
+.org> wrote:
+>
+> Andy Chiu <andy.chiu@sifive.com> writes:
+>
+> > Some caller-saved registers which are not defined as function arguments
+> > in the ABI can still be passed as arguments when the kernel is compiled
+> > with Clang. As a result, we must save and restore those registers to
+> > prevent ftrace from clobbering them.
+> >
+> > - [1]: https://reviews.llvm.org/D68559
+> >
+> > Reported-by: Evgenii Shatokhin <e.shatokhin@yadro.com>
+> > Closes: https://lore.kernel.org/linux-riscv/7e7c7914-445d-426d-89a0-59a=
+9199c45b1@yadro.com/
+> > Acked-by: Nathan Chancellor <nathan@kernel.org>
+> > Signed-off-by: Andy Chiu <andy.chiu@sifive.com>
+>
+> Shouldn't this be a separate fix? Still reading the details, but it
+> smells like something what should be disabled when building w/ LLVM, no?
 
-kernel test robot noticed the following build warnings:
+Yes, this is a fix. My intention was indicating the dependency. So
+people won't hit into trouble testing it. I can send it in a separate
+series.
 
-[auto build test WARNING on net-next/main]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Daniel-Golle/net-phy-aquantia-allow-forcing-order-of-MDI-pairs/20240821-210717
-base:   net-next/main
-patch link:    https://lore.kernel.org/r/ed46220cc4c52d630fc481c8148fc749242c368d.1724244281.git.daniel%40makrotopia.org
-patch subject: [PATCH net-next 2/2] net: phy: aquantia: allow forcing order of MDI pairs
-config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20240822/202408221523.6Cc0ADf9-lkp@intel.com/config)
-compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 26670e7fa4f032a019d23d56c6a02926e854e8af)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240822/202408221523.6Cc0ADf9-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202408221523.6Cc0ADf9-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
-   In file included from drivers/net/phy/aquantia/aquantia_main.c:15:
-   In file included from include/linux/phy.h:16:
-   In file included from include/linux/ethtool.h:18:
-   In file included from include/linux/if_ether.h:19:
-   In file included from include/linux/skbuff.h:17:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:10:
-   In file included from include/linux/mm.h:2228:
-   include/linux/vmstat.h:514:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     514 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
-   In file included from drivers/net/phy/aquantia/aquantia_main.c:15:
-   In file included from include/linux/phy.h:16:
-   In file included from include/linux/ethtool.h:18:
-   In file included from include/linux/if_ether.h:19:
-   In file included from include/linux/skbuff.h:17:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:12:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:14:
-   In file included from arch/hexagon/include/asm/io.h:328:
-   include/asm-generic/io.h:548:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     548 |         val = __raw_readb(PCI_IOBASE + addr);
-         |                           ~~~~~~~~~~ ^
-   include/asm-generic/io.h:561:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     561 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
-      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-         |                                                   ^
-   In file included from drivers/net/phy/aquantia/aquantia_main.c:15:
-   In file included from include/linux/phy.h:16:
-   In file included from include/linux/ethtool.h:18:
-   In file included from include/linux/if_ether.h:19:
-   In file included from include/linux/skbuff.h:17:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:12:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:14:
-   In file included from arch/hexagon/include/asm/io.h:328:
-   include/asm-generic/io.h:574:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     574 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
-      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
-         |                                                   ^
-   In file included from drivers/net/phy/aquantia/aquantia_main.c:15:
-   In file included from include/linux/phy.h:16:
-   In file included from include/linux/ethtool.h:18:
-   In file included from include/linux/if_ether.h:19:
-   In file included from include/linux/skbuff.h:17:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:12:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:14:
-   In file included from arch/hexagon/include/asm/io.h:328:
-   include/asm-generic/io.h:585:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     585 |         __raw_writeb(value, PCI_IOBASE + addr);
-         |                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:595:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     595 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:605:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     605 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
->> drivers/net/phy/aquantia/aquantia_main.c:483:5: warning: no previous prototype for function 'aqr107_config_mdi' [-Wmissing-prototypes]
-     483 | int aqr107_config_mdi(struct phy_device *phydev)
-         |     ^
-   drivers/net/phy/aquantia/aquantia_main.c:483:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-     483 | int aqr107_config_mdi(struct phy_device *phydev)
-         | ^
-         | static 
-   8 warnings generated.
-
-
-vim +/aqr107_config_mdi +483 drivers/net/phy/aquantia/aquantia_main.c
-
-   482	
- > 483	int aqr107_config_mdi(struct phy_device *phydev)
-   484	{
-   485		struct device_node *np = phydev->mdio.dev.of_node;
-   486		bool force_normal, force_reverse;
-   487	
-   488		force_normal = of_property_read_bool(np, "marvell,force-mdi-order-normal");
-   489		force_reverse = of_property_read_bool(np, "marvell,force-mdi-order-reverse");
-   490	
-   491		if (force_normal && force_reverse)
-   492			return -EINVAL;
-   493	
-   494		if (force_normal)
-   495			return phy_modify_mmd(phydev, MDIO_MMD_PMAPMD, PMAPMD_RSVD_VEND_PROV,
-   496					      PMAPMD_RSVD_VEND_PROV_MDI_CONF,
-   497					      PMAPMD_RSVD_VEND_PROV_MDI_FORCE);
-   498	
-   499		if (force_reverse)
-   500			return phy_modify_mmd(phydev, MDIO_MMD_PMAPMD, PMAPMD_RSVD_VEND_PROV,
-   501					      PMAPMD_RSVD_VEND_PROV_MDI_CONF,
-   502					      PMAPMD_RSVD_VEND_PROV_MDI_REVERSE |
-   503					      PMAPMD_RSVD_VEND_PROV_MDI_FORCE);
-   504	
-   505		return 0;
-   506	}
-   507	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Thanks,
+Andy
