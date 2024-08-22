@@ -1,64 +1,61 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 21EDC36B11;
-	Thu, 22 Aug 2024 03:04:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D9438208A7;
+	Thu, 22 Aug 2024 03:25:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724295860; cv=none; b=U99GibCk5iWFtjPRdBxszWnkg6/onzLEwSBcp6JatNi9i/hTjkl9Al++nTXu+N08DK4w9G/FBSmxpMbcF93cV0Clr8n7l/Nl1jQf96SHxjqjW2+edKoiiL64/xZbXGQVXQQjxWUCr1lpgV7kWREqD8xfnRTohlYQ2mKKLCw6Y6I=
+	t=1724297122; cv=none; b=izWR0pUKFTHTx73olR/Gsc0x1ZbHkPk6nxpy/WGvSeivNoupJ4fzXqGkQr8Jj/cg6janzCeC6cI3PxZJOKcosKLmpEaBicgjEVwgg01u1uSTUwudOeprvpaMs0/gCgvQCuCCb1Y36DjrgPnDPaY/aJKIgNpi4nE2sKCCxYTuT+8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724295860; c=relaxed/simple;
-	bh=lvNhs5V8N/5bFG9RwUsUEn2kFnJ+XtKOVbVwLk/GChI=;
+	s=arc-20240116; t=1724297122; c=relaxed/simple;
+	bh=8uy+Bg2eGFPzkDqiOgyhJynla4bqzmj8hPQSZfG+Los=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=nR8gBKiXrV2BJoMaIihcbipU+u0HOuwJzgrIGdE7yoJQd6qNNnFzEEGEVJFPdB7EQQR+m8D9uTtaKHk4rXdmTrPRHyyfHs1kLrw30U1/ItBdsJZtUmW127mZC15aXR7yaA0JijDxqvxzvv2zd0jbC5YCiBQjB9t5w+UYGgmUV5Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=OqffCBAO; arc=none smtp.client-ip=192.198.163.7
+	 Content-Type:Content-Disposition:In-Reply-To; b=TP9lrUzV5ukACgbMSwG/qwRnyE2M4fGuamF4SQWw/TUScMpFBBXSG+QdOn9AyGQ+6RgzN6Ks0DhuOEeJzvSjISWbvE5buGi+IzTzMJ9Mwwf2OhTmqy+/n69neQPpw9tlrNdfa4XFb91j4434uB2rq/+QCaQ/XNkgV1L7rcj5T6Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Sp727Q7D; arc=none smtp.client-ip=192.198.163.16
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="OqffCBAO"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Sp727Q7D"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1724295858; x=1755831858;
+  t=1724297120; x=1755833120;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=lvNhs5V8N/5bFG9RwUsUEn2kFnJ+XtKOVbVwLk/GChI=;
-  b=OqffCBAOaK4Gu4+BT5qtq19g3AJjI7Z58ADcFOfaKjFpuUqk2qDkrn3a
-   wT4MxfQnf4r9y0jMatnRC0J0Ozrz3LW2OQz3+BtkpuhR4beAqsDBwBrEH
-   J+Bs3ZHtkXdbQmVU8RcNjwv14hf4AW2rrpJb3MYRef4wphL9EhHR7FIiX
-   wQ2jNHJQ5rAG6Fzkxs+MVJSMMg8fgkI4Nn4k0AoyQ2ZcRoi993UQvTVY0
-   jzTGN+QRnRhsVH7YTz/ui3wz7znonDflOldSD6scmb5cpoPFWw5xi+Aeu
-   MexiUY8pFOKq3E3zqDysQ0BlZD5nB8nxqyBbtFNAEMTWfc0fKFMuOTDAp
-   A==;
-X-CSE-ConnectionGUID: XhpKGiKfRN6CQFfXbiicfQ==
-X-CSE-MsgGUID: oC+0hXBUQi6OZI2unOv27w==
-X-IronPort-AV: E=McAfee;i="6700,10204,11171"; a="48084083"
+  bh=8uy+Bg2eGFPzkDqiOgyhJynla4bqzmj8hPQSZfG+Los=;
+  b=Sp727Q7Dx9pd6fkhikon2vuPKNg7+8JRsVUBFfiYzvJFM86plgBWK8Nb
+   Osr3U2rWvBkui6vh1FcJGI126a29fBPgHg37gUApH5aurhzcixcW56MYZ
+   IvCOj9JOa3BdG1n4v21QNR6u6HZj4/bw4xprP6vAyOxroupMqfGpjDsYR
+   w7rgRQgMmnA98LjpKexYEgP3lEgV6fMAUGJq/yovPErI4s3NwjYq85RAy
+   DXdLzSZhW4aNb+CRV/wkt1mMzI45iEre9tICAXN2bVDLGYz1+IuZVx3F/
+   iLs7RemUwB80b7tWwJu72wCmcesPH3GOQwwEcfVopZtauKYtb8lyNWZaP
+   Q==;
+X-CSE-ConnectionGUID: TmdXJGYRTbWUuIVwOULy0A==
+X-CSE-MsgGUID: LT5iUz/vQo2fw/8WXp+UJw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11171"; a="13145926"
 X-IronPort-AV: E=Sophos;i="6.10,165,1719903600"; 
-   d="scan'208";a="48084083"
-Received: from fmviesa004.fm.intel.com ([10.60.135.144])
-  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Aug 2024 20:04:17 -0700
-X-CSE-ConnectionGUID: 18hlvfugSd6Y8gSOMdYkIg==
-X-CSE-MsgGUID: PPNOVJfPSbGi3Ff3iLsAzg==
+   d="scan'208";a="13145926"
+Received: from orviesa009.jf.intel.com ([10.64.159.149])
+  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Aug 2024 20:25:19 -0700
+X-CSE-ConnectionGUID: 8oWk0ZT6QXWO0Y4TjO8w3Q==
+X-CSE-MsgGUID: Dzv4d56QSxu2MDS2PGmcRw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.10,165,1719903600"; 
-   d="scan'208";a="65989588"
+   d="scan'208";a="61288488"
 Received: from lkp-server01.sh.intel.com (HELO 9a732dc145d3) ([10.239.97.150])
-  by fmviesa004.fm.intel.com with ESMTP; 21 Aug 2024 20:04:15 -0700
+  by orviesa009.jf.intel.com with ESMTP; 21 Aug 2024 20:25:17 -0700
 Received: from kbuild by 9a732dc145d3 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1sgy7Q-000CCi-1p;
-	Thu, 22 Aug 2024 03:04:12 +0000
-Date: Thu, 22 Aug 2024 11:03:47 +0800
+	id 1sgyRm-000CER-2a;
+	Thu, 22 Aug 2024 03:25:14 +0000
+Date: Thu, 22 Aug 2024 11:24:51 +0800
 From: kernel test robot <lkp@intel.com>
-To: Vasant Hegde <vasant.hegde@amd.com>, iommu@lists.linux.dev,
-	joro@8bytes.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, will@kernel.org,
-	robin.murphy@arm.com, suravee.suthikulpanit@amd.com, jgg@ziepe.ca,
-	yi.l.liu@intel.com, baolu.lu@linux.intel.com, kevin.tian@intel.com,
-	Vasant Hegde <vasant.hegde@amd.com>
-Subject: Re: [PATCH 1/5] iommu: Enhance domain allocation code to take
- additional flags
-Message-ID: <202408221020.wjaKCVvB-lkp@intel.com>
-References: <20240821133554.7405-2-vasant.hegde@amd.com>
+To: Liao Yuanhong <liaoyuanhong@vivo.com>, alexandre.belloni@bootlin.com,
+	linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Liao Yuanhong <liaoyuanhong@vivo.com>
+Subject: Re: [PATCH 1/7] rtc:rtc-at91rm9200:Use devm_clk_get_enabled() helpers
+Message-ID: <202408221130.3Kw5w51m-lkp@intel.com>
+References: <20240821092846.20138-2-liaoyuanhong@vivo.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -67,152 +64,281 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240821133554.7405-2-vasant.hegde@amd.com>
+In-Reply-To: <20240821092846.20138-2-liaoyuanhong@vivo.com>
 
-Hi Vasant,
+Hi Liao,
 
 kernel test robot noticed the following build errors:
 
-[auto build test ERROR on linus/master]
-[also build test ERROR on v6.11-rc4 next-20240821]
-[cannot apply to joro-iommu/next]
+[auto build test ERROR on abelloni/rtc-next]
+[also build test ERROR on tegra/for-next linus/master v6.11-rc4 next-20240821]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Vasant-Hegde/iommu-Enhance-domain-allocation-code-to-take-additional-flags/20240821-214124
-base:   linus/master
-patch link:    https://lore.kernel.org/r/20240821133554.7405-2-vasant.hegde%40amd.com
-patch subject: [PATCH 1/5] iommu: Enhance domain allocation code to take additional flags
-config: i386-randconfig-004-20240822 (https://download.01.org/0day-ci/archive/20240822/202408221020.wjaKCVvB-lkp@intel.com/config)
-compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240822/202408221020.wjaKCVvB-lkp@intel.com/reproduce)
+url:    https://github.com/intel-lab-lkp/linux/commits/Liao-Yuanhong/rtc-rtc-at91rm9200-Use-devm_clk_get_enabled-helpers/20240821-190257
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/abelloni/linux.git rtc-next
+patch link:    https://lore.kernel.org/r/20240821092846.20138-2-liaoyuanhong%40vivo.com
+patch subject: [PATCH 1/7] rtc:rtc-at91rm9200:Use devm_clk_get_enabled() helpers
+config: arm-defconfig (https://download.01.org/0day-ci/archive/20240822/202408221130.3Kw5w51m-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240822/202408221130.3Kw5w51m-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202408221020.wjaKCVvB-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202408221130.3Kw5w51m-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All error/warnings (new ones prefixed by >>):
 
-   In file included from drivers/gpu/drm/arm/display/komeda/komeda_dev.c:8:
-   include/linux/iommu.h:1103:1: error: declaration of anonymous struct must be a definition
-    1103 | struct inline iommu_domain *iommu_paging_domain_alloc_flags(struct device *dev,
-         | ^
-   include/linux/iommu.h:1103:1: warning: declaration does not declare anything [-Wmissing-declarations]
-   include/linux/iommu.h:1478:48: warning: declaration of 'struct msi_desc' will not be visible outside of this function [-Wvisibility]
-    1478 | static inline int iommu_dma_prepare_msi(struct msi_desc *desc, phys_addr_t msi_addr)
-         |                                                ^
-   include/linux/iommu.h:1483:53: warning: declaration of 'struct msi_desc' will not be visible outside of this function [-Wvisibility]
-    1483 | static inline void iommu_dma_compose_msi_msg(struct msi_desc *desc, struct msi_msg *msg)
-         |                                                     ^
->> drivers/gpu/drm/arm/display/komeda/komeda_dev.c:250:16: error: call to undeclared function 'iommu_get_domain_for_dev'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     250 |         mdev->iommu = iommu_get_domain_for_dev(mdev->dev);
-         |                       ^
->> drivers/gpu/drm/arm/display/komeda/komeda_dev.c:250:14: error: incompatible integer to pointer conversion assigning to 'struct iommu_domain *' from 'int' [-Wint-conversion]
-     250 |         mdev->iommu = iommu_get_domain_for_dev(mdev->dev);
-         |                     ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   3 warnings and 3 errors generated.
+   drivers/rtc/rtc-at91rm9200.c:473:6: warning: unused variable 'ret' [-Wunused-variable]
+           int ret = 0;
+               ^
+>> drivers/rtc/rtc-at91rm9200.c:504:2: warning: non-void function does not return a value in all control paths [-Wreturn-type]
+           }
+           ^
+>> drivers/rtc/rtc-at91rm9200.c:506:30: error: expected ')'
+           at91_rtc_write(AT91_RTC_CR, 0);
+                                       ^
+   drivers/rtc/rtc-at91rm9200.c:506:2: note: to match this '('
+           at91_rtc_write(AT91_RTC_CR, 0);
+           ^
+   drivers/rtc/rtc-at91rm9200.c:89:17: note: expanded from macro 'at91_rtc_write'
+           writel_relaxed((val), at91_rtc_regs + field)
+                          ^
+>> drivers/rtc/rtc-at91rm9200.c:506:30: error: type specifier missing, defaults to 'int' [-Werror,-Wimplicit-int]
+           at91_rtc_write(AT91_RTC_CR, 0);
+                                       ^
+   drivers/rtc/rtc-at91rm9200.c:506:2: error: type specifier missing, defaults to 'int' [-Werror,-Wimplicit-int]
+           at91_rtc_write(AT91_RTC_CR, 0);
+           ^
+   drivers/rtc/rtc-at91rm9200.c:89:2: note: expanded from macro 'at91_rtc_write'
+           writel_relaxed((val), at91_rtc_regs + field)
+           ^
+   arch/arm/include/asm/io.h:282:56: note: expanded from macro 'writel_relaxed'
+   #define writel_relaxed(v,c)     __raw_writel((__force u32) cpu_to_le32(v),c)
+                                                              ^
+   include/linux/byteorder/generic.h:88:21: note: expanded from macro 'cpu_to_le32'
+   #define cpu_to_le32 __cpu_to_le32
+                       ^
+   include/uapi/linux/byteorder/little_endian.h:34:36: note: expanded from macro '__cpu_to_le32'
+   #define __cpu_to_le32(x) ((__force __le32)(__u32)(x))
+                                      ^
+>> drivers/rtc/rtc-at91rm9200.c:506:2: error: function cannot return function type 'int (int)'
+   drivers/rtc/rtc-at91rm9200.c:89:2: note: expanded from macro 'at91_rtc_write'
+           writel_relaxed((val), at91_rtc_regs + field)
+           ^
+   arch/arm/include/asm/io.h:282:56: note: expanded from macro 'writel_relaxed'
+   #define writel_relaxed(v,c)     __raw_writel((__force u32) cpu_to_le32(v),c)
+                                                              ^
+   include/linux/byteorder/generic.h:88:21: note: expanded from macro 'cpu_to_le32'
+   #define cpu_to_le32 __cpu_to_le32
+                       ^
+   include/uapi/linux/byteorder/little_endian.h:34:43: note: expanded from macro '__cpu_to_le32'
+   #define __cpu_to_le32(x) ((__force __le32)(__u32)(x))
+                                             ^
+   drivers/rtc/rtc-at91rm9200.c:506:2: error: type specifier missing, defaults to 'int' [-Werror,-Wimplicit-int]
+   drivers/rtc/rtc-at91rm9200.c:89:2: note: expanded from macro 'at91_rtc_write'
+           writel_relaxed((val), at91_rtc_regs + field)
+           ^
+   arch/arm/include/asm/io.h:282:51: note: expanded from macro 'writel_relaxed'
+   #define writel_relaxed(v,c)     __raw_writel((__force u32) cpu_to_le32(v),c)
+                                                         ^
+>> drivers/rtc/rtc-at91rm9200.c:506:2: error: function cannot return function type 'int (int ((*)(__le32))(__u32))' (aka 'int (int ((*)(unsigned int))(unsigned int))')
+   drivers/rtc/rtc-at91rm9200.c:89:2: note: expanded from macro 'at91_rtc_write'
+           writel_relaxed((val), at91_rtc_regs + field)
+           ^
+   arch/arm/include/asm/io.h:282:42: note: expanded from macro 'writel_relaxed'
+   #define writel_relaxed(v,c)     __raw_writel((__force u32) cpu_to_le32(v),c)
+                                                ^
+>> drivers/rtc/rtc-at91rm9200.c:506:2: error: unknown type name 'at91_rtc_regs'
+   drivers/rtc/rtc-at91rm9200.c:89:24: note: expanded from macro 'at91_rtc_write'
+           writel_relaxed((val), at91_rtc_regs + field)
+                                 ^
+   drivers/rtc/rtc-at91rm9200.c:506:2: error: expected ')'
+   drivers/rtc/rtc-at91rm9200.c:89:38: note: expanded from macro 'at91_rtc_write'
+           writel_relaxed((val), at91_rtc_regs + field)
+                                               ^
+   drivers/rtc/rtc-at91rm9200.c:506:2: note: to match this '('
+   drivers/rtc/rtc-at91rm9200.c:89:2: note: expanded from macro 'at91_rtc_write'
+           writel_relaxed((val), at91_rtc_regs + field)
+           ^
+   arch/arm/include/asm/io.h:282:41: note: expanded from macro 'writel_relaxed'
+   #define writel_relaxed(v,c)     __raw_writel((__force u32) cpu_to_le32(v),c)
+                                               ^
+   drivers/rtc/rtc-at91rm9200.c:506:2: error: type specifier missing, defaults to 'int' [-Werror,-Wimplicit-int]
+           at91_rtc_write(AT91_RTC_CR, 0);
+           ^
+   drivers/rtc/rtc-at91rm9200.c:89:2: note: expanded from macro 'at91_rtc_write'
+           writel_relaxed((val), at91_rtc_regs + field)
+           ^
+   arch/arm/include/asm/io.h:282:29: note: expanded from macro 'writel_relaxed'
+   #define writel_relaxed(v,c)     __raw_writel((__force u32) cpu_to_le32(v),c)
+                                   ^
+   arch/arm/include/asm/io.h:92:22: note: expanded from macro '__raw_writel'
+   #define __raw_writel __raw_writel
+                        ^
+   drivers/rtc/rtc-at91rm9200.c:507:30: error: expected ')'
+           at91_rtc_write(AT91_RTC_MR, at91_rtc_read(AT91_RTC_MR) & ~AT91_RTC_HRMOD);
+                                       ^
+   drivers/rtc/rtc-at91rm9200.c:87:2: note: expanded from macro 'at91_rtc_read'
+           readl_relaxed(at91_rtc_regs + field)
+           ^
+   arch/arm/include/asm/io.h:277:27: note: expanded from macro 'readl_relaxed'
+   #define readl_relaxed(c) ({ u32 __r = le32_to_cpu((__force __le32) \
+                             ^
+   drivers/rtc/rtc-at91rm9200.c:507:30: note: to match this '('
+   drivers/rtc/rtc-at91rm9200.c:87:2: note: expanded from macro 'at91_rtc_read'
+           readl_relaxed(at91_rtc_regs + field)
+           ^
+   arch/arm/include/asm/io.h:277:26: note: expanded from macro 'readl_relaxed'
+   #define readl_relaxed(c) ({ u32 __r = le32_to_cpu((__force __le32) \
+                            ^
+   drivers/rtc/rtc-at91rm9200.c:507:57: error: expected ')'
+           at91_rtc_write(AT91_RTC_MR, at91_rtc_read(AT91_RTC_MR) & ~AT91_RTC_HRMOD);
+                                                                  ^
+   drivers/rtc/rtc-at91rm9200.c:507:2: note: to match this '('
+           at91_rtc_write(AT91_RTC_MR, at91_rtc_read(AT91_RTC_MR) & ~AT91_RTC_HRMOD);
+           ^
+   drivers/rtc/rtc-at91rm9200.c:89:17: note: expanded from macro 'at91_rtc_write'
+           writel_relaxed((val), at91_rtc_regs + field)
+                          ^
+   drivers/rtc/rtc-at91rm9200.c:507:30: error: type specifier missing, defaults to 'int' [-Werror,-Wimplicit-int]
+           at91_rtc_write(AT91_RTC_MR, at91_rtc_read(AT91_RTC_MR) & ~AT91_RTC_HRMOD);
+                                       ^
+   drivers/rtc/rtc-at91rm9200.c:87:2: note: expanded from macro 'at91_rtc_read'
+           readl_relaxed(at91_rtc_regs + field)
+           ^
+   arch/arm/include/asm/io.h:277:27: note: expanded from macro 'readl_relaxed'
+   #define readl_relaxed(c) ({ u32 __r = le32_to_cpu((__force __le32) \
+                             ^
+   drivers/rtc/rtc-at91rm9200.c:507:2: error: type specifier missing, defaults to 'int' [-Werror,-Wimplicit-int]
+           at91_rtc_write(AT91_RTC_MR, at91_rtc_read(AT91_RTC_MR) & ~AT91_RTC_HRMOD);
+           ^
+   drivers/rtc/rtc-at91rm9200.c:89:2: note: expanded from macro 'at91_rtc_write'
+           writel_relaxed((val), at91_rtc_regs + field)
+           ^
+   arch/arm/include/asm/io.h:282:56: note: expanded from macro 'writel_relaxed'
+   #define writel_relaxed(v,c)     __raw_writel((__force u32) cpu_to_le32(v),c)
+                                                              ^
+   include/linux/byteorder/generic.h:88:21: note: expanded from macro 'cpu_to_le32'
+   #define cpu_to_le32 __cpu_to_le32
+                       ^
+   include/uapi/linux/byteorder/little_endian.h:34:36: note: expanded from macro '__cpu_to_le32'
+   #define __cpu_to_le32(x) ((__force __le32)(__u32)(x))
+                                      ^
+   drivers/rtc/rtc-at91rm9200.c:507:2: error: function cannot return function type 'int (int)'
+   drivers/rtc/rtc-at91rm9200.c:89:2: note: expanded from macro 'at91_rtc_write'
+           writel_relaxed((val), at91_rtc_regs + field)
+           ^
+   arch/arm/include/asm/io.h:282:56: note: expanded from macro 'writel_relaxed'
+   #define writel_relaxed(v,c)     __raw_writel((__force u32) cpu_to_le32(v),c)
+                                                              ^
+   include/linux/byteorder/generic.h:88:21: note: expanded from macro 'cpu_to_le32'
+   #define cpu_to_le32 __cpu_to_le32
+                       ^
+   include/uapi/linux/byteorder/little_endian.h:34:43: note: expanded from macro '__cpu_to_le32'
+   #define __cpu_to_le32(x) ((__force __le32)(__u32)(x))
+                                             ^
+   drivers/rtc/rtc-at91rm9200.c:507:2: error: type specifier missing, defaults to 'int' [-Werror,-Wimplicit-int]
+   drivers/rtc/rtc-at91rm9200.c:89:2: note: expanded from macro 'at91_rtc_write'
+           writel_relaxed((val), at91_rtc_regs + field)
+           ^
+   arch/arm/include/asm/io.h:282:51: note: expanded from macro 'writel_relaxed'
+   #define writel_relaxed(v,c)     __raw_writel((__force u32) cpu_to_le32(v),c)
+                                                         ^
+   drivers/rtc/rtc-at91rm9200.c:507:2: error: function cannot return function type 'int (int ((*)(__le32))(__u32))' (aka 'int (int ((*)(unsigned int))(unsigned int))')
+   drivers/rtc/rtc-at91rm9200.c:89:2: note: expanded from macro 'at91_rtc_write'
+           writel_relaxed((val), at91_rtc_regs + field)
+           ^
+   arch/arm/include/asm/io.h:282:42: note: expanded from macro 'writel_relaxed'
 
 
-vim +250 drivers/gpu/drm/arm/display/komeda/komeda_dev.c
+vim +506 drivers/rtc/rtc-at91rm9200.c
 
-b25bc78f8a0750 james qian wang (Arm Technology China  2019-12-10  179) 
-bd628c1bed7902 james qian wang (Arm Technology China  2019-01-03  180) struct komeda_dev *komeda_dev_create(struct device *dev)
-bd628c1bed7902 james qian wang (Arm Technology China  2019-01-03  181) {
-bd628c1bed7902 james qian wang (Arm Technology China  2019-01-03  182) 	struct platform_device *pdev = to_platform_device(dev);
-b25bc78f8a0750 james qian wang (Arm Technology China  2019-12-10  183) 	komeda_identify_func komeda_identify;
-bd628c1bed7902 james qian wang (Arm Technology China  2019-01-03  184) 	struct komeda_dev *mdev;
-bd628c1bed7902 james qian wang (Arm Technology China  2019-01-03  185) 	int err = 0;
-bd628c1bed7902 james qian wang (Arm Technology China  2019-01-03  186) 
-b25bc78f8a0750 james qian wang (Arm Technology China  2019-12-10  187) 	komeda_identify = of_device_get_match_data(dev);
-b25bc78f8a0750 james qian wang (Arm Technology China  2019-12-10  188) 	if (!komeda_identify)
-bd628c1bed7902 james qian wang (Arm Technology China  2019-01-03  189) 		return ERR_PTR(-ENODEV);
-bd628c1bed7902 james qian wang (Arm Technology China  2019-01-03  190) 
-bd628c1bed7902 james qian wang (Arm Technology China  2019-01-03  191) 	mdev = devm_kzalloc(dev, sizeof(*mdev), GFP_KERNEL);
-bd628c1bed7902 james qian wang (Arm Technology China  2019-01-03  192) 	if (!mdev)
-bd628c1bed7902 james qian wang (Arm Technology China  2019-01-03  193) 		return ERR_PTR(-ENOMEM);
-bd628c1bed7902 james qian wang (Arm Technology China  2019-01-03  194) 
-20d84aa8417910 james qian wang (Arm Technology China  2019-01-22  195) 	mutex_init(&mdev->lock);
-20d84aa8417910 james qian wang (Arm Technology China  2019-01-22  196) 
-bd628c1bed7902 james qian wang (Arm Technology China  2019-01-03  197) 	mdev->dev = dev;
-50ec5b563bed04 Markus Elfring                         2019-09-21  198  	mdev->reg_base = devm_platform_ioremap_resource(pdev, 0);
-bd628c1bed7902 james qian wang (Arm Technology China  2019-01-03  199) 	if (IS_ERR(mdev->reg_base)) {
-bd628c1bed7902 james qian wang (Arm Technology China  2019-01-03  200) 		DRM_ERROR("Map register space failed.\n");
-bd628c1bed7902 james qian wang (Arm Technology China  2019-01-03  201) 		err = PTR_ERR(mdev->reg_base);
-bd628c1bed7902 james qian wang (Arm Technology China  2019-01-03  202) 		mdev->reg_base = NULL;
-bd628c1bed7902 james qian wang (Arm Technology China  2019-01-03  203) 		goto err_cleanup;
-bd628c1bed7902 james qian wang (Arm Technology China  2019-01-03  204) 	}
-bd628c1bed7902 james qian wang (Arm Technology China  2019-01-03  205) 
-6f84da0c74f12f james qian wang (Arm Technology China  2019-06-05  206) 	mdev->aclk = devm_clk_get(dev, "aclk");
-6f84da0c74f12f james qian wang (Arm Technology China  2019-06-05  207) 	if (IS_ERR(mdev->aclk)) {
-28be315c9c0c0b james qian wang (Arm Technology China  2019-06-05  208) 		DRM_ERROR("Get engine clk failed.\n");
-6f84da0c74f12f james qian wang (Arm Technology China  2019-06-05  209) 		err = PTR_ERR(mdev->aclk);
-6f84da0c74f12f james qian wang (Arm Technology China  2019-06-05  210) 		mdev->aclk = NULL;
-bd628c1bed7902 james qian wang (Arm Technology China  2019-01-03  211) 		goto err_cleanup;
-bd628c1bed7902 james qian wang (Arm Technology China  2019-01-03  212) 	}
-bd628c1bed7902 james qian wang (Arm Technology China  2019-01-03  213) 
-6f84da0c74f12f james qian wang (Arm Technology China  2019-06-05  214) 	clk_prepare_enable(mdev->aclk);
-bd628c1bed7902 james qian wang (Arm Technology China  2019-01-03  215) 
-b25bc78f8a0750 james qian wang (Arm Technology China  2019-12-10  216) 	mdev->funcs = komeda_identify(mdev->reg_base, &mdev->chip);
-b25bc78f8a0750 james qian wang (Arm Technology China  2019-12-10  217) 	if (!mdev->funcs) {
-b25bc78f8a0750 james qian wang (Arm Technology China  2019-12-10  218) 		DRM_ERROR("Failed to identify the HW.\n");
-bd628c1bed7902 james qian wang (Arm Technology China  2019-01-03  219) 		err = -ENODEV;
-2ebb6701654e0d Lowry Li (Arm Technology China         2019-09-23  220) 		goto disable_clk;
-bd628c1bed7902 james qian wang (Arm Technology China  2019-01-03  221) 	}
-bd628c1bed7902 james qian wang (Arm Technology China  2019-01-03  222) 
-bd628c1bed7902 james qian wang (Arm Technology China  2019-01-03  223) 	DRM_INFO("Found ARM Mali-D%x version r%dp%d\n",
-bd628c1bed7902 james qian wang (Arm Technology China  2019-01-03  224) 		 MALIDP_CORE_ID_PRODUCT_ID(mdev->chip.core_id),
-bd628c1bed7902 james qian wang (Arm Technology China  2019-01-03  225) 		 MALIDP_CORE_ID_MAJOR(mdev->chip.core_id),
-bd628c1bed7902 james qian wang (Arm Technology China  2019-01-03  226) 		 MALIDP_CORE_ID_MINOR(mdev->chip.core_id));
-bd628c1bed7902 james qian wang (Arm Technology China  2019-01-03  227) 
-981d29d2db7c96 james qian wang (Arm Technology China  2019-01-03  228) 	mdev->funcs->init_format_table(mdev);
-981d29d2db7c96 james qian wang (Arm Technology China  2019-01-03  229) 
-bd628c1bed7902 james qian wang (Arm Technology China  2019-01-03  230) 	err = mdev->funcs->enum_resources(mdev);
-bd628c1bed7902 james qian wang (Arm Technology China  2019-01-03  231) 	if (err) {
-bd628c1bed7902 james qian wang (Arm Technology China  2019-01-03  232) 		DRM_ERROR("enumerate display resource failed.\n");
-2ebb6701654e0d Lowry Li (Arm Technology China         2019-09-23  233) 		goto disable_clk;
-bd628c1bed7902 james qian wang (Arm Technology China  2019-01-03  234) 	}
-bd628c1bed7902 james qian wang (Arm Technology China  2019-01-03  235) 
-29e56aec911dd7 james qian wang (Arm Technology China  2019-01-03  236) 	err = komeda_parse_dt(dev, mdev);
-29e56aec911dd7 james qian wang (Arm Technology China  2019-01-03  237) 	if (err) {
-29e56aec911dd7 james qian wang (Arm Technology China  2019-01-03  238) 		DRM_ERROR("parse device tree failed.\n");
-2ebb6701654e0d Lowry Li (Arm Technology China         2019-09-23  239) 		goto disable_clk;
-29e56aec911dd7 james qian wang (Arm Technology China  2019-01-03  240) 	}
-29e56aec911dd7 james qian wang (Arm Technology China  2019-01-03  241) 
-321e925c5813c2 james qian wang (Arm Technology China  2019-01-22  242) 	err = komeda_assemble_pipelines(mdev);
-321e925c5813c2 james qian wang (Arm Technology China  2019-01-22  243) 	if (err) {
-321e925c5813c2 james qian wang (Arm Technology China  2019-01-22  244) 		DRM_ERROR("assemble display pipelines failed.\n");
-2ebb6701654e0d Lowry Li (Arm Technology China         2019-09-23  245) 		goto disable_clk;
-321e925c5813c2 james qian wang (Arm Technology China  2019-01-22  246) 	}
-321e925c5813c2 james qian wang (Arm Technology China  2019-01-22  247) 
-1c831ade9f352d Robin Murphy                           2020-09-03  248  	dma_set_max_seg_size(dev, U32_MAX);
-a260e0b847f079 Lowry Li (Arm Technology China         2019-04-11  249) 
-e87cae37f6006f Lowry Li (Arm Technology China         2019-06-06 @250) 	mdev->iommu = iommu_get_domain_for_dev(mdev->dev);
-e87cae37f6006f Lowry Li (Arm Technology China         2019-06-06  251) 	if (!mdev->iommu)
-e87cae37f6006f Lowry Li (Arm Technology China         2019-06-06  252) 		DRM_INFO("continue without IOMMU support!\n");
-e87cae37f6006f Lowry Li (Arm Technology China         2019-06-06  253) 
-2ebb6701654e0d Lowry Li (Arm Technology China         2019-09-23  254) 	clk_disable_unprepare(mdev->aclk);
-2ebb6701654e0d Lowry Li (Arm Technology China         2019-09-23  255) 
-55223394d56bab james qian wang (Arm Technology China  2019-01-22  256) 	err = sysfs_create_group(&dev->kobj, &komeda_sysfs_attr_group);
-55223394d56bab james qian wang (Arm Technology China  2019-01-22  257) 	if (err) {
-55223394d56bab james qian wang (Arm Technology China  2019-01-22  258) 		DRM_ERROR("create sysfs group failed.\n");
-55223394d56bab james qian wang (Arm Technology China  2019-01-22  259) 		goto err_cleanup;
-55223394d56bab james qian wang (Arm Technology China  2019-01-22  260) 	}
-55223394d56bab james qian wang (Arm Technology China  2019-01-22  261) 
-8894cd5824e500 Mihail Atanassov                       2019-11-07  262  	mdev->err_verbosity = KOMEDA_DEV_PRINT_ERR_EVENTS;
-8894cd5824e500 Mihail Atanassov                       2019-11-07  263  
-7d3cfb70a604d2 james qian wang (Arm Technology China  2019-01-22  264) 	komeda_debugfs_init(mdev);
-7d3cfb70a604d2 james qian wang (Arm Technology China  2019-01-22  265) 
-bd628c1bed7902 james qian wang (Arm Technology China  2019-01-03  266) 	return mdev;
-bd628c1bed7902 james qian wang (Arm Technology China  2019-01-03  267) 
-2ebb6701654e0d Lowry Li (Arm Technology China         2019-09-23  268) disable_clk:
-2ebb6701654e0d Lowry Li (Arm Technology China         2019-09-23  269) 	clk_disable_unprepare(mdev->aclk);
-bd628c1bed7902 james qian wang (Arm Technology China  2019-01-03  270) err_cleanup:
-bd628c1bed7902 james qian wang (Arm Technology China  2019-01-03  271) 	komeda_dev_destroy(mdev);
-bd628c1bed7902 james qian wang (Arm Technology China  2019-01-03  272) 	return ERR_PTR(err);
-bd628c1bed7902 james qian wang (Arm Technology China  2019-01-03  273) }
-bd628c1bed7902 james qian wang (Arm Technology China  2019-01-03  274) 
+f6a46f8b302d9b drivers/rtc/rtc-at91rm9200.c Alexandre Belloni                2020-11-09  465  
+788b1fc619a31e drivers/rtc/rtc-at91.c       Andrew Victor                    2006-06-25  466  /*
+788b1fc619a31e drivers/rtc/rtc-at91.c       Andrew Victor                    2006-06-25  467   * Initialize and install RTC driver
+788b1fc619a31e drivers/rtc/rtc-at91.c       Andrew Victor                    2006-06-25  468   */
+788b1fc619a31e drivers/rtc/rtc-at91.c       Andrew Victor                    2006-06-25  469  static int __init at91_rtc_probe(struct platform_device *pdev)
+788b1fc619a31e drivers/rtc/rtc-at91.c       Andrew Victor                    2006-06-25  470  {
+788b1fc619a31e drivers/rtc/rtc-at91.c       Andrew Victor                    2006-06-25  471  	struct rtc_device *rtc;
+d28bdfc5c80fb6 drivers/rtc/rtc-at91rm9200.c Jean-Christophe PLAGNIOL-VILLARD 2011-11-14  472  	struct resource *regs;
+d28bdfc5c80fb6 drivers/rtc/rtc-at91rm9200.c Jean-Christophe PLAGNIOL-VILLARD 2011-11-14 @473  	int ret = 0;
+788b1fc619a31e drivers/rtc/rtc-at91.c       Andrew Victor                    2006-06-25  474  
+288d9cf1764a25 drivers/rtc/rtc-at91rm9200.c Claudiu Beznea                   2019-09-26  475  	at91_rtc_config = of_device_get_match_data(&pdev->dev);
+de645475913f67 drivers/rtc/rtc-at91rm9200.c Johan Hovold                     2013-06-12  476  	if (!at91_rtc_config)
+de645475913f67 drivers/rtc/rtc-at91rm9200.c Johan Hovold                     2013-06-12  477  		return -ENODEV;
+de645475913f67 drivers/rtc/rtc-at91rm9200.c Johan Hovold                     2013-06-12  478  
+d28bdfc5c80fb6 drivers/rtc/rtc-at91rm9200.c Jean-Christophe PLAGNIOL-VILLARD 2011-11-14  479  	regs = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+d28bdfc5c80fb6 drivers/rtc/rtc-at91rm9200.c Jean-Christophe PLAGNIOL-VILLARD 2011-11-14  480  	if (!regs) {
+d28bdfc5c80fb6 drivers/rtc/rtc-at91rm9200.c Jean-Christophe PLAGNIOL-VILLARD 2011-11-14  481  		dev_err(&pdev->dev, "no mmio resource defined\n");
+d28bdfc5c80fb6 drivers/rtc/rtc-at91rm9200.c Jean-Christophe PLAGNIOL-VILLARD 2011-11-14  482  		return -ENXIO;
+d28bdfc5c80fb6 drivers/rtc/rtc-at91rm9200.c Jean-Christophe PLAGNIOL-VILLARD 2011-11-14  483  	}
+d28bdfc5c80fb6 drivers/rtc/rtc-at91rm9200.c Jean-Christophe PLAGNIOL-VILLARD 2011-11-14  484  
+d28bdfc5c80fb6 drivers/rtc/rtc-at91rm9200.c Jean-Christophe PLAGNIOL-VILLARD 2011-11-14  485  	irq = platform_get_irq(pdev, 0);
+faac910201e9be drivers/rtc/rtc-at91rm9200.c Stephen Boyd                     2019-07-30  486  	if (irq < 0)
+d28bdfc5c80fb6 drivers/rtc/rtc-at91rm9200.c Jean-Christophe PLAGNIOL-VILLARD 2011-11-14  487  		return -ENXIO;
+d28bdfc5c80fb6 drivers/rtc/rtc-at91rm9200.c Jean-Christophe PLAGNIOL-VILLARD 2011-11-14  488  
+f3766250b2e9f2 drivers/rtc/rtc-at91rm9200.c Sachin Kamat                     2013-11-12  489  	at91_rtc_regs = devm_ioremap(&pdev->dev, regs->start,
+f3766250b2e9f2 drivers/rtc/rtc-at91rm9200.c Sachin Kamat                     2013-11-12  490  				     resource_size(regs));
+d28bdfc5c80fb6 drivers/rtc/rtc-at91rm9200.c Jean-Christophe PLAGNIOL-VILLARD 2011-11-14  491  	if (!at91_rtc_regs) {
+d28bdfc5c80fb6 drivers/rtc/rtc-at91rm9200.c Jean-Christophe PLAGNIOL-VILLARD 2011-11-14  492  		dev_err(&pdev->dev, "failed to map registers, aborting.\n");
+d28bdfc5c80fb6 drivers/rtc/rtc-at91rm9200.c Jean-Christophe PLAGNIOL-VILLARD 2011-11-14  493  		return -ENOMEM;
+d28bdfc5c80fb6 drivers/rtc/rtc-at91rm9200.c Jean-Christophe PLAGNIOL-VILLARD 2011-11-14  494  	}
+d28bdfc5c80fb6 drivers/rtc/rtc-at91rm9200.c Jean-Christophe PLAGNIOL-VILLARD 2011-11-14  495  
+735ae2056b3c72 drivers/rtc/rtc-at91rm9200.c Alexandre Belloni                2017-07-06  496  	rtc = devm_rtc_allocate_device(&pdev->dev);
+735ae2056b3c72 drivers/rtc/rtc-at91rm9200.c Alexandre Belloni                2017-07-06  497  	if (IS_ERR(rtc))
+735ae2056b3c72 drivers/rtc/rtc-at91rm9200.c Alexandre Belloni                2017-07-06  498  		return PTR_ERR(rtc);
+735ae2056b3c72 drivers/rtc/rtc-at91rm9200.c Alexandre Belloni                2017-07-06  499  	platform_set_drvdata(pdev, rtc);
+735ae2056b3c72 drivers/rtc/rtc-at91rm9200.c Alexandre Belloni                2017-07-06  500  
+40844cea20a5f8 drivers/rtc/rtc-at91rm9200.c Liao Yuanhong                    2024-08-21  501  	sclk = devm_clk_get_enabled(&pdev->dev, NULL);
+11f67a8bbf6587 drivers/rtc/rtc-at91rm9200.c Alexandre Belloni                2015-07-31  502  	if (IS_ERR(sclk))
+11f67a8bbf6587 drivers/rtc/rtc-at91rm9200.c Alexandre Belloni                2015-07-31  503  		return PTR_ERR(sclk);
+11f67a8bbf6587 drivers/rtc/rtc-at91rm9200.c Alexandre Belloni                2015-07-31 @504  	}
+11f67a8bbf6587 drivers/rtc/rtc-at91rm9200.c Alexandre Belloni                2015-07-31  505  
+d28bdfc5c80fb6 drivers/rtc/rtc-at91rm9200.c Jean-Christophe PLAGNIOL-VILLARD 2011-11-14 @506  	at91_rtc_write(AT91_RTC_CR, 0);
+f6a46f8b302d9b drivers/rtc/rtc-at91rm9200.c Alexandre Belloni                2020-11-09  507  	at91_rtc_write(AT91_RTC_MR, at91_rtc_read(AT91_RTC_MR) & ~AT91_RTC_HRMOD);
+788b1fc619a31e drivers/rtc/rtc-at91.c       Andrew Victor                    2006-06-25  508  
+788b1fc619a31e drivers/rtc/rtc-at91.c       Andrew Victor                    2006-06-25  509  	/* Disable all interrupts */
+e304fcd075a0e9 drivers/rtc/rtc-at91rm9200.c Johan Hovold                     2013-06-12  510  	at91_rtc_write_idr(AT91_RTC_ACKUPD | AT91_RTC_ALARM |
+e7a8bb12c24af8 drivers/rtc/rtc-at91.c       Andrew Morton                    2006-06-25  511  					AT91_RTC_SECEV | AT91_RTC_TIMEV |
+e7a8bb12c24af8 drivers/rtc/rtc-at91.c       Andrew Morton                    2006-06-25  512  					AT91_RTC_CALEV);
+788b1fc619a31e drivers/rtc/rtc-at91.c       Andrew Victor                    2006-06-25  513  
+f3766250b2e9f2 drivers/rtc/rtc-at91rm9200.c Sachin Kamat                     2013-11-12  514  	ret = devm_request_irq(&pdev->dev, irq, at91_rtc_interrupt,
+dd1f1f391dd7f3 drivers/rtc/rtc-at91rm9200.c Boris Brezillon                  2015-03-02  515  			       IRQF_SHARED | IRQF_COND_SUSPEND,
+d728b1e69fd582 drivers/rtc/rtc-at91.c       David Brownell                   2006-11-25  516  			       "at91_rtc", pdev);
+788b1fc619a31e drivers/rtc/rtc-at91.c       Andrew Victor                    2006-06-25  517  	if (ret) {
+6588208cb2be4a drivers/rtc/rtc-at91rm9200.c Jingoo Han                       2013-02-21  518  		dev_err(&pdev->dev, "IRQ %d already in use.\n", irq);
+40844cea20a5f8 drivers/rtc/rtc-at91rm9200.c Liao Yuanhong                    2024-08-21  519  		return ret;
+788b1fc619a31e drivers/rtc/rtc-at91.c       Andrew Victor                    2006-06-25  520  	}
+788b1fc619a31e drivers/rtc/rtc-at91.c       Andrew Victor                    2006-06-25  521  
+5d4675a811fb71 drivers/rtc/rtc-at91rm9200.c David Brownell                   2007-02-20  522  	/* cpu init code should really have flagged this device as
+5d4675a811fb71 drivers/rtc/rtc-at91rm9200.c David Brownell                   2007-02-20  523  	 * being wake-capable; if it didn't, do that here.
+5d4675a811fb71 drivers/rtc/rtc-at91rm9200.c David Brownell                   2007-02-20  524  	 */
+5d4675a811fb71 drivers/rtc/rtc-at91rm9200.c David Brownell                   2007-02-20  525  	if (!device_can_wakeup(&pdev->dev))
+5d4675a811fb71 drivers/rtc/rtc-at91rm9200.c David Brownell                   2007-02-20  526  		device_init_wakeup(&pdev->dev, 1);
+5d4675a811fb71 drivers/rtc/rtc-at91rm9200.c David Brownell                   2007-02-20  527  
+f6a46f8b302d9b drivers/rtc/rtc-at91rm9200.c Alexandre Belloni                2020-11-09  528  	if (at91_rtc_config->has_correction)
+f6a46f8b302d9b drivers/rtc/rtc-at91rm9200.c Alexandre Belloni                2020-11-09  529  		rtc->ops = &sama5d4_rtc_ops;
+f6a46f8b302d9b drivers/rtc/rtc-at91rm9200.c Alexandre Belloni                2020-11-09  530  	else
+735ae2056b3c72 drivers/rtc/rtc-at91rm9200.c Alexandre Belloni                2017-07-06  531  		rtc->ops = &at91_rtc_ops;
+f6a46f8b302d9b drivers/rtc/rtc-at91rm9200.c Alexandre Belloni                2020-11-09  532  
+6c78a872a673c4 drivers/rtc/rtc-at91rm9200.c Alexandre Belloni                2018-05-17  533  	rtc->range_min = RTC_TIMESTAMP_BEGIN_1900;
+6c78a872a673c4 drivers/rtc/rtc-at91rm9200.c Alexandre Belloni                2018-05-17  534  	rtc->range_max = RTC_TIMESTAMP_END_2099;
+fdcfd854333be5 drivers/rtc/rtc-at91rm9200.c Bartosz Golaszewski              2020-11-09  535  	ret = devm_rtc_register_device(rtc);
+735ae2056b3c72 drivers/rtc/rtc-at91rm9200.c Alexandre Belloni                2017-07-06  536  	if (ret)
+40844cea20a5f8 drivers/rtc/rtc-at91rm9200.c Liao Yuanhong                    2024-08-21  537  		return ret;
+788b1fc619a31e drivers/rtc/rtc-at91.c       Andrew Victor                    2006-06-25  538  
+2fe121e1f5aa3b drivers/rtc/rtc-at91rm9200.c Boris Brezillon                  2014-06-06  539  	/* enable SECEV interrupt in order to initialize at91_rtc_upd_rdy
+2fe121e1f5aa3b drivers/rtc/rtc-at91rm9200.c Boris Brezillon                  2014-06-06  540  	 * completion.
+2fe121e1f5aa3b drivers/rtc/rtc-at91rm9200.c Boris Brezillon                  2014-06-06  541  	 */
+2fe121e1f5aa3b drivers/rtc/rtc-at91rm9200.c Boris Brezillon                  2014-06-06  542  	at91_rtc_write_ier(AT91_RTC_SECEV);
+2fe121e1f5aa3b drivers/rtc/rtc-at91rm9200.c Boris Brezillon                  2014-06-06  543  
+6588208cb2be4a drivers/rtc/rtc-at91rm9200.c Jingoo Han                       2013-02-21  544  	dev_info(&pdev->dev, "AT91 Real Time Clock driver.\n");
+788b1fc619a31e drivers/rtc/rtc-at91.c       Andrew Victor                    2006-06-25  545  	return 0;
+788b1fc619a31e drivers/rtc/rtc-at91.c       Andrew Victor                    2006-06-25  546  }
+788b1fc619a31e drivers/rtc/rtc-at91.c       Andrew Victor                    2006-06-25  547  
 
 -- 
 0-DAY CI Kernel Test Service
