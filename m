@@ -1,62 +1,76 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1925C1CBEAA;
-	Thu, 22 Aug 2024 13:33:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 40D262745D;
+	Thu, 22 Aug 2024 14:15:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724333594; cv=none; b=MRGKE0GhXiRIsIvySxLfqwJo1WSZ8I/nmt4Qk4lxE665fwPPwBzf2k40sW50y4QNqDg8QuC0YpVLD7tSE2B9b8ThOTQ2lsVbI4zwsXfvQFoguFuilxu4ft2xCyiqvBrMis3JMSDxzl7iRc7hxxNAB71UpDMbxT5QdxAcOEfO8cc=
+	t=1724336120; cv=none; b=Wwst54UiBhJXAV4+2byb554n6T5js0Wlyd8HBpslnKMTxN6YhyRrELkgHs9g3tEMIGs3+68zDEZg+OtGRVby/yDyvikEL6V4sRU1QY6eG4T1WvAO+KbPKzoIuqg/fhfdzOmn54NUkrdxw9RC4FFOuhBwctyZJB04QoT08YXredE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724333594; c=relaxed/simple;
-	bh=YOQpzuPpXnB6FLMYSxu8prpD2kqwsQoJZlJ9qa6UWSw=;
+	s=arc-20240116; t=1724336120; c=relaxed/simple;
+	bh=N0UsVQc1quPucMHanRFreY+o7eT0pQqsYArCHU/T7LU=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=L60GdIRoDtorOEzin5HL64Ku26fs2Z0EIfQtCMzZJfR3Y/eUOS7Lu+eFX+6WZ/KeeMB8OihMiZFCTNW+XiYQS+01+OLJ8YqBVx8PtahQLDUWf67y6Me1v2D3uM7qdWlCKgginHjQvIqNxMMx+mGn8Re3tVg8VTko2Ka/wOosl+8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Jub/uZZ1; arc=none smtp.client-ip=198.175.65.14
+	 Content-Type:Content-Disposition:In-Reply-To; b=hdfIXA9r7E3xV02oq2OU/DLhl0nqlpsFnT6wNApxa1L2MfiZFUEEqmuZenAHLEl7En8ga1qr5Kz8i4NEpiEuOjp7/z0dqSS2tq5eCIoZ7HpbGnNk7CkI9vXi/slkMBctKQjwDH2tjITKKkhHO0H/JCh48rhBH0xc0I2JANcmPVo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=TevxDDKJ; arc=none smtp.client-ip=192.198.163.7
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Jub/uZZ1"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="TevxDDKJ"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1724333592; x=1755869592;
+  t=1724336118; x=1755872118;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=YOQpzuPpXnB6FLMYSxu8prpD2kqwsQoJZlJ9qa6UWSw=;
-  b=Jub/uZZ1v/VXXkByls0m2YGFtB/3/W531JmadGyhLUsuo3NLcVC2IGuS
-   pmOOkwUplNqWm5bdPi+VS796S4pEoWJybsUHUcXWy5RF6OMtkJXjanRVD
-   K4zfDW9jXncWgildhMZ6i2D7MbtD+ZZnainOMpkOsDeAX4Tv5cHxthZ2p
-   S1tYrD+g/fyAoiE1B+kqHd8N3LQ0Dy8uzIipgBDMKl+kuOMVxxDAIQRpn
-   82kHEDSfmFuLPom3AxK3ixzvzukq8QnpGXlnWBE0PXHgAKJk3ZYCQi0//
-   Oj8wQUQzKzsjAzUjxhllbuPYFO6Up28j5N+s/E4Fp2IMRoJE4tOlbK5KR
-   A==;
-X-CSE-ConnectionGUID: LMU5BCe1T4+QQo6gQN5Hwg==
-X-CSE-MsgGUID: zbDA5v+oRBmQXZcg14r1Yw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11172"; a="26543135"
+  bh=N0UsVQc1quPucMHanRFreY+o7eT0pQqsYArCHU/T7LU=;
+  b=TevxDDKJd6IOdjGt+nvwWMTw5a0I7ZHqvMxGMy/bOD7udeATqLBrWqab
+   aROaz4vk/pS0xKSosBkdjFrlhjX5Xys973j+8j30TQN9BAwnLrdXX1jqG
+   dlwc6EVM2meNStFS++Pri0br/4E4mFkrWQkmQMhStPZNJ1qyQ9guaa8wi
+   wrS09Jp04BLdVITiyO/+1cdyV+2drsREReeCukCwKuT077pQalJWaaWIa
+   kl0Am8yiel4yjbwAQbDkbfEz4HqILspXmBTJpDWfstpMpAvoiOedUOGUi
+   7yGCL8Q3khz15uc7MJsJNWY2veFfsgboxQg5tPErP3YlDS5KrNy8MhfuM
+   Q==;
+X-CSE-ConnectionGUID: C259jthBTuK7YtHRC3SeDw==
+X-CSE-MsgGUID: RgW1IP5hSU6MPuG8xuSYSw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11172"; a="48146851"
 X-IronPort-AV: E=Sophos;i="6.10,167,1719903600"; 
-   d="scan'208";a="26543135"
-Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Aug 2024 06:33:12 -0700
-X-CSE-ConnectionGUID: mZuSZ+AmQ0WSvzHpq1dwAQ==
-X-CSE-MsgGUID: HcwZRDhLQf6xVVmAv3B3bw==
+   d="scan'208";a="48146851"
+Received: from orviesa008.jf.intel.com ([10.64.159.148])
+  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Aug 2024 07:15:17 -0700
+X-CSE-ConnectionGUID: dT51fZTvSqWFhZRqkA8Wdw==
+X-CSE-MsgGUID: gLBrdYJoT2KS1cHWkU+wpQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.10,167,1719903600"; 
-   d="scan'208";a="84615922"
+   d="scan'208";a="62175288"
 Received: from lkp-server01.sh.intel.com (HELO 9a732dc145d3) ([10.239.97.150])
-  by fmviesa002.fm.intel.com with ESMTP; 22 Aug 2024 06:33:08 -0700
+  by orviesa008.jf.intel.com with ESMTP; 22 Aug 2024 07:15:12 -0700
 Received: from kbuild by 9a732dc145d3 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1sh7w2-000Cn6-2S;
-	Thu, 22 Aug 2024 13:33:06 +0000
-Date: Thu, 22 Aug 2024 21:32:59 +0800
+	id 1sh8aj-000Cqv-2a;
+	Thu, 22 Aug 2024 14:15:09 +0000
+Date: Thu, 22 Aug 2024 22:14:25 +0800
 From: kernel test robot <lkp@intel.com>
-To: "hongchi.peng" <hongchi.peng@siengine.com>, liviu.dudau@arm.com
+To: Steven Price <steven.price@arm.com>, kvm@vger.kernel.org,
+	kvmarm@lists.linux.dev
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	maarten.lankhorst@linux.intel.com, mripard@kernel.org,
-	tzimmermann@suse.de, airlied@gmail.com, daniel@ffwll.ch,
-	dri-devel@lists.freedesktop.org, hongchi.peng@siengine.com
-Subject: Re: [PATCH] drm: komeda: Fix an issue related to normalized zpos
-Message-ID: <202408222146.r7E6lCGh-lkp@intel.com>
-References: <20240821085613.5408-1-hongchi.peng@siengine.com>
+	Steven Price <steven.price@arm.com>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Marc Zyngier <maz@kernel.org>, Will Deacon <will@kernel.org>,
+	James Morse <james.morse@arm.com>,
+	Oliver Upton <oliver.upton@linux.dev>,
+	Suzuki K Poulose <suzuki.poulose@arm.com>,
+	Zenghui Yu <yuzenghui@huawei.com>,
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+	Joey Gouly <joey.gouly@arm.com>,
+	Alexandru Elisei <alexandru.elisei@arm.com>,
+	Christoffer Dall <christoffer.dall@arm.com>,
+	Fuad Tabba <tabba@google.com>, linux-coco@lists.linux.dev,
+	Ganapatrao Kulkarni <gankulkarni@os.amperecomputing.com>,
+	Gavin Shan <gshan@redhat.com>,
+	Shanker Donthineni <sdonthineni@nvidia.com>,
+	Alper Gun <alpergun@google.com>
+Subject: Re: [PATCH v4 18/43] arm64: RME: Handle realm enter/exit
+Message-ID: <202408222119.6YF3UR6O-lkp@intel.com>
+References: <20240821153844.60084-19-steven.price@arm.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -65,187 +79,165 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240821085613.5408-1-hongchi.peng@siengine.com>
+In-Reply-To: <20240821153844.60084-19-steven.price@arm.com>
 
-Hi hongchi.peng,
+Hi Steven,
 
-kernel test robot noticed the following build errors:
+kernel test robot noticed the following build warnings:
 
-[auto build test ERROR on drm-misc/drm-misc-next]
-[also build test ERROR on linus/master v6.11-rc4 next-20240822]
+[auto build test WARNING on kvmarm/next]
+[also build test WARNING on kvm/queue arm64/for-next/core linus/master v6.11-rc4 next-20240822]
+[cannot apply to kvm/linux-next]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/hongchi-peng/drm-komeda-Fix-an-issue-related-to-normalized-zpos/20240822-045334
-base:   git://anongit.freedesktop.org/drm/drm-misc drm-misc-next
-patch link:    https://lore.kernel.org/r/20240821085613.5408-1-hongchi.peng%40siengine.com
-patch subject: [PATCH] drm: komeda: Fix an issue related to normalized zpos
-config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20240822/202408222146.r7E6lCGh-lkp@intel.com/config)
+url:    https://github.com/intel-lab-lkp/linux/commits/Steven-Price/KVM-Prepare-for-handling-only-shared-mappings-in-mmu_notifier-events/20240821-235327
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/kvmarm/kvmarm.git next
+patch link:    https://lore.kernel.org/r/20240821153844.60084-19-steven.price%40arm.com
+patch subject: [PATCH v4 18/43] arm64: RME: Handle realm enter/exit
+config: arm64-allmodconfig (https://download.01.org/0day-ci/archive/20240822/202408222119.6YF3UR6O-lkp@intel.com/config)
 compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 26670e7fa4f032a019d23d56c6a02926e854e8af)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240822/202408222146.r7E6lCGh-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240822/202408222119.6YF3UR6O-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202408222146.r7E6lCGh-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202408222119.6YF3UR6O-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
-   In file included from drivers/gpu/drm/arm/display/komeda/komeda_kms.c:7:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:14:
-   In file included from arch/hexagon/include/asm/io.h:328:
-   include/asm-generic/io.h:548:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     548 |         val = __raw_readb(PCI_IOBASE + addr);
-         |                           ~~~~~~~~~~ ^
-   include/asm-generic/io.h:561:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     561 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
-      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-         |                                                   ^
-   In file included from drivers/gpu/drm/arm/display/komeda/komeda_kms.c:7:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:14:
-   In file included from arch/hexagon/include/asm/io.h:328:
-   include/asm-generic/io.h:574:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     574 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
-      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
-         |                                                   ^
-   In file included from drivers/gpu/drm/arm/display/komeda/komeda_kms.c:7:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:14:
-   In file included from arch/hexagon/include/asm/io.h:328:
-   include/asm-generic/io.h:585:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     585 |         __raw_writeb(value, PCI_IOBASE + addr);
-         |                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:595:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     595 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:605:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     605 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   In file included from drivers/gpu/drm/arm/display/komeda/komeda_kms.c:9:
-   In file included from include/drm/drm_atomic.h:31:
-   In file included from include/drm/drm_crtc.h:32:
-   In file included from include/drm/drm_modes.h:33:
-   In file included from include/drm/drm_connector.h:32:
-   In file included from include/drm/drm_util.h:36:
-   In file included from include/linux/kgdb.h:19:
-   In file included from include/linux/kprobes.h:28:
-   In file included from include/linux/ftrace.h:13:
-   In file included from include/linux/kallsyms.h:13:
+   In file included from arch/arm64/kvm/rme-exit.c:6:
+   In file included from include/linux/kvm_host.h:16:
    In file included from include/linux/mm.h:2228:
+   include/linux/vmstat.h:500:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     500 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     501 |                            item];
+         |                            ~~~~
+   include/linux/vmstat.h:507:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     507 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     508 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
    include/linux/vmstat.h:514:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
      514 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
          |                               ~~~~~~~~~~~ ^ ~~~
->> drivers/gpu/drm/arm/display/komeda/komeda_kms.c:207:5: error: call to '__compiletime_assert_310' declared with 'error' attribute: max(slave_zpos, kcrtc_st->max_slave_zorder) signedness error
-     207 |                                 max(slave_zpos, kcrtc_st->max_slave_zorder);
-         |                                 ^
-   include/linux/minmax.h:136:19: note: expanded from macro 'max'
-     136 | #define max(x, y)       __careful_cmp(max, x, y)
-         |                         ^
-   include/linux/minmax.h:105:2: note: expanded from macro '__careful_cmp'
-     105 |         __careful_cmp_once(op, x, y, __UNIQUE_ID(x_), __UNIQUE_ID(y_))
-         |         ^
-   include/linux/minmax.h:100:2: note: expanded from macro '__careful_cmp_once'
-     100 |         BUILD_BUG_ON_MSG(!__types_ok(x,y,ux,uy),        \
-         |         ^
-   note: (skipping 2 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
-   include/linux/compiler_types.h:498:2: note: expanded from macro '_compiletime_assert'
-     498 |         __compiletime_assert(condition, msg, prefix, suffix)
-         |         ^
-   include/linux/compiler_types.h:491:4: note: expanded from macro '__compiletime_assert'
-     491 |                         prefix ## suffix();                             \
-         |                         ^
-   <scratch space>:79:1: note: expanded from here
-      79 | __compiletime_assert_310
-         | ^
-   7 warnings and 1 error generated.
+   include/linux/vmstat.h:519:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     519 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     520 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/vmstat.h:528:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     528 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     529 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+   arch/arm64/kvm/rme-exit.c:61:23: warning: initializer overrides prior initialization of this subobject [-Winitializer-overrides]
+      61 |         [ESR_ELx_EC_SYS64]      = rec_exit_sys_reg,
+         |                                   ^~~~~~~~~~~~~~~~
+   arch/arm64/kvm/rme-exit.c:60:27: note: previous initialization is here
+      60 |         [0 ... ESR_ELx_EC_MAX]  = rec_exit_reason_notimpl,
+         |                                   ^~~~~~~~~~~~~~~~~~~~~~~
+   arch/arm64/kvm/rme-exit.c:62:26: warning: initializer overrides prior initialization of this subobject [-Winitializer-overrides]
+      62 |         [ESR_ELx_EC_DABT_LOW]   = rec_exit_sync_dabt,
+         |                                   ^~~~~~~~~~~~~~~~~~
+   arch/arm64/kvm/rme-exit.c:60:27: note: previous initialization is here
+      60 |         [0 ... ESR_ELx_EC_MAX]  = rec_exit_reason_notimpl,
+         |                                   ^~~~~~~~~~~~~~~~~~~~~~~
+   arch/arm64/kvm/rme-exit.c:63:26: warning: initializer overrides prior initialization of this subobject [-Winitializer-overrides]
+      63 |         [ESR_ELx_EC_IABT_LOW]   = rec_exit_sync_iabt
+         |                                   ^~~~~~~~~~~~~~~~~~
+   arch/arm64/kvm/rme-exit.c:60:27: note: previous initialization is here
+      60 |         [0 ... ESR_ELx_EC_MAX]  = rec_exit_reason_notimpl,
+         |                                   ^~~~~~~~~~~~~~~~~~~~~~~
+>> arch/arm64/kvm/rme-exit.c:94:6: warning: variable 'top_ipa' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
+      94 |         if (realm_is_addr_protected(realm, base) &&
+         |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      95 |             realm_is_addr_protected(realm, top - 1)) {
+         |             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/arm64/kvm/rme-exit.c:108:44: note: uninitialized use occurs here
+     108 |         kvm_prepare_memory_fault_exit(vcpu, base, top_ipa - base, false, false,
+         |                                                   ^~~~~~~
+   arch/arm64/kvm/rme-exit.c:94:2: note: remove the 'if' if its condition is always true
+      94 |         if (realm_is_addr_protected(realm, base) &&
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      95 |             realm_is_addr_protected(realm, top - 1)) {
+         |             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>> arch/arm64/kvm/rme-exit.c:94:6: warning: variable 'top_ipa' is used uninitialized whenever '&&' condition is false [-Wsometimes-uninitialized]
+      94 |         if (realm_is_addr_protected(realm, base) &&
+         |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/arm64/kvm/rme-exit.c:108:44: note: uninitialized use occurs here
+     108 |         kvm_prepare_memory_fault_exit(vcpu, base, top_ipa - base, false, false,
+         |                                                   ^~~~~~~
+   arch/arm64/kvm/rme-exit.c:94:6: note: remove the '&&' if its condition is always true
+      94 |         if (realm_is_addr_protected(realm, base) &&
+         |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/arm64/kvm/rme-exit.c:91:23: note: initialize the variable 'top_ipa' to silence this warning
+      91 |         unsigned long top_ipa;
+         |                              ^
+         |                               = 0
+   10 warnings generated.
 
 
-vim +207 drivers/gpu/drm/arm/display/komeda/komeda_kms.c
+vim +94 arch/arm64/kvm/rme-exit.c
 
-   151	
-   152	static int komeda_crtc_normalize_zpos(struct drm_crtc *crtc,
-   153					      struct drm_crtc_state *crtc_st)
-   154	{
-   155		struct drm_atomic_state *state = crtc_st->state;
-   156		struct komeda_crtc *kcrtc = to_kcrtc(crtc);
-   157		struct komeda_crtc_state *kcrtc_st = to_kcrtc_st(crtc_st);
-   158		struct komeda_plane_state *kplane_st;
-   159		struct drm_plane_state *plane_st;
-   160		struct drm_plane *plane;
-   161		struct list_head zorder_list;
-   162		int order = 0, slave_zpos, err;
-   163	
-   164		DRM_DEBUG_ATOMIC("[CRTC:%d:%s] calculating normalized zpos values\n",
-   165				 crtc->base.id, crtc->name);
-   166	
-   167		INIT_LIST_HEAD(&zorder_list);
-   168	
-   169		/* This loop also added all effected planes into the new state */
-   170		drm_for_each_plane_mask(plane, crtc->dev, crtc_st->plane_mask) {
-   171			plane_st = drm_atomic_get_plane_state(state, plane);
-   172			if (IS_ERR(plane_st))
-   173				return PTR_ERR(plane_st);
-   174	
-   175			/* Build a list by zpos increasing */
-   176			err = komeda_plane_state_list_add(plane_st, &zorder_list);
-   177			if (err)
-   178				return err;
-   179		}
-   180	
-   181		kcrtc_st->max_slave_zorder = 0;
-   182	
-   183		list_for_each_entry(kplane_st, &zorder_list, zlist_node) {
-   184			plane_st = &kplane_st->base;
-   185			plane = plane_st->plane;
-   186	
-   187			plane_st->normalized_zpos = order++;
-   188			/* When layer_split has been enabled, one plane will be handled
-   189			 * by two separated komeda layers (left/right), which may needs
-   190			 * two zorders.
-   191			 * - zorder: for left_layer for left display part.
-   192			 * - zorder + 1: will be reserved for right layer.
-   193			 */
-   194			if (to_kplane_st(plane_st)->layer_split)
-   195				order++;
-   196	
-   197			DRM_DEBUG_ATOMIC("[PLANE:%d:%s] zpos:%d, normalized zpos: %d\n",
-   198					 plane->base.id, plane->name,
-   199					 plane_st->zpos, plane_st->normalized_zpos);
-   200	
-   201			/* calculate max slave zorder */
-   202			if (has_bit(drm_plane_index(plane), kcrtc->slave_planes)) {
-   203				slave_zpos = plane_st->normalized_zpos;
-   204				if (to_kplane_st(plane_st)->layer_split)
-   205					slave_zpos++;
-   206				kcrtc_st->max_slave_zorder =
- > 207					max(slave_zpos, kcrtc_st->max_slave_zorder);
-   208			}
-   209		}
-   210	
-   211		crtc_st->zpos_changed = true;
-   212	
-   213		return 0;
-   214	}
-   215	
+    58	
+    59	static exit_handler_fn rec_exit_handlers[] = {
+  > 60		[0 ... ESR_ELx_EC_MAX]	= rec_exit_reason_notimpl,
+    61		[ESR_ELx_EC_SYS64]	= rec_exit_sys_reg,
+    62		[ESR_ELx_EC_DABT_LOW]	= rec_exit_sync_dabt,
+    63		[ESR_ELx_EC_IABT_LOW]	= rec_exit_sync_iabt
+    64	};
+    65	
+    66	static int rec_exit_psci(struct kvm_vcpu *vcpu)
+    67	{
+    68		struct realm_rec *rec = &vcpu->arch.rec;
+    69		int i;
+    70		int ret;
+    71	
+    72		for (i = 0; i < REC_RUN_GPRS; i++)
+    73			vcpu_set_reg(vcpu, i, rec->run->exit.gprs[i]);
+    74	
+    75		ret = kvm_smccc_call_handler(vcpu);
+    76	
+    77		for (i = 0; i < REC_RUN_GPRS; i++)
+    78			rec->run->enter.gprs[i] = vcpu_get_reg(vcpu, i);
+    79	
+    80		return ret;
+    81	}
+    82	
+    83	static int rec_exit_ripas_change(struct kvm_vcpu *vcpu)
+    84	{
+    85		struct kvm *kvm = vcpu->kvm;
+    86		struct realm *realm = &kvm->arch.realm;
+    87		struct realm_rec *rec = &vcpu->arch.rec;
+    88		unsigned long base = rec->run->exit.ripas_base;
+    89		unsigned long top = rec->run->exit.ripas_top;
+    90		unsigned long ripas = rec->run->exit.ripas_value & 1;
+    91		unsigned long top_ipa;
+    92		int ret = -EINVAL;
+    93	
+  > 94		if (realm_is_addr_protected(realm, base) &&
+    95		    realm_is_addr_protected(realm, top - 1)) {
+    96			kvm_mmu_topup_memory_cache(&vcpu->arch.mmu_page_cache,
+    97						   kvm_mmu_cache_min_pages(vcpu->arch.hw_mmu));
+    98			write_lock(&kvm->mmu_lock);
+    99			ret = realm_set_ipa_state(vcpu, base, top, ripas, &top_ipa);
+   100			write_unlock(&kvm->mmu_lock);
+   101		}
+   102	
+   103		WARN(ret && ret != -ENOMEM,
+   104		     "Unable to satisfy SET_IPAS for %#lx - %#lx, ripas: %#lx\n",
+   105		     base, top, ripas);
+   106	
+   107		/* Exit to VMM to complete the change */
+ > 108		kvm_prepare_memory_fault_exit(vcpu, base, top_ipa - base, false, false,
+   109					      ripas == 1);
+   110	
+   111		return 0;
+   112	}
+   113	
 
 -- 
 0-DAY CI Kernel Test Service
