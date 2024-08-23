@@ -1,61 +1,63 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 73C8E1850AF;
-	Fri, 23 Aug 2024 12:35:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7FE04188596;
+	Fri, 23 Aug 2024 13:57:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724416530; cv=none; b=ak+RlMaUOlqFQEd8m2SghuLtpvGaE6dQ2f8S8WLdaqdGWNZOPhm0VBR0jkUqhNvqVsUFjucj33q/15TfMvebsGcmlvksTsSbMWj88zRns4cjLkk743GTkm0TUVZ0BM1/+PWhQ3wmpSFyjuYN7SigDH23lj1PD9DKK6yR8gzZPnI=
+	t=1724421455; cv=none; b=IAdkqZhX77Q5Y93z4yUXUPew/3zyaBlwnByyh2HjEo1lBP+h0VVOUH/BwgJGMpf85ggDSue0J6X2V971uSEVaB8CeFQarlpgTd3a4xX8QByVGRcO219Je/6lkwU1L5htFCu0m51F+L45Cp7pCajEqyjh28U5e9wqFpHI9wypI8g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724416530; c=relaxed/simple;
-	bh=ix6vXKCUbnKnqPEkpF9Bih2vIgrDcu1Z3BK9hyeomeA=;
+	s=arc-20240116; t=1724421455; c=relaxed/simple;
+	bh=LDNpPxi4G7n+Ft5t7DksRyjmvULIrLPrUtYNcHz4Z0c=;
 	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=ed23Xp008mRS2qcsw4j8LAvLCcyMm+yQjAIhuUQYxUjFXhP6x40ogvOjU3vqHXKY+Urtyb/Fseq2QduJF/PW0PLcPluwkptIgwcc6svQ/qKvHjW2TjW6QyGFnfnt9ZlJDo1c9gh7cswSJG479G2Zub3ziwSvUAZxJYtLNks4OBY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=RGUtSxEf; arc=none smtp.client-ip=192.198.163.11
+	 Content-Disposition; b=FXa17CObBa7hWQYCldlDEqjpKuULzMy4w7kaUBqwmrjZinPa1scT5WD3BLif0B53Is9cWefNAR3Ujz0DxGz+HkGR9dkLIpNQs1zcIk0bWDeYptTni2NYyql8j/3fNLo8Jt3fELFlE/LITPZdITFLbZbsOT40qcbM4++II3Cn2tc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=YdQsh6CQ; arc=none smtp.client-ip=198.175.65.21
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="RGUtSxEf"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="YdQsh6CQ"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1724416528; x=1755952528;
+  t=1724421454; x=1755957454;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=ix6vXKCUbnKnqPEkpF9Bih2vIgrDcu1Z3BK9hyeomeA=;
-  b=RGUtSxEfQefIMagxyWMNPksCy4QFU4ysqaFqbdpcCkPcLPw2OcFBLIow
-   qKKcYetKRdHomhwuUegXhLJKlg5ocRfrWVsu1sBgY7D1RQySlbyR2hkUc
-   ALES57VTwFlXbJwJTA8O2nipThdxsi4Ivg5vjTRVZczvYLvoM9+ZsdIma
-   wPhvYgCx300O6IZrsf5ebrx0Qr/dCiUws8fmhMOPF/atFCezIkAZKeN1G
-   XoL0tGMGlooSkQwQG7NLj2St5PC6wfNwiBXmyyCs82ZGrHra3Sb8ARtwx
-   VcJCCF03lGR1Bxvq8nCWTziFcauxLH2m8/UVRmYQSalbAkj59E8r7Lnmc
-   w==;
-X-CSE-ConnectionGUID: /EX4kYU7SlS9wwHcXo9DeQ==
-X-CSE-MsgGUID: t6Y3BuBySuyKLL7HleJtbA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11172"; a="33505131"
+  bh=LDNpPxi4G7n+Ft5t7DksRyjmvULIrLPrUtYNcHz4Z0c=;
+  b=YdQsh6CQzSXEqUigSHPsnMSby91OSNXa8UDKvqhoJku6cvb05zc7SyAV
+   c1j3JO0mkQTD0Bhwlm1GNx5IeoxuyB3kCt3GfJFQib5+yUJsV1ge8d8kG
+   HuMnUW0Fq1MZ/LcL/MmPOv6a77gj+OsDocR/+iLV+Ncu8ICG4DJm7PNVU
+   Ueau/LFKhNo73Hy4ZokB4KTNCxJEk+LiDespHfLnd+G0Q4m5SeA9Y9xiR
+   zUPc7VTuBWMWqZMc+iTkO2wQ5Tj/LJn511nBt2Tu0Wdww+yHMAZ16QmmU
+   SU/rxmXjbEysiT7z7Gw2KmAvlapORPl+2vSNHRQKz2MIsRBODdqrUVsa+
+   A==;
+X-CSE-ConnectionGUID: eOz3HGuOQIa1RMU9GoDvpQ==
+X-CSE-MsgGUID: KIkAWiMrT22j20zrcxgNdg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11172"; a="22855669"
 X-IronPort-AV: E=Sophos;i="6.10,170,1719903600"; 
-   d="scan'208";a="33505131"
-Received: from orviesa007.jf.intel.com ([10.64.159.147])
-  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Aug 2024 05:35:28 -0700
-X-CSE-ConnectionGUID: SHAeHeDoSGWSMIRPnDqBMA==
-X-CSE-MsgGUID: 99cntAGlTJWmRrCGIMPVgA==
+   d="scan'208";a="22855669"
+Received: from orviesa003.jf.intel.com ([10.64.159.143])
+  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Aug 2024 06:57:31 -0700
+X-CSE-ConnectionGUID: 0uEkEY4ORs+PVwHI0m7kmQ==
+X-CSE-MsgGUID: GJ5iRcg5Q5iLt+E33hvCcg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.10,170,1719903600"; 
-   d="scan'208";a="62303847"
+   d="scan'208";a="66622762"
 Received: from lkp-server01.sh.intel.com (HELO 9a732dc145d3) ([10.239.97.150])
-  by orviesa007.jf.intel.com with ESMTP; 23 Aug 2024 05:35:26 -0700
+  by orviesa003.jf.intel.com with ESMTP; 23 Aug 2024 06:57:28 -0700
 Received: from kbuild by 9a732dc145d3 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1shTVj-000Dhc-2t;
-	Fri, 23 Aug 2024 12:35:23 +0000
-Date: Fri, 23 Aug 2024 20:35:15 +0800
+	id 1shUn8-000Dlc-10;
+	Fri, 23 Aug 2024 13:57:26 +0000
+Date: Fri, 23 Aug 2024 21:56:36 +0800
 From: kernel test robot <lkp@intel.com>
-To: Simon Horman <horms@kernel.org>
+To: Yuntao Liu <liuyuntao12@huawei.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	devel@driverdev.osuosl.org,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: [staging:staging-testing 36/53]
- drivers/staging/rtl8192e/rtllib_crypt_tkip.c:640:7: warning: variable 'iv16'
- set but not used
-Message-ID: <202408232049.UJef268y-lkp@intel.com>
+	linux-kernel@vger.kernel.org,
+	"Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Linus Walleij <linus.walleij@linaro.org>
+Subject: WARNING: modpost: vmlinux: section mismatch in reference:
+ imx7d_enet_init+0x18 (section: .text.unlikely.imx7d_enet_init) ->
+ imx7d_enet_clk_sel (section: .init.text)
+Message-ID: <202408232129.sx7nsk3e-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -65,62 +67,123 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/staging.git staging-testing
-head:   5315266844ea3b0b8b6be9842d5901e439fa838a
-commit: 5f1a6826ea4900f8540d5eeb29f97796860f2d08 [36/53] staging: rtl8192e: remove set but otherwise unused local variable iv32
-config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20240823/202408232049.UJef268y-lkp@intel.com/config)
-compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240823/202408232049.UJef268y-lkp@intel.com/reproduce)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   3d5f968a177d468cd13568ef901c5be84d83d32b
+commit: ed0f941022515ff40473ea5335769a5dc2524a3f ARM: 9404/1: arm32: enable HAVE_LD_DEAD_CODE_DATA_ELIMINATION
+date:   2 months ago
+config: arm-randconfig-002-20240823 (https://download.01.org/0day-ci/archive/20240823/202408232129.sx7nsk3e-lkp@intel.com/config)
+compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 08e5a1de8227512d4774a534b91cb2353cef6284)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240823/202408232129.sx7nsk3e-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202408232049.UJef268y-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202408232129.sx7nsk3e-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All warnings (new ones prefixed by >>, old ones prefixed by <<):
 
->> drivers/staging/rtl8192e/rtllib_crypt_tkip.c:640:7: warning: variable 'iv16' set but not used [-Wunused-but-set-variable]
-     640 |                 u16 iv16 = tkey->tx_iv16;
-         |                     ^
-   1 warning generated.
-
-
-vim +/iv16 +640 drivers/staging/rtl8192e/rtllib_crypt_tkip.c
-
-ecdfa44610fa18 drivers/staging/rtl8192e/ieee80211/ieee80211_crypt_tkip.c Greg Kroah-Hartman 2009-08-04  626  
-94a799425eee82 drivers/staging/rtl8192e/rtllib_crypt_tkip.c              Larry Finger       2011-08-23  627  static int rtllib_tkip_get_key(void *key, int len, u8 *seq, void *priv)
-ecdfa44610fa18 drivers/staging/rtl8192e/ieee80211/ieee80211_crypt_tkip.c Greg Kroah-Hartman 2009-08-04  628  {
-94a799425eee82 drivers/staging/rtl8192e/rtllib_crypt_tkip.c              Larry Finger       2011-08-23  629  	struct rtllib_tkip_data *tkey = priv;
-ecdfa44610fa18 drivers/staging/rtl8192e/ieee80211/ieee80211_crypt_tkip.c Greg Kroah-Hartman 2009-08-04  630  
-ecdfa44610fa18 drivers/staging/rtl8192e/ieee80211/ieee80211_crypt_tkip.c Greg Kroah-Hartman 2009-08-04  631  	if (len < TKIP_KEY_LEN)
-ecdfa44610fa18 drivers/staging/rtl8192e/ieee80211/ieee80211_crypt_tkip.c Greg Kroah-Hartman 2009-08-04  632  		return -1;
-ecdfa44610fa18 drivers/staging/rtl8192e/ieee80211/ieee80211_crypt_tkip.c Greg Kroah-Hartman 2009-08-04  633  
-ecdfa44610fa18 drivers/staging/rtl8192e/ieee80211/ieee80211_crypt_tkip.c Greg Kroah-Hartman 2009-08-04  634  	if (!tkey->key_set)
-ecdfa44610fa18 drivers/staging/rtl8192e/ieee80211/ieee80211_crypt_tkip.c Greg Kroah-Hartman 2009-08-04  635  		return 0;
-ecdfa44610fa18 drivers/staging/rtl8192e/ieee80211/ieee80211_crypt_tkip.c Greg Kroah-Hartman 2009-08-04  636  	memcpy(key, tkey->key, TKIP_KEY_LEN);
-ecdfa44610fa18 drivers/staging/rtl8192e/ieee80211/ieee80211_crypt_tkip.c Greg Kroah-Hartman 2009-08-04  637  
-ecdfa44610fa18 drivers/staging/rtl8192e/ieee80211/ieee80211_crypt_tkip.c Greg Kroah-Hartman 2009-08-04  638  	if (seq) {
-ecdfa44610fa18 drivers/staging/rtl8192e/ieee80211/ieee80211_crypt_tkip.c Greg Kroah-Hartman 2009-08-04  639  		/* Return the sequence number of the last transmitted frame. */
-ecdfa44610fa18 drivers/staging/rtl8192e/ieee80211/ieee80211_crypt_tkip.c Greg Kroah-Hartman 2009-08-04 @640  		u16 iv16 = tkey->tx_iv16;
-3a6b70c3f3558a drivers/staging/rtl8192e/rtllib_crypt_tkip.c              Matthew Casey      2014-08-22  641  
-ecdfa44610fa18 drivers/staging/rtl8192e/ieee80211/ieee80211_crypt_tkip.c Greg Kroah-Hartman 2009-08-04  642  		iv16--;
-ecdfa44610fa18 drivers/staging/rtl8192e/ieee80211/ieee80211_crypt_tkip.c Greg Kroah-Hartman 2009-08-04  643  		seq[0] = tkey->tx_iv16;
-ecdfa44610fa18 drivers/staging/rtl8192e/ieee80211/ieee80211_crypt_tkip.c Greg Kroah-Hartman 2009-08-04  644  		seq[1] = tkey->tx_iv16 >> 8;
-ecdfa44610fa18 drivers/staging/rtl8192e/ieee80211/ieee80211_crypt_tkip.c Greg Kroah-Hartman 2009-08-04  645  		seq[2] = tkey->tx_iv32;
-ecdfa44610fa18 drivers/staging/rtl8192e/ieee80211/ieee80211_crypt_tkip.c Greg Kroah-Hartman 2009-08-04  646  		seq[3] = tkey->tx_iv32 >> 8;
-ecdfa44610fa18 drivers/staging/rtl8192e/ieee80211/ieee80211_crypt_tkip.c Greg Kroah-Hartman 2009-08-04  647  		seq[4] = tkey->tx_iv32 >> 16;
-ecdfa44610fa18 drivers/staging/rtl8192e/ieee80211/ieee80211_crypt_tkip.c Greg Kroah-Hartman 2009-08-04  648  		seq[5] = tkey->tx_iv32 >> 24;
-ecdfa44610fa18 drivers/staging/rtl8192e/ieee80211/ieee80211_crypt_tkip.c Greg Kroah-Hartman 2009-08-04  649  	}
-ecdfa44610fa18 drivers/staging/rtl8192e/ieee80211/ieee80211_crypt_tkip.c Greg Kroah-Hartman 2009-08-04  650  
-ecdfa44610fa18 drivers/staging/rtl8192e/ieee80211/ieee80211_crypt_tkip.c Greg Kroah-Hartman 2009-08-04  651  	return TKIP_KEY_LEN;
-ecdfa44610fa18 drivers/staging/rtl8192e/ieee80211/ieee80211_crypt_tkip.c Greg Kroah-Hartman 2009-08-04  652  }
-ecdfa44610fa18 drivers/staging/rtl8192e/ieee80211/ieee80211_crypt_tkip.c Greg Kroah-Hartman 2009-08-04  653  
-
-:::::: The code at line 640 was first introduced by commit
-:::::: ecdfa44610fa18678c3dd481af75368b9800c6c7 Staging: add Realtek 8192 PCI wireless driver
-
-:::::: TO: Greg Kroah-Hartman <gregkh@suse.de>
-:::::: CC: Greg Kroah-Hartman <gregkh@suse.de>
+WARNING: modpost: missing MODULE_DESCRIPTION() in vmlinux.o
+>> WARNING: modpost: vmlinux: section mismatch in reference: imx7d_enet_init+0x18 (section: .text.unlikely.imx7d_enet_init) -> imx7d_enet_clk_sel (section: .init.text)
+WARNING: modpost: missing MODULE_DESCRIPTION() in arch/arm/crypto/poly1305-arm.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in kernel/time/time_test.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in fs/nls/nls_cp737.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in fs/nls/nls_cp852.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in fs/nls/nls_cp855.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in fs/nls/nls_cp864.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in fs/nls/nls_cp865.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in fs/nls/nls_cp866.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in fs/nls/nls_cp869.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in fs/nls/nls_cp874.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in fs/nls/nls_cp932.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in fs/nls/nls_euc-jp.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in fs/nls/nls_ascii.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in fs/nls/nls_iso8859-2.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in fs/nls/nls_iso8859-5.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in fs/nls/nls_iso8859-13.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in fs/nls/nls_koi8-r.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in fs/nls/nls_koi8-u.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in fs/nls/nls_koi8-ru.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in fs/nls/mac-greek.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in fs/nls/mac-inuit.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in fs/nls/mac-roman.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in fs/nls/mac-turkish.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in fs/nls/nls_ucs2_utils.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in fs/unicode/utf8data.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in fs/ext4/ext4-inode-test.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in fs/jbd2/jbd2.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in fs/ufs/ufs.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in fs/qnx4/qnx4.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in security/keys/trusted-keys/trusted.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in security/keys/encrypted-keys/encrypted-keys.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in security/apparmor/apparmor_policy_unpack_test.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in crypto/algif_skcipher.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in lib/kunit/kunit.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in lib/kunit/kunit-test.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in lib/math/prime_numbers.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in lib/crypto/libarc4.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in lib/string_kunit.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in lib/string_helpers_kunit.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in lib/cpumask_kunit.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in lib/test_ida.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in lib/test_module.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in lib/test_rhashtable.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in lib/test_static_keys.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in lib/test_static_key_base.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in lib/test_bitmap.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in lib/test_maple_tree.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in lib/test_memcat_p.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in lib/test_blackhole_dev.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in lib/test_meminit.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in lib/list-test.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in lib/test_linear_ranges.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in lib/test_bits.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in lib/cmdline_kunit.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in lib/overflow_kunit.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in lib/fortify_kunit.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in lib/siphash_kunit.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/pinctrl/pinctrl-mcp23s08_i2c.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/pinctrl/pinctrl-mcp23s08.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/video/backlight/platform_lcd.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/video/backlight/rt4831-backlight.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/clk/mediatek/clk-mt7622-eth.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/clk/mediatek/clk-mt7622-hif.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/clk/mediatek/clk-mt7986-apmixed.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/clk/mediatek/clk-mt7986-topckgen.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/clk/mediatek/clk-mt8365-vdec.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/clk/mediatek/clk-mt8365-venc.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/clk/versatile/clk-vexpress-osc.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/clk/qcom/clk-qcom.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/clk/qcom/gcc-msm8976.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/dma/qcom/hdma_mgmt.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/dma/ti/cppi41.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/dma/dmatest.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/soc/mediatek/mtk-cmdq-helper.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/virtio/virtio_dma_buf.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/regulator/max20411-regulator.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/regulator/tps6286x-regulator.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/char/hw_random/omap-rng.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/char/hw_random/omap3-rom-rng.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/gpu/drm/tests/drm_kunit_helpers.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/gpu/drm/tests/drm_buddy_test.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/gpu/drm/tests/drm_cmdline_parser_test.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/gpu/drm/tests/drm_connector_test.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/gpu/drm/tests/drm_damage_helper_test.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/gpu/drm/tests/drm_dp_mst_helper_test.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/gpu/drm/tests/drm_exec_test.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/gpu/drm/tests/drm_format_test.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/gpu/drm/tests/drm_framebuffer_test.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/gpu/drm/tests/drm_gem_shmem_test.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/gpu/drm/tests/drm_managed_test.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/gpu/drm/tests/drm_mm_test.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/gpu/drm/tests/drm_modes_test.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/gpu/drm/tests/drm_plane_helper_test.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/gpu/drm/tests/drm_probe_helper_test.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/gpu/drm/tests/drm_rect_test.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/gpu/drm/bridge/lontium-lt9611.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/gpu/drm/bridge/lontium-lt9611uxc.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/gpu/drm/bridge/sil-sii8620.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/gpu/drm/bridge/sii9234.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/gpu/drm/drm_panel_orientation_quirks.o
 
 -- 
 0-DAY CI Kernel Test Service
