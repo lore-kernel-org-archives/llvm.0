@@ -1,58 +1,33 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4BAB117C;
-	Fri, 23 Aug 2024 00:05:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6CA0C63A;
+	Fri, 23 Aug 2024 00:12:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724371527; cv=none; b=D2Uwh4Hw3FcbAHPR5syVCrx8/0XJHSf3vuTu3dow05xHpFHsmygp2bGHUBkOaAQgcObvKPa2FwoXy91azHiMCHSKgh/5kOY5JenmtlpjNrUlkZy/G5Cueo0NvTQdHzFFO4hERGiMb+v8ncqZDwT824QUWSoWS7+1TzQ6SSUNYj0=
+	t=1724371937; cv=none; b=SIperVK4gAo6Kl62x9sU0gLHsjaemfAe4T7FiAcpbycCYlBunqLtdHBxGc1TPTKAfw9bj7RF8nSpgeVSnX3ZQMwcQCUOmQhBo3wuK+hI6KA9ZMybI3NxE/EaT41U020ZMxyXdj1qyGLETxLn29xjhYMVPzCwmcHWmZMurWmhOvo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724371527; c=relaxed/simple;
-	bh=aVeJe/7KLuyfzsfAXhhlrtTjGT4oThY97aPYWYhQF0A=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=NQzrI+PEhoFjdHHbfvNQlsTiqMrjaeIDh2WZIST8Ry9DSCD0QUhyHhWd3+nKbnY6/HWuNWCxWGT6vgQIpRjyYBZAA6W42Hlt3zW3VVFhyvmSoSG+gx3NXp5HW+J+nIdBp4LUp+r77YD9BFgLICM1wxP5osw57rxEAxu2h7zAXWo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jTVZz4YE; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1724371937; c=relaxed/simple;
+	bh=hR348iFeerciLqBqWHS3fQeIxVKDvQfpmtUSU4LpnR4=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=M+zvhRD2ZEAZNYaVQw7ZaD++EF2vDQFUJtSQ9UV9MU1M9AuQbTShrfEZDbUwce7bl2Xb29xmpv3lNl0sV6XPj0ulhAl/+xMCdjccf+cpM9ImQkmaNC3d/BaS8hUIn5guzd2somNixLKMOqE0e4rt1Eq9AP4DBSmbB2KglrvNSeA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=U56DRAnA; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jTVZz4YE"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C2CBFC32782;
-	Fri, 23 Aug 2024 00:05:26 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="U56DRAnA"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9E629C32782;
+	Fri, 23 Aug 2024 00:12:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1724371526;
-	bh=aVeJe/7KLuyfzsfAXhhlrtTjGT4oThY97aPYWYhQF0A=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=jTVZz4YEPR8OkLTX3s51yozSUOWo5LbCs2D16ppX7+fj+iG2YuA+B87To7r58lA/k
-	 9OIjL+7Ux/j4+/3EoQknaz11d+/CkSau4jgiimojc0cVPUCcXrxTCQVc6kYDk44Ivp
-	 ZEauXX+xUq6LPl0VYYGRbw9Tkv2VYowwFtRp1pxfwP1lCPUWuFtKn/B+zAr2MSG+Hu
-	 gGnbm+EGaK1Z4bfr1fYnmLadDrsTz4tAVCSv4R04rhdtkpSzV4Jkrr082CrxmEjp5f
-	 0717RoIpRCOyxcCHFkNQdFYcEV6FYdgAoWol+bwdzMlvGuzPYbKH4eEahkxcqhhZbp
-	 rK6ghTimYPnCQ==
-From: Kees Cook <kees@kernel.org>
-To: Andy Shevchenko <andy@kernel.org>,
-	Kees Cook <kees@kernel.org>
-Cc: Justin Stitt <justinstitt@google.com>,
-	Luc Van Oostenryck <luc.vanoostenryck@gmail.com>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Miguel Ojeda <ojeda@kernel.org>,
-	Marco Elver <elver@google.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Hao Luo <haoluo@google.com>,
-	Przemek Kitszel <przemyslaw.kitszel@intel.com>,
-	linux-sparse@vger.kernel.org,
-	linux-hardening@vger.kernel.org,
-	Bill Wendling <morbo@google.com>,
-	Mark Rutland <mark.rutland@arm.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Alexander Lobakin <aleksander.lobakin@intel.com>,
-	Tony Ambardar <tony.ambardar@gmail.com>,
-	Petr Pavlu <petr.pavlu@suse.com>,
-	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: Re: [PATCH] string: Check for "nonstring" attribute on strscpy() arguments
-Date: Thu, 22 Aug 2024 17:05:22 -0700
-Message-Id: <172437152070.4121900.7735546714762971895.b4-ty@kernel.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20240805214340.work.339-kees@kernel.org>
-References: <20240805214340.work.339-kees@kernel.org>
+	s=k20201202; t=1724371937;
+	bh=hR348iFeerciLqBqWHS3fQeIxVKDvQfpmtUSU4LpnR4=;
+	h=From:Date:Subject:To:Cc:From;
+	b=U56DRAnAIl4WrFQvlPLEWvV4zoUhuOOkJnrxO8Hrdfui+dr0sRNl1mMqFuoLQcljh
+	 KpaGDfWV3W7UT6+WTf8lHFJV606WPyn6rohpw6VWdO5a9DAGGr+bR6+/zIM3ThKcyQ
+	 y4axf3sIzkn6GgsuLgASAbD863nuHlvPEG60F0y3k1TEDGjHpEXqL+0DpRDTtG58ED
+	 K+43zzwYZQ/shBs996oZhSYhuICZShrlXWldSyJSe0ZPz2g4r5lSDFKl4WCXwId6u5
+	 a3mSVGUx6iqtTNtqOVVgJFhrNIN7n9/+2zocDa9sltXiqviKQwbiEbNLzqDMN1Y+tl
+	 pdopWggV/qNqw==
+From: Nathan Chancellor <nathan@kernel.org>
+Date: Thu, 22 Aug 2024 17:12:13 -0700
+Subject: [PATCH] x86/resctrl: Annotate __get_mem_config_intel() as __init
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -60,25 +35,62 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
+Message-Id: <20240822-x86-restctrl-get_mem_config_intel-init-v1-1-8b0a68a8731a@kernel.org>
+X-B4-Tracking: v=1; b=H4sIANzTx2YC/x3N0QqDMAxA0V+RPC9Q4zZkvzJG6WraBTSONgxB/
+ PcVH8/LvTtULsIVHt0OhX9SZdWG/tJB/ATNjDI1Azm6upEIt/GOhatFKzNmNr/w4uOqSbIXNZ5
+ RVAyHkByFWz+4d4AW+xZOsp2j5+s4/kyu4AV4AAAA
+To: Fenghua Yu <fenghua.yu@intel.com>, 
+ Reinette Chatre <reinette.chatre@intel.com>, x86@kernel.org, 
+ Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, 
+ Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>
+Cc: linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
+ patches@lists.linux.dev, Nathan Chancellor <nathan@kernel.org>
+X-Mailer: b4 0.15-dev
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1536; i=nathan@kernel.org;
+ h=from:subject:message-id; bh=hR348iFeerciLqBqWHS3fQeIxVKDvQfpmtUSU4LpnR4=;
+ b=owGbwMvMwCUmm602sfCA1DTG02pJDGnHLz84X8XOkPy4bFNjt9SaiQ2m505eE87olbG6ornn6
+ O0O09sHO0pZGMS4GGTFFFmqH6seNzScc5bxxqlJMHNYmUCGMHBxCsBETBYyMjTbcSZfv2xycsGG
+ s269Plctyva2Js2Ydalc9ErK2ujC75qMDBNjrlZ+2iawbS2bp4klV/6xd9pq7+eWb3ln96D/cOI
+ hbX4A
+X-Developer-Key: i=nathan@kernel.org; a=openpgp;
+ fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
 
-On Mon, 05 Aug 2024 14:43:44 -0700, Kees Cook wrote:
-> GCC already checks for arguments that are marked with the "nonstring"[1]
-> attribute when used on standard C String API functions (e.g. strcpy). Gain
-> this compile-time checking also for the kernel's primary string copying
-> function, strscpy().
-> 
-> Note that Clang has neither "nonstring" nor __builtin_has_attribute().
-> 
-> [...]
+After a recent LLVM change [1] that deduces __cold on functions that
+only call cold code (such as __init functions), there is a section
+mismatch warning from __get_mem_config_intel(), which got moved to
+.text.unlikely. as a result of that optimization:
 
-Applied to for-next/hardening, thanks!
+  WARNING: modpost: vmlinux: section mismatch in reference: __get_mem_config_intel+0x77 (section: .text.unlikely.) -> thread_throttle_mode_init (section: .init.text)
 
-[1/1] string: Check for "nonstring" attribute on strscpy() arguments
-      https://git.kernel.org/kees/c/559048d156ff
+Mark __get_mem_config_intel() as __init as well since it is only called
+from __init code, which clears up the warning.
 
-Take care,
+Link: https://github.com/llvm/llvm-project/commit/6b11573b8c5e3d36beee099dbe7347c2a007bf53 [1]
+Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+---
+ arch/x86/kernel/cpu/resctrl/core.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
+diff --git a/arch/x86/kernel/cpu/resctrl/core.c b/arch/x86/kernel/cpu/resctrl/core.c
+index 1930fce9dfe9..b28646f1d9d6 100644
+--- a/arch/x86/kernel/cpu/resctrl/core.c
++++ b/arch/x86/kernel/cpu/resctrl/core.c
+@@ -199,7 +199,7 @@ static inline bool rdt_get_mb_table(struct rdt_resource *r)
+ 	return false;
+ }
+ 
+-static bool __get_mem_config_intel(struct rdt_resource *r)
++static bool __init __get_mem_config_intel(struct rdt_resource *r)
+ {
+ 	struct rdt_hw_resource *hw_res = resctrl_to_arch_res(r);
+ 	union cpuid_0x10_3_eax eax;
+
+---
+base-commit: 7424fc6b86c8980a87169e005f5cd4438d18efe6
+change-id: 20240822-x86-restctrl-get_mem_config_intel-init-3af02a5130ba
+
+Best regards,
 -- 
-Kees Cook
+Nathan Chancellor <nathan@kernel.org>
 
