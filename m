@@ -1,88 +1,101 @@
-Received: from sipsolutions.net (s3.sipsolutions.net [168.119.38.16])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C035028EA;
-	Fri, 23 Aug 2024 10:42:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=168.119.38.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F1051D52D
+	for <llvm@lists.linux.dev>; Fri, 23 Aug 2024 11:42:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724409729; cv=none; b=VIylkKzDeijdQH4tHHYLWL7ARsJC1pgNofgbhryHbmcSeV3sJe50OsrkpjcxIBMrIrT+vlXponLQRUsJYMLpY5dyCkeu43raTMn2LZ6icR0GQVYd819ATlYQi+RTLPScd0Yb3CZgf1U3KUvgOLl1a6wwzjekv0Q1K1GA9scrgnY=
+	t=1724413328; cv=none; b=U8fznttKXt4nvJ7TWh7PBBcSB+8fDD5mtVOblIRjto0KyE6hhR4p8El2oQ1ViNoAbHKInnkDHbF5f+QfudQaRbSUTeudL002qJFpL4kFpMKkNCo8bOoLSJ3gz27AmzhE/rxbZsgSqC66aVTMgo4RkxaX4v8UQ7VgePnUldCCsj4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724409729; c=relaxed/simple;
-	bh=5KK2RJQAtkePrpJ0BcZucFZ37M/1X8amjjqPRfU7Umw=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=Fy/TCbbiYVyORt+csGDbS340gKAV8f9s8+4jI8hFwITYwyKnhNRrfcOOLt8jAEsMy51RT0mqOjOpRUrHy5c1jXamorRwTu8zpeXOxq+5vnTFF5TLvQEkOLXZR0FxAPLtmZ1NsP85Q4/E2RBwquRQY/oysLiPSGURLu/b/gCX5hY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sipsolutions.net; spf=pass smtp.mailfrom=sipsolutions.net; dkim=pass (2048-bit key) header.d=sipsolutions.net header.i=@sipsolutions.net header.b=lNyoYqLj; arc=none smtp.client-ip=168.119.38.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sipsolutions.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sipsolutions.net
+	s=arc-20240116; t=1724413328; c=relaxed/simple;
+	bh=8Terx0hf3tF4LFUW8CdW+9KyQF3kVg73HbSSUcPVcuk=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=uf3rQYK3iuHSZnNR36tzIunK6vW/RrHsXKhis01yERucsBy8/7NSzyscGhn0zKcN5T+fo9kaNs5uot7/1UjEbbzExmsfEdc67nFWxmYEMGHcJ9fX8K4lF03skAiv2ZqB4fsxlMAkre9UQpenDGb5m9gGUFEhTAk1uDbm24qHTiE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=H/c2cP27; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sipsolutions.net header.i=@sipsolutions.net header.b="lNyoYqLj"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=sipsolutions.net; s=mail; h=MIME-Version:Content-Transfer-Encoding:
-	Content-Type:References:In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender
-	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-To:
-	Resent-Cc:Resent-Message-ID; bh=ySAq5GhCFf2JrQxerjYMWjlswlOjNEg+iTM1YZdGN5M=;
-	t=1724409727; x=1725619327; b=lNyoYqLjQeDAHQk+UswukTWKJB/UbQhwKUR2oCULwDRg3iy
-	Q3/opl9NoV0k+yHrOa0IYC9GAIr/sAECL5kitBnDwlJFdP++fj9mzrYRhQrMM6FSVJRFPQjrY63Hh
-	UkrObAOLXeevlzmgdVQlKbDjGtl3PzcsJspgd4773+w8jzYE8y/LFt7Dh/vO7KiR7tQ4fHhgfcsjL
-	+q00hpU+KZZ/VcKuZbUURQHrTrHmCDac9YJxOOJcqV0e60uTRRXdATulJt2I/DyHLRtQfvabZEiXU
-	r/qHZK6ae2Jxpu0uvrnkCZBqcOyVVR9pKNI4lnun+2HKv7dzmpKiAoe6i08JBdLg==;
-Received: by sipsolutions.net with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
-	(Exim 4.97)
-	(envelope-from <johannes@sipsolutions.net>)
-	id 1shRk3-0000000FS9z-2l39;
-	Fri, 23 Aug 2024 12:42:03 +0200
-Message-ID: <6a9916848826a07ca41f1170e1d20cda9e798872.camel@sipsolutions.net>
-Subject: Re: [PATCH v3] wifi: cfg80211: Set the channel definition for the
- different Wi-Fi modes when starting CAC
-From: Johannes Berg <johannes@sipsolutions.net>
-To: Issam Hamdi <ih@simonwunderlich.de>, quic_jjohnson@quicinc.com
-Cc: kvalo@kernel.org, linux-wireless@vger.kernel.org, lkp@intel.com, 
-	llvm@lists.linux.dev, mathias.kretschmer@fit.fraunhofer.de, 
-	oe-kbuild-all@lists.linux.dev
-Date: Fri, 23 Aug 2024 12:42:02 +0200
-In-Reply-To: <20240816142418.3381951-1-ih@simonwunderlich.de>
-References: <9809b165-8d25-4984-a1dd-6fca28f1dda9@quicinc.com>
-	 <20240816142418.3381951-1-ih@simonwunderlich.de>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.52.4 (3.52.4-1.fc40) 
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="H/c2cP27"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1724413325;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=MGtVEy1yNE0P1wz9XDLLo5ohbzQWESz/TfbRdQsZsSo=;
+	b=H/c2cP273mNlrfBlmkrSYg74cwmSNtFqFpURv2wFwpBQBQ7wZbBOGPiba6WN0tIWNH1yJZ
+	34z4lX103qkFtfta6zS+Hv1RmMkyIASfsTp4VkNmouqxV5bKz3nxlOCsiAtnTfwi8UZOo5
+	dg+UajVs2WRbb4Dw2J6q87XOZJZAY2c=
+Received: from mx-prod-mc-02.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-257-ViPpE5qrOBCL67aQjDZNSg-1; Fri,
+ 23 Aug 2024 07:42:03 -0400
+X-MC-Unique: ViPpE5qrOBCL67aQjDZNSg-1
+Received: from mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.17])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-02.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 00AFA1955D4A
+	for <llvm@lists.linux.dev>; Fri, 23 Aug 2024 11:42:03 +0000 (UTC)
+Received: from [172.64.0.35] (unknown [10.30.32.160])
+	by mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 3D6EC19560A3;
+	Fri, 23 Aug 2024 11:42:01 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.11.0-rc4,
+ mainline.kernel.org-clang, 3d5f968a)
+Date: Fri, 23 Aug 2024 11:42:01 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-malware-bazaar: not-scanned
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.17
+Message-Id: <63021.124082307420300939@us-mta-257.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Fri, 2024-08-16 at 16:24 +0200, Issam Hamdi wrote:
->=20
-> @@ -10143,7 +10143,23 @@ static int nl80211_start_radar_detection(struct =
-sk_buff *skb,
-> =20
->  	err =3D rdev_start_radar_detection(rdev, dev, &chandef, cac_time_ms);
->  	if (!err) {
-> -		wdev->links[0].ap.chandef =3D chandef;
-> +		switch (wdev->iftype) {
-> +		case NL80211_IFTYPE_MESH_POINT:
-> +			wdev->u.mesh.chandef =3D chandef;
-> +			break;
-> +		case NL80211_IFTYPE_ADHOC:
-> +			wdev->u.ibss.chandef =3D chandef;
-> +			break;
-> +		case NL80211_IFTYPE_OCB:
-> +			wdev->u.ocb.chandef =3D chandef;
-> +			break;
->=20
+Hi, we tested your kernel and here are the results:
 
-OCB cannot even get to this code given earlier conditions, why are you
-adding it here?
+    Overall result: FAILED
+             Merge: OK
+           Compile: FAILED
 
 
-I guess this should conflict:
+Kernel information:
+    Commit message: Merge tag 'pwrseq-fixes-for-v6.11-rc5' of git://git.ker=
+nel.org/pub/scm/linux/kernel/git/brgl/linux
 
-https://lore.kernel.org/linux-wireless/20240711035147.1896538-1-quic_adisi@=
-quicinc.com/
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1424571680
 
-but it's probably not too hard to resolve that.
+One or more kernel builds failed:
+    Unrecognized or new issues:
+         ppc64le - https://datawarehouse.cki-project.org/kcidb/builds/redha=
+t:1424571680-ppc64le-kernel
+           s390x - https://datawarehouse.cki-project.org/kcidb/builds/redha=
+t:1424571680-s390x-kernel
+          x86_64 (debug) - https://datawarehouse.cki-project.org/kcidb/buil=
+ds/redhat:1424571680-x86_64-kernel-debug
 
-johannes
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
