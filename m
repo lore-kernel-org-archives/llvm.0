@@ -1,31 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0BFF618BBB4;
-	Fri, 23 Aug 2024 14:01:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7109C198A0E;
+	Fri, 23 Aug 2024 14:03:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724421716; cv=none; b=VlWLp9+YDcl753UmlPkWCtaJHFlMf0b3UjcKzeyem7dn7DeH4S5nCjP35oyKkTdDOPXQZSkiV1VHhFbFxi4bmr/YVE+uzbj1ktugFY3Ofr0mrMjZn6cboqlUGXyR7jp1U9fBg52yImlk5LoBgH3QtQK24HhoteiGnaOWgC6RxKM=
+	t=1724421814; cv=none; b=V9nSjmAIQ632yVulXE9oaZjM2T4VV8IUGpeNOXH9mjZx8LKCmNxMk1qQbNjcLIWBDlnn+X14mL8xDHsjZEzl4Ue/Rp4ykDSFzQ4UjBF9wo2D7i3UaQow/JyL92VYIId2UtTPR/PRnfsmAwkzqMq498jd0Qly3gANoft2hSH46E4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724421716; c=relaxed/simple;
-	bh=15l+qDzCLdF1gpvhcpikzw6gieOH+CMMdtspTwbv/8Y=;
+	s=arc-20240116; t=1724421814; c=relaxed/simple;
+	bh=lGrsBWzdm1BuLDIslzhYFqNiKFN3zkGBzaOPQb/Y4hk=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=mX4koKQchFYWElg5+WVG3EsMjLGBmT5dDOh+AciA+vqobrvZpgONUWvtUyOtE2MbwOfK9LbibfSozW11GlSPzOQq6wmXW0eyjUFViBq6pP4RNJjWXF738qFBO9vbtvFAB53U6DfURbgkqUrreSP6OxU6KMi3eQ3yRepnFGXrGDM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lflddiE+; arc=none smtp.client-ip=10.30.226.201
+	 MIME-Version; b=YSGsqVJOYu4jn4AVRq0DDgSyIymIHj57FHIuRFkoJi/+d5CiRbid+qDJKLk+XRwZ+i9AZTFBR9lRPYCx5zeX137gXQ+1fwzzDehAo7kFee+8EQjUzqd9jqvFwqqcKmZpkXWyDAPvPqpMoidaCSAJtVYha1Fou63UFRiCie4o31g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DUEGgCqf; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lflddiE+"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 434E0C32786;
-	Fri, 23 Aug 2024 14:01:54 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DUEGgCqf"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DA2DBC4AF0F;
+	Fri, 23 Aug 2024 14:03:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1724421715;
-	bh=15l+qDzCLdF1gpvhcpikzw6gieOH+CMMdtspTwbv/8Y=;
+	s=k20201202; t=1724421814;
+	bh=lGrsBWzdm1BuLDIslzhYFqNiKFN3zkGBzaOPQb/Y4hk=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=lflddiE+iJ64OWZQNWYAtWOjE1oONrdYZAJlmlaPosdYUqOUKQ3wbaD9L8jdbg4jF
-	 VULZWo09h7aJ6f0lwKucpq5dXEtLk2qe+DzdQZ1ut8yexpuT+5alwQmLWi7sOGxEHL
-	 9KgFyny/B7E9AzpueHp4JZM5br4HWqIe94DxU/KkzuBtaHPLsWBZiD9W9iAqioNCmW
-	 bxQrZRIv+g6tj4oQ9rQ0fBAr//ObtMV8AWcEw3gt8ZluB/X5rs/qB2Hyv/iuKLeu6b
-	 +/VE5Ixx4ZwRr89Lt5goSi84HK0RzpFkMfrwNDxDa30sj6L49AzbYYyNB8AIEeAeRK
-	 lcNu4oAi/sy9A==
+	b=DUEGgCqf+t7OMRUr1UFTor6nlEvlYXw7PVWixp+Wjx9BeM2XjJNayLZ5ZtEuiIAyd
+	 F9IVE2Tm8uotcEWkN+aukguGQbLyInLj6/5EKc82Sy3wNrtiEm/UMb9MsM7/iUmRFB
+	 ASr98L4oNL+lssoEqX2EufQAQ3lcXVQGXngP+LezerB1LZNWJXjl22+HnwoUSpyvWB
+	 575w8w0A/3vKcIKyFNHQhaneIq1tO8htoO68YUiqGUOvNsYWypKv2wZD4ZUNV2uBzv
+	 gzV1Ur7jpPEBQvYn3foOzNa6/31+mHXYoiEcwFuizat/6CXIKssVbKfDKjibGCZrSv
+	 hrbUr58+SeKFw==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
@@ -40,12 +40,12 @@ Cc: Miguel Ojeda <ojeda@kernel.org>,
 	nathan@kernel.org,
 	rust-for-linux@vger.kernel.org,
 	llvm@lists.linux.dev
-Subject: [PATCH AUTOSEL 6.10 10/24] rust: add intrinsics to fix `-Os` builds
-Date: Fri, 23 Aug 2024 10:00:32 -0400
-Message-ID: <20240823140121.1974012-10-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 6.6 09/20] rust: add intrinsics to fix `-Os` builds
+Date: Fri, 23 Aug 2024 10:02:23 -0400
+Message-ID: <20240823140309.1974696-9-sashal@kernel.org>
 X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20240823140121.1974012-1-sashal@kernel.org>
-References: <20240823140121.1974012-1-sashal@kernel.org>
+In-Reply-To: <20240823140309.1974696-1-sashal@kernel.org>
+References: <20240823140309.1974696-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -54,7 +54,7 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
-X-stable-base: Linux 6.10.6
+X-stable-base: Linux 6.6.47
 Content-Transfer-Encoding: 8bit
 
 From: Miguel Ojeda <ojeda@kernel.org>
@@ -117,10 +117,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  2 files changed, 5 insertions(+), 2 deletions(-)
 
 diff --git a/rust/Makefile b/rust/Makefile
-index 5a41ace9fea10..de223d74d683d 100644
+index 060ba8cfa9149..9e0939b8fa78b 100644
 --- a/rust/Makefile
 +++ b/rust/Makefile
-@@ -408,8 +408,8 @@ rust-analyzer:
+@@ -411,8 +411,8 @@ rust-analyzer:
  		$(if $(KBUILD_EXTMOD),$(extmod_prefix),$(objtree))/rust-project.json
  
  redirect-intrinsics = \
