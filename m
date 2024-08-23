@@ -1,59 +1,59 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E8E98493;
-	Fri, 23 Aug 2024 06:08:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF00713FD72;
+	Fri, 23 Aug 2024 08:21:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724393303; cv=none; b=fgqifrQBGesr9I8uJuhJR55KMlXon+DgWUnojCZQee/UY6eibC4SpQF5szm5MwcyZdFKE+YfWUbCk6kJx7kXls6atx1CSP9s8IJctvz/JgaTyHbwNehRv/zXj7KukTSLh/7MX0R83nbSLBIxWor7v4y4sXsr0yobkjzzHxml4+0=
+	t=1724401284; cv=none; b=rZ2iCGi9hLXSssR/a4ARi/8KAWtduAu1ssPrnRp0/Fl+XBhbUEFZtJt8Hld+YxmQez3cLZ+qA8DCqUOiiI4eNnrfOLMG8Pu/LxNxxrSroeQmllsv9bwnrDBxbduMIJjCJnQ7v5U/dfPiSF37acHS5DK5xz3Pg5vjHK+Jb7G1N18=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724393303; c=relaxed/simple;
-	bh=nuW7tx4/IjV89ImKwJ1avhhAsAKVlzWLrgNRGKrLFSw=;
+	s=arc-20240116; t=1724401284; c=relaxed/simple;
+	bh=g625q9iLZjr5CiEQXuS8hAeVGvfHv4tJVA/jZRo4WSk=;
 	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=Xw3Z3uNiqT+sHkp1PlQanhr1X+LZU5IWEqXJuSnD3yasWzwe2M3PW53Mmv5oLU/gjS0joDXynUL8TaXH62tSYqUvzVa7OwgdMd53XMtstM+0cNYpPkWG03HIpRImvYZow74NnCZvdGhgJsh6UxJASfBTT4trdFSkY7Rx0A4VAnc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=OGDfojq3; arc=none smtp.client-ip=192.198.163.14
+	 Content-Disposition; b=jalzBr8NUGcowF4Cql1k5DSwnazCpRq4LBSOUZ6HjOX72bl533wgaNVZSyDVMh8aI35n3t9lBm4BRDkbLkNyHKd7zAtB5j496f4Y4xI7yrIoGOSITxP5MD6LkawBbCwq5xihzuDM37PCdVvzmT2qy2b7kNanF7BFKwBfSoXSEY4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Vs9YRKal; arc=none smtp.client-ip=192.198.163.10
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="OGDfojq3"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Vs9YRKal"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1724393301; x=1755929301;
+  t=1724401283; x=1755937283;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=nuW7tx4/IjV89ImKwJ1avhhAsAKVlzWLrgNRGKrLFSw=;
-  b=OGDfojq36xrOnRqKM/2pxZL+uLWCS1YfLzefTJNbIBJEStKpX9KLrykQ
-   F40IhUs8Jog/MoYSP9+3zaXW1wi/wULdzYmgy12zPtT3SXWPDzHoc3D9i
-   nsRpqfQ2rX//vHsEmbnUsXn0Qcr/Gr2XSroCl0z9Pp8jBBb35V8JSRaiA
-   8oUqaYn4rL/bV4P3xqvF9AhinjevzY3iA3vU/pbgGUJAMQGOlM8JCu0aU
-   gDuWJJGpkB2P1ljAbfaI+DbZ43bTCVMTYWpcVyTYzspiJDXsy2xs8AR+c
-   lORrjtnJqpawKdxpHUsYQfsbTtYXqVWavrKSgmRNCj5gOOA/Jy8Fbo9nP
-   Q==;
-X-CSE-ConnectionGUID: wcZJn5NLQOeapXqi383pGg==
-X-CSE-MsgGUID: V5PnXyQaSPKEmyvlYXd3OA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11172"; a="23026894"
+  bh=g625q9iLZjr5CiEQXuS8hAeVGvfHv4tJVA/jZRo4WSk=;
+  b=Vs9YRKalG6vlpq1aH2D4BDItwcqpADwgRqJvaqxaZ+6maBkDfiZsBI6f
+   cpZq9h72baAWLBE/OLsecZkpWcEfvqgdZ2FvUnLtSYsUBCzNRilnQNeXY
+   wtyfAXFROCrHGfBXJDEax1j3ICA+cbTmLxbNzO8z25k2/BJRL3CEp8WWw
+   0Em5bnEF+lu5qjnFChLRODWrfd+UXUqfkoDuBLyWF6+8CVfETODSJqm5u
+   LfJKPk7ReQBet2z9goUtFY3Yly+cpSGINZuxkAy7g3Bdgs/luC+t0J6Pp
+   LlbkRxhFCAd4XqolyWwJRR3/mEqcHScuwbjFhZr5vSqh7kRrNNFMRN665
+   g==;
+X-CSE-ConnectionGUID: sw6x2HP6SBOTmmpvN0eSzg==
+X-CSE-MsgGUID: fXeJIbRwT5OTGQ+7aVQIbw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11172"; a="34275274"
 X-IronPort-AV: E=Sophos;i="6.10,169,1719903600"; 
-   d="scan'208";a="23026894"
-Received: from orviesa003.jf.intel.com ([10.64.159.143])
-  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Aug 2024 23:08:21 -0700
-X-CSE-ConnectionGUID: X20f1s04R+eY2+169eaa9A==
-X-CSE-MsgGUID: Q0gprOw5S3i07VzErslJ8w==
+   d="scan'208";a="34275274"
+Received: from fmviesa010.fm.intel.com ([10.60.135.150])
+  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Aug 2024 01:21:22 -0700
+X-CSE-ConnectionGUID: QbmLwHRcQU637XnNuLj6gw==
+X-CSE-MsgGUID: 3hY1yftMROmy/jDO/2V3OA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.10,169,1719903600"; 
-   d="scan'208";a="66521739"
+   d="scan'208";a="61869761"
 Received: from lkp-server01.sh.intel.com (HELO 9a732dc145d3) ([10.239.97.150])
-  by orviesa003.jf.intel.com with ESMTP; 22 Aug 2024 23:08:20 -0700
+  by fmviesa010.fm.intel.com with ESMTP; 23 Aug 2024 01:21:21 -0700
 Received: from kbuild by 9a732dc145d3 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1shNT7-000DXM-0j;
-	Fri, 23 Aug 2024 06:08:17 +0000
-Date: Fri, 23 Aug 2024 14:08:00 +0800
+	id 1shPXq-000DaO-2w;
+	Fri, 23 Aug 2024 08:21:18 +0000
+Date: Fri, 23 Aug 2024 16:20:32 +0800
 From: kernel test robot <lkp@intel.com>
-To: Jinjie Ruan <ruanjinjie@huawei.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Mark Brown <broonie@kernel.org>
-Subject: [broonie-ci:file5cJeP2 19/22] drivers/spi/spi-stm32-qspi.c:787:20:
- warning: variable 'res' is uninitialized when used here
-Message-ID: <202408231418.RS9DeHRU-lkp@intel.com>
+To: Mark Brown <broonie@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [broonie-ci:net-encx24j600-regmap-locking 2/2]
+ drivers/net/ethernet/microchip/encx24j600.c:178:24: error: no member named
+ 'mutex' in 'struct encx24j600_context'
+Message-ID: <202408231643.YgUWJsfo-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -63,158 +63,132 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/ci.git file5cJeP2
-head:   bbdb9913983a8e0f5aa5b95b75fac9ad17c1e2b7
-commit: 3415f0c34c0121dc2bb1fda6d79d5506fa055863 [19/22] spi: stm32-qspi: Simpify resource lookup
-config: x86_64-buildonly-randconfig-004-20240823 (https://download.01.org/0day-ci/archive/20240823/202408231418.RS9DeHRU-lkp@intel.com/config)
-compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240823/202408231418.RS9DeHRU-lkp@intel.com/reproduce)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/ci.git net-encx24j600-regmap-locking
+head:   f0468e3490ad91b1ed822abd6e641017305c9024
+commit: f0468e3490ad91b1ed822abd6e641017305c9024 [2/2] net: encx24j600: Use standard regmap locking
+config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20240823/202408231643.YgUWJsfo-lkp@intel.com/config)
+compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 26670e7fa4f032a019d23d56c6a02926e854e8af)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240823/202408231643.YgUWJsfo-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202408231418.RS9DeHRU-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202408231643.YgUWJsfo-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> drivers/spi/spi-stm32-qspi.c:787:20: warning: variable 'res' is uninitialized when used here [-Wuninitialized]
-     787 |         qspi->phys_base = res->start;
-         |                           ^~~
-   drivers/spi/spi-stm32-qspi.c:773:22: note: initialize the variable 'res' to silence this warning
-     773 |         struct resource *res;
-         |                             ^
-         |                              = NULL
-   1 warning generated.
+   In file included from drivers/net/ethernet/microchip/encx24j600.c:11:
+   In file included from include/linux/etherdevice.h:20:
+   In file included from include/linux/if_ether.h:19:
+   In file included from include/linux/skbuff.h:17:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:10:
+   In file included from include/linux/mm.h:2228:
+   include/linux/vmstat.h:514:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     514 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+   In file included from drivers/net/ethernet/microchip/encx24j600.c:11:
+   In file included from include/linux/etherdevice.h:20:
+   In file included from include/linux/if_ether.h:19:
+   In file included from include/linux/skbuff.h:17:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:12:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:14:
+   In file included from arch/hexagon/include/asm/io.h:328:
+   include/asm-generic/io.h:548:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     548 |         val = __raw_readb(PCI_IOBASE + addr);
+         |                           ~~~~~~~~~~ ^
+   include/asm-generic/io.h:561:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     561 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
+      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
+         |                                                   ^
+   In file included from drivers/net/ethernet/microchip/encx24j600.c:11:
+   In file included from include/linux/etherdevice.h:20:
+   In file included from include/linux/if_ether.h:19:
+   In file included from include/linux/skbuff.h:17:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:12:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:14:
+   In file included from arch/hexagon/include/asm/io.h:328:
+   include/asm-generic/io.h:574:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     574 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
+      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
+         |                                                   ^
+   In file included from drivers/net/ethernet/microchip/encx24j600.c:11:
+   In file included from include/linux/etherdevice.h:20:
+   In file included from include/linux/if_ether.h:19:
+   In file included from include/linux/skbuff.h:17:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:12:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:14:
+   In file included from arch/hexagon/include/asm/io.h:328:
+   include/asm-generic/io.h:585:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     585 |         __raw_writeb(value, PCI_IOBASE + addr);
+         |                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:595:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     595 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:605:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     605 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+>> drivers/net/ethernet/microchip/encx24j600.c:178:24: error: no member named 'mutex' in 'struct encx24j600_context'
+     178 |         mutex_lock(&priv->ctx.mutex);
+         |                     ~~~~~~~~~ ^
+   include/linux/mutex.h:161:44: note: expanded from macro 'mutex_lock'
+     161 | #define mutex_lock(lock) mutex_lock_nested(lock, 0)
+         |                                            ^~~~
+   drivers/net/ethernet/microchip/encx24j600.c:180:26: error: no member named 'mutex' in 'struct encx24j600_context'
+     180 |         mutex_unlock(&priv->ctx.mutex);
+         |                       ~~~~~~~~~ ^
+   drivers/net/ethernet/microchip/encx24j600.c:190:24: error: no member named 'mutex' in 'struct encx24j600_context'
+     190 |         mutex_lock(&priv->ctx.mutex);
+         |                     ~~~~~~~~~ ^
+   include/linux/mutex.h:161:44: note: expanded from macro 'mutex_lock'
+     161 | #define mutex_lock(lock) mutex_lock_nested(lock, 0)
+         |                                            ^~~~
+   drivers/net/ethernet/microchip/encx24j600.c:192:26: error: no member named 'mutex' in 'struct encx24j600_context'
+     192 |         mutex_unlock(&priv->ctx.mutex);
+         |                       ~~~~~~~~~ ^
+   7 warnings and 4 errors generated.
 
 
-vim +/res +787 drivers/spi/spi-stm32-qspi.c
+vim +178 drivers/net/ethernet/microchip/encx24j600.c
 
-c530cd1d9d5e77 Ludovic Barre    2018-10-05  766  
-c530cd1d9d5e77 Ludovic Barre    2018-10-05  767  static int stm32_qspi_probe(struct platform_device *pdev)
-c530cd1d9d5e77 Ludovic Barre    2018-10-05  768  {
-c530cd1d9d5e77 Ludovic Barre    2018-10-05  769  	struct device *dev = &pdev->dev;
-c530cd1d9d5e77 Ludovic Barre    2018-10-05  770  	struct spi_controller *ctrl;
-c530cd1d9d5e77 Ludovic Barre    2018-10-05  771  	struct reset_control *rstc;
-c530cd1d9d5e77 Ludovic Barre    2018-10-05  772  	struct stm32_qspi *qspi;
-c530cd1d9d5e77 Ludovic Barre    2018-10-05  773  	struct resource *res;
-c530cd1d9d5e77 Ludovic Barre    2018-10-05  774  	int ret, irq;
-c530cd1d9d5e77 Ludovic Barre    2018-10-05  775  
-d9ea4bcf244d93 Yang Yingliang   2023-11-28  776  	ctrl = devm_spi_alloc_host(dev, sizeof(*qspi));
-c530cd1d9d5e77 Ludovic Barre    2018-10-05  777  	if (!ctrl)
-c530cd1d9d5e77 Ludovic Barre    2018-10-05  778  		return -ENOMEM;
-c530cd1d9d5e77 Ludovic Barre    2018-10-05  779  
-c530cd1d9d5e77 Ludovic Barre    2018-10-05  780  	qspi = spi_controller_get_devdata(ctrl);
-a88eceb17ac7e8 Ludovic Barre    2019-03-25  781  	qspi->ctrl = ctrl;
-c530cd1d9d5e77 Ludovic Barre    2018-10-05  782  
-3415f0c34c0121 Jinjie Ruan      2024-08-20  783  	qspi->io_base = devm_platform_ioremap_resource_byname(pdev, "qspi");
-e4d63473d3110a Patrice Chotard  2022-01-17  784  	if (IS_ERR(qspi->io_base))
-e4d63473d3110a Patrice Chotard  2022-01-17  785  		return PTR_ERR(qspi->io_base);
-c530cd1d9d5e77 Ludovic Barre    2018-10-05  786  
-245308c6217027 Ludovic Barre    2019-03-25 @787  	qspi->phys_base = res->start;
-245308c6217027 Ludovic Barre    2019-03-25  788  
-3415f0c34c0121 Jinjie Ruan      2024-08-20  789  	qspi->mm_base = devm_platform_ioremap_resource_byname(pdev, "qspi_mm");
-e4d63473d3110a Patrice Chotard  2022-01-17  790  	if (IS_ERR(qspi->mm_base))
-e4d63473d3110a Patrice Chotard  2022-01-17  791  		return PTR_ERR(qspi->mm_base);
-c530cd1d9d5e77 Ludovic Barre    2018-10-05  792  
-c530cd1d9d5e77 Ludovic Barre    2018-10-05  793  	qspi->mm_size = resource_size(res);
-e4d63473d3110a Patrice Chotard  2022-01-17  794  	if (qspi->mm_size > STM32_QSPI_MAX_MMAP_SZ)
-e4d63473d3110a Patrice Chotard  2022-01-17  795  		return -EINVAL;
-c530cd1d9d5e77 Ludovic Barre    2018-10-05  796  
-c530cd1d9d5e77 Ludovic Barre    2018-10-05  797  	irq = platform_get_irq(pdev, 0);
-e4d63473d3110a Patrice Chotard  2022-01-17  798  	if (irq < 0)
-e4d63473d3110a Patrice Chotard  2022-01-17  799  		return irq;
-4b562de4e227db Fabien Dessenne  2019-04-24  800  
-c530cd1d9d5e77 Ludovic Barre    2018-10-05  801  	ret = devm_request_irq(dev, irq, stm32_qspi_irq, 0,
-c530cd1d9d5e77 Ludovic Barre    2018-10-05  802  			       dev_name(dev), qspi);
-c530cd1d9d5e77 Ludovic Barre    2018-10-05  803  	if (ret) {
-c530cd1d9d5e77 Ludovic Barre    2018-10-05  804  		dev_err(dev, "failed to request irq\n");
-e4d63473d3110a Patrice Chotard  2022-01-17  805  		return ret;
-c530cd1d9d5e77 Ludovic Barre    2018-10-05  806  	}
-c530cd1d9d5e77 Ludovic Barre    2018-10-05  807  
-c530cd1d9d5e77 Ludovic Barre    2018-10-05  808  	init_completion(&qspi->data_completion);
-86d1c6bbae3212 Patrice Chotard  2021-05-18  809  	init_completion(&qspi->match_completion);
-c530cd1d9d5e77 Ludovic Barre    2018-10-05  810  
-c530cd1d9d5e77 Ludovic Barre    2018-10-05  811  	qspi->clk = devm_clk_get(dev, NULL);
-e4d63473d3110a Patrice Chotard  2022-01-17  812  	if (IS_ERR(qspi->clk))
-e4d63473d3110a Patrice Chotard  2022-01-17  813  		return PTR_ERR(qspi->clk);
-c530cd1d9d5e77 Ludovic Barre    2018-10-05  814  
-c530cd1d9d5e77 Ludovic Barre    2018-10-05  815  	qspi->clk_rate = clk_get_rate(qspi->clk);
-e4d63473d3110a Patrice Chotard  2022-01-17  816  	if (!qspi->clk_rate)
-e4d63473d3110a Patrice Chotard  2022-01-17  817  		return -EINVAL;
-c530cd1d9d5e77 Ludovic Barre    2018-10-05  818  
-c530cd1d9d5e77 Ludovic Barre    2018-10-05  819  	ret = clk_prepare_enable(qspi->clk);
-c530cd1d9d5e77 Ludovic Barre    2018-10-05  820  	if (ret) {
-c530cd1d9d5e77 Ludovic Barre    2018-10-05  821  		dev_err(dev, "can not enable the clock\n");
-e4d63473d3110a Patrice Chotard  2022-01-17  822  		return ret;
-c530cd1d9d5e77 Ludovic Barre    2018-10-05  823  	}
-c530cd1d9d5e77 Ludovic Barre    2018-10-05  824  
-c530cd1d9d5e77 Ludovic Barre    2018-10-05  825  	rstc = devm_reset_control_get_exclusive(dev, NULL);
-8196f7bcc2adf2 Etienne Carriere 2020-02-03  826  	if (IS_ERR(rstc)) {
-8196f7bcc2adf2 Etienne Carriere 2020-02-03  827  		ret = PTR_ERR(rstc);
-8196f7bcc2adf2 Etienne Carriere 2020-02-03  828  		if (ret == -EPROBE_DEFER)
-35700e221b18fa Patrice Chotard  2020-06-16  829  			goto err_clk_disable;
-8196f7bcc2adf2 Etienne Carriere 2020-02-03  830  	} else {
-c530cd1d9d5e77 Ludovic Barre    2018-10-05  831  		reset_control_assert(rstc);
-c530cd1d9d5e77 Ludovic Barre    2018-10-05  832  		udelay(2);
-c530cd1d9d5e77 Ludovic Barre    2018-10-05  833  		reset_control_deassert(rstc);
-c530cd1d9d5e77 Ludovic Barre    2018-10-05  834  	}
-c530cd1d9d5e77 Ludovic Barre    2018-10-05  835  
-c530cd1d9d5e77 Ludovic Barre    2018-10-05  836  	qspi->dev = dev;
-c530cd1d9d5e77 Ludovic Barre    2018-10-05  837  	platform_set_drvdata(pdev, qspi);
-658606ff4cf680 Peter Ujfalusi   2019-12-12  838  	ret = stm32_qspi_dma_setup(qspi);
-658606ff4cf680 Peter Ujfalusi   2019-12-12  839  	if (ret)
-35700e221b18fa Patrice Chotard  2020-06-16  840  		goto err_dma_free;
-658606ff4cf680 Peter Ujfalusi   2019-12-12  841  
-c530cd1d9d5e77 Ludovic Barre    2018-10-05  842  	mutex_init(&qspi->lock);
-c530cd1d9d5e77 Ludovic Barre    2018-10-05  843  
-a557fca630cc6d Patrice Chotard  2022-08-23  844  	ctrl->mode_bits = SPI_RX_DUAL | SPI_RX_QUAD | SPI_TX_OCTAL
-a557fca630cc6d Patrice Chotard  2022-08-23  845  		| SPI_TX_DUAL | SPI_TX_QUAD | SPI_RX_OCTAL;
-c530cd1d9d5e77 Ludovic Barre    2018-10-05  846  	ctrl->setup = stm32_qspi_setup;
-c530cd1d9d5e77 Ludovic Barre    2018-10-05  847  	ctrl->bus_num = -1;
-c530cd1d9d5e77 Ludovic Barre    2018-10-05  848  	ctrl->mem_ops = &stm32_qspi_mem_ops;
-a557fca630cc6d Patrice Chotard  2022-08-23  849  	ctrl->use_gpio_descriptors = true;
-a557fca630cc6d Patrice Chotard  2022-08-23  850  	ctrl->transfer_one_message = stm32_qspi_transfer_one_message;
-c530cd1d9d5e77 Ludovic Barre    2018-10-05  851  	ctrl->num_chipselect = STM32_QSPI_MAX_NORCHIP;
-c530cd1d9d5e77 Ludovic Barre    2018-10-05  852  	ctrl->dev.of_node = dev->of_node;
-c530cd1d9d5e77 Ludovic Barre    2018-10-05  853  
-9d282c17b023a9 Patrice Chotard  2020-04-17  854  	pm_runtime_set_autosuspend_delay(dev, STM32_AUTOSUSPEND_DELAY);
-9d282c17b023a9 Patrice Chotard  2020-04-17  855  	pm_runtime_use_autosuspend(dev);
-9d282c17b023a9 Patrice Chotard  2020-04-17  856  	pm_runtime_set_active(dev);
-9d282c17b023a9 Patrice Chotard  2020-04-17  857  	pm_runtime_enable(dev);
-9d282c17b023a9 Patrice Chotard  2020-04-17  858  	pm_runtime_get_noresume(dev);
-9d282c17b023a9 Patrice Chotard  2020-04-17  859  
-d9ea4bcf244d93 Yang Yingliang   2023-11-28  860  	ret = spi_register_controller(ctrl);
-9d282c17b023a9 Patrice Chotard  2020-04-17  861  	if (ret)
-35700e221b18fa Patrice Chotard  2020-06-16  862  		goto err_pm_runtime_free;
-9d282c17b023a9 Patrice Chotard  2020-04-17  863  
-9d282c17b023a9 Patrice Chotard  2020-04-17  864  	pm_runtime_mark_last_busy(dev);
-9d282c17b023a9 Patrice Chotard  2020-04-17  865  	pm_runtime_put_autosuspend(dev);
-9d282c17b023a9 Patrice Chotard  2020-04-17  866  
-c530cd1d9d5e77 Ludovic Barre    2018-10-05  867  	return 0;
-c530cd1d9d5e77 Ludovic Barre    2018-10-05  868  
-35700e221b18fa Patrice Chotard  2020-06-16  869  err_pm_runtime_free:
-35700e221b18fa Patrice Chotard  2020-06-16  870  	pm_runtime_get_sync(qspi->dev);
-35700e221b18fa Patrice Chotard  2020-06-16  871  	/* disable qspi */
-35700e221b18fa Patrice Chotard  2020-06-16  872  	writel_relaxed(0, qspi->io_base + QSPI_CR);
-35700e221b18fa Patrice Chotard  2020-06-16  873  	mutex_destroy(&qspi->lock);
-35700e221b18fa Patrice Chotard  2020-06-16  874  	pm_runtime_put_noidle(qspi->dev);
-35700e221b18fa Patrice Chotard  2020-06-16  875  	pm_runtime_disable(qspi->dev);
-35700e221b18fa Patrice Chotard  2020-06-16  876  	pm_runtime_set_suspended(qspi->dev);
-35700e221b18fa Patrice Chotard  2020-06-16  877  	pm_runtime_dont_use_autosuspend(qspi->dev);
-35700e221b18fa Patrice Chotard  2020-06-16  878  err_dma_free:
-35700e221b18fa Patrice Chotard  2020-06-16  879  	stm32_qspi_dma_free(qspi);
-35700e221b18fa Patrice Chotard  2020-06-16  880  err_clk_disable:
-35700e221b18fa Patrice Chotard  2020-06-16  881  	clk_disable_unprepare(qspi->clk);
-3c0af1dd2fe78a Patrice Chotard  2019-10-04  882  
-c530cd1d9d5e77 Ludovic Barre    2018-10-05  883  	return ret;
-c530cd1d9d5e77 Ludovic Barre    2018-10-05  884  }
-c530cd1d9d5e77 Ludovic Barre    2018-10-05  885  
+d70e53262f5cfc Jon Ringle        2015-10-06  172  
+d70e53262f5cfc Jon Ringle        2015-10-06  173  static int encx24j600_raw_read(struct encx24j600_priv *priv, u8 reg, u8 *data,
+d70e53262f5cfc Jon Ringle        2015-10-06  174  			       size_t count)
+d70e53262f5cfc Jon Ringle        2015-10-06  175  {
+d70e53262f5cfc Jon Ringle        2015-10-06  176  	int ret;
+b822ee6c5e5ba1 Jeroen De Wachter 2016-12-12  177  
+d70e53262f5cfc Jon Ringle        2015-10-06 @178  	mutex_lock(&priv->ctx.mutex);
+d70e53262f5cfc Jon Ringle        2015-10-06  179  	ret = regmap_encx24j600_spi_read(&priv->ctx, reg, data, count);
+d70e53262f5cfc Jon Ringle        2015-10-06  180  	mutex_unlock(&priv->ctx.mutex);
+d70e53262f5cfc Jon Ringle        2015-10-06  181  
+d70e53262f5cfc Jon Ringle        2015-10-06  182  	return ret;
+d70e53262f5cfc Jon Ringle        2015-10-06  183  }
+d70e53262f5cfc Jon Ringle        2015-10-06  184  
 
-:::::: The code at line 787 was first introduced by commit
-:::::: 245308c6217027c0d7fc8c3cf2bf95858c704d7b spi: stm32-qspi: add dma support
+:::::: The code at line 178 was first introduced by commit
+:::::: d70e53262f5cfc0b88a211ef9cbd1ca5256f4a6b net: Microchip encx24j600 driver
 
-:::::: TO: Ludovic Barre <ludovic.barre@st.com>
-:::::: CC: Mark Brown <broonie@kernel.org>
+:::::: TO: Jon Ringle <jringle@gridpoint.com>
+:::::: CC: David S. Miller <davem@davemloft.net>
 
 -- 
 0-DAY CI Kernel Test Service
