@@ -1,160 +1,158 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7109C198A0E;
-	Fri, 23 Aug 2024 14:03:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 98B96194C9E;
+	Fri, 23 Aug 2024 16:13:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724421814; cv=none; b=V9nSjmAIQ632yVulXE9oaZjM2T4VV8IUGpeNOXH9mjZx8LKCmNxMk1qQbNjcLIWBDlnn+X14mL8xDHsjZEzl4Ue/Rp4ykDSFzQ4UjBF9wo2D7i3UaQow/JyL92VYIId2UtTPR/PRnfsmAwkzqMq498jd0Qly3gANoft2hSH46E4=
+	t=1724429586; cv=none; b=Ejc70EMbfX9OM291CzZ4MfusIMPnAKuVHIewWX/Ks+kH2EFvYCqubenuikew5i37XJcbhaBVf5sWHo4Z3kagaIoyv4/AvMJ7VdA81TgAr9xpG9oUtbikzBkkExZivKjg8xV6rvzb7yQo0Xh8eBBbih7elaOc+OnZ7NfVjEi6Q7U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724421814; c=relaxed/simple;
-	bh=lGrsBWzdm1BuLDIslzhYFqNiKFN3zkGBzaOPQb/Y4hk=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=YSGsqVJOYu4jn4AVRq0DDgSyIymIHj57FHIuRFkoJi/+d5CiRbid+qDJKLk+XRwZ+i9AZTFBR9lRPYCx5zeX137gXQ+1fwzzDehAo7kFee+8EQjUzqd9jqvFwqqcKmZpkXWyDAPvPqpMoidaCSAJtVYha1Fou63UFRiCie4o31g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DUEGgCqf; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1724429586; c=relaxed/simple;
+	bh=302mPfppIzV0eIiBLegANXAiB+NF/JryI6zwyAqPKeI=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=oOocNxTBYVq7Th/YAtRJdhTz5eRCGFBMJzNj+HqdfbCHQNi7g9oX7FhjYV4HwQgfXPJnjAAdd0TeM9sxnX/yLYfQ81g+dE+nWJvjoOAQx18yg3yfzSX36DMXhFF0B9Zo8AOqmXdX1d5H8fy6RNKdPCuEsBXLxLAKT4Q4H88plRU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gf+WMIRu; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DUEGgCqf"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DA2DBC4AF0F;
-	Fri, 23 Aug 2024 14:03:32 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gf+WMIRu"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2B9AEC4AF51;
+	Fri, 23 Aug 2024 16:13:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1724421814;
-	bh=lGrsBWzdm1BuLDIslzhYFqNiKFN3zkGBzaOPQb/Y4hk=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=DUEGgCqf+t7OMRUr1UFTor6nlEvlYXw7PVWixp+Wjx9BeM2XjJNayLZ5ZtEuiIAyd
-	 F9IVE2Tm8uotcEWkN+aukguGQbLyInLj6/5EKc82Sy3wNrtiEm/UMb9MsM7/iUmRFB
-	 ASr98L4oNL+lssoEqX2EufQAQ3lcXVQGXngP+LezerB1LZNWJXjl22+HnwoUSpyvWB
-	 575w8w0A/3vKcIKyFNHQhaneIq1tO8htoO68YUiqGUOvNsYWypKv2wZD4ZUNV2uBzv
-	 gzV1Ur7jpPEBQvYn3foOzNa6/31+mHXYoiEcwFuizat/6CXIKssVbKfDKjibGCZrSv
-	 hrbUr58+SeKFw==
-From: Sasha Levin <sashal@kernel.org>
-To: linux-kernel@vger.kernel.org,
-	stable@vger.kernel.org
-Cc: Miguel Ojeda <ojeda@kernel.org>,
-	Gary Guo <gary@garyguo.net>,
-	Alice Ryhl <aliceryhl@google.com>,
-	Trevor Gross <tmgross@umich.edu>,
-	Boqun Feng <boqun.feng@gmail.com>,
-	Sasha Levin <sashal@kernel.org>,
-	alex.gaynor@gmail.com,
-	wedsonaf@gmail.com,
-	nathan@kernel.org,
-	rust-for-linux@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: [PATCH AUTOSEL 6.6 09/20] rust: add intrinsics to fix `-Os` builds
-Date: Fri, 23 Aug 2024 10:02:23 -0400
-Message-ID: <20240823140309.1974696-9-sashal@kernel.org>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20240823140309.1974696-1-sashal@kernel.org>
-References: <20240823140309.1974696-1-sashal@kernel.org>
+	s=k20201202; t=1724429586;
+	bh=302mPfppIzV0eIiBLegANXAiB+NF/JryI6zwyAqPKeI=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=gf+WMIRurTbcCUp5XG/SJqSuNJlC/5jTbjfrtjz9Bke6unn38fmcRN+YM+/H/43FY
+	 lbsc3h6ZC8f35iYEa6UeUssIiTd08RvXwBi0MjdL4zAyp5kjx1JxZ/jC1iaIgqVRiC
+	 ur7OZG2hFz/jXs+MMeV/l8lH7W26g2wD/QYWC2kZo7w7gmoo9/4AMNkWWYGV3JSqVU
+	 VYLEbcUT4YrL0R0e4pLlZFcUYiVRRx3QTP0KTf1NhMoH/d4g/aTw9/BbDf/isvQzr/
+	 EiLGa0gp/ERZgq1t2tqvHzgTKwOtnypPYBaPN7Is/mZCf7pHacg835+FQlJc3L0cNq
+	 yW2ydpGu7UQUg==
+Received: by mail-lj1-f181.google.com with SMTP id 38308e7fff4ca-2f3edb2d908so22009911fa.2;
+        Fri, 23 Aug 2024 09:13:06 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCVU+HzF/6t4Rh/l70QVPgM5ynjYXvBt7lpkIJZm6up/UsEWqtphxh0KqXBVki43J2KofgW8XNk=@lists.linux.dev, AJvYcCXFvpVhaLVMd5/SyYwr7O6U9fqWiGOjHAnUHiKz9LJfu0N39oDkW4DARxeR3G7jVXzRi/zNsA==@lists.linux.dev
+X-Gm-Message-State: AOJu0Yyz+d4JI6D48eRBWM8uUfzz8HzaSSlaNZqal3Ldp1wPMOWrVOtR
+	6+VS8LQlV9JhtRtGDSCvyjGDcK96ghMC1jqsb4SQXB5YbM6ULLPxeb62CrNRByDbpvZ1gILERTc
+	4VuPSd7sclOmcW1rdPg3COXs+w+0=
+X-Google-Smtp-Source: AGHT+IGLQePVn5RhKmrGdV43WiO6IyDdZ4P8M+JxvZmPPDeIiajBOGYYWmzAWjRdCByIm/YmPmOehjlJ0SdmJRob6wc=
+X-Received: by 2002:a05:651c:1505:b0:2ef:2dfd:15dc with SMTP id
+ 38308e7fff4ca-2f4f48ef636mr23768021fa.9.1724429584330; Fri, 23 Aug 2024
+ 09:13:04 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-X-stable-base: Linux 6.6.47
-Content-Transfer-Encoding: 8bit
+References: <20240807-macos-build-support-v1-0-4cd1ded85694@samsung.com> <20240807-macos-build-support-v1-1-4cd1ded85694@samsung.com>
+In-Reply-To: <20240807-macos-build-support-v1-1-4cd1ded85694@samsung.com>
+From: Masahiro Yamada <masahiroy@kernel.org>
+Date: Sat, 24 Aug 2024 01:12:26 +0900
+X-Gmail-Original-Message-ID: <CAK7LNARmy=N+6O87BJGZbodssDw21sHgMf36TXdcxD4=5A_OBA@mail.gmail.com>
+Message-ID: <CAK7LNARmy=N+6O87BJGZbodssDw21sHgMf36TXdcxD4=5A_OBA@mail.gmail.com>
+Subject: Re: [PATCH 01/12] scripts: subarch.include: fix SUBARCH on MacOS hosts
+To: da.gomez@samsung.com
+Cc: Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nicolas@fjasle.eu>, 
+	Lucas De Marchi <lucas.demarchi@intel.com>, 
+	=?UTF-8?Q?Thomas_Hellstr=C3=B6m?= <thomas.hellstrom@linux.intel.com>, 
+	Rodrigo Vivi <rodrigo.vivi@intel.com>, 
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, Maxime Ripard <mripard@kernel.org>, 
+	Thomas Zimmermann <tzimmermann@suse.de>, David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>, 
+	William Hubbs <w.d.hubbs@gmail.com>, Chris Brannon <chris@the-brannons.com>, 
+	Kirk Reiser <kirk@reisers.ca>, Samuel Thibault <samuel.thibault@ens-lyon.org>, 
+	Paul Moore <paul@paul-moore.com>, Stephen Smalley <stephen.smalley.work@gmail.com>, 
+	Ondrej Mosnacek <omosnace@redhat.com>, Catalin Marinas <catalin.marinas@arm.com>, 
+	Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>, Oliver Upton <oliver.upton@linux.dev>, 
+	James Morse <james.morse@arm.com>, Suzuki K Poulose <suzuki.poulose@arm.com>, 
+	Zenghui Yu <yuzenghui@huawei.com>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	Jiri Slaby <jirislaby@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
+	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, linux-kernel@vger.kernel.org, 
+	linux-kbuild@vger.kernel.org, intel-xe@lists.freedesktop.org, 
+	dri-devel@lists.freedesktop.org, speakup@linux-speakup.org, 
+	selinux@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+	kvmarm@lists.linux.dev, linux-serial@vger.kernel.org, llvm@lists.linux.dev, 
+	Finn Behrens <me@kloenk.dev>, "Daniel Gomez (Samsung)" <d+samsung@kruces.com>, gost.dev@samsung.com, 
+	Nick Desaulniers <nick.desaulniers@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-From: Miguel Ojeda <ojeda@kernel.org>
-
-[ Upstream commit 02dfd63afe65f7bacad543ba2b10f77083ae7929 ]
-
-Alice reported [1] that an arm64 build failed with:
-
-    ld.lld: error: undefined symbol: __extendsfdf2
-    >>> referenced by core.a6f5fc5794e7b7b3-cgu.0
-    >>>               rust/core.o:(<f32>::midpoint) in archive vmlinux.a
-    >>> referenced by core.a6f5fc5794e7b7b3-cgu.0
-    >>>               rust/core.o:(<f32>::midpoint) in archive vmlinux.a
-
-    ld.lld: error: undefined symbol: __truncdfsf2
-    >>> referenced by core.a6f5fc5794e7b7b3-cgu.0
-    >>>               rust/core.o:(<f32>::midpoint) in archive vmlinux.a
-
-Rust 1.80.0 or later together with `CONFIG_CC_OPTIMIZE_FOR_SIZE=y`
-is what triggers it.
-
-In addition, x86_64 builds also fail the same way.
-
-Similarly, compiling with Rust 1.82.0 (currently in nightly) makes
-another one appear, possibly due to the LLVM 19 upgrade there:
-
-    ld.lld: error: undefined symbol: __eqdf2
-    >>> referenced by core.20495ea57a9f069d-cgu.0
-    >>>               rust/core.o:(<f64>::next_up) in archive vmlinux.a
-    >>> referenced by core.20495ea57a9f069d-cgu.0
-    >>>               rust/core.o:(<f64>::next_down) in archive vmlinux.a
-
-Gary adds [1]:
-
-> Usually the fix on rustc side is to mark those functions as `#[inline]`
+On Wed, Aug 7, 2024 at 8:10=E2=80=AFAM Daniel Gomez via B4 Relay
+<devnull+da.gomez.samsung.com@kernel.org> wrote:
 >
-> All of {midpoint,next_up,next_down} are indeed unstable functions not
-> marked as inline...
+> From: Nick Desaulniers <nick.desaulniers@gmail.com>
+>
+> When building the Linux kernel on an aarch64 MacOS based host, if we don'=
+t
+> specify a value for ARCH when invoking make, we default to arm and thus
+> multi_v7_defconfig rather than the expected arm64 and arm64's defconfig.
+>
+> This is because subarch.include invokes `uname -m` which on MacOS hosts
+> evaluates to `arm64` but on Linux hosts evaluates to `aarch64`,
+>
+> This allows us to build ARCH=3Darm64 natively on MacOS (as in ARCH need
+> not be specified on an aarch64-based system).
+>
+> Utilize a negative lookahead regular expression to avoid matching arm64.
 
-Fix all those by adding those intrinsics to our usual workaround.
 
-[ Trevor quickly submitted a fix to upstream Rust [2] that has already
-  been merged, to be released in Rust 1.82.0 (2024-10-17). - Miguel ]
+Does sed support "negative lookahead regular expression"?
 
-Cc: Gary Guo <gary@garyguo.net>
-Reported-by: Alice Ryhl <aliceryhl@google.com>
-Closes: https://rust-for-linux.zulipchat.com/#narrow/stream/x/topic/x/near/455637364 [1]
-Reviewed-by: Trevor Gross <tmgross@umich.edu>
-Tested-by: Alice Ryhl <aliceryhl@google.com>
-Tested-by: Boqun Feng <boqun.feng@gmail.com>
-Reviewed-by: Gary Guo <gary@garyguo.net>
-Link: https://github.com/rust-lang/rust/pull/128749 [2]
-Link: https://lore.kernel.org/r/20240806150619.192882-1-ojeda@kernel.org
-[ Shortened Zulip link. - Miguel ]
-Signed-off-by: Miguel Ojeda <ojeda@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- rust/Makefile             | 4 ++--
- rust/compiler_builtins.rs | 3 +++
- 2 files changed, 5 insertions(+), 2 deletions(-)
+>
+> Add a separate expression to support for armv.* as per error reported by
+> Nicolas Schier [1].
+>
+> [1] https://lore.kernel.org/all/Y3MRvtwdjIwMHvRo@bergen.fjasle.eu/#t
+>
+> Signed-off-by: Nick Desaulniers <nick.desaulniers@gmail.com>
+> Signed-off-by: Daniel Gomez <da.gomez@samsung.com>
+> ---
+>  scripts/subarch.include | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+>
+> diff --git a/scripts/subarch.include b/scripts/subarch.include
+> index 4bd327d0ae42..5d84ad8c0dee 100644
+> --- a/scripts/subarch.include
+> +++ b/scripts/subarch.include
+> @@ -6,7 +6,8 @@
+>
+>  SUBARCH :=3D $(shell uname -m | sed -e s/i.86/x86/ -e s/x86_64/x86/ \
+>                                   -e s/sun4u/sparc64/ \
+> -                                 -e s/arm.*/arm/ -e s/sa110/arm/ \
+> +                                 -e s/armv.*/arm/ \
+> +                                 -e s/arm\(?:\(?!64\).*\)/arm/ -e s/sa11=
+0/arm/ \
 
-diff --git a/rust/Makefile b/rust/Makefile
-index 060ba8cfa9149..9e0939b8fa78b 100644
---- a/rust/Makefile
-+++ b/rust/Makefile
-@@ -411,8 +411,8 @@ rust-analyzer:
- 		$(if $(KBUILD_EXTMOD),$(extmod_prefix),$(objtree))/rust-project.json
- 
- redirect-intrinsics = \
--	__addsf3 __eqsf2 __gesf2 __lesf2 __ltsf2 __mulsf3 __nesf2 __unordsf2 \
--	__adddf3 __ledf2 __ltdf2 __muldf3 __unorddf2 \
-+	__addsf3 __eqsf2 __extendsfdf2 __gesf2 __lesf2 __ltsf2 __mulsf3 __nesf2 __truncdfsf2 __unordsf2 \
-+	__adddf3 __eqdf2 __ledf2 __ltdf2 __muldf3 __unorddf2 \
- 	__muloti4 __multi3 \
- 	__udivmodti4 __udivti3 __umodti3
- 
-diff --git a/rust/compiler_builtins.rs b/rust/compiler_builtins.rs
-index bba2922c6ef77..f14b8d7caf899 100644
---- a/rust/compiler_builtins.rs
-+++ b/rust/compiler_builtins.rs
-@@ -40,16 +40,19 @@ pub extern "C" fn $ident() {
- define_panicking_intrinsics!("`f32` should not be used", {
-     __addsf3,
-     __eqsf2,
-+    __extendsfdf2,
-     __gesf2,
-     __lesf2,
-     __ltsf2,
-     __mulsf3,
-     __nesf2,
-+    __truncdfsf2,
-     __unordsf2,
- });
- 
- define_panicking_intrinsics!("`f64` should not be used", {
-     __adddf3,
-+    __eqdf2,
-     __ledf2,
-     __ltdf2,
-     __muldf3,
--- 
-2.43.0
 
+s/arm\(?:\(?!64\).*\)/arm/
+
+In sed, this expression does not seem to match anything.
+
+(or please give me some matching examples if I miss something)
+
+
+
+
+
+Nocolas already provided correct code:
+
+> [1] https://lore.kernel.org/all/Y3MRvtwdjIwMHvRo@bergen.fjasle.eu/#t
+
+
+
+
+
+
+>                                   -e s/s390x/s390/ \
+>                                   -e s/ppc.*/powerpc/ -e s/mips.*/mips/ \
+>                                   -e s/sh[234].*/sh/ -e s/aarch64.*/arm64=
+/ \
+>
+> --
+> Git-146)
+>
+>
+
+
+--
+Best Regards
+
+
+Masahiro Yamada
