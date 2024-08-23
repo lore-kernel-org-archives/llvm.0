@@ -1,158 +1,75 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from zeeaster.vergenet.net (zeeaster.vergenet.net [206.189.110.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 98B96194C9E;
-	Fri, 23 Aug 2024 16:13:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E0CEB18594C;
+	Fri, 23 Aug 2024 17:22:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=206.189.110.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724429586; cv=none; b=Ejc70EMbfX9OM291CzZ4MfusIMPnAKuVHIewWX/Ks+kH2EFvYCqubenuikew5i37XJcbhaBVf5sWHo4Z3kagaIoyv4/AvMJ7VdA81TgAr9xpG9oUtbikzBkkExZivKjg8xV6rvzb7yQo0Xh8eBBbih7elaOc+OnZ7NfVjEi6Q7U=
+	t=1724433760; cv=none; b=Aws3p5rk6c7RY85FhsX3qD0TX4GKqon8TN/48J2RHyHD4qusRJ2qG/ZThwQ5YkuiDNs86ETpj8W9G25JITbbKTGwPiHgEKtEhhb+fpbLUg+ZsZKIXl3wkY6BqKHUdLo5E/Ty1Ik7wVom6Yg7VrLp9ej/EjRWGIpArUXMdXBQlZ8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724429586; c=relaxed/simple;
-	bh=302mPfppIzV0eIiBLegANXAiB+NF/JryI6zwyAqPKeI=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=oOocNxTBYVq7Th/YAtRJdhTz5eRCGFBMJzNj+HqdfbCHQNi7g9oX7FhjYV4HwQgfXPJnjAAdd0TeM9sxnX/yLYfQ81g+dE+nWJvjoOAQx18yg3yfzSX36DMXhFF0B9Zo8AOqmXdX1d5H8fy6RNKdPCuEsBXLxLAKT4Q4H88plRU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gf+WMIRu; arc=none smtp.client-ip=10.30.226.201
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gf+WMIRu"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2B9AEC4AF51;
-	Fri, 23 Aug 2024 16:13:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1724429586;
-	bh=302mPfppIzV0eIiBLegANXAiB+NF/JryI6zwyAqPKeI=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=gf+WMIRurTbcCUp5XG/SJqSuNJlC/5jTbjfrtjz9Bke6unn38fmcRN+YM+/H/43FY
-	 lbsc3h6ZC8f35iYEa6UeUssIiTd08RvXwBi0MjdL4zAyp5kjx1JxZ/jC1iaIgqVRiC
-	 ur7OZG2hFz/jXs+MMeV/l8lH7W26g2wD/QYWC2kZo7w7gmoo9/4AMNkWWYGV3JSqVU
-	 VYLEbcUT4YrL0R0e4pLlZFcUYiVRRx3QTP0KTf1NhMoH/d4g/aTw9/BbDf/isvQzr/
-	 EiLGa0gp/ERZgq1t2tqvHzgTKwOtnypPYBaPN7Is/mZCf7pHacg835+FQlJc3L0cNq
-	 yW2ydpGu7UQUg==
-Received: by mail-lj1-f181.google.com with SMTP id 38308e7fff4ca-2f3edb2d908so22009911fa.2;
-        Fri, 23 Aug 2024 09:13:06 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCVU+HzF/6t4Rh/l70QVPgM5ynjYXvBt7lpkIJZm6up/UsEWqtphxh0KqXBVki43J2KofgW8XNk=@lists.linux.dev, AJvYcCXFvpVhaLVMd5/SyYwr7O6U9fqWiGOjHAnUHiKz9LJfu0N39oDkW4DARxeR3G7jVXzRi/zNsA==@lists.linux.dev
-X-Gm-Message-State: AOJu0Yyz+d4JI6D48eRBWM8uUfzz8HzaSSlaNZqal3Ldp1wPMOWrVOtR
-	6+VS8LQlV9JhtRtGDSCvyjGDcK96ghMC1jqsb4SQXB5YbM6ULLPxeb62CrNRByDbpvZ1gILERTc
-	4VuPSd7sclOmcW1rdPg3COXs+w+0=
-X-Google-Smtp-Source: AGHT+IGLQePVn5RhKmrGdV43WiO6IyDdZ4P8M+JxvZmPPDeIiajBOGYYWmzAWjRdCByIm/YmPmOehjlJ0SdmJRob6wc=
-X-Received: by 2002:a05:651c:1505:b0:2ef:2dfd:15dc with SMTP id
- 38308e7fff4ca-2f4f48ef636mr23768021fa.9.1724429584330; Fri, 23 Aug 2024
- 09:13:04 -0700 (PDT)
+	s=arc-20240116; t=1724433760; c=relaxed/simple;
+	bh=K6CbXFMK7cTgJ8BtfPI89AVrtYigjOS7es3NEJ8cxBo=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=cWV1M6tJPp2LMf8rZAeKxVp0gJNABwPOzz9V+67tfqbKBu6Y1bAd9YT9bweoHHJCnus3kpWzVdr7SSdt10kz16ZkIU5LjeE4aoQsCQnDoCnLbBvLCWCmvM6JAdgzKCPKE9FjjTwCOg5lE19h0kRfM8IQLV5DS7WxX6VzqyRyHG8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=horms.net; spf=pass smtp.mailfrom=vergenet.net; arc=none smtp.client-ip=206.189.110.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=horms.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=vergenet.net
+Received: from madeliefje.horms.nl (haye-23-b2-v4wan-167567-cust3213.vm28.cable.virginm.net [82.40.60.142])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by zeeaster.vergenet.net (Postfix) with ESMTPSA id 7EB1E2024E;
+	Fri, 23 Aug 2024 17:16:49 +0000 (UTC)
+Received: by madeliefje.horms.nl (Postfix, from userid 7100)
+	id 3633D2AC6; Fri, 23 Aug 2024 18:16:49 +0100 (BST)
+Date: Fri, 23 Aug 2024 18:16:49 +0100
+From: Simon Horman <simon@horms.net>
+To: kernel test robot <lkp@intel.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	devel@driverdev.osuosl.org,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: Re: [staging:staging-testing 36/53]
+ drivers/staging/rtl8192e/rtllib_crypt_tkip.c:640:7: warning: variable 'iv16'
+ set but not used
+Message-ID: <20240823171649.GZ2164@vergenet.net>
+References: <202408232049.UJef268y-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20240807-macos-build-support-v1-0-4cd1ded85694@samsung.com> <20240807-macos-build-support-v1-1-4cd1ded85694@samsung.com>
-In-Reply-To: <20240807-macos-build-support-v1-1-4cd1ded85694@samsung.com>
-From: Masahiro Yamada <masahiroy@kernel.org>
-Date: Sat, 24 Aug 2024 01:12:26 +0900
-X-Gmail-Original-Message-ID: <CAK7LNARmy=N+6O87BJGZbodssDw21sHgMf36TXdcxD4=5A_OBA@mail.gmail.com>
-Message-ID: <CAK7LNARmy=N+6O87BJGZbodssDw21sHgMf36TXdcxD4=5A_OBA@mail.gmail.com>
-Subject: Re: [PATCH 01/12] scripts: subarch.include: fix SUBARCH on MacOS hosts
-To: da.gomez@samsung.com
-Cc: Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nicolas@fjasle.eu>, 
-	Lucas De Marchi <lucas.demarchi@intel.com>, 
-	=?UTF-8?Q?Thomas_Hellstr=C3=B6m?= <thomas.hellstrom@linux.intel.com>, 
-	Rodrigo Vivi <rodrigo.vivi@intel.com>, 
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, Maxime Ripard <mripard@kernel.org>, 
-	Thomas Zimmermann <tzimmermann@suse.de>, David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>, 
-	William Hubbs <w.d.hubbs@gmail.com>, Chris Brannon <chris@the-brannons.com>, 
-	Kirk Reiser <kirk@reisers.ca>, Samuel Thibault <samuel.thibault@ens-lyon.org>, 
-	Paul Moore <paul@paul-moore.com>, Stephen Smalley <stephen.smalley.work@gmail.com>, 
-	Ondrej Mosnacek <omosnace@redhat.com>, Catalin Marinas <catalin.marinas@arm.com>, 
-	Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>, Oliver Upton <oliver.upton@linux.dev>, 
-	James Morse <james.morse@arm.com>, Suzuki K Poulose <suzuki.poulose@arm.com>, 
-	Zenghui Yu <yuzenghui@huawei.com>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	Jiri Slaby <jirislaby@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
-	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, linux-kernel@vger.kernel.org, 
-	linux-kbuild@vger.kernel.org, intel-xe@lists.freedesktop.org, 
-	dri-devel@lists.freedesktop.org, speakup@linux-speakup.org, 
-	selinux@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	kvmarm@lists.linux.dev, linux-serial@vger.kernel.org, llvm@lists.linux.dev, 
-	Finn Behrens <me@kloenk.dev>, "Daniel Gomez (Samsung)" <d+samsung@kruces.com>, gost.dev@samsung.com, 
-	Nick Desaulniers <nick.desaulniers@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <202408232049.UJef268y-lkp@intel.com>
+X-Virus-Scanned: clamav-milter 0.103.10 at zeeaster
+X-Virus-Status: Clean
 
-On Wed, Aug 7, 2024 at 8:10=E2=80=AFAM Daniel Gomez via B4 Relay
-<devnull+da.gomez.samsung.com@kernel.org> wrote:
->
-> From: Nick Desaulniers <nick.desaulniers@gmail.com>
->
-> When building the Linux kernel on an aarch64 MacOS based host, if we don'=
-t
-> specify a value for ARCH when invoking make, we default to arm and thus
-> multi_v7_defconfig rather than the expected arm64 and arm64's defconfig.
->
-> This is because subarch.include invokes `uname -m` which on MacOS hosts
-> evaluates to `arm64` but on Linux hosts evaluates to `aarch64`,
->
-> This allows us to build ARCH=3Darm64 natively on MacOS (as in ARCH need
-> not be specified on an aarch64-based system).
->
-> Utilize a negative lookahead regular expression to avoid matching arm64.
+On Fri, Aug 23, 2024 at 08:35:15PM +0800, kernel test robot wrote:
+> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/staging.git staging-testing
+> head:   5315266844ea3b0b8b6be9842d5901e439fa838a
+> commit: 5f1a6826ea4900f8540d5eeb29f97796860f2d08 [36/53] staging: rtl8192e: remove set but otherwise unused local variable iv32
+> config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20240823/202408232049.UJef268y-lkp@intel.com/config)
+> compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
+> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240823/202408232049.UJef268y-lkp@intel.com/reproduce)
+> 
+> If you fix the issue in a separate patch/commit (i.e. not just a new version of
+> the same patch/commit), kindly add following tags
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Closes: https://lore.kernel.org/oe-kbuild-all/202408232049.UJef268y-lkp@intel.com/
+> 
+> All warnings (new ones prefixed by >>):
+> 
+> >> drivers/staging/rtl8192e/rtllib_crypt_tkip.c:640:7: warning: variable 'iv16' set but not used [-Wunused-but-set-variable]
+>      640 |                 u16 iv16 = tkey->tx_iv16;
+>          |                     ^
+>    1 warning generated.
 
+Sorry about this.
 
-Does sed support "negative lookahead regular expression"?
+It seems that my patch, cited above, which removed a set but otherwise
+unused variable results in iv16 being set but otherwise unused.
 
->
-> Add a separate expression to support for armv.* as per error reported by
-> Nicolas Schier [1].
->
-> [1] https://lore.kernel.org/all/Y3MRvtwdjIwMHvRo@bergen.fjasle.eu/#t
->
-> Signed-off-by: Nick Desaulniers <nick.desaulniers@gmail.com>
-> Signed-off-by: Daniel Gomez <da.gomez@samsung.com>
-> ---
->  scripts/subarch.include | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
->
-> diff --git a/scripts/subarch.include b/scripts/subarch.include
-> index 4bd327d0ae42..5d84ad8c0dee 100644
-> --- a/scripts/subarch.include
-> +++ b/scripts/subarch.include
-> @@ -6,7 +6,8 @@
->
->  SUBARCH :=3D $(shell uname -m | sed -e s/i.86/x86/ -e s/x86_64/x86/ \
->                                   -e s/sun4u/sparc64/ \
-> -                                 -e s/arm.*/arm/ -e s/sa110/arm/ \
-> +                                 -e s/armv.*/arm/ \
-> +                                 -e s/arm\(?:\(?!64\).*\)/arm/ -e s/sa11=
-0/arm/ \
+I'll prepare a follow-up patch to address this.
 
-
-s/arm\(?:\(?!64\).*\)/arm/
-
-In sed, this expression does not seem to match anything.
-
-(or please give me some matching examples if I miss something)
-
-
-
-
-
-Nocolas already provided correct code:
-
-> [1] https://lore.kernel.org/all/Y3MRvtwdjIwMHvRo@bergen.fjasle.eu/#t
-
-
-
-
-
-
->                                   -e s/s390x/s390/ \
->                                   -e s/ppc.*/powerpc/ -e s/mips.*/mips/ \
->                                   -e s/sh[234].*/sh/ -e s/aarch64.*/arm64=
-/ \
->
-> --
-> Git-146)
->
->
-
-
---
-Best Regards
-
-
-Masahiro Yamada
+...
