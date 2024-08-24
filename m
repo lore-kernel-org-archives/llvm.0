@@ -1,66 +1,66 @@
-Received: from mail-yw1-f179.google.com (mail-yw1-f179.google.com [209.85.128.179])
+Received: from mail-yw1-f175.google.com (mail-yw1-f175.google.com [209.85.128.175])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5876F2A8D0
-	for <llvm@lists.linux.dev>; Sat, 24 Aug 2024 07:22:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1078214F12D
+	for <llvm@lists.linux.dev>; Sat, 24 Aug 2024 07:25:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724484145; cv=none; b=VYy8SvgLplaIyg/Ygoof7GefBVkzVZUYUHs133iGIxlHE25FeI0aq0u7DemEFg4IJmqHCH7BTd158dnvkN4SHrTvji4GlZ1Cx6dEx/0dCq0G5HlW0vi7ISUSVpdLTybkzTUlUlYKFPjDm7qeXQG4yY/zzRDbk6FTL6GIH36n0p8=
+	t=1724484305; cv=none; b=LYcE7sPXlMP61f+WgRWDrUBAhfrHssL9n9RVnHAFb9P5Kqru2T0Yl48ww3oosraBLuPoEEoBDF0M/me8zAnPSftuqKqfTwDvqbo9FRpKsAqkI1md4gS3NsHWJh18XYD58uOb37o2SMITQA2qQt5tUJ2yVXSCEz2NXMGCeTCxBGs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724484145; c=relaxed/simple;
-	bh=OStfsJg52TgOodEuPCI04XC30uKxNi9BjiHLIAblgbk=;
+	s=arc-20240116; t=1724484305; c=relaxed/simple;
+	bh=g6xKvcThqp7cNcb49IH7d8Zjo3rGrlE8E1s03ZsRXRk=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=aIveVj1Ht7y+q/RmdeHwqTFKjbaQUkK2300U1RqtrbqVmGfL05uyjUH/Odj/tHGBOfxbvIwc4YApm4C/6dwDskC7KnSH/t0zgNqyFy5xDum6A9Pwq4kKyM83EJ07mLAQLYiybik9BX7cyqG0EPywGKP2AE3AJ7j3W9xuvZ/9puo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=umich.edu; spf=pass smtp.mailfrom=umich.edu; dkim=pass (2048-bit key) header.d=umich.edu header.i=@umich.edu header.b=ZgTga3lp; arc=none smtp.client-ip=209.85.128.179
+	 To:Cc:Content-Type; b=NwfAx5WAHi+oJ3hBxoP0j3Z5fWNY+98DRliDsiEeYQ7o9ONF+xypRFKj4zACxBGR+WGi6gkLczEAoWNvQakdDB2RXfgihPtCA1QpYcDz16wZPf0W2uqFejMdCbem4qJdG5NwD4pjpVpSANgOB3bBnH2jKh7uN624knAi5opo5s4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=umich.edu; spf=pass smtp.mailfrom=umich.edu; dkim=pass (2048-bit key) header.d=umich.edu header.i=@umich.edu header.b=OfylNslN; arc=none smtp.client-ip=209.85.128.175
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=umich.edu
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=umich.edu
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=umich.edu header.i=@umich.edu header.b="ZgTga3lp"
-Received: by mail-yw1-f179.google.com with SMTP id 00721157ae682-6c49c9018ebso21132237b3.3
-        for <llvm@lists.linux.dev>; Sat, 24 Aug 2024 00:22:23 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=umich.edu header.i=@umich.edu header.b="OfylNslN"
+Received: by mail-yw1-f175.google.com with SMTP id 00721157ae682-6c32daf0797so27734187b3.0
+        for <llvm@lists.linux.dev>; Sat, 24 Aug 2024 00:25:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=umich.edu; s=google-2016-06-03; t=1724484142; x=1725088942; darn=lists.linux.dev;
+        d=umich.edu; s=google-2016-06-03; t=1724484302; x=1725089102; darn=lists.linux.dev;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=DVsalfG8grE5RGhDxTKtFqtbQowxlW8KEY/SQtljHg4=;
-        b=ZgTga3lp3WIsayxX9+hqTsr3dwedhyCKI4syi4VwROSubr+fDc0B8nbDBMBct/cOVZ
-         +N8bSM7RJOBvQAypaRD1mUy57x7EEN8+t7qC+CVTmRXRSqzfFS4pJB37UeIfkkYIi6ah
-         3eE2C/0RzHi5KLx9t1fvL8ZG+O6csOC8w1aTCIXn6ZuJce22UF8IGohmiChk8Ff+M7gc
-         u8NvdCNFpvQGyLQhg9mdjnSI8HT85aKgVNZ7ux0K8a/I8o//Ef8WGTa0URJRFHeIXssD
-         6405VBPVF6q/35Wf0JoGpus6647JVve0/0Gpy99nNwN3n9OuH7wJ3KuMXsPO34dI3geo
-         MW3w==
+        bh=q6+A2VuRa3vINzgOnqqBfzLTYjWfMi7SqqtjGQfCE/k=;
+        b=OfylNslNKe1Fj06wDvTg+/aaDridtxGqnwQtYk6bWRHu6skut0lcd1SVyn/KBc4Q0V
+         FbcSiFNbVob3PKuP2ksbre0ygebA8BC5Lyf22Q6BGsa6+ZrlMg3js5BJeax6qRZoNhm2
+         Jija+vWZiIINzj1Ihfa8PHpLEa7Qam53bgdM3z2q8eZ1rREXC0ieA9nJbBcQt3IePyHg
+         /IMWEkB3FJQPX4iKWUIV8+OQ3+NtCH7aAx6O8Dya9+5TvdzevEfThhJBF69AqEtoA9EG
+         Li/HX0DVTwU9cuXyKpHkCBgdCIq/InVMsXcD+8/DC5PzFIkS94rOzgzvSQXzs2BCcPQM
+         eMpA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1724484142; x=1725088942;
+        d=1e100.net; s=20230601; t=1724484302; x=1725089102;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=DVsalfG8grE5RGhDxTKtFqtbQowxlW8KEY/SQtljHg4=;
-        b=tafzEDAFDMIbImG35qkjl0q40TjWOXJQubjfV6tUQw4k3/A+B9x27vHqTWsuYH9Rvh
-         a5TsRDhSkOqMeauTMMHJo/TM/xfNG0YQDKF/TOaxi+xVze9+5zZAWAiO01n8sp/uxSBV
-         /PDV9EGsrY5sBPDq+y1kiRj0HqLytmAqdu/6KfB8gt/mJRB7xp/Sj+ntqNYC/jODSMWp
-         5fRBgkUS1Dnn0h3nFchtsBJ7qCFzE713/neBiipugqx4DSXZyydZnRGM2Sg+QYgT9/30
-         7xqlIMPJ2ZFL/nnhhhHO3q//VvWsjSR+AVzMzCNKqxAhkkY+yujtTSMJBO/9xnsBP4Dv
-         dWEg==
-X-Forwarded-Encrypted: i=1; AJvYcCWMaIZKHzNHaefKUITEcROGkBx+J/dJTV0A2TZbt4MZ+FI6M4vl4hHzBayQqkXcm1TmssZu@lists.linux.dev
-X-Gm-Message-State: AOJu0YwsMuJe3HMiMKhk6Zk96n28dP2X8SaDWdAb5srf6E1WRVfhiI46
-	FTk6SZEW3siQ+3Lq2SkXgYm7O8tURn+PXoyu3GYxWFELOOVmLTdU2L0BNB/AXcKzjemZu8M9O99
-	p70hU0lZW3pBeUswG5Sv1kwiRD62FXsE2sF826w==
-X-Google-Smtp-Source: AGHT+IEVBoQ80HNOho+LZux6lbfvXl8vt0fCx9AYG0zW1m1SHhNoA2/84+JhvXA8lXkPyPOtHR5BM1lzqViGPT9r19k=
-X-Received: by 2002:a05:690c:768c:b0:6b2:7bd8:d7a4 with SMTP id
- 00721157ae682-6c629fd7875mr51388347b3.41.1724484142200; Sat, 24 Aug 2024
- 00:22:22 -0700 (PDT)
+        bh=q6+A2VuRa3vINzgOnqqBfzLTYjWfMi7SqqtjGQfCE/k=;
+        b=j4KcfrjvJfkqA+ooXwM6ocNLblwjrMO33lEA9m+BMTE8dB1DVdSyUC7ZiOZ5r8mIqx
+         H2UAwkUkssCixgRmWZWRunIY3UHIQg/XirrF+1CN7tapOE33G7xoDAqrfFJVpvKE5PJQ
+         A3ofw8ricZyS0l8MtH3XXw8Ym/4PiWJwOpcN3RPH4gTrDFID5VqbwR2JIUlrK79rXNHM
+         ILTYSU24ERYDxsQsY+21hoFEGKv4nuUeOGCrarjZ/2/dQOwnzUZH4sIvC3HXT/X1A9EL
+         GHWuUdsLyWjbMQM+QGYycipkpyOpq+cyBAmpicird2rhbCLajr4nvuIrFVlmbja/N+y0
+         odHg==
+X-Forwarded-Encrypted: i=1; AJvYcCWA0DOEaFdgqZlkinzK688HSeuuPlrwgopg0EbbBj5mCJydiYqB7TY3CikGd7vyc6RveODf@lists.linux.dev
+X-Gm-Message-State: AOJu0Ywmg0lhUKhyPToHkx+DHGSu41MhI0J3PjWJyO5ZBbG9TrlQIbIR
+	w5VLgBoQBKOMH9MzSdr6EFvwUb/zThTcipJ/JjJ752R++TdmXOLWPpwPCMUfSwK9cKxT2OvC2Ca
+	vFMhaazKlR2LNnO/IEAK+HscAZanyCm3Oep4AGg==
+X-Google-Smtp-Source: AGHT+IG1BlHDuekV5AcLsj47uYwHvnVdzGRFSDLUmEl/F7Nsu+5/w5qTxjhDCMbQGyjdd5802kibXL0vaoVv13Foy4o=
+X-Received: by 2002:a05:690c:6606:b0:61b:1e81:4eb8 with SMTP id
+ 00721157ae682-6c62538d6f6mr67130637b3.9.1724484302011; Sat, 24 Aug 2024
+ 00:25:02 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20240819153656.28807-2-vadorovsky@protonmail.com>
-In-Reply-To: <20240819153656.28807-2-vadorovsky@protonmail.com>
+References: <20240819153656.28807-2-vadorovsky@protonmail.com> <36272d4a-eb95-4842-b171-ad6ec39a7631@gmail.com>
+In-Reply-To: <36272d4a-eb95-4842-b171-ad6ec39a7631@gmail.com>
 From: Trevor Gross <tmgross@umich.edu>
-Date: Sat, 24 Aug 2024 02:22:11 -0500
-Message-ID: <CALNs47sa3RfbeGoT+_MUcZUAv=Wn2t0o1L-9v1D7jWp6NVicGg@mail.gmail.com>
+Date: Sat, 24 Aug 2024 02:24:50 -0500
+Message-ID: <CALNs47uKWTH9mUhEp1-f=zX8fgPpWExQWct0YYa2Q9H6yuaKJA@mail.gmail.com>
 Subject: Re: [PATCH RESEND v5] rust: str: Use `core::CStr`, remove the custom
  `CStr` implementation
 To: Michal Rostecki <vadorovsky@gmail.com>
@@ -83,190 +83,34 @@ Cc: Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>,
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, Aug 19, 2024 at 10:39=E2=80=AFAM Michal Rostecki <vadorovsky@gmail.=
+On Mon, Aug 19, 2024 at 10:43=E2=80=AFAM Michal Rostecki <vadorovsky@gmail.=
 com> wrote:
 >
-> From: Michal Rostecki <vadorovsky@gmail.com>
+> On 8/19/24 17:36, Michal Rostecki wrote:
+> > From: Michal Rostecki <vadorovsky@gmail.com>
+> >
+> > `CStr` became a part of `core` library in Rust 1.75. This change replac=
+es
+> > the custom `CStr` implementation with the one from `core`.
 
-You don't need this since the email already shows it is already from
-you :) Aiui this is only needed when forwarding a patch for someone
-else, or if you use a different commit email for some reason.
+[ very long snip ]
 
-> `CStr` became a part of `core` library in Rust 1.75. This change replaces
-> the custom `CStr` implementation with the one from `core`.
-
-The diff in `kernel/str.rs` is really difficult to read and review
-since the new parts get interleaved with the removed lines. Could you
-split this into a couple patches? Probably roughly the five described
-below:
-
-1. Add all the new things `CStrExt`, `CStrDisplay`, and their implementatio=
-ns.
-2. Add `CStrExt` to the prelude (Alice's suggestion)
-3. Update existing uses of our `CStr` to instead use `core::CStr`
-4. Remove our current `CStr`
-5. Change any docs for `CString` or `c_str!`, as relevant
-
-Just remember that things should build after each patch.
-
-> diff --git a/rust/kernel/kunit.rs b/rust/kernel/kunit.rs
-> index 0ba77276ae7e..79a50ab59af0 100644
-> --- a/rust/kernel/kunit.rs
-> +++ b/rust/kernel/kunit.rs
-> @@ -56,13 +56,15 @@ macro_rules! kunit_assert {
->                 break 'out;
->             }
+> > @@ -180,7 +180,7 @@ macro_rules! assert {{
+> >       #[allow(unused)]
+> >       macro_rules! assert_eq {{
+> >           ($left:expr, $right:expr $(,)?) =3D> {{{{
+> > -            kernel::kunit_assert_eq!("{kunit_name}", "{real_path}", __=
+DOCTEST_ANCHOR - {line}, $left, $right);
+> > +            kernel::kunit_assert_eq!(c"{kunit_name}", c"{real_path}", =
+__DOCTEST_ANCHOR - {line}, $left, $right);
+> >           }}}}
+> >       }}
+> >
 >
-> -            static FILE: &'static $crate::str::CStr =3D $crate::c_str!($=
-file);
-> +            static FILE: &'static core::ffi::CStr =3D $file;
->             static LINE: i32 =3D core::line!() as i32 - $diff;
-> -            static CONDITION: &'static $crate::str::CStr =3D $crate::c_s=
-tr!(stringify!($condition));
-> +            static CONDITION: &'static core::ffi::CStr =3D $crate::c_str=
-!(stringify!($condition));
+> I forgot to include the version history before sending the patch, sorry.
 
-This change and the associated invocation changes can be dropped since
-we are keeping `c_str`. It's cleaner to be able to call macros with
-"standard strings" rather than c"c strings" where possible.
-
-> diff --git a/rust/kernel/str.rs b/rust/kernel/str.rs
-> index bb8d4f41475b..97a298a44b96 100644
-> --- a/rust/kernel/str.rs
-> +++ b/rust/kernel/str.rs
-
-(I removed most of the `-` lines for my review below)
-
-> +/// Wrapper around [`CStr`] which implements [`Display`](core::fmt::Disp=
-lay).
-> +pub struct CStrDisplay<'a>(&'a CStr);
->
-> +impl fmt::Display for CStrDisplay<'_> {
-> +    /// Formats printable ASCII characters, escaping the rest.
->      ///
->      /// # Examples
->      ///
->      /// ```
-> +    /// # use core::ffi::CStr;
->      /// # use kernel::c_str;
->      /// # use kernel::fmt;
-> +    /// # use kernel::str::{CStrExt, CString};
-> +    /// let penguin =3D c"=F0=9F=90=A7";
-> +    /// let s =3D CString::try_from_fmt(fmt!("{}", penguin.display())).u=
-nwrap();
-> +    /// assert_eq!(s.to_bytes_with_nul(), "\\xf0\\x9f\\x90\\xa7\0".as_by=
-tes());
-> +    ///
-> +    /// let ascii =3D c"so \"cool\"";
-> +    /// let s =3D CString::try_from_fmt(fmt!("{}", ascii.display())).unw=
-rap();
-> +    /// assert_eq!(s.to_bytes_with_nul(), "so \"cool\"\0".as_bytes());
->      /// ```
->      fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-
-You don't need docs on the `Display` impl since that is more or less
-innate. Docs should indeed be on `fn display()`, which you have.
-
-> +/// Extensions to [`CStr`].
-> +pub trait CStrExt {
-> +    /// Returns an object that implements [`Display`](core::fmt::Display=
-) for
-> +    /// safely printing a [`CStr`] that may contain non-ASCII data, whic=
-h are
-> +    /// escaped.
-
-Just split this into two sentences, e.g.
-
-    /// Returns an object ... for safely printing a [`CStr`].
-    ///
-    /// If the `CStr` contains non-ASCII data, it is escaped.
-
-> +    ///
-> +    /// # Examples
->      ///
->      /// ```
-> +    /// # use core::ffi::CStr;
->      /// # use kernel::c_str;
->      /// # use kernel::fmt;
-> +    /// # use kernel::str::{CStrExt, CString};
-> +    /// let penguin =3D c"=F0=9F=90=A7";
-> +    /// let s =3D CString::try_from_fmt(fmt!("{}", penguin.display())).u=
-nwrap();
-> +    /// assert_eq!(s.to_bytes_with_nul(), "\\xf0\\x9f\\x90\\xa7\0".as_by=
-tes());
-> +    ///
-> +    /// let ascii =3D c"so \"cool\"";
-> +    /// let s =3D CString::try_from_fmt(fmt!("{}", ascii.display())).unw=
-rap();
-> +    /// assert_eq!(s.to_bytes_with_nul(), "so \"cool\"\0".as_bytes());
->      /// ```
-> +    fn display(&self) -> CStrDisplay<'_>;
-
-Nit: Could you swap the ascii and penguin examples so the easier one
-is first? Also I would remove the extra quote chars `\"` since it
-makes things tougher to read without demonstrating much.
-
-> +    /// Creates a mutable [`CStr`] from a `[u8]` without performing any
-> +    /// additional checks.
-> +    ///
-> +    /// # Safety
-> +    ///
-> +    /// `bytes` *must* end with a `NUL` byte, and should only have a sin=
-gle
-> +    /// `NUL` byte (or the string will be truncated).
-> +    unsafe fn from_bytes_with_nul_unchecked_mut(bytes: &mut [u8]) -> &mu=
-t Self;
->  }
-
-+1 to Alice's suggestion of removing this and leaving `DerefMut` if
-that works for our usecases.
-
-If we leave this, just copy the `# Safety` section from
-`CStr::from_bytes_with_nul_unchecked` since I think this could use
-some improved wording (and "or the string will be truncated" is not
-accurate - any number of things could break, it doesn't just become a
-shorter string).
-
->  /// Creates a new [`CStr`] from a string literal.
->  ///
-> +/// This macro is not needed when C-string literals (`c"hello"` syntax) =
-can be
-> +/// used directly, but can be used when a C-string version of a standard=
- string
-> +/// literal is required (often when working with macros).
-> +///
-> +/// The string should not contain any `NUL` bytes.
-
-For the last line, maybe
-
-    /// # Panics
-    ///
-    /// This macro panics if the string contains an interior `NUL` byte.
-
->  /// # Examples
->  ///
->  /// ```
-> +/// # use core::ffi::CStr;
->  /// # use kernel::c_str;
-> +/// const MY_CSTR: &CStr =3D c_str!(stringify!(5));
->  /// ```
->  #[macro_export]
->  macro_rules! c_str {
->      ($str:expr) =3D> {{
->          const S: &str =3D concat!($str, "\0");
-> +        const C: &core::ffi::CStr =3D match core::ffi::CStr::from_bytes_=
-with_nul(S.as_bytes()) {
->              Ok(v) =3D> v,
->              Err(_) =3D> panic!("string contains interior NUL"),
->          };
-
-Thanks for the updates from last time. For what it's worth, this is
-the first time an email from this series has come through for me with
-no problems (not getting grouped in the same thread as all other
-versions in my client) so whatever it is, do the same thing next time
-:)
+For future reference - when replying, you should delete irrelevant
+bits of the message you are replying to, otherwise things get kind of
+messy.
 
 - Trevor
-
-[1]: https://doc.rust-lang.org/std/ffi/struct.CStr.html#method.from_bytes_w=
-ith_nul_unchecked
