@@ -1,101 +1,76 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E33FA5F
-	for <llvm@lists.linux.dev>; Sat, 24 Aug 2024 02:52:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 378F9EEB1;
+	Sat, 24 Aug 2024 03:32:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724467929; cv=none; b=JbjFKomPrC3PLF3kVKV8wXAUos3tUyZmeLH7qu82SOAXw4SPnCbEvvWezWGwpSXnRNmb0/nJwWdZQu05MDi3gpxGqL0rwh1vB2Rcr056wSq8CiUgI0vu4xyrFu3BR1Jz8tdddTTxq1cFRQI0IqJy0YLll4u28grO3BrrTE+Giz8=
+	t=1724470348; cv=none; b=rK9vsbP/vDbAP8/TJIAQc1T2/UUB0BvKuOi7dm4umZWXuRff/jlS2MNOZ09cI9ELFMD9GC2DqFqF1aB5M+MjFtHdkvZnzq6YPsMwVnDvqZh/TgljnalCku3csJxWMyu142A7beJJNl/DU2d09L1er5wEdmlGKpOzuc9dYTWgbOs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724467929; c=relaxed/simple;
-	bh=Ccxbyflai2pk744cO+Dy3g5WfTGhqP1D1BrhGifXEPg=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=WNKmyySvJHVxj+eHkDe5fJrhejJvJZFFKESkUE+ayveJPNj78TmgmMfq6ZlzqcSq8BIITFm5lRb77kKP5c4vV9jakjjx1J65dncMDRD0z0vEWRNtJlf9dO+HqVT8vJj9gr15wS9Ug+Bbt9Ywli7IvXvQ45aEohEdBuYtQlw9us4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=UMCSBBPf; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1724470348; c=relaxed/simple;
+	bh=P8OUrwb6qdsilJULGUiZLBTPqjy8rYsIhHeRsrhKmtI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Zr/NCdLdap+KujQZeTbAchZc/MOI4I/ZwDjkh0hiiX7UGJTWNiiZojKzorhpp4gCLB8lm3Oys9Hy0/o9i/J1jxbtifyb+MAk2olwX2hVXawLKu+dqNnzPYY+6KmqjvlHDwEPKHXj5q3miQ6ZfGf1CzoqaaG8gxKezaz8O7H8vzI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=seNG/zyH; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="UMCSBBPf"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1724467925;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=b8HQttwTb33/iFOp5Sv43QG5YyqTYnmDEqYqCSN1Auk=;
-	b=UMCSBBPfTPlC7lSz8k+Zh/i6Zr7eBoQK7R+L8kd6lel+fopE90MAzt05G+lR0pRqCXYUDO
-	CGcOkT7WPFs9pY5xm1CKkFrve1CafzTmwC1cxenBaksvCDgMS0U9M2AHu3SAxy4AY+/4+N
-	u6UG/xRXktMHv96Y/PCoaQSqBBZIrNY=
-Received: from mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-556-gYJx2HUlNVGXKkRsB0pTBA-1; Fri,
- 23 Aug 2024 22:52:04 -0400
-X-MC-Unique: gYJx2HUlNVGXKkRsB0pTBA-1
-Received: from mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.40])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 11E271955D47
-	for <llvm@lists.linux.dev>; Sat, 24 Aug 2024 02:52:03 +0000 (UTC)
-Received: from [172.64.0.35] (unknown [10.30.32.160])
-	by mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 7582119560A3;
-	Sat, 24 Aug 2024 02:52:02 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.11.0-rc4,
- mainline.kernel.org-clang, 60f0560f)
-Date: Sat, 24 Aug 2024 02:52:02 -0000
-To: llvm@lists.linux.dev
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="seNG/zyH"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4B5C9C32781;
+	Sat, 24 Aug 2024 03:32:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1724470347;
+	bh=P8OUrwb6qdsilJULGUiZLBTPqjy8rYsIhHeRsrhKmtI=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=seNG/zyHkwLlNy6gAqv5YoyT/jmcl4EWfrqmtg3EXXF+g/0+1sfEo6ZX0Dbb9kNSH
+	 MVq5APyc2zZVosqb0+/w6hDA6YeAun9SNGPT+fzd3DjvDN2q6OvLzGBQH+DgH89b1y
+	 0T1tkKkjupRnt582sH2AZwRuwN58LJ2FFq4DM/okGCtpjuhRTuPvlBKVcf3Ff6oyCA
+	 AvCIOaFJGr/dN08RBUdILpe8EvuDM5AbPrEi2WNbE1QYFeoePJXltobrfCu1ejTKll
+	 o6KkOcIIi4GhMlPFJIwHkKhj+3lwL7JpTk5HQAJvP2Jd+AW28Zw3Tb3jqlZtTUi2ti
+	 lPbAMTOrPhvuQ==
+Date: Fri, 23 Aug 2024 20:32:25 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: kernel test robot <lkp@intel.com>
+Cc: Yuntao Liu <liuyuntao12@huawei.com>, llvm@lists.linux.dev,
+	oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
+	"Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Linus Walleij <linus.walleij@linaro.org>
+Subject: Re: WARNING: modpost: vmlinux: section mismatch in reference:
+ imx7d_enet_init+0x18 (section: .text.unlikely.imx7d_enet_init) ->
+ imx7d_enet_clk_sel (section: .init.text)
+Message-ID: <20240824033225.GB1733394@thelio-3990X>
+References: <202408232129.sx7nsk3e-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.40
-Message-Id: <89970.124082322520400136@us-mta-556.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <202408232129.sx7nsk3e-lkp@intel.com>
 
-Hi, we tested your kernel and here are the results:
+On Fri, Aug 23, 2024 at 09:56:36PM +0800, kernel test robot wrote:
+> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+> head:   3d5f968a177d468cd13568ef901c5be84d83d32b
+> commit: ed0f941022515ff40473ea5335769a5dc2524a3f ARM: 9404/1: arm32: enable HAVE_LD_DEAD_CODE_DATA_ELIMINATION
+> date:   2 months ago
+> config: arm-randconfig-002-20240823 (https://download.01.org/0day-ci/archive/20240823/202408232129.sx7nsk3e-lkp@intel.com/config)
+> compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 08e5a1de8227512d4774a534b91cb2353cef6284)
+> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240823/202408232129.sx7nsk3e-lkp@intel.com/reproduce)
+> 
+> If you fix the issue in a separate patch/commit (i.e. not just a new version of
+> the same patch/commit), kindly add following tags
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Closes: https://lore.kernel.org/oe-kbuild-all/202408232129.sx7nsk3e-lkp@intel.com/
+> 
+> All warnings (new ones prefixed by >>, old ones prefixed by <<):
+> 
+> WARNING: modpost: missing MODULE_DESCRIPTION() in vmlinux.o
+> >> WARNING: modpost: vmlinux: section mismatch in reference: imx7d_enet_init+0x18 (section: .text.unlikely.imx7d_enet_init) -> imx7d_enet_clk_sel (section: .init.text)
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: FAILED
+This is caused by a recent LLVM change, I sent
+https://lore.kernel.org/r/20240822-imx7d-mark-imx7d_enet_init-as-init-v1-1-8dfadee3bed4@kernel.org
+for it.
 
-
-Kernel information:
-    Commit message: Merge tag 'nfs-for-6.11-2' of git://git.linux-nfs.org/p=
-rojects/anna/linux-nfs
-
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1425503328
-
-One or more kernel builds failed:
-    Unrecognized or new issues:
-         ppc64le - https://datawarehouse.cki-project.org/kcidb/builds/redha=
-t:1425503328-ppc64le-kernel
-           s390x - https://datawarehouse.cki-project.org/kcidb/builds/redha=
-t:1425503328-s390x-kernel
-          x86_64 (debug) - https://datawarehouse.cki-project.org/kcidb/buil=
-ds/redhat:1425503328-x86_64-kernel-debug
-
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+Cheers,
+Nathan
