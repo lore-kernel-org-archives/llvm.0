@@ -1,57 +1,57 @@
-Received: from mail-io1-f66.google.com (mail-io1-f66.google.com [209.85.166.66])
+Received: from mail-io1-f65.google.com (mail-io1-f65.google.com [209.85.166.65])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 80F66143C65
-	for <llvm@lists.linux.dev>; Sat, 24 Aug 2024 23:07:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.66
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 144F0145B05
+	for <llvm@lists.linux.dev>; Sat, 24 Aug 2024 23:07:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.65
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724540844; cv=none; b=K3N7J8hq28VfYY+kUsM6NDuR/zAzEBdXJhdKs0bhv0rnfsp7p+x4RBFJgz8i0qyBRYCEb9LlnQDu/MLf6ZKtrSCzubMaYzmiywTcXYLU//JHQ0/aaxwFm2MgfooYvzl8IqENzJdDbrYJuYJLkdZKpihMJQT/2FuJ/VCEGi71G/o=
+	t=1724540854; cv=none; b=LpRyktMtT5LiDcDRwNiiCa53Fvje6bY60YQFwfnCSqyx9+F566lscWvJJG/G/v8Qd5mEAhZKhzG6vi2QhPTe7CgsFllj//KOwIWnHBcjUHzOK8mOS6xsEG6nBb8206L4njuisCgMM9VYXVf6W9w6LF430s3g6cobLam8v7ScP/Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724540844; c=relaxed/simple;
-	bh=U0S4KY4P4mMk6kXYBXhOMBGppwcV8ZYcGXaIpEav1FE=;
+	s=arc-20240116; t=1724540854; c=relaxed/simple;
+	bh=y7rZxTKpyl0JwzsBx4Lq7x9Sp+C4O7QrJbTBCbHGnoU=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=Pl/M2S/AuOBF0AXs4Os+IxlCNkNehCKu+MTa22x+G60IdrRl+4WjuDvFuudl28WLMSu92CXvG3RPpp0+z0z9JYlh63X361/dIzyJO7l5PDi6H4XVhrOBIAKYeYcmnhM1DwF/Zhc6mKzn+ikpyNo2VTi+IbGdb3fW/ZG1Fhqt87k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=illinois.edu; spf=pass smtp.mailfrom=illinois.edu; dkim=pass (2048-bit key) header.d=illinois-edu.20230601.gappssmtp.com header.i=@illinois-edu.20230601.gappssmtp.com header.b=SK7wVozv; arc=none smtp.client-ip=209.85.166.66
+	 MIME-Version; b=uxQhW3M7XP717yzVD2AQjiyiUvzHlX6neFIvwRpRGZOxW2wYqVm/tUovuJ5s9Xoi4cF5hl+uDImqo6fI/iOrlyq+KvFv2P/MHpM/KlylE18zUUp6KYZPO1hfL3fRW2dnklamu+1xiWSLIGiyFMNG/TL2JnDtoMkHPgUn/Y2e8mo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=illinois.edu; spf=pass smtp.mailfrom=illinois.edu; dkim=pass (2048-bit key) header.d=illinois-edu.20230601.gappssmtp.com header.i=@illinois-edu.20230601.gappssmtp.com header.b=Pnj5kxGi; arc=none smtp.client-ip=209.85.166.65
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=illinois.edu
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=illinois.edu
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=illinois-edu.20230601.gappssmtp.com header.i=@illinois-edu.20230601.gappssmtp.com header.b="SK7wVozv"
-Received: by mail-io1-f66.google.com with SMTP id ca18e2360f4ac-824ee14f7bfso121552539f.1
-        for <llvm@lists.linux.dev>; Sat, 24 Aug 2024 16:07:21 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=illinois-edu.20230601.gappssmtp.com header.i=@illinois-edu.20230601.gappssmtp.com header.b="Pnj5kxGi"
+Received: by mail-io1-f65.google.com with SMTP id ca18e2360f4ac-81f921c40f2so116373639f.0
+        for <llvm@lists.linux.dev>; Sat, 24 Aug 2024 16:07:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=illinois-edu.20230601.gappssmtp.com; s=20230601; t=1724540840; x=1725145640; darn=lists.linux.dev;
+        d=illinois-edu.20230601.gappssmtp.com; s=20230601; t=1724540852; x=1725145652; darn=lists.linux.dev;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=eplaYsiiWgCTy5PRkFB4ff2nqvq9q3OfHUIofrtUZ0k=;
-        b=SK7wVozvzUP1A7FZoOain2gINZ7VjXuYSAiRU1FdnCuLvVxhhUeW9yDH0FaccHeJla
-         F8HxJuOOxBoDQvpfILLVnO9Ykamr67a6jWjgs9X3CuxqD/4mP6VqPmw39XUKz01FjUdk
-         MrNsIg7JY25cUEztTOaqx09atUAJSk1v1VB6EovEOSO0e2XhxMjHZpfaTpGK05jGcQKB
-         EE7jNuNAu1vipXUCT33dIGa5G0ziyMNwc+sVw9n1QtniBG/6XgKti/Q6HXwqGbDZHbPZ
-         qGMDWpS1UjZYqQBFlu2g2iEP9Oyn3+Ndp29BV1n8rBFkoe0uXi+0Fv/gsJ3isdoTgFDk
-         bifg==
+        bh=pI1ahIsPt9dhXQGKmSRkAPO4yB+V9yLk9R0g7YeqYis=;
+        b=Pnj5kxGiWjMhvYEH7EljsMvobBFWHm8dgKR1aCe0YsECvEq4kCa1TLnpMM8QulLRax
+         Ui2cT8DjuGGstcYslgEL+KhOoQb2HXU+3UrAA/VpZt+enVjgTknTyICOeoizTZMmyUL+
+         IyIj/stt2+GHVK5yzPau4jz4yu+26rz6AuisHpgDeZ2i/LKO+2De9Sg84fvfHhpj9IW5
+         GvOD+vgy9ywy+EBjaaRSoGkTFfDgyJX6mmEZWLBBHnyPDy7DuOoFRIZJ1jXXBWXcLwHD
+         CAStkokao0vqioW9hDeJRso+R4e9NnI30AMSaOszGpbyXRjF6Y83GnY6G/3MIBZCweIR
+         iVAQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1724540840; x=1725145640;
+        d=1e100.net; s=20230601; t=1724540852; x=1725145652;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=eplaYsiiWgCTy5PRkFB4ff2nqvq9q3OfHUIofrtUZ0k=;
-        b=H93JibJamhFz/NPqbwv5K/7siipmRgDHEYEYitF3cXSmQN2AdLAjU//IZMzTXjZdP+
-         BQYkfdHbnVNm9F8bbPPgPGEgkq03E1qDYg54tbIQNN6cF9gWUFQw5QqV5JjG2vmZImpP
-         hfpzJ4mnnS8xjfQvAvCns/YpJgv0vqWYJLbSEcEYxoJTIkrL97o+ICg9Ud/asH08eylG
-         V8RG7mykOUjFkVKSvUFpw9PQx200cKGOJT17icwjVGNHNaX/xzr2Y7wosTZ67tidCE5l
-         wnITo8wHhuj2jb7dek9DIq5Iac60ZctfXpotPZOzxOGCwq8SFE8ZDLAXT1m9TR1SH7nn
-         a5Ww==
-X-Forwarded-Encrypted: i=1; AJvYcCU8gZdQ2fv4MM6phNrdbgM7lmo8erU1WnyWVJw2mXqk4G1Ac+slsCUc+tYBuW/qdU3TeQ6l@lists.linux.dev
-X-Gm-Message-State: AOJu0YzlFt/9iqRBwdt5sHNc9EhU0M4F1jiQYgR/rmCK7ycqc82PUTOE
-	dpAVcgZyQbqc7KW10ssqELE0IEhMQyYwwnc+8M4aQK42qgllAzU+2g1Co0CvEQ==
-X-Google-Smtp-Source: AGHT+IGMHgrjxuTK1IXh9WwnvBXGAgm3x0MPaDSYXa/O8CNdJcXDMS3NKmaFRHTenHG7ThmwiB9kVg==
-X-Received: by 2002:a05:6602:6b87:b0:804:2b28:75db with SMTP id ca18e2360f4ac-82787329bbemr590220339f.10.1724540840544;
-        Sat, 24 Aug 2024 16:07:20 -0700 (PDT)
+        bh=pI1ahIsPt9dhXQGKmSRkAPO4yB+V9yLk9R0g7YeqYis=;
+        b=N6sWV7qJE78szHAFKUb9DkB2W6OYYA+fsxwhXi0zjYGafJ5z4XAtm9VTHldWs8SBpH
+         vI7ouLcgk5x4ztNXp5cQ2KM58wB8VBSOY+am0y5+U2actdlSOiOF/mBZsAeSbq0UPAaK
+         APobvt8niRAG3RI+yMBYxViZTsUXmwdnN+wbIVTmnqmhcaAqInO0xzRekejdzEhRJLR8
+         f0XN/mK7lbpMOiu68cIdESaV7KgHCj+3x7M6nHiwjEwwv+4IfOPNCsfbf4USPApuFHLK
+         B1xQh0U+JCicZF3D/i2A03LkqcKTadFqwa+WLaMLuTAPXLJBO/FURoBg5fIgWpV6wqad
+         +2oQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVXf8OG04NxgiiBbB3oV7OgpcBF9TEM5Tw4ebiAtNEKJoyxmqRpSpXMkyj2x84qSJ+ZxJrY@lists.linux.dev
+X-Gm-Message-State: AOJu0YxVTdRt/gEnxpDN953KV+PKq81CcWaECNLMM0IZL6btdVD7i/83
+	0dNKwA/0stAMEldINKw7AbsztmDR6EMMMYQ/Ve4VIfaThdW0Qk2x+6zDUxN+Fg==
+X-Google-Smtp-Source: AGHT+IFl2rO8s4tG2IK/76OuZILBkQM0bjWjC93REDF+iiyuiQbUEz5yxBnC5GLBkdA4N6JUhLkQxw==
+X-Received: by 2002:a05:6602:6103:b0:825:2f0:9f74 with SMTP id ca18e2360f4ac-8278739c0famr756294039f.16.1724540852172;
+        Sat, 24 Aug 2024 16:07:32 -0700 (PDT)
 Received: from shizuku.. (mobile-130-126-255-62.near.illinois.edu. [130.126.255.62])
-        by smtp.gmail.com with ESMTPSA id 8926c6da1cb9f-4ce70f85671sm1563938173.80.2024.08.24.16.07.18
+        by smtp.gmail.com with ESMTPSA id 8926c6da1cb9f-4ce70f85671sm1563938173.80.2024.08.24.16.07.30
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 24 Aug 2024 16:07:20 -0700 (PDT)
+        Sat, 24 Aug 2024 16:07:31 -0700 (PDT)
 From: Wentao Zhang <wentaoz5@illinois.edu>
 To: linux-kbuild@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
@@ -102,9 +102,9 @@ Cc: wentaoz5@illinois.edu,
 	justinstitt@google.com,
 	maskray@google.com,
 	dvyukov@google.com
-Subject: [RFC PATCH 2/3] kbuild, llvm-cov: disable instrumentation in odd or sensitive code
-Date: Sat, 24 Aug 2024 18:06:40 -0500
-Message-Id: <20240824230641.385839-3-wentaoz5@illinois.edu>
+Subject: [RFC PATCH 3/3] llvm-cov: add Clang's MC/DC support
+Date: Sat, 24 Aug 2024 18:06:41 -0500
+Message-Id: <20240824230641.385839-4-wentaoz5@illinois.edu>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20240824230641.385839-1-wentaoz5@illinois.edu>
 References: <20240824230641.385839-1-wentaoz5@illinois.edu>
@@ -116,139 +116,130 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Disable instrumentation in the same areas that were disabled for
-kernel/gcov/
+Add Clang flags and kconfig options for measuring the kernel's modified
+condition/decision coverage (MC/DC).
+
+As of Clang 19, users can determine the max number of conditions in a
+decision to measure via option LLVM_COV_KERNEL_MCDC_MAX_CONDITIONS,
+which controls -fmcdc-max-conditions flag of Clang cc1 [1]. Since MC/DC
+implementation utilizes bitmaps to track the execution of test vectors,
+more memory is consumed if larger decisions are getting counted. The
+maximum value supported by Clang is 32767. According to local
+experiments, the working maximum for Linux kernel is 44, with the
+largest decisions in kernel codebase (with 45 conditions) excluded,
+otherwise the kernel image size limit will be exceeded. The largest
+decisions in kernel are contributed for example by macros checking
+CPUID.
+
+Code exceeding LLVM_COV_KERNEL_MCDC_MAX_CONDITIONS will produce compiler
+warnings.
+
+As of LLVM 19, certain expressions are still not covered, and will produce
+build warnings when they are encountered:
+
+"[...] if a boolean expression is embedded in the nest of another boolean
+ expression but separated by a non-logical operator, this is also not
+ supported. For example, in x = (a && b && c && func(d && f)), the d && f
+ case starts a new boolean expression that is separated from the other
+ conditions by the operator func(). When this is encountered, a warning
+ will be generated and the boolean expression will not be
+ instrumented." [2]
+
+[1] https://discourse.llvm.org/t/rfc-coverage-new-algorithm-and-file-format-for-mc-dc/76798
+[2] https://clang.llvm.org/docs/SourceBasedCodeCoverage.html#mc-dc-instrumentation
 
 Signed-off-by: Wentao Zhang <wentaoz5@illinois.edu>
 Signed-off-by: Chuck Wolber <chuck.wolber@boeing.com>
 ---
- arch/x86/boot/Makefile                | 1 +
- arch/x86/boot/compressed/Makefile     | 1 +
- arch/x86/entry/vdso/Makefile          | 1 +
- arch/x86/platform/efi/Makefile        | 1 +
- arch/x86/purgatory/Makefile           | 1 +
- arch/x86/realmode/rm/Makefile         | 1 +
- arch/x86/um/vdso/Makefile             | 1 +
- drivers/firmware/efi/libstub/Makefile | 2 ++
- kernel/trace/Makefile                 | 1 +
- scripts/Makefile.modfinal             | 1 +
- 10 files changed, 11 insertions(+)
+ Makefile                |  6 ++++++
+ kernel/llvm-cov/Kconfig | 36 ++++++++++++++++++++++++++++++++++++
+ scripts/Makefile.lib    | 11 +++++++++++
+ 3 files changed, 53 insertions(+)
 
-diff --git a/arch/x86/boot/Makefile b/arch/x86/boot/Makefile
-index 9cc0ff6e9067..2cc2c55af305 100644
---- a/arch/x86/boot/Makefile
-+++ b/arch/x86/boot/Makefile
-@@ -57,6 +57,7 @@ KBUILD_AFLAGS	:= $(KBUILD_CFLAGS) -D__ASSEMBLY__
- KBUILD_CFLAGS	+= $(call cc-option,-fmacro-prefix-map=$(srctree)/=)
- KBUILD_CFLAGS	+= -fno-asynchronous-unwind-tables
- KBUILD_CFLAGS	+= $(CONFIG_CC_IMPLICIT_FALLTHROUGH)
-+LLVM_COV_PROFILE := n
+diff --git a/Makefile b/Makefile
+index 1750a2b7dfe8..4aa263e5f67f 100644
+--- a/Makefile
++++ b/Makefile
+@@ -740,6 +740,12 @@ all: vmlinux
+ CFLAGS_LLVM_COV := -fprofile-instr-generate -fcoverage-mapping
+ export CFLAGS_LLVM_COV
  
- $(obj)/bzImage: asflags-y  := $(SVGA_MODE)
- 
-diff --git a/arch/x86/boot/compressed/Makefile b/arch/x86/boot/compressed/Makefile
-index f2051644de94..86c79c36db2e 100644
---- a/arch/x86/boot/compressed/Makefile
-+++ b/arch/x86/boot/compressed/Makefile
-@@ -43,6 +43,7 @@ KBUILD_CFLAGS += -D__DISABLE_EXPORTS
- # Disable relocation relaxation in case the link is not PIE.
- KBUILD_CFLAGS += $(call cc-option,-Wa$(comma)-mrelax-relocations=no)
- KBUILD_CFLAGS += -include $(srctree)/include/linux/hidden.h
-+LLVM_COV_PROFILE := n
- 
- # sev.c indirectly includes inat-table.h which is generated during
- # compilation and stored in $(objtree). Add the directory to the includes so
-diff --git a/arch/x86/entry/vdso/Makefile b/arch/x86/entry/vdso/Makefile
-index c9216ac4fb1e..d9587b3b6bf2 100644
---- a/arch/x86/entry/vdso/Makefile
-+++ b/arch/x86/entry/vdso/Makefile
-@@ -156,6 +156,7 @@ quiet_cmd_vdso = VDSO    $@
- 
- VDSO_LDFLAGS = -shared --hash-style=both --build-id=sha1 \
- 	$(call ld-option, --eh-frame-hdr) -Bsymbolic -z noexecstack
-+LLVM_COV_PROFILE := n
- 
- quiet_cmd_vdso_and_check = VDSO    $@
-       cmd_vdso_and_check = $(cmd_vdso); $(cmd_vdso_check)
-diff --git a/arch/x86/platform/efi/Makefile b/arch/x86/platform/efi/Makefile
-index 500cab4a7f7c..a07852e8f3ae 100644
---- a/arch/x86/platform/efi/Makefile
-+++ b/arch/x86/platform/efi/Makefile
-@@ -1,6 +1,7 @@
- # SPDX-License-Identifier: GPL-2.0
- KASAN_SANITIZE := n
- GCOV_PROFILE := n
-+LLVM_COV_PROFILE := n
- 
- obj-$(CONFIG_EFI) 		+= memmap.o quirks.o efi.o efi_$(BITS).o \
- 				   efi_stub_$(BITS).o
-diff --git a/arch/x86/purgatory/Makefile b/arch/x86/purgatory/Makefile
-index ebdfd7b84feb..b4e619114898 100644
---- a/arch/x86/purgatory/Makefile
-+++ b/arch/x86/purgatory/Makefile
-@@ -28,6 +28,7 @@ PURGATORY_LDFLAGS := -e purgatory_start -z nodefaultlib
- LDFLAGS_purgatory.ro := -r $(PURGATORY_LDFLAGS)
- LDFLAGS_purgatory.chk := $(PURGATORY_LDFLAGS)
- targets += purgatory.ro purgatory.chk
-+LLVM_COV_PROFILE := n
- 
- # These are adjustments to the compiler flags used for objects that
- # make up the standalone purgatory.ro
-diff --git a/arch/x86/realmode/rm/Makefile b/arch/x86/realmode/rm/Makefile
-index a0fb39abc5c8..d36338bfa2ce 100644
---- a/arch/x86/realmode/rm/Makefile
-+++ b/arch/x86/realmode/rm/Makefile
-@@ -67,3 +67,4 @@ KBUILD_CFLAGS	:= $(REALMODE_CFLAGS) -D_SETUP -D_WAKEUP \
- 		   -I$(srctree)/arch/x86/boot
- KBUILD_AFLAGS	:= $(KBUILD_CFLAGS) -D__ASSEMBLY__
- KBUILD_CFLAGS	+= -fno-asynchronous-unwind-tables
-+LLVM_COV_PROFILE := n
-diff --git a/arch/x86/um/vdso/Makefile b/arch/x86/um/vdso/Makefile
-index 6a77ea6434ff..3ea2f5d123fe 100644
---- a/arch/x86/um/vdso/Makefile
-+++ b/arch/x86/um/vdso/Makefile
-@@ -60,3 +60,4 @@ quiet_cmd_vdso = VDSO    $@
- 		 sh $(src)/checkundef.sh '$(NM)' '$@'
- 
- VDSO_LDFLAGS = -fPIC -shared -Wl,--hash-style=sysv -z noexecstack
-+LLVM_COV_PROFILE := n
-diff --git a/drivers/firmware/efi/libstub/Makefile b/drivers/firmware/efi/libstub/Makefile
-index ed4e8ddbe76a..b8224ff291d9 100644
---- a/drivers/firmware/efi/libstub/Makefile
-+++ b/drivers/firmware/efi/libstub/Makefile
-@@ -62,6 +62,8 @@ KBUILD_CFLAGS := $(filter-out $(CC_FLAGS_LTO), $(KBUILD_CFLAGS))
- # `-fdata-sections` flag from KBUILD_CFLAGS_KERNEL
- KBUILD_CFLAGS_KERNEL := $(filter-out -fdata-sections, $(KBUILD_CFLAGS_KERNEL))
- 
-+LLVM_COV_PROFILE := n
++CFLAGS_LLVM_COV_MCDC := -fcoverage-mcdc
++ifdef CONFIG_LLVM_COV_KERNEL_MCDC_MAX_CONDITIONS
++CFLAGS_LLVM_COV_MCDC += -Xclang -fmcdc-max-conditions=$(CONFIG_LLVM_COV_KERNEL_MCDC_MAX_CONDITIONS)
++endif
++export CFLAGS_LLVM_COV_MCDC
 +
- lib-y				:= efi-stub-helper.o gop.o secureboot.o tpm.o \
- 				   file.o mem.o random.o randomalloc.o pci.o \
- 				   skip_spaces.o lib-cmdline.o lib-ctype.o \
-diff --git a/kernel/trace/Makefile b/kernel/trace/Makefile
-index 057cd975d014..0293acc50afa 100644
---- a/kernel/trace/Makefile
-+++ b/kernel/trace/Makefile
-@@ -30,6 +30,7 @@ endif
- ifdef CONFIG_GCOV_PROFILE_FTRACE
- GCOV_PROFILE := y
+ CFLAGS_GCOV	:= -fprofile-arcs -ftest-coverage
+ ifdef CONFIG_CC_IS_GCC
+ CFLAGS_GCOV	+= -fno-tree-loop-im
+diff --git a/kernel/llvm-cov/Kconfig b/kernel/llvm-cov/Kconfig
+index 505eba5bd23c..40b6a4fd590e 100644
+--- a/kernel/llvm-cov/Kconfig
++++ b/kernel/llvm-cov/Kconfig
+@@ -26,4 +26,40 @@ config LLVM_COV_KERNEL
+ 	  Note that the debugfs filesystem has to be mounted to access the raw
+ 	  profile.
+ 
++config LLVM_COV_KERNEL_MCDC
++	bool "Enable measuring modified condition/decision coverage (MC/DC)"
++	depends on LLVM_COV_KERNEL
++	depends on CLANG_VERSION >= 180000
++	help
++	  This option enables modified condition/decision coverage (MC/DC)
++	  code coverage instrumentation.
++
++	  If unsure, say N.
++
++	  This will add Clang's Source-based Code Coverage MC/DC
++	  instrumentation to your kernel. As of LLVM 19, certain expressions
++	  are still not covered, and will produce build warnings when they are
++	  encountered.
++
++	  "[...] if a boolean expression is embedded in the nest of another
++	   boolean expression but separated by a non-logical operator, this is
++	   also not supported. For example, in
++	   x = (a && b && c && func(d && f)), the d && f case starts a new
++	   boolean expression that is separated from the other conditions by the
++	   operator func(). When this is encountered, a warning will be
++	   generated and the boolean expression will not be instrumented."
++
++	   https://clang.llvm.org/docs/SourceBasedCodeCoverage.html#mc-dc-instrumentation
++
++config LLVM_COV_KERNEL_MCDC_MAX_CONDITIONS
++	int "Maximum number of conditions in a decision to instrument"
++	range 6 32767
++	depends on LLVM_COV_KERNEL_MCDC
++	depends on CLANG_VERSION >= 190000
++	default "6"
++	help
++	  This value is passed to "-fmcdc-max-conditions" flag of Clang cc1.
++	  Expressions whose number of conditions is greater than this value will
++	  produce warnings and will not be instrumented.
++
+ endmenu
+diff --git a/scripts/Makefile.lib b/scripts/Makefile.lib
+index b9ceaee34b28..b8dfad01cb52 100644
+--- a/scripts/Makefile.lib
++++ b/scripts/Makefile.lib
+@@ -168,6 +168,17 @@ _c_flags += $(if $(patsubst n%,, \
+ 		$(CFLAGS_LLVM_COV))
  endif
-+LLVM_COV_PROFILE := n
  
- # Functions in this file could be invoked from early interrupt
- # code and produce random code coverage.
-diff --git a/scripts/Makefile.modfinal b/scripts/Makefile.modfinal
-index 1fa98b5e952b..4fc791fff26c 100644
---- a/scripts/Makefile.modfinal
-+++ b/scripts/Makefile.modfinal
-@@ -22,6 +22,7 @@ __modfinal: $(modules:%.o=%.ko)
- modname = $(notdir $(@:.mod.o=))
- part-of-module = y
- GCOV_PROFILE := n
-+LLVM_COV_PROFILE := n
- KCSAN_SANITIZE := n
- 
- quiet_cmd_cc_o_c = CC [M]  $@
++#
++# Flag that turns on modified condition/decision coverage (MC/DC) measurement
++# with Clang's Source-based Code Coverage. Enable the flag for a file or
++# directory depending on variables LLVM_COV_PROFILE_obj.o and LLVM_COV_PROFILE.
++#
++ifeq ($(CONFIG_LLVM_COV_KERNEL_MCDC),y)
++_c_flags += $(if $(patsubst n%,, \
++		$(LLVM_COV_PROFILE_$(basetarget).o)$(LLVM_COV_PROFILE)y), \
++		$(CFLAGS_LLVM_COV_MCDC))
++endif
++
+ #
+ # Enable address sanitizer flags for kernel except some files or directories
+ # we don't want to check (depends on variables KASAN_SANITIZE_obj.o, KASAN_SANITIZE)
 -- 
 2.45.2
 
