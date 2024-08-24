@@ -1,76 +1,117 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 378F9EEB1;
-	Sat, 24 Aug 2024 03:32:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB31E3214;
+	Sat, 24 Aug 2024 03:47:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724470348; cv=none; b=rK9vsbP/vDbAP8/TJIAQc1T2/UUB0BvKuOi7dm4umZWXuRff/jlS2MNOZ09cI9ELFMD9GC2DqFqF1aB5M+MjFtHdkvZnzq6YPsMwVnDvqZh/TgljnalCku3csJxWMyu142A7beJJNl/DU2d09L1er5wEdmlGKpOzuc9dYTWgbOs=
+	t=1724471239; cv=none; b=iH+uT7i9V6HZbgeS8TFon54OnOpB7ccaqdpvsrMHJnrXYfvRZYzx9g2oIjriqBlXkbiaIJ5seU8iFZ57Rnsin4WYNBeyNLRxKmCwr0IL+A36m1g1rX9nMyoSBqRxZOio0SNQqCN7BoGMRPR6xwr0o0Syjg1iBsLdN5OvX4KozXo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724470348; c=relaxed/simple;
-	bh=P8OUrwb6qdsilJULGUiZLBTPqjy8rYsIhHeRsrhKmtI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Zr/NCdLdap+KujQZeTbAchZc/MOI4I/ZwDjkh0hiiX7UGJTWNiiZojKzorhpp4gCLB8lm3Oys9Hy0/o9i/J1jxbtifyb+MAk2olwX2hVXawLKu+dqNnzPYY+6KmqjvlHDwEPKHXj5q3miQ6ZfGf1CzoqaaG8gxKezaz8O7H8vzI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=seNG/zyH; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1724471239; c=relaxed/simple;
+	bh=9hvQeS0ngXVdosBqKG7tf+RduULcEVupa0NszXQJR7E=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=Var9g3bYHURGI+T4QRsb9ngBqzA3xJa3SZ7+axwtTPWqoiCr128ax6iNp/fQXcPrsfQqx0fNp4UqZL9BweXBvxnUg6RJGf7ZyLn1TIIk9yLiM7OY7fJYI88zKsYmpvFs4eOfryljTm7PvwTplI2Zh/70V7nwnKiScdF+TCexoAo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=adOncbTw; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="seNG/zyH"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4B5C9C32781;
-	Sat, 24 Aug 2024 03:32:27 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="adOncbTw"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A377EC32781;
+	Sat, 24 Aug 2024 03:47:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1724470347;
-	bh=P8OUrwb6qdsilJULGUiZLBTPqjy8rYsIhHeRsrhKmtI=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=seNG/zyHkwLlNy6gAqv5YoyT/jmcl4EWfrqmtg3EXXF+g/0+1sfEo6ZX0Dbb9kNSH
-	 MVq5APyc2zZVosqb0+/w6hDA6YeAun9SNGPT+fzd3DjvDN2q6OvLzGBQH+DgH89b1y
-	 0T1tkKkjupRnt582sH2AZwRuwN58LJ2FFq4DM/okGCtpjuhRTuPvlBKVcf3Ff6oyCA
-	 AvCIOaFJGr/dN08RBUdILpe8EvuDM5AbPrEi2WNbE1QYFeoePJXltobrfCu1ejTKll
-	 o6KkOcIIi4GhMlPFJIwHkKhj+3lwL7JpTk5HQAJvP2Jd+AW28Zw3Tb3jqlZtTUi2ti
-	 lPbAMTOrPhvuQ==
-Date: Fri, 23 Aug 2024 20:32:25 -0700
+	s=k20201202; t=1724471239;
+	bh=9hvQeS0ngXVdosBqKG7tf+RduULcEVupa0NszXQJR7E=;
+	h=From:Date:Subject:To:Cc:From;
+	b=adOncbTwURvRgjY1LZgDiwhlMCAZV/hWtxyHUuLYbmNudJXeTYti7ELfIIj3rgNSG
+	 TrUdh43mvCLZQnroaA4BDSaymfdi4fFiWBnc6Sx+X1vloMhe2/tyChICI2ZVrWnckx
+	 QZP077mGelqsOESHNt1l/iYRjVuNAZ8JyOTiSwH+DjdXiAq0CejZFomv9e9eBhUZo6
+	 gcY8uOcGR9qCDbywgqxuwa5EfT4H2mWX6hus81z7p4wyV5ycKIx0uoTyr+owsCtL5r
+	 3Gj94NHyqCJzUeV/0M+qX7KsqrSV7JSrId+LnIPfWqiCD2NPqFuZl/7+zWShmgH2Jh
+	 bXPnXsona51mw==
 From: Nathan Chancellor <nathan@kernel.org>
-To: kernel test robot <lkp@intel.com>
-Cc: Yuntao Liu <liuyuntao12@huawei.com>, llvm@lists.linux.dev,
-	oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
-	"Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Linus Walleij <linus.walleij@linaro.org>
-Subject: Re: WARNING: modpost: vmlinux: section mismatch in reference:
- imx7d_enet_init+0x18 (section: .text.unlikely.imx7d_enet_init) ->
- imx7d_enet_clk_sel (section: .init.text)
-Message-ID: <20240824033225.GB1733394@thelio-3990X>
-References: <202408232129.sx7nsk3e-lkp@intel.com>
+Date: Fri, 23 Aug 2024 20:47:13 -0700
+Subject: [PATCH] drm/xe: Fix total initialization in xe_ggtt_print_holes()
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <202408232129.sx7nsk3e-lkp@intel.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20240823-drm-xe-fix-total-in-xe_ggtt_print_holes-v1-1-12b02d079327@kernel.org>
+X-B4-Tracking: v=1; b=H4sIAMBXyWYC/x3NQQqDMBCF4avIrDuQji60VyklhDjGAZvIJIgg3
+ r1Dl9/if++Cyipc4dVdoHxIlZINz0cHcQ05McpsBnI0uJF6nPWLJ+MiJ7bSwoaSzT6l1vyukpt
+ fy8YVXVwo9tMUAgWwtV3Zmv/T+3PfP+WWHHh5AAAA
+To: Lucas De Marchi <lucas.demarchi@intel.com>, 
+ =?utf-8?q?Thomas_Hellstr=C3=B6m?= <thomas.hellstrom@linux.intel.com>, 
+ Rodrigo Vivi <rodrigo.vivi@intel.com>, 
+ Maarten Lankhorst <maarten.lankhorst@linux.intel.com>
+Cc: Jonathan Cavitt <jonathan.cavitt@intel.com>, 
+ intel-xe@lists.freedesktop.org, dri-devel@lists.freedesktop.org, 
+ llvm@lists.linux.dev, patches@lists.linux.dev, 
+ Nathan Chancellor <nathan@kernel.org>
+X-Mailer: b4 0.15-dev
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2190; i=nathan@kernel.org;
+ h=from:subject:message-id; bh=9hvQeS0ngXVdosBqKG7tf+RduULcEVupa0NszXQJR7E=;
+ b=owGbwMvMwCUmm602sfCA1DTG02pJDGknw49prXzD4iFidfWUy5+3BzlrvVifzfv6oUksQHgLJ
+ 6fxxB+hHaUsDGJcDLJiiizVj1WPGxrOOct449QkmDmsTCBDGLg4BWAiZ10Z/hk/3OlUfbvLSSLE
+ uf7jLLbpa7f9lng6b92knNd7Pui5S61j+Cs3ZdNeSa/vJz5IZTa7bT0/3e7pWZPP0/lX3+/cbnB
+ rPg8/AA==
+X-Developer-Key: i=nathan@kernel.org; a=openpgp;
+ fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
 
-On Fri, Aug 23, 2024 at 09:56:36PM +0800, kernel test robot wrote:
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-> head:   3d5f968a177d468cd13568ef901c5be84d83d32b
-> commit: ed0f941022515ff40473ea5335769a5dc2524a3f ARM: 9404/1: arm32: enable HAVE_LD_DEAD_CODE_DATA_ELIMINATION
-> date:   2 months ago
-> config: arm-randconfig-002-20240823 (https://download.01.org/0day-ci/archive/20240823/202408232129.sx7nsk3e-lkp@intel.com/config)
-> compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 08e5a1de8227512d4774a534b91cb2353cef6284)
-> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240823/202408232129.sx7nsk3e-lkp@intel.com/reproduce)
-> 
-> If you fix the issue in a separate patch/commit (i.e. not just a new version of
-> the same patch/commit), kindly add following tags
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes: https://lore.kernel.org/oe-kbuild-all/202408232129.sx7nsk3e-lkp@intel.com/
-> 
-> All warnings (new ones prefixed by >>, old ones prefixed by <<):
-> 
-> WARNING: modpost: missing MODULE_DESCRIPTION() in vmlinux.o
-> >> WARNING: modpost: vmlinux: section mismatch in reference: imx7d_enet_init+0x18 (section: .text.unlikely.imx7d_enet_init) -> imx7d_enet_clk_sel (section: .init.text)
+Clang warns (or errors with CONFIG_DRM_WERROR or CONFIG_WERROR):
 
-This is caused by a recent LLVM change, I sent
-https://lore.kernel.org/r/20240822-imx7d-mark-imx7d_enet_init-as-init-v1-1-8dfadee3bed4@kernel.org
-for it.
+  drivers/gpu/drm/xe/xe_ggtt.c:810:3: error: variable 'total' is uninitialized when used here [-Werror,-Wuninitialized]
+    810 |                 total += hole_size;
+        |                 ^~~~~
+  drivers/gpu/drm/xe/xe_ggtt.c:798:11: note: initialize the variable 'total' to silence this warning
+    798 |         u64 total;
+        |                  ^
+        |                   = 0
+  1 error generated.
 
-Cheers,
-Nathan
+Move the zero initialization of total from
+xe_gt_sriov_pf_config_print_available_ggtt() to xe_ggtt_print_holes() to
+resolve the warning.
+
+Fixes: 136367290ea5 ("drm/xe: Introduce xe_ggtt_print_holes")
+Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+---
+ drivers/gpu/drm/xe/xe_ggtt.c               | 2 +-
+ drivers/gpu/drm/xe/xe_gt_sriov_pf_config.c | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/gpu/drm/xe/xe_ggtt.c b/drivers/gpu/drm/xe/xe_ggtt.c
+index a3ce91decdce..86fc6afa43bd 100644
+--- a/drivers/gpu/drm/xe/xe_ggtt.c
++++ b/drivers/gpu/drm/xe/xe_ggtt.c
+@@ -795,7 +795,7 @@ u64 xe_ggtt_print_holes(struct xe_ggtt *ggtt, u64 alignment, struct drm_printer
+ 	const struct drm_mm_node *entry;
+ 	u64 hole_min_start = xe_wopcm_size(tile_to_xe(ggtt->tile));
+ 	u64 hole_start, hole_end, hole_size;
+-	u64 total;
++	u64 total = 0;
+ 	char buf[10];
+ 
+ 	mutex_lock(&ggtt->lock);
+diff --git a/drivers/gpu/drm/xe/xe_gt_sriov_pf_config.c b/drivers/gpu/drm/xe/xe_gt_sriov_pf_config.c
+index c8835d9eead6..41ed07b153b5 100644
+--- a/drivers/gpu/drm/xe/xe_gt_sriov_pf_config.c
++++ b/drivers/gpu/drm/xe/xe_gt_sriov_pf_config.c
+@@ -2110,7 +2110,7 @@ int xe_gt_sriov_pf_config_print_available_ggtt(struct xe_gt *gt, struct drm_prin
+ {
+ 	struct xe_ggtt *ggtt = gt_to_tile(gt)->mem.ggtt;
+ 	u64 alignment = pf_get_ggtt_alignment(gt);
+-	u64 spare, avail, total = 0;
++	u64 spare, avail, total;
+ 	char buf[10];
+ 
+ 	xe_gt_assert(gt, IS_SRIOV_PF(gt_to_xe(gt)));
+
+---
+base-commit: 66a0f6b9f5fc205272035b6ffa4830be51e3f787
+change-id: 20240823-drm-xe-fix-total-in-xe_ggtt_print_holes-0cf2c399aa2a
+
+Best regards,
+-- 
+Nathan Chancellor <nathan@kernel.org>
+
