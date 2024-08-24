@@ -1,166 +1,338 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f53.google.com (mail-lf1-f53.google.com [209.85.167.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F01228E0F;
-	Sat, 24 Aug 2024 16:16:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D0EB74059
+	for <llvm@lists.linux.dev>; Sat, 24 Aug 2024 19:35:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724516175; cv=none; b=NPpFYzLgGYIsisI2dLk315zu7RHhf8iRwUnuPuWbabybo4YfUJvkXBB4OQVTu50cDdcerXBhe4PBjdPPj95Wf08Umu0QyIe0qXmgrzJ4PKUd+3mRNvla/JX+FojGDqQd0XCqMV4TZTGM4v8QfY6BzoxGwZdL37CDJexj2MvwzVs=
+	t=1724528128; cv=none; b=L6hK6Fy74yi3JFKBnKiWtyzEXznCSzYjdjTKltT32/kqwqo3a2r4xb7o0yjHecqZA8GHBMqzI4qWvKJOxJciqO0ePTBW2fR4FI7VVVC3HpI76uDkBYZlIbZkbhZBfugzcmzCr9WPpjRQLCBLyzP2+xfLiLQ4YGet313ME+azGxM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724516175; c=relaxed/simple;
-	bh=5npEBL0N5rPhX3B2EfF8IFc285nRsHadiz1RjjaWL/U=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=dLCCRDQC759nrjP9o6b8isJgsO58rlqhyvW4nOnVFu3McHUDJ+vklUvtVXegk5EU+a+7JdGwiYWPrYh8/bsupymCvBjCOGAK69Obj+HWh7PkRUwU3jZhzh0Hbc0vZFRgQPC243vFhBTgDVV+fH63maAFGPmagAOd0d/oEtq0Chw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=hu1GeOvK; arc=none smtp.client-ip=198.175.65.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1724528128; c=relaxed/simple;
+	bh=bytNnuowzmtyhvFR4SOrAtgSwC0Npg1muBqZ82NtqaQ=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=p40LaGXkDkRLFa+qhNldNuqZa7YF7lKyM9eDX0GMjvBKe0d6ftyLW3aXDYP5S2ZIbp8EAhoGL8YIhU6WwKqbPnI3aVN2GqOl8fKb/NZH7cq2EXS5wgS4IROMPVMtN1jwISlZ8fLmBgA+Ru7VRyDYAUF6XDFYLnFjoS6hmA7GQF8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kruces.com; spf=pass smtp.mailfrom=kruces.com; dkim=pass (2048-bit key) header.d=kruces-com.20230601.gappssmtp.com header.i=@kruces-com.20230601.gappssmtp.com header.b=ycsj90JR; arc=none smtp.client-ip=209.85.167.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kruces.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kruces.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="hu1GeOvK"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1724516173; x=1756052173;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=5npEBL0N5rPhX3B2EfF8IFc285nRsHadiz1RjjaWL/U=;
-  b=hu1GeOvKjeyW3kNoef0xrmtdRcL5/1AVu2BQwLGgjKHSaU+n51RCCLt3
-   qLqFGkollv5nhcb9Dj8+ycrY1uM37BKBE6Om1vukUVr81Dv9wfXJjSk8M
-   9chO5/CuM04+M8q7+tswCdObgFrtZ4E9y73Bg987odyIHI0X7f/5kJ2CC
-   ZAYg1gHYhxy3I9qN6gRDP5SW2/rJGdLn++7kbjGt6euzDoD897qj7m+CV
-   FPilAtebjMei6u8u8nx1zZB+b0Emy7ChyYhWAoi9MZ9o2U8HXQ9gii+pF
-   PlO5Ap4UOQmGJIYka2cm/DAKBnEFvw0YMH0fsBY/2wsypFT/qJ75AMOA7
-   w==;
-X-CSE-ConnectionGUID: wxQYwTNpR9KpDrHQMTwHKQ==
-X-CSE-MsgGUID: Triii5uFRJ+Ldq4TooQopw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11173"; a="26746295"
-X-IronPort-AV: E=Sophos;i="6.10,173,1719903600"; 
-   d="scan'208";a="26746295"
-Received: from fmviesa005.fm.intel.com ([10.60.135.145])
-  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Aug 2024 09:16:13 -0700
-X-CSE-ConnectionGUID: J0vPG9XxRUKOTBqkmAGLcw==
-X-CSE-MsgGUID: FBFCYa8eTWWkXBpfMNzgWg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.10,173,1719903600"; 
-   d="scan'208";a="66418332"
-Received: from lkp-server01.sh.intel.com (HELO 9a732dc145d3) ([10.239.97.150])
-  by fmviesa005.fm.intel.com with ESMTP; 24 Aug 2024 09:16:08 -0700
-Received: from kbuild by 9a732dc145d3 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1shtQr-000Eb5-2p;
-	Sat, 24 Aug 2024 16:16:05 +0000
-Date: Sun, 25 Aug 2024 00:15:25 +0800
-From: kernel test robot <lkp@intel.com>
-To: Shashank Babu Chinta Venkata <quic_schintav@quicinc.com>,
-	agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
-	mani@kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	quic_msarkar@quicinc.com, quic_kraravin@quicinc.com,
-	Lorenzo Pieralisi <lpieralisi@kernel.org>,
-	Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-	Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-	Rob Herring <robh@kernel.org>, Bjorn Helgaas <helgaas@kernel.org>,
-	Jingoo Han <jingoohan1@gmail.com>,
-	Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-	Serge Semin <fancer.lancer@gmail.com>,
-	Niklas Cassel <cassel@kernel.org>,
-	Conor Dooley <conor.dooley@microchip.com>,
-	linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
-	linux-arm-msm@vger.kernel.org
-Subject: Re: [PATCH v5 1/3] PCI: qcom: Refactor common code
-Message-ID: <202408242300.2ECtncwN-lkp@intel.com>
-References: <20240821170917.21018-2-quic_schintav@quicinc.com>
+	dkim=pass (2048-bit key) header.d=kruces-com.20230601.gappssmtp.com header.i=@kruces-com.20230601.gappssmtp.com header.b="ycsj90JR"
+Received: by mail-lf1-f53.google.com with SMTP id 2adb3069b0e04-53345dcd377so3960569e87.2
+        for <llvm@lists.linux.dev>; Sat, 24 Aug 2024 12:35:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kruces-com.20230601.gappssmtp.com; s=20230601; t=1724528125; x=1725132925; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=rqUQEx0JW9sRldU4OvC73NB0gIVSnxsis8NsIR8izBY=;
+        b=ycsj90JRQDxkFnyrM/l1A1RReI4e8JfGZ4X6wpFNhmH4HwpUJVk+eVCK528xuM7Mj1
+         VeX3C4YGAaLIN0/k4h1gK76hapx2f7QObHuf1Nfsj+15dLxc+b+zsN2hcfPf5kK7VEYG
+         ge2WQrkfNDzEToBpqGYDjm1DJGn1LSzuC4euNSmbGy8tHAnxdVhW1IEXM0n8eMm51Iwi
+         tHn+F22dF9FcVcf1Hin8m+wRIWZWtLv688WsK6C1HxWIQaiERmqoeFGopgn1u8tQF+q+
+         kxOnJa9iIAHyAon5gZKmo7ZU4pZYs0Fdlf4ZG9FbOTIZw5cciQU0DjrjiKDTR4ZQfOU0
+         Jh7g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1724528125; x=1725132925;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=rqUQEx0JW9sRldU4OvC73NB0gIVSnxsis8NsIR8izBY=;
+        b=dxlviwaBBkTbdkNgfxWam0CVN/back6svq/9ko1OV7xm+WqkytCDrTZb3vVZffY5NH
+         63hSQH+b4g2JnHOXkKoSQMt1dryzJ2VUzlgL//G16nq7m545OnbksT0Bz0fhcSMCdhAq
+         onfaFoMDNtdY1pJ9N01Rp6JSMEpGVfET9M7gAXRUbv6fnZzbNH5YJvtzaneU2ZMDjGg5
+         Dsu1Yzd8pwKRC23y1fCgSsGgYY+KgLMLBHaAbGqrkmxhlO87RWYRhEWUIOXsiayuymaD
+         KaPf9rK96t1T7c9hVqRu4HmcsJTgd3qOcgn5xjchK76gNS3lBIEP48kit/u7ybvq5uhb
+         ObNQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVL/LcIkXSRtLsTj0IXEzqJLdh/37XRqxXxw1ZB74k+Pg8cmQ/GSjhRRW6uBGoVIN08X9by@lists.linux.dev
+X-Gm-Message-State: AOJu0YytGdd7gQDzTTBJk3Svjy0QPH0/8uQGtua7LmVnRYCYey2639Jv
+	NuCRLzknubkOTIbsV+DCQcuwrlCXE67mbef7OULC36bLBDxnmO4VP9WAbq1RABFg+1GoxN7SNb6
+	VNddzv2x2EJBqXQQs3DdFUBMBD/ecHUkizeyK0Q==
+X-Google-Smtp-Source: AGHT+IGPd8NNVY8iNQlItVputHqv0A9NBxIa2qpJxJ9QIyvsMaWXLridmTyEMYCVXko8QGT/5mpgBtUGbv8rSnzMtM4=
+X-Received: by 2002:a05:6512:3195:b0:52e:9f17:841a with SMTP id
+ 2adb3069b0e04-534387558bdmr3980885e87.6.1724528124835; Sat, 24 Aug 2024
+ 12:35:24 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240821170917.21018-2-quic_schintav@quicinc.com>
+References: <20240807-macos-build-support-v1-0-4cd1ded85694@samsung.com>
+ <20240807-macos-build-support-v1-1-4cd1ded85694@samsung.com>
+ <CAK7LNARmy=N+6O87BJGZbodssDw21sHgMf36TXdcxD4=5A_OBA@mail.gmail.com> <CABj0suC1atc=iPX4uOL5FYkzYBRtZC1J3Lhruo7hejd-fe9Yuw@mail.gmail.com>
+In-Reply-To: <CABj0suC1atc=iPX4uOL5FYkzYBRtZC1J3Lhruo7hejd-fe9Yuw@mail.gmail.com>
+From: "Daniel Gomez (Samsung)" <d+samsung@kruces.com>
+Date: Sat, 24 Aug 2024 21:34:58 +0200
+Message-ID: <CABj0suDu1XPi7mPdqQWm2J3=XbTMHKGbz85ixM=gMr5VRkU78g@mail.gmail.com>
+Subject: Re: [PATCH 01/12] scripts: subarch.include: fix SUBARCH on MacOS hosts
+To: Masahiro Yamada <masahiroy@kernel.org>
+Cc: da.gomez@samsung.com, Nathan Chancellor <nathan@kernel.org>, 
+	Nicolas Schier <nicolas@fjasle.eu>, Lucas De Marchi <lucas.demarchi@intel.com>, 
+	=?UTF-8?Q?Thomas_Hellstr=C3=B6m?= <thomas.hellstrom@linux.intel.com>, 
+	Rodrigo Vivi <rodrigo.vivi@intel.com>, 
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, Maxime Ripard <mripard@kernel.org>, 
+	Thomas Zimmermann <tzimmermann@suse.de>, David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>, 
+	William Hubbs <w.d.hubbs@gmail.com>, Chris Brannon <chris@the-brannons.com>, 
+	Kirk Reiser <kirk@reisers.ca>, Samuel Thibault <samuel.thibault@ens-lyon.org>, 
+	Paul Moore <paul@paul-moore.com>, Stephen Smalley <stephen.smalley.work@gmail.com>, 
+	Ondrej Mosnacek <omosnace@redhat.com>, Catalin Marinas <catalin.marinas@arm.com>, 
+	Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>, Oliver Upton <oliver.upton@linux.dev>, 
+	James Morse <james.morse@arm.com>, Suzuki K Poulose <suzuki.poulose@arm.com>, 
+	Zenghui Yu <yuzenghui@huawei.com>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	Jiri Slaby <jirislaby@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
+	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, linux-kernel@vger.kernel.org, 
+	linux-kbuild@vger.kernel.org, intel-xe@lists.freedesktop.org, 
+	dri-devel@lists.freedesktop.org, speakup@linux-speakup.org, 
+	selinux@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+	kvmarm@lists.linux.dev, linux-serial@vger.kernel.org, llvm@lists.linux.dev, 
+	Finn Behrens <me@kloenk.dev>, gost.dev@samsung.com, 
+	Nick Desaulniers <nick.desaulniers@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Shashank,
+On Sat, Aug 24, 2024 at 12:14=E2=80=AFAM Daniel Gomez (Samsung)
+<d+samsung@kruces.com> wrote:
+>
+> On Fri, Aug 23, 2024 at 6:13=E2=80=AFPM Masahiro Yamada <masahiroy@kernel=
+.org> wrote:
+> >
+> > On Wed, Aug 7, 2024 at 8:10=E2=80=AFAM Daniel Gomez via B4 Relay
+> > <devnull+da.gomez.samsung.com@kernel.org> wrote:
+> > >
+> > > From: Nick Desaulniers <nick.desaulniers@gmail.com>
+> > >
+> > > When building the Linux kernel on an aarch64 MacOS based host, if we =
+don't
+> > > specify a value for ARCH when invoking make, we default to arm and th=
+us
+> > > multi_v7_defconfig rather than the expected arm64 and arm64's defconf=
+ig.
+> > >
+> > > This is because subarch.include invokes `uname -m` which on MacOS hos=
+ts
+> > > evaluates to `arm64` but on Linux hosts evaluates to `aarch64`,
+> > >
+> > > This allows us to build ARCH=3Darm64 natively on MacOS (as in ARCH ne=
+ed
+> > > not be specified on an aarch64-based system).
+> > >
+> > > Utilize a negative lookahead regular expression to avoid matching arm=
+64.
+> >
+> >
+> > Does sed support "negative lookahead regular expression"?
+>
+> I think they removed support for PCRE. I've found this:
+>
+> commit 261c7f145d015d9acb79dc650d27e4a23b839c23
+> Author: Assaf Gordon <assafgordon@gmail.com>
+> Date:   Tue Aug 21 14:25:57 2018 -0600
+>
+>     maint: remove REG_PERL code
+>
+>     Perl-regexp syntax (PCRE) in GNU Sed is shelved indefinitely.
+>     See https://bugs.gnu.org/22801 , https://bugs.gnu.org/22647 .
+>     Remove all (unused) REG_PERL related code.
+>
+>     * sed/sed.c, sed/sed.h, sed/regexp.c, sed/compile.c: Remove REG_PERL =
+code.
+>
+> git tag --contains 261c7f145d015d9acb79dc650d27e4a23b839c23
+> v4.6
+> v4.7
+> v4.8
+> v4.9
+>
+> And my sed version is (Debian):
+>
+> sed --version
+> sed (GNU sed) 4.9
+> Packaged by Debian
+> Copyright (C) 2022 Free Software Foundation, Inc.
+> License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.=
+html>.
+> This is free software: you are free to change and redistribute it.
+> There is NO WARRANTY, to the extent permitted by law.
+>
+> Written by Jay Fenlason, Tom Lord, Ken Pizzini,
+> Paolo Bonzini, Jim Meyering, and Assaf Gordon.
+>
+> This sed program was built with SELinux support.
+> SELinux is disabled on this system.
+>
+> GNU sed home page: <https://www.gnu.org/software/sed/>.
+> General help using GNU software: <https://www.gnu.org/gethelp/>.
+> E-mail bug reports to: <bug-sed@gnu.org>.
+>
+> sed version (Homebrew):
+> sed --version
+> sed (GNU sed) 4.9
+> Copyright (C) 2022 Free Software Foundation, Inc.
+> License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.=
+html>.
+> This is free software: you are free to change and redistribute it.
+> There is NO WARRANTY, to the extent permitted by law.
+>
+> Written by Jay Fenlason, Tom Lord, Ken Pizzini,
+> Paolo Bonzini, Jim Meyering, and Assaf Gordon.
+>
+> This sed program was built without SELinux support.
+>
+> GNU sed home page: <https://www.gnu.org/software/sed/>.
+> General help using GNU software: <https://www.gnu.org/gethelp/>.
+> E-mail bug reports to: <bug-sed@gnu.org>.
+>
+> >
+> > >
+> > > Add a separate expression to support for armv.* as per error reported=
+ by
+> > > Nicolas Schier [1].
+> > >
+> > > [1] https://lore.kernel.org/all/Y3MRvtwdjIwMHvRo@bergen.fjasle.eu/#t
+> > >
+> > > Signed-off-by: Nick Desaulniers <nick.desaulniers@gmail.com>
+> > > Signed-off-by: Daniel Gomez <da.gomez@samsung.com>
+> > > ---
+> > >  scripts/subarch.include | 3 ++-
+> > >  1 file changed, 2 insertions(+), 1 deletion(-)
+> > >
+> > > diff --git a/scripts/subarch.include b/scripts/subarch.include
+> > > index 4bd327d0ae42..5d84ad8c0dee 100644
+> > > --- a/scripts/subarch.include
+> > > +++ b/scripts/subarch.include
+> > > @@ -6,7 +6,8 @@
+> > >
+> > >  SUBARCH :=3D $(shell uname -m | sed -e s/i.86/x86/ -e s/x86_64/x86/ =
+\
+> > >                                   -e s/sun4u/sparc64/ \
+> > > -                                 -e s/arm.*/arm/ -e s/sa110/arm/ \
+> > > +                                 -e s/armv.*/arm/ \
+> > > +                                 -e s/arm\(?:\(?!64\).*\)/arm/ -e s/=
+sa110/arm/ \
+> >
+> >
+> > s/arm\(?:\(?!64\).*\)/arm/
+> >
+> > In sed, this expression does not seem to match anything.
+>
+> You are correct. I've removed the expression and saw no difference.
+> See below with my test case:
+> >
+> > (or please give me some matching examples if I miss something)
+>
+> cat Makefile
+> MACHINE ?=3D "aarch64"
+> SUBARCH0 :=3D $(shell echo $(MACHINE) | sed \
+>                                   -e s/arm.*/arm/ \
+>                                   -e s/aarch64.*/arm64/)
+>
+> SUBARCH1 :=3D $(shell echo $(MACHINE) | sed \
+>                                   -e s/armv.*/arm/ \
+>                                   -e s/aarch64.*/arm64/)
+>
+> SUBARCH2 :=3D $(shell echo $(MACHINE) | sed \
+>                                   -e /^arm64$/!s/arm.*/arm/ \
+>                                   -e s/aarch64.*/arm64/)
+>
+> test:
+>         @echo "MACHINE=3D$(MACHINE)"
+>         @echo "SUBARCH0=3D$(SUBARCH0)"
+>         @echo "SUBARCH1=3D$(SUBARCH1)"
+>         @echo "SUBARCH2=3D$(SUBARCH2)"
+>         @echo "---"
+>
+> SUBARCH0 represents the current upstream expressions for arm/arm64.
+> SUBARCH1 is my proposal in case we need to cover only armv* for 32-bit
+> arm (I think that is incomplete?) and SUBARCH2 is Nicolas' proposal
+> (which I can't make it work in the test Makefile).
 
-kernel test robot noticed the following build errors:
+To make Nicolas's expression work in Makefile I just need to pass 2 $ like =
+this:
 
-[auto build test ERROR on pci/next]
-[also build test ERROR on linus/master v6.11-rc4]
-[cannot apply to pci/for-linus next-20240823]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+diff -u Makefile.old Makefile
+--- Makefile.old  2024-08-24 21:25:28.525267566 +0200
++++ Makefile    2024-08-24 21:28:32.640477991 +0200
+@@ -8,7 +8,7 @@
+                                  -e s/aarch64.*/arm64/)
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Shashank-Babu-Chinta-Venkata/PCI-qcom-Refactor-common-code/20240822-011229
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/pci/pci.git next
-patch link:    https://lore.kernel.org/r/20240821170917.21018-2-quic_schintav%40quicinc.com
-patch subject: [PATCH v5 1/3] PCI: qcom: Refactor common code
-config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20240824/202408242300.2ECtncwN-lkp@intel.com/config)
-compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240824/202408242300.2ECtncwN-lkp@intel.com/reproduce)
+ SUBARCH2 :=3D $(shell echo $(MACHINE) | sed \
+-                                 -e /^arm64$/!s/arm.*/arm/ \
++                                 -e /^arm64$$/!s/arm.*/arm/ \
+                                  -e s/aarch64.*/arm64/)
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202408242300.2ECtncwN-lkp@intel.com/
+ test:
 
-All errors (new ones prefixed by >>):
+And all test cases passed. So, I will include this change for v2.
 
->> drivers/pci/controller/dwc/pcie-qcom-ep.c:321:55: error: too few arguments to function call, expected 3, have 2
-     321 |         ret = qcom_pcie_common_icc_init(pci, pcie_ep->icc_mem);
-         |               ~~~~~~~~~~~~~~~~~~~~~~~~~                      ^
-   drivers/pci/controller/dwc/pcie-qcom-common.h:14:5: note: 'qcom_pcie_common_icc_init' declared here
-      14 | int qcom_pcie_common_icc_init(struct dw_pcie *pci, struct icc_path *icc_mem, u32 bandwidth);
-         |     ^                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   1 error generated.
-
-
-vim +321 drivers/pci/controller/dwc/pcie-qcom-ep.c
-
-   295	
-   296	static int qcom_pcie_enable_resources(struct qcom_pcie_ep *pcie_ep)
-   297	{
-   298		struct dw_pcie *pci = &pcie_ep->pci;
-   299		int ret;
-   300	
-   301		ret = clk_bulk_prepare_enable(pcie_ep->num_clks, pcie_ep->clks);
-   302		if (ret)
-   303			return ret;
-   304	
-   305		ret = qcom_pcie_ep_core_reset(pcie_ep);
-   306		if (ret)
-   307			goto err_disable_clk;
-   308	
-   309		ret = phy_init(pcie_ep->phy);
-   310		if (ret)
-   311			goto err_disable_clk;
-   312	
-   313		ret = phy_set_mode_ext(pcie_ep->phy, PHY_MODE_PCIE, PHY_MODE_PCIE_EP);
-   314		if (ret)
-   315			goto err_phy_exit;
-   316	
-   317		ret = phy_power_on(pcie_ep->phy);
-   318		if (ret)
-   319			goto err_phy_exit;
-   320	
- > 321		ret = qcom_pcie_common_icc_init(pci, pcie_ep->icc_mem);
-   322		if (ret) {
-   323			dev_err(pci->dev, "failed to set interconnect bandwidth: %d\n",
-   324				ret);
-   325			goto err_phy_off;
-   326		}
-   327	
-   328		return 0;
-   329	
-   330	err_phy_off:
-   331		phy_power_off(pcie_ep->phy);
-   332	err_phy_exit:
-   333		phy_exit(pcie_ep->phy);
-   334	err_disable_clk:
-   335		clk_bulk_disable_unprepare(pcie_ep->num_clks, pcie_ep->clks);
-   336	
-   337		return ret;
-   338	}
-   339	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+>
+> Running the above Makefile, I get:
+>
+> make test MACHINE=3Darmv4 && make test MACHINE=3Darm7 && make test
+> MACHINE=3Darmhf && make test MACHINE=3Daarch64 && make test MACHINE=3Darm=
+64
+> MACHINE=3Darmv4
+> SUBARCH0=3Darm
+> SUBARCH1=3Darm
+> SUBARCH2=3Darmv4
+> ---
+> MACHINE=3Darm7
+> SUBARCH0=3Darm
+> SUBARCH1=3Darm7
+> SUBARCH2=3Darm7
+> ---
+> MACHINE=3Darmhf
+> SUBARCH0=3Darm
+> SUBARCH1=3Darmhf
+> SUBARCH2=3Darmhf
+> ---
+> MACHINE=3Daarch64
+> SUBARCH0=3Darm64
+> SUBARCH1=3Darm64
+> SUBARCH2=3Darm64
+> ---
+> MACHINE=3Darm64
+> SUBARCH0=3Darm
+> SUBARCH1=3Darm64
+> SUBARCH2=3Darm64
+> ---
+> >
+> >
+> >
+> >
+> >
+> > Nocolas already provided correct code:
+> >
+> > > [1] https://lore.kernel.org/all/Y3MRvtwdjIwMHvRo@bergen.fjasle.eu/#t
+>
+> I think it is even more simple if we just make this change:
+>
+> -                                 -e s/arm.*/arm/ -e s/sa110/arm/ \
+> +                                 -e s/armv.*/arm/ \
+>
+> Does armv.* cover all arm32 machines? I see armhf, arm7, arm8 and
+> armv*, is it correct?
+>
+> And thanks for checking!
+>
+> >
+> >
+> >
+> >
+> >
+> >
+> > >                                   -e s/s390x/s390/ \
+> > >                                   -e s/ppc.*/powerpc/ -e s/mips.*/mip=
+s/ \
+> > >                                   -e s/sh[234].*/sh/ -e s/aarch64.*/a=
+rm64/ \
+> > >
+> > > --
+> > > Git-146)
+> > >
+> > >
+> >
+> >
+> > --
+> > Best Regards
+> >
+> >
+> > Masahiro Yamada
