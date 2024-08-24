@@ -1,90 +1,236 @@
-Received: from mail-pj1-f48.google.com (mail-pj1-f48.google.com [209.85.216.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B138417C9A9
-	for <llvm@lists.linux.dev>; Sat, 24 Aug 2024 14:45:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8EEDC17ADF0;
+	Sat, 24 Aug 2024 15:15:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724510754; cv=none; b=PgQs1ljX+b22LaXk0vLHFENclE7PZJPIP0UUCOhhwqLa6jz290tjiD5s3tBKMvpELFajS/9BIKfXydy571SnZvjlnCdcOQcAMzmh/Uy8AN6kW0UICXUQJU+CtURL2B/23B/d6Yk+i6RwyXxPQCHbj8muybYxZzkZK3t/9dOhHXk=
+	t=1724512514; cv=none; b=d3B6FAzy40Xf0aP1OZU7pzUghGNig83e8rRO+b5ofOkc5dc8zgJJHYnDE5OFCZDi+Cbq4arbweLtyF9EAtHjaeKSmqmD+Bu/TR2Bc7l9jvBuEXcBbinMnQMa+puRcFJrA1nGy+QFYmkMsESr8jDMa6eda8HLaCBOs7UW/z6dj9g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724510754; c=relaxed/simple;
-	bh=/AY/sNru5AP+z05Xzfrj8YNsnhwxuUTOdjXIlQJ6XyU=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=l4E7eTenz6/MifknvndpYpot8P8aL5WcI/tzg+eOmIlBdjO1aAvbYAwa1x+zC0aoQqksw3k745c9+5Jhgnntk8pmZGBmuYgkZgjb9mYngjj/pFUR6sqcLu4Low3/SW9c6LJNnyI+ZJC/Q2R/mOfDkJ5+S2hOzV94QOANLB4NdxM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Krj7/KtD; arc=none smtp.client-ip=209.85.216.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1724512514; c=relaxed/simple;
+	bh=NicyyiMcd9HEoDW7MAWCI8DVBTruke1Py8vjTw1MPhA=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=ortL65o2Rqeh0pa4dr1VmmUPLemSlYGCXKgaj/yMp+cQ7J8TxaJEdtFykIPpRstbTJlctyGy+N5YqccZVwtWJo1ZE6uukS3sThVkvmByeQYXHxDIkh4prpeIaIf4olKxyt0RIlRl9MUiUYYUyfjfqXY1I9QqBurcKjODGooR6/Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=d8C3hNS1; arc=none smtp.client-ip=192.198.163.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Krj7/KtD"
-Received: by mail-pj1-f48.google.com with SMTP id 98e67ed59e1d1-2d3ba497224so348347a91.0
-        for <llvm@lists.linux.dev>; Sat, 24 Aug 2024 07:45:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1724510752; x=1725115552; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=/AY/sNru5AP+z05Xzfrj8YNsnhwxuUTOdjXIlQJ6XyU=;
-        b=Krj7/KtDcnodzibl8duveR6xrqO0GpL84q5g9epqBlycsvwe2Bt9HCi7Th37utnfT+
-         tLXtPq27ArkXNBg9NPmZYHFIqcu8DglDrcpX9hTWpVZBPVeVn803+3pisKikifcv9edS
-         o9b38BbWmJgHwMHEplPP+gIfI1jt7TiKsqPIOYqNzFbG4AjR7Crhfaeq2s9Wrmw/RTyc
-         yG5Hk0mT2Lji+0sOAoSGrCvEjcWbPCYDno7rmX87Ry/HBJCSAqZofnHevQUuTHjvcXaA
-         lc8KUYFEB1GkE1q4o/IhO+pD+vFY11j7X5kr+JuCDBHaoQfjQ3/aidVlzKm4sgMCs8n8
-         roGA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1724510752; x=1725115552;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=/AY/sNru5AP+z05Xzfrj8YNsnhwxuUTOdjXIlQJ6XyU=;
-        b=lyx9m3/N3uPrP+xmAKEcHiARjAEZRC33aqn5rjDP0kZb+scBU5h/fQJ2xEZNB9F6L7
-         xu8Fzu1t++M8pn0A6HhPBfVqv7UlI1rCxXQc8n4I8NqgcemLO+RxWgEQWX8us6wIuxfs
-         rAOKjY2HntiMZvV+nNHmR8Oz+TPwv7bhRpfNPtWeGAWzPlHsLny0Ypde0UpJoWl0mgP1
-         JY06GJsWY1UamCCNGXCTN0ZbVxydaHSKu2kQjPqxF0WIbK2QqdSae65KIcyfjzB+SKR0
-         K78TUk/RQbPNh7g5Q4k9qeuqhy50QxvlkU7EsxL+t1mNJr8WEjxGyqdt6FMbcGYNcWNe
-         jHsA==
-X-Forwarded-Encrypted: i=1; AJvYcCW4HfUA+9q4hLZITHYXE5u6Dz1Ln4ywm0EuI8/TGa71m/fSovdiPwq7PQTlFeLRqi+Ti1UD@lists.linux.dev
-X-Gm-Message-State: AOJu0YwQB4Lf45tIzeCLSmkMJo0+l+VCCg5+Q+QagIecudhyxw3WPoPU
-	2BkrNlRtmfV/jHv0tMUk1G1ku66vNFsQCQmuCrdlwwYbT+QkCjl5WvZp9YHLiOJwInjQtSMkOkQ
-	idLecCuboxcPQk0KEZKY1MMq5+xI=
-X-Google-Smtp-Source: AGHT+IGfX8QIzewjfC1VpX6LrP8Cy2hMePVnGVnVmq6AtmnErsRclJnUUAQfjFofiK3pLD75V1yJSc/BeFY9dH0Q4ck=
-X-Received: by 2002:a17:90b:3e8c:b0:2cb:4382:99eb with SMTP id
- 98e67ed59e1d1-2d646db48c5mr3602585a91.6.1724510751965; Sat, 24 Aug 2024
- 07:45:51 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="d8C3hNS1"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1724512512; x=1756048512;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=NicyyiMcd9HEoDW7MAWCI8DVBTruke1Py8vjTw1MPhA=;
+  b=d8C3hNS1TNo762JiAUQNs3vAS4WIjqll7srOzia62BM9QWeDtrF/4lOT
+   4+ad9tloftZFjAlZwG6VtlBYvUHP2j5KfQd78CPWFyxGGLV7hdCSMApl5
+   o0tlAjyQ2HoqIfmoTxiwFAtNouovU1MkqIhQdRx6mi4AYurS7jC1K2SNG
+   g5BBAedRUNLON5boua3UEkzTAaJt6u0gViMUSF8aapKL3xECn924UlGjz
+   c5yfGpo4ZW9ysWlODw4Sf81o+ew/GI+5ES7T0Yj+xgXtbTj0sKFitun9O
+   EzsHgtudnWU3u+N/m3N4yZ2BXSyqDKYxX7KYg6GxwTWDZbqrgK7UQb3P+
+   w==;
+X-CSE-ConnectionGUID: LxxJdyW6RmC5QMkNV3AndA==
+X-CSE-MsgGUID: +A8IOC4IT+qZaIKVCdJYPw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11173"; a="34395862"
+X-IronPort-AV: E=Sophos;i="6.10,173,1719903600"; 
+   d="scan'208";a="34395862"
+Received: from orviesa004.jf.intel.com ([10.64.159.144])
+  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Aug 2024 08:15:08 -0700
+X-CSE-ConnectionGUID: 7YbP17hZSSOoOE1qPIjQyA==
+X-CSE-MsgGUID: ENWhByTkRH+YJKb2VM3ZEw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.10,173,1719903600"; 
+   d="scan'208";a="67022624"
+Received: from lkp-server01.sh.intel.com (HELO 9a732dc145d3) ([10.239.97.150])
+  by orviesa004.jf.intel.com with ESMTP; 24 Aug 2024 08:15:07 -0700
+Received: from kbuild by 9a732dc145d3 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1shsTo-000EYX-0s;
+	Sat, 24 Aug 2024 15:15:04 +0000
+Date: Sat, 24 Aug 2024 23:14:17 +0800
+From: kernel test robot <lkp@intel.com>
+To: "Liam R. Howlett" <Liam.Howlett@oracle.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Linux Memory Management List <linux-mm@kvack.org>,
+	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
+Subject: [akpm-mm:mm-unstable 357/379] mm/vma.h:114:19: error: use of
+ undeclared identifier 'USER_PGTABLES_CEILING'
+Message-ID: <202408242348.uGvgH9tt-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20240823140121.1974012-1-sashal@kernel.org> <20240823140121.1974012-10-sashal@kernel.org>
-In-Reply-To: <20240823140121.1974012-10-sashal@kernel.org>
-From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date: Sat, 24 Aug 2024 16:45:36 +0200
-Message-ID: <CANiq72=gqDOeqHhL=cvohoBWrc-gp8p6p11+13gE7C1MA6pwyQ@mail.gmail.com>
-Subject: Re: [PATCH AUTOSEL 6.10 10/24] rust: add intrinsics to fix `-Os` builds
-To: Sasha Levin <sashal@kernel.org>
-Cc: linux-kernel@vger.kernel.org, stable@vger.kernel.org, 
-	Miguel Ojeda <ojeda@kernel.org>, Gary Guo <gary@garyguo.net>, Alice Ryhl <aliceryhl@google.com>, 
-	Trevor Gross <tmgross@umich.edu>, Boqun Feng <boqun.feng@gmail.com>, alex.gaynor@gmail.com, 
-	wedsonaf@gmail.com, nathan@kernel.org, rust-for-linux@vger.kernel.org, 
-	llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Fri, Aug 23, 2024 at 4:01=E2=80=AFPM Sasha Levin <sashal@kernel.org> wro=
-te:
->
-> From: Miguel Ojeda <ojeda@kernel.org>
->
-> [ Upstream commit 02dfd63afe65f7bacad543ba2b10f77083ae7929 ]
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-unstable
+head:   b659edec079c90012cf8d05624e312d1062b8b87
+commit: ca39aca8db2d78ff82356defba75d14ce78a67b9 [357/379] mm/vma: track start and end for munmap in vma_munmap_struct
+config: arm-allnoconfig (https://download.01.org/0day-ci/archive/20240824/202408242348.uGvgH9tt-lkp@intel.com/config)
+compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 08e5a1de8227512d4774a534b91cb2353cef6284)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240824/202408242348.uGvgH9tt-lkp@intel.com/reproduce)
 
-Sounds good.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202408242348.uGvgH9tt-lkp@intel.com/
 
-I don't think one can hit this, since we only saw the issue with Rust
-1.80.0+ and 6.10 Stable supports only 1.78.0 so far, but it could be
-that we later need it or someone unpins/upgrades the version.
+All errors (new ones prefixed by >>):
 
-Thanks!
+   In file included from mm/filemap.c:15:
+   In file included from include/linux/dax.h:6:
+   In file included from include/linux/mm.h:2198:
+   include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+   In file included from mm/filemap.c:52:
+   In file included from mm/internal.h:13:
+   include/linux/mm_inline.h:47:41: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+      47 |         __mod_lruvec_state(lruvec, NR_LRU_BASE + lru, nr_pages);
+         |                                    ~~~~~~~~~~~ ^ ~~~
+   include/linux/mm_inline.h:49:22: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+      49 |                                 NR_ZONE_LRU_BASE + lru, nr_pages);
+         |                                 ~~~~~~~~~~~~~~~~ ^ ~~~
+   In file included from mm/filemap.c:52:
+   In file included from mm/internal.h:22:
+>> mm/vma.h:114:19: error: use of undeclared identifier 'USER_PGTABLES_CEILING'
+     114 |         vms->unmap_end = USER_PGTABLES_CEILING;
+         |                          ^
+   3 warnings and 1 error generated.
+--
+   In file included from mm/vmscan.c:15:
+   In file included from include/linux/mm.h:2198:
+   include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+   In file included from mm/vmscan.c:30:
+   include/linux/mm_inline.h:47:41: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+      47 |         __mod_lruvec_state(lruvec, NR_LRU_BASE + lru, nr_pages);
+         |                                    ~~~~~~~~~~~ ^ ~~~
+   include/linux/mm_inline.h:49:22: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+      49 |                                 NR_ZONE_LRU_BASE + lru, nr_pages);
+         |                                 ~~~~~~~~~~~~~~~~ ^ ~~~
+   In file included from mm/vmscan.c:67:
+   In file included from mm/internal.h:22:
+>> mm/vma.h:114:19: error: use of undeclared identifier 'USER_PGTABLES_CEILING'
+     114 |         vms->unmap_end = USER_PGTABLES_CEILING;
+         |                          ^
+   mm/vmscan.c:401:51: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     401 |                         size += zone_page_state(zone, NR_ZONE_LRU_BASE + lru);
+         |                                                       ~~~~~~~~~~~~~~~~ ^ ~~~
+   mm/vmscan.c:1730:4: warning: arithmetic between different enumeration types ('enum vm_event_item' and 'enum zone_type') [-Wenum-enum-conversion]
+    1730 |                         __count_zid_vm_events(PGSCAN_SKIP, zid, nr_skipped[zid]);
+         |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/vmstat.h:139:34: note: expanded from macro '__count_zid_vm_events'
+     139 |         __count_vm_events(item##_NORMAL - ZONE_NORMAL + zid, delta)
+         |                           ~~~~~~~~~~~~~ ^ ~~~~~~~~~~~
+   mm/vmscan.c:2235:51: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+    2235 |         inactive = lruvec_page_state(lruvec, NR_LRU_BASE + inactive_lru);
+         |                                              ~~~~~~~~~~~ ^ ~~~~~~~~~~~~
+   mm/vmscan.c:2236:49: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+    2236 |         active = lruvec_page_state(lruvec, NR_LRU_BASE + active_lru);
+         |                                            ~~~~~~~~~~~ ^ ~~~~~~~~~~
+   mm/vmscan.c:6251:3: warning: arithmetic between different enumeration types ('enum vm_event_item' and 'enum zone_type') [-Wenum-enum-conversion]
+    6251 |                 __count_zid_vm_events(ALLOCSTALL, sc->reclaim_idx, 1);
+         |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/vmstat.h:139:34: note: expanded from macro '__count_zid_vm_events'
+     139 |         __count_vm_events(item##_NORMAL - ZONE_NORMAL + zid, delta)
+         |                           ~~~~~~~~~~~~~ ^ ~~~~~~~~~~~
+   8 warnings and 1 error generated.
+--
+   In file included from mm/page_alloc.c:19:
+   In file included from include/linux/mm.h:2198:
+   include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+   In file included from mm/page_alloc.c:44:
+   include/linux/mm_inline.h:47:41: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+      47 |         __mod_lruvec_state(lruvec, NR_LRU_BASE + lru, nr_pages);
+         |                                    ~~~~~~~~~~~ ^ ~~~
+   include/linux/mm_inline.h:49:22: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+      49 |                                 NR_ZONE_LRU_BASE + lru, nr_pages);
+         |                                 ~~~~~~~~~~~~~~~~ ^ ~~~
+   In file included from mm/page_alloc.c:59:
+   In file included from mm/internal.h:22:
+>> mm/vma.h:114:19: error: use of undeclared identifier 'USER_PGTABLES_CEILING'
+     114 |         vms->unmap_end = USER_PGTABLES_CEILING;
+         |                          ^
+   mm/page_alloc.c:2892:2: warning: arithmetic between different enumeration types ('enum vm_event_item' and 'enum zone_type') [-Wenum-enum-conversion]
+    2892 |         __count_zid_vm_events(PGALLOC, page_zonenum(page), 1 << order);
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/vmstat.h:139:34: note: expanded from macro '__count_zid_vm_events'
+     139 |         __count_vm_events(item##_NORMAL - ZONE_NORMAL + zid, delta)
+         |                           ~~~~~~~~~~~~~ ^ ~~~~~~~~~~~
+   mm/page_alloc.c:3009:3: warning: arithmetic between different enumeration types ('enum vm_event_item' and 'enum zone_type') [-Wenum-enum-conversion]
+    3009 |                 __count_zid_vm_events(PGALLOC, page_zonenum(page), 1 << order);
+         |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/vmstat.h:139:34: note: expanded from macro '__count_zid_vm_events'
+     139 |         __count_vm_events(item##_NORMAL - ZONE_NORMAL + zid, delta)
+         |                           ~~~~~~~~~~~~~ ^ ~~~~~~~~~~~
+   mm/page_alloc.c:4651:2: warning: arithmetic between different enumeration types ('enum vm_event_item' and 'enum zone_type') [-Wenum-enum-conversion]
+    4651 |         __count_zid_vm_events(PGALLOC, zone_idx(zone), nr_account);
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/vmstat.h:139:34: note: expanded from macro '__count_zid_vm_events'
+     139 |         __count_vm_events(item##_NORMAL - ZONE_NORMAL + zid, delta)
+         |                           ~~~~~~~~~~~~~ ^ ~~~~~~~~~~~
+   6 warnings and 1 error generated.
 
-Cheers,
-Miguel
+
+vim +/USER_PGTABLES_CEILING +114 mm/vma.h
+
+    67	
+    68	/* Required for do_brk_flags(). */
+    69	void init_vma_prep(struct vma_prepare *vp,
+    70			   struct vm_area_struct *vma);
+    71	
+    72	/* Required for do_brk_flags(). */
+    73	void vma_complete(struct vma_prepare *vp,
+    74			  struct vma_iterator *vmi, struct mm_struct *mm);
+    75	
+    76	int vma_expand(struct vma_iterator *vmi, struct vm_area_struct *vma,
+    77		       unsigned long start, unsigned long end, pgoff_t pgoff,
+    78		       struct vm_area_struct *next);
+    79	
+    80	int vma_shrink(struct vma_iterator *vmi, struct vm_area_struct *vma,
+    81		       unsigned long start, unsigned long end, pgoff_t pgoff);
+    82	
+    83	/*
+    84	 * init_vma_munmap() - Initializer wrapper for vma_munmap_struct
+    85	 * @vms: The vma munmap struct
+    86	 * @vmi: The vma iterator
+    87	 * @vma: The first vm_area_struct to munmap
+    88	 * @start: The aligned start address to munmap
+    89	 * @end: The aligned end address to munmap
+    90	 * @uf: The userfaultfd list_head
+    91	 * @unlock: Unlock after the operation.  Only unlocked on success
+    92	 */
+    93	static inline void init_vma_munmap(struct vma_munmap_struct *vms,
+    94			struct vma_iterator *vmi, struct vm_area_struct *vma,
+    95			unsigned long start, unsigned long end, struct list_head *uf,
+    96			bool unlock)
+    97	{
+    98		vms->vmi = vmi;
+    99		vms->vma = vma;
+   100		if (vma) {
+   101			vms->mm = vma->vm_mm;
+   102			vms->start = start;
+   103			vms->end = end;
+   104		} else {
+   105			vms->mm = NULL;
+   106			vms->start = vms->end = 0;
+   107		}
+   108		vms->unlock = unlock;
+   109		vms->uf = uf;
+   110		vms->vma_count = 0;
+   111		vms->nr_pages = vms->locked_vm = vms->nr_accounted = 0;
+   112		vms->exec_vm = vms->stack_vm = vms->data_vm = 0;
+   113		vms->unmap_start = FIRST_USER_ADDRESS;
+ > 114		vms->unmap_end = USER_PGTABLES_CEILING;
+   115	}
+   116	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
