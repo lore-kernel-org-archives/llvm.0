@@ -1,58 +1,65 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E0B8F446CF;
-	Sat, 24 Aug 2024 20:30:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 393051EA80;
+	Sat, 24 Aug 2024 22:02:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724531417; cv=none; b=CJsyXnetPXD5/q2WiRUnpQdLwTWOuR5CLE4wV174QzcxX/XdgTiLpV0PXt7JkxwPo8+fyH0moc86O7WF5WPz6f283phebWCaLB7BHj071U9MciwVbFIVQl01qAgyDNkB/gykJVNDkweT+arXtS94ZP56HAI0MbTgfcnPtIYl0bA=
+	t=1724536942; cv=none; b=kITSkX/atZ4Q3r5SQExMvpZSQM6dPodB+f9Qu7ZdCsFV1nq+Fi47HLZP9O0CW+2OY1Kfwy6SZyuL5Ti1in6u6ISgeq3eVJDKAl0FLPVA8DPLrEHd6pBg2qJ0kTJ20PS2A4mtoHZAspV/K+/ikuJi+y8pd8h7zepl+eQpWqC45pQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724531417; c=relaxed/simple;
-	bh=T/vcE2sVvtU/mXUdiR01tPzOz5j6s3jhgvX6EgsmHyM=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=ORAjDbow91czTFVdiXpBxaiDWtxkxqN2aH8NzJm48vB5wdXPmNHHFuEsp4h02HAFC36rsD9v0jYHJzd3FgopYSUxUfqKLqz+oajklKU1vZmIj+bNOoonAjTuh+yX3f3nwYz/TmPgffDzzO95nQdX6mHqnyMZOwYIEt1896lPTsQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=m1DE4e1U; arc=none smtp.client-ip=192.198.163.8
+	s=arc-20240116; t=1724536942; c=relaxed/simple;
+	bh=MmxaIE2PueHguE0gCbMZQWUzdtg69INhZhqLCKuzG8Y=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=FPFSRBRKPQenG0IDi+m7gXpLw9wcM+7Sh+YNLqKds+GoR8i+P7vxvLmwicbqsNtqcPOiroMXgSDRFZbc5krDmtuB0PZoqJwgpUJBNs6t5AjnJ5xDf9onnWm6Zyc9CBzMaKWhv7qtKYucbdXk+SY8adL5qGoPMtzBmSUw41gJb9c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=P/5llR0S; arc=none smtp.client-ip=198.175.65.9
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="m1DE4e1U"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="P/5llR0S"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1724531416; x=1756067416;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=T/vcE2sVvtU/mXUdiR01tPzOz5j6s3jhgvX6EgsmHyM=;
-  b=m1DE4e1UxF85aOZK/Oadi8DLz/fUqIBVkxd7psT7ELFklD3kmqHFSVDO
-   +BJIsoLvetOmplFXKCo00cvoce/NomcycUsq8ht4jhzo5Pxg+TYtHUvkH
-   RartPD9zHyQ5Kpv4Q8yAO7sV2VSItPM3McIoPi9vmjqwDxD8sijuovODg
-   49t8zETwTB4El4qYiQtKNwcs2gQBIp+dUkgjW+lPSE1sSemfQr8yMmGTm
-   Q5x5KfPPR87ZawiRUzf4jM6HlNLLRSMjz6oJXAOG8JyNVDnvBj3wExE7o
-   O1uVh2hgD3vs2Pcbe0deGUA/9U6VX5s106gm35iST9Na10CZbaRkceMDx
-   g==;
-X-CSE-ConnectionGUID: c6JQJcQPSHWi7w7Dcnbi6w==
-X-CSE-MsgGUID: iMuomOvRTzGCRU5+k6e01g==
-X-IronPort-AV: E=McAfee;i="6700,10204,11173"; a="40500113"
+  t=1724536939; x=1756072939;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=MmxaIE2PueHguE0gCbMZQWUzdtg69INhZhqLCKuzG8Y=;
+  b=P/5llR0S/IDw6VCuHwBFPvozS/NRmtbrY28mh7cTMswNV1k+KOvhNXkF
+   Y2J8nm3pm3XOseVymrnsodFXdaplsnJtOPIwTxzu+DAK7WD+IbJv4KUxi
+   tNjOzsXRv3UWBBjXkpHCdhizV8Mgld2eaPtnL9aWeTjfcR4ExypQG2+TI
+   hK5dUXVnKPgoMOCR3YcHjTNbEyAiB/c+aWxZy6Q51HLxa1tuVrlEhWuQy
+   xOqcq7caooc2lq0Afv76sATXt4YsQiMzJMM5XrAv9gccGLiFpVbrsE+9r
+   IiYARcKuLmXTSVq50CkKNNwC4iFbukjBldyRfXy2uaOJRJ/BauwSkL57P
+   w==;
+X-CSE-ConnectionGUID: vh5k0ObHTmyNfKiUiWcOTw==
+X-CSE-MsgGUID: JTlxnHBNRgWIcTRecDO3zg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11173"; a="45511027"
 X-IronPort-AV: E=Sophos;i="6.10,174,1719903600"; 
-   d="scan'208";a="40500113"
-Received: from fmviesa003.fm.intel.com ([10.60.135.143])
-  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Aug 2024 13:30:16 -0700
-X-CSE-ConnectionGUID: gQm6J1WHSnaEk/mvyeWq5A==
-X-CSE-MsgGUID: N6QygZUGRwyqwkyD5xlV1g==
+   d="scan'208";a="45511027"
+Received: from fmviesa006.fm.intel.com ([10.60.135.146])
+  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Aug 2024 15:02:19 -0700
+X-CSE-ConnectionGUID: 4RSaj7S5Smqh6zu7TAaaBw==
+X-CSE-MsgGUID: tUVB7kDTQzG/IqO6gvMc3g==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.10,174,1719903600"; 
-   d="scan'208";a="66320456"
+   d="scan'208";a="61828874"
 Received: from lkp-server01.sh.intel.com (HELO 9a732dc145d3) ([10.239.97.150])
-  by fmviesa003.fm.intel.com with ESMTP; 24 Aug 2024 13:30:14 -0700
+  by fmviesa006.fm.intel.com with ESMTP; 24 Aug 2024 15:02:15 -0700
 Received: from kbuild by 9a732dc145d3 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1shxOm-000EjP-0u;
-	Sat, 24 Aug 2024 20:30:12 +0000
-Date: Sun, 25 Aug 2024 04:30:04 +0800
+	id 1shypp-000ElT-1s;
+	Sat, 24 Aug 2024 22:02:13 +0000
+Date: Sun, 25 Aug 2024 06:01:21 +0800
 From: kernel test robot <lkp@intel.com>
-To: Cong Wang <cong.wang@bytedance.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [congwang:net-next 7/7] drivers/net/gtp.c:1684:1: warning: unused
- label 'out_rel_sock'
-Message-ID: <202408250446.zDtBQu8x-lkp@intel.com>
+To: Yang Ruibin <11162571@vivo.com>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Daniel Lezcano <daniel.lezcano@linaro.org>,
+	Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>,
+	Stephen Rothwell <sfr@canb.auug.org.au>, linux-pm@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	opensource.kernel@vivo.com
+Subject: Re: [PATCH v1] drivers:testing:Handle possible memory leaks
+Message-ID: <202408250520.ZWvQ82gO-lkp@intel.com>
+References: <20240822032108.1223332-1-11162571@vivo.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -61,84 +68,77 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20240822032108.1223332-1-11162571@vivo.com>
 
-tree:   https://github.com/congwang/linux.git net-next
-head:   838946abe3f368da7b47c1af57777bc172657cf8
-commit: 838946abe3f368da7b47c1af57777bc172657cf8 [7/7] l2tp: refactor setup_udp_tunnel_sock()
-config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20240825/202408250446.zDtBQu8x-lkp@intel.com/config)
+Hi Yang,
+
+kernel test robot noticed the following build warnings:
+
+[auto build test WARNING on next-20240821]
+[cannot apply to rafael-pm/thermal v6.11-rc4 v6.11-rc3 v6.11-rc2 linus/master v6.11-rc4]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Yang-Ruibin/drivers-testing-Handle-possible-memory-leaks/20240822-112305
+base:   next-20240821
+patch link:    https://lore.kernel.org/r/20240822032108.1223332-1-11162571%40vivo.com
+patch subject: [PATCH v1] drivers:testing:Handle possible memory leaks
+config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20240825/202408250520.ZWvQ82gO-lkp@intel.com/config)
 compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240825/202408250446.zDtBQu8x-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240825/202408250520.ZWvQ82gO-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202408250446.zDtBQu8x-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202408250520.ZWvQ82gO-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
->> drivers/net/gtp.c:1684:1: warning: unused label 'out_rel_sock' [-Wunused-label]
-    1684 | out_rel_sock:
-         | ^~~~~~~~~~~~~
+>> drivers/thermal/testing/command.c:155:3: warning: misleading indentation; statement is not part of the previous 'if' [-Wmisleading-indentation]
+     155 |                 return -EFAULT;
+         |                 ^
+   drivers/thermal/testing/command.c:153:2: note: previous statement is here
+     153 |         if (copy_from_user(buf, user_buf, count))
+         |         ^
    1 warning generated.
 
 
-vim +/out_rel_sock +1684 drivers/net/gtp.c
+vim +/if +155 drivers/thermal/testing/command.c
 
-459aa660eb1d8c Pablo Neira       2016-05-09  1642  
-49ecc587dca275 Jonas Bonn        2021-02-03  1643  static struct sock *gtp_encap_enable_socket(int fd, int type,
-1e3a3abd8b28cf Andreas Schultz   2017-03-09  1644  					    struct gtp_dev *gtp)
-459aa660eb1d8c Pablo Neira       2016-05-09  1645  {
-459aa660eb1d8c Pablo Neira       2016-05-09  1646  	struct udp_tunnel_sock_cfg tuncfg = {NULL};
-49ecc587dca275 Jonas Bonn        2021-02-03  1647  	struct socket *sock;
-1e3a3abd8b28cf Andreas Schultz   2017-03-09  1648  	struct sock *sk;
-49ecc587dca275 Jonas Bonn        2021-02-03  1649  	int err;
-49ecc587dca275 Jonas Bonn        2021-02-03  1650  
-49ecc587dca275 Jonas Bonn        2021-02-03  1651  	pr_debug("enable gtp on %d, %d\n", fd, type);
-49ecc587dca275 Jonas Bonn        2021-02-03  1652  
-49ecc587dca275 Jonas Bonn        2021-02-03  1653  	sock = sockfd_lookup(fd, &err);
-49ecc587dca275 Jonas Bonn        2021-02-03  1654  	if (!sock) {
-49ecc587dca275 Jonas Bonn        2021-02-03  1655  		pr_debug("gtp socket fd=%d not found\n", fd);
-49ecc587dca275 Jonas Bonn        2021-02-03  1656  		return NULL;
-49ecc587dca275 Jonas Bonn        2021-02-03  1657  	}
-459aa660eb1d8c Pablo Neira       2016-05-09  1658  
-940ba14986657a Eric Dumazet      2020-01-21  1659  	sk = sock->sk;
-940ba14986657a Eric Dumazet      2020-01-21  1660  	if (sk->sk_protocol != IPPROTO_UDP ||
-940ba14986657a Eric Dumazet      2020-01-21  1661  	    sk->sk_type != SOCK_DGRAM ||
-940ba14986657a Eric Dumazet      2020-01-21  1662  	    (sk->sk_family != AF_INET && sk->sk_family != AF_INET6)) {
-49ecc587dca275 Jonas Bonn        2021-02-03  1663  		pr_debug("socket fd=%d not UDP\n", fd);
-49ecc587dca275 Jonas Bonn        2021-02-03  1664  		sk = ERR_PTR(-EINVAL);
-49ecc587dca275 Jonas Bonn        2021-02-03  1665  		goto out_sock;
-459aa660eb1d8c Pablo Neira       2016-05-09  1666  	}
-459aa660eb1d8c Pablo Neira       2016-05-09  1667  
-999cb275c807b9 Pablo Neira Ayuso 2024-05-07  1668  	if (sk->sk_family == AF_INET6 &&
-999cb275c807b9 Pablo Neira Ayuso 2024-05-07  1669  	    !sk->sk_ipv6only) {
-999cb275c807b9 Pablo Neira Ayuso 2024-05-07  1670  		sk = ERR_PTR(-EADDRNOTAVAIL);
-999cb275c807b9 Pablo Neira Ayuso 2024-05-07  1671  		goto out_sock;
-999cb275c807b9 Pablo Neira Ayuso 2024-05-07  1672  	}
-999cb275c807b9 Pablo Neira Ayuso 2024-05-07  1673  
-940ba14986657a Eric Dumazet      2020-01-21  1674  	lock_sock(sk);
-459aa660eb1d8c Pablo Neira       2016-05-09  1675  
-459aa660eb1d8c Pablo Neira       2016-05-09  1676  	tuncfg.sk_user_data = gtp;
-1e3a3abd8b28cf Andreas Schultz   2017-03-09  1677  	tuncfg.encap_type = type;
-459aa660eb1d8c Pablo Neira       2016-05-09  1678  	tuncfg.encap_rcv = gtp_encap_recv;
-459aa660eb1d8c Pablo Neira       2016-05-09  1679  	tuncfg.encap_destroy = gtp_encap_destroy;
-838946abe3f368 Cong Wang         2024-08-23  1680  	if (setup_udp_tunnel_sock(sock_net(sock->sk), sock, &tuncfg))
-838946abe3f368 Cong Wang         2024-08-23  1681  		sk = ERR_PTR(-EBUSY);
-838946abe3f368 Cong Wang         2024-08-23  1682  	else
-838946abe3f368 Cong Wang         2024-08-23  1683  		sock_hold(sk);
-49ecc587dca275 Jonas Bonn        2021-02-03 @1684  out_rel_sock:
-49ecc587dca275 Jonas Bonn        2021-02-03  1685  	release_sock(sock->sk);
-49ecc587dca275 Jonas Bonn        2021-02-03  1686  out_sock:
-1e3a3abd8b28cf Andreas Schultz   2017-03-09  1687  	sockfd_put(sock);
-49ecc587dca275 Jonas Bonn        2021-02-03  1688  	return sk;
-1e3a3abd8b28cf Andreas Schultz   2017-03-09  1689  }
-459aa660eb1d8c Pablo Neira       2016-05-09  1690  
-
-:::::: The code at line 1684 was first introduced by commit
-:::::: 49ecc587dca2754571791bebd36e9e36e2a0d973 Revert "GTP: add support for flow based tunneling API"
-
-:::::: TO: Jonas Bonn <jonas@norrbonn.se>
-:::::: CC: Jakub Kicinski <kuba@kernel.org>
+7801e360656c57 Rafael J. Wysocki 2024-08-02  141  
+7801e360656c57 Rafael J. Wysocki 2024-08-02  142  static ssize_t tt_command_process(struct dentry *dentry, const char __user *user_buf,
+7801e360656c57 Rafael J. Wysocki 2024-08-02  143  				  size_t count)
+7801e360656c57 Rafael J. Wysocki 2024-08-02  144  {
+7801e360656c57 Rafael J. Wysocki 2024-08-02  145  	char *buf __free(kfree);
+7801e360656c57 Rafael J. Wysocki 2024-08-02  146  	char *arg;
+7801e360656c57 Rafael J. Wysocki 2024-08-02  147  	int i;
+7801e360656c57 Rafael J. Wysocki 2024-08-02  148  
+7801e360656c57 Rafael J. Wysocki 2024-08-02  149  	buf = kmalloc(count + 1, GFP_KERNEL);
+7801e360656c57 Rafael J. Wysocki 2024-08-02  150  	if (!buf)
+7801e360656c57 Rafael J. Wysocki 2024-08-02  151  		return -ENOMEM;
+7801e360656c57 Rafael J. Wysocki 2024-08-02  152  
+7801e360656c57 Rafael J. Wysocki 2024-08-02  153  	if (copy_from_user(buf, user_buf, count))
+98706c6ade7c2e Yang Ruibin       2024-08-22  154  		kfree(buf);
+7801e360656c57 Rafael J. Wysocki 2024-08-02 @155  		return -EFAULT;
+7801e360656c57 Rafael J. Wysocki 2024-08-02  156  
+7801e360656c57 Rafael J. Wysocki 2024-08-02  157  	buf[count] = '\0';
+7801e360656c57 Rafael J. Wysocki 2024-08-02  158  	strim(buf);
+7801e360656c57 Rafael J. Wysocki 2024-08-02  159  
+7801e360656c57 Rafael J. Wysocki 2024-08-02  160  	arg = strstr(buf, ":");
+7801e360656c57 Rafael J. Wysocki 2024-08-02  161  	if (arg) {
+7801e360656c57 Rafael J. Wysocki 2024-08-02  162  		*arg = '\0';
+7801e360656c57 Rafael J. Wysocki 2024-08-02  163  		arg++;
+7801e360656c57 Rafael J. Wysocki 2024-08-02  164  	}
+7801e360656c57 Rafael J. Wysocki 2024-08-02  165  
+7801e360656c57 Rafael J. Wysocki 2024-08-02  166  	for (i = 0; i < ARRAY_SIZE(tt_command_strings); i++) {
+7801e360656c57 Rafael J. Wysocki 2024-08-02  167  		if (!strcmp(buf, tt_command_strings[i]))
+7801e360656c57 Rafael J. Wysocki 2024-08-02  168  			return tt_command_exec(i, arg);
+7801e360656c57 Rafael J. Wysocki 2024-08-02  169  	}
+7801e360656c57 Rafael J. Wysocki 2024-08-02  170  
+7801e360656c57 Rafael J. Wysocki 2024-08-02  171  	return -EINVAL;
+7801e360656c57 Rafael J. Wysocki 2024-08-02  172  }
+7801e360656c57 Rafael J. Wysocki 2024-08-02  173  
 
 -- 
 0-DAY CI Kernel Test Service
