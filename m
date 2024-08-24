@@ -1,245 +1,174 @@
-Received: from mail-io1-f65.google.com (mail-io1-f65.google.com [209.85.166.65])
+Received: from mail-il1-f179.google.com (mail-il1-f179.google.com [209.85.166.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 144F0145B05
-	for <llvm@lists.linux.dev>; Sat, 24 Aug 2024 23:07:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.65
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 815557DA92
+	for <llvm@lists.linux.dev>; Sat, 24 Aug 2024 23:21:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724540854; cv=none; b=LpRyktMtT5LiDcDRwNiiCa53Fvje6bY60YQFwfnCSqyx9+F566lscWvJJG/G/v8Qd5mEAhZKhzG6vi2QhPTe7CgsFllj//KOwIWnHBcjUHzOK8mOS6xsEG6nBb8206L4njuisCgMM9VYXVf6W9w6LF430s3g6cobLam8v7ScP/Y=
+	t=1724541695; cv=none; b=rtIAl7ThiyRLVmv3EB0pbbzG0sKkeVeOQY7DXIvlhWZDu9vO1wk+Lt+bTBHb3ha8ZmkzVyrhotQlgh+XP8AfpzVBsuHaMdylzPUBLmOa6jGkbWkUhBXTrMF0X76COm/07mh9Y/d6Mp3ZmOwYCAKQU1lwXa/7o+Y7OIuKyr/BfF4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724540854; c=relaxed/simple;
-	bh=y7rZxTKpyl0JwzsBx4Lq7x9Sp+C4O7QrJbTBCbHGnoU=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=uxQhW3M7XP717yzVD2AQjiyiUvzHlX6neFIvwRpRGZOxW2wYqVm/tUovuJ5s9Xoi4cF5hl+uDImqo6fI/iOrlyq+KvFv2P/MHpM/KlylE18zUUp6KYZPO1hfL3fRW2dnklamu+1xiWSLIGiyFMNG/TL2JnDtoMkHPgUn/Y2e8mo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=illinois.edu; spf=pass smtp.mailfrom=illinois.edu; dkim=pass (2048-bit key) header.d=illinois-edu.20230601.gappssmtp.com header.i=@illinois-edu.20230601.gappssmtp.com header.b=Pnj5kxGi; arc=none smtp.client-ip=209.85.166.65
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=illinois.edu
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=illinois.edu
+	s=arc-20240116; t=1724541695; c=relaxed/simple;
+	bh=W/WcOeQpPEmunvrdDhNitjqy32TMzG49sI7jExIuEcM=;
+	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=fcluwjRlGmJLpQhEtAlYekS8JbjBwrfv0UOIMmHcRRo7v2ff7HbB9KX3pdVgK4LgnScOhjHrhBesNLTe5uJeJYu6rH9PIY8cLbP3A79kFsQHNumc92Z2hjpl5w6oHYooXGtb6/Et51vqT8XNFbxISPcSXt4GqW4Jj6KVa4KHyPE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=lzLcZUOi; arc=none smtp.client-ip=209.85.166.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=illinois-edu.20230601.gappssmtp.com header.i=@illinois-edu.20230601.gappssmtp.com header.b="Pnj5kxGi"
-Received: by mail-io1-f65.google.com with SMTP id ca18e2360f4ac-81f921c40f2so116373639f.0
-        for <llvm@lists.linux.dev>; Sat, 24 Aug 2024 16:07:32 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lzLcZUOi"
+Received: by mail-il1-f179.google.com with SMTP id e9e14a558f8ab-39d3b89ded1so11288365ab.0
+        for <llvm@lists.linux.dev>; Sat, 24 Aug 2024 16:21:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=illinois-edu.20230601.gappssmtp.com; s=20230601; t=1724540852; x=1725145652; darn=lists.linux.dev;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=pI1ahIsPt9dhXQGKmSRkAPO4yB+V9yLk9R0g7YeqYis=;
-        b=Pnj5kxGiWjMhvYEH7EljsMvobBFWHm8dgKR1aCe0YsECvEq4kCa1TLnpMM8QulLRax
-         Ui2cT8DjuGGstcYslgEL+KhOoQb2HXU+3UrAA/VpZt+enVjgTknTyICOeoizTZMmyUL+
-         IyIj/stt2+GHVK5yzPau4jz4yu+26rz6AuisHpgDeZ2i/LKO+2De9Sg84fvfHhpj9IW5
-         GvOD+vgy9ywy+EBjaaRSoGkTFfDgyJX6mmEZWLBBHnyPDy7DuOoFRIZJ1jXXBWXcLwHD
-         CAStkokao0vqioW9hDeJRso+R4e9NnI30AMSaOszGpbyXRjF6Y83GnY6G/3MIBZCweIR
-         iVAQ==
+        d=gmail.com; s=20230601; t=1724541692; x=1725146492; darn=lists.linux.dev;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=1Tmq+UU0sA2SGlzZYXprDD9mtGBC22vjFkL/LTayqLA=;
+        b=lzLcZUOi8Z4xvWdkTwa+JHpVGMUkVNoZl9COlfFNx/IMvqSGqdQM5HaCAQVK7EriYG
+         KCwE5jBBij68AAxwV9Yac44A8orRoHuO8FOWAzRlpcF9oNU/d5XUVY7xElEhcKyPG8ea
+         1RVeL08WwZKnhH0vhRw8bvfc/XR+jIjxDejWi0ViG88JYH6lSD+PqWpLSvgSzLZfY0Up
+         YSEUs47bVSCmkiHmwVLByMUSjtIIHfcEuJ8OqDvkDi8MrVSdLTQ32iXVhwHqqDZLctJJ
+         cpsbgaIveXZFGILL53NNbf0W71UgGVhf4BYwi4tY9YNuyK8zuqbigMlBMEJ/mZrTq3yU
+         +Xog==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1724540852; x=1725145652;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=pI1ahIsPt9dhXQGKmSRkAPO4yB+V9yLk9R0g7YeqYis=;
-        b=N6sWV7qJE78szHAFKUb9DkB2W6OYYA+fsxwhXi0zjYGafJ5z4XAtm9VTHldWs8SBpH
-         vI7ouLcgk5x4ztNXp5cQ2KM58wB8VBSOY+am0y5+U2actdlSOiOF/mBZsAeSbq0UPAaK
-         APobvt8niRAG3RI+yMBYxViZTsUXmwdnN+wbIVTmnqmhcaAqInO0xzRekejdzEhRJLR8
-         f0XN/mK7lbpMOiu68cIdESaV7KgHCj+3x7M6nHiwjEwwv+4IfOPNCsfbf4USPApuFHLK
-         B1xQh0U+JCicZF3D/i2A03LkqcKTadFqwa+WLaMLuTAPXLJBO/FURoBg5fIgWpV6wqad
-         +2oQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVXf8OG04NxgiiBbB3oV7OgpcBF9TEM5Tw4ebiAtNEKJoyxmqRpSpXMkyj2x84qSJ+ZxJrY@lists.linux.dev
-X-Gm-Message-State: AOJu0YxVTdRt/gEnxpDN953KV+PKq81CcWaECNLMM0IZL6btdVD7i/83
-	0dNKwA/0stAMEldINKw7AbsztmDR6EMMMYQ/Ve4VIfaThdW0Qk2x+6zDUxN+Fg==
-X-Google-Smtp-Source: AGHT+IFl2rO8s4tG2IK/76OuZILBkQM0bjWjC93REDF+iiyuiQbUEz5yxBnC5GLBkdA4N6JUhLkQxw==
-X-Received: by 2002:a05:6602:6103:b0:825:2f0:9f74 with SMTP id ca18e2360f4ac-8278739c0famr756294039f.16.1724540852172;
-        Sat, 24 Aug 2024 16:07:32 -0700 (PDT)
-Received: from shizuku.. (mobile-130-126-255-62.near.illinois.edu. [130.126.255.62])
-        by smtp.gmail.com with ESMTPSA id 8926c6da1cb9f-4ce70f85671sm1563938173.80.2024.08.24.16.07.30
+        d=1e100.net; s=20230601; t=1724541692; x=1725146492;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=1Tmq+UU0sA2SGlzZYXprDD9mtGBC22vjFkL/LTayqLA=;
+        b=MoxfTFObTSiW0ZKF8xqe/kIROtXiywBCsrpIbZS+qBjOnkdEnSfpvCsUeHbcKcTknB
+         D23LzoAzN6JbQ6oOszO7t2UdqvIRYJRsa/PUUToLd0saBFSHCO3kZ3KW1F+XM/IBvnlo
+         Ggjjc4Xv1xUv8CsTav4jKSINsnDg38vuhYXkutc4pTiIaGM8YwlO6ElkgjCXWJuysO7I
+         gG43o0KGbdD+9MkdgK+YDL38i0BFRCoSzavWSP7VuOAN6GZ5gYD67ZBpWs5SgxYmxR2j
+         HxC3EdrY9JP33ExuaX0Aq7uFQqWSQ5Sh+7Pf5rxGi5S8WsFp9f4ywoC/hSgZ95mpQwX/
+         mUew==
+X-Forwarded-Encrypted: i=1; AJvYcCUsHoS/KkeuKywK0alXHgywLPmxqiQpC1VVV9a1y7eg6l2xlPH9h0Qbe3Y2eJ4DEzoG5CNa@lists.linux.dev
+X-Gm-Message-State: AOJu0YybZDnCHf1GgJaZ7ywPamorDkbgw2Rlf7iDQB62cUB7li6ihrJK
+	6aLNVPCSidJhsnHMy4L8UEGcAq29DmbpELDjXThm5txh/bQ737rhTwL9JA==
+X-Google-Smtp-Source: AGHT+IF2XS4wyftc4M73YpCByrmApTDQfKepJBYOrYtCUJ8UX40muwnsijnbov7r6FP63fbC42Vs6A==
+X-Received: by 2002:a05:6e02:154a:b0:39d:28b4:2514 with SMTP id e9e14a558f8ab-39e3c9854c4mr75885395ab.10.1724541692497;
+        Sat, 24 Aug 2024 16:21:32 -0700 (PDT)
+Received: from kodidev-ubuntu (69-172-146-21.cable.teksavvy.com. [69.172.146.21])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-203b01b4d47sm16843775ad.258.2024.08.24.16.21.31
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 24 Aug 2024 16:07:31 -0700 (PDT)
-From: Wentao Zhang <wentaoz5@illinois.edu>
-To: linux-kbuild@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-efi@vger.kernel.org,
-	linux-um@lists.infradead.org,
-	linux-arch@vger.kernel.org,
-	linux-trace-kernel@vger.kernel.org,
-	llvm@lists.linux.dev,
-	x86@kernel.org
-Cc: wentaoz5@illinois.edu,
-	marinov@illinois.edu,
-	tyxu@illinois.edu,
-	jinghao7@illinois.edu,
-	tingxur@illinois.edu,
-	steven.h.vanderleest@boeing.com,
-	chuck.wolber@boeing.com,
-	matthew.l.weber3@boeing.com,
-	Matt.Kelly2@boeing.com,
-	andrew.j.oppelt@boeing.com,
-	samuel.sarkisian@boeing.com,
-	morbo@google.com,
-	samitolvanen@google.com,
-	masahiroy@kernel.org,
-	tglx@linutronix.de,
-	mingo@redhat.com,
-	bp@alien8.de,
-	dave.hansen@linux.intel.com,
-	luto@kernel.org,
-	ardb@kernel.org,
-	richard@nod.at,
-	anton.ivanov@cambridgegreys.com,
-	johannes@sipsolutions.net,
-	arnd@arndb.de,
-	rostedt@goodmis.org,
-	mhiramat@kernel.org,
-	oberpar@linux.ibm.com,
-	akpm@linux-foundation.org,
-	paulmck@kernel.org,
-	bhelgaas@google.com,
-	kees@kernel.org,
-	jpoimboe@kernel.org,
-	peterz@infradead.org,
-	kent.overstreet@linux.dev,
-	nathan@kernel.org,
-	hpa@zytor.com,
-	mathieu.desnoyers@efficios.com,
-	ndesaulniers@google.com,
-	justinstitt@google.com,
-	maskray@google.com,
-	dvyukov@google.com
-Subject: [RFC PATCH 3/3] llvm-cov: add Clang's MC/DC support
-Date: Sat, 24 Aug 2024 18:06:41 -0500
-Message-Id: <20240824230641.385839-4-wentaoz5@illinois.edu>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20240824230641.385839-1-wentaoz5@illinois.edu>
-References: <20240824230641.385839-1-wentaoz5@illinois.edu>
+        Sat, 24 Aug 2024 16:21:31 -0700 (PDT)
+From: Tony Ambardar <tony.ambardar@gmail.com>
+X-Google-Original-From: Tony Ambardar <Tony.Ambardar@gmail.com>
+Date: Sat, 24 Aug 2024 16:21:29 -0700
+To: Ilya Leoshkevich <iii@linux.ibm.com>
+Cc: bpf@vger.kernel.org, linux-s390@vger.kernel.org, llvm@lists.linux.dev,
+	Alexei Starovoitov <ast@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>
+Subject: Re: Problem testing with S390x under QEMU on x86_64
+Message-ID: <Zspq+db1KOhhh2Yf@kodidev-ubuntu>
+References: <ZsEcsaa3juxxQBUf@kodidev-ubuntu>
+ <180f4c27ebfb954d6b0fd2303c9fb7d5f21dae04.camel@linux.ibm.com>
+ <ZsU3GdK5t6KEOr0g@kodidev-ubuntu>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZsU3GdK5t6KEOr0g@kodidev-ubuntu>
 
-Add Clang flags and kconfig options for measuring the kernel's modified
-condition/decision coverage (MC/DC).
+On Tue, Aug 20, 2024 at 05:38:49PM -0700, Tony Ambardar wrote:
+> 
+> Hi Ilya,
+> 
+> Thanks for following up. As it happens, I did this the day before out of
+> desperation after trying various kernel config and rootfs changes
+> with no luck, and can confirm the system runs faster and without the
+> kernel crashes noted above. Certainly the latest QEMU seems mandatory.
+> 
+> The good news is that 99% of tests with my cross-compiled test_progs
+> work as expected out of the box, and some of the failing ones helped
+> troubleshoot a few hidden libbpf issues. I'll outline the remaining
+> failures for your feedback and comparison with native-built tests.
+> 
+> I used the command line:
+>     ./test_progs -d get_stack_raw_tp,stacktrace_build_id,verifier_iterating_callbacks,tailcalls
+> 
 
-As of Clang 19, users can determine the max number of conditions in a
-decision to measure via option LLVM_COV_KERNEL_MCDC_MAX_CONDITIONS,
-which controls -fmcdc-max-conditions flag of Clang cc1 [1]. Since MC/DC
-implementation utilizes bitmaps to track the execution of test vectors,
-more memory is consumed if larger decisions are getting counted. The
-maximum value supported by Clang is 32767. According to local
-experiments, the working maximum for Linux kernel is 44, with the
-largest decisions in kernel codebase (with 45 conditions) excluded,
-otherwise the kernel image size limit will be exceeded. The largest
-decisions in kernel are contributed for example by macros checking
-CPUID.
+[snip]
 
-Code exceeding LLVM_COV_KERNEL_MCDC_MAX_CONDITIONS will produce compiler
-warnings.
+> Aside from the tests above, I see only 3 failing tests:
+> 
+> All error logs:
+> test_map_ptr:PASS:skel_open 0 nsec
+> test_map_ptr:FAIL:skel_load unexpected error: -22 (errno 22)
+> #165     map_ptr:FAIL
+> subtest_userns:PASS:socketpair 0 nsec
+> subtest_userns:PASS:fork 0 nsec
+> recvfd:PASS:recvmsg 0 nsec
+> recvfd:PASS:cmsg_null 0 nsec
+> recvfd:PASS:cmsg_len 0 nsec
+> recvfd:PASS:cmsg_level 0 nsec
+> recvfd:PASS:cmsg_type 0 nsec
+> parent:PASS:recv_bpffs_fd 0 nsec
+> materialize_bpffs_fd:PASS:fs_cfg_cmds 0 nsec
+> materialize_bpffs_fd:PASS:fs_cfg_maps 0 nsec
+> materialize_bpffs_fd:PASS:fs_cfg_progs 0 nsec
+> materialize_bpffs_fd:PASS:fs_cfg_attachs 0 nsec
+> parent:PASS:materialize_bpffs_fd 0 nsec
+> sendfd:PASS:sendmsg 0 nsec
+> parent:PASS:send_mnt_fd 0 nsec
+> recvfd:PASS:recvmsg 0 nsec
+> recvfd:PASS:cmsg_null 0 nsec
+> recvfd:PASS:cmsg_len 0 nsec
+> recvfd:PASS:cmsg_level 0 nsec
+> recvfd:PASS:cmsg_type 0 nsec
+> parent:PASS:recv_token_fd 0 nsec
+> parent:FAIL:waitpid_child unexpected error: 22 (errno 3)
+> #402/9   token/obj_priv_implicit_token_envvar:FAIL
+> #402     token:FAIL
+> libbpf: prog 'on_event': BPF program load failed: Bad address
+> libbpf: prog 'on_event': -- BEGIN PROG LOAD LOG --
+> The sequence of 8193 jumps is too complex.
+> verification time 2816240 usec
+> stack depth 360
+> processed 116096 insns (limit 1000000) max_states_per_insn 1 total_states 5061 peak_states 5061 mark_read 2540
+> -- END PROG LOAD LOG --
+> libbpf: prog 'on_event': failed to load: -14
+> libbpf: failed to load object 'pyperf600.bpf.o'
+> scale_test:FAIL:expect_success unexpected error: -14 (errno 14)
+> #525     verif_scale_pyperf600:FAIL
+> Summary: 559/4166 PASSED, 98 SKIPPED, 3 FAILED
+> 
 
-As of LLVM 19, certain expressions are still not covered, and will produce
-build warnings when they are encountered:
+Hi Ilya,
 
-"[...] if a boolean expression is embedded in the nest of another boolean
- expression but separated by a non-logical operator, this is also not
- supported. For example, in x = (a && b && c && func(d && f)), the d && f
- case starts a new boolean expression that is separated from the other
- conditions by the operator func(). When this is encountered, a warning
- will be generated and the boolean expression will not be
- instrumented." [2]
+A brief update with some good news: the 3 test failures above have been
+resolved and all expected tests now pass on QEMU/s390x under x86_64.
 
-[1] https://discourse.llvm.org/t/rfc-coverage-new-algorithm-and-file-format-for-mc-dc/76798
-[2] https://clang.llvm.org/docs/SourceBasedCodeCoverage.html#mc-dc-instrumentation
+Test '#165 map_ptr:FAIL' was a bug in my light-skeleton code, and fixed in
+my patch series v2:
+https://lore.kernel.org/bpf/cover.1724313164.git.tony.ambardar@gmail.com/
 
-Signed-off-by: Wentao Zhang <wentaoz5@illinois.edu>
-Signed-off-by: Chuck Wolber <chuck.wolber@boeing.com>
----
- Makefile                |  6 ++++++
- kernel/llvm-cov/Kconfig | 36 ++++++++++++++++++++++++++++++++++++
- scripts/Makefile.lib    | 11 +++++++++++
- 3 files changed, 53 insertions(+)
+Test '#402/9 token/obj_priv_implicit_token_envvar:FAIL' was a problem in my
+rootfs configuration and now passes after resolving.
 
-diff --git a/Makefile b/Makefile
-index 1750a2b7dfe8..4aa263e5f67f 100644
---- a/Makefile
-+++ b/Makefile
-@@ -740,6 +740,12 @@ all: vmlinux
- CFLAGS_LLVM_COV := -fprofile-instr-generate -fcoverage-mapping
- export CFLAGS_LLVM_COV
- 
-+CFLAGS_LLVM_COV_MCDC := -fcoverage-mcdc
-+ifdef CONFIG_LLVM_COV_KERNEL_MCDC_MAX_CONDITIONS
-+CFLAGS_LLVM_COV_MCDC += -Xclang -fmcdc-max-conditions=$(CONFIG_LLVM_COV_KERNEL_MCDC_MAX_CONDITIONS)
-+endif
-+export CFLAGS_LLVM_COV_MCDC
-+
- CFLAGS_GCOV	:= -fprofile-arcs -ftest-coverage
- ifdef CONFIG_CC_IS_GCC
- CFLAGS_GCOV	+= -fno-tree-loop-im
-diff --git a/kernel/llvm-cov/Kconfig b/kernel/llvm-cov/Kconfig
-index 505eba5bd23c..40b6a4fd590e 100644
---- a/kernel/llvm-cov/Kconfig
-+++ b/kernel/llvm-cov/Kconfig
-@@ -26,4 +26,40 @@ config LLVM_COV_KERNEL
- 	  Note that the debugfs filesystem has to be mounted to access the raw
- 	  profile.
- 
-+config LLVM_COV_KERNEL_MCDC
-+	bool "Enable measuring modified condition/decision coverage (MC/DC)"
-+	depends on LLVM_COV_KERNEL
-+	depends on CLANG_VERSION >= 180000
-+	help
-+	  This option enables modified condition/decision coverage (MC/DC)
-+	  code coverage instrumentation.
-+
-+	  If unsure, say N.
-+
-+	  This will add Clang's Source-based Code Coverage MC/DC
-+	  instrumentation to your kernel. As of LLVM 19, certain expressions
-+	  are still not covered, and will produce build warnings when they are
-+	  encountered.
-+
-+	  "[...] if a boolean expression is embedded in the nest of another
-+	   boolean expression but separated by a non-logical operator, this is
-+	   also not supported. For example, in
-+	   x = (a && b && c && func(d && f)), the d && f case starts a new
-+	   boolean expression that is separated from the other conditions by the
-+	   operator func(). When this is encountered, a warning will be
-+	   generated and the boolean expression will not be instrumented."
-+
-+	   https://clang.llvm.org/docs/SourceBasedCodeCoverage.html#mc-dc-instrumentation
-+
-+config LLVM_COV_KERNEL_MCDC_MAX_CONDITIONS
-+	int "Maximum number of conditions in a decision to instrument"
-+	range 6 32767
-+	depends on LLVM_COV_KERNEL_MCDC
-+	depends on CLANG_VERSION >= 190000
-+	default "6"
-+	help
-+	  This value is passed to "-fmcdc-max-conditions" flag of Clang cc1.
-+	  Expressions whose number of conditions is greater than this value will
-+	  produce warnings and will not be instrumented.
-+
- endmenu
-diff --git a/scripts/Makefile.lib b/scripts/Makefile.lib
-index b9ceaee34b28..b8dfad01cb52 100644
---- a/scripts/Makefile.lib
-+++ b/scripts/Makefile.lib
-@@ -168,6 +168,17 @@ _c_flags += $(if $(patsubst n%,, \
- 		$(CFLAGS_LLVM_COV))
- endif
- 
-+#
-+# Flag that turns on modified condition/decision coverage (MC/DC) measurement
-+# with Clang's Source-based Code Coverage. Enable the flag for a file or
-+# directory depending on variables LLVM_COV_PROFILE_obj.o and LLVM_COV_PROFILE.
-+#
-+ifeq ($(CONFIG_LLVM_COV_KERNEL_MCDC),y)
-+_c_flags += $(if $(patsubst n%,, \
-+		$(LLVM_COV_PROFILE_$(basetarget).o)$(LLVM_COV_PROFILE)y), \
-+		$(CFLAGS_LLVM_COV_MCDC))
-+endif
-+
- #
- # Enable address sanitizer flags for kernel except some files or directories
- # we don't want to check (depends on variables KASAN_SANITIZE_obj.o, KASAN_SANITIZE)
--- 
-2.45.2
+Test '#525 verif_scale_pyperf600:FAIL' was caused by clang miscompilation
+exposed by my use of clang-19 and clang-20. The test passes when built
+with clang-17 (used by BPF CI) or clang-18 which I switched to use.
 
+One symptom of the problem is easily seen by manually compiling:
+
+$ clang-18  -g -Wall -Werror -D__TARGET_ARCH_s390 -mbig-endian -Itools/testing/selftests/bpf/tools/include -Itools/testing/selftests/bpf -Itools/include/uapi -Itools/testing/selftests/usr/include -Wno-compare-distinct-pointer-types -idirafter /usr/lib/llvm-18/lib/clang/18/include -idirafter /usr/local/include -idirafter /usr/lib/gcc-cross/s390x-linux-gnu/11/../../../../s390x-linux-gnu/include -idirafter /usr/include/s390x-linux-gnu -idirafter /usr/include -DENABLE_ATOMICS_TESTS -O2 --target=bpfeb -c tools/testing/selftests/bpf/progs/pyperf600.c -mcpu=v3 -o pyperf600.clang18.bpf.o
+
+$ clang-19  -g -Wall -Werror -D__TARGET_ARCH_s390 -mbig-endian -Itools/testing/selftests/bpf/tools/include -Itools/testing/selftests/bpf -Itools/include/uapi -Itools/testing/selftests/usr/include -Wno-compare-distinct-pointer-types -idirafter /usr/lib/llvm-19/lib/clang/19/include -idirafter /usr/local/include -idirafter /usr/lib/gcc-cross/s390x-linux-gnu/11/../../../../s390x-linux-gnu/include -idirafter /usr/include/s390x-linux-gnu -idirafter /usr/include -DENABLE_ATOMICS_TESTS -O2 --target=bpfeb -c tools/testing/selftests/bpf/progs/pyperf600.c -mcpu=v3 -o pyperf600.clang19.bpf.o
+
+$ llvm-readelf-18 -S pyperf600.clang{18,19}.bpf.o |grep .symtab
+  [27] .symtab           SYMTAB          0000000000000000 1739d0 01ad60 18      1 4572  8
+  [27] .symtab           SYMTAB          0000000000000000 14f048 0001e0 18      1  12  8
+
+Notice that the .symtab has shrunk by ~200X for example going to clang-19!
+(CCing llvm maintainers)
+
+
+Kind regards,
+Tony
