@@ -1,59 +1,67 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5402F13AD27;
-	Sat, 24 Aug 2024 09:08:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E8153BB22;
+	Sat, 24 Aug 2024 09:28:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724490484; cv=none; b=MubTo3IRogEX1dTv1nwjqmNJsyyKr4518AGvUSP/ujLwRRAMxrbjJTY6SPSMCnRKnpnF//pMPOGpSJ6dT5jS1FR4K8/8R2nJJOQSiKLHk3IGdcsdfMF06/+uXfYpmz/z+0Zm86IJXrg/+sLRM64AMtzM0SFtN/19T73Dm6GYdDc=
+	t=1724491686; cv=none; b=hFARxzpnnSCkLic6cMx0Dc4J6ikFhBfnKqu4Lftbp8Qcfi6fnO8vfPUZluihakRJu5QPdWtx1R2UZ8HONdbr1kChkqtxe7tqAf5dLTYx7CtxDFVD1mG6kkaHh33S/Y9Zqt+6wuaKceZ0ldXCDNOcgJH/3nEGk+X0okRln81Z15U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724490484; c=relaxed/simple;
-	bh=nO+dgJIkmDAO58yDF+knscpZ/1cT6CKUm6iGHn3zE3g=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=e7Ox8qWU09VzEhc/VaogUZlAsppy/+/ALJXqW8Xpw3DCFBt+44X7FAbMukC/cEm2cqNRdKY3mhuuxdwN2rWwVDlYrLwrgddzzAW1gmFL8CunG1IppnUojNGRtdBGWap1MG0hKAX1WCqr4NE6lvtlHfUY70r7HI0ST9bMCclHJ1I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Xlcc4S2e; arc=none smtp.client-ip=192.198.163.10
+	s=arc-20240116; t=1724491686; c=relaxed/simple;
+	bh=81/t5idYrQZJgPisckKvJ1/FCeEOtftpD4K7FG5JXfo=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=fBZKGvLAt4jpAqygOnJLEGv6daRucMVb5eO38kjlQU6NfJyryP0mCvfuPtUlsntpO75vj06qR5B83pQtUhr8brRg2W65dBzgKPPuT+b0rM4rTma5L4EKE7GgDU00x+Qipd4CC+t3lm6cTJMPduu/BBbIHsqvvwmY9baTmeVcu+0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=fhMBL1fn; arc=none smtp.client-ip=198.175.65.13
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Xlcc4S2e"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="fhMBL1fn"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1724490481; x=1756026481;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=nO+dgJIkmDAO58yDF+knscpZ/1cT6CKUm6iGHn3zE3g=;
-  b=Xlcc4S2e7vmB7ImCaDFmSXHyYJ/qYLEeCBo1J7On1pzNOHTCt8yfQ4AP
-   rdNNN3asbMu1zsDDRMBPP5NSJ4sgXIp2dQKPx9XnZUDm6XyNJ+Hurv/WM
-   c9JIHB1e3GNGc3fxF4hyQ+J5tF9AdImr3pXl448/XLOzSydTQ/7qgGx4C
-   Zrr/bnRqygHW4WQRBGOGzFBfjx0umTzfup2twRSmnufn1L33Pfam1+kI9
-   08PHRXhE2upG08VyTp5CIy74RkGI4L7HiL8KS4X78qNrhSp53jbysSH80
-   D/eC7STRUoGbFIf4gvFUpWLFxEswh07KJXhQZWAWsnOaB/9pGdqy3hIMe
-   A==;
-X-CSE-ConnectionGUID: mEFxlt40Ri+Jx/UXELUfnQ==
-X-CSE-MsgGUID: 6o8Frk/4SWejrDFjUzI5Lg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11173"; a="34386165"
+  t=1724491684; x=1756027684;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=81/t5idYrQZJgPisckKvJ1/FCeEOtftpD4K7FG5JXfo=;
+  b=fhMBL1fntsReqhkJ8udJaLF9Y8mN1UelUiZvHA7qJHQfJeFzeLB6fIpC
+   wkmOT1JGVn24/3Mdhn1HsvdGBtJCdL9e+9LCcd+6JaprRAUxNQV/VzJIm
+   7lV2ccslGn5JNuoI1lGDDASAJK6+9dOm+vHsVfwE5DPNx/sX2v2gc/eKu
+   pIx12cxJIltwoBL49H4C26md2ttOgDi2lMdT/yWy8Cv2qluuP4bLecc6F
+   kzRI60CkNkq8oq54dPtuJ2Xv73e8RvOlCKraDlAe/zIs6r4pon5i8wAo0
+   kqcdSFuItZqYfyVqL8wt7yKZ5zPyXHII/FWKFh7NaEW/eddiH7fgkN/z2
+   g==;
+X-CSE-ConnectionGUID: bWg4jRrURy6fPQ8L1sTHew==
+X-CSE-MsgGUID: mdcRymgXT/qeY6O4i6pakA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11173"; a="34133949"
 X-IronPort-AV: E=Sophos;i="6.10,173,1719903600"; 
-   d="scan'208";a="34386165"
-Received: from orviesa004.jf.intel.com ([10.64.159.144])
-  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Aug 2024 02:08:00 -0700
-X-CSE-ConnectionGUID: fyz6BjuqRwuDczMo8cSlJQ==
-X-CSE-MsgGUID: FpDID5CSTjyp2sJvTsF1sw==
+   d="scan'208";a="34133949"
+Received: from fmviesa002.fm.intel.com ([10.60.135.142])
+  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Aug 2024 02:28:04 -0700
+X-CSE-ConnectionGUID: wTuGyv2bQUakDP6NuFOOUg==
+X-CSE-MsgGUID: +exo54fyS9qR/X/0MjvR1A==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.10,173,1719903600"; 
-   d="scan'208";a="66975750"
+   d="scan'208";a="85236532"
 Received: from lkp-server01.sh.intel.com (HELO 9a732dc145d3) ([10.239.97.150])
-  by orviesa004.jf.intel.com with ESMTP; 24 Aug 2024 02:07:59 -0700
+  by fmviesa002.fm.intel.com with ESMTP; 24 Aug 2024 02:27:59 -0700
 Received: from kbuild by 9a732dc145d3 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1shmkW-000ENf-30;
-	Sat, 24 Aug 2024 09:07:56 +0000
-Date: Sat, 24 Aug 2024 17:07:11 +0800
+	id 1shn3t-000EO1-0L;
+	Sat, 24 Aug 2024 09:27:57 +0000
+Date: Sat, 24 Aug 2024 17:27:39 +0800
 From: kernel test robot <lkp@intel.com>
-To: Saurabh Sengar <ssengar@linux.microsoft.com>
+To: Jinjie Ruan <ruanjinjie@huawei.com>, chaitanya.dhere@amd.com,
+	jun.lei@amd.com, harry.wentland@amd.com, sunpeng.li@amd.com,
+	Rodrigo.Siqueira@amd.com, alexander.deucher@amd.com,
+	christian.koenig@amd.com, Xinhui.Pan@amd.com, airlied@gmail.com,
+	daniel@ffwll.ch, alex.hung@amd.com, aurabindo.pillai@amd.com,
+	colin.i.king@gmail.com, dillon.varone@amd.com,
+	amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+	linux-kernel@vger.kernel.org
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org, Wei Liu <wei.liu@kernel.org>,
-	Michael Kelley <mikelley@microsoft.com>
-Subject: error: ran out of registers during register allocation
-Message-ID: <202408241749.UqczF06l-lkp@intel.com>
+	ruanjinjie@huawei.com
+Subject: Re: [PATCH -next 5/5] drm/amd/display: Make dcn35_fpga_funcs static
+Message-ID: <202408241600.uHrTIx7j-lkp@intel.com>
+References: <20240821064040.2292969-6-ruanjinjie@huawei.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -62,35 +70,45 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20240821064040.2292969-6-ruanjinjie@huawei.com>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   d2bafcf224f3911b183113b2fcb536c9e90684a3
-commit: f83705a51275ed29117d46e1d68e8b16dcb40507 Driver: VMBus: Add Devicetree support
-date:   1 year, 4 months ago
-config: i386-buildonly-randconfig-004-20240824 (https://download.01.org/0day-ci/archive/20240824/202408241749.UqczF06l-lkp@intel.com/config)
+Hi Jinjie,
+
+kernel test robot noticed the following build warnings:
+
+[auto build test WARNING on next-20240821]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Jinjie-Ruan/drm-amd-display-Make-core_dcn4_g6_temp_read_blackout_table-static/20240821-143421
+base:   next-20240821
+patch link:    https://lore.kernel.org/r/20240821064040.2292969-6-ruanjinjie%40huawei.com
+patch subject: [PATCH -next 5/5] drm/amd/display: Make dcn35_fpga_funcs static
+config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20240824/202408241600.uHrTIx7j-lkp@intel.com/config)
 compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240824/202408241749.UqczF06l-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240824/202408241600.uHrTIx7j-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202408241749.UqczF06l-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202408241600.uHrTIx7j-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> error: ran out of registers during register allocation
->> error: ran out of registers during register allocation
-   2 errors generated.
---
->> error: ran out of registers during register allocation
-   1 error generated.
---
->> error: ran out of registers during register allocation
->> error: ran out of registers during register allocation
->> error: ran out of registers during register allocation
->> error: ran out of registers during register allocation
->> error: ran out of registers during register allocation
-   5 errors generated.
+>> drivers/gpu/drm/amd/amdgpu/../display/dc/clk_mgr/dcn35/dcn35_clk_mgr.c:1071:29: warning: unused variable 'dcn35_fpga_funcs' [-Wunused-variable]
+    1071 | static struct clk_mgr_funcs dcn35_fpga_funcs = {
+         |                             ^~~~~~~~~~~~~~~~
+   1 warning generated.
+
+
+vim +/dcn35_fpga_funcs +1071 drivers/gpu/drm/amd/amdgpu/../display/dc/clk_mgr/dcn35/dcn35_clk_mgr.c
+
+  1070	
+> 1071	static struct clk_mgr_funcs dcn35_fpga_funcs = {
+  1072		.get_dp_ref_clk_frequency = dce12_get_dp_ref_freq_khz,
+  1073		.update_clocks = dcn35_update_clocks_fpga,
+  1074		.init_clocks = dcn35_init_clocks_fpga,
+  1075		.get_dtb_ref_clk_frequency = dcn31_get_dtb_ref_freq_khz,
+  1076	};
+  1077	
 
 -- 
 0-DAY CI Kernel Test Service
