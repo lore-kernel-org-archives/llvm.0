@@ -1,116 +1,161 @@
-Received: from mail-yw1-f175.google.com (mail-yw1-f175.google.com [209.85.128.175])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1078214F12D
-	for <llvm@lists.linux.dev>; Sat, 24 Aug 2024 07:25:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3EC1E1F94D;
+	Sat, 24 Aug 2024 08:05:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724484305; cv=none; b=LYcE7sPXlMP61f+WgRWDrUBAhfrHssL9n9RVnHAFb9P5Kqru2T0Yl48ww3oosraBLuPoEEoBDF0M/me8zAnPSftuqKqfTwDvqbo9FRpKsAqkI1md4gS3NsHWJh18XYD58uOb37o2SMITQA2qQt5tUJ2yVXSCEz2NXMGCeTCxBGs=
+	t=1724486702; cv=none; b=VzI0eVVXm/Q0L2tSMFibC/+yvvPABXMmEGZtqIxwjoV3ahO5SMeRCn/PMsAe8uEcngzppti1/n1e0uHN3ku6E/enTHnZTsvU19/ewHG+acjiEmeA3BHcUMzWsvC/1hd8k+VOQFoWR3tVNLewO8DtKUlTdokN32rwMvpUEcFODng=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724484305; c=relaxed/simple;
-	bh=g6xKvcThqp7cNcb49IH7d8Zjo3rGrlE8E1s03ZsRXRk=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=NwfAx5WAHi+oJ3hBxoP0j3Z5fWNY+98DRliDsiEeYQ7o9ONF+xypRFKj4zACxBGR+WGi6gkLczEAoWNvQakdDB2RXfgihPtCA1QpYcDz16wZPf0W2uqFejMdCbem4qJdG5NwD4pjpVpSANgOB3bBnH2jKh7uN624knAi5opo5s4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=umich.edu; spf=pass smtp.mailfrom=umich.edu; dkim=pass (2048-bit key) header.d=umich.edu header.i=@umich.edu header.b=OfylNslN; arc=none smtp.client-ip=209.85.128.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=umich.edu
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=umich.edu
+	s=arc-20240116; t=1724486702; c=relaxed/simple;
+	bh=foS8KQkUxVxkulvd5nUBkVF0PXcyoL+M3U6ZzApzLw8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Krj4sEKG0Mu0QysOC8jviAPGaX4Q/9gQGLJllyGAzTHugHiWS01XRmPJrc9hle3N9drENf9uGBbUBpV91CPKWxBx7XaptdnNCTm2Ju7piXdcU4Q9bE8svJtoArs96h7BPF5vHoeav1tiaJHfVM9sB16fSpSjH1m71qhY/N1LthE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=HI5TDGrd; arc=none smtp.client-ip=192.198.163.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=umich.edu header.i=@umich.edu header.b="OfylNslN"
-Received: by mail-yw1-f175.google.com with SMTP id 00721157ae682-6c32daf0797so27734187b3.0
-        for <llvm@lists.linux.dev>; Sat, 24 Aug 2024 00:25:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=umich.edu; s=google-2016-06-03; t=1724484302; x=1725089102; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=q6+A2VuRa3vINzgOnqqBfzLTYjWfMi7SqqtjGQfCE/k=;
-        b=OfylNslNKe1Fj06wDvTg+/aaDridtxGqnwQtYk6bWRHu6skut0lcd1SVyn/KBc4Q0V
-         FbcSiFNbVob3PKuP2ksbre0ygebA8BC5Lyf22Q6BGsa6+ZrlMg3js5BJeax6qRZoNhm2
-         Jija+vWZiIINzj1Ihfa8PHpLEa7Qam53bgdM3z2q8eZ1rREXC0ieA9nJbBcQt3IePyHg
-         /IMWEkB3FJQPX4iKWUIV8+OQ3+NtCH7aAx6O8Dya9+5TvdzevEfThhJBF69AqEtoA9EG
-         Li/HX0DVTwU9cuXyKpHkCBgdCIq/InVMsXcD+8/DC5PzFIkS94rOzgzvSQXzs2BCcPQM
-         eMpA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1724484302; x=1725089102;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=q6+A2VuRa3vINzgOnqqBfzLTYjWfMi7SqqtjGQfCE/k=;
-        b=j4KcfrjvJfkqA+ooXwM6ocNLblwjrMO33lEA9m+BMTE8dB1DVdSyUC7ZiOZ5r8mIqx
-         H2UAwkUkssCixgRmWZWRunIY3UHIQg/XirrF+1CN7tapOE33G7xoDAqrfFJVpvKE5PJQ
-         A3ofw8ricZyS0l8MtH3XXw8Ym/4PiWJwOpcN3RPH4gTrDFID5VqbwR2JIUlrK79rXNHM
-         ILTYSU24ERYDxsQsY+21hoFEGKv4nuUeOGCrarjZ/2/dQOwnzUZH4sIvC3HXT/X1A9EL
-         GHWuUdsLyWjbMQM+QGYycipkpyOpq+cyBAmpicird2rhbCLajr4nvuIrFVlmbja/N+y0
-         odHg==
-X-Forwarded-Encrypted: i=1; AJvYcCWA0DOEaFdgqZlkinzK688HSeuuPlrwgopg0EbbBj5mCJydiYqB7TY3CikGd7vyc6RveODf@lists.linux.dev
-X-Gm-Message-State: AOJu0Ywmg0lhUKhyPToHkx+DHGSu41MhI0J3PjWJyO5ZBbG9TrlQIbIR
-	w5VLgBoQBKOMH9MzSdr6EFvwUb/zThTcipJ/JjJ752R++TdmXOLWPpwPCMUfSwK9cKxT2OvC2Ca
-	vFMhaazKlR2LNnO/IEAK+HscAZanyCm3Oep4AGg==
-X-Google-Smtp-Source: AGHT+IG1BlHDuekV5AcLsj47uYwHvnVdzGRFSDLUmEl/F7Nsu+5/w5qTxjhDCMbQGyjdd5802kibXL0vaoVv13Foy4o=
-X-Received: by 2002:a05:690c:6606:b0:61b:1e81:4eb8 with SMTP id
- 00721157ae682-6c62538d6f6mr67130637b3.9.1724484302011; Sat, 24 Aug 2024
- 00:25:02 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="HI5TDGrd"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1724486700; x=1756022700;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=foS8KQkUxVxkulvd5nUBkVF0PXcyoL+M3U6ZzApzLw8=;
+  b=HI5TDGrdGKPYD5z3vdNmzEcTvbmRxhWAPdV/62jxNz/QA9Q+SD0mbtXq
+   jtS38QVkVvzgoN5+1bMK1jBnarPhXmF8rYAv7XuExQBgU47Rcf/Ei+ad1
+   w/OtsybBLhAXs3eAg6znzCiTTDYB2nmei2FsvTYQei3zWL/IcRQoZ+Ek9
+   qr9RadIk2bQ6zBdktgV9KG9BFras9fSE0FbsOEw7L1uGHmrp2pQMINeu6
+   86WVr93SKybCjH6db26fzq8MsuNwMQ6BJwdQ51K6ZYyGukXe6OM58fMg2
+   HFRE8r6v/KTpnB9/EUlVblnk8HSulpJ3mJw1/noMJkYi5RwD1VbuDeCDa
+   Q==;
+X-CSE-ConnectionGUID: GcMXU5r1RNKQ8Ia12x5QXg==
+X-CSE-MsgGUID: xg4RDX3MQLOWWLc6REn03w==
+X-IronPort-AV: E=McAfee;i="6700,10204,11173"; a="22489982"
+X-IronPort-AV: E=Sophos;i="6.10,172,1719903600"; 
+   d="scan'208";a="22489982"
+Received: from fmviesa006.fm.intel.com ([10.60.135.146])
+  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Aug 2024 01:05:00 -0700
+X-CSE-ConnectionGUID: tj1nqfCfRZaaoIrsX3mpdw==
+X-CSE-MsgGUID: ZmcisiiRSQeizrFvnZT1zA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.10,172,1719903600"; 
+   d="scan'208";a="61717198"
+Received: from lkp-server01.sh.intel.com (HELO 9a732dc145d3) ([10.239.97.150])
+  by fmviesa006.fm.intel.com with ESMTP; 24 Aug 2024 01:04:57 -0700
+Received: from kbuild by 9a732dc145d3 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1shllX-000ELb-0a;
+	Sat, 24 Aug 2024 08:04:55 +0000
+Date: Sat, 24 Aug 2024 16:04:21 +0800
+From: kernel test robot <lkp@intel.com>
+To: Jiaxun Yang <jiaxun.yang@flygoat.com>, Rob Herring <robh@kernel.org>,
+	Saravana Kannan <saravanak@google.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	loongarch@lists.linux.dev, chenhuacai@kernel.org,
+	Kevin Wheatfox <enkerewpo@hotmail.com>,
+	Jiaxun Yang <jiaxun.yang@flygoat.com>
+Subject: Re: [PATCH] of_reserved_mem: Save region name string into struct
+ reserved_mem
+Message-ID: <202408241510.Rk14q8Rg-lkp@intel.com>
+References: <20240821-save_resv_name-v1-1-b9c17f103ffb@flygoat.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20240819153656.28807-2-vadorovsky@protonmail.com> <36272d4a-eb95-4842-b171-ad6ec39a7631@gmail.com>
-In-Reply-To: <36272d4a-eb95-4842-b171-ad6ec39a7631@gmail.com>
-From: Trevor Gross <tmgross@umich.edu>
-Date: Sat, 24 Aug 2024 02:24:50 -0500
-Message-ID: <CALNs47uKWTH9mUhEp1-f=zX8fgPpWExQWct0YYa2Q9H6yuaKJA@mail.gmail.com>
-Subject: Re: [PATCH RESEND v5] rust: str: Use `core::CStr`, remove the custom
- `CStr` implementation
-To: Michal Rostecki <vadorovsky@gmail.com>
-Cc: Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, 
-	Wedson Almeida Filho <wedsonaf@gmail.com>, Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, 
-	=?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
-	Benno Lossin <benno.lossin@proton.me>, Andreas Hindborg <a.hindborg@samsung.com>, 
-	Alice Ryhl <aliceryhl@google.com>, Brendan Higgins <brendan.higgins@linux.dev>, 
-	David Gow <davidgow@google.com>, Rae Moar <rmoar@google.com>, 
-	FUJITA Tomonori <fujita.tomonori@gmail.com>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, 
-	Justin Stitt <justinstitt@google.com>, Martin Rodriguez Reboredo <yakoyoku@gmail.com>, 
-	Finn Behrens <me@kloenk.dev>, Manmohan Shukla <manmshuk@gmail.com>, 
-	Valentin Obst <kernel@valentinobst.de>, Yutaro Ohno <yutaro.ono.418@gmail.com>, 
-	Asahi Lina <lina@asahilina.net>, Danilo Krummrich <dakr@redhat.com>, Tiago Lam <tiagolam@gmail.com>, 
-	Charalampos Mitrodimas <charmitro@posteo.net>, Tejun Heo <tj@kernel.org>, Roland Xu <mu001999@outlook.com>, 
-	rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com, 
-	netdev@vger.kernel.org, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240821-save_resv_name-v1-1-b9c17f103ffb@flygoat.com>
 
-On Mon, Aug 19, 2024 at 10:43=E2=80=AFAM Michal Rostecki <vadorovsky@gmail.=
-com> wrote:
->
-> On 8/19/24 17:36, Michal Rostecki wrote:
-> > From: Michal Rostecki <vadorovsky@gmail.com>
-> >
-> > `CStr` became a part of `core` library in Rust 1.75. This change replac=
-es
-> > the custom `CStr` implementation with the one from `core`.
+Hi Jiaxun,
 
-[ very long snip ]
+kernel test robot noticed the following build warnings:
 
-> > @@ -180,7 +180,7 @@ macro_rules! assert {{
-> >       #[allow(unused)]
-> >       macro_rules! assert_eq {{
-> >           ($left:expr, $right:expr $(,)?) =3D> {{{{
-> > -            kernel::kunit_assert_eq!("{kunit_name}", "{real_path}", __=
-DOCTEST_ANCHOR - {line}, $left, $right);
-> > +            kernel::kunit_assert_eq!(c"{kunit_name}", c"{real_path}", =
-__DOCTEST_ANCHOR - {line}, $left, $right);
-> >           }}}}
-> >       }}
-> >
->
-> I forgot to include the version history before sending the patch, sorry.
+[auto build test WARNING on bb1b0acdcd66e0d8eedee3570d249e076b89ab32]
 
-For future reference - when replying, you should delete irrelevant
-bits of the message you are replying to, otherwise things get kind of
-messy.
+url:    https://github.com/intel-lab-lkp/linux/commits/Jiaxun-Yang/of_reserved_mem-Save-region-name-string-into-struct-reserved_mem/20240821-215235
+base:   bb1b0acdcd66e0d8eedee3570d249e076b89ab32
+patch link:    https://lore.kernel.org/r/20240821-save_resv_name-v1-1-b9c17f103ffb%40flygoat.com
+patch subject: [PATCH] of_reserved_mem: Save region name string into struct reserved_mem
+config: i386-buildonly-randconfig-002-20240824 (https://download.01.org/0day-ci/archive/20240824/202408241510.Rk14q8Rg-lkp@intel.com/config)
+compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240824/202408241510.Rk14q8Rg-lkp@intel.com/reproduce)
 
-- Trevor
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202408241510.Rk14q8Rg-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/of/of_reserved_mem.c:467:12: warning: address of array 'rmem->name' will always evaluate to 'true' [-Wpointer-bool-conversion]
+     467 |                                         rmem->name ? rmem->name : "unknown");
+         |                                         ~~~~~~^~~~ ~
+   include/linux/printk.h:538:34: note: expanded from macro 'pr_info'
+     538 |         printk(KERN_INFO pr_fmt(fmt), ##__VA_ARGS__)
+         |                                         ^~~~~~~~~~~
+   include/linux/printk.h:465:60: note: expanded from macro 'printk'
+     465 | #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
+         |                                                            ^~~~~~~~~~~
+   include/linux/printk.h:437:19: note: expanded from macro 'printk_index_wrap'
+     437 |                 _p_func(_fmt, ##__VA_ARGS__);                           \
+         |                                 ^~~~~~~~~~~
+   1 warning generated.
+
+
+vim +467 drivers/of/of_reserved_mem.c
+
+ae1add247bf8c2 Mitchel Humpherys  2015-09-15  426  
+3f0c8206644836 Marek Szyprowski   2014-02-28  427  /**
+c8813f7ec01c67 chenqiwu           2020-05-11  428   * fdt_init_reserved_mem() - allocate and init all saved reserved memory regions
+3f0c8206644836 Marek Szyprowski   2014-02-28  429   */
+3f0c8206644836 Marek Szyprowski   2014-02-28  430  void __init fdt_init_reserved_mem(void)
+3f0c8206644836 Marek Szyprowski   2014-02-28  431  {
+3f0c8206644836 Marek Szyprowski   2014-02-28  432  	int i;
+ae1add247bf8c2 Mitchel Humpherys  2015-09-15  433  
+ae1add247bf8c2 Mitchel Humpherys  2015-09-15  434  	/* check for overlapping reserved regions */
+ae1add247bf8c2 Mitchel Humpherys  2015-09-15  435  	__rmem_check_for_overlap();
+ae1add247bf8c2 Mitchel Humpherys  2015-09-15  436  
+3f0c8206644836 Marek Szyprowski   2014-02-28  437  	for (i = 0; i < reserved_mem_count; i++) {
+3f0c8206644836 Marek Szyprowski   2014-02-28  438  		struct reserved_mem *rmem = &reserved_mem[i];
+3f0c8206644836 Marek Szyprowski   2014-02-28  439  		unsigned long node = rmem->fdt_node;
+3f0c8206644836 Marek Szyprowski   2014-02-28  440  		int err = 0;
+6f1188b4ac7577 Yue Hu             2020-07-30  441  		bool nomap;
+3f0c8206644836 Marek Szyprowski   2014-02-28  442  
+d0b8ed47e83a22 pierre Kuo         2019-02-19  443  		nomap = of_get_flat_dt_prop(node, "no-map", NULL) != NULL;
+9dcfee01930e6c Marek Szyprowski   2014-07-14  444  
+3f0c8206644836 Marek Szyprowski   2014-02-28  445  		if (rmem->size == 0)
+3f0c8206644836 Marek Szyprowski   2014-02-28  446  			err = __reserved_mem_alloc_size(node, rmem->name,
+3f0c8206644836 Marek Szyprowski   2014-02-28  447  						 &rmem->base, &rmem->size);
+d0b8ed47e83a22 pierre Kuo         2019-02-19  448  		if (err == 0) {
+d0b8ed47e83a22 pierre Kuo         2019-02-19  449  			err = __reserved_mem_init_node(rmem);
+d0b8ed47e83a22 pierre Kuo         2019-02-19  450  			if (err != 0 && err != -ENOENT) {
+d0b8ed47e83a22 pierre Kuo         2019-02-19  451  				pr_info("node %s compatible matching fail\n",
+d0b8ed47e83a22 pierre Kuo         2019-02-19  452  					rmem->name);
+d0b8ed47e83a22 pierre Kuo         2019-02-19  453  				if (nomap)
+7b25995f5319ad Dong Aisheng       2021-06-11  454  					memblock_clear_nomap(rmem->base, rmem->size);
+3c6867a12a224d Dong Aisheng       2021-06-11  455  				else
+3ecc68349bbab6 Mike Rapoport      2021-11-05  456  					memblock_phys_free(rmem->base,
+3ecc68349bbab6 Mike Rapoport      2021-11-05  457  							   rmem->size);
+aeb9267eb6b1df Martin Liu         2023-02-10  458  			} else {
+aeb9267eb6b1df Martin Liu         2023-02-10  459  				phys_addr_t end = rmem->base + rmem->size - 1;
+aeb9267eb6b1df Martin Liu         2023-02-10  460  				bool reusable =
+aeb9267eb6b1df Martin Liu         2023-02-10  461  					(of_get_flat_dt_prop(node, "reusable", NULL)) != NULL;
+aeb9267eb6b1df Martin Liu         2023-02-10  462  
+6ee7afbabcee4d Geert Uytterhoeven 2023-02-16  463  				pr_info("%pa..%pa (%lu KiB) %s %s %s\n",
+aeb9267eb6b1df Martin Liu         2023-02-10  464  					&rmem->base, &end, (unsigned long)(rmem->size / SZ_1K),
+aeb9267eb6b1df Martin Liu         2023-02-10  465  					nomap ? "nomap" : "map",
+aeb9267eb6b1df Martin Liu         2023-02-10  466  					reusable ? "reusable" : "non-reusable",
+aeb9267eb6b1df Martin Liu         2023-02-10 @467  					rmem->name ? rmem->name : "unknown");
+d0b8ed47e83a22 pierre Kuo         2019-02-19  468  			}
+d0b8ed47e83a22 pierre Kuo         2019-02-19  469  		}
+3f0c8206644836 Marek Szyprowski   2014-02-28  470  	}
+3f0c8206644836 Marek Szyprowski   2014-02-28  471  }
+9dcfee01930e6c Marek Szyprowski   2014-07-14  472  
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
