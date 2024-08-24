@@ -1,218 +1,272 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f179.google.com (mail-yw1-f179.google.com [209.85.128.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A1BADC148;
-	Sat, 24 Aug 2024 06:52:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5876F2A8D0
+	for <llvm@lists.linux.dev>; Sat, 24 Aug 2024 07:22:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724482381; cv=none; b=stPS6OAYaqidR2feoRxzFFJRSQxCKFyRxqyBo0LOxJPJ12bLo5e0r9xlTwyGlXarzZmIc7hWGJ2A1YjyaloAeFQWHUxn0gswCL/gB3rBdoJ+8JnBeUTbJyiiod7qQl/oLDdb+SdOB1/L7KrXWDzzxXemuEqBbD9zFS+T17leh4M=
+	t=1724484145; cv=none; b=VYy8SvgLplaIyg/Ygoof7GefBVkzVZUYUHs133iGIxlHE25FeI0aq0u7DemEFg4IJmqHCH7BTd158dnvkN4SHrTvji4GlZ1Cx6dEx/0dCq0G5HlW0vi7ISUSVpdLTybkzTUlUlYKFPjDm7qeXQG4yY/zzRDbk6FTL6GIH36n0p8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724482381; c=relaxed/simple;
-	bh=HakomvbS1IACJZChzBCWGNivmnnK0hCIXl7X87T5u34=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=ZQXP6E4bS4YKJwHAG9DucSuJBs/QW1ii1OyTEOD8Gop5VkoEYTeTYItH9PeO/3SeyRapMyDvIFO3UObxp+i+AdBcpVnyMUXn5bsfCmO+fIOgvZTPoQ5iQPtqnkmRDBinWGsAtdtlQ4yV0IodeKQ0jJ0PyOzhYYyGzzEoRuyxkX8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=fPPflHzJ; arc=none smtp.client-ip=198.175.65.20
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1724484145; c=relaxed/simple;
+	bh=OStfsJg52TgOodEuPCI04XC30uKxNi9BjiHLIAblgbk=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=aIveVj1Ht7y+q/RmdeHwqTFKjbaQUkK2300U1RqtrbqVmGfL05uyjUH/Odj/tHGBOfxbvIwc4YApm4C/6dwDskC7KnSH/t0zgNqyFy5xDum6A9Pwq4kKyM83EJ07mLAQLYiybik9BX7cyqG0EPywGKP2AE3AJ7j3W9xuvZ/9puo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=umich.edu; spf=pass smtp.mailfrom=umich.edu; dkim=pass (2048-bit key) header.d=umich.edu header.i=@umich.edu header.b=ZgTga3lp; arc=none smtp.client-ip=209.85.128.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=umich.edu
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=umich.edu
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="fPPflHzJ"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1724482379; x=1756018379;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=HakomvbS1IACJZChzBCWGNivmnnK0hCIXl7X87T5u34=;
-  b=fPPflHzJhBlU0TwLB+yoS+b8HVkhkhOnaOdo5+33c37V6Wyt3yz1L/uv
-   LGZ7yGmQdXODhSly4EbmBEpKXOjT3H+43J0JuRidzqEfri2DQY+SbpBX6
-   kMUCPnlFA15Z1XxUtiOedF72HBli5aQ6kcFILhuRM2BpMwBtgyYGbuSN7
-   4p6876xH2T8nULjSwtBe7tLwHyO/XrqjJcLLPWqs3dum1nK1UnW2FZnkp
-   yMjRTIImIYeiMHwSldUficPDO9P9kAcT//NaCwphIhIvp8VdMR40rH8Th
-   +yMrMHSpoTq81effxJId6ap93CIxpPLODVJUj77cnYbGiF0fMsK/jyIN9
-   A==;
-X-CSE-ConnectionGUID: Y1CqmyD0TSGOa43cuzsKsg==
-X-CSE-MsgGUID: 0CfCxFDZRk6InfKQutl7MQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11173"; a="22776585"
-X-IronPort-AV: E=Sophos;i="6.10,172,1719903600"; 
-   d="scan'208";a="22776585"
-Received: from fmviesa006.fm.intel.com ([10.60.135.146])
-  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Aug 2024 23:52:58 -0700
-X-CSE-ConnectionGUID: DmYGUg6DTLOG1fENOsL3Fg==
-X-CSE-MsgGUID: 6I5bOpjJQjKyjroa8tb27w==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.10,172,1719903600"; 
-   d="scan'208";a="61707193"
-Received: from lkp-server01.sh.intel.com (HELO 9a732dc145d3) ([10.239.97.150])
-  by fmviesa006.fm.intel.com with ESMTP; 23 Aug 2024 23:52:56 -0700
-Received: from kbuild by 9a732dc145d3 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1shkdq-000EJr-0R;
-	Sat, 24 Aug 2024 06:52:54 +0000
-Date: Sat, 24 Aug 2024 14:52:31 +0800
-From: kernel test robot <lkp@intel.com>
-To: Trond Myklebust <trond.myklebust@hammerspace.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Chuck Lever <chuck.lever@oracle.com>,
-	Jeff Layton <jlayton@kernel.org>, NeilBrown <neilb@suse.de>
-Subject: [cel:nfsd-6.1.y 7/7] fs/nfsd/vfs.c:536:6: error: assigning to
- '__be32' (aka 'unsigned int') from incompatible type 'void'
-Message-ID: <202408241407.mX8q2lQw-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=umich.edu header.i=@umich.edu header.b="ZgTga3lp"
+Received: by mail-yw1-f179.google.com with SMTP id 00721157ae682-6c49c9018ebso21132237b3.3
+        for <llvm@lists.linux.dev>; Sat, 24 Aug 2024 00:22:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=umich.edu; s=google-2016-06-03; t=1724484142; x=1725088942; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=DVsalfG8grE5RGhDxTKtFqtbQowxlW8KEY/SQtljHg4=;
+        b=ZgTga3lp3WIsayxX9+hqTsr3dwedhyCKI4syi4VwROSubr+fDc0B8nbDBMBct/cOVZ
+         +N8bSM7RJOBvQAypaRD1mUy57x7EEN8+t7qC+CVTmRXRSqzfFS4pJB37UeIfkkYIi6ah
+         3eE2C/0RzHi5KLx9t1fvL8ZG+O6csOC8w1aTCIXn6ZuJce22UF8IGohmiChk8Ff+M7gc
+         u8NvdCNFpvQGyLQhg9mdjnSI8HT85aKgVNZ7ux0K8a/I8o//Ef8WGTa0URJRFHeIXssD
+         6405VBPVF6q/35Wf0JoGpus6647JVve0/0Gpy99nNwN3n9OuH7wJ3KuMXsPO34dI3geo
+         MW3w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1724484142; x=1725088942;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=DVsalfG8grE5RGhDxTKtFqtbQowxlW8KEY/SQtljHg4=;
+        b=tafzEDAFDMIbImG35qkjl0q40TjWOXJQubjfV6tUQw4k3/A+B9x27vHqTWsuYH9Rvh
+         a5TsRDhSkOqMeauTMMHJo/TM/xfNG0YQDKF/TOaxi+xVze9+5zZAWAiO01n8sp/uxSBV
+         /PDV9EGsrY5sBPDq+y1kiRj0HqLytmAqdu/6KfB8gt/mJRB7xp/Sj+ntqNYC/jODSMWp
+         5fRBgkUS1Dnn0h3nFchtsBJ7qCFzE713/neBiipugqx4DSXZyydZnRGM2Sg+QYgT9/30
+         7xqlIMPJ2ZFL/nnhhhHO3q//VvWsjSR+AVzMzCNKqxAhkkY+yujtTSMJBO/9xnsBP4Dv
+         dWEg==
+X-Forwarded-Encrypted: i=1; AJvYcCWMaIZKHzNHaefKUITEcROGkBx+J/dJTV0A2TZbt4MZ+FI6M4vl4hHzBayQqkXcm1TmssZu@lists.linux.dev
+X-Gm-Message-State: AOJu0YwsMuJe3HMiMKhk6Zk96n28dP2X8SaDWdAb5srf6E1WRVfhiI46
+	FTk6SZEW3siQ+3Lq2SkXgYm7O8tURn+PXoyu3GYxWFELOOVmLTdU2L0BNB/AXcKzjemZu8M9O99
+	p70hU0lZW3pBeUswG5Sv1kwiRD62FXsE2sF826w==
+X-Google-Smtp-Source: AGHT+IEVBoQ80HNOho+LZux6lbfvXl8vt0fCx9AYG0zW1m1SHhNoA2/84+JhvXA8lXkPyPOtHR5BM1lzqViGPT9r19k=
+X-Received: by 2002:a05:690c:768c:b0:6b2:7bd8:d7a4 with SMTP id
+ 00721157ae682-6c629fd7875mr51388347b3.41.1724484142200; Sat, 24 Aug 2024
+ 00:22:22 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+References: <20240819153656.28807-2-vadorovsky@protonmail.com>
+In-Reply-To: <20240819153656.28807-2-vadorovsky@protonmail.com>
+From: Trevor Gross <tmgross@umich.edu>
+Date: Sat, 24 Aug 2024 02:22:11 -0500
+Message-ID: <CALNs47sa3RfbeGoT+_MUcZUAv=Wn2t0o1L-9v1D7jWp6NVicGg@mail.gmail.com>
+Subject: Re: [PATCH RESEND v5] rust: str: Use `core::CStr`, remove the custom
+ `CStr` implementation
+To: Michal Rostecki <vadorovsky@gmail.com>
+Cc: Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, 
+	Wedson Almeida Filho <wedsonaf@gmail.com>, Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, 
+	=?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
+	Benno Lossin <benno.lossin@proton.me>, Andreas Hindborg <a.hindborg@samsung.com>, 
+	Alice Ryhl <aliceryhl@google.com>, Brendan Higgins <brendan.higgins@linux.dev>, 
+	David Gow <davidgow@google.com>, Rae Moar <rmoar@google.com>, 
+	FUJITA Tomonori <fujita.tomonori@gmail.com>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, 
+	Justin Stitt <justinstitt@google.com>, Martin Rodriguez Reboredo <yakoyoku@gmail.com>, 
+	Finn Behrens <me@kloenk.dev>, Manmohan Shukla <manmshuk@gmail.com>, 
+	Valentin Obst <kernel@valentinobst.de>, Yutaro Ohno <yutaro.ono.418@gmail.com>, 
+	Asahi Lina <lina@asahilina.net>, Danilo Krummrich <dakr@redhat.com>, Tiago Lam <tiagolam@gmail.com>, 
+	Charalampos Mitrodimas <charmitro@posteo.net>, Tejun Heo <tj@kernel.org>, Roland Xu <mu001999@outlook.com>, 
+	rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com, 
+	netdev@vger.kernel.org, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/cel/linux nfsd-6.1.y
-head:   a5860f87bf2b5c77071640da909e49584284ec73
-commit: a5860f87bf2b5c77071640da909e49584284ec73 [7/7] nfsd: Fix a regression in nfsd_setattr()
-config: i386-buildonly-randconfig-001-20240824 (https://download.01.org/0day-ci/archive/20240824/202408241407.mX8q2lQw-lkp@intel.com/config)
-compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240824/202408241407.mX8q2lQw-lkp@intel.com/reproduce)
+On Mon, Aug 19, 2024 at 10:39=E2=80=AFAM Michal Rostecki <vadorovsky@gmail.=
+com> wrote:
+>
+> From: Michal Rostecki <vadorovsky@gmail.com>
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202408241407.mX8q2lQw-lkp@intel.com/
+You don't need this since the email already shows it is already from
+you :) Aiui this is only needed when forwarding a patch for someone
+else, or if you use a different commit email for some reason.
 
-All errors (new ones prefixed by >>):
+> `CStr` became a part of `core` library in Rust 1.75. This change replaces
+> the custom `CStr` implementation with the one from `core`.
 
->> fs/nfsd/vfs.c:536:6: error: assigning to '__be32' (aka 'unsigned int') from incompatible type 'void'
-     536 |         err = fh_fill_pre_attrs(fhp);
-         |             ^ ~~~~~~~~~~~~~~~~~~~~~~
-   1 error generated.
+The diff in `kernel/str.rs` is really difficult to read and review
+since the new parts get interleaved with the removed lines. Could you
+split this into a couple patches? Probably roughly the five described
+below:
 
+1. Add all the new things `CStrExt`, `CStrDisplay`, and their implementatio=
+ns.
+2. Add `CStrExt` to the prelude (Alice's suggestion)
+3. Update existing uses of our `CStr` to instead use `core::CStr`
+4. Remove our current `CStr`
+5. Change any docs for `CString` or `c_str!`, as relevant
 
-vim +536 fs/nfsd/vfs.c
+Just remember that things should build after each patch.
 
-   451	
-   452	/**
-   453	 * nfsd_setattr - Set various file attributes.
-   454	 * @rqstp: controlling RPC transaction
-   455	 * @fhp: filehandle of target
-   456	 * @attr: attributes to set
-   457	 * @check_guard: set to 1 if guardtime is a valid timestamp
-   458	 * @guardtime: do not act if ctime.tv_sec does not match this timestamp
-   459	 *
-   460	 * This call may adjust the contents of @attr (in particular, this
-   461	 * call may change the bits in the na_iattr.ia_valid field).
-   462	 *
-   463	 * Returns nfs_ok on success, otherwise an NFS status code is
-   464	 * returned. Caller must release @fhp by calling fh_put in either
-   465	 * case.
-   466	 */
-   467	__be32
-   468	nfsd_setattr(struct svc_rqst *rqstp, struct svc_fh *fhp,
-   469		     struct nfsd_attrs *attr,
-   470		     int check_guard, time64_t guardtime)
-   471	{
-   472		struct dentry	*dentry;
-   473		struct inode	*inode;
-   474		struct iattr	*iap = attr->na_iattr;
-   475		int		accmode = NFSD_MAY_SATTR;
-   476		umode_t		ftype = 0;
-   477		__be32		err;
-   478		int		host_err = 0;
-   479		bool		get_write_count;
-   480		bool		size_change = (iap->ia_valid & ATTR_SIZE);
-   481		int		retries;
-   482	
-   483		if (iap->ia_valid & ATTR_SIZE) {
-   484			accmode |= NFSD_MAY_WRITE|NFSD_MAY_OWNER_OVERRIDE;
-   485			ftype = S_IFREG;
-   486		}
-   487	
-   488		/*
-   489		 * If utimes(2) and friends are called with times not NULL, we should
-   490		 * not set NFSD_MAY_WRITE bit. Otherwise fh_verify->nfsd_permission
-   491		 * will return EACCES, when the caller's effective UID does not match
-   492		 * the owner of the file, and the caller is not privileged. In this
-   493		 * situation, we should return EPERM(notify_change will return this).
-   494		 */
-   495		if (iap->ia_valid & (ATTR_ATIME | ATTR_MTIME)) {
-   496			accmode |= NFSD_MAY_OWNER_OVERRIDE;
-   497			if (!(iap->ia_valid & (ATTR_ATIME_SET | ATTR_MTIME_SET)))
-   498				accmode |= NFSD_MAY_WRITE;
-   499		}
-   500	
-   501		/* Callers that do fh_verify should do the fh_want_write: */
-   502		get_write_count = !fhp->fh_dentry;
-   503	
-   504		/* Get inode */
-   505		err = fh_verify(rqstp, fhp, ftype, accmode);
-   506		if (err)
-   507			return err;
-   508		if (get_write_count) {
-   509			host_err = fh_want_write(fhp);
-   510			if (host_err)
-   511				goto out;
-   512		}
-   513	
-   514		dentry = fhp->fh_dentry;
-   515		inode = d_inode(dentry);
-   516	
-   517		nfsd_sanitize_attrs(inode, iap);
-   518	
-   519		if (check_guard && guardtime != inode->i_ctime.tv_sec)
-   520			return nfserr_notsync;
-   521	
-   522		/*
-   523		 * The size case is special, it changes the file in addition to the
-   524		 * attributes, and file systems don't expect it to be mixed with
-   525		 * "random" attribute changes.  We thus split out the size change
-   526		 * into a separate call to ->setattr, and do the rest as a separate
-   527		 * setattr call.
-   528		 */
-   529		if (size_change) {
-   530			err = nfsd_get_write_access(rqstp, fhp, iap);
-   531			if (err)
-   532				return err;
-   533		}
-   534	
-   535		inode_lock(inode);
- > 536		err = fh_fill_pre_attrs(fhp);
-   537		if (err)
-   538			goto out_unlock;
-   539		for (retries = 1;;) {
-   540			struct iattr attrs;
-   541	
-   542			/*
-   543			 * notify_change() can alter its iattr argument, making
-   544			 * @iap unsuitable for submission multiple times. Make a
-   545			 * copy for every loop iteration.
-   546			 */
-   547			attrs = *iap;
-   548			host_err = __nfsd_setattr(dentry, &attrs);
-   549			if (host_err != -EAGAIN || !retries--)
-   550				break;
-   551			if (!nfsd_wait_for_delegreturn(rqstp, inode))
-   552				break;
-   553		}
-   554		if (attr->na_seclabel && attr->na_seclabel->len)
-   555			attr->na_labelerr = security_inode_setsecctx(dentry,
-   556				attr->na_seclabel->data, attr->na_seclabel->len);
-   557		if (IS_ENABLED(CONFIG_FS_POSIX_ACL) && attr->na_pacl)
-   558			attr->na_aclerr = set_posix_acl(&init_user_ns,
-   559							inode, ACL_TYPE_ACCESS,
-   560							attr->na_pacl);
-   561		if (IS_ENABLED(CONFIG_FS_POSIX_ACL) &&
-   562		    !attr->na_aclerr && attr->na_dpacl && S_ISDIR(inode->i_mode))
-   563			attr->na_aclerr = set_posix_acl(&init_user_ns,
-   564							inode, ACL_TYPE_DEFAULT,
-   565							attr->na_dpacl);
-   566		fh_fill_post_attrs(fhp);
-   567	out_unlock:
-   568		inode_unlock(inode);
-   569		if (size_change)
-   570			put_write_access(inode);
-   571	out:
-   572		if (!host_err)
-   573			host_err = commit_metadata(fhp);
-   574		return err != 0 ? err : nfserrno(host_err);
-   575	}
-   576	
+> diff --git a/rust/kernel/kunit.rs b/rust/kernel/kunit.rs
+> index 0ba77276ae7e..79a50ab59af0 100644
+> --- a/rust/kernel/kunit.rs
+> +++ b/rust/kernel/kunit.rs
+> @@ -56,13 +56,15 @@ macro_rules! kunit_assert {
+>                 break 'out;
+>             }
+>
+> -            static FILE: &'static $crate::str::CStr =3D $crate::c_str!($=
+file);
+> +            static FILE: &'static core::ffi::CStr =3D $file;
+>             static LINE: i32 =3D core::line!() as i32 - $diff;
+> -            static CONDITION: &'static $crate::str::CStr =3D $crate::c_s=
+tr!(stringify!($condition));
+> +            static CONDITION: &'static core::ffi::CStr =3D $crate::c_str=
+!(stringify!($condition));
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+This change and the associated invocation changes can be dropped since
+we are keeping `c_str`. It's cleaner to be able to call macros with
+"standard strings" rather than c"c strings" where possible.
+
+> diff --git a/rust/kernel/str.rs b/rust/kernel/str.rs
+> index bb8d4f41475b..97a298a44b96 100644
+> --- a/rust/kernel/str.rs
+> +++ b/rust/kernel/str.rs
+
+(I removed most of the `-` lines for my review below)
+
+> +/// Wrapper around [`CStr`] which implements [`Display`](core::fmt::Disp=
+lay).
+> +pub struct CStrDisplay<'a>(&'a CStr);
+>
+> +impl fmt::Display for CStrDisplay<'_> {
+> +    /// Formats printable ASCII characters, escaping the rest.
+>      ///
+>      /// # Examples
+>      ///
+>      /// ```
+> +    /// # use core::ffi::CStr;
+>      /// # use kernel::c_str;
+>      /// # use kernel::fmt;
+> +    /// # use kernel::str::{CStrExt, CString};
+> +    /// let penguin =3D c"=F0=9F=90=A7";
+> +    /// let s =3D CString::try_from_fmt(fmt!("{}", penguin.display())).u=
+nwrap();
+> +    /// assert_eq!(s.to_bytes_with_nul(), "\\xf0\\x9f\\x90\\xa7\0".as_by=
+tes());
+> +    ///
+> +    /// let ascii =3D c"so \"cool\"";
+> +    /// let s =3D CString::try_from_fmt(fmt!("{}", ascii.display())).unw=
+rap();
+> +    /// assert_eq!(s.to_bytes_with_nul(), "so \"cool\"\0".as_bytes());
+>      /// ```
+>      fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+
+You don't need docs on the `Display` impl since that is more or less
+innate. Docs should indeed be on `fn display()`, which you have.
+
+> +/// Extensions to [`CStr`].
+> +pub trait CStrExt {
+> +    /// Returns an object that implements [`Display`](core::fmt::Display=
+) for
+> +    /// safely printing a [`CStr`] that may contain non-ASCII data, whic=
+h are
+> +    /// escaped.
+
+Just split this into two sentences, e.g.
+
+    /// Returns an object ... for safely printing a [`CStr`].
+    ///
+    /// If the `CStr` contains non-ASCII data, it is escaped.
+
+> +    ///
+> +    /// # Examples
+>      ///
+>      /// ```
+> +    /// # use core::ffi::CStr;
+>      /// # use kernel::c_str;
+>      /// # use kernel::fmt;
+> +    /// # use kernel::str::{CStrExt, CString};
+> +    /// let penguin =3D c"=F0=9F=90=A7";
+> +    /// let s =3D CString::try_from_fmt(fmt!("{}", penguin.display())).u=
+nwrap();
+> +    /// assert_eq!(s.to_bytes_with_nul(), "\\xf0\\x9f\\x90\\xa7\0".as_by=
+tes());
+> +    ///
+> +    /// let ascii =3D c"so \"cool\"";
+> +    /// let s =3D CString::try_from_fmt(fmt!("{}", ascii.display())).unw=
+rap();
+> +    /// assert_eq!(s.to_bytes_with_nul(), "so \"cool\"\0".as_bytes());
+>      /// ```
+> +    fn display(&self) -> CStrDisplay<'_>;
+
+Nit: Could you swap the ascii and penguin examples so the easier one
+is first? Also I would remove the extra quote chars `\"` since it
+makes things tougher to read without demonstrating much.
+
+> +    /// Creates a mutable [`CStr`] from a `[u8]` without performing any
+> +    /// additional checks.
+> +    ///
+> +    /// # Safety
+> +    ///
+> +    /// `bytes` *must* end with a `NUL` byte, and should only have a sin=
+gle
+> +    /// `NUL` byte (or the string will be truncated).
+> +    unsafe fn from_bytes_with_nul_unchecked_mut(bytes: &mut [u8]) -> &mu=
+t Self;
+>  }
+
++1 to Alice's suggestion of removing this and leaving `DerefMut` if
+that works for our usecases.
+
+If we leave this, just copy the `# Safety` section from
+`CStr::from_bytes_with_nul_unchecked` since I think this could use
+some improved wording (and "or the string will be truncated" is not
+accurate - any number of things could break, it doesn't just become a
+shorter string).
+
+>  /// Creates a new [`CStr`] from a string literal.
+>  ///
+> +/// This macro is not needed when C-string literals (`c"hello"` syntax) =
+can be
+> +/// used directly, but can be used when a C-string version of a standard=
+ string
+> +/// literal is required (often when working with macros).
+> +///
+> +/// The string should not contain any `NUL` bytes.
+
+For the last line, maybe
+
+    /// # Panics
+    ///
+    /// This macro panics if the string contains an interior `NUL` byte.
+
+>  /// # Examples
+>  ///
+>  /// ```
+> +/// # use core::ffi::CStr;
+>  /// # use kernel::c_str;
+> +/// const MY_CSTR: &CStr =3D c_str!(stringify!(5));
+>  /// ```
+>  #[macro_export]
+>  macro_rules! c_str {
+>      ($str:expr) =3D> {{
+>          const S: &str =3D concat!($str, "\0");
+> +        const C: &core::ffi::CStr =3D match core::ffi::CStr::from_bytes_=
+with_nul(S.as_bytes()) {
+>              Ok(v) =3D> v,
+>              Err(_) =3D> panic!("string contains interior NUL"),
+>          };
+
+Thanks for the updates from last time. For what it's worth, this is
+the first time an email from this series has come through for me with
+no problems (not getting grouped in the same thread as all other
+versions in my client) so whatever it is, do the same thing next time
+:)
+
+- Trevor
+
+[1]: https://doc.rust-lang.org/std/ffi/struct.CStr.html#method.from_bytes_w=
+ith_nul_unchecked
