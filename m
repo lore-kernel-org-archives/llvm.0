@@ -1,67 +1,61 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E8153BB22;
-	Sat, 24 Aug 2024 09:28:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B69D2F29;
+	Sat, 24 Aug 2024 09:59:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724491686; cv=none; b=hFARxzpnnSCkLic6cMx0Dc4J6ikFhBfnKqu4Lftbp8Qcfi6fnO8vfPUZluihakRJu5QPdWtx1R2UZ8HONdbr1kChkqtxe7tqAf5dLTYx7CtxDFVD1mG6kkaHh33S/Y9Zqt+6wuaKceZ0ldXCDNOcgJH/3nEGk+X0okRln81Z15U=
+	t=1724493545; cv=none; b=T/JN4aAcc5qGwJ3yK4qX8Xrhi5wq2Uhwv6rdWakebV94CIVkChRxSTG/iUS+ftF98mnjcQd9l1Nm/sLPqc86ydfr6eQuOTEwXUmGthb9AH8j5NDo6dg4EfQ2NVycI07NnxEZ7zBtftJCdHit5Ov9XYKkJTC/FUW6Qms55oDooos=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724491686; c=relaxed/simple;
-	bh=81/t5idYrQZJgPisckKvJ1/FCeEOtftpD4K7FG5JXfo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=fBZKGvLAt4jpAqygOnJLEGv6daRucMVb5eO38kjlQU6NfJyryP0mCvfuPtUlsntpO75vj06qR5B83pQtUhr8brRg2W65dBzgKPPuT+b0rM4rTma5L4EKE7GgDU00x+Qipd4CC+t3lm6cTJMPduu/BBbIHsqvvwmY9baTmeVcu+0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=fhMBL1fn; arc=none smtp.client-ip=198.175.65.13
+	s=arc-20240116; t=1724493545; c=relaxed/simple;
+	bh=kd3Y1SdUQ69/GH7tpxPJ/MQTlDnghkcrXvEzYYi8CLk=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=ffTAMintUZtI/J4JD7RLyoogdJVx6Io4sIuZwJzEv3J/4063z8gHlKhzN+twPK1mnvc4Awl7BYnV1kDXMt/eujFkKmVromPkEKt40j30qV5FhdXzKafOYLtBIdBsei2NKYpt8hckeoW0dW+CFdjIhwcfS+s0BvZz5Z9isi2Ewso=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=GqABBJ1O; arc=none smtp.client-ip=192.198.163.7
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="fhMBL1fn"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="GqABBJ1O"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1724491684; x=1756027684;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=81/t5idYrQZJgPisckKvJ1/FCeEOtftpD4K7FG5JXfo=;
-  b=fhMBL1fntsReqhkJ8udJaLF9Y8mN1UelUiZvHA7qJHQfJeFzeLB6fIpC
-   wkmOT1JGVn24/3Mdhn1HsvdGBtJCdL9e+9LCcd+6JaprRAUxNQV/VzJIm
-   7lV2ccslGn5JNuoI1lGDDASAJK6+9dOm+vHsVfwE5DPNx/sX2v2gc/eKu
-   pIx12cxJIltwoBL49H4C26md2ttOgDi2lMdT/yWy8Cv2qluuP4bLecc6F
-   kzRI60CkNkq8oq54dPtuJ2Xv73e8RvOlCKraDlAe/zIs6r4pon5i8wAo0
-   kqcdSFuItZqYfyVqL8wt7yKZ5zPyXHII/FWKFh7NaEW/eddiH7fgkN/z2
-   g==;
-X-CSE-ConnectionGUID: bWg4jRrURy6fPQ8L1sTHew==
-X-CSE-MsgGUID: mdcRymgXT/qeY6O4i6pakA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11173"; a="34133949"
+  t=1724493542; x=1756029542;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=kd3Y1SdUQ69/GH7tpxPJ/MQTlDnghkcrXvEzYYi8CLk=;
+  b=GqABBJ1OczqlE9at1kvi1oOBICJ4FiNP1iwrs9L2AmBpS1sIPjCCZyFf
+   v3LVQARcMVZh7Wx94HFlxasTND0rAzFOu3I0FjlVT63CyNp2Msy6pnh57
+   ofidJiZktzbF7L3EUvFKVVXqqZSKAUNsQLPU7tAX4adHBUf+KkJOJnQUM
+   P+IKX4fWLQ8RCM/wQluRgGR9CYRYS5MG8x4CQLQ1u8yY6oJYTjv9XotaK
+   ev0hgSAoWh1k7QrcfufDVxH1L+gI/C+a5Dp9KHiul4nrIl8wl6tAn2vZ3
+   qSuMTcdOMv/KDyV4f9uOWXIC1iIJBSmXYXU9vbUo5Cl+hDStSs0azJ787
+   w==;
+X-CSE-ConnectionGUID: dvtHkCcDTSmSzYQwzvB/tQ==
+X-CSE-MsgGUID: 9NPLuUm0TgeuGV9G1+KTxA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11173"; a="48364298"
 X-IronPort-AV: E=Sophos;i="6.10,173,1719903600"; 
-   d="scan'208";a="34133949"
-Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Aug 2024 02:28:04 -0700
-X-CSE-ConnectionGUID: wTuGyv2bQUakDP6NuFOOUg==
-X-CSE-MsgGUID: +exo54fyS9qR/X/0MjvR1A==
+   d="scan'208";a="48364298"
+Received: from orviesa003.jf.intel.com ([10.64.159.143])
+  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Aug 2024 02:59:01 -0700
+X-CSE-ConnectionGUID: NSml6T7ZR5CTluUDf+GJNw==
+X-CSE-MsgGUID: CMUAUd4xTuyh+z5OM4baIQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.10,173,1719903600"; 
-   d="scan'208";a="85236532"
+   d="scan'208";a="66856781"
 Received: from lkp-server01.sh.intel.com (HELO 9a732dc145d3) ([10.239.97.150])
-  by fmviesa002.fm.intel.com with ESMTP; 24 Aug 2024 02:27:59 -0700
+  by orviesa003.jf.intel.com with ESMTP; 24 Aug 2024 02:59:00 -0700
 Received: from kbuild by 9a732dc145d3 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1shn3t-000EO1-0L;
-	Sat, 24 Aug 2024 09:27:57 +0000
-Date: Sat, 24 Aug 2024 17:27:39 +0800
+	id 1shnXt-000EOp-1T;
+	Sat, 24 Aug 2024 09:58:57 +0000
+Date: Sat, 24 Aug 2024 17:58:41 +0800
 From: kernel test robot <lkp@intel.com>
-To: Jinjie Ruan <ruanjinjie@huawei.com>, chaitanya.dhere@amd.com,
-	jun.lei@amd.com, harry.wentland@amd.com, sunpeng.li@amd.com,
-	Rodrigo.Siqueira@amd.com, alexander.deucher@amd.com,
-	christian.koenig@amd.com, Xinhui.Pan@amd.com, airlied@gmail.com,
-	daniel@ffwll.ch, alex.hung@amd.com, aurabindo.pillai@amd.com,
-	colin.i.king@gmail.com, dillon.varone@amd.com,
-	amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-	linux-kernel@vger.kernel.org
+To: Chen Yufan <chenyufan@vivo.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	ruanjinjie@huawei.com
-Subject: Re: [PATCH -next 5/5] drm/amd/display: Make dcn35_fpga_funcs static
-Message-ID: <202408241600.uHrTIx7j-lkp@intel.com>
-References: <20240821064040.2292969-6-ruanjinjie@huawei.com>
+	linux-kernel@vger.kernel.org, x86@kernel.org,
+	Thomas Gleixner <tglx@linutronix.de>
+Subject: [tip:timers/core 5/5] kernel/time/timekeeping.c:220:7: warning:
+ comparison of distinct pointer types ('unsigned long *' and 'typeof
+ (tk->last_warning + (100 * 300)) *' (aka 'long *'))
+Message-ID: <202408241701.NSEI3MOV-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -70,45 +64,81 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240821064040.2292969-6-ruanjinjie@huawei.com>
 
-Hi Jinjie,
-
-kernel test robot noticed the following build warnings:
-
-[auto build test WARNING on next-20240821]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Jinjie-Ruan/drm-amd-display-Make-core_dcn4_g6_temp_read_blackout_table-static/20240821-143421
-base:   next-20240821
-patch link:    https://lore.kernel.org/r/20240821064040.2292969-6-ruanjinjie%40huawei.com
-patch subject: [PATCH -next 5/5] drm/amd/display: Make dcn35_fpga_funcs static
-config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20240824/202408241600.uHrTIx7j-lkp@intel.com/config)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git timers/core
+head:   42db2c2cb5ac3572380a9489b8f8bbe0e534dfc7
+commit: 42db2c2cb5ac3572380a9489b8f8bbe0e534dfc7 [5/5] timekeeping: Use time_after() in timekeeping_check_update()
+config: i386-buildonly-randconfig-002-20240824 (https://download.01.org/0day-ci/archive/20240824/202408241701.NSEI3MOV-lkp@intel.com/config)
 compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240824/202408241600.uHrTIx7j-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240824/202408241701.NSEI3MOV-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202408241600.uHrTIx7j-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202408241701.NSEI3MOV-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
->> drivers/gpu/drm/amd/amdgpu/../display/dc/clk_mgr/dcn35/dcn35_clk_mgr.c:1071:29: warning: unused variable 'dcn35_fpga_funcs' [-Wunused-variable]
-    1071 | static struct clk_mgr_funcs dcn35_fpga_funcs = {
-         |                             ^~~~~~~~~~~~~~~~
-   1 warning generated.
+>> kernel/time/timekeeping.c:220:7: warning: comparison of distinct pointer types ('unsigned long *' and 'typeof (tk->last_warning + (100 * 300)) *' (aka 'long *')) [-Wcompare-distinct-pointer-types]
+     220 |                 if (time_after(jiffies, tk->last_warning + WARNING_FREQ)) {
+         |                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/jiffies.h:129:3: note: expanded from macro 'time_after'
+     129 |          typecheck(unsigned long, b) && \
+         |          ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/typecheck.h:12:18: note: expanded from macro 'typecheck'
+      12 |         (void)(&__dummy == &__dummy2); \
+         |                ~~~~~~~~ ^  ~~~~~~~~~
+   kernel/time/timekeeping.c:230:7: warning: comparison of distinct pointer types ('unsigned long *' and 'typeof (tk->last_warning + (100 * 300)) *' (aka 'long *')) [-Wcompare-distinct-pointer-types]
+     230 |                 if (time_after(jiffies, tk->last_warning + WARNING_FREQ)) {
+         |                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/jiffies.h:129:3: note: expanded from macro 'time_after'
+     129 |          typecheck(unsigned long, b) && \
+         |          ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/typecheck.h:12:18: note: expanded from macro 'typecheck'
+      12 |         (void)(&__dummy == &__dummy2); \
+         |                ~~~~~~~~ ^  ~~~~~~~~~
+   2 warnings generated.
 
 
-vim +/dcn35_fpga_funcs +1071 drivers/gpu/drm/amd/amdgpu/../display/dc/clk_mgr/dcn35/dcn35_clk_mgr.c
+vim +220 kernel/time/timekeeping.c
 
-  1070	
-> 1071	static struct clk_mgr_funcs dcn35_fpga_funcs = {
-  1072		.get_dp_ref_clk_frequency = dce12_get_dp_ref_freq_khz,
-  1073		.update_clocks = dcn35_update_clocks_fpga,
-  1074		.init_clocks = dcn35_init_clocks_fpga,
-  1075		.get_dtb_ref_clk_frequency = dcn31_get_dtb_ref_freq_khz,
-  1076	};
-  1077	
+   203	
+   204		u64 max_cycles = tk->tkr_mono.clock->max_cycles;
+   205		const char *name = tk->tkr_mono.clock->name;
+   206	
+   207		if (offset > max_cycles) {
+   208			printk_deferred("WARNING: timekeeping: Cycle offset (%lld) is larger than allowed by the '%s' clock's max_cycles value (%lld): time overflow danger\n",
+   209					offset, name, max_cycles);
+   210			printk_deferred("         timekeeping: Your kernel is sick, but tries to cope by capping time updates\n");
+   211		} else {
+   212			if (offset > (max_cycles >> 1)) {
+   213				printk_deferred("INFO: timekeeping: Cycle offset (%lld) is larger than the '%s' clock's 50%% safety margin (%lld)\n",
+   214						offset, name, max_cycles >> 1);
+   215				printk_deferred("      timekeeping: Your kernel is still fine, but is feeling a bit nervous\n");
+   216			}
+   217		}
+   218	
+   219		if (tk->underflow_seen) {
+ > 220			if (time_after(jiffies, tk->last_warning + WARNING_FREQ)) {
+   221				printk_deferred("WARNING: Underflow in clocksource '%s' observed, time update ignored.\n", name);
+   222				printk_deferred("         Please report this, consider using a different clocksource, if possible.\n");
+   223				printk_deferred("         Your kernel is probably still fine.\n");
+   224				tk->last_warning = jiffies;
+   225			}
+   226			tk->underflow_seen = 0;
+   227		}
+   228	
+   229		if (tk->overflow_seen) {
+   230			if (time_after(jiffies, tk->last_warning + WARNING_FREQ)) {
+   231				printk_deferred("WARNING: Overflow in clocksource '%s' observed, time update capped.\n", name);
+   232				printk_deferred("         Please report this, consider using a different clocksource, if possible.\n");
+   233				printk_deferred("         Your kernel is probably still fine.\n");
+   234				tk->last_warning = jiffies;
+   235			}
+   236			tk->overflow_seen = 0;
+   237		}
+   238	}
+   239	
 
 -- 
 0-DAY CI Kernel Test Service
