@@ -1,174 +1,152 @@
-Received: from mail-il1-f179.google.com (mail-il1-f179.google.com [209.85.166.179])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 815557DA92
-	for <llvm@lists.linux.dev>; Sat, 24 Aug 2024 23:21:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B175E370;
+	Sun, 25 Aug 2024 00:06:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724541695; cv=none; b=rtIAl7ThiyRLVmv3EB0pbbzG0sKkeVeOQY7DXIvlhWZDu9vO1wk+Lt+bTBHb3ha8ZmkzVyrhotQlgh+XP8AfpzVBsuHaMdylzPUBLmOa6jGkbWkUhBXTrMF0X76COm/07mh9Y/d6Mp3ZmOwYCAKQU1lwXa/7o+Y7OIuKyr/BfF4=
+	t=1724544398; cv=none; b=Jlwlj2grPCaFelk+MEoL7N22CGKhQ4pG6ttET/xgaJ25tl6tHLKqu4RhN70gEo3NPQcWRmSRWSG1jM8Q6IPX3jnV0rjQqsKgkq/Tcj3ogF7Oxiv0W2YWsrq6HRQw77HipQ0ERpQJufKHHPsVPZoAnX96qxWkIepiyVK2VUv7Kbo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724541695; c=relaxed/simple;
-	bh=W/WcOeQpPEmunvrdDhNitjqy32TMzG49sI7jExIuEcM=;
-	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=fcluwjRlGmJLpQhEtAlYekS8JbjBwrfv0UOIMmHcRRo7v2ff7HbB9KX3pdVgK4LgnScOhjHrhBesNLTe5uJeJYu6rH9PIY8cLbP3A79kFsQHNumc92Z2hjpl5w6oHYooXGtb6/Et51vqT8XNFbxISPcSXt4GqW4Jj6KVa4KHyPE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=lzLcZUOi; arc=none smtp.client-ip=209.85.166.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1724544398; c=relaxed/simple;
+	bh=s9ZUymRC5N50hCwelOFwDegTY8GnrkT1qUjyrttceIA=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=guAaVSYkP5Ff/IX2uoLjn4F3iJ/ysgKeE9xqCdAeGnOVTJmHLXjaPUzy+GINO7fZYD0g9YPOgJxu2zKr8AZGIeDmszbeEz0FxYtl+FqsGK5RIUn9DmLF+C2m73bLHhCp+xiseyyLf+t04JRd5FdIqr2CZbq8kyAzPSKPBJBLtCk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qw+/s5HW; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lzLcZUOi"
-Received: by mail-il1-f179.google.com with SMTP id e9e14a558f8ab-39d3b89ded1so11288365ab.0
-        for <llvm@lists.linux.dev>; Sat, 24 Aug 2024 16:21:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1724541692; x=1725146492; darn=lists.linux.dev;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=1Tmq+UU0sA2SGlzZYXprDD9mtGBC22vjFkL/LTayqLA=;
-        b=lzLcZUOi8Z4xvWdkTwa+JHpVGMUkVNoZl9COlfFNx/IMvqSGqdQM5HaCAQVK7EriYG
-         KCwE5jBBij68AAxwV9Yac44A8orRoHuO8FOWAzRlpcF9oNU/d5XUVY7xElEhcKyPG8ea
-         1RVeL08WwZKnhH0vhRw8bvfc/XR+jIjxDejWi0ViG88JYH6lSD+PqWpLSvgSzLZfY0Up
-         YSEUs47bVSCmkiHmwVLByMUSjtIIHfcEuJ8OqDvkDi8MrVSdLTQ32iXVhwHqqDZLctJJ
-         cpsbgaIveXZFGILL53NNbf0W71UgGVhf4BYwi4tY9YNuyK8zuqbigMlBMEJ/mZrTq3yU
-         +Xog==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1724541692; x=1725146492;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=1Tmq+UU0sA2SGlzZYXprDD9mtGBC22vjFkL/LTayqLA=;
-        b=MoxfTFObTSiW0ZKF8xqe/kIROtXiywBCsrpIbZS+qBjOnkdEnSfpvCsUeHbcKcTknB
-         D23LzoAzN6JbQ6oOszO7t2UdqvIRYJRsa/PUUToLd0saBFSHCO3kZ3KW1F+XM/IBvnlo
-         Ggjjc4Xv1xUv8CsTav4jKSINsnDg38vuhYXkutc4pTiIaGM8YwlO6ElkgjCXWJuysO7I
-         gG43o0KGbdD+9MkdgK+YDL38i0BFRCoSzavWSP7VuOAN6GZ5gYD67ZBpWs5SgxYmxR2j
-         HxC3EdrY9JP33ExuaX0Aq7uFQqWSQ5Sh+7Pf5rxGi5S8WsFp9f4ywoC/hSgZ95mpQwX/
-         mUew==
-X-Forwarded-Encrypted: i=1; AJvYcCUsHoS/KkeuKywK0alXHgywLPmxqiQpC1VVV9a1y7eg6l2xlPH9h0Qbe3Y2eJ4DEzoG5CNa@lists.linux.dev
-X-Gm-Message-State: AOJu0YybZDnCHf1GgJaZ7ywPamorDkbgw2Rlf7iDQB62cUB7li6ihrJK
-	6aLNVPCSidJhsnHMy4L8UEGcAq29DmbpELDjXThm5txh/bQ737rhTwL9JA==
-X-Google-Smtp-Source: AGHT+IF2XS4wyftc4M73YpCByrmApTDQfKepJBYOrYtCUJ8UX40muwnsijnbov7r6FP63fbC42Vs6A==
-X-Received: by 2002:a05:6e02:154a:b0:39d:28b4:2514 with SMTP id e9e14a558f8ab-39e3c9854c4mr75885395ab.10.1724541692497;
-        Sat, 24 Aug 2024 16:21:32 -0700 (PDT)
-Received: from kodidev-ubuntu (69-172-146-21.cable.teksavvy.com. [69.172.146.21])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-203b01b4d47sm16843775ad.258.2024.08.24.16.21.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 24 Aug 2024 16:21:31 -0700 (PDT)
-From: Tony Ambardar <tony.ambardar@gmail.com>
-X-Google-Original-From: Tony Ambardar <Tony.Ambardar@gmail.com>
-Date: Sat, 24 Aug 2024 16:21:29 -0700
-To: Ilya Leoshkevich <iii@linux.ibm.com>
-Cc: bpf@vger.kernel.org, linux-s390@vger.kernel.org, llvm@lists.linux.dev,
-	Alexei Starovoitov <ast@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>
-Subject: Re: Problem testing with S390x under QEMU on x86_64
-Message-ID: <Zspq+db1KOhhh2Yf@kodidev-ubuntu>
-References: <ZsEcsaa3juxxQBUf@kodidev-ubuntu>
- <180f4c27ebfb954d6b0fd2303c9fb7d5f21dae04.camel@linux.ibm.com>
- <ZsU3GdK5t6KEOr0g@kodidev-ubuntu>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qw+/s5HW"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E3B39C32781;
+	Sun, 25 Aug 2024 00:06:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1724544398;
+	bh=s9ZUymRC5N50hCwelOFwDegTY8GnrkT1qUjyrttceIA=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=qw+/s5HWsZk5eRGie+x3BFqiFk/iZXsmlDUMOd7YFj5cCVLMfNKHFW4Go+GZg/+ni
+	 XlWk5yJ0AdkiGpR3bD6wazE/bY916z9mJS88G4JSSJGZl8xvCJ9BGpjj/Kgcu8V746
+	 N3eVxc6FHwaa9PtB7k2r6Tvfdb/mIq04ppnZfmzjjdvvCxZTUk0IRncg+MeVgghyaL
+	 89PNUJ7rDxW+0fgHXVLkYa0pqSROjyYsFkj4VVcq92lvabgZFm8Tz0aDBcIPE06hn+
+	 Ns27HYjmpKUpb7a2/Yhl1T0zpZiI1Xe1tKdMojloGlLtaRe50w1FyywWA6d+2X9aDt
+	 9ahxbRyfkLr8w==
+From: SeongJae Park <sj@kernel.org>
+To: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
+Cc: SeongJae Park <sj@kernel.org>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
+	llvm@lists.linux.dev,
+	oe-kbuild-all@lists.linux.dev,
+	kernel test robot <lkp@intel.com>,
+	Linux Memory Management List <linux-mm@kvack.org>
+Subject: Re: [akpm-mm:mm-unstable 357/379] mm/vma.h:114:19: error: use of undeclared identifier 'USER_PGTABLES_CEILING'
+Date: Sat, 24 Aug 2024 17:05:10 -0700
+Message-Id: <20240825000510.136384-1-sj@kernel.org>
+X-Mailer: git-send-email 2.39.2
+In-Reply-To: <da1a6b2c-f792-432f-b99f-51717dcc8d83@lucifer.local>
+References: 
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZsU3GdK5t6KEOr0g@kodidev-ubuntu>
+Content-Transfer-Encoding: 8bit
 
-On Tue, Aug 20, 2024 at 05:38:49PM -0700, Tony Ambardar wrote:
+Hello,
+
+On Sat, 24 Aug 2024 20:43:25 +0100 Lorenzo Stoakes <lorenzo.stoakes@oracle.com> wrote:
+
+> On Sat, Aug 24, 2024 at 11:14:17PM GMT, kernel test robot wrote:
+> > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-unstable
+> > head:   b659edec079c90012cf8d05624e312d1062b8b87
+> > commit: ca39aca8db2d78ff82356defba75d14ce78a67b9 [357/379] mm/vma: track start and end for munmap in vma_munmap_struct
+> > config: arm-allnoconfig (https://download.01.org/0day-ci/archive/20240824/202408242348.uGvgH9tt-lkp@intel.com/config)
+> > compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 08e5a1de8227512d4774a534b91cb2353cef6284)
+> > reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240824/202408242348.uGvgH9tt-lkp@intel.com/reproduce)
+> >
+> > If you fix the issue in a separate patch/commit (i.e. not just a new version of
+> > the same patch/commit), kindly add following tags
+> > | Reported-by: kernel test robot <lkp@intel.com>
+> > | Closes: https://lore.kernel.org/oe-kbuild-all/202408242348.uGvgH9tt-lkp@intel.com/
+> >
+> > All errors (new ones prefixed by >>):
+> >
+> >    In file included from mm/filemap.c:15:
+> >    In file included from include/linux/dax.h:6:
+> >    In file included from include/linux/mm.h:2198:
+> >    include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+> >      518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+> >          |                               ~~~~~~~~~~~ ^ ~~~
+> >    In file included from mm/filemap.c:52:
+> >    In file included from mm/internal.h:13:
+> >    include/linux/mm_inline.h:47:41: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+> >       47 |         __mod_lruvec_state(lruvec, NR_LRU_BASE + lru, nr_pages);
+> >          |                                    ~~~~~~~~~~~ ^ ~~~
+> >    include/linux/mm_inline.h:49:22: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+> >       49 |                                 NR_ZONE_LRU_BASE + lru, nr_pages);
+> >          |                                 ~~~~~~~~~~~~~~~~ ^ ~~~
+> >    In file included from mm/filemap.c:52:
+> >    In file included from mm/internal.h:22:
+> > >> mm/vma.h:114:19: error: use of undeclared identifier 'USER_PGTABLES_CEILING'
+> >      114 |         vms->unmap_end = USER_PGTABLES_CEILING;
+> >          |                          ^
+> >    3 warnings and 1 error generated.
 > 
-> Hi Ilya,
+> [snip]
 > 
-> Thanks for following up. As it happens, I did this the day before out of
-> desperation after trying various kernel config and rootfs changes
-> with no luck, and can confirm the system runs faster and without the
-> kernel crashes noted above. Certainly the latest QEMU seems mandatory.
+> Thanks for the report!
 > 
-> The good news is that 99% of tests with my cross-compiled test_progs
-> work as expected out of the box, and some of the failing ones helped
-> troubleshoot a few hidden libbpf issues. I'll outline the remaining
-> failures for your feedback and comparison with native-built tests.
+> This is a trivial issue, and can be fixed with the attached fix-patch. This also
+> resolves the issue reported in
+> https://lore.kernel.org/oe-kbuild-all/202408242304.1A1fXTgE-lkp@intel.com/
 > 
-> I used the command line:
->     ./test_progs -d get_stack_raw_tp,stacktrace_build_id,verifier_iterating_callbacks,tailcalls
+> ----8<----
+> From 565ad376b0a3aa5822ef479faadff271e90ba51c Mon Sep 17 00:00:00 2001
+> From: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
+> Date: Sat, 24 Aug 2024 20:20:17 +0100
+> Subject: [PATCH] mm: include linux/pgtable.h in vma_internal.h
 > 
-
-[snip]
-
-> Aside from the tests above, I see only 3 failing tests:
+> For some arches this is required in order to have access to
+> USER_PGTABLES_CEILING and FIRST_USER_ADDRESS.
 > 
-> All error logs:
-> test_map_ptr:PASS:skel_open 0 nsec
-> test_map_ptr:FAIL:skel_load unexpected error: -22 (errno 22)
-> #165     map_ptr:FAIL
-> subtest_userns:PASS:socketpair 0 nsec
-> subtest_userns:PASS:fork 0 nsec
-> recvfd:PASS:recvmsg 0 nsec
-> recvfd:PASS:cmsg_null 0 nsec
-> recvfd:PASS:cmsg_len 0 nsec
-> recvfd:PASS:cmsg_level 0 nsec
-> recvfd:PASS:cmsg_type 0 nsec
-> parent:PASS:recv_bpffs_fd 0 nsec
-> materialize_bpffs_fd:PASS:fs_cfg_cmds 0 nsec
-> materialize_bpffs_fd:PASS:fs_cfg_maps 0 nsec
-> materialize_bpffs_fd:PASS:fs_cfg_progs 0 nsec
-> materialize_bpffs_fd:PASS:fs_cfg_attachs 0 nsec
-> parent:PASS:materialize_bpffs_fd 0 nsec
-> sendfd:PASS:sendmsg 0 nsec
-> parent:PASS:send_mnt_fd 0 nsec
-> recvfd:PASS:recvmsg 0 nsec
-> recvfd:PASS:cmsg_null 0 nsec
-> recvfd:PASS:cmsg_len 0 nsec
-> recvfd:PASS:cmsg_level 0 nsec
-> recvfd:PASS:cmsg_type 0 nsec
-> parent:PASS:recv_token_fd 0 nsec
-> parent:FAIL:waitpid_child unexpected error: 22 (errno 3)
-> #402/9   token/obj_priv_implicit_token_envvar:FAIL
-> #402     token:FAIL
-> libbpf: prog 'on_event': BPF program load failed: Bad address
-> libbpf: prog 'on_event': -- BEGIN PROG LOAD LOG --
-> The sequence of 8193 jumps is too complex.
-> verification time 2816240 usec
-> stack depth 360
-> processed 116096 insns (limit 1000000) max_states_per_insn 1 total_states 5061 peak_states 5061 mark_read 2540
-> -- END PROG LOAD LOG --
-> libbpf: prog 'on_event': failed to load: -14
-> libbpf: failed to load object 'pyperf600.bpf.o'
-> scale_test:FAIL:expect_success unexpected error: -14 (errno 14)
-> #525     verif_scale_pyperf600:FAIL
-> Summary: 559/4166 PASSED, 98 SKIPPED, 3 FAILED
+> Reported-by: kernel test robot <lkp@intel.com>
+> Closes: https://lore.kernel.org/oe-kbuild-all/202408242348.uGvgH9tt-lkp@intel.com/
+> Closes: https://lore.kernel.org/oe-kbuild-all/202408242304.1A1fXTgE-lkp@intel.com/
+> Signed-off-by: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
+> ---
+>  mm/vma_internal.h | 1 +
+>  1 file changed, 1 insertion(+)
 > 
+> diff --git a/mm/vma_internal.h b/mm/vma_internal.h
+> index b930ab12a587..971b13e880c9 100644
+> --- a/mm/vma_internal.h
+> +++ b/mm/vma_internal.h
+> @@ -33,6 +33,7 @@
+>  #include <linux/mutex.h>
+>  #include <linux/pagemap.h>
+>  #include <linux/pfn.h>
+> +#include <linux/pgtable.h>
+>  #include <linux/rcupdate.h>
+>  #include <linux/rmap.h>
+>  #include <linux/rwsem.h>
+> --
+> 2.46.0
 
-Hi Ilya,
+Even after applying the above patch, I get similar errors when CONFIG_MMU is
+unset[1], as below.  Maybe the case should also be handled?
 
-A brief update with some good news: the 3 test failures above have been
-resolved and all expected tests now pass on QEMU/s390x under x86_64.
-
-Test '#165 map_ptr:FAIL' was a bug in my light-skeleton code, and fixed in
-my patch series v2:
-https://lore.kernel.org/bpf/cover.1724313164.git.tony.ambardar@gmail.com/
-
-Test '#402/9 token/obj_priv_implicit_token_envvar:FAIL' was a problem in my
-rootfs configuration and now passes after resolving.
-
-Test '#525 verif_scale_pyperf600:FAIL' was caused by clang miscompilation
-exposed by my use of clang-19 and clang-20. The test passes when built
-with clang-17 (used by BPF CI) or clang-18 which I switched to use.
-
-One symptom of the problem is easily seen by manually compiling:
-
-$ clang-18  -g -Wall -Werror -D__TARGET_ARCH_s390 -mbig-endian -Itools/testing/selftests/bpf/tools/include -Itools/testing/selftests/bpf -Itools/include/uapi -Itools/testing/selftests/usr/include -Wno-compare-distinct-pointer-types -idirafter /usr/lib/llvm-18/lib/clang/18/include -idirafter /usr/local/include -idirafter /usr/lib/gcc-cross/s390x-linux-gnu/11/../../../../s390x-linux-gnu/include -idirafter /usr/include/s390x-linux-gnu -idirafter /usr/include -DENABLE_ATOMICS_TESTS -O2 --target=bpfeb -c tools/testing/selftests/bpf/progs/pyperf600.c -mcpu=v3 -o pyperf600.clang18.bpf.o
-
-$ clang-19  -g -Wall -Werror -D__TARGET_ARCH_s390 -mbig-endian -Itools/testing/selftests/bpf/tools/include -Itools/testing/selftests/bpf -Itools/include/uapi -Itools/testing/selftests/usr/include -Wno-compare-distinct-pointer-types -idirafter /usr/lib/llvm-19/lib/clang/19/include -idirafter /usr/local/include -idirafter /usr/lib/gcc-cross/s390x-linux-gnu/11/../../../../s390x-linux-gnu/include -idirafter /usr/include/s390x-linux-gnu -idirafter /usr/include -DENABLE_ATOMICS_TESTS -O2 --target=bpfeb -c tools/testing/selftests/bpf/progs/pyperf600.c -mcpu=v3 -o pyperf600.clang19.bpf.o
-
-$ llvm-readelf-18 -S pyperf600.clang{18,19}.bpf.o |grep .symtab
-  [27] .symtab           SYMTAB          0000000000000000 1739d0 01ad60 18      1 4572  8
-  [27] .symtab           SYMTAB          0000000000000000 14f048 0001e0 18      1  12  8
-
-Notice that the .symtab has shrunk by ~200X for example going to clang-19!
-(CCing llvm maintainers)
+    In file included from /lib/../mm/internal.h:22:0,
+                     from /lib/vsprintf.c:50:
+    /lib/../mm/vma.h: In function 'init_vma_munmap':
+    /lib/../mm/vma.h:113:21: error: 'FIRST_USER_ADDRESS' undeclared (first use in this function); did you mean 'IFLA_PERM_ADDRESS'?
+      vms->unmap_start = FIRST_USER_ADDRESS;
+                         ^~~~~~~~~~~~~~~~~~
+                         IFLA_PERM_ADDRESS
+    /lib/../mm/vma.h:113:21: note: each undeclared identifier is reported only once for each function it appears in
+    /lib/../mm/vma.h:114:19: error: 'USER_PGTABLES_CEILING' undeclared (first use in this function)
+      vms->unmap_end = USER_PGTABLES_CEILING;
+                       ^~~~~~~~~~~~~~~~~~~~~
 
 
-Kind regards,
-Tony
+[1] https://github.com/damonitor/damon-tests/blob/master/corr/tests/build_m68k.sh
+
+
+Thanks,
+SJ
