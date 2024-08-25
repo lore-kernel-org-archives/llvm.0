@@ -1,101 +1,86 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F1151C3D
-	for <llvm@lists.linux.dev>; Sun, 25 Aug 2024 02:22:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CFFAE1C3D;
+	Sun, 25 Aug 2024 02:35:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724552533; cv=none; b=hZa/q/lXyNuqy7aG/KYHb2YxxU9TXC9xKe54//IUmAcP9he7r6KnFjNVuWE5pir9/kw1q9pKS4mc/DNaK7r4qkuf1S6ADjqyUySccBBRbEd+FuRuQkcVIfuLV2nmp5A5180qoW+E4dPHA0rejwraG7lHCXFdRBqP+4/c0AElLk4=
+	t=1724553323; cv=none; b=aVHBDcs34/8hL7bmWB1H+4KWkyfh5GnSeKINi/5uqe0HqkGqA2r9Xd6/qWSL+9bLW7CZsQ/RADGverkWH5Gna+LB82ug9r0X/kDJD7YRQY3BpdTEyyX0eQXnpswYZT3Q0H6+0Q/6zyRRKLzFkfJD+nvC1Z41F2uBQDFFdY1rqAA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724552533; c=relaxed/simple;
-	bh=R8YaGuv8aD7L1i+fdhENuDE3x7WisViGJ4r8Xzc0U8A=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=DZJ8KlNgGQLFcVY1R91XrvpaeaL81jh+5Sdzm4rj7LNMvWMeQ5IewIj1zr8mSuQ57uf+dpXk8b/CddnpcCJNL+vn5wv2nVhgSrEhiGpvncaK4ifvd9R2mjMGyohUtGQtwXq87eMdb/68lR5756wmSlq9yAZD7tiLsbfwSd6BsPg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=M+15BM8y; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1724553323; c=relaxed/simple;
+	bh=TiTZ37gh8BuCevxe9GOpbW8zYGrfcTugzKsODcqgI8c=;
+	h=Date:From:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=UhaLgb57ZPPP36KdtIwhxD+tlbpASJjdzFY91+982cC5BZi5pL73fId3rzhdAwUv5DN3AxYOqvX8HINiVMmdWCJMerD4ByChE5GG8FlzOwxa03DcO7fsRZn2rFIOUJqnHJDnr8XJIx05C2mjCzY4EneweyAvzIzPPQqAb/+pJdQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=KDdfa5No; arc=none smtp.client-ip=192.198.163.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="M+15BM8y"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1724552530;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=/zMNowy3GOGVqSSf/q++z396mXXuhaeLEqrzy6bi7z8=;
-	b=M+15BM8yw/rnuM4j1GpiqT6a30UCPjpIqWrG0B4859q5hqn+fTuWCLOHktL/VIgubu31mQ
-	NMFVLQgdsphj4nzaae5Dh4J/r4/DviRBFP7N8icfuG5rO3dOOXjwJO1ODpVZ2YVXDND5WL
-	LGOj9laWgwFK6THM7bK04E22yVSWc3U=
-Received: from mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-213-AAQJStXiM6q4TTMC2jqecg-1; Sat,
- 24 Aug 2024 22:22:07 -0400
-X-MC-Unique: AAQJStXiM6q4TTMC2jqecg-1
-Received: from mx-prod-int-02.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-02.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.15])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 8CD2E1956080
-	for <llvm@lists.linux.dev>; Sun, 25 Aug 2024 02:22:06 +0000 (UTC)
-Received: from [172.64.0.35] (unknown [10.30.32.160])
-	by mx-prod-int-02.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id CD68B19560AA;
-	Sun, 25 Aug 2024 02:22:05 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (6.11.0-rc4,
- mainline.kernel.org-clang, 780bdc1b)
-Date: Sun, 25 Aug 2024 02:22:05 -0000
-To: llvm@lists.linux.dev
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="KDdfa5No"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1724553322; x=1756089322;
+  h=date:from:cc:subject:message-id:mime-version;
+  bh=TiTZ37gh8BuCevxe9GOpbW8zYGrfcTugzKsODcqgI8c=;
+  b=KDdfa5NouivJxA+HNxYFMs2W5S8e0DgDJuyJnIgjc7fhnhC5yfoKYYdI
+   724CG3toD/13qrfaFXRb17ZpBd7/I8Mxn285s4F9BauU4BspI2RHOqStd
+   uF7P9zzr2G+S6gysxfmpp8czNMJBIKt2DMalf9PdEWYFTuzwKkRH7Mf4a
+   CWZUHqesUTem2CW6yVywJHwQM0lhnXKMFFXMnpgu6KgKybEcFRhEYCtNI
+   X8WsV+H5CfFUKVCdRVTz4LVKDDebPmOQjGYwZYQVgR/cpo4zi8/FvdQ23
+   ffNnzAzji32N21zjnqv5V/JMFe5IMhKdswnrPtai5kfVpEROkSjeC1eC/
+   g==;
+X-CSE-ConnectionGUID: syugElZlQ7enB9SHdaX2jA==
+X-CSE-MsgGUID: NNrgoLyrTFqtIhqrI1jTPQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11173"; a="48388743"
+X-IronPort-AV: E=Sophos;i="6.10,174,1719903600"; 
+   d="scan'208";a="48388743"
+Received: from fmviesa009.fm.intel.com ([10.60.135.149])
+  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Aug 2024 19:35:21 -0700
+X-CSE-ConnectionGUID: IjayFyK2SI+xnEFfj7wn8g==
+X-CSE-MsgGUID: zKdPu92VQEykbWyikRbqRQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.10,174,1719903600"; 
+   d="scan'208";a="62222890"
+Received: from lkp-server01.sh.intel.com (HELO 9a732dc145d3) ([10.239.97.150])
+  by fmviesa009.fm.intel.com with ESMTP; 24 Aug 2024 19:35:20 -0700
+Received: from kbuild by 9a732dc145d3 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1si366-000Etv-1v;
+	Sun, 25 Aug 2024 02:35:18 +0000
+Date: Sun, 25 Aug 2024 10:34:55 +0800
+From: kernel test robot <lkp@intel.com>
+Cc: oe-kbuild-all@lists.linux.dev, llvm@lists.linux.dev
+Subject: [broonie-misc:spi-6.12 19/21] vmlinux.o: warning: objtool:
+ .text.wpcm_fiu_probe: unexpected end of section
+Message-ID: <202408251028.hjY7PYx8-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.15
-Message-Id: <71825.124082422220700131@us-mta-213.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Hi, we tested your kernel and here are the results:
+TO: Jinjie Ruan <ruanjinjie@huawei.com>
+CC: Mark Brown <broonie@kernel.org>
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: FAILED
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/misc.git spi-6.12
+head:   91232b00b1a5d2486770c72c51a752a77c7601b2
+commit: 3bf2a5359b0bde22418705ec862ac5077312e4c2 [19/21] spi: wpcm-fiu: Use devm_platform_ioremap_resource_byname()
+config: x86_64-buildonly-randconfig-004-20240825 (https://download.01.org/0day-ci/archive/20240825/202408251028.hjY7PYx8-lkp@intel.com/config)
+compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240825/202408251028.hjY7PYx8-lkp@intel.com/reproduce)
 
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202408251028.hjY7PYx8-lkp@intel.com/
 
-Kernel information:
-    Commit message: Merge tag '6.11-rc5-server-fixes' of git://git.samba.or=
-g/ksmbd
+All warnings (new ones prefixed by >>):
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:1426045071
+   vmlinux.o: warning: objtool: .text.exynos_sysmmu_irq: unexpected end of section
+>> vmlinux.o: warning: objtool: .text.wpcm_fiu_probe: unexpected end of section
 
-One or more kernel builds failed:
-    Unrecognized or new issues:
-         ppc64le - https://datawarehouse.cki-project.org/kcidb/builds/redha=
-t:1426045071-ppc64le-kernel
-           s390x - https://datawarehouse.cki-project.org/kcidb/builds/redha=
-t:1426045071-s390x-kernel
-          x86_64 (debug) - https://datawarehouse.cki-project.org/kcidb/buil=
-ds/redhat:1426045071-x86_64-kernel-debug
-
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
