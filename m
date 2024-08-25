@@ -1,116 +1,107 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2BFF91DFEB;
-	Sun, 25 Aug 2024 11:53:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2DA6774076
+	for <llvm@lists.linux.dev>; Sun, 25 Aug 2024 12:12:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724586820; cv=none; b=nQhwubMm7l9PZf0Bl+lp6A60mG04mPHt+MHop6Hr4TYlk5eyK5Gn8XdpnXmzIWNqKX5pFqd5lXfhuB8wkHVfF75ydOyE3YbaeqpDaTUygoQ7c+yv+9QXNtSrt4P2yVOdvlxWwQLIkqAW4taRm/PXTj1hHz8OUduKm/HVltan2j8=
+	t=1724587951; cv=none; b=tw3w4rMnheAG5lQxhbG0hJArBcQ84GtbjC3DHku6xMGVydP4zVcsema5EcSTmPKiyG3IU696suvroSsGYXvULcJ4YBU2rle1J0QiZklENp9xU2CzJFwWMz8QBtYw52wYSUzqUO2mQzGMLOyRcMjt5Af3GB+sNMaGS46gr9ER7Ns=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724586820; c=relaxed/simple;
-	bh=DL5woH7X/DvXU3TbyJsZ519GzpH6qR7sVLryG+gxeug=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=gjf9BFjiP4w1Uv+dzYHCmWPZUVZAto785p8mS83Z5PE/9mcrXluf3zwFi0NWOKgDJZVMminMroGXsO2km5w7xfO9DlKwg1/ThIuK1UIuARHumzZ4DAHzt/8MT+4pQJzC02kgrTDGjeg6did+7ygAbnEelmL7fwUDsg3Tx6cGiw0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=OpR+1CXk; arc=none smtp.client-ip=192.198.163.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1724587951; c=relaxed/simple;
+	bh=D7uIUkqdvy06evqcOOap+ibcf1+dWnSSdC1uvDXmmBE=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=c4IKai2+0b+l7l+goHkLI7kCuBRrt8rHE5xVeMkbrkZdBUZJkXPgfuVKLf22L5tBbsnuEq0SnjKb49vV6R9IkkdKc724Q34k5E5wZ6q08DdzYZ94bkRzUVN8lheGSnslyymhv3BLAvGrd0x33irqVI94KHIc8QRyV4JI5IHXUhA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=RriSFBj2; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=CMp1ks+T; arc=none smtp.client-ip=193.142.43.55
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="OpR+1CXk"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1724586818; x=1756122818;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=DL5woH7X/DvXU3TbyJsZ519GzpH6qR7sVLryG+gxeug=;
-  b=OpR+1CXke8z0c0xw5kQY6+/3YuGztq8VzMoR6ZQ16Med673vbC908IGj
-   gXSL/M2+CQRxKJNwqK9RLLipkbyOYAmigq2cxJIFmBVjIgkRdkJHWhEl9
-   XU+x/eAdOc74a3IZmLYqGKjucLIOYzaiDe7KMO1AZ7AKa3g0q6JPJsZdc
-   yt4Kv41gCfliLLYboXqArc+gnKjDnZB58HyBCvsjWHsCSgYNh3GulmPy7
-   M8vVTC0d6MtBts6y1iYZ8Oa38uMAyBXzSE14PBEbMQyI/E0CR/dVAsiE2
-   GOApPoTh5xyrlD37JuASFX4PRHo/fOGXmGa/KHNOFkhTWwGcWBXMmu6Y1
-   g==;
-X-CSE-ConnectionGUID: Hv6e2OEzTuOgSWFIKoiSzg==
-X-CSE-MsgGUID: DnXmnxRRRj23pl1LNkgovQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11173"; a="48401684"
-X-IronPort-AV: E=Sophos;i="6.10,175,1719903600"; 
-   d="scan'208";a="48401684"
-Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Aug 2024 04:53:38 -0700
-X-CSE-ConnectionGUID: AJ8rFAAbSG6GFeLwaKcBog==
-X-CSE-MsgGUID: nxSRUmnfQH+TcayZmtvILg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.10,175,1719903600"; 
-   d="scan'208";a="85439709"
-Received: from lkp-server01.sh.intel.com (HELO 9a732dc145d3) ([10.239.97.150])
-  by fmviesa002.fm.intel.com with ESMTP; 25 Aug 2024 04:53:36 -0700
-Received: from kbuild by 9a732dc145d3 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1siBoM-000F9T-0v;
-	Sun, 25 Aug 2024 11:53:34 +0000
-Date: Sun, 25 Aug 2024 19:53:20 +0800
-From: kernel test robot <lkp@intel.com>
-To: Fabien Parent <fabien.parent@linaro.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Miguel Ojeda <ojeda@kernel.org>
-Subject: [rust:pr/1040 22/23] error[E0277]: the trait bound
- `rust_doctest_kernel_alloc_box_ext_rs_0::kernel::device::Device:
- AsRef<rust_doctest_kernel_alloc_box_ext_rs_0::kernel::device::Device>` is
- not satisfied
-Message-ID: <202408251945.uQADGa9Q-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="RriSFBj2";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="CMp1ks+T"
+From: Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020; t=1724587948;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=asbg7BYlj4ZFgiVrwgb1Wswlv6diZDiLLgBcqea48xc=;
+	b=RriSFBj2vDDUs2J9MepRaX1WU4HV5T31ItjTQdAPICrFKbnSbJKqI6ghRbD9nepkX0MQTp
+	B8MVoOiYVT9zlJS9xBNMdvBUimnGoQkuPqkCtfWVVzOchRNU9SMDupjEjOexXpol0/tbnH
+	G06poRLAw9E5XsaxTg34bKYKBPSCh4Q5AE/85Hg2vxlVUCvhHcwtE4t0Uhopt1k1CIFkRf
+	ceQibitytHaEPhbMJxnrIvpeQC07fgsyLoOYvRwcyKZdvsE2WTuNcWbe17QvxXCG4E3ZCk
+	UQsoIqX+Hl350cnsNW4Gsu4MpoA61jdwQWsILSel4Ttv7wEY9j24TWETTpcDLQ==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020e; t=1724587948;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=asbg7BYlj4ZFgiVrwgb1Wswlv6diZDiLLgBcqea48xc=;
+	b=CMp1ks+TWlx6LMjmObNiYxsYpvfW1kxsSLXGKg6bqsPEM0EA/xzXuJ7hDSi56zSOsJgCmE
+	JubKYVxuspFiVbAA==
+To: Wentao Zhang <wentaoz5@illinois.edu>, linux-kbuild@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-efi@vger.kernel.org,
+ linux-um@lists.infradead.org, linux-arch@vger.kernel.org,
+ linux-trace-kernel@vger.kernel.org, llvm@lists.linux.dev, x86@kernel.org
+Cc: wentaoz5@illinois.edu, marinov@illinois.edu, tyxu@illinois.edu,
+ jinghao7@illinois.edu, tingxur@illinois.edu,
+ steven.h.vanderleest@boeing.com, chuck.wolber@boeing.com,
+ matthew.l.weber3@boeing.com, Matt.Kelly2@boeing.com,
+ andrew.j.oppelt@boeing.com, samuel.sarkisian@boeing.com, morbo@google.com,
+ samitolvanen@google.com, masahiroy@kernel.org, mingo@redhat.com,
+ bp@alien8.de, dave.hansen@linux.intel.com, luto@kernel.org,
+ ardb@kernel.org, richard@nod.at, anton.ivanov@cambridgegreys.com,
+ johannes@sipsolutions.net, arnd@arndb.de, rostedt@goodmis.org,
+ mhiramat@kernel.org, oberpar@linux.ibm.com, akpm@linux-foundation.org,
+ paulmck@kernel.org, bhelgaas@google.com, kees@kernel.org,
+ jpoimboe@kernel.org, peterz@infradead.org, kent.overstreet@linux.dev,
+ nathan@kernel.org, hpa@zytor.com, mathieu.desnoyers@efficios.com,
+ ndesaulniers@google.com, justinstitt@google.com, maskray@google.com,
+ dvyukov@google.com
+Subject: Re: [RFC PATCH 2/3] kbuild, llvm-cov: disable instrumentation in
+ odd or sensitive code
+In-Reply-To: <20240824230641.385839-3-wentaoz5@illinois.edu>
+References: <20240824230641.385839-1-wentaoz5@illinois.edu>
+ <20240824230641.385839-3-wentaoz5@illinois.edu>
+Date: Sun, 25 Aug 2024 14:12:27 +0200
+Message-ID: <878qwkg5sk.ffs@tglx>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Type: text/plain
 
-tree:   https://github.com/Rust-for-Linux/linux pr/1040
-head:   53444cbc3fd2c22b56d4e9ab8b8c0f2b643cb9a7
-commit: e1082f6340c60e6fe9e9e8730f63bbc6515c5020 [22/23] rust: regulator: add Regulator Driver abstraction
-config: x86_64-buildonly-randconfig-006-20240825 (https://download.01.org/0day-ci/archive/20240825/202408251945.uQADGa9Q-lkp@intel.com/config)
-compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240825/202408251945.uQADGa9Q-lkp@intel.com/reproduce)
+On Sat, Aug 24 2024 at 18:06, Wentao Zhang wrote:
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202408251945.uQADGa9Q-lkp@intel.com/
+The subject line is really not useful. What's 'odd' code?
 
-All errors (new ones prefixed by >>):
+> Disable instrumentation in the same areas that were disabled for
+> kernel/gcov/
 
->> error[E0277]: the trait bound `rust_doctest_kernel_alloc_box_ext_rs_0::kernel::device::Device: AsRef<rust_doctest_kernel_alloc_box_ext_rs_0::kernel::device::Device>` is not satisfied
-   --> rust/doctests_kernel_generated.rs:3726:46
-   |
-   3726 | let config = Config::<Arc<DriverData>>::new(&dev, Arc::try_new(DriverData(128))?);
-   |              ------------------------------  ^^^ the trait `AsRef<rust_doctest_kernel_alloc_box_ext_rs_0::kernel::device::Device>` is not implemented for `rust_doctest_kernel_alloc_box_ext_rs_0::kernel::device::Device`, which is required by `&&rust_doctest_kernel_alloc_box_ext_rs_0::kernel::device::Device: AsRef<rust_doctest_kernel_alloc_box_ext_rs_0::kernel::device::Device>`
-   |              |
-   |              required by a bound introduced by this call
-   |
-   = note: required for `&rust_doctest_kernel_alloc_box_ext_rs_0::kernel::device::Device` to implement `AsRef<rust_doctest_kernel_alloc_box_ext_rs_0::kernel::device::Device>`
-   = note: 1 redundant requirement hidden
-   = note: required for `&&rust_doctest_kernel_alloc_box_ext_rs_0::kernel::device::Device` to implement `AsRef<rust_doctest_kernel_alloc_box_ext_rs_0::kernel::device::Device>`
-   note: required by a bound in `rust_doctest_kernel_alloc_box_ext_rs_0::kernel::regulator::driver::Config::<T>::new`
-   --> rust/kernel/regulator/driver.rs:346:19
-   |
-   346  |     pub fn new<U: AsRef<Device>>(dev: U, data: T) -> Self {
-   |                   ^^^^^^^^^^^^^ required by this bound in `Config::<T>::new`
---
->> error[E0277]: the trait bound `rust_doctest_kernel_alloc_box_ext_rs_0::kernel::device::Device: AsRef<rust_doctest_kernel_alloc_box_ext_rs_0::kernel::device::Device>` is not satisfied
-   --> rust/doctests_kernel_generated.rs:3727:34
-   |
-   3727 | let reg = Registration::register(dev, desc, config)?;
-   |           ---------------------- ^^^ the trait `AsRef<rust_doctest_kernel_alloc_box_ext_rs_0::kernel::device::Device>` is not implemented for `rust_doctest_kernel_alloc_box_ext_rs_0::kernel::device::Device`, which is required by `&rust_doctest_kernel_alloc_box_ext_rs_0::kernel::device::Device: AsRef<rust_doctest_kernel_alloc_box_ext_rs_0::kernel::device::Device>`
-   |           |
-   |           required by a bound introduced by this call
-   |
-   = note: required for `&rust_doctest_kernel_alloc_box_ext_rs_0::kernel::device::Device` to implement `AsRef<rust_doctest_kernel_alloc_box_ext_rs_0::kernel::device::Device>`
-   note: required by a bound in `rust_doctest_kernel_alloc_box_ext_rs_0::kernel::regulator::driver::Registration::register`
-   --> rust/kernel/regulator/driver.rs:362:57
-   |
-   362  |     pub fn register<T: ForeignOwnable + Send + Sync, U: AsRef<Device>>(
-   |                                                         ^^^^^^^^^^^^^ required by this bound in `Registration::register`
+> Signed-off-by: Wentao Zhang <wentaoz5@illinois.edu>
+> Signed-off-by: Chuck Wolber <chuck.wolber@boeing.com>
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+This Signed-off-by chain is broken. See Documentation/process/
+
+> diff --git a/arch/x86/boot/Makefile b/arch/x86/boot/Makefile
+> index 9cc0ff6e9067..2cc2c55af305 100644
+> --- a/arch/x86/boot/Makefile
+> +++ b/arch/x86/boot/Makefile
+> @@ -57,6 +57,7 @@ KBUILD_AFLAGS	:= $(KBUILD_CFLAGS) -D__ASSEMBLY__
+>  KBUILD_CFLAGS	+= $(call cc-option,-fmacro-prefix-map=$(srctree)/=)
+>  KBUILD_CFLAGS	+= -fno-asynchronous-unwind-tables
+>  KBUILD_CFLAGS	+= $(CONFIG_CC_IMPLICIT_FALLTHROUGH)
+> +LLVM_COV_PROFILE := n
+
+See 7f7f6f7ad654 ("Makefile: remove redundant tool coverage variables")
+
+Also a 'git grep GCOV_PROFILE' shows way more places. Can't LLVM_COV
+just use the already existing GCOV_PROFILE annotations or is LLVM_COV
+suitable for all the files which have been excluded for GCOV?
+
+GCOV has GCOV_PROFILE_obj.o, GCOV_PROFILE and CONFIG_GCOV_PROFILE_ALL
+for a reason, no?
+
+Thanks,
+
+        tglx
