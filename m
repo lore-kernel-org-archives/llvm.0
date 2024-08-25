@@ -1,82 +1,158 @@
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+Received: from out-176.mta1.migadu.com (out-176.mta1.migadu.com [95.215.58.176])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F9B815530F;
-	Sun, 25 Aug 2024 17:31:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 287BE1803A
+	for <llvm@lists.linux.dev>; Sun, 25 Aug 2024 20:24:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724607083; cv=none; b=dt6HemEosK9jWtpwWJ55ybx/1AWq5/ydys/oy7ja6A/UtlECjN4EivpyDWYaiD0NwiLGv/5v7qqhUYttFEIx6EphID2eEnmZ/iVtSxiM5inlzll6J2xublvT/xB9IbGVQraUFu100U6bZMTPbU6bOf8datpNz17cqYfbDSBrbxY=
+	t=1724617445; cv=none; b=Y9vRsbGtYhzpqppYOQB71nekyzjNj6dJ0xxCNo3X/GZKRC65hHDClcPE84MNNFsIaRO5LDNFiztXe65cKqBwKB7TYRpMhxw1tY8s+S0tQFSmJI/wObV0t6CYXWabi29vBNkmC97ZIVHIJOuSYH06UoxpMXteCLI6aWTuMWX43vc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724607083; c=relaxed/simple;
-	bh=wmtWUfpmfCZGEMQdVRnTrLIYzG+Q2zI2WQxByn/Uy8c=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=kn2AYSyFE2h9aPmT5Gz3jVoU1i0NAfF1rfrG2/7k1IV+JwfDUXODznsDdqN8UZqLs5fxWWi0qXKuQH/knJ5IVR9k/+QUanbiXZUk+wSn4H72P+6u29dR8Otkq2tFTehpRE9jPx0ZHPqMYLFN/ccaBRlTzOnLaOSZFWTCD02yJYk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=eNMRCR59; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=CBmQ0yUK; arc=none smtp.client-ip=193.142.43.55
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
+	s=arc-20240116; t=1724617445; c=relaxed/simple;
+	bh=zkyR7ZWqhHXtg4p7uuToQzwm8GODl0IP6u8Xdfmc1Fk=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=OyhCZyoIJcu64rTt/YqBi3Yn8hRocti1K8glzsllNS36pK1TdIXgds9IoznPQIZM/97fqes5kDSlQ+a6yiiugVQaCIVx6LioPeW6DPGWEYrMcv0JV8TB0RA/Cuh6Xdb2SykdwkDxHQ8HqO4SB/DkfPq5wdu5t40grXr3lzMyvqc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=WbxExdBX; arc=none smtp.client-ip=95.215.58.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="eNMRCR59";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="CBmQ0yUK"
-From: Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1724607080;
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="WbxExdBX"
+Message-ID: <c8c590b2-40b2-4cc0-9eb7-410dbd080a49@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1724617440;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=rifzP16A2yr95plgYd6zfpZQqnQuyygW57qXYWyKsyg=;
-	b=eNMRCR59PFJvK1Drkdb9KpEB8NRNi2WrmAYMWE5M9huxwFGfMSU6qJi3uu0A3lgs5mT0B1
-	lq0i4MANemreAUXxhWeuxtxigSyk3f/Kwxe/2RoCt3VeHc2JfFb2/IMl+GLOfazQd7ckwF
-	DjIOpAdQ3rBCjJmJDSIbCkhQO1puNwifH6aJbrza2uo8CxKMjzQTV8kGivkr3Z2cHBYqXt
-	XmeOC0sZnGU6OOXumvhDtpuDCrCC4UuQ+1jxhQ7rY+0mui58LrfQSP0ABxp2G6Maz4D53k
-	vx/JiGmloQVF7PcjE/1JIhMd6lnpGWPQ5HnkNG86cAKtMepxOJ6EmzOq/BXueQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1724607080;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=rifzP16A2yr95plgYd6zfpZQqnQuyygW57qXYWyKsyg=;
-	b=CBmQ0yUKYOsYJEOi4kMVjHlJPXOs8H243l+QRvk4dMqygWkrrumlQ29Np5PVDI0DV0F2zs
-	843zjwSLsXLBwpDA==
-To: kernel test robot <lkp@intel.com>, Chen Yufan <chenyufan@vivo.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
- linux-kernel@vger.kernel.org, x86@kernel.org
-Subject: Re: [tip:timers/core 5/5] kernel/time/timekeeping.c:220:7: warning:
- comparison of distinct pointer types ('unsigned long *' and 'typeof
- (tk->last_warning + (100 * 300)) *' (aka 'long *'))
-In-Reply-To: <202408241701.NSEI3MOV-lkp@intel.com>
-References: <202408241701.NSEI3MOV-lkp@intel.com>
-Date: Sun, 25 Aug 2024 19:31:20 +0200
-Message-ID: <87seusecgn.ffs@tglx>
+	bh=lJmOM6hEOwMpe5Yh5pt13Atiwnn9TOnDLKnLZJg/H30=;
+	b=WbxExdBXuYnSYsFdmRJRcypMRKZXh2bH0uWHvwOgytfpz/X47NImf1QMmx/Jvzb9HRFoXR
+	bIoSCLdOZaj0bbgcKlXXV4Jgtr0kAgo1Ln/qxpKzcl0GIFcz4s56t4TB8wSYL9GRU1EGQw
+	3tsQGQIdZDnFtm0dWMem8t93R2o+zjA=
+Date: Sun, 25 Aug 2024 13:23:51 -0700
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain
+Subject: Re: Problem testing with S390x under QEMU on x86_64
+Content-Language: en-GB
+To: Tony Ambardar <tony.ambardar@gmail.com>,
+ Ilya Leoshkevich <iii@linux.ibm.com>
+Cc: bpf@vger.kernel.org, linux-s390@vger.kernel.org, llvm@lists.linux.dev,
+ Alexei Starovoitov <ast@kernel.org>, Nathan Chancellor <nathan@kernel.org>,
+ Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling
+ <morbo@google.com>, Justin Stitt <justinstitt@google.com>
+References: <ZsEcsaa3juxxQBUf@kodidev-ubuntu>
+ <180f4c27ebfb954d6b0fd2303c9fb7d5f21dae04.camel@linux.ibm.com>
+ <ZsU3GdK5t6KEOr0g@kodidev-ubuntu> <Zspq+db1KOhhh2Yf@kodidev-ubuntu>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Yonghong Song <yonghong.song@linux.dev>
+In-Reply-To: <Zspq+db1KOhhh2Yf@kodidev-ubuntu>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
 
-On Sat, Aug 24 2024 at 17:58, kernel test robot wrote:
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git timers/core
-> head:   42db2c2cb5ac3572380a9489b8f8bbe0e534dfc7
-> commit: 42db2c2cb5ac3572380a9489b8f8bbe0e534dfc7 [5/5] timekeeping: Use time_after() in timekeeping_check_update()
-> config: i386-buildonly-randconfig-002-20240824 (https://download.01.org/0day-ci/archive/20240824/202408241701.NSEI3MOV-lkp@intel.com/config)
-> compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
-> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240824/202408241701.NSEI3MOV-lkp@intel.com/reproduce)
+
+On 8/24/24 4:21 PM, Tony Ambardar wrote:
+> On Tue, Aug 20, 2024 at 05:38:49PM -0700, Tony Ambardar wrote:
+>> Hi Ilya,
+>>
+>> Thanks for following up. As it happens, I did this the day before out of
+>> desperation after trying various kernel config and rootfs changes
+>> with no luck, and can confirm the system runs faster and without the
+>> kernel crashes noted above. Certainly the latest QEMU seems mandatory.
+>>
+>> The good news is that 99% of tests with my cross-compiled test_progs
+>> work as expected out of the box, and some of the failing ones helped
+>> troubleshoot a few hidden libbpf issues. I'll outline the remaining
+>> failures for your feedback and comparison with native-built tests.
+>>
+>> I used the command line:
+>>      ./test_progs -d get_stack_raw_tp,stacktrace_build_id,verifier_iterating_callbacks,tailcalls
+>>
+> [snip]
 >
-> If you fix the issue in a separate patch/commit (i.e. not just a new version of
-> the same patch/commit), kindly add following tags
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes: https://lore.kernel.org/oe-kbuild-all/202408241701.NSEI3MOV-lkp@intel.com/
+>> Aside from the tests above, I see only 3 failing tests:
+>>
+>> All error logs:
+>> test_map_ptr:PASS:skel_open 0 nsec
+>> test_map_ptr:FAIL:skel_load unexpected error: -22 (errno 22)
+>> #165     map_ptr:FAIL
+>> subtest_userns:PASS:socketpair 0 nsec
+>> subtest_userns:PASS:fork 0 nsec
+>> recvfd:PASS:recvmsg 0 nsec
+>> recvfd:PASS:cmsg_null 0 nsec
+>> recvfd:PASS:cmsg_len 0 nsec
+>> recvfd:PASS:cmsg_level 0 nsec
+>> recvfd:PASS:cmsg_type 0 nsec
+>> parent:PASS:recv_bpffs_fd 0 nsec
+>> materialize_bpffs_fd:PASS:fs_cfg_cmds 0 nsec
+>> materialize_bpffs_fd:PASS:fs_cfg_maps 0 nsec
+>> materialize_bpffs_fd:PASS:fs_cfg_progs 0 nsec
+>> materialize_bpffs_fd:PASS:fs_cfg_attachs 0 nsec
+>> parent:PASS:materialize_bpffs_fd 0 nsec
+>> sendfd:PASS:sendmsg 0 nsec
+>> parent:PASS:send_mnt_fd 0 nsec
+>> recvfd:PASS:recvmsg 0 nsec
+>> recvfd:PASS:cmsg_null 0 nsec
+>> recvfd:PASS:cmsg_len 0 nsec
+>> recvfd:PASS:cmsg_level 0 nsec
+>> recvfd:PASS:cmsg_type 0 nsec
+>> parent:PASS:recv_token_fd 0 nsec
+>> parent:FAIL:waitpid_child unexpected error: 22 (errno 3)
+>> #402/9   token/obj_priv_implicit_token_envvar:FAIL
+>> #402     token:FAIL
+>> libbpf: prog 'on_event': BPF program load failed: Bad address
+>> libbpf: prog 'on_event': -- BEGIN PROG LOAD LOG --
+>> The sequence of 8193 jumps is too complex.
+>> verification time 2816240 usec
+>> stack depth 360
+>> processed 116096 insns (limit 1000000) max_states_per_insn 1 total_states 5061 peak_states 5061 mark_read 2540
+>> -- END PROG LOAD LOG --
+>> libbpf: prog 'on_event': failed to load: -14
+>> libbpf: failed to load object 'pyperf600.bpf.o'
+>> scale_test:FAIL:expect_success unexpected error: -14 (errno 14)
+>> #525     verif_scale_pyperf600:FAIL
+>> Summary: 559/4166 PASSED, 98 SKIPPED, 3 FAILED
+>>
+> Hi Ilya,
 >
-> All warnings (new ones prefixed by >>):
+> A brief update with some good news: the 3 test failures above have been
+> resolved and all expected tests now pass on QEMU/s390x under x86_64.
 >
->>> kernel/time/timekeeping.c:220:7: warning: comparison of distinct pointer types ('unsigned long *' and 'typeof (tk->last_warning + (100 * 300)) *' (aka 'long *')) [-Wcompare-distinct-pointer-types]
->      220 |                 if (time_after(jiffies, tk->last_warning + WARNING_FREQ)) {
->          |                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> Test '#165 map_ptr:FAIL' was a bug in my light-skeleton code, and fixed in
+> my patch series v2:
+> https://lore.kernel.org/bpf/cover.1724313164.git.tony.ambardar@gmail.com/
+>
+> Test '#402/9 token/obj_priv_implicit_token_envvar:FAIL' was a problem in my
+> rootfs configuration and now passes after resolving.
+>
+> Test '#525 verif_scale_pyperf600:FAIL' was caused by clang miscompilation
+> exposed by my use of clang-19 and clang-20. The test passes when built
+> with clang-17 (used by BPF CI) or clang-18 which I switched to use.
 
-Indeed. For that to work tk->last_warning must me changed to unsigned
-long. Zapped the commit for now.
+x86 has the same issue where clang19 generated code will cause verification
+failure. Eduard is working on this.
 
-Thanks,
+>
+> One symptom of the problem is easily seen by manually compiling:
+>
+> $ clang-18  -g -Wall -Werror -D__TARGET_ARCH_s390 -mbig-endian -Itools/testing/selftests/bpf/tools/include -Itools/testing/selftests/bpf -Itools/include/uapi -Itools/testing/selftests/usr/include -Wno-compare-distinct-pointer-types -idirafter /usr/lib/llvm-18/lib/clang/18/include -idirafter /usr/local/include -idirafter /usr/lib/gcc-cross/s390x-linux-gnu/11/../../../../s390x-linux-gnu/include -idirafter /usr/include/s390x-linux-gnu -idirafter /usr/include -DENABLE_ATOMICS_TESTS -O2 --target=bpfeb -c tools/testing/selftests/bpf/progs/pyperf600.c -mcpu=v3 -o pyperf600.clang18.bpf.o
+>
+> $ clang-19  -g -Wall -Werror -D__TARGET_ARCH_s390 -mbig-endian -Itools/testing/selftests/bpf/tools/include -Itools/testing/selftests/bpf -Itools/include/uapi -Itools/testing/selftests/usr/include -Wno-compare-distinct-pointer-types -idirafter /usr/lib/llvm-19/lib/clang/19/include -idirafter /usr/local/include -idirafter /usr/lib/gcc-cross/s390x-linux-gnu/11/../../../../s390x-linux-gnu/include -idirafter /usr/include/s390x-linux-gnu -idirafter /usr/include -DENABLE_ATOMICS_TESTS -O2 --target=bpfeb -c tools/testing/selftests/bpf/progs/pyperf600.c -mcpu=v3 -o pyperf600.clang19.bpf.o
+>
+> $ llvm-readelf-18 -S pyperf600.clang{18,19}.bpf.o |grep .symtab
+>    [27] .symtab           SYMTAB          0000000000000000 1739d0 01ad60 18      1 4572  8
+>    [27] .symtab           SYMTAB          0000000000000000 14f048 0001e0 18      1  12  8
+>
+> Notice that the .symtab has shrunk by ~200X for example going to clang-19!
+> (CCing llvm maintainers)
 
-        tglx
+This is a known issue. In llvm18, all labels (to identify basic blocks) are in symbol table.
+Those labels are removed from symbol table in llvm19.
+
+>
+>
+> Kind regards,
+> Tony
+>
