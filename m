@@ -1,68 +1,70 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 204C419AA58;
-	Mon, 26 Aug 2024 20:33:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 87EB5199EAD;
+	Mon, 26 Aug 2024 20:54:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724704415; cv=none; b=kHiLO1QX9YCBkSXyH20CHsVj06DPXSvW6AbnO/iQsBMSRtSEDcqnKr5jDkyqWXBs5YyVFLaH4uHveNYAEByqmY6KM//M4FnwnRaFBjSxyBPLI3pwM5wA8PXtKtWQkR3hnwOpDeb3sl1WQFBarN0zMffbDgepw4+1gyAkVTQAkEU=
+	t=1724705676; cv=none; b=KiEw77TgLwKEfbE1KM9oWCX4ooF3VWsJik4LqIofjTYWu2Q+BJwkGz7443yYCiP7VnDXlGRD1AugyV2lLLNP0oTSSbS8tOJ6uip30vgFHNhGskR/ZCplnx5YqqMxB900YgCk88plN86mAhOl0Jdn/xldcDupmXU1JECKc1XWxXY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724704415; c=relaxed/simple;
-	bh=2++G5TFlPGtMjuHigKRpDGrLbf2Eqc9lo5+EAg8NCAM=;
+	s=arc-20240116; t=1724705676; c=relaxed/simple;
+	bh=k+TQRYD+JH8C/rBpKmaN1zOafqMznb8cVJmo0xOJUb0=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=o4pOeenWzM7CAK1VwS0lwkGbI+vONJDqg8fEnaHkE2VI2ojhuo9RuaCF3qTnjAA3Bbnuaai44Rb+Nz6vm7bslc5k+qI50iaz9JNhzKTwqFVDICTAqUMOmWyjznnuxN1iWU/Y6pevqcy8+XC2/W58uNyeYW/2Eydm+DnQa7Noc0E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=VlpgbJJv; arc=none smtp.client-ip=198.175.65.11
+	 Content-Type:Content-Disposition:In-Reply-To; b=T7tRbjSPCuqrA6x3xfQn3DtrkBE3oE5eZJnAibi3VY3Ut2ODNh6P0XorNAXcmFesaIihULjDFVz147ModhtEKk89tagy8Y8oSvcTyz4DVQtxSJbg9HFk8Ri6s1vtF39dSp9gHQfY/v5lCIQByxNHb1hDKBQdfnncRnbXbOa7hpM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=J2DlK/86; arc=none smtp.client-ip=192.198.163.14
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="VlpgbJJv"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="J2DlK/86"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1724704414; x=1756240414;
+  t=1724705675; x=1756241675;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=2++G5TFlPGtMjuHigKRpDGrLbf2Eqc9lo5+EAg8NCAM=;
-  b=VlpgbJJv5xTdyvEFy360eUN8ZW6zjUSPxzWLzSB5tmljvIpRnXDwjKGo
-   GvQGxxsoXn9DVCqNn2n/zjZe5Q5AWUC0KsI0UfO3yPGRWGj4dTZbSvucf
-   ajXHuUVVx1hoSw9UTcxtJEutmY3dSkc3N74jeH4w0tuf1+fIe/6oEruqT
-   LJLWJtTXUZQ5oDDJuPIoBO2fYYlF+u3dYYBWCtCluSYJomi7HxbHsVyIU
-   w6d4EJz7r97vWamMxchi9hd/I+A+zkR4WngsLG5y1l9gKrk8oJO8fDg6N
-   DBwQUzTdjAyN1gswZelxjkOK577Jmz2b+if8Tfx5A/CHnjgIyfHiL4I6c
-   A==;
-X-CSE-ConnectionGUID: cgE1StcMQSampMdX6B+vZA==
-X-CSE-MsgGUID: DW1KUUXhQVmXHb6ZPevfLQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11176"; a="33718539"
+  bh=k+TQRYD+JH8C/rBpKmaN1zOafqMznb8cVJmo0xOJUb0=;
+  b=J2DlK/86oHBfHi9cG/l1ByHtLKj3KZxVWyFRW2lpjPTPwUn2Lqa2ko9L
+   9qp5vgmQ5jZ0Ipzp13mUmK2DcJJ2cDVcJipCleHaF1pgeIyB1spqYVu/I
+   OvguD/W5oFbnq//NMxzfNMQ7bJNErR3uth0lmWEalexKpNJLaphoHC9z/
+   LjKbG/wVPgE2R6HSWLJM564vO0wy3Qdoqu9dMxLTUyRxldZE+H0sgI967
+   u5CXRL3CNKJzrRvQsQm+wuQTXuj31Us+6f4uDS+/KuQO6NbLHXIRQCJph
+   PokAMRyIrVNonHmwZqDUQPWCqT93t2MHNlfCMq2n2M7ec1w8vnfc7bPKs
+   Q==;
+X-CSE-ConnectionGUID: P2uZkpmnRAKwyc4eqE3tPQ==
+X-CSE-MsgGUID: SSJBTPAJThyOtswAfT66qg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11176"; a="23332958"
 X-IronPort-AV: E=Sophos;i="6.10,178,1719903600"; 
-   d="scan'208";a="33718539"
-Received: from fmviesa003.fm.intel.com ([10.60.135.143])
-  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Aug 2024 13:33:33 -0700
-X-CSE-ConnectionGUID: k/7FiudcQo2ky1jVVuMYnA==
-X-CSE-MsgGUID: BRSQLwrQTSyMrd5Hh7M/zg==
+   d="scan'208";a="23332958"
+Received: from orviesa008.jf.intel.com ([10.64.159.148])
+  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Aug 2024 13:54:34 -0700
+X-CSE-ConnectionGUID: Ns8CnMvxRZ6DEQfFoFoGVg==
+X-CSE-MsgGUID: apbdG7+TS1uH63Jl7VN+2Q==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.10,178,1719903600"; 
-   d="scan'208";a="66780976"
+   d="scan'208";a="63365817"
 Received: from lkp-server01.sh.intel.com (HELO 9a732dc145d3) ([10.239.97.150])
-  by fmviesa003.fm.intel.com with ESMTP; 26 Aug 2024 13:33:29 -0700
+  by orviesa008.jf.intel.com with ESMTP; 26 Aug 2024 13:54:30 -0700
 Received: from kbuild by 9a732dc145d3 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1sigP0-000HZi-1U;
-	Mon, 26 Aug 2024 20:33:26 +0000
-Date: Tue, 27 Aug 2024 04:32:49 +0800
+	id 1sigjL-000Hai-0L;
+	Mon, 26 Aug 2024 20:54:27 +0000
+Date: Tue, 27 Aug 2024 04:53:28 +0800
 From: kernel test robot <lkp@intel.com>
-To: Ahmed Ehab <bottaawesome633@gmail.com>, linux-kernel@vger.kernel.org
+To: Michal Hocko <mhocko@kernel.org>,
+	Andrew Morton <akpm@linux-foundation.org>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Ingo Molnar <mingo@redhat.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Juri Lelli <juri.lelli@redhat.com>,
-	Vincent Guittot <vincent.guittot@linaro.org>,
-	Dietmar Eggemann <dietmar.eggemann@arm.com>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-	Valentin Schneider <vschneid@redhat.com>,
-	linux-kernel-mentees@lists.linuxfoundation.org
-Subject: Re: [PATCH] Refactor switch_mm_cid() to avoid unnecessary checks
-Message-ID: <202408270455.R85TrPfw-lkp@intel.com>
-References: <20240824223132.11925-1-bottaawesome633@gmail.com>
+	Linux Memory Management List <linux-mm@kvack.org>,
+	Christoph Hellwig <hch@lst.de>, Yafang Shao <laoar.shao@gmail.com>,
+	Kent Overstreet <kent.overstreet@linux.dev>, jack@suse.cz,
+	Christian Brauner <brauner@kernel.org>,
+	Alexander Viro <viro@zeniv.linux.org.uk>,
+	Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>,
+	"Serge E. Hallyn" <serge@hallyn.com>, linux-fsdevel@vger.kernel.org,
+	linux-bcachefs@vger.kernel.org,
+	linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Michal Hocko <mhocko@suse.com>
+Subject: Re: [PATCH 1/2] bcachefs: do not use PF_MEMALLOC_NORECLAIM
+Message-ID: <202408270446.6Ew7FPHA-lkp@intel.com>
+References: <20240826085347.1152675-2-mhocko@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -71,119 +73,106 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240824223132.11925-1-bottaawesome633@gmail.com>
+In-Reply-To: <20240826085347.1152675-2-mhocko@kernel.org>
 
-Hi Ahmed,
+Hi Michal,
 
 kernel test robot noticed the following build errors:
 
-[auto build test ERROR on tip/sched/core]
-[also build test ERROR on linus/master v6.11-rc5 next-20240826]
+[auto build test ERROR on akpm-mm/mm-everything]
+[also build test ERROR on tip/sched/core brauner-vfs/vfs.all linus/master v6.11-rc5]
+[cannot apply to next-20240826]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Ahmed-Ehab/Refactor-switch_mm_cid-to-avoid-unnecessary-checks/20240826-153216
-base:   tip/sched/core
-patch link:    https://lore.kernel.org/r/20240824223132.11925-1-bottaawesome633%40gmail.com
-patch subject: [PATCH] Refactor switch_mm_cid() to avoid unnecessary checks
-config: arm-ep93xx_defconfig (https://download.01.org/0day-ci/archive/20240827/202408270455.R85TrPfw-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240827/202408270455.R85TrPfw-lkp@intel.com/reproduce)
+url:    https://github.com/intel-lab-lkp/linux/commits/Michal-Hocko/bcachefs-do-not-use-PF_MEMALLOC_NORECLAIM/20240826-171013
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
+patch link:    https://lore.kernel.org/r/20240826085347.1152675-2-mhocko%40kernel.org
+patch subject: [PATCH 1/2] bcachefs: do not use PF_MEMALLOC_NORECLAIM
+config: arm-randconfig-003-20240827 (https://download.01.org/0day-ci/archive/20240827/202408270446.6Ew7FPHA-lkp@intel.com/config)
+compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 08e5a1de8227512d4774a534b91cb2353cef6284)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240827/202408270446.6Ew7FPHA-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202408270455.R85TrPfw-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202408270446.6Ew7FPHA-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> kernel/sched/core.c:5232:4: error: implicit declaration of function 'switch_mm_cid_from_user_to_kernel' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
-                           switch_mm_cid_from_user_to_kernel(rq, prev, next);
-                           ^
->> kernel/sched/core.c:5257:4: error: implicit declaration of function 'switch_mm_cid_from_kernel_to_user' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
-                           switch_mm_cid_from_kernel_to_user(rq, prev, next);
-                           ^
->> kernel/sched/core.c:5259:4: error: implicit declaration of function 'switch_mm_cid_from_user_to_user' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
-                           switch_mm_cid_from_user_to_user(rq, prev, next);
-                           ^
-   3 errors generated.
+   In file included from fs/bcachefs/fs.c:4:
+   In file included from fs/bcachefs/bcachefs.h:188:
+   In file included from include/linux/bio.h:10:
+   In file included from include/linux/blk_types.h:10:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:8:
+   In file included from include/linux/cacheflush.h:5:
+   In file included from arch/arm/include/asm/cacheflush.h:10:
+   In file included from include/linux/mm.h:2198:
+   include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+>> fs/bcachefs/fs.c:248:60: error: too many arguments provided to function-like macro invocation
+     248 |         if (unlikely(inode_init_always_gfp(c->vfs_sb, &inode->v), gfp)) {
+         |                                                                   ^
+   include/linux/compiler.h:77:10: note: macro 'unlikely' defined here
+      77 | # define unlikely(x)    __builtin_expect(!!(x), 0)
+         |          ^
+>> fs/bcachefs/fs.c:248:6: error: use of undeclared identifier 'unlikely'
+     248 |         if (unlikely(inode_init_always_gfp(c->vfs_sb, &inode->v), gfp)) {
+         |             ^
+>> fs/bcachefs/fs.c:261:60: error: use of undeclared identifier 'GFP_NOWARN'
+     261 |         struct bch_inode_info *inode = __bch2_new_inode(trans->c, GFP_NOWARN | GFP_NOWAIT);
+         |                                                                   ^
+   1 warning and 3 errors generated.
 
 
-vim +/switch_mm_cid_from_user_to_kernel +5232 kernel/sched/core.c
+vim +248 fs/bcachefs/fs.c
 
-  5199	
-  5200	/*
-  5201	 * context_switch - switch to the new MM and the new thread's register state.
-  5202	 */
-  5203	static __always_inline struct rq *
-  5204	context_switch(struct rq *rq, struct task_struct *prev,
-  5205		       struct task_struct *next, struct rq_flags *rf)
-  5206	{
-  5207		prepare_task_switch(rq, prev, next);
-  5208	
-  5209		/*
-  5210		 * For paravirt, this is coupled with an exit in switch_to to
-  5211		 * combine the page table reload and the switch backend into
-  5212		 * one hypercall.
-  5213		 */
-  5214		arch_start_context_switch(prev);
-  5215	
-  5216		/*
-  5217		 * kernel -> kernel   lazy + transfer active
-  5218		 *   user -> kernel   lazy + mmgrab_lazy_tlb() active
-  5219		 *
-  5220		 * kernel ->   user   switch + mmdrop_lazy_tlb() active
-  5221		 *   user ->   user   switch
-  5222		 *
-  5223		 * switch_mm_cid() needs to be updated if the barriers provided
-  5224		 * by context_switch() are modified.
-  5225		 */
-  5226		if (!next->mm) {                                // to kernel
-  5227			enter_lazy_tlb(prev->active_mm, next);
-  5228	
-  5229			next->active_mm = prev->active_mm;
-  5230			if (prev->mm) {                           // from user
-  5231				mmgrab_lazy_tlb(prev->active_mm);
-> 5232				switch_mm_cid_from_user_to_kernel(rq, prev, next);
-  5233			}
-  5234			else
-  5235				/*
-  5236				 * kernel -> kernel transition does not change rq->curr->mm
-  5237				 * state. It stays NULL.
-  5238				 */
-  5239				prev->active_mm = NULL;
-  5240		} else {                                        // to user
-  5241			membarrier_switch_mm(rq, prev->active_mm, next->mm);
-  5242			/*
-  5243			 * sys_membarrier() requires an smp_mb() between setting
-  5244			 * rq->curr / membarrier_switch_mm() and returning to userspace.
-  5245			 *
-  5246			 * The below provides this either through switch_mm(), or in
-  5247			 * case 'prev->active_mm == next->mm' through
-  5248			 * finish_task_switch()'s mmdrop().
-  5249			 */
-  5250			switch_mm_irqs_off(prev->active_mm, next->mm, next);
-  5251			lru_gen_use_mm(next->mm);
-  5252	
-  5253			if (!prev->mm) {                        // from kernel
-  5254				/* will mmdrop_lazy_tlb() in finish_task_switch(). */
-  5255				rq->prev_mm = prev->active_mm;
-  5256				prev->active_mm = NULL;
-> 5257				switch_mm_cid_from_kernel_to_user(rq, prev, next);
-  5258			} else
-> 5259				switch_mm_cid_from_user_to_user(rq, prev, next);
-  5260		}
-  5261	
-  5262		prepare_lock_switch(rq, next, rf);
-  5263	
-  5264		/* Here we just switch the register state and the stack. */
-  5265		switch_to(prev, next, prev);
-  5266		barrier();
-  5267	
-  5268		return finish_task_switch(prev);
-  5269	}
-  5270	
+   233	
+   234	static struct bch_inode_info *__bch2_new_inode(struct bch_fs *c, gfp_t gfp)
+   235	{
+   236		struct bch_inode_info *inode = kmem_cache_alloc(bch2_inode_cache, gfp);
+   237		if (!inode)
+   238			return NULL;
+   239	
+   240		inode_init_once(&inode->v);
+   241		mutex_init(&inode->ei_update_lock);
+   242		two_state_lock_init(&inode->ei_pagecache_lock);
+   243		INIT_LIST_HEAD(&inode->ei_vfs_inode_list);
+   244		inode->ei_flags = 0;
+   245		mutex_init(&inode->ei_quota_lock);
+   246		memset(&inode->ei_devs_need_flush, 0, sizeof(inode->ei_devs_need_flush));
+   247	
+ > 248		if (unlikely(inode_init_always_gfp(c->vfs_sb, &inode->v), gfp)) {
+   249			kmem_cache_free(bch2_inode_cache, inode);
+   250			return NULL;
+   251		}
+   252	
+   253		return inode;
+   254	}
+   255	
+   256	/*
+   257	 * Allocate a new inode, dropping/retaking btree locks if necessary:
+   258	 */
+   259	static struct bch_inode_info *bch2_new_inode(struct btree_trans *trans)
+   260	{
+ > 261		struct bch_inode_info *inode = __bch2_new_inode(trans->c, GFP_NOWARN | GFP_NOWAIT);
+   262	
+   263		if (unlikely(!inode)) {
+   264			int ret = drop_locks_do(trans, (inode = __bch2_new_inode(trans->c, GFP_NOFS)) ? 0 : -ENOMEM);
+   265			if (ret && inode) {
+   266				__destroy_inode(&inode->v);
+   267				kmem_cache_free(bch2_inode_cache, inode);
+   268			}
+   269			if (ret)
+   270				return ERR_PTR(ret);
+   271		}
+   272	
+   273		return inode;
+   274	}
+   275	
 
 -- 
 0-DAY CI Kernel Test Service
