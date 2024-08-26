@@ -1,60 +1,61 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E09471CD25;
-	Mon, 26 Aug 2024 15:24:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 63AC019308C;
+	Mon, 26 Aug 2024 16:05:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724685855; cv=none; b=M/wDutKAL27hnD4USPLOpUj/T4deSz55KA6Dov+UJvK1ksbKZqte/erckDGOnPTt/7ivYdwVsswlZ4zGdlombz76vCTRWzN0TDS/TqwztazvZvlYEGsglqh0MazzJgOKVzIcfW+aQEKhXzWKKzSBLu1EXYxMKKSGHaQTQw+smb8=
+	t=1724688328; cv=none; b=l3K3pqiDbLZFItkoPT85aY/LXGWp2LRXCkf+Ndx6pEQIfnyLPHhuahIvJxLxP89VClbEeGkvhbltDuIRhtmvlfwTwFGAiC7fVQ7KpkfjAcxGIfLX1vzYMlkfPrCY3QdZjdF4Zg5gOKkA5Fr+M2XEpWLqaFZi0b/equPVztZChiE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724685855; c=relaxed/simple;
-	bh=CaBbi3OQv9oAwXqvZefHAetx2+TNWlDRtz/czDbMKd8=;
+	s=arc-20240116; t=1724688328; c=relaxed/simple;
+	bh=/2Do9k3Sze9rh2v7/7p30zOKQMTiSFu60fpAD/a0QrM=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=URDkSx5kML+DCz2ZovipnQ+/fVFGVE99TuNEWFrJSfVAxvaoezvjdCXlOdM+q1av3mX2gGECUGLRfeVl0U32X0E7ENAa0MNsRPYq2rtZPb2vVBnMPjvD78LNvGTZ9d48xEMqBfugpsq193RnM3QFYcPVI6lRMRbRCWnRfWKDZUI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=eCb5HGd2; arc=none smtp.client-ip=198.175.65.16
+	 Content-Type:Content-Disposition:In-Reply-To; b=VeFB0ZPxKNcBTp2IOr6ghAfSsX00Q0/k1zCIYgqWdqzgLVhOB/Z661Mz8eggheyHnuCjGKspTxZEfrx0/wAR/wK0NsHlUC+gjNDbTQVu9IcKIMMHncDIFR5d9M+VhzgJaWyL1NS69joL6s/FDf07QEcW60pEecRvy/erRdMXNJ4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=SMqy6Sfm; arc=none smtp.client-ip=198.175.65.18
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="eCb5HGd2"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="SMqy6Sfm"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1724685852; x=1756221852;
+  t=1724688326; x=1756224326;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=CaBbi3OQv9oAwXqvZefHAetx2+TNWlDRtz/czDbMKd8=;
-  b=eCb5HGd2O4wnrLcCKeEeM9/vxZnZaKd68QjCObbF7N+tfjPiYRfcOLjv
-   Xuvgku0daPDZi+X3YeXBI5FPaec1WCaGjP66w0AKUV2ePtEpjCK21zFn3
-   2LXTAHGX96jGuuNJHjamhLREZrdHdZ4C0VwbYO/k4t2uXhXGujlh/wCLy
-   H/1X8N5G2nPpgr+Ka+neVXLiNMAYMU2/DjOiy1T14njbHLJQrZp1FdaA5
-   nlBhWvmVD9zfmuYrIShSvaBXegWt1J66ohzdRuS7AtPFJnvbog4BItbU9
-   PfMSQFNUOgkpWz3IryOjVHDL4e2LBXTkBMyFyem4S0GrB1P7QztdTJcoy
-   w==;
-X-CSE-ConnectionGUID: v4u+35YpTomxACHxu0K9xQ==
-X-CSE-MsgGUID: /1XiBFLhQGavWSCn08Yp0A==
-X-IronPort-AV: E=McAfee;i="6700,10204,11176"; a="23246729"
-X-IronPort-AV: E=Sophos;i="6.10,177,1719903600"; 
-   d="scan'208";a="23246729"
-Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Aug 2024 08:24:11 -0700
-X-CSE-ConnectionGUID: M+wg2UATRHmxjMnfplPWmw==
-X-CSE-MsgGUID: 7Zy/U1HkROC40csSaOsdCg==
+  bh=/2Do9k3Sze9rh2v7/7p30zOKQMTiSFu60fpAD/a0QrM=;
+  b=SMqy6SfmD9BINKHEZA0gadtteqr7QtSbWkpwe5u0UTV1PO83Tmy9g1tW
+   7HDUzYIeDu/9E2c85BCah58HVR9eYevc/dQI9zFaDIQJkSfnYaujUVbVe
+   R2yTJY1IE7QM58+PNobgvupQgDjT7uBlIovELW/DIoWFMke56qDO5/pvy
+   wEIpmvcGIpgpQ/EkHd4QSZO27MU4dziYBp2NVP3vqBbuVAmva/h1b52fc
+   pMZdDHZrO4orHEVzhxtLhRdJtbSbHw0FFS+z2pxW61kvnjPD0RhOcYaOE
+   YNlLrMrR9wT1Wceu/VHy/pAdYRIMRKhB0+rDSGD/hjNubP0Kn/uEJ+YYf
+   g==;
+X-CSE-ConnectionGUID: Bge7LZpDT96jB7NWN9tQww==
+X-CSE-MsgGUID: Irxjr5KsSjWmb6YDQagv+A==
+X-IronPort-AV: E=McAfee;i="6700,10204,11176"; a="23277577"
+X-IronPort-AV: E=Sophos;i="6.10,178,1719903600"; 
+   d="scan'208";a="23277577"
+Received: from fmviesa004.fm.intel.com ([10.60.135.144])
+  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Aug 2024 09:05:20 -0700
+X-CSE-ConnectionGUID: s0kwVPpTS0W4sAU9v6JqLQ==
+X-CSE-MsgGUID: FQMP2285QLCrGMnJg8flmw==
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.10,177,1719903600"; 
-   d="scan'208";a="93271804"
+X-IronPort-AV: E=Sophos;i="6.10,178,1719903600"; 
+   d="scan'208";a="67248289"
 Received: from lkp-server01.sh.intel.com (HELO 9a732dc145d3) ([10.239.97.150])
-  by orviesa002.jf.intel.com with ESMTP; 26 Aug 2024 08:24:10 -0700
+  by fmviesa004.fm.intel.com with ESMTP; 26 Aug 2024 09:05:13 -0700
 Received: from kbuild by 9a732dc145d3 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1sibZg-000HE7-0O;
-	Mon, 26 Aug 2024 15:24:08 +0000
-Date: Mon, 26 Aug 2024 23:23:31 +0800
+	id 1sicDP-000HGQ-1G;
+	Mon, 26 Aug 2024 16:05:11 +0000
+Date: Tue, 27 Aug 2024 00:05:07 +0800
 From: kernel test robot <lkp@intel.com>
-To: Christoph Hellwig <hch@lst.de>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [PATCH 5/6] xfs: call xfs_bmap_exact_minlen_extent_alloc from
- xfs_bmap_btalloc
-Message-ID: <202408262312.ekF7lryy-lkp@intel.com>
-References: <20240824034100.1163020-6-hch@lst.de>
+To: Cheng Xu <chengyou@linux.alibaba.com>, jgg@ziepe.ca, leon@kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-rdma@vger.kernel.org, KaiShen@linux.alibaba.com
+Subject: Re: [PATCH for-next 2/4] RDMA/erdma: Refactor the initialization and
+ destruction of EQ
+Message-ID: <202408262310.5jeNjXWm-lkp@intel.com>
+References: <20240823075058.89488-3-chengyou@linux.alibaba.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -63,101 +64,156 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240824034100.1163020-6-hch@lst.de>
+In-Reply-To: <20240823075058.89488-3-chengyou@linux.alibaba.com>
 
-Hi Christoph,
+Hi Cheng,
 
-kernel test robot noticed the following build errors:
+kernel test robot noticed the following build warnings:
 
-[auto build test ERROR on xfs-linux/for-next]
-[also build test ERROR on linus/master v6.11-rc5 next-20240826]
-[cannot apply to djwong-xfs/djwong-devel]
+[auto build test WARNING on rdma/for-next]
+[also build test WARNING on linus/master v6.11-rc5 next-20240826]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Christoph-Hellwig/xfs-return-bool-from-xfs_attr3_leaf_add/20240826-140936
-base:   https://git.kernel.org/pub/scm/fs/xfs/xfs-linux.git for-next
-patch link:    https://lore.kernel.org/r/20240824034100.1163020-6-hch%40lst.de
-patch subject: [PATCH 5/6] xfs: call xfs_bmap_exact_minlen_extent_alloc from xfs_bmap_btalloc
-config: x86_64-rhel-8.3-rust (https://download.01.org/0day-ci/archive/20240826/202408262312.ekF7lryy-lkp@intel.com/config)
-compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240826/202408262312.ekF7lryy-lkp@intel.com/reproduce)
+url:    https://github.com/intel-lab-lkp/linux/commits/Cheng-Xu/RDMA-erdma-Make-the-device-probe-process-more-robust/20240826-123256
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/rdma/rdma.git for-next
+patch link:    https://lore.kernel.org/r/20240823075058.89488-3-chengyou%40linux.alibaba.com
+patch subject: [PATCH for-next 2/4] RDMA/erdma: Refactor the initialization and destruction of EQ
+config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20240826/202408262310.5jeNjXWm-lkp@intel.com/config)
+compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 08e5a1de8227512d4774a534b91cb2353cef6284)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240826/202408262310.5jeNjXWm-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202408262312.ekF7lryy-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202408262310.5jeNjXWm-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> fs/xfs/libxfs/xfs_bmap.c:3762:50: error: too many arguments provided to function-like macro invocation
-    3762 |                 error = xfs_bmap_exact_minlen_extent_alloc(ap, &args);
-         |                                                                ^
-   fs/xfs/libxfs/xfs_bmap.c:3500:9: note: macro 'xfs_bmap_exact_minlen_extent_alloc' defined here
-    3500 | #define xfs_bmap_exact_minlen_extent_alloc(bma) (-EFSCORRUPTED)
-         |         ^
->> fs/xfs/libxfs/xfs_bmap.c:3762:11: error: use of undeclared identifier 'xfs_bmap_exact_minlen_extent_alloc'
-    3762 |                 error = xfs_bmap_exact_minlen_extent_alloc(ap, &args);
-         |                         ^
-   2 errors generated.
+   In file included from include/linux/highmem.h:10:
+   In file included from include/linux/mm.h:2228:
+   include/linux/vmstat.h:500:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     500 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     501 |                            item];
+         |                            ~~~~
+   include/linux/vmstat.h:507:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     507 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     508 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/vmstat.h:514:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     514 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+   include/linux/vmstat.h:519:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     519 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     520 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/vmstat.h:528:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     528 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     529 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+   In file included from drivers/infiniband/hw/erdma/erdma_eq.c:7:
+   In file included from drivers/infiniband/hw/erdma/erdma_verbs.h:10:
+   In file included from drivers/infiniband/hw/erdma/erdma.h:11:
+   In file included from include/linux/netdevice.h:38:
+   In file included from include/net/net_namespace.h:43:
+   In file included from include/linux/skbuff.h:28:
+   In file included from include/linux/dma-mapping.h:11:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/s390/include/asm/io.h:93:
+   include/asm-generic/io.h:548:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     548 |         val = __raw_readb(PCI_IOBASE + addr);
+         |                           ~~~~~~~~~~ ^
+   include/asm-generic/io.h:561:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     561 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
+      37 | #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
+         |                                                           ^
+   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
+     102 | #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
+         |                                                      ^
+   In file included from drivers/infiniband/hw/erdma/erdma_eq.c:7:
+   In file included from drivers/infiniband/hw/erdma/erdma_verbs.h:10:
+   In file included from drivers/infiniband/hw/erdma/erdma.h:11:
+   In file included from include/linux/netdevice.h:38:
+   In file included from include/net/net_namespace.h:43:
+   In file included from include/linux/skbuff.h:28:
+   In file included from include/linux/dma-mapping.h:11:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/s390/include/asm/io.h:93:
+   include/asm-generic/io.h:574:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     574 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
+      35 | #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
+         |                                                           ^
+   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
+     115 | #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
+         |                                                      ^
+   In file included from drivers/infiniband/hw/erdma/erdma_eq.c:7:
+   In file included from drivers/infiniband/hw/erdma/erdma_verbs.h:10:
+   In file included from drivers/infiniband/hw/erdma/erdma.h:11:
+   In file included from include/linux/netdevice.h:38:
+   In file included from include/net/net_namespace.h:43:
+   In file included from include/linux/skbuff.h:28:
+   In file included from include/linux/dma-mapping.h:11:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/s390/include/asm/io.h:93:
+   include/asm-generic/io.h:585:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     585 |         __raw_writeb(value, PCI_IOBASE + addr);
+         |                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:595:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     595 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:605:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     605 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:693:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     693 |         readsb(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:701:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     701 |         readsw(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:709:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     709 |         readsl(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:718:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     718 |         writesb(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+   include/asm-generic/io.h:727:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     727 |         writesw(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+   include/asm-generic/io.h:736:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     736 |         writesl(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+>> drivers/infiniband/hw/erdma/erdma_eq.c:141:6: warning: no previous prototype for function 'erdma_aeq_destroy' [-Wmissing-prototypes]
+     141 | void erdma_aeq_destroy(struct erdma_dev *dev)
+         |      ^
+   drivers/infiniband/hw/erdma/erdma_eq.c:141:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+     141 | void erdma_aeq_destroy(struct erdma_dev *dev)
+         | ^
+         | static 
+   18 warnings generated.
 
 
-vim +3762 fs/xfs/libxfs/xfs_bmap.c
+vim +/erdma_aeq_destroy +141 drivers/infiniband/hw/erdma/erdma_eq.c
 
-  3728	
-  3729	static int
-  3730	xfs_bmap_btalloc(
-  3731		struct xfs_bmalloca	*ap)
-  3732	{
-  3733		struct xfs_mount	*mp = ap->ip->i_mount;
-  3734		struct xfs_alloc_arg	args = {
-  3735			.tp		= ap->tp,
-  3736			.mp		= mp,
-  3737			.fsbno		= NULLFSBLOCK,
-  3738			.oinfo		= XFS_RMAP_OINFO_SKIP_UPDATE,
-  3739			.minleft	= ap->minleft,
-  3740			.wasdel		= ap->wasdel,
-  3741			.resv		= XFS_AG_RESV_NONE,
-  3742			.datatype	= ap->datatype,
-  3743			.alignment	= 1,
-  3744			.minalignslop	= 0,
-  3745		};
-  3746		xfs_fileoff_t		orig_offset;
-  3747		xfs_extlen_t		orig_length;
-  3748		int			error;
-  3749		int			stripe_align;
-  3750	
-  3751		ASSERT(ap->length);
-  3752		orig_offset = ap->offset;
-  3753		orig_length = ap->length;
-  3754	
-  3755		stripe_align = xfs_bmap_compute_alignments(ap, &args);
-  3756	
-  3757		/* Trim the allocation back to the maximum an AG can fit. */
-  3758		args.maxlen = min(ap->length, mp->m_ag_max_usable);
-  3759	
-  3760		if (unlikely(XFS_TEST_ERROR(false, mp,
-  3761				XFS_ERRTAG_BMAP_ALLOC_MINLEN_EXTENT)))
-> 3762			error = xfs_bmap_exact_minlen_extent_alloc(ap, &args);
-  3763		else if ((ap->datatype & XFS_ALLOC_USERDATA) &&
-  3764				xfs_inode_is_filestream(ap->ip))
-  3765			error = xfs_bmap_btalloc_filestreams(ap, &args, stripe_align);
-  3766		else
-  3767			error = xfs_bmap_btalloc_best_length(ap, &args, stripe_align);
-  3768		if (error)
-  3769			return error;
-  3770	
-  3771		if (args.fsbno != NULLFSBLOCK) {
-  3772			xfs_bmap_process_allocated_extent(ap, &args, orig_offset,
-  3773				orig_length);
-  3774		} else {
-  3775			ap->blkno = NULLFSBLOCK;
-  3776			ap->length = 0;
-  3777		}
-  3778		return 0;
-  3779	}
-  3780	
+f2a0a630b953451 Cheng Xu 2022-07-27  140  
+f2a0a630b953451 Cheng Xu 2022-07-27 @141  void erdma_aeq_destroy(struct erdma_dev *dev)
+f2a0a630b953451 Cheng Xu 2022-07-27  142  {
+f2a0a630b953451 Cheng Xu 2022-07-27  143  	struct erdma_eq *eq = &dev->aeq;
+f2a0a630b953451 Cheng Xu 2022-07-27  144  
+f0697bf078368d7 Boshi Yu 2024-03-11  145  	dma_free_coherent(&dev->pdev->dev, eq->depth << EQE_SHIFT, eq->qbuf,
+f2a0a630b953451 Cheng Xu 2022-07-27  146  			  eq->qbuf_dma_addr);
+f0697bf078368d7 Boshi Yu 2024-03-11  147  
+fdb09ed15f272ad Boshi Yu 2024-03-11  148  	dma_pool_free(dev->db_pool, eq->dbrec, eq->dbrec_dma);
+f2a0a630b953451 Cheng Xu 2022-07-27  149  }
+f2a0a630b953451 Cheng Xu 2022-07-27  150  
 
 -- 
 0-DAY CI Kernel Test Service
