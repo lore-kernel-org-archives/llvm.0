@@ -1,78 +1,74 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f171.google.com (mail-pf1-f171.google.com [209.85.210.171])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 65C1F146D6D;
-	Mon, 26 Aug 2024 10:13:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E7AF01741C0
+	for <llvm@lists.linux.dev>; Mon, 26 Aug 2024 10:50:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724667241; cv=none; b=q3KAzgYk7/ssC/OkYKfOz3RrxWtRsVP5gVmW56zvuivpNo9uyAT0rbBGGHQVaKo7zR2xWku4h2cf/ts3urwsza+5fv938Pejx14qq6bm+nEtexN8ItqGqlpbHShTcSGfVMg+gqw4EbTWEn9aq98DD+cGlEe95mArUF+mdw9Ah9A=
+	t=1724669433; cv=none; b=ZUHTDPjL0/9jfJemnKg1EQ2N6ZT/oDMU2goXbLWoY3Yysq6SZZDsQ4kje3tbuM5jkyZRZkS5O63HlwuaSAXxqvzP/L53f5UYrW0+4eBsAXdfU6gnOWRici0GLMFtHg1dmPMxJeKql0gQkVY5/XLk4wljxfzMW2VRAlMvODdyY+c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724667241; c=relaxed/simple;
-	bh=3OMh0I6YDGa+H54lyN0aZeKV/jasJN3FKzzG5FqwCZc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=EKAR5Ih128LkGsnk5Sha8UaPgdC6ulFc4l6Qn8JxgFbXOvoz1KBMNNZczBSE/uq59Yx1wXOplIURVfz8g8TM43YQJdchM3kNeYhPS/ejBi69uh9BXPReA8BEM6ojlgpB2HyZNuNVgGGyqcIsOAi/dDK6kxaf6+uafmYH33bQzHE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=fZXu2l/y; arc=none smtp.client-ip=192.198.163.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1724669433; c=relaxed/simple;
+	bh=uAJWrnhKAr+TitU4/QOtd7gy/ZzpWQKw7fRDPeKcgIE=;
+	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=l1I1QX2RVFGdevzH61DupNEXmLglv5weiBQaO/azNjoCSTOSqoSgNtbd2rsHEjcqyBuReYYgzJQod/wVhFlWAsrhoozF29vZwFrPfT8B9J6kEy2P6LTSvfmTxzZ5OHX3+DAO+InsfFr6ZT36fDfbxWdTEd1OXvCZW1/I3fu69DU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=MFOrLPFn; arc=none smtp.client-ip=209.85.210.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="fZXu2l/y"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1724667239; x=1756203239;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=3OMh0I6YDGa+H54lyN0aZeKV/jasJN3FKzzG5FqwCZc=;
-  b=fZXu2l/y3+EUsVjdUXllCwg319KvR9Jn3KbszwHRinQTIhzAHJyIlEgI
-   YgIbvlxiqitTpovCoWt918fXmuuaSQHy1e76PABagoztuMWfGodr+2G1m
-   n7ZhiNnHGISIuz26zWvIXx1r2CGqHpIUtjt2Pdy6UYVIZDjkqeMjS3XvK
-   juvRMroOIZ46FPEzMqzx32I45f+YDtb/W3U9qCr+6RCjinXKgnfdemxFb
-   b+6tmFrAmEIPdsoyb5W6vGGGne89BE8WOiQh9spMzU1dJN0P7bCqfGBmg
-   T0gqTT61uCAj1kt5garcXXD5Vb78o3RHVUHA2rnID/22rwHILPaM8GUSh
-   Q==;
-X-CSE-ConnectionGUID: rkinqMv+TtSqVUSXslCObg==
-X-CSE-MsgGUID: l3qtmafISvGo1THUYK6Mcg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11175"; a="23257026"
-X-IronPort-AV: E=Sophos;i="6.10,177,1719903600"; 
-   d="scan'208";a="23257026"
-Received: from fmviesa008.fm.intel.com ([10.60.135.148])
-  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Aug 2024 03:13:58 -0700
-X-CSE-ConnectionGUID: j2hGswy3Tqa//Z8Y2y8Osg==
-X-CSE-MsgGUID: FKbHAQ2HT1Woa5mT7v3qTA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.10,177,1719903600"; 
-   d="scan'208";a="62437513"
-Received: from lkp-server01.sh.intel.com (HELO 9a732dc145d3) ([10.239.97.150])
-  by fmviesa008.fm.intel.com with ESMTP; 26 Aug 2024 03:13:53 -0700
-Received: from kbuild by 9a732dc145d3 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1siWjO-000GsF-2m;
-	Mon, 26 Aug 2024 10:13:50 +0000
-Date: Mon, 26 Aug 2024 18:13:45 +0800
-From: kernel test robot <lkp@intel.com>
-To: Christophe Leroy <christophe.leroy@csgroup.eu>,
-	Michael Ellerman <mpe@ellerman.id.au>,
-	Nicholas Piggin <npiggin@gmail.com>,
-	Naveen N Rao <naveen@kernel.org>, Andy Lutomirski <luto@kernel.org>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-	"H. Peter Anvin" <hpa@zytor.com>, Theodore Ts'o <tytso@mit.edu>,
-	"Jason A. Donenfeld" <Jason@zx2c4.com>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-	Vincenzo Frascino <vincenzo.frascino@arm.com>,
-	Shuah Khan <skhan@linuxfoundation.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Linux Memory Management List <linux-mm@kvack.org>,
-	linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-	linux-fsdevel@vger.kernel.org, linux-arch@vger.kernel.org,
-	linux-trace-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v2 07/17] mm: Define VM_DROPPABLE for powerpc/32
-Message-ID: <202408261734.UAvnH7Mv-lkp@intel.com>
-References: <315e3a268b165b6edad7dcb723b0d8a506a56c4e.1724309198.git.christophe.leroy@csgroup.eu>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MFOrLPFn"
+Received: by mail-pf1-f171.google.com with SMTP id d2e1a72fcca58-714262f1bb4so2920098b3a.3
+        for <llvm@lists.linux.dev>; Mon, 26 Aug 2024 03:50:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1724669431; x=1725274231; darn=lists.linux.dev;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=kz4Xwf3jhGksglONaJ7p+UE/pw0jxJqIllk99bmumcY=;
+        b=MFOrLPFn/WuRX3pIdw+8E16OT3CJ4VMRaJURUKMlGqBuh6kR9RshMjOSLYDyckj49J
+         d49hNir0Q6e7O5D5hduvyH7NFFoDjjosVQPh+wIvfPIF5B5aDOXc2Jdxmkw7HLPIblK4
+         b3Xak3hORZMY7PbDVfWxn2fOP/FVZItb9OIHQ8+Qask/2f8X+lyX52gL7voXuWJkn3Ci
+         DDeoVXiv/hL2O7t2kEqA4x2/yCBgMFU4lz3MwNPe9CURDQjnwIRtXpV/Z2Q1bh097SSX
+         2ANgAydhM+wZR4Rv2vNT0LwfdOcfdzrBJd+9te8wgxuf9i+zcw6B7hVxL5soLNJOB3ui
+         Md1Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1724669431; x=1725274231;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=kz4Xwf3jhGksglONaJ7p+UE/pw0jxJqIllk99bmumcY=;
+        b=ZVTu+7chuyYqOQZofkQTXU8qHwIpmYJOYDcmyFSiR48xhi3wV7ecT+VUJFrPK0NJ+r
+         hrRxndN67K1PTh6MMxZ8ATwdr+zN/AkvGWxuN+VtdrlxbBejypei5uwtn04PWappcAHK
+         YyraWt4ha6aOEMT/6LLQx4+FOwR41dRNPzP4y6g0klJRo40eN0Q3i1t65+jJm6ZFJr6h
+         taTpmwDXfeBneh1e4Q46KxDUQRXJNPxp6qzS43MWuLAcqH3S9fSWCMOjqtXnecNREfDr
+         5pHDY+hNA8UnXcIFtmoqr+M1h3GlRC68OD6m2USwK6m0xH5GgdG0aZPfO5IqcdgV6iaL
+         vd8Q==
+X-Forwarded-Encrypted: i=1; AJvYcCVLjhRb4jPpJR1Jjw7NrEBbjN99TL3NQcTPeU6HQvO7l0tkKodBSEyhsjnbSckFwsirf9CT@lists.linux.dev
+X-Gm-Message-State: AOJu0Yw9h1EYbwFGojPZ4/o2vss+xg6ieSmRZU+Kklgp9hF5ZlVm1+8E
+	7wq4aNb0aUd+Ug6ETOdS9HOuKpAKBMzRwHgbj9GYEGwZ6k2fhtbY
+X-Google-Smtp-Source: AGHT+IE+B6Dhu7mYsvVdA80XUfKbYNh6db4h8UlzbeNdJYdKTPQRqiwqqQhSfx+8JfTMMsGLlYcsaw==
+X-Received: by 2002:a05:6a20:4311:b0:1c4:87b9:7ef9 with SMTP id adf61e73a8af0-1cc8b59171emr11036512637.42.1724669431035;
+        Mon, 26 Aug 2024 03:50:31 -0700 (PDT)
+Received: from kodidev-ubuntu (69-172-146-21.cable.teksavvy.com. [69.172.146.21])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2038557f59bsm65602475ad.97.2024.08.26.03.50.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 26 Aug 2024 03:50:30 -0700 (PDT)
+From: Tony Ambardar <tony.ambardar@gmail.com>
+X-Google-Original-From: Tony Ambardar <Tony.Ambardar@gmail.com>
+Date: Mon, 26 Aug 2024 03:50:28 -0700
+To: Yonghong Song <yonghong.song@linux.dev>
+Cc: Ilya Leoshkevich <iii@linux.ibm.com>, bpf@vger.kernel.org,
+	linux-s390@vger.kernel.org, llvm@lists.linux.dev,
+	Alexei Starovoitov <ast@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>
+Subject: Re: Problem testing with S390x under QEMU on x86_64
+Message-ID: <Zsxd9HskofXttp+p@kodidev-ubuntu>
+References: <ZsEcsaa3juxxQBUf@kodidev-ubuntu>
+ <180f4c27ebfb954d6b0fd2303c9fb7d5f21dae04.camel@linux.ibm.com>
+ <ZsU3GdK5t6KEOr0g@kodidev-ubuntu>
+ <Zspq+db1KOhhh2Yf@kodidev-ubuntu>
+ <c8c590b2-40b2-4cc0-9eb7-410dbd080a49@linux.dev>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -81,76 +77,44 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <315e3a268b165b6edad7dcb723b0d8a506a56c4e.1724309198.git.christophe.leroy@csgroup.eu>
+In-Reply-To: <c8c590b2-40b2-4cc0-9eb7-410dbd080a49@linux.dev>
 
-Hi Christophe,
+On Sun, Aug 25, 2024 at 01:23:51PM -0700, Yonghong Song wrote:
+> 
+> On 8/24/24 4:21 PM, Tony Ambardar wrote:
 
-kernel test robot noticed the following build warnings:
+[snip]
 
-[auto build test WARNING on powerpc/next]
-[also build test WARNING on powerpc/fixes shuah-kselftest/next shuah-kselftest/fixes linus/master v6.11-rc5 next-20240823]
-[cannot apply to crng-random/master]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+> > 
+> > Test '#525 verif_scale_pyperf600:FAIL' was caused by clang miscompilation
+> > exposed by my use of clang-19 and clang-20. The test passes when built
+> > with clang-17 (used by BPF CI) or clang-18 which I switched to use.
+> 
+> x86 has the same issue where clang19 generated code will cause verification
+> failure. Eduard is working on this.
+> 
+> > 
+> > One symptom of the problem is easily seen by manually compiling:
+> > 
+> > $ clang-18  -g -Wall -Werror -D__TARGET_ARCH_s390 -mbig-endian -Itools/testing/selftests/bpf/tools/include -Itools/testing/selftests/bpf -Itools/include/uapi -Itools/testing/selftests/usr/include -Wno-compare-distinct-pointer-types -idirafter /usr/lib/llvm-18/lib/clang/18/include -idirafter /usr/local/include -idirafter /usr/lib/gcc-cross/s390x-linux-gnu/11/../../../../s390x-linux-gnu/include -idirafter /usr/include/s390x-linux-gnu -idirafter /usr/include -DENABLE_ATOMICS_TESTS -O2 --target=bpfeb -c tools/testing/selftests/bpf/progs/pyperf600.c -mcpu=v3 -o pyperf600.clang18.bpf.o
+> > 
+> > $ clang-19  -g -Wall -Werror -D__TARGET_ARCH_s390 -mbig-endian -Itools/testing/selftests/bpf/tools/include -Itools/testing/selftests/bpf -Itools/include/uapi -Itools/testing/selftests/usr/include -Wno-compare-distinct-pointer-types -idirafter /usr/lib/llvm-19/lib/clang/19/include -idirafter /usr/local/include -idirafter /usr/lib/gcc-cross/s390x-linux-gnu/11/../../../../s390x-linux-gnu/include -idirafter /usr/include/s390x-linux-gnu -idirafter /usr/include -DENABLE_ATOMICS_TESTS -O2 --target=bpfeb -c tools/testing/selftests/bpf/progs/pyperf600.c -mcpu=v3 -o pyperf600.clang19.bpf.o
+> > 
+> > $ llvm-readelf-18 -S pyperf600.clang{18,19}.bpf.o |grep .symtab
+> >    [27] .symtab           SYMTAB          0000000000000000 1739d0 01ad60 18      1 4572  8
+> >    [27] .symtab           SYMTAB          0000000000000000 14f048 0001e0 18      1  12  8
+> > 
+> > Notice that the .symtab has shrunk by ~200X for example going to clang-19!
+> > (CCing llvm maintainers)
+> 
+> This is a known issue. In llvm18, all labels (to identify basic blocks) are in symbol table.
+> Those labels are removed from symbol table in llvm19.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Christophe-Leroy/asm-generic-unaligned-h-Extract-common-header-for-vDSO/20240826-103525
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/powerpc/linux.git next
-patch link:    https://lore.kernel.org/r/315e3a268b165b6edad7dcb723b0d8a506a56c4e.1724309198.git.christophe.leroy%40csgroup.eu
-patch subject: [PATCH v2 07/17] mm: Define VM_DROPPABLE for powerpc/32
-config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20240826/202408261734.UAvnH7Mv-lkp@intel.com/config)
-compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240826/202408261734.UAvnH7Mv-lkp@intel.com/reproduce)
+Glad to hear this a known issue being looked at now. A quick search on my part found nothing, so sorry for the noise and thanks for clarifying.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202408261734.UAvnH7Mv-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
-   In file included from mm/debug_page_ref.c:6:
-   In file included from include/trace/events/page_ref.h:11:
-   include/trace/events/mmflags.h:168:5: warning: 'VM_DROPPABLE' is not defined, evaluates to 0 [-Wundef]
-     168 | #if VM_DROPPABLE != VM_NONE
-         |     ^
-   include/trace/events/mmflags.h:168:21: warning: 'VM_NONE' is not defined, evaluates to 0 [-Wundef]
-     168 | #if VM_DROPPABLE != VM_NONE
-         |                     ^
-   In file included from mm/debug_page_ref.c:6:
-   In file included from include/trace/events/page_ref.h:135:
-   In file included from include/trace/define_trace.h:95:
-   In file included from include/trace/events/page_ref.h:11:
-   include/trace/events/mmflags.h:168:5: warning: 'VM_DROPPABLE' is not defined, evaluates to 0 [-Wundef]
-     168 | #if VM_DROPPABLE != VM_NONE
-         |     ^
-   include/trace/events/mmflags.h:168:21: warning: 'VM_NONE' is not defined, evaluates to 0 [-Wundef]
-     168 | #if VM_DROPPABLE != VM_NONE
-         |                     ^
-   In file included from mm/debug_page_ref.c:6:
-   In file included from include/trace/events/page_ref.h:135:
-   In file included from include/trace/define_trace.h:102:
-   In file included from include/trace/trace_events.h:94:
-   In file included from include/trace/events/page_ref.h:11:
->> include/trace/events/mmflags.h:169:10: warning: 'IF_HAVE_VM_DROPPABLE' macro redefined [-Wmacro-redefined]
-     169 | # define IF_HAVE_VM_DROPPABLE(flag, name) {flag, name},
-         |          ^
-   include/trace/events/mmflags.h:171:10: note: previous definition is here
-     171 | # define IF_HAVE_VM_DROPPABLE(flag, name)
-         |          ^
-   5 warnings generated.
-
-
-vim +/IF_HAVE_VM_DROPPABLE +169 include/trace/events/mmflags.h
-
-7677f7fd8be766 Axel Rasmussen     2021-05-04  167  
-41e2c674b334ed Christophe Leroy   2024-08-22 @168  #if VM_DROPPABLE != VM_NONE
-9651fcedf7b92d Jason A. Donenfeld 2022-12-08 @169  # define IF_HAVE_VM_DROPPABLE(flag, name) {flag, name},
-9651fcedf7b92d Jason A. Donenfeld 2022-12-08  170  #else
-9651fcedf7b92d Jason A. Donenfeld 2022-12-08  171  # define IF_HAVE_VM_DROPPABLE(flag, name)
-9651fcedf7b92d Jason A. Donenfeld 2022-12-08  172  #endif
-9651fcedf7b92d Jason A. Donenfeld 2022-12-08  173  
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+> 
+> > 
+> > 
+> > Kind regards,
+> > Tony
+> > 
