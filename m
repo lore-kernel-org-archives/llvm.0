@@ -1,178 +1,149 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7FC77153BF7;
-	Mon, 26 Aug 2024 10:55:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 19447321D;
+	Mon, 26 Aug 2024 10:58:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724669703; cv=none; b=nkg0HPishP8BQ4Hv/QkI3gfvBAnRO70hjA5WLqik92BRBKlxTyf0dN/Ugoy8nz0+r85NILtMULMBtCEIpd8ZQBltgeZr3CLJQ0a3r4uJpBNXD8554ORzTVOaU9xniM1L3ecm+nPM/otGkPzNP6bFSeGs//GZzjr7DT2E+pl9eOI=
+	t=1724669891; cv=none; b=bWbDm4nio+H+GkJ+FHJxw+ZFkrx4flawtNwOLjZh8p5lfPdEU2uUph4CNncZwvdeZAfDhLj4Ne8R+SLxdXNelDN+y34WdK/K3N+ROocLFa0QTdlK9xbfURV4oc0eS8/r+77pnRc5qoZh/SEsdGZTwNOFDr+suctpvVLezn//V6c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724669703; c=relaxed/simple;
-	bh=ZKvhXZbFQWf5hH+P/pxElLbtOGycUozQPtcN9rFQF0o=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=hmd6353Qx+LaTbysgvL2WyrX54rUZ97+wnjkger71N+KZY9rKjBDqxwB0+mzwlU3jDVQbh27r6k48ORP4KSFxYeB0eCSC4L3nEmHX8pknvqEkFudaLdN4fBREBYK/Yt/m1/PRmoawc0MpytsVLdE7ChwMVhx9gkOH9zuZ54rkNY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=GJ9PWG/M; arc=none smtp.client-ip=192.198.163.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1724669891; c=relaxed/simple;
+	bh=hcaKc0Ezkqyp7WoNsBchrZvC12LrMBAs0TyShg0N7+g=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=gv6YLgT5bqBcHrGE5155usrOGAndFxj56mhqRPPyc9TeC51wNY6dvzsC7W1xnuZrFuVQLkcU2/M4prOY272hSg4d83jjbkbPo9i4Sx9iKgAawGAv57OetgH+4QQsHPPHFCpRoVCaQ8fGUks2plTM2KCK9E71q9koo7spnYc9vzQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DboTE/v/; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="GJ9PWG/M"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1724669701; x=1756205701;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=ZKvhXZbFQWf5hH+P/pxElLbtOGycUozQPtcN9rFQF0o=;
-  b=GJ9PWG/M70kqmog70ZXi85NubhoeDDfdteoJWS+CU6qgUOf3Y4iAP2ih
-   JpCFdq+KNFd4SEXCB01f6z12t030orOgttnq35XKIZf+zsHngamAyeRxs
-   Ky6M8kRJi6S33VIVu5uEK+5FPWzx1I0uDmXfK1Ys+ESWbFESpyboBs3FV
-   xcfP8FzzUJ2I5vI1kXg4tPZC3wLeSnFCjK+a08q9c4dA0PvG2Z29UdBBR
-   vlRLiywWj/dCYSmkNSLnzwOB2Dm+MyE4FNYqR8hv1AjGO/Qzi0CXx0ip+
-   w8hXv7b423UXzknNGAXgMjGPUeNDSjmE2ICSmKp53ux3CjnQV5Jzu3ZFT
-   w==;
-X-CSE-ConnectionGUID: kkt6Lp73S36EHn2fYCil5Q==
-X-CSE-MsgGUID: hzuLRSAxTJqxhDj2G5Ilqg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11175"; a="33705000"
-X-IronPort-AV: E=Sophos;i="6.10,177,1719903600"; 
-   d="scan'208";a="33705000"
-Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Aug 2024 03:54:59 -0700
-X-CSE-ConnectionGUID: I8HPQD2CS/KwUrAxpj/7RA==
-X-CSE-MsgGUID: pXKU0ebkSnC/cyYA2tBXzw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.10,177,1719903600"; 
-   d="scan'208";a="93202996"
-Received: from lkp-server01.sh.intel.com (HELO 9a732dc145d3) ([10.239.97.150])
-  by orviesa002.jf.intel.com with ESMTP; 26 Aug 2024 03:54:57 -0700
-Received: from kbuild by 9a732dc145d3 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1siXN8-000Gx0-2w;
-	Mon, 26 Aug 2024 10:54:54 +0000
-Date: Mon, 26 Aug 2024 18:54:35 +0800
-From: kernel test robot <lkp@intel.com>
-To: Shyam Sundar S K <Shyam-sundar.S-k@amd.com>,
-	Jean Delvare <jdelvare@suse.com>,
-	Andi Shyti <andi.shyti@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-i2c@vger.kernel.org, Sanket.Goswami@amd.com,
-	Shyam Sundar S K <Shyam-sundar.S-k@amd.com>
-Subject: Re: [PATCH 3/5] i2c: piix4: Add ACPI support for ASF SMBus device
-Message-ID: <202408261816.iYeJHXHU-lkp@intel.com>
-References: <20240822142200.686842-4-Shyam-sundar.S-k@amd.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DboTE/v/"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 54EFFC58131;
+	Mon, 26 Aug 2024 10:58:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1724669889;
+	bh=hcaKc0Ezkqyp7WoNsBchrZvC12LrMBAs0TyShg0N7+g=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=DboTE/v/Nk3IY08xhzY82zVzS8bcN5kjdDejAygo4TiIEbxK0MnNxaSNjSPBNEKkD
+	 KvLpnchoflTtEGkYrXANdZU1szTXJym3xGmzpynA3oKx5JPpOaVcc/fF4DPGg+IK8q
+	 AfZ0l47AC/nO38QYvtpqjlk0bk48p2yA5Ejt22KToHXF0+oOBb9BsXd5rdMjPE0X7I
+	 8s4l3JXuUcWxpKQRm+oxPtjh1+jlIL2nJPD6s9z8zVNnE0lTzn/c4OGoCCFjbxoeuE
+	 Z1jCPdwxcTuxTDGii3IblPbDqI/rNLvW39c69BgJqo8taw358b9z+QGKczVxa/e1Nq
+	 u2V+PbneDoGmA==
+Date: Mon, 26 Aug 2024 11:57:56 +0100
+From: Jonathan Cameron <jic23@kernel.org>
+To: kernel test robot <lkp@intel.com>
+Cc: David Lechner <dlechner@baylibre.com>, llvm@lists.linux.dev,
+ oe-kbuild-all@lists.linux.dev, Michael Hennerich
+ <Michael.Hennerich@analog.com>, Nuno =?UTF-8?B?U8Oh?= <nuno.sa@analog.com>,
+ Jonathan Corbet <corbet@lwn.net>, linux-iio@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org
+Subject: Re: [PATCH 2/4] iio: adc: ad4695: implement calibration support
+Message-ID: <20240826115756.01cd41d3@jic23-huawei>
+In-Reply-To: <202408211207.fmYTjQDK-lkp@intel.com>
+References: <20240820-ad4695-gain-offset-v1-2-c8f6e3b47551@baylibre.com>
+	<202408211207.fmYTjQDK-lkp@intel.com>
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240822142200.686842-4-Shyam-sundar.S-k@amd.com>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-Hi Shyam,
+On Wed, 21 Aug 2024 12:21:09 +0800
+kernel test robot <lkp@intel.com> wrote:
 
-kernel test robot noticed the following build warnings:
+> Hi David,
+> 
+> kernel test robot noticed the following build warnings:
+> 
+> [auto build test WARNING on 0f718e10da81446df0909c9939dff2b77e3b4e95]
+> 
+> url:    https://github.com/intel-lab-lkp/linux/commits/David-Lechner/iio-adc-ad4695-add-2nd-regmap-for-16-bit-registers/20240821-000102
+> base:   0f718e10da81446df0909c9939dff2b77e3b4e95
+> patch link:    https://lore.kernel.org/r/20240820-ad4695-gain-offset-v1-2-c8f6e3b47551%40baylibre.com
+> patch subject: [PATCH 2/4] iio: adc: ad4695: implement calibration support
+> config: i386-buildonly-randconfig-002-20240821 (https://download.01.org/0day-ci/archive/20240821/202408211207.fmYTjQDK-lkp@intel.com/config)
+> compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
+> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240821/202408211207.fmYTjQDK-lkp@intel.com/reproduce)
+> 
+> If you fix the issue in a separate patch/commit (i.e. not just a new version of
+> the same patch/commit), kindly add following tags
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Closes: https://lore.kernel.org/oe-kbuild-all/202408211207.fmYTjQDK-lkp@intel.com/
+> 
+> All warnings (new ones prefixed by >>):
+> 
+> >> drivers/iio/adc/ad4695.c:735:6: warning: unused variable 'ret' [-Wunused-variable]  
+>      735 |         int ret;
+>          |             ^~~
+>    1 warning generated.
+I dropped this whilst applying.
 
-[auto build test WARNING on andi-shyti/i2c/i2c-host]
-[also build test WARNING on linus/master v6.11-rc5 next-20240823]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+> 
+> 
+> vim +/ret +735 drivers/iio/adc/ad4695.c
+> 
+>    728	
+>    729	static int ad4695_write_raw(struct iio_dev *indio_dev,
+>    730				    struct iio_chan_spec const *chan,
+>    731				    int val, int val2, long mask)
+>    732	{
+>    733		struct ad4695_state *st = iio_priv(indio_dev);
+>    734		unsigned int reg_val;
+>  > 735		int ret;  
+>    736	
+>    737		iio_device_claim_direct_scoped(return -EBUSY, indio_dev) {
+>    738			switch (mask) {
+>    739			case IIO_CHAN_INFO_CALIBSCALE:
+>    740				switch (chan->type) {
+>    741				case IIO_VOLTAGE:
+>    742					if (val < 0 || val2 < 0)
+>    743						reg_val = 0;
+>    744					else if (val > 1)
+>    745						reg_val = U16_MAX;
+>    746					else
+>    747						reg_val = (val * (1 << 16) +
+>    748							   mul_u64_u32_div(val2, 1 << 16,
+>    749									   MICRO)) / 2;
+>    750	
+>    751					return regmap_write(st->regmap16,
+>    752						AD4695_REG_GAIN_IN(chan->scan_index),
+>    753						reg_val);
+>    754				default:
+>    755					return -EINVAL;
+>    756				}
+>    757			case IIO_CHAN_INFO_CALIBBIAS:
+>    758				switch (chan->type) {
+>    759				case IIO_VOLTAGE:
+>    760					if (val2 >= 0 && val > S16_MAX / 4)
+>    761						reg_val = S16_MAX;
+>    762					else if ((val2 < 0 ? -val : val) < S16_MIN / 4)
+>    763						reg_val = S16_MIN;
+>    764					else if (val2 < 0)
+>    765						reg_val = clamp_t(int,
+>    766							-(val * 4 + -val2 * 4 / MICRO),
+>    767							S16_MIN, S16_MAX);
+>    768					else if (val < 0)
+>    769						reg_val = clamp_t(int,
+>    770							val * 4 - val2 * 4 / MICRO,
+>    771							S16_MIN, S16_MAX);
+>    772					else
+>    773						reg_val = clamp_t(int,
+>    774							val * 4 + val2 * 4 / MICRO,
+>    775							S16_MIN, S16_MAX);
+>    776	
+>    777					return regmap_write(st->regmap16,
+>    778						AD4695_REG_OFFSET_IN(chan->scan_index),
+>    779						reg_val);
+>    780				default:
+>    781					return -EINVAL;
+>    782				}
+>    783			default:
+>    784				return -EINVAL;
+>    785			}
+>    786		}
+>    787		unreachable();
+>    788	}
+>    789	
+> 
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Shyam-Sundar-S-K/i2c-piix4-Allow-more-than-two-algo-selection-for-SMBus/20240826-113028
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/andi.shyti/linux.git i2c/i2c-host
-patch link:    https://lore.kernel.org/r/20240822142200.686842-4-Shyam-sundar.S-k%40amd.com
-patch subject: [PATCH 3/5] i2c: piix4: Add ACPI support for ASF SMBus device
-config: i386-buildonly-randconfig-003-20240826 (https://download.01.org/0day-ci/archive/20240826/202408261816.iYeJHXHU-lkp@intel.com/config)
-compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240826/202408261816.iYeJHXHU-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202408261816.iYeJHXHU-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> drivers/i2c/busses/i2c-piix4.c:935:6: warning: variable 'cmd' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
-     935 |         if (!(reg & SB800_ASF_ERROR_STATUS)) {
-         |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/i2c/busses/i2c-piix4.c:971:8: note: uninitialized use occurs here
-     971 |         if (!(cmd & BIT(0))) {
-         |               ^~~
-   drivers/i2c/busses/i2c-piix4.c:935:2: note: remove the 'if' if its condition is always true
-     935 |         if (!(reg & SB800_ASF_ERROR_STATUS)) {
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/i2c/busses/i2c-piix4.c:927:19: note: initialize the variable 'cmd' to silence this warning
-     927 |         u8 bank, reg, cmd;
-         |                          ^
-         |                           = '\0'
-   1 warning generated.
-
-
-vim +935 drivers/i2c/busses/i2c-piix4.c
-
-   920	
-   921	static void sb800_asf_process_slave(struct work_struct *work)
-   922	{
-   923		struct i2c_piix4_adapdata *adapdata = container_of(work, struct i2c_piix4_adapdata,
-   924								   work_buf.work);
-   925		unsigned short piix4_smba = adapdata->smba;
-   926		u8 data[SB800_ASF_BLOCK_MAX_BYTES];
-   927		u8 bank, reg, cmd;
-   928		u8 len, val = 0;
-   929		int i;
-   930	
-   931		/* Read slave status register */
-   932		reg = inb_p(ASFSLVSTA);
-   933	
-   934		/* Check if no error bits are set in slave status register */
- > 935		if (!(reg & SB800_ASF_ERROR_STATUS)) {
-   936			/* Read data bank */
-   937			reg = inb_p(ASFDATABNKSEL);
-   938			bank = (reg & BIT(3)) >> 3;
-   939	
-   940			/* Set read data bank */
-   941			if (bank) {
-   942				reg = reg | BIT(4);
-   943				reg = reg & (~BIT(3));
-   944			} else {
-   945				reg = reg & (~BIT(4));
-   946				reg = reg & (~BIT(2));
-   947			}
-   948	
-   949			/* Read command register */
-   950			outb_p(reg, ASFDATABNKSEL);
-   951			cmd = inb_p(ASFINDEX);
-   952			len = inb_p(ASFDATARWPTR);
-   953			for (i = 0; i < len; i++)
-   954				data[i] = inb_p(ASFINDEX);
-   955	
-   956			/* Clear data bank status */
-   957			if (bank) {
-   958				reg = reg | BIT(3);
-   959				outb_p(reg, ASFDATABNKSEL);
-   960			} else {
-   961				reg = reg | BIT(2);
-   962				outb_p(reg, ASFDATABNKSEL);
-   963			}
-   964		} else {
-   965			/* Set bank as full */
-   966			reg = reg | (BIT(3) | BIT(2));
-   967			outb_p(reg, ASFDATABNKSEL);
-   968		}
-   969	
-   970		outb_p(0, ASFSETDATARDPTR);
-   971		if (!(cmd & BIT(0))) {
-   972			i2c_slave_event(adapdata->slave, I2C_SLAVE_WRITE_REQUESTED, &val);
-   973			for (i = 0; i < len; i++) {
-   974				val = data[i];
-   975				i2c_slave_event(adapdata->slave, I2C_SLAVE_WRITE_RECEIVED, &val);
-   976			}
-   977			i2c_slave_event(adapdata->slave, I2C_SLAVE_STOP, &val);
-   978		}
-   979	}
-   980	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
