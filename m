@@ -1,158 +1,180 @@
-Received: from out-176.mta1.migadu.com (out-176.mta1.migadu.com [95.215.58.176])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 287BE1803A
-	for <llvm@lists.linux.dev>; Sun, 25 Aug 2024 20:24:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 00E61145FF9;
+	Mon, 26 Aug 2024 08:28:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724617445; cv=none; b=Y9vRsbGtYhzpqppYOQB71nekyzjNj6dJ0xxCNo3X/GZKRC65hHDClcPE84MNNFsIaRO5LDNFiztXe65cKqBwKB7TYRpMhxw1tY8s+S0tQFSmJI/wObV0t6CYXWabi29vBNkmC97ZIVHIJOuSYH06UoxpMXteCLI6aWTuMWX43vc=
+	t=1724660931; cv=none; b=fpTAAMzypcLNoSl2yP3SSIhdWJUXWxcBtU4C2kmTp5bDs2XtMrkPhrmje2N94qrZEVVH8nesLka3FSY6GcMifN2H2dYPWocvbIcbtkYl2EEwsZ8FJpq0W50/RMvEIIojRKKWbvv8/nQAY0IZAymSfswTB0eoBqm0XCib7k8aAqE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724617445; c=relaxed/simple;
-	bh=zkyR7ZWqhHXtg4p7uuToQzwm8GODl0IP6u8Xdfmc1Fk=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=OyhCZyoIJcu64rTt/YqBi3Yn8hRocti1K8glzsllNS36pK1TdIXgds9IoznPQIZM/97fqes5kDSlQ+a6yiiugVQaCIVx6LioPeW6DPGWEYrMcv0JV8TB0RA/Cuh6Xdb2SykdwkDxHQ8HqO4SB/DkfPq5wdu5t40grXr3lzMyvqc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=WbxExdBX; arc=none smtp.client-ip=95.215.58.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1724660931; c=relaxed/simple;
+	bh=CW+5hKUdRYfKL28YTTCoc4w1TLEiEKoAB4PnZpQqhbk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=nKF7M0eTDFmGSssNqMn3aaZbgKWbNSoFnYRxQlDjzGniZHHPXP3HiTjKth6Y9dyakZpDWKwuRtgSYk1rYA1kyPsi6ps11Oa7QO2LsMzlZgNnNfyD7CmuyUHTy8SpFCfzP3SHS+PLyZ/G/O4P0fW0aaKob8bSGwSCSe96WjF1gRo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=YwAMOlfY; arc=none smtp.client-ip=198.175.65.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="WbxExdBX"
-Message-ID: <c8c590b2-40b2-4cc0-9eb7-410dbd080a49@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1724617440;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=lJmOM6hEOwMpe5Yh5pt13Atiwnn9TOnDLKnLZJg/H30=;
-	b=WbxExdBXuYnSYsFdmRJRcypMRKZXh2bH0uWHvwOgytfpz/X47NImf1QMmx/Jvzb9HRFoXR
-	bIoSCLdOZaj0bbgcKlXXV4Jgtr0kAgo1Ln/qxpKzcl0GIFcz4s56t4TB8wSYL9GRU1EGQw
-	3tsQGQIdZDnFtm0dWMem8t93R2o+zjA=
-Date: Sun, 25 Aug 2024 13:23:51 -0700
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="YwAMOlfY"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1724660927; x=1756196927;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=CW+5hKUdRYfKL28YTTCoc4w1TLEiEKoAB4PnZpQqhbk=;
+  b=YwAMOlfYko/CJe3neliBI7wbsA4iHZjK+aoeaPiXSkOopIosHle9LmfZ
+   vXWkW1JFmn2TOK0HgzGhhJnKaEyEVfOoeH4G8/fAvlHdiYFDQNy/H71g/
+   oglle/LiZ4mh+vD32G+1zD7p4okG5aoZcOVe6LS90d5CLgQ/LOQmLgVth
+   fx6GR6zVLq/rch8NLjj8P+qplIkzzxiVHmrrwgx12pOGcSKeEiIcUouE+
+   0AfybL+r4oQC96IcqhVba8rbPTRUYjmgKyq4YXx7mcc/r6pVE6qQ1t9FP
+   ZGXpFgkLcs7wbCPVplsWCf43fpoeW4ArEG2Gtuy6PYj8C9Z3t+1hYDlcW
+   Q==;
+X-CSE-ConnectionGUID: Fb7UXOqTR7KuPh7CbJpM3g==
+X-CSE-MsgGUID: XFjN4e2KRaGEdBhx39pHsw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11175"; a="26863117"
+X-IronPort-AV: E=Sophos;i="6.10,177,1719903600"; 
+   d="scan'208";a="26863117"
+Received: from orviesa005.jf.intel.com ([10.64.159.145])
+  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Aug 2024 01:28:47 -0700
+X-CSE-ConnectionGUID: qzDAa/RzQuqTqBcMmesRyg==
+X-CSE-MsgGUID: D/7I0FJIQVO3Zp7Qcviwrw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.10,177,1719903600"; 
+   d="scan'208";a="67337166"
+Received: from lkp-server01.sh.intel.com (HELO 9a732dc145d3) ([10.239.97.150])
+  by orviesa005.jf.intel.com with ESMTP; 26 Aug 2024 01:28:45 -0700
+Received: from kbuild by 9a732dc145d3 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1siV5e-000Gfd-1f;
+	Mon, 26 Aug 2024 08:28:42 +0000
+Date: Mon, 26 Aug 2024 16:28:36 +0800
+From: kernel test robot <lkp@intel.com>
+To: Wenliang <wenliang202407@163.com>, linux@roeck-us.net
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, jdelvare@suse.com,
+	linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Wenliang <wenliang202407@163.com>
+Subject: Re: [PATCH linux dev 6.11] hwmon:add new hwmon driver sq52205
+Message-ID: <202408261627.lm2xKacD-lkp@intel.com>
+References: <20240822074426.7241-1-wenliang202407@163.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Subject: Re: Problem testing with S390x under QEMU on x86_64
-Content-Language: en-GB
-To: Tony Ambardar <tony.ambardar@gmail.com>,
- Ilya Leoshkevich <iii@linux.ibm.com>
-Cc: bpf@vger.kernel.org, linux-s390@vger.kernel.org, llvm@lists.linux.dev,
- Alexei Starovoitov <ast@kernel.org>, Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling
- <morbo@google.com>, Justin Stitt <justinstitt@google.com>
-References: <ZsEcsaa3juxxQBUf@kodidev-ubuntu>
- <180f4c27ebfb954d6b0fd2303c9fb7d5f21dae04.camel@linux.ibm.com>
- <ZsU3GdK5t6KEOr0g@kodidev-ubuntu> <Zspq+db1KOhhh2Yf@kodidev-ubuntu>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Yonghong Song <yonghong.song@linux.dev>
-In-Reply-To: <Zspq+db1KOhhh2Yf@kodidev-ubuntu>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240822074426.7241-1-wenliang202407@163.com>
+
+Hi Wenliang,
+
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on linux/master]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Wenliang/hwmon-add-new-hwmon-driver-sq52205/20240826-103932
+base:   linux/master
+patch link:    https://lore.kernel.org/r/20240822074426.7241-1-wenliang202407%40163.com
+patch subject: [PATCH linux dev 6.11] hwmon:add new hwmon driver sq52205
+config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20240826/202408261627.lm2xKacD-lkp@intel.com/config)
+compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240826/202408261627.lm2xKacD-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202408261627.lm2xKacD-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> drivers/hwmon/sq52205.c:493:37: error: cannot assign to variable 'sq522xx_regmap_config' with const-qualified type 'const struct regmap_config'
+     493 |         sq522xx_regmap_config.max_register = data->config->registers;
+         |         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ^
+   drivers/hwmon/sq52205.c:67:35: note: variable 'sq522xx_regmap_config' declared const here
+      67 | static const struct regmap_config sq522xx_regmap_config = {
+         | ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~
+      68 |         .reg_bits = 8,
+         |         ~~~~~~~~~~~~~~
+      69 |         .val_bits = 16,
+         |         ~~~~~~~~~~~~~~~
+      70 | };
+         | ~
+   1 error generated.
 
 
-On 8/24/24 4:21 PM, Tony Ambardar wrote:
-> On Tue, Aug 20, 2024 at 05:38:49PM -0700, Tony Ambardar wrote:
->> Hi Ilya,
->>
->> Thanks for following up. As it happens, I did this the day before out of
->> desperation after trying various kernel config and rootfs changes
->> with no luck, and can confirm the system runs faster and without the
->> kernel crashes noted above. Certainly the latest QEMU seems mandatory.
->>
->> The good news is that 99% of tests with my cross-compiled test_progs
->> work as expected out of the box, and some of the failing ones helped
->> troubleshoot a few hidden libbpf issues. I'll outline the remaining
->> failures for your feedback and comparison with native-built tests.
->>
->> I used the command line:
->>      ./test_progs -d get_stack_raw_tp,stacktrace_build_id,verifier_iterating_callbacks,tailcalls
->>
-> [snip]
->
->> Aside from the tests above, I see only 3 failing tests:
->>
->> All error logs:
->> test_map_ptr:PASS:skel_open 0 nsec
->> test_map_ptr:FAIL:skel_load unexpected error: -22 (errno 22)
->> #165     map_ptr:FAIL
->> subtest_userns:PASS:socketpair 0 nsec
->> subtest_userns:PASS:fork 0 nsec
->> recvfd:PASS:recvmsg 0 nsec
->> recvfd:PASS:cmsg_null 0 nsec
->> recvfd:PASS:cmsg_len 0 nsec
->> recvfd:PASS:cmsg_level 0 nsec
->> recvfd:PASS:cmsg_type 0 nsec
->> parent:PASS:recv_bpffs_fd 0 nsec
->> materialize_bpffs_fd:PASS:fs_cfg_cmds 0 nsec
->> materialize_bpffs_fd:PASS:fs_cfg_maps 0 nsec
->> materialize_bpffs_fd:PASS:fs_cfg_progs 0 nsec
->> materialize_bpffs_fd:PASS:fs_cfg_attachs 0 nsec
->> parent:PASS:materialize_bpffs_fd 0 nsec
->> sendfd:PASS:sendmsg 0 nsec
->> parent:PASS:send_mnt_fd 0 nsec
->> recvfd:PASS:recvmsg 0 nsec
->> recvfd:PASS:cmsg_null 0 nsec
->> recvfd:PASS:cmsg_len 0 nsec
->> recvfd:PASS:cmsg_level 0 nsec
->> recvfd:PASS:cmsg_type 0 nsec
->> parent:PASS:recv_token_fd 0 nsec
->> parent:FAIL:waitpid_child unexpected error: 22 (errno 3)
->> #402/9   token/obj_priv_implicit_token_envvar:FAIL
->> #402     token:FAIL
->> libbpf: prog 'on_event': BPF program load failed: Bad address
->> libbpf: prog 'on_event': -- BEGIN PROG LOAD LOG --
->> The sequence of 8193 jumps is too complex.
->> verification time 2816240 usec
->> stack depth 360
->> processed 116096 insns (limit 1000000) max_states_per_insn 1 total_states 5061 peak_states 5061 mark_read 2540
->> -- END PROG LOAD LOG --
->> libbpf: prog 'on_event': failed to load: -14
->> libbpf: failed to load object 'pyperf600.bpf.o'
->> scale_test:FAIL:expect_success unexpected error: -14 (errno 14)
->> #525     verif_scale_pyperf600:FAIL
->> Summary: 559/4166 PASSED, 98 SKIPPED, 3 FAILED
->>
-> Hi Ilya,
->
-> A brief update with some good news: the 3 test failures above have been
-> resolved and all expected tests now pass on QEMU/s390x under x86_64.
->
-> Test '#165 map_ptr:FAIL' was a bug in my light-skeleton code, and fixed in
-> my patch series v2:
-> https://lore.kernel.org/bpf/cover.1724313164.git.tony.ambardar@gmail.com/
->
-> Test '#402/9 token/obj_priv_implicit_token_envvar:FAIL' was a problem in my
-> rootfs configuration and now passes after resolving.
->
-> Test '#525 verif_scale_pyperf600:FAIL' was caused by clang miscompilation
-> exposed by my use of clang-19 and clang-20. The test passes when built
-> with clang-17 (used by BPF CI) or clang-18 which I switched to use.
+vim +493 drivers/hwmon/sq52205.c
 
-x86 has the same issue where clang19 generated code will cause verification
-failure. Eduard is working on this.
+   460	
+   461	static int sq522xx_probe(struct i2c_client *client)
+   462	{
+   463		struct device *dev = &client->dev;
+   464		struct sq522xx_data *data;
+   465		struct device *hwmon_dev;
+   466		u32 val;
+   467		int ret, group = 0;
+   468		enum sq522xx_ids chip;
+   469	
+   470		if (client->dev.of_node)
+   471			chip = (uintptr_t)of_device_get_match_data(&client->dev);
+   472		else
+   473			chip = i2c_match_id(sq522xx_id, client)->driver_data;
+   474	
+   475		data = devm_kzalloc(dev, sizeof(*data), GFP_KERNEL);
+   476		if (!data)
+   477			return -ENOMEM;
+   478	
+   479		/* set the device type */
+   480		data->client = client;
+   481		data->config = &sq522xx_config[chip];
+   482		mutex_init(&data->config_lock);
+   483	
+   484		if (of_property_read_u32(dev->of_node, "shunt-resistor", &val) < 0)
+   485			val = SQ522XX_RSHUNT_DEFAULT;
+   486	
+   487	
+   488		if (val <= 0 || val > data->config->calibration_factor)
+   489			return -ENODEV;
+   490	
+   491		data->rshunt = val;
+   492	
+ > 493		sq522xx_regmap_config.max_register = data->config->registers;
+   494	
+   495		data->regmap = devm_regmap_init_i2c(client, &sq522xx_regmap_config);
+   496		if (IS_ERR(data->regmap)) {
+   497			dev_err(dev, "failed to allocate register map\n");
+   498			return PTR_ERR(data->regmap);
+   499		}
+   500	
+   501	
+   502		ret = sq522xx_init(data);
+   503		if (ret < 0) {
+   504			dev_err(dev, "error configuring the device: %d\n", ret);
+   505			return -ENODEV;
+   506		}
+   507		if (chip == sq52205) {
+   508			ret = sq52205_init(data);
+   509			if (ret < 0) {
+   510				dev_err(dev, "error configuring the device cal: %d\n", ret);
+   511				return -ENODEV;
+   512			}
+   513		}
+   514	
+   515		data->groups[group++] = &sq522xx_group;
+   516		if (chip == sq52205)
+   517			data->groups[group++] = &sq52205_group;
+   518	
+   519		hwmon_dev = devm_hwmon_device_register_with_groups(dev, client->name,
+   520									data, data->groups);
+   521		if (IS_ERR(hwmon_dev))
+   522			return PTR_ERR(hwmon_dev);
+   523	
+   524		dev_info(dev, "power monitor %s (Rshunt = %li uOhm)\n",
+   525			 client->name, data->rshunt);
+   526	
+   527		return 0;
+   528	}
+   529	
 
->
-> One symptom of the problem is easily seen by manually compiling:
->
-> $ clang-18  -g -Wall -Werror -D__TARGET_ARCH_s390 -mbig-endian -Itools/testing/selftests/bpf/tools/include -Itools/testing/selftests/bpf -Itools/include/uapi -Itools/testing/selftests/usr/include -Wno-compare-distinct-pointer-types -idirafter /usr/lib/llvm-18/lib/clang/18/include -idirafter /usr/local/include -idirafter /usr/lib/gcc-cross/s390x-linux-gnu/11/../../../../s390x-linux-gnu/include -idirafter /usr/include/s390x-linux-gnu -idirafter /usr/include -DENABLE_ATOMICS_TESTS -O2 --target=bpfeb -c tools/testing/selftests/bpf/progs/pyperf600.c -mcpu=v3 -o pyperf600.clang18.bpf.o
->
-> $ clang-19  -g -Wall -Werror -D__TARGET_ARCH_s390 -mbig-endian -Itools/testing/selftests/bpf/tools/include -Itools/testing/selftests/bpf -Itools/include/uapi -Itools/testing/selftests/usr/include -Wno-compare-distinct-pointer-types -idirafter /usr/lib/llvm-19/lib/clang/19/include -idirafter /usr/local/include -idirafter /usr/lib/gcc-cross/s390x-linux-gnu/11/../../../../s390x-linux-gnu/include -idirafter /usr/include/s390x-linux-gnu -idirafter /usr/include -DENABLE_ATOMICS_TESTS -O2 --target=bpfeb -c tools/testing/selftests/bpf/progs/pyperf600.c -mcpu=v3 -o pyperf600.clang19.bpf.o
->
-> $ llvm-readelf-18 -S pyperf600.clang{18,19}.bpf.o |grep .symtab
->    [27] .symtab           SYMTAB          0000000000000000 1739d0 01ad60 18      1 4572  8
->    [27] .symtab           SYMTAB          0000000000000000 14f048 0001e0 18      1  12  8
->
-> Notice that the .symtab has shrunk by ~200X for example going to clang-19!
-> (CCing llvm maintainers)
-
-This is a known issue. In llvm18, all labels (to identify basic blocks) are in symbol table.
-Those labels are removed from symbol table in llvm19.
-
->
->
-> Kind regards,
-> Tony
->
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
