@@ -1,149 +1,119 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 19447321D;
-	Mon, 26 Aug 2024 10:58:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D1F526AED;
+	Mon, 26 Aug 2024 11:06:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724669891; cv=none; b=bWbDm4nio+H+GkJ+FHJxw+ZFkrx4flawtNwOLjZh8p5lfPdEU2uUph4CNncZwvdeZAfDhLj4Ne8R+SLxdXNelDN+y34WdK/K3N+ROocLFa0QTdlK9xbfURV4oc0eS8/r+77pnRc5qoZh/SEsdGZTwNOFDr+suctpvVLezn//V6c=
+	t=1724670362; cv=none; b=XdFn5Jlm7dcqMAZrdcgD6cfzxFjmPb+Ixhi4VqOX1hpADhDMyBPOtMFRDoy2/CZLPFPnnz3m7ldtb4gLxiKpOKt3DoCMtoQfZ6j54LwXkVMon48y84fWh2HxVrpq5gex4+jP836PCdDLIaZBJjsxi3kJhf2Lzrp/tUgFNVbfOE0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724669891; c=relaxed/simple;
-	bh=hcaKc0Ezkqyp7WoNsBchrZvC12LrMBAs0TyShg0N7+g=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=gv6YLgT5bqBcHrGE5155usrOGAndFxj56mhqRPPyc9TeC51wNY6dvzsC7W1xnuZrFuVQLkcU2/M4prOY272hSg4d83jjbkbPo9i4Sx9iKgAawGAv57OetgH+4QQsHPPHFCpRoVCaQ8fGUks2plTM2KCK9E71q9koo7spnYc9vzQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DboTE/v/; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1724670362; c=relaxed/simple;
+	bh=DeypC7wSzVm9rP4EFt3Nk1BcPUET9FJSGmxWDXQQwZ4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=BiCdtEmdmPRVLPhni4xZ37qvZH2V2KmgOeRRfN8LBWuF0MP9djW/Nt4jH2oyPosW/z1Zsr+bIDZACdS2cdzBZb6joHp3xRxgiq7ZFbH4+JT3cbKQzkvnHQjabrQCglk3xvNwHCwWHOAGu/axH86AE3M62oIAVuVR1J4vfxd94hs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=e6e5rLdL; arc=none smtp.client-ip=192.198.163.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DboTE/v/"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 54EFFC58131;
-	Mon, 26 Aug 2024 10:58:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1724669889;
-	bh=hcaKc0Ezkqyp7WoNsBchrZvC12LrMBAs0TyShg0N7+g=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=DboTE/v/Nk3IY08xhzY82zVzS8bcN5kjdDejAygo4TiIEbxK0MnNxaSNjSPBNEKkD
-	 KvLpnchoflTtEGkYrXANdZU1szTXJym3xGmzpynA3oKx5JPpOaVcc/fF4DPGg+IK8q
-	 AfZ0l47AC/nO38QYvtpqjlk0bk48p2yA5Ejt22KToHXF0+oOBb9BsXd5rdMjPE0X7I
-	 8s4l3JXuUcWxpKQRm+oxPtjh1+jlIL2nJPD6s9z8zVNnE0lTzn/c4OGoCCFjbxoeuE
-	 Z1jCPdwxcTuxTDGii3IblPbDqI/rNLvW39c69BgJqo8taw358b9z+QGKczVxa/e1Nq
-	 u2V+PbneDoGmA==
-Date: Mon, 26 Aug 2024 11:57:56 +0100
-From: Jonathan Cameron <jic23@kernel.org>
-To: kernel test robot <lkp@intel.com>
-Cc: David Lechner <dlechner@baylibre.com>, llvm@lists.linux.dev,
- oe-kbuild-all@lists.linux.dev, Michael Hennerich
- <Michael.Hennerich@analog.com>, Nuno =?UTF-8?B?U8Oh?= <nuno.sa@analog.com>,
- Jonathan Corbet <corbet@lwn.net>, linux-iio@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org
-Subject: Re: [PATCH 2/4] iio: adc: ad4695: implement calibration support
-Message-ID: <20240826115756.01cd41d3@jic23-huawei>
-In-Reply-To: <202408211207.fmYTjQDK-lkp@intel.com>
-References: <20240820-ad4695-gain-offset-v1-2-c8f6e3b47551@baylibre.com>
-	<202408211207.fmYTjQDK-lkp@intel.com>
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-pc-linux-gnu)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="e6e5rLdL"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1724670360; x=1756206360;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=DeypC7wSzVm9rP4EFt3Nk1BcPUET9FJSGmxWDXQQwZ4=;
+  b=e6e5rLdLeyRiPHhHtVYgGq+3Md4Vp6baIZsMdCuC0au/ulKVPjfspS6v
+   bAiB2srZScEXcOrcP2shEIziOUXCYLzN7GD16bxvRdVxlAlhDfj61n89w
+   ytnbwjqDvCMKpQVxcpGPTBJs2hHyVXgFyE1w1ySY8yJdLp4EmNUSHCoZg
+   jwlVubr6HWhMCBPDRfUpg6ctc+dka9JH2UqU5xXb4HLVpo5Ion932N5qd
+   SAoEkru61Q2sXAXmEBamn553b0OeDwhQ6P0cdNWkVhYYtnhou7eGSf7cF
+   zDdrLPiWcE28x6ViVBqsNrMuHyPYMYJAymm6OWfcyVxEIdGtdlU0csJOO
+   w==;
+X-CSE-ConnectionGUID: 05zLSkAtSvaGW3WQwBw+sw==
+X-CSE-MsgGUID: 4pmjcB0GTyOl4a5T4hUAsw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11175"; a="48475862"
+X-IronPort-AV: E=Sophos;i="6.10,177,1719903600"; 
+   d="scan'208";a="48475862"
+Received: from fmviesa006.fm.intel.com ([10.60.135.146])
+  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Aug 2024 04:05:59 -0700
+X-CSE-ConnectionGUID: uSUROZIcRbWci/Uw9YCBvw==
+X-CSE-MsgGUID: XPnzInLLRe2TXjZQyN7jYg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.10,177,1719903600"; 
+   d="scan'208";a="62157586"
+Received: from lkp-server01.sh.intel.com (HELO 9a732dc145d3) ([10.239.97.150])
+  by fmviesa006.fm.intel.com with ESMTP; 26 Aug 2024 04:05:58 -0700
+Received: from kbuild by 9a732dc145d3 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1siXXn-000GyD-2n;
+	Mon, 26 Aug 2024 11:05:55 +0000
+Date: Mon, 26 Aug 2024 19:04:55 +0800
+From: kernel test robot <lkp@intel.com>
+To: Shyam Sundar S K <Shyam-sundar.S-k@amd.com>,
+	Jean Delvare <jdelvare@suse.com>,
+	Andi Shyti <andi.shyti@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-i2c@vger.kernel.org, Sanket.Goswami@amd.com,
+	Shyam Sundar S K <Shyam-sundar.S-k@amd.com>
+Subject: Re: [PATCH 2/5] i2c: piix4: Add i2c_algorithm operations to support
+ AMD ASF with SMBus
+Message-ID: <202408261803.Zxa8c8JJ-lkp@intel.com>
+References: <20240822142200.686842-3-Shyam-sundar.S-k@amd.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240822142200.686842-3-Shyam-sundar.S-k@amd.com>
 
-On Wed, 21 Aug 2024 12:21:09 +0800
-kernel test robot <lkp@intel.com> wrote:
+Hi Shyam,
 
-> Hi David,
-> 
-> kernel test robot noticed the following build warnings:
-> 
-> [auto build test WARNING on 0f718e10da81446df0909c9939dff2b77e3b4e95]
-> 
-> url:    https://github.com/intel-lab-lkp/linux/commits/David-Lechner/iio-adc-ad4695-add-2nd-regmap-for-16-bit-registers/20240821-000102
-> base:   0f718e10da81446df0909c9939dff2b77e3b4e95
-> patch link:    https://lore.kernel.org/r/20240820-ad4695-gain-offset-v1-2-c8f6e3b47551%40baylibre.com
-> patch subject: [PATCH 2/4] iio: adc: ad4695: implement calibration support
-> config: i386-buildonly-randconfig-002-20240821 (https://download.01.org/0day-ci/archive/20240821/202408211207.fmYTjQDK-lkp@intel.com/config)
-> compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
-> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240821/202408211207.fmYTjQDK-lkp@intel.com/reproduce)
-> 
-> If you fix the issue in a separate patch/commit (i.e. not just a new version of
-> the same patch/commit), kindly add following tags
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes: https://lore.kernel.org/oe-kbuild-all/202408211207.fmYTjQDK-lkp@intel.com/
-> 
-> All warnings (new ones prefixed by >>):
-> 
-> >> drivers/iio/adc/ad4695.c:735:6: warning: unused variable 'ret' [-Wunused-variable]  
->      735 |         int ret;
->          |             ^~~
->    1 warning generated.
-I dropped this whilst applying.
+kernel test robot noticed the following build errors:
 
-> 
-> 
-> vim +/ret +735 drivers/iio/adc/ad4695.c
-> 
->    728	
->    729	static int ad4695_write_raw(struct iio_dev *indio_dev,
->    730				    struct iio_chan_spec const *chan,
->    731				    int val, int val2, long mask)
->    732	{
->    733		struct ad4695_state *st = iio_priv(indio_dev);
->    734		unsigned int reg_val;
->  > 735		int ret;  
->    736	
->    737		iio_device_claim_direct_scoped(return -EBUSY, indio_dev) {
->    738			switch (mask) {
->    739			case IIO_CHAN_INFO_CALIBSCALE:
->    740				switch (chan->type) {
->    741				case IIO_VOLTAGE:
->    742					if (val < 0 || val2 < 0)
->    743						reg_val = 0;
->    744					else if (val > 1)
->    745						reg_val = U16_MAX;
->    746					else
->    747						reg_val = (val * (1 << 16) +
->    748							   mul_u64_u32_div(val2, 1 << 16,
->    749									   MICRO)) / 2;
->    750	
->    751					return regmap_write(st->regmap16,
->    752						AD4695_REG_GAIN_IN(chan->scan_index),
->    753						reg_val);
->    754				default:
->    755					return -EINVAL;
->    756				}
->    757			case IIO_CHAN_INFO_CALIBBIAS:
->    758				switch (chan->type) {
->    759				case IIO_VOLTAGE:
->    760					if (val2 >= 0 && val > S16_MAX / 4)
->    761						reg_val = S16_MAX;
->    762					else if ((val2 < 0 ? -val : val) < S16_MIN / 4)
->    763						reg_val = S16_MIN;
->    764					else if (val2 < 0)
->    765						reg_val = clamp_t(int,
->    766							-(val * 4 + -val2 * 4 / MICRO),
->    767							S16_MIN, S16_MAX);
->    768					else if (val < 0)
->    769						reg_val = clamp_t(int,
->    770							val * 4 - val2 * 4 / MICRO,
->    771							S16_MIN, S16_MAX);
->    772					else
->    773						reg_val = clamp_t(int,
->    774							val * 4 + val2 * 4 / MICRO,
->    775							S16_MIN, S16_MAX);
->    776	
->    777					return regmap_write(st->regmap16,
->    778						AD4695_REG_OFFSET_IN(chan->scan_index),
->    779						reg_val);
->    780				default:
->    781					return -EINVAL;
->    782				}
->    783			default:
->    784				return -EINVAL;
->    785			}
->    786		}
->    787		unreachable();
->    788	}
->    789	
-> 
+[auto build test ERROR on andi-shyti/i2c/i2c-host]
+[also build test ERROR on linus/master v6.11-rc5 next-20240823]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
+url:    https://github.com/intel-lab-lkp/linux/commits/Shyam-Sundar-S-K/i2c-piix4-Allow-more-than-two-algo-selection-for-SMBus/20240826-113028
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/andi.shyti/linux.git i2c/i2c-host
+patch link:    https://lore.kernel.org/r/20240822142200.686842-3-Shyam-sundar.S-k%40amd.com
+patch subject: [PATCH 2/5] i2c: piix4: Add i2c_algorithm operations to support AMD ASF with SMBus
+config: x86_64-rhel-8.3-rust (https://download.01.org/0day-ci/archive/20240826/202408261803.Zxa8c8JJ-lkp@intel.com/config)
+compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240826/202408261803.Zxa8c8JJ-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202408261803.Zxa8c8JJ-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> drivers/i2c/busses/i2c-piix4.c:1069:3: error: field designator 'reg_slave' does not refer to any field in type 'const struct i2c_algorithm'
+    1069 |         .reg_slave = sb800_asf_reg_slave,
+         |         ~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>> drivers/i2c/busses/i2c-piix4.c:1070:3: error: field designator 'unreg_slave' does not refer to any field in type 'const struct i2c_algorithm'
+    1070 |         .unreg_slave = sb800_asf_unreg_slave,
+         |         ~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   2 errors generated.
+
+
+vim +1069 drivers/i2c/busses/i2c-piix4.c
+
+  1066	
+  1067	static const struct i2c_algorithm sb800_asf_smbus_algorithm = {
+  1068		.master_xfer = sb800_asf_xfer,
+> 1069		.reg_slave = sb800_asf_reg_slave,
+> 1070		.unreg_slave = sb800_asf_unreg_slave,
+  1071		.functionality = sb800_asf_func,
+  1072	};
+  1073	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
