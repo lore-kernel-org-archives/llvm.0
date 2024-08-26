@@ -1,84 +1,164 @@
-Received: from szxga04-in.huawei.com (szxga04-in.huawei.com [45.249.212.190])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A23953362;
-	Mon, 26 Aug 2024 13:37:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.190
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E09471CD25;
+	Mon, 26 Aug 2024 15:24:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724679461; cv=none; b=ShObpKJB8Y713jKu2sfmySv70NhxGtvGRTumm4L59Y58A3buZu5YVEoMLWN8aPuu5pUQSXpemjWlOvuT+0Tczl+ZYrLLULn+Afyzx1CuM9y9u2LJO55xIVZtSX4yNC+fH7B4oWhy6OHPWZMMkXkmfclfmjdAnauUCk2rCfRux6w=
+	t=1724685855; cv=none; b=M/wDutKAL27hnD4USPLOpUj/T4deSz55KA6Dov+UJvK1ksbKZqte/erckDGOnPTt/7ivYdwVsswlZ4zGdlombz76vCTRWzN0TDS/TqwztazvZvlYEGsglqh0MazzJgOKVzIcfW+aQEKhXzWKKzSBLu1EXYxMKKSGHaQTQw+smb8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724679461; c=relaxed/simple;
-	bh=xiGocR7nIh1k/qlLWTMuuA1jG3/Z6R0f7bMz1TYPhRU=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=BIylk0V82+qbTn4Xa/FB8Cj/CNpYyYBFOrvX1lxD98EsT1rfYiijnumwr+GWEkNcMxoSptYZRPdG0Tih11Zz3eqR8OtcYdR57MFBDxxF7pU24mjCQDV4v+l+zLVPqrVzxCw9fIx3gHGff99uOi7L/oiy7sR3/jgmb8DqPLdNP68=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.190
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.19.162.112])
-	by szxga04-in.huawei.com (SkyGuard) with ESMTP id 4Wss760yc1z20mkp;
-	Mon, 26 Aug 2024 21:32:50 +0800 (CST)
-Received: from kwepemg500010.china.huawei.com (unknown [7.202.181.71])
-	by mail.maildlp.com (Postfix) with ESMTPS id 63E481402E0;
-	Mon, 26 Aug 2024 21:37:37 +0800 (CST)
-Received: from [10.67.109.211] (10.67.109.211) by
- kwepemg500010.china.huawei.com (7.202.181.71) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.11; Mon, 26 Aug 2024 21:37:36 +0800
-Message-ID: <836bcd4e-fb5f-447a-b23f-c6f1d5ddc745@huawei.com>
-Date: Mon, 26 Aug 2024 21:37:36 +0800
+	s=arc-20240116; t=1724685855; c=relaxed/simple;
+	bh=CaBbi3OQv9oAwXqvZefHAetx2+TNWlDRtz/czDbMKd8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=URDkSx5kML+DCz2ZovipnQ+/fVFGVE99TuNEWFrJSfVAxvaoezvjdCXlOdM+q1av3mX2gGECUGLRfeVl0U32X0E7ENAa0MNsRPYq2rtZPb2vVBnMPjvD78LNvGTZ9d48xEMqBfugpsq193RnM3QFYcPVI6lRMRbRCWnRfWKDZUI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=eCb5HGd2; arc=none smtp.client-ip=198.175.65.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="eCb5HGd2"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1724685852; x=1756221852;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=CaBbi3OQv9oAwXqvZefHAetx2+TNWlDRtz/czDbMKd8=;
+  b=eCb5HGd2O4wnrLcCKeEeM9/vxZnZaKd68QjCObbF7N+tfjPiYRfcOLjv
+   Xuvgku0daPDZi+X3YeXBI5FPaec1WCaGjP66w0AKUV2ePtEpjCK21zFn3
+   2LXTAHGX96jGuuNJHjamhLREZrdHdZ4C0VwbYO/k4t2uXhXGujlh/wCLy
+   H/1X8N5G2nPpgr+Ka+neVXLiNMAYMU2/DjOiy1T14njbHLJQrZp1FdaA5
+   nlBhWvmVD9zfmuYrIShSvaBXegWt1J66ohzdRuS7AtPFJnvbog4BItbU9
+   PfMSQFNUOgkpWz3IryOjVHDL4e2LBXTkBMyFyem4S0GrB1P7QztdTJcoy
+   w==;
+X-CSE-ConnectionGUID: v4u+35YpTomxACHxu0K9xQ==
+X-CSE-MsgGUID: /1XiBFLhQGavWSCn08Yp0A==
+X-IronPort-AV: E=McAfee;i="6700,10204,11176"; a="23246729"
+X-IronPort-AV: E=Sophos;i="6.10,177,1719903600"; 
+   d="scan'208";a="23246729"
+Received: from orviesa002.jf.intel.com ([10.64.159.142])
+  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Aug 2024 08:24:11 -0700
+X-CSE-ConnectionGUID: M+wg2UATRHmxjMnfplPWmw==
+X-CSE-MsgGUID: 7Zy/U1HkROC40csSaOsdCg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.10,177,1719903600"; 
+   d="scan'208";a="93271804"
+Received: from lkp-server01.sh.intel.com (HELO 9a732dc145d3) ([10.239.97.150])
+  by orviesa002.jf.intel.com with ESMTP; 26 Aug 2024 08:24:10 -0700
+Received: from kbuild by 9a732dc145d3 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1sibZg-000HE7-0O;
+	Mon, 26 Aug 2024 15:24:08 +0000
+Date: Mon, 26 Aug 2024 23:23:31 +0800
+From: kernel test robot <lkp@intel.com>
+To: Christoph Hellwig <hch@lst.de>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: Re: [PATCH 5/6] xfs: call xfs_bmap_exact_minlen_extent_alloc from
+ xfs_bmap_btalloc
+Message-ID: <202408262312.ekF7lryy-lkp@intel.com>
+References: <20240824034100.1163020-6-hch@lst.de>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: WARNING: modpost: vmlinux: section mismatch in reference:
- imx7d_enet_init+0x18 (section: .text.unlikely.imx7d_enet_init) ->
- imx7d_enet_clk_sel (section: .init.text)
-Content-Language: en-US
-To: Nathan Chancellor <nathan@kernel.org>, kernel test robot <lkp@intel.com>
-CC: <llvm@lists.linux.dev>, <oe-kbuild-all@lists.linux.dev>,
-	<linux-kernel@vger.kernel.org>, "Russell King (Oracle)"
-	<rmk+kernel@armlinux.org.uk>, Arnd Bergmann <arnd@arndb.de>, Linus Walleij
-	<linus.walleij@linaro.org>
-References: <202408232129.sx7nsk3e-lkp@intel.com>
- <20240824033225.GB1733394@thelio-3990X>
-From: "liuyuntao (F)" <liuyuntao12@huawei.com>
-In-Reply-To: <20240824033225.GB1733394@thelio-3990X>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- kwepemg500010.china.huawei.com (7.202.181.71)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240824034100.1163020-6-hch@lst.de>
 
-I reproduce the warning, even if reset the patch
-`ARM: 9404/1: arm32: enable HAVE_LD_DEAD_CODE_DATA_ELIMINATION`,
-it seems not this patch cause the warning.
+Hi Christoph,
+
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on xfs-linux/for-next]
+[also build test ERROR on linus/master v6.11-rc5 next-20240826]
+[cannot apply to djwong-xfs/djwong-devel]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Christoph-Hellwig/xfs-return-bool-from-xfs_attr3_leaf_add/20240826-140936
+base:   https://git.kernel.org/pub/scm/fs/xfs/xfs-linux.git for-next
+patch link:    https://lore.kernel.org/r/20240824034100.1163020-6-hch%40lst.de
+patch subject: [PATCH 5/6] xfs: call xfs_bmap_exact_minlen_extent_alloc from xfs_bmap_btalloc
+config: x86_64-rhel-8.3-rust (https://download.01.org/0day-ci/archive/20240826/202408262312.ekF7lryy-lkp@intel.com/config)
+compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240826/202408262312.ekF7lryy-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202408262312.ekF7lryy-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> fs/xfs/libxfs/xfs_bmap.c:3762:50: error: too many arguments provided to function-like macro invocation
+    3762 |                 error = xfs_bmap_exact_minlen_extent_alloc(ap, &args);
+         |                                                                ^
+   fs/xfs/libxfs/xfs_bmap.c:3500:9: note: macro 'xfs_bmap_exact_minlen_extent_alloc' defined here
+    3500 | #define xfs_bmap_exact_minlen_extent_alloc(bma) (-EFSCORRUPTED)
+         |         ^
+>> fs/xfs/libxfs/xfs_bmap.c:3762:11: error: use of undeclared identifier 'xfs_bmap_exact_minlen_extent_alloc'
+    3762 |                 error = xfs_bmap_exact_minlen_extent_alloc(ap, &args);
+         |                         ^
+   2 errors generated.
 
 
-On 2024/8/24 11:32, Nathan Chancellor wrote:
-> On Fri, Aug 23, 2024 at 09:56:36PM +0800, kernel test robot wrote:
->> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
->> head:   3d5f968a177d468cd13568ef901c5be84d83d32b
->> commit: ed0f941022515ff40473ea5335769a5dc2524a3f ARM: 9404/1: arm32: enable HAVE_LD_DEAD_CODE_DATA_ELIMINATION
->> date:   2 months ago
->> config: arm-randconfig-002-20240823 (https://download.01.org/0day-ci/archive/20240823/202408232129.sx7nsk3e-lkp@intel.com/config)
->> compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 08e5a1de8227512d4774a534b91cb2353cef6284)
->> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240823/202408232129.sx7nsk3e-lkp@intel.com/reproduce)
->>
->> If you fix the issue in a separate patch/commit (i.e. not just a new version of
->> the same patch/commit), kindly add following tags
->> | Reported-by: kernel test robot <lkp@intel.com>
->> | Closes: https://lore.kernel.org/oe-kbuild-all/202408232129.sx7nsk3e-lkp@intel.com/
->>
->> All warnings (new ones prefixed by >>, old ones prefixed by <<):
->>
->> WARNING: modpost: missing MODULE_DESCRIPTION() in vmlinux.o
->>>> WARNING: modpost: vmlinux: section mismatch in reference: imx7d_enet_init+0x18 (section: .text.unlikely.imx7d_enet_init) -> imx7d_enet_clk_sel (section: .init.text)
-> 
-> This is caused by a recent LLVM change, I sent
-> https://lore.kernel.org/r/20240822-imx7d-mark-imx7d_enet_init-as-init-v1-1-8dfadee3bed4@kernel.org
-> for it.
-> 
-> Cheers,
-> Nathan
+vim +3762 fs/xfs/libxfs/xfs_bmap.c
+
+  3728	
+  3729	static int
+  3730	xfs_bmap_btalloc(
+  3731		struct xfs_bmalloca	*ap)
+  3732	{
+  3733		struct xfs_mount	*mp = ap->ip->i_mount;
+  3734		struct xfs_alloc_arg	args = {
+  3735			.tp		= ap->tp,
+  3736			.mp		= mp,
+  3737			.fsbno		= NULLFSBLOCK,
+  3738			.oinfo		= XFS_RMAP_OINFO_SKIP_UPDATE,
+  3739			.minleft	= ap->minleft,
+  3740			.wasdel		= ap->wasdel,
+  3741			.resv		= XFS_AG_RESV_NONE,
+  3742			.datatype	= ap->datatype,
+  3743			.alignment	= 1,
+  3744			.minalignslop	= 0,
+  3745		};
+  3746		xfs_fileoff_t		orig_offset;
+  3747		xfs_extlen_t		orig_length;
+  3748		int			error;
+  3749		int			stripe_align;
+  3750	
+  3751		ASSERT(ap->length);
+  3752		orig_offset = ap->offset;
+  3753		orig_length = ap->length;
+  3754	
+  3755		stripe_align = xfs_bmap_compute_alignments(ap, &args);
+  3756	
+  3757		/* Trim the allocation back to the maximum an AG can fit. */
+  3758		args.maxlen = min(ap->length, mp->m_ag_max_usable);
+  3759	
+  3760		if (unlikely(XFS_TEST_ERROR(false, mp,
+  3761				XFS_ERRTAG_BMAP_ALLOC_MINLEN_EXTENT)))
+> 3762			error = xfs_bmap_exact_minlen_extent_alloc(ap, &args);
+  3763		else if ((ap->datatype & XFS_ALLOC_USERDATA) &&
+  3764				xfs_inode_is_filestream(ap->ip))
+  3765			error = xfs_bmap_btalloc_filestreams(ap, &args, stripe_align);
+  3766		else
+  3767			error = xfs_bmap_btalloc_best_length(ap, &args, stripe_align);
+  3768		if (error)
+  3769			return error;
+  3770	
+  3771		if (args.fsbno != NULLFSBLOCK) {
+  3772			xfs_bmap_process_allocated_extent(ap, &args, orig_offset,
+  3773				orig_length);
+  3774		} else {
+  3775			ap->blkno = NULLFSBLOCK;
+  3776			ap->length = 0;
+  3777		}
+  3778		return 0;
+  3779	}
+  3780	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
