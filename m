@@ -1,180 +1,85 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
+Received: from mail.simonwunderlich.de (mail.simonwunderlich.de [23.88.38.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 00E61145FF9;
-	Mon, 26 Aug 2024 08:28:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 07C0E146593;
+	Mon, 26 Aug 2024 10:00:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=23.88.38.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724660931; cv=none; b=fpTAAMzypcLNoSl2yP3SSIhdWJUXWxcBtU4C2kmTp5bDs2XtMrkPhrmje2N94qrZEVVH8nesLka3FSY6GcMifN2H2dYPWocvbIcbtkYl2EEwsZ8FJpq0W50/RMvEIIojRKKWbvv8/nQAY0IZAymSfswTB0eoBqm0XCib7k8aAqE=
+	t=1724666430; cv=none; b=D7b05n/Goja59KxaSl89XVPT6IitbiC7bZmD3A5xglQbMWCBtrRQ6S+ZAz/97lKpQ05bx/W8CS18OtXhbj1JllXywbdilgUH6X2jSPWXS9u7vUNFEm8pSDfI4DxvVBckWbK20w4aOzJ++ToMzxmfmT3/IEU4NheJEbY3eS8OT2I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724660931; c=relaxed/simple;
-	bh=CW+5hKUdRYfKL28YTTCoc4w1TLEiEKoAB4PnZpQqhbk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=nKF7M0eTDFmGSssNqMn3aaZbgKWbNSoFnYRxQlDjzGniZHHPXP3HiTjKth6Y9dyakZpDWKwuRtgSYk1rYA1kyPsi6ps11Oa7QO2LsMzlZgNnNfyD7CmuyUHTy8SpFCfzP3SHS+PLyZ/G/O4P0fW0aaKob8bSGwSCSe96WjF1gRo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=YwAMOlfY; arc=none smtp.client-ip=198.175.65.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="YwAMOlfY"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1724660927; x=1756196927;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=CW+5hKUdRYfKL28YTTCoc4w1TLEiEKoAB4PnZpQqhbk=;
-  b=YwAMOlfYko/CJe3neliBI7wbsA4iHZjK+aoeaPiXSkOopIosHle9LmfZ
-   vXWkW1JFmn2TOK0HgzGhhJnKaEyEVfOoeH4G8/fAvlHdiYFDQNy/H71g/
-   oglle/LiZ4mh+vD32G+1zD7p4okG5aoZcOVe6LS90d5CLgQ/LOQmLgVth
-   fx6GR6zVLq/rch8NLjj8P+qplIkzzxiVHmrrwgx12pOGcSKeEiIcUouE+
-   0AfybL+r4oQC96IcqhVba8rbPTRUYjmgKyq4YXx7mcc/r6pVE6qQ1t9FP
-   ZGXpFgkLcs7wbCPVplsWCf43fpoeW4ArEG2Gtuy6PYj8C9Z3t+1hYDlcW
-   Q==;
-X-CSE-ConnectionGUID: Fb7UXOqTR7KuPh7CbJpM3g==
-X-CSE-MsgGUID: XFjN4e2KRaGEdBhx39pHsw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11175"; a="26863117"
-X-IronPort-AV: E=Sophos;i="6.10,177,1719903600"; 
-   d="scan'208";a="26863117"
-Received: from orviesa005.jf.intel.com ([10.64.159.145])
-  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Aug 2024 01:28:47 -0700
-X-CSE-ConnectionGUID: qzDAa/RzQuqTqBcMmesRyg==
-X-CSE-MsgGUID: D/7I0FJIQVO3Zp7Qcviwrw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.10,177,1719903600"; 
-   d="scan'208";a="67337166"
-Received: from lkp-server01.sh.intel.com (HELO 9a732dc145d3) ([10.239.97.150])
-  by orviesa005.jf.intel.com with ESMTP; 26 Aug 2024 01:28:45 -0700
-Received: from kbuild by 9a732dc145d3 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1siV5e-000Gfd-1f;
-	Mon, 26 Aug 2024 08:28:42 +0000
-Date: Mon, 26 Aug 2024 16:28:36 +0800
-From: kernel test robot <lkp@intel.com>
-To: Wenliang <wenliang202407@163.com>, linux@roeck-us.net
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, jdelvare@suse.com,
-	linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Wenliang <wenliang202407@163.com>
-Subject: Re: [PATCH linux dev 6.11] hwmon:add new hwmon driver sq52205
-Message-ID: <202408261627.lm2xKacD-lkp@intel.com>
-References: <20240822074426.7241-1-wenliang202407@163.com>
+	s=arc-20240116; t=1724666430; c=relaxed/simple;
+	bh=09jhWOnkxDVfb8Yz6zOonjn5P+Qcq8OhpPg6YtP1234=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=psssEWtn8wqrMqF3i8lA52lDJ9SqNqRjSaCQvEgEouHaPb437GDtTBm2EzS0tRserczDFUqi+mwP/IQ966Se78lPYkb8Dxm3S8qYhTGECGahvdP6pHRUeNzL8A2frgIvXIFBfN5VjxXjewyDzUYkAKde4JCnWP9Wq4fcys5vs0U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=simonwunderlich.de; spf=pass smtp.mailfrom=simonwunderlich.de; arc=none smtp.client-ip=23.88.38.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=simonwunderlich.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=simonwunderlich.de
+Received: from [IPV6:2003:c5:9714:6a90::32b] (p200300C597146a90000000000000032B.dip0.t-ipconnect.de [IPv6:2003:c5:9714:6a90::32b])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mail.simonwunderlich.de (Postfix) with ESMTPSA id 05C07FA131;
+	Mon, 26 Aug 2024 11:51:04 +0200 (CEST)
+Message-ID: <a2a5e90a-4a24-4c83-9bfe-43b4e32cf73c@simonwunderlich.de>
+Date: Mon, 26 Aug 2024 11:51:03 +0200
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240822074426.7241-1-wenliang202407@163.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3] wifi: cfg80211: Set the channel definition for the
+ different Wi-Fi modes when starting CAC
+Content-Language: en-US
+To: Johannes Berg <johannes@sipsolutions.net>, quic_jjohnson@quicinc.com
+Cc: kvalo@kernel.org, linux-wireless@vger.kernel.org, lkp@intel.com,
+ llvm@lists.linux.dev, mathias.kretschmer@fit.fraunhofer.de,
+ oe-kbuild-all@lists.linux.dev
+References: <9809b165-8d25-4984-a1dd-6fca28f1dda9@quicinc.com>
+ <20240816142418.3381951-1-ih@simonwunderlich.de>
+ <6a9916848826a07ca41f1170e1d20cda9e798872.camel@sipsolutions.net>
+From: Hamdi Issam <ih@simonwunderlich.de>
+In-Reply-To: <6a9916848826a07ca41f1170e1d20cda9e798872.camel@sipsolutions.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Hi Wenliang,
+Hello,
 
-kernel test robot noticed the following build errors:
+On 8/23/24 12:42, Johannes Berg wrote:
+> On Fri, 2024-08-16 at 16:24 +0200, Issam Hamdi wrote:
+>> @@ -10143,7 +10143,23 @@ static int nl80211_start_radar_detection(struct sk_buff *skb,
+>>   
+>>   	err = rdev_start_radar_detection(rdev, dev, &chandef, cac_time_ms);
+>>   	if (!err) {
+>> -		wdev->links[0].ap.chandef = chandef;
+>> +		switch (wdev->iftype) {
+>> +		case NL80211_IFTYPE_MESH_POINT:
+>> +			wdev->u.mesh.chandef = chandef;
+>> +			break;
+>> +		case NL80211_IFTYPE_ADHOC:
+>> +			wdev->u.ibss.chandef = chandef;
+>> +			break;
+>> +		case NL80211_IFTYPE_OCB:
+>> +			wdev->u.ocb.chandef = chandef;
+>> +			break;
+>>
+> OCB cannot even get to this code given earlier conditions, why are you
+> adding it here?
 
-[auto build test ERROR on linux/master]
+Actually I didn't test it with OCB mode, I added the check on the 
+different modes to make sure that the function "wdev_chandef" return a 
+no NULL chandef for the different modes.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Wenliang/hwmon-add-new-hwmon-driver-sq52205/20240826-103932
-base:   linux/master
-patch link:    https://lore.kernel.org/r/20240822074426.7241-1-wenliang202407%40163.com
-patch subject: [PATCH linux dev 6.11] hwmon:add new hwmon driver sq52205
-config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20240826/202408261627.lm2xKacD-lkp@intel.com/config)
-compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240826/202408261627.lm2xKacD-lkp@intel.com/reproduce)
+I will remove the check on the OCB mode, if it will impact other 
+implementation.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202408261627.lm2xKacD-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> drivers/hwmon/sq52205.c:493:37: error: cannot assign to variable 'sq522xx_regmap_config' with const-qualified type 'const struct regmap_config'
-     493 |         sq522xx_regmap_config.max_register = data->config->registers;
-         |         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ^
-   drivers/hwmon/sq52205.c:67:35: note: variable 'sq522xx_regmap_config' declared const here
-      67 | static const struct regmap_config sq522xx_regmap_config = {
-         | ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~
-      68 |         .reg_bits = 8,
-         |         ~~~~~~~~~~~~~~
-      69 |         .val_bits = 16,
-         |         ~~~~~~~~~~~~~~~
-      70 | };
-         | ~
-   1 error generated.
-
-
-vim +493 drivers/hwmon/sq52205.c
-
-   460	
-   461	static int sq522xx_probe(struct i2c_client *client)
-   462	{
-   463		struct device *dev = &client->dev;
-   464		struct sq522xx_data *data;
-   465		struct device *hwmon_dev;
-   466		u32 val;
-   467		int ret, group = 0;
-   468		enum sq522xx_ids chip;
-   469	
-   470		if (client->dev.of_node)
-   471			chip = (uintptr_t)of_device_get_match_data(&client->dev);
-   472		else
-   473			chip = i2c_match_id(sq522xx_id, client)->driver_data;
-   474	
-   475		data = devm_kzalloc(dev, sizeof(*data), GFP_KERNEL);
-   476		if (!data)
-   477			return -ENOMEM;
-   478	
-   479		/* set the device type */
-   480		data->client = client;
-   481		data->config = &sq522xx_config[chip];
-   482		mutex_init(&data->config_lock);
-   483	
-   484		if (of_property_read_u32(dev->of_node, "shunt-resistor", &val) < 0)
-   485			val = SQ522XX_RSHUNT_DEFAULT;
-   486	
-   487	
-   488		if (val <= 0 || val > data->config->calibration_factor)
-   489			return -ENODEV;
-   490	
-   491		data->rshunt = val;
-   492	
- > 493		sq522xx_regmap_config.max_register = data->config->registers;
-   494	
-   495		data->regmap = devm_regmap_init_i2c(client, &sq522xx_regmap_config);
-   496		if (IS_ERR(data->regmap)) {
-   497			dev_err(dev, "failed to allocate register map\n");
-   498			return PTR_ERR(data->regmap);
-   499		}
-   500	
-   501	
-   502		ret = sq522xx_init(data);
-   503		if (ret < 0) {
-   504			dev_err(dev, "error configuring the device: %d\n", ret);
-   505			return -ENODEV;
-   506		}
-   507		if (chip == sq52205) {
-   508			ret = sq52205_init(data);
-   509			if (ret < 0) {
-   510				dev_err(dev, "error configuring the device cal: %d\n", ret);
-   511				return -ENODEV;
-   512			}
-   513		}
-   514	
-   515		data->groups[group++] = &sq522xx_group;
-   516		if (chip == sq52205)
-   517			data->groups[group++] = &sq52205_group;
-   518	
-   519		hwmon_dev = devm_hwmon_device_register_with_groups(dev, client->name,
-   520									data, data->groups);
-   521		if (IS_ERR(hwmon_dev))
-   522			return PTR_ERR(hwmon_dev);
-   523	
-   524		dev_info(dev, "power monitor %s (Rshunt = %li uOhm)\n",
-   525			 client->name, data->rshunt);
-   526	
-   527		return 0;
-   528	}
-   529	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+>
+> I guess this should conflict:
+>
+> https://lore.kernel.org/linux-wireless/20240711035147.1896538-1-quic_adisi@quicinc.com/
+>
+> but it's probably not too hard to resolve that.
+>
+> johannes
+Issam
