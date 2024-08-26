@@ -1,74 +1,62 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1479E186608;
-	Mon, 26 Aug 2024 13:20:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F1F3F40855;
+	Mon, 26 Aug 2024 13:30:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724678415; cv=none; b=ILw891GF4nXFPm6BueM79qLWGYnX52AANllh/yV10ugLWysXx30yFroTTxuwZUG7H1j4/GEep7LvwhB84DxgOs8Pvt18QjJfbTBOpn1KN0bGmxg7T3V1AMvK3/zPibOWHI2aJVHpcnMvRj3nBkriSGoG1/9LG4uZO9dGnTAcV98=
+	t=1724679010; cv=none; b=dXh375cMskcZDj9C+APx7U+47c4EgRb7uOWyHOnWAnXH6YEt+kaVSpg+KHyvHfiSTLhFUFzQDzT+5zhp8WqlX7hH5h6RdmPibaLztLohgbGaiKTPz71LJ9gVlwDPn/k6HPP6zjBCVhGLdvGI4KK87ZEY+vjgyiMFqajn1WYqs7Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724678415; c=relaxed/simple;
-	bh=E3jqWk0quNbd2DIIwzH2hsPPy6kfLMiKIT4k5BaQN9I=;
+	s=arc-20240116; t=1724679010; c=relaxed/simple;
+	bh=OxXpckFXtIJTdXwF/Ee9oAJfvLLzhU8EiUb05bfLQBk=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=H/Ol0067uEkS37y1/Foah8hrqEip04OXNCMypRwD2lP8q5ngHue2xN9DO7YTI9S+8MUmeRvSRFFl6sVEvMn45XIm5qo+2v4HsVEYFMeqfTTBzRIffQc3rZNsLCj6XQyZ3NNfCWTnuUgiO/htFmhRhR3cqb3+XLNM4AYuaJrn4DM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=BDdlMTYS; arc=none smtp.client-ip=192.198.163.15
+	 Content-Type:Content-Disposition:In-Reply-To; b=ofaG0R+LT/LwF8anaVVYkhCJ1SP+dQdeecimPUl64Sw8MK+Q14PO8COf9XMkDC00rZaUVOIKAZbRfIlS4EnPZSlO4A4APr5bErf0ZtfpWvLx1NzPzWYcEuweMwNEFhh3fm73nJsGoR+pU/K6M4CZdyPjkykwPbdEALwyVHKR57U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=JfGAmYpz; arc=none smtp.client-ip=192.198.163.19
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="BDdlMTYS"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="JfGAmYpz"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1724678411; x=1756214411;
+  t=1724679009; x=1756215009;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=E3jqWk0quNbd2DIIwzH2hsPPy6kfLMiKIT4k5BaQN9I=;
-  b=BDdlMTYSrbAdSIAZbPrLYbKe29DYXKM7yhNL1zqzak1+yKQ6f55caLU0
-   1wDrLtdtjDFJ8QX18QDd6RLzUvFsaoSqWwMjXgaLoTnIlAEGxJvEkBJGh
-   ZhllLEdFeyzvmI9aoJd3Ct2A7Tgdwa4QOZo8Qj7IiLHWYxY02NrPn0LT1
-   1giLXaksqM3ry4trM202DlxxIIWomMtEMT94ID7I186Toa3MJHOXOVrLW
-   wuaIf0CuMz8SFSUNDBAAV8j9Bg9KuajdSSnaZtcyw+aQiJ3Qg55Ks+Rsz
-   6sBp1D/tddxeV4uReZOQVS7/NKpzKlGPXlQAKWpL6bh13i0wk4HGv51kJ
-   A==;
-X-CSE-ConnectionGUID: pdDAW9ypRL6asV3fgoLg0w==
-X-CSE-MsgGUID: kzJ/mhosQg+6wOzTwt32mA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11176"; a="23266505"
+  bh=OxXpckFXtIJTdXwF/Ee9oAJfvLLzhU8EiUb05bfLQBk=;
+  b=JfGAmYpzkKUUpq+hAQ0NK1XAC7jxx6j1GERf3hLAG4UbPpZl4CCPy1L8
+   rBRuKoTYE7/MmLtwLtXnLXEYKcFPydZja62Rwuw7ll+I8taO0l6u/Acpp
+   YPHyyz5r1gWIkGmguy+jJkorT49UieNgIgv+jv1n/9MB5vm9JU4l4hpd1
+   dXuUqHmCLhLtiQMxCTwhXFwue4LXsCXExSHkvU/e0pJKRVarcr3GE9H1y
+   cTcyRLJ0LScr9dRib7hXlUYjhtvFliu9V92cFG4uMMjoi6CwRQZYmhQPC
+   BNXAspqeCkcdVFq5rIGtIu/bbLT+3eYhqVP4WkR/8PtiQw/SNbdW2Xmbr
+   w==;
+X-CSE-ConnectionGUID: 7QTLTlYaQ5WsbWYUJ4E0TQ==
+X-CSE-MsgGUID: RTqJzqOwQZe9nXenPfwPTg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11176"; a="22694689"
 X-IronPort-AV: E=Sophos;i="6.10,177,1719903600"; 
-   d="scan'208";a="23266505"
-Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Aug 2024 06:20:10 -0700
-X-CSE-ConnectionGUID: pEF2z3PSSqO4UPPXQmj/yQ==
-X-CSE-MsgGUID: J7nWDYN7R/mm5vWIQnhyiQ==
+   d="scan'208";a="22694689"
+Received: from orviesa005.jf.intel.com ([10.64.159.145])
+  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Aug 2024 06:30:08 -0700
+X-CSE-ConnectionGUID: XKSV/4w3RmG7+vfqrR8lVQ==
+X-CSE-MsgGUID: lxTYJ1q7TpuCyxQCeC7IQA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.10,177,1719903600"; 
-   d="scan'208";a="93233605"
+   d="scan'208";a="67407584"
 Received: from lkp-server01.sh.intel.com (HELO 9a732dc145d3) ([10.239.97.150])
-  by orviesa002.jf.intel.com with ESMTP; 26 Aug 2024 06:20:05 -0700
+  by orviesa005.jf.intel.com with ESMTP; 26 Aug 2024 06:30:06 -0700
 Received: from kbuild by 9a732dc145d3 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1siZdb-000H6x-0H;
-	Mon, 26 Aug 2024 13:20:03 +0000
-Date: Mon, 26 Aug 2024 21:19:15 +0800
+	id 1siZnH-000H7h-34;
+	Mon, 26 Aug 2024 13:30:03 +0000
+Date: Mon, 26 Aug 2024 21:29:39 +0800
 From: kernel test robot <lkp@intel.com>
-To: Chen-Yu Tsai <wenst@chromium.org>, Rob Herring <robh@kernel.org>,
-	Saravana Kannan <saravanak@google.com>,
-	Matthias Brugger <matthias.bgg@gmail.com>,
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
-	Wolfram Sang <wsa-dev@sang-engineering.com>,
-	Benson Leung <bleung@chromium.org>,
-	Tzung-Bi Shih <tzungbi@kernel.org>, Mark Brown <broonie@kernel.org>,
-	Liam Girdwood <lgirdwood@gmail.com>
+To: Wu Bo <bo.wu@vivo.com>, linux-kernel@vger.kernel.org
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Chen-Yu Tsai <wenst@chromium.org>, chrome-platform@lists.linux.dev,
-	devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-	Douglas Anderson <dianders@chromium.org>,
-	Johan Hovold <johan@kernel.org>, Jiri Kosina <jikos@kernel.org>,
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-	linux-i2c@vger.kernel.org
-Subject: Re: [PATCH v5 02/10] regulator: Move OF-specific regulator lookup
- code to of_regulator.c
-Message-ID: <202408262013.YYc4obi2-lkp@intel.com>
-References: <20240822092006.3134096-3-wenst@chromium.org>
+	Serge Semin <fancer.lancer@gmail.com>, linux-mips@vger.kernel.org,
+	Wu Bo <wubo.oduw@gmail.com>
+Subject: Re: [PATCH] bus: bt1-axi: change to use devm_clk_get_enabled()
+ helpers
+Message-ID: <202408262130.M4pjxUDC-lkp@intel.com>
+References: <20240823023103.1984437-1-bo.wu@vivo.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -77,50 +65,58 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240822092006.3134096-3-wenst@chromium.org>
+In-Reply-To: <20240823023103.1984437-1-bo.wu@vivo.com>
 
-Hi Chen-Yu,
+Hi Wu,
 
-kernel test robot noticed the following build errors:
+kernel test robot noticed the following build warnings:
 
-[auto build test ERROR on broonie-regulator/for-next]
-[also build test ERROR on robh/for-next wsa/i2c/for-next linus/master v6.11-rc5 next-20240826]
+[auto build test WARNING on linus/master]
+[also build test WARNING on v6.11-rc5 next-20240826]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Chen-Yu-Tsai/of-dynamic-Add-of_changeset_update_prop_string/20240826-105737
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/regulator.git for-next
-patch link:    https://lore.kernel.org/r/20240822092006.3134096-3-wenst%40chromium.org
-patch subject: [PATCH v5 02/10] regulator: Move OF-specific regulator lookup code to of_regulator.c
-config: i386-buildonly-randconfig-003-20240826 (https://download.01.org/0day-ci/archive/20240826/202408262013.YYc4obi2-lkp@intel.com/config)
-compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240826/202408262013.YYc4obi2-lkp@intel.com/reproduce)
+url:    https://github.com/intel-lab-lkp/linux/commits/Wu-Bo/bus-bt1-axi-change-to-use-devm_clk_get_enabled-helpers/20240826-122401
+base:   linus/master
+patch link:    https://lore.kernel.org/r/20240823023103.1984437-1-bo.wu%40vivo.com
+patch subject: [PATCH] bus: bt1-axi: change to use devm_clk_get_enabled() helpers
+config: arm-randconfig-002-20240826 (https://download.01.org/0day-ci/archive/20240826/202408262130.M4pjxUDC-lkp@intel.com/config)
+compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 08e5a1de8227512d4774a534b91cb2353cef6284)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240826/202408262130.M4pjxUDC-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202408262013.YYc4obi2-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202408262130.M4pjxUDC-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
-   In file included from drivers/regulator/devres.c:15:
->> drivers/regulator/internal.h:87:9: error: incompatible integer to pointer conversion returning 'int' from a function with result type 'struct regulator_dev *' [-Wint-conversion]
-      87 |         return -ENODEV;
-         |                ^~~~~~~
-   1 error generated.
+>> drivers/bus/bt1-axi.c:158:9: warning: variable 'ret' is uninitialized when used here [-Wuninitialized]
+     158 |         return ret;
+         |                ^~~
+   drivers/bus/bt1-axi.c:151:9: note: initialize the variable 'ret' to silence this warning
+     151 |         int ret;
+         |                ^
+         |                 = 0
+   1 warning generated.
 
 
-vim +87 drivers/regulator/internal.h
+vim +/ret +158 drivers/bus/bt1-axi.c
 
-    82	
-    83	#else
-    84	static inline struct regulator_dev *of_regulator_dev_lookup(struct device *dev,
-    85								    const char *supply)
-    86	{
-  > 87		return -ENODEV;
-    88	}
-    89	
+63cb77136e04ff Serge Semin 2020-05-26  148  
+63cb77136e04ff Serge Semin 2020-05-26  149  static int bt1_axi_request_clk(struct bt1_axi *axi)
+63cb77136e04ff Serge Semin 2020-05-26  150  {
+63cb77136e04ff Serge Semin 2020-05-26  151  	int ret;
+63cb77136e04ff Serge Semin 2020-05-26  152  
+6ac8fb96f7dfde Wu Bo       2024-08-22  153  	axi->aclk = devm_clk_get_enabled(axi->dev, "aclk");
+5e93207e962a6d Serge Semin 2022-06-10  154  	if (IS_ERR(axi->aclk))
+5e93207e962a6d Serge Semin 2022-06-10  155  		return dev_err_probe(axi->dev, PTR_ERR(axi->aclk),
+5e93207e962a6d Serge Semin 2022-06-10  156  				     "Couldn't get AXI Interconnect clock\n");
+63cb77136e04ff Serge Semin 2020-05-26  157  
+7f57416f2aebe6 Serge Semin 2020-05-28 @158  	return ret;
+63cb77136e04ff Serge Semin 2020-05-26  159  }
+63cb77136e04ff Serge Semin 2020-05-26  160  
 
 -- 
 0-DAY CI Kernel Test Service
