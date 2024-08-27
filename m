@@ -1,190 +1,131 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
+Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF9F5179A8;
-	Tue, 27 Aug 2024 06:34:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 93ABD18D65C
+	for <llvm@lists.linux.dev>; Tue, 27 Aug 2024 09:54:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.69.126.157
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724740443; cv=none; b=k5wcbajOWOYAcgP1fWVIi29mURllkC4+Xb1VvcRoDHRRuWM3EKEYnZCs5I2fY8kEa1vPsD3jqdL9lgHj1WQ2m9PS28V0vNNxW4MP0x+7Upsg4DKds7479trmDQzHbmvv7q+L7Iu2vdfUW+GszzQOoShoKyZV67wMpNJk7XX4pxA=
+	t=1724752498; cv=none; b=IneYrDEfKhwH2Kdf1pPAr2DSC5WidfmAe7pD403DszKZMIq+5xJabDgUHCobQW5OOR/sWTgOp+sNsZNmLYaZHx+mgJo9fP+G3rW7z88NTkT9DJfoLwmMKiq1th5yXHw1xyq54yWzePM8nmp3YGBKCaW0cNt66Dh6PbQ0nS2E2DA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724740443; c=relaxed/simple;
-	bh=P9zOrCau2M2SHj2r5Dp5xZiqEpHI+waUUi/eT5wM3ec=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=iSri264RXUEtqgeQKVb0EBLfg3ObdAU5WK7Nut2KecNXfpee1BYUVqauXNlDyGNZq834mzkfDJIWDFOvC+7ZYzvBVeGACImG59kL87iFCkV8T8TXZEbDoRao83uxpKROGhw2N9nqUEFVgbWk4PXFbQW6RkQBSSM7jMppxFwdaLU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=KI1KMHo0; arc=none smtp.client-ip=192.198.163.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1724752498; c=relaxed/simple;
+	bh=FI10dEkXRoEqfg6u3Q2Dk6B7FUz2tABo2Vlbk9C316k=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=F248bkgsBXd82ykfggDMSXriU9ffNQH8wQByn5um6MogsiLn4Hx6YhCQXMCARRo9+TVZrq94J4GcWzwl4fCWW6y1ObrAfL+qg7sUw/Uoo4WbOZEao6KFEvKq8ZpDIEDOWGEx92WyXxYe++Olf1SJpoDfggSlfewZWD5iMht4xWY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=lYJCSq4x; arc=none smtp.client-ip=159.69.126.157
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=weissschuh.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="KI1KMHo0"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1724740442; x=1756276442;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=P9zOrCau2M2SHj2r5Dp5xZiqEpHI+waUUi/eT5wM3ec=;
-  b=KI1KMHo0/kxkI1qrFB5BSieF5zSjqGZjG7YSoMG6eYlMnwbLvlkO60AP
-   bqVfstvE7DLDRzJH04sphi3FIAMULDfRGBEry4cGVSLjk08pbmxzEtADw
-   km6XZ0qx2ZrjKVsy6Vz+Go+QujbEzjVyKuPu0aP5g7n3Cl2Z2GiHqvm4s
-   wDpPh5I2S7FtkBwIBYmoL7lKSJpDg8G0B9yMa5HytI7TjMfFh9zVChbgb
-   fFENCRgks+V0ctFHYaEAoEg0f8nsHHzyPrV15xgdBODgqSMjFL+uOiNYA
-   89TobmPW9zMR1F7qwARutTHFiz/AFnVcRxbq+idfQMM8rKLPTdIqNyKc1
-   w==;
-X-CSE-ConnectionGUID: Kd2PKgR4Q+ypr16VvXheXg==
-X-CSE-MsgGUID: mchAEZ2VTNW3/saBw98svA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11176"; a="34606224"
-X-IronPort-AV: E=Sophos;i="6.10,179,1719903600"; 
-   d="scan'208";a="34606224"
-Received: from orviesa009.jf.intel.com ([10.64.159.149])
-  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Aug 2024 23:34:01 -0700
-X-CSE-ConnectionGUID: FG++n/t7TZmX7tyo1f58fw==
-X-CSE-MsgGUID: zUpZghT4SdS8EMlyUKnNVg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.10,179,1719903600"; 
-   d="scan'208";a="62722566"
-Received: from lkp-server01.sh.intel.com (HELO 9a732dc145d3) ([10.239.97.150])
-  by orviesa009.jf.intel.com with ESMTP; 26 Aug 2024 23:33:58 -0700
-Received: from kbuild by 9a732dc145d3 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1sipm8-000I9S-0k;
-	Tue, 27 Aug 2024 06:33:56 +0000
-Date: Tue, 27 Aug 2024 14:32:59 +0800
-From: kernel test robot <lkp@intel.com>
-To: Maksym Kutsevol <max@kutsevol.com>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Breno Leitao <leitao@debian.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/2] netcons: Add udp send fail statistics to netconsole
-Message-ID: <202408271419.3JJwwxE7-lkp@intel.com>
-References: <20240824215130.2134153-2-max@kutsevol.com>
+	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="lYJCSq4x"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
+	s=mail; t=1724752485;
+	bh=FI10dEkXRoEqfg6u3Q2Dk6B7FUz2tABo2Vlbk9C316k=;
+	h=From:Date:Subject:To:Cc:From;
+	b=lYJCSq4xVpHE+cQK3ydTfc7R+h08/E3nryaC3+wegsJUN62L0jB2LSgT0Vumi3Ti7
+	 mKZ1Tcw3FG3qMy7Z3aw3DRVTImtVXNGXo99HKGJExWe9Gc0LtnhHtsmSA5OSBLgsey
+	 Tw4RRdtrMgIEr091KB0I0ygsmDvAp/6mZOQWKHvo=
+From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
+Date: Tue, 27 Aug 2024 11:54:43 +0200
+Subject: [PATCH] sysctl: avoid spurious permanent empty tables
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240824215130.2134153-2-max@kutsevol.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+Message-Id: <20240827-sysctl-const-shared-identity-v1-1-2714a798c4ff@weissschuh.net>
+X-B4-Tracking: v=1; b=H4sIAGKizWYC/x3MSwqAMAwA0atI1ga0+L+KuKhtqgGp0hRRxLtbX
+ D4Y5gGhwCQwZA8EOll49wllnoFZtV8I2SaDKlRVdKpFucXEDc3uJaKsOpBNCfnI8cZez13ZUO2
+ smyEtjkCOr38/Tu/7ATpks/FuAAAA
+To: Luis Chamberlain <mcgrof@kernel.org>, Kees Cook <kees@kernel.org>, 
+ Joel Granados <j.granados@samsung.com>
+Cc: Nathan Chancellor <nathan@kernel.org>, 
+ Nick Desaulniers <ndesaulniers@google.com>, 
+ Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
+ linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
+ llvm@lists.linux.dev, kernel test robot <oliver.sang@intel.com>, 
+ stable@vger.kernel.org, 
+ =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
+X-Mailer: b4 0.14.1
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1724752485; l=2962;
+ i=linux@weissschuh.net; s=20221212; h=from:subject:message-id;
+ bh=FI10dEkXRoEqfg6u3Q2Dk6B7FUz2tABo2Vlbk9C316k=;
+ b=P41gnbdv8wnYCR3Jy/tGAVFr6kZg1Y61NS35L88Tmn9hFgmek9RBBh+ZeYOgYD73HwW/DRQds
+ LZWja3uU0A4BTl4eJU7IQIqwWV15p75mh1h1wz/XdwM9FV8jNo8NIe8
+X-Developer-Key: i=linux@weissschuh.net; a=ed25519;
+ pk=KcycQgFPX2wGR5azS7RhpBqedglOZVgRPfdFSPB1LNw=
 
-Hi Maksym,
+The test if a table is a permanently empty one, inspects the address of
+the registered ctl_table argument.
+However as sysctl_mount_point is an empty array and does not occupy and
+space it can end up sharing an address with another object in memory.
+If that other object itself is a "struct ctl_table" then registering
+that table will fail as it's incorrectly recognized as permanently empty.
 
-kernel test robot noticed the following build warnings:
+Avoid this issue by adding a dummy element to the array so that the
+array is not empty anymore and the potential address sharing is avoided.
+Explicitly register the table with zero elements as otherwise the dummy
+element would be recognized as a sentinel element which would lead to a
+runtime warning from the sysctl core.
 
-[auto build test WARNING on 8af174ea863c72f25ce31cee3baad8a301c0cf0f]
+While the issue seems unlikely to be encountered at this time, this
+seems mostly be due to luck.
+Also a future change, constifying sysctl_mount_point and root_table, can
+reliably trigger this issue on clang 18.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Maksym-Kutsevol/netcons-Add-udp-send-fail-statistics-to-netconsole/20240826-163850
-base:   8af174ea863c72f25ce31cee3baad8a301c0cf0f
-patch link:    https://lore.kernel.org/r/20240824215130.2134153-2-max%40kutsevol.com
-patch subject: [PATCH 2/2] netcons: Add udp send fail statistics to netconsole
-config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20240827/202408271419.3JJwwxE7-lkp@intel.com/config)
-compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 08e5a1de8227512d4774a534b91cb2353cef6284)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240827/202408271419.3JJwwxE7-lkp@intel.com/reproduce)
+Given that empty arrays are non-standard in the first place,
+avoid them if possible.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202408271419.3JJwwxE7-lkp@intel.com/
+Reported-by: kernel test robot <oliver.sang@intel.com>
+Closes: https://lore.kernel.org/oe-lkp/202408051453.f638857e-lkp@intel.com
+Fixes: 4a7b29f65094 ("sysctl: move sysctl type to ctl_table_header")
+Fixes: a35dd3a786f5 ("sysctl: drop now unnecessary out-of-bounds check")
+Cc: stable@vger.kernel.org
+Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
+---
+This was originally part of a feature series [0], but is resubmitted on
+its own to make it into v6.11To.
 
-All warnings (new ones prefixed by >>):
+[0] https://lore.kernel.org/lkml/20240805-sysctl-const-api-v2-0-52c85f02ee5e@weissschuh.net/
+---
+ fs/proc/proc_sysctl.c | 11 ++++++++---
+ 1 file changed, 8 insertions(+), 3 deletions(-)
 
-   In file included from drivers/net/netconsole.c:27:
-   In file included from include/linux/mm.h:2228:
-   include/linux/vmstat.h:517:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     517 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
-   In file included from drivers/net/netconsole.c:35:
-   In file included from include/linux/netpoll.h:11:
-   In file included from include/linux/netdevice.h:38:
-   In file included from include/net/net_namespace.h:43:
-   In file included from include/linux/skbuff.h:17:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:12:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:14:
-   In file included from arch/hexagon/include/asm/io.h:328:
-   include/asm-generic/io.h:548:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     548 |         val = __raw_readb(PCI_IOBASE + addr);
-         |                           ~~~~~~~~~~ ^
-   include/asm-generic/io.h:561:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     561 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
-      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-         |                                                   ^
-   In file included from drivers/net/netconsole.c:35:
-   In file included from include/linux/netpoll.h:11:
-   In file included from include/linux/netdevice.h:38:
-   In file included from include/net/net_namespace.h:43:
-   In file included from include/linux/skbuff.h:17:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:12:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:14:
-   In file included from arch/hexagon/include/asm/io.h:328:
-   include/asm-generic/io.h:574:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     574 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
-      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
-         |                                                   ^
-   In file included from drivers/net/netconsole.c:35:
-   In file included from include/linux/netpoll.h:11:
-   In file included from include/linux/netdevice.h:38:
-   In file included from include/net/net_namespace.h:43:
-   In file included from include/linux/skbuff.h:17:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:12:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:14:
-   In file included from arch/hexagon/include/asm/io.h:328:
-   include/asm-generic/io.h:585:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     585 |         __raw_writeb(value, PCI_IOBASE + addr);
-         |                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:595:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     595 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:605:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     605 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
->> drivers/net/netconsole.c:341:3: warning: format specifies type 'unsigned long' but the argument has type 'size_t' (aka 'unsigned int') [-Wformat]
-     340 |         return sysfs_emit(buf, "xmit_drop: %lu enomem: %lu\n",
-         |                                            ~~~
-         |                                            %zu
-     341 |                 nt->stats.xmit_drop_count, nt->stats.enomem_count);
-         |                 ^~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/net/netconsole.c:341:30: warning: format specifies type 'unsigned long' but the argument has type 'size_t' (aka 'unsigned int') [-Wformat]
-     340 |         return sysfs_emit(buf, "xmit_drop: %lu enomem: %lu\n",
-         |                                                        ~~~
-         |                                                        %zu
-     341 |                 nt->stats.xmit_drop_count, nt->stats.enomem_count);
-         |                                            ^~~~~~~~~~~~~~~~~~~~~~
-   9 warnings generated.
+diff --git a/fs/proc/proc_sysctl.c b/fs/proc/proc_sysctl.c
+index 9553e77c9d31..d11ebc055ce0 100644
+--- a/fs/proc/proc_sysctl.c
++++ b/fs/proc/proc_sysctl.c
+@@ -29,8 +29,13 @@ static const struct inode_operations proc_sys_inode_operations;
+ static const struct file_operations proc_sys_dir_file_operations;
+ static const struct inode_operations proc_sys_dir_operations;
+ 
+-/* Support for permanently empty directories */
+-static struct ctl_table sysctl_mount_point[] = { };
++/*
++ * Support for permanently empty directories.
++ * Must be non-empty to avoid sharing an address with other tables.
++ */
++static struct ctl_table sysctl_mount_point[] = {
++	{ }
++};
+ 
+ /**
+  * register_sysctl_mount_point() - registers a sysctl mount point
+@@ -42,7 +47,7 @@ static struct ctl_table sysctl_mount_point[] = { };
+  */
+ struct ctl_table_header *register_sysctl_mount_point(const char *path)
+ {
+-	return register_sysctl(path, sysctl_mount_point);
++	return register_sysctl_sz(path, sysctl_mount_point, 0);
+ }
+ EXPORT_SYMBOL(register_sysctl_mount_point);
+ 
 
+---
+base-commit: 3e9bff3bbe1355805de919f688bef4baefbfd436
+change-id: 20240827-sysctl-const-shared-identity-9ab816e5fdfb
 
-vim +341 drivers/net/netconsole.c
-
-   335	
-   336	static ssize_t stats_show(struct config_item *item, char *buf)
-   337	{
-   338		struct netconsole_target *nt = to_target(item);
-   339	
-   340		return sysfs_emit(buf, "xmit_drop: %lu enomem: %lu\n",
- > 341			nt->stats.xmit_drop_count, nt->stats.enomem_count);
-   342	}
-   343	
-
+Best regards,
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Thomas Weißschuh <linux@weissschuh.net>
+
