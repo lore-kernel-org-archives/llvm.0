@@ -1,63 +1,61 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8964734CDD;
-	Tue, 27 Aug 2024 22:23:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 13792176AD8;
+	Tue, 27 Aug 2024 22:44:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724797403; cv=none; b=mOHzPR4RUqSQ/bCxjXzbhmfK3FsKBq7vxZn3/NXFmkJjKnlp5qs2nnGFsPYOPlHDg0PUo7Savn1XDj3DlgaQitx25y1evcWQM56Pyipd7dXQt1x9l1OctJYxwOBU3HpuO+AYRIkPLuInhbBU4Cp+fFw6FqJ01syey6r8BqW0Pcg=
+	t=1724798664; cv=none; b=Pkcze6CQEVTVPPlQ9Yg5cx+CIt+vg+d96QVkFji4uxfj94spHUEcZEuaXeWVboLWTHusYDGbBLO5jOnQohjcUiCcx1KCrwnmVfY2wMYJlVNoS31JQdd/hXbId/zYuiijN/o+aWPxiMUQwgEjUKOFiDpWua+Mbwvd8xgdgzbWp/4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724797403; c=relaxed/simple;
-	bh=ItqJNfn3hlKuY1giqmucMmbfP7TZmqrlAw07jjbs07Q=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Nbus/WaiiKBD2B6HzjjGdM3vmePWcj9+McUkIswuwReUExdQ46fMZdiGFwOVEn5A79tI54cEwZMLmhY9LscY5TWO0xYpfPglXOt+jR/fo44Hzfq9sBN8R69VeS/0Hz7RQixK5WnRTd4c0K39lspu8krz+l4hDCYq0cb1qOVqXp4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=A5KS/wZG; arc=none smtp.client-ip=192.198.163.18
+	s=arc-20240116; t=1724798664; c=relaxed/simple;
+	bh=2rRd23sLADmUoTAvAfvdQvXX9hK41kxFTxnm1TRX5PA=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=cDiJTL6VHxcrZB3u6St3OEMklQnQEqb88hISNOophJlnx5VZ8MWiC3CzYXXRFRZwLje6B/0GrUO6m7/0/FyQQ4dgTX1+sW4R7FvTA7BA1haIS3lPQbdIM06oR4nIjFVt7eiKDZXwhpilo+o8pKrElxh7hwaVJE+rWHcO9sS+lgQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=WoXdCxm9; arc=none smtp.client-ip=198.175.65.14
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="A5KS/wZG"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="WoXdCxm9"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1724797401; x=1756333401;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=ItqJNfn3hlKuY1giqmucMmbfP7TZmqrlAw07jjbs07Q=;
-  b=A5KS/wZGdDG4wPT7ZXHe9rrH0+cJnet6oVrNfelgODLcl1shYk09GJCj
-   +hlTUIWdsy/mLmf0H1aebpcZckRRWnWjZ0icGMe0LpZaLCLgqC44/jUc0
-   89u8qzdaBKoVQ/hPXPfFRBMItrEblkchr2bo16n8Fi7h3AZLqScQQ7XjR
-   aq2mESY+2WI64wBKMYKOM2uLY09KsrVqvBqIZ2COSubkw+kFNCHUnRUwB
-   g5VNyFM6mVYo+59nc6f51cki6k4YoFeZiOFXlcPGHapLeT4D7ZmfSJ0dP
-   Fw5jUiiCj75FDZjfii9n5g+VCCsnhpNDy2aEGd4IXBD58H4x35zX67j5B
-   Q==;
-X-CSE-ConnectionGUID: Ox+1iG/7RdiSp6dO4ab4Pg==
-X-CSE-MsgGUID: Xott1kZHTTOnWrgkbZAx9Q==
-X-IronPort-AV: E=McAfee;i="6700,10204,11177"; a="22827970"
+  t=1724798662; x=1756334662;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=2rRd23sLADmUoTAvAfvdQvXX9hK41kxFTxnm1TRX5PA=;
+  b=WoXdCxm9VqRfZOwugpmu0yiRZU/lrMawJramm4xLbFhUpvsfg67xjW6/
+   MvpHkGSENn6b7tnaEMmYWmsLXgrpf2JrOx6Os/rALA3qCtkLKotgQ2Dqd
+   dRdZdGooES6zGOG833qPv/NFSKLNsnG/q4VBu23zyd1PTSXI+Uo6y/6gn
+   LR2cZKhk5Xo2NFfNSyEd2Aj6yZdFI748apQ+NfBHvTX3uisT3tecXHqmy
+   1DBsXyzpcNncQEPkSJvV3MwOifC69uZfGoTwhTS8WA16OO7GkI/JbYvo4
+   Vy+Xx0FuYAA/rWipO56sqpFSqGYl+okIsK4A7jXkMgmSnfDnOwIWDWXG+
+   A==;
+X-CSE-ConnectionGUID: CEaHgzcySEqGUxdCsNX6Ow==
+X-CSE-MsgGUID: sLpTnY+hSY+h587SPHVYCw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11177"; a="27098007"
 X-IronPort-AV: E=Sophos;i="6.10,181,1719903600"; 
-   d="scan'208";a="22827970"
-Received: from fmviesa008.fm.intel.com ([10.60.135.148])
-  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Aug 2024 15:23:21 -0700
-X-CSE-ConnectionGUID: TfXBwgbVROG8c7n2l5+BrA==
-X-CSE-MsgGUID: 0ny/6AyhSVKNPQ49kngS3Q==
+   d="scan'208";a="27098007"
+Received: from orviesa007.jf.intel.com ([10.64.159.147])
+  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Aug 2024 15:44:22 -0700
+X-CSE-ConnectionGUID: N/YM8+IDQX2cFMWAV3Uqvw==
+X-CSE-MsgGUID: gWcVgN00TDa1uX67VEt23g==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.10,181,1719903600"; 
-   d="scan'208";a="63009612"
+   d="scan'208";a="63531607"
 Received: from lkp-server01.sh.intel.com (HELO 9a732dc145d3) ([10.239.97.150])
-  by fmviesa008.fm.intel.com with ESMTP; 27 Aug 2024 15:23:18 -0700
+  by orviesa007.jf.intel.com with ESMTP; 27 Aug 2024 15:44:20 -0700
 Received: from kbuild by 9a732dc145d3 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1sj4aq-000K8Y-2V;
-	Tue, 27 Aug 2024 22:23:16 +0000
-Date: Wed, 28 Aug 2024 06:22:53 +0800
+	id 1sj4vB-000KA6-2R;
+	Tue, 27 Aug 2024 22:44:17 +0000
+Date: Wed, 28 Aug 2024 06:43:22 +0800
 From: kernel test robot <lkp@intel.com>
-To: Brett Creeley <brett.creeley@amd.com>, netdev@vger.kernel.org,
-	davem@davemloft.net, kuba@kernel.org, edumazet@google.com,
-	pabeni@redhat.com
+To: ningyu <ningyu@eswincomputing.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	shannon.nelson@amd.com, brett.creeley@amd.com
-Subject: Re: [PATCH v2 net-next 5/5] ionic: convert Rx queue buffers to use
- page_pool
-Message-ID: <202408280648.f6Hb9cX3-lkp@intel.com>
-References: <20240826184422.21895-6-brett.creeley@amd.com>
+	Emil Renner Berthing <emil.renner.berthing@canonical.com>,
+	Darshan Prajapati <darshan.prajapati@einfochips.com>,
+	Pinkesh Vaghela <pinkesh.vaghela@einfochips.com>
+Subject: [esmil:eic7700 18/20] arch/riscv/kernel/bus_error.c:33: warning:
+ Cannot understand  * @brief Bus error unit register map
+Message-ID: <202408280625.nTEqbAws-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -66,166 +64,38 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240826184422.21895-6-brett.creeley@amd.com>
 
-Hi Brett,
-
-kernel test robot noticed the following build warnings:
-
-[auto build test WARNING on net-next/main]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Brett-Creeley/ionic-debug-line-for-Tx-completion-errors/20240827-024626
-base:   net-next/main
-patch link:    https://lore.kernel.org/r/20240826184422.21895-6-brett.creeley%40amd.com
-patch subject: [PATCH v2 net-next 5/5] ionic: convert Rx queue buffers to use page_pool
-config: powerpc-allyesconfig (https://download.01.org/0day-ci/archive/20240828/202408280648.f6Hb9cX3-lkp@intel.com/config)
+tree:   https://github.com/esmil/linux eic7700
+head:   eb44174b12f99d320be704b45db6b994f6a014bd
+commit: f098c3ff914842b8e39b4de84efca891f2347b2b [18/20] drivers: bus-error: Added SiFive Bus Error driver
+config: riscv-defconfig (https://download.01.org/0day-ci/archive/20240828/202408280625.nTEqbAws-lkp@intel.com/config)
 compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 08e5a1de8227512d4774a534b91cb2353cef6284)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240828/202408280648.f6Hb9cX3-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240828/202408280625.nTEqbAws-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202408280648.f6Hb9cX3-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202408280625.nTEqbAws-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
-   In file included from drivers/net/ethernet/pensando/ionic/ionic_txrx.c:4:
-   In file included from include/linux/ip.h:16:
-   In file included from include/linux/skbuff.h:17:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:8:
-   In file included from include/linux/cacheflush.h:5:
-   In file included from arch/powerpc/include/asm/cacheflush.h:7:
-   In file included from include/linux/mm.h:2228:
-   include/linux/vmstat.h:503:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     503 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     504 |                            item];
-         |                            ~~~~
-   include/linux/vmstat.h:510:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     510 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     511 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/vmstat.h:517:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     517 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
-   include/linux/vmstat.h:523:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     523 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     524 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
->> drivers/net/ethernet/pensando/ionic/ionic_txrx.c:203:30: warning: implicit conversion from 'unsigned long' to 'u16' (aka 'unsigned short') changes value from 65536 to 0 [-Wconstant-conversion]
-     203 |                 frag_len = min_t(u16, len, IONIC_PAGE_SIZE);
-         |                            ~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~
-   drivers/net/ethernet/pensando/ionic/ionic_dev.h:184:28: note: expanded from macro 'IONIC_PAGE_SIZE'
-     184 | #define IONIC_PAGE_SIZE                         PAGE_SIZE
-         |                                                 ^
-   arch/powerpc/include/asm/page.h:25:34: note: expanded from macro 'PAGE_SIZE'
-      25 | #define PAGE_SIZE               (ASM_CONST(1) << PAGE_SHIFT)
-         |                                               ^
-   include/linux/minmax.h:213:52: note: expanded from macro 'min_t'
-     213 | #define min_t(type, x, y) __cmp_once(min, type, x, y)
-         |                           ~~~~~~~~~~~~~~~~~~~~~~~~~^~
-   include/linux/minmax.h:96:33: note: expanded from macro '__cmp_once'
-      96 |         __cmp_once_unique(op, type, x, y, __UNIQUE_ID(x_), __UNIQUE_ID(y_))
-         |         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/minmax.h:93:31: note: expanded from macro '__cmp_once_unique'
-      93 |         ({ type ux = (x); type uy = (y); __cmp(op, ux, uy); })
-         |                                ~~    ^
-   drivers/net/ethernet/pensando/ionic/ionic_txrx.c:797:36: warning: implicit conversion from 'unsigned long' to 'u16' (aka 'unsigned short') changes value from 65536 to 0 [-Wconstant-conversion]
-     797 |                 first_frag_len = min_t(u16, len, IONIC_PAGE_SIZE);
-         |                                  ~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~
-   drivers/net/ethernet/pensando/ionic/ionic_dev.h:184:28: note: expanded from macro 'IONIC_PAGE_SIZE'
-     184 | #define IONIC_PAGE_SIZE                         PAGE_SIZE
-         |                                                 ^
-   arch/powerpc/include/asm/page.h:25:34: note: expanded from macro 'PAGE_SIZE'
-      25 | #define PAGE_SIZE               (ASM_CONST(1) << PAGE_SHIFT)
-         |                                               ^
-   include/linux/minmax.h:213:52: note: expanded from macro 'min_t'
-     213 | #define min_t(type, x, y) __cmp_once(min, type, x, y)
-         |                           ~~~~~~~~~~~~~~~~~~~~~~~~~^~
-   include/linux/minmax.h:96:33: note: expanded from macro '__cmp_once'
-      96 |         __cmp_once_unique(op, type, x, y, __UNIQUE_ID(x_), __UNIQUE_ID(y_))
-         |         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/minmax.h:93:31: note: expanded from macro '__cmp_once_unique'
-      93 |         ({ type ux = (x); type uy = (y); __cmp(op, ux, uy); })
-         |                                ~~    ^
-   drivers/net/ethernet/pensando/ionic/ionic_txrx.c:832:38: warning: implicit conversion from 'unsigned long' to 'u16' (aka 'unsigned short') changes value from 65536 to 0 [-Wconstant-conversion]
-     832 |                         frag_len = min_t(u16, remain_len, IONIC_PAGE_SIZE);
-         |                                    ~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~
-   drivers/net/ethernet/pensando/ionic/ionic_dev.h:184:28: note: expanded from macro 'IONIC_PAGE_SIZE'
-     184 | #define IONIC_PAGE_SIZE                         PAGE_SIZE
-         |                                                 ^
-   arch/powerpc/include/asm/page.h:25:34: note: expanded from macro 'PAGE_SIZE'
-      25 | #define PAGE_SIZE               (ASM_CONST(1) << PAGE_SHIFT)
-         |                                               ^
-   include/linux/minmax.h:213:52: note: expanded from macro 'min_t'
-     213 | #define min_t(type, x, y) __cmp_once(min, type, x, y)
-         |                           ~~~~~~~~~~~~~~~~~~~~~~~~~^~
-   include/linux/minmax.h:96:33: note: expanded from macro '__cmp_once'
-      96 |         __cmp_once_unique(op, type, x, y, __UNIQUE_ID(x_), __UNIQUE_ID(y_))
-         |         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/minmax.h:93:31: note: expanded from macro '__cmp_once_unique'
-      93 |         ({ type ux = (x); type uy = (y); __cmp(op, ux, uy); })
-         |                                ~~    ^
-   7 warnings generated.
+>> arch/riscv/kernel/bus_error.c:33: warning: Cannot understand  * @brief Bus error unit register map
+    on line 33 - I thought it was a doc line
 
 
-vim +203 drivers/net/ethernet/pensando/ionic/ionic_txrx.c
+vim +33 arch/riscv/kernel/bus_error.c
 
-   174	
-   175	static struct sk_buff *ionic_rx_build_skb(struct ionic_queue *q,
-   176						  struct ionic_rx_desc_info *desc_info,
-   177						  unsigned int headroom,
-   178						  unsigned int len,
-   179						  unsigned int num_sg_elems,
-   180						  bool synced)
-   181	{
-   182		struct ionic_buf_info *buf_info;
-   183		struct sk_buff *skb;
-   184		unsigned int i;
-   185		u16 frag_len;
-   186	
-   187		buf_info = &desc_info->bufs[0];
-   188		prefetchw(buf_info->page);
-   189	
-   190		skb = napi_get_frags(&q_to_qcq(q)->napi);
-   191		if (unlikely(!skb)) {
-   192			net_warn_ratelimited("%s: SKB alloc failed on %s!\n",
-   193					     dev_name(q->dev), q->name);
-   194			q_to_rx_stats(q)->alloc_err++;
-   195			return NULL;
-   196		}
-   197		skb_mark_for_recycle(skb);
-   198	
-   199		if (headroom)
-   200			frag_len = min_t(u16, len,
-   201					 IONIC_XDP_MAX_LINEAR_MTU + VLAN_ETH_HLEN);
-   202		else
- > 203			frag_len = min_t(u16, len, IONIC_PAGE_SIZE);
-   204	
-   205		if (unlikely(!buf_info->page))
-   206			goto err_bad_buf_page;
-   207		ionic_rx_add_skb_frag(q, skb, buf_info, headroom, frag_len, synced);
-   208		len -= frag_len;
-   209		buf_info++;
-   210	
-   211		for (i = 0; i < num_sg_elems; i++, buf_info++) {
-   212			if (unlikely(!buf_info->page))
-   213				goto err_bad_buf_page;
-   214			frag_len = min_t(u16, len, buf_info->len);
-   215			ionic_rx_add_skb_frag(q, skb, buf_info, 0, frag_len, synced);
-   216			len -= frag_len;
-   217		}
-   218	
-   219		return skb;
-   220	
-   221	err_bad_buf_page:
-   222		dev_kfree_skb(skb);
-   223		return NULL;
-   224	}
-   225	
+    31	
+    32	/**
+  > 33	 * @brief Bus error unit register map
+    34	 * 0x00 : cause of error event
+    35	 * 0x08 : physical address of error event
+    36	 * 0x10 : event enable mask
+    37	 * 0x18 : platform-level interrupt enable mask
+    38	 * 0x20 : accrued event mask
+    39	 * 0x28 : hart-local interrupt enable mask
+    40	 */
+    41	
 
 -- 
 0-DAY CI Kernel Test Service
