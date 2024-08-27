@@ -1,62 +1,56 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 87BEB1494AC;
-	Tue, 27 Aug 2024 10:38:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0629319D076;
+	Tue, 27 Aug 2024 13:00:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724755100; cv=none; b=AeiquZxxezunRf+dgaqDbS+HG8IUQr6c8gcSHcz7i235jBlDuYSZgi77nRBu0w2MElPIQPLRZwMCuQyRRlD5kBCdQnj1BuoaS+RYctYUla3vuhlzKR63WlyS3Sd1NJGOwJOHJzJHF7MP8xWFnoNnJP19uyJCEodmJt4C3qEvtew=
+	t=1724763624; cv=none; b=VTEGzGZi4JTpeuerVlQUgg9cGzGSAugf/5fGdWoQ+wVPzlyimkKfToFFmHn9jMmIahyMIihbMkRI0Relgu9FfeGFjIPpYZ6yVXbslYINPGjXTRcggH21iBQV2FeYpCQxfq6KxnR7bhz3wSDQ/mj5MpyfapSHMGDBPbo990zGH9k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724755100; c=relaxed/simple;
-	bh=5YCi4i5sFByw03BA9DFgBLqn2Xkexy28Zv+P6xGdrpw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=CkztbrYEiVSCDgv53pfGuwtPpmq+V+rhgcMyBpiWQ29fPz8faq2xN7zlEh2bKjWJRM3zWM1sr7HOM23QQKJcB2Q5TRBTiVIQLmc/UDoSz04puB2OgGzuX/1AyvnUKnP3MWvyQFSL69HkRD81EmOaPeM1g2COuCFy9RWopLC5gv4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ikRlgTQ/; arc=none smtp.client-ip=192.198.163.10
+	s=arc-20240116; t=1724763624; c=relaxed/simple;
+	bh=4cvXnTWp6FoaAip3grs43rS1U+ScVhROAGcV/c/9jnU=;
+	h=Date:From:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=rHK41antw8F+U/uSfKg+wdMn6+lStJUxHF0JCspUmyQSffJfFSg3+Wv20PSfpYeBBPQu5g4cHKN5jiwtn272DviwaLITOiRWamSxvAgMc0s2uOlfOF3JGsndxmSzAeRvqZ6/S6fl1g0wZN3Oc+Abn/4fcNeV0+TYGFlZ6h+OLRw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=m2T6vMSX; arc=none smtp.client-ip=198.175.65.10
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ikRlgTQ/"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="m2T6vMSX"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1724755099; x=1756291099;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=5YCi4i5sFByw03BA9DFgBLqn2Xkexy28Zv+P6xGdrpw=;
-  b=ikRlgTQ/lH3XYxZqzo7QAH53Uh4na7uWbpuUnd9TMisH/XhuVa2bCssg
-   P+lxCSwmR6faNGY06/CaMxZznl7HzzCEpd8G0crHtQ+h0RTc9TqqwN8xS
-   9Jdm/Dien9F2JjIKSXSHH7jLsYGBfMb+MgluB6KBHvpajnugAwbaG4KYh
-   7VQRBfV/0wM9kn4At6sALXfpwY9reD2YDAuUrNz58CiXHDIa/UczMT5N3
-   m8w3utST/5gNk93BwGcoqgZ/T+cxCSqJA5jGStU+ivpRAIZbzTY0t6IgN
-   Gy5iRhQi6Lr1VnTp/MviKl/53MtHfO2NgDvp0oGyylwZ+5JuPzDv3eIwe
-   g==;
-X-CSE-ConnectionGUID: CCbvMtD6SZmtRU9NL2HIVA==
-X-CSE-MsgGUID: Yi3zckbqREm9jSGi48xrLw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11176"; a="34634013"
+  t=1724763622; x=1756299622;
+  h=date:from:cc:subject:message-id:mime-version;
+  bh=4cvXnTWp6FoaAip3grs43rS1U+ScVhROAGcV/c/9jnU=;
+  b=m2T6vMSX6uXh5XpsVEOrDyaS3SdXtKxiAAtD3TzyNV4NGFJNmzj51vVm
+   L8Zr7T8nzD6Bic8jLbUUX+rgxrRetorZEnoywN2GM6UpFnyhF01YtvUES
+   u2YQKfjtPvVHO9KdH7mJ+oJrPfnOXx9q73I/x1CqYDFJFNzCFWsGeqVQV
+   aH9hN+FGH3BMPdFOejGDfU8B0VW/ZItmPVp30/rh1Hd7my8yEo02hYy4T
+   cnXs84eIuQNgtRcRzMM2KjYnilifiZtCyP+k7Q+60CzIM7ymPfNgmmGNZ
+   75cwKPdGgoH+SPm4GGfoxP69TLYt+suBwJQUw8+sfSYbdXBrUM82XPEES
+   Q==;
+X-CSE-ConnectionGUID: d9/edYa2RrSdTZms8saH8w==
+X-CSE-MsgGUID: 0SrIK1uSScSskb/kgf49+A==
+X-IronPort-AV: E=McAfee;i="6700,10204,11176"; a="40708884"
 X-IronPort-AV: E=Sophos;i="6.10,180,1719903600"; 
-   d="scan'208";a="34634013"
-Received: from fmviesa008.fm.intel.com ([10.60.135.148])
-  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Aug 2024 03:38:18 -0700
-X-CSE-ConnectionGUID: Z+jbXAbeSBS4e6IuyiA97w==
-X-CSE-MsgGUID: eGxP8muFQXWmr65PMRG8Nw==
+   d="scan'208";a="40708884"
+Received: from fmviesa007.fm.intel.com ([10.60.135.147])
+  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Aug 2024 06:00:21 -0700
+X-CSE-ConnectionGUID: CYs+sTRMQf+UXDBxSh7k2w==
+X-CSE-MsgGUID: LVovynCsQHaVEPCJrzkE1A==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.10,180,1719903600"; 
-   d="scan'208";a="62809770"
+   d="scan'208";a="62567839"
 Received: from lkp-server01.sh.intel.com (HELO 9a732dc145d3) ([10.239.97.150])
-  by fmviesa008.fm.intel.com with ESMTP; 27 Aug 2024 03:38:15 -0700
+  by fmviesa007.fm.intel.com with ESMTP; 27 Aug 2024 06:00:20 -0700
 Received: from kbuild by 9a732dc145d3 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1sitaX-000IX0-1a;
-	Tue, 27 Aug 2024 10:38:13 +0000
-Date: Tue, 27 Aug 2024 18:37:39 +0800
+	id 1sivo1-000If6-35;
+	Tue, 27 Aug 2024 13:00:17 +0000
+Date: Tue, 27 Aug 2024 20:59:36 +0800
 From: kernel test robot <lkp@intel.com>
-To: jiping huang <huangjiping95@qq.com>, mturquette@baylibre.com,
-	sboyd@kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
-	jiping huang <huangjiping95@qq.com>
-Subject: Re: [PATCH] clk: Delete redundant logic.
-Message-ID: <202408271846.xZq9AEQa-lkp@intel.com>
-References: <tencent_713186AE6290AC7B8037FD247F5BF04C0308@qq.com>
+Cc: oe-kbuild-all@lists.linux.dev, llvm@lists.linux.dev
+Subject: Re: [PATCH 07/12] drm/i915/display: Move dss stuff in intel_dss files
+Message-ID: <202408272006.MeBwKwmM-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -65,134 +59,168 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <tencent_713186AE6290AC7B8037FD247F5BF04C0308@qq.com>
 
-Hi jiping,
+In-Reply-To: <20240826111527.1113622-8-ankit.k.nautiyal@intel.com>
+References: <20240826111527.1113622-8-ankit.k.nautiyal@intel.com>
+TO: Ankit Nautiyal <ankit.k.nautiyal@intel.com>
+TO: intel-gfx@lists.freedesktop.org
+TO: intel-xe@lists.freedesktop.org
+CC: jani.nikula@linux.intel.com
+CC: suraj.kandpal@intel.com
+CC: ville.syrjala@linux.intel.com
+
+Hi Ankit,
 
 kernel test robot noticed the following build warnings:
 
-[auto build test WARNING on clk/clk-next]
-[also build test WARNING on linus/master v6.11-rc5 next-20240827]
+[auto build test WARNING on drm-intel/for-linux-next]
+[also build test WARNING on drm-tip/drm-tip drm-xe/drm-xe-next next-20240826]
+[cannot apply to drm-intel/for-linux-next-fixes linus/master v6.11-rc5]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/jiping-huang/clk-Delete-redundant-logic/20240826-170900
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/clk/linux.git clk-next
-patch link:    https://lore.kernel.org/r/tencent_713186AE6290AC7B8037FD247F5BF04C0308%40qq.com
-patch subject: [PATCH] clk: Delete redundant logic.
-config: i386-buildonly-randconfig-005-20240827 (https://download.01.org/0day-ci/archive/20240827/202408271846.xZq9AEQa-lkp@intel.com/config)
-compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240827/202408271846.xZq9AEQa-lkp@intel.com/reproduce)
+url:    https://github.com/intel-lab-lkp/linux/commits/Ankit-Nautiyal/drm-i915-display-Move-all-DSS-control-registers-to-a-new-file/20240826-191600
+base:   git://anongit.freedesktop.org/drm-intel for-linux-next
+patch link:    https://lore.kernel.org/r/20240826111527.1113622-8-ankit.k.nautiyal%40intel.com
+patch subject: [PATCH 07/12] drm/i915/display: Move dss stuff in intel_dss files
+config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20240827/202408272006.MeBwKwmM-lkp@intel.com/config)
+compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 08e5a1de8227512d4774a534b91cb2353cef6284)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240827/202408272006.MeBwKwmM-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202408271846.xZq9AEQa-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202408272006.MeBwKwmM-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
->> drivers/clk/clk.c:2320:14: warning: variable 'parent' is uninitialized when used here [-Wuninitialized]
-    2320 |         } else if (!parent || !(core->flags & CLK_SET_RATE_PARENT)) {
-         |                     ^~~~~~
-   drivers/clk/clk.c:2286:38: note: initialize the variable 'parent' to silence this warning
-    2286 |         struct clk_core *old_parent, *parent;
-         |                                             ^
-         |                                              = NULL
->> drivers/clk/clk.c:2332:16: warning: variable 'old_parent' is uninitialized when used here [-Wuninitialized]
-    2332 |         if (parent != old_parent &&
-         |                       ^~~~~~~~~~
-   drivers/clk/clk.c:2286:29: note: initialize the variable 'old_parent' to silence this warning
-    2286 |         struct clk_core *old_parent, *parent;
-         |                                    ^
-         |                                     = NULL
-   2 warnings generated.
+   In file included from include/linux/device.h:32:
+   In file included from include/linux/device/driver.h:21:
+   In file included from include/linux/module.h:19:
+   In file included from include/linux/elf.h:6:
+   In file included from arch/s390/include/asm/elf.h:181:
+   In file included from arch/s390/include/asm/mmu_context.h:11:
+   In file included from arch/s390/include/asm/pgalloc.h:18:
+   In file included from include/linux/mm.h:2228:
+   include/linux/vmstat.h:500:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     500 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     501 |                            item];
+         |                            ~~~~
+   include/linux/vmstat.h:507:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     507 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     508 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/vmstat.h:514:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     514 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+   include/linux/vmstat.h:519:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     519 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     520 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/vmstat.h:528:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     528 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     529 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+   In file included from drivers/gpu/drm/i915/display/intel_dss.c:6:
+   In file included from drivers/gpu/drm/xe/compat-i915-headers/i915_drv.h:16:
+   In file included from drivers/gpu/drm/xe/compat-i915-headers/intel_runtime_pm.h:10:
+   In file included from drivers/gpu/drm/xe/xe_device_types.h:9:
+   In file included from include/linux/pci.h:39:
+   In file included from include/linux/io.h:14:
+   In file included from arch/s390/include/asm/io.h:93:
+   include/asm-generic/io.h:548:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     548 |         val = __raw_readb(PCI_IOBASE + addr);
+         |                           ~~~~~~~~~~ ^
+   include/asm-generic/io.h:561:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     561 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
+      37 | #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
+         |                                                           ^
+   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
+     102 | #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
+         |                                                      ^
+   In file included from drivers/gpu/drm/i915/display/intel_dss.c:6:
+   In file included from drivers/gpu/drm/xe/compat-i915-headers/i915_drv.h:16:
+   In file included from drivers/gpu/drm/xe/compat-i915-headers/intel_runtime_pm.h:10:
+   In file included from drivers/gpu/drm/xe/xe_device_types.h:9:
+   In file included from include/linux/pci.h:39:
+   In file included from include/linux/io.h:14:
+   In file included from arch/s390/include/asm/io.h:93:
+   include/asm-generic/io.h:574:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     574 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
+      35 | #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
+         |                                                           ^
+   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
+     115 | #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
+         |                                                      ^
+   In file included from drivers/gpu/drm/i915/display/intel_dss.c:6:
+   In file included from drivers/gpu/drm/xe/compat-i915-headers/i915_drv.h:16:
+   In file included from drivers/gpu/drm/xe/compat-i915-headers/intel_runtime_pm.h:10:
+   In file included from drivers/gpu/drm/xe/xe_device_types.h:9:
+   In file included from include/linux/pci.h:39:
+   In file included from include/linux/io.h:14:
+   In file included from arch/s390/include/asm/io.h:93:
+   include/asm-generic/io.h:585:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     585 |         __raw_writeb(value, PCI_IOBASE + addr);
+         |                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:595:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     595 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:605:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     605 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:693:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     693 |         readsb(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:701:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     701 |         readsw(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:709:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     709 |         readsl(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:718:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     718 |         writesb(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+   include/asm-generic/io.h:727:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     727 |         writesw(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+   include/asm-generic/io.h:736:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     736 |         writesl(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+>> drivers/gpu/drm/i915/display/intel_dss.c:255:17: warning: arithmetic between different enumeration types ('enum pipe' and 'enum intel_display_power_domain') [-Wenum-enum-conversion]
+     255 |         power_domain = POWER_DOMAIN_PIPE(pipe);
+         |                        ^~~~~~~~~~~~~~~~~~~~~~~
+   drivers/gpu/drm/i915/display/intel_display_power.h:120:41: note: expanded from macro 'POWER_DOMAIN_PIPE'
+     120 | #define POWER_DOMAIN_PIPE(pipe) ((pipe) + POWER_DOMAIN_PIPE_A)
+         |                                  ~~~~~~ ^ ~~~~~~~~~~~~~~~~~~~
+   18 warnings generated.
 
 
-vim +/parent +2320 drivers/clk/clk.c
+vim +255 drivers/gpu/drm/i915/display/intel_dss.c
 
-b2476490ef11134 Mike Turquette  2012-03-15  2277  
-4dff95dc9477a34 Stephen Boyd    2015-04-30  2278  /*
-4dff95dc9477a34 Stephen Boyd    2015-04-30  2279   * calculate the new rates returning the topmost clock that has to be
-4dff95dc9477a34 Stephen Boyd    2015-04-30  2280   * changed.
-4dff95dc9477a34 Stephen Boyd    2015-04-30  2281   */
-4dff95dc9477a34 Stephen Boyd    2015-04-30  2282  static struct clk_core *clk_calc_new_rates(struct clk_core *core,
-4dff95dc9477a34 Stephen Boyd    2015-04-30  2283  					   unsigned long rate)
-4dff95dc9477a34 Stephen Boyd    2015-04-30  2284  {
-4dff95dc9477a34 Stephen Boyd    2015-04-30  2285  	struct clk_core *top = core;
-4dff95dc9477a34 Stephen Boyd    2015-04-30  2286  	struct clk_core *old_parent, *parent;
-4dff95dc9477a34 Stephen Boyd    2015-04-30  2287  	unsigned long best_parent_rate = 0;
-4dff95dc9477a34 Stephen Boyd    2015-04-30  2288  	unsigned long new_rate;
-4dff95dc9477a34 Stephen Boyd    2015-04-30  2289  	unsigned long min_rate;
-4dff95dc9477a34 Stephen Boyd    2015-04-30  2290  	unsigned long max_rate;
-4dff95dc9477a34 Stephen Boyd    2015-04-30  2291  	int p_index = 0;
-4dff95dc9477a34 Stephen Boyd    2015-04-30  2292  	long ret;
-4dff95dc9477a34 Stephen Boyd    2015-04-30  2293  
-4dff95dc9477a34 Stephen Boyd    2015-04-30  2294  	/* sanity */
-4dff95dc9477a34 Stephen Boyd    2015-04-30  2295  	if (IS_ERR_OR_NULL(core))
-4dff95dc9477a34 Stephen Boyd    2015-04-30  2296  		return NULL;
-4dff95dc9477a34 Stephen Boyd    2015-04-30  2297  
-4dff95dc9477a34 Stephen Boyd    2015-04-30  2298  	clk_core_get_boundaries(core, &min_rate, &max_rate);
-71472c0c06cf9a3 James Hogan     2013-07-29  2299  
-4dff95dc9477a34 Stephen Boyd    2015-04-30  2300  	/* find the closest rate and parent clk/rate */
-0f6cc2b8e94da54 Jerome Brunet   2017-12-01  2301  	if (clk_core_can_round(core)) {
-0817b62cc037a56 Boris Brezillon 2015-07-07  2302  		struct clk_rate_request req;
-0817b62cc037a56 Boris Brezillon 2015-07-07  2303  
-718af795d3fd786 Maxime Ripard   2022-08-16  2304  		clk_core_init_rate_req(core, &req, rate);
-0f6cc2b8e94da54 Jerome Brunet   2017-12-01  2305  
-49e62e0d96baf72 Maxime Ripard   2022-10-26  2306  		trace_clk_rate_request_start(&req);
-49e62e0d96baf72 Maxime Ripard   2022-10-26  2307  
-0f6cc2b8e94da54 Jerome Brunet   2017-12-01  2308  		ret = clk_core_determine_round_nolock(core, &req);
-4dff95dc9477a34 Stephen Boyd    2015-04-30  2309  		if (ret < 0)
-4dff95dc9477a34 Stephen Boyd    2015-04-30  2310  			return NULL;
-035a61c314eb3da Tomeu Vizoso    2015-01-23  2311  
-49e62e0d96baf72 Maxime Ripard   2022-10-26  2312  		trace_clk_rate_request_done(&req);
-49e62e0d96baf72 Maxime Ripard   2022-10-26  2313  
-0817b62cc037a56 Boris Brezillon 2015-07-07  2314  		best_parent_rate = req.best_parent_rate;
-0817b62cc037a56 Boris Brezillon 2015-07-07  2315  		new_rate = req.rate;
-0817b62cc037a56 Boris Brezillon 2015-07-07  2316  		parent = req.best_parent_hw ? req.best_parent_hw->core : NULL;
-1c8e600440c7f50 Tomeu Vizoso    2015-01-23  2317  
-4dff95dc9477a34 Stephen Boyd    2015-04-30  2318  		if (new_rate < min_rate || new_rate > max_rate)
-4dff95dc9477a34 Stephen Boyd    2015-04-30  2319  			return NULL;
-4dff95dc9477a34 Stephen Boyd    2015-04-30 @2320  	} else if (!parent || !(core->flags & CLK_SET_RATE_PARENT)) {
-4dff95dc9477a34 Stephen Boyd    2015-04-30  2321  		/* pass-through clock without adjustable parent */
-4dff95dc9477a34 Stephen Boyd    2015-04-30  2322  		core->new_rate = core->rate;
-4dff95dc9477a34 Stephen Boyd    2015-04-30  2323  		return NULL;
-4dff95dc9477a34 Stephen Boyd    2015-04-30  2324  	} else {
-4dff95dc9477a34 Stephen Boyd    2015-04-30  2325  		/* pass-through clock with adjustable parent */
-4dff95dc9477a34 Stephen Boyd    2015-04-30  2326  		top = clk_calc_new_rates(parent, rate);
-4dff95dc9477a34 Stephen Boyd    2015-04-30  2327  		new_rate = parent->new_rate;
-4dff95dc9477a34 Stephen Boyd    2015-04-30  2328  		goto out;
-1c8e600440c7f50 Tomeu Vizoso    2015-01-23  2329  	}
-035a61c314eb3da Tomeu Vizoso    2015-01-23  2330  
-4dff95dc9477a34 Stephen Boyd    2015-04-30  2331  	/* some clocks must be gated to change parent */
-4dff95dc9477a34 Stephen Boyd    2015-04-30 @2332  	if (parent != old_parent &&
-4dff95dc9477a34 Stephen Boyd    2015-04-30  2333  	    (core->flags & CLK_SET_PARENT_GATE) && core->prepare_count) {
-4dff95dc9477a34 Stephen Boyd    2015-04-30  2334  		pr_debug("%s: %s not gated but wants to reparent\n",
-4dff95dc9477a34 Stephen Boyd    2015-04-30  2335  			 __func__, core->name);
-4dff95dc9477a34 Stephen Boyd    2015-04-30  2336  		return NULL;
-035a61c314eb3da Tomeu Vizoso    2015-01-23  2337  	}
-b2476490ef11134 Mike Turquette  2012-03-15  2338  
-4dff95dc9477a34 Stephen Boyd    2015-04-30  2339  	/* try finding the new parent index */
-4dff95dc9477a34 Stephen Boyd    2015-04-30  2340  	if (parent && core->num_parents > 1) {
-4dff95dc9477a34 Stephen Boyd    2015-04-30  2341  		p_index = clk_fetch_parent_index(core, parent);
-4dff95dc9477a34 Stephen Boyd    2015-04-30  2342  		if (p_index < 0) {
-4dff95dc9477a34 Stephen Boyd    2015-04-30  2343  			pr_debug("%s: clk %s can not be parent of clk %s\n",
-4dff95dc9477a34 Stephen Boyd    2015-04-30  2344  				 __func__, parent->name, core->name);
-4dff95dc9477a34 Stephen Boyd    2015-04-30  2345  			return NULL;
-4dff95dc9477a34 Stephen Boyd    2015-04-30  2346  		}
-4dff95dc9477a34 Stephen Boyd    2015-04-30  2347  	}
-b2476490ef11134 Mike Turquette  2012-03-15  2348  
-4dff95dc9477a34 Stephen Boyd    2015-04-30  2349  	if ((core->flags & CLK_SET_RATE_PARENT) && parent &&
-4dff95dc9477a34 Stephen Boyd    2015-04-30  2350  	    best_parent_rate != parent->rate)
-4dff95dc9477a34 Stephen Boyd    2015-04-30  2351  		top = clk_calc_new_rates(parent, best_parent_rate);
-035a61c314eb3da Tomeu Vizoso    2015-01-23  2352  
-4dff95dc9477a34 Stephen Boyd    2015-04-30  2353  out:
-4dff95dc9477a34 Stephen Boyd    2015-04-30  2354  	clk_calc_subtree(core, new_rate, parent, p_index);
-b2476490ef11134 Mike Turquette  2012-03-15  2355  
-4dff95dc9477a34 Stephen Boyd    2015-04-30  2356  	return top;
-b2476490ef11134 Mike Turquette  2012-03-15  2357  }
-b2476490ef11134 Mike Turquette  2012-03-15  2358  
+   241	
+   242	void intel_dss_get_uncompressed_joiner_pipes(struct intel_display *display,
+   243						     struct intel_crtc *crtc,
+   244						     u8 *primary_pipes,
+   245						     u8 *secondary_pipes)
+   246	{
+   247		struct drm_i915_private *i915 = to_i915(display->drm);
+   248		enum intel_display_power_domain power_domain;
+   249		enum pipe pipe = crtc->pipe;
+   250		intel_wakeref_t wakeref;
+   251	
+   252		if (DISPLAY_VER(display) < 13)
+   253			return;
+   254	
+ > 255		power_domain = POWER_DOMAIN_PIPE(pipe);
 
 -- 
 0-DAY CI Kernel Test Service
