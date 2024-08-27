@@ -1,230 +1,559 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 887C4197A7A;
-	Tue, 27 Aug 2024 21:11:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4BC441552E0
+	for <llvm@lists.linux.dev>; Tue, 27 Aug 2024 21:32:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724793082; cv=none; b=sNtXWGqteA2sEue8xIQsRM51ihMXwE8JSE/mpgVUKFiCaQPRaYK6mcxYgbiIop4zyeE9s7/YV6rYMzjMCxAPb2JbuX1wTMdGh7BmJB0tBJjL4AJqRRECkyUB2uSFToHop0fvi2TnCCbX//++yiDxr5p6ZbOmUI35OI2p3int6lk=
+	t=1724794339; cv=none; b=F5CehHaBBIo3lxuxLXEe9s0DzJsvSYtc62teY4yJIA/hwbhpF2gmTTGLzIOl+TKvhcaj3myZ9FFHNZg3Tz71iHc5YICyyvKLgf5U0Nj7185+OrbKtDr7eZmhBKZAkapkc9cROo2Zs/exakIfn4vN2Fqf1skLEfPc6WNjl90sUW4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724793082; c=relaxed/simple;
-	bh=hX9UxprD85FtuIPVMil0tW9A26h2eibinJjk2tisZ+4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Zkpi+aCRVLEK6Sgc0NQoXjeqQIQgBMfV+3EKUK3ybS5tS4Hf5SBxPCiPLGdB6ks1haJseb4EyZlm/ZtUAtAJpWf/xRtiRV6/+X3bec6eAjh0ITWLALigZlDgRjqsLC4sXdMUAZa8kdGI3i90tuaLWn+Lqbw+LX6uYIBYUhqtJz8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=JodbmpKq; arc=none smtp.client-ip=198.175.65.20
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1724794339; c=relaxed/simple;
+	bh=CVB7PlTjlvVwgCeFOiuvc32ytM8grPNDLclCvEwsE1M=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=C7mY9m9i55BOXUf+y/OkPeierKJFAvfXnOh1ixJ34+G49UgiVEzxAvnuvZeHw748OVggSRuq1FkLk9Fw73Je6Bgg40h/C1l7Ia9rl5TUWkOaFo2lWbe+sQ5DWvpAMjFe0aLr1GEbOwLcQmS7Bpkd4PgmspOyEcgOPK+VxRMJ0qk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=EsmTL1hj; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=r6gO+rhe; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=EsmTL1hj; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=r6gO+rhe; arc=none smtp.client-ip=195.135.223.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="JodbmpKq"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1724793081; x=1756329081;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=hX9UxprD85FtuIPVMil0tW9A26h2eibinJjk2tisZ+4=;
-  b=JodbmpKqU2bJse15Wuo0VpvRvxl/sDIjySjHfvBM+D5xzBsFvhYxnjvN
-   unw2PaRVqvVLPpk2dmHjBq7R04lC7YtwuSYbsLyMbVZ+RWZIcyGe+CVnO
-   DJMMliq5fpM8f9VAn87bhjJynQFHSCPYiF/FQI9/QTSzu8WGrTIhsatVi
-   +CEOTCN5+PcQqViin2qpRB7RaYt4AnkXt/medDiRp2Tugsl5Iw3bsVFNa
-   x6wtWiv6ZhAiCxwo61H+aGroGygxnpS7sLEQ2P/0v112vdQ7RuHUqlT8L
-   wQ2NjWL+F64SRBt1QoBi/Dnjm3s62dxqy/X79Gb3kU0zjaku6p33Kqry0
-   A==;
-X-CSE-ConnectionGUID: Tnd6KsdWTN+3+W/w+KOVZA==
-X-CSE-MsgGUID: SnlQy9gIRamkuX31hT1bxw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11177"; a="23101650"
-X-IronPort-AV: E=Sophos;i="6.10,181,1719903600"; 
-   d="scan'208";a="23101650"
-Received: from orviesa010.jf.intel.com ([10.64.159.150])
-  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Aug 2024 14:11:20 -0700
-X-CSE-ConnectionGUID: Of5xkQfCSTynNfwGFbyAYA==
-X-CSE-MsgGUID: NlDceEr4StyItgZaBL9+OA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.10,181,1719903600"; 
-   d="scan'208";a="62837941"
-Received: from lkp-server01.sh.intel.com (HELO 9a732dc145d3) ([10.239.97.150])
-  by orviesa010.jf.intel.com with ESMTP; 27 Aug 2024 14:11:17 -0700
-Received: from kbuild by 9a732dc145d3 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1sj3T8-000K5i-2E;
-	Tue, 27 Aug 2024 21:11:14 +0000
-Date: Wed, 28 Aug 2024 05:10:52 +0800
-From: kernel test robot <lkp@intel.com>
-To: David Leonard <David.Leonard@digi.com>,
-	linux-arm-kernel@lists.infradead.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Dong Aisheng <aisheng.dong@nxp.com>,
-	Fabio Estevam <festevam@gmail.com>, Shawn Guo <shawnguo@kernel.org>,
-	Jacky Bai <ping.bai@nxp.com>,
-	Pengutronix Kernel Team <kernel@pengutronix.de>,
-	Linus Walleij <linus.walleij@linaro.org>,
-	linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org
-Subject: Re: [PATCH 4/6] pinctrl: ls1046a: Add pinctrl driver support
-Message-ID: <202408280509.Jr3oFGGy-lkp@intel.com>
-References: <c0ecf4f4-94f1-2efd-b05b-fc117c62e516@digi.com>
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="EsmTL1hj";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="r6gO+rhe";
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="EsmTL1hj";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="r6gO+rhe"
+Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out2.suse.de (Postfix) with ESMTPS id 73C021FB92;
+	Tue, 27 Aug 2024 21:32:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1724794335; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
+	bh=1p8Uzkwlngkp0JVaiE/6IGnq5C0FBQjwb3xmsQ5sqsk=;
+	b=EsmTL1hjBMF5VhELF1EgW7d10PYJz4GULMVRp1fmtDdW2/avBEustrdr1Cr1eid5SZJPE2
+	eX93oY/c8/XOJHWe35WtYn+PbRv8Fb1q1O90tP76YlSWVGwaR/7/wqDrpEhgaSgqxm1Phi
+	lejtLxruQvP/lonaJ82toSA8E19cxqE=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1724794335;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
+	bh=1p8Uzkwlngkp0JVaiE/6IGnq5C0FBQjwb3xmsQ5sqsk=;
+	b=r6gO+rheX+JdkfXQ/Jsj6891pn+jHod0O1gBkpik2vdOcJE8Q2vylL16PtIwIH3zwLgUYU
+	63mCTgTMRwxdWJAg==
+Authentication-Results: smtp-out2.suse.de;
+	none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1724794335; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
+	bh=1p8Uzkwlngkp0JVaiE/6IGnq5C0FBQjwb3xmsQ5sqsk=;
+	b=EsmTL1hjBMF5VhELF1EgW7d10PYJz4GULMVRp1fmtDdW2/avBEustrdr1Cr1eid5SZJPE2
+	eX93oY/c8/XOJHWe35WtYn+PbRv8Fb1q1O90tP76YlSWVGwaR/7/wqDrpEhgaSgqxm1Phi
+	lejtLxruQvP/lonaJ82toSA8E19cxqE=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1724794335;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
+	bh=1p8Uzkwlngkp0JVaiE/6IGnq5C0FBQjwb3xmsQ5sqsk=;
+	b=r6gO+rheX+JdkfXQ/Jsj6891pn+jHod0O1gBkpik2vdOcJE8Q2vylL16PtIwIH3zwLgUYU
+	63mCTgTMRwxdWJAg==
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 3C7BA13724;
+	Tue, 27 Aug 2024 21:32:15 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id f9piDt9FzmZxFAAAD6G6ig
+	(envelope-from <vbabka@suse.cz>); Tue, 27 Aug 2024 21:32:15 +0000
+Message-ID: <5c3852e6-4a6a-42d8-85ff-8c1605939454@suse.cz>
+Date: Tue, 27 Aug 2024 23:32:14 +0200
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <c0ecf4f4-94f1-2efd-b05b-fc117c62e516@digi.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3] slab: Introduce kmalloc_obj() and family
+Content-Language: en-US
+To: Kees Cook <kees@kernel.org>,
+ Linus Torvalds <torvalds@linux-foundation.org>
+Cc: Christoph Lameter <cl@linux.com>, Pekka Enberg <penberg@kernel.org>,
+ David Rientjes <rientjes@google.com>, Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+ Andrew Morton <akpm@linux-foundation.org>,
+ Roman Gushchin <roman.gushchin@linux.dev>,
+ Hyeonggon Yoo <42.hyeyoo@gmail.com>,
+ "Gustavo A . R . Silva" <gustavoars@kernel.org>,
+ Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
+ Jann Horn <jannh@google.com>, Przemek Kitszel
+ <przemyslaw.kitszel@intel.com>, Marco Elver <elver@google.com>,
+ linux-mm@kvack.org, Nathan Chancellor <nathan@kernel.org>,
+ Nick Desaulniers <ndesaulniers@google.com>, linux-kernel@vger.kernel.org,
+ llvm@lists.linux.dev, linux-hardening@vger.kernel.org
+References: <20240822231324.make.666-kees@kernel.org>
+From: Vlastimil Babka <vbabka@suse.cz>
+Autocrypt: addr=vbabka@suse.cz; keydata=
+ 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
+ EP+ylKVEKb0Q2A==
+In-Reply-To: <20240822231324.make.666-kees@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Level: 
+X-Spamd-Result: default: False [-2.80 / 50.00];
+	BAYES_HAM(-3.00)[100.00%];
+	SUSPICIOUS_RECIPS(1.50)[];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	NEURAL_HAM_SHORT(-0.20)[-1.000];
+	MIME_GOOD(-0.10)[text/plain];
+	RCVD_TLS_ALL(0.00)[];
+	TAGGED_RCPT(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	RCPT_COUNT_TWELVE(0.00)[21];
+	ARC_NA(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	MID_RHS_MATCH_FROM(0.00)[];
+	FREEMAIL_ENVRCPT(0.00)[gmail.com];
+	DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
+	FROM_HAS_DN(0.00)[];
+	FREEMAIL_CC(0.00)[linux.com,kernel.org,google.com,lge.com,linux-foundation.org,linux.dev,gmail.com,intel.com,kvack.org,vger.kernel.org,lists.linux.dev];
+	TO_DN_SOME(0.00)[];
+	FROM_EQ_ENVFROM(0.00)[];
+	RCVD_COUNT_TWO(0.00)[2];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	FUZZY_BLOCKED(0.00)[rspamd.com];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[intel.com:email,gnu.org:url]
+X-Spam-Score: -2.80
+X-Spam-Flag: NO
 
-Hi David,
++Cc Linus
 
-kernel test robot noticed the following build errors:
+On 8/23/24 01:13, Kees Cook wrote:
+> Introduce type-aware kmalloc-family helpers to replace the common
+> idioms for single, array, and flexible object allocations:
+> 
+> 	ptr = kmalloc(sizeof(*ptr), gfp);
+> 	ptr = kzalloc(sizeof(*ptr), gfp);
+> 	ptr = kmalloc_array(count, sizeof(*ptr), gfp);
+> 	ptr = kcalloc(count, sizeof(*ptr), gfp);
+> 	ptr = kmalloc(struct_size(ptr, flex_member, count), gfp);
+> 
+> These become, respectively:
+> 
+> 	kmalloc_obj(ptr, gfp);
+> 	kzalloc_obj(ptr, gfp);
+> 	kmalloc_objs(ptr, count, gfp);
+> 	kzalloc_objs(ptr, count, gfp);
+> 	kmalloc_flex(ptr, flex_member, count, gfp);
 
-[auto build test ERROR on linusw-pinctrl/devel]
-[also build test ERROR on linusw-pinctrl/for-next shawnguo/for-next arm64/for-next/core kvmarm/next rockchip/for-next soc/for-next linus/master v6.11-rc5 next-20240827]
-[cannot apply to arm/for-next arm/fixes]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+This is indeed better than the previous version. The hidden assignment to
+ptr seems still very counter-intuitive, but if it's the only way to do those
+validations, the question is then just whether it's worth the getting used
+to it, or not.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/David-Leonard/arm64-dts-ls1012a-add-pinctrl-node/20240827-104431
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-pinctrl.git devel
-patch link:    https://lore.kernel.org/r/c0ecf4f4-94f1-2efd-b05b-fc117c62e516%40digi.com
-patch subject: [PATCH 4/6] pinctrl: ls1046a: Add pinctrl driver support
-config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20240828/202408280509.Jr3oFGGy-lkp@intel.com/config)
-compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 08e5a1de8227512d4774a534b91cb2353cef6284)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240828/202408280509.Jr3oFGGy-lkp@intel.com/reproduce)
+> These each return the assigned value of ptr (which may be NULL on
+> failure). For cases where the total size of the allocation is needed,
+> the kmalloc_obj_sz(), kmalloc_objs_sz(), and kmalloc_flex_sz() family
+> of macros can be used. For example:
+> 
+> 	info->size = struct_size(ptr, flex_member, count);
+> 	ptr = kmalloc(info->size, gfp);
+> 
+> becomes:
+> 
+> 	kmalloc_flex_sz(ptr, flex_member, count, gfp, &info->size);
+> 
+> Internal introspection of allocated type now becomes possible, allowing
+> for future alignment-aware choices and hardening work. For example,
+> adding __alignof(*ptr) as an argument to the internal allocators so that
+> appropriate/efficient alignment choices can be made, or being able to
+> correctly choose per-allocation offset randomization within a bucket
+> that does not break alignment requirements.
+> 
+> Introduces __flex_count() for when __builtin_get_counted_by() is added
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202408280509.Jr3oFGGy-lkp@intel.com/
+"Also introduce __flex_counter() ..."?
 
-All errors (new ones prefixed by >>):
+> by GCC[1] and Clang[2]. The internal use of __flex_count() allows for
+> automatically setting the counter member of a struct's flexible array
 
-   In file included from drivers/pinctrl/freescale/pinctrl-ls1046a.c:8:
-   In file included from include/linux/module.h:19:
-   In file included from include/linux/elf.h:6:
-   In file included from arch/s390/include/asm/elf.h:181:
-   In file included from arch/s390/include/asm/mmu_context.h:11:
-   In file included from arch/s390/include/asm/pgalloc.h:18:
-   In file included from include/linux/mm.h:2228:
-   include/linux/vmstat.h:500:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     500 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     501 |                            item];
-         |                            ~~~~
-   include/linux/vmstat.h:507:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     507 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     508 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/vmstat.h:514:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     514 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
-   include/linux/vmstat.h:519:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     519 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     520 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/vmstat.h:528:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     528 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     529 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   In file included from drivers/pinctrl/freescale/pinctrl-ls1046a.c:14:
-   In file included from include/linux/io.h:14:
-   In file included from arch/s390/include/asm/io.h:93:
-   include/asm-generic/io.h:548:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     548 |         val = __raw_readb(PCI_IOBASE + addr);
-         |                           ~~~~~~~~~~ ^
-   include/asm-generic/io.h:561:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     561 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
-      37 | #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
-         |                                                           ^
-   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
-     102 | #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
-         |                                                      ^
-   In file included from drivers/pinctrl/freescale/pinctrl-ls1046a.c:14:
-   In file included from include/linux/io.h:14:
-   In file included from arch/s390/include/asm/io.h:93:
-   include/asm-generic/io.h:574:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     574 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
-      35 | #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
-         |                                                           ^
-   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
-     115 | #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
-         |                                                      ^
-   In file included from drivers/pinctrl/freescale/pinctrl-ls1046a.c:14:
-   In file included from include/linux/io.h:14:
-   In file included from arch/s390/include/asm/io.h:93:
-   include/asm-generic/io.h:585:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     585 |         __raw_writeb(value, PCI_IOBASE + addr);
-         |                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:595:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     595 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:605:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     605 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:693:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     693 |         readsb(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:701:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     701 |         readsw(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:709:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     709 |         readsl(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:718:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     718 |         writesb(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   include/asm-generic/io.h:727:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     727 |         writesw(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   include/asm-generic/io.h:736:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     736 |         writesl(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
->> drivers/pinctrl/freescale/pinctrl-ls1046a.c:199:51: error: passing 'const struct pinctrl_desc *' to parameter of type 'struct pinctrl_desc *' discards qualifiers [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
-     199 |         ret = devm_pinctrl_register_and_init(&pdev->dev, &ls1046a_pinctrl_desc,
-         |                                                          ^~~~~~~~~~~~~~~~~~~~~
-   include/linux/pinctrl/pinctrl.h:180:26: note: passing argument to parameter 'pctldesc' here
-     180 |                                 struct pinctrl_desc *pctldesc,
-         |                                                      ^
-   17 warnings and 1 error generated.
+But if it's a to-be-implemented feature, perhaps it would be too early to
+include it here? Were you able to even test that part right now?
 
+> member when it has been annotated with __counted_by(), avoiding any
+> missed early size initializations while __counted_by() annotations are
+> added to the kernel. Additionally, this also checks for "too large"
+> allocations based on the type size of the counter variable. For example:
+> 
+> 	if (count > type_max(ptr->flex_count))
+> 		fail...;
+> 	info->size = struct_size(ptr, flex_member, count);
+> 	ptr = kmalloc(info->size, gfp);
+> 	ptr->flex_count = count;
+> 
+> becomes (i.e. unchanged from earlier example):
+> 
+> 	kmalloc_flex_sz(ptr, flex_member, count, gfp, &info->size);
+> 
+> Replacing all existing simple code patterns found via Coccinelle[3]
+> shows what could be replaced immediately (saving roughly 1,500 lines):
+> 
+>  7040 files changed, 14128 insertions(+), 15557 deletions(-)
 
-vim +199 drivers/pinctrl/freescale/pinctrl-ls1046a.c
+Since that could be feasible to apply only if Linus ran that directly
+himself, including him now. Because doing it any other way would leave us
+semi-converted forever and not bring the full benefits?
 
-   179	
-   180	static int ls1046a_pinctrl_probe(struct platform_device *pdev)
-   181	{
-   182		struct ls1046a_pinctrl_pdata *pd;
-   183		int ret;
-   184	
-   185		pd = devm_kzalloc(&pdev->dev, sizeof(*pd), GFP_KERNEL);
-   186		if (!pd)
-   187			return -ENOMEM;
-   188		platform_set_drvdata(pdev, pd);
-   189	
-   190		pd->big_endian = device_is_big_endian(&pdev->dev);
-   191	
-   192		/* SCFG PMUX0 */
-   193		pd->cr0mem = devm_platform_ioremap_resource(pdev, 0);
-   194		if (IS_ERR(pd->cr0mem))
-   195			return PTR_ERR(pd->cr0mem);
-   196		dev_dbg(&pdev->dev, "scfg pmuxcr0 at %px %s", pd->cr0mem,
-   197			pd->big_endian ? "be" : "le");
-   198	
- > 199		ret = devm_pinctrl_register_and_init(&pdev->dev, &ls1046a_pinctrl_desc,
-   200			pd, &pd->pctl_dev);
-   201		if (ret)
-   202			return dev_err_probe(&pdev->dev, ret, "Failed pinctrl init\n");
-   203	
-   204		pinctrl_enable(pd->pctl_dev);
-   205		return ret;
-   206	}
-   207	
+> Link: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=116016 [1]
+> Link: https://github.com/llvm/llvm-project/issues/99774 [2]
+> Link: https://github.com/kees/kernel-tools/blob/trunk/coccinelle/examples/kmalloc_obj-assign-size.cocci [3]
+> Signed-off-by: Kees Cook <kees@kernel.org>
+> ---
+> Initial testing looks good. Before I write all the self-tests, I just
+> wanted to validate that the new API is reasonable (i.e. it is no longer
+> using optional argument counts for choosing the internal API).
+> 
+>  v3:
+>   - Add .rst documentation
+>   - Add kern-doc
+>   - Return ptr instead of size by default
+>   - Add *_sz() variants that provide allocation size output
+>   - Implement __flex_counter() logic
+>  v2: https://lore.kernel.org/linux-hardening/20240807235433.work.317-kees@kernel.org/
+>  v1: https://lore.kernel.org/linux-hardening/20240719192744.work.264-kees@kernel.org/
+> Cc: Vlastimil Babka <vbabka@suse.cz>
+> Cc: Christoph Lameter <cl@linux.com>
+> Cc: Pekka Enberg <penberg@kernel.org>
+> Cc: David Rientjes <rientjes@google.com>
+> Cc: Joonsoo Kim <iamjoonsoo.kim@lge.com>
+> Cc: Andrew Morton <akpm@linux-foundation.org>
+> Cc: Roman Gushchin <roman.gushchin@linux.dev>
+> Cc: Hyeonggon Yoo <42.hyeyoo@gmail.com>
+> Cc: Gustavo A. R. Silva <gustavoars@kernel.org>
+> Cc: Bill Wendling <morbo@google.com>
+> Cc: Justin Stitt <justinstitt@google.com>
+> Cc: Jann Horn <jannh@google.com>
+> Cc: Przemek Kitszel <przemyslaw.kitszel@intel.com>
+> Cc: Marco Elver <elver@google.com>
+> Cc: linux-mm@kvack.org
+> ---
+>  Documentation/process/deprecated.rst |  41 +++++++
+>  include/linux/compiler_types.h       |  22 ++++
+>  include/linux/slab.h                 | 174 +++++++++++++++++++++++++++
+>  3 files changed, 237 insertions(+)
+> 
+> diff --git a/Documentation/process/deprecated.rst b/Documentation/process/deprecated.rst
+> index 1f7f3e6c9cda..b22ec088a044 100644
+> --- a/Documentation/process/deprecated.rst
+> +++ b/Documentation/process/deprecated.rst
+> @@ -372,3 +372,44 @@ The helper must be used::
+>  			DECLARE_FLEX_ARRAY(struct type2, two);
+>  		};
+>  	};
+> +
+> +Open-coded kmalloc assignments
+> +------------------------------
+> +Performing open-coded kmalloc()-family allocation assignments prevents
+> +the kernel (and compiler) from being able to examine the type of the
+> +variable being assigned, which limits any related introspection that
+> +may help with alignment, wrap-around, or additional hardening. The
+> +kmalloc_obj()-family of macros provide this introspection, which can be
+> +used for the common code patterns for single, array, and flexible object
+> +allocations. For example, these open coded assignments::
+> +
+> +	ptr = kmalloc(sizeof(*ptr), gfp);
+> +	ptr = kzalloc(sizeof(*ptr), gfp);
+> +	ptr = kmalloc_array(count, sizeof(*ptr), gfp);
+> +	ptr = kcalloc(count, sizeof(*ptr), gfp);
+> +	ptr = kmalloc(struct_size(ptr, flex_member, count), gfp);
+> +
+> +become, respectively::
+> +
+> +	kmalloc_obj(ptr, gfp);
+> +	kzalloc_obj(ptr, gfp);
+> +	kmalloc_objs(ptr, count, gfp);
+> +	kzalloc_objs(ptr, count, gfp);
+> +	kmalloc_flex(ptr, flex_member, count, gfp);
+> +
+> +For the cases where the total size of the allocation is also needed,
+> +the kmalloc_obj_size(), kmalloc_objs_sz(), and kmalloc_flex_sz() family of
+> +macros can be used. For example, converting these assignments::
+> +
+> +	total_size = struct_size(ptr, flex_member, count);
+> +	ptr = kmalloc(total_size, gfp);
+> +
+> +becomes::
+> +
+> +	kmalloc_flex_sz(ptr, flex_member, count, gfp, &total_size);
+> +
+> +If `ptr->flex_member` is annotated with __counted_by(), the allocation
+> +will automatically fail if `count` is larger than the maximum
+> +representable value that can be stored in the counter member associated
+> +with `flex_member`. Similarly, the allocation will fail if the total
+> +size of the allocation exceeds the maximum value `*total_size` can hold.
+> diff --git a/include/linux/compiler_types.h b/include/linux/compiler_types.h
+> index f14c275950b5..b99deae45210 100644
+> --- a/include/linux/compiler_types.h
+> +++ b/include/linux/compiler_types.h
+> @@ -421,6 +421,28 @@ struct ftrace_likely_data {
+>  #define __member_size(p)	__builtin_object_size(p, 1)
+>  #endif
+>  
+> +#if __has_builtin(__builtin_get_counted_by)
+> +/**
+> + * __flex_counter - Get pointer to counter member for the given
+> + *		    flexible array, if it was annotated with __counted_by()
+> + * @flex: Pointer to flexible array member of an addressable struct instance
+> + *
+> + * For example, with:
+> + *
+> + *	struct foo {
+> + *		int counter;
+> + *		short array[] __counted_by(counter);
+> + *	} *p;
+> + *
+> + * __flex_counter(p->array) will resolve to &p->counter.
+> + *
+> + * If p->array is unannotated, this returns (void *)NULL.
+> + */
+> +#define __flex_counter(flex)	__builtin_get_counted_by(flex)
+> +#else
+> +#define __flex_counter(flex)	((void *)NULL)
+> +#endif
+> +
+>  /*
+>   * Some versions of gcc do not mark 'asm goto' volatile:
+>   *
+> diff --git a/include/linux/slab.h b/include/linux/slab.h
+> index eb2bf4629157..c37606b9e248 100644
+> --- a/include/linux/slab.h
+> +++ b/include/linux/slab.h
+> @@ -686,6 +686,180 @@ static __always_inline __alloc_size(1) void *kmalloc_noprof(size_t size, gfp_t f
+>  }
+>  #define kmalloc(...)				alloc_hooks(kmalloc_noprof(__VA_ARGS__))
+>  
+> +#define __alloc_objs(ALLOC, P, COUNT, FLAGS, SIZE)		\
+> +({								\
+> +	size_t __obj_size = size_mul(sizeof(*P), COUNT);	\
+> +	const typeof(_Generic(SIZE,				\
+> +			void *: (size_t *)NULL,			\
+> +			default: SIZE)) __size_ptr = (SIZE);	\
+> +	typeof(P) __obj_ptr = NULL;				\
+> +	/* Does the total size fit in the *SIZE variable? */	\
+> +	if (!__size_ptr || __obj_size <= type_max(*__size_ptr))	\
+> +		__obj_ptr = ALLOC(__obj_size, FLAGS);		\
+> +	if (!__obj_ptr)						\
+> +		__obj_size = 0;					\
+> +	if (__size_ptr)						\
+> +		*__size_ptr = __obj_size;			\
+> +	(P) = __obj_ptr;					\
+> +})
+> +
+> +#define __alloc_flex(ALLOC, P, FAM, COUNT, FLAGS, SIZE)			\
+> +({									\
+> +	size_t __count = (COUNT);					\
+> +	size_t __obj_size = struct_size(P, FAM, __count);		\
+> +	const typeof(_Generic(SIZE,					\
+> +			void *: (size_t *)NULL,				\
+> +			default: SIZE)) __size_ptr = (SIZE);		\
+> +	typeof(P) __obj_ptr = NULL;					\
+> +	/* Just query the counter type for type_max checking. */	\
+> +	typeof(_Generic(__flex_counter(__obj_ptr->FAM),			\
+> +			void *: (size_t *)NULL,				\
+> +			default: __flex_counter(__obj_ptr->FAM)))	\
+> +		__counter_type_ptr = NULL;				\
+> +	/* Does the count fit in the __counted_by counter member? */	\
+> +	if ((__count <= type_max(*__counter_type_ptr)) &&		\
+> +	    /* Does the total size fit in the *SIZE variable? */	\
+> +	    (!__size_ptr || __obj_size <= type_max(*__size_ptr)))	\
+> +		__obj_ptr = ALLOC(__obj_size, FLAGS);			\
+> +	if (__obj_ptr) {						\
+> +		/* __obj_ptr now allocated so get real counter ptr. */	\
+> +		typeof(_Generic(__flex_counter(__obj_ptr->FAM),		\
+> +				void *: (size_t *)NULL,			\
+> +				default: __flex_counter(__obj_ptr->FAM))) \
+> +			__counter_ptr = __flex_counter(__obj_ptr->FAM);	\
+> +		if (__counter_ptr)					\
+> +			*__counter_ptr = __count;			\
+> +	} else {							\
+> +		__obj_size = 0;						\
+> +	}								\
+> +	if (__size_ptr)							\
+> +		*__size_ptr = __obj_size;				\
+> +	(P) = __obj_ptr;						\
+> +})
+> +
+> +/**
+> + * kmalloc_obj - Allocate a single instance of the given structure
+> + * @P: Pointer to hold allocation of the structure
+> + * @FLAGS: GFP flags for the allocation
+> + *
+> + * Returns the newly allocated value of @P on success, NULL on failure.
+> + * @P is assigned the result, either way.
+> + */
+> +#define kmalloc_obj(P, FLAGS)				\
+> +	__alloc_objs(kmalloc, P, 1, FLAGS, NULL)
+> +/**
+> + * kmalloc_obj_sz - Allocate a single instance of the given structure and
+> + *		 store total size
+> + * @P: Pointer to hold allocation of the structure
+> + * @FLAGS: GFP flags for the allocation
+> + * @SIZE: Pointer to variable to hold the total allocation size
+> + *
+> + * Returns the newly allocated value of @P on success, NULL on failure.
+> + * @P is assigned the result, either way. If @SIZE is non-NULL, the
+> + * allocation will immediately fail if the total allocation size is larger
+> + * than what the type of *@SIZE can represent.
+> + */
+> +#define kmalloc_obj_sz(P, FLAGS, SIZE)			\
+> +	__alloc_objs(kmalloc, P, 1, FLAGS, SIZE)
+> +/**
+> + * kmalloc_objs - Allocate an array of the given structure
+> + * @P: Pointer to hold allocation of the structure array
+> + * @COUNT: How many elements in the array
+> + * @FLAGS: GFP flags for the allocation
+> + *
+> + * Returns the newly allocated value of @P on success, NULL on failure.
+> + * @P is assigned the result, either way.
+> + */
+> +#define kmalloc_objs(P, COUNT, FLAGS)			\
+> +	__alloc_objs(kmalloc, P, COUNT, FLAGS, NULL)
+> +/**
+> + * kmalloc_objs_sz - Allocate an array of the given structure and store
+> + *		     total size
+> + * @P: Pointer to hold allocation of the structure array
+> + * @COUNT: How many elements in the array
+> + * @FLAGS: GFP flags for the allocation
+> + * @SIZE: Pointer to variable to hold the total allocation size
+> + *
+> + * Returns the newly allocated value of @P on success, NULL on failure.
+> + * @P is assigned the result, either way. If @SIZE is non-NULL, the
+> + * allocation will immediately fail if the total allocation size is larger
+> + * than what the type of *@SIZE can represent.
+> + */
+> +#define kmalloc_objs_sz(P, COUNT, FLAGS, SIZE)		\
+> +	__alloc_objs(kmalloc, P, COUNT, FLAGS, SIZE)
+> +/**
+> + * kmalloc_flex - Allocate a single instance of the given flexible structure
+> + * @P: Pointer to hold allocation of the structure
+> + * @FAM: The name of the flexible array member of the structure
+> + * @COUNT: How many flexible array member elements are desired
+> + * @FLAGS: GFP flags for the allocation
+> + *
+> + * Returns the newly allocated value of @P on success, NULL on failure.
+> + * @P is assigned the result, either way. If @FAM has been annotated with
+> + * __counted_by(), the allocation will immediately fail if @COUNT is larger
+> + * than what the type of the struct's counter variable can represent.
+> + */
+> +#define kmalloc_flex(P, FAM, COUNT, FLAGS)		\
+> +	__alloc_flex(kmalloc, P, FAM, COUNT, FLAGS, NULL)
+> +
+> +/**
+> + * kmalloc_flex_sz - Allocate a single instance of the given flexible
+> + *		     structure and store total size
+> + * @P: Pointer to hold allocation of the structure
+> + * @FAM: The name of the flexible array member of the structure
+> + * @COUNT: How many flexible array member elements are desired
+> + * @FLAGS: GFP flags for the allocation
+> + * @SIZE: Pointer to variable to hold the total allocation size
+> + *
+> + * Returns the newly allocated value of @P on success, NULL on failure.
+> + * @P is assigned the result, either way. If @FAM has been annotated with
+> + * __counted_by(), the allocation will immediately fail if @COUNT is larger
+> + * than what the type of the struct's counter variable can represent. If
+> + * @SIZE is non-NULL, the allocation will immediately fail if the total
+> + * allocation size is larger than what the type of *@SIZE can represent.
+> + */
+> +#define kmalloc_flex_sz(P, FAM, COUNT, FLAGS, SIZE)	\
+> +	__alloc_flex(kmalloc, P, FAM, COUNT, FLAGS, SIZE)
+> +
+> +#define kzalloc_obj(P, FLAGS)				\
+> +	__alloc_objs(kzalloc, P, 1, FLAGS, NULL)
+> +#define kzalloc_obj_sz(P, FLAGS, SIZE)			\
+> +	__alloc_objs(kzalloc, P, 1, FLAGS, SIZE)
+> +#define kzalloc_objs(P, COUNT, FLAGS)			\
+> +	__alloc_objs(kzalloc, P, COUNT, FLAGS, NULL)
+> +#define kzalloc_objs_sz(P, COUNT, FLAGS, SIZE)		\
+> +	__alloc_objs(kzalloc, P, COUNT, FLAGS, SIZE)
+> +#define kzalloc_flex(P, FAM, COUNT, FLAGS)		\
+> +	__alloc_flex(kzalloc, P, FAM, COUNT, FLAGS, NULL)
+> +#define kzalloc_flex_sz(P, FAM, COUNT, FLAGS, SIZE)	\
+> +	__alloc_flex(kzalloc, P, FAM, COUNT, FLAGS, SIZE)
+> +
+> +#define kvmalloc_obj(P, FLAGS)				\
+> +	__alloc_objs(kvmalloc, P, 1, FLAGS, NULL)
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Wonder if there is really a single struct (not array) with no flex array
+that could need kvmalloc? :)
+
+> +#define kvmalloc_obj_sz(P, FLAGS, SIZE)			\
+> +	__alloc_objs(kvmalloc, P, 1, FLAGS, SIZE)
+> +#define kvmalloc_objs(P, COUNT, FLAGS)			\
+> +	__alloc_objs(kvmalloc, P, COUNT, FLAGS, NULL)
+> +#define kvmalloc_objs_sz(P, COUNT, FLAGS, SIZE)		\
+> +	__alloc_objs(kvmalloc, P, COUNT, FLAGS, SIZE)
+> +#define kvmalloc_flex(P, FAM, COUNT, FLAGS)		\
+> +	__alloc_flex(kvmalloc, P, FAM, COUNT, FLAGS, NULL)
+> +#define kvmalloc_flex_sz(P, FAM, COUNT, FLAGS, SIZE)	\
+> +	__alloc_flex(kvmalloc, P, FAM, COUNT, FLAGS, SIZE)
+> +
+> +#define kvzalloc_obj(P, FLAGS)				\
+> +	__alloc_objs(kvzalloc, P, 1, FLAGS, NULL)
+> +#define kvzalloc_obj_sz(P, FLAGS, SIZE)			\
+> +	__alloc_objs(kvzalloc, P, 1, FLAGS, SIZE)
+> +#define kvzalloc_objs(P, COUNT, FLAGS)			\
+> +	__alloc_objs(kvzalloc, P, COUNT, FLAGS, NULL)
+> +#define kvzalloc_objs_sz(P, COUNT, FLAGS, SIZE)		\
+> +	__alloc_objs(kvzalloc, P, COUNT, FLAGS, SIZE)
+> +#define kvzalloc_flex(P, FAM, COUNT, FLAGS)		\
+> +	__alloc_flex(kvzalloc, P, FAM, COUNT, FLAGS, NULL)
+> +#define kvzalloc_flex_sz(P, FAM, COUNT, FLAGS, SIZE)	\
+> +	__alloc_flex(kvzalloc, P, FAM, COUNT, FLAGS, SIZE)
+> +
+>  #define kmem_buckets_alloc(_b, _size, _flags)	\
+>  	alloc_hooks(__kmalloc_node_noprof(PASS_BUCKET_PARAMS(_size, _b), _flags, NUMA_NO_NODE))
+>  
+
