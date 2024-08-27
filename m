@@ -1,62 +1,72 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 482081C32;
-	Tue, 27 Aug 2024 01:01:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A3FCC8FE;
+	Tue, 27 Aug 2024 02:23:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724720504; cv=none; b=dUfINGgE5tKD8oZl/0j3+znNJT5EUFNzu6i1X+cQ+QfkIj244ZV32uJcbjwWj9F9LFi+uuU4o5AJYTmBKNat5YhiWmq9akMfj7mArrK3HV0x1za1B9ij+L30kiXFtkKT0luWhuTs8YZoIpnoUYuY+KSwnSbA9nuu2yUYRuj0yfY=
+	t=1724725428; cv=none; b=cIUKuasEv8dMKlgqAMddh7U2b22wUMww2E9/qJsCpUbwED91FM+oazk3hSWRUrvE0ye8PUlJBTMDGn2fWGrSaraHknXZkqU1nUyCMqgIQ3LFGTptgbjubO6aNfzMRbL77dHhDSYjdhgUZVjHTEgNx9Ahe/QuzKZnnLQM2AZfQ0U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724720504; c=relaxed/simple;
-	bh=rFufEXOcqmHihXud+JM7yUDTs+ayr54truiXZ9jdepM=;
+	s=arc-20240116; t=1724725428; c=relaxed/simple;
+	bh=9FCIJxsMYSpU1aUPh+K5f4k3cmYgB1Evzoh4BA6p5gc=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=pcmKPMI9Tv+LjzNWw7PPDcJNH/TOWuUHzUgKlFqy7xdJT7T622PCEKhVzqZGwJ6RYPfNt0k3xWcYitDGSLRKpO41Ucs5frvsuHyWyOTV4s995GfwoOft46wnCqy2v47cQ4t6Zmql0UyQkKYQ4ZWcBD9/2AbPPq6tSuw5R2CS4Ac=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=CMB9BT1V; arc=none smtp.client-ip=198.175.65.14
+	 Content-Type:Content-Disposition:In-Reply-To; b=B8kYbHytwW4ERlhXS/01zU25WgX1/5aTzhf08UosDM0KNkvJEb0ClKoJmz/n1Si0UO/5RrP1v9Mdg7ahS7fnWK2ga/MQaR8REWwtlMWXB2XQhsFJe0+ev922yWLvqwvLrdl0fdo0jIc/IS6Bw6zilmWLxolJORnadf1BX+8SVHY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=jSz4JVjk; arc=none smtp.client-ip=192.198.163.9
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="CMB9BT1V"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="jSz4JVjk"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1724720503; x=1756256503;
+  t=1724725426; x=1756261426;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=rFufEXOcqmHihXud+JM7yUDTs+ayr54truiXZ9jdepM=;
-  b=CMB9BT1V1g6GWFeykjE9S1SmwZT3TJiMnGjjoJth9oNeYB1m6yd7vaLs
-   4/u+UeEg8CQd7HZE1zo+ZAOVbrgTY38zhMnpFDPWr5kC4cp798VbgNWUV
-   04wFd4CWlrZJ/lO1R7BjqLE67obF+B8AO6TqEaeX4mPEWn/37UugUKqxy
-   E7D6o4rfPE4dxRngzOpL3/VN/IUhHZbhlGtZpDgXCRLyj57XU0B7A4U9u
-   bIeyXIzUKimX7XMNEFUJBiOdPShn4mP8Wk5+YCBKx1YVTtJfpBx9qJzzX
-   MaxobgBRU2+BQKuraLoQrvFjLaIxsZqa3HUHlON0qUhVSyUJ6HGUEa03A
-   A==;
-X-CSE-ConnectionGUID: fffNJdAPQp2O5CQZ7ONjXw==
-X-CSE-MsgGUID: N3sK6BpWTTGumVxSG4Z/0A==
-X-IronPort-AV: E=McAfee;i="6700,10204,11176"; a="26966844"
+  bh=9FCIJxsMYSpU1aUPh+K5f4k3cmYgB1Evzoh4BA6p5gc=;
+  b=jSz4JVjkBKNZdy0RXaRbyUOVRooTGPuh55ke7U+fIDk6oQdWGFjA6qko
+   WgXpQtuvPuV9OL/hRdDUR1YvYe4NPLNK8DNM/bZU3epYZvaEg2ZIH/59b
+   4Ksfbga8nUK+Z20Csc5wYz94GSn/cDkduuStV1eieMPStT2V3dMSQalOn
+   kxvVlLRBRZHpKU3f4oYRzEF9CAYN9ub7GURhxUh5ch+cODltImMYil6jx
+   VZmqJn6ruByAB//xIOJlMv5nqMx7lIpdkUOi3FGwWRfvDBhYbr9DwxSdS
+   Vk71P3BqITBFJdDdUR5ncX9S99y2OyTE5UgY745X8/k9g5S99pdky/gdZ
+   w==;
+X-CSE-ConnectionGUID: KCxinimETCiK6UNCS4TQMA==
+X-CSE-MsgGUID: z/Tx6pXyTICTETmvB6J+9w==
+X-IronPort-AV: E=McAfee;i="6700,10204,11176"; a="33842807"
 X-IronPort-AV: E=Sophos;i="6.10,179,1719903600"; 
-   d="scan'208";a="26966844"
+   d="scan'208";a="33842807"
 Received: from fmviesa006.fm.intel.com ([10.60.135.146])
-  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Aug 2024 18:01:42 -0700
-X-CSE-ConnectionGUID: HTA7rQF+RV6Q3r4UgQjoiA==
-X-CSE-MsgGUID: CoFx0FOYREmguxYzLdTD1w==
+  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Aug 2024 19:23:46 -0700
+X-CSE-ConnectionGUID: gkxRGydFQXynZmJ8vej9rQ==
+X-CSE-MsgGUID: /7k15b78SHuSJdem06g7ug==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.10,179,1719903600"; 
-   d="scan'208";a="62364145"
+   d="scan'208";a="62386322"
 Received: from lkp-server01.sh.intel.com (HELO 9a732dc145d3) ([10.239.97.150])
-  by fmviesa006.fm.intel.com with ESMTP; 26 Aug 2024 18:01:39 -0700
+  by fmviesa006.fm.intel.com with ESMTP; 26 Aug 2024 19:23:42 -0700
 Received: from kbuild by 9a732dc145d3 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1sikaX-000Hjn-17;
-	Tue, 27 Aug 2024 01:01:37 +0000
-Date: Tue, 27 Aug 2024 09:01:27 +0800
+	id 1silrw-000HnZ-0f;
+	Tue, 27 Aug 2024 02:23:40 +0000
+Date: Tue, 27 Aug 2024 10:23:06 +0800
 From: kernel test robot <lkp@intel.com>
-To: Kunwu Chan <kunwu.chan@linux.dev>, nipun.gupta@amd.com,
-	nikhil.agarwal@amd.com
+To: Andrei Stefanescu <andrei.stefanescu@oss.nxp.com>,
+	Linus Walleij <linus.walleij@linaro.org>,
+	Bartosz Golaszewski <brgl@bgdev.pl>, Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Chester Lin <chester62515@gmail.com>,
+	Matthias Brugger <mbrugger@suse.com>,
+	Ghennadi Procopciuc <Ghennadi.Procopciuc@nxp.com>,
+	Larisa Grigore <larisa.grigore@nxp.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org, Kunwu Chan <chentao@kylinos.cn>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: Re: [PATCH] cdx: make cdx_bus_type constant
-Message-ID: <202408270946.gKlAW6oT-lkp@intel.com>
-References: <20240823071412.130246-1-kunwu.chan@linux.dev>
+	linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	NXP S32 Linux Team <s32@nxp.com>,
+	Andrei Stefanescu <andrei.stefanescu@oss.nxp.com>
+Subject: Re: [PATCH 2/3] drivers: gpio: siul2-s32g2: add NXP S32G2/S32G3 SoCs
+ support
+Message-ID: <202408271011.hpcNokNu-lkp@intel.com>
+References: <20240826084214.2368673-3-andrei.stefanescu@oss.nxp.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -65,107 +75,137 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240823071412.130246-1-kunwu.chan@linux.dev>
+In-Reply-To: <20240826084214.2368673-3-andrei.stefanescu@oss.nxp.com>
 
-Hi Kunwu,
+Hi Andrei,
 
-kernel test robot noticed the following build errors:
+kernel test robot noticed the following build warnings:
 
-[auto build test ERROR on linus/master]
-[also build test ERROR on v6.11-rc5 next-20240826]
+[auto build test WARNING on brgl/gpio/for-next]
+[also build test WARNING on robh/for-next linus/master v6.11-rc5 next-20240826]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Kunwu-Chan/cdx-make-cdx_bus_type-constant/20240826-123621
-base:   linus/master
-patch link:    https://lore.kernel.org/r/20240823071412.130246-1-kunwu.chan%40linux.dev
-patch subject: [PATCH] cdx: make cdx_bus_type constant
-config: arm64-allmodconfig (https://download.01.org/0day-ci/archive/20240827/202408270946.gKlAW6oT-lkp@intel.com/config)
+url:    https://github.com/intel-lab-lkp/linux/commits/Andrei-Stefanescu/dt-bindings-gpio-add-schema-for-NXP-S32G2-S32G3-SoCs/20240826-164853
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/brgl/linux.git gpio/for-next
+patch link:    https://lore.kernel.org/r/20240826084214.2368673-3-andrei.stefanescu%40oss.nxp.com
+patch subject: [PATCH 2/3] drivers: gpio: siul2-s32g2: add NXP S32G2/S32G3 SoCs support
+config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20240827/202408271011.hpcNokNu-lkp@intel.com/config)
 compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 08e5a1de8227512d4774a534b91cb2353cef6284)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240827/202408270946.gKlAW6oT-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240827/202408271011.hpcNokNu-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202408270946.gKlAW6oT-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202408271011.hpcNokNu-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
-   In file included from drivers/cdx/cdx.c:66:
-   In file included from include/linux/mm.h:2228:
-   include/linux/vmstat.h:503:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     503 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     504 |                            item];
-         |                            ~~~~
-   include/linux/vmstat.h:510:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     510 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     511 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/vmstat.h:517:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     517 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
-   include/linux/vmstat.h:523:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     523 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     524 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
->> drivers/cdx/cdx.c:615:25: error: passing 'const struct bus_type *' to parameter of type 'struct bus_type *' discards qualifiers [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
-     615 |         cdx_unregister_devices(&cdx_bus_type);
-         |                                ^~~~~~~~~~~~~
-   drivers/cdx/cdx.c:173:53: note: passing argument to parameter 'bus' here
-     173 | static void cdx_unregister_devices(struct bus_type *bus)
-         |                                                     ^
-   4 warnings and 1 error generated.
+   In file included from drivers/gpio/gpio-siul2-s32g2.c:11:
+   In file included from include/linux/io.h:14:
+   In file included from arch/hexagon/include/asm/io.h:328:
+   include/asm-generic/io.h:548:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     548 |         val = __raw_readb(PCI_IOBASE + addr);
+         |                           ~~~~~~~~~~ ^
+   include/asm-generic/io.h:561:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     561 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
+      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
+         |                                                   ^
+   In file included from drivers/gpio/gpio-siul2-s32g2.c:11:
+   In file included from include/linux/io.h:14:
+   In file included from arch/hexagon/include/asm/io.h:328:
+   include/asm-generic/io.h:574:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     574 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
+      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
+         |                                                   ^
+   In file included from drivers/gpio/gpio-siul2-s32g2.c:11:
+   In file included from include/linux/io.h:14:
+   In file included from arch/hexagon/include/asm/io.h:328:
+   include/asm-generic/io.h:585:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     585 |         __raw_writeb(value, PCI_IOBASE + addr);
+         |                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:595:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     595 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:605:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     605 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+>> drivers/gpio/gpio-siul2-s32g2.c:342:5: warning: format specifies type 'unsigned long' but the argument has type 'size_t' (aka 'unsigned int') [-Wformat]
+     341 |                                 "Failed to initialize opad2%lu regmap config\n",
+         |                                                            ~~~
+         |                                                            %zu
+     342 |                                 i);
+         |                                 ^
+   include/linux/dev_printk.h:154:65: note: expanded from macro 'dev_err'
+     154 |         dev_printk_index_wrap(_dev_err, KERN_ERR, dev, dev_fmt(fmt), ##__VA_ARGS__)
+         |                                                                ~~~     ^~~~~~~~~~~
+   include/linux/dev_printk.h:110:23: note: expanded from macro 'dev_printk_index_wrap'
+     110 |                 _p_func(dev, fmt, ##__VA_ARGS__);                       \
+         |                              ~~~    ^~~~~~~~~~~
+   drivers/gpio/gpio-siul2-s32g2.c:351:5: warning: format specifies type 'unsigned long' but the argument has type 'size_t' (aka 'unsigned int') [-Wformat]
+     350 |                                 "Failed to initialize ipad2%lu regmap config\n",
+         |                                                            ~~~
+         |                                                            %zu
+     351 |                                 i);
+         |                                 ^
+   include/linux/dev_printk.h:154:65: note: expanded from macro 'dev_err'
+     154 |         dev_printk_index_wrap(_dev_err, KERN_ERR, dev, dev_fmt(fmt), ##__VA_ARGS__)
+         |                                                                ~~~     ^~~~~~~~~~~
+   include/linux/dev_printk.h:110:23: note: expanded from macro 'dev_printk_index_wrap'
+     110 |                 _p_func(dev, fmt, ##__VA_ARGS__);                       \
+         |                              ~~~    ^~~~~~~~~~~
+   drivers/gpio/gpio-siul2-s32g2.c:499:5: warning: format specifies type 'unsigned long' but the argument has type 'size_t' (aka 'unsigned int') [-Wformat]
+     498 |                                 "unable to get pinspec %lu from device tree\n",
+         |                                                        ~~~
+         |                                                        %zu
+     499 |                                 i);
+         |                                 ^
+   include/linux/dev_printk.h:154:65: note: expanded from macro 'dev_err'
+     154 |         dev_printk_index_wrap(_dev_err, KERN_ERR, dev, dev_fmt(fmt), ##__VA_ARGS__)
+         |                                                                ~~~     ^~~~~~~~~~~
+   include/linux/dev_printk.h:110:23: note: expanded from macro 'dev_printk_index_wrap'
+     110 |                 _p_func(dev, fmt, ##__VA_ARGS__);                       \
+         |                              ~~~    ^~~~~~~~~~~
+   9 warnings generated.
 
 
-vim +615 drivers/cdx/cdx.c
+vim +342 drivers/gpio/gpio-siul2-s32g2.c
 
-cf60af04edfe51 Abhijit Gangurde 2023-12-22  597  
-d06f5a3f714092 Linus Torvalds   2023-04-27  598  static ssize_t rescan_store(const struct bus_type *bus,
-2959ab247061e6 Nipun Gupta      2023-03-13  599  			    const char *buf, size_t count)
-2959ab247061e6 Nipun Gupta      2023-03-13  600  {
-2959ab247061e6 Nipun Gupta      2023-03-13  601  	struct cdx_controller *cdx;
-54b406e10f0334 Abhijit Gangurde 2023-10-17  602  	struct platform_device *pd;
-54b406e10f0334 Abhijit Gangurde 2023-10-17  603  	struct device_node *np;
-2959ab247061e6 Nipun Gupta      2023-03-13  604  	bool val;
-2959ab247061e6 Nipun Gupta      2023-03-13  605  
-2959ab247061e6 Nipun Gupta      2023-03-13  606  	if (kstrtobool(buf, &val) < 0)
-2959ab247061e6 Nipun Gupta      2023-03-13  607  		return -EINVAL;
-2959ab247061e6 Nipun Gupta      2023-03-13  608  
-2959ab247061e6 Nipun Gupta      2023-03-13  609  	if (!val)
-2959ab247061e6 Nipun Gupta      2023-03-13  610  		return -EINVAL;
-2959ab247061e6 Nipun Gupta      2023-03-13  611  
-f0af816834667b Abhijit Gangurde 2023-10-17  612  	mutex_lock(&cdx_controller_lock);
-f0af816834667b Abhijit Gangurde 2023-10-17  613  
-2959ab247061e6 Nipun Gupta      2023-03-13  614  	/* Unregister all the devices on the bus */
-2959ab247061e6 Nipun Gupta      2023-03-13 @615  	cdx_unregister_devices(&cdx_bus_type);
-2959ab247061e6 Nipun Gupta      2023-03-13  616  
-2959ab247061e6 Nipun Gupta      2023-03-13  617  	/* Rescan all the devices */
-54b406e10f0334 Abhijit Gangurde 2023-10-17  618  	for_each_compatible_node(np, NULL, compat_node_name) {
-54b406e10f0334 Abhijit Gangurde 2023-10-17  619  		pd = of_find_device_by_node(np);
-87736ae12e1427 Dan Carpenter    2024-01-02  620  		if (!pd) {
-87736ae12e1427 Dan Carpenter    2024-01-02  621  			of_node_put(np);
-1960932eef9183 Dan Carpenter    2024-01-02  622  			count = -EINVAL;
-1960932eef9183 Dan Carpenter    2024-01-02  623  			goto unlock;
-87736ae12e1427 Dan Carpenter    2024-01-02  624  		}
-54b406e10f0334 Abhijit Gangurde 2023-10-17  625  
-54b406e10f0334 Abhijit Gangurde 2023-10-17  626  		cdx = platform_get_drvdata(pd);
-54b406e10f0334 Abhijit Gangurde 2023-10-17  627  		if (cdx && cdx->controller_registered && cdx->ops->scan)
-54b406e10f0334 Abhijit Gangurde 2023-10-17  628  			cdx->ops->scan(cdx);
-54b406e10f0334 Abhijit Gangurde 2023-10-17  629  
-54b406e10f0334 Abhijit Gangurde 2023-10-17  630  		put_device(&pd->dev);
-2959ab247061e6 Nipun Gupta      2023-03-13  631  	}
-2959ab247061e6 Nipun Gupta      2023-03-13  632  
-1960932eef9183 Dan Carpenter    2024-01-02  633  unlock:
-f0af816834667b Abhijit Gangurde 2023-10-17  634  	mutex_unlock(&cdx_controller_lock);
-f0af816834667b Abhijit Gangurde 2023-10-17  635  
-2959ab247061e6 Nipun Gupta      2023-03-13  636  	return count;
-2959ab247061e6 Nipun Gupta      2023-03-13  637  }
-2959ab247061e6 Nipun Gupta      2023-03-13  638  static BUS_ATTR_WO(rescan);
-2959ab247061e6 Nipun Gupta      2023-03-13  639  
+   329	
+   330	static int siul2_gpio_pads_init(struct platform_device *pdev,
+   331					struct siul2_gpio_dev *gpio_dev)
+   332	{
+   333		struct device *dev = &pdev->dev;
+   334		size_t i;
+   335	
+   336		for (i = 0; i < ARRAY_SIZE(gpio_dev->siul2); i++) {
+   337			gpio_dev->siul2[i].opadmap = init_padregmap(pdev, gpio_dev, i,
+   338								    false);
+   339			if (IS_ERR(gpio_dev->siul2[i].opadmap)) {
+   340				dev_err(dev,
+   341					"Failed to initialize opad2%lu regmap config\n",
+ > 342					i);
+   343				return PTR_ERR(gpio_dev->siul2[i].opadmap);
+   344			}
+   345	
+   346			gpio_dev->siul2[i].ipadmap = init_padregmap(pdev, gpio_dev, i,
+   347								    true);
+   348			if (IS_ERR(gpio_dev->siul2[i].ipadmap)) {
+   349				dev_err(dev,
+   350					"Failed to initialize ipad2%lu regmap config\n",
+   351					i);
+   352				return PTR_ERR(gpio_dev->siul2[i].ipadmap);
+   353			}
+   354		}
+   355	
+   356		return 0;
+   357	}
+   358	
 
 -- 
 0-DAY CI Kernel Test Service
