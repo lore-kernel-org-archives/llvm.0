@@ -1,173 +1,58 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ACBAC1C7B71;
-	Tue, 27 Aug 2024 16:04:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 10F5B1CDA37;
+	Tue, 27 Aug 2024 16:25:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724774646; cv=none; b=h4VLkgGIdT/dgDfk3lif9HBZP3G5rfXIOAY0uo+omC2wMfP7KrMa504P3E/9jXnLV5EtgiTAy2fssozIPepIJRiIj1OBURK8OXq3S8dLn5/q56jppwTGWfBfgKt/JfIwgBEMKu2W6K3BugsDd4z4t8/jxfIchsKDc4CtBHOuSaA=
+	t=1724775934; cv=none; b=OZC53FohbNBMEUwRJRbmJVWt6tD0si6TgjFCuNCtxajqcs/5ZMZiA0mMuseMLwSJ3g/mpQYnycqlYuhIh0BPPeyHEcjaFeqEgIz5uvJSBz+W2RQjBds20AfBmL2/+gMpkaYtVAum2jJCUE16mcih4oy4DNzbaaePD1pRjf4fgAc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724774646; c=relaxed/simple;
-	bh=ao0RX5ro/6ez3vKUPCpFiFkR1VW7QTBa5WWL6WRZhY8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=qzh2cjomxAk0QlSu+WflSdFeTm2wwC7Aoqe4mabE+Dwanr5Gfh8kEZfdCDzGfQFdmA8395M+b9a+72AmhMz8phcYXTP1FgdaIl0pxh2yIqP44Mr4SwwsIm7CdF49M/Y/mojA2TnOUkuSgu+IJok4qjvFv1vy2XZ0aDtSDQiRtFo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Iyrynehh; arc=none smtp.client-ip=198.175.65.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Iyrynehh"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1724774644; x=1756310644;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=ao0RX5ro/6ez3vKUPCpFiFkR1VW7QTBa5WWL6WRZhY8=;
-  b=IyrynehhF4iOHzd+aSPbBRfBpQp/oVRfzYQTGP6EaRhnkt/mKBA8ZqpU
-   FtqIfxjCntCzaFEU2nOfYUSwAETJzzs/F7hVjvQDLmbc1CF2GxP1adVkH
-   Mh9Yn6O8gDcoR0X//mLJuLKdUItw3DIpMJ5R3wFuJpzF6eI3Ls6L25nde
-   qKbi+DZ3MADji0e3Gnkluz0Un+Aemrye31/APKyG4UuglIjkaajxfmsPg
-   5uehnnmEkex5HjqP4rd5ejno2zmU5Bu4+Mv+F1ALT99T8FSgQkqI46Han
-   52aZ+8LWehC3Wfm7iNJLrF6a0qmWC5D5nX8+pJFCJ5lkJcwARdM5quWsw
-   w==;
-X-CSE-ConnectionGUID: O2pNsps4RzqyuG/kyT+T9A==
-X-CSE-MsgGUID: 82fOnsA2TyyyoYggNTnk2Q==
-X-IronPort-AV: E=McAfee;i="6700,10204,11177"; a="40736304"
-X-IronPort-AV: E=Sophos;i="6.10,180,1719903600"; 
-   d="scan'208";a="40736304"
-Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Aug 2024 09:04:03 -0700
-X-CSE-ConnectionGUID: tzVhxsI0SNCeFoPEq+h/sw==
-X-CSE-MsgGUID: QS6uijy3TGulNDeXCOoRGg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.10,180,1719903600"; 
-   d="scan'208";a="93634623"
-Received: from lkp-server01.sh.intel.com (HELO 9a732dc145d3) ([10.239.97.150])
-  by orviesa002.jf.intel.com with ESMTP; 27 Aug 2024 09:03:59 -0700
-Received: from kbuild by 9a732dc145d3 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1siyfj-000Jny-1n;
-	Tue, 27 Aug 2024 16:03:55 +0000
-Date: Wed, 28 Aug 2024 00:03:19 +0800
-From: kernel test robot <lkp@intel.com>
-To: Shakeel Butt <shakeel.butt@linux.dev>,
-	Andrew Morton <akpm@linux-foundation.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Linux Memory Management List <linux-mm@kvack.org>,
-	Johannes Weiner <hannes@cmpxchg.org>,
-	Michal Hocko <mhocko@kernel.org>,
-	Roman Gushchin <roman.gushchin@linux.dev>,
-	Muchun Song <muchun.song@linux.dev>,
-	Vlastimil Babka <vbabka@suse.cz>,
-	David Rientjes <rientjes@google.com>,
-	Hyeonggon Yoo <42.hyeyoo@gmail.com>,
-	Eric Dumazet <edumazet@google.com>,
-	"David S . Miller" <davem@davemloft.net>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	linux-kernel@vger.kernel.org,
-	Meta kernel team <kernel-team@meta.com>, cgroups@vger.kernel.org,
-	netdev@vger.kernel.org
-Subject: Re: [PATCH v1] memcg: add charging of already allocated slab objects
-Message-ID: <202408272341.k4cl3jz0-lkp@intel.com>
-References: <20240826232908.4076417-1-shakeel.butt@linux.dev>
+	s=arc-20240116; t=1724775934; c=relaxed/simple;
+	bh=pp5seK9cFETth4Q3mhHoLrCJJb991K9mLFMTyHePyZ8=;
+	h=From:To:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=B2uHzqHiaHIFKyAQnm5d+5cEbYoIGOcETT8oVoL+aB2APy4UMhCuUPRjSZbjrWSunfDWMJlUhCkeg8eycc19qHlwSy13UQqqIpg2atSv9KGcLSeQhAzhGMREvAvfKWoi/G5k0YtjYrq8d3nny3i/08ZNTsPP9hxEhkV3t2aihaY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 89726C8B7C5;
+	Tue, 27 Aug 2024 16:25:33 +0000 (UTC)
+Received: by mercury (Postfix, from userid 1000)
+	id 418F61060535; Tue, 27 Aug 2024 18:25:31 +0200 (CEST)
+From: Sebastian Reichel <sebastian.reichel@collabora.com>
+To: Sebastian Reichel <sre@kernel.org>, 
+ Nathan Chancellor <nathan@kernel.org>, 
+ Nick Desaulniers <ndesaulniers@google.com>, 
+ Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
+ linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ llvm@lists.linux.dev, Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20240705113113.42851-1-krzysztof.kozlowski@linaro.org>
+References: <20240705113113.42851-1-krzysztof.kozlowski@linaro.org>
+Subject: Re: [PATCH 1/2] power: supply: core: simplify with cleanup.h
+Message-Id: <172477593125.353499.16835192129915410138.b4-ty@collabora.com>
+Date: Tue, 27 Aug 2024 18:25:31 +0200
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240826232908.4076417-1-shakeel.butt@linux.dev>
-
-Hi Shakeel,
-
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on akpm-mm/mm-everything]
-[also build test ERROR on linus/master v6.11-rc5 next-20240827]
-[cannot apply to vbabka-slab/for-next]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Shakeel-Butt/memcg-add-charging-of-already-allocated-slab-objects/20240827-073150
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
-patch link:    https://lore.kernel.org/r/20240826232908.4076417-1-shakeel.butt%40linux.dev
-patch subject: [PATCH v1] memcg: add charging of already allocated slab objects
-config: s390-allnoconfig (https://download.01.org/0day-ci/archive/20240827/202408272341.k4cl3jz0-lkp@intel.com/config)
-compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 08e5a1de8227512d4774a534b91cb2353cef6284)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240827/202408272341.k4cl3jz0-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202408272341.k4cl3jz0-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
-   In file included from mm/slub.c:13:
-   In file included from include/linux/mm.h:2198:
-   include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
-   In file included from mm/slub.c:49:
-   In file included from mm/internal.h:13:
-   include/linux/mm_inline.h:47:41: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-      47 |         __mod_lruvec_state(lruvec, NR_LRU_BASE + lru, nr_pages);
-         |                                    ~~~~~~~~~~~ ^ ~~~
-   include/linux/mm_inline.h:49:22: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-      49 |                                 NR_ZONE_LRU_BASE + lru, nr_pages);
-         |                                 ~~~~~~~~~~~~~~~~ ^ ~~~
->> mm/slub.c:4115:31: error: no member named 'objcg' in 'struct slabobj_ext'
-    4115 |                 if (unlikely(slab_exts[off].objcg))
-         |                              ~~~~~~~~~~~~~~ ^
-   include/linux/compiler.h:77:42: note: expanded from macro 'unlikely'
-      77 | # define unlikely(x)    __builtin_expect(!!(x), 0)
-         |                                             ^
-   3 warnings and 1 error generated.
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.14.1
 
 
-vim +4115 mm/slub.c
+On Fri, 05 Jul 2024 13:31:12 +0200, Krzysztof Kozlowski wrote:
+> Allocate the memory with scoped/cleanup.h to reduce error handling and
+> make the code a bit simpler.
+> 
+> 
 
-  4085	
-  4086	#define KMALLOC_TYPE (SLAB_KMALLOC | SLAB_CACHE_DMA | \
-  4087			      SLAB_ACCOUNT | SLAB_RECLAIM_ACCOUNT)
-  4088	
-  4089	bool kmem_cache_charge(void *objp, gfp_t gfpflags)
-  4090	{
-  4091		struct slabobj_ext *slab_exts;
-  4092		struct kmem_cache *s;
-  4093		struct folio *folio;
-  4094		struct slab *slab;
-  4095		unsigned long off;
-  4096	
-  4097		if (!memcg_kmem_online())
-  4098			return true;
-  4099	
-  4100		folio = virt_to_folio(objp);
-  4101		if (unlikely(!folio_test_slab(folio)))
-  4102			return false;
-  4103	
-  4104		slab = folio_slab(folio);
-  4105		s = slab->slab_cache;
-  4106	
-  4107		/* Ignore KMALLOC_NORMAL cache to avoid circular dependency. */
-  4108		if ((s->flags & KMALLOC_TYPE) == SLAB_KMALLOC)
-  4109			return true;
-  4110	
-  4111		/* Ignore already charged objects. */
-  4112		slab_exts = slab_obj_exts(slab);
-  4113		if (slab_exts) {
-  4114			off = obj_to_index(s, slab, objp);
-> 4115			if (unlikely(slab_exts[off].objcg))
-  4116				return true;
-  4117		}
-  4118	
-  4119		return memcg_slab_post_charge(s, objp, gfpflags);
-  4120	}
-  4121	EXPORT_SYMBOL(kmem_cache_charge);
-  4122	
+Applied, thanks!
 
+[1/2] power: supply: core: simplify with cleanup.h
+      commit: a9125e868f7ad80d527cf5c69e20fa0ada96bff9
+[2/2] power: supply: twl4030_charger: correct comparision with old current
+      commit: e764374f4b57a0e0c0221bc0188034ae9996808e
+
+Best regards,
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Sebastian Reichel <sebastian.reichel@collabora.com>
+
