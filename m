@@ -1,244 +1,230 @@
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C8B91C5788;
-	Tue, 27 Aug 2024 20:16:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 887C4197A7A;
+	Tue, 27 Aug 2024 21:11:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724789806; cv=none; b=crGWfe58ipiB+nC8R0RocLPIIlmNPvBFqkVgzLjXSm6tsA8Uwbk0euCzXPPKrf96pfcxE0G2ymvqGxNIWa3SwC4A5R+7emWJ/k3KnFTZMg5SF6X8vR45a2/mpJgvdt89R2/hIOrg0K6K4lbHHNK63eR17uOkBj7G9+corLlSQwY=
+	t=1724793082; cv=none; b=sNtXWGqteA2sEue8xIQsRM51ihMXwE8JSE/mpgVUKFiCaQPRaYK6mcxYgbiIop4zyeE9s7/YV6rYMzjMCxAPb2JbuX1wTMdGh7BmJB0tBJjL4AJqRRECkyUB2uSFToHop0fvi2TnCCbX//++yiDxr5p6ZbOmUI35OI2p3int6lk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724789806; c=relaxed/simple;
-	bh=Hcx8QcIxQCwYgcS9aVzVA/bgTxxtOqbsBjmUJhdmgDE=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=puVY7nm71kB31TwXAxWjnh/W0c9IQjAq+Bvr554ycGEwHX2QwvcmSa+747kjkNTEoI/eL/RH/b7sIJEKujzbBmgz9OGE+UGAOCkXE7uQP4tRZpttwzfZTWDE/G9hJbZMaq/d+Gr1o8xI8P2fYhZodi/voIeOl3xpMWqCUP5MVYw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=H2cRDo2s; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=Oigw9UeX; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=H2cRDo2s; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=Oigw9UeX; arc=none smtp.client-ip=195.135.223.130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
+	s=arc-20240116; t=1724793082; c=relaxed/simple;
+	bh=hX9UxprD85FtuIPVMil0tW9A26h2eibinJjk2tisZ+4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Zkpi+aCRVLEK6Sgc0NQoXjeqQIQgBMfV+3EKUK3ybS5tS4Hf5SBxPCiPLGdB6ks1haJseb4EyZlm/ZtUAtAJpWf/xRtiRV6/+X3bec6eAjh0ITWLALigZlDgRjqsLC4sXdMUAZa8kdGI3i90tuaLWn+Lqbw+LX6uYIBYUhqtJz8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=JodbmpKq; arc=none smtp.client-ip=198.175.65.20
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="H2cRDo2s";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="Oigw9UeX";
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="H2cRDo2s";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="Oigw9UeX"
-Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out1.suse.de (Postfix) with ESMTPS id A903621B26;
-	Tue, 27 Aug 2024 20:16:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1724789801; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=nGZ2P7NBrFDQ9r5RZr35OZ49pTXK6VSOYy22Fa0AIok=;
-	b=H2cRDo2sZsK9GGwhMSl1+LBbuJkzDzZYXcRxrrBUP1ii16m+nlgl5lQuGRMlXjKO3rMU+2
-	RW7ZakNBPsPXhimbmHe87HiRt56Srjp7XbDJTAs786nC4bb+YpVip4YFqKQJVmk2ruOvwG
-	TTSl5TE1vADus4Sac+O5ia3FfZexrQE=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1724789801;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=nGZ2P7NBrFDQ9r5RZr35OZ49pTXK6VSOYy22Fa0AIok=;
-	b=Oigw9UeXIEcBSjzCMhjwNNDBauMqt8lcBgPJkrJGXLDcmeW7czBJF9IftZwl7tLtBCB5ac
-	SJ5wvU5kPUJ/WpCg==
-Authentication-Results: smtp-out1.suse.de;
-	none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1724789801; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=nGZ2P7NBrFDQ9r5RZr35OZ49pTXK6VSOYy22Fa0AIok=;
-	b=H2cRDo2sZsK9GGwhMSl1+LBbuJkzDzZYXcRxrrBUP1ii16m+nlgl5lQuGRMlXjKO3rMU+2
-	RW7ZakNBPsPXhimbmHe87HiRt56Srjp7XbDJTAs786nC4bb+YpVip4YFqKQJVmk2ruOvwG
-	TTSl5TE1vADus4Sac+O5ia3FfZexrQE=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1724789801;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=nGZ2P7NBrFDQ9r5RZr35OZ49pTXK6VSOYy22Fa0AIok=;
-	b=Oigw9UeXIEcBSjzCMhjwNNDBauMqt8lcBgPJkrJGXLDcmeW7czBJF9IftZwl7tLtBCB5ac
-	SJ5wvU5kPUJ/WpCg==
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 6516913A20;
-	Tue, 27 Aug 2024 20:16:41 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id NMafEik0zmYWfQAAD6G6ig
-	(envelope-from <krisman@suse.de>); Tue, 27 Aug 2024 20:16:41 +0000
-From: Gabriel Krisman Bertazi <krisman@suse.de>
-To: "Theodore Ts'o" <tytso@mit.edu>
-Cc: Lizhi Xu <lizhi.xu@windriver.com>,  adilger.kernel@dilger.ca,
-  coreteam@netfilter.org,  davem@davemloft.net,  ebiggers@kernel.org,
-  fw@strlen.de,  jaegeuk@kernel.org,  kadlec@netfilter.org,
-  kuba@kernel.org,  linux-ext4@vger.kernel.org,
-  linux-fscrypt@vger.kernel.org,  linux-kernel@vger.kernel.org,
-  lkp@intel.com,  llvm@lists.linux.dev,  netdev@vger.kernel.org,
-  netfilter-devel@vger.kernel.org,  oe-kbuild-all@lists.linux.dev,
-  pablo@netfilter.org,
-  syzbot+340581ba9dceb7e06fb3@syzkaller.appspotmail.com,
-  syzkaller-bugs@googlegroups.com
-Subject: [PATCH] ext4: Fix error message when rejecting the default hash
-In-Reply-To: <172433877724.370733.16770771071139702263.b4-ty@mit.edu>
-	(Theodore Ts'o's message of "Thu, 22 Aug 2024 11:00:11 -0400")
-Organization: SUSE
-References: <87le3kle87.fsf@mailhost.krisman.be>
-	<20240605012335.44086-1-lizhi.xu@windriver.com>
-	<172433877724.370733.16770771071139702263.b4-ty@mit.edu>
-Date: Tue, 27 Aug 2024 16:16:36 -0400
-Message-ID: <87jzg1en6j.fsf_-_@mailhost.krisman.be>
-User-Agent: Gnus/5.13 (Gnus v5.13)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="JodbmpKq"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1724793081; x=1756329081;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=hX9UxprD85FtuIPVMil0tW9A26h2eibinJjk2tisZ+4=;
+  b=JodbmpKqU2bJse15Wuo0VpvRvxl/sDIjySjHfvBM+D5xzBsFvhYxnjvN
+   unw2PaRVqvVLPpk2dmHjBq7R04lC7YtwuSYbsLyMbVZ+RWZIcyGe+CVnO
+   DJMMliq5fpM8f9VAn87bhjJynQFHSCPYiF/FQI9/QTSzu8WGrTIhsatVi
+   +CEOTCN5+PcQqViin2qpRB7RaYt4AnkXt/medDiRp2Tugsl5Iw3bsVFNa
+   x6wtWiv6ZhAiCxwo61H+aGroGygxnpS7sLEQ2P/0v112vdQ7RuHUqlT8L
+   wQ2NjWL+F64SRBt1QoBi/Dnjm3s62dxqy/X79Gb3kU0zjaku6p33Kqry0
+   A==;
+X-CSE-ConnectionGUID: Tnd6KsdWTN+3+W/w+KOVZA==
+X-CSE-MsgGUID: SnlQy9gIRamkuX31hT1bxw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11177"; a="23101650"
+X-IronPort-AV: E=Sophos;i="6.10,181,1719903600"; 
+   d="scan'208";a="23101650"
+Received: from orviesa010.jf.intel.com ([10.64.159.150])
+  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Aug 2024 14:11:20 -0700
+X-CSE-ConnectionGUID: Of5xkQfCSTynNfwGFbyAYA==
+X-CSE-MsgGUID: NlDceEr4StyItgZaBL9+OA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.10,181,1719903600"; 
+   d="scan'208";a="62837941"
+Received: from lkp-server01.sh.intel.com (HELO 9a732dc145d3) ([10.239.97.150])
+  by orviesa010.jf.intel.com with ESMTP; 27 Aug 2024 14:11:17 -0700
+Received: from kbuild by 9a732dc145d3 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1sj3T8-000K5i-2E;
+	Tue, 27 Aug 2024 21:11:14 +0000
+Date: Wed, 28 Aug 2024 05:10:52 +0800
+From: kernel test robot <lkp@intel.com>
+To: David Leonard <David.Leonard@digi.com>,
+	linux-arm-kernel@lists.infradead.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Dong Aisheng <aisheng.dong@nxp.com>,
+	Fabio Estevam <festevam@gmail.com>, Shawn Guo <shawnguo@kernel.org>,
+	Jacky Bai <ping.bai@nxp.com>,
+	Pengutronix Kernel Team <kernel@pengutronix.de>,
+	Linus Walleij <linus.walleij@linaro.org>,
+	linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org
+Subject: Re: [PATCH 4/6] pinctrl: ls1046a: Add pinctrl driver support
+Message-ID: <202408280509.Jr3oFGGy-lkp@intel.com>
+References: <c0ecf4f4-94f1-2efd-b05b-fc117c62e516@digi.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Score: -2.80
-X-Spamd-Result: default: False [-2.80 / 50.00];
-	BAYES_HAM(-3.00)[100.00%];
-	SUSPICIOUS_RECIPS(1.50)[];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	NEURAL_HAM_SHORT(-0.20)[-1.000];
-	MIME_GOOD(-0.10)[text/plain];
-	ARC_NA(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	HAS_ORG_HEADER(0.00)[];
-	RCVD_TLS_ALL(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[21];
-	MIME_TRACE(0.00)[0:+];
-	TAGGED_RCPT(0.00)[340581ba9dceb7e06fb3];
-	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
-	FUZZY_BLOCKED(0.00)[rspamd.com];
-	FROM_HAS_DN(0.00)[];
-	TO_DN_SOME(0.00)[];
-	FROM_EQ_ENVFROM(0.00)[];
-	RCVD_COUNT_TWO(0.00)[2];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[imap1.dmz-prg2.suse.org:helo,suse.de:email]
-X-Spam-Flag: NO
-X-Spam-Level: 
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <c0ecf4f4-94f1-2efd-b05b-fc117c62e516@digi.com>
 
-"Theodore Ts'o" <tytso@mit.edu> writes:
+Hi David,
 
-> On Wed, 05 Jun 2024 09:23:35 +0800, Lizhi Xu wrote:
->> When mounting the ext4 filesystem, if the default hash version is set to
->> DX_HASH_SIPHASH but the casefold feature is not set, exit the mounting.
->> 
->> 
->
-> Applied, thanks!
->
-> [1/1] fs/ext4: Filesystem without casefold feature cannot be mounted with spihash
->       commit: 985b67cd86392310d9e9326de941c22fc9340eec
+kernel test robot noticed the following build errors:
 
-Ted,
+[auto build test ERROR on linusw-pinctrl/devel]
+[also build test ERROR on linusw-pinctrl/for-next shawnguo/for-next arm64/for-next/core kvmarm/next rockchip/for-next soc/for-next linus/master v6.11-rc5 next-20240827]
+[cannot apply to arm/for-next arm/fixes]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Since you took the above, can you please consider the following fixup?
-I had pointed we shouldn't have siphash as the sb default hash at all:
+url:    https://github.com/intel-lab-lkp/linux/commits/David-Leonard/arm64-dts-ls1012a-add-pinctrl-node/20240827-104431
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-pinctrl.git devel
+patch link:    https://lore.kernel.org/r/c0ecf4f4-94f1-2efd-b05b-fc117c62e516%40digi.com
+patch subject: [PATCH 4/6] pinctrl: ls1046a: Add pinctrl driver support
+config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20240828/202408280509.Jr3oFGGy-lkp@intel.com/config)
+compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 08e5a1de8227512d4774a534b91cb2353cef6284)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240828/202408280509.Jr3oFGGy-lkp@intel.com/reproduce)
 
-based on your dev branch.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202408280509.Jr3oFGGy-lkp@intel.com/
 
->8
-Subject: [PATCH] ext4: Fix error message when rejecting the default hash
+All errors (new ones prefixed by >>):
 
-Commit 985b67cd8639 ("ext4: filesystems without casefold feature cannot
-be mounted with siphash") properly rejects volumes where
-s_def_hash_version is set to DX_HASH_SIPHASH, but the check and the
-error message should not look into casefold setup - a filesystem should
-never have DX_HASH_SIPHASH as the default hash.  Fix it and, since we
-are there, move the check to ext4_hash_info_init.
+   In file included from drivers/pinctrl/freescale/pinctrl-ls1046a.c:8:
+   In file included from include/linux/module.h:19:
+   In file included from include/linux/elf.h:6:
+   In file included from arch/s390/include/asm/elf.h:181:
+   In file included from arch/s390/include/asm/mmu_context.h:11:
+   In file included from arch/s390/include/asm/pgalloc.h:18:
+   In file included from include/linux/mm.h:2228:
+   include/linux/vmstat.h:500:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     500 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     501 |                            item];
+         |                            ~~~~
+   include/linux/vmstat.h:507:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     507 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     508 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/vmstat.h:514:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     514 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+   include/linux/vmstat.h:519:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     519 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     520 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/vmstat.h:528:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     528 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     529 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+   In file included from drivers/pinctrl/freescale/pinctrl-ls1046a.c:14:
+   In file included from include/linux/io.h:14:
+   In file included from arch/s390/include/asm/io.h:93:
+   include/asm-generic/io.h:548:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     548 |         val = __raw_readb(PCI_IOBASE + addr);
+         |                           ~~~~~~~~~~ ^
+   include/asm-generic/io.h:561:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     561 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
+      37 | #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
+         |                                                           ^
+   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
+     102 | #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
+         |                                                      ^
+   In file included from drivers/pinctrl/freescale/pinctrl-ls1046a.c:14:
+   In file included from include/linux/io.h:14:
+   In file included from arch/s390/include/asm/io.h:93:
+   include/asm-generic/io.h:574:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     574 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
+      35 | #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
+         |                                                           ^
+   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
+     115 | #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
+         |                                                      ^
+   In file included from drivers/pinctrl/freescale/pinctrl-ls1046a.c:14:
+   In file included from include/linux/io.h:14:
+   In file included from arch/s390/include/asm/io.h:93:
+   include/asm-generic/io.h:585:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     585 |         __raw_writeb(value, PCI_IOBASE + addr);
+         |                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:595:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     595 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:605:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     605 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:693:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     693 |         readsb(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:701:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     701 |         readsw(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:709:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     709 |         readsl(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:718:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     718 |         writesb(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+   include/asm-generic/io.h:727:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     727 |         writesw(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+   include/asm-generic/io.h:736:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     736 |         writesl(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+>> drivers/pinctrl/freescale/pinctrl-ls1046a.c:199:51: error: passing 'const struct pinctrl_desc *' to parameter of type 'struct pinctrl_desc *' discards qualifiers [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
+     199 |         ret = devm_pinctrl_register_and_init(&pdev->dev, &ls1046a_pinctrl_desc,
+         |                                                          ^~~~~~~~~~~~~~~~~~~~~
+   include/linux/pinctrl/pinctrl.h:180:26: note: passing argument to parameter 'pctldesc' here
+     180 |                                 struct pinctrl_desc *pctldesc,
+         |                                                      ^
+   17 warnings and 1 error generated.
 
-Fixes:985b67cd8639 ("ext4: filesystems without casefold feature cannot
-be mounted with siphash")
-Signed-off-by: Gabriel Krisman Bertazi <krisman@suse.de>
----
- fs/ext4/ext4.h  |  1 +
- fs/ext4/super.c | 27 +++++++++++++++++----------
- 2 files changed, 18 insertions(+), 10 deletions(-)
 
-diff --git a/fs/ext4/ext4.h b/fs/ext4/ext4.h
-index 5845e4aa091a..4120f24880cb 100644
---- a/fs/ext4/ext4.h
-+++ b/fs/ext4/ext4.h
-@@ -2462,6 +2462,7 @@ static inline __le16 ext4_rec_len_to_disk(unsigned len, unsigned blocksize)
- #define DX_HASH_HALF_MD4_UNSIGNED	4
- #define DX_HASH_TEA_UNSIGNED		5
- #define DX_HASH_SIPHASH			6
-+#define DX_HASH_LAST 			DX_HASH_SIPHASH
- 
- static inline u32 ext4_chksum(struct ext4_sb_info *sbi, u32 crc,
- 			      const void *address, unsigned int length)
-diff --git a/fs/ext4/super.c b/fs/ext4/super.c
-index 25cd0d662e31..c6a34ad07ecc 100644
---- a/fs/ext4/super.c
-+++ b/fs/ext4/super.c
-@@ -3582,13 +3582,6 @@ int ext4_feature_set_ok(struct super_block *sb, int readonly)
- 			 "mounted without CONFIG_UNICODE");
- 		return 0;
- 	}
--	if (EXT4_SB(sb)->s_es->s_def_hash_version == DX_HASH_SIPHASH &&
--	    !ext4_has_feature_casefold(sb)) {
--		ext4_msg(sb, KERN_ERR,
--			 "Filesystem without casefold feature cannot be "
--			 "mounted with siphash");
--		return 0;
--	}
- 
- 	if (readonly)
- 		return 1;
-@@ -5094,16 +5087,27 @@ static int ext4_load_super(struct super_block *sb, ext4_fsblk_t *lsb,
- 	return ret;
- }
- 
--static void ext4_hash_info_init(struct super_block *sb)
-+static int ext4_hash_info_init(struct super_block *sb)
- {
- 	struct ext4_sb_info *sbi = EXT4_SB(sb);
- 	struct ext4_super_block *es = sbi->s_es;
- 	unsigned int i;
- 
-+	sbi->s_def_hash_version = es->s_def_hash_version;
-+
-+	if (sbi->s_def_hash_version > DX_HASH_LAST) {
-+		ext4_msg(sb, KERN_ERR,
-+			 "Invalid default hash set in the superblock");
-+		return -EINVAL;
-+	} else if (sbi->s_def_hash_version == DX_HASH_SIPHASH) {
-+		ext4_msg(sb, KERN_ERR,
-+			 "SIPHASH is not a valid default hash value");
-+		return -EINVAL;
-+	}
-+
- 	for (i = 0; i < 4; i++)
- 		sbi->s_hash_seed[i] = le32_to_cpu(es->s_hash_seed[i]);
- 
--	sbi->s_def_hash_version = es->s_def_hash_version;
- 	if (ext4_has_feature_dir_index(sb)) {
- 		i = le32_to_cpu(es->s_flags);
- 		if (i & EXT2_FLAGS_UNSIGNED_HASH)
-@@ -5121,6 +5125,7 @@ static void ext4_hash_info_init(struct super_block *sb)
- #endif
- 		}
- 	}
-+	return 0;
- }
- 
- static int ext4_block_group_meta_init(struct super_block *sb, int silent)
-@@ -5256,7 +5261,9 @@ static int __ext4_fill_super(struct fs_context *fc, struct super_block *sb)
- 	if (err)
- 		goto failed_mount;
- 
--	ext4_hash_info_init(sb);
-+	err = ext4_hash_info_init(sb);
-+	if (err)
-+		goto failed_mount;
- 
- 	err = ext4_handle_clustersize(sb);
- 	if (err)
+vim +199 drivers/pinctrl/freescale/pinctrl-ls1046a.c
+
+   179	
+   180	static int ls1046a_pinctrl_probe(struct platform_device *pdev)
+   181	{
+   182		struct ls1046a_pinctrl_pdata *pd;
+   183		int ret;
+   184	
+   185		pd = devm_kzalloc(&pdev->dev, sizeof(*pd), GFP_KERNEL);
+   186		if (!pd)
+   187			return -ENOMEM;
+   188		platform_set_drvdata(pdev, pd);
+   189	
+   190		pd->big_endian = device_is_big_endian(&pdev->dev);
+   191	
+   192		/* SCFG PMUX0 */
+   193		pd->cr0mem = devm_platform_ioremap_resource(pdev, 0);
+   194		if (IS_ERR(pd->cr0mem))
+   195			return PTR_ERR(pd->cr0mem);
+   196		dev_dbg(&pdev->dev, "scfg pmuxcr0 at %px %s", pd->cr0mem,
+   197			pd->big_endian ? "be" : "le");
+   198	
+ > 199		ret = devm_pinctrl_register_and_init(&pdev->dev, &ls1046a_pinctrl_desc,
+   200			pd, &pd->pctl_dev);
+   201		if (ret)
+   202			return dev_err_probe(&pdev->dev, ret, "Failed pinctrl init\n");
+   203	
+   204		pinctrl_enable(pd->pctl_dev);
+   205		return ret;
+   206	}
+   207	
+
 -- 
-2.46.0
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
