@@ -1,266 +1,294 @@
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D4D0A158DC2;
-	Wed, 28 Aug 2024 10:07:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=205.220.165.32
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724839682; cv=fail; b=c2F8MdSw4GTyjEzxGNLJIIOSMWDZIsDWrdeHcmjnmXoMPolGAvjX3l9DsuNaDdGtsj/+ihD7B7KY5ti8FxKQDr/b9N24+ELfLhfeDjTDdqTBaOAJpXuWo7ZnHfsqqKewbdfikzYVh0EE5BS94oBetVg4uNZQeSnfEb/9GQ94r18=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724839682; c=relaxed/simple;
-	bh=sqARwVeEQgpi5b3mZ+NePyiVZq7O3i+Brp7aA8Rsyi0=;
-	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=kcDj2/u4XWSwGFqy8LVYWP/ucbfPcKsVRaZ721yLcuv4Vzjxi2RlcOZbOFjiMX+vmPj/cuc8qLSQ6qw9MWQRN1kTJVcra61xxGJ31YUcr2SLwrVMdUI14XvBxiLZu+pUCojPhaVRbdX8C+ePOdrRCSUNeAwWT7d2jDbmpUbcY6E=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=J4n/hm6H; dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b=yEdkqrLz; arc=fail smtp.client-ip=205.220.165.32
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B4B7613BAC3;
+	Wed, 28 Aug 2024 14:06:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1724853981; cv=none; b=WXaYA275BH1BXqU5UDJUlGwEkFt373pryrc3qr0h+fTD9zitzBYWQLflNwO/FFsDUgSlMYBn9HFg8y8qccnQb3jh65DPj3Mw+wG3sxBFMhTUtaw7z2wQ+1DtD79Zvy4Tliezt93pOxbf28/PM39X23fF1JvSeANOL7IeU04Jea0=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1724853981; c=relaxed/simple;
+	bh=p8fYRaYJbikNAFe75FNzV4FuQDGIYOp8Nf9NadyrPGE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ZIXzu89jnVIUgpuZip8clRaRmPL2XvwJOb2BCcfmQWsTD96+8LeFnIYtgqJmZzh3P0deoBffSO2MxBdR4qVe/MELYraAHxrYkFX4P3rdR7TMH4l4cVicBabDDP/Dcy3+BdcIx0RN2Y8+ibQNJXWQ0PDJsrnIb/wGedZIir8pP3s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=gNdGjSDw; arc=none smtp.client-ip=198.175.65.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="J4n/hm6H";
-	dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b="yEdkqrLz"
-Received: from pps.filterd (m0333521.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 47S7tp8m028748;
-	Wed, 28 Aug 2024 10:07:53 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=
-	message-id:date:subject:to:cc:references:from:in-reply-to
-	:content-type:content-transfer-encoding:mime-version; s=
-	corp-2023-11-20; bh=nXikIl1z5RCZPNYaC7lfqke/BbVB9JFkwgq0VsY5zYk=; b=
-	J4n/hm6HFy9A3d9Bn5FeA0DSoutAkoyLVQbkgTTXHadUsCP2EOfyyBdzjUthlgn2
-	XisefaGwqeWIYe+n5bkovrJNi1O6+r6dGRmwiImLHxCB/pcCLBpGQvQgomgtbNMx
-	j8KngZl6e1kjvBLJ6uPpjUEp1UmUO9GOw7V4tTLxEfX9Xt5TROR02baPHSHGTU90
-	65h5NKx+d8Bz/Q0ZxnhSXK0d7M4AQu/OpyL9cqig6z3/2gljtj9dbOUph2Yrg0Nq
-	S6o77W8LCW8b01HAYbRbPXz1oCV9QpiqW7+GZ4PGJ7ne4N+jX8yYUQRJslZvt+KM
-	1hLrhjrpRv0h2WP4UdYj6g==
-Received: from phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta03.appoci.oracle.com [138.1.37.129])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 419pur8xp4-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Wed, 28 Aug 2024 10:07:51 +0000 (GMT)
-Received: from pps.filterd (phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-	by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 47S8XPJg034931;
-	Wed, 28 Aug 2024 10:07:51 GMT
-Received: from nam04-dm6-obe.outbound.protection.outlook.com (mail-dm6nam04lp2042.outbound.protection.outlook.com [104.47.73.42])
-	by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 4189su9g16-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Wed, 28 Aug 2024 10:07:50 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=vHCaMm5fbF94mcF2Ep0X4xeLZ7sLDWW2dxYKDmtqkv4b/OQtdLtmV1llAH85Of1fWIwfWwFvrfhPTMHV+Q5u9uvXvDpchfMjioHRJUy/YO+yukdzIkOs32EoZZv6WS723N687JSOcxgG4eHJ7BTeq0nTaFBVScLB3ViuhxFN83oaYOMNJKg1cgFLvFQSCGELUS/TyNg4EuR0gVbMng6QtL68v337DTaevqbSkQB3kir+tp/Wv1lEFvHB5/v2tQJXcZTsEKlT773BjVm1wFvsAvH+wo7ttDI95bQjtOlBPPTxqjVFCnuaJ+kh/w+DhbuaBt3xpg/C+qh3U0nR4LP38g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=nXikIl1z5RCZPNYaC7lfqke/BbVB9JFkwgq0VsY5zYk=;
- b=BMvrZMCesZ5lWPxaKGCX/KGVR6J8EHwUMUsCk70ZtVqTk+AoZuLc/6dLWZNPPseNJDgWY8KIri8Gdqy7Jyt5Xfq93WAFxCCNnQoc8cRoEHHwcpXTGxTP+7nOj/4r3J6unc1bZTMyhySga36egnBU7awNEY/SKnvJLYb6OeCOrautLxxfq+2NT04vfFaMn1nOwkR/HI28rFXCZ4qqgg5Yul24mgDVztR5RYRjstc1zEQHEMWJDJI9G8Gl2kiBKFBNFwI18sAvA51BZT7O+lR7/wlQOhtKjZgH8Ver+YbEO97PhdGIrplAZRD3YDZd36u5VvMDWZnt0p0BP42s+EG+Rg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=nXikIl1z5RCZPNYaC7lfqke/BbVB9JFkwgq0VsY5zYk=;
- b=yEdkqrLzz9TTpdzompJzessVbuhR/hJH05UDMPYlk56p59pIGSRU51NRUUTVF5YMywgEwMLPjeOJuCiMLx8FWawNyJzI0BZQWo77HK40pmPnAQHfUh0BhkuTq4YTWLyVN8GZeqyuE0tz3JuRxGLVvKgPm8KxIWztcGAFbVfbzhc=
-Received: from PH0PR10MB5433.namprd10.prod.outlook.com (2603:10b6:510:e0::9)
- by SA6PR10MB8158.namprd10.prod.outlook.com (2603:10b6:806:442::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7918.14; Wed, 28 Aug
- 2024 10:07:49 +0000
-Received: from PH0PR10MB5433.namprd10.prod.outlook.com
- ([fe80::47be:ad6e:e3be:ba80]) by PH0PR10MB5433.namprd10.prod.outlook.com
- ([fe80::47be:ad6e:e3be:ba80%6]) with mapi id 15.20.7918.012; Wed, 28 Aug 2024
- 10:07:48 +0000
-Message-ID: <894fc485-0a0f-479e-88e0-eddb9ccf065c@oracle.com>
-Date: Wed, 28 Aug 2024 12:07:44 +0200
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] kbuild: use objcopy to generate asm-offsets
-To: Masahiro Yamada <masahiroy@kernel.org>
-Cc: linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-omap@vger.kernel.org,
-        kvmarm@lists.linux.dev, kvm@vger.kernel.org,
-        linux-um@lists.infradead.org, bpf@vger.kernel.org,
-        llvm@lists.linux.dev
-References: <20240828083605.3093701-1-vegard.nossum@oracle.com>
-Content-Language: en-US
-From: Vegard Nossum <vegard.nossum@oracle.com>
-Autocrypt: addr=vegard.nossum@oracle.com; keydata=
- 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 8A==
-In-Reply-To: <20240828083605.3093701-1-vegard.nossum@oracle.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: PR0P264CA0160.FRAP264.PROD.OUTLOOK.COM
- (2603:10a6:100:1b::28) To PH0PR10MB5433.namprd10.prod.outlook.com
- (2603:10b6:510:e0::9)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="gNdGjSDw"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1724853979; x=1756389979;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=p8fYRaYJbikNAFe75FNzV4FuQDGIYOp8Nf9NadyrPGE=;
+  b=gNdGjSDwYKkHgKgz+NgQ1EpSavfsRm8fBgrB5y2NME/UlktjvIf9gPvW
+   ABr/Ci5a5RZiye7PpMxO24mxck2DMxwalNarKoD0dampFXhtLf8IrM5yg
+   z1iY2AnHLg2/VIvoOV4BnU4Kx4uiAEB+cBDAj2JbAQVbZ4J9GTmoP2JlT
+   N9fjM3aq5QQfwFIovFuGocExZ6kQDBZNbM1Fd9FXnmXG32s+VQloBONss
+   BCsJIESICvj9pk1CJaVRLyaXQyOH1XpnEiDOOA9+khchafmwAIs4JZrhW
+   oNtCMFWG9buHuX1FcLuO2ZTkKSvNH3nTnMwSyWU1prg1stkiRYkGRyeqr
+   Q==;
+X-CSE-ConnectionGUID: Wa6cfArqRsyWE1BD/zjMXw==
+X-CSE-MsgGUID: AI6JLGKcQbu4sKUqw9HEig==
+X-IronPort-AV: E=McAfee;i="6700,10204,11178"; a="40860519"
+X-IronPort-AV: E=Sophos;i="6.10,182,1719903600"; 
+   d="scan'208";a="40860519"
+Received: from fmviesa008.fm.intel.com ([10.60.135.148])
+  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Aug 2024 07:06:18 -0700
+X-CSE-ConnectionGUID: 33rlizBuQT2V4yEvTqOMIg==
+X-CSE-MsgGUID: lswcdQ5iTIuUqiPuz6sCFg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.10,182,1719903600"; 
+   d="scan'208";a="63217887"
+Received: from lkp-server01.sh.intel.com (HELO 9a732dc145d3) ([10.239.97.150])
+  by fmviesa008.fm.intel.com with ESMTP; 28 Aug 2024 07:06:16 -0700
+Received: from kbuild by 9a732dc145d3 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1sjJJN-000L1m-2J;
+	Wed, 28 Aug 2024 14:06:13 +0000
+Date: Wed, 28 Aug 2024 22:05:38 +0800
+From: kernel test robot <lkp@intel.com>
+To: Krzysztof Kozlowski <krzk@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: Re: [PATCH 2/2] soc: qcom: pmic_glink: simplify locking with guard()
+Message-ID: <202408282155.g3NXNW3R-lkp@intel.com>
+References: <20240822163345.223787-2-krzysztof.kozlowski@linaro.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH0PR10MB5433:EE_|SA6PR10MB8158:EE_
-X-MS-Office365-Filtering-Correlation-Id: 4007748e-0ce3-45cd-4c75-08dcc7494517
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|376014|366016|1800799024|7416014;
-X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?QjVmQzF2Vk9ZVXNZamkxbUtvWWRKdWNOQ3lqM1dNbTRhaFZqUHhEV1JncnJN?=
- =?utf-8?B?RGFVZ2xqeWVBQWJGdTFUYnhVamxFQ0VMOWJLVVRMdUVJa3VaTWJWbmZVTVRx?=
- =?utf-8?B?VzRaZXBzQzNmNGQxYU1uY1FxemxsYTkwanQzZG41ODE5QVVkWnNmaDN1Qis4?=
- =?utf-8?B?Q05hS3d6ZmVUemdLUW1nbzdVb1p0ZS81MzlxNkErd1RXTlVhRTVaUTVqYXNK?=
- =?utf-8?B?Ulc4K3BWM00zd1NraTN6NVFKZWpjYjF0cFh3YzVPODRwZmlnTzh5QjFFcnU2?=
- =?utf-8?B?MElhaFdUSTd4SXVrVndkdzFEVlpXZEtKVndVbE5IM2V2SVllcEUvSTl4OFRm?=
- =?utf-8?B?L3JuU1ZmK3VuaUtKZ1NrNXIrQ0xGbnJkKzFvZjZSYjlQaWdkSENFaUpBZWRs?=
- =?utf-8?B?ckJ2WUV2RXVzWi9CNzB4VkxJdWlYSU83M2VyYjlpNS9idGpEelZ1OTNibXlB?=
- =?utf-8?B?QmdYOGNablRja0NDakJRUjJpR0ZERE9FdWdoVzlyNFVFRzl5R0hzZUdKYjBu?=
- =?utf-8?B?MGhWNXB4blk5MDdKTm81YVppaHFuSk1QRzhkSlhsSmZ2UlRQTmt3bTBHaWpq?=
- =?utf-8?B?cjI3aWpJSWVFZkpEYzg4Sjl0MU5zNXV2OHY5R3k3VU5jK0IyYndocHRUNzlE?=
- =?utf-8?B?SmFsRmZZUXZwWXB0NHJMQUgydkRiaXdMejZWdDc1M0RTV2lMS2plSXgrMCtn?=
- =?utf-8?B?c1ZOWG1zb0hMZnVtWG1haW1QTUd0K2tIa0FORTJqTzFMZU51UW5hU1o5MUxE?=
- =?utf-8?B?U3NHMC9sTnJBdmFjT0hCb3p0dFdGdUlvVmJEN1JNR2tmUUk2SHNaMiszQWdo?=
- =?utf-8?B?dVVzeWpzVjVScE9JbE5mK21zMGVJbGJhQUx6c1dTSGozWXU5YnU4NmMxY2Vi?=
- =?utf-8?B?aGl2TXhnOERSN05iUXF3RjFkK2RHRGhJSm14MVpQdUhoc2tOZmJRVjY4Q0NP?=
- =?utf-8?B?V09ESzEzZGxkM1ppR0VlZ1NXQXF4ays5QlVIRzR4bEx2OWR4MnBxVll6cVlY?=
- =?utf-8?B?bzBxT2ZaclFkdW4rK3ZKNUtrcWlONHF6d1RjSEFYUTcyZy9xREVFRmR5VUxw?=
- =?utf-8?B?ME1mTWdLa3Y1THFKT3dIVHlRcERPNU1TSHhVOXY2dERadDdMTGxyN2dLTGVy?=
- =?utf-8?B?cFlPdHRwSDRYT3ZOL1ppRWN6dXlkbFluMytYWVJ1YWplUFZSakl4eVNDZHpG?=
- =?utf-8?B?eC95VVI2VzhFUlpUR1I3VGxkbS9ydXdVclhpd2svQmphODRTbmxyME9vV2dL?=
- =?utf-8?B?VkxpcTV3WXpZUDlZdmJiNGFiVDZWSTlCbGZTZ2hDYjJCN2JXdUJEOVNnTmkv?=
- =?utf-8?B?UnBHSGNkaHdETEFTajRZVzBEdUEzUzRjQXRVaUk4akFuYngrU3lkWEpyTkxp?=
- =?utf-8?B?eUs4RTl3YmVXY3VMZ2pNNjdMMk5zU0RDYzZxQ2M5Ny9sT2d4b20xSW4xNUdL?=
- =?utf-8?B?M3duSHdLWDdZMzI3TzlJL1UxcEJEWUtrTlZUL2pFSGZiUWo3YzBTNGFzVGF4?=
- =?utf-8?B?dVZiRys0Njkya3ozTm1iSGsxdWRFVzVlV2hkVzhVdnpRM1l4Rmk3WmwvbjFL?=
- =?utf-8?B?VThrN2hPSDNiN1NWMEY4RFA1SnhYTEUycXJKWTFrZ1U2MXMzVnJpMXIwRFQ5?=
- =?utf-8?B?WmVtdG9iS014TlJVcm9OZTNSMEtkTm1vdkVib280WWoyOWI0amRPcjI0NDJv?=
- =?utf-8?B?WGcxSXVzaTQ4SVphQ1RoaUtUQm9KbEd4SVdQKzNBckwyZ1NUMDU1RTE5OXFi?=
- =?utf-8?B?NUV2TWdVSmxmSGlFK0tIaTVFREJPekJtWm5WaDBCSTNlcnVmOXFqTHp3L2VF?=
- =?utf-8?B?RnpjWVg1S2xzRnF2Rlgrdz09?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR10MB5433.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(366016)(1800799024)(7416014);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?NFREbGtNYUJFWGxnYlJPb0kwVDN4MkhhN0J1TklCdXNMQ1RleG85OTJTVDlt?=
- =?utf-8?B?N1VMYVo4Q1hqMjVPUUlaRHJtVTBmZVJINHE2cWE4ZnoyL1VndldTKzlwUWhp?=
- =?utf-8?B?UXRXS2dDb0tFTUE5UDlBRmF6aHZZTWhsWHBXOWtHVnVvRFZHM3VkZlF6cWQw?=
- =?utf-8?B?dzdHbEFOa0FlYlQ1TUUzU2RhUVkwdWdDREdCVmJoekM5UlZYbXZBTm9uMm5Y?=
- =?utf-8?B?cW9RT1BUcFlxOTNwbFJaVGMrd214MFh6MjhsU3FsOXE4N3V5N3pRdmFtaXhX?=
- =?utf-8?B?ckVFSGswYm5ObUJ0ckhhN2Rsa3pIVGlwRFU4bTVaZzlQOEFiVDRYaldRa0Er?=
- =?utf-8?B?TDFCYVFLcjJHMXVtM0cyeDRLUlFjWE9IVmNMWFVtL2hXc3BYVHFidW1td2k2?=
- =?utf-8?B?cS9BVWRoSDB2NXFJM0plTUJZQ05VOFV4clJFOUhiQmMzTGF3Q3pUNytBRXA4?=
- =?utf-8?B?anFxbGdPc0M0RnFyejN6Z2V5dEp5WElld2VXc2JKSmt5Rkd4WkxYTjhsb1ZZ?=
- =?utf-8?B?Y0RZMlpDc1hkWWh4ZUNraGcxL2VHcXA0WUtPSE5xS0F5VXYxSVd6dkR1SXRq?=
- =?utf-8?B?OG1pMVc0alpuMVV0RFplOWczQmsybzZBNU4vT3hBQmdPc3RvYWw4MndnVi9i?=
- =?utf-8?B?TUFJQjAxKy9QR3FhUjZGQkMrUkgxbjVaZCtGbmlRbTE5TmdtclJXZlRLb1JW?=
- =?utf-8?B?bm1EMTlOZ2FlWnNBV2lmNU1iVlo1ci9HaitVR0luRTZJQ3dUTjhnU0tPRXVt?=
- =?utf-8?B?U3RrZEdXaW5ETnp3aHJuNCtqNURzaVpadnJOUVBsSElRNjVXaEZQWGhmVVhC?=
- =?utf-8?B?Tzc3c0dLaVo2V2lTOG4wZjF1NHgrWi9RQ2NGUk9JVnNrT1VZTnJad3BEbDdl?=
- =?utf-8?B?eDJURUZoa3ltemVyWG9UZXRCcitnZXF1Tk5ybDBvSmlqWjJNRW5zQk1OTzVv?=
- =?utf-8?B?c0RUYkFHRm13N01UQTJaTTk2ZUhTSTRSMlMzaXVrdUJieHVFZFczUFFvcjBU?=
- =?utf-8?B?S1hsSkFlV1J1U0Fqa2NuaEhzMmVrUm5nUndRbTZUdklPSGUzdXBWelVLNE9G?=
- =?utf-8?B?RTcycElvSVZFTVV0aHRyZkNlbXM4UE5TbEdFYnJoVnpMWmlXbmNqVjRObmd2?=
- =?utf-8?B?RTBFUjM1YzBoeGNncTB4ejk3YjFoM1Fpem1TY1pDcXU1OVhtbXNHM3FKdGJn?=
- =?utf-8?B?dVBjbmtJdEdxalNmN0hTbUROUkFKMm9mRDVzZEVQSmdYeTR1VUFaRllUMkVE?=
- =?utf-8?B?d2k0OUFkN1B6cm1QTXlDQmgxMDJsYnpoS1haQ2UwSzhiN1d1OVo1RThiMTNG?=
- =?utf-8?B?N2plWDQvZW9aaUpONTlCKzRzUEZ1NzB0cEVDWnpod05ROFpibStUZHlkMzVq?=
- =?utf-8?B?b0I3MmNlVUlPdFVzVW1oTHNWTGRCS25zRGlZeDBEaDRaOHA1b1p6WTh0VGUx?=
- =?utf-8?B?L0JsL1lqUGlDczRTL0h2Ymh0T3lhd2lzYVlWWGlrQzVWQXluaUgvS1R1Z2ZB?=
- =?utf-8?B?TVNManhZMDlyT2FvVGNrc2ZTZ0hWR01GdjFIVUh0ZDYyaUsySDhiNGp6bTNM?=
- =?utf-8?B?azRuSFl0c2RqajJ6Q1o5QlpoeEhqNTRZYmNxS1BuMzdzNVQxTFExVWZsOElR?=
- =?utf-8?B?MmRqcjdMUzVXd2M1VUdmc0xSZVdQZGxveXNuZHJ2TUQxdzAwN3o1bldvNEZO?=
- =?utf-8?B?U0RndzlwYVNwOEVjM1JVZk11bVlCcGtUVTRxTWNIKy9RYUxINnJsRzR4a3U1?=
- =?utf-8?B?bzVSeHhoZzd4TUVxSXZ0MFJjQjE2L2s4UkkzcCtHOXlIeTBxY3JDQUhaY0w1?=
- =?utf-8?B?ZmMrUVhZdENaM0x2K2UrbWJ2L1VDVHdheFNxZnVyL0swQlo5cFNUNCtLNU9n?=
- =?utf-8?B?WDMvNkpnKzIyUHNkNFdLOWp2RnhZVFJIMmFTZ1JkTmEyZW44VU9CUlNvUGJh?=
- =?utf-8?B?eXRXTlp1dDBJbkJrNjVkL3BCQVE5SlBISldVR3pMZjFFNkFJVUlKbklONU1O?=
- =?utf-8?B?Wk5yR1gzVUQ5Ym5pc3lrd0JsL3lUaHVpcUZNaTlxay9rOVptd3pZcVc3ZzRY?=
- =?utf-8?B?blA5aGd0UGJpU1NpTjVmVDkyZEVQbXYxRnpPcXFYV29LNVdmRDk3Nlc5TER4?=
- =?utf-8?B?ZmdmekxXZE9BZGgxNFFtbFQwR3ZiZ2h6UVRyRFVlaGt4VTNMM0RiQ3hzWHU0?=
- =?utf-8?B?N2c9PQ==?=
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0:
-	uMtfJD/sCecWwqyschpMAUnWccG9zvvQlQPbQsgOH49g/gNxZHWzevCtld9OlDb9tzlnscW2Rl+af4sC/GG1QhaAgm5NNU0Shyfg4YLqiincFwp9xQdF8bi1jjWHlJENndI+H3ItRm3kMsC/v9nbF+R7B9+YOZOGxHuZ+yvkbcO7Ybsgr5qejCQzvXQ2xzH6XA4d24XAlnN/ccmCZ7JxUCwvMK0LN1SFsdarNqJ/6hXRQRlBHqBLQlA4IzayprbJmg1fKR5flPvTOjuxfZdF5P9dKIU+9teU9Sb0rx8ur+vGks3G4KALbdCtEN0cSQpeuBIjJW3+8nR8lz/JQvXjd6kA+ffYBgFhADeUARB7ii60SjKAQ3nxxTF6mdK8vt25irA1k7Q/x+SWGp2SJZo8fX04XMkSJ2n2OQevwpxl7qipaa9+xQvWoyklRYOUSaFDbsEyUhFIlHPnqZjt2mqwauzoQmYHl6Uv+BC/vMcHeLa9yozjR1oJuIK1EbF7rDZVm1+jCQloy1OY8ryOaygnlBF5rnuT3FsR30XbPB84gdTyqVVKstIIcYNwURyq2+eleDqAjDSTPPG4OKUZT2yIffrO9vtL1XdVWfozf2d4hxU=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 4007748e-0ce3-45cd-4c75-08dcc7494517
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR10MB5433.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Aug 2024 10:07:48.8827
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: rqsu3xJhLdnL1ELMXx5MwQzMCiaMtzQ+XAiY4/jQpQcH0siymSxrrd0RqZuRZFyVCXwMl0OorSWVFB1pPo3zArrG/YvrJYDaw7PW28/v4yQ=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA6PR10MB8158
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
- definitions=2024-08-28_03,2024-08-27_01,2024-05-17_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 spamscore=0 suspectscore=0
- mlxlogscore=898 malwarescore=0 bulkscore=0 phishscore=0 mlxscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2407110000
- definitions=main-2408280072
-X-Proofpoint-ORIG-GUID: ZdtryZiMjPX-nbwQfZT5dFAmj6IA0Iuy
-X-Proofpoint-GUID: ZdtryZiMjPX-nbwQfZT5dFAmj6IA0Iuy
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240822163345.223787-2-krzysztof.kozlowski@linaro.org>
+
+Hi Krzysztof,
+
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on next-20240823]
+[cannot apply to linus/master v6.11-rc5 v6.11-rc4 v6.11-rc3 v6.11-rc5]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Krzysztof-Kozlowski/soc-qcom-pmic_glink-simplify-locking-with-guard/20240826-115806
+base:   next-20240823
+patch link:    https://lore.kernel.org/r/20240822163345.223787-2-krzysztof.kozlowski%40linaro.org
+patch subject: [PATCH 2/2] soc: qcom: pmic_glink: simplify locking with guard()
+config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20240828/202408282155.g3NXNW3R-lkp@intel.com/config)
+compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 08e5a1de8227512d4774a534b91cb2353cef6284)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240828/202408282155.g3NXNW3R-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202408282155.g3NXNW3R-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+   In file included from drivers/soc/qcom/pmic_glink.c:6:
+   In file included from include/linux/auxiliary_bus.h:11:
+   In file included from include/linux/device.h:32:
+   In file included from include/linux/device/driver.h:21:
+   In file included from include/linux/module.h:19:
+   In file included from include/linux/elf.h:6:
+   In file included from arch/s390/include/asm/elf.h:181:
+   In file included from arch/s390/include/asm/mmu_context.h:11:
+   In file included from arch/s390/include/asm/pgalloc.h:18:
+   In file included from include/linux/mm.h:2202:
+   include/linux/vmstat.h:504:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     504 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     505 |                            item];
+         |                            ~~~~
+   include/linux/vmstat.h:511:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     511 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     512 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+   include/linux/vmstat.h:524:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     524 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     525 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+>> drivers/soc/qcom/pmic_glink.c:311:3: error: cannot jump from this goto statement to its label
+     311 |                 goto out_release_aux_devices;
+         |                 ^
+   drivers/soc/qcom/pmic_glink.c:314:2: note: jump bypasses initialization of variable with __attribute__((cleanup))
+     314 |         guard(mutex)(&__pmic_glink_lock);
+         |         ^
+   include/linux/cleanup.h:303:15: note: expanded from macro 'guard'
+     303 |         CLASS(_name, __UNIQUE_ID(guard))
+         |                      ^
+   include/linux/compiler.h:189:29: note: expanded from macro '__UNIQUE_ID'
+     189 | #define __UNIQUE_ID(prefix) __PASTE(__PASTE(__UNIQUE_ID_, prefix), __COUNTER__)
+         |                             ^
+   include/linux/compiler_types.h:84:22: note: expanded from macro '__PASTE'
+      84 | #define __PASTE(a,b) ___PASTE(a,b)
+         |                      ^
+   include/linux/compiler_types.h:83:23: note: expanded from macro '___PASTE'
+      83 | #define ___PASTE(a,b) a##b
+         |                       ^
+   <scratch space>:131:1: note: expanded from here
+     131 | __UNIQUE_ID_guard502
+         | ^
+   drivers/soc/qcom/pmic_glink.c:304:4: error: cannot jump from this goto statement to its label
+     304 |                         goto out_release_altmode_aux;
+         |                         ^
+   drivers/soc/qcom/pmic_glink.c:314:2: note: jump bypasses initialization of variable with __attribute__((cleanup))
+     314 |         guard(mutex)(&__pmic_glink_lock);
+         |         ^
+   include/linux/cleanup.h:303:15: note: expanded from macro 'guard'
+     303 |         CLASS(_name, __UNIQUE_ID(guard))
+         |                      ^
+   include/linux/compiler.h:189:29: note: expanded from macro '__UNIQUE_ID'
+     189 | #define __UNIQUE_ID(prefix) __PASTE(__PASTE(__UNIQUE_ID_, prefix), __COUNTER__)
+         |                             ^
+   include/linux/compiler_types.h:84:22: note: expanded from macro '__PASTE'
+      84 | #define __PASTE(a,b) ___PASTE(a,b)
+         |                      ^
+   include/linux/compiler_types.h:83:23: note: expanded from macro '___PASTE'
+      83 | #define ___PASTE(a,b) a##b
+         |                       ^
+   <scratch space>:131:1: note: expanded from here
+     131 | __UNIQUE_ID_guard502
+         | ^
+   drivers/soc/qcom/pmic_glink.c:299:4: error: cannot jump from this goto statement to its label
+     299 |                         goto out_release_ucsi_aux;
+         |                         ^
+   drivers/soc/qcom/pmic_glink.c:314:2: note: jump bypasses initialization of variable with __attribute__((cleanup))
+     314 |         guard(mutex)(&__pmic_glink_lock);
+         |         ^
+   include/linux/cleanup.h:303:15: note: expanded from macro 'guard'
+     303 |         CLASS(_name, __UNIQUE_ID(guard))
+         |                      ^
+   include/linux/compiler.h:189:29: note: expanded from macro '__UNIQUE_ID'
+     189 | #define __UNIQUE_ID(prefix) __PASTE(__PASTE(__UNIQUE_ID_, prefix), __COUNTER__)
+         |                             ^
+   include/linux/compiler_types.h:84:22: note: expanded from macro '__PASTE'
+      84 | #define __PASTE(a,b) ___PASTE(a,b)
+         |                      ^
+   include/linux/compiler_types.h:83:23: note: expanded from macro '___PASTE'
+      83 | #define ___PASTE(a,b) a##b
+         |                       ^
+   <scratch space>:131:1: note: expanded from here
+     131 | __UNIQUE_ID_guard502
+         | ^
+   drivers/soc/qcom/pmic_glink.c:294:4: error: cannot jump from this goto statement to its label
+     294 |                         goto out_release_pdr_handle;
+         |                         ^
+   drivers/soc/qcom/pmic_glink.c:314:2: note: jump bypasses initialization of variable with __attribute__((cleanup))
+     314 |         guard(mutex)(&__pmic_glink_lock);
+         |         ^
+   include/linux/cleanup.h:303:15: note: expanded from macro 'guard'
+     303 |         CLASS(_name, __UNIQUE_ID(guard))
+         |                      ^
+   include/linux/compiler.h:189:29: note: expanded from macro '__UNIQUE_ID'
+     189 | #define __UNIQUE_ID(prefix) __PASTE(__PASTE(__UNIQUE_ID_, prefix), __COUNTER__)
+         |                             ^
+   include/linux/compiler_types.h:84:22: note: expanded from macro '__PASTE'
+      84 | #define __PASTE(a,b) ___PASTE(a,b)
+         |                      ^
+   include/linux/compiler_types.h:83:23: note: expanded from macro '___PASTE'
+      83 | #define ___PASTE(a,b) a##b
+         |                       ^
+   <scratch space>:131:1: note: expanded from here
+     131 | __UNIQUE_ID_guard502
+         | ^
+   4 warnings and 4 errors generated.
+
+Kconfig warnings: (for reference only)
+   WARNING: unmet direct dependencies detected for OMAP2PLUS_MBOX
+   Depends on [n]: MAILBOX [=y] && (ARCH_OMAP2PLUS || ARCH_K3)
+   Selected by [m]:
+   - TI_K3_M4_REMOTEPROC [=m] && REMOTEPROC [=y] && (ARCH_K3 || COMPILE_TEST [=y])
 
 
-On 28/08/2024 10:36, Vegard Nossum wrote:
-> In order to give assembly code access to C structs without having to
-> hardcore member offsets, the kernel compiles a C source file listing all
-> the structs and offsets that are needed in assembly code. Using some
-> C preprocessor trickery and a sed script, the compiled assembly code is
-> turned back into C preprocessor code that in turn can be used by the
-> asssembly code.
-> 
-> This sed script is very hard to read and understand.
-> 
-> Remove the sed script and compile the C source listing structs and
-> offsets to an object file (instead of assembly code) that embeds C source
-> directly. Then extract the C source using objcopy.
-> 
-> The resulting code is more readable, less fragile, and sligthly shorter.
-> 
-> Note to reviewers: The 'objcopy ... /dev/stdout | cat' bit is needed to
-> force the correct ordering of the objcopy lines vs. the surrounding echo
-> commands; without it, objcopy will open /dev/stdout (which refers to a
-> temporary file created by kbuild) and reset the file offset to 0. In
-> other words, the pipe ensures that objcopy doesn't overwrite the lines
-> that already exist in /dev/stdout.
+vim +311 drivers/soc/qcom/pmic_glink.c
 
-Turns out LLVM's objcopy doesn't support writing to /dev/stdout, so we
-might have to use a temporary file. I'll look into it and send a v2.
+58ef4ece1e41ac Bjorn Andersson     2023-01-31  258  
+58ef4ece1e41ac Bjorn Andersson     2023-01-31  259  static int pmic_glink_probe(struct platform_device *pdev)
+58ef4ece1e41ac Bjorn Andersson     2023-01-31  260  {
+ff642773b6b5b8 Neil Armstrong      2023-03-21  261  	const unsigned long *match_data;
+58ef4ece1e41ac Bjorn Andersson     2023-01-31  262  	struct pdr_service *service;
+58ef4ece1e41ac Bjorn Andersson     2023-01-31  263  	struct pmic_glink *pg;
+58ef4ece1e41ac Bjorn Andersson     2023-01-31  264  	int ret;
+58ef4ece1e41ac Bjorn Andersson     2023-01-31  265  
+58ef4ece1e41ac Bjorn Andersson     2023-01-31  266  	pg = devm_kzalloc(&pdev->dev, sizeof(*pg), GFP_KERNEL);
+58ef4ece1e41ac Bjorn Andersson     2023-01-31  267  	if (!pg)
+58ef4ece1e41ac Bjorn Andersson     2023-01-31  268  		return -ENOMEM;
+58ef4ece1e41ac Bjorn Andersson     2023-01-31  269  
+58ef4ece1e41ac Bjorn Andersson     2023-01-31  270  	dev_set_drvdata(&pdev->dev, pg);
+58ef4ece1e41ac Bjorn Andersson     2023-01-31  271  
+58ef4ece1e41ac Bjorn Andersson     2023-01-31  272  	pg->dev = &pdev->dev;
+58ef4ece1e41ac Bjorn Andersson     2023-01-31  273  
+58ef4ece1e41ac Bjorn Andersson     2023-01-31  274  	INIT_LIST_HEAD(&pg->clients);
+9329933699b32d Bjorn Andersson     2024-04-30  275  	spin_lock_init(&pg->client_lock);
+58ef4ece1e41ac Bjorn Andersson     2023-01-31  276  	mutex_init(&pg->state_lock);
+58ef4ece1e41ac Bjorn Andersson     2023-01-31  277  
+ff642773b6b5b8 Neil Armstrong      2023-03-21  278  	match_data = (unsigned long *)of_device_get_match_data(&pdev->dev);
+4db09e7b967b90 Dmitry Baryshkov    2023-10-25  279  	if (!match_data)
+4db09e7b967b90 Dmitry Baryshkov    2023-10-25  280  		return -EINVAL;
+4db09e7b967b90 Dmitry Baryshkov    2023-10-25  281  
+ff642773b6b5b8 Neil Armstrong      2023-03-21  282  	pg->client_mask = *match_data;
+ff642773b6b5b8 Neil Armstrong      2023-03-21  283  
+f79ee78767ca60 Rob Clark           2024-02-17  284  	pg->pdr = pdr_handle_alloc(pmic_glink_pdr_callback, pg);
+f79ee78767ca60 Rob Clark           2024-02-17  285  	if (IS_ERR(pg->pdr)) {
+f79ee78767ca60 Rob Clark           2024-02-17  286  		ret = dev_err_probe(&pdev->dev, PTR_ERR(pg->pdr),
+f79ee78767ca60 Rob Clark           2024-02-17  287  				    "failed to initialize pdr\n");
+f79ee78767ca60 Rob Clark           2024-02-17  288  		return ret;
+f79ee78767ca60 Rob Clark           2024-02-17  289  	}
+f79ee78767ca60 Rob Clark           2024-02-17  290  
+ff642773b6b5b8 Neil Armstrong      2023-03-21  291  	if (pg->client_mask & BIT(PMIC_GLINK_CLIENT_UCSI)) {
+ff642773b6b5b8 Neil Armstrong      2023-03-21  292  		ret = pmic_glink_add_aux_device(pg, &pg->ucsi_aux, "ucsi");
+58ef4ece1e41ac Bjorn Andersson     2023-01-31  293  		if (ret)
+f79ee78767ca60 Rob Clark           2024-02-17  294  			goto out_release_pdr_handle;
+ff642773b6b5b8 Neil Armstrong      2023-03-21  295  	}
+ff642773b6b5b8 Neil Armstrong      2023-03-21  296  	if (pg->client_mask & BIT(PMIC_GLINK_CLIENT_ALTMODE)) {
+ff642773b6b5b8 Neil Armstrong      2023-03-21  297  		ret = pmic_glink_add_aux_device(pg, &pg->altmode_aux, "altmode");
+ff642773b6b5b8 Neil Armstrong      2023-03-21  298  		if (ret)
+ff642773b6b5b8 Neil Armstrong      2023-03-21  299  			goto out_release_ucsi_aux;
+ff642773b6b5b8 Neil Armstrong      2023-03-21  300  	}
+ff642773b6b5b8 Neil Armstrong      2023-03-21  301  	if (pg->client_mask & BIT(PMIC_GLINK_CLIENT_BATT)) {
+58ef4ece1e41ac Bjorn Andersson     2023-01-31  302  		ret = pmic_glink_add_aux_device(pg, &pg->ps_aux, "power-supply");
+58ef4ece1e41ac Bjorn Andersson     2023-01-31  303  		if (ret)
+58ef4ece1e41ac Bjorn Andersson     2023-01-31  304  			goto out_release_altmode_aux;
+ff642773b6b5b8 Neil Armstrong      2023-03-21  305  	}
+58ef4ece1e41ac Bjorn Andersson     2023-01-31  306  
+58ef4ece1e41ac Bjorn Andersson     2023-01-31  307  	service = pdr_add_lookup(pg->pdr, "tms/servreg", "msm/adsp/charger_pd");
+58ef4ece1e41ac Bjorn Andersson     2023-01-31  308  	if (IS_ERR(service)) {
+58ef4ece1e41ac Bjorn Andersson     2023-01-31  309  		ret = dev_err_probe(&pdev->dev, PTR_ERR(service),
+58ef4ece1e41ac Bjorn Andersson     2023-01-31  310  				    "failed adding pdr lookup for charger_pd\n");
+f79ee78767ca60 Rob Clark           2024-02-17 @311  		goto out_release_aux_devices;
+58ef4ece1e41ac Bjorn Andersson     2023-01-31  312  	}
+58ef4ece1e41ac Bjorn Andersson     2023-01-31  313  
+1570ad52d5c0f4 Krzysztof Kozlowski 2024-08-22  314  	guard(mutex)(&__pmic_glink_lock);
+58ef4ece1e41ac Bjorn Andersson     2023-01-31  315  	__pmic_glink = pg;
+58ef4ece1e41ac Bjorn Andersson     2023-01-31  316  
+58ef4ece1e41ac Bjorn Andersson     2023-01-31  317  	return 0;
+58ef4ece1e41ac Bjorn Andersson     2023-01-31  318  
+58ef4ece1e41ac Bjorn Andersson     2023-01-31  319  out_release_aux_devices:
+ff642773b6b5b8 Neil Armstrong      2023-03-21  320  	if (pg->client_mask & BIT(PMIC_GLINK_CLIENT_BATT))
+58ef4ece1e41ac Bjorn Andersson     2023-01-31  321  		pmic_glink_del_aux_device(pg, &pg->ps_aux);
+58ef4ece1e41ac Bjorn Andersson     2023-01-31  322  out_release_altmode_aux:
+ff642773b6b5b8 Neil Armstrong      2023-03-21  323  	if (pg->client_mask & BIT(PMIC_GLINK_CLIENT_ALTMODE))
+58ef4ece1e41ac Bjorn Andersson     2023-01-31  324  		pmic_glink_del_aux_device(pg, &pg->altmode_aux);
+ff642773b6b5b8 Neil Armstrong      2023-03-21  325  out_release_ucsi_aux:
+ff642773b6b5b8 Neil Armstrong      2023-03-21  326  	if (pg->client_mask & BIT(PMIC_GLINK_CLIENT_UCSI))
+ff642773b6b5b8 Neil Armstrong      2023-03-21  327  		pmic_glink_del_aux_device(pg, &pg->ucsi_aux);
+f79ee78767ca60 Rob Clark           2024-02-17  328  out_release_pdr_handle:
+f79ee78767ca60 Rob Clark           2024-02-17  329  	pdr_handle_release(pg->pdr);
+58ef4ece1e41ac Bjorn Andersson     2023-01-31  330  
+58ef4ece1e41ac Bjorn Andersson     2023-01-31  331  	return ret;
+58ef4ece1e41ac Bjorn Andersson     2023-01-31  332  }
+58ef4ece1e41ac Bjorn Andersson     2023-01-31  333  
 
-
-Vegard
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
