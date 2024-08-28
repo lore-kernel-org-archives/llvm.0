@@ -1,233 +1,353 @@
-Received: from zg8tmtyylji0my4xnjeumjiw.icoremail.net (zg8tmtyylji0my4xnjeumjiw.icoremail.net [162.243.161.220])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C7C1A15A87B
-	for <llvm@lists.linux.dev>; Wed, 28 Aug 2024 07:43:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=162.243.161.220
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 99901142E6F;
+	Wed, 28 Aug 2024 08:36:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.177.32
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724831034; cv=none; b=fmBcHFjTCLpXWFvXK27TJIGzw+ej+OxOMjzDhKKsGzLlIIjVCJIYDIodtDTlLgn1O3iFVPwKyKD9b09zT6Q+F1WtA9ZiEv8sU5CfJq36ZenZcZfMIs8ePn4aJvA+awJG4RqQiJs8czmXFZQMZotVPHr8EqeMzJOtmT9y1WkWYzo=
+	t=1724834204; cv=none; b=ODYybxVxn+HlOfBa/PwT8XsQhFJsjQT8BdZgs6SLzQSLiWySiXwgqpB/YygSgbUjCnxseAppWIFhmoS9vSXYPZlCCgxkYz7TDNGl+zvAAzHt4ORU4PCfN+9n/CXeBdzDqsV1xe1utzBTu16sP714P5/SXkCBYAna8An/sXgQMIA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724831034; c=relaxed/simple;
-	bh=tgZElXEW/k+zqqpn44uzCLqkqVHYMPI9jUULFZjtiBs=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=L7W+g/gut4JFegObqnXpYKKN/Z3GQFGnepuVHLo6Fm3aT3LQC/w9Fh6eLlyhEgaeLRbRsu6I/5HGJ+b3pFWBoVMUfNEhEy7VXtBA5L/NR3Cotile16HkaL4umXqNjW3JoJ32cC402ohleF2gPY7gzX3gDbcaYmjRknqQn1yVVHU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=hust.edu.cn; spf=pass smtp.mailfrom=hust.edu.cn; arc=none smtp.client-ip=162.243.161.220
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=hust.edu.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hust.edu.cn
-Received: from hust.edu.cn (unknown [172.16.0.52])
-	by app2 (Coremail) with SMTP id HwEQrAD3_s4S1c5mfyWbAA--.27325S2;
-	Wed, 28 Aug 2024 15:43:14 +0800 (CST)
-Received: from pride-PowerEdge-R740.. (unknown [222.20.126.129])
-	by gateway (Coremail) with SMTP id _____wDHsE4L1c5mqcHAAA--.58773S2;
-	Wed, 28 Aug 2024 15:43:09 +0800 (CST)
-From: Dongliang Mu <dzm91@hust.edu.cn>
-To: Alex Shi <alexs@kernel.org>,
-	Yanteng Si <siyanteng@loongson.cn>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Dongliang Mu <dzm91@hust.edu.cn>
-Cc: hust-os-kernel-patches@googlegroups.com,
-	linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: [PATCH] docs/zh_CN: add the translation of kbuild/gcc-plugins.rst
-Date: Wed, 28 Aug 2024 15:42:28 +0800
-Message-ID: <20240828074305.314666-1-dzm91@hust.edu.cn>
-X-Mailer: git-send-email 2.43.0
+	s=arc-20240116; t=1724834204; c=relaxed/simple;
+	bh=uSmvSJeNFmeyFfY8BGu6VB4JiXjq3KkKYAvR2TQtleU=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=Lpn5jPyUTyhuCvZA8/L7kIdcBT2Q1fUCwXc6kCLU1IoTAgLaXqWYT80FcomA60XcI+4JkSuZoP6ebnpn8VXcw6cCvz2oEdOmgvzxE9vsqWnjnCxkDjS5JEXHRULyVopesU/EohMgCuKdfVXZKr7UcuyDILytknZPqoOIdLkxumg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=FzUI8QiL; arc=none smtp.client-ip=205.220.177.32
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="FzUI8QiL"
+Received: from pps.filterd (m0333520.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 47S7twWb001449;
+	Wed, 28 Aug 2024 08:36:19 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=
+	from:to:cc:subject:date:message-id:mime-version
+	:content-transfer-encoding; s=corp-2023-11-20; bh=erGN/lqsjy+1F1
+	v45hgnTn7sAAhyNEqUCYCfrD4e66w=; b=FzUI8QiLz8N8Q9/kg9sBihxj/oY8ZC
+	kaVESOG/UcGONLSec3hC635Mh29O7hxOpDUdTjjabT3xm9XzA5ilWRxKcqdYvxlk
+	bJPD+0O7qe2cpHrmLeHjcXBmnOm3HomNqgoQUnpWsusEOse+YFnLWo2i8bitu41a
+	wpWcjTxX7t/CG1DkypMhFZnk/N8yFry+PdYMVivyXQSRWUnWU1X7MS50tTzYljgN
+	1NidAHdw9C3NtFRWkM+o+ijq4zuEh7OGv8S0iXLNeUpTdvS2xtqUG3AJ8+xM2URU
+	gOoVexbOghjd/moFl666q1VSZmGpCOPEZ8n3Yv+ArqN+8Hr/67+PS9sg==
+Received: from phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta01.appoci.oracle.com [138.1.114.2])
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 419pugrs44-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Wed, 28 Aug 2024 08:36:18 +0000 (GMT)
+Received: from pps.filterd (phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+	by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 47S72I0x016639;
+	Wed, 28 Aug 2024 08:36:17 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+	by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 418a5ten6d-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Wed, 28 Aug 2024 08:36:17 +0000
+Received: from phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 47S8KiB0017099;
+	Wed, 28 Aug 2024 08:36:17 GMT
+Received: from localhost.localdomain (dhcp-10-175-47-71.vpn.oracle.com [10.175.47.71])
+	by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTP id 418a5ten64-1;
+	Wed, 28 Aug 2024 08:36:16 +0000
+From: Vegard Nossum <vegard.nossum@oracle.com>
+To: Masahiro Yamada <masahiroy@kernel.org>
+Cc: linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-omap@vger.kernel.org,
+        kvmarm@lists.linux.dev, kvm@vger.kernel.org,
+        linux-um@lists.infradead.org, bpf@vger.kernel.org,
+        llvm@lists.linux.dev, Vegard Nossum <vegard.nossum@oracle.com>
+Subject: [PATCH] kbuild: use objcopy to generate asm-offsets
+Date: Wed, 28 Aug 2024 10:36:04 +0200
+Message-Id: <20240828083605.3093701-1-vegard.nossum@oracle.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:HwEQrAD3_s4S1c5mfyWbAA--.27325S2
-Authentication-Results: app2; spf=neutral smtp.mail=dzm91@hust.edu.cn;
-X-Coremail-Antispam: 1UD129KBjvJXoWxtryfXF4fur15KFyUur48Zwb_yoWxXr4fpw
-	1qk34SgFWSyFy093yfKr1fuF15JFs3Ww15Ka4kGwn7tF1kJrZ0y39xtry5GFyfWFy8ZrW7
-	XF4YyrW8uw1jva7anT9S1TB71UUUUjUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUQab7Iv0xC_Zr1lb4IE77IF4wAFc2x0x2IEx4CE42xK8VAvwI8I
-	cIk0rVWrJVCq3wA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjx
-	v20xvE14v26w1j6s0DM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4UJVWxJr1l84ACjcxK
-	6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_GcCE3s1ln4kS14v26r
-	1Y6r17M2vYz4IE04k24VAvwVAKI4IrM2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI
-	12xvs2x26I8E6xACxx1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj64x0Y40En7xvr7AKxV
-	W8Jr0_Cr1UMcIj6x8ErcxFaVAv8VW8uFyUJr1UMcIj6xkF7I0En7xvr7AKxVW8Jr0_Cr1U
-	McvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwCY1x0262kKe7AKxVWUAVWUtw
-	CF04k20xvY0x0EwIxGrwCF04k20xvE74AGY7Cv6cx26r4fZr1UJr1l4I8I3I0E4IkC6x0Y
-	z7v_Jr0_Gr1l4IxYO2xFxVAFwI0_Jrv_JF1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x
-	8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE
-	2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42
-	xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF
-	7I0E14v26r1j6r4UYxBIdaVFxhVjvjDU0xZFpf9x07jy38nUUUUU=
-X-CM-SenderInfo: asqsiiirqrkko6kx23oohg3hdfq/
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
+ definitions=2024-08-28_03,2024-08-27_01,2024-05-17_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 mlxscore=0 mlxlogscore=999
+ phishscore=0 bulkscore=0 malwarescore=0 suspectscore=0 spamscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2407110000
+ definitions=main-2408280060
+X-Proofpoint-GUID: RCp8Tn4L9XlNZemaT9NkL3670WSRULoV
+X-Proofpoint-ORIG-GUID: RCp8Tn4L9XlNZemaT9NkL3670WSRULoV
 
-Finish the translation of kbuild/gcc-plugins.rst and move gcc-plugins
-from TODO to the main body.
+In order to give assembly code access to C structs without having to
+hardcore member offsets, the kernel compiles a C source file listing all
+the structs and offsets that are needed in assembly code. Using some
+C preprocessor trickery and a sed script, the compiled assembly code is
+turned back into C preprocessor code that in turn can be used by the
+asssembly code.
 
-Update to commit 3832d1fd84b6 ("docs/core-api: expand Fedora instructions
-for GCC plugins")
+This sed script is very hard to read and understand.
 
-Signed-off-by: Dongliang Mu <dzm91@hust.edu.cn>
+Remove the sed script and compile the C source listing structs and
+offsets to an object file (instead of assembly code) that embeds C source
+directly. Then extract the C source using objcopy.
+
+The resulting code is more readable, less fragile, and sligthly shorter.
+
+Note to reviewers: The 'objcopy ... /dev/stdout | cat' bit is needed to
+force the correct ordering of the objcopy lines vs. the surrounding echo
+commands; without it, objcopy will open /dev/stdout (which refers to a
+temporary file created by kbuild) and reset the file offset to 0. In
+other words, the pipe ensures that objcopy doesn't overwrite the lines
+that already exist in /dev/stdout.
+
+Signed-off-by: Vegard Nossum <vegard.nossum@oracle.com>
 ---
- .../translations/zh_CN/kbuild/gcc-plugins.rst | 126 ++++++++++++++++++
- .../translations/zh_CN/kbuild/index.rst       |   2 +-
- 2 files changed, 127 insertions(+), 1 deletion(-)
- create mode 100644 Documentation/translations/zh_CN/kbuild/gcc-plugins.rst
+ Kbuild                       | 10 +++++-----
+ arch/arm/mach-at91/Makefile  |  4 ++--
+ arch/arm/mach-omap2/Makefile |  4 ++--
+ arch/arm64/kvm/Makefile      |  9 +++++----
+ arch/x86/kvm/Makefile        |  4 ++--
+ arch/x86/um/Makefile         |  6 +++---
+ drivers/memory/Makefile      |  4 ++--
+ include/linux/kbuild.h       | 15 +++++++++++----
+ samples/bpf/Makefile         |  4 ++--
+ scripts/Makefile.lib         | 13 +------------
+ scripts/mod/Makefile         |  4 ++--
+ 11 files changed, 37 insertions(+), 40 deletions(-)
 
-diff --git a/Documentation/translations/zh_CN/kbuild/gcc-plugins.rst b/Documentation/translations/zh_CN/kbuild/gcc-plugins.rst
-new file mode 100644
-index 000000000000..214945a4ecf3
---- /dev/null
-+++ b/Documentation/translations/zh_CN/kbuild/gcc-plugins.rst
-@@ -0,0 +1,126 @@
-+.. SPDX-License-Identifier: GPL-2.0
-+
-+.. include:: ../disclaimer-zh_CN.rst
-+
-+:Original: Documentation/kbuild/gcc-plugins.rst
-+:Translator: 慕冬亮 Dongliang Mu <dzm91@hust.edu.cn>
-+
-+================
-+GCC 插件基础设施
-+================
-+
-+
-+介绍
-+============
-+
-+GCC 插件是为编译器提供额外功能的可加载模块 [1]_。它们对于运行时插装和静态分析非常有用。
-+我们可以在编译过程中通过回调 [2]_，GIMPLE [3]_，IPA [4]_ 和 RTL Passes [5]_
-+（译者注：Pass 是编译器所采用的一种结构化技术，用于完成编译对象的分析、优化或转换等功能）
-+来分析、修改和添加更多的代码。
-+
-+内核的 GCC 插件基础设施支持构建树外模块、交叉编译和在单独的目录中构建。插件源文件必须由
-+C++ 编译器编译。
-+
-+目前 GCC 插件基础设施只支持一些架构。搜索 "select HAVE_GCC_PLUGINS" 来查找支持
-+GCC 插件的架构。
-+
-+这个基础设施是从 grsecurity [6]_  和 PaX [7]_ 移植过来的。
-+
-+--
-+
-+.. [1] https://gcc.gnu.org/onlinedocs/gccint/Plugins.html
-+.. [2] https://gcc.gnu.org/onlinedocs/gccint/Plugin-API.html#Plugin-API
-+.. [3] https://gcc.gnu.org/onlinedocs/gccint/GIMPLE.html
-+.. [4] https://gcc.gnu.org/onlinedocs/gccint/IPA.html
-+.. [5] https://gcc.gnu.org/onlinedocs/gccint/RTL.html
-+.. [6] https://grsecurity.net/
-+.. [7] https://pax.grsecurity.net/
-+
-+
-+目的
-+=======
-+
-+GCC 插件的设计目的是提供一个场所，用于试验 GCC 或 Clang 上游没有的潜在编译器功能。
-+一旦它们的实用性得到验证，目标就是将这些功能添加到 GCC（和 Clang）的上游，然后在
-+所有支持的 GCC 版本都支持这些功能后，再将它们从内核中移除。
-+
-+具体来说，新插件应该只实现上游编译器（GCC 和 Clang）不支持的功能。
-+
-+当 Clang 中存在 GCC 中不存在的某项功能时，应努力将该功能上传到上游 GCC（而不仅仅
-+是作为内核专用的 GCC 插件），以使整个生态都能从中受益。
-+
-+类似的，如果 GCC 插件提供的功能在 Clang 中 **不** 存在，但该功能被证明是有用的，也应
-+努力将该功能上传到 GCC（和 Clang）。
-+
-+在上游 GCC 提供了某项功能后，该插件将无法在相应的 GCC 版本（以及更高版本）下编译。
-+一旦所有内核支持的 GCC 版本都提供了该功能，该插件将从内核中移除。
-+
-+
-+文件
-+=====
-+
-+**$(src)/scripts/gcc-plugins**
-+
-+	这是 GCC 插件的目录。
-+
-+**$(src)/scripts/gcc-plugins/gcc-common.h**
-+
-+	这是 GCC 插件的兼容性头文件。
-+	应始终包含它，而不是单独的 GCC 头文件。
-+
-+**$(src)/scripts/gcc-plugins/gcc-generate-gimple-pass.h,
-+$(src)/scripts/gcc-plugins/gcc-generate-ipa-pass.h,
-+$(src)/scripts/gcc-plugins/gcc-generate-simple_ipa-pass.h,
-+$(src)/scripts/gcc-plugins/gcc-generate-rtl-pass.h**
-+
-+	这些头文件可以自动生成 GIMPLE、SIMPLE_IPA、IPA 和 RTL passes 的注册结构。
-+	与手动创建结构相比，它们更受欢迎。
-+
-+
-+用法
-+=====
-+
-+你必须为你的 GCC 版本安装 GCC 插件头文件，以 Ubuntu 上的 gcc-10 为例::
-+
-+	apt-get install gcc-10-plugin-dev
-+
-+或者在 Fedora 上::
-+
-+	dnf install gcc-plugin-devel libmpc-devel
-+
-+或者在 Fedora 上使用包含插件的交叉编译器时::
-+
-+	dnf install libmpc-devel
-+
-+在内核配置中启用 GCC 插件基础设施与一些你想使用的插件::
-+
-+	CONFIG_GCC_PLUGINS=y
-+	CONFIG_GCC_PLUGIN_LATENT_ENTROPY=y
-+	...
-+
-+运行 gcc（本地或交叉编译器），确保能够检测到插件头文件::
-+
-+	gcc -print-file-name=plugin
-+	CROSS_COMPILE=arm-linux-gnu- ${CROSS_COMPILE}gcc -print-file-name=plugin
-+
-+"plugin" 这个词意味着它们没有被检测到::
-+
-+	plugin
-+
-+完整的路径则表示插件已经被检测到::
-+
-+       /usr/lib/gcc/x86_64-redhat-linux/12/plugin
-+
-+编译包括插件在内的最小工具集::
-+
-+	make scripts
-+
-+或者直接在内核中运行 make，使用循环复杂性 GCC 插件编译整个内核。
-+
-+
-+4. 如何添加新的 GCC 插件
-+==============================
-+
-+GCC 插件位于 scripts/gcc-plugins/。你需要将插件源文件放在 scripts/gcc-plugins/ 目录下。
-+子目录创建并不支持，你必须添加在 scripts/gcc-plugins/Makefile、scripts/Makefile.gcc-plugins
-+和相关的 Kconfig 文件中。
-diff --git a/Documentation/translations/zh_CN/kbuild/index.rst b/Documentation/translations/zh_CN/kbuild/index.rst
-index d906a4e88d0f..b51655d981f6 100644
---- a/Documentation/translations/zh_CN/kbuild/index.rst
-+++ b/Documentation/translations/zh_CN/kbuild/index.rst
-@@ -13,6 +13,7 @@
-     :maxdepth: 1
+diff --git a/Kbuild b/Kbuild
+index 464b34a08f51e..412b77007deb1 100644
+--- a/Kbuild
++++ b/Kbuild
+@@ -9,9 +9,9 @@
  
-     headers_install
-+    gcc-plugins
+ bounds-file := include/generated/bounds.h
  
- TODO:
+-targets := kernel/bounds.s
++targets := kernel/bounds.o
  
-@@ -24,7 +25,6 @@ TODO:
- - modules
- - issues
- - reproducible-builds
--- gcc-plugins
- - llvm
+-$(bounds-file): kernel/bounds.s FORCE
++$(bounds-file): kernel/bounds.o FORCE
+ 	$(call filechk,offsets,__LINUX_BOUNDS_H__)
  
- .. only::  subproject and html
+ # Generate timeconst.h
+@@ -27,11 +27,11 @@ $(timeconst-file): kernel/time/timeconst.bc FORCE
+ 
+ offsets-file := include/generated/asm-offsets.h
+ 
+-targets += arch/$(SRCARCH)/kernel/asm-offsets.s
++targets += arch/$(SRCARCH)/kernel/asm-offsets.o
+ 
+-arch/$(SRCARCH)/kernel/asm-offsets.s: $(timeconst-file) $(bounds-file)
++arch/$(SRCARCH)/kernel/asm-offsets.o: $(timeconst-file) $(bounds-file)
+ 
+-$(offsets-file): arch/$(SRCARCH)/kernel/asm-offsets.s FORCE
++$(offsets-file): arch/$(SRCARCH)/kernel/asm-offsets.o FORCE
+ 	$(call filechk,offsets,__ASM_OFFSETS_H__)
+ 
+ # Check for missing system calls
+diff --git a/arch/arm/mach-at91/Makefile b/arch/arm/mach-at91/Makefile
+index 794bd12ab0a8e..4d4be0000fd98 100644
+--- a/arch/arm/mach-at91/Makefile
++++ b/arch/arm/mach-at91/Makefile
+@@ -18,10 +18,10 @@ ifeq ($(CONFIG_PM_DEBUG),y)
+ CFLAGS_pm.o += -DDEBUG
+ endif
+ 
+-$(obj)/pm_data-offsets.h: $(obj)/pm_data-offsets.s FORCE
++$(obj)/pm_data-offsets.h: $(obj)/pm_data-offsets.o FORCE
+ 	$(call filechk,offsets,__PM_DATA_OFFSETS_H__)
+ 
+ $(obj)/pm_suspend.o: $(obj)/pm_data-offsets.h
+ 
+-targets += pm_data-offsets.s
++targets += pm_data-offsets.o
+ clean-files += pm_data-offsets.h
+diff --git a/arch/arm/mach-omap2/Makefile b/arch/arm/mach-omap2/Makefile
+index daf21127c82f1..991ffe6871d1d 100644
+--- a/arch/arm/mach-omap2/Makefile
++++ b/arch/arm/mach-omap2/Makefile
+@@ -217,12 +217,12 @@ obj-y					+= omap_phy_internal.o
+ 
+ obj-$(CONFIG_MACH_OMAP2_TUSB6010)	+= usb-tusb6010.o
+ 
+-$(obj)/pm-asm-offsets.h: $(obj)/pm-asm-offsets.s FORCE
++$(obj)/pm-asm-offsets.h: $(obj)/pm-asm-offsets.o FORCE
+ 	$(call filechk,offsets,__TI_PM_ASM_OFFSETS_H__)
+ 
+ $(obj)/sleep33xx.o $(obj)/sleep43xx.o: $(obj)/pm-asm-offsets.h
+ 
+-targets += pm-asm-offsets.s
++targets += pm-asm-offsets.o
+ clean-files += pm-asm-offsets.h
+ 
+ obj-$(CONFIG_OMAP_IOMMU)		+= omap-iommu.o
+diff --git a/arch/arm64/kvm/Makefile b/arch/arm64/kvm/Makefile
+index 86a629aaf0a13..ee699a683d82c 100644
+--- a/arch/arm64/kvm/Makefile
++++ b/arch/arm64/kvm/Makefile
+@@ -28,17 +28,18 @@ kvm-y += arm.o mmu.o mmio.o psci.o hypercalls.o pvtime.o \
+ kvm-$(CONFIG_HW_PERF_EVENTS)  += pmu-emul.o pmu.o
+ kvm-$(CONFIG_ARM64_PTR_AUTH)  += pauth.o
+ 
+-always-y := hyp_constants.h hyp-constants.s
++always-y := hyp_constants.h hyp-constants.o
+ 
+ define rule_gen_hyp_constants
+ 	$(call filechk,offsets,__HYP_CONSTANTS_H__)
+ endef
+ 
+ CFLAGS_hyp-constants.o = -I $(src)/hyp/include
+-$(obj)/hyp-constants.s: $(src)/hyp/hyp-constants.c FORCE
+-	$(call if_changed_dep,cc_s_c)
+ 
+-$(obj)/hyp_constants.h: $(obj)/hyp-constants.s FORCE
++$(obj)/hyp-constants.o: $(src)/hyp/hyp-constants.c FORCE
++	$(call if_changed_dep,cc_o_c)
++
++$(obj)/hyp_constants.h: $(obj)/hyp-constants.o FORCE
+ 	$(call if_changed_rule,gen_hyp_constants)
+ 
+ obj-kvm := $(addprefix $(obj)/, $(kvm-y))
+diff --git a/arch/x86/kvm/Makefile b/arch/x86/kvm/Makefile
+index 5494669a055a6..3b561c7e7c4f9 100644
+--- a/arch/x86/kvm/Makefile
++++ b/arch/x86/kvm/Makefile
+@@ -42,8 +42,8 @@ $(obj)/svm/vmenter.o: $(obj)/kvm-asm-offsets.h
+ AFLAGS_vmx/vmenter.o    := -iquote $(obj)
+ $(obj)/vmx/vmenter.o: $(obj)/kvm-asm-offsets.h
+ 
+-$(obj)/kvm-asm-offsets.h: $(obj)/kvm-asm-offsets.s FORCE
++$(obj)/kvm-asm-offsets.h: $(obj)/kvm-asm-offsets.o FORCE
+ 	$(call filechk,offsets,__KVM_ASM_OFFSETS_H__)
+ 
+-targets += kvm-asm-offsets.s
++targets += kvm-asm-offsets.o
+ clean-files += kvm-asm-offsets.h
+diff --git a/arch/x86/um/Makefile b/arch/x86/um/Makefile
+index 36e67fc97c22f..6563503d4b25d 100644
+--- a/arch/x86/um/Makefile
++++ b/arch/x86/um/Makefile
+@@ -38,11 +38,11 @@ subarch-$(CONFIG_MODULES) += ../kernel/module.o
+ 
+ USER_OBJS := bugs_$(BITS).o ptrace_user.o fault.o
+ 
+-$(obj)/user-offsets.s: c_flags = -Wp,-MD,$(depfile) $(USER_CFLAGS) \
++$(obj)/user-offsets.o: c_flags = -Wp,-MD,$(depfile) $(USER_CFLAGS) \
+ 	-Iarch/x86/include/generated
+-targets += user-offsets.s
++targets += user-offsets.o
+ 
+-include/generated/user_constants.h: $(obj)/user-offsets.s FORCE
++include/generated/user_constants.h: $(obj)/user-offsets.o FORCE
+ 	$(call filechk,offsets,__USER_CONSTANT_H__)
+ 
+ UNPROFILE_OBJS := stub_segv.o
+diff --git a/drivers/memory/Makefile b/drivers/memory/Makefile
+index d2e6ca9abbe02..efae95f315a12 100644
+--- a/drivers/memory/Makefile
++++ b/drivers/memory/Makefile
+@@ -34,8 +34,8 @@ ti-emif-sram-objs		:= ti-emif-pm.o ti-emif-sram-pm.o
+ 
+ $(obj)/ti-emif-sram-pm.o: $(obj)/ti-emif-asm-offsets.h
+ 
+-$(obj)/ti-emif-asm-offsets.h: $(obj)/emif-asm-offsets.s FORCE
++$(obj)/ti-emif-asm-offsets.h: $(obj)/emif-asm-offsets.o FORCE
+ 	$(call filechk,offsets,__TI_EMIF_ASM_OFFSETS_H__)
+ 
+-targets += emif-asm-offsets.s
++targets += emif-asm-offsets.o
+ clean-files += ti-emif-asm-offsets.h
+diff --git a/include/linux/kbuild.h b/include/linux/kbuild.h
+index e7be517aaaf68..d253ae4dfd1c1 100644
+--- a/include/linux/kbuild.h
++++ b/include/linux/kbuild.h
+@@ -2,15 +2,22 @@
+ #ifndef __LINUX_KBUILD_H
+ #define __LINUX_KBUILD_H
+ 
+-#define DEFINE(sym, val) \
+-	asm volatile("\n.ascii \"->" #sym " %0 " #val "\"" : : "i" (val))
++#define _LINE(x, ...) \
++	asm volatile( \
++		".pushsection \".data.kbuild\"; "\
++		".ascii \"" x "\\n\"; "\
++		".popsection" : : __VA_ARGS__)
+ 
+-#define BLANK() asm volatile("\n.ascii \"->\"" : : )
++#define DEFINE(sym, val) \
++	_LINE("#define " #sym " %c0 /* " #val " */", "i" (val))
+ 
+ #define OFFSET(sym, str, mem) \
+ 	DEFINE(sym, offsetof(struct str, mem))
+ 
++#define BLANK() \
++	_LINE("")
++
+ #define COMMENT(x) \
+-	asm volatile("\n.ascii \"->#" x "\"")
++	_LINE("/* " #x " */")
+ 
+ #endif
+diff --git a/samples/bpf/Makefile b/samples/bpf/Makefile
+index 3e003dd6bea09..a5d86ac8f5f57 100644
+--- a/samples/bpf/Makefile
++++ b/samples/bpf/Makefile
+@@ -270,10 +270,10 @@ $(LIBBPF_OUTPUT) $(BPFTOOL_OUTPUT):
+ 	$(call msg,MKDIR,$@)
+ 	$(Q)mkdir -p $@
+ 
+-$(obj)/syscall_nrs.h:	$(obj)/syscall_nrs.s FORCE
++$(obj)/syscall_nrs.h:	$(obj)/syscall_nrs.o FORCE
+ 	$(call filechk,offsets,__SYSCALL_NRS_H__)
+ 
+-targets += syscall_nrs.s
++targets += syscall_nrs.o
+ clean-files += syscall_nrs.h
+ 
+ FORCE:
+diff --git a/scripts/Makefile.lib b/scripts/Makefile.lib
+index 207325eaf1d1c..f78b0b12ace26 100644
+--- a/scripts/Makefile.lib
++++ b/scripts/Makefile.lib
+@@ -583,17 +583,6 @@ quiet_cmd_zstd22_with_size = ZSTD22  $@
+ # ASM offsets
+ # ---------------------------------------------------------------------------
+ 
+-# Default sed regexp - multiline due to syntax constraints
+-#
+-# Use [:space:] because LLVM's integrated assembler inserts <tab> around
+-# the .ascii directive whereas GCC keeps the <space> as-is.
+-define sed-offsets
+-	's:^[[:space:]]*\.ascii[[:space:]]*"\(.*\)".*:\1:; \
+-	/^->/{s:->#\(.*\):/* \1 */:; \
+-	s:^->\([^ ]*\) [\$$#]*\([^ ]*\) \(.*\):#define \1 \2 /* \3 */:; \
+-	s:->::; p;}'
+-endef
+-
+ # Use filechk to avoid rebuilds when a header changes, but the resulting file
+ # does not
+ define filechk_offsets
+@@ -605,7 +594,7 @@ define filechk_offsets
+ 	 echo " * This file was generated by Kbuild"; \
+ 	 echo " */"; \
+ 	 echo ""; \
+-	 sed -ne $(sed-offsets) < $<; \
++	 $(OBJCOPY) -j .data.kbuild -O binary $< /dev/stdout | cat; \
+ 	 echo ""; \
+ 	 echo "#endif"
+ endef
+diff --git a/scripts/mod/Makefile b/scripts/mod/Makefile
+index c729bc936bae1..3c3f5e16a30a2 100644
+--- a/scripts/mod/Makefile
++++ b/scripts/mod/Makefile
+@@ -8,10 +8,10 @@ modpost-objs	:= modpost.o file2alias.o sumversion.o symsearch.o
+ 
+ devicetable-offsets-file := devicetable-offsets.h
+ 
+-$(obj)/$(devicetable-offsets-file): $(obj)/devicetable-offsets.s FORCE
++$(obj)/$(devicetable-offsets-file): $(obj)/devicetable-offsets.o FORCE
+ 	$(call filechk,offsets,__DEVICETABLE_OFFSETS_H__)
+ 
+-targets += $(devicetable-offsets-file) devicetable-offsets.s
++targets += $(devicetable-offsets-file) devicetable-offsets.o
+ 
+ # dependencies on generated files need to be listed explicitly
+ 
 -- 
-2.43.0
+2.34.1
 
