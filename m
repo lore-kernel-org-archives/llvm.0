@@ -1,54 +1,69 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25AFBD512;
-	Wed, 28 Aug 2024 00:19:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D173DDC3;
+	Wed, 28 Aug 2024 00:26:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724804380; cv=none; b=FOSgkK5/UWA9yjlhEvSBg6QiHCfc3C2JTCuj88PxDGmBnbZ12vTGnPufZP8D0i9IYlhL2yvQiv8+koOdBgrNOmxUxlBcPEKKa+yOSlE+mOH/+VlbTRK41JBWTtoJa4+ok0Uwx4h+yv4dj2WXkncIfJigpRtWCvLwrWzIVMq+WtI=
+	t=1724804791; cv=none; b=eBPXLqaVgysyoqS07oWKzQQ4YyPzIvNjA9SNxdoNiO7shBggHmDRXk+SSk7bs8Rj1o73GUv93/CTxRb5+Nfqo7EQ91Hk85EapmorQmSlcIb5UI3Ufa4f0eYmL7rGblT9oSKV49hs7qnZpaMg1WoMCo4bE1qr6DX2+N73xsJazUo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724804380; c=relaxed/simple;
-	bh=ZoyDIz63nWYpi7kgSp5N7yU52tLO9esbjOR04pJNKQg=;
+	s=arc-20240116; t=1724804791; c=relaxed/simple;
+	bh=3BxYW8fatp/yBFsFz/oCa/Qh8//iHs1gU1fRTYqapfo=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=H3iVLHG9MamNsA3FF6WaweRTc2ruHg1rPXOB+cHTU6QCamsVdcmc9RGYSHShOBRgGNX0MLxbIHlwCm3UIMTKGW1G8b6MJsIr6eanhdnj8g5E25yrQiSbKZUSqnSyd+27jgBCUZOwjNKu5ESpl7UyITdxlw5NkVQV6Wb9plPZfKo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dtdnD7A7; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=HzmPaLfcukhrOBJbYvNE58DFfqxU6I14RJ5/8weKe3IXvYM5T6mwZ7OJ2l6WdjSBLLK/PBg8U2XbuOjPEw6gB+UYM7pw9I5/KgRM1/BDKde+S6l7fFI2iYGDXsTmHgd7ncKYgp4EtDVaP2q59g38UcoYimlRgQV8WIq/j671wmU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=TmDAqwH1; arc=none smtp.client-ip=198.175.65.21
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dtdnD7A7"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EECCAC4DDEF;
-	Wed, 28 Aug 2024 00:19:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1724804380;
-	bh=ZoyDIz63nWYpi7kgSp5N7yU52tLO9esbjOR04pJNKQg=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=dtdnD7A7NsL4pMbFwtC2SBfC8RVhRJP9WNAQvLy78pWjWCPOVs/B4zGwI0FqY8JRU
-	 bgAbYXiozbSt1NvLkB5p7DCKTvBckJdwZK44PyoAJBjxY7r2wWsLnytSDoglhsHzYt
-	 o8oXbN2PDIJUBkK0/ueRACpFtnpx+W8hWU3KwQA/5FBmm6Vz4NS/d9Xeb2OfcrqkIq
-	 asNLlP3AgZq84n+E8qXDJoIGqqSpBQz0XdxSaXy05Pm/cFmpLXZ4/3jUvWfewWDH9z
-	 LgTm4YfbPiWf6VTbL83e4sQOh1JpyvYLxWaZFZlTjRiZw8H/l9/uPN1abcRhWS3mcZ
-	 edqhHRikuJgVQ==
-Date: Tue, 27 Aug 2024 17:19:39 -0700
-From: Kees Cook <kees@kernel.org>
-To: Vlastimil Babka <vbabka@suse.cz>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>,
-	Christoph Lameter <cl@linux.com>, Pekka Enberg <penberg@kernel.org>,
-	David Rientjes <rientjes@google.com>,
-	Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Roman Gushchin <roman.gushchin@linux.dev>,
-	Hyeonggon Yoo <42.hyeyoo@gmail.com>,
-	"Gustavo A . R . Silva" <gustavoars@kernel.org>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>, Jann Horn <jannh@google.com>,
-	Przemek Kitszel <przemyslaw.kitszel@intel.com>,
-	Marco Elver <elver@google.com>, linux-mm@kvack.org,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-	linux-hardening@vger.kernel.org
-Subject: Re: [PATCH v3] slab: Introduce kmalloc_obj() and family
-Message-ID: <202408271709.31D322019@keescook>
-References: <20240822231324.make.666-kees@kernel.org>
- <5c3852e6-4a6a-42d8-85ff-8c1605939454@suse.cz>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="TmDAqwH1"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1724804789; x=1756340789;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=3BxYW8fatp/yBFsFz/oCa/Qh8//iHs1gU1fRTYqapfo=;
+  b=TmDAqwH19j1EW5uO7nZVGlnssJXFRm2re3v2E5Ws9jsVvOqQsTL0v1TF
+   Nb2S9dYOObnlIkzw3WCI/g7Bwb/tkoyEHdlPmriYu4qes/0e0C0Y230Vl
+   ntINFmotanQnxF0dNeXDxwWO/1CtJT8adYEic3Th0Ve9UyOvmlwYyuqzM
+   HHIiTdlyPbKQy6WUwRqceKvS/YM+eaoQZmKMpkI5jYSrINcMMKTjT1C5l
+   RtSsM9WTj8Vu6HsNR6xh66Q79D2fMp0m26on73ek1eLTCTKV+/S1SZ6Sf
+   XiF56kSZ6XKaxyHEgNUtFKjlySLd7EW3ZsUwem8AGCjY+If9tApa/teLK
+   Q==;
+X-CSE-ConnectionGUID: Z2bhaduvTj+PpdW+OZMKYA==
+X-CSE-MsgGUID: WDOfhswxS6yFeLS9d0/k5A==
+X-IronPort-AV: E=McAfee;i="6700,10204,11177"; a="23273737"
+X-IronPort-AV: E=Sophos;i="6.10,181,1719903600"; 
+   d="scan'208";a="23273737"
+Received: from orviesa006.jf.intel.com ([10.64.159.146])
+  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Aug 2024 17:26:28 -0700
+X-CSE-ConnectionGUID: bb80TmV3QoOI0wkcWCQaDw==
+X-CSE-MsgGUID: kp8sTFTaRbezJjWGBtZ3Yg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.10,181,1719903600"; 
+   d="scan'208";a="63383351"
+Received: from lkp-server01.sh.intel.com (HELO 9a732dc145d3) ([10.239.97.150])
+  by orviesa006.jf.intel.com with ESMTP; 27 Aug 2024 17:26:25 -0700
+Received: from kbuild by 9a732dc145d3 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1sj6Vy-000KGI-1x;
+	Wed, 28 Aug 2024 00:26:22 +0000
+Date: Wed, 28 Aug 2024 08:26:00 +0800
+From: kernel test robot <lkp@intel.com>
+To: Dikshita Agarwal via B4 Relay <devnull+quic_dikshita.quicinc.com@kernel.org>,
+	Vikash Garodia <quic_vgarodia@quicinc.com>,
+	Abhinav Kumar <quic_abhinavk@quicinc.com>,
+	Mauro Carvalho Chehab <mchehab@kernel.org>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Philipp Zabel <p.zabel@pengutronix.de>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Dikshita Agarwal <quic_dikshita@quicinc.com>
+Subject: Re: [PATCH v3 18/29] media: iris: implement vb2 streaming ops
+Message-ID: <202408280735.el4Z7sYK-lkp@intel.com>
+References: <20240827-iris_v3-v3-18-c5fdbbe65e70@quicinc.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -57,99 +72,98 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <5c3852e6-4a6a-42d8-85ff-8c1605939454@suse.cz>
+In-Reply-To: <20240827-iris_v3-v3-18-c5fdbbe65e70@quicinc.com>
 
-On Tue, Aug 27, 2024 at 11:32:14PM +0200, Vlastimil Babka wrote:
-> +Cc Linus
-> 
-> On 8/23/24 01:13, Kees Cook wrote:
-> > Introduce type-aware kmalloc-family helpers to replace the common
-> > idioms for single, array, and flexible object allocations:
-> > 
-> > 	ptr = kmalloc(sizeof(*ptr), gfp);
-> > 	ptr = kzalloc(sizeof(*ptr), gfp);
-> > 	ptr = kmalloc_array(count, sizeof(*ptr), gfp);
-> > 	ptr = kcalloc(count, sizeof(*ptr), gfp);
-> > 	ptr = kmalloc(struct_size(ptr, flex_member, count), gfp);
-> > 
-> > These become, respectively:
-> > 
-> > 	kmalloc_obj(ptr, gfp);
-> > 	kzalloc_obj(ptr, gfp);
-> > 	kmalloc_objs(ptr, count, gfp);
-> > 	kzalloc_objs(ptr, count, gfp);
-> > 	kmalloc_flex(ptr, flex_member, count, gfp);
-> 
-> This is indeed better than the previous version. The hidden assignment to
-> ptr seems still very counter-intuitive, but if it's the only way to do those
-> validations, the question is then just whether it's worth the getting used
-> to it, or not.
+Hi Dikshita,
 
-We could make the syntax require "&ptr"?
+kernel test robot noticed the following build warnings:
 
-As for alternatives, one thing I investigated for a while that made
-several compiler people unhappy was to introduce an builtin named
-something like __builtin_lvalue() which could be used on the RHS of an
-assignment to discover the lvalue in some way. Then we could, for
-example, add alignment discovery like so:
+[auto build test WARNING on 31aaa7d95e09892c81df0d7c49ae85640fa4e202]
 
-#define kmalloc(_size, _gfp)	\
-	__kmalloc(_size, __alignof(typeof(__builtin_lvalue())), _gfp)
+url:    https://github.com/intel-lab-lkp/linux/commits/Dikshita-Agarwal-via-B4-Relay/dt-bindings-media-Add-sm8550-dt-schema/20240827-181059
+base:   31aaa7d95e09892c81df0d7c49ae85640fa4e202
+patch link:    https://lore.kernel.org/r/20240827-iris_v3-v3-18-c5fdbbe65e70%40quicinc.com
+patch subject: [PATCH v3 18/29] media: iris: implement vb2 streaming ops
+config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20240828/202408280735.el4Z7sYK-lkp@intel.com/config)
+compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240828/202408280735.el4Z7sYK-lkp@intel.com/reproduce)
 
-or do the FAM struct allocations:
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202408280735.el4Z7sYK-lkp@intel.com/
 
-#define kmalloc_flex(_member, _count, _gfp)	\
-	__kmalloc(sizeof(*typeof(__builtin_lvalue())) +
-		  sizeof(*__builtin_lvalue()->_member) * (_count), gfp)
+All warnings (new ones prefixed by >>):
 
-Compiler folks seems very unhappy with this, though. As I can recognize
-it creates problems for stuff like:
+>> drivers/media/platform/qcom/iris/iris_hfi_gen1_command.c:167:12: warning: variable 'flush_type' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
+     167 |                 else if (V4L2_TYPE_IS_CAPTURE(plane))
+         |                          ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/uapi/linux/videodev2.h:174:36: note: expanded from macro 'V4L2_TYPE_IS_CAPTURE'
+     174 | #define V4L2_TYPE_IS_CAPTURE(type) (!V4L2_TYPE_IS_OUTPUT(type))
+         |                                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/media/platform/qcom/iris/iris_hfi_gen1_command.c:175:26: note: uninitialized use occurs here
+     175 |                 flush_pkt.flush_type = flush_type;
+         |                                        ^~~~~~~~~~
+   drivers/media/platform/qcom/iris/iris_hfi_gen1_command.c:167:8: note: remove the 'if' if its condition is always true
+     167 |                 else if (V4L2_TYPE_IS_CAPTURE(plane))
+         |                      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     168 |                         flush_type = HFI_FLUSH_OUTPUT;
+   drivers/media/platform/qcom/iris/iris_hfi_gen1_command.c:145:16: note: initialize the variable 'flush_type' to silence this warning
+     145 |         u32 flush_type;
+         |                       ^
+         |                        = 0
+   1 warning generated.
 
-	return kmalloc(...)
 
-Of course the proposed macros still have the above problem, and both to
-use a temporary variable to deal with it.
+vim +167 drivers/media/platform/qcom/iris/iris_hfi_gen1_command.c
 
-So, really it's a question of "how best to introspect the lvalue?"
-
-> [...]
-> > by GCC[1] and Clang[2]. The internal use of __flex_count() allows for
-> > automatically setting the counter member of a struct's flexible array
-> 
-> But if it's a to-be-implemented feature, perhaps it would be too early to
-> include it here? Were you able to even test that part right now?
-
-There are RFC patches for both GCC and Clang that I tested against.
-However, yes, it is still pretty early. I just wanted to show that it
-can work, etc. (i.e. not propose a macro with no "real" benefit over the
-existing assignments).
-
-> [...]
-> > Replacing all existing simple code patterns found via Coccinelle[3]
-> > shows what could be replaced immediately (saving roughly 1,500 lines):
-> > 
-> >  7040 files changed, 14128 insertions(+), 15557 deletions(-)
-> 
-> Since that could be feasible to apply only if Linus ran that directly
-> himself, including him now. Because doing it any other way would leave us
-> semi-converted forever and not bring the full benefits?
-
-Right -- I'd want to do a mass conversion and follow it up with any
-remaining ones. There are a lot in the style of "return k*alloc(...)"
-for example.
-
-> [...]
-> > +#define kvmalloc_obj(P, FLAGS)				\
-> > +	__alloc_objs(kvmalloc, P, 1, FLAGS, NULL)
-> 
-> Wonder if there is really a single struct (not array) with no flex array
-> that could need kvmalloc? :)
-
-Ah, yes, Good point. I was going for "full" macro coverage. :P
-
-Thanks for looking at this!
-
--Kees
+   139	
+   140	static int iris_hfi_gen1_session_stop(struct iris_inst *inst, u32 plane)
+   141	{
+   142		struct iris_core *core = inst->core;
+   143		struct hfi_session_flush_pkt flush_pkt;
+   144		struct hfi_session_pkt pkt;
+   145		u32 flush_type;
+   146		int ret = 0;
+   147	
+   148		if ((V4L2_TYPE_IS_OUTPUT(plane) &&
+   149		     inst->state == IRIS_INST_INPUT_STREAMING) ||
+   150		    (V4L2_TYPE_IS_CAPTURE(plane) &&
+   151		     inst->state == IRIS_INST_OUTPUT_STREAMING) ||
+   152		    inst->state == IRIS_INST_ERROR) {
+   153			reinit_completion(&inst->completion);
+   154			iris_hfi_gen1_packet_session_cmd(inst, &pkt, HFI_CMD_SESSION_STOP);
+   155			ret = iris_hfi_queue_cmd_write(core, &pkt, pkt.shdr.hdr.size);
+   156			if (!ret)
+   157				ret = iris_wait_for_session_response(inst, false);
+   158	
+   159			reinit_completion(&inst->completion);
+   160			iris_hfi_gen1_packet_session_cmd(inst, &pkt, HFI_CMD_SESSION_RELEASE_RESOURCES);
+   161			ret = iris_hfi_queue_cmd_write(core, &pkt, pkt.shdr.hdr.size);
+   162			if (!ret)
+   163				ret = iris_wait_for_session_response(inst, false);
+   164		} else if (inst->state == IRIS_INST_STREAMING) {
+   165			if (V4L2_TYPE_IS_OUTPUT(plane))
+   166				flush_type = HFI_FLUSH_ALL;
+ > 167			else if (V4L2_TYPE_IS_CAPTURE(plane))
+   168				flush_type = HFI_FLUSH_OUTPUT;
+   169	
+   170			reinit_completion(&inst->flush_completion);
+   171	
+   172			flush_pkt.shdr.hdr.size = sizeof(struct hfi_session_flush_pkt);
+   173			flush_pkt.shdr.hdr.pkt_type = HFI_CMD_SESSION_FLUSH;
+   174			flush_pkt.shdr.session_id = inst->session_id;
+   175			flush_pkt.flush_type = flush_type;
+   176	
+   177			ret = iris_hfi_queue_cmd_write(core, &flush_pkt, flush_pkt.shdr.hdr.size);
+   178			if (!ret)
+   179				ret = iris_wait_for_session_response(inst, true);
+   180		}
+   181	
+   182		return ret;
+   183	}
+   184	
 
 -- 
-Kees Cook
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
