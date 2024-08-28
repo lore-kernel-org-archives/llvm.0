@@ -1,53 +1,53 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D173DDC3;
-	Wed, 28 Aug 2024 00:26:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D4D0B4AEF2;
+	Wed, 28 Aug 2024 02:39:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724804791; cv=none; b=eBPXLqaVgysyoqS07oWKzQQ4YyPzIvNjA9SNxdoNiO7shBggHmDRXk+SSk7bs8Rj1o73GUv93/CTxRb5+Nfqo7EQ91Hk85EapmorQmSlcIb5UI3Ufa4f0eYmL7rGblT9oSKV49hs7qnZpaMg1WoMCo4bE1qr6DX2+N73xsJazUo=
+	t=1724812777; cv=none; b=S+uXEWqM9hqL3VJpvaq7XJsQ8f1bPqZRpGUwjop5LlOV70kJNHQtv/eoMSflJOFjNu4BwPtCMMu4fW7Q99oXzRMd7GVOe1cKqfeoPcGCINZvCcrPPBLGaO+n+/CrmmcUEG1Q0S1ivRyM1EjIh0EePnhjnZ26zgis21k99Ibo0h0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724804791; c=relaxed/simple;
-	bh=3BxYW8fatp/yBFsFz/oCa/Qh8//iHs1gU1fRTYqapfo=;
+	s=arc-20240116; t=1724812777; c=relaxed/simple;
+	bh=2ZXtBTUi5Kw/5EWXmiCqP0tVkkTkI9dk6zjA1j9gRKg=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=HzmPaLfcukhrOBJbYvNE58DFfqxU6I14RJ5/8weKe3IXvYM5T6mwZ7OJ2l6WdjSBLLK/PBg8U2XbuOjPEw6gB+UYM7pw9I5/KgRM1/BDKde+S6l7fFI2iYGDXsTmHgd7ncKYgp4EtDVaP2q59g38UcoYimlRgQV8WIq/j671wmU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=TmDAqwH1; arc=none smtp.client-ip=198.175.65.21
+	 Content-Type:Content-Disposition:In-Reply-To; b=UJTQu/Aq7rK/4bUjfGOrlGjKzRngwpxVUEoG544/BRCDwkADTNVIdPFyQ/HCGc1VfAzosNWr/cKYa+tfYfUhVbRkNVub6n/75kIo9MxnPPdptoAE1MU9T7F6tAP//4KQXo/UnFk+IUxYxauIsAOKE58+u4qWd7Ik0gzgJf/9sHQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=UnKz6Yyc; arc=none smtp.client-ip=198.175.65.12
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="TmDAqwH1"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="UnKz6Yyc"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1724804789; x=1756340789;
+  t=1724812777; x=1756348777;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=3BxYW8fatp/yBFsFz/oCa/Qh8//iHs1gU1fRTYqapfo=;
-  b=TmDAqwH19j1EW5uO7nZVGlnssJXFRm2re3v2E5Ws9jsVvOqQsTL0v1TF
-   Nb2S9dYOObnlIkzw3WCI/g7Bwb/tkoyEHdlPmriYu4qes/0e0C0Y230Vl
-   ntINFmotanQnxF0dNeXDxwWO/1CtJT8adYEic3Th0Ve9UyOvmlwYyuqzM
-   HHIiTdlyPbKQy6WUwRqceKvS/YM+eaoQZmKMpkI5jYSrINcMMKTjT1C5l
-   RtSsM9WTj8Vu6HsNR6xh66Q79D2fMp0m26on73ek1eLTCTKV+/S1SZ6Sf
-   XiF56kSZ6XKaxyHEgNUtFKjlySLd7EW3ZsUwem8AGCjY+If9tApa/teLK
+  bh=2ZXtBTUi5Kw/5EWXmiCqP0tVkkTkI9dk6zjA1j9gRKg=;
+  b=UnKz6YycpAZXNSamI81PCNyKk53IMZQ/ChUJTcAjZ4bLzOCpfe/jELfY
+   P2dHv9Vn0+JTgOE6MW/P3sKUBT8DC4SfcrJEFX6J1IyLuaXVy07+GrdJD
+   jaGhYljwmEwUaoWakHi0uwUjmgaZMhR8OfqFkof0vA+89iWl4xsZWr8Sy
+   df65piSX1Ff5OUA/IeghOHKGSXp9zfityuo2IipsiDe3D+pMKnJ+JsnhS
+   LttQvZ7FdWMdebZ/Fpww4X3lPzZr12Xg8MYUZKgkdhejFkkY7J9MBZyOa
+   fH0cv2//9dmB7LC9nPEvrOQV12/AiIfHFNzQFHehQrGdSq+Jsn3xxm1go
    Q==;
-X-CSE-ConnectionGUID: Z2bhaduvTj+PpdW+OZMKYA==
-X-CSE-MsgGUID: WDOfhswxS6yFeLS9d0/k5A==
-X-IronPort-AV: E=McAfee;i="6700,10204,11177"; a="23273737"
+X-CSE-ConnectionGUID: KZ4ftqtSSSawEZdK+ujc9w==
+X-CSE-MsgGUID: TVO+NgLgQG+J6Qkol7i3fg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11177"; a="34696139"
 X-IronPort-AV: E=Sophos;i="6.10,181,1719903600"; 
-   d="scan'208";a="23273737"
-Received: from orviesa006.jf.intel.com ([10.64.159.146])
-  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Aug 2024 17:26:28 -0700
-X-CSE-ConnectionGUID: bb80TmV3QoOI0wkcWCQaDw==
-X-CSE-MsgGUID: kp8sTFTaRbezJjWGBtZ3Yg==
+   d="scan'208";a="34696139"
+Received: from fmviesa005.fm.intel.com ([10.60.135.145])
+  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Aug 2024 19:39:35 -0700
+X-CSE-ConnectionGUID: YUfKDBDLQnyG7HqzOxSihA==
+X-CSE-MsgGUID: ZTHQgopVQwuL/xcntPkIxQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.10,181,1719903600"; 
-   d="scan'208";a="63383351"
+   d="scan'208";a="67433426"
 Received: from lkp-server01.sh.intel.com (HELO 9a732dc145d3) ([10.239.97.150])
-  by orviesa006.jf.intel.com with ESMTP; 27 Aug 2024 17:26:25 -0700
+  by fmviesa005.fm.intel.com with ESMTP; 27 Aug 2024 19:39:30 -0700
 Received: from kbuild by 9a732dc145d3 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1sj6Vy-000KGI-1x;
-	Wed, 28 Aug 2024 00:26:22 +0000
-Date: Wed, 28 Aug 2024 08:26:00 +0800
+	id 1sj8am-000KMQ-0g;
+	Wed, 28 Aug 2024 02:39:28 +0000
+Date: Wed, 28 Aug 2024 10:38:52 +0800
 From: kernel test robot <lkp@intel.com>
 To: Dikshita Agarwal via B4 Relay <devnull+quic_dikshita.quicinc.com@kernel.org>,
 	Vikash Garodia <quic_vgarodia@quicinc.com>,
@@ -61,9 +61,10 @@ Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
 	linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org,
 	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
 	Dikshita Agarwal <quic_dikshita@quicinc.com>
-Subject: Re: [PATCH v3 18/29] media: iris: implement vb2 streaming ops
-Message-ID: <202408280735.el4Z7sYK-lkp@intel.com>
-References: <20240827-iris_v3-v3-18-c5fdbbe65e70@quicinc.com>
+Subject: Re: [PATCH v3 06/29] media: iris: introduce iris core state
+ management with shared queues
+Message-ID: <202408281019.97M0qU7D-lkp@intel.com>
+References: <20240827-iris_v3-v3-6-c5fdbbe65e70@quicinc.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -72,7 +73,7 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240827-iris_v3-v3-18-c5fdbbe65e70@quicinc.com>
+In-Reply-To: <20240827-iris_v3-v3-6-c5fdbbe65e70@quicinc.com>
 
 Hi Dikshita,
 
@@ -82,87 +83,168 @@ kernel test robot noticed the following build warnings:
 
 url:    https://github.com/intel-lab-lkp/linux/commits/Dikshita-Agarwal-via-B4-Relay/dt-bindings-media-Add-sm8550-dt-schema/20240827-181059
 base:   31aaa7d95e09892c81df0d7c49ae85640fa4e202
-patch link:    https://lore.kernel.org/r/20240827-iris_v3-v3-18-c5fdbbe65e70%40quicinc.com
-patch subject: [PATCH v3 18/29] media: iris: implement vb2 streaming ops
-config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20240828/202408280735.el4Z7sYK-lkp@intel.com/config)
-compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240828/202408280735.el4Z7sYK-lkp@intel.com/reproduce)
+patch link:    https://lore.kernel.org/r/20240827-iris_v3-v3-6-c5fdbbe65e70%40quicinc.com
+patch subject: [PATCH v3 06/29] media: iris: introduce iris core state management with shared queues
+config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20240828/202408281019.97M0qU7D-lkp@intel.com/config)
+compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 08e5a1de8227512d4774a534b91cb2353cef6284)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240828/202408281019.97M0qU7D-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202408280735.el4Z7sYK-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202408281019.97M0qU7D-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
->> drivers/media/platform/qcom/iris/iris_hfi_gen1_command.c:167:12: warning: variable 'flush_type' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
-     167 |                 else if (V4L2_TYPE_IS_CAPTURE(plane))
-         |                          ^~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/uapi/linux/videodev2.h:174:36: note: expanded from macro 'V4L2_TYPE_IS_CAPTURE'
-     174 | #define V4L2_TYPE_IS_CAPTURE(type) (!V4L2_TYPE_IS_OUTPUT(type))
-         |                                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/media/platform/qcom/iris/iris_hfi_gen1_command.c:175:26: note: uninitialized use occurs here
-     175 |                 flush_pkt.flush_type = flush_type;
-         |                                        ^~~~~~~~~~
-   drivers/media/platform/qcom/iris/iris_hfi_gen1_command.c:167:8: note: remove the 'if' if its condition is always true
-     167 |                 else if (V4L2_TYPE_IS_CAPTURE(plane))
-         |                      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     168 |                         flush_type = HFI_FLUSH_OUTPUT;
-   drivers/media/platform/qcom/iris/iris_hfi_gen1_command.c:145:16: note: initialize the variable 'flush_type' to silence this warning
-     145 |         u32 flush_type;
-         |                       ^
-         |                        = 0
-   1 warning generated.
+   In file included from drivers/media/platform/qcom/iris/iris_probe.c:8:
+   In file included from drivers/media/platform/qcom/iris/iris_core.h:10:
+   In file included from include/media/v4l2-device.h:12:
+   In file included from include/media/media-device.h:16:
+   In file included from include/linux/pci.h:38:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:14:
+   In file included from arch/hexagon/include/asm/io.h:328:
+   include/asm-generic/io.h:548:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     548 |         val = __raw_readb(PCI_IOBASE + addr);
+         |                           ~~~~~~~~~~ ^
+   include/asm-generic/io.h:561:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     561 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
+      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
+         |                                                   ^
+   In file included from drivers/media/platform/qcom/iris/iris_probe.c:8:
+   In file included from drivers/media/platform/qcom/iris/iris_core.h:10:
+   In file included from include/media/v4l2-device.h:12:
+   In file included from include/media/media-device.h:16:
+   In file included from include/linux/pci.h:38:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:14:
+   In file included from arch/hexagon/include/asm/io.h:328:
+   include/asm-generic/io.h:574:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     574 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
+      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
+         |                                                   ^
+   In file included from drivers/media/platform/qcom/iris/iris_probe.c:8:
+   In file included from drivers/media/platform/qcom/iris/iris_core.h:10:
+   In file included from include/media/v4l2-device.h:12:
+   In file included from include/media/media-device.h:16:
+   In file included from include/linux/pci.h:38:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:14:
+   In file included from arch/hexagon/include/asm/io.h:328:
+   include/asm-generic/io.h:585:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     585 |         __raw_writeb(value, PCI_IOBASE + addr);
+         |                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:595:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     595 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:605:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     605 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   In file included from drivers/media/platform/qcom/iris/iris_probe.c:8:
+   In file included from drivers/media/platform/qcom/iris/iris_core.h:10:
+   In file included from include/media/v4l2-device.h:12:
+   In file included from include/media/media-device.h:16:
+   In file included from include/linux/pci.h:2669:
+   In file included from include/linux/dma-mapping.h:11:
+   In file included from include/linux/scatterlist.h:8:
+   In file included from include/linux/mm.h:2228:
+   include/linux/vmstat.h:514:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     514 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+>> drivers/media/platform/qcom/iris/iris_probe.c:114:35: warning: implicit conversion from 'unsigned long long' to 'unsigned long' changes value from 18446744073709551615 to 4294967295 [-Wconstant-conversion]
+     114 |         dma_set_seg_boundary(&pdev->dev, DMA_BIT_MASK(64));
+         |         ~~~~~~~~~~~~~~~~~~~~             ^~~~~~~~~~~~~~~~
+   include/linux/dma-mapping.h:77:40: note: expanded from macro 'DMA_BIT_MASK'
+      77 | #define DMA_BIT_MASK(n) (((n) == 64) ? ~0ULL : ((1ULL<<(n))-1))
+         |                                        ^~~~~
+   8 warnings generated.
 
 
-vim +167 drivers/media/platform/qcom/iris/iris_hfi_gen1_command.c
+vim +114 drivers/media/platform/qcom/iris/iris_probe.c
 
-   139	
-   140	static int iris_hfi_gen1_session_stop(struct iris_inst *inst, u32 plane)
-   141	{
-   142		struct iris_core *core = inst->core;
-   143		struct hfi_session_flush_pkt flush_pkt;
-   144		struct hfi_session_pkt pkt;
-   145		u32 flush_type;
-   146		int ret = 0;
-   147	
-   148		if ((V4L2_TYPE_IS_OUTPUT(plane) &&
-   149		     inst->state == IRIS_INST_INPUT_STREAMING) ||
-   150		    (V4L2_TYPE_IS_CAPTURE(plane) &&
-   151		     inst->state == IRIS_INST_OUTPUT_STREAMING) ||
-   152		    inst->state == IRIS_INST_ERROR) {
-   153			reinit_completion(&inst->completion);
-   154			iris_hfi_gen1_packet_session_cmd(inst, &pkt, HFI_CMD_SESSION_STOP);
-   155			ret = iris_hfi_queue_cmd_write(core, &pkt, pkt.shdr.hdr.size);
-   156			if (!ret)
-   157				ret = iris_wait_for_session_response(inst, false);
-   158	
-   159			reinit_completion(&inst->completion);
-   160			iris_hfi_gen1_packet_session_cmd(inst, &pkt, HFI_CMD_SESSION_RELEASE_RESOURCES);
-   161			ret = iris_hfi_queue_cmd_write(core, &pkt, pkt.shdr.hdr.size);
-   162			if (!ret)
-   163				ret = iris_wait_for_session_response(inst, false);
-   164		} else if (inst->state == IRIS_INST_STREAMING) {
-   165			if (V4L2_TYPE_IS_OUTPUT(plane))
-   166				flush_type = HFI_FLUSH_ALL;
- > 167			else if (V4L2_TYPE_IS_CAPTURE(plane))
-   168				flush_type = HFI_FLUSH_OUTPUT;
-   169	
-   170			reinit_completion(&inst->flush_completion);
-   171	
-   172			flush_pkt.shdr.hdr.size = sizeof(struct hfi_session_flush_pkt);
-   173			flush_pkt.shdr.hdr.pkt_type = HFI_CMD_SESSION_FLUSH;
-   174			flush_pkt.shdr.session_id = inst->session_id;
-   175			flush_pkt.flush_type = flush_type;
-   176	
-   177			ret = iris_hfi_queue_cmd_write(core, &flush_pkt, flush_pkt.shdr.hdr.size);
-   178			if (!ret)
-   179				ret = iris_wait_for_session_response(inst, true);
-   180		}
-   181	
-   182		return ret;
-   183	}
-   184	
+    59	
+    60	static int iris_probe(struct platform_device *pdev)
+    61	{
+    62		struct device *dev = &pdev->dev;
+    63		struct iris_core *core;
+    64		u64 dma_mask;
+    65		int ret;
+    66	
+    67		core = devm_kzalloc(&pdev->dev, sizeof(*core), GFP_KERNEL);
+    68		if (!core)
+    69			return -ENOMEM;
+    70		core->dev = dev;
+    71	
+    72		core->state = IRIS_CORE_DEINIT;
+    73		mutex_init(&core->lock);
+    74	
+    75		core->reg_base = devm_platform_ioremap_resource(pdev, 0);
+    76		if (IS_ERR(core->reg_base))
+    77			return PTR_ERR(core->reg_base);
+    78	
+    79		core->irq = platform_get_irq(pdev, 0);
+    80		if (core->irq < 0)
+    81			return core->irq;
+    82	
+    83		core->iris_platform_data = of_device_get_match_data(core->dev);
+    84		if (!core->iris_platform_data) {
+    85			ret = -ENODEV;
+    86			dev_err_probe(core->dev, ret, "init platform failed\n");
+    87			return ret;
+    88		}
+    89	
+    90		iris_init_ops(core);
+    91		ret = iris_init_resources(core);
+    92		if (ret) {
+    93			dev_err_probe(core->dev, ret, "init resource failed\n");
+    94			return ret;
+    95		}
+    96	
+    97		ret = v4l2_device_register(dev, &core->v4l2_dev);
+    98		if (ret)
+    99			return ret;
+   100	
+   101		ret = iris_register_video_device(core);
+   102		if (ret)
+   103			goto err_v4l2_unreg;
+   104	
+   105		platform_set_drvdata(pdev, core);
+   106	
+   107		dma_mask = core->iris_platform_data->dma_mask;
+   108	
+   109		ret = dma_set_mask_and_coherent(dev, dma_mask);
+   110		if (ret)
+   111			goto err_vdev_unreg;
+   112	
+   113		dma_set_max_seg_size(&pdev->dev, DMA_BIT_MASK(32));
+ > 114		dma_set_seg_boundary(&pdev->dev, DMA_BIT_MASK(64));
+   115	
+   116		return 0;
+   117	
+   118	err_vdev_unreg:
+   119		video_unregister_device(core->vdev_dec);
+   120	err_v4l2_unreg:
+   121		v4l2_device_unregister(&core->v4l2_dev);
+   122	
+   123		return ret;
+   124	}
+   125	
 
 -- 
 0-DAY CI Kernel Test Service
