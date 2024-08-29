@@ -1,65 +1,62 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 837421B1D41;
-	Thu, 29 Aug 2024 20:38:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7DB2A28685;
+	Thu, 29 Aug 2024 20:58:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724963898; cv=none; b=BjlzDdA/WKx+LXldThH8q4blG3tZX3TGZ5+V1DdIsFozNrKtcHev/PlEn09x+bWf9BPncjjA7XjhXJLmAn1PZKMiSMval2trr7FS6hURZxfNbtXyBYDSqWjUcG7abGzEDgWyYz3zSwFjazqHrfdSyGIdveFaqFqgYTyjV4waMq8=
+	t=1724965124; cv=none; b=WRZs2bvnt/8XBpmHYTfmRCg2UvqKgRastWzLFBfJumutWWP30BDiZpTeD8VyprAkpHFXL7/e9HuZOHEBk8eZTyaIZvGsMLBWRM+x4FSubhbQ6eDK41NLq6Av4kH61X/bm5F31K0XollZ2ix2cmA2//y7soC5bD7kD/5GQvJI24s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724963898; c=relaxed/simple;
-	bh=tscwRgI2saPDR7x1unDsFBI0xOp0fMmY1QDhyt+9PHk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Ss3sJVP4SYqLwK/aO06zGgpYIXDBCRWJUcU3tts3v05dtuccu3W6lTIpsrch2enAl6mrU9UtMpENgGxBD6dV8OKwCI9J1K4Li6P1ejHAk6A2FqmyCrkjXlPJkRi8wCSod51A5CUO7i2d4ChCx7uet/5Cf+TAP4lvEAe7OJqstHA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=anW59re8; arc=none smtp.client-ip=192.198.163.11
+	s=arc-20240116; t=1724965124; c=relaxed/simple;
+	bh=b+4qD1cIb/TJ53fWFfgtWVJxxOmpdanE0Kan2qefjh8=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=s3+gGzG5mioWk35Bddo9h1iaTsPQnu2hB7WKTISR9oQzcG0lhUZ2whyrahBzz4Owo9UKlw54XuOy1LhIVHAs03L1ecPZtKvLrSqY6FDrX5SLNOBMDJvPWk7nR2jbnXPWeLNB0lMDggiySKWBcNQY2HTq/J3Pha9E/mK9RNOR5Ak=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=AG905zaG; arc=none smtp.client-ip=198.175.65.10
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="anW59re8"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="AG905zaG"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1724963897; x=1756499897;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=tscwRgI2saPDR7x1unDsFBI0xOp0fMmY1QDhyt+9PHk=;
-  b=anW59re8g7E9kAelpNk+BBP1JV1PEOrPDKd7lZU3vM+SOIaCuXobj0e7
-   uP8jDX1W910+zN1waibuYTbWL94NJXYfhUx2AC9ZLDFiUSrgdhMxcwleh
-   OUEOtML7MWvmxWzN/kTUyo65swMO2bpGzo61/drgiQ/kPWsVZjOSyz2jV
-   RIylGzGYX7dHLL5pkZqeCHM9cIzq4NMLT1Lq1EiwtFMExxfQwx/P2Bse4
-   i3a5xxZANsNKbKJtTLaOEFDOOKEf1GGNI6f/lyXCoFIQCUAf4iwRPCoW8
-   GfNpg9+UU3sctCg7zK6YcjZCv0EM+Dipba01RU1n3VXzfgtzA+iajeMPQ
-   w==;
-X-CSE-ConnectionGUID: NcomHs4hTri3LMAygrhyWQ==
-X-CSE-MsgGUID: HsXmehPIQ4i+cTsWZifFog==
-X-IronPort-AV: E=McAfee;i="6700,10204,11179"; a="34200572"
+  t=1724965121; x=1756501121;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=b+4qD1cIb/TJ53fWFfgtWVJxxOmpdanE0Kan2qefjh8=;
+  b=AG905zaGZoIe1g6wmtfk68cxkXNxX4AcI+cIi94AkJ4cLCgnDENEOZ0u
+   IeMjKUWHwuhWbrVRu7TYqqJGo0Sef8U0ptU9rgWkP3qsAAOpj2aDQYDUZ
+   Aaf2kJjFRhef1pODPvNHcGHfQEsGRFN7D17ywGyAIxHXk+9DkPkR3IhKx
+   9dVTu+iCg+QCiJAEDCuS79OGq/QFEjnQTae4tpBIHbRtNaelSYoGzsZQ0
+   c3sC6W57UhUz/hmxfao6bCe55MQGf1h1/wvlX9mzj4ISGUPt6uighClCP
+   4CaefdyZIbRVYx73r3/SeSWn3I+qs6wxqjuxAl11SFvUiKGw6grAJ0BnJ
+   g==;
+X-CSE-ConnectionGUID: B49J8WmsQRiyHqvT9xGj5Q==
+X-CSE-MsgGUID: sDgpNFU1TiS3wT162T2DYw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11179"; a="41064779"
 X-IronPort-AV: E=Sophos;i="6.10,186,1719903600"; 
-   d="scan'208";a="34200572"
-Received: from fmviesa006.fm.intel.com ([10.60.135.146])
-  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Aug 2024 13:37:41 -0700
-X-CSE-ConnectionGUID: +2I+PKpfTEWO7ZhOV/mdjw==
-X-CSE-MsgGUID: 9jFLsk+2R9icUo/uf7t0Ig==
+   d="scan'208";a="41064779"
+Received: from orviesa007.jf.intel.com ([10.64.159.147])
+  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Aug 2024 13:58:41 -0700
+X-CSE-ConnectionGUID: 8eIImSyeRiufhFz/ovBwIg==
+X-CSE-MsgGUID: 9MaRyyLdRfC5TeSuYN2rVg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.10,186,1719903600"; 
-   d="scan'208";a="63325399"
+   d="scan'208";a="64198595"
 Received: from lkp-server01.sh.intel.com (HELO 9c6b1c7d3b50) ([10.239.97.150])
-  by fmviesa006.fm.intel.com with ESMTP; 29 Aug 2024 13:37:38 -0700
+  by orviesa007.jf.intel.com with ESMTP; 29 Aug 2024 13:58:39 -0700
 Received: from kbuild by 9c6b1c7d3b50 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1sjltg-0000iM-02;
-	Thu, 29 Aug 2024 20:37:36 +0000
-Date: Fri, 30 Aug 2024 04:37:35 +0800
+	id 1sjmE0-0000jE-1X;
+	Thu, 29 Aug 2024 20:58:36 +0000
+Date: Fri, 30 Aug 2024 04:57:57 +0800
 From: kernel test robot <lkp@intel.com>
-To: Vegard Nossum <vegard.nossum@oracle.com>,
-	Masahiro Yamada <masahiroy@kernel.org>
-Cc: oe-kbuild-all@lists.linux.dev, linux-kbuild@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-omap@vger.kernel.org, kvmarm@lists.linux.dev,
-	kvm@vger.kernel.org, linux-um@lists.infradead.org,
-	bpf@vger.kernel.org, llvm@lists.linux.dev,
-	Vegard Nossum <vegard.nossum@oracle.com>
-Subject: Re: [PATCH] kbuild: use objcopy to generate asm-offsets
-Message-ID: <202408300438.xObK98m5-lkp@intel.com>
-References: <20240828083605.3093701-1-vegard.nossum@oracle.com>
+To: Akshata Jahagirdar <akshata.jahagirdar@intel.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Linux Memory Management List <linux-mm@kvack.org>,
+	Matt Roper <matthew.d.roper@intel.com>,
+	Matthew Brost <matthew.brost@intel.com>
+Subject: [linux-next:master 375/7693] drivers/gpu/drm/xe/xe_migrate.c:304:52:
+ warning: result of comparison of constant 274877906944 with expression of
+ type 'resource_size_t' (aka 'unsigned int') is always true
+Message-ID: <202408300455.vSOPslVt-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -68,118 +65,244 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240828083605.3093701-1-vegard.nossum@oracle.com>
 
-Hi Vegard,
-
-kernel test robot noticed the following build warnings:
-
-[auto build test WARNING on masahiroy-kbuild/for-next]
-[also build test WARNING on masahiroy-kbuild/fixes soc/for-next kvmarm/next kvm/queue uml/next krzk-mem-ctrl/for-next bpf-next/master bpf/master linus/master v6.11-rc5 next-20240829]
-[cannot apply to tmlind-omap/for-next kvm/linux-next uml/fixes]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Vegard-Nossum/kbuild-use-objcopy-to-generate-asm-offsets/20240828-163854
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/masahiroy/linux-kbuild.git for-next
-patch link:    https://lore.kernel.org/r/20240828083605.3093701-1-vegard.nossum%40oracle.com
-patch subject: [PATCH] kbuild: use objcopy to generate asm-offsets
-config: mips-loongson3_defconfig (https://download.01.org/0day-ci/archive/20240830/202408300438.xObK98m5-lkp@intel.com/config)
-compiler: mips64el-linux-gcc (GCC) 13.2.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240830/202408300438.xObK98m5-lkp@intel.com/reproduce)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+head:   b18bbfc14a38b5234e09c2adcf713e38063a7e6e
+commit: 8d79acd567db183e675cccc6cc737d2959e2a2d9 [375/7693] drm/xe/migrate: Add helper function to program identity map
+config: i386-randconfig-001-20240830 (https://download.01.org/0day-ci/archive/20240830/202408300455.vSOPslVt-lkp@intel.com/config)
+compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240830/202408300455.vSOPslVt-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202408300438.xObK98m5-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202408300455.vSOPslVt-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
-   mips64el-linux-objcopy: /dev/stdout[.data.kbuild]: Illegal seek
-   In file included from include/linux/mm_types.h:18,
-                    from include/linux/uio.h:10,
-                    from include/linux/socket.h:8,
-                    from include/linux/compat.h:15,
-                    from arch/mips/kernel/asm-offsets.c:12:
-   include/linux/page-flags-layout.h:15:5: warning: "MAX_NR_ZONES" is not defined, evaluates to 0 [-Wundef]
-      15 | #if MAX_NR_ZONES < 2
-         |     ^~~~~~~~~~~~
-   include/linux/page-flags-layout.h:58:19: warning: "LRU_GEN_WIDTH" is not defined, evaluates to 0 [-Wundef]
-      58 | #if ZONES_WIDTH + LRU_GEN_WIDTH + SECTIONS_WIDTH + NODES_SHIFT \
-         |                   ^~~~~~~~~~~~~
-   include/linux/page-flags-layout.h:59:28: warning: "NR_PAGEFLAGS" is not defined, evaluates to 0 [-Wundef]
-      59 |         <= BITS_PER_LONG - NR_PAGEFLAGS
-         |                            ^~~~~~~~~~~~
-   include/linux/page-flags-layout.h:93:19: warning: "LRU_GEN_WIDTH" is not defined, evaluates to 0 [-Wundef]
-      93 | #if ZONES_WIDTH + LRU_GEN_WIDTH + SECTIONS_WIDTH + NODES_WIDTH + \
-         |                   ^~~~~~~~~~~~~
-   include/linux/page-flags-layout.h:94:64: warning: "NR_PAGEFLAGS" is not defined, evaluates to 0 [-Wundef]
-      94 |         KASAN_TAG_WIDTH + LAST_CPUPID_SHIFT <= BITS_PER_LONG - NR_PAGEFLAGS
-         |                                                                ^~~~~~~~~~~~
-   include/linux/page-flags-layout.h:104:19: warning: "LRU_GEN_WIDTH" is not defined, evaluates to 0 [-Wundef]
-     104 | #if ZONES_WIDTH + LRU_GEN_WIDTH + SECTIONS_WIDTH + NODES_WIDTH + \
-         |                   ^~~~~~~~~~~~~
-   include/linux/page-flags-layout.h:105:63: warning: "NR_PAGEFLAGS" is not defined, evaluates to 0 [-Wundef]
-     105 |         KASAN_TAG_WIDTH + LAST_CPUPID_WIDTH > BITS_PER_LONG - NR_PAGEFLAGS
-         |                                                               ^~~~~~~~~~~~
-   In file included from include/linux/mm_types.h:5:
-   include/linux/mm_types_task.h:22:34: warning: "SPINLOCK_SIZE" is not defined, evaluates to 0 [-Wundef]
-      22 | #define ALLOC_SPLIT_PTLOCKS     (SPINLOCK_SIZE > BITS_PER_LONG/8)
-         |                                  ^~~~~~~~~~~~~
-   include/linux/mm_types.h:478:5: note: in expansion of macro 'ALLOC_SPLIT_PTLOCKS'
-     478 | #if ALLOC_SPLIT_PTLOCKS
-         |     ^~~~~~~~~~~~~~~~~~~
-   In file included from include/linux/dcache.h:14,
-                    from include/linux/fs.h:8,
-                    from include/linux/compat.h:17:
->> include/linux/lockref.h:23:36: warning: "SPINLOCK_SIZE" is not defined, evaluates to 0 [-Wundef]
-      23 |          IS_ENABLED(CONFIG_SMP) && SPINLOCK_SIZE <= 4)
-         |                                    ^~~~~~~~~~~~~
-   include/linux/lockref.h:27:5: note: in expansion of macro 'USE_CMPXCHG_LOCKREF'
-      27 | #if USE_CMPXCHG_LOCKREF
-         |     ^~~~~~~~~~~~~~~~~~~
-   In file included from include/linux/gfp.h:7,
-                    from include/linux/xarray.h:16,
-                    from include/linux/list_lru.h:14,
-                    from include/linux/fs.h:13:
-   include/linux/mmzone.h:842:29: error: 'MAX_NR_ZONES' undeclared here (not in a function); did you mean 'MAX_NR_GENS'?
-     842 |         long lowmem_reserve[MAX_NR_ZONES];
-         |                             ^~~~~~~~~~~~
-         |                             MAX_NR_GENS
-   include/linux/mm_types_task.h:22:34: warning: "SPINLOCK_SIZE" is not defined, evaluates to 0 [-Wundef]
-      22 | #define ALLOC_SPLIT_PTLOCKS     (SPINLOCK_SIZE > BITS_PER_LONG/8)
-         |                                  ^~~~~~~~~~~~~
-   include/linux/mm.h:2889:5: note: in expansion of macro 'ALLOC_SPLIT_PTLOCKS'
-    2889 | #if ALLOC_SPLIT_PTLOCKS
-         |     ^~~~~~~~~~~~~~~~~~~
-   In file included from include/linux/swap.h:9,
-                    from include/linux/suspend.h:5,
-                    from arch/mips/kernel/asm-offsets.c:17:
-   include/linux/memcontrol.h: In function 'mem_cgroup_get_zone_lru_size':
->> include/linux/memcontrol.h:914:31: warning: parameter 'lru' set but not used [-Wunused-but-set-parameter]
-     914 |                 enum lru_list lru, int zone_idx)
-         |                 ~~~~~~~~~~~~~~^~~
->> include/linux/memcontrol.h:914:40: warning: parameter 'zone_idx' set but not used [-Wunused-but-set-parameter]
-     914 |                 enum lru_list lru, int zone_idx)
-         |                                    ~~~~^~~~~~~~
-   make[3]: *** [scripts/Makefile.build:244: arch/mips/kernel/asm-offsets.o] Error 1
-   make[3]: Target 'missing-syscalls' not remade because of errors.
-   make[2]: *** [arch/mips/Makefile:432: archprepare] Error 2
-   make[2]: Target 'prepare' not remade because of errors.
-   make[1]: *** [Makefile:224: __sub-make] Error 2
-   make[1]: Target 'prepare' not remade because of errors.
-   make: *** [Makefile:224: __sub-make] Error 2
-   make: Target 'prepare' not remade because of errors.
+>> drivers/gpu/drm/xe/xe_migrate.c:304:52: warning: result of comparison of constant 274877906944 with expression of type 'resource_size_t' (aka 'unsigned int') is always true [-Wtautological-constant-out-of-range-compare]
+     304 |                 xe_assert(xe, (xe->mem.vram.actual_physical_size <= SZ_256G));
+         |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~
+   drivers/gpu/drm/xe/xe_assert.h:108:54: note: expanded from macro 'xe_assert'
+     108 | #define xe_assert(xe, condition) xe_assert_msg((xe), condition, "")
+         |                                  ~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~
+   drivers/gpu/drm/xe/xe_assert.h:111:24: note: expanded from macro 'xe_assert_msg'
+     111 |         __xe_assert_msg(__xe, condition,                                                        \
+         |         ~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     112 |                         "platform: %s subplatform: %d\n"                                        \
+         |                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     113 |                         "graphics: %s %u.%02u step %s\n"                                        \
+         |                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     114 |                         "media: %s %u.%02u step %s\n"                                           \
+         |                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     115 |                         msg,                                                                    \
+         |                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     116 |                         __xe->info.platform_name, __xe->info.subplatform,                       \
+         |                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     117 |                         __xe->info.graphics_name,                                               \
+         |                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     118 |                         __xe->info.graphics_verx100 / 100,                                      \
+         |                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     119 |                         __xe->info.graphics_verx100 % 100,                                      \
+         |                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     120 |                         xe_step_name(__xe->info.step.graphics),                                 \
+         |                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     121 |                         __xe->info.media_name,                                                  \
+         |                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     122 |                         __xe->info.media_verx100 / 100,                                         \
+         |                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     123 |                         __xe->info.media_verx100 % 100,                                         \
+         |                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     124 |                         xe_step_name(__xe->info.step.media),                                    \
+         |                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     125 |                         ## arg);                                                                \
+         |                         ~~~~~~~
+   drivers/gpu/drm/xe/xe_assert.h:84:31: note: expanded from macro '__xe_assert_msg'
+      84 |         (void)drm_WARN(&(xe)->drm, !(condition), "[" DRM_NAME "] Assertion `%s` failed!\n" msg, \
+         |               ~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      85 |                        __stringify(condition), ## arg);                                         \
+         |                        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/drm/drm_print.h:635:7: note: expanded from macro 'drm_WARN'
+     635 |         WARN(condition, "%s %s: [drm] " format,                         \
+         |         ~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     636 |                         dev_driver_string((drm)->dev),                  \
+         |                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     637 |                         dev_name((drm)->dev), ## arg)
+         |                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/asm-generic/bug.h:132:25: note: expanded from macro 'WARN'
+     132 |         int __ret_warn_on = !!(condition);                              \
+         |                                ^~~~~~~~~
+   1 warning generated.
+
+Kconfig warnings: (for reference only)
+   WARNING: unmet direct dependencies detected for FB_IOMEM_HELPERS
+   Depends on [n]: HAS_IOMEM [=y] && FB_CORE [=n]
+   Selected by [m]:
+   - DRM_XE_DISPLAY [=y] && HAS_IOMEM [=y] && DRM [=y] && DRM_XE [=m] && DRM_XE [=m]=m [=m]
 
 
-vim +/SPINLOCK_SIZE +23 include/linux/lockref.h
+vim +304 drivers/gpu/drm/xe/xe_migrate.c
 
-57f4257eae33e0 Peter Zijlstra     2013-11-14  20  
-57f4257eae33e0 Peter Zijlstra     2013-11-14  21  #define USE_CMPXCHG_LOCKREF \
-57f4257eae33e0 Peter Zijlstra     2013-11-14  22  	(IS_ENABLED(CONFIG_ARCH_USE_CMPXCHG_LOCKREF) && \
-597d795a2a786d Kirill A. Shutemov 2013-12-20 @23  	 IS_ENABLED(CONFIG_SMP) && SPINLOCK_SIZE <= 4)
-0f8f2aaaab0b0f Waiman Long        2013-08-28  24  
+   177	
+   178	static int xe_migrate_prepare_vm(struct xe_tile *tile, struct xe_migrate *m,
+   179					 struct xe_vm *vm)
+   180	{
+   181		struct xe_device *xe = tile_to_xe(tile);
+   182		u16 pat_index = xe->pat.idx[XE_CACHE_WB];
+   183		u8 id = tile->id;
+   184		u32 num_entries = NUM_PT_SLOTS, num_level = vm->pt_root[id]->level,
+   185		    num_setup = num_level + 1;
+   186		u32 map_ofs, level, i;
+   187		struct xe_bo *bo, *batch = tile->mem.kernel_bb_pool->bo;
+   188		u64 entry, pt30_ofs;
+   189	
+   190		/* Can't bump NUM_PT_SLOTS too high */
+   191		BUILD_BUG_ON(NUM_PT_SLOTS > SZ_2M/XE_PAGE_SIZE);
+   192		/* Must be a multiple of 64K to support all platforms */
+   193		BUILD_BUG_ON(NUM_PT_SLOTS * XE_PAGE_SIZE % SZ_64K);
+   194		/* And one slot reserved for the 4KiB page table updates */
+   195		BUILD_BUG_ON(!(NUM_KERNEL_PDE & 1));
+   196	
+   197		/* Need to be sure everything fits in the first PT, or create more */
+   198		xe_tile_assert(tile, m->batch_base_ofs + batch->size < SZ_2M);
+   199	
+   200		bo = xe_bo_create_pin_map(vm->xe, tile, vm,
+   201					  num_entries * XE_PAGE_SIZE,
+   202					  ttm_bo_type_kernel,
+   203					  XE_BO_FLAG_VRAM_IF_DGFX(tile) |
+   204					  XE_BO_FLAG_PINNED);
+   205		if (IS_ERR(bo))
+   206			return PTR_ERR(bo);
+   207	
+   208		/* PT31 reserved for 2M identity map */
+   209		pt30_ofs = bo->size - 2 * XE_PAGE_SIZE;
+   210		entry = vm->pt_ops->pde_encode_bo(bo, pt30_ofs, pat_index);
+   211		xe_pt_write(xe, &vm->pt_root[id]->bo->vmap, 0, entry);
+   212	
+   213		map_ofs = (num_entries - num_setup) * XE_PAGE_SIZE;
+   214	
+   215		/* Map the entire BO in our level 0 pt */
+   216		for (i = 0, level = 0; i < num_entries; level++) {
+   217			entry = vm->pt_ops->pte_encode_bo(bo, i * XE_PAGE_SIZE,
+   218							  pat_index, 0);
+   219	
+   220			xe_map_wr(xe, &bo->vmap, map_ofs + level * 8, u64, entry);
+   221	
+   222			if (vm->flags & XE_VM_FLAG_64K)
+   223				i += 16;
+   224			else
+   225				i += 1;
+   226		}
+   227	
+   228		if (!IS_DGFX(xe)) {
+   229			/* Write out batch too */
+   230			m->batch_base_ofs = NUM_PT_SLOTS * XE_PAGE_SIZE;
+   231			for (i = 0; i < batch->size;
+   232			     i += vm->flags & XE_VM_FLAG_64K ? XE_64K_PAGE_SIZE :
+   233			     XE_PAGE_SIZE) {
+   234				entry = vm->pt_ops->pte_encode_bo(batch, i,
+   235								  pat_index, 0);
+   236	
+   237				xe_map_wr(xe, &bo->vmap, map_ofs + level * 8, u64,
+   238					  entry);
+   239				level++;
+   240			}
+   241			if (xe->info.has_usm) {
+   242				xe_tile_assert(tile, batch->size == SZ_1M);
+   243	
+   244				batch = tile->primary_gt->usm.bb_pool->bo;
+   245				m->usm_batch_base_ofs = m->batch_base_ofs + SZ_1M;
+   246				xe_tile_assert(tile, batch->size == SZ_512K);
+   247	
+   248				for (i = 0; i < batch->size;
+   249				     i += vm->flags & XE_VM_FLAG_64K ? XE_64K_PAGE_SIZE :
+   250				     XE_PAGE_SIZE) {
+   251					entry = vm->pt_ops->pte_encode_bo(batch, i,
+   252									  pat_index, 0);
+   253	
+   254					xe_map_wr(xe, &bo->vmap, map_ofs + level * 8, u64,
+   255						  entry);
+   256					level++;
+   257				}
+   258			}
+   259		} else {
+   260			u64 batch_addr = xe_bo_addr(batch, 0, XE_PAGE_SIZE);
+   261	
+   262			m->batch_base_ofs = xe_migrate_vram_ofs(xe, batch_addr);
+   263	
+   264			if (xe->info.has_usm) {
+   265				batch = tile->primary_gt->usm.bb_pool->bo;
+   266				batch_addr = xe_bo_addr(batch, 0, XE_PAGE_SIZE);
+   267				m->usm_batch_base_ofs = xe_migrate_vram_ofs(xe, batch_addr);
+   268			}
+   269		}
+   270	
+   271		for (level = 1; level < num_level; level++) {
+   272			u32 flags = 0;
+   273	
+   274			if (vm->flags & XE_VM_FLAG_64K && level == 1)
+   275				flags = XE_PDE_64K;
+   276	
+   277			entry = vm->pt_ops->pde_encode_bo(bo, map_ofs + (u64)(level - 1) *
+   278							  XE_PAGE_SIZE, pat_index);
+   279			xe_map_wr(xe, &bo->vmap, map_ofs + XE_PAGE_SIZE * level, u64,
+   280				  entry | flags);
+   281		}
+   282	
+   283		/* Write PDE's that point to our BO. */
+   284		for (i = 0; i < map_ofs / PAGE_SIZE; i++) {
+   285			entry = vm->pt_ops->pde_encode_bo(bo, (u64)i * XE_PAGE_SIZE,
+   286							  pat_index);
+   287	
+   288			xe_map_wr(xe, &bo->vmap, map_ofs + XE_PAGE_SIZE +
+   289				  (i + 1) * 8, u64, entry);
+   290		}
+   291	
+   292		/* Set up a 1GiB NULL mapping at 255GiB offset. */
+   293		level = 2;
+   294		xe_map_wr(xe, &bo->vmap, map_ofs + XE_PAGE_SIZE * level + 255 * 8, u64,
+   295			  vm->pt_ops->pte_encode_addr(xe, 0, pat_index, level, IS_DGFX(xe), 0)
+   296			  | XE_PTE_NULL);
+   297		m->cleared_mem_ofs = (255ULL << xe_pt_shift(level));
+   298	
+   299		/* Identity map the entire vram at 256GiB offset */
+   300		if (IS_DGFX(xe)) {
+   301			u64 pt31_ofs = bo->size - XE_PAGE_SIZE;
+   302	
+   303			xe_migrate_program_identity(xe, vm, bo, map_ofs, 256, pat_index, pt31_ofs);
+ > 304			xe_assert(xe, (xe->mem.vram.actual_physical_size <= SZ_256G));
+   305		}
+   306	
+   307		/*
+   308		 * Example layout created above, with root level = 3:
+   309		 * [PT0...PT7]: kernel PT's for copy/clear; 64 or 4KiB PTE's
+   310		 * [PT8]: Kernel PT for VM_BIND, 4 KiB PTE's
+   311		 * [PT9...PT27]: Userspace PT's for VM_BIND, 4 KiB PTE's
+   312		 * [PT28 = PDE 0] [PT29 = PDE 1] [PT30 = PDE 2] [PT31 = 2M vram identity map]
+   313		 *
+   314		 * This makes the lowest part of the VM point to the pagetables.
+   315		 * Hence the lowest 2M in the vm should point to itself, with a few writes
+   316		 * and flushes, other parts of the VM can be used either for copying and
+   317		 * clearing.
+   318		 *
+   319		 * For performance, the kernel reserves PDE's, so about 20 are left
+   320		 * for async VM updates.
+   321		 *
+   322		 * To make it easier to work, each scratch PT is put in slot (1 + PT #)
+   323		 * everywhere, this allows lockless updates to scratch pages by using
+   324		 * the different addresses in VM.
+   325		 */
+   326	#define NUM_VMUSA_UNIT_PER_PAGE	32
+   327	#define VM_SA_UPDATE_UNIT_SIZE		(XE_PAGE_SIZE / NUM_VMUSA_UNIT_PER_PAGE)
+   328	#define NUM_VMUSA_WRITES_PER_UNIT	(VM_SA_UPDATE_UNIT_SIZE / sizeof(u64))
+   329		drm_suballoc_manager_init(&m->vm_update_sa,
+   330					  (size_t)(map_ofs / XE_PAGE_SIZE - NUM_KERNEL_PDE) *
+   331					  NUM_VMUSA_UNIT_PER_PAGE, 0);
+   332	
+   333		m->pt_bo = bo;
+   334		return 0;
+   335	}
+   336	
 
 -- 
 0-DAY CI Kernel Test Service
