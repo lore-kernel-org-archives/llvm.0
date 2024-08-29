@@ -1,129 +1,117 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
+Received: from mail.simonwunderlich.de (mail.simonwunderlich.de [23.88.38.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C4E1116C86D;
-	Thu, 29 Aug 2024 07:30:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC57D15666A;
+	Thu, 29 Aug 2024 09:09:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=23.88.38.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724916655; cv=none; b=cCjd88MF4UxeifpPNSCX13ojgriLu4yPFqbR93Yo5UGJaoRBIHsifLBJTeZKKToKT5MAm9vfQzeF1NhLAWHAVejXVQ7a8cma7s46VXIC9GuczTjbtdi0DaRQc7Pv7ZS5HZp4IOURAMWhmI0Ws9hTzb3uXlFDvbTBrxLF5wAdrTQ=
+	t=1724922567; cv=none; b=QBZUQhp1A7aWH+Hnf3LJxoL1tc0JX8GNQh+MUgY1l1knK6wbkfr6rLx2rrW/SH3oe4USkHRU4FKMe3DPM4Oa9N9O7mlVJX7mdNbhigxPSwvvLmVCEWPhZ2GuomSdtrw1CQNuTWT6m01ArCt14f54DZfmwGfNgnUk7GXnw1AU6P4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724916655; c=relaxed/simple;
-	bh=br5YSHH2dpsgd6ZsbLMoQl+gzHFga1+L7uA0e08Xg/E=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=HQ4wX/QxDgDArdJKTYe9F6bVfItcChREMSrY6oWQIhlXE3xtm5BaaAI6C4wW9pW3e/3nxaXZ1Q8DMRbzmpfoeaqSvzwbNfK1I1m7iHs6jghIQu+RtXY9AK8kafj98bmtMedRYfZq4LBLSx13K0gFLLGKgkPWiYBsLcVJDv8CSFQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Lj3cc1JP; arc=none smtp.client-ip=192.198.163.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Lj3cc1JP"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1724916653; x=1756452653;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=br5YSHH2dpsgd6ZsbLMoQl+gzHFga1+L7uA0e08Xg/E=;
-  b=Lj3cc1JPQMSo++udepTez5Fnv0fTkEdOjshmz+J9tNh/OkesvDhftS+U
-   PvCgoWkdWsjSyn/fcypKQ2vH+yBzHiP2wczYkkvhRJe2NMq1NHCQuc3dF
-   5SvFoZDDw5m7l30e5nm0RDNbuRBhd84+ukb8mKUtmxuDimEa2mYHhzrm5
-   6j8zExSE4LuVKWme4hjpIJRPKw1DG8qz48/tLpm5ylRSKIrvf23+Z0a3J
-   BELz+49n6luXsgQZNvR4lTvnZTJYTF+pH7xL1aZay3SHjkXHqsdQdHLGv
-   lJyjlCJyZy+2DFdJrb+zTrKlLDLN7d6WQn8qrva8hdoZK26r0RXYJwKKq
-   A==;
-X-CSE-ConnectionGUID: g0XKOkHxQsiBtcUEH7G6Kw==
-X-CSE-MsgGUID: 5/wXMSCGQwWNdyfhaXlb9Q==
-X-IronPort-AV: E=McAfee;i="6700,10204,11178"; a="23648924"
-X-IronPort-AV: E=Sophos;i="6.10,185,1719903600"; 
-   d="scan'208";a="23648924"
-Received: from fmviesa007.fm.intel.com ([10.60.135.147])
-  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Aug 2024 00:30:52 -0700
-X-CSE-ConnectionGUID: 7Dk5lrEtSiCF1bpsASUzqw==
-X-CSE-MsgGUID: l4XClNB/T3yBV4mscdRnIA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.10,185,1719903600"; 
-   d="scan'208";a="63173591"
-Received: from lkp-server01.sh.intel.com (HELO 9a732dc145d3) ([10.239.97.150])
-  by fmviesa007.fm.intel.com with ESMTP; 29 Aug 2024 00:30:50 -0700
-Received: from kbuild by 9a732dc145d3 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1sjZcG-000Lqw-10;
-	Thu, 29 Aug 2024 07:30:48 +0000
-Date: Thu, 29 Aug 2024 15:30:10 +0800
-From: kernel test robot <lkp@intel.com>
-To: Matt Johnston <matt@codeconstruct.com.au>, jk@codeconstruct.com.au
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Eric Dumazet <edumazet@google.com>, netdev@vger.kernel.org
-Subject: Re: [PATCH net 1/2] net: mctp-serial: Add kunit test for
- next_chunk_len()
-Message-ID: <202408291542.2o5GOBhQ-lkp@intel.com>
-References: <20240827020803.957250-2-matt@codeconstruct.com.au>
+	s=arc-20240116; t=1724922567; c=relaxed/simple;
+	bh=ml4sOxO8ZKyXC6YXZdo3WVWHC04PEgkVadV4wh9Vvcs=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=hDkmUN/W23g+MC4kpBOqp7KROkomWOpi6sBJshu4R7jfHAwehY4weECNnwZPjghqTTgrDM4fsJPnw6vS08RuMmdWbABUTu8qYjm6A32iZPg0eDWW+sOKMbqZ0Ph5xsTYKvd8Bh7YeG73/aIfWdkN0mjv0K/qwhGZrZgbonYmXMc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=simonwunderlich.de; spf=pass smtp.mailfrom=simonwunderlich.de; arc=none smtp.client-ip=23.88.38.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=simonwunderlich.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=simonwunderlich.de
+Received: from localhost (p200300c5972FE490000000000000032b.dip0.t-ipconnect.de [IPv6:2003:c5:972f:e490::32b])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mail.simonwunderlich.de (Postfix) with ESMTPSA id 3F8F4FA131;
+	Thu, 29 Aug 2024 11:09:18 +0200 (CEST)
+From: Issam Hamdi <ih@simonwunderlich.de>
+To: johannes@sipsolutions.net
+Cc: ih@simonwunderlich.de,
+	kvalo@kernel.org,
+	linux-wireless@vger.kernel.org,
+	lkp@intel.com,
+	llvm@lists.linux.dev,
+	mathias.kretschmer@fit.fraunhofer.de,
+	oe-kbuild-all@lists.linux.dev,
+	quic_jjohnson@quicinc.com
+Subject: [PATCH v4] wifi: cfg80211: Set the channel definition for the different Wi-Fi modes when starting CAC
+Date: Thu, 29 Aug 2024 11:09:15 +0200
+Message-Id: <20240829090915.2887206-1-ih@simonwunderlich.de>
+X-Mailer: git-send-email 2.39.2
+In-Reply-To: <6a9916848826a07ca41f1170e1d20cda9e798872.camel@sipsolutions.net>
+References: <6a9916848826a07ca41f1170e1d20cda9e798872.camel@sipsolutions.net>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240827020803.957250-2-matt@codeconstruct.com.au>
+Content-Transfer-Encoding: 8bit
 
-Hi Matt,
+When starting CAC in a mode other than AP mode, it return a
+"WARNING: CPU: 0 PID: 63 at cfg80211_chandef_dfs_usable+0x20/0xaf [cfg80211]"
+caused by the chandef.chan being null at the end of CAC.
 
-kernel test robot noticed the following build errors:
+Solution: Ensure the channel definition is set for the different modes
+when starting CAC to avoid getting a NULL 'chan' at the end of CAC.
 
-[auto build test ERROR on net/main]
+ Call Trace:
+  ? show_regs.part.0+0x14/0x16
+  ? __warn+0x67/0xc0
+  ? cfg80211_chandef_dfs_usable+0x20/0xaf [cfg80211]
+  ? report_bug+0xa7/0x130
+  ? exc_overflow+0x30/0x30
+  ? handle_bug+0x27/0x50
+  ? exc_invalid_op+0x18/0x60
+  ? handle_exception+0xf6/0xf6
+  ? exc_overflow+0x30/0x30
+  ? cfg80211_chandef_dfs_usable+0x20/0xaf [cfg80211]
+  ? exc_overflow+0x30/0x30
+  ? cfg80211_chandef_dfs_usable+0x20/0xaf [cfg80211]
+  ? regulatory_propagate_dfs_state.cold+0x1b/0x4c [cfg80211]
+  ? cfg80211_propagate_cac_done_wk+0x1a/0x30 [cfg80211]
+  ? process_one_work+0x165/0x280
+  ? worker_thread+0x120/0x3f0
+  ? kthread+0xc2/0xf0
+  ? process_one_work+0x280/0x280
+  ? kthread_complete_and_exit+0x20/0x20
+  ? ret_from_fork+0x19/0x24
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Matt-Johnston/net-mctp-serial-Add-kunit-test-for-next_chunk_len/20240827-101656
-base:   net/main
-patch link:    https://lore.kernel.org/r/20240827020803.957250-2-matt%40codeconstruct.com.au
-patch subject: [PATCH net 1/2] net: mctp-serial: Add kunit test for next_chunk_len()
-config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20240829/202408291542.2o5GOBhQ-lkp@intel.com/config)
-compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240829/202408291542.2o5GOBhQ-lkp@intel.com/reproduce)
+Signed-off-by: Issam Hamdi <ih@simonwunderlich.de>
+Signed-off-by: Kretschmer Mathias <mathias.kretschmer@fit.fraunhofer.de>
+---
+---
+v2: update the subject
+v3: update the second Signed-off-by to Reported-by
+v4: Remove the check on the OCB mode
+---
+ net/wireless/nl80211.c | 15 ++++++++++++++-
+ 1 file changed, 14 insertions(+), 1 deletion(-)
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202408291542.2o5GOBhQ-lkp@intel.com/
+diff --git a/net/wireless/nl80211.c b/net/wireless/nl80211.c
+index 7397a372c78e..60cf6d3dd3ca 100644
+--- a/net/wireless/nl80211.c
++++ b/net/wireless/nl80211.c
+@@ -10143,7 +10143,20 @@ static int nl80211_start_radar_detection(struct sk_buff *skb,
+ 
+ 	err = rdev_start_radar_detection(rdev, dev, &chandef, cac_time_ms);
+ 	if (!err) {
+-		wdev->links[0].ap.chandef = chandef;
++		switch (wdev->iftype) {
++		case NL80211_IFTYPE_MESH_POINT:
++			wdev->u.mesh.chandef = chandef;
++			break;
++		case NL80211_IFTYPE_ADHOC:
++			wdev->u.ibss.chandef = chandef;
++			break;
++		case NL80211_IFTYPE_AP:
++		case NL80211_IFTYPE_P2P_GO:
++			wdev->links[0].ap.chandef = chandef;
++			break;
++		default:
++			break;
++		}
+ 		wdev->cac_started = true;
+ 		wdev->cac_start_time = jiffies;
+ 		wdev->cac_time_ms = cac_time_ms;
 
-All errors (new ones prefixed by >>):
-
->> drivers/net/mctp/mctp-serial.c:541:24: error: initializing 'struct test_chunk_tx *' with an expression of type 'const void *' discards qualifiers [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
-     541 |         struct test_chunk_tx *params = test->param_value;
-         |                               ^        ~~~~~~~~~~~~~~~~~
-   1 error generated.
-
-
-vim +541 drivers/net/mctp/mctp-serial.c
-
-   534	
-   535	static void test_next_chunk_len(struct kunit *test)
-   536	{
-   537		struct mctp_serial devx;
-   538		struct mctp_serial *dev = &devx;
-   539		int next;
-   540	
- > 541		struct test_chunk_tx *params = test->param_value;
-   542	
-   543		memset(dev, 0x0, sizeof(*dev));
-   544		memcpy(dev->txbuf, params->input, params->input_len);
-   545		dev->txlen = params->input_len;
-   546	
-   547		for (size_t i = 0; i < MAX_CHUNKS; i++) {
-   548			next = next_chunk_len(dev);
-   549			dev->txpos += next;
-   550			KUNIT_EXPECT_EQ(test, next, params->chunks[i]);
-   551	
-   552			if (next == 0) {
-   553				KUNIT_EXPECT_EQ(test, dev->txpos, dev->txlen);
-   554				return;
-   555			}
-   556		}
-   557	
-   558		KUNIT_FAIL_AND_ABORT(test, "Ran out of chunks");
-   559	}
-   560	
-
+base-commit: cc32e9fb380d8afdbf3486d7063d5520bfb0f071
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.39.2
+
