@@ -1,122 +1,186 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E12781B81D2;
-	Thu, 29 Aug 2024 18:15:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 837421B1D41;
+	Thu, 29 Aug 2024 20:38:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724955302; cv=none; b=N0Fub5acp+efaOQRAB21IuFtYLpIATBMWDPkNS2FPrzNa5X8kSiQMvbQ2jAQoIhfYSI2Rr6FqIgEa9eUnNo1FaqLZcbkeiHen4OzYbnh7i98o7+fCNyqnvnzdF696WZLbn1FWUJfEwSHIiJ5RzqNO7hgjP3ej3V6u1IzCUsyzHc=
+	t=1724963898; cv=none; b=BjlzDdA/WKx+LXldThH8q4blG3tZX3TGZ5+V1DdIsFozNrKtcHev/PlEn09x+bWf9BPncjjA7XjhXJLmAn1PZKMiSMval2trr7FS6hURZxfNbtXyBYDSqWjUcG7abGzEDgWyYz3zSwFjazqHrfdSyGIdveFaqFqgYTyjV4waMq8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724955302; c=relaxed/simple;
-	bh=68pjJN/T0s4pW9PljETJv3LnYCfdZMsgv4u+jY3JAdg=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=uwQFVWQxAJtBUB5wuilO/Gqhz9RF0/um4D6JXU/uIyOfPbf/Te6O4ab+EqfzSFa73QMfIBqArD5H9MonGpImVLziaBQNnm/H91VopkoGF2jTgjN+gv2laA2q4Z5IXMCNUNPQJwLR+P6Jftzc/vk6jpNOvSdyfvOOmAWw02IFWeg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Cu7LbsvN; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1724963898; c=relaxed/simple;
+	bh=tscwRgI2saPDR7x1unDsFBI0xOp0fMmY1QDhyt+9PHk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Ss3sJVP4SYqLwK/aO06zGgpYIXDBCRWJUcU3tts3v05dtuccu3W6lTIpsrch2enAl6mrU9UtMpENgGxBD6dV8OKwCI9J1K4Li6P1ejHAk6A2FqmyCrkjXlPJkRi8wCSod51A5CUO7i2d4ChCx7uet/5Cf+TAP4lvEAe7OJqstHA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=anW59re8; arc=none smtp.client-ip=192.198.163.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Cu7LbsvN"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E35ECC4CEC1;
-	Thu, 29 Aug 2024 18:15:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1724955301;
-	bh=68pjJN/T0s4pW9PljETJv3LnYCfdZMsgv4u+jY3JAdg=;
-	h=From:Date:Subject:To:Cc:From;
-	b=Cu7LbsvNjAZ86rPytatnX8nYGVP3n6pMecH2okCGZfYDGY2MKMH98ctmOqmy3zVgl
-	 qgZNCMgw3zBDYJglGk56ZAKcu5YSmJoBbiwuv1EdzgtWBcMiBbAox0radj6Df4IhWm
-	 9bC8YegzzXi04GNknISxgpiI14A0yWU3kghnbZVXmq+0hJAtx4Vd4OL9iszkqC+FUB
-	 edH61e1adfRNIp0XJTbVcExh/CCQscKUO7sP9fpLVFjHjAntekXU81dRPxZpmHMkHf
-	 QtpeF3iYd824/5kyhdGt0IMxe5nwvjqbl4+gR9EkCcHc7XEKIjzLmhmyXODfkc7tyZ
-	 Loks/GklY4stA==
-From: Nathan Chancellor <nathan@kernel.org>
-Date: Thu, 29 Aug 2024 11:14:54 -0700
-Subject: [PATCH ipsec-next v2] xfrm: policy: Restore dir assignments in
- xfrm_hash_rebuild()
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="anW59re8"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1724963897; x=1756499897;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=tscwRgI2saPDR7x1unDsFBI0xOp0fMmY1QDhyt+9PHk=;
+  b=anW59re8g7E9kAelpNk+BBP1JV1PEOrPDKd7lZU3vM+SOIaCuXobj0e7
+   uP8jDX1W910+zN1waibuYTbWL94NJXYfhUx2AC9ZLDFiUSrgdhMxcwleh
+   OUEOtML7MWvmxWzN/kTUyo65swMO2bpGzo61/drgiQ/kPWsVZjOSyz2jV
+   RIylGzGYX7dHLL5pkZqeCHM9cIzq4NMLT1Lq1EiwtFMExxfQwx/P2Bse4
+   i3a5xxZANsNKbKJtTLaOEFDOOKEf1GGNI6f/lyXCoFIQCUAf4iwRPCoW8
+   GfNpg9+UU3sctCg7zK6YcjZCv0EM+Dipba01RU1n3VXzfgtzA+iajeMPQ
+   w==;
+X-CSE-ConnectionGUID: NcomHs4hTri3LMAygrhyWQ==
+X-CSE-MsgGUID: HsXmehPIQ4i+cTsWZifFog==
+X-IronPort-AV: E=McAfee;i="6700,10204,11179"; a="34200572"
+X-IronPort-AV: E=Sophos;i="6.10,186,1719903600"; 
+   d="scan'208";a="34200572"
+Received: from fmviesa006.fm.intel.com ([10.60.135.146])
+  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Aug 2024 13:37:41 -0700
+X-CSE-ConnectionGUID: +2I+PKpfTEWO7ZhOV/mdjw==
+X-CSE-MsgGUID: 9jFLsk+2R9icUo/uf7t0Ig==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.10,186,1719903600"; 
+   d="scan'208";a="63325399"
+Received: from lkp-server01.sh.intel.com (HELO 9c6b1c7d3b50) ([10.239.97.150])
+  by fmviesa006.fm.intel.com with ESMTP; 29 Aug 2024 13:37:38 -0700
+Received: from kbuild by 9c6b1c7d3b50 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1sjltg-0000iM-02;
+	Thu, 29 Aug 2024 20:37:36 +0000
+Date: Fri, 30 Aug 2024 04:37:35 +0800
+From: kernel test robot <lkp@intel.com>
+To: Vegard Nossum <vegard.nossum@oracle.com>,
+	Masahiro Yamada <masahiroy@kernel.org>
+Cc: oe-kbuild-all@lists.linux.dev, linux-kbuild@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-omap@vger.kernel.org, kvmarm@lists.linux.dev,
+	kvm@vger.kernel.org, linux-um@lists.infradead.org,
+	bpf@vger.kernel.org, llvm@lists.linux.dev,
+	Vegard Nossum <vegard.nossum@oracle.com>
+Subject: Re: [PATCH] kbuild: use objcopy to generate asm-offsets
+Message-ID: <202408300438.xObK98m5-lkp@intel.com>
+References: <20240828083605.3093701-1-vegard.nossum@oracle.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20240829-xfrm-restore-dir-assign-xfrm_hash_rebuild-v2-1-1cf8958f6e8e@kernel.org>
-X-B4-Tracking: v=1; b=H4sIAJ260GYC/52OWwqDMBBFtyLz3SlJ8Nmv7qOIRB11qI0ysWIR9
- 16bJfTzPrjn7uBJmDzcoh2EVvY8uVOYSwTNYF1PyO2pwSgTq9wUuHXyQiG/TELYsqD1nnsX/Gq
- wfqiE6jePLWZx0Vhj0jjJNZx7s1DHW2A9gGdPDTraFijPbODf4CfcWHVo/EFcNWq0Rqk8TeIiq
- /X9SeJovE7SQ3kcxxdkDi3W7wAAAA==
-To: Steffen Klassert <steffen.klassert@secunet.com>, 
- Herbert Xu <herbert@gondor.apana.org.au>, Florian Westphal <fw@strlen.de>
-Cc: netdev@vger.kernel.org, llvm@lists.linux.dev, patches@lists.linux.dev, 
- Nathan Chancellor <nathan@kernel.org>
-X-Mailer: b4 0.14.1
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2489; i=nathan@kernel.org;
- h=from:subject:message-id; bh=68pjJN/T0s4pW9PljETJv3LnYCfdZMsgv4u+jY3JAdg=;
- b=owGbwMvMwCUmm602sfCA1DTG02pJDGkXdi3ZyrnuT7B26DeJ5YoRnRsn7Ktc6eDio6V14dyN8
- 19v2fSmdZSyMIhxMciKKbJUP1Y9bmg45yzjjVOTYOawMoEMYeDiFICJiOoyMnzav0Zrcfr+ZRu/
- bd7b3J5ufm7a2tJftQde+rM/WPDBP/Upw3+PCO7FE36snXeQ+7mE+3PbWefFdn19Yv1N8c7PV7z
- fzJdxAQA=
-X-Developer-Key: i=nathan@kernel.org; a=openpgp;
- fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240828083605.3093701-1-vegard.nossum@oracle.com>
 
-Clang warns (or errors with CONFIG_WERROR):
+Hi Vegard,
 
-  net/xfrm/xfrm_policy.c:1286:8: error: variable 'dir' is uninitialized when used here [-Werror,-Wuninitialized]
-   1286 |                 if ((dir & XFRM_POLICY_MASK) == XFRM_POLICY_OUT) {
-        |                      ^~~
-  net/xfrm/xfrm_policy.c:1257:9: note: initialize the variable 'dir' to silence this warning
-   1257 |         int dir;
-        |                ^
-        |                 = 0
-  1 error generated.
+kernel test robot noticed the following build warnings:
 
-A recent refactoring removed some assignments to dir because
-xfrm_policy_is_dead_or_sk() has a dir assignment in it. However, dir is
-used elsewhere in xfrm_hash_rebuild(), including within loops where it
-needs to be reloaded for each policy. Restore the assignments before the
-first use of dir to fix the warning and ensure dir is properly
-initialized throughout the function.
+[auto build test WARNING on masahiroy-kbuild/for-next]
+[also build test WARNING on masahiroy-kbuild/fixes soc/for-next kvmarm/next kvm/queue uml/next krzk-mem-ctrl/for-next bpf-next/master bpf/master linus/master v6.11-rc5 next-20240829]
+[cannot apply to tmlind-omap/for-next kvm/linux-next uml/fixes]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Fixes: 08c2182cf0b4 ("xfrm: policy: use recently added helper in more places")
-Acked-by: Florian Westphal <fw@strlen.de>
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
----
-Changes in v2:
-- Restore another dir assignment in
-    list_for_each_entry_reverse(policy, ...
-  loop, necessitating a value reload to avoid a stale value (thanks to
-  Florian for the review).
-- Reword commit message slightly based on above change.
-- Pick up Florian's ack.
-- Add 'ipsec-next' subject prefix.
-- Link to v1: https://lore.kernel.org/r/20240829-xfrm-restore-dir-assign-xfrm_hash_rebuild-v1-1-a200865497b1@kernel.org
----
- net/xfrm/xfrm_policy.c | 2 ++
- 1 file changed, 2 insertions(+)
+url:    https://github.com/intel-lab-lkp/linux/commits/Vegard-Nossum/kbuild-use-objcopy-to-generate-asm-offsets/20240828-163854
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/masahiroy/linux-kbuild.git for-next
+patch link:    https://lore.kernel.org/r/20240828083605.3093701-1-vegard.nossum%40oracle.com
+patch subject: [PATCH] kbuild: use objcopy to generate asm-offsets
+config: mips-loongson3_defconfig (https://download.01.org/0day-ci/archive/20240830/202408300438.xObK98m5-lkp@intel.com/config)
+compiler: mips64el-linux-gcc (GCC) 13.2.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240830/202408300438.xObK98m5-lkp@intel.com/reproduce)
 
-diff --git a/net/xfrm/xfrm_policy.c b/net/xfrm/xfrm_policy.c
-index 6336baa8a93c..63890c0628c4 100644
---- a/net/xfrm/xfrm_policy.c
-+++ b/net/xfrm/xfrm_policy.c
-@@ -1283,6 +1283,7 @@ static void xfrm_hash_rebuild(struct work_struct *work)
- 		if (xfrm_policy_is_dead_or_sk(policy))
- 			continue;
- 
-+		dir = xfrm_policy_id2dir(policy->index);
- 		if ((dir & XFRM_POLICY_MASK) == XFRM_POLICY_OUT) {
- 			if (policy->family == AF_INET) {
- 				dbits = rbits4;
-@@ -1337,6 +1338,7 @@ static void xfrm_hash_rebuild(struct work_struct *work)
- 		hlist_del_rcu(&policy->bydst);
- 
- 		newpos = NULL;
-+		dir = xfrm_policy_id2dir(policy->index);
- 		chain = policy_hash_bysel(net, &policy->selector,
- 					  policy->family, dir);
- 
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202408300438.xObK98m5-lkp@intel.com/
 
----
-base-commit: 17163f23678c7599e40758d7b96f68e3f3f2ea15
-change-id: 20240829-xfrm-restore-dir-assign-xfrm_hash_rebuild-749ca2264581
+All warnings (new ones prefixed by >>):
 
-Best regards,
+   mips64el-linux-objcopy: /dev/stdout[.data.kbuild]: Illegal seek
+   In file included from include/linux/mm_types.h:18,
+                    from include/linux/uio.h:10,
+                    from include/linux/socket.h:8,
+                    from include/linux/compat.h:15,
+                    from arch/mips/kernel/asm-offsets.c:12:
+   include/linux/page-flags-layout.h:15:5: warning: "MAX_NR_ZONES" is not defined, evaluates to 0 [-Wundef]
+      15 | #if MAX_NR_ZONES < 2
+         |     ^~~~~~~~~~~~
+   include/linux/page-flags-layout.h:58:19: warning: "LRU_GEN_WIDTH" is not defined, evaluates to 0 [-Wundef]
+      58 | #if ZONES_WIDTH + LRU_GEN_WIDTH + SECTIONS_WIDTH + NODES_SHIFT \
+         |                   ^~~~~~~~~~~~~
+   include/linux/page-flags-layout.h:59:28: warning: "NR_PAGEFLAGS" is not defined, evaluates to 0 [-Wundef]
+      59 |         <= BITS_PER_LONG - NR_PAGEFLAGS
+         |                            ^~~~~~~~~~~~
+   include/linux/page-flags-layout.h:93:19: warning: "LRU_GEN_WIDTH" is not defined, evaluates to 0 [-Wundef]
+      93 | #if ZONES_WIDTH + LRU_GEN_WIDTH + SECTIONS_WIDTH + NODES_WIDTH + \
+         |                   ^~~~~~~~~~~~~
+   include/linux/page-flags-layout.h:94:64: warning: "NR_PAGEFLAGS" is not defined, evaluates to 0 [-Wundef]
+      94 |         KASAN_TAG_WIDTH + LAST_CPUPID_SHIFT <= BITS_PER_LONG - NR_PAGEFLAGS
+         |                                                                ^~~~~~~~~~~~
+   include/linux/page-flags-layout.h:104:19: warning: "LRU_GEN_WIDTH" is not defined, evaluates to 0 [-Wundef]
+     104 | #if ZONES_WIDTH + LRU_GEN_WIDTH + SECTIONS_WIDTH + NODES_WIDTH + \
+         |                   ^~~~~~~~~~~~~
+   include/linux/page-flags-layout.h:105:63: warning: "NR_PAGEFLAGS" is not defined, evaluates to 0 [-Wundef]
+     105 |         KASAN_TAG_WIDTH + LAST_CPUPID_WIDTH > BITS_PER_LONG - NR_PAGEFLAGS
+         |                                                               ^~~~~~~~~~~~
+   In file included from include/linux/mm_types.h:5:
+   include/linux/mm_types_task.h:22:34: warning: "SPINLOCK_SIZE" is not defined, evaluates to 0 [-Wundef]
+      22 | #define ALLOC_SPLIT_PTLOCKS     (SPINLOCK_SIZE > BITS_PER_LONG/8)
+         |                                  ^~~~~~~~~~~~~
+   include/linux/mm_types.h:478:5: note: in expansion of macro 'ALLOC_SPLIT_PTLOCKS'
+     478 | #if ALLOC_SPLIT_PTLOCKS
+         |     ^~~~~~~~~~~~~~~~~~~
+   In file included from include/linux/dcache.h:14,
+                    from include/linux/fs.h:8,
+                    from include/linux/compat.h:17:
+>> include/linux/lockref.h:23:36: warning: "SPINLOCK_SIZE" is not defined, evaluates to 0 [-Wundef]
+      23 |          IS_ENABLED(CONFIG_SMP) && SPINLOCK_SIZE <= 4)
+         |                                    ^~~~~~~~~~~~~
+   include/linux/lockref.h:27:5: note: in expansion of macro 'USE_CMPXCHG_LOCKREF'
+      27 | #if USE_CMPXCHG_LOCKREF
+         |     ^~~~~~~~~~~~~~~~~~~
+   In file included from include/linux/gfp.h:7,
+                    from include/linux/xarray.h:16,
+                    from include/linux/list_lru.h:14,
+                    from include/linux/fs.h:13:
+   include/linux/mmzone.h:842:29: error: 'MAX_NR_ZONES' undeclared here (not in a function); did you mean 'MAX_NR_GENS'?
+     842 |         long lowmem_reserve[MAX_NR_ZONES];
+         |                             ^~~~~~~~~~~~
+         |                             MAX_NR_GENS
+   include/linux/mm_types_task.h:22:34: warning: "SPINLOCK_SIZE" is not defined, evaluates to 0 [-Wundef]
+      22 | #define ALLOC_SPLIT_PTLOCKS     (SPINLOCK_SIZE > BITS_PER_LONG/8)
+         |                                  ^~~~~~~~~~~~~
+   include/linux/mm.h:2889:5: note: in expansion of macro 'ALLOC_SPLIT_PTLOCKS'
+    2889 | #if ALLOC_SPLIT_PTLOCKS
+         |     ^~~~~~~~~~~~~~~~~~~
+   In file included from include/linux/swap.h:9,
+                    from include/linux/suspend.h:5,
+                    from arch/mips/kernel/asm-offsets.c:17:
+   include/linux/memcontrol.h: In function 'mem_cgroup_get_zone_lru_size':
+>> include/linux/memcontrol.h:914:31: warning: parameter 'lru' set but not used [-Wunused-but-set-parameter]
+     914 |                 enum lru_list lru, int zone_idx)
+         |                 ~~~~~~~~~~~~~~^~~
+>> include/linux/memcontrol.h:914:40: warning: parameter 'zone_idx' set but not used [-Wunused-but-set-parameter]
+     914 |                 enum lru_list lru, int zone_idx)
+         |                                    ~~~~^~~~~~~~
+   make[3]: *** [scripts/Makefile.build:244: arch/mips/kernel/asm-offsets.o] Error 1
+   make[3]: Target 'missing-syscalls' not remade because of errors.
+   make[2]: *** [arch/mips/Makefile:432: archprepare] Error 2
+   make[2]: Target 'prepare' not remade because of errors.
+   make[1]: *** [Makefile:224: __sub-make] Error 2
+   make[1]: Target 'prepare' not remade because of errors.
+   make: *** [Makefile:224: __sub-make] Error 2
+   make: Target 'prepare' not remade because of errors.
+
+
+vim +/SPINLOCK_SIZE +23 include/linux/lockref.h
+
+57f4257eae33e0 Peter Zijlstra     2013-11-14  20  
+57f4257eae33e0 Peter Zijlstra     2013-11-14  21  #define USE_CMPXCHG_LOCKREF \
+57f4257eae33e0 Peter Zijlstra     2013-11-14  22  	(IS_ENABLED(CONFIG_ARCH_USE_CMPXCHG_LOCKREF) && \
+597d795a2a786d Kirill A. Shutemov 2013-12-20 @23  	 IS_ENABLED(CONFIG_SMP) && SPINLOCK_SIZE <= 4)
+0f8f2aaaab0b0f Waiman Long        2013-08-28  24  
+
 -- 
-Nathan Chancellor <nathan@kernel.org>
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
