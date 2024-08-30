@@ -1,176 +1,93 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
+Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DDA7C148828;
-	Fri, 30 Aug 2024 16:18:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 39D9E1B9B26
+	for <llvm@lists.linux.dev>; Fri, 30 Aug 2024 16:42:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=93.17.235.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725034704; cv=none; b=UvdybP7RFGy1zXy3BqhuKGG1AbvQkqac/JhoBgMQ6jHY4Yaq5XbfmvEGzwNK9kkWmirtppnI7tNuzdXLgDUR97xfm6Px8ibazYX/gXJIwPMFFfpkPUjJW/83wzKrloTziFmC7ylxaMmpPpVBueAi+CU5mN6w2KKI7eatacaUpBY=
+	t=1725036179; cv=none; b=ugzpoAladcrCDvMWX3OPWdPVci9xMFtnjX/KjtP+1klbvvsaPoNlpLXlBCiT8ETHp4pg98SoVmAdPw41oUts08+vjETVG9QT0JybsNOc3Slj2tuOgZvJdrJn583TBB5DwHl3s3kswg0vER3dd/RFy8md2/JgInDQq52WZSXGR7c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725034704; c=relaxed/simple;
-	bh=DO78Muknig9uLuHIr6AaX8YDe6MmUYrrNJiE1yiyh+w=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Qg6YaWZgAGP1eKOHUuuv6ZLadAFUdh3J2RCBW4658taPZSTcMdHNxxqzUO69C7yv7gUrq6edFgDFRqsY54KxN6utc4IN/leEPN2ZSDDpsQs9xDbiu0ObkZJn+PNe7LFcnwBsvyKaVbNZkqwjZdLtGWGax7rGKwzZmiUdcg7tXQU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=O1H9mzd+; arc=none smtp.client-ip=192.198.163.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="O1H9mzd+"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1725034701; x=1756570701;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=DO78Muknig9uLuHIr6AaX8YDe6MmUYrrNJiE1yiyh+w=;
-  b=O1H9mzd+Hwlz5gwZ46xdCxwaQMD8UsGj+oBU7oIWyoRManAJJUd/6Keo
-   /d9KUE6kB91ilWpMPU/Dm6f4QrMT5wifQq5T4MvQTl1z8yD/0sZhsGBBW
-   8eAHeKGV9g700DR6C7T3EEGzwT05mNBjqih5BvppueaQZiyR0O41EMoz6
-   Jvvtpi+2yjxOLFqUk7BJqs3OMDZEUAD+kVPrR91OJusSE6AapOU2IetnI
-   9fBX6al5QxfKx0s3ZmFwWcgiCDSxocgHdKa2gxyneBy2VJbXE3l0kHcAM
-   zcqao9iS0G7rO1qQimNqgUv+KnSQ6pmvfi5kQIsfd9LMDqmbQje87fk7l
-   Q==;
-X-CSE-ConnectionGUID: O1pcNTzBTAqagS0GLCCQOA==
-X-CSE-MsgGUID: 84+7zuhlR1++s8HYzuXurw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11180"; a="23201125"
-X-IronPort-AV: E=Sophos;i="6.10,189,1719903600"; 
-   d="scan'208";a="23201125"
-Received: from fmviesa010.fm.intel.com ([10.60.135.150])
-  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Aug 2024 09:18:20 -0700
-X-CSE-ConnectionGUID: ZmpClZ4hQiSdhPeamVJM7Q==
-X-CSE-MsgGUID: nUiw9z3xSnu9BstrvjHnZw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.10,189,1719903600"; 
-   d="scan'208";a="64134769"
-Received: from lkp-server01.sh.intel.com (HELO 9c6b1c7d3b50) ([10.239.97.150])
-  by fmviesa010.fm.intel.com with ESMTP; 30 Aug 2024 09:18:17 -0700
-Received: from kbuild by 9c6b1c7d3b50 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1sk4KF-0001dS-0L;
-	Fri, 30 Aug 2024 16:18:15 +0000
-Date: Sat, 31 Aug 2024 00:18:11 +0800
-From: kernel test robot <lkp@intel.com>
-To: Adhemerval Zanella <adhemerval.zanella@linaro.org>,
-	"Jason A . Donenfeld" <Jason@zx2c4.com>,
-	Theodore Ts'o <tytso@mit.edu>, linux-kernel@vger.kernel.org,
-	linux-crypto@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-arch@vger.kernel.org,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>, Thomas Gleixner <tglx@linutronix.de>,
-	Eric Biggers <ebiggers@kernel.org>,
-	Christophe Leroy <christophe.leroy@csgroup.eu>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [PATCH v2] aarch64: vdso: Wire up getrandom() vDSO implementation
-Message-ID: <202408310030.S5ZNwLWz-lkp@intel.com>
-References: <20240829201728.2825-1-adhemerval.zanella@linaro.org>
+	s=arc-20240116; t=1725036179; c=relaxed/simple;
+	bh=TOnGq0IO24mAJLekrXPB1z6LZN6IYMcZ09nnaFQEPw4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=RlIJlsvvpwW8IiauzKL7Y1kTdNcTz9spdy/FCFSWuG/hSkt3QL5ShnMB+Pq8vLjPvJPc9LT/7el6zzbGqLsG+WROm4QZtNupozhODKpnYD7aHpzDlaGskhFa/1hSwfv3rDBnZpEj8ubGQs42KkkdTglewX9e7oksZ9bhkSoVR9g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=csgroup.eu; spf=pass smtp.mailfrom=csgroup.eu; arc=none smtp.client-ip=93.17.235.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=csgroup.eu
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=csgroup.eu
+Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
+	by localhost (Postfix) with ESMTP id 4WwP8c465gz9sS8;
+	Fri, 30 Aug 2024 18:42:56 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from pegase2.c-s.fr ([172.26.127.65])
+	by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 6brwcfcnvqln; Fri, 30 Aug 2024 18:42:56 +0200 (CEST)
+Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
+	by pegase2.c-s.fr (Postfix) with ESMTP id 4WwP8c3CYvz9sS7;
+	Fri, 30 Aug 2024 18:42:56 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+	by messagerie.si.c-s.fr (Postfix) with ESMTP id 59C838B794;
+	Fri, 30 Aug 2024 18:42:56 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from messagerie.si.c-s.fr ([127.0.0.1])
+	by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
+	with ESMTP id spbTDoYI002a; Fri, 30 Aug 2024 18:42:56 +0200 (CEST)
+Received: from [192.168.234.133] (unknown [192.168.234.133])
+	by messagerie.si.c-s.fr (Postfix) with ESMTP id 74A238B764;
+	Fri, 30 Aug 2024 18:42:55 +0200 (CEST)
+Message-ID: <84682299-8cbe-4b66-9c26-17786e73af55@csgroup.eu>
+Date: Fri, 30 Aug 2024 18:42:55 +0200
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240829201728.2825-1-adhemerval.zanella@linaro.org>
-
-Hi Adhemerval,
-
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on crng-random/master]
-[also build test ERROR on next-20240830]
-[cannot apply to arm64/for-next/core shuah-kselftest/next shuah-kselftest/fixes linus/master v6.11-rc5]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Adhemerval-Zanella/aarch64-vdso-Wire-up-getrandom-vDSO-implementation/20240830-041912
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/crng/random.git master
-patch link:    https://lore.kernel.org/r/20240829201728.2825-1-adhemerval.zanella%40linaro.org
-patch subject: [PATCH v2] aarch64: vdso: Wire up getrandom() vDSO implementation
-config: arm64-allyesconfig (https://download.01.org/0day-ci/archive/20240831/202408310030.S5ZNwLWz-lkp@intel.com/config)
-compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 46fe36a4295f05d5d3731762e31fc4e6e99863e9)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240831/202408310030.S5ZNwLWz-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202408310030.S5ZNwLWz-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
-   In file included from arch/arm64/kernel/asm-offsets.c:10:
-   In file included from include/linux/arm_sdei.h:8:
-   In file included from include/acpi/ghes.h:5:
-   In file included from include/acpi/apei.h:9:
-   In file included from include/linux/acpi.h:39:
-   In file included from include/acpi/acpi_io.h:7:
-   In file included from arch/arm64/include/asm/acpi.h:14:
-   In file included from include/linux/memblock.h:12:
-   In file included from include/linux/mm.h:2228:
-   include/linux/vmstat.h:503:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     503 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     504 |                            item];
-         |                            ~~~~
-   include/linux/vmstat.h:510:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     510 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     511 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/vmstat.h:517:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     517 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
-   include/linux/vmstat.h:523:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     523 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     524 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   4 warnings generated.
-   In file included from <built-in>:4:
-   In file included from lib/vdso/getrandom.c:8:
-   In file included from include/linux/mm.h:2228:
-   include/linux/vmstat.h:503:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     503 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     504 |                            item];
-         |                            ~~~~
-   include/linux/vmstat.h:510:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     510 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     511 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/vmstat.h:517:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     517 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
-   include/linux/vmstat.h:523:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     523 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     524 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   In file included from <built-in>:4:
-   In file included from lib/vdso/getrandom.c:12:
-   In file included from arch/arm64/include/asm/vdso/getrandom.h:8:
->> arch/arm64/include/asm/vdso.h:25:10: fatal error: 'generated/vdso-offsets.h' file not found
-      25 | #include <generated/vdso-offsets.h>
-         |          ^~~~~~~~~~~~~~~~~~~~~~~~~~
-   4 warnings and 1 error generated.
-   make[3]: *** [scripts/Makefile.build:244: arch/arm64/kernel/vdso/vgetrandom.o] Error 1
-   make[3]: Target 'include/generated/vdso-offsets.h' not remade because of errors.
-   make[3]: Target 'arch/arm64/kernel/vdso/vdso.so' not remade because of errors.
-   make[2]: *** [arch/arm64/Makefile:217: vdso_prepare] Error 2
-   make[2]: Target 'prepare' not remade because of errors.
-   make[1]: *** [Makefile:224: __sub-make] Error 2
-   make[1]: Target 'prepare' not remade because of errors.
-   make: *** [Makefile:224: __sub-make] Error 2
-   make: Target 'prepare' not remade because of errors.
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 4/5] powerpc/vdso: Wire up getrandom() vDSO
+ implementation on PPC32
+To: "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc: Andrew Morton <akpm@linux-foundation.org>,
+ Steven Rostedt <rostedt@goodmis.org>, Masami Hiramatsu
+ <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+ Michael Ellerman <mpe@ellerman.id.au>, Nicholas Piggin <npiggin@gmail.com>,
+ Naveen N Rao <naveen@kernel.org>, Nathan Chancellor <nathan@kernel.org>,
+ Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling
+ <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
+ Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
+ linuxppc-dev@lists.ozlabs.org, linux-kselftest@vger.kernel.org,
+ llvm@lists.linux.dev, linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+ linux-trace-kernel@vger.kernel.org,
+ Adhemerval Zanella <adhemerval.zanella@linaro.org>,
+ Xi Ruoyao <xry111@xry111.site>
+References: <cover.1725031952.git.christophe.leroy@csgroup.eu>
+ <e7e4c6d36cf98229850c333f113bcea909564501.1725031952.git.christophe.leroy@csgroup.eu>
+ <ZtHv9R8b7qwWKR2b@zx2c4.com>
+Content-Language: fr-FR
+From: Christophe Leroy <christophe.leroy@csgroup.eu>
+In-Reply-To: <ZtHv9R8b7qwWKR2b@zx2c4.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
 
-vim +25 arch/arm64/include/asm/vdso.h
 
-0a7927d2b89e55 Adhemerval Zanella 2024-08-29  24  
-9031fefde6f2ac Will Deacon        2012-03-05 @25  #include <generated/vdso-offsets.h>
-9031fefde6f2ac Will Deacon        2012-03-05  26  
+Le 30/08/2024 à 18:14, Jason A. Donenfeld a écrit :
+> On Fri, Aug 30, 2024 at 05:57:08PM +0200, Christophe Leroy wrote:
+>> + *	r5: 8-byte counter input/output (saved on stack)
+>> + *
+>> + *	r14-r15: counter
+>> + */
+>> +SYM_FUNC_START(__arch_chacha20_blocks_nostack)
+>> +	stwu	r1, -96(r1)
+>> +	stw	r5, 20(r1)
+>> +	stmw	r14, 24(r1)
+>> +	li	r31, 4
+>> +	LWZX_LE	r14, 0, r5
+>> +	LWZX_LE	r15, r31, r5
+> 
+> Why swap endian on the counter?
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Unlike the keys, the counter is passed to the function as an u8*, not as 
+a u64*, so I thought it was raw data in little endian order, same as 
+when using Sodium. Is it wrong ?
+
+Christophe
