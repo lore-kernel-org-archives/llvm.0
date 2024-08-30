@@ -1,109 +1,101 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
+Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5EF6C1BB69B;
-	Fri, 30 Aug 2024 18:13:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 36B8E1B9B29
+	for <llvm@lists.linux.dev>; Fri, 30 Aug 2024 18:52:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=93.17.235.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725041608; cv=none; b=jxCaEOUPB5c6GLWqnF6svwRiLHlhCz8lgZmiI6g4hunNzOOx90bqz4tAJrSOrU3qHQEDCJR1x/9G11NWLHUIq5L87MTZUJSPtixstksCoLHIh9haW4tUprIXqKe8dpER3KQ/KsNdWH4WP+780u1AD44sJsDQd8UNw2hox1Vxjrg=
+	t=1725043962; cv=none; b=i7B4nEtw89bIXlo9c6HzYBQ94XHi9Wv+l8exQfTrhNVhmh5EAcvR45BHjj5s+VDhRZieIcBwGroe8swSE66p0G9FGDx68CerNfxOv9CDBpHNZAWY+vQshl+ctiX2EPwy0Dn9UHySduavqGfRZ5/OneSD9KfhvaF5jua+NyXRTGo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725041608; c=relaxed/simple;
-	bh=1PoT89t/XdmjPTM+XIFdIhJ/W39LbpxLukgemNmf3iQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=lI1eAffGdaj0wsiIMJ0xdxunlIaIxUZeYP3oUEXfQhZ3dcGrzjoDLYkkrV1bWnqdXe53KvSx85UoNSSqZ5IA8DXDkQCTgiBh+Sb0IK/w6tiGO7i/wrO8HcDwYmlJit2gfbXor7Bi8qoY7TS2wL8J9JHet7ckS6W93nYPxHllFGI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Z3gvs65/; arc=none smtp.client-ip=198.175.65.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Z3gvs65/"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1725041607; x=1756577607;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=1PoT89t/XdmjPTM+XIFdIhJ/W39LbpxLukgemNmf3iQ=;
-  b=Z3gvs65/i4PDccWhBfPRVBc+WfgdD76qPmWLRcBpO/BK2LHinWJidxbk
-   slTYZwa+tNRYstzTQgqac+cTli/B61brtP9vrND/BJwGypNQcwHffsrDD
-   KxFnNsmAFqtSI6gzaQVsbJXrIUKIj2W6XCscVgCu0JSvh8+JiFre9Ncsz
-   auBgwuWWEQDm8kOkIRw+64yEZK7upPq197muaL0Ee9ylYe6Pd8+7oYOjj
-   Guhxlc6EfW8GXIARFchVWcR8heAfJcUbNubsWK/DU7yyCZxt1ESEgP4CT
-   y73p5oHzpdG/MpGcckWYm95bnz1UP4g4xcHHKajM5tETWBPFj2UBWKoww
-   w==;
-X-CSE-ConnectionGUID: ZLzAyvS3Rzm9LZSMTrg52Q==
-X-CSE-MsgGUID: 96cDTwI7SrWz4v6uz6JKIg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11180"; a="23831590"
-X-IronPort-AV: E=Sophos;i="6.10,189,1719903600"; 
-   d="scan'208";a="23831590"
-Received: from fmviesa008.fm.intel.com ([10.60.135.148])
-  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Aug 2024 11:13:26 -0700
-X-CSE-ConnectionGUID: /pUVxff5TmGq91P597DCeQ==
-X-CSE-MsgGUID: xziq/ljaRCGoJLNKBqfe8g==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.10,189,1719903600"; 
-   d="scan'208";a="63979374"
-Received: from lkp-server01.sh.intel.com (HELO 9c6b1c7d3b50) ([10.239.97.150])
-  by fmviesa008.fm.intel.com with ESMTP; 30 Aug 2024 11:13:25 -0700
-Received: from kbuild by 9c6b1c7d3b50 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1sk67e-0001nh-2R;
-	Fri, 30 Aug 2024 18:13:22 +0000
-Date: Sat, 31 Aug 2024 02:12:37 +0800
-From: kernel test robot <lkp@intel.com>
-To: Markus Schneider-Pargmann <msp@baylibre.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [PATCH v11 1/4] firmware: ti_sci: Add support for querying the
- firmware caps
-Message-ID: <202408310239.suIrfaIB-lkp@intel.com>
-References: <20240829201606.1407773-2-msp@baylibre.com>
+	s=arc-20240116; t=1725043962; c=relaxed/simple;
+	bh=kPiLDQ8HQsZ7OY2s7jtUVwKAWbrRXvStaSUX+5VHXqg=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=fsG59Mimv6WqV8omCNn/vvoCApqPJkK6n1FBjEkEF312FlnNoJF4dTtMoBDTmRVE6KL0rV/ezTJ5nfE4exIZ5i9aJKrvQn6hKewNVSfx+H+TyYm24o3O8avIgHoQkVp3iJwLYqsqcIQC10frkYvNy9bk6ic+d0Ry7+KnpnReHwU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=csgroup.eu; spf=pass smtp.mailfrom=csgroup.eu; arc=none smtp.client-ip=93.17.235.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=csgroup.eu
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=csgroup.eu
+Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
+	by localhost (Postfix) with ESMTP id 4WwS2H2zdLz9sSN;
+	Fri, 30 Aug 2024 20:52:39 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from pegase2.c-s.fr ([172.26.127.65])
+	by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 3f9-XC2A1YeT; Fri, 30 Aug 2024 20:52:39 +0200 (CEST)
+Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
+	by pegase2.c-s.fr (Postfix) with ESMTP id 4WwS2H1wnjz9sSK;
+	Fri, 30 Aug 2024 20:52:39 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+	by messagerie.si.c-s.fr (Postfix) with ESMTP id 28C2A8B794;
+	Fri, 30 Aug 2024 20:52:39 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from messagerie.si.c-s.fr ([127.0.0.1])
+	by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
+	with ESMTP id h0_TT9jQfciA; Fri, 30 Aug 2024 20:52:39 +0200 (CEST)
+Received: from [192.168.234.133] (unknown [192.168.234.133])
+	by messagerie.si.c-s.fr (Postfix) with ESMTP id 428938B764;
+	Fri, 30 Aug 2024 20:52:38 +0200 (CEST)
+Message-ID: <ef38cd36-3e15-4608-8b72-87cf7621cce6@csgroup.eu>
+Date: Fri, 30 Aug 2024 20:52:37 +0200
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240829201606.1407773-2-msp@baylibre.com>
-
-Hi Markus,
-
-kernel test robot noticed the following build warnings:
-
-[auto build test WARNING on soc/for-next]
-[also build test WARNING on linus/master v6.11-rc5 next-20240830]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Markus-Schneider-Pargmann/firmware-ti_sci-Add-support-for-querying-the-firmware-caps/20240830-041726
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git for-next
-patch link:    https://lore.kernel.org/r/20240829201606.1407773-2-msp%40baylibre.com
-patch subject: [PATCH v11 1/4] firmware: ti_sci: Add support for querying the firmware caps
-config: arm-defconfig (https://download.01.org/0day-ci/archive/20240831/202408310239.suIrfaIB-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240831/202408310239.suIrfaIB-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202408310239.suIrfaIB-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> drivers/firmware/ti_sci.c:10:9: warning: 'pr_fmt' macro redefined [-Wmacro-redefined]
-   #define pr_fmt(fmt) "%s: " fmt, __func__
-           ^
-   include/linux/printk.h:355:9: note: previous definition is here
-   #define pr_fmt(fmt) fmt
-           ^
-   1 warning generated.
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 4/5] powerpc/vdso: Wire up getrandom() vDSO
+ implementation on PPC32
+To: "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc: Andrew Morton <akpm@linux-foundation.org>,
+ Steven Rostedt <rostedt@goodmis.org>, Masami Hiramatsu
+ <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+ Michael Ellerman <mpe@ellerman.id.au>, Nicholas Piggin <npiggin@gmail.com>,
+ Naveen N Rao <naveen@kernel.org>, Nathan Chancellor <nathan@kernel.org>,
+ Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling
+ <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
+ Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
+ linuxppc-dev@lists.ozlabs.org, linux-kselftest@vger.kernel.org,
+ llvm@lists.linux.dev, linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+ linux-trace-kernel@vger.kernel.org,
+ Adhemerval Zanella <adhemerval.zanella@linaro.org>,
+ Xi Ruoyao <xry111@xry111.site>
+References: <cover.1725031952.git.christophe.leroy@csgroup.eu>
+ <e7e4c6d36cf98229850c333f113bcea909564501.1725031952.git.christophe.leroy@csgroup.eu>
+ <ZtHwnc4AZuRULkom@zx2c4.com>
+Content-Language: fr-FR
+From: Christophe Leroy <christophe.leroy@csgroup.eu>
+In-Reply-To: <ZtHwnc4AZuRULkom@zx2c4.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
 
-vim +/pr_fmt +10 drivers/firmware/ti_sci.c
 
-aa276781a64a5f Nishanth Menon 2016-10-18 @10  #define pr_fmt(fmt) "%s: " fmt, __func__
-aa276781a64a5f Nishanth Menon 2016-10-18  11  
+Le 30/08/2024 à 18:17, Jason A. Donenfeld a écrit :
+> On Fri, Aug 30, 2024 at 05:57:08PM +0200, Christophe Leroy wrote:
+>> @@ -14,6 +14,10 @@ ifeq ($(uname_M),x86_64)
+>>   TEST_GEN_PROGS += vdso_test_getrandom
+>>   TEST_GEN_PROGS += vdso_test_chacha
+>>   endif
+>> +ifeq ($(ARCH),powerpc)
+>> +TEST_GEN_PROGS += vdso_test_getrandom
+>> +TEST_GEN_PROGS += vdso_test_chacha
+>> +endif
+> 
+> FYI, as of [1], you should now be able to add powerpc to the filter list
+> instead of having to duplicate a new stanza:
+> 
+> [1] https://eur01.safelinks.protection.outlook.com/?url=https%3A%2F%2Fgit.kernel.org%2Fpub%2Fscm%2Flinux%2Fkernel%2Fgit%2Fcrng%2Frandom.git%2Fcommit%2F%3Fid%3Dbbaae98172ed284fc0d5d39cc0d68f5d06164f06&data=05%7C02%7Cchristophe.leroy%40csgroup.eu%7C4f51736c027a44cc7df908dcc90f46d6%7C8b87af7d86474dc78df45f69a2011bb5%7C0%7C0%7C638606314665557021%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C0%7C%7C%7C&sdata=UtLdKTuEaZVhsguKa7kX1TBJ%2BvvQtl7DmU9hSBeThWo%3D&reserved=0
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+I'm a bit sceptic with that commit. IIUC you are changing the meaning of 
+$ARCH. How does that fit with the $ARCH we give when we cross-build or 
+with the ARCH which is set by the top-level Makefile in 
+tools/testing/selftests ?
+
+Also, wouldn't there be a way to use scripts/subarch.include instead of 
+opencoding ?
+
+Afterall, would it be a problem to build it even for i386 ? It should 
+now be ignored anyway with your new commit f78280b1a3ce ("selftests: 
+vDSO: skip getrandom test if architecture is unsupported")
+
+Christophe
