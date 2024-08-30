@@ -1,59 +1,64 @@
 Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A9B91B2ED5;
-	Fri, 30 Aug 2024 15:05:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D3AAF1B5311;
+	Fri, 30 Aug 2024 15:26:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725030318; cv=none; b=fvWJ0mRSRBNuX0HMuadFhfw0x4V2DLLf1o1QNg2UIlDG4vIPKNKG059QnxmhBrbPmVsw/+uW8aIYevK8q/t1I/RwbkrO0aOjGDbtf+ky9zTilim7kpG3CsrpfF+nuMdFLW+3O1ljAKpqFRvNJbOwnbmQNwow0Sklg41Ci5HhjXY=
+	t=1725031580; cv=none; b=ByWeiacIfN7G7AbG3H3ynCFFQtukxRF7ww6B8qENud6jkNG+42bnUMkFcr8pC8JY8OfKFunfemGk88ZnqwFUccs9H/K+gW+rEo6vxgJSgtYGQdAlERxtu8KVQfG24mUz6nAMVGaKByQPvaiTnw+5w7uo2oTbVWqmLURAQ40pwYc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725030318; c=relaxed/simple;
-	bh=0Gyi4D+lWnphsxV9XXUBi+COU1tFEXCrojJYq70NhSw=;
+	s=arc-20240116; t=1725031580; c=relaxed/simple;
+	bh=C0WOOozSTgEFuiMBLxHw7M8hNxWE4gcUb9pNKJ7jF8Y=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=BI2unN5ZAb5MP7RFhTZ6JbMsSgRHTBZ+QwUeGe3cinDra1cdgJgGCoycnutJnwTbtXUq5qW5IKm4iQzDW9I7IZEyEs3sIz6i/cV8eiGyixgW+LhFyRJwKbRGEIonqT22/cf9S04d7ply2dFdFCgr3NdM0/eAGJ+YIdEqv6Gt/bA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Uv8WCB5M; arc=none smtp.client-ip=192.198.163.16
+	 Content-Type:Content-Disposition:In-Reply-To; b=YZq9aoriaQZa2PCwtDPerj3l3ID/iBjXLEvVX0e7VmN8fLITei7m2rBsEI20nIvMFgvxMz3eSC6CWL1LiYuP3DaJ1hsRo6nM2SbCAOwLn5+eMtauz8X4qumFIWgBR44bjanKLhHF9F9N/HGtTRWFVIozBWWkFtdbvbRn3ygHEEk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=g7lyQ7cI; arc=none smtp.client-ip=192.198.163.16
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Uv8WCB5M"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="g7lyQ7cI"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1725030317; x=1756566317;
+  t=1725031579; x=1756567579;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=0Gyi4D+lWnphsxV9XXUBi+COU1tFEXCrojJYq70NhSw=;
-  b=Uv8WCB5MqkA4yzY+H0GIZSz51ZHz2JVQ8oxipRU9955M6SF+9p9FLjIc
-   OEvRfbnrMfeNzZOjKHF9Ausu0DW4eAOJQUCbXaqKbQs4ycCg5WNVxAyNj
-   g48LVEM6NBwZTtJXpBCzLQMLJCzOXsEJHuqK8ZR9Bz9z8NAb9X2zPvMT4
-   oXwm8s6GfFO5Hz+y0tfrtBeURo3lWrLLUhpVQFLlXt5EeVcko2hYm7Qgh
-   c0l74uafeSwyjzMFCVdH6V9P8Y36rFcy7+iKXS8P/OXnUbKJvUzUSLgVM
-   rbfTMhA+/yfFxAbZQpLeQ3zG83FF1QvRqcC4aaZ6z5iBKnQrBZMOigOjq
-   Q==;
-X-CSE-ConnectionGUID: NPBCUXJOQdOfHL5H+8jJNA==
-X-CSE-MsgGUID: gG479IbnQPeHxT0ogwsc8Q==
-X-IronPort-AV: E=McAfee;i="6700,10204,11180"; a="13298934"
+  bh=C0WOOozSTgEFuiMBLxHw7M8hNxWE4gcUb9pNKJ7jF8Y=;
+  b=g7lyQ7cIBJhF+aWjl2XfY2XiTJRgDZ8sbmYOIt4nN00mnVcyAEw3epWi
+   2cCsArMb1NIlZrfQQ9cbZLw7AaCSaQ5uFMGWbgTW81YCzObRP78N2M/UG
+   uol6G+1yYJ0uigAxvNPp+LfeXTd/3/nOPfyd/DONb/j8WxzX/1bHy+Ax/
+   e8HMS0oZoI/8EBQPeJemsXxiZSLsLi8zi+ktUJFgeTsb8UlGeX8kT8s4U
+   gGe1pmRoWcWpobd3BKqLSEyACBQNW0w4roRzj7fIhdDaPFMUcC7mV8tew
+   5yOmpnmXRfXwMiLuATRV1LtF55QCRk0fuGNUmCeDC6SbhUN4Sb/1twDdi
+   A==;
+X-CSE-ConnectionGUID: FboqWLqVR+aAkbvj4v84hw==
+X-CSE-MsgGUID: Xg3abouuSKu4O7Of/THUkw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11180"; a="13299624"
 X-IronPort-AV: E=Sophos;i="6.10,189,1719903600"; 
-   d="scan'208";a="13298934"
+   d="scan'208";a="13299624"
 Received: from fmviesa008.fm.intel.com ([10.60.135.148])
-  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Aug 2024 08:05:16 -0700
-X-CSE-ConnectionGUID: mLThyzsQS++RO9dIbUxPIg==
-X-CSE-MsgGUID: 3wZbENVWSHa11k/pO2WtVg==
+  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Aug 2024 08:26:18 -0700
+X-CSE-ConnectionGUID: tl3tTf0ESYi2Xww4hMSRhg==
+X-CSE-MsgGUID: o8vLVVWmRMaRu2s4tMj8AQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.10,189,1719903600"; 
-   d="scan'208";a="63937010"
+   d="scan'208";a="63941616"
 Received: from lkp-server01.sh.intel.com (HELO 9c6b1c7d3b50) ([10.239.97.150])
-  by fmviesa008.fm.intel.com with ESMTP; 30 Aug 2024 08:05:14 -0700
+  by fmviesa008.fm.intel.com with ESMTP; 30 Aug 2024 08:26:15 -0700
 Received: from kbuild by 9c6b1c7d3b50 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1sk3BY-0001Yc-0u;
-	Fri, 30 Aug 2024 15:05:12 +0000
-Date: Fri, 30 Aug 2024 23:04:56 +0800
+	id 1sk3Vt-0001a4-1C;
+	Fri, 30 Aug 2024 15:26:13 +0000
+Date: Fri, 30 Aug 2024 23:26:10 +0800
 From: kernel test robot <lkp@intel.com>
-To: Kaixiong Yu <yukaixiong@huawei.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [PATCH -next 08/15] mm: nommu: move sysctl to its own file
-Message-ID: <202408302219.we70LHBV-lkp@intel.com>
-References: <20240826120449.1666461-9-yukaixiong@huawei.com>
+To: Li Lingfeng <lilingfeng3@huawei.com>, trondmy@kernel.org,
+	anna@kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, jlayton@kernel.org,
+	linux-nfs@vger.kernel.org, linux-kernel@vger.kernel.org,
+	yukuai1@huaweicloud.com, houtao1@huawei.com, yi.zhang@huawei.com,
+	yangerkun@huawei.com, lilingfeng@huaweicloud.com,
+	lilingfeng3@huawei.com
+Subject: Re: [PATCH v2] nfs: protect nfs41_impl_id by rcu
+Message-ID: <202408302315.02P7HuVM-lkp@intel.com>
+References: <20240829133743.1008788-1-lilingfeng3@huawei.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -62,88 +67,95 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240826120449.1666461-9-yukaixiong@huawei.com>
+In-Reply-To: <20240829133743.1008788-1-lilingfeng3@huawei.com>
 
-Hi Kaixiong,
+Hi Li,
 
 kernel test robot noticed the following build errors:
 
-[auto build test ERROR on next-20240826]
+[auto build test ERROR on trondmy-nfs/linux-next]
+[also build test ERROR on linus/master v6.11-rc5 next-20240830]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Kaixiong-Yu/mm-vmstat-move-sysctls-to-its-own-files/20240826-200753
-base:   next-20240826
-patch link:    https://lore.kernel.org/r/20240826120449.1666461-9-yukaixiong%40huawei.com
-patch subject: [PATCH -next 08/15] mm: nommu: move sysctl to its own file
-config: arm-randconfig-003-20240830 (https://download.01.org/0day-ci/archive/20240830/202408302219.we70LHBV-lkp@intel.com/config)
-compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 46fe36a4295f05d5d3731762e31fc4e6e99863e9)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240830/202408302219.we70LHBV-lkp@intel.com/reproduce)
+url:    https://github.com/intel-lab-lkp/linux/commits/Li-Lingfeng/nfs-protect-nfs41_impl_id-by-rcu/20240829-213622
+base:   git://git.linux-nfs.org/projects/trondmy/linux-nfs.git linux-next
+patch link:    https://lore.kernel.org/r/20240829133743.1008788-1-lilingfeng3%40huawei.com
+patch subject: [PATCH v2] nfs: protect nfs41_impl_id by rcu
+config: i386-randconfig-001-20240830 (https://download.01.org/0day-ci/archive/20240830/202408302315.02P7HuVM-lkp@intel.com/config)
+compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240830/202408302315.02P7HuVM-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202408302219.we70LHBV-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202408302315.02P7HuVM-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
-   In file included from mm/nommu.c:20:
-   In file included from include/linux/mm.h:2168:
-   include/linux/vmstat.h:507:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     507 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
-   In file included from mm/nommu.c:43:
-   In file included from mm/internal.h:13:
-   include/linux/mm_inline.h:47:41: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-      47 |         __mod_lruvec_state(lruvec, NR_LRU_BASE + lru, nr_pages);
-         |                                    ~~~~~~~~~~~ ^ ~~~
-   include/linux/mm_inline.h:49:22: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-      49 |                                 NR_ZONE_LRU_BASE + lru, nr_pages);
-         |                                 ~~~~~~~~~~~~~~~~ ^ ~~~
-   In file included from mm/nommu.c:43:
-   In file included from mm/internal.h:22:
-   mm/vma.h:184:19: error: use of undeclared identifier 'USER_PGTABLES_CEILING'
-     184 |         vms->unmap_end = USER_PGTABLES_CEILING;
-         |                          ^
->> mm/nommu.c:405:2: error: expected ';' after top level declarator
-     405 | }
-         |  ^
-         |  ;
->> mm/nommu.c:417:2: error: call to undeclared function 'register_syscall_init'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     417 |         register_syscall_init("vm", nommu_table);
-         |         ^
-   mm/nommu.c:417:2: note: did you mean '__register_sysctl_init'?
-   include/linux/sysctl.h:232:13: note: '__register_sysctl_init' declared here
-     232 | extern void __register_sysctl_init(const char *path, struct ctl_table *table,
-         |             ^
-   3 warnings and 3 errors generated.
+>> fs/nfs/nfs4client.c:286:34: error: incomplete definition of type 'struct nfs41_impl_id'
+     286 |         struct nfs41_impl_id *impl_id = container_of(head, struct nfs41_impl_id, __rcu_head);
+         |                                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/container_of.h:20:47: note: expanded from macro 'container_of'
+      20 |         static_assert(__same_type(*(ptr), ((type *)0)->member) ||       \
+         |         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~
+      21 |                       __same_type(*(ptr), void),                        \
+         |                       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      22 |                       "pointer type mismatch in container_of()");       \
+         |                       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/compiler_types.h:451:74: note: expanded from macro '__same_type'
+     451 | #define __same_type(a, b) __builtin_types_compatible_p(typeof(a), typeof(b))
+         |                                                                          ^
+   include/linux/build_bug.h:77:50: note: expanded from macro 'static_assert'
+      77 | #define static_assert(expr, ...) __static_assert(expr, ##__VA_ARGS__, #expr)
+         |                                  ~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/build_bug.h:78:56: note: expanded from macro '__static_assert'
+      78 | #define __static_assert(expr, msg, ...) _Static_assert(expr, msg)
+         |                                                        ^~~~
+   include/linux/nfs_fs_sb.h:23:8: note: forward declaration of 'struct nfs41_impl_id'
+      23 | struct nfs41_impl_id;
+         |        ^
+>> fs/nfs/nfs4client.c:286:34: error: offsetof of incomplete type 'struct nfs41_impl_id'
+     286 |         struct nfs41_impl_id *impl_id = container_of(head, struct nfs41_impl_id, __rcu_head);
+         |                                         ^                  ~~~~~~
+   include/linux/container_of.h:23:21: note: expanded from macro 'container_of'
+      23 |         ((type *)(__mptr - offsetof(type, member))); })
+         |                            ^        ~~~~
+   include/linux/stddef.h:16:32: note: expanded from macro 'offsetof'
+      16 | #define offsetof(TYPE, MEMBER)  __builtin_offsetof(TYPE, MEMBER)
+         |                                 ^                  ~~~~
+   include/linux/nfs_fs_sb.h:23:8: note: forward declaration of 'struct nfs41_impl_id'
+      23 | struct nfs41_impl_id;
+         |        ^
+>> fs/nfs/nfs4client.c:286:24: error: initializing 'struct nfs41_impl_id *' with an expression of incompatible type 'void'
+     286 |         struct nfs41_impl_id *impl_id = container_of(head, struct nfs41_impl_id, __rcu_head);
+         |                               ^         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   fs/nfs/nfs4client.c:304:27: error: incomplete definition of type 'struct nfs41_impl_id'
+     304 |                 call_rcu(&clp->cl_implid->__rcu_head, nfs4_free_impl_id_rcu);
+         |                           ~~~~~~~~~~~~~~^
+   include/linux/nfs_fs_sb.h:23:8: note: forward declaration of 'struct nfs41_impl_id'
+      23 | struct nfs41_impl_id;
+         |        ^
+   4 errors generated.
+
+Kconfig warnings: (for reference only)
+   WARNING: unmet direct dependencies detected for FB_IOMEM_HELPERS
+   Depends on [n]: HAS_IOMEM [=y] && FB_CORE [=n]
+   Selected by [m]:
+   - DRM_XE_DISPLAY [=y] && HAS_IOMEM [=y] && DRM [=y] && DRM_XE [=m] && DRM_XE [=m]=m [=m]
 
 
-vim +405 mm/nommu.c
+vim +286 fs/nfs/nfs4client.c
 
-   395	
-   396	static struct ctl_table nommu_table[] = {
-   397		{
-   398			.procname	= "nr_trim_pages",
-   399			.data		= &sysctl_nr_trim_pages,
-   400			.maxlen		= sizeof(sysctl_nr_trim_pages),
-   401			.mode		= 0644,
-   402			.proc_handler	= proc_dointvec_minmax,
-   403			.extra1		= SYSCTL_ZERO,
-   404		},
- > 405	}
-   406	
-   407	/*
-   408	 * initialise the percpu counter for VM and region record slabs
-   409	 */
-   410	void __init mmap_init(void)
-   411	{
-   412		int ret;
-   413	
-   414		ret = percpu_counter_init(&vm_committed_as, 0, GFP_KERNEL);
-   415		VM_BUG_ON(ret);
-   416		vm_region_jar = KMEM_CACHE(vm_region, SLAB_PANIC|SLAB_ACCOUNT);
- > 417		register_syscall_init("vm", nommu_table);
-   418	}
-   419	
+   283	
+   284	static void nfs4_free_impl_id_rcu(struct rcu_head *head)
+   285	{
+ > 286		struct nfs41_impl_id *impl_id = container_of(head, struct nfs41_impl_id, __rcu_head);
+   287	
+   288		kfree(impl_id);
+   289	}
+   290	
 
 -- 
 0-DAY CI Kernel Test Service
