@@ -1,357 +1,223 @@
-Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 41BD71B81C3
-	for <llvm@lists.linux.dev>; Fri, 30 Aug 2024 15:57:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=93.17.235.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 862F41B86E2;
+	Fri, 30 Aug 2024 16:08:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725033467; cv=none; b=OZT/EuvtUFjIJ6G6+ySkRg5hVhBCKjjSdrMf0o7pUObTNWjQhJ6fndbpyaw+rMfGJfnYB+4LVBIUWRYvvD1HhGitXjZ1gvoPyPe1IlonpLm2+CTYYFPaNzNHBpyaZA5s2WMTN4d7Yeeb5maaKyx0n/XhpDruIYkvMb4xsWIxzeY=
+	t=1725034105; cv=none; b=csPuRwOmBQtLtcOPib7zzqRwrAvjonXO5PZflbvOZY+VrcPU710G0muIXJqv6joamRh8It2VdMx+Ruu3N9sVoZdfN/tBsebBRCQtgGzUnod36fB1+NLQPNWHiAu1vJYbgtrYuBPv4WYIlTVlLoUw+2pXAD43PeetgpIdqlOCea8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725033467; c=relaxed/simple;
-	bh=RZqSySqYFylmyuA5iRHusRb2CMpC6wGsXem6AUNbLuM=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=tYa5tnHE+aEwbO2/yTftG+8uU4NCbA1zW/a0S+cIIcQ/0qJAu6ZHzMHH1gO0IkIylLAXPD5HSOkb4OyRCHZMht4O3xgu2qX0z46/UYryoa4SeWyXFce18pk/GEGEyFgXZCObLxD6Hvz4swtEOl5CSnfrpEiN63do0m3ozf1k4vk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=csgroup.eu; spf=pass smtp.mailfrom=csgroup.eu; arc=none smtp.client-ip=93.17.235.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=csgroup.eu
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=csgroup.eu
-Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
-	by localhost (Postfix) with ESMTP id 4WwN820xV8z9sSS;
-	Fri, 30 Aug 2024 17:57:22 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from pegase2.c-s.fr ([172.26.127.65])
-	by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 9BHKF7MYlO9x; Fri, 30 Aug 2024 17:57:22 +0200 (CEST)
-Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
-	by pegase2.c-s.fr (Postfix) with ESMTP id 4WwN816PBbz9sS7;
-	Fri, 30 Aug 2024 17:57:21 +0200 (CEST)
-Received: from localhost (localhost [127.0.0.1])
-	by messagerie.si.c-s.fr (Postfix) with ESMTP id C6DEA8B764;
-	Fri, 30 Aug 2024 17:57:21 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from messagerie.si.c-s.fr ([127.0.0.1])
-	by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
-	with ESMTP id uAS6-PSNHXJa; Fri, 30 Aug 2024 17:57:21 +0200 (CEST)
-Received: from PO20335.idsi0.si.c-s.fr (unknown [192.168.234.133])
-	by messagerie.si.c-s.fr (Postfix) with ESMTP id C196F8B794;
-	Fri, 30 Aug 2024 17:57:20 +0200 (CEST)
-From: Christophe Leroy <christophe.leroy@csgroup.eu>
-To: Andrew Morton <akpm@linux-foundation.org>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-	Michael Ellerman <mpe@ellerman.id.au>,
-	Nicholas Piggin <npiggin@gmail.com>,
-	Naveen N Rao <naveen@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Shuah Khan <shuah@kernel.org>,
-	"Jason A . Donenfeld" <Jason@zx2c4.com>
-Cc: Christophe Leroy <christophe.leroy@csgroup.eu>,
-	linux-kernel@vger.kernel.org,
-	linuxppc-dev@lists.ozlabs.org,
-	linux-kselftest@vger.kernel.org,
-	llvm@lists.linux.dev,
-	linux-fsdevel@vger.kernel.org,
-	linux-mm@kvack.org,
-	linux-trace-kernel@vger.kernel.org,
-	Adhemerval Zanella <adhemerval.zanella@linaro.org>,
-	Xi Ruoyao <xry111@xry111.site>
-Subject: [PATCH v3 5/5] powerpc/vdso: Wire up getrandom() vDSO implementation on PPC64
-Date: Fri, 30 Aug 2024 17:57:09 +0200
-Message-ID: <8dacc4e43ca17ff5394474a38faf3d1ed04f1fe3.1725031952.git.christophe.leroy@csgroup.eu>
-X-Mailer: git-send-email 2.44.0
-In-Reply-To: <cover.1725031952.git.christophe.leroy@csgroup.eu>
-References: <cover.1725031952.git.christophe.leroy@csgroup.eu>
+	s=arc-20240116; t=1725034105; c=relaxed/simple;
+	bh=NQvkHbKFvCNmAk13O0Hw0+Go2GG2xCkOaQ+cBqqlySY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=u578aIWwXaR1Ni3LE0omPinabIn/2YDrctJg0CKqqQY1dz4tVJfyLSkJiF+jPT9khBEkQzTFXNyvFv2VyZC8mgFUfNj2ja4SwZ7jVLn3m304R05kVpgDGNeW0wSh5Ly5Blkh+vhSF1z0aAheSkKmQSiQbDDYKn8Fa11s/NKPWMU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=mNhsBHSJ; arc=none smtp.client-ip=198.175.65.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="mNhsBHSJ"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1725034104; x=1756570104;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=NQvkHbKFvCNmAk13O0Hw0+Go2GG2xCkOaQ+cBqqlySY=;
+  b=mNhsBHSJkYFUYPYUvHRDkEMRWBBC8ishJZ1UBw6ZcKTWZRjl7KT6WOQt
+   5xHwLgmMicJcFLXQ4SHvyPO1eqHA/JYXogzHShUmV+sUJbObXbS3bxqW3
+   SbkdAldbPMsgqYT1io1pvKSJetiyNNq49cT7zOQXCen/sFR0/Eu8I09G1
+   N1SKrlBuZ7dgx/2cf3KCFWdTwPvzUspVcyiZ67BWdddOG2zkyWlN2c7au
+   4to1fGTR3X0PK3snG44uLA7SFLgAP7WNlkiJF8EWjmS+2MtcDAYxbVy1P
+   HjQ0OHqrZu+IH9Clm4L2F3WCCReVGmRjSZnd/kegaKYB/3DxBfqSYEqgo
+   Q==;
+X-CSE-ConnectionGUID: zDko7rMmSt2nE8fIohfnCw==
+X-CSE-MsgGUID: 56LNoQ9bTEe04y5Ekv64SQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11180"; a="34255322"
+X-IronPort-AV: E=Sophos;i="6.10,189,1719903600"; 
+   d="scan'208";a="34255322"
+Received: from orviesa002.jf.intel.com ([10.64.159.142])
+  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Aug 2024 09:08:21 -0700
+X-CSE-ConnectionGUID: dUUB7NMLS0i/oQh7OvxTUA==
+X-CSE-MsgGUID: LVikeV91R/i9tICoQsoktg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.10,189,1719903600"; 
+   d="scan'208";a="94674482"
+Received: from lkp-server01.sh.intel.com (HELO 9c6b1c7d3b50) ([10.239.97.150])
+  by orviesa002.jf.intel.com with ESMTP; 30 Aug 2024 09:08:17 -0700
+Received: from kbuild by 9c6b1c7d3b50 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1sk4AY-0001cu-2r;
+	Fri, 30 Aug 2024 16:08:14 +0000
+Date: Sat, 31 Aug 2024 00:07:37 +0800
+From: kernel test robot <lkp@intel.com>
+To: Billy Tsai <billy_tsai@aspeedtech.com>, linus.walleij@linaro.org,
+	brgl@bgdev.pl, robh@kernel.org, krzk+dt@kernel.org,
+	conor+dt@kernel.org, joel@jms.id.au, andrew@codeconstruct.com.au,
+	linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, linux-aspeed@lists.ozlabs.org,
+	linux-kernel@vger.kernel.org, BMC-SW@aspeedtech.com
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: Re: [PATCH v2 3/4] gpio: aspeed: Create llops to handle hardware
+ access
+Message-ID: <202408302344.bCpCF6bu-lkp@intel.com>
+References: <20240830034047.2251482-4-billy_tsai@aspeedtech.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1725033425; l=8227; i=christophe.leroy@csgroup.eu; s=20211009; h=from:subject:message-id; bh=RZqSySqYFylmyuA5iRHusRb2CMpC6wGsXem6AUNbLuM=; b=Q9SndYRLYnz+rNPgHPdAY1Q+AbqC22AyVLkdSzp8bpb0Yac03csS5glWQQ8l4Gs2G4Bzqnsah ijB2x73ukGrB9RVsjFHt49/QhhNSST/8oUlPNWjD5tn1AQUF4B7gX6v
-X-Developer-Key: i=christophe.leroy@csgroup.eu; a=ed25519; pk=HIzTzUj91asvincQGOFx6+ZF5AoUuP9GdOtQChs7Mm0=
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240830034047.2251482-4-billy_tsai@aspeedtech.com>
 
-Extend getrandom() vDSO implementation to powerpc64.
+Hi Billy,
 
-Tested on QEMU on both ppc64_defconfig and ppc64le_defconfig.
+kernel test robot noticed the following build warnings:
 
-The results are not precise as it is QEMU on an x86 laptop, but
-no need to be precise to see the benefit.
+[auto build test WARNING on brgl/gpio/for-next]
+[also build test WARNING on linus/master v6.11-rc5 next-20240830]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-~ # ./vdso_test_getrandom bench-single
-   vdso: 25000000 times in 4.977777162 seconds
-   libc: 25000000 times in 75.516749981 seconds
-syscall: 25000000 times in 86.842242014 seconds
+url:    https://github.com/intel-lab-lkp/linux/commits/Billy-Tsai/dt-bindings-gpio-aspeed-ast2400-gpio-Support-ast2700/20240830-114325
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/brgl/linux.git gpio/for-next
+patch link:    https://lore.kernel.org/r/20240830034047.2251482-4-billy_tsai%40aspeedtech.com
+patch subject: [PATCH v2 3/4] gpio: aspeed: Create llops to handle hardware access
+config: i386-buildonly-randconfig-004-20240830 (https://download.01.org/0day-ci/archive/20240830/202408302344.bCpCF6bu-lkp@intel.com/config)
+compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240830/202408302344.bCpCF6bu-lkp@intel.com/reproduce)
 
-~ # ./vdso_test_getrandom bench-single
-   vdso: 25000000 times in 6.473814156 seconds
-   libc: 25000000 times in 73.875109463 seconds
-syscall: 25000000 times in 71.805066229 seconds
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202408302344.bCpCF6bu-lkp@intel.com/
 
-Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
----
-v3: New (split out of previous patch)
----
- arch/powerpc/Kconfig                         |  2 +-
- arch/powerpc/include/asm/mman.h              |  2 +-
- arch/powerpc/kernel/vdso/Makefile            | 10 +-
- arch/powerpc/kernel/vdso/getrandom.S         |  8 ++
- arch/powerpc/kernel/vdso/vdso64.lds.S        |  1 +
- arch/powerpc/kernel/vdso/vgetrandom-chacha.S | 98 ++++++++++++++++++++
- 6 files changed, 116 insertions(+), 5 deletions(-)
+All warnings (new ones prefixed by >>):
 
-diff --git a/arch/powerpc/Kconfig b/arch/powerpc/Kconfig
-index 54b270ef18b1..b45452ac4a73 100644
---- a/arch/powerpc/Kconfig
-+++ b/arch/powerpc/Kconfig
-@@ -311,7 +311,7 @@ config PPC
- 	select SYSCTL_EXCEPTION_TRACE
- 	select THREAD_INFO_IN_TASK
- 	select TRACE_IRQFLAGS_SUPPORT
--	select VDSO_GETRANDOM			if PPC32
-+	select VDSO_GETRANDOM
- 	#
- 	# Please keep this list sorted alphabetically.
- 	#
-diff --git a/arch/powerpc/include/asm/mman.h b/arch/powerpc/include/asm/mman.h
-index 17a77d47ed6d..42a51a993d94 100644
---- a/arch/powerpc/include/asm/mman.h
-+++ b/arch/powerpc/include/asm/mman.h
-@@ -6,7 +6,7 @@
- 
- #include <uapi/asm/mman.h>
- 
--#ifdef CONFIG_PPC64
-+#if defined(CONFIG_PPC64) && !defined(BUILD_VDSO)
- 
- #include <asm/cputable.h>
- #include <linux/mm.h>
-diff --git a/arch/powerpc/kernel/vdso/Makefile b/arch/powerpc/kernel/vdso/Makefile
-index fa0b9b3b51af..56fb1633529a 100644
---- a/arch/powerpc/kernel/vdso/Makefile
-+++ b/arch/powerpc/kernel/vdso/Makefile
-@@ -9,6 +9,7 @@ obj-vdso32 = sigtramp32-32.o gettimeofday-32.o datapage-32.o cacheflush-32.o not
- obj-vdso64 = sigtramp64-64.o gettimeofday-64.o datapage-64.o cacheflush-64.o note-64.o getcpu-64.o
- 
- obj-vdso32 += getrandom-32.o vgetrandom-chacha-32.o
-+obj-vdso64 += getrandom-64.o vgetrandom-chacha-64.o
- 
- ifneq ($(c-gettimeofday-y),)
-   CFLAGS_vgettimeofday-32.o += -include $(c-gettimeofday-y)
-@@ -21,6 +22,7 @@ endif
- 
- ifneq ($(c-getrandom-y),)
-   CFLAGS_vgetrandom-32.o += -include $(c-getrandom-y)
-+  CFLAGS_vgetrandom-64.o += -include $(c-getrandom-y) $(call cc-option, -ffixed-r30)
- endif
- 
- # Build rules
-@@ -34,10 +36,10 @@ endif
- targets := $(obj-vdso32) vdso32.so.dbg vgettimeofday-32.o vgetrandom-32.o
- targets += crtsavres-32.o
- obj-vdso32 := $(addprefix $(obj)/, $(obj-vdso32))
--targets += $(obj-vdso64) vdso64.so.dbg vgettimeofday-64.o
-+targets += $(obj-vdso64) vdso64.so.dbg vgettimeofday-64.o vgetrandom-64.o
- obj-vdso64 := $(addprefix $(obj)/, $(obj-vdso64))
- 
--ccflags-y := -fno-common -fno-builtin
-+ccflags-y := -fno-common -fno-builtin -DBUILD_VDSO
- ccflags-y += $(DISABLE_LATENT_ENTROPY_PLUGIN)
- ccflags-y += $(call cc-option, -fno-stack-protector)
- ccflags-y += -DDISABLE_BRANCH_PROFILING
-@@ -71,7 +73,7 @@ CPPFLAGS_vdso64.lds += -P -C
- # link rule for the .so file, .lds has to be first
- $(obj)/vdso32.so.dbg: $(obj)/vdso32.lds $(obj-vdso32) $(obj)/vgettimeofday-32.o $(obj)/vgetrandom-32.o $(obj)/crtsavres-32.o FORCE
- 	$(call if_changed,vdso32ld_and_check)
--$(obj)/vdso64.so.dbg: $(obj)/vdso64.lds $(obj-vdso64) $(obj)/vgettimeofday-64.o FORCE
-+$(obj)/vdso64.so.dbg: $(obj)/vdso64.lds $(obj-vdso64) $(obj)/vgettimeofday-64.o $(obj)/vgetrandom-64.o FORCE
- 	$(call if_changed,vdso64ld_and_check)
- 
- # assembly rules for the .S files
-@@ -87,6 +89,8 @@ $(obj-vdso64): %-64.o: %.S FORCE
- 	$(call if_changed_dep,vdso64as)
- $(obj)/vgettimeofday-64.o: %-64.o: %.c FORCE
- 	$(call if_changed_dep,cc_o_c)
-+$(obj)/vgetrandom-64.o: %-64.o: %.c FORCE
-+	$(call if_changed_dep,cc_o_c)
- 
- # Generate VDSO offsets using helper script
- gen-vdso32sym := $(src)/gen_vdso32_offsets.sh
-diff --git a/arch/powerpc/kernel/vdso/getrandom.S b/arch/powerpc/kernel/vdso/getrandom.S
-index 21773ef3fc1d..a957cd2b2b03 100644
---- a/arch/powerpc/kernel/vdso/getrandom.S
-+++ b/arch/powerpc/kernel/vdso/getrandom.S
-@@ -27,10 +27,18 @@
-   .cfi_adjust_cfa_offset PPC_MIN_STKFRM
- 	PPC_STL		r0, PPC_MIN_STKFRM + PPC_LR_STKOFF(r1)
-   .cfi_rel_offset lr, PPC_MIN_STKFRM + PPC_LR_STKOFF
-+#ifdef __powerpc64__
-+	PPC_STL		r2, PPC_MIN_STKFRM + STK_GOT(r1)
-+  .cfi_rel_offset r2, PPC_MIN_STKFRM + STK_GOT
-+#endif
- 	get_datapage	r8
- 	addi		r8, r8, VDSO_RNG_DATA_OFFSET
- 	bl		CFUNC(DOTSYM(\funct))
- 	PPC_LL		r0, PPC_MIN_STKFRM + PPC_LR_STKOFF(r1)
-+#ifdef __powerpc64__
-+	PPC_LL		r2, PPC_MIN_STKFRM + STK_GOT(r1)
-+  .cfi_restore r2
-+#endif
- 	cmpwi		r3, 0
- 	mtlr		r0
- 	addi		r1, r1, 2 * PPC_MIN_STKFRM
-diff --git a/arch/powerpc/kernel/vdso/vdso64.lds.S b/arch/powerpc/kernel/vdso/vdso64.lds.S
-index 400819258c06..9481e4b892ed 100644
---- a/arch/powerpc/kernel/vdso/vdso64.lds.S
-+++ b/arch/powerpc/kernel/vdso/vdso64.lds.S
-@@ -123,6 +123,7 @@ VERSION
- 		__kernel_sigtramp_rt64;
- 		__kernel_getcpu;
- 		__kernel_time;
-+		__kernel_getrandom;
- 
- 	local: *;
- 	};
-diff --git a/arch/powerpc/kernel/vdso/vgetrandom-chacha.S b/arch/powerpc/kernel/vdso/vgetrandom-chacha.S
-index a3475b9e8c10..c9d4c5b38242 100644
---- a/arch/powerpc/kernel/vdso/vgetrandom-chacha.S
-+++ b/arch/powerpc/kernel/vdso/vgetrandom-chacha.S
-@@ -79,12 +79,59 @@
-  *	r16-r31: state
-  */
- SYM_FUNC_START(__arch_chacha20_blocks_nostack)
-+#ifdef __powerpc64__
-+	std	r5, -216(r1)
-+
-+	std	r14, -144(r1)
-+	std	r15, -136(r1)
-+	std	r16, -128(r1)
-+	std	r17, -120(r1)
-+	std	r18, -112(r1)
-+	std	r19, -104(r1)
-+	std	r20, -96(r1)
-+	std	r21, -88(r1)
-+	std	r22, -80(r1)
-+	std	r23, -72(r1)
-+	std	r24, -64(r1)
-+	std	r25, -56(r1)
-+	std	r26, -48(r1)
-+	std	r27, -40(r1)
-+	std	r28, -32(r1)
-+	std	r29, -24(r1)
-+	std	r30, -16(r1)
-+	std	r31, -8(r1)
-+#else
- 	stwu	r1, -96(r1)
- 	stw	r5, 20(r1)
-+#if defined(CONFIG_CPU_BIG_ENDIAN)
- 	stmw	r14, 24(r1)
-+#else
-+	stw	r14, 24(r1)
-+	stw	r15, 28(r1)
-+	stw	r16, 32(r1)
-+	stw	r17, 36(r1)
-+	stw	r18, 40(r1)
-+	stw	r19, 44(r1)
-+	stw	r20, 48(r1)
-+	stw	r21, 52(r1)
-+	stw	r22, 56(r1)
-+	stw	r23, 60(r1)
-+	stw	r24, 64(r1)
-+	stw	r25, 68(r1)
-+	stw	r26, 72(r1)
-+	stw	r27, 76(r1)
-+	stw	r28, 80(r1)
-+	stw	r29, 84(r1)
-+	stw	r30, 88(r1)
-+	stw	r31, 92(r1)
-+#endif
-+#endif
- 	li	r31, 4
- 	LWZX_LE	r14, 0, r5
- 	LWZX_LE	r15, r31, r5
-+#ifdef __powerpc64__
-+	rldimi	r14, r15, 32, 0
-+#endif
- 	mr	r0, r6
- 
- 	lwz	r5, 0(r4)
-@@ -177,13 +224,22 @@ SYM_FUNC_START(__arch_chacha20_blocks_nostack)
- 	STWX_LE	r31, r4, r3
- 	addi	r3, r3, 8
- 
-+#ifdef __powerpc64__
-+	addi	r14, r14, 1
-+	srdi	r15, r14, 32
-+#else
- 	addic	r14, r14, 1
- 	addze	r15, r15
-+#endif
- 
- 	subic.	r0, r0, 1	/* subi. can't use r0 as source */
- 	bne	.Lblock
- 
-+#ifdef __powerpc64__
-+	ld	r5, -216(r1)
-+#else
- 	lwz	r5, 20(r1)
-+#endif
- 	STWX_LE	r14, 0, r5
- 	STWX_LE	r15, r4, r5
- 
-@@ -195,7 +251,49 @@ SYM_FUNC_START(__arch_chacha20_blocks_nostack)
- 	li	r11, 0
- 	li	r12, 0
- 
-+#ifdef __powerpc64__
-+	ld	r14, -144(r1)
-+	ld	r15, -136(r1)
-+	ld	r16, -128(r1)
-+	ld	r17, -120(r1)
-+	ld	r18, -112(r1)
-+	ld	r19, -104(r1)
-+	ld	r20, -96(r1)
-+	ld	r21, -88(r1)
-+	ld	r22, -80(r1)
-+	ld	r23, -72(r1)
-+	ld	r24, -64(r1)
-+	ld	r25, -56(r1)
-+	ld	r26, -48(r1)
-+	ld	r27, -40(r1)
-+	ld	r28, -32(r1)
-+	ld	r29, -24(r1)
-+	ld	r30, -16(r1)
-+	ld	r31, -8(r1)
-+#else
-+#if defined(CONFIG_CPU_BIG_ENDIAN)
- 	lmw	r14, 24(r1)
-+#else
-+	lwz	r14, 24(r1)
-+	lwz	r15, 28(r1)
-+	lwz	r16, 32(r1)
-+	lwz	r17, 36(r1)
-+	lwz	r18, 40(r1)
-+	lwz	r19, 44(r1)
-+	lwz	r20, 48(r1)
-+	lwz	r21, 52(r1)
-+	lwz	r22, 56(r1)
-+	lwz	r23, 60(r1)
-+	lwz	r24, 64(r1)
-+	lwz	r25, 68(r1)
-+	lwz	r26, 72(r1)
-+	lwz	r27, 76(r1)
-+	lwz	r28, 80(r1)
-+	lwz	r29, 84(r1)
-+	lwz	r30, 88(r1)
-+	lwz	r31, 92(r1)
-+#endif
- 	addi	r1, r1, 96
-+#endif
- 	blr
- SYM_FUNC_END(__arch_chacha20_blocks_nostack)
+>> drivers/gpio/gpio-aspeed.c:394:6: warning: variable 'copro' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
+     394 |         if (gpio->llops->copro_request)
+         |             ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/gpio/gpio-aspeed.c:399:6: note: uninitialized use occurs here
+     399 |         if (copro && gpio->llops->copro_release)
+         |             ^~~~~
+   drivers/gpio/gpio-aspeed.c:394:2: note: remove the 'if' if its condition is always true
+     394 |         if (gpio->llops->copro_request)
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     395 |                 copro = gpio->llops->copro_request(gpio, offset);
+   drivers/gpio/gpio-aspeed.c:391:12: note: initialize the variable 'copro' to silence this warning
+     391 |         bool copro;
+         |                   ^
+         |                    = 0
+   drivers/gpio/gpio-aspeed.c:415:6: warning: variable 'copro' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
+     415 |         if (gpio->llops->copro_request)
+         |             ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/gpio/gpio-aspeed.c:418:6: note: uninitialized use occurs here
+     418 |         if (copro && gpio->llops->copro_release)
+         |             ^~~~~
+   drivers/gpio/gpio-aspeed.c:415:2: note: remove the 'if' if its condition is always true
+     415 |         if (gpio->llops->copro_request)
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     416 |                 copro = gpio->llops->copro_request(gpio, offset);
+   drivers/gpio/gpio-aspeed.c:408:12: note: initialize the variable 'copro' to silence this warning
+     408 |         bool copro;
+         |                   ^
+         |                    = 0
+   drivers/gpio/gpio-aspeed.c:438:6: warning: variable 'copro' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
+     438 |         if (gpio->llops->copro_request)
+         |             ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/gpio/gpio-aspeed.c:443:6: note: uninitialized use occurs here
+     443 |         if (copro && gpio->llops->copro_release)
+         |             ^~~~~
+   drivers/gpio/gpio-aspeed.c:438:2: note: remove the 'if' if its condition is always true
+     438 |         if (gpio->llops->copro_request)
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     439 |                 copro = gpio->llops->copro_request(gpio, offset);
+   drivers/gpio/gpio-aspeed.c:431:12: note: initialize the variable 'copro' to silence this warning
+     431 |         bool copro;
+         |                   ^
+         |                    = 0
+   drivers/gpio/gpio-aspeed.c:502:6: warning: variable 'copro' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
+     502 |         if (gpio->llops->copro_request)
+         |             ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/gpio/gpio-aspeed.c:507:6: note: uninitialized use occurs here
+     507 |         if (copro && gpio->llops->copro_release)
+         |             ^~~~~
+   drivers/gpio/gpio-aspeed.c:502:2: note: remove the 'if' if its condition is always true
+     502 |         if (gpio->llops->copro_request)
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     503 |                 copro = gpio->llops->copro_request(gpio, offset);
+   drivers/gpio/gpio-aspeed.c:495:12: note: initialize the variable 'copro' to silence this warning
+     495 |         bool copro;
+         |                   ^
+         |                    = 0
+   drivers/gpio/gpio-aspeed.c:528:6: warning: variable 'copro' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
+     528 |         if (gpio->llops->copro_request)
+         |             ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/gpio/gpio-aspeed.c:533:6: note: uninitialized use occurs here
+     533 |         if (copro && gpio->llops->copro_release)
+         |             ^~~~~
+   drivers/gpio/gpio-aspeed.c:528:2: note: remove the 'if' if its condition is always true
+     528 |         if (gpio->llops->copro_request)
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     529 |                 copro = gpio->llops->copro_request(gpio, offset);
+   drivers/gpio/gpio-aspeed.c:517:12: note: initialize the variable 'copro' to silence this warning
+     517 |         bool copro;
+         |                   ^
+         |                    = 0
+   drivers/gpio/gpio-aspeed.c:589:6: warning: variable 'copro' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
+     589 |         if (gpio->llops->copro_request)
+         |             ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/gpio/gpio-aspeed.c:596:6: note: uninitialized use occurs here
+     596 |         if (copro && gpio->llops->copro_release)
+         |             ^~~~~
+   drivers/gpio/gpio-aspeed.c:589:2: note: remove the 'if' if its condition is always true
+     589 |         if (gpio->llops->copro_request)
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     590 |                 copro = gpio->llops->copro_request(gpio, offset);
+   drivers/gpio/gpio-aspeed.c:561:12: note: initialize the variable 'copro' to silence this warning
+     561 |         bool copro;
+         |                   ^
+         |                    = 0
+   drivers/gpio/gpio-aspeed.c:659:6: warning: variable 'copro' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
+     659 |         if (gpio->llops->copro_request)
+         |             ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/gpio/gpio-aspeed.c:664:6: note: uninitialized use occurs here
+     664 |         if (copro && gpio->llops->copro_release)
+         |             ^~~~~
+   drivers/gpio/gpio-aspeed.c:659:2: note: remove the 'if' if its condition is always true
+     659 |         if (gpio->llops->copro_request)
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     660 |                 copro = gpio->llops->copro_request(gpio, offset);
+   drivers/gpio/gpio-aspeed.c:656:12: note: initialize the variable 'copro' to silence this warning
+     656 |         bool copro;
+         |                   ^
+         |                    = 0
+   7 warnings generated.
+
+
+vim +394 drivers/gpio/gpio-aspeed.c
+
+   385	
+   386	static void aspeed_gpio_set(struct gpio_chip *gc, unsigned int offset,
+   387				    int val)
+   388	{
+   389		struct aspeed_gpio *gpio = gpiochip_get_data(gc);
+   390		unsigned long flags;
+   391		bool copro;
+   392	
+   393		raw_spin_lock_irqsave(&gpio->lock, flags);
+ > 394		if (gpio->llops->copro_request)
+   395			copro = gpio->llops->copro_request(gpio, offset);
+   396	
+   397		__aspeed_gpio_set(gc, offset, val);
+   398	
+   399		if (copro && gpio->llops->copro_release)
+   400			gpio->llops->copro_release(gpio, offset);
+   401		raw_spin_unlock_irqrestore(&gpio->lock, flags);
+   402	}
+   403	
+
 -- 
-2.44.0
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
