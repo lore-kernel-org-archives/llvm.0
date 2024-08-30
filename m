@@ -1,131 +1,127 @@
-Received: from mail-vs1-f52.google.com (mail-vs1-f52.google.com [209.85.217.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2454B14C59B
-	for <llvm@lists.linux.dev>; Fri, 30 Aug 2024 06:45:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.217.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C61B116BE25;
+	Fri, 30 Aug 2024 08:16:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725000324; cv=none; b=br/UqUuETLt8kls/YigwONwuLPTAnltrH4/ebPfdt6Exz5q0LB3vogsUClrcppQBdBMibBuuGa1F8XdiNmbliG7UDVFbbEExMvLjo2drXy9PEkpJPPgN+OhaTM1982C0DCg6SOOdz1T9bF6xLofn6YbOs2acuq+52kRftfkOduA=
+	t=1725005767; cv=none; b=qj9/EDAzCOzthUyWlchZthSLgwD9w9YL/FxzN3J23Ks8o2HIfKPWeziTdYsx+09NKwwxEZdVv8c43ojTInOkuS0PiFnYtgUci+uWdWXUGixx8TLn9qjwwdRNWxSiFEaIpuy12o+dUGvIYZtapL8d0tpZZqj0MXDEbs+lY5BxD5Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725000324; c=relaxed/simple;
-	bh=z2tMGYCX6QIF8USqnak/joMuhfj1TNUKUkBSSXPLdCM=;
-	h=MIME-Version:From:Date:Message-ID:Subject:To:Cc:Content-Type; b=hhu3obWsCgQV88E1ZmiqEjyinDgI8mEkS7UZd227OOvXKjSDTwsj0TQPeUg4Bh89qJETPixbmzJ895AuxfKqx8KQ4bAqELW75bX0/IoGXlkRhb0n9GTefaLS95GxUlM8C7pSdo/F5OZTP5ARvyayzLOv5vgfeGXeKmImJKPRNW4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=FDe9Ang4; arc=none smtp.client-ip=209.85.217.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+	s=arc-20240116; t=1725005767; c=relaxed/simple;
+	bh=PjHdWePCmnjwILs37Lv5nHxMdYlILMkbkBxzQj+3vB0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=qKnRfXI6Khv/coy6weo92hQ96WC2SnZcIJMNb8ypz+73hTTvRfQ0S/Kf1/0zPCEkExcbIvdpu1WtuCZi1Zdi9GPF9oNuYpbXlkcLmW2qN8Ym8nKMGAbPGjA0huGThYkENkckztk3KURPK9m21RpT9Pr/XVwTQdEirJBlYBHcEbc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=c66ZebI+; arc=none smtp.client-ip=192.198.163.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="FDe9Ang4"
-Received: by mail-vs1-f52.google.com with SMTP id ada2fe7eead31-498eb76145bso679705137.1
-        for <llvm@lists.linux.dev>; Thu, 29 Aug 2024 23:45:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1725000322; x=1725605122; darn=lists.linux.dev;
-        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=rbpFfZAAGy+MvWzUwDXlPYpxkRy+IDxVTjCRFwW+Hxg=;
-        b=FDe9Ang4AlU1ZQry/RdZ30cYG4JOlN/G5PQmCvByuRyj+Pd7PBS1k3X/kxcZBDeHjs
-         7Wu/uPx4RFBOzEn8f8nsYv4U2Gaj2k05xbsmdjM4126Zh1yYiOx3cFA9k+eKyX+vAjKi
-         sR4CRZY9YS0tp/DjNpK5SqYTG6Ir1Nd1zuhGUv4GWECQL1sv56/8I7WNQ44nivAgnOtp
-         MIIiBHCcMFsSrKh0dtOapmm5D2ElHsAsOGo4qa0J6GYPOi/LO/SWKmL7hYaapYv66aJW
-         /mgBH+2jmWhXJZR4HV0J3xoQ/giaEoi4ux1MF2kCj/3/+xEJO09R/2CZTvOAMnrbPd9a
-         q+Aw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1725000322; x=1725605122;
-        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=rbpFfZAAGy+MvWzUwDXlPYpxkRy+IDxVTjCRFwW+Hxg=;
-        b=vpcup9/OjA36ZSiXyYWJI50L7zDWITKbTdVBhYypzVdiBFpWwduxoH0r6uqqqFdkl9
-         Cb/XyhwnqprsjVi4y5RllyGkWDHJjv7eIZ283ZheXgLx9XmqwPIeyLbt/EuaJLBYDbxM
-         qyQqgZXFg/sXkDbwpdpA5cmgCyacKaj07e/e/C1kdWTRzbtaQwDd9yeW1r0XQvWB6DOi
-         oEw41HhJwK9kGI2hdMQTGudziD26+w3YZ50JY0NeQt3NTrjoYg5WZUGJi2zjz9i/JOPo
-         6/ayviM20KHM5FDQ+Cc6opsa2u3XSFUFhQf6wkMQ21tC0rDzPi366LQgK6PuageowZXp
-         Ifhw==
-X-Gm-Message-State: AOJu0Yw14m00jNNinMA/hwMfqqwCmNH4cpKXMnpmR3CXNB6pekuKf4Li
-	1hViIzKV20L8YJuC+K55hZsJeLZHCNumSZtqGcc0kaKYAwwnsqT6uWjxdscw8vRmRlrsMjnEVUl
-	aekGAAO/3gMTYkeojUOfJxLueC9iKk0Gtgl33D3X0+he4wWrfX4Q=
-X-Google-Smtp-Source: AGHT+IGjtT+iRsWBRGw877rPBsoWnB7aehlawvTFpCsFP81H03YlByPMlEYvHuWNIHaoPnc0CqKmfajXR5onhPoZMMU=
-X-Received: by 2002:a05:6102:3754:b0:498:ccd9:5b1e with SMTP id
- ada2fe7eead31-49a5b017424mr6994044137.4.1725000321654; Thu, 29 Aug 2024
- 23:45:21 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="c66ZebI+"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1725005764; x=1756541764;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=PjHdWePCmnjwILs37Lv5nHxMdYlILMkbkBxzQj+3vB0=;
+  b=c66ZebI+wd83jed5PiOKePFSLaqYuOlyr2CD2uOr2AlQRi1h5QgNXc/c
+   sbUZebCzQBOU0gOzdtjNnZyqvBBse0bZ0vQkxwD1n/OM3VOGXvhqTJDiA
+   66oomZHCpDdb+TQLXrNxGWU/sxepa/uS/GcjjBf75iLv18ppv3jn8Vj5i
+   kSIE09htct7n5mxLOADCswpSA+Yen4ell+45BMqvUR7MeN6nj9CJ4Wpig
+   oQld0LCTjMOt83VF96AIvm+n5TH80NasmH61CmOTuAAe4kNIZFX5wl9W0
+   thZSl6pHKt0SKCQbwivi1eM2bjoI6CXhnyMK+rjw02R0YqVCH8ZmUAL+a
+   w==;
+X-CSE-ConnectionGUID: p0e5p0TsTtuq1BS1uVRXuQ==
+X-CSE-MsgGUID: bSaJoiSMST6x4Wkw8FiUTw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11179"; a="26533349"
+X-IronPort-AV: E=Sophos;i="6.10,188,1719903600"; 
+   d="scan'208";a="26533349"
+Received: from orviesa008.jf.intel.com ([10.64.159.148])
+  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Aug 2024 01:16:03 -0700
+X-CSE-ConnectionGUID: TvvbhJ8BQJWBw3Zg/wmMJg==
+X-CSE-MsgGUID: moiARIEVTB2TfW5fDJeLHA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.10,188,1719903600"; 
+   d="scan'208";a="64568780"
+Received: from lkp-server01.sh.intel.com (HELO 9c6b1c7d3b50) ([10.239.97.150])
+  by orviesa008.jf.intel.com with ESMTP; 30 Aug 2024 01:16:00 -0700
+Received: from kbuild by 9c6b1c7d3b50 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1sjwnU-0001FC-38;
+	Fri, 30 Aug 2024 08:15:56 +0000
+Date: Fri, 30 Aug 2024 16:15:46 +0800
+From: kernel test robot <lkp@intel.com>
+To: Christian =?iso-8859-1?Q?K=F6nig?= <ckoenig.leichtzumerken@gmail.com>,
+	daniel.vetter@ffwll.ch, vitaly.prosyak@amd.com
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	dri-devel@lists.freedesktop.org, ltuikov89@gmail.com
+Subject: Re: [PATCH 1/4] drm/sched: add optional errno to drm_sched_start()
+Message-ID: <202408301653.9umdd9cC-lkp@intel.com>
+References: <20240826122541.85663-1-christian.koenig@amd.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-From: Naresh Kamboju <naresh.kamboju@linaro.org>
-Date: Fri, 30 Aug 2024 12:15:10 +0530
-Message-ID: <CA+G9fYtemFfuhc7=eNyP3TezM9Euc8sFtHe4GDR4Z9XdHzXSJA@mail.gmail.com>
-Subject: net/xfrm/xfrm_policy.c:1286:8: error: variable 'dir' is uninitialized
- when used here [-Werror,-Wuninitialized]
-To: clang-built-linux <llvm@lists.linux.dev>, Netdev <netdev@vger.kernel.org>, 
-	open list <linux-kernel@vger.kernel.org>, lkft-triage@lists.linaro.org, 
-	Linux Regressions <regressions@lists.linux.dev>
-Cc: Anders Roxell <anders.roxell@linaro.org>, Dan Carpenter <dan.carpenter@linaro.org>, 
-	Arnd Bergmann <arnd@arndb.de>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <ndesaulniers@google.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20240826122541.85663-1-christian.koenig@amd.com>
 
-The x86_64 defconfig builds failed on today's Linux next-20240829
-due to following build warnings / errors.
+Hi Christian,
 
-Regressions:
-* i386, build
-  - clang-18-defconfig
-  - clang-nightly-defconfig
+kernel test robot noticed the following build errors:
 
-* x86_64, build
-  - clang-18-lkftconfig
-  - clang-18-lkftconfig-compat
-  - clang-18-lkftconfig-kcsan
-  - clang-18-lkftconfig-no-kselftest-frag
-  - clang-18-x86_64_defconfig
-  - clang-nightly-lkftconfig
-  - clang-nightly-lkftconfig-kselftest
-  - clang-nightly-x86_64_defconfig
-  - rustclang-nightly-lkftconfig-kselftest
+[auto build test ERROR on next-20240826]
+[cannot apply to drm-intel/for-linux-next drm-intel/for-linux-next-fixes linus/master v6.11-rc5 v6.11-rc4 v6.11-rc3 v6.11-rc5]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-first seen on next-20240829.
-  Good: next-20240828
-  BAD:  next-20240829
+url:    https://github.com/intel-lab-lkp/linux/commits/Christian-K-nig/dma-buf-give-examples-of-error-codes-to-use/20240826-202848
+base:   next-20240826
+patch link:    https://lore.kernel.org/r/20240826122541.85663-1-christian.koenig%40amd.com
+patch subject: [PATCH 1/4] drm/sched: add optional errno to drm_sched_start()
+config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20240830/202408301653.9umdd9cC-lkp@intel.com/config)
+compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240830/202408301653.9umdd9cC-lkp@intel.com/reproduce)
 
-Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202408301653.9umdd9cC-lkp@intel.com/
 
-build log:
---------
-net/xfrm/xfrm_policy.c:1286:8: error: variable 'dir' is uninitialized
-when used here [-Werror,-Wuninitialized]
- 1286 |                 if ((dir & XFRM_POLICY_MASK) == XFRM_POLICY_OUT) {
-      |                      ^~~
-net/xfrm/xfrm_policy.c:1257:9: note: initialize the variable 'dir' to
-silence this warning
- 1257 |         int dir;
-      |                ^
-      |                 = 0
-1 error generated.
+All errors (new ones prefixed by >>):
 
-Build Log links,
---------
- - https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20240829/testrun/24977652/suite/build/test/clang-18-lkftconfig/log
+>> drivers/gpu/drm/panthor/panthor_sched.c:2541:35: error: too few arguments to function call, expected 2, have 1
+    2541 |         drm_sched_start(&queue->scheduler);
+         |         ~~~~~~~~~~~~~~~                  ^
+   include/drm/gpu_scheduler.h:582:6: note: 'drm_sched_start' declared here
+     582 | void drm_sched_start(struct drm_gpu_scheduler *sched, int errno);
+         |      ^               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   1 error generated.
 
-Build failed comparison:
- - https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20240829/testrun/24977652/suite/build/test/clang-18-lkftconfig/history/
+Kconfig warnings: (for reference only)
+   WARNING: unmet direct dependencies detected for OMAP2PLUS_MBOX
+   Depends on [n]: MAILBOX [=y] && (ARCH_OMAP2PLUS || ARCH_K3)
+   Selected by [y]:
+   - TI_K3_M4_REMOTEPROC [=y] && REMOTEPROC [=y] && (ARCH_K3 || COMPILE_TEST [=y])
 
-metadata:
-----
-  git describe: next-20240829
-  git repo: https://gitlab.com/Linaro/lkft/mirrors/next/linux-next
-  git sha: b18bbfc14a38b5234e09c2adcf713e38063a7e6e
-  kernel config:
-https://storage.tuxsuite.com/public/linaro/lkft/builds/2lKF49FRX1FB3IVv46cfZc30s9y/config
-  build url: https://storage.tuxsuite.com/public/linaro/lkft/builds/2lKF49FRX1FB3IVv46cfZc30s9y/
-  toolchain: clang-18 and clang-nightly
-  config: defconfig
 
-Steps to reproduce:
----------
- - tuxmake --runtime podman --target-arch x86_64 --toolchain clang-18
---kconfig defconfig LLVM=1 LLVM_IAS=1
+vim +2541 drivers/gpu/drm/panthor/panthor_sched.c
 
---
-Linaro LKFT
-https://lkft.linaro.org
+de85488138247d0 Boris Brezillon 2024-02-29  2532  
+de85488138247d0 Boris Brezillon 2024-02-29  2533  static void queue_start(struct panthor_queue *queue)
+de85488138247d0 Boris Brezillon 2024-02-29  2534  {
+de85488138247d0 Boris Brezillon 2024-02-29  2535  	struct panthor_job *job;
+de85488138247d0 Boris Brezillon 2024-02-29  2536  
+de85488138247d0 Boris Brezillon 2024-02-29  2537  	/* Re-assign the parent fences. */
+de85488138247d0 Boris Brezillon 2024-02-29  2538  	list_for_each_entry(job, &queue->scheduler.pending_list, base.list)
+de85488138247d0 Boris Brezillon 2024-02-29  2539  		job->base.s_fence->parent = dma_fence_get(job->done_fence);
+de85488138247d0 Boris Brezillon 2024-02-29  2540  
+83b501c1799a96a Christian König 2024-07-19 @2541  	drm_sched_start(&queue->scheduler);
+de85488138247d0 Boris Brezillon 2024-02-29  2542  }
+de85488138247d0 Boris Brezillon 2024-02-29  2543  
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
