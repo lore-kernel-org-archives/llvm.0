@@ -1,130 +1,158 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f176.google.com (mail-pg1-f176.google.com [209.85.215.176])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9ACCA192D77;
-	Fri, 30 Aug 2024 17:42:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D180514E2E9;
+	Fri, 30 Aug 2024 17:55:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725039749; cv=none; b=HBQBqJBISFKo9CYVM9Nl1MRWFK3OHm9VkpdPAe6kGvZsNJe+6lwNFMV5tjBcYSd7MZv8vlwQO98XI2br6/ocYw6kd9MlLQs+e6GsdbJF0D/tFmTKhIc3DIk0ZbadcN1DYrH5jjRGLAOTLvyO7tqibTBI2gvz5hMUIyCXZV/Z2SM=
+	t=1725040518; cv=none; b=fY74x+GmEdNbAHUJuPw1LBUbdaMyOA+nUEHRiQhwsoz31uUHRB/tLgb2X4ui2HWlYf11C9WOrz/NIYr8RI8UZ9Dh/jQ8B7Jg94uDqj5yPK78PpoHOaBwvcecfyTNu95t6jDStqqWBUBcbgs+wtsG1RkfRUmb6m0MLC/s6i8hKig=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725039749; c=relaxed/simple;
-	bh=3MNP2MVv4HH9Xr02GOYFXzqt2aY5RaJ54paa0p/6Q1Y=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Nox78iV+aammd1nvZ4MsZjVv6nKkmoSLfifkEcNGza3oExwaxO60t5RojAQoqAC2IS/a2ESY+0H4xy9QKwUhy1NGRj+RSJRN5capuUOGLKRbrvN55RwzLbVqcjToclftfJTNi1wjfZugdAFNHlrJIzeR0mxeS8GogqaeH2TuQxQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Pvb4Bpnq; arc=none smtp.client-ip=192.198.163.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1725040518; c=relaxed/simple;
+	bh=f3THC0pBTuv9SAl7dOz57STAiV+tmA1lLWhuX8fg/Tw=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=r/cOd660UJplb/JgHwnp3qXt/grRLZz8ineClIojOZIRyouhQCkr2fNS+mtYALs3VwX59raAm5T5To7GwtiEie4sQGK4WlrzuQ2CCE0zfXhdbu6AMXTvHJMTCmHEL2tQ0u4UWBsa8hcL0Wo5Pwa/bYb+6ZPKI/e4FVk6v64FrlM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=B4CWd+3S; arc=none smtp.client-ip=209.85.215.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Pvb4Bpnq"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1725039748; x=1756575748;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=3MNP2MVv4HH9Xr02GOYFXzqt2aY5RaJ54paa0p/6Q1Y=;
-  b=Pvb4BpnqSsVRrkhSYubL21dNSOhUY+fekyMfkcd63mgh+GhJvSrcp442
-   iDvfd9fzNhK0xXN3gO+0fL9dog+OZFqdnoWlgJKhLu+aGyn+iLLcfJ9cI
-   qZSM4jYXjGs8nsmyCE/zb9gFUMGDNymMOidSV5jaITgg4sAQ9upIzZa2R
-   5qHOKbKZgXXvRsUkVsIoYsBAP4Oh+lphdBqEPIrvdLi1gOzso1PftWvLp
-   +bH6b04p1DofJLPREtQafpcDhNxd3Gyn4JzNa0yFunGkJRv764ly12sgj
-   oveGCirlDuoW3T8hNroR1vMEq9yoeRXtd80KSPs/NSLxpPqUp9fOoKQo2
-   w==;
-X-CSE-ConnectionGUID: D4mQPJDSTVqwCzr/5RyLRQ==
-X-CSE-MsgGUID: ojw4wyX5Q9SkuYdVQuZkOw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11180"; a="26588819"
-X-IronPort-AV: E=Sophos;i="6.10,189,1719903600"; 
-   d="scan'208";a="26588819"
-Received: from orviesa008.jf.intel.com ([10.64.159.148])
-  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Aug 2024 10:42:27 -0700
-X-CSE-ConnectionGUID: Qrn7kCy4TTmPY7lfTIiV5Q==
-X-CSE-MsgGUID: hveFh9znS2aLYY//6xr4tA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.10,189,1719903600"; 
-   d="scan'208";a="64713167"
-Received: from lkp-server01.sh.intel.com (HELO 9c6b1c7d3b50) ([10.239.97.150])
-  by orviesa008.jf.intel.com with ESMTP; 30 Aug 2024 10:42:23 -0700
-Received: from kbuild by 9c6b1c7d3b50 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1sk5dc-0001la-2H;
-	Fri, 30 Aug 2024 17:42:20 +0000
-Date: Sat, 31 Aug 2024 01:41:46 +0800
-From: kernel test robot <lkp@intel.com>
-To: Andrii Nakryiko <andrii@kernel.org>, linux-trace-kernel@vger.kernel.org,
-	peterz@infradead.org, oleg@redhat.com
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	rostedt@goodmis.org, mhiramat@kernel.org, bpf@vger.kernel.org,
-	linux-kernel@vger.kernel.org, jolsa@kernel.org, paulmck@kernel.org,
-	willy@infradead.org, surenb@google.com, akpm@linux-foundation.org,
-	linux-mm@kvack.org, Andrii Nakryiko <andrii@kernel.org>
-Subject: Re: [PATCH v4 8/8] uprobes: switch to RCU Tasks Trace flavor for
- better performance
-Message-ID: <202408310130.t9EBKteQ-lkp@intel.com>
-References: <20240829183741.3331213-9-andrii@kernel.org>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="B4CWd+3S"
+Received: by mail-pg1-f176.google.com with SMTP id 41be03b00d2f7-7cf6641765dso1603501a12.1;
+        Fri, 30 Aug 2024 10:55:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1725040516; x=1725645316; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=qZ762szQ1qEpWPo0O5KQwapOAPZbS/knJpSelWgCLe8=;
+        b=B4CWd+3S9tySTaTPgmnNoTLwkqfz2Ny2cz8P0b1HWnaD36shDHb90XO4/A6aeKyzvp
+         hhXMX5QoyBhaaifsnvWWUQxVo2l0Zj/XmtP1NJ9Dy4px4E2N6vfqSGoYDqSR8Mn9LGZ1
+         rQQ7hBlIP2YYWsXhndAcjhxpzUgU6MH1hUq4N3/U0Ms/abil35WdqrtP/UNkXaTS28u/
+         tkTBm6mFCWN3zJVjykF5l/Gv3QBpcUT9Ep/KQmFseFgO9WVWmdmMjR3n5Rb/slR3zTUo
+         0uWSX0v6c7N0teU6VW6prQFsZr2RWRNgY9JyTz4nwKNuJSAQX3PAfyfW+VKVtICssPY6
+         EnoA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1725040516; x=1725645316;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=qZ762szQ1qEpWPo0O5KQwapOAPZbS/knJpSelWgCLe8=;
+        b=pTRD0RbPVvhpozwnT3xVV4khXHjGZ8pyYstIpRve6u6f6aTI/smxYAFVJKHXZgY2op
+         nATsVIbBGCIx7Z4ERdsvkA50AUQf8txbwqKm3qUsVtbYccqWeuTH48qC40KrxZgVIJgi
+         NxnBo9sZmu5X7LKJPAEWdI5S9XB6L1lL8dNTAuJnluBHKJh95kzC7VEsqnN03Vc7hAQu
+         pIadGIU49/4HGiTcVG0e2Mz9+VLF7LblZnwOsOyTvlp5ejBeMdmClPgWdoheGW/hNMH+
+         3kfGr4rfPHqz6Vf5rJRpEn11CGlZXPDnpxfL4kr1S9Ed+Z4QwlpTM37kn2eClA9SlEsj
+         OOsg==
+X-Forwarded-Encrypted: i=1; AJvYcCWJJAyLzuwErSTqoYIePbLxM3bFG4EbgZdu6fThdG58tikJm55jTY4t4uGVjtHMMV5GyCWg@lists.linux.dev, AJvYcCXcYxXhFphIJlw/u1WMmHzn1JuZNfCdN4m0oXS5WoQhilut26ZzOzMyZeRncr1BtTrDL90AnnjSV13TedNuIQ==@lists.linux.dev
+X-Gm-Message-State: AOJu0YxF7kIBY0JqGOHcAq9+etNeftNc8qM0jvueqIkv43hFN4LKS/aM
+	JbJm4Y7Smg3QEPw3WDsiQabpBzUlyzOWn+rdjuQ2HtEtimtPMPP8PGeCtQaZlIVnwwLo4CbSQtk
+	HODSds2abKlA+4NtBLIUGnQSXVzQ=
+X-Google-Smtp-Source: AGHT+IHtJjX1Gwk7q65iKPb2jj2ZTbFe6Gbjk0MA9s/QRUze7TuxIpE1CDYdoK+SEpOHhavyYH0EIzF6ReAgjG7xuJ8=
+X-Received: by 2002:a17:90a:ce90:b0:2d8:6f73:55a with SMTP id
+ 98e67ed59e1d1-2d86f7305edmr2818362a91.25.1725040515970; Fri, 30 Aug 2024
+ 10:55:15 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240829183741.3331213-9-andrii@kernel.org>
+References: <20240829183741.3331213-9-andrii@kernel.org> <202408310130.t9EBKteQ-lkp@intel.com>
+In-Reply-To: <202408310130.t9EBKteQ-lkp@intel.com>
+From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date: Fri, 30 Aug 2024 10:55:04 -0700
+Message-ID: <CAEf4BzYiSfyZky+Axab6BwN55cyoY9N-0p7DA9R2OFr=ZdjS5Q@mail.gmail.com>
+Subject: Re: [PATCH v4 8/8] uprobes: switch to RCU Tasks Trace flavor for
+ better performance
+To: kernel test robot <lkp@intel.com>
+Cc: Andrii Nakryiko <andrii@kernel.org>, linux-trace-kernel@vger.kernel.org, 
+	peterz@infradead.org, oleg@redhat.com, llvm@lists.linux.dev, 
+	oe-kbuild-all@lists.linux.dev, rostedt@goodmis.org, mhiramat@kernel.org, 
+	bpf@vger.kernel.org, linux-kernel@vger.kernel.org, jolsa@kernel.org, 
+	paulmck@kernel.org, willy@infradead.org, surenb@google.com, 
+	akpm@linux-foundation.org, linux-mm@kvack.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Andrii,
+On Fri, Aug 30, 2024 at 10:42=E2=80=AFAM kernel test robot <lkp@intel.com> =
+wrote:
+>
+> Hi Andrii,
+>
+> kernel test robot noticed the following build errors:
+>
+> [auto build test ERROR on tip/perf/core]
+> [also build test ERROR on next-20240830]
+> [cannot apply to perf-tools-next/perf-tools-next perf-tools/perf-tools li=
+nus/master acme/perf/core v6.11-rc5]
+> [If your patch is applied to the wrong git tree, kindly drop us a note.
+> And when submitting patch, we suggest to use '--base' as documented in
+> https://git-scm.com/docs/git-format-patch#_base_tree_information]
+>
+> url:    https://github.com/intel-lab-lkp/linux/commits/Andrii-Nakryiko/up=
+robes-revamp-uprobe-refcounting-and-lifetime-management/20240830-024135
+> base:   tip/perf/core
+> patch link:    https://lore.kernel.org/r/20240829183741.3331213-9-andrii%=
+40kernel.org
+> patch subject: [PATCH v4 8/8] uprobes: switch to RCU Tasks Trace flavor f=
+or better performance
+> config: i386-buildonly-randconfig-004-20240830 (https://download.01.org/0=
+day-ci/archive/20240831/202408310130.t9EBKteQ-lkp@intel.com/config)
+> compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a=
+15a9eac96088ae5e9134248d8236e34b91b1)
+> reproduce (this is a W=3D1 build): (https://download.01.org/0day-ci/archi=
+ve/20240831/202408310130.t9EBKteQ-lkp@intel.com/reproduce)
+>
+> If you fix the issue in a separate patch/commit (i.e. not just a new vers=
+ion of
+> the same patch/commit), kindly add following tags
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Closes: https://lore.kernel.org/oe-kbuild-all/202408310130.t9EBKteQ-lkp=
+@intel.com/
+>
+> All errors (new ones prefixed by >>):
+>
+> >> kernel/events/uprobes.c:1157:2: error: call to undeclared function 'sy=
+nchronize_rcu_tasks_trace'; ISO C99 and later do not support implicit funct=
+ion declarations [-Wimplicit-function-declaration]
+>     1157 |         synchronize_rcu_tasks_trace();
+>          |         ^
+>    kernel/events/uprobes.c:1157:2: note: did you mean 'synchronize_rcu_ta=
+sks_rude'?
+>    include/linux/rcupdate.h:206:6: note: 'synchronize_rcu_tasks_rude' dec=
+lared here
+>      206 | void synchronize_rcu_tasks_rude(void);
+>          |      ^
+>    1 error generated.
 
-kernel test robot noticed the following build errors:
+Missing #include <linux/rcupdate_trace.h>, will add.
 
-[auto build test ERROR on tip/perf/core]
-[also build test ERROR on next-20240830]
-[cannot apply to perf-tools-next/perf-tools-next perf-tools/perf-tools linus/master acme/perf/core v6.11-rc5]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Andrii-Nakryiko/uprobes-revamp-uprobe-refcounting-and-lifetime-management/20240830-024135
-base:   tip/perf/core
-patch link:    https://lore.kernel.org/r/20240829183741.3331213-9-andrii%40kernel.org
-patch subject: [PATCH v4 8/8] uprobes: switch to RCU Tasks Trace flavor for better performance
-config: i386-buildonly-randconfig-004-20240830 (https://download.01.org/0day-ci/archive/20240831/202408310130.t9EBKteQ-lkp@intel.com/config)
-compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240831/202408310130.t9EBKteQ-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202408310130.t9EBKteQ-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> kernel/events/uprobes.c:1157:2: error: call to undeclared function 'synchronize_rcu_tasks_trace'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-    1157 |         synchronize_rcu_tasks_trace();
-         |         ^
-   kernel/events/uprobes.c:1157:2: note: did you mean 'synchronize_rcu_tasks_rude'?
-   include/linux/rcupdate.h:206:6: note: 'synchronize_rcu_tasks_rude' declared here
-     206 | void synchronize_rcu_tasks_rude(void);
-         |      ^
-   1 error generated.
-
-
-vim +/synchronize_rcu_tasks_trace +1157 kernel/events/uprobes.c
-
-  1145	
-  1146	void uprobe_unregister_sync(void)
-  1147	{
-  1148		/*
-  1149		 * Now that handler_chain() and handle_uretprobe_chain() iterate over
-  1150		 * uprobe->consumers list under RCU protection without holding
-  1151		 * uprobe->register_rwsem, we need to wait for RCU grace period to
-  1152		 * make sure that we can't call into just unregistered
-  1153		 * uprobe_consumer's callbacks anymore. If we don't do that, fast and
-  1154		 * unlucky enough caller can free consumer's memory and cause
-  1155		 * handler_chain() or handle_uretprobe_chain() to do an use-after-free.
-  1156		 */
-> 1157		synchronize_rcu_tasks_trace();
-  1158	}
-  1159	EXPORT_SYMBOL_GPL(uprobe_unregister_sync);
-  1160	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+>
+>
+> vim +/synchronize_rcu_tasks_trace +1157 kernel/events/uprobes.c
+>
+>   1145
+>   1146  void uprobe_unregister_sync(void)
+>   1147  {
+>   1148          /*
+>   1149           * Now that handler_chain() and handle_uretprobe_chain() =
+iterate over
+>   1150           * uprobe->consumers list under RCU protection without ho=
+lding
+>   1151           * uprobe->register_rwsem, we need to wait for RCU grace =
+period to
+>   1152           * make sure that we can't call into just unregistered
+>   1153           * uprobe_consumer's callbacks anymore. If we don't do th=
+at, fast and
+>   1154           * unlucky enough caller can free consumer's memory and c=
+ause
+>   1155           * handler_chain() or handle_uretprobe_chain() to do an u=
+se-after-free.
+>   1156           */
+> > 1157          synchronize_rcu_tasks_trace();
+>   1158  }
+>   1159  EXPORT_SYMBOL_GPL(uprobe_unregister_sync);
+>   1160
+>
+> --
+> 0-DAY CI Kernel Test Service
+> https://github.com/intel/lkp-tests/wiki
