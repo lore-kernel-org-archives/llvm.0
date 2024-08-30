@@ -1,52 +1,61 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B6DC16DC3A;
-	Fri, 30 Aug 2024 21:47:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DFC2C18DF9B;
+	Fri, 30 Aug 2024 23:42:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725054480; cv=none; b=rECC8nMhKr5rs6z9iy4rndx5VUltddiMnoMwdHiEtuSDbvSU4bE5sTvR4HcPKZ+HJauXCw7e+lKpm5PHQ/3iDc4w2PNZq1BEYIbcsJWGJITYPj5cbo321hdDzmneM7Xj3z/Dm+YJnYVshN5OgsxsVTw96tKAz52psSDNHotwuzQ=
+	t=1725061367; cv=none; b=c5Yw4Pwwp5nnspLBMv88QGnMzj7gR5LQhmH0G1bYyvLn0VKK794q4ICI5eRRKSnB6Msi2HIbWSX6AdH3T2qOuf9Vo3lOVwFLe64gpB2c7CQu//n/260zTputEPtKAOkkEfaLR/YMl7EJkEcodZ07ZBEZm0N/i3FiLRlgE6JIXkI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725054480; c=relaxed/simple;
-	bh=V2BzNcrGkNzfsuRDDxr7pv4K4r6CmS2XCVgqdcF0iyQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=nl11GiodNOQG3VN8NLXedgIQjwmCY20B21jJASQFT+L8zyWWzJyI5LwE8F0+KWHTYldMqj6YcX3s6frZcxJzqHBmMhYkkxBisd1HJDy2XKd+Knuw6KhAYOLyHwif9ERGZqKf8YVbZSwXvLTYAogq0DcTZVqCSE5fbm/oN7dle84=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aak8bVrZ; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1725061367; c=relaxed/simple;
+	bh=hgvODO1xl+N9l15+2DgxbYjvJXkNYYi7umvXalPA1TM=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=RWohP2d+CP2bYu3onNYPEuywZD5cXYGYNLLPDsaeK26Ve2iPxMRR5hzg8vVabw4FjrBW6erKBb6sSisKd4pZ0a7oUal/UofX+UG0UalOGUVgPjNBsdjhqaSluj/LqYx0E5sC17NMoC6DuBEjx65+civsPVg5d2nyYsCCzACu9Dk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=g+F+Kv9+; arc=none smtp.client-ip=192.198.163.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aak8bVrZ"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F30C8C4CEC2;
-	Fri, 30 Aug 2024 21:47:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1725054479;
-	bh=V2BzNcrGkNzfsuRDDxr7pv4K4r6CmS2XCVgqdcF0iyQ=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=aak8bVrZJp9udde+pUotS9CbFC1p4p3o//AvmebbToX83GtzeoiVcVfdXsBFxbHqq
-	 +VNVifvEnDPmLFj9zMdKObZpY7qM7asX3GU6LF8DCk5qGtwaAx5eSWgfCKabGSI0Yo
-	 9gfWJoYJtJgC70SxcshmWFY8LPFJAN9ycvMNEZzMqrxmL8VhDIcXjOFzSm9vuw83LY
-	 17jEdjRynzAtXkF8oxgNZlVBx9tEWqbUob9BqGD5Tjr2rGBj6rFzyheo+bQTomOOzU
-	 uimD4tddDUIbw4MUXyHqacLr+0YThBtVRLGvwjfuTN2SHixC4h44YZlaz0IC32QHfK
-	 p6hgOJlUZC7VQ==
-Date: Fri, 30 Aug 2024 14:47:57 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Simon Horman <horms@kernel.org>
-Cc: Naresh Kamboju <naresh.kamboju@linaro.org>,
-	clang-built-linux <llvm@lists.linux.dev>,
-	Netdev <netdev@vger.kernel.org>,
-	open list <linux-kernel@vger.kernel.org>,
-	lkft-triage@lists.linaro.org,
-	Linux Regressions <regressions@lists.linux.dev>,
-	Anders Roxell <anders.roxell@linaro.org>,
-	Dan Carpenter <dan.carpenter@linaro.org>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Florian Westphal <fw@strlen.de>,
-	Steffen Klassert <steffen.klassert@secunet.com>
-Subject: Re: net/xfrm/xfrm_policy.c:1286:8: error: variable 'dir' is
- uninitialized when used here [-Werror,-Wuninitialized]
-Message-ID: <20240830214757.GA3819549@thelio-3990X>
-References: <CA+G9fYtemFfuhc7=eNyP3TezM9Euc8sFtHe4GDR4Z9XdHzXSJA@mail.gmail.com>
- <20240830164706.GW1368797@kernel.org>
- <20240830170449.GX1368797@kernel.org>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="g+F+Kv9+"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1725061366; x=1756597366;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=hgvODO1xl+N9l15+2DgxbYjvJXkNYYi7umvXalPA1TM=;
+  b=g+F+Kv9+s1SQhx+wuC83JPoSmjPjmjzy0AmncSm293BkiHrUynsHGBsa
+   OBdpIf9ykwQ8kFj/7V6Kxw4suShmGfZzSgmrE7mN4HHiQeO0HzZPxJTSu
+   oSLrJQXB8fXBclnY3oRrPp4dT+gfe5Qm3uciwelgV9N/R2SxV+71Vrspu
+   jruHoq5tGSqfLwXo8KheLsiHXWuslezprMF/NCp+OoXcBBeoIfRsBlmkd
+   m/79Hey6kwuQKaKtI6jHRMIJUstF4g+ZIPBBjF3WDe8fc4TqNyytvcg1h
+   MmnpgxCxmUfoTp6pP7ya2UAaEQGwTSauiMBidoNOrKPtVb4Y6u93CJx0a
+   Q==;
+X-CSE-ConnectionGUID: biOIievWQGOfHLhmEWXNyg==
+X-CSE-MsgGUID: Thp3ZJHqRG+N4MGom1BLcw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11180"; a="23601174"
+X-IronPort-AV: E=Sophos;i="6.10,190,1719903600"; 
+   d="scan'208";a="23601174"
+Received: from fmviesa005.fm.intel.com ([10.60.135.145])
+  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Aug 2024 16:42:43 -0700
+X-CSE-ConnectionGUID: EmelMn+RTFWA7JgXS/E1wg==
+X-CSE-MsgGUID: tl4gfJYSTKy2ZQvVQEbNQA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.10,190,1719903600"; 
+   d="scan'208";a="68446163"
+Received: from lkp-server01.sh.intel.com (HELO 9c6b1c7d3b50) ([10.239.97.150])
+  by fmviesa005.fm.intel.com with ESMTP; 30 Aug 2024 16:42:41 -0700
+Received: from kbuild by 9c6b1c7d3b50 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1skBGJ-0002DG-2t;
+	Fri, 30 Aug 2024 23:42:39 +0000
+Date: Sat, 31 Aug 2024 07:42:38 +0800
+From: kernel test robot <lkp@intel.com>
+To: "Liam R. Howlett" <Liam.Howlett@oracle.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-kernel@vger.kernel.org,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Linux Memory Management List <linux-mm@kvack.org>,
+	"Matthew Wilcox (Oracle)" <willy@infradead.org>
+Subject: lib/maple_tree.c:330:20: error: unused function 'mte_set_full'
+Message-ID: <202408310728.S7EE59BN-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -55,69 +64,45 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240830170449.GX1368797@kernel.org>
 
-Hi Simon (and Naresh),
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   fb24560f31f9dff2c97707cfed6029bfebebaf1c
+commit: 54a611b605901c7d5d05b6b8f5d04a6ceb0962aa Maple Tree: add new data structure
+date:   1 year, 11 months ago
+config: x86_64-sof-customedconfig-amd-defconfig (https://download.01.org/0day-ci/archive/20240831/202408310728.S7EE59BN-lkp@intel.com/config)
+compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240831/202408310728.S7EE59BN-lkp@intel.com/reproduce)
 
-On Fri, Aug 30, 2024 at 06:04:49PM +0100, Simon Horman wrote:
-> On Fri, Aug 30, 2024 at 05:47:06PM +0100, Simon Horman wrote:
-> > + Florian, Steffen
-> > 
-> > On Fri, Aug 30, 2024 at 12:15:10PM +0530, Naresh Kamboju wrote:
-> > > The x86_64 defconfig builds failed on today's Linux next-20240829
-> > > due to following build warnings / errors.
-> > > 
-> > > Regressions:
-> > > * i386, build
-> > >   - clang-18-defconfig
-> > >   - clang-nightly-defconfig
-> > > 
-> > > * x86_64, build
-> > >   - clang-18-lkftconfig
-> > >   - clang-18-lkftconfig-compat
-> > >   - clang-18-lkftconfig-kcsan
-> > >   - clang-18-lkftconfig-no-kselftest-frag
-> > >   - clang-18-x86_64_defconfig
-> > >   - clang-nightly-lkftconfig
-> > >   - clang-nightly-lkftconfig-kselftest
-> > >   - clang-nightly-x86_64_defconfig
-> > >   - rustclang-nightly-lkftconfig-kselftest
-> > > 
-> > > first seen on next-20240829.
-> > >   Good: next-20240828
-> > >   BAD:  next-20240829
-> > > 
-> > > Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
-> > > 
-> > > build log:
-> > > --------
-> > > net/xfrm/xfrm_policy.c:1286:8: error: variable 'dir' is uninitialized
-> > > when used here [-Werror,-Wuninitialized]
-> > >  1286 |                 if ((dir & XFRM_POLICY_MASK) == XFRM_POLICY_OUT) {
-> > >       |                      ^~~
-> > > net/xfrm/xfrm_policy.c:1257:9: note: initialize the variable 'dir' to
-> > > silence this warning
-> > >  1257 |         int dir;
-> > >       |                ^
-> > >       |                 = 0
-> > > 1 error generated.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202408310728.S7EE59BN-lkp@intel.com/
 
-Thanks for the report.
+All errors (new ones prefixed by >>):
 
-> > I believe that is due to
-> > commit 08c2182cf0b4 ("xfrm: policy: use recently added helper in more places")
-> > 
-> > I will work on a fix to initialise dir in the loop where it is used.
-> 
-> Patch is here:
-> - [PATCH ipsec-next] xfrm: Initialise dir in xfrm_hash_rebuild()
->   https://lore.kernel.org/netdev/20240830-xfrm_hash_rebuild-dir-v1-1-f75092d07e1b@kernel.org/T/#u
+>> lib/maple_tree.c:330:20: error: unused function 'mte_set_full' [-Werror,-Wunused-function]
+     330 | static inline void mte_set_full(const struct maple_enode *node)
+         |                    ^~~~~~~~~~~~
+>> lib/maple_tree.c:335:20: error: unused function 'mte_clear_full' [-Werror,-Wunused-function]
+     335 | static inline void mte_clear_full(const struct maple_enode *node)
+         |                    ^~~~~~~~~~~~~~
+   2 errors generated.
 
-I sent the same patch as a v1 but Florian pointed out that dir needs to
-be initialized in the other loop too. I sent my v2 for it yesterday, it
-just needs to be merged.
 
-https://lore.kernel.org/all/20240829-xfrm-restore-dir-assign-xfrm_hash_rebuild-v2-1-1cf8958f6e8e@kernel.org/
+vim +/mte_set_full +330 lib/maple_tree.c
 
-Cheers,
-Nathan
+   329	
+ > 330	static inline void mte_set_full(const struct maple_enode *node)
+   331	{
+   332		node = (void *)((unsigned long)node & ~MAPLE_ENODE_NULL);
+   333	}
+   334	
+ > 335	static inline void mte_clear_full(const struct maple_enode *node)
+   336	{
+   337		node = (void *)((unsigned long)node | MAPLE_ENODE_NULL);
+   338	}
+   339	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
