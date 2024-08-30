@@ -1,108 +1,102 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A4A416C68F;
-	Fri, 30 Aug 2024 17:04:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 46E5B1BAEF1
+	for <llvm@lists.linux.dev>; Fri, 30 Aug 2024 17:23:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=93.17.235.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725037494; cv=none; b=tmqnW+qdbN5K2MI7HOdlVzKjUUEbYG7D9C83QlACnro+UXIqm8h7UiOXHSgfCURTk/i63t4KMzHU3ZEk9wJpKRJYUnuv1Rj7iqG5gEXKwuTm11N1Tq0z7ss1Oz6KVlDHzBRIooptMmVsK3wZb4BreE5O4qPTRtC4swFwn/gNzqU=
+	t=1725038603; cv=none; b=ULIlUoQZllm1Lp47RDgwQEDYOkne/R2yhdD1NqqQdrUIUIYh1yY888nQ8JXSf0/jlLDNu/wLVLiL+PHF4uqeb88tblguC4eftHpAY/ZQ833GBvDrEv8pdCSOVPdPqA2y5wr5KHoxAz7tLUJCgVtvqRkxE7eywpBQ/dSxyy40Up8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725037494; c=relaxed/simple;
-	bh=xIXAMIe5hLeQUFpwywsJ8g5KP7dZuff50VDK4ECjhaQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=PYeVPVPOlqPQWLI5e7uFX5svpltQE3/y5fZoSYbV1H6pJGq5nj/jr8q+kVyehvtVOa8L0SxARDWqO6yZDTjTYDoZA6+fWME/tOoD0jhIkIS5TD+MLsxoYbcHf5caTP6wy7n7gkJkxaLdZ8ufYPm7vC4kZFEy10HjSkl3bjBpAtM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nFGiZtTV; arc=none smtp.client-ip=10.30.226.201
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nFGiZtTV"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 32E95C4CEC2;
-	Fri, 30 Aug 2024 17:04:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1725037493;
-	bh=xIXAMIe5hLeQUFpwywsJ8g5KP7dZuff50VDK4ECjhaQ=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=nFGiZtTVGSMcAvzTDKKMPKU9t254eb1MRqstsx3+2wi7SnROqSDh21xZ9yJMc+sme
-	 g0yvyDsJeCojACLE1s9CQXEPLA7hgyBJn1ZAkHeMUhHREV/QzOD4Dr9CxoRWLyjRIB
-	 Oop5Z8PNSHkHP6P/Xzs6eWiCQpG+xQkMxywEPVt80Lup3BdgkKC1XiVPMGIogi6/1E
-	 CQGvNOxr1OYofJdERSgID4GHEsMtkSvBlXfuj6788/Qw2eab6sil6o9Rh4GrkA9x6d
-	 n9asGsqSMCPmeqwy1GAgZ+ZSIqPiQ0S8hix+olAAS9AwbGCl29Gbq3urMDZ74j0m4C
-	 47WrsXy/moEwg==
-Date: Fri, 30 Aug 2024 18:04:49 +0100
-From: Simon Horman <horms@kernel.org>
-To: Naresh Kamboju <naresh.kamboju@linaro.org>
-Cc: clang-built-linux <llvm@lists.linux.dev>,
-	Netdev <netdev@vger.kernel.org>,
-	open list <linux-kernel@vger.kernel.org>,
-	lkft-triage@lists.linaro.org,
-	Linux Regressions <regressions@lists.linux.dev>,
-	Anders Roxell <anders.roxell@linaro.org>,
-	Dan Carpenter <dan.carpenter@linaro.org>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Florian Westphal <fw@strlen.de>,
-	Steffen Klassert <steffen.klassert@secunet.com>
-Subject: Re: net/xfrm/xfrm_policy.c:1286:8: error: variable 'dir' is
- uninitialized when used here [-Werror,-Wuninitialized]
-Message-ID: <20240830170449.GX1368797@kernel.org>
-References: <CA+G9fYtemFfuhc7=eNyP3TezM9Euc8sFtHe4GDR4Z9XdHzXSJA@mail.gmail.com>
- <20240830164706.GW1368797@kernel.org>
+	s=arc-20240116; t=1725038603; c=relaxed/simple;
+	bh=OQprKL7AItHOSloDct5hB2de1jg2c4V4YkjD5qduxVc=;
+	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
+	 In-Reply-To:Content-Type; b=jn8TdRtd64oaZTNpWLBZwEsUWEidfxJ0hhhbrFOOUeWIqggvGjseSJ4xowUG5vaWhBWUXN0TRZ47jZpHcXlihDddiXEA7ziPm9DaH9GZLhpfDKJ9zLJUIqPUmWl/W/6MIxlsOyPVBIz9dfNYlAu1wAOKV9v3M4F9i652vJPpVB4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=csgroup.eu; spf=pass smtp.mailfrom=csgroup.eu; arc=none smtp.client-ip=93.17.235.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=csgroup.eu
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=csgroup.eu
+Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
+	by localhost (Postfix) with ESMTP id 4WwQ3D1gMBz9sS8;
+	Fri, 30 Aug 2024 19:23:20 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from pegase2.c-s.fr ([172.26.127.65])
+	by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id g-0ANya1nR0i; Fri, 30 Aug 2024 19:23:20 +0200 (CEST)
+Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
+	by pegase2.c-s.fr (Postfix) with ESMTP id 4WwQ3D0Xpmz9sS7;
+	Fri, 30 Aug 2024 19:23:20 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+	by messagerie.si.c-s.fr (Postfix) with ESMTP id F13B68B794;
+	Fri, 30 Aug 2024 19:23:19 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from messagerie.si.c-s.fr ([127.0.0.1])
+	by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
+	with ESMTP id 7ABmumGq8hAw; Fri, 30 Aug 2024 19:23:19 +0200 (CEST)
+Received: from [192.168.234.133] (unknown [192.168.234.133])
+	by messagerie.si.c-s.fr (Postfix) with ESMTP id 125AE8B764;
+	Fri, 30 Aug 2024 19:23:19 +0200 (CEST)
+Message-ID: <b33384e2-088d-4116-81d5-ae895a761c19@csgroup.eu>
+Date: Fri, 30 Aug 2024 19:23:18 +0200
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240830164706.GW1368797@kernel.org>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 4/5] powerpc/vdso: Wire up getrandom() vDSO
+ implementation on PPC32
+From: Christophe Leroy <christophe.leroy@csgroup.eu>
+To: "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc: Andrew Morton <akpm@linux-foundation.org>,
+ Steven Rostedt <rostedt@goodmis.org>, Masami Hiramatsu
+ <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+ Michael Ellerman <mpe@ellerman.id.au>, Nicholas Piggin <npiggin@gmail.com>,
+ Naveen N Rao <naveen@kernel.org>, Nathan Chancellor <nathan@kernel.org>,
+ Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling
+ <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
+ Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
+ linuxppc-dev@lists.ozlabs.org, linux-kselftest@vger.kernel.org,
+ llvm@lists.linux.dev, linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+ linux-trace-kernel@vger.kernel.org,
+ Adhemerval Zanella <adhemerval.zanella@linaro.org>,
+ Xi Ruoyao <xry111@xry111.site>
+References: <cover.1725031952.git.christophe.leroy@csgroup.eu>
+ <e7e4c6d36cf98229850c333f113bcea909564501.1725031952.git.christophe.leroy@csgroup.eu>
+ <ZtHv9R8b7qwWKR2b@zx2c4.com>
+ <84682299-8cbe-4b66-9c26-17786e73af55@csgroup.eu>
+Content-Language: fr-FR
+In-Reply-To: <84682299-8cbe-4b66-9c26-17786e73af55@csgroup.eu>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On Fri, Aug 30, 2024 at 05:47:06PM +0100, Simon Horman wrote:
-> + Florian, Steffen
-> 
-> On Fri, Aug 30, 2024 at 12:15:10PM +0530, Naresh Kamboju wrote:
-> > The x86_64 defconfig builds failed on today's Linux next-20240829
-> > due to following build warnings / errors.
-> > 
-> > Regressions:
-> > * i386, build
-> >   - clang-18-defconfig
-> >   - clang-nightly-defconfig
-> > 
-> > * x86_64, build
-> >   - clang-18-lkftconfig
-> >   - clang-18-lkftconfig-compat
-> >   - clang-18-lkftconfig-kcsan
-> >   - clang-18-lkftconfig-no-kselftest-frag
-> >   - clang-18-x86_64_defconfig
-> >   - clang-nightly-lkftconfig
-> >   - clang-nightly-lkftconfig-kselftest
-> >   - clang-nightly-x86_64_defconfig
-> >   - rustclang-nightly-lkftconfig-kselftest
-> > 
-> > first seen on next-20240829.
-> >   Good: next-20240828
-> >   BAD:  next-20240829
-> > 
-> > Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
-> > 
-> > build log:
-> > --------
-> > net/xfrm/xfrm_policy.c:1286:8: error: variable 'dir' is uninitialized
-> > when used here [-Werror,-Wuninitialized]
-> >  1286 |                 if ((dir & XFRM_POLICY_MASK) == XFRM_POLICY_OUT) {
-> >       |                      ^~~
-> > net/xfrm/xfrm_policy.c:1257:9: note: initialize the variable 'dir' to
-> > silence this warning
-> >  1257 |         int dir;
-> >       |                ^
-> >       |                 = 0
-> > 1 error generated.
-> 
-> I believe that is due to
-> commit 08c2182cf0b4 ("xfrm: policy: use recently added helper in more places")
-> 
-> I will work on a fix to initialise dir in the loop where it is used.
 
-Patch is here:
-- [PATCH ipsec-next] xfrm: Initialise dir in xfrm_hash_rebuild()
-  https://lore.kernel.org/netdev/20240830-xfrm_hash_rebuild-dir-v1-1-f75092d07e1b@kernel.org/T/#u
+
+Le 30/08/2024 à 18:42, Christophe Leroy a écrit :
+> 
+> 
+> Le 30/08/2024 à 18:14, Jason A. Donenfeld a écrit :
+>> On Fri, Aug 30, 2024 at 05:57:08PM +0200, Christophe Leroy wrote:
+>>> + *    r5: 8-byte counter input/output (saved on stack)
+>>> + *
+>>> + *    r14-r15: counter
+>>> + */
+>>> +SYM_FUNC_START(__arch_chacha20_blocks_nostack)
+>>> +    stwu    r1, -96(r1)
+>>> +    stw    r5, 20(r1)
+>>> +    stmw    r14, 24(r1)
+>>> +    li    r31, 4
+>>> +    LWZX_LE    r14, 0, r5
+>>> +    LWZX_LE    r15, r31, r5
+>>
+>> Why swap endian on the counter?
+> 
+> Unlike the keys, the counter is passed to the function as an u8*, not as 
+> a u64*, so I thought it was raw data in little endian order, same as 
+> when using Sodium. Is it wrong ?
+
+Hum ..... I looked again and it seems it is already a u32 *. Looks like 
+I mis-read the 8-byte comment. Or I did it right in the begining then I 
+swapped it at the same time as I swapped the keys after my first test 
+when the selftest was using Sodium. I can't remember. I'll fix it.
+
+Christophe
