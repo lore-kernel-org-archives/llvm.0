@@ -1,109 +1,64 @@
-Received: from e3i12.smtp2go.com (e3i12.smtp2go.com [158.120.84.12])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3EE1145016
-	for <llvm@lists.linux.dev>; Fri, 30 Aug 2024 20:09:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=158.120.84.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB7CD16FF5F;
+	Fri, 30 Aug 2024 21:37:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725048576; cv=none; b=psy5cBaqLtzZWlKew0LGTjrdNYUH5B9X4eePfejpKRMhctfGS3gVSfbaXDg8T1eqQzCaDeilbCt7KbBovTVOjl5kzG1nIaobBWjm+sJu2Qqfc+4rVGsUzT9WnSMLpakvXAbVW/skSVMLEBC7KCd6SmnQy8e8Z8g/rL75Yacd2ms=
+	t=1725053864; cv=none; b=F2IEtQX2sMJFx56xozELY3kL9DunIY8VD0VoTNCpP7cq63sGPrlhJxm1hvo1GUoDr/5yvOk15t81zZNIY7zUWtXZg1sIF29TMgizxPSir6XhjafHqvoKfmn6463MgY6DIfE1DgfOBB8jU8mCDGfyBQfX1i7n0VbG2yUy2VpFHOU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725048576; c=relaxed/simple;
-	bh=VrcLFN5tqkfWY7mTHOYKMf0e0KvomCFsMPrfJDAaMSY=;
+	s=arc-20240116; t=1725053864; c=relaxed/simple;
+	bh=NMkRApkrOKWbtVRfnehMf4mTd0oXInv2mc61RoHBklE=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=M0AzS7Df8z4HrrtNlODtDnlUpmQ/B5FJFRp1nsbzbPgvH8HRSZFuNGh5qIfYsgZ9ymEnmm9SQq8K7AD1w/6DXcT906Cf5tWYce7I2x52B51rBdn76ic7K4HVgkBHYcnqvT1qugiT15Ondznc1y8x7F8gpgpXnFH4IaNa14b4SAM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=fjasle.eu; spf=pass smtp.mailfrom=em1174286.fjasle.eu; dkim=pass (2048-bit key) header.d=smtpservice.net header.i=@smtpservice.net header.b=gNYQisJM; dkim=pass (2048-bit key) header.d=fjasle.eu header.i=@fjasle.eu header.b=iKXSggyg; dkim=pass (1024-bit key) header.d=fjasle.eu header.i=@fjasle.eu header.b=P7Vd6NkS; arc=none smtp.client-ip=158.120.84.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=fjasle.eu
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=em1174286.fjasle.eu
+	 Content-Type:Content-Disposition:In-Reply-To; b=FFHI7DY4fgMjwH5bTAFxXok00y9B80sl9TffGM19SkONw3WMUbHpiOAPV9ayhlBkUqxS7z7ouIkhftmjbcWppHh5+3I30KdllI5GwixSiclDq+OKgg1eFScJsTaast3dUj1a93PVq7TN48x0xRynea+fB1OjmP8SieNzPCzTyQI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=TpPb3Uqq; arc=none smtp.client-ip=198.175.65.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=smtpservice.net header.i=@smtpservice.net header.b="gNYQisJM";
-	dkim=pass (2048-bit key) header.d=fjasle.eu header.i=@fjasle.eu header.b="iKXSggyg";
-	dkim=pass (1024-bit key) header.d=fjasle.eu header.i=@fjasle.eu header.b="P7Vd6NkS"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=smtpservice.net;
- i=@smtpservice.net; q=dns/txt; s=a1-4; t=1725047640; h=feedback-id :
- x-smtpcorp-track : date : message-id : to : subject : from : reply-to
- : sender : list-unsubscribe : list-unsubscribe-post;
- bh=8ffM0oj/VoAWiRvIYhx2YzkqNpRjhG4e8iNPq0uer6M=;
- b=gNYQisJM+9xxF9Q46g4XmEQsFGff28lMlOk5HfwhKiN5LMd65B+s+QhE/m4Di6Ga9GBwb
- sPLdsW6X5tD1qwbss/qkmoIUzt4NGaBKl/ctB28e4B5xUarEkegioc7blyrE24XiBMGNnsR
- bkJA0nfXiaY841C3wcmroCigvR9KgS2HoWLX8h4UZBUFzJWTC3vPq1C7Dq1rSu16Hzh1ZHP
- wYjDx8YngneMgGF2xWLKnU+shJ45MY58SOyEtbBUfa3QqgDsvuFfkApem+pYoaNN6QLh9IJ
- EwMAyW8Q7C7A+JF0jxyOmvx6IshplGVws2Mh83QNQz2hdcPIq1FYAStqinYw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fjasle.eu;
- i=@fjasle.eu; q=dns/txt; s=s1174286; t=1725047640; h=from : subject :
- to : message-id : date;
- bh=8ffM0oj/VoAWiRvIYhx2YzkqNpRjhG4e8iNPq0uer6M=;
- b=iKXSggyg+LBfdCYiW74qh1xev5pawGrwF3VrlrlwTGFEzGlGjyjC5DML3rZ0g8Mgv6HEr
- iWksfv/l1Zu7HlAq82NiOYd9SJJFXqgNCFlyAuFyYMO4qyfIkZP7ATm42gZVX4q63yvDUjz
- xKUhFE03uVkrNkfR2qmHcDV4TUUaOBKi+/dmFnqSTeG3C3CKzAgNfPWkEqCuJm8Vc5d9T5u
- wRm0TMSo4rxHwc9zw7Ki5H8nyNEBLWn3YveVvSqUjXdjR77DjUy0sChgB8KeIyz5c7yH37j
- 096hrOAdIlKSnEAnAAZ3lgdqNpp1IhSAK92V+pnfIO2u9j8EaiRY01bqc5Jw==
-Received: from [10.85.249.164] (helo=leknes.fjasle.eu)
-	by smtpcorp.com with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
-	(Exim 4.97.1-S2G)
-	(envelope-from <nicolas@fjasle.eu>)
-	id 1sk7gj-FnQW0hPpdBf-nWmg;
-	Fri, 30 Aug 2024 19:53:42 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=fjasle.eu; s=mail;
-	t=1725047604; bh=VrcLFN5tqkfWY7mTHOYKMf0e0KvomCFsMPrfJDAaMSY=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=P7Vd6NkS50dZUF4ArGNPd4emC0HPqVDT3dc+nak6w/kyFZyIa7wpU0vTqmsiIkRep
-	 lFQ7rFhNaD2Mf9eA7RsNhjnIHPRkgubjb0TmusaqfHzYKQpJgQpvZs4tHW5Z4AT4vC
-	 fDqmIJfHaxoaJYo+8KfLKLIUurdYOyn4DfkqTbOE=
-Received: by leknes.fjasle.eu (Postfix, from userid 1000)
-	id 423D3449B6; Fri, 30 Aug 2024 21:53:24 +0200 (CEST)
-Date: Fri, 30 Aug 2024 21:53:24 +0200
-From: Nicolas Schier <nicolas@fjasle.eu>
-To: Daniel Gomez <da.gomez@samsung.com>,
-	Masahiro Yamada <masahiroy@kernel.org>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Lucas De Marchi <lucas.demarchi@intel.com>,
-	Thomas =?iso-8859-1?Q?Hellstr=F6m?= <thomas.hellstrom@linux.intel.com>,
-	Rodrigo Vivi <rodrigo.vivi@intel.com>,
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-	Maxime Ripard <mripard@kernel.org>,
-	Thomas Zimmermann <tzimmermann@suse.de>,
-	David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
-	William Hubbs <w.d.hubbs@gmail.com>,
-	Chris Brannon <chris@the-brannons.com>,
-	Kirk Reiser <kirk@reisers.ca>,
-	Samuel Thibault <samuel.thibault@ens-lyon.org>,
-	Paul Moore <paul@paul-moore.com>,
-	Stephen Smalley <stephen.smalley.work@gmail.com>,
-	Ondrej Mosnacek <omosnace@redhat.com>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
-	Oliver Upton <oliver.upton@linux.dev>,
-	James Morse <james.morse@arm.com>,
-	Suzuki K Poulose <suzuki.poulose@arm.com>,
-	Zenghui Yu <yuzenghui@huawei.com>,
-	Jiri Slaby <jirislaby@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"linux-kbuild@vger.kernel.org" <linux-kbuild@vger.kernel.org>,
-	"intel-xe@lists.freedesktop.org" <intel-xe@lists.freedesktop.org>,
-	"dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
-	"speakup@linux-speakup.org" <speakup@linux-speakup.org>,
-	"selinux@vger.kernel.org" <selinux@vger.kernel.org>,
-	"linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>,
-	"kvmarm@lists.linux.dev" <kvmarm@lists.linux.dev>,
-	"linux-serial@vger.kernel.org" <linux-serial@vger.kernel.org>,
-	"llvm@lists.linux.dev" <llvm@lists.linux.dev>,
-	Finn Behrens <me@kloenk.dev>,
-	"Daniel Gomez (Samsung)" <d+samsung@kruces.com>,
-	"gost.dev@samsung.com" <gost.dev@samsung.com>
-Subject: Re: [PATCH 08/12] include: add elf.h support
-Message-ID: <ZtIjNBhqdxmMBxfM@fjasle.eu>
-References: <20240807-macos-build-support-v1-0-4cd1ded85694@samsung.com>
- <20240807-macos-build-support-v1-8-4cd1ded85694@samsung.com>
- <CGME20240807110435eucas1p2eca071b0a0122b8686d43c57bd94dc8c@eucas1p2.samsung.com>
- <2024080717-cross-retiree-862e@gregkh>
- <dxkmmrlhlhsrjulnyabfgcr37ojway2dxaypelf3uchkmhw4jn@z54e33jdpxmr>
- <2024080720-skyline-recapture-d80d@gregkh>
- <20240807-mottled-stoic-degu-d1e4cb@lindesnes>
- <20240823225450.spuvjs5b5ruujim4@AALNPWDAGOMEZ1.aal.scsc.local>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="TpPb3Uqq"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1725053863; x=1756589863;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=NMkRApkrOKWbtVRfnehMf4mTd0oXInv2mc61RoHBklE=;
+  b=TpPb3UqqGdty5scaLTM1j9oDqi7DwOSY2NScp/s2ZkHOZaWwL99o0Ezw
+   OtUOXCwiQfj4h0HySGhVeiKiV8btoI14pd4mWQRoiYMIVKkOkn12fFQoL
+   ORwHaLeubZkiXfa4nXl1U5PimtWbEYnKYWGFbTZoBlFFO33poIhHD40pv
+   Op39Kr4dGfxDEys335yot7e68HfQr19U2oJl35LnAV7GkWbKZBxcoWgx6
+   V/PdoQQMujesDkUi4PNpJ/eOQa8ImogmPGoPqIs1nxGUh1zZ1FuQkDbMZ
+   7HS6OW+KmUacOv+c4ZhAXsYR+1mO0auNEkZ4G0YFW88+MD73fHGwKkfGl
+   Q==;
+X-CSE-ConnectionGUID: YPL2pI0LRNS6q5mInMAd6A==
+X-CSE-MsgGUID: hphL03IuTSOXKafe7j0l3Q==
+X-IronPort-AV: E=McAfee;i="6700,10204,11180"; a="27474609"
+X-IronPort-AV: E=Sophos;i="6.10,189,1719903600"; 
+   d="scan'208";a="27474609"
+Received: from orviesa003.jf.intel.com ([10.64.159.143])
+  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Aug 2024 14:37:42 -0700
+X-CSE-ConnectionGUID: Z8u/uYXNQKyHU/qNmOPM7Q==
+X-CSE-MsgGUID: iZwp9e8PQq++8H0QPaEshA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.10,189,1719903600"; 
+   d="scan'208";a="68818300"
+Received: from lkp-server01.sh.intel.com (HELO 9c6b1c7d3b50) ([10.239.97.150])
+  by orviesa003.jf.intel.com with ESMTP; 30 Aug 2024 14:37:39 -0700
+Received: from kbuild by 9c6b1c7d3b50 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1sk9JJ-000296-2B;
+	Fri, 30 Aug 2024 21:37:37 +0000
+Date: Sat, 31 Aug 2024 05:37:31 +0800
+From: kernel test robot <lkp@intel.com>
+To: Wan Junjie <junjie.wan@inceptio.ai>,
+	Ioana Ciornei <ioana.ciornei@nxp.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+	"junjie.wan" <junjie.wan@inceptio.ai>
+Subject: Re: [PATCH] dpaa2-switch: fix flooding domain among multiple vlans
+Message-ID: <202408310505.RxA0GVcf-lkp@intel.com>
+References: <20240827110855.3186502-1-junjie.wan@inceptio.ai>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -112,47 +67,72 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240823225450.spuvjs5b5ruujim4@AALNPWDAGOMEZ1.aal.scsc.local>
-X-Report-Abuse: Please forward a copy of this message, including all headers, to <abuse-report@smtp2go.com>
-Feedback-ID: 1174286m:1174286a9YXZ7r:1174286sfGQOlJjcl
-X-smtpcorp-track: cgOj1-wBUG0C.FUGovxvVt9ho.mzss7wOho15
+In-Reply-To: <20240827110855.3186502-1-junjie.wan@inceptio.ai>
 
-On Sat, Aug 24, 2024 at 12:54:50AM +0200 Daniel Gomez wrote:
-> On Wed, Aug 07, 2024 at 05:46:03PM +0200, Nicolas Schier wrote:
-> > On Wed, Aug 07, 2024 at 04:18:54PM +0200, Greg Kroah-Hartman wrote:
-> > > On Wed, Aug 07, 2024 at 02:13:57PM +0000, Daniel Gomez wrote:
-> > > > > Also, as this is not internal for the kernel, but rather for userspace
-> > > > > builds, shouldn't the include/ path be different?
-> > > > 
-> > > > Can you suggest an alternative path or provide documentation that could help
-> > > > identify the correct location? Perhaps usr/include?
-> > > 
-> > > That is better than the generic include path as you are attempting to
-> > > mix userspace and kernel headers in the same directory :(
-> > 
-> > Please keep in mind, that usr/include/ currently does not hold a single
-> > header file but is used for dynamically composing the UAPI header tree.
-> > 
-> > In general, I do not like the idea of keeping a elf.h file here that
-> > possibly is out-of-sync with the actual system's version (even though
-> > elf.h should not see that much changes).  Might it be more helpful to
-> > provide a "development kit" for Linux devs that need to build on MacOS
-> > that provides necessary missing system header files, instead of merging
-> > those into upstream?
-> 
-> I took this suggestion and tried pushing a Homebrew formula/package here [1].
-> I think I chose a wrong name and maybe something like "development kit" would
-> have been better. However, would it be possible instead to include the *.rb file
-> in the scripts/ directory? So users of this can generate the development kit in
-> their environments. I would maintain the script to keep it in sync with the
-> required glibc version for the latest kernel version.
-> 
-> [1] https://github.com/Homebrew/homebrew-core/pull/181885
+Hi Wan,
 
-I think it sounds sensible to hold that formula file in the upstream tree.  But
-I am not sure if scripts/ is the best location.
+kernel test robot noticed the following build warnings:
 
-Masahiro, what do you think?
+[auto build test WARNING on linus/master]
+[also build test WARNING on v6.11-rc5 next-20240830]
+[cannot apply to horms-ipvs/master]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Kind regards,
-Nicolas
+url:    https://github.com/intel-lab-lkp/linux/commits/Wan-Junjie/dpaa2-switch-fix-flooding-domain-among-multiple-vlans/20240827-191121
+base:   linus/master
+patch link:    https://lore.kernel.org/r/20240827110855.3186502-1-junjie.wan%40inceptio.ai
+patch subject: [PATCH] dpaa2-switch: fix flooding domain among multiple vlans
+config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20240831/202408310505.RxA0GVcf-lkp@intel.com/config)
+compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240831/202408310505.RxA0GVcf-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202408310505.RxA0GVcf-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+   drivers/net/ethernet/freescale/dpaa2/dpaa2-switch.c:179:11: warning: unused variable 'i' [-Wunused-variable]
+     179 |         int err, i;
+         |                  ^
+>> drivers/net/ethernet/freescale/dpaa2/dpaa2-switch.c:1784:3: warning: misleading indentation; statement is not part of the previous 'if' [-Wmisleading-indentation]
+    1784 |                 return err;
+         |                 ^
+   drivers/net/ethernet/freescale/dpaa2/dpaa2-switch.c:1782:2: note: previous statement is here
+    1782 |         if (err)
+         |         ^
+   2 warnings generated.
+
+
+vim +/if +1784 drivers/net/ethernet/freescale/dpaa2/dpaa2-switch.c
+
+  1766	
+  1767	static int dpaa2_switch_port_flood(struct ethsw_port_priv *port_priv,
+  1768					   struct switchdev_brport_flags flags)
+  1769	{
+  1770		struct ethsw_core *ethsw = port_priv->ethsw_data;
+  1771		struct net_device *netdev = port_priv->netdev;
+  1772		int err;
+  1773	
+  1774		if (flags.mask & BR_BCAST_FLOOD)
+  1775			port_priv->bcast_flood = !!(flags.val & BR_BCAST_FLOOD);
+  1776	
+  1777		if (flags.mask & BR_FLOOD)
+  1778			port_priv->ucast_flood = !!(flags.val & BR_FLOOD);
+  1779	
+  1780		/* Recreate the egress flood domain of every vlan domain */
+  1781		err = vlan_for_each(netdev, dpaa2_switch_port_flood_vlan, netdev);
+  1782		if (err)
+  1783			netdev_err(netdev, "Unable to restore vlan flood err (%d)\n", err);
+> 1784			return err;
+  1785	
+  1786		return dpaa2_switch_fdb_set_egress_flood(ethsw, port_priv->fdb->fdb_id);
+  1787	}
+  1788	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
