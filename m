@@ -1,62 +1,57 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7DB2A28685;
-	Thu, 29 Aug 2024 20:58:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D3803134B6;
+	Fri, 30 Aug 2024 02:45:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724965124; cv=none; b=WRZs2bvnt/8XBpmHYTfmRCg2UvqKgRastWzLFBfJumutWWP30BDiZpTeD8VyprAkpHFXL7/e9HuZOHEBk8eZTyaIZvGsMLBWRM+x4FSubhbQ6eDK41NLq6Av4kH61X/bm5F31K0XollZ2ix2cmA2//y7soC5bD7kD/5GQvJI24s=
+	t=1724985949; cv=none; b=QADu3dDn9PK2HW9m5mvsWkan+ZjuY82CH77Ey0SLzcE65L7ONte4DvuvtXFVG64m+Exy9UGY0QWfNWPskg1zrfp1k6h65KzINaYj+zRfaixwpqtCxQ/cG/ml62yg7w8Y4dwD36eSdC/tLRd8UAmMi/35/nL4SS0yB/o3+lsgHRg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724965124; c=relaxed/simple;
-	bh=b+4qD1cIb/TJ53fWFfgtWVJxxOmpdanE0Kan2qefjh8=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=s3+gGzG5mioWk35Bddo9h1iaTsPQnu2hB7WKTISR9oQzcG0lhUZ2whyrahBzz4Owo9UKlw54XuOy1LhIVHAs03L1ecPZtKvLrSqY6FDrX5SLNOBMDJvPWk7nR2jbnXPWeLNB0lMDggiySKWBcNQY2HTq/J3Pha9E/mK9RNOR5Ak=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=AG905zaG; arc=none smtp.client-ip=198.175.65.10
+	s=arc-20240116; t=1724985949; c=relaxed/simple;
+	bh=si0JVNQoCTbh9jZG6zCj/5kSjC4SiFTPz1OB9raPtLw=;
+	h=Date:From:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=gt/LkKukCBGFuAQ4l7fk1E9Sp0bMq4hKmizkGhhaalz1vxEqKVfXAn3Ob9yr0zsaiiGh71/oNp/TETOJg32iSOBhA4xK85arVfd4PsF/20jRl9khIiq/9HXGjjm0NJ0fx6+iaxl5DnXNTZe5L118kvoITiYEafbBHuYzq2OiDz4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=LADAUGcH; arc=none smtp.client-ip=192.198.163.15
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="AG905zaG"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="LADAUGcH"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1724965121; x=1756501121;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=b+4qD1cIb/TJ53fWFfgtWVJxxOmpdanE0Kan2qefjh8=;
-  b=AG905zaGZoIe1g6wmtfk68cxkXNxX4AcI+cIi94AkJ4cLCgnDENEOZ0u
-   IeMjKUWHwuhWbrVRu7TYqqJGo0Sef8U0ptU9rgWkP3qsAAOpj2aDQYDUZ
-   Aaf2kJjFRhef1pODPvNHcGHfQEsGRFN7D17ywGyAIxHXk+9DkPkR3IhKx
-   9dVTu+iCg+QCiJAEDCuS79OGq/QFEjnQTae4tpBIHbRtNaelSYoGzsZQ0
-   c3sC6W57UhUz/hmxfao6bCe55MQGf1h1/wvlX9mzj4ISGUPt6uighClCP
-   4CaefdyZIbRVYx73r3/SeSWn3I+qs6wxqjuxAl11SFvUiKGw6grAJ0BnJ
-   g==;
-X-CSE-ConnectionGUID: B49J8WmsQRiyHqvT9xGj5Q==
-X-CSE-MsgGUID: sDgpNFU1TiS3wT162T2DYw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11179"; a="41064779"
-X-IronPort-AV: E=Sophos;i="6.10,186,1719903600"; 
-   d="scan'208";a="41064779"
-Received: from orviesa007.jf.intel.com ([10.64.159.147])
-  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Aug 2024 13:58:41 -0700
-X-CSE-ConnectionGUID: 8eIImSyeRiufhFz/ovBwIg==
-X-CSE-MsgGUID: 9MaRyyLdRfC5TeSuYN2rVg==
+  t=1724985948; x=1756521948;
+  h=date:from:cc:subject:message-id:mime-version;
+  bh=si0JVNQoCTbh9jZG6zCj/5kSjC4SiFTPz1OB9raPtLw=;
+  b=LADAUGcHAS1TwW2JM9N7Ef0b0NNEDalrPgC1W2oWVEwWPbThTwHlFOKa
+   RzCTWLoNdcn7894s7LT3+4y5zZVsFjpo6EUEPJIidMW5e3sx5KL3SsZ9k
+   8kkdPME037KleBAVCKJaKHps+/BJ8gAmBSPeg8qn8Q6OsXXucrLg2szf/
+   6866ARIlKbqnXkzkGUiLngBYVzDKFR/2SOoGdE1f0LMWBhrD0l8tFivOE
+   MvKSPUF7C1pgXW+PeS42XU3eb7U8wU7X31jlmPamsRhzxRYYn+V4eBmEl
+   ALR060dkUEQ2LAeQG+5NrHljWO5GkwQBF0N22QhUkJ88FRe/5/m8dWG9R
+   Q==;
+X-CSE-ConnectionGUID: nW1zujR/S3S3WIUJpES+8Q==
+X-CSE-MsgGUID: jvn47ym7Q9+2UCJfsAz05w==
+X-IronPort-AV: E=McAfee;i="6700,10204,11179"; a="23781567"
+X-IronPort-AV: E=Sophos;i="6.10,187,1719903600"; 
+   d="scan'208";a="23781567"
+Received: from fmviesa007.fm.intel.com ([10.60.135.147])
+  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Aug 2024 19:45:47 -0700
+X-CSE-ConnectionGUID: Sa+HnfDfQqWPNUXHjcPEEA==
+X-CSE-MsgGUID: XvHOiAlKR+mxEzX2gQkYhw==
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.10,186,1719903600"; 
-   d="scan'208";a="64198595"
+X-IronPort-AV: E=Sophos;i="6.10,187,1719903600"; 
+   d="scan'208";a="63456621"
 Received: from lkp-server01.sh.intel.com (HELO 9c6b1c7d3b50) ([10.239.97.150])
-  by orviesa007.jf.intel.com with ESMTP; 29 Aug 2024 13:58:39 -0700
+  by fmviesa007.fm.intel.com with ESMTP; 29 Aug 2024 19:45:46 -0700
 Received: from kbuild by 9c6b1c7d3b50 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1sjmE0-0000jE-1X;
-	Thu, 29 Aug 2024 20:58:36 +0000
-Date: Fri, 30 Aug 2024 04:57:57 +0800
+	id 1sjrdv-0000vK-2v;
+	Fri, 30 Aug 2024 02:45:43 +0000
+Date: Fri, 30 Aug 2024 10:45:33 +0800
 From: kernel test robot <lkp@intel.com>
-To: Akshata Jahagirdar <akshata.jahagirdar@intel.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Linux Memory Management List <linux-mm@kvack.org>,
-	Matt Roper <matthew.d.roper@intel.com>,
-	Matthew Brost <matthew.brost@intel.com>
-Subject: [linux-next:master 375/7693] drivers/gpu/drm/xe/xe_migrate.c:304:52:
- warning: result of comparison of constant 274877906944 with expression of
- type 'resource_size_t' (aka 'unsigned int') is always true
-Message-ID: <202408300455.vSOPslVt-lkp@intel.com>
+Cc: oe-kbuild-all@lists.linux.dev, llvm@lists.linux.dev
+Subject: vmlinux.o: warning: objtool: set_ftrace_ops_ro+0x80: relocation to
+ !ENDBR: arch_rethook_prepare+0xe
+Message-ID: <202408301007.tdWHDUJo-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -66,243 +61,198 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-head:   b18bbfc14a38b5234e09c2adcf713e38063a7e6e
-commit: 8d79acd567db183e675cccc6cc737d2959e2a2d9 [375/7693] drm/xe/migrate: Add helper function to program identity map
-config: i386-randconfig-001-20240830 (https://download.01.org/0day-ci/archive/20240830/202408300455.vSOPslVt-lkp@intel.com/config)
+CC: linux-kernel@vger.kernel.org
+TO: Breno Leitao <leitao@debian.org>
+CC: Ingo Molnar <mingo@kernel.org>
+CC: Ariel Miculas <amiculas@cisco.com>
+
+Hi Breno,
+
+FYI, the error/warning was bisected to this commit, please ignore it if it's irrelevant.
+
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   1b5fe53681d9c388f1600310fe3488091701d4d0
+commit: aefb2f2e619b6c334bcb31de830aa00ba0b11129 x86/bugs: Rename CONFIG_RETPOLINE            => CONFIG_MITIGATION_RETPOLINE
+date:   8 months ago
+config: x86_64-buildonly-randconfig-001-20240830 (https://download.01.org/0day-ci/archive/20240830/202408301007.tdWHDUJo-lkp@intel.com/config)
 compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240830/202408300455.vSOPslVt-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240830/202408301007.tdWHDUJo-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202408300455.vSOPslVt-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202408301007.tdWHDUJo-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
->> drivers/gpu/drm/xe/xe_migrate.c:304:52: warning: result of comparison of constant 274877906944 with expression of type 'resource_size_t' (aka 'unsigned int') is always true [-Wtautological-constant-out-of-range-compare]
-     304 |                 xe_assert(xe, (xe->mem.vram.actual_physical_size <= SZ_256G));
-         |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~
-   drivers/gpu/drm/xe/xe_assert.h:108:54: note: expanded from macro 'xe_assert'
-     108 | #define xe_assert(xe, condition) xe_assert_msg((xe), condition, "")
-         |                                  ~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~
-   drivers/gpu/drm/xe/xe_assert.h:111:24: note: expanded from macro 'xe_assert_msg'
-     111 |         __xe_assert_msg(__xe, condition,                                                        \
-         |         ~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     112 |                         "platform: %s subplatform: %d\n"                                        \
-         |                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     113 |                         "graphics: %s %u.%02u step %s\n"                                        \
-         |                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     114 |                         "media: %s %u.%02u step %s\n"                                           \
-         |                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     115 |                         msg,                                                                    \
-         |                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     116 |                         __xe->info.platform_name, __xe->info.subplatform,                       \
-         |                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     117 |                         __xe->info.graphics_name,                                               \
-         |                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     118 |                         __xe->info.graphics_verx100 / 100,                                      \
-         |                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     119 |                         __xe->info.graphics_verx100 % 100,                                      \
-         |                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     120 |                         xe_step_name(__xe->info.step.graphics),                                 \
-         |                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     121 |                         __xe->info.media_name,                                                  \
-         |                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     122 |                         __xe->info.media_verx100 / 100,                                         \
-         |                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     123 |                         __xe->info.media_verx100 % 100,                                         \
-         |                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     124 |                         xe_step_name(__xe->info.step.media),                                    \
-         |                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     125 |                         ## arg);                                                                \
-         |                         ~~~~~~~
-   drivers/gpu/drm/xe/xe_assert.h:84:31: note: expanded from macro '__xe_assert_msg'
-      84 |         (void)drm_WARN(&(xe)->drm, !(condition), "[" DRM_NAME "] Assertion `%s` failed!\n" msg, \
-         |               ~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-      85 |                        __stringify(condition), ## arg);                                         \
-         |                        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/drm/drm_print.h:635:7: note: expanded from macro 'drm_WARN'
-     635 |         WARN(condition, "%s %s: [drm] " format,                         \
-         |         ~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     636 |                         dev_driver_string((drm)->dev),                  \
-         |                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     637 |                         dev_name((drm)->dev), ## arg)
-         |                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/asm-generic/bug.h:132:25: note: expanded from macro 'WARN'
-     132 |         int __ret_warn_on = !!(condition);                              \
-         |                                ^~~~~~~~~
-   1 warning generated.
-
-Kconfig warnings: (for reference only)
-   WARNING: unmet direct dependencies detected for FB_IOMEM_HELPERS
-   Depends on [n]: HAS_IOMEM [=y] && FB_CORE [=n]
-   Selected by [m]:
-   - DRM_XE_DISPLAY [=y] && HAS_IOMEM [=y] && DRM [=y] && DRM_XE [=m] && DRM_XE [=m]=m [=m]
+   vmlinux.o: warning: objtool: leaf_copy_boundary_item+0x2b11: stack state mismatch: cfa1=4+280 cfa2=4+288
+>> vmlinux.o: warning: objtool: set_ftrace_ops_ro+0x80: relocation to !ENDBR: arch_rethook_prepare+0xe
 
 
-vim +304 drivers/gpu/drm/xe/xe_migrate.c
-
-   177	
-   178	static int xe_migrate_prepare_vm(struct xe_tile *tile, struct xe_migrate *m,
-   179					 struct xe_vm *vm)
-   180	{
-   181		struct xe_device *xe = tile_to_xe(tile);
-   182		u16 pat_index = xe->pat.idx[XE_CACHE_WB];
-   183		u8 id = tile->id;
-   184		u32 num_entries = NUM_PT_SLOTS, num_level = vm->pt_root[id]->level,
-   185		    num_setup = num_level + 1;
-   186		u32 map_ofs, level, i;
-   187		struct xe_bo *bo, *batch = tile->mem.kernel_bb_pool->bo;
-   188		u64 entry, pt30_ofs;
-   189	
-   190		/* Can't bump NUM_PT_SLOTS too high */
-   191		BUILD_BUG_ON(NUM_PT_SLOTS > SZ_2M/XE_PAGE_SIZE);
-   192		/* Must be a multiple of 64K to support all platforms */
-   193		BUILD_BUG_ON(NUM_PT_SLOTS * XE_PAGE_SIZE % SZ_64K);
-   194		/* And one slot reserved for the 4KiB page table updates */
-   195		BUILD_BUG_ON(!(NUM_KERNEL_PDE & 1));
-   196	
-   197		/* Need to be sure everything fits in the first PT, or create more */
-   198		xe_tile_assert(tile, m->batch_base_ofs + batch->size < SZ_2M);
-   199	
-   200		bo = xe_bo_create_pin_map(vm->xe, tile, vm,
-   201					  num_entries * XE_PAGE_SIZE,
-   202					  ttm_bo_type_kernel,
-   203					  XE_BO_FLAG_VRAM_IF_DGFX(tile) |
-   204					  XE_BO_FLAG_PINNED);
-   205		if (IS_ERR(bo))
-   206			return PTR_ERR(bo);
-   207	
-   208		/* PT31 reserved for 2M identity map */
-   209		pt30_ofs = bo->size - 2 * XE_PAGE_SIZE;
-   210		entry = vm->pt_ops->pde_encode_bo(bo, pt30_ofs, pat_index);
-   211		xe_pt_write(xe, &vm->pt_root[id]->bo->vmap, 0, entry);
-   212	
-   213		map_ofs = (num_entries - num_setup) * XE_PAGE_SIZE;
-   214	
-   215		/* Map the entire BO in our level 0 pt */
-   216		for (i = 0, level = 0; i < num_entries; level++) {
-   217			entry = vm->pt_ops->pte_encode_bo(bo, i * XE_PAGE_SIZE,
-   218							  pat_index, 0);
-   219	
-   220			xe_map_wr(xe, &bo->vmap, map_ofs + level * 8, u64, entry);
-   221	
-   222			if (vm->flags & XE_VM_FLAG_64K)
-   223				i += 16;
-   224			else
-   225				i += 1;
-   226		}
-   227	
-   228		if (!IS_DGFX(xe)) {
-   229			/* Write out batch too */
-   230			m->batch_base_ofs = NUM_PT_SLOTS * XE_PAGE_SIZE;
-   231			for (i = 0; i < batch->size;
-   232			     i += vm->flags & XE_VM_FLAG_64K ? XE_64K_PAGE_SIZE :
-   233			     XE_PAGE_SIZE) {
-   234				entry = vm->pt_ops->pte_encode_bo(batch, i,
-   235								  pat_index, 0);
-   236	
-   237				xe_map_wr(xe, &bo->vmap, map_ofs + level * 8, u64,
-   238					  entry);
-   239				level++;
-   240			}
-   241			if (xe->info.has_usm) {
-   242				xe_tile_assert(tile, batch->size == SZ_1M);
-   243	
-   244				batch = tile->primary_gt->usm.bb_pool->bo;
-   245				m->usm_batch_base_ofs = m->batch_base_ofs + SZ_1M;
-   246				xe_tile_assert(tile, batch->size == SZ_512K);
-   247	
-   248				for (i = 0; i < batch->size;
-   249				     i += vm->flags & XE_VM_FLAG_64K ? XE_64K_PAGE_SIZE :
-   250				     XE_PAGE_SIZE) {
-   251					entry = vm->pt_ops->pte_encode_bo(batch, i,
-   252									  pat_index, 0);
-   253	
-   254					xe_map_wr(xe, &bo->vmap, map_ofs + level * 8, u64,
-   255						  entry);
-   256					level++;
-   257				}
-   258			}
-   259		} else {
-   260			u64 batch_addr = xe_bo_addr(batch, 0, XE_PAGE_SIZE);
-   261	
-   262			m->batch_base_ofs = xe_migrate_vram_ofs(xe, batch_addr);
-   263	
-   264			if (xe->info.has_usm) {
-   265				batch = tile->primary_gt->usm.bb_pool->bo;
-   266				batch_addr = xe_bo_addr(batch, 0, XE_PAGE_SIZE);
-   267				m->usm_batch_base_ofs = xe_migrate_vram_ofs(xe, batch_addr);
-   268			}
-   269		}
-   270	
-   271		for (level = 1; level < num_level; level++) {
-   272			u32 flags = 0;
-   273	
-   274			if (vm->flags & XE_VM_FLAG_64K && level == 1)
-   275				flags = XE_PDE_64K;
-   276	
-   277			entry = vm->pt_ops->pde_encode_bo(bo, map_ofs + (u64)(level - 1) *
-   278							  XE_PAGE_SIZE, pat_index);
-   279			xe_map_wr(xe, &bo->vmap, map_ofs + XE_PAGE_SIZE * level, u64,
-   280				  entry | flags);
-   281		}
-   282	
-   283		/* Write PDE's that point to our BO. */
-   284		for (i = 0; i < map_ofs / PAGE_SIZE; i++) {
-   285			entry = vm->pt_ops->pde_encode_bo(bo, (u64)i * XE_PAGE_SIZE,
-   286							  pat_index);
-   287	
-   288			xe_map_wr(xe, &bo->vmap, map_ofs + XE_PAGE_SIZE +
-   289				  (i + 1) * 8, u64, entry);
-   290		}
-   291	
-   292		/* Set up a 1GiB NULL mapping at 255GiB offset. */
-   293		level = 2;
-   294		xe_map_wr(xe, &bo->vmap, map_ofs + XE_PAGE_SIZE * level + 255 * 8, u64,
-   295			  vm->pt_ops->pte_encode_addr(xe, 0, pat_index, level, IS_DGFX(xe), 0)
-   296			  | XE_PTE_NULL);
-   297		m->cleared_mem_ofs = (255ULL << xe_pt_shift(level));
-   298	
-   299		/* Identity map the entire vram at 256GiB offset */
-   300		if (IS_DGFX(xe)) {
-   301			u64 pt31_ofs = bo->size - XE_PAGE_SIZE;
-   302	
-   303			xe_migrate_program_identity(xe, vm, bo, map_ofs, 256, pat_index, pt31_ofs);
- > 304			xe_assert(xe, (xe->mem.vram.actual_physical_size <= SZ_256G));
-   305		}
-   306	
-   307		/*
-   308		 * Example layout created above, with root level = 3:
-   309		 * [PT0...PT7]: kernel PT's for copy/clear; 64 or 4KiB PTE's
-   310		 * [PT8]: Kernel PT for VM_BIND, 4 KiB PTE's
-   311		 * [PT9...PT27]: Userspace PT's for VM_BIND, 4 KiB PTE's
-   312		 * [PT28 = PDE 0] [PT29 = PDE 1] [PT30 = PDE 2] [PT31 = 2M vram identity map]
-   313		 *
-   314		 * This makes the lowest part of the VM point to the pagetables.
-   315		 * Hence the lowest 2M in the vm should point to itself, with a few writes
-   316		 * and flushes, other parts of the VM can be used either for copying and
-   317		 * clearing.
-   318		 *
-   319		 * For performance, the kernel reserves PDE's, so about 20 are left
-   320		 * for async VM updates.
-   321		 *
-   322		 * To make it easier to work, each scratch PT is put in slot (1 + PT #)
-   323		 * everywhere, this allows lockless updates to scratch pages by using
-   324		 * the different addresses in VM.
-   325		 */
-   326	#define NUM_VMUSA_UNIT_PER_PAGE	32
-   327	#define VM_SA_UPDATE_UNIT_SIZE		(XE_PAGE_SIZE / NUM_VMUSA_UNIT_PER_PAGE)
-   328	#define NUM_VMUSA_WRITES_PER_UNIT	(VM_SA_UPDATE_UNIT_SIZE / sizeof(u64))
-   329		drm_suballoc_manager_init(&m->vm_update_sa,
-   330					  (size_t)(map_ofs / XE_PAGE_SIZE - NUM_KERNEL_PDE) *
-   331					  NUM_VMUSA_UNIT_PER_PAGE, 0);
-   332	
-   333		m->pt_bo = bo;
-   334		return 0;
-   335	}
-   336	
+objdump-func vmlinux.o set_ftrace_ops_ro:
+0000 00000000001758c0 <set_ftrace_ops_ro>:
+0000   1758c0:	f3 0f 1e fa          	endbr64
+0004   1758c4:	55                   	push   %rbp
+0005   1758c5:	41 57                	push   %r15
+0007   1758c7:	41 56                	push   %r14
+0009   1758c9:	41 55                	push   %r13
+000b   1758cb:	41 54                	push   %r12
+000d   1758cd:	53                   	push   %rbx
+000e   1758ce:	48 8d 64 24 d8       	lea    -0x28(%rsp),%rsp
+0013   1758d3:	e8 00 00 00 00       	call   1758d8 <set_ftrace_ops_ro+0x18>	1758d4: R_X86_64_PLT32	__msan_get_context_state-0x4
+0018   1758d8:	48 89 c3             	mov    %rax,%rbx
+001b   1758db:	e8 00 00 00 00       	call   1758e0 <set_ftrace_ops_ro+0x20>	1758dc: R_X86_64_PLT32	__sanitizer_cov_trace_pc-0x4
+0020   1758e0:	48 c7 c7 00 00 00 00 	mov    $0x0,%rdi	1758e3: R_X86_64_32S	ftrace_ops_list
+0027   1758e7:	4c 8b 2d 00 00 00 00 	mov    0x0(%rip),%r13        # 1758ee <set_ftrace_ops_ro+0x2e>	1758ea: R_X86_64_PC32	ftrace_ops_list-0x4
+002e   1758ee:	e8 00 00 00 00       	call   1758f3 <set_ftrace_ops_ro+0x33>	1758ef: R_X86_64_PLT32	__msan_metadata_ptr_for_load_8-0x4
+0033   1758f3:	48 8b 28             	mov    (%rax),%rbp
+0036   1758f6:	8b 02                	mov    (%rdx),%eax
+0038   1758f8:	48 89 5c 24 08       	mov    %rbx,0x8(%rsp)
+003d   1758fd:	c7 83 20 03 00 00 00 00 00 00 	movl   $0x0,0x320(%rbx)
+0047   175907:	89 44 24 04          	mov    %eax,0x4(%rsp)
+004b   17590b:	e8 00 00 00 00       	call   175910 <set_ftrace_ops_ro+0x50>	17590c: R_X86_64_PLT32	debug_lockdep_rcu_enabled-0x4
+0050   175910:	48 c7 c0 00 00 00 00 	mov    $0x0,%rax	175913: R_X86_64_32S	ftrace_regs_caller
+0057   175917:	48 c7 c2 00 00 00 00 	mov    $0x0,%rdx	17591a: R_X86_64_32S	ftrace_regs_caller_end
+005e   17591e:	48 c7 c1 00 00 00 00 	mov    $0x0,%rcx	175921: R_X86_64_32S	ftrace_caller
+0065   175925:	48 c7 c6 00 00 00 00 	mov    $0x0,%rsi	175928: R_X86_64_32S	ftrace_caller_end
+006c   17592c:	48 29 c2             	sub    %rax,%rdx
+006f   17592f:	48 29 ce             	sub    %rcx,%rsi
+0072   175932:	48 f7 d8             	neg    %rax
+0075   175935:	48 f7 d9             	neg    %rcx
+0078   175938:	48 8d 04 05 00 00 00 00 	lea    0x0(,%rax,1),%rax	17593c: R_X86_64_32S	ftrace_regs_caller_end+0x1008
+0080   175940:	48 8d 0c 0d 00 00 00 00 	lea    0x0(,%rcx,1),%rcx	175944: R_X86_64_32S	ftrace_caller_end+0x1008
+0088   175948:	48 89 54 24 20       	mov    %rdx,0x20(%rsp)
+008d   17594d:	48 89 74 24 18       	mov    %rsi,0x18(%rsp)
+0092   175952:	48 31 c1             	xor    %rax,%rcx
+0095   175955:	48 c1 e9 0c          	shr    $0xc,%rcx
+0099   175959:	48 89 4c 24 10       	mov    %rcx,0x10(%rsp)
+009e   17595e:	48 85 ed             	test   %rbp,%rbp
+00a1   175961:	0f 85 7e 01 00 00    	jne    175ae5 <set_ftrace_ops_ro+0x225>
+00a7   175967:	49 8d 7d 10          	lea    0x10(%r13),%rdi
+00ab   17596b:	4c 8b 3f             	mov    (%rdi),%r15
+00ae   17596e:	e8 00 00 00 00       	call   175973 <set_ftrace_ops_ro+0xb3>	17596f: R_X86_64_PLT32	__msan_metadata_ptr_for_load_8-0x4
+00b3   175973:	4c 8b 20             	mov    (%rax),%r12
+00b6   175976:	44 89 fb             	mov    %r15d,%ebx
+00b9   175979:	44 8b 32             	mov    (%rdx),%r14d
+00bc   17597c:	44 89 e0             	mov    %r12d,%eax
+00bf   17597f:	81 e3 00 08 00 00    	and    $0x800,%ebx
+00c5   175985:	25 00 08 00 00       	and    $0x800,%eax
+00ca   17598a:	48 85 c0             	test   %rax,%rax
+00cd   17598d:	74 06                	je     175995 <set_ftrace_ops_ro+0xd5>
+00cf   17598f:	f7 d0                	not    %eax
+00d1   175991:	21 d8                	and    %ebx,%eax
+00d3   175993:	74 0f                	je     1759a4 <set_ftrace_ops_ro+0xe4>
+00d5   175995:	48 85 db             	test   %rbx,%rbx
+00d8   175998:	75 17                	jne    1759b1 <set_ftrace_ops_ro+0xf1>
+00da   17599a:	e8 00 00 00 00       	call   17599f <set_ftrace_ops_ro+0xdf>	17599b: R_X86_64_PLT32	__sanitizer_cov_trace_pc-0x4
+00df   17599f:	e9 9b 00 00 00       	jmp    175a3f <set_ftrace_ops_ro+0x17f>
+00e4   1759a4:	44 89 f7             	mov    %r14d,%edi
+00e7   1759a7:	e8 00 00 00 00       	call   1759ac <set_ftrace_ops_ro+0xec>	1759a8: R_X86_64_PLT32	__msan_warning-0x4
+00ec   1759ac:	48 85 db             	test   %rbx,%rbx
+00ef   1759af:	74 e9                	je     17599a <set_ftrace_ops_ro+0xda>
+00f1   1759b1:	e8 00 00 00 00       	call   1759b6 <set_ftrace_ops_ro+0xf6>	1759b2: R_X86_64_PLT32	__sanitizer_cov_trace_pc-0x4
+00f6   1759b6:	41 83 e4 04          	and    $0x4,%r12d
+00fa   1759ba:	41 83 e7 04          	and    $0x4,%r15d
+00fe   1759be:	b9 00 00 00 00       	mov    $0x0,%ecx
+0103   1759c3:	4d 85 e4             	test   %r12,%r12
+0106   1759c6:	41 f7 d4             	not    %r12d
+0109   1759c9:	0f 94 c0             	sete   %al
+010c   1759cc:	45 85 e7             	test   %r12d,%r15d
+010f   1759cf:	0f 95 c3             	setne  %bl
+0112   1759d2:	08 c3                	or     %al,%bl
+0114   1759d4:	44 0f 45 f1          	cmovne %ecx,%r14d
+0118   1759d8:	4d 85 ff             	test   %r15,%r15
+011b   1759db:	4c 8b 7c 24 20       	mov    0x20(%rsp),%r15
+0120   1759e0:	4c 0f 44 7c 24 18    	cmove  0x18(%rsp),%r15
+0126   1759e6:	48 85 ed             	test   %rbp,%rbp
+0129   1759e9:	0f 85 12 01 00 00    	jne    175b01 <set_ftrace_ops_ro+0x241>
+012f   1759ef:	49 8d bd 90 01 00 00 	lea    0x190(%r13),%rdi
+0136   1759f6:	4c 8b 27             	mov    (%rdi),%r12
+0139   1759f9:	e8 00 00 00 00       	call   1759fe <set_ftrace_ops_ro+0x13e>	1759fa: R_X86_64_PLT32	__msan_metadata_ptr_for_load_8-0x4
+013e   1759fe:	48 83 38 00          	cmpq   $0x0,(%rax)
+0142   175a02:	8b 3a                	mov    (%rdx),%edi
+0144   175a04:	48 8b 4c 24 08       	mov    0x8(%rsp),%rcx
+0149   175a09:	c7 81 20 03 00 00 00 00 00 00 	movl   $0x0,0x320(%rcx)
+0153   175a13:	0f 85 f6 00 00 00    	jne    175b0f <set_ftrace_ops_ro+0x24f>
+0159   175a19:	83 7c 24 10 00       	cmpl   $0x0,0x10(%rsp)
+015e   175a1e:	0f 94 c0             	sete   %al
+0161   175a21:	08 c3                	or     %al,%bl
+0163   175a23:	0f 84 f0 00 00 00    	je     175b19 <set_ftrace_ops_ro+0x259>
+0169   175a29:	49 81 c7 08 10 00 00 	add    $0x1008,%r15
+0170   175a30:	4c 89 e7             	mov    %r12,%rdi
+0173   175a33:	49 c1 ef 0c          	shr    $0xc,%r15
+0177   175a37:	44 89 fe             	mov    %r15d,%esi
+017a   175a3a:	e8 00 00 00 00       	call   175a3f <set_ftrace_ops_ro+0x17f>	175a3b: R_X86_64_PLT32	set_memory_ro-0x4
+017f   175a3f:	48 85 ed             	test   %rbp,%rbp
+0182   175a42:	0f 85 ab 00 00 00    	jne    175af3 <set_ftrace_ops_ro+0x233>
+0188   175a48:	49 8d 7d 00          	lea    0x0(%r13),%rdi
+018c   175a4c:	48 8d 7f 08          	lea    0x8(%rdi),%rdi
+0190   175a50:	4c 8b 2f             	mov    (%rdi),%r13
+0193   175a53:	e8 00 00 00 00       	call   175a58 <set_ftrace_ops_ro+0x198>	175a54: R_X86_64_PLT32	__msan_metadata_ptr_for_load_8-0x4
+0198   175a58:	48 8b 28             	mov    (%rax),%rbp
+019b   175a5b:	8b 0a                	mov    (%rdx),%ecx
+019d   175a5d:	48 8b 44 24 08       	mov    0x8(%rsp),%rax
+01a2   175a62:	89 4c 24 04          	mov    %ecx,0x4(%rsp)
+01a6   175a66:	c7 80 20 03 00 00 00 00 00 00 	movl   $0x0,0x320(%rax)
+01b0   175a70:	e8 00 00 00 00       	call   175a75 <set_ftrace_ops_ro+0x1b5>	175a71: R_X86_64_PLT32	debug_lockdep_rcu_enabled-0x4
+01b5   175a75:	48 89 e8             	mov    %rbp,%rax
+01b8   175a78:	4c 89 ea             	mov    %r13,%rdx
+01bb   175a7b:	48 c7 c7 00 00 00 00 	mov    $0x0,%rdi	175a7e: R_X86_64_32S	ftrace_list_end
+01c2   175a82:	48 f7 d0             	not    %rax
+01c5   175a85:	4c 85 e8             	test   %r13,%rax
+01c8   175a88:	0f 94 c1             	sete   %cl
+01cb   175a8b:	4d 85 ed             	test   %r13,%r13
+01ce   175a8e:	0f 94 c3             	sete   %bl
+01d1   175a91:	40 0f 95 c6          	setne  %sil
+01d5   175a95:	48 31 fa             	xor    %rdi,%rdx
+01d8   175a98:	48 85 c2             	test   %rax,%rdx
+01db   175a9b:	0f 94 c0             	sete   %al
+01de   175a9e:	49 81 fd 00 00 00 00 	cmp    $0x0,%r13	175aa1: R_X86_64_32S	ftrace_list_end
+01e5   175aa5:	0f 95 c2             	setne  %dl
+01e8   175aa8:	41 0f 94 c6          	sete   %r14b
+01ec   175aac:	40 20 c6             	and    %al,%sil
+01ef   175aaf:	08 c2                	or     %al,%dl
+01f1   175ab1:	20 ca                	and    %cl,%dl
+01f3   175ab3:	40 08 f2             	or     %sil,%dl
+01f6   175ab6:	80 fa 01             	cmp    $0x1,%dl
+01f9   175ab9:	75 05                	jne    175ac0 <set_ftrace_ops_ro+0x200>
+01fb   175abb:	48 85 ed             	test   %rbp,%rbp
+01fe   175abe:	75 15                	jne    175ad5 <set_ftrace_ops_ro+0x215>
+0200   175ac0:	44 08 f3             	or     %r14b,%bl
+0203   175ac3:	75 61                	jne    175b26 <set_ftrace_ops_ro+0x266>
+0205   175ac5:	e8 00 00 00 00       	call   175aca <set_ftrace_ops_ro+0x20a>	175ac6: R_X86_64_PLT32	__sanitizer_cov_trace_pc-0x4
+020a   175aca:	48 85 ed             	test   %rbp,%rbp
+020d   175acd:	0f 84 94 fe ff ff    	je     175967 <set_ftrace_ops_ro+0xa7>
+0213   175ad3:	eb 10                	jmp    175ae5 <set_ftrace_ops_ro+0x225>
+0215   175ad5:	8b 7c 24 04          	mov    0x4(%rsp),%edi
+0219   175ad9:	e8 00 00 00 00       	call   175ade <set_ftrace_ops_ro+0x21e>	175ada: R_X86_64_PLT32	__msan_warning-0x4
+021e   175ade:	44 08 f3             	or     %r14b,%bl
+0221   175ae1:	75 43                	jne    175b26 <set_ftrace_ops_ro+0x266>
+0223   175ae3:	eb e0                	jmp    175ac5 <set_ftrace_ops_ro+0x205>
+0225   175ae5:	8b 7c 24 04          	mov    0x4(%rsp),%edi
+0229   175ae9:	e8 00 00 00 00       	call   175aee <set_ftrace_ops_ro+0x22e>	175aea: R_X86_64_PLT32	__msan_warning-0x4
+022e   175aee:	e9 74 fe ff ff       	jmp    175967 <set_ftrace_ops_ro+0xa7>
+0233   175af3:	8b 7c 24 04          	mov    0x4(%rsp),%edi
+0237   175af7:	e8 00 00 00 00       	call   175afc <set_ftrace_ops_ro+0x23c>	175af8: R_X86_64_PLT32	__msan_warning-0x4
+023c   175afc:	e9 47 ff ff ff       	jmp    175a48 <set_ftrace_ops_ro+0x188>
+0241   175b01:	8b 7c 24 04          	mov    0x4(%rsp),%edi
+0245   175b05:	e8 00 00 00 00       	call   175b0a <set_ftrace_ops_ro+0x24a>	175b06: R_X86_64_PLT32	__msan_warning-0x4
+024a   175b0a:	e9 e0 fe ff ff       	jmp    1759ef <set_ftrace_ops_ro+0x12f>
+024f   175b0f:	e8 00 00 00 00       	call   175b14 <set_ftrace_ops_ro+0x254>	175b10: R_X86_64_PLT32	__msan_warning-0x4
+0254   175b14:	e9 00 ff ff ff       	jmp    175a19 <set_ftrace_ops_ro+0x159>
+0259   175b19:	44 89 f7             	mov    %r14d,%edi
+025c   175b1c:	e8 00 00 00 00       	call   175b21 <set_ftrace_ops_ro+0x261>	175b1d: R_X86_64_PLT32	__msan_warning-0x4
+0261   175b21:	e9 03 ff ff ff       	jmp    175a29 <set_ftrace_ops_ro+0x169>
+0266   175b26:	e8 00 00 00 00       	call   175b2b <set_ftrace_ops_ro+0x26b>	175b27: R_X86_64_PLT32	__sanitizer_cov_trace_pc-0x4
+026b   175b2b:	48 8d 64 24 28       	lea    0x28(%rsp),%rsp
+0270   175b30:	5b                   	pop    %rbx
+0271   175b31:	41 5c                	pop    %r12
+0273   175b33:	41 5d                	pop    %r13
+0275   175b35:	41 5e                	pop    %r14
+0277   175b37:	41 5f                	pop    %r15
+0279   175b39:	5d                   	pop    %rbp
+027a   175b3a:	c3                   	ret
+027b   175b3b:	0f 1f 44 00 00       	nopl   0x0(%rax,%rax,1)
 
 -- 
 0-DAY CI Kernel Test Service
