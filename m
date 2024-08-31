@@ -1,53 +1,60 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB99922095;
-	Sat, 31 Aug 2024 08:24:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2344814D28F;
+	Sat, 31 Aug 2024 08:28:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725092657; cv=none; b=mF06gqTODT9//NEewMbqC90pD5LgOq0ukNwR4Ntp9n98AO0YdSHekU3T9OP3UJkfdA0cee2CFOmJXa81FptK6D3CB7yGH/a4oCJC6+Bkp/+1zEWvLBi/2ueOjMX/EdDdBut8dELNmUep20w/ZPmWLwYYYBd/QF9YxxhM9RPalBk=
+	t=1725092937; cv=none; b=dpiX3u3Wi3xdBKupemdGpiC74fjW16Xs2XzzfMc40sEYdzc04thAlSdjON1k3tSIiYcUjNgK1s6zxAJ2r0Jm512ONJKPJr7NK67F1d88iGojwmTD4WwmigOEJM3+cImidUOVbTxW0IAOODVVoGrWtqRuNOm2oIoDNPXNDd9KhTg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725092657; c=relaxed/simple;
-	bh=8Q0rv1U+EQwWMFT1qBVs5i+5vSbooP+Bl5Hfnffjh4s=;
+	s=arc-20240116; t=1725092937; c=relaxed/simple;
+	bh=rkNJisPGdptDqdqLnXQ/smzIUcfvIakSjzsrw03LkfU=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=tb8yeQVbtO3EDNbooQAJVyqLv3M5geqxm94LzY5Kt/XeDsbzWxdd9kQhfs7q0GfjhqKytkaNjG7CxxkY/KBXpN4Knjkl6BB25emaEUhauiB8hR77f7bOduM8OkzK4sv5Bii7ITPNydfnPHaca1eIuuG/EICUWGn97cIf6ZfP/ms=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PThRW3+n; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=FhPikJZIGAZYhF0DGk3Xo+yUU0wipUKZv77odZ22OIJtJbDWbIB4SaeTyX2VDmNdVj44BijPLvHPTYYzx5MD3tnqQ7X8erpBy9jyhmiqGy+7Fmn7pKHm8JQ3ERfSxkQr8NL40lSzO2FCHnDZeUhmI2qficbr3Sv9hHd5S0VdC8k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=B+EOVCA1; arc=none smtp.client-ip=192.198.163.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PThRW3+n"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DAD1CC4CEC0;
-	Sat, 31 Aug 2024 08:24:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1725092656;
-	bh=8Q0rv1U+EQwWMFT1qBVs5i+5vSbooP+Bl5Hfnffjh4s=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=PThRW3+nZ4aRFDDLhuSiH5RqKJ6xblGOcBjhmOsCOIxA7+eOKv5dTW70+S1e7yNxP
-	 PuH1KcpVat0BQ6ivesg5oPzqIPnJMlHj/JF5wMZeak1Ue/peGfq/yFFGvNNJpRJ2X8
-	 Uh+arijRJZWunOUvbQoXai0j5/7LT/5tk3mSYrPFppqGFwnTuC3+wpCy4b3Ai4uOxv
-	 9iDxt9jn66PXSPX8ABpnzGZugz+g2/VwrEEok6U1mgp8u5vH7pH3GdEU6PdxHa4pk1
-	 mwWzJlWPbeYcaQ2tSdDCD+hIZlP7VJrUtl7/qPuWrDY0NmZVFFQEs3eED2wcAbHCoh
-	 7hUv8gH2gOkvg==
-Date: Sat, 31 Aug 2024 09:24:11 +0100
-From: Simon Horman <horms@kernel.org>
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: Naresh Kamboju <naresh.kamboju@linaro.org>,
-	clang-built-linux <llvm@lists.linux.dev>,
-	Netdev <netdev@vger.kernel.org>,
-	open list <linux-kernel@vger.kernel.org>,
-	lkft-triage@lists.linaro.org,
-	Linux Regressions <regressions@lists.linux.dev>,
-	Anders Roxell <anders.roxell@linaro.org>,
-	Dan Carpenter <dan.carpenter@linaro.org>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Florian Westphal <fw@strlen.de>,
-	Steffen Klassert <steffen.klassert@secunet.com>
-Subject: Re: net/xfrm/xfrm_policy.c:1286:8: error: variable 'dir' is
- uninitialized when used here [-Werror,-Wuninitialized]
-Message-ID: <20240831082411.GC4063074@kernel.org>
-References: <CA+G9fYtemFfuhc7=eNyP3TezM9Euc8sFtHe4GDR4Z9XdHzXSJA@mail.gmail.com>
- <20240830164706.GW1368797@kernel.org>
- <20240830170449.GX1368797@kernel.org>
- <20240830214757.GA3819549@thelio-3990X>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="B+EOVCA1"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1725092935; x=1756628935;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=rkNJisPGdptDqdqLnXQ/smzIUcfvIakSjzsrw03LkfU=;
+  b=B+EOVCA1dEiS+RmheTKP4nx/Z8SGsCaqLFxbnF0esQUNSvTM8d7jqoIz
+   tiGWBVXNek+q9d94xIvBpnwt1itN7zhI0Zrkc4gRajM0cmGqdgoMyZbZ7
+   9ijgN/iyeTo8CpEKCcI5gRtWFK4BXy6mwaCTaHyZUY7BQYkAWbdkb510f
+   NaraYRNPedBNqS+0tNsc9zgEDH2uujjbRqt8/RQpzcnV+//2308zWdnbo
+   v/HU+ABDLJsPvNIAIakdentgjcfTj/1XwAkgv3zKuo8vbmndcTEACBm0P
+   4DO3XiubUSYZEmdFolbiLhnAYgc+j94hzq0ltVuT5mIXs813XAwue1txi
+   w==;
+X-CSE-ConnectionGUID: 9GqbSBpqRcmMfKOJgByENw==
+X-CSE-MsgGUID: mQoS0Z4WRiaYp61E+Fz62A==
+X-IronPort-AV: E=McAfee;i="6700,10204,11180"; a="23923584"
+X-IronPort-AV: E=Sophos;i="6.10,191,1719903600"; 
+   d="scan'208";a="23923584"
+Received: from orviesa006.jf.intel.com ([10.64.159.146])
+  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Aug 2024 01:28:54 -0700
+X-CSE-ConnectionGUID: 3W+OWVDxQ1GzNcbfC6Y4Cg==
+X-CSE-MsgGUID: ngukxttgToCFDDbXLnFeBA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.10,191,1719903600"; 
+   d="scan'208";a="64476377"
+Received: from lkp-server01.sh.intel.com (HELO 9c6b1c7d3b50) ([10.239.97.150])
+  by orviesa006.jf.intel.com with ESMTP; 31 Aug 2024 01:28:52 -0700
+Received: from kbuild by 9c6b1c7d3b50 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1skJTV-0002Ss-2c;
+	Sat, 31 Aug 2024 08:28:49 +0000
+Date: Sat, 31 Aug 2024 16:28:36 +0800
+From: kernel test robot <lkp@intel.com>
+To: Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: Re: [PATCH v4 4/6] media: i2c: og01a1b: Add support of xvclk supply
+ clock in power management
+Message-ID: <202408311620.AghElnWZ-lkp@intel.com>
+References: <20240830063459.3088895-5-vladimir.zapolskiy@linaro.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -56,69 +63,147 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240830214757.GA3819549@thelio-3990X>
+In-Reply-To: <20240830063459.3088895-5-vladimir.zapolskiy@linaro.org>
 
-On Fri, Aug 30, 2024 at 02:47:57PM -0700, Nathan Chancellor wrote:
-> Hi Simon (and Naresh),
-> 
-> On Fri, Aug 30, 2024 at 06:04:49PM +0100, Simon Horman wrote:
-> > On Fri, Aug 30, 2024 at 05:47:06PM +0100, Simon Horman wrote:
-> > > + Florian, Steffen
-> > > 
-> > > On Fri, Aug 30, 2024 at 12:15:10PM +0530, Naresh Kamboju wrote:
-> > > > The x86_64 defconfig builds failed on today's Linux next-20240829
-> > > > due to following build warnings / errors.
-> > > > 
-> > > > Regressions:
-> > > > * i386, build
-> > > >   - clang-18-defconfig
-> > > >   - clang-nightly-defconfig
-> > > > 
-> > > > * x86_64, build
-> > > >   - clang-18-lkftconfig
-> > > >   - clang-18-lkftconfig-compat
-> > > >   - clang-18-lkftconfig-kcsan
-> > > >   - clang-18-lkftconfig-no-kselftest-frag
-> > > >   - clang-18-x86_64_defconfig
-> > > >   - clang-nightly-lkftconfig
-> > > >   - clang-nightly-lkftconfig-kselftest
-> > > >   - clang-nightly-x86_64_defconfig
-> > > >   - rustclang-nightly-lkftconfig-kselftest
-> > > > 
-> > > > first seen on next-20240829.
-> > > >   Good: next-20240828
-> > > >   BAD:  next-20240829
-> > > > 
-> > > > Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
-> > > > 
-> > > > build log:
-> > > > --------
-> > > > net/xfrm/xfrm_policy.c:1286:8: error: variable 'dir' is uninitialized
-> > > > when used here [-Werror,-Wuninitialized]
-> > > >  1286 |                 if ((dir & XFRM_POLICY_MASK) == XFRM_POLICY_OUT) {
-> > > >       |                      ^~~
-> > > > net/xfrm/xfrm_policy.c:1257:9: note: initialize the variable 'dir' to
-> > > > silence this warning
-> > > >  1257 |         int dir;
-> > > >       |                ^
-> > > >       |                 = 0
-> > > > 1 error generated.
-> 
-> Thanks for the report.
-> 
-> > > I believe that is due to
-> > > commit 08c2182cf0b4 ("xfrm: policy: use recently added helper in more places")
-> > > 
-> > > I will work on a fix to initialise dir in the loop where it is used.
-> > 
-> > Patch is here:
-> > - [PATCH ipsec-next] xfrm: Initialise dir in xfrm_hash_rebuild()
-> >   https://lore.kernel.org/netdev/20240830-xfrm_hash_rebuild-dir-v1-1-f75092d07e1b@kernel.org/T/#u
-> 
-> I sent the same patch as a v1 but Florian pointed out that dir needs to
-> be initialized in the other loop too. I sent my v2 for it yesterday, it
-> just needs to be merged.
-> 
-> https://lore.kernel.org/all/20240829-xfrm-restore-dir-assign-xfrm_hash_rebuild-v2-1-1cf8958f6e8e@kernel.org/
+Hi Vladimir,
 
-Thanks, and sorry for the noise.
+kernel test robot noticed the following build warnings:
+
+[auto build test WARNING on media-tree/master]
+[also build test WARNING on linuxtv-media-stage/master robh/for-next linus/master sailus-media-tree/master v6.11-rc5 next-20240830]
+[cannot apply to sailus-media-tree/streams]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Vladimir-Zapolskiy/media-dt-bindings-Add-OmniVision-OG01A1B-image-sensor/20240830-143737
+base:   git://linuxtv.org/media_tree.git master
+patch link:    https://lore.kernel.org/r/20240830063459.3088895-5-vladimir.zapolskiy%40linaro.org
+patch subject: [PATCH v4 4/6] media: i2c: og01a1b: Add support of xvclk supply clock in power management
+config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20240831/202408311620.AghElnWZ-lkp@intel.com/config)
+compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 46fe36a4295f05d5d3731762e31fc4e6e99863e9)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240831/202408311620.AghElnWZ-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202408311620.AghElnWZ-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+   In file included from drivers/media/i2c/og01a1b.c:8:
+   In file included from include/linux/i2c.h:19:
+   In file included from include/linux/regulator/consumer.h:35:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:13:
+   In file included from include/linux/cgroup.h:25:
+   In file included from include/linux/kernel_stat.h:8:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:14:
+   In file included from arch/hexagon/include/asm/io.h:328:
+   include/asm-generic/io.h:548:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     548 |         val = __raw_readb(PCI_IOBASE + addr);
+         |                           ~~~~~~~~~~ ^
+   include/asm-generic/io.h:561:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     561 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
+      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
+         |                                                   ^
+   In file included from drivers/media/i2c/og01a1b.c:8:
+   In file included from include/linux/i2c.h:19:
+   In file included from include/linux/regulator/consumer.h:35:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:13:
+   In file included from include/linux/cgroup.h:25:
+   In file included from include/linux/kernel_stat.h:8:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:14:
+   In file included from arch/hexagon/include/asm/io.h:328:
+   include/asm-generic/io.h:574:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     574 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
+      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
+         |                                                   ^
+   In file included from drivers/media/i2c/og01a1b.c:8:
+   In file included from include/linux/i2c.h:19:
+   In file included from include/linux/regulator/consumer.h:35:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:13:
+   In file included from include/linux/cgroup.h:25:
+   In file included from include/linux/kernel_stat.h:8:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:14:
+   In file included from arch/hexagon/include/asm/io.h:328:
+   include/asm-generic/io.h:585:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     585 |         __raw_writeb(value, PCI_IOBASE + addr);
+         |                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:595:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     595 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:605:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     605 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   In file included from drivers/media/i2c/og01a1b.c:8:
+   In file included from include/linux/i2c.h:19:
+   In file included from include/linux/regulator/consumer.h:35:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:21:
+   In file included from include/linux/mm.h:2228:
+   include/linux/vmstat.h:514:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     514 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+>> drivers/media/i2c/og01a1b.c:981:42: warning: overflow in expression; result is -397'934'592 with type 'long' [-Winteger-overflow]
+     981 |         unsigned long delay = DIV_ROUND_UP(8192 * USEC_PER_SEC, OG01A1B_MCLK);
+         |                               ~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/math.h:37:22: note: expanded from macro 'DIV_ROUND_UP'
+      37 | #define DIV_ROUND_UP __KERNEL_DIV_ROUND_UP
+         |                      ^
+   include/uapi/linux/const.h:34:40: note: expanded from macro '__KERNEL_DIV_ROUND_UP'
+      34 | #define __KERNEL_DIV_ROUND_UP(n, d) (((n) + (d) - 1) / (d))
+         |                                        ^
+   8 warnings generated.
+
+
+vim +981 drivers/media/i2c/og01a1b.c
+
+   977	
+   978	/* Power/clock management functions */
+   979	static int og01a1b_power_on(struct device *dev)
+   980	{
+ > 981		unsigned long delay = DIV_ROUND_UP(8192 * USEC_PER_SEC, OG01A1B_MCLK);
+   982		struct v4l2_subdev *sd = dev_get_drvdata(dev);
+   983		struct og01a1b *og01a1b = to_og01a1b(sd);
+   984		int ret;
+   985	
+   986		ret = clk_prepare_enable(og01a1b->xvclk);
+   987		if (ret)
+   988			return ret;
+   989	
+   990		if (og01a1b->xvclk)
+   991			usleep_range(delay, 2 * delay);
+   992	
+   993		return 0;
+   994	}
+   995	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
