@@ -1,61 +1,74 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DFC2C18DF9B;
-	Fri, 30 Aug 2024 23:42:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B7E481A716;
+	Sat, 31 Aug 2024 00:45:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725061367; cv=none; b=c5Yw4Pwwp5nnspLBMv88QGnMzj7gR5LQhmH0G1bYyvLn0VKK794q4ICI5eRRKSnB6Msi2HIbWSX6AdH3T2qOuf9Vo3lOVwFLe64gpB2c7CQu//n/260zTputEPtKAOkkEfaLR/YMl7EJkEcodZ07ZBEZm0N/i3FiLRlgE6JIXkI=
+	t=1725065150; cv=none; b=T8mFo+XNr6GzYyAoboKxV2OCltJEEColjmkfS0j0gDERArFj9Aqhx4Rq7K614+bD/LGspcjbTQHAhreFR2lKbe6vq51e7D5VKjC9v6EKa3WML+TmAlIQKA27mT4XPMeBNWYexqtIBAZl27K+Mp9XFH9SxfXGBx5Pc0jRaDnleaQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725061367; c=relaxed/simple;
-	bh=hgvODO1xl+N9l15+2DgxbYjvJXkNYYi7umvXalPA1TM=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=RWohP2d+CP2bYu3onNYPEuywZD5cXYGYNLLPDsaeK26Ve2iPxMRR5hzg8vVabw4FjrBW6erKBb6sSisKd4pZ0a7oUal/UofX+UG0UalOGUVgPjNBsdjhqaSluj/LqYx0E5sC17NMoC6DuBEjx65+civsPVg5d2nyYsCCzACu9Dk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=g+F+Kv9+; arc=none smtp.client-ip=192.198.163.17
+	s=arc-20240116; t=1725065150; c=relaxed/simple;
+	bh=m2q0EIE3WOnElSaZtNtUDPmT9aG++HAOSqsq5F8ycZo=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=unoKB58vhB8LxNl8/NG1nc/5qHuchcwYbYWSzAofR9uuRpPiVcDnRMWkaPqotQkGMajGUQxwoMXlLaksnNBuIXrUgPm7+dr0/Tn2sWnVI4uqptI8Ex2kD5ikDm0SZH2X5Mhl5pjd7fbXf4Y0DaSAX9B8JBh8tTMWmHHjaFvdsgM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=MWTSE9Br; arc=none smtp.client-ip=192.198.163.15
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="g+F+Kv9+"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="MWTSE9Br"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1725061366; x=1756597366;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=hgvODO1xl+N9l15+2DgxbYjvJXkNYYi7umvXalPA1TM=;
-  b=g+F+Kv9+s1SQhx+wuC83JPoSmjPjmjzy0AmncSm293BkiHrUynsHGBsa
-   OBdpIf9ykwQ8kFj/7V6Kxw4suShmGfZzSgmrE7mN4HHiQeO0HzZPxJTSu
-   oSLrJQXB8fXBclnY3oRrPp4dT+gfe5Qm3uciwelgV9N/R2SxV+71Vrspu
-   jruHoq5tGSqfLwXo8KheLsiHXWuslezprMF/NCp+OoXcBBeoIfRsBlmkd
-   m/79Hey6kwuQKaKtI6jHRMIJUstF4g+ZIPBBjF3WDe8fc4TqNyytvcg1h
-   MmnpgxCxmUfoTp6pP7ya2UAaEQGwTSauiMBidoNOrKPtVb4Y6u93CJx0a
-   Q==;
-X-CSE-ConnectionGUID: biOIievWQGOfHLhmEWXNyg==
-X-CSE-MsgGUID: Thp3ZJHqRG+N4MGom1BLcw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11180"; a="23601174"
+  t=1725065148; x=1756601148;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=m2q0EIE3WOnElSaZtNtUDPmT9aG++HAOSqsq5F8ycZo=;
+  b=MWTSE9BrC/5wP9addTlwbMw1dEATUI7rCIfIYUbugJkwl1SJt4kS6XAt
+   kKaHQO9aF4jNREzLw1nG6+D1xWn5Nr3YhPmZ/LwcWMwovgRImF3eWuUZE
+   A8o5JEK36S42uFjj3xZ7uyA0foB08EZR/YfH3e7Pt1h6WhGfbx3q1GroC
+   1ZD6L+e6BP/XlMdLChPE8m2351zVwUz5GCqUFkrW5AI/dWtpllpV15Lei
+   2xpIKWyfiofZGied+59zT1hGcBohExjkl1HchBOXEIUoRWV7uqYtFzssz
+   89SgVcJKeWb1ci9U7Pp0IqTIkafNUrWFR+WRh0/Lf9k4dFIgz8jFQyiqp
+   A==;
+X-CSE-ConnectionGUID: dluFo6f4RZy5eYfELfqbeQ==
+X-CSE-MsgGUID: izD9K9v4S9W4yNxZamse1w==
+X-IronPort-AV: E=McAfee;i="6700,10204,11180"; a="23892872"
 X-IronPort-AV: E=Sophos;i="6.10,190,1719903600"; 
-   d="scan'208";a="23601174"
+   d="scan'208";a="23892872"
 Received: from fmviesa005.fm.intel.com ([10.60.135.145])
-  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Aug 2024 16:42:43 -0700
-X-CSE-ConnectionGUID: EmelMn+RTFWA7JgXS/E1wg==
-X-CSE-MsgGUID: tl4gfJYSTKy2ZQvVQEbNQA==
+  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Aug 2024 17:45:47 -0700
+X-CSE-ConnectionGUID: u/GJuGqQQlK5hrQMr3hglw==
+X-CSE-MsgGUID: k697wz3HTuSYiLlEI6//FQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.10,190,1719903600"; 
-   d="scan'208";a="68446163"
+   d="scan'208";a="68458817"
 Received: from lkp-server01.sh.intel.com (HELO 9c6b1c7d3b50) ([10.239.97.150])
-  by fmviesa005.fm.intel.com with ESMTP; 30 Aug 2024 16:42:41 -0700
+  by fmviesa005.fm.intel.com with ESMTP; 30 Aug 2024 17:45:43 -0700
 Received: from kbuild by 9c6b1c7d3b50 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1skBGJ-0002DG-2t;
-	Fri, 30 Aug 2024 23:42:39 +0000
-Date: Sat, 31 Aug 2024 07:42:38 +0800
+	id 1skCFJ-0002Fc-06;
+	Sat, 31 Aug 2024 00:45:41 +0000
+Date: Sat, 31 Aug 2024 08:45:16 +0800
 From: kernel test robot <lkp@intel.com>
-To: "Liam R. Howlett" <Liam.Howlett@oracle.com>
+To: Thomas Bonnefille <thomas.bonnefille@bootlin.com>,
+	Jonathan Cameron <jic23@kernel.org>,
+	Lars-Peter Clausen <lars@metafoo.de>, Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Chen Wang <unicorn_wang@outlook.com>,
+	Inochi Amaoto <inochiama@outlook.com>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Linux Memory Management List <linux-mm@kvack.org>,
-	"Matthew Wilcox (Oracle)" <willy@infradead.org>
-Subject: lib/maple_tree.c:330:20: error: unused function 'mte_set_full'
-Message-ID: <202408310728.S7EE59BN-lkp@intel.com>
+	Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+	=?iso-8859-1?Q?Miqu=E8l?= Raynal <miquel.raynal@bootlin.com>,
+	linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
+	Thomas Bonnefille <thomas.bonnefille@bootlin.com>
+Subject: Re: [PATCH v5 2/3] iio: adc: sophgo-saradc: Add driver for Sophgo
+ CV1800B SARADC
+Message-ID: <202408310817.GT3TMpnv-lkp@intel.com>
+References: <20240829-sg2002-adc-v5-2-aacb381e869b@bootlin.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -64,44 +77,83 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20240829-sg2002-adc-v5-2-aacb381e869b@bootlin.com>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   fb24560f31f9dff2c97707cfed6029bfebebaf1c
-commit: 54a611b605901c7d5d05b6b8f5d04a6ceb0962aa Maple Tree: add new data structure
-date:   1 year, 11 months ago
-config: x86_64-sof-customedconfig-amd-defconfig (https://download.01.org/0day-ci/archive/20240831/202408310728.S7EE59BN-lkp@intel.com/config)
+Hi Thomas,
+
+kernel test robot noticed the following build warnings:
+
+[auto build test WARNING on 5be63fc19fcaa4c236b307420483578a56986a37]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Thomas-Bonnefille/dt-bindings-iio-adc-sophgo-cv1800b-saradc-Add-Sophgo-CV1800B-SARADC/20240829-203431
+base:   5be63fc19fcaa4c236b307420483578a56986a37
+patch link:    https://lore.kernel.org/r/20240829-sg2002-adc-v5-2-aacb381e869b%40bootlin.com
+patch subject: [PATCH v5 2/3] iio: adc: sophgo-saradc: Add driver for Sophgo CV1800B SARADC
+config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20240831/202408310817.GT3TMpnv-lkp@intel.com/config)
 compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240831/202408310728.S7EE59BN-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240831/202408310817.GT3TMpnv-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202408310728.S7EE59BN-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202408310817.GT3TMpnv-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> lib/maple_tree.c:330:20: error: unused function 'mte_set_full' [-Werror,-Wunused-function]
-     330 | static inline void mte_set_full(const struct maple_enode *node)
-         |                    ^~~~~~~~~~~~
->> lib/maple_tree.c:335:20: error: unused function 'mte_clear_full' [-Werror,-Wunused-function]
-     335 | static inline void mte_clear_full(const struct maple_enode *node)
-         |                    ^~~~~~~~~~~~~~
-   2 errors generated.
+>> drivers/iio/adc/sophgo-cv1800b-adc.c:120:3: warning: label followed by a declaration is a C23 extension [-Wc23-extensions]
+     120 |                 u32 status_reg = readl(saradc->regs + CV1800B_ADC_CYC_SET_REG);
+         |                 ^
+   1 warning generated.
 
 
-vim +/mte_set_full +330 lib/maple_tree.c
+vim +120 drivers/iio/adc/sophgo-cv1800b-adc.c
 
-   329	
- > 330	static inline void mte_set_full(const struct maple_enode *node)
-   331	{
-   332		node = (void *)((unsigned long)node & ~MAPLE_ENODE_NULL);
-   333	}
-   334	
- > 335	static inline void mte_clear_full(const struct maple_enode *node)
-   336	{
-   337		node = (void *)((unsigned long)node | MAPLE_ENODE_NULL);
-   338	}
-   339	
+    88	
+    89	static int cv1800b_adc_read_raw(struct iio_dev *indio_dev,
+    90					struct iio_chan_spec const *chan,
+    91					int *val, int *val2, long mask)
+    92	{
+    93		struct cv1800b_adc *saradc = iio_priv(indio_dev);
+    94	
+    95		switch (mask) {
+    96		case IIO_CHAN_INFO_RAW:{
+    97			u32 sample;
+    98	
+    99			scoped_guard(mutex, &saradc->lock) {
+   100				int ret;
+   101	
+   102				cv1800b_adc_start_measurement(saradc, chan->scan_index);
+   103				ret = cv1800b_adc_wait(saradc);
+   104				if (ret < 0)
+   105					return ret;
+   106	
+   107				sample = readl(saradc->regs + CV1800B_ADC_CH_RESULT_REG(chan->scan_index));
+   108			}
+   109			if (!(sample & CV1800B_ADC_CH_VALID))
+   110				return -ENODATA;
+   111	
+   112			*val = sample & CV1800B_ADC_CH_RESULT;
+   113			return IIO_VAL_INT;
+   114			}
+   115		case IIO_CHAN_INFO_SCALE:
+   116			*val = 3300;
+   117			*val2 = 12;
+   118			return IIO_VAL_FRACTIONAL_LOG2;
+   119		case IIO_CHAN_INFO_SAMP_FREQ:
+ > 120			u32 status_reg = readl(saradc->regs + CV1800B_ADC_CYC_SET_REG);
+   121			int clk_div = (1 + FIELD_GET(CV1800B_MASK_CLKDIV, status_reg));
+   122			int freq = clk_get_rate(saradc->clk) / clk_div;
+   123			int nb_startup_cycle = 1 + FIELD_GET(CV1800B_MASK_STARTUP_CYCLE, status_reg);
+   124			int nb_sample_cycle = 1 + FIELD_GET(CV1800B_MASK_SAMPLE_WINDOW, status_reg);
+   125			int nb_compare_cycle = 1 + FIELD_GET(CV1800B_MASK_COMPARE_CYCLE, status_reg);
+   126	
+   127			*val = freq / (nb_startup_cycle + nb_sample_cycle + nb_compare_cycle);
+   128			return IIO_VAL_INT;
+   129		default:
+   130			return -EINVAL;
+   131		}
+   132	}
+   133	
 
 -- 
 0-DAY CI Kernel Test Service
