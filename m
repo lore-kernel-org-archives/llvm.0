@@ -1,59 +1,59 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F1A81758F;
-	Sat, 31 Aug 2024 06:32:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 84EBB16EBED;
+	Sat, 31 Aug 2024 07:04:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725085973; cv=none; b=Ru+hmhKv1hwdCcZiImm2QYhZdRnzzxUx7gRoDEXJ1lx0Sc187JIYAQB4WXrKbNh2Woq5/FjQoDOyqeKjE8oQmqIhZ0ASeLhR92oQK2ZBaRa2ByYBgX56QuZlbtwT2ugdXefAChj7c42w6iBpIDc23ryrdxHA1W4wZMX/uC0ZAVI=
+	t=1725087896; cv=none; b=gZSrJOr9QogUEfhSC4HTKtcq824vaDkkxpuQXypmT6CE+MbCaesmBxBaucZSJNhhQjz7kAG9gvalMnM9Oea2W0kAbw7VUPDkVpCqPAgVEEBG+2a3RwljCpucJWaTMwqnnBkQDj1H9QEs6ffHDqyP6Ms7BFz5uT+g/2Cj6j0bTGk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725085973; c=relaxed/simple;
-	bh=4CK1/41L47kIuAQFq+ES6aU+VRmnMYoLH6YotiIjHJ8=;
+	s=arc-20240116; t=1725087896; c=relaxed/simple;
+	bh=JKEQXIXKED+8Pw8da1C5xAekT7C4EqGCID20YKUKeD4=;
 	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=u5TBz2U3F/4IifJfE4OoPv1Spy6vjFRT/mhyxdbtuArnzwwyWMg0CBnpPllTCspro1I0q5A3Xg69SHLrArCn57tV2wz2dcpz+klhHaAf9lzZ6A2vnR3uJ8rk/na+BTOevJNse9B0VM2kF2slFY8sw3ZX2I+Of7ovVbCzj/dV+Xw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=GE3OhLtB; arc=none smtp.client-ip=198.175.65.21
+	 Content-Disposition; b=Tu6EjCJ5HILQBTFrrTUB6kQiZLjq6XHHdwBKT/JVL708QwmQcJIr4rlD20njscCaRBAWJcIdf31EawHx5cZJeyjm6PcltypA2+pCnEye7Wpipf+l9NIvg5zYblPALFg6fNxuKx/YN7N1T3IyWRE7oQdZW5IngWmjLEeBRXBjDN8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=heBtBwxJ; arc=none smtp.client-ip=192.198.163.16
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="GE3OhLtB"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="heBtBwxJ"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1725085971; x=1756621971;
+  t=1725087895; x=1756623895;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=4CK1/41L47kIuAQFq+ES6aU+VRmnMYoLH6YotiIjHJ8=;
-  b=GE3OhLtB26n0uhxADZc314aTHWzLTYjtWACy06NBZhxXVnEakzMeQ6B9
-   fE/9QSM6KB9U8UneTOASYcLZyEJNa+G8VLpXABarvLYDdYFOjr2M2Ja/+
-   SMQj8iCPscZLudHrUBqy+rhmOJNOuBIXRNwf0YvjtXvmCZINKUd2JtR1R
-   6RG4SwssOLNJnXFs86RzvbtF/CkET+k3rndL9oOLzzL928UEt71S3fVYW
-   s7pPSqLKAhjT0X6ETmzVUfXjuLU5fQncVZyP6i0gJbHKeckq0grU1ucPg
-   V5jDs97JEOmBqBmtQEboYBhKNvR7wYFbHWBX+LN3aIcBGFw3ilVK121Dx
-   Q==;
-X-CSE-ConnectionGUID: D3igQ2gSQZWhT9IgkuX8RA==
-X-CSE-MsgGUID: 8Y8ewG+4S+uGTmTQ0C8Xig==
-X-IronPort-AV: E=McAfee;i="6700,10204,11180"; a="23694928"
+  bh=JKEQXIXKED+8Pw8da1C5xAekT7C4EqGCID20YKUKeD4=;
+  b=heBtBwxJ3Dix+KeH5NajsWqrEzT9Tdh1h4Srx0qwxVrqjeRp7YaXVRIn
+   Dr/8YCUkX7GF0dPPckxp7uttxWYdYoHaCZ7VdpMpJ9cSiqF3m9h2106Ks
+   GFq5OvAMAoiZs/vYSKn5ZV6cW1g7y+Jytmsvq8Rl7J6ywDErKtKChzEMo
+   KB6nv5LbJ1oLYospwNiljGcUC+hsZ3QS65emsYH9NhP/Cxhyq5zL+9RQX
+   Iarau37UCY+X37AzbYrBh3UmRTK0lOTdaI83BQiyqQGWtrq98ymMa17TM
+   mZiVEUqwKiYsUZu2jXfm5+fW6dJteKVzzbnj2L8khUiw/uBSgRs7NfCdk
+   g==;
+X-CSE-ConnectionGUID: gAml5CiwQ1KnDAsuBgnT1g==
+X-CSE-MsgGUID: Sd87ubpVQOCNpYYJ+A8U4A==
+X-IronPort-AV: E=McAfee;i="6700,10204,11180"; a="13308912"
 X-IronPort-AV: E=Sophos;i="6.10,191,1719903600"; 
-   d="scan'208";a="23694928"
-Received: from fmviesa010.fm.intel.com ([10.60.135.150])
-  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Aug 2024 23:32:50 -0700
-X-CSE-ConnectionGUID: ofK0ba+YQeuTUVJ0Az5gFg==
-X-CSE-MsgGUID: aeN2V/UmRke/bQwgANyvNw==
+   d="scan'208";a="13308912"
+Received: from orviesa006.jf.intel.com ([10.64.159.146])
+  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Aug 2024 00:04:52 -0700
+X-CSE-ConnectionGUID: hcdCQj+SQbqPVt5aV6izYQ==
+X-CSE-MsgGUID: bj9yYPDiSzOxFUV7eOkQZw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.10,191,1719903600"; 
-   d="scan'208";a="64285448"
+   d="scan'208";a="64467304"
 Received: from lkp-server01.sh.intel.com (HELO 9c6b1c7d3b50) ([10.239.97.150])
-  by fmviesa010.fm.intel.com with ESMTP; 30 Aug 2024 23:32:49 -0700
+  by orviesa006.jf.intel.com with ESMTP; 31 Aug 2024 00:04:50 -0700
 Received: from kbuild by 9c6b1c7d3b50 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1skHfD-0002Ow-0e;
-	Sat, 31 Aug 2024 06:32:47 +0000
-Date: Sat, 31 Aug 2024 14:32:02 +0800
+	id 1skIAC-0002Pv-0E;
+	Sat, 31 Aug 2024 07:04:48 +0000
+Date: Sat, 31 Aug 2024 15:04:05 +0800
 From: kernel test robot <lkp@intel.com>
-To: Christian Brauner <brauner@kernel.org>
+To: "Paul E. McKenney" <paulmck@kernel.org>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Christian Brauner <christianvanbrauner@gmail.com>
-Subject: [brauner-vfs:work.f_version 10/25] fs/read_write.c:101: warning:
- Function parameter or struct member 'file' not described in 'must_set_pos'
-Message-ID: <202408311424.c7gx0m7d-lkp@intel.com>
+	linux-kernel@vger.kernel.org
+Subject: [paulmck-rcu:dev.2024.08.30a 27/33] include/linux/srcu.h:246:30:
+ error: use of undeclared identifier 'SRCU_READ_FLAVOR_NORMAL'
+Message-ID: <202408311452.nS2HBgqc-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -63,78 +63,187 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/vfs/vfs.git work.f_version
-head:   d72dc08ce60a47a989d21ef59e54f19875a02bc0
-commit: cceaab97d92605d32034f3451e1cfec1cc80299a [10/25] fs: add must_set_pos()
-config: s390-allnoconfig (https://download.01.org/0day-ci/archive/20240831/202408311424.c7gx0m7d-lkp@intel.com/config)
-compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 46fe36a4295f05d5d3731762e31fc4e6e99863e9)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240831/202408311424.c7gx0m7d-lkp@intel.com/reproduce)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git dev.2024.08.30a
+head:   05416eb79213ad6a9770faa795059fdd00adb6e0
+commit: d4401cc54f3e2985675be825f5222aff9764ab8b [27/33] srcu: Convert srcu_data ->srcu_reader_flavor to bit field
+config: x86_64-allnoconfig (https://download.01.org/0day-ci/archive/20240831/202408311452.nS2HBgqc-lkp@intel.com/config)
+compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240831/202408311452.nS2HBgqc-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202408311424.c7gx0m7d-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202408311452.nS2HBgqc-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> fs/read_write.c:101: warning: Function parameter or struct member 'file' not described in 'must_set_pos'
+   In file included from arch/x86/kernel/asm-offsets.c:9:
+   In file included from include/linux/crypto.h:17:
+   In file included from include/linux/slab.h:16:
+   In file included from include/linux/gfp.h:7:
+   In file included from include/linux/mmzone.h:1432:
+   In file included from include/linux/memory_hotplug.h:7:
+   In file included from include/linux/notifier.h:16:
+>> include/linux/srcu.h:246:30: error: use of undeclared identifier 'SRCU_READ_FLAVOR_NORMAL'
+     246 |         srcu_check_read_flavor(ssp, SRCU_READ_FLAVOR_NORMAL);
+         |                                     ^
+>> include/linux/srcu.h:267:30: error: use of undeclared identifier 'SRCU_READ_FLAVOR_NMI'
+     267 |         srcu_check_read_flavor(ssp, SRCU_READ_FLAVOR_NMI);
+         |                                     ^
+   include/linux/srcu.h:279:30: error: use of undeclared identifier 'SRCU_READ_FLAVOR_NORMAL'
+     279 |         srcu_check_read_flavor(ssp, SRCU_READ_FLAVOR_NORMAL);
+         |                                     ^
+   include/linux/srcu.h:308:30: error: use of undeclared identifier 'SRCU_READ_FLAVOR_NORMAL'
+     308 |         srcu_check_read_flavor(ssp, SRCU_READ_FLAVOR_NORMAL);
+         |                                     ^
+   include/linux/srcu.h:323:30: error: use of undeclared identifier 'SRCU_READ_FLAVOR_NORMAL'
+     323 |         srcu_check_read_flavor(ssp, SRCU_READ_FLAVOR_NORMAL);
+         |                                     ^
+   include/linux/srcu.h:339:30: error: use of undeclared identifier 'SRCU_READ_FLAVOR_NMI'
+     339 |         srcu_check_read_flavor(ssp, SRCU_READ_FLAVOR_NMI);
+         |                                     ^
+   include/linux/srcu.h:348:30: error: use of undeclared identifier 'SRCU_READ_FLAVOR_NORMAL'
+     348 |         srcu_check_read_flavor(ssp, SRCU_READ_FLAVOR_NORMAL);
+         |                                     ^
+   include/linux/srcu.h:365:30: error: use of undeclared identifier 'SRCU_READ_FLAVOR_NORMAL'
+     365 |         srcu_check_read_flavor(ssp, SRCU_READ_FLAVOR_NORMAL);
+         |                                     ^
+   In file included from arch/x86/kernel/asm-offsets.c:14:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:13:
+   In file included from include/linux/cgroup.h:16:
+   In file included from include/linux/fs.h:33:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:98:11: warning: array index 3 is past the end of the array (that has type 'unsigned long[1]') [-Warray-bounds]
+      98 |                 return (set->sig[3] | set->sig[2] |
+         |                         ^        ~
+   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
+      24 |         unsigned long sig[_NSIG_WORDS];
+         |         ^
+   In file included from arch/x86/kernel/asm-offsets.c:14:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:13:
+   In file included from include/linux/cgroup.h:16:
+   In file included from include/linux/fs.h:33:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:98:25: warning: array index 2 is past the end of the array (that has type 'unsigned long[1]') [-Warray-bounds]
+      98 |                 return (set->sig[3] | set->sig[2] |
+         |                                       ^        ~
+   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
+      24 |         unsigned long sig[_NSIG_WORDS];
+         |         ^
+   In file included from arch/x86/kernel/asm-offsets.c:14:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:13:
+   In file included from include/linux/cgroup.h:16:
+   In file included from include/linux/fs.h:33:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:99:4: warning: array index 1 is past the end of the array (that has type 'unsigned long[1]') [-Warray-bounds]
+      99 |                         set->sig[1] | set->sig[0]) == 0;
+         |                         ^        ~
+   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
+      24 |         unsigned long sig[_NSIG_WORDS];
+         |         ^
+   In file included from arch/x86/kernel/asm-offsets.c:14:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:13:
+   In file included from include/linux/cgroup.h:16:
+   In file included from include/linux/fs.h:33:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:101:11: warning: array index 1 is past the end of the array (that has type 'unsigned long[1]') [-Warray-bounds]
+     101 |                 return (set->sig[1] | set->sig[0]) == 0;
+         |                         ^        ~
+   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
+      24 |         unsigned long sig[_NSIG_WORDS];
+         |         ^
+   In file included from arch/x86/kernel/asm-offsets.c:14:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:13:
+   In file included from include/linux/cgroup.h:16:
+   In file included from include/linux/fs.h:33:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:114:11: warning: array index 3 is past the end of the array (that has type 'const unsigned long[1]') [-Warray-bounds]
+     114 |                 return  (set1->sig[3] == set2->sig[3]) &&
+         |                          ^         ~
+   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
+      24 |         unsigned long sig[_NSIG_WORDS];
+         |         ^
+   In file included from arch/x86/kernel/asm-offsets.c:14:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:13:
+   In file included from include/linux/cgroup.h:16:
 
 
-vim +101 fs/read_write.c
+vim +/SRCU_READ_FLAVOR_NORMAL +246 include/linux/srcu.h
 
-    87	
-    88	/**
-    89	 * must_set_pos - check whether f_pos has to be updated
-    90	 * @offset: offset to use
-    91	 * @whence: type of seek operation
-    92	 * @eof: end of file
-    93	 *
-    94	 * Check whether f_pos needs to be updated and update @offset according
-    95	 * to @whence.
-    96	 *
-    97	 * Return: 0 if f_pos doesn't need to be updated, 1 if f_pos has to be
-    98	 * updated, and negative error code on failure.
-    99	 */
-   100	static __maybe_unused int must_set_pos(struct file *file, loff_t *offset, int whence, loff_t eof)
- > 101	{
-   102		switch (whence) {
-   103		case SEEK_END:
-   104			*offset += eof;
-   105			break;
-   106		case SEEK_CUR:
-   107			/*
-   108			 * Here we special-case the lseek(fd, 0, SEEK_CUR)
-   109			 * position-querying operation.  Avoid rewriting the "same"
-   110			 * f_pos value back to the file because a concurrent read(),
-   111			 * write() or lseek() might have altered it
-   112			 */
-   113			if (*offset == 0) {
-   114				*offset = file->f_pos;
-   115				return 0;
-   116			}
-   117			break;
-   118		case SEEK_DATA:
-   119			/*
-   120			 * In the generic case the entire file is data, so as long as
-   121			 * offset isn't at the end of the file then the offset is data.
-   122			 */
-   123			if ((unsigned long long)*offset >= eof)
-   124				return -ENXIO;
-   125			break;
-   126		case SEEK_HOLE:
-   127			/*
-   128			 * There is a virtual hole at the end of the file, so as long as
-   129			 * offset isn't i_size or larger, return i_size.
-   130			 */
-   131			if ((unsigned long long)*offset >= eof)
-   132				return -ENXIO;
-   133			*offset = eof;
-   134			break;
-   135		}
-   136	
-   137		return 1;
-   138	}
-   139	
+   221	
+   222	/**
+   223	 * srcu_read_lock - register a new reader for an SRCU-protected structure.
+   224	 * @ssp: srcu_struct in which to register the new reader.
+   225	 *
+   226	 * Enter an SRCU read-side critical section.  Note that SRCU read-side
+   227	 * critical sections may be nested.  However, it is illegal to
+   228	 * call anything that waits on an SRCU grace period for the same
+   229	 * srcu_struct, whether directly or indirectly.  Please note that
+   230	 * one way to indirectly wait on an SRCU grace period is to acquire
+   231	 * a mutex that is held elsewhere while calling synchronize_srcu() or
+   232	 * synchronize_srcu_expedited().
+   233	 *
+   234	 * The return value from srcu_read_lock() must be passed unaltered
+   235	 * to the matching srcu_read_unlock().  Note that srcu_read_lock() and
+   236	 * the matching srcu_read_unlock() must occur in the same context, for
+   237	 * example, it is illegal to invoke srcu_read_unlock() in an irq handler
+   238	 * if the matching srcu_read_lock() was invoked in process context.  Or,
+   239	 * for that matter to invoke srcu_read_unlock() from one task and the
+   240	 * matching srcu_read_lock() from another.
+   241	 */
+   242	static inline int srcu_read_lock(struct srcu_struct *ssp) __acquires(ssp)
+   243	{
+   244		int retval;
+   245	
+ > 246		srcu_check_read_flavor(ssp, SRCU_READ_FLAVOR_NORMAL);
+   247		retval = __srcu_read_lock(ssp);
+   248		srcu_lock_acquire(&ssp->dep_map);
+   249		return retval;
+   250	}
+   251	
+   252	/**
+   253	 * srcu_read_lock_nmisafe - register a new reader for an SRCU-protected structure.
+   254	 * @ssp: srcu_struct in which to register the new reader.
+   255	 *
+   256	 * Enter an SRCU read-side critical section, but in an NMI-safe manner.
+   257	 * See srcu_read_lock() for more information.
+   258	 *
+   259	 * If srcu_read_lock_nmisafe() is ever used on an srcu_struct structure,
+   260	 * then none of the other flavors may be used, whether before, during,
+   261	 * or after.
+   262	 */
+   263	static inline int srcu_read_lock_nmisafe(struct srcu_struct *ssp) __acquires(ssp)
+   264	{
+   265		int retval;
+   266	
+ > 267		srcu_check_read_flavor(ssp, SRCU_READ_FLAVOR_NMI);
+   268		retval = __srcu_read_lock_nmisafe(ssp);
+   269		rcu_try_lock_acquire(&ssp->dep_map);
+   270		return retval;
+   271	}
+   272	
 
 -- 
 0-DAY CI Kernel Test Service
