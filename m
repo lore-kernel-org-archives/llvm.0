@@ -1,153 +1,82 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 581C7170A16;
-	Sat, 31 Aug 2024 08:39:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
+Received: from zg8tmja2lje4os43os4xodqa.icoremail.net (zg8tmja2lje4os43os4xodqa.icoremail.net [206.189.79.184])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 38C181531F2
+	for <llvm@lists.linux.dev>; Sat, 31 Aug 2024 09:34:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=206.189.79.184
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725093597; cv=none; b=addrDLpVn2qru1tjxd0XrC+Mv8sncB8HDRR+A2l68Xc3l9BDgB9nDus1zuWZr1xtI6jYaeslLrq6Av1Yc/0tVc9NgI37zkwssJOQ7fh7zXrHrDYnoX1PeKIh7FwTy88xaOo+8Gx1bNQeuS9t6G+KxHRJ+jC3HQAsnmNVe5xr3go=
+	t=1725096886; cv=none; b=aQps5fP5AXhlrK7oI3jBg5mt8diJSdofkSATnOOnTRTqXSdIzilWugULg53lvDueSyxMZa0uEX4tiv9DRwBmTX2NPp62mX724V3RV4P7aIE/0l57k5uXql+QBwqEFwlPNd6pb3EN5yy5+RnZ3Fe9JNhXSlUmFuxbN1uYjdSOgxg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725093597; c=relaxed/simple;
-	bh=vVR49KnwmnGRZgZYBA5+9YsGu1guxGNopWUanH/op4Q=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=Q4bJWJuJ+iGHTXQh+yPru5xq/Ky9a0mvI6nHYP7beezxoupaFIjFAkCzbxYT6cWf/Lo5D3Q3R65SQtHXgIvkkaz1vdKjxZeJTIxy1xbDiPkcURZzTqC7mLuY02WTMEp+thlGa7hhFWdLojLAqzVbExqgsJMQVDs8R7mvm0gg72A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=EZ93egrr; arc=none smtp.client-ip=198.175.65.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="EZ93egrr"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1725093596; x=1756629596;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=vVR49KnwmnGRZgZYBA5+9YsGu1guxGNopWUanH/op4Q=;
-  b=EZ93egrr+2Zuf34R4s/Ue19sF3tc/Rl9eor4jyBsoztctHOWOx/pO6vD
-   5KrJ9LT+s0w4o6PKb8PojYIDcMqOq+0/Bk/0dmbCEFvJQYydAsTZK8hz6
-   W56QG3k6mTiAa4C4yAxRPTdrnT7LJt1sYkWReeENcvAr9RWVEggiuDN7h
-   EIg+3Bkap/JNfoqXqdCGaRz6dPFv7cBEFSlwoipNW1+hI5TE8ZdnpIaoK
-   QFYVRe0zwAhcdrHi0szFIozYk43CJBxFrjKPW5fWN2VzJGC1Kqm9lIdng
-   UhO4vujdTr5XxyV50auHpinPnPWQx5W35eJ4I+Ea6wOTr+LknS0w+NyEK
-   Q==;
-X-CSE-ConnectionGUID: oNPty2QbTAKdDKZonfPwWg==
-X-CSE-MsgGUID: N6s6wf8fRZy3Ppm6r6wxsg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11180"; a="23872636"
-X-IronPort-AV: E=Sophos;i="6.10,191,1719903600"; 
-   d="scan'208";a="23872636"
-Received: from fmviesa005.fm.intel.com ([10.60.135.145])
-  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Aug 2024 01:39:53 -0700
-X-CSE-ConnectionGUID: q9Ym/l4TRoWSTTaTjAxulA==
-X-CSE-MsgGUID: zrWPZfBDTp29bEUqBk512g==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.10,191,1719903600"; 
-   d="scan'208";a="68529407"
-Received: from lkp-server01.sh.intel.com (HELO 9c6b1c7d3b50) ([10.239.97.150])
-  by fmviesa005.fm.intel.com with ESMTP; 31 Aug 2024 01:39:52 -0700
-Received: from kbuild by 9c6b1c7d3b50 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1skJeA-0002TP-08;
-	Sat, 31 Aug 2024 08:39:50 +0000
-Date: Sat, 31 Aug 2024 16:39:03 +0800
-From: kernel test robot <lkp@intel.com>
-To: Chen Ridong <chenridong@huawei.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	cgroups@vger.kernel.org, Tejun Heo <tj@kernel.org>
-Subject: [tj-cgroup:test 23/31] kernel/cgroup/cpuset-v1.c:163:2: error: call
- to undeclared function 'cpus_read_lock'; ISO C99 and later do not support
- implicit function declarations
-Message-ID: <202408311651.vwwxEpKn-lkp@intel.com>
+	s=arc-20240116; t=1725096886; c=relaxed/simple;
+	bh=MR/bquMwAShwkaSAxEEYJ2hCVPOGKucoQiT9IMkWJuQ=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=R+Q5y85EeIoXRo28i63N4rKCL8STIHhEX2pJvV76mIUKQbH+7YBDophAbpolTyK/fjZyPfl0WU9O299w8IkTld6r+uqDXxip/HpEkg1JfXA381y5jkqm6Yug+j/NyTgKFecWV2a7Vc5lW+h5dALkcU+MDxiYVKX0rwOQsUEtYWk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=hust.edu.cn; spf=pass smtp.mailfrom=hust.edu.cn; arc=none smtp.client-ip=206.189.79.184
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=hust.edu.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hust.edu.cn
+Received: from hust.edu.cn (unknown [172.16.0.52])
+	by app2 (Coremail) with SMTP id HwEQrAA34BSW49JmqDiiAA--.37814S2;
+	Sat, 31 Aug 2024 17:34:14 +0800 (CST)
+Received: from [192.168.1.4] (unknown [183.94.69.228])
+	by gateway (Coremail) with SMTP id _____wBnb7+T49JmZZ3bAA--.26820S2;
+	Sat, 31 Aug 2024 17:34:14 +0800 (CST)
+Message-ID: <35904aa5-9851-4894-b953-689904bf33ca@hust.edu.cn>
+Date: Sat, 31 Aug 2024 17:34:11 +0800
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/tj/cgroup.git test
-head:   a5ab7b05a3c825f23d74106f3304de7d024cff8a
-commit: dd46bd00ab4c00f6126794c6b52fbc87a2c5c389 [23/31] cgroup/cpuset: move relax_domain_level to cpuset-v1.c
-config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20240831/202408311651.vwwxEpKn-lkp@intel.com/config)
-compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 46fe36a4295f05d5d3731762e31fc4e6e99863e9)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240831/202408311651.vwwxEpKn-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202408311651.vwwxEpKn-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
-   In file included from kernel/cgroup/cpuset-v1.c:3:
-   In file included from kernel/cgroup/cpuset-internal.h:9:
-   In file included from include/linux/cpuset.h:17:
-   In file included from include/linux/mm.h:2228:
-   include/linux/vmstat.h:500:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     500 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     501 |                            item];
-         |                            ~~~~
-   include/linux/vmstat.h:507:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     507 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     508 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/vmstat.h:514:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     514 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
-   include/linux/vmstat.h:519:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     519 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     520 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/vmstat.h:528:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     528 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     529 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
->> kernel/cgroup/cpuset-v1.c:163:2: error: call to undeclared function 'cpus_read_lock'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     163 |         cpus_read_lock();
-         |         ^
-   kernel/cgroup/cpuset-v1.c:163:2: note: did you mean 'rcu_read_lock'?
-   include/linux/rcupdate.h:834:29: note: 'rcu_read_lock' declared here
-     834 | static __always_inline void rcu_read_lock(void)
-         |                             ^
->> kernel/cgroup/cpuset-v1.c:178:2: error: call to undeclared function 'cpus_read_unlock'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     178 |         cpus_read_unlock();
-         |         ^
-   5 warnings and 2 errors generated.
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2] docs/zh_CN: add the translation of
+ kbuild/gcc-plugins.rst
+To: Alex Shi <seakeel@gmail.com>, Alex Shi <alexs@kernel.org>,
+ Yanteng Si <siyanteng@loongson.cn>, Jonathan Corbet <corbet@lwn.net>,
+ Nathan Chancellor <nathan@kernel.org>,
+ Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling
+ <morbo@google.com>, Justin Stitt <justinstitt@google.com>
+Cc: hust-os-kernel-patches@googlegroups.com, linux-doc@vger.kernel.org,
+ linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+References: <20240831034924.3729507-1-dzm91@hust.edu.cn>
+ <0a434542-b207-4bb6-886e-74eff6cc9f39@gmail.com>
+From: Dongliang Mu <dzm91@hust.edu.cn>
+In-Reply-To: <0a434542-b207-4bb6-886e-74eff6cc9f39@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:HwEQrAA34BSW49JmqDiiAA--.37814S2
+Authentication-Results: app2; spf=neutral smtp.mail=dzm91@hust.edu.cn;
+X-Coremail-Antispam: 1UD129KBjDUn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7v73
+	VFW2AGmfu7bjvjm3AaLaJ3UjIYCTnIWjp_UUUOJ7k0a2IF6r1UM7kC6x804xWl1xkIjI8I
+	6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2
+	x7M28EF7xvwVC0I7IYx2IY67AKxVWDJVCq3wA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8
+	Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v26r
+	xl6s0DM2vYz4IE04k24VAvwVAKI4IrM2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI
+	12xvs2x26I8E6xACxx1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj64x0Y40En7xvr7AKxV
+	W8Jr0_Cr1UMcIj6x8ErcxFaVAv8VW8uFyUJr1UMcIj6xkF7I0En7xvr7AKxVW8Jr0_Cr1U
+	McvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvEwIxGrwCF04k20xvY0x0EwIxGrwCF04k20x
+	vE74AGY7Cv6cx26r4fZr1UJr1l4c8EcI0En4kS14v26r1Y6r17MxAqzxv26xkF7I0En4kS
+	14v26r126r1DMxC20s026xCaFVCjc4AY6r1j6r4UMxCIbckI1I0E14v26r1Y6r17MI8I3I
+	0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWU
+	tVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcV
+	CY1x0267AKxVWUJVW8JwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAF
+	wI0_Gr0_Cr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa
+	7sRdnYzUUUUUU==
+X-CM-SenderInfo: asqsiiirqrkko6kx23oohg3hdfq/
 
 
-vim +/cpus_read_lock +163 kernel/cgroup/cpuset-v1.c
+On 2024/8/31 12:11, Alex Shi wrote:
+>
+> On 8/31/24 11:48 AM, Dongliang Mu wrote:
+>> +目的
+>> +=======
+>> +
+> there are still a lots of sign incorrect. Please be sure everything looks fine in a web browser after you 'make htmldocs'
 
-   155	
-   156	int cpuset_write_s64(struct cgroup_subsys_state *css, struct cftype *cft,
-   157				    s64 val)
-   158	{
-   159		struct cpuset *cs = css_cs(css);
-   160		cpuset_filetype_t type = cft->private;
-   161		int retval = -ENODEV;
-   162	
- > 163		cpus_read_lock();
-   164		cpuset_lock();
-   165		if (!is_cpuset_online(cs))
-   166			goto out_unlock;
-   167	
-   168		switch (type) {
-   169		case FILE_SCHED_RELAX_DOMAIN_LEVEL:
-   170			retval = update_relax_domain_level(cs, val);
-   171			break;
-   172		default:
-   173			retval = -EINVAL;
-   174			break;
-   175		}
-   176	out_unlock:
-   177		cpuset_unlock();
- > 178		cpus_read_unlock();
-   179		return retval;
-   180	}
-   181	
+What do you mean by "sign incorrect"? I check the html rendering in the 
+vscode. It seems fine to me.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Dongliang Mu
+
+>
+> Thanks
+>   
+
