@@ -1,89 +1,105 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0237B14295;
-	Sat, 31 Aug 2024 00:50:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D25323FC2;
+	Sat, 31 Aug 2024 01:28:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725065417; cv=none; b=iW8vUQQqkbamATjJ0S4ToaTN4yYWBKrm4fSDolBsbVQOB/8Qneto3eSwPIIvhp2wBxliRoZBBjEPsyic+Bg/nYzu6CvxiZIzPR5ws49CvQXtVFXipBrPDaamPfupmYD3DmMq6elPKkimc1UlalLKX3pn9OsM6BImHW1sTcjjxL0=
+	t=1725067728; cv=none; b=CwcaIb2wLXozuNjoceBLnQ6OcEb4YX3gDURPGWf2Ff758wYDCGcltvvJ6YeSlYRtVPHQNBpv6o1jGxzDdMYhGpOG9f+4HSgtVDB7k50C1rwJDzqCKu2HwiWMo8uJhzij1rBb49BgnHZo7mKIcaHZgqMTnNAESj0FW05KZ+lri04=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725065417; c=relaxed/simple;
-	bh=dArAaDyNKHpopF5ls6/ZjblTvjXOQ4qnRUSDMkJfEgg=;
-	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
-	 Mime-Version:Content-Type; b=g33aj1DdX3I6Qs1MzDN5f1yGC1Lj6YbPQyTTw8KzqtG4h6/Aa9Gv1e6ODkfcrSG02UZyk3C/Om8GSv3/uTKEPZELRUEpb1dhdwpKVGM4DlHLWXqazQpVxAXq3nn93S60Fu9Zb04sGklIFNF5AQITR2tx/VkgRgxnHaoR1l1fwUs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=QPhozql+; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1725067728; c=relaxed/simple;
+	bh=/oIGIDZx1EL02vEkq3oxHjcflX1plTu8Qt53MH7r1RY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=IP0mU1/QfDt+CbDSRcb7lQyskS21UKN8t6iwjlZW7es36slweOjytCbPUBy/j6cZ3jm1LLop5E/ETzk2EX3t1G0A014s+wNChGt4zLkC8n8omvKGz/NT9lOngO63Dp8NBDF/UrXvJ+6en6xmHdELTxOlty3X9mTW0s9uYb4JfQI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IQRJ6MOd; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="QPhozql+"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 638C8C4CEC2;
-	Sat, 31 Aug 2024 00:50:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-	s=korg; t=1725065416;
-	bh=dArAaDyNKHpopF5ls6/ZjblTvjXOQ4qnRUSDMkJfEgg=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=QPhozql+04RQSZygVYg5aef32ibi/+VO4TLy45nz63AZPz+B/o09xsvspbJuDhf6t
-	 UnKS+L/aJ981ixFUrITnabMh5CsTZwMpS01Koj7Ai2IICQqLYgRhJXoQhbWVsV1+dr
-	 NegpmlC313N5m6G9XNcQwh9LnDSntIFdFEqsbBkU=
-Date: Fri, 30 Aug 2024 17:50:15 -0700
-From: Andrew Morton <akpm@linux-foundation.org>
-To: kernel test robot <lkp@intel.com>
-Cc: "Liam R. Howlett" <Liam.Howlett@oracle.com>, llvm@lists.linux.dev,
- oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org, Linux Memory
- Management List <linux-mm@kvack.org>, "Matthew Wilcox (Oracle)"
- <willy@infradead.org>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IQRJ6MOd"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DE424C4CEC2;
+	Sat, 31 Aug 2024 01:28:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1725067727;
+	bh=/oIGIDZx1EL02vEkq3oxHjcflX1plTu8Qt53MH7r1RY=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=IQRJ6MOdEtrMwpjTXOeOKZjY7iYkZVdKz/t1kSB2S2micXC7NijpqBiChwUeMXAfB
+	 VuoHIXO77FXSh8wHPVmXu8mYY9ZAfd4NIqxzm1PcOFQYUPNPVGnsAKtTtoKUrGfFsw
+	 pa38RfrH6AGyeCsBCyWJA+xqsjc3uTF0fj2756KF/bIv50NTP94a/mR79qUaivVhV2
+	 ZSRTnttMSClZJRzb5hsEgpDmEskXgtTWkJP+UUavoqhePADZ39of7LxokpQtsi7drX
+	 XL8aTaV6dB1ID/toAVbcMwU9Rju4iQY0GarEPljT6Iup5ESUVj/HBoq8g1Kvf7mst6
+	 KqDrYD01NjWQw==
+Date: Fri, 30 Aug 2024 18:28:45 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Andrew Morton <akpm@linux-foundation.org>
+Cc: kernel test robot <lkp@intel.com>,
+	"Liam R. Howlett" <Liam.Howlett@oracle.com>, llvm@lists.linux.dev,
+	oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
+	Linux Memory Management List <linux-mm@kvack.org>,
+	"Matthew Wilcox (Oracle)" <willy@infradead.org>
 Subject: Re: lib/maple_tree.c:330:20: error: unused function 'mte_set_full'
-Message-Id: <20240830175015.3569d261b0d48d46eb6ec1cf@linux-foundation.org>
-In-Reply-To: <202408310728.S7EE59BN-lkp@intel.com>
+Message-ID: <20240831012845.GA2993938@thelio-3990X>
 References: <202408310728.S7EE59BN-lkp@intel.com>
-X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+ <20240830175015.3569d261b0d48d46eb6ec1cf@linux-foundation.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240830175015.3569d261b0d48d46eb6ec1cf@linux-foundation.org>
 
-On Sat, 31 Aug 2024 07:42:38 +0800 kernel test robot <lkp@intel.com> wrote:
-
-> All errors (new ones prefixed by >>):
+On Fri, Aug 30, 2024 at 05:50:15PM -0700, Andrew Morton wrote:
+> On Sat, 31 Aug 2024 07:42:38 +0800 kernel test robot <lkp@intel.com> wrote:
 > 
-> >> lib/maple_tree.c:330:20: error: unused function 'mte_set_full' [-Werror,-Wunused-function]
->      330 | static inline void mte_set_full(const struct maple_enode *node)
->          |                    ^~~~~~~~~~~~
-> >> lib/maple_tree.c:335:20: error: unused function 'mte_clear_full' [-Werror,-Wunused-function]
->      335 | static inline void mte_clear_full(const struct maple_enode *node)
->          |                    ^~~~~~~~~~~~~~
->    2 errors generated.
+> > All errors (new ones prefixed by >>):
+> > 
+> > >> lib/maple_tree.c:330:20: error: unused function 'mte_set_full' [-Werror,-Wunused-function]
+> >      330 | static inline void mte_set_full(const struct maple_enode *node)
+> >          |                    ^~~~~~~~~~~~
+> > >> lib/maple_tree.c:335:20: error: unused function 'mte_clear_full' [-Werror,-Wunused-function]
+> >      335 | static inline void mte_clear_full(const struct maple_enode *node)
+> >          |                    ^~~~~~~~~~~~~~
+> >    2 errors generated.
+> 
+> afaict these have never been used.  It's odd that this was just detected.
 
-afaict these have never been used.  It's odd that this was just detected.
+I don't think it has just now been detected, as these functions have
+been flagged before:
 
-Should we just zap them or is there some reason to retain?
+https://lore.kernel.org/20240503160821.GB3960118@thelio-3990X/
 
---- a/lib/maple_tree.c~a
-+++ a/lib/maple_tree.c
-@@ -348,21 +348,6 @@ static inline void *mte_safe_root(const
- 	return (void *)((unsigned long)node & ~MAPLE_ROOT_NODE);
- }
- 
--static inline void *mte_set_full(const struct maple_enode *node)
--{
--	return (void *)((unsigned long)node & ~MAPLE_ENODE_NULL);
--}
--
--static inline void *mte_clear_full(const struct maple_enode *node)
--{
--	return (void *)((unsigned long)node | MAPLE_ENODE_NULL);
--}
--
--static inline bool mte_has_null(const struct maple_enode *node)
--{
--	return (unsigned long)node & MAPLE_ENODE_NULL;
--}
--
- static __always_inline bool ma_is_root(struct maple_node *node)
- {
- 	return ((unsigned long)node->parent & MA_ROOT_PARENT);
-_
+> Should we just zap them or is there some reason to retain?
 
+From the above thread, Liam and Matthew seem to want to retain them.
+Perhaps just wrapping them in '#if 0' and a comment that says these will
+eventually see use would be a happy compromise between outright removal
+and doing nothing about this warning?
 
+> --- a/lib/maple_tree.c~a
+> +++ a/lib/maple_tree.c
+> @@ -348,21 +348,6 @@ static inline void *mte_safe_root(const
+>  	return (void *)((unsigned long)node & ~MAPLE_ROOT_NODE);
+>  }
+>  
+> -static inline void *mte_set_full(const struct maple_enode *node)
+> -{
+> -	return (void *)((unsigned long)node & ~MAPLE_ENODE_NULL);
+> -}
+> -
+> -static inline void *mte_clear_full(const struct maple_enode *node)
+> -{
+> -	return (void *)((unsigned long)node | MAPLE_ENODE_NULL);
+> -}
+> -
+> -static inline bool mte_has_null(const struct maple_enode *node)
+> -{
+> -	return (unsigned long)node & MAPLE_ENODE_NULL;
+> -}
+> -
+>  static __always_inline bool ma_is_root(struct maple_node *node)
+>  {
+>  	return ((unsigned long)node->parent & MA_ROOT_PARENT);
+> _
+> 
+> 
+> 
