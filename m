@@ -1,105 +1,235 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D25323FC2;
-	Sat, 31 Aug 2024 01:28:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from zg8tmja2lje4os43os4xodqa.icoremail.net (zg8tmja2lje4os43os4xodqa.icoremail.net [206.189.79.184])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CD3BC1D12E1
+	for <llvm@lists.linux.dev>; Sat, 31 Aug 2024 03:51:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=206.189.79.184
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725067728; cv=none; b=CwcaIb2wLXozuNjoceBLnQ6OcEb4YX3gDURPGWf2Ff758wYDCGcltvvJ6YeSlYRtVPHQNBpv6o1jGxzDdMYhGpOG9f+4HSgtVDB7k50C1rwJDzqCKu2HwiWMo8uJhzij1rBb49BgnHZo7mKIcaHZgqMTnNAESj0FW05KZ+lri04=
+	t=1725076291; cv=none; b=lIzXWoINliVF1pPcRbAeEs+lvUUWAwtZPw22JcO0lI3jC0w/MWiu8pVq+2cDJiYTdDhmfZIyNTiPbKD9FgBdp7T6BVY/Y0osW2Qpz0pILK4gk3xMhjei8kLS72GQ9ycyJ47GxchWN30qCYQVYTZLa9R4m4CV6GsIZ10e+aJwWQk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725067728; c=relaxed/simple;
-	bh=/oIGIDZx1EL02vEkq3oxHjcflX1plTu8Qt53MH7r1RY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=IP0mU1/QfDt+CbDSRcb7lQyskS21UKN8t6iwjlZW7es36slweOjytCbPUBy/j6cZ3jm1LLop5E/ETzk2EX3t1G0A014s+wNChGt4zLkC8n8omvKGz/NT9lOngO63Dp8NBDF/UrXvJ+6en6xmHdELTxOlty3X9mTW0s9uYb4JfQI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IQRJ6MOd; arc=none smtp.client-ip=10.30.226.201
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IQRJ6MOd"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DE424C4CEC2;
-	Sat, 31 Aug 2024 01:28:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1725067727;
-	bh=/oIGIDZx1EL02vEkq3oxHjcflX1plTu8Qt53MH7r1RY=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=IQRJ6MOdEtrMwpjTXOeOKZjY7iYkZVdKz/t1kSB2S2micXC7NijpqBiChwUeMXAfB
-	 VuoHIXO77FXSh8wHPVmXu8mYY9ZAfd4NIqxzm1PcOFQYUPNPVGnsAKtTtoKUrGfFsw
-	 pa38RfrH6AGyeCsBCyWJA+xqsjc3uTF0fj2756KF/bIv50NTP94a/mR79qUaivVhV2
-	 ZSRTnttMSClZJRzb5hsEgpDmEskXgtTWkJP+UUavoqhePADZ39of7LxokpQtsi7drX
-	 XL8aTaV6dB1ID/toAVbcMwU9Rju4iQY0GarEPljT6Iup5ESUVj/HBoq8g1Kvf7mst6
-	 KqDrYD01NjWQw==
-Date: Fri, 30 Aug 2024 18:28:45 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Andrew Morton <akpm@linux-foundation.org>
-Cc: kernel test robot <lkp@intel.com>,
-	"Liam R. Howlett" <Liam.Howlett@oracle.com>, llvm@lists.linux.dev,
-	oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
-	Linux Memory Management List <linux-mm@kvack.org>,
-	"Matthew Wilcox (Oracle)" <willy@infradead.org>
-Subject: Re: lib/maple_tree.c:330:20: error: unused function 'mte_set_full'
-Message-ID: <20240831012845.GA2993938@thelio-3990X>
-References: <202408310728.S7EE59BN-lkp@intel.com>
- <20240830175015.3569d261b0d48d46eb6ec1cf@linux-foundation.org>
+	s=arc-20240116; t=1725076291; c=relaxed/simple;
+	bh=53bZytTUajpVNIHI0kdeFUfleUDqkJ/X5bRITQrwgYQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=RNZydlM8DS05DFOUkD2uRojH4sa2eXxXgdsXWxbKZGlTDsxiZF0SQp974URpdMDtSTimePoq8IPJ2G4OEckr/ch7A0UAk6Ej8CXjl+PyExpI+OfrKeN/Fqaf+Mbg862zNNHmkZmUk6MDDU4qh0rFlGFCnM7m7RodL5yhYisnnkU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=hust.edu.cn; spf=pass smtp.mailfrom=hust.edu.cn; arc=none smtp.client-ip=206.189.79.184
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=hust.edu.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hust.edu.cn
+Received: from hust.edu.cn (unknown [172.16.0.52])
+	by app1 (Coremail) with SMTP id HgEQrAC3vzsck9JmGlkgBQ--.1107S2;
+	Sat, 31 Aug 2024 11:50:52 +0800 (CST)
+Received: from pride-PowerEdge-R740.. (unknown [222.20.126.129])
+	by gateway (Coremail) with SMTP id _____wB3EjwXk9JmbHjZAA--.9330S2;
+	Sat, 31 Aug 2024 11:50:48 +0800 (CST)
+From: Dongliang Mu <dzm91@hust.edu.cn>
+To: Alex Shi <alexs@kernel.org>,
+	Yanteng Si <siyanteng@loongson.cn>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Dongliang Mu <dzm91@hust.edu.cn>
+Cc: hust-os-kernel-patches@googlegroups.com,
+	linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: [PATCH v2] docs/zh_CN: add the translation of kbuild/gcc-plugins.rst
+Date: Sat, 31 Aug 2024 11:48:46 +0800
+Message-ID: <20240831034924.3729507-1-dzm91@hust.edu.cn>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240830175015.3569d261b0d48d46eb6ec1cf@linux-foundation.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:HgEQrAC3vzsck9JmGlkgBQ--.1107S2
+Authentication-Results: app1; spf=neutral smtp.mail=dzm91@hust.edu.cn;
+X-Coremail-Antispam: 1UD129KBjvJXoWxtry3CrWrKr13Gr4xKryfJFb_yoWxXrWUpw
+	4qk34SgFWSyFy093yfKr1xuF15JFs3Ww1UKa48Gwn7tF1kJrZ0y3y3try5GryfWFy8ZrW3
+	XF4ayrWUuw1UZa7anT9S1TB71UUUUUJqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUQIb7Iv0xC_Zr1lb4IE77IF4wAFc2x0x2IEx4CE42xK8VAvwI8I
+	cIk0rVWrJVCq3wA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjx
+	v20xvE14v26F1j6w1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26F4j6r4UJwA2z4x0Y4vE
+	x4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oVCq3wAaw2AFwI0_Jr
+	v_JF1lnxkEFVAIw20F6cxK64vIFxWle2I262IYc4CY6c8Ij28IcVAaY2xG8wAqjxCEc2xF
+	0cIa020Ex4CE44I27wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0EF7xvrVAajcxG14v26r
+	4UJVWxJr1lYx0E74AGY7Cv6cx26r4fZr1UJr1lYx0Ec7CjxVAajcxG14v26r4UJVWxJr1l
+	Ox8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JMxkF7I0En4kS14v26r126r1DMx
+	AIw28IcxkI7VAKI48JMxAIw28IcVCjz48v1sIEY20_GFW3Jr1UJwCFx2IqxVCFs4IE7xkE
+	bVWUJVW8JwCFI7km07C267AKxVWUXVWUAwC20s026c02F40E14v26r1j6r18MI8I3I0E74
+	80Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0
+	I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF04
+	k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7Cj
+	xVAFwI0_Jr0_GrUvcSsGvfC2KfnxnUUI43ZEXa7IUnFD73UUUUU==
+X-CM-SenderInfo: asqsiiirqrkko6kx23oohg3hdfq/
 
-On Fri, Aug 30, 2024 at 05:50:15PM -0700, Andrew Morton wrote:
-> On Sat, 31 Aug 2024 07:42:38 +0800 kernel test robot <lkp@intel.com> wrote:
-> 
-> > All errors (new ones prefixed by >>):
-> > 
-> > >> lib/maple_tree.c:330:20: error: unused function 'mte_set_full' [-Werror,-Wunused-function]
-> >      330 | static inline void mte_set_full(const struct maple_enode *node)
-> >          |                    ^~~~~~~~~~~~
-> > >> lib/maple_tree.c:335:20: error: unused function 'mte_clear_full' [-Werror,-Wunused-function]
-> >      335 | static inline void mte_clear_full(const struct maple_enode *node)
-> >          |                    ^~~~~~~~~~~~~~
-> >    2 errors generated.
-> 
-> afaict these have never been used.  It's odd that this was just detected.
+Finish the translation of kbuild/gcc-plugins.rst and move gcc-plugins
+from TODO to the main body.
 
-I don't think it has just now been detected, as these functions have
-been flagged before:
+Update to commit 3832d1fd84b6 ("docs/core-api: expand Fedora instructions
+for GCC plugins")
 
-https://lore.kernel.org/20240503160821.GB3960118@thelio-3990X/
+Signed-off-by: Dongliang Mu <dzm91@hust.edu.cn>
+---
+v1->v2: fix comments from yanteng
 
-> Should we just zap them or is there some reason to retain?
+ .../translations/zh_CN/kbuild/gcc-plugins.rst | 126 ++++++++++++++++++
+ .../translations/zh_CN/kbuild/index.rst       |   2 +-
+ 2 files changed, 127 insertions(+), 1 deletion(-)
+ create mode 100644 Documentation/translations/zh_CN/kbuild/gcc-plugins.rst
 
-From the above thread, Liam and Matthew seem to want to retain them.
-Perhaps just wrapping them in '#if 0' and a comment that says these will
-eventually see use would be a happy compromise between outright removal
-and doing nothing about this warning?
+diff --git a/Documentation/translations/zh_CN/kbuild/gcc-plugins.rst b/Documentation/translations/zh_CN/kbuild/gcc-plugins.rst
+new file mode 100644
+index 000000000000..f31fed139289
+--- /dev/null
++++ b/Documentation/translations/zh_CN/kbuild/gcc-plugins.rst
+@@ -0,0 +1,126 @@
++.. SPDX-License-Identifier: GPL-2.0
++
++.. include:: ../disclaimer-zh_CN.rst
++
++:Original: Documentation/kbuild/gcc-plugins.rst
++:Translator: 慕冬亮 Dongliang Mu <dzm91@hust.edu.cn>
++
++================
++GCC 插件基础设施
++================
++
++
++介绍
++=====
++
++GCC 插件是为编译器提供额外功能的可加载模块 [1]_。它们对于运行时插装和静态分析非常有用。
++我们可以在编译过程中通过回调 [2]_，GIMPLE [3]_，IPA [4]_ 和 RTL Passes [5]_
++（译者注：Pass 是编译器所采用的一种结构化技术，用于完成编译对象的分析、优化或转换等功能）
++来分析、修改和添加更多的代码。
++
++内核的 GCC 插件基础设施支持构建树外模块、交叉编译和在单独的目录中构建。插件源文件必须由
++C++ 编译器编译。
++
++目前 GCC 插件基础设施只支持一些架构。搜索 "select HAVE_GCC_PLUGINS" 来查找支持
++GCC 插件的架构。
++
++这个基础设施是从 grsecurity [6]_  和 PaX [7]_ 移植过来的。
++
++--
++
++.. [1] https://gcc.gnu.org/onlinedocs/gccint/Plugins.html
++.. [2] https://gcc.gnu.org/onlinedocs/gccint/Plugin-API.html#Plugin-API
++.. [3] https://gcc.gnu.org/onlinedocs/gccint/GIMPLE.html
++.. [4] https://gcc.gnu.org/onlinedocs/gccint/IPA.html
++.. [5] https://gcc.gnu.org/onlinedocs/gccint/RTL.html
++.. [6] https://grsecurity.net/
++.. [7] https://pax.grsecurity.net/
++
++
++目的
++=======
++
++GCC 插件的设计目的是提供一个用于试验 GCC 或 Clang 上游没有的潜在编译器功能的场所。
++一旦它们的实用性得到验证，这些功能将被添加到 GCC（和 Clang）的上游。随后，在所有
++支持的 GCC 版本都支持这些功能后，它们会被从内核中移除。
++
++具体来说，新插件应该只实现上游编译器（GCC 和 Clang）不支持的功能。
++
++当 Clang 中存在 GCC 中不存在的某项功能时，应努力将该功能做到 GCC 上游（而不仅仅
++是作为内核专用的 GCC 插件），以使整个生态都能从中受益。
++
++类似的，如果 GCC 插件提供的功能在 Clang 中 **不** 存在，但该功能被证明是有用的，也应
++努力将该功能上传到 GCC（和 Clang）。
++
++在上游 GCC 提供了某项功能后，该插件将无法在相应的 GCC 版本（以及更高版本）下编译。
++一旦所有内核支持的 GCC 版本都提供了该功能，该插件将从内核中移除。
++
++
++文件
++=====
++
++**$(src)/scripts/gcc-plugins**
++
++	这是 GCC 插件的目录。
++
++**$(src)/scripts/gcc-plugins/gcc-common.h**
++
++	这是 GCC 插件的兼容性头文件。
++	应始终包含它，而不是单独的 GCC 头文件。
++
++**$(src)/scripts/gcc-plugins/gcc-generate-gimple-pass.h,
++$(src)/scripts/gcc-plugins/gcc-generate-ipa-pass.h,
++$(src)/scripts/gcc-plugins/gcc-generate-simple_ipa-pass.h,
++$(src)/scripts/gcc-plugins/gcc-generate-rtl-pass.h**
++
++	这些头文件可以自动生成 GIMPLE、SIMPLE_IPA、IPA 和 RTL passes 的注册结构。
++	与手动创建结构相比，它们更受欢迎。
++
++
++用法
++=====
++
++你必须为你的 GCC 版本安装 GCC 插件头文件，以 Ubuntu 上的 gcc-10 为例::
++
++	apt-get install gcc-10-plugin-dev
++
++或者在 Fedora 上::
++
++	dnf install gcc-plugin-devel libmpc-devel
++
++或者在 Fedora 上使用包含插件的交叉编译器时::
++
++	dnf install libmpc-devel
++
++在内核配置中启用 GCC 插件基础设施与一些你想使用的插件::
++
++	CONFIG_GCC_PLUGINS=y
++	CONFIG_GCC_PLUGIN_LATENT_ENTROPY=y
++	...
++
++运行 gcc（本地或交叉编译器），确保能够检测到插件头文件::
++
++	gcc -print-file-name=plugin
++	CROSS_COMPILE=arm-linux-gnu- ${CROSS_COMPILE}gcc -print-file-name=plugin
++
++"plugin" 这个词意味着它们没有被检测到::
++
++	plugin
++
++完整的路径则表示插件已经被检测到::
++
++       /usr/lib/gcc/x86_64-redhat-linux/12/plugin
++
++编译包括插件在内的最小工具集::
++
++	make scripts
++
++或者直接在内核中运行 make，使用循环复杂性 GCC 插件编译整个内核。
++
++
++4. 如何添加新的 GCC 插件
++==============================
++
++GCC 插件位于 scripts/gcc-plugins/。你需要将插件源文件放在 scripts/gcc-plugins/ 目录下。
++子目录创建并不支持，你必须添加在 scripts/gcc-plugins/Makefile、scripts/Makefile.gcc-plugins
++和相关的 Kconfig 文件中。
+diff --git a/Documentation/translations/zh_CN/kbuild/index.rst b/Documentation/translations/zh_CN/kbuild/index.rst
+index d906a4e88d0f..b51655d981f6 100644
+--- a/Documentation/translations/zh_CN/kbuild/index.rst
++++ b/Documentation/translations/zh_CN/kbuild/index.rst
+@@ -13,6 +13,7 @@
+     :maxdepth: 1
+ 
+     headers_install
++    gcc-plugins
+ 
+ TODO:
+ 
+@@ -24,7 +25,6 @@ TODO:
+ - modules
+ - issues
+ - reproducible-builds
+-- gcc-plugins
+ - llvm
+ 
+ .. only::  subproject and html
+-- 
+2.43.0
 
-> --- a/lib/maple_tree.c~a
-> +++ a/lib/maple_tree.c
-> @@ -348,21 +348,6 @@ static inline void *mte_safe_root(const
->  	return (void *)((unsigned long)node & ~MAPLE_ROOT_NODE);
->  }
->  
-> -static inline void *mte_set_full(const struct maple_enode *node)
-> -{
-> -	return (void *)((unsigned long)node & ~MAPLE_ENODE_NULL);
-> -}
-> -
-> -static inline void *mte_clear_full(const struct maple_enode *node)
-> -{
-> -	return (void *)((unsigned long)node | MAPLE_ENODE_NULL);
-> -}
-> -
-> -static inline bool mte_has_null(const struct maple_enode *node)
-> -{
-> -	return (unsigned long)node & MAPLE_ENODE_NULL;
-> -}
-> -
->  static __always_inline bool ma_is_root(struct maple_node *node)
->  {
->  	return ((unsigned long)node->parent & MA_ROOT_PARENT);
-> _
-> 
-> 
-> 
