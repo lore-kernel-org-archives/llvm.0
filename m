@@ -1,59 +1,68 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B44BE78676;
-	Sat, 31 Aug 2024 18:07:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D290A13AD09;
+	Sat, 31 Aug 2024 18:48:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725127643; cv=none; b=vBQMTzHg7xmvKOOTIz72xfzDy6cAJkrcpM1V5kXRqCvIS21TEFg0+HA9WWQfY4lB0LZ46mT7H4aP3XzAbV9qTk5Bj5BYk6N3rsyeSl0+/VUSp/m1+eO2ZACREUdXY2dzjJVn5zY2c+D2n00W2MKV7wdhoMnJx5bwurh8+LdGcfk=
+	t=1725130101; cv=none; b=o9ieKKW08zvc8v5v7YB5CMj94IqEP7apuVa77AnoQzISh/p8bQuqkuvTAhQFv8iGoef4vjO7HY6KQE27NvgGauz5i6LQx+hrZgfOXbAbSKQtUJx7OiTUGxbup/LscROWx0m2PJSl03UjrnK8FJ/VY6BEsmlhZPDClPMg3Fv8buQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725127643; c=relaxed/simple;
-	bh=aarbNujcQJQu8cWevGdPTbcJJFKQH7w9HGZjr2sx000=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=t3Un1uzBOGvFqEoZ0Mgda1UBrqmfXjdsmNT6wqldT/GpzAG0h9c5a3neF6XtLGVy8VmZKEWTaS40z+3fpVatGc804nYInIoRyyh7CdbRfwKO0aKTiDh6P4yODUbCxNINNjsJo9iwJw1mmGPaeviSJbnaQOQVOoc999jMbD+O95Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=By/I4Ok8; arc=none smtp.client-ip=198.175.65.12
+	s=arc-20240116; t=1725130101; c=relaxed/simple;
+	bh=vNLx4cr9O3aGVI+0EaJtBOHUEzDm0igOlyxGNzpMucA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=T+Ezjgu9XoPj4wALuGo+SqrLuPKVWUD6PMwPe/gTbwaybeQ1TwXP7dUIXqYnnww/kQBAgJT9KufWhPRFPF1Dda+iA/d+e8pMQWqzWsmQXXCna0HXJrqhMDsI88o2bIFOi4wvtSntatDjEieNJzTQhiBZ/qzcTlY/M+QRDRSJ6gg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=IdGO4SuV; arc=none smtp.client-ip=192.198.163.19
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="By/I4Ok8"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="IdGO4SuV"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1725127639; x=1756663639;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=aarbNujcQJQu8cWevGdPTbcJJFKQH7w9HGZjr2sx000=;
-  b=By/I4Ok8eeb6hMjUSA3h8bfH2ya5C2BRa/avA7K3MRmmQ9LsitsMO4qP
-   sGYmtsAOcN3rPec81pDUriyBeLTqoJo2kX24SWWtUlss6hg3V3ZOVpZCd
-   s8/jJjedoA+6EhgBIi+qCgc8wzZB+C2mzmH7y/MJKECZoBN+1z/j7JNRd
-   goRSyRyZeI1wy7ztJ9DKpdn9mxC+lhOwLdXEiu23aoSgLlkIbn+AP659F
-   Y4TLpyzDs7IeL4YY1dTMNqjkn1cIXPk0giwJNgIhbolkcHLH/skuBFTff
-   mXtfPtrm45JS/9pz94rpXv2qx3VuWPOPttvFmwytcfpARUC50rUTMjHNP
-   g==;
-X-CSE-ConnectionGUID: ttYhPwyzQjKqUzVn2DimwQ==
-X-CSE-MsgGUID: JJNm55YaRkquF0ixwwmisA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11181"; a="35122299"
+  t=1725130099; x=1756666099;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=vNLx4cr9O3aGVI+0EaJtBOHUEzDm0igOlyxGNzpMucA=;
+  b=IdGO4SuVRA4aZdHJieeUN/zaEaA6SHket5aMfYixkzUtBP9FVuzVEa9T
+   b5VlRsSF0szklCyBNVOTuCsdHAuINtddG4PQXV+1Ad+BZuY8WY0X/vKGP
+   XrRES+nSpWrByG5nCymywjLghz5XG/rbu3KHBjJqK5NwhmO3Hrqco5Bo+
+   GgZ8FKj1AcCQd06qLdIf1FzYfac5kg6Sx+c6v6p+qErKAiNGSP6JXYw7s
+   qfufK7KxWELVE1/Yp6QgXXFll/KBlUyFnGGQzhGUx+VNYlH/3maWRjyIl
+   Rh34offJlkdTLu0sniiPOenWzkngXQHHfPpRP+g1tUH5WWgU9h+3GOAW8
+   w==;
+X-CSE-ConnectionGUID: fNT4WG2USfOSXF6lkbmrdw==
+X-CSE-MsgGUID: HBFdyASiTLKwBz3e8If0JQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11181"; a="23332626"
 X-IronPort-AV: E=Sophos;i="6.10,192,1719903600"; 
-   d="scan'208";a="35122299"
-Received: from fmviesa008.fm.intel.com ([10.60.135.148])
-  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Aug 2024 11:07:16 -0700
-X-CSE-ConnectionGUID: ZuQhqq6BRrOc43Oghc6LQg==
-X-CSE-MsgGUID: GlbcVdAlRk23nCyW8b0BgQ==
+   d="scan'208";a="23332626"
+Received: from fmviesa006.fm.intel.com ([10.60.135.146])
+  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Aug 2024 11:48:18 -0700
+X-CSE-ConnectionGUID: f4mjMjXfRJ+UWxJ+QP6Pfg==
+X-CSE-MsgGUID: NfQMlSULQLSgc4c+LoHlng==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.10,192,1719903600"; 
-   d="scan'208";a="64203827"
+   d="scan'208";a="63815430"
 Received: from lkp-server01.sh.intel.com (HELO 9c6b1c7d3b50) ([10.239.97.150])
-  by fmviesa008.fm.intel.com with ESMTP; 31 Aug 2024 11:07:15 -0700
+  by fmviesa006.fm.intel.com with ESMTP; 31 Aug 2024 11:48:15 -0700
 Received: from kbuild by 9c6b1c7d3b50 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1skSVE-0002zI-2B;
-	Sat, 31 Aug 2024 18:07:12 +0000
-Date: Sun, 1 Sep 2024 02:06:30 +0800
+	id 1skT8v-00030o-1V;
+	Sat, 31 Aug 2024 18:48:13 +0000
+Date: Sun, 1 Sep 2024 02:47:27 +0800
 From: kernel test robot <lkp@intel.com>
-To: Sean Christopherson <seanjc@google.com>
+To: Chunhui Li <chunhui.li@mediatek.com>,
+	Luis Chamberlain <mcgrof@kernel.org>,
+	Matthias Brugger <matthias.bgg@gmail.com>,
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org, Kai Huang <kai.huang@intel.com>
-Subject: arch/x86/kernel/reboot.c:939:20: error: unused function
- 'nmi_shootdown_cpus_on_restart'
-Message-ID: <202409010207.jrH6sNV4-lkp@intel.com>
+	linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-mediatek@lists.infradead.org, wsd_upstream@mediatek.com,
+	Chunhui Li <chunhui.li@mediatek.com>,
+	Xion Wang <xion.wang@mediatek.com>
+Subject: Re: [PATCH] module: abort module loading when sysfs setup suffer
+ errors
+Message-ID: <202409010209.FqYOzYEa-lkp@intel.com>
+References: <20240830054400.26622-1-chunhui.li@mediatek.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -62,43 +71,106 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20240830054400.26622-1-chunhui.li@mediatek.com>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   1934261d897467a924e2afd1181a74c1cbfa2c1d
-commit: 261cd5ed934e6923187cf1c9eaa6cb63f2b81212 x86/reboot: Expose VMCS crash hooks if and only if KVM_{INTEL,AMD} is enabled
-date:   1 year, 1 month ago
-config: x86_64-sof-customedconfig-amd-defconfig (https://download.01.org/0day-ci/archive/20240901/202409010207.jrH6sNV4-lkp@intel.com/config)
-compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240901/202409010207.jrH6sNV4-lkp@intel.com/reproduce)
+Hi Chunhui,
+
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on mcgrof/modules-next]
+[also build test ERROR on linus/master v6.11-rc5 next-20240830]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Chunhui-Li/module-abort-module-loading-when-sysfs-setup-suffer-errors/20240830-134417
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git modules-next
+patch link:    https://lore.kernel.org/r/20240830054400.26622-1-chunhui.li%40mediatek.com
+patch subject: [PATCH] module: abort module loading when sysfs setup suffer errors
+config: powerpc-mpc834x_itx_defconfig (https://download.01.org/0day-ci/archive/20240901/202409010209.FqYOzYEa-lkp@intel.com/config)
+compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 46fe36a4295f05d5d3731762e31fc4e6e99863e9)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240901/202409010209.FqYOzYEa-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202409010207.jrH6sNV4-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202409010209.FqYOzYEa-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> arch/x86/kernel/reboot.c:939:20: error: unused function 'nmi_shootdown_cpus_on_restart' [-Werror,-Wunused-function]
-     939 | static inline void nmi_shootdown_cpus_on_restart(void)
-         |                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   1 error generated.
+   In file included from kernel/module/sysfs.c:13:
+   In file included from include/linux/kallsyms.h:13:
+   In file included from include/linux/mm.h:2228:
+   include/linux/vmstat.h:517:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     517 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+>> kernel/module/sysfs.c:400:6: error: assigning to 'int' from incompatible type 'void'
+     400 |         err = add_sect_attrs(mod, info);
+         |             ^ ~~~~~~~~~~~~~~~~~~~~~~~~~
+   kernel/module/sysfs.c:404:6: error: assigning to 'int' from incompatible type 'void'
+     404 |         err = add_notes_attrs(mod, info);
+         |             ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~
+   1 warning and 2 errors generated.
 
 
-vim +/nmi_shootdown_cpus_on_restart +939 arch/x86/kernel/reboot.c
+vim +400 kernel/module/sysfs.c
 
-26044aff37a5455 Sean Christopherson 2022-11-30  938  
-26044aff37a5455 Sean Christopherson 2022-11-30 @939  static inline void nmi_shootdown_cpus_on_restart(void)
-26044aff37a5455 Sean Christopherson 2022-11-30  940  {
-26044aff37a5455 Sean Christopherson 2022-11-30  941  	if (!crash_ipi_issued)
-26044aff37a5455 Sean Christopherson 2022-11-30  942  		nmi_shootdown_cpus(NULL);
-2ddded213895e41 Eduardo Habkost     2008-11-12  943  }
-58c5661f2144c08 Hidehiro Kawai      2015-12-14  944  
-
-:::::: The code at line 939 was first introduced by commit
-:::::: 26044aff37a5455b19a91785086914fd33053ef4 x86/crash: Disable virt in core NMI crash handler to avoid double shootdown
-
-:::::: TO: Sean Christopherson <seanjc@google.com>
-:::::: CC: Sean Christopherson <seanjc@google.com>
+   370	
+   371	int mod_sysfs_setup(struct module *mod,
+   372			    const struct load_info *info,
+   373				   struct kernel_param *kparam,
+   374				   unsigned int num_params)
+   375	{
+   376		int err;
+   377	
+   378		err = mod_sysfs_init(mod);
+   379		if (err)
+   380			goto out;
+   381	
+   382		mod->holders_dir = kobject_create_and_add("holders", &mod->mkobj.kobj);
+   383		if (!mod->holders_dir) {
+   384			err = -ENOMEM;
+   385			goto out_unreg;
+   386		}
+   387	
+   388		err = module_param_sysfs_setup(mod, kparam, num_params);
+   389		if (err)
+   390			goto out_unreg_holders;
+   391	
+   392		err = module_add_modinfo_attrs(mod);
+   393		if (err)
+   394			goto out_unreg_param;
+   395	
+   396		err = add_usage_links(mod);
+   397		if (err)
+   398			goto out_unreg_modinfo_attrs;
+   399	
+ > 400		err = add_sect_attrs(mod, info);
+   401		if (err)
+   402			goto out_unreg_sect_attrs;
+   403	
+   404		err = add_notes_attrs(mod, info);
+   405		if (err)
+   406			goto out_unreg_notes_attrs;
+   407	
+   408		return 0;
+   409	
+   410	out_unreg_notes_attrs:
+   411		remove_notes_attrs(mod);
+   412	out_unreg_sect_attrs:
+   413		remove_sect_attrs(mod);
+   414	out_unreg_modinfo_attrs:
+   415		module_remove_modinfo_attrs(mod, -1);
+   416	out_unreg_param:
+   417		module_param_sysfs_remove(mod);
+   418	out_unreg_holders:
+   419		kobject_put(mod->holders_dir);
+   420	out_unreg:
+   421		mod_kobject_put(mod);
+   422	out:
+   423		return err;
+   424	}
+   425	
 
 -- 
 0-DAY CI Kernel Test Service
