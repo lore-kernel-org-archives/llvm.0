@@ -1,109 +1,211 @@
-Received: from mail-il1-f169.google.com (mail-il1-f169.google.com [209.85.166.169])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 00AEB2F28
-	for <llvm@lists.linux.dev>; Sun,  1 Sep 2024 06:03:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F5F32BAF3;
+	Sun,  1 Sep 2024 07:18:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725170599; cv=none; b=CO73CmLFjlwCp0wIu6eqTo6JCP+k429FkRg7qWLdKVwgCyF8MFzmgjPtXhKuqfBJbGNkh81nEiJ9lNgtSUwD1hpqRLzYCpjIjPaLx7+dZu7ug/2FUfyZirLK8mywU9/74H1weSy9CPRDu6ng7AyB/b0M+QzxPwmkqVbEuYewNeg=
+	t=1725175121; cv=none; b=DIW3r0Do0numxtdmHkFFHLzCf6PmQD9LvVM+RUkPPE+azPVcPchucCmEkpFXeXxrnjqCb+ebI1j1LMHcDvaoaelMmqOUrAgAd3be2i7/MFqJAMxpA98Ubs1U3R2By34ovY/79D3rPKq0HY2ZGeUzO/LxHk4kZw4E7WrghvQAGYA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725170599; c=relaxed/simple;
-	bh=gTaVx+TwHD+FJbillFONR4wr3k7gQ6JEyFsWWKxKwTA=;
-	h=Message-ID:Date:MIME-Version:To:Cc:References:Subject:From:
-	 In-Reply-To:Content-Type; b=mJI+xm4m356bK9OzV4bP/vtrtypsvQYhKLoKdTiiYAjWchiF02RNGWKqCrPY0GFOboIPnkKV17zz1HJR1BU//aubb21SY8zROi3zZEr5T01bd3gJhfHArN+gMD4Uq8CaXSQdz3IoyJCYfru11mzRaEz1wFNZm2WrpxJu5oKETHQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=JQDrgkqq; arc=none smtp.client-ip=209.85.166.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1725175121; c=relaxed/simple;
+	bh=PBFLBJBX7Pbtyxt0jcF5LM1PCQfKzUdL4y8cIrPkGcM=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=hON/RbGnAz/Coa4qsudYIa0ivFJg0IwjYNaIleESvsSyrJtR5YueE/nHdX8a3PPfFB2/gZahnpXwvycSH00eF7dJ9K9JUlHwSoatLij941x4J1fstRUpFpKXCYhzXjDvbu3qih7XmnEmYO+60CFDQ+5M1oZb9Mmp29KTIfBZkS4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=njXSv9wL; arc=none smtp.client-ip=192.198.163.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JQDrgkqq"
-Received: by mail-il1-f169.google.com with SMTP id e9e14a558f8ab-39f51371baeso3011065ab.3
-        for <llvm@lists.linux.dev>; Sat, 31 Aug 2024 23:03:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1725170597; x=1725775397; darn=lists.linux.dev;
-        h=content-transfer-encoding:in-reply-to:from:content-language:subject
-         :references:cc:to:user-agent:mime-version:date:message-id:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=6ASaKifyh7CAWP7KfJ/Pkn2CRTiEMZbywc4FPBtZowk=;
-        b=JQDrgkqqZjytWe/X5CsZzMaEuBg9UaDYdfm+NJtNzG6646FWr9fv5iCC3hb/3L0zib
-         fz7T0ue9mKxQslSKpHjm4Zf77npRxoVnWjTmWz1ewcUtrNUtiOQaypG7LUbqV3cjRlhM
-         Sk8hNgy4q6RDxlvxAiFK5oWIwm+Sf6K4wk4tpXj7LGBongVpttkY4iMwcb+57tYoiVDE
-         jPK0sAcZTi2JvQGvjgIXGRwSfvyh3I3svG9LooBvXeqYF0iCV3FavMaSzPi+XZc9IuVd
-         De8oWqvWBsC0FGhFT9QYgd/VpuWgcpRKOfvpDlYKbPOQYWfEOEr83p0pvPLVmo6UgEpE
-         jcPg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1725170597; x=1725775397;
-        h=content-transfer-encoding:in-reply-to:from:content-language:subject
-         :references:cc:to:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=6ASaKifyh7CAWP7KfJ/Pkn2CRTiEMZbywc4FPBtZowk=;
-        b=JpRCd0N+228bVN2lMgfmWVJl7a1YGmYwT6TY2mDie8B2uExae+4zAq2hl2w7cvTtnd
-         XNMupMPx5oQvM54jo/a3eaMVnmdx7WSdBEf0a5uzlvBkV0xiPuLdnN72eMPJcfoPgHMn
-         d01vuYU9Dj5QoFkVdAP4XG8TycC1eIpkATqbm77W3IhH8ik4QIIvYi1W9J1fWvD1cB84
-         JBJt4CeOkhdufdEDVXEyJbFBXRTFepeADrjUGelwQiAbSWMgoMEY5seSORy3hgnbyEy2
-         kJhxLNZvmc9sZRcTAxBJOrpDc2XGCxH+8pFIckU+UvvDATCBnVZnYJKTG5ku5gCen0C/
-         Y76w==
-X-Forwarded-Encrypted: i=1; AJvYcCXA8QmCHbMVAn7KM/YDuuFVvtMGrEx2pz+PPmHROoW+J3nxCnDsVyCAk8GnBUm5Y2YqUhDr@lists.linux.dev
-X-Gm-Message-State: AOJu0Yzs3PQ1o3iHo1QlkJefNI5Qo/MlQIcjVd3cKjxqY5kOI1fRirwc
-	7E+iqTMbKpxm+wwa2XJynSMeRC8viVI6ZqOl1ZbcJVVMtm/t/wth
-X-Google-Smtp-Source: AGHT+IGw6QkiS7ytm3WVmlkoKhqjolc0dX880UP6OkyZZlWBmYHKwT4V+Nr35s91ww2YI7/yzG1CwQ==
-X-Received: by 2002:a05:6e02:1cad:b0:398:16d1:6127 with SMTP id e9e14a558f8ab-39f37867c14mr129488355ab.21.1725170596927;
-        Sat, 31 Aug 2024 23:03:16 -0700 (PDT)
-Received: from [10.0.2.15] (KD106167171201.ppp-bb.dion.ne.jp. [106.167.171.201])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-7d22e9d92a5sm4631784a12.90.2024.08.31.23.03.14
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 31 Aug 2024 23:03:16 -0700 (PDT)
-Message-ID: <58b7c7d2-f60c-4a2d-9cb5-d583182bfef4@gmail.com>
-Date: Sun, 1 Sep 2024 15:03:13 +0900
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="njXSv9wL"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1725175119; x=1756711119;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=PBFLBJBX7Pbtyxt0jcF5LM1PCQfKzUdL4y8cIrPkGcM=;
+  b=njXSv9wL52Kfl97ArxgDTNcGYFp83Pv7hB7VP2whmZimRy3XX5wR0unq
+   s8jCXm8PpCu4TjjYR1jwkPFnh8tADxCIdQGyBeg1/s1qYC9F3geLitLAm
+   V6nibrXXUdh0czkErg56YCY6OULQ3+p9DXEYguvePrbvMbC8YKvixfkZw
+   Io/nIXmO/Dc1/cH6RHZFqT0LaWenGeIQEMt9xtxqooWd169IdJ94nOTgf
+   X7L4wu1fNquFNyRukawqf6KtHR9A9fcdDQkz/f8qou8JO799HQYEbDktT
+   XaQv59S5hNfBcz8UXlg6yA6vqFBim4lxEwZfeZT4dki7ko8r22cXc9oSl
+   g==;
+X-CSE-ConnectionGUID: dyWLk5fvRfCqGpXMNtK7VA==
+X-CSE-MsgGUID: uruCuQ77Twm6J+paoFSqRQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11181"; a="23957143"
+X-IronPort-AV: E=Sophos;i="6.10,193,1719903600"; 
+   d="scan'208";a="23957143"
+Received: from fmviesa002.fm.intel.com ([10.60.135.142])
+  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Sep 2024 00:18:39 -0700
+X-CSE-ConnectionGUID: ik5fGnq3QB+5tcVP5+Grtg==
+X-CSE-MsgGUID: 4RY/FlM0QbCaOeA6HjWWSw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.10,193,1719903600"; 
+   d="scan'208";a="87536507"
+Received: from lkp-server01.sh.intel.com (HELO 9c6b1c7d3b50) ([10.239.97.150])
+  by fmviesa002.fm.intel.com with ESMTP; 01 Sep 2024 00:18:36 -0700
+Received: from kbuild by 9c6b1c7d3b50 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1sker4-0003Vu-2r;
+	Sun, 01 Sep 2024 07:18:34 +0000
+Date: Sun, 1 Sep 2024 15:18:17 +0800
+From: kernel test robot <lkp@intel.com>
+To: huangyifeng <huangyifeng@eswincomputing.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Emil Renner Berthing <emil.renner.berthing@canonical.com>,
+	Pinkesh Vaghela <pinkesh.vaghela@einfochips.com>
+Subject: [esmil:eic7700 12/20] drivers/clk/eswin/clk.c:387:27: warning:
+ variable 'refdiv_val' set but not used
+Message-ID: <202409011509.WzwSaXkG-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-To: dzm91@hust.edu.cn, seakeel@gmail.com
-Cc: corbet@lwn.net, hust-os-kernel-patches@googlegroups.com,
- justinstitt@google.com, linux-doc@vger.kernel.org,
- linux-kernel@vger.kernel.org, llvm@lists.linux.dev, morbo@google.com,
- nathan@kernel.org, ndesaulniers@google.com, siyanteng@loongson.cn,
- alexs@kernel.org
-References: <35904aa5-9851-4894-b953-689904bf33ca@hust.edu.cn>
-Subject: Re: [PATCH v2] docs/zh_CN: add the translation of
- kbuild/gcc-plugins.rst
-Content-Language: en-US
-From: Akira Yokosawa <akiyks@gmail.com>
-In-Reply-To: <35904aa5-9851-4894-b953-689904bf33ca@hust.edu.cn>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Hi,
+tree:   https://github.com/esmil/linux eic7700
+head:   eb44174b12f99d320be704b45db6b994f6a014bd
+commit: fca55d936fc3d393ef2a17314f5b7a96bdfc721c [12/20] drivers: clk: eswin: added clock driver for eic7700
+config: riscv-allmodconfig (https://download.01.org/0day-ci/archive/20240901/202409011509.WzwSaXkG-lkp@intel.com/config)
+compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 08e5a1de8227512d4774a534b91cb2353cef6284)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240901/202409011509.WzwSaXkG-lkp@intel.com/reproduce)
 
-I'm not Alex, but let me chime in.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202409011509.WzwSaXkG-lkp@intel.com/
 
-On Sat, 31 Aug 2024 17:34:11 +0800, Dongliang Mu wrote:
-> On 2024/8/31 12:11, Alex Shi wrote:
->>
->> On 8/31/24 11:48 AM, Dongliang Mu wrote:
->>> +目的
->>> +=======
->>> +
->> there are still a lots of sign incorrect. Please be sure everything looks fine in a web browser after you 'make htmldocs'
-> 
-> What do you mean by "sign incorrect"? I check the html rendering in the 
-> vscode. It seems fine to me.
+All warnings (new ones prefixed by >>):
 
-You are right.  There is nothing wrong as far as the reST specification
-is concerned.
+>> drivers/clk/eswin/clk.c:387:27: warning: variable 'refdiv_val' set but not used [-Wunused-but-set-variable]
+     387 |         u64 frac_val, fbdiv_val, refdiv_val;
+         |                                  ^
+>> drivers/clk/eswin/clk.c:388:6: warning: variable 'postdiv1_val' set but not used [-Wunused-but-set-variable]
+     388 |         u32 postdiv1_val;
+         |             ^
+>> drivers/clk/eswin/clk.c:838:13: warning: no previous prototype for function 'eswin_register_clk' [-Wmissing-prototypes]
+     838 | struct clk *eswin_register_clk(struct eswin_clock_data *data,
+         |             ^
+   drivers/clk/eswin/clk.c:838:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+     838 | struct clk *eswin_register_clk(struct eswin_clock_data *data,
+         | ^
+         | static 
+   3 warnings generated.
 
-Quote from https://docutils.sourceforge.io/docs/ref/rst/restructuredtext.html#sections
-(emphasis by me):
 
-    An underline/overline is a single repeated punctuation character that
-    begins in column 1 and forms a line extending *at least* as far as the
-    right edge of the title text.
+vim +/refdiv_val +387 drivers/clk/eswin/clk.c
 
-HTH, Akira
+   382	
+   383	static unsigned long clk_pll_recalc_rate(struct clk_hw *hw,
+   384			unsigned long parent_rate)
+   385	{
+   386		struct eswin_clk_pll *clk = to_pll_clk(hw);
+ > 387		u64 frac_val, fbdiv_val, refdiv_val;
+ > 388		u32 postdiv1_val;
+   389		u32 val;
+   390		u64 rate;
+   391	
+   392		val = readl_relaxed(clk->ctrl_reg0);
+   393		val = val >> clk->fbdiv_shift;
+   394		val &= ((1 << clk->fbdiv_width) - 1);
+   395		fbdiv_val = val;
+   396	
+   397		val = readl_relaxed(clk->ctrl_reg0);
+   398		val = val >> clk->refdiv_shift;
+   399		val &= ((1 << clk->refdiv_width) - 1);
+   400		refdiv_val = val;
+   401	
+   402		val = readl_relaxed(clk->ctrl_reg1);
+   403		val = val >> clk->frac_shift;
+   404		val &= ((1 << clk->frac_width) - 1);
+   405		frac_val = val;
+   406	
+   407		val = readl_relaxed(clk->ctrl_reg2);
+   408		val = val >> clk->postdiv1_shift;
+   409		val &= ((1 << clk->postdiv1_width) - 1);
+   410		postdiv1_val = val;
+   411	
+   412		switch (clk->id) {
+   413			case EIC7700_APLL_FOUT1:
+   414				switch (frac_val) {
+   415					case 14092861:
+   416						rate = APLL_HIGH_FREQ;
+   417						break;
+   418					case 10603200:
+   419						rate = APLL_LOW_FREQ;
+   420						break;
+   421					default:
+   422						pr_err("%s %d, clk id %d, unknow frac_val %llu\n", __func__, __LINE__, clk->id, frac_val);
+   423						rate = 0;
+   424						break;
+   425				}
+   426				break;
+   427			case EIC7700_PLL_CPU:
+   428				switch (fbdiv_val) {
+   429					case 300:
+   430						rate = CLK_FREQ_1800M;
+   431						break;
+   432					case 283:
+   433						rate = CLK_FREQ_1700M;
+   434						break;
+   435					case 266:
+   436						rate = CLK_FREQ_1600M;
+   437						break;
+   438					case 250:
+   439						rate = CLK_FREQ_1500M;
+   440						break;
+   441					case 216:
+   442						rate = CLK_FREQ_1300M;
+   443						break;
+   444					case 200:
+   445						rate = CLK_FREQ_1200M;
+   446						break;
+   447					case 166:
+   448						rate = CLK_FREQ_1000M;
+   449						break;
+   450					case 150:
+   451						rate = CLK_FREQ_900M;
+   452						break;
+   453					case 133:
+   454						rate = CLK_FREQ_800M;
+   455						break;
+   456					case 116:
+   457						rate = CLK_FREQ_700M;
+   458						break;
+   459					case 100:
+   460						rate = CLK_FREQ_600M;
+   461						break;
+   462					case 83:
+   463						rate = CLK_FREQ_500M;
+   464						break;
+   465					case 66:
+   466						rate = CLK_FREQ_400M;
+   467						break;
+   468					case 33:
+   469						rate = CLK_FREQ_200M;
+   470						break;
+   471					case 16:
+   472						rate = CLK_FREQ_100M;
+   473						break;
+   474					case 233:
+   475						rate = CLK_FREQ_1400M;
+   476						break;
+   477					default:
+   478						pr_err("%s %d, clk id %d, unknow fbdiv_val %llu\n", __func__, __LINE__, clk->id, fbdiv_val);
+   479						rate = 0;
+   480						break;
+   481				}
+   482				break;
+   483			default:
+   484				pr_err("%s %d, unknow clk id %d\n", __func__, __LINE__, clk->id);
+   485				rate = 0;
+   486				break;
+   487		}
+   488		return rate;
+   489	}
+   490	
 
-> 
-> Dongliang Mu
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
