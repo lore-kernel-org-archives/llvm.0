@@ -1,114 +1,78 @@
-Received: from mail-oa1-f47.google.com (mail-oa1-f47.google.com [209.85.160.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA20742A91
-	for <llvm@lists.linux.dev>; Sun,  1 Sep 2024 10:38:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 741B52BAEA
+	for <llvm@lists.linux.dev>; Sun,  1 Sep 2024 11:17:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725187123; cv=none; b=dILH+GgcRM2gPHmWJbM/D9FkfsqXArB6HWPGi8i2pV32+A7rVgq40PA4Parjq2NBR9E6Kf74PNy06zdlFdTWHCEAsoV6LyXvdS8WLSU3vFicFrRuzkNNHuuBxvgdFb3oeFdpqE08tssgP2B3qa+kFoph7IqnZNvaPsiyggKvgAw=
+	t=1725189436; cv=none; b=r/n92oNEt+L9+E5b/QvKCdePOZM9yJ/Nl/8pjl4MaZCcVL09CP0EPMVWk2aDYSa01qYIb0OI8kmONDjHd2TMQ+jTbpaYz1/h2CuM4YQT+FXMXL1/bm7bPSCt3L666tBGopuWscQCIim3DJL2zOvEuEwRFsDFSVIx+nUyXWj9pRc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725187123; c=relaxed/simple;
-	bh=RtbrHR8X01m8ZmauEKuNsNd8YBX31NLA3tjo7E1zYhE=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=D4t5nfoxk3YE7RBNORu3uvX6dMae0anLgOOeHzE3X8cZLVuc4L99yMYUN7Gd6rduWSqKF0fKQb3U6zCykMQHyoLbrlBK9y6/yKr+d121eXcZFF5Is4S8OON9wTBBsyAaYDb6B6u1oQDiLF7U3Qf4lHjO1cyMQpqIYfqcImgoTiI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=He983XTS; arc=none smtp.client-ip=209.85.160.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1725189436; c=relaxed/simple;
+	bh=12cWuQ7mup9YTSiqwEKWyZdMv05ZO0xRLyuLQm0ks/k=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=l1EPX2z2Q3FuvDNbCb67DzZyN4RTD96X0UKu1l74ABgUz+UXZM7VBTR3ycjWuopHB0uWH+jIwUD+PLceypyFUJDPeIbk2M7J2LtiQpSwowpUgGMJKHpw7tVLBpOrFVIfBU7TNWLU0hIelhhC8K83dem7T+cixaEkkEO67zkTtPY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ellerman.id.au; spf=pass smtp.mailfrom=ellerman.id.au; dkim=pass (2048-bit key) header.d=ellerman.id.au header.i=@ellerman.id.au header.b=oPxs4d9/; arc=none smtp.client-ip=150.107.74.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ellerman.id.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ellerman.id.au
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="He983XTS"
-Received: by mail-oa1-f47.google.com with SMTP id 586e51a60fabf-277f0540c3aso93949fac.3
-        for <llvm@lists.linux.dev>; Sun, 01 Sep 2024 03:38:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1725187121; x=1725791921; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=lyzhfAO6X5H2nFlBE67hjFSOfmqgByxBU/TMolVNnCU=;
-        b=He983XTSKqoSjzXIrYTR9rA7wreV519lHgCzJx7mpGJ0lDM8GJ88qe90AkgtgrGx2c
-         Dt3jlNW/RL8qYh9VgT6J+31i+qNcWZCIw7f7r7ycRCl0O3ys3Io0QkeF0WPfRWrB97kX
-         2HdinyDF4nyxBM+Jee6jd1fOXt4RKgfV4PuD1Vt9qe++J0s+ghzrHIjVeoyFnUVHBFo7
-         S88Golp/d6UU0TfnIxn/eYfrMMKZuVuHc8NwlYkGCHJPs5pN01T1WRqnwr5UlOnSJYcv
-         rouNbwCVnQCfLWUwFwexNbwnVC+Ki5r3coRNh8/9LUOzYl4ufex+jlGcI0yZzu7Hk/pK
-         iXuQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1725187121; x=1725791921;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=lyzhfAO6X5H2nFlBE67hjFSOfmqgByxBU/TMolVNnCU=;
-        b=lbtQPwPe7N6VjTNiKmSvzTWuNjcjL+wPvvHVkM3gz/gzigejwh3HNCvGzX19d2Wvrp
-         nb1xJ/Pu97wGA5kXQJGt8FfnMccF1TTvpxF6TQl6jHk5Xk5OsN8gJQkt6EJItNezM+jt
-         D8X9F/uFj84cCnLgSWF2OOBHckf12IHAilcJ9V3DogxpaFs4K/WD5sVl0D4T0TVh7Djt
-         vD/eLKVUyV4wOAxyUEd7RJkaBvLAv72pvU7jyt+sLJAH4S3RJb2zQR4k+uMJnX0C2B3H
-         RiSHUkvc1WlF1cUcS+fepnC/1yKo56aK6TiJXCiz9PBqnYxpdmx0s+jEMNUTaWcJWuQE
-         x4Xg==
-X-Forwarded-Encrypted: i=1; AJvYcCWTsiH1+cJ0jA06Dg8wxiJj890ThrldXkq0NbDm4bwK5LkNGX00eQoZg2QGZUFlpSYhb4Kl@lists.linux.dev
-X-Gm-Message-State: AOJu0YwsbfFJDe97+FQ0s1aPULpfAu1NEcmT0QF/IaveLbE0IcvoDMqN
-	CSHHgdgFmHyrP6NymjHwBklGgAo7W/AEHa1+eVtk9M2Ee8oOLf9yoQCSkpFMpZFk7sNwBFRxQaJ
-	1kGZbpbAlIFKCw0k+a06VswWFOiE=
-X-Google-Smtp-Source: AGHT+IFwDrFIRchFBPeU5Cmhdf8kTcaSFA4UqvIROjrdvU6DSkfFqOLzuG6/Nk75iyrmFNWILWDA+pXxJaqlFWVRaBE=
-X-Received: by 2002:a05:6871:1cc:b0:25e:b999:d24 with SMTP id
- 586e51a60fabf-277cc63f0f9mr4474832fac.0.1725187120778; Sun, 01 Sep 2024
- 03:38:40 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=ellerman.id.au header.i=@ellerman.id.au header.b="oPxs4d9/"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
+	s=201909; t=1725189425;
+	bh=12cWuQ7mup9YTSiqwEKWyZdMv05ZO0xRLyuLQm0ks/k=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+	b=oPxs4d9/PVThgd1vK3IHuP418JsvF/KuFs3uGnIiPI0SXxmT1DMemyoAckEdH3ccV
+	 VYXU6v2evRZ8gsVzKQPhPhPQZXIChDv5R2rm2AwwD6kzu9/8N/PEtOeTYcHIdLrt8t
+	 IXUukjkUMXx3Ni8RuqjJtU69mcoErckGRG2WkEdduYTDMVurBWlA7ROh3XXmoPgvtP
+	 Q8UcO5zp2+RQNklj0buJqHJSvaPt5XpgK5osQoruTVDMaBCXWo5lDMJpQSRzuHY6Ri
+	 gtBx6d0oRek5+QR+s3HXcKhq3+7x2+N+dOsu1cmp4MnUnJMY8fuhi2JSxpqLVv4B8w
+	 7S8gWegPke53w==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4WxTqg3yTGz4wyR;
+	Sun,  1 Sep 2024 21:17:03 +1000 (AEST)
+From: Michael Ellerman <mpe@ellerman.id.au>
+To: Christophe Leroy <christophe.leroy@csgroup.eu>, Andrew Morton
+ <akpm@linux-foundation.org>, Steven Rostedt <rostedt@goodmis.org>, Masami
+ Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers
+ <mathieu.desnoyers@efficios.com>, Nicholas Piggin <npiggin@gmail.com>,
+ Naveen N Rao <naveen@kernel.org>, Nathan Chancellor <nathan@kernel.org>,
+ Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling
+ <morbo@google.com>, Justin Stitt <justinstitt@google.com>, Shuah Khan
+ <shuah@kernel.org>, "Jason A . Donenfeld" <Jason@zx2c4.com>
+Cc: Christophe Leroy <christophe.leroy@csgroup.eu>,
+ linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+ linux-kselftest@vger.kernel.org, llvm@lists.linux.dev,
+ linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+ linux-trace-kernel@vger.kernel.org, Adhemerval Zanella
+ <adhemerval.zanella@linaro.org>, Xi Ruoyao <xry111@xry111.site>
+Subject: Re: [PATCH v3 1/5] mm: Define VM_DROPPABLE for powerpc/32
+In-Reply-To: <a0454ec1a8ab3455abc8205357681eaa685cd49b.1725031952.git.christophe.leroy@csgroup.eu>
+References: <cover.1725031952.git.christophe.leroy@csgroup.eu>
+ <a0454ec1a8ab3455abc8205357681eaa685cd49b.1725031952.git.christophe.leroy@csgroup.eu>
+Date: Sun, 01 Sep 2024 21:17:02 +1000
+Message-ID: <87bk17ei8h.fsf@mail.lhotse>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <35904aa5-9851-4894-b953-689904bf33ca@hust.edu.cn> <58b7c7d2-f60c-4a2d-9cb5-d583182bfef4@gmail.com>
-In-Reply-To: <58b7c7d2-f60c-4a2d-9cb5-d583182bfef4@gmail.com>
-From: Dongliang Mu <mudongliangabcd@gmail.com>
-Date: Sun, 1 Sep 2024 18:38:02 +0800
-Message-ID: <CAD-N9QXks-bFxz+4NVbuvG7BJQZrRiodHXqSadqzdA-ammsM1w@mail.gmail.com>
-Subject: Re: [PATCH v2] docs/zh_CN: add the translation of kbuild/gcc-plugins.rst
-To: Akira Yokosawa <akiyks@gmail.com>
-Cc: dzm91@hust.edu.cn, seakeel@gmail.com, corbet@lwn.net, 
-	hust-os-kernel-patches@googlegroups.com, justinstitt@google.com, 
-	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
-	morbo@google.com, nathan@kernel.org, ndesaulniers@google.com, 
-	siyanteng@loongson.cn, alexs@kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain
 
-On Sun, Sep 1, 2024 at 2:03=E2=80=AFPM Akira Yokosawa <akiyks@gmail.com> wr=
-ote:
+Christophe Leroy <christophe.leroy@csgroup.eu> writes:
+> Commit 9651fcedf7b9 ("mm: add MAP_DROPPABLE for designating always
+> lazily freeable mappings") only adds VM_DROPPABLE for 64 bits
+> architectures.
 >
-> Hi,
->
-> I'm not Alex, but let me chime in.
->
-> On Sat, 31 Aug 2024 17:34:11 +0800, Dongliang Mu wrote:
-> > On 2024/8/31 12:11, Alex Shi wrote:
-> >>
-> >> On 8/31/24 11:48 AM, Dongliang Mu wrote:
-> >>> +=E7=9B=AE=E7=9A=84
-> >>> +=3D=3D=3D=3D=3D=3D=3D
-> >>> +
-> >> there are still a lots of sign incorrect. Please be sure everything lo=
-oks fine in a web browser after you 'make htmldocs'
-> >
-> > What do you mean by "sign incorrect"? I check the html rendering in the
-> > vscode. It seems fine to me.
->
-> You are right.  There is nothing wrong as far as the reST specification
-> is concerned.
->
-> Quote from https://docutils.sourceforge.io/docs/ref/rst/restructuredtext.=
-html#sections
-> (emphasis by me):
->
->     An underline/overline is a single repeated punctuation character that
->     begins in column 1 and forms a line extending *at least* as far as th=
-e
->     right edge of the title text.
->
+> In order to also use the getrandom vDSO implementation on powerpc/32,
+> use VM_ARCH_1 for VM_DROPPABLE on powerpc/32. This is possible because
+> VM_ARCH_1 is used for VM_SAO on powerpc and VM_SAO is only for
+> powerpc/64.
 
-I see. Will send a v3 patch.
+Also, there can't be any existing users of VM_SAO on 32-bit, because PROT_SAO
+(which maps to VM_SAO) is only accepted on CPUs that support SAO, and
+those CPUs are all 64-bit.
 
-> HTH, Akira
->
-> >
-> > Dongliang Mu
->
->
+cheers
