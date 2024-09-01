@@ -1,171 +1,154 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 508BE17CA09;
-	Sun,  1 Sep 2024 13:59:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1DE0E17E44A;
+	Sun,  1 Sep 2024 16:15:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725199189; cv=none; b=nZxwLNyrzd/Ow7zEI6t4bai5hHPOyIEHpSLnRs8LwgKyDJtngmGkclkgBbGeq3AEMfUbxu1ul1GPDwXWDr633kJRKd4gAOrNf/07//74KV7m8uqnPFywmQLgAohvuncW7FBuLXFam7ATuqnl3pupoGtRHhKoKqesIn7aZ4wZctU=
+	t=1725207339; cv=none; b=n4wiyz/xPKN6DQqTSVBxy2Cyd1vYzdgS4CI42c77xQezcVmjeYf7LsS9E169qtGH8aXi5O5uSJX+35i9MIeSrSe6UvFAbnKp6J7teOAMZCa+Zr4cyPH8/V3Wd9lTe3ynYW+9mI2HHitdFcgQx8pjnNRG68kKE0DDYVL/5ADDdXo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725199189; c=relaxed/simple;
-	bh=8PIFY8LG34AjsukZzVTGF0xAjNP4Y9QybWb1k8i7YIE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=eXx8jwZfo1fSlz4llS4Mz9ZUMwE25swRYipPFbR8fkqgSNwGHA228ibb9jbSJL0psKZHCiD2K+IcRLyle0vUS/bjEdQruSDQmrWcrYSki7sCIFEqRkpXgNMeGXHmjQQ6SLyjdjxPYC9vBckaPIJRS0nP7nXungAI/R3M/bS6Yik=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=XW+izhTg; arc=none smtp.client-ip=198.175.65.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1725207339; c=relaxed/simple;
+	bh=gYIgZOi4sdR4hTdNE3LJJ3LeXGN5BLGNfkofNqnsRBc=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=N6qqo20wIkhFTpJlW43OidiwknW60YVmFQQ/2ZN47qOO+nTSh5IRp0EOHOg84KyhTVjQjPaOymrBVRws8KlIDKDO6Vm3N3zddDoosP9lVeOiofyw+Dt9eSr9Fdm4Qsa5IISgmuAnBSVlhDRsc7CLa7QvhG0zjjqvXDQl0NRe1uo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=F5h1/eNL; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="XW+izhTg"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1725199188; x=1756735188;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=8PIFY8LG34AjsukZzVTGF0xAjNP4Y9QybWb1k8i7YIE=;
-  b=XW+izhTgKHLCXZ8Y1ZF3ZKCjwN3OArq8Kvjhnf3jjTOTRJcA6FhOuSjA
-   yfXRAE/hWqqR/SQKh5lV7ppHdPoTEfd13hQzOU0pXKT+buhqDzOYC09sQ
-   J+JP32WyRB2fokaWTF74XBmgCbYbgeCs2q3siKrRVOpZU+LZ4MSyWAOLE
-   FUSepWyaIK9nT6tpHt0qG+8mZsZzH4XSKh1vHTWfcXm93b2UWsYqCanm+
-   XlYCvw+8emojAOg2BjftGTG0l3n3D49sP1m8blKrSSa50eMuWOefNAUih
-   +cpktLpG1oxxZdctTt+OIbC/TmdkNWxGlMV0pmDQYfF3CadPAsYPax1+d
-   Q==;
-X-CSE-ConnectionGUID: lOUYgVebSxW4IjjPom4zQg==
-X-CSE-MsgGUID: 0LBSLXoHRAWnBoTYoYH1Dg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11182"; a="27576186"
-X-IronPort-AV: E=Sophos;i="6.10,194,1719903600"; 
-   d="scan'208";a="27576186"
-Received: from orviesa009.jf.intel.com ([10.64.159.149])
-  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Sep 2024 06:59:47 -0700
-X-CSE-ConnectionGUID: G+zkmi1VSs6AISZpXUW1Gg==
-X-CSE-MsgGUID: JEuX1tH0SGynNNpfRmHgzA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.10,194,1719903600"; 
-   d="scan'208";a="64301483"
-Received: from lkp-server01.sh.intel.com (HELO 9c6b1c7d3b50) ([10.239.97.150])
-  by orviesa009.jf.intel.com with ESMTP; 01 Sep 2024 06:59:46 -0700
-Received: from kbuild by 9c6b1c7d3b50 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1skl7H-0003hu-1b;
-	Sun, 01 Sep 2024 13:59:43 +0000
-Date: Sun, 1 Sep 2024 21:59:26 +0800
-From: kernel test robot <lkp@intel.com>
-To: Yafang Shao <laoar.shao@gmail.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [RFC PATCH] NFS: Fix missing files in `ls` command output
-Message-ID: <202409012146.wYz4Qg5V-lkp@intel.com>
-References: <20240829091340.2043-1-laoar.shao@gmail.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="F5h1/eNL"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 939F5C4CECA;
+	Sun,  1 Sep 2024 16:15:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1725207338;
+	bh=gYIgZOi4sdR4hTdNE3LJJ3LeXGN5BLGNfkofNqnsRBc=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=F5h1/eNLAut+K9xbInA8o1Vqa2sZpvVnt33i+mDoFpaubGehtbFtkTdZKWa1mvOQU
+	 CSsiRwCvOWvZvMvEO8L0Dsxwyr89B9qMvVFfrWbzq6Z8wKms7E7vADuGZJavaJ+Yq9
+	 ddCRkatwMBI2yP8xVSOJokY6nLAtiaa47fyw12UjAMSKYqFuQqVvxjY3Vk9ZgQzRoc
+	 6bOCtTkFHWjSazc04tEnJCsudAEBR8Pcv/himZ9VWJRdbe++qCe48wzQKqTx7uOX07
+	 J7ewjUPy7qvCfaKAR8hR3puGLgD0egOP9gXsf94jOOO8lGHC7jbxrL/PZ8tNivTSUu
+	 C2srQRHZ3LE7g==
+Received: by mail-lf1-f41.google.com with SMTP id 2adb3069b0e04-53346132348so4320883e87.2;
+        Sun, 01 Sep 2024 09:15:38 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCVUpQ468UjH0YYC43sQzFBKnkfsv3LtvM4G9+Q5MmJSU4HAWAWIjvCmTQzG7qFjvYRU7/DjeZ8=@lists.linux.dev, AJvYcCX6Kp8gzTNtGA0EhzTOYHXVoDYuQdrmbM5+u3lhUl4OhzS7SZW72LqqK2sPMeBESa0GGHDZmA==@lists.linux.dev
+X-Gm-Message-State: AOJu0YyY8hTbBgLvs9NoCVmdoQ/LauZnA+y7RUI0gXVsCsoHpuv7sKTS
+	eGs6/iw7RIB2dxgWNyZrBbrqPld5+r0KnW5Sl8s/2WSA+mK91cBcvuAcHDTXCRLrj6vPQ4/RUEK
+	4bIH02tuf2fgIY4VOvluyGcMefe8=
+X-Google-Smtp-Source: AGHT+IEvW4vK5zxx451a7ZmsPELGu2ASm3u0aIbHJUwKBVb/P5sQhkJtI91jLzLi0FROvKEcgj/L3zpZL4SS+3Wibx0=
+X-Received: by 2002:a05:6512:282b:b0:533:d3e:16e9 with SMTP id
+ 2adb3069b0e04-53546bb4402mr4892938e87.57.1725207337206; Sun, 01 Sep 2024
+ 09:15:37 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240829091340.2043-1-laoar.shao@gmail.com>
+References: <20240807-macos-build-support-v1-0-4cd1ded85694@samsung.com>
+ <20240807-macos-build-support-v1-8-4cd1ded85694@samsung.com>
+ <CGME20240807110435eucas1p2eca071b0a0122b8686d43c57bd94dc8c@eucas1p2.samsung.com>
+ <2024080717-cross-retiree-862e@gregkh> <dxkmmrlhlhsrjulnyabfgcr37ojway2dxaypelf3uchkmhw4jn@z54e33jdpxmr>
+ <2024080720-skyline-recapture-d80d@gregkh> <20240807-mottled-stoic-degu-d1e4cb@lindesnes>
+ <20240823225450.spuvjs5b5ruujim4@AALNPWDAGOMEZ1.aal.scsc.local> <ZtIjNBhqdxmMBxfM@fjasle.eu>
+In-Reply-To: <ZtIjNBhqdxmMBxfM@fjasle.eu>
+From: Masahiro Yamada <masahiroy@kernel.org>
+Date: Mon, 2 Sep 2024 01:15:01 +0900
+X-Gmail-Original-Message-ID: <CAK7LNAQhHBi7nSG5SAbqD3HFO3uMR6GHckZHcQXgWao7G8i9gw@mail.gmail.com>
+Message-ID: <CAK7LNAQhHBi7nSG5SAbqD3HFO3uMR6GHckZHcQXgWao7G8i9gw@mail.gmail.com>
+Subject: Re: [PATCH 08/12] include: add elf.h support
+To: Nicolas Schier <nicolas@fjasle.eu>
+Cc: Daniel Gomez <da.gomez@samsung.com>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	Nathan Chancellor <nathan@kernel.org>, Lucas De Marchi <lucas.demarchi@intel.com>, 
+	=?UTF-8?Q?Thomas_Hellstr=C3=B6m?= <thomas.hellstrom@linux.intel.com>, 
+	Rodrigo Vivi <rodrigo.vivi@intel.com>, 
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, Maxime Ripard <mripard@kernel.org>, 
+	Thomas Zimmermann <tzimmermann@suse.de>, David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>, 
+	William Hubbs <w.d.hubbs@gmail.com>, Chris Brannon <chris@the-brannons.com>, 
+	Kirk Reiser <kirk@reisers.ca>, Samuel Thibault <samuel.thibault@ens-lyon.org>, 
+	Paul Moore <paul@paul-moore.com>, Stephen Smalley <stephen.smalley.work@gmail.com>, 
+	Ondrej Mosnacek <omosnace@redhat.com>, Catalin Marinas <catalin.marinas@arm.com>, 
+	Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>, Oliver Upton <oliver.upton@linux.dev>, 
+	James Morse <james.morse@arm.com>, Suzuki K Poulose <suzuki.poulose@arm.com>, 
+	Zenghui Yu <yuzenghui@huawei.com>, Jiri Slaby <jirislaby@kernel.org>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, 
+	Justin Stitt <justinstitt@google.com>, 
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, 
+	"linux-kbuild@vger.kernel.org" <linux-kbuild@vger.kernel.org>, 
+	"intel-xe@lists.freedesktop.org" <intel-xe@lists.freedesktop.org>, 
+	"dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>, 
+	"speakup@linux-speakup.org" <speakup@linux-speakup.org>, 
+	"selinux@vger.kernel.org" <selinux@vger.kernel.org>, 
+	"linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>, 
+	"kvmarm@lists.linux.dev" <kvmarm@lists.linux.dev>, 
+	"linux-serial@vger.kernel.org" <linux-serial@vger.kernel.org>, 
+	"llvm@lists.linux.dev" <llvm@lists.linux.dev>, Finn Behrens <me@kloenk.dev>, 
+	"Daniel Gomez (Samsung)" <d+samsung@kruces.com>, "gost.dev@samsung.com" <gost.dev@samsung.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Yafang,
-
-[This is a private test report for your RFC patch.]
-kernel test robot noticed the following build warnings:
-
-[auto build test WARNING on trondmy-nfs/linux-next]
-[also build test WARNING on linus/master v6.11-rc6 next-20240830]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Yafang-Shao/NFS-Fix-missing-files-in-ls-command-output/20240829-171711
-base:   git://git.linux-nfs.org/projects/trondmy/linux-nfs.git linux-next
-patch link:    https://lore.kernel.org/r/20240829091340.2043-1-laoar.shao%40gmail.com
-patch subject: [RFC PATCH] NFS: Fix missing files in `ls` command output
-config: i386-randconfig-001-20240901 (https://download.01.org/0day-ci/archive/20240901/202409012146.wYz4Qg5V-lkp@intel.com/config)
-compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240901/202409012146.wYz4Qg5V-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202409012146.wYz4Qg5V-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> fs/nfs/dir.c:326:6: warning: variable 'cache_entry' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
-     326 |         if (ret) {
-         |             ^~~
-   fs/nfs/dir.c:345:17: note: uninitialized use occurs here
-     345 |         *prev_cookie = cache_entry->cookie;
-         |                        ^~~~~~~~~~~
-   fs/nfs/dir.c:326:2: note: remove the 'if' if its condition is always false
-     326 |         if (ret) {
-         |         ^~~~~~~~~~
-     327 |                 kfree(name);
-         |                 ~~~~~~~~~~~~
-     328 |                 goto out;
-         |                 ~~~~~~~~~
-     329 |         }
-         |         ~
-   fs/nfs/dir.c:323:6: warning: variable 'cache_entry' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
-     323 |         if (!name)
-         |             ^~~~~
-   fs/nfs/dir.c:345:17: note: uninitialized use occurs here
-     345 |         *prev_cookie = cache_entry->cookie;
-         |                        ^~~~~~~~~~~
-   fs/nfs/dir.c:323:2: note: remove the 'if' if its condition is always false
-     323 |         if (!name)
-         |         ^~~~~~~~~~
-     324 |                 goto out;
-         |                 ~~~~~~~~
-   fs/nfs/dir.c:316:43: note: initialize the variable 'cache_entry' to silence this warning
-     316 |         struct nfs_cache_array_entry *cache_entry;
-         |                                                  ^
-         |                                                   = NULL
-   2 warnings generated.
+On Sat, Aug 31, 2024 at 4:54=E2=80=AFAM Nicolas Schier <nicolas@fjasle.eu> =
+wrote:
+>
+> On Sat, Aug 24, 2024 at 12:54:50AM +0200 Daniel Gomez wrote:
+> > On Wed, Aug 07, 2024 at 05:46:03PM +0200, Nicolas Schier wrote:
+> > > On Wed, Aug 07, 2024 at 04:18:54PM +0200, Greg Kroah-Hartman wrote:
+> > > > On Wed, Aug 07, 2024 at 02:13:57PM +0000, Daniel Gomez wrote:
+> > > > > > Also, as this is not internal for the kernel, but rather for us=
+erspace
+> > > > > > builds, shouldn't the include/ path be different?
+> > > > >
+> > > > > Can you suggest an alternative path or provide documentation that=
+ could help
+> > > > > identify the correct location? Perhaps usr/include?
+> > > >
+> > > > That is better than the generic include path as you are attempting =
+to
+> > > > mix userspace and kernel headers in the same directory :(
+> > >
+> > > Please keep in mind, that usr/include/ currently does not hold a sing=
+le
+> > > header file but is used for dynamically composing the UAPI header tre=
+e.
+> > >
+> > > In general, I do not like the idea of keeping a elf.h file here that
+> > > possibly is out-of-sync with the actual system's version (even though
+> > > elf.h should not see that much changes).  Might it be more helpful to
+> > > provide a "development kit" for Linux devs that need to build on MacO=
+S
+> > > that provides necessary missing system header files, instead of mergi=
+ng
+> > > those into upstream?
+> >
+> > I took this suggestion and tried pushing a Homebrew formula/package her=
+e [1].
+> > I think I chose a wrong name and maybe something like "development kit"=
+ would
+> > have been better. However, would it be possible instead to include the =
+*.rb file
+> > in the scripts/ directory? So users of this can generate the developmen=
+t kit in
+> > their environments. I would maintain the script to keep it in sync with=
+ the
+> > required glibc version for the latest kernel version.
+> >
+> > [1] https://github.com/Homebrew/homebrew-core/pull/181885
+>
+> I think it sounds sensible to hold that formula file in the upstream tree=
+.  But
+> I am not sure if scripts/ is the best location.
+>
+> Masahiro, what do you think?
 
 
-vim +326 fs/nfs/dir.c
+I do not know much about the homebrew, but why does the upstream
+kernel need to merge such masOS stuff?
 
-d1bacf9eb2fd0e Bryan Schumaker       2010-09-24  310  
-ec108d3cc7663d Anna Schumaker        2023-04-04  311  static int nfs_readdir_folio_array_append(struct folio *folio,
-0adf85b445c7fb Trond Myklebust       2022-02-27  312  					  const struct nfs_entry *entry,
-b04660a1b4ac01 Yafang Shao           2024-08-29  313  					  u64 *cookie, u64 *prev_cookie)
-d1bacf9eb2fd0e Bryan Schumaker       2010-09-24  314  {
-a52a8a6adad99e Trond Myklebust       2020-11-01  315  	struct nfs_cache_array *array;
-4a201d6e3f4253 Trond Myklebust       2010-10-23  316  	struct nfs_cache_array_entry *cache_entry;
-a52a8a6adad99e Trond Myklebust       2020-11-01  317  	const char *name;
-0adf85b445c7fb Trond Myklebust       2022-02-27  318  	int ret = -ENOMEM;
-4a201d6e3f4253 Trond Myklebust       2010-10-23  319  
-a52a8a6adad99e Trond Myklebust       2020-11-01  320  	name = nfs_readdir_copy_name(entry->name, entry->len);
-3020093f578fb6 Trond Myklebust       2010-11-20  321  
-4b71e2416ec4cb Fabio M. De Francesco 2023-05-03  322  	array = kmap_local_folio(folio, 0);
-0adf85b445c7fb Trond Myklebust       2022-02-27  323  	if (!name)
-0adf85b445c7fb Trond Myklebust       2022-02-27  324  		goto out;
-b1e21c97437f64 Trond Myklebust       2020-11-01  325  	ret = nfs_readdir_array_can_expand(array);
-a52a8a6adad99e Trond Myklebust       2020-11-01 @326  	if (ret) {
-a52a8a6adad99e Trond Myklebust       2020-11-01  327  		kfree(name);
-4a201d6e3f4253 Trond Myklebust       2010-10-23  328  		goto out;
-a52a8a6adad99e Trond Myklebust       2020-11-01  329  	}
-d1bacf9eb2fd0e Bryan Schumaker       2010-09-24  330  
-b1e21c97437f64 Trond Myklebust       2020-11-01  331  	cache_entry = &array->array[array->size];
-0adf85b445c7fb Trond Myklebust       2022-02-27  332  	cache_entry->cookie = array->last_cookie;
-4a201d6e3f4253 Trond Myklebust       2010-10-23  333  	cache_entry->ino = entry->ino;
-0b26a0bf6ff398 Trond Myklebust       2010-11-20  334  	cache_entry->d_type = entry->d_type;
-a52a8a6adad99e Trond Myklebust       2020-11-01  335  	cache_entry->name_len = entry->len;
-a52a8a6adad99e Trond Myklebust       2020-11-01  336  	cache_entry->name = name;
-d1bacf9eb2fd0e Bryan Schumaker       2010-09-24  337  	array->last_cookie = entry->cookie;
-762567b7c798af Trond Myklebust       2020-11-04  338  	if (array->last_cookie <= cache_entry->cookie)
-762567b7c798af Trond Myklebust       2020-11-04  339  		array->cookies_are_ordered = 0;
-8cd51a0ccd1bed Trond Myklebust       2010-11-15  340  	array->size++;
-47c716cbf638a1 Trond Myklebust       2010-12-07  341  	if (entry->eof != 0)
-b1e21c97437f64 Trond Myklebust       2020-11-01  342  		nfs_readdir_array_set_eof(array);
-4a201d6e3f4253 Trond Myklebust       2010-10-23  343  out:
-0adf85b445c7fb Trond Myklebust       2022-02-27  344  	*cookie = array->last_cookie;
-b04660a1b4ac01 Yafang Shao           2024-08-29  345  	*prev_cookie = cache_entry->cookie;
-4b71e2416ec4cb Fabio M. De Francesco 2023-05-03  346  	kunmap_local(array);
-4a201d6e3f4253 Trond Myklebust       2010-10-23  347  	return ret;
-d1bacf9eb2fd0e Bryan Schumaker       2010-09-24  348  }
-d1bacf9eb2fd0e Bryan Schumaker       2010-09-24  349  
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+
+>
+> Kind regards,
+> Nicolas
+
+
+
+--=20
+Best Regards
+Masahiro Yamada
