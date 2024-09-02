@@ -1,521 +1,149 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
+Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D37B195;
-	Mon,  2 Sep 2024 11:36:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A237617BEB2
+	for <llvm@lists.linux.dev>; Mon,  2 Sep 2024 12:04:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=93.17.235.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725277017; cv=none; b=PuadjoamfmWVciw36uu9WwwKFHbnfupSGU7ZICCAmcni4EdLE5tSTW245b+AAvjKay46AFau3DEk41RfSaz0totsXgZXUiBAfR/Nr7ABgPzVNSVoWI4jhIqClRtphvvf7obS7lBfr+dYMc5Mcxvrt7aOQeRup/CyJ+o797fosJE=
+	t=1725278689; cv=none; b=VJHPIw+CL7hknvk8ian/x42QgGLbeXmkLAnPHoKIg1GHN53GPtp6UGCnWmM94K5ZH1Vqff7Pe9EPJsLwYMm4Bk6FIpfTJPoMmEG9v3oOIqwtpOAmw9XQLUh6oymhFdt5y4SpBss6pDzQR73l4GYWLt/yOnnv0RWOhI5yarhJ8pA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725277017; c=relaxed/simple;
-	bh=np78Ags0a5gE0HETTzL/UxOEG6q1FqBn20k4ktX/kNY=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=lYox4HWEjoxDhKNJbjLn4EKE5QbjZ1wNJovNkKJuPt1FQ7aOeVi2pNu7DPqOYHwqaYY5GUYNJqj65J3RKh0IGh//eSPtSPHaPRj+CDe/WrQhga47qscCLeHFlBrkGHZssdH3Q63+eiGneUw/BwomdcSybQe74Nj4/g+QnBIcvMo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=VgwFozHL; arc=none smtp.client-ip=192.198.163.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="VgwFozHL"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1725277015; x=1756813015;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=np78Ags0a5gE0HETTzL/UxOEG6q1FqBn20k4ktX/kNY=;
-  b=VgwFozHLUZDGqkabO3EMTHgfuH/gbz2511A+BsEg7Fmj0SyexU/d76Lj
-   eRLkIHOH+7X+kzc+UbyQWUGBxWMy3xpnwa/iBaKKzNdD0UHUmRc8xin5H
-   KrF5J8/j8NPtNSpUWI1OY/JRyvU2IoML8tG4ETrov+8N7hZ/rhn20nOS7
-   7L3W9FlJiiAPeh0qiGESRqHsl2TSk+m7dhQNaoq7TNndk95qzjiZU84cR
-   PK6OV2bCdwE60die1RsZbUh8kjOWGUraP1X/NAMNctbBYtQhBuugwWTy+
-   u7gghZn/RP3IfLedyCbQW1svwqClEvJE5g9rTW2fJN4h2u7hTEPR2fWap
-   w==;
-X-CSE-ConnectionGUID: kSvHeNw5TJi5F5SFyghloQ==
-X-CSE-MsgGUID: ZD6ugSOdSaOhysPKdqqPCw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11182"; a="49257581"
-X-IronPort-AV: E=Sophos;i="6.10,195,1719903600"; 
-   d="scan'208";a="49257581"
-Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Sep 2024 04:36:54 -0700
-X-CSE-ConnectionGUID: QA7XztkoTpi0YX8SyvOR3g==
-X-CSE-MsgGUID: PTHLfATPTIq+LMph+3c3DA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.10,195,1719903600"; 
-   d="scan'208";a="95397393"
-Received: from lkp-server01.sh.intel.com (HELO 9c6b1c7d3b50) ([10.239.97.150])
-  by fmviesa001.fm.intel.com with ESMTP; 02 Sep 2024 04:36:52 -0700
-Received: from kbuild by 9c6b1c7d3b50 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1sl5MY-0005Nk-0b;
-	Mon, 02 Sep 2024 11:36:50 +0000
-Date: Mon, 2 Sep 2024 19:36:39 +0800
-From: kernel test robot <lkp@intel.com>
-To: Josh Poimboeuf <jpoimboe@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [jpoimboe:objtool-diff 5/13] crypto/xor.c:98:4: error: expected ')'
-Message-ID: <202409021941.ThGglQhp-lkp@intel.com>
+	s=arc-20240116; t=1725278689; c=relaxed/simple;
+	bh=6QJA22qLgaef3fSOvlKvx8xuZHLDNXZ+/mQjcDCzEMY=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=uVjXy6nOQxcaUrxvHUcnkLWCzaqARXY9ZtuljvhgKcNga/7glXGp7pvwclw3oXdM0+hywG3PN8Dh0ZB2psvjm98z29LK3x/XsKHmCDTy8Q8CdonaNIq3XUFFgajoci5k2p3NN9QX8VWEYfzvBMmtTDCCUgGPf7rrq3X2yLMhBos=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=csgroup.eu; spf=pass smtp.mailfrom=csgroup.eu; arc=none smtp.client-ip=93.17.235.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=csgroup.eu
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=csgroup.eu
+Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
+	by localhost (Postfix) with ESMTP id 4Wy6rF4LfZz9sSN;
+	Mon,  2 Sep 2024 14:04:45 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from pegase2.c-s.fr ([172.26.127.65])
+	by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id yk9NbO304bBT; Mon,  2 Sep 2024 14:04:45 +0200 (CEST)
+Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
+	by pegase2.c-s.fr (Postfix) with ESMTP id 4Wy6rF35r3z9sS7;
+	Mon,  2 Sep 2024 14:04:45 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+	by messagerie.si.c-s.fr (Postfix) with ESMTP id 5422D8B76D;
+	Mon,  2 Sep 2024 14:04:45 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from messagerie.si.c-s.fr ([127.0.0.1])
+	by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
+	with ESMTP id 52TK7Nj36tHo; Mon,  2 Sep 2024 14:04:45 +0200 (CEST)
+Received: from PO20335.idsi0.si.c-s.fr (unknown [192.168.234.167])
+	by messagerie.si.c-s.fr (Postfix) with ESMTP id 524D28B763;
+	Mon,  2 Sep 2024 14:04:44 +0200 (CEST)
+From: Christophe Leroy <christophe.leroy@csgroup.eu>
+To: Andrew Morton <akpm@linux-foundation.org>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+	Michael Ellerman <mpe@ellerman.id.au>,
+	Nicholas Piggin <npiggin@gmail.com>,
+	Naveen N Rao <naveen@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Shuah Khan <shuah@kernel.org>,
+	"Jason A . Donenfeld" <Jason@zx2c4.com>
+Cc: Christophe Leroy <christophe.leroy@csgroup.eu>,
+	linux-kernel@vger.kernel.org,
+	linuxppc-dev@lists.ozlabs.org,
+	linux-kselftest@vger.kernel.org,
+	llvm@lists.linux.dev,
+	linux-fsdevel@vger.kernel.org,
+	linux-mm@kvack.org,
+	linux-trace-kernel@vger.kernel.org,
+	Adhemerval Zanella <adhemerval.zanella@linaro.org>,
+	Xi Ruoyao <xry111@xry111.site>
+Subject: [PATCH v4 0/5] Wire up getrandom() vDSO implementation on powerpc
+Date: Mon,  2 Sep 2024 14:04:37 +0200
+Message-ID: <cover.1725278148.git.christophe.leroy@csgroup.eu>
+X-Mailer: git-send-email 2.44.0
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1725278679; l=3360; i=christophe.leroy@csgroup.eu; s=20211009; h=from:subject:message-id; bh=6QJA22qLgaef3fSOvlKvx8xuZHLDNXZ+/mQjcDCzEMY=; b=rkRd0PJANyDxoARin8UZaDw85VDVM67JUNJRPKtg/l5osHwVfNdLo2rqVgI+mMAut8vXZ2bwB KXoGERc0HRoCjQSpBMuxuW9ZLqlOAtlY/8R4T+eTO3MO/rpoaIMyeN7
+X-Developer-Key: i=christophe.leroy@csgroup.eu; a=ed25519; pk=HIzTzUj91asvincQGOFx6+ZF5AoUuP9GdOtQChs7Mm0=
+Content-Transfer-Encoding: 8bit
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jpoimboe/linux.git objtool-diff
-head:   d63894f7f2633e98788b1a74a983e9dbea49d1b7
-commit: 919add2736f64cbcbf2a7ec537e95ee652c9f8c3 [5/13] x86/alternative: Create symbols for special section entries
-config: um-randconfig-002-20240902 (https://download.01.org/0day-ci/archive/20240902/202409021941.ThGglQhp-lkp@intel.com/config)
-compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240902/202409021941.ThGglQhp-lkp@intel.com/reproduce)
+This series wires up getrandom() vDSO implementation on powerpc.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202409021941.ThGglQhp-lkp@intel.com/
+Tested on PPC32 on real hardware.
+Tested on PPC64 (both BE and LE) on QEMU:
 
-All errors (new ones prefixed by >>):
+Performance on powerpc 885:
+	~# ./vdso_test_getrandom bench-single
+	   vdso: 25000000 times in 62.938002291 seconds
+	   libc: 25000000 times in 535.581916866 seconds
+	syscall: 25000000 times in 531.525042806 seconds
 
->> crypto/xor.c:98:4: error: expected ')'
-                           mb(); /* prevent loop optimization */
-                           ^
-   arch/x86/um/asm/barrier.h:15:14: note: expanded from macro 'mb'
-   #define mb()    alternative("lock; addl $0,0(%%esp)", "mfence", X86_FEATURE_XMM2)
-                   ^
-   arch/x86/include/asm/alternative.h:277:23: note: expanded from macro 'alternative'
-           asm_inline volatile (ALTERNATIVE(oldinstr, newinstr, ft_flags) : : : "memory")
-                                ^
-   arch/x86/include/asm/alternative.h:228:2: note: expanded from macro 'ALTERNATIVE'
-           ALTINSTR_ENTRY(ft_flags, 1)                                     \
-           ^
-   arch/x86/include/asm/alternative.h:208:2: note: expanded from macro 'ALTINSTR_ENTRY'
-           FAKE_SYMBOL(__alt_, 681f)                                             \
-           ^
-   crypto/xor.c:100:4: error: expected ')'
-                           mb();
-                           ^
-   arch/x86/um/asm/barrier.h:15:14: note: expanded from macro 'mb'
-   #define mb()    alternative("lock; addl $0,0(%%esp)", "mfence", X86_FEATURE_XMM2)
-                   ^
-   arch/x86/include/asm/alternative.h:277:23: note: expanded from macro 'alternative'
-           asm_inline volatile (ALTERNATIVE(oldinstr, newinstr, ft_flags) : : : "memory")
-                                ^
-   arch/x86/include/asm/alternative.h:228:2: note: expanded from macro 'ALTERNATIVE'
-           ALTINSTR_ENTRY(ft_flags, 1)                                     \
-           ^
-   arch/x86/include/asm/alternative.h:208:2: note: expanded from macro 'ALTINSTR_ENTRY'
-           FAKE_SYMBOL(__alt_, 681f)                                             \
-           ^
-   2 errors generated.
---
-   include/asm-generic/io.h:51:24: note: expanded from macro '__io_pbw'
-   #define __io_pbw()     __io_bw()
-                          ^
-   include/asm-generic/io.h:39:24: note: expanded from macro '__io_bw'
-   #define __io_bw()      wmb()
-                          ^
-   arch/x86/um/asm/barrier.h:17:15: note: expanded from macro 'wmb'
-   #define wmb()   alternative("lock; addl $0,0(%%esp)", "sfence", X86_FEATURE_XMM)
-                   ^
-   arch/x86/include/asm/alternative.h:277:23: note: expanded from macro 'alternative'
-           asm_inline volatile (ALTERNATIVE(oldinstr, newinstr, ft_flags) : : : "memory")
-                                ^
-   arch/x86/include/asm/alternative.h:228:2: note: expanded from macro 'ALTERNATIVE'
-           ALTINSTR_ENTRY(ft_flags, 1)                                     \
-           ^
-   arch/x86/include/asm/alternative.h:208:2: note: expanded from macro 'ALTINSTR_ENTRY'
-           FAKE_SYMBOL(__alt_, 681f)                                             \
-           ^
-   In file included from drivers/virtio/virtio_ring.c:6:
-   In file included from include/linux/virtio.h:7:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/um/include/asm/io.h:24:
-   include/asm-generic/io.h:585:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writeb(value, PCI_IOBASE + addr);
-                               ~~~~~~~~~~ ^
-   include/asm-generic/io.h:594:2: error: expected ')'
-           __io_pbw();
-           ^
-   include/asm-generic/io.h:51:24: note: expanded from macro '__io_pbw'
-   #define __io_pbw()     __io_bw()
-                          ^
-   include/asm-generic/io.h:39:24: note: expanded from macro '__io_bw'
-   #define __io_bw()      wmb()
-                          ^
-   arch/x86/um/asm/barrier.h:17:15: note: expanded from macro 'wmb'
-   #define wmb()   alternative("lock; addl $0,0(%%esp)", "sfence", X86_FEATURE_XMM)
-                   ^
-   arch/x86/include/asm/alternative.h:277:23: note: expanded from macro 'alternative'
-           asm_inline volatile (ALTERNATIVE(oldinstr, newinstr, ft_flags) : : : "memory")
-                                ^
-   arch/x86/include/asm/alternative.h:228:2: note: expanded from macro 'ALTERNATIVE'
-           ALTINSTR_ENTRY(ft_flags, 1)                                     \
-           ^
-   arch/x86/include/asm/alternative.h:208:2: note: expanded from macro 'ALTINSTR_ENTRY'
-           FAKE_SYMBOL(__alt_, 681f)                                             \
-           ^
-   In file included from drivers/virtio/virtio_ring.c:6:
-   In file included from include/linux/virtio.h:7:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/um/include/asm/io.h:24:
-   include/asm-generic/io.h:595:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:604:2: error: expected ')'
-           __io_pbw();
-           ^
-   include/asm-generic/io.h:51:24: note: expanded from macro '__io_pbw'
-   #define __io_pbw()     __io_bw()
-                          ^
-   include/asm-generic/io.h:39:24: note: expanded from macro '__io_bw'
-   #define __io_bw()      wmb()
-                          ^
-   arch/x86/um/asm/barrier.h:17:15: note: expanded from macro 'wmb'
-   #define wmb()   alternative("lock; addl $0,0(%%esp)", "sfence", X86_FEATURE_XMM)
-                   ^
-   arch/x86/include/asm/alternative.h:277:23: note: expanded from macro 'alternative'
-           asm_inline volatile (ALTERNATIVE(oldinstr, newinstr, ft_flags) : : : "memory")
-                                ^
-   arch/x86/include/asm/alternative.h:228:2: note: expanded from macro 'ALTERNATIVE'
-           ALTINSTR_ENTRY(ft_flags, 1)                                     \
-           ^
-   arch/x86/include/asm/alternative.h:208:2: note: expanded from macro 'ALTINSTR_ENTRY'
-           FAKE_SYMBOL(__alt_, 681f)                                             \
-           ^
-   In file included from drivers/virtio/virtio_ring.c:6:
-   In file included from include/linux/virtio.h:7:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/um/include/asm/io.h:24:
-   include/asm-generic/io.h:605:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:693:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsb(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:701:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsw(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:709:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsl(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:718:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesb(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   include/asm-generic/io.h:727:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesw(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   include/asm-generic/io.h:736:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesl(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   In file included from drivers/virtio/virtio_ring.c:7:
->> include/linux/virtio_ring.h:28:3: error: expected ')'
-                   virt_mb();
-                   ^
-   include/asm-generic/barrier.h:213:36: note: expanded from macro 'virt_mb'
-   #define virt_mb() do { kcsan_mb(); __smp_mb(); } while (0)
-                                      ^
-   include/asm-generic/barrier.h:85:20: note: expanded from macro '__smp_mb'
-   #define __smp_mb()      mb()
-                           ^
-   arch/x86/um/asm/barrier.h:15:14: note: expanded from macro 'mb'
-   #define mb()    alternative("lock; addl $0,0(%%esp)", "mfence", X86_FEATURE_XMM2)
-                   ^
-   arch/x86/include/asm/alternative.h:277:23: note: expanded from macro 'alternative'
-           asm_inline volatile (ALTERNATIVE(oldinstr, newinstr, ft_flags) : : : "memory")
-                                ^
-   arch/x86/include/asm/alternative.h:228:2: note: expanded from macro 'ALTERNATIVE'
-           ALTINSTR_ENTRY(ft_flags, 1)                                     \
-           ^
-   arch/x86/include/asm/alternative.h:208:2: note: expanded from macro 'ALTINSTR_ENTRY'
-           FAKE_SYMBOL(__alt_, 681f)                                             \
-           ^
-   In file included from drivers/virtio/virtio_ring.c:7:
-   include/linux/virtio_ring.h:30:3: error: expected ')'
-                   mb();
-                   ^
-   arch/x86/um/asm/barrier.h:15:14: note: expanded from macro 'mb'
-   #define mb()    alternative("lock; addl $0,0(%%esp)", "mfence", X86_FEATURE_XMM2)
-                   ^
-   arch/x86/include/asm/alternative.h:277:23: note: expanded from macro 'alternative'
-           asm_inline volatile (ALTERNATIVE(oldinstr, newinstr, ft_flags) : : : "memory")
-                                ^
-   arch/x86/include/asm/alternative.h:228:2: note: expanded from macro 'ALTERNATIVE'
-           ALTINSTR_ENTRY(ft_flags, 1)                                     \
-           ^
-   arch/x86/include/asm/alternative.h:208:2: note: expanded from macro 'ALTINSTR_ENTRY'
-           FAKE_SYMBOL(__alt_, 681f)                                             \
-           ^
-   In file included from drivers/virtio/virtio_ring.c:7:
-   include/linux/virtio_ring.h:36:3: error: expected ')'
-                   virt_rmb();
-                   ^
-   include/asm-generic/barrier.h:214:38: note: expanded from macro 'virt_rmb'
-   #define virt_rmb() do { kcsan_rmb(); __smp_rmb(); } while (0)
-                                        ^
-   include/asm-generic/barrier.h:89:21: note: expanded from macro '__smp_rmb'
-   #define __smp_rmb()     rmb()
-                           ^
-   arch/x86/um/asm/barrier.h:16:15: note: expanded from macro 'rmb'
-   #define rmb()   alternative("lock; addl $0,0(%%esp)", "lfence", X86_FEATURE_XMM2)
-                   ^
-   arch/x86/include/asm/alternative.h:277:23: note: expanded from macro 'alternative'
-           asm_inline volatile (ALTERNATIVE(oldinstr, newinstr, ft_flags) : : : "memory")
-                                ^
-   arch/x86/include/asm/alternative.h:228:2: note: expanded from macro 'ALTERNATIVE'
-           ALTINSTR_ENTRY(ft_flags, 1)                                     \
-           ^
-   arch/x86/include/asm/alternative.h:208:2: note: expanded from macro 'ALTINSTR_ENTRY'
-           FAKE_SYMBOL(__alt_, 681f)                                             \
-           ^
-   In file included from drivers/virtio/virtio_ring.c:7:
-   include/linux/virtio_ring.h:38:3: error: expected ')'
-                   dma_rmb();
-                   ^
-   include/asm-generic/barrier.h:77:19: note: expanded from macro 'dma_rmb'
-   #define dma_rmb()       rmb()
-                           ^
-   arch/x86/um/asm/barrier.h:16:15: note: expanded from macro 'rmb'
-   #define rmb()   alternative("lock; addl $0,0(%%esp)", "lfence", X86_FEATURE_XMM2)
-                   ^
-   arch/x86/include/asm/alternative.h:277:23: note: expanded from macro 'alternative'
-           asm_inline volatile (ALTERNATIVE(oldinstr, newinstr, ft_flags) : : : "memory")
-                                ^
-   arch/x86/include/asm/alternative.h:228:2: note: expanded from macro 'ALTERNATIVE'
-           ALTINSTR_ENTRY(ft_flags, 1)                                     \
-           ^
-   arch/x86/include/asm/alternative.h:208:2: note: expanded from macro 'ALTINSTR_ENTRY'
-           FAKE_SYMBOL(__alt_, 681f)                                             \
-           ^
-   In file included from drivers/virtio/virtio_ring.c:7:
-   include/linux/virtio_ring.h:44:3: error: expected ')'
-                   virt_wmb();
-                   ^
-   include/asm-generic/barrier.h:215:38: note: expanded from macro 'virt_wmb'
-   #define virt_wmb() do { kcsan_wmb(); __smp_wmb(); } while (0)
-                                        ^
-   include/asm-generic/barrier.h:93:21: note: expanded from macro '__smp_wmb'
-   #define __smp_wmb()     wmb()
-                           ^
-   arch/x86/um/asm/barrier.h:17:15: note: expanded from macro 'wmb'
-   #define wmb()   alternative("lock; addl $0,0(%%esp)", "sfence", X86_FEATURE_XMM)
-                   ^
-   arch/x86/include/asm/alternative.h:277:23: note: expanded from macro 'alternative'
-           asm_inline volatile (ALTERNATIVE(oldinstr, newinstr, ft_flags) : : : "memory")
-                                ^
-   arch/x86/include/asm/alternative.h:228:2: note: expanded from macro 'ALTERNATIVE'
-           ALTINSTR_ENTRY(ft_flags, 1)                                     \
-           ^
-   arch/x86/include/asm/alternative.h:208:2: note: expanded from macro 'ALTINSTR_ENTRY'
-           FAKE_SYMBOL(__alt_, 681f)                                             \
-           ^
-   In file included from drivers/virtio/virtio_ring.c:7:
-   include/linux/virtio_ring.h:46:3: error: expected ')'
-                   dma_wmb();
-                   ^
-   include/asm-generic/barrier.h:81:19: note: expanded from macro 'dma_wmb'
-   #define dma_wmb()       wmb()
-                           ^
-   arch/x86/um/asm/barrier.h:17:15: note: expanded from macro 'wmb'
-   #define wmb()   alternative("lock; addl $0,0(%%esp)", "sfence", X86_FEATURE_XMM)
-                   ^
-   arch/x86/include/asm/alternative.h:277:23: note: expanded from macro 'alternative'
-           asm_inline volatile (ALTERNATIVE(oldinstr, newinstr, ft_flags) : : : "memory")
-                                ^
-   arch/x86/include/asm/alternative.h:228:2: note: expanded from macro 'ALTERNATIVE'
-           ALTINSTR_ENTRY(ft_flags, 1)                                     \
-           ^
-   arch/x86/include/asm/alternative.h:208:2: note: expanded from macro 'ALTINSTR_ENTRY'
-           FAKE_SYMBOL(__alt_, 681f)                                             \
-           ^
->> drivers/virtio/virtio_ring.c:871:3: error: expected ')'
-                   virtio_store_mb(vq->weak_barriers,
-                   ^
-   include/linux/virtio_ring.h:52:3: note: expanded from macro 'virtio_store_mb'
-                   virt_store_mb(*p, v); \
-                   ^
-   include/asm-generic/barrier.h:216:52: note: expanded from macro 'virt_store_mb'
-   #define virt_store_mb(var, value) do { kcsan_mb(); __smp_store_mb(var, value); } while (0)
-                                                      ^
-   include/asm-generic/barrier.h:127:66: note: expanded from macro '__smp_store_mb'
-   #define __smp_store_mb(var, value)  do { WRITE_ONCE(var, value); __smp_mb(); } while (0)
-                                                                    ^
-   note: (skipping 2 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
-   arch/x86/include/asm/alternative.h:277:23: note: expanded from macro 'alternative'
-           asm_inline volatile (ALTERNATIVE(oldinstr, newinstr, ft_flags) : : : "memory")
-                                ^
-   arch/x86/include/asm/alternative.h:228:2: note: expanded from macro 'ALTERNATIVE'
-           ALTINSTR_ENTRY(ft_flags, 1)                                     \
-           ^
-   arch/x86/include/asm/alternative.h:208:2: note: expanded from macro 'ALTINSTR_ENTRY'
-           FAKE_SYMBOL(__alt_, 681f)                                             \
-           ^
-   fatal error: too many errors emitted, stopping now [-ferror-limit=]
-   12 warnings and 20 errors generated.
---
-   In file included from include/linux/hardirq.h:11:
-   In file included from arch/um/include/asm/hardirq.h:5:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:14:
-   In file included from arch/um/include/asm/io.h:24:
-   include/asm-generic/io.h:585:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writeb(value, PCI_IOBASE + addr);
-                               ~~~~~~~~~~ ^
-   include/asm-generic/io.h:594:2: error: expected ')'
-           __io_pbw();
-           ^
-   include/asm-generic/io.h:51:24: note: expanded from macro '__io_pbw'
-   #define __io_pbw()     __io_bw()
-                          ^
-   include/asm-generic/io.h:39:24: note: expanded from macro '__io_bw'
-   #define __io_bw()      wmb()
-                          ^
-   arch/x86/um/asm/barrier.h:17:15: note: expanded from macro 'wmb'
-   #define wmb()   alternative("lock; addl $0,0(%%esp)", "sfence", X86_FEATURE_XMM)
-                   ^
-   arch/x86/include/asm/alternative.h:277:23: note: expanded from macro 'alternative'
-           asm_inline volatile (ALTERNATIVE(oldinstr, newinstr, ft_flags) : : : "memory")
-                                ^
-   arch/x86/include/asm/alternative.h:228:2: note: expanded from macro 'ALTERNATIVE'
-           ALTINSTR_ENTRY(ft_flags, 1)                                     \
-           ^
-   arch/x86/include/asm/alternative.h:208:2: note: expanded from macro 'ALTINSTR_ENTRY'
-           FAKE_SYMBOL(__alt_, 681f)                                             \
-           ^
-   In file included from drivers/mtd/mtdchar.c:16:
-   In file included from include/linux/backing-dev.h:16:
-   In file included from include/linux/writeback.h:13:
-   In file included from include/linux/blk_types.h:10:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:12:
-   In file included from include/linux/hardirq.h:11:
-   In file included from arch/um/include/asm/hardirq.h:5:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:14:
-   In file included from arch/um/include/asm/io.h:24:
-   include/asm-generic/io.h:595:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:604:2: error: expected ')'
-           __io_pbw();
-           ^
-   include/asm-generic/io.h:51:24: note: expanded from macro '__io_pbw'
-   #define __io_pbw()     __io_bw()
-                          ^
-   include/asm-generic/io.h:39:24: note: expanded from macro '__io_bw'
-   #define __io_bw()      wmb()
-                          ^
-   arch/x86/um/asm/barrier.h:17:15: note: expanded from macro 'wmb'
-   #define wmb()   alternative("lock; addl $0,0(%%esp)", "sfence", X86_FEATURE_XMM)
-                   ^
-   arch/x86/include/asm/alternative.h:277:23: note: expanded from macro 'alternative'
-           asm_inline volatile (ALTERNATIVE(oldinstr, newinstr, ft_flags) : : : "memory")
-                                ^
-   arch/x86/include/asm/alternative.h:228:2: note: expanded from macro 'ALTERNATIVE'
-           ALTINSTR_ENTRY(ft_flags, 1)                                     \
-           ^
-   arch/x86/include/asm/alternative.h:208:2: note: expanded from macro 'ALTINSTR_ENTRY'
-           FAKE_SYMBOL(__alt_, 681f)                                             \
-           ^
-   In file included from drivers/mtd/mtdchar.c:16:
-   In file included from include/linux/backing-dev.h:16:
-   In file included from include/linux/writeback.h:13:
-   In file included from include/linux/blk_types.h:10:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:12:
-   In file included from include/linux/hardirq.h:11:
-   In file included from arch/um/include/asm/hardirq.h:5:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:14:
-   In file included from arch/um/include/asm/io.h:24:
-   include/asm-generic/io.h:605:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:693:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsb(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:701:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsw(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:709:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsl(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:718:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesb(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   include/asm-generic/io.h:727:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesw(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   include/asm-generic/io.h:736:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesl(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   In file included from drivers/mtd/mtdchar.c:24:
->> include/linux/mtd/map.h:427:2: error: expected ')'
-           mb();
-           ^
-   arch/x86/um/asm/barrier.h:15:14: note: expanded from macro 'mb'
-   #define mb()    alternative("lock; addl $0,0(%%esp)", "mfence", X86_FEATURE_XMM2)
-                   ^
-   arch/x86/include/asm/alternative.h:277:23: note: expanded from macro 'alternative'
-           asm_inline volatile (ALTERNATIVE(oldinstr, newinstr, ft_flags) : : : "memory")
-                                ^
-   arch/x86/include/asm/alternative.h:228:2: note: expanded from macro 'ALTERNATIVE'
-           ALTINSTR_ENTRY(ft_flags, 1)                                     \
-           ^
-   arch/x86/include/asm/alternative.h:208:2: note: expanded from macro 'ALTINSTR_ENTRY'
-           FAKE_SYMBOL(__alt_, 681f)                                             \
-           ^
-   12 warnings and 13 errors generated.
-..
+Performance on powerpc 8321:
+	~# ./vdso_test_getrandom bench-single
+	   vdso: 25000000 times in 16.899318858 seconds
+	   libc: 25000000 times in 131.050596522 seconds
+	syscall: 25000000 times in 129.794790389 seconds
 
+Performance on QEMU pseries:
+	~ # ./vdso_test_getrandom bench-single
+	   vdso: 25000000 times in 4.977777162 seconds
+	   libc: 25000000 times in 75.516749981 seconds
+	syscall: 25000000 times in 86.842242014 seconds
 
-vim +98 crypto/xor.c
+Changes in v4:
+- Rebased on recent random git tree (963233ff0133) (The new tree includes selftests fixes)
+- Read/write counter in native byte order
+- Don't use anymore compat macros to write output
+- Fixed selftests build failure with patch 4 (without patch 5) on little endian on PPC64
+- Implement a __kernel_getrandom() stub returning ENOSYS on ppc64 in patch 4 (without patch 5) to make selftests happy.
 
-^1da177e4c3f41 drivers/md/xor.c Linus Torvalds    2005-04-16   81  
-af7cf25dd15b74 crypto/xor.c     Jan Beulich       2012-10-11   82  static void __init
-^1da177e4c3f41 drivers/md/xor.c Linus Torvalds    2005-04-16   83  do_xor_speed(struct xor_block_template *tmpl, void *b1, void *b2)
-^1da177e4c3f41 drivers/md/xor.c Linus Torvalds    2005-04-16   84  {
-^1da177e4c3f41 drivers/md/xor.c Linus Torvalds    2005-04-16   85  	int speed;
-10b0f78a732371 crypto/xor.c     Nathan Chancellor 2020-10-06   86  	int i, j;
-c055e3eae0f133 crypto/xor.c     Ard Biesheuvel    2020-09-26   87  	ktime_t min, start, diff;
-^1da177e4c3f41 drivers/md/xor.c Linus Torvalds    2005-04-16   88  
-^1da177e4c3f41 drivers/md/xor.c Linus Torvalds    2005-04-16   89  	tmpl->next = template_list;
-^1da177e4c3f41 drivers/md/xor.c Linus Torvalds    2005-04-16   90  	template_list = tmpl;
-^1da177e4c3f41 drivers/md/xor.c Linus Torvalds    2005-04-16   91  
-56a519913eeba2 crypto/xor.c     Jim Kukunas       2012-05-22   92  	preempt_disable();
-56a519913eeba2 crypto/xor.c     Jim Kukunas       2012-05-22   93  
-c055e3eae0f133 crypto/xor.c     Ard Biesheuvel    2020-09-26   94  	min = (ktime_t)S64_MAX;
-c055e3eae0f133 crypto/xor.c     Ard Biesheuvel    2020-09-26   95  	for (i = 0; i < 3; i++) {
-c055e3eae0f133 crypto/xor.c     Ard Biesheuvel    2020-09-26   96  		start = ktime_get();
-c055e3eae0f133 crypto/xor.c     Ard Biesheuvel    2020-09-26   97  		for (j = 0; j < REPS; j++) {
-cfb28fde083761 crypto/xor.c     Bhaskar Chowdhury 2021-02-03  @98  			mb(); /* prevent loop optimization */
-^1da177e4c3f41 drivers/md/xor.c Linus Torvalds    2005-04-16   99  			tmpl->do_2(BENCH_SIZE, b1, b2);
-^1da177e4c3f41 drivers/md/xor.c Linus Torvalds    2005-04-16  100  			mb();
-^1da177e4c3f41 drivers/md/xor.c Linus Torvalds    2005-04-16  101  		}
-c055e3eae0f133 crypto/xor.c     Ard Biesheuvel    2020-09-26  102  		diff = ktime_sub(ktime_get(), start);
-c055e3eae0f133 crypto/xor.c     Ard Biesheuvel    2020-09-26  103  		if (diff < min)
-c055e3eae0f133 crypto/xor.c     Ard Biesheuvel    2020-09-26  104  			min = diff;
-^1da177e4c3f41 drivers/md/xor.c Linus Torvalds    2005-04-16  105  	}
-^1da177e4c3f41 drivers/md/xor.c Linus Torvalds    2005-04-16  106  
-56a519913eeba2 crypto/xor.c     Jim Kukunas       2012-05-22  107  	preempt_enable();
-56a519913eeba2 crypto/xor.c     Jim Kukunas       2012-05-22  108  
-c055e3eae0f133 crypto/xor.c     Ard Biesheuvel    2020-09-26  109  	// bytes/ns == GB/s, multiply by 1000 to get MB/s [not MiB/s]
-3c02e04fd4f571 crypto/xor.c     Kirill Tkhai      2020-12-31  110  	if (!min)
-3c02e04fd4f571 crypto/xor.c     Kirill Tkhai      2020-12-31  111  		min = 1;
-c055e3eae0f133 crypto/xor.c     Ard Biesheuvel    2020-09-26  112  	speed = (1000 * REPS * BENCH_SIZE) / (unsigned int)ktime_to_ns(min);
-^1da177e4c3f41 drivers/md/xor.c Linus Torvalds    2005-04-16  113  	tmpl->speed = speed;
-^1da177e4c3f41 drivers/md/xor.c Linus Torvalds    2005-04-16  114  
-c055e3eae0f133 crypto/xor.c     Ard Biesheuvel    2020-09-26  115  	pr_info("   %-16s: %5d MB/sec\n", tmpl->name, speed);
-^1da177e4c3f41 drivers/md/xor.c Linus Torvalds    2005-04-16  116  }
-^1da177e4c3f41 drivers/md/xor.c Linus Torvalds    2005-04-16  117  
+Changes in v3:
+- Rebased on recent random git tree (0c7e00e22c21)
+- Fixed build failures reported by robots around VM_DROPPABLE
+- Fixed crash on PPC64 due to clobbered r13 by not using r13 anymore (saving it was not enough for signals).
+- Split final patch in two, first for PPC32, second for PPC64
+- Moved selftest fixes out of this series
 
-:::::: The code at line 98 was first introduced by commit
-:::::: cfb28fde083761bfb839bc53059068bab5634b6a crypto: xor - Fix typo of optimization
+Changes in v2:
+- Define VM_DROPPABLE for powerpc/32
+- Fixes generic vDSO getrandom headers to enable CONFIG_COMPAT build.
+- Fixed size of generation counter
+- Fixed selftests to work on non x86 architectures
 
-:::::: TO: Bhaskar Chowdhury <unixbhaskar@gmail.com>
-:::::: CC: Herbert Xu <herbert@gondor.apana.org.au>
+Christophe Leroy (5):
+  mm: Define VM_DROPPABLE for powerpc/32
+  powerpc/vdso32: Add crtsavres
+  powerpc/vdso: Refactor CFLAGS for CVDSO build
+  powerpc/vdso: Wire up getrandom() vDSO implementation on PPC32
+  powerpc/vdso: Wire up getrandom() vDSO implementation on PPC64
+
+ arch/powerpc/Kconfig                         |   1 +
+ arch/powerpc/include/asm/mman.h              |   2 +-
+ arch/powerpc/include/asm/vdso/getrandom.h    |  54 ++++
+ arch/powerpc/include/asm/vdso/vsyscall.h     |   6 +
+ arch/powerpc/include/asm/vdso_datapage.h     |   2 +
+ arch/powerpc/kernel/asm-offsets.c            |   1 +
+ arch/powerpc/kernel/vdso/Makefile            |  57 ++--
+ arch/powerpc/kernel/vdso/getrandom.S         |  58 ++++
+ arch/powerpc/kernel/vdso/gettimeofday.S      |  13 -
+ arch/powerpc/kernel/vdso/vdso32.lds.S        |   1 +
+ arch/powerpc/kernel/vdso/vdso64.lds.S        |   1 +
+ arch/powerpc/kernel/vdso/vgetrandom-chacha.S | 320 +++++++++++++++++++
+ arch/powerpc/kernel/vdso/vgetrandom.c        |  14 +
+ fs/proc/task_mmu.c                           |   4 +-
+ include/linux/mm.h                           |   4 +-
+ include/trace/events/mmflags.h               |   4 +-
+ tools/testing/selftests/vDSO/Makefile        |   2 +-
+ 17 files changed, 501 insertions(+), 43 deletions(-)
+ create mode 100644 arch/powerpc/include/asm/vdso/getrandom.h
+ create mode 100644 arch/powerpc/kernel/vdso/getrandom.S
+ create mode 100644 arch/powerpc/kernel/vdso/vgetrandom-chacha.S
+ create mode 100644 arch/powerpc/kernel/vdso/vgetrandom.c
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.44.0
+
