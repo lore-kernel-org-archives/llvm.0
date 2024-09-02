@@ -1,303 +1,180 @@
-Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
+Received: from omta38.uswest2.a.cloudfilter.net (omta38.uswest2.a.cloudfilter.net [35.89.44.37])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BBD6D1C62A7
-	for <llvm@lists.linux.dev>; Mon,  2 Sep 2024 19:18:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=93.17.235.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 69E1B1A3A84
+	for <llvm@lists.linux.dev>; Mon,  2 Sep 2024 19:55:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=35.89.44.37
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725304683; cv=none; b=NGtmbPjX8wRA2NOQjQvtkr+iXsq7pV6priwgYqS3DQeHRezLr/ybAlkJGIvUhFx2j9/iFOaL3wwynsdHYoQT3llrMZj2CEZ953XzR/Wx/uuM9XrNcrLQDVUmCV3ti4JfdX2ruWEVP1kqhVN3vryAUiQxmJ+MGWrGw9CcvpaP+98=
+	t=1725306953; cv=none; b=qGqWLiXznzE82ZOI+lXJm4Igzsk0sOtWVm/5JjwQQHKRqSqRIwhKGrPylA2BYEHG1bdlLGq06L+4sVwY6Q//EIF11hYkkP0wwng1fVVs2S+RAj9RHw0x59VcPFAUYUBSPOn7oxVWPCeqv/VPOHNyCoHN+HfvujqLQ1QJ9brdTbU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725304683; c=relaxed/simple;
-	bh=1u98q0W43xTrsnG50liffh4ZTxumv6Ho4dq/SBaH6jA=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=g2JJL5SeyLmMijUYVoUFFnNSCd760N7hrB7rUOq5WS/GZMeORyKH0JLa4xPvoJmHJyAf+2EobFxWnS9Zard5YVaFAK1uxlqCQVBMdW7cjyUa/Q3m2gPdEfQ3TokGCXbHJog1UXvYKl7tA0DzaTArJ0mYYxagQ+XiDH0zOV88cWU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=csgroup.eu; spf=pass smtp.mailfrom=csgroup.eu; arc=none smtp.client-ip=93.17.235.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=csgroup.eu
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=csgroup.eu
-Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
-	by localhost (Postfix) with ESMTP id 4WyJRg4Yrzz9sSS;
-	Mon,  2 Sep 2024 21:17:35 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from pegase2.c-s.fr ([172.26.127.65])
-	by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id UHuwOflyJahA; Mon,  2 Sep 2024 21:17:35 +0200 (CEST)
-Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
-	by pegase2.c-s.fr (Postfix) with ESMTP id 4WyJRg3FM1z9sS7;
-	Mon,  2 Sep 2024 21:17:35 +0200 (CEST)
-Received: from localhost (localhost [127.0.0.1])
-	by messagerie.si.c-s.fr (Postfix) with ESMTP id 621068B76E;
-	Mon,  2 Sep 2024 21:17:35 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from messagerie.si.c-s.fr ([127.0.0.1])
-	by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
-	with ESMTP id nRvxAuIibIDy; Mon,  2 Sep 2024 21:17:35 +0200 (CEST)
-Received: from PO20335.idsi0.si.c-s.fr (unknown [192.168.234.167])
-	by messagerie.si.c-s.fr (Postfix) with ESMTP id 657548B773;
-	Mon,  2 Sep 2024 21:17:34 +0200 (CEST)
-From: Christophe Leroy <christophe.leroy@csgroup.eu>
-To: Andrew Morton <akpm@linux-foundation.org>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-	Michael Ellerman <mpe@ellerman.id.au>,
-	Nicholas Piggin <npiggin@gmail.com>,
-	Naveen N Rao <naveen@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Shuah Khan <shuah@kernel.org>,
-	"Jason A . Donenfeld" <Jason@zx2c4.com>
-Cc: Christophe Leroy <christophe.leroy@csgroup.eu>,
-	linux-kernel@vger.kernel.org,
-	linuxppc-dev@lists.ozlabs.org,
-	linux-kselftest@vger.kernel.org,
-	llvm@lists.linux.dev,
-	linux-fsdevel@vger.kernel.org,
-	linux-mm@kvack.org,
-	linux-trace-kernel@vger.kernel.org,
-	Adhemerval Zanella <adhemerval.zanella@linaro.org>,
-	Xi Ruoyao <xry111@xry111.site>
-Subject: [PATCH v5 5/5] powerpc/vdso: Wire up getrandom() vDSO implementation on VDSO64
-Date: Mon,  2 Sep 2024 21:17:22 +0200
-Message-ID: <de334b1de27260f217d6bc65e02c841e8eff75be.1725304404.git.christophe.leroy@csgroup.eu>
-X-Mailer: git-send-email 2.44.0
-In-Reply-To: <cover.1725304404.git.christophe.leroy@csgroup.eu>
-References: <cover.1725304404.git.christophe.leroy@csgroup.eu>
+	s=arc-20240116; t=1725306953; c=relaxed/simple;
+	bh=4Gl0HPrKQMl+WMydtbAQMHf8HGp50fdjNpDI/SdAZuE=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=lAHcf4JxTvJ1Oh+RtkFWFNj0o/GArkD3TW2j3s90zUMsTYydhYcUSzZpUHYunRxskvN0010+lrQBg3/pHY05gdo39KA8954HbgSD5MefXYipFJHv9xuhUgwH/uMeL18WENXqmi5P+h8iCgQt064Z7bUVrhofQCRpDmq2y7XRRfo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=embeddedor.com; spf=pass smtp.mailfrom=embeddedor.com; dkim=pass (2048-bit key) header.d=embeddedor.com header.i=@embeddedor.com header.b=bRny1xjM; arc=none smtp.client-ip=35.89.44.37
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=embeddedor.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=embeddedor.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=embeddedor.com header.i=@embeddedor.com header.b="bRny1xjM"
+Received: from eig-obgw-6003a.ext.cloudfilter.net ([10.0.30.151])
+	by cmsmtp with ESMTPS
+	id lBltsWlDUumtXlD9NsDYVC; Mon, 02 Sep 2024 19:55:45 +0000
+Received: from gator4166.hostgator.com ([108.167.133.22])
+	by cmsmtp with ESMTPS
+	id lD9MshUk5V2ivlD9MsLV2T; Mon, 02 Sep 2024 19:55:44 +0000
+X-Authority-Analysis: v=2.4 cv=OLns3jaB c=1 sm=1 tr=0 ts=66d61840
+ a=1YbLdUo/zbTtOZ3uB5T3HA==:117 a=frY+GlAHrI6frpeK1MvySw==:17
+ a=IkcTkHD0fZMA:10 a=EaEq8P2WXUwA:10 a=7T7KSl7uo7wA:10 a=VwQbUJbxAAAA:8
+ a=62GdtKjr0Ia7E08erwkA:9 a=QEXdDO2ut3YA:10 a=Xt_RvD8W3m28Mn_h3AK8:22
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=embeddedor.com; s=default; h=Content-Transfer-Encoding:Content-Type:
+	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
+	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
+	List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+	bh=GhQ01iJSLK8ItBVKt2WxUw/tblsKhoLVEspih28gtqc=; b=bRny1xjMpunawdNKG0yX95lgsl
+	jOo3JpFSGkfAHDsF7pyEkh++AQkoIVnB7whs6Cgr+9fQkull+32tyqq+3e2v7k/ro7YkdiPhKPGUO
+	QAsPpkA0vBW5aFA8uPjx/kgQuluZ8jN999AiCS4htzyW2f71Ha188kwLBgpr3AoOwPazJNdNj6gfP
+	LqxneShjYOBCcqPPvieO8yOJaNdO6HlhwgDTrk5ZysrDonCs7STjOVSnNjvtWjDSSa4BHHIc0+bZx
+	NFpe+O3TRRgQFYNwSvs6xen8gzarK2H24b8v+xem8E+Th/4vnogFqOeHyubchzOiqv5CTzOmNh4Ok
+	FpbioynA==;
+Received: from [201.172.173.139] (port=56798 helo=[192.168.15.5])
+	by gator4166.hostgator.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+	(Exim 4.96.2)
+	(envelope-from <gustavo@embeddedor.com>)
+	id 1slD9L-0048xZ-0r;
+	Mon, 02 Sep 2024 14:55:43 -0500
+Message-ID: <88384607-4fcf-4ab1-8edf-9258df0bbf3c@embeddedor.com>
+Date: Mon, 2 Sep 2024 13:55:41 -0600
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1725304638; l=7245; i=christophe.leroy@csgroup.eu; s=20211009; h=from:subject:message-id; bh=1u98q0W43xTrsnG50liffh4ZTxumv6Ho4dq/SBaH6jA=; b=lM1uhuWNjxthaHQDf7uVaaSIKJ42G+9/6cAo7nbd76NGIaBABIDpKtUqexJkcPnaewmAS32q3 h+Nv5kPU5p2DUadEnB+UvL81zdHxza+GA275Mngu9p5wM9cdC8ZywAr
-X-Developer-Key: i=christophe.leroy@csgroup.eu; a=ed25519; pk=HIzTzUj91asvincQGOFx6+ZF5AoUuP9GdOtQChs7Mm0=
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [Intel-wired-lan] [PATCH iwl-next] ice: Consistently use
+ ethtool_puts() to copy strings
+To: Simon Horman <horms@kernel.org>, Tony Nguyen
+ <anthony.l.nguyen@intel.com>, Przemek Kitszel <przemyslaw.kitszel@intel.com>
+Cc: netdev@vger.kernel.org, llvm@lists.linux.dev,
+ Nick Desaulniers <ndesaulniers@google.com>,
+ Nathan Chancellor <nathan@kernel.org>, Eric Dumazet <edumazet@google.com>,
+ intel-wired-lan@lists.osuosl.org, Bill Wendling <morbo@google.com>,
+ Justin Stitt <justinstitt@google.com>, Jakub Kicinski <kuba@kernel.org>,
+ Paolo Abeni <pabeni@redhat.com>, "David S. Miller" <davem@davemloft.net>
+References: <20240902-igc-ss-puts-v1-1-c66a73b532c7@kernel.org>
+Content-Language: en-US
+From: "Gustavo A. R. Silva" <gustavo@embeddedor.com>
+In-Reply-To: <20240902-igc-ss-puts-v1-1-c66a73b532c7@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - gator4166.hostgator.com
+X-AntiAbuse: Original Domain - lists.linux.dev
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - embeddedor.com
+X-BWhitelist: no
+X-Source-IP: 201.172.173.139
+X-Source-L: No
+X-Exim-ID: 1slD9L-0048xZ-0r
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: ([192.168.15.5]) [201.172.173.139]:56798
+X-Source-Auth: gustavo@embeddedor.com
+X-Email-Count: 11
+X-Org: HG=hgshared;ORG=hostgator;
+X-Source-Cap: Z3V6aWRpbmU7Z3V6aWRpbmU7Z2F0b3I0MTY2Lmhvc3RnYXRvci5jb20=
+X-Local-Domain: yes
+X-CMAE-Envelope: MS4xfPzI1JtD9Lu4TI4ROiTMJb6LfLxRJhvXsz7VZrSfX1oonACzY9eLODpoenBFsTLiY642hW9dHhO6My+4Fe6q8ds+DUb0rqugyaESWaXywr0Wb1zt7kKc
+ d8/oYMdbZ52tJIdc/ZSdr4n8vJ1Qo/6Tw5HIY/A1bAqe/M1OvJTj90VQcZiPCh4dzmpzy3BRsY6idrTYb7oxgakxECvJkvS2NW0=
 
-Extend getrandom() vDSO implementation to VDSO64
 
-Tested on QEMU on both ppc64_defconfig and ppc64le_defconfig.
 
-The results are not precise as it is QEMU on an x86 laptop, but
-no need to be precise to see the benefit.
+On 02/09/24 06:46, Simon Horman wrote:
+> ethtool_puts() is the preferred method for copying ethtool strings.
+> And ethtool_puts() is already used to copy ethtool strings in
+> igc_ethtool_get_strings(). With this patch igc_ethtool_get_strings()
+> uses it for all such cases.
+> 
+> In general, the compiler can't use fortification to verify that the
+> destination buffer isn't over-run when the destination is the first
+> element of an array, and more than one element of the array is to be
+> written by memcpy().
+> 
+> For the ETH_SS_PRIV_FLAGS the problem doesn't manifest as there is only
+> one element in the igc_priv_flags_strings array.
+> 
+> In the ETH_SS_TEST case, there is more than one element of
+> igc_gstrings_test, and from the compiler's perspective, that element is
+> overrun. In practice it does not overrun the overall size of the array,
+> but it is nice to use tooling to help us where possible. In this case
+> the problem is flagged as follows.
+> 
+> Flagged by clang-18 as:
+> 
+> In file included from drivers/net/ethernet/intel/igc/igc_ethtool.c:5:
+> In file included from ./include/linux/if_vlan.h:10:
+> In file included from ./include/linux/netdevice.h:24:
+> In file included from ./include/linux/timer.h:6:
+> In file included from ./include/linux/ktime.h:25:
+> In file included from ./include/linux/jiffies.h:10:
+> In file included from ./include/linux/time.h:60:
+> In file included from ./include/linux/time32.h:13:
+> In file included from ./include/linux/timex.h:67:
+> In file included from ./arch/x86/include/asm/timex.h:5:
+> In file included from ./arch/x86/include/asm/processor.h:19:
+> In file included from ./arch/x86/include/asm/cpuid.h:62:
+> In file included from ./arch/x86/include/asm/paravirt.h:21:
+> In file included from ./include/linux/cpumask.h:12:
+> In file included from ./include/linux/bitmap.h:13:
+> In file included from ./include/linux/string.h:374:
+> .../fortify-string.h:580:4: warning: call to '__read_overflow2_field' declared with 'warning' attribute: detected read beyond size of field (2nd parameter); maybe use struct_group()? [-Wattribute-warning]
+> 
+> And Smatch as:
+> 
+> .../igc_ethtool.c:771 igc_ethtool_get_strings() error: __builtin_memcpy() '*igc_gstrings_test' too small (32 vs 160)
+> 
+> Curiously, not flagged by gcc-14.
+> 
+> Compile tested only.
+> 
+> Signed-off-by: Simon Horman <horms@kernel.org>
+> ---
+>   drivers/net/ethernet/intel/igc/igc_ethtool.c | 8 ++++----
+>   1 file changed, 4 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/net/ethernet/intel/igc/igc_ethtool.c b/drivers/net/ethernet/intel/igc/igc_ethtool.c
+> index 457b5d7f1610..ccace77c6c2d 100644
+> --- a/drivers/net/ethernet/intel/igc/igc_ethtool.c
+> +++ b/drivers/net/ethernet/intel/igc/igc_ethtool.c
+> @@ -768,8 +768,8 @@ static void igc_ethtool_get_strings(struct net_device *netdev, u32 stringset,
+>   
+>   	switch (stringset) {
+>   	case ETH_SS_TEST:
+> -		memcpy(data, *igc_gstrings_test,
+> -		       IGC_TEST_LEN * ETH_GSTRING_LEN);
 
-~ # ./vdso_test_getrandom bench-single
-   vdso: 25000000 times in 4.977777162 seconds
-   libc: 25000000 times in 75.516749981 seconds
-syscall: 25000000 times in 86.842242014 seconds
+I think this problem should be solved if we use the array's address,
+which in this case is `igc_gstrings_test`, instead of the address of
+the first row. So, the above should look as follows:
 
-~ # ./vdso_test_getrandom bench-single
-   vdso: 25000000 times in 6.473814156 seconds
-   libc: 25000000 times in 73.875109463 seconds
-syscall: 25000000 times in 71.805066229 seconds
+memcpy(data, igc_gstrings_test, IGC_TEST_LEN * ETH_GSTRING_LEN);
 
-Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
----
-v5:
-- VDSO32 for both PPC32 and PPC64 is in previous patch. This patch have the logic for VDSO64.
+> +		for (i = 0; i < IGC_TEST_LEN; i++)
+> +			ethtool_puts(&p, igc_gstrings_test[i]);
+>   		break;
+>   	case ETH_SS_STATS:
+>   		for (i = 0; i < IGC_GLOBAL_STATS_LEN; i++)
+> @@ -791,8 +791,8 @@ static void igc_ethtool_get_strings(struct net_device *netdev, u32 stringset,
+>   		/* BUG_ON(p - data != IGC_STATS_LEN * ETH_GSTRING_LEN); */
+>   		break;
+>   	case ETH_SS_PRIV_FLAGS:
+> -		memcpy(data, igc_priv_flags_strings,
+> -		       IGC_PRIV_FLAGS_STR_LEN * ETH_GSTRING_LEN);
 
-v4:
-- Use __BIG_ENDIAN__ which is defined by GCC instead of CONFIG_CPU_BIG_ENDIAN which is unknown by selftests
-- Implement a cleaner/smaller output copy for little endian instead of keeping compat macro.
+In this case, the code is effectively reading from the array's address.
 
-v3: New (split out of previous patch)
----
- arch/powerpc/Kconfig                         |  2 +-
- arch/powerpc/kernel/vdso/Makefile            |  8 ++-
- arch/powerpc/kernel/vdso/getrandom.S         |  8 +++
- arch/powerpc/kernel/vdso/vdso64.lds.S        |  1 +
- arch/powerpc/kernel/vdso/vgetrandom-chacha.S | 53 ++++++++++++++++++++
- 5 files changed, 69 insertions(+), 3 deletions(-)
-
-diff --git a/arch/powerpc/Kconfig b/arch/powerpc/Kconfig
-index e500a59ddecc..b45452ac4a73 100644
---- a/arch/powerpc/Kconfig
-+++ b/arch/powerpc/Kconfig
-@@ -311,7 +311,7 @@ config PPC
- 	select SYSCTL_EXCEPTION_TRACE
- 	select THREAD_INFO_IN_TASK
- 	select TRACE_IRQFLAGS_SUPPORT
--	select VDSO_GETRANDOM			if VDSO32
-+	select VDSO_GETRANDOM
- 	#
- 	# Please keep this list sorted alphabetically.
- 	#
-diff --git a/arch/powerpc/kernel/vdso/Makefile b/arch/powerpc/kernel/vdso/Makefile
-index 7a4a935406d8..56fb1633529a 100644
---- a/arch/powerpc/kernel/vdso/Makefile
-+++ b/arch/powerpc/kernel/vdso/Makefile
-@@ -9,6 +9,7 @@ obj-vdso32 = sigtramp32-32.o gettimeofday-32.o datapage-32.o cacheflush-32.o not
- obj-vdso64 = sigtramp64-64.o gettimeofday-64.o datapage-64.o cacheflush-64.o note-64.o getcpu-64.o
- 
- obj-vdso32 += getrandom-32.o vgetrandom-chacha-32.o
-+obj-vdso64 += getrandom-64.o vgetrandom-chacha-64.o
- 
- ifneq ($(c-gettimeofday-y),)
-   CFLAGS_vgettimeofday-32.o += -include $(c-gettimeofday-y)
-@@ -21,6 +22,7 @@ endif
- 
- ifneq ($(c-getrandom-y),)
-   CFLAGS_vgetrandom-32.o += -include $(c-getrandom-y)
-+  CFLAGS_vgetrandom-64.o += -include $(c-getrandom-y) $(call cc-option, -ffixed-r30)
- endif
- 
- # Build rules
-@@ -34,7 +36,7 @@ endif
- targets := $(obj-vdso32) vdso32.so.dbg vgettimeofday-32.o vgetrandom-32.o
- targets += crtsavres-32.o
- obj-vdso32 := $(addprefix $(obj)/, $(obj-vdso32))
--targets += $(obj-vdso64) vdso64.so.dbg vgettimeofday-64.o
-+targets += $(obj-vdso64) vdso64.so.dbg vgettimeofday-64.o vgetrandom-64.o
- obj-vdso64 := $(addprefix $(obj)/, $(obj-vdso64))
- 
- ccflags-y := -fno-common -fno-builtin -DBUILD_VDSO
-@@ -71,7 +73,7 @@ CPPFLAGS_vdso64.lds += -P -C
- # link rule for the .so file, .lds has to be first
- $(obj)/vdso32.so.dbg: $(obj)/vdso32.lds $(obj-vdso32) $(obj)/vgettimeofday-32.o $(obj)/vgetrandom-32.o $(obj)/crtsavres-32.o FORCE
- 	$(call if_changed,vdso32ld_and_check)
--$(obj)/vdso64.so.dbg: $(obj)/vdso64.lds $(obj-vdso64) $(obj)/vgettimeofday-64.o FORCE
-+$(obj)/vdso64.so.dbg: $(obj)/vdso64.lds $(obj-vdso64) $(obj)/vgettimeofday-64.o $(obj)/vgetrandom-64.o FORCE
- 	$(call if_changed,vdso64ld_and_check)
- 
- # assembly rules for the .S files
-@@ -87,6 +89,8 @@ $(obj-vdso64): %-64.o: %.S FORCE
- 	$(call if_changed_dep,vdso64as)
- $(obj)/vgettimeofday-64.o: %-64.o: %.c FORCE
- 	$(call if_changed_dep,cc_o_c)
-+$(obj)/vgetrandom-64.o: %-64.o: %.c FORCE
-+	$(call if_changed_dep,cc_o_c)
- 
- # Generate VDSO offsets using helper script
- gen-vdso32sym := $(src)/gen_vdso32_offsets.sh
-diff --git a/arch/powerpc/kernel/vdso/getrandom.S b/arch/powerpc/kernel/vdso/getrandom.S
-index 21773ef3fc1d..a957cd2b2b03 100644
---- a/arch/powerpc/kernel/vdso/getrandom.S
-+++ b/arch/powerpc/kernel/vdso/getrandom.S
-@@ -27,10 +27,18 @@
-   .cfi_adjust_cfa_offset PPC_MIN_STKFRM
- 	PPC_STL		r0, PPC_MIN_STKFRM + PPC_LR_STKOFF(r1)
-   .cfi_rel_offset lr, PPC_MIN_STKFRM + PPC_LR_STKOFF
-+#ifdef __powerpc64__
-+	PPC_STL		r2, PPC_MIN_STKFRM + STK_GOT(r1)
-+  .cfi_rel_offset r2, PPC_MIN_STKFRM + STK_GOT
-+#endif
- 	get_datapage	r8
- 	addi		r8, r8, VDSO_RNG_DATA_OFFSET
- 	bl		CFUNC(DOTSYM(\funct))
- 	PPC_LL		r0, PPC_MIN_STKFRM + PPC_LR_STKOFF(r1)
-+#ifdef __powerpc64__
-+	PPC_LL		r2, PPC_MIN_STKFRM + STK_GOT(r1)
-+  .cfi_restore r2
-+#endif
- 	cmpwi		r3, 0
- 	mtlr		r0
- 	addi		r1, r1, 2 * PPC_MIN_STKFRM
-diff --git a/arch/powerpc/kernel/vdso/vdso64.lds.S b/arch/powerpc/kernel/vdso/vdso64.lds.S
-index 400819258c06..9481e4b892ed 100644
---- a/arch/powerpc/kernel/vdso/vdso64.lds.S
-+++ b/arch/powerpc/kernel/vdso/vdso64.lds.S
-@@ -123,6 +123,7 @@ VERSION
- 		__kernel_sigtramp_rt64;
- 		__kernel_getcpu;
- 		__kernel_time;
-+		__kernel_getrandom;
- 
- 	local: *;
- 	};
-diff --git a/arch/powerpc/kernel/vdso/vgetrandom-chacha.S b/arch/powerpc/kernel/vdso/vgetrandom-chacha.S
-index ac85788205cb..7f9061a9e8b4 100644
---- a/arch/powerpc/kernel/vdso/vgetrandom-chacha.S
-+++ b/arch/powerpc/kernel/vdso/vgetrandom-chacha.S
-@@ -124,6 +124,26 @@
-  */
- SYM_FUNC_START(__arch_chacha20_blocks_nostack)
- #ifdef __powerpc64__
-+	std	counter, -216(r1)
-+
-+	std	r14, -144(r1)
-+	std	r15, -136(r1)
-+	std	r16, -128(r1)
-+	std	r17, -120(r1)
-+	std	r18, -112(r1)
-+	std	r19, -104(r1)
-+	std	r20, -96(r1)
-+	std	r21, -88(r1)
-+	std	r22, -80(r1)
-+	std	r23, -72(r1)
-+	std	r24, -64(r1)
-+	std	r25, -56(r1)
-+	std	r26, -48(r1)
-+	std	r27, -40(r1)
-+	std	r28, -32(r1)
-+	std	r29, -24(r1)
-+	std	r30, -16(r1)
-+	std	r31, -8(r1)
- #else
- 	stwu	r1, -96(r1)
- 	stw	counter, 20(r1)
-@@ -149,9 +169,13 @@ SYM_FUNC_START(__arch_chacha20_blocks_nostack)
- 	stw	r30, 88(r1)
- 	stw	r31, 92(r1)
- #endif
-+#endif	/* __powerpc64__ */
- 
- 	lwz	counter0, 0(counter)
- 	lwz	counter1, 4(counter)
-+#ifdef __powerpc64__
-+	rldimi	counter0, counter1, 32, 0
-+#endif
- 	mr	idx_r0, nblocks
- 	subi	dst_bytes, dst_bytes, 4
- 
-@@ -267,12 +291,21 @@ SYM_FUNC_START(__arch_chacha20_blocks_nostack)
- 
- 	subic.	idx_r0, idx_r0, 1	/* subi. can't use r0 as source */
- 
-+#ifdef __powerpc64__
-+	addi	counter0, counter0, 1
-+	srdi	counter1, counter0, 32
-+#else
- 	addic	counter0, counter0, 1
- 	addze	counter1, counter1
-+#endif
- 
- 	bne	.Lblock
- 
-+#ifdef __powerpc64__
-+	ld	counter, -216(r1)
-+#else
- 	lwz	counter, 20(r1)
-+#endif
- 	stw	counter0, 0(counter)
- 	stw	counter1, 4(counter)
- 
-@@ -284,6 +317,26 @@ SYM_FUNC_START(__arch_chacha20_blocks_nostack)
- 	li	r11, 0
- 	li	r12, 0
- 
-+#ifdef __powerpc64__
-+	ld	r14, -144(r1)
-+	ld	r15, -136(r1)
-+	ld	r16, -128(r1)
-+	ld	r17, -120(r1)
-+	ld	r18, -112(r1)
-+	ld	r19, -104(r1)
-+	ld	r20, -96(r1)
-+	ld	r21, -88(r1)
-+	ld	r22, -80(r1)
-+	ld	r23, -72(r1)
-+	ld	r24, -64(r1)
-+	ld	r25, -56(r1)
-+	ld	r26, -48(r1)
-+	ld	r27, -40(r1)
-+	ld	r28, -32(r1)
-+	ld	r29, -24(r1)
-+	ld	r30, -16(r1)
-+	ld	r31, -8(r1)
-+#else
- #ifdef __BIG_ENDIAN__
- 	lmw	r14, 24(r1)
- #else
--- 
-2.44.0
-
+--
+Gustavo
