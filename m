@@ -1,106 +1,132 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF2411A0BE0;
-	Tue,  3 Sep 2024 09:29:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3DAD51A42B4;
+	Tue,  3 Sep 2024 11:08:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725355776; cv=none; b=YmMrn3B89npQS3P6ZylJ0v6ufzgxucSaiffm7R7BjFIadOOX27cKn8on/F6gm97nWgymLQvsUyP1kvdsfPAwkPwEHYn2QX+GCisEN6gcDA5+VxQfrD0CalyjTzDLlkl1RhY/Iw5gSNhMZGzWkxqlbfssE4TDfStGZkO7tfpZ5lA=
+	t=1725361686; cv=none; b=rQTBLJX9UCBTxtszd3/2dS/Ve3q1vm3Ing8NLRQi6gSKQLMT/GMx2SvSRHH+BQ8bYdSyHdv1rzwOxRLhPaZHlQMUE76Dd2lflMJ9rigKN7kyYpubfa6aKN7nDVCAq5gQKLDcwnT+to8aQjwum32eHuJzxpYphhVghszLO0v3FYo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725355776; c=relaxed/simple;
-	bh=V6Ts8UeyZzyhtsfr4GKAWGTzPe6MoHhPae1lOHa7ehM=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Wd3MxDaD5NUEtZDyWZ/5ZVuX+ly24+1oYAlSbhyKjJOx1OFU2SwrjjljBS3M8vCfCbzaliXvOaq00xOy+Yz7S5iNHIiiesN5EKK2c11+OHo4tDJ+A/ZcLrDa16KKZ4e5BnvyRIy1OqIfIng0hnpb+x6YP2Et/2Rcj+a3ahCVzSE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=B2+DIvPM; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1725361686; c=relaxed/simple;
+	bh=CTGV5cSWNEwdtCEqsR0WZlu+pKua+Ipafbs6CHg0sqg=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=rwZitzDNf90xhnXPgjPtOnsvQgCaFjzODbAVMljvzrkQI4ovd7be9EGmnUCcmlN8/3CpgrBZ9y++rbnFuyMVO5geG12GB76JqmB8SJEKsMwhWylTeDoqxChyAH0pzoiQH/DAIudw1j7tasxWa1vkQzBL8cHd0S23jgjMdI3gBzQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=IO5+Q7bO; arc=none smtp.client-ip=192.198.163.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="B2+DIvPM"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7A525C4CEC8;
-	Tue,  3 Sep 2024 09:29:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1725355775;
-	bh=V6Ts8UeyZzyhtsfr4GKAWGTzPe6MoHhPae1lOHa7ehM=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=B2+DIvPMxoKjhFD7wiF+7h0l/cf/7MYT3BR0Zhx9vp7HBRO4mfIxwB9KqYB/sTeeC
-	 1G81qhU92qnFCiE/jliReBCBu6b2qHvBBHBVRrSMDGFA+JwuXas7widUz6aFtvxdkF
-	 4tjHzOkHd6/ex/78UYqR6cDfYnFj/Pq5XqY4K3a0iXYisf626Hp7/acc1DOSY/a6cg
-	 a2POT1sITjmIyfszLS/XUbkntiO3MqghfOGuiOpgHz9jatyaXxIOGO9cYBAqqbwA/B
-	 15wIL94JzUdR+NZ65E3bnzn2/+w0/WyZpdfxs3YRDoguIILWF4YT/rse1cCgfc4OyQ
-	 fg09k/DSfw2nw==
-Received: by mail-lf1-f50.google.com with SMTP id 2adb3069b0e04-5353d0b7463so8570925e87.3;
-        Tue, 03 Sep 2024 02:29:35 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCW/fMK+ci84z5wJyq2YTXGOb37uVRIwdNePIQtFWWcPRD1gpNuE5/pkpVesyS+KUmg+9y3WoA==@lists.linux.dev, AJvYcCXrwE1jtWVy7NQci1xB9MRcr2q/tIqcWWECJ3IURRi0pUvyDh++zG6rO3gdmLpzXnAa3GaWgdM=@lists.linux.dev
-X-Gm-Message-State: AOJu0YwnITlKIPATgxGy0C3Gl/ldvaD3XysgerT5dGNvpu9u6GG6NooA
-	CI41b4TyqHL+UTnGusp0hB8JDlKEnXHQxcPOGkKIqgjDts6g8DB+nYJxMZNeDebnGhS8SQJa+3O
-	J2BgZ8LTOILeeXQ9GInk6jU8cMHI=
-X-Google-Smtp-Source: AGHT+IHCtdlG38E/0l7FYyhNp/Eh+agXUP/x4m9X1sDISAuGOfE6COrF1RVXR4n+XrSU6Tf+eKwYmtlidm1SXvGzdlM=
-X-Received: by 2002:a05:6512:108f:b0:533:4785:82ab with SMTP id
- 2adb3069b0e04-53546b223d3mr10683476e87.1.1725355774159; Tue, 03 Sep 2024
- 02:29:34 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="IO5+Q7bO"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1725361684; x=1756897684;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=CTGV5cSWNEwdtCEqsR0WZlu+pKua+Ipafbs6CHg0sqg=;
+  b=IO5+Q7bO78vTsVHjQTDrlfnOk6F3QgAoL2A/k9vQvcQYS+Bv/VG5APqS
+   I3VDvwjrOG+G93yaMBY4wE7xL56mczzTM0BCNpiqVMb79E4cYrtgkOh8n
+   ST8QiO7EaCut6dSuFmhkZeQLYwZXAMNTqBt8XTc8FaG89z3+wEjLKdcMV
+   AXtgl0qtl6qRgHDkk0ioYk+M1xxE9WwUVL/sCSUTM6iuk1ENd6fAlZ00j
+   numfxKhv11nPFwiuAIerE3twxt7VIirKt6oN/qyUxGzMSEW37pQzEi8gq
+   Jp9l2gbD+DAuMeLIzhqW/h/3nAlsLbavPujcUtoetnLjA2E1QiQN/K/MH
+   g==;
+X-CSE-ConnectionGUID: D5/6gUFvRAGu+Wvqamha7g==
+X-CSE-MsgGUID: McrRKBZ7TFexQy5jV6XZ5g==
+X-IronPort-AV: E=McAfee;i="6700,10204,11183"; a="26867827"
+X-IronPort-AV: E=Sophos;i="6.10,198,1719903600"; 
+   d="scan'208";a="26867827"
+Received: from fmviesa008.fm.intel.com ([10.60.135.148])
+  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Sep 2024 04:08:00 -0700
+X-CSE-ConnectionGUID: mDgBZVmTS0Ku1cA481AZHg==
+X-CSE-MsgGUID: Tbten34rRRiMy3U7FRYB1g==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.10,198,1719903600"; 
+   d="scan'208";a="64886686"
+Received: from lkp-server01.sh.intel.com (HELO 9c6b1c7d3b50) ([10.239.97.150])
+  by fmviesa008.fm.intel.com with ESMTP; 03 Sep 2024 04:07:59 -0700
+Received: from kbuild by 9c6b1c7d3b50 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1slRO8-0006XW-1a;
+	Tue, 03 Sep 2024 11:07:56 +0000
+Date: Tue, 3 Sep 2024 19:07:41 +0800
+From: kernel test robot <lkp@intel.com>
+To: Kent Overstreet <kent.overstreet@linux.dev>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Linux Memory Management List <linux-mm@kvack.org>
+Subject: [linux-next:master 7634/8795] fs/bcachefs/sb-members.c:503:2: error:
+ expected expression
+Message-ID: <202409031807.S80qlUjK-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20240828083605.3093701-1-vegard.nossum@oracle.com>
- <875xrd7h88.fsf@mail.lhotse> <d1bb2638-2e0e-44ef-b8da-9746ed532ed1@oracle.com>
-In-Reply-To: <d1bb2638-2e0e-44ef-b8da-9746ed532ed1@oracle.com>
-From: Masahiro Yamada <masahiroy@kernel.org>
-Date: Tue, 3 Sep 2024 18:28:57 +0900
-X-Gmail-Original-Message-ID: <CAK7LNAT84K0RgDfLoOOLjtyCqsS19bASXRv43HF8P=C9obJPVA@mail.gmail.com>
-Message-ID: <CAK7LNAT84K0RgDfLoOOLjtyCqsS19bASXRv43HF8P=C9obJPVA@mail.gmail.com>
-Subject: Re: [PATCH] kbuild: use objcopy to generate asm-offsets
-To: Vegard Nossum <vegard.nossum@oracle.com>
-Cc: Michael Ellerman <mpe@ellerman.id.au>, linux-kbuild@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	linux-omap@vger.kernel.org, kvmarm@lists.linux.dev, kvm@vger.kernel.org, 
-	linux-um@lists.infradead.org, bpf@vger.kernel.org, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Tue, Sep 3, 2024 at 4:21=E2=80=AFPM Vegard Nossum <vegard.nossum@oracle.=
-com> wrote:
->
->
-> On 03/09/2024 01:45, Michael Ellerman wrote:
-> > Vegard Nossum <vegard.nossum@oracle.com> writes:
-> >> Remove the sed script and compile the C source listing structs and
-> >> offsets to an object file (instead of assembly code) that embeds C sou=
-rce
-> >> directly. Then extract the C source using objcopy.
-> >>
-> >
-> > I threw some builders at this and hit a few errors:
->
-> Thanks, I also got the ones from kernel test robot and figured something
-> was going a bit wrong.
->
-> There are several issues: clang wants - instead of /dev/stdout as an
-> argument to objcopy, and then gcc has some bugs that prevent the numbers
-> from appearing correctly on some architectures, also I had an extra # in
-> the COMMENT() macro which only resulted in an error on some
-> architectures. I've attached a tentative v2 that fixes these issues, but
-> I'm still trying to figure out why m68k is giving me slightly different
-> output for include/generated/asm-offsets.h and why the arc assembler
-> fails.
->
-> In the end I'm wondering if this patch is really worth it, given all the
-> failures and little workarounds :-| If I can sort out the last few
-> failures I'll submit it as an RFC.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+head:   6804f0edbe7747774e6ae60f20cec4ee3ad7c187
+commit: 4e7795eda4459bf3e69c87c793bc34f610f9d981 [7634/8795] bcachefs: bch2_sb_member_alloc()
+config: powerpc64-randconfig-003-20240903 (https://download.01.org/0day-ci/archive/20240903/202409031807.S80qlUjK-lkp@intel.com/config)
+compiler: clang version 16.0.6 (https://github.com/llvm/llvm-project 7cbf1a2591520c2491aa35339f227775f4d3adf6)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240903/202409031807.S80qlUjK-lkp@intel.com/reproduce)
 
-This patch has zero benefit.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202409031807.S80qlUjK-lkp@intel.com/
 
-The current way (preprocess + sed) is faster than
-your way (preprocess + compile + objcopy) and works
-independently of tool quirks.
+All errors (new ones prefixed by >>):
+
+>> fs/bcachefs/sb-members.c:503:2: error: expected expression
+           unsigned nr_devices = max_t(unsigned, dev_idx + 1, c->sb.nr_devices);
+           ^
+>> fs/bcachefs/sb-members.c:507:42: error: use of undeclared identifier 'nr_devices'
+                                        le16_to_cpu(mi->member_bytes) * nr_devices, sizeof(u64));
+                                                                        ^
+   include/linux/math.h:37:22: note: expanded from macro 'DIV_ROUND_UP'
+   #define DIV_ROUND_UP __KERNEL_DIV_ROUND_UP
+                        ^
+   fs/bcachefs/sb-members.c:513:30: error: use of undeclared identifier 'nr_devices'
+           c->disk_sb.sb->nr_devices = nr_devices;
+                                       ^
+   3 errors generated.
 
 
+vim +503 fs/bcachefs/sb-members.c
 
+   476	
+   477	int bch2_sb_member_alloc(struct bch_fs *c)
+   478	{
+   479		unsigned dev_idx = c->sb.nr_devices;
+   480		if (dev_idx < BCH_SB_MEMBERS_MAX)
+   481			goto have_slot;
+   482	
+   483		int best = -1;
+   484		u64 best_last_mount = 0;
+   485		for (dev_idx = 0; dev_idx < BCH_SB_MEMBERS_MAX; dev_idx++) {
+   486			struct bch_member m = bch2_sb_member_get(c->disk_sb.sb, dev_idx);
+   487			if (bch2_member_alive(&m))
+   488				continue;
+   489	
+   490			u64 last_mount = le64_to_cpu(m.last_mount);
+   491			if (best < 0 || last_mount < best_last_mount) {
+   492				best = dev_idx;
+   493				best_last_mount = last_mount;
+   494			}
+   495		}
+   496		if (best >= 0) {
+   497			dev_idx = best;
+   498			goto have_slot;
+   499		}
+   500	
+   501		return -BCH_ERR_ENOSPC_sb_members;
+   502	have_slot:
+ > 503		unsigned nr_devices = max_t(unsigned, dev_idx + 1, c->sb.nr_devices);
+   504	
+   505		struct bch_sb_field_members_v2 *mi = bch2_sb_field_get(c->disk_sb.sb, members_v2);
+   506		unsigned u64s = DIV_ROUND_UP(sizeof(struct bch_sb_field_members_v2) +
+ > 507					     le16_to_cpu(mi->member_bytes) * nr_devices, sizeof(u64));
 
-
-
-
-
---
-Best Regards
-Masahiro Yamada
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
