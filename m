@@ -1,62 +1,58 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B92A13F43E;
-	Tue,  3 Sep 2024 15:47:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CDC0D26AFC;
+	Tue,  3 Sep 2024 16:08:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725378441; cv=none; b=u4rIVnNrwi5+tMLkGpwVP/NZlM3Aw3X2X7XnB7Wq5Uo8KRpNC73tfSLzvikeQsIT8Bu4Ea6ub0VosR6yXeNlVI3ywcp0RMM01nsnqPJFEWqGDveuoi+g5+uRhvdlzAkQBCrQaenHe3TUNoG5vJomNsGl6Tv6qD0/FvkWA3Jz0eo=
+	t=1725379702; cv=none; b=h5kJwYfX4XUlNOipLfyqWFILzBdFh6Dg4UprOQxhGcl0gpDcpfQEtpiwsHecYbTgLLycUHzTcUii+JfJmSgi6nrDdVEk4djoyUmieDp5FGnrbWGF5LyQoFQzTs4gYn3AD/IaIjHcfYWyYfyJ7Sb3v0brAC4ljTjE8sWivc0gL0c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725378441; c=relaxed/simple;
-	bh=MJh2V+auA/rLdCEOxa08zCix2D9oA5EOwctHljU9Vks=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=h5BmIjU/nqJGAN/GlTxJUoyGooRr47KKHhcn96+/Y0vpsz6FK/8ji11WmTt1fUFFYBAr1ItDCo5CsKlnMT8I5QM5Kh4z7/wdmQ7aeJILqmWoEAQ4AoRvi3CUR5R9ngoG8qffmHklSch2ne02PDRYRh8oVSIGovCzL1HVAmHpkbA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=KPkKafTF; arc=none smtp.client-ip=192.198.163.14
+	s=arc-20240116; t=1725379702; c=relaxed/simple;
+	bh=fXQ0anoNadjel+xyRscGl3ntRRtw4UDVrrlb7NfuQLg=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=Q2ko6UfLDFgf2t0fxPck28GCd1N+PdiKPNNvmzfHi0w7dmh2WMSiz1KpmD4t6Y/iQxf7et538ks9oGx9gVBjMVJ9GlXPh7ruGAGrCxwL0NIC1UoS4dwZOzV+tCys7hdIGPjinSwtC3IK2cn4jkgs1FsYdxBEmQtu7LkyRer9tC8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=bHDvoawB; arc=none smtp.client-ip=198.175.65.10
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="KPkKafTF"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="bHDvoawB"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1725378439; x=1756914439;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=MJh2V+auA/rLdCEOxa08zCix2D9oA5EOwctHljU9Vks=;
-  b=KPkKafTFMJzbEk/6ta5xAkSvHN7U53LtLUnzkKBj9P9sxXyQz2l94W+H
-   9/TlUQwKSutuhZl3+KHxC70p+zwwbY09/hFmX/ugRQOF2UpajSTGZfNqH
-   MF4iY6YQMtwJg2bdLEF53STBwWheNDyZy4qJHAD3oX3BiiF9vqarRNucS
-   r7GxUmqkATpkrxdojRY9CCTl989XDNmnVZhTb7XW2Vestzk28YsD5M8wF
-   LehUrNS1gU75ZQvq5hlZ6H+vYS3POxtsn76kiZvXcuXE/NQtEENHVt9dK
-   ONAnSl/9F8tZjb46y8mf2X48w5E/kRUXa9SXj8/vlDmN+H/eGwvlMBN/h
-   g==;
-X-CSE-ConnectionGUID: +BMUEL7UROuXcwKAIHZLpg==
-X-CSE-MsgGUID: xnIqS5uZTcyqIZesRBFUXw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11184"; a="24176665"
+  t=1725379700; x=1756915700;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=fXQ0anoNadjel+xyRscGl3ntRRtw4UDVrrlb7NfuQLg=;
+  b=bHDvoawBo332HdXJkCeM79i8svbzXxDCx++wUFImh0+019Kc1Hs5uiUo
+   WaFwYKHepch5aenh1HfjGHLE1sWrfskC9Remb+6LO5CKImGBpqfMP5tP5
+   2C55w/72t4qmwuTh9yzlYr4BSA1h4HE0q055diBfReHMVNo02ZBOLmnZb
+   hxCmWC6NLvQQcpMZNa2XvkaBqYmuGOWZ5zQFg7teJuSpFzGcgViIssg+v
+   Ni3PgyTXs/95U6JqH9yV1K7KrcqzNtqbFk59JI4jMRuJC6OUqzX0TMmGR
+   UDhRxgCLEkngUlVkZrViK2BitXdGLGGlcJJymQOZBiKN2upRxUU+CF316
+   w==;
+X-CSE-ConnectionGUID: 03lrVaOGTxuQQRaLV27gZQ==
+X-CSE-MsgGUID: zk4rfQnySIuKwgmBvLGCEw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11184"; a="41461912"
 X-IronPort-AV: E=Sophos;i="6.10,199,1719903600"; 
-   d="scan'208";a="24176665"
-Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Sep 2024 08:47:16 -0700
-X-CSE-ConnectionGUID: 7Jzz+qfgSwOZXceBWyl2cw==
-X-CSE-MsgGUID: nSO2torVToaMOlESOHRY7g==
+   d="scan'208";a="41461912"
+Received: from fmviesa010.fm.intel.com ([10.60.135.150])
+  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Sep 2024 09:08:19 -0700
+X-CSE-ConnectionGUID: we3NXwoHSz2IODzz7edDPg==
+X-CSE-MsgGUID: P4DbNXxpSPu3/TFyqy233Q==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.10,199,1719903600"; 
-   d="scan'208";a="88202644"
+   d="scan'208";a="65181849"
 Received: from lkp-server01.sh.intel.com (HELO 9c6b1c7d3b50) ([10.239.97.150])
-  by fmviesa002.fm.intel.com with ESMTP; 03 Sep 2024 08:47:14 -0700
+  by fmviesa010.fm.intel.com with ESMTP; 03 Sep 2024 09:08:17 -0700
 Received: from kbuild by 9c6b1c7d3b50 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1slVkO-0006qy-1L;
-	Tue, 03 Sep 2024 15:47:12 +0000
-Date: Tue, 3 Sep 2024 23:46:30 +0800
+	id 1slW4l-0006sE-0n;
+	Tue, 03 Sep 2024 16:08:15 +0000
+Date: Wed, 4 Sep 2024 00:07:20 +0800
 From: kernel test robot <lkp@intel.com>
-To: Hongbo Li <lihongbo22@huawei.com>, christophe.leroy@csgroup.eu
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	lihongbo22@huawei.com, linuxppc-dev@lists.ozlabs.org,
-	linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH -next] soc/fsl/qbman: make use of the helper function
- kthread_run_on_cpu()
-Message-ID: <202409032300.9u9g0C8J-lkp@intel.com>
-References: <20240902133125.3089560-1-lihongbo22@huawei.com>
+To: David Howells <dhowells@redhat.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [dhowells-fs:netfs-crypt 36/37] fs/netfs/direct_read.c:291:25:
+ warning: variable 'start' is uninitialized when used here
+Message-ID: <202409040018.dK9qOlqV-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -65,147 +61,148 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240902133125.3089560-1-lihongbo22@huawei.com>
 
-Hi Hongbo,
-
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on next-20240902]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Hongbo-Li/soc-fsl-qbman-make-use-of-the-helper-function-kthread_run_on_cpu/20240903-060257
-base:   next-20240902
-patch link:    https://lore.kernel.org/r/20240902133125.3089560-1-lihongbo22%40huawei.com
-patch subject: [PATCH -next] soc/fsl/qbman: make use of the helper function kthread_run_on_cpu()
-config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20240903/202409032300.9u9g0C8J-lkp@intel.com/config)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/dhowells/linux-fs.git netfs-crypt
+head:   3962f4beba4e7ffa6cfab018df8a612902a1d2c8
+commit: 504a8d4b08293dbaa09e7057f3b4ea045ba52d29 [36/37] netfs: Implement bounce-buffering for unbuffered/DIO read
+config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20240904/202409040018.dK9qOlqV-lkp@intel.com/config)
 compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240903/202409032300.9u9g0C8J-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240904/202409040018.dK9qOlqV-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202409032300.9u9g0C8J-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202409040018.dK9qOlqV-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> drivers/soc/fsl/qbman/qman_test_stash.c:112:27: error: too many arguments to function call, expected 4, have 5
-     111 |                 struct task_struct *k = kthread_run_on_cpu(bstrap_fn, &bstrap,
-         |                                         ~~~~~~~~~~~~~~~~~~
-     112 |                                                 cpu, "hotpotato%d", cpu);
-         |                                                                     ^~~
-   include/linux/kthread.h:73:1: note: 'kthread_run_on_cpu' declared here
-      73 | kthread_run_on_cpu(int (*threadfn)(void *data), void *data,
-         | ^                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-      74 |                         unsigned int cpu, const char *namefmt)
-         |                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   1 error generated.
+>> fs/netfs/direct_read.c:291:25: warning: variable 'start' is uninitialized when used here [-Wuninitialized]
+     291 |                 _debug("bounce %llx", start);
+         |                                       ^~~~~
+   fs/netfs/internal.h:445:17: note: expanded from macro '_debug'
+     445 |                 kdebug(FMT, ##__VA_ARGS__);     \
+         |                               ^~~~~~~~~~~
+   fs/netfs/internal.h:422:43: note: expanded from macro 'kdebug'
+     422 | #define kdebug(FMT, ...) dbgprintk(FMT, ##__VA_ARGS__)
+         |                                           ^~~~~~~~~~~
+   fs/netfs/internal.h:418:46: note: expanded from macro 'dbgprintk'
+     418 |         printk("[%-6.6s] "FMT"\n", current->comm, ##__VA_ARGS__)
+         |                                                     ^~~~~~~~~~~
+   include/linux/printk.h:465:60: note: expanded from macro 'printk'
+     465 | #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
+         |                                                            ^~~~~~~~~~~
+   include/linux/printk.h:437:19: note: expanded from macro 'printk_index_wrap'
+     437 |                 _p_func(_fmt, ##__VA_ARGS__);                           \
+         |                                 ^~~~~~~~~~~
+   fs/netfs/direct_read.c:235:26: note: initialize the variable 'start' to silence this warning
+     235 |         unsigned long long start;
+         |                                 ^
+         |                                  = 0
+   1 warning generated.
 
-Kconfig warnings: (for reference only)
-   WARNING: unmet direct dependencies detected for OMAP2PLUS_MBOX
-   Depends on [n]: MAILBOX [=y] && (ARCH_OMAP2PLUS || ARCH_K3)
-   Selected by [y]:
-   - TI_K3_M4_REMOTEPROC [=y] && REMOTEPROC [=y] && (ARCH_K3 || COMPILE_TEST [=y])
 
+vim +/start +291 fs/netfs/direct_read.c
 
-vim +112 drivers/soc/fsl/qbman/qman_test_stash.c
-
-    35	
-    36	/*
-    37	 * Algorithm:
-    38	 *
-    39	 * Each cpu will have HP_PER_CPU "handlers" set up, each of which incorporates
-    40	 * an rx/tx pair of FQ objects (both of which are stashed on dequeue). The
-    41	 * organisation of FQIDs is such that the HP_PER_CPU*NUM_CPUS handlers will
-    42	 * shuttle a "hot potato" frame around them such that every forwarding action
-    43	 * moves it from one cpu to another. (The use of more than one handler per cpu
-    44	 * is to allow enough handlers/FQs to truly test the significance of caching -
-    45	 * ie. when cache-expiries are occurring.)
-    46	 *
-    47	 * The "hot potato" frame content will be HP_NUM_WORDS*4 bytes in size, and the
-    48	 * first and last words of the frame data will undergo a transformation step on
-    49	 * each forwarding action. To achieve this, each handler will be assigned a
-    50	 * 32-bit "mixer", that is produced using a 32-bit LFSR. When a frame is
-    51	 * received by a handler, the mixer of the expected sender is XOR'd into all
-    52	 * words of the entire frame, which is then validated against the original
-    53	 * values. Then, before forwarding, the entire frame is XOR'd with the mixer of
-    54	 * the current handler. Apart from validating that the frame is taking the
-    55	 * expected path, this also provides some quasi-realistic overheads to each
-    56	 * forwarding action - dereferencing *all* the frame data, computation, and
-    57	 * conditional branching. There is a "special" handler designated to act as the
-    58	 * instigator of the test by creating an enqueuing the "hot potato" frame, and
-    59	 * to determine when the test has completed by counting HP_LOOPS iterations.
-    60	 *
-    61	 * Init phases:
-    62	 *
-    63	 * 1. prepare each cpu's 'hp_cpu' struct using on_each_cpu(,,1) and link them
-    64	 *    into 'hp_cpu_list'. Specifically, set processor_id, allocate HP_PER_CPU
-    65	 *    handlers and link-list them (but do no other handler setup).
-    66	 *
-    67	 * 2. scan over 'hp_cpu_list' HP_PER_CPU times, the first time sets each
-    68	 *    hp_cpu's 'iterator' to point to its first handler. With each loop,
-    69	 *    allocate rx/tx FQIDs and mixer values to the hp_cpu's iterator handler
-    70	 *    and advance the iterator for the next loop. This includes a final fixup,
-    71	 *    which connects the last handler to the first (and which is why phase 2
-    72	 *    and 3 are separate).
-    73	 *
-    74	 * 3. scan over 'hp_cpu_list' HP_PER_CPU times, the first time sets each
-    75	 *    hp_cpu's 'iterator' to point to its first handler. With each loop,
-    76	 *    initialise FQ objects and advance the iterator for the next loop.
-    77	 *    Moreover, do this initialisation on the cpu it applies to so that Rx FQ
-    78	 *    initialisation targets the correct cpu.
-    79	 */
-    80	
-    81	/*
-    82	 * helper to run something on all cpus (can't use on_each_cpu(), as that invokes
-    83	 * the fn from irq context, which is too restrictive).
-    84	 */
-    85	struct bstrap {
-    86		int (*fn)(void);
-    87		atomic_t started;
-    88	};
-    89	static int bstrap_fn(void *bs)
-    90	{
-    91		struct bstrap *bstrap = bs;
-    92		int err;
-    93	
-    94		atomic_inc(&bstrap->started);
-    95		err = bstrap->fn();
-    96		if (err)
-    97			return err;
-    98		while (!kthread_should_stop())
-    99			msleep(20);
-   100		return 0;
-   101	}
-   102	static int on_all_cpus(int (*fn)(void))
-   103	{
-   104		int cpu;
-   105	
-   106		for_each_cpu(cpu, cpu_online_mask) {
-   107			struct bstrap bstrap = {
-   108				.fn = fn,
-   109				.started = ATOMIC_INIT(0)
-   110			};
-   111			struct task_struct *k = kthread_run_on_cpu(bstrap_fn, &bstrap,
- > 112							cpu, "hotpotato%d", cpu);
-   113			int ret;
-   114	
-   115			if (IS_ERR(k))
-   116				return -ENOMEM;
-   117			/*
-   118			 * If we call kthread_stop() before the "wake up" has had an
-   119			 * effect, then the thread may exit with -EINTR without ever
-   120			 * running the function. So poll until it's started before
-   121			 * requesting it to stop.
-   122			 */
-   123			while (!atomic_read(&bstrap.started))
-   124				msleep(20);
-   125			ret = kthread_stop(k);
-   126			if (ret)
-   127				return ret;
-   128		}
-   129		return 0;
-   130	}
-   131	
+   220	
+   221	/**
+   222	 * netfs_unbuffered_read_iter_locked - Perform an unbuffered or direct I/O read
+   223	 * @iocb: The I/O control descriptor describing the read
+   224	 * @iter: The output buffer (also specifies read length)
+   225	 *
+   226	 * Perform an unbuffered I/O or direct I/O from the file in @iocb to the
+   227	 * output buffer.  No use is made of the pagecache.
+   228	 *
+   229	 * The caller must hold any appropriate locks.
+   230	 */
+   231	ssize_t netfs_unbuffered_read_iter_locked(struct kiocb *iocb, struct iov_iter *iter)
+   232	{
+   233		struct netfs_io_request *rreq;
+   234		struct netfs_inode *ictx;
+   235		unsigned long long start;
+   236		ssize_t ret;
+   237		size_t orig_count = iov_iter_count(iter);
+   238		bool sync = is_sync_kiocb(iocb);
+   239	
+   240		_enter("");
+   241	
+   242		if (!orig_count)
+   243			return 0; /* Don't update atime */
+   244	
+   245		ret = kiocb_write_and_wait(iocb, orig_count);
+   246		if (ret < 0)
+   247			return ret;
+   248		file_accessed(iocb->ki_filp);
+   249	
+   250		rreq = netfs_alloc_request(iocb->ki_filp->f_mapping, iocb->ki_filp,
+   251					   iocb->ki_pos, orig_count,
+   252					   NETFS_DIO_READ);
+   253		if (IS_ERR(rreq))
+   254			return PTR_ERR(rreq);
+   255	
+   256		ictx = netfs_inode(rreq->inode);
+   257		netfs_stat(&netfs_n_rh_dio_read);
+   258		trace_netfs_read(rreq, rreq->start, rreq->len, netfs_read_trace_dio_read);
+   259	
+   260		/* If this is an async op, we have to keep track of the destination
+   261		 * buffer for ourselves as the caller's iterator will be trashed when
+   262		 * we return.
+   263		 *
+   264		 * In such a case, extract an iterator to represent as much of the the
+   265		 * output buffer as we can manage.  Note that the extraction might not
+   266		 * be able to allocate a sufficiently large bvec array and may shorten
+   267		 * the request.
+   268		 */
+   269		if (user_backed_iter(iter)) {
+   270			ret = netfs_extract_user_iter(iter, rreq->len, &rreq->buffer.iter, 0);
+   271			if (ret < 0)
+   272				goto out;
+   273			rreq->direct_bv = (struct bio_vec *)rreq->buffer.iter.bvec;
+   274			rreq->direct_bv_count = ret;
+   275			rreq->direct_bv_unpin = iov_iter_extract_will_pin(iter);
+   276			rreq->len = iov_iter_count(&rreq->buffer.iter);
+   277		} else {
+   278			rreq->buffer.iter = *iter;
+   279			rreq->len = orig_count;
+   280			rreq->direct_bv_unpin = false;
+   281			iov_iter_advance(iter, orig_count);
+   282		}
+   283	
+   284		/* If we're going to use a bounce buffer, we need to set it up.  We
+   285		 * will then need to pad the request out to the minimum block size.
+   286		 */
+   287		if (test_bit(NETFS_RREQ_USE_BOUNCE_BUFFER, &rreq->flags)) {
+   288			size_t min_bsize = 1UL << ictx->crypto_bshift;
+   289	
+   290			rreq->bounce_alloc_to = round_down(rreq->start, min_bsize);
+ > 291			_debug("bounce %llx", start);
+   292	
+   293			ret = netfs_alloc_bounce(rreq, rreq->bounce_alloc_to + min_bsize, GFP_KERNEL);
+   294			if (ret < 0)
+   295				goto out;
+   296		}
+   297	
+   298		if (!sync)
+   299			rreq->iocb = iocb;
+   300	
+   301		ret = netfs_unbuffered_read(rreq, sync);
+   302		if (ret < 0)
+   303			goto out; /* May be -EIOCBQUEUED */
+   304		if (sync) {
+   305			ret = netfs_dio_copy_bounce_to_dest(rreq, iocb);
+   306			if (ret == 0) {
+   307				iocb->ki_pos += rreq->transferred;
+   308				ret = rreq->transferred;
+   309			}
+   310		}
+   311	
+   312	out:
+   313		netfs_put_request(rreq, false, netfs_rreq_trace_put_return);
+   314		if (ret > 0)
+   315			orig_count -= ret;
+   316		return ret;
+   317	}
+   318	EXPORT_SYMBOL(netfs_unbuffered_read_iter_locked);
+   319	
 
 -- 
 0-DAY CI Kernel Test Service
