@@ -1,68 +1,67 @@
-Received: from mail-pf1-f181.google.com (mail-pf1-f181.google.com [209.85.210.181])
+Received: from mail-pf1-f174.google.com (mail-pf1-f174.google.com [209.85.210.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C02218E030
-	for <llvm@lists.linux.dev>; Tue,  3 Sep 2024 17:43:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8256318E367
+	for <llvm@lists.linux.dev>; Tue,  3 Sep 2024 17:44:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725385441; cv=none; b=iPZRtO7PsmdDD/dghZLfscm5n73fHJui4zDdvuQ5fwqUu+g56B7CfFk1hC7nkcFuGbGAmxMeTv0/I2talsqGjJjSfrSspCNr/0E2LZeEJL0ZVIUAHDFZDEXgtwMG4o/XMSP3O4Kv9KksiRuv+63ALVsY9Bq/FFu4yJeUmTR+Vuk=
+	t=1725385463; cv=none; b=tHZE48avIn1dNJns8GCOseGBDjb46qliMbOeZdXMLJXx437mZqtX2U0zrubPmnme5i/NtKxtct+nZtspesGk9Hm3vNH78lYpH6TXRLJ2UtOYFo/BVp0c5hk0oiuq2y/LvWFFe0bht6L6Bcg/G+ImgYl+ZqvJV66AUnw7yeMXWh4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725385441; c=relaxed/simple;
-	bh=gi+yu/z+/Fjxnn4wuJ/sFP88katAdvUnvWOv4IPfnOI=;
+	s=arc-20240116; t=1725385463; c=relaxed/simple;
+	bh=DzpwJQwOT3F0kC0YR4xC7AP8eabN0PyPAbZ0DqFkPfA=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=n5XnMdymuF1vhVRNmEkFlwz9PjOVCkCsutnyN++2p+OKASsZN9GMqU3ju5K1ASOt4Fx4DG/rsPivoqZsrvdirqlQ2f5k+Lgl5ZF6in+UlL3G0u27emODc30UDAdzElZon6kIUlCgux1snJkROr1bReplntnYPsqaQISvGtIy8FM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bgHU1ZNo; arc=none smtp.client-ip=209.85.210.181
+	 To:Cc:Content-Type; b=lSyZ3WMDy4B/gqYRKLqcHOWcvEv68ltdbgsUm/IT86oyWYmhtbfHcIg3rlg/5UHfr3aB6jucYP8vC/TsYdvMCI/GecM6od3ll7qES73FIi3z4nYHio00GvlUhvEDnIf4l6yC/mItxgMs1OZ+2W70W7aKFvr1rGZZAT1gHvoqboM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=iuDRV/Fo; arc=none smtp.client-ip=209.85.210.174
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bgHU1ZNo"
-Received: by mail-pf1-f181.google.com with SMTP id d2e1a72fcca58-71447da79e1so308363b3a.0
-        for <llvm@lists.linux.dev>; Tue, 03 Sep 2024 10:43:59 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="iuDRV/Fo"
+Received: by mail-pf1-f174.google.com with SMTP id d2e1a72fcca58-7144135c842so293848b3a.1
+        for <llvm@lists.linux.dev>; Tue, 03 Sep 2024 10:44:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1725385439; x=1725990239; darn=lists.linux.dev;
+        d=gmail.com; s=20230601; t=1725385462; x=1725990262; darn=lists.linux.dev;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=gi+yu/z+/Fjxnn4wuJ/sFP88katAdvUnvWOv4IPfnOI=;
-        b=bgHU1ZNoOD8w/kg/IS/3O/AC1t3jJov6SnMIKy1mFeIGfCK4aWf7j4hCT11PVurX/z
-         tSlhbXBvK+U7JxvbKDmq4PM4Q+xzUBjIscfF/Te+Dnbd9GKLi0rxAOUZMRXpjIRYK01W
-         IJ6QFuvAkYED8VW13r/gciD+Wc18s1hKxtmUnxFxlw+Qp86+yFyczTiTzjM0bB3DwP5f
-         nWc65xuo/C7a99/ygOHIbF0J0zdHdy7+5KjNEiWfB2HXZm41XK2N6aU1a2RhRP1cSfOT
-         Vx5XXBVG0ZFgt+EAOMoUf3hAuQui02gKXCSVmWp3j3i9ilmbzwt6/ab5AmSVxm+uRjW1
-         OipA==
+        bh=DzpwJQwOT3F0kC0YR4xC7AP8eabN0PyPAbZ0DqFkPfA=;
+        b=iuDRV/FoqTkaPBgOoGQilQ5hQ+o21ZcrTVwxHFDX36kEpx2LZ7ZFMV5AB3BGY9ECB0
+         2DFFHQOdN+mgg4KG8nlX0ylcxTkqjlLQDbjaMWYt5HrV0FFXlI+fqMmYMBaq1ieBmNbh
+         p/IATP19biMXunJT4gWtvlQgx5CfWq4Owsm45BoeHAS34x2Z6kvma4XHQfNzpBT33dOX
+         OmAGf3pECFj6WQJsjVR0GIjvkU3B3taio3JLfA8qbVwjf3EiwIaxKIWiDqP98gjVe8D8
+         swklOGYi+EEdvDbZJMlUTolhTq8Y2AUkE0W62caJl3PeGOQAhb12NHahWwsOyvA2ZZOV
+         VGvg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1725385439; x=1725990239;
+        d=1e100.net; s=20230601; t=1725385462; x=1725990262;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=gi+yu/z+/Fjxnn4wuJ/sFP88katAdvUnvWOv4IPfnOI=;
-        b=FX+hQbLDi9X1krup6Gompue6HxRU1R2BVHqaBYWjSm0SUh+JJ1ao03lyQRxe8Q64vT
-         zyslv4TRTA0r9EKjxoTglZ0tyKWGIkOW8pec/5S42sVhIXUozte/H/P8l2hAybi0DJrj
-         Zuw7S7IzZw2YDCvAF6kXWqY5GLl7x9jfLICQ87KSPt8lepv5dn0sdACH6jhv/PYmdOs2
-         Bi1ANoT0wttT9Q2F39bRpJr8vQJKvQCUO0V4ENzQhTs7XwOQuQMmwEzW62G4JvIaqxLQ
-         DhVKcVOBu71Dv0uozw5mL1fW86rpwxWgGNhfnm/4AFOlnjxMOHgEaAgGyg9xOi4xtZM9
-         qjfw==
-X-Forwarded-Encrypted: i=1; AJvYcCUPADIdcWdZYZfksXvMOi2XRZi66n/J5d7gf2MIkAmULduS8qSGUVkpmPgAYfFfAic55GjQ@lists.linux.dev
-X-Gm-Message-State: AOJu0Yyugc19+rqohgZfPGRtVWiOZlxDf/u+86MERwncqH+6WLmu1T/u
-	PoorMn38uXRAZvIPOKS2vLU80VIezZt3OwVLHjZOlwxcIt6z8+hjNzsS4ZxvMQoahS/avxJfplQ
-	b9N97MWXCIbIp29qOIY1JftmQCeA=
-X-Google-Smtp-Source: AGHT+IGOit+pKE1XEmbe1GmHAZjGSQFBSI/2mJn7mS7tx95JcJrV9hAXdxD2z8nbCI3vzg90VuXd/BAf95vimO+HTSw=
-X-Received: by 2002:a05:6a20:c513:b0:1ce:f7fe:83ba with SMTP id
- adf61e73a8af0-1cef7fe848cmr1647514637.4.1725385438739; Tue, 03 Sep 2024
- 10:43:58 -0700 (PDT)
+        bh=DzpwJQwOT3F0kC0YR4xC7AP8eabN0PyPAbZ0DqFkPfA=;
+        b=UCU2uyXdcdBQtYg++YQJdr7+t8BNBlfzwI4lBDKrvNiBDxIHp+T6JzVWOEsn1vg9kT
+         WYb/AJF0QU+hyHfZ1MDxM43/dC9eImmdxQ2mdDuGvrBQZeO+zOl4bjQru48f63ZyMLTy
+         sGWuAYDnviw+rcglf8Y3OpHkVSHVZ24D/8qmF+epboxRA5AgvDGbcXJQqbXieWWmtC6g
+         3cq0CGApz8vUjJXGA+8CHugltASyoBhFVM4zNzfNEzNjkKVJDuueyZO+p8dBF1d//W1f
+         7Z96yxEib/wyGwx87kBgB8xhpawwPoqVeX+jPKreB7u2YFZr3DXrNCPaf7sbJMVpHRnn
+         u6KA==
+X-Forwarded-Encrypted: i=1; AJvYcCW6WbpQmdoslQwTuqT1OB3idBpb/Zf0SUO1uHvzlhUW2hD0ezXhkf9V1PUQBTlshFGTF75X@lists.linux.dev
+X-Gm-Message-State: AOJu0YwKe0b0qq1E/tx1JgOHSX72oSQLrIdUKWp4UEjsHsDGPmVWCrrP
+	WJxjsVPnjFCe38OHLr6TpDlTS1DJ3nuXjAXypw2/fvtcX5u7Tb2BTLSNmDf0wNb+D1ejy8nUa7l
+	fYptxDP1EG0OvYWfqv8ZhGodqxS4=
+X-Google-Smtp-Source: AGHT+IEr2msm5yg48J8o10JFNcKqa18Qf0QpuKetck9mzQgqKhHQ/7Pg+OEHdxchtehB6dyn3bXmyxfB4BSsSfVqxbo=
+X-Received: by 2002:a05:6a00:1816:b0:70e:acd0:d8b6 with SMTP id
+ d2e1a72fcca58-71730458903mr8460968b3a.0.1725385461577; Tue, 03 Sep 2024
+ 10:44:21 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20240903-mips-rust-v1-0-0fdf0b2fd58f@flygoat.com> <20240903-mips-rust-v1-2-0fdf0b2fd58f@flygoat.com>
-In-Reply-To: <20240903-mips-rust-v1-2-0fdf0b2fd58f@flygoat.com>
+References: <20240903-mips-rust-v1-0-0fdf0b2fd58f@flygoat.com> <20240903-mips-rust-v1-3-0fdf0b2fd58f@flygoat.com>
+In-Reply-To: <20240903-mips-rust-v1-3-0fdf0b2fd58f@flygoat.com>
 From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date: Tue, 3 Sep 2024 19:43:46 +0200
-Message-ID: <CANiq72mKZukJ+V_fXtvfBxN-WVBBOr1pZJ3iKrWgagTrJC4pdg@mail.gmail.com>
-Subject: Re: [PATCH 2/3] MIPS: Rename mips_instruction type to workaround
- bindgen issue
+Date: Tue, 3 Sep 2024 19:44:08 +0200
+Message-ID: <CANiq72=z1yJm-B_ie=GfueOF1qksaSD9txgFU1YQo2tZx0qQPg@mail.gmail.com>
+Subject: Re: [PATCH 3/3] rust: Enable for MIPS
 To: Jiaxun Yang <jiaxun.yang@flygoat.com>
 Cc: Masahiro Yamada <masahiroy@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
 	Nicolas Schier <nicolas@fjasle.eu>, Richard Weinberger <richard@nod.at>, 
@@ -88,14 +87,17 @@ Content-Transfer-Encoding: quoted-printable
 On Tue, Sep 3, 2024 at 7:15=E2=80=AFPM Jiaxun Yang <jiaxun.yang@flygoat.com=
 > wrote:
 >
-> We have a union and a type both named after mips_instruction,
-> rust bindgen is not happy with this kind of naming alias.
+> We don't use builtin target as there is no sutiable baremetal
+> target for us that can cover all ISA variants supported by kernel.
 
-For this sort of thing, you may be able to add it to the block list at
-`rust/bindgen_parameters`, so that you don't need to change any C
-code.
+Since we should try to go away from using `target.json`: what was not
+possible to enable via e.g. `-Ctarget-features` or other flags? i.e. I
+see the `+mips*` features there in the supported list, and from a
+quick test the data layout also seems to match, but I assume I missed
+something.
 
-I hope that helps!
+If it is not possible, then we should definitely ping upstream Rust about i=
+t. :)
 
 Cheers,
 Miguel
