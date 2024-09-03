@@ -1,63 +1,63 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CED9513A40F;
-	Tue,  3 Sep 2024 01:33:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E2C2433BC;
+	Tue,  3 Sep 2024 03:15:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725327215; cv=none; b=rzTzBaEXmkd/iKNHZKeTRFTI+1qP5pwrO3oSFx8v6UOo9J8MafgOwFai+cPHsldubWVVHNGleXepwyQow0ve3+m9F0aPcIs2vDPrgFb3kMW9ZTX5brOEkb0REPFLxLa2tekCQQMasB4tA7EbBfCTrFJiyuWfl47QpFtgrVsFnBo=
+	t=1725333341; cv=none; b=iDxEir+TB24kAVZSYrXTGAnWwr3+RcLj1LnEB0hXqP01QQNJMovuNYpXmIB/GI7CkZPwzjQuDCF6wWmowBkay63KWSNjCTbTUFFUX5DOMEcRS2lJy3xZMumvcd/geMYZM88qCAkf5oQPHp2sAKX03Y3aREMb9TWthXXP3VAV9vY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725327215; c=relaxed/simple;
-	bh=1yxLTU43j5tMCXj+3ugF/3/zN2UgMs9UprUUFdov/tY=;
+	s=arc-20240116; t=1725333341; c=relaxed/simple;
+	bh=ARVgzjc77gwC4k0HXCvC8mOKt71sAJB8KzGegu4qRJk=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=u/4MyGGjZVYHJ5/a0ifoPdwf5EslGFuExk4OWxM67JXM16BgOtUei02m3KGzQKiLcZZBDvCuBmSfJ99XbVbF+MlBCL3/33GvJlRm+mM8cZxxeeNcKeG45+RncbdlaHL+JS9C9brVBwT+i5US82zygNJbC4tDFmPgvUWl61AzagA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=i9QWmJ2x; arc=none smtp.client-ip=198.175.65.9
+	 Content-Type:Content-Disposition:In-Reply-To; b=fXFIwTAOnJZavam1jKuH00my3e34I87F1GlaWszH6KbNCOX7isyZXumCepEZJzEFgh+J4BxjA3+zjEhep7a93xoo/m66FqbKZ04jOtVEDT9nUPqeOS9zgzcGdIyD7hxTZRLqmA3o9V+I5lpKpSSPJQUtVuEUuxvNoQ4ihPv7pHA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Mk08CFVA; arc=none smtp.client-ip=198.175.65.15
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="i9QWmJ2x"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Mk08CFVA"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1725327213; x=1756863213;
+  t=1725333340; x=1756869340;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=1yxLTU43j5tMCXj+3ugF/3/zN2UgMs9UprUUFdov/tY=;
-  b=i9QWmJ2xgQssYZ+tQr/mEgiO+Emlo/lnOlk7PPaRaSOqJcsgfRFl1sua
-   6BsdScQZoQOwPL/Az4YjBYB2eBH/dj4uLaVCwYpqtQDwT3WUwcKdar5/Y
-   d9kfjc4ry/iJC03M+Qb0QGqK3v96+RPb7obYbluxPEPd9rcVTZtOvvTc1
-   mrIs8Kcm3OpVUCp4g30IMVoXEx47Nu32cPtRiVNlAHq2fEBPIqhWCKRpz
-   8VRp/4OTjJ3uIRv57nEtduzNONfD7ID393KhqttWRCJ70QJXKQzAK4S+R
-   nOyVLhCQ5g8/aiUsGRLHcY7wp5FvtDrvQQw4laF4dlugryq4O1RUvPAyk
+  bh=ARVgzjc77gwC4k0HXCvC8mOKt71sAJB8KzGegu4qRJk=;
+  b=Mk08CFVAdq7PFNZS93q36v0DFHV4Di4gkQfa5uoPOX6yPU1l7rl3ztVc
+   uB3Xy0BvNfEnGNUP1SNGtECax9kPuw73aIog3qR989m4Jhe8hcFBbFEpI
+   aaR/P1+P4syDmsh2onUeBVMrqvVgFPKgatYxCkrNPkBJJLnpAn1Fw1EDi
+   wM1etzBv1PvbGqwxTlu+3k5K4scmpwiCFiJCGlGoewD02Zbz8qL7krFUo
+   XLiepfuw8aWckQExA+CR+H3DRXXcAdVEncCmCsVq0yqkckwzOIvufChDp
+   mALWvb+9BZFBqkp3UYqVKhNuzBAHnE2Xwr4oMEPFg23wEbqDSkSqWkmuH
    w==;
-X-CSE-ConnectionGUID: JKmx48QKS2S1YIgN4rQ+wg==
-X-CSE-MsgGUID: bSFbLdd3TSCtZQsm/RUwhQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11183"; a="46425531"
+X-CSE-ConnectionGUID: A3osA54WRMOoKOT491ZSwA==
+X-CSE-MsgGUID: FqlgEPzuR0WFv3YmSj+9sg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11183"; a="27664109"
 X-IronPort-AV: E=Sophos;i="6.10,197,1719903600"; 
-   d="scan'208";a="46425531"
-Received: from fmviesa008.fm.intel.com ([10.60.135.148])
-  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Sep 2024 18:33:33 -0700
-X-CSE-ConnectionGUID: 2+sVUTuQRDmsfpU0jLv+Iw==
-X-CSE-MsgGUID: nILQxEBNT9Sxz770qNoPjQ==
+   d="scan'208";a="27664109"
+Received: from fmviesa009.fm.intel.com ([10.60.135.149])
+  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Sep 2024 20:15:38 -0700
+X-CSE-ConnectionGUID: TAo27OybTx2qFDf1mBgO9A==
+X-CSE-MsgGUID: vTjRbZ1jTACniPdDgXUDTw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.10,197,1719903600"; 
-   d="scan'208";a="64742979"
+   d="scan'208";a="64797274"
 Received: from lkp-server01.sh.intel.com (HELO 9c6b1c7d3b50) ([10.239.97.150])
-  by fmviesa008.fm.intel.com with ESMTP; 02 Sep 2024 18:33:30 -0700
+  by fmviesa009.fm.intel.com with ESMTP; 02 Sep 2024 20:15:34 -0700
 Received: from kbuild by 9c6b1c7d3b50 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1slIQC-00064Y-19;
-	Tue, 03 Sep 2024 01:33:28 +0000
-Date: Tue, 3 Sep 2024 09:32:55 +0800
+	id 1slK0x-000694-34;
+	Tue, 03 Sep 2024 03:15:31 +0000
+Date: Tue, 3 Sep 2024 11:15:02 +0800
 From: kernel test robot <lkp@intel.com>
-To: Abhash Jha <abhashkumarjha123@gmail.com>, linux-iio@vger.kernel.org
+To: Ankit Nautiyal <ankit.k.nautiyal@intel.com>,
+	intel-gfx@lists.freedesktop.org
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	songqiang1304521@gmail.com, jic23@kernel.org, lars@metafoo.de,
-	linux-kernel@vger.kernel.org,
-	Abhash Jha <abhashkumarjha123@gmail.com>
-Subject: Re: [PATCH v2 2/2] iio: proximity: vl53l0x-i2c: Added continuous
- mode support
-Message-ID: <202409030909.1CQBnx22-lkp@intel.com>
-References: <20240902122557.129013-3-abhashkumarjha123@gmail.com>
+	jani.nikula@linux.intel.com, ville.syrjala@linux.intel.com,
+	mitulkumar.ajitkumar.golani@intel.com
+Subject: Re: [PATCH 04/13] drm/i915/display: Enable MSA Ignore Timing PAR
+ only when in not fixed_rr mode
+Message-ID: <202409031027.GftRdwjU-lkp@intel.com>
+References: <20240902080635.2946858-5-ankit.k.nautiyal@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -66,70 +66,76 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240902122557.129013-3-abhashkumarjha123@gmail.com>
+In-Reply-To: <20240902080635.2946858-5-ankit.k.nautiyal@intel.com>
 
-Hi Abhash,
+Hi Ankit,
 
-kernel test robot noticed the following build errors:
+kernel test robot noticed the following build warnings:
 
-[auto build test ERROR on jic23-iio/togreg]
-[also build test ERROR on linus/master v6.11-rc6 next-20240902]
+[auto build test WARNING on drm-intel/for-linux-next]
+[also build test WARNING on drm-tip/drm-tip next-20240902]
+[cannot apply to drm-intel/for-linux-next-fixes linus/master v6.11-rc6]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Abhash-Jha/iio-proximity-vl53l0x-i2c-Added-sensor-ID-check/20240902-204936
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/jic23/iio.git togreg
-patch link:    https://lore.kernel.org/r/20240902122557.129013-3-abhashkumarjha123%40gmail.com
-patch subject: [PATCH v2 2/2] iio: proximity: vl53l0x-i2c: Added continuous mode support
-config: i386-buildonly-randconfig-005-20240903 (https://download.01.org/0day-ci/archive/20240903/202409030909.1CQBnx22-lkp@intel.com/config)
+url:    https://github.com/intel-lab-lkp/linux/commits/Ankit-Nautiyal/drm-i915-dp-Avoid-vrr-compute-config-for-HDMI-sink/20240902-205135
+base:   git://anongit.freedesktop.org/drm-intel for-linux-next
+patch link:    https://lore.kernel.org/r/20240902080635.2946858-5-ankit.k.nautiyal%40intel.com
+patch subject: [PATCH 04/13] drm/i915/display: Enable MSA Ignore Timing PAR only when in not fixed_rr mode
+config: x86_64-rhel-8.3-rust (https://download.01.org/0day-ci/archive/20240903/202409031027.GftRdwjU-lkp@intel.com/config)
 compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240903/202409030909.1CQBnx22-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240903/202409031027.GftRdwjU-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202409030909.1CQBnx22-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202409031027.GftRdwjU-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> drivers/iio/proximity/vl53l0x-i2c.c:104:20: error: call to undeclared function 'get_unaligned_be16'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     104 |         data->scan.chan = get_unaligned_be16(&buffer[10]);
-         |                           ^
-   1 error generated.
+>> drivers/gpu/drm/i915/display/intel_dp_link_training.c:724:6: warning: variable 'enable_msa_timing_par_ignore' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
+     724 |         if (crtc_state->vrr.enable && !crtc_state->vrr.fixed_rr)
+         |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/gpu/drm/i915/display/intel_dp_link_training.c:728:30: note: uninitialized use occurs here
+     728 |                                         crtc_state->port_clock, enable_msa_timing_par_ignore);
+         |                                                                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/gpu/drm/i915/display/intel_dp_link_training.c:724:2: note: remove the 'if' if its condition is always true
+     724 |         if (crtc_state->vrr.enable && !crtc_state->vrr.fixed_rr)
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     725 |                 enable_msa_timing_par_ignore = true;
+>> drivers/gpu/drm/i915/display/intel_dp_link_training.c:724:6: warning: variable 'enable_msa_timing_par_ignore' is used uninitialized whenever '&&' condition is false [-Wsometimes-uninitialized]
+     724 |         if (crtc_state->vrr.enable && !crtc_state->vrr.fixed_rr)
+         |             ^~~~~~~~~~~~~~~~~~~~~~
+   drivers/gpu/drm/i915/display/intel_dp_link_training.c:728:30: note: uninitialized use occurs here
+     728 |                                         crtc_state->port_clock, enable_msa_timing_par_ignore);
+         |                                                                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/gpu/drm/i915/display/intel_dp_link_training.c:724:6: note: remove the '&&' if its condition is always true
+     724 |         if (crtc_state->vrr.enable && !crtc_state->vrr.fixed_rr)
+         |             ^~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/gpu/drm/i915/display/intel_dp_link_training.c:721:35: note: initialize the variable 'enable_msa_timing_par_ignore' to silence this warning
+     721 |         bool enable_msa_timing_par_ignore;
+         |                                          ^
+         |                                           = 0
+   2 warnings generated.
 
 
-vim +/get_unaligned_be16 +104 drivers/iio/proximity/vl53l0x-i2c.c
+vim +724 drivers/gpu/drm/i915/display/intel_dp_link_training.c
 
-    87	
-    88	static irqreturn_t vl53l0x_trigger_handler(int irq, void *priv)
-    89	{
-    90		struct iio_poll_func *pf = priv;
-    91		struct iio_dev *indio_dev = pf->indio_dev;
-    92		struct vl53l0x_data *data = iio_priv(indio_dev);
-    93		u8 buffer[12];
-    94		int ret;
-    95	
-    96		ret = i2c_smbus_read_i2c_block_data(data->client,
-    97						VL_REG_RESULT_RANGE_STATUS,
-    98						sizeof(buffer), buffer);
-    99		if (ret < 0)
-   100			return ret;
-   101		else if (ret != 12)
-   102			return -EREMOTEIO;
-   103	
- > 104		data->scan.chan = get_unaligned_be16(&buffer[10]);
-   105		iio_push_to_buffers_with_timestamp(indio_dev, &data->scan,
-   106						iio_get_time_ns(indio_dev));
-   107	
-   108		iio_trigger_notify_done(indio_dev->trig);
-   109		ret = vl53l0x_clear_irq(data);
-   110		if (ret < 0)
-   111			return ret;
-   112	
-   113		return IRQ_HANDLED;
-   114	}
-   115	
+   717	
+   718	static void intel_dp_update_downspread_ctrl(struct intel_dp *intel_dp,
+   719						    const struct intel_crtc_state *crtc_state)
+   720	{
+   721		bool enable_msa_timing_par_ignore;
+   722	
+   723		/* Enable MSA TIMING PAR IGNORE only in non fixed_rr mode */
+ > 724		if (crtc_state->vrr.enable && !crtc_state->vrr.fixed_rr)
+   725			enable_msa_timing_par_ignore = true;
+   726	
+   727		intel_dp_link_training_set_mode(intel_dp,
+   728						crtc_state->port_clock, enable_msa_timing_par_ignore);
+   729	}
+   730	
 
 -- 
 0-DAY CI Kernel Test Service
