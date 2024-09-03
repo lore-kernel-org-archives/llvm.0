@@ -1,100 +1,90 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 36ECC18BB98;
-	Tue,  3 Sep 2024 16:27:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B0BF818BB9F;
+	Tue,  3 Sep 2024 16:51:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725380833; cv=none; b=jOq1wwSy+B/UrwUxQwvMTrVaNQMiO0KM+8fJC6wKuAP36UARzYLuRDGIpQNQNq2lwevIcCJ5HKQifre/VlNOMFMB0KkGT7ZEvg6o0MidSxG8+uKet6dVYRh2CO87lt2n4Arb7pFBg1dFafJQd7vI7xOpy50iUGvu4rfcvczHBxM=
+	t=1725382290; cv=none; b=cBDvjvUP9L9mkIbINHy86XoOVzTHl3odit9UidDtDfsWCiD6ElR18zXgE6gx4EBqOiH5ypcX4NSB7tyyi+9e2awupdO8yLq1/3swHYEbRZUZFXVRTkx9dXJFPlKvyylQevxkJg23fcVjasfk3ozTCfmOnZLaDJ4/FTGZ/iCnNuA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725380833; c=relaxed/simple;
-	bh=vhaMH9nB7L0B5h8YVg4047SSaEis2Kis9LFU6jI5oVU=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=uutURBJgqTWAJhPmSay31ks3GM1XD0dG85quPzZ5Qg8zwIEZAPL0+LU+Nuv+zSK5xZ7WkiDt3YtyiYrtNWzVkauiQPMr5YEiV8Rk78HOzvKF7FJXSSRk7TuODxHxwQ5jUibrZ3ntn8iQzpVEO7Yz9hcETRkjkSf7EgIrXbWYOwU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KAFuA8H4; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1725382290; c=relaxed/simple;
+	bh=v6QUWDn3Xk0vLTb/0TXXT0hs0RxaaMRHOSxlGXdBePM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=QQpSfa9rb1G3yT7lKB4y8J7xIDpsOLaXL4wSdrrQqJjf+LSBZOb3fdwKwiyExWdeMqVMEFmV6CNYYXPwmdRKHg5BdLyHSyg5DNLc5cCNPQRwMK6itgX5rwPl8rvCTe9QcaQA6MmOaebzO1ifd2/wFxQwone0YGsIZfFNBfozqiA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KFVhE7HU; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KAFuA8H4"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C0E29C4CECA;
-	Tue,  3 Sep 2024 16:27:09 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KFVhE7HU"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5A9B3C4CEC4;
+	Tue,  3 Sep 2024 16:51:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1725380832;
-	bh=vhaMH9nB7L0B5h8YVg4047SSaEis2Kis9LFU6jI5oVU=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=KAFuA8H4UrstlOD0JoeX3mhoqbbICkQhhXaKFpMIGPKc+ol6KEp3xotXNqF6C4SU/
-	 OXe4iqYRgCq4ZHJNKZ0gp2nxHfAeY4kVQnKHOGCYTOzbJKRuXun/OUeWyYG9xkZp51
-	 8jLW/D4xzU63b7KsUGDCjpJmRGd7YIPu9JXbJYdYcRyksxIXSu3jHHGP6xhBZ1aKXB
-	 aEiCpzlsNvZr+vAH6csX022kDQQYD40AH/Vi9ZX137ptN2ZvuDNYZEKT0I9/ZZQPOL
-	 gI1hz8b0ZRFaUpzFqCVoFmRCuuzUoJpyvJwbuNZgU81LJkA51/sx7MUt7jpFrzLNxJ
-	 VKhaBARzWakQg==
+	s=k20201202; t=1725382290;
+	bh=v6QUWDn3Xk0vLTb/0TXXT0hs0RxaaMRHOSxlGXdBePM=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=KFVhE7HUztDHKoswnzl716+1BfpdDKMFPobGsXUUzoyxEc/JwV1DKOdwH2dNzPPCp
+	 +84ICnp9h4Vz4Os3Ngpo+r7TM0OLxTfH4We+YPI8IM3x5IQGojqgOsxeQIROIzBtHn
+	 1V9tRetREZ2idlJ/DoIR1S1oZC+CH6Gf1KenFx0uo08pjZGigUD+4imoTwgV08yhkG
+	 Nl355Yq8OYzFYRSInPciya4dZM/OVDn72lyB2nB7Q8ccPOwS7q0vEnMtwGSX9GAVob
+	 7t8+z+dljI2JPLmFrBSNuCizFgeVOjKbcRwkdtIkkvE3jO9sE+B/2+5+icsNt6WeW3
+	 O/pyypMxBEOiQ==
+Date: Tue, 3 Sep 2024 17:51:24 +0100
 From: Simon Horman <horms@kernel.org>
-Date: Tue, 03 Sep 2024 17:26:54 +0100
-Subject: [PATCH net-next 2/2] octeontx2-pf: Make iplen __be16 in
- otx2_sqe_add_ext()
+To: Sunil Goutham <sgoutham@marvell.com>,
+	Linu Cherian <lcherian@marvell.com>,
+	Geetha sowjanya <gakula@marvell.com>,
+	Jerin Jacob <jerinj@marvell.com>,
+	Hariprasad Kelam <hkelam@marvell.com>,
+	Subbaraya Sundeep <sbhatta@marvell.com>
+Cc: "David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>, netdev@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: Re: [PATCH net-next 0/2] octeontx2: Address some Sparse warnings
+Message-ID: <20240903165124.GG4792@kernel.org>
+References: <20240903-octeontx2-sparse-v1-0-f190309ecb0a@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20240903-octeontx2-sparse-v1-2-f190309ecb0a@kernel.org>
-References: <20240903-octeontx2-sparse-v1-0-f190309ecb0a@kernel.org>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 In-Reply-To: <20240903-octeontx2-sparse-v1-0-f190309ecb0a@kernel.org>
-To: Sunil Goutham <sgoutham@marvell.com>, 
- Linu Cherian <lcherian@marvell.com>, Geetha sowjanya <gakula@marvell.com>, 
- Jerin Jacob <jerinj@marvell.com>, Hariprasad Kelam <hkelam@marvell.com>, 
- Subbaraya Sundeep <sbhatta@marvell.com>
-Cc: "David S. Miller" <davem@davemloft.net>, 
- Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, 
- Paolo Abeni <pabeni@redhat.com>, Nathan Chancellor <nathan@kernel.org>, 
- Nick Desaulniers <ndesaulniers@google.com>, 
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
- netdev@vger.kernel.org, llvm@lists.linux.dev
-X-Mailer: b4 0.14.0
 
-In otx2_sqe_add_ext() iplen is used to hold a 16-bit big-endian value,
-but it's type is u16, indicating a host byte order integer.
+On Tue, Sep 03, 2024 at 05:26:52PM +0100, Simon Horman wrote:
+> Hi,
+> 
+> This patchset addresses some Sparse warnings that are flagged in files
+> touched by recent patch submissions.
 
-Address this mismatch by changing the type of iplen to __be16.
+Oops, I now realise that the issue addressed by patch 1/2 is
+not described there as being flagged by Sparse.
 
-Flagged by Sparse as:
+I'll plan to send a v2, with an updated cover letter,
+after an appropriate timeout. Any review in the meantime
+would be appreciated.
 
-.../otx2_txrx.c:699:31: warning: incorrect type in assignment (different base types)
-.../otx2_txrx.c:699:31:    expected unsigned short [usertype] iplen
-.../otx2_txrx.c:699:31:    got restricted __be16 [usertype]
-.../otx2_txrx.c:701:54: warning: incorrect type in assignment (different base types)
-.../otx2_txrx.c:701:54:    expected restricted __be16 [usertype] tot_len
-.../otx2_txrx.c:701:54:    got unsigned short [usertype] iplen
-.../otx2_txrx.c:704:60: warning: incorrect type in assignment (different base types)
-.../otx2_txrx.c:704:60:    expected restricted __be16 [usertype] payload_len
-.../otx2_txrx.c:704:60:    got unsigned short [usertype] iplen
-
-Introduced in
-commit dc1a9bf2c816 ("octeontx2-pf: Add UDP segmentation offload support")
-
-No functional change intended.
-Compile tested only.
-
-Signed-off-by: Simon Horman <horms@kernel.org>
----
- drivers/net/ethernet/marvell/octeontx2/nic/otx2_txrx.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_txrx.c b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_txrx.c
-index 3eb85949677a..933e18ba2fb2 100644
---- a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_txrx.c
-+++ b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_txrx.c
-@@ -687,7 +687,7 @@ static void otx2_sqe_add_ext(struct otx2_nic *pfvf, struct otx2_snd_queue *sq,
- 		} else if (skb_shinfo(skb)->gso_type & SKB_GSO_UDP_L4) {
- 			__be16 l3_proto = vlan_get_protocol(skb);
- 			struct udphdr *udph = udp_hdr(skb);
--			u16 iplen;
-+			__be16 iplen;
- 
- 			ext->lso_sb = skb_transport_offset(skb) +
- 					sizeof(struct udphdr);
+> 
+> Although these changes do not alter the functionality of the code, by
+> addressing them real problems introduced in future which are flagged by
+> Sparse will stand out more readily.
+> 
+> Compile tested only.
+> 
+> ---
+> Simon Horman (2):
+>       octeontx2-af: Pass string literal as format argument of alloc_workqueue()
+>       octeontx2-pf: Make iplen __be16 in otx2_sqe_add_ext()
+> 
+>  drivers/net/ethernet/marvell/octeontx2/af/rvu.c        | 4 ++--
+>  drivers/net/ethernet/marvell/octeontx2/nic/otx2_txrx.c | 2 +-
+>  2 files changed, 3 insertions(+), 3 deletions(-)
+> 
+> base-commit: 54f1a107bd034e8d9052f5642280876090ebe31c
 
 -- 
-2.45.2
-
+pw-bot: cr
