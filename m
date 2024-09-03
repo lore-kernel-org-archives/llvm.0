@@ -1,247 +1,175 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
+Received: from pfout7-smtp.messagingengine.com (fout7-smtp.messagingengine.com [103.168.172.150])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7BFF218BC2E;
-	Tue,  3 Sep 2024 16:59:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 204B518CC15
+	for <llvm@lists.linux.dev>; Tue,  3 Sep 2024 17:14:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.150
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725382767; cv=none; b=RnQpColw3abuaHSFEIKfvNOlKHfcXQAbj6ep5Iasx0JiN7v3vQIXRgBObHjPXwvr339GJT8GL9BXR+FSovPVHIgUZATLY29XOIlJ10sPhs81oZrm/SUFM83Y28OorDSQaY9Rb5nnvh2ROTW37k5K56p4INqLk+CNcsKpxioGncs=
+	t=1725383696; cv=none; b=Z2R6jMeEcubGCoOBuC7QUfQpjlHifbNflKO767tGzVaj9GNPTKKfyQ85HUzuoybBRClkBtOQxY1TBGFoLJW1pNfZtYqn4wJ+jXWVEm+CXT0nETHw/dX9mQ3aJQyZnDMeunTI40Vl1VA5Z00FHCUegPuULu0Ouv424rw6psBLQCY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725382767; c=relaxed/simple;
-	bh=dPccbiHVTbReszo4effFnD48owgl2gfnw4WAXijn0cY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=HK558W8rVq6CW/DQPObSvxhZFLfOGSXlD1oYfhmjSTsEpnUC2YQd6ggAG0dTEpfiHWX12vcIDuHaEJV2i6gnrANTYmloiWmJHPDr1Mt+gfT6mDICZnPbbV6K5lHyjCl6vHCcnf46XzYzm1n0rMkD7kVfnb47KAJvZSaCpOD1kpE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=W9uUazat; arc=none smtp.client-ip=192.198.163.8
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1725383696; c=relaxed/simple;
+	bh=yHsKOiUFp2MiVqGWwQV43VcJHwo6PG/N8EqTaf5dnE8=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=rLZegxcdpS/CEEX6DBO5HrBd+7rZ7N7aRSguXkOK6PhOUCKtZ0g6bQXVPZMon30/zlwtFjn79rntuwSDR1AB4m7EGK89MhzhwW34jRDr755dEusZtVMeXgn1IaVcQQOTHN56n3CJU462UmNrl+Q/tZQm0D0YFLT0N81xsjhdx+o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=flygoat.com; spf=pass smtp.mailfrom=flygoat.com; dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b=12VGiL+F; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=giyy0SpS; arc=none smtp.client-ip=103.168.172.150
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=flygoat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flygoat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="W9uUazat"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1725382765; x=1756918765;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=dPccbiHVTbReszo4effFnD48owgl2gfnw4WAXijn0cY=;
-  b=W9uUazatP2jY3Xie+egly6IwiLGg6xF1+LjVhwVubJRIDUMA3ubV5c7T
-   IEGPPdpQhVYMHYLwuoDwkUBFk5SLTzlB55K6p6i6GanbENjfhraSVrW2a
-   o/1FPTmXwKhkkY9OSNk2B2gK/0jIt+3f+/fyXPRC5O2JYIn5NjJoCuwA4
-   sdYcLVpep3z/LHS93MLrrnB+PrVc0DCGqYG1VaPfhL8qlieb9FpTQYd0/
-   sfnx1xb7cwJ5YBtBpxY8vFfnHqUzOwdDRIDtseFeRYMrLX0UWmJsDzsQD
-   Z0POHcMdELu4YVLfMY9ZXKdgaUyzCfOrSq7eUiPHoG0Z9Y0N0u/Vg7tLc
-   Q==;
-X-CSE-ConnectionGUID: mOVRoEFxTZuVHDGhAwYHxQ==
-X-CSE-MsgGUID: sIytjSBVQmuuvXLAVsfBVg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11184"; a="41491604"
-X-IronPort-AV: E=Sophos;i="6.10,199,1719903600"; 
-   d="scan'208";a="41491604"
-Received: from fmviesa005.fm.intel.com ([10.60.135.145])
-  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Sep 2024 09:59:24 -0700
-X-CSE-ConnectionGUID: 7mMokwraQCuMFQeW2tP+aQ==
-X-CSE-MsgGUID: 08W5/tC9TZqreBobmS1Yew==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.10,199,1719903600"; 
-   d="scan'208";a="69364471"
-Received: from lkp-server01.sh.intel.com (HELO 9c6b1c7d3b50) ([10.239.97.150])
-  by fmviesa005.fm.intel.com with ESMTP; 03 Sep 2024 09:59:21 -0700
-Received: from kbuild by 9c6b1c7d3b50 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1slWsA-0006vv-2L;
-	Tue, 03 Sep 2024 16:59:18 +0000
-Date: Wed, 4 Sep 2024 00:59:12 +0800
-From: kernel test robot <lkp@intel.com>
-To: Abhishek Tamboli <abhishektamboli9@gmail.com>,
-	neil.armstrong@linaro.org, maarten.lankhorst@linux.intel.com,
-	mripard@kernel.org, tzimmermann@suse.de, airlied@gmail.com,
-	daniel@ffwll.ch
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	quic_jesszhan@quicinc.com, skhan@linuxfoundation.org,
-	rbmarliere@gmail.com,
-	linux-kernel-mentees@lists.linuxfoundation.org,
-	dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] drm/panel: hx83112a: Switch to wrapped mipi_dsi functions
-Message-ID: <202409040049.2hf8jrZG-lkp@intel.com>
-References: <20240902170153.34512-1-abhishektamboli9@gmail.com>
+	dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b="12VGiL+F";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="giyy0SpS"
+Received: from phl-compute-05.internal (phl-compute-05.phl.internal [10.202.2.45])
+	by mailfout.phl.internal (Postfix) with ESMTP id 006EB13803CF;
+	Tue,  3 Sep 2024 13:14:53 -0400 (EDT)
+Received: from phl-mailfrontend-02 ([10.202.2.163])
+  by phl-compute-05.internal (MEProxy); Tue, 03 Sep 2024 13:14:53 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
+	cc:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:message-id:mime-version:reply-to
+	:subject:subject:to:to; s=fm2; t=1725383692; x=1725470092; bh=dB
+	UfKeVf2UEZTsAZiC5iNPpiBQ1B2GtTe75No1Oz86U=; b=12VGiL+FFCka10zW+c
+	kC5wRGUWUt4NWGeHJMbTeZD9/TRhy5/yPewvphUFUcEiWQS4kfqku1he0miBKhOz
+	72dtoYzShDiQs5s49LyxDG6uE1+9oRHfvuqGHKL6SpoEmmYy3GCG62rZQRWJdGkl
+	oVImBnC3pkpvR4bBwaU1qd0B3r37CTWJN1aqAPzFgXtAaiuROGw2Kjnozppbi5L3
+	EEzfEmQLpEjA64RxMrL0DQmYkeXnnNrxfl9NCjO4gAfa6uG787+ZZlSboQjkUC0/
+	yRDgX+GP6tFcpJ9sSl7BXWYsTe8ymfGw7Y1UY5LHrW/NAIibMb7+tuAqZN/fVz0W
+	bUUA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:message-id:mime-version:reply-to:subject
+	:subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+	:x-sasl-enc; s=fm1; t=1725383692; x=1725470092; bh=dBUfKeVf2UEZT
+	sAZiC5iNPpiBQ1B2GtTe75No1Oz86U=; b=giyy0SpStln1MvyZnmrs0i5R9QIjv
+	mML5XtoWlbAot5P3sn5ZMXPppVE2LMSvIu2nTd1pXP/3v31HIhJ664/i8pSo3leS
+	9QUtimSyggthryclPp+9mbFZnP82ifmN15IPbu5J7NdvGJRHJUAAhwDK+EIqb7wz
+	wf8TAhgvHo/bfQBeNSPP6NCYcG7w7WJcnYBZNCNuAorxLhHjq+wUZkA1WgLcnsCx
+	BnGE4Bh7RgglN1jJjxy/pAZS6pgtjH/UGtO4bJdJ9g3f97A0oX/bQKpknBE3iGJB
+	S7lR4VgnhqWuDuhtyXmSRzQIyfeY+ARGz3fOeXcGoRV1SSHDr47mL45hg==
+X-ME-Sender: <xms:CkTXZo5SqroS1sTNLgmrJDDHbG62xfu399l__B3wSSQGJ2Ef_eB_Hw>
+    <xme:CkTXZp7WjgcUnau8yyob-H9QOhAg5ZUzsfNJ08YiYpjyYnOG7mqh8o3Z77MtbYtPX
+    2X3blepGamfy7-5lK8>
+X-ME-Received: <xmr:CkTXZnetq2EXvHxxzk55tZ1D6ikuj7lK4hVAxF16JX2kvGLcDX96PeJ1PEA-i9ZEAyU>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeftddrudehhedguddutdcutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpggftfghnshhusghstghrihgsvgdp
+    uffrtefokffrpgfnqfghnecuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivg
+    hnthhsucdlqddutddtmdenucfjughrpefhufffkfggtgfgvfevofesthejredtredtjeen
+    ucfhrhhomheplfhirgiguhhnucgjrghnghcuoehjihgrgihunhdrhigrnhhgsehflhihgh
+    horghtrdgtohhmqeenucggtffrrghtthgvrhhnpedufffffffhueehvefhgfelveekueeg
+    teefgeeiieejheefkeehkeevudevieegueenucevlhhushhtvghrufhiiigvpedtnecurf
+    grrhgrmhepmhgrihhlfhhrohhmpehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgt
+    ohhmpdhnsggprhgtphhtthhopeegtddpmhhouggvpehsmhhtphhouhhtpdhrtghpthhtoh
+    epsggvnhhnohdrlhhoshhsihhnsehprhhothhonhdrmhgvpdhrtghpthhtohepthhssgho
+    ghgvnhgusegrlhhphhgrrdhfrhgrnhhkvghnrdguvgdprhgtphhtthhopehjohhhrghnnh
+    gvshesshhiphhsohhluhhtihhonhhsrdhnvghtpdhrtghpthhtoheplhhlvhhmsehlihhs
+    thhsrdhlihhnuhigrdguvghvpdhrtghpthhtohepghgrrhihsehgrghrhihguhhordhnvg
+    htpdhrtghpthhtoheprhhitghhrghrugesnhhougdrrghtpdhrtghpthhtohepthhglhig
+    sehlihhnuhhtrhhonhhigidruggvpdhrtghpthhtohepsghjohhrnhefpghghhesphhroh
+    htohhnmhgrihhlrdgtohhmpdhrtghpthhtohepnhgrthhhrghnsehkvghrnhgvlhdrohhr
+    gh
+X-ME-Proxy: <xmx:CkTXZtIxiTQESdo22N2eGnQfM_DMR0BEH7Ch8icyR6wnbcBN5EKewA>
+    <xmx:CkTXZsKmCOdFuq5CENNbP-OeT0jqudA2kT3sgSiiKfmmQUrNVVcbRA>
+    <xmx:CkTXZuzoP5yjEJ56bl-Ofj_XUo4ysmA4W5UUu-RnvIOWA88K2k0QSA>
+    <xmx:CkTXZgLGp8ZVxkCkb25EOMe2XEZrIqFs8koY2WqRhcDbHJ3ezgQfcQ>
+    <xmx:DETXZseSggvY7dvJI0wBC6GSv6tWlR2lQ4COPW1xAhYH2piybbcKdMyE>
+Feedback-ID: ifd894703:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
+ 3 Sep 2024 13:14:46 -0400 (EDT)
+From: Jiaxun Yang <jiaxun.yang@flygoat.com>
+Subject: [PATCH 0/3] rust: Initial MIPS support
+Date: Tue, 03 Sep 2024 18:14:33 +0100
+Message-Id: <20240903-mips-rust-v1-0-0fdf0b2fd58f@flygoat.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240902170153.34512-1-abhishektamboli9@gmail.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAPlD12YC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
+ vPSU3UzU4B8JSMDIxMDSwNj3dzMgmLdotLiEt20RIvUtBQLY7PkVEsloPqCotS0zAqwWdGxtbU
+ AkM9ljVsAAAA=
+To: Masahiro Yamada <masahiroy@kernel.org>,
+  Nathan Chancellor <nathan@kernel.org>,
+ Nicolas Schier <nicolas@fjasle.eu>,  Richard Weinberger <richard@nod.at>,
+  Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+  Johannes Berg <johannes@sipsolutions.net>,
+  Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
+  Borislav Petkov <bp@alien8.de>,
+ Dave Hansen <dave.hansen@linux.intel.com>,  x86@kernel.org,
+ "H. Peter Anvin" <hpa@zytor.com>,  Miguel Ojeda <ojeda@kernel.org>,
+ Alex Gaynor <alex.gaynor@gmail.com>,
+  Wedson Almeida Filho <wedsonaf@gmail.com>,
+  Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+  =?utf-8?q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
+  Benno Lossin <benno.lossin@proton.me>,
+  Andreas Hindborg <a.hindborg@samsung.com>,
+  Alice Ryhl <aliceryhl@google.com>,
+  Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+  Steven Rostedt <rostedt@goodmis.org>,
+  Masami Hiramatsu <mhiramat@kernel.org>,
+ Mark Rutland <mark.rutland@arm.com>,  Jonathan Corbet <corbet@lwn.net>,
+ Alex Shi <alexs@kernel.org>,  Yanteng Si <siyanteng@loongson.cn>,
+  Nick Desaulniers <ndesaulniers@google.com>,
+  Bill Wendling <morbo@google.com>,
+ Justin Stitt <justinstitt@google.com>
+Cc: linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ linux-um@lists.infradead.org, rust-for-linux@vger.kernel.org, 
+ linux-mips@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
+ linux-doc@vger.kernel.org, llvm@lists.linux.dev, 
+ Jiaxun Yang <jiaxun.yang@flygoat.com>
+X-Mailer: b4 0.14.1
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1758;
+ i=jiaxun.yang@flygoat.com; h=from:subject:message-id;
+ bh=yHsKOiUFp2MiVqGWwQV43VcJHwo6PG/N8EqTaf5dnE8=;
+ b=owGbwMvMwCXmXMhTe71c8zDjabUkhrTrLmwX27bfZTp0Rqz9StjDHXtX9Dek3XgaOfPK4zubX
+ Q9oa/t97ChlYRDjYpAVU2QJEVDq29B4ccH1B1l/YOawMoEMYeDiFICLHGdkWFu0bHI876v+lp2J
+ xaYTQ7OLJ7xm4rsn/PhAL2v0rcwHYgz/TKWfeb5fNut3m9/qe0WS2/tSW6vUtjrMn1hxc/WOBPN
+ uDgA=
+X-Developer-Key: i=jiaxun.yang@flygoat.com; a=openpgp;
+ fpr=980379BEFEBFBF477EA04EF9C111949073FC0F67
 
-Hi Abhishek,
+Hi Folks,
 
-kernel test robot noticed the following build errors:
+This series added MIPS arch support to rust for linux,
+hopefully MIPS is not too late to the party :-)
 
-[auto build test ERROR on drm-misc/drm-misc-next]
-[also build test ERROR on linus/master v6.11-rc6 next-20240903]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Sample rust module tested on R4000(el),mips32,mips32r2el,mips64,
+mips64r2el,mips64r6el.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Abhishek-Tamboli/drm-panel-hx83112a-Switch-to-wrapped-mipi_dsi-functions/20240903-010317
-base:   git://anongit.freedesktop.org/drm/drm-misc drm-misc-next
-patch link:    https://lore.kernel.org/r/20240902170153.34512-1-abhishektamboli9%40gmail.com
-patch subject: [PATCH] drm/panel: hx83112a: Switch to wrapped mipi_dsi functions
-config: x86_64-randconfig-005-20240903 (https://download.01.org/0day-ci/archive/20240904/202409040049.2hf8jrZG-lkp@intel.com/config)
-compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240904/202409040049.2hf8jrZG-lkp@intel.com/reproduce)
+Please review.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202409040049.2hf8jrZG-lkp@intel.com/
+Thanks
 
-All errors (new ones prefixed by >>):
+Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
+---
+Jiaxun Yang (3):
+      rust: Introduce HAVE_GENERATE_RUST_TARGET config option
+      MIPS: Rename mips_instruction type to workaround bindgen issue
+      rust: Enable for MIPS
 
->> drivers/gpu/drm/panel/panel-himax-hx83112a.c:63:2: error: use of undeclared identifier 'dsi'
-      63 |         dsi->mode_flags |= MIPI_DSI_MODE_LPM;
-         |         ^
-   drivers/gpu/drm/panel/panel-himax-hx83112a.c:197:2: error: use of undeclared identifier 'dsi'
-     197 |         dsi->mode_flags &= ~MIPI_DSI_MODE_LPM;
-         |         ^
-   2 errors generated.
+ Documentation/rust/arch-support.rst                |  1 +
+ .../translations/zh_CN/rust/arch-support.rst       |  1 +
+ Makefile                                           |  4 ++
+ arch/Kconfig                                       |  8 +++
+ arch/mips/Kconfig                                  |  2 +
+ arch/mips/include/asm/dsemul.h                     |  2 +-
+ arch/mips/include/asm/inst.h                       |  6 +-
+ arch/mips/kernel/ftrace.c                          |  2 +-
+ arch/mips/kernel/kprobes.c                         |  2 +-
+ arch/mips/math-emu/cp1emu.c                        | 18 +++---
+ arch/mips/math-emu/dsemul.c                        |  8 +--
+ arch/um/Kconfig                                    |  1 +
+ arch/x86/Makefile                                  |  1 -
+ arch/x86/Makefile.um                               |  1 -
+ rust/Makefile                                      |  2 +-
+ scripts/Makefile                                   |  4 +-
+ scripts/generate_rust_target.rs                    | 64 ++++++++++++++++++++++
+ 17 files changed, 102 insertions(+), 25 deletions(-)
+---
+base-commit: 469f1bad3c1c6e268059f78c0eec7e9552b3894c
+change-id: 20240903-mips-rust-fa8efd836ce9
 
-
-vim +/dsi +63 drivers/gpu/drm/panel/panel-himax-hx83112a.c
-
-654f26a0f43cfd3 Luca Weiss       2024-02-16   58  
-654f26a0f43cfd3 Luca Weiss       2024-02-16   59  static int hx83112a_on(struct hx83112a_panel *ctx)
-654f26a0f43cfd3 Luca Weiss       2024-02-16   60  {
-a76c4f29a2e42d1 Abhishek Tamboli 2024-09-02   61  	struct mipi_dsi_multi_context dsi_ctx = {.dsi = ctx->dsi};
-654f26a0f43cfd3 Luca Weiss       2024-02-16   62  
-654f26a0f43cfd3 Luca Weiss       2024-02-16  @63  	dsi->mode_flags |= MIPI_DSI_MODE_LPM;
-654f26a0f43cfd3 Luca Weiss       2024-02-16   64  
-a76c4f29a2e42d1 Abhishek Tamboli 2024-09-02   65  	mipi_dsi_dcs_write_seq_multi(&dsi_ctx, HX83112A_SETEXTC, 0x83, 0x11, 0x2a);
-a76c4f29a2e42d1 Abhishek Tamboli 2024-09-02   66  	mipi_dsi_dcs_write_seq_multi(&dsi_ctx, HX83112A_SETPOWER1,
-654f26a0f43cfd3 Luca Weiss       2024-02-16   67  			       0x08, 0x28, 0x28, 0x83, 0x83, 0x4c, 0x4f, 0x33);
-a76c4f29a2e42d1 Abhishek Tamboli 2024-09-02   68  	mipi_dsi_dcs_write_seq_multi(&dsi_ctx, HX83112A_SETDISP,
-654f26a0f43cfd3 Luca Weiss       2024-02-16   69  			       0x00, 0x02, 0x00, 0x90, 0x24, 0x00, 0x08, 0x19,
-654f26a0f43cfd3 Luca Weiss       2024-02-16   70  			       0xea, 0x11, 0x11, 0x00, 0x11, 0xa3);
-a76c4f29a2e42d1 Abhishek Tamboli 2024-09-02   71  	mipi_dsi_dcs_write_seq_multi(&dsi_ctx, HX83112A_SETDRV,
-654f26a0f43cfd3 Luca Weiss       2024-02-16   72  			       0x58, 0x68, 0x58, 0x68, 0x0f, 0xef, 0x0b, 0xc0,
-654f26a0f43cfd3 Luca Weiss       2024-02-16   73  			       0x0b, 0xc0, 0x0b, 0xc0, 0x00, 0xff, 0x00, 0xff,
-654f26a0f43cfd3 Luca Weiss       2024-02-16   74  			       0x00, 0x00, 0x14, 0x15, 0x00, 0x29, 0x11, 0x07,
-654f26a0f43cfd3 Luca Weiss       2024-02-16   75  			       0x12, 0x00, 0x29);
-a76c4f29a2e42d1 Abhishek Tamboli 2024-09-02   76  	mipi_dsi_dcs_write_seq_multi(&dsi_ctx, HX83112A_SETBANK, 0x02);
-a76c4f29a2e42d1 Abhishek Tamboli 2024-09-02   77  	mipi_dsi_dcs_write_seq_multi(&dsi_ctx, HX83112A_SETDRV,
-654f26a0f43cfd3 Luca Weiss       2024-02-16   78  			       0x00, 0x12, 0x12, 0x11, 0x88, 0x12, 0x12, 0x00,
-654f26a0f43cfd3 Luca Weiss       2024-02-16   79  			       0x53);
-a76c4f29a2e42d1 Abhishek Tamboli 2024-09-02   80  	mipi_dsi_dcs_write_seq_multi(&dsi_ctx, HX83112A_SETBANK, 0x00);
-a76c4f29a2e42d1 Abhishek Tamboli 2024-09-02   81  	mipi_dsi_dcs_write_seq_multi(&dsi_ctx, HX83112A_SETBANK, 0x03);
-a76c4f29a2e42d1 Abhishek Tamboli 2024-09-02   82  	mipi_dsi_dcs_write_seq_multi(&dsi_ctx, HX83112A_SETDGCLUT,
-654f26a0f43cfd3 Luca Weiss       2024-02-16   83  			       0xff, 0xfe, 0xfb, 0xf8, 0xf4, 0xf1, 0xed, 0xe6,
-654f26a0f43cfd3 Luca Weiss       2024-02-16   84  			       0xe2, 0xde, 0xdb, 0xd6, 0xd3, 0xcf, 0xca, 0xc6,
-654f26a0f43cfd3 Luca Weiss       2024-02-16   85  			       0xc2, 0xbe, 0xb9, 0xb0, 0xa7, 0x9e, 0x96, 0x8d,
-654f26a0f43cfd3 Luca Weiss       2024-02-16   86  			       0x84, 0x7c, 0x74, 0x6b, 0x62, 0x5a, 0x51, 0x49,
-654f26a0f43cfd3 Luca Weiss       2024-02-16   87  			       0x41, 0x39, 0x31, 0x29, 0x21, 0x19, 0x12, 0x0a,
-654f26a0f43cfd3 Luca Weiss       2024-02-16   88  			       0x06, 0x05, 0x02, 0x01, 0x00, 0x00, 0xc9, 0xb3,
-654f26a0f43cfd3 Luca Weiss       2024-02-16   89  			       0x08, 0x0e, 0xf2, 0xe1, 0x59, 0xf4, 0x22, 0xad,
-654f26a0f43cfd3 Luca Weiss       2024-02-16   90  			       0x40);
-a76c4f29a2e42d1 Abhishek Tamboli 2024-09-02   91  	mipi_dsi_dcs_write_seq_multi(&dsi_ctx, HX83112A_SETBANK, 0x02);
-a76c4f29a2e42d1 Abhishek Tamboli 2024-09-02   92  	mipi_dsi_dcs_write_seq_multi(&dsi_ctx, HX83112A_SETDGCLUT,
-654f26a0f43cfd3 Luca Weiss       2024-02-16   93  			       0xff, 0xfe, 0xfb, 0xf8, 0xf4, 0xf1, 0xed, 0xe6,
-654f26a0f43cfd3 Luca Weiss       2024-02-16   94  			       0xe2, 0xde, 0xdb, 0xd6, 0xd3, 0xcf, 0xca, 0xc6,
-654f26a0f43cfd3 Luca Weiss       2024-02-16   95  			       0xc2, 0xbe, 0xb9, 0xb0, 0xa7, 0x9e, 0x96, 0x8d,
-654f26a0f43cfd3 Luca Weiss       2024-02-16   96  			       0x84, 0x7c, 0x74, 0x6b, 0x62, 0x5a, 0x51, 0x49,
-654f26a0f43cfd3 Luca Weiss       2024-02-16   97  			       0x41, 0x39, 0x31, 0x29, 0x21, 0x19, 0x12, 0x0a,
-654f26a0f43cfd3 Luca Weiss       2024-02-16   98  			       0x06, 0x05, 0x02, 0x01, 0x00, 0x00, 0xc9, 0xb3,
-654f26a0f43cfd3 Luca Weiss       2024-02-16   99  			       0x08, 0x0e, 0xf2, 0xe1, 0x59, 0xf4, 0x22, 0xad,
-654f26a0f43cfd3 Luca Weiss       2024-02-16  100  			       0x40);
-a76c4f29a2e42d1 Abhishek Tamboli 2024-09-02  101  	mipi_dsi_dcs_write_seq_multi(&dsi_ctx, HX83112A_SETBANK, 0x01);
-a76c4f29a2e42d1 Abhishek Tamboli 2024-09-02  102  	mipi_dsi_dcs_write_seq_multi(&dsi_ctx, HX83112A_SETDGCLUT,
-654f26a0f43cfd3 Luca Weiss       2024-02-16  103  			       0xff, 0xfe, 0xfb, 0xf8, 0xf4, 0xf1, 0xed, 0xe6,
-654f26a0f43cfd3 Luca Weiss       2024-02-16  104  			       0xe2, 0xde, 0xdb, 0xd6, 0xd3, 0xcf, 0xca, 0xc6,
-654f26a0f43cfd3 Luca Weiss       2024-02-16  105  			       0xc2, 0xbe, 0xb9, 0xb0, 0xa7, 0x9e, 0x96, 0x8d,
-654f26a0f43cfd3 Luca Weiss       2024-02-16  106  			       0x84, 0x7c, 0x74, 0x6b, 0x62, 0x5a, 0x51, 0x49,
-654f26a0f43cfd3 Luca Weiss       2024-02-16  107  			       0x41, 0x39, 0x31, 0x29, 0x21, 0x19, 0x12, 0x0a,
-654f26a0f43cfd3 Luca Weiss       2024-02-16  108  			       0x06, 0x05, 0x02, 0x01, 0x00, 0x00, 0xc9, 0xb3,
-654f26a0f43cfd3 Luca Weiss       2024-02-16  109  			       0x08, 0x0e, 0xf2, 0xe1, 0x59, 0xf4, 0x22, 0xad,
-654f26a0f43cfd3 Luca Weiss       2024-02-16  110  			       0x40);
-a76c4f29a2e42d1 Abhishek Tamboli 2024-09-02  111  	mipi_dsi_dcs_write_seq_multi(&dsi_ctx, HX83112A_SETBANK, 0x00);
-a76c4f29a2e42d1 Abhishek Tamboli 2024-09-02  112  	mipi_dsi_dcs_write_seq_multi(&dsi_ctx, HX83112A_SETDGCLUT, 0x01);
-a76c4f29a2e42d1 Abhishek Tamboli 2024-09-02  113  	mipi_dsi_dcs_write_seq_multi(&dsi_ctx, HX83112A_SETTCON,
-654f26a0f43cfd3 Luca Weiss       2024-02-16  114  			       0x70, 0x00, 0x04, 0xe0, 0x33, 0x00);
-a76c4f29a2e42d1 Abhishek Tamboli 2024-09-02  115  	mipi_dsi_dcs_write_seq_multi(&dsi_ctx, HX83112A_SETPANEL, 0x08);
-a76c4f29a2e42d1 Abhishek Tamboli 2024-09-02  116  	mipi_dsi_dcs_write_seq_multi(&dsi_ctx, HX83112A_SETPOWER2, 0x2b, 0x2b);
-a76c4f29a2e42d1 Abhishek Tamboli 2024-09-02  117  	mipi_dsi_dcs_write_seq_multi(&dsi_ctx, HX83112A_SETGIP0,
-654f26a0f43cfd3 Luca Weiss       2024-02-16  118  			       0x80, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x08,
-654f26a0f43cfd3 Luca Weiss       2024-02-16  119  			       0x08, 0x03, 0x03, 0x22, 0x18, 0x07, 0x07, 0x07,
-654f26a0f43cfd3 Luca Weiss       2024-02-16  120  			       0x07, 0x32, 0x10, 0x06, 0x00, 0x06, 0x32, 0x10,
-654f26a0f43cfd3 Luca Weiss       2024-02-16  121  			       0x07, 0x00, 0x07, 0x32, 0x19, 0x31, 0x09, 0x31,
-654f26a0f43cfd3 Luca Weiss       2024-02-16  122  			       0x00, 0x00, 0x05, 0x00, 0x00, 0x00, 0x00, 0x08,
-654f26a0f43cfd3 Luca Weiss       2024-02-16  123  			       0x09, 0x30, 0x00, 0x00, 0x00, 0x06, 0x0d, 0x00,
-654f26a0f43cfd3 Luca Weiss       2024-02-16  124  			       0x0f);
-a76c4f29a2e42d1 Abhishek Tamboli 2024-09-02  125  	mipi_dsi_dcs_write_seq_multi(&dsi_ctx, HX83112A_SETBANK, 0x01);
-a76c4f29a2e42d1 Abhishek Tamboli 2024-09-02  126  	mipi_dsi_dcs_write_seq_multi(&dsi_ctx, HX83112A_SETGIP0,
-654f26a0f43cfd3 Luca Weiss       2024-02-16  127  			       0x00, 0x00, 0x19, 0x10, 0x00, 0x0a, 0x00, 0x81);
-a76c4f29a2e42d1 Abhishek Tamboli 2024-09-02  128  	mipi_dsi_dcs_write_seq_multi(&dsi_ctx, HX83112A_SETBANK, 0x00);
-a76c4f29a2e42d1 Abhishek Tamboli 2024-09-02  129  	mipi_dsi_dcs_write_seq_multi(&dsi_ctx, HX83112A_SETGIP1,
-654f26a0f43cfd3 Luca Weiss       2024-02-16  130  			       0x18, 0x18, 0x18, 0x18, 0x18, 0x18, 0x18, 0x18,
-654f26a0f43cfd3 Luca Weiss       2024-02-16  131  			       0xc0, 0xc0, 0x18, 0x18, 0x19, 0x19, 0x18, 0x18,
-654f26a0f43cfd3 Luca Weiss       2024-02-16  132  			       0x40, 0x40, 0x18, 0x18, 0x18, 0x18, 0x3f, 0x3f,
-654f26a0f43cfd3 Luca Weiss       2024-02-16  133  			       0x28, 0x28, 0x24, 0x24, 0x02, 0x03, 0x02, 0x03,
-654f26a0f43cfd3 Luca Weiss       2024-02-16  134  			       0x00, 0x01, 0x00, 0x01, 0x31, 0x31, 0x31, 0x31,
-654f26a0f43cfd3 Luca Weiss       2024-02-16  135  			       0x30, 0x30, 0x30, 0x30, 0x2f, 0x2f, 0x2f, 0x2f);
-a76c4f29a2e42d1 Abhishek Tamboli 2024-09-02  136  	mipi_dsi_dcs_write_seq_multi(&dsi_ctx, HX83112A_SETGIP2,
-654f26a0f43cfd3 Luca Weiss       2024-02-16  137  			       0x18, 0x18, 0x18, 0x18, 0x18, 0x18, 0x18, 0x18,
-654f26a0f43cfd3 Luca Weiss       2024-02-16  138  			       0x40, 0x40, 0x18, 0x18, 0x18, 0x18, 0x19, 0x19,
-654f26a0f43cfd3 Luca Weiss       2024-02-16  139  			       0x40, 0x40, 0x18, 0x18, 0x18, 0x18, 0x3f, 0x3f,
-654f26a0f43cfd3 Luca Weiss       2024-02-16  140  			       0x24, 0x24, 0x28, 0x28, 0x01, 0x00, 0x01, 0x00,
-654f26a0f43cfd3 Luca Weiss       2024-02-16  141  			       0x03, 0x02, 0x03, 0x02, 0x31, 0x31, 0x31, 0x31,
-654f26a0f43cfd3 Luca Weiss       2024-02-16  142  			       0x30, 0x30, 0x30, 0x30, 0x2f, 0x2f, 0x2f, 0x2f);
-a76c4f29a2e42d1 Abhishek Tamboli 2024-09-02  143  	mipi_dsi_dcs_write_seq_multi(&dsi_ctx, HX83112A_SETGIP3,
-654f26a0f43cfd3 Luca Weiss       2024-02-16  144  			       0xaa, 0xea, 0xaa, 0xaa, 0xaa, 0xaa, 0xaa, 0xea,
-654f26a0f43cfd3 Luca Weiss       2024-02-16  145  			       0xaa, 0xaa, 0xaa, 0xaa, 0xaa, 0xea, 0xab, 0xaa,
-654f26a0f43cfd3 Luca Weiss       2024-02-16  146  			       0xaa, 0xaa, 0xaa, 0xea, 0xab, 0xaa, 0xaa, 0xaa);
-a76c4f29a2e42d1 Abhishek Tamboli 2024-09-02  147  	mipi_dsi_dcs_write_seq_multi(&dsi_ctx, HX83112A_SETBANK, 0x01);
-a76c4f29a2e42d1 Abhishek Tamboli 2024-09-02  148  	mipi_dsi_dcs_write_seq_multi(&dsi_ctx, HX83112A_SETGIP3,
-654f26a0f43cfd3 Luca Weiss       2024-02-16  149  			       0xaa, 0x2e, 0x28, 0x00, 0x00, 0x00, 0xaa, 0x2e,
-654f26a0f43cfd3 Luca Weiss       2024-02-16  150  			       0x28, 0x00, 0x00, 0x00, 0xaa, 0xee, 0xaa, 0xaa,
-654f26a0f43cfd3 Luca Weiss       2024-02-16  151  			       0xaa, 0xaa, 0xaa, 0xee, 0xaa, 0xaa, 0xaa, 0xaa);
-a76c4f29a2e42d1 Abhishek Tamboli 2024-09-02  152  	mipi_dsi_dcs_write_seq_multi(&dsi_ctx, HX83112A_SETBANK, 0x02);
-a76c4f29a2e42d1 Abhishek Tamboli 2024-09-02  153  	mipi_dsi_dcs_write_seq_multi(&dsi_ctx, HX83112A_SETGIP3,
-654f26a0f43cfd3 Luca Weiss       2024-02-16  154  			       0xaa, 0xff, 0xff, 0xff, 0xff, 0xff, 0xaa, 0xff,
-654f26a0f43cfd3 Luca Weiss       2024-02-16  155  			       0xff, 0xff, 0xff, 0xff);
-a76c4f29a2e42d1 Abhishek Tamboli 2024-09-02  156  	mipi_dsi_dcs_write_seq_multi(&dsi_ctx, HX83112A_SETBANK, 0x03);
-a76c4f29a2e42d1 Abhishek Tamboli 2024-09-02  157  	mipi_dsi_dcs_write_seq_multi(&dsi_ctx, HX83112A_SETGIP3,
-654f26a0f43cfd3 Luca Weiss       2024-02-16  158  			       0xaa, 0xaa, 0xea, 0xaa, 0xaa, 0xaa, 0xaa, 0xaa,
-654f26a0f43cfd3 Luca Weiss       2024-02-16  159  			       0xea, 0xaa, 0xaa, 0xaa, 0xaa, 0xff, 0xff, 0xff,
-654f26a0f43cfd3 Luca Weiss       2024-02-16  160  			       0xff, 0xff, 0xaa, 0xff, 0xff, 0xff, 0xff, 0xff);
-a76c4f29a2e42d1 Abhishek Tamboli 2024-09-02  161  	mipi_dsi_dcs_write_seq_multi(&dsi_ctx, HX83112A_SETBANK, 0x00);
-a76c4f29a2e42d1 Abhishek Tamboli 2024-09-02  162  	mipi_dsi_dcs_write_seq_multi(&dsi_ctx, HX83112A_SETTP1,
-654f26a0f43cfd3 Luca Weiss       2024-02-16  163  			       0x0e, 0x0e, 0x1e, 0x65, 0x1c, 0x65, 0x00, 0x50,
-654f26a0f43cfd3 Luca Weiss       2024-02-16  164  			       0x20, 0x20, 0x00, 0x00, 0x02, 0x02, 0x02, 0x05,
-654f26a0f43cfd3 Luca Weiss       2024-02-16  165  			       0x14, 0x14, 0x32, 0xb9, 0x23, 0xb9, 0x08);
-a76c4f29a2e42d1 Abhishek Tamboli 2024-09-02  166  	mipi_dsi_dcs_write_seq_multi(&dsi_ctx, HX83112A_SETBANK, 0x01);
-a76c4f29a2e42d1 Abhishek Tamboli 2024-09-02  167  	mipi_dsi_dcs_write_seq_multi(&dsi_ctx, HX83112A_SETTP1,
-654f26a0f43cfd3 Luca Weiss       2024-02-16  168  			       0x02, 0x00, 0xa8, 0x01, 0xa8, 0x0d, 0xa4, 0x0e);
-a76c4f29a2e42d1 Abhishek Tamboli 2024-09-02  169  	mipi_dsi_dcs_write_seq_multi(&dsi_ctx, HX83112A_SETBANK, 0x02);
-a76c4f29a2e42d1 Abhishek Tamboli 2024-09-02  170  	mipi_dsi_dcs_write_seq_multi(&dsi_ctx, HX83112A_SETTP1,
-654f26a0f43cfd3 Luca Weiss       2024-02-16  171  			       0x00, 0x00, 0x08, 0x00, 0x01, 0x00, 0x00, 0x00,
-654f26a0f43cfd3 Luca Weiss       2024-02-16  172  			       0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-654f26a0f43cfd3 Luca Weiss       2024-02-16  173  			       0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x04, 0x00,
-654f26a0f43cfd3 Luca Weiss       2024-02-16  174  			       0x00, 0x00, 0x00, 0x02, 0x00);
-a76c4f29a2e42d1 Abhishek Tamboli 2024-09-02  175  	mipi_dsi_dcs_write_seq_multi(&dsi_ctx, HX83112A_SETBANK, 0x00);
-a76c4f29a2e42d1 Abhishek Tamboli 2024-09-02  176  	mipi_dsi_dcs_write_seq_multi(&dsi_ctx, HX83112A_UNKNOWN1, 0xc3);
-a76c4f29a2e42d1 Abhishek Tamboli 2024-09-02  177  	mipi_dsi_dcs_write_seq_multi(&dsi_ctx, HX83112A_SETCLOCK, 0xd1, 0xd6);
-a76c4f29a2e42d1 Abhishek Tamboli 2024-09-02  178  	mipi_dsi_dcs_write_seq_multi(&dsi_ctx, HX83112A_UNKNOWN1, 0x3f);
-a76c4f29a2e42d1 Abhishek Tamboli 2024-09-02  179  	mipi_dsi_dcs_write_seq_multi(&dsi_ctx, HX83112A_UNKNOWN1, 0xc6);
-a76c4f29a2e42d1 Abhishek Tamboli 2024-09-02  180  	mipi_dsi_dcs_write_seq_multi(&dsi_ctx, HX83112A_SETPTBA, 0x37);
-a76c4f29a2e42d1 Abhishek Tamboli 2024-09-02  181  	mipi_dsi_dcs_write_seq_multi(&dsi_ctx, HX83112A_UNKNOWN1, 0x3f);
-654f26a0f43cfd3 Luca Weiss       2024-02-16  182  
-a76c4f29a2e42d1 Abhishek Tamboli 2024-09-02  183  	mipi_dsi_dcs_exit_sleep_mode_multi(&dsi_ctx);
-a76c4f29a2e42d1 Abhishek Tamboli 2024-09-02  184  	mipi_dsi_msleep(&dsi_ctx, 150);
-654f26a0f43cfd3 Luca Weiss       2024-02-16  185  
-a76c4f29a2e42d1 Abhishek Tamboli 2024-09-02  186  	mipi_dsi_dcs_set_display_on_multi(&dsi_ctx);
-a76c4f29a2e42d1 Abhishek Tamboli 2024-09-02  187  	mipi_dsi_msleep(&dsi_ctx, 50);
-a76c4f29a2e42d1 Abhishek Tamboli 2024-09-02  188  
-a76c4f29a2e42d1 Abhishek Tamboli 2024-09-02  189  	return dsi_ctx.accum_err;
-654f26a0f43cfd3 Luca Weiss       2024-02-16  190  }
-654f26a0f43cfd3 Luca Weiss       2024-02-16  191  
-
+Best regards,
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Jiaxun Yang <jiaxun.yang@flygoat.com>
+
