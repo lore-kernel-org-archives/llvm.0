@@ -1,67 +1,67 @@
-Received: from mail-pf1-f174.google.com (mail-pf1-f174.google.com [209.85.210.174])
+Received: from mail-pj1-f47.google.com (mail-pj1-f47.google.com [209.85.216.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8256318E367
-	for <llvm@lists.linux.dev>; Tue,  3 Sep 2024 17:44:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D43C3190063
+	for <llvm@lists.linux.dev>; Tue,  3 Sep 2024 17:45:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725385463; cv=none; b=tHZE48avIn1dNJns8GCOseGBDjb46qliMbOeZdXMLJXx437mZqtX2U0zrubPmnme5i/NtKxtct+nZtspesGk9Hm3vNH78lYpH6TXRLJ2UtOYFo/BVp0c5hk0oiuq2y/LvWFFe0bht6L6Bcg/G+ImgYl+ZqvJV66AUnw7yeMXWh4=
+	t=1725385537; cv=none; b=a9w/xCk+2zHmg7BUwE6Zyf5bTX+75PT5E+GPgGyEvJ0bqSeADof4f1tkZxuR4nbGhNTALqcWEz3asooV7ct7QqagoMBowYIg/pYspnZXCIfqxwSPp5BKbFUM23xVq90W7EKSNwMANb1s+Ad3Zw+B9LEeP+DevPx3FRhrxoLTvy0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725385463; c=relaxed/simple;
-	bh=DzpwJQwOT3F0kC0YR4xC7AP8eabN0PyPAbZ0DqFkPfA=;
+	s=arc-20240116; t=1725385537; c=relaxed/simple;
+	bh=0DofYcV1Ki+ENSwTIpZw+asSjmZojx2JbABHePOoO20=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=lSyZ3WMDy4B/gqYRKLqcHOWcvEv68ltdbgsUm/IT86oyWYmhtbfHcIg3rlg/5UHfr3aB6jucYP8vC/TsYdvMCI/GecM6od3ll7qES73FIi3z4nYHio00GvlUhvEDnIf4l6yC/mItxgMs1OZ+2W70W7aKFvr1rGZZAT1gHvoqboM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=iuDRV/Fo; arc=none smtp.client-ip=209.85.210.174
+	 To:Cc:Content-Type; b=Cp2ajpEKxKQ0VDf/CQKyiC+SfMQwFzhiSWMjKwi9vBb9ssQIICIiJLZVTQl5ZhBvYCSoG5uGxkO9J7lV9ndj+7sJ1vLheA130oRf4GujBiOMsfkLq2YCO5Iy+hStrQGKILqJBgnCr4Fss5goed148+qfp+8ROAHaRDiYQF18bHI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=YhuLp5kr; arc=none smtp.client-ip=209.85.216.47
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="iuDRV/Fo"
-Received: by mail-pf1-f174.google.com with SMTP id d2e1a72fcca58-7144135c842so293848b3a.1
-        for <llvm@lists.linux.dev>; Tue, 03 Sep 2024 10:44:22 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YhuLp5kr"
+Received: by mail-pj1-f47.google.com with SMTP id 98e67ed59e1d1-2d871bd95ffso387041a91.2
+        for <llvm@lists.linux.dev>; Tue, 03 Sep 2024 10:45:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1725385462; x=1725990262; darn=lists.linux.dev;
+        d=gmail.com; s=20230601; t=1725385535; x=1725990335; darn=lists.linux.dev;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=DzpwJQwOT3F0kC0YR4xC7AP8eabN0PyPAbZ0DqFkPfA=;
-        b=iuDRV/FoqTkaPBgOoGQilQ5hQ+o21ZcrTVwxHFDX36kEpx2LZ7ZFMV5AB3BGY9ECB0
-         2DFFHQOdN+mgg4KG8nlX0ylcxTkqjlLQDbjaMWYt5HrV0FFXlI+fqMmYMBaq1ieBmNbh
-         p/IATP19biMXunJT4gWtvlQgx5CfWq4Owsm45BoeHAS34x2Z6kvma4XHQfNzpBT33dOX
-         OmAGf3pECFj6WQJsjVR0GIjvkU3B3taio3JLfA8qbVwjf3EiwIaxKIWiDqP98gjVe8D8
-         swklOGYi+EEdvDbZJMlUTolhTq8Y2AUkE0W62caJl3PeGOQAhb12NHahWwsOyvA2ZZOV
-         VGvg==
+        bh=0DofYcV1Ki+ENSwTIpZw+asSjmZojx2JbABHePOoO20=;
+        b=YhuLp5krtZINsJzBu0JZW9CerWQQQU67wESHnBh4RmeStaR6riCJYvHd7B7ZAWtJob
+         2tvYDRIPwkUJCRQJQ3hW2I/BJFjNnCEcCqKLouEWsRboIwHxZQSC6ybsoL7FvL3TSBOm
+         PGolPB8y3H8JeMegDAtXZiPkBy65W/pwV3NlONJKwahMP+ZRJGGVDDBuLNqcCGO/pPmR
+         X9pIv/UQgHuIlblsLgPhCp3tyzCLBFtS++uC1LRH8SqreBpElLPNoxd8sdDVbuEpioiJ
+         yneExxubUo8uW1eEl5lr3LW46c96retRRGs5Jz4QwZkT9I2m3jhN0pga/QDtICPs6RIN
+         XqEA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1725385462; x=1725990262;
+        d=1e100.net; s=20230601; t=1725385535; x=1725990335;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=DzpwJQwOT3F0kC0YR4xC7AP8eabN0PyPAbZ0DqFkPfA=;
-        b=UCU2uyXdcdBQtYg++YQJdr7+t8BNBlfzwI4lBDKrvNiBDxIHp+T6JzVWOEsn1vg9kT
-         WYb/AJF0QU+hyHfZ1MDxM43/dC9eImmdxQ2mdDuGvrBQZeO+zOl4bjQru48f63ZyMLTy
-         sGWuAYDnviw+rcglf8Y3OpHkVSHVZ24D/8qmF+epboxRA5AgvDGbcXJQqbXieWWmtC6g
-         3cq0CGApz8vUjJXGA+8CHugltASyoBhFVM4zNzfNEzNjkKVJDuueyZO+p8dBF1d//W1f
-         7Z96yxEib/wyGwx87kBgB8xhpawwPoqVeX+jPKreB7u2YFZr3DXrNCPaf7sbJMVpHRnn
-         u6KA==
-X-Forwarded-Encrypted: i=1; AJvYcCW6WbpQmdoslQwTuqT1OB3idBpb/Zf0SUO1uHvzlhUW2hD0ezXhkf9V1PUQBTlshFGTF75X@lists.linux.dev
-X-Gm-Message-State: AOJu0YwKe0b0qq1E/tx1JgOHSX72oSQLrIdUKWp4UEjsHsDGPmVWCrrP
-	WJxjsVPnjFCe38OHLr6TpDlTS1DJ3nuXjAXypw2/fvtcX5u7Tb2BTLSNmDf0wNb+D1ejy8nUa7l
-	fYptxDP1EG0OvYWfqv8ZhGodqxS4=
-X-Google-Smtp-Source: AGHT+IEr2msm5yg48J8o10JFNcKqa18Qf0QpuKetck9mzQgqKhHQ/7Pg+OEHdxchtehB6dyn3bXmyxfB4BSsSfVqxbo=
-X-Received: by 2002:a05:6a00:1816:b0:70e:acd0:d8b6 with SMTP id
- d2e1a72fcca58-71730458903mr8460968b3a.0.1725385461577; Tue, 03 Sep 2024
- 10:44:21 -0700 (PDT)
+        bh=0DofYcV1Ki+ENSwTIpZw+asSjmZojx2JbABHePOoO20=;
+        b=izACItoESCxd7n3OpQERpCqFGiJVEBTjOe3jQcGgJ+Zo6XCIlP1suehdxMOFekCpG1
+         Wc+hHR7SegEuNYnwOIO2VyvrrqSZe0paVAxk64dCgOqWvGWm/jJbJb/g3HU92z/fZINm
+         7ni1TTKFRkJI8mx44QHev0BCn4INOitpye/c7AaY2DiH9s33MwyBaSgOWSZC9msjwqqy
+         owbU15Mg4NvwQ9/TPAkeeBPSAKgJ1c0a7ZZTIVn4EAR2556p6DwF6UjJUIWhGToTKNED
+         zWdbpDXtzcIVDTbeaL6xeX0oCSTsuXf+lse+1Oadutzt33Be5MTTn5XhFdgASJCq2Vr7
+         bjxg==
+X-Forwarded-Encrypted: i=1; AJvYcCWmzLwcXt/62rql5Xw330yG3Irc/U5kDo9vHKZq72ukdWIglG7rIesn6t3lDUQA0KBwQOQv@lists.linux.dev
+X-Gm-Message-State: AOJu0YyQF1K/GuYlt+s0zCWn7m3Vgd99dNxxa2JN3gh9venN23pX3dU7
+	OKFmnqFpdejZZVVEkz1yvnL+GxJx4tXrOEYHRGrthLqdSSGz39rOeU4HBJxC2/LW01fRLlMda9S
+	ZBYndi4Ivq1NLbF9anxT/xdZqXwo=
+X-Google-Smtp-Source: AGHT+IGSJaGwOM9WSS6C4CfJ5n+iQPEV9+ern3LlVZwrkMxCoO8ICwpxdMLXqIAiQmi7uSiY7KxVOTk+pY+MMkXUU6k=
+X-Received: by 2002:a17:90b:207:b0:2d8:792e:9b22 with SMTP id
+ 98e67ed59e1d1-2d8792e9cc0mr7985254a91.0.1725385535089; Tue, 03 Sep 2024
+ 10:45:35 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20240903-mips-rust-v1-0-0fdf0b2fd58f@flygoat.com> <20240903-mips-rust-v1-3-0fdf0b2fd58f@flygoat.com>
-In-Reply-To: <20240903-mips-rust-v1-3-0fdf0b2fd58f@flygoat.com>
+References: <20240903-mips-rust-v1-0-0fdf0b2fd58f@flygoat.com>
+In-Reply-To: <20240903-mips-rust-v1-0-0fdf0b2fd58f@flygoat.com>
 From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date: Tue, 3 Sep 2024 19:44:08 +0200
-Message-ID: <CANiq72=z1yJm-B_ie=GfueOF1qksaSD9txgFU1YQo2tZx0qQPg@mail.gmail.com>
-Subject: Re: [PATCH 3/3] rust: Enable for MIPS
+Date: Tue, 3 Sep 2024 19:45:22 +0200
+Message-ID: <CANiq72nG-7Zbd11S=VkMdhpSON8vJOpDe4qhGy3czrKgrJ0DXA@mail.gmail.com>
+Subject: Re: [PATCH 0/3] rust: Initial MIPS support
 To: Jiaxun Yang <jiaxun.yang@flygoat.com>
 Cc: Masahiro Yamada <masahiroy@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
 	Nicolas Schier <nicolas@fjasle.eu>, Richard Weinberger <richard@nod.at>, 
@@ -84,20 +84,18 @@ Cc: Masahiro Yamada <masahiroy@kernel.org>, Nathan Chancellor <nathan@kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Sep 3, 2024 at 7:15=E2=80=AFPM Jiaxun Yang <jiaxun.yang@flygoat.com=
+On Tue, Sep 3, 2024 at 7:14=E2=80=AFPM Jiaxun Yang <jiaxun.yang@flygoat.com=
 > wrote:
 >
-> We don't use builtin target as there is no sutiable baremetal
-> target for us that can cover all ISA variants supported by kernel.
+> This series added MIPS arch support to rust for linux,
+> hopefully MIPS is not too late to the party :-)
 
-Since we should try to go away from using `target.json`: what was not
-possible to enable via e.g. `-Ctarget-features` or other flags? i.e. I
-see the `+mips*` features there in the supported list, and from a
-quick test the data layout also seems to match, but I assume I missed
-something.
+Definitely not late :)
 
-If it is not possible, then we should definitely ping upstream Rust about i=
-t. :)
+> Sample rust module tested on R4000(el),mips32,mips32r2el,mips64,
+> mips64r2el,mips64r6el.
+
+That is great, thanks for this!
 
 Cheers,
 Miguel
