@@ -1,50 +1,62 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B0BF818BB9F;
-	Tue,  3 Sep 2024 16:51:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7304C18B49A;
+	Tue,  3 Sep 2024 16:59:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725382290; cv=none; b=cBDvjvUP9L9mkIbINHy86XoOVzTHl3odit9UidDtDfsWCiD6ElR18zXgE6gx4EBqOiH5ypcX4NSB7tyyi+9e2awupdO8yLq1/3swHYEbRZUZFXVRTkx9dXJFPlKvyylQevxkJg23fcVjasfk3ozTCfmOnZLaDJ4/FTGZ/iCnNuA=
+	t=1725382766; cv=none; b=W75dK/2knnMoi52KKSR/02fnHARuXXE6OwLGzvAMhYn4wn0voP+kcukgi/d4pGnMNpYOJEWhf76g+g7u1AsA2zj7IWZYDV0rgKp1E2uaA5e5HjnUfNjGcJ0u4kERh8jZcXvPhNVwC9z+ithRYz92qTt/DYmYoghSUvykTTGUfvc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725382290; c=relaxed/simple;
-	bh=v6QUWDn3Xk0vLTb/0TXXT0hs0RxaaMRHOSxlGXdBePM=;
+	s=arc-20240116; t=1725382766; c=relaxed/simple;
+	bh=NqD0KjUYLUqZjf+h45oIDnI7UgcCt77pUgo/JygmMuk=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=QQpSfa9rb1G3yT7lKB4y8J7xIDpsOLaXL4wSdrrQqJjf+LSBZOb3fdwKwiyExWdeMqVMEFmV6CNYYXPwmdRKHg5BdLyHSyg5DNLc5cCNPQRwMK6itgX5rwPl8rvCTe9QcaQA6MmOaebzO1ifd2/wFxQwone0YGsIZfFNBfozqiA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KFVhE7HU; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=OwsXawCQlcaLxIPCqaPDsqkgql96v/6Q0s+DJIQsS8zx2ar02unr7vQGpPxWr7haUWkutG5UuZBK/97XWvA8h6mbzGKB3AHCphp5zUMzT0h3OP+i0otFUYohuFyXPaZJ7u/qM5vodthOJeXIIEa7OHPds5GMO9qEakXFg18O0sk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=mhiIEMMN; arc=none smtp.client-ip=198.175.65.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KFVhE7HU"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5A9B3C4CEC4;
-	Tue,  3 Sep 2024 16:51:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1725382290;
-	bh=v6QUWDn3Xk0vLTb/0TXXT0hs0RxaaMRHOSxlGXdBePM=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=KFVhE7HUztDHKoswnzl716+1BfpdDKMFPobGsXUUzoyxEc/JwV1DKOdwH2dNzPPCp
-	 +84ICnp9h4Vz4Os3Ngpo+r7TM0OLxTfH4We+YPI8IM3x5IQGojqgOsxeQIROIzBtHn
-	 1V9tRetREZ2idlJ/DoIR1S1oZC+CH6Gf1KenFx0uo08pjZGigUD+4imoTwgV08yhkG
-	 Nl355Yq8OYzFYRSInPciya4dZM/OVDn72lyB2nB7Q8ccPOwS7q0vEnMtwGSX9GAVob
-	 7t8+z+dljI2JPLmFrBSNuCizFgeVOjKbcRwkdtIkkvE3jO9sE+B/2+5+icsNt6WeW3
-	 O/pyypMxBEOiQ==
-Date: Tue, 3 Sep 2024 17:51:24 +0100
-From: Simon Horman <horms@kernel.org>
-To: Sunil Goutham <sgoutham@marvell.com>,
-	Linu Cherian <lcherian@marvell.com>,
-	Geetha sowjanya <gakula@marvell.com>,
-	Jerin Jacob <jerinj@marvell.com>,
-	Hariprasad Kelam <hkelam@marvell.com>,
-	Subbaraya Sundeep <sbhatta@marvell.com>
-Cc: "David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>, netdev@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: Re: [PATCH net-next 0/2] octeontx2: Address some Sparse warnings
-Message-ID: <20240903165124.GG4792@kernel.org>
-References: <20240903-octeontx2-sparse-v1-0-f190309ecb0a@kernel.org>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="mhiIEMMN"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1725382764; x=1756918764;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=NqD0KjUYLUqZjf+h45oIDnI7UgcCt77pUgo/JygmMuk=;
+  b=mhiIEMMNQrYMuMem5Oc9cVZiUF/nfDApNPLGEtwoB5l0UJUbqWti0mfe
+   6vMH9PM0uXM0tiikt1TkJregzRf9r/cQ0E3pclIer3bQWVr65HY/DBK9+
+   30SlSb8Z88uZRek6gSUY25kieasj4Jb8eaFCTRkq/klRLxrO9vtIJ6N86
+   RKcKetLq2mLETd/dp60Q/7sQCXhqPr2x0YWp6fhLuB9eM4S0K1lPqExor
+   3kHyGIyY3jklfTM0wZrkSM2tFl2kq+QBAJDf5zr9AGoxVO9vE2Fde5e3P
+   pnp8/b/wT4XVUVIfUkvx1QKFQ83B7BC3IvdD8lXSTLTgh6xN2/gGXpHeK
+   A==;
+X-CSE-ConnectionGUID: z0LcbJeuRWqTfKH84PPdiA==
+X-CSE-MsgGUID: Kbf2o8R3Q5+FG1Kyz8ftQg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11184"; a="35154043"
+X-IronPort-AV: E=Sophos;i="6.10,199,1719903600"; 
+   d="scan'208";a="35154043"
+Received: from fmviesa009.fm.intel.com ([10.60.135.149])
+  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Sep 2024 09:59:24 -0700
+X-CSE-ConnectionGUID: 6JJAdnTkTbmZkM6YU1L3dA==
+X-CSE-MsgGUID: nXQVUhrmR0GbIjv6Vr8EtA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.10,199,1719903600"; 
+   d="scan'208";a="65030974"
+Received: from lkp-server01.sh.intel.com (HELO 9c6b1c7d3b50) ([10.239.97.150])
+  by fmviesa009.fm.intel.com with ESMTP; 03 Sep 2024 09:59:20 -0700
+Received: from kbuild by 9c6b1c7d3b50 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1slWsA-0006vt-2H;
+	Tue, 03 Sep 2024 16:59:18 +0000
+Date: Wed, 4 Sep 2024 00:59:11 +0800
+From: kernel test robot <lkp@intel.com>
+To: "Kobayashi, Daisuke" <kobayashi.da-06@fujitsu.com>,
+	linux-cxl@vger.kernel.org, dan.j.williams@intel.com
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, mj@ucw.cz,
+	"Kobayashi, Daisuke" <kobayashi.da-06@fujitsu.com>,
+	Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Subject: Re: [PATCH v17 1/2] cxl/core/regs: Add rcd_pcie_cap initialization
+Message-ID: <202409040010.afyGcWUe-lkp@intel.com>
+References: <20240903025915.270521-2-kobayashi.da-06@fujitsu.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -53,38 +65,92 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240903-octeontx2-sparse-v1-0-f190309ecb0a@kernel.org>
+In-Reply-To: <20240903025915.270521-2-kobayashi.da-06@fujitsu.com>
 
-On Tue, Sep 03, 2024 at 05:26:52PM +0100, Simon Horman wrote:
-> Hi,
-> 
-> This patchset addresses some Sparse warnings that are flagged in files
-> touched by recent patch submissions.
+Hi Kobayashi,Daisuke,
 
-Oops, I now realise that the issue addressed by patch 1/2 is
-not described there as being flagged by Sparse.
+kernel test robot noticed the following build errors:
 
-I'll plan to send a v2, with an updated cover letter,
-after an appropriate timeout. Any review in the meantime
-would be appreciated.
+[auto build test ERROR on cxl/next]
+[also build test ERROR on linus/master cxl/pending v6.11-rc6 next-20240903]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-> 
-> Although these changes do not alter the functionality of the code, by
-> addressing them real problems introduced in future which are flagged by
-> Sparse will stand out more readily.
-> 
-> Compile tested only.
-> 
-> ---
-> Simon Horman (2):
->       octeontx2-af: Pass string literal as format argument of alloc_workqueue()
->       octeontx2-pf: Make iplen __be16 in otx2_sqe_add_ext()
-> 
->  drivers/net/ethernet/marvell/octeontx2/af/rvu.c        | 4 ++--
->  drivers/net/ethernet/marvell/octeontx2/nic/otx2_txrx.c | 2 +-
->  2 files changed, 3 insertions(+), 3 deletions(-)
-> 
-> base-commit: 54f1a107bd034e8d9052f5642280876090ebe31c
+url:    https://github.com/intel-lab-lkp/linux/commits/Kobayashi-Daisuke/cxl-core-regs-Add-rcd_pcie_cap-initialization/20240903-110023
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/cxl/cxl.git next
+patch link:    https://lore.kernel.org/r/20240903025915.270521-2-kobayashi.da-06%40fujitsu.com
+patch subject: [PATCH v17 1/2] cxl/core/regs: Add rcd_pcie_cap initialization
+config: x86_64-randconfig-001-20240903 (https://download.01.org/0day-ci/archive/20240904/202409040010.afyGcWUe-lkp@intel.com/config)
+compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240904/202409040010.afyGcWUe-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202409040010.afyGcWUe-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> drivers/cxl/pci.c:510:25: error: use of undeclared identifier '__free_put_cxl_port'; did you mean '__free_put_cxl_root'?
+     510 |                 struct cxl_port *port __free(put_cxl_port) =
+         |                                       ^
+   include/linux/cleanup.h:64:33: note: expanded from macro '__free'
+      64 | #define __free(_name)   __cleanup(__free_##_name)
+         |                                   ^
+   <scratch space>:28:1: note: expanded from here
+      28 | __free_put_cxl_port
+         | ^
+   drivers/cxl/cxl.h:752:1: note: '__free_put_cxl_root' declared here
+     752 | DEFINE_FREE(put_cxl_root, struct cxl_root *, if (_T) put_cxl_root(_T))
+         | ^
+   include/linux/cleanup.h:62:21: note: expanded from macro 'DEFINE_FREE'
+      62 |         static inline void __free_##_name(void *p) { _type _T = *(_type *)p; _free; }
+         |                            ^
+   <scratch space>:64:1: note: expanded from here
+      64 | __free_put_cxl_root
+         | ^
+   1 error generated.
+
+
+vim +510 drivers/cxl/pci.c
+
+   495	
+   496	static int cxl_pci_setup_regs(struct pci_dev *pdev, enum cxl_regloc_type type,
+   497				      struct cxl_register_map *map)
+   498	{
+   499		int rc;
+   500	
+   501		rc = cxl_find_regblock(pdev, type, map);
+   502	
+   503		/*
+   504		 * If the Register Locator DVSEC does not exist, check if it
+   505		 * is an RCH and try to extract the Component Registers from
+   506		 * an RCRB.
+   507		 */
+   508		if (rc && type == CXL_REGLOC_RBI_COMPONENT && is_cxl_restricted(pdev)) {
+   509			struct cxl_dport *dport;
+ > 510			struct cxl_port *port __free(put_cxl_port) =
+   511				cxl_pci_find_port(pdev, &dport);
+   512			if (!port)
+   513				return -EPROBE_DEFER;
+   514	
+   515			rc = cxl_rcrb_get_comp_regs(pdev, map, dport);
+   516			if (rc)
+   517				return rc;
+   518	
+   519			rc = cxl_dport_map_rcd_linkcap(pdev, dport);
+   520			if (rc)
+   521				return rc;
+   522	
+   523		} else if (rc) {
+   524			return rc;
+   525		}
+   526	
+   527		return cxl_setup_regs(map);
+   528	}
+   529	
 
 -- 
-pw-bot: cr
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
