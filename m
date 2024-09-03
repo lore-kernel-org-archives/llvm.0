@@ -1,141 +1,160 @@
 Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 55A8C1865F0;
-	Tue,  3 Sep 2024 07:52:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 064171A3AA2;
+	Tue,  3 Sep 2024 09:04:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725349972; cv=none; b=keZ1aEFQ5nQo1XkH2hK0MY+Pf6jcSMBJAh03rMo+KHLKmbQ7wqvkOsbkQ2F0/LKDKOhC1SkL0wfjHv9QpKLpJnnnO1HXLdL72kLjo779dY5xC7qX7JR0jMv5jk84bI6dW46E6umva2rmIJyjLUekfIMxUER6O0vakwGMkKzVfKw=
+	t=1725354297; cv=none; b=YFJ3wKATICfKEcELPhUQQK0n58h7NAbLJRG+tAnOsIhwbNy1XRs+DPWztQgpd/NYdEGq7qgUXnGCAfNpBiJ8DOHv1aE6Epy3DjaQlI+jELld4I2zRVTV3ztHNFxUEvwedNjBNIjT0J7HV/8hWRkvbdmaZ+HurXvHBuZG6vW/L6w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725349972; c=relaxed/simple;
-	bh=t9N/jlwW/ok+MM/Mta0kNwYGTnj3VNDdb++trM9lic0=;
+	s=arc-20240116; t=1725354297; c=relaxed/simple;
+	bh=1cgBr08tnbYyezACo8zWrdfoBjXjj4PUhJ/aPzF8Vs8=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=rx10hRcojC2jptwgPUxA6d+70APtbAPe0pisGSemeO2klZig/ZKUu1B2Rl/esp9wZhKwi60itVsHug1qT4EWWUvkmVp4moEo8GI0lq5qTsj1gJyQHjwoaV3PSuA21ctbkuXS/iLBvKGpbjfLNIjIVcmrEPjDrKdu72nJP2esAMw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Fy9DN6K+; arc=none smtp.client-ip=192.198.163.15
+	 Content-Type:Content-Disposition:In-Reply-To; b=PjTrJ4xGmTeqEJnE/BsEbSvNH/DqnNY2NOLpR8vt3DIrv8JnFoBLZJqL5bmc1MqSoygy6IajWn/0qQEYiy66voUmUIq/RuYbuNZDSkeCDfYEbSDqizwnLGi24NS7MFioNRdVdNKhfu3gykfp1bb0s4rLuprwdlLB9PMYXKglQlo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=KEaAJaO1; arc=none smtp.client-ip=192.198.163.15
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Fy9DN6K+"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="KEaAJaO1"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1725349971; x=1756885971;
+  t=1725354296; x=1756890296;
   h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=t9N/jlwW/ok+MM/Mta0kNwYGTnj3VNDdb++trM9lic0=;
-  b=Fy9DN6K+hc/EfeEQF7h8ZWWA/n5scTChsFCeAyBS//Xk7KmUMZR4D1BG
-   PRHKdnlnGvhdQ74OGQAgf+DFAZpHute7NrXptNxlSTSc9UjP6j58qmyMb
-   E2f7ahPX2ok0xuVYs9FXmQv6OLguVIEkOPqaZPD1tv1N/bTR0RZ5aFLlN
-   P5EUBLI5lLPMJMZCfy33PNVD6AyT/euwWoLDzhdeRMEyRVM8gSUj9uOmT
-   JmA/fU5Ak/Z1j2O3wxx6azO8RgwqdIGy6x6iaG30/m9iHVpgDIcL0kC24
-   hr5GjJes3EYGxxXUTctg8HHoKbX+Hvx7HquaK9/yVkSmIyvNsE7A/7qKI
-   A==;
-X-CSE-ConnectionGUID: Fsk8U/YdR1CFZRdHs0sf/g==
-X-CSE-MsgGUID: oi3KmmR9SzOEfeGe4q6hzA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11183"; a="24085479"
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=1cgBr08tnbYyezACo8zWrdfoBjXjj4PUhJ/aPzF8Vs8=;
+  b=KEaAJaO1I2/9pUXQGs6Ser6clbfX5hQIDRNTMEcgzXj1T7k16dMb4/Dc
+   rW+TTA7KFbUInK/1pHvS06fonkiWr7cEObrbQATupxip1JwV0OHTa8Laf
+   zJoCtBgnMqy0IO+cG2Pi9xGP9BbEWUtm83wnn8EIZWsGReOvvQ9phs10U
+   jio9hkBXnsTGuYTj+YRswi5b1xbYZB1i4GgAtoGZWON2rQCHGcnArpEDw
+   jpWE/jXg1Z4kjm4qiFguZezZOxNJd1P2RrmOxwB7WbTCXShrNgGnRyYB6
+   jZkxMBCXbvTbkyv48molt8vcnWFoDnhMxIDd+f+KVvr7jclq24ZQq7zii
+   g==;
+X-CSE-ConnectionGUID: iH7J9834R62ENqI5sX+XPg==
+X-CSE-MsgGUID: PlFYE4b2Rx20O3v5/E2E3g==
+X-IronPort-AV: E=McAfee;i="6700,10204,11183"; a="24092535"
 X-IronPort-AV: E=Sophos;i="6.10,198,1719903600"; 
-   d="scan'208";a="24085479"
-Received: from fmviesa010.fm.intel.com ([10.60.135.150])
-  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Sep 2024 00:52:50 -0700
-X-CSE-ConnectionGUID: KgR/VfDuQTGrHzuBecpYnw==
-X-CSE-MsgGUID: zll42YBsR3uoQUQ4fNhZOQ==
+   d="scan'208";a="24092535"
+Received: from orviesa001.jf.intel.com ([10.64.159.141])
+  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Sep 2024 02:04:55 -0700
+X-CSE-ConnectionGUID: QBkddXZoS26pou/N5GlsCQ==
+X-CSE-MsgGUID: NgFFM9UUQc+u+UsTBh1Cww==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.10,198,1719903600"; 
-   d="scan'208";a="65017340"
+   d="scan'208";a="102279344"
 Received: from lkp-server01.sh.intel.com (HELO 9c6b1c7d3b50) ([10.239.97.150])
-  by fmviesa010.fm.intel.com with ESMTP; 03 Sep 2024 00:52:47 -0700
+  by orviesa001.jf.intel.com with ESMTP; 03 Sep 2024 02:04:52 -0700
 Received: from kbuild by 9c6b1c7d3b50 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1slOLF-0006NK-2l;
-	Tue, 03 Sep 2024 07:52:45 +0000
-Date: Tue, 3 Sep 2024 15:52:22 +0800
+	id 1slPSz-0006Qw-1k;
+	Tue, 03 Sep 2024 09:04:49 +0000
+Date: Tue, 3 Sep 2024 17:04:27 +0800
 From: kernel test robot <lkp@intel.com>
-To: Ankit Nautiyal <ankit.k.nautiyal@intel.com>,
-	intel-gfx@lists.freedesktop.org
+To: =?iso-8859-1?Q?Andr=E9?= Almeida <andrealmeid@igalia.com>,
+	Hugh Dickins <hughd@google.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Alexander Viro <viro@zeniv.linux.org.uk>,
+	Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>,
+	krisman@kernel.org
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	jani.nikula@linux.intel.com, ville.syrjala@linux.intel.com,
-	mitulkumar.ajitkumar.golani@intel.com
-Subject: Re: [PATCH 04/13] drm/i915/display: Enable MSA Ignore Timing PAR
- only when in not fixed_rr mode
-Message-ID: <202409031530.5OEhhqKb-lkp@intel.com>
-References: <20240902080635.2946858-5-ankit.k.nautiyal@intel.com>
+	Linux Memory Management List <linux-mm@kvack.org>,
+	linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+	kernel-dev@igalia.com, Daniel Rosenberg <drosen@google.com>,
+	smcv@collabora.com, Christoph Hellwig <hch@lst.de>,
+	=?iso-8859-1?Q?Andr=E9?= Almeida <andrealmeid@igalia.com>
+Subject: Re: [PATCH v2 6/8] tmpfs: Add flag FS_CASEFOLD_FL support for tmpfs
+ dirs
+Message-ID: <202409031620.BOshMDgn-lkp@intel.com>
+References: <20240902225511.757831-7-andrealmeid@igalia.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20240902080635.2946858-5-ankit.k.nautiyal@intel.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20240902225511.757831-7-andrealmeid@igalia.com>
 
-Hi Ankit,
+Hi André,
 
 kernel test robot noticed the following build errors:
 
-[auto build test ERROR on drm-intel/for-linux-next]
-[also build test ERROR on drm-tip/drm-tip next-20240902]
-[cannot apply to drm-intel/for-linux-next-fixes linus/master v6.11-rc6]
+[auto build test ERROR on akpm-mm/mm-everything]
+[also build test ERROR on tytso-ext4/dev brauner-vfs/vfs.all linus/master v6.11-rc6 next-20240903]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Ankit-Nautiyal/drm-i915-dp-Avoid-vrr-compute-config-for-HDMI-sink/20240902-205135
-base:   git://anongit.freedesktop.org/drm-intel for-linux-next
-patch link:    https://lore.kernel.org/r/20240902080635.2946858-5-ankit.k.nautiyal%40intel.com
-patch subject: [PATCH 04/13] drm/i915/display: Enable MSA Ignore Timing PAR only when in not fixed_rr mode
-config: x86_64-randconfig-071-20240903 (https://download.01.org/0day-ci/archive/20240903/202409031530.5OEhhqKb-lkp@intel.com/config)
+url:    https://github.com/intel-lab-lkp/linux/commits/Andr-Almeida/unicode-Fix-utf8_load-error-path/20240903-070149
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
+patch link:    https://lore.kernel.org/r/20240902225511.757831-7-andrealmeid%40igalia.com
+patch subject: [PATCH v2 6/8] tmpfs: Add flag FS_CASEFOLD_FL support for tmpfs dirs
+config: i386-buildonly-randconfig-005-20240903 (https://download.01.org/0day-ci/archive/20240903/202409031620.BOshMDgn-lkp@intel.com/config)
 compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240903/202409031530.5OEhhqKb-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240903/202409031620.BOshMDgn-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202409031530.5OEhhqKb-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202409031620.BOshMDgn-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> drivers/gpu/drm/i915/display/intel_dp_link_training.c:724:6: error: variable 'enable_msa_timing_par_ignore' is used uninitialized whenever 'if' condition is false [-Werror,-Wsometimes-uninitialized]
-     724 |         if (crtc_state->vrr.enable && !crtc_state->vrr.fixed_rr)
-         |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/gpu/drm/i915/display/intel_dp_link_training.c:728:30: note: uninitialized use occurs here
-     728 |                                         crtc_state->port_clock, enable_msa_timing_par_ignore);
-         |                                                                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/gpu/drm/i915/display/intel_dp_link_training.c:724:2: note: remove the 'if' if its condition is always true
-     724 |         if (crtc_state->vrr.enable && !crtc_state->vrr.fixed_rr)
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     725 |                 enable_msa_timing_par_ignore = true;
->> drivers/gpu/drm/i915/display/intel_dp_link_training.c:724:6: error: variable 'enable_msa_timing_par_ignore' is used uninitialized whenever '&&' condition is false [-Werror,-Wsometimes-uninitialized]
-     724 |         if (crtc_state->vrr.enable && !crtc_state->vrr.fixed_rr)
-         |             ^~~~~~~~~~~~~~~~~~~~~~
-   drivers/gpu/drm/i915/display/intel_dp_link_training.c:728:30: note: uninitialized use occurs here
-     728 |                                         crtc_state->port_clock, enable_msa_timing_par_ignore);
-         |                                                                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/gpu/drm/i915/display/intel_dp_link_training.c:724:6: note: remove the '&&' if its condition is always true
-     724 |         if (crtc_state->vrr.enable && !crtc_state->vrr.fixed_rr)
-         |             ^~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/gpu/drm/i915/display/intel_dp_link_training.c:721:35: note: initialize the variable 'enable_msa_timing_par_ignore' to silence this warning
-     721 |         bool enable_msa_timing_par_ignore;
-         |                                          ^
-         |                                           = 0
-   2 errors generated.
+>> mm/shmem.c:2771:12: error: no member named 's_encoding' in 'struct super_block'
+    2771 |                 if (!sb->s_encoding)
+         |                      ~~  ^
+   1 error generated.
 
 
-vim +724 drivers/gpu/drm/i915/display/intel_dp_link_training.c
+vim +2771 mm/shmem.c
 
-   717	
-   718	static void intel_dp_update_downspread_ctrl(struct intel_dp *intel_dp,
-   719						    const struct intel_crtc_state *crtc_state)
-   720	{
-   721		bool enable_msa_timing_par_ignore;
-   722	
-   723		/* Enable MSA TIMING PAR IGNORE only in non fixed_rr mode */
- > 724		if (crtc_state->vrr.enable && !crtc_state->vrr.fixed_rr)
-   725			enable_msa_timing_par_ignore = true;
-   726	
-   727		intel_dp_link_training_set_mode(intel_dp,
-   728						crtc_state->port_clock, enable_msa_timing_par_ignore);
-   729	}
-   730	
+  2760	
+  2761	/*
+  2762	 * chattr's fsflags are unrelated to extended attributes,
+  2763	 * but tmpfs has chosen to enable them under the same config option.
+  2764	 */
+  2765	static int shmem_set_inode_flags(struct inode *inode, unsigned int fsflags, struct dentry *dentry)
+  2766	{
+  2767		unsigned int i_flags = 0, old = inode->i_flags;
+  2768		struct super_block *sb = inode->i_sb;
+  2769	
+  2770		if (fsflags & FS_CASEFOLD_FL) {
+> 2771			if (!sb->s_encoding)
+  2772				return -EOPNOTSUPP;
+  2773	
+  2774			if (!S_ISDIR(inode->i_mode))
+  2775				return -ENOTDIR;
+  2776	
+  2777			if (dentry && !simple_empty(dentry))
+  2778				return -ENOTEMPTY;
+  2779	
+  2780			i_flags |= S_CASEFOLD;
+  2781		} else if (old & S_CASEFOLD) {
+  2782			if (dentry && !simple_empty(dentry))
+  2783				return -ENOTEMPTY;
+  2784		}
+  2785	
+  2786		if (fsflags & FS_NOATIME_FL)
+  2787			i_flags |= S_NOATIME;
+  2788		if (fsflags & FS_APPEND_FL)
+  2789			i_flags |= S_APPEND;
+  2790		if (fsflags & FS_IMMUTABLE_FL)
+  2791			i_flags |= S_IMMUTABLE;
+  2792		/*
+  2793		 * But FS_NODUMP_FL does not require any action in i_flags.
+  2794		 */
+  2795		inode_set_flags(inode, i_flags, S_NOATIME | S_APPEND | S_IMMUTABLE | S_CASEFOLD);
+  2796	
+  2797		return 0;
+  2798	}
+  2799	#else
+  2800	static void shmem_set_inode_flags(struct inode *inode, unsigned int fsflags, struct dentry *dentry)
+  2801	{
+  2802	}
+  2803	#define shmem_initxattrs NULL
+  2804	#endif
+  2805	
 
 -- 
 0-DAY CI Kernel Test Service
