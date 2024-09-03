@@ -1,49 +1,59 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5190018BBB6;
-	Tue,  3 Sep 2024 15:25:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 997481891B9;
+	Tue,  3 Sep 2024 15:47:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725377130; cv=none; b=cD29OaLmsiF6/i7CdrIqwUmip4z8P+Sd2YRPqbz2LmsFH3x7wx64xzUfPJiDYBY+1tfI9s1RHBXphNVhO5DdKeXs0bB7Xq6k2VtGFUBx3JFi9gaPwXWlwybm7TWTCYDVaMDXhXutysUdMhW+w5pLSLHby7BmJnVp0DmpOXPw9f4=
+	t=1725378438; cv=none; b=uYeYmXDbNnfDVvr0t/+jsphXU7yr1VPDlUmBKvgBiIoV3/55QM9iK4NJq2zcIhUuCpQA55SZdovIHcI/NYFu/q9QOOULERc0AQ7B1w84EY4mJq2TImERWwsnpooO2Vq1Bhl8E51MxzKUu8u63fawr5E8BhW7Ljq1eC3i8tBdVSU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725377130; c=relaxed/simple;
-	bh=NzTUmUqb1pcIqhYJTsD/7reom8G6ax17uBj3IOYVPCI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=pTrBdfrqG55nmwOkdLNHdmbAgm3n206PVS4XHRPX6IKil+mhg9NmhzPpBUR206RsJWTNtCTfv/h1WmSFXhEOoJNvtFHY08oDRSbraCB5480JTKBF+B/SiUyX90IjWVIHIBBbeXKJ6zFUYXmk+EpeSJx52s8yd2sY2DzggpsTKd0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZeaettQk; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1725378438; c=relaxed/simple;
+	bh=MlL2ekpNBHWtNe30G+6JiHx0CcJvvFtMGonOwXzVqPM=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=DJi1vbLCzRauQOcbtVzYCbDJudbGihe5/xvjlow6QhCwYcL0iczPkHlY4gcvBebGRYsXzAUtcW0ceHGt9BL7EM7LRfDwtJVABrsKaAG6m2DXz21t1RVxZA/2kiIb4EVM9roH95KDV/BLQtbubc+NWt/vUY4JC/auFJ2t5zxin6o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Lys3dDUz; arc=none smtp.client-ip=192.198.163.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZeaettQk"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2D193C4CEC4;
-	Tue,  3 Sep 2024 15:25:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1725377130;
-	bh=NzTUmUqb1pcIqhYJTsD/7reom8G6ax17uBj3IOYVPCI=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=ZeaettQkOkHlYywmGqrgRmeCu5Hlh4aCuJLM9CPgIdPSLxLsW41+FsMRMltGu5pWE
-	 Ut3sRsMu9hi/VHGzoG6EBLUvSPdoiY/zQeii2rpiPDuNDfHf/jysRh6fQqJj6pxrqs
-	 dgUj27QwgA1tH3SHkIXI1Xq9QSYg05RhQ/3UwlDq/CHBuX6wLLN84+kSfgBfmAo1ZN
-	 4D3uQFqvo1abKTtKsgqCgLGfaBsmi8MZvlpGi1ll038LpaRUtPiVU9uqqGV4dPUr9L
-	 8N20lY4pGykKF0Z+SwfBDyYerAH4uJ7FdC45KnDtsgs2CEQCqYhQnCuvZlETiHb/sO
-	 GnQcHSdgb3tkA==
-Date: Tue, 3 Sep 2024 16:25:24 +0100
-From: Simon Horman <horms@kernel.org>
-To: "Gustavo A. R. Silva" <gustavo@embeddedor.com>
-Cc: Tony Nguyen <anthony.l.nguyen@intel.com>,
-	Przemek Kitszel <przemyslaw.kitszel@intel.com>,
-	netdev@vger.kernel.org, llvm@lists.linux.dev,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Eric Dumazet <edumazet@google.com>,
-	intel-wired-lan@lists.osuosl.org, Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	"David S. Miller" <davem@davemloft.net>
-Subject: Re: [Intel-wired-lan] [PATCH iwl-next] ice: Consistently use
- ethtool_puts() to copy strings
-Message-ID: <20240903152524.GC4792@kernel.org>
-References: <20240902-igc-ss-puts-v1-1-c66a73b532c7@kernel.org>
- <88384607-4fcf-4ab1-8edf-9258df0bbf3c@embeddedor.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Lys3dDUz"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1725378437; x=1756914437;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=MlL2ekpNBHWtNe30G+6JiHx0CcJvvFtMGonOwXzVqPM=;
+  b=Lys3dDUzW3daMZACwdCi7FONKvM0fSDQZU9aMYeSRJyRJeHkfTk3oK/h
+   R8c7KPa2D3egnbt5CJylHNzvymNP8vd4cANXRE2ws42Faog8bIptfdV+r
+   qhzuemZM5eE+h8kkatb9px+up3ED6T6HP0cfpExthzZV2xd8ZQ71D3Vnj
+   /mts7IkcC5z0XAeRp3wC7rRsahY0yK+P84TmSCf1zFA6SdP0lM2/cl21V
+   4kR6JCVexL7iW8vsfYKD0IRvVdsHwuPfxU2uJ/obvlQerDNP7uoG/JNS7
+   Hb2Afcz02j1BRwON63rVREDCdzVxA8+6Z1t1wHHrL2VLo5rpY9PE3qwGo
+   g==;
+X-CSE-ConnectionGUID: K6asfALxQrGpEXPAQYFpGQ==
+X-CSE-MsgGUID: T73FkqaQQ8iQzr77pz11wA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11184"; a="24176663"
+X-IronPort-AV: E=Sophos;i="6.10,199,1719903600"; 
+   d="scan'208";a="24176663"
+Received: from fmviesa002.fm.intel.com ([10.60.135.142])
+  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Sep 2024 08:47:16 -0700
+X-CSE-ConnectionGUID: 4/SH70pWSlKtdRm9+Cg7hA==
+X-CSE-MsgGUID: u8jqcSDER2mouJk2ghCjhg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.10,199,1719903600"; 
+   d="scan'208";a="88202643"
+Received: from lkp-server01.sh.intel.com (HELO 9c6b1c7d3b50) ([10.239.97.150])
+  by fmviesa002.fm.intel.com with ESMTP; 03 Sep 2024 08:47:14 -0700
+Received: from kbuild by 9c6b1c7d3b50 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1slVkO-0006r2-1T;
+	Tue, 03 Sep 2024 15:47:12 +0000
+Date: Tue, 3 Sep 2024 23:46:31 +0800
+From: kernel test robot <lkp@intel.com>
+To: David Howells <dhowells@redhat.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [dhowells-fs:netfs-crypt 37/37] fs/netfs/crypto.c:305:38: warning:
+ format specifies type 'size_t' (aka 'unsigned int') but the argument has
+ type 'unsigned long'
+Message-ID: <202409032337.cSEMj0gq-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -52,98 +62,100 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <88384607-4fcf-4ab1-8edf-9258df0bbf3c@embeddedor.com>
 
-On Mon, Sep 02, 2024 at 01:55:41PM -0600, Gustavo A. R. Silva wrote:
-> 
-> 
-> On 02/09/24 06:46, Simon Horman wrote:
-> > ethtool_puts() is the preferred method for copying ethtool strings.
-> > And ethtool_puts() is already used to copy ethtool strings in
-> > igc_ethtool_get_strings(). With this patch igc_ethtool_get_strings()
-> > uses it for all such cases.
-> > 
-> > In general, the compiler can't use fortification to verify that the
-> > destination buffer isn't over-run when the destination is the first
-> > element of an array, and more than one element of the array is to be
-> > written by memcpy().
-> > 
-> > For the ETH_SS_PRIV_FLAGS the problem doesn't manifest as there is only
-> > one element in the igc_priv_flags_strings array.
-> > 
-> > In the ETH_SS_TEST case, there is more than one element of
-> > igc_gstrings_test, and from the compiler's perspective, that element is
-> > overrun. In practice it does not overrun the overall size of the array,
-> > but it is nice to use tooling to help us where possible. In this case
-> > the problem is flagged as follows.
-> > 
-> > Flagged by clang-18 as:
-> > 
-> > In file included from drivers/net/ethernet/intel/igc/igc_ethtool.c:5:
-> > In file included from ./include/linux/if_vlan.h:10:
-> > In file included from ./include/linux/netdevice.h:24:
-> > In file included from ./include/linux/timer.h:6:
-> > In file included from ./include/linux/ktime.h:25:
-> > In file included from ./include/linux/jiffies.h:10:
-> > In file included from ./include/linux/time.h:60:
-> > In file included from ./include/linux/time32.h:13:
-> > In file included from ./include/linux/timex.h:67:
-> > In file included from ./arch/x86/include/asm/timex.h:5:
-> > In file included from ./arch/x86/include/asm/processor.h:19:
-> > In file included from ./arch/x86/include/asm/cpuid.h:62:
-> > In file included from ./arch/x86/include/asm/paravirt.h:21:
-> > In file included from ./include/linux/cpumask.h:12:
-> > In file included from ./include/linux/bitmap.h:13:
-> > In file included from ./include/linux/string.h:374:
-> > .../fortify-string.h:580:4: warning: call to '__read_overflow2_field' declared with 'warning' attribute: detected read beyond size of field (2nd parameter); maybe use struct_group()? [-Wattribute-warning]
-> > 
-> > And Smatch as:
-> > 
-> > .../igc_ethtool.c:771 igc_ethtool_get_strings() error: __builtin_memcpy() '*igc_gstrings_test' too small (32 vs 160)
-> > 
-> > Curiously, not flagged by gcc-14.
-> > 
-> > Compile tested only.
-> > 
-> > Signed-off-by: Simon Horman <horms@kernel.org>
-> > ---
-> >   drivers/net/ethernet/intel/igc/igc_ethtool.c | 8 ++++----
-> >   1 file changed, 4 insertions(+), 4 deletions(-)
-> > 
-> > diff --git a/drivers/net/ethernet/intel/igc/igc_ethtool.c b/drivers/net/ethernet/intel/igc/igc_ethtool.c
-> > index 457b5d7f1610..ccace77c6c2d 100644
-> > --- a/drivers/net/ethernet/intel/igc/igc_ethtool.c
-> > +++ b/drivers/net/ethernet/intel/igc/igc_ethtool.c
-> > @@ -768,8 +768,8 @@ static void igc_ethtool_get_strings(struct net_device *netdev, u32 stringset,
-> >   	switch (stringset) {
-> >   	case ETH_SS_TEST:
-> > -		memcpy(data, *igc_gstrings_test,
-> > -		       IGC_TEST_LEN * ETH_GSTRING_LEN);
-> 
-> I think this problem should be solved if we use the array's address,
-> which in this case is `igc_gstrings_test`, instead of the address of
-> the first row. So, the above should look as follows:
-> 
-> memcpy(data, igc_gstrings_test, IGC_TEST_LEN * ETH_GSTRING_LEN);
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/dhowells/linux-fs.git netfs-crypt
+head:   3962f4beba4e7ffa6cfab018df8a612902a1d2c8
+commit: 3962f4beba4e7ffa6cfab018df8a612902a1d2c8 [37/37] netfs: Support decryption on ubuffered/DIO read
+config: i386-buildonly-randconfig-003-20240903 (https://download.01.org/0day-ci/archive/20240903/202409032337.cSEMj0gq-lkp@intel.com/config)
+compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240903/202409032337.cSEMj0gq-lkp@intel.com/reproduce)
 
-Thanks for the advice.
-FWIIW, I do like the consistency of using ethtool_puts().
-But, OTOH, your suggestion is much simpler.
-I will send an updated the patch accordingly.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202409032337.cSEMj0gq-lkp@intel.com/
 
-> 
-> > +		for (i = 0; i < IGC_TEST_LEN; i++)
-> > +			ethtool_puts(&p, igc_gstrings_test[i]);
-> >   		break;
-> >   	case ETH_SS_STATS:
-> >   		for (i = 0; i < IGC_GLOBAL_STATS_LEN; i++)
-> > @@ -791,8 +791,8 @@ static void igc_ethtool_get_strings(struct net_device *netdev, u32 stringset,
-> >   		/* BUG_ON(p - data != IGC_STATS_LEN * ETH_GSTRING_LEN); */
-> >   		break;
-> >   	case ETH_SS_PRIV_FLAGS:
-> > -		memcpy(data, igc_priv_flags_strings,
-> > -		       IGC_PRIV_FLAGS_STR_LEN * ETH_GSTRING_LEN);
-> 
-> In this case, the code is effectively reading from the array's address.
+All warnings (new ones prefixed by >>):
 
-True. In light of your other suggestion I'll drop this hung.
+>> fs/netfs/crypto.c:305:38: warning: format specifies type 'size_t' (aka 'unsigned int') but the argument has type 'unsigned long' [-Wformat]
+     304 |         kdebug("type=%u nr=%zu type=%u nr=%zu",
+         |                            ~~~
+         |                            %lu
+     305 |                rreq->bounce.iter.iter_type, rreq->bounce.iter.nr_segs,
+         |                                             ^~~~~~~~~~~~~~~~~~~~~~~~~
+   fs/netfs/internal.h:443:43: note: expanded from macro 'kdebug'
+     443 | #define kdebug(FMT, ...) dbgprintk(FMT, ##__VA_ARGS__)
+         |                                    ~~~    ^~~~~~~~~~~
+   fs/netfs/internal.h:439:46: note: expanded from macro 'dbgprintk'
+     439 |         printk("[%-6.6s] "FMT"\n", current->comm, ##__VA_ARGS__)
+         |                           ~~~                       ^~~~~~~~~~~
+   include/linux/printk.h:465:60: note: expanded from macro 'printk'
+     465 | #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
+         |                                                     ~~~    ^~~~~~~~~~~
+   include/linux/printk.h:437:19: note: expanded from macro 'printk_index_wrap'
+     437 |                 _p_func(_fmt, ##__VA_ARGS__);                           \
+         |                         ~~~~    ^~~~~~~~~~~
+   fs/netfs/crypto.c:306:38: warning: format specifies type 'size_t' (aka 'unsigned int') but the argument has type 'unsigned long' [-Wformat]
+     304 |         kdebug("type=%u nr=%zu type=%u nr=%zu",
+         |                                           ~~~
+         |                                           %lu
+     305 |                rreq->bounce.iter.iter_type, rreq->bounce.iter.nr_segs,
+     306 |                rreq->buffer.iter.iter_type, rreq->buffer.iter.nr_segs);
+         |                                             ^~~~~~~~~~~~~~~~~~~~~~~~~
+   fs/netfs/internal.h:443:43: note: expanded from macro 'kdebug'
+     443 | #define kdebug(FMT, ...) dbgprintk(FMT, ##__VA_ARGS__)
+         |                                    ~~~    ^~~~~~~~~~~
+   fs/netfs/internal.h:439:46: note: expanded from macro 'dbgprintk'
+     439 |         printk("[%-6.6s] "FMT"\n", current->comm, ##__VA_ARGS__)
+         |                           ~~~                       ^~~~~~~~~~~
+   include/linux/printk.h:465:60: note: expanded from macro 'printk'
+     465 | #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
+         |                                                     ~~~    ^~~~~~~~~~~
+   include/linux/printk.h:437:19: note: expanded from macro 'printk_index_wrap'
+     437 |                 _p_func(_fmt, ##__VA_ARGS__);                           \
+         |                         ~~~~    ^~~~~~~~~~~
+>> fs/netfs/crypto.c:283:29: warning: variable 'skip' set but not used [-Wunused-but-set-variable]
+     283 |         size_t len, processed = 0, skip, bsize = 1UL << ctx->crypto_bshift;
+         |                                    ^
+   3 warnings generated.
+
+
+vim +305 fs/netfs/crypto.c
+
+   273	
+   274	/*
+   275	 * Decrypt the result of a DIO read request.
+   276	 */
+   277	void netfs_decrypt_dio(struct netfs_io_request *rreq)
+   278	{
+   279		struct netfs_inode *ctx = netfs_inode(rreq->inode);
+   280		struct scatterlist source_sg[16], dest_sg[16];
+   281		unsigned long long start;
+   282		unsigned int n_source;
+ > 283		size_t len, processed = 0, skip, bsize = 1UL << ctx->crypto_bshift;
+   284		int ret;
+   285	
+   286		trace_netfs_rreq(rreq, netfs_rreq_trace_decrypt);
+   287		if (rreq->start >= rreq->i_size)
+   288			return;
+   289	
+   290		start = round_down(rreq->start, bsize);
+   291		skip = rreq->start - start;
+   292		len = round_down(rreq->transferred, bsize);
+   293	
+   294		if (rreq->buffer.iter.count < rreq->len)
+   295			iov_iter_revert(&rreq->buffer.iter, rreq->len - rreq->buffer.iter.count);
+   296		if (rreq->bounce.iter.count < len)
+   297			iov_iter_revert(&rreq->bounce.iter, len - rreq->bounce.iter.count);
+   298	
+   299		kdebug("DECRYPT %llx-%llx f=%lx %zx/%zx %zx/%llx",
+   300		       start, start + len - 1, rreq->flags,
+   301		       rreq->bounce.iter.count, len,
+   302		       rreq->buffer.iter.count, rreq->len);
+   303	
+   304		kdebug("type=%u nr=%zu type=%u nr=%zu",
+ > 305		       rreq->bounce.iter.iter_type, rreq->bounce.iter.nr_segs,
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
