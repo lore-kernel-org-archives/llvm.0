@@ -1,161 +1,106 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 064171A3AA2;
-	Tue,  3 Sep 2024 09:04:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF2411A0BE0;
+	Tue,  3 Sep 2024 09:29:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725354297; cv=none; b=YFJ3wKATICfKEcELPhUQQK0n58h7NAbLJRG+tAnOsIhwbNy1XRs+DPWztQgpd/NYdEGq7qgUXnGCAfNpBiJ8DOHv1aE6Epy3DjaQlI+jELld4I2zRVTV3ztHNFxUEvwedNjBNIjT0J7HV/8hWRkvbdmaZ+HurXvHBuZG6vW/L6w=
+	t=1725355776; cv=none; b=YmMrn3B89npQS3P6ZylJ0v6ufzgxucSaiffm7R7BjFIadOOX27cKn8on/F6gm97nWgymLQvsUyP1kvdsfPAwkPwEHYn2QX+GCisEN6gcDA5+VxQfrD0CalyjTzDLlkl1RhY/Iw5gSNhMZGzWkxqlbfssE4TDfStGZkO7tfpZ5lA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725354297; c=relaxed/simple;
-	bh=1cgBr08tnbYyezACo8zWrdfoBjXjj4PUhJ/aPzF8Vs8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=PjTrJ4xGmTeqEJnE/BsEbSvNH/DqnNY2NOLpR8vt3DIrv8JnFoBLZJqL5bmc1MqSoygy6IajWn/0qQEYiy66voUmUIq/RuYbuNZDSkeCDfYEbSDqizwnLGi24NS7MFioNRdVdNKhfu3gykfp1bb0s4rLuprwdlLB9PMYXKglQlo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=KEaAJaO1; arc=none smtp.client-ip=192.198.163.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1725355776; c=relaxed/simple;
+	bh=V6Ts8UeyZzyhtsfr4GKAWGTzPe6MoHhPae1lOHa7ehM=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Wd3MxDaD5NUEtZDyWZ/5ZVuX+ly24+1oYAlSbhyKjJOx1OFU2SwrjjljBS3M8vCfCbzaliXvOaq00xOy+Yz7S5iNHIiiesN5EKK2c11+OHo4tDJ+A/ZcLrDa16KKZ4e5BnvyRIy1OqIfIng0hnpb+x6YP2Et/2Rcj+a3ahCVzSE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=B2+DIvPM; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="KEaAJaO1"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1725354296; x=1756890296;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=1cgBr08tnbYyezACo8zWrdfoBjXjj4PUhJ/aPzF8Vs8=;
-  b=KEaAJaO1I2/9pUXQGs6Ser6clbfX5hQIDRNTMEcgzXj1T7k16dMb4/Dc
-   rW+TTA7KFbUInK/1pHvS06fonkiWr7cEObrbQATupxip1JwV0OHTa8Laf
-   zJoCtBgnMqy0IO+cG2Pi9xGP9BbEWUtm83wnn8EIZWsGReOvvQ9phs10U
-   jio9hkBXnsTGuYTj+YRswi5b1xbYZB1i4GgAtoGZWON2rQCHGcnArpEDw
-   jpWE/jXg1Z4kjm4qiFguZezZOxNJd1P2RrmOxwB7WbTCXShrNgGnRyYB6
-   jZkxMBCXbvTbkyv48molt8vcnWFoDnhMxIDd+f+KVvr7jclq24ZQq7zii
-   g==;
-X-CSE-ConnectionGUID: iH7J9834R62ENqI5sX+XPg==
-X-CSE-MsgGUID: PlFYE4b2Rx20O3v5/E2E3g==
-X-IronPort-AV: E=McAfee;i="6700,10204,11183"; a="24092535"
-X-IronPort-AV: E=Sophos;i="6.10,198,1719903600"; 
-   d="scan'208";a="24092535"
-Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Sep 2024 02:04:55 -0700
-X-CSE-ConnectionGUID: QBkddXZoS26pou/N5GlsCQ==
-X-CSE-MsgGUID: NgFFM9UUQc+u+UsTBh1Cww==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.10,198,1719903600"; 
-   d="scan'208";a="102279344"
-Received: from lkp-server01.sh.intel.com (HELO 9c6b1c7d3b50) ([10.239.97.150])
-  by orviesa001.jf.intel.com with ESMTP; 03 Sep 2024 02:04:52 -0700
-Received: from kbuild by 9c6b1c7d3b50 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1slPSz-0006Qw-1k;
-	Tue, 03 Sep 2024 09:04:49 +0000
-Date: Tue, 3 Sep 2024 17:04:27 +0800
-From: kernel test robot <lkp@intel.com>
-To: =?iso-8859-1?Q?Andr=E9?= Almeida <andrealmeid@igalia.com>,
-	Hugh Dickins <hughd@google.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Alexander Viro <viro@zeniv.linux.org.uk>,
-	Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>,
-	krisman@kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Linux Memory Management List <linux-mm@kvack.org>,
-	linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-	kernel-dev@igalia.com, Daniel Rosenberg <drosen@google.com>,
-	smcv@collabora.com, Christoph Hellwig <hch@lst.de>,
-	=?iso-8859-1?Q?Andr=E9?= Almeida <andrealmeid@igalia.com>
-Subject: Re: [PATCH v2 6/8] tmpfs: Add flag FS_CASEFOLD_FL support for tmpfs
- dirs
-Message-ID: <202409031620.BOshMDgn-lkp@intel.com>
-References: <20240902225511.757831-7-andrealmeid@igalia.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="B2+DIvPM"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7A525C4CEC8;
+	Tue,  3 Sep 2024 09:29:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1725355775;
+	bh=V6Ts8UeyZzyhtsfr4GKAWGTzPe6MoHhPae1lOHa7ehM=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=B2+DIvPMxoKjhFD7wiF+7h0l/cf/7MYT3BR0Zhx9vp7HBRO4mfIxwB9KqYB/sTeeC
+	 1G81qhU92qnFCiE/jliReBCBu6b2qHvBBHBVRrSMDGFA+JwuXas7widUz6aFtvxdkF
+	 4tjHzOkHd6/ex/78UYqR6cDfYnFj/Pq5XqY4K3a0iXYisf626Hp7/acc1DOSY/a6cg
+	 a2POT1sITjmIyfszLS/XUbkntiO3MqghfOGuiOpgHz9jatyaXxIOGO9cYBAqqbwA/B
+	 15wIL94JzUdR+NZ65E3bnzn2/+w0/WyZpdfxs3YRDoguIILWF4YT/rse1cCgfc4OyQ
+	 fg09k/DSfw2nw==
+Received: by mail-lf1-f50.google.com with SMTP id 2adb3069b0e04-5353d0b7463so8570925e87.3;
+        Tue, 03 Sep 2024 02:29:35 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCW/fMK+ci84z5wJyq2YTXGOb37uVRIwdNePIQtFWWcPRD1gpNuE5/pkpVesyS+KUmg+9y3WoA==@lists.linux.dev, AJvYcCXrwE1jtWVy7NQci1xB9MRcr2q/tIqcWWECJ3IURRi0pUvyDh++zG6rO3gdmLpzXnAa3GaWgdM=@lists.linux.dev
+X-Gm-Message-State: AOJu0YwnITlKIPATgxGy0C3Gl/ldvaD3XysgerT5dGNvpu9u6GG6NooA
+	CI41b4TyqHL+UTnGusp0hB8JDlKEnXHQxcPOGkKIqgjDts6g8DB+nYJxMZNeDebnGhS8SQJa+3O
+	J2BgZ8LTOILeeXQ9GInk6jU8cMHI=
+X-Google-Smtp-Source: AGHT+IHCtdlG38E/0l7FYyhNp/Eh+agXUP/x4m9X1sDISAuGOfE6COrF1RVXR4n+XrSU6Tf+eKwYmtlidm1SXvGzdlM=
+X-Received: by 2002:a05:6512:108f:b0:533:4785:82ab with SMTP id
+ 2adb3069b0e04-53546b223d3mr10683476e87.1.1725355774159; Tue, 03 Sep 2024
+ 02:29:34 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20240902225511.757831-7-andrealmeid@igalia.com>
+References: <20240828083605.3093701-1-vegard.nossum@oracle.com>
+ <875xrd7h88.fsf@mail.lhotse> <d1bb2638-2e0e-44ef-b8da-9746ed532ed1@oracle.com>
+In-Reply-To: <d1bb2638-2e0e-44ef-b8da-9746ed532ed1@oracle.com>
+From: Masahiro Yamada <masahiroy@kernel.org>
+Date: Tue, 3 Sep 2024 18:28:57 +0900
+X-Gmail-Original-Message-ID: <CAK7LNAT84K0RgDfLoOOLjtyCqsS19bASXRv43HF8P=C9obJPVA@mail.gmail.com>
+Message-ID: <CAK7LNAT84K0RgDfLoOOLjtyCqsS19bASXRv43HF8P=C9obJPVA@mail.gmail.com>
+Subject: Re: [PATCH] kbuild: use objcopy to generate asm-offsets
+To: Vegard Nossum <vegard.nossum@oracle.com>
+Cc: Michael Ellerman <mpe@ellerman.id.au>, linux-kbuild@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+	linux-omap@vger.kernel.org, kvmarm@lists.linux.dev, kvm@vger.kernel.org, 
+	linux-um@lists.infradead.org, bpf@vger.kernel.org, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi André,
+On Tue, Sep 3, 2024 at 4:21=E2=80=AFPM Vegard Nossum <vegard.nossum@oracle.=
+com> wrote:
+>
+>
+> On 03/09/2024 01:45, Michael Ellerman wrote:
+> > Vegard Nossum <vegard.nossum@oracle.com> writes:
+> >> Remove the sed script and compile the C source listing structs and
+> >> offsets to an object file (instead of assembly code) that embeds C sou=
+rce
+> >> directly. Then extract the C source using objcopy.
+> >>
+> >
+> > I threw some builders at this and hit a few errors:
+>
+> Thanks, I also got the ones from kernel test robot and figured something
+> was going a bit wrong.
+>
+> There are several issues: clang wants - instead of /dev/stdout as an
+> argument to objcopy, and then gcc has some bugs that prevent the numbers
+> from appearing correctly on some architectures, also I had an extra # in
+> the COMMENT() macro which only resulted in an error on some
+> architectures. I've attached a tentative v2 that fixes these issues, but
+> I'm still trying to figure out why m68k is giving me slightly different
+> output for include/generated/asm-offsets.h and why the arc assembler
+> fails.
+>
+> In the end I'm wondering if this patch is really worth it, given all the
+> failures and little workarounds :-| If I can sort out the last few
+> failures I'll submit it as an RFC.
 
-kernel test robot noticed the following build errors:
+This patch has zero benefit.
 
-[auto build test ERROR on akpm-mm/mm-everything]
-[also build test ERROR on tytso-ext4/dev brauner-vfs/vfs.all linus/master v6.11-rc6 next-20240903]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Andr-Almeida/unicode-Fix-utf8_load-error-path/20240903-070149
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
-patch link:    https://lore.kernel.org/r/20240902225511.757831-7-andrealmeid%40igalia.com
-patch subject: [PATCH v2 6/8] tmpfs: Add flag FS_CASEFOLD_FL support for tmpfs dirs
-config: i386-buildonly-randconfig-005-20240903 (https://download.01.org/0day-ci/archive/20240903/202409031620.BOshMDgn-lkp@intel.com/config)
-compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240903/202409031620.BOshMDgn-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202409031620.BOshMDgn-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> mm/shmem.c:2771:12: error: no member named 's_encoding' in 'struct super_block'
-    2771 |                 if (!sb->s_encoding)
-         |                      ~~  ^
-   1 error generated.
+The current way (preprocess + sed) is faster than
+your way (preprocess + compile + objcopy) and works
+independently of tool quirks.
 
 
-vim +2771 mm/shmem.c
 
-  2760	
-  2761	/*
-  2762	 * chattr's fsflags are unrelated to extended attributes,
-  2763	 * but tmpfs has chosen to enable them under the same config option.
-  2764	 */
-  2765	static int shmem_set_inode_flags(struct inode *inode, unsigned int fsflags, struct dentry *dentry)
-  2766	{
-  2767		unsigned int i_flags = 0, old = inode->i_flags;
-  2768		struct super_block *sb = inode->i_sb;
-  2769	
-  2770		if (fsflags & FS_CASEFOLD_FL) {
-> 2771			if (!sb->s_encoding)
-  2772				return -EOPNOTSUPP;
-  2773	
-  2774			if (!S_ISDIR(inode->i_mode))
-  2775				return -ENOTDIR;
-  2776	
-  2777			if (dentry && !simple_empty(dentry))
-  2778				return -ENOTEMPTY;
-  2779	
-  2780			i_flags |= S_CASEFOLD;
-  2781		} else if (old & S_CASEFOLD) {
-  2782			if (dentry && !simple_empty(dentry))
-  2783				return -ENOTEMPTY;
-  2784		}
-  2785	
-  2786		if (fsflags & FS_NOATIME_FL)
-  2787			i_flags |= S_NOATIME;
-  2788		if (fsflags & FS_APPEND_FL)
-  2789			i_flags |= S_APPEND;
-  2790		if (fsflags & FS_IMMUTABLE_FL)
-  2791			i_flags |= S_IMMUTABLE;
-  2792		/*
-  2793		 * But FS_NODUMP_FL does not require any action in i_flags.
-  2794		 */
-  2795		inode_set_flags(inode, i_flags, S_NOATIME | S_APPEND | S_IMMUTABLE | S_CASEFOLD);
-  2796	
-  2797		return 0;
-  2798	}
-  2799	#else
-  2800	static void shmem_set_inode_flags(struct inode *inode, unsigned int fsflags, struct dentry *dentry)
-  2801	{
-  2802	}
-  2803	#define shmem_initxattrs NULL
-  2804	#endif
-  2805	
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+
+
+
+
+--
+Best Regards
+Masahiro Yamada
