@@ -1,180 +1,172 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D31121CCEE3;
-	Wed,  4 Sep 2024 09:58:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 821C51CCB43;
+	Wed,  4 Sep 2024 11:39:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725443891; cv=none; b=Y5bGND/Zz02D2o3fndlMyJO0L+e8TR/N0ovfe3Du5A7GDUWbQqNhC2TS2EW2+ERt2ZXSD/4wrR1WzrfiXS/lZMHxndZhMTQtplWMCymjMC272BJtJoxRFRLSlVxZ29OQ/uUHrSxQaVD4qA6PF/y/krT1oOI1B0slROQuJv+rTVc=
+	t=1725449954; cv=none; b=YndOy90W5YRieKZZQMqm0ASQhPFo5/tuRjO3aUmpmAzUkd/ZwNBOXqeirXIQNAvrUROKi1oKUDjqEzS7Yj0qIuE5ocidzjqc46qYpacYLd7jjFRV1729F3u10tR+uUgQgBZFSmBu11Z1X2iejIjxYXgbK5qhFZHsEs8jb0sZCAQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725443891; c=relaxed/simple;
-	bh=K3XRxhgvvaJuzWtw7fw9RYQGpCxvwFPd0ZFjfLVadAs=;
+	s=arc-20240116; t=1725449954; c=relaxed/simple;
+	bh=M9yhLPtalzMN7Yv9fifAMNwsC0ZuhH4CKgWnffA6uOI=;
 	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=WmtU224+HX+azZ4dzYdykpvmTnLC3DDI//wP9/s7/gt8G5fV4r/dRzTPFjVfvggtS/d8JNQ4Du5r/2TVy3n4XMjXWiBSK1RzLzSLmKFh274+rjat75RjpFK3ixQHkQTuCl0Qk+wjWy/sPmwFOVPi8xPHT52bxZ28NZeg2MFcAgo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=DM4rbP5T; arc=none smtp.client-ip=198.175.65.15
+	 Content-Disposition; b=aYIN1cjD4T8qIrmC3VzC/prYc2UJZ8iXJvnk/9okFJpsw/0i7zGRxnQY+9dMbCMLp0v5S9t28WApmHaOI6lnzIUphW/lsyqow2WGMzEu9G5vnxux+XDyW+F/+/mAbCCaXlf9YFcNKEhPRBWIyMY70gIaXLaSbcD2/7Rm3zxoP4Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=M8x1alDF; arc=none smtp.client-ip=192.198.163.19
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="DM4rbP5T"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="M8x1alDF"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1725443890; x=1756979890;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=K3XRxhgvvaJuzWtw7fw9RYQGpCxvwFPd0ZFjfLVadAs=;
-  b=DM4rbP5T/7OeV6DkDLbdqvaLOowyiAOSQW9YfdrAFHnZMG14RCQRIzvy
-   QFMP8H0DEO4RWSuMCBOdZy6LuDKLlnQ33QsEH0qJJKVF0MihVRcVzV+GH
-   bNiugb6t826xxNdb0FMTYn4ucbo+Qiuw0drF9jMjvqfcmMK1iq+EO7Pa1
-   34t2U8/KnpIGrrnAgBoORQOvSZrQswbSu3Y4OwtWmXc0usgORTey9k6HO
-   gJWQNySRMZrkYnd8jvhXfmFEcS1obzYQUGDvT++KApMdAhcOviBHSlpxh
-   deb2nJ97OnzIYdMMZo2Js3iLjMXyC706TOCE0mExqNBxigdPsQHxlJZI8
-   w==;
-X-CSE-ConnectionGUID: rC5adF5MRTmig1W88JXkaQ==
-X-CSE-MsgGUID: ZrurWJ4qQAiIKpUphYSBZg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11184"; a="27854930"
+  t=1725449952; x=1756985952;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=M9yhLPtalzMN7Yv9fifAMNwsC0ZuhH4CKgWnffA6uOI=;
+  b=M8x1alDFws/RG5aHI6tAwIoWAUC6hkc8f/Wwv6Up12CosuUW+T0EQDD+
+   x7RPBM3vE4WVBqe3gTJYahyapKeebIQFaIZZn4bcEBS3Do8MO+E9oTuMG
+   OSL+I50MDYU0xlmMT+AyaPBByIbQDSbZ/Iz3Iix39ED6TspLxU688zX5+
+   mYD3FCcCrjI4nURznuB31Tt19VPFn6MtGWcBtIDhfaFspiFygYzYUQ0L6
+   KSnThPIKvjkX3kf44XPUW+rZj3usc4B7Oa6NseKHRe6JwSPyYD6JvapyJ
+   lThOnX90i27aW4BARKjGOzseL4PdIInOydHrTojfiRlQFrJeCrfBW7Z4N
+   Q==;
+X-CSE-ConnectionGUID: KiXKyJhpS+mNN8DN0eDiTw==
+X-CSE-MsgGUID: KqWf5/PjQ9u0HO6A06Rv0w==
+X-IronPort-AV: E=McAfee;i="6700,10204,11184"; a="23665329"
 X-IronPort-AV: E=Sophos;i="6.10,201,1719903600"; 
-   d="scan'208";a="27854930"
-Received: from fmviesa007.fm.intel.com ([10.60.135.147])
-  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Sep 2024 02:58:10 -0700
-X-CSE-ConnectionGUID: 39+CWM22SpysaoMoNPrIfw==
-X-CSE-MsgGUID: Evx1CLRsQjKdayKCAKstIw==
+   d="scan'208";a="23665329"
+Received: from fmviesa006.fm.intel.com ([10.60.135.146])
+  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Sep 2024 04:39:12 -0700
+X-CSE-ConnectionGUID: ItJRzvQORP+bj0QvYeLC4Q==
+X-CSE-MsgGUID: JBM00pUgT5iq6ljv1m2b3w==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.10,201,1719903600"; 
-   d="scan'208";a="64901217"
+   d="scan'208";a="64900069"
 Received: from lkp-server01.sh.intel.com (HELO 9c6b1c7d3b50) ([10.239.97.150])
-  by fmviesa007.fm.intel.com with ESMTP; 04 Sep 2024 02:58:08 -0700
+  by fmviesa006.fm.intel.com with ESMTP; 04 Sep 2024 04:39:11 -0700
 Received: from kbuild by 9c6b1c7d3b50 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1slmm5-0007qA-0z;
-	Wed, 04 Sep 2024 09:58:05 +0000
-Date: Wed, 4 Sep 2024 17:57:08 +0800
+	id 1sloLs-0007v9-1h;
+	Wed, 04 Sep 2024 11:39:08 +0000
+Date: Wed, 4 Sep 2024 19:38:52 +0800
 From: kernel test robot <lkp@intel.com>
-To: "Ricardo B. Marliere" <ricardo@marliere.net>
+To: Chao Yu <yuchao0@huawei.com>, Chao Yu <chao@kernel.org>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	devel@driverdev.osuosl.org,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: [driver-core:class_cleanup 33/42]
- drivers/bus/fsl-mc/fsl-mc-bus.c:412:5: error: initializing 'struct
- device_type *' with an expression of type 'typeof (fsl_mc_bus_dpsw_type) *'
- (aka 'const struct device_type *') discards qualifiers
-Message-ID: <202409041701.8NfSraMa-lkp@intel.com>
+	Chao Yu <yuchao0@huawei.com>, Chao Yu <chao@kernel.org>
+Subject: [chao:wip 5/5] fs/f2fs/namei.c:469:15: warning: unused variable
+ 'root_ino'
+Message-ID: <202409041931.QlsPggLS-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/driver-core.git class_cleanup
-head:   95b7bd9f5490de7ff7cfb0c4137a3c22cf3de1bf
-commit: c191af695e7dd0aac49c5b70e0bdfd0cfaac5a24 [33/42] bus: fsl-mc: constify the struct device_type usage
-config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20240904/202409041701.8NfSraMa-lkp@intel.com/config)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/chao/linux.git wip
+head:   69dc8fbbbb39f85f9f436ca562c98afbcc2a48d2
+commit: 69dc8fbbbb39f85f9f436ca562c98afbcc2a48d2 [5/5] f2fs: get rid of online repaire on corrupted directory
+config: x86_64-rhel-8.3-rust (https://download.01.org/0day-ci/archive/20240904/202409041931.QlsPggLS-lkp@intel.com/config)
 compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240904/202409041701.8NfSraMa-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240904/202409041931.QlsPggLS-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202409041701.8NfSraMa-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202409041931.QlsPggLS-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
-   drivers/bus/fsl-mc/fsl-mc-bus.c:409:5: error: initializing 'struct device_type *' with an expression of type 'typeof (fsl_mc_bus_dprc_type) *' (aka 'const struct device_type *') discards qualifiers [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
-     409 |                 { &fsl_mc_bus_dprc_type, "dprc" },
-         |                   ^~~~~~~~~~~~~~~~~~~~~
-   drivers/bus/fsl-mc/fsl-mc-bus.c:410:5: error: initializing 'struct device_type *' with an expression of type 'typeof (fsl_mc_bus_dpni_type) *' (aka 'const struct device_type *') discards qualifiers [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
-     410 |                 { &fsl_mc_bus_dpni_type, "dpni" },
-         |                   ^~~~~~~~~~~~~~~~~~~~~
-   drivers/bus/fsl-mc/fsl-mc-bus.c:411:5: error: initializing 'struct device_type *' with an expression of type 'typeof (fsl_mc_bus_dpio_type) *' (aka 'const struct device_type *') discards qualifiers [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
-     411 |                 { &fsl_mc_bus_dpio_type, "dpio" },
-         |                   ^~~~~~~~~~~~~~~~~~~~~
->> drivers/bus/fsl-mc/fsl-mc-bus.c:412:5: error: initializing 'struct device_type *' with an expression of type 'typeof (fsl_mc_bus_dpsw_type) *' (aka 'const struct device_type *') discards qualifiers [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
-     412 |                 { &fsl_mc_bus_dpsw_type, "dpsw" },
-         |                   ^~~~~~~~~~~~~~~~~~~~~
->> drivers/bus/fsl-mc/fsl-mc-bus.c:413:5: error: initializing 'struct device_type *' with an expression of type 'typeof (fsl_mc_bus_dpbp_type) *' (aka 'const struct device_type *') discards qualifiers [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
-     413 |                 { &fsl_mc_bus_dpbp_type, "dpbp" },
-         |                   ^~~~~~~~~~~~~~~~~~~~~
->> drivers/bus/fsl-mc/fsl-mc-bus.c:414:5: error: initializing 'struct device_type *' with an expression of type 'typeof (fsl_mc_bus_dpcon_type) *' (aka 'const struct device_type *') discards qualifiers [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
-     414 |                 { &fsl_mc_bus_dpcon_type, "dpcon" },
-         |                   ^~~~~~~~~~~~~~~~~~~~~~
->> drivers/bus/fsl-mc/fsl-mc-bus.c:415:5: error: initializing 'struct device_type *' with an expression of type 'typeof (fsl_mc_bus_dpmcp_type) *' (aka 'const struct device_type *') discards qualifiers [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
-     415 |                 { &fsl_mc_bus_dpmcp_type, "dpmcp" },
-         |                   ^~~~~~~~~~~~~~~~~~~~~~
-   drivers/bus/fsl-mc/fsl-mc-bus.c:416:5: error: initializing 'struct device_type *' with an expression of type 'typeof (fsl_mc_bus_dpmac_type) *' (aka 'const struct device_type *') discards qualifiers [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
-     416 |                 { &fsl_mc_bus_dpmac_type, "dpmac" },
-         |                   ^~~~~~~~~~~~~~~~~~~~~~
-   drivers/bus/fsl-mc/fsl-mc-bus.c:417:5: error: initializing 'struct device_type *' with an expression of type 'typeof (fsl_mc_bus_dprtc_type) *' (aka 'const struct device_type *') discards qualifiers [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
-     417 |                 { &fsl_mc_bus_dprtc_type, "dprtc" },
-         |                   ^~~~~~~~~~~~~~~~~~~~~~
-   drivers/bus/fsl-mc/fsl-mc-bus.c:418:5: error: initializing 'struct device_type *' with an expression of type 'typeof (fsl_mc_bus_dpseci_type) *' (aka 'const struct device_type *') discards qualifiers [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
-     418 |                 { &fsl_mc_bus_dpseci_type, "dpseci" },
-         |                   ^~~~~~~~~~~~~~~~~~~~~~~
->> drivers/bus/fsl-mc/fsl-mc-bus.c:419:5: error: initializing 'struct device_type *' with an expression of type 'typeof (fsl_mc_bus_dpdmux_type) *' (aka 'const struct device_type *') discards qualifiers [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
-     419 |                 { &fsl_mc_bus_dpdmux_type, "dpdmux" },
-         |                   ^~~~~~~~~~~~~~~~~~~~~~~
-   drivers/bus/fsl-mc/fsl-mc-bus.c:420:5: error: initializing 'struct device_type *' with an expression of type 'typeof (fsl_mc_bus_dpdcei_type) *' (aka 'const struct device_type *') discards qualifiers [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
-     420 |                 { &fsl_mc_bus_dpdcei_type, "dpdcei" },
-         |                   ^~~~~~~~~~~~~~~~~~~~~~~
-   drivers/bus/fsl-mc/fsl-mc-bus.c:421:5: error: initializing 'struct device_type *' with an expression of type 'typeof (fsl_mc_bus_dpaiop_type) *' (aka 'const struct device_type *') discards qualifiers [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
-     421 |                 { &fsl_mc_bus_dpaiop_type, "dpaiop" },
-         |                   ^~~~~~~~~~~~~~~~~~~~~~~
-   drivers/bus/fsl-mc/fsl-mc-bus.c:422:5: error: initializing 'struct device_type *' with an expression of type 'typeof (fsl_mc_bus_dpci_type) *' (aka 'const struct device_type *') discards qualifiers [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
-     422 |                 { &fsl_mc_bus_dpci_type, "dpci" },
-         |                   ^~~~~~~~~~~~~~~~~~~~~
->> drivers/bus/fsl-mc/fsl-mc-bus.c:423:5: error: initializing 'struct device_type *' with an expression of type 'typeof (fsl_mc_bus_dpdmai_type) *' (aka 'const struct device_type *') discards qualifiers [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
-     423 |                 { &fsl_mc_bus_dpdmai_type, "dpdmai" },
-         |                   ^~~~~~~~~~~~~~~~~~~~~~~
-   drivers/bus/fsl-mc/fsl-mc-bus.c:424:5: error: initializing 'struct device_type *' with an expression of type 'typeof (fsl_mc_bus_dpdbg_type) *' (aka 'const struct device_type *') discards qualifiers [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
-     424 |                 { &fsl_mc_bus_dpdbg_type, "dpdbg" },
-         |                   ^~~~~~~~~~~~~~~~~~~~~~
-   16 errors generated.
+>> fs/f2fs/namei.c:469:15: warning: unused variable 'root_ino' [-Wunused-variable]
+     469 |         unsigned int root_ino = F2FS_ROOT_INO(F2FS_I_SB(dir));
+         |                      ^~~~~~~~
+   1 warning generated.
 
 
-vim +412 drivers/bus/fsl-mc/fsl-mc-bus.c
+vim +/root_ino +469 fs/f2fs/namei.c
 
-e70ba1b06c26cd drivers/bus/fsl-mc/fsl-mc-bus.c         Ioana Ciornei   2021-02-08  402  
-47433b630b7b30 drivers/staging/fsl-mc/bus/fsl-mc-bus.c Laurentiu Tudor 2017-11-17  403  static struct device_type *fsl_mc_get_device_type(const char *type)
-47433b630b7b30 drivers/staging/fsl-mc/bus/fsl-mc-bus.c Laurentiu Tudor 2017-11-17  404  {
-47433b630b7b30 drivers/staging/fsl-mc/bus/fsl-mc-bus.c Laurentiu Tudor 2017-11-17  405  	static const struct {
-47433b630b7b30 drivers/staging/fsl-mc/bus/fsl-mc-bus.c Laurentiu Tudor 2017-11-17  406  		struct device_type *dev_type;
-47433b630b7b30 drivers/staging/fsl-mc/bus/fsl-mc-bus.c Laurentiu Tudor 2017-11-17  407  		const char *type;
-47433b630b7b30 drivers/staging/fsl-mc/bus/fsl-mc-bus.c Laurentiu Tudor 2017-11-17  408  	} dev_types[] = {
-47433b630b7b30 drivers/staging/fsl-mc/bus/fsl-mc-bus.c Laurentiu Tudor 2017-11-17  409  		{ &fsl_mc_bus_dprc_type, "dprc" },
-47433b630b7b30 drivers/staging/fsl-mc/bus/fsl-mc-bus.c Laurentiu Tudor 2017-11-17  410  		{ &fsl_mc_bus_dpni_type, "dpni" },
-47433b630b7b30 drivers/staging/fsl-mc/bus/fsl-mc-bus.c Laurentiu Tudor 2017-11-17  411  		{ &fsl_mc_bus_dpio_type, "dpio" },
-47433b630b7b30 drivers/staging/fsl-mc/bus/fsl-mc-bus.c Laurentiu Tudor 2017-11-17 @412  		{ &fsl_mc_bus_dpsw_type, "dpsw" },
-47433b630b7b30 drivers/staging/fsl-mc/bus/fsl-mc-bus.c Laurentiu Tudor 2017-11-17 @413  		{ &fsl_mc_bus_dpbp_type, "dpbp" },
-47433b630b7b30 drivers/staging/fsl-mc/bus/fsl-mc-bus.c Laurentiu Tudor 2017-11-17 @414  		{ &fsl_mc_bus_dpcon_type, "dpcon" },
-47433b630b7b30 drivers/staging/fsl-mc/bus/fsl-mc-bus.c Laurentiu Tudor 2017-11-17 @415  		{ &fsl_mc_bus_dpmcp_type, "dpmcp" },
-47433b630b7b30 drivers/staging/fsl-mc/bus/fsl-mc-bus.c Laurentiu Tudor 2017-11-17  416  		{ &fsl_mc_bus_dpmac_type, "dpmac" },
-47433b630b7b30 drivers/staging/fsl-mc/bus/fsl-mc-bus.c Laurentiu Tudor 2017-11-17  417  		{ &fsl_mc_bus_dprtc_type, "dprtc" },
-e9158b35ef9afb drivers/bus/fsl-mc/fsl-mc-bus.c         Horia Geantă    2018-09-12  418  		{ &fsl_mc_bus_dpseci_type, "dpseci" },
-a3b7a581823857 drivers/bus/fsl-mc/fsl-mc-bus.c         Ioana Ciornei   2020-07-17 @419  		{ &fsl_mc_bus_dpdmux_type, "dpdmux" },
-a3b7a581823857 drivers/bus/fsl-mc/fsl-mc-bus.c         Ioana Ciornei   2020-07-17  420  		{ &fsl_mc_bus_dpdcei_type, "dpdcei" },
-a3b7a581823857 drivers/bus/fsl-mc/fsl-mc-bus.c         Ioana Ciornei   2020-07-17  421  		{ &fsl_mc_bus_dpaiop_type, "dpaiop" },
-a3b7a581823857 drivers/bus/fsl-mc/fsl-mc-bus.c         Ioana Ciornei   2020-07-17  422  		{ &fsl_mc_bus_dpci_type, "dpci" },
-a3b7a581823857 drivers/bus/fsl-mc/fsl-mc-bus.c         Ioana Ciornei   2020-07-17 @423  		{ &fsl_mc_bus_dpdmai_type, "dpdmai" },
-e70ba1b06c26cd drivers/bus/fsl-mc/fsl-mc-bus.c         Ioana Ciornei   2021-02-08  424  		{ &fsl_mc_bus_dpdbg_type, "dpdbg" },
-47433b630b7b30 drivers/staging/fsl-mc/bus/fsl-mc-bus.c Laurentiu Tudor 2017-11-17  425  		{ NULL, NULL }
-47433b630b7b30 drivers/staging/fsl-mc/bus/fsl-mc-bus.c Laurentiu Tudor 2017-11-17  426  	};
-47433b630b7b30 drivers/staging/fsl-mc/bus/fsl-mc-bus.c Laurentiu Tudor 2017-11-17  427  	int i;
-47433b630b7b30 drivers/staging/fsl-mc/bus/fsl-mc-bus.c Laurentiu Tudor 2017-11-17  428  
-47433b630b7b30 drivers/staging/fsl-mc/bus/fsl-mc-bus.c Laurentiu Tudor 2017-11-17  429  	for (i = 0; dev_types[i].dev_type; i++)
-47433b630b7b30 drivers/staging/fsl-mc/bus/fsl-mc-bus.c Laurentiu Tudor 2017-11-17  430  		if (!strcmp(dev_types[i].type, type))
-47433b630b7b30 drivers/staging/fsl-mc/bus/fsl-mc-bus.c Laurentiu Tudor 2017-11-17  431  			return dev_types[i].dev_type;
-47433b630b7b30 drivers/staging/fsl-mc/bus/fsl-mc-bus.c Laurentiu Tudor 2017-11-17  432  
-47433b630b7b30 drivers/staging/fsl-mc/bus/fsl-mc-bus.c Laurentiu Tudor 2017-11-17  433  	return NULL;
-47433b630b7b30 drivers/staging/fsl-mc/bus/fsl-mc-bus.c Laurentiu Tudor 2017-11-17  434  }
-47433b630b7b30 drivers/staging/fsl-mc/bus/fsl-mc-bus.c Laurentiu Tudor 2017-11-17  435  
+57397d86c62dfe Jaegeuk Kim             2012-11-02  459  
+57397d86c62dfe Jaegeuk Kim             2012-11-02  460  static struct dentry *f2fs_lookup(struct inode *dir, struct dentry *dentry,
+57397d86c62dfe Jaegeuk Kim             2012-11-02  461  		unsigned int flags)
+57397d86c62dfe Jaegeuk Kim             2012-11-02  462  {
+57397d86c62dfe Jaegeuk Kim             2012-11-02  463  	struct inode *inode = NULL;
+57397d86c62dfe Jaegeuk Kim             2012-11-02  464  	struct f2fs_dir_entry *de;
+57397d86c62dfe Jaegeuk Kim             2012-11-02  465  	struct page *page;
+0c5e36db17f5fe Chao Yu                 2017-10-17  466  	struct dentry *new;
+0c5e36db17f5fe Chao Yu                 2017-10-17  467  	nid_t ino = -1;
+fcc85a4d86b501 Jaegeuk Kim             2015-04-21  468  	int err = 0;
+8c2b1435b9f489 Liu Xue                 2016-02-26 @469  	unsigned int root_ino = F2FS_ROOT_INO(F2FS_I_SB(dir));
+43c780ba26244e Eric Biggers            2020-05-07  470  	struct f2fs_filename fname;
+57397d86c62dfe Jaegeuk Kim             2012-11-02  471  
+0c5e36db17f5fe Chao Yu                 2017-10-17  472  	trace_f2fs_lookup_start(dir, dentry, flags);
+0c5e36db17f5fe Chao Yu                 2017-10-17  473  
+0c5e36db17f5fe Chao Yu                 2017-10-17  474  	if (dentry->d_name.len > F2FS_NAME_LEN) {
+0c5e36db17f5fe Chao Yu                 2017-10-17  475  		err = -ENAMETOOLONG;
+0c5e36db17f5fe Chao Yu                 2017-10-17  476  		goto out;
+0c5e36db17f5fe Chao Yu                 2017-10-17  477  	}
+57397d86c62dfe Jaegeuk Kim             2012-11-02  478  
+43c780ba26244e Eric Biggers            2020-05-07  479  	err = f2fs_prepare_lookup(dir, dentry, &fname);
+b01531db6cec2a Eric Biggers            2019-03-20  480  	if (err == -ENOENT)
+b01531db6cec2a Eric Biggers            2019-03-20  481  		goto out_splice;
+b01531db6cec2a Eric Biggers            2019-03-20  482  	if (err)
+b01531db6cec2a Eric Biggers            2019-03-20  483  		goto out;
+b01531db6cec2a Eric Biggers            2019-03-20  484  	de = __f2fs_find_entry(dir, &fname, &page);
+43c780ba26244e Eric Biggers            2020-05-07  485  	f2fs_free_filename(&fname);
+b01531db6cec2a Eric Biggers            2019-03-20  486  
+eb4246dc12da4a Jaegeuk Kim             2016-05-27  487  	if (!de) {
+0c5e36db17f5fe Chao Yu                 2017-10-17  488  		if (IS_ERR(page)) {
+0c5e36db17f5fe Chao Yu                 2017-10-17  489  			err = PTR_ERR(page);
+0c5e36db17f5fe Chao Yu                 2017-10-17  490  			goto out;
+0c5e36db17f5fe Chao Yu                 2017-10-17  491  		}
+84597b1f9b051f Chao Yu                 2020-05-27  492  		err = -ENOENT;
+0c5e36db17f5fe Chao Yu                 2017-10-17  493  		goto out_splice;
+eb4246dc12da4a Jaegeuk Kim             2016-05-27  494  	}
+06957e8fe6945e Jaegeuk Kim             2015-04-22  495  
+06957e8fe6945e Jaegeuk Kim             2015-04-22  496  	ino = le32_to_cpu(de->ino);
+57397d86c62dfe Jaegeuk Kim             2012-11-02  497  	f2fs_put_page(page, 0);
+57397d86c62dfe Jaegeuk Kim             2012-11-02  498  
+57397d86c62dfe Jaegeuk Kim             2012-11-02  499  	inode = f2fs_iget(dir->i_sb, ino);
+0c5e36db17f5fe Chao Yu                 2017-10-17  500  	if (IS_ERR(inode)) {
+0c5e36db17f5fe Chao Yu                 2017-10-17  501  		err = PTR_ERR(inode);
+0c5e36db17f5fe Chao Yu                 2017-10-17  502  		goto out;
+0c5e36db17f5fe Chao Yu                 2017-10-17  503  	}
+510022a85839a8 Jaegeuk Kim             2015-03-30  504  
+62230e0d702f61 Chandan Rajendra        2018-12-12  505  	if (IS_ENCRYPTED(dir) &&
+8074bb515014d2 Jaegeuk Kim             2016-02-23  506  	    (S_ISDIR(inode->i_mode) || S_ISLNK(inode->i_mode)) &&
+8074bb515014d2 Jaegeuk Kim             2016-02-23  507  	    !fscrypt_has_permitted_context(dir, inode)) {
+dcbb4c10e6d969 Joe Perches             2019-06-18  508  		f2fs_warn(F2FS_I_SB(inode), "Inconsistent encryption contexts: %lu/%lu",
+faac7fd97e0827 Eric Biggers            2017-04-07  509  			  dir->i_ino, inode->i_ino);
+faac7fd97e0827 Eric Biggers            2017-04-07  510  		err = -EPERM;
+0c5e36db17f5fe Chao Yu                 2017-10-17  511  		goto out_iput;
+8074bb515014d2 Jaegeuk Kim             2016-02-23  512  	}
+0c5e36db17f5fe Chao Yu                 2017-10-17  513  out_splice:
+28add38d545f44 Gabriel Krisman Bertazi 2024-06-06  514  	if (IS_ENABLED(CONFIG_UNICODE) && !inode && IS_CASEFOLDED(dir)) {
+2c2eb7a300cd7c Daniel Rosenberg        2019-07-23  515  		/* Eventually we want to call d_add_ci(dentry, NULL)
+2c2eb7a300cd7c Daniel Rosenberg        2019-07-23  516  		 * for negative dentries in the encoding case as
+2c2eb7a300cd7c Daniel Rosenberg        2019-07-23  517  		 * well.  For now, prevent the negative dentry
+2c2eb7a300cd7c Daniel Rosenberg        2019-07-23  518  		 * from being cached.
+2c2eb7a300cd7c Daniel Rosenberg        2019-07-23  519  		 */
+2c2eb7a300cd7c Daniel Rosenberg        2019-07-23  520  		trace_f2fs_lookup_end(dir, dentry, ino, err);
+2c2eb7a300cd7c Daniel Rosenberg        2019-07-23  521  		return NULL;
+2c2eb7a300cd7c Daniel Rosenberg        2019-07-23  522  	}
+28add38d545f44 Gabriel Krisman Bertazi 2024-06-06  523  
+0c5e36db17f5fe Chao Yu                 2017-10-17  524  	new = d_splice_alias(inode, dentry);
+cadfc2f9f8c35e Wu Bo                   2023-06-01  525  	trace_f2fs_lookup_end(dir, !IS_ERR_OR_NULL(new) ? new : dentry,
+cadfc2f9f8c35e Wu Bo                   2023-06-01  526  				ino, IS_ERR(new) ? PTR_ERR(new) : err);
+0c5e36db17f5fe Chao Yu                 2017-10-17  527  	return new;
+0c5e36db17f5fe Chao Yu                 2017-10-17  528  out_iput:
+d726732c7ce951 Chao Yu                 2016-03-10  529  	iput(inode);
+0c5e36db17f5fe Chao Yu                 2017-10-17  530  out:
+0c5e36db17f5fe Chao Yu                 2017-10-17  531  	trace_f2fs_lookup_end(dir, dentry, ino, err);
+fcc85a4d86b501 Jaegeuk Kim             2015-04-21  532  	return ERR_PTR(err);
+57397d86c62dfe Jaegeuk Kim             2012-11-02  533  }
+57397d86c62dfe Jaegeuk Kim             2012-11-02  534  
 
-:::::: The code at line 412 was first introduced by commit
-:::::: 47433b630b7b30d0daa360c64308c0f4c9632986 staging: fsl-mc: add support for device type
+:::::: The code at line 469 was first introduced by commit
+:::::: 8c2b1435b9f48904aaa9401d12b800ca8c4dae05 f2fs: recovery missing dot dentries in root directory
 
-:::::: TO: Laurentiu Tudor <laurentiu.tudor@nxp.com>
-:::::: CC: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+:::::: TO: Liu Xue <liuxueliu.liu@huawei.com>
+:::::: CC: Jaegeuk Kim <jaegeuk@kernel.org>
 
 -- 
 0-DAY CI Kernel Test Service
