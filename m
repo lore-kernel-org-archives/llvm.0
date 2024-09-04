@@ -1,121 +1,202 @@
-Received: from mail-yw1-f176.google.com (mail-yw1-f176.google.com [209.85.128.176])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A660B1D6DDB
-	for <llvm@lists.linux.dev>; Tue,  3 Sep 2024 23:43:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1FDFF4A28;
+	Wed,  4 Sep 2024 01:34:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.189
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725407015; cv=none; b=rK+yxM9fMbMoqwVQljER8FzOowoSNDFK3jDcrUhAPYujiWvylwbwl2aFMMY2zN3ee3/0aahRH5KiXAGdSktLTJPh2hh2dm18n0kJ4CJ5WtPY3G2yOO+3ejy6qcRhdiVvRS5OADQE7xbhH/b0rbQb0dCMQypxAYBwoKY8lBuBklE=
+	t=1725413655; cv=none; b=TXcH7uqDvivNuVB0gj4qPVbb3OHcNA0S3W+sI96yGceiKgVbbr+RUQp64ZxstDTIowb3f0oGRO7JKQR6Bls8dIvPruxQtnVm8grxuHz/fZXaHeyXkhq/cs61dxZNZ/HVkEit2w1bLmZy+zntaV01a1Ksd4s6iNjH6lin3LTJDLg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725407015; c=relaxed/simple;
-	bh=dRWeIz+ubJrojnqheq1wHauzuvHp2VInC5LvS5KJ2X0=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=G+0UiQa5GC/81Qi6asWADL+yu6JDHgne6q/Yi25Zvs+gbu7dLIceCvpJYESiBYRLhm7eFuYqIsCPHdara/zZQQ79a1GWl/dednizjtDg3FurkPdnBIEA+l4Sv7TOjgBim4JhH/KDF+1hiW9MAwMZnBwUkek2eTuKi78/Y7oblDg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=umich.edu; spf=pass smtp.mailfrom=umich.edu; dkim=pass (2048-bit key) header.d=umich.edu header.i=@umich.edu header.b=sKg413ay; arc=none smtp.client-ip=209.85.128.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=umich.edu
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=umich.edu
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=umich.edu header.i=@umich.edu header.b="sKg413ay"
-Received: by mail-yw1-f176.google.com with SMTP id 00721157ae682-6bada443ffeso1503807b3.0
-        for <llvm@lists.linux.dev>; Tue, 03 Sep 2024 16:43:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=umich.edu; s=google-2016-06-03; t=1725407012; x=1726011812; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=SlCnxIZL2Il1OI5y0fydGu2G23DBSVnD0BItXQgCoF0=;
-        b=sKg413aylUNyjvKEWjA2MOU+opwJkn2PK3LvvORzdwjlEaRWUT6552onshCu2M/TPg
-         WKRmsv7j6JM5gz6Ia7Qv+jKNS8y3XPthFYEJb0mG23/7mQLsO4wtmXJnBXiicx8O/Tsd
-         ukTOf1/17EpSr/x85cH2qPZZXailRLkJXJeAIGgHUAUwIuLRl/AKHmpq8uvrJKYlspEy
-         jgDP48VBWnKwyW8sUl1iB7YnB3BC+mWF31EDsrOfPChKtRv76Ue9f/2aQbnTZIKI1tfa
-         ptb+ppFbs5IWw9qG1QUxvRYH7pPgqGtGnp7dnbKxFtZz9AnbIWJQdZR2DLse2C+cI9QG
-         mUvw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1725407012; x=1726011812;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=SlCnxIZL2Il1OI5y0fydGu2G23DBSVnD0BItXQgCoF0=;
-        b=I1XPaKBALkbY6TaYvlCs+JHSlhzFEfxM8bvikpw0eBYJLKAylgg9d/SPkqxg2jZ2zp
-         jUwz4gVc82T/r+uuw9C2G3cy5i9FWDmMzR1Of3G9Rad8q59IYLz1CQAtfxbJt+M9Zu8b
-         elXLcyf9NGmlTjBMsA0dBBnqWdAiHviZ0O2Cyr35eVgo4v92y24w27Z/PuUem3FkrRNG
-         F6/FP9oayz9szHD/rrMb3yFi7xVGFWdQ7urlMyuSPPClgEZXveILa81mBUM4tXTQiA0w
-         MYQ8qSjZ3oEsXQuHlHwvfXtQFmrJsS42EOpYLfg4TpUgWp7JXdZFNLAgZsW9jnwvhoS5
-         l/MQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXg5V/2X9I01TC3JPydinHJPSDpIeaJy77ftmagAAqUx8/Svn/nO/UZY4+2z2lxretUq2oi@lists.linux.dev
-X-Gm-Message-State: AOJu0Yw7UacU96jNFN4gtTBmGQpooEG4SgWps0Qn4LqqjNdvNYX7kmCe
-	T0EzScWjvYTiFY+srcH33/7nZjK8NEjeKI1GFVyyYXUBDwzTp/DoNC+CLnU823ej1p50bNfConU
-	o0qm5zqp4CwBGa6fRs3VrB2o+zZ80/kLcNnWIiw==
-X-Google-Smtp-Source: AGHT+IFrQMIAF4flYNUpK76WrQSCNNRsT5DiFAql0jr+5EnBkw560S9E7XVDmYuoVKDvvbmn5wWUKdeul1GdgNXPNN4=
-X-Received: by 2002:a05:690c:2891:b0:64a:445c:6 with SMTP id
- 00721157ae682-6db25fcd975mr1453357b3.17.1725407012635; Tue, 03 Sep 2024
- 16:43:32 -0700 (PDT)
+	s=arc-20240116; t=1725413655; c=relaxed/simple;
+	bh=Oih0GOiXYboBsbhH4GEDzU7e6NAObERmBhpWCClj5lI=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=mdhgIkpjdVS5BwJIQTIpPm6zzccYvjXWxCIgPWBKeHSCCUFAySkTzfmzhAzM/bF5Sbll0CbUokvRbSOK4+rbxULQIqqP7z1aDoUMLXTJrXu4m7015uWOJi2pfxPoLNaqXGdKsfgP+J5yHCY15/aBLhFLXPWoLTpMw8UxUcrwqrQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.189
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.19.163.174])
+	by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4Wz4f03ztgz69LX;
+	Wed,  4 Sep 2024 09:29:12 +0800 (CST)
+Received: from dggpeml500022.china.huawei.com (unknown [7.185.36.66])
+	by mail.maildlp.com (Postfix) with ESMTPS id A254F1403D2;
+	Wed,  4 Sep 2024 09:34:09 +0800 (CST)
+Received: from [10.67.111.104] (10.67.111.104) by
+ dggpeml500022.china.huawei.com (7.185.36.66) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.39; Wed, 4 Sep 2024 09:34:09 +0800
+Message-ID: <e68fa7bf-50a9-4507-92b0-b637a048099e@huawei.com>
+Date: Wed, 4 Sep 2024 09:34:09 +0800
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <62F5EEA0B866E9E0+20240903130606.292935-1-zig@iorw.io>
-In-Reply-To: <62F5EEA0B866E9E0+20240903130606.292935-1-zig@iorw.io>
-From: Trevor Gross <tmgross@umich.edu>
-Date: Tue, 3 Sep 2024 19:43:21 -0400
-Message-ID: <CALNs47s8Qzbckjf_f_-Cr2rVmAf4sbo1MaSBFagdhZS4KcpQNQ@mail.gmail.com>
-Subject: Re: [PATCH 0/2] rust: arch/um: Rust modules support for UML
-To: Zigit Zo <zig@iorw.io>
-Cc: ojeda@kernel.org, bjorn3_gh@protonmail.com, richard@nod.at, 
-	anton.ivanov@cambridgegreys.com, johannes@sipsolutions.net, 
-	tglx@linutronix.de, mingo@redhat.com, nathan@kernel.org, 
-	ndesaulniers@google.com, gary@garyguo.net, rust-for-linux@vger.kernel.org, 
-	linux-um@lists.infradead.org, llvm@lists.linux.dev, x86@kernel.org, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH -next] soc/fsl/qbman: make use of the helper function
+ kthread_run_on_cpu()
+To: kernel test robot <lkp@intel.com>, <christophe.leroy@csgroup.eu>
+CC: <llvm@lists.linux.dev>, <oe-kbuild-all@lists.linux.dev>,
+	<linuxppc-dev@lists.ozlabs.org>, <linux-arm-kernel@lists.infradead.org>
+References: <20240902133125.3089560-1-lihongbo22@huawei.com>
+ <202409032300.9u9g0C8J-lkp@intel.com>
+Content-Language: en-US
+From: Hongbo Li <lihongbo22@huawei.com>
+In-Reply-To: <202409032300.9u9g0C8J-lkp@intel.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ dggpeml500022.china.huawei.com (7.185.36.66)
 
-On Tue, Sep 3, 2024 at 9:10=E2=80=AFAM Zigit Zo <zig@iorw.io> wrote:
->
-> The series make Rust modules running under x86_64 UML, as a supplement
-> for the previous work:
-> - https://lore.kernel.org/rust-for-linux/20221217044436.4138642-1-davidgo=
-w@google.com/
->
-> The previous work by David (many thanks!) has made the Rust UML compiles,
-> and for the builtin modules, it works as expected. But for loadable
-> modules, the UML will complain
->
->   'Unknown rela relocation: 9'
->
-> when we try to 'insmod rust_print.ko'. That's because the modules are
-> compiled against '-Crelocation-model=3Dpie', makes the LLVM treat the
-> modules as PIE executables, but they are just static modules.
->
-> Besides, the Rust's code model for x86_64 UML is still 'kernel', leading
-> some relocations "overflowed", we keep it the same as 'KBUILD_CFLAGS'
-> set in UML ('large' here) to address it.
->
-> Now we can test our Rust modules in UML.
->
-> Regards,
-> -- Zigit
->
-> Zigit Zo (2):
->   rust: arch/um: use 'static' relocation model for uml modules
->   rust: arch/um: use 'large' code model for uml
 
-Hi Zigit,
 
-Thanks for sending this. It looks like the patches may have gotten
-split from the cover letter because the In-Reply-To header isn't exact
-for whatever reason (the two patches reply to
-<20240903130606.292935-1-zig@iorw.io>, but the original has ID
-<62F5EEA0B866E9E0+20240903130606.292935-1-zig@iorw.io>).
+On 2024/9/3 23:46, kernel test robot wrote:
+> Hi Hongbo,
+> 
+> kernel test robot noticed the following build errors:
+> 
+> [auto build test ERROR on next-20240902]
+> 
+> url:    https://github.com/intel-lab-lkp/linux/commits/Hongbo-Li/soc-fsl-qbman-make-use-of-the-helper-function-kthread_run_on_cpu/20240903-060257
+> base:   next-20240902
+> patch link:    https://lore.kernel.org/r/20240902133125.3089560-1-lihongbo22%40huawei.com
+> patch subject: [PATCH -next] soc/fsl/qbman: make use of the helper function kthread_run_on_cpu()
+> config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20240903/202409032300.9u9g0C8J-lkp@intel.com/config)
+> compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
+> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240903/202409032300.9u9g0C8J-lkp@intel.com/reproduce)
+> 
+> If you fix the issue in a separate patch/commit (i.e. not just a new version of
+> the same patch/commit), kindly add following tags
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Closes: https://lore.kernel.org/oe-kbuild-all/202409032300.9u9g0C8J-lkp@intel.com/
+> 
+> All errors (new ones prefixed by >>):
+> 
+>>> drivers/soc/fsl/qbman/qman_test_stash.c:112:27: error: too many arguments to function call, expected 4, have 5
+>       111 |                 struct task_struct *k = kthread_run_on_cpu(bstrap_fn, &bstrap,
+>           |                                         ~~~~~~~~~~~~~~~~~~
+>       112 |                                                 cpu, "hotpotato%d", cpu);
+Sorry, I forget remove the last cpu variable.
 
-No worries for this initial rev, but just double check this if there
-is a v2 :) archive links of the individual patches for reference:
+struct task_struct *k = kthread_run_on_cpu(bstrap_fn, &bstrap, cpu, 
+"hotpotato%u");
 
-[1/2]: https://lore.kernel.org/lkml/FD7D773099A0C7EC+20240903130606.292935-=
-2-zig@iorw.io/
-[2/2]: https://lore.kernel.org/lkml/54FC087D02C52990+20240903130606.292935-=
-3-zig@iorw.io/
 
-- Trevor
+Thanks,
+Hongbo
+
+>           |                                                                     ^~~
+>     include/linux/kthread.h:73:1: note: 'kthread_run_on_cpu' declared here
+>        73 | kthread_run_on_cpu(int (*threadfn)(void *data), void *data,
+>           | ^                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>        74 |                         unsigned int cpu, const char *namefmt)
+>           |                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>     1 error generated.
+> 
+> Kconfig warnings: (for reference only)
+>     WARNING: unmet direct dependencies detected for OMAP2PLUS_MBOX
+>     Depends on [n]: MAILBOX [=y] && (ARCH_OMAP2PLUS || ARCH_K3)
+>     Selected by [y]:
+>     - TI_K3_M4_REMOTEPROC [=y] && REMOTEPROC [=y] && (ARCH_K3 || COMPILE_TEST [=y])
+> 
+> 
+> vim +112 drivers/soc/fsl/qbman/qman_test_stash.c
+> 
+>      35	
+>      36	/*
+>      37	 * Algorithm:
+>      38	 *
+>      39	 * Each cpu will have HP_PER_CPU "handlers" set up, each of which incorporates
+>      40	 * an rx/tx pair of FQ objects (both of which are stashed on dequeue). The
+>      41	 * organisation of FQIDs is such that the HP_PER_CPU*NUM_CPUS handlers will
+>      42	 * shuttle a "hot potato" frame around them such that every forwarding action
+>      43	 * moves it from one cpu to another. (The use of more than one handler per cpu
+>      44	 * is to allow enough handlers/FQs to truly test the significance of caching -
+>      45	 * ie. when cache-expiries are occurring.)
+>      46	 *
+>      47	 * The "hot potato" frame content will be HP_NUM_WORDS*4 bytes in size, and the
+>      48	 * first and last words of the frame data will undergo a transformation step on
+>      49	 * each forwarding action. To achieve this, each handler will be assigned a
+>      50	 * 32-bit "mixer", that is produced using a 32-bit LFSR. When a frame is
+>      51	 * received by a handler, the mixer of the expected sender is XOR'd into all
+>      52	 * words of the entire frame, which is then validated against the original
+>      53	 * values. Then, before forwarding, the entire frame is XOR'd with the mixer of
+>      54	 * the current handler. Apart from validating that the frame is taking the
+>      55	 * expected path, this also provides some quasi-realistic overheads to each
+>      56	 * forwarding action - dereferencing *all* the frame data, computation, and
+>      57	 * conditional branching. There is a "special" handler designated to act as the
+>      58	 * instigator of the test by creating an enqueuing the "hot potato" frame, and
+>      59	 * to determine when the test has completed by counting HP_LOOPS iterations.
+>      60	 *
+>      61	 * Init phases:
+>      62	 *
+>      63	 * 1. prepare each cpu's 'hp_cpu' struct using on_each_cpu(,,1) and link them
+>      64	 *    into 'hp_cpu_list'. Specifically, set processor_id, allocate HP_PER_CPU
+>      65	 *    handlers and link-list them (but do no other handler setup).
+>      66	 *
+>      67	 * 2. scan over 'hp_cpu_list' HP_PER_CPU times, the first time sets each
+>      68	 *    hp_cpu's 'iterator' to point to its first handler. With each loop,
+>      69	 *    allocate rx/tx FQIDs and mixer values to the hp_cpu's iterator handler
+>      70	 *    and advance the iterator for the next loop. This includes a final fixup,
+>      71	 *    which connects the last handler to the first (and which is why phase 2
+>      72	 *    and 3 are separate).
+>      73	 *
+>      74	 * 3. scan over 'hp_cpu_list' HP_PER_CPU times, the first time sets each
+>      75	 *    hp_cpu's 'iterator' to point to its first handler. With each loop,
+>      76	 *    initialise FQ objects and advance the iterator for the next loop.
+>      77	 *    Moreover, do this initialisation on the cpu it applies to so that Rx FQ
+>      78	 *    initialisation targets the correct cpu.
+>      79	 */
+>      80	
+>      81	/*
+>      82	 * helper to run something on all cpus (can't use on_each_cpu(), as that invokes
+>      83	 * the fn from irq context, which is too restrictive).
+>      84	 */
+>      85	struct bstrap {
+>      86		int (*fn)(void);
+>      87		atomic_t started;
+>      88	};
+>      89	static int bstrap_fn(void *bs)
+>      90	{
+>      91		struct bstrap *bstrap = bs;
+>      92		int err;
+>      93	
+>      94		atomic_inc(&bstrap->started);
+>      95		err = bstrap->fn();
+>      96		if (err)
+>      97			return err;
+>      98		while (!kthread_should_stop())
+>      99			msleep(20);
+>     100		return 0;
+>     101	}
+>     102	static int on_all_cpus(int (*fn)(void))
+>     103	{
+>     104		int cpu;
+>     105	
+>     106		for_each_cpu(cpu, cpu_online_mask) {
+>     107			struct bstrap bstrap = {
+>     108				.fn = fn,
+>     109				.started = ATOMIC_INIT(0)
+>     110			};
+>     111			struct task_struct *k = kthread_run_on_cpu(bstrap_fn, &bstrap,
+>   > 112							cpu, "hotpotato%d", cpu);
+>     113			int ret;
+>     114	
+>     115			if (IS_ERR(k))
+>     116				return -ENOMEM;
+>     117			/*
+>     118			 * If we call kthread_stop() before the "wake up" has had an
+>     119			 * effect, then the thread may exit with -EINTR without ever
+>     120			 * running the function. So poll until it's started before
+>     121			 * requesting it to stop.
+>     122			 */
+>     123			while (!atomic_read(&bstrap.started))
+>     124				msleep(20);
+>     125			ret = kthread_stop(k);
+>     126			if (ret)
+>     127				return ret;
+>     128		}
+>     129		return 0;
+>     130	}
+>     131	
+> 
