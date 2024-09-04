@@ -1,309 +1,175 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
+Received: from fout8-smtp.messagingengine.com (fout8-smtp.messagingengine.com [103.168.172.151])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D64946BFB0;
-	Wed,  4 Sep 2024 04:16:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B91231465A0
+	for <llvm@lists.linux.dev>; Wed,  4 Sep 2024 07:38:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.151
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725423421; cv=none; b=ua0bH/Wq0Yie5wepVrJbFjb0FN7SiCV+Ka9n5Lqx7cvjqL94YZhLgPIdlMAAD/XogV9z+DracKkAmadz5WBfpQTYS2whLjy8ybq+hceAkD9EPfhYW06D2jL9MoEM2r7V/vus7mARrarIcvAUOpykmue1kQj5kjOVLrJxgx/14+M=
+	t=1725435509; cv=none; b=FDYdh3eSf3QPKKhzAruijVNNtB8cc5d0aiAYg8BcpNWLmo6DYLy1J5HsQCiWDs76dyoL8vpKDcvUCBxu3nJcCb30IpGF5ltHYZ3xvDotm5SDPBLhT/1tV5PoegGseJm7nR/LNk5Y8cMOFc1nZUhPiYrppC7Y/FBE/Dg4uw+k6LU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725423421; c=relaxed/simple;
-	bh=WxbZhrHGDSoLP4QMoF2VE1j73UFWW7VcsDfG5vVnYuo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=u4AlFP8VlkNCIWjPSwjc5ud8Ap9d6hGtu8PKHIKlksrmAqV2HiI9WhAPRIk38I1vy86dDa100KXSYVcMxWdu5W51HHZ/7ido2CaYuPrcJiD2tSW30zrtGp/zYzeAsj+MTLZo+Xok3tczbhh6JRUbWrUJL6WUDuIdhouY42c/QCE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Z09mIQ+d; arc=none smtp.client-ip=192.198.163.8
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1725435509; c=relaxed/simple;
+	bh=sz6ZXnptgCPAXnQbA/qYwtmPVRCJO0RfwwN0oTEtnVE=;
+	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
+	 Subject:Content-Type; b=MyFLEMH8RJc7DVnProzw3BT7FSOGNuGXAa+vAPgUKSKPNU3YqXyzxnccFpBIsCtyHjt1xlNC29MyfzhOXBzcVNUsoF7rVkyLgV8um0hDafb+O4A28oN3SgtVS3jEM4+AKYViMON1vqGZSdmXiuEM/yfhwYJfl+u9/jCY8zfQFZQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=flygoat.com; spf=pass smtp.mailfrom=flygoat.com; dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b=rfNHq06S; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=BiFOEq1s; arc=none smtp.client-ip=103.168.172.151
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=flygoat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flygoat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Z09mIQ+d"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1725423419; x=1756959419;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=WxbZhrHGDSoLP4QMoF2VE1j73UFWW7VcsDfG5vVnYuo=;
-  b=Z09mIQ+dOJteZF9ko+WIrEw+4WJnDqN0HVL+ocLhTmXAzBM3LWg2SqgP
-   rjmxRAvcF26px7TbMHrHVE7ZcICG9U91Qk91ozIY5l66w5H51gGew5Kjq
-   aGcbLT4hZRNVOO5xpAaZua9SidZ7ZSSZRfAj7WPpaBHnuLChZrsKo8VuK
-   Tn6kbFF11+GRLoHtPnZ2N+m8pHohrUMQKXY1vhKYdXgaG3Fli5E8VK6a7
-   H3/EmocHraiLbfSXTooPcGa0WPPgb7+wMtvRkQbjmTdccNU02yykrN8wo
-   lCHr6Jcdo9lmM6O2RlFlSN81B0k9f/3sHqRV7dv2mmo1UErvC7Onr/tyE
-   w==;
-X-CSE-ConnectionGUID: PVkHW9TJSKW6uBbD6AkZIA==
-X-CSE-MsgGUID: F7IOKAOrRQOyvKpPCNgL2g==
-X-IronPort-AV: E=McAfee;i="6700,10204,11184"; a="41549975"
-X-IronPort-AV: E=Sophos;i="6.10,200,1719903600"; 
-   d="scan'208";a="41549975"
-Received: from fmviesa008.fm.intel.com ([10.60.135.148])
-  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Sep 2024 20:26:01 -0700
-X-CSE-ConnectionGUID: gXeyB6J9QSaIYOOkmKLeMA==
-X-CSE-MsgGUID: 7ml/kCKcRgKffE77DOT6uQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.10,200,1719903600"; 
-   d="scan'208";a="65152514"
-Received: from lkp-server01.sh.intel.com (HELO 9c6b1c7d3b50) ([10.239.97.150])
-  by fmviesa008.fm.intel.com with ESMTP; 03 Sep 2024 20:25:46 -0700
-Received: from kbuild by 9c6b1c7d3b50 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1slgeO-0007VF-2X;
-	Wed, 04 Sep 2024 03:25:44 +0000
-Date: Wed, 4 Sep 2024 11:25:40 +0800
-From: kernel test robot <lkp@intel.com>
-To: Namhyung Kim <namhyung@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [RFC/PATCH 2/4] perf/core: Export perf_exclude_event()
-Message-ID: <202409041025.CJXNAW1u-lkp@intel.com>
-References: <20240830232910.1839548-3-namhyung@kernel.org>
+	dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b="rfNHq06S";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="BiFOEq1s"
+Received: from phl-compute-05.internal (phl-compute-05.phl.internal [10.202.2.45])
+	by mailfout.phl.internal (Postfix) with ESMTP id CA46F138017F;
+	Wed,  4 Sep 2024 03:38:26 -0400 (EDT)
+Received: from phl-imap-12 ([10.202.2.86])
+  by phl-compute-05.internal (MEProxy); Wed, 04 Sep 2024 03:38:26 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
+	cc:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm2; t=1725435506;
+	 x=1725521906; bh=sz6ZXnptgCPAXnQbA/qYwtmPVRCJO0RfwwN0oTEtnVE=; b=
+	rfNHq06S+/FbiJrjcoOAISVrJY1dv8k4g+acB71qeIe0yoy8tEYuiuX6duhHot0X
+	pnl4Iv+jSo1NbgXY27Sm6bOV4qZGIbsxcYq1KA6O7qp3Gv/QXwLbfO8thQJHWS3Q
+	4cLKRt7uqNAaIKrt2TBz5bcums1IZHW3zWq2AysZvWT1FXBRMTYO6Ug7R8MAVuoB
+	3rWV9jPuGkruOmjZMEU/e+2OAMc/GE9oK8kvjNfq6TMiuw5V9pqid8KdfeXQEG0s
+	Y1tdgKvxCvK0hle8lBgZUObKDBQqSNtQDQJN6p+CK2QxAVMDWch6RSMqs0CL2BEM
+	99k/hnes1guZnUoy8uSlpw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1725435506; x=
+	1725521906; bh=sz6ZXnptgCPAXnQbA/qYwtmPVRCJO0RfwwN0oTEtnVE=; b=B
+	iFOEq1sVqpbBj1w9LMAEZgDjMzrAxYO5IHVpeDFFhntFPf128oUA/18aSRhUV9lt
+	SjTwO1VpWlAVLcHFnIK53Uh65HRATfjliGXh4mjrwEVBt7ypXoKoq7z6ztq4VmKS
+	j9oWFRgn4sfUWeeZbX7j/P4W3nU0xEzcO4z3m0NAdClE47/ikZ0WlI1KHqSqrgiy
+	STUHs83TLL2fjm39nos9JCPme3s5LawmO/KM9/Q2AQZakvZ67FNHsfftPHcObHoz
+	MmaLCMTA2TfvqKjTLC+pmp68EZbbIoTFXuDQWfGlk09BUpDTn4jOwgURKst5b4IF
+	p5c/y86CfrkJwoV8fqdTg==
+X-ME-Sender: <xms:cA7YZpsfXod5rMH1QTlm0kTIPWxJqwPiszVY5eBC46ewJFhh3iw5CQ>
+    <xme:cA7YZifTUghUpf-WKUM0pFh-ulBKmpAalims9KaeyULKphrFiIFxxqcDgax3OHQUi
+    ywmBY4QNB45dm8KCc0>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeftddrudehiedguddvtdcutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpggftfghnshhusghstghrihgsvgdp
+    uffrtefokffrpgfnqfghnecuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivg
+    hnthhsucdlqddutddtmdenucfjughrpefoggffhffvvefkjghfufgtgfesthhqredtredt
+    jeenucfhrhhomhepfdflihgrgihunhcujggrnhhgfdcuoehjihgrgihunhdrhigrnhhgse
+    hflhihghhorghtrdgtohhmqeenucggtffrrghtthgvrhhnpeevueffteefkeehhfdthfel
+    feffjedvffekgfeiuedugeekgeejvedtffeiledtueenucffohhmrghinhepghhithhhuh
+    gsrdgtohhmnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhho
+    mhepjhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomhdpnhgspghrtghpthhtoh
+    epgedtpdhmohguvgepshhmthhpohhuthdprhgtphhtthhopegsphesrghlihgvnhekrdgu
+    vgdprhgtphhtthhopehtshgsohhgvghnugesrghlphhhrgdrfhhrrghnkhgvnhdruggvpd
+    hrtghpthhtohepmhgrrhhkrdhruhhtlhgrnhgusegrrhhmrdgtohhmpdhrtghpthhtohep
+    rghnthhonhdrihhvrghnohhvsegtrghmsghrihgughgvghhrvgihshdrtghomhdprhgtph
+    htthhopehnihgtohhlrghssehfjhgrshhlvgdrvghupdhrtghpthhtohepghgrrhihsehg
+    rghrhihguhhordhnvghtpdhrtghpthhtoheprghlvgigrdhgrgihnhhorhesghhmrghilh
+    drtghomhdprhgtphhtthhopegsohhquhhnrdhfvghnghesghhmrghilhdrtghomhdprhgt
+    phhtthhopehmihhguhgvlhdrohhjvggurgdrshgrnhguohhnihhssehgmhgrihhlrdgtoh
+    hm
+X-ME-Proxy: <xmx:cA7YZsxJTWa516B1amj6UWURaphYpQG7A_CZANJjeHUVSV9pyNfcWg>
+    <xmx:cA7YZgMgKTSMs2eNfwkAsPGl3QfC0ElKD-WFY0SQxWw9BMzetozcJQ>
+    <xmx:cA7YZp8XTYFkwebvCNZsdfsBNO62gvaU4g82IG_p09N7BGZtG4pzAA>
+    <xmx:cA7YZgWFhnrDB95x5DNuYD5ky5Bo6vtbXwU8siGEdfpJ0b4-IAyzCQ>
+    <xmx:cg7YZu8KItrX9IUQjFOMUxdHGLKL6ymyzV556PeKCfMCW0g4shDq4p8v>
+Feedback-ID: ifd894703:Fastmail
+Received: by mailuser.phl.internal (Postfix, from userid 501)
+	id 680AD1C207BB; Wed,  4 Sep 2024 03:38:24 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240830232910.1839548-3-namhyung@kernel.org>
-
-Hi Namhyung,
-
-[This is a private test report for your RFC patch.]
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on tip/perf/core]
-[also build test ERROR on perf-tools/perf-tools acme/perf/core linus/master v6.11-rc6 next-20240903]
-[cannot apply to perf-tools-next/perf-tools-next]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Namhyung-Kim/perf-core-Add-PERF_FORMAT_DROPPED/20240831-073000
-base:   tip/perf/core
-patch link:    https://lore.kernel.org/r/20240830232910.1839548-3-namhyung%40kernel.org
-patch subject: [RFC/PATCH 2/4] perf/core: Export perf_exclude_event()
-config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20240904/202409041025.CJXNAW1u-lkp@intel.com/config)
-compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 05f5a91d00b02f4369f46d076411c700755ae041)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240904/202409041025.CJXNAW1u-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202409041025.CJXNAW1u-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
-   In file included from arch/s390/kernel/perf_cpum_sf.c:13:
-   In file included from include/linux/perf_event.h:25:
-   In file included from arch/s390/include/asm/perf_event.h:14:
-   In file included from include/linux/device.h:32:
-   In file included from include/linux/device/driver.h:21:
-   In file included from include/linux/module.h:19:
-   In file included from include/linux/elf.h:6:
-   In file included from arch/s390/include/asm/elf.h:181:
-   In file included from arch/s390/include/asm/mmu_context.h:11:
-   In file included from arch/s390/include/asm/pgalloc.h:18:
-   In file included from include/linux/mm.h:2228:
-   include/linux/vmstat.h:500:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     500 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     501 |                            item];
-         |                            ~~~~
-   include/linux/vmstat.h:507:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     507 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     508 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/vmstat.h:514:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     514 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
-   include/linux/vmstat.h:519:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     519 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     520 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/vmstat.h:528:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     528 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     529 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   In file included from arch/s390/kernel/perf_cpum_sf.c:25:
-   In file included from include/linux/io.h:14:
-   In file included from arch/s390/include/asm/io.h:93:
-   include/asm-generic/io.h:548:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     548 |         val = __raw_readb(PCI_IOBASE + addr);
-         |                           ~~~~~~~~~~ ^
-   include/asm-generic/io.h:561:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     561 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
-      37 | #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
-         |                                                           ^
-   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
-     102 | #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
-         |                                                      ^
-   In file included from arch/s390/kernel/perf_cpum_sf.c:25:
-   In file included from include/linux/io.h:14:
-   In file included from arch/s390/include/asm/io.h:93:
-   include/asm-generic/io.h:574:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     574 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
-      35 | #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
-         |                                                           ^
-   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
-     115 | #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
-         |                                                      ^
-   In file included from arch/s390/kernel/perf_cpum_sf.c:25:
-   In file included from include/linux/io.h:14:
-   In file included from arch/s390/include/asm/io.h:93:
-   include/asm-generic/io.h:585:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     585 |         __raw_writeb(value, PCI_IOBASE + addr);
-         |                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:595:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     595 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:605:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     605 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:693:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     693 |         readsb(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:701:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     701 |         readsw(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:709:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     709 |         readsl(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:718:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     718 |         writesb(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   include/asm-generic/io.h:727:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     727 |         writesw(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   include/asm-generic/io.h:736:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     736 |         writesl(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
->> arch/s390/kernel/perf_cpum_sf.c:1086:12: error: static declaration of 'perf_exclude_event' follows non-static declaration
-    1086 | static int perf_exclude_event(struct perf_event *event, struct pt_regs *regs,
-         |            ^
-   include/linux/perf_event.h:1637:12: note: previous declaration is here
-    1637 | extern int perf_exclude_event(struct perf_event *event, struct pt_regs *regs);
-         |            ^
->> arch/s390/kernel/perf_cpum_sf.c:1169:39: error: too many arguments to function call, expected 2, have 3
-    1169 |         if (perf_exclude_event(event, &regs, sde_regs))
-         |             ~~~~~~~~~~~~~~~~~~               ^~~~~~~~
-   include/linux/perf_event.h:1637:12: note: 'perf_exclude_event' declared here
-    1637 | extern int perf_exclude_event(struct perf_event *event, struct pt_regs *regs);
-         |            ^                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   17 warnings and 2 errors generated.
+Date: Wed, 04 Sep 2024 08:38:04 +0100
+From: "Jiaxun Yang" <jiaxun.yang@flygoat.com>
+To: "Miguel Ojeda" <miguel.ojeda.sandonis@gmail.com>
+Cc: "Masahiro Yamada" <masahiroy@kernel.org>,
+ "Nathan Chancellor" <nathan@kernel.org>,
+ "Nicolas Schier" <nicolas@fjasle.eu>,
+ "Richard Weinberger" <richard@nod.at>,
+ "Anton Ivanov" <anton.ivanov@cambridgegreys.com>,
+ "Johannes Berg" <johannes@sipsolutions.net>,
+ "Thomas Gleixner" <tglx@linutronix.de>, "Ingo Molnar" <mingo@redhat.com>,
+ "Borislav Petkov" <bp@alien8.de>,
+ "Dave Hansen" <dave.hansen@linux.intel.com>, x86@kernel.org,
+ "H. Peter Anvin" <hpa@zytor.com>, "Miguel Ojeda" <ojeda@kernel.org>,
+ "Alex Gaynor" <alex.gaynor@gmail.com>,
+ "Wedson Almeida Filho" <wedsonaf@gmail.com>,
+ "Boqun Feng" <boqun.feng@gmail.com>, "Gary Guo" <gary@garyguo.net>,
+ =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
+ "Benno Lossin" <benno.lossin@proton.me>,
+ "Andreas Hindborg" <a.hindborg@samsung.com>,
+ "Alice Ryhl" <aliceryhl@google.com>,
+ "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>,
+ "Steven Rostedt" <rostedt@goodmis.org>,
+ "Masami Hiramatsu" <mhiramat@kernel.org>,
+ "Mark Rutland" <mark.rutland@arm.com>,
+ "Jonathan Corbet" <corbet@lwn.net>, "Alex Shi" <alexs@kernel.org>,
+ "Yanteng Si" <siyanteng@loongson.cn>,
+ "Nick Desaulniers" <ndesaulniers@google.com>,
+ "Bill Wendling" <morbo@google.com>,
+ "Justin Stitt" <justinstitt@google.com>, linux-kbuild@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-um@lists.infradead.org,
+ rust-for-linux@vger.kernel.org,
+ "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+ linux-trace-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+ llvm@lists.linux.dev
+Message-Id: <a6959bc0-f0bb-425b-b3b1-3123d3b809b5@app.fastmail.com>
+In-Reply-To: 
+ <CANiq72mvTTgyTjDCWBz_kOdY1f4gopAtWxyC4P4c+Lr0YVkzLA@mail.gmail.com>
+References: <20240903-mips-rust-v1-0-0fdf0b2fd58f@flygoat.com>
+ <20240903-mips-rust-v1-3-0fdf0b2fd58f@flygoat.com>
+ <CANiq72=z1yJm-B_ie=GfueOF1qksaSD9txgFU1YQo2tZx0qQPg@mail.gmail.com>
+ <d9591a84-9a0f-4046-9b2a-437061f6882b@app.fastmail.com>
+ <CANiq72m5iFcqRU_qdUCZkoV8ayPhtQQq3TTEDRUYfMEsnNqTDg@mail.gmail.com>
+ <6f6f04d7-55b3-4714-9bcd-cb4e1ae6c86a@app.fastmail.com>
+ <CANiq72mvTTgyTjDCWBz_kOdY1f4gopAtWxyC4P4c+Lr0YVkzLA@mail.gmail.com>
+Subject: Re: [PATCH 3/3] rust: Enable for MIPS
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
 
-vim +/perf_exclude_event +1086 arch/s390/kernel/perf_cpum_sf.c
 
-8c069ff4bd6063 Hendrik Brueckner     2013-12-12  1076  
-dd127b3b977b81 Hendrik Brueckner     2013-12-12  1077  /* perf_exclude_event() - Filter event
-dd127b3b977b81 Hendrik Brueckner     2013-12-12  1078   * @event:	The perf event
-dd127b3b977b81 Hendrik Brueckner     2013-12-12  1079   * @regs:	pt_regs structure
-dd127b3b977b81 Hendrik Brueckner     2013-12-12  1080   * @sde_regs:	Sample-data-entry (sde) regs structure
-dd127b3b977b81 Hendrik Brueckner     2013-12-12  1081   *
-dd127b3b977b81 Hendrik Brueckner     2013-12-12  1082   * Filter perf events according to their exclude specification.
-dd127b3b977b81 Hendrik Brueckner     2013-12-12  1083   *
-dd127b3b977b81 Hendrik Brueckner     2013-12-12  1084   * Return non-zero if the event shall be excluded.
-dd127b3b977b81 Hendrik Brueckner     2013-12-12  1085   */
-dd127b3b977b81 Hendrik Brueckner     2013-12-12 @1086  static int perf_exclude_event(struct perf_event *event, struct pt_regs *regs,
-dd127b3b977b81 Hendrik Brueckner     2013-12-12  1087  			      struct perf_sf_sde_regs *sde_regs)
-dd127b3b977b81 Hendrik Brueckner     2013-12-12  1088  {
-dd127b3b977b81 Hendrik Brueckner     2013-12-12  1089  	if (event->attr.exclude_user && user_mode(regs))
-dd127b3b977b81 Hendrik Brueckner     2013-12-12  1090  		return 1;
-dd127b3b977b81 Hendrik Brueckner     2013-12-12  1091  	if (event->attr.exclude_kernel && !user_mode(regs))
-dd127b3b977b81 Hendrik Brueckner     2013-12-12  1092  		return 1;
-dd127b3b977b81 Hendrik Brueckner     2013-12-12  1093  	if (event->attr.exclude_guest && sde_regs->in_guest)
-dd127b3b977b81 Hendrik Brueckner     2013-12-12  1094  		return 1;
-dd127b3b977b81 Hendrik Brueckner     2013-12-12  1095  	if (event->attr.exclude_host && !sde_regs->in_guest)
-dd127b3b977b81 Hendrik Brueckner     2013-12-12  1096  		return 1;
-dd127b3b977b81 Hendrik Brueckner     2013-12-12  1097  	return 0;
-dd127b3b977b81 Hendrik Brueckner     2013-12-12  1098  }
-dd127b3b977b81 Hendrik Brueckner     2013-12-12  1099  
-8c069ff4bd6063 Hendrik Brueckner     2013-12-12  1100  /* perf_push_sample() - Push samples to perf
-8c069ff4bd6063 Hendrik Brueckner     2013-12-12  1101   * @event:	The perf event
-8c069ff4bd6063 Hendrik Brueckner     2013-12-12  1102   * @sample:	Hardware sample data
-8c069ff4bd6063 Hendrik Brueckner     2013-12-12  1103   *
-8c069ff4bd6063 Hendrik Brueckner     2013-12-12  1104   * Use the hardware sample data to create perf event sample.  The sample
-8c069ff4bd6063 Hendrik Brueckner     2013-12-12  1105   * is the pushed to the event subsystem and the function checks for
-8c069ff4bd6063 Hendrik Brueckner     2013-12-12  1106   * possible event overflows.  If an event overflow occurs, the PMU is
-8c069ff4bd6063 Hendrik Brueckner     2013-12-12  1107   * stopped.
-8c069ff4bd6063 Hendrik Brueckner     2013-12-12  1108   *
-8c069ff4bd6063 Hendrik Brueckner     2013-12-12  1109   * Return non-zero if an event overflow occurred.
-8c069ff4bd6063 Hendrik Brueckner     2013-12-12  1110   */
-3d43b981eb841a Pu Hou                2017-05-19  1111  static int perf_push_sample(struct perf_event *event,
-3d43b981eb841a Pu Hou                2017-05-19  1112  			    struct hws_basic_entry *basic)
-8c069ff4bd6063 Hendrik Brueckner     2013-12-12  1113  {
-8c069ff4bd6063 Hendrik Brueckner     2013-12-12  1114  	int overflow;
-8c069ff4bd6063 Hendrik Brueckner     2013-12-12  1115  	struct pt_regs regs;
-443e802bab1691 Hendrik Brueckner     2013-12-12  1116  	struct perf_sf_sde_regs *sde_regs;
-8c069ff4bd6063 Hendrik Brueckner     2013-12-12  1117  	struct perf_sample_data data;
-8c069ff4bd6063 Hendrik Brueckner     2013-12-12  1118  
-7e75fc3ff4cffd Hendrik Brueckner     2013-12-13  1119  	/* Setup perf sample */
-8c069ff4bd6063 Hendrik Brueckner     2013-12-12  1120  	perf_sample_data_init(&data, 0, event->hw.last_period);
-8c069ff4bd6063 Hendrik Brueckner     2013-12-12  1121  
-443e802bab1691 Hendrik Brueckner     2013-12-12  1122  	/* Setup pt_regs to look like an CPU-measurement external interrupt
-443e802bab1691 Hendrik Brueckner     2013-12-12  1123  	 * using the Program Request Alert code.  The regs.int_parm_long
-443e802bab1691 Hendrik Brueckner     2013-12-12  1124  	 * field which is unused contains additional sample-data-entry related
-443e802bab1691 Hendrik Brueckner     2013-12-12  1125  	 * indicators.
-443e802bab1691 Hendrik Brueckner     2013-12-12  1126  	 */
-8c069ff4bd6063 Hendrik Brueckner     2013-12-12  1127  	memset(&regs, 0, sizeof(regs));
-443e802bab1691 Hendrik Brueckner     2013-12-12  1128  	regs.int_code = 0x1407;
-443e802bab1691 Hendrik Brueckner     2013-12-12  1129  	regs.int_parm = CPU_MF_INT_SF_PRA;
-443e802bab1691 Hendrik Brueckner     2013-12-12  1130  	sde_regs = (struct perf_sf_sde_regs *) &regs.int_parm_long;
-443e802bab1691 Hendrik Brueckner     2013-12-12  1131  
-3d43b981eb841a Pu Hou                2017-05-19  1132  	psw_bits(regs.psw).ia	= basic->ia;
-3d43b981eb841a Pu Hou                2017-05-19  1133  	psw_bits(regs.psw).dat	= basic->T;
-3d43b981eb841a Pu Hou                2017-05-19  1134  	psw_bits(regs.psw).wait = basic->W;
-3d43b981eb841a Pu Hou                2017-05-19  1135  	psw_bits(regs.psw).pstate = basic->P;
-3d43b981eb841a Pu Hou                2017-05-19  1136  	psw_bits(regs.psw).as	= basic->AS;
-8c069ff4bd6063 Hendrik Brueckner     2013-12-12  1137  
-e22cf8ca6f75a6 Christian Borntraeger 2015-10-06  1138  	/*
-c19805f870c1fa Christian Borntraeger 2016-11-08  1139  	 * Use the hardware provided configuration level to decide if the
-c19805f870c1fa Christian Borntraeger 2016-11-08  1140  	 * sample belongs to a guest or host. If that is not available,
-c19805f870c1fa Christian Borntraeger 2016-11-08  1141  	 * fall back to the following heuristics:
-c19805f870c1fa Christian Borntraeger 2016-11-08  1142  	 * A non-zero guest program parameter always indicates a guest
-c19805f870c1fa Christian Borntraeger 2016-11-08  1143  	 * sample. Some early samples or samples from guests without
-b1685ab9bd3ae1 Christian Borntraeger 2016-02-29  1144  	 * lpp usage would be misaccounted to the host. We use the asn
-c19805f870c1fa Christian Borntraeger 2016-11-08  1145  	 * value as an addon heuristic to detect most of these guest samples.
-df26c2e87e6cf3 Martin Schwidefsky    2017-04-04  1146  	 * If the value differs from 0xffff (the host value), we assume to
-df26c2e87e6cf3 Martin Schwidefsky    2017-04-04  1147  	 * be a KVM guest.
-443e802bab1691 Hendrik Brueckner     2013-12-12  1148  	 */
-3d43b981eb841a Pu Hou                2017-05-19  1149  	switch (basic->CL) {
-c19805f870c1fa Christian Borntraeger 2016-11-08  1150  	case 1: /* logical partition */
-c19805f870c1fa Christian Borntraeger 2016-11-08  1151  		sde_regs->in_guest = 0;
-c19805f870c1fa Christian Borntraeger 2016-11-08  1152  		break;
-c19805f870c1fa Christian Borntraeger 2016-11-08  1153  	case 2: /* virtual machine */
-c19805f870c1fa Christian Borntraeger 2016-11-08  1154  		sde_regs->in_guest = 1;
-c19805f870c1fa Christian Borntraeger 2016-11-08  1155  		break;
-c19805f870c1fa Christian Borntraeger 2016-11-08  1156  	default: /* old machine, use heuristics */
-3d43b981eb841a Pu Hou                2017-05-19  1157  		if (basic->gpp || basic->prim_asn != 0xffff)
-443e802bab1691 Hendrik Brueckner     2013-12-12  1158  			sde_regs->in_guest = 1;
-c19805f870c1fa Christian Borntraeger 2016-11-08  1159  		break;
-c19805f870c1fa Christian Borntraeger 2016-11-08  1160  	}
-443e802bab1691 Hendrik Brueckner     2013-12-12  1161  
-544e8dd7a8e49d Hendrik Brueckner     2016-03-08  1162  	/*
-544e8dd7a8e49d Hendrik Brueckner     2016-03-08  1163  	 * Store the PID value from the sample-data-entry to be
-544e8dd7a8e49d Hendrik Brueckner     2016-03-08  1164  	 * processed and resolved by cpumsf_output_event_pid().
-544e8dd7a8e49d Hendrik Brueckner     2016-03-08  1165  	 */
-544e8dd7a8e49d Hendrik Brueckner     2016-03-08  1166  	data.tid_entry.pid = basic->hpp & LPP_PID_MASK;
-544e8dd7a8e49d Hendrik Brueckner     2016-03-08  1167  
-8c069ff4bd6063 Hendrik Brueckner     2013-12-12  1168  	overflow = 0;
-dd127b3b977b81 Hendrik Brueckner     2013-12-12 @1169  	if (perf_exclude_event(event, &regs, sde_regs))
-dd127b3b977b81 Hendrik Brueckner     2013-12-12  1170  		goto out;
-8c069ff4bd6063 Hendrik Brueckner     2013-12-12  1171  	if (perf_event_overflow(event, &data, &regs)) {
-8c069ff4bd6063 Hendrik Brueckner     2013-12-12  1172  		overflow = 1;
-8c069ff4bd6063 Hendrik Brueckner     2013-12-12  1173  		event->pmu->stop(event, 0);
-8c069ff4bd6063 Hendrik Brueckner     2013-12-12  1174  	}
-8c069ff4bd6063 Hendrik Brueckner     2013-12-12  1175  	perf_event_update_userpage(event);
-dd127b3b977b81 Hendrik Brueckner     2013-12-12  1176  out:
-8c069ff4bd6063 Hendrik Brueckner     2013-12-12  1177  	return overflow;
-8c069ff4bd6063 Hendrik Brueckner     2013-12-12  1178  }
-8c069ff4bd6063 Hendrik Brueckner     2013-12-12  1179  
+=E5=9C=A82024=E5=B9=B49=E6=9C=883=E6=97=A5=E4=B9=9D=E6=9C=88 =E4=B8=8B=E5=
+=8D=888:01=EF=BC=8CMiguel Ojeda=E5=86=99=E9=81=93=EF=BC=9A
+> On Tue, Sep 3, 2024 at 8:32=E2=80=AFPM Jiaxun Yang <jiaxun.yang@flygoa=
+t.com> wrote:
+>>
+>> Ahh thanks for the elaboration.
+>
+> You're welcome!
+>
+>> However, kernel supports many ISA variants that are not defined by an=
+y rust target
+>> triple, I'm not really sure if it's appropriate to define them all in=
+ upstream.
+>
+> They need to be in upstream Rust somehow, because upstream Rust does
+> not want to stabilize `target.json` since it is too tied to LLVM (as
+> far as we have been told). Whether that is via `-Ctarget-feature`, or a
+> new `-Cglobal-target-feature`, or specific flags like `-Zfixed-x18`
+> (originally `-Ctarget-feature=3D+reserve-x18`), or (many) new target
+> triples for different combinations, or something else, it depends on
+> the case and what upstream Rust wants to do.
+>
+> That is why we should tell them what is needed, ideally in a new issue
+> in upstream Rust, and link it in
+> https://github.com/Rust-for-Linux/linux/issues/355 (please see that
+> list for similar examples).
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Seems like this topic is covered by an existing issue
+
+Reported at:
+https://github.com/rust-embedded/wg/issues/792#issuecomment-2328133517
+
+Thanks!
+>
+> I hope that explains a bit more the context.
+>
+> Cheers,
+> Miguel
+
+--=20
+- Jiaxun
