@@ -1,88 +1,92 @@
-Received: from smtpbguseast3.qq.com (smtpbguseast3.qq.com [54.243.244.52])
+Received: from fanzine2.igalia.com (fanzine.igalia.com [178.60.130.6])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B08101D7E3F
-	for <llvm@lists.linux.dev>; Wed,  4 Sep 2024 12:29:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=54.243.244.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 104F71D9321;
+	Wed,  4 Sep 2024 13:23:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=178.60.130.6
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725452992; cv=none; b=MNFXrodYke0yEjlNpoTm4M77yqE4TbkMhUhEUSzQa7XLavae+JCYSOTA0OgYVEJRGI+KixrDKVNAtMAYNkfqHQ+or/rZGC/SUTG5NAU7YcRUZKmOLibroEMIT+AAGIU2/7MVemKnay7eEwlRKtmsD3NDuMPAcirfrlGTQb7L5tg=
+	t=1725456237; cv=none; b=hVaNOh+jjpoWlf9hmQ0F6se/qDymUUMbPHJnpqoZpD0NChc46IieHX66hudHjjACwkNd/yhImaZyWGkoVl9Rrxb2bTnTfiV6I6Tdw9x1iWZC5BzlulN+d7IHqeLidxYuxXF+PAgU/e8iT4LWqa27FjVSpnMSvRvpqid1agxPrI0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725452992; c=relaxed/simple;
-	bh=sFm2HpUoj2CaPhjOOZkuLbu82utaZ07dktMJYD+N+KE=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type:Content-Disposition; b=RAiYGUJrTnRyNEheR8CR9z4kdD2VBhg1DaoB5kZ8YRotatk3K+OGGYlaSJq1lCNvRV7T6r24KqhAwJjyxoP0kf6o5MMxKTfMfmo2911sElmlCGTx1T3NGRiL3rcWx40D/ZF8HGxGh9rr4/kDa9v+ehrfniNQTXxp1lghz34cHNA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iorw.io; spf=none smtp.mailfrom=iorw.io; arc=none smtp.client-ip=54.243.244.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iorw.io
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=iorw.io
-X-QQ-mid: bizesmtp91t1725452913tk5jw6rs
-X-QQ-Originating-IP: SaysuuqQVKOz++TcBwpN6cWTk6uo5XmvwZdgQeuDIY8=
-Received: from localhost.localdomain ( [203.119.160.23])
-	by bizesmtp.qq.com (ESMTP) with 
-	id ; Wed, 04 Sep 2024 20:28:22 +0800 (CST)
-X-QQ-SSF: 0000000000000000000000000000000
-X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 956775205899086131
-From: Zigit Zo <zig@iorw.io>
-To: stappers@stappers.nl
-Cc: anton.ivanov@cambridgegreys.com,
-	bjorn3_gh@protonmail.com,
-	gary@garyguo.net,
-	johannes@sipsolutions.net,
-	linux-kernel@vger.kernel.org,
-	linux-um@lists.infradead.org,
-	llvm@lists.linux.dev,
-	mingo@redhat.com,
-	nathan@kernel.org,
-	ndesaulniers@google.com,
-	ojeda@kernel.org,
-	richard@nod.at,
-	rust-for-linux@vger.kernel.org,
-	tglx@linutronix.de,
-	x86@kernel.org,
-	zig@iorw.io
-Subject: Re: [PATCH 1/2] rust: arch/um: use 'static' relocation model for uml modules
-Date: Wed,  4 Sep 2024 20:28:10 +0800
-Message-ID: <477D5EA32B25AA05+ZthOusZtXttQOf3B@evil>
-X-Mailer: git-send-email 2.46.0
-In-Reply-To: <ZtgopAHp+I2+xCIz@gpm.stappers.nl>
-References: <20240903130606.292935-1-zig@iorw.io> <FD7D773099A0C7EC+20240903130606.292935-2-zig@iorw.io> <ZtgopAHp+I2+xCIz@gpm.stappers.nl>
+	s=arc-20240116; t=1725456237; c=relaxed/simple;
+	bh=z/6x6HxIH7lyVMLfedwKLVfYeqbo5dz4ARrxodKWaGA=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=k0qK9hXs+wI+4XlKwH4c7l/8lZNOvz3Dz82CWYptuAq4cviZ3dAPM9famigYzLDs0vZHmjhKFxqL6day3ERP/Xx4Yspej4vWtm920TdgUd2OdzUCQi2EjcCcvApKkmfpKZf13GtvAeG5GrSiuWvh5fl7rlQcnpiuv2US4g67Ctk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com; spf=pass smtp.mailfrom=igalia.com; dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b=CWFPRWOv; arc=none smtp.client-ip=178.60.130.6
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=igalia.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b="CWFPRWOv"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
+	s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
+	References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
+	Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+	Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+	List-Subscribe:List-Post:List-Owner:List-Archive;
+	bh=3NFOAj+YITGbfqpTG/opvnFh0aZiVcPLLOMCI+yzbOk=; b=CWFPRWOvcrBLl2epmgxOBK+14F
+	dEQApEgNExEwBZ14+CgbVTnnDQ4K+7BuxBSDUNCmg1ldMcD5BKMBmO4riT2D4v3/qKNGZNNppqtzT
+	vEegc936UAvgoK+YXt+NjWTHZYO2FtVT+nb7R58EtCCnXn9VT4fbZFCt+7Ksx3j3XzQkw2oYAdvhm
+	HalhWYyKBvlZToyj8t4oyrwwZBL40CCtb8ptWVxggb4iHHCSDstX+jtsgNZY2Xzyco0i78Y1ynVrC
+	AUCJthxzO4RdPKfcP1c8VS6BII5N4rEZUEucV8wbBGYii6dSE0bu02rS4WlXAPSb3b5kAPqlg1a76
+	unFA51Kg==;
+Received: from [177.172.122.98] (helo=[192.168.15.100])
+	by fanzine2.igalia.com with esmtpsa 
+	(Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
+	id 1slpyy-009WNA-HT; Wed, 04 Sep 2024 15:23:36 +0200
+Message-ID: <63bbeec6-718f-49ad-974d-fb3958bd1564@igalia.com>
+Date: Wed, 4 Sep 2024 10:23:26 -0300
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH RESEND] selftests/futex: Order calls in futex_requeue
+To: Edward Liaw <edliaw@google.com>
+Cc: linux-kernel@vger.kernel.org, Frederic Weisbecker <frederic@kernel.org>,
+ Bill Wendling <morbo@google.com>, Thomas Gleixner <tglx@linutronix.de>,
+ Ingo Molnar <mingo@redhat.com>, Anna-Maria Behnsen
+ <anna-maria@linutronix.de>, Shuah Khan <shuah@kernel.org>,
+ Peter Zijlstra <peterz@infradead.org>, Marco Elver <elver@google.com>,
+ Nick Desaulniers <ndesaulniers@google.com>,
+ Davidlohr Bueso <dave@stgolabs.net>, Nathan Chancellor <nathan@kernel.org>,
+ Stephen Boyd <sboyd@kernel.org>, Oleg Nesterov <oleg@redhat.com>,
+ Justin Stitt <justinstitt@google.com>, Dmitry Vyukov <dvyukov@google.com>,
+ Darren Hart <dvhart@infradead.org>, linux-kselftest@vger.kernel.org,
+ kernel-team@android.com, Muhammad Usama Anjum <usama.anjum@collabora.com>,
+ Davidlohr Bueso <dbueso@suse.de>, llvm@lists.linux.dev,
+ John Stultz <jstultz@google.com>
+References: <20240903203915.3383774-1-edliaw@google.com>
+Content-Language: en-US
+From: =?UTF-8?Q?Andr=C3=A9_Almeida?= <andrealmeid@igalia.com>
+In-Reply-To: <20240903203915.3383774-1-edliaw@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:iorw.io:qybglogicsvrgz:qybglogicsvrgz8a-1
 
-On Wed, Sep 04, 2024 at 11:30:12AM +0200, Geert Stappers wrote:
-> I failed to match the actual change with the commit message.  Consider
-> that ignorance on my side.
+Hi Edward,
 
-FYI, I'm using the master branch of the upstream, but yes it's in the
-'rust-next' or other branches as well, so maybe not a big deal IMO.
+Thanks for your patch!
 
-Of what 'https://rust-for-linux.com/branches' says, maybe I'll use the
-'rust-next' branch for the next time, thanks for pointing out!
+Em 03/09/2024 17:39, Edward Liaw escreveu:
+> Similar to fbf4dec70277 ("selftests/futex: Order calls to
+> futex_lock_pi"), which fixed a flake in futex_lock_pi due to racing
+> between the parent and child threads.
+> 
+> The same issue can occur in the futex_requeue test, because it expects
+> waiterfn to make progress to futex_wait before the parent starts to
+> requeue. This is mitigated by the parent sleeping for WAKE_WAIT_US, but
+> it still fails occasionally. This can be reproduced by adding a sleep in
+> the waiterfn before futex_wait:
+> 
+> TAP version 13
+> 1..2
+> not ok 1 futex_requeue simple returned: 0
+> not ok 2 futex_requeue simple returned: 0
+> not ok 3 futex_requeue many returned: 0
+> not ok 4 futex_requeue many returned: 0
+> 
+> Instead, replace the sleep with barriers to make the sequencing
+> explicit.
+> 
 
-> I see a problem in just renaming a variable, might be my problem.  Thing
-> is that removal of 'KBUILD_RUSTFLAG += ' feels wrong, hence this posting.
-
-I think this is fine, the 'KBUILD_RUSTFLAG' controls the 'PIE' flag for
-both the kernel itself and the loadable modules. And yes, that's the only
-way I can make the 'PIE' flag out of the modules while keeping the UML
-kernel itself works, and the 'scripts/Makefile.lib' I tought has placed
-those flags correctly.
-
-What about adding a 'static' flag to the 'arch/um/Makefile' explicitly,
-
----
-KBUILD_RUSTFLAGS_KERNEL += -Crelocation-model=pie
-KBUILD_RUSTFLAGS_MODULE += -Crelocation-model=static
----
-
-but that's just a redundant of the already defined 'KBUILD_RUSTFLAGS'.
-Have no more ideas what can this flag goes wrong :(
+Reviewed-by: André Almeida <andrealmeid@igalia.com>
