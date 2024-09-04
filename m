@@ -1,120 +1,149 @@
-Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B11C51D04A1
-	for <llvm@lists.linux.dev>; Wed,  4 Sep 2024 14:36:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=93.17.235.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F11711DFE0A;
+	Wed,  4 Sep 2024 15:19:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725460580; cv=none; b=muypwSm+brZ9JrwQMIq4YXmcro1U0MQ+ujmTmy9ergt/b2+vdZOCRnyDsfDqwzvQdMGK3sKs4lRcC7ZwQ+NZzvJHQnj+/28lGx7nYEPG0vo066wtQrJKhY40qwf2ZAer7i2OJ6tODlwLNe2HwRoq9GmnotkCeveATH0GvHOg0iY=
+	t=1725463169; cv=none; b=h7JAYg3pNwDHy6SLb7NTB51DWqRKyKa/koGKACB6ozjVgiDNKcn/xR3p+i2kTMYf8y+xLZ/6nz1lsOeAzQKfLCKbioUjjRSKNZ6GaBsXNWhUg8OtGtX1Qfm9C9xIQrMDu6CHAUGaGGXAdN1lmQItz9a+6yYckC3UBc+x9W5ZcWQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725460580; c=relaxed/simple;
-	bh=mrcpBZCNCDHUN8s1jct5aPcG3/C9zlzErsh6HAxxzVU=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=BU8tYwZgM1wUklcuv3/A8c4VzhyITPhDrbfGyCFB6rjXSk2/5T0+SqM91zUFZzrJEIR5yik7+v2B0WuSlygJFNmEsPMmo5iXXvLsIAJpyYaQV14Xv4/k+lyhZye3Rh079MiM3yFr4flWFvtPl5K9qVNv7viXyVY+aBq6JHOkMqw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=csgroup.eu; spf=pass smtp.mailfrom=csgroup.eu; arc=none smtp.client-ip=93.17.235.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=csgroup.eu
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=csgroup.eu
-Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
-	by localhost (Postfix) with ESMTP id 4WzQ685Z1lz9sS7;
-	Wed,  4 Sep 2024 16:36:16 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from pegase2.c-s.fr ([172.26.127.65])
-	by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id j3Oi0qoOC3QN; Wed,  4 Sep 2024 16:36:16 +0200 (CEST)
-Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
-	by pegase2.c-s.fr (Postfix) with ESMTP id 4WzQ684j7Sz9sRy;
-	Wed,  4 Sep 2024 16:36:16 +0200 (CEST)
-Received: from localhost (localhost [127.0.0.1])
-	by messagerie.si.c-s.fr (Postfix) with ESMTP id 8DE208B77A;
-	Wed,  4 Sep 2024 16:36:16 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from messagerie.si.c-s.fr ([127.0.0.1])
-	by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
-	with ESMTP id MDg64KpQGgK2; Wed,  4 Sep 2024 16:36:16 +0200 (CEST)
-Received: from [192.168.234.246] (unknown [192.168.234.246])
-	by messagerie.si.c-s.fr (Postfix) with ESMTP id 9D5618B778;
-	Wed,  4 Sep 2024 16:36:15 +0200 (CEST)
-Message-ID: <070a2aa1-a804-4124-ad89-c43e09dc3ded@csgroup.eu>
-Date: Wed, 4 Sep 2024 16:36:15 +0200
+	s=arc-20240116; t=1725463169; c=relaxed/simple;
+	bh=gSq7vb9u4cJxaHzBIHobaINd3seRBAaJwCchcacHiwc=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=NOZZ9s2PDr3Y7LLFR4KplmqWENlFHckTuHkm5MN2/UUslMHB5a1VNdCUK+kDENlzdrKTJQiuk6RMnOOfIE9HvJhOaqiHwUuTvgJzd/wTqhUlvlhvNtWGs12MqOXZbdxe4KP4Q2JCleGXXFULklmcOovM+iJANN6xoYQ9ZPMqCm4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=i+0iyzom; arc=none smtp.client-ip=198.175.65.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="i+0iyzom"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1725463168; x=1756999168;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=gSq7vb9u4cJxaHzBIHobaINd3seRBAaJwCchcacHiwc=;
+  b=i+0iyzomR7TWq/iyxCaB5QSJM06FRAgkINveLf8iU6GrDMJmgDggdMiA
+   B+ldabLhkd1olNKdBp2TuP9ZQLIh2PdrcQer22nxMdKH2Nol/At00/Mf3
+   OSQmGoQvMftWqHhiuJmRUps+81y68Qw3eASSlmnilvbOS99MCyl97e9Dx
+   y/Z/9EMl5/OYmjdayteUbdflPcbr0ZZci/8AQIP8hRizL/CsB/TK2KNaC
+   atrPyyXRC7TqK+KR3ZvHsDGMVimqhUeiWEKXlLhE1tgZcXCdKsWubI8ba
+   SnKJ4d5GW1j9CxSX1HnC5DUl1ozNjd3hA44XJLymKMTep4YKmfJioEVvy
+   g==;
+X-CSE-ConnectionGUID: H8JwbiBxRn2OlFuhY16pLg==
+X-CSE-MsgGUID: DQreXhztTXGShGL/ybjBLw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11185"; a="24275858"
+X-IronPort-AV: E=Sophos;i="6.10,202,1719903600"; 
+   d="scan'208";a="24275858"
+Received: from orviesa007.jf.intel.com ([10.64.159.147])
+  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Sep 2024 08:19:27 -0700
+X-CSE-ConnectionGUID: u3zG7jDOTxqTflRbOjvuRg==
+X-CSE-MsgGUID: MggbZ93rSCGjKXuyB/RoxQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.10,202,1719903600"; 
+   d="scan'208";a="65823709"
+Received: from lkp-server01.sh.intel.com (HELO 9c6b1c7d3b50) ([10.239.97.150])
+  by orviesa007.jf.intel.com with ESMTP; 04 Sep 2024 08:19:24 -0700
+Received: from kbuild by 9c6b1c7d3b50 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1slrn0-0008Fr-1Y;
+	Wed, 04 Sep 2024 15:19:22 +0000
+Date: Wed, 4 Sep 2024 23:19:14 +0800
+From: kernel test robot <lkp@intel.com>
+To: Janne Grunau <j@jannau.net>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [asahilinux:bits/200-dcp 230/238]
+ drivers/gpu/drm/apple/audio.c:212:16: error: call to undeclared function
+ 'snd_interval_rate_bits'; ISO C99 and later do not support implicit function
+ declarations
+Message-ID: <202409042355.WqksqtFY-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5 0/5] Wire up getrandom() vDSO implementation on powerpc
-To: "Jason A. Donenfeld" <Jason@zx2c4.com>
-Cc: Andrew Morton <akpm@linux-foundation.org>,
- Steven Rostedt <rostedt@goodmis.org>, Masami Hiramatsu
- <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
- Michael Ellerman <mpe@ellerman.id.au>, Nicholas Piggin <npiggin@gmail.com>,
- Naveen N Rao <naveen@kernel.org>, Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling
- <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
- Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
- linuxppc-dev@lists.ozlabs.org, linux-kselftest@vger.kernel.org,
- llvm@lists.linux.dev, linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
- linux-trace-kernel@vger.kernel.org,
- Adhemerval Zanella <adhemerval.zanella@linaro.org>,
- Xi Ruoyao <xry111@xry111.site>
-References: <cover.1725304404.git.christophe.leroy@csgroup.eu>
- <Zthr1nB_RJ56YD3O@zx2c4.com>
-Content-Language: fr-FR
-From: Christophe Leroy <christophe.leroy@csgroup.eu>
-In-Reply-To: <Zthr1nB_RJ56YD3O@zx2c4.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
 
+Hi Janne,
+
+First bad commit (maybe != root cause):
+
+tree:   https://github.com/AsahiLinux/linux bits/200-dcp
+head:   8cd704aefe491d6d33806aa46f191536e926a26f
+commit: 736e62fb8d3925cd950bff001e604faed1defafc [230/238] fixup! WIP: add header test target copied from i915
+config: arm64-allmodconfig (https://download.01.org/0day-ci/archive/20240904/202409042355.WqksqtFY-lkp@intel.com/config)
+compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 05f5a91d00b02f4369f46d076411c700755ae041)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240904/202409042355.WqksqtFY-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202409042355.WqksqtFY-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+   In file included from drivers/gpu/drm/apple/audio.c:17:
+   In file included from include/linux/of_dma.h:14:
+   In file included from include/linux/dmaengine.h:12:
+   In file included from include/linux/scatterlist.h:8:
+   In file included from include/linux/mm.h:2258:
+   include/linux/vmstat.h:500:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     500 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     501 |                            item];
+         |                            ~~~~
+   include/linux/vmstat.h:507:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     507 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     508 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/vmstat.h:514:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     514 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+   include/linux/vmstat.h:519:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     519 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     520 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/vmstat.h:528:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     528 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     529 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+>> drivers/gpu/drm/apple/audio.c:212:16: error: call to undeclared function 'snd_interval_rate_bits'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     212 |         return snd_interval_rate_bits(r, hits.rates);
+         |                ^
+   drivers/gpu/drm/apple/audio.c:448:6: warning: variable 'ret' set but not used [-Wunused-but-set-variable]
+     448 |         int ret;
+         |             ^
+   6 warnings and 1 error generated.
 
 
-Le 04/09/2024 à 16:16, Jason A. Donenfeld a écrit :
-> Hi Christophe, Michael,
-> 
-> On Mon, Sep 02, 2024 at 09:17:17PM +0200, Christophe Leroy wrote:
->> This series wires up getrandom() vDSO implementation on powerpc.
->>
->> Tested on PPC32 on real hardware.
->> Tested on PPC64 (both BE and LE) on QEMU:
->>
->> Performance on powerpc 885:
->> 	~# ./vdso_test_getrandom bench-single
->> 	   vdso: 25000000 times in 62.938002291 seconds
->> 	   libc: 25000000 times in 535.581916866 seconds
->> 	syscall: 25000000 times in 531.525042806 seconds
->>
->> Performance on powerpc 8321:
->> 	~# ./vdso_test_getrandom bench-single
->> 	   vdso: 25000000 times in 16.899318858 seconds
->> 	   libc: 25000000 times in 131.050596522 seconds
->> 	syscall: 25000000 times in 129.794790389 seconds
->>
->> Performance on QEMU pseries:
->> 	~ # ./vdso_test_getrandom bench-single
->> 	   vdso: 25000000 times in 4.977777162 seconds
->> 	   libc: 25000000 times in 75.516749981 seconds
->> 	syscall: 25000000 times in 86.842242014 seconds
-> 
-> Looking good. I have no remaining nits on this patchset; it looks good
-> to me.
-> 
-> A review from Michael would be nice though (in addition to the necessary
-> "Ack" I need to commit this to my tree), because there are a lot of PPC
-> particulars that I don't know enough about to review properly. For
-> example, you use -ffixed-r30 on PPC64. I'm sure there's a good reason
-> for this, but I don't know enough to assess it. And cvdso_call I have no
-> idea what's going on. Etc.
+vim +/snd_interval_rate_bits +212 drivers/gpu/drm/apple/audio.c
 
-You can learn a bit more about cvdso_call in commit ce7d8056e38b 
-("powerpc/vdso: Prepare for switching VDSO to generic C implementation.")
+5e64cc3dc97a4d Martin Povišer 2023-02-23  201  
+5e64cc3dc97a4d Martin Povišer 2023-02-23  202  static int dcpaud_rule_rate(struct snd_pcm_hw_params *params,
+5e64cc3dc97a4d Martin Povišer 2023-02-23  203                               struct snd_pcm_hw_rule *rule)
+5e64cc3dc97a4d Martin Povišer 2023-02-23  204  {
+5e64cc3dc97a4d Martin Povišer 2023-02-23  205  	struct dcp_audio *dcpaud = rule->private;
+5e64cc3dc97a4d Martin Povišer 2023-02-23  206  	struct snd_interval *r = hw_param_interval(params,
+5e64cc3dc97a4d Martin Povišer 2023-02-23  207  				SNDRV_PCM_HW_PARAM_RATE);
+5e64cc3dc97a4d Martin Povišer 2023-02-23  208  	struct dcp_sound_format_mask hits;
+5e64cc3dc97a4d Martin Povišer 2023-02-23  209  
+5e64cc3dc97a4d Martin Povišer 2023-02-23  210          dcpaud_consult_elements(dcpaud, params, &hits);
+5e64cc3dc97a4d Martin Povišer 2023-02-23  211  
+5e64cc3dc97a4d Martin Povišer 2023-02-23 @212          return snd_interval_rate_bits(r, hits.rates);
+5e64cc3dc97a4d Martin Povišer 2023-02-23  213  }
+5e64cc3dc97a4d Martin Povišer 2023-02-23  214  
 
-About the fixed-r30, you can learn more in commit a88603f4b92e 
-("powerpc/vdso: Don't use r30 to avoid breaking Go lang")
+:::::: The code at line 212 was first introduced by commit
+:::::: 5e64cc3dc97a4d727f98515c49478ffab19b3da5 gpu: drm: apple: Add DCP audio driver
 
+:::::: TO: Martin Povišer <povik+lin@cutebit.org>
+:::::: CC: Janne Grunau <j@jannau.net>
 
-> 
-> But anyway, awesome work, and I look forward to the final stretches.
-
-Thanks, looking forward to getting this series applied.
-
-Christophe
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
