@@ -1,101 +1,123 @@
-Received: from mail-ot1-f43.google.com (mail-ot1-f43.google.com [209.85.210.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D2F6238DFC
-	for <llvm@lists.linux.dev>; Wed,  4 Sep 2024 08:28:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F6CC1CCEC2;
+	Wed,  4 Sep 2024 08:35:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725438537; cv=none; b=qioXD84bNWGEYunynYLGuu/oWT5VZI/BLalj14KGgja2hVuPwtHT9FLix71e+0GFe7xxDLI9BRtyR4y8CmMZCgJGrb7E/PHNJDXvsCNVP9Dq4RjbqHBU/2UrrkCsR9qOJILtIFo3qUbwAiaIoUPR23+9TCfvnE1IANxAcAeRG0w=
+	t=1725438904; cv=none; b=E7q4eJ3ItY5zTMvKqsfdOkkxHPKJGh41zV8lvUnyslXF26CMfgn9HF388/g5HOJOj7U3VNpofK6YSr1sXqzbBLSr78hFb6aWAqJ/qzeHwJL3LgMcCy2Ummom/QwWNR4LWsw7nhT6BbNQ5b37D1OQ7abWr8OZbH2l/SVw0IOejbQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725438537; c=relaxed/simple;
-	bh=jdt4L7B/HVtgHJTf5Ay/37Kjc9tEjPIOz23j2vKvezg=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=vEBbS9IiGA9DA5KfbTrCe5kJ9hnCM3Kn5Zm7H3Nhy13kKpO9YrUjdA+dEreIqjc3ISMDQj8mi4vq33yWrYf3m6DQv69B0mqwfeK0RfzgVaD/AlNmu/RvLzNwfzwzoD3GN1+KPNCPe29j+QCSZvo114z/sq4IRuWmwmrCwhGJDeA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=P5Vf8sbC; arc=none smtp.client-ip=209.85.210.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1725438904; c=relaxed/simple;
+	bh=R3wVcA9VHYHoeglK9f9HjbBFuZQCz+14TtUM16JKt48=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=qRkgh5776xcm8SNaFwjIk7bLVJrbM97OMG8cZdtI9gxBLvBuxwiMmL7N52kvZfkn2R9g2ZFTZBp3gA6FBAmCuhwEsQoZgbQCiKBTCRGtv9XjxWPr0VaqiNGMKkYUiEJpxvJKmx6RDbqJeg4f/3r6dg55xj3/ASF9SyflC5WuCOw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=GL+Yg4NB; arc=none smtp.client-ip=192.198.163.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="P5Vf8sbC"
-Received: by mail-ot1-f43.google.com with SMTP id 46e09a7af769-70f59acf6c7so311523a34.3
-        for <llvm@lists.linux.dev>; Wed, 04 Sep 2024 01:28:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1725438535; x=1726043335; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=jdt4L7B/HVtgHJTf5Ay/37Kjc9tEjPIOz23j2vKvezg=;
-        b=P5Vf8sbC7etx/Ld/aOgwbE6XjGawGjZeFigIOudyzRzq4CS65Q1WpurRNCDrbqlH7C
-         wdZq+OJbqp2NcVnWWiIsRyBItMmRsxwUpvfhNQBZhgPyTIjOfz3G8Wj+Iv0XYCUWK6zh
-         hd3F+WHGFt5pWyyN4Atgb4lqAKBcpRCWdOmInI07AGl7lEVtpOPGVERP4gjXnI4hc5t3
-         idkPVgSV2hlMFdFN01uztTD4zMX/gs/tG9AxCuqzwDBwXH5Yqq1l7VTlUKxaI6+3McfC
-         4hSRJ3BILQNEYretcko1rxLN6LXqaN6wZsMMvcVrRHdrsEMqKkM+P4Hf+TybZTfjmbNc
-         hQ9Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1725438535; x=1726043335;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=jdt4L7B/HVtgHJTf5Ay/37Kjc9tEjPIOz23j2vKvezg=;
-        b=r5FPJqed2gxpa2wI5qEde+2y1KtAhS8Nw2y/FxTCrewH6O1CiCq06wzagKT7vMnoeY
-         JKSl5fADO1pcxAmJ6f4YVf0hNxChkVUBvarXPx4LwzxqJbIZVFotWCXT+rD4Xk3bhCth
-         Nv6k3cruA7ghch0hL24IKNpRgAUtLwxTrx8VgBs+epodsQp6PQsFTBcnFohrGN6gBEd+
-         Lxn0+R5L1I/2/gzF+pKGe/C9PtDdtQcyzlgEBs9Xhtn3Bn/WFVcCFphIH5rBDtLWv253
-         S1S4mRmFsPnw6KWaew8pSMA3KrpZIUcz8syTNB3N46P95k9LBj0d58cQxNJ9jyTpJ6SN
-         2Xjg==
-X-Forwarded-Encrypted: i=1; AJvYcCXL/yr9YZBqDqxS2IWwnkPlpsGyMlR7tum39qMQJO4zsJFEw8xMN/6B0cj7lHAUkx6KlSb0@lists.linux.dev
-X-Gm-Message-State: AOJu0YzJ8fRv74v0XnLQmFljwZKWOsIUOJOvh4xCbr3B7J6ONINELDQY
-	KvsqG+rKJlc0TbPn6EcS0fIVZzbJMuapxYCaFv8E2Z4P3b0EPzI2BhgzxDpkuht44ml7r6dtxzt
-	w7FDjXj3OlzogQeKzddKAwrd2JMI=
-X-Google-Smtp-Source: AGHT+IG7ayScQVV2ACfQehNhc8C8kUzsvNWbtTACdA8kQELKf2OV6f3hSmmCq0rgCq8R7f/fWdFT+b2PvKUGt44U9CM=
-X-Received: by 2002:a05:6359:4c93:b0:1ac:a26c:9e91 with SMTP id
- e5c5f4694b2df-1b7e39c063dmr1048812355d.4.1725438534828; Wed, 04 Sep 2024
- 01:28:54 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="GL+Yg4NB"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1725438902; x=1756974902;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=R3wVcA9VHYHoeglK9f9HjbBFuZQCz+14TtUM16JKt48=;
+  b=GL+Yg4NBrsvlDUE42rBtCGbHyIX7+6KO5GERbZ9yAiUhYcIEe0YIFCsG
+   pMDsbpjVVZwUsmOGthrPqASFCV2J+2NqGarO0XBFtdcn0tFcSKmFW7FRG
+   YG8pGk7xHaiNfFyPHXRJhKe7b+UAFNYX2fiFnbZ+4KwM8Mh42aqOnyvIL
+   2rzW5g3ro2WRGEmDO4svk5uYphpFBLHB7Zd6q1eJ5vzFM9Xzb1Q9KRr5y
+   ++QlBU6/6tgV5f+n8NdG/cZ6YoRNn81+ShBx0/kU5GKjlaPaJ5Xp/ahri
+   +gtYNtqeL+PlY68UhRL2qWrcBo2xX8Ah9mw9q1OoyLP2RymMTsUCG9SFL
+   g==;
+X-CSE-ConnectionGUID: +pdPCbN9TuykHuaYBGImbQ==
+X-CSE-MsgGUID: Ba5dqRkiTZag3ufxzGp+pQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11184"; a="24236102"
+X-IronPort-AV: E=Sophos;i="6.10,201,1719903600"; 
+   d="scan'208";a="24236102"
+Received: from orviesa007.jf.intel.com ([10.64.159.147])
+  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Sep 2024 01:35:01 -0700
+X-CSE-ConnectionGUID: H1kCEl9mQAGNrmexilwP1w==
+X-CSE-MsgGUID: 63BFkn3gQUqU46GqoJ59Ow==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.10,201,1719903600"; 
+   d="scan'208";a="65718197"
+Received: from lkp-server01.sh.intel.com (HELO 9c6b1c7d3b50) ([10.239.97.150])
+  by orviesa007.jf.intel.com with ESMTP; 04 Sep 2024 01:35:00 -0700
+Received: from kbuild by 9c6b1c7d3b50 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1sllTe-0007is-0K;
+	Wed, 04 Sep 2024 08:34:58 +0000
+Date: Wed, 4 Sep 2024 16:34:22 +0800
+From: kernel test robot <lkp@intel.com>
+To: Sean Christopherson <seanjc@google.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [sean-jc:x86/cleanup_smp_nmi_shootdown 1/2]
+ arch/x86/kernel/reboot.c:596:34: error: use of undeclared identifier
+ 'crash_ipi_issued'
+Message-ID: <202409041652.pnFsMUJ8-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20240903-mips-rust-v1-0-0fdf0b2fd58f@flygoat.com>
- <20240903-mips-rust-v1-3-0fdf0b2fd58f@flygoat.com> <CANiq72=z1yJm-B_ie=GfueOF1qksaSD9txgFU1YQo2tZx0qQPg@mail.gmail.com>
- <d9591a84-9a0f-4046-9b2a-437061f6882b@app.fastmail.com> <CANiq72m5iFcqRU_qdUCZkoV8ayPhtQQq3TTEDRUYfMEsnNqTDg@mail.gmail.com>
- <6f6f04d7-55b3-4714-9bcd-cb4e1ae6c86a@app.fastmail.com> <CANiq72mvTTgyTjDCWBz_kOdY1f4gopAtWxyC4P4c+Lr0YVkzLA@mail.gmail.com>
- <a6959bc0-f0bb-425b-b3b1-3123d3b809b5@app.fastmail.com>
-In-Reply-To: <a6959bc0-f0bb-425b-b3b1-3123d3b809b5@app.fastmail.com>
-From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date: Wed, 4 Sep 2024 10:28:42 +0200
-Message-ID: <CANiq72mjKEpaBqKccZPiNzpsJL65jb2zp9Ve4FHK0fRd014ACw@mail.gmail.com>
-Subject: Re: [PATCH 3/3] rust: Enable for MIPS
-To: Jiaxun Yang <jiaxun.yang@flygoat.com>
-Cc: Masahiro Yamada <masahiroy@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
-	Nicolas Schier <nicolas@fjasle.eu>, Richard Weinberger <richard@nod.at>, 
-	Anton Ivanov <anton.ivanov@cambridgegreys.com>, Johannes Berg <johannes@sipsolutions.net>, 
-	Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
-	"H. Peter Anvin" <hpa@zytor.com>, Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, 
-	Wedson Almeida Filho <wedsonaf@gmail.com>, Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, 
-	=?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
-	Benno Lossin <benno.lossin@proton.me>, Andreas Hindborg <a.hindborg@samsung.com>, 
-	Alice Ryhl <aliceryhl@google.com>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
-	Steven Rostedt <rostedt@goodmis.org>, Masami Hiramatsu <mhiramat@kernel.org>, 
-	Mark Rutland <mark.rutland@arm.com>, Jonathan Corbet <corbet@lwn.net>, Alex Shi <alexs@kernel.org>, 
-	Yanteng Si <siyanteng@loongson.cn>, Nick Desaulniers <ndesaulniers@google.com>, 
-	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, linux-kbuild@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-um@lists.infradead.org, 
-	rust-for-linux@vger.kernel.org, 
-	"linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>, linux-trace-kernel@vger.kernel.org, 
-	linux-doc@vger.kernel.org, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Wed, Sep 4, 2024 at 9:38=E2=80=AFAM Jiaxun Yang <jiaxun.yang@flygoat.com=
-> wrote:
->
-> Reported at:
-> https://github.com/rust-embedded/wg/issues/792#issuecomment-2328133517
+Hi Sean,
 
-Thanks for the link! Added to our bullet point about the target spec
-file in https://github.com/Rust-for-Linux/linux/issues/2.
+FYI, the error/warning was bisected to this commit, please ignore it if it's irrelevant.
 
-Cheers,
-Miguel
+tree:   https://github.com/sean-jc/linux x86/cleanup_smp_nmi_shootdown
+head:   2d66e97505d0772d0ae26174538d4368541dfec7
+commit: c7de2d2c0cab7d890294b5437faf1bccb6bc978d [1/2] x86/reboot: Open code nmi_shootdown_cpus_on_restart() into its sole user
+config: i386-buildonly-randconfig-001-20240904 (https://download.01.org/0day-ci/archive/20240904/202409041652.pnFsMUJ8-lkp@intel.com/config)
+compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240904/202409041652.pnFsMUJ8-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202409041652.pnFsMUJ8-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> arch/x86/kernel/reboot.c:596:34: error: use of undeclared identifier 'crash_ipi_issued'
+     596 |                 if (IS_ENABLED(CONFIG_SMP) && !crash_ipi_issued)
+         |                                                ^
+   1 error generated.
+
+
+vim +/crash_ipi_issued +596 arch/x86/kernel/reboot.c
+
+   576	
+   577	static void emergency_reboot_disable_virtualization(void)
+   578	{
+   579		local_irq_disable();
+   580	
+   581		/*
+   582		 * Disable virtualization on all CPUs before rebooting to avoid hanging
+   583		 * the system, as VMX and SVM block INIT when running in the host.
+   584		 *
+   585		 * We can't take any locks and we may be on an inconsistent state, so
+   586		 * use NMIs as IPIs to tell the other CPUs to disable VMX/SVM and halt.
+   587		 *
+   588		 * Do the NMI shootdown even if virtualization is off on _this_ CPU, as
+   589		 * other CPUs may have virtualization enabled.
+   590		 */
+   591		if (rcu_access_pointer(cpu_emergency_virt_callback)) {
+   592			/* Safely force _this_ CPU out of VMX/SVM operation. */
+   593			cpu_emergency_disable_virtualization();
+   594	
+   595			/* Disable VMX/SVM and halt on other CPUs. */
+ > 596			if (IS_ENABLED(CONFIG_SMP) && !crash_ipi_issued)
+   597				nmi_shootdown_cpus(NULL);
+   598		}
+   599	}
+   600	#else
+   601	static void emergency_reboot_disable_virtualization(void) { }
+   602	#endif /* CONFIG_KVM_INTEL || CONFIG_KVM_AMD */
+   603	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
