@@ -1,136 +1,84 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D5581CF7AE;
-	Wed,  4 Sep 2024 17:23:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6AFF412BEBB;
+	Wed,  4 Sep 2024 18:29:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725470621; cv=none; b=EypjB2jc20VNgrnu4xdEpeu+bTa0hSr0bUjQ8o/qo/X9Mj0BF7kluLq2Qkljjd0vUINDYogpaFi7IIk/fblJ1gY4L25hMYuzlh+3KpTxYNlSp9M7ko042HG450cv2LkB5BG5EJvjfPDBXF2hpnFDGVyk75zDhEEwkX/oQwB6CfE=
+	t=1725474592; cv=none; b=VCR3QGF1Grx3NKDscRoKLpumFuNJ+ebCoD5xHylDUm6cXiRFuIn7MdUwP6Bxaq2DuWZimyl5EArI7ITNIk9h73UcTCQ2GkdxO6fVRyVL94ZslYkik8LFQ8iIzWtvDABpco9OQ7OKXr5bzYWEwswFCqnj485nNGrCEUR0x0knhIQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725470621; c=relaxed/simple;
-	bh=ILuonY5731KqpUyvDIpzSQYrE7kjsGqjXWSqJ8pp3+g=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Ny6wffCHkq1r+GHQZYEHO+/1PzAtaOIV2WphGDQagc6SF33Z9awZlGZTqBar5Ib9jyPq9K/bEop7e0vOIrArDTyDIk59gWLBIQL9CRS3tCDFPa8cyc896qwnenlIwbYC8mB6evS9TMCo4G+8/drTJxmQ+eDC7ZwwYQYN8bPLGGM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Qm1uEBSn; arc=none smtp.client-ip=192.198.163.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1725474592; c=relaxed/simple;
+	bh=Ee/uOpTbeXyGEGDg5RzUmhHX88O/8p8BzMH+PG23OOo=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=NjI0K4uUKTY9Cw0GwhHoRhIGp5UCgsqye+GIzqzBj9jP2OzKdp2zE9xNVBuu4dWN6cIosBBKwomq5RCxSeRfklQsRLvWxDWqLJSTZKfzUyb3Rlp13QdEivWa04/YcaKhOeRREpR/wRAKRVcvbZu24qGAyTI8tweVBmMuhl+6zmg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=j3+j3Ta6; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Qm1uEBSn"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1725470619; x=1757006619;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=ILuonY5731KqpUyvDIpzSQYrE7kjsGqjXWSqJ8pp3+g=;
-  b=Qm1uEBSnDPHOWDVx7+0a+rxKFadR68t+2Phbm1MYarl57FOcSJEF8Wb2
-   aZZup1tbqjaLQIhwufBRBovcNvPGgi90j3Wm/cP+Hni9fce2pRckRyaYP
-   zphgDGOv4Snqect2mPlBbzBc0vNN5QD+EgcUmbZNqkUx0NI0jhkzbAUMQ
-   gFZRggtbOH5eKnaMJ1uR7r4o5av9aKrDvGRTdy1aVYxjOhZrjsoaSEC8f
-   WKaSs1Bd19MhhJ+sdhAX2qh42N63C1rZoFmQxxVBDw8SxB9ptLaa5FnOF
-   x2Ys642sI39VbM4HNCcCpAI00OBtI1cIrLUH8OADzN5hq4Kk7zAHx5eq1
-   g==;
-X-CSE-ConnectionGUID: RU3pyqTNQNa/1Bn/H7o2zA==
-X-CSE-MsgGUID: xYUQpXUQSMKkPS10dN8/sQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11185"; a="24340542"
-X-IronPort-AV: E=Sophos;i="6.10,202,1719903600"; 
-   d="scan'208";a="24340542"
-Received: from orviesa010.jf.intel.com ([10.64.159.150])
-  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Sep 2024 10:23:38 -0700
-X-CSE-ConnectionGUID: 19/cCM0JQEuNh6FlCbvv3w==
-X-CSE-MsgGUID: 7/kbMBt0T8CdPYilquRsZQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.10,202,1719903600"; 
-   d="scan'208";a="65177629"
-Received: from lkp-server01.sh.intel.com (HELO 9c6b1c7d3b50) ([10.239.97.150])
-  by orviesa010.jf.intel.com with ESMTP; 04 Sep 2024 10:23:34 -0700
-Received: from kbuild by 9c6b1c7d3b50 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1sltj8-0008OJ-1z;
-	Wed, 04 Sep 2024 17:23:30 +0000
-Date: Thu, 5 Sep 2024 01:23:00 +0800
-From: kernel test robot <lkp@intel.com>
-To: Mariel Tinaco <Mariel.Tinaco@analog.com>, linux-iio@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Jonathan Cameron <jic23@kernel.org>,
-	Lars-Peter Clausen <lars@metafoo.de>, Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Michael Hennerich <Michael.Hennerich@analog.com>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Marcelo Schmitt <marcelo.schmitt1@gmail.com>,
-	Dimitri Fedrau <dima.fedrau@gmail.com>,
-	David Lechner <dlechner@baylibre.com>,
-	Nuno =?iso-8859-1?Q?S=E1?= <noname.nuno@gmail.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [PATCH v3 2/2] iio: dac: support the ad8460 Waveform DAC
-Message-ID: <202409050100.CGStaazP-lkp@intel.com>
-References: <20240904023040.23352-3-Mariel.Tinaco@analog.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="j3+j3Ta6"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 14092C4CEC2;
+	Wed,  4 Sep 2024 18:29:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1725474592;
+	bh=Ee/uOpTbeXyGEGDg5RzUmhHX88O/8p8BzMH+PG23OOo=;
+	h=From:Subject:Date:To:Cc:From;
+	b=j3+j3Ta65uGmhMbn+H+ijge53GhI3v2HHEs3hZm62sqSbljpAU2Xv1alD8mGJ0B/x
+	 Wjt/nisZFG3xuN7/GuirWjz2sy7UxGKuE/HPOcGOR4Aj4p8LMQyIKrME5RgeR4AFAP
+	 oABpw6FppErh6x71ib0neqtO45MSg2AdstPOh/JCSnDMVOe5ZB1/79W/8xrVbMvfVA
+	 g2eVKWDgwdhJHaNvRzEIEuYZoQErwYjyEN8waTOvSX6ocqqt+g69jzfMXeObfD6h/d
+	 FRmCPh300vpC32ccmOkkysvuTmXXHJ50AYPlEORoR7ePbP7VfFmCSrgdc3ZvGICrCP
+	 cGvtVnzTD1mxQ==
+From: Simon Horman <horms@kernel.org>
+Subject: [PATCH net-next v2 0/2] octeontx2: Address some warnings
+Date: Wed, 04 Sep 2024 19:29:35 +0100
+Message-Id: <20240904-octeontx2-sparse-v2-0-14f2305fe4b2@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240904023040.23352-3-Mariel.Tinaco@analog.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAA+n2GYC/3WNywqDMBBFf0Vm3SlJ+hC76n8UF4leNbQkMgliE
+ f+9wX2Xh8M9d6ME8Uj0qDYSLD75GAqYU0XdZMMI9n1hMspcVaMuHLuMGPJqOM1WEviue4e6qW/
+ OOSqzWTD49Ui+KCBzwJqpLWbyKUf5Hl+LPvz/7KJZ8aCLUw06p+zzDQn4nKOM1O77/gM+RUTJu
+ wAAAA==
+To: Sunil Goutham <sgoutham@marvell.com>, 
+ Linu Cherian <lcherian@marvell.com>, Geetha sowjanya <gakula@marvell.com>, 
+ Jerin Jacob <jerinj@marvell.com>, Hariprasad Kelam <hkelam@marvell.com>, 
+ Subbaraya Sundeep <sbhatta@marvell.com>
+Cc: "David S. Miller" <davem@davemloft.net>, 
+ Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, 
+ Paolo Abeni <pabeni@redhat.com>, Nathan Chancellor <nathan@kernel.org>, 
+ Nick Desaulniers <ndesaulniers@google.com>, 
+ Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
+ netdev@vger.kernel.org, llvm@lists.linux.dev
+X-Mailer: b4 0.14.0
 
-Hi Mariel,
+Hi,
 
-kernel test robot noticed the following build errors:
+This patchset addresses some warnings flagged by Sparse, gcc-14, and
+clang-18 in files touched by recent patch submissions.
 
-[auto build test ERROR on c4b43d8336e52dce6d124e428aa3b71703e62647]
+Although these changes do not alter the functionality of the code, by
+addressing them real problems introduced in future which are flagged by
+Sparse will stand out more readily.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Mariel-Tinaco/dt-bindings-iio-dac-add-docs-for-ad8460/20240904-103413
-base:   c4b43d8336e52dce6d124e428aa3b71703e62647
-patch link:    https://lore.kernel.org/r/20240904023040.23352-3-Mariel.Tinaco%40analog.com
-patch subject: [PATCH v3 2/2] iio: dac: support the ad8460 Waveform DAC
-config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20240905/202409050100.CGStaazP-lkp@intel.com/config)
-compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240905/202409050100.CGStaazP-lkp@intel.com/reproduce)
+Compile tested only.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202409050100.CGStaazP-lkp@intel.com/
+---
+Changes in v2:
+- Updated cover letter - it incorrectly claimed both patches
+  addressed issues flagged by Sparse
+- Added Tested-by tags from Geetha sowjanya. Thanks!
+- Link to v1: https://lore.kernel.org/r/20240903-octeontx2-sparse-v1-0-f190309ecb0a@kernel.org
 
-All errors (new ones prefixed by >>):
+---
+Simon Horman (2):
+      octeontx2-af: Pass string literal as format argument of alloc_workqueue()
+      octeontx2-pf: Make iplen __be16 in otx2_sqe_add_ext()
 
->> drivers/iio/dac/ad8460.c:165:9: error: call to undeclared function 'get_unaligned_le16'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     165 |         *val = get_unaligned_le16(state->spi_tx_buf);
-         |                ^
->> drivers/iio/dac/ad8460.c:172:2: error: call to undeclared function 'put_unaligned_le16'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     172 |         put_unaligned_le16(FIELD_PREP(AD8460_DATA_BYTE_FULL_MSK, val),
-         |         ^
-   2 errors generated.
+ drivers/net/ethernet/marvell/octeontx2/af/rvu.c        | 4 ++--
+ drivers/net/ethernet/marvell/octeontx2/nic/otx2_txrx.c | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
+base-commit: 54f1a107bd034e8d9052f5642280876090ebe31c
 
-vim +/get_unaligned_le16 +165 drivers/iio/dac/ad8460.c
-
-   155	
-   156	static int ad8460_get_hvdac_word(struct ad8460_state *state, int index, int *val)
-   157	{
-   158		int ret;
-   159	
-   160		ret = regmap_bulk_read(state->regmap, AD8460_HVDAC_DATA_WORD_LOW(index),
-   161				       &state->spi_tx_buf, AD8460_DATA_BYTE_WORD_LENGTH);
-   162		if (ret)
-   163			return ret;
-   164	
- > 165		*val = get_unaligned_le16(state->spi_tx_buf);
-   166	
-   167		return ret;
-   168	}
-   169	
-   170	static int ad8460_set_hvdac_word(struct ad8460_state *state, int index, int val)
-   171	{
- > 172		put_unaligned_le16(FIELD_PREP(AD8460_DATA_BYTE_FULL_MSK, val),
-   173					     &state->spi_tx_buf);
-   174	
-   175		return regmap_bulk_write(state->regmap, AD8460_HVDAC_DATA_WORD_LOW(index),
-   176					 state->spi_tx_buf, AD8460_DATA_BYTE_WORD_LENGTH);
-   177	}
-   178	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
