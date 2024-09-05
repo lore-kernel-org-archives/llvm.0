@@ -1,107 +1,98 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D95E8288C
-	for <llvm@lists.linux.dev>; Thu,  5 Sep 2024 18:48:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7718E18A6B0;
+	Thu,  5 Sep 2024 19:11:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725562136; cv=none; b=uR1TBlsLVbsTXRgIZK0WxhBS+i6niTYZU8Vg7jr0xEgB4idh24q9QIdUM9MS3/e7P4j6PoEdj7Zo+ZxrTeiHLojkEL2W/SSY/LF/s2Ck6NdIfWrS8qQSCQcXP0lFvp/IYQ0QtUf++zT7cv1rQniYrHminfhbb6VZx4KTELV1LcQ=
+	t=1725563466; cv=none; b=SVEx/++lyxKXXOjwCaO4BInyGIX9v1iwIh775Sf01VDlUuPF4Tyd2kVDGnw9Ocpb97OhPXRnjN32WHGRzCwiYsD0ZfGnpBaLBeLuLbsyo9B8oBJG9kaVOqpWXsVRncDz51U2piYI+eEWauDjD7qmu87/Ze8Bpj9wLzkVmqL5bpo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725562136; c=relaxed/simple;
-	bh=ZljIkKUS2LF56585H3POgSW+/xG8s5rlvOrzZoy8J/s=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=NiUn9l2BBhix3m0cJhGKkjYEncq1q/R3Cr3UZrJdqR6gylYFn9+/SutD18wULjpx0QkOxyYpSytjJZBUyeJczLAHvkwlBxFFTfqyrItnDVmyR0QRdm85Olm4fL2O/q+gSYi8P3nuiCbNyZ+ptb/22ZNkPQ71EJ/tU2NSBcCC0I8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Ze+tsMpD; arc=none smtp.client-ip=192.198.163.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+	s=arc-20240116; t=1725563466; c=relaxed/simple;
+	bh=a+2l3lUJXsVo9C6MHsAUuRf8wIiXOv+aWoA+7tw5gHs=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=OHnmE1u4Ysh6XGuvtrTnlbUYHivUYg1WM+wxYD/6C9QPuhD2h8Ie40jHU1PiiMt/23vt7tiPtbsFDsqbmLipWy+gtmG1BU0gRtGdcFdt32TdK5hO0c/zfIOJ1I+mTMGoCLfy6d/uOjT3aA7arj7T7PYoYfW9smBiiGNevEww/x4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BFDQ+Aev; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Ze+tsMpD"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1725562135; x=1757098135;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=ZljIkKUS2LF56585H3POgSW+/xG8s5rlvOrzZoy8J/s=;
-  b=Ze+tsMpDXUz9mF8CKTKHuMjM9aP9DB2WQP5NglkoNuDbfXo0shzqoljn
-   2QzkXYSJkqC2WlNRuTtkzN8epAu0cNycv4vwiSXMwSMw1fL1w9D2sOXG3
-   wHrs7NSEQdo2qUbMfHvaUZ9/evf4KJIeXbc/kXnBYWpQO98eoAm+Kpixe
-   A3/RYc/NxHcfw7FbLnnPnVW3vcD4CmyP6QwuyVosEaIl+LonsYZo1dvPV
-   Nl2NFMGoJT5rI5wwhaUthN1kDDOej5VBTYAVjdQz4Oxdb18odq0xW+E++
-   RaF/wuVXFjIqNed77AEPj8tD9OKB7Bmg9FGoWs0p+GnpjFFbp0G6Ag5LR
-   w==;
-X-CSE-ConnectionGUID: G71pFf0uQAis8xbOj/CQ9Q==
-X-CSE-MsgGUID: qiTXL7CdTeKbXTJJg+pY+g==
-X-IronPort-AV: E=McAfee;i="6700,10204,11186"; a="28187976"
-X-IronPort-AV: E=Sophos;i="6.10,205,1719903600"; 
-   d="scan'208";a="28187976"
-Received: from orviesa005.jf.intel.com ([10.64.159.145])
-  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Sep 2024 11:48:54 -0700
-X-CSE-ConnectionGUID: /+wtgG3KS+ydmXMb+ufECw==
-X-CSE-MsgGUID: 8YAd/cYsT/GUYAOpERb1KA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.10,205,1719903600"; 
-   d="scan'208";a="70523400"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orviesa005.jf.intel.com with ESMTP; 05 Sep 2024 11:48:51 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-	id 4D90B31E; Thu, 05 Sep 2024 21:48:49 +0300 (EEST)
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-	linux-pm@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>,
-	Len Brown <len.brown@intel.com>,
-	Pavel Machek <pavel@ucw.cz>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Subject: [PATCH v1 1/1] PM: hibernate: Remove unused stub for saveable_highmem_page()
-Date: Thu,  5 Sep 2024 21:48:48 +0300
-Message-ID: <20240905184848.318978-1-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.43.0.rc1.1336.g36b5255a03ac
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BFDQ+Aev"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9152DC4CEC3;
+	Thu,  5 Sep 2024 19:11:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1725563466;
+	bh=a+2l3lUJXsVo9C6MHsAUuRf8wIiXOv+aWoA+7tw5gHs=;
+	h=From:Date:Subject:To:Cc:From;
+	b=BFDQ+Aevsz0K7BTHQ6JbJLC5GHetlcJxA7JEcZdPBzG7oqn29PrB7N1j5AXqPf0vr
+	 sKYREc99tBsQMl+erfVtIWyN16G3UxeloA4GZx24d/4jndRwfw6uvearDUdIwfT4F/
+	 DslnihxyUGBUnXXKY5UQp2EK19TMt9F/SfTUXtUWxmULT1RIfilWrlhiunefu0C+7L
+	 0tOPHUo4/fFhCXUKcGEELrIitMua4SwI2s0+zbrh9IqiuRf4aPFN8/8ffS+PsojuJJ
+	 dnsEYEAcILwHSl5so07LdgRf3gprI7aNqrJuTpAt/7OJbV7b0mQ9FRBqkatNP/AyuO
+	 LDxa4fTtcudzQ==
+From: Nathan Chancellor <nathan@kernel.org>
+Date: Thu, 05 Sep 2024 12:10:56 -0700
+Subject: [PATCH] KVM: x86: Avoid clang -Wimplicit-fallthrough in
+ kvm_vm_ioctl_check_extension()
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20240905-kvm-x86-avoid-clang-implicit-fallthrough-v1-1-f2e785f1aa45@kernel.org>
+X-B4-Tracking: v=1; b=H4sIAD8C2mYC/x2NzQqDMBAGX0X23IUYf7B9leIhxNV8NBpJbBDEd
+ 2/ocWCYuShJhCR6VRdFyUgIW4H6UZF1ZluEMRUmrXSrnqrjT175HHo2OWBi64vDWHcPi4Nn4/3
+ hYvgujnvdDtIY2zW6ppLbo8w4/6v3eN8/SJLeknoAAAA=
+To: Sean Christopherson <seanjc@google.com>, 
+ Paolo Bonzini <pbonzini@redhat.com>
+Cc: Tom Dohrmann <erbse.13@gmx.de>, kvm@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, llvm@lists.linux.dev, patches@lists.linux.dev, 
+ Nathan Chancellor <nathan@kernel.org>
+X-Mailer: b4 0.15-dev
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1350; i=nathan@kernel.org;
+ h=from:subject:message-id; bh=a+2l3lUJXsVo9C6MHsAUuRf8wIiXOv+aWoA+7tw5gHs=;
+ b=owGbwMvMwCUmm602sfCA1DTG02pJDGm3mDw72FxMTS58WrLP4attWd16I94jh++8/Zpvbf6Xx
+ T3vbmNrRykLgxgXg6yYIkv1Y9XjhoZzzjLeODUJZg4rE8gQBi5OAZjIrzyGf2rad9gux4Wo9W7s
+ CVk+NfJ7zJRztxMNi3c63phwpGtXVwYjw9uyWT8Zcjn12U4Gf5plqMJ41tL4TFjshQK1qkuXS0X
+ 6WAA=
+X-Developer-Key: i=nathan@kernel.org; a=openpgp;
+ fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
 
-When saveable_highmem_page() is unused, it prevents kernel builds
-with clang, `make W=1` and CONFIG_WERROR=y:
+Clang warns (or errors with CONFIG_WERROR):
 
-kernel/power/snapshot.c:1369:21: error: unused function 'saveable_highmem_page' [-Werror,-Wunused-function]
- 1369 | static inline void *saveable_highmem_page(struct zone *z, unsigned long p)
-      |                     ^~~~~~~~~~~~~~~~~~~~~
+  arch/x86/kvm/x86.c:4819:2: error: unannotated fall-through between switch labels [-Werror,-Wimplicit-fallthrough]
+   4819 |         default:
+        |         ^
 
-Fix this by removing unused stub.
+Clang is a little more pedantic than GCC, which does not warn when
+falling through to a case that is just break or return. Clang's version
+is more in line with the kernel's own stance in deprecated.rst, which
+states that all switch/case blocks must end in either break,
+fallthrough, continue, goto, or return. Add the missing break to silence
+the warning.
 
-See also commit 6863f5643dd7 ("kbuild: allow Clang to find unused static
-inline functions for W=1 build").
-
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Fixes: d30d9ee94cc0 ("KVM: x86: Only advertise KVM_CAP_READONLY_MEM when supported by VM")
+Signed-off-by: Nathan Chancellor <nathan@kernel.org>
 ---
- kernel/power/snapshot.c | 5 -----
- 1 file changed, 5 deletions(-)
+ arch/x86/kvm/x86.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/kernel/power/snapshot.c b/kernel/power/snapshot.c
-index 405eddbda4fc..30894d8f0a78 100644
---- a/kernel/power/snapshot.c
-+++ b/kernel/power/snapshot.c
-@@ -1365,11 +1365,6 @@ static unsigned int count_highmem_pages(void)
+diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+index 0f801804150e..c983c8e434b8 100644
+--- a/arch/x86/kvm/x86.c
++++ b/arch/x86/kvm/x86.c
+@@ -4816,6 +4816,7 @@ int kvm_vm_ioctl_check_extension(struct kvm *kvm, long ext)
+ 		break;
+ 	case KVM_CAP_READONLY_MEM:
+ 		r = kvm ? kvm_arch_has_readonly_mem(kvm) : 1;
++		break;
+ 	default:
+ 		break;
  	}
- 	return n;
- }
--#else
--static inline void *saveable_highmem_page(struct zone *z, unsigned long p)
--{
--	return NULL;
--}
- #endif /* CONFIG_HIGHMEM */
- 
- /**
+
+---
+base-commit: 59cbd4eea48fdbc68fc17a29ad71188fea74b28b
+change-id: 20240905-kvm-x86-avoid-clang-implicit-fallthrough-6248e3ac5321
+
+Best regards,
 -- 
-2.43.0.rc1.1336.g36b5255a03ac
+Nathan Chancellor <nathan@kernel.org>
 
