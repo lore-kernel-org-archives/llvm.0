@@ -1,113 +1,65 @@
-Received: from mail-oo1-f66.google.com (mail-oo1-f66.google.com [209.85.161.66])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 44E0D17A599
-	for <llvm@lists.linux.dev>; Thu,  5 Sep 2024 18:08:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.66
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 790AD16F831
+	for <llvm@lists.linux.dev>; Thu,  5 Sep 2024 18:43:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725559708; cv=none; b=HxcmNFjYbJogh4ulpeZh1P4LscUv0oT2iMNKKx4utKfYy6FFVl0FzkY9Vy3fv37OOm0Ct2qHHGYfuhJyYX9SsQ/FbtK7rNJ918HkfOF9zhwweaujH61GaMiLytmzr26tAy8vzsqOJS90UV1X5Gm7jVAC4he87zaI0CwLkMs4bR4=
+	t=1725561837; cv=none; b=e0PDoVsfnCvbFMsAEqoZBZ/k9JQHra2upaDUQfgMlmxms3MGQ3CwPQ2E3+0SOlwqj9KbIsie5VcNBeflFH62MVUo6nXWhCv7RcyPI+2MrEc6iefybmVImLXZLVZQ5C3ou3DxuqsvrkOVyScAQCasrh0dZZBdDfvGhiWwnl+eeuE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725559708; c=relaxed/simple;
-	bh=yTjFB74aYheCz0jzkiyD05MEqttD3cBEB16TrrKu6ME=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=JTzZmeFFy/ZgbB/o5q6fvrJgC0kFlnF/UIqWZrRS+8bhXzarpmC6dEuI6wEELF3WxwjFAWavwiMUukELIetBvkX0VYi/NEetZKwSeHK8WaXuPtuq56eoOVowyqJy/DbpRI+l2MLzkY/1shkKw0BX1YxK9/ZDoKfeSrZa3ulN7lg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=illinois.edu; spf=pass smtp.mailfrom=illinois.edu; dkim=pass (2048-bit key) header.d=illinois-edu.20230601.gappssmtp.com header.i=@illinois-edu.20230601.gappssmtp.com header.b=kMmmaoGv; arc=none smtp.client-ip=209.85.161.66
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=illinois.edu
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=illinois.edu
+	s=arc-20240116; t=1725561837; c=relaxed/simple;
+	bh=nBfjKE3bg5Bz1iS/U8d1Ggy3AginAlf1fR3zMKD5m24=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=By5M32YQ/x5tCrtynZ6w+K0CyG01w4vn+WPwMP6Vmd+2tGYcZFqRQfbF+NiU45pWCrcsiE35u4o7nnDLgcgykHTw2Z8Nxjfg03B/jv7s/R6aQW5oirOStNPzCYzFjHieZsLrAfP5tjx/yVTVkFGnyY7xRqsOQ4zYJ5S2Ea9ajlc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ZQQOISAU; arc=none smtp.client-ip=198.175.65.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=illinois-edu.20230601.gappssmtp.com header.i=@illinois-edu.20230601.gappssmtp.com header.b="kMmmaoGv"
-Received: by mail-oo1-f66.google.com with SMTP id 006d021491bc7-5df9433ac0cso744160eaf.3
-        for <llvm@lists.linux.dev>; Thu, 05 Sep 2024 11:08:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=illinois-edu.20230601.gappssmtp.com; s=20230601; t=1725559705; x=1726164505; darn=lists.linux.dev;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=iaax2KMv1pfmqcinOyW9AJBjnAW5CoEYUzGnm6PN3kM=;
-        b=kMmmaoGv27nw930pslsYSTiuYdVpogtv7Ptv0MmRal8+XnR3yK2jSVydn6eiqAsZNO
-         HHvMo3Mn5LBPkWyYZVj/7JE/rU9c5E1yP3jUfKIKmfDVm8WXZNqSEQwtvct3Qy2+cCta
-         yxt009SRr7181zPdqJMxIXFxfRnQjK6ulEc17/OOgj00ysS19jCwJzP3So00j2HWWA+p
-         X2hQ3FBgMaG+6K7ybbbI7H8wrWATxqUPUHsIacyuHX/wkkUjSyhUqzemnaLXLLJkkDVT
-         w4bmjgKcl54NLEe6RulOZyJEZKVP0W1IfRKmE7odlymjgH/k1MwNq0JWqp6utPU9rkNl
-         8sOA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1725559705; x=1726164505;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=iaax2KMv1pfmqcinOyW9AJBjnAW5CoEYUzGnm6PN3kM=;
-        b=sU3ESTPtex/NFley7SPL11iYMU/AW0cyk5u7IpvSxCL3vTnvdpeosPe4WsQHCxJ+cR
-         G1eJI3kxnQ7uGqxezWMs/sd31eX5SD2/0OykYtrB2wmWhFVe+pE9hr3jGqRoB/J1FHzL
-         Xw5b99fPVuvJWbNxXUNQfHj3BhE2gB/D3hl9FPiPkh1MNYnv7cy+JKI076AfBA0gKSx3
-         r/Jxpxk8Eh9vXrsrphhtMAx9x0W9U72M0hPPKjtzmfF4OMG+lYi6XWdN/gaEUmxWi+8Q
-         3hj/wD8QdxcZ5DA8FGofZuADs1RoCAGrzSbbfjyQrmGNBm1ovyJbBK2bhJvGNUmxyEf1
-         CwtA==
-X-Forwarded-Encrypted: i=1; AJvYcCVt0LremcQMlyBGgAJNSu97m5jWWvOGIIF9kQw3NMQyVh8CYfNJvKpwUB/4cfzSWjvVZZhY@lists.linux.dev
-X-Gm-Message-State: AOJu0Yxz3oJdQ8t8HhscErw6IA7hlD+VbflopgE2ZwUo9Y9T7XWFq/bh
-	Y1uE/ECc6grMJlZS/oNlS5W8i8AEk4WCMnrOf5ILlSRNhiw2bMzlBjWDM0bghw==
-X-Google-Smtp-Source: AGHT+IElODMM0rQh4mddrzv/F5ovRuzJwZcdSq8FKd1lAPOBIO5XJpe1dPGMgoqhRfT//mb9dwT12Q==
-X-Received: by 2002:a05:6358:3123:b0:1b5:fc87:f033 with SMTP id e5c5f4694b2df-1b8385d965amr10429755d.11.1725559704945;
-        Thu, 05 Sep 2024 11:08:24 -0700 (PDT)
-Received: from node0.kernel3.linux-mcdc-pg0.utah.cloudlab.us ([128.110.218.246])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-6c5201e43dasm9566796d6.46.2024.09.05.11.08.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 05 Sep 2024 11:08:24 -0700 (PDT)
-From: Wentao Zhang <wentaoz5@illinois.edu>
-To: peterz@infradead.org
-Cc: Matt.Kelly2@boeing.com,
-	akpm@linux-foundation.org,
-	andrew.j.oppelt@boeing.com,
-	anton.ivanov@cambridgegreys.com,
-	ardb@kernel.org,
-	arnd@arndb.de,
-	bhelgaas@google.com,
-	bp@alien8.de,
-	chuck.wolber@boeing.com,
-	dave.hansen@linux.intel.com,
-	dvyukov@google.com,
-	hpa@zytor.com,
-	jinghao7@illinois.edu,
-	johannes@sipsolutions.net,
-	jpoimboe@kernel.org,
-	justinstitt@google.com,
-	kees@kernel.org,
-	kent.overstreet@linux.dev,
-	linux-arch@vger.kernel.org,
-	linux-efi@vger.kernel.org,
-	linux-kbuild@vger.kernel.org,
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ZQQOISAU"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1725561837; x=1757097837;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=nBfjKE3bg5Bz1iS/U8d1Ggy3AginAlf1fR3zMKD5m24=;
+  b=ZQQOISAUpQSoiZTtsoaj+Xi5Q/P6e7FqzvYFq6SDiqDssDiiKfuNR8eM
+   oCauTRzfewAuqNe6Ku58ldOgJm5G/eLpBHdhtnrxJW7oOI2VyXPSF4m4w
+   9vG4of7ICr6TRoFxEHncW/kucwDzN/thEZzNN6z4LY4ihPQJsMHjJqJ3B
+   wnw4YiGFeShzTd2QHnbiOOGYVkSa1dJ3z3YxN6vFRpYTkICNECiSjM5ed
+   LnQsN7PJJwxxZDIhKQ6OL3jcKt4U/J/trxc00a4EPk4jBzg9NW3N3Gjre
+   E5I5ZR3miZexMNad3Qglx92oTiPxvSAbu4XWoZC42/uwkT+tUjGlbalVR
+   Q==;
+X-CSE-ConnectionGUID: 8HPwyCh2SJa1yx0wIpR3gw==
+X-CSE-MsgGUID: ap97bDJAQpmpr1eSuRUnRA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11186"; a="28052937"
+X-IronPort-AV: E=Sophos;i="6.10,205,1719903600"; 
+   d="scan'208";a="28052937"
+Received: from fmviesa010.fm.intel.com ([10.60.135.150])
+  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Sep 2024 11:43:56 -0700
+X-CSE-ConnectionGUID: zWIrjf09Rkieqb+IT4Yw6A==
+X-CSE-MsgGUID: 0aospkpTQAmLaCnKqZSwfw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.10,205,1719903600"; 
+   d="scan'208";a="65955636"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmviesa010.fm.intel.com with ESMTP; 05 Sep 2024 11:43:53 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+	id BDE8731E; Thu, 05 Sep 2024 21:43:51 +0300 (EEST)
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To: Thomas Kuehne <thomas.kuehne@gmx.li>,
+	linux-input@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
-	linux-trace-kernel@vger.kernel.org,
-	linux-um@lists.infradead.org,
-	llvm@lists.linux.dev,
-	luto@kernel.org,
-	marinov@illinois.edu,
-	masahiroy@kernel.org,
-	maskray@google.com,
-	mathieu.desnoyers@efficios.com,
-	matthew.l.weber3@boeing.com,
-	mhiramat@kernel.org,
-	mingo@redhat.com,
-	morbo@google.com,
-	nathan@kernel.org,
-	ndesaulniers@google.com,
-	oberpar@linux.ibm.com,
-	paulmck@kernel.org,
-	richard@nod.at,
-	rostedt@goodmis.org,
-	samitolvanen@google.com,
-	samuel.sarkisian@boeing.com,
-	steven.h.vanderleest@boeing.com,
-	tglx@linutronix.de,
-	tingxur@illinois.edu,
-	tyxu@illinois.edu,
-	wentaoz5@illinois.edu,
-	x86@kernel.org
-Subject: Re: [PATCH v2 0/4] Enable measuring the kernel's Source-based Code Coverage and MC/DC with Clang
-Date: Thu,  5 Sep 2024 13:07:58 -0500
-Message-ID: <20240905180758.1396234-1-wentaoz5@illinois.edu>
-X-Mailer: git-send-email 2.45.2
-In-Reply-To: <20240905114140.GN4723@noisy.programming.kicks-ass.net>
-References: <20240905114140.GN4723@noisy.programming.kicks-ass.net>
+	llvm@lists.linux.dev
+Cc: Jiri Kosina <jikos@kernel.org>,
+	Benjamin Tissoires <bentiss@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v1 1/1] HID: debug: Remove duplicates from 'keys'
+Date: Thu,  5 Sep 2024 21:43:50 +0300
+Message-ID: <20240905184351.311858-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.43.0.rc1.1336.g36b5255a03ac
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -116,191 +68,62 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-On 2024-09-05 06:41, Peter Zijlstra wrote:
-> On Wed, Sep 04, 2024 at 11:32:41PM -0500, Wentao Zhang wrote:
->> From: Wentao Zhang <zhangwt1997@gmail.com>
->>
->> This series adds support for building x86-64 kernels with Clang's Source-
->> based Code Coverage[1] in order to facilitate Modified Condition/Decision
->> Coverage (MC/DC)[2] that provably correlates to source code for all levels
->> of compiler optimization.
->>
->> The newly added kernel/llvm-cov/ directory complements the existing gcov
->> implementation. Gcov works at the object code level which may better
->> reflect actual execution. However, Gcov lacks the necessary information to
->> correlate coverage measurement with source code location when compiler
->> optimization level is non-zero (which is the default when building the
->> kernel). In addition, gcov reports are occasionally ambiguous when
->> attempting to compare with source code level developer intent.
->>
->> In the following gcov example from drivers/firmware/dmi_scan.c, an
->> expression with four conditions is reported to have six branch outcomes,
->> which is not ideally informative in many safety related use cases, such as
->> automotive, medical, and aerospace.
->>
->>          5: 1068:	if (s == e || *e != '/' || !month || month > 12) {
->> branch  0 taken 5 (fallthrough)
->> branch  1 taken 0
->> branch  2 taken 5 (fallthrough)
->> branch  3 taken 0
->> branch  4 taken 0 (fallthrough)
->> branch  5 taken 5
->>
->> On the other hand, Clang's Source-based Code Coverage instruments at the
->> compiler frontend which maintains an accurate mapping from coverage
->> measurement to source code location. Coverage reports reflect exactly how
->> the code is written regardless of optimization and can present advanced
->> metrics like branch coverage and MC/DC in a clearer way. Coverage report
->> for the same snippet by llvm-cov would look as follows:
->>
->>   1068|      5|	if (s == e || *e != '/' || !month || month > 12) {
->>    ------------------
->>    |  Branch (1068:6): [True: 0, False: 5]
->>    |  Branch (1068:16): [True: 0, False: 5]
->>    |  Branch (1068:29): [True: 0, False: 5]
->>    |  Branch (1068:39): [True: 0, False: 5]
->>    ------------------
->>
->> Clang has added MC/DC support as of its 18.1.0 release. MC/DC is a fine-
->> grained coverage metric required by many automotive and aviation industrial
->> standards for certifying mission-critical software [3].
->>
->> In the following example from arch/x86/events/probe.c, llvm-cov gives the
->> MC/DC measurement for the compound logic decision at line 43.
->>
->>     43|     12|			if (msr[bit].test && !msr[bit].test(bit, data))
->>    ------------------
->>    |---> MC/DC Decision Region (43:8) to (43:50)
->>    |
->>    |  Number of Conditions: 2
->>    |     Condition C1 --> (43:8)
->>    |     Condition C2 --> (43:25)
->>    |
->>    |  Executed MC/DC Test Vectors:
->>    |
->>    |     C1, C2    Result
->>    |  1 { T,  F  = F      }
->>    |  2 { T,  T  = T      }
->>    |
->>    |  C1-Pair: not covered
->>    |  C2-Pair: covered: (1,2)
->>    |  MC/DC Coverage for Decision: 50.00%
->>    |
->>    ------------------
->>     44|      5|				continue;
->>
->> As the results suggest, during the span of measurement, only condition C2
->> (!msr[bit].test(bit, data)) is covered. That means C2 was evaluated to both
->> true and false, and in those test vectors C2 affected the decision outcome
->> independently. Therefore MC/DC for this decision is 1 out of 2 (50.00%).
->>
->> To do a full kernel measurement, instrument the kernel with
->> LLVM_COV_KERNEL_MCDC enabled, and optionally set a
->> LLVM_COV_KERNEL_MCDC_MAX_CONDITIONS value (the default is six). Run the
->> testsuites, and collect the raw profile data under
->> /sys/kernel/debug/llvm-cov/profraw. Such raw profile data can be merged and
->> indexed, and used for generating coverage reports in various formats.
->>
->>    $ cp /sys/kernel/debug/llvm-cov/profraw vmlinux.profraw
->>    $ llvm-profdata merge vmlinux.profraw -o vmlinux.profdata
->>    $ llvm-cov show --show-mcdc --show-mcdc-summary                         \
->>               --format=text --use-color=false -output-dir=coverage_reports \
->>               -instr-profile vmlinux.profdata vmlinux
->>
->> The first two patches enable the llvm-cov infrastructure, where the first
->> enables source based code coverage and the second adds MC/DC support. The
->> next patch disables instrumentation for curve25519-x86_64.c for the same
->> reason as gcov. The final patch enables coverage for x86-64.
->>
->> The choice to use a new Makefile variable LLVM_COV_PROFILE, instead of
->> reusing GCOV_PROFILE, was deliberate. More work needs to be done to
->> determine if it is appropriate to reuse the same flag. In addition, given
->> the fundamentally different approaches to instrumentation and the resulting
->> variation in coverage reports, there is a strong likelihood that coverage
->> type will need to be managed separately.
->>
->> This work reuses code from a previous effort by Sami Tolvanen et al. [4].
->> Our aim is for source-based *code coverage* required for high assurance
->> (MC/DC) while [4] focused more on performance optimization.
->>
->> This initial submission is restricted to x86-64. Support for other
->> architectures would need a bit more Makefile & linker script modification.
->> Informally we've confirmed that arm64 works and more are being tested.
->>
->> Note that Source-based Code Coverage is Clang-specific and isn't compatible
->> with Clang's gcov support in kernel/gcov/. Currently, kernel/gcov/ is not
->> able to measure MC/DC without modifying CFLAGS_GCOV and it would face the
->> same issues in terms of source correlation as gcov in general does.
->>
->> Some demo and results can be found in [5]. We will talk about this patch
->> series in the Refereed Track at LPC 2024 [6].
->>
->> Known Limitations:
->>
->> Kernel code with logical expressions exceeding
->> LVM_COV_KERNEL_MCDC_MAX_CONDITIONS will produce a compiler warning.
->> Expressions with up to 47 conditions are found in the Linux kernel source
->> tree (as of v6.11), but 46 seems to be the max value before the build fails
->> due to kernel size. As of LLVM 19 the max number of conditions possible is
->> 32767.
->>
->> As of LLVM 19, certain expressions are still not covered, and will produce
->> build warnings when they are encountered:
->>
->> "[...] if a boolean expression is embedded in the nest of another boolean
->>   expression but separated by a non-logical operator, this is also not
->>   supported. For example, in x = (a && b && c && func(d && f)), the d && f
->>   case starts a new boolean expression that is separated from the other
->>   conditions by the operator func(). When this is encountered, a warning
->>   will be generated and the boolean expression will not be
->>   instrumented." [7]
->>
-> 
-> What does this actually look like in the generated code?
-> 
+Duplicates in 'keys prevents kernel builds with clang, `make W=1` and
+CONFIG_WERROR=y, for example:
 
-Example 1: https://godbolt.org/z/PT6ssxdv1 (Taken from Message-ID:
-<20210614153545.GA68749@worktop.programming.kicks-ass.net>) where counter
-updates look like "inc qword ptr [rip + .L__profc_instr(int)]".
+drivers/hid/hid-debug.c:3443:18: error: initializer overrides prior initialization of this subobject [-Werror,-Winitializer-overrides]
+ 3443 |         [KEY_HANGEUL] = "HanGeul",              [KEY_HANGUP_PHONE] = "HangUpPhone",
+      |                         ^~~~~~~~~
+drivers/hid/hid-debug.c:3217:18: note: previous initialization is here
+ 3217 |         [KEY_HANGUEL] = "Hangeul",              [KEY_HANJA] = "Hanja",
+      |                         ^~~~~~~~~
 
-Example 2 with MC/DC: https://godbolt.org/z/ronMc578z where bitmap updates
-look like "or byte ptr [rip + .L__profbm_instr(int)], 8".
+Fix this by removing them.
 
-> Where is the modification to noinstr ?
->
+The logic of removal is that, remove...
+1) if there is a constant that uses another defined constant, OR
+2) the one that appears later in the list.
 
-In both two examples the compiler is respecting
-"__no_profile_instrument_function__" attribute, which is part of
-"__no_profile" macro, which is in turn part of "noinstr" macro.
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+ drivers/hid/hid-debug.c | 9 ++++-----
+ 1 file changed, 4 insertions(+), 5 deletions(-)
 
-> What is the impact on certification of not covering the noinstr code.
-> 
-> 
-
-Allow me to reformat Steve's <steven.h.vanderleest@boeing.com> reply below:
-
-  -------------------------------------------------------------------------
-  I'll answer Peter's last question: "What is the impact on certification
-  of not covering the noinstr code."
- 
-  Any code in the target image that is not executed by a test (and thus not
-  covered) must be analyzed and justified as an exception. For example,
-  defensive code is often impossible to exercise by test, but can be
-  included in the image with a justification to the regulatory authority
-  such as the Federal Aviation Administration (FAA). In practice, this
-  means the number of unique instances of non-instrumented code needs to be
-  manageable.  I say "unique instances" because there may be many instances
-  of a particular category, but justified by the same analysis/rationale.
-  Where we specifically mark a section of code with noinstr, it is
-  typically because the instrumentation would change the behavior of the
-  code, perturbing the test results. With some analysis for each distinct
-  category of this issue, we could then write justification(s) to show
-  the overall coverage is sufficient.
- 
-  Regards,
-  Steve
-  -------------------------------------------------------------------------
-
-Thanks,
-Wentao
+diff --git a/drivers/hid/hid-debug.c b/drivers/hid/hid-debug.c
+index d5abfe652fb5..618ebaa3bfc0 100644
+--- a/drivers/hid/hid-debug.c
++++ b/drivers/hid/hid-debug.c
+@@ -3214,7 +3214,7 @@ static const char *keys[KEY_MAX + 1] = {
+ 	[KEY_VOLUMEUP] = "VolumeUp",		[KEY_POWER] = "Power",
+ 	[KEY_KPEQUAL] = "KPEqual",		[KEY_KPPLUSMINUS] = "KPPlusMinus",
+ 	[KEY_PAUSE] = "Pause",			[KEY_KPCOMMA] = "KPComma",
+-	[KEY_HANGUEL] = "Hangeul",		[KEY_HANJA] = "Hanja",
++	[KEY_HANJA] = "Hanja",
+ 	[KEY_YEN] = "Yen",			[KEY_LEFTMETA] = "LeftMeta",
+ 	[KEY_RIGHTMETA] = "RightMeta",		[KEY_COMPOSE] = "Compose",
+ 	[KEY_STOP] = "Stop",			[KEY_AGAIN] = "Again",
+@@ -3309,9 +3309,9 @@ static const char *keys[KEY_MAX + 1] = {
+ 	[KEY_EPG] = "EPG",			[KEY_PVR] = "PVR",
+ 	[KEY_MHP] = "MHP",			[KEY_LANGUAGE] = "Language",
+ 	[KEY_TITLE] = "Title",			[KEY_SUBTITLE] = "Subtitle",
+-	[KEY_ANGLE] = "Angle",			[KEY_ZOOM] = "Zoom",
++	[KEY_ANGLE] = "Angle",
+ 	[KEY_MODE] = "Mode",			[KEY_KEYBOARD] = "Keyboard",
+-	[KEY_SCREEN] = "Screen",		[KEY_PC] = "PC",
++	[KEY_PC] = "PC",
+ 	[KEY_TV] = "TV",			[KEY_TV2] = "TV2",
+ 	[KEY_VCR] = "VCR",			[KEY_VCR2] = "VCR2",
+ 	[KEY_SAT] = "Sat",			[KEY_SAT2] = "Sat2",
+@@ -3409,8 +3409,7 @@ static const char *keys[KEY_MAX + 1] = {
+ 	[BTN_TRIGGER_HAPPY35] = "TriggerHappy35", [BTN_TRIGGER_HAPPY36] = "TriggerHappy36",
+ 	[BTN_TRIGGER_HAPPY37] = "TriggerHappy37", [BTN_TRIGGER_HAPPY38] = "TriggerHappy38",
+ 	[BTN_TRIGGER_HAPPY39] = "TriggerHappy39", [BTN_TRIGGER_HAPPY40] = "TriggerHappy40",
+-	[BTN_DIGI] = "Digi",			[BTN_STYLUS3] = "Stylus3",
+-	[BTN_TOOL_QUINTTAP] = "ToolQuintTap",	[BTN_WHEEL] = "Wheel",
++	[BTN_STYLUS3] = "Stylus3",		 [BTN_TOOL_QUINTTAP] = "ToolQuintTap",
+ 	[KEY_10CHANNELSDOWN] = "10ChannelsDown",
+ 	[KEY_10CHANNELSUP] = "10ChannelsUp",
+ 	[KEY_3D_MODE] = "3DMode",		[KEY_ADDRESSBOOK] = "Addressbook",
+-- 
+2.43.0.rc1.1336.g36b5255a03ac
 
