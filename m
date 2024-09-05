@@ -1,137 +1,105 @@
-Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CCC4D1A0705
-	for <llvm@lists.linux.dev>; Thu,  5 Sep 2024 16:55:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=93.17.235.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4ABC51A0705
+	for <llvm@lists.linux.dev>; Thu,  5 Sep 2024 16:59:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725555340; cv=none; b=Tat4vEcETpWr4u1D8EVwAYOjDwl0JwUBFsv2j38ERvipfOx334QAb/HB6wCMHcx4Ec3qdct9vLASf0p6MQODAbQMLc64FnCNG0TvDVQzErIl4vMqyf6ZgYCkQZAEsD2UiX3VTAY/gLfKsgjfhWpqwjGpkNsRIvKcO8kWKgxyUwI=
+	t=1725555559; cv=none; b=K8i2hS+ugCWIGgeDSdS2DjV0x5nm0al26w+spDj9f4Lr7yEAAwdiKIKdfZ6G91CxDfZWAJgHPQ1L5NRB2GBOV1HmrmnIrmjT9zMu+Hw2bY0r0Sq7w88Eb4D6MkvXx1FyHy4VDp+5G+p7BdRxBrC/C7rfa7RujijdOVJept0lplE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725555340; c=relaxed/simple;
-	bh=kdVzNKSWW1JFEdIP3+NQic9f8mGqxCua6ECgEvOVeJM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=DKlSFSPslpFWz9KNH9EoeeJ7wpOv1krSsmANEj2UQAA6k+WvQRzaMncsUxbrutmskVgkg0r8+MgybquhyAhMmDvhR1Z4b3dDTIAGra21AJbz4ITkdRhFzzUXK8jz/ef+9ZSaTuGCzQ9QYUEIHhU/O6KJe5QydpF+78ZfnZrOLnQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=csgroup.eu; spf=pass smtp.mailfrom=csgroup.eu; arc=none smtp.client-ip=93.17.235.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=csgroup.eu
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=csgroup.eu
-Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
-	by localhost (Postfix) with ESMTP id 4X058M1gffz9sRs;
-	Thu,  5 Sep 2024 18:55:31 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from pegase2.c-s.fr ([172.26.127.65])
-	by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id utC0CxKuXD61; Thu,  5 Sep 2024 18:55:31 +0200 (CEST)
-Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
-	by pegase2.c-s.fr (Postfix) with ESMTP id 4X058M0gPbz9sRr;
-	Thu,  5 Sep 2024 18:55:31 +0200 (CEST)
-Received: from localhost (localhost [127.0.0.1])
-	by messagerie.si.c-s.fr (Postfix) with ESMTP id 046AF8B77C;
-	Thu,  5 Sep 2024 18:55:31 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from messagerie.si.c-s.fr ([127.0.0.1])
-	by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
-	with ESMTP id ScrEPCzszJ3z; Thu,  5 Sep 2024 18:55:30 +0200 (CEST)
-Received: from [192.168.235.60] (unknown [192.168.235.60])
-	by messagerie.si.c-s.fr (Postfix) with ESMTP id EB2C58B778;
-	Thu,  5 Sep 2024 18:55:29 +0200 (CEST)
-Message-ID: <85c02620-e8b2-4c97-9905-685a9a4e556d@csgroup.eu>
-Date: Thu, 5 Sep 2024 18:55:27 +0200
+	s=arc-20240116; t=1725555559; c=relaxed/simple;
+	bh=8yPNk1w6gny+tyTSZwwdgp4V17bpRWxeXnuihEyS1DM=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=uo0/9uW9Kfi/V8AM/HUL9bjrHgCDLpwr+Exad7GNpL1YaAkuFY80WYfNhyC1TDGHYLdthM2oUBE7Eq7seDzIJ1lB+Wp+sn04JKafHo6of/a7n7slm5jW0YucZxzRwMoiTHoyB0+Eo151NRY5Z6ScQBMEOW/6nbFwLl55zelPVtc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=a1sx1Y/d; arc=none smtp.client-ip=192.198.163.19
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="a1sx1Y/d"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1725555557; x=1757091557;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=8yPNk1w6gny+tyTSZwwdgp4V17bpRWxeXnuihEyS1DM=;
+  b=a1sx1Y/dGNmxDD5R1IljJ/MuMjlFPBhaCPdgI/7sv07AvrvaSl5pbkDX
+   aiWZ2zDRmWMghLL6HFtQ3iE0b8f5eHGssE28JywSxlZKVtZCozJKuXKUi
+   AErxC8wVii+YWsU+ssY6rst9E31PsiEuViU0AuQyTJunzl2pNgQUM5kEW
+   6HY47jjRrh/nCQWqKEhN0up5nVKYHQSvZjb93uzq7eiK6CDThQVhCJ811
+   1uCyF3hHlNeqs8rlPj5pgaw3bcjRa+P7357zifctTQbq/oTTWATtuXATr
+   PkHhNO6735VTx4cXMJHgrOjvBQt8X8LQm6T2ggL1JZiNUnxzOYterT0lJ
+   g==;
+X-CSE-ConnectionGUID: T1pnjpVtTtC8VVol3kMREA==
+X-CSE-MsgGUID: oH6KqXb6RP253iyH7z93Fg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11186"; a="23844560"
+X-IronPort-AV: E=Sophos;i="6.10,205,1719903600"; 
+   d="scan'208";a="23844560"
+Received: from orviesa008.jf.intel.com ([10.64.159.148])
+  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Sep 2024 09:59:17 -0700
+X-CSE-ConnectionGUID: DjP+8LrTTDyfKrNO6OT1VA==
+X-CSE-MsgGUID: oaruv8hrQ/+1q9Ii9qCilw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.10,205,1719903600"; 
+   d="scan'208";a="66419963"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orviesa008.jf.intel.com with ESMTP; 05 Sep 2024 09:59:14 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+	id B616F31E; Thu, 05 Sep 2024 19:59:01 +0300 (EEST)
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To: Thomas Gleixner <tglx@linutronix.de>,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev
+Cc: Ingo Molnar <mingo@redhat.com>,
+	Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	x86@kernel.org,
+	"H. Peter Anvin" <hpa@zytor.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v1 1/1] x86/cpu: Mark flag_is_changeable_p() with __maybe_unused
+Date: Thu,  5 Sep 2024 19:58:58 +0300
+Message-ID: <20240905165859.254387-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.43.0.rc1.1336.g36b5255a03ac
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5 4/5] powerpc/vdso: Wire up getrandom() vDSO
- implementation on VDSO32
-To: "Jason A. Donenfeld" <Jason@zx2c4.com>
-Cc: Andrew Morton <akpm@linux-foundation.org>,
- Steven Rostedt <rostedt@goodmis.org>, Masami Hiramatsu
- <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
- Michael Ellerman <mpe@ellerman.id.au>, Nicholas Piggin <npiggin@gmail.com>,
- Naveen N Rao <naveen@kernel.org>, Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling
- <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
- Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
- linuxppc-dev@lists.ozlabs.org, linux-kselftest@vger.kernel.org,
- llvm@lists.linux.dev, linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
- linux-trace-kernel@vger.kernel.org,
- Adhemerval Zanella <adhemerval.zanella@linaro.org>,
- Xi Ruoyao <xry111@xry111.site>
-References: <cover.1725304404.git.christophe.leroy@csgroup.eu>
- <1f49c2ce009f8b007ab0676fb41187b2d54f28b2.1725304404.git.christophe.leroy@csgroup.eu>
- <ZtnYqZI-nrsNslwy@zx2c4.com>
-Content-Language: fr-FR
-From: Christophe Leroy <christophe.leroy@csgroup.eu>
-In-Reply-To: <ZtnYqZI-nrsNslwy@zx2c4.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
+When flag_is_changeable_p() is unused, it prevents kernel builds
+with clang, `make W=1` and CONFIG_WERROR=y:
 
+arch/x86/kernel/cpu/common.c:351:19: error: unused function 'flag_is_changeable_p' [-Werror,-Wunused-function]
+  351 | static inline int flag_is_changeable_p(u32 flag)
+      |                   ^~~~~~~~~~~~~~~~~~~~
 
-Le 05/09/2024 à 18:13, Jason A. Donenfeld a écrit :
->> +/*
->> + * The macro sets two stack frames, one for the caller and one for the callee
->> + * because there are no requirement for the caller to set a stack frame when
->> + * calling VDSO so it may have omitted to set one, especially on PPC64
->> + */
->> +
->> +.macro cvdso_call funct
->> +  .cfi_startproc
->> +	PPC_STLU	r1, -PPC_MIN_STKFRM(r1)
->> +  .cfi_adjust_cfa_offset PPC_MIN_STKFRM
->> +	mflr		r0
->> +	PPC_STLU	r1, -PPC_MIN_STKFRM(r1)
->> +  .cfi_adjust_cfa_offset PPC_MIN_STKFRM
->> +	PPC_STL		r0, PPC_MIN_STKFRM + PPC_LR_STKOFF(r1)
->> +  .cfi_rel_offset lr, PPC_MIN_STKFRM + PPC_LR_STKOFF
->> +	get_datapage	r8
->> +	addi		r8, r8, VDSO_RNG_DATA_OFFSET
->> +	bl		CFUNC(DOTSYM(\funct))
->> +	PPC_LL		r0, PPC_MIN_STKFRM + PPC_LR_STKOFF(r1)
->> +	cmpwi		r3, 0
->> +	mtlr		r0
->> +	addi		r1, r1, 2 * PPC_MIN_STKFRM
->> +  .cfi_restore lr
->> +  .cfi_def_cfa_offset 0
->> +	crclr		so
->> +	bgelr+
->> +	crset		so
->> +	neg		r3, r3
->> +	blr
->> +  .cfi_endproc
->> +.endm
-> 
-> You wrote in an earlier email that this worked with time namespaces, but
-> in my testing that doesn't seem to be the case.
+Fix this by marking it with __maybe_unused.
 
-Did I write that ? I can't remember and neither can I remember testing 
-it with time namespaces.
+See also commit 6863f5643dd7 ("kbuild: allow Clang to find unused static
+inline functions for W=1 build").
 
-> 
->  From my test harness [1]:
-> 
-> Normal single thread
->     vdso: 25000000 times in 12.494133131 seconds
->     libc: 25000000 times in 69.594625188 seconds
-> syscall: 25000000 times in 67.349243972 seconds
-> Time namespace single thread
->     vdso: 25000000 times in 71.673057436 seconds
->     libc: 25000000 times in 71.712774121 seconds
-> syscall: 25000000 times in 66.902318080 seconds
-> 
-> I'm seeing this on ppc, ppc64, and ppc64le.
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+ arch/x86/kernel/cpu/common.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-What is the command to use to test with time namespace ?
+diff --git a/arch/x86/kernel/cpu/common.c b/arch/x86/kernel/cpu/common.c
+index d4e539d4e158..20051f99a253 100644
+--- a/arch/x86/kernel/cpu/common.c
++++ b/arch/x86/kernel/cpu/common.c
+@@ -287,7 +287,7 @@ static int __init cachesize_setup(char *str)
+ __setup("cachesize=", cachesize_setup);
+ 
+ /* Standard macro to see if a specific flag is changeable */
+-static inline int flag_is_changeable_p(u32 flag)
++static inline __maybe_unused int flag_is_changeable_p(u32 flag)
+ {
+ 	u32 f1, f2;
+ 
+-- 
+2.43.0.rc1.1336.g36b5255a03ac
 
-> 
-> Can you figure out what's going on and send a fix, which I'll squash
-> into this commit?
-
-Sure
-
-> 
-> Jason
-> 
-> [1] https://eur01.safelinks.protection.outlook.com/?url=https%3A%2F%2Fgit.zx2c4.com%2Flinux-rng%2Fcommit%2F%3Fh%3Djd%2Fvdso-test-harness&data=05%7C02%7Cchristophe.leroy%40csgroup.eu%7C59fa9061064945c73a1608dccdc5b51c%7C8b87af7d86474dc78df45f69a2011bb5%7C0%7C0%7C638611496253413014%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C0%7C%7C%7C&sdata=ZUJqhcnZL7SYkuXUIt9Nlo46sZj26VYW%2F8I%2BrBLRpBE%3D&reserved=0
