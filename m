@@ -1,58 +1,38 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E43151A00CF;
-	Thu,  5 Sep 2024 15:10:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2DF9119D8B7
+	for <llvm@lists.linux.dev>; Thu,  5 Sep 2024 15:40:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725549012; cv=none; b=cSRCcCdQldPsnuN8bURhqciUYXc69IKfXs7iZssr1pKQyj9WCcTVjUCXctD3ZuZB5sWDc8DctRgMt84FcYLOj8Kr5cNj6bRBHTlgYc/PKE8jnD5jtZQleBFTg4KzGon49Pr1rx3u8yWHDaHfEh/blPeU1U5LMBb/ZLG72UbZ9RY=
+	t=1725550834; cv=none; b=CtNj3CcIo/eKxfMVbXX34mlAc35fvHeb7SfwV9dvd4Gclqd/YDLgApKqoLt9LLIzEU6zFnxLHCWnRfuzWrlhqksFQKDVG69JUDI/qW4CF/1eE8DJ0dMJiFJySZSZmy1lW8hDYLsZ1CxSla+4lN/8tB30o1sZVKr8ypU7YODemdE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725549012; c=relaxed/simple;
-	bh=+B9AVG0IskDOSjaCDJfK/llhKs1Qjy/sxXaIz3HYjiA=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=Lw3EQeKPw0uhDrkpc0sISaexNvgQzaZyTRApoEgqUNDmNFynaPhJomrfN/om/5EONvQGhqxUJoK9QiEwD3Y1xtlNRPZUW/xBsVEWsJeBAqOTS+aherVNBGGaw5JD9uHLAWZz6kapV3OhITkIV4ChZJEkjRQrmQGFARh2hc88CdA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=f3Yf3nvU; arc=none smtp.client-ip=192.198.163.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1725550834; c=relaxed/simple;
+	bh=GcoRkRZc4Q0XVU54Uq1MbzPiHvMtf3B/i+2XF0ydMZs=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=vFTf5i4E4L/L33RjNPTJm+RPf9F4LzPKDZqGFTNDhBi9Mj/lxCCGliVN7Hb6lvwx/VT9FyxNE4dWRr9d8kHcbkhb7NbPLV0R4tijfEuyz/PHm5HGpyqogLhvInhhsE01aJg3cSW5zCkN3wGeK6K1vvz5s77PNimU9/VG3bqIsyc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JogIp1E/; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="f3Yf3nvU"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1725549009; x=1757085009;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=+B9AVG0IskDOSjaCDJfK/llhKs1Qjy/sxXaIz3HYjiA=;
-  b=f3Yf3nvUI8wnkNJOawGCRKPlMFffmL8i1hnbWhS3wSJtmHDLnCxHUQVY
-   HBkH9EnPaQZVWe4oFiGihBVM7LlTQpVvVGpebAm98GC6HcCJi7jhb9ZsL
-   MBCjKUiLM9RsrF+ik+luGQZwLTyvxxnT9EAs7Ook48oVymVtfom11Ovr9
-   hzvvpJ8gkCJZeu26m3NTC2lxpY/tLyRjSOMPBY+d4Mwf/IX5QgyKKLnaz
-   nYDo/fyScpuYdEOGswidbWayocsPVr8t+sEYHZ5EpzkZxwIVjl89uzraC
-   NFOgIfCCG3EGUX0K60ty1whGaMqEKp5d6klswPTcoIxkpB/1yIp9Gjhhb
-   Q==;
-X-CSE-ConnectionGUID: szfqnl7sTw2uEZjXsPaPuA==
-X-CSE-MsgGUID: D9AkVi2qT3mTPcQHDRIvLg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11186"; a="27200310"
-X-IronPort-AV: E=Sophos;i="6.10,205,1719903600"; 
-   d="scan'208";a="27200310"
-Received: from fmviesa006.fm.intel.com ([10.60.135.146])
-  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Sep 2024 08:10:09 -0700
-X-CSE-ConnectionGUID: 4I/UuM26SZCGlGovjx+LIA==
-X-CSE-MsgGUID: SRLCETK+SJa1ZNjfLLlHVw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.10,205,1719903600"; 
-   d="scan'208";a="65311745"
-Received: from lkp-server01.sh.intel.com (HELO 9c6b1c7d3b50) ([10.239.97.150])
-  by fmviesa006.fm.intel.com with ESMTP; 05 Sep 2024 08:10:08 -0700
-Received: from kbuild by 9c6b1c7d3b50 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1smE7a-000A1b-1f;
-	Thu, 05 Sep 2024 15:10:06 +0000
-Date: Thu, 5 Sep 2024 23:09:39 +0800
-From: kernel test robot <lkp@intel.com>
-To: Max Filippov <jcmvbkbc@gmail.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [jcmvbkbc-xtensa:xtensa-6.11-rc6-esp32 35/53]
- drivers/misc/esp32-ipc.c:228:34: warning: unused variable 'esp32_ipc_match'
-Message-ID: <202409052325.VBYpXKyZ-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JogIp1E/"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7C462C4CEC3;
+	Thu,  5 Sep 2024 15:40:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1725550833;
+	bh=GcoRkRZc4Q0XVU54Uq1MbzPiHvMtf3B/i+2XF0ydMZs=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=JogIp1E/8el4hSoBGh0+XPmcL0fP/gOSQGQMgtc7b9kABBWrrAQ496DFMgpun8+Eb
+	 Qoor3VdC59wFW36uD5PFeETQV2WzFAwwjBbUfOfz42wbarBAHiiHpjP9udkJmw2XtM
+	 Gof2s9EJfOXwynBgltmu+fNJUk+cknfuft3Xjv7FfNanDz36wjB/2gc5sOwzdUIoBr
+	 uJ4xHl5X9tmKKxQKRhzZo/BVhGFZNPg63l4nTX6p6FSk0hbXM3ncHeJyUvxpiP0k/B
+	 sdCf5xeIaRiOJtzB0SbpBsfOzv8hOzygsgLUK32/g2QUkWpQThYWt6ZeWJ1IxDjmFu
+	 rYU5cuQJuMmEQ==
+Date: Thu, 5 Sep 2024 08:40:31 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: linaro-toolchain@lists.linaro.org
+Cc: llvm@lists.linux.dev
+Subject: Re: [Linaro-TCWG-CI] v6.11-rc1-143-g4e7795eda4459: Failure on aarch64
+Message-ID: <20240905154031.GA2597978@thelio-3990X>
+References: <2051722969.176113.1725489402796@jenkins.jenkins>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -61,54 +41,30 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <2051722969.176113.1725489402796@jenkins.jenkins>
 
-Hi Max,
+On Wed, Sep 04, 2024 at 10:36:41PM +0000, ci_notify@linaro.org wrote:
+> Dear contributor, our automatic CI has detected problems related to your patch(es).  Please find some details below.  If you have any questions, please follow up on linaro-toolchain@lists.linaro.org mailing list, Libera's #linaro-tcwg channel, or ping your favourite Linaro toolchain developer on the usual project channel.
+> 
+> We understand that it might be difficult to find the necessary logs or reproduce the issue locally. If you can't get what you need from our CI within minutes, let us know and we will be happy to help.
+> 
+> We track this report status in https://linaro.atlassian.net/browse/LLVM-1339 , please let us know if you are looking at the problem and/or when you have a fix.
+> 
+> In CI config tcwg_kernel/llvm-master-aarch64-next-allyesconfig after:
+> 
+>   | commit v6.11-rc1-143-g4e7795eda4459
+>   | Author: Kent Overstreet <kent.overstreet@linux.dev>
+>   | Date:   Sun Sep 1 18:08:25 2024 -0400
+>   | 
+>   |     bcachefs: bch2_sb_member_alloc()
+>   |     
+>   |     refactoring
+>   |     
+>   |     Signed-off-by: Kent Overstreet <kent.overstreet@linux.dev>
 
-First bad commit (maybe != root cause):
+Thanks for the report, this should be fixed now:
 
-tree:   https://github.com/jcmvbkbc/linux-xtensa xtensa-6.11-rc6-esp32
-head:   4a9ffb44ce4c24e9dcd4a5f06beeb3dded85319a
-commit: de5a96ec7f9b35d9493bc022d16cd1a03ff73798 [35/53] esp_wifi: add IPC transport
-config: i386-defconfig (https://download.01.org/0day-ci/archive/20240905/202409052325.VBYpXKyZ-lkp@intel.com/config)
-compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240905/202409052325.VBYpXKyZ-lkp@intel.com/reproduce)
+https://git.kernel.org/next/linux-next/c/da6e6a70084d99d522058bbef00b9cbe48cb7ca4
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202409052325.VBYpXKyZ-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> drivers/misc/esp32-ipc.c:228:34: warning: unused variable 'esp32_ipc_match' [-Wunused-const-variable]
-     228 | static const struct of_device_id esp32_ipc_match[] = {
-         |                                  ^~~~~~~~~~~~~~~
-   1 warning generated.
-
-Kconfig warnings: (for reference only)
-   WARNING: unmet direct dependencies detected for ESP32_IPC
-   Depends on [n]: OF [=n] && HAS_IOMEM [=y]
-   Selected by [y]:
-   - ESP32_WIFI_SHMEM [=y] && NETDEVICES [=y] && WLAN [=y] && WLAN_VENDOR_ESPRESSIF [=y]
-
-
-vim +/esp32_ipc_match +228 drivers/misc/esp32-ipc.c
-
-9aee3c117c9d9b Max Filippov 2023-08-11  227  
-9aee3c117c9d9b Max Filippov 2023-08-11 @228  static const struct of_device_id esp32_ipc_match[] = {
-9aee3c117c9d9b Max Filippov 2023-08-11  229  	{
-9aee3c117c9d9b Max Filippov 2023-08-11  230  		.compatible = "esp,esp32-ipc",
-9aee3c117c9d9b Max Filippov 2023-08-11  231  	}, {},
-9aee3c117c9d9b Max Filippov 2023-08-11  232  };
-9aee3c117c9d9b Max Filippov 2023-08-11  233  MODULE_DEVICE_TABLE(of, esp32_ipc_match);
-9aee3c117c9d9b Max Filippov 2023-08-11  234  
-
-:::::: The code at line 228 was first introduced by commit
-:::::: 9aee3c117c9d9b9481c339d9ac7b47e6c949bdac misc/esp32-ipc: introduce generic IPC for ESP32
-
-:::::: TO: Max Filippov <jcmvbkbc@gmail.com>
-:::::: CC: Max Filippov <jcmvbkbc@gmail.com>
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Cheers,
+Nathan
