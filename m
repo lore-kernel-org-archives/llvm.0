@@ -1,123 +1,153 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 59192193434
-	for <llvm@lists.linux.dev>; Thu,  5 Sep 2024 20:36:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D024A1A3BB9;
+	Thu,  5 Sep 2024 20:41:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725568582; cv=none; b=E5eXsA/6KtqmbKaayI4lFv3dAIL6SE7Jgw9pOHFxbalV2KI9ELUsUbHYSDGHSNhUZZXkoAAVDs40vpGJpYejND+U7cepxVA6aoKlaV7cg3sEe+PRxKqyjcl0/n74dhqls2tnuulg98nL9fK+wYbQ5RpeHGnbwPUTw32XdMASIG0=
+	t=1725568909; cv=none; b=qCaQkczc8dLk7XAiLFbV90s8/8Xx2M3kKWQc+AFrtnBLDdlumIvQ0YWLllGAul258iuiVQCd5t68Ap4y7FJpCT3/KATXmdTiAEw+9j2S5aaZOwu2uc7rpZLm363shHjbaE8LgeCqCT5vDKp/PSwIyjbEalA8oyS6+X6RvfuALQo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725568582; c=relaxed/simple;
-	bh=3smZTLdjqVJBDU000AvNAnMsFP19IXssykG6fzVljXY=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=jzaP4jrh/ecfBemQYqcgqP57yt769jkk57KEJKSiHYnquOhWHzz6ycvjTCNtBfcqr5R7apcj0IDzWDH9NY+YdK5fUii3kZiFhLG9MZHbKKeDG1fY8It/8d2KP07RV5r6NUwm6OC5BYQn3dw+nYyJvtBo1HyeEx8Y9AKBhbAaQ24=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=DZrjHtZP; arc=none smtp.client-ip=192.198.163.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+	s=arc-20240116; t=1725568909; c=relaxed/simple;
+	bh=1pTKkK+g3LwaTtJ584c38j5d6WNE2g/owBxKg20Z/ps=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=NZSKdCkfOWoYR+LV2AP2Al3M++Ij2ln0XHwZ0TTJt7QspiFhWN/1b47S8r06OgXO1X2stTG+oxD8iLDQ2QMdo86EYPupFyrzoY5D4IW9z1qx9v3B95OcD0InISzZLYCtNw+B9HHO/rbRcXqxMhjr4+MHb5DdepuKin62dDbnktk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b=Vmhr4xm1; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="DZrjHtZP"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1725568580; x=1757104580;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=3smZTLdjqVJBDU000AvNAnMsFP19IXssykG6fzVljXY=;
-  b=DZrjHtZP7nbQHRsCnhwN5h8ndJsIPitXEW88XnOxDz2wLRSM0948RpdN
-   fPfqZc5jwf0iNAJKV0juGM6wgIZkIW+q3Nzqs3COp320H6QxZ2vTPRpZR
-   UKvogGRLlxILbNaEzS9WW7EKs2Ilvw99WxOjfGWGZE8GccLGvn3yCKr+H
-   dCw7d8ChBIKlHtaMGGAgHwhJK+Wkdn8kfoHFtVsqjnqVEWFqRvyMi/Cs+
-   srZkoO0CFoy+fiveJGZwtFbKkz59yfzl6MwAgxdZIHyng8049xm4ug0GO
-   9DmxiX49IfCl5IljfCLLUFWMCJxP6Zg672r3fdXbIFCmCWwLu6dP5aa0f
-   Q==;
-X-CSE-ConnectionGUID: l9Sl0Q0KRIGiodLnQLVwXw==
-X-CSE-MsgGUID: 7VwS4Gn+Sfy58dxBuWGxBg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11186"; a="23816958"
-X-IronPort-AV: E=Sophos;i="6.10,205,1719903600"; 
-   d="scan'208";a="23816958"
-Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Sep 2024 13:36:20 -0700
-X-CSE-ConnectionGUID: 2w8SmdCORLyvd1eRSuY3pA==
-X-CSE-MsgGUID: PKoY7JYeQ9+U8pEPP5ELsA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.10,205,1719903600"; 
-   d="scan'208";a="96520887"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by fmviesa001.fm.intel.com with ESMTP; 05 Sep 2024 13:36:16 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-	id C737E31E; Thu, 05 Sep 2024 23:36:14 +0300 (EEST)
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: Pablo Neira Ayuso <pablo@netfilter.org>,
-	Felix Huettner <felix.huettner@mail.schwarz>,
-	netfilter-devel@vger.kernel.org,
-	coreteam@netfilter.org,
-	netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev
-Cc: Jozsef Kadlecsik <kadlec@netfilter.org>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
+	dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="Vmhr4xm1"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 398A0C4CEC3;
+	Thu,  5 Sep 2024 20:41:46 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+	dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="Vmhr4xm1"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+	t=1725568904;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=IeN0hion7E5T8bnC9bEQSPstkGSkSwCA9M/4YZOxoLs=;
+	b=Vmhr4xm1Wp03ugcdrYba3ciO2c/OQp0oQM3tMCUeyv/y6IZN4vNwmCaOuwFQTFlZjTxzGh
+	vyDmKYOWlgz6gVR/SY11McK85Ld05NIERlGr0h62hGj7fSc/8dsPEgJIDmwgO9QkzhtMl2
+	G9lC+jvPOPB9VCi02VaBflNkREEbT7Y=
+Received: 
+	by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 48b42c3c (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
+	Thu, 5 Sep 2024 20:41:44 +0000 (UTC)
+Date: Thu, 5 Sep 2024 22:41:40 +0200
+From: "Jason A. Donenfeld" <Jason@zx2c4.com>
+To: Christophe Leroy <christophe.leroy@csgroup.eu>
+Cc: Andrew Morton <akpm@linux-foundation.org>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+	Michael Ellerman <mpe@ellerman.id.au>,
+	Nicholas Piggin <npiggin@gmail.com>,
+	Naveen N Rao <naveen@kernel.org>,
 	Nathan Chancellor <nathan@kernel.org>,
 	Nick Desaulniers <ndesaulniers@google.com>,
 	Bill Wendling <morbo@google.com>,
 	Justin Stitt <justinstitt@google.com>,
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Subject: [PATCH net v1 1/1] netfilter: conntrack: Guard possoble unused functions
-Date: Thu,  5 Sep 2024 23:36:12 +0300
-Message-ID: <20240905203612.333421-1-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.43.0.rc1.1336.g36b5255a03ac
+	Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
+	linuxppc-dev@lists.ozlabs.org, linux-kselftest@vger.kernel.org,
+	llvm@lists.linux.dev, linux-fsdevel@vger.kernel.org,
+	linux-mm@kvack.org, linux-trace-kernel@vger.kernel.org,
+	Adhemerval Zanella <adhemerval.zanella@linaro.org>,
+	Xi Ruoyao <xry111@xry111.site>
+Subject: Re: [PATCH v5 4/5] powerpc/vdso: Wire up getrandom() vDSO
+ implementation on VDSO32
+Message-ID: <ZtoXhGYflBNR74g0@zx2c4.com>
+References: <cover.1725304404.git.christophe.leroy@csgroup.eu>
+ <1f49c2ce009f8b007ab0676fb41187b2d54f28b2.1725304404.git.christophe.leroy@csgroup.eu>
+ <ZtnYqZI-nrsNslwy@zx2c4.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <ZtnYqZI-nrsNslwy@zx2c4.com>
 
-Some of the functions may be unused, it prevents kernel builds
-with clang, `make W=1` and CONFIG_WERROR=y:
+On Thu, Sep 05, 2024 at 06:13:29PM +0200, Jason A. Donenfeld wrote:
+> > +/*
+> > + * The macro sets two stack frames, one for the caller and one for the callee
+> > + * because there are no requirement for the caller to set a stack frame when
+> > + * calling VDSO so it may have omitted to set one, especially on PPC64
+> > + */
+> > +
+> > +.macro cvdso_call funct
+> > +  .cfi_startproc
+> > +	PPC_STLU	r1, -PPC_MIN_STKFRM(r1)
+> > +  .cfi_adjust_cfa_offset PPC_MIN_STKFRM
+> > +	mflr		r0
+> > +	PPC_STLU	r1, -PPC_MIN_STKFRM(r1)
+> > +  .cfi_adjust_cfa_offset PPC_MIN_STKFRM
+> > +	PPC_STL		r0, PPC_MIN_STKFRM + PPC_LR_STKOFF(r1)
+> > +  .cfi_rel_offset lr, PPC_MIN_STKFRM + PPC_LR_STKOFF
+> > +	get_datapage	r8
+> > +	addi		r8, r8, VDSO_RNG_DATA_OFFSET
+> > +	bl		CFUNC(DOTSYM(\funct))
+> > +	PPC_LL		r0, PPC_MIN_STKFRM + PPC_LR_STKOFF(r1)
+> > +	cmpwi		r3, 0
+> > +	mtlr		r0
+> > +	addi		r1, r1, 2 * PPC_MIN_STKFRM
+> > +  .cfi_restore lr
+> > +  .cfi_def_cfa_offset 0
+> > +	crclr		so
+> > +	bgelr+
+> > +	crset		so
+> > +	neg		r3, r3
+> > +	blr
+> > +  .cfi_endproc
+> > +.endm
+> 
+> Can you figure out what's going on and send a fix, which I'll squash
+> into this commit?
 
-net/netfilter/nf_conntrack_netlink.c:657:22: error: unused function 'ctnetlink_acct_size' [-Werror,-Wunused-function]
-  657 | static inline size_t ctnetlink_acct_size(const struct nf_conn *ct)
-      |                      ^~~~~~~~~~~~~~~~~~~
-net/netfilter/nf_conntrack_netlink.c:667:19: error: unused function 'ctnetlink_secctx_size' [-Werror,-Wunused-function]
-  667 | static inline int ctnetlink_secctx_size(const struct nf_conn *ct)
-      |                   ^~~~~~~~~~~~~~~~~~~~~
-net/netfilter/nf_conntrack_netlink.c:683:22: error: unused function 'ctnetlink_timestamp_size' [-Werror,-Wunused-function]
-  683 | static inline size_t ctnetlink_timestamp_size(const struct nf_conn *ct)
-      |                      ^~~~~~~~~~~~~~~~~~~~~~~~
+This doesn't work, but I wonder if something like it is what we want. I
+need to head out for the day, but here's what I've got. It's all wrong
+but might be of interest.
 
-Fix this by guarding possible unused functions with ifdeffery.
-
-See also commit 6863f5643dd7 ("kbuild: allow Clang to find unused static
-inline functions for W=1 build").
-
-Fixes: 4a96300cec88 ("netfilter: ctnetlink: restore inlining for netlink message size calculation")
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
- net/netfilter/nf_conntrack_netlink.c | 2 ++
- 1 file changed, 2 insertions(+)
-
-diff --git a/net/netfilter/nf_conntrack_netlink.c b/net/netfilter/nf_conntrack_netlink.c
-index 4cbf71d0786b..7ab7dc7569e7 100644
---- a/net/netfilter/nf_conntrack_netlink.c
-+++ b/net/netfilter/nf_conntrack_netlink.c
-@@ -654,6 +654,7 @@ static size_t ctnetlink_proto_size(const struct nf_conn *ct)
+diff --git a/arch/powerpc/include/asm/vdso/getrandom.h b/arch/powerpc/include/asm/vdso/getrandom.h
+index 501d6bb14e8a..acb271709d30 100644
+--- a/arch/powerpc/include/asm/vdso/getrandom.h
++++ b/arch/powerpc/include/asm/vdso/getrandom.h
+@@ -47,7 +47,8 @@ static __always_inline struct vdso_rng_data *__arch_get_vdso_rng_data(void)
  }
+
+ ssize_t __c_kernel_getrandom(void *buffer, size_t len, unsigned int flags, void *opaque_state,
+-			     size_t opaque_len, const struct vdso_rng_data *vd);
++			     size_t opaque_len, const struct vdso_data *vd,
++			     const struct vdso_rng_data *vrd);
+
+ #endif /* !__ASSEMBLY__ */
+
+diff --git a/arch/powerpc/kernel/vdso/getrandom.S b/arch/powerpc/kernel/vdso/getrandom.S
+index a957cd2b2b03..bc49eb87cfd1 100644
+--- a/arch/powerpc/kernel/vdso/getrandom.S
++++ b/arch/powerpc/kernel/vdso/getrandom.S
+@@ -32,7 +32,7 @@
+   .cfi_rel_offset r2, PPC_MIN_STKFRM + STK_GOT
  #endif
- 
-+#if defined(CONFIG_NF_CONNTRACK_EVENTS) || defined(CONFIG_NETFILTER_NETLINK_GLUE_CT)
- static inline size_t ctnetlink_acct_size(const struct nf_conn *ct)
+ 	get_datapage	r8
+-	addi		r8, r8, VDSO_RNG_DATA_OFFSET
++	addi		r9, r8, VDSO_RNG_DATA_OFFSET
+ 	bl		CFUNC(DOTSYM(\funct))
+ 	PPC_LL		r0, PPC_MIN_STKFRM + PPC_LR_STKOFF(r1)
+ #ifdef __powerpc64__
+diff --git a/arch/powerpc/kernel/vdso/vgetrandom.c b/arch/powerpc/kernel/vdso/vgetrandom.c
+index 5f855d45fb7b..408c76036868 100644
+--- a/arch/powerpc/kernel/vdso/vgetrandom.c
++++ b/arch/powerpc/kernel/vdso/vgetrandom.c
+@@ -8,7 +8,10 @@
+ #include <linux/types.h>
+
+ ssize_t __c_kernel_getrandom(void *buffer, size_t len, unsigned int flags, void *opaque_state,
+-			     size_t opaque_len, const struct vdso_rng_data *vd)
++			     size_t opaque_len, const struct vdso_data *vd,
++			     const struct vdso_rng_data *vrd)
  {
- 	if (!nf_ct_ext_exist(ct, NF_CT_EXT_ACCT))
-@@ -690,6 +691,7 @@ static inline size_t ctnetlink_timestamp_size(const struct nf_conn *ct)
- 	return 0;
- #endif
+-	return __cvdso_getrandom_data(vd, buffer, len, flags, opaque_state, opaque_len);
++	if (IS_ENABLED(CONFIG_TIME_NS) && vd->clock_mode == VDSO_CLOCKMODE_TIMENS)
++		vrd = (void *)vrd + (1UL << CONFIG_PAGE_SHIFT);
++	return __cvdso_getrandom_data(vrd, buffer, len, flags, opaque_state, opaque_len);
  }
-+#endif
- 
- #ifdef CONFIG_NF_CONNTRACK_EVENTS
- static size_t ctnetlink_nlmsg_size(const struct nf_conn *ct)
--- 
-2.43.0.rc1.1336.g36b5255a03ac
 
