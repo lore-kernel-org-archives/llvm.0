@@ -1,115 +1,137 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
+Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 80C711A0AFA
-	for <llvm@lists.linux.dev>; Thu,  5 Sep 2024 16:32:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CCC4D1A0705
+	for <llvm@lists.linux.dev>; Thu,  5 Sep 2024 16:55:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=93.17.235.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725553957; cv=none; b=XiZEBZyFdoI3v7+KVjQaXrdwjRBiolLU5IRwplYZbABjrl9FbIlLkG8ncjSW7QgANng4tLpSvPOjOJSq7Su6WATLZaa6XgNlJ//WDyN9vd9f0KkL+LmJx4h4RxxmeILDPq6f/H96KC3Aa1jexOuAmiSLzuRrUblqTi7xekIbTqA=
+	t=1725555340; cv=none; b=Tat4vEcETpWr4u1D8EVwAYOjDwl0JwUBFsv2j38ERvipfOx334QAb/HB6wCMHcx4Ec3qdct9vLASf0p6MQODAbQMLc64FnCNG0TvDVQzErIl4vMqyf6ZgYCkQZAEsD2UiX3VTAY/gLfKsgjfhWpqwjGpkNsRIvKcO8kWKgxyUwI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725553957; c=relaxed/simple;
-	bh=bM8/Aky9cVDTyu6+CHOGv/cduQxzuGgQDvzKsFymVfU=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=gPiCn2mmHITMSXXwv+n+85VMefn7sZogXUjzTV4ZHUF2+pzEen+6nvu1gnegkvvP0tcXW6uLM10c2hqT9S+SK0mdeZHRnguTSO/8DxTm46ojCZvP0bkXXti13wowO1WUbYqduMovJpHnlI2C4JEgkoFZNJXLeIpubZR8zcYlahU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=bZQ4zSna; arc=none smtp.client-ip=192.198.163.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="bZQ4zSna"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1725553956; x=1757089956;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=bM8/Aky9cVDTyu6+CHOGv/cduQxzuGgQDvzKsFymVfU=;
-  b=bZQ4zSnaNTmoIYXtBfjQlI8YTFTOmy0E+MXCJoQEyBYLCum4YWmEQ56g
-   EiMtdujnJ9Y+JxpPaFoC0ih5mmcsZUC/TBZDqx+P2Fs1Vov2k/Y+i6vUc
-   mH178g1qTtWcqnD10vYODq5Y77xYwON2BHfXu4zL8JGqOU4VnesvRRw1b
-   VDMLu2zAYCNwOTg2w4wm/qSDljSoOuznrd2/Pg9mohkIPaDuKWKCjp2hV
-   +m3cTROJsaWpC1lY6EFWWxbuehSunKwx6QK04h1D+Llls1OUF46xjynlk
-   kVtm8QdNCrSF11gHKFGjg1M/RIb325IZPrBEYVF9c+J9X9gZeyEGX3H04
-   w==;
-X-CSE-ConnectionGUID: oxc16evoTHauYpwKUPUa/g==
-X-CSE-MsgGUID: mWqeZBeNQ++P2jSclqHEkw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11186"; a="34952586"
-X-IronPort-AV: E=Sophos;i="6.10,205,1719903600"; 
-   d="scan'208";a="34952586"
-Received: from orviesa009.jf.intel.com ([10.64.159.149])
-  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Sep 2024 09:32:34 -0700
-X-CSE-ConnectionGUID: 5FzCHLL9QUO3km3zapl2Zw==
-X-CSE-MsgGUID: z9pulfogRiSFU0MeIpQb8Q==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.10,205,1719903600"; 
-   d="scan'208";a="65671184"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orviesa009.jf.intel.com with ESMTP; 05 Sep 2024 09:32:31 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-	id 347B031E; Thu, 05 Sep 2024 19:32:30 +0300 (EEST)
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: linux-ext4@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev
-Cc: "Theodore Ts'o" <tytso@mit.edu>,
-	Andreas Dilger <adilger.kernel@dilger.ca>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Subject: [PATCH v1 1/1] ext4: Mark ctx_*_flags() with __maybe_unused
-Date: Thu,  5 Sep 2024 19:32:29 +0300
-Message-ID: <20240905163229.140522-1-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.43.0.rc1.1336.g36b5255a03ac
+	s=arc-20240116; t=1725555340; c=relaxed/simple;
+	bh=kdVzNKSWW1JFEdIP3+NQic9f8mGqxCua6ECgEvOVeJM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=DKlSFSPslpFWz9KNH9EoeeJ7wpOv1krSsmANEj2UQAA6k+WvQRzaMncsUxbrutmskVgkg0r8+MgybquhyAhMmDvhR1Z4b3dDTIAGra21AJbz4ITkdRhFzzUXK8jz/ef+9ZSaTuGCzQ9QYUEIHhU/O6KJe5QydpF+78ZfnZrOLnQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=csgroup.eu; spf=pass smtp.mailfrom=csgroup.eu; arc=none smtp.client-ip=93.17.235.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=csgroup.eu
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=csgroup.eu
+Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
+	by localhost (Postfix) with ESMTP id 4X058M1gffz9sRs;
+	Thu,  5 Sep 2024 18:55:31 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from pegase2.c-s.fr ([172.26.127.65])
+	by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id utC0CxKuXD61; Thu,  5 Sep 2024 18:55:31 +0200 (CEST)
+Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
+	by pegase2.c-s.fr (Postfix) with ESMTP id 4X058M0gPbz9sRr;
+	Thu,  5 Sep 2024 18:55:31 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+	by messagerie.si.c-s.fr (Postfix) with ESMTP id 046AF8B77C;
+	Thu,  5 Sep 2024 18:55:31 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from messagerie.si.c-s.fr ([127.0.0.1])
+	by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
+	with ESMTP id ScrEPCzszJ3z; Thu,  5 Sep 2024 18:55:30 +0200 (CEST)
+Received: from [192.168.235.60] (unknown [192.168.235.60])
+	by messagerie.si.c-s.fr (Postfix) with ESMTP id EB2C58B778;
+	Thu,  5 Sep 2024 18:55:29 +0200 (CEST)
+Message-ID: <85c02620-e8b2-4c97-9905-685a9a4e556d@csgroup.eu>
+Date: Thu, 5 Sep 2024 18:55:27 +0200
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v5 4/5] powerpc/vdso: Wire up getrandom() vDSO
+ implementation on VDSO32
+To: "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc: Andrew Morton <akpm@linux-foundation.org>,
+ Steven Rostedt <rostedt@goodmis.org>, Masami Hiramatsu
+ <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+ Michael Ellerman <mpe@ellerman.id.au>, Nicholas Piggin <npiggin@gmail.com>,
+ Naveen N Rao <naveen@kernel.org>, Nathan Chancellor <nathan@kernel.org>,
+ Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling
+ <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
+ Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
+ linuxppc-dev@lists.ozlabs.org, linux-kselftest@vger.kernel.org,
+ llvm@lists.linux.dev, linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+ linux-trace-kernel@vger.kernel.org,
+ Adhemerval Zanella <adhemerval.zanella@linaro.org>,
+ Xi Ruoyao <xry111@xry111.site>
+References: <cover.1725304404.git.christophe.leroy@csgroup.eu>
+ <1f49c2ce009f8b007ab0676fb41187b2d54f28b2.1725304404.git.christophe.leroy@csgroup.eu>
+ <ZtnYqZI-nrsNslwy@zx2c4.com>
+Content-Language: fr-FR
+From: Christophe Leroy <christophe.leroy@csgroup.eu>
+In-Reply-To: <ZtnYqZI-nrsNslwy@zx2c4.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
-When ctx_set_flags() is unused, it prevents kernel builds
-with clang, `make W=1` and CONFIG_WERROR=y:
 
-.../ext4/super.c:2120:1: error: unused function 'ctx_set_flags' [-Werror,-Wunused-function]
- 2120 | EXT4_SET_CTX(flags); /* set only */
-      | ^~~~~~~~~~~~~~~~~~~
 
-Fix this by marking ctx_*_flags() with __maybe_unused
-(mark both for the sake of symmetry).
+Le 05/09/2024 à 18:13, Jason A. Donenfeld a écrit :
+>> +/*
+>> + * The macro sets two stack frames, one for the caller and one for the callee
+>> + * because there are no requirement for the caller to set a stack frame when
+>> + * calling VDSO so it may have omitted to set one, especially on PPC64
+>> + */
+>> +
+>> +.macro cvdso_call funct
+>> +  .cfi_startproc
+>> +	PPC_STLU	r1, -PPC_MIN_STKFRM(r1)
+>> +  .cfi_adjust_cfa_offset PPC_MIN_STKFRM
+>> +	mflr		r0
+>> +	PPC_STLU	r1, -PPC_MIN_STKFRM(r1)
+>> +  .cfi_adjust_cfa_offset PPC_MIN_STKFRM
+>> +	PPC_STL		r0, PPC_MIN_STKFRM + PPC_LR_STKOFF(r1)
+>> +  .cfi_rel_offset lr, PPC_MIN_STKFRM + PPC_LR_STKOFF
+>> +	get_datapage	r8
+>> +	addi		r8, r8, VDSO_RNG_DATA_OFFSET
+>> +	bl		CFUNC(DOTSYM(\funct))
+>> +	PPC_LL		r0, PPC_MIN_STKFRM + PPC_LR_STKOFF(r1)
+>> +	cmpwi		r3, 0
+>> +	mtlr		r0
+>> +	addi		r1, r1, 2 * PPC_MIN_STKFRM
+>> +  .cfi_restore lr
+>> +  .cfi_def_cfa_offset 0
+>> +	crclr		so
+>> +	bgelr+
+>> +	crset		so
+>> +	neg		r3, r3
+>> +	blr
+>> +  .cfi_endproc
+>> +.endm
+> 
+> You wrote in an earlier email that this worked with time namespaces, but
+> in my testing that doesn't seem to be the case.
 
-See also commit 6863f5643dd7 ("kbuild: allow Clang to find unused static
-inline functions for W=1 build").
+Did I write that ? I can't remember and neither can I remember testing 
+it with time namespaces.
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
- fs/ext4/super.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+> 
+>  From my test harness [1]:
+> 
+> Normal single thread
+>     vdso: 25000000 times in 12.494133131 seconds
+>     libc: 25000000 times in 69.594625188 seconds
+> syscall: 25000000 times in 67.349243972 seconds
+> Time namespace single thread
+>     vdso: 25000000 times in 71.673057436 seconds
+>     libc: 25000000 times in 71.712774121 seconds
+> syscall: 25000000 times in 66.902318080 seconds
+> 
+> I'm seeing this on ppc, ppc64, and ppc64le.
 
-diff --git a/fs/ext4/super.c b/fs/ext4/super.c
-index e72145c4ae5a..8bbd84c2f3ca 100644
---- a/fs/ext4/super.c
-+++ b/fs/ext4/super.c
-@@ -2095,16 +2095,16 @@ static int ext4_parse_test_dummy_encryption(const struct fs_parameter *param,
- }
- 
- #define EXT4_SET_CTX(name)						\
--static inline void ctx_set_##name(struct ext4_fs_context *ctx,		\
--				  unsigned long flag)			\
-+static inline __maybe_unused						\
-+void ctx_set_##name(struct ext4_fs_context *ctx, unsigned long flag)	\
- {									\
- 	ctx->mask_s_##name |= flag;					\
- 	ctx->vals_s_##name |= flag;					\
- }
- 
- #define EXT4_CLEAR_CTX(name)						\
--static inline void ctx_clear_##name(struct ext4_fs_context *ctx,	\
--				    unsigned long flag)			\
-+static inline __maybe_unused						\
-+void ctx_clear_##name(struct ext4_fs_context *ctx, unsigned long flag)	\
- {									\
- 	ctx->mask_s_##name |= flag;					\
- 	ctx->vals_s_##name &= ~flag;					\
--- 
-2.43.0.rc1.1336.g36b5255a03ac
+What is the command to use to test with time namespace ?
 
+> 
+> Can you figure out what's going on and send a fix, which I'll squash
+> into this commit?
+
+Sure
+
+> 
+> Jason
+> 
+> [1] https://eur01.safelinks.protection.outlook.com/?url=https%3A%2F%2Fgit.zx2c4.com%2Flinux-rng%2Fcommit%2F%3Fh%3Djd%2Fvdso-test-harness&data=05%7C02%7Cchristophe.leroy%40csgroup.eu%7C59fa9061064945c73a1608dccdc5b51c%7C8b87af7d86474dc78df45f69a2011bb5%7C0%7C0%7C638611496253413014%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C0%7C%7C%7C&sdata=ZUJqhcnZL7SYkuXUIt9Nlo46sZj26VYW%2F8I%2BrBLRpBE%3D&reserved=0
