@@ -1,64 +1,65 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 790AD16F831
-	for <llvm@lists.linux.dev>; Thu,  5 Sep 2024 18:43:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D95E8288C
+	for <llvm@lists.linux.dev>; Thu,  5 Sep 2024 18:48:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725561837; cv=none; b=e0PDoVsfnCvbFMsAEqoZBZ/k9JQHra2upaDUQfgMlmxms3MGQ3CwPQ2E3+0SOlwqj9KbIsie5VcNBeflFH62MVUo6nXWhCv7RcyPI+2MrEc6iefybmVImLXZLVZQ5C3ou3DxuqsvrkOVyScAQCasrh0dZZBdDfvGhiWwnl+eeuE=
+	t=1725562136; cv=none; b=uR1TBlsLVbsTXRgIZK0WxhBS+i6niTYZU8Vg7jr0xEgB4idh24q9QIdUM9MS3/e7P4j6PoEdj7Zo+ZxrTeiHLojkEL2W/SSY/LF/s2Ck6NdIfWrS8qQSCQcXP0lFvp/IYQ0QtUf++zT7cv1rQniYrHminfhbb6VZx4KTELV1LcQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725561837; c=relaxed/simple;
-	bh=nBfjKE3bg5Bz1iS/U8d1Ggy3AginAlf1fR3zMKD5m24=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=By5M32YQ/x5tCrtynZ6w+K0CyG01w4vn+WPwMP6Vmd+2tGYcZFqRQfbF+NiU45pWCrcsiE35u4o7nnDLgcgykHTw2Z8Nxjfg03B/jv7s/R6aQW5oirOStNPzCYzFjHieZsLrAfP5tjx/yVTVkFGnyY7xRqsOQ4zYJ5S2Ea9ajlc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ZQQOISAU; arc=none smtp.client-ip=198.175.65.15
+	s=arc-20240116; t=1725562136; c=relaxed/simple;
+	bh=ZljIkKUS2LF56585H3POgSW+/xG8s5rlvOrzZoy8J/s=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=NiUn9l2BBhix3m0cJhGKkjYEncq1q/R3Cr3UZrJdqR6gylYFn9+/SutD18wULjpx0QkOxyYpSytjJZBUyeJczLAHvkwlBxFFTfqyrItnDVmyR0QRdm85Olm4fL2O/q+gSYi8P3nuiCbNyZ+ptb/22ZNkPQ71EJ/tU2NSBcCC0I8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Ze+tsMpD; arc=none smtp.client-ip=192.198.163.12
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ZQQOISAU"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Ze+tsMpD"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1725561837; x=1757097837;
+  t=1725562135; x=1757098135;
   h=from:to:cc:subject:date:message-id:mime-version:
    content-transfer-encoding;
-  bh=nBfjKE3bg5Bz1iS/U8d1Ggy3AginAlf1fR3zMKD5m24=;
-  b=ZQQOISAUpQSoiZTtsoaj+Xi5Q/P6e7FqzvYFq6SDiqDssDiiKfuNR8eM
-   oCauTRzfewAuqNe6Ku58ldOgJm5G/eLpBHdhtnrxJW7oOI2VyXPSF4m4w
-   9vG4of7ICr6TRoFxEHncW/kucwDzN/thEZzNN6z4LY4ihPQJsMHjJqJ3B
-   wnw4YiGFeShzTd2QHnbiOOGYVkSa1dJ3z3YxN6vFRpYTkICNECiSjM5ed
-   LnQsN7PJJwxxZDIhKQ6OL3jcKt4U/J/trxc00a4EPk4jBzg9NW3N3Gjre
-   E5I5ZR3miZexMNad3Qglx92oTiPxvSAbu4XWoZC42/uwkT+tUjGlbalVR
-   Q==;
-X-CSE-ConnectionGUID: 8HPwyCh2SJa1yx0wIpR3gw==
-X-CSE-MsgGUID: ap97bDJAQpmpr1eSuRUnRA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11186"; a="28052937"
+  bh=ZljIkKUS2LF56585H3POgSW+/xG8s5rlvOrzZoy8J/s=;
+  b=Ze+tsMpDXUz9mF8CKTKHuMjM9aP9DB2WQP5NglkoNuDbfXo0shzqoljn
+   2QzkXYSJkqC2WlNRuTtkzN8epAu0cNycv4vwiSXMwSMw1fL1w9D2sOXG3
+   wHrs7NSEQdo2qUbMfHvaUZ9/evf4KJIeXbc/kXnBYWpQO98eoAm+Kpixe
+   A3/RYc/NxHcfw7FbLnnPnVW3vcD4CmyP6QwuyVosEaIl+LonsYZo1dvPV
+   Nl2NFMGoJT5rI5wwhaUthN1kDDOej5VBTYAVjdQz4Oxdb18odq0xW+E++
+   RaF/wuVXFjIqNed77AEPj8tD9OKB7Bmg9FGoWs0p+GnpjFFbp0G6Ag5LR
+   w==;
+X-CSE-ConnectionGUID: G71pFf0uQAis8xbOj/CQ9Q==
+X-CSE-MsgGUID: qiTXL7CdTeKbXTJJg+pY+g==
+X-IronPort-AV: E=McAfee;i="6700,10204,11186"; a="28187976"
 X-IronPort-AV: E=Sophos;i="6.10,205,1719903600"; 
-   d="scan'208";a="28052937"
-Received: from fmviesa010.fm.intel.com ([10.60.135.150])
-  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Sep 2024 11:43:56 -0700
-X-CSE-ConnectionGUID: zWIrjf09Rkieqb+IT4Yw6A==
-X-CSE-MsgGUID: 0aospkpTQAmLaCnKqZSwfw==
+   d="scan'208";a="28187976"
+Received: from orviesa005.jf.intel.com ([10.64.159.145])
+  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Sep 2024 11:48:54 -0700
+X-CSE-ConnectionGUID: /+wtgG3KS+ydmXMb+ufECw==
+X-CSE-MsgGUID: 8YAd/cYsT/GUYAOpERb1KA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.10,205,1719903600"; 
-   d="scan'208";a="65955636"
+   d="scan'208";a="70523400"
 Received: from black.fi.intel.com ([10.237.72.28])
-  by fmviesa010.fm.intel.com with ESMTP; 05 Sep 2024 11:43:53 -0700
+  by orviesa005.jf.intel.com with ESMTP; 05 Sep 2024 11:48:51 -0700
 Received: by black.fi.intel.com (Postfix, from userid 1003)
-	id BDE8731E; Thu, 05 Sep 2024 21:43:51 +0300 (EEST)
+	id 4D90B31E; Thu, 05 Sep 2024 21:48:49 +0300 (EEST)
 From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: Thomas Kuehne <thomas.kuehne@gmx.li>,
-	linux-input@vger.kernel.org,
+To: "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+	linux-pm@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	llvm@lists.linux.dev
-Cc: Jiri Kosina <jikos@kernel.org>,
-	Benjamin Tissoires <bentiss@kernel.org>,
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>,
+	Len Brown <len.brown@intel.com>,
+	Pavel Machek <pavel@ucw.cz>,
 	Nathan Chancellor <nathan@kernel.org>,
 	Nick Desaulniers <ndesaulniers@google.com>,
 	Bill Wendling <morbo@google.com>,
 	Justin Stitt <justinstitt@google.com>,
 	Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Subject: [PATCH v1 1/1] HID: debug: Remove duplicates from 'keys'
-Date: Thu,  5 Sep 2024 21:43:50 +0300
-Message-ID: <20240905184351.311858-1-andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v1 1/1] PM: hibernate: Remove unused stub for saveable_highmem_page()
+Date: Thu,  5 Sep 2024 21:48:48 +0300
+Message-ID: <20240905184848.318978-1-andriy.shevchenko@linux.intel.com>
 X-Mailer: git-send-email 2.43.0.rc1.1336.g36b5255a03ac
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -68,62 +69,39 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Duplicates in 'keys prevents kernel builds with clang, `make W=1` and
-CONFIG_WERROR=y, for example:
+When saveable_highmem_page() is unused, it prevents kernel builds
+with clang, `make W=1` and CONFIG_WERROR=y:
 
-drivers/hid/hid-debug.c:3443:18: error: initializer overrides prior initialization of this subobject [-Werror,-Winitializer-overrides]
- 3443 |         [KEY_HANGEUL] = "HanGeul",              [KEY_HANGUP_PHONE] = "HangUpPhone",
-      |                         ^~~~~~~~~
-drivers/hid/hid-debug.c:3217:18: note: previous initialization is here
- 3217 |         [KEY_HANGUEL] = "Hangeul",              [KEY_HANJA] = "Hanja",
-      |                         ^~~~~~~~~
+kernel/power/snapshot.c:1369:21: error: unused function 'saveable_highmem_page' [-Werror,-Wunused-function]
+ 1369 | static inline void *saveable_highmem_page(struct zone *z, unsigned long p)
+      |                     ^~~~~~~~~~~~~~~~~~~~~
 
-Fix this by removing them.
+Fix this by removing unused stub.
 
-The logic of removal is that, remove...
-1) if there is a constant that uses another defined constant, OR
-2) the one that appears later in the list.
+See also commit 6863f5643dd7 ("kbuild: allow Clang to find unused static
+inline functions for W=1 build").
 
 Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 ---
- drivers/hid/hid-debug.c | 9 ++++-----
- 1 file changed, 4 insertions(+), 5 deletions(-)
+ kernel/power/snapshot.c | 5 -----
+ 1 file changed, 5 deletions(-)
 
-diff --git a/drivers/hid/hid-debug.c b/drivers/hid/hid-debug.c
-index d5abfe652fb5..618ebaa3bfc0 100644
---- a/drivers/hid/hid-debug.c
-+++ b/drivers/hid/hid-debug.c
-@@ -3214,7 +3214,7 @@ static const char *keys[KEY_MAX + 1] = {
- 	[KEY_VOLUMEUP] = "VolumeUp",		[KEY_POWER] = "Power",
- 	[KEY_KPEQUAL] = "KPEqual",		[KEY_KPPLUSMINUS] = "KPPlusMinus",
- 	[KEY_PAUSE] = "Pause",			[KEY_KPCOMMA] = "KPComma",
--	[KEY_HANGUEL] = "Hangeul",		[KEY_HANJA] = "Hanja",
-+	[KEY_HANJA] = "Hanja",
- 	[KEY_YEN] = "Yen",			[KEY_LEFTMETA] = "LeftMeta",
- 	[KEY_RIGHTMETA] = "RightMeta",		[KEY_COMPOSE] = "Compose",
- 	[KEY_STOP] = "Stop",			[KEY_AGAIN] = "Again",
-@@ -3309,9 +3309,9 @@ static const char *keys[KEY_MAX + 1] = {
- 	[KEY_EPG] = "EPG",			[KEY_PVR] = "PVR",
- 	[KEY_MHP] = "MHP",			[KEY_LANGUAGE] = "Language",
- 	[KEY_TITLE] = "Title",			[KEY_SUBTITLE] = "Subtitle",
--	[KEY_ANGLE] = "Angle",			[KEY_ZOOM] = "Zoom",
-+	[KEY_ANGLE] = "Angle",
- 	[KEY_MODE] = "Mode",			[KEY_KEYBOARD] = "Keyboard",
--	[KEY_SCREEN] = "Screen",		[KEY_PC] = "PC",
-+	[KEY_PC] = "PC",
- 	[KEY_TV] = "TV",			[KEY_TV2] = "TV2",
- 	[KEY_VCR] = "VCR",			[KEY_VCR2] = "VCR2",
- 	[KEY_SAT] = "Sat",			[KEY_SAT2] = "Sat2",
-@@ -3409,8 +3409,7 @@ static const char *keys[KEY_MAX + 1] = {
- 	[BTN_TRIGGER_HAPPY35] = "TriggerHappy35", [BTN_TRIGGER_HAPPY36] = "TriggerHappy36",
- 	[BTN_TRIGGER_HAPPY37] = "TriggerHappy37", [BTN_TRIGGER_HAPPY38] = "TriggerHappy38",
- 	[BTN_TRIGGER_HAPPY39] = "TriggerHappy39", [BTN_TRIGGER_HAPPY40] = "TriggerHappy40",
--	[BTN_DIGI] = "Digi",			[BTN_STYLUS3] = "Stylus3",
--	[BTN_TOOL_QUINTTAP] = "ToolQuintTap",	[BTN_WHEEL] = "Wheel",
-+	[BTN_STYLUS3] = "Stylus3",		 [BTN_TOOL_QUINTTAP] = "ToolQuintTap",
- 	[KEY_10CHANNELSDOWN] = "10ChannelsDown",
- 	[KEY_10CHANNELSUP] = "10ChannelsUp",
- 	[KEY_3D_MODE] = "3DMode",		[KEY_ADDRESSBOOK] = "Addressbook",
+diff --git a/kernel/power/snapshot.c b/kernel/power/snapshot.c
+index 405eddbda4fc..30894d8f0a78 100644
+--- a/kernel/power/snapshot.c
++++ b/kernel/power/snapshot.c
+@@ -1365,11 +1365,6 @@ static unsigned int count_highmem_pages(void)
+ 	}
+ 	return n;
+ }
+-#else
+-static inline void *saveable_highmem_page(struct zone *z, unsigned long p)
+-{
+-	return NULL;
+-}
+ #endif /* CONFIG_HIGHMEM */
+ 
+ /**
 -- 
 2.43.0.rc1.1336.g36b5255a03ac
 
