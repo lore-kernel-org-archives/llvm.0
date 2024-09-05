@@ -1,70 +1,62 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F22B51A0AE1
-	for <llvm@lists.linux.dev>; Thu,  5 Sep 2024 17:13:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 55DCE45005
+	for <llvm@lists.linux.dev>; Thu,  5 Sep 2024 17:16:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725556433; cv=none; b=gLbBMrVWsnv9IwohwqN6GaagUwEjKJrsyiV3GpIe27Bn3J4tP1LmHcTIPeVxXtL/pOfVqdPWfAuqfhjiFBbrZp30GqptfYMd2ty1yVV/qX+hnKBm2x3xUn+pmU11mpEMsL6T+KayCLgHRPDi3nacihu1XJRry9Pg4JnA2/7ChCU=
+	t=1725556562; cv=none; b=XC7REKTXdpCXeeEp1hFBCa8zuXiBTbR8izzzZztky3Uwd3SGZBGubn4Lf/RbViqUwMu5sFa/XDdcbSEBht9auBwXH/IdxL4diHun1eIhU32wgOF4zynsNbhy4ZO/JgjOpPDOhtF5ZacEwgZJBOfCAWHhESXEnQxt1oZ7KSP4V94=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725556433; c=relaxed/simple;
-	bh=OKsws4AYyTGeGlOnUqGnm9T+Wb0mx3BnDDnBXSbo06g=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=lpYZ27LK0lWA36Nteif6gQbISbmR/bPmFZibxO9MecDPoohbpYNH3KeHUxAmzpi2rUr8eLuMTtv7mARnCpLTahzC/G3/ymqZ9SRaJfREK2gyfj2ap6PaS4iaLYhO6Kn8VgmpA8vj6auMwy2GRgJdv13OsD09fcEqfYkCgjtwBkI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=QA2FDKB7; arc=none smtp.client-ip=198.175.65.11
+	s=arc-20240116; t=1725556562; c=relaxed/simple;
+	bh=HprEm+25bMv9ipc0ur/k025rHi0KLLQza4pA0qsXpJo=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=CHdleN2oIWEFdtIA60k/QHZlZs4YXrkINm7m/m4jHALfdImRcHNxSdYJo90/FRGV7ekATjmpdxotW3Y7TMcSKVSyEwBKWsuJtI3LdAovVuErG9Hs2vkTMuHUTIYDwQPTuTufylnjUR0m70Il3Wbo3cjg7Ga9CHATKWC5u6X2mls=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=W5LSHwMM; arc=none smtp.client-ip=198.175.65.9
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="QA2FDKB7"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="W5LSHwMM"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1725556432; x=1757092432;
+  t=1725556562; x=1757092562;
   h=from:to:cc:subject:date:message-id:mime-version:
    content-transfer-encoding;
-  bh=OKsws4AYyTGeGlOnUqGnm9T+Wb0mx3BnDDnBXSbo06g=;
-  b=QA2FDKB7fkmaLC3oQlZUzmX78GxAvUVRF1stKOyPs/F7nABNyGI3e2Qv
-   As7rKsJpN1mhdHAtMPTiJBCYE295zRzI3DozIBBdkYW5kxIy2kvfUSfOy
-   tT5zvgApw34i997zr7/2ia+uhJ+yFMVIYKWnd29YHUTRukOVbEigRHc/N
-   uLsEkGXobmvAQxJH10Lug6IyGGIOt34bAkrM1BHka/YIQNvf/7pYFg3kd
-   CwQyGLns9RxSjeIImHBEpOlWdeB1rJKTvweJ7+Ru8oYWjPOl8o9a46M8B
-   FWbYGpBtlBTys89G7Ng1W8cpTyZe8yUXMNIyKxze0Kz8QNy++qzu7lPOk
-   g==;
-X-CSE-ConnectionGUID: BIXvweBDS4OnCMUqt9Vifw==
-X-CSE-MsgGUID: l6jzs0yaSAuy98ZApmG9tw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11186"; a="34863340"
+  bh=HprEm+25bMv9ipc0ur/k025rHi0KLLQza4pA0qsXpJo=;
+  b=W5LSHwMM+TczkJZd0gPFWfniVFffWE5/jT51OMpREVSzaRJVt6/zzOaQ
+   OOrng+eyY2QSjH6Txy0zzIm8l2Ths8vM+uswPKyyvmjmLwo16Nk7VPHVt
+   Wjmyqytqd4xINT8EKe+hThhczoVzkyK8+JSe4yQyRfi3Geo7gnUgqC0/P
+   nI9R6kmdYLjRGLnfZDoS8M3Th11Z4WtWlrSNOgMPmdCIEmOTqYv6Ho7nH
+   xT8fYT0hFlg3eSp8l00rmfNHrKyoxCFBk8q8uD+w5iRBS41sgWigSvNuT
+   jXIh1qNWftTbe0wExnEtO1FemoqiMK45nvtx7gLW/zrU0SthJmfuMUX6H
+   A==;
+X-CSE-ConnectionGUID: tAO4ONZ9SHaD5xvPQTAvSw==
+X-CSE-MsgGUID: w70FFM4tRuGIbVD4H0oceg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11186"; a="46820335"
 X-IronPort-AV: E=Sophos;i="6.10,205,1719903600"; 
-   d="scan'208";a="34863340"
-Received: from fmviesa007.fm.intel.com ([10.60.135.147])
-  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Sep 2024 10:13:52 -0700
-X-CSE-ConnectionGUID: t+S3g3I7Q+Kc8My2JXJOcg==
-X-CSE-MsgGUID: 8O8VSu/cQgSr5sGAN0d3HQ==
+   d="scan'208";a="46820335"
+Received: from fmviesa004.fm.intel.com ([10.60.135.144])
+  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Sep 2024 10:16:01 -0700
+X-CSE-ConnectionGUID: jG0AhIh3TROoGs10VT+HdA==
+X-CSE-MsgGUID: NJo70IV1TDe5tF7dhehhQQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.10,205,1719903600"; 
-   d="scan'208";a="65409979"
+   d="scan'208";a="70260947"
 Received: from black.fi.intel.com ([10.237.72.28])
-  by fmviesa007.fm.intel.com with ESMTP; 05 Sep 2024 10:13:47 -0700
+  by fmviesa004.fm.intel.com with ESMTP; 05 Sep 2024 10:15:59 -0700
 Received: by black.fi.intel.com (Postfix, from userid 1003)
-	id 5D4D331E; Thu, 05 Sep 2024 20:13:46 +0300 (EEST)
+	id 8BE3531E; Thu, 05 Sep 2024 20:15:57 +0300 (EEST)
 From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: Ingo Molnar <mingo@kernel.org>,
+To: Andrew Morton <akpm@linux-foundation.org>,
+	linux-mm@kvack.org,
 	linux-kernel@vger.kernel.org,
 	llvm@lists.linux.dev
-Cc: Ingo Molnar <mingo@redhat.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Juri Lelli <juri.lelli@redhat.com>,
-	Vincent Guittot <vincent.guittot@linaro.org>,
-	Dietmar Eggemann <dietmar.eggemann@arm.com>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Ben Segall <bsegall@google.com>,
-	Mel Gorman <mgorman@suse.de>,
-	Valentin Schneider <vschneid@redhat.com>,
-	Nathan Chancellor <nathan@kernel.org>,
+Cc: Nathan Chancellor <nathan@kernel.org>,
 	Nick Desaulniers <ndesaulniers@google.com>,
 	Bill Wendling <morbo@google.com>,
 	Justin Stitt <justinstitt@google.com>,
 	Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Subject: [PATCH v1 1/1] sched/fair: Mark cfs_bandwidth_used() and m*_vruntime() with __maybe_unused
-Date: Thu,  5 Sep 2024 20:12:10 +0300
-Message-ID: <20240905171210.267626-1-andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v1 1/1] mm/page_alloc: Mark has_unaccepted_memory() with __maybe_unused
+Date: Thu,  5 Sep 2024 20:15:53 +0300
+Message-ID: <20240905171553.275054-1-andriy.shevchenko@linux.intel.com>
 X-Mailer: git-send-email 2.43.0.rc1.1336.g36b5255a03ac
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -74,17 +66,14 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-When cfs_bandwidth_used() is unused, it prevents kernel builds
+When has_unaccepted_memory() is unused, it prevents kernel builds
 with clang, `make W=1` and CONFIG_WERROR=y:
 
-kernel/sched/fair.c:526:19: error: unused function 'max_vruntime' [-Werror,-Wunused-function]
-  526 | static inline u64 max_vruntime(u64 max_vruntime, u64 vruntime)
-      |                   ^~~~~~~~~~~~
-kernel/sched/fair.c:6580:20: error: unused function 'cfs_bandwidth_used' [-Werror,-Wunused-function]
- 6580 | static inline bool cfs_bandwidth_used(void)
-      |                    ^~~~~~~~~~~~~~~~~~
+mm/page_alloc.c:7036:20: error: unused function 'has_unaccepted_memory' [-Werror,-Wunused-function]
+ 7036 | static inline bool has_unaccepted_memory(void)
+      |                    ^~~~~~~~~~~~~~~~~~~~~
 
-Fix this by marking them with __maybe_unused (all cases for the sake of
+Fix this by marking it with __maybe_unused (all cases for the sake of
 symmetry).
 
 See also commit 6863f5643dd7 ("kbuild: allow Clang to find unused static
@@ -92,55 +81,28 @@ inline functions for W=1 build").
 
 Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 ---
- kernel/sched/fair.c | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+ mm/page_alloc.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-index 9057584ec06d..b9d35675db50 100644
---- a/kernel/sched/fair.c
-+++ b/kernel/sched/fair.c
-@@ -523,7 +523,7 @@ void account_cfs_rq_runtime(struct cfs_rq *cfs_rq, u64 delta_exec);
-  * Scheduling class tree data structure manipulation methods:
-  */
- 
--static inline u64 max_vruntime(u64 max_vruntime, u64 vruntime)
-+static inline __maybe_unused u64 max_vruntime(u64 max_vruntime, u64 vruntime)
- {
- 	s64 delta = (s64)(vruntime - max_vruntime);
- 	if (delta > 0)
-@@ -532,7 +532,7 @@ static inline u64 max_vruntime(u64 max_vruntime, u64 vruntime)
- 	return max_vruntime;
+diff --git a/mm/page_alloc.c b/mm/page_alloc.c
+index c565de8f48e9..3b47f1b17ae5 100644
+--- a/mm/page_alloc.c
++++ b/mm/page_alloc.c
+@@ -6990,7 +6990,7 @@ static bool cond_accept_memory(struct zone *zone, unsigned int order)
+ 	return ret;
  }
  
--static inline u64 min_vruntime(u64 min_vruntime, u64 vruntime)
-+static inline __maybe_unused u64 min_vruntime(u64 min_vruntime, u64 vruntime)
+-static inline bool has_unaccepted_memory(void)
++static inline __maybe_unused bool has_unaccepted_memory(void)
  {
- 	s64 delta = (s64)(vruntime - min_vruntime);
- 	if (delta < 0)
-@@ -5547,7 +5547,7 @@ entity_tick(struct cfs_rq *cfs_rq, struct sched_entity *curr, int queued)
- #ifdef CONFIG_JUMP_LABEL
- static struct static_key __cfs_bandwidth_used;
- 
--static inline bool cfs_bandwidth_used(void)
-+static inline __maybe_unused bool cfs_bandwidth_used(void)
- {
- 	return static_key_false(&__cfs_bandwidth_used);
+ 	return static_branch_unlikely(&zones_with_unaccepted_pages);
  }
-@@ -5562,7 +5562,7 @@ void cfs_bandwidth_usage_dec(void)
- 	static_key_slow_dec_cpuslocked(&__cfs_bandwidth_used);
+@@ -7033,7 +7033,7 @@ static bool cond_accept_memory(struct zone *zone, unsigned int order)
+ 	return false;
  }
- #else /* CONFIG_JUMP_LABEL */
--static bool cfs_bandwidth_used(void)
-+static inline __maybe_unused bool cfs_bandwidth_used(void)
- {
- 	return true;
- }
-@@ -6577,7 +6577,7 @@ static void sched_fair_update_stop_tick(struct rq *rq, struct task_struct *p)
  
- #else /* CONFIG_CFS_BANDWIDTH */
- 
--static inline bool cfs_bandwidth_used(void)
-+static inline __maybe_unused bool cfs_bandwidth_used(void)
+-static inline bool has_unaccepted_memory(void)
++static inline __maybe_unused bool has_unaccepted_memory(void)
  {
  	return false;
  }
