@@ -1,137 +1,136 @@
-Received: from mail-wr1-f44.google.com (mail-wr1-f44.google.com [209.85.221.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2266E146D7F
-	for <llvm@lists.linux.dev>; Wed,  4 Sep 2024 22:36:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 940464C80;
+	Thu,  5 Sep 2024 00:32:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725489407; cv=none; b=ds+H9HZd0EJZw9w73qPwRtJSeon27TydbsjrF5Zpm4p4nL8JzJY6hSYHMVz9ThU/2VXGYfA84Mr4wrcY8WcvMH6I6NrkHiWXl3uIRWke3QAqg+DrDRNoO/19L3xcPjDMibolcpZVc+WAlPO0+6PxKmmgm2w+fN0QAUren4lormo=
+	t=1725496379; cv=none; b=kl27A5MfdwmrYLYNPdwPFvzkCroslXByNrVgY4+VusVnSLxxaTTXrlWY0qZYOzmaGokrf+JarxDrJvLUqvI4lhykVgMDEpg2Ycx+R5dUFKac/uQ60z5GkjsTwzwbodBzP54Jnb7pIhS+ftuJh3Mrew3hA3rymTcFtgyZHOFPnwA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725489407; c=relaxed/simple;
-	bh=5r0lJ9UNKLZgKsa8qZH/2f8ua7MPxUhfTLSSPcSjv0I=;
-	h=From:Date:To:Message-ID:Subject:MIME-Version:Content-Type; b=h+RV2n0+ojj2AdIy5fEOsMm3OvGNpjaREmG64xUBpyTZC4+fYKWWI8dtiE9IX2ZhiQ2VRxqpgArOokyeZk1LUQzwTyZ0F+bZ120OaZuf6xB+XLys/JckH5I+deI7boriblpXdXNxnxvlh7VKxDmn9AG0rBxg8LpFPDfhQXJdHDw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=eTDxNWG1; arc=none smtp.client-ip=209.85.221.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+	s=arc-20240116; t=1725496379; c=relaxed/simple;
+	bh=crazjdg71klOd1OiBadjY6+WBPbLnAkc9ES/WcRTk1Q=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=Ec553Cm8h8h7a58cyifj/uHL0Tx+BL30PIr4WFcJFY89594gs04JcoCTp2gWdyyFtvnBZplWBLqGVl4Zbh5r6yzEZEYknkzdudGOdP3PFF4JsguUxwwZgLasZysygwjc2AtFUaWW9rYeYGC8ksTiKf2DtjY4gOqntTw6FoODvnA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=NjEfXjly; arc=none smtp.client-ip=198.175.65.21
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="eTDxNWG1"
-Received: by mail-wr1-f44.google.com with SMTP id ffacd0b85a97d-374c84dcc90so36570f8f.1
-        for <llvm@lists.linux.dev>; Wed, 04 Sep 2024 15:36:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1725489403; x=1726094203; darn=lists.linux.dev;
-        h=list-id:mime-version:subject:message-id:to:reply-to:date:from:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=neixDsfWSvKP9NLUVqQFsDa2E/vyWXuFC8jA2RO97Sg=;
-        b=eTDxNWG1Szjh+nBXYz17ryne3EtLPBDBb6CKvJAxQa/sJ/KFnku6umHuk4JMiVIdbd
-         NZGI2SskosBZOO6NAh9BfW48zO8wXv8xn28O13dltGNHlo6/hSi62meWItLxbtF2u25e
-         m1F4xzW5/9N60NCJFSrxkkLl/hpQgexvsbV7d+U8wfWTp18PgZntg8lzUpRdBy4QAWXc
-         N3GD4SBGHV+5U2batcTb8TmWl6EsenC5HT3YsRvjTM+YvqTnAYGb1QeIJAgKr+vPRSJ+
-         lm1AKM4HNdTq/HV/CL4r21U9Prduygx/HR2m7bjhI9sNYYQr/XkoQbYXU7xWqFaPGxWn
-         1nXg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1725489403; x=1726094203;
-        h=list-id:mime-version:subject:message-id:to:reply-to:date:from
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=neixDsfWSvKP9NLUVqQFsDa2E/vyWXuFC8jA2RO97Sg=;
-        b=WL3585r6e+Qe3zByeu8mQ47F0G29H4vQa1Tmmsi0MdgzgXwIypRKMllOMKB32eRQD1
-         mb81p3QwA29zkixJoeGxV1QNC+wT20Oaetyo3Y1odsXfT63eTuoVG7+fbozywssn5Zlc
-         hMGAjHFAaRYzvo+WHMRC3WLNBp6yQry4kRm9kLyykT/PZ+a5p+HRrgtFsCHoz+ApvMSN
-         PkSy1SxfBoS6FNt62whjABJKF4WXmt7Gh8m2qBnddt49NPBdYlWDOTJkcBQd7VqYFYOw
-         qayG8IuYk9nYoMFudWuMdi9v2bE9QgGukfTmyE7FLMxRuRzglVryqz0JGaeoJM/M5fqz
-         SsrQ==
-X-Gm-Message-State: AOJu0Yxnm0psLviXEx5SRwWirIUZdebkY4FPsEhFViiyRDaji9iFaNDg
-	ZBaT+GgePtRJkbxwZsOoZbhw53JQdL8h63UIkp+6XydgxwLv+6i1YNvQOkBojgm5bUNom0oBkUR
-	1
-X-Google-Smtp-Source: AGHT+IFftUj9/TGj9HoUVfrCkiMl4RAxOhiBwwn7Sg2/RAowDLunzmnStcjRAP7/dH6Q+NsGen/CSw==
-X-Received: by 2002:adf:e3c9:0:b0:374:b71f:72c9 with SMTP id ffacd0b85a97d-3776f452fd1mr2706177f8f.16.1725489403229;
-        Wed, 04 Sep 2024 15:36:43 -0700 (PDT)
-Received: from jenkins.jenkins (ci.linaro.org. [88.99.136.175])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-42bb6df0f41sm214684785e9.19.2024.09.04.15.36.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 04 Sep 2024 15:36:42 -0700 (PDT)
-From: ci_notify@linaro.org
-X-Google-Original-From: linaro-infrastructure-errors@lists.linaro.org
-Date: Wed, 4 Sep 2024 22:36:41 +0000 (UTC)
-Reply-To: linaro-toolchain@lists.linaro.org
-To: llvm@lists.linux.dev
-Message-ID: <2051722969.176113.1725489402796@jenkins.jenkins>
-Subject: [Linaro-TCWG-CI] v6.11-rc1-143-g4e7795eda4459: Failure on aarch64
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="NjEfXjly"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1725496376; x=1757032376;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=crazjdg71klOd1OiBadjY6+WBPbLnAkc9ES/WcRTk1Q=;
+  b=NjEfXjly+gwMdMhH/nqr7gsEdMzmewnqge1/MIsDF/G/9DSkUscABRU2
+   +q6EtGLS9aOfrrxV8AuHZkAngDv1+siTIjDUMU20hBS9ZGkISqFDq5J/N
+   6GQ00KuaeLA/7IN+6RHHQRr6dhADHjoWaAsFFCCX0mKTGhNeyvE81o0ld
+   jjCxncchNUtEHEgd2CHzEItrVwfAslmfTTepFh6JeJPfhWPwSCwk9c6yc
+   hJHW1RAwHhyozXpV6tcD1/rL+LRDrQYXU6BA3Zd8PXgLoBgoTDvRSIT7V
+   vgzSFfO3UitCCq1y8nZP3kRrI0MoLpfl+o3oK5DHWFOrib6BpMbY1sRQp
+   Q==;
+X-CSE-ConnectionGUID: sfUzdg99QDKZJAh52ERSIg==
+X-CSE-MsgGUID: rXGd9fAJT/WkZKJFOV+faQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11185"; a="24140924"
+X-IronPort-AV: E=Sophos;i="6.10,203,1719903600"; 
+   d="scan'208";a="24140924"
+Received: from orviesa009.jf.intel.com ([10.64.159.149])
+  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Sep 2024 17:32:56 -0700
+X-CSE-ConnectionGUID: G6CR/n1CQMm/dwrYVsNtYA==
+X-CSE-MsgGUID: ETX3xN9XTNyeIDOFyhBrmg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.10,203,1719903600"; 
+   d="scan'208";a="65434829"
+Received: from lkp-server01.sh.intel.com (HELO 9c6b1c7d3b50) ([10.239.97.150])
+  by orviesa009.jf.intel.com with ESMTP; 04 Sep 2024 17:32:52 -0700
+Received: from kbuild by 9c6b1c7d3b50 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1sm0Qc-0008jT-22;
+	Thu, 05 Sep 2024 00:32:50 +0000
+Date: Thu, 5 Sep 2024 08:32:46 +0800
+From: kernel test robot <lkp@intel.com>
+To: Ville =?iso-8859-1?Q?Syrj=E4l=E4?= <ville.syrjala@linux.intel.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-kernel@vger.kernel.org
+Subject: drivers/gpu/drm/sti/sti_plane.h:32:28: error: bitwise operation
+ between different enumeration types ('enum sti_plane_type' and 'enum
+ sti_plane_id_of_type')
+Message-ID: <202409050827.ygmp05pG-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; 
-	boundary="----=_Part_176112_1777319573.1725489402090"
-X-Jenkins-Job: TCWG Build tcwg_kernel/llvm-master-aarch64-next-allyesconfig
-X-Jenkins-Result: SUCCESS
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-------=_Part_176112_1777319573.1725489402090
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Hi Ville,
 
-Dear contributor, our automatic CI has detected problems related to your patch(es).  Please find some details below.  If you have any questions, please follow up on linaro-toolchain@lists.linaro.org mailing list, Libera's #linaro-tcwg channel, or ping your favourite Linaro toolchain developer on the usual project channel.
+FYI, the error/warning still remains.
 
-We understand that it might be difficult to find the necessary logs or reproduce the issue locally. If you can't get what you need from our CI within minutes, let us know and we will be happy to help.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   c763c43396883456ef57e5e78b64d3c259c4babc
+commit: 74bde7581df3e18061119e1b27b63d0a9ea57b7a drm/sti: Allow build with COMPILE_TEST=y
+date:   3 months ago
+config: powerpc-randconfig-002-20240905 (https://download.01.org/0day-ci/archive/20240905/202409050827.ygmp05pG-lkp@intel.com/config)
+compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 05f5a91d00b02f4369f46d076411c700755ae041)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240905/202409050827.ygmp05pG-lkp@intel.com/reproduce)
 
-We track this report status in https://linaro.atlassian.net/browse/LLVM-1339 , please let us know if you are looking at the problem and/or when you have a fix.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202409050827.ygmp05pG-lkp@intel.com/
 
-In CI config tcwg_kernel/llvm-master-aarch64-next-allyesconfig after:
+All errors (new ones prefixed by >>):
 
-  | commit v6.11-rc1-143-g4e7795eda4459
-  | Author: Kent Overstreet <kent.overstreet@linux.dev>
-  | Date:   Sun Sep 1 18:08:25 2024 -0400
-  | 
-  |     bcachefs: bch2_sb_member_alloc()
-  |     
-  |     refactoring
-  |     
-  |     Signed-off-by: Kent Overstreet <kent.overstreet@linux.dev>
+   In file included from drivers/gpu/drm/sti/sti_compositor.c:10:
+   In file included from include/linux/io.h:14:
+   In file included from arch/powerpc/include/asm/io.h:24:
+   In file included from include/linux/mm.h:2253:
+   include/linux/vmstat.h:514:36: error: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Werror,-Wenum-enum-conversion]
+     514 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+   In file included from drivers/gpu/drm/sti/sti_compositor.c:20:
+   In file included from drivers/gpu/drm/sti/sti_compositor.h:15:
+   In file included from drivers/gpu/drm/sti/sti_mixer.h:17:
+>> drivers/gpu/drm/sti/sti_plane.h:32:28: error: bitwise operation between different enumeration types ('enum sti_plane_type' and 'enum sti_plane_id_of_type') [-Werror,-Wenum-enum-conversion]
+      32 |         STI_GDP_0       = STI_GDP | STI_ID_0,
+         |                           ~~~~~~~ ^ ~~~~~~~~
+   drivers/gpu/drm/sti/sti_plane.h:33:28: error: bitwise operation between different enumeration types ('enum sti_plane_type' and 'enum sti_plane_id_of_type') [-Werror,-Wenum-enum-conversion]
+      33 |         STI_GDP_1       = STI_GDP | STI_ID_1,
+         |                           ~~~~~~~ ^ ~~~~~~~~
+   drivers/gpu/drm/sti/sti_plane.h:34:28: error: bitwise operation between different enumeration types ('enum sti_plane_type' and 'enum sti_plane_id_of_type') [-Werror,-Wenum-enum-conversion]
+      34 |         STI_GDP_2       = STI_GDP | STI_ID_2,
+         |                           ~~~~~~~ ^ ~~~~~~~~
+   drivers/gpu/drm/sti/sti_plane.h:35:28: error: bitwise operation between different enumeration types ('enum sti_plane_type' and 'enum sti_plane_id_of_type') [-Werror,-Wenum-enum-conversion]
+      35 |         STI_GDP_3       = STI_GDP | STI_ID_3,
+         |                           ~~~~~~~ ^ ~~~~~~~~
+   drivers/gpu/drm/sti/sti_plane.h:36:28: error: bitwise operation between different enumeration types ('enum sti_plane_type' and 'enum sti_plane_id_of_type') [-Werror,-Wenum-enum-conversion]
+      36 |         STI_HQVDP_0     = STI_VDP | STI_ID_0,
+         |                           ~~~~~~~ ^ ~~~~~~~~
+   6 errors generated.
 
-Results changed to
-# reset_artifacts:
--10
-# build_abe binutils:
--9
-# build_kernel_llvm:
--5
-# build_abe qemu:
--2
-# linux_n_obj:
-23322
 
-From
-# reset_artifacts:
--10
-# build_abe binutils:
--9
-# build_kernel_llvm:
--5
-# build_abe qemu:
--2
-# linux_n_obj:
-23397
-# linux build successful:
-all
+vim +32 drivers/gpu/drm/sti/sti_plane.h
 
-The configuration of this build is:
-CI config tcwg_kernel/llvm-master-aarch64-next-allyesconfig
+871bcdfea68560 drivers/gpu/drm/sti/sti_drm_plane.h Vincent Abriou 2015-07-31  30  
+871bcdfea68560 drivers/gpu/drm/sti/sti_drm_plane.h Vincent Abriou 2015-07-31  31  enum sti_plane_desc {
+871bcdfea68560 drivers/gpu/drm/sti/sti_drm_plane.h Vincent Abriou 2015-07-31 @32  	STI_GDP_0       = STI_GDP | STI_ID_0,
+871bcdfea68560 drivers/gpu/drm/sti/sti_drm_plane.h Vincent Abriou 2015-07-31  33  	STI_GDP_1       = STI_GDP | STI_ID_1,
+871bcdfea68560 drivers/gpu/drm/sti/sti_drm_plane.h Vincent Abriou 2015-07-31  34  	STI_GDP_2       = STI_GDP | STI_ID_2,
+871bcdfea68560 drivers/gpu/drm/sti/sti_drm_plane.h Vincent Abriou 2015-07-31  35  	STI_GDP_3       = STI_GDP | STI_ID_3,
+871bcdfea68560 drivers/gpu/drm/sti/sti_drm_plane.h Vincent Abriou 2015-07-31  36  	STI_HQVDP_0     = STI_VDP | STI_ID_0,
+871bcdfea68560 drivers/gpu/drm/sti/sti_drm_plane.h Vincent Abriou 2015-07-31  37  	STI_CURSOR      = STI_CUR,
+871bcdfea68560 drivers/gpu/drm/sti/sti_drm_plane.h Vincent Abriou 2015-07-31  38  	STI_BACK        = STI_BCK
+871bcdfea68560 drivers/gpu/drm/sti/sti_drm_plane.h Vincent Abriou 2015-07-31  39  };
+871bcdfea68560 drivers/gpu/drm/sti/sti_drm_plane.h Vincent Abriou 2015-07-31  40  
 
------------------8<--------------------------8<--------------------------8<--------------------------
-The information below can be used to reproduce a debug environment:
+:::::: The code at line 32 was first introduced by commit
+:::::: 871bcdfea68560991bd650406e47a801ab9d635d drm/sti: code clean up
 
-Current build   : https://ci.linaro.org/job/tcwg_kernel--llvm-master-aarch64-next-allyesconfig-build/234/artifact/artifacts
-Reference build : https://ci.linaro.org/job/tcwg_kernel--llvm-master-aarch64-next-allyesconfig-build/233/artifact/artifacts
+:::::: TO: Vincent Abriou <vincent.abriou@st.com>
+:::::: CC: Benjamin Gaignard <benjamin.gaignard@linaro.org>
 
-Reproduce last good and first bad builds: https://git-us.linaro.org/toolchain/ci/interesting-commits.git/plain/linux/sha1/4e7795eda4459bf3e69c87c793bc34f610f9d981/tcwg_kernel/llvm-master-aarch64-next-allyesconfig/reproduction_instructions.txt
-
-Full commit : https://gitlab.com/Linaro/lkft/mirrors/next/linux-next/commit/4e7795eda4459bf3e69c87c793bc34f610f9d981
-
-List of configurations that regressed due to this commit :
-* tcwg_kernel
-** llvm-master-aarch64-next-allyesconfig
-*** Failure
-*** https://git-us.linaro.org/toolchain/ci/interesting-commits.git/plain/linux/sha1/4e7795eda4459bf3e69c87c793bc34f610f9d981/tcwg_kernel/llvm-master-aarch64-next-allyesconfig/details.txt
-*** https://ci.linaro.org/job/tcwg_kernel--llvm-master-aarch64-next-allyesconfig-build/234/artifact/artifacts
-------=_Part_176112_1777319573.1725489402090--
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
