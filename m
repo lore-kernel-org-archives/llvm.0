@@ -1,173 +1,152 @@
 Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B1C52F855;
-	Fri,  6 Sep 2024 03:56:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C3393CF74;
+	Fri,  6 Sep 2024 03:56:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725594967; cv=none; b=du7K2aGmZ38y5wH9x6Oeh5mOJrOIOzV4etLz5HqmJOlDMXukLsgyeGLxUt4NjKhn23USc68PglEEbuciJT1JqP8GnO/6aUH2cr6E+NNN7JTSjIV5CUu7hBbYSywJWpinrBRroyCiGs4nwIxfqQiOKB5T90Rwye+PInWkbc9nuEY=
+	t=1725594968; cv=none; b=SGZZzPw5Jb+ZVmRBXS73IfaFkw/8tcrkLZJjbyzDjZMpkjH0SbvPiOO177lOGWlvwz2ngZw7J8RsLeHnG0SzlH+YSuyo0jPXccY5IJrUMqpOMM27g8PIEbm2M2jzfv8fNTv7C9BJr6flcjCPvmAc2IWaddfWnGRIGYZd8kVzsrg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725594967; c=relaxed/simple;
-	bh=nmZ4pS8yU5IUmH5chtGorIYivQHHPDiMwQwGAsYtDQc=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=lIXsHTpG8VsMk484I4r3/a5nhrDV4uOwLxGm5ysrkuAWd4gJzd2YoVzGa1HFMhbyittAeG7camO8A45xemDGUh70FiP9XYPvfDxq3mf2DsuuWeB2W4CGkvnlA230hMp6FGn4B6hW6wS5bqw/K9qqM5D3ElBrh7347o41xBwJ7WI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=lgvjMery; arc=none smtp.client-ip=192.198.163.18
+	s=arc-20240116; t=1725594968; c=relaxed/simple;
+	bh=AOgep25YPfbArNphRZ3FzjXtGgRBjP2wdNuj5+iyhso=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=D152LWnzLfSqRsC7wRvfsINwNCwD0x43N4dVCvl1JpM52qnkWQhsNkNNRpUotvOLcZOtDfojbqR6XdETamIk4ge3qLj9ECQRz0Fid6Uyfr2JFcgM3TDbOEwsl3bdDhvqGb2PLswNfUryBnzL7c9j/bJzPyfNa7Qa9pdtlNId5l8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=mGyj5clv; arc=none smtp.client-ip=192.198.163.18
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="lgvjMery"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="mGyj5clv"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1725594966; x=1757130966;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=nmZ4pS8yU5IUmH5chtGorIYivQHHPDiMwQwGAsYtDQc=;
-  b=lgvjMeryIkJekjPyhrmSShkC/dAzPgbqh1ZfpwOLDHQVxh3lbgvvJFVn
-   6JVi7oCNgXjCwrA43/z+YTXOKobfRWBZYlWXtwkuwNXNyXxwUh74oVvBv
-   Raz/R225GFZvIVew/OaSwkYJ8EsDaUuLvFOj3zn0A6mrgt47Bs6+8/NAs
-   28y8Zv1K6dnmwdJFdaNOZIcvUHcYcpHMLdshFrFFtW/9Ovvq8Dy0hFaOm
-   ndiQskd3YIwutT2wiJP2FlzWuhHFFRBpsAX8l/iLF/0CBHeWP/QBvFu82
-   WMiIuT1PGLiGMlP4TAwDZHYUctmLa2acQCeksIHoL+8z8YjOvZI1On5Hy
-   A==;
-X-CSE-ConnectionGUID: tveVXPIpQKWs/2wqDaRXLg==
-X-CSE-MsgGUID: FoENY3+YQvatf1LiPDTiDQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11186"; a="23849515"
+  t=1725594967; x=1757130967;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=AOgep25YPfbArNphRZ3FzjXtGgRBjP2wdNuj5+iyhso=;
+  b=mGyj5clvMQDUsVWic9pxb4uow8SAmwMaqiUyND/N4cNzmlsumDAwc30B
+   S3h50EyN+ZwQrdrtzVEA6ji2K9s1+Msjg11KfnEWc5ywOCa3h9yQoPu0R
+   Dir/2rxe68mfiTViIhH//HbrJPGqNLW55rrG0dypemMWMF+AsxpJ3lv2K
+   GUmrD58t9LZxXf2TGZW50Vprk++nMHul71UJqAzl7H/F+iwE9RVYmU3UV
+   wfrqtud/2ChIENwHpY8zcTT8gaAyadW6co805Mvrzi0HfmYBS8I0w6Jcs
+   MsIoVWSHldRXjkUe1g3PgWWSORJDc1VhnqcQ2I9VwNLL7cb40bjaD7/Oh
+   Q==;
+X-CSE-ConnectionGUID: VgKjeS9YT6yPdlNiz89hbA==
+X-CSE-MsgGUID: ZbYzcT+HTNqh/z4sqg2DXw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11186"; a="23849518"
 X-IronPort-AV: E=Sophos;i="6.10,206,1719903600"; 
-   d="scan'208";a="23849515"
+   d="scan'208";a="23849518"
 Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Sep 2024 20:56:03 -0700
-X-CSE-ConnectionGUID: jEpw3xpSSr68K6mVXDxtdw==
-X-CSE-MsgGUID: 775FaP0KT8G66U/mrt2s1g==
+  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Sep 2024 20:56:05 -0700
+X-CSE-ConnectionGUID: 6bbdXEE/QD+NC094Jser1Q==
+X-CSE-MsgGUID: El4D01XXR+m56hRhWBK04w==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.10,206,1719903600"; 
-   d="scan'208";a="96548775"
+   d="scan'208";a="96548787"
 Received: from lkp-server01.sh.intel.com (HELO 9c6b1c7d3b50) ([10.239.97.150])
   by orviesa002.jf.intel.com with ESMTP; 05 Sep 2024 20:56:02 -0700
 Received: from kbuild by 9c6b1c7d3b50 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1smQ4l-000AaU-20;
+	id 1smQ4l-000AaW-24;
 	Fri, 06 Sep 2024 03:55:59 +0000
 Date: Fri, 6 Sep 2024 11:55:02 +0800
 From: kernel test robot <lkp@intel.com>
-To: Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [morimoto:sound-TDM-spit-2024-09-05 13/15]
- sound/soc/generic/simple-card-utils.c:1090:2: error: expected expression
-Message-ID: <202409061149.8R3krElg-lkp@intel.com>
+To: Thomas =?iso-8859-1?Q?Hellstr=F6m?= <thomas.hellstrom@linux.intel.com>,
+	intel-xe@lists.freedesktop.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Thomas =?iso-8859-1?Q?Hellstr=F6m?= <thomas.hellstrom@linux.intel.com>,
+	Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
+	amd-gfx@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
+	nouveau@lists.freedesktop.org, spice-devel@lists.freedesktop.org,
+	dri-devel@lists.freedesktop.org,
+	Zack Rusin <zack.rusin@broadcom.com>,
+	bcm-kernel-feedback-list@broadcom.com,
+	Sui Jingfeng <suijingfeng@loongson.cn>,
+	Matthew Brost <matthew.brost@intel.com>
+Subject: Re: [PATCH 1/2] drm/ttm: Change ttm_device_init to use a struct
+ instead of multiple bools
+Message-ID: <202409061145.AtKjpWFJ-lkp@intel.com>
+References: <20240905093322.29786-2-thomas.hellstrom@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20240905093322.29786-2-thomas.hellstrom@linux.intel.com>
 
-tree:   https://github.com/morimoto/linux sound-TDM-spit-2024-09-05
-head:   f2dc6deeba0553cf79ecb30e76e88ea593f3124b
-commit: 8c7603aac45dda53bd582adf8e220cc959fc391b [13/15] ASoC: simple-card-utils: cleanup graph_get_dai_id()
-config: arm64-randconfig-002-20240906 (https://download.01.org/0day-ci/archive/20240906/202409061149.8R3krElg-lkp@intel.com/config)
-compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240906/202409061149.8R3krElg-lkp@intel.com/reproduce)
+Hi Thomas,
+
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on drm-intel/for-linux-next]
+[also build test ERROR on next-20240905]
+[cannot apply to drm-xe/drm-xe-next drm-intel/for-linux-next-fixes drm-tip/drm-tip linus/master v6.11-rc6]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Thomas-Hellstr-m/drm-ttm-Change-ttm_device_init-to-use-a-struct-instead-of-multiple-bools/20240905-173606
+base:   git://anongit.freedesktop.org/drm-intel for-linux-next
+patch link:    https://lore.kernel.org/r/20240905093322.29786-2-thomas.hellstrom%40linux.intel.com
+patch subject: [PATCH 1/2] drm/ttm: Change ttm_device_init to use a struct instead of multiple bools
+config: i386-randconfig-002-20240906 (https://download.01.org/0day-ci/archive/20240906/202409061145.AtKjpWFJ-lkp@intel.com/config)
+compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240906/202409061145.AtKjpWFJ-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202409061149.8R3krElg-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202409061145.AtKjpWFJ-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> sound/soc/generic/simple-card-utils.c:1090:2: error: expected expression
-    1090 |         struct device_node *node __free(device_node) = of_graph_get_port_parent(ep);
-         |         ^
->> sound/soc/generic/simple-card-utils.c:1093:25: error: use of undeclared identifier 'node'
-    1093 |         for_each_of_graph_port(node, port) {
-         |                                ^
->> sound/soc/generic/simple-card-utils.c:1093:25: error: use of undeclared identifier 'node'
-   3 errors generated.
+>> drivers/gpu/drm/drm_gem_vram_helper.c:981:13: error: too many arguments to function call, expected 6, have 7
+     978 |         ret = ttm_device_init(&vmm->bdev, &bo_driver, dev->dev,
+         |               ~~~~~~~~~~~~~~~
+     979 |                                  dev->anon_inode->i_mapping,
+     980 |                                  dev->vma_offset_manager,
+     981 |                                  false, true);
+         |                                         ^~~~
+   include/drm/ttm/ttm_device.h:300:5: note: 'ttm_device_init' declared here
+     300 | int ttm_device_init(struct ttm_device *bdev, const struct ttm_device_funcs *funcs,
+         |     ^               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     301 |                     struct device *dev, struct address_space *mapping,
+         |                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     302 |                     struct drm_vma_offset_manager *vma_manager,
+         |                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     303 |                     const struct ttm_device_init_flags flags);
+         |                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   1 error generated.
 
 
-vim +1090 sound/soc/generic/simple-card-utils.c
+vim +981 drivers/gpu/drm/drm_gem_vram_helper.c
 
-  1027	
-  1028	static int graph_get_dai_id(struct device_node *ep)
-  1029	{
-  1030		int i, id;
-  1031		int ret;
-  1032	
-  1033		/*
-  1034		 * For example HDMI case, it has video/sound ports,
-  1035		 * thus ALSA SoC need to adjust for it.
-  1036		 *
-  1037		 * HDMI-Sound driver should support .of_xlate_dai_id callback,
-  1038		 * and indicate specified DAI ID
-  1039		 */
-  1040		ret = snd_soc_get_dai_id(ep);
-  1041		if (ret != -ENOTSUPP)
-  1042			return ret;
-  1043	
-  1044		/*
-  1045		 * [snd_soc_dai_driver] and [Of-Graph port] relationship
-  1046		 *
-  1047		 * static struct snd_soc_dai_driver xxx_dais[] = {
-  1048		 *	{
-  1049		 *		this DAI is handled as "port@0"
-  1050		 *	},
-  1051		 *	{
-  1052		 *		this DAI is handled as "port@1"
-  1053		 *	},
-  1054		 *	...
-  1055		 * };
-  1056		 *
-  1057		 * driver {
-  1058		 *	ports {
-  1059		 *		port@0 {
-  1060		 *			reg = <0>;
-  1061		 *			...
-  1062		 *		};
-  1063		 *		port@1 {
-  1064		 *			reg = <1>;
-  1065		 *			...
-  1066		 *		};
-  1067		 *		...
-  1068		 *	};
-  1069		 * };
-  1070		 */
-  1071	
-  1072		/*
-  1073		 * Because having "reg" was not so strict requested before on DT, some DT might not have it.
-  1074		 * Let's check and use it if exist, otherwise it will count "port".
-  1075		 */
-  1076		struct device_node *port __free(device_node) = of_get_parent(ep);
-  1077	
-  1078		ret = of_property_present(port, "reg");
-  1079		if (!ret)
-  1080			goto count_port;
-  1081	
-  1082		of_property_read_u32(port, "reg", &id);
-  1083	
-  1084		return id;
-  1085	
-  1086	count_port:
-  1087		/*
-  1088		 * Non HDMI sound case, counting port on its DT is enough. Let's count it.
-  1089		 */
-> 1090		struct device_node *node __free(device_node) = of_graph_get_port_parent(ep);
-  1091		i = 0;
-  1092		id = -ENODEV;
-> 1093		for_each_of_graph_port(node, port) {
-  1094			for_each_of_graph_port_endpoint(port, endpoint) {
-  1095				if (endpoint == ep) {
-  1096					id = i;
-  1097					goto end_of_loop;
-  1098				}
-  1099			}
-  1100			i++;
-  1101		}
-  1102	end_of_loop:
-  1103	
-  1104		return id;
-  1105	}
-  1106	
+6b5ce4a1fb8489 Thomas Zimmermann 2019-09-11  969  
+c30b225dba01b4 Thomas Zimmermann 2019-09-11  970  static int drm_vram_mm_init(struct drm_vram_mm *vmm, struct drm_device *dev,
+b0e40e0805221d Thomas Zimmermann 2019-09-11  971  			    uint64_t vram_base, size_t vram_size)
+6b5ce4a1fb8489 Thomas Zimmermann 2019-09-11  972  {
+6b5ce4a1fb8489 Thomas Zimmermann 2019-09-11  973  	int ret;
+6b5ce4a1fb8489 Thomas Zimmermann 2019-09-11  974  
+6b5ce4a1fb8489 Thomas Zimmermann 2019-09-11  975  	vmm->vram_base = vram_base;
+6b5ce4a1fb8489 Thomas Zimmermann 2019-09-11  976  	vmm->vram_size = vram_size;
+6b5ce4a1fb8489 Thomas Zimmermann 2019-09-11  977  
+8af8a109b34fa8 Christian König   2020-10-01  978  	ret = ttm_device_init(&vmm->bdev, &bo_driver, dev->dev,
+6b5ce4a1fb8489 Thomas Zimmermann 2019-09-11  979  				 dev->anon_inode->i_mapping,
+6b5ce4a1fb8489 Thomas Zimmermann 2019-09-11  980  				 dev->vma_offset_manager,
+ee5d2a8e549e90 Christian König   2020-10-24 @981  				 false, true);
+6b5ce4a1fb8489 Thomas Zimmermann 2019-09-11  982  	if (ret)
+6b5ce4a1fb8489 Thomas Zimmermann 2019-09-11  983  		return ret;
+6b5ce4a1fb8489 Thomas Zimmermann 2019-09-11  984  
+37205891d84f92 Dave Airlie       2020-08-04  985  	ret = ttm_range_man_init(&vmm->bdev, TTM_PL_VRAM,
+0fe438cec9e1d2 Christian König   2020-09-11  986  				 false, vram_size >> PAGE_SHIFT);
+6b5ce4a1fb8489 Thomas Zimmermann 2019-09-11  987  	if (ret)
+6b5ce4a1fb8489 Thomas Zimmermann 2019-09-11  988  		return ret;
+6b5ce4a1fb8489 Thomas Zimmermann 2019-09-11  989  
+6b5ce4a1fb8489 Thomas Zimmermann 2019-09-11  990  	return 0;
+6b5ce4a1fb8489 Thomas Zimmermann 2019-09-11  991  }
+6b5ce4a1fb8489 Thomas Zimmermann 2019-09-11  992  
 
 -- 
 0-DAY CI Kernel Test Service
