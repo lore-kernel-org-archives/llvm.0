@@ -1,140 +1,107 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E7A7A1C9EA8;
-	Fri,  6 Sep 2024 15:37:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 72F6E1D2F6C
+	for <llvm@lists.linux.dev>; Fri,  6 Sep 2024 15:43:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725637076; cv=none; b=Cq6SD0R953ADxRkQMT1ErgEsyQvAhWEjpSnHtlYCsrRrD3TE9Jr3KGjAI9y/2M8cuLIh8pkYwH2VSQOYw3rFQF3G9NHqB6WhXy+FZqIO7hV5wRKslG7pPCY3EOAUMy7qktiJeOaqiA5+ZteaJ32JsV6UVWe6H7KXmHnWu/dY74Q=
+	t=1725637422; cv=none; b=kdocdO2DTbiUpR45JM7bRY/BR+3wR5CUptbiQmK4OzltaH1OPVJo+5A989OBIek8D5ha8w63l24D3kBcodqJY26QMoYnWyfx9H3kHdFaPYuiITXNCIRqj7YCZADRo+X/z52TexoLNQybjTsQiyl76WhKcjosQ3/YgKjh6np5kQ4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725637076; c=relaxed/simple;
-	bh=2UKmaZtNLMhEviH6IeYoUF4i0dN1ltzq9GMvMgOlDQg=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=rWYQ1JS4LchuQmfMcL3IqDEZPRV2ohnVQ0cRXtWRwtBgBUJn2RfKF8cvzcAo7a5s+OxOsoJWaWtfhYYI00YhvWXFXFTfBi2nEjF2GZIxlytYYt/j0fU1WQnnn/050ba6g+6GVDmC+2EPtEC4mMzNr5xxtfeZ7V6+P3WNuBLKw8E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=D+uGcia6; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1725637422; c=relaxed/simple;
+	bh=5FDvh4fea6HWFs/qXnSsOsUIHGXCTXgCLjpn+Cc/8yM=;
+	h=Date:From:To:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=UGmksCTrhAqKIt3LG5XHVdDYBoOs5gKN3y3zkt1HedZUOhpN8nwDnKa3iHFdiTJYjY7XaboHwfWeesM7r7fLBG91Y3ySK4Skfks7fIQMxvWnP1k4DrG8E00hbom+iojYQXJ/Bd1sE6DDe6obVR9UDzoOOmLbiwFP1YrfSNW4nhY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=MkQuaC+9; arc=none smtp.client-ip=198.175.65.21
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="D+uGcia6"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 657E6C4CECD;
-	Fri,  6 Sep 2024 15:37:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1725637075;
-	bh=2UKmaZtNLMhEviH6IeYoUF4i0dN1ltzq9GMvMgOlDQg=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=D+uGcia6C1rMFfGtzuNOkJuofRcalbpLcwqkWo4QCWmBvbKYPJGA/uSDWpwZjBbmB
-	 njLZLd39uJ74CDwwpHnOywo+j9w6RfLW9osPDFdwmgM58Feg3ncW7nfU9kwamY+IMy
-	 99Py1s10IMSqqtK6gyrueYStEJqVfklEmVG7fAAmOMmjp7xtwGpS2Qy70uF4wbani/
-	 Arp55SZxjIHtg+pC2RSd0gh/dunKUeUaGhb0g6r6jx92vIQXhc9rNmXyDaGmHGxnxH
-	 mMaAlC4PbOxH77iNGW7Pvshd1MvQ6r6pNMr6RuFr1dAs5SjdWnfJTeb/GI6MK/vsYd
-	 QhGUIsjQ5VrGw==
-Received: by mail-lf1-f43.google.com with SMTP id 2adb3069b0e04-53655b9bbcdso1852608e87.2;
-        Fri, 06 Sep 2024 08:37:55 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCW0b3DeaYVkX+RebwhzLNI5QaZB+kogCivZuURRr1skuIq/EudRh7QsQwwOYAIb5DAJ+jDcBnE=@lists.linux.dev, AJvYcCWubbfCYZUX7utM1j/YLt1pZjmLDejT8TvKaPHuLyUbFogmg+iDVFFdAbSgNi5s6R4iPlusdw==@lists.linux.dev
-X-Gm-Message-State: AOJu0Yx+dDQL4wX7adnFL+yxKnCyGWlGNK/L+FzZ0XTpaK9r90RuOf/X
-	Pz/IMeiUZR6t73JIYioDKXx0a1S19UGATQRZjS7NYAF/t7PHGLG4qlqL/TWpoWWatXIGCLIykjU
-	8Jj0R2eUT5gMQTh4dbSHxyeZEnpQ=
-X-Google-Smtp-Source: AGHT+IFANMBQ3/Jcqmb4USNwfdW9Zoa8E3V2AYrxt1g8TZNZwyh6S+HB/OdPYQYnVIS/P9F4Mt5DF0hoACFuvJ/eFH4=
-X-Received: by 2002:a05:6512:104f:b0:533:46cc:a71e with SMTP id
- 2adb3069b0e04-536588103damr2074798e87.54.1725637073910; Fri, 06 Sep 2024
- 08:37:53 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="MkQuaC+9"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1725637420; x=1757173420;
+  h=date:from:to:subject:message-id:references:mime-version:
+   in-reply-to;
+  bh=5FDvh4fea6HWFs/qXnSsOsUIHGXCTXgCLjpn+Cc/8yM=;
+  b=MkQuaC+9x8VvWotjGZx5d7ZtX6Z3yOn2SDQXxJimYY8Q+1y0feTcK0tX
+   0egZ7vuLMhv0OaTQsiJY63fe+FphvfZqDn6QwXmGWF5V8owOO4PB1Z9wT
+   o7FgsBw1QCJlcqVtfgRNj+B+7uKiM9XwkAVO1UF5625uEut+H43SmZaFy
+   WhIPD4zrSPfKEVMA54x5czW3+exnKugCG9h4otPMMSbqLeU6/FxWRn4Rv
+   aqOMBamUuvxypQ4Rycx5KcJRy0o0m9AgF8WFdb3l47uY250DrUgTQ8bcG
+   wdoOq12hEKHxiyHzjzmle5No7uZW7pMMCByDLIGELwGTN0YGUpCwQDzBK
+   A==;
+X-CSE-ConnectionGUID: JH1NZdX+TCC7B0/mNIZSIg==
+X-CSE-MsgGUID: OelH34ZVR72O9emyJfVq9w==
+X-IronPort-AV: E=McAfee;i="6700,10204,11187"; a="24349665"
+X-IronPort-AV: E=Sophos;i="6.10,208,1719903600"; 
+   d="scan'208";a="24349665"
+Received: from orviesa009.jf.intel.com ([10.64.159.149])
+  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Sep 2024 08:43:39 -0700
+X-CSE-ConnectionGUID: L0dOF7V6Ts+sggY5gOybcg==
+X-CSE-MsgGUID: vYswIGANTV+XEgUtmza+cg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.10,208,1719903600"; 
+   d="scan'208";a="65960892"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orviesa009.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Sep 2024 08:43:38 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.98)
+	(envelope-from <andriy.shevchenko@linux.intel.com>)
+	id 1smb7X-00000005qmn-0yUi;
+	Fri, 06 Sep 2024 18:43:35 +0300
+Date: Fri, 6 Sep 2024 18:43:34 +0300
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To: "Liam R. Howlett" <Liam.Howlett@oracle.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	maple-tree@lists.infradead.org, linux-mm@kvack.org,
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>
+Subject: Re: [PATCH v1 1/1] maple_tree: Drop unused functions to fix the build
+Message-ID: <ZtsjJoGKRxszp-m6@smile.fi.intel.com>
+References: <20240906150533.568994-1-andriy.shevchenko@linux.intel.com>
+ <krsjmi43ziyojqicc4pxzwfwbffqrnk5npbuoq6l2cnq5eovkd@afofyteb5wo3>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20240906-macos-build-support-v2-0-06beff418848@samsung.com>
- <20240906-macos-build-support-v2-7-06beff418848@samsung.com> <CAHC9VhQkstJ8Ox-T+FLU34s9U0gezRba6bMA-tUPs80u6sVh2g@mail.gmail.com>
-In-Reply-To: <CAHC9VhQkstJ8Ox-T+FLU34s9U0gezRba6bMA-tUPs80u6sVh2g@mail.gmail.com>
-From: Masahiro Yamada <masahiroy@kernel.org>
-Date: Sat, 7 Sep 2024 00:37:16 +0900
-X-Gmail-Original-Message-ID: <CAK7LNAQytsDzaJfAJA0nL=KPjxj3DBCRLeuHUwgGDt8fTJ0fTQ@mail.gmail.com>
-Message-ID: <CAK7LNAQytsDzaJfAJA0nL=KPjxj3DBCRLeuHUwgGDt8fTJ0fTQ@mail.gmail.com>
-Subject: Re: [PATCH v2 7/8] selinux: move genheaders to security/selinux/
-To: Paul Moore <paul@paul-moore.com>
-Cc: da.gomez@samsung.com, Nathan Chancellor <nathan@kernel.org>, 
-	Nicolas Schier <nicolas@fjasle.eu>, Lucas De Marchi <lucas.demarchi@intel.com>, 
-	=?UTF-8?Q?Thomas_Hellstr=C3=B6m?= <thomas.hellstrom@linux.intel.com>, 
-	Rodrigo Vivi <rodrigo.vivi@intel.com>, 
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, Maxime Ripard <mripard@kernel.org>, 
-	Thomas Zimmermann <tzimmermann@suse.de>, David Airlie <airlied@gmail.com>, 
-	William Hubbs <w.d.hubbs@gmail.com>, Chris Brannon <chris@the-brannons.com>, 
-	Kirk Reiser <kirk@reisers.ca>, Samuel Thibault <samuel.thibault@ens-lyon.org>, 
-	Stephen Smalley <stephen.smalley.work@gmail.com>, Ondrej Mosnacek <omosnace@redhat.com>, 
-	Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>, 
-	Oliver Upton <oliver.upton@linux.dev>, James Morse <james.morse@arm.com>, 
-	Suzuki K Poulose <suzuki.poulose@arm.com>, Zenghui Yu <yuzenghui@huawei.com>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Jiri Slaby <jirislaby@kernel.org>, 
-	Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, 
-	Justin Stitt <justinstitt@google.com>, Simona Vetter <simona.vetter@ffwll.ch>, 
-	linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org, 
-	intel-xe@lists.freedesktop.org, dri-devel@lists.freedesktop.org, 
-	speakup@linux-speakup.org, selinux@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev, 
-	linux-serial@vger.kernel.org, llvm@lists.linux.dev, 
-	Finn Behrens <me@kloenk.dev>, "Daniel Gomez (Samsung)" <d+samsung@kruces.com>, gost.dev@samsung.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <krsjmi43ziyojqicc4pxzwfwbffqrnk5npbuoq6l2cnq5eovkd@afofyteb5wo3>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 
-On Fri, Sep 6, 2024 at 11:54=E2=80=AFPM Paul Moore <paul@paul-moore.com> wr=
-ote:
->
-> On Fri, Sep 6, 2024 at 7:01=E2=80=AFAM Daniel Gomez via B4 Relay
-> <devnull+da.gomez.samsung.com@kernel.org> wrote:
-> >
-> > From: Masahiro Yamada <masahiroy@kernel.org>
-> >
-> > This tool is only used in security/selinux/Makefile.
-> >
-> > There is no reason to keep it under scripts/.
-> >
-> > Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
-> > ---
-> >  scripts/remove-stale-files                                    | 3 +++
-> >  scripts/selinux/Makefile                                      | 2 +-
-> >  scripts/selinux/genheaders/.gitignore                         | 2 --
-> >  scripts/selinux/genheaders/Makefile                           | 3 ---
-> >  security/selinux/.gitignore                                   | 1 +
-> >  security/selinux/Makefile                                     | 7 ++++=
-+--
-> >  {scripts/selinux/genheaders =3D> security/selinux}/genheaders.c | 0
-> >  7 files changed, 10 insertions(+), 8 deletions(-)
->
-> Did you read my comments on your previous posting of this patch?  Here
-> is a lore link in case you missed it or it was swallowed by your
-> inbox:
->
-> https://lore.kernel.org/selinux/3447459d08dd7ebb58972129cddf1c44@paul-moo=
-re.com
->
-> Unless there is an serious need for this relocation, and I don't see
-> one explicitly documented either in this patchset or the previous, I
-> don't want to see this patch go upstream.
+On Fri, Sep 06, 2024 at 11:26:26AM -0400, Liam R. Howlett wrote:
+> This exists to stop people from using the bits while the feature is in
+> active development.  We had the same patch a few days (weeks?) ago.
+
+This breaks build. Can you propose better solution, please?
+
+> * Andy Shevchenko <andriy.shevchenko@linux.intel.com> [240906 11:05]:
+> > A few functions defined but not used. This, in particular,
+> > prevents kernel builds with clang, `make W=1` and CONFIG_WERROR=y:
+> > 
+> > lib/maple_tree.c:351:21: error: unused function 'mte_set_full' [-Werror,-Wunused-function]
+> >   351 | static inline void *mte_set_full(const struct maple_enode *node)
+> >       |                     ^~~~~~~~~~~~
+> > lib/maple_tree.c:356:21: error: unused function 'mte_clear_full' [-Werror,-Wunused-function]
+> >   356 | static inline void *mte_clear_full(const struct maple_enode *node)
+> >       |                     ^~~~~~~~~~~~~~
+> > lib/maple_tree.c:361:20: error: unused function 'mte_has_null' [-Werror,-Wunused-function]
+> >   361 | static inline bool mte_has_null(const struct maple_enode *node)
+> >       |                    ^~~~~~~~~~~~
+> > 
+> > Fix this by dropping unused functions.
+> > 
+> > See also commit 6863f5643dd7 ("kbuild: allow Clang to find unused static
+> > inline functions for W=1 build").
+> > 
+> > Fixes: 6e7ba8b5e238 ("maple_tree: mte_set_full() and mte_clear_full() clang-analyzer clean up")
+> > Fixes: 54a611b60590 ("Maple Tree: add new data structure")
+
+-- 
+With Best Regards,
+Andy Shevchenko
 
 
-I commented on the previous thread.
-
-
-I will reword it as follows:
-
-
---------------->8--------------------
-selinux: move genheaders to security/selinux/
-
-This tool is only used in security/selinux/Makefile.
-
-Move it to security/selinux/ so that 'make clean' can clean it up.
-
-Please note 'make clean' does not visit scripts/ because tools under
-scripts/ are often used for external module builds. Obviously, genheaders
-is not the case here.
---------------->8--------------------
-
-
-
-
-
-
---
-Best Regards
-
-Masahiro Yamada
