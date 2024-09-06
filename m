@@ -1,63 +1,40 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ECB6F158875;
-	Fri,  6 Sep 2024 21:53:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ABFF715B547;
+	Fri,  6 Sep 2024 23:40:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725659584; cv=none; b=JIm53GCmNu9cX11zF8HJsAvKIJqg3GwdSGJHImvYsONtswXk209luUMRKgzAz8i0zLkDGFmxxfFv0FR9TUnMgj0QyQR2T1YAgUUdvU6V7dG+2Fp3cgkVBzmnE1HouB3lZTkcl5H5s6orDio6QD5/oWb3HGeP9JQTjo+mctr3TSU=
+	t=1725666000; cv=none; b=P1vtKJl07BGF+V9dGPivuxK7BQTk8nL3spf1T+oakge3OD7EAN1gaqYsW//xD1pi7dKgXsbQPrhNAFVkdiiBYr797LR+C9G231/2JVf2I/q/ZN1c3dznK1CZPaDaJ/LBPY3fzDaWQQExGIxPCwG/o8xnSJh7mVPKXlSM17Ytiz8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725659584; c=relaxed/simple;
-	bh=ChXqD8a53++EF7MfJqJwbBM6458Bp+61DtjHQo7CeTY=;
+	s=arc-20240116; t=1725666000; c=relaxed/simple;
+	bh=hMcMMc3MkfFHqrQ2mnexr17azQHrRCKNkfzIhM20zq8=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=WpZingsttDlHaEpWTu/JxbgYE+M7MwJnNFe2wVyk4BN5UR/BeMTlD24JcDS2Z3vBS/QD95MWtKZxwyT1GjUwNXi5DUGZhzlkIsnHuFixoWm3lHhwe5S3dvrDiihgWGRerW8dRVJ0W6sdEwn5k9iQI/JLrrR1THxjv6XeHlcoqJs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=FI7IC73z; arc=none smtp.client-ip=192.198.163.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=jV2qINie/a8LJG2F+lbt8yHWV/NjSzcEvjXxkCkGAPsFNA20vVotbMHbXvrRlHTnFqM9RfqpunA8ao1qbcSPe2cILu/4ixnfAUl8nxZ1wmQwEXnMHI5sb0gswaQ7KuiuM9jz3BF5//5jnoXfQ3alx6m2GjMG6RU5ls8gfvHe+V8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aUqxPU4e; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="FI7IC73z"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1725659583; x=1757195583;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=ChXqD8a53++EF7MfJqJwbBM6458Bp+61DtjHQo7CeTY=;
-  b=FI7IC73z9GrvLhFsioBu/g/67d78uRfCdtU3DsNUN4eIeBFAKXulE10B
-   +u2MOYkQO6mU/+c6C9W3qvuEFFQVWALuGSFlwDq9PujPF0k34Wb0h1xsb
-   18pEqHQLhkpyvVMyROOHILc9GpnUmloosqZWcXcHUEDBnMOc57Tjv04ZE
-   4ZLjzsTTtAP3Ge2P2qdPu/xznnuPwhjR9QCc3jhKgUk7mBB0JOFT9utj6
-   6rDII+q6206ppvD+ubc6lJXviolH42JdFhh9f1DFcC5clYO/ukpP5QDrE
-   SKzLfBKD4LiAQbvHwabDH8wQ/qHbcDxLXgH4aRsFI8Wb61C5fyqW5vMSq
-   w==;
-X-CSE-ConnectionGUID: IMioXF6xSTa7/Oyb/L5DMw==
-X-CSE-MsgGUID: 3GfTFFMWQeyb2fR7VNfv+g==
-X-IronPort-AV: E=McAfee;i="6700,10204,11187"; a="24627668"
-X-IronPort-AV: E=Sophos;i="6.10,209,1719903600"; 
-   d="scan'208";a="24627668"
-Received: from orviesa008.jf.intel.com ([10.64.159.148])
-  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Sep 2024 14:53:03 -0700
-X-CSE-ConnectionGUID: HtPUhkhwTqGdr2/euIBQ9w==
-X-CSE-MsgGUID: zNuizZeuS6iiaJFmHXMJ1A==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.10,209,1719903600"; 
-   d="scan'208";a="66813650"
-Received: from lkp-server01.sh.intel.com (HELO 9c6b1c7d3b50) ([10.239.97.150])
-  by orviesa008.jf.intel.com with ESMTP; 06 Sep 2024 14:53:00 -0700
-Received: from kbuild by 9c6b1c7d3b50 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1smgsz-000Blp-1E;
-	Fri, 06 Sep 2024 21:52:57 +0000
-Date: Sat, 7 Sep 2024 05:52:51 +0800
-From: kernel test robot <lkp@intel.com>
-To: Joanne Koong <joannelkoong@gmail.com>, miklos@szeredi.hu,
-	linux-fsdevel@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	josef@toxicpanda.com, bernd.schubert@fastmail.fm,
-	sweettea-kernel@dorminy.me, kernel-team@meta.com
-Subject: Re: [PATCH v2 RESEND] fuse: Enable dynamic configuration of fuse max
- pages limit (FUSE_MAX_MAX_PAGES)
-Message-ID: <202409070557.u6rI9J9K-lkp@intel.com>
-References: <20240905174541.392785-1-joannelkoong@gmail.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aUqxPU4e"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D7131C4CEC4;
+	Fri,  6 Sep 2024 23:39:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1725666000;
+	bh=hMcMMc3MkfFHqrQ2mnexr17azQHrRCKNkfzIhM20zq8=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=aUqxPU4eo+UHEB4+25Nsa3J5VXEiBtO5Zn0tIMvz//qNKqiAho6aoWjY8jdFqoloj
+	 ma3w7Kif0kWJ+/gL2mcybS3wbdygVhLFo+JZSgzwc4G55zKPc2q+BUFAs3fQOhpjCV
+	 WIixBSX0VXl4JPSPOl3JoUs0nInHCPMbdRcCGCMVIURvNtlxpBpvsUxFwDqQRkQZct
+	 NvgfWj9KLtxCuuRlRTLfKCfKrNi5PQgdMeFyVcE3pjeUaECTo/iYMJFRJ4KCIMxBaq
+	 9rpL3XN+6vooaVe4raSjzHig0PX2RtjUN+vk8ZV+He8QCmU7R1ZTeTaAbn8/HxuoMs
+	 ozBD4iKyqtfUA==
+Date: Fri, 6 Sep 2024 16:39:58 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: Paolo Bonzini <pbonzini@redhat.com>, linux-kernel@vger.kernel.org,
+	kvm@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [GIT PULL] KVM fixes for Linux 6.11-rc7
+Message-ID: <20240906233958.GA1968981@thelio-3990X>
+References: <20240906154517.191976-1-pbonzini@redhat.com>
+ <CAHk-=wjK7HF3dQT8q_6fr3eLGvKS+c46PdYNVAsHRyQRgcgiyw@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -66,133 +43,39 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240905174541.392785-1-joannelkoong@gmail.com>
+In-Reply-To: <CAHk-=wjK7HF3dQT8q_6fr3eLGvKS+c46PdYNVAsHRyQRgcgiyw@mail.gmail.com>
 
-Hi Joanne,
+On Fri, Sep 06, 2024 at 03:38:16PM -0700, Linus Torvalds wrote:
+> On Fri, 6 Sept 2024 at 08:45, Paolo Bonzini <pbonzini@redhat.com> wrote:
+> >
+> > - Specialize return value of KVM_CHECK_EXTENSION(KVM_CAP_READONLY_MEM),
+> >   based on VM type
+> 
+> Grr. This actually causes a build warning with clang, but I didn't
+> notice in my "between pulls" build check, because that is with gcc.
+> 
+> So now it's merged with this error:
+> 
+>    arch/x86/kvm/x86.c:4819:2: error: unannotated fall-through between
+> switch labels [-Werror,-Wimplicit-fallthrough]
+> 
+> and I'm actually surprised that gcc didn't warn about this too.
 
-kernel test robot noticed the following build errors:
+Yeah, GCC does not warn when falling through to a break or return, as I
+mention in the patch I sent for this (I was going to keep an eye out for
+the pull request and comment before it went in but looks like I missed
+it):
 
-[auto build test ERROR on mszeredi-fuse/for-next]
-[also build test ERROR on linus/master v6.11-rc6 next-20240906]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+https://lore.kernel.org/kvm/20240905-kvm-x86-avoid-clang-implicit-fallthrough-v1-1-f2e785f1aa45@kernel.org/
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Joanne-Koong/fuse-Enable-dynamic-configuration-of-fuse-max-pages-limit-FUSE_MAX_MAX_PAGES/20240906-014722
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/mszeredi/fuse.git for-next
-patch link:    https://lore.kernel.org/r/20240905174541.392785-1-joannelkoong%40gmail.com
-patch subject: [PATCH v2 RESEND] fuse: Enable dynamic configuration of fuse max pages limit (FUSE_MAX_MAX_PAGES)
-config: hexagon-randconfig-001-20240907 (https://download.01.org/0day-ci/archive/20240907/202409070557.u6rI9J9K-lkp@intel.com/config)
-compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 05f5a91d00b02f4369f46d076411c700755ae041)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240907/202409070557.u6rI9J9K-lkp@intel.com/reproduce)
+> We definitely enable -Wimplicit-fallthrough on gcc too, but apparently
+> it's not functional: falling through to a "break" statement seems to
+> not warn with gcc. Which is nonsensical, but whatever.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202409070557.u6rI9J9K-lkp@intel.com/
+This was brought up to GCC at one point and they considered its current
+behavior as working as intended from my understanding:
 
-All errors (new ones prefixed by >>):
+https://gcc.gnu.org/bugzilla/show_bug.cgi?id=91432
 
-   In file included from fs/fuse/sysctl.c:9:
-   In file included from fs/fuse/fuse_i.h:22:
-   In file included from include/linux/mm.h:2228:
-   include/linux/vmstat.h:514:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     514 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
-   In file included from fs/fuse/sysctl.c:9:
-   In file included from fs/fuse/fuse_i.h:23:
-   In file included from include/linux/backing-dev.h:16:
-   In file included from include/linux/writeback.h:13:
-   In file included from include/linux/blk_types.h:10:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:12:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:14:
-   In file included from arch/hexagon/include/asm/io.h:328:
-   include/asm-generic/io.h:548:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     548 |         val = __raw_readb(PCI_IOBASE + addr);
-         |                           ~~~~~~~~~~ ^
-   include/asm-generic/io.h:561:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     561 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
-      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-         |                                                   ^
-   In file included from fs/fuse/sysctl.c:9:
-   In file included from fs/fuse/fuse_i.h:23:
-   In file included from include/linux/backing-dev.h:16:
-   In file included from include/linux/writeback.h:13:
-   In file included from include/linux/blk_types.h:10:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:12:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:14:
-   In file included from arch/hexagon/include/asm/io.h:328:
-   include/asm-generic/io.h:574:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     574 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
-      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
-         |                                                   ^
-   In file included from fs/fuse/sysctl.c:9:
-   In file included from fs/fuse/fuse_i.h:23:
-   In file included from include/linux/backing-dev.h:16:
-   In file included from include/linux/writeback.h:13:
-   In file included from include/linux/blk_types.h:10:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:12:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:14:
-   In file included from arch/hexagon/include/asm/io.h:328:
-   include/asm-generic/io.h:585:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     585 |         __raw_writeb(value, PCI_IOBASE + addr);
-         |                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:595:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     595 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:605:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     605 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   fs/fuse/sysctl.c:28:26: error: too many arguments provided to function-like macro invocation
-      28 | int fuse_sysctl_register(void)
-         |                          ^
-   fs/fuse/fuse_i.h:1473:9: note: macro 'fuse_sysctl_register' defined here
-    1473 | #define fuse_sysctl_register()          (0)
-         |         ^
-   fs/fuse/sysctl.c:28:25: error: expected ';' after top level declarator
-      28 | int fuse_sysctl_register(void)
-         |                         ^
-         |                         ;
-   fs/fuse/sysctl.c:36:29: error: too many arguments provided to function-like macro invocation
-      36 | void fuse_sysctl_unregister(void)
-         |                             ^
-   fs/fuse/fuse_i.h:1474:9: note: macro 'fuse_sysctl_unregister' defined here
-    1474 | #define fuse_sysctl_unregister()        do { } while (0)
-         |         ^
->> fs/fuse/sysctl.c:36:6: error: variable has incomplete type 'void'
-      36 | void fuse_sysctl_unregister(void)
-         |      ^
-   fs/fuse/sysctl.c:36:28: error: expected ';' after top level declarator
-      36 | void fuse_sysctl_unregister(void)
-         |                            ^
-         |                            ;
-   7 warnings and 5 errors generated.
-
-
-vim +/void +36 fs/fuse/sysctl.c
-
-    35	
-  > 36	void fuse_sysctl_unregister(void)
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Cheers,
+Nathan
