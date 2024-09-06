@@ -1,354 +1,162 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1806A3BBE2;
-	Fri,  6 Sep 2024 02:32:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 62C34171CD;
+	Fri,  6 Sep 2024 02:48:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725589942; cv=none; b=bn9FtiHYrsyhfrUoXlQIw85+wA5yBW3Rsvp+hFnnCGvFqrfFHdRiCg3qZV2tdjF02XKK1zdHK0PwW83x7CxWOrd1lXGSOhiXL3aHfLK6+6cmwnW6OSJmPry+Y9umCIU76O9KEPwviwgtOdLXGO21vK64TScyFX177O/49J22tbk=
+	t=1725590918; cv=none; b=NCOdaXODvfA1824Yj6X5k9F6tmbR6xWCn7bSyo1NUuxsvyUJaoUx906X88+pPSz7sL0QPxixglYH8K8Js1haItWb8kDHehpo/BfSeJza8yGEl6VuaJE+y+NjunDNe930I4MRbifUA3FDvNNMS4ZOcz3a+Zh0Y2V6IDSlWggNUAw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725589942; c=relaxed/simple;
-	bh=YtZmysrWzp6BpQnHg4QMuzt/YrgZkjtZnyYgIG3Ewfw=;
+	s=arc-20240116; t=1725590918; c=relaxed/simple;
+	bh=pzJlw2IoPHrFAAWumd0ORTINL6ZPVNgxfaErncZQH8s=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=EZA2TUkBwl/a48f25muSqBWrwlwV+9C9Mp/oLV6cPy2I0ssLnx1F2KBIuUQTb+/DAWNwiNOxeGEXkqmxJJVjpObU8eyWtYdUrP/ivlbrHMCfaAxtIyUdgz1NAyqY+sIw+JQD15OqBzj9Bj8wLDeJrgVI8ou4rSR+J6VbXp0KoyY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=V0BxUR98; arc=none smtp.client-ip=198.175.65.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=CtEOQwxFpf3Q4EKMehjIX4m7xd5B1Y03opwrHavNiS5cRRTyh6mykaiPfgnbCLfX9gnHI0M8oi8cx/Bx5IN101IcB9nXl5Grm32V6Cl+vKDV8+2vj3WFzOyc2bdaAC8mZRG8ZJKatAJg9aOWHXhWA2PUHHRxFBqVjHeZs9ZQba4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b=bRX4+VzE; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="V0BxUR98"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1725589941; x=1757125941;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=YtZmysrWzp6BpQnHg4QMuzt/YrgZkjtZnyYgIG3Ewfw=;
-  b=V0BxUR985hWkUTQJyDX3AD39VbzWzPt64ToxSRXggrs/+VSfDWAQqW/j
-   ha+uYpKVmyvIom6LpmbC5XYMPlaDxpRJ2+Q9AdbYNzNOmp7PIzvG/WIPs
-   xt8PeW1iUwNQW1u/ra5pAHisl+dWU3Tsx2SZLY4qicr6/aKdruwemSSxI
-   DVHPjRIbb8uGeGVTlU2wElMsSRJ3w2e/O+vOPzksatqA7UDYFO1rm1l3T
-   XM0EsZ4EELmHVlGX6dHhs19yJDA2a9NyPV5voUQLiNn6FkgbnR205od4A
-   lDxB8zI3e1QdfxlywH4WH9cE/HzcvggOdcxu695NOvSzuNY2MCUKlIq8H
-   Q==;
-X-CSE-ConnectionGUID: fDdvSnJyTimro4HpX6CnfQ==
-X-CSE-MsgGUID: xYpZie28RnSSwnXZCWrs/Q==
-X-IronPort-AV: E=McAfee;i="6700,10204,11186"; a="46868582"
-X-IronPort-AV: E=Sophos;i="6.10,206,1719903600"; 
-   d="scan'208";a="46868582"
-Received: from orviesa007.jf.intel.com ([10.64.159.147])
-  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Sep 2024 19:32:16 -0700
-X-CSE-ConnectionGUID: T/xaDss5RnmldXGPslcNAQ==
-X-CSE-MsgGUID: AjqLJhQtR7Owfh1yfy5R8A==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.10,206,1719903600"; 
-   d="scan'208";a="66358488"
-Received: from lkp-server01.sh.intel.com (HELO 9c6b1c7d3b50) ([10.239.97.150])
-  by orviesa007.jf.intel.com with ESMTP; 05 Sep 2024 19:31:59 -0700
-Received: from kbuild by 9c6b1c7d3b50 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1smOlQ-000AWh-16;
-	Fri, 06 Sep 2024 02:31:56 +0000
-Date: Fri, 6 Sep 2024 10:31:11 +0800
-From: kernel test robot <lkp@intel.com>
-To: Colton Lewis <coltonlewis@google.com>, kvm@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Oliver Upton <oliver.upton@linux.dev>,
-	Sean Christopherson <seanjc@google.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Ingo Molnar <mingo@redhat.com>,
-	Arnaldo Carvalho de Melo <acme@kernel.org>,
-	Namhyung Kim <namhyung@kernel.org>,
-	Mark Rutland <mark.rutland@arm.com>,
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-	Jiri Olsa <jolsa@kernel.org>, Ian Rogers <irogers@google.com>,
-	Adrian Hunter <adrian.hunter@intel.com>,
-	Kan Liang <kan.liang@linux.intel.com>,
-	Will Deacon <will@kernel.org>, Russell King <linux@armlinux.org.uk>,
-	Catalin Marinas <catalin.marinas@arm.com>,
+	dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="bRX4+VzE"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 754BFC4CEC3;
+	Fri,  6 Sep 2024 02:48:35 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+	dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="bRX4+VzE"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+	t=1725590913;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=GDin/TTzmHCatsL5YEP7qml5EKwCyw3+unP9HsNBBks=;
+	b=bRX4+VzElx6AhF7yIERy0JoxrcqZ8w2XnNUX4cySvATmmNIgFgKdGdfDY+DT1KfFqexJRX
+	9BvfkivoCdg2WCBNWf5LjK2iwqnwDbLFu2UJPBepJhXrsh39RcDJ68oyyRJJCk1qgWS81f
+	K191Ft9MxUKb0Efd83zvLBnDi2pl2n4=
+Received: 
+	by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 5ee168b6 (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
+	Fri, 6 Sep 2024 02:48:32 +0000 (UTC)
+Date: Fri, 6 Sep 2024 04:48:28 +0200
+From: "Jason A. Donenfeld" <Jason@zx2c4.com>
+To: Christophe Leroy <christophe.leroy@csgroup.eu>
+Cc: Andrew Morton <akpm@linux-foundation.org>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
 	Michael Ellerman <mpe@ellerman.id.au>,
 	Nicholas Piggin <npiggin@gmail.com>,
-	Christophe Leroy <christophe.leroy@csgroup.eu>,
 	Naveen N Rao <naveen@kernel.org>,
-	Heiko Carstens <hca@linux.ibm.com>,
-	Vasily Gorbik <gor@linux.ibm.com>,
-	Alexander Gordeev <agordeev@linux.ibm.com>,
-	Christian Borntraeger <borntraeger@linux.ibm.com>,
-	Sven Schnelle <svens@linux.ibm.com>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-	"H . Peter Anvin" <hpa@zytor.com>
-Subject: Re: [PATCH 5/5] perf: Correct perf sampling with guest VMs
-Message-ID: <202409061037.eHiKgnDf-lkp@intel.com>
-References: <20240904204133.1442132-6-coltonlewis@google.com>
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
+	linuxppc-dev@lists.ozlabs.org, linux-kselftest@vger.kernel.org,
+	llvm@lists.linux.dev, linux-fsdevel@vger.kernel.org,
+	linux-mm@kvack.org, linux-trace-kernel@vger.kernel.org,
+	Adhemerval Zanella <adhemerval.zanella@linaro.org>,
+	Xi Ruoyao <xry111@xry111.site>
+Subject: Re: [PATCH v5 4/5] powerpc/vdso: Wire up getrandom() vDSO
+ implementation on VDSO32
+Message-ID: <ZtptfOicjZU3k3ZV@zx2c4.com>
+References: <cover.1725304404.git.christophe.leroy@csgroup.eu>
+ <1f49c2ce009f8b007ab0676fb41187b2d54f28b2.1725304404.git.christophe.leroy@csgroup.eu>
+ <ZtnYqZI-nrsNslwy@zx2c4.com>
+ <ZtoXhGYflBNR74g0@zx2c4.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20240904204133.1442132-6-coltonlewis@google.com>
+In-Reply-To: <ZtoXhGYflBNR74g0@zx2c4.com>
 
-Hi Colton,
+On Thu, Sep 05, 2024 at 10:41:40PM +0200, Jason A. Donenfeld wrote:
+> On Thu, Sep 05, 2024 at 06:13:29PM +0200, Jason A. Donenfeld wrote:
+> > > +/*
+> > > + * The macro sets two stack frames, one for the caller and one for the callee
+> > > + * because there are no requirement for the caller to set a stack frame when
+> > > + * calling VDSO so it may have omitted to set one, especially on PPC64
+> > > + */
+> > > +
+> > > +.macro cvdso_call funct
+> > > +  .cfi_startproc
+> > > +	PPC_STLU	r1, -PPC_MIN_STKFRM(r1)
+> > > +  .cfi_adjust_cfa_offset PPC_MIN_STKFRM
+> > > +	mflr		r0
+> > > +	PPC_STLU	r1, -PPC_MIN_STKFRM(r1)
+> > > +  .cfi_adjust_cfa_offset PPC_MIN_STKFRM
+> > > +	PPC_STL		r0, PPC_MIN_STKFRM + PPC_LR_STKOFF(r1)
+> > > +  .cfi_rel_offset lr, PPC_MIN_STKFRM + PPC_LR_STKOFF
+> > > +	get_datapage	r8
+> > > +	addi		r8, r8, VDSO_RNG_DATA_OFFSET
+> > > +	bl		CFUNC(DOTSYM(\funct))
+> > > +	PPC_LL		r0, PPC_MIN_STKFRM + PPC_LR_STKOFF(r1)
+> > > +	cmpwi		r3, 0
+> > > +	mtlr		r0
+> > > +	addi		r1, r1, 2 * PPC_MIN_STKFRM
+> > > +  .cfi_restore lr
+> > > +  .cfi_def_cfa_offset 0
+> > > +	crclr		so
+> > > +	bgelr+
+> > > +	crset		so
+> > > +	neg		r3, r3
+> > > +	blr
+> > > +  .cfi_endproc
+> > > +.endm
+> > 
+> > Can you figure out what's going on and send a fix, which I'll squash
+> > into this commit?
+> 
+> This doesn't work, but I wonder if something like it is what we want. I
+> need to head out for the day, but here's what I've got. It's all wrong
+> but might be of interest.
 
-kernel test robot noticed the following build errors:
+Oh, I just got one small detail wrong before. The below actually works,
+and uses the same strategy as on arm64.
 
-[auto build test ERROR on perf-tools-next/perf-tools-next]
-[also build test ERROR on tip/perf/core perf-tools/perf-tools acme/perf/core linus/master v6.11-rc6 next-20240905]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Let me know if you'd like me to fix up this commit with the below patch,
+or if you have another way you'd like to go about it.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Colton-Lewis/arm-perf-Drop-unused-functions/20240905-044442
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/perf/perf-tools-next.git perf-tools-next
-patch link:    https://lore.kernel.org/r/20240904204133.1442132-6-coltonlewis%40google.com
-patch subject: [PATCH 5/5] perf: Correct perf sampling with guest VMs
-config: s390-defconfig (https://download.01.org/0day-ci/archive/20240906/202409061037.eHiKgnDf-lkp@intel.com/config)
-compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 05f5a91d00b02f4369f46d076411c700755ae041)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240906/202409061037.eHiKgnDf-lkp@intel.com/reproduce)
+diff --git a/arch/powerpc/include/asm/vdso/getrandom.h b/arch/powerpc/include/asm/vdso/getrandom.h
+index 501d6bb14e8a..acb271709d30 100644
+--- a/arch/powerpc/include/asm/vdso/getrandom.h
++++ b/arch/powerpc/include/asm/vdso/getrandom.h
+@@ -47,7 +47,8 @@ static __always_inline struct vdso_rng_data *__arch_get_vdso_rng_data(void)
+ }
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202409061037.eHiKgnDf-lkp@intel.com/
+ ssize_t __c_kernel_getrandom(void *buffer, size_t len, unsigned int flags, void *opaque_state,
+-			     size_t opaque_len, const struct vdso_rng_data *vd);
++			     size_t opaque_len, const struct vdso_data *vd,
++			     const struct vdso_rng_data *vrd);
 
-All errors (new ones prefixed by >>):
+ #endif /* !__ASSEMBLY__ */
 
-   In file included from arch/s390/kernel/perf_event.c:12:
-   In file included from include/linux/perf_event.h:25:
-   In file included from arch/s390/include/asm/perf_event.h:14:
-   In file included from include/linux/device.h:32:
-   In file included from include/linux/device/driver.h:21:
-   In file included from include/linux/module.h:19:
-   In file included from include/linux/elf.h:6:
-   In file included from arch/s390/include/asm/elf.h:181:
-   In file included from arch/s390/include/asm/mmu_context.h:11:
-   In file included from arch/s390/include/asm/pgalloc.h:18:
-   In file included from include/linux/mm.h:2228:
-   include/linux/vmstat.h:500:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     500 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     501 |                            item];
-         |                            ~~~~
-   include/linux/vmstat.h:507:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     507 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     508 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/vmstat.h:514:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     514 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
-   include/linux/vmstat.h:519:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     519 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     520 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/vmstat.h:528:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     528 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     529 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   In file included from arch/s390/kernel/perf_event.c:13:
-   In file included from include/linux/kvm_host.h:19:
-   In file included from include/linux/msi.h:24:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:14:
-   In file included from arch/s390/include/asm/io.h:93:
-   include/asm-generic/io.h:548:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     548 |         val = __raw_readb(PCI_IOBASE + addr);
-         |                           ~~~~~~~~~~ ^
-   include/asm-generic/io.h:561:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     561 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
-      37 | #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
-         |                                                           ^
-   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
-     102 | #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
-         |                                                      ^
-   In file included from arch/s390/kernel/perf_event.c:13:
-   In file included from include/linux/kvm_host.h:19:
-   In file included from include/linux/msi.h:24:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:14:
-   In file included from arch/s390/include/asm/io.h:93:
-   include/asm-generic/io.h:574:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     574 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
-      35 | #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
-         |                                                           ^
-   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
-     115 | #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
-         |                                                      ^
-   In file included from arch/s390/kernel/perf_event.c:13:
-   In file included from include/linux/kvm_host.h:19:
-   In file included from include/linux/msi.h:24:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:14:
-   In file included from arch/s390/include/asm/io.h:93:
-   include/asm-generic/io.h:585:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     585 |         __raw_writeb(value, PCI_IOBASE + addr);
-         |                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:595:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     595 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:605:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     605 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:693:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     693 |         readsb(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:701:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     701 |         readsw(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:709:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     709 |         readsl(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:718:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     718 |         writesb(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   include/asm-generic/io.h:727:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     727 |         writesw(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   include/asm-generic/io.h:736:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     736 |         writesl(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
->> arch/s390/kernel/perf_event.c:87:15: error: conflicting types for 'perf_misc_flags'
-      87 | unsigned long perf_arch_misc_flags(struct pt_regs *regs)
-         |               ^
-   arch/s390/include/asm/perf_event.h:42:36: note: expanded from macro 'perf_arch_misc_flags'
-      42 | #define perf_arch_misc_flags(regs) perf_misc_flags(regs)
-         |                                    ^
-   include/linux/perf_event.h:1636:22: note: previous declaration is here
-    1636 | extern unsigned long perf_misc_flags(struct perf_event *event, struct pt_regs *regs);
-         |                      ^
-   17 warnings and 1 error generated.
---
-   In file included from kernel/events/core.c:12:
-   In file included from include/linux/mm.h:2228:
-   include/linux/vmstat.h:500:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     500 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     501 |                            item];
-         |                            ~~~~
-   include/linux/vmstat.h:507:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     507 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     508 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/vmstat.h:514:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     514 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
-   include/linux/vmstat.h:519:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     519 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     520 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/vmstat.h:528:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     528 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     529 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   In file included from kernel/events/core.c:20:
-   In file included from include/linux/tick.h:8:
-   In file included from include/linux/clockchips.h:14:
-   In file included from include/linux/clocksource.h:22:
-   In file included from arch/s390/include/asm/io.h:93:
-   include/asm-generic/io.h:548:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     548 |         val = __raw_readb(PCI_IOBASE + addr);
-         |                           ~~~~~~~~~~ ^
-   include/asm-generic/io.h:561:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     561 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
-      37 | #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
-         |                                                           ^
-   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
-     102 | #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
-         |                                                      ^
-   In file included from kernel/events/core.c:20:
-   In file included from include/linux/tick.h:8:
-   In file included from include/linux/clockchips.h:14:
-   In file included from include/linux/clocksource.h:22:
-   In file included from arch/s390/include/asm/io.h:93:
-   include/asm-generic/io.h:574:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     574 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
-      35 | #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
-         |                                                           ^
-   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
-     115 | #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
-         |                                                      ^
-   In file included from kernel/events/core.c:20:
-   In file included from include/linux/tick.h:8:
-   In file included from include/linux/clockchips.h:14:
-   In file included from include/linux/clocksource.h:22:
-   In file included from arch/s390/include/asm/io.h:93:
-   include/asm-generic/io.h:585:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     585 |         __raw_writeb(value, PCI_IOBASE + addr);
-         |                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:595:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     595 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:605:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     605 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:693:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     693 |         readsb(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:701:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     701 |         readsw(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:709:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     709 |         readsl(PCI_IOBASE + addr, buffer, count);
-         |                ~~~~~~~~~~ ^
-   include/asm-generic/io.h:718:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     718 |         writesb(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   include/asm-generic/io.h:727:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     727 |         writesw(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
-   include/asm-generic/io.h:736:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     736 |         writesl(PCI_IOBASE + addr, buffer, count);
-         |                 ~~~~~~~~~~ ^
->> kernel/events/core.c:6929:9: error: too few arguments to function call, expected 2, have 1
-    6929 |         return perf_arch_misc_flags(regs);
-         |                ^~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/s390/include/asm/perf_event.h:42:56: note: expanded from macro 'perf_arch_misc_flags'
-      42 | #define perf_arch_misc_flags(regs) perf_misc_flags(regs)
-         |                                    ~~~~~~~~~~~~~~~     ^
-   kernel/events/core.c:6923:15: note: 'perf_misc_flags' declared here
-    6923 | unsigned long perf_misc_flags(struct perf_event *event,
-         |               ^               ~~~~~~~~~~~~~~~~~~~~~~~~~
-    6924 |                               struct pt_regs *regs)
-         |                               ~~~~~~~~~~~~~~~~~~~~
-   17 warnings and 1 error generated.
+diff --git a/arch/powerpc/kernel/vdso/getrandom.S b/arch/powerpc/kernel/vdso/getrandom.S
+index a957cd2b2b03..64cc1fad3ccc 100644
+--- a/arch/powerpc/kernel/vdso/getrandom.S
++++ b/arch/powerpc/kernel/vdso/getrandom.S
+@@ -32,7 +32,8 @@
+   .cfi_rel_offset r2, PPC_MIN_STKFRM + STK_GOT
+ #endif
+ 	get_datapage	r8
+-	addi		r8, r8, VDSO_RNG_DATA_OFFSET
++	addi		r9, r8, VDSO_RNG_DATA_OFFSET
++	addi		r8, r8, VDSO_DATA_OFFSET
+ 	bl		CFUNC(DOTSYM(\funct))
+ 	PPC_LL		r0, PPC_MIN_STKFRM + PPC_LR_STKOFF(r1)
+ #ifdef __powerpc64__
+diff --git a/arch/powerpc/kernel/vdso/vgetrandom.c b/arch/powerpc/kernel/vdso/vgetrandom.c
+index 5f855d45fb7b..408c76036868 100644
+--- a/arch/powerpc/kernel/vdso/vgetrandom.c
++++ b/arch/powerpc/kernel/vdso/vgetrandom.c
+@@ -8,7 +8,10 @@
+ #include <linux/types.h>
 
+ ssize_t __c_kernel_getrandom(void *buffer, size_t len, unsigned int flags, void *opaque_state,
+-			     size_t opaque_len, const struct vdso_rng_data *vd)
++			     size_t opaque_len, const struct vdso_data *vd,
++			     const struct vdso_rng_data *vrd)
+ {
+-	return __cvdso_getrandom_data(vd, buffer, len, flags, opaque_state, opaque_len);
++	if (IS_ENABLED(CONFIG_TIME_NS) && vd->clock_mode == VDSO_CLOCKMODE_TIMENS)
++		vrd = (void *)vrd + (1UL << CONFIG_PAGE_SHIFT);
++	return __cvdso_getrandom_data(vrd, buffer, len, flags, opaque_state, opaque_len);
+ }
 
-vim +/perf_misc_flags +87 arch/s390/kernel/perf_event.c
-
-443e802bab1691 Hendrik Brueckner 2013-12-12   86  
-842be6816e2958 Colton Lewis      2024-09-04  @87  unsigned long perf_arch_misc_flags(struct pt_regs *regs)
-b764bb1c50c279 Heinz Graalfs     2013-06-12   88  {
-443e802bab1691 Hendrik Brueckner 2013-12-12   89  	/* Check if the cpum_sf PMU has created the pt_regs structure.
-443e802bab1691 Hendrik Brueckner 2013-12-12   90  	 * In this case, perf misc flags can be easily extracted.  Otherwise,
-443e802bab1691 Hendrik Brueckner 2013-12-12   91  	 * do regular checks on the pt_regs content.
-443e802bab1691 Hendrik Brueckner 2013-12-12   92  	 */
-443e802bab1691 Hendrik Brueckner 2013-12-12   93  	if (regs->int_code == 0x1407 && regs->int_parm == CPU_MF_INT_SF_PRA)
-443e802bab1691 Hendrik Brueckner 2013-12-12   94  		if (!regs->gprs[15])
-443e802bab1691 Hendrik Brueckner 2013-12-12   95  			return perf_misc_flags_sf(regs);
-443e802bab1691 Hendrik Brueckner 2013-12-12   96  
-b764bb1c50c279 Heinz Graalfs     2013-06-12   97  	if (is_in_guest(regs))
-b764bb1c50c279 Heinz Graalfs     2013-06-12   98  		return perf_misc_guest_flags(regs);
-b764bb1c50c279 Heinz Graalfs     2013-06-12   99  
-b764bb1c50c279 Heinz Graalfs     2013-06-12  100  	return user_mode(regs) ? PERF_RECORD_MISC_USER
-b764bb1c50c279 Heinz Graalfs     2013-06-12  101  			       : PERF_RECORD_MISC_KERNEL;
-b764bb1c50c279 Heinz Graalfs     2013-06-12  102  }
-b764bb1c50c279 Heinz Graalfs     2013-06-12  103  
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
