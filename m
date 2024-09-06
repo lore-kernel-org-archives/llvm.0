@@ -1,141 +1,177 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A4E764594D;
-	Fri,  6 Sep 2024 03:24:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 657761B969;
+	Fri,  6 Sep 2024 03:35:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725593073; cv=none; b=o7ygxrRh8NuIZ6aHsKTI3w7C5p69xe0VBK4T25uLYb9biMKEGQZv7DBd3wG+JEoGMHAPOhv3SsC+fv77K+ZvObjH5qRuu7Zync5X765F/0sEA4/ZOlmaMdPduyjgpDBABY48ijxZXIoxan6ne8vFqh/aJNRI5+AB90YLl+2vVNA=
+	t=1725593706; cv=none; b=Isqd+/aL88JmerpdAJNE10f6vLnWzgvpypUa8DRlJ8zBmL7yWkeaMacJjbI7kUbL7QvHMREUwS/L+pczvxgCQUFk/G+5VCxYQTEOdU0Pj3GS703Ps/DLZHsQmRbPghucIJvpRR5/m002/I9Af+BjQyNEyoUJw7ZlJvkRnydiwiw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725593073; c=relaxed/simple;
-	bh=wfQzaJMpMaVFDS+iwo6CFaUv6FyRkEZbifJAijJc6BQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=DnONqEZafn4kSlXlbAx6vD9fz2xR81nWi9vymdfpFuVAK7lyWOzoDNxZyz3+QuXdlDBC2RzyMS9Wg7ecm1sWuHog7Iz4IKM4XNVdXZjxJmwC8USwsmWlxwk5jmHlisoJmkaLjws+ZMFWNRfcTEpRJ2HPnW6gT624joZ5rdGRqhI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b=lWXUkZvb; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1725593706; c=relaxed/simple;
+	bh=75PGzrP4a2+hRp+fRcLyHWZtHWIyhb1pvOJ9n+hZTaw=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=te9/uXtdJadz5pBxIBBLkRyce5CUKVzvhUO6n41BrcvW8ffJ2wFdgkpbzjQIzlvCrZOOdnhNZ7RoUAwjO7CJc0kfB9v17jW0kv2ueIguL2Az7SqUscLXcXM2UmLq8kFzoQ54o4Km/G7Qlu0JYWKXiBg+jLmW8982ACi6qXpPGKw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=DhWj8AYb; arc=none smtp.client-ip=192.198.163.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="lWXUkZvb"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DC162C4CEC3;
-	Fri,  6 Sep 2024 03:24:30 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-	dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="lWXUkZvb"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-	t=1725593069;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=Z2dxDPKKa2YK6AR5mLMyQ8i6dADRrELxYn6efyeudEY=;
-	b=lWXUkZvbvlbUyOMCWA1zuc7ad4c+I0UJcawqwTucUHLSLfjSoDcXGiWc2V7qkYM6p9qDOE
-	xqMX7fe/Xfh9D0076bwd4NPqJu9BUto8QUy3Vo/4JDK4c4+j1HrSQbP9/ilbY+G0btPrj7
-	0Zg0qZDITzK9zGSnoBQ0QQgntbqq/qk=
-Received: 
-	by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 182a6eb3 (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
-	Fri, 6 Sep 2024 03:24:28 +0000 (UTC)
-Date: Fri, 6 Sep 2024 05:24:24 +0200
-From: "Jason A. Donenfeld" <Jason@zx2c4.com>
-To: Christophe Leroy <christophe.leroy@csgroup.eu>
-Cc: Andrew Morton <akpm@linux-foundation.org>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-	Michael Ellerman <mpe@ellerman.id.au>,
-	Nicholas Piggin <npiggin@gmail.com>,
-	Naveen N Rao <naveen@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
-	linuxppc-dev@lists.ozlabs.org, linux-kselftest@vger.kernel.org,
-	llvm@lists.linux.dev, linux-fsdevel@vger.kernel.org,
-	linux-mm@kvack.org, linux-trace-kernel@vger.kernel.org,
-	Adhemerval Zanella <adhemerval.zanella@linaro.org>,
-	Xi Ruoyao <xry111@xry111.site>
-Subject: Re: [PATCH v5 4/5] powerpc/vdso: Wire up getrandom() vDSO
- implementation on VDSO32
-Message-ID: <Ztp16FkqG0ALlXnh@zx2c4.com>
-References: <cover.1725304404.git.christophe.leroy@csgroup.eu>
- <1f49c2ce009f8b007ab0676fb41187b2d54f28b2.1725304404.git.christophe.leroy@csgroup.eu>
- <ZtnYqZI-nrsNslwy@zx2c4.com>
- <ZtoXhGYflBNR74g0@zx2c4.com>
- <ZtptfOicjZU3k3ZV@zx2c4.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="DhWj8AYb"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1725593705; x=1757129705;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=75PGzrP4a2+hRp+fRcLyHWZtHWIyhb1pvOJ9n+hZTaw=;
+  b=DhWj8AYbQxpfoiaFHe5d/WciyXBqxctzSjQBvMLVo5YSwoRAHoskUx1A
+   +j+m60O+VRkDfBP977l/gTdDI0AM/0c6iGBs9BhyFUnyUDfRJmpG22zDH
+   vEF6dXt/to1UNckKp6Z7kCTZ3CAWhJz1i1jU29saMxmcZzNLtTVUx4040
+   m8fN4SMjUfEAtHza28Q+DAHbaPM3SZfd+NUPG/yV9ir7H3ZVTjvzRITC1
+   ZB9qyIm0VDmUHUuSAdK1COcEYhnCnxivSRnvyd32ICvqEugqaRxbjQhRz
+   sZcbybzhUUE4D0lI3ZdPh0FI0NcwwB3Tz+Z9fxPOzONvmO3WkLLQ1yRcx
+   A==;
+X-CSE-ConnectionGUID: 7NPmN7nISj+RppXes31kpQ==
+X-CSE-MsgGUID: G6vsGnnlQo6rkohnB7xrDQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11186"; a="35013223"
+X-IronPort-AV: E=Sophos;i="6.10,206,1719903600"; 
+   d="scan'208";a="35013223"
+Received: from fmviesa004.fm.intel.com ([10.60.135.144])
+  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Sep 2024 20:35:04 -0700
+X-CSE-ConnectionGUID: GRuZ7xngTcaIn//569oOWA==
+X-CSE-MsgGUID: CQTY69YBRZCID/xFk//ybA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.10,206,1719903600"; 
+   d="scan'208";a="70395440"
+Received: from lkp-server01.sh.intel.com (HELO 9c6b1c7d3b50) ([10.239.97.150])
+  by fmviesa004.fm.intel.com with ESMTP; 05 Sep 2024 20:35:01 -0700
+Received: from kbuild by 9c6b1c7d3b50 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1smPkQ-000AZP-2g;
+	Fri, 06 Sep 2024 03:34:58 +0000
+Date: Fri, 6 Sep 2024 11:34:12 +0800
+From: kernel test robot <lkp@intel.com>
+To: Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [morimoto:sound-TDM-spit-2024-09-05 13/15]
+ sound/soc/generic/simple-card-utils.c:1090:2: warning: label followed by a
+ declaration is a C23 extension
+Message-ID: <202409061121.oggHCMje-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <ZtptfOicjZU3k3ZV@zx2c4.com>
 
-On Fri, Sep 06, 2024 at 04:48:28AM +0200, Jason A. Donenfeld wrote:
-> On Thu, Sep 05, 2024 at 10:41:40PM +0200, Jason A. Donenfeld wrote:
-> > On Thu, Sep 05, 2024 at 06:13:29PM +0200, Jason A. Donenfeld wrote:
-> > > > +/*
-> > > > + * The macro sets two stack frames, one for the caller and one for the callee
-> > > > + * because there are no requirement for the caller to set a stack frame when
-> > > > + * calling VDSO so it may have omitted to set one, especially on PPC64
-> > > > + */
-> > > > +
-> > > > +.macro cvdso_call funct
-> > > > +  .cfi_startproc
-> > > > +	PPC_STLU	r1, -PPC_MIN_STKFRM(r1)
-> > > > +  .cfi_adjust_cfa_offset PPC_MIN_STKFRM
-> > > > +	mflr		r0
-> > > > +	PPC_STLU	r1, -PPC_MIN_STKFRM(r1)
-> > > > +  .cfi_adjust_cfa_offset PPC_MIN_STKFRM
-> > > > +	PPC_STL		r0, PPC_MIN_STKFRM + PPC_LR_STKOFF(r1)
-> > > > +  .cfi_rel_offset lr, PPC_MIN_STKFRM + PPC_LR_STKOFF
-> > > > +	get_datapage	r8
-> > > > +	addi		r8, r8, VDSO_RNG_DATA_OFFSET
-> > > > +	bl		CFUNC(DOTSYM(\funct))
-> > > > +	PPC_LL		r0, PPC_MIN_STKFRM + PPC_LR_STKOFF(r1)
-> > > > +	cmpwi		r3, 0
-> > > > +	mtlr		r0
-> > > > +	addi		r1, r1, 2 * PPC_MIN_STKFRM
-> > > > +  .cfi_restore lr
-> > > > +  .cfi_def_cfa_offset 0
-> > > > +	crclr		so
-> > > > +	bgelr+
-> > > > +	crset		so
-> > > > +	neg		r3, r3
-> > > > +	blr
-> > > > +  .cfi_endproc
-> > > > +.endm
-> > > 
-> > > Can you figure out what's going on and send a fix, which I'll squash
-> > > into this commit?
-> > 
-> > This doesn't work, but I wonder if something like it is what we want. I
-> > need to head out for the day, but here's what I've got. It's all wrong
-> > but might be of interest.
-> 
-> Oh, I just got one small detail wrong before. The below actually works,
-> and uses the same strategy as on arm64.
-> 
-> Let me know if you'd like me to fix up this commit with the below patch,
-> or if you have another way you'd like to go about it.
+tree:   https://github.com/morimoto/linux sound-TDM-spit-2024-09-05
+head:   f2dc6deeba0553cf79ecb30e76e88ea593f3124b
+commit: 8c7603aac45dda53bd582adf8e220cc959fc391b [13/15] ASoC: simple-card-utils: cleanup graph_get_dai_id()
+config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20240906/202409061121.oggHCMje-lkp@intel.com/config)
+compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240906/202409061121.oggHCMje-lkp@intel.com/reproduce)
 
-And here's the much shorter version in assembly, which maybe you prefer.
-Also works, and is a bit less invasive than the other thing.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202409061121.oggHCMje-lkp@intel.com/
 
-diff --git a/arch/powerpc/kernel/vdso/getrandom.S b/arch/powerpc/kernel/vdso/getrandom.S
-index a957cd2b2b03..070daba2d547 100644
---- a/arch/powerpc/kernel/vdso/getrandom.S
-+++ b/arch/powerpc/kernel/vdso/getrandom.S
-@@ -32,6 +32,14 @@
-   .cfi_rel_offset r2, PPC_MIN_STKFRM + STK_GOT
- #endif
- 	get_datapage	r8
-+#ifdef CONFIG_TIME_NS
-+	lis		r10, 0x7fff
-+	ori		r10, r10, 0xffff
-+	lwz		r9, VDSO_DATA_OFFSET + 4(r8)
-+	cmpw		r9, r10
-+	bne		+8
-+	addi		r8, r8, (1 << CONFIG_PAGE_SHIFT)
-+#endif
- 	addi		r8, r8, VDSO_RNG_DATA_OFFSET
- 	bl		CFUNC(DOTSYM(\funct))
- 	PPC_LL		r0, PPC_MIN_STKFRM + PPC_LR_STKOFF(r1)
+All warnings (new ones prefixed by >>):
 
+>> sound/soc/generic/simple-card-utils.c:1090:2: warning: label followed by a declaration is a C23 extension [-Wc23-extensions]
+    1090 |         struct device_node *node __free(device_node) = of_graph_get_port_parent(ep);
+         |         ^
+   1 warning generated.
+
+Kconfig warnings: (for reference only)
+   WARNING: unmet direct dependencies detected for OMAP2PLUS_MBOX
+   Depends on [n]: MAILBOX [=y] && (ARCH_OMAP2PLUS || ARCH_K3)
+   Selected by [y]:
+   - TI_K3_M4_REMOTEPROC [=y] && REMOTEPROC [=y] && (ARCH_K3 || COMPILE_TEST [=y])
+
+
+vim +1090 sound/soc/generic/simple-card-utils.c
+
+  1027	
+  1028	static int graph_get_dai_id(struct device_node *ep)
+  1029	{
+  1030		int i, id;
+  1031		int ret;
+  1032	
+  1033		/*
+  1034		 * For example HDMI case, it has video/sound ports,
+  1035		 * thus ALSA SoC need to adjust for it.
+  1036		 *
+  1037		 * HDMI-Sound driver should support .of_xlate_dai_id callback,
+  1038		 * and indicate specified DAI ID
+  1039		 */
+  1040		ret = snd_soc_get_dai_id(ep);
+  1041		if (ret != -ENOTSUPP)
+  1042			return ret;
+  1043	
+  1044		/*
+  1045		 * [snd_soc_dai_driver] and [Of-Graph port] relationship
+  1046		 *
+  1047		 * static struct snd_soc_dai_driver xxx_dais[] = {
+  1048		 *	{
+  1049		 *		this DAI is handled as "port@0"
+  1050		 *	},
+  1051		 *	{
+  1052		 *		this DAI is handled as "port@1"
+  1053		 *	},
+  1054		 *	...
+  1055		 * };
+  1056		 *
+  1057		 * driver {
+  1058		 *	ports {
+  1059		 *		port@0 {
+  1060		 *			reg = <0>;
+  1061		 *			...
+  1062		 *		};
+  1063		 *		port@1 {
+  1064		 *			reg = <1>;
+  1065		 *			...
+  1066		 *		};
+  1067		 *		...
+  1068		 *	};
+  1069		 * };
+  1070		 */
+  1071	
+  1072		/*
+  1073		 * Because having "reg" was not so strict requested before on DT, some DT might not have it.
+  1074		 * Let's check and use it if exist, otherwise it will count "port".
+  1075		 */
+  1076		struct device_node *port __free(device_node) = of_get_parent(ep);
+  1077	
+  1078		ret = of_property_present(port, "reg");
+  1079		if (!ret)
+  1080			goto count_port;
+  1081	
+  1082		of_property_read_u32(port, "reg", &id);
+  1083	
+  1084		return id;
+  1085	
+  1086	count_port:
+  1087		/*
+  1088		 * Non HDMI sound case, counting port on its DT is enough. Let's count it.
+  1089		 */
+> 1090		struct device_node *node __free(device_node) = of_graph_get_port_parent(ep);
+  1091		i = 0;
+  1092		id = -ENODEV;
+  1093		for_each_of_graph_port(node, port) {
+  1094			for_each_of_graph_port_endpoint(port, endpoint) {
+  1095				if (endpoint == ep) {
+  1096					id = i;
+  1097					goto end_of_loop;
+  1098				}
+  1099			}
+  1100			i++;
+  1101		}
+  1102	end_of_loop:
+  1103	
+  1104		return id;
+  1105	}
+  1106	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
