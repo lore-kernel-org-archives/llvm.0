@@ -1,107 +1,139 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lj1-f174.google.com (mail-lj1-f174.google.com [209.85.208.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 72F6E1D2F6C
-	for <llvm@lists.linux.dev>; Fri,  6 Sep 2024 15:43:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E29381CBE83;
+	Fri,  6 Sep 2024 15:47:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725637422; cv=none; b=kdocdO2DTbiUpR45JM7bRY/BR+3wR5CUptbiQmK4OzltaH1OPVJo+5A989OBIek8D5ha8w63l24D3kBcodqJY26QMoYnWyfx9H3kHdFaPYuiITXNCIRqj7YCZADRo+X/z52TexoLNQybjTsQiyl76WhKcjosQ3/YgKjh6np5kQ4=
+	t=1725637629; cv=none; b=ZNYrkN0hylmAiAWYPDRFiulXs/iAkWnQlMr0oSt3hQ43veqV/ZRAHS7vQxZPAlCstdITKiQaphm0CWwLQBefyXe3xjzQc6R0wxCfrZa9zApj0hLldFCnD8Np6YQbGzqGi/QjjAR2ruZGIxhRIcixv4MIMnbDcIvZ0oRWMRXWqbY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725637422; c=relaxed/simple;
-	bh=5FDvh4fea6HWFs/qXnSsOsUIHGXCTXgCLjpn+Cc/8yM=;
-	h=Date:From:To:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=UGmksCTrhAqKIt3LG5XHVdDYBoOs5gKN3y3zkt1HedZUOhpN8nwDnKa3iHFdiTJYjY7XaboHwfWeesM7r7fLBG91Y3ySK4Skfks7fIQMxvWnP1k4DrG8E00hbom+iojYQXJ/Bd1sE6DDe6obVR9UDzoOOmLbiwFP1YrfSNW4nhY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=MkQuaC+9; arc=none smtp.client-ip=198.175.65.21
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+	s=arc-20240116; t=1725637629; c=relaxed/simple;
+	bh=gu20GtAI+AjtMwQyNX0gTbxgQ17/cmjuVAn+9Ihywbo=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Z78qDLfhWccFc/dFE03IKtw8Ik45nYEA04Njx/NpZgW0RBJQsbSOkrjpQMObRnYPD2rqeAMHtACso8Ab6RTuRZj07e9GrGStrMR6ynoq4VMt7ygHDOnmLo2zok8tKDpwdSEVu3D4qJOdMqsMY1P8cqRCBVXOqDBGNVVpDdFeqQc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=cYRktac9; arc=none smtp.client-ip=209.85.208.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="MkQuaC+9"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1725637420; x=1757173420;
-  h=date:from:to:subject:message-id:references:mime-version:
-   in-reply-to;
-  bh=5FDvh4fea6HWFs/qXnSsOsUIHGXCTXgCLjpn+Cc/8yM=;
-  b=MkQuaC+9x8VvWotjGZx5d7ZtX6Z3yOn2SDQXxJimYY8Q+1y0feTcK0tX
-   0egZ7vuLMhv0OaTQsiJY63fe+FphvfZqDn6QwXmGWF5V8owOO4PB1Z9wT
-   o7FgsBw1QCJlcqVtfgRNj+B+7uKiM9XwkAVO1UF5625uEut+H43SmZaFy
-   WhIPD4zrSPfKEVMA54x5czW3+exnKugCG9h4otPMMSbqLeU6/FxWRn4Rv
-   aqOMBamUuvxypQ4Rycx5KcJRy0o0m9AgF8WFdb3l47uY250DrUgTQ8bcG
-   wdoOq12hEKHxiyHzjzmle5No7uZW7pMMCByDLIGELwGTN0YGUpCwQDzBK
-   A==;
-X-CSE-ConnectionGUID: JH1NZdX+TCC7B0/mNIZSIg==
-X-CSE-MsgGUID: OelH34ZVR72O9emyJfVq9w==
-X-IronPort-AV: E=McAfee;i="6700,10204,11187"; a="24349665"
-X-IronPort-AV: E=Sophos;i="6.10,208,1719903600"; 
-   d="scan'208";a="24349665"
-Received: from orviesa009.jf.intel.com ([10.64.159.149])
-  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Sep 2024 08:43:39 -0700
-X-CSE-ConnectionGUID: L0dOF7V6Ts+sggY5gOybcg==
-X-CSE-MsgGUID: vYswIGANTV+XEgUtmza+cg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.10,208,1719903600"; 
-   d="scan'208";a="65960892"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orviesa009.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Sep 2024 08:43:38 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.98)
-	(envelope-from <andriy.shevchenko@linux.intel.com>)
-	id 1smb7X-00000005qmn-0yUi;
-	Fri, 06 Sep 2024 18:43:35 +0300
-Date: Fri, 6 Sep 2024 18:43:34 +0300
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: "Liam R. Howlett" <Liam.Howlett@oracle.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	maple-tree@lists.infradead.org, linux-mm@kvack.org,
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>
-Subject: Re: [PATCH v1 1/1] maple_tree: Drop unused functions to fix the build
-Message-ID: <ZtsjJoGKRxszp-m6@smile.fi.intel.com>
-References: <20240906150533.568994-1-andriy.shevchenko@linux.intel.com>
- <krsjmi43ziyojqicc4pxzwfwbffqrnk5npbuoq6l2cnq5eovkd@afofyteb5wo3>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cYRktac9"
+Received: by mail-lj1-f174.google.com with SMTP id 38308e7fff4ca-2f025b94e07so19559291fa.0;
+        Fri, 06 Sep 2024 08:47:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1725637626; x=1726242426; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Dh009DPJvSFVva+/nxDK2xUzYWcU9eTQCK+MUuJaT7Y=;
+        b=cYRktac9PngTDHd/3YcSQR1N53ZgAShjUlsAZTSTu2eip0AZgCr8neiQFyghOnTdz+
+         qdiv/qTv8h5VeXgBVidmwFGxgIjrK9kO9IaWCvpb0y1SbU8XPcgAdQOzajnfat0w5hFm
+         WaUvQH3FnotBmM0gX2epjSB70D+AyHi2R5j6PAhBbhl4Z7LsUbVV9s9MecfplRv30AuV
+         pfhmmk8yFnyh2EHzni82zv23cOqdLTU49/2eaXmhPrCPJcp8nZO3ieIi5ogZOe+xDH3r
+         hVoacHNC+ydwu4yQ2dvNiwLZGiBsZQnPmGyXOw3JMnanNn233YkPDK4CskhGW/3M/cQM
+         /rAw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1725637626; x=1726242426;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Dh009DPJvSFVva+/nxDK2xUzYWcU9eTQCK+MUuJaT7Y=;
+        b=iWcYn3GNBZjNMG6bW8ZOJObH1y3jAzFXpsyo93Cjsyf3dxgy1+41qjhdBRaC+FQMUs
+         LNtAiEYw0COwFhHMDPtyQ8llXABTK0CrpLXKp4ct2QBWTBqcs58teGV4WRBc8ix9A9Yx
+         tDmRZM1DneJBtvCjgO6e6hayj7SSZIW4sWCwA25Rvchh8PmNl8ll0SATUp60lMfpbZd5
+         xCr4PeNDd9FDtyehGXHkjSfqeUnNAM3+okwZu1jgm5dryrStbZO62ECUxshaA7Dgu1P8
+         iaFXuln2NIx3uMwqX6n7O3DwPpLntvgJb+fdauF/L23xatRJMv6rYNCwrBE4f8PO1UFK
+         4s8A==
+X-Forwarded-Encrypted: i=1; AJvYcCWFX5QrEXsV9GwZcj0BDB743yRsPKExrkWSQTWBZB6d//4ZTa9lCAH21SVbcRL2FbbU3uzhOgQ7RqnmqS064A==@lists.linux.dev, AJvYcCWukLDXSf7vv6IFq+PsGXPbhL5OhV51POGn8hLoxYaygMshQkZO9kLHkq46ePDXvNSKTn91@lists.linux.dev
+X-Gm-Message-State: AOJu0Yw+cH4RkMzNDieTbtnYkadfJ9+4BlyJhVcWvrbHFSxPig5+ak7s
+	x3uO2jmGAOsmsREXmYmtYOcPXqERYh3Y/r+SpdB6sThKThc1mdCThQzNR9urGGs6MaDTkJiWnPk
+	T17YPR/jRebpE4NDOodeztiVqqaw=
+X-Google-Smtp-Source: AGHT+IFVTTO8+ZBCXPaEE36sFeuTpJhoQDkWbuaTISaCNmzvdon+aj6I6+n1c5eaD8ERcgKm6xZ5omk4rnvtxUz71rA=
+X-Received: by 2002:a2e:4c02:0:b0:2f6:4aed:9973 with SMTP id
+ 38308e7fff4ca-2f7524a3509mr18052481fa.44.1725637625018; Fri, 06 Sep 2024
+ 08:47:05 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <krsjmi43ziyojqicc4pxzwfwbffqrnk5npbuoq6l2cnq5eovkd@afofyteb5wo3>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+References: <20240905122020.872466-18-ubizjak@gmail.com> <202409062123.F3r9hB9z-lkp@intel.com>
+In-Reply-To: <202409062123.F3r9hB9z-lkp@intel.com>
+From: Uros Bizjak <ubizjak@gmail.com>
+Date: Fri, 6 Sep 2024 17:46:51 +0200
+Message-ID: <CAFULd4Yz=C5oZ=hWa9biLsXvvBK3EqjndD8kRRWgb=RYiSFKAw@mail.gmail.com>
+Subject: Re: [PATCH 17/18] random: Do not include <linux/prandom.h>
+To: kernel test robot <lkp@intel.com>
+Cc: linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
+	oe-kbuild-all@lists.linux.dev, "Theodore Ts'o" <tytso@mit.edu>, 
+	"Jason A. Donenfeld" <Jason@zx2c4.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Fri, Sep 06, 2024 at 11:26:26AM -0400, Liam R. Howlett wrote:
-> This exists to stop people from using the bits while the feature is in
-> active development.  We had the same patch a few days (weeks?) ago.
+On Fri, Sep 6, 2024 at 4:22=E2=80=AFPM kernel test robot <lkp@intel.com> wr=
+ote:
+>
+> Hi Uros,
+>
+> kernel test robot noticed the following build errors:
+>
+> [auto build test ERROR on akpm-mm/mm-nonmm-unstable]
+> [also build test ERROR on mtd/mtd/next mtd/mtd/fixes linus/master v6.11-r=
+c6 next-20240906]
+> [If your patch is applied to the wrong git tree, kindly drop us a note.
+> And when submitting patch, we suggest to use '--base' as documented in
+> https://git-scm.com/docs/git-format-patch#_base_tree_information]
+>
+> url:    https://github.com/intel-lab-lkp/linux/commits/Uros-Bizjak/x86-ka=
+slr-Include-linux-prandom-h-instead-of-linux-random-h/20240905-202710
+> base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-no=
+nmm-unstable
+> patch link:    https://lore.kernel.org/r/20240905122020.872466-18-ubizjak=
+%40gmail.com
+> patch subject: [PATCH 17/18] random: Do not include <linux/prandom.h>
+> config: um-randconfig-002-20240906 (https://download.01.org/0day-ci/archi=
+ve/20240906/202409062123.F3r9hB9z-lkp@intel.com/config)
+> compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 0=
+5f5a91d00b02f4369f46d076411c700755ae041)
+> reproduce (this is a W=3D1 build): (https://download.01.org/0day-ci/archi=
+ve/20240906/202409062123.F3r9hB9z-lkp@intel.com/reproduce)
+>
+> If you fix the issue in a separate patch/commit (i.e. not just a new vers=
+ion of
+> the same patch/commit), kindly add following tags
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Closes: https://lore.kernel.org/oe-kbuild-all/202409062123.F3r9hB9z-lkp=
+@intel.com/
+>
+> All error/warnings (new ones prefixed by >>):
+>
+>    In file included from crypto/testmgr.c:27:
 
-This breaks build. Can you propose better solution, please?
+Ah, here we have a negative config flag, enabled for allyesconfig, so
+- the source is disabled with allyesconfig.
 
-> * Andy Shevchenko <andriy.shevchenko@linux.intel.com> [240906 11:05]:
-> > A few functions defined but not used. This, in particular,
-> > prevents kernel builds with clang, `make W=1` and CONFIG_WERROR=y:
-> > 
-> > lib/maple_tree.c:351:21: error: unused function 'mte_set_full' [-Werror,-Wunused-function]
-> >   351 | static inline void *mte_set_full(const struct maple_enode *node)
-> >       |                     ^~~~~~~~~~~~
-> > lib/maple_tree.c:356:21: error: unused function 'mte_clear_full' [-Werror,-Wunused-function]
-> >   356 | static inline void *mte_clear_full(const struct maple_enode *node)
-> >       |                     ^~~~~~~~~~~~~~
-> > lib/maple_tree.c:361:20: error: unused function 'mte_has_null' [-Werror,-Wunused-function]
-> >   361 | static inline bool mte_has_null(const struct maple_enode *node)
-> >       |                    ^~~~~~~~~~~~
-> > 
-> > Fix this by dropping unused functions.
-> > 
-> > See also commit 6863f5643dd7 ("kbuild: allow Clang to find unused static
-> > inline functions for W=1 build").
-> > 
-> > Fixes: 6e7ba8b5e238 ("maple_tree: mte_set_full() and mte_clear_full() clang-analyzer clean up")
-> > Fixes: 54a611b60590 ("Maple Tree: add new data structure")
+#ifdef CONFIG_CRYPTO_MANAGER_DISABLE_TESTS
+...
+#endif
 
--- 
-With Best Regards,
-Andy Shevchenko
+Patch is as simple as:
 
+--cut here--
+diff --git a/crypto/testmgr.c b/crypto/testmgr.c
+index f02cb075bd68..eeb7edd99a93 100644
+--- a/crypto/testmgr.c
++++ b/crypto/testmgr.c
+@@ -23,7 +23,7 @@
+#include <linux/fips.h>
+#include <linux/module.h>
+#include <linux/once.h>
+-#include <linux/random.h>
++#include <linux/prandom.h>
+#include <linux/scatterlist.h>
+#include <linux/slab.h>
+#include <linux/string.h>
+--cut here--
 
+Will add the patch to v2 series.
+
+Thanks to the kernel test robot,
+Uros.
