@@ -1,114 +1,253 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CBAB61459FD;
-	Fri,  6 Sep 2024 09:23:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 599E71CBEBD;
+	Fri,  6 Sep 2024 11:01:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725614583; cv=none; b=UxnJYnwqn3ms6G1YOQ1UtpF0Cvb6unic2thpI5OzPNmRF0VbBkxfPkhxj+2MvWXNrmqKPGN1oduf62Bwt0lpU6z8WtUXKtkHEToibMdcHvxh4bH7tb2P6KAlTMv/rgdNTdLnFUgSsqN3iCL0hwFF/h/Ck7/uVbtxVus4bn6n3lY=
+	t=1725620500; cv=none; b=XhmlwymCIlwSUrMAE2vI7Ek98ky/ZHB+jhujeo9uKVJZrXnwlRt7rVh/9m72BoNW3wtx2BCt5MvgkeinT0H33/lI0Hd4fCzcrU6iepnc9YceLXRZjfFlrhxFXuR/EhZUFVGJwPT8tC9RymfkBcjhi/A8nhbFgQvKXhe+0FQm0EU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725614583; c=relaxed/simple;
-	bh=JR3mQVUBRcTsb6WCjCw0cgd9BkJ1RqTbb1N3pRmCnbQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=QSPwClKDOANHUEGQzkCVt0yd7TkAWOhu+oORdigy7a1Bb8v9grgsLzxRPAxu5oLzFGtTnQcXnO7VTY3j7b7xbzY1Z6YeWtfm65YmzJGF/9tqfeJP3ggSmxJK3RJ/3Jj6TxCbfVOY6OApYUpFeh+f141YsEw/GFpzJRFNfnWLWJM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=VQex7TrO; arc=none smtp.client-ip=192.198.163.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1725620500; c=relaxed/simple;
+	bh=TZ+5SMHrhrYlL8TOlFpYxPkfKpZGWI5ka+ne8BNKBYU=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=Ub2g1wp6bxOiF4b+G+82OCiZuxMDNFhxI/zoM3lZj88jXmxwjY+a5YE60fFoC+JGuaapZU5SfDwiW/zwUoH7JJWiOq7GT1VrYMoXhKzxL9htBuOSq8NaY7sxIW2rSFcFUgXZkClFXDkLk3C2iiyh2AKF4AcgahoA8AV5TqTaYS8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EsPz/rSi; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="VQex7TrO"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1725614581; x=1757150581;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=JR3mQVUBRcTsb6WCjCw0cgd9BkJ1RqTbb1N3pRmCnbQ=;
-  b=VQex7TrOFyIa4JuVlnTXhs/OEax8s2OxFZpMWQjmLYy1NmViizSJd7Iq
-   83j9J/JoQAEo/bghy/zoYLLAAZDF/F9HZr8Fb2cm2vmcBGd0wsWLxfcFz
-   Gd+g8t6x8NVucwNLKIUrDdrQedabtvA2pKEtc1DyGIwpASnWeUPpN3MKk
-   9PRELuiMq1DiyQziktJIoaokdIwhFTt3JQy6juraa6UkfbefuFF1ZdGob
-   pN3C+cirg62KzjiDqTB4HvItwCL/kG9QIbdkFFyX2L/gqqDpoZirW4rpV
-   t8jjfEMy9rtRm1G8WHw6eCA7PXMMvPh/yVVH6IrCOj0Jz6gC8WMWEp1aY
-   A==;
-X-CSE-ConnectionGUID: Rq5Sr1T5TICFLIdw7bhmeQ==
-X-CSE-MsgGUID: 8ckgUamyTUeqmf3e0hLueg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11186"; a="13407092"
-X-IronPort-AV: E=Sophos;i="6.10,207,1719903600"; 
-   d="scan'208";a="13407092"
-Received: from orviesa009.jf.intel.com ([10.64.159.149])
-  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Sep 2024 02:23:00 -0700
-X-CSE-ConnectionGUID: 6SicCxJ2T86hyJOkMLAGNQ==
-X-CSE-MsgGUID: qTEErkvJQkCltP1VIYzU+Q==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.10,207,1719903600"; 
-   d="scan'208";a="65887220"
-Received: from lkp-server01.sh.intel.com (HELO 9c6b1c7d3b50) ([10.239.97.150])
-  by orviesa009.jf.intel.com with ESMTP; 06 Sep 2024 02:22:58 -0700
-Received: from kbuild by 9c6b1c7d3b50 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1smVB9-000Auj-0v;
-	Fri, 06 Sep 2024 09:22:55 +0000
-Date: Fri, 6 Sep 2024 17:22:28 +0800
-From: kernel test robot <lkp@intel.com>
-To: Vadim Fedorenko <vadfed@meta.com>,
-	Vadim Fedorenko <vadim.fedorenko@linux.dev>,
-	Willem de Bruijn <willemb@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	David Ahern <dsahern@kernel.org>,
-	Jason Xing <kerneljasonxing@gmail.com>,
-	Simon Horman <horms@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	netdev@vger.kernel.org
-Subject: Re: [PATCH net-next v3 1/4] net_tstamp: add SCM_TS_OPT_ID to provide
- OPT_ID in control message
-Message-ID: <202409061658.ydeSewh7-lkp@intel.com>
-References: <20240904113153.2196238-2-vadfed@meta.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EsPz/rSi"
+Received: by smtp.kernel.org (Postfix) with ESMTPS id CF6A7C4CECB;
+	Fri,  6 Sep 2024 11:01:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1725620499;
+	bh=TZ+5SMHrhrYlL8TOlFpYxPkfKpZGWI5ka+ne8BNKBYU=;
+	h=From:Subject:Date:To:Cc:Reply-To:From;
+	b=EsPz/rSiQlXGQJZAplFuV7djjKI0Bk3bxrXy/Ay04/nanHb0TmgO15cuYyvw/wTfe
+	 CMOiE+R6NxyJr3sgSNw9QXoW1Rpm0l2pkUfRrcOSmLmvMZXdDHkXWqZJFEBywNO7pd
+	 wLX/gscdGoFd8hOxSWeUerNYUdkAWf+r0pTtseDDOcRR6h730Tv4BF5e08xtvnfLO3
+	 DLF6b/U//YCKX29CEQu1WnDy4LqXIxoYMnYBod5HKshud7A1bjVZ4bO2DJ+19Geizy
+	 pzJgizOSL+pWSuakTm3zDKxt8KiQszMHHmQwFe69lNmwQm2VjGOGJIBC8DOxzWnNAz
+	 EFaqTkw9EHZKA==
+Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B0AA8CD5BDD;
+	Fri,  6 Sep 2024 11:01:39 +0000 (UTC)
+From: Daniel Gomez via B4 Relay <devnull+da.gomez.samsung.com@kernel.org>
+Subject: [PATCH v2 0/8] Enable build system on macOS hosts
+Date: Fri, 06 Sep 2024 13:01:27 +0200
+Message-Id: <20240906-macos-build-support-v2-0-06beff418848@samsung.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240904113153.2196238-2-vadfed@meta.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-B4-Tracking: v=1; b=H4sIAAfh2mYC/32NQQ6CMBBFr0Jm7ZiWoAVX3sOwKJ0KkwglHUo0h
+ LtbOYDL95L//gbiI3uBW7FB9CsLhylDeSrADXbqPTJlhlKVlaqVwdG6INglfhFKmucQF2ycVWS
+ MpU4byMs5+ie/j+qjzTywLCF+jpNV/+z/3qpRYeVIk6f6cm2qu9hR0tSfXRih3ff9C2+x1CC4A
+ AAA
+To: Masahiro Yamada <masahiroy@kernel.org>, 
+ Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nicolas@fjasle.eu>, 
+ Lucas De Marchi <lucas.demarchi@intel.com>, 
+ =?utf-8?q?Thomas_Hellstr=C3=B6m?= <thomas.hellstrom@linux.intel.com>, 
+ Rodrigo Vivi <rodrigo.vivi@intel.com>, 
+ Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
+ Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>, 
+ David Airlie <airlied@gmail.com>, William Hubbs <w.d.hubbs@gmail.com>, 
+ Chris Brannon <chris@the-brannons.com>, Kirk Reiser <kirk@reisers.ca>, 
+ Samuel Thibault <samuel.thibault@ens-lyon.org>, 
+ Paul Moore <paul@paul-moore.com>, 
+ Stephen Smalley <stephen.smalley.work@gmail.com>, 
+ Ondrej Mosnacek <omosnace@redhat.com>, 
+ Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
+ Marc Zyngier <maz@kernel.org>, Oliver Upton <oliver.upton@linux.dev>, 
+ James Morse <james.morse@arm.com>, 
+ Suzuki K Poulose <suzuki.poulose@arm.com>, 
+ Zenghui Yu <yuzenghui@huawei.com>, 
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+ Jiri Slaby <jirislaby@kernel.org>, 
+ Nick Desaulniers <ndesaulniers@google.com>, 
+ Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
+ Simona Vetter <simona.vetter@ffwll.ch>
+Cc: linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org, 
+ intel-xe@lists.freedesktop.org, dri-devel@lists.freedesktop.org, 
+ speakup@linux-speakup.org, selinux@vger.kernel.org, 
+ linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev, 
+ linux-serial@vger.kernel.org, llvm@lists.linux.dev, 
+ Finn Behrens <me@kloenk.dev>, 
+ "Daniel Gomez (Samsung)" <d+samsung@kruces.com>, gost.dev@samsung.com, 
+ Daniel Gomez <da.gomez@samsung.com>, 
+ Nick Desaulniers <nick.desaulniers@gmail.com>
+X-Mailer: b4 0.14.1
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1725620498; l=6996;
+ i=da.gomez@samsung.com; s=20240621; h=from:subject:message-id;
+ bh=TZ+5SMHrhrYlL8TOlFpYxPkfKpZGWI5ka+ne8BNKBYU=;
+ b=ayL2MPQnBtEx4lGC0G1crXfF8O4KlaX6OFWn5S6fsN4KlxD3Qdnjil/2zTLO/l2WVayP0UXIO
+ ZVoNG/cKjqEDiiR+0GxTIYS6rNsNoRuqaX/hj9danc0NcoamLKkrxlf
+X-Developer-Key: i=da.gomez@samsung.com; a=ed25519;
+ pk=BqYk31UHkmv0WZShES6pIZcdmPPGay5LbzifAdZ2Ia4=
+X-Endpoint-Received: by B4 Relay for da.gomez@samsung.com/20240621 with
+ auth_id=175
+X-Original-From: Daniel Gomez <da.gomez@samsung.com>
+Reply-To: da.gomez@samsung.com
 
-Hi Vadim,
+This patch set allows for building the Linux kernel for arm64 in macOS
+with LLVM.
 
-kernel test robot noticed the following build errors:
+Patches are based on previous Nick's work and suggestions [1][2][3] to
+enable the Linux kernel build system on macOS hosts.
 
-[auto build test ERROR on net-next/main]
+macOS does not provide certain headers that are available in a GNU/Linux
+distribution with development headers installed, usually provided by
+the GNU C Library (glibc) and/or other projects. These missing headers
+are needed as build dependencies. To address this, the patches depend
+on a new Bee Headers Homebrew Tap formula [6][7][8] that provides them
+together with a pkg-config file to locate the include directory.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Vadim-Fedorenko/net_tstamp-add-SCM_TS_OPT_ID-to-provide-OPT_ID-in-control-message/20240904-193351
-base:   net-next/main
-patch link:    https://lore.kernel.org/r/20240904113153.2196238-2-vadfed%40meta.com
-patch subject: [PATCH net-next v3 1/4] net_tstamp: add SCM_TS_OPT_ID to provide OPT_ID in control message
-config: i386-buildonly-randconfig-005-20240906 (https://download.01.org/0day-ci/archive/20240906/202409061658.ydeSewh7-lkp@intel.com/config)
-compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240906/202409061658.ydeSewh7-lkp@intel.com/reproduce)
+To locate them, Makefiles include something like:
+	$(shell $(HOSTPKG_CONFIG) --cflags bee-headers 2> /dev/null)
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202409061658.ydeSewh7-lkp@intel.com/
+[6] Project:
+https://github.com/bee-headers
+[7] Headers repository:
+https://github.com/bee-headers/headers.git
+[8] Homebrew Tap formula:
+https://github.com/bee-headers/homebrew-bee-headers.git
 
-All error/warnings (new ones prefixed by >>):
+To set up the environment, documentation is provided via last patch in
+this series.
 
-   In file included from <built-in>:1:
->> ./usr/include/linux/net_tstamp.h:46:15: error: unknown type name 'SOF_TIMESTAMPING_LAST'
-      46 | static_assert(SOF_TIMESTAMPING_LAST != (1 << 31));
-         |               ^
->> ./usr/include/linux/net_tstamp.h:46:37: error: expected ')'
-      46 | static_assert(SOF_TIMESTAMPING_LAST != (1 << 31));
-         |                                     ^
-   ./usr/include/linux/net_tstamp.h:46:14: note: to match this '('
-      46 | static_assert(SOF_TIMESTAMPING_LAST != (1 << 31));
-         |              ^
->> ./usr/include/linux/net_tstamp.h:46:1: warning: type specifier missing, defaults to 'int' [-Wimplicit-int]
-      46 | static_assert(SOF_TIMESTAMPING_LAST != (1 << 31));
-         | ^
-         | int
-   1 warning and 2 errors generated.
+More configurations and architectures as well as support for Rust
+(from Finn Behrens [4] [5]) can be added in the future to extend build
+support.
 
+[1]: WIP: build Linux on MacOS
+https://github.com/ClangBuiltLinux/linux/commit/f06333e29addbc3d714adb340355f471c1dfe95a
+
+[2] Subject: [PATCH] scripts: subarch.include: fix SUBARCH on MacOS hosts
+https://lore.kernel.org/all/20221113233812.36784-1-nick.desaulniers@gmail.com/
+
+[3] Subject: Any interest in building the Linux kernel from a MacOS host?
+https://lore.kernel.org/all/CAH7mPvj64Scp6_Nbaj8KOfkoV5f7_N5L=Tv5Z9zGyn5SS+gsUw@mail.gmail.com/
+
+[4] https://github.com/kloenk/linux/commits/rust-project_macos-dylib/
+
+[5] https://kloenk.eu/posts/build-linux-on-m1-macos/
+
+To: Masahiro Yamada <masahiroy@kernel.org>
+To: Nathan Chancellor <nathan@kernel.org>
+To: Nicolas Schier <nicolas@fjasle.eu>
+To: Lucas De Marchi <lucas.demarchi@intel.com>
+To: Thomas Hellström <thomas.hellstrom@linux.intel.com>
+To: Rodrigo Vivi <rodrigo.vivi@intel.com>
+To: Maarten Lankhorst <maarten.lankhorst@linux.intel.com>
+To: Maxime Ripard <mripard@kernel.org>
+To: Thomas Zimmermann <tzimmermann@suse.de>
+To: David Airlie <airlied@gmail.com>
+To: Daniel Vetter <daniel@ffwll.ch>
+To: William Hubbs <w.d.hubbs@gmail.com>
+To: Chris Brannon <chris@the-brannons.com>
+To: Kirk Reiser <kirk@reisers.ca>
+To: Samuel Thibault <samuel.thibault@ens-lyon.org>
+To: Paul Moore <paul@paul-moore.com>
+To: Stephen Smalley <stephen.smalley.work@gmail.com>
+To: Ondrej Mosnacek <omosnace@redhat.com>
+To: Catalin Marinas <catalin.marinas@arm.com>
+To: Will Deacon <will@kernel.org>
+To: Marc Zyngier <maz@kernel.org>
+To: Oliver Upton <oliver.upton@linux.dev>
+To: James Morse <james.morse@arm.com>
+To: Suzuki K Poulose <suzuki.poulose@arm.com>
+To: Zenghui Yu <yuzenghui@huawei.com>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To: Jiri Slaby <jirislaby@kernel.org>
+To: Nick Desaulniers <ndesaulniers@google.com>
+To: Bill Wendling <morbo@google.com>
+To: Justin Stitt <justinstitt@google.com>
+Cc: linux-kernel@vger.kernel.org
+Cc: linux-kbuild@vger.kernel.org
+Cc: intel-xe@lists.freedesktop.org
+Cc: dri-devel@lists.freedesktop.org
+Cc: speakup@linux-speakup.org
+Cc: selinux@vger.kernel.org
+Cc: linux-arm-kernel@lists.infradead.org
+Cc: kvmarm@lists.linux.dev
+Cc: linux-serial@vger.kernel.org
+Cc: llvm@lists.linux.dev
+Cc: Finn Behrens <me@kloenk.dev>
+Cc: Daniel Gomez (Samsung) <d+samsung@kruces.com>
+Cc: gost.dev@samsung.com
+
+Signed-off-by: Daniel Gomez <da.gomez@samsung.com>
+---
+Changes in v2:
+- Add documentation and set this 'feature' as experimental.
+- Update cover letter.
+- Drop unnecessary changes. Patches removed:
+	- kbuild: add header_install dependency to scripts
+	- include: add endian.h support
+	- include: add elf.h support
+- Update Makefiles to find Bee Headers with pkg-config.
+- Update file2alias to solve uuid_t conflicts inside Makefile as
+suggested by Nicolas Schier.
+- Adapt xe_gen_wa_oob to solve getprogname()/
+program_invocation_short_name in runtime. as suggested by Lucas De
+Marchi.
+- Remove linux/version.h in accessibility/speakup as suggested by
+Masahiro Yamada.
+- Replace selinux patches with new Masahiro Yamada's patches:
+	Message-id: 20240809122007.1220219-1-masahiroy@kernel.org
+	Link: https://lore.kernel.org/all/20240809122007.1220219-1-masahiroy@kernel.org/
+- Replace tty/vt with new Masahiro Yamada's patch:
+	Message-id: 20240809160853.1269466-1-masahiroy@kernel.org
+	Link: https://lore.kernel.org/all/20240809160853.1269466-1-masahiroy@kernel.org/
+	(Already merged in the linux-next tag used)
+- Replace scripts/kallsyms patch with Masahiro Yamada's patch:
+	Message-id: 20240807181148.660157-1-masahiroy@kernel.org
+	Link: https://lore.kernel.org/all/20240807181148.660157-1-masahiroy@kernel.org/
+	(Already merged in the linux-next tag used)
+- Link to v1: https://lore.kernel.org/r/20240807-macos-build-support-v1-0-4cd1ded85694@samsung.com
+
+---
+Daniel Gomez (5):
+      file2alias: fix uuid_t definitions for macos
+      drm/xe: xe_gen_wa_oob: fix program_invocation_short_name for macos
+      arm64: nvhe: add bee-headers support
+      scripts: add bee-headers support
+      Documentation: add howto build in macos
+
+Masahiro Yamada (2):
+      selinux: do not include <linux/*.h> headers from host programs
+      selinux: move genheaders to security/selinux/
+
+Nick Desaulniers (1):
+      scripts: subarch.include: fix SUBARCH on macOS hosts
+
+ Documentation/kbuild/llvm.rst                      | 78 ++++++++++++++++++++++
+ arch/arm64/kernel/pi/Makefile                      |  1 +
+ arch/arm64/kernel/vdso32/Makefile                  |  1 +
+ arch/arm64/kvm/hyp/nvhe/Makefile                   |  3 +-
+ drivers/gpu/drm/xe/xe_gen_wa_oob.c                 |  4 ++
+ scripts/Makefile                                   |  4 +-
+ scripts/mod/Makefile                               |  7 ++
+ scripts/mod/file2alias.c                           |  3 +
+ scripts/remove-stale-files                         |  3 +
+ scripts/selinux/Makefile                           |  2 +-
+ scripts/selinux/genheaders/.gitignore              |  2 -
+ scripts/selinux/genheaders/Makefile                |  5 --
+ scripts/selinux/mdp/Makefile                       |  2 +-
+ scripts/selinux/mdp/mdp.c                          |  4 --
+ scripts/subarch.include                            |  2 +-
+ security/selinux/.gitignore                        |  1 +
+ security/selinux/Makefile                          |  7 +-
+ .../genheaders => security/selinux}/genheaders.c   |  3 -
+ security/selinux/include/classmap.h                | 19 ++++--
+ security/selinux/include/initial_sid_to_string.h   |  2 -
+ 20 files changed, 123 insertions(+), 30 deletions(-)
+---
+base-commit: ad40aff1edffeccc412cde93894196dca7bc739e
+change-id: 20240807-macos-build-support-9ca0d77adb17
+
+Best regards,
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Daniel Gomez <da.gomez@samsung.com>
+
+
