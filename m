@@ -1,181 +1,149 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C7471CC179;
-	Fri,  6 Sep 2024 12:17:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1453225760;
+	Fri,  6 Sep 2024 12:49:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725625036; cv=none; b=JoHFcQPRqHxwRzvVwRTsU/Gaad5m4qp2A/xNc86TDxi7XOHfUj3xOxzv5hsYkBdkkfl6Jc0D4mxkYr9qYpgg7HHJ8mthg2hp/48nuCuTKNNoMFGL15fprmf/aLjNSYjA0OyHyXgfAEL3nwUm6MtGL+0WDK838mdOf8333xX45CM=
+	t=1725626959; cv=none; b=BfSoYX+i1fa4Ufqwrl+c9GXQm3//xygASgWfIO8ChLITwufRfrc66lqkWCBKvnPwNJBCRDaodLGpljLDMnxCQOj0qP4Eeg7zXC35CueckYKMjpZO9qQAvkIxdVG0WTfxZ8ME0x0T/a/mCOzxNbpON6FCbbk1xxmEdldqYz0/hME=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725625036; c=relaxed/simple;
-	bh=jkARdfGFjKPa7xTSk9XZUCCG8FmUKLT4fQHW2/MAecE=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=tPwTojDclMI1nyZh9k/eKimIblPO9v7VeQ6NAVGUIO/QmO32n2JzMQ0RF4CEB7bcHcqhumvaAmUzvOWSqj5R/7rNjUScEMUUfrZoraHsFfMZbKaGRX886h2NSFJ4N2rvz+T4UbbvybgKbbIxn98otCOjE7glSMtmAStDygbQsCA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=F1DVmyMf; arc=none smtp.client-ip=198.175.65.15
+	s=arc-20240116; t=1725626959; c=relaxed/simple;
+	bh=ZlsARWX/BEYFhlfQUcLbzycTLhjqrkGv312ZXs12Hek=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=JH4UWQqPHJTz0QLJVBWX+6mMnY1kjMZkXgmI8TGmayq0XIWIBR1YFS19tVIxnSdqj6F6GjDqrX/mzyXKZkzjTaGAIkeinqVjbg88A2o2rRuEhaTMiK07KDmTgpnQBvf0VD6QB4QMurxwSJL64NzNKH3bhgwG6DzbKx+WwZ2OjSg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Slu7PAOA; arc=none smtp.client-ip=192.198.163.19
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="F1DVmyMf"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Slu7PAOA"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1725625034; x=1757161034;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=jkARdfGFjKPa7xTSk9XZUCCG8FmUKLT4fQHW2/MAecE=;
-  b=F1DVmyMfz2rvhbBIlQOFbhmYA1S1buOV6ThNM/isBLwKurch5HlYaBG3
-   DXYB+yZHXjfVnQAY4Mo6b/athhvJoxnh8WnM62y05S2SrJS0Z11ipFuJs
-   daX16gp6lnEsWgJVzF1aWRtp4Hjbk+478fngCmQyE/iUpuo9mCr2EDBOr
-   PRSqGoo1YQySlTArJ5V7t+8g0nkf8EnAQFY6qqONfKN6w5rzJ6x44ZDL3
-   DmfbDqfoDXYWNj51up6ucYADtyMkhIe4HNvcQgmVYxSa3MFrwKuGvU4Lq
-   r5CU2vUeioH1UpzqhjzxcO3NkIuXpkNBQQnEkmGbfzw0H9xbKg9ZvaImy
-   w==;
-X-CSE-ConnectionGUID: dl/pWmRbT4eyAESe19SQpQ==
-X-CSE-MsgGUID: sgLibBd/RfmGeVNdu1FYPg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11187"; a="28130055"
+  t=1725626957; x=1757162957;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=ZlsARWX/BEYFhlfQUcLbzycTLhjqrkGv312ZXs12Hek=;
+  b=Slu7PAOAPjnPEyO9umUDI1KM9fwCmfZvvw+8ERSr2nFGG8781LudE0FY
+   R0/nmXDDwmRQWdKqjsP6pNcwemB8xEgViF25TTGnNyu2nwa0MmdPMeUFO
+   0UBYc0So5K7JbScaBS/jGpBvD0H2ib5l0ORcN4z/qybo9da1iq1YHtijO
+   h2gsVBg01p1w7Yr1dCyX3AnGjMpE1rk9P8h4VEmYSPU1ARXCFcKEumXKP
+   upJto5p7Sdung0//2YeTbWv0Gx11sjOiz8/c5v/6mfeUftmbXG7DQKtXu
+   OdWTlGCpRoq5IQ/gpJKmws9fGBvyblIhKIUwwHd8G/uJEN0Fy+3QIsQpa
+   Q==;
+X-CSE-ConnectionGUID: aV9UT5esSQ2j4nYWDmShTQ==
+X-CSE-MsgGUID: mYVS4D9sQH2IGANJQQFZuA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11187"; a="23940570"
 X-IronPort-AV: E=Sophos;i="6.10,207,1719903600"; 
-   d="scan'208";a="28130055"
-Received: from orviesa003.jf.intel.com ([10.64.159.143])
-  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Sep 2024 05:17:11 -0700
-X-CSE-ConnectionGUID: otLI9PZQTRehcKv0jR7m1A==
-X-CSE-MsgGUID: +BtAORS3R3yJRpH1JUsx8A==
+   d="scan'208";a="23940570"
+Received: from fmviesa010.fm.intel.com ([10.60.135.150])
+  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Sep 2024 05:49:16 -0700
+X-CSE-ConnectionGUID: kR62BsuvQ+yrAZYLm0GTuA==
+X-CSE-MsgGUID: s+qJx/1vS3CwSpDt3/Zwvw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.10,207,1719903600"; 
-   d="scan'208";a="70733573"
+   d="scan'208";a="66181683"
 Received: from lkp-server01.sh.intel.com (HELO 9c6b1c7d3b50) ([10.239.97.150])
-  by orviesa003.jf.intel.com with ESMTP; 06 Sep 2024 05:17:11 -0700
+  by fmviesa010.fm.intel.com with ESMTP; 06 Sep 2024 05:49:15 -0700
 Received: from kbuild by 9c6b1c7d3b50 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1smXtk-000BAR-0Q;
-	Fri, 06 Sep 2024 12:17:08 +0000
-Date: Fri, 6 Sep 2024 20:17:06 +0800
+	id 1smYOn-000BFH-1E;
+	Fri, 06 Sep 2024 12:49:13 +0000
+Date: Fri, 6 Sep 2024 20:48:30 +0800
 From: kernel test robot <lkp@intel.com>
-To: Felix Fietkau <nbd@nbd.name>
+To: Philipp Stanner <pstanner@redhat.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [nbd168-wireless:mt76 21/47]
- drivers/net/wireless/mediatek/mt76/tx.c:350:29: error: use of undeclared
- identifier 'IEEE80211_TX_CTRL_SCAN_TX'; did you mean
- 'IEEE80211_TX_CTRL_AMSDU'?
-Message-ID: <202409062056.p8rImddj-lkp@intel.com>
+Subject: Re: [RFC PATCH] drm/sched: Fix teardown leaks with refcounting
+Message-ID: <202409062019.O0EwYMd5-lkp@intel.com>
+References: <20240903094531.29893-2-pstanner@redhat.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20240903094531.29893-2-pstanner@redhat.com>
 
-tree:   https://github.com/nbd168/wireless mt76
-head:   cbb4ce62a1d578f134d443e7c7348a11044a7990
-commit: a462e130db0953e5c21823e764142e3b1d514421 [21/47] wifi: mt76: add separate tx scheduling queue for off-channel tx
-config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20240906/202409062056.p8rImddj-lkp@intel.com/config)
-compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 05f5a91d00b02f4369f46d076411c700755ae041)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240906/202409062056.p8rImddj-lkp@intel.com/reproduce)
+Hi Philipp,
+
+[This is a private test report for your RFC patch.]
+kernel test robot noticed the following build warnings:
+
+[auto build test WARNING on drm-misc/drm-misc-next]
+[also build test WARNING on linus/master v6.11-rc6 next-20240906]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Philipp-Stanner/drm-sched-Fix-teardown-leaks-with-refcounting/20240903-174759
+base:   git://anongit.freedesktop.org/drm/drm-misc drm-misc-next
+patch link:    https://lore.kernel.org/r/20240903094531.29893-2-pstanner%40redhat.com
+patch subject: [RFC PATCH] drm/sched: Fix teardown leaks with refcounting
+config: i386-buildonly-randconfig-001-20240906 (https://download.01.org/0day-ci/archive/20240906/202409062019.O0EwYMd5-lkp@intel.com/config)
+compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240906/202409062019.O0EwYMd5-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202409062056.p8rImddj-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202409062019.O0EwYMd5-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
-   In file included from drivers/net/wireless/mediatek/mt76/tx.c:6:
-   In file included from drivers/net/wireless/mediatek/mt76/mt76.h:10:
-   In file included from include/linux/io.h:14:
-   In file included from arch/hexagon/include/asm/io.h:328:
-   include/asm-generic/io.h:548:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     548 |         val = __raw_readb(PCI_IOBASE + addr);
-         |                           ~~~~~~~~~~ ^
-   include/asm-generic/io.h:561:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     561 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
-      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-         |                                                   ^
-   In file included from drivers/net/wireless/mediatek/mt76/tx.c:6:
-   In file included from drivers/net/wireless/mediatek/mt76/mt76.h:10:
-   In file included from include/linux/io.h:14:
-   In file included from arch/hexagon/include/asm/io.h:328:
-   include/asm-generic/io.h:574:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     574 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
-      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
-         |                                                   ^
-   In file included from drivers/net/wireless/mediatek/mt76/tx.c:6:
-   In file included from drivers/net/wireless/mediatek/mt76/mt76.h:10:
-   In file included from include/linux/io.h:14:
-   In file included from arch/hexagon/include/asm/io.h:328:
-   include/asm-generic/io.h:585:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     585 |         __raw_writeb(value, PCI_IOBASE + addr);
-         |                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:595:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     595 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:605:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     605 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   In file included from drivers/net/wireless/mediatek/mt76/tx.c:6:
-   In file included from drivers/net/wireless/mediatek/mt76/mt76.h:12:
-   In file included from include/linux/skbuff.h:17:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:10:
-   In file included from include/linux/mm.h:2228:
-   include/linux/vmstat.h:517:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     517 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
->> drivers/net/wireless/mediatek/mt76/tx.c:350:29: error: use of undeclared identifier 'IEEE80211_TX_CTRL_SCAN_TX'; did you mean 'IEEE80211_TX_CTRL_AMSDU'?
-     350 |             (info->control.flags & IEEE80211_TX_CTRL_SCAN_TX))
-         |                                    ^~~~~~~~~~~~~~~~~~~~~~~~~
-         |                                    IEEE80211_TX_CTRL_AMSDU
-   include/net/mac80211.h:1013:2: note: 'IEEE80211_TX_CTRL_AMSDU' declared here
-    1013 |         IEEE80211_TX_CTRL_AMSDU                 = BIT(3),
-         |         ^
-   7 warnings and 1 error generated.
+   drivers/gpu/drm/scheduler/sched_main.c:407: warning: Function parameter or struct member 'result' not described in 'drm_sched_job_done'
+>> drivers/gpu/drm/scheduler/sched_main.c:1336: warning: Function parameter or struct member 'jobs_remaining' not described in '__drm_sched_fini'
+>> drivers/gpu/drm/scheduler/sched_main.c:1336: warning: expecting prototype for drm_sched_fini(). Prototype was for __drm_sched_fini() instead
 
 
-vim +350 drivers/net/wireless/mediatek/mt76/tx.c
+vim +1336 drivers/gpu/drm/scheduler/sched_main.c
 
-   327	
-   328	void
-   329	mt76_tx(struct mt76_phy *phy, struct ieee80211_sta *sta,
-   330		struct mt76_wcid *wcid, struct sk_buff *skb)
-   331	{
-   332		struct ieee80211_tx_info *info = IEEE80211_SKB_CB(skb);
-   333		struct sk_buff_head *head;
-   334	
-   335		if (mt76_testmode_enabled(phy)) {
-   336			ieee80211_free_txskb(phy->hw, skb);
-   337			return;
-   338		}
-   339	
-   340		if (WARN_ON(skb_get_queue_mapping(skb) >= MT_TXQ_PSD))
-   341			skb_set_queue_mapping(skb, MT_TXQ_BE);
-   342	
-   343		if (wcid && !(wcid->tx_info & MT_WCID_TX_INFO_SET))
-   344			ieee80211_get_tx_rates(info->control.vif, sta, skb,
-   345					       info->control.rates, 1);
-   346	
-   347		info->hw_queue |= FIELD_PREP(MT_TX_HW_QUEUE_PHY, phy->band_idx);
-   348	
-   349		if ((info->flags & IEEE80211_TX_CTL_TX_OFFCHAN) ||
- > 350		    (info->control.flags & IEEE80211_TX_CTRL_SCAN_TX))
-   351			head = &wcid->tx_offchannel;
-   352		else
-   353			head = &wcid->tx_pending;
-   354	
-   355		spin_lock_bh(&head->lock);
-   356		__skb_queue_tail(head, skb);
-   357		spin_unlock_bh(&head->lock);
-   358	
-   359		spin_lock_bh(&phy->tx_lock);
-   360		if (list_empty(&wcid->tx_list))
-   361			list_add_tail(&wcid->tx_list, &phy->tx_list);
-   362		spin_unlock_bh(&phy->tx_lock);
-   363	
-   364		mt76_worker_schedule(&phy->dev->tx_worker);
-   365	}
-   366	EXPORT_SYMBOL_GPL(mt76_tx);
-   367	
+f49565982194d6 drivers/gpu/drm/amd/scheduler/gpu_scheduler.c Christian König   2015-08-20  1327  
+a72ce6f84109c1 drivers/gpu/drm/amd/scheduler/gpu_scheduler.c Jammy Zhou        2015-05-22  1328  /**
+2d33948e4e00b5 drivers/gpu/drm/scheduler/gpu_scheduler.c     Nayan Deshmukh    2018-05-29  1329   * drm_sched_fini - Destroy a gpu scheduler
+2d33948e4e00b5 drivers/gpu/drm/scheduler/gpu_scheduler.c     Nayan Deshmukh    2018-05-29  1330   *
+2d33948e4e00b5 drivers/gpu/drm/scheduler/gpu_scheduler.c     Nayan Deshmukh    2018-05-29  1331   * @sched: scheduler instance
+a72ce6f84109c1 drivers/gpu/drm/amd/scheduler/gpu_scheduler.c Jammy Zhou        2015-05-22  1332   *
+2d33948e4e00b5 drivers/gpu/drm/scheduler/gpu_scheduler.c     Nayan Deshmukh    2018-05-29  1333   * Tears down and cleans up the scheduler.
+a72ce6f84109c1 drivers/gpu/drm/amd/scheduler/gpu_scheduler.c Jammy Zhou        2015-05-22  1334   */
+8f9b35110d847d drivers/gpu/drm/scheduler/sched_main.c        Philipp Stanner   2024-09-03  1335  static void __drm_sched_fini(struct kref *jobs_remaining)
+a72ce6f84109c1 drivers/gpu/drm/amd/scheduler/gpu_scheduler.c Jammy Zhou        2015-05-22 @1336  {
+8f9b35110d847d drivers/gpu/drm/scheduler/sched_main.c        Philipp Stanner   2024-09-03  1337  	struct drm_gpu_scheduler *sched;
+c61cdbdbffc169 drivers/gpu/drm/scheduler/sched_main.c        Andrey Grodzovsky 2021-05-12  1338  	struct drm_sched_entity *s_entity;
+c61cdbdbffc169 drivers/gpu/drm/scheduler/sched_main.c        Andrey Grodzovsky 2021-05-12  1339  	int i;
+c61cdbdbffc169 drivers/gpu/drm/scheduler/sched_main.c        Andrey Grodzovsky 2021-05-12  1340  
+8f9b35110d847d drivers/gpu/drm/scheduler/sched_main.c        Philipp Stanner   2024-09-03  1341  	sched = container_of(jobs_remaining, struct drm_gpu_scheduler, jobs_remaining);
+8f9b35110d847d drivers/gpu/drm/scheduler/sched_main.c        Philipp Stanner   2024-09-03  1342  
+a6149f03936993 drivers/gpu/drm/scheduler/sched_main.c        Matthew Brost     2023-10-30  1343  	drm_sched_wqueue_stop(sched);
+faf6e1a87e0742 drivers/gpu/drm/scheduler/sched_main.c        Andrey Grodzovsky 2018-10-18  1344  
+38f922a563aac3 drivers/gpu/drm/scheduler/sched_main.c        Luben Tuikov      2023-11-22  1345  	for (i = DRM_SCHED_PRIORITY_KERNEL; i < sched->num_rqs; i++) {
+56e449603f0ac5 drivers/gpu/drm/scheduler/sched_main.c        Luben Tuikov      2023-10-14  1346  		struct drm_sched_rq *rq = sched->sched_rq[i];
+c61cdbdbffc169 drivers/gpu/drm/scheduler/sched_main.c        Andrey Grodzovsky 2021-05-12  1347  
+c61cdbdbffc169 drivers/gpu/drm/scheduler/sched_main.c        Andrey Grodzovsky 2021-05-12  1348  		spin_lock(&rq->lock);
+c61cdbdbffc169 drivers/gpu/drm/scheduler/sched_main.c        Andrey Grodzovsky 2021-05-12  1349  		list_for_each_entry(s_entity, &rq->entities, list)
+c61cdbdbffc169 drivers/gpu/drm/scheduler/sched_main.c        Andrey Grodzovsky 2021-05-12  1350  			/*
+c61cdbdbffc169 drivers/gpu/drm/scheduler/sched_main.c        Andrey Grodzovsky 2021-05-12  1351  			 * Prevents reinsertion and marks job_queue as idle,
+c61cdbdbffc169 drivers/gpu/drm/scheduler/sched_main.c        Andrey Grodzovsky 2021-05-12  1352  			 * it will removed from rq in drm_sched_entity_fini
+c61cdbdbffc169 drivers/gpu/drm/scheduler/sched_main.c        Andrey Grodzovsky 2021-05-12  1353  			 * eventually
+c61cdbdbffc169 drivers/gpu/drm/scheduler/sched_main.c        Andrey Grodzovsky 2021-05-12  1354  			 */
+c61cdbdbffc169 drivers/gpu/drm/scheduler/sched_main.c        Andrey Grodzovsky 2021-05-12  1355  			s_entity->stopped = true;
+c61cdbdbffc169 drivers/gpu/drm/scheduler/sched_main.c        Andrey Grodzovsky 2021-05-12  1356  		spin_unlock(&rq->lock);
+56e449603f0ac5 drivers/gpu/drm/scheduler/sched_main.c        Luben Tuikov      2023-10-14  1357  		kfree(sched->sched_rq[i]);
+c61cdbdbffc169 drivers/gpu/drm/scheduler/sched_main.c        Andrey Grodzovsky 2021-05-12  1358  	}
+c61cdbdbffc169 drivers/gpu/drm/scheduler/sched_main.c        Andrey Grodzovsky 2021-05-12  1359  
+c61cdbdbffc169 drivers/gpu/drm/scheduler/sched_main.c        Andrey Grodzovsky 2021-05-12  1360  	/* Wakeup everyone stuck in drm_sched_entity_flush for this scheduler */
+c61cdbdbffc169 drivers/gpu/drm/scheduler/sched_main.c        Andrey Grodzovsky 2021-05-12  1361  	wake_up_all(&sched->job_scheduled);
+c61cdbdbffc169 drivers/gpu/drm/scheduler/sched_main.c        Andrey Grodzovsky 2021-05-12  1362  
+e582951baabba3 drivers/gpu/drm/scheduler/sched_main.c        Andrey Grodzovsky 2021-01-18  1363  	/* Confirm no work left behind accessing device structures */
+e582951baabba3 drivers/gpu/drm/scheduler/sched_main.c        Andrey Grodzovsky 2021-01-18  1364  	cancel_delayed_work_sync(&sched->work_tdr);
+e582951baabba3 drivers/gpu/drm/scheduler/sched_main.c        Andrey Grodzovsky 2021-01-18  1365  
+a6149f03936993 drivers/gpu/drm/scheduler/sched_main.c        Matthew Brost     2023-10-30  1366  	if (sched->own_submit_wq)
+a6149f03936993 drivers/gpu/drm/scheduler/sched_main.c        Matthew Brost     2023-10-30  1367  		destroy_workqueue(sched->submit_wq);
+faf6e1a87e0742 drivers/gpu/drm/scheduler/sched_main.c        Andrey Grodzovsky 2018-10-18  1368  	sched->ready = false;
+56e449603f0ac5 drivers/gpu/drm/scheduler/sched_main.c        Luben Tuikov      2023-10-14  1369  	kfree(sched->sched_rq);
+56e449603f0ac5 drivers/gpu/drm/scheduler/sched_main.c        Luben Tuikov      2023-10-14  1370  	sched->sched_rq = NULL;
+a72ce6f84109c1 drivers/gpu/drm/amd/scheduler/gpu_scheduler.c Jammy Zhou        2015-05-22  1371  }
+8f9b35110d847d drivers/gpu/drm/scheduler/sched_main.c        Philipp Stanner   2024-09-03  1372  
 
 -- 
 0-DAY CI Kernel Test Service
