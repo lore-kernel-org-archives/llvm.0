@@ -1,131 +1,155 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-vk1-f180.google.com (mail-vk1-f180.google.com [209.85.221.180])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 71E8F1D174E
-	for <llvm@lists.linux.dev>; Fri,  6 Sep 2024 14:55:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 01ACC1D174E
+	for <llvm@lists.linux.dev>; Fri,  6 Sep 2024 14:56:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725634522; cv=none; b=aItygWKUQ8BXmKa69YKnZIX4crYtQ8aBdMwOD74R4HLlOiTni6iRlXsX9FI5airSW7T/HtyOrGs9XZaK6r5v4KT/OnFzQzltP8Im0Xev5XJ663xezyhXyWodhkEASt63WEHTFjvpA9oxOi/oJLXSLahwA9M3du9XFuofy2Z4vb8=
+	t=1725634608; cv=none; b=BsDeWzWNd+qBP1c/DnjYWGNtXhSKBJXQJfnqe0FEvd4Bwqp85anKbWtLn17bcEnT4KHopipi/9ICr+pmAzp2z2hQ7qvmgi/4xq7nBPOVnsTMlrIZcM/Lt5QiMIQs62nboWP8kXoukFiahoMly6VpHWdI5VQUq9Xi+Ird3BykSsI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725634522; c=relaxed/simple;
-	bh=MFuZNLwda90vW+mPXIjOs38OY9mGR52AE5fGXpmm25k=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=ANh4iGCovB19yFSXCEcHNHk7GMl5bNa1eFrt+nk1xvnk9Sjrzcr44S6wBGLdke7BLznWNLF52+vOp4vofIYAeQkc9IJufyFnpup95Y6NccM7YUDfDXU5ltvwuJO7vC05SOQ7/tJaOCYEqAlF8fH4G1e/F/9y1GJF6K4Mv7QkgZs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Hkms3ho8; arc=none smtp.client-ip=192.198.163.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+	s=arc-20240116; t=1725634608; c=relaxed/simple;
+	bh=Z4WKeJmpOYFiYE7cCHqfI5S+mHBFpdvOr74BGZhwPJY=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=uUtaGmj+3Ljx+Q8s8Tbalxb9U07hWH+MA7annXGZT+G2YxJXpaNX8doJT4CgvVlYIL5ZYo92NzusHvdrvzpyEhf5GLx4xFXvHZqHciaBNVXevrEnKYHHk78KXv5muPMcfYqHlD+KI9FyESgcDN1PPHuvoCcEVTPO2jRPSKFd/Po=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=Yum8ZkNb; arc=none smtp.client-ip=209.85.221.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Hkms3ho8"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1725634522; x=1757170522;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=MFuZNLwda90vW+mPXIjOs38OY9mGR52AE5fGXpmm25k=;
-  b=Hkms3ho8Sovvj590XCUGoo5QMhd5gi59P17xhIVfYZijVym+XTX+LA9U
-   6Zb2CFXT4ekWMZDrlYpci0hPN7JsbkDc5DM3htxLc+/gsRyzSfIJyMgn4
-   tEmy9uWB8qtvwKmXzFF18TzOwOz+Wyn1bT4ediLEQEv6DVS2vu+Q+8wvH
-   LFrOYW0fs/2V7KCpTAG4NeyHt/NEHKhFlAR/uyI/mUFudta2pnVq5fPzU
-   A1ubvAFFKNtzOJ0UJb4rSb+Vfbw6tDJ7FTaFOOQwXZo+EA8fefcL2e67B
-   emnftq1J8Q7s1JKqdIHsViYsmw6zrXbrIGclIXrjpUTPUZDnqLn95Kvew
-   A==;
-X-CSE-ConnectionGUID: oI9RSdt3ThKbZX0ExSAvRw==
-X-CSE-MsgGUID: sNS3So2mRkKh6TSmBsRYTQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11187"; a="23900509"
-X-IronPort-AV: E=Sophos;i="6.10,208,1719903600"; 
-   d="scan'208";a="23900509"
-Received: from orviesa004.jf.intel.com ([10.64.159.144])
-  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Sep 2024 07:55:20 -0700
-X-CSE-ConnectionGUID: 69DWNT1tTrKmjA8uXnUubQ==
-X-CSE-MsgGUID: fXGnhljAQQGHcGChVQ28fw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.10,208,1719903600"; 
-   d="scan'208";a="70917921"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orviesa004.jf.intel.com with ESMTP; 06 Sep 2024 07:55:16 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-	id BD38613E; Fri, 06 Sep 2024 17:55:14 +0300 (EEST)
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: Pablo Neira Ayuso <pablo@netfilter.org>,
-	Pavel Tikhomirov <ptikhomirov@virtuozzo.com>,
-	netfilter-devel@vger.kernel.org,
-	coreteam@netfilter.org,
-	netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev
-Cc: Jozsef Kadlecsik <kadlec@netfilter.org>,
-	"David S. Miller" <davem@davemloft.net>,
-	David Ahern <dsahern@kernel.org>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Subject: [PATCH net v1 1/1] netfilter: nf_reject: Fix build error when CONFIG_BRIDGE_NETFILTER=n
-Date: Fri,  6 Sep 2024 17:55:13 +0300
-Message-ID: <20240906145513.567781-1-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.43.0.rc1.1336.g36b5255a03ac
+	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="Yum8ZkNb"
+Received: by mail-vk1-f180.google.com with SMTP id 71dfb90a1353d-4fcf9102c8bso585814e0c.2
+        for <llvm@lists.linux.dev>; Fri, 06 Sep 2024 07:56:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore.com; s=google; t=1725634605; x=1726239405; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Z8DQFAISHS7i5IP3gsOeV2GhBMoOIKb1H2ynRnefFiA=;
+        b=Yum8ZkNbOK6DAGYWjPl8kRHOwbo1+HXMGK/8gHVzHaIWUFZsIeEOAY/oBLRBdph5G8
+         B78cEx8tiWUCufR5TusdxTPY6KtOXKntrN37k9jtoHD4+XvHM0F01xfUd0B0mR9v2tsj
+         CUM2v5Zq8igazAzGj6YpxdL0PE1agBEnO5dvGb/Neu2UB1AlPzcOCMzaDjPtDqFpYlx6
+         t2LNza88PDyds8ofnp9lzZS7U3Wq/VtZXHEU73Og/JVhWKICNdrH7mkA+FnNKXC+qgfs
+         Iyw8mQ9WZ8iw8NySyLgyk9VBYvn/HeiIHllULlvJ0GffVcI07Mh8N1eLXUNXFyuILzrA
+         Y2/A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1725634605; x=1726239405;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Z8DQFAISHS7i5IP3gsOeV2GhBMoOIKb1H2ynRnefFiA=;
+        b=kwGUevWvLRgJ3FaD5uHvCTdXGEdFnZhPB4YWREzyVQIz/xoK/l/WhC2KI76MeMNLux
+         KQreOynCkTWyv5SWrX1ydmrLyLwrpIRb4GAGfF9hqpokWhEP7ipAbZ3naMvVz87CkEcX
+         RPLLsE6cQyeOM7A3UlHjkFQAvsy9S26wC5CNt6lrqA81fzQP/Pj3MV8ZsC/RRMhQE23q
+         A1LK3uJAQZSgyFTNI8XTJlDhDdkDQMViIuBvTUjjdR++YXInXNp+uhDxuokqYUHasF/s
+         3zeBZzjvvqJYYbTCdsEfyvCLdUVs2S9IMDE5t0B2CXVE0cJeUlxNhF6uOWKk87xQJfKK
+         pVGg==
+X-Forwarded-Encrypted: i=1; AJvYcCXtGnxi2Bict+FfePeKZ002Jm9Q9d6JUP0KVecup9GGfckfyYiao0g0OLhu23QTPqtr3KbX@lists.linux.dev
+X-Gm-Message-State: AOJu0Yw8g9K0D+kgJTGyaKbOxjcakmHqQ8eS2q9C0QqdGhqDEx7fmVYF
+	zwqHS1bkE0iNcuvWUO524/ZFknRfKuqkzHEg1S4G8YGNg88JicgDAhJK03GxYtuvUCHY5cPknHz
+	cgBQd2aTwDvXCm96US0FjVYLJgPVOceRa8f0u
+X-Google-Smtp-Source: AGHT+IHq7ZiORKnHJ7OGW0/x1cWaLstSbHVVP69Jhc2KtxHBDUWP5W0/AltVyanWWqQY/QWC4tnW0snbDbe3WIJv/jg=
+X-Received: by 2002:a05:6122:3b17:b0:501:2842:428a with SMTP id
+ 71dfb90a1353d-50128425272mr4021883e0c.8.1725634604866; Fri, 06 Sep 2024
+ 07:56:44 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20240906-macos-build-support-v2-0-06beff418848@samsung.com> <20240906-macos-build-support-v2-6-06beff418848@samsung.com>
+In-Reply-To: <20240906-macos-build-support-v2-6-06beff418848@samsung.com>
+From: Paul Moore <paul@paul-moore.com>
+Date: Fri, 6 Sep 2024 10:56:33 -0400
+Message-ID: <CAHC9VhRpHgqN2fp1J3x9=zBqNr3QHsSDgUnoZ7M-SuOQ6hQ4nw@mail.gmail.com>
+Subject: Re: [PATCH v2 6/8] selinux: do not include <linux/*.h> headers from
+ host programs
+To: da.gomez@samsung.com
+Cc: Masahiro Yamada <masahiroy@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
+	Nicolas Schier <nicolas@fjasle.eu>, Lucas De Marchi <lucas.demarchi@intel.com>, 
+	=?UTF-8?Q?Thomas_Hellstr=C3=B6m?= <thomas.hellstrom@linux.intel.com>, 
+	Rodrigo Vivi <rodrigo.vivi@intel.com>, 
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, Maxime Ripard <mripard@kernel.org>, 
+	Thomas Zimmermann <tzimmermann@suse.de>, David Airlie <airlied@gmail.com>, 
+	William Hubbs <w.d.hubbs@gmail.com>, Chris Brannon <chris@the-brannons.com>, 
+	Kirk Reiser <kirk@reisers.ca>, Samuel Thibault <samuel.thibault@ens-lyon.org>, 
+	Stephen Smalley <stephen.smalley.work@gmail.com>, Ondrej Mosnacek <omosnace@redhat.com>, 
+	Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>, 
+	Oliver Upton <oliver.upton@linux.dev>, James Morse <james.morse@arm.com>, 
+	Suzuki K Poulose <suzuki.poulose@arm.com>, Zenghui Yu <yuzenghui@huawei.com>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Jiri Slaby <jirislaby@kernel.org>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, 
+	Justin Stitt <justinstitt@google.com>, Simona Vetter <simona.vetter@ffwll.ch>, 
+	linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org, 
+	intel-xe@lists.freedesktop.org, dri-devel@lists.freedesktop.org, 
+	speakup@linux-speakup.org, selinux@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev, 
+	linux-serial@vger.kernel.org, llvm@lists.linux.dev, 
+	Finn Behrens <me@kloenk.dev>, "Daniel Gomez (Samsung)" <d+samsung@kruces.com>, gost.dev@samsung.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-In some cases (CONFIG_BRIDGE_NETFILTER=n) the pointer to IP header
-is set but not used, it prevents kernel builds with clang, `make W=1`
-and CONFIG_WERROR=y:
+On Fri, Sep 6, 2024 at 7:01=E2=80=AFAM Daniel Gomez via B4 Relay
+<devnull+da.gomez.samsung.com@kernel.org> wrote:
+>
+> From: Masahiro Yamada <masahiroy@kernel.org>
+>
+> Commit bfc5e3a6af39 ("selinux: use the kernel headers when building
+> scripts/selinux") is not the right thing to do.
+>
+> It is clear from the warning in include/uapi/linux/types.h:
+>
+>   #ifndef __EXPORTED_HEADERS__
+>   #warning "Attempt to use kernel headers from user space, see https://ke=
+rnelnewbies.org/KernelHeaders"
+>   #endif /* __EXPORTED_HEADERS__ */
+>
+> If you are inclined to define __EXPORTED_HEADERS__, you are likely doing
+> wrong.
+>
+> Adding the comment:
+>
+>   /* NOTE: we really do want to use the kernel headers here */
+>
+> does not justify the hack in any way.
+>
+> Currently, <linux/*.h> headers are included for the following purposes:
+>
+>  - <linux/capability.h> is included to check CAP_LAST_CAP
+>  - <linux/socket.h> in included to check PF_MAX
+>
+> We can skip these checks when building host programs, as they will
+> be eventually tested when building the kernel space.
+>
+> I got rid of <linux/stddef.h> from initial_sid_to_string.h because
+> it is likely that NULL is already defined. If you insist on making
+> it self-contained, you can add the following:
+>
+>   #ifdef __KERNEL__
+>   #include <linux/stddef.h>
+>   #else
+>   #include <stddef.h>
+>   #endif
+>
+> scripts/selinux/mdp/mdp.c still includes <linux/kconfig.h>, which is
+> also discouraged and should be fixed by a follow-up refactoring.
+>
+> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+> ---
+>  scripts/selinux/genheaders/Makefile              |  4 +---
+>  scripts/selinux/genheaders/genheaders.c          |  3 ---
+>  scripts/selinux/mdp/Makefile                     |  2 +-
+>  scripts/selinux/mdp/mdp.c                        |  4 ----
+>  security/selinux/include/classmap.h              | 19 ++++++++++++------=
+-
+>  security/selinux/include/initial_sid_to_string.h |  2 --
+>  6 files changed, 14 insertions(+), 20 deletions(-)
 
-ipv6: split nf_send_reset6() in smaller functions
-netfilter: nf_reject_ipv4: split nf_send_reset() in smaller functions
+Similar to patch 7/8, please read my comments on your previous posting
+of this patch, it doesn't appear that you've made any of the changes I
+asked for in your previous posting.
 
-net/ipv4/netfilter/nf_reject_ipv4.c:243:16: error: variable 'niph' set but not used [-Werror,-Wunused-but-set-variable]
-  243 |         struct iphdr *niph;
-      |                       ^
-net/ipv6/netfilter/nf_reject_ipv6.c:286:18: error: variable 'ip6h' set but not used [-Werror,-Wunused-but-set-variable]
-  286 |         struct ipv6hdr *ip6h;
-      |                         ^
+https://lore.kernel.org/selinux/317c7d20ab8a72975571cb554589522b@paul-moore=
+.com
 
-Fix these by marking respective variables with __maybe_unused as it
-seems more complicated to address that in a better way due to ifdeffery.
-
-Fixes: 8bfcdf6671b1 ("netfilter: nf_reject_ipv6: split nf_send_reset6() in smaller functions")
-Fixes: 052b9498eea5 ("netfilter: nf_reject_ipv4: split nf_send_reset() in smaller functions")
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
- net/ipv4/netfilter/nf_reject_ipv4.c | 2 +-
- net/ipv6/netfilter/nf_reject_ipv6.c | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/net/ipv4/netfilter/nf_reject_ipv4.c b/net/ipv4/netfilter/nf_reject_ipv4.c
-index 04504b2b51df..0af42494ac66 100644
---- a/net/ipv4/netfilter/nf_reject_ipv4.c
-+++ b/net/ipv4/netfilter/nf_reject_ipv4.c
-@@ -240,7 +240,7 @@ void nf_send_reset(struct net *net, struct sock *sk, struct sk_buff *oldskb,
- 		   int hook)
- {
- 	struct sk_buff *nskb;
--	struct iphdr *niph;
-+	struct iphdr *niph __maybe_unused;
- 	const struct tcphdr *oth;
- 	struct tcphdr _oth;
- 
-diff --git a/net/ipv6/netfilter/nf_reject_ipv6.c b/net/ipv6/netfilter/nf_reject_ipv6.c
-index dedee264b8f6..f5ed4e779b72 100644
---- a/net/ipv6/netfilter/nf_reject_ipv6.c
-+++ b/net/ipv6/netfilter/nf_reject_ipv6.c
-@@ -283,7 +283,7 @@ void nf_send_reset6(struct net *net, struct sock *sk, struct sk_buff *oldskb,
- 	const struct tcphdr *otcph;
- 	unsigned int otcplen, hh_len;
- 	const struct ipv6hdr *oip6h = ipv6_hdr(oldskb);
--	struct ipv6hdr *ip6h;
-+	struct ipv6hdr *ip6h __maybe_unused;
- 	struct dst_entry *dst = NULL;
- 	struct flowi6 fl6;
- 
--- 
-2.43.0.rc1.1336.g36b5255a03ac
-
+--=20
+paul-moore.com
