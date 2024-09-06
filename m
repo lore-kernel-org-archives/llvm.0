@@ -1,154 +1,312 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C86C1CEADD;
-	Fri,  6 Sep 2024 14:03:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B81C61EEF9;
+	Fri,  6 Sep 2024 14:22:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725631400; cv=none; b=lipExuMDc8F+9uWwRie6TbU1zgfHqw5FbNq5nrSKAUU6//EvgMd0yM5AIAfRWyyjoSVovy5umS6sEgiYTWNN+Z9xlJbsXEqSHU1pSFcdkiGUU5aBlAKPFGcG9AxFEHFAt2FqtynRU+Ogc688XSJKsuCOHQ4quJrC/xrUbQFb9KQ=
+	t=1725632551; cv=none; b=AUv00UADCwKBl6isFAf2qHAp4nmlHClQziKkAzfrhUoMo31ZNWpo+OlYwBADmj4sjsm4UI+fQ8Osjoq1PYjjB/UpGtn3s+vkBTaFcjTClf9d8YZtagt/v43pej2XryUXk6wketWoGKpPgQwEfUfy3ImeOFJKQ5xv4ed/0Uy0644=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725631400; c=relaxed/simple;
-	bh=cCvVFVarD948ikan+/2TaJVbsKjZAcxCYUNJAassXuo=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=OWd1PtOIHBGAnVjXZkqX/yTHbq4qk6YMIQDLl2d9dIxgejiMunr7oa2CFdF6KSNmHDZUZUyGRD8lp0ckbNNVBEhFgWDOxxqbvatNO85mncgwdAiJQob/NI7nUAdFeBEpYYQCjmGN3icHdX4A127mQYwWR9YhPDnsuLW0idaaa+s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dyMY9vi+; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1725632551; c=relaxed/simple;
+	bh=sRgeBNcKFgMqqkW9Yo1Gps/THyaCysW2AxD8cIFBghU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=aOErg8wf8dqEPaM5HiIIREvw08BlKHSczoufPUGg3i96TJNwc36UALqVlOFUsCCX+KUKT33VPB3+dKP9NqLgEZL6FuJRqj5PP0MHCUtzDV4g+0pRA8McTuL+jrm/rz3oCvLtwbsed4r7gumwuNHGa+4Cx3Vvv5u6y8ssaZTRrbA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=IZQI2tg0; arc=none smtp.client-ip=192.198.163.8
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dyMY9vi+"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0A084C4AF09;
-	Fri,  6 Sep 2024 14:03:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1725631400;
-	bh=cCvVFVarD948ikan+/2TaJVbsKjZAcxCYUNJAassXuo=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=dyMY9vi+Iv/1EE4rQ5BwnYhfwk66+LJ4z96MdbykYSppKKoQ6y3a0sNfUu/b88uyD
-	 CnMZ+ONw74z6CdB7oB6DTdO6H33Yg0CqFxIeKoXjlAeH7r+IeYZBwiBhKopg0VRDv1
-	 gzpGPqLViAnfIcvPs8ONYWfyESePiuh7ufuvViitOGQLxvTFW462hGXk6bbFU2yUaH
-	 L9ypC5UisZq5so1J2EZ4Zsx2oDa8QzGHtDF2R5KDWuQbRupAZrdUcRbDK0gOWrBwUd
-	 QfmUhasthbSt1k+8xvJ7JF5Ifym3SEZdnZdQXjE4OvCP9je+KurLddBgNN2nspGq59
-	 NazYJG1NuiiDw==
-Received: by mail-lf1-f42.google.com with SMTP id 2adb3069b0e04-5343e75c642so2437680e87.2;
-        Fri, 06 Sep 2024 07:03:19 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCXip1DM9FZxx9LPc0c65hTcU7o9xmBNqYLa4V2c+NmcFWrPXPK/NRDa+GpIAuPZMNJXbC50ew==@lists.linux.dev, AJvYcCXp9pASBb1LUn6AYEIycYzSDtC8bU9N0yHg/SHE/QKCE4ArXcTNn4ojxSTmoNqERpdaYg3S2YA=@lists.linux.dev
-X-Gm-Message-State: AOJu0YzpX+xQ1/3jAcUoqoxQm9f5sMDcyqLpLFUe+o50JYu06hR+d7ty
-	rpjiHbwnlrJYmg1PSdSTgCpz/a7jDDvImiFee4WR1mdvIrdNz1fB9TRIRSscrLWXKlUCVWn3RbK
-	hblRJHqhiiWDyyzriQFiABKZWljA=
-X-Google-Smtp-Source: AGHT+IEwm1OihzyduuH3GdpU3yiLq9gm3KuXayVrsg5BxQSVxVXk/rmKiVyZVYISmyKuN7IvBRI5rMb23e03P34iqD4=
-X-Received: by 2002:a05:6512:39ce:b0:536:54df:bff2 with SMTP id
- 2adb3069b0e04-53658812f84mr1830079e87.54.1725631398698; Fri, 06 Sep 2024
- 07:03:18 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="IZQI2tg0"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1725632549; x=1757168549;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=sRgeBNcKFgMqqkW9Yo1Gps/THyaCysW2AxD8cIFBghU=;
+  b=IZQI2tg0ohIBC9seq9Y6v/+bcm6Nafwll6XMaQD+dUn3vaXnrDMfas7u
+   yzZtlYYYuZG7RaIXKldknu8KkE6rsUWsHVPbxw1dhAH0cnTMh0XJ9B8mW
+   Fofr5hXBYUjhwDxYSE20wyLWSsf00+OAnAO6B4jmvfmvMT02MWDaXuT1d
+   2lE2rNvusEWkjqmI+K4h1wxlKMeZrOXUSfjyJfeTuL3mLCg0+mg6QZjYz
+   9jtWIclE60P9IbVYCCfeRW/VETqI3o1umk4ualBsX3BR5GxDBlMzM5Miw
+   oWeap7kFuOHWcLi7JLwElEzSTSC4y98r5M+aVmf1ldCfIMVkDsDhkBRnD
+   Q==;
+X-CSE-ConnectionGUID: YoBHixizRoq/itOydKhP/Q==
+X-CSE-MsgGUID: 5RauaQFyRSmAUVyup0wFaA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11187"; a="41901897"
+X-IronPort-AV: E=Sophos;i="6.10,208,1719903600"; 
+   d="scan'208";a="41901897"
+Received: from orviesa008.jf.intel.com ([10.64.159.148])
+  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Sep 2024 07:22:28 -0700
+X-CSE-ConnectionGUID: CdYiCZJrQL2Jf21xiloMmg==
+X-CSE-MsgGUID: vpXNwx25Rbeuq4YAUidMsw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.10,208,1719903600"; 
+   d="scan'208";a="66717890"
+Received: from lkp-server01.sh.intel.com (HELO 9c6b1c7d3b50) ([10.239.97.150])
+  by orviesa008.jf.intel.com with ESMTP; 06 Sep 2024 07:22:25 -0700
+Received: from kbuild by 9c6b1c7d3b50 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1smZqx-000BLX-28;
+	Fri, 06 Sep 2024 14:22:23 +0000
+Date: Fri, 6 Sep 2024 22:21:24 +0800
+From: kernel test robot <lkp@intel.com>
+To: Uros Bizjak <ubizjak@gmail.com>, linux-kernel@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Uros Bizjak <ubizjak@gmail.com>, Theodore Ts'o <tytso@mit.edu>,
+	"Jason A. Donenfeld" <Jason@zx2c4.com>
+Subject: Re: [PATCH 17/18] random: Do not include <linux/prandom.h>
+Message-ID: <202409062123.F3r9hB9z-lkp@intel.com>
+References: <20240905122020.872466-18-ubizjak@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20240906-macos-build-support-v2-0-06beff418848@samsung.com> <20240906-macos-build-support-v2-5-06beff418848@samsung.com>
-In-Reply-To: <20240906-macos-build-support-v2-5-06beff418848@samsung.com>
-From: Masahiro Yamada <masahiroy@kernel.org>
-Date: Fri, 6 Sep 2024 23:02:42 +0900
-X-Gmail-Original-Message-ID: <CAK7LNAQGuXzuA5tNSv0q_AMAy8Zw5MtG2RFRW0nQOwCO8Z5FLw@mail.gmail.com>
-Message-ID: <CAK7LNAQGuXzuA5tNSv0q_AMAy8Zw5MtG2RFRW0nQOwCO8Z5FLw@mail.gmail.com>
-Subject: Re: [PATCH v2 5/8] scripts: add bee-headers support
-To: da.gomez@samsung.com
-Cc: Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nicolas@fjasle.eu>, 
-	Lucas De Marchi <lucas.demarchi@intel.com>, 
-	=?UTF-8?Q?Thomas_Hellstr=C3=B6m?= <thomas.hellstrom@linux.intel.com>, 
-	Rodrigo Vivi <rodrigo.vivi@intel.com>, 
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, Maxime Ripard <mripard@kernel.org>, 
-	Thomas Zimmermann <tzimmermann@suse.de>, David Airlie <airlied@gmail.com>, 
-	William Hubbs <w.d.hubbs@gmail.com>, Chris Brannon <chris@the-brannons.com>, 
-	Kirk Reiser <kirk@reisers.ca>, Samuel Thibault <samuel.thibault@ens-lyon.org>, 
-	Paul Moore <paul@paul-moore.com>, Stephen Smalley <stephen.smalley.work@gmail.com>, 
-	Ondrej Mosnacek <omosnace@redhat.com>, Catalin Marinas <catalin.marinas@arm.com>, 
-	Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>, Oliver Upton <oliver.upton@linux.dev>, 
-	James Morse <james.morse@arm.com>, Suzuki K Poulose <suzuki.poulose@arm.com>, 
-	Zenghui Yu <yuzenghui@huawei.com>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	Jiri Slaby <jirislaby@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
-	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
-	Simona Vetter <simona.vetter@ffwll.ch>, linux-kernel@vger.kernel.org, 
-	linux-kbuild@vger.kernel.org, intel-xe@lists.freedesktop.org, 
-	dri-devel@lists.freedesktop.org, speakup@linux-speakup.org, 
-	selinux@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	kvmarm@lists.linux.dev, linux-serial@vger.kernel.org, llvm@lists.linux.dev, 
-	Finn Behrens <me@kloenk.dev>, "Daniel Gomez (Samsung)" <d+samsung@kruces.com>, gost.dev@samsung.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240905122020.872466-18-ubizjak@gmail.com>
 
-On Fri, Sep 6, 2024 at 8:01=E2=80=AFPM Daniel Gomez via B4 Relay
-<devnull+da.gomez.samsung.com@kernel.org> wrote:
->
-> From: Daniel Gomez <da.gomez@samsung.com>
->
-> endian.h header is not provided by default in macOS. Use pkg-config with
-> the new development package 'bee-headers' [1] to find the path where the
-> headers are installed.
->
-> [1] Bee Headers Project links:
-> https://github.com/bee-headers/headers
-> https://github.com/bee-headers/homebrew-bee-headers
->
-> It requires to install bee-headers Homebrew Tap:
->   brew tap bee-headers/bee-headers
->   brew install bee-headers/bee-headers/bee-headers
->
-> Signed-off-by: Daniel Gomez <da.gomez@samsung.com>
-> ---
->  scripts/Makefile     | 4 +++-
->  scripts/mod/Makefile | 5 +++++
->  2 files changed, 8 insertions(+), 1 deletion(-)
->
-> diff --git a/scripts/Makefile b/scripts/Makefile
-> index 6bcda4b9d054..40f6a9159f8c 100644
-> --- a/scripts/Makefile
-> +++ b/scripts/Makefile
-> @@ -25,8 +25,10 @@ generate_rust_target-rust :=3D y
->  rustdoc_test_builder-rust :=3D y
->  rustdoc_test_gen-rust :=3D y
->
-> -HOSTCFLAGS_sorttable.o =3D -I$(srctree)/tools/include
-> +HOSTCFLAGS_sorttable.o =3D -I$(srctree)/tools/include \
-> +       $(shell $(HOSTPKG_CONFIG) --cflags bee-headers 2> /dev/null)
->  HOSTLDLIBS_sorttable =3D -lpthread
-> +HOSTCFLAGS_insert-sys-cert.o =3D $(shell $(HOSTPKG_CONFIG) --cflags bee-=
-headers 2> /dev/null)
->  HOSTCFLAGS_asn1_compiler.o =3D -I$(srctree)/include
->  HOSTCFLAGS_sign-file.o =3D $(shell $(HOSTPKG_CONFIG) --cflags libcrypto =
-2> /dev/null)
->  HOSTLDLIBS_sign-file =3D $(shell $(HOSTPKG_CONFIG) --libs libcrypto 2> /=
-dev/null || echo -lcrypto)
-> diff --git a/scripts/mod/Makefile b/scripts/mod/Makefile
-> index 75c12c045f21..33bb032039ba 100644
-> --- a/scripts/mod/Makefile
-> +++ b/scripts/mod/Makefile
-> @@ -9,6 +9,11 @@ modpost-objs   :=3D modpost.o file2alias.o sumversion.o =
-symsearch.o
->  devicetable-offsets-file :=3D devicetable-offsets.h
->
->  HOSTCFLAGS_file2alias.o +=3D -D_UUID_T -D__GETHOSTUUID_H
-> +HOSTCFLAGS_modpost.o =3D $(shell $(HOSTPKG_CONFIG) --cflags bee-headers =
-2> /dev/null)
-> +HOSTCFLAGS_file2alias.o =3D $(shell $(HOSTPKG_CONFIG) --cflags bee-heade=
-rs 2> /dev/null)
-> +HOSTCFLAGS_sumversion.o =3D $(shell $(HOSTPKG_CONFIG) --cflags bee-heade=
-rs 2> /dev/null)
-> +HOSTCFLAGS_symsearch.o =3D $(shell $(HOSTPKG_CONFIG) --cflags bee-header=
-s 2> /dev/null)
-> +HOSTCFLAGS_mk_elfconfig.o =3D $(shell $(HOSTPKG_CONFIG) --cflags bee-hea=
-ders 2> /dev/null)
->
->  $(obj)/$(devicetable-offsets-file): $(obj)/devicetable-offsets.s FORCE
->         $(call filechk,offsets,__DEVICETABLE_OFFSETS_H__)
+Hi Uros,
+
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on akpm-mm/mm-nonmm-unstable]
+[also build test ERROR on mtd/mtd/next mtd/mtd/fixes linus/master v6.11-rc6 next-20240906]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Uros-Bizjak/x86-kaslr-Include-linux-prandom-h-instead-of-linux-random-h/20240905-202710
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-nonmm-unstable
+patch link:    https://lore.kernel.org/r/20240905122020.872466-18-ubizjak%40gmail.com
+patch subject: [PATCH 17/18] random: Do not include <linux/prandom.h>
+config: um-randconfig-002-20240906 (https://download.01.org/0day-ci/archive/20240906/202409062123.F3r9hB9z-lkp@intel.com/config)
+compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 05f5a91d00b02f4369f46d076411c700755ae041)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240906/202409062123.F3r9hB9z-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202409062123.F3r9hB9z-lkp@intel.com/
+
+All error/warnings (new ones prefixed by >>):
+
+   In file included from crypto/testmgr.c:27:
+   In file included from include/linux/scatterlist.h:8:
+   In file included from include/linux/mm.h:2228:
+   include/linux/vmstat.h:517:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     517 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+   In file included from crypto/testmgr.c:27:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/um/include/asm/io.h:24:
+   include/asm-generic/io.h:548:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     548 |         val = __raw_readb(PCI_IOBASE + addr);
+         |                           ~~~~~~~~~~ ^
+   include/asm-generic/io.h:561:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     561 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
+      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
+         |                                                   ^
+   In file included from crypto/testmgr.c:27:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/um/include/asm/io.h:24:
+   include/asm-generic/io.h:574:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     574 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
+      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
+         |                                                   ^
+   In file included from crypto/testmgr.c:27:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/um/include/asm/io.h:24:
+   include/asm-generic/io.h:585:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     585 |         __raw_writeb(value, PCI_IOBASE + addr);
+         |                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:595:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     595 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:605:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     605 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:693:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     693 |         readsb(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:701:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     701 |         readsw(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:709:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     709 |         readsl(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:718:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     718 |         writesb(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+   include/asm-generic/io.h:727:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     727 |         writesw(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+   include/asm-generic/io.h:736:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     736 |         writesl(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+>> crypto/testmgr.c:881:42: warning: declaration of 'struct rnd_state' will not be visible outside of this function [-Wvisibility]
+     881 | static inline void init_rnd_state(struct rnd_state *rng)
+         |                                          ^
+>> crypto/testmgr.c:883:2: error: call to undeclared function 'prandom_seed_state'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     883 |         prandom_seed_state(rng, get_random_u64());
+         |         ^
+   crypto/testmgr.c:886:36: warning: declaration of 'struct rnd_state' will not be visible outside of this function [-Wvisibility]
+     886 | static inline u8 prandom_u8(struct rnd_state *rng)
+         |                                    ^
+>> crypto/testmgr.c:888:9: error: call to undeclared function 'prandom_u32_state'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     888 |         return prandom_u32_state(rng);
+         |                ^
+   crypto/testmgr.c:891:44: warning: declaration of 'struct rnd_state' will not be visible outside of this function [-Wvisibility]
+     891 | static inline u32 prandom_u32_below(struct rnd_state *rng, u32 ceil)
+         |                                            ^
+   crypto/testmgr.c:897:9: error: call to undeclared function 'prandom_u32_state'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     897 |         return prandom_u32_state(rng) % ceil;
+         |                ^
+   crypto/testmgr.c:900:40: warning: declaration of 'struct rnd_state' will not be visible outside of this function [-Wvisibility]
+     900 | static inline bool prandom_bool(struct rnd_state *rng)
+         |                                        ^
+>> crypto/testmgr.c:902:27: error: incompatible pointer types passing 'struct rnd_state *' to parameter of type 'struct rnd_state *' [-Werror,-Wincompatible-pointer-types]
+     902 |         return prandom_u32_below(rng, 2);
+         |                                  ^~~
+   crypto/testmgr.c:891:55: note: passing argument to parameter 'rng' here
+     891 | static inline u32 prandom_u32_below(struct rnd_state *rng, u32 ceil)
+         |                                                       ^
+   crypto/testmgr.c:905:48: warning: declaration of 'struct rnd_state' will not be visible outside of this function [-Wvisibility]
+     905 | static inline u32 prandom_u32_inclusive(struct rnd_state *rng,
+         |                                                ^
+   crypto/testmgr.c:908:35: error: incompatible pointer types passing 'struct rnd_state *' to parameter of type 'struct rnd_state *' [-Werror,-Wincompatible-pointer-types]
+     908 |         return floor + prandom_u32_below(rng, ceil - floor + 1);
+         |                                          ^~~
+   crypto/testmgr.c:891:55: note: passing argument to parameter 'rng' here
+     891 | static inline u32 prandom_u32_below(struct rnd_state *rng, u32 ceil)
+         |                                                       ^
+   crypto/testmgr.c:912:51: warning: declaration of 'struct rnd_state' will not be visible outside of this function [-Wvisibility]
+     912 | static unsigned int generate_random_length(struct rnd_state *rng,
+         |                                                   ^
+   crypto/testmgr.c:915:39: error: incompatible pointer types passing 'struct rnd_state *' to parameter of type 'struct rnd_state *' [-Werror,-Wincompatible-pointer-types]
+     915 |         unsigned int len = prandom_u32_below(rng, max_len + 1);
+         |                                              ^~~
+   crypto/testmgr.c:891:55: note: passing argument to parameter 'rng' here
+     891 | static inline u32 prandom_u32_below(struct rnd_state *rng, u32 ceil)
+         |                                                       ^
+   crypto/testmgr.c:917:28: error: incompatible pointer types passing 'struct rnd_state *' to parameter of type 'struct rnd_state *' [-Werror,-Wincompatible-pointer-types]
+     917 |         switch (prandom_u32_below(rng, 4)) {
+         |                                   ^~~
+   crypto/testmgr.c:891:55: note: passing argument to parameter 'rng' here
+     891 | static inline u32 prandom_u32_below(struct rnd_state *rng, u32 ceil)
+         |                                                       ^
+   crypto/testmgr.c:930:31: error: incompatible pointer types passing 'struct rnd_state *' to parameter of type 'struct rnd_state *' [-Werror,-Wincompatible-pointer-types]
+     930 |         if (len && prandom_u32_below(rng, 4) == 0)
+         |                                      ^~~
+   crypto/testmgr.c:891:55: note: passing argument to parameter 'rng' here
+     891 | static inline u32 prandom_u32_below(struct rnd_state *rng, u32 ceil)
+         |                                                       ^
+   crypto/testmgr.c:936:36: warning: declaration of 'struct rnd_state' will not be visible outside of this function [-Wvisibility]
+     936 | static void flip_random_bit(struct rnd_state *rng, u8 *buf, size_t size)
+         |                                    ^
+   crypto/testmgr.c:940:29: error: incompatible pointer types passing 'struct rnd_state *' to parameter of type 'struct rnd_state *' [-Werror,-Wincompatible-pointer-types]
+     940 |         bitpos = prandom_u32_below(rng, size * 8);
+         |                                    ^~~
+   crypto/testmgr.c:891:55: note: passing argument to parameter 'rng' here
+     891 | static inline u32 prandom_u32_below(struct rnd_state *rng, u32 ceil)
+         |                                                       ^
+   crypto/testmgr.c:945:37: warning: declaration of 'struct rnd_state' will not be visible outside of this function [-Wvisibility]
+     945 | static void flip_random_byte(struct rnd_state *rng, u8 *buf, size_t size)
+         |                                     ^
+   crypto/testmgr.c:947:24: error: incompatible pointer types passing 'struct rnd_state *' to parameter of type 'struct rnd_state *' [-Werror,-Wincompatible-pointer-types]
+     947 |         buf[prandom_u32_below(rng, size)] ^= 0xff;
+         |                               ^~~
+   crypto/testmgr.c:891:55: note: passing argument to parameter 'rng' here
+     891 | static inline u32 prandom_u32_below(struct rnd_state *rng, u32 ceil)
+         |                                                       ^
+   crypto/testmgr.c:951:34: warning: declaration of 'struct rnd_state' will not be visible outside of this function [-Wvisibility]
+     951 | static void mutate_buffer(struct rnd_state *rng, u8 *buf, size_t size)
+         |                                  ^
+   crypto/testmgr.c:957:24: error: incompatible pointer types passing 'struct rnd_state *' to parameter of type 'struct rnd_state *' [-Werror,-Wincompatible-pointer-types]
+     957 |         if (prandom_u32_below(rng, 4) == 0) {
+         |                               ^~~
+   crypto/testmgr.c:891:55: note: passing argument to parameter 'rng' here
+     891 | static inline u32 prandom_u32_below(struct rnd_state *rng, u32 ceil)
+         |                                                       ^
+   crypto/testmgr.c:958:52: error: incompatible pointer types passing 'struct rnd_state *' to parameter of type 'struct rnd_state *' [-Werror,-Wincompatible-pointer-types]
+     958 |                 num_flips = min_t(size_t, 1 << prandom_u32_below(rng, 8),
+         |                                                                  ^~~
+   include/linux/minmax.h:213:49: note: expanded from macro 'min_t'
+     213 | #define min_t(type, x, y) __cmp_once(min, type, x, y)
+         |                                                 ^
+   include/linux/minmax.h:96:30: note: expanded from macro '__cmp_once'
+      96 |         __cmp_once_unique(op, type, x, y, __UNIQUE_ID(x_), __UNIQUE_ID(y_))
+         |                                     ^
+   include/linux/minmax.h:93:16: note: expanded from macro '__cmp_once_unique'
+      93 |         ({ type ux = (x); type uy = (y); __cmp(op, ux, uy); })
+         |                       ^
+   crypto/testmgr.c:891:55: note: passing argument to parameter 'rng' here
+     891 | static inline u32 prandom_u32_below(struct rnd_state *rng, u32 ceil)
+         |                                                       ^
+   crypto/testmgr.c:961:20: error: incompatible pointer types passing 'struct rnd_state *' to parameter of type 'struct rnd_state *' [-Werror,-Wincompatible-pointer-types]
+     961 |                         flip_random_bit(rng, buf, size);
+         |                                         ^~~
+   crypto/testmgr.c:936:47: note: passing argument to parameter 'rng' here
+     936 | static void flip_random_bit(struct rnd_state *rng, u8 *buf, size_t size)
+         |                                               ^
+   crypto/testmgr.c:965:24: error: incompatible pointer types passing 'struct rnd_state *' to parameter of type 'struct rnd_state *' [-Werror,-Wincompatible-pointer-types]
+     965 |         if (prandom_u32_below(rng, 4) == 0) {
+         |                               ^~~
+   crypto/testmgr.c:891:55: note: passing argument to parameter 'rng' here
+     891 | static inline u32 prandom_u32_below(struct rnd_state *rng, u32 ceil)
+         |                                                       ^
+   crypto/testmgr.c:966:52: error: incompatible pointer types passing 'struct rnd_state *' to parameter of type 'struct rnd_state *' [-Werror,-Wincompatible-pointer-types]
+     966 |                 num_flips = min_t(size_t, 1 << prandom_u32_below(rng, 8), size);
+         |                                                                  ^~~
+   include/linux/minmax.h:213:49: note: expanded from macro 'min_t'
+     213 | #define min_t(type, x, y) __cmp_once(min, type, x, y)
+         |                                                 ^
+   include/linux/minmax.h:96:30: note: expanded from macro '__cmp_once'
+      96 |         __cmp_once_unique(op, type, x, y, __UNIQUE_ID(x_), __UNIQUE_ID(y_))
+         |                                     ^
+   include/linux/minmax.h:93:16: note: expanded from macro '__cmp_once_unique'
+      93 |         ({ type ux = (x); type uy = (y); __cmp(op, ux, uy); })
 
 
+vim +/prandom_seed_state +883 crypto/testmgr.c
 
-Same as 4/8.
+f2bb770ae89641 Eric Biggers 2019-04-11  873  
+f900fde2888360 Eric Biggers 2023-02-27  874  /*
+f900fde2888360 Eric Biggers 2023-02-27  875   * The fuzz tests use prandom instead of the normal Linux RNG since they don't
+f900fde2888360 Eric Biggers 2023-02-27  876   * need cryptographically secure random numbers.  This greatly improves the
+f900fde2888360 Eric Biggers 2023-02-27  877   * performance of these tests, especially if they are run before the Linux RNG
+f900fde2888360 Eric Biggers 2023-02-27  878   * has been initialized or if they are run on a lockdep-enabled kernel.
+f900fde2888360 Eric Biggers 2023-02-27  879   */
+f900fde2888360 Eric Biggers 2023-02-27  880  
+f900fde2888360 Eric Biggers 2023-02-27 @881  static inline void init_rnd_state(struct rnd_state *rng)
+f900fde2888360 Eric Biggers 2023-02-27  882  {
+f900fde2888360 Eric Biggers 2023-02-27 @883  	prandom_seed_state(rng, get_random_u64());
+f900fde2888360 Eric Biggers 2023-02-27  884  }
+f900fde2888360 Eric Biggers 2023-02-27  885  
+f900fde2888360 Eric Biggers 2023-02-27  886  static inline u8 prandom_u8(struct rnd_state *rng)
+f900fde2888360 Eric Biggers 2023-02-27  887  {
+f900fde2888360 Eric Biggers 2023-02-27 @888  	return prandom_u32_state(rng);
+f900fde2888360 Eric Biggers 2023-02-27  889  }
+f900fde2888360 Eric Biggers 2023-02-27  890  
+f900fde2888360 Eric Biggers 2023-02-27 @891  static inline u32 prandom_u32_below(struct rnd_state *rng, u32 ceil)
+f900fde2888360 Eric Biggers 2023-02-27  892  {
+f900fde2888360 Eric Biggers 2023-02-27  893  	/*
+f900fde2888360 Eric Biggers 2023-02-27  894  	 * This is slightly biased for non-power-of-2 values of 'ceil', but this
+f900fde2888360 Eric Biggers 2023-02-27  895  	 * isn't important here.
+f900fde2888360 Eric Biggers 2023-02-27  896  	 */
+f900fde2888360 Eric Biggers 2023-02-27  897  	return prandom_u32_state(rng) % ceil;
+f900fde2888360 Eric Biggers 2023-02-27  898  }
+f900fde2888360 Eric Biggers 2023-02-27  899  
+f900fde2888360 Eric Biggers 2023-02-27  900  static inline bool prandom_bool(struct rnd_state *rng)
+f900fde2888360 Eric Biggers 2023-02-27  901  {
+f900fde2888360 Eric Biggers 2023-02-27 @902  	return prandom_u32_below(rng, 2);
+f900fde2888360 Eric Biggers 2023-02-27  903  }
+f900fde2888360 Eric Biggers 2023-02-27  904  
 
-NACK.
-
-
-
-
---
-Best Regards
-
-Masahiro Yamada
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
