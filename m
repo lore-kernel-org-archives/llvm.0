@@ -1,100 +1,114 @@
-Received: from angie.orcam.me.uk (angie.orcam.me.uk [78.133.224.34])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 119A21C7B73
-	for <llvm@lists.linux.dev>; Fri,  6 Sep 2024 09:03:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=78.133.224.34
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CBAB61459FD;
+	Fri,  6 Sep 2024 09:23:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725613391; cv=none; b=AkWvN0oaaimb3Mab8H84baZHXZZ9ZENb1puoEvnZV/liIkh0qp4+sW71a9roR1ifL6FTL35PiZpqRoKnoF05lqeUnXdRF2mzqqNGC9uWv1hdy/uhjsPo89w8eSMF0YIYoW2zvTIYaq1flDrV6vYQdls9O3tm7t11nlODhnpAook=
+	t=1725614583; cv=none; b=UxnJYnwqn3ms6G1YOQ1UtpF0Cvb6unic2thpI5OzPNmRF0VbBkxfPkhxj+2MvWXNrmqKPGN1oduf62Bwt0lpU6z8WtUXKtkHEToibMdcHvxh4bH7tb2P6KAlTMv/rgdNTdLnFUgSsqN3iCL0hwFF/h/Ck7/uVbtxVus4bn6n3lY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725613391; c=relaxed/simple;
-	bh=2l09rkOqboCyjryA87QJc97kuMI3uMLu5CVxFZ/Bn6k=;
-	h=Date:From:To:cc:Subject:In-Reply-To:Message-ID:References:
-	 MIME-Version:Content-Type; b=TERCNf28w6QhramM97ALXusB5nTyUrKcljjlmI85SMOhgQn4D9L7off3KeqnIP87sUrV6Hb9x/z4Zz7WJri131XW6Xv+IMSbAsyX1mZntBAB2V9kFH4fIEr3jvK51Ly6PFcSI+3ec0D4b0CSba3SugKldczKIDy/3O6tKug0VPA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=orcam.me.uk; spf=none smtp.mailfrom=orcam.me.uk; arc=none smtp.client-ip=78.133.224.34
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=orcam.me.uk
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=orcam.me.uk
-Received: by angie.orcam.me.uk (Postfix, from userid 500)
-	id 961EC92009C; Fri,  6 Sep 2024 11:03:06 +0200 (CEST)
-Received: from localhost (localhost [127.0.0.1])
-	by angie.orcam.me.uk (Postfix) with ESMTP id 900F792009B;
-	Fri,  6 Sep 2024 10:03:06 +0100 (BST)
-Date: Fri, 6 Sep 2024 10:03:06 +0100 (BST)
-From: "Maciej W. Rozycki" <macro@orcam.me.uk>
-To: Jiaxun Yang <jiaxun.yang@flygoat.com>
-cc: Masahiro Yamada <masahiroy@kernel.org>, 
-    Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nicolas@fjasle.eu>, 
-    Richard Weinberger <richard@nod.at>, 
-    Anton Ivanov <anton.ivanov@cambridgegreys.com>, 
-    Johannes Berg <johannes@sipsolutions.net>, 
-    Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, 
-    Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, 
-    x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>, 
-    Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, 
-    Wedson Almeida Filho <wedsonaf@gmail.com>, 
-    Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, 
-    =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
-    Benno Lossin <benno.lossin@proton.me>, 
-    Andreas Hindborg <a.hindborg@samsung.com>, 
-    Alice Ryhl <aliceryhl@google.com>, 
-    Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
-    Steven Rostedt <rostedt@goodmis.org>, 
-    Masami Hiramatsu <mhiramat@kernel.org>, 
-    Mark Rutland <mark.rutland@arm.com>, Jonathan Corbet <corbet@lwn.net>, 
-    Alex Shi <alexs@kernel.org>, Yanteng Si <siyanteng@loongson.cn>, 
-    Nick Desaulniers <ndesaulniers@google.com>, 
-    Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
-    linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, 
-    linux-um@lists.infradead.org, rust-for-linux@vger.kernel.org, 
-    linux-mips@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
-    linux-doc@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH 2/3] MIPS: Rename mips_instruction type to workaround
- bindgen issue
-In-Reply-To: <20240903-mips-rust-v1-2-0fdf0b2fd58f@flygoat.com>
-Message-ID: <alpine.DEB.2.21.2409060455300.1802@angie.orcam.me.uk>
-References: <20240903-mips-rust-v1-0-0fdf0b2fd58f@flygoat.com> <20240903-mips-rust-v1-2-0fdf0b2fd58f@flygoat.com>
-User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
+	s=arc-20240116; t=1725614583; c=relaxed/simple;
+	bh=JR3mQVUBRcTsb6WCjCw0cgd9BkJ1RqTbb1N3pRmCnbQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=QSPwClKDOANHUEGQzkCVt0yd7TkAWOhu+oORdigy7a1Bb8v9grgsLzxRPAxu5oLzFGtTnQcXnO7VTY3j7b7xbzY1Z6YeWtfm65YmzJGF/9tqfeJP3ggSmxJK3RJ/3Jj6TxCbfVOY6OApYUpFeh+f141YsEw/GFpzJRFNfnWLWJM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=VQex7TrO; arc=none smtp.client-ip=192.198.163.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="VQex7TrO"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1725614581; x=1757150581;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=JR3mQVUBRcTsb6WCjCw0cgd9BkJ1RqTbb1N3pRmCnbQ=;
+  b=VQex7TrOFyIa4JuVlnTXhs/OEax8s2OxFZpMWQjmLYy1NmViizSJd7Iq
+   83j9J/JoQAEo/bghy/zoYLLAAZDF/F9HZr8Fb2cm2vmcBGd0wsWLxfcFz
+   Gd+g8t6x8NVucwNLKIUrDdrQedabtvA2pKEtc1DyGIwpASnWeUPpN3MKk
+   9PRELuiMq1DiyQziktJIoaokdIwhFTt3JQy6juraa6UkfbefuFF1ZdGob
+   pN3C+cirg62KzjiDqTB4HvItwCL/kG9QIbdkFFyX2L/gqqDpoZirW4rpV
+   t8jjfEMy9rtRm1G8WHw6eCA7PXMMvPh/yVVH6IrCOj0Jz6gC8WMWEp1aY
+   A==;
+X-CSE-ConnectionGUID: Rq5Sr1T5TICFLIdw7bhmeQ==
+X-CSE-MsgGUID: 8ckgUamyTUeqmf3e0hLueg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11186"; a="13407092"
+X-IronPort-AV: E=Sophos;i="6.10,207,1719903600"; 
+   d="scan'208";a="13407092"
+Received: from orviesa009.jf.intel.com ([10.64.159.149])
+  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Sep 2024 02:23:00 -0700
+X-CSE-ConnectionGUID: 6SicCxJ2T86hyJOkMLAGNQ==
+X-CSE-MsgGUID: qTEErkvJQkCltP1VIYzU+Q==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.10,207,1719903600"; 
+   d="scan'208";a="65887220"
+Received: from lkp-server01.sh.intel.com (HELO 9c6b1c7d3b50) ([10.239.97.150])
+  by orviesa009.jf.intel.com with ESMTP; 06 Sep 2024 02:22:58 -0700
+Received: from kbuild by 9c6b1c7d3b50 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1smVB9-000Auj-0v;
+	Fri, 06 Sep 2024 09:22:55 +0000
+Date: Fri, 6 Sep 2024 17:22:28 +0800
+From: kernel test robot <lkp@intel.com>
+To: Vadim Fedorenko <vadfed@meta.com>,
+	Vadim Fedorenko <vadim.fedorenko@linux.dev>,
+	Willem de Bruijn <willemb@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	David Ahern <dsahern@kernel.org>,
+	Jason Xing <kerneljasonxing@gmail.com>,
+	Simon Horman <horms@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	netdev@vger.kernel.org
+Subject: Re: [PATCH net-next v3 1/4] net_tstamp: add SCM_TS_OPT_ID to provide
+ OPT_ID in control message
+Message-ID: <202409061658.ydeSewh7-lkp@intel.com>
+References: <20240904113153.2196238-2-vadfed@meta.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240904113153.2196238-2-vadfed@meta.com>
 
-On Tue, 3 Sep 2024, Jiaxun Yang wrote:
+Hi Vadim,
 
-> Rename it as mips_insn, which is not conflicting with anything
-> and fits the name of header.
-[...]
-> diff --git a/arch/mips/kernel/ftrace.c b/arch/mips/kernel/ftrace.c
-> index 8c401e42301c..153c9666a77c 100644
-> --- a/arch/mips/kernel/ftrace.c
-> +++ b/arch/mips/kernel/ftrace.c
-> @@ -248,7 +248,7 @@ int ftrace_disable_ftrace_graph_caller(void)
->  #define S_R_SP	(0xafb0 << 16)	/* s{d,w} R, offset(sp) */
->  #define OFFSET_MASK	0xffff	/* stack offset range: 0 ~ PT_SIZE */
->  
-> -unsigned long ftrace_get_parent_ra_addr(unsigned long self_ra, unsigned long
-> +static long ftrace_get_parent_ra_addr(unsigned long self_ra, unsigned long
->  		old_parent_ra, unsigned long parent_ra_addr, unsigned long fp)
->  {
->  	unsigned long sp, ip, tmp;
+kernel test robot noticed the following build errors:
 
- This goes beyond renaming `mips_instruction' data type to `mips_insn'.
+[auto build test ERROR on net-next/main]
 
-> diff --git a/arch/mips/kernel/kprobes.c b/arch/mips/kernel/kprobes.c
-> index dc39f5b3fb83..7a1b1c3674da 100644
-> --- a/arch/mips/kernel/kprobes.c
-> +++ b/arch/mips/kernel/kprobes.c
-> @@ -90,7 +90,7 @@ int arch_prepare_kprobe(struct kprobe *p)
->  	}
->  
->  	if (copy_from_kernel_nofault(&prev_insn, p->addr - 1,
-> -			sizeof(mips_instruction)) == 0 &&
-> +			sizeof(kprobe_opcode_t)) == 0 &&
->  	    insn_has_delayslot(prev_insn)) {
->  		pr_notice("Kprobes for branch delayslot are not supported\n");
->  		ret = -EINVAL;
+url:    https://github.com/intel-lab-lkp/linux/commits/Vadim-Fedorenko/net_tstamp-add-SCM_TS_OPT_ID-to-provide-OPT_ID-in-control-message/20240904-193351
+base:   net-next/main
+patch link:    https://lore.kernel.org/r/20240904113153.2196238-2-vadfed%40meta.com
+patch subject: [PATCH net-next v3 1/4] net_tstamp: add SCM_TS_OPT_ID to provide OPT_ID in control message
+config: i386-buildonly-randconfig-005-20240906 (https://download.01.org/0day-ci/archive/20240906/202409061658.ydeSewh7-lkp@intel.com/config)
+compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240906/202409061658.ydeSewh7-lkp@intel.com/reproduce)
 
- Likewise.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202409061658.ydeSewh7-lkp@intel.com/
 
-  Maciej
+All error/warnings (new ones prefixed by >>):
+
+   In file included from <built-in>:1:
+>> ./usr/include/linux/net_tstamp.h:46:15: error: unknown type name 'SOF_TIMESTAMPING_LAST'
+      46 | static_assert(SOF_TIMESTAMPING_LAST != (1 << 31));
+         |               ^
+>> ./usr/include/linux/net_tstamp.h:46:37: error: expected ')'
+      46 | static_assert(SOF_TIMESTAMPING_LAST != (1 << 31));
+         |                                     ^
+   ./usr/include/linux/net_tstamp.h:46:14: note: to match this '('
+      46 | static_assert(SOF_TIMESTAMPING_LAST != (1 << 31));
+         |              ^
+>> ./usr/include/linux/net_tstamp.h:46:1: warning: type specifier missing, defaults to 'int' [-Wimplicit-int]
+      46 | static_assert(SOF_TIMESTAMPING_LAST != (1 << 31));
+         | ^
+         | int
+   1 warning and 2 errors generated.
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
