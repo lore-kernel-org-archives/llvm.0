@@ -1,153 +1,194 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
+Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C3393CF74;
-	Fri,  6 Sep 2024 03:56:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC115481B3
+	for <llvm@lists.linux.dev>; Fri,  6 Sep 2024 04:53:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=93.17.235.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725594968; cv=none; b=SGZZzPw5Jb+ZVmRBXS73IfaFkw/8tcrkLZJjbyzDjZMpkjH0SbvPiOO177lOGWlvwz2ngZw7J8RsLeHnG0SzlH+YSuyo0jPXccY5IJrUMqpOMM27g8PIEbm2M2jzfv8fNTv7C9BJr6flcjCPvmAc2IWaddfWnGRIGYZd8kVzsrg=
+	t=1725598411; cv=none; b=Jx1LQ9NS0dfAW5G5PCL7X1sq2Y8mShSjoag5iC1SlC5dvJJ1dzfnSgWvUWlMCaZMi95S/ak472HzDKyDHJupXnE4XL+xJQNDML5dOFOs5i9rBjAppJBFPup21RNEHD9aqvrxi0kBvIZxOFHzQoquVg6BamT3TCmNm8BYPzTMTrI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725594968; c=relaxed/simple;
-	bh=AOgep25YPfbArNphRZ3FzjXtGgRBjP2wdNuj5+iyhso=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=D152LWnzLfSqRsC7wRvfsINwNCwD0x43N4dVCvl1JpM52qnkWQhsNkNNRpUotvOLcZOtDfojbqR6XdETamIk4ge3qLj9ECQRz0Fid6Uyfr2JFcgM3TDbOEwsl3bdDhvqGb2PLswNfUryBnzL7c9j/bJzPyfNa7Qa9pdtlNId5l8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=mGyj5clv; arc=none smtp.client-ip=192.198.163.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="mGyj5clv"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1725594967; x=1757130967;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=AOgep25YPfbArNphRZ3FzjXtGgRBjP2wdNuj5+iyhso=;
-  b=mGyj5clvMQDUsVWic9pxb4uow8SAmwMaqiUyND/N4cNzmlsumDAwc30B
-   S3h50EyN+ZwQrdrtzVEA6ji2K9s1+Msjg11KfnEWc5ywOCa3h9yQoPu0R
-   Dir/2rxe68mfiTViIhH//HbrJPGqNLW55rrG0dypemMWMF+AsxpJ3lv2K
-   GUmrD58t9LZxXf2TGZW50Vprk++nMHul71UJqAzl7H/F+iwE9RVYmU3UV
-   wfrqtud/2ChIENwHpY8zcTT8gaAyadW6co805Mvrzi0HfmYBS8I0w6Jcs
-   MsIoVWSHldRXjkUe1g3PgWWSORJDc1VhnqcQ2I9VwNLL7cb40bjaD7/Oh
-   Q==;
-X-CSE-ConnectionGUID: VgKjeS9YT6yPdlNiz89hbA==
-X-CSE-MsgGUID: ZbYzcT+HTNqh/z4sqg2DXw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11186"; a="23849518"
-X-IronPort-AV: E=Sophos;i="6.10,206,1719903600"; 
-   d="scan'208";a="23849518"
-Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Sep 2024 20:56:05 -0700
-X-CSE-ConnectionGUID: 6bbdXEE/QD+NC094Jser1Q==
-X-CSE-MsgGUID: El4D01XXR+m56hRhWBK04w==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.10,206,1719903600"; 
-   d="scan'208";a="96548787"
-Received: from lkp-server01.sh.intel.com (HELO 9c6b1c7d3b50) ([10.239.97.150])
-  by orviesa002.jf.intel.com with ESMTP; 05 Sep 2024 20:56:02 -0700
-Received: from kbuild by 9c6b1c7d3b50 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1smQ4l-000AaW-24;
-	Fri, 06 Sep 2024 03:55:59 +0000
-Date: Fri, 6 Sep 2024 11:55:02 +0800
-From: kernel test robot <lkp@intel.com>
-To: Thomas =?iso-8859-1?Q?Hellstr=F6m?= <thomas.hellstrom@linux.intel.com>,
-	intel-xe@lists.freedesktop.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Thomas =?iso-8859-1?Q?Hellstr=F6m?= <thomas.hellstrom@linux.intel.com>,
-	Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
-	amd-gfx@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
-	nouveau@lists.freedesktop.org, spice-devel@lists.freedesktop.org,
-	dri-devel@lists.freedesktop.org,
-	Zack Rusin <zack.rusin@broadcom.com>,
-	bcm-kernel-feedback-list@broadcom.com,
-	Sui Jingfeng <suijingfeng@loongson.cn>,
-	Matthew Brost <matthew.brost@intel.com>
-Subject: Re: [PATCH 1/2] drm/ttm: Change ttm_device_init to use a struct
- instead of multiple bools
-Message-ID: <202409061145.AtKjpWFJ-lkp@intel.com>
-References: <20240905093322.29786-2-thomas.hellstrom@linux.intel.com>
+	s=arc-20240116; t=1725598411; c=relaxed/simple;
+	bh=A75lYGrLa/x3ArGAifgM6TS5Vw27r6mpHb5G0N+ZIgI=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=YPJQ/kzwztQG1PRiUWo/yraa0027/tRVXnhB/lgnwvgEoas3JZk/txknu1b7KOaVuydTLpiTPjWjh4oPInNO8cENoYXKuoTMuczoX23rReHyMwSGdmzew0D0nIUHXuVmyX3ek7ECjlIyoXV67nt6XuXNrxzZGu3utmWQo/h/8Oo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=csgroup.eu; spf=pass smtp.mailfrom=csgroup.eu; arc=none smtp.client-ip=93.17.235.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=csgroup.eu
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=csgroup.eu
+Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
+	by localhost (Postfix) with ESMTP id 4X0P4l4sMRz9sRy;
+	Fri,  6 Sep 2024 06:53:27 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from pegase2.c-s.fr ([172.26.127.65])
+	by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id cGNa5ow0wQLB; Fri,  6 Sep 2024 06:53:27 +0200 (CEST)
+Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
+	by pegase2.c-s.fr (Postfix) with ESMTP id 4X0P4l3spgz9sRs;
+	Fri,  6 Sep 2024 06:53:27 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+	by messagerie.si.c-s.fr (Postfix) with ESMTP id 739B98B778;
+	Fri,  6 Sep 2024 06:53:27 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from messagerie.si.c-s.fr ([127.0.0.1])
+	by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
+	with ESMTP id X35N0C8uKPzN; Fri,  6 Sep 2024 06:53:27 +0200 (CEST)
+Received: from [192.168.235.70] (unknown [192.168.235.70])
+	by messagerie.si.c-s.fr (Postfix) with ESMTP id 7D03E8B764;
+	Fri,  6 Sep 2024 06:53:26 +0200 (CEST)
+Message-ID: <45f7170d-a209-4079-9384-274b0c413a4b@csgroup.eu>
+Date: Fri, 6 Sep 2024 06:53:26 +0200
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v5 4/5] powerpc/vdso: Wire up getrandom() vDSO
+ implementation on VDSO32
+To: "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc: Andrew Morton <akpm@linux-foundation.org>,
+ Steven Rostedt <rostedt@goodmis.org>, Masami Hiramatsu
+ <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+ Michael Ellerman <mpe@ellerman.id.au>, Nicholas Piggin <npiggin@gmail.com>,
+ Naveen N Rao <naveen@kernel.org>, Nathan Chancellor <nathan@kernel.org>,
+ Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling
+ <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
+ Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
+ linuxppc-dev@lists.ozlabs.org, linux-kselftest@vger.kernel.org,
+ llvm@lists.linux.dev, linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+ linux-trace-kernel@vger.kernel.org,
+ Adhemerval Zanella <adhemerval.zanella@linaro.org>,
+ Xi Ruoyao <xry111@xry111.site>
+References: <cover.1725304404.git.christophe.leroy@csgroup.eu>
+ <1f49c2ce009f8b007ab0676fb41187b2d54f28b2.1725304404.git.christophe.leroy@csgroup.eu>
+ <ZtnYqZI-nrsNslwy@zx2c4.com> <ZtoXhGYflBNR74g0@zx2c4.com>
+ <ZtptfOicjZU3k3ZV@zx2c4.com> <Ztp16FkqG0ALlXnh@zx2c4.com>
+Content-Language: fr-FR
+From: Christophe Leroy <christophe.leroy@csgroup.eu>
+In-Reply-To: <Ztp16FkqG0ALlXnh@zx2c4.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20240905093322.29786-2-thomas.hellstrom@linux.intel.com>
 
-Hi Thomas,
+Hi Jason,
 
-kernel test robot noticed the following build errors:
+Le 06/09/2024 Ã  05:24, Jason A. Donenfeld a Ã©critÂ :
+> On Fri, Sep 06, 2024 at 04:48:28AM +0200, Jason A. Donenfeld wrote:
+>> On Thu, Sep 05, 2024 at 10:41:40PM +0200, Jason A. Donenfeld wrote:
+>>> On Thu, Sep 05, 2024 at 06:13:29PM +0200, Jason A. Donenfeld wrote:
+>>>>> +/*
+>>>>> + * The macro sets two stack frames, one for the caller and one for the callee
+>>>>> + * because there are no requirement for the caller to set a stack frame when
+>>>>> + * calling VDSO so it may have omitted to set one, especially on PPC64
+>>>>> + */
+>>>>> +
+>>>>> +.macro cvdso_call funct
+>>>>> +  .cfi_startproc
+>>>>> +	PPC_STLU	r1, -PPC_MIN_STKFRM(r1)
+>>>>> +  .cfi_adjust_cfa_offset PPC_MIN_STKFRM
+>>>>> +	mflr		r0
+>>>>> +	PPC_STLU	r1, -PPC_MIN_STKFRM(r1)
+>>>>> +  .cfi_adjust_cfa_offset PPC_MIN_STKFRM
+>>>>> +	PPC_STL		r0, PPC_MIN_STKFRM + PPC_LR_STKOFF(r1)
+>>>>> +  .cfi_rel_offset lr, PPC_MIN_STKFRM + PPC_LR_STKOFF
+>>>>> +	get_datapage	r8
+>>>>> +	addi		r8, r8, VDSO_RNG_DATA_OFFSET
+>>>>> +	bl		CFUNC(DOTSYM(\funct))
+>>>>> +	PPC_LL		r0, PPC_MIN_STKFRM + PPC_LR_STKOFF(r1)
+>>>>> +	cmpwi		r3, 0
+>>>>> +	mtlr		r0
+>>>>> +	addi		r1, r1, 2 * PPC_MIN_STKFRM
+>>>>> +  .cfi_restore lr
+>>>>> +  .cfi_def_cfa_offset 0
+>>>>> +	crclr		so
+>>>>> +	bgelr+
+>>>>> +	crset		so
+>>>>> +	neg		r3, r3
+>>>>> +	blr
+>>>>> +  .cfi_endproc
+>>>>> +.endm
+>>>>
+>>>> Can you figure out what's going on and send a fix, which I'll squash
+>>>> into this commit?
+>>>
+>>> This doesn't work, but I wonder if something like it is what we want. I
+>>> need to head out for the day, but here's what I've got. It's all wrong
+>>> but might be of interest.
+>>
+>> Oh, I just got one small detail wrong before. The below actually works,
+>> and uses the same strategy as on arm64.
+>>
+>> Let me know if you'd like me to fix up this commit with the below patch,
+>> or if you have another way you'd like to go about it.
+> 
+> And here's the much shorter version in assembly, which maybe you prefer.
+> Also works, and is a bit less invasive than the other thing.
+> 
+> diff --git a/arch/powerpc/kernel/vdso/getrandom.S b/arch/powerpc/kernel/vdso/getrandom.S
+> index a957cd2b2b03..070daba2d547 100644
+> --- a/arch/powerpc/kernel/vdso/getrandom.S
+> +++ b/arch/powerpc/kernel/vdso/getrandom.S
+> @@ -32,6 +32,14 @@
+>     .cfi_rel_offset r2, PPC_MIN_STKFRM + STK_GOT
+>   #endif
+>   	get_datapage	r8
+> +#ifdef CONFIG_TIME_NS
+> +	lis		r10, 0x7fff
+> +	ori		r10, r10, 0xffff
+> +	lwz		r9, VDSO_DATA_OFFSET + 4(r8)
+> +	cmpw		r9, r10
+> +	bne		+8
+> +	addi		r8, r8, (1 << CONFIG_PAGE_SHIFT)
+> +#endif
+>   	addi		r8, r8, VDSO_RNG_DATA_OFFSET
+>   	bl		CFUNC(DOTSYM(\funct))
+>   	PPC_LL		r0, PPC_MIN_STKFRM + PPC_LR_STKOFF(r1)
+> 
 
-[auto build test ERROR on drm-intel/for-linux-next]
-[also build test ERROR on next-20240905]
-[cannot apply to drm-xe/drm-xe-next drm-intel/for-linux-next-fixes drm-tip/drm-tip linus/master v6.11-rc6]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Thanks for looking.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Thomas-Hellstr-m/drm-ttm-Change-ttm_device_init-to-use-a-struct-instead-of-multiple-bools/20240905-173606
-base:   git://anongit.freedesktop.org/drm-intel for-linux-next
-patch link:    https://lore.kernel.org/r/20240905093322.29786-2-thomas.hellstrom%40linux.intel.com
-patch subject: [PATCH 1/2] drm/ttm: Change ttm_device_init to use a struct instead of multiple bools
-config: i386-randconfig-002-20240906 (https://download.01.org/0day-ci/archive/20240906/202409061145.AtKjpWFJ-lkp@intel.com/config)
-compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240906/202409061145.AtKjpWFJ-lkp@intel.com/reproduce)
+I came to more or less the same solutions thnt you with the following 
+that seems to work:
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202409061145.AtKjpWFJ-lkp@intel.com/
+diff --git a/arch/powerpc/kernel/vdso/vgetrandom.c 
+b/arch/powerpc/kernel/vdso/vgetrandom.c
+index 5f855d45fb7b..9705344d39d0 100644
+--- a/arch/powerpc/kernel/vdso/vgetrandom.c
++++ b/arch/powerpc/kernel/vdso/vgetrandom.c
+@@ -4,11 +4,19 @@
+   *
+   * Copyright (C) 2024 Christophe Leroy <christophe.leroy@csgroup.eu>, 
+CS GROUP France
+   */
++#include <linux/container_of.h>
+  #include <linux/time.h>
+  #include <linux/types.h>
 
-All errors (new ones prefixed by >>):
-
->> drivers/gpu/drm/drm_gem_vram_helper.c:981:13: error: too many arguments to function call, expected 6, have 7
-     978 |         ret = ttm_device_init(&vmm->bdev, &bo_driver, dev->dev,
-         |               ~~~~~~~~~~~~~~~
-     979 |                                  dev->anon_inode->i_mapping,
-     980 |                                  dev->vma_offset_manager,
-     981 |                                  false, true);
-         |                                         ^~~~
-   include/drm/ttm/ttm_device.h:300:5: note: 'ttm_device_init' declared here
-     300 | int ttm_device_init(struct ttm_device *bdev, const struct ttm_device_funcs *funcs,
-         |     ^               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     301 |                     struct device *dev, struct address_space *mapping,
-         |                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     302 |                     struct drm_vma_offset_manager *vma_manager,
-         |                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     303 |                     const struct ttm_device_init_flags flags);
-         |                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   1 error generated.
++#include <asm/vdso_datapage.h>
++
+  ssize_t __c_kernel_getrandom(void *buffer, size_t len, unsigned int 
+flags, void *opaque_state,
+  			     size_t opaque_len, const struct vdso_rng_data *vd)
+  {
++	struct vdso_arch_data *arch_data = container_of(vd, struct 
+vdso_arch_data, rng_data);
++
++	if (IS_ENABLED(CONFIG_TIME_NS) && arch_data->data[0].clock_mode == 
+VDSO_CLOCKMODE_TIMENS)
++		vd = (void *)vd + (1UL << CONFIG_PAGE_SHIFT);
++
+  	return __cvdso_getrandom_data(vd, buffer, len, flags, opaque_state, 
+opaque_len);
+  }
 
 
-vim +981 drivers/gpu/drm/drm_gem_vram_helper.c
+However, if we have this problem with __kernel_getrandom, don't we also 
+have it with: ?
+		__kernel_get_syscall_map;
+		__kernel_get_tbfreq;
+		__kernel_sync_dicache;
 
-6b5ce4a1fb8489 Thomas Zimmermann 2019-09-11  969  
-c30b225dba01b4 Thomas Zimmermann 2019-09-11  970  static int drm_vram_mm_init(struct drm_vram_mm *vmm, struct drm_device *dev,
-b0e40e0805221d Thomas Zimmermann 2019-09-11  971  			    uint64_t vram_base, size_t vram_size)
-6b5ce4a1fb8489 Thomas Zimmermann 2019-09-11  972  {
-6b5ce4a1fb8489 Thomas Zimmermann 2019-09-11  973  	int ret;
-6b5ce4a1fb8489 Thomas Zimmermann 2019-09-11  974  
-6b5ce4a1fb8489 Thomas Zimmermann 2019-09-11  975  	vmm->vram_base = vram_base;
-6b5ce4a1fb8489 Thomas Zimmermann 2019-09-11  976  	vmm->vram_size = vram_size;
-6b5ce4a1fb8489 Thomas Zimmermann 2019-09-11  977  
-8af8a109b34fa8 Christian König   2020-10-01  978  	ret = ttm_device_init(&vmm->bdev, &bo_driver, dev->dev,
-6b5ce4a1fb8489 Thomas Zimmermann 2019-09-11  979  				 dev->anon_inode->i_mapping,
-6b5ce4a1fb8489 Thomas Zimmermann 2019-09-11  980  				 dev->vma_offset_manager,
-ee5d2a8e549e90 Christian König   2020-10-24 @981  				 false, true);
-6b5ce4a1fb8489 Thomas Zimmermann 2019-09-11  982  	if (ret)
-6b5ce4a1fb8489 Thomas Zimmermann 2019-09-11  983  		return ret;
-6b5ce4a1fb8489 Thomas Zimmermann 2019-09-11  984  
-37205891d84f92 Dave Airlie       2020-08-04  985  	ret = ttm_range_man_init(&vmm->bdev, TTM_PL_VRAM,
-0fe438cec9e1d2 Christian König   2020-09-11  986  				 false, vram_size >> PAGE_SHIFT);
-6b5ce4a1fb8489 Thomas Zimmermann 2019-09-11  987  	if (ret)
-6b5ce4a1fb8489 Thomas Zimmermann 2019-09-11  988  		return ret;
-6b5ce4a1fb8489 Thomas Zimmermann 2019-09-11  989  
-6b5ce4a1fb8489 Thomas Zimmermann 2019-09-11  990  	return 0;
-6b5ce4a1fb8489 Thomas Zimmermann 2019-09-11  991  }
-6b5ce4a1fb8489 Thomas Zimmermann 2019-09-11  992  
+If they are also affected, then get_page macro is the place to fix.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+I will check all of this now and keep you updated before noon (Paris Time).
+
+Christophe
