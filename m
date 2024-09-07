@@ -1,177 +1,235 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 145234D8CF;
-	Sat,  7 Sep 2024 05:24:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
+Received: from zg8tmja2lje4os43os4xodqa.icoremail.net (zg8tmja2lje4os43os4xodqa.icoremail.net [206.189.79.184])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CB02D3CF73
+	for <llvm@lists.linux.dev>; Sat,  7 Sep 2024 07:03:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=206.189.79.184
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725686663; cv=none; b=bLbVeAdZ8oSfM1cbD7Wz85pUdElnjtX+A6tLG0jQDmpvGCEivMK1BCzsjyGCMP8w+SQ6SxF0K/x/JBfL9G04xQQRYeRZKU0uhbDupiyxiXTcx/dE02MH/3xhReR2aiKnBW3T858MLCOZ/shQuj+c7aL0lWvYzKUWKGFVMjrk5c0=
+	t=1725692629; cv=none; b=jkOkvDoE4z5kbteNhFmu6keWSc3iRRNlbb3TE3N1Qdry7TRKVT5IOMt5ASPuio7kgAAGzGboz8ItpUWQGvvjBjVMOm5uIQBXne8Ie10cyGwhlHfFoTzhBWNld6P3SPLlFNRbMF22JbGAilNWg0ukL0HnSGZc46JJgMgtmHi/ECs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725686663; c=relaxed/simple;
-	bh=2F5ZvEBzkWr2lpMxRtDtFxfq2FqVyGMrHpXkOoW747o=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=h+AMVLIIzKFK9D0FBo4+hj2d2eMn0bvUfeBndGFFIYioyXIOKnmGKv/1eSTeVHsmeKGdgA8rKhya8cs09w2OyZJZznyn/YogwkWHix8z5De9Q2xrdUa5SbOcC16moerpBeuFcdFigvYJo1evPTJaDrfVe2IpNqvLHnhIX1rnPVI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=lRlbXeSi; arc=none smtp.client-ip=198.175.65.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="lRlbXeSi"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1725686662; x=1757222662;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=2F5ZvEBzkWr2lpMxRtDtFxfq2FqVyGMrHpXkOoW747o=;
-  b=lRlbXeSiYBOqYznNw4pcT2OXgjkR3Yhel0hdKR8newzuTd7CPaPnIuZa
-   2/nahj3K0tQk1Fk0RgwL8S16dRPUQyChTwyl6t3/UOetUAnoby/dZ3iKY
-   pSTX5ZVXIHKZfHCm0hqleQajGWb5JxwqaiK7P9qNkv1BZFqYT1B+3JDgW
-   zDE8cw3LDZfU2JAk5T7KsXLCPkJf2FNtsC2t12oIT4i/KXuanhUzvjrnK
-   2KT+YAkwcpSY4r0ae0ysQMYo8fkUSa/zyWZBjTRozx39RZzt8pqi7kDNi
-   t8Mtz1ck5Xs5abu6TMzKd/pihaviTAUABp2cgY+HIu6CZ2DpwD4ytP+Zj
-   w==;
-X-CSE-ConnectionGUID: ZS5Mmw2sQvap+VcphYLBCw==
-X-CSE-MsgGUID: VSawRcfqQxaXBrWlN+LE5w==
-X-IronPort-AV: E=McAfee;i="6700,10204,11187"; a="24597255"
-X-IronPort-AV: E=Sophos;i="6.10,209,1719903600"; 
-   d="scan'208";a="24597255"
-Received: from fmviesa006.fm.intel.com ([10.60.135.146])
-  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Sep 2024 22:24:21 -0700
-X-CSE-ConnectionGUID: EwlRnuEWRA+Ii7R7hdulhQ==
-X-CSE-MsgGUID: cdameIxKQPiUsB+yDRUBWQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.10,209,1719903600"; 
-   d="scan'208";a="65782887"
-Received: from lkp-server01.sh.intel.com (HELO 9c6b1c7d3b50) ([10.239.97.150])
-  by fmviesa006.fm.intel.com with ESMTP; 06 Sep 2024 22:24:20 -0700
-Received: from kbuild by 9c6b1c7d3b50 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1smnvl-000C97-20;
-	Sat, 07 Sep 2024 05:24:17 +0000
-Date: Sat, 7 Sep 2024 13:23:47 +0800
-From: kernel test robot <lkp@intel.com>
-To: Tony Lindgren <tony.lindgren@linux.intel.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org, Petr Mladek <pmladek@suse.com>
-Subject: ERROR: modpost: "match_devname_and_update_preferred_console"
- [drivers/tty/serial/serial_base.ko] undefined!
-Message-ID: <202409071312.qlwtTOS1-lkp@intel.com>
+	s=arc-20240116; t=1725692629; c=relaxed/simple;
+	bh=+/LcFYTp7KLv58itnht7DYnfbBPKyPA8iVJckCrOOQM=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=EZU/dpC5qOyxWLlke3ekSesTHJ4ITQYll5NuBtXAsR+HOkaAwbkTcJ0MCf2dUxnKJXbLR99PpYKfakbZ+hD3QTbbU3kvG8f76gdKdeKwFelAIeK3ci4HwlTpOOsP8D/GrwsKXRZEtyq1qBXNJfK6vop95TtiTF5GSOxsahzSfU8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=hust.edu.cn; spf=pass smtp.mailfrom=hust.edu.cn; arc=none smtp.client-ip=206.189.79.184
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=hust.edu.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hust.edu.cn
+Received: from hust.edu.cn (unknown [172.16.0.50])
+	by app2 (Coremail) with SMTP id HwEQrACHjs6c+ttmzYOyAA--.7244S2;
+	Sat, 07 Sep 2024 15:02:52 +0800 (CST)
+Received: from pride-PowerEdge-R740.. (unknown [222.20.126.129])
+	by gateway (Coremail) with SMTP id _____wBXXlKW+ttmNH1CAA--.25340S2;
+	Sat, 07 Sep 2024 15:02:47 +0800 (CST)
+From: Dongliang Mu <dzm91@hust.edu.cn>
+To: Alex Shi <alexs@kernel.org>,
+	Yanteng Si <siyanteng@loongson.cn>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Dongliang Mu <dzm91@hust.edu.cn>
+Cc: hust-os-kernel-patches@googlegroups.cm,
+	linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: [PATCH v3] docs/zh_CN: add the translation of kbuild/gcc-plugins.rst
+Date: Sat,  7 Sep 2024 15:02:08 +0800
+Message-ID: <20240907070244.206808-1-dzm91@hust.edu.cn>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:HwEQrACHjs6c+ttmzYOyAA--.7244S2
+Authentication-Results: app2; spf=neutral smtp.mail=dzm91@hust.edu.cn;
+X-Coremail-Antispam: 1UD129KBjvJXoWxtry3CrWrKr13Gr4xKryfJFb_yoWxXF47pw
+	4vk34SgFWIyFy093yfKr1xuF15JFs3Ww1UKa48Gwn7tF1kJrZ0y3y3try5GryfWFy8ZrW3
+	XF4ayrWUuw1UZa7anT9S1TB71UUUUjUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUQIb7Iv0xC_tr1lb4IE77IF4wAFc2x0x2IEx4CE42xK8VAvwI8I
+	cIk0rVWrJVCq3wA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjx
+	v20xvE14v26F1j6w1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26F4j6r4UJwA2z4x0Y4vE
+	x4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oVCq3wAaw2AFwI0_Jr
+	v_JF1lnxkEFVAIw20F6cxK64vIFxWle2I262IYc4CY6c8Ij28IcVAaY2xG8wAqjxCEc2xF
+	0cIa020Ex4CE44I27wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0EF7xvrVAajcxG14v26r
+	4UJVWxJr1lYx0E74AGY7Cv6cx26r4fZr1UJr1lYx0Ec7CjxVAajcxG14v26r4UJVWxJr1l
+	Ox8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JMxkF7I0En4kS14v26r126r1DMx
+	AIw28IcxkI7VAKI48JMxAIw28IcVCjz48v1sIEY20_GFW3Jr1UJwCFx2IqxVCFs4IE7xkE
+	bVWUJVW8JwCFI7km07C267AKxVWUXVWUAwC20s026c02F40E14v26r1j6r18MI8I3I0E74
+	80Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0
+	I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF04
+	k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7Cj
+	xVAFwI0_Jr0_GrUvcSsGvfC2KfnxnUUI43ZEXa7IUn8sqtUUUUU==
+X-CM-SenderInfo: asqsiiirqrkko6kx23oohg3hdfq/
 
-Hi Tony,
+Finish the translation of kbuild/gcc-plugins.rst and move gcc-plugins
+from TODO to the main body.
 
-FYI, the error/warning still remains.
+Update to commit 3832d1fd84b6 ("docs/core-api: expand Fedora instructions
+for GCC plugins")
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   b31c4492884252a8360f312a0ac2049349ddf603
-commit: 12c91cec3155f79216641162a32e04a59abb6e37 serial: core: Add serial_base_match_and_update_preferred_console()
-date:   9 weeks ago
-config: i386-buildonly-randconfig-004-20240907 (https://download.01.org/0day-ci/archive/20240907/202409071312.qlwtTOS1-lkp@intel.com/config)
-compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240907/202409071312.qlwtTOS1-lkp@intel.com/reproduce)
+Signed-off-by: Dongliang Mu <dzm91@hust.edu.cn>
+---
+v2->v3: fix sign incorrect pointed by Alex
+v1->v2: fix comments from yanteng
+ .../translations/zh_CN/kbuild/gcc-plugins.rst | 126 ++++++++++++++++++
+ .../translations/zh_CN/kbuild/index.rst       |   2 +-
+ 2 files changed, 127 insertions(+), 1 deletion(-)
+ create mode 100644 Documentation/translations/zh_CN/kbuild/gcc-plugins.rst
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202409071312.qlwtTOS1-lkp@intel.com/
-
-All errors (new ones prefixed by >>, old ones prefixed by <<):
-
-WARNING: modpost: missing MODULE_DESCRIPTION() in arch/x86/crypto/crc32-pclmul.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in kernel/rcu/rcutorture.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in kernel/rcu/rcuscale.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in kernel/rcu/refscale.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in kernel/time/test_udelay.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in fs/nls/nls_cp437.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in fs/nls/nls_cp863.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in fs/nls/nls_cp869.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in fs/nls/nls_cp874.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in fs/nls/nls_cp936.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in fs/nls/nls_cp949.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in fs/nls/nls_iso8859-1.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in fs/nls/nls_iso8859-2.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in fs/nls/nls_iso8859-4.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in fs/nls/nls_iso8859-13.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in fs/nls/nls_iso8859-15.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in fs/nls/nls_utf8.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in fs/nls/mac-centeuro.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in fs/nls/mac-inuit.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in fs/nls/mac-romanian.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in fs/nls/mac-roman.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in fs/nls/mac-turkish.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in fs/nls/nls_ucs2_utils.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in fs/jbd2/jbd2.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in fs/isofs/isofs.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in security/keys/trusted-keys/trusted.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in crypto/cast_common.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in crypto/crypto_simd.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in lib/math/prime_numbers.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in lib/crypto/libdes.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in lib/find_bit_benchmark.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in lib/test_dhry.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in lib/test_firmware.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in lib/test-kstrtox.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in lib/test_module.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in lib/test_uuid.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in lib/test_xarray.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in lib/test_maple_tree.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in lib/test_memcat_p.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in lib/test_meminit.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in lib/test_free_pages.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in lib/test_objpool.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/acpi/platform_profile.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/virtio/virtio_dma_buf.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/regulator/max20411-regulator.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/char/agp/ati-agp.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/char/agp/amd-k7-agp.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/char/agp/amd64-agp.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/char/agp/intel-agp.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/char/agp/intel-gtt.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/char/agp/nvidia-agp.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/char/agp/sis-agp.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/char/agp/via-agp.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/char/dtlk.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/char/nvram.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/char/hw_random/omap-rng.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/char/hw_random/omap3-rom-rng.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/gpu/drm/tiny/bochs.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/gpu/drm/tiny/cirrus.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/gpu/drm/drm_panel_orientation_quirks.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/mfd/arizona.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/cxl/cxl_pci.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/uio/uio_cif.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/auxdisplay/hd44780_common.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/media/v4l2-core/v4l2-async.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/media/v4l2-core/v4l2-fwnode.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/leds/simple/simatic-ipc-leds.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/leds/simple/simatic-ipc-leds-gpio-core.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/leds/simple/simatic-ipc-leds-gpio-apollolake.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/leds/simple/simatic-ipc-leds-gpio-f7188x.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/staging/greybus/gb-log.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/staging/greybus/gb-raw.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/platform/goldfish/goldfish_pipe.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/devfreq/governor_simpleondemand.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/devfreq/governor_powersave.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hwtracing/intel_th/intel_th_msu_sink.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/mtd/chips/cfi_util.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/mtd/chips/cfi_cmdset_0020.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/mtd/maps/map_funcs.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/input/matrix-keymap.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/input/vivaldi-fmap.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hwmon/asus_atk0110.o
->> ERROR: modpost: "match_devname_and_update_preferred_console" [drivers/tty/serial/serial_base.ko] undefined!
-
-Kconfig warnings: (for reference only)
-   WARNING: unmet direct dependencies detected for FB_IOMEM_HELPERS
-   Depends on [n]: HAS_IOMEM [=y] && FB_CORE [=n]
-   Selected by [m]:
-   - DRM_XE_DISPLAY [=y] && HAS_IOMEM [=y] && DRM [=m] && DRM_XE [=m] && DRM_XE [=m]=m [=m]
-
+diff --git a/Documentation/translations/zh_CN/kbuild/gcc-plugins.rst b/Documentation/translations/zh_CN/kbuild/gcc-plugins.rst
+new file mode 100644
+index 000000000000..67a8abbf5887
+--- /dev/null
++++ b/Documentation/translations/zh_CN/kbuild/gcc-plugins.rst
+@@ -0,0 +1,126 @@
++.. SPDX-License-Identifier: GPL-2.0
++
++.. include:: ../disclaimer-zh_CN.rst
++
++:Original: Documentation/kbuild/gcc-plugins.rst
++:Translator: 慕冬亮 Dongliang Mu <dzm91@hust.edu.cn>
++
++================
++GCC 插件基础设施
++================
++
++
++介绍
++====
++
++GCC 插件是为编译器提供额外功能的可加载模块 [1]_。它们对于运行时插装和静态分析非常有用。
++我们可以在编译过程中通过回调 [2]_，GIMPLE [3]_，IPA [4]_ 和 RTL Passes [5]_
++（译者注：Pass 是编译器所采用的一种结构化技术，用于完成编译对象的分析、优化或转换等功能）
++来分析、修改和添加更多的代码。
++
++内核的 GCC 插件基础设施支持构建树外模块、交叉编译和在单独的目录中构建。插件源文件必须由
++C++ 编译器编译。
++
++目前 GCC 插件基础设施只支持一些架构。搜索 "select HAVE_GCC_PLUGINS" 来查找支持
++GCC 插件的架构。
++
++这个基础设施是从 grsecurity [6]_  和 PaX [7]_ 移植过来的。
++
++--
++
++.. [1] https://gcc.gnu.org/onlinedocs/gccint/Plugins.html
++.. [2] https://gcc.gnu.org/onlinedocs/gccint/Plugin-API.html#Plugin-API
++.. [3] https://gcc.gnu.org/onlinedocs/gccint/GIMPLE.html
++.. [4] https://gcc.gnu.org/onlinedocs/gccint/IPA.html
++.. [5] https://gcc.gnu.org/onlinedocs/gccint/RTL.html
++.. [6] https://grsecurity.net/
++.. [7] https://pax.grsecurity.net/
++
++
++目的
++====
++
++GCC 插件的设计目的是提供一个用于试验 GCC 或 Clang 上游没有的潜在编译器功能的场所。
++一旦它们的实用性得到验证，这些功能将被添加到 GCC（和 Clang）的上游。随后，在所有
++支持的 GCC 版本都支持这些功能后，它们会被从内核中移除。
++
++具体来说，新插件应该只实现上游编译器（GCC 和 Clang）不支持的功能。
++
++当 Clang 中存在 GCC 中不存在的某项功能时，应努力将该功能做到 GCC 上游（而不仅仅
++是作为内核专用的 GCC 插件），以使整个生态都能从中受益。
++
++类似的，如果 GCC 插件提供的功能在 Clang 中 **不** 存在，但该功能被证明是有用的，也应
++努力将该功能上传到 GCC（和 Clang）。
++
++在上游 GCC 提供了某项功能后，该插件将无法在相应的 GCC 版本（以及更高版本）下编译。
++一旦所有内核支持的 GCC 版本都提供了该功能，该插件将从内核中移除。
++
++
++文件
++====
++
++**$(src)/scripts/gcc-plugins**
++
++	这是 GCC 插件的目录。
++
++**$(src)/scripts/gcc-plugins/gcc-common.h**
++
++	这是 GCC 插件的兼容性头文件。
++	应始终包含它，而不是单独的 GCC 头文件。
++
++**$(src)/scripts/gcc-plugins/gcc-generate-gimple-pass.h,
++$(src)/scripts/gcc-plugins/gcc-generate-ipa-pass.h,
++$(src)/scripts/gcc-plugins/gcc-generate-simple_ipa-pass.h,
++$(src)/scripts/gcc-plugins/gcc-generate-rtl-pass.h**
++
++	这些头文件可以自动生成 GIMPLE、SIMPLE_IPA、IPA 和 RTL passes 的注册结构。
++	与手动创建结构相比，它们更受欢迎。
++
++
++用法
++====
++
++你必须为你的 GCC 版本安装 GCC 插件头文件，以 Ubuntu 上的 gcc-10 为例::
++
++	apt-get install gcc-10-plugin-dev
++
++或者在 Fedora 上::
++
++	dnf install gcc-plugin-devel libmpc-devel
++
++或者在 Fedora 上使用包含插件的交叉编译器时::
++
++	dnf install libmpc-devel
++
++在内核配置中启用 GCC 插件基础设施与一些你想使用的插件::
++
++	CONFIG_GCC_PLUGINS=y
++	CONFIG_GCC_PLUGIN_LATENT_ENTROPY=y
++	...
++
++运行 gcc（本地或交叉编译器），确保能够检测到插件头文件::
++
++	gcc -print-file-name=plugin
++	CROSS_COMPILE=arm-linux-gnu- ${CROSS_COMPILE}gcc -print-file-name=plugin
++
++"plugin" 这个词意味着它们没有被检测到::
++
++	plugin
++
++完整的路径则表示插件已经被检测到::
++
++       /usr/lib/gcc/x86_64-redhat-linux/12/plugin
++
++编译包括插件在内的最小工具集::
++
++	make scripts
++
++或者直接在内核中运行 make，使用循环复杂性 GCC 插件编译整个内核。
++
++
++4. 如何添加新的 GCC 插件
++========================
++
++GCC 插件位于 scripts/gcc-plugins/。你需要将插件源文件放在 scripts/gcc-plugins/ 目录下。
++子目录创建并不支持，你必须添加在 scripts/gcc-plugins/Makefile、scripts/Makefile.gcc-plugins
++和相关的 Kconfig 文件中。
+diff --git a/Documentation/translations/zh_CN/kbuild/index.rst b/Documentation/translations/zh_CN/kbuild/index.rst
+index d906a4e88d0f..b51655d981f6 100644
+--- a/Documentation/translations/zh_CN/kbuild/index.rst
++++ b/Documentation/translations/zh_CN/kbuild/index.rst
+@@ -13,6 +13,7 @@
+     :maxdepth: 1
+ 
+     headers_install
++    gcc-plugins
+ 
+ TODO:
+ 
+@@ -24,7 +25,6 @@ TODO:
+ - modules
+ - issues
+ - reproducible-builds
+-- gcc-plugins
+ - llvm
+ 
+ .. only::  subproject and html
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.43.0
+
