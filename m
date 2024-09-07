@@ -1,111 +1,82 @@
-Received: from mail-lj1-f174.google.com (mail-lj1-f174.google.com [209.85.208.174])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C2A11B85EE
-	for <llvm@lists.linux.dev>; Sat,  7 Sep 2024 00:48:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C774817547;
+	Sat,  7 Sep 2024 01:30:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725670113; cv=none; b=K9uDmJU47ltHQRL2ewqBZTaZwdIwmS/RvY+T9wueDhcv2nqDe6uCtVmlDVJRfrY7gDJLY9SdGV+3zg6IDvq1zK7EUwiuhi8TbgIWSL4w45jVNehIszGwWSWdGQV5zZwiVaDD7pr1Veq5WlAE2QGBbwykCh0e9ijiDE79nOYy3YY=
+	t=1725672634; cv=none; b=HXzoyxiM1H/U6UemaKiZppkOaMNvs5xeAbW6tCwwx77spv4TSHKA8jROazED1fonwOKf6KhpCI5ILTtBH4rNifFkLpwUL8S9A/psZ/9eZ2wAjQ2h/5Qe7ntanpoFEzuC5sOX9J/CN7jirX/B1E3Dy5NR5CrmK8R98kYPRHLgMOw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725670113; c=relaxed/simple;
-	bh=UFUaOWELgtMfFEsfIQ6vW+7mTZedBrO6HDqKObAmwFg=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=faw378equNpvSk9rLIqd1P6OM3v+oog1Oj5TgeVTbjtf44Mgqjs49FOZNJRi4yjYM3TRcr8teENjl1lJ3AhuyzqS9Iiu/ZSeVcLNxuVuka+aDNifmktjMFeFjq8zj20H/Ia03mpF+sj0A3WK2pvxovZy6/ysWUKrQ6QfvZJPudw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=I/uZnogo; arc=none smtp.client-ip=209.85.208.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
+	s=arc-20240116; t=1725672634; c=relaxed/simple;
+	bh=OIjlUWpsF8/KqdXsnxQ39reC2jSTTuqwdBZAwK4EC0E=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=EHBoQrwoQiBBA9xx1WohEBo34uLppoPhCWkib/QPthdZUIxf4Th5fARQeTgk/zI5ECVQX8LRmfePKACABxFET+vk2vd6mgtUOtXC3f2zkFkGT9XSvpFPYEPqSNQuIjLA3ilHk3go9V74Bxdhi6Qes5B8SgpOBKnkB2d5D9bT1tA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cILIN+18; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="I/uZnogo"
-Received: by mail-lj1-f174.google.com with SMTP id 38308e7fff4ca-2f502086419so32295411fa.3
-        for <llvm@lists.linux.dev>; Fri, 06 Sep 2024 17:48:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1725670109; x=1726274909; darn=lists.linux.dev;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=8jlGegiEN/nXhAMG4ddyYE+bSxApyov+rlpPE1WvsoM=;
-        b=I/uZnogoVeR7q64qCn2sdPgITiAggheV0EjOa+cyJYFwjRHTJMnsmbCmi4HVS2sPW5
-         3B9RjOD4tFU8vLKkZlb89UNcMHXwfXt+K9JsYIc4Qi+F9V7ubaXTlKWC02bAqUP8pTNC
-         WZKvvrgWLsyTxOPOIXDwzbnv4MIOkHg93tkn8=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1725670109; x=1726274909;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=8jlGegiEN/nXhAMG4ddyYE+bSxApyov+rlpPE1WvsoM=;
-        b=DNADXVrlTZeP8ChsCvpq/AmBGjfjCxJeOPYtCWVcMb5VitpdmJvIrhplmv05Ns4/qb
-         YPfAwn4u8rlt5NqwrSID9avnTPLoUfqi1ao4Rya1iO7SJ7uB/dbEF803uZfI6WgPQ/zF
-         fJeBCNKsRWyEVwjr5SRU8CZYeuru7HvmmyzDLNoVYjsjpgOyNHAma1LlPCZ6fO+/4CH3
-         YQNDvgmiJhZXt54Xx46QFJQBOUXEey21tmi9Lkxm4OsvMG8pqZJozOwDMti4YOpUG5P5
-         XozaHVWVutYvPAPS6SNLnK0kNdNBHE/6tp5Cy7kJMsStgaZNHo9z/XTQhc8jDPiu0YCl
-         zd0A==
-X-Forwarded-Encrypted: i=1; AJvYcCUvVIR6A5ymw5sJ2tty57VEWSO38Imm5NZen4kcnBMc+jlfz/Rhx8nfRFM7SZUrmo7WDt1d@lists.linux.dev
-X-Gm-Message-State: AOJu0YzTsGWz/g+RK7QcjGfmBcv1bPPDMQGMd9UOu0Az+iseZA4FhKzm
-	9KzDO0Z2KtmBQSRVDyRJVW+lKBFtdMRRt/WrhG65DlfkQ5NEIqel19VHWKx906uljjNHVlfLfZj
-	r/U0=
-X-Google-Smtp-Source: AGHT+IHUnGellZAFtOxCHo2Spaz84cuzT7tI4Ym2YcUE07lvptHTYgqwWWWgHQLhffUBpZI1rkycGA==
-X-Received: by 2002:a2e:4612:0:b0:2f6:61f3:c618 with SMTP id 38308e7fff4ca-2f751f85ae9mr24624691fa.43.1725670107941;
-        Fri, 06 Sep 2024 17:48:27 -0700 (PDT)
-Received: from mail-lj1-f171.google.com (mail-lj1-f171.google.com. [209.85.208.171])
-        by smtp.gmail.com with ESMTPSA id 38308e7fff4ca-2f75c009944sm329471fa.63.2024.09.06.17.48.26
-        for <llvm@lists.linux.dev>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 06 Sep 2024 17:48:27 -0700 (PDT)
-Received: by mail-lj1-f171.google.com with SMTP id 38308e7fff4ca-2f3edb2d908so30463531fa.2
-        for <llvm@lists.linux.dev>; Fri, 06 Sep 2024 17:48:26 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCXYSKz5DZOAGCX49KgYMuOecLtjIGnAQkAdKCmJBSfnJoUza3n3c79bBYB+n10GWMofy6N8@lists.linux.dev
-X-Received: by 2002:a2e:6111:0:b0:2f3:e2fd:7dcd with SMTP id
- 38308e7fff4ca-2f751ea7abdmr23935841fa.6.1725670106422; Fri, 06 Sep 2024
- 17:48:26 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cILIN+18"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 56EDBC4CEC4;
+	Sat,  7 Sep 2024 01:30:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1725672634;
+	bh=OIjlUWpsF8/KqdXsnxQ39reC2jSTTuqwdBZAwK4EC0E=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=cILIN+18GgrHVFk+2ttx4GTHt5c1yMqxrwbH4eVhb+0vKBVBo43PBK5xszxS7R2Ka
+	 fuyppWwGzOaG21atPpUjUdCNJxZdgrIW3MqfQ5VVXeXZs8AUxtSq82/b5pBU6AKz/s
+	 o9pBRxULqUmN+UT4oMtc5DThzNszJa/FNdRlGkZI3z589CPUDCO9Gy/NqPbt4eDkB5
+	 GC3F9hKD3tYMovoeQ5ZCRx50yitDyxlkfQq288BE3kyBHZ/iYC43Y7SiTmdudPMHFI
+	 tyI25WM2Z3SpXmbIVYCumn/jMNghy2wu2h66mbWNL30ssZlqRH1+PXq/q1Eg5PSzEQ
+	 6Y6Nuh4zK3j/w==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 70D9E3805D82;
+	Sat,  7 Sep 2024 01:30:36 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20240906154517.191976-1-pbonzini@redhat.com> <CAHk-=wjK7HF3dQT8q_6fr3eLGvKS+c46PdYNVAsHRyQRgcgiyw@mail.gmail.com>
- <20240906233958.GA1968981@thelio-3990X>
-In-Reply-To: <20240906233958.GA1968981@thelio-3990X>
-From: Linus Torvalds <torvalds@linux-foundation.org>
-Date: Fri, 6 Sep 2024 17:48:09 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wi0ePNgwLfk8yddABjnZh+gcL9dV2E8mxLKfb=8LHFQ-g@mail.gmail.com>
-Message-ID: <CAHk-=wi0ePNgwLfk8yddABjnZh+gcL9dV2E8mxLKfb=8LHFQ-g@mail.gmail.com>
-Subject: Re: [GIT PULL] KVM fixes for Linux 6.11-rc7
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: Paolo Bonzini <pbonzini@redhat.com>, linux-kernel@vger.kernel.org, kvm@vger.kernel.org, 
-	llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net-next v2 0/2] octeontx2: Address some warnings
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <172567263499.2576623.425623460796543424.git-patchwork-notify@kernel.org>
+Date: Sat, 07 Sep 2024 01:30:34 +0000
+References: <20240904-octeontx2-sparse-v2-0-14f2305fe4b2@kernel.org>
+In-Reply-To: <20240904-octeontx2-sparse-v2-0-14f2305fe4b2@kernel.org>
+To: Simon Horman <horms@kernel.org>
+Cc: sgoutham@marvell.com, lcherian@marvell.com, gakula@marvell.com,
+ jerinj@marvell.com, hkelam@marvell.com, sbhatta@marvell.com,
+ davem@davemloft.net, edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+ nathan@kernel.org, ndesaulniers@google.com, morbo@google.com,
+ justinstitt@google.com, netdev@vger.kernel.org, llvm@lists.linux.dev
 
-On Fri, 6 Sept 2024 at 16:40, Nathan Chancellor <nathan@kernel.org> wrote:
->
-> This was brought up to GCC at one point and they considered its current
-> behavior as working as intended from my understanding:
->
-> https://gcc.gnu.org/bugzilla/show_bug.cgi?id=91432
+Hello:
 
-Their argument seems to be "the missing fallthrough has no effect".
+This series was applied to netdev/net-next.git (main)
+by Jakub Kicinski <kuba@kernel.org>:
 
-Which is true.
+On Wed, 04 Sep 2024 19:29:35 +0100 you wrote:
+> Hi,
+> 
+> This patchset addresses some warnings flagged by Sparse, gcc-14, and
+> clang-18 in files touched by recent patch submissions.
+> 
+> Although these changes do not alter the functionality of the code, by
+> addressing them real problems introduced in future which are flagged by
+> Sparse will stand out more readily.
+> 
+> [...]
 
-But they seem to be missing that it has no effect *NOW*.
+Here is the summary with links:
+  - [net-next,v2,1/2] octeontx2-af: Pass string literal as format argument of alloc_workqueue()
+    https://git.kernel.org/netdev/net-next/c/92218f108f51
+  - [net-next,v2,2/2] octeontx2-pf: Make iplen __be16 in otx2_sqe_add_ext()
+    https://git.kernel.org/netdev/net-next/c/7baa90c616e5
 
-One major problem case is that people tend to add new cases to the end
-of a switch() statement, not counting that final "default: break".
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-So the "it doesn't have any effect NOW" is true, but the next time
-somebody edits that and doesn't check warnings, it *will* have very
-strange behavior, and it won't be affecting the newly added case, but
-some entirely unrelated previous case.
 
-So I really think the lack of warnings is a gcc mis-feature. It leaves
-code in a bad situation going forward.
-
-Oh well.  Many times I have had to disable warnings entirely because
-they have too many false positives, so I guess the occasional "doesn't
-warn enough" is still a better problem to have.
-
-And at least we have (a) clang warning about it and (b) require the
-warnings going forward and use -Werror, so at least for the kernel the
-"when somebody edits that code, you get surprising behavior" case
-_will_ get noticed.
-
-                 Linus
