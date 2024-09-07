@@ -1,235 +1,211 @@
-Received: from zg8tmja2lje4os43os4xodqa.icoremail.net (zg8tmja2lje4os43os4xodqa.icoremail.net [206.189.79.184])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CB02D3CF73
-	for <llvm@lists.linux.dev>; Sat,  7 Sep 2024 07:03:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=206.189.79.184
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 99AA71BC23;
+	Sat,  7 Sep 2024 08:33:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725692629; cv=none; b=jkOkvDoE4z5kbteNhFmu6keWSc3iRRNlbb3TE3N1Qdry7TRKVT5IOMt5ASPuio7kgAAGzGboz8ItpUWQGvvjBjVMOm5uIQBXne8Ie10cyGwhlHfFoTzhBWNld6P3SPLlFNRbMF22JbGAilNWg0ukL0HnSGZc46JJgMgtmHi/ECs=
+	t=1725698037; cv=none; b=qD1mqHWVccr5YKYNx52Lq6QnmvMSr0ZwN2mUnO0rAe1cOZAkJaR4hVSx9DJSEJU8f7/EEI0yxCpnK4SaqByshhJs29w9hLhg516PjmwdP19V3Y9qYN9hp+3ztH1l/CKxV4id4ThMsVfIUs9cf0gyksTL/eM0R1TomW9yGpU2HiU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725692629; c=relaxed/simple;
-	bh=+/LcFYTp7KLv58itnht7DYnfbBPKyPA8iVJckCrOOQM=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=EZU/dpC5qOyxWLlke3ekSesTHJ4ITQYll5NuBtXAsR+HOkaAwbkTcJ0MCf2dUxnKJXbLR99PpYKfakbZ+hD3QTbbU3kvG8f76gdKdeKwFelAIeK3ci4HwlTpOOsP8D/GrwsKXRZEtyq1qBXNJfK6vop95TtiTF5GSOxsahzSfU8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=hust.edu.cn; spf=pass smtp.mailfrom=hust.edu.cn; arc=none smtp.client-ip=206.189.79.184
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=hust.edu.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hust.edu.cn
-Received: from hust.edu.cn (unknown [172.16.0.50])
-	by app2 (Coremail) with SMTP id HwEQrACHjs6c+ttmzYOyAA--.7244S2;
-	Sat, 07 Sep 2024 15:02:52 +0800 (CST)
-Received: from pride-PowerEdge-R740.. (unknown [222.20.126.129])
-	by gateway (Coremail) with SMTP id _____wBXXlKW+ttmNH1CAA--.25340S2;
-	Sat, 07 Sep 2024 15:02:47 +0800 (CST)
-From: Dongliang Mu <dzm91@hust.edu.cn>
-To: Alex Shi <alexs@kernel.org>,
-	Yanteng Si <siyanteng@loongson.cn>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Dongliang Mu <dzm91@hust.edu.cn>
-Cc: hust-os-kernel-patches@googlegroups.cm,
-	linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: [PATCH v3] docs/zh_CN: add the translation of kbuild/gcc-plugins.rst
-Date: Sat,  7 Sep 2024 15:02:08 +0800
-Message-ID: <20240907070244.206808-1-dzm91@hust.edu.cn>
-X-Mailer: git-send-email 2.43.0
+	s=arc-20240116; t=1725698037; c=relaxed/simple;
+	bh=28Hazu9X3gNJl3G8MxXIbEf04c6aPW6n4xtnOcKil40=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=tCSnmZRbfs8yF5JE0ZT2cRr6O54j3wW+VV3PrWr6YHfCpVVGjUeqBVBVvlZpMYpVh1dNPb1in9VLw/u93Kw447awbBhZJUY/afEOrNbMVUP43gMQYlVZ7OeFVX5afi1t1qKQo5H8jIGH/uVgx59HeY9YX9WG+o5L7W4fLErGaYc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MKwpQEll; arc=none smtp.client-ip=10.30.226.201
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MKwpQEll"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5C0FEC4CEDA;
+	Sat,  7 Sep 2024 08:33:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1725698037;
+	bh=28Hazu9X3gNJl3G8MxXIbEf04c6aPW6n4xtnOcKil40=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=MKwpQEllnQB/o8CNMzuyJtbtiSGA+c5UZDrKGjDxHolsbO1UhCd4PmE1n6r5WOdDA
+	 aLy+2o9C8YF5F/xgPJ4eXT93pMOt8VR5rY62KJd77ozp/lijD7K/hpeIOOyAzloBRM
+	 DuT33ZzmWKzdksD+17/mPMmpfoCnwxp1ZJkctGIbbknkfH6YVGpY7IDRG5SfkA6bSi
+	 sasFCTcByKHpiVYyalHp4Qii6QkesPzs3eD8fJ/EKuw4BxDl7+v8NOY+cISIeep8cl
+	 USjETT0gIF5DsrL4trTRk8waMzX2ibQg9a8xMzpyqVqP9wJyeVTsEr5XCX6nHP5toK
+	 QTBAYBcP7A5jQ==
+Received: by mail-lf1-f41.google.com with SMTP id 2adb3069b0e04-53568ffc525so3736705e87.0;
+        Sat, 07 Sep 2024 01:33:57 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCViic8kPzRd+OHgxpsx5KXmfrmz1qfVsFA1vqR/LmahY4aT8ABrYYUjq6wb3c/fbqvG9FRjsg==@lists.linux.dev, AJvYcCVoLBL7yHfzaoROlhutBypzdmJO8vkChxhmR4WImwXYtFEsUtzry1+pAbcIo+LxLSjatpf9o2U=@lists.linux.dev
+X-Gm-Message-State: AOJu0YwK1JilcwGvzcq54f510Q6BUdpa+QA40Vt0uFeT0Gp1XsGWdXCl
+	TE7WKyUm7GkJMxpC9jKa9jf3GqO1SQvAkkYPtCUNzMpGc443hUQB+Ct9381XT7W/2O8TDszTuUd
+	S5t479tDk04k8zkNB2YycFJQqKrg=
+X-Google-Smtp-Source: AGHT+IGiO0grfYCPThFgBWdbGnh5ywWPEfhApDWuSp1Dpho+N3p8He+DadB7u7HS7zJcZD43BZdwwTxPjh5NmXNMfjQ=
+X-Received: by 2002:a05:6512:e97:b0:533:3fc8:9ac0 with SMTP id
+ 2adb3069b0e04-536587c6a50mr3459219e87.34.1725698035371; Sat, 07 Sep 2024
+ 01:33:55 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:HwEQrACHjs6c+ttmzYOyAA--.7244S2
-Authentication-Results: app2; spf=neutral smtp.mail=dzm91@hust.edu.cn;
-X-Coremail-Antispam: 1UD129KBjvJXoWxtry3CrWrKr13Gr4xKryfJFb_yoWxXF47pw
-	4vk34SgFWIyFy093yfKr1xuF15JFs3Ww1UKa48Gwn7tF1kJrZ0y3y3try5GryfWFy8ZrW3
-	XF4ayrWUuw1UZa7anT9S1TB71UUUUjUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUQIb7Iv0xC_tr1lb4IE77IF4wAFc2x0x2IEx4CE42xK8VAvwI8I
-	cIk0rVWrJVCq3wA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjx
-	v20xvE14v26F1j6w1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26F4j6r4UJwA2z4x0Y4vE
-	x4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oVCq3wAaw2AFwI0_Jr
-	v_JF1lnxkEFVAIw20F6cxK64vIFxWle2I262IYc4CY6c8Ij28IcVAaY2xG8wAqjxCEc2xF
-	0cIa020Ex4CE44I27wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0EF7xvrVAajcxG14v26r
-	4UJVWxJr1lYx0E74AGY7Cv6cx26r4fZr1UJr1lYx0Ec7CjxVAajcxG14v26r4UJVWxJr1l
-	Ox8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JMxkF7I0En4kS14v26r126r1DMx
-	AIw28IcxkI7VAKI48JMxAIw28IcVCjz48v1sIEY20_GFW3Jr1UJwCFx2IqxVCFs4IE7xkE
-	bVWUJVW8JwCFI7km07C267AKxVWUXVWUAwC20s026c02F40E14v26r1j6r18MI8I3I0E74
-	80Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0
-	I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF04
-	k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7Cj
-	xVAFwI0_Jr0_GrUvcSsGvfC2KfnxnUUI43ZEXa7IUn8sqtUUUUU==
-X-CM-SenderInfo: asqsiiirqrkko6kx23oohg3hdfq/
+References: <20240906-macos-build-support-v2-0-06beff418848@samsung.com> <20240906-macos-build-support-v2-8-06beff418848@samsung.com>
+In-Reply-To: <20240906-macos-build-support-v2-8-06beff418848@samsung.com>
+From: Masahiro Yamada <masahiroy@kernel.org>
+Date: Sat, 7 Sep 2024 17:33:18 +0900
+X-Gmail-Original-Message-ID: <CAK7LNASpWSXbjF_7n0MhosNism=BpvHOnKsa344RPM_wmC9dGA@mail.gmail.com>
+Message-ID: <CAK7LNASpWSXbjF_7n0MhosNism=BpvHOnKsa344RPM_wmC9dGA@mail.gmail.com>
+Subject: Re: [PATCH v2 8/8] Documentation: add howto build in macos
+To: da.gomez@samsung.com
+Cc: Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nicolas@fjasle.eu>, 
+	Lucas De Marchi <lucas.demarchi@intel.com>, 
+	=?UTF-8?Q?Thomas_Hellstr=C3=B6m?= <thomas.hellstrom@linux.intel.com>, 
+	Rodrigo Vivi <rodrigo.vivi@intel.com>, 
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, Maxime Ripard <mripard@kernel.org>, 
+	Thomas Zimmermann <tzimmermann@suse.de>, David Airlie <airlied@gmail.com>, 
+	William Hubbs <w.d.hubbs@gmail.com>, Chris Brannon <chris@the-brannons.com>, 
+	Kirk Reiser <kirk@reisers.ca>, Samuel Thibault <samuel.thibault@ens-lyon.org>, 
+	Paul Moore <paul@paul-moore.com>, Stephen Smalley <stephen.smalley.work@gmail.com>, 
+	Ondrej Mosnacek <omosnace@redhat.com>, Catalin Marinas <catalin.marinas@arm.com>, 
+	Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>, Oliver Upton <oliver.upton@linux.dev>, 
+	James Morse <james.morse@arm.com>, Suzuki K Poulose <suzuki.poulose@arm.com>, 
+	Zenghui Yu <yuzenghui@huawei.com>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	Jiri Slaby <jirislaby@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
+	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
+	Simona Vetter <simona.vetter@ffwll.ch>, linux-kernel@vger.kernel.org, 
+	linux-kbuild@vger.kernel.org, intel-xe@lists.freedesktop.org, 
+	dri-devel@lists.freedesktop.org, speakup@linux-speakup.org, 
+	selinux@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+	kvmarm@lists.linux.dev, linux-serial@vger.kernel.org, llvm@lists.linux.dev, 
+	Finn Behrens <me@kloenk.dev>, "Daniel Gomez (Samsung)" <d+samsung@kruces.com>, gost.dev@samsung.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Finish the translation of kbuild/gcc-plugins.rst and move gcc-plugins
-from TODO to the main body.
+On Fri, Sep 6, 2024 at 8:01=E2=80=AFPM Daniel Gomez via B4 Relay
+<devnull+da.gomez.samsung.com@kernel.org> wrote:
+>
+> From: Daniel Gomez <da.gomez@samsung.com>
+>
+> Add documentation under kbuild/llvm to inform about the experimental
+> support for building the Linux kernel in macOS hosts environments.
+>
+> Signed-off-by: Daniel Gomez <da.gomez@samsung.com>
 
-Update to commit 3832d1fd84b6 ("docs/core-api: expand Fedora instructions
-for GCC plugins")
 
-Signed-off-by: Dongliang Mu <dzm91@hust.edu.cn>
----
-v2->v3: fix sign incorrect pointed by Alex
-v1->v2: fix comments from yanteng
- .../translations/zh_CN/kbuild/gcc-plugins.rst | 126 ++++++++++++++++++
- .../translations/zh_CN/kbuild/index.rst       |   2 +-
- 2 files changed, 127 insertions(+), 1 deletion(-)
- create mode 100644 Documentation/translations/zh_CN/kbuild/gcc-plugins.rst
+Instead, you can add this instruction to:
 
-diff --git a/Documentation/translations/zh_CN/kbuild/gcc-plugins.rst b/Documentation/translations/zh_CN/kbuild/gcc-plugins.rst
-new file mode 100644
-index 000000000000..67a8abbf5887
---- /dev/null
-+++ b/Documentation/translations/zh_CN/kbuild/gcc-plugins.rst
-@@ -0,0 +1,126 @@
-+.. SPDX-License-Identifier: GPL-2.0
-+
-+.. include:: ../disclaimer-zh_CN.rst
-+
-+:Original: Documentation/kbuild/gcc-plugins.rst
-+:Translator: 慕冬亮 Dongliang Mu <dzm91@hust.edu.cn>
-+
-+================
-+GCC 插件基础设施
-+================
-+
-+
-+介绍
-+====
-+
-+GCC 插件是为编译器提供额外功能的可加载模块 [1]_。它们对于运行时插装和静态分析非常有用。
-+我们可以在编译过程中通过回调 [2]_，GIMPLE [3]_，IPA [4]_ 和 RTL Passes [5]_
-+（译者注：Pass 是编译器所采用的一种结构化技术，用于完成编译对象的分析、优化或转换等功能）
-+来分析、修改和添加更多的代码。
-+
-+内核的 GCC 插件基础设施支持构建树外模块、交叉编译和在单独的目录中构建。插件源文件必须由
-+C++ 编译器编译。
-+
-+目前 GCC 插件基础设施只支持一些架构。搜索 "select HAVE_GCC_PLUGINS" 来查找支持
-+GCC 插件的架构。
-+
-+这个基础设施是从 grsecurity [6]_  和 PaX [7]_ 移植过来的。
-+
-+--
-+
-+.. [1] https://gcc.gnu.org/onlinedocs/gccint/Plugins.html
-+.. [2] https://gcc.gnu.org/onlinedocs/gccint/Plugin-API.html#Plugin-API
-+.. [3] https://gcc.gnu.org/onlinedocs/gccint/GIMPLE.html
-+.. [4] https://gcc.gnu.org/onlinedocs/gccint/IPA.html
-+.. [5] https://gcc.gnu.org/onlinedocs/gccint/RTL.html
-+.. [6] https://grsecurity.net/
-+.. [7] https://pax.grsecurity.net/
-+
-+
-+目的
-+====
-+
-+GCC 插件的设计目的是提供一个用于试验 GCC 或 Clang 上游没有的潜在编译器功能的场所。
-+一旦它们的实用性得到验证，这些功能将被添加到 GCC（和 Clang）的上游。随后，在所有
-+支持的 GCC 版本都支持这些功能后，它们会被从内核中移除。
-+
-+具体来说，新插件应该只实现上游编译器（GCC 和 Clang）不支持的功能。
-+
-+当 Clang 中存在 GCC 中不存在的某项功能时，应努力将该功能做到 GCC 上游（而不仅仅
-+是作为内核专用的 GCC 插件），以使整个生态都能从中受益。
-+
-+类似的，如果 GCC 插件提供的功能在 Clang 中 **不** 存在，但该功能被证明是有用的，也应
-+努力将该功能上传到 GCC（和 Clang）。
-+
-+在上游 GCC 提供了某项功能后，该插件将无法在相应的 GCC 版本（以及更高版本）下编译。
-+一旦所有内核支持的 GCC 版本都提供了该功能，该插件将从内核中移除。
-+
-+
-+文件
-+====
-+
-+**$(src)/scripts/gcc-plugins**
-+
-+	这是 GCC 插件的目录。
-+
-+**$(src)/scripts/gcc-plugins/gcc-common.h**
-+
-+	这是 GCC 插件的兼容性头文件。
-+	应始终包含它，而不是单独的 GCC 头文件。
-+
-+**$(src)/scripts/gcc-plugins/gcc-generate-gimple-pass.h,
-+$(src)/scripts/gcc-plugins/gcc-generate-ipa-pass.h,
-+$(src)/scripts/gcc-plugins/gcc-generate-simple_ipa-pass.h,
-+$(src)/scripts/gcc-plugins/gcc-generate-rtl-pass.h**
-+
-+	这些头文件可以自动生成 GIMPLE、SIMPLE_IPA、IPA 和 RTL passes 的注册结构。
-+	与手动创建结构相比，它们更受欢迎。
-+
-+
-+用法
-+====
-+
-+你必须为你的 GCC 版本安装 GCC 插件头文件，以 Ubuntu 上的 gcc-10 为例::
-+
-+	apt-get install gcc-10-plugin-dev
-+
-+或者在 Fedora 上::
-+
-+	dnf install gcc-plugin-devel libmpc-devel
-+
-+或者在 Fedora 上使用包含插件的交叉编译器时::
-+
-+	dnf install libmpc-devel
-+
-+在内核配置中启用 GCC 插件基础设施与一些你想使用的插件::
-+
-+	CONFIG_GCC_PLUGINS=y
-+	CONFIG_GCC_PLUGIN_LATENT_ENTROPY=y
-+	...
-+
-+运行 gcc（本地或交叉编译器），确保能够检测到插件头文件::
-+
-+	gcc -print-file-name=plugin
-+	CROSS_COMPILE=arm-linux-gnu- ${CROSS_COMPILE}gcc -print-file-name=plugin
-+
-+"plugin" 这个词意味着它们没有被检测到::
-+
-+	plugin
-+
-+完整的路径则表示插件已经被检测到::
-+
-+       /usr/lib/gcc/x86_64-redhat-linux/12/plugin
-+
-+编译包括插件在内的最小工具集::
-+
-+	make scripts
-+
-+或者直接在内核中运行 make，使用循环复杂性 GCC 插件编译整个内核。
-+
-+
-+4. 如何添加新的 GCC 插件
-+========================
-+
-+GCC 插件位于 scripts/gcc-plugins/。你需要将插件源文件放在 scripts/gcc-plugins/ 目录下。
-+子目录创建并不支持，你必须添加在 scripts/gcc-plugins/Makefile、scripts/Makefile.gcc-plugins
-+和相关的 Kconfig 文件中。
-diff --git a/Documentation/translations/zh_CN/kbuild/index.rst b/Documentation/translations/zh_CN/kbuild/index.rst
-index d906a4e88d0f..b51655d981f6 100644
---- a/Documentation/translations/zh_CN/kbuild/index.rst
-+++ b/Documentation/translations/zh_CN/kbuild/index.rst
-@@ -13,6 +13,7 @@
-     :maxdepth: 1
- 
-     headers_install
-+    gcc-plugins
- 
- TODO:
- 
-@@ -24,7 +25,6 @@ TODO:
- - modules
- - issues
- - reproducible-builds
--- gcc-plugins
- - llvm
- 
- .. only::  subproject and html
--- 
-2.43.0
+https://github.com/bee-headers/homebrew-bee-headers/blob/main/README.md
 
+
+
+
+
+> ---
+>  Documentation/kbuild/llvm.rst | 78 +++++++++++++++++++++++++++++++++++++=
+++++++
+>  1 file changed, 78 insertions(+)
+>
+> diff --git a/Documentation/kbuild/llvm.rst b/Documentation/kbuild/llvm.rs=
+t
+> index 6dc66b4f31a7..de3bde925793 100644
+> --- a/Documentation/kbuild/llvm.rst
+> +++ b/Documentation/kbuild/llvm.rst
+> @@ -186,6 +186,84 @@ yet. Bug reports are always welcome at the issue tra=
+cker below!
+>       - Supported
+>       - ``LLVM=3D1``
+>
+> +Experimental Build in macOS
+> +---------------------------
+> +
+> +Building on macOS with LLVM is experimental. This section provides steps=
+ to
+> +install dependencies via Homebrew, set up the environment, and start the=
+ build
+> +process.
+> +
+> +1. **Create a Case-Sensitive Volume**
+> +
+> +   For fetching and building the project, you need a case-sensitive volu=
+me. Use the following
+> +   command to create one:
+> +
+> +   .. code-block:: shell
+> +
+> +      diskutil apfs addVolume /dev/disk<N> "Case-sensitive APFS" linux
+> +
+> +   Replace `/dev/disk<N>` with the appropriate disk identifier.
+> +
+> +2. **Install Build Dependencies**
+> +
+> +Use Homebrew to install the required build dependencies.
+> +
+> +- **Core Utilities**: `coreutils`, `findutils`, `gnu-sed`, `gnu-tar`, `g=
+rep`,
+> +  `llvm`, `make`, and `pkg-config`.
+> +
+> +   .. code-block:: shell
+> +
+> +      brew install coreutils findutils gnu-sed gnu-tar grep llvm make pk=
+g-config
+> +
+> +- **Bee Headers**: Install byteswap, elf and endian headers using the
+> +  `Bee Headers Project <https://github.com/bee-headers/headers>`_.
+> +
+> +   .. code-block:: shell
+> +
+> +      brew tap bee-headers/bee-headers
+> +      brew install bee-headers/bee-headers/bee-headers
+> +
+> +   After installation, verify the `CFLAGS` with `pkg-config`:
+> +
+> +   .. code-block:: shell
+> +
+> +      pkg-config --cflags bee-headers
+> +      -I/opt/homebrew/Cellar/bee-headers/0.1/include
+> +
+> +3. **Configure the PATH**
+> +
+> +   Include all the required GNU tools and LLVM in your `PATH`. This ensu=
+res that
+> +   the necessary tools are available during the build process.
+> +
+> +   .. code-block:: shell
+> +
+> +      PATH=3D"/opt/homebrew/opt/coreutils/libexec/gnubin:$PATH"
+> +      PATH=3D"/opt/homebrew/opt/findutils/libexec/gnubin:$PATH"
+> +      PATH=3D"/opt/homebrew/opt/gnu-sed/libexec/gnubin:$PATH"
+> +      PATH=3D"/opt/homebrew/opt/gnu-tar/libexec/gnubin:$PATH"
+> +      PATH=3D"/opt/homebrew/opt/grep/libexec/gnubin:$PATH"
+> +      PATH=3D"/opt/homebrew/opt/make/libexec/gnubin:$PATH"
+> +      PATH=3D"/opt/homebrew/opt/llvm/bin:$PATH"
+> +
+> +Building the Project
+> +--------------------
+> +
+> +Once the environment is set up, you can start the build process using LL=
+VM. Run
+> +the following commands to initiate the build:
+> +
+> +.. code-block:: shell
+> +
+> +   make LLVM=3D1 allyesconfig
+> +   make LLVM=3D1 -j$(nproc)
+> +
+> +Supported in macOS
+> +~~~~~~~~~~~~~~~~~~
+> +
+> +At the moment, only arm64 is supported and tested with `allyesconfig` Ma=
+kefile
+> +configuration target. Other Kconfig options not included in `allyesconfi=
+g`
+> +target and architectures may be supported as well as support in macOS is=
+ based
+> +on LLVM effort and maintenance.
+> +
+>  Getting Help
+>  ------------
+>
+>
+> --
+> 2.46.0
+>
+>
+
+
+--
+Best Regards
+Masahiro Yamada
