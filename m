@@ -1,60 +1,60 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C5DE3D982;
-	Sat,  7 Sep 2024 17:48:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5799614EC5D;
+	Sat,  7 Sep 2024 18:41:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725731289; cv=none; b=c5lvXgYwSoogdjsf2iOz43JJ+dZUXT/ZLYf889aq1t6J26pwaqUdUrIJ6vdw5dvs9oUp8S0riBp/oXQcwYQTa35x5PUCXXO3gLyGPi06hEYZVeUMmPKphxuBvmrQ7m3Im2JyBJaaSICCS0RC6e464c+h35VILvRWL6kGBphLWKA=
+	t=1725734483; cv=none; b=GAzyOJsjHlOoDRnlqwKG4M5dL52gYWCEN6SZ2MaMwnvL6wJrawGhZ4SrgIFcd6+e5L7veQit9apI3LGMVuIHmknWLPJUypjwzw1B0jB+rBnYbPMomNhkSrK4wxLBWvPFuHJNKf/sea21s/TOwop7ee66989nBZMsGoE+WTwcwps=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725731289; c=relaxed/simple;
-	bh=rWvxc5qQ76GxQFViaQIWgGD99/ej2hDGIu9YulFZXn0=;
+	s=arc-20240116; t=1725734483; c=relaxed/simple;
+	bh=QzLPxJNpW0ummtXfm/a7SXko0h0avC25mylKyRU7lT8=;
 	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=ZBoBKESmgZl2Fsj/PrxsEbBie/Oea3hGNN9FrCfwsZhvg9pnh0gVFsIa1FrXrpNkagwSd4k7FjTGPMrWzDYDd1RRpVbxtUrUs6EP51Dndeb5kHljGvd7NYoZ3vRoItJMDHtmY6KssHs/yvGfZOtB+8+nWO/oHgYGx+Tdp6PnCgc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=L/m2Z8RZ; arc=none smtp.client-ip=198.175.65.13
+	 Content-Disposition; b=RSRSb8ektpIQOMm8gluL+VzkSD+iA0x+74iYaUiWMGUi5o2/F5UIy1J+aS4MUmxNCRFn3b0GkPmpVv8zGr3UPOit31mg8i+ZgpEywpRUDsChRZQuVuN9K+qCw6OCmLDzcmN3jkL9k1aTVrpUR0uFfbTaim3/+LfkgZ0lKD1cRf8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=mXWaFZsn; arc=none smtp.client-ip=192.198.163.17
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="L/m2Z8RZ"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="mXWaFZsn"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1725731289; x=1757267289;
+  t=1725734481; x=1757270481;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=rWvxc5qQ76GxQFViaQIWgGD99/ej2hDGIu9YulFZXn0=;
-  b=L/m2Z8RZtG61kujRQ+5/CrzRhzlYMPHn4Mv4ev6YF9PSYd64bCfJrb1f
-   0Yi216oMnh4kR2+uTetdsVGLqAj5+IJgNu7FZE/p5U5TEBqM9h+67JZc+
-   XA2n3bh9tQjZnyKva54399DpOm0BZ4ikMbW9L6AlMeWS2Qfp9BdT3wio1
-   7BuXo8EYxWEd4cqL6DgUd6xZ7PBxi1JLRvOr6DxGcTF1WzlqOIDYpdUcy
-   XUiM4B91DCwvLzcDNPNX2WhPqQ06URakQvt2EwB+MbgANZytTqsoprhLW
-   dmmnG+l3V5g032N/Q3mG6hMRDZoaOA9pC3eURAjCy22LUdke17adzuGyI
-   g==;
-X-CSE-ConnectionGUID: O1brRmTmQAyrQkHxWVbKHg==
-X-CSE-MsgGUID: JwgLIhQMRxOAVKr/q72guA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11188"; a="35615194"
+  bh=QzLPxJNpW0ummtXfm/a7SXko0h0avC25mylKyRU7lT8=;
+  b=mXWaFZsnu3mwvX/13LaGRoQFz/z+LtclV56vcqEqkpXGpUTgPTyb5HOw
+   bfd3CWefp+SkPnBhm9UyAH4ynYOM0jV56odsNgBOl8HXizAVSe5kHhvXJ
+   kPX24TaPygg9zYa5s8agYM9GGDwy70jW9FJV+s7hkZs6wjPKkweWi+EaE
+   6SNaQPssuJO6G+zlZYh6ZUYgslgl30Ep9ekqytKzef2F9ihvS364JhCIk
+   uP9xnIIcRIFpdXTcDB1Cu191LADyXyzGT6XlqLjmPyja4FC8UpE4cucCM
+   ynHP1VdpQ4iS8vblVkALJmoR0jISG3JoVv3GuU/BVM9QrWtEy9t6NJMjm
+   A==;
+X-CSE-ConnectionGUID: 9KJXcz0JT4qTOw+8gRz8uQ==
+X-CSE-MsgGUID: 9g2BLALXRCqKIyOxb+2wmA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11188"; a="24345826"
 X-IronPort-AV: E=Sophos;i="6.10,210,1719903600"; 
-   d="scan'208";a="35615194"
-Received: from orviesa010.jf.intel.com ([10.64.159.150])
-  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Sep 2024 10:48:08 -0700
-X-CSE-ConnectionGUID: B/Y9vomSREqc3s3UuISvPA==
-X-CSE-MsgGUID: APWCvyCqSha0F/x56vZWRA==
+   d="scan'208";a="24345826"
+Received: from fmviesa009.fm.intel.com ([10.60.135.149])
+  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Sep 2024 11:41:21 -0700
+X-CSE-ConnectionGUID: x5M4F/EDSsC4fViRyX95VA==
+X-CSE-MsgGUID: jinmvRcfQUaqNgf48CmYjA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.10,210,1719903600"; 
-   d="scan'208";a="66039835"
+   d="scan'208";a="66239957"
 Received: from lkp-server01.sh.intel.com (HELO 9c6b1c7d3b50) ([10.239.97.150])
-  by orviesa010.jf.intel.com with ESMTP; 07 Sep 2024 10:48:06 -0700
+  by fmviesa009.fm.intel.com with ESMTP; 07 Sep 2024 11:41:19 -0700
 Received: from kbuild by 9c6b1c7d3b50 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1smzXX-000Cnf-2S;
-	Sat, 07 Sep 2024 17:48:03 +0000
-Date: Sun, 8 Sep 2024 01:47:34 +0800
+	id 1sn0N3-000CrP-1c;
+	Sat, 07 Sep 2024 18:41:17 +0000
+Date: Sun, 8 Sep 2024 02:40:55 +0800
 From: kernel test robot <lkp@intel.com>
 To: Steve Jeong <how2soft@gmail.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
 	Dongjin Kim <tobetter@gmail.com>
 Subject: [tobetter:odroid-6.6.y 41/82] drivers/char/aml-gpiomem.c:129:22:
- error: implicit declaration of function 'phys_mem_access_prot' is invalid in
- C99
-Message-ID: <202409080128.akaGy1t7-lkp@intel.com>
+ error: call to undeclared function 'phys_mem_access_prot'; ISO C99 and later
+ do not support implicit function declarations
+Message-ID: <202409080228.5faeeBw8-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -67,24 +67,81 @@ Content-Disposition: inline
 tree:   https://github.com/tobetter/linux odroid-6.6.y
 head:   c970a63609188f53cf758a3dcd395e777150a29a
 commit: 5e7a0fcf547e3b4f54e37972019abef8e78192a7 [41/82] ODROID-N2/C4: char: Add /dev/gpiomem device
-config: riscv-randconfig-002-20240907 (https://download.01.org/0day-ci/archive/20240908/202409080128.akaGy1t7-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240908/202409080128.akaGy1t7-lkp@intel.com/reproduce)
+config: s390-randconfig-002-20240907 (https://download.01.org/0day-ci/archive/20240908/202409080228.5faeeBw8-lkp@intel.com/config)
+compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240908/202409080228.5faeeBw8-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202409080128.akaGy1t7-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202409080228.5faeeBw8-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> drivers/char/aml-gpiomem.c:129:22: error: implicit declaration of function 'phys_mem_access_prot' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+   In file included from drivers/char/aml-gpiomem.c:55:
+   In file included from include/linux/io.h:13:
+   In file included from arch/s390/include/asm/io.h:78:
+   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __raw_readb(PCI_IOBASE + addr);
+                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
+   #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
+                                                             ^
+   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
+   #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
+                                                        ^
+   In file included from drivers/char/aml-gpiomem.c:55:
+   In file included from include/linux/io.h:13:
+   In file included from arch/s390/include/asm/io.h:78:
+   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
+   #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
+                                                             ^
+   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
+   #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
+                                                        ^
+   In file included from drivers/char/aml-gpiomem.c:55:
+   In file included from include/linux/io.h:13:
+   In file included from arch/s390/include/asm/io.h:78:
+   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writeb(value, PCI_IOBASE + addr);
+                               ~~~~~~~~~~ ^
+   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:692:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsb(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:700:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsw(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:708:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsl(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:717:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesb(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+   include/asm-generic/io.h:726:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesw(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+   include/asm-generic/io.h:735:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesl(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+>> drivers/char/aml-gpiomem.c:129:22: error: call to undeclared function 'phys_mem_access_prot'; ISO C99 and later do not support implicit function declarations [-Werror,-Wimplicit-function-declaration]
            vma->vm_page_prot = phys_mem_access_prot(file, vma->vm_pgoff,
                                ^
    drivers/char/aml-gpiomem.c:129:20: error: assigning to 'pgprot_t' from incompatible type 'int'
            vma->vm_page_prot = phys_mem_access_prot(file, vma->vm_pgoff,
                              ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   2 errors generated.
+   12 warnings and 2 errors generated.
 
 
 vim +/phys_mem_access_prot +129 drivers/char/aml-gpiomem.c
