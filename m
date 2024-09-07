@@ -1,63 +1,59 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 027E23A1BA;
-	Sat,  7 Sep 2024 04:43:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 145234D8CF;
+	Sat,  7 Sep 2024 05:24:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725684199; cv=none; b=l/r3WQTFsio/Ueemuzcp1vdXoTaBBO/Z8lMQkzf3nW/E3aigiys8cPpJtl8tK+yEIGhQF0b0pDJpQ8YMqQIXyAT5xcGdLZE8JLe3HIv/3Bh87f1emonwS9npItFO7iIyPXYgoyKCuSefoUBu4Skeg+U6wU570f+ksonmVYzWG7U=
+	t=1725686663; cv=none; b=bLbVeAdZ8oSfM1cbD7Wz85pUdElnjtX+A6tLG0jQDmpvGCEivMK1BCzsjyGCMP8w+SQ6SxF0K/x/JBfL9G04xQQRYeRZKU0uhbDupiyxiXTcx/dE02MH/3xhReR2aiKnBW3T858MLCOZ/shQuj+c7aL0lWvYzKUWKGFVMjrk5c0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725684199; c=relaxed/simple;
-	bh=fSEXct1GgQ9TOYumem+6pN9Cr1YQiae/V1ufRG6MUww=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=mnpsrmIVqgXsL8pCG0SOo6A7JDTkIKdS2551Y615MTVy/K+aae2ubunkGm1PiWuykgByO6FFFLx+U0LTlzpD3OtSWpvwW9bUbJNM+7dS0ZhfOWQmA0eJBGVZAtjTrcAg/toTsxU3fzXNpfMYCr+PUTqRzsq5KHti6uHOgs/tuRY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=kGI2OXRw; arc=none smtp.client-ip=192.198.163.18
+	s=arc-20240116; t=1725686663; c=relaxed/simple;
+	bh=2F5ZvEBzkWr2lpMxRtDtFxfq2FqVyGMrHpXkOoW747o=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=h+AMVLIIzKFK9D0FBo4+hj2d2eMn0bvUfeBndGFFIYioyXIOKnmGKv/1eSTeVHsmeKGdgA8rKhya8cs09w2OyZJZznyn/YogwkWHix8z5De9Q2xrdUa5SbOcC16moerpBeuFcdFigvYJo1evPTJaDrfVe2IpNqvLHnhIX1rnPVI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=lRlbXeSi; arc=none smtp.client-ip=198.175.65.18
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="kGI2OXRw"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="lRlbXeSi"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1725684198; x=1757220198;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=fSEXct1GgQ9TOYumem+6pN9Cr1YQiae/V1ufRG6MUww=;
-  b=kGI2OXRwl1XWZTIqjgjRhk+wtqbnMVBWL0biNRoixHKzpQgMT/oV/EYQ
-   kDQMXgTWyyUGXuuL1V/N8tKE0W2srMuGFmHYuGW+YZlxRwk4fQeOKNcBt
-   bGJv4GYVQBhmclgQH9V4ahTTRkVusVo9OuG0BByT0LxqE3RKcAxvIxPYo
-   uSEXP7JMVqM4pNeLiGvhVYidD6Eo+rU1RNaDCYC5FXCugNPu/KQY3yHXX
-   AUg1ltZEczXzi3GGyVeHDlHE8tTtkdzcRXvjZtc6GIjiDgjBsRqlW3Q0V
-   JLHWZXD/Zezdb9dt+CHxocBeMk1kgsufLhcq5S38Tzrf03U2NaPUs7rGO
-   Q==;
-X-CSE-ConnectionGUID: t72edvhOSwe6HNDlK6r7hg==
-X-CSE-MsgGUID: gGOwQZTuQyuxx4BiSP1bhQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11187"; a="23955068"
+  t=1725686662; x=1757222662;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=2F5ZvEBzkWr2lpMxRtDtFxfq2FqVyGMrHpXkOoW747o=;
+  b=lRlbXeSiYBOqYznNw4pcT2OXgjkR3Yhel0hdKR8newzuTd7CPaPnIuZa
+   2/nahj3K0tQk1Fk0RgwL8S16dRPUQyChTwyl6t3/UOetUAnoby/dZ3iKY
+   pSTX5ZVXIHKZfHCm0hqleQajGWb5JxwqaiK7P9qNkv1BZFqYT1B+3JDgW
+   zDE8cw3LDZfU2JAk5T7KsXLCPkJf2FNtsC2t12oIT4i/KXuanhUzvjrnK
+   2KT+YAkwcpSY4r0ae0ysQMYo8fkUSa/zyWZBjTRozx39RZzt8pqi7kDNi
+   t8Mtz1ck5Xs5abu6TMzKd/pihaviTAUABp2cgY+HIu6CZ2DpwD4ytP+Zj
+   w==;
+X-CSE-ConnectionGUID: ZS5Mmw2sQvap+VcphYLBCw==
+X-CSE-MsgGUID: VSawRcfqQxaXBrWlN+LE5w==
+X-IronPort-AV: E=McAfee;i="6700,10204,11187"; a="24597255"
 X-IronPort-AV: E=Sophos;i="6.10,209,1719903600"; 
-   d="scan'208";a="23955068"
-Received: from orviesa004.jf.intel.com ([10.64.159.144])
-  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Sep 2024 21:43:17 -0700
-X-CSE-ConnectionGUID: YZcGfQ8sTUef9E57zeVnPg==
-X-CSE-MsgGUID: TAyDOvwdTrSJnrX/DeGfCQ==
+   d="scan'208";a="24597255"
+Received: from fmviesa006.fm.intel.com ([10.60.135.146])
+  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Sep 2024 22:24:21 -0700
+X-CSE-ConnectionGUID: EwlRnuEWRA+Ii7R7hdulhQ==
+X-CSE-MsgGUID: cdameIxKQPiUsB+yDRUBWQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.10,209,1719903600"; 
-   d="scan'208";a="71106913"
+   d="scan'208";a="65782887"
 Received: from lkp-server01.sh.intel.com (HELO 9c6b1c7d3b50) ([10.239.97.150])
-  by orviesa004.jf.intel.com with ESMTP; 06 Sep 2024 21:43:14 -0700
+  by fmviesa006.fm.intel.com with ESMTP; 06 Sep 2024 22:24:20 -0700
 Received: from kbuild by 9c6b1c7d3b50 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1smnI0-000C7d-23;
-	Sat, 07 Sep 2024 04:43:12 +0000
-Date: Sat, 7 Sep 2024 12:42:15 +0800
+	id 1smnvl-000C97-20;
+	Sat, 07 Sep 2024 05:24:17 +0000
+Date: Sat, 7 Sep 2024 13:23:47 +0800
 From: kernel test robot <lkp@intel.com>
-To: KobaK <kobak@nvidia.com>, Matt Ochs <mochs@nvidia.com>,
-	James Morse <james.morse@arm.com>,
-	"Rafael J . Wysocki" <rafael@kernel.org>,
-	Len Brown <lenb@kernel.org>, linux-acpi@vger.kernel.org,
-	linux-kernel@vger.kernel.org, Zhang Rui <rui.zhang@intel.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [PATCH V3] acpi/prmt: find block with specific type
-Message-ID: <202409071245.bkGWWtfQ-lkp@intel.com>
-References: <20240905124950.512973-1-kobak@nvidia.com>
+To: Tony Lindgren <tony.lindgren@linux.intel.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-kernel@vger.kernel.org, Petr Mladek <pmladek@suse.com>
+Subject: ERROR: modpost: "match_devname_and_update_preferred_console"
+ [drivers/tty/serial/serial_base.ko] undefined!
+Message-ID: <202409071312.qlwtTOS1-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -66,154 +62,115 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240905124950.512973-1-kobak@nvidia.com>
 
-Hi KobaK,
+Hi Tony,
 
-kernel test robot noticed the following build warnings:
+FYI, the error/warning still remains.
 
-[auto build test WARNING on rafael-pm/linux-next]
-[also build test WARNING on rafael-pm/bleeding-edge linus/master v6.11-rc6 next-20240906]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/KobaK/acpi-prmt-find-block-with-specific-type/20240905-205316
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git linux-next
-patch link:    https://lore.kernel.org/r/20240905124950.512973-1-kobak%40nvidia.com
-patch subject: [PATCH V3] acpi/prmt: find block with specific type
-config: x86_64-rhel-8.3-rust (https://download.01.org/0day-ci/archive/20240907/202409071245.bkGWWtfQ-lkp@intel.com/config)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   b31c4492884252a8360f312a0ac2049349ddf603
+commit: 12c91cec3155f79216641162a32e04a59abb6e37 serial: core: Add serial_base_match_and_update_preferred_console()
+date:   9 weeks ago
+config: i386-buildonly-randconfig-004-20240907 (https://download.01.org/0day-ci/archive/20240907/202409071312.qlwtTOS1-lkp@intel.com/config)
 compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240907/202409071245.bkGWWtfQ-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240907/202409071312.qlwtTOS1-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202409071245.bkGWWtfQ-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202409071312.qlwtTOS1-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>, old ones prefixed by <<):
 
->> drivers/acpi/prmt.c:163:5: warning: format specifies type 'int' but the argument has type 'u64' (aka 'unsigned long long') [-Wformat]
-     162 |                                 "Idx: %d, Parts of handler(GUID: %pUB) are missed, handler_addr %llx, data_addr %llx, param_addr %llx",
-         |                                       ~~
-         |                                       %llu
-     163 |                                 cur_handler, th->handler_addr,
-         |                                 ^~~~~~~~~~~
-   include/linux/printk.h:518:37: note: expanded from macro 'pr_warn'
-     518 |         printk(KERN_WARNING pr_fmt(fmt), ##__VA_ARGS__)
-         |                                    ~~~     ^~~~~~~~~~~
-   include/linux/printk.h:465:60: note: expanded from macro 'printk'
-     465 | #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
-         |                                                     ~~~    ^~~~~~~~~~~
-   include/linux/printk.h:437:19: note: expanded from macro 'printk_index_wrap'
-     437 |                 _p_func(_fmt, ##__VA_ARGS__);                           \
-         |                         ~~~~    ^~~~~~~~~~~
->> drivers/acpi/prmt.c:162:105: warning: more '%' conversions than data arguments [-Wformat-insufficient-args]
-     162 |                                 "Idx: %d, Parts of handler(GUID: %pUB) are missed, handler_addr %llx, data_addr %llx, param_addr %llx",
-         |                                                                                                                                  ~~~^
-   include/linux/printk.h:518:29: note: expanded from macro 'pr_warn'
-     518 |         printk(KERN_WARNING pr_fmt(fmt), ##__VA_ARGS__)
-         |                                    ^~~
-   include/linux/printk.h:355:21: note: expanded from macro 'pr_fmt'
-     355 | #define pr_fmt(fmt) fmt
-         |                     ^~~
-   include/linux/printk.h:465:53: note: expanded from macro 'printk'
-     465 | #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
-         |                                                     ^~~
-   include/linux/printk.h:437:11: note: expanded from macro 'printk_index_wrap'
-     437 |                 _p_func(_fmt, ##__VA_ARGS__);                           \
-         |                         ^~~~
-   2 warnings generated.
+WARNING: modpost: missing MODULE_DESCRIPTION() in arch/x86/crypto/crc32-pclmul.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in kernel/rcu/rcutorture.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in kernel/rcu/rcuscale.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in kernel/rcu/refscale.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in kernel/time/test_udelay.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in fs/nls/nls_cp437.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in fs/nls/nls_cp863.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in fs/nls/nls_cp869.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in fs/nls/nls_cp874.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in fs/nls/nls_cp936.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in fs/nls/nls_cp949.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in fs/nls/nls_iso8859-1.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in fs/nls/nls_iso8859-2.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in fs/nls/nls_iso8859-4.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in fs/nls/nls_iso8859-13.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in fs/nls/nls_iso8859-15.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in fs/nls/nls_utf8.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in fs/nls/mac-centeuro.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in fs/nls/mac-inuit.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in fs/nls/mac-romanian.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in fs/nls/mac-roman.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in fs/nls/mac-turkish.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in fs/nls/nls_ucs2_utils.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in fs/jbd2/jbd2.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in fs/isofs/isofs.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in security/keys/trusted-keys/trusted.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in crypto/cast_common.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in crypto/crypto_simd.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in lib/math/prime_numbers.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in lib/crypto/libdes.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in lib/find_bit_benchmark.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in lib/test_dhry.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in lib/test_firmware.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in lib/test-kstrtox.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in lib/test_module.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in lib/test_uuid.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in lib/test_xarray.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in lib/test_maple_tree.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in lib/test_memcat_p.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in lib/test_meminit.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in lib/test_free_pages.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in lib/test_objpool.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/acpi/platform_profile.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/virtio/virtio_dma_buf.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/regulator/max20411-regulator.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/char/agp/ati-agp.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/char/agp/amd-k7-agp.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/char/agp/amd64-agp.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/char/agp/intel-agp.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/char/agp/intel-gtt.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/char/agp/nvidia-agp.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/char/agp/sis-agp.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/char/agp/via-agp.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/char/dtlk.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/char/nvram.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/char/hw_random/omap-rng.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/char/hw_random/omap3-rom-rng.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/gpu/drm/tiny/bochs.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/gpu/drm/tiny/cirrus.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/gpu/drm/drm_panel_orientation_quirks.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/mfd/arizona.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/cxl/cxl_pci.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/uio/uio_cif.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/auxdisplay/hd44780_common.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/media/v4l2-core/v4l2-async.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/media/v4l2-core/v4l2-fwnode.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/leds/simple/simatic-ipc-leds.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/leds/simple/simatic-ipc-leds-gpio-core.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/leds/simple/simatic-ipc-leds-gpio-apollolake.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/leds/simple/simatic-ipc-leds-gpio-f7188x.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/staging/greybus/gb-log.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/staging/greybus/gb-raw.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/platform/goldfish/goldfish_pipe.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/devfreq/governor_simpleondemand.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/devfreq/governor_powersave.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hwtracing/intel_th/intel_th_msu_sink.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/mtd/chips/cfi_util.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/mtd/chips/cfi_cmdset_0020.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/mtd/maps/map_funcs.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/input/matrix-keymap.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/input/vivaldi-fmap.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/hwmon/asus_atk0110.o
+>> ERROR: modpost: "match_devname_and_update_preferred_console" [drivers/tty/serial/serial_base.ko] undefined!
 
-
-vim +163 drivers/acpi/prmt.c
-
-    93	
-    94	static int __init
-    95	acpi_parse_prmt(union acpi_subtable_headers *header, const unsigned long end)
-    96	{
-    97		struct acpi_prmt_module_info *module_info;
-    98		struct acpi_prmt_handler_info *handler_info;
-    99		struct prm_handler_info *th;
-   100		struct prm_module_info *tm;
-   101		u64 *mmio_count;
-   102		u64 cur_handler = 0;
-   103		u32 module_info_size = 0;
-   104		u64 mmio_range_size = 0;
-   105		void *temp_mmio;
-   106	
-   107		module_info = (struct acpi_prmt_module_info *) header;
-   108		module_info_size = struct_size(tm, handlers, module_info->handler_info_count);
-   109		tm = kmalloc(module_info_size, GFP_KERNEL);
-   110		if (!tm)
-   111			goto parse_prmt_out1;
-   112	
-   113		guid_copy(&tm->guid, (guid_t *) module_info->module_guid);
-   114		tm->major_rev = module_info->major_rev;
-   115		tm->minor_rev = module_info->minor_rev;
-   116		tm->handler_count = module_info->handler_info_count;
-   117		tm->updatable = true;
-   118	
-   119		if (module_info->mmio_list_pointer) {
-   120			/*
-   121			 * Each module is associated with a list of addr
-   122			 * ranges that it can use during the service
-   123			 */
-   124			mmio_count = (u64 *) memremap(module_info->mmio_list_pointer, 8, MEMREMAP_WB);
-   125			if (!mmio_count)
-   126				goto parse_prmt_out2;
-   127	
-   128			mmio_range_size = struct_size(tm->mmio_info, addr_ranges, *mmio_count);
-   129			tm->mmio_info = kmalloc(mmio_range_size, GFP_KERNEL);
-   130			if (!tm->mmio_info)
-   131				goto parse_prmt_out3;
-   132	
-   133			temp_mmio = memremap(module_info->mmio_list_pointer, mmio_range_size, MEMREMAP_WB);
-   134			if (!temp_mmio)
-   135				goto parse_prmt_out4;
-   136			memmove(tm->mmio_info, temp_mmio, mmio_range_size);
-   137		} else {
-   138			tm->mmio_info = kmalloc(sizeof(*tm->mmio_info), GFP_KERNEL);
-   139			if (!tm->mmio_info)
-   140				goto parse_prmt_out2;
-   141	
-   142			tm->mmio_info->mmio_count = 0;
-   143		}
-   144	
-   145		INIT_LIST_HEAD(&tm->module_list);
-   146		list_add(&tm->module_list, &prm_module_list);
-   147	
-   148		handler_info = get_first_handler(module_info);
-   149		do {
-   150			th = &tm->handlers[cur_handler];
-   151	
-   152			guid_copy(&th->guid, (guid_t *)handler_info->handler_guid);
-   153			th->handler_addr =
-   154				(void *)efi_pa_va_lookup(handler_info->handler_address, EFI_RUNTIME_SERVICES_CODE);
-   155			th->static_data_buffer_addr =
-   156				efi_pa_va_lookup(handler_info->static_data_buffer_address, EFI_RUNTIME_SERVICES_DATA);
-   157			th->acpi_param_buffer_addr =
-   158				efi_pa_va_lookup(handler_info->acpi_param_buffer_address, EFI_RUNTIME_SERVICES_DATA);
-   159	
-   160			if (!th->handler_addr || !th->static_data_buffer_addr || !th->acpi_param_buffer_addr)
-   161				pr_warn(
- > 162					"Idx: %d, Parts of handler(GUID: %pUB) are missed, handler_addr %llx, data_addr %llx, param_addr %llx",
- > 163					cur_handler, th->handler_addr,
-   164					th->static_data_buffer_addr, th->acpi_param_buffer_addr);
-   165		} while (++cur_handler < tm->handler_count && (handler_info = get_next_handler(handler_info)));
-   166	
-   167		return 0;
-   168	
-   169	parse_prmt_out4:
-   170		kfree(tm->mmio_info);
-   171	parse_prmt_out3:
-   172		memunmap(mmio_count);
-   173	parse_prmt_out2:
-   174		kfree(tm);
-   175	parse_prmt_out1:
-   176		return -ENOMEM;
-   177	}
-   178	
+Kconfig warnings: (for reference only)
+   WARNING: unmet direct dependencies detected for FB_IOMEM_HELPERS
+   Depends on [n]: HAS_IOMEM [=y] && FB_CORE [=n]
+   Selected by [m]:
+   - DRM_XE_DISPLAY [=y] && HAS_IOMEM [=y] && DRM [=m] && DRM_XE [=m] && DRM_XE [=m]=m [=m]
 
 -- 
 0-DAY CI Kernel Test Service
