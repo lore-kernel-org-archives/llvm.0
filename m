@@ -1,81 +1,111 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lj1-f174.google.com (mail-lj1-f174.google.com [209.85.208.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ABFF715B547;
-	Fri,  6 Sep 2024 23:40:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C2A11B85EE
+	for <llvm@lists.linux.dev>; Sat,  7 Sep 2024 00:48:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725666000; cv=none; b=P1vtKJl07BGF+V9dGPivuxK7BQTk8nL3spf1T+oakge3OD7EAN1gaqYsW//xD1pi7dKgXsbQPrhNAFVkdiiBYr797LR+C9G231/2JVf2I/q/ZN1c3dznK1CZPaDaJ/LBPY3fzDaWQQExGIxPCwG/o8xnSJh7mVPKXlSM17Ytiz8=
+	t=1725670113; cv=none; b=K9uDmJU47ltHQRL2ewqBZTaZwdIwmS/RvY+T9wueDhcv2nqDe6uCtVmlDVJRfrY7gDJLY9SdGV+3zg6IDvq1zK7EUwiuhi8TbgIWSL4w45jVNehIszGwWSWdGQV5zZwiVaDD7pr1Veq5WlAE2QGBbwykCh0e9ijiDE79nOYy3YY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725666000; c=relaxed/simple;
-	bh=hMcMMc3MkfFHqrQ2mnexr17azQHrRCKNkfzIhM20zq8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=jV2qINie/a8LJG2F+lbt8yHWV/NjSzcEvjXxkCkGAPsFNA20vVotbMHbXvrRlHTnFqM9RfqpunA8ao1qbcSPe2cILu/4ixnfAUl8nxZ1wmQwEXnMHI5sb0gswaQ7KuiuM9jz3BF5//5jnoXfQ3alx6m2GjMG6RU5ls8gfvHe+V8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aUqxPU4e; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1725670113; c=relaxed/simple;
+	bh=UFUaOWELgtMfFEsfIQ6vW+7mTZedBrO6HDqKObAmwFg=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=faw378equNpvSk9rLIqd1P6OM3v+oog1Oj5TgeVTbjtf44Mgqjs49FOZNJRi4yjYM3TRcr8teENjl1lJ3AhuyzqS9Iiu/ZSeVcLNxuVuka+aDNifmktjMFeFjq8zj20H/Ia03mpF+sj0A3WK2pvxovZy6/ysWUKrQ6QfvZJPudw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=I/uZnogo; arc=none smtp.client-ip=209.85.208.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aUqxPU4e"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D7131C4CEC4;
-	Fri,  6 Sep 2024 23:39:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1725666000;
-	bh=hMcMMc3MkfFHqrQ2mnexr17azQHrRCKNkfzIhM20zq8=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=aUqxPU4eo+UHEB4+25Nsa3J5VXEiBtO5Zn0tIMvz//qNKqiAho6aoWjY8jdFqoloj
-	 ma3w7Kif0kWJ+/gL2mcybS3wbdygVhLFo+JZSgzwc4G55zKPc2q+BUFAs3fQOhpjCV
-	 WIixBSX0VXl4JPSPOl3JoUs0nInHCPMbdRcCGCMVIURvNtlxpBpvsUxFwDqQRkQZct
-	 NvgfWj9KLtxCuuRlRTLfKCfKrNi5PQgdMeFyVcE3pjeUaECTo/iYMJFRJ4KCIMxBaq
-	 9rpL3XN+6vooaVe4raSjzHig0PX2RtjUN+vk8ZV+He8QCmU7R1ZTeTaAbn8/HxuoMs
-	 ozBD4iKyqtfUA==
-Date: Fri, 6 Sep 2024 16:39:58 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: Paolo Bonzini <pbonzini@redhat.com>, linux-kernel@vger.kernel.org,
-	kvm@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [GIT PULL] KVM fixes for Linux 6.11-rc7
-Message-ID: <20240906233958.GA1968981@thelio-3990X>
-References: <20240906154517.191976-1-pbonzini@redhat.com>
- <CAHk-=wjK7HF3dQT8q_6fr3eLGvKS+c46PdYNVAsHRyQRgcgiyw@mail.gmail.com>
+	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="I/uZnogo"
+Received: by mail-lj1-f174.google.com with SMTP id 38308e7fff4ca-2f502086419so32295411fa.3
+        for <llvm@lists.linux.dev>; Fri, 06 Sep 2024 17:48:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google; t=1725670109; x=1726274909; darn=lists.linux.dev;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=8jlGegiEN/nXhAMG4ddyYE+bSxApyov+rlpPE1WvsoM=;
+        b=I/uZnogoVeR7q64qCn2sdPgITiAggheV0EjOa+cyJYFwjRHTJMnsmbCmi4HVS2sPW5
+         3B9RjOD4tFU8vLKkZlb89UNcMHXwfXt+K9JsYIc4Qi+F9V7ubaXTlKWC02bAqUP8pTNC
+         WZKvvrgWLsyTxOPOIXDwzbnv4MIOkHg93tkn8=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1725670109; x=1726274909;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=8jlGegiEN/nXhAMG4ddyYE+bSxApyov+rlpPE1WvsoM=;
+        b=DNADXVrlTZeP8ChsCvpq/AmBGjfjCxJeOPYtCWVcMb5VitpdmJvIrhplmv05Ns4/qb
+         YPfAwn4u8rlt5NqwrSID9avnTPLoUfqi1ao4Rya1iO7SJ7uB/dbEF803uZfI6WgPQ/zF
+         fJeBCNKsRWyEVwjr5SRU8CZYeuru7HvmmyzDLNoVYjsjpgOyNHAma1LlPCZ6fO+/4CH3
+         YQNDvgmiJhZXt54Xx46QFJQBOUXEey21tmi9Lkxm4OsvMG8pqZJozOwDMti4YOpUG5P5
+         XozaHVWVutYvPAPS6SNLnK0kNdNBHE/6tp5Cy7kJMsStgaZNHo9z/XTQhc8jDPiu0YCl
+         zd0A==
+X-Forwarded-Encrypted: i=1; AJvYcCUvVIR6A5ymw5sJ2tty57VEWSO38Imm5NZen4kcnBMc+jlfz/Rhx8nfRFM7SZUrmo7WDt1d@lists.linux.dev
+X-Gm-Message-State: AOJu0YzTsGWz/g+RK7QcjGfmBcv1bPPDMQGMd9UOu0Az+iseZA4FhKzm
+	9KzDO0Z2KtmBQSRVDyRJVW+lKBFtdMRRt/WrhG65DlfkQ5NEIqel19VHWKx906uljjNHVlfLfZj
+	r/U0=
+X-Google-Smtp-Source: AGHT+IHUnGellZAFtOxCHo2Spaz84cuzT7tI4Ym2YcUE07lvptHTYgqwWWWgHQLhffUBpZI1rkycGA==
+X-Received: by 2002:a2e:4612:0:b0:2f6:61f3:c618 with SMTP id 38308e7fff4ca-2f751f85ae9mr24624691fa.43.1725670107941;
+        Fri, 06 Sep 2024 17:48:27 -0700 (PDT)
+Received: from mail-lj1-f171.google.com (mail-lj1-f171.google.com. [209.85.208.171])
+        by smtp.gmail.com with ESMTPSA id 38308e7fff4ca-2f75c009944sm329471fa.63.2024.09.06.17.48.26
+        for <llvm@lists.linux.dev>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 06 Sep 2024 17:48:27 -0700 (PDT)
+Received: by mail-lj1-f171.google.com with SMTP id 38308e7fff4ca-2f3edb2d908so30463531fa.2
+        for <llvm@lists.linux.dev>; Fri, 06 Sep 2024 17:48:26 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCXYSKz5DZOAGCX49KgYMuOecLtjIGnAQkAdKCmJBSfnJoUza3n3c79bBYB+n10GWMofy6N8@lists.linux.dev
+X-Received: by 2002:a2e:6111:0:b0:2f3:e2fd:7dcd with SMTP id
+ 38308e7fff4ca-2f751ea7abdmr23935841fa.6.1725670106422; Fri, 06 Sep 2024
+ 17:48:26 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHk-=wjK7HF3dQT8q_6fr3eLGvKS+c46PdYNVAsHRyQRgcgiyw@mail.gmail.com>
+References: <20240906154517.191976-1-pbonzini@redhat.com> <CAHk-=wjK7HF3dQT8q_6fr3eLGvKS+c46PdYNVAsHRyQRgcgiyw@mail.gmail.com>
+ <20240906233958.GA1968981@thelio-3990X>
+In-Reply-To: <20240906233958.GA1968981@thelio-3990X>
+From: Linus Torvalds <torvalds@linux-foundation.org>
+Date: Fri, 6 Sep 2024 17:48:09 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wi0ePNgwLfk8yddABjnZh+gcL9dV2E8mxLKfb=8LHFQ-g@mail.gmail.com>
+Message-ID: <CAHk-=wi0ePNgwLfk8yddABjnZh+gcL9dV2E8mxLKfb=8LHFQ-g@mail.gmail.com>
+Subject: Re: [GIT PULL] KVM fixes for Linux 6.11-rc7
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: Paolo Bonzini <pbonzini@redhat.com>, linux-kernel@vger.kernel.org, kvm@vger.kernel.org, 
+	llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
 
-On Fri, Sep 06, 2024 at 03:38:16PM -0700, Linus Torvalds wrote:
-> On Fri, 6 Sept 2024 at 08:45, Paolo Bonzini <pbonzini@redhat.com> wrote:
-> >
-> > - Specialize return value of KVM_CHECK_EXTENSION(KVM_CAP_READONLY_MEM),
-> >   based on VM type
-> 
-> Grr. This actually causes a build warning with clang, but I didn't
-> notice in my "between pulls" build check, because that is with gcc.
-> 
-> So now it's merged with this error:
-> 
->    arch/x86/kvm/x86.c:4819:2: error: unannotated fall-through between
-> switch labels [-Werror,-Wimplicit-fallthrough]
-> 
-> and I'm actually surprised that gcc didn't warn about this too.
+On Fri, 6 Sept 2024 at 16:40, Nathan Chancellor <nathan@kernel.org> wrote:
+>
+> This was brought up to GCC at one point and they considered its current
+> behavior as working as intended from my understanding:
+>
+> https://gcc.gnu.org/bugzilla/show_bug.cgi?id=91432
 
-Yeah, GCC does not warn when falling through to a break or return, as I
-mention in the patch I sent for this (I was going to keep an eye out for
-the pull request and comment before it went in but looks like I missed
-it):
+Their argument seems to be "the missing fallthrough has no effect".
 
-https://lore.kernel.org/kvm/20240905-kvm-x86-avoid-clang-implicit-fallthrough-v1-1-f2e785f1aa45@kernel.org/
+Which is true.
 
-> We definitely enable -Wimplicit-fallthrough on gcc too, but apparently
-> it's not functional: falling through to a "break" statement seems to
-> not warn with gcc. Which is nonsensical, but whatever.
+But they seem to be missing that it has no effect *NOW*.
 
-This was brought up to GCC at one point and they considered its current
-behavior as working as intended from my understanding:
+One major problem case is that people tend to add new cases to the end
+of a switch() statement, not counting that final "default: break".
 
-https://gcc.gnu.org/bugzilla/show_bug.cgi?id=91432
+So the "it doesn't have any effect NOW" is true, but the next time
+somebody edits that and doesn't check warnings, it *will* have very
+strange behavior, and it won't be affecting the newly added case, but
+some entirely unrelated previous case.
 
-Cheers,
-Nathan
+So I really think the lack of warnings is a gcc mis-feature. It leaves
+code in a bad situation going forward.
+
+Oh well.  Many times I have had to disable warnings entirely because
+they have too many false positives, so I guess the occasional "doesn't
+warn enough" is still a better problem to have.
+
+And at least we have (a) clang warning about it and (b) require the
+warnings going forward and use -Werror, so at least for the kernel the
+"when somebody edits that code, you get surprising behavior" case
+_will_ get noticed.
+
+                 Linus
