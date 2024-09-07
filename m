@@ -1,55 +1,55 @@
-Received: from mail-ej1-f50.google.com (mail-ej1-f50.google.com [209.85.218.50])
+Received: from mail-ej1-f52.google.com (mail-ej1-f52.google.com [209.85.218.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E8A51BC23
-	for <llvm@lists.linux.dev>; Sat,  7 Sep 2024 09:28:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F29F9266AB
+	for <llvm@lists.linux.dev>; Sat,  7 Sep 2024 09:32:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725701300; cv=none; b=n0QM6+95Tci7VF+tmqdb7OVvm529Nu6X18bqfMMsFA144cnzzs8Ats4VNpDH2Xk6autLQ4vLv1eezhUYNmz1pPc7a2hERpDoK5ocvOCNRKipapxUIv+I0x1VB02KgpXmblneg63MYYj9dQfoZ03dk3/jIsjQ8caaKPwdUW/p1u4=
+	t=1725701571; cv=none; b=iYZF69tgMjsCe+hXbUAaQ5ufmN2Dx2w34sm1Bhdb/s/WO72wxFaJcLlopbVv6J6l9ENTqL3/KG/9Os6LSQDgKa+7hwbLRxdKhzAU3irwd3/vwn/oVrIgfchZVLnUbjQJVqDfhD6WPj4P1I1KSDeqDzz8hgwzd19xSWqh+fdCnD8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725701300; c=relaxed/simple;
-	bh=lbf9xF8T6QLgnvYifItrn1rqxgvbvmSNipCKwXxHqRw=;
+	s=arc-20240116; t=1725701571; c=relaxed/simple;
+	bh=pLRCLThgiNm0DnTCnzf1SU7HK+Xdrn0HCAQw1/fv6eE=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=qFIbJvOb1Qrm3Lvb/R3+eLzQq7n0p5rsEAHMbqVDhs8qL3g7KGDrkIjaxlDvMpGI2XttKAHPXYJGe/VCHOLEEPShorlZCwiECNeeKtE/UwR0ulahFLJPYrwQ0gaHKY6wcSWhTSjXkq/9CkZRNOfuJvjOanIRNcWpbFXuZHry9+Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kruces.com; spf=pass smtp.mailfrom=kruces.com; dkim=pass (2048-bit key) header.d=kruces-com.20230601.gappssmtp.com header.i=@kruces-com.20230601.gappssmtp.com header.b=ZtY9swzQ; arc=none smtp.client-ip=209.85.218.50
+	 To:Cc:Content-Type; b=paTYpZ5pVU4ZpcPPY81YO9rRvYHLLkrQUQ+xt4h8pg8D2Zx5lBRoDkGVJW2cCsQRqAOXzlCKvCoXmWuQ43+gF4WPbfhEdg9Z0RsY2p3A0lXy19rd8cRcD9UunF4yg6+t1oOBOfITj5hEkev6oMgmtf9GKUdMKXT8y4dbIpnXwH4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kruces.com; spf=pass smtp.mailfrom=kruces.com; dkim=pass (2048-bit key) header.d=kruces-com.20230601.gappssmtp.com header.i=@kruces-com.20230601.gappssmtp.com header.b=W167v78T; arc=none smtp.client-ip=209.85.218.52
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kruces.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kruces.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kruces-com.20230601.gappssmtp.com header.i=@kruces-com.20230601.gappssmtp.com header.b="ZtY9swzQ"
-Received: by mail-ej1-f50.google.com with SMTP id a640c23a62f3a-a8a7929fd64so316229866b.0
-        for <llvm@lists.linux.dev>; Sat, 07 Sep 2024 02:28:17 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kruces-com.20230601.gappssmtp.com header.i=@kruces-com.20230601.gappssmtp.com header.b="W167v78T"
+Received: by mail-ej1-f52.google.com with SMTP id a640c23a62f3a-a8a897bd4f1so209835366b.3
+        for <llvm@lists.linux.dev>; Sat, 07 Sep 2024 02:32:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kruces-com.20230601.gappssmtp.com; s=20230601; t=1725701296; x=1726306096; darn=lists.linux.dev;
+        d=kruces-com.20230601.gappssmtp.com; s=20230601; t=1725701567; x=1726306367; darn=lists.linux.dev;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=mLjcQZPs76go0Vfx5eTZL9J6PO34NT3+t7m9ovsvig4=;
-        b=ZtY9swzQEbhov2+1MsYTMbDz8c11ISME8lIaR2e3Yi0QoKKpKI6f+ih2eBesSrLhtu
-         8jC+lP2HNIbOABOYbHve6k8IFQBL3W8Mft5wZmuUJSOIuOMGAjXJhVg0XXX7AG4HPlOH
-         tti+xIscogYvVNAJZ6PUYmRmSEoL63WL4QS591g/CLrByswHcSxE1qGp+p6Mdr4OW0oW
-         z4l381INc+fZNywElldE0NyIquP6DSwW5O157LZ4FWx7mtFAOkZnrf3ofCFrM2RHOqld
-         BlwVDbwKVDIBOHC+0+unv3YG1FYURNfy/rym278SXxReqOm/jPWrU/QmziAHrAuvtLbB
-         DAlQ==
+        bh=TYAYDwYU9XEQd7B0n4GlUaSi+kByWiSIqgApWZK2k7Y=;
+        b=W167v78TzEDNd9PPqwingbRuLqqFXwWxbtiwOdS7OOcKkXOQiATvCfRGx9jtZrupbo
+         xhU5JGCga0MysvsxNO+9zZKspcRj2BXrmD6w+FhCzrT27paqW1SdpsAyEaNrdLG02yhR
+         trQaDSwm1yinBldj0CUlnUmDItLAUhHhAxi+5pFhydyEgb/rUDATahkbbQ7At2wVTlDt
+         1yYA7540gE6SFYq4yIWsG1dWs1VsKdHrF/PfhBrJGmqNaRxXZzuvUwzX5L2y3vwrVvyu
+         gfKQpYLwwv7jC1yu5vDw/6JScBRkTIASzi1w8ZVM7ZRtYrTkSEdSxKYzdx3T3vggKZFT
+         KLAg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1725701296; x=1726306096;
+        d=1e100.net; s=20230601; t=1725701567; x=1726306367;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=mLjcQZPs76go0Vfx5eTZL9J6PO34NT3+t7m9ovsvig4=;
-        b=r6AsoHOo0zx2EAUro22kBZ4WuHbSoCLsYnS00CgUqpAmBfOnpd+7G1SO2PXX+qpKeg
-         qZM44h7AGRhFX3qvzEj5ULVJ7+RO3ivrAMkoCGVcZHb7OLzrsk6XC4aUZb2qHYlS2gZD
-         yQur9vdWA9Q4WiF7c+KnKTXUqTFaMtws0+Pf8DrJcW20bak5hSSClqAFN8WpbLFIzfQ/
-         JoNvXIB4zUsCM4XAOkbfsmRN2Ch+x17SYPEG0W14Aw9lYbhHT+LmVyedrc/IbXBB48Ms
-         qxK1A3lX4TG6gybpaXY5gR3hGL3ADdWQ/RKrLsyfx0qp5/zmEsnEF/5gFe2DO6MqywxX
-         ppKg==
-X-Forwarded-Encrypted: i=1; AJvYcCUDBEM7ikUcr5c0rWKbRoXmPCiixps32hU7pVU2mC2ZqPKkca0qtL0cs8X3s1L6Au4JEIvg@lists.linux.dev
-X-Gm-Message-State: AOJu0YwHyl7noLyzbB8nyeOlx+67exhwfnrdNieoJdBC6XllcPIvGpPW
-	hT+YaFKqOi51XsH6kBvTksSd5sftC6bUrlcBaDFjEd2hCdtvcqPQZJqiYmpCKyOGjT+GLNvRpPc
-	9HBp8KDB/BMwXyev7n7BHXSyrFi1zepkhPazyKg==
-X-Google-Smtp-Source: AGHT+IHhXXnbhoNhhw+Ovt49rejZC3sVAmWR3HQdOoxj8Eoar6lFd6KvmW+TQT/o1AMvFsui8ZDqx+Trbs/ZtjaLt7Y=
-X-Received: by 2002:a17:906:730a:b0:a86:721d:3021 with SMTP id
- a640c23a62f3a-a8a885faa78mr441611866b.24.1725701295453; Sat, 07 Sep 2024
- 02:28:15 -0700 (PDT)
+        bh=TYAYDwYU9XEQd7B0n4GlUaSi+kByWiSIqgApWZK2k7Y=;
+        b=CSOo/ASWzMeY5pwPjjm9e8YaRLqhJwdqSeU7+h+GQJgUSagX12v5Ny4I+GcBXmderU
+         /bSppkjPhcRxEg7CG23QtuEeQJ+VvaX7TqZCHx0QMP0c0aU1JjsM9C2WI3WhCmIsw8By
+         p087LAJgddLk1M78d7CRhjREZiO12WFvS+l5/s9feRXBZINoJ2rEZsyoZ1rRVu7AonH4
+         b8jX0ryND3wRNAFP4bTYECvRBh2Uj6RihjF2i3acFwVse1uFRu3AUis99GdDUFuezu36
+         VQfpaaNX6ovYolZJq64RyAIW3xVBAwdbcS9GGCGolQlMG906HMulyHESnApr2ZexJKxR
+         +IyA==
+X-Forwarded-Encrypted: i=1; AJvYcCUmQK5QNb7vPERxc90EFFAe0FOHJYlupggKGMcJGIf3vVfe/RzJ8OtDQLRpoPsQDihrjGTa@lists.linux.dev
+X-Gm-Message-State: AOJu0Ywu1FyFiDP/xwujmbp/o6savokdj3A2fxL3qT0RyqYR/XnokA0f
+	V7pLa9aJBIDid2BxDV9iX9pV2iifA6xsSdtJrZGFswQo4Gblw91tyAWIlfoC8oUu2A2qnLmaiRX
+	0+OL1Il7Ua6Y5lWZY5P56VXAfflROyz5W7esTiQ==
+X-Google-Smtp-Source: AGHT+IGWwhV1FppouK54v3V9A8eHwS6rbK0nonXkKqq2rXZ9hT6w4qHPiZkVwNteqV+2HfQ53hj21jvfFLgYyvqTkhg=
+X-Received: by 2002:a17:906:6a15:b0:a7a:9144:e23a with SMTP id
+ a640c23a62f3a-a8d248a6d5fmr79801166b.43.1725701567219; Sat, 07 Sep 2024
+ 02:32:47 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -57,12 +57,12 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 References: <20240906-macos-build-support-v2-0-06beff418848@samsung.com>
- <20240906-macos-build-support-v2-4-06beff418848@samsung.com> <CAK7LNARTnJ10ABuD96U-MaYitnX3AF=GD+N-skH7VBfAmOw9RQ@mail.gmail.com>
-In-Reply-To: <CAK7LNARTnJ10ABuD96U-MaYitnX3AF=GD+N-skH7VBfAmOw9RQ@mail.gmail.com>
+ <20240906-macos-build-support-v2-8-06beff418848@samsung.com> <CAK7LNASpWSXbjF_7n0MhosNism=BpvHOnKsa344RPM_wmC9dGA@mail.gmail.com>
+In-Reply-To: <CAK7LNASpWSXbjF_7n0MhosNism=BpvHOnKsa344RPM_wmC9dGA@mail.gmail.com>
 From: "Daniel Gomez (Samsung)" <d+samsung@kruces.com>
-Date: Sat, 7 Sep 2024 11:27:49 +0200
-Message-ID: <CABj0suDiPf0ySOwQx=6k+6bTZqRmq1+tjPx7=dxSTO5DVqO4nQ@mail.gmail.com>
-Subject: Re: [PATCH v2 4/8] arm64: nvhe: add bee-headers support
+Date: Sat, 7 Sep 2024 11:32:20 +0200
+Message-ID: <CABj0suBQCc8=0tLng=OWW=K1hjFuLFZWhbjsqHtz2FzZt4i0sw@mail.gmail.com>
+Subject: Re: [PATCH v2 8/8] Documentation: add howto build in macos
 To: Masahiro Yamada <masahiroy@kernel.org>
 Cc: da.gomez@samsung.com, Nathan Chancellor <nathan@kernel.org>, 
 	Nicolas Schier <nicolas@fjasle.eu>, Lucas De Marchi <lucas.demarchi@intel.com>, 
@@ -88,122 +88,143 @@ Cc: da.gomez@samsung.com, Nathan Chancellor <nathan@kernel.org>,
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Fri, Sep 6, 2024 at 4:03=E2=80=AFPM Masahiro Yamada <masahiroy@kernel.or=
-g> wrote:
+On Sat, Sep 7, 2024 at 10:33=E2=80=AFAM Masahiro Yamada <masahiroy@kernel.o=
+rg> wrote:
 >
 > On Fri, Sep 6, 2024 at 8:01=E2=80=AFPM Daniel Gomez via B4 Relay
 > <devnull+da.gomez.samsung.com@kernel.org> wrote:
 > >
 > > From: Daniel Gomez <da.gomez@samsung.com>
 > >
-> > endian.h header is not provided by default in macOS. Use pkg-config wit=
-h
-> > the new development package 'bee-headers' [1] to find the path where th=
-e
-> > headers are installed.
-> >
-> > [1] Bee Headers Project links:
-> > https://github.com/bee-headers/headers
-> > https://github.com/bee-headers/homebrew-bee-headers
-> >
-> > It requires to install bee-headers Homebrew Tap:
-> >
-> >   brew tap bee-headers/bee-headers
-> >   brew install bee-headers/bee-headers/bee-headers
+> > Add documentation under kbuild/llvm to inform about the experimental
+> > support for building the Linux kernel in macOS hosts environments.
 > >
 > > Signed-off-by: Daniel Gomez <da.gomez@samsung.com>
+>
+>
+> Instead, you can add this instruction to:
+>
+> https://github.com/bee-headers/homebrew-bee-headers/blob/main/README.md
+
+Sure, that can be done as well. But the effort here is to have this
+integrated. So, I think documentation should be in-tree.
+
+>
+>
+>
+>
+>
 > > ---
-> >  arch/arm64/kernel/pi/Makefile     | 1 +
-> >  arch/arm64/kernel/vdso32/Makefile | 1 +
-> >  arch/arm64/kvm/hyp/nvhe/Makefile  | 3 ++-
-> >  3 files changed, 4 insertions(+), 1 deletion(-)
+> >  Documentation/kbuild/llvm.rst | 78 +++++++++++++++++++++++++++++++++++=
+++++++++
+> >  1 file changed, 78 insertions(+)
 > >
-> > diff --git a/arch/arm64/kernel/pi/Makefile b/arch/arm64/kernel/pi/Makef=
-ile
-> > index 4d11a8c29181..259c9a45fba0 100644
-> > --- a/arch/arm64/kernel/pi/Makefile
-> > +++ b/arch/arm64/kernel/pi/Makefile
-> > @@ -20,6 +20,7 @@ KBUILD_CFLAGS :=3D $(filter-out $(CC_FLAGS_SCS), $(KB=
-UILD_CFLAGS))
-> >  KBUILD_CFLAGS  :=3D $(filter-out $(CC_FLAGS_LTO), $(KBUILD_CFLAGS))
+> > diff --git a/Documentation/kbuild/llvm.rst b/Documentation/kbuild/llvm.=
+rst
+> > index 6dc66b4f31a7..de3bde925793 100644
+> > --- a/Documentation/kbuild/llvm.rst
+> > +++ b/Documentation/kbuild/llvm.rst
+> > @@ -186,6 +186,84 @@ yet. Bug reports are always welcome at the issue t=
+racker below!
+> >       - Supported
+> >       - ``LLVM=3D1``
 > >
-> >  hostprogs      :=3D relacheck
-> > +HOSTCFLAGS_relacheck.o =3D $(shell $(HOSTPKG_CONFIG) --cflags bee-head=
-ers 2> /dev/null)
+> > +Experimental Build in macOS
+> > +---------------------------
+> > +
+> > +Building on macOS with LLVM is experimental. This section provides ste=
+ps to
+> > +install dependencies via Homebrew, set up the environment, and start t=
+he build
+> > +process.
+> > +
+> > +1. **Create a Case-Sensitive Volume**
+> > +
+> > +   For fetching and building the project, you need a case-sensitive vo=
+lume. Use the following
+> > +   command to create one:
+> > +
+> > +   .. code-block:: shell
+> > +
+> > +      diskutil apfs addVolume /dev/disk<N> "Case-sensitive APFS" linux
+> > +
+> > +   Replace `/dev/disk<N>` with the appropriate disk identifier.
+> > +
+> > +2. **Install Build Dependencies**
+> > +
+> > +Use Homebrew to install the required build dependencies.
+> > +
+> > +- **Core Utilities**: `coreutils`, `findutils`, `gnu-sed`, `gnu-tar`, =
+`grep`,
+> > +  `llvm`, `make`, and `pkg-config`.
+> > +
+> > +   .. code-block:: shell
+> > +
+> > +      brew install coreutils findutils gnu-sed gnu-tar grep llvm make =
+pkg-config
+> > +
+> > +- **Bee Headers**: Install byteswap, elf and endian headers using the
+> > +  `Bee Headers Project <https://github.com/bee-headers/headers>`_.
+> > +
+> > +   .. code-block:: shell
+> > +
+> > +      brew tap bee-headers/bee-headers
+> > +      brew install bee-headers/bee-headers/bee-headers
+> > +
+> > +   After installation, verify the `CFLAGS` with `pkg-config`:
+> > +
+> > +   .. code-block:: shell
+> > +
+> > +      pkg-config --cflags bee-headers
+> > +      -I/opt/homebrew/Cellar/bee-headers/0.1/include
+> > +
+> > +3. **Configure the PATH**
+> > +
+> > +   Include all the required GNU tools and LLVM in your `PATH`. This en=
+sures that
+> > +   the necessary tools are available during the build process.
+> > +
+> > +   .. code-block:: shell
+> > +
+> > +      PATH=3D"/opt/homebrew/opt/coreutils/libexec/gnubin:$PATH"
+> > +      PATH=3D"/opt/homebrew/opt/findutils/libexec/gnubin:$PATH"
+> > +      PATH=3D"/opt/homebrew/opt/gnu-sed/libexec/gnubin:$PATH"
+> > +      PATH=3D"/opt/homebrew/opt/gnu-tar/libexec/gnubin:$PATH"
+> > +      PATH=3D"/opt/homebrew/opt/grep/libexec/gnubin:$PATH"
+> > +      PATH=3D"/opt/homebrew/opt/make/libexec/gnubin:$PATH"
+> > +      PATH=3D"/opt/homebrew/opt/llvm/bin:$PATH"
+> > +
+> > +Building the Project
+> > +--------------------
+> > +
+> > +Once the environment is set up, you can start the build process using =
+LLVM. Run
+> > +the following commands to initiate the build:
+> > +
+> > +.. code-block:: shell
+> > +
+> > +   make LLVM=3D1 allyesconfig
+> > +   make LLVM=3D1 -j$(nproc)
+> > +
+> > +Supported in macOS
+> > +~~~~~~~~~~~~~~~~~~
+> > +
+> > +At the moment, only arm64 is supported and tested with `allyesconfig` =
+Makefile
+> > +configuration target. Other Kconfig options not included in `allyescon=
+fig`
+> > +target and architectures may be supported as well as support in macOS =
+is based
+> > +on LLVM effort and maintenance.
+> > +
+> >  Getting Help
+> >  ------------
 > >
-> >  quiet_cmd_piobjcopy =3D $(quiet_cmd_objcopy)
-> >        cmd_piobjcopy =3D $(cmd_objcopy) && $(obj)/relacheck $(@) $(<)
-> > diff --git a/arch/arm64/kernel/vdso32/Makefile b/arch/arm64/kernel/vdso=
-32/Makefile
-> > index 25a2cb6317f3..6cb8a04bd829 100644
-> > --- a/arch/arm64/kernel/vdso32/Makefile
-> > +++ b/arch/arm64/kernel/vdso32/Makefile
-> > @@ -107,6 +107,7 @@ VDSO_LDFLAGS +=3D --orphan-handling=3D$(CONFIG_LD_O=
-RPHAN_WARN_LEVEL)
-> >  # $(hostprogs) with $(obj)
-> >  munge :=3D ../../../arm/vdso/vdsomunge
-> >  hostprogs :=3D $(munge)
-> > +HOSTCFLAGS_$(munge).o =3D $(shell $(HOSTPKG_CONFIG) --cflags bee-heade=
-rs 2> /dev/null)
-> >
-> >  c-obj-vdso :=3D note.o
-> >  c-obj-vdso-gettimeofday :=3D vgettimeofday.o
-> > diff --git a/arch/arm64/kvm/hyp/nvhe/Makefile b/arch/arm64/kvm/hyp/nvhe=
-/Makefile
-> > index b43426a493df..d20a440b6964 100644
-> > --- a/arch/arm64/kvm/hyp/nvhe/Makefile
-> > +++ b/arch/arm64/kvm/hyp/nvhe/Makefile
-> > @@ -15,7 +15,8 @@ ccflags-y +=3D -fno-stack-protector     \
-> >              $(DISABLE_STACKLEAK_PLUGIN)
-> >
-> >  hostprogs :=3D gen-hyprel
-> > -HOST_EXTRACFLAGS +=3D -I$(objtree)/include
-> > +HOST_EXTRACFLAGS +=3D -I$(objtree)/include \
-> > +       $(shell $(HOSTPKG_CONFIG) --cflags bee-headers 2> /dev/null)
-> >
-> >  lib-objs :=3D clear_page.o copy_page.o memcpy.o memset.o
-> >  lib-objs :=3D $(addprefix ../../../lib/, $(lib-objs))
 > >
 > > --
 > > 2.46.0
 > >
 > >
->
-> NACK.
->
-> Developers working on Linux distributions have no interest
-> in your homebrew setup.
->
-> For 99% of users, pkg-config does not do anything good.
-> It is a waste of process forks.
-
-I didn't think of this, and I agree with you.
-
->
->
->
-> You need to do it outside.
->
->
->  $ HOSTCFLAGS=3D$(pkg-config --cflags bee-headers) make
->
-> or
->
->  $ export HOSTCFLAGS=3D$(pkg-config --cflags bee-headers)
->  $ make
-
-Would a Makefile variable be suitable for this use case to make it
-easier in the command-line?
-
-We can detect we are in a non-linux based environment and enable a
-Makefile <VAR> (e.g., NOLINUX=3D1) and handle the NOLINUX build case
-(with pkg-config/bee-headers) inside the Makefiles for these non-linux
-cases.
-
-
->
->
->
 >
 >
 > --
