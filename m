@@ -1,63 +1,65 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8030F282FA;
-	Sat,  7 Sep 2024 20:16:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D0DB15E5D4;
+	Sat,  7 Sep 2024 21:49:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725740198; cv=none; b=iO3pzq83JYXJnDoOYKu7DchqH45n4ze/4qeJIC3XtP34U1N4M7rrUbqryjViZJe89X2uCrZQzaGBEZ5ewh8yWzPjJHz9LW5kltjwvFYZn1Nboj3ek+OH05qMhaP+FmugsqfHnvinnn/TYXBR9QpDF2dvJbRDkRKABMsstD1fFcA=
+	t=1725745772; cv=none; b=SWFGh74rLHYeM8HoYkrOqqaSnvXnTCdGpVEgvCT4mJ4TVdYFuHkyVoExETzYOEe6yHgugtVuKQNSIbvVSgC2M0HfzpOTWxsjvGDhh9bWRgBBouP7nT70CMaEZ1nEcXs7BFEmHWlAcMgwHQfzVarzeEKqRouYntSOG1xx7rjEkvY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725740198; c=relaxed/simple;
-	bh=WMVQMzLE9Xqb8q7ZuUfOhRebecLvcZqfXpcB1wDdFrE=;
+	s=arc-20240116; t=1725745772; c=relaxed/simple;
+	bh=kGaVm3ajfEzbqOzJXpCQSZ0xPnHjlIg/FyJWIUkrZgI=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=cWVvGOFdAVQhqevtWL6WLcrGlzrlkeBx9dkXDurjkPzLnBPzIYu7j5MYEAhEfBTrb7RxzONpvTB9xBUdTmoS0c/zYT/WWUvlcjAxOLnHi/yt+QBOaCU5049GwqPohr+tkyjqoaqFS7qMNmJI5IWH0rxeTiLhnaVbgykFQzHtp+4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=WeJ8XttG; arc=none smtp.client-ip=192.198.163.16
+	 Content-Type:Content-Disposition:In-Reply-To; b=b3vEseJiJdByBCoTnSZTl18DH6pqVXiP40fDYPsnZKJVBJ29QxMCPW6NGGXYJtUYSxmse051RJ4jUOipe+cBD10fQzi2keqg/JXeIkn4u2x7OvkDqKvyGgUxk/wsJe3oTa1vVbO1GhAxxaAzPx8yhgcWjrDVSRW9uxmqnFnByf4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=lqm+HT4y; arc=none smtp.client-ip=192.198.163.7
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="WeJ8XttG"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="lqm+HT4y"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1725740196; x=1757276196;
+  t=1725745771; x=1757281771;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=WMVQMzLE9Xqb8q7ZuUfOhRebecLvcZqfXpcB1wDdFrE=;
-  b=WeJ8XttGHQy+tkbuJ6/7M45+lm5PPBxFGU67O0E4/AmF87/2+p78ZWNt
-   YDXqv2IK906rJxSI1VVxsT49rELPyUDMGRtHrTDWgfJX2fTdPsOtCfWn1
-   4oPBCy69fpPJ+aFNjYJe1iKDT5uA9wWhNZ3NaDboo3vUeHdtS8iMwhiKR
-   uKFls7ftOBN4XbwzbpX/QX9Zc7HxH6+kDZ4gK2L99vzrE0xv2Us9hNABo
-   +tXnmT+iWrzmL4IuRF/EtBavt2afwHH242c2ewYwiyUzIAFKo6obBZnrw
-   RB8n9GAwxkHvcpKcJ1fJRg6RQg6T5whwqrrti4W7eij5LJa1wmWyq2MCl
-   A==;
-X-CSE-ConnectionGUID: 9tlgqQo3Tn2RKYtwCtIqaw==
-X-CSE-MsgGUID: 9IuC07RNRiij46h/944i9Q==
-X-IronPort-AV: E=McAfee;i="6700,10204,11188"; a="13424234"
+  bh=kGaVm3ajfEzbqOzJXpCQSZ0xPnHjlIg/FyJWIUkrZgI=;
+  b=lqm+HT4yLseil/MVXz+aY4aW3odEhIFy8XHnn83fstH9FfOeaw9+/AKA
+   87BlS9xPNglOu7r8ED2v3WF/cmi627ZBhPI9EvjLYvYKgtMq8sk8Zr2TK
+   o/QTHzTdviWiBxGfPSKOSc0YBlBvW/Wx6Iq0LuTwMR+q5SZ3/jU3CfJnj
+   j0evnV5mXW//SnELBT9rjo65g8V3Z2gjzHsyvK3nfknb2vVYRXA5gdcKA
+   oSLI9302lD4P+PHKRnr21yD9n4raum34+b0+NF4dV+fihys/Hrmdbgo8j
+   Bl6nkuNP4TrzPgICXDOnYXOJfIsFbC9KSmyeFfkISttztGgFZqd6QLOkA
+   g==;
+X-CSE-ConnectionGUID: CxnHZUkNRAuzWTrhjhhuxQ==
+X-CSE-MsgGUID: ek+IeRgfTV6nGO1V2wdKIA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11188"; a="49887695"
 X-IronPort-AV: E=Sophos;i="6.10,211,1719903600"; 
-   d="scan'208";a="13424234"
-Received: from orviesa003.jf.intel.com ([10.64.159.143])
-  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Sep 2024 13:16:35 -0700
-X-CSE-ConnectionGUID: sB+7M0u9T22JZWBAuo/AcQ==
-X-CSE-MsgGUID: PaXA9fJ2SUSKXdN51vEzzA==
+   d="scan'208";a="49887695"
+Received: from fmviesa009.fm.intel.com ([10.60.135.149])
+  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Sep 2024 14:49:31 -0700
+X-CSE-ConnectionGUID: owogG1gmQQqW1koiWTIJUQ==
+X-CSE-MsgGUID: h8xLWRGPTOqAG0/Losp03w==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.10,211,1719903600"; 
-   d="scan'208";a="71055438"
+   d="scan'208";a="66276962"
 Received: from lkp-server01.sh.intel.com (HELO 9c6b1c7d3b50) ([10.239.97.150])
-  by orviesa003.jf.intel.com with ESMTP; 07 Sep 2024 13:16:34 -0700
+  by fmviesa009.fm.intel.com with ESMTP; 07 Sep 2024 14:49:28 -0700
 Received: from kbuild by 9c6b1c7d3b50 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1sn1rD-000Cxv-0p;
-	Sat, 07 Sep 2024 20:16:31 +0000
-Date: Sun, 8 Sep 2024 04:16:02 +0800
+	id 1sn3J7-000D2G-2z;
+	Sat, 07 Sep 2024 21:49:25 +0000
+Date: Sun, 8 Sep 2024 05:49:12 +0800
 From: kernel test robot <lkp@intel.com>
-To: Vasileios Amoiridis <vassilisamir@gmail.com>, robh@kernel.org,
-	saravanak@google.com, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org
+To: Rohit Chavan <roheetchavan@gmail.com>,
+	Johannes Berg <johannes@sipsolutions.net>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	linux-wireless@vger.kernel.org, linux-kernel@vger.kernel.org
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	andriy.shevchenko@linux.intel.com,
-	Vasileios Amoiridis <vassilisamir@gmail.com>
-Subject: Re: [PATCH v2 2/2] of/irq: Use helper to define resources
-Message-ID: <202409080407.JLfgI8Fr-lkp@intel.com>
-References: <20240904160239.121301-3-vassilisamir@gmail.com>
+	netdev@vger.kernel.org, Rohit Chavan <roheetchavan@gmail.com>
+Subject: Re: [PATCH] lib80211: Use ERR_CAST() to return
+Message-ID: <202409080536.stm6x1AU-lkp@intel.com>
+References: <20240906114455.730559-1-roheetchavan@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -66,79 +68,120 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240904160239.121301-3-vassilisamir@gmail.com>
+In-Reply-To: <20240906114455.730559-1-roheetchavan@gmail.com>
 
-Hi Vasileios,
+Hi Rohit,
 
 kernel test robot noticed the following build errors:
 
-[auto build test ERROR on ecc768a84f0b8e631986f9ade3118fa37852fef0]
+[auto build test ERROR on wireless-next/main]
+[also build test ERROR on wireless/main linus/master v6.11-rc6 next-20240906]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Vasileios-Amoiridis/of-irq-Make-use-of-irq_get_trigger_type/20240905-000607
-base:   ecc768a84f0b8e631986f9ade3118fa37852fef0
-patch link:    https://lore.kernel.org/r/20240904160239.121301-3-vassilisamir%40gmail.com
-patch subject: [PATCH v2 2/2] of/irq: Use helper to define resources
-config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20240908/202409080407.JLfgI8Fr-lkp@intel.com/config)
-compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240908/202409080407.JLfgI8Fr-lkp@intel.com/reproduce)
+url:    https://github.com/intel-lab-lkp/linux/commits/Rohit-Chavan/lib80211-Use-ERR_CAST-to-return/20240906-194721
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/wireless/wireless-next.git main
+patch link:    https://lore.kernel.org/r/20240906114455.730559-1-roheetchavan%40gmail.com
+patch subject: [PATCH] lib80211: Use ERR_CAST() to return
+config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20240908/202409080536.stm6x1AU-lkp@intel.com/config)
+compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 05f5a91d00b02f4369f46d076411c700755ae041)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240908/202409080536.stm6x1AU-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202409080407.JLfgI8Fr-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202409080536.stm6x1AU-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> drivers/of/irq.c:432:71: error: expected ';' after expression
-     432 |                 *r = DEFINE_RES_IRQ_NAMED(irq, name ? name : of_node_full_name(dev))
-         |                                                                                     ^
-         |                                                                                     ;
-   1 error generated.
+   In file included from net/wireless/lib80211.c:21:
+   In file included from include/linux/ieee80211.h:19:
+   In file included from include/linux/if_ether.h:19:
+   In file included from include/linux/skbuff.h:17:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:10:
+   In file included from include/linux/mm.h:2228:
+   include/linux/vmstat.h:517:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     517 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+   In file included from net/wireless/lib80211.c:21:
+   In file included from include/linux/ieee80211.h:19:
+   In file included from include/linux/if_ether.h:19:
+   In file included from include/linux/skbuff.h:17:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:12:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:14:
+   In file included from arch/hexagon/include/asm/io.h:328:
+   include/asm-generic/io.h:548:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     548 |         val = __raw_readb(PCI_IOBASE + addr);
+         |                           ~~~~~~~~~~ ^
+   include/asm-generic/io.h:561:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     561 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
+      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
+         |                                                   ^
+   In file included from net/wireless/lib80211.c:21:
+   In file included from include/linux/ieee80211.h:19:
+   In file included from include/linux/if_ether.h:19:
+   In file included from include/linux/skbuff.h:17:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:12:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:14:
+   In file included from arch/hexagon/include/asm/io.h:328:
+   include/asm-generic/io.h:574:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     574 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
+      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
+         |                                                   ^
+   In file included from net/wireless/lib80211.c:21:
+   In file included from include/linux/ieee80211.h:19:
+   In file included from include/linux/if_ether.h:19:
+   In file included from include/linux/skbuff.h:17:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:12:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:14:
+   In file included from arch/hexagon/include/asm/io.h:328:
+   include/asm-generic/io.h:585:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     585 |         __raw_writeb(value, PCI_IOBASE + addr);
+         |                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:595:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     595 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:605:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     605 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+>> net/wireless/lib80211.c:230:18: error: incompatible integer to pointer conversion passing 'int' to parameter of type 'const void *' [-Wint-conversion]
+     230 |         return ERR_CAST(1);
+         |                         ^
+   include/linux/err.h:82:64: note: passing argument to parameter 'ptr' here
+      82 | static inline void * __must_check ERR_CAST(__force const void *ptr)
+         |                                                                ^
+   7 warnings and 1 error generated.
 
-Kconfig warnings: (for reference only)
-   WARNING: unmet direct dependencies detected for OMAP2PLUS_MBOX
-   Depends on [n]: MAILBOX [=y] && (ARCH_OMAP2PLUS || ARCH_K3)
-   Selected by [y]:
-   - TI_K3_M4_REMOTEPROC [=y] && REMOTEPROC [=y] && (ARCH_K3 || COMPILE_TEST [=y])
 
+vim +230 net/wireless/lib80211.c
 
-vim +432 drivers/of/irq.c
-
-   405	
-   406	/**
-   407	 * of_irq_to_resource - Decode a node's IRQ and return it as a resource
-   408	 * @dev: pointer to device tree node
-   409	 * @index: zero-based index of the irq
-   410	 * @r: pointer to resource structure to return result into.
-   411	 */
-   412	int of_irq_to_resource(struct device_node *dev, int index, struct resource *r)
-   413	{
-   414		int irq = of_irq_get(dev, index);
-   415	
-   416		if (irq < 0)
-   417			return irq;
-   418	
-   419		/* Only dereference the resource if both the
-   420		 * resource and the irq are valid. */
-   421		if (r && irq) {
-   422			const char *name = NULL;
-   423	
-   424			memset(r, 0, sizeof(*r));
-   425			/*
-   426			 * Get optional "interrupt-names" property to add a name
-   427			 * to the resource.
-   428			 */
-   429			of_property_read_string_index(dev, "interrupt-names", index,
-   430						      &name);
-   431	
- > 432			*r = DEFINE_RES_IRQ_NAMED(irq, name ? name : of_node_full_name(dev))
-   433			r->flags |= irq_get_trigger_type(irq);
-   434		}
-   435	
-   436		return irq;
-   437	}
-   438	EXPORT_SYMBOL_GPL(of_irq_to_resource);
-   439	
+   227	
+   228	static void *lib80211_crypt_null_init(int keyidx)
+   229	{
+ > 230		return ERR_CAST(1);
+   231	}
+   232	
 
 -- 
 0-DAY CI Kernel Test Service
