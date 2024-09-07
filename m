@@ -1,60 +1,65 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5799614EC5D;
-	Sat,  7 Sep 2024 18:41:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6CB0354652;
+	Sat,  7 Sep 2024 18:52:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725734483; cv=none; b=GAzyOJsjHlOoDRnlqwKG4M5dL52gYWCEN6SZ2MaMwnvL6wJrawGhZ4SrgIFcd6+e5L7veQit9apI3LGMVuIHmknWLPJUypjwzw1B0jB+rBnYbPMomNhkSrK4wxLBWvPFuHJNKf/sea21s/TOwop7ee66989nBZMsGoE+WTwcwps=
+	t=1725735146; cv=none; b=txXJxLav4pMOJNxnyst/z/1b8BPGBrP2bGgIMY8T7jiyfkI2Gbr7un1Of6QLeOdH2Xw63XS2z3+WJ8sPSM0SXkzaEs5Q+pk7BT10p17Wtc7YFWwB6KTUxGSG/4TsQ62DtGvF6CkHc5lpHHroNEyV8Dq7xiGBQo+aQ2qjB35pjnc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725734483; c=relaxed/simple;
-	bh=QzLPxJNpW0ummtXfm/a7SXko0h0avC25mylKyRU7lT8=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=RSRSb8ektpIQOMm8gluL+VzkSD+iA0x+74iYaUiWMGUi5o2/F5UIy1J+aS4MUmxNCRFn3b0GkPmpVv8zGr3UPOit31mg8i+ZgpEywpRUDsChRZQuVuN9K+qCw6OCmLDzcmN3jkL9k1aTVrpUR0uFfbTaim3/+LfkgZ0lKD1cRf8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=mXWaFZsn; arc=none smtp.client-ip=192.198.163.17
+	s=arc-20240116; t=1725735146; c=relaxed/simple;
+	bh=7kXAAak41bb4OA0mgBW08er5hKbpTDTK5zGHmAxffbE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=UKILsJv9ufEbI1bDKehR/Z8wnl57fRBBESqyVCx9016g05K6tRQ8j0UNL+EhHE529JzOb8kEzc/xjqMbQDfzFbjFq7cOubS10wdcy0vQMUvy+IOLbIhDyTaruqof4LS6wfgkCq+jZh51uDZBj+Ai8d8VI9auseFytF6HksNXLuM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=BETa9mBB; arc=none smtp.client-ip=198.175.65.10
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="mXWaFZsn"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="BETa9mBB"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1725734481; x=1757270481;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=QzLPxJNpW0ummtXfm/a7SXko0h0avC25mylKyRU7lT8=;
-  b=mXWaFZsnu3mwvX/13LaGRoQFz/z+LtclV56vcqEqkpXGpUTgPTyb5HOw
-   bfd3CWefp+SkPnBhm9UyAH4ynYOM0jV56odsNgBOl8HXizAVSe5kHhvXJ
-   kPX24TaPygg9zYa5s8agYM9GGDwy70jW9FJV+s7hkZs6wjPKkweWi+EaE
-   6SNaQPssuJO6G+zlZYh6ZUYgslgl30Ep9ekqytKzef2F9ihvS364JhCIk
-   uP9xnIIcRIFpdXTcDB1Cu191LADyXyzGT6XlqLjmPyja4FC8UpE4cucCM
-   ynHP1VdpQ4iS8vblVkALJmoR0jISG3JoVv3GuU/BVM9QrWtEy9t6NJMjm
-   A==;
-X-CSE-ConnectionGUID: 9KJXcz0JT4qTOw+8gRz8uQ==
-X-CSE-MsgGUID: 9g2BLALXRCqKIyOxb+2wmA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11188"; a="24345826"
+  t=1725735143; x=1757271143;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=7kXAAak41bb4OA0mgBW08er5hKbpTDTK5zGHmAxffbE=;
+  b=BETa9mBBKI2FvhTQoEzhcoLXZRRS4to8JIrm9qT9s6KlDquiv+WGnNY8
+   cJwTa0G0hqAMglS2xdhWXrfxaijBAkgMT64vmhSveJwLYnlOKFYMabrOh
+   MYN38Fjt0E+3glzcqY49Pcu6L9Mk+M6ORbPLoGB6UmsCuhhTs9J+bwiRG
+   6BOxppy2HLnJsIphXr8QJfLIBYQRwI0MzBJZsGEw8f9xrb4sDERzQAn/B
+   J8Eh5qaFrLuJi6TYHTDvJjG/QGAQE66lP4SDuAmYTdB5gk004lR+Zd4fN
+   APIeRffvMy8gl5l0N2YPBufITEhgpQN1BlHoxzwCGUm9FTMr80cMAfNIJ
+   w==;
+X-CSE-ConnectionGUID: 7nD5ePWXQGWhdWVdIkxSYw==
+X-CSE-MsgGUID: ey6PUI86TduBDyhfbQAiXQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11188"; a="41951151"
 X-IronPort-AV: E=Sophos;i="6.10,210,1719903600"; 
-   d="scan'208";a="24345826"
-Received: from fmviesa009.fm.intel.com ([10.60.135.149])
-  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Sep 2024 11:41:21 -0700
-X-CSE-ConnectionGUID: x5M4F/EDSsC4fViRyX95VA==
-X-CSE-MsgGUID: jinmvRcfQUaqNgf48CmYjA==
+   d="scan'208";a="41951151"
+Received: from orviesa010.jf.intel.com ([10.64.159.150])
+  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Sep 2024 11:52:23 -0700
+X-CSE-ConnectionGUID: DKht4rykTp25WAWqy2CtFw==
+X-CSE-MsgGUID: l7NNmD5fRdWILsvA1D185Q==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.10,210,1719903600"; 
-   d="scan'208";a="66239957"
+   d="scan'208";a="66048902"
 Received: from lkp-server01.sh.intel.com (HELO 9c6b1c7d3b50) ([10.239.97.150])
-  by fmviesa009.fm.intel.com with ESMTP; 07 Sep 2024 11:41:19 -0700
+  by orviesa010.jf.intel.com with ESMTP; 07 Sep 2024 11:52:20 -0700
 Received: from kbuild by 9c6b1c7d3b50 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1sn0N3-000CrP-1c;
-	Sat, 07 Sep 2024 18:41:17 +0000
-Date: Sun, 8 Sep 2024 02:40:55 +0800
+	id 1sn0Xh-000Crn-2r;
+	Sat, 07 Sep 2024 18:52:17 +0000
+Date: Sun, 8 Sep 2024 02:51:38 +0800
 From: kernel test robot <lkp@intel.com>
-To: Steve Jeong <how2soft@gmail.com>
+To: Riyan Dhiman <riyandhiman14@gmail.com>, jim2101024@gmail.com,
+	nsaenz@kernel.org, lorian.fainelli@broadcom.com,
+	bcm-kernel-feedback-list@broadcom.com, bhelgaas@google.com
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Dongjin Kim <tobetter@gmail.com>
-Subject: [tobetter:odroid-6.6.y 41/82] drivers/char/aml-gpiomem.c:129:22:
- error: call to undeclared function 'phys_mem_access_prot'; ISO C99 and later
- do not support implicit function declarations
-Message-ID: <202409080228.5faeeBw8-lkp@intel.com>
+	linux-pci@vger.kernel.org, linux-rpi-kernel@lists.infradead.org,
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+	Riyan Dhiman <riyandhiman14@gmail.com>
+Subject: Re: [PATCH next] PCI: brmstb: Fix type mismatch for num_inbound_wins
+ in brcm_pcie_setup()
+Message-ID: <202409080202.tevgFgI7-lkp@intel.com>
+References: <20240904161953.46790-2-riyandhiman14@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -63,122 +68,208 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20240904161953.46790-2-riyandhiman14@gmail.com>
 
-tree:   https://github.com/tobetter/linux odroid-6.6.y
-head:   c970a63609188f53cf758a3dcd395e777150a29a
-commit: 5e7a0fcf547e3b4f54e37972019abef8e78192a7 [41/82] ODROID-N2/C4: char: Add /dev/gpiomem device
-config: s390-randconfig-002-20240907 (https://download.01.org/0day-ci/archive/20240908/202409080228.5faeeBw8-lkp@intel.com/config)
-compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240908/202409080228.5faeeBw8-lkp@intel.com/reproduce)
+Hi Riyan,
+
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on next-20240904]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Riyan-Dhiman/PCI-brmstb-Fix-type-mismatch-for-num_inbound_wins-in-brcm_pcie_setup/20240905-002339
+base:   next-20240904
+patch link:    https://lore.kernel.org/r/20240904161953.46790-2-riyandhiman14%40gmail.com
+patch subject: [PATCH next] PCI: brmstb: Fix type mismatch for num_inbound_wins in brcm_pcie_setup()
+config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20240908/202409080202.tevgFgI7-lkp@intel.com/config)
+compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240908/202409080202.tevgFgI7-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202409080228.5faeeBw8-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202409080202.tevgFgI7-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
-   In file included from drivers/char/aml-gpiomem.c:55:
-   In file included from include/linux/io.h:13:
-   In file included from arch/s390/include/asm/io.h:78:
-   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __raw_readb(PCI_IOBASE + addr);
-                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
-   #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
-                                                             ^
-   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
-   #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
-                                                        ^
-   In file included from drivers/char/aml-gpiomem.c:55:
-   In file included from include/linux/io.h:13:
-   In file included from arch/s390/include/asm/io.h:78:
-   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
-   #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
-                                                             ^
-   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
-   #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
-                                                        ^
-   In file included from drivers/char/aml-gpiomem.c:55:
-   In file included from include/linux/io.h:13:
-   In file included from arch/s390/include/asm/io.h:78:
-   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writeb(value, PCI_IOBASE + addr);
-                               ~~~~~~~~~~ ^
-   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:692:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsb(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:700:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsw(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:708:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           readsl(PCI_IOBASE + addr, buffer, count);
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:717:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesb(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   include/asm-generic/io.h:726:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesw(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   include/asm-generic/io.h:735:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesl(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
->> drivers/char/aml-gpiomem.c:129:22: error: call to undeclared function 'phys_mem_access_prot'; ISO C99 and later do not support implicit function declarations [-Werror,-Wimplicit-function-declaration]
-           vma->vm_page_prot = phys_mem_access_prot(file, vma->vm_pgoff,
-                               ^
-   drivers/char/aml-gpiomem.c:129:20: error: assigning to 'pgprot_t' from incompatible type 'int'
-           vma->vm_page_prot = phys_mem_access_prot(file, vma->vm_pgoff,
-                             ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   12 warnings and 2 errors generated.
+>> drivers/pci/controller/pcie-brcmstb.c:1033:21: error: expected ';' at end of declaration
+    1033 |         u8 num_out_wins = 0
+         |                            ^
+         |                            ;
+   1 error generated.
+
+Kconfig warnings: (for reference only)
+   WARNING: unmet direct dependencies detected for OMAP2PLUS_MBOX
+   Depends on [n]: MAILBOX [=y] && (ARCH_OMAP2PLUS || ARCH_K3)
+   Selected by [y]:
+   - TI_K3_M4_REMOTEPROC [=y] && REMOTEPROC [=y] && (ARCH_K3 || COMPILE_TEST [=y])
 
 
-vim +/phys_mem_access_prot +129 drivers/char/aml-gpiomem.c
+vim +1033 drivers/pci/controller/pcie-brcmstb.c
 
-   112	
-   113	static int aml_gpiomem_mmap(struct file *file, struct vm_area_struct *vma)
-   114	{
-   115		int gpio_area = 0;
-   116		unsigned long start = vma->vm_pgoff << PAGE_SHIFT;
-   117		unsigned long end   = start + vma->vm_end - vma->vm_start;
-   118	
-   119		while (gpio_area < inst->gpio_area_count) {
-   120			if ((inst->gpio_regs_phys[gpio_area].start >= start) &&
-   121			    (inst->gpio_regs_phys[gpio_area].end   <= end))
-   122				goto found;
-   123			gpio_area++;
-   124		}
-   125	
-   126		return -EACCES;
-   127	
-   128	found:
- > 129		vma->vm_page_prot = phys_mem_access_prot(file, vma->vm_pgoff,
-   130				vma->vm_end - vma->vm_start,
-   131				vma->vm_page_prot);
-   132	
-   133		vma->vm_ops = &aml_gpiomem_vm_ops;
-   134	
-   135		if (remap_pfn_range(vma, vma->vm_start,
-   136					vma->vm_pgoff,
-   137					vma->vm_end - vma->vm_start,
-   138					vma->vm_page_prot)) {
-   139			return -EAGAIN;
-   140		}
-   141	
-   142		return 0;
-   143	}
-   144	
+  1025	
+  1026	static int brcm_pcie_setup(struct brcm_pcie *pcie)
+  1027	{
+  1028		struct inbound_win inbound_wins[PCIE_BRCM_MAX_INBOUND_WINS];
+  1029		void __iomem *base = pcie->base;
+  1030		struct pci_host_bridge *bridge;
+  1031		struct resource_entry *entry;
+  1032		u32 tmp, burst, aspm_support;
+> 1033		u8 num_out_wins = 0
+  1034		int num_inbound_wins = 0;
+  1035		int memc, ret;
+  1036	
+  1037		/* Reset the bridge */
+  1038		ret = pcie->bridge_sw_init_set(pcie, 1);
+  1039		if (ret)
+  1040			return ret;
+  1041	
+  1042		/* Ensure that PERST# is asserted; some bootloaders may deassert it. */
+  1043		if (pcie->soc_base == BCM2711) {
+  1044			ret = pcie->perst_set(pcie, 1);
+  1045			if (ret) {
+  1046				pcie->bridge_sw_init_set(pcie, 0);
+  1047				return ret;
+  1048			}
+  1049		}
+  1050	
+  1051		usleep_range(100, 200);
+  1052	
+  1053		/* Take the bridge out of reset */
+  1054		ret = pcie->bridge_sw_init_set(pcie, 0);
+  1055		if (ret)
+  1056			return ret;
+  1057	
+  1058		tmp = readl(base + HARD_DEBUG(pcie));
+  1059		if (is_bmips(pcie))
+  1060			tmp &= ~PCIE_BMIPS_MISC_HARD_PCIE_HARD_DEBUG_SERDES_IDDQ_MASK;
+  1061		else
+  1062			tmp &= ~PCIE_MISC_HARD_PCIE_HARD_DEBUG_SERDES_IDDQ_MASK;
+  1063		writel(tmp, base + HARD_DEBUG(pcie));
+  1064		/* Wait for SerDes to be stable */
+  1065		usleep_range(100, 200);
+  1066	
+  1067		/*
+  1068		 * SCB_MAX_BURST_SIZE is a two bit field.  For GENERIC chips it
+  1069		 * is encoded as 0=128, 1=256, 2=512, 3=Rsvd, for BCM7278 it
+  1070		 * is encoded as 0=Rsvd, 1=128, 2=256, 3=512.
+  1071		 */
+  1072		if (is_bmips(pcie))
+  1073			burst = 0x1; /* 256 bytes */
+  1074		else if (pcie->soc_base == BCM2711)
+  1075			burst = 0x0; /* 128 bytes */
+  1076		else if (pcie->soc_base == BCM7278)
+  1077			burst = 0x3; /* 512 bytes */
+  1078		else
+  1079			burst = 0x2; /* 512 bytes */
+  1080	
+  1081		/*
+  1082		 * Set SCB_MAX_BURST_SIZE, CFG_READ_UR_MODE, SCB_ACCESS_EN,
+  1083		 * RCB_MPS_MODE, RCB_64B_MODE
+  1084		 */
+  1085		tmp = readl(base + PCIE_MISC_MISC_CTRL);
+  1086		u32p_replace_bits(&tmp, 1, PCIE_MISC_MISC_CTRL_SCB_ACCESS_EN_MASK);
+  1087		u32p_replace_bits(&tmp, 1, PCIE_MISC_MISC_CTRL_CFG_READ_UR_MODE_MASK);
+  1088		u32p_replace_bits(&tmp, burst, PCIE_MISC_MISC_CTRL_MAX_BURST_SIZE_MASK);
+  1089		u32p_replace_bits(&tmp, 1, PCIE_MISC_MISC_CTRL_PCIE_RCB_MPS_MODE_MASK);
+  1090		u32p_replace_bits(&tmp, 1, PCIE_MISC_MISC_CTRL_PCIE_RCB_64B_MODE_MASK);
+  1091		writel(tmp, base + PCIE_MISC_MISC_CTRL);
+  1092	
+  1093		num_inbound_wins = brcm_pcie_get_inbound_wins(pcie, inbound_wins);
+  1094		if (num_inbound_wins < 0)
+  1095			return num_inbound_wins;
+  1096	
+  1097		set_inbound_win_registers(pcie, inbound_wins, num_inbound_wins);
+  1098	
+  1099		if (!brcm_pcie_rc_mode(pcie)) {
+  1100			dev_err(pcie->dev, "PCIe RC controller misconfigured as Endpoint\n");
+  1101			return -EINVAL;
+  1102		}
+  1103	
+  1104		tmp = readl(base + PCIE_MISC_MISC_CTRL);
+  1105		for (memc = 0; memc < pcie->num_memc; memc++) {
+  1106			u32 scb_size_val = ilog2(pcie->memc_size[memc]) - 15;
+  1107	
+  1108			if (memc == 0)
+  1109				u32p_replace_bits(&tmp, scb_size_val, SCB_SIZE_MASK(0));
+  1110			else if (memc == 1)
+  1111				u32p_replace_bits(&tmp, scb_size_val, SCB_SIZE_MASK(1));
+  1112			else if (memc == 2)
+  1113				u32p_replace_bits(&tmp, scb_size_val, SCB_SIZE_MASK(2));
+  1114		}
+  1115		writel(tmp, base + PCIE_MISC_MISC_CTRL);
+  1116	
+  1117		/*
+  1118		 * We ideally want the MSI target address to be located in the 32bit
+  1119		 * addressable memory area. Some devices might depend on it. This is
+  1120		 * possible either when the inbound window is located above the lower
+  1121		 * 4GB or when the inbound area is smaller than 4GB (taking into
+  1122		 * account the rounding-up we're forced to perform).
+  1123		 */
+  1124		if (inbound_wins[2].pci_offset >= SZ_4G ||
+  1125		    (inbound_wins[2].size + inbound_wins[2].pci_offset) < SZ_4G)
+  1126			pcie->msi_target_addr = BRCM_MSI_TARGET_ADDR_LT_4GB;
+  1127		else
+  1128			pcie->msi_target_addr = BRCM_MSI_TARGET_ADDR_GT_4GB;
+  1129	
+  1130	
+  1131		/* Don't advertise L0s capability if 'aspm-no-l0s' */
+  1132		aspm_support = PCIE_LINK_STATE_L1;
+  1133		if (!of_property_read_bool(pcie->np, "aspm-no-l0s"))
+  1134			aspm_support |= PCIE_LINK_STATE_L0S;
+  1135		tmp = readl(base + PCIE_RC_CFG_PRIV1_LINK_CAPABILITY);
+  1136		u32p_replace_bits(&tmp, aspm_support,
+  1137			PCIE_RC_CFG_PRIV1_LINK_CAPABILITY_ASPM_SUPPORT_MASK);
+  1138		writel(tmp, base + PCIE_RC_CFG_PRIV1_LINK_CAPABILITY);
+  1139	
+  1140		/*
+  1141		 * For config space accesses on the RC, show the right class for
+  1142		 * a PCIe-PCIe bridge (the default setting is to be EP mode).
+  1143		 */
+  1144		tmp = readl(base + PCIE_RC_CFG_PRIV1_ID_VAL3);
+  1145		u32p_replace_bits(&tmp, 0x060400,
+  1146				  PCIE_RC_CFG_PRIV1_ID_VAL3_CLASS_CODE_MASK);
+  1147		writel(tmp, base + PCIE_RC_CFG_PRIV1_ID_VAL3);
+  1148	
+  1149		bridge = pci_host_bridge_from_priv(pcie);
+  1150		resource_list_for_each_entry(entry, &bridge->windows) {
+  1151			struct resource *res = entry->res;
+  1152	
+  1153			if (resource_type(res) != IORESOURCE_MEM)
+  1154				continue;
+  1155	
+  1156			if (num_out_wins >= BRCM_NUM_PCIE_OUT_WINS) {
+  1157				dev_err(pcie->dev, "too many outbound wins\n");
+  1158				return -EINVAL;
+  1159			}
+  1160	
+  1161			if (is_bmips(pcie)) {
+  1162				u64 start = res->start;
+  1163				unsigned int j, nwins = resource_size(res) / SZ_128M;
+  1164	
+  1165				/* bmips PCIe outbound windows have a 128MB max size */
+  1166				if (nwins > BRCM_NUM_PCIE_OUT_WINS)
+  1167					nwins = BRCM_NUM_PCIE_OUT_WINS;
+  1168				for (j = 0; j < nwins; j++, start += SZ_128M)
+  1169					brcm_pcie_set_outbound_win(pcie, j, start,
+  1170								   start - entry->offset,
+  1171								   SZ_128M);
+  1172				break;
+  1173			}
+  1174			brcm_pcie_set_outbound_win(pcie, num_out_wins, res->start,
+  1175						   res->start - entry->offset,
+  1176						   resource_size(res));
+  1177			num_out_wins++;
+  1178		}
+  1179	
+  1180		/* PCIe->SCB endian mode for inbound window */
+  1181		tmp = readl(base + PCIE_RC_CFG_VENDOR_VENDOR_SPECIFIC_REG1);
+  1182		u32p_replace_bits(&tmp, PCIE_RC_CFG_VENDOR_SPCIFIC_REG1_LITTLE_ENDIAN,
+  1183			PCIE_RC_CFG_VENDOR_VENDOR_SPECIFIC_REG1_ENDIAN_MODE_BAR2_MASK);
+  1184		writel(tmp, base + PCIE_RC_CFG_VENDOR_VENDOR_SPECIFIC_REG1);
+  1185	
+  1186		return 0;
+  1187	}
+  1188	
 
 -- 
 0-DAY CI Kernel Test Service
