@@ -1,303 +1,307 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EBF21157E87;
-	Sat,  7 Sep 2024 23:43:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 05122208D7;
+	Sat,  7 Sep 2024 23:56:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725752615; cv=none; b=LCmQJyrPefcjzFctjdEvpgELUkS0RpYtnfj+bIJQp3E9y/n02gYvrFaF954v8PRnKgIM+y5PHEdMEmKfn/+tA1vIIHJh4cDeanrM5cdYRKD7mm0ASQFV4vz8UKM5wADtoUhxdsefNfVr6V8rOG8sTj6btnEFDDekznUUlBGwJP0=
+	t=1725753407; cv=none; b=JC13Dl0k3s/5+6luuK6GmxQMeieVQyG7b0YF9uHbYrs01aRORqwYArRTcp+0Zy50tBNQJIVm3xp9yL0k2Llx1dVh1gS+L2SAxcI09EaShrvDiR4qvk28zH+3hWJmtcwOXIORS92t48T13KEaXW1HcnU9w94BYvmY93rd+8PXj4k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725752615; c=relaxed/simple;
-	bh=sc+aCtj+UEhS3AOysrX2JdySWJk+jxByVd8iyOT4nlc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=f7UyNUu+CdgGs1Snm9Md6plrBJ0WjPP9nDaphMVIdtUmLmIVhMVprj9KT5icBvDgEL9VPaAkzck8HdBcES037IbUEgHr7JxxaP28ziUMBekZCFjY+ItdtJE79IKVTo9CaQBKo1R9XifiiDGKQaQl0rFR97/JC11JZQcZcKhXHgY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=PRhp2meS; arc=none smtp.client-ip=192.198.163.8
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1725753407; c=relaxed/simple;
+	bh=3+fttz6gFjJyl43MzULvKEFzXvtQ0BnzO8vK0ypOgmk=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=qC9YQGKvk8GTrRJhaluh2cSreXHBQ6ctZY8xho6iYiho77g9v/sm2BD71vqnBVOH2vpDBtqrRp/ggRoI2J0ljepUP7lD7Uup5G6Usj1r5VFZCSZ6zA9evD8vcA5LM+c76CBlJoNG9oq9tCJ2VhZZOQ4jYe9anbIsQHddKLeE64I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SibNPPI7; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="PRhp2meS"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1725752614; x=1757288614;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=sc+aCtj+UEhS3AOysrX2JdySWJk+jxByVd8iyOT4nlc=;
-  b=PRhp2meSkvcY+ODj68hcxbGTgZ2gL89NmdDCCMp825wznT5CE1UoTMEx
-   nyF/pbHlOkwpiw04R7fk6YaTfk5TfKNdODqI1Cgv5PKpXddCar7ujpDmo
-   tlmrK04xPfAY1Xl37Ej+uUFZe2zP9KHPCKDH6r0c0xn4Xm6b+toQsknMF
-   prP37SQXzrCqmYYIDgeBrKze6PETB12D0l8Xsei9SoENBDjc6JkDeVNOL
-   jwzSCFsYmHurNBdCylHWxhNg33AjxIlBW+vELectDpQje4oURKUAvJNG9
-   9d39aySSyPC/rZjImPUam9fkc/k26g2t3B9JtnlWEC7ElZT6ZLS1A4QE9
-   Q==;
-X-CSE-ConnectionGUID: foQo3ckkRWSNEbrhgStEiQ==
-X-CSE-MsgGUID: 0AzfB8TjRbeXK3EX01ApqQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11188"; a="41987879"
-X-IronPort-AV: E=Sophos;i="6.10,211,1719903600"; 
-   d="scan'208";a="41987879"
-Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Sep 2024 16:43:33 -0700
-X-CSE-ConnectionGUID: bwSWk3GxTl2suxQZ3P1Bbg==
-X-CSE-MsgGUID: L/sIJ98tTbyjV8Ibtkzp6Q==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.10,211,1719903600"; 
-   d="scan'208";a="103759016"
-Received: from lkp-server01.sh.intel.com (HELO 9c6b1c7d3b50) ([10.239.97.150])
-  by orviesa001.jf.intel.com with ESMTP; 07 Sep 2024 16:43:32 -0700
-Received: from kbuild by 9c6b1c7d3b50 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1sn55V-000D7D-1g;
-	Sat, 07 Sep 2024 23:43:29 +0000
-Date: Sun, 8 Sep 2024 07:43:03 +0800
-From: kernel test robot <lkp@intel.com>
-To: Prabhakar <prabhakar.csengg@gmail.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [RFC PATCH 09/12] media: i2c: ov5645: Add internal image sink pad
-Message-ID: <202409080711.N8d4wdQ1-lkp@intel.com>
-References: <20240904210719.52466-10-prabhakar.mahadev-lad.rj@bp.renesas.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SibNPPI7"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 65937C4CEC2;
+	Sat,  7 Sep 2024 23:56:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1725753406;
+	bh=3+fttz6gFjJyl43MzULvKEFzXvtQ0BnzO8vK0ypOgmk=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=SibNPPI71xjK1aVr++eeCD/2bazAy/iYBPyysb5rRC2mHLZw3R/PX//k9Up/biD0L
+	 Sdl6BjlfU8OszbMxnPH927/wP+r8Pzdevh7mZYumlT0Wv1/hzTYZOAKH1kU3vxngaz
+	 bNK5UG2LrqHTNDxHsj/OpBB7iLGFwyhLPVm6voHKPa9KQnsPJyKubDU/llolAE8tyd
+	 qnzqPVgqd6JJD5C4Bhy4hwTHF8ZqiMDWJ7WyrC8zUj6qZyyY7+umgeB83vaqzDj5oq
+	 N+uMOqKu1EaTUnOrf/gSOdbWOMBGHj4R3WwDXjffhLDYaNh7THJSXkkpaurSw3OV3G
+	 Bq/I6AT6oSfSA==
+Received: by mail-lj1-f176.google.com with SMTP id 38308e7fff4ca-2f75c6ed428so8773091fa.0;
+        Sat, 07 Sep 2024 16:56:46 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCU/mdlbHFVr3HNoBab2ha14D5X+pigBANo6rrJQD9z+MG9SmP+EzHceEGvsrQ6Yj09ANFWjDQ==@lists.linux.dev, AJvYcCUdBJjqUsSI57ddKbRGCDFRuJCzK7YMIvtxGQ6J5OF9Cf080Am6QlLml6KEEb/hIzNFPjcM/W4=@lists.linux.dev
+X-Gm-Message-State: AOJu0Yx+EUPYtofKEkiY0OnWQ9XrDyOcDSQdbENjA7BTQhToYyPVF1jN
+	/jSdgo+UsUzhb5LsvAVJeV08aD3EF0ac4qwdML9dQo9e6SGxmUwZYRYDw9HdqaAWNUq1NOmdq3x
+	BbOWxZemLGK0Ze9W/ZACR/D6/o6s=
+X-Google-Smtp-Source: AGHT+IGCmAdPpT4vaY5j7bydBqEJCnII/COJ3M97NOQpUWntN39srlx/IA0p5Ib/mdHX9fQOiWsnGPDPPro7thKEoqs=
+X-Received: by 2002:a05:6512:234e:b0:52e:9d6b:2691 with SMTP id
+ 2adb3069b0e04-536587b07ebmr4813104e87.20.1725753405079; Sat, 07 Sep 2024
+ 16:56:45 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240904210719.52466-10-prabhakar.mahadev-lad.rj@bp.renesas.com>
+References: <20240906-macos-build-support-v2-0-06beff418848@samsung.com> <20240906-macos-build-support-v2-2-06beff418848@samsung.com>
+In-Reply-To: <20240906-macos-build-support-v2-2-06beff418848@samsung.com>
+From: Masahiro Yamada <masahiroy@kernel.org>
+Date: Sun, 8 Sep 2024 08:56:08 +0900
+X-Gmail-Original-Message-ID: <CAK7LNARw-7uwJB7ibmSYE5nYUtPXcr4J9cHBQqm9BnNS=SRUhQ@mail.gmail.com>
+Message-ID: <CAK7LNARw-7uwJB7ibmSYE5nYUtPXcr4J9cHBQqm9BnNS=SRUhQ@mail.gmail.com>
+Subject: Re: [PATCH v2 2/8] file2alias: fix uuid_t definitions for macos
+To: da.gomez@samsung.com
+Cc: Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nicolas@fjasle.eu>, 
+	Lucas De Marchi <lucas.demarchi@intel.com>, 
+	=?UTF-8?Q?Thomas_Hellstr=C3=B6m?= <thomas.hellstrom@linux.intel.com>, 
+	Rodrigo Vivi <rodrigo.vivi@intel.com>, 
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, Maxime Ripard <mripard@kernel.org>, 
+	Thomas Zimmermann <tzimmermann@suse.de>, David Airlie <airlied@gmail.com>, 
+	William Hubbs <w.d.hubbs@gmail.com>, Chris Brannon <chris@the-brannons.com>, 
+	Kirk Reiser <kirk@reisers.ca>, Samuel Thibault <samuel.thibault@ens-lyon.org>, 
+	Paul Moore <paul@paul-moore.com>, Stephen Smalley <stephen.smalley.work@gmail.com>, 
+	Ondrej Mosnacek <omosnace@redhat.com>, Catalin Marinas <catalin.marinas@arm.com>, 
+	Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>, Oliver Upton <oliver.upton@linux.dev>, 
+	James Morse <james.morse@arm.com>, Suzuki K Poulose <suzuki.poulose@arm.com>, 
+	Zenghui Yu <yuzenghui@huawei.com>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	Jiri Slaby <jirislaby@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
+	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
+	Simona Vetter <simona.vetter@ffwll.ch>, linux-kernel@vger.kernel.org, 
+	linux-kbuild@vger.kernel.org, intel-xe@lists.freedesktop.org, 
+	dri-devel@lists.freedesktop.org, speakup@linux-speakup.org, 
+	selinux@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+	kvmarm@lists.linux.dev, linux-serial@vger.kernel.org, llvm@lists.linux.dev, 
+	Finn Behrens <me@kloenk.dev>, "Daniel Gomez (Samsung)" <d+samsung@kruces.com>, gost.dev@samsung.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Prabhakar,
+On Fri, Sep 6, 2024 at 8:01=E2=80=AFPM Daniel Gomez via B4 Relay
+<devnull+da.gomez.samsung.com@kernel.org> wrote:
+>
+> From: Daniel Gomez <da.gomez@samsung.com>
+>
+> The uuid_t struct defined in sys/types.h on macOS hosts conflicts with
+> the one defined in file2alias, resulting in the typedef redefinition
+> error below. To resolve this conflict, define the _UUID_T and
+> __GETHOSTUUID_ in file2alias HOSTCFLAGS.
+>
+> Error:
+>   HOSTCC  scripts/mod/file2alias.o scripts/mod/file2alias.c:45:3:
+> error: typedef redefinition with different types ('struct uuid_t' vs
+> '__darwin_uuid_t' (aka 'unsigned char[16]'))    45 | } uuid_t;       |
+> ^
+> /Library/Developer/CommandLineTools/SDKs/MacOSX14.sdk/usr/include/
+>    sys/_types/_uuid_t.h:31:25: note: previous definition is here 31 |
+>    typedef __darwin_uuid_t uuid_t;    |                         ^
+> scripts/mod/file2alias.c:1354:7: error: member reference base
+>  type 'typeof (((struct tee_client_device_id *)0)->uuid)' (aka
+>  'unsigned char[16]') is not a structure or union 1354 |
+>  uuid->b[0], uuid->b[1], uuid->b[2], uuid->b[3], uuid->b[4],      |
+>  ~~~~^ ~
+> /Library/Developer/CommandLineTools/SDKs/MacOSX14.sdk/usr/include/
+>    secure/_stdio.h:47:56: note: expanded from macro 'sprintf' 47 |
+>    __builtin___sprintf_chk (str, 0, __darwin_obsz(str), __VA_ARGS__)
+>    |                                                        ^~~~~~~~~~~
+> scripts/mod/file2alias.c:1354:19: error: member reference base
+>  type 'typeof (((struct tee_client_device_id *)0)->uuid)' (aka
+>  'unsigned char[16]') is not a structure or union 1354 |
+>  uuid->b[0], uuid->b[1], uuid->b[2], uuid->b[3], uuid->b[4],      |
+>  ~~~~^ ~
+> /Library/Developer/CommandLineTools/SDKs/MacOSX14.sdk/usr/include/
+>    secure/_stdio.h:47:56: note: expanded from macro 'sprintf' 47 |
+>    __builtin___sprintf_chk (str, 0, __darwin_obsz(str), __VA_ARGS__)
+>    |                                                        ^~~~~~~~~~~
+> scripts/mod/file2alias.c:1354:31: error: member reference base
+>  type 'typeof (((struct tee_client_device_id *)0)->uuid)' (aka
+>  'unsigned char[16]') is not a structure or union 1354 |
+>  uuid->b[0], uuid->b[1], uuid->b[2], uuid->b[3], uuid->b[4],      |
+>  ~~~~^ ~
+> /Library/Developer/CommandLineTools/SDKs/MacOSX14.sdk/usr/include/
+>    secure/_stdio.h:47:56: note: expanded from macro 'sprintf' 47 |
+>    __builtin___sprintf_chk (str, 0, __darwin_obsz(str), __VA_ARGS__)
+>    |                                                        ^~~~~~~~~~~
+> scripts/mod/file2alias.c:1354:43: error: member reference base
+>  type 'typeof (((struct tee_client_device_id *)0)->uuid)' (aka
+>  'unsigned char[16]') is not a structure or union 1354 |
+>  uuid->b[0], uuid->b[1], uuid->b[2], uuid->b[3], uuid->b[4],      |
+>  ~~~~^ ~
+> /Library/Developer/CommandLineTools/SDKs/MacOSX14.sdk/usr/include/
+>    secure/_stdio.h:47:56: note: expanded from macro 'sprintf' 47 |
+>    __builtin___sprintf_chk (str, 0, __darwin_obsz(str), __VA_ARGS__)
+>    |                                                        ^~~~~~~~~~~
+> scripts/mod/file2alias.c:1354:55: error: member reference base
+>  type 'typeof (((struct tee_client_device_id *)0)->uuid)' (aka
+>  'unsigned char[16]') is not a structure or union 1354 |
+>  uuid->b[0], uuid->b[1], uuid->b[2], uuid->b[3], uuid->b[4],      |
+>  ~~~~^ ~
+> /Library/Developer/CommandLineTools/SDKs/MacOSX14.sdk/usr/include/
+>    secure/_stdio.h:47:56: note: expanded from macro 'sprintf' 47 |
+>    __builtin___sprintf_chk (str, 0, __darwin_obsz(str), __VA_ARGS__)
+>    |                                                        ^~~~~~~~~~~
+> scripts/mod/file2alias.c:1355:7: error: member reference base
+>  type 'typeof (((struct tee_client_device_id *)0)->uuid)' (aka
+>  'unsigned char[16]') is not a structure or union 1355 |
+>  uuid->b[5], uuid->b[6], uuid->b[7], uuid->b[8], uuid->b[9],      |
+>  ~~~~^ ~
+> /Library/Developer/CommandLineTools/SDKs/MacOSX14.sdk/usr/include/
+>    secure/_stdio.h:47:56: note: expanded from macro 'sprintf' 47 |
+>    __builtin___sprintf_chk (str, 0, __darwin_obsz(str), __VA_ARGS__)
+>    |                                                        ^~~~~~~~~~~
+> scripts/mod/file2alias.c:1355:19: error: member reference base
+>  type 'typeof (((struct tee_client_device_id *)0)->uuid)' (aka
+>  'unsigned char[16]') is not a structure or union 1355 |
+>  uuid->b[5], uuid->b[6], uuid->b[7], uuid->b[8], uuid->b[9],      |
+>  ~~~~^ ~
+> /Library/Developer/CommandLineTools/SDKs/MacOSX14.sdk/usr/include/
+>    secure/_stdio.h:47:56: note: expanded from macro 'sprintf' 47 |
+>    __builtin___sprintf_chk (str, 0, __darwin_obsz(str), __VA_ARGS__)
+>    |                                                        ^~~~~~~~~~~
+> scripts/mod/file2alias.c:1355:31: error: member reference base
+>  type 'typeof (((struct tee_client_device_id *)0)->uuid)' (aka
+>  'unsigned char[16]') is not a structure or union 1355 |
+>  uuid->b[5], uuid->b[6], uuid->b[7], uuid->b[8], uuid->b[9],      |
+>  ~~~~^ ~
+> /Library/Developer/CommandLineTools/SDKs/MacOSX14.sdk/usr/include/
+>    secure/_stdio.h:47:56: note: expanded from macro 'sprintf' 47 |
+>    __builtin___sprintf_chk (str, 0, __darwin_obsz(str), __VA_ARGS__)
+>    |                                                        ^~~~~~~~~~~
+> scripts/mod/file2alias.c:1355:43: error: member reference base
+>  type 'typeof (((struct tee_client_device_id *)0)->uuid)' (aka
+>  'unsigned char[16]') is not a structure or union 1355 |
+>  uuid->b[5], uuid->b[6], uuid->b[7], uuid->b[8], uuid->b[9],      |
+>  ~~~~^ ~
+> /Library/Developer/CommandLineTools/SDKs/MacOSX14.sdk/usr/include/
+>    secure/_stdio.h:47:56: note: expanded from macro 'sprintf' 47 |
+>    __builtin___sprintf_chk (str, 0, __darwin_obsz(str), __VA_ARGS__)
+>    |                                                        ^~~~~~~~~~~
+> scripts/mod/file2alias.c:1355:55: error: member reference base
+>  type 'typeof (((struct tee_client_device_id *)0)->uuid)' (aka
+>  'unsigned char[16]') is not a structure or union 1355 |
+>  uuid->b[5], uuid->b[6], uuid->b[7], uuid->b[8], uuid->b[9],      |
+>  ~~~~^ ~
+> /Library/Developer/CommandLineTools/SDKs/MacOSX14.sdk/usr/include/
+>    secure/_stdio.h:47:56: note: expanded from macro 'sprintf' 47 |
+>    __builtin___sprintf_chk (str, 0, __darwin_obsz(str), __VA_ARGS__)
+>    |                                                        ^~~~~~~~~~~
+> scripts/mod/file2alias.c:1356:7: error: member reference base
+>  type 'typeof (((struct tee_client_device_id *)0)->uuid)' (aka
+>  'unsigned char[16]') is not a structure or union 1356 |
+>  uuid->b[10], uuid->b[11], uuid->b[12], uuid->b[13], uuid->b[14],      |
+>  ~~~~^ ~
+> /Library/Developer/CommandLineTools/SDKs/MacOSX14.sdk/usr/include/
+>    secure/_stdio.h:47:56: note: expanded from macro 'sprintf' 47 |
+>    __builtin___sprintf_chk (str, 0, __darwin_obsz(str), __VA_ARGS__)
+>    |                                                        ^~~~~~~~~~~
+> scripts/mod/file2alias.c:1356:20: error: member reference base
+>  type 'typeof (((struct tee_client_device_id *)0)->uuid)' (aka
+>  'unsigned char[16]') is not a structure or union 1356 |
+>  uuid->b[10], uuid->b[11], uuid->b[12], uuid->b[13], uuid->b[14],      |
+>  ~~~~^ ~
+> /Library/Developer/CommandLineTools/SDKs/MacOSX14.sdk/usr/include/
+>    secure/_stdio.h:47:56: note: expanded from macro 'sprintf' 47 |
+>    __builtin___sprintf_chk (str, 0, __darwin_obsz(str), __VA_ARGS__)
+>    |                                                        ^~~~~~~~~~~
+> scripts/mod/file2alias.c:1356:33: error: member reference base
+>  type 'typeof (((struct tee_client_device_id *)0)->uuid)' (aka
+>  'unsigned char[16]') is not a structure or union 1356 |
+>  uuid->b[10], uuid->b[11], uuid->b[12], uuid->b[13], uuid->b[14],      |
+>  ~~~~^ ~
+> /Library/Developer/CommandLineTools/SDKs/MacOSX14.sdk/usr/include/
+>    secure/_stdio.h:47:56: note: expanded from macro 'sprintf' 47 |
+>    __builtin___sprintf_chk (str, 0, __darwin_obsz(str), __VA_ARGS__)
+>    |                                                        ^~~~~~~~~~~
+> scripts/mod/file2alias.c:1356:46: error: member reference base
+>  type 'typeof (((struct tee_client_device_id *)0)->uuid)' (aka
+>  'unsigned char[16]') is not a structure or union 1356 |
+>  uuid->b[10], uuid->b[11], uuid->b[12], uuid->b[13], uuid->b[14],      |
+>  ~~~~^ ~
+> /Library/Developer/CommandLineTools/SDKs/MacOSX14.sdk/usr/include/
+>    secure/_stdio.h:47:56: note: expanded from macro 'sprintf' 47 |
+>    __builtin___sprintf_chk (str, 0, __darwin_obsz(str), __VA_ARGS__)
+>    |                                                        ^~~~~~~~~~~
+> scripts/mod/file2alias.c:1356:59: error: member reference base
+>  type 'typeof (((struct tee_client_device_id *)0)->uuid)' (aka
+>  'unsigned char[16]') is not a structure or union 1356 |
+>  uuid->b[10], uuid->b[11], uuid->b[12], uuid->b[13], uuid->b[14],      |
+>  ~~~~^ ~
+> /Library/Developer/CommandLineTools/SDKs/MacOSX14.sdk/usr/include/
+>    secure/_stdio.h:47:56: note: expanded from macro 'sprintf' 47 |
+>    __builtin___sprintf_chk (str, 0, __darwin_obsz(str), __VA_ARGS__)
+>    |                                                        ^~~~~~~~~~~
+> scripts/mod/file2alias.c:1357:7: error: member reference base
+>  type 'typeof (((struct tee_client_device_id *)0)->uuid)' (aka
+>  'unsigned char[16]') is not a structure or union 1357 |
+>  uuid->b[15]);      |                 ~~~~^ ~
+> /Library/Developer/CommandLineTools/SDKs/MacOSX14.sdk/usr/include/
+>    secure/_stdio.h:47:56: note: expanded from macro 'sprintf' 47 |
+>    __builtin___sprintf_chk (str, 0, __darwin_obsz(str), __VA_ARGS__)
+>    |                                                        ^~~~~~~~~~~
+> 17 errors generated.
+>
+> Suggested-by: Nicolas Schier <nicolas@fjasle.eu>
+> Signed-off-by: Daniel Gomez <da.gomez@samsung.com>
+> ---
+>  scripts/mod/Makefile     | 2 ++
+>  scripts/mod/file2alias.c | 3 +++
+>  2 files changed, 5 insertions(+)
+>
+> diff --git a/scripts/mod/Makefile b/scripts/mod/Makefile
+> index c729bc936bae..75c12c045f21 100644
+> --- a/scripts/mod/Makefile
+> +++ b/scripts/mod/Makefile
+> @@ -8,6 +8,8 @@ modpost-objs    :=3D modpost.o file2alias.o sumversion.o =
+symsearch.o
+>
+>  devicetable-offsets-file :=3D devicetable-offsets.h
+>
+> +HOSTCFLAGS_file2alias.o +=3D -D_UUID_T -D__GETHOSTUUID_H
+> +
+>  $(obj)/$(devicetable-offsets-file): $(obj)/devicetable-offsets.s FORCE
+>         $(call filechk,offsets,__DEVICETABLE_OFFSETS_H__)
+>
+> diff --git a/scripts/mod/file2alias.c b/scripts/mod/file2alias.c
+> index 99dce93a4188..ab743f6d60ef 100644
+> --- a/scripts/mod/file2alias.c
+> +++ b/scripts/mod/file2alias.c
+> @@ -11,6 +11,9 @@
+>   */
+>
+>  #include "modpost.h"
+> +#ifdef __APPLE__
+> +#define uuid_t sys_uuid_t
+> +#endif
+>  #include "devicetable-offsets.h"
 
-[This is a private test report for your RFC patch.]
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on media-tree/master]
-[also build test ERROR on linuxtv-media-stage/master sailus-media-tree/master linus/master v6.11-rc6 next-20240906]
-[cannot apply to sailus-media-tree/streams]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Prabhakar/media-i2c-ov5645-Add-V4L2_SUBDEV_FL_HAS_EVENTS-and-subscribe-hooks/20240905-051300
-base:   git://linuxtv.org/media_tree.git master
-patch link:    https://lore.kernel.org/r/20240904210719.52466-10-prabhakar.mahadev-lad.rj%40bp.renesas.com
-patch subject: [RFC PATCH 09/12] media: i2c: ov5645: Add internal image sink pad
-config: i386-buildonly-randconfig-004-20240908 (https://download.01.org/0day-ci/archive/20240908/202409080711.N8d4wdQ1-lkp@intel.com/config)
-compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240908/202409080711.N8d4wdQ1-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202409080711.N8d4wdQ1-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> drivers/media/i2c/ov5645.c:1167:61: error: use of undeclared identifier 'MEDIA_PAD_FL_INTERNAL'
-    1167 |         ov5645->pads[OV5645_PAD_IMAGE].flags = MEDIA_PAD_FL_SINK | MEDIA_PAD_FL_INTERNAL;
-         |                                                                    ^
-   1 error generated.
 
 
-vim +/MEDIA_PAD_FL_INTERNAL +1167 drivers/media/i2c/ov5645.c
 
-  1057	
-  1058	static int ov5645_probe(struct i2c_client *client)
-  1059	{
-  1060		struct device *dev = &client->dev;
-  1061		struct device_node *endpoint;
-  1062		struct ov5645 *ov5645;
-  1063		u8 chip_id_high, chip_id_low;
-  1064		unsigned int i;
-  1065		u32 xclk_freq;
-  1066		int ret;
-  1067	
-  1068		ov5645 = devm_kzalloc(dev, sizeof(struct ov5645), GFP_KERNEL);
-  1069		if (!ov5645)
-  1070			return -ENOMEM;
-  1071	
-  1072		ov5645->i2c_client = client;
-  1073		ov5645->dev = dev;
-  1074	
-  1075		endpoint = of_graph_get_endpoint_by_regs(dev->of_node, 0, -1);
-  1076		if (!endpoint)
-  1077			return dev_err_probe(dev, -EINVAL, "endpoint node not found\n");
-  1078	
-  1079		ret = v4l2_fwnode_endpoint_parse(of_fwnode_handle(endpoint),
-  1080						 &ov5645->ep);
-  1081	
-  1082		of_node_put(endpoint);
-  1083	
-  1084		if (ret < 0)
-  1085			return dev_err_probe(dev, ret, "parsing endpoint node failed\n");
-  1086	
-  1087		if (ov5645->ep.bus_type != V4L2_MBUS_CSI2_DPHY)
-  1088			return dev_err_probe(dev, -EINVAL, "invalid bus type, must be CSI2\n");
-  1089	
-  1090		/* get system clock (xclk) */
-  1091		ov5645->xclk = devm_clk_get(dev, NULL);
-  1092		if (IS_ERR(ov5645->xclk))
-  1093			return dev_err_probe(dev, PTR_ERR(ov5645->xclk), "could not get xclk");
-  1094	
-  1095		ret = of_property_read_u32(dev->of_node, "clock-frequency", &xclk_freq);
-  1096		if (ret)
-  1097			return dev_err_probe(dev, ret, "could not get xclk frequency\n");
-  1098	
-  1099		/* external clock must be 24MHz, allow 1% tolerance */
-  1100		if (xclk_freq < 23760000 || xclk_freq > 24240000)
-  1101			return dev_err_probe(dev, -EINVAL, "external clock frequency %u is not supported\n",
-  1102					     xclk_freq);
-  1103	
-  1104		ret = clk_set_rate(ov5645->xclk, xclk_freq);
-  1105		if (ret)
-  1106			return dev_err_probe(dev, ret, "could not set xclk frequency\n");
-  1107	
-  1108		for (i = 0; i < OV5645_NUM_SUPPLIES; i++)
-  1109			ov5645->supplies[i].supply = ov5645_supply_name[i];
-  1110	
-  1111		ret = devm_regulator_bulk_get(dev, OV5645_NUM_SUPPLIES,
-  1112					      ov5645->supplies);
-  1113		if (ret < 0)
-  1114			return ret;
-  1115	
-  1116		ov5645->enable_gpio = devm_gpiod_get(dev, "enable", GPIOD_OUT_HIGH);
-  1117		if (IS_ERR(ov5645->enable_gpio))
-  1118			return dev_err_probe(dev, PTR_ERR(ov5645->enable_gpio), "cannot get enable gpio\n");
-  1119	
-  1120		ov5645->rst_gpio = devm_gpiod_get(dev, "reset", GPIOD_OUT_HIGH);
-  1121		if (IS_ERR(ov5645->rst_gpio))
-  1122			return dev_err_probe(dev, PTR_ERR(ov5645->rst_gpio), "cannot get reset gpio\n");
-  1123	
-  1124		v4l2_ctrl_handler_init(&ov5645->ctrls, 9);
-  1125		v4l2_ctrl_new_std(&ov5645->ctrls, &ov5645_ctrl_ops,
-  1126				  V4L2_CID_SATURATION, -4, 4, 1, 0);
-  1127		v4l2_ctrl_new_std(&ov5645->ctrls, &ov5645_ctrl_ops,
-  1128				  V4L2_CID_HFLIP, 0, 1, 1, 0);
-  1129		v4l2_ctrl_new_std(&ov5645->ctrls, &ov5645_ctrl_ops,
-  1130				  V4L2_CID_VFLIP, 0, 1, 1, 0);
-  1131		v4l2_ctrl_new_std(&ov5645->ctrls, &ov5645_ctrl_ops,
-  1132				  V4L2_CID_AUTOGAIN, 0, 1, 1, 1);
-  1133		v4l2_ctrl_new_std(&ov5645->ctrls, &ov5645_ctrl_ops,
-  1134				  V4L2_CID_AUTO_WHITE_BALANCE, 0, 1, 1, 1);
-  1135		v4l2_ctrl_new_std_menu(&ov5645->ctrls, &ov5645_ctrl_ops,
-  1136				       V4L2_CID_EXPOSURE_AUTO, V4L2_EXPOSURE_MANUAL,
-  1137				       0, V4L2_EXPOSURE_AUTO);
-  1138		v4l2_ctrl_new_std_menu_items(&ov5645->ctrls, &ov5645_ctrl_ops,
-  1139					     V4L2_CID_TEST_PATTERN,
-  1140					     ARRAY_SIZE(ov5645_test_pattern_menu) - 1,
-  1141					     0, 0, ov5645_test_pattern_menu);
-  1142		ov5645->pixel_clock = v4l2_ctrl_new_std(&ov5645->ctrls,
-  1143							&ov5645_ctrl_ops,
-  1144							V4L2_CID_PIXEL_RATE,
-  1145							1, INT_MAX, 1, 1);
-  1146		ov5645->link_freq = v4l2_ctrl_new_int_menu(&ov5645->ctrls,
-  1147							   &ov5645_ctrl_ops,
-  1148							   V4L2_CID_LINK_FREQ,
-  1149							   ARRAY_SIZE(link_freq) - 1,
-  1150							   0, link_freq);
-  1151		if (ov5645->link_freq)
-  1152			ov5645->link_freq->flags |= V4L2_CTRL_FLAG_READ_ONLY;
-  1153	
-  1154		ov5645->sd.ctrl_handler = &ov5645->ctrls;
-  1155	
-  1156		if (ov5645->ctrls.error) {
-  1157			ret = ov5645->ctrls.error;
-  1158			dev_err_probe(dev, ret, "%s: control initialization error %d\n",
-  1159				      __func__, ov5645->ctrls.error);
-  1160			goto free_ctrl;
-  1161		}
-  1162	
-  1163		v4l2_i2c_subdev_init(&ov5645->sd, client, &ov5645_subdev_ops);
-  1164		ov5645->sd.internal_ops = &ov5645_internal_ops;
-  1165		ov5645->sd.flags |= V4L2_SUBDEV_FL_HAS_DEVNODE | V4L2_SUBDEV_FL_HAS_EVENTS;
-  1166		ov5645->pads[OV5645_PAD_SOURCE].flags = MEDIA_PAD_FL_SOURCE;
-> 1167		ov5645->pads[OV5645_PAD_IMAGE].flags = MEDIA_PAD_FL_SINK | MEDIA_PAD_FL_INTERNAL;
-  1168		ov5645->sd.dev = dev;
-  1169		ov5645->sd.entity.function = MEDIA_ENT_F_CAM_SENSOR;
-  1170	
-  1171		ret = media_entity_pads_init(&ov5645->sd.entity, ARRAY_SIZE(ov5645->pads), ov5645->pads);
-  1172		if (ret < 0) {
-  1173			dev_err_probe(dev, ret, "could not register media entity\n");
-  1174			goto free_ctrl;
-  1175		}
-  1176	
-  1177		ret = ov5645_set_power_on(dev);
-  1178		if (ret)
-  1179			goto free_entity;
-  1180	
-  1181		ret = ov5645_read_reg(ov5645, OV5645_CHIP_ID_HIGH, &chip_id_high);
-  1182		if (ret < 0 || chip_id_high != OV5645_CHIP_ID_HIGH_BYTE) {
-  1183			ret = -ENODEV;
-  1184			dev_err_probe(dev, ret, "could not read ID high\n");
-  1185			goto power_down;
-  1186		}
-  1187		ret = ov5645_read_reg(ov5645, OV5645_CHIP_ID_LOW, &chip_id_low);
-  1188		if (ret < 0 || chip_id_low != OV5645_CHIP_ID_LOW_BYTE) {
-  1189			ret = -ENODEV;
-  1190			dev_err_probe(dev, ret, "could not read ID low\n");
-  1191			goto power_down;
-  1192		}
-  1193	
-  1194		dev_info(dev, "OV5645 detected at address 0x%02x\n", client->addr);
-  1195	
-  1196		ret = ov5645_read_reg(ov5645, OV5645_AEC_PK_MANUAL,
-  1197				      &ov5645->aec_pk_manual);
-  1198		if (ret < 0) {
-  1199			ret = -ENODEV;
-  1200			dev_err_probe(dev, ret, "could not read AEC/AGC mode\n");
-  1201			goto power_down;
-  1202		}
-  1203	
-  1204		ret = ov5645_read_reg(ov5645, OV5645_TIMING_TC_REG20,
-  1205				      &ov5645->timing_tc_reg20);
-  1206		if (ret < 0) {
-  1207			ret = -ENODEV;
-  1208			dev_err_probe(dev, ret, "could not read vflip value\n");
-  1209			goto power_down;
-  1210		}
-  1211	
-  1212		ret = ov5645_read_reg(ov5645, OV5645_TIMING_TC_REG21,
-  1213				      &ov5645->timing_tc_reg21);
-  1214		if (ret < 0) {
-  1215			ret = -ENODEV;
-  1216			dev_err_probe(dev, ret, "could not read hflip value\n");
-  1217			goto power_down;
-  1218		}
-  1219	
-  1220		ov5645->sd.state_lock = ov5645->ctrls.lock;
-  1221		ret = v4l2_subdev_init_finalize(&ov5645->sd);
-  1222		if (ret < 0) {
-  1223			dev_err_probe(dev, ret, "subdev init error\n");
-  1224			goto power_down;
-  1225		}
-  1226	
-  1227		ret = v4l2_async_register_subdev_sensor(&ov5645->sd);
-  1228		if (ret < 0) {
-  1229			dev_err_probe(dev, ret, "could not register v4l2 device\n");
-  1230			goto error_subdev_cleanup;
-  1231		}
-  1232	
-  1233		pm_runtime_set_active(dev);
-  1234		pm_runtime_get_noresume(dev);
-  1235		pm_runtime_enable(dev);
-  1236		pm_runtime_set_autosuspend_delay(dev, 1000);
-  1237		pm_runtime_use_autosuspend(dev);
-  1238		pm_runtime_mark_last_busy(dev);
-  1239		pm_runtime_put_autosuspend(dev);
-  1240	
-  1241		return 0;
-  1242	
-  1243	error_subdev_cleanup:
-  1244		v4l2_subdev_cleanup(&ov5645->sd);
-  1245	power_down:
-  1246		ov5645_set_power_off(dev);
-  1247	free_entity:
-  1248		media_entity_cleanup(&ov5645->sd.entity);
-  1249	free_ctrl:
-  1250		v4l2_ctrl_handler_free(&ov5645->ctrls);
-  1251	
-  1252		return ret;
-  1253	}
-  1254	
+Is this what Nicolas suggested?
+https://lore.kernel.org/lkml/20240807-sexy-roadrunner-of-acceptance-a84bbf@=
+lindesnes/
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+
+I thought he suggested replacing #ifdef __APPLE__
+with -D_UUID_T -D__GETHOSTUUID_H.
+
+
+You added -D_UUID_T -D__GETHOSTUUID_H,
+keeping #ifdef __APPLE__.
+
+
+
+
+
+
+
+
+
+>  /* We use the ELF typedefs for kernel_ulong_t but bite the bullet and
+>
+> --
+> 2.46.0
+>
+>
+
+
+--=20
+Best Regards
+Masahiro Yamada
