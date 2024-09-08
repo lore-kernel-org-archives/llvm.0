@@ -1,118 +1,217 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D4526C149;
-	Sun,  8 Sep 2024 01:30:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 81F9E1CA81;
+	Sun,  8 Sep 2024 08:23:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725759008; cv=none; b=kPtPLRFiZPMznQvnQJHRJuhoCP+sSmU9fI4Kidh96CfdDe7V82Ub9VYmMKXhuzB+M2K6eXCdQaA7nQyzbRhKVhXeEKoDKOeBXwd5RQRYXzpqg7QcRf/GUgg0pNbc/KmECtel7F17HIotoxcngUK6ic6aqhZbWeFpIuaWbCpw5yg=
+	t=1725783822; cv=none; b=KHrcnYS4JyGcRR4ZviTSIJwrcbZ5J/ogSdKE4nrTg1mvrjEjBY7Vshhf48CcsVZDBEywWJ9f1Ymr+qSx30BFmjq2Dp6ZR3AduxN7c2If55FhYLqWBtqVRFhuNWYGXng67KzhDkVIdokoHNzFG9r8NqUq5hxVWood/+Lo2FsmJcs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725759008; c=relaxed/simple;
-	bh=fyOnv3k2017y/ErSznnZHp0l9XWS0bPVAmjp32U6Etk=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=IwSQsblCiMKSenuHlh/X/YW5yEur9R0BRE/UJaabWbjqDADMZtQwsDt//86WNV5Cds70Y7+qroZtgf9gpdJ6zUftQx/kFhRGvKPhJsmMuWDRINNCx5/bNReWc/i908jBeRffcnuW5lEAumL+FJQ5QA6pu+RYosaLtps1jGNpaq8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iw0ZyrY4; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1725783822; c=relaxed/simple;
+	bh=CS8TPU9h4Zcfsx0T2yCnIV7BAoo30S/6YenmxXnsGvo=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=l1YC+gA5dfFzKabe32rQWhtgfcRUogjVMXSSGJ8++uJZ7Ou5FwgXVs6oCeXlEc1rss/70lEMfyivODeG+pgVFa/bNCNGJJQpVxaBJfSECTPN34W9kNxMI2u/KwkFJNOGzIFMxdtBI884ziGz25TZQLfQYXlYdFqV7j0UhOFhSVo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Ci+yzc6c; arc=none smtp.client-ip=198.175.65.19
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iw0ZyrY4"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 41E55C4CECF;
-	Sun,  8 Sep 2024 01:30:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1725759008;
-	bh=fyOnv3k2017y/ErSznnZHp0l9XWS0bPVAmjp32U6Etk=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=iw0ZyrY4vuLZ21JCPOC7RhuX7jH+ga/520Dv1aaM8uNgOoHpA/cMaELxoMFbt9WhQ
-	 6cWjNnSP4o7rT5Xc1qm3XtbFn4YS0prmu2KTWtXTjxFFhomNRnXeVVh9JP5z7M7miU
-	 RsaI6nAFHnSgzlWx+0avsFEestaO6zMIOeHJmmJYY2W/sPtsC3Enk28MuA6dyzDfS8
-	 B0BwayB0He+GmuHbYvmm98cgYqbFocvJdNDrBPe2nLlyhExI1t8DoPlC1Xy7y6a7TS
-	 6nqNvu2hKR3rjjA6O1+SusQWQQ2vp9f+8BBS60UzZLI2p5UciVSLsD54+sq6iFumv2
-	 XlPJ61sFI6v6g==
-Received: by mail-lf1-f49.google.com with SMTP id 2adb3069b0e04-536562739baso2513847e87.1;
-        Sat, 07 Sep 2024 18:30:08 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCVkjNI6xngTKGjm0ZJSccbu3O9jHLgqOIQPy6FYcI1gW4PNfhZz03iQRohLaCrtlyD4tXuKTrg=@lists.linux.dev, AJvYcCX9JOa4c+E7dUUYm4esjW6+gf3vw0t+A1oz/wGZZx2M7ClEcneys6HqoI0AgtakspGwnGyqhA==@lists.linux.dev
-X-Gm-Message-State: AOJu0YwRErFZ77PWCeYhbdAAlAJgsKxJkbb2yejjhqv31d35RfVUNtPQ
-	5AaTvV4VrazAFZsSlTsVWCrlh5F2Vdov0VTBsHjpkowBIt7kriMufDFIz1yvjFTIch+rPKA1JyS
-	Fidu7kNk06aObD570dZWwN7MNRuA=
-X-Google-Smtp-Source: AGHT+IF+h293KpoI++f+ufbs7y7oQSzJ8FqYF6U09FVXsYlA3fTualWC6YvD7rLK4LHaRVS5cfnW7EaXVcZxWqO9e3g=
-X-Received: by 2002:a05:6512:1598:b0:535:66bb:3303 with SMTP id
- 2adb3069b0e04-536587a4100mr4487964e87.12.1725759006849; Sat, 07 Sep 2024
- 18:30:06 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Ci+yzc6c"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1725783821; x=1757319821;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=CS8TPU9h4Zcfsx0T2yCnIV7BAoo30S/6YenmxXnsGvo=;
+  b=Ci+yzc6cY/VbtO1a5Ez3REhf0RJFoqUMyMrfuu8V7bVFyP67VNo1AIrU
+   9gBso5YXGS5/q9qz7AKg5BNi7B8FilmEgh7skLBf450du8QtvHfES2QAV
+   JM94kM3Ynh7rmAnepepmtaka67qo6EqcmDQj3oJWd43clWJnSVmvpSLvw
+   M7g3EThWXIg2XfL9LzbxrE9Z87WbfDL9hcWsCzqP2VzSfSTpcyBN0r6FJ
+   94TTBHSgNAsToB6YToZ2W2dLOx7HxZzRd3tm1nGxjrDpKz2GpkFt6rU1D
+   rhl3+9hwnm+ghEErEJnk0rF6SPDD54T1cGuY5qNtDEfv5cx1Uq7KN+J34
+   A==;
+X-CSE-ConnectionGUID: 4fShWk41ScuxlSi7tyYECQ==
+X-CSE-MsgGUID: sTCehd3cQyWW1E70RlLOWg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11188"; a="24354252"
+X-IronPort-AV: E=Sophos;i="6.10,212,1719903600"; 
+   d="scan'208";a="24354252"
+Received: from orviesa005.jf.intel.com ([10.64.159.145])
+  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Sep 2024 01:23:41 -0700
+X-CSE-ConnectionGUID: 6oAA7FJbSruiYJPpsZmMzw==
+X-CSE-MsgGUID: G7OGkTdsTTy5SmlzG5AKaw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.10,212,1719903600"; 
+   d="scan'208";a="71175839"
+Received: from lkp-server01.sh.intel.com (HELO 9c6b1c7d3b50) ([10.239.97.150])
+  by orviesa005.jf.intel.com with ESMTP; 08 Sep 2024 01:23:36 -0700
+Received: from kbuild by 9c6b1c7d3b50 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1snDCn-000DKi-1v;
+	Sun, 08 Sep 2024 08:23:33 +0000
+Date: Sun, 8 Sep 2024 16:22:35 +0800
+From: kernel test robot <lkp@intel.com>
+To: Heiko Stuebner <heiko@sntech.de>, lee@kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, robh@kernel.org,
+	krzk+dt@kernel.org, conor+dt@kernel.org, jdelvare@suse.com,
+	linux@roeck-us.net, heiko@sntech.de, dmitry.torokhov@gmail.com,
+	pavel@ucw.cz, ukleinek@debian.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-rockchip@lists.infradead.org, linux-input@vger.kernel.org,
+	linux-leds@vger.kernel.org
+Subject: Re: [PATCH v7 1/8] mfd: core: make platform_data pointer const in
+ struct mfd_cell
+Message-ID: <202409081514.inB0qj3o-lkp@intel.com>
+References: <20240905185232.2899464-2-heiko@sntech.de>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20240906-macos-build-support-v2-0-06beff418848@samsung.com>
- <20240906-macos-build-support-v2-8-06beff418848@samsung.com>
- <CAK7LNASpWSXbjF_7n0MhosNism=BpvHOnKsa344RPM_wmC9dGA@mail.gmail.com> <CABj0suBQCc8=0tLng=OWW=K1hjFuLFZWhbjsqHtz2FzZt4i0sw@mail.gmail.com>
-In-Reply-To: <CABj0suBQCc8=0tLng=OWW=K1hjFuLFZWhbjsqHtz2FzZt4i0sw@mail.gmail.com>
-From: Masahiro Yamada <masahiroy@kernel.org>
-Date: Sun, 8 Sep 2024 10:29:30 +0900
-X-Gmail-Original-Message-ID: <CAK7LNARqUTC2GixVeUQpMvzWt=h8KZvLHTHvp3ftxNwJQU6pWQ@mail.gmail.com>
-Message-ID: <CAK7LNARqUTC2GixVeUQpMvzWt=h8KZvLHTHvp3ftxNwJQU6pWQ@mail.gmail.com>
-Subject: Re: [PATCH v2 8/8] Documentation: add howto build in macos
-To: "Daniel Gomez (Samsung)" <d+samsung@kruces.com>
-Cc: da.gomez@samsung.com, Nathan Chancellor <nathan@kernel.org>, 
-	Nicolas Schier <nicolas@fjasle.eu>, Lucas De Marchi <lucas.demarchi@intel.com>, 
-	=?UTF-8?Q?Thomas_Hellstr=C3=B6m?= <thomas.hellstrom@linux.intel.com>, 
-	Rodrigo Vivi <rodrigo.vivi@intel.com>, 
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, Maxime Ripard <mripard@kernel.org>, 
-	Thomas Zimmermann <tzimmermann@suse.de>, David Airlie <airlied@gmail.com>, 
-	William Hubbs <w.d.hubbs@gmail.com>, Chris Brannon <chris@the-brannons.com>, 
-	Kirk Reiser <kirk@reisers.ca>, Samuel Thibault <samuel.thibault@ens-lyon.org>, 
-	Paul Moore <paul@paul-moore.com>, Stephen Smalley <stephen.smalley.work@gmail.com>, 
-	Ondrej Mosnacek <omosnace@redhat.com>, Catalin Marinas <catalin.marinas@arm.com>, 
-	Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>, Oliver Upton <oliver.upton@linux.dev>, 
-	James Morse <james.morse@arm.com>, Suzuki K Poulose <suzuki.poulose@arm.com>, 
-	Zenghui Yu <yuzenghui@huawei.com>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	Jiri Slaby <jirislaby@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
-	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
-	Simona Vetter <simona.vetter@ffwll.ch>, linux-kernel@vger.kernel.org, 
-	linux-kbuild@vger.kernel.org, intel-xe@lists.freedesktop.org, 
-	dri-devel@lists.freedesktop.org, speakup@linux-speakup.org, 
-	selinux@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	kvmarm@lists.linux.dev, linux-serial@vger.kernel.org, llvm@lists.linux.dev, 
-	Finn Behrens <me@kloenk.dev>, gost.dev@samsung.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240905185232.2899464-2-heiko@sntech.de>
 
-On Sat, Sep 7, 2024 at 6:32=E2=80=AFPM Daniel Gomez (Samsung)
-<d+samsung@kruces.com> wrote:
->
-> On Sat, Sep 7, 2024 at 10:33=E2=80=AFAM Masahiro Yamada <masahiroy@kernel=
-.org> wrote:
-> >
-> > On Fri, Sep 6, 2024 at 8:01=E2=80=AFPM Daniel Gomez via B4 Relay
-> > <devnull+da.gomez.samsung.com@kernel.org> wrote:
-> > >
-> > > From: Daniel Gomez <da.gomez@samsung.com>
-> > >
-> > > Add documentation under kbuild/llvm to inform about the experimental
-> > > support for building the Linux kernel in macOS hosts environments.
-> > >
-> > > Signed-off-by: Daniel Gomez <da.gomez@samsung.com>
-> >
-> >
-> > Instead, you can add this instruction to:
-> >
-> > https://github.com/bee-headers/homebrew-bee-headers/blob/main/README.md
->
-> Sure, that can be done as well. But the effort here is to have this
-> integrated. So, I think documentation should be in-tree.
+Hi Heiko,
+
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on next-20240905]
+[also build test ERROR on v6.11-rc6]
+[cannot apply to lee-mfd/for-mfd-next groeck-staging/hwmon-next lee-leds/for-leds-next linus/master lee-mfd/for-mfd-fixes v6.11-rc6 v6.11-rc5 v6.11-rc4]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Heiko-Stuebner/mfd-core-make-platform_data-pointer-const-in-struct-mfd_cell/20240906-025553
+base:   next-20240905
+patch link:    https://lore.kernel.org/r/20240905185232.2899464-2-heiko%40sntech.de
+patch subject: [PATCH v7 1/8] mfd: core: make platform_data pointer const in struct mfd_cell
+config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20240908/202409081514.inB0qj3o-lkp@intel.com/config)
+compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 05f5a91d00b02f4369f46d076411c700755ae041)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240908/202409081514.inB0qj3o-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202409081514.inB0qj3o-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+   In file included from drivers/hid/hid-sensor-hub.c:8:
+   In file included from include/linux/hid.h:29:
+   In file included from include/linux/hid_bpf.h:6:
+   In file included from include/linux/bpf.h:21:
+   In file included from include/linux/kallsyms.h:13:
+   In file included from include/linux/mm.h:2206:
+   include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+   In file included from drivers/hid/hid-sensor-hub.c:8:
+   In file included from include/linux/hid.h:29:
+   In file included from include/linux/hid_bpf.h:6:
+   In file included from include/linux/bpf.h:31:
+   In file included from include/linux/memcontrol.h:13:
+   In file included from include/linux/cgroup.h:26:
+   In file included from include/linux/kernel_stat.h:8:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:14:
+   In file included from arch/hexagon/include/asm/io.h:328:
+   include/asm-generic/io.h:548:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     548 |         val = __raw_readb(PCI_IOBASE + addr);
+         |                           ~~~~~~~~~~ ^
+   include/asm-generic/io.h:561:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     561 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
+      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
+         |                                                   ^
+   In file included from drivers/hid/hid-sensor-hub.c:8:
+   In file included from include/linux/hid.h:29:
+   In file included from include/linux/hid_bpf.h:6:
+   In file included from include/linux/bpf.h:31:
+   In file included from include/linux/memcontrol.h:13:
+   In file included from include/linux/cgroup.h:26:
+   In file included from include/linux/kernel_stat.h:8:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:14:
+   In file included from arch/hexagon/include/asm/io.h:328:
+   include/asm-generic/io.h:574:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     574 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
+      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
+         |                                                   ^
+   In file included from drivers/hid/hid-sensor-hub.c:8:
+   In file included from include/linux/hid.h:29:
+   In file included from include/linux/hid_bpf.h:6:
+   In file included from include/linux/bpf.h:31:
+   In file included from include/linux/memcontrol.h:13:
+   In file included from include/linux/cgroup.h:26:
+   In file included from include/linux/kernel_stat.h:8:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:14:
+   In file included from arch/hexagon/include/asm/io.h:328:
+   include/asm-generic/io.h:585:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     585 |         __raw_writeb(value, PCI_IOBASE + addr);
+         |                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:595:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     595 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:605:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     605 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+>> drivers/hid/hid-sensor-hub.c:744:33: error: initializing 'struct hid_sensor_hub_device *' with an expression of type 'const void *' discards qualifiers [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
+     744 |                 struct hid_sensor_hub_device *hsdev =
+         |                                               ^
+     745 |                         data->hid_sensor_hub_client_devs[i].platform_data;
+         |                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   7 warnings and 1 error generated.
+
+Kconfig warnings: (for reference only)
+   WARNING: unmet direct dependencies detected for OMAP2PLUS_MBOX
+   Depends on [n]: MAILBOX [=y] && (ARCH_OMAP2PLUS || ARCH_K3)
+   Selected by [m]:
+   - TI_K3_M4_REMOTEPROC [=m] && REMOTEPROC [=y] && (ARCH_K3 || COMPILE_TEST [=y])
 
 
+vim +744 drivers/hid/hid-sensor-hub.c
 
-I do not think so.
+401ca24fb34aee srinivas pandruvada 2012-09-05  732  
+401ca24fb34aee srinivas pandruvada 2012-09-05  733  static void sensor_hub_remove(struct hid_device *hdev)
+401ca24fb34aee srinivas pandruvada 2012-09-05  734  {
+401ca24fb34aee srinivas pandruvada 2012-09-05  735  	struct sensor_hub_data *data = hid_get_drvdata(hdev);
+401ca24fb34aee srinivas pandruvada 2012-09-05  736  	unsigned long flags;
+e651a1da442ae0 Srinivas Pandruvada 2015-02-19  737  	int i;
+401ca24fb34aee srinivas pandruvada 2012-09-05  738  
+401ca24fb34aee srinivas pandruvada 2012-09-05  739  	hid_dbg(hdev, " hardware removed\n");
+401ca24fb34aee srinivas pandruvada 2012-09-05  740  	hid_hw_close(hdev);
+f2f13a68c37c13 Axel Lin            2012-09-19  741  	hid_hw_stop(hdev);
+401ca24fb34aee srinivas pandruvada 2012-09-05  742  	spin_lock_irqsave(&data->lock, flags);
+e651a1da442ae0 Srinivas Pandruvada 2015-02-19  743  	for (i = 0; i < data->hid_sensor_client_cnt; ++i) {
+e651a1da442ae0 Srinivas Pandruvada 2015-02-19 @744  		struct hid_sensor_hub_device *hsdev =
+e651a1da442ae0 Srinivas Pandruvada 2015-02-19  745  			data->hid_sensor_hub_client_devs[i].platform_data;
+e651a1da442ae0 Srinivas Pandruvada 2015-02-19  746  		if (hsdev->pending.status)
+e651a1da442ae0 Srinivas Pandruvada 2015-02-19  747  			complete(&hsdev->pending.ready);
+e651a1da442ae0 Srinivas Pandruvada 2015-02-19  748  	}
+401ca24fb34aee srinivas pandruvada 2012-09-05  749  	spin_unlock_irqrestore(&data->lock, flags);
+401ca24fb34aee srinivas pandruvada 2012-09-05  750  	mfd_remove_devices(&hdev->dev);
+401ca24fb34aee srinivas pandruvada 2012-09-05  751  	mutex_destroy(&data->mutex);
+401ca24fb34aee srinivas pandruvada 2012-09-05  752  }
+401ca24fb34aee srinivas pandruvada 2012-09-05  753  
 
-
-Most people are not compile-testing on macOS.
-
-This is an unofficial tip, which you can advertise
-somewhere else.
-
-
-
-
---=20
-Best Regards
-Masahiro Yamada
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
