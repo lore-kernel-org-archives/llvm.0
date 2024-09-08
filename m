@@ -1,336 +1,106 @@
-Received: from mail-ej1-f49.google.com (mail-ej1-f49.google.com [209.85.218.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C602617624F
-	for <llvm@lists.linux.dev>; Sun,  8 Sep 2024 17:41:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 056E7C8D7;
+	Sun,  8 Sep 2024 18:29:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725817266; cv=none; b=BeFqj9DEm969jHFJnU9twwBsjJKsc8qkqtEdr78bMtzYzEYcpjeaRfJiC1tPEZ/ha07F5fRIUYc+s6odnfbZy+FgYgiQMwWQsbGiWcBkDvGnyS32CwLK9tcyk8XmfkdATurL07J6Mk10Lz3R/hoC6wKP5S6YL4tvaWxxBYEpLeA=
+	t=1725820174; cv=none; b=FgN4qTlcFmSFKzRE15XGbF/YhrQDsWMsgcSWZATLImnqHjx98M7tk/pEJ0WLb0vB+JVK3BCaisDnMIVp2scZ4FE5tDu/SvaD5Nue1O0cv6NBJQXx5wlGUY+EAy8eL5V7weOsVUMmGi7sy1IehLqcwEr7RJ/JVOvK2lzGObvq+jA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725817266; c=relaxed/simple;
-	bh=4x2mtOQlRb0PLQYsIdFIS4OpJJNhyfJXhcP1AXkKZFk=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=m81SQ5ukfeeVL5u5T0u/n3p7bbsc4Cehfu4xPQWBa0fUYbTNEevHk78sTz8bS+TGvNTlcKD0pqmgOVZrvfPUeabqgQtvNGsQiZo9fGw+AbS7dE7z2/FM+NM10dPV227jOWb8kc4Sxz3WCxf8cIOxhXSy3GUtm3r/H7mWgyZrPtA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kruces.com; spf=pass smtp.mailfrom=kruces.com; dkim=pass (2048-bit key) header.d=kruces-com.20230601.gappssmtp.com header.i=@kruces-com.20230601.gappssmtp.com header.b=NHpiTt00; arc=none smtp.client-ip=209.85.218.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kruces.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kruces.com
+	s=arc-20240116; t=1725820174; c=relaxed/simple;
+	bh=9L35pRO9O6reaIetMunMgNY2vpHC1rr73V88dtdTRZ8=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=GuD8x5pnlZvzj6OEaHqmQ1dlHA1SOASQwKb4niAOhh9Do0Dnq68sW2Mbohyxjtkto8DQ8qkcewf/jJQ50vzc3p7JNIYWLfXYjkfMPCAHZYnTmwnIjkuPtDj5iqhrHImd1Q3ye6d8RngUOaiMVNBiu7KvdSZnLz7kbAfqHrBPUHk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=CwyRvVWI; arc=none smtp.client-ip=192.198.163.8
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kruces-com.20230601.gappssmtp.com header.i=@kruces-com.20230601.gappssmtp.com header.b="NHpiTt00"
-Received: by mail-ej1-f49.google.com with SMTP id a640c23a62f3a-a8d56155f51so18585466b.2
-        for <llvm@lists.linux.dev>; Sun, 08 Sep 2024 10:41:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kruces-com.20230601.gappssmtp.com; s=20230601; t=1725817262; x=1726422062; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=fviFcg3HLptplXdgVPwFETuKylRy16bbpArI+x9x9sA=;
-        b=NHpiTt00RoDzsDS3uY+WSfaaIIZ8GzW6miyemOJeNyisGWJaRU6ZqWwlW7SV4YY2of
-         KeOslhYlrwn8AcEVXeF2o7Bd6zeUPIcpcEAKGohKkkt8vnIs/9cUgtfX6s8wm1ks3g80
-         sApK8P2SaUWIBkufcyVpyn6SNi8WkWCWDM4ySmqxaDXAETHmxKKnLKOTnW1HSvhdcxw1
-         u4zjykU5NPcj1jufwn5HwxYsq+I2oX9KBaaYuE9shDRBrU5s7UT9H5x0QErAEEKMANM7
-         zj8E4YmJ0W7AIGLrQl181bggUX8pq88H0NgFH4jGhm7e9D5IQI3DIRuJOspo88aH33Lp
-         fCsg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1725817262; x=1726422062;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=fviFcg3HLptplXdgVPwFETuKylRy16bbpArI+x9x9sA=;
-        b=Z0ZlMGCGugYKIaM+czHXXnRF7c2AfM+Cz+3wARNzCI71HfaXkmE4FLRinGPeXZw0bL
-         PvDSguhrsUE+Q/8wUh8khWDP5tulHbxpWbHNnQZxvYSv0qLtiUQBWZu1wCfH3D0RSHog
-         laj5nyVebPJ/BAjYmcOGNG/1UhN6nkGuPMTa7ZK7Z8yEfToC4U1ywFdOO4HZh4ANmCOV
-         reua1Un5P0kUlJHrV5kIYGqPYG5GRpmNQC+6/IBO+8EirwJ1vO6DUyxnnTar5U5M2AeK
-         JeX5OQrWK8HC+PZ+FS2fIFsqWJNN5FJeDPn+/1uKEfkgWOUPFya/rRfctBySgdXr+ePY
-         Fhlg==
-X-Forwarded-Encrypted: i=1; AJvYcCW7Azh7UdEMbaUmrSRrat0VFl7phy/IhHFps3K63v+nEQmxw4OUw+zOHZK56hlThWePb1gm@lists.linux.dev
-X-Gm-Message-State: AOJu0YznOE6d4nyoNfbeqmzj9t3XwD2yPGwpSeZUbKRc10XgJxm0IsIq
-	RwKIn72O1uG4DQ/jKmZhYViAxgc9vVCmAlViaPajByhPaFQBwBZ4FiH3ov4Qza2GnZAOYeStPlk
-	LKodo+QSi7CIehI4m3k6skhL7gOEZTXvNMu9Pyw==
-X-Google-Smtp-Source: AGHT+IG0taDaRweGpDhiFssf20qgh8akE04jwmSCvgTsBJig1BN0pA1T1q/8W0tMp8E8Ed3WvXCdk5VBeHS2T6PZWVU=
-X-Received: by 2002:a17:907:9690:b0:a8d:2faf:d343 with SMTP id
- a640c23a62f3a-a8d2fafee8fmr226989166b.27.1725817261797; Sun, 08 Sep 2024
- 10:41:01 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="CwyRvVWI"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1725820172; x=1757356172;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=9L35pRO9O6reaIetMunMgNY2vpHC1rr73V88dtdTRZ8=;
+  b=CwyRvVWI4fVPUg6K0yfOdadWq5DbEd1vxZ0tA/GseNFcAYD2j+HCCH0E
+   8IbbCEmVO89i562kmJxynyyGxCBWsSmX7yzDlWXfg0U/lfMEgzhhFQ/yN
+   SCgAW0I77ramiN4I4BKbcgEl7mTJ9roaWPVV26ytiLfy/bbN2J+9B/YWu
+   seXtNFhwPtehBk4czEtJW4b5y9VknxDRHPzcbiQtP/vuchQEcw+giiKQf
+   pOs7+mq7A0ifVX3omPYiBblTy8t3H+gRKu2Jy8WvkD10BI36kzlQrWFYh
+   0252OGkZY5amNTapdQpmpnlNkGRW4l2OVZZLMHYFMswwc5Zx77a3FjKjf
+   A==;
+X-CSE-ConnectionGUID: jy/nJVaFSBiZ1sKcHhHYlw==
+X-CSE-MsgGUID: Zy03Zq+LS4Sb8hsBlZPWLQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11189"; a="42018211"
+X-IronPort-AV: E=Sophos;i="6.10,212,1719903600"; 
+   d="scan'208";a="42018211"
+Received: from fmviesa009.fm.intel.com ([10.60.135.149])
+  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Sep 2024 11:29:32 -0700
+X-CSE-ConnectionGUID: x/qy3MMgQ8OBJWOdlIhXmA==
+X-CSE-MsgGUID: 5Um0AMeiTjWYPn03FouZfA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.10,212,1719903600"; 
+   d="scan'208";a="66445901"
+Received: from lkp-server01.sh.intel.com (HELO 9c6b1c7d3b50) ([10.239.97.150])
+  by fmviesa009.fm.intel.com with ESMTP; 08 Sep 2024 11:29:30 -0700
+Received: from kbuild by 9c6b1c7d3b50 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1snMfA-000Doh-1Q;
+	Sun, 08 Sep 2024 18:29:28 +0000
+Date: Mon, 9 Sep 2024 02:28:43 +0800
+From: kernel test robot <lkp@intel.com>
+To: Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [morimoto:sound-pcm-cleanup-2024-09-06 3/10]
+ sound/soc/soc-compress.c:545: warning: Excess function parameter 'num'
+ description in 'snd_soc_new_compress'
+Message-ID: <202409090248.IXLfqQMV-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20240906-macos-build-support-v2-0-06beff418848@samsung.com>
- <20240906-macos-build-support-v2-2-06beff418848@samsung.com> <CAK7LNARw-7uwJB7ibmSYE5nYUtPXcr4J9cHBQqm9BnNS=SRUhQ@mail.gmail.com>
-In-Reply-To: <CAK7LNARw-7uwJB7ibmSYE5nYUtPXcr4J9cHBQqm9BnNS=SRUhQ@mail.gmail.com>
-From: "Daniel Gomez (Samsung)" <d+samsung@kruces.com>
-Date: Sun, 8 Sep 2024 19:40:34 +0200
-Message-ID: <CABj0suCHeWGDXX-S6U9X5iCzwMqn9pq=i84PSKwKtUXhGxaBjQ@mail.gmail.com>
-Subject: Re: [PATCH v2 2/8] file2alias: fix uuid_t definitions for macos
-To: Masahiro Yamada <masahiroy@kernel.org>
-Cc: da.gomez@samsung.com, Nathan Chancellor <nathan@kernel.org>, 
-	Nicolas Schier <nicolas@fjasle.eu>, Lucas De Marchi <lucas.demarchi@intel.com>, 
-	=?UTF-8?Q?Thomas_Hellstr=C3=B6m?= <thomas.hellstrom@linux.intel.com>, 
-	Rodrigo Vivi <rodrigo.vivi@intel.com>, 
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, Maxime Ripard <mripard@kernel.org>, 
-	Thomas Zimmermann <tzimmermann@suse.de>, David Airlie <airlied@gmail.com>, 
-	William Hubbs <w.d.hubbs@gmail.com>, Chris Brannon <chris@the-brannons.com>, 
-	Kirk Reiser <kirk@reisers.ca>, Samuel Thibault <samuel.thibault@ens-lyon.org>, 
-	Paul Moore <paul@paul-moore.com>, Stephen Smalley <stephen.smalley.work@gmail.com>, 
-	Ondrej Mosnacek <omosnace@redhat.com>, Catalin Marinas <catalin.marinas@arm.com>, 
-	Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>, Oliver Upton <oliver.upton@linux.dev>, 
-	James Morse <james.morse@arm.com>, Suzuki K Poulose <suzuki.poulose@arm.com>, 
-	Zenghui Yu <yuzenghui@huawei.com>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	Jiri Slaby <jirislaby@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
-	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
-	Simona Vetter <simona.vetter@ffwll.ch>, linux-kernel@vger.kernel.org, 
-	linux-kbuild@vger.kernel.org, intel-xe@lists.freedesktop.org, 
-	dri-devel@lists.freedesktop.org, speakup@linux-speakup.org, 
-	selinux@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	kvmarm@lists.linux.dev, linux-serial@vger.kernel.org, llvm@lists.linux.dev, 
-	Finn Behrens <me@kloenk.dev>, gost.dev@samsung.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Sun, Sep 8, 2024 at 1:56=E2=80=AFAM Masahiro Yamada <masahiroy@kernel.or=
-g> wrote:
->
-> On Fri, Sep 6, 2024 at 8:01=E2=80=AFPM Daniel Gomez via B4 Relay
-> <devnull+da.gomez.samsung.com@kernel.org> wrote:
-> >
-> > From: Daniel Gomez <da.gomez@samsung.com>
-> >
-> > The uuid_t struct defined in sys/types.h on macOS hosts conflicts with
-> > the one defined in file2alias, resulting in the typedef redefinition
-> > error below. To resolve this conflict, define the _UUID_T and
-> > __GETHOSTUUID_ in file2alias HOSTCFLAGS.
-> >
-> > Error:
-> >   HOSTCC  scripts/mod/file2alias.o scripts/mod/file2alias.c:45:3:
-> > error: typedef redefinition with different types ('struct uuid_t' vs
-> > '__darwin_uuid_t' (aka 'unsigned char[16]'))    45 | } uuid_t;       |
-> > ^
-> > /Library/Developer/CommandLineTools/SDKs/MacOSX14.sdk/usr/include/
-> >    sys/_types/_uuid_t.h:31:25: note: previous definition is here 31 |
-> >    typedef __darwin_uuid_t uuid_t;    |                         ^
-> > scripts/mod/file2alias.c:1354:7: error: member reference base
-> >  type 'typeof (((struct tee_client_device_id *)0)->uuid)' (aka
-> >  'unsigned char[16]') is not a structure or union 1354 |
-> >  uuid->b[0], uuid->b[1], uuid->b[2], uuid->b[3], uuid->b[4],      |
-> >  ~~~~^ ~
-> > /Library/Developer/CommandLineTools/SDKs/MacOSX14.sdk/usr/include/
-> >    secure/_stdio.h:47:56: note: expanded from macro 'sprintf' 47 |
-> >    __builtin___sprintf_chk (str, 0, __darwin_obsz(str), __VA_ARGS__)
-> >    |                                                        ^~~~~~~~~~~
-> > scripts/mod/file2alias.c:1354:19: error: member reference base
-> >  type 'typeof (((struct tee_client_device_id *)0)->uuid)' (aka
-> >  'unsigned char[16]') is not a structure or union 1354 |
-> >  uuid->b[0], uuid->b[1], uuid->b[2], uuid->b[3], uuid->b[4],      |
-> >  ~~~~^ ~
-> > /Library/Developer/CommandLineTools/SDKs/MacOSX14.sdk/usr/include/
-> >    secure/_stdio.h:47:56: note: expanded from macro 'sprintf' 47 |
-> >    __builtin___sprintf_chk (str, 0, __darwin_obsz(str), __VA_ARGS__)
-> >    |                                                        ^~~~~~~~~~~
-> > scripts/mod/file2alias.c:1354:31: error: member reference base
-> >  type 'typeof (((struct tee_client_device_id *)0)->uuid)' (aka
-> >  'unsigned char[16]') is not a structure or union 1354 |
-> >  uuid->b[0], uuid->b[1], uuid->b[2], uuid->b[3], uuid->b[4],      |
-> >  ~~~~^ ~
-> > /Library/Developer/CommandLineTools/SDKs/MacOSX14.sdk/usr/include/
-> >    secure/_stdio.h:47:56: note: expanded from macro 'sprintf' 47 |
-> >    __builtin___sprintf_chk (str, 0, __darwin_obsz(str), __VA_ARGS__)
-> >    |                                                        ^~~~~~~~~~~
-> > scripts/mod/file2alias.c:1354:43: error: member reference base
-> >  type 'typeof (((struct tee_client_device_id *)0)->uuid)' (aka
-> >  'unsigned char[16]') is not a structure or union 1354 |
-> >  uuid->b[0], uuid->b[1], uuid->b[2], uuid->b[3], uuid->b[4],      |
-> >  ~~~~^ ~
-> > /Library/Developer/CommandLineTools/SDKs/MacOSX14.sdk/usr/include/
-> >    secure/_stdio.h:47:56: note: expanded from macro 'sprintf' 47 |
-> >    __builtin___sprintf_chk (str, 0, __darwin_obsz(str), __VA_ARGS__)
-> >    |                                                        ^~~~~~~~~~~
-> > scripts/mod/file2alias.c:1354:55: error: member reference base
-> >  type 'typeof (((struct tee_client_device_id *)0)->uuid)' (aka
-> >  'unsigned char[16]') is not a structure or union 1354 |
-> >  uuid->b[0], uuid->b[1], uuid->b[2], uuid->b[3], uuid->b[4],      |
-> >  ~~~~^ ~
-> > /Library/Developer/CommandLineTools/SDKs/MacOSX14.sdk/usr/include/
-> >    secure/_stdio.h:47:56: note: expanded from macro 'sprintf' 47 |
-> >    __builtin___sprintf_chk (str, 0, __darwin_obsz(str), __VA_ARGS__)
-> >    |                                                        ^~~~~~~~~~~
-> > scripts/mod/file2alias.c:1355:7: error: member reference base
-> >  type 'typeof (((struct tee_client_device_id *)0)->uuid)' (aka
-> >  'unsigned char[16]') is not a structure or union 1355 |
-> >  uuid->b[5], uuid->b[6], uuid->b[7], uuid->b[8], uuid->b[9],      |
-> >  ~~~~^ ~
-> > /Library/Developer/CommandLineTools/SDKs/MacOSX14.sdk/usr/include/
-> >    secure/_stdio.h:47:56: note: expanded from macro 'sprintf' 47 |
-> >    __builtin___sprintf_chk (str, 0, __darwin_obsz(str), __VA_ARGS__)
-> >    |                                                        ^~~~~~~~~~~
-> > scripts/mod/file2alias.c:1355:19: error: member reference base
-> >  type 'typeof (((struct tee_client_device_id *)0)->uuid)' (aka
-> >  'unsigned char[16]') is not a structure or union 1355 |
-> >  uuid->b[5], uuid->b[6], uuid->b[7], uuid->b[8], uuid->b[9],      |
-> >  ~~~~^ ~
-> > /Library/Developer/CommandLineTools/SDKs/MacOSX14.sdk/usr/include/
-> >    secure/_stdio.h:47:56: note: expanded from macro 'sprintf' 47 |
-> >    __builtin___sprintf_chk (str, 0, __darwin_obsz(str), __VA_ARGS__)
-> >    |                                                        ^~~~~~~~~~~
-> > scripts/mod/file2alias.c:1355:31: error: member reference base
-> >  type 'typeof (((struct tee_client_device_id *)0)->uuid)' (aka
-> >  'unsigned char[16]') is not a structure or union 1355 |
-> >  uuid->b[5], uuid->b[6], uuid->b[7], uuid->b[8], uuid->b[9],      |
-> >  ~~~~^ ~
-> > /Library/Developer/CommandLineTools/SDKs/MacOSX14.sdk/usr/include/
-> >    secure/_stdio.h:47:56: note: expanded from macro 'sprintf' 47 |
-> >    __builtin___sprintf_chk (str, 0, __darwin_obsz(str), __VA_ARGS__)
-> >    |                                                        ^~~~~~~~~~~
-> > scripts/mod/file2alias.c:1355:43: error: member reference base
-> >  type 'typeof (((struct tee_client_device_id *)0)->uuid)' (aka
-> >  'unsigned char[16]') is not a structure or union 1355 |
-> >  uuid->b[5], uuid->b[6], uuid->b[7], uuid->b[8], uuid->b[9],      |
-> >  ~~~~^ ~
-> > /Library/Developer/CommandLineTools/SDKs/MacOSX14.sdk/usr/include/
-> >    secure/_stdio.h:47:56: note: expanded from macro 'sprintf' 47 |
-> >    __builtin___sprintf_chk (str, 0, __darwin_obsz(str), __VA_ARGS__)
-> >    |                                                        ^~~~~~~~~~~
-> > scripts/mod/file2alias.c:1355:55: error: member reference base
-> >  type 'typeof (((struct tee_client_device_id *)0)->uuid)' (aka
-> >  'unsigned char[16]') is not a structure or union 1355 |
-> >  uuid->b[5], uuid->b[6], uuid->b[7], uuid->b[8], uuid->b[9],      |
-> >  ~~~~^ ~
-> > /Library/Developer/CommandLineTools/SDKs/MacOSX14.sdk/usr/include/
-> >    secure/_stdio.h:47:56: note: expanded from macro 'sprintf' 47 |
-> >    __builtin___sprintf_chk (str, 0, __darwin_obsz(str), __VA_ARGS__)
-> >    |                                                        ^~~~~~~~~~~
-> > scripts/mod/file2alias.c:1356:7: error: member reference base
-> >  type 'typeof (((struct tee_client_device_id *)0)->uuid)' (aka
-> >  'unsigned char[16]') is not a structure or union 1356 |
-> >  uuid->b[10], uuid->b[11], uuid->b[12], uuid->b[13], uuid->b[14],      =
-|
-> >  ~~~~^ ~
-> > /Library/Developer/CommandLineTools/SDKs/MacOSX14.sdk/usr/include/
-> >    secure/_stdio.h:47:56: note: expanded from macro 'sprintf' 47 |
-> >    __builtin___sprintf_chk (str, 0, __darwin_obsz(str), __VA_ARGS__)
-> >    |                                                        ^~~~~~~~~~~
-> > scripts/mod/file2alias.c:1356:20: error: member reference base
-> >  type 'typeof (((struct tee_client_device_id *)0)->uuid)' (aka
-> >  'unsigned char[16]') is not a structure or union 1356 |
-> >  uuid->b[10], uuid->b[11], uuid->b[12], uuid->b[13], uuid->b[14],      =
-|
-> >  ~~~~^ ~
-> > /Library/Developer/CommandLineTools/SDKs/MacOSX14.sdk/usr/include/
-> >    secure/_stdio.h:47:56: note: expanded from macro 'sprintf' 47 |
-> >    __builtin___sprintf_chk (str, 0, __darwin_obsz(str), __VA_ARGS__)
-> >    |                                                        ^~~~~~~~~~~
-> > scripts/mod/file2alias.c:1356:33: error: member reference base
-> >  type 'typeof (((struct tee_client_device_id *)0)->uuid)' (aka
-> >  'unsigned char[16]') is not a structure or union 1356 |
-> >  uuid->b[10], uuid->b[11], uuid->b[12], uuid->b[13], uuid->b[14],      =
-|
-> >  ~~~~^ ~
-> > /Library/Developer/CommandLineTools/SDKs/MacOSX14.sdk/usr/include/
-> >    secure/_stdio.h:47:56: note: expanded from macro 'sprintf' 47 |
-> >    __builtin___sprintf_chk (str, 0, __darwin_obsz(str), __VA_ARGS__)
-> >    |                                                        ^~~~~~~~~~~
-> > scripts/mod/file2alias.c:1356:46: error: member reference base
-> >  type 'typeof (((struct tee_client_device_id *)0)->uuid)' (aka
-> >  'unsigned char[16]') is not a structure or union 1356 |
-> >  uuid->b[10], uuid->b[11], uuid->b[12], uuid->b[13], uuid->b[14],      =
-|
-> >  ~~~~^ ~
-> > /Library/Developer/CommandLineTools/SDKs/MacOSX14.sdk/usr/include/
-> >    secure/_stdio.h:47:56: note: expanded from macro 'sprintf' 47 |
-> >    __builtin___sprintf_chk (str, 0, __darwin_obsz(str), __VA_ARGS__)
-> >    |                                                        ^~~~~~~~~~~
-> > scripts/mod/file2alias.c:1356:59: error: member reference base
-> >  type 'typeof (((struct tee_client_device_id *)0)->uuid)' (aka
-> >  'unsigned char[16]') is not a structure or union 1356 |
-> >  uuid->b[10], uuid->b[11], uuid->b[12], uuid->b[13], uuid->b[14],      =
-|
-> >  ~~~~^ ~
-> > /Library/Developer/CommandLineTools/SDKs/MacOSX14.sdk/usr/include/
-> >    secure/_stdio.h:47:56: note: expanded from macro 'sprintf' 47 |
-> >    __builtin___sprintf_chk (str, 0, __darwin_obsz(str), __VA_ARGS__)
-> >    |                                                        ^~~~~~~~~~~
-> > scripts/mod/file2alias.c:1357:7: error: member reference base
-> >  type 'typeof (((struct tee_client_device_id *)0)->uuid)' (aka
-> >  'unsigned char[16]') is not a structure or union 1357 |
-> >  uuid->b[15]);      |                 ~~~~^ ~
-> > /Library/Developer/CommandLineTools/SDKs/MacOSX14.sdk/usr/include/
-> >    secure/_stdio.h:47:56: note: expanded from macro 'sprintf' 47 |
-> >    __builtin___sprintf_chk (str, 0, __darwin_obsz(str), __VA_ARGS__)
-> >    |                                                        ^~~~~~~~~~~
-> > 17 errors generated.
-> >
-> > Suggested-by: Nicolas Schier <nicolas@fjasle.eu>
-> > Signed-off-by: Daniel Gomez <da.gomez@samsung.com>
-> > ---
-> >  scripts/mod/Makefile     | 2 ++
-> >  scripts/mod/file2alias.c | 3 +++
-> >  2 files changed, 5 insertions(+)
-> >
-> > diff --git a/scripts/mod/Makefile b/scripts/mod/Makefile
-> > index c729bc936bae..75c12c045f21 100644
-> > --- a/scripts/mod/Makefile
-> > +++ b/scripts/mod/Makefile
-> > @@ -8,6 +8,8 @@ modpost-objs    :=3D modpost.o file2alias.o sumversion.=
-o symsearch.o
-> >
-> >  devicetable-offsets-file :=3D devicetable-offsets.h
-> >
-> > +HOSTCFLAGS_file2alias.o +=3D -D_UUID_T -D__GETHOSTUUID_H
-> > +
-> >  $(obj)/$(devicetable-offsets-file): $(obj)/devicetable-offsets.s FORCE
-> >         $(call filechk,offsets,__DEVICETABLE_OFFSETS_H__)
-> >
-> > diff --git a/scripts/mod/file2alias.c b/scripts/mod/file2alias.c
-> > index 99dce93a4188..ab743f6d60ef 100644
-> > --- a/scripts/mod/file2alias.c
-> > +++ b/scripts/mod/file2alias.c
-> > @@ -11,6 +11,9 @@
-> >   */
-> >
-> >  #include "modpost.h"
-> > +#ifdef __APPLE__
-> > +#define uuid_t sys_uuid_t
-> > +#endif
-> >  #include "devicetable-offsets.h"
->
->
->
->
-> Is this what Nicolas suggested?
-> https://lore.kernel.org/lkml/20240807-sexy-roadrunner-of-acceptance-a84bb=
-f@lindesnes/
->
->
-> I thought he suggested replacing #ifdef __APPLE__
-> with -D_UUID_T -D__GETHOSTUUID_H.
->
->
-> You added -D_UUID_T -D__GETHOSTUUID_H,
-> keeping #ifdef __APPLE__.
+tree:   https://github.com/morimoto/linux sound-pcm-cleanup-2024-09-06
+head:   46ce7eb32f30081c6c26a57ad12a2b20f9f12d09
+commit: 9dc7690e8c84c67ffe3d525e1a5bdf66338f3529 [3/10] ASoC: rename rtd->num to rtd->id
+config: i386-buildonly-randconfig-004-20240908 (https://download.01.org/0day-ci/archive/20240909/202409090248.IXLfqQMV-lkp@intel.com/config)
+compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240909/202409090248.IXLfqQMV-lkp@intel.com/reproduce)
 
-I forgot to remove this.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202409090248.IXLfqQMV-lkp@intel.com/
 
-Based on your suggestion in the other thread to use/overwrite
-HOSTCFLAGS via the command line, it seems I should drop this patch.
-Can you confirm?
+All warnings (new ones prefixed by >>):
 
->
->
->
->
->
->
->
->
->
-> >  /* We use the ELF typedefs for kernel_ulong_t but bite the bullet and
-> >
-> > --
-> > 2.46.0
-> >
-> >
->
->
-> --
-> Best Regards
-> Masahiro Yamada
+   sound/soc/soc-compress.c:545: warning: Function parameter or struct member 'id' not described in 'snd_soc_new_compress'
+>> sound/soc/soc-compress.c:545: warning: Excess function parameter 'num' description in 'snd_soc_new_compress'
+
+
+vim +545 sound/soc/soc-compress.c
+
+2a99ef0fdb35a0 Liam Girdwood     2014-01-17  535  
+6f0c42269f000b Jie Yang          2015-10-13  536  /**
+6f0c42269f000b Jie Yang          2015-10-13  537   * snd_soc_new_compress - create a new compress.
+6f0c42269f000b Jie Yang          2015-10-13  538   *
+6f0c42269f000b Jie Yang          2015-10-13  539   * @rtd: The runtime for which we will create compress
+6f0c42269f000b Jie Yang          2015-10-13  540   * @num: the device index number (zero based - shared with normal PCMs)
+6f0c42269f000b Jie Yang          2015-10-13  541   *
+6f0c42269f000b Jie Yang          2015-10-13  542   * Return: 0 for success, else error.
+6f0c42269f000b Jie Yang          2015-10-13  543   */
+9dc7690e8c84c6 Kuninori Morimoto 2024-09-06  544  int snd_soc_new_compress(struct snd_soc_pcm_runtime *rtd, int id)
+1245b7005de02d Namarta Kohli     2012-08-16 @545  {
+
+:::::: The code at line 545 was first introduced by commit
+:::::: 1245b7005de02d5bfa0c321df925f5b6c83c99e1 ASoC: add compress stream support
+
+:::::: TO: Namarta Kohli <namartax.kohli@intel.com>
+:::::: CC: Mark Brown <broonie@opensource.wolfsonmicro.com>
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
