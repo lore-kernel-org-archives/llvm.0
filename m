@@ -1,135 +1,170 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D5571482E2;
-	Sun,  8 Sep 2024 14:06:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA5414436E;
+	Sun,  8 Sep 2024 17:07:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725804362; cv=none; b=au6LsIJAP9/khXXpnS7bekc2yRBpz9nqd6hANDsRHcJVtLU6v9pH98v1xUqbB+CGrIkgMuUYvc0c7U3Ds9/kex7/EzAReqksWuJnjDIOytITHxajaLWnkSluf2XVQo4MHU9J7xKHA2AlcYyGETK+qjttzlsF5H3KimJSXQ5SAkg=
+	t=1725815250; cv=none; b=oHRac5S87oybYLCnZWgMSN6X63R3zkQEFQjzMMNmCU0JFeQRhDJZrHPx3eypb/juIDYOwDdDJ/ZQ9j0bSvXD3ZN3A8fsq6nUewQ70GC7CnySJOxKYD5OzSw0Uv57lAvSmwDBQZcK6nz9P6oxT4QVTsmKz5I7CiQqVjkl0D//pSI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725804362; c=relaxed/simple;
-	bh=Ad4/7XPxi3RBCcpnHNdup/IntXAmdAiFzCqV31ZrC8E=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=DbUbZXCUUo5FZ/tCOxArufr3hxIGiqNx/8yS1mb75PIMG3yZfudatw41zHro3Gy8ixt/Hs+J0myaUGN7m49bsyH8F2DtmHHeIPqUpJHMSqzp857Ni/uuFeKj7HgBDeuE+SqkVDegfrgcThyC74BlwL5UNhzgbTZ2AMf/S3h3a/8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AcHlyBuY; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1725815250; c=relaxed/simple;
+	bh=P2/0U6lW5ks2HD0ZSmhZupVFrPU9sUMaH9Nid6z7tdw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=uE+qTt3ebdLeFMzzHL+jMUktWubb12KMfCjCVGLzz7ibiHcXPqeqDaFPdBtxoLLJF4HxkF0A/Cvg7sNTTwcX8QS6pU54M9iYn9+bjQqi2VHmNwJvrgL5M7wYYut5L0JHWpL4eLD/Ask2505v+zCsK5nRvOmHRxv4rw4wV9Gquw4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=MsGFvEAy; arc=none smtp.client-ip=198.175.65.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AcHlyBuY"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 11E2CC4CECD;
-	Sun,  8 Sep 2024 14:06:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1725804362;
-	bh=Ad4/7XPxi3RBCcpnHNdup/IntXAmdAiFzCqV31ZrC8E=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=AcHlyBuYBPCOQ7jIB2rntkKpQdPTJ/l7pcHdzNcGFkTWTjYHnFM6WJ5nTP0MW6Caa
-	 Zt1ox1IDu3uaP3//4TeYKuDih3pmV8U8zAjj2LN9kHSvhu7Ky/HxAxH61fOdiEzhP6
-	 sHgCRPF0qzcgHokT3S6LiNsJko5TbcQWTLxoVP+jp5ddJgH6gx/p4T4ZpzV0sAxAHC
-	 1aj4cTK1GRUM95sVNf+RtsMbnQv9lHcE3eQPkpEXfh1bppFpjnQhY3S5iMKvAe0fAU
-	 88/sCANnEpsaLV1/cQgcuGTU1kEml3J60TeVpU2uRsvi2qwExQvCPXOQIU7UQ4+1ea
-	 4fGxipFZjEfDA==
-Received: by mail-lf1-f43.google.com with SMTP id 2adb3069b0e04-53568ffc525so4767385e87.0;
-        Sun, 08 Sep 2024 07:06:01 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCVBeGU/cJzcGWkVNjZS0+2FGqQcL1NImLPn0cl90Qf69fKOw23/4G7Y/z+KTvR60BAmXcFTxw==@lists.linux.dev, AJvYcCWTVlyfH+MT/B7gb1T9friYUl1hVKOa7h7Bl0imFmJn+Gi7N73ml/kLDypOLnvvoISk5UCkAy4=@lists.linux.dev
-X-Gm-Message-State: AOJu0YzLD3KCWL+jAehM/AKFzqUj5vMVe7EDmyvL1oiKwXRl+Mxek3Z5
-	cV6/cuyZkHgr8SSgiFBQxZlan5yf6gDDMMMdr+lvuSaQeQKqkXh/ttlNh41VVuOFejA8VjZdPOX
-	FYxNFwzOv2MjdGaXpf1HGKfwk3dw=
-X-Google-Smtp-Source: AGHT+IEekyXzzy8xWmAgDNhgqelhya4e5VFx9Ykjsgx5+vTZUqkhDQk7X/hDch9ahgJlF6RSlE5QnOyvMXW2LHKx9EA=
-X-Received: by 2002:a05:6512:138f:b0:536:53f0:2f8e with SMTP id
- 2adb3069b0e04-536587fcc5fmr4978005e87.37.1725804360702; Sun, 08 Sep 2024
- 07:06:00 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="MsGFvEAy"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1725815249; x=1757351249;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=P2/0U6lW5ks2HD0ZSmhZupVFrPU9sUMaH9Nid6z7tdw=;
+  b=MsGFvEAyAuY1CV3U6HTfdv3yVYPSP1r50YayOnzGIbSVOh1CQ3ODWvpM
+   qO+mgzhHJuME1br5/sgC46XymZjE43Cr/PTyD7eqs5rAP+uyt4JbWzpEc
+   MnOi+sS4s2C4zoed/WsMWgu8RvIyW6xVqSy8fk6F/mtOGWB6G7ShmUdXq
+   GwuFX3UMawNDA6I91n+wfmRLv2R7OsFhACQP51j6RifKULSU9E+jYt8Xt
+   TQ7bWMUh5xiJ41W/JiFJMfc5LVgzmXv4RKEBP4qot7DrNsyQTeJFrsxyl
+   ++dyKQAiZXXuO2hIQuf4wHvhQ6zJe/KhhRirAc/T7edJ/oSA3dHTzf0/x
+   w==;
+X-CSE-ConnectionGUID: D1nKYJqMTie7vEDLCXAgZA==
+X-CSE-MsgGUID: 3JPA04nGQJWj5AlLkG1QEA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11189"; a="47028569"
+X-IronPort-AV: E=Sophos;i="6.10,212,1719903600"; 
+   d="scan'208";a="47028569"
+Received: from fmviesa008.fm.intel.com ([10.60.135.148])
+  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Sep 2024 10:07:28 -0700
+X-CSE-ConnectionGUID: iZ83Dsn3QYS6/GzGz2KYGw==
+X-CSE-MsgGUID: Ta/qcRvVSWmtx+Bm2/kzRw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.10,212,1719903600"; 
+   d="scan'208";a="66478878"
+Received: from lkp-server01.sh.intel.com (HELO 9c6b1c7d3b50) ([10.239.97.150])
+  by fmviesa008.fm.intel.com with ESMTP; 08 Sep 2024 10:07:26 -0700
+Received: from kbuild by 9c6b1c7d3b50 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1snLNk-000Dkl-0t;
+	Sun, 08 Sep 2024 17:07:24 +0000
+Date: Mon, 9 Sep 2024 01:06:48 +0800
+From: kernel test robot <lkp@intel.com>
+To: Florian Westphal <fw@strlen.de>, netfilter-devel@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Florian Westphal <fw@strlen.de>, cgroups@vger.kernel.org,
+	Nadia Pinaeva <n.m.pinaeva@gmail.com>
+Subject: Re: [PATCH nf 2/2] netfilter: nft_socket: make cgroupsv2 matching
+ work with namespaces
+Message-ID: <202409090022.jxFbbVYj-lkp@intel.com>
+References: <20240905105451.28857-2-fw@strlen.de>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20240906-macos-build-support-v2-0-06beff418848@samsung.com> <20240906-macos-build-support-v2-1-06beff418848@samsung.com>
-In-Reply-To: <20240906-macos-build-support-v2-1-06beff418848@samsung.com>
-From: Masahiro Yamada <masahiroy@kernel.org>
-Date: Sun, 8 Sep 2024 23:05:24 +0900
-X-Gmail-Original-Message-ID: <CAK7LNASdvtkSgTGip=Q5gmx5x8X_EYarjkEum+HMtFC83sSnXg@mail.gmail.com>
-Message-ID: <CAK7LNASdvtkSgTGip=Q5gmx5x8X_EYarjkEum+HMtFC83sSnXg@mail.gmail.com>
-Subject: Re: [PATCH v2 1/8] scripts: subarch.include: fix SUBARCH on macOS hosts
-To: da.gomez@samsung.com
-Cc: Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nicolas@fjasle.eu>, 
-	Lucas De Marchi <lucas.demarchi@intel.com>, 
-	=?UTF-8?Q?Thomas_Hellstr=C3=B6m?= <thomas.hellstrom@linux.intel.com>, 
-	Rodrigo Vivi <rodrigo.vivi@intel.com>, 
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, Maxime Ripard <mripard@kernel.org>, 
-	Thomas Zimmermann <tzimmermann@suse.de>, David Airlie <airlied@gmail.com>, 
-	William Hubbs <w.d.hubbs@gmail.com>, Chris Brannon <chris@the-brannons.com>, 
-	Kirk Reiser <kirk@reisers.ca>, Samuel Thibault <samuel.thibault@ens-lyon.org>, 
-	Paul Moore <paul@paul-moore.com>, Stephen Smalley <stephen.smalley.work@gmail.com>, 
-	Ondrej Mosnacek <omosnace@redhat.com>, Catalin Marinas <catalin.marinas@arm.com>, 
-	Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>, Oliver Upton <oliver.upton@linux.dev>, 
-	James Morse <james.morse@arm.com>, Suzuki K Poulose <suzuki.poulose@arm.com>, 
-	Zenghui Yu <yuzenghui@huawei.com>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	Jiri Slaby <jirislaby@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
-	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
-	Simona Vetter <simona.vetter@ffwll.ch>, linux-kernel@vger.kernel.org, 
-	linux-kbuild@vger.kernel.org, intel-xe@lists.freedesktop.org, 
-	dri-devel@lists.freedesktop.org, speakup@linux-speakup.org, 
-	selinux@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	kvmarm@lists.linux.dev, linux-serial@vger.kernel.org, llvm@lists.linux.dev, 
-	Finn Behrens <me@kloenk.dev>, "Daniel Gomez (Samsung)" <d+samsung@kruces.com>, gost.dev@samsung.com, 
-	Nick Desaulniers <nick.desaulniers@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240905105451.28857-2-fw@strlen.de>
 
-On Fri, Sep 6, 2024 at 8:01=E2=80=AFPM Daniel Gomez via B4 Relay
-<devnull+da.gomez.samsung.com@kernel.org> wrote:
->
-> From: Nick Desaulniers <nick.desaulniers@gmail.com>
->
-> When building the Linux kernel on an aarch64 macOS based host, if we don'=
-t
-> specify a value for ARCH when invoking make, we default to arm and thus
-> multi_v7_defconfig rather than the expected arm64 and arm64's defconfig.
->
-> This is because subarch.include invokes `uname -m` which on MacOS hosts
-> evaluates to `arm64` but on Linux hosts evaluates to `aarch64`,
->
-> This allows us to build ARCH=3Darm64 natively on macOS (as in ARCH need
-> not be specified on an aarch64-based system).
->
-> Avoid matching arm64 by excluding it from the arm.* sed expression.
->
-> Signed-off-by: Nick Desaulniers <nick.desaulniers@gmail.com>
-> Signed-off-by: Daniel Gomez <da.gomez@samsung.com>
-> ---
+Hi Florian,
+
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on netfilter-nf/main]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Florian-Westphal/netfilter-nft_socket-make-cgroupsv2-matching-work-with-namespaces/20240908-025647
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/netfilter/nf.git main
+patch link:    https://lore.kernel.org/r/20240905105451.28857-2-fw%40strlen.de
+patch subject: [PATCH nf 2/2] netfilter: nft_socket: make cgroupsv2 matching work with namespaces
+config: i386-randconfig-006-20240908 (https://download.01.org/0day-ci/archive/20240909/202409090022.jxFbbVYj-lkp@intel.com/config)
+compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240909/202409090022.jxFbbVYj-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202409090022.jxFbbVYj-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> net/netfilter/nft_socket.c:212:9: error: call to undeclared function 'nft_socket_cgroup_subtree_level'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     212 |                 err = nft_socket_cgroup_subtree_level();
+         |                       ^
+   1 error generated.
 
 
-Applied to linux-kbuild with
-Suggested-by: Nicolas Schier <nicolas@fjasle.eu>
+vim +/nft_socket_cgroup_subtree_level +212 net/netfilter/nft_socket.c
 
-Thanks.
+   169	
+   170	static int nft_socket_init(const struct nft_ctx *ctx,
+   171				   const struct nft_expr *expr,
+   172				   const struct nlattr * const tb[])
+   173	{
+   174		struct nft_socket *priv = nft_expr_priv(expr);
+   175		unsigned int len;
+   176	
+   177		if (!tb[NFTA_SOCKET_DREG] || !tb[NFTA_SOCKET_KEY])
+   178			return -EINVAL;
+   179	
+   180		switch(ctx->family) {
+   181		case NFPROTO_IPV4:
+   182	#if IS_ENABLED(CONFIG_NF_TABLES_IPV6)
+   183		case NFPROTO_IPV6:
+   184	#endif
+   185		case NFPROTO_INET:
+   186			break;
+   187		default:
+   188			return -EOPNOTSUPP;
+   189		}
+   190	
+   191		priv->key = ntohl(nla_get_be32(tb[NFTA_SOCKET_KEY]));
+   192		switch(priv->key) {
+   193		case NFT_SOCKET_TRANSPARENT:
+   194		case NFT_SOCKET_WILDCARD:
+   195			len = sizeof(u8);
+   196			break;
+   197		case NFT_SOCKET_MARK:
+   198			len = sizeof(u32);
+   199			break;
+   200	#ifdef CONFIG_CGROUPS
+   201		case NFT_SOCKET_CGROUPV2: {
+   202			unsigned int level;
+   203			int err;
+   204	
+   205			if (!tb[NFTA_SOCKET_LEVEL])
+   206				return -EINVAL;
+   207	
+   208			level = ntohl(nla_get_be32(tb[NFTA_SOCKET_LEVEL]));
+   209			if (level > 255)
+   210				return -EOPNOTSUPP;
+   211	
+ > 212			err = nft_socket_cgroup_subtree_level();
+   213			if (err < 0)
+   214				return err;
+   215	
+   216			priv->level_user = level;
+   217	
+   218			level += err;
+   219			/* Implies a giant cgroup tree */
+   220			if (WARN_ON_ONCE(level > 255))
+   221				return -EOPNOTSUPP;
+   222	
+   223			priv->level = level;
+   224			len = sizeof(u64);
+   225			break;
+   226		}
+   227	#endif
+   228		default:
+   229			return -EOPNOTSUPP;
+   230		}
+   231	
+   232		priv->len = len;
+   233		return nft_parse_register_store(ctx, tb[NFTA_SOCKET_DREG], &priv->dreg,
+   234						NULL, NFT_DATA_VALUE, len);
+   235	}
+   236	
 
-
-
->  scripts/subarch.include | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/scripts/subarch.include b/scripts/subarch.include
-> index 4bd327d0ae42..c4592d59d69b 100644
-> --- a/scripts/subarch.include
-> +++ b/scripts/subarch.include
-> @@ -6,7 +6,7 @@
->
->  SUBARCH :=3D $(shell uname -m | sed -e s/i.86/x86/ -e s/x86_64/x86/ \
->                                   -e s/sun4u/sparc64/ \
-> -                                 -e s/arm.*/arm/ -e s/sa110/arm/ \
-> +                                 -e /^arm64$$/!s/arm.*/arm/ -e s/sa110/a=
-rm/ \
->                                   -e s/s390x/s390/ \
->                                   -e s/ppc.*/powerpc/ -e s/mips.*/mips/ \
->                                   -e s/sh[234].*/sh/ -e s/aarch64.*/arm64=
-/ \
->
-> --
-> 2.46.0
->
->
-
-
---=20
-Best Regards
-Masahiro Yamada
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
