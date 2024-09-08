@@ -1,138 +1,118 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 025D856B8C;
-	Sun,  8 Sep 2024 09:03:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C4F68481DB;
+	Sun,  8 Sep 2024 10:06:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725786224; cv=none; b=Zl0/zGtOOZV6f+w0lzqSKlD8QPIrVKeOXuKhoXhxjo7Oh+6FjKkyWRFBDlGqc+47lnAmw9YXDWm6r7NrgoTGHyG08UGmOE8KcaZRIvNBWZ89+bcp0zmKjhSIpWwnQJHsrjmQKN6NNu2IeX74SASjacyitgogwdbvVnJ7zXmBPPE=
+	t=1725789973; cv=none; b=C6wNj/KIBAQaLzSVGYfiwW4ywExpOfovVtbL6BSbzLuOWgC0n1ddfL+7lhlLwX4y/zKb0zlt2nm7VtTb8pzKqcrwryDN/Iv1wQc13WypF2rzC+4TGvsKofAnvyhjTVcKbGe3QcKpRyqXwopJ8DNF5bItiHJkjTCEroHeiZ2LZSI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725786224; c=relaxed/simple;
-	bh=iaWBGRY0Ga/QyUiWnGcCNwe6GvY+ter/ioZNDc3NI98=;
-	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=asbCa9rj+5t3QscoLXMTgRUWigwXTWnVEz5yeecmAmfNEy33HPqvzryUaKmanS2XuqkPsPSFEAFaF5WveGiJshWnAGZ/6MjtVHL7sAKqCWoSV/s8vENKJ5D8JewDglzw3QtXCPiALTnW142SRp7x079sTRKRVoEHEwIzY9mV3wY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=msrOKWhQ; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1725789973; c=relaxed/simple;
+	bh=HsNfp0m1q1ji5xVb6ut0rp9Pz5DZyMxha7K6nrcV3kY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=C4Ae+6yEUgOBYBCjA/jsZL2AUBGxdcZa/7SdlcdPPq6AWobqUIE3zlQcOA72Rw5mQXbX2yo+hWKP86Z3mbPJLyHrpvNfVPcUTshGoyYFlnrMS29tZ2n5+lnCuC0N+bHcuMlALI4sn4oJ3OSvJJO4qV6Bow4P+hNkpU6Td2ekwyE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Apcbnn0X; arc=none smtp.client-ip=192.198.163.19
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="msrOKWhQ"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6B215C4CEC3;
-	Sun,  8 Sep 2024 09:03:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1725786223;
-	bh=iaWBGRY0Ga/QyUiWnGcCNwe6GvY+ter/ioZNDc3NI98=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=msrOKWhQM0NPDWGVtAJ5zBEdnKCnebFP9yaFEL1mSerelkJzG94ySzSfD6m0E4ojc
-	 kjMQh/ag+VyC/d780XoBD3PFZknFPAaFuYrxlcv/7ehW/GnvHaXFX6vSxvK6izDxeT
-	 1aT8e43zs2q3ex2vaR4U5q7VCLRR17De16EZEcUEMrm6e/Ihnzg7IC+Z3iUYdB/LSl
-	 oDcnllCDJdMTn71NrJDIl+KUsuiipPjrCpjpyr+ARjQTJ57aC6uYZR+FfbtZC+MKA/
-	 lRKaWi8C3AchITgoKamTtMqoTINB1JW/Ckv5nWk919r8jMsGBxedp0p7u2Dy37tp1T
-	 Gwnf0KlvbKv3Q==
-Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
-	by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.95)
-	(envelope-from <maz@kernel.org>)
-	id 1snDpa-00AcmB-1V;
-	Sun, 08 Sep 2024 10:03:38 +0100
-Date: Sun, 08 Sep 2024 10:03:36 +0100
-Message-ID: <86cylev7o7.wl-maz@kernel.org>
-From: Marc Zyngier <maz@kernel.org>
-To: "Daniel Gomez (Samsung)" <d+samsung@kruces.com>
-Cc: Masahiro Yamada <masahiroy@kernel.org>,	da.gomez@samsung.com,	Nathan
- Chancellor <nathan@kernel.org>,	Nicolas Schier <nicolas@fjasle.eu>,	Lucas
- De Marchi <lucas.demarchi@intel.com>,	Thomas =?UTF-8?B?SGVsbHN0csO2bQ==?=
- <thomas.hellstrom@linux.intel.com>,	Rodrigo Vivi <rodrigo.vivi@intel.com>,
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,	Maxime Ripard
- <mripard@kernel.org>,	Thomas Zimmermann <tzimmermann@suse.de>,	David Airlie
- <airlied@gmail.com>,	William Hubbs <w.d.hubbs@gmail.com>,	Chris Brannon
- <chris@the-brannons.com>,	Kirk Reiser <kirk@reisers.ca>,	Samuel Thibault
- <samuel.thibault@ens-lyon.org>,	Paul Moore <paul@paul-moore.com>,	Stephen
- Smalley <stephen.smalley.work@gmail.com>,	Ondrej Mosnacek
- <omosnace@redhat.com>,	Catalin Marinas <catalin.marinas@arm.com>,	Will
- Deacon <will@kernel.org>,	Oliver Upton <oliver.upton@linux.dev>,	James
- Morse <james.morse@arm.com>,	Suzuki K Poulose <suzuki.poulose@arm.com>,
-	Zenghui Yu <yuzenghui@huawei.com>,	Greg Kroah-Hartman
- <gregkh@linuxfoundation.org>,	Jiri Slaby <jirislaby@kernel.org>,	Nick
- Desaulniers <ndesaulniers@google.com>,	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,	Simona Vetter
- <simona.vetter@ffwll.ch>,	linux-kernel@vger.kernel.org,
-	linux-kbuild@vger.kernel.org,	intel-xe@lists.freedesktop.org,
-	dri-devel@lists.freedesktop.org,	speakup@linux-speakup.org,
-	selinux@vger.kernel.org,	linux-arm-kernel@lists.infradead.org,
-	kvmarm@lists.linux.dev,	linux-serial@vger.kernel.org,	llvm@lists.linux.dev,
-	Finn Behrens <me@kloenk.dev>,	gost.dev@samsung.com
-Subject: Re: [PATCH v2 8/8] Documentation: add howto build in macos
-In-Reply-To: <CABj0suBQCc8=0tLng=OWW=K1hjFuLFZWhbjsqHtz2FzZt4i0sw@mail.gmail.com>
-References: <20240906-macos-build-support-v2-0-06beff418848@samsung.com>
-	<20240906-macos-build-support-v2-8-06beff418848@samsung.com>
-	<CAK7LNASpWSXbjF_7n0MhosNism=BpvHOnKsa344RPM_wmC9dGA@mail.gmail.com>
-	<CABj0suBQCc8=0tLng=OWW=K1hjFuLFZWhbjsqHtz2FzZt4i0sw@mail.gmail.com>
-User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
- FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/29.4
- (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Apcbnn0X"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1725789972; x=1757325972;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=HsNfp0m1q1ji5xVb6ut0rp9Pz5DZyMxha7K6nrcV3kY=;
+  b=Apcbnn0XPavsfRHFmjaOckyShOTMMv8H/UREYxmNuMSRIcFa9GAxs8Fp
+   Z/iskIajTBLIRBb3WpW0eIS/gkxF10OxX2iyDERKZU1aoOUOOWuFlj7Pr
+   FabuIYheLDsiCiz4fWqWDauFekByFPlWvjHhK/bPbCBbE1d94JTm/nxDa
+   NR7KDDC6eSjdu1L1CVlv0ZLOodV8cZOkDZQANqPENx7ElHRV2GE5NFthv
+   IZAtpEpUXDs9Zex1FZkMtiGGOsDfvzHfwFurJkQB8onaUaaywAM9deuHq
+   qxJTwZ9LmYNIbIfH59eEzbyaWOkBlvIYMdNeGHJIn0mfPAx4undubmxyi
+   Q==;
+X-CSE-ConnectionGUID: gsFgjr6MTAag3yB2j5WeJQ==
+X-CSE-MsgGUID: 4OTkKl4iQpGGwNPNZBq/ZA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11188"; a="24043637"
+X-IronPort-AV: E=Sophos;i="6.10,212,1719903600"; 
+   d="scan'208";a="24043637"
+Received: from fmviesa010.fm.intel.com ([10.60.135.150])
+  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Sep 2024 03:06:11 -0700
+X-CSE-ConnectionGUID: /Lz/KiqER/SFKAsirg6XlA==
+X-CSE-MsgGUID: XivoA3U6RW2a2gZVRlV0Vw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.10,212,1719903600"; 
+   d="scan'208";a="66618395"
+Received: from lkp-server01.sh.intel.com (HELO 9c6b1c7d3b50) ([10.239.97.150])
+  by fmviesa010.fm.intel.com with ESMTP; 08 Sep 2024 03:06:04 -0700
+Received: from kbuild by 9c6b1c7d3b50 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1snEny-000DQh-06;
+	Sun, 08 Sep 2024 10:06:02 +0000
+Date: Sun, 8 Sep 2024 18:05:54 +0800
+From: kernel test robot <lkp@intel.com>
+To: Jiaxun Yang <jiaxun.yang@flygoat.com>,
+	Masahiro Yamada <masahiroy@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nicolas Schier <nicolas@fjasle.eu>,
+	Richard Weinberger <richard@nod.at>,
+	Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+	Johannes Berg <johannes@sipsolutions.net>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+	"H. Peter Anvin" <hpa@zytor.com>, Miguel Ojeda <ojeda@kernel.org>,
+	Alex Gaynor <alex.gaynor@gmail.com>,
+	Wedson Almeida Filho <wedsonaf@gmail.com>,
+	Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+	=?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
+	Benno Lossin <benno.lossin@proton.me>,
+	Andreas Hindborg <a.hindborg@samsung.com>,
+	Alice Ryhl <aliceryhl@google.com>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Jonathan Corbet <corbet@lwn.net>, Alex Shi <alexs@kernel.org>,
+	Yanteng Si <siyanteng@loongson.cn>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: Re: [PATCH v2 1/3] rust: Introduce HAVE_GENERATE_RUST_TARGET config
+ option
+Message-ID: <202409081703.CUljfXjY-lkp@intel.com>
+References: <20240905-mips-rust-v2-1-409d66819418@flygoat.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-SA-Exim-Connect-IP: 185.219.108.64
-X-SA-Exim-Rcpt-To: d+samsung@kruces.com, masahiroy@kernel.org, da.gomez@samsung.com, nathan@kernel.org, nicolas@fjasle.eu, lucas.demarchi@intel.com, thomas.hellstrom@linux.intel.com, rodrigo.vivi@intel.com, maarten.lankhorst@linux.intel.com, mripard@kernel.org, tzimmermann@suse.de, airlied@gmail.com, w.d.hubbs@gmail.com, chris@the-brannons.com, kirk@reisers.ca, samuel.thibault@ens-lyon.org, paul@paul-moore.com, stephen.smalley.work@gmail.com, omosnace@redhat.com, catalin.marinas@arm.com, will@kernel.org, oliver.upton@linux.dev, james.morse@arm.com, suzuki.poulose@arm.com, yuzenghui@huawei.com, gregkh@linuxfoundation.org, jirislaby@kernel.org, ndesaulniers@google.com, morbo@google.com, justinstitt@google.com, simona.vetter@ffwll.ch, linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org, intel-xe@lists.freedesktop.org, dri-devel@lists.freedesktop.org, speakup@linux-speakup.org, selinux@vger.kernel.org, linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev, linux-serial@vger.kernel.org, llvm@lists.linux.dev, me@kloenk.dev, gost.dev@samsung.com
-X-SA-Exim-Mail-From: maz@kernel.org
-X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240905-mips-rust-v2-1-409d66819418@flygoat.com>
 
-On Sat, 07 Sep 2024 10:32:20 +0100,
-"Daniel Gomez (Samsung)" <d+samsung@kruces.com> wrote:
->=20
-> On Sat, Sep 7, 2024 at 10:33=E2=80=AFAM Masahiro Yamada <masahiroy@kernel=
-.org> wrote:
-> >
-> > On Fri, Sep 6, 2024 at 8:01=E2=80=AFPM Daniel Gomez via B4 Relay
-> > <devnull+da.gomez.samsung.com@kernel.org> wrote:
-> > >
-> > > From: Daniel Gomez <da.gomez@samsung.com>
-> > >
-> > > Add documentation under kbuild/llvm to inform about the experimental
-> > > support for building the Linux kernel in macOS hosts environments.
-> > >
-> > > Signed-off-by: Daniel Gomez <da.gomez@samsung.com>
-> >
-> >
-> > Instead, you can add this instruction to:
-> >
-> > https://github.com/bee-headers/homebrew-bee-headers/blob/main/README.md
->=20
-> Sure, that can be done as well. But the effort here is to have this
-> integrated. So, I think documentation should be in-tree.
+Hi Jiaxun,
 
-I think this ship sailed the moment you ended-up with an external
-dependency.
+kernel test robot noticed the following build errors:
 
-Having looked at this series (and in particular patch #4 which falls
-under my remit), I can't help but think that the whole thing should
-simply live as a wrapper around the pristine build system instead of
-hacking things inside of it. You already pull external dependencies
-(the include files). Just add a script that sets things up
-(environment variables that already exist) and calls 'make' in the
-kernel tree.
+[auto build test ERROR on 469f1bad3c1c6e268059f78c0eec7e9552b3894c]
 
-I also dislike that this is forcing "native" developers to cater for
-an operating system they are unlikely to have access to. If I break
-this hack tomorrow by adding a new dependency that MacOS doesn't
-provide, how do I fix it? Should I drop my changes on the floor?
+url:    https://github.com/intel-lab-lkp/linux/commits/Jiaxun-Yang/rust-Introduce-HAVE_GENERATE_RUST_TARGET-config-option/20240905-213538
+base:   469f1bad3c1c6e268059f78c0eec7e9552b3894c
+patch link:    https://lore.kernel.org/r/20240905-mips-rust-v2-1-409d66819418%40flygoat.com
+patch subject: [PATCH v2 1/3] rust: Introduce HAVE_GENERATE_RUST_TARGET config option
+config: x86_64-rhel-8.3-rust (https://download.01.org/0day-ci/archive/20240908/202409081703.CUljfXjY-lkp@intel.com/config)
+compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240908/202409081703.CUljfXjY-lkp@intel.com/reproduce)
 
-As an alternative, and since you already have to create a special
-file-system to contain your kernel tree, you may as well run Linux in
-a VM, which I am told works pretty well (QEMU supports HVF, and there
-are plenty of corporate-friendly alternatives). This would solve your
-problem once and for all.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202409081703.CUljfXjY-lkp@intel.com/
 
-Please don't take the above the wrong way. I'm sympathetic to what you
-are trying to do. But this is IMO going in the wrong direction.
+All errors (new ones prefixed by >>):
 
-Thanks,
+>> error: /opt/cross/rustc-1.78.0-bindgen-0.65.1/rustup/toolchains/1.78.0-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/num/f32.rs:804:6: in function _RNvMNtCs5QSdWC790r4_4core3f32f7next_up float (float): SSE register return with SSE disabled
 
-	M.
-
---=20
-Without deviation from the norm, progress is not possible.
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
