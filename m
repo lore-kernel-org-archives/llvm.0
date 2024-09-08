@@ -1,106 +1,140 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp.gentoo.org (woodpecker.gentoo.org [140.211.166.183])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 056E7C8D7;
-	Sun,  8 Sep 2024 18:29:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 48D6C1C01
+	for <llvm@lists.linux.dev>; Sun,  8 Sep 2024 18:47:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=140.211.166.183
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725820174; cv=none; b=FgN4qTlcFmSFKzRE15XGbF/YhrQDsWMsgcSWZATLImnqHjx98M7tk/pEJ0WLb0vB+JVK3BCaisDnMIVp2scZ4FE5tDu/SvaD5Nue1O0cv6NBJQXx5wlGUY+EAy8eL5V7weOsVUMmGi7sy1IehLqcwEr7RJ/JVOvK2lzGObvq+jA=
+	t=1725821243; cv=none; b=l3h/XTasyh8P+cU5uWF08Z8Hodxnk47BZ5rKQQVy3GhkhEmaWSxKncj2/jWlo7WfvezNFkNAjfZfF5ot2fxNSASWylZYigc7sd95+HNmDeNGPCVr4k1QrWWD3FdrcupeCS4N4201MWoj8dzyd6HPtX9AVBW6iiK0K6131PwIDgs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725820174; c=relaxed/simple;
-	bh=9L35pRO9O6reaIetMunMgNY2vpHC1rr73V88dtdTRZ8=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=GuD8x5pnlZvzj6OEaHqmQ1dlHA1SOASQwKb4niAOhh9Do0Dnq68sW2Mbohyxjtkto8DQ8qkcewf/jJQ50vzc3p7JNIYWLfXYjkfMPCAHZYnTmwnIjkuPtDj5iqhrHImd1Q3ye6d8RngUOaiMVNBiu7KvdSZnLz7kbAfqHrBPUHk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=CwyRvVWI; arc=none smtp.client-ip=192.198.163.8
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="CwyRvVWI"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1725820172; x=1757356172;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=9L35pRO9O6reaIetMunMgNY2vpHC1rr73V88dtdTRZ8=;
-  b=CwyRvVWI4fVPUg6K0yfOdadWq5DbEd1vxZ0tA/GseNFcAYD2j+HCCH0E
-   8IbbCEmVO89i562kmJxynyyGxCBWsSmX7yzDlWXfg0U/lfMEgzhhFQ/yN
-   SCgAW0I77ramiN4I4BKbcgEl7mTJ9roaWPVV26ytiLfy/bbN2J+9B/YWu
-   seXtNFhwPtehBk4czEtJW4b5y9VknxDRHPzcbiQtP/vuchQEcw+giiKQf
-   pOs7+mq7A0ifVX3omPYiBblTy8t3H+gRKu2Jy8WvkD10BI36kzlQrWFYh
-   0252OGkZY5amNTapdQpmpnlNkGRW4l2OVZZLMHYFMswwc5Zx77a3FjKjf
-   A==;
-X-CSE-ConnectionGUID: jy/nJVaFSBiZ1sKcHhHYlw==
-X-CSE-MsgGUID: Zy03Zq+LS4Sb8hsBlZPWLQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11189"; a="42018211"
-X-IronPort-AV: E=Sophos;i="6.10,212,1719903600"; 
-   d="scan'208";a="42018211"
-Received: from fmviesa009.fm.intel.com ([10.60.135.149])
-  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Sep 2024 11:29:32 -0700
-X-CSE-ConnectionGUID: x/qy3MMgQ8OBJWOdlIhXmA==
-X-CSE-MsgGUID: 5Um0AMeiTjWYPn03FouZfA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.10,212,1719903600"; 
-   d="scan'208";a="66445901"
-Received: from lkp-server01.sh.intel.com (HELO 9c6b1c7d3b50) ([10.239.97.150])
-  by fmviesa009.fm.intel.com with ESMTP; 08 Sep 2024 11:29:30 -0700
-Received: from kbuild by 9c6b1c7d3b50 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1snMfA-000Doh-1Q;
-	Sun, 08 Sep 2024 18:29:28 +0000
-Date: Mon, 9 Sep 2024 02:28:43 +0800
-From: kernel test robot <lkp@intel.com>
-To: Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [morimoto:sound-pcm-cleanup-2024-09-06 3/10]
- sound/soc/soc-compress.c:545: warning: Excess function parameter 'num'
- description in 'snd_soc_new_compress'
-Message-ID: <202409090248.IXLfqQMV-lkp@intel.com>
+	s=arc-20240116; t=1725821243; c=relaxed/simple;
+	bh=gxfttsqh7OsEGsyHzIJRp1REN8ioJ4jHnjZwFibSk9M=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=JLxweiTW+zlkcuv3vcnYxXLZ9EGCs05FwVk7snan2cCSHTP/T/HWLzihr1WTxWC8kwPT+Nrkktxur4Tda2KSDFNHoy9Qr9tjIFMWvWs8Q0zDruo7i/p13ERWNIAiKbF2deiB08aK97jviONYZZv3kRcOz8rJpyH/cuAX9ozAzG8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gentoo.org; spf=pass smtp.mailfrom=gentoo.org; arc=none smtp.client-ip=140.211.166.183
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gentoo.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gentoo.org
+From: Sam James <sam@gentoo.org>
+To: Peter Zijlstra <peterz@infradead.org>,
+	Ingo Molnar <mingo@redhat.com>,
+	Arnaldo Carvalho de Melo <acme@kernel.org>,
+	Namhyung Kim <namhyung@kernel.org>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Ian Rogers <irogers@google.com>,
+	Adrian Hunter <adrian.hunter@intel.com>,
+	"Liang, Kan" <kan.liang@linux.intel.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>
+Cc: Sam James <sam@gentoo.org>,
+	linux-kernel@vger.kernel.org,
+	linux-perf-users@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: [PATCH] tools: drop nonsensical -O6
+Date: Sun,  8 Sep 2024 19:46:41 +0100
+Message-ID: <4f01524fa4ea91c7146a41e26ceaf9dae4c127e4.1725821201.git.sam@gentoo.org>
+X-Mailer: git-send-email 2.46.0
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
 
-tree:   https://github.com/morimoto/linux sound-pcm-cleanup-2024-09-06
-head:   46ce7eb32f30081c6c26a57ad12a2b20f9f12d09
-commit: 9dc7690e8c84c67ffe3d525e1a5bdf66338f3529 [3/10] ASoC: rename rtd->num to rtd->id
-config: i386-buildonly-randconfig-004-20240908 (https://download.01.org/0day-ci/archive/20240909/202409090248.IXLfqQMV-lkp@intel.com/config)
-compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240909/202409090248.IXLfqQMV-lkp@intel.com/reproduce)
+-O6 is very much not-a-thing. Really, this should've been dropped
+entirely in 49b3cd306e60b9d889c775cb2ebb709f80dd8ae9 instead of just
+passing it for not-Clang.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202409090248.IXLfqQMV-lkp@intel.com/
+Just collapse it down to -O3, instead of "-O6 unless Clang, in which case
+-O3".
 
-All warnings (new ones prefixed by >>):
+GCC interprets > -O3 as -O3. It doesn't even interpret > -O3 as -Ofast,
+which is a good thing, given -Ofast has specific (non-)requirements for
+code built using it. So, this does nothing except look a bit daft.
 
-   sound/soc/soc-compress.c:545: warning: Function parameter or struct member 'id' not described in 'snd_soc_new_compress'
->> sound/soc/soc-compress.c:545: warning: Excess function parameter 'num' description in 'snd_soc_new_compress'
+Remove the silliness and also save a few lines in the Makefiles accordingly.
 
+Signed-off-by: Sam James <sam@gentoo.org>
+---
+I promise I'm not completely humourless, but given it's caused
+actual workarounds to be added for Clang, I don't think this is worth keeping.
 
-vim +545 sound/soc/soc-compress.c
+Plus it sort of propagates a silly myth that -O6 does anything.
 
-2a99ef0fdb35a0 Liam Girdwood     2014-01-17  535  
-6f0c42269f000b Jie Yang          2015-10-13  536  /**
-6f0c42269f000b Jie Yang          2015-10-13  537   * snd_soc_new_compress - create a new compress.
-6f0c42269f000b Jie Yang          2015-10-13  538   *
-6f0c42269f000b Jie Yang          2015-10-13  539   * @rtd: The runtime for which we will create compress
-6f0c42269f000b Jie Yang          2015-10-13  540   * @num: the device index number (zero based - shared with normal PCMs)
-6f0c42269f000b Jie Yang          2015-10-13  541   *
-6f0c42269f000b Jie Yang          2015-10-13  542   * Return: 0 for success, else error.
-6f0c42269f000b Jie Yang          2015-10-13  543   */
-9dc7690e8c84c6 Kuninori Morimoto 2024-09-06  544  int snd_soc_new_compress(struct snd_soc_pcm_runtime *rtd, int id)
-1245b7005de02d Namarta Kohli     2012-08-16 @545  {
+ tools/lib/api/Makefile     | 4 ----
+ tools/lib/subcmd/Makefile  | 4 +---
+ tools/lib/symbol/Makefile  | 4 ----
+ tools/perf/Makefile.config | 6 +-----
+ 4 files changed, 2 insertions(+), 16 deletions(-)
 
-:::::: The code at line 545 was first introduced by commit
-:::::: 1245b7005de02d5bfa0c321df925f5b6c83c99e1 ASoC: add compress stream support
-
-:::::: TO: Namarta Kohli <namartax.kohli@intel.com>
-:::::: CC: Mark Brown <broonie@opensource.wolfsonmicro.com>
-
+diff --git a/tools/lib/api/Makefile b/tools/lib/api/Makefile
+index 044860ac1ed1c..7f6396087b467 100644
+--- a/tools/lib/api/Makefile
++++ b/tools/lib/api/Makefile
+@@ -31,11 +31,7 @@ CFLAGS := $(EXTRA_WARNINGS) $(EXTRA_CFLAGS)
+ CFLAGS += -ggdb3 -Wall -Wextra -std=gnu99 -U_FORTIFY_SOURCE -fPIC
+ 
+ ifeq ($(DEBUG),0)
+-ifeq ($(CC_NO_CLANG), 0)
+   CFLAGS += -O3
+-else
+-  CFLAGS += -O6
+-endif
+ endif
+ 
+ ifeq ($(DEBUG),0)
+diff --git a/tools/lib/subcmd/Makefile b/tools/lib/subcmd/Makefile
+index b87213263a5e0..6717b82fc5876 100644
+--- a/tools/lib/subcmd/Makefile
++++ b/tools/lib/subcmd/Makefile
+@@ -38,10 +38,8 @@ endif
+ 
+ ifeq ($(DEBUG),1)
+   CFLAGS += -O0
+-else ifeq ($(CC_NO_CLANG), 0)
+-  CFLAGS += -O3
+ else
+-  CFLAGS += -O6
++  CFLAGS += -O3
+ endif
+ 
+ # Treat warnings as errors unless directed not to
+diff --git a/tools/lib/symbol/Makefile b/tools/lib/symbol/Makefile
+index 13d43c6f92b4a..426b845edfacc 100644
+--- a/tools/lib/symbol/Makefile
++++ b/tools/lib/symbol/Makefile
+@@ -31,11 +31,7 @@ CFLAGS := $(EXTRA_WARNINGS) $(EXTRA_CFLAGS)
+ CFLAGS += -ggdb3 -Wall -Wextra -std=gnu11 -U_FORTIFY_SOURCE -fPIC
+ 
+ ifeq ($(DEBUG),0)
+-ifeq ($(CC_NO_CLANG), 0)
+   CFLAGS += -O3
+-else
+-  CFLAGS += -O6
+-endif
+ endif
+ 
+ ifeq ($(DEBUG),0)
+diff --git a/tools/perf/Makefile.config b/tools/perf/Makefile.config
+index fa679db61f622..5d6b08a896150 100644
+--- a/tools/perf/Makefile.config
++++ b/tools/perf/Makefile.config
+@@ -238,11 +238,7 @@ endif
+ 
+ ifeq ($(DEBUG),0)
+ CORE_CFLAGS += -DNDEBUG=1
+-ifeq ($(CC_NO_CLANG), 0)
+-  CORE_CFLAGS += -O3
+-else
+-  CORE_CFLAGS += -O6
+-endif
++CORE_CFLAGS += -O3
+ else
+   CORE_CFLAGS += -g
+   CXXFLAGS += -g
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.46.0
+
