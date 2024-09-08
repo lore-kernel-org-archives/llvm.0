@@ -1,67 +1,59 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 81F9E1CA81;
-	Sun,  8 Sep 2024 08:23:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C700139587;
+	Sun,  8 Sep 2024 08:44:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725783822; cv=none; b=KHrcnYS4JyGcRR4ZviTSIJwrcbZ5J/ogSdKE4nrTg1mvrjEjBY7Vshhf48CcsVZDBEywWJ9f1Ymr+qSx30BFmjq2Dp6ZR3AduxN7c2If55FhYLqWBtqVRFhuNWYGXng67KzhDkVIdokoHNzFG9r8NqUq5hxVWood/+Lo2FsmJcs=
+	t=1725785064; cv=none; b=Jv3E+l9cDJHiUnMNlAWieGNgaXKKrUYXzuS+WeuHRn2k4/DBIesJaoLvwYUrO2gVoE+QXfR1BU7Xy/UJYKwkoXbkilZ2uI7fInHAUnxX2Ft3y4zV+V7prWH59s/yui9jvKXNOLOOVQUc8+ZafrvZE5636zsV54pCnj7DzaXRjYo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725783822; c=relaxed/simple;
-	bh=CS8TPU9h4Zcfsx0T2yCnIV7BAoo30S/6YenmxXnsGvo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=l1YC+gA5dfFzKabe32rQWhtgfcRUogjVMXSSGJ8++uJZ7Ou5FwgXVs6oCeXlEc1rss/70lEMfyivODeG+pgVFa/bNCNGJJQpVxaBJfSECTPN34W9kNxMI2u/KwkFJNOGzIFMxdtBI884ziGz25TZQLfQYXlYdFqV7j0UhOFhSVo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Ci+yzc6c; arc=none smtp.client-ip=198.175.65.19
+	s=arc-20240116; t=1725785064; c=relaxed/simple;
+	bh=n+3JF9/VjdM3/kbehCdSSMf7u9TQ19AadDjNf+CtvDY=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=MHSEj0N8BqBe4AflDrCp3NVad0/pW3s+H5nBKEK3shw5Jz1kcxxPXn/akpWOOH5ZV7QgqBLCBVyO6CwlPP4SBNf6kNzVjHrYQyo8xsOyiYfN+LY1OSWzqD4mazYe0XlqxLDaNlAR1mHyhos4QuEWGuHcngwA8tQBelZXSDhu0Fg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Dl4mcL8V; arc=none smtp.client-ip=192.198.163.13
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Ci+yzc6c"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Dl4mcL8V"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1725783821; x=1757319821;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=CS8TPU9h4Zcfsx0T2yCnIV7BAoo30S/6YenmxXnsGvo=;
-  b=Ci+yzc6cY/VbtO1a5Ez3REhf0RJFoqUMyMrfuu8V7bVFyP67VNo1AIrU
-   9gBso5YXGS5/q9qz7AKg5BNi7B8FilmEgh7skLBf450du8QtvHfES2QAV
-   JM94kM3Ynh7rmAnepepmtaka67qo6EqcmDQj3oJWd43clWJnSVmvpSLvw
-   M7g3EThWXIg2XfL9LzbxrE9Z87WbfDL9hcWsCzqP2VzSfSTpcyBN0r6FJ
-   94TTBHSgNAsToB6YToZ2W2dLOx7HxZzRd3tm1nGxjrDpKz2GpkFt6rU1D
-   rhl3+9hwnm+ghEErEJnk0rF6SPDD54T1cGuY5qNtDEfv5cx1Uq7KN+J34
+  t=1725785062; x=1757321062;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=n+3JF9/VjdM3/kbehCdSSMf7u9TQ19AadDjNf+CtvDY=;
+  b=Dl4mcL8V9oKmJK7N9kytwC0/arz4ekhtNFaxwRNUsF4ZFuQs+boFZAet
+   n9UrkrDwssJ+EEOQ2qAIgFxorT8IsTb68YEZ4UF/7w418x6+n5hqQP1kO
+   /2R2gyRjvbrMthBuOgp9hAnHbA8T2TiauO0bA2uCgQQsgptF8Wk/4WHVh
+   EMaW6j4pNCzyC2iaDSS7yvMmtrxhrHPIqNoM1MDcf9fa1PNNug0H08777
+   HojfH6euOQKzrXFEo55Z5SehhmkxIMCZpoxuNsT82eT0d8tU/ay+Htupl
+   BpLQ+qNb95WgnHtVHF7XCuYtE47//zGkjzQRJbmsf7zxNo0W6f9IU5tvX
    A==;
-X-CSE-ConnectionGUID: 4fShWk41ScuxlSi7tyYECQ==
-X-CSE-MsgGUID: sTCehd3cQyWW1E70RlLOWg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11188"; a="24354252"
+X-CSE-ConnectionGUID: qkVjqZB8TJG9q3AVCbmjVw==
+X-CSE-MsgGUID: eFu97Uf9S9O/5R1dqbAFlQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11188"; a="27413553"
 X-IronPort-AV: E=Sophos;i="6.10,212,1719903600"; 
-   d="scan'208";a="24354252"
-Received: from orviesa005.jf.intel.com ([10.64.159.145])
-  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Sep 2024 01:23:41 -0700
-X-CSE-ConnectionGUID: 6oAA7FJbSruiYJPpsZmMzw==
-X-CSE-MsgGUID: G7OGkTdsTTy5SmlzG5AKaw==
+   d="scan'208";a="27413553"
+Received: from fmviesa006.fm.intel.com ([10.60.135.146])
+  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Sep 2024 01:44:21 -0700
+X-CSE-ConnectionGUID: cEYFmIu6TdGVgwin59YjeQ==
+X-CSE-MsgGUID: uz2qSEs+SRmydEn5004fkw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.10,212,1719903600"; 
-   d="scan'208";a="71175839"
+   d="scan'208";a="66013644"
 Received: from lkp-server01.sh.intel.com (HELO 9c6b1c7d3b50) ([10.239.97.150])
-  by orviesa005.jf.intel.com with ESMTP; 08 Sep 2024 01:23:36 -0700
+  by fmviesa006.fm.intel.com with ESMTP; 08 Sep 2024 01:44:19 -0700
 Received: from kbuild by 9c6b1c7d3b50 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1snDCn-000DKi-1v;
-	Sun, 08 Sep 2024 08:23:33 +0000
-Date: Sun, 8 Sep 2024 16:22:35 +0800
+	id 1snDWr-000DNP-0t;
+	Sun, 08 Sep 2024 08:44:17 +0000
+Date: Sun, 8 Sep 2024 16:43:38 +0800
 From: kernel test robot <lkp@intel.com>
-To: Heiko Stuebner <heiko@sntech.de>, lee@kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, robh@kernel.org,
-	krzk+dt@kernel.org, conor+dt@kernel.org, jdelvare@suse.com,
-	linux@roeck-us.net, heiko@sntech.de, dmitry.torokhov@gmail.com,
-	pavel@ucw.cz, ukleinek@debian.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-rockchip@lists.infradead.org, linux-input@vger.kernel.org,
-	linux-leds@vger.kernel.org
-Subject: Re: [PATCH v7 1/8] mfd: core: make platform_data pointer const in
- struct mfd_cell
-Message-ID: <202409081514.inB0qj3o-lkp@intel.com>
-References: <20240905185232.2899464-2-heiko@sntech.de>
+To: Masahiro Yamada <masahiroy@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-kernel@vger.kernel.org
+Subject: ld.lld: error: relocation R_RISCV_HI20 cannot be used against symbol
+ '__sancov_gen_cov_switch_values'; recompile with -fPIC
+Message-ID: <202409081658.d1dItwXr-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -70,147 +62,31 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240905185232.2899464-2-heiko@sntech.de>
 
-Hi Heiko,
-
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on next-20240905]
-[also build test ERROR on v6.11-rc6]
-[cannot apply to lee-mfd/for-mfd-next groeck-staging/hwmon-next lee-leds/for-leds-next linus/master lee-mfd/for-mfd-fixes v6.11-rc6 v6.11-rc5 v6.11-rc4]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Heiko-Stuebner/mfd-core-make-platform_data-pointer-const-in-struct-mfd_cell/20240906-025553
-base:   next-20240905
-patch link:    https://lore.kernel.org/r/20240905185232.2899464-2-heiko%40sntech.de
-patch subject: [PATCH v7 1/8] mfd: core: make platform_data pointer const in struct mfd_cell
-config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20240908/202409081514.inB0qj3o-lkp@intel.com/config)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   d1f2d51b711a3b7f1ae1b46701c769c1d580fa7f
+commit: f79dc03fe68c79d388908182e68d702f7f1786bc kconfig: refactor choice value calculation
+date:   8 weeks ago
+config: riscv-randconfig-001-20240908 (https://download.01.org/0day-ci/archive/20240908/202409081658.d1dItwXr-lkp@intel.com/config)
 compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 05f5a91d00b02f4369f46d076411c700755ae041)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240908/202409081514.inB0qj3o-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240908/202409081658.d1dItwXr-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202409081514.inB0qj3o-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202409081658.d1dItwXr-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
-   In file included from drivers/hid/hid-sensor-hub.c:8:
-   In file included from include/linux/hid.h:29:
-   In file included from include/linux/hid_bpf.h:6:
-   In file included from include/linux/bpf.h:21:
-   In file included from include/linux/kallsyms.h:13:
-   In file included from include/linux/mm.h:2206:
-   include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
-   In file included from drivers/hid/hid-sensor-hub.c:8:
-   In file included from include/linux/hid.h:29:
-   In file included from include/linux/hid_bpf.h:6:
-   In file included from include/linux/bpf.h:31:
-   In file included from include/linux/memcontrol.h:13:
-   In file included from include/linux/cgroup.h:26:
-   In file included from include/linux/kernel_stat.h:8:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:14:
-   In file included from arch/hexagon/include/asm/io.h:328:
-   include/asm-generic/io.h:548:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     548 |         val = __raw_readb(PCI_IOBASE + addr);
-         |                           ~~~~~~~~~~ ^
-   include/asm-generic/io.h:561:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     561 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
-      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-         |                                                   ^
-   In file included from drivers/hid/hid-sensor-hub.c:8:
-   In file included from include/linux/hid.h:29:
-   In file included from include/linux/hid_bpf.h:6:
-   In file included from include/linux/bpf.h:31:
-   In file included from include/linux/memcontrol.h:13:
-   In file included from include/linux/cgroup.h:26:
-   In file included from include/linux/kernel_stat.h:8:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:14:
-   In file included from arch/hexagon/include/asm/io.h:328:
-   include/asm-generic/io.h:574:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     574 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
-      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
-         |                                                   ^
-   In file included from drivers/hid/hid-sensor-hub.c:8:
-   In file included from include/linux/hid.h:29:
-   In file included from include/linux/hid_bpf.h:6:
-   In file included from include/linux/bpf.h:31:
-   In file included from include/linux/memcontrol.h:13:
-   In file included from include/linux/cgroup.h:26:
-   In file included from include/linux/kernel_stat.h:8:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:14:
-   In file included from arch/hexagon/include/asm/io.h:328:
-   include/asm-generic/io.h:585:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     585 |         __raw_writeb(value, PCI_IOBASE + addr);
-         |                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:595:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     595 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:605:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     605 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
->> drivers/hid/hid-sensor-hub.c:744:33: error: initializing 'struct hid_sensor_hub_device *' with an expression of type 'const void *' discards qualifiers [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
-     744 |                 struct hid_sensor_hub_device *hsdev =
-         |                                               ^
-     745 |                         data->hid_sensor_hub_client_devs[i].platform_data;
-         |                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   7 warnings and 1 error generated.
-
-Kconfig warnings: (for reference only)
-   WARNING: unmet direct dependencies detected for OMAP2PLUS_MBOX
-   Depends on [n]: MAILBOX [=y] && (ARCH_OMAP2PLUS || ARCH_K3)
-   Selected by [m]:
-   - TI_K3_M4_REMOTEPROC [=m] && REMOTEPROC [=y] && (ARCH_K3 || COMPILE_TEST [=y])
-
-
-vim +744 drivers/hid/hid-sensor-hub.c
-
-401ca24fb34aee srinivas pandruvada 2012-09-05  732  
-401ca24fb34aee srinivas pandruvada 2012-09-05  733  static void sensor_hub_remove(struct hid_device *hdev)
-401ca24fb34aee srinivas pandruvada 2012-09-05  734  {
-401ca24fb34aee srinivas pandruvada 2012-09-05  735  	struct sensor_hub_data *data = hid_get_drvdata(hdev);
-401ca24fb34aee srinivas pandruvada 2012-09-05  736  	unsigned long flags;
-e651a1da442ae0 Srinivas Pandruvada 2015-02-19  737  	int i;
-401ca24fb34aee srinivas pandruvada 2012-09-05  738  
-401ca24fb34aee srinivas pandruvada 2012-09-05  739  	hid_dbg(hdev, " hardware removed\n");
-401ca24fb34aee srinivas pandruvada 2012-09-05  740  	hid_hw_close(hdev);
-f2f13a68c37c13 Axel Lin            2012-09-19  741  	hid_hw_stop(hdev);
-401ca24fb34aee srinivas pandruvada 2012-09-05  742  	spin_lock_irqsave(&data->lock, flags);
-e651a1da442ae0 Srinivas Pandruvada 2015-02-19  743  	for (i = 0; i < data->hid_sensor_client_cnt; ++i) {
-e651a1da442ae0 Srinivas Pandruvada 2015-02-19 @744  		struct hid_sensor_hub_device *hsdev =
-e651a1da442ae0 Srinivas Pandruvada 2015-02-19  745  			data->hid_sensor_hub_client_devs[i].platform_data;
-e651a1da442ae0 Srinivas Pandruvada 2015-02-19  746  		if (hsdev->pending.status)
-e651a1da442ae0 Srinivas Pandruvada 2015-02-19  747  			complete(&hsdev->pending.ready);
-e651a1da442ae0 Srinivas Pandruvada 2015-02-19  748  	}
-401ca24fb34aee srinivas pandruvada 2012-09-05  749  	spin_unlock_irqrestore(&data->lock, flags);
-401ca24fb34aee srinivas pandruvada 2012-09-05  750  	mfd_remove_devices(&hdev->dev);
-401ca24fb34aee srinivas pandruvada 2012-09-05  751  	mutex_destroy(&data->mutex);
-401ca24fb34aee srinivas pandruvada 2012-09-05  752  }
-401ca24fb34aee srinivas pandruvada 2012-09-05  753  
+>> ld.lld: error: relocation R_RISCV_HI20 cannot be used against symbol '__sancov_gen_cov_switch_values'; recompile with -fPIC
+   >>> defined in vmlinux.a(arch/riscv/errata/sifive/errata.o)
+   >>> referenced by errata.c:71 (arch/riscv/errata/sifive/errata.c:71)
+   >>>               arch/riscv/errata/sifive/errata.o:(errata_cip_1200_check_func) in archive vmlinux.a
+--
+>> ld.lld: error: relocation R_RISCV_LO12_I cannot be used against symbol '__sancov_gen_cov_switch_values'; recompile with -fPIC
+   >>> defined in vmlinux.a(arch/riscv/errata/sifive/errata.o)
+   >>> referenced by errata.c:71 (arch/riscv/errata/sifive/errata.c:71)
+   >>>               arch/riscv/errata/sifive/errata.o:(errata_cip_1200_check_func) in archive vmlinux.a
 
 -- 
 0-DAY CI Kernel Test Service
