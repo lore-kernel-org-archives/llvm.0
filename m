@@ -1,62 +1,60 @@
 Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA5414436E;
-	Sun,  8 Sep 2024 17:07:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 11E4C175D47;
+	Sun,  8 Sep 2024 17:27:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725815250; cv=none; b=oHRac5S87oybYLCnZWgMSN6X63R3zkQEFQjzMMNmCU0JFeQRhDJZrHPx3eypb/juIDYOwDdDJ/ZQ9j0bSvXD3ZN3A8fsq6nUewQ70GC7CnySJOxKYD5OzSw0Uv57lAvSmwDBQZcK6nz9P6oxT4QVTsmKz5I7CiQqVjkl0D//pSI=
+	t=1725816451; cv=none; b=HPd3MygA1fQsinzuEq0Kd7j+WOBvlVxM9TOMLhuEIsER/W8IPODIfO0iCFX1dBsxsLjZEFMdRgxsW2McwHhUpcY97wCbg4iLoMwRjRs1oMtqyXQlYdCF9gpkJGxgYW6A6A2yw26iIL67jlKRSEbGOe/fEbmcCWuSV42EanJsKh4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725815250; c=relaxed/simple;
-	bh=P2/0U6lW5ks2HD0ZSmhZupVFrPU9sUMaH9Nid6z7tdw=;
+	s=arc-20240116; t=1725816451; c=relaxed/simple;
+	bh=+XBel1FP3kOt1YaP4DMSN70DkMcrUTcubM9pH02YgEA=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=uE+qTt3ebdLeFMzzHL+jMUktWubb12KMfCjCVGLzz7ibiHcXPqeqDaFPdBtxoLLJF4HxkF0A/Cvg7sNTTwcX8QS6pU54M9iYn9+bjQqi2VHmNwJvrgL5M7wYYut5L0JHWpL4eLD/Ask2505v+zCsK5nRvOmHRxv4rw4wV9Gquw4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=MsGFvEAy; arc=none smtp.client-ip=198.175.65.9
+	 Content-Type:Content-Disposition:In-Reply-To; b=aXXaaXTV8Y6OA+EVsGhzrKJELYSA1u/uqUOdwYGRLi5cYDY3DIZh/zxlsz13vbYqhjb0wn6yOQFAffFRZlcu2rVDAAjqTu00t9sU2lpdDcAffO/DkOKCP5yEeeRHvyLDICII0yF2FMXoOxkPZ02iu4ILKqVgYJPE1kEGeOyHnX8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=kEtnME5G; arc=none smtp.client-ip=198.175.65.9
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="MsGFvEAy"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="kEtnME5G"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1725815249; x=1757351249;
+  t=1725816450; x=1757352450;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=P2/0U6lW5ks2HD0ZSmhZupVFrPU9sUMaH9Nid6z7tdw=;
-  b=MsGFvEAyAuY1CV3U6HTfdv3yVYPSP1r50YayOnzGIbSVOh1CQ3ODWvpM
-   qO+mgzhHJuME1br5/sgC46XymZjE43Cr/PTyD7eqs5rAP+uyt4JbWzpEc
-   MnOi+sS4s2C4zoed/WsMWgu8RvIyW6xVqSy8fk6F/mtOGWB6G7ShmUdXq
-   GwuFX3UMawNDA6I91n+wfmRLv2R7OsFhACQP51j6RifKULSU9E+jYt8Xt
-   TQ7bWMUh5xiJ41W/JiFJMfc5LVgzmXv4RKEBP4qot7DrNsyQTeJFrsxyl
-   ++dyKQAiZXXuO2hIQuf4wHvhQ6zJe/KhhRirAc/T7edJ/oSA3dHTzf0/x
-   w==;
-X-CSE-ConnectionGUID: D1nKYJqMTie7vEDLCXAgZA==
-X-CSE-MsgGUID: 3JPA04nGQJWj5AlLkG1QEA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11189"; a="47028569"
+  bh=+XBel1FP3kOt1YaP4DMSN70DkMcrUTcubM9pH02YgEA=;
+  b=kEtnME5GHd55M89kvOhTsT5sjU3Ncih5R26jb+cUZv8rR1f9pEnHtk7A
+   5xfEl7kU2m3Ao8RDQ78rCMnt3uyVvCYHHiljCJgnCMTSktq41BEN29QWZ
+   Kz7CqlICZqRn3z1Q5bVpffaobkCEFINBrqOkbjfs+sMOhAHRNcrXlcbP2
+   CMqculzCaYuIwzPuI4HIcvO6GJBniY3CjXBrUrmscLcqMZGWlqqbwRYJ9
+   StVzc8w1JuEPglXefPlT3puUyiJpc3T2VJJX6+brwvigB3olA7RhkWKcI
+   6ECHRGOIssNFyCj61p2YfI5YRGs4fEBwbAcoJV4xws/xcB3otBLCfsg1o
+   g==;
+X-CSE-ConnectionGUID: S7zmHT7bSmqXOjOr+Zf5Hw==
+X-CSE-MsgGUID: Cx9ZzJmoTSyuy7aDMmhaZA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11189"; a="47029329"
 X-IronPort-AV: E=Sophos;i="6.10,212,1719903600"; 
-   d="scan'208";a="47028569"
-Received: from fmviesa008.fm.intel.com ([10.60.135.148])
-  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Sep 2024 10:07:28 -0700
-X-CSE-ConnectionGUID: iZ83Dsn3QYS6/GzGz2KYGw==
-X-CSE-MsgGUID: Ta/qcRvVSWmtx+Bm2/kzRw==
+   d="scan'208";a="47029329"
+Received: from orviesa005.jf.intel.com ([10.64.159.145])
+  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Sep 2024 10:27:29 -0700
+X-CSE-ConnectionGUID: vqNqnSPzQzONxQLh/bbFqg==
+X-CSE-MsgGUID: VWxpoC7HTGqQdNPaqgTlLw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.10,212,1719903600"; 
-   d="scan'208";a="66478878"
+   d="scan'208";a="71254156"
 Received: from lkp-server01.sh.intel.com (HELO 9c6b1c7d3b50) ([10.239.97.150])
-  by fmviesa008.fm.intel.com with ESMTP; 08 Sep 2024 10:07:26 -0700
+  by orviesa005.jf.intel.com with ESMTP; 08 Sep 2024 10:27:27 -0700
 Received: from kbuild by 9c6b1c7d3b50 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1snLNk-000Dkl-0t;
-	Sun, 08 Sep 2024 17:07:24 +0000
-Date: Mon, 9 Sep 2024 01:06:48 +0800
+	id 1snLh6-000DlV-21;
+	Sun, 08 Sep 2024 17:27:24 +0000
+Date: Mon, 9 Sep 2024 01:27:11 +0800
 From: kernel test robot <lkp@intel.com>
-To: Florian Westphal <fw@strlen.de>, netfilter-devel@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Florian Westphal <fw@strlen.de>, cgroups@vger.kernel.org,
-	Nadia Pinaeva <n.m.pinaeva@gmail.com>
-Subject: Re: [PATCH nf 2/2] netfilter: nft_socket: make cgroupsv2 matching
- work with namespaces
-Message-ID: <202409090022.jxFbbVYj-lkp@intel.com>
-References: <20240905105451.28857-2-fw@strlen.de>
+To: Charlie Jenkins <charlie@rivosinc.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: Re: [PATCH RFC v3 1/2] mm: Add personality flag to limit address to
+ 47 bits
+Message-ID: <202409090150.Po6fKG3u-lkp@intel.com>
+References: <20240905-patches-below_hint_mmap-v3-1-3cd5564efbbb@rivosinc.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -65,105 +63,85 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240905105451.28857-2-fw@strlen.de>
+In-Reply-To: <20240905-patches-below_hint_mmap-v3-1-3cd5564efbbb@rivosinc.com>
 
-Hi Florian,
+Hi Charlie,
 
-kernel test robot noticed the following build errors:
+[This is a private test report for your RFC patch.]
+kernel test robot noticed the following build warnings:
 
-[auto build test ERROR on netfilter-nf/main]
+[auto build test WARNING on 5be63fc19fcaa4c236b307420483578a56986a37]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Florian-Westphal/netfilter-nft_socket-make-cgroupsv2-matching-work-with-namespaces/20240908-025647
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/netfilter/nf.git main
-patch link:    https://lore.kernel.org/r/20240905105451.28857-2-fw%40strlen.de
-patch subject: [PATCH nf 2/2] netfilter: nft_socket: make cgroupsv2 matching work with namespaces
-config: i386-randconfig-006-20240908 (https://download.01.org/0day-ci/archive/20240909/202409090022.jxFbbVYj-lkp@intel.com/config)
+url:    https://github.com/intel-lab-lkp/linux/commits/Charlie-Jenkins/mm-Add-personality-flag-to-limit-address-to-47-bits/20240906-052121
+base:   5be63fc19fcaa4c236b307420483578a56986a37
+patch link:    https://lore.kernel.org/r/20240905-patches-below_hint_mmap-v3-1-3cd5564efbbb%40rivosinc.com
+patch subject: [PATCH RFC v3 1/2] mm: Add personality flag to limit address to 47 bits
+config: i386-defconfig (https://download.01.org/0day-ci/archive/20240909/202409090150.Po6fKG3u-lkp@intel.com/config)
 compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240909/202409090022.jxFbbVYj-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240909/202409090150.Po6fKG3u-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202409090022.jxFbbVYj-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202409090150.Po6fKG3u-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> net/netfilter/nft_socket.c:212:9: error: call to undeclared function 'nft_socket_cgroup_subtree_level'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     212 |                 err = nft_socket_cgroup_subtree_level();
-         |                       ^
-   1 error generated.
+>> mm/mmap.c:1770:44: warning: shift count >= width of type [-Wshift-count-overflow]
+    1770 |                 info->high_limit = MIN(info->high_limit, BIT(47) - 1);
+         |                                    ~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~
+   include/vdso/bits.h:7:26: note: expanded from macro 'BIT'
+       7 | #define BIT(nr)                 (UL(1) << (nr))
+         |                                        ^
+   include/linux/minmax.h:329:30: note: expanded from macro 'MIN'
+     329 | #define MIN(a,b) __cmp(min,a,b)
+         |                  ~~~~~~~~~~~~^~
+   include/linux/minmax.h:90:45: note: expanded from macro '__cmp'
+      90 | #define __cmp(op, x, y) ((x) __cmp_op_##op (y) ? (x) : (y))
+         |                                             ^
+>> mm/mmap.c:1770:44: warning: shift count >= width of type [-Wshift-count-overflow]
+    1770 |                 info->high_limit = MIN(info->high_limit, BIT(47) - 1);
+         |                                    ~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~
+   include/vdso/bits.h:7:26: note: expanded from macro 'BIT'
+       7 | #define BIT(nr)                 (UL(1) << (nr))
+         |                                        ^
+   include/linux/minmax.h:329:30: note: expanded from macro 'MIN'
+     329 | #define MIN(a,b) __cmp(min,a,b)
+         |                  ~~~~~~~~~~~~^~
+   include/linux/minmax.h:90:57: note: expanded from macro '__cmp'
+      90 | #define __cmp(op, x, y) ((x) __cmp_op_##op (y) ? (x) : (y))
+         |                                                         ^
+   2 warnings generated.
 
 
-vim +/nft_socket_cgroup_subtree_level +212 net/netfilter/nft_socket.c
+vim +1770 mm/mmap.c
 
-   169	
-   170	static int nft_socket_init(const struct nft_ctx *ctx,
-   171				   const struct nft_expr *expr,
-   172				   const struct nlattr * const tb[])
-   173	{
-   174		struct nft_socket *priv = nft_expr_priv(expr);
-   175		unsigned int len;
-   176	
-   177		if (!tb[NFTA_SOCKET_DREG] || !tb[NFTA_SOCKET_KEY])
-   178			return -EINVAL;
-   179	
-   180		switch(ctx->family) {
-   181		case NFPROTO_IPV4:
-   182	#if IS_ENABLED(CONFIG_NF_TABLES_IPV6)
-   183		case NFPROTO_IPV6:
-   184	#endif
-   185		case NFPROTO_INET:
-   186			break;
-   187		default:
-   188			return -EOPNOTSUPP;
-   189		}
-   190	
-   191		priv->key = ntohl(nla_get_be32(tb[NFTA_SOCKET_KEY]));
-   192		switch(priv->key) {
-   193		case NFT_SOCKET_TRANSPARENT:
-   194		case NFT_SOCKET_WILDCARD:
-   195			len = sizeof(u8);
-   196			break;
-   197		case NFT_SOCKET_MARK:
-   198			len = sizeof(u32);
-   199			break;
-   200	#ifdef CONFIG_CGROUPS
-   201		case NFT_SOCKET_CGROUPV2: {
-   202			unsigned int level;
-   203			int err;
-   204	
-   205			if (!tb[NFTA_SOCKET_LEVEL])
-   206				return -EINVAL;
-   207	
-   208			level = ntohl(nla_get_be32(tb[NFTA_SOCKET_LEVEL]));
-   209			if (level > 255)
-   210				return -EOPNOTSUPP;
-   211	
- > 212			err = nft_socket_cgroup_subtree_level();
-   213			if (err < 0)
-   214				return err;
-   215	
-   216			priv->level_user = level;
-   217	
-   218			level += err;
-   219			/* Implies a giant cgroup tree */
-   220			if (WARN_ON_ONCE(level > 255))
-   221				return -EOPNOTSUPP;
-   222	
-   223			priv->level = level;
-   224			len = sizeof(u64);
-   225			break;
-   226		}
-   227	#endif
-   228		default:
-   229			return -EOPNOTSUPP;
-   230		}
-   231	
-   232		priv->len = len;
-   233		return nft_parse_register_store(ctx, tb[NFTA_SOCKET_DREG], &priv->dreg,
-   234						NULL, NFT_DATA_VALUE, len);
-   235	}
-   236	
+  1755	
+  1756	/*
+  1757	 * Search for an unmapped address range.
+  1758	 *
+  1759	 * We are looking for a range that:
+  1760	 * - does not intersect with any VMA;
+  1761	 * - is contained within the [low_limit, high_limit) interval;
+  1762	 * - is at least the desired size.
+  1763	 * - satisfies (begin_addr & align_mask) == (align_offset & align_mask)
+  1764	 */
+  1765	unsigned long vm_unmapped_area(struct vm_unmapped_area_info *info)
+  1766	{
+  1767		unsigned long addr;
+  1768	
+  1769		if (current->personality & ADDR_LIMIT_47BIT)
+> 1770			info->high_limit = MIN(info->high_limit, BIT(47) - 1);
+  1771	
+  1772		if (info->flags & VM_UNMAPPED_AREA_TOPDOWN)
+  1773			addr = unmapped_area_topdown(info);
+  1774		else
+  1775			addr = unmapped_area(info);
+  1776	
+  1777		trace_vm_unmapped_area(addr, info);
+  1778		return addr;
+  1779	}
+  1780	
 
 -- 
 0-DAY CI Kernel Test Service
