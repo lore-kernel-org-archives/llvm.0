@@ -1,177 +1,120 @@
-Received: from fout6-smtp.messagingengine.com (fout6-smtp.messagingengine.com [103.168.172.149])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1034613BAC2;
-	Sun,  8 Sep 2024 10:20:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.149
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 28CEB1E522;
+	Sun,  8 Sep 2024 12:50:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725790817; cv=none; b=dPAq8CaTiPDZgJRWxVczLrJsWJitbbSPImuBDJC0ps1GkxH9aB8vFNLpH4cXTmSXMBHY2x9nMv30CBlS/t8i4s8D9V4p2Y5YgEcko7uZ7AIg9akGVeiyGIv/dlzsrvrIYQNLHkOHWr10YBJ2QB6T4unSDffRrGBNhLqqB14Ch/g=
+	t=1725799814; cv=none; b=UoKLt+jNdrvW2TDzjE3X1/EdONyqjF5osUPrr3jsJBGaZIoNkinCgD4kY1dr9ND6R9QYBimjxAdXLjasi23Zl32zroKDjU3ZBAer5fsBo4OP6k2FWrpWfY2C48O8KozkUEvEx5FiYFnkCmZcvaZDM34gHRa63xqtlqc2rMeOm/w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725790817; c=relaxed/simple;
-	bh=lk1+zZ+jiu2Oz9/qJlhKahZ3/gT/P2RzNeEcaBMO0oc=;
-	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
-	 Subject:Content-Type; b=fvykcMCuEw+jxsZbWPuykf0kgT6URDnTUe1dUAPvMCwdmfZV1Auq/l2BA8rRSwxq9naiKr0K6ejc/H7Vgcu4Qbb7jEJE+lhe4Ka6HpdGIwPmcmzne1SS5il5AaOwnQSBLoQizjVFEPDzHo4FiIWWYYZU0gQwLkRcvXXbxtUbN3k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=flygoat.com; spf=pass smtp.mailfrom=flygoat.com; dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b=lRnzknhS; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=eTa6pUfw; arc=none smtp.client-ip=103.168.172.149
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=flygoat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flygoat.com
+	s=arc-20240116; t=1725799814; c=relaxed/simple;
+	bh=vQYUxMY9KsZyzEw/qQOftd+ftZURJcV2ugrpzDHyro4=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=Pi3NfPfOVCEqoJS52H2wa/qKt9SKD1JsAvk1SSJVB8IJdNt+BnBNqwUXNC/xwN36AaKCRfj8U/dEc8Hk+Y9rFRKIKdkgUzSN5CGm3iKcTQ4wxPKwaqNJF4FezM8I+7E8smcVCUEi6Gn8ur8s/p2zQBfMDUsIu1lwmWjLKa9ndTo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=jBKZY6mD; arc=none smtp.client-ip=192.198.163.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b="lRnzknhS";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="eTa6pUfw"
-Received: from phl-compute-09.internal (phl-compute-09.phl.internal [10.202.2.49])
-	by mailfout.phl.internal (Postfix) with ESMTP id E0CAA13802F2;
-	Sun,  8 Sep 2024 06:20:14 -0400 (EDT)
-Received: from phl-imap-12 ([10.202.2.86])
-  by phl-compute-09.internal (MEProxy); Sun, 08 Sep 2024 06:20:14 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
-	cc:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm2; t=1725790814;
-	 x=1725877214; bh=9EaytkM5LDH5lJ/uxj4WXd/rSRPpUoaSxQw9e1SAr90=; b=
-	lRnzknhSCJCq2nwona3ZNH0RMIunu1ORNxxuNPYzKIdn8Ktg2qq/28g2VJ0uvBnO
-	+UGokr6zRt4gXu+LV8XSNk1ciVoFfhzGjN5wdPgMeewrN/eBF6QZ0tNkoTKcZhUI
-	oTsQPxY72FcYAc2ELKL+sPDrU1Db38XeKXZ1zpdp3sSxRd5l3n/kREI8lV6sSacZ
-	NU4Po7tsyEXAXVB3+d+S0zVvtPlRDX1kreCxONDrPfqgNJ7p0xziRwMK5sl9jp0z
-	MoE0QOukdfF1kN0IQAdTA40uqzckcUob9wduI97QdTquDUaqY/jv6xTArQ3YWMj7
-	wf4Ralzx5d4fCjot/P1HWQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1725790814; x=
-	1725877214; bh=9EaytkM5LDH5lJ/uxj4WXd/rSRPpUoaSxQw9e1SAr90=; b=e
-	Ta6pUfwWFU7xYhcOaBw2lezc5f26nkZutWdlIuFkEchQzxd55tCMIALDXgj7fSi3
-	TZA/lFh+u9Arr34EEGfvk6UF3wigj7oNo6Z3ForWw31aB4Szql4elHDzB8nGpWpS
-	ky0fzqRhcuysCt0oOLVIpbvX0K7AGdys1a42xs26KZ5xMskyBK5SUDpcb0i+hkfK
-	UsOK72t+QpZobSOjVuCvH2+BAHZlGcsqqW1AFYrJ6nx7K5t4h29kkW/mmeHCS5f6
-	JUCPhgWKPvy0Wgt8+/kpaBUj59O5ol95RyHoHA1QR6TjuGBMgOW2SEDdc5L+DTE4
-	weBGqhWi0+sdNWs4tOdSw==
-X-ME-Sender: <xms:XHrdZq1OhCboq_TEeQrym_mWsXGs0YBbH7Qdi_v8D4FkaiETKKr5NQ>
-    <xme:XHrdZtEJdxoEcK_OFOYW8-KbCEOYg3XYmw-uLEdSTZMpiJyN4mUGvsHu7pqokhBTK
-    2uGrXKbP9y2zjh7nrI>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeftddrudeihedgvdejucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdggtfgfnhhsuhgsshgtrhhisggvpdfu
-    rfetoffkrfgpnffqhgenuceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnh
-    htshculddquddttddmnecujfgurhepofggfffhvfevkfgjfhfutgfgsehtqhertdertdej
-    necuhfhrohhmpedflfhirgiguhhnucgjrghnghdfuceojhhirgiguhhnrdihrghnghesfh
-    hlhihgohgrthdrtghomheqnecuggftrfgrthhtvghrnhepjeelheeigeduueffieeiffel
-    jeejhedtudekkeeuffevhfejuefghfeutdejfffgnecuffhomhgrihhnpehgihhthhhusg
-    drtghomhdpkhgvrhhnvghlrdhorhhgpddtuddrohhrghenucevlhhushhtvghrufhiiigv
-    pedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehjihgrgihunhdrhigrnhhgsehflhihgh
-    horghtrdgtohhmpdhnsggprhgtphhtthhopeeffedpmhhouggvpehsmhhtphhouhhtpdhr
-    tghpthhtohepsghpsegrlhhivghnkedruggvpdhrtghpthhtohepthhssghoghgvnhguse
-    grlhhphhgrrdhfrhgrnhhkvghnrdguvgdprhgtphhtthhopehmrghrkhdrrhhuthhlrghn
-    ugesrghrmhdrtghomhdprhgtphhtthhopegrnhhtohhnrdhivhgrnhhovhestggrmhgsrh
-    hiughgvghgrhgvhihsrdgtohhmpdhrtghpthhtohepnhhitgholhgrshesfhhjrghslhgv
-    rdgvuhdprhgtphhtthhopehgrghrhiesghgrrhihghhuohdrnhgvthdprhgtphhtthhope
-    grlhgvgidrghgrhihnohhrsehgmhgrihhlrdgtohhmpdhrtghpthhtohepsghoqhhunhdr
-    fhgvnhhgsehgmhgrihhlrdgtohhmpdhrtghpthhtohepfigvughsohhnrghfsehgmhgrih
-    hlrdgtohhm
-X-ME-Proxy: <xmx:XHrdZi5MjXmazbkYWJyyrTrAQ4pHD9qCEeMwl9D-q9Ok_kkT44Z9yQ>
-    <xmx:XHrdZr0v5haPnTbwVcjvAKiWc6fYEY6E2uYr_4LSFdvDToLPoB4bDA>
-    <xmx:XHrdZtHlZbMaQqW16ZVeONZY_E8qWRMYYSYDp0plGcY3UE6wU2Moqw>
-    <xmx:XHrdZk88b4rKdAQjWldtcj9F8btYB7myTXW-XtsO3WwbC8jcYQht8A>
-    <xmx:XnrdZk8k1Kih0ysKc34UeVTIOuXeyIkcvv_zRuqpHCEhutXZdDD8_GhF>
-Feedback-ID: ifd894703:Fastmail
-Received: by mailuser.phl.internal (Postfix, from userid 501)
-	id 6FE011C20065; Sun,  8 Sep 2024 06:20:12 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="jBKZY6mD"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1725799813; x=1757335813;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=vQYUxMY9KsZyzEw/qQOftd+ftZURJcV2ugrpzDHyro4=;
+  b=jBKZY6mDrP1WTWXB9x3Cnd3jaVucdIrbZ/Py8hZgW19PbajLeRgKkCG+
+   h0hzt++Pnc6xsMNGU9PkHvtGSPCXpcpR9WsdYNGNF57xGIO98nyE6oDvi
+   qjU95MVQHQUKLyOXSYTM+Nh6SZbI2KgAj4+e3qoupF8zSW9NJ86E5JQ7p
+   ryGYzB2jlW00QzUAJYw3Iy/vRZ4866+nXPT3VuVXusIvIO7E4aIysNlVj
+   Q62fPvUzMmNnCMGNg97yT/bZfVr75csX++PVO3T2BdW6A27MfY2PZkHsl
+   zKku7V6D63M1gEU9QAd7GxqA8IyIcMpLMgAg9ra06QJ7aQEiL9iXI0PZC
+   A==;
+X-CSE-ConnectionGUID: Yr8/0MyuQxS3CA9vF0n+rw==
+X-CSE-MsgGUID: Ky5K5HjLTpCJhlroWc5zMw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11189"; a="24658951"
+X-IronPort-AV: E=Sophos;i="6.10,212,1719903600"; 
+   d="scan'208";a="24658951"
+Received: from orviesa004.jf.intel.com ([10.64.159.144])
+  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Sep 2024 05:50:13 -0700
+X-CSE-ConnectionGUID: Z6uFOa3rRh6SXlQysFdyKg==
+X-CSE-MsgGUID: Ax1og0U3R4GXKD6rcBKAIw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.10,212,1719903600"; 
+   d="scan'208";a="71363990"
+Received: from lkp-server01.sh.intel.com (HELO 9c6b1c7d3b50) ([10.239.97.150])
+  by orviesa004.jf.intel.com with ESMTP; 08 Sep 2024 05:50:11 -0700
+Received: from kbuild by 9c6b1c7d3b50 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1snHMm-000DXX-2e;
+	Sun, 08 Sep 2024 12:50:08 +0000
+Date: Sun, 8 Sep 2024 20:50:07 +0800
+From: kernel test robot <lkp@intel.com>
+To: Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Alex Deucher <alexander.deucher@amd.com>,
+	Friedrich Vock <friedrich.vock@gmx.de>
+Subject: [agd5f:drm-next 73/97]
+ drivers/gpu/drm/amd/amdgpu/amdgpu_vm_cpu.c:50: warning: Function parameter
+ or struct member 'sync' not described in 'amdgpu_vm_cpu_prepare'
+Message-ID: <202409082022.1UsYF3Yg-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Date: Sun, 08 Sep 2024 11:19:52 +0100
-From: "Jiaxun Yang" <jiaxun.yang@flygoat.com>
-To: "kernel test robot" <lkp@intel.com>,
- "Masahiro Yamada" <masahiroy@kernel.org>,
- "Nathan Chancellor" <nathan@kernel.org>,
- "Nicolas Schier" <nicolas@fjasle.eu>,
- "Richard Weinberger" <richard@nod.at>,
- "Anton Ivanov" <anton.ivanov@cambridgegreys.com>,
- "Johannes Berg" <johannes@sipsolutions.net>,
- "Thomas Gleixner" <tglx@linutronix.de>, "Ingo Molnar" <mingo@redhat.com>,
- "Borislav Petkov" <bp@alien8.de>,
- "Dave Hansen" <dave.hansen@linux.intel.com>, x86@kernel.org,
- "H. Peter Anvin" <hpa@zytor.com>, "Miguel Ojeda" <ojeda@kernel.org>,
- "Alex Gaynor" <alex.gaynor@gmail.com>,
- "Wedson Almeida Filho" <wedsonaf@gmail.com>,
- "Boqun Feng" <boqun.feng@gmail.com>, "Gary Guo" <gary@garyguo.net>,
- =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
- "Benno Lossin" <benno.lossin@proton.me>,
- "Andreas Hindborg" <a.hindborg@samsung.com>,
- "Alice Ryhl" <aliceryhl@google.com>,
- "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>,
- "Steven Rostedt" <rostedt@goodmis.org>,
- "Masami Hiramatsu" <mhiramat@kernel.org>,
- "Mark Rutland" <mark.rutland@arm.com>,
- "Jonathan Corbet" <corbet@lwn.net>, "Alex Shi" <alexs@kernel.org>,
- "Yanteng Si" <siyanteng@loongson.cn>,
- "Nick Desaulniers" <ndesaulniers@google.com>,
- "Bill Wendling" <morbo@google.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Message-Id: <70ccb9a6-7bef-435d-bd3c-7f3d8487031e@app.fastmail.com>
-In-Reply-To: <202409081703.CUljfXjY-lkp@intel.com>
-References: <20240905-mips-rust-v2-1-409d66819418@flygoat.com>
- <202409081703.CUljfXjY-lkp@intel.com>
-Subject: Re: [PATCH v2 1/3] rust: Introduce HAVE_GENERATE_RUST_TARGET config option
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+
+tree:   https://gitlab.freedesktop.org/agd5f/linux.git drm-next
+head:   0df8ef6e1b5dc7a6edc6242a95f47a257ffecff0
+commit: 4da5a95bf125fd682249f60e296455c6413b4e10 [73/97] drm/amdgpu: re-work VM syncing
+config: i386-buildonly-randconfig-002-20240908 (https://download.01.org/0day-ci/archive/20240908/202409082022.1UsYF3Yg-lkp@intel.com/config)
+compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240908/202409082022.1UsYF3Yg-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202409082022.1UsYF3Yg-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/gpu/drm/amd/amdgpu/amdgpu_vm_cpu.c:50: warning: Function parameter or struct member 'sync' not described in 'amdgpu_vm_cpu_prepare'
+>> drivers/gpu/drm/amd/amdgpu/amdgpu_vm_cpu.c:50: warning: Excess function parameter 'resv' description in 'amdgpu_vm_cpu_prepare'
+>> drivers/gpu/drm/amd/amdgpu/amdgpu_vm_cpu.c:50: warning: Excess function parameter 'sync_mode' description in 'amdgpu_vm_cpu_prepare'
 
 
+vim +50 drivers/gpu/drm/amd/amdgpu/amdgpu_vm_cpu.c
 
-=E5=9C=A82024=E5=B9=B49=E6=9C=888=E6=97=A5=E4=B9=9D=E6=9C=88 =E4=B8=8A=E5=
-=8D=8811:05=EF=BC=8Ckernel test robot=E5=86=99=E9=81=93=EF=BC=9A
-> Hi Jiaxun,
->
-> kernel test robot noticed the following build errors:
->
-> [auto build test ERROR on 469f1bad3c1c6e268059f78c0eec7e9552b3894c]
->
-> url:   =20
-> https://github.com/intel-lab-lkp/linux/commits/Jiaxun-Yang/rust-Introd=
-uce-HAVE_GENERATE_RUST_TARGET-config-option/20240905-213538
-> base:   469f1bad3c1c6e268059f78c0eec7e9552b3894c
-> patch link:   =20
-> https://lore.kernel.org/r/20240905-mips-rust-v2-1-409d66819418%40flygo=
-at.com
-> patch subject: [PATCH v2 1/3] rust: Introduce HAVE_GENERATE_RUST_TARGE=
-T=20
-> config option
-> config: x86_64-rhel-8.3-rust=20
-> (https://download.01.org/0day-ci/archive/20240908/202409081703.CUljfXj=
-Y-lkp@intel.com/config)
-> compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project=20
-> 617a15a9eac96088ae5e9134248d8236e34b91b1)
-> reproduce (this is a W=3D1 build):=20
-> (https://download.01.org/0day-ci/archive/20240908/202409081703.CUljfXj=
-Y-lkp@intel.com/reproduce)
->
-> If you fix the issue in a separate patch/commit (i.e. not just a new=20
-> version of
-> the same patch/commit), kindly add following tags
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes:=20
-> https://lore.kernel.org/oe-kbuild-all/202409081703.CUljfXjY-lkp@intel.=
-com/
->
-> All errors (new ones prefixed by >>):
->
->>> error: /opt/cross/rustc-1.78.0-bindgen-0.65.1/rustup/toolchains/1.78=
-.0-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/num/f3=
-2.rs:804:6: in function _RNvMNtCs5QSdWC790r4_4core3f32f7next_up float (f=
-loat): SSE register return with SSE disabled
+ecf96b52bf98a2 Christian König 2019-03-21  37  
+6dd09027a22ac7 Christian König 2019-03-18  38  /**
+6dd09027a22ac7 Christian König 2019-03-18  39   * amdgpu_vm_cpu_prepare - prepare page table update with the CPU
+6dd09027a22ac7 Christian König 2019-03-18  40   *
+6dd09027a22ac7 Christian König 2019-03-18  41   * @p: see amdgpu_vm_update_params definition
+7eff65d6c59c49 Lee Jones       2020-11-13  42   * @resv: reservation object with embedded fence
+7eff65d6c59c49 Lee Jones       2020-11-13  43   * @sync_mode: synchronization mode
+6dd09027a22ac7 Christian König 2019-03-18  44   *
+6dd09027a22ac7 Christian König 2019-03-18  45   * Returns:
+6dd09027a22ac7 Christian König 2019-03-18  46   * Negativ errno, 0 for success.
+6dd09027a22ac7 Christian König 2019-03-18  47   */
+9f3cc18d19b7b7 Christian König 2020-01-23  48  static int amdgpu_vm_cpu_prepare(struct amdgpu_vm_update_params *p,
+4da5a95bf125fd Christian König 2024-08-20  49  				 struct amdgpu_sync *sync)
+6dd09027a22ac7 Christian König 2019-03-18 @50  {
+4da5a95bf125fd Christian König 2024-08-20  51  	if (!sync)
+6dd09027a22ac7 Christian König 2019-03-18  52  		return 0;
+47ca7efa4c13f8 Christian König 2019-09-16  53  
+4da5a95bf125fd Christian König 2024-08-20  54  	return amdgpu_sync_wait(sync, true);
+6dd09027a22ac7 Christian König 2019-03-18  55  }
+6dd09027a22ac7 Christian König 2019-03-18  56  
 
-It seems like not related to this patch?
+:::::: The code at line 50 was first introduced by commit
+:::::: 6dd09027a22ac78f6ab1881aa7e2e21ad61c02b8 drm/amdgpu: new VM update backends
 
-No functional behaviour change on x86.=20
+:::::: TO: Christian König <christian.koenig@amd.com>
+:::::: CC: Alex Deucher <alexander.deucher@amd.com>
 
-Thanks
->
-> --=20
-> 0-DAY CI Kernel Test Service
-> https://github.com/intel/lkp-tests/wiki
-
---=20
-- Jiaxun
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
