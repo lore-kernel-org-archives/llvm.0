@@ -1,126 +1,125 @@
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 755AF176237
-	for <llvm@lists.linux.dev>; Mon,  9 Sep 2024 08:57:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7568F1B29B3
+	for <llvm@lists.linux.dev>; Mon,  9 Sep 2024 09:26:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725872244; cv=none; b=Zgc+b5Fm4UauwDvyAq/vnKj5dx7wbRTki8ySob2yRYLI8dKLJv4Y+PuZVbK9K8DQJxL0ACvXKPaX9ITXs4YeG6oqCX8zhL1K0IdPIAW40gsY+CDQPicgSv7exJ/P/RFwU3urza/aIJ3dF+wDEctcpgXZRUThxQ3RUiqq3kXSEqE=
+	t=1725874014; cv=none; b=GjWHMj4lVdvmHxhDOodgwPAWDiqXDjDfUWDXG+3IByPk4iD3YlVBQK/OaN+5iyith1UAaPjFfdfgRPjgKuZM+dhNN2lYl2dO2nprhIEJfCXnRW5ZDZcv7B2uBYpaa+KaizvqXw/zT/JHsUBiYE/7UNNA203aZVLCR1dSZnjUnSw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725872244; c=relaxed/simple;
-	bh=8xxXr+ro/u+DzU/FZBGhGxfHBvikVGquq4JzD94W42s=;
+	s=arc-20240116; t=1725874014; c=relaxed/simple;
+	bh=YMfDOUXP8QWcgZnPeCfOORRIXgzJrJORZJWFxCKAw1U=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=bFbO17vKn0g4Hy9rUjW4kU4Or4bMUh2om1J+9uM/9ve2ekYZa0jM3FnatU/i07YZzY1ZH62ds6NGoX1AZgXWoyiWLzmSPOFuV8OZcMIidr1M7l+/oh6WVsE2dGqSOwCwZp/NCI83jMr6yxTVCtz7hh0LOFQ3ZZgCJIlwnTc7k+I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <mkl@pengutronix.de>)
-	id 1snaCq-0004Ic-JM; Mon, 09 Sep 2024 10:57:08 +0200
-Received: from [2a0a:edc0:0:b01:1d::7b] (helo=bjornoya.blackshift.org)
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.94.2)
-	(envelope-from <mkl@pengutronix.de>)
-	id 1snaCo-006btk-VB; Mon, 09 Sep 2024 10:57:06 +0200
-Received: from pengutronix.de (pd9e595f8.dip0.t-ipconnect.de [217.229.149.248])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	(Authenticated sender: mkl-all@blackshift.org)
-	by smtp.blackshift.org (Postfix) with ESMTPSA id 97BCB3366D4;
-	Mon, 09 Sep 2024 08:57:06 +0000 (UTC)
-Date: Mon, 9 Sep 2024 10:57:06 +0200
-From: Marc Kleine-Budde <mkl@pengutronix.de>
+	 Content-Type:Content-Disposition:In-Reply-To; b=p4aQmBfL+qpT+vVte4NlNXPS5MXGJARrYUygGG5Idc1DRNdZ6yfdRCH6T89qT8SxyS01G1uMouig56uQnX4Bu+rKNy4NwiwcVSHCZwthJECqR/2JS3WPDHIWvBWfJXOovPn8PCwWKaRP5P2PoHc3dhcda0ilXM7SJ6/FFo7/HGU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=fTt/3P2v; arc=none smtp.client-ip=192.198.163.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="fTt/3P2v"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1725874013; x=1757410013;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=YMfDOUXP8QWcgZnPeCfOORRIXgzJrJORZJWFxCKAw1U=;
+  b=fTt/3P2vConG40Bvn1ZAhdFF7EHAW9k8d2pICOtAoYKnmnYwEa1qpDLs
+   pBsd3L2VEDpHnZjQmImwhRB7pdfusxZ1UPlx4219Hs1vRuYFFoflnVSk8
+   7PoOJHOr3oLfC2vldAgTJ6DTEVNLlX18VzafJADxSfMFCEGTk1Xv1c0lr
+   zXlLW0RWq/CdcuodGWn/nP5Db1YrrYTuWibphorFa6ZLs23qbtAamNWDZ
+   vWwoNkLPZVbAvSu7l0EMC3H4tWc+4UrvkfxDWxVGXHpuHrvdqYNVEy8da
+   GD0SYo0Qe3IgJC5WDYitjGq8eJNVmlS2xCXiUt3Fu1dmmSVjSN1PQivOc
+   w==;
+X-CSE-ConnectionGUID: 7Ihac2oSTA60tlvHWYo9LA==
+X-CSE-MsgGUID: ODAu34G4RNKNX52eLjCMDg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11189"; a="24718766"
+X-IronPort-AV: E=Sophos;i="6.10,213,1719903600"; 
+   d="scan'208";a="24718766"
+Received: from fmviesa007.fm.intel.com ([10.60.135.147])
+  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Sep 2024 02:26:53 -0700
+X-CSE-ConnectionGUID: 9SN7b16eQ7aeQERUUwenrQ==
+X-CSE-MsgGUID: O8pxyOc7S7Gk/VEVAOIJ+w==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.10,213,1719903600"; 
+   d="scan'208";a="66324974"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmviesa007.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Sep 2024 02:26:42 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.98)
+	(envelope-from <andriy.shevchenko@linux.intel.com>)
+	id 1snafP-00000006jXU-2nYN;
+	Mon, 09 Sep 2024 12:26:39 +0300
+Date: Mon, 9 Sep 2024 12:26:39 +0300
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 To: Simon Horman <horms@kernel.org>
-Cc: Nathan Chancellor <nathan@kernel.org>, kernel@pengutronix.de, 
-	Vincent Mailhol <mailhol.vincent@wanadoo.fr>, "David S. Miller" <davem@davemloft.net>, 
-	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, 
-	Paolo Abeni <pabeni@redhat.com>, Heiko Stuebner <heiko@sntech.de>, linux-can@vger.kernel.org, 
-	netdev@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	linux-rockchip@lists.infradead.org, llvm@lists.linux.dev, patches@lists.linux.dev
-Subject: Re: [PATCH] can: rockchip_canfd: fix return type of
- rkcanfd_start_xmit()
-Message-ID: <20240909-arcane-practical-petrel-015d24-mkl@pengutronix.de>
-References: <20240906-rockchip-canfd-wifpts-v1-1-b1398da865b7@kernel.org>
- <20240909084448.GU2097826@kernel.org>
+Cc: Pablo Neira Ayuso <pablo@netfilter.org>,
+	Felix Huettner <felix.huettner@mail.schwarz>,
+	netfilter-devel@vger.kernel.org, coreteam@netfilter.org,
+	netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev, Jozsef Kadlecsik <kadlec@netfilter.org>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>
+Subject: Re: [PATCH net v1 1/1] netfilter: conntrack: Guard possoble unused
+ functions
+Message-ID: <Zt6_T2INKWSm7YK8@smile.fi.intel.com>
+References: <20240905203612.333421-1-andriy.shevchenko@linux.intel.com>
+ <20240906162938.GH2097826@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="fuepnusvih4poru2"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240909084448.GU2097826@kernel.org>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: llvm@lists.linux.dev
+In-Reply-To: <20240906162938.GH2097826@kernel.org>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+
+On Fri, Sep 06, 2024 at 05:29:38PM +0100, Simon Horman wrote:
+> On Thu, Sep 05, 2024 at 11:36:12PM +0300, Andy Shevchenko wrote:
+> > Some of the functions may be unused, it prevents kernel builds
+> > with clang, `make W=1` and CONFIG_WERROR=y:
+> > 
+> > net/netfilter/nf_conntrack_netlink.c:657:22: error: unused function 'ctnetlink_acct_size' [-Werror,-Wunused-function]
+> >   657 | static inline size_t ctnetlink_acct_size(const struct nf_conn *ct)
+> >       |                      ^~~~~~~~~~~~~~~~~~~
+> > net/netfilter/nf_conntrack_netlink.c:667:19: error: unused function 'ctnetlink_secctx_size' [-Werror,-Wunused-function]
+> >   667 | static inline int ctnetlink_secctx_size(const struct nf_conn *ct)
+> >       |                   ^~~~~~~~~~~~~~~~~~~~~
+> > net/netfilter/nf_conntrack_netlink.c:683:22: error: unused function 'ctnetlink_timestamp_size' [-Werror,-Wunused-function]
+> >   683 | static inline size_t ctnetlink_timestamp_size(const struct nf_conn *ct)
+> >       |                      ^~~~~~~~~~~~~~~~~~~~~~~~
+> 
+> Hi Andy,
+> 
+> Local testing seems to show that the warning is still emitted
+> for ctnetlink_label_size if CONFIG_NETFILTER_NETLINK_GLUE_CT is enabled
+> but CONFIG_NF_CONNTRACK_EVENTS is not.
+
+Hmm... Let me try that. I am using mostly x86_64_defconfig for the testing.
+The idea is to have once x86_64_defconfig to be clean with W=1 and since then
+it will be easier to enable it unconditionally for CIs for _that_ particular
+configuration(s) ("s" in case of i386_defconfig to be at the same level).
+
+> > Fix this by guarding possible unused functions with ifdeffery.
+> > 
+> > See also commit 6863f5643dd7 ("kbuild: allow Clang to find unused static
+> > inline functions for W=1 build").
+> > 
+> > Fixes: 4a96300cec88 ("netfilter: ctnetlink: restore inlining for netlink message size calculation")
+> 
+> I'm not sure that this qualifies as a fix, rather I think it should
+> be targeted at net-next without a Fixes tag.
+
+Okay.
+
+Thank you for the review!
+
+-- 
+With Best Regards,
+Andy Shevchenko
 
 
---fuepnusvih4poru2
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On 09.09.2024 09:44:48, Simon Horman wrote:
-> On Fri, Sep 06, 2024 at 01:26:41PM -0700, Nathan Chancellor wrote:
-> > With clang's kernel control flow integrity (kCFI, CONFIG_CFI_CLANG),
-> > indirect call targets are validated against the expected function
-> > pointer prototype to make sure the call target is valid to help mitigate
-> > ROP attacks. If they are not identical, there is a failure at run time,
-> > which manifests as either a kernel panic or thread getting killed. A
-> > warning in clang aims to catch these at compile time, which reveals:
-> >=20
-> >   drivers/net/can/rockchip/rockchip_canfd-core.c:770:20: error: incompa=
-tible function pointer types initializing 'netdev_tx_t (*)(struct sk_buff *=
-, struct net_device *)' (aka 'enum netdev_tx (*)(struct sk_buff *, struct n=
-et_device *)') with an expression of type 'int (struct sk_buff *, struct ne=
-t_device *)' [-Werror,-Wincompatible-function-pointer-types-strict]
-> >     770 |         .ndo_start_xmit =3D rkcanfd_start_xmit,
-> >         |                           ^~~~~~~~~~~~~~~~~~
-> >=20
-> > ->ndo_start_xmit() in 'struct net_device_ops' expects a return type of
-> > 'netdev_tx_t', not 'int' (although the types are ABI compatible). Adjust
-> > the return type of rkcanfd_start_xmit() to match the prototype's to
-> > resolve the warning.
-> >=20
-> > Fixes: ff60bfbaf67f ("can: rockchip_canfd: add driver for Rockchip CAN-=
-FD controller")
-> > Signed-off-by: Nathan Chancellor <nathan@kernel.org>
->=20
-> Thanks, I was able to reproduce this problem at build time
-> and that your patch addresses it.
-
-FTR: the default clang in Debian unstable, clang-16.0.6 doesn't support
-this. With clang-20 from experimental it works, haven't checked older
-versions, though.
-
-regards,
-Marc
-
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde          |
-Embedded Linux                   | https://www.pengutronix.de |
-Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
-
---fuepnusvih4poru2
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEUEC6huC2BN0pvD5fKDiiPnotvG8FAmbeuF8ACgkQKDiiPnot
-vG+3gQf+MluezEfY084GfE16SOshu37NwV1Ignu8Goqy9G7jmMndcoundvwxiosq
-9Hd/6ILhI4GzWIF4a7UKOP6e+QPHz3eJ4V2Mgbs13QYtoLDf1nT+h+14MkiIMipK
-s6z9Ee31ptiZbn2raC7J6f8Z72+F0iysurkx39ZT8vt7Okq70pBQUN+HzPgH4Ryv
-MPcMpvh6mRaSQyC3zUuTnO1fW6hTMQGhOjJ4/TH5yaQvSo2N4qJExjM05X6Zz7lx
-uXt78y+/LA7U3Ew4fXyEhStgIxPlFalFcR47lXQzuVBmIRiV3Z44PONYJHPjsS8m
-lUd5S51lrVQG5sCik6LNGoQvZst9Yg==
-=JBly
------END PGP SIGNATURE-----
-
---fuepnusvih4poru2--
