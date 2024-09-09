@@ -1,98 +1,180 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-il1-f178.google.com (mail-il1-f178.google.com [209.85.166.178])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A9BD116131C;
-	Sun,  8 Sep 2024 23:30:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D3FF533EA
+	for <llvm@lists.linux.dev>; Mon,  9 Sep 2024 00:30:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725838213; cv=none; b=M+r7R7I3VL4We1T6IUbzbGVJ60FtB9suEOI3zFw6Nq2+qxG3401j2M15zAWNC47UrLofAidBB1gW5pEoiqwb75HS+ZlTZbyVXcbl8F3QWRTq0BfpsPL300z5lOVsXVwcfJeLXAFmxLVex9dBxekdDxdQNcHXSiYvCSeW0/hlCq8=
+	t=1725841810; cv=none; b=qtJCaZ+CJFwYD1gQ5OKd465RYsVfa7Nk1rLsAdMWHL5/Quulqyt8cas1RFy45sCtG4y1fQNshfUdMcnA+UbqsEhCj8PU9aVXaZZlePPvz1eKio23a3C2YlWy22BfJKMVz0IZoryeK2yWKbCoNs/1kIwk5czO7e1vf4hd+rvv55o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725838213; c=relaxed/simple;
-	bh=lUFLP2HRd2X2JjK7zXcxSdZ1fWTysYB1/qV2dk/l90g=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=R1xTp/VR7WBjsm5XATadM2bHmNThdY6BN+5go5/2jFpFxapACRQ48KroFcROC5HvUltau/FVM8rdNFZYkimPK9YQ3nWQDY8vM40tLkrjMiYDlP+EefSiVmflKkrDVAXbaYiVJREBoD+eOliqq4Ew2vhAIOqElIswzB0G4fxom7Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=f5r+7D9M; arc=none smtp.client-ip=198.175.65.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1725841810; c=relaxed/simple;
+	bh=WKgDTUCCgtaz7HK/6klsNdbV5jsdqfsckL/4sEAMpOE=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=VJ4JeClS8nMBjZ4sy5Bhy6Z0RLQLQMfKDed8QoAzyR13VFZcINcosnyq44OwToGneWZgmiyoXe6Q/DTOj4Wr2OgmnuxLsVXv3u/ESkvcUzzqnWNxlG/q68bGdi03zFeE5n9Vb5G2LNa9KU2mZwbzoSMAzBkrqtZ5ExGvhhVuft4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=K36BBq0A; arc=none smtp.client-ip=209.85.166.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="f5r+7D9M"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1725838212; x=1757374212;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=lUFLP2HRd2X2JjK7zXcxSdZ1fWTysYB1/qV2dk/l90g=;
-  b=f5r+7D9MaW2OL/MIg1GsPcC1X6gFpzOwxDRk2CqyaIzkMVfWwhqc7gLM
-   CibQzttVNxNueodcE27CFeHAr0oOiLgJxnAqBjBLC2SB+POzn54+c0mAG
-   mi+Y7g3SSD+YyL2eedluKNxdrlMQgydJlwkhyJVRGC5zV+21MpMx7fRC5
-   bxVh8gd5Bc4WJTJIHD3flFpsfIoJ2fqQYpa5909tLFOsL3glo7KpUv0Ry
-   nHNm3Y8hIwqV0kZLkJ2sOvVfW5dOPqhO5hPvlx/zsaH8V04i0sg9xuUa0
-   hb21THmPXDmYdcDpUxiq7gkwoIcncqsrsP2Zf+Jx9eMBVsW6wE9DPtv+w
-   A==;
-X-CSE-ConnectionGUID: 7+jrzuN+SP2FH+qjaMePKA==
-X-CSE-MsgGUID: k7rJ6dTRTbqHpOPj933NFg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11189"; a="35865351"
-X-IronPort-AV: E=Sophos;i="6.10,213,1719903600"; 
-   d="scan'208";a="35865351"
-Received: from fmviesa009.fm.intel.com ([10.60.135.149])
-  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Sep 2024 16:30:09 -0700
-X-CSE-ConnectionGUID: 2X+0piqaSWWuIw4uykCLTg==
-X-CSE-MsgGUID: sTse+OX3TmGFDwFevZbZXw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.10,213,1719903600"; 
-   d="scan'208";a="66481156"
-Received: from lkp-server01.sh.intel.com (HELO 9c6b1c7d3b50) ([10.239.97.150])
-  by fmviesa009.fm.intel.com with ESMTP; 08 Sep 2024 16:30:06 -0700
-Received: from kbuild by 9c6b1c7d3b50 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1snRM4-000E4e-1A;
-	Sun, 08 Sep 2024 23:30:04 +0000
-Date: Mon, 9 Sep 2024 07:29:55 +0800
-From: kernel test robot <lkp@intel.com>
-To: Vipin Sharma <vipinsh@google.com>, seanjc@google.com,
-	pbonzini@redhat.com, dmatlack@google.com
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Vipin Sharma <vipinsh@google.com>
-Subject: Re: [PATCH v3 2/2] KVM: x86/mmu: Recover TDP MMU NX huge pages using
- MMU read lock
-Message-ID: <202409090949.xuOxMsJ2-lkp@intel.com>
-References: <20240906204515.3276696-3-vipinsh@google.com>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="K36BBq0A"
+Received: by mail-il1-f178.google.com with SMTP id e9e14a558f8ab-39d2a107aebso460075ab.0
+        for <llvm@lists.linux.dev>; Sun, 08 Sep 2024 17:30:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1725841808; x=1726446608; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=vzWtczCuQJEE//3oD8ytfGgUcpGMdIcjSJ+8lWxc07M=;
+        b=K36BBq0AHrAR7WrAM5a8H1FpXJ607gxGqRfjNIbfP39z3r9jsNLaARGGtgor8lQbtV
+         lF7/hI1YjwLaQmwsBhPfnDd0SLLSCOTx24ciXBEeWfH1s3RvFIyrTTFcrzbnGmOjzAw6
+         6tiesD6v0i1x791yoHAlqn00Q5kG1MTmzo0IY1jEOswpgP1jthkaTv/TN5jEdWx8Re87
+         oOhIM6pParw/L1uaYCPd2Ct4Ofw31ns+JcKTpv73GS9YzfB6H0tY1G75WexJIsBg/BNQ
+         2aV3I4KoeXZrz7xRFUiRk0gP2EI+GcFgL4XWEo5UHKJJ8H5yfTEZ//NIHhiDKz8CZn4t
+         DdLQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1725841808; x=1726446608;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=vzWtczCuQJEE//3oD8ytfGgUcpGMdIcjSJ+8lWxc07M=;
+        b=bDujMRGRCJC+9qZuzWilgbSxp3mkBeGxDiHN9fa3RsvzCwk+b5dQXAZDtSEhvJALo4
+         I70aINAGY7tN2p8lHLGF4q69XqIGj+jeAGRLxVPxJOZZHOituAq7LBxN0eCFbD0bwr7c
+         Clc4I86V1lb5s/ZZMmJqNUQND5MI3bYpULAiL5AmHOOzyMPLtkJ2E9K9sb7tgUTWXZxU
+         aDTAT+lywmA7zmkPOuUDikqfAbf9KncLnsgdFhcOE2JJ4pslIDeopojXHKbUUyLfHa4Z
+         afmZo7DCeAB1nlJKbvewi2RLIYNrntQf0Rt8hLVbTMlIRFf3/+6Uc4F+z9rqovqGk83K
+         KOkQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUTj4wavVPKeXSHkaWKn+9RIyvsjAK5vzdVZAU2QW2VYO+Zo8jgNkVxAv7uul11kybLeD/N@lists.linux.dev
+X-Gm-Message-State: AOJu0YyrwPWwFcGvhkTikcG/lPxvISK79E9jk8GTqJo/41gZftWaTQwC
+	4JffE6MyEyaeacPhb2wkE7uw0EvprTJw0LH5YNIduPIgoSCHkH1Vb+2kuE4r/JhgVLeMkps3C03
+	CjbXiGAJYjwaHUAwjS3eDM7vSB20PfWuV6LrD
+X-Google-Smtp-Source: AGHT+IHOI75SbCP2ecalhMEuqj0tZIDEkkGR2qFHnHxzn1IVb0IipPvs9HPoy2IMKDUvyhRHHypRGtSPLWf/oCMOZvo=
+X-Received: by 2002:a05:6e02:1c2e:b0:39e:68d8:2891 with SMTP id
+ e9e14a558f8ab-3a0576c3222mr3552395ab.6.1725841807625; Sun, 08 Sep 2024
+ 17:30:07 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240906204515.3276696-3-vipinsh@google.com>
+References: <4f01524fa4ea91c7146a41e26ceaf9dae4c127e4.1725821201.git.sam@gentoo.org>
+In-Reply-To: <4f01524fa4ea91c7146a41e26ceaf9dae4c127e4.1725821201.git.sam@gentoo.org>
+From: Ian Rogers <irogers@google.com>
+Date: Sun, 8 Sep 2024 17:29:56 -0700
+Message-ID: <CAP-5=fXz81LOZA+vTGixT26R9vNSpxnCj0=0ieg8E3G4DidGdQ@mail.gmail.com>
+Subject: Re: [PATCH] tools: drop nonsensical -O6
+To: Sam James <sam@gentoo.org>
+Cc: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
+	Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, 
+	Mark Rutland <mark.rutland@arm.com>, 
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>, Jiri Olsa <jolsa@kernel.org>, 
+	Adrian Hunter <adrian.hunter@intel.com>, "Liang, Kan" <kan.liang@linux.intel.com>, 
+	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
+	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, linux-kernel@vger.kernel.org, 
+	linux-perf-users@vger.kernel.org, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Vipin,
+On Sun, Sep 8, 2024 at 11:47=E2=80=AFAM Sam James <sam@gentoo.org> wrote:
+>
+> -O6 is very much not-a-thing. Really, this should've been dropped
+> entirely in 49b3cd306e60b9d889c775cb2ebb709f80dd8ae9 instead of just
+> passing it for not-Clang.
+>
+> Just collapse it down to -O3, instead of "-O6 unless Clang, in which case
+> -O3".
+>
+> GCC interprets > -O3 as -O3. It doesn't even interpret > -O3 as -Ofast,
+> which is a good thing, given -Ofast has specific (non-)requirements for
+> code built using it. So, this does nothing except look a bit daft.
+>
+> Remove the silliness and also save a few lines in the Makefiles according=
+ly.
+>
+> Signed-off-by: Sam James <sam@gentoo.org>
 
-kernel test robot noticed the following build errors:
+Reviewed-by: Ian Rogers <irogers@google.com>
 
-[auto build test ERROR on 332d2c1d713e232e163386c35a3ba0c1b90df83f]
+Thanks,
+Ian
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Vipin-Sharma/KVM-x86-mmu-Track-TDP-MMU-NX-huge-pages-separately/20240907-044800
-base:   332d2c1d713e232e163386c35a3ba0c1b90df83f
-patch link:    https://lore.kernel.org/r/20240906204515.3276696-3-vipinsh%40google.com
-patch subject: [PATCH v3 2/2] KVM: x86/mmu: Recover TDP MMU NX huge pages using MMU read lock
-config: i386-randconfig-005-20240908 (https://download.01.org/0day-ci/archive/20240909/202409090949.xuOxMsJ2-lkp@intel.com/config)
-compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240909/202409090949.xuOxMsJ2-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202409090949.xuOxMsJ2-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> ld.lld: error: undefined symbol: kvm_tdp_mmu_zap_possible_nx_huge_page
-   >>> referenced by mmu.c:7415 (arch/x86/kvm/mmu/mmu.c:7415)
-   >>>               arch/x86/kvm/mmu/mmu.o:(kvm_recover_nx_huge_pages) in archive vmlinux.a
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+> ---
+> I promise I'm not completely humourless, but given it's caused
+> actual workarounds to be added for Clang, I don't think this is worth kee=
+ping.
+>
+> Plus it sort of propagates a silly myth that -O6 does anything.
+>
+>  tools/lib/api/Makefile     | 4 ----
+>  tools/lib/subcmd/Makefile  | 4 +---
+>  tools/lib/symbol/Makefile  | 4 ----
+>  tools/perf/Makefile.config | 6 +-----
+>  4 files changed, 2 insertions(+), 16 deletions(-)
+>
+> diff --git a/tools/lib/api/Makefile b/tools/lib/api/Makefile
+> index 044860ac1ed1c..7f6396087b467 100644
+> --- a/tools/lib/api/Makefile
+> +++ b/tools/lib/api/Makefile
+> @@ -31,11 +31,7 @@ CFLAGS :=3D $(EXTRA_WARNINGS) $(EXTRA_CFLAGS)
+>  CFLAGS +=3D -ggdb3 -Wall -Wextra -std=3Dgnu99 -U_FORTIFY_SOURCE -fPIC
+>
+>  ifeq ($(DEBUG),0)
+> -ifeq ($(CC_NO_CLANG), 0)
+>    CFLAGS +=3D -O3
+> -else
+> -  CFLAGS +=3D -O6
+> -endif
+>  endif
+>
+>  ifeq ($(DEBUG),0)
+> diff --git a/tools/lib/subcmd/Makefile b/tools/lib/subcmd/Makefile
+> index b87213263a5e0..6717b82fc5876 100644
+> --- a/tools/lib/subcmd/Makefile
+> +++ b/tools/lib/subcmd/Makefile
+> @@ -38,10 +38,8 @@ endif
+>
+>  ifeq ($(DEBUG),1)
+>    CFLAGS +=3D -O0
+> -else ifeq ($(CC_NO_CLANG), 0)
+> -  CFLAGS +=3D -O3
+>  else
+> -  CFLAGS +=3D -O6
+> +  CFLAGS +=3D -O3
+>  endif
+>
+>  # Treat warnings as errors unless directed not to
+> diff --git a/tools/lib/symbol/Makefile b/tools/lib/symbol/Makefile
+> index 13d43c6f92b4a..426b845edfacc 100644
+> --- a/tools/lib/symbol/Makefile
+> +++ b/tools/lib/symbol/Makefile
+> @@ -31,11 +31,7 @@ CFLAGS :=3D $(EXTRA_WARNINGS) $(EXTRA_CFLAGS)
+>  CFLAGS +=3D -ggdb3 -Wall -Wextra -std=3Dgnu11 -U_FORTIFY_SOURCE -fPIC
+>
+>  ifeq ($(DEBUG),0)
+> -ifeq ($(CC_NO_CLANG), 0)
+>    CFLAGS +=3D -O3
+> -else
+> -  CFLAGS +=3D -O6
+> -endif
+>  endif
+>
+>  ifeq ($(DEBUG),0)
+> diff --git a/tools/perf/Makefile.config b/tools/perf/Makefile.config
+> index fa679db61f622..5d6b08a896150 100644
+> --- a/tools/perf/Makefile.config
+> +++ b/tools/perf/Makefile.config
+> @@ -238,11 +238,7 @@ endif
+>
+>  ifeq ($(DEBUG),0)
+>  CORE_CFLAGS +=3D -DNDEBUG=3D1
+> -ifeq ($(CC_NO_CLANG), 0)
+> -  CORE_CFLAGS +=3D -O3
+> -else
+> -  CORE_CFLAGS +=3D -O6
+> -endif
+> +CORE_CFLAGS +=3D -O3
+>  else
+>    CORE_CFLAGS +=3D -g
+>    CXXFLAGS +=3D -g
+> --
+> 2.46.0
+>
