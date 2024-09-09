@@ -1,40 +1,55 @@
-Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D4DE1B9B4F;
-	Mon,  9 Sep 2024 13:29:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2792C1779B1
+	for <llvm@lists.linux.dev>; Mon,  9 Sep 2024 13:57:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725888585; cv=none; b=RU1iJ1hE1LnEmNKToKNWqJ6V0o++6D9O1j6xrQMhNPlGl6/bYXXL5/iZX6jRxZK966RCALQaf72qpmYgECf48AWgziBY6FIGPmZRdbm+vJ/CobIQS+Q5FvtAEBj/r/iCe0BXGxXBzW66a0x3rNnw+GA+SiRt2fd0jEtWcT7441k=
+	t=1725890262; cv=none; b=gEjp10WtQM9X/3t3yInnFNrDfQxyAT6WcZbvIt7Q4YpEp4kChXXABltmy9WlITxHcsZb7u5simIvYDODTaRFWUJFNRrPupCTaSajgZSeFYtMxcfA8qV0AQDkDNw3a2ym90x63BMIRS45b1CVlS2/Jzga+41st7hzVh9upV6kFQU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725888585; c=relaxed/simple;
-	bh=NSVxsFaqGlzoYc1D7+gbTul5M5Fdu6Sgfob6CN3TRhE=;
+	s=arc-20240116; t=1725890262; c=relaxed/simple;
+	bh=q/tNtIyfCdRY6XfwelsHm0yk8u5ChMUVArQ6qqsoLi4=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=iz1QXNRJD9/BpTC4XFA8SQqfH1dzeS7KK0z4GvcDcxOE2vKi5wY4U4XAB1iZI+CCmGPx5B8j3+Jto4lqhTdbcZQ6S7fxsxhEddg+DjRH/e0Xec1Hh4CQPyPwl0eELYJroPd5OH/iaaC3IqyK/YL3+wULbPi8Jy5oiu3mkZcMLZU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=nO21K//H; arc=none smtp.client-ip=90.155.50.34
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
+	 Content-Type:Content-Disposition:In-Reply-To; b=ZtHJELrrHnzrlrc8G+IA/Q0V3WBnm5V5PS8PmXuR/Ja6UHcMv4Cbs1UMf26ER9wET0uQHPhEASifz73b5DaPQQiiOvoyi4JdOqTMJxcCsOAljDjz/kiPJBWpz6FJjB5kfijLiroQ61OrrvzVqOZdcRj9rS3+KqjN2gbZxOAcLJU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=GkSWKcNb; arc=none smtp.client-ip=192.198.163.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="nO21K//H"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=x6iQ/z/XvJ4BIsYA0tRbAU4qSXMzVxil+GOt5Tk6KkE=; b=nO21K//H+VzyF+uatXpYFlLdrS
-	fRnGVBaQf8CRjrXouGKw188kJuiVQyWgftLtni/zaOK5P3M1/YO60dEUUtMSyU45BE8YUZ1rSeytF
-	mhJs0xipBROCD476AS96yg5+funVP8ykEa0m2nxJVUkDUX3lzCppXbeheuTpUCP1tl2Z+b2GHlVtt
-	+YlmroLMhjlPNZhU7HcHUbkg+VAQHgCVRxA6ESXor9k4TKJAHr9yaIW+wDhaXvghVo7iyHE2Wz6SF
-	B87MhtORBTmaMbJy8obcG5uWZ14PiJ3q5Lwr5o1WRgjLCoVqb51S14s+kjQ5lAsvDY9kX86Yq5b6U
-	RrNNIn5Q==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-	by casper.infradead.org with esmtpsa (Exim 4.98 #2 (Red Hat Linux))
-	id 1sneSa-0000000DC8Y-2Rgl;
-	Mon, 09 Sep 2024 13:29:41 +0000
-Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
-	id 15AA230047C; Mon,  9 Sep 2024 15:29:41 +0200 (CEST)
-Date: Mon, 9 Sep 2024 15:29:41 +0200
-From: Peter Zijlstra <peterz@infradead.org>
-To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="GkSWKcNb"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1725890261; x=1757426261;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=q/tNtIyfCdRY6XfwelsHm0yk8u5ChMUVArQ6qqsoLi4=;
+  b=GkSWKcNbB3PGRIfF0o6oDj84bacEcxzdmmrxKydGOwzaJgmlRW+iY6Lo
+   xSxgNHyOzSJRMLaGTD/WEFJymEBRXFpQfV5Qm7x/U/1d2Rq6QbK9Sb4sQ
+   fiSW+Qv6HZ0HL8vOlV553/45+8x8Ek1G+1XDpGzukiHa6v66lWWtsi/ie
+   cI8X5b0Xtn84fB/8HxU6hXm1dqMxnUzaIpt2ZAdaxjmn8MlaKk2aXynEe
+   RBBQOiGwBNbC9m7uPrGHqS4LzSCFmHVnBjj49S9XQafGW9IX+xsOMTog0
+   CxqbSoMQtUs5k7DDh1g9iy4YinFYiSlG2Ymsc3F8aQsrp9Gwn/soTlS9/
+   Q==;
+X-CSE-ConnectionGUID: eK4EkMqBSRuM0/udLBfVXA==
+X-CSE-MsgGUID: 0w4VgtFfQvyavzIfjpJFEA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11190"; a="24749512"
+X-IronPort-AV: E=Sophos;i="6.10,214,1719903600"; 
+   d="scan'208";a="24749512"
+Received: from fmviesa001.fm.intel.com ([10.60.135.141])
+  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Sep 2024 06:57:41 -0700
+X-CSE-ConnectionGUID: TG4k6iiPQyugxqb20JQswQ==
+X-CSE-MsgGUID: U9s4ZGILQiazlOofvYe99Q==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.10,214,1719903600"; 
+   d="scan'208";a="97488731"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmviesa001.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Sep 2024 06:57:39 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.98)
+	(envelope-from <andriy.shevchenko@linux.intel.com>)
+	id 1snetb-00000006oTg-0UmU;
+	Mon, 09 Sep 2024 16:57:35 +0300
+Date: Mon, 9 Sep 2024 16:57:34 +0300
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To: Peter Zijlstra <peterz@infradead.org>
 Cc: linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
 	Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
 	Waiman Long <longman@redhat.com>, Boqun Feng <boqun.feng@gmail.com>,
@@ -44,8 +59,9 @@ Cc: linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
 	Justin Stitt <justinstitt@google.com>
 Subject: Re: [PATCH v1 1/1] locking/rwsem: Mark inline helpers with
  __maybe_unused
-Message-ID: <20240909132941.GE4723@noisy.programming.kicks-ass.net>
+Message-ID: <Zt7-zhkwxy7E-KGb@smile.fi.intel.com>
 References: <20240909115839.1022530-1-andriy.shevchenko@linux.intel.com>
+ <20240909132941.GE4723@noisy.programming.kicks-ass.net>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -54,29 +70,45 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240909115839.1022530-1-andriy.shevchenko@linux.intel.com>
+In-Reply-To: <20240909132941.GE4723@noisy.programming.kicks-ass.net>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 
-On Mon, Sep 09, 2024 at 02:58:39PM +0300, Andy Shevchenko wrote:
-> When one or more inline heplers are unused, it prevents kernel builds
-> with clang, `make W=1` and CONFIG_WERROR=y:
+On Mon, Sep 09, 2024 at 03:29:41PM +0200, Peter Zijlstra wrote:
+> On Mon, Sep 09, 2024 at 02:58:39PM +0300, Andy Shevchenko wrote:
+> > When one or more inline heplers are unused, it prevents kernel builds
+> > with clang, `make W=1` and CONFIG_WERROR=y:
+> > 
+> > kernel/locking/rwsem.c:187:20: error: unused function 'is_rwsem_reader_owned' [-Werror,-Wunused-function]
+> >   187 | static inline bool is_rwsem_reader_owned(struct rw_semaphore *sem)
+> >       |                    ^~~~~~~~~~~~~~~~~~~~~
+> > kernel/locking/rwsem.c:271:35: error: unused function 'rwsem_owner' [-Werror,-Wunused-function]
+> >   271 | static inline struct task_struct *rwsem_owner(struct rw_semaphore *sem)
+> >       |                                   ^~~~~~~~~~~
+> > 
+> > Fix this by marking inline helpers with __maybe_unused.
+> > 
+> > See also commit 6863f5643dd7 ("kbuild: allow Clang to find unused static
+> > inline functions for W=1 build").
 > 
-> kernel/locking/rwsem.c:187:20: error: unused function 'is_rwsem_reader_owned' [-Werror,-Wunused-function]
->   187 | static inline bool is_rwsem_reader_owned(struct rw_semaphore *sem)
->       |                    ^~~~~~~~~~~~~~~~~~~~~
-> kernel/locking/rwsem.c:271:35: error: unused function 'rwsem_owner' [-Werror,-Wunused-function]
->   271 | static inline struct task_struct *rwsem_owner(struct rw_semaphore *sem)
->       |                                   ^~~~~~~~~~~
+> :-(
 > 
-> Fix this by marking inline helpers with __maybe_unused.
-> 
-> See also commit 6863f5643dd7 ("kbuild: allow Clang to find unused static
-> inline functions for W=1 build").
+> And now you're back to the exact situation that people tried to avoid.
+> The moment one of these functions goes unused it will no longer scream
+> about it.
 
-:-(
+Yeah... The problem is that I don't know well this code. This is, of course,
+just a quickfix, the proper one should probably locate the function under
+the proper guards (here all of them are used only for debugging AFAICS).
+But I'm not sure. Hence consider this as
+Reported-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
-And now you're back to the exact situation that people tried to avoid.
-The moment one of these functions goes unused it will no longer scream
-about it.
+> I'm for reverting the above commit, that gets all static inline on the
+> same footing, it should not matter if code is from a header file or not.
 
-I'm for reverting the above commit, that gets all static inline on the
-same footing, it should not matter if code is from a header file or not.
+Is it the case? Because to me it seems to complain only on C files.
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
+
