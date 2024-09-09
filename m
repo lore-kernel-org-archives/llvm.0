@@ -1,116 +1,119 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F61954279;
-	Mon,  9 Sep 2024 06:54:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 128671AE025
+	for <llvm@lists.linux.dev>; Mon,  9 Sep 2024 07:14:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725864887; cv=none; b=gSryiXsjIw79W2CGBdSIsFTIFf/8msVy0ys2+JbR3Cdha+AFcRltYosEQufoJy0etiOCTjVRvgQcCTPqIBp7neqK4vyBxabAjT5qCFjpO79vD1mdb8gl97vZeYLL5XwD2Lxo2YJtXYqlC3ihhl2zhP3Wjo3IOu25bndLgYdVHXQ=
+	t=1725866100; cv=none; b=dsJhxQr1Bw4EoOfMtpRg99hIfsRJIvCsHLnZvntjAdH4kNL6jxfLC1oTZb+UgLzR79hm6PWhAz/+0k25+GNhM3Vrg8jFdHBxDmpptrJjN0SULAk80qt+uT/vYZkoVarfYQy0d5B6u9LWoHAT1DQt8epJAB3SXQ11pHKPmEt/fK0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725864887; c=relaxed/simple;
-	bh=5CUtr5c0Taa2cv5diyyUItk9tTuJ/bOmNRRQPiYqb3E=;
+	s=arc-20240116; t=1725866100; c=relaxed/simple;
+	bh=snuoNvsrx2PKI9Nr4K54WSHcvlbHkfybutdtOuFAYKU=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=RbeV2kJSWJ/sO1CPU1Llh/VsTckv3jVPYrJV2r+GAcclJ4mRXC6f/GMGfxPv/Ls85N8vPisq5w2aoxayX7osx6Tx5X4DwTQAW4oljWgzmOhsWW1uvm7m907PmwmQQ/jyOBwr0arKCC0DQvudH6bVulZs4rmW+Hsd8wjGa6KX7Qg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=i8uYuYiO; arc=none smtp.client-ip=192.198.163.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="i8uYuYiO"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1725864885; x=1757400885;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=5CUtr5c0Taa2cv5diyyUItk9tTuJ/bOmNRRQPiYqb3E=;
-  b=i8uYuYiOpFRXbPsVKPQNbPHnQfNh+NnhEsxpJQqCm0j0zb5KJdUPZVeQ
-   ziB4LvH7Vm8Tvez1aCXLODYBjeC0zntWGhTUUm4N+/9vDREX+2yXEWrkZ
-   O8Wt5xvOilnYqVGaW0KXs/8xaPdjNvsFsXckAPPaSsCi65v0T8wzyZb2x
-   8FsCbn5HzLAdZVOeN0mwwgAr0JLI+gaDRHcUTiY217R12LPugE0iaLiuq
-   9oxKCUHvsB1gzK5SRlD0mienY8Rmj0956TNqU1MxTir7Sbtc9E9r2zy2L
-   gy4NPVkut9yUbx4DJ31R9+Ibh2Ff9PQaZ1d5rR1sXkAmZdj7UM+s3XsGu
-   g==;
-X-CSE-ConnectionGUID: we23OG3LTfah0My9vU4yxA==
-X-CSE-MsgGUID: Qc1y/uaVQbWoRoFF13D+tg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11189"; a="24088212"
-X-IronPort-AV: E=Sophos;i="6.10,213,1719903600"; 
-   d="scan'208";a="24088212"
-Received: from orviesa005.jf.intel.com ([10.64.159.145])
-  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Sep 2024 23:54:44 -0700
-X-CSE-ConnectionGUID: BS0doVCZT46N2bu1t/06Ew==
-X-CSE-MsgGUID: Aie8GE95S4SuzoK+HwL02A==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.10,213,1719903600"; 
-   d="scan'208";a="71368229"
-Received: from lkp-server01.sh.intel.com (HELO 9c6b1c7d3b50) ([10.239.97.150])
-  by orviesa005.jf.intel.com with ESMTP; 08 Sep 2024 23:54:42 -0700
-Received: from kbuild by 9c6b1c7d3b50 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1snYII-000EQU-2F;
-	Mon, 09 Sep 2024 06:54:38 +0000
-Date: Mon, 9 Sep 2024 14:54:25 +0800
-From: kernel test robot <lkp@intel.com>
-To: Hamza Mahfooz <hamza.mahfooz@amd.com>, dri-devel@lists.freedesktop.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-	Maxime Ripard <mripard@kernel.org>,
-	Thomas Zimmermann <tzimmermann@suse.de>,
-	David Airlie <airlied@gmail.com>,
-	Jani Nikula <jani.nikula@linux.intel.com>,
-	Simona Vetter <simona.vetter@ffwll.ch>,
-	Alex Deucher <alexander.deucher@amd.com>,
-	Rodrigo Siqueira <rodrigo.siqueira@amd.com>,
-	Harry Wentland <harry.wentland@amd.com>,
-	Hamza Mahfooz <hamza.mahfooz@amd.com>,
-	Karol Herbst <kherbst@redhat.com>
-Subject: Re: [PATCH v3] drm/edid: add CTA Video Format Data Block support
-Message-ID: <202409091450.S7bzV2ho-lkp@intel.com>
-References: <20240906224307.423250-1-hamza.mahfooz@amd.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=Ix87gNV3qk43N6/rJUjq7Vplf5SJQ2OQcU5r7TtRcGpTloMqFzjKCFU4UdxL0ZGJ2uWgaetJpT76inbm+kMrMw4IIDNUCiR4LZL7hkEDq210wbtoyU4/nESCnIINzTO+b59JaCdM0WBnGrOgbw28XkYvIwngAhIWRRspMaGkivw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <mkl@pengutronix.de>)
+	id 1snYbn-0005G9-Us; Mon, 09 Sep 2024 09:14:47 +0200
+Received: from [2a0a:edc0:0:b01:1d::7b] (helo=bjornoya.blackshift.org)
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.94.2)
+	(envelope-from <mkl@pengutronix.de>)
+	id 1snYbn-006awm-4H; Mon, 09 Sep 2024 09:14:47 +0200
+Received: from pengutronix.de (pd9e595f8.dip0.t-ipconnect.de [217.229.149.248])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	(Authenticated sender: mkl-all@blackshift.org)
+	by smtp.blackshift.org (Postfix) with ESMTPSA id AF69C33650C;
+	Mon, 09 Sep 2024 07:14:46 +0000 (UTC)
+Date: Mon, 9 Sep 2024 09:14:46 +0200
+From: Marc Kleine-Budde <mkl@pengutronix.de>
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: kernel@pengutronix.de, Vincent Mailhol <mailhol.vincent@wanadoo.fr>, 
+	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+	Heiko Stuebner <heiko@sntech.de>, linux-can@vger.kernel.org, netdev@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, linux-rockchip@lists.infradead.org, llvm@lists.linux.dev, 
+	patches@lists.linux.dev
+Subject: Re: [PATCH] can: rockchip_canfd: fix return type of
+ rkcanfd_start_xmit()
+Message-ID: <20240909-arcane-hopping-trogon-e66ce9-mkl@pengutronix.de>
+References: <20240906-rockchip-canfd-wifpts-v1-1-b1398da865b7@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="5fw2ahjtdojmvq5a"
 Content-Disposition: inline
-In-Reply-To: <20240906224307.423250-1-hamza.mahfooz@amd.com>
+In-Reply-To: <20240906-rockchip-canfd-wifpts-v1-1-b1398da865b7@kernel.org>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: llvm@lists.linux.dev
 
-Hi Hamza,
 
-kernel test robot noticed the following build errors:
+--5fw2ahjtdojmvq5a
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-[auto build test ERROR on drm-misc/drm-misc-next]
-[also build test ERROR on drm/drm-next drm-exynos/exynos-drm-next drm-intel/for-linux-next drm-intel/for-linux-next-fixes drm-tip/drm-tip linus/master v6.11-rc7 next-20240906]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+On 06.09.2024 13:26:41, Nathan Chancellor wrote:
+> With clang's kernel control flow integrity (kCFI, CONFIG_CFI_CLANG),
+> indirect call targets are validated against the expected function
+> pointer prototype to make sure the call target is valid to help mitigate
+> ROP attacks. If they are not identical, there is a failure at run time,
+> which manifests as either a kernel panic or thread getting killed. A
+> warning in clang aims to catch these at compile time, which reveals:
+>=20
+>   drivers/net/can/rockchip/rockchip_canfd-core.c:770:20: error: incompati=
+ble function pointer types initializing 'netdev_tx_t (*)(struct sk_buff *, =
+struct net_device *)' (aka 'enum netdev_tx (*)(struct sk_buff *, struct net=
+_device *)') with an expression of type 'int (struct sk_buff *, struct net_=
+device *)' [-Werror,-Wincompatible-function-pointer-types-strict]
+>     770 |         .ndo_start_xmit =3D rkcanfd_start_xmit,
+>         |                           ^~~~~~~~~~~~~~~~~~
+>=20
+> ->ndo_start_xmit() in 'struct net_device_ops' expects a return type of
+> 'netdev_tx_t', not 'int' (although the types are ABI compatible). Adjust
+> the return type of rkcanfd_start_xmit() to match the prototype's to
+> resolve the warning.
+>=20
+> Fixes: ff60bfbaf67f ("can: rockchip_canfd: add driver for Rockchip CAN-FD=
+ controller")
+> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Hamza-Mahfooz/drm-edid-add-CTA-Video-Format-Data-Block-support/20240907-064359
-base:   git://anongit.freedesktop.org/drm/drm-misc drm-misc-next
-patch link:    https://lore.kernel.org/r/20240906224307.423250-1-hamza.mahfooz%40amd.com
-patch subject: [PATCH v3] drm/edid: add CTA Video Format Data Block support
-config: arm-nhk8815_defconfig (https://download.01.org/0day-ci/archive/20240909/202409091450.S7bzV2ho-lkp@intel.com/config)
-compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 05f5a91d00b02f4369f46d076411c700755ae041)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240909/202409091450.S7bzV2ho-lkp@intel.com/reproduce)
+Applied to linux-can-next.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202409091450.S7bzV2ho-lkp@intel.com/
+Thanks,
+Marc
 
-All errors (new ones prefixed by >>):
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde          |
+Embedded Linux                   | https://www.pengutronix.de |
+Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
 
->> ld.lld: error: undefined symbol: __aeabi_uldivmod
-   >>> referenced by drm_edid.c:5470 (drivers/gpu/drm/drm_edid.c:5470)
-   >>>               drivers/gpu/drm/drm_edid.o:(_drm_edid_connector_add_modes) in archive vmlinux.a
-   >>> referenced by drm_edid.c:5508 (drivers/gpu/drm/drm_edid.c:5508)
-   >>>               drivers/gpu/drm/drm_edid.o:(_drm_edid_connector_add_modes) in archive vmlinux.a
-   >>> referenced by drm_edid.c:5509 (drivers/gpu/drm/drm_edid.c:5509)
-   >>>               drivers/gpu/drm/drm_edid.o:(_drm_edid_connector_add_modes) in archive vmlinux.a
-   >>> referenced 1 more times
-   >>> did you mean: __aeabi_uidivmod
-   >>> defined in: vmlinux.a(arch/arm/lib/lib1funcs.o)
+--5fw2ahjtdojmvq5a
+Content-Type: application/pgp-signature; name="signature.asc"
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEUEC6huC2BN0pvD5fKDiiPnotvG8FAmbeoGMACgkQKDiiPnot
+vG8E7gf/XpZwpCzyzLr/XwHFG9RLcVnIdAp2UjKJAb9bt2OLqRFLpeg/sn4rvM6c
+sn/3WBHWjl1pOxih8/srCfm46JO86F4Z9WLduY5dFC2a9CiBWW6vB/+J0467HyIy
+T7iMjqhJpMOi/RW2xQIb3rm0DjewSxjhhGmmHgbtR8HS210U08AxZWCxq0dULR5u
+BmGC2rq5GyVhCoD2TVsUIpzKHIbwm7zk82CxeVgzXvWHVZ8/g71UN4qvWOvo6vsr
+U52Za8YFmERPv2WmuiHn2KdUht1aAJsyzIqWoCXXHWKoGo6WhuipCSLbLxL+UwAq
+AdnREoaojt9NTDFQXa1B1x67ftG8HA==
+=qgme
+-----END PGP SIGNATURE-----
+
+--5fw2ahjtdojmvq5a--
