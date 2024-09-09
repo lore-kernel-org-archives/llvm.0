@@ -1,52 +1,49 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 92487139CF6;
-	Mon,  9 Sep 2024 15:17:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8912E219F3;
+	Mon,  9 Sep 2024 15:27:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725895038; cv=none; b=LdB3Nk88p6oYxHrXIveVhEQtpqG6S3A03/Jj7rdC6NWzOLE+35Vau/aO0l7nrnZsIHJ/N9e/SQJDO3hAgJ1hL4Drw4B2uVoGwVrB8yuEw0NTwVDSAQa7F0NEeRugc/nURwUPmgUQjOnvlF27grIaflrwWHm2KHFmVuza7ShqB50=
+	t=1725895659; cv=none; b=s1ZJNMX2+ceRvBD32pXHemXR+Z1F86ejI9lGHIaZgQu8b1tdd589zH3/R2OfH2OIMxX9y72BVg+JBGtu1EkD3iWUJwegizx0NJc/YDDz8zUKHVGclKlmkC3vYzwfORR+ZNHb6hkRXk8dqFkBqOnS1SfKSdtDhIog9zSxRVopwcI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725895038; c=relaxed/simple;
-	bh=4UnHiTSmesifrapU4hY+D7bZkm176mfI1MGT9K3EfJU=;
+	s=arc-20240116; t=1725895659; c=relaxed/simple;
+	bh=bkf0FPBXI9ffG3pgzuSvrT/omg9CfDr3n4aP+Ydrft0=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=BEUyG5iYKATHC3hAw4U11WKshi30whr0DpGdIRZ2yLmGrClktjGanttb4SjTrEJhKBJI5z6d6ayJZrUf6SLUMVe3pbGeWbbO8qH1uDlDluD0ucfx2qgXVX3PmYuZUyJl4slWlGOYMJdQocWLI9ROibbiaA/qCW+mjJmz/3CuaFM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=i7YNXVJn; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=AXO2zILBfuQMgMFGQsMohjKinxPGbBMIH5W+3yTwuobyW8Tlkx2sNkNTQ8oEOx6hQwUEofKKdoUL7MK9rgP3z8Y3ATv4XPN0NbfLuy8awVyGDhVvTMx83kXoizT1ri2zUs/NATmve6A36/dprp9bCASISC/ajldiW3K2OzDW7Is=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=frarv78Y; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="i7YNXVJn"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DAC3BC4CEC5;
-	Mon,  9 Sep 2024 15:17:14 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="frarv78Y"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 39236C4CEC5;
+	Mon,  9 Sep 2024 15:27:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1725895038;
-	bh=4UnHiTSmesifrapU4hY+D7bZkm176mfI1MGT9K3EfJU=;
+	s=k20201202; t=1725895659;
+	bh=bkf0FPBXI9ffG3pgzuSvrT/omg9CfDr3n4aP+Ydrft0=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=i7YNXVJn8mr9u3JIms5lk+k+0EzePN3dufNOrxgBDlOeiNGUgv9H1DPzP/hVyfXz3
-	 8GQPnUs7e7O/fgP9sikPQRa0V4ZunBXutjASuST+9zmflFiqLsb5OfsahR75KyybqP
-	 x8uV+TjA4dwXr19Kxsjl0VvRU8QNJZF2dLGZpUwOHJyE5hq1r/rrCHFbvyZjbW3ysj
-	 m069t3GrumzbDer2HEz31i/caWeK0y5bXNi2tlbSjo4HS350D7cwczQLl4YBkdATxA
-	 1cPvXLTpY++jkiCI5d1RrH0+VYI1ghZT0wNSlghgnuRFRAt7RozHimqJ8thKy2Mavk
-	 plHpgn0RD9iwg==
-Date: Mon, 9 Sep 2024 16:17:12 +0100
-From: Simon Horman <horms@kernel.org>
-To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc: Pablo Neira Ayuso <pablo@netfilter.org>,
-	Felix Huettner <felix.huettner@mail.schwarz>,
-	netfilter-devel@vger.kernel.org, coreteam@netfilter.org,
-	netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev, Jozsef Kadlecsik <kadlec@netfilter.org>,
+	b=frarv78YKu9T5tWlwTYmYfDLTkkR7U+/3o3Bys2C8DHmqmwnP4kfag/9hBM0O6KKb
+	 vi8KkYkqHU0/rO3NfdLgBNfSvQn+wCs5aU8S9P0amI9KEzw8g4LA+2oyjmn7D5DUzc
+	 a3imUOStMdC8AjO7RcUwiMzy/thY2xWuSP58mQV/URkEBNxTRkH+q064e38N/OMvr3
+	 vkfZ7g+Ra0Vqu6XMBBfCPKFch3Wj0aRX18jYGIDvHSRksO16P04xaekzRINf7BDyEk
+	 bOe1CKZDUGTvf2eCM50SHbgSL79CrZUEYkm4geGBjscqV0GNiE17Kaewgcfq1jH2j/
+	 Rx5H/UvGwxmDg==
+Date: Mon, 9 Sep 2024 08:27:36 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Marc Kleine-Budde <mkl@pengutronix.de>
+Cc: Simon Horman <horms@kernel.org>, kernel@pengutronix.de,
+	Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
 	"David S. Miller" <davem@davemloft.net>,
 	Eric Dumazet <edumazet@google.com>,
 	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>
-Subject: Re: [PATCH net v1 1/1] netfilter: conntrack: Guard possoble unused
- functions
-Message-ID: <20240909151712.GZ2097826@kernel.org>
-References: <20240905203612.333421-1-andriy.shevchenko@linux.intel.com>
- <20240906162938.GH2097826@kernel.org>
- <Zt7B79Q3O7mNqrOl@smile.fi.intel.com>
+	Heiko Stuebner <heiko@sntech.de>, linux-can@vger.kernel.org,
+	netdev@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-rockchip@lists.infradead.org, llvm@lists.linux.dev,
+	patches@lists.linux.dev
+Subject: Re: [PATCH] can: rockchip_canfd: fix return type of
+ rkcanfd_start_xmit()
+Message-ID: <20240909152736.GA1406978@thelio-3990X>
+References: <20240906-rockchip-canfd-wifpts-v1-1-b1398da865b7@kernel.org>
+ <20240909084448.GU2097826@kernel.org>
+ <20240909-arcane-practical-petrel-015d24-mkl@pengutronix.de>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -55,17 +52,32 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Zt7B79Q3O7mNqrOl@smile.fi.intel.com>
+In-Reply-To: <20240909-arcane-practical-petrel-015d24-mkl@pengutronix.de>
 
-On Mon, Sep 09, 2024 at 12:37:51PM +0300, Andy Shevchenko wrote:
-> On Fri, Sep 06, 2024 at 05:29:38PM +0100, Simon Horman wrote:
-> > On Thu, Sep 05, 2024 at 11:36:12PM +0300, Andy Shevchenko wrote:
-> 
-> > Local testing seems to show that the warning is still emitted
-> > for ctnetlink_label_size if CONFIG_NETFILTER_NETLINK_GLUE_CT is enabled
-> > but CONFIG_NF_CONNTRACK_EVENTS is not.
-> 
-> Can you elaborate on this, please?
-> I can not reproduce.
+Hi Marc,
 
-Sure, let me retest and get back to you.
+On Mon, Sep 09, 2024 at 10:57:06AM +0200, Marc Kleine-Budde wrote:
+> On 09.09.2024 09:44:48, Simon Horman wrote:
+> > On Fri, Sep 06, 2024 at 01:26:41PM -0700, Nathan Chancellor wrote:
+> > >   drivers/net/can/rockchip/rockchip_canfd-core.c:770:20: error: incompatible function pointer types initializing 'netdev_tx_t (*)(struct sk_buff *, struct net_device *)' (aka 'enum netdev_tx (*)(struct sk_buff *, struct net_device *)') with an expression of type 'int (struct sk_buff *, struct net_device *)' [-Werror,-Wincompatible-function-pointer-types-strict]
+> > >     770 |         .ndo_start_xmit = rkcanfd_start_xmit,
+> > >         |                           ^~~~~~~~~~~~~~~~~~
+...
+> FTR: the default clang in Debian unstable, clang-16.0.6 doesn't support
+> this. With clang-20 from experimental it works, haven't checked older
+> versions, though.
+
+Hmmm, interesting, the patch that added
+-Wincompatible-function-pointer-types-strict was added in LLVM 16, so it
+should work for 16.0.6...
+
+https://github.com/llvm/llvm-project/commits/41ce74e6e983f523d44d3a80be5ae778c35df85a
+
+I don't have easy access to Debian at the moment so I can double check
+it later. I would like to get this turned on for the whole kernel soon
+but there is still one subsystem that has several instances that I have
+not been able to workaround at this point so I've just stuck to adding
+it via KCFLAGS when testing.
+
+Cheers,
+Nathan
