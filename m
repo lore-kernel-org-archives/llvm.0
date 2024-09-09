@@ -1,122 +1,123 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f54.google.com (mail-lf1-f54.google.com [209.85.167.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0AE08188CDF;
-	Mon,  9 Sep 2024 18:36:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BADDF54278;
+	Mon,  9 Sep 2024 19:10:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725907010; cv=none; b=gv3ZjJJz6gZbiFIpeLvvtT381ox9CkHOC9+d0NgJCCMgqjf+MomclqjDA+E/hfAHfkasZVsVV1cP79sYI+vhVrKQEcirXH9qLMSKA84O8TUbedCNX71UvCdANNVDmo8zHcDnyC0njgnTzfldOm78SXdMeJz/RmY3bMvI4UnMuGc=
+	t=1725909044; cv=none; b=CCK+vWeiYklp28ffI4a0nRJfHi5HomPtYkxkruo7X1HYquGN5p6JpO2Q4PVDyv/xL2BKib6twlJN7Eh6d+96H4fMviaj2Zl7DqHb/5whgT5waC3lRGhYb8SvZlwpCDuLWhiA5Bd0eDE0WhzMgGKWTas/rzFOwp3/EieFfnkCu/s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725907010; c=relaxed/simple;
-	bh=Oz8nIrkz41riwrlS01Qi8Kt7NCXl92E6S/MW6xZ1nVc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=WPSJUjXUZr7vp9it3iFOA6LpbqVOxvczKMkafEgOH3l0gQXPFFhB1phdMwrV4sOqkB9BnqMgklNhFDaET5zceEz3aqSMwk5ZtLr/rRHC5zjqso1S6P4kbpthflFjkDEp+lwf1m+2lL7tjcSabrO+sCVs2fPGatM85PokD7c1fk8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=PQsce2b8; arc=none smtp.client-ip=192.198.163.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1725909044; c=relaxed/simple;
+	bh=oR9cwDqmVpiW55PzkayUy0i6c1cKTg9o+4ITLiEGDoQ=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=m0KHQlY/1E4KY5rQCwYAYBE1fEgBvYsDUDtjA7WNzcdKJS3I9jgrV3NgXekh99J1Jj3yL5bcoTHTCbJ9RQj0yCaKG31axZvIMhoeh+UXCj362i4sbLMAvNDf7fyLpKeym7+JxnfsPGrYdbjGyc2raTxxHqln4mQt06QlryxjA4M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=SlgDw1Fh; arc=none smtp.client-ip=209.85.167.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="PQsce2b8"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1725907008; x=1757443008;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Oz8nIrkz41riwrlS01Qi8Kt7NCXl92E6S/MW6xZ1nVc=;
-  b=PQsce2b8yYsxxQ2iBK74FRB1aSVWqFOPIpH6ejba30oa+VrOPqucGa7L
-   xvHwd9xQK+M9zipQGvSlkfWul3qWDOz+vp3o3/qDl9L7fWdEBkrZkKPZX
-   TlgpotqR/zUVXdYFCcgwz5qPcuBbABcWNAiEuuhv44G23M/3AagVFfZal
-   vex5T9QpnQz49oOwhAhCiaesiLsTKjIIyQ3mxNYtkInceiS3f6cLh2v+t
-   fZj2Mv44PD41d/CGrsEwaZIAG4uu0s3+bDNN4RXVXaBxTYjotPyNkul18
-   2yMTtRIjl66lrUqpmCmshFZbBUGXQEeCYNBRFsDzl+rGsDkd6njLhMb7J
-   w==;
-X-CSE-ConnectionGUID: HNmxjhnHSOy2ds3YHYO1iA==
-X-CSE-MsgGUID: ijyTu4KZQOyokrtfsaZF1A==
-X-IronPort-AV: E=McAfee;i="6700,10204,11190"; a="27543993"
-X-IronPort-AV: E=Sophos;i="6.10,215,1719903600"; 
-   d="scan'208";a="27543993"
-Received: from fmviesa008.fm.intel.com ([10.60.135.148])
-  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Sep 2024 11:36:47 -0700
-X-CSE-ConnectionGUID: tQVDNjLBS0Kq7sUlK/R3jg==
-X-CSE-MsgGUID: sGzZBAN/T3ubk8/Jmq6Rgw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.10,215,1719903600"; 
-   d="scan'208";a="66808113"
-Received: from lkp-server01.sh.intel.com (HELO 9c6b1c7d3b50) ([10.239.97.150])
-  by fmviesa008.fm.intel.com with ESMTP; 09 Sep 2024 11:36:45 -0700
-Received: from kbuild by 9c6b1c7d3b50 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1snjFj-000F5E-06;
-	Mon, 09 Sep 2024 18:36:43 +0000
-Date: Tue, 10 Sep 2024 02:36:36 +0800
-From: kernel test robot <lkp@intel.com>
-To: Luis Felipe Hernandez <luis.hernandez093@gmail.com>,
-	brendan.higgins@linux.dev, davidgow@google.com, rmoar@google.com
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Luis Felipe Hernandez <luis.hernandez093@gmail.com>,
-	linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
-	skhan@linuxfoundation.org,
-	linux-kernel-mentees@lists.linuxfoundation.org
-Subject: Re: [PATCH v4] lib/math: Add int_pow test suite
-Message-ID: <202409100220.g9Ghp1te-lkp@intel.com>
-References: <20240908224901.78595-1-luis.hernandez093@gmail.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="SlgDw1Fh"
+Received: by mail-lf1-f54.google.com with SMTP id 2adb3069b0e04-5365392cfafso4467258e87.0;
+        Mon, 09 Sep 2024 12:10:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1725909041; x=1726513841; darn=lists.linux.dev;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=PLAaA+GP0TBFIHxcYRpcjwhyfzRqgjOI+EgC7yPQbeg=;
+        b=SlgDw1FhEtExCoESAr1buLll5VtnGKG/CfsEsdkNXTiBpQHLwxgJL3oATYOVX1+cwq
+         CnqrjZlET0qUpQggaXsWFGtZbN/2aXziyYQQo9c7u3cZubEM/fnULkgLjLwixKCLVoeP
+         6B8EaidUoAKTuIor4udOxESG0j1BVetQ2dKjizuaDo4ufMfTqOB5ge8r/m5CZEcNgEOr
+         QoS3jSFTUn2osLo+82I8E9pVOKnU2BsMCwpavpBei4Rfc37+8DpotE0TsyqDkSLyiDUY
+         O3mR+U8f6GS877rNdTEq/EdSXOfonNyGURCiVZpD3cTSoTndrHy6Q2zafeIqKwM7f4Fe
+         cYGQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1725909041; x=1726513841;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=PLAaA+GP0TBFIHxcYRpcjwhyfzRqgjOI+EgC7yPQbeg=;
+        b=I7ikXYY8dQepHJGNRoPzc/9pTIB2Boqu1iOs+vjth5uPvDylbV11sZzSbVs1WRrrHZ
+         RQSi3TzoBM+O9ApnNHPr0zmQFa3ge2NdqbxwEaTi32H2ddF7Nc78QKIqGAh4Swmxkop2
+         m1LYxGOwzZr3fQSuVM9R3oJF4544geT3ygcGLymhcqAa9VpCAyq8Wx95bgowdyuh+n96
+         YIRi9LfqKfppmRdVle0rfs/5ATkLflyIkUNc+SvxWYLaNsQcVxuGjU0E78KoKn2r7sP+
+         cf4i5M0T0gKePxhDJGACfDaSks3OBB8vXQqH/EMaHdHIT81fxiPOLzQk1Xm+UEanmP8V
+         ja5Q==
+X-Forwarded-Encrypted: i=1; AJvYcCUbiDYusbqVv7xuvh7AvhRefB+p6TtBmQBBq/N9k0ZaOp3IxUY1Gh4Gc7I5kJRLh/+cEN3jOOLgdQ==@lists.linux.dev, AJvYcCWfh+Dx3CRXpDax3GYLHUiqMA+crpUsDkRthbzNvCzD9q26jqLJs1qqZDQIKosLzNY5xpp4@lists.linux.dev
+X-Gm-Message-State: AOJu0YxdMDY327rUXrMDMus4Qf2CAkdyIxaAadnLUHd4HYbHGTdFL3hu
+	SXJwNpZwijxXXyxz+DBj8isdAKM/gTV6glVBijjUvIz6TY7+lmtA
+X-Google-Smtp-Source: AGHT+IF41hgBa0SxOWn1cUbeQ5vTlr2BJxXvbK0+wa15NzG/X9ZZ2BMzYZ3n1zFCSCFbcTTt/f5RAA==
+X-Received: by 2002:a05:6512:4018:b0:52c:df8c:72cc with SMTP id 2adb3069b0e04-536587f9a5amr8810728e87.43.1725909040414;
+        Mon, 09 Sep 2024 12:10:40 -0700 (PDT)
+Received: from [192.168.1.127] ([151.95.58.24])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a8d25d40cebsm374629966b.200.2024.09.09.12.10.39
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 09 Sep 2024 12:10:40 -0700 (PDT)
+Message-ID: <76068b7e-af53-4422-ad97-cf3070182ec4@gmail.com>
+Date: Mon, 9 Sep 2024 21:10:35 +0200
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240908224901.78595-1-luis.hernandez093@gmail.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] iio: bmi323: Fix array reference in
+ bmi323_core_runtime_suspend()
+To: Nathan Chancellor <nathan@kernel.org>,
+ Jagath Jog J <jagathjog1996@gmail.com>, Jonathan Cameron <jic23@kernel.org>,
+ Lars-Peter Clausen <lars@metafoo.de>
+Cc: linux-iio@vger.kernel.org, llvm@lists.linux.dev, patches@lists.linux.dev
+References: <20240909-iio-bmi323-fix-array-ref-v1-1-51c220f22229@kernel.org>
+Content-Language: en-US, it-IT, en-US-large
+From: Denis Benato <benato.denis96@gmail.com>
+In-Reply-To: <20240909-iio-bmi323-fix-array-ref-v1-1-51c220f22229@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Hi Luis,
+On 09/09/24 18:38, Nathan Chancellor wrote:
+> Clang warns (or errors with CONFIG_WERROR):
+> 
+>   drivers/iio/imu/bmi323/bmi323_core.c:133:27: error: variable 'bmi323_ext_reg_savestate' is not needed and will not be emitted [-Werror,-Wunneeded-internal-declaration]
+>     133 | static const unsigned int bmi323_ext_reg_savestate[] = {
+>         |                           ^~~~~~~~~~~~~~~~~~~~~~~~
+> 
+> bmi323_ext_reg_savestate is only used within sizeof() through
+> ARRAY_SIZE(), so it is not unused, but it will not be emitted in the
+> final binary because sizeof() is evaluated only at compile time.
+> bmi323_ext_reg_savestate should have been used in the second parameter
+> in the call to bmi323_read_ext_reg() in the second for loop in
+> bmi323_core_runtime_suspend().
+> 
+> Fixes: 16531118ba63 ("iio: bmi323: peripheral in lowest power state on suspend")
+> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+> ---
+>  drivers/iio/imu/bmi323/bmi323_core.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/iio/imu/bmi323/bmi323_core.c b/drivers/iio/imu/bmi323/bmi323_core.c
+> index 671401ce80dcf947b7b64ea3af112d2a42ca5501..64dbce23ce17bcdd11c0d4c454dbeb9de17ef56c 100644
+> --- a/drivers/iio/imu/bmi323/bmi323_core.c
+> +++ b/drivers/iio/imu/bmi323/bmi323_core.c
+> @@ -2199,7 +2199,7 @@ static int bmi323_core_runtime_suspend(struct device *dev)
+>  	}
+>  
+>  	for (unsigned int i = 0; i < ARRAY_SIZE(bmi323_ext_reg_savestate); i++) {
+> -		ret = bmi323_read_ext_reg(data, bmi323_reg_savestate[i],
+> +		ret = bmi323_read_ext_reg(data, bmi323_ext_reg_savestate[i],
+>  					  &savestate->reg_settings[i]);
+>  		if (ret) {
+>  			dev_err(data->dev,
+> 
+> ---
+> base-commit: 5ba0cb92584ba5e107c97001e09013c1da0772a8
+> change-id: 20240909-iio-bmi323-fix-array-ref-a0672a8213f0
+> 
+> Best regards,
+Hello Nathan,
 
-kernel test robot noticed the following build warnings:
+Thank you kindly for spotting and fixing it.
 
-[auto build test WARNING on v6.11-rc6]
-[also build test WARNING on linus/master next-20240909]
-[cannot apply to akpm-mm/mm-nonmm-unstable]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Regrettably while integrating suggestions I received I also changed the patch semantic and due to my hardware not having the irq pin connected to the cpu this went unnoticed.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Luis-Felipe-Hernandez/lib-math-Add-int_pow-test-suite/20240909-065058
-base:   v6.11-rc6
-patch link:    https://lore.kernel.org/r/20240908224901.78595-1-luis.hernandez093%40gmail.com
-patch subject: [PATCH v4] lib/math: Add int_pow test suite
-config: arm64-randconfig-002-20240909 (https://download.01.org/0day-ci/archive/20240910/202409100220.g9Ghp1te-lkp@intel.com/config)
-compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 05f5a91d00b02f4369f46d076411c700755ae041)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240910/202409100220.g9Ghp1te-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202409100220.g9Ghp1te-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> lib/math/tests/int_pow_kunit.c:22:11: warning: integer literal is too large to be represented in a signed integer type, interpreting as unsigned [-Wimplicitly-unsigned-literal]
-      22 |         { 2, 63, 9223372036854775808, "Large result"},
-         |                  ^
-   1 warning generated.
-
-
-vim +22 lib/math/tests/int_pow_kunit.c
-
-    12	
-    13	static const struct test_case_params params[] = {
-    14		{ 64, 0, 1, "Power of zero" },
-    15		{ 64, 1, 64, "Power of one"},
-    16		{ 0, 5, 0, "Base zero" },
-    17		{ 1, 64, 1, "Base one" },
-    18		{ 2, 2, 4, "Two squared"},
-    19		{ 2, 3, 8, "Two cubed"},
-    20		{ 5, 5, 3125, "Five raised to the fifth power" },
-    21		{ U64_MAX, 1, U64_MAX, "Max base" },
-  > 22		{ 2, 63, 9223372036854775808, "Large result"},
-    23	};
-    24	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Best regards,
+Denis Benato
