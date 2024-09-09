@@ -1,138 +1,82 @@
-Received: from mail-ed1-f48.google.com (mail-ed1-f48.google.com [209.85.208.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A48161B3F1E
-	for <llvm@lists.linux.dev>; Mon,  9 Sep 2024 12:37:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D4DE1B9B4F;
+	Mon,  9 Sep 2024 13:29:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725885456; cv=none; b=euQ0U3SSSoKhjgYbu7IPi3UrBo18uTvTsqFtDFxPt9jF/4bUrajfxyIFl8znA7+1+iu0Gx+vNLTkVJvHkasK14NzvQuZUxYu2beAVW5kqHaQl/Hb5jzDjPsac12vmhZ8rURg9XMg+LqBQ317h4AuazEzTCJaQZqhXY+QybSELLs=
+	t=1725888585; cv=none; b=RU1iJ1hE1LnEmNKToKNWqJ6V0o++6D9O1j6xrQMhNPlGl6/bYXXL5/iZX6jRxZK966RCALQaf72qpmYgECf48AWgziBY6FIGPmZRdbm+vJ/CobIQS+Q5FvtAEBj/r/iCe0BXGxXBzW66a0x3rNnw+GA+SiRt2fd0jEtWcT7441k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725885456; c=relaxed/simple;
-	bh=7x++IXptugSBcTMKm1CnBGE34+7xQrLR4WRchoqO7zI=;
-	h=From:Date:To:Message-ID:Subject:MIME-Version:Content-Type; b=XwvHIsT55Kjvt5G4cwmVEVlF3gdDVORLhEATea/gz1A3FBioPT4EFAYyg89CbZhonal3xaqVUIoJUXz9xYOtMM2q7mJDbhuqaRVlH4Jzsgbxwn3A2tcUK+pKmdUmNxVHdeQGhH8REcTKYFaEOCM13Z+ix4l0Hys6KKIjg/MWIw4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=ybKLtNCJ; arc=none smtp.client-ip=209.85.208.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+	s=arc-20240116; t=1725888585; c=relaxed/simple;
+	bh=NSVxsFaqGlzoYc1D7+gbTul5M5Fdu6Sgfob6CN3TRhE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=iz1QXNRJD9/BpTC4XFA8SQqfH1dzeS7KK0z4GvcDcxOE2vKi5wY4U4XAB1iZI+CCmGPx5B8j3+Jto4lqhTdbcZQ6S7fxsxhEddg+DjRH/e0Xec1Hh4CQPyPwl0eELYJroPd5OH/iaaC3IqyK/YL3+wULbPi8Jy5oiu3mkZcMLZU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=nO21K//H; arc=none smtp.client-ip=90.155.50.34
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="ybKLtNCJ"
-Received: by mail-ed1-f48.google.com with SMTP id 4fb4d7f45d1cf-5c3ed267a7bso1851014a12.3
-        for <llvm@lists.linux.dev>; Mon, 09 Sep 2024 05:37:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1725885453; x=1726490253; darn=lists.linux.dev;
-        h=list-id:mime-version:subject:message-id:to:reply-to:date:from:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=1i1SG9ZyQO1Dn1Tv20UB4E8WTvm5LphoCfNmE2TqwkI=;
-        b=ybKLtNCJCzCyODtP0J2y7JaltmNN+FXVdY1SV1JCVQX0mU5+tAN0lM9tSrmP1cKFUw
-         WJz4J84ZZ+aYBHU4jgzpu3ss3vmsqTJ6YizIyykdOYwaGXF/EWBAa6pMspN+ANRc97Xb
-         S8Z1E9VpIXaQqOYif7oe0Mi6Iju8wPDStrjFXFs0GUusUk8zgSw+vhjVl0RsAffEtYx3
-         pcNEFxyOtHclTTfg0/1QupvtjgI+/rJIYJ8NHCFXGlJrKM7edgGUoS+rw7xpcJsQSETc
-         uC8IogvTd2V0HZumlSjOASeQt6DvaBUxY93RBONOdvhWBihtfrC7G7k8eHNJC7oKCTd0
-         TIyw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1725885453; x=1726490253;
-        h=list-id:mime-version:subject:message-id:to:reply-to:date:from
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=1i1SG9ZyQO1Dn1Tv20UB4E8WTvm5LphoCfNmE2TqwkI=;
-        b=KULf6sgXRzhX9HKH7uByJNFjRZXC3vgJrqTUjC1eDITMTo4qGxbd0czE32/oM3wkH8
-         qmqbWgDAqbLDr304jX//IReENU6/onmsT+vemHpg8IywfixuaFGcVVahXSI2vI9V4taI
-         6xB5wGkO6h6m2pCXavi3XUNpsPJJryTSTODltaQIm/IZerInlm2WK0xSX7Y1QlGmGeFb
-         CzBd2Kq4Zzd1/Xn606Xrjr4lCd45ZJoW1ujK5BwrwfBcD4BK+cjZv1FeEHpgwkgQphEq
-         LitPF+BaWoG0NKGx+DWGu3osr/bYCuiGqhnf9LdlgfM7Y0qUQcEgHgL0HsDduSVX1lo4
-         Jncg==
-X-Gm-Message-State: AOJu0YwxLNBl5OSWLEXLGRLljOuInY6gjdUj6Eg/yEN04DR6lsY4fQ9d
-	MnFuCKDp7wlJ/SxvRJMS+S+kY2eXTY5bRNFRpkYeueMNbsokudWwEgJvjM1l+NIBNs/1MTNMOfs
-	3
-X-Google-Smtp-Source: AGHT+IFPMpLNSPEx2AqxH90baBQr2iNHSvzorGKDLa/Ixu1Pz6nkg070ttX1dpMV1CurY11gy4frCQ==
-X-Received: by 2002:a17:907:3688:b0:a7d:e5b1:bf65 with SMTP id a640c23a62f3a-a8a885f6487mr922550566b.21.1725885452394;
-        Mon, 09 Sep 2024 05:37:32 -0700 (PDT)
-Received: from jenkins.jenkins (ci.linaro.org. [88.99.136.175])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a8d25d5dc97sm337027566b.212.2024.09.09.05.37.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 09 Sep 2024 05:37:31 -0700 (PDT)
-From: ci_notify@linaro.org
-X-Google-Original-From: linaro-infrastructure-errors@lists.linaro.org
-Date: Mon, 9 Sep 2024 12:37:30 +0000 (UTC)
-Reply-To: linaro-toolchain@lists.linaro.org
-To: llvm@lists.linux.dev
-Message-ID: <1833124036.181352.1725885451762@jenkins.jenkins>
-Subject: [Linaro-TCWG-CI] v6.10-12615-g08c2182cf0b47: Failure on aarch64
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="nO21K//H"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=x6iQ/z/XvJ4BIsYA0tRbAU4qSXMzVxil+GOt5Tk6KkE=; b=nO21K//H+VzyF+uatXpYFlLdrS
+	fRnGVBaQf8CRjrXouGKw188kJuiVQyWgftLtni/zaOK5P3M1/YO60dEUUtMSyU45BE8YUZ1rSeytF
+	mhJs0xipBROCD476AS96yg5+funVP8ykEa0m2nxJVUkDUX3lzCppXbeheuTpUCP1tl2Z+b2GHlVtt
+	+YlmroLMhjlPNZhU7HcHUbkg+VAQHgCVRxA6ESXor9k4TKJAHr9yaIW+wDhaXvghVo7iyHE2Wz6SF
+	B87MhtORBTmaMbJy8obcG5uWZ14PiJ3q5Lwr5o1WRgjLCoVqb51S14s+kjQ5lAsvDY9kX86Yq5b6U
+	RrNNIn5Q==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+	by casper.infradead.org with esmtpsa (Exim 4.98 #2 (Red Hat Linux))
+	id 1sneSa-0000000DC8Y-2Rgl;
+	Mon, 09 Sep 2024 13:29:41 +0000
+Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
+	id 15AA230047C; Mon,  9 Sep 2024 15:29:41 +0200 (CEST)
+Date: Mon, 9 Sep 2024 15:29:41 +0200
+From: Peter Zijlstra <peterz@infradead.org>
+To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc: linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+	Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
+	Waiman Long <longman@redhat.com>, Boqun Feng <boqun.feng@gmail.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>
+Subject: Re: [PATCH v1 1/1] locking/rwsem: Mark inline helpers with
+ __maybe_unused
+Message-ID: <20240909132941.GE4723@noisy.programming.kicks-ass.net>
+References: <20240909115839.1022530-1-andriy.shevchenko@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; 
-	boundary="----=_Part_181351_1536764681.1725885450927"
-X-Jenkins-Job: TCWG Build tcwg_kernel/llvm-master-aarch64-next-allmodconfig
-X-Jenkins-Result: SUCCESS
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240909115839.1022530-1-andriy.shevchenko@linux.intel.com>
 
-------=_Part_181351_1536764681.1725885450927
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+On Mon, Sep 09, 2024 at 02:58:39PM +0300, Andy Shevchenko wrote:
+> When one or more inline heplers are unused, it prevents kernel builds
+> with clang, `make W=1` and CONFIG_WERROR=y:
+> 
+> kernel/locking/rwsem.c:187:20: error: unused function 'is_rwsem_reader_owned' [-Werror,-Wunused-function]
+>   187 | static inline bool is_rwsem_reader_owned(struct rw_semaphore *sem)
+>       |                    ^~~~~~~~~~~~~~~~~~~~~
+> kernel/locking/rwsem.c:271:35: error: unused function 'rwsem_owner' [-Werror,-Wunused-function]
+>   271 | static inline struct task_struct *rwsem_owner(struct rw_semaphore *sem)
+>       |                                   ^~~~~~~~~~~
+> 
+> Fix this by marking inline helpers with __maybe_unused.
+> 
+> See also commit 6863f5643dd7 ("kbuild: allow Clang to find unused static
+> inline functions for W=1 build").
 
-Dear contributor, our automatic CI has detected problems related to your patch(es).  Please find some details below.  If you have any questions, please follow up on linaro-toolchain@lists.linaro.org mailing list, Libera's #linaro-tcwg channel, or ping your favourite Linaro toolchain developer on the usual project channel.
+:-(
 
-We understand that it might be difficult to find the necessary logs or reproduce the issue locally. If you can't get what you need from our CI within minutes, let us know and we will be happy to help.
+And now you're back to the exact situation that people tried to avoid.
+The moment one of these functions goes unused it will no longer scream
+about it.
 
-We track this report status in https://linaro.atlassian.net/browse/LLVM-1343 , please let us know if you are looking at the problem and/or when you have a fix.
-
-In CI config tcwg_kernel/llvm-master-aarch64-next-allmodconfig after:
-
-  | commit v6.10-12615-g08c2182cf0b47
-  | Author: Florian Westphal <fw@strlen.de>
-  | Date:   Tue Aug 27 15:37:32 2024 +0200
-  | 
-  |     xfrm: policy: use recently added helper in more places
-  |     
-  |     No logical change intended.
-  |     
-  |     Signed-off-by: Florian Westphal <fw@strlen.de>
-  |     Signed-off-by: Steffen Klassert <steffen.klassert@secunet.com>
-
-Results changed to
-# reset_artifacts:
--10
-# build_abe binutils:
--9
-# build_kernel_llvm:
--5
-# build_abe qemu:
--2
-# linux_n_obj:
-25706
-
-From
-# reset_artifacts:
--10
-# build_abe binutils:
--9
-# build_kernel_llvm:
--5
-# build_abe qemu:
--2
-# linux_n_obj:
-35360
-# linux build successful:
-all
-
-The configuration of this build is:
-CI config tcwg_kernel/llvm-master-aarch64-next-allmodconfig
-
------------------8<--------------------------8<--------------------------8<--------------------------
-The information below can be used to reproduce a debug environment:
-
-Current build   : https://ci.linaro.org/job/tcwg_kernel--llvm-master-aarch64-next-allmodconfig-build/255/artifact/artifacts
-Reference build : https://ci.linaro.org/job/tcwg_kernel--llvm-master-aarch64-next-allmodconfig-build/254/artifact/artifacts
-
-Reproduce last good and first bad builds: https://git-us.linaro.org/toolchain/ci/interesting-commits.git/plain/linux/sha1/08c2182cf0b47646af7f3daa292980f95f5e1ea6/tcwg_kernel/llvm-master-aarch64-next-allmodconfig/reproduction_instructions.txt
-
-Full commit : https://gitlab.com/Linaro/lkft/mirrors/next/linux-next/commit/08c2182cf0b47646af7f3daa292980f95f5e1ea6
-
-List of configurations that regressed due to this commit :
-* tcwg_kernel
-** llvm-master-aarch64-next-allmodconfig
-*** Failure
-*** https://git-us.linaro.org/toolchain/ci/interesting-commits.git/plain/linux/sha1/08c2182cf0b47646af7f3daa292980f95f5e1ea6/tcwg_kernel/llvm-master-aarch64-next-allmodconfig/details.txt
-*** https://ci.linaro.org/job/tcwg_kernel--llvm-master-aarch64-next-allmodconfig-build/255/artifact/artifacts
-------=_Part_181351_1536764681.1725885450927--
+I'm for reverting the above commit, that gets all static inline on the
+same footing, it should not matter if code is from a header file or not.
