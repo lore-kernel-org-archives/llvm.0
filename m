@@ -1,58 +1,63 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B1A1F18CBF0;
-	Mon,  9 Sep 2024 23:06:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 013C8210EC;
+	Mon,  9 Sep 2024 23:58:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725923207; cv=none; b=kX2gS7kGvFc+FsdEZgPelqNY61ESMaTiLOpEqCqTboaCwkQndmhTnosxTqfCQCienwIabfeXLD36YmrjizgdT3yzqi2Hhdeu21Vaay+lvNmwWybCtK55RSuKPMk2acEwOuLs+fZW46t9+8VNqp/92wtbZ+VhHxN9F/CL8e5wYCE=
+	t=1725926293; cv=none; b=i6aONfJE3TsygycDWpzTQzbPIyiNQY3OM0nF7x3HrVp1Q/S9+/cxpXSjQjumEA2Zg8pDeLui32LKylB84KfgSmV36bWTp7tw56IIMngbnAvGDRwdk6/av5Qb5n2danEF6yialJ8j0dcX6Kmt8K4vsOMicjwjKzj04pH3YAAHD2E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725923207; c=relaxed/simple;
-	bh=d6sQfdMd/TRtHc//UGkxb+8WTJvSlnDR9/Dt0jbt5JU=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=Z/LzBNdw8IUMrJ4arniz9GWyWSzWCslJSW/7vYT0ImT16CIcJ94Dkbre8EYcBN1NM1iE4HO2cR8JZbXeXZOf3Xo3HnuCCx9zUQLhXjVne5qmigwXg1aDHq1gSZz1UY3hXvnriwDr/s22rFSv/NlwZk22hGrz63SaVUEjQtjgHLs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=C7Ox8NJN; arc=none smtp.client-ip=192.198.163.15
+	s=arc-20240116; t=1725926293; c=relaxed/simple;
+	bh=5epVVkn2PLxPjF6sN9j3lSNsxBTpsJNigNUbCBDzaGE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=FMeGOEqM0Bc3Ifz28GTD8WaTEyqt5+6ijilm6Tcc9PRR1GWzmW7+v0PHJtubHe4kSc8GNSCaVig1SEaTmN0wCUY37DbqZzFqhKXu1CcwStIRxcJu6Hb2yDdEuRYYGrdCwpPU230UzmoUkemV5I+bJHl5Ozm+euocBDaPcJZJqoI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ZzvVq2/3; arc=none smtp.client-ip=198.175.65.14
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="C7Ox8NJN"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ZzvVq2/3"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1725923205; x=1757459205;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=d6sQfdMd/TRtHc//UGkxb+8WTJvSlnDR9/Dt0jbt5JU=;
-  b=C7Ox8NJNmXKuYLveDy/KmuCk9WUFqER2neI9qegL8NHMuecI4HN8CHXz
-   7vL5qpzauFxWlFikjSdvb3xQQOLO6F+VI5WyRbJVnL1W00O1ZNMbOR6AL
-   zuSgnlEY9Frz5hyg1/fD0z/3tmDUzZMvf/IuiVs/C9BpdZrp7jKb2p1Bo
-   xh2uOaNa8wonpqpen3gH/uWWBNhQC+eP6Rzcb0bFgX93rLHxKYE6HOG7T
-   OUOC/fA8l8WgC6hz6TDQJnaz0SeoicU08AEe6HrmruKTHrc9vgM8A8+F6
-   f9atkxkSeUpzkYGkLkyBO5pGfrtk2llz9WZ2BcpgZwjQrHUz3oQw6+yUP
-   w==;
-X-CSE-ConnectionGUID: bx+QSuaiTcGXajpuPG5nMQ==
-X-CSE-MsgGUID: EYcbFTXlRY+PZ3vHcCHvJg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11190"; a="24806662"
+  t=1725926293; x=1757462293;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=5epVVkn2PLxPjF6sN9j3lSNsxBTpsJNigNUbCBDzaGE=;
+  b=ZzvVq2/3ZKibj0kwlM/QN9L5rPgN2e8GsdjfPw8fey9mal9x8cVqt0q7
+   qEa+A5fyTvvIEBJbkeuWmTvnwfneiz3Q3ygucVfNJJ38M9ER6OEDtpS17
+   ddyHmc1zx2w9lONpbZKHwPRPWZBbY31twXjsLiBlCuN0DI7stopK9Rt/F
+   f7OEPggx4sHesgEsjgMd3/XeMUWayxB+Kyq6RlNW236hpBCX5+xf3/VPI
+   1OWZcZzGFr1ypHVbh6leMrkWYX0o8oELinYRTWScaKB7WVJoZAEOrxTL3
+   t8+2FYSUO44xHJCcK0JSqCWJiYo3xIW5r8AM2mLwqxwqC2bwBAEPXlYiF
+   A==;
+X-CSE-ConnectionGUID: 1pW3A5lLQAyGufztGtYsrw==
+X-CSE-MsgGUID: gATYwDdZRBmkOOCSJqugug==
+X-IronPort-AV: E=McAfee;i="6700,10204,11190"; a="28430946"
 X-IronPort-AV: E=Sophos;i="6.10,215,1719903600"; 
-   d="scan'208";a="24806662"
-Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Sep 2024 16:06:44 -0700
-X-CSE-ConnectionGUID: Dt4vttWWTP+tKGdvbSUHjw==
-X-CSE-MsgGUID: E0A85fuYSyO7FJwOKHmjWg==
+   d="scan'208";a="28430946"
+Received: from fmviesa002.fm.intel.com ([10.60.135.142])
+  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Sep 2024 16:58:12 -0700
+X-CSE-ConnectionGUID: 1WbSL/OlSTSao5p/1SU7lQ==
+X-CSE-MsgGUID: XkS4mGqfTAamzR8ZFWoXjA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.10,215,1719903600"; 
-   d="scan'208";a="97625971"
+   d="scan'208";a="90123048"
 Received: from lkp-server01.sh.intel.com (HELO 9c6b1c7d3b50) ([10.239.97.150])
-  by fmviesa001.fm.intel.com with ESMTP; 09 Sep 2024 16:06:43 -0700
+  by fmviesa002.fm.intel.com with ESMTP; 09 Sep 2024 16:58:09 -0700
 Received: from kbuild by 9c6b1c7d3b50 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1snnSz-000FK0-0g;
-	Mon, 09 Sep 2024 23:06:41 +0000
-Date: Tue, 10 Sep 2024 07:06:18 +0800
+	id 1snoGl-000FMe-12;
+	Mon, 09 Sep 2024 23:58:07 +0000
+Date: Tue, 10 Sep 2024 07:58:03 +0800
 From: kernel test robot <lkp@intel.com>
-To: Kent Overstreet <kent.overstreet@linux.dev>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [koverstreet-bcachefs:bcachefs-garbage 169/258]
- fs/bcachefs/ec.c:899:2: error: expected expression
-Message-ID: <202409100726.g9xGizIl-lkp@intel.com>
+To: Abhash Jha <abhashkumarjha123@gmail.com>, linux-iio@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	anshulusr@gmail.com, jic23@kernel.org, lars@metafoo.de,
+	linux-kernel@vger.kernel.org,
+	Abhash Jha <abhashkumarjha123@gmail.com>
+Subject: Re: [PATCH 3/4] iio: light: ltr390: Interrupts and threshold event
+ support
+Message-ID: <202409100717.2rKMS0oi-lkp@intel.com>
+References: <20240909103623.264113-4-abhashkumarjha123@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -61,116 +66,115 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20240909103623.264113-4-abhashkumarjha123@gmail.com>
 
-tree:   https://github.com/koverstreet/bcachefs bcachefs-garbage
-head:   c88c2220b6b527cec382f06a0ba3feab2a593b37
-commit: 1cf183a9fbb35bf1e6544d317fd534d6ff862e0e [169/258] bcachefs: Better error messages in bch2_ec_read_extent()
-config: powerpc64-randconfig-003-20240909 (https://download.01.org/0day-ci/archive/20240910/202409100726.g9xGizIl-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240910/202409100726.g9xGizIl-lkp@intel.com/reproduce)
+Hi Abhash,
+
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on jic23-iio/togreg]
+[also build test ERROR on next-20240909]
+[cannot apply to linus/master v6.11-rc7]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Abhash-Jha/iio-light-ltr390-Suspend-and-Resume-support/20240909-193623
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/jic23/iio.git togreg
+patch link:    https://lore.kernel.org/r/20240909103623.264113-4-abhashkumarjha123%40gmail.com
+patch subject: [PATCH 3/4] iio: light: ltr390: Interrupts and threshold event support
+config: x86_64-buildonly-randconfig-003-20240910 (https://download.01.org/0day-ci/archive/20240910/202409100717.2rKMS0oi-lkp@intel.com/config)
+compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240910/202409100717.2rKMS0oi-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202409100726.g9xGizIl-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202409100717.2rKMS0oi-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> fs/bcachefs/ec.c:899:2: error: expected expression
-           struct printbuf msgbuf = PRINTBUF;
-           ^
->> fs/bcachefs/ec.c:900:25: error: use of undeclared identifier 'msgbuf'
-           bch2_bkey_val_to_text(&msgbuf, c, orig_k);
-                                  ^
-   fs/bcachefs/ec.c:902:55: error: use of undeclared identifier 'msgbuf'
-                               "error doing reconstruct read: %s\n  %s", msg, msgbuf.buf);
-                                                                              ^
-   fs/bcachefs/ec.c:903:17: error: use of undeclared identifier 'msgbuf'
-           printbuf_exit(&msgbuf);;
-                          ^
-   4 errors generated.
+>> drivers/iio/light/ltr390.c:633:19: error: call to undeclared function 'irq_get_trigger_type'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     633 |                 int irq_flags = irq_get_trigger_type(client->irq);
+         |                                 ^
+   1 error generated.
 
 
-vim +899 fs/bcachefs/ec.c
+vim +/irq_get_trigger_type +633 drivers/iio/light/ltr390.c
 
-   830	
-   831	/* recovery read path: */
-   832	int bch2_ec_read_extent(struct btree_trans *trans, struct bch_read_bio *rbio,
-   833				struct bkey_s_c orig_k)
-   834	{
-   835		struct bch_fs *c = trans->c;
-   836		struct ec_stripe_buf *buf = NULL;
-   837		struct closure cl;
-   838		struct bch_stripe *v;
-   839		unsigned i, offset;
-   840		const char *msg = NULL;
-   841		int ret = 0;
-   842	
-   843		closure_init_stack(&cl);
-   844	
-   845		BUG_ON(!rbio->pick.has_ec);
-   846	
-   847		buf = kzalloc(sizeof(*buf), GFP_NOFS);
-   848		if (!buf)
-   849			return -BCH_ERR_ENOMEM_ec_read_extent;
-   850	
-   851		ret = lockrestart_do(trans, get_stripe_key_trans(trans, rbio->pick.ec.idx, buf));
-   852		if (ret) {
-   853			msg = "stripe not found";
-   854			goto err;
-   855		}
-   856	
-   857		v = &bkey_i_to_stripe(&buf->key)->v;
-   858	
-   859		if (!bch2_ptr_matches_stripe(v, rbio->pick)) {
-   860			msg = "pointer doesn't match stripe";
-   861			goto err;
-   862		}
-   863	
-   864		offset = rbio->bio.bi_iter.bi_sector - v->ptrs[rbio->pick.ec.block].offset;
-   865		if (offset + bio_sectors(&rbio->bio) > le16_to_cpu(v->sectors)) {
-   866			msg = "read is bigger than stripe";
-   867			goto err;
-   868		}
-   869	
-   870		ret = ec_stripe_buf_init(buf, offset, bio_sectors(&rbio->bio));
-   871		if (ret) {
-   872			msg = "-ENOMEM";
-   873			goto err;
-   874		}
-   875	
-   876		for (i = 0; i < v->nr_blocks; i++)
-   877			ec_block_io(c, buf, REQ_OP_READ, i, &cl);
-   878	
-   879		closure_sync(&cl);
-   880	
-   881		if (ec_nr_failed(buf) > v->nr_redundant) {
-   882			msg = "unable to read enough blocks";
-   883			goto err;
-   884		}
-   885	
-   886		ec_validate_checksums(c, buf);
-   887	
-   888		ret = ec_do_recov(c, buf);
-   889		if (ret)
-   890			goto err;
-   891	
-   892		memcpy_to_bio(&rbio->bio, rbio->bio.bi_iter,
-   893			      buf->data[rbio->pick.ec.block] + ((offset - buf->offset) << 9));
-   894	out:
-   895		ec_stripe_buf_exit(buf);
-   896		kfree(buf);
-   897		return ret;
-   898	err:
- > 899		struct printbuf msgbuf = PRINTBUF;
- > 900		bch2_bkey_val_to_text(&msgbuf, c, orig_k);
-   901		bch_err_ratelimited(c,
-   902				    "error doing reconstruct read: %s\n  %s", msg, msgbuf.buf);
-   903		printbuf_exit(&msgbuf);;
-   904		ret = -BCH_ERR_stripe_reconstruct;
-   905		goto out;
-   906	}
-   907	
+   578	
+   579	static int ltr390_probe(struct i2c_client *client)
+   580	{
+   581		struct ltr390_data *data;
+   582		struct iio_dev *indio_dev;
+   583		struct device *dev;
+   584		int ret, part_number;
+   585	
+   586		dev = &client->dev;
+   587		indio_dev = devm_iio_device_alloc(dev, sizeof(*data));
+   588		if (!indio_dev)
+   589			return -ENOMEM;
+   590	
+   591		data = iio_priv(indio_dev);
+   592	
+   593		data->regmap = devm_regmap_init_i2c(client, &ltr390_regmap_config);
+   594		if (IS_ERR(data->regmap))
+   595			return dev_err_probe(dev, PTR_ERR(data->regmap),
+   596					     "regmap initialization failed\n");
+   597	
+   598		data->client = client;
+   599		/* default value of integration time from pg: 15 of the datasheet */
+   600		data->int_time_us = 100000;
+   601		/* default value of gain from pg: 16 of the datasheet */
+   602		data->gain = 3;
+   603		/* default mode for ltr390 is ALS mode */
+   604		data->mode = LTR390_SET_ALS_MODE;
+   605	
+   606		mutex_init(&data->lock);
+   607	
+   608		indio_dev->info = &ltr390_info;
+   609		indio_dev->channels = ltr390_channels;
+   610		indio_dev->num_channels = ARRAY_SIZE(ltr390_channels);
+   611		indio_dev->name = "ltr390";
+   612	
+   613		ret = regmap_read(data->regmap, LTR390_PART_ID, &part_number);
+   614		if (ret)
+   615			return dev_err_probe(dev, ret,
+   616					     "failed to get sensor's part id\n");
+   617		/* Lower 4 bits of `part_number` change with hardware revisions */
+   618		if (part_number >> 4 != LTR390_PART_NUMBER_ID)
+   619			dev_info(dev, "received invalid product id: 0x%x", part_number);
+   620		dev_dbg(dev, "LTR390, product id: 0x%x\n", part_number);
+   621	
+   622		/* reset sensor, chip fails to respond to this, so ignore any errors */
+   623		regmap_set_bits(data->regmap, LTR390_MAIN_CTRL, LTR390_SW_RESET);
+   624	
+   625		/* Wait for the registers to reset before proceeding */
+   626		usleep_range(1000, 2000);
+   627	
+   628		ret = regmap_set_bits(data->regmap, LTR390_MAIN_CTRL, LTR390_SENSOR_ENABLE);
+   629		if (ret)
+   630			return dev_err_probe(dev, ret, "failed to enable the sensor\n");
+   631	
+   632		if (client->irq) {
+ > 633			int irq_flags = irq_get_trigger_type(client->irq);
+   634	
+   635			if (!irq_flags)
+   636				irq_flags = IRQF_TRIGGER_FALLING;
+   637	
+   638			ret = devm_request_threaded_irq(&client->dev, client->irq,
+   639							NULL, ltr390_interrupt_handler,
+   640							irq_flags | IRQF_ONESHOT,
+   641							"ltr390_thresh_event", indio_dev);
+   642			if (ret) {
+   643				dev_err(&client->dev, "request irq (%d) failed\n", client->irq);
+   644				return ret;
+   645			}
+   646		}
+   647	
+   648		return devm_iio_device_register(dev, indio_dev);
+   649	}
+   650	
 
 -- 
 0-DAY CI Kernel Test Service
