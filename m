@@ -1,57 +1,70 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0802C1741F0;
-	Mon,  9 Sep 2024 05:54:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F61954279;
+	Mon,  9 Sep 2024 06:54:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725861261; cv=none; b=fjvqp/D8AhM1f2a6vDh3EMeAIHvZhDndRr365oOFiku5IJhgihQ2c7jRmN0pWdoaLU5JkrVqyn2MgQAHcmyVciZN/qv1cjrdRErvWyjezwbEMkki8YVlxaHJJBi9B8V8HEjOgWmseinasDpKb+Kbqck5amnSUS6aXoFSXem2hxI=
+	t=1725864887; cv=none; b=gSryiXsjIw79W2CGBdSIsFTIFf/8msVy0ys2+JbR3Cdha+AFcRltYosEQufoJy0etiOCTjVRvgQcCTPqIBp7neqK4vyBxabAjT5qCFjpO79vD1mdb8gl97vZeYLL5XwD2Lxo2YJtXYqlC3ihhl2zhP3Wjo3IOu25bndLgYdVHXQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725861261; c=relaxed/simple;
-	bh=bxex6xMzInlTbz9S7Sjl0HhrLpmlW6o8zrtqzzxe0Dk=;
+	s=arc-20240116; t=1725864887; c=relaxed/simple;
+	bh=5CUtr5c0Taa2cv5diyyUItk9tTuJ/bOmNRRQPiYqb3E=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=dM6f6TGjFF3cxSz3+393aWJhgej4OxY2pwAiSmt9EoD1+duk0MwwAAXm77nMQUFDGXlXSOiST8lUoOXAe0FB6GmTB9IXrROwzcNzcFxJRAGhHhUJdJQFEiOLeIlSN1iihLF7tmDU96S162hkYi+7IwVcmD4kHo+ljKJvi+gPTEY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=lpIR/WDN; arc=none smtp.client-ip=192.198.163.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=RbeV2kJSWJ/sO1CPU1Llh/VsTckv3jVPYrJV2r+GAcclJ4mRXC6f/GMGfxPv/Ls85N8vPisq5w2aoxayX7osx6Tx5X4DwTQAW4oljWgzmOhsWW1uvm7m907PmwmQQ/jyOBwr0arKCC0DQvudH6bVulZs4rmW+Hsd8wjGa6KX7Qg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=i8uYuYiO; arc=none smtp.client-ip=192.198.163.19
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="lpIR/WDN"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="i8uYuYiO"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1725861260; x=1757397260;
+  t=1725864885; x=1757400885;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=bxex6xMzInlTbz9S7Sjl0HhrLpmlW6o8zrtqzzxe0Dk=;
-  b=lpIR/WDNP2L5dFWvRvMG9zkrp2MxQFTNoQwediFzztjEErt93mZJPu/F
-   qxdmfsOKkOmR+GBpLc5TBo+Kh6hGj1IPNXGNsAMrIwJZo3cG/Mm5iMV10
-   91znzE1ww0ymSFiGnPENc3Y+FKCEc2d9ElANv47o3jQoXf5altrecWACt
-   AVS/oiU4bwtEcLy5Gm8Eh07lJBayj2FJUlTpOlP8y6PYZWmRLgOa7hKxJ
-   ZWyNPqTktA1sv5+6in5rU8K14f6c6MasF7k8GYNneqOcbmZ3vbIi/733n
-   F5v5n5rTLTxGSKTSrZ3vyfaAHzUj8kuSGCsDjM7gl8VjmDrwNvrn2nUAK
-   w==;
-X-CSE-ConnectionGUID: 5CdYvNTXS5eGWazmYsZncQ==
-X-CSE-MsgGUID: tC6Qf+SQR4i+/DZSx4lTag==
-X-IronPort-AV: E=McAfee;i="6700,10204,11189"; a="35911235"
+  bh=5CUtr5c0Taa2cv5diyyUItk9tTuJ/bOmNRRQPiYqb3E=;
+  b=i8uYuYiOpFRXbPsVKPQNbPHnQfNh+NnhEsxpJQqCm0j0zb5KJdUPZVeQ
+   ziB4LvH7Vm8Tvez1aCXLODYBjeC0zntWGhTUUm4N+/9vDREX+2yXEWrkZ
+   O8Wt5xvOilnYqVGaW0KXs/8xaPdjNvsFsXckAPPaSsCi65v0T8wzyZb2x
+   8FsCbn5HzLAdZVOeN0mwwgAr0JLI+gaDRHcUTiY217R12LPugE0iaLiuq
+   9oxKCUHvsB1gzK5SRlD0mienY8Rmj0956TNqU1MxTir7Sbtc9E9r2zy2L
+   gy4NPVkut9yUbx4DJ31R9+Ibh2Ff9PQaZ1d5rR1sXkAmZdj7UM+s3XsGu
+   g==;
+X-CSE-ConnectionGUID: we23OG3LTfah0My9vU4yxA==
+X-CSE-MsgGUID: Qc1y/uaVQbWoRoFF13D+tg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11189"; a="24088212"
 X-IronPort-AV: E=Sophos;i="6.10,213,1719903600"; 
-   d="scan'208";a="35911235"
-Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Sep 2024 22:54:19 -0700
-X-CSE-ConnectionGUID: XmGWAFyTQ4+Sdw3V8P2ZKQ==
-X-CSE-MsgGUID: YjYyMP3fRou+rsudVrrTPA==
+   d="scan'208";a="24088212"
+Received: from orviesa005.jf.intel.com ([10.64.159.145])
+  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Sep 2024 23:54:44 -0700
+X-CSE-ConnectionGUID: BS0doVCZT46N2bu1t/06Ew==
+X-CSE-MsgGUID: Aie8GE95S4SuzoK+HwL02A==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.10,213,1719903600"; 
-   d="scan'208";a="97266050"
-Received: from jkrzyszt-mobl2.ger.corp.intel.com (HELO tlindgre-MOBL1) ([10.245.246.140])
-  by orviesa002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Sep 2024 22:54:17 -0700
-Date: Mon, 9 Sep 2024 08:54:12 +0300
-From: Tony Lindgren <tony.lindgren@linux.intel.com>
-To: kernel test robot <lkp@intel.com>
+   d="scan'208";a="71368229"
+Received: from lkp-server01.sh.intel.com (HELO 9c6b1c7d3b50) ([10.239.97.150])
+  by orviesa005.jf.intel.com with ESMTP; 08 Sep 2024 23:54:42 -0700
+Received: from kbuild by 9c6b1c7d3b50 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1snYII-000EQU-2F;
+	Mon, 09 Sep 2024 06:54:38 +0000
+Date: Mon, 9 Sep 2024 14:54:25 +0800
+From: kernel test robot <lkp@intel.com>
+To: Hamza Mahfooz <hamza.mahfooz@amd.com>, dri-devel@lists.freedesktop.org
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org, Petr Mladek <pmladek@suse.com>
-Subject: Re: ERROR: modpost: "match_devname_and_update_preferred_console"
- [drivers/tty/serial/serial_base.ko] undefined!
-Message-ID: <Zt6NhNCbiBkSx_Uy@tlindgre-MOBL1>
-References: <202409071312.qlwtTOS1-lkp@intel.com>
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+	Maxime Ripard <mripard@kernel.org>,
+	Thomas Zimmermann <tzimmermann@suse.de>,
+	David Airlie <airlied@gmail.com>,
+	Jani Nikula <jani.nikula@linux.intel.com>,
+	Simona Vetter <simona.vetter@ffwll.ch>,
+	Alex Deucher <alexander.deucher@amd.com>,
+	Rodrigo Siqueira <rodrigo.siqueira@amd.com>,
+	Harry Wentland <harry.wentland@amd.com>,
+	Hamza Mahfooz <hamza.mahfooz@amd.com>,
+	Karol Herbst <kherbst@redhat.com>
+Subject: Re: [PATCH v3] drm/edid: add CTA Video Format Data Block support
+Message-ID: <202409091450.S7bzV2ho-lkp@intel.com>
+References: <20240906224307.423250-1-hamza.mahfooz@amd.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -60,40 +73,44 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <202409071312.qlwtTOS1-lkp@intel.com>
+In-Reply-To: <20240906224307.423250-1-hamza.mahfooz@amd.com>
 
-Hi,
+Hi Hamza,
 
-On Sat, Sep 07, 2024 at 01:23:47PM +0800, kernel test robot wrote:
-> Hi Tony,
-> 
-> FYI, the error/warning still remains.
-> 
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-> head:   b31c4492884252a8360f312a0ac2049349ddf603
-> commit: 12c91cec3155f79216641162a32e04a59abb6e37 serial: core: Add serial_base_match_and_update_preferred_console()
-> date:   9 weeks ago
-> config: i386-buildonly-randconfig-004-20240907 (https://download.01.org/0day-ci/archive/20240907/202409071312.qlwtTOS1-lkp@intel.com/config)
-> compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
-> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240907/202409071312.qlwtTOS1-lkp@intel.com/reproduce)
-> 
-> If you fix the issue in a separate patch/commit (i.e. not just a new version of
-> the same patch/commit), kindly add following tags
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes: https://lore.kernel.org/oe-kbuild-all/202409071312.qlwtTOS1-lkp@intel.com/
-> 
-> All errors (new ones prefixed by >>, old ones prefixed by <<):
-...
+kernel test robot noticed the following build errors:
 
-> >> ERROR: modpost: "match_devname_and_update_preferred_console" [drivers/tty/serial/serial_base.ko] undefined!
+[auto build test ERROR on drm-misc/drm-misc-next]
+[also build test ERROR on drm/drm-next drm-exynos/exynos-drm-next drm-intel/for-linux-next drm-intel/for-linux-next-fixes drm-tip/drm-tip linus/master v6.11-rc7 next-20240906]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Sorry I did not realize we still have an open build issue. I'll send a fix.
+url:    https://github.com/intel-lab-lkp/linux/commits/Hamza-Mahfooz/drm-edid-add-CTA-Video-Format-Data-Block-support/20240907-064359
+base:   git://anongit.freedesktop.org/drm/drm-misc drm-misc-next
+patch link:    https://lore.kernel.org/r/20240906224307.423250-1-hamza.mahfooz%40amd.com
+patch subject: [PATCH v3] drm/edid: add CTA Video Format Data Block support
+config: arm-nhk8815_defconfig (https://download.01.org/0day-ci/archive/20240909/202409091450.S7bzV2ho-lkp@intel.com/config)
+compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 05f5a91d00b02f4369f46d076411c700755ae041)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240909/202409091450.S7bzV2ho-lkp@intel.com/reproduce)
 
-As the serial port devices drives can select SERIAL_CORE_CONSOLE, and
-CONFIG_PRINTK may not be set we should check for both Kconfig options.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202409091450.S7bzV2ho-lkp@intel.com/
 
-So if defined(CONFIG_SERIAL_CORE_CONSOLE) && defined(CONFIG_PRINTK).
+All errors (new ones prefixed by >>):
 
-Regards,
+>> ld.lld: error: undefined symbol: __aeabi_uldivmod
+   >>> referenced by drm_edid.c:5470 (drivers/gpu/drm/drm_edid.c:5470)
+   >>>               drivers/gpu/drm/drm_edid.o:(_drm_edid_connector_add_modes) in archive vmlinux.a
+   >>> referenced by drm_edid.c:5508 (drivers/gpu/drm/drm_edid.c:5508)
+   >>>               drivers/gpu/drm/drm_edid.o:(_drm_edid_connector_add_modes) in archive vmlinux.a
+   >>> referenced by drm_edid.c:5509 (drivers/gpu/drm/drm_edid.c:5509)
+   >>>               drivers/gpu/drm/drm_edid.o:(_drm_edid_connector_add_modes) in archive vmlinux.a
+   >>> referenced 1 more times
+   >>> did you mean: __aeabi_uidivmod
+   >>> defined in: vmlinux.a(arch/arm/lib/lib1funcs.o)
 
-Tony
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
