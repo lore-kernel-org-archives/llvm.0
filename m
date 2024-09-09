@@ -1,102 +1,144 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC62213CA81;
-	Mon,  9 Sep 2024 16:24:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E7FEF1487E2
+	for <llvm@lists.linux.dev>; Mon,  9 Sep 2024 16:37:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725899070; cv=none; b=aqwEQ2fTGITdLeugXoJVVKh96Bgz9VSSMGag5ZYt58WWYed2sT4TgY9oNgo0AbaaIaOpiKRB9Ivf9a2r/T94YntZzIAK1MBJhnjmTH08G4IDszZfx581j16g0ZI+GY76iJaHzXH2mUq/B/9W0eCty4TyPlCjneYlot6n+ySEPIk=
+	t=1725899878; cv=none; b=Id2IQhBHRZOqMEXxCKReGHfXeYVN7ztHcbzWghoeYlT2fWcnl+HB1FVZYH2K3dChmOZby/lTj83kBkX4HvZDQVOcWUQVqimJw6lv6IbudqfV9DCaxNONHwAAQwPU9dKIlkYgeG9zxCNKN2qsPG8oqAj+L3ciIfhxy9Dy7xdgYc0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725899070; c=relaxed/simple;
-	bh=Z9KQaBMYa5sFKDVDG6vipFDugxmhAcXo+x7jIXMTm4k=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=REmk7t59vy/18VNlYbtBn6iBaEwRtRhpTB1p2ZYCNtfGwmhSpTBt6hvKxgYv8+I5bSrslwJFsV5adsDwjdyGy/+H50hIYOe3ID7NggPlfBc4YLKK1eqGyKTW5xBCI5ifXwhL7zq68H01tr2fq0JKHLlQsLl0AKROye5gamKivxo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nUFhMo1a; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1725899878; c=relaxed/simple;
+	bh=J+TMqA4hWjbwioo7PODnJ2Mu8+DiW0Hq5YpHKC4cp8Y=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=e55xvbu+77OVxHOfuw0qAppi8DB4d/Gfi0WickEabvUnuAh5HnpjbRLgwDVhcaZ8Pkh6xSnusFOXZWFQ2c1vVMV1YDxdCuqw78AfvEx8JUcD4Rn0zrQekOz0WXKmJyCWHoUCCZXY9PVSrcao6RZcEMX6KAOYQjbTpKbrnV3T2h4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=yPSOt+fA; arc=none smtp.client-ip=209.85.214.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nUFhMo1a"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E1663C4CEC5;
-	Mon,  9 Sep 2024 16:24:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1725899069;
-	bh=Z9KQaBMYa5sFKDVDG6vipFDugxmhAcXo+x7jIXMTm4k=;
-	h=From:Date:Subject:To:Cc:From;
-	b=nUFhMo1aVL0SZ26zu0BGprNSrg8esC9sKfr9Uhd9jg/awvZA907m1qU8mpnp64FFm
-	 ouQ7SY4t02QysCMRIwsc3Cvli6U6OYOyLAxkZWPaNs6rR6BSzK+EFOgjzsCuNcb1mk
-	 iLa0Q24Qk0dtrmGSlpQ0ezEsY9QySiqVvrvKN0H6QZhsqbgYns7JovokeAGHke5K+x
-	 Zav3hP4vtBFKiBC/8WC14H+TB4So04Mywvw8c42k4LRs2OOdkaFK/V7rBu8Y6Wxg8K
-	 unbMZg831bE/l0fBQX+VI6xlGGfX60RaxpFqjXeQdtQ1HKkLeBAbCNVvp5TygqfUhY
-	 Tp3ICMpAeku0Q==
-From: Nathan Chancellor <nathan@kernel.org>
-Date: Mon, 09 Sep 2024 09:24:25 -0700
-Subject: [PATCH net-next] can: rockchip_canfd: Use div_s64() in
- rkcanfd_timestamp_init()
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="yPSOt+fA"
+Received: by mail-pl1-f181.google.com with SMTP id d9443c01a7336-2056aa5cefcso1785ad.0
+        for <llvm@lists.linux.dev>; Mon, 09 Sep 2024 09:37:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1725899876; x=1726504676; darn=lists.linux.dev;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=JOOFqUYicDKJWHormB2k8+g8FNmBdRSZdqhfGZx3tz0=;
+        b=yPSOt+fAqoZZMkyWrURSLwAEJrlOYQ7otHkinZZpvj0EmtRYDcTNIMKe6RNjyK9JHP
+         nzK94qJERjnvK+BEyjRsaHIrWLbsy/uuQ1Tg81lveEkzvnH5eXwZ1h/AutFrIHXlXUyF
+         s+X0othiLMxudNCvVDBzQJt0wuJjDErL3gaopi+eeByRHIyJ3RYNGf6dd6ofS2tJLYse
+         pXvC2Or/3VmZ9xQbwhsXU4gqV78oNedSght1MCR+/JSgW940NWRYZaa8oJ8DsUHaxsw0
+         2Tq3BFJqoBj/5rd5Q2O4g9bne76ykYmKUkcRUI6VazuYc7qad31tUfT9jXhy0CFeFN8Z
+         DyCg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1725899876; x=1726504676;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=JOOFqUYicDKJWHormB2k8+g8FNmBdRSZdqhfGZx3tz0=;
+        b=Nwj5VGlC+RtBeVJrq9Ky+yx7FyogewN5+QSFYkw4bQOh8WqRHw/VoWu4Y1rz2H8aKU
+         o2UtbWu02o0spBya2PAETZCl0uufA2mJXKsKijaU/XPUsM79LAf7v86+HcDHSpq4ox56
+         AvFN8rtjQWCyXWpdRRLrfdYlbsnFGBSTGjWNDncKhH5078UDgsD7Jdb9Yy5BiUSTOrF4
+         Kzmme9v4oZraCEbiGUTyYh5j66F2lBkE8Safo5WVtL0JxffHPUUQu2NzhTSU86nLQb2C
+         NbFjhSGK7dZjBDkiIQHqr75ntb/poMvxVMh0e5NEJsNBJZQz1xeatrSeINjNNjjiv8pZ
+         x8BQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVzaJXyrNjUNf+rsMy0E5F0vo//0ySWcmfiykUvo8PmYeqqRwU6LccsTdF76uQ1uD08p+Ct@lists.linux.dev
+X-Gm-Message-State: AOJu0YzCp/rq8gLR7UodswDkLoiPcD8qDAWzLRaAB7kb7dpb6uzl3vsH
+	lmr+8xlytHUcPvBf6kQIFvua7LL/NXOYudIVtrUC6THNqY+RklCr687Y00GNeg==
+X-Google-Smtp-Source: AGHT+IGt/zGxoLNJ1MV7IGrwUFYrUiSbdM2BjUXKwF/MUTbDmVMYeXNMDIi6QqLiLEXzyPirUfM6Kg==
+X-Received: by 2002:a17:902:c401:b0:1eb:3f4f:6f02 with SMTP id d9443c01a7336-2070a839333mr5222855ad.12.1725899875805;
+        Mon, 09 Sep 2024 09:37:55 -0700 (PDT)
+Received: from google.com (176.13.105.34.bc.googleusercontent.com. [34.105.13.176])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2dadc1104a3sm6839200a91.45.2024.09.09.09.37.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 09 Sep 2024 09:37:54 -0700 (PDT)
+Date: Mon, 9 Sep 2024 09:37:49 -0700
+From: Vipin Sharma <vipinsh@google.com>
+To: kernel test robot <lkp@intel.com>
+Cc: seanjc@google.com, pbonzini@redhat.com, dmatlack@google.com,
+	llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	kvm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 2/2] KVM: x86/mmu: Recover TDP MMU NX huge pages using
+ MMU read lock
+Message-ID: <20240909163749.GA2168505.vipinsh@google.com>
+References: <20240906204515.3276696-3-vipinsh@google.com>
+ <202409090949.xuOxMsJ2-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20240909-rockchip-canfd-clang-div-libcall-v1-1-c6037ea0bb2b@kernel.org>
-X-B4-Tracking: v=1; b=H4sIADgh32YC/x2NQQqDMBAAvyJ7diFqKKRfKR6SzaYuDaskIoL4d
- 0OPA8PMBZWLcIV3d0HhQ6qs2mDoO6DF65dRYmMYzWiNMw7LSj9aZEPymiJSbhJGOTBLIJ8zBu/
- Sa3B2siFBy2yFk5z/xQeUd1Q+d5jv+wFsvFrEfAAAAA==
-X-Change-ID: 20240909-rockchip-canfd-clang-div-libcall-ba9f619434bf
-To: Marc Kleine-Budde <mkl@pengutronix.de>, kernel@pengutronix.de, 
- Vincent Mailhol <mailhol.vincent@wanadoo.fr>, 
- "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
- Heiko Stuebner <heiko@sntech.de>
-Cc: linux-can@vger.kernel.org, netdev@vger.kernel.org, 
- linux-arm-kernel@lists.infradead.org, linux-rockchip@lists.infradead.org, 
- llvm@lists.linux.dev, patches@lists.linux.dev, 
- Nathan Chancellor <nathan@kernel.org>
-X-Mailer: b4 0.15-dev
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1692; i=nathan@kernel.org;
- h=from:subject:message-id; bh=Z9KQaBMYa5sFKDVDG6vipFDugxmhAcXo+x7jIXMTm4k=;
- b=owGbwMvMwCUmm602sfCA1DTG02pJDGn3FW0upoUKl7aqfFFYZn1Cp+1punwQ75573+3fRvc8n
- lCamsbRUcrCIMbFICumyFL9WPW4oeGcs4w3Tk2CmcPKBDKEgYtTACYS4cHwP/MzDy/DIpdboSzX
- v/7dbybqzzFHbs7kO2aK7/8Ia4btb2X4n/BILDIvXeTg6i9OOXuMgt9enXpGUawva6FZ2/kE4QJ
- dZgA=
-X-Developer-Key: i=nathan@kernel.org; a=openpgp;
- fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <202409090949.xuOxMsJ2-lkp@intel.com>
 
-When building with clang for a 32-bit target, such as arm, a libcall is
-generated when dividing the result of clocksource_cyc2ns(), which
-returns a signed 64-bit integer:
+On 2024-09-09 07:29:55, kernel test robot wrote:
+> Hi Vipin,
+> 
+> kernel test robot noticed the following build errors:
+> 
+> [auto build test ERROR on 332d2c1d713e232e163386c35a3ba0c1b90df83f]
+> 
+> url:    https://github.com/intel-lab-lkp/linux/commits/Vipin-Sharma/KVM-x86-mmu-Track-TDP-MMU-NX-huge-pages-separately/20240907-044800
+> base:   332d2c1d713e232e163386c35a3ba0c1b90df83f
+> patch link:    https://lore.kernel.org/r/20240906204515.3276696-3-vipinsh%40google.com
+> patch subject: [PATCH v3 2/2] KVM: x86/mmu: Recover TDP MMU NX huge pages using MMU read lock
+> config: i386-randconfig-005-20240908 (https://download.01.org/0day-ci/archive/20240909/202409090949.xuOxMsJ2-lkp@intel.com/config)
+> compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
+> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240909/202409090949.xuOxMsJ2-lkp@intel.com/reproduce)
+> 
+> If you fix the issue in a separate patch/commit (i.e. not just a new version of
+> the same patch/commit), kindly add following tags
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Closes: https://lore.kernel.org/oe-kbuild-all/202409090949.xuOxMsJ2-lkp@intel.com/
+> 
+> All errors (new ones prefixed by >>):
+> 
+> >> ld.lld: error: undefined symbol: kvm_tdp_mmu_zap_possible_nx_huge_page
+>    >>> referenced by mmu.c:7415 (arch/x86/kvm/mmu/mmu.c:7415)
+>    >>>               arch/x86/kvm/mmu/mmu.o:(kvm_recover_nx_huge_pages) in archive vmlinux.a
 
-  ERROR: modpost: "__aeabi_ldivmod" [drivers/net/can/rockchip/rockchip_canfd.ko] undefined!
+I missed it because i386 command I used was from config given in v1 of
+the series by lkp bot. That command was just for build kvm directory and
+ldd didn't get invoke.
 
-Use div_s64() to avoid generating the libcall.
+I will send out a new version after collecting feedback on this version
+of the series. I am thinking of below change to fix the error.
 
-Fixes: 4e1a18bab124 ("can: rockchip_canfd: add hardware timestamping support")
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
----
-This does not happen with GCC, likely because it implements
-optimizations for division by a constant that clang does not implement.
----
- drivers/net/can/rockchip/rockchip_canfd-timestamp.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+diff --git a/arch/x86/kvm/mmu/tdp_mmu.h b/arch/x86/kvm/mmu/tdp_mmu.h
+index ed4bdceb9aec..37620496f64a 100644
+--- a/arch/x86/kvm/mmu/tdp_mmu.h
++++ b/arch/x86/kvm/mmu/tdp_mmu.h
+@@ -20,8 +20,6 @@ __must_check static inline bool kvm_tdp_mmu_get_root(struct kvm_mmu_page *root)
+ void kvm_tdp_mmu_put_root(struct kvm *kvm, struct kvm_mmu_page *root);
 
-diff --git a/drivers/net/can/rockchip/rockchip_canfd-timestamp.c b/drivers/net/can/rockchip/rockchip_canfd-timestamp.c
-index 81cccc5fd8384ee1fec919077db48632f0fe7cc2..4ca01d385ffffdeec964b7fd954d8ba3ba3a1381 100644
---- a/drivers/net/can/rockchip/rockchip_canfd-timestamp.c
-+++ b/drivers/net/can/rockchip/rockchip_canfd-timestamp.c
-@@ -71,7 +71,7 @@ void rkcanfd_timestamp_init(struct rkcanfd_priv *priv)
- 
- 	max_cycles = div_u64(ULLONG_MAX, cc->mult);
- 	max_cycles = min(max_cycles, cc->mask);
--	work_delay_ns = clocksource_cyc2ns(max_cycles, cc->mult, cc->shift) / 3;
-+	work_delay_ns = div_s64(clocksource_cyc2ns(max_cycles, cc->mult, cc->shift), 3);
- 	priv->work_delay_jiffies = nsecs_to_jiffies(work_delay_ns);
- 	INIT_DELAYED_WORK(&priv->timestamp, rkcanfd_timestamp_work);
- 
+ bool kvm_tdp_mmu_zap_leafs(struct kvm *kvm, gfn_t start, gfn_t end, bool flush);
+-bool kvm_tdp_mmu_zap_possible_nx_huge_page(struct kvm *kvm,
+-                                          struct kvm_mmu_page *sp);
+ void kvm_tdp_mmu_zap_all(struct kvm *kvm);
+ void kvm_tdp_mmu_invalidate_all_roots(struct kvm *kvm);
+ void kvm_tdp_mmu_zap_invalidated_roots(struct kvm *kvm);
+@@ -73,8 +71,17 @@ void kvm_tdp_mmu_recover_nx_huge_pages(struct kvm *kvm);
 
----
-base-commit: bfba7bc8b7c2c100b76edb3a646fdce256392129
-change-id: 20240909-rockchip-canfd-clang-div-libcall-ba9f619434bf
+ #ifdef CONFIG_X86_64
+ static inline bool is_tdp_mmu_page(struct kvm_mmu_page *sp) { return sp->tdp_mmu_page; }
++bool kvm_tdp_mmu_zap_possible_nx_huge_page(struct kvm *kvm,
++                                          struct kvm_mmu_page *sp);
+ #else
+ static inline bool is_tdp_mmu_page(struct kvm_mmu_page *sp) { return false; }
++static bool kvm_tdp_mmu_zap_possible_nx_huge_page(struct kvm *kvm,
++                                          struct kvm_mmu_page *sp)
++{
++       WARN_ONCE(1, "TDP MMU not supported in 32bit builds");
++       return false;
++}
++
+ #endif
 
-Best regards,
--- 
-Nathan Chancellor <nathan@kernel.org>
+ #endif /* __KVM_X86_MMU_TDP_MMU_H */
 
+
+> 
+> -- 
+> 0-DAY CI Kernel Test Service
+> https://github.com/intel/lkp-tests/wiki
