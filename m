@@ -1,123 +1,104 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F25F1BC39
-	for <llvm@lists.linux.dev>; Mon,  9 Sep 2024 15:41:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 05CF81CF9B
+	for <llvm@lists.linux.dev>; Mon,  9 Sep 2024 15:43:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725896471; cv=none; b=KZqRi7llt0PNf9ffaWAhb87zABUPftz/kmXLK1E0W4zWVCq2WgY/Icq0J3e8B9sJlREU96hSnEx9I5mwr5/DL1LLdxaeh1yMpOk8PH+1kkDYOjzv1AhK3lFjDG9XFJHaqO1DcXXWr8oUXYHtLWMDAWqxpTXSlAzzOyIyWkQEqQI=
+	t=1725896597; cv=none; b=PyI4pnLBwzVAtHrTPrVzyiyVR7w1uXjhgdvl6uXm8YuphfeZ9ezxKQIOWmoUjVi7uj4ghJYBKSy1orL86723752sAmcpQkdHfy3hvq37Pd1B+8pqpqFr1XupQZCqs9uJqBTS/ugFgK3UJ+VCmXQ9Q9sxBGQLbxMmUZhN7iKEWy0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725896471; c=relaxed/simple;
-	bh=7vzxP9BH5QXEj6ke5NOg3e9aAiXGq0Kzq6rOQrQSMZw=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Z0TJ1AzG8kScjOHmIeLdbNLJYdjfziFKQxQuviQdb2vamak8jWdHFJTDL1THA2MUwOLX3nT9d0ky9mhR6P6dy43lJ9HbFEnZQYeBlQkPHd7bL0Gg8Twxl3Ja+2MYUij1Yf/YjUjlXC7Vcb/R85Tki0ERGi92+Yv1j3gababNU5o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=RQqPcnOu; arc=none smtp.client-ip=192.198.163.17
+	s=arc-20240116; t=1725896597; c=relaxed/simple;
+	bh=3jZYt1HJ9TnQchV5YgtJvyqEPqxfwVI2DDnFVPVlXlY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=MWMuzv6RenZnOpxxZ9bR5hsxIToc7k+NnzViRW+76D4oSl7PTLpf7p+uTubEweTApkZz0ID10UQxKxHV67BpsXl/Nkpz2LG8fy7zG78g6QfKP9oNNlTWBwUysA/E36LV/Y11gwNfwWncqaUXUhQRaNdH/wYzQJkIySI9tFJyTUc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=a1ecd7dS; arc=none smtp.client-ip=192.198.163.19
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="RQqPcnOu"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="a1ecd7dS"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1725896470; x=1757432470;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=7vzxP9BH5QXEj6ke5NOg3e9aAiXGq0Kzq6rOQrQSMZw=;
-  b=RQqPcnOui7kvrBYtpBxVNyYIjJ1GTyIXhUvYVW88CfQtu86NAYC+Xk5B
-   /wgdLhEBy+GNxJSQdezREQkdu/Gtwn1dOhH48a5rwcKVNgybzNLacjIa5
-   uvCrvaJRkHBHNMAWIu/AdcfUAd33xYrr1Eqn9hBH2B3t49ZOtjsZ5n62U
-   M2FJpFv7uV+N6xBIKI/4RicJZ/XRzobtZHQbkAt1gxqXKck9VaRyLioFV
-   zyajj/8P9wg15HakS8QyarA28XT3izBh6kIORNMvHNUnazgPhnt7hyphm
-   SMycdXUifxkxx/oVbc8RWFZvMOrnER/3YWEylXInJEYHkZx6lDDvaspWk
-   g==;
-X-CSE-ConnectionGUID: H72s06drR/SeJwUyEZ1HPg==
-X-CSE-MsgGUID: HWrgNOzMSPaVfM5MgOrdfg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11190"; a="24476479"
+  t=1725896596; x=1757432596;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=3jZYt1HJ9TnQchV5YgtJvyqEPqxfwVI2DDnFVPVlXlY=;
+  b=a1ecd7dS/K2/BIz8s83gOaXeMTUY9WooYEe6CYuU9ft0cJ5u5taH30PS
+   aBujlB7WWf4TGlT+6C2PP0ydnCDSHsl9jhmhYC4jAQaTXBWP+iPMUve6I
+   QEtd4lDdrasabEwle/JU0qWf9kj815BG1qQbtgTh8cwq8uMVcCiOSW2Uv
+   h9kAaR2EyzWSpwsbOFkeCEAWt987eBpUZVbKni523EYMDjdUjKrrLVdu0
+   aJUk4ssTpZiHOcKb2odgLUDTvwGpmCJTh2t6GZo72HJQzWyLscy2kDceX
+   x2YkVBkPWTpBMt5LpBi5+N/anVZjXfOfVaaYsAUmWaAxJmzecBe6/a426
+   Q==;
+X-CSE-ConnectionGUID: MSEm+3wIR42IONbex9rfhA==
+X-CSE-MsgGUID: nJcd5oHKT5CEQ3yLz+BlsQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11190"; a="24148850"
 X-IronPort-AV: E=Sophos;i="6.10,214,1719903600"; 
-   d="scan'208";a="24476479"
-Received: from orviesa010.jf.intel.com ([10.64.159.150])
-  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Sep 2024 08:41:09 -0700
-X-CSE-ConnectionGUID: TeqJXNiRSZesjnMlHYEQ8A==
-X-CSE-MsgGUID: dhkNtVyaR1Gkke20Q2VbRw==
+   d="scan'208";a="24148850"
+Received: from orviesa001.jf.intel.com ([10.64.159.141])
+  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Sep 2024 08:43:15 -0700
+X-CSE-ConnectionGUID: eztMQyI+TB+hpZltWlWZ+A==
+X-CSE-MsgGUID: Cc3guyExTRSw9dCcKpV/lQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.10,214,1719903600"; 
-   d="scan'208";a="66502268"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orviesa010.jf.intel.com with ESMTP; 09 Sep 2024 08:41:05 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-	id 1876C18D; Mon, 09 Sep 2024 18:41:04 +0300 (EEST)
+   d="scan'208";a="104160936"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orviesa001.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Sep 2024 08:43:12 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.98)
+	(envelope-from <andriy.shevchenko@linux.intel.com>)
+	id 1sngXi-00000006rJ6-1c1S;
+	Mon, 09 Sep 2024 18:43:06 +0300
+Date: Mon, 9 Sep 2024 18:43:06 +0300
 From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: Pablo Neira Ayuso <pablo@netfilter.org>,
-	Felix Huettner <felix.huettner@mail.schwarz>,
-	netfilter-devel@vger.kernel.org,
-	coreteam@netfilter.org,
-	netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev
-Cc: Jozsef Kadlecsik <kadlec@netfilter.org>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
+To: Dave Hansen <dave.hansen@intel.com>
+Cc: Thomas Gleixner <tglx@linutronix.de>, linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev, Ingo Molnar <mingo@redhat.com>,
+	Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+	"H. Peter Anvin" <hpa@zytor.com>,
 	Nathan Chancellor <nathan@kernel.org>,
 	Nick Desaulniers <ndesaulniers@google.com>,
 	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Subject: [PATCH net-next v2 1/1] netfilter: conntrack: Guard possible unused functions
-Date: Mon,  9 Sep 2024 18:39:56 +0300
-Message-ID: <20240909154043.1381269-2-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.43.0.rc1.1336.g36b5255a03ac
+	Justin Stitt <justinstitt@google.com>
+Subject: Re: [PATCH v2 1/1] x86/cpu: Mark flag_is_changeable_p() with
+ __maybe_unused
+Message-ID: <Zt8XivpWU9J-TyPj@smile.fi.intel.com>
+References: <20240905170308.260067-1-andriy.shevchenko@linux.intel.com>
+ <e08e8add-7e4b-4a87-adb4-b6f843752bec@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <e08e8add-7e4b-4a87-adb4-b6f843752bec@intel.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 
-Some of the functions may be unused, it prevents kernel builds
-with clang, `make W=1` and CONFIG_WERROR=y:
+On Mon, Sep 09, 2024 at 08:35:43AM -0700, Dave Hansen wrote:
+> On 9/5/24 10:02, Andy Shevchenko wrote:
 
-net/netfilter/nf_conntrack_netlink.c:657:22: error: unused function 'ctnetlink_acct_size' [-Werror,-Wunused-function]
-  657 | static inline size_t ctnetlink_acct_size(const struct nf_conn *ct)
-      |                      ^~~~~~~~~~~~~~~~~~~
-net/netfilter/nf_conntrack_netlink.c:667:19: error: unused function 'ctnetlink_secctx_size' [-Werror,-Wunused-function]
-  667 | static inline int ctnetlink_secctx_size(const struct nf_conn *ct)
-      |                   ^~~~~~~~~~~~~~~~~~~~~
-net/netfilter/nf_conntrack_netlink.c:683:22: error: unused function 'ctnetlink_timestamp_size' [-Werror,-Wunused-function]
-  683 | static inline size_t ctnetlink_timestamp_size(const struct nf_conn *ct)
-      |                      ^~~~~~~~~~~~~~~~~~~~~~~~
+...
 
-Fix this by guarding possible unused functions with ifdeffery.
+> > arch/x86/kernel/cpu/common.c:351:19: error: unused function 'flag_is_changeable_p' [-Werror,-Wunused-function]
+> >   351 | static inline int flag_is_changeable_p(u32 flag)
+> >       |                   ^~~~~~~~~~~~~~~~~~~~
+> > 
+> > Fix this by marking it with __maybe_unused (both cases for the sake of
+> > symmetry).
+> > 
+> > See also commit 6863f5643dd7 ("kbuild: allow Clang to find unused static
+> > inline functions for W=1 build").
+> 
+> Maybe something like this:
+> 
+> 	http://hansen.beer/~dave/intel/onelessifdef.patch
 
-See also commit 6863f5643dd7 ("kbuild: allow Clang to find unused static
-inline functions for W=1 build").
+Fine to me as long as the issue is solved :-) Please, submit it formally I may
+test it.
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
-v2: fixed typo, dropped Fixes (Simon), optimised by reusing existing ifdeffery
- net/netfilter/nf_conntrack_netlink.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/net/netfilter/nf_conntrack_netlink.c b/net/netfilter/nf_conntrack_netlink.c
-index 4cbf71d0786b..39430f333f05 100644
---- a/net/netfilter/nf_conntrack_netlink.c
-+++ b/net/netfilter/nf_conntrack_netlink.c
-@@ -652,7 +652,6 @@ static size_t ctnetlink_proto_size(const struct nf_conn *ct)
- 
- 	return len + len4;
- }
--#endif
- 
- static inline size_t ctnetlink_acct_size(const struct nf_conn *ct)
- {
-@@ -690,6 +689,7 @@ static inline size_t ctnetlink_timestamp_size(const struct nf_conn *ct)
- 	return 0;
- #endif
- }
-+#endif
- 
- #ifdef CONFIG_NF_CONNTRACK_EVENTS
- static size_t ctnetlink_nlmsg_size(const struct nf_conn *ct)
 -- 
-2.43.0.rc1.1336.g36b5255a03ac
+With Best Regards,
+Andy Shevchenko
+
 
