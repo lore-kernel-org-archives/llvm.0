@@ -1,174 +1,199 @@
-Received: from fout8-smtp.messagingengine.com (fout8-smtp.messagingengine.com [103.168.172.151])
+Received: from smtpbguseast1.qq.com (smtpbguseast1.qq.com [54.204.34.129])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE0F1AD2D
-	for <llvm@lists.linux.dev>; Mon,  9 Sep 2024 02:03:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.151
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F51F14F135
+	for <llvm@lists.linux.dev>; Mon,  9 Sep 2024 02:58:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=54.204.34.129
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725847423; cv=none; b=K++CqWaoKgwhPewL7DTAScqb0qR9LeBR0CwCeBA0E6rmDg0CYqjHSe2o6RY/FZJqEeyld9qSVZlVdqrY/ciH0DclYbY2hYMKizF15fsYd21KEtF6DTshDFvKvojl3rksgDb3v95bE2qBTVgxm0sb/kkZNatgIsVWmDH0DxGj7tA=
+	t=1725850699; cv=none; b=JDlcO710Pp9KTDBlBhvaQxLKhLdroLVdglAPvyiqBjYRpf/ctYY6tkWFOTdfrRa3hxOd4bDnTboT+ms2juHReOV90U0rPJiNDCztZqoSrfy4Irzs90VoNoCiddv2ihRrDa/2uMJACpbB4ph5g++pXA6lVihlaImdPR7X0KJJmrk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725847423; c=relaxed/simple;
-	bh=iq3nvBmfllRTiJyTA94ksSdjaG4lbdwMfupgOFpV+nk=;
-	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
-	 Subject:Content-Type; b=QspLAUOXl2hRilSQCmnoKoX9K+egiv5UrL3GSeey4urTkDnWQ8/6Zsbs4Ri3UYEBo1qEWCtO2M1Vz8YQc5bg4WSIAKYBt1Gn+rGDSYoiD2+4qFGuRbHEEvEz81x0SAJPAu5wdjwxRsavo01Pkrhp1FgNz68aD+7yTWVURJjaMco=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=flygoat.com; spf=pass smtp.mailfrom=flygoat.com; dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b=Bk5lpu29; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=AiMcD2ed; arc=none smtp.client-ip=103.168.172.151
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=flygoat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flygoat.com
+	s=arc-20240116; t=1725850699; c=relaxed/simple;
+	bh=61I2ChZ6MoldBG9x3NThRnCHIYyf1KC7SPeNFXUUbJA=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=GcPRDoeSDnNp7XYfyMFP1uvDUXuWYlkinXUeu2+IU9+g1xc/Ie8GNEmZUp/1PiKDF2kvEinl912pQ4TGwVIwLYu4Z03pjziDCgFrVOvoN/gIxHf25PxHwpmJiZX6LCs6nXEPioNnSWggzDouZDR8L1PBqJnS6a+jEIaUfrE4umI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com; spf=pass smtp.mailfrom=uniontech.com; dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b=gvaQqebc; arc=none smtp.client-ip=54.204.34.129
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=uniontech.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b="Bk5lpu29";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="AiMcD2ed"
-Received: from phl-compute-09.internal (phl-compute-09.phl.internal [10.202.2.49])
-	by mailfout.phl.internal (Postfix) with ESMTP id AA4701380204;
-	Sun,  8 Sep 2024 22:03:40 -0400 (EDT)
-Received: from phl-imap-12 ([10.202.2.86])
-  by phl-compute-09.internal (MEProxy); Sun, 08 Sep 2024 22:03:40 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
-	cc:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm2; t=1725847420;
-	 x=1725933820; bh=q7tWMu/BR29AlMFdHva1ZVq5cMfk2jme775waWAHW4I=; b=
-	Bk5lpu29vUgR/3Yn+f0b5v7DMMh0IzJ/nuAymzxv9M6NlzFcmgIQSk4PHOfdnGI0
-	5YDNexb9uJJl0C9xYm3R0A1Own2HWMHuacJRBynPJ/vc1pxEBB6YWDv1hERcSNFu
-	YD3RJmNUAHLOMeuJx/mYmLdI05rqDslLRSrZNN73CaEW7Jqchs0qvzNXOzVXJRYc
-	HFMtM12CTC2svJYGvroc3YHDCRsIFWwHw036986plVOpUFBH075vrz9stlx6uI9Z
-	Ye30mY4T2D4Ahf79p9IbuQT9PB4/kXjtyeX9H2wgcxHpiqA5C1E6tp6ZOwBVcoZT
-	h0p+uSjlwrBL0u51wAzlRA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1725847420; x=
-	1725933820; bh=q7tWMu/BR29AlMFdHva1ZVq5cMfk2jme775waWAHW4I=; b=A
-	iMcD2edf/MFm2reD7Pe+RDelZuG6Af9igc3mlePjx6rRBlIP720RhVqIrLm5goo2
-	0sDpFNUPjTcPk6jvO+rHmWookXLeBF40nhmGTUVWbTbj0ppFyIBkkeQ8ZM4rJ0CO
-	OrSkoa1M69vVOwbVQO5dRRyoQKg1t4qFG9py/KOUjC7KvbTzN2Qd+NTql/atqMLo
-	zK+xRokwW36er0DVdFNWPBKEc2v2Se+kDzQ7MJ6c4PUw8GXuhnL1+4Q9m/WpN86r
-	kUp3Vf3+lQj2dKf1uzqbRMPVZ+7+UbLGAFQ6YWtVLOw21zW+HpZKbx26ggHGadsQ
-	TukFb3B2I+I0jcrcy9z5g==
-X-ME-Sender: <xms:eVfeZga7McnadKJCaQQWsb2eJcqBlYfKCjYh9WXuqj4pFtNXHIfy9A>
-    <xme:eVfeZrYhsj0Kpuysh4j38emYhQh2PihN-Pt_4hoycuAN625NgrynsstYDZRWrbSKr
-    65R7PfRgQjMqLiY4_E>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeftddrudeiiedgheeiucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdggtfgfnhhsuhgsshgtrhhisggvpdfu
-    rfetoffkrfgpnffqhgenuceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnh
-    htshculddquddttddmnecujfgurhepofggfffhvfevkfgjfhfutgfgsehtqhertdertdej
-    necuhfhrohhmpedflfhirgiguhhnucgjrghnghdfuceojhhirgiguhhnrdihrghnghesfh
-    hlhihgohgrthdrtghomheqnecuggftrfgrthhtvghrnhepjeehfeduvddtgffgvdffkeet
-    hefhlefgvdevvdekuefffeekheehgeevhfevteejnecuvehluhhsthgvrhfuihiivgeptd
-    enucfrrghrrghmpehmrghilhhfrhhomhepjhhirgiguhhnrdihrghnghesfhhlhihgohgr
-    thdrtghomhdpnhgspghrtghpthhtohepgedtpdhmohguvgepshhmthhpohhuthdprhgtph
-    htthhopegsphesrghlihgvnhekrdguvgdprhgtphhtthhopehtshgsohhgvghnugesrghl
-    phhhrgdrfhhrrghnkhgvnhdruggvpdhrtghpthhtohepmhgrrhhkrdhruhhtlhgrnhguse
-    grrhhmrdgtohhmpdhrtghpthhtoheprghnthhonhdrihhvrghnohhvsegtrghmsghrihgu
-    ghgvghhrvgihshdrtghomhdprhgtphhtthhopehnihgtohhlrghssehfjhgrshhlvgdrvg
-    hupdhrtghpthhtohepghgrrhihsehgrghrhihguhhordhnvghtpdhrtghpthhtoheprghl
-    vgigrdhgrgihnhhorhesghhmrghilhdrtghomhdprhgtphhtthhopegsohhquhhnrdhfvg
-    hnghesghhmrghilhdrtghomhdprhgtphhtthhopeifvggushhonhgrfhesghhmrghilhdr
-    tghomh
-X-ME-Proxy: <xmx:eVfeZq82Si7Ov1P0ceKc9b73LdRBt8tM9bl11ajO0H9HMSey8fBmew>
-    <xmx:eVfeZqru8dIgbxqlpz6eU85vngqVk1J42POs9tLH2koG0mcEdAphlw>
-    <xmx:eVfeZroea9p-6eaSAdAFy43eTiDrsJXCZGdRMaWD7ztowxSVvv0I9A>
-    <xmx:eVfeZoTNlV0UHz4H3XGfD6_2zkin4Y6FcnMzKZjcMDfcQ0AoycKivQ>
-    <xmx:fFfeZr5uL035KrNYQjYTCr3GGysD5Rwts1Yq1o6WsVSlM70w6h-BuAyR>
-Feedback-ID: ifd894703:Fastmail
-Received: by mailuser.phl.internal (Postfix, from userid 501)
-	id CAC1D1C20065; Sun,  8 Sep 2024 22:03:37 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
+	dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b="gvaQqebc"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=uniontech.com;
+	s=onoh2408; t=1725850638;
+	bh=0jvAXe9spnDkSUEV8dePIAYQvx00bCT7m3MR46ml5fI=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version;
+	b=gvaQqebcD8pSIsNoXprAnAoaJCKxnOH5YwKzeDzQl6DL7zSdFJNEDwoBL+SnthU4G
+	 ViWrPZTpzLg600dslrHdJ751mq7exozGI9kPmEXhOHi+qdCeOmUGbEhdI8AtQmNn8u
+	 xkPYwuaSvStrU9OmRmHLavfpkvw1Ti3wJPySquUQ=
+X-QQ-mid: bizesmtp80t1725850634tv2rc5j5
+X-QQ-Originating-IP: E6t5mxXfc7ZFPvUXzfw9HkQ6yB38DisTbd7HuGprEOo=
+Received: from localhost.localdomain ( [113.57.152.160])
+	by bizesmtp.qq.com (ESMTP) with 
+	id ; Mon, 09 Sep 2024 10:57:11 +0800 (CST)
+X-QQ-SSF: 0000000000000000000000000000000
+X-QQ-GoodBg: 1
+X-BIZMAIL-ID: 2667592176881023246
+From: WangYuli <wangyuli@uniontech.com>
+To: stable@vger.kernel.org,
+	gregkh@linuxfoundation.org,
+	sashal@kernel.org,
+	parri.andrea@gmail.com,
+	mathieu.desnoyers@efficios.com,
+	palmer@rivosinc.com,
+	wangyuli@uniontech.com
+Cc: linux-kernel@vger.kernel.org,
+	paul.walmsley@sifive.com,
+	palmer@dabbelt.com,
+	aou@eecs.berkeley.edu,
+	nathan@kernel.org,
+	ndesaulniers@google.com,
+	trix@redhat.com,
+	linux-riscv@lists.infradead.org,
+	llvm@lists.linux.dev,
+	paulmck@kernel.org,
+	mingo@redhat.com,
+	peterz@infradead.org,
+	juri.lelli@redhat.com,
+	vincent.guittot@linaro.org,
+	dietmar.eggemann@arm.com,
+	rostedt@goodmis.org,
+	bsegall@google.com,
+	mgorman@suse.de,
+	bristot@redhat.com,
+	vschneid@redhat.com,
+	brauner@kernel.org,
+	arnd@arndb.de
+Subject: [PATCH 6.6] membarrier: riscv: Add full memory barrier in switch_mm()
+Date: Mon,  9 Sep 2024 10:57:01 +0800
+Message-ID: <10F34E3A3BFBC534+20240909025701.1101397-1-wangyuli@uniontech.com>
+X-Mailer: git-send-email 2.43.4
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Date: Mon, 09 Sep 2024 03:01:45 +0100
-From: "Jiaxun Yang" <jiaxun.yang@flygoat.com>
-To: "Maciej W. Rozycki" <macro@orcam.me.uk>
-Cc: "Masahiro Yamada" <masahiroy@kernel.org>,
- "Nathan Chancellor" <nathan@kernel.org>,
- "Nicolas Schier" <nicolas@fjasle.eu>,
- "Richard Weinberger" <richard@nod.at>,
- "Anton Ivanov" <anton.ivanov@cambridgegreys.com>,
- "Johannes Berg" <johannes@sipsolutions.net>,
- "Thomas Gleixner" <tglx@linutronix.de>, "Ingo Molnar" <mingo@redhat.com>,
- "Borislav Petkov" <bp@alien8.de>,
- "Dave Hansen" <dave.hansen@linux.intel.com>, x86@kernel.org,
- "H. Peter Anvin" <hpa@zytor.com>, "Miguel Ojeda" <ojeda@kernel.org>,
- "Alex Gaynor" <alex.gaynor@gmail.com>,
- "Wedson Almeida Filho" <wedsonaf@gmail.com>,
- "Boqun Feng" <boqun.feng@gmail.com>, "Gary Guo" <gary@garyguo.net>,
- =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
- "Benno Lossin" <benno.lossin@proton.me>,
- "Andreas Hindborg" <a.hindborg@samsung.com>,
- "Alice Ryhl" <aliceryhl@google.com>,
- "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>,
- "Steven Rostedt" <rostedt@goodmis.org>,
- "Masami Hiramatsu" <mhiramat@kernel.org>,
- "Mark Rutland" <mark.rutland@arm.com>,
- "Jonathan Corbet" <corbet@lwn.net>, "Alex Shi" <alexs@kernel.org>,
- "Yanteng Si" <siyanteng@loongson.cn>,
- "Nick Desaulniers" <ndesaulniers@google.com>,
- "Bill Wendling" <morbo@google.com>,
- "Justin Stitt" <justinstitt@google.com>, linux-kbuild@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-um@lists.infradead.org,
- rust-for-linux@vger.kernel.org,
- "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
- linux-trace-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
- llvm@lists.linux.dev
-Message-Id: <035ccfe5-c368-4cd9-8e0d-34e0e355cb05@app.fastmail.com>
-In-Reply-To: <alpine.DEB.2.21.2409082138160.60835@angie.orcam.me.uk>
-References: <20240905-mips-rust-v2-0-409d66819418@flygoat.com>
- <20240905-mips-rust-v2-3-409d66819418@flygoat.com>
- <alpine.DEB.2.21.2409082138160.60835@angie.orcam.me.uk>
-Subject: Re: [PATCH v2 3/3] rust: Enable for MIPS
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:uniontech.com:qybglogicsvrgz:qybglogicsvrgz8a-1
 
+From: Andrea Parri <parri.andrea@gmail.com>
 
+[ Upstream commit d6cfd1770f20392d7009ae1fdb04733794514fa9 ]
 
-=E5=9C=A82024=E5=B9=B49=E6=9C=888=E6=97=A5=E4=B9=9D=E6=9C=88 =E4=B8=8B=E5=
-=8D=889:43=EF=BC=8CMaciej W. Rozycki=E5=86=99=E9=81=93=EF=BC=9A
-> On Thu, 5 Sep 2024, Jiaxun Yang wrote:
->
->> diff --git a/scripts/generate_rust_target.rs b/scripts/generate_rust_=
-target.rs
->> index 863720777313..bbdf8a4dd169 100644
->> --- a/scripts/generate_rust_target.rs
->> +++ b/scripts/generate_rust_target.rs
-> [...]
->> +        } else {
->> +            ts.push("arch", "mips");
->> +            cfg.get("TARGET_ISA_REV").map(|isa_rev| {
->> +                let feature =3D match isa_rev.as_str() {
->> +                    "1" =3D> ",+mips32",
->> +                    "2" =3D> ",+mips32r2",
->> +                    "5" =3D> ",+mips32r5",
->> +                    "6" =3D> ",+mips32r6",
->> +                    _ =3D> ",+mips2",
->
->  What's the consequence of using `mips2' rather than `mips1' here?  Ho=
-w=20
-> about other ISA revisions, e.g. `mips4' (that also applies to the 64BI=
-T=20
-> leg)?
+The membarrier system call requires a full memory barrier after storing
+to rq->curr, before going back to user-space.  The barrier is only
+needed when switching between processes: the barrier is implied by
+mmdrop() when switching from kernel to userspace, and it's not needed
+when switching from userspace to kernel.
 
-LLVM's mips1 backend is a little bit broken beyond repair, so I tried to=
- use mips2
-as a baseline. I should probably let HAVE_RUST depend on !CPU_R3000 to g=
-et it covered.
+Rely on the feature/mechanism ARCH_HAS_MEMBARRIER_CALLBACKS and on the
+primitive membarrier_arch_switch_mm(), already adopted by the PowerPC
+architecture, to insert the required barrier.
 
-We have no good way to tell ISA reversion prior to R1 just from Kconfig =
-TARGET_ISA_REV,
-valid numbers for TARGET_ISA_REV are only 1, 2, 5, 6 from Kconfig.
+Fixes: fab957c11efe2f ("RISC-V: Atomic and Locking Code")
+Signed-off-by: Andrea Parri <parri.andrea@gmail.com>
+Reviewed-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Link: https://lore.kernel.org/r/20240131144936.29190-2-parri.andrea@gmail.com
+Signed-off-by: Palmer Dabbelt <palmer@rivosinc.com>
+Signed-off-by: WangYuli <wangyuli@uniontech.com>
+---
+ MAINTAINERS                         |  2 +-
+ arch/riscv/Kconfig                  |  1 +
+ arch/riscv/include/asm/membarrier.h | 31 +++++++++++++++++++++++++++++
+ arch/riscv/mm/context.c             |  2 ++
+ kernel/sched/core.c                 |  5 +++--
+ 5 files changed, 38 insertions(+), 3 deletions(-)
+ create mode 100644 arch/riscv/include/asm/membarrier.h
 
-Given that mips 2 and 3 binaries (Rust object files) can link run flawle=
-ssly on all pre-R6
-(despite R3000) hardware with matching bitness, they were chosen as fall=
-back here.
+diff --git a/MAINTAINERS b/MAINTAINERS
+index f09415b2b3c5..ae4c0cec5073 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -13702,7 +13702,7 @@ M:	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+ M:	"Paul E. McKenney" <paulmck@kernel.org>
+ L:	linux-kernel@vger.kernel.org
+ S:	Supported
+-F:	arch/powerpc/include/asm/membarrier.h
++F:	arch/*/include/asm/membarrier.h
+ F:	include/uapi/linux/membarrier.h
+ F:	kernel/sched/membarrier.c
+ 
+diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
+index c785a0200573..1df4afccc381 100644
+--- a/arch/riscv/Kconfig
++++ b/arch/riscv/Kconfig
+@@ -27,6 +27,7 @@ config RISCV
+ 	select ARCH_HAS_GCOV_PROFILE_ALL
+ 	select ARCH_HAS_GIGANTIC_PAGE
+ 	select ARCH_HAS_KCOV
++	select ARCH_HAS_MEMBARRIER_CALLBACKS
+ 	select ARCH_HAS_MMIOWB
+ 	select ARCH_HAS_NON_OVERLAPPING_ADDRESS_SPACE
+ 	select ARCH_HAS_PMEM_API
+diff --git a/arch/riscv/include/asm/membarrier.h b/arch/riscv/include/asm/membarrier.h
+new file mode 100644
+index 000000000000..6c016ebb5020
+--- /dev/null
++++ b/arch/riscv/include/asm/membarrier.h
+@@ -0,0 +1,31 @@
++/* SPDX-License-Identifier: GPL-2.0-only */
++#ifndef _ASM_RISCV_MEMBARRIER_H
++#define _ASM_RISCV_MEMBARRIER_H
++
++static inline void membarrier_arch_switch_mm(struct mm_struct *prev,
++					     struct mm_struct *next,
++					     struct task_struct *tsk)
++{
++	/*
++	 * Only need the full barrier when switching between processes.
++	 * Barrier when switching from kernel to userspace is not
++	 * required here, given that it is implied by mmdrop(). Barrier
++	 * when switching from userspace to kernel is not needed after
++	 * store to rq->curr.
++	 */
++	if (IS_ENABLED(CONFIG_SMP) &&
++	    likely(!(atomic_read(&next->membarrier_state) &
++		     (MEMBARRIER_STATE_PRIVATE_EXPEDITED |
++		      MEMBARRIER_STATE_GLOBAL_EXPEDITED)) || !prev))
++		return;
++
++	/*
++	 * The membarrier system call requires a full memory barrier
++	 * after storing to rq->curr, before going back to user-space.
++	 * Matches a full barrier in the proximity of the membarrier
++	 * system call entry.
++	 */
++	smp_mb();
++}
++
++#endif /* _ASM_RISCV_MEMBARRIER_H */
+diff --git a/arch/riscv/mm/context.c b/arch/riscv/mm/context.c
+index 217fd4de6134..ba8eb3944687 100644
+--- a/arch/riscv/mm/context.c
++++ b/arch/riscv/mm/context.c
+@@ -323,6 +323,8 @@ void switch_mm(struct mm_struct *prev, struct mm_struct *next,
+ 	if (unlikely(prev == next))
+ 		return;
+ 
++	membarrier_arch_switch_mm(prev, next, task);
++
+ 	/*
+ 	 * Mark the current MM context as inactive, and the next as
+ 	 * active.  This is at least used by the icache flushing
+diff --git a/kernel/sched/core.c b/kernel/sched/core.c
+index 97571d390f18..9b406d988654 100644
+--- a/kernel/sched/core.c
++++ b/kernel/sched/core.c
+@@ -6679,8 +6679,9 @@ static void __sched notrace __schedule(unsigned int sched_mode)
+ 		 *
+ 		 * Here are the schemes providing that barrier on the
+ 		 * various architectures:
+-		 * - mm ? switch_mm() : mmdrop() for x86, s390, sparc, PowerPC.
+-		 *   switch_mm() rely on membarrier_arch_switch_mm() on PowerPC.
++		 * - mm ? switch_mm() : mmdrop() for x86, s390, sparc, PowerPC,
++		 *   RISC-V.  switch_mm() relies on membarrier_arch_switch_mm()
++		 *   on PowerPC and on RISC-V.
+ 		 * - finish_lock_switch() for weakly-ordered
+ 		 *   architectures where spin_unlock is a full barrier,
+ 		 * - switch_to() for arm64 (weakly-ordered, spin_unlock
+-- 
+2.43.4
 
-Thanks
->
->   Maciej
-
---=20
-- Jiaxun
