@@ -1,111 +1,113 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A8700191F9B
-	for <llvm@lists.linux.dev>; Tue, 10 Sep 2024 16:01:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
+Received: from angie.orcam.me.uk (angie.orcam.me.uk [78.133.224.34])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2FDA1199FD6
+	for <llvm@lists.linux.dev>; Tue, 10 Sep 2024 16:03:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=78.133.224.34
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725984110; cv=none; b=Gowg37MUuOnvc+OA7stu55EyRL74tfvRLUsXWAuDY8kGSv1v0BbJMuLCNHZhflZpjnEpPXcEYTcWeGTM6gcJpLmDpAiLxYdGmDWGQFpZFCnXgiBTVgRsIHMloa/bKMLJdMJnQv3LTGuRVQJmGJzlcsThR91lXnYSeyGhw/26pas=
+	t=1725984224; cv=none; b=WuyvIIh4JAYF7y/O4h6lDYZ6OB8u/B9uhzEiAWhVekkRajAa1LnHgZsTUM8dmur72dTjts5ZwJj8usUh/kZEw71xVBr5oGg1xNbVDAHFCRhtHzjrenvlbbs8NE9wPwJFyz3Xv+3221Zg/QiNjMUgcnoHLJkaEUj0QzbRv/KVwmU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725984110; c=relaxed/simple;
-	bh=MQgPafDHjLHaX5gKO9KL1IlRjgS9muJNkIylVhQgN5I=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=gN3PccaQ5/b10QXAq6Tk2lXN8jwMCdZG6iUK+NzmV9jKvuHJEbQzHmmT4dhE0M/Q1+tFq7GXVHbqatl2HNnhasOa8CR0BOeNLhFFPY4/JEgmUuD1CycsMSTcKQIZuF7czZHftNOlfbC1SDkRDKd3K1+CzkhqDFfAPee5tp450P8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=HlRwcI7y; arc=none smtp.client-ip=192.198.163.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="HlRwcI7y"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1725984108; x=1757520108;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=MQgPafDHjLHaX5gKO9KL1IlRjgS9muJNkIylVhQgN5I=;
-  b=HlRwcI7yw1YKZbvzgX1Tj0eZMmyZh+Y0bpZkwTsLxliEor5ksbM0Hhu8
-   nXQLmkM8h40vxqvhFmEDn9nqXDc/u/+sF4LOBP/BvSSqd61yOA5ShWYCc
-   yadIhI3/mW4wxgwa29Yl1vUss4tjAl/bazGFAwPBeFHNmv8PhaG8VRgeB
-   jKY5ZX9a7o5k+frOiyD+0mMhFR9Q8bUpcmUp8gGW9SqkV1W3Rj/ZQ29Qa
-   DpRgtQkoyLhuPAZQADKA3rxwtfH/WM4doiHbiVhSxrZvxx7lKmbRjIvQm
-   r8bmeV8NMTH6BwrCOFEq9YESaIqTR5MGfIL8/xlwlAyaGSsA19MmXu0cm
-   Q==;
-X-CSE-ConnectionGUID: 5in4gK6IRvmc3NkkeVxCMQ==
-X-CSE-MsgGUID: tjUB0WgYRsqVfESp9b9/cA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11191"; a="35409393"
-X-IronPort-AV: E=Sophos;i="6.10,217,1719903600"; 
-   d="scan'208";a="35409393"
-Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Sep 2024 09:01:48 -0700
-X-CSE-ConnectionGUID: BUvuTxknQXeTFlj1hWLUJQ==
-X-CSE-MsgGUID: VXRhtHmDSM2DsFvkPdW7LA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.10,217,1719903600"; 
-   d="scan'208";a="97898098"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmviesa001.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Sep 2024 09:01:45 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.98)
-	(envelope-from <andriy.shevchenko@linux.intel.com>)
-	id 1so3JG-00000007Fbm-2XJr;
-	Tue, 10 Sep 2024 19:01:42 +0300
-Date: Tue, 10 Sep 2024 19:01:42 +0300
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: Waiman Long <longman@redhat.com>
-Cc: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>,
-	Will Deacon <will.deacon@arm.com>,
-	Boqun Feng <boqun.feng@gmail.com>, linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev, Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>
-Subject: Re: [PATCH] locking/rwsem: Move is_rwsem_reader_owned() and
- rwsem_owner() under CONFIG_DEBUG_RWSEMS
-Message-ID: <ZuBtZuK9mJCwdvO1@smile.fi.intel.com>
-References: <20240909182905.161156-1-longman@redhat.com>
- <ZuAAOmjTGYEFQJPC@smile.fi.intel.com>
- <ZuAAbi7hRWz2DUte@smile.fi.intel.com>
- <5142d007-dc8b-4eea-b708-4ec2df08f90a@redhat.com>
+	s=arc-20240116; t=1725984224; c=relaxed/simple;
+	bh=Cdiv22D2XE0zZV2f8MCtiT3Ss4BAr6XjTBSKLUi7loE=;
+	h=Date:From:To:cc:Subject:In-Reply-To:Message-ID:References:
+	 MIME-Version:Content-Type; b=eQedEVEujSoS7PLqjhDOz+yJE010wvxOqwVwyFqtnSV++kgqmbjyJ1XRuYaCUP25AU5Cpr5FydBpLuR1Wq9fiViDNGBJjwyIk0jey4PmmwkK4whucCYRC6rmE0qzfl3MP7PqXwd+cow1wU8onZaEWvQYCzZ1Ega2MHkrQriyAEA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=orcam.me.uk; spf=none smtp.mailfrom=orcam.me.uk; arc=none smtp.client-ip=78.133.224.34
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=orcam.me.uk
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=orcam.me.uk
+Received: by angie.orcam.me.uk (Postfix, from userid 500)
+	id A5A2792009C; Tue, 10 Sep 2024 18:03:39 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+	by angie.orcam.me.uk (Postfix) with ESMTP id A14D492009B;
+	Tue, 10 Sep 2024 17:03:39 +0100 (BST)
+Date: Tue, 10 Sep 2024 17:03:39 +0100 (BST)
+From: "Maciej W. Rozycki" <macro@orcam.me.uk>
+To: Jiaxun Yang <jiaxun.yang@flygoat.com>
+cc: Masahiro Yamada <masahiroy@kernel.org>, 
+    Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nicolas@fjasle.eu>, 
+    Richard Weinberger <richard@nod.at>, 
+    Anton Ivanov <anton.ivanov@cambridgegreys.com>, 
+    Johannes Berg <johannes@sipsolutions.net>, 
+    Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, 
+    Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, 
+    x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>, 
+    Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, 
+    Wedson Almeida Filho <wedsonaf@gmail.com>, 
+    Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, 
+    =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
+    Benno Lossin <benno.lossin@proton.me>, 
+    Andreas Hindborg <a.hindborg@samsung.com>, 
+    Alice Ryhl <aliceryhl@google.com>, 
+    Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
+    Steven Rostedt <rostedt@goodmis.org>, 
+    Masami Hiramatsu <mhiramat@kernel.org>, 
+    Mark Rutland <mark.rutland@arm.com>, Jonathan Corbet <corbet@lwn.net>, 
+    Alex Shi <alexs@kernel.org>, Yanteng Si <siyanteng@loongson.cn>, 
+    Nick Desaulniers <ndesaulniers@google.com>, 
+    Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
+    linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, 
+    linux-um@lists.infradead.org, rust-for-linux@vger.kernel.org, 
+    "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>, 
+    linux-trace-kernel@vger.kernel.org, linux-doc@vger.kernel.org, 
+    llvm@lists.linux.dev
+Subject: Re: [PATCH v2 3/3] rust: Enable for MIPS
+In-Reply-To: <035ccfe5-c368-4cd9-8e0d-34e0e355cb05@app.fastmail.com>
+Message-ID: <alpine.DEB.2.21.2409101643210.60835@angie.orcam.me.uk>
+References: <20240905-mips-rust-v2-0-409d66819418@flygoat.com> <20240905-mips-rust-v2-3-409d66819418@flygoat.com> <alpine.DEB.2.21.2409082138160.60835@angie.orcam.me.uk> <035ccfe5-c368-4cd9-8e0d-34e0e355cb05@app.fastmail.com>
+User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <5142d007-dc8b-4eea-b708-4ec2df08f90a@redhat.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+Content-Type: text/plain; charset=US-ASCII
 
-On Tue, Sep 10, 2024 at 11:47:17AM -0400, Waiman Long wrote:
-> On 9/10/24 04:16, Andy Shevchenko wrote:
-> > On Tue, Sep 10, 2024 at 11:15:54AM +0300, Andy Shevchenko wrote:
-> > > On Mon, Sep 09, 2024 at 02:29:05PM -0400, Waiman Long wrote:
-> > > > Both is_rwsem_reader_owned() and rwsem_owner() are currently only used when
-> > > > CONFIG_DEBUG_RWSEMS is defined. This causes a compilation error with clang
-> > > > when `make W=1` and CONFIG_WERROR=y:
-> > > > 
-> > > > kernel/locking/rwsem.c:187:20: error: unused function 'is_rwsem_reader_owned' [-Werror,-Wunused-function]
-> > > >    187 | static inline bool is_rwsem_reader_owned(struct rw_semaphore *sem)
-> > > >        |                    ^~~~~~~~~~~~~~~~~~~~~
-> > > > kernel/locking/rwsem.c:271:35: error: unused function 'rwsem_owner' [-Werror,-Wunused-function]
-> > > >    271 | static inline struct task_struct *rwsem_owner(struct rw_semaphore *sem)
-> > > >        |                                   ^~~~~~~~~~~
-> > > > 
-> > > > Fix this by moving these two functions under the CONFIG_DEBUG_RWSEMS define.
-> > > At least this solves my issue,
-> > > Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> > ...and
-> > 
-> > Tested-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+On Mon, 9 Sep 2024, Jiaxun Yang wrote:
+
+> >> diff --git a/scripts/generate_rust_target.rs b/scripts/generate_rust_target.rs
+> >> index 863720777313..bbdf8a4dd169 100644
+> >> --- a/scripts/generate_rust_target.rs
+> >> +++ b/scripts/generate_rust_target.rs
+> > [...]
+> >> +        } else {
+> >> +            ts.push("arch", "mips");
+> >> +            cfg.get("TARGET_ISA_REV").map(|isa_rev| {
+> >> +                let feature = match isa_rev.as_str() {
+> >> +                    "1" => ",+mips32",
+> >> +                    "2" => ",+mips32r2",
+> >> +                    "5" => ",+mips32r5",
+> >> +                    "6" => ",+mips32r6",
+> >> +                    _ => ",+mips2",
+> >
+> >  What's the consequence of using `mips2' rather than `mips1' here?  How 
+> > about other ISA revisions, e.g. `mips4' (that also applies to the 64BIT 
+> > leg)?
 > 
-> Thanks for the testing.
-> 
-> No functional change is intended for this patch. Ingo & Peter, can this
-> patch lands in v6.12 or has to wait until v6.13?
+> LLVM's mips1 backend is a little bit broken beyond repair, so I tried to use mips2
+> as a baseline. I should probably let HAVE_RUST depend on !CPU_R3000 to get it covered.
 
-I see it already in PeterZ's tree.
+ GCC works just fine I suppose, just as with the other language frontends, 
+doesn't it?
 
--- 
-With Best Regards,
-Andy Shevchenko
+> We have no good way to tell ISA reversion prior to R1 just from Kconfig TARGET_ISA_REV,
+> valid numbers for TARGET_ISA_REV are only 1, 2, 5, 6 from Kconfig.
 
+ This approach doesn't work for some MIPS architecture processor configs 
+anyway, e.g. what ISA revision will CPU_P5600 imply here?
 
+ However if there's a need (and previously there wasn't), then I think it 
+can be sorted in a straightforward way.  We have just a bunch of CPU_* 
+settings and we can define corresponding ISA_* settings to select, e.g. 
+ISA_MIPS1, ISA_MIPS3, ISA_MIPS32_R1, ISA_MIPS64_R6, and so on, based on 
+information extracted from per-CPU_* `-march=' compilation flags from 
+arch/mips/Makefile (possibly combined with ISA data obtained from 
+GCC/binutils for said flags).
+
+ It could be a bit tedious to write, but not a big challenge really, just 
+mechanical work.
+
+> Given that mips 2 and 3 binaries (Rust object files) can link run flawlessly on all pre-R6
+> (despite R3000) hardware with matching bitness, they were chosen as fallback here.
+
+ I'm fine with having a MIPS1/R3000 exception for broken LLVM, but I see 
+no reason to disable it for GCC.
+
+  Maciej
