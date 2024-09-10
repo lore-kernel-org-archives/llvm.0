@@ -1,435 +1,252 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f178.google.com (mail-pl1-f178.google.com [209.85.214.178])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B214E6F2EA;
-	Tue, 10 Sep 2024 01:21:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD5E329A5
+	for <llvm@lists.linux.dev>; Tue, 10 Sep 2024 02:34:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725931291; cv=none; b=nNhVYiXM/tjRqwFtYorNPlov+6aWAfNJb1Kx/gs30ffHeaTfOsFJkrmJpYR72PuHKCXH1zEoJn7x0jYVz9kiNrDPKtcm4CRU86th/6m+PESYZsVHTpM2iw27pOaEsanDy9MO13kIk4U1+MCNP5O5wec+BJgm5aS6139T/qqm240=
+	t=1725935693; cv=none; b=YsyLi85WxU/lYf/eynEOWYZvnwrf/CbrdiTawTL401mxk4WQi94tJEVi4rPjChs4Tq00/NquOgVRMLPg6nxOf/KdYUlS7OgAtwunX7lLTUU/Ti4duhVVmYMVzm3cfIZtLSkb6qNVfnpjTM5p0kLMpWhqb+6q4cAlVeUl2feDacM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725931291; c=relaxed/simple;
-	bh=47BuXYbruCR0gw5tGLOtmVdd2LPD98sn1OpkYaPVnq4=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=hOzROpS9ZXDf/BANuzGDfjVbdDLEdMs1xLfywy5uKm6yBWH1Y6b4vCbqJwRxkJ+UCC8se+4jWD0HDSQT7ufrxv4tb30Ei5AOIv5gIYlL+7AVRB7wDlcThw1StY/G5Pr59BjVZ7mgaRGIEFLOXhy0AqdfdUqsUJxZTzbcnT4bNlg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=i/7nHf1p; arc=none smtp.client-ip=198.175.65.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1725935693; c=relaxed/simple;
+	bh=veXA8/aEIcvbJ4tdLTLkNwd/cTiLdA9uvb6N55XyEZc=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=p5DlfjFb5rNvRMhkCzRGoZq5KXX5rF0udGMbcLn3dkoi3M7ZgqlY9Vk59tvhAhm3yRAuiYW8cTTTV0qeGEGrBQvH74yDnYfzU2FrAxDpiHi3GXBVF3C8JcrG73OOa6n/14XUp5AqwOURWO5cUBoObQwUHCSM2rN0KgXNWcJQtSM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ArgrzuW3; arc=none smtp.client-ip=209.85.214.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="i/7nHf1p"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1725931289; x=1757467289;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=47BuXYbruCR0gw5tGLOtmVdd2LPD98sn1OpkYaPVnq4=;
-  b=i/7nHf1pPC28R7deqYplKvrZ3y1nxuP66fe5+DcgBQ5DeKVT+WYa4QoX
-   URmGqg9wnVRgge+/AGc0RFCgIgm/EiHHgoR3st1T0sTLCiF4nKU1gemel
-   Hyrdxr/ENTRe8hmcPEi3K6QB6EM5xCp/uuQvsrwP4rFtDu6hxEttLkTky
-   T29aJv/dEev2v1Grlm2Jnj6oCJ4awUfNlTHP2JoXOqU/mfsq59RitAuCJ
-   E8lLrwtnF0LvsFQP8CFLc0oPsrg1Prt9dyGg6fmSrAyCo4TrOCtVZxA0p
-   GHMg9d9Fu7nz37Fhexwiy0EsHKeaSwKpGEum4NWnmKRrjja3CUS5XqD8L
-   w==;
-X-CSE-ConnectionGUID: RyRIrPmjR+uhhsQNNegtyg==
-X-CSE-MsgGUID: jcUkiWHSRKyNPl1mcBrYaQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11190"; a="36003527"
-X-IronPort-AV: E=Sophos;i="6.10,215,1719903600"; 
-   d="scan'208";a="36003527"
-Received: from orviesa007.jf.intel.com ([10.64.159.147])
-  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Sep 2024 18:21:26 -0700
-X-CSE-ConnectionGUID: 0XfhrLygRgeHL8Kar55Z9g==
-X-CSE-MsgGUID: 5dEWjsIASUCPXNJcGJjkjQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.10,215,1719903600"; 
-   d="scan'208";a="67394951"
-Received: from lkp-server01.sh.intel.com (HELO 9c6b1c7d3b50) ([10.239.97.150])
-  by orviesa007.jf.intel.com with ESMTP; 09 Sep 2024 18:21:24 -0700
-Received: from kbuild by 9c6b1c7d3b50 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1snpZK-000FSA-25;
-	Tue, 10 Sep 2024 01:21:22 +0000
-Date: Tue, 10 Sep 2024 09:21:11 +0800
-From: kernel test robot <lkp@intel.com>
-To: Kent Overstreet <kent.overstreet@linux.dev>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [koverstreet-bcachefs:bcachefs-garbage 209/258]
- fs/bcachefs/thread_with_file.c:139:22: error: incompatible pointer types
- passing 'struct kiocb *' to parameter of type 'struct pipe_inode_info *'
-Message-ID: <202409100927.ibrz6qEv-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ArgrzuW3"
+Received: by mail-pl1-f178.google.com with SMTP id d9443c01a7336-2068a7c9286so46508845ad.1
+        for <llvm@lists.linux.dev>; Mon, 09 Sep 2024 19:34:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1725935691; x=1726540491; darn=lists.linux.dev;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=JbGFjI1Jm4RL1Dvc7yvqZW7MuzgcmJKxyv77P01RY7g=;
+        b=ArgrzuW3h1xH0fxKs0wT3eYGMeCg516525yFbWsjetaj6OQzf0b/uoba4Ly5LcCvAw
+         JuUQTKrgdLzHYXk+NsPkoMFC7jMU56th0H+HXbnJGexhIKbrohuqdimNHhoghPlo3uNH
+         7xzVzFEXod7jyn4LlC2mqyXF/wd4B+KtHLrKs5BBobBpGXIgZQE/grPt2Ow8HgKsIu/N
+         BrBY2Ft/Ozub/PY5bb8JXcqlOrMFiUIhx3RGOtujq+uLNEpo0S+sdZE9HOO0iMqyk19i
+         jYFOM03w5hpGn6/V0Eg0F8av9oOcMOpWQHBQXjYDy03GQyhWD4qun6mrt+ek/uvaG6DV
+         sWqg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1725935691; x=1726540491;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=JbGFjI1Jm4RL1Dvc7yvqZW7MuzgcmJKxyv77P01RY7g=;
+        b=l+LULRaWHqA+FtTClMLLP2K9Dqi/1E+l/wzun5PCn7h/V3oKJnnmeuNS1Hdu7gH5Ct
+         B7mZSTiMN4Ud2wogYxfzCG44IdR+OCh89O0ZwmpO2RZ10MnaEenNVxF5YhI86vSS0X8m
+         omJNTha5mVBTrsAUvKnuS7k7BOHeumEc3XprKxtxlXKwwkyxRXYLhwVO/Mw2XEWEmhH4
+         qimmTmfhN2NLRAzDK3baDjer66Iw8/hXBimjw7Hh82fMOIm7hSW8PmjkeIxj7B/dTjnR
+         9lrZdzPdRfUD+E5TCpRz8Ekuluqj11bmRIbmLNQqIjRo5L8mXxYSaE6A4zyTrI8rxxwL
+         oksw==
+X-Forwarded-Encrypted: i=1; AJvYcCVPlkCLzlJio8PII9QV2SdXHn+b6echlBRYB3qxCwpQIzOyA099GPmL7VaFlwp59hU77TZA@lists.linux.dev
+X-Gm-Message-State: AOJu0Yx7VDnkABwzxVFDumeQCpbShasNerNqlIVA5eKJwxk9Id5EpAoI
+	g79B0HeWu/bAlW4gLQkGhLQjJvM5Yvp/f3SweLGoOOTeDO0eahXJ
+X-Google-Smtp-Source: AGHT+IEfbDIfIWEWl9+hGeO41iqQlYwbmdVvslDHL+mdRN/85/Dbu+yZ/qjViZE/76xB3gtzWv1L+g==
+X-Received: by 2002:a17:902:eccf:b0:205:6a9b:7e3e with SMTP id d9443c01a7336-206f05faedcmr193772175ad.56.1725935690772;
+        Mon, 09 Sep 2024 19:34:50 -0700 (PDT)
+Received: from [192.168.255.10] ([43.132.141.21])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-20710f3121fsm39794215ad.257.2024.09.09.19.34.47
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 09 Sep 2024 19:34:50 -0700 (PDT)
+Message-ID: <f98a792c-3ee0-478f-8696-f0d153ade931@gmail.com>
+Date: Tue, 10 Sep 2024 10:34:46 +0800
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-
-tree:   https://github.com/koverstreet/bcachefs bcachefs-garbage
-head:   c88c2220b6b527cec382f06a0ba3feab2a593b37
-commit: 79e9f469b262e253396d71d7af0945da30a61cd0 [209/258] bcachefs: convert thread_with_stdio to pipes WIP
-config: i386-randconfig-003-20240909 (https://download.01.org/0day-ci/archive/20240910/202409100927.ibrz6qEv-lkp@intel.com/config)
-compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240910/202409100927.ibrz6qEv-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202409100927.ibrz6qEv-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
-   In file included from fs/bcachefs/thread_with_file.c:4:
-   In file included from fs/bcachefs/bcachefs.h:188:
-   In file included from include/linux/bio.h:10:
-   In file included from include/linux/blk_types.h:10:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:8:
-   In file included from include/linux/cacheflush.h:5:
-   In file included from arch/x86/include/asm/cacheflush.h:5:
-   include/linux/mm.h:1200:17: error: use of undeclared identifier 'VMALLOC_START'; did you mean 'KMALLOC_DMA'?
-    1200 |         return addr >= VMALLOC_START && addr < VMALLOC_END;
-         |                        ^~~~~~~~~~~~~
-         |                        KMALLOC_DMA
-   include/linux/slab.h:421:2: note: 'KMALLOC_DMA' declared here
-     421 |         KMALLOC_DMA,
-         |         ^
-   In file included from fs/bcachefs/thread_with_file.c:4:
-   In file included from fs/bcachefs/bcachefs.h:188:
-   In file included from include/linux/bio.h:10:
-   In file included from include/linux/blk_types.h:10:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:8:
-   In file included from include/linux/cacheflush.h:5:
-   In file included from arch/x86/include/asm/cacheflush.h:5:
-   include/linux/mm.h:1200:41: error: use of undeclared identifier 'VMALLOC_END'; did you mean 'KMALLOC_DMA'?
-    1200 |         return addr >= VMALLOC_START && addr < VMALLOC_END;
-         |                                                ^~~~~~~~~~~
-         |                                                KMALLOC_DMA
-   include/linux/slab.h:421:2: note: 'KMALLOC_DMA' declared here
-     421 |         KMALLOC_DMA,
-         |         ^
->> fs/bcachefs/thread_with_file.c:139:22: error: incompatible pointer types passing 'struct kiocb *' to parameter of type 'struct pipe_inode_info *' [-Werror,-Wincompatible-pointer-types]
-     139 |         return do_pipe_read(kiocb, iter, thr->in);
-         |                             ^~~~~
-   include/linux/pipe_fs_i.h:273:46: note: passing argument to parameter 'pipe' here
-     273 | ssize_t do_pipe_read(struct pipe_inode_info *pipe,
-         |                                              ^
->> fs/bcachefs/thread_with_file.c:146:44: error: too few arguments to function call, expected 4, have 3
-     146 |         return do_pipe_write(kiocb, iter, thr->out);
-         |                ~~~~~~~~~~~~~                      ^
-   include/linux/pipe_fs_i.h:276:9: note: 'do_pipe_write' declared here
-     276 | ssize_t do_pipe_write(struct pipe_inode_info *pipe,
-         |         ^             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     277 |                       struct iov_iter *to,
-         |                       ~~~~~~~~~~~~~~~~~~~~
-     278 |                       bool nonblock,
-         |                       ~~~~~~~~~~~~~~
-     279 |                       bool is_packetized);
-         |                       ~~~~~~~~~~~~~~~~~~
->> fs/bcachefs/thread_with_file.c:257:2: error: call to undeclared function 'stdio_buf_init'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     257 |         stdio_buf_init(&thr->stdio.input);
-         |         ^
->> fs/bcachefs/thread_with_file.c:257:23: error: no member named 'stdio' in 'struct thread_with_stdio'
-     257 |         stdio_buf_init(&thr->stdio.input);
-         |                         ~~~  ^
-   fs/bcachefs/thread_with_file.c:258:23: error: no member named 'stdio' in 'struct thread_with_stdio'
-     258 |         stdio_buf_init(&thr->stdio.output);
-         |                         ~~~  ^
-   fs/bcachefs/thread_with_file.c:267:22: error: too few arguments to function call, expected 3, have 0
-     267 |         return do_pipe_read();
-         |                ~~~~~~~~~~~~ ^
-   include/linux/pipe_fs_i.h:273:9: note: 'do_pipe_read' declared here
-     273 | ssize_t do_pipe_read(struct pipe_inode_info *pipe,
-         |         ^            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     274 |                      struct iov_iter *to,
-         |                      ~~~~~~~~~~~~~~~~~~~~
-     275 |                      bool nonblock);
-         |                      ~~~~~~~~~~~~~
->> fs/bcachefs/thread_with_file.c:275:33: error: call to undeclared function 'stdio_redirect_has_input'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     275 |                 wait_event_timeout(buf->wait, stdio_redirect_has_input(stdio),
-         |                                               ^
->> fs/bcachefs/thread_with_file.c:275:33: error: call to undeclared function 'stdio_redirect_has_input'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-   fs/bcachefs/thread_with_file.c:277:12: error: call to undeclared function 'stdio_redirect_has_input'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     277 |         } while (!stdio_redirect_has_input(stdio));
-         |                   ^
->> fs/bcachefs/thread_with_file.c:309:32: error: call to undeclared function 'stdio_redirect_has_more_input'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     309 |         wait_event_timeout(buf->wait, stdio_redirect_has_more_input(stdio, seen), t);
-         |                                       ^
->> fs/bcachefs/thread_with_file.c:309:32: error: call to undeclared function 'stdio_redirect_has_more_input'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
->> fs/bcachefs/thread_with_file.c:399:5: error: call to undeclared function 'stdio_redirect_has_output_space'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     399 |                                 stdio_redirect_has_output_space(stdio));
-         |                                 ^
-   14 errors generated.
---
-   In file included from fs/bcachefs/chardev.c:4:
-   In file included from fs/bcachefs/bcachefs.h:188:
-   In file included from include/linux/bio.h:10:
-   In file included from include/linux/blk_types.h:10:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:8:
-   In file included from include/linux/cacheflush.h:5:
-   In file included from arch/x86/include/asm/cacheflush.h:5:
-   include/linux/mm.h:1200:17: error: use of undeclared identifier 'VMALLOC_START'; did you mean 'KMALLOC_DMA'?
-    1200 |         return addr >= VMALLOC_START && addr < VMALLOC_END;
-         |                        ^~~~~~~~~~~~~
-         |                        KMALLOC_DMA
-   include/linux/slab.h:421:2: note: 'KMALLOC_DMA' declared here
-     421 |         KMALLOC_DMA,
-         |         ^
-   In file included from fs/bcachefs/chardev.c:4:
-   In file included from fs/bcachefs/bcachefs.h:188:
-   In file included from include/linux/bio.h:10:
-   In file included from include/linux/blk_types.h:10:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:8:
-   In file included from include/linux/cacheflush.h:5:
-   In file included from arch/x86/include/asm/cacheflush.h:5:
-   include/linux/mm.h:1200:41: error: use of undeclared identifier 'VMALLOC_END'; did you mean 'KMALLOC_DMA'?
-    1200 |         return addr >= VMALLOC_START && addr < VMALLOC_END;
-         |                                                ^~~~~~~~~~~
-         |                                                KMALLOC_DMA
-   include/linux/slab.h:421:2: note: 'KMALLOC_DMA' declared here
-     421 |         KMALLOC_DMA,
-         |         ^
->> fs/bcachefs/chardev.c:156:38: error: no member named 'stdio' in 'struct thread_with_stdio'
-     156 |                 bch2_stdio_redirect_printf(&stdio->stdio, false, "%s: errors fixed\n", c->name);
-         |                                             ~~~~~  ^
-   fs/bcachefs/chardev.c:160:38: error: no member named 'stdio' in 'struct thread_with_stdio'
-     160 |                 bch2_stdio_redirect_printf(&stdio->stdio, false, "%s: still has errors\n", c->name);
-         |                                             ~~~~~  ^
-   fs/bcachefs/chardev.c:226:58: error: no member named 'stdio' in 'struct thread_with_stdio'
-     226 |         opt_set(thr->opts, stdio, (u64)(unsigned long)&thr->thr.stdio);
-         |                                                        ~~~~~~~~ ^
-   fs/bcachefs/opts.h:548:18: note: expanded from macro 'opt_set'
-     548 |         (_opts)._name = _v;                                             \
-         |                         ^~
-   fs/bcachefs/chardev.c:783:23: error: no member named 'stdio' in 'struct thread_with_stdio'
-     783 |         c->stdio = &thr->thr.stdio;
-         |                     ~~~~~~~~ ^
-   6 errors generated.
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3] docs/zh_CN: add the translation of
+ kbuild/gcc-plugins.rst
+To: Dongliang Mu <dzm91@hust.edu.cn>, Alex Shi <alexs@kernel.org>,
+ Yanteng Si <siyanteng@loongson.cn>, Jonathan Corbet <corbet@lwn.net>,
+ Nathan Chancellor <nathan@kernel.org>,
+ Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling
+ <morbo@google.com>, Justin Stitt <justinstitt@google.com>
+Cc: hust-os-kernel-patches@googlegroups.cm, linux-doc@vger.kernel.org,
+ linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+References: <20240907070244.206808-1-dzm91@hust.edu.cn>
+Content-Language: en-US
+From: Alex Shi <seakeel@gmail.com>
+In-Reply-To: <20240907070244.206808-1-dzm91@hust.edu.cn>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
 
-vim +139 fs/bcachefs/thread_with_file.c
+LGTM,
 
-   134	
-   135	static ssize_t thread_with_stdio_read(struct kiocb *kiocb, struct iov_iter *iter)
-   136	{
-   137		struct thread_with_stdio *thr =
-   138			container_of(kiocb->ki_filp->private_data, struct thread_with_stdio, thr);
- > 139		return do_pipe_read(kiocb, iter, thr->in);
-   140	}
-   141	
-   142	static ssize_t thread_with_stdio_write(struct kiocb *kiocb, struct iov_iter *iter)
-   143	{
-   144		struct thread_with_stdio *thr =
-   145			container_of(kiocb->ki_filp->private_data, struct thread_with_stdio, thr);
- > 146		return do_pipe_write(kiocb, iter, thr->out);
-   147	}
-   148	
-   149	static __poll_t thread_with_stdio_poll(struct file *file, struct poll_table_struct *wait)
-   150	{
-   151		struct thread_with_stdio *thr =
-   152			container_of(file->private_data, struct thread_with_stdio, thr);
-   153	
-   154		if (file->f_mode & FMODE_READ)
-   155			poll_wait(file, &thr->in->rd_wait, wait);
-   156		if (file->f_mode & FMODE_WRITE)
-   157			poll_wait(file, &thr->out->wr_wait, wait);
-   158	
-   159		__poll_t mask = 0;
-   160	#if 0
-   161		if (stdio_redirect_has_output(&thr->stdio))
-   162			mask |= EPOLLIN;
-   163		if (stdio_redirect_has_input_space(&thr->stdio))
-   164			mask |= EPOLLOUT;
-   165		if (thr->thr.done)
-   166			mask |= EPOLLHUP|EPOLLERR;
-   167	#endif
-   168		return mask;
-   169	}
-   170	
-   171	static int thread_with_stdio_flush(struct file *file, fl_owner_t id)
-   172	{
-   173		struct thread_with_stdio *thr =
-   174			container_of(file->private_data, struct thread_with_stdio, thr);
-   175	
-   176		return thr->thr.ret;
-   177	}
-   178	
-   179	static long thread_with_stdio_ioctl(struct file *file, unsigned int cmd, unsigned long p)
-   180	{
-   181		struct thread_with_stdio *thr =
-   182			container_of(file->private_data, struct thread_with_stdio, thr);
-   183	
-   184		if (thr->ops->unlocked_ioctl)
-   185			return thr->ops->unlocked_ioctl(thr, cmd, p);
-   186		return -ENOTTY;
-   187	}
-   188	
-   189	static const struct file_operations thread_with_stdio_fops = {
-   190		.llseek		= no_llseek,
-   191		.read_iter	= thread_with_stdio_read,
-   192		.write_iter	= thread_with_stdio_write,
-   193		.poll		= thread_with_stdio_poll,
-   194		.flush		= thread_with_stdio_flush,
-   195		.release	= thread_with_stdio_release,
-   196		.unlocked_ioctl	= thread_with_stdio_ioctl,
-   197	};
-   198	
-   199	static const struct file_operations thread_with_stdout_fops = {
-   200		.llseek		= no_llseek,
-   201		.read_iter	= thread_with_stdio_read,
-   202		.poll		= thread_with_stdio_poll,
-   203		.flush		= thread_with_stdio_flush,
-   204		.release	= thread_with_stdio_release,
-   205		.unlocked_ioctl	= thread_with_stdio_ioctl,
-   206	};
-   207	
-   208	static void thread_with_stdio_fn(void *arg)
-   209	{
-   210		struct thread_with_stdio *thr = arg;
-   211	
-   212		thr->thr.ret = thr->ops->fn(thr);
-   213		thread_with_stdio_done(thr);
-   214	}
-   215	
-   216	void bch2_thread_with_stdio_exit(struct thread_with_stdio *thr)
-   217	{
-   218		bch2_thread_with_file_exit(&thr->thr);
-   219		if (thr->in)
-   220			free_pipe_info(thr->in);
-   221		if (thr->out)
-   222			free_pipe_info(thr->out);
-   223		thr->in = thr->out = NULL;
-   224	}
-   225	
-   226	int bch2_thread_with_stdio_init(struct thread_with_stdio *thr,
-   227					const struct thread_with_stdio_ops *ops)
-   228	{
-   229		thr->ops = ops;
-   230		thr->in = alloc_pipe_info();
-   231		thr->out = alloc_pipe_info();
-   232		if (!thr->in || !thr->out) {
-   233			bch2_thread_with_stdio_exit(thr);
-   234			return -ENOMEM;
-   235		}
-   236	
-   237		thr->in->writers++;
-   238		thr->in->readers++;
-   239		return 0;
-   240	}
-   241	
-   242	int __bch2_run_thread_with_stdio(struct thread_with_stdio *thr)
-   243	{
-   244		return bch2_run_thread_with_file(&thr->thr, &thread_with_stdio_fops, thread_with_stdio_fn);
-   245	}
-   246	
-   247	int bch2_run_thread_with_stdio(struct thread_with_stdio *thr,
-   248				       const struct thread_with_stdio_ops *ops)
-   249	{
-   250		return bch2_thread_with_stdio_init(thr, ops) ?:
-   251			__bch2_run_thread_with_stdio(thr);
-   252	}
-   253	
-   254	int bch2_run_thread_with_stdout(struct thread_with_stdio *thr,
-   255					const struct thread_with_stdio_ops *ops)
-   256	{
- > 257		stdio_buf_init(&thr->stdio.input);
-   258		stdio_buf_init(&thr->stdio.output);
-   259		thr->ops = ops;
-   260	
-   261		return bch2_run_thread_with_file(&thr->thr, &thread_with_stdout_fops, thread_with_stdio_fn);
-   262	}
-   263	EXPORT_SYMBOL_GPL(bch2_run_thread_with_stdout);
-   264	
-   265	int bch2_stdio_redirect_read(struct stdio_redirect *stdio, char *ubuf, size_t len)
-   266	{
-   267		return do_pipe_read();
-   268		struct stdio_buf *buf = &stdio->input;
-   269	
-   270		/*
-   271		 * we're waiting on user input (or for the file descriptor to be
-   272		 * closed), don't want a hung task warning:
-   273		 */
-   274		do {
- > 275			wait_event_timeout(buf->wait, stdio_redirect_has_input(stdio),
-   276					   sysctl_hung_task_timeout_secs * HZ / 2);
-   277		} while (!stdio_redirect_has_input(stdio));
-   278	
-   279		if (stdio->done)
-   280			return -1;
-   281	
-   282		spin_lock(&buf->lock);
-   283		int ret = min(len, buf->buf.nr);
-   284		buf->buf.nr -= ret;
-   285		memcpy(ubuf, buf->buf.data, ret);
-   286		memmove(buf->buf.data,
-   287			buf->buf.data + ret,
-   288			buf->buf.nr);
-   289		spin_unlock(&buf->lock);
-   290	
-   291		wake_up(&buf->wait);
-   292		return ret;
-   293	}
-   294	
-   295	int bch2_stdio_redirect_readline_timeout(struct stdio_redirect *stdio,
-   296						 darray_char *line,
-   297						 unsigned long timeout)
-   298	{
-   299		unsigned long until = jiffies + timeout, t;
-   300		struct stdio_buf *buf = &stdio->input;
-   301		size_t seen = 0;
-   302	again:
-   303		t = timeout != MAX_SCHEDULE_TIMEOUT
-   304			? max_t(long, until - jiffies, 0)
-   305			: timeout;
-   306	
-   307		t = min(t, sysctl_hung_task_timeout_secs * HZ / 2);
-   308	
- > 309		wait_event_timeout(buf->wait, stdio_redirect_has_more_input(stdio, seen), t);
-   310	
-   311		if (stdio->done)
-   312			return -1;
-   313	
-   314		spin_lock(&buf->lock);
-   315		seen = buf->buf.nr;
-   316		char *n = memchr(buf->buf.data, '\n', seen);
-   317	
-   318		if (!n && timeout != MAX_SCHEDULE_TIMEOUT && time_after_eq(jiffies, until)) {
-   319			spin_unlock(&buf->lock);
-   320			return -ETIME;
-   321		}
-   322	
-   323		if (!n) {
-   324			buf->waiting_for_line = true;
-   325			spin_unlock(&buf->lock);
-   326			goto again;
-   327		}
-   328	
-   329		size_t b = n + 1 - buf->buf.data;
-   330		if (b > line->size) {
-   331			spin_unlock(&buf->lock);
-   332			int ret = darray_resize(line, b);
-   333			if (ret)
-   334				return ret;
-   335			seen = 0;
-   336			goto again;
-   337		}
-   338	
-   339		buf->buf.nr -= b;
-   340		memcpy(line->data, buf->buf.data, b);
-   341		memmove(buf->buf.data,
-   342			buf->buf.data + b,
-   343			buf->buf.nr);
-   344		line->nr = b;
-   345	
-   346		buf->waiting_for_line = false;
-   347		spin_unlock(&buf->lock);
-   348	
-   349		wake_up(&buf->wait);
-   350		return 0;
-   351	}
-   352	
+Reviewed-by: Alex Shi <alexs@kernel.org>
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+On 9/7/24 3:02 PM, Dongliang Mu wrote:
+> Finish the translation of kbuild/gcc-plugins.rst and move gcc-plugins
+> from TODO to the main body.
+> 
+> Update to commit 3832d1fd84b6 ("docs/core-api: expand Fedora instructions
+> for GCC plugins")
+> 
+> Signed-off-by: Dongliang Mu <dzm91@hust.edu.cn>
+> ---
+> v2->v3: fix sign incorrect pointed by Alex
+> v1->v2: fix comments from yanteng
+>  .../translations/zh_CN/kbuild/gcc-plugins.rst | 126 ++++++++++++++++++
+>  .../translations/zh_CN/kbuild/index.rst       |   2 +-
+>  2 files changed, 127 insertions(+), 1 deletion(-)
+>  create mode 100644 Documentation/translations/zh_CN/kbuild/gcc-plugins.rst
+> 
+> diff --git a/Documentation/translations/zh_CN/kbuild/gcc-plugins.rst b/Documentation/translations/zh_CN/kbuild/gcc-plugins.rst
+> new file mode 100644
+> index 000000000000..67a8abbf5887
+> --- /dev/null
+> +++ b/Documentation/translations/zh_CN/kbuild/gcc-plugins.rst
+> @@ -0,0 +1,126 @@
+> +.. SPDX-License-Identifier: GPL-2.0
+> +
+> +.. include:: ../disclaimer-zh_CN.rst
+> +
+> +:Original: Documentation/kbuild/gcc-plugins.rst
+> +:Translator: 慕冬亮 Dongliang Mu <dzm91@hust.edu.cn>
+> +
+> +================
+> +GCC 插件基础设施
+> +================
+> +
+> +
+> +介绍
+> +====
+> +
+> +GCC 插件是为编译器提供额外功能的可加载模块 [1]_。它们对于运行时插装和静态分析非常有用。
+> +我们可以在编译过程中通过回调 [2]_，GIMPLE [3]_，IPA [4]_ 和 RTL Passes [5]_
+> +（译者注：Pass 是编译器所采用的一种结构化技术，用于完成编译对象的分析、优化或转换等功能）
+> +来分析、修改和添加更多的代码。
+> +
+> +内核的 GCC 插件基础设施支持构建树外模块、交叉编译和在单独的目录中构建。插件源文件必须由
+> +C++ 编译器编译。
+> +
+> +目前 GCC 插件基础设施只支持一些架构。搜索 "select HAVE_GCC_PLUGINS" 来查找支持
+> +GCC 插件的架构。
+> +
+> +这个基础设施是从 grsecurity [6]_  和 PaX [7]_ 移植过来的。
+> +
+> +--
+> +
+> +.. [1] https://gcc.gnu.org/onlinedocs/gccint/Plugins.html
+> +.. [2] https://gcc.gnu.org/onlinedocs/gccint/Plugin-API.html#Plugin-API
+> +.. [3] https://gcc.gnu.org/onlinedocs/gccint/GIMPLE.html
+> +.. [4] https://gcc.gnu.org/onlinedocs/gccint/IPA.html
+> +.. [5] https://gcc.gnu.org/onlinedocs/gccint/RTL.html
+> +.. [6] https://grsecurity.net/
+> +.. [7] https://pax.grsecurity.net/
+> +
+> +
+> +目的
+> +====
+> +
+> +GCC 插件的设计目的是提供一个用于试验 GCC 或 Clang 上游没有的潜在编译器功能的场所。
+> +一旦它们的实用性得到验证，这些功能将被添加到 GCC（和 Clang）的上游。随后，在所有
+> +支持的 GCC 版本都支持这些功能后，它们会被从内核中移除。
+> +
+> +具体来说，新插件应该只实现上游编译器（GCC 和 Clang）不支持的功能。
+> +
+> +当 Clang 中存在 GCC 中不存在的某项功能时，应努力将该功能做到 GCC 上游（而不仅仅
+> +是作为内核专用的 GCC 插件），以使整个生态都能从中受益。
+> +
+> +类似的，如果 GCC 插件提供的功能在 Clang 中 **不** 存在，但该功能被证明是有用的，也应
+> +努力将该功能上传到 GCC（和 Clang）。
+> +
+> +在上游 GCC 提供了某项功能后，该插件将无法在相应的 GCC 版本（以及更高版本）下编译。
+> +一旦所有内核支持的 GCC 版本都提供了该功能，该插件将从内核中移除。
+> +
+> +
+> +文件
+> +====
+> +
+> +**$(src)/scripts/gcc-plugins**
+> +
+> +	这是 GCC 插件的目录。
+> +
+> +**$(src)/scripts/gcc-plugins/gcc-common.h**
+> +
+> +	这是 GCC 插件的兼容性头文件。
+> +	应始终包含它，而不是单独的 GCC 头文件。
+> +
+> +**$(src)/scripts/gcc-plugins/gcc-generate-gimple-pass.h,
+> +$(src)/scripts/gcc-plugins/gcc-generate-ipa-pass.h,
+> +$(src)/scripts/gcc-plugins/gcc-generate-simple_ipa-pass.h,
+> +$(src)/scripts/gcc-plugins/gcc-generate-rtl-pass.h**
+> +
+> +	这些头文件可以自动生成 GIMPLE、SIMPLE_IPA、IPA 和 RTL passes 的注册结构。
+> +	与手动创建结构相比，它们更受欢迎。
+> +
+> +
+> +用法
+> +====
+> +
+> +你必须为你的 GCC 版本安装 GCC 插件头文件，以 Ubuntu 上的 gcc-10 为例::
+> +
+> +	apt-get install gcc-10-plugin-dev
+> +
+> +或者在 Fedora 上::
+> +
+> +	dnf install gcc-plugin-devel libmpc-devel
+> +
+> +或者在 Fedora 上使用包含插件的交叉编译器时::
+> +
+> +	dnf install libmpc-devel
+> +
+> +在内核配置中启用 GCC 插件基础设施与一些你想使用的插件::
+> +
+> +	CONFIG_GCC_PLUGINS=y
+> +	CONFIG_GCC_PLUGIN_LATENT_ENTROPY=y
+> +	...
+> +
+> +运行 gcc（本地或交叉编译器），确保能够检测到插件头文件::
+> +
+> +	gcc -print-file-name=plugin
+> +	CROSS_COMPILE=arm-linux-gnu- ${CROSS_COMPILE}gcc -print-file-name=plugin
+> +
+> +"plugin" 这个词意味着它们没有被检测到::
+> +
+> +	plugin
+> +
+> +完整的路径则表示插件已经被检测到::
+> +
+> +       /usr/lib/gcc/x86_64-redhat-linux/12/plugin
+> +
+> +编译包括插件在内的最小工具集::
+> +
+> +	make scripts
+> +
+> +或者直接在内核中运行 make，使用循环复杂性 GCC 插件编译整个内核。
+> +
+> +
+> +4. 如何添加新的 GCC 插件
+> +========================
+> +
+> +GCC 插件位于 scripts/gcc-plugins/。你需要将插件源文件放在 scripts/gcc-plugins/ 目录下。
+> +子目录创建并不支持，你必须添加在 scripts/gcc-plugins/Makefile、scripts/Makefile.gcc-plugins
+> +和相关的 Kconfig 文件中。
+> diff --git a/Documentation/translations/zh_CN/kbuild/index.rst b/Documentation/translations/zh_CN/kbuild/index.rst
+> index d906a4e88d0f..b51655d981f6 100644
+> --- a/Documentation/translations/zh_CN/kbuild/index.rst
+> +++ b/Documentation/translations/zh_CN/kbuild/index.rst
+> @@ -13,6 +13,7 @@
+>      :maxdepth: 1
+>  
+>      headers_install
+> +    gcc-plugins
+>  
+>  TODO:
+>  
+> @@ -24,7 +25,6 @@ TODO:
+>  - modules
+>  - issues
+>  - reproducible-builds
+> -- gcc-plugins
+>  - llvm
+>  
+>  .. only::  subproject and html
