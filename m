@@ -1,108 +1,157 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net [217.70.183.199])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 74394190047;
-	Tue, 10 Sep 2024 11:58:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 11A3C191F7B
+	for <llvm@lists.linux.dev>; Tue, 10 Sep 2024 12:35:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.199
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725969486; cv=none; b=amOnEzlmFJxZO6WKhvDg7YJ+3qV0KL3uWjfBfYk29wXCXnGMZz9SEORAZP4LCtGV/qfGiJ7Y45e+eJF81oxNqb9+oWQY0gUWhxVdECFpTsMRY4AnGJmWbozC82R+Pd6IyPv02RVMWwRrt2m6zBw0g9ZtvYRBY+KVgTozSBhlntw=
+	t=1725971717; cv=none; b=oNMXEyPX15jVSjep9RJM8gFNmttASGCQwDjbj6xdmoQhjD1KdSyvybY4MZD9o9U3cfE14EhgVZ+mexQX4FPHOSGcyECA7T9LWmxK36gVAH0dQIBuo/0hMCkln9gru8lJvur+j8MEwRoxrVd0TAghqiBNMG4Ga2xFAJq6oave2E0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725969486; c=relaxed/simple;
-	bh=nxm8JGXvA/juyus1Lqfvbv0TjjsNRb50mc0VwIYbggw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=n+A01WsdQqmH5PK8lQj/280NC2FMh4mq+ahGBIpekE4p2zDIiE08vVUVoyFhFLZYRzEWqETo7/Fm/9HKXVA6PNMgiCu4So4oR2Mg/Y/99HHZJPtNvsgrgCz0NSXyul4HbF88AGt9sOqJltLZdrrD05Gngpz85BiosKBOGb9tNKA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=Mu2OqBie; arc=none smtp.client-ip=10.30.226.201
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="Mu2OqBie"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5333EC4CEC3;
-	Tue, 10 Sep 2024 11:58:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1725969486;
-	bh=nxm8JGXvA/juyus1Lqfvbv0TjjsNRb50mc0VwIYbggw=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Mu2OqBieA010YaJZ9trrWESWcM/unoYGySmVYRZRA7J39DWUTONOtc9N39UmXL0yB
-	 vCAY7mKuYmRZjgvwXYk2LEt3H/ksZbWWk4bCXHM2ugkZyQGEnrfm74j17OO3ykiB2b
-	 Bsn2siY0eFKHQGUu7VqqaaOXq1idIhXoL64/GUZg=
-Date: Tue, 10 Sep 2024 13:58:02 +0200
-From: Greg KH <gregkh@linuxfoundation.org>
-To: Alexandre Ghiti <alex@ghiti.fr>
-Cc: WangYuli <wangyuli@uniontech.com>, stable@vger.kernel.org,
-	sashal@kernel.org, parri.andrea@gmail.com,
-	mathieu.desnoyers@efficios.com, palmer@rivosinc.com,
-	linux-kernel@vger.kernel.org, paul.walmsley@sifive.com,
-	palmer@dabbelt.com, aou@eecs.berkeley.edu, nathan@kernel.org,
-	ndesaulniers@google.com, trix@redhat.com,
-	linux-riscv@lists.infradead.org, llvm@lists.linux.dev,
-	paulmck@kernel.org, mingo@redhat.com, peterz@infradead.org,
-	juri.lelli@redhat.com, vincent.guittot@linaro.org,
-	dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
-	mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
-	brauner@kernel.org, arnd@arndb.de
-Subject: Re: [PATCH 6.6] membarrier: riscv: Add full memory barrier in
- switch_mm()
-Message-ID: <2024091037-errant-countdown-4928@gregkh>
-References: <10F34E3A3BFBC534+20240909025701.1101397-1-wangyuli@uniontech.com>
- <2024091002-caution-tinderbox-a847@gregkh>
- <364e0e33-68ad-4f0c-86f1-f6a95def9a30@ghiti.fr>
+	s=arc-20240116; t=1725971717; c=relaxed/simple;
+	bh=OQ+Vs2QCCA6pe2c7oQq1SazHpCwagUDdfVm4Y+oDTQ4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=eljS8OPqo++PL9Jww3mznLDovafqR5gI1sKO35fM2zxhXZ8zQ2aRhojbupqZuU5it+MXuE2CsRVg4vaNp8Y8AT8mOqSFBuUzbBKbu+mDYLrCyQJDkN97g7rljkym35/orAWWf9KUabMQyIFmtwzONwO3x1yHb1qSHrawyc9MHQ4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ghiti.fr; spf=pass smtp.mailfrom=ghiti.fr; arc=none smtp.client-ip=217.70.183.199
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ghiti.fr
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ghiti.fr
+Received: by mail.gandi.net (Postfix) with ESMTPSA id BCA02FF809;
+	Tue, 10 Sep 2024 12:35:06 +0000 (UTC)
+Message-ID: <5d486ff8-2ab5-4ed5-a1da-c2817927b3a2@ghiti.fr>
+Date: Tue, 10 Sep 2024 14:35:06 +0200
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <364e0e33-68ad-4f0c-86f1-f6a95def9a30@ghiti.fr>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 6.6] membarrier: riscv: Add full memory barrier in
+ switch_mm()
+Content-Language: en-US
+To: Greg KH <gregkh@linuxfoundation.org>
+Cc: WangYuli <wangyuli@uniontech.com>, stable@vger.kernel.org,
+ sashal@kernel.org, parri.andrea@gmail.com, mathieu.desnoyers@efficios.com,
+ palmer@rivosinc.com, linux-kernel@vger.kernel.org, paul.walmsley@sifive.com,
+ palmer@dabbelt.com, aou@eecs.berkeley.edu, nathan@kernel.org,
+ ndesaulniers@google.com, trix@redhat.com, linux-riscv@lists.infradead.org,
+ llvm@lists.linux.dev, paulmck@kernel.org, mingo@redhat.com,
+ peterz@infradead.org, juri.lelli@redhat.com, vincent.guittot@linaro.org,
+ dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
+ mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
+ brauner@kernel.org, arnd@arndb.de
+References: <10F34E3A3BFBC534+20240909025701.1101397-1-wangyuli@uniontech.com>
+ <2024091002-caution-tinderbox-a847@gregkh>
+ <364e0e33-68ad-4f0c-86f1-f6a95def9a30@ghiti.fr>
+ <2024091037-errant-countdown-4928@gregkh>
+From: Alexandre Ghiti <alex@ghiti.fr>
+In-Reply-To: <2024091037-errant-countdown-4928@gregkh>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-GND-Sasl: alex@ghiti.fr
 
-On Tue, Sep 10, 2024 at 01:31:04PM +0200, Alexandre Ghiti wrote:
-> Hi Greg,
-> 
-> On 10/09/2024 09:32, Greg KH wrote:
-> > On Mon, Sep 09, 2024 at 10:57:01AM +0800, WangYuli wrote:
-> > > From: Andrea Parri <parri.andrea@gmail.com>
-> > > 
-> > > [ Upstream commit d6cfd1770f20392d7009ae1fdb04733794514fa9 ]
-> > > 
-> > > The membarrier system call requires a full memory barrier after storing
-> > > to rq->curr, before going back to user-space.  The barrier is only
-> > > needed when switching between processes: the barrier is implied by
-> > > mmdrop() when switching from kernel to userspace, and it's not needed
-> > > when switching from userspace to kernel.
-> > > 
-> > > Rely on the feature/mechanism ARCH_HAS_MEMBARRIER_CALLBACKS and on the
-> > > primitive membarrier_arch_switch_mm(), already adopted by the PowerPC
-> > > architecture, to insert the required barrier.
-> > > 
-> > > Fixes: fab957c11efe2f ("RISC-V: Atomic and Locking Code")
-> > > Signed-off-by: Andrea Parri <parri.andrea@gmail.com>
-> > > Reviewed-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-> > > Link: https://lore.kernel.org/r/20240131144936.29190-2-parri.andrea@gmail.com
-> > > Signed-off-by: Palmer Dabbelt <palmer@rivosinc.com>
-> > > Signed-off-by: WangYuli <wangyuli@uniontech.com>
-> > > ---
-> > >   MAINTAINERS                         |  2 +-
-> > >   arch/riscv/Kconfig                  |  1 +
-> > >   arch/riscv/include/asm/membarrier.h | 31 +++++++++++++++++++++++++++++
-> > >   arch/riscv/mm/context.c             |  2 ++
-> > >   kernel/sched/core.c                 |  5 +++--
-> > >   5 files changed, 38 insertions(+), 3 deletions(-)
-> > >   create mode 100644 arch/riscv/include/asm/membarrier.h
-> > Now queued up, thanks.
-> 
-> 
-> The original patch was merged in 6.9 and the Fixes tag points to a commit
-> introduced in v4.15. So IIUC, this patch should have been backported
-> "automatically" to the releases < 6.9 right? As stated in the documentation
-> (process/stable-kernel-rules.html):
-> 
-> "Note, such tagging is unnecessary if the stable team can derive the
-> appropriate versions from Fixes: tags."
-> 
-> Or did we miss something?
 
-Yes, you didn't tag cc: stable at all in this commit, which is why we
-did not see it.  The documentation says that :)
+On 10/09/2024 13:58, Greg KH wrote:
+> On Tue, Sep 10, 2024 at 01:31:04PM +0200, Alexandre Ghiti wrote:
+>> Hi Greg,
+>>
+>> On 10/09/2024 09:32, Greg KH wrote:
+>>> On Mon, Sep 09, 2024 at 10:57:01AM +0800, WangYuli wrote:
+>>>> From: Andrea Parri <parri.andrea@gmail.com>
+>>>>
+>>>> [ Upstream commit d6cfd1770f20392d7009ae1fdb04733794514fa9 ]
+>>>>
+>>>> The membarrier system call requires a full memory barrier after storing
+>>>> to rq->curr, before going back to user-space.  The barrier is only
+>>>> needed when switching between processes: the barrier is implied by
+>>>> mmdrop() when switching from kernel to userspace, and it's not needed
+>>>> when switching from userspace to kernel.
+>>>>
+>>>> Rely on the feature/mechanism ARCH_HAS_MEMBARRIER_CALLBACKS and on the
+>>>> primitive membarrier_arch_switch_mm(), already adopted by the PowerPC
+>>>> architecture, to insert the required barrier.
+>>>>
+>>>> Fixes: fab957c11efe2f ("RISC-V: Atomic and Locking Code")
+>>>> Signed-off-by: Andrea Parri <parri.andrea@gmail.com>
+>>>> Reviewed-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+>>>> Link: https://lore.kernel.org/r/20240131144936.29190-2-parri.andrea@gmail.com
+>>>> Signed-off-by: Palmer Dabbelt <palmer@rivosinc.com>
+>>>> Signed-off-by: WangYuli <wangyuli@uniontech.com>
+>>>> ---
+>>>>    MAINTAINERS                         |  2 +-
+>>>>    arch/riscv/Kconfig                  |  1 +
+>>>>    arch/riscv/include/asm/membarrier.h | 31 +++++++++++++++++++++++++++++
+>>>>    arch/riscv/mm/context.c             |  2 ++
+>>>>    kernel/sched/core.c                 |  5 +++--
+>>>>    5 files changed, 38 insertions(+), 3 deletions(-)
+>>>>    create mode 100644 arch/riscv/include/asm/membarrier.h
+>>> Now queued up, thanks.
+>>
+>> The original patch was merged in 6.9 and the Fixes tag points to a commit
+>> introduced in v4.15. So IIUC, this patch should have been backported
+>> "automatically" to the releases < 6.9 right? As stated in the documentation
+>> (process/stable-kernel-rules.html):
+>>
+>> "Note, such tagging is unnecessary if the stable team can derive the
+>> appropriate versions from Fixes: tags."
+>>
+>> Or did we miss something?
+> Yes, you didn't tag cc: stable at all in this commit, which is why we
+> did not see it.  The documentation says that :)
 
-thanks,
 
-greg k-h
+Ok, some patches seem to make it to stable without the cc: stable tag 
+(like the one below for example), so I thought it was not necessary.
+
+From: Alexandre Ghiti <alexghiti@rivosinc.com>
+
+[ Upstream commit 1ff95eb2bebda50c4c5406caaf201e0fcb24cc8f ]
+
+RISCV_ALTERNATIVE_EARLY will issue sbi_ecall() very early in the boot
+process, before the first memory mapping is setup so we can't have any
+instrumentation happening here.
+
+In addition, when the kernel is relocatable, we must also not issue any
+relocation this early since they would have been patched virtually only.
+
+So, instead of disabling instrumentation for the whole kernel/sbi.c file
+and compiling it with -fno-pie, simply move __sbi_ecall() and
+__sbi_base_ecall() into their own file where this is fixed.
+
+Reported-by: Conor Dooley <conor.dooley@microchip.com>
+Closes:https://lore.kernel.org/linux-riscv/20240813-pony-truck-3e7a83e9759e@spud/
+Reported-by 
+<https://lore.kernel.org/linux-riscv/20240813-pony-truck-3e7a83e9759e@spud/Reported-by>:syzbot+cfbcb82adf6d7279fd35@syzkaller.appspotmail.com 
+<mailto:syzbot%2Bcfbcb82adf6d7279fd35@syzkaller.appspotmail.com>
+Closes:https://lore.kernel.org/linux-riscv/00000000000065062c061fcec37b@google.com/ 
+<https://lore.kernel.org/linux-riscv/00000000000065062c061fcec37b@google.com/>
+Fixes: 1745cfafebdf ("riscv: don't use global static vars to store 
+alternative data")
+Signed-off-by: Alexandre Ghiti <alexghiti@rivosinc.com>
+Link:https://lore.kernel.org/r/20240829165048.49756-1-alexghiti@rivosinc.com 
+<https://lore.kernel.org/r/20240829165048.49756-1-alexghiti@rivosinc.com>
+Signed-off-by: Palmer Dabbelt <palmer@rivosinc.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+  arch/riscv/include/asm/sbi.h | 20 ++++++++++-
+  arch/riscv/kernel/Makefile   |  6 +++-
+  arch/riscv/kernel/sbi.c      | 63 -----------------------------------
+  arch/riscv/kernel/sbi_ecall.c | 48 ++++++++++++++++++++++++++
+  4 files changed, 72 insertions(+), 65 deletions(-)
+  create mode 100644 arch/riscv/kernel/sbi_ecall.c
+
+I'll pay attention to that from now on.
+
+Thanks,
+
+Alex
+
+
+>
+> thanks,
+>
+> greg k-h
+>
+> _______________________________________________
+> linux-riscv mailing list
+> linux-riscv@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-riscv
