@@ -1,134 +1,231 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
+Received: from out-182.mta0.migadu.com (out-182.mta0.migadu.com [91.218.175.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C347E282EA;
-	Tue, 10 Sep 2024 03:07:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD3CB4436A
+	for <llvm@lists.linux.dev>; Tue, 10 Sep 2024 03:14:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725937647; cv=none; b=qOtQIL37LiuxG7jlvK5xDSeRpdpXDVrnRoscafeSvTW6lq3+WNL/ShWy/bRfHUz4Hg/ugswRWFh4F+2h0dxHdzawf1PZ1iuUCUm3vGHU6wej6PTrYIz3Hb/Pgw76tLWf+1nJN24ISHYvKhjlmxXEYYsk+8UuHyTb6WjyYmkpqQQ=
+	t=1725938068; cv=none; b=rC8cKVWoT4QQsd4pAaYBw+wju603k+sUg/HEYT5pot1yzO61MVZJxKjkK3k6fYUXA+Ijtn7VcwIK3K8R371IE45LkU4t/ibkb752EPUFpFlkzLJx9BCdTwcbmkmmD7BpQrmBJ09Sk9ZtU+rHg931RTJcbWCkTufwNO/RMAz8znk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725937647; c=relaxed/simple;
-	bh=q8A/oaTKxO2g75EdYP84UySv3JNfHQYktwjxs6CJGjc=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=MtfdbIt7EjaDY+R5MMx6dumT9LRZpppsJNanc44LieWTlDaXAesNSwVMyL90Mt/G5smXe/MxdN0pQjsSsUDqpyiqILJP7KtH587pzWASQsjm25gV4HH/6oyt7BJ5LDURBd4tsRuMQdELHy9JAg9e13wNF2RZB1B/voFWRkD5ZPs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=G1IeAlNn; arc=none smtp.client-ip=198.175.65.20
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1725938068; c=relaxed/simple;
+	bh=XZ/dizzuFlggz8N7mbiSBg50/BhHibOeNR0BlwyvmJg=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=MiWt/YapgcniW4cOm70D0LU9kFPgdWOYn7JRcKles0n16l0cCOCzFmb/U5kSPsvsI9+E1pxyfVsqqm5qLW9YI4No+FW5BvAueE5YgTXABCxYlSU+Aa95Ac6fDAj1HwbjHz/uNdvsVTkaGCPLkFU8A7TKZ9fz7/ZAv6TVoto58Dg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=stYe1fd9; arc=none smtp.client-ip=91.218.175.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="G1IeAlNn"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1725937646; x=1757473646;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=q8A/oaTKxO2g75EdYP84UySv3JNfHQYktwjxs6CJGjc=;
-  b=G1IeAlNnaRUncxfp+VeCnvMgtiO2Wpx96oYOKUNxq8TjWnCg1wymK4k0
-   IP6q3J/lAlxS8G284QYMhjtRKPp8u3SrUahvCfGYSaCMkG/nlT3bOuZWo
-   cMdTfQumxuoMfxhM9gqjiKTbHFjFAMO5NOW2sGOQA2z+bvvAybShl7GHo
-   FkociCkRoJuzaJ3vATOvbWYNV8kRWNJr9rOJRVZCPqzfj+1/bfryUBK1G
-   T3HlIeK5AwZYdYb83YjWZS/tomm0Q78TzQP5bLkRGPVeIFgatz9edvxDJ
-   gWCmUvFriNiGaVzFBFCzYbw+2LCUzuGaoYHZFL/WPqweZU4wirct4V3Ja
-   g==;
-X-CSE-ConnectionGUID: 06d0NVYeSfi+9tVQ9v2Dqw==
-X-CSE-MsgGUID: IdYgCDVuRIyQFXSTIy4P6w==
-X-IronPort-AV: E=McAfee;i="6700,10204,11190"; a="24480244"
-X-IronPort-AV: E=Sophos;i="6.10,215,1719903600"; 
-   d="scan'208";a="24480244"
-Received: from orviesa010.jf.intel.com ([10.64.159.150])
-  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Sep 2024 20:07:23 -0700
-X-CSE-ConnectionGUID: QxQdgMReTK+HXvy1PYOOCQ==
-X-CSE-MsgGUID: KYIpkXqpR8Kgu7jIXlsI/w==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.10,215,1719903600"; 
-   d="scan'208";a="66680077"
-Received: from lkp-server01.sh.intel.com (HELO 9c6b1c7d3b50) ([10.239.97.150])
-  by orviesa010.jf.intel.com with ESMTP; 09 Sep 2024 20:07:21 -0700
-Received: from kbuild by 9c6b1c7d3b50 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1snrDq-000FZc-1o;
-	Tue, 10 Sep 2024 03:07:18 +0000
-Date: Tue, 10 Sep 2024 11:07:16 +0800
-From: kernel test robot <lkp@intel.com>
-To: Andrew Morton <akpm@linux-foundation.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Linux Memory Management List <linux-mm@kvack.org>
-Subject: [linux-next:master 10352/10516] kernel/resource.c:1874:43: error:
- use of undeclared identifier 'MAX_PHYSMEM_BITS'
-Message-ID: <202409101018.h037Tq0a-lkp@intel.com>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="stYe1fd9"
+Message-ID: <47e6a637-fe2c-4099-92bd-a2acdf1e0b3d@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1725938062;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=zOk3T4QNOS8F4QZutG3gxnZiBZHpX7piGLxJ1CtpCEI=;
+	b=stYe1fd9ofOy2VXU90yQCIXm8JHOgjVG3QF0mCeO2ODlTQHK5LyDLEer8q5Gp568fdANa1
+	CKGHBg0oGRRIZP49g1m6DHk4GFCXUmjQHUEFlF+xqFIJsjtgt3qmEiqbRPOd+qrG0Epj7D
+	W+P315ubkSqRZMPHM7L8B7qUR1W0x2k=
+Date: Tue, 10 Sep 2024 11:14:01 +0800
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-head:   100cc857359b5d731407d1038f7e76cd0e871d94
-commit: 5f445800cbdfc4b4185d496a43dfd78df63d2265 [10352/10516] Merge branch 'mm-everything' of git://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm
-config: arm-randconfig-001-20240910 (https://download.01.org/0day-ci/archive/20240910/202409101018.h037Tq0a-lkp@intel.com/config)
-compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 05f5a91d00b02f4369f46d076411c700755ae041)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240910/202409101018.h037Tq0a-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202409101018.h037Tq0a-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
-   In file included from kernel/resource.c:21:
-   In file included from include/linux/pseudo_fs.h:4:
-   In file included from include/linux/fs_context.h:14:
-   In file included from include/linux/security.h:33:
-   In file included from include/linux/mm.h:2202:
-   include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
->> kernel/resource.c:1874:43: error: use of undeclared identifier 'MAX_PHYSMEM_BITS'
-    1874 |                 end = min_t(resource_size_t, base->end, PHYSMEM_END);
-         |                                                         ^
-   include/linux/mm.h:101:32: note: expanded from macro 'PHYSMEM_END'
-     101 | # define PHYSMEM_END    ((1ULL << MAX_PHYSMEM_BITS) - 1)
-         |                                   ^
-   kernel/resource.c:1891:51: error: use of undeclared identifier 'MAX_PHYSMEM_BITS'
-    1891 |                addr <= min_t(resource_size_t, base->end, PHYSMEM_END);
-         |                                                          ^
-   include/linux/mm.h:101:32: note: expanded from macro 'PHYSMEM_END'
-     101 | # define PHYSMEM_END    ((1ULL << MAX_PHYSMEM_BITS) - 1)
-         |                                   ^
-   1 warning and 2 errors generated.
-
-Kconfig warnings: (for reference only)
-   WARNING: unmet direct dependencies detected for GET_FREE_REGION
-   Depends on [n]: SPARSEMEM [=n]
-   Selected by [y]:
-   - RESOURCE_KUNIT_TEST [=y] && RUNTIME_TESTING_MENU [=y] && KUNIT [=y]
+Subject: Re: [PATCH v3] docs/zh_CN: add the translation of
+ kbuild/gcc-plugins.rst
+To: Dongliang Mu <dzm91@hust.edu.cn>, Alex Shi <alexs@kernel.org>,
+ Yanteng Si <siyanteng@loongson.cn>, Jonathan Corbet <corbet@lwn.net>,
+ Nathan Chancellor <nathan@kernel.org>,
+ Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling
+ <morbo@google.com>, Justin Stitt <justinstitt@google.com>
+Cc: hust-os-kernel-patches@googlegroups.cm, linux-doc@vger.kernel.org,
+ linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+References: <20240907070244.206808-1-dzm91@hust.edu.cn>
+Content-Language: en-US
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: YanTeng Si <si.yanteng@linux.dev>
+In-Reply-To: <20240907070244.206808-1-dzm91@hust.edu.cn>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
 
-vim +/MAX_PHYSMEM_BITS +1874 kernel/resource.c
 
-14b80582c43e4f Dan Williams    2022-05-20  1867  
-14b80582c43e4f Dan Williams    2022-05-20  1868  static resource_size_t gfr_start(struct resource *base, resource_size_t size,
-14b80582c43e4f Dan Williams    2022-05-20  1869  				 resource_size_t align, unsigned long flags)
-14b80582c43e4f Dan Williams    2022-05-20  1870  {
-14b80582c43e4f Dan Williams    2022-05-20  1871  	if (flags & GFR_DESCENDING) {
-14b80582c43e4f Dan Williams    2022-05-20  1872  		resource_size_t end;
-14b80582c43e4f Dan Williams    2022-05-20  1873  
-ea72ce5da22806 Thomas Gleixner 2024-08-14 @1874  		end = min_t(resource_size_t, base->end, PHYSMEM_END);
-14b80582c43e4f Dan Williams    2022-05-20  1875  		return end - size + 1;
-14b80582c43e4f Dan Williams    2022-05-20  1876  	}
-14b80582c43e4f Dan Williams    2022-05-20  1877  
-9d844a11c912c3 Huang Ying      2024-09-06  1878  	return ALIGN(max(base->start, align), align);
-14b80582c43e4f Dan Williams    2022-05-20  1879  }
-14b80582c43e4f Dan Williams    2022-05-20  1880  
 
-:::::: The code at line 1874 was first introduced by commit
-:::::: ea72ce5da22806d5713f3ffb39a6d5ae73841f93 x86/kaslr: Expose and use the end of the physical memory address space
+在 2024/9/7 15:02, Dongliang Mu 写道:
+> Finish the translation of kbuild/gcc-plugins.rst and move gcc-plugins
+> from TODO to the main body.
+>
+> Update to commit 3832d1fd84b6 ("docs/core-api: expand Fedora instructions
+> for GCC plugins")
+>
+> Signed-off-by: Dongliang Mu <dzm91@hust.edu.cn>
+Reviewed-by: Yanteng Si <si.yanteng@linux.dev>
 
-:::::: TO: Thomas Gleixner <tglx@linutronix.de>
-:::::: CC: Thomas Gleixner <tglx@linutronix.de>
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Thanks,
+Yanteng
+> ---
+> v2->v3: fix sign incorrect pointed by Alex
+> v1->v2: fix comments from yanteng
+>   .../translations/zh_CN/kbuild/gcc-plugins.rst | 126 ++++++++++++++++++
+>   .../translations/zh_CN/kbuild/index.rst       |   2 +-
+>   2 files changed, 127 insertions(+), 1 deletion(-)
+>   create mode 100644 Documentation/translations/zh_CN/kbuild/gcc-plugins.rst
+>
+> diff --git a/Documentation/translations/zh_CN/kbuild/gcc-plugins.rst b/Documentation/translations/zh_CN/kbuild/gcc-plugins.rst
+> new file mode 100644
+> index 000000000000..67a8abbf5887
+> --- /dev/null
+> +++ b/Documentation/translations/zh_CN/kbuild/gcc-plugins.rst
+> @@ -0,0 +1,126 @@
+> +.. SPDX-License-Identifier: GPL-2.0
+> +
+> +.. include:: ../disclaimer-zh_CN.rst
+> +
+> +:Original: Documentation/kbuild/gcc-plugins.rst
+> +:Translator: 慕冬亮 Dongliang Mu <dzm91@hust.edu.cn>
+> +
+> +================
+> +GCC 插件基础设施
+> +================
+> +
+> +
+> +介绍
+> +====
+> +
+> +GCC 插件是为编译器提供额外功能的可加载模块 [1]_。它们对于运行时插装和静态分析非常有用。
+> +我们可以在编译过程中通过回调 [2]_，GIMPLE [3]_，IPA [4]_ 和 RTL Passes [5]_
+> +（译者注：Pass 是编译器所采用的一种结构化技术，用于完成编译对象的分析、优化或转换等功能）
+> +来分析、修改和添加更多的代码。
+> +
+> +内核的 GCC 插件基础设施支持构建树外模块、交叉编译和在单独的目录中构建。插件源文件必须由
+> +C++ 编译器编译。
+> +
+> +目前 GCC 插件基础设施只支持一些架构。搜索 "select HAVE_GCC_PLUGINS" 来查找支持
+> +GCC 插件的架构。
+> +
+> +这个基础设施是从 grsecurity [6]_  和 PaX [7]_ 移植过来的。
+> +
+> +--
+> +
+> +.. [1] https://gcc.gnu.org/onlinedocs/gccint/Plugins.html
+> +.. [2] https://gcc.gnu.org/onlinedocs/gccint/Plugin-API.html#Plugin-API
+> +.. [3] https://gcc.gnu.org/onlinedocs/gccint/GIMPLE.html
+> +.. [4] https://gcc.gnu.org/onlinedocs/gccint/IPA.html
+> +.. [5] https://gcc.gnu.org/onlinedocs/gccint/RTL.html
+> +.. [6] https://grsecurity.net/
+> +.. [7] https://pax.grsecurity.net/
+> +
+> +
+> +目的
+> +====
+> +
+> +GCC 插件的设计目的是提供一个用于试验 GCC 或 Clang 上游没有的潜在编译器功能的场所。
+> +一旦它们的实用性得到验证，这些功能将被添加到 GCC（和 Clang）的上游。随后，在所有
+> +支持的 GCC 版本都支持这些功能后，它们会被从内核中移除。
+> +
+> +具体来说，新插件应该只实现上游编译器（GCC 和 Clang）不支持的功能。
+> +
+> +当 Clang 中存在 GCC 中不存在的某项功能时，应努力将该功能做到 GCC 上游（而不仅仅
+> +是作为内核专用的 GCC 插件），以使整个生态都能从中受益。
+> +
+> +类似的，如果 GCC 插件提供的功能在 Clang 中 **不** 存在，但该功能被证明是有用的，也应
+> +努力将该功能上传到 GCC（和 Clang）。
+> +
+> +在上游 GCC 提供了某项功能后，该插件将无法在相应的 GCC 版本（以及更高版本）下编译。
+> +一旦所有内核支持的 GCC 版本都提供了该功能，该插件将从内核中移除。
+> +
+> +
+> +文件
+> +====
+> +
+> +**$(src)/scripts/gcc-plugins**
+> +
+> +	这是 GCC 插件的目录。
+> +
+> +**$(src)/scripts/gcc-plugins/gcc-common.h**
+> +
+> +	这是 GCC 插件的兼容性头文件。
+> +	应始终包含它，而不是单独的 GCC 头文件。
+> +
+> +**$(src)/scripts/gcc-plugins/gcc-generate-gimple-pass.h,
+> +$(src)/scripts/gcc-plugins/gcc-generate-ipa-pass.h,
+> +$(src)/scripts/gcc-plugins/gcc-generate-simple_ipa-pass.h,
+> +$(src)/scripts/gcc-plugins/gcc-generate-rtl-pass.h**
+> +
+> +	这些头文件可以自动生成 GIMPLE、SIMPLE_IPA、IPA 和 RTL passes 的注册结构。
+> +	与手动创建结构相比，它们更受欢迎。
+> +
+> +
+> +用法
+> +====
+> +
+> +你必须为你的 GCC 版本安装 GCC 插件头文件，以 Ubuntu 上的 gcc-10 为例::
+> +
+> +	apt-get install gcc-10-plugin-dev
+> +
+> +或者在 Fedora 上::
+> +
+> +	dnf install gcc-plugin-devel libmpc-devel
+> +
+> +或者在 Fedora 上使用包含插件的交叉编译器时::
+> +
+> +	dnf install libmpc-devel
+> +
+> +在内核配置中启用 GCC 插件基础设施与一些你想使用的插件::
+> +
+> +	CONFIG_GCC_PLUGINS=y
+> +	CONFIG_GCC_PLUGIN_LATENT_ENTROPY=y
+> +	...
+> +
+> +运行 gcc（本地或交叉编译器），确保能够检测到插件头文件::
+> +
+> +	gcc -print-file-name=plugin
+> +	CROSS_COMPILE=arm-linux-gnu- ${CROSS_COMPILE}gcc -print-file-name=plugin
+> +
+> +"plugin" 这个词意味着它们没有被检测到::
+> +
+> +	plugin
+> +
+> +完整的路径则表示插件已经被检测到::
+> +
+> +       /usr/lib/gcc/x86_64-redhat-linux/12/plugin
+> +
+> +编译包括插件在内的最小工具集::
+> +
+> +	make scripts
+> +
+> +或者直接在内核中运行 make，使用循环复杂性 GCC 插件编译整个内核。
+> +
+> +
+> +4. 如何添加新的 GCC 插件
+> +========================
+> +
+> +GCC 插件位于 scripts/gcc-plugins/。你需要将插件源文件放在 scripts/gcc-plugins/ 目录下。
+> +子目录创建并不支持，你必须添加在 scripts/gcc-plugins/Makefile、scripts/Makefile.gcc-plugins
+> +和相关的 Kconfig 文件中。
+> diff --git a/Documentation/translations/zh_CN/kbuild/index.rst b/Documentation/translations/zh_CN/kbuild/index.rst
+> index d906a4e88d0f..b51655d981f6 100644
+> --- a/Documentation/translations/zh_CN/kbuild/index.rst
+> +++ b/Documentation/translations/zh_CN/kbuild/index.rst
+> @@ -13,6 +13,7 @@
+>       :maxdepth: 1
+>   
+>       headers_install
+> +    gcc-plugins
+>   
+>   TODO:
+>   
+> @@ -24,7 +25,6 @@ TODO:
+>   - modules
+>   - issues
+>   - reproducible-builds
+> -- gcc-plugins
+>   - llvm
+>   
+>   .. only::  subproject and html
+
