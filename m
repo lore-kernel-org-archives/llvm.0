@@ -1,137 +1,75 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A80517BEBF;
-	Tue, 10 Sep 2024 07:06:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4397D17C7BD;
+	Tue, 10 Sep 2024 07:18:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725951962; cv=none; b=Eo5ss9umbM8igkeHeZiK9ZeCAzSqDHl4599oIs0JLLaoE8xRiaUHcc/NYEvUTJFjeEb4Dt+cvCXz/DyUEEJzdZJJT8CzkTpDEMRnDZsd61bpSB/Mn6OmNBXygVchICHQJ9QAkMl/n7VaELz/kofh0TcTYDfakX9XK2YFNpFdhIc=
+	t=1725952687; cv=none; b=Bm6yJAH9Q+rAhep5JrK0fd4heckkrtctBPPT1a80xw6/FksLlP8pBztvadl62UHB8GyCK/jycOh3lJt42sxTLJJo+Xu+uXhhDqONMwqb/g4q4qOULSQmbTDOOj/Uu/qzHXjgwsGuBaDWWA+XpGOJiDGJ+eLQLUZDqhDwJfcTHcc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725951962; c=relaxed/simple;
-	bh=gqF06DA7eFnsn0rKiQDdVrzFfjrAyFqYKop9G+HSQT8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=CdnI9BRkUWXZAob7p0tJsBPkJInWm+FzLAYxw054345wPPl9U3d5751aU4DCWOEOvOtXJDxq3KuymEADJn19ejDfr47oz0kJvwVUEfDQRnx5V2eJBytjpxpYB/GYrcKIVRsdnsmGf8OHzaEjUm6zDu2TlXBJwXSRiPpEMvX1AhY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=SDmmn8fs; arc=none smtp.client-ip=192.198.163.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1725952687; c=relaxed/simple;
+	bh=OnyMkOUZUp3mVLWHnjm3K66y8reg6sgBhI6dE1mMjYk=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=aeMYopslueJOyVOgEWG9KJsS5WHsehIfvP+Tpvt75kg5CC09BG83YTiNEd9VUg/34NJzpSgYuEb1R/2zNXMAXp34rubXf2DEmnnCsc4MrOkPfNHzkSJ6L8n4gBSPbNCQ1nXOosHz4ZOsPIEsRiX8vb0oGdj7YkFLt9KhrtsgU08=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JGenVeDF; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="SDmmn8fs"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1725951960; x=1757487960;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=gqF06DA7eFnsn0rKiQDdVrzFfjrAyFqYKop9G+HSQT8=;
-  b=SDmmn8fsVRYEBASI+HW/vpriHNG8qcUwVuwJFkL3u7IyhlDBT1lU0k63
-   6ru+iZWH9XHap66emPeVt9WXsHBulvcHdbgGOFiqRun5SgwSaKDQMYOWS
-   O2bvuXGoyz0LOcA+kEpCRIG8evq7ZL/CYc7vfFMv6x6gzj4eLjRs0bRD3
-   S2Mor946jf3qgwsZXmiagsFbCCAiSgS72+B8AayCZXLtyU8/tNq5SFCRR
-   KTx7VlXQzF/qPcM9tHXzgIIk1hm4WpCWAMpTWPpbbnKK14Y2lD+NJ7TiQ
-   O3jGxopAihQcPLB7NPO5MNPDjHPRM0y/2ihdWdlEMSMQ8wE9qtDwoCAvg
-   A==;
-X-CSE-ConnectionGUID: e+yGJwtTTM61+18rSn1mkQ==
-X-CSE-MsgGUID: 41IhfWUVRWe7/k1MxPtIOA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11190"; a="28571871"
-X-IronPort-AV: E=Sophos;i="6.10,216,1719903600"; 
-   d="scan'208";a="28571871"
-Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Sep 2024 00:05:57 -0700
-X-CSE-ConnectionGUID: n/zJixobRey0zzAxypIMUQ==
-X-CSE-MsgGUID: tEfp3j0WQM2xmbrEPdFTiQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.10,216,1719903600"; 
-   d="scan'208";a="97638226"
-Received: from lkp-server01.sh.intel.com (HELO 53e96f405c61) ([10.239.97.150])
-  by orviesa002.jf.intel.com with ESMTP; 10 Sep 2024 00:05:51 -0700
-Received: from kbuild by 53e96f405c61 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1snuwd-0000CK-1L;
-	Tue, 10 Sep 2024 07:05:47 +0000
-Date: Tue, 10 Sep 2024 15:05:41 +0800
-From: kernel test robot <lkp@intel.com>
-To: Vadim Fedorenko <vadfed@meta.com>,
-	Vadim Fedorenko <vadim.fedorenko@linux.dev>,
-	Willem de Bruijn <willemb@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	David Ahern <dsahern@kernel.org>,
-	Jason Xing <kerneljasonxing@gmail.com>,
-	Simon Horman <horms@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	netdev@vger.kernel.org
-Subject: Re: [PATCH net-next v4 2/3] net_tstamp: add SCM_TS_OPT_ID for RAW
- sockets
-Message-ID: <202409101415.65PxVwQn-lkp@intel.com>
-References: <20240909165046.644417-3-vadfed@meta.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JGenVeDF"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D1BE0C4CEC3;
+	Tue, 10 Sep 2024 07:18:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1725952686;
+	bh=OnyMkOUZUp3mVLWHnjm3K66y8reg6sgBhI6dE1mMjYk=;
+	h=From:Subject:Date:To:Cc:From;
+	b=JGenVeDFkaAhwiBhE0wl3TChSfLAhJqBLTUSvjz35IZrYtVTkYoZKoqFDBjMbr3HL
+	 EPv1gsURNVPR7cnsm1ydTcJnLovAqNI0CoWJftiEH69y6QqQDM7+OMw179jrQ+xESk
+	 mjPxHhxeFiBMHDFEXoNwab1vuuPoOHsiuR6R/Xq3uUbr1sDnLi6Kf/NaYbFVUiGuJ9
+	 RHGPiqyzd789VIslYGWeV67fnw6yht/HCoGVhWgFrxW2jHL95m4Pte6xpfqIw3JdJU
+	 l7aI9/sWDWzvgIejwPNTPHRFEqZG5P3L4FFTkn8XzEyHMREAFMdETDg/x8BfPzJpCW
+	 Gy9u1hJUN0FgA==
+From: Simon Horman <horms@kernel.org>
+Subject: [PATCH net-next 0/3] net: ethernet: ti: Address some warnings
+Date: Tue, 10 Sep 2024 08:17:55 +0100
+Message-Id: <20240910-ti-warn-v1-0-afd1e404abbe@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240909165046.644417-3-vadfed@meta.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAKPy32YC/x3MQQqAIBBA0avErBtQKdCuEi3KxprNFColRHdPW
+ j74/AcSRaYEQ/NApIsTH1Kh2wb8PstGyGs1GGU65bTCzHjPUXBd/OI6a03oDdT6jBS4/KcRhDI
+ KlQzT+34RCdTcYwAAAA==
+To: "David S. Miller" <davem@davemloft.net>, 
+ Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, 
+ Paolo Abeni <pabeni@redhat.com>, Siddharth Vadapalli <s-vadapalli@ti.com>, 
+ Roger Quadros <rogerq@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
+ Nick Desaulniers <ndesaulniers@google.com>, 
+ Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>
+Cc: netdev@vger.kernel.org, linux-omap@vger.kernel.org, 
+ llvm@lists.linux.dev
+X-Mailer: b4 0.14.0
 
-Hi Vadim,
+Hi,
 
-kernel test robot noticed the following build errors:
+This patchset addresses some warnings flagged by Sparse, and clang-18 in
+TI Ethernet drivers.
 
-[auto build test ERROR on net-next/main]
+Although these changes do not alter the functionality of the code, by
+addressing them real problems introduced in future which are flagged by
+tooling will stand out more readily.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Vadim-Fedorenko/net_tstamp-add-SCM_TS_OPT_ID-to-provide-OPT_ID-in-control-message/20240910-005324
-base:   net-next/main
-patch link:    https://lore.kernel.org/r/20240909165046.644417-3-vadfed%40meta.com
-patch subject: [PATCH net-next v4 2/3] net_tstamp: add SCM_TS_OPT_ID for RAW sockets
-config: arm-integrator_defconfig (https://download.01.org/0day-ci/archive/20240910/202409101415.65PxVwQn-lkp@intel.com/config)
-compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 05f5a91d00b02f4369f46d076411c700755ae041)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240910/202409101415.65PxVwQn-lkp@intel.com/reproduce)
+Compile tested only.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202409101415.65PxVwQn-lkp@intel.com/
+---
+Simon Horman (3):
+      net: ethernet: ti: am65-cpsw: Address __percpu Sparse warnings
+      net: ethernet: ti: am65-cpsw: Use __be64 type for id_temp
+      net: ethernet: ti: cpsw_ale: Remove unused accessor functions
 
-All errors (new ones prefixed by >>):
+ drivers/net/ethernet/ti/am65-cpsw-nuss.c |  8 +++-----
+ drivers/net/ethernet/ti/cpsw_ale.c       | 30 +++++++++++++++++++++---------
+ 2 files changed, 24 insertions(+), 14 deletions(-)
 
-   In file included from net/ipv4/tcp.c:252:
-   In file included from include/linux/inet_diag.h:5:
-   In file included from include/net/netlink.h:6:
-   In file included from include/linux/netlink.h:7:
-   In file included from include/linux/skbuff.h:17:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:8:
-   In file included from include/linux/cacheflush.h:5:
-   In file included from arch/arm/include/asm/cacheflush.h:10:
-   In file included from include/linux/mm.h:2232:
-   include/linux/vmstat.h:517:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     517 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
->> net/ipv4/tcp.c:485:25: error: use of undeclared identifier 'sockc'
-     485 |                 sock_tx_timestamp(sk, sockc, &shinfo->tx_flags);
-         |                                       ^
-   1 warning and 1 error generated.
+base-commit: a9b1fab3b69f163bbe7a012d0c3f6b5204500c05
 
-
-vim +/sockc +485 net/ipv4/tcp.c
-
-   476	
-   477	static void tcp_tx_timestamp(struct sock *sk, u16 tsflags)
-   478	{
-   479		struct sk_buff *skb = tcp_write_queue_tail(sk);
-   480	
-   481		if (tsflags && skb) {
-   482			struct skb_shared_info *shinfo = skb_shinfo(skb);
-   483			struct tcp_skb_cb *tcb = TCP_SKB_CB(skb);
-   484	
- > 485			sock_tx_timestamp(sk, sockc, &shinfo->tx_flags);
-   486			if (tsflags & SOF_TIMESTAMPING_TX_ACK)
-   487				tcb->txstamp_ack = 1;
-   488			if (tsflags & SOF_TIMESTAMPING_TX_RECORD_MASK)
-   489				shinfo->tskey = TCP_SKB_CB(skb)->seq + skb->len - 1;
-   490		}
-   491	}
-   492	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
