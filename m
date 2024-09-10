@@ -1,46 +1,76 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD19852F71;
-	Tue, 10 Sep 2024 07:32:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1964D187878
+	for <llvm@lists.linux.dev>; Tue, 10 Sep 2024 08:12:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725953533; cv=none; b=jCuvavoESZnFHHDapUi4N+SLClhjNs035Zh0fWv88Q+cqRTv4PtefJgw28RWCd41JrMglSU1CA3neVcmv7J1JMSl0s7E1Euw1g5Wl5lyJ8JMj0SyGE6YTYmrYDtTThMHxnGqlgYHuyudEGkwyMpNX5fGnXX0pHH//IvQgIZbWMo=
+	t=1725955950; cv=none; b=SZgNBCOX9FlPKbRzHaaUuhpiOS/xYqdk4XHqj/fnIoEnPJW2UrpeuBvYrzYd99FmTjdFT0jGWzFfik0CiEf3iJMs/rDFNXCxlFyOODczYRH6bRfD0cipK23clt4tIwFHtwWvRYfYzZk3kqu5vpSSodUWWnkY+LOt+H3uUxtYCX0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725953533; c=relaxed/simple;
-	bh=Wt3I8iEDKPg35JSenun0Nk2iBIDnFaPNA3lYXP3Yk4U=;
+	s=arc-20240116; t=1725955950; c=relaxed/simple;
+	bh=X6w/BPx5GBKrPXBB3CaDS2kMB9yUmJ5UQVZ/g6ar698=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ozynRAhacyxkmVIWsp0vNB+w1DdZy/Ojb2rIyPvg+K9S2nFXE4/UQesVYZUe74BzZnTL3bVBqRnSC4JyL8cXymbF8FpG3WlAVCL12NVEB5W+UTNbzkDjN4M8NTkAmTjYrBvkATc477tkGsR4NJYSJxRTZKUcwfPUk7pqC40AYU0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=UcszCMuZ; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=YegdEfdlTGseyYaKGYen+yqOhudxwpZEf0AXPpreiADeLEypm5QaQRXyAzO23IZUbDAC0Sg25qSYUUXzEhmxuFzpPsIP7XG43q0ro4WsV9HLOdG+lNKbwcnoU4HUGHybec8jvMgjmfOxkHxpqY3/MBsovFtn0Y0idUuY5tK4xD4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=c1JO7NKW; arc=none smtp.client-ip=198.175.65.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="UcszCMuZ"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C50A4C4CEC3;
-	Tue, 10 Sep 2024 07:32:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1725953533;
-	bh=Wt3I8iEDKPg35JSenun0Nk2iBIDnFaPNA3lYXP3Yk4U=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=UcszCMuZNY9rpBWYCUlpAx6I7oXcWxHhUQfGs4FOETXF3tyEjS8aQXwrT1pZFCcEU
-	 LhhUwaaWo+my1Lf8s57xE0KDl498Qzn3WzAmGpip6FtQGnRPZN5ry0i6ja1U0phOTU
-	 7Vv4Z65RInrd9LnCJ6L/4HTNUhxM7ipbuJK9+QW8=
-Date: Tue, 10 Sep 2024 09:32:10 +0200
-From: Greg KH <gregkh@linuxfoundation.org>
-To: WangYuli <wangyuli@uniontech.com>
-Cc: stable@vger.kernel.org, sashal@kernel.org, parri.andrea@gmail.com,
-	mathieu.desnoyers@efficios.com, palmer@rivosinc.com,
-	linux-kernel@vger.kernel.org, paul.walmsley@sifive.com,
-	palmer@dabbelt.com, aou@eecs.berkeley.edu, nathan@kernel.org,
-	ndesaulniers@google.com, trix@redhat.com,
-	linux-riscv@lists.infradead.org, llvm@lists.linux.dev,
-	paulmck@kernel.org, mingo@redhat.com, peterz@infradead.org,
-	juri.lelli@redhat.com, vincent.guittot@linaro.org,
-	dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
-	mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
-	brauner@kernel.org, arnd@arndb.de
-Subject: Re: [PATCH 6.6] membarrier: riscv: Add full memory barrier in
- switch_mm()
-Message-ID: <2024091002-caution-tinderbox-a847@gregkh>
-References: <10F34E3A3BFBC534+20240909025701.1101397-1-wangyuli@uniontech.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="c1JO7NKW"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1725955949; x=1757491949;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=X6w/BPx5GBKrPXBB3CaDS2kMB9yUmJ5UQVZ/g6ar698=;
+  b=c1JO7NKWOYPt8+q5NLhYkD7Z2AWl3620cVQL8IoL3rRzLUfvlsSEjQw/
+   /Jxkdp5zhH6HLT1X5OKF+mPF6I4eOptSHNATKeyOy9bUoV7UkBeLyqfQz
+   o9LW3uptwegk5DysrW4UBFfZaJY9mMy3oMHISrHKFtZpUGkWK3og6f6GH
+   fdybnE8oEFX4VIwpDCm3zp2vwgfwuf2mSQkmWV0KcMDp/slqf7xW4uD+m
+   kOxZqZkXOgKHT0NDVmColnXWZhqlhTf0HVcUnyYlK4APM3Xn4+WMilmmT
+   v0mgnZYNUOGZdMe9dhQKg1aZkEQfcxtNGQ36ZM5xequnD76f22UDx0Oxx
+   A==;
+X-CSE-ConnectionGUID: RBUNpjCzSaK8PArIztYRcw==
+X-CSE-MsgGUID: s2/HXa8SQxCnZKlSBSimIw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11190"; a="47204530"
+X-IronPort-AV: E=Sophos;i="6.10,216,1719903600"; 
+   d="scan'208";a="47204530"
+Received: from orviesa002.jf.intel.com ([10.64.159.142])
+  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Sep 2024 01:12:29 -0700
+X-CSE-ConnectionGUID: fyEZI10hQyekJ/4mrj2MmQ==
+X-CSE-MsgGUID: 7C9rnatgR5+/KfxNh0wgfg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.10,216,1719903600"; 
+   d="scan'208";a="97648069"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orviesa002.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Sep 2024 01:12:25 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.98)
+	(envelope-from <andriy.shevchenko@linux.intel.com>)
+	id 1snvz3-000000077EJ-2djD;
+	Tue, 10 Sep 2024 11:12:21 +0300
+Date: Tue, 10 Sep 2024 11:12:21 +0300
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To: Simon Horman <horms@kernel.org>
+Cc: Pablo Neira Ayuso <pablo@netfilter.org>,
+	Felix Huettner <felix.huettner@mail.schwarz>,
+	netfilter-devel@vger.kernel.org, coreteam@netfilter.org,
+	netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev, Jozsef Kadlecsik <kadlec@netfilter.org>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>
+Subject: Re: [PATCH net v1 1/1] netfilter: conntrack: Guard possoble unused
+ functions
+Message-ID: <Zt__ZT-P0kUY909z@smile.fi.intel.com>
+References: <20240905203612.333421-1-andriy.shevchenko@linux.intel.com>
+ <20240906162938.GH2097826@kernel.org>
+ <Zt7B79Q3O7mNqrOl@smile.fi.intel.com>
+ <20240909151712.GZ2097826@kernel.org>
+ <Zt8V5xjrZaEvR8K5@smile.fi.intel.com>
+ <20240909183043.GE2097826@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -49,38 +79,32 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <10F34E3A3BFBC534+20240909025701.1101397-1-wangyuli@uniontech.com>
+In-Reply-To: <20240909183043.GE2097826@kernel.org>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 
-On Mon, Sep 09, 2024 at 10:57:01AM +0800, WangYuli wrote:
-> From: Andrea Parri <parri.andrea@gmail.com>
+On Mon, Sep 09, 2024 at 07:30:43PM +0100, Simon Horman wrote:
+> On Mon, Sep 09, 2024 at 06:36:07PM +0300, Andy Shevchenko wrote:
+> > On Mon, Sep 09, 2024 at 04:17:12PM +0100, Simon Horman wrote:
+> > > On Mon, Sep 09, 2024 at 12:37:51PM +0300, Andy Shevchenko wrote:
+> > > > On Fri, Sep 06, 2024 at 05:29:38PM +0100, Simon Horman wrote:
+> > > > > On Thu, Sep 05, 2024 at 11:36:12PM +0300, Andy Shevchenko wrote:
+> > > > 
+> > > > > Local testing seems to show that the warning is still emitted
+> > > > > for ctnetlink_label_size if CONFIG_NETFILTER_NETLINK_GLUE_CT is enabled
+> > 
+> > Hold on, this is not related to the patch.
+> > It might be another issue.
 > 
-> [ Upstream commit d6cfd1770f20392d7009ae1fdb04733794514fa9 ]
+> Yes, sorry, I see that now too.
 > 
-> The membarrier system call requires a full memory barrier after storing
-> to rq->curr, before going back to user-space.  The barrier is only
-> needed when switching between processes: the barrier is implied by
-> mmdrop() when switching from kernel to userspace, and it's not needed
-> when switching from userspace to kernel.
-> 
-> Rely on the feature/mechanism ARCH_HAS_MEMBARRIER_CALLBACKS and on the
-> primitive membarrier_arch_switch_mm(), already adopted by the PowerPC
-> architecture, to insert the required barrier.
-> 
-> Fixes: fab957c11efe2f ("RISC-V: Atomic and Locking Code")
-> Signed-off-by: Andrea Parri <parri.andrea@gmail.com>
-> Reviewed-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-> Link: https://lore.kernel.org/r/20240131144936.29190-2-parri.andrea@gmail.com
-> Signed-off-by: Palmer Dabbelt <palmer@rivosinc.com>
-> Signed-off-by: WangYuli <wangyuli@uniontech.com>
-> ---
->  MAINTAINERS                         |  2 +-
->  arch/riscv/Kconfig                  |  1 +
->  arch/riscv/include/asm/membarrier.h | 31 +++++++++++++++++++++++++++++
->  arch/riscv/mm/context.c             |  2 ++
->  kernel/sched/core.c                 |  5 +++--
->  5 files changed, 38 insertions(+), 3 deletions(-)
->  create mode 100644 arch/riscv/include/asm/membarrier.h
+> Perhaps it can be fixed separately, something like this:
 
-Now queued up, thanks.
+If you make a patch, it will help somebody who has that in their configuration
+files enabled (with the other one being disabled). Note, I use x86_64_defconfig
+which doesn't have this specific issue to be occurred.
 
-greg k-h
+-- 
+With Best Regards,
+Andy Shevchenko
+
+
