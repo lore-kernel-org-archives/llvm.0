@@ -1,126 +1,127 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E89611A0734;
-	Tue, 10 Sep 2024 16:53:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B5C51BBBDA;
+	Tue, 10 Sep 2024 17:23:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725987203; cv=none; b=qzDfmXrAmm8DnrhLrnmuuiQNKVO5kwg3/LouoVgMKREvFr1+HXWWPeCEQWqz691nlMR+oMAbHvqk3nDP/GKW+kUkrJuF+31PzctcAnZbtwn0Bv9LijlNpqVC7GkC80FYo9avd/QPPez6zOm6XY6pU0OkxoIilX50D1U6DTCnDFE=
+	t=1725988996; cv=none; b=V4e4oc1NIENhvQ7JRHnptm6GtNtwBD/3F3EE9olyO7/hBXbdQy/T/CIxqUya3Esyv1Td+2pkir1jr+iuAdU819dtX7VOWNzZYqkZaD+6bgfE0TScZ4JWNaJtKA+MIkXvAEh9mK9j1Y7WEc3vZQ5AMtzXenKRRHlYx9zrOAUzdFU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725987203; c=relaxed/simple;
-	bh=2Rpn8Njt73fgw3DpGP8vD/PC06yNfALDsBx2YphgNLk=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=KHk9Q6ZnEjomp4imXb9aB/bMGbCPWc59uosf3dJNBjVLxfmJq/j2aX1pf8cn6RU308kJlMgPY0FRduWqcHW2iGJG50oygZZAdrMDbjkNf53C27E2Hoq0sss6xUdmxU94Pv2aP03FZO3ltEdP49uZY2lrLXueeWkLwQFoNxc1MQU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dWMZaZXr; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1725988996; c=relaxed/simple;
+	bh=Pz6ByEUAA2e7z7QMJPjcM7ls1ioJtV2pZRHzNjfD0Ds=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=pGZDjUjw+PDJD6rhyDFKB7UqpuN9VFWmSi6GUaKJl66EEBudInFY+nXaXIrXu03pvuV8B4ipHa4aidB+IvNTHNGJkoMDuGkCvry0VCudCNhUsw13h7H4l8AupLboJutRcZU7ex+Pq+ZqUE0TTAvcz9HISLwGfsvzleZT6amuktc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=O4QdhDdz; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dWMZaZXr"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0086AC4CEC3;
-	Tue, 10 Sep 2024 16:53:17 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="O4QdhDdz"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6E20FC4CECE;
+	Tue, 10 Sep 2024 17:23:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1725987202;
-	bh=2Rpn8Njt73fgw3DpGP8vD/PC06yNfALDsBx2YphgNLk=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=dWMZaZXrjxOa5UfU0zNTGeflGVHGoxKjDWGYbqB/N/FZee6+lQ7/X5JRVZc8wEbXF
-	 oR7Wr4opmQKKC7N3t0qZFmDw2eZDiQI9f6tHPSvK5vzcXl/PC7IR/81+creMcDPp6t
-	 i1kypKi+eNuICldPess4KnvBra2Pu7RqH1ZcFXlb8s3wfAXwV+y33BLlCqS3G2Cs0h
-	 KzuAxDt324Tx8+081+QWY8Ci6XCsdftsM0of89hzhribYcrPI48YtNvLWIknTGACgt
-	 L+mYBqq0zp6SWGK5lbAc7+ghEbRdaHfM2dItvHNYSxyve9CPdcesWkphFf4Xl9Os07
-	 jGSuNnQ2rUGPw==
-Message-ID: <b60928c6-19c5-473c-8f13-532ed3fd3b3a@kernel.org>
-Date: Tue, 10 Sep 2024 17:53:16 +0100
+	s=k20201202; t=1725988995;
+	bh=Pz6ByEUAA2e7z7QMJPjcM7ls1ioJtV2pZRHzNjfD0Ds=;
+	h=From:Date:Subject:To:Cc:From;
+	b=O4QdhDdz7uqEpMUaqlA949WNPRzs+AS2KmaqsSEmnw1QywNm8VtXhQxGE0ilfKnEs
+	 7RgA5e0OXMAnJHp7UGe4BQmSBb38amXc+uCQIOj1LsJyJ2okJiAOVHjJ98Gvd61D6y
+	 Z4ZPscd5U9rjexfjmuQ8MLHww+R8PSEjKzb9jsovtqXO1j7xENdDLnF5UzG9teetlJ
+	 RBQbWk3V2HDnJ7kHUEeMfzsbcIHRJqPT0ow4vU03pT1TKL0Dny7bdbmnNEiX5pXVc2
+	 O0AXUKq73ckcPtHyujAhb07l4Unfg+ysifOxHrD0Ex0IE3N513CUImpXmCwhOmHmEw
+	 NtbALF2SpznRw==
+From: Nathan Chancellor <nathan@kernel.org>
+Date: Tue, 10 Sep 2024 10:22:54 -0700
+Subject: [PATCH] iio: bmi323: Drop CONFIG_PM guards around runtime
+ functions
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/2] perf build: Autodetect minimum required llvm-dev
- version
-To: James Clark <james.clark@linaro.org>, linux-perf-users@vger.kernel.org,
- sesse@google.com, acme@kernel.org
-Cc: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>,
- Namhyung Kim <namhyung@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
- Alexander Shishkin <alexander.shishkin@linux.intel.com>,
- Jiri Olsa <jolsa@kernel.org>, Ian Rogers <irogers@google.com>,
- Adrian Hunter <adrian.hunter@intel.com>,
- "Liang, Kan" <kan.liang@linux.intel.com>,
- Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling
- <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
- "Masami Hiramatsu (Google)" <mhiramat@kernel.org>,
- Changbin Du <changbin.du@huawei.com>, Guilherme Amadio <amadio@gentoo.org>,
- Leo Yan <leo.yan@arm.com>, Manu Bretelle <chantr4@gmail.com>,
- linux-kernel@vger.kernel.org, bpf@vger.kernel.org, llvm@lists.linux.dev
-References: <20240910140405.568791-1-james.clark@linaro.org>
- <b2e813c4-be89-457d-8c38-38849177ec93@kernel.org>
- <307568b9-9b6b-4eaa-973c-8f88538b8545@linaro.org>
-From: Quentin Monnet <qmo@kernel.org>
-Content-Language: en-GB
-In-Reply-To: <307568b9-9b6b-4eaa-973c-8f88538b8545@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20240910-iio-bmi323-remove-config_pm-guards-v1-1-0552249207af@kernel.org>
+X-B4-Tracking: v=1; b=H4sIAG2A4GYC/x3NTQqDMBBA4avIrB2YxIo/V5FS0jims0giE5SCe
+ PeGLr/NexcUVuECc3OB8ilFcqowbQP+41JglLUaLNkHTYZQJOM7Smc7VI75ZPQ5bRJee8RwOF0
+ L9gMNUz8yOW+ghnblTb7/yfK87x8hETGDdAAAAA==
+X-Change-ID: 20240910-iio-bmi323-remove-config_pm-guards-5707958e0ac1
+To: Jagath Jog J <jagathjog1996@gmail.com>, 
+ Jonathan Cameron <jic23@kernel.org>, Lars-Peter Clausen <lars@metafoo.de>, 
+ Denis Benato <benato.denis96@gmail.com>
+Cc: linux-iio@vger.kernel.org, llvm@lists.linux.dev, 
+ patches@lists.linux.dev, Nathan Chancellor <nathan@kernel.org>
+X-Mailer: b4 0.15-dev
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2939; i=nathan@kernel.org;
+ h=from:subject:message-id; bh=Pz6ByEUAA2e7z7QMJPjcM7ls1ioJtV2pZRHzNjfD0Ds=;
+ b=owGbwMvMwCUmm602sfCA1DTG02pJDGkPGpqTj903X8Z2hnfVmohXWgI3OxOYDpdaOwvGRi7MO
+ z0psvFmRykLgxgXg6yYIkv1Y9XjhoZzzjLeODUJZg4rE8gQBi5OAZiIjzojw8TTj3v7/s7b4lOi
+ O2fnB6acyB4nwYVF1x+td+179kxteggjwz7L8G4hYc81S7eryUyaIctgrJonxP9+msyT/5NuXAk
+ T4QIA
+X-Developer-Key: i=nathan@kernel.org; a=openpgp;
+ fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
 
-2024-09-10 16:11 UTC+0100 ~ James Clark <james.clark@linaro.org>
-> 
-> 
-> On 9/10/24 15:27, Quentin Monnet wrote:
->> 2024-09-10 15:04 UTC+0100 ~ James Clark <james.clark@linaro.org>
->>> The new LLVM addr2line feature requires a minimum version of 13 to
->>> compile. Add a feature check for the version so that NO_LLVM=1 doesn't
->>> need to be explicitly added. Leave the existing llvm feature check
->>> intact because it's used by tools other than Perf.
->>>
->>> This fixes the following compilation error when the llvm-dev version
->>> doesn't match:
->>>
->>>    util/llvm-c-helpers.cpp: In function 'char* 
->>> llvm_name_for_code(dso*, const char*, u64)':
->>>    util/llvm-c-helpers.cpp:178:21: error: 
->>> 'std::remove_reference_t<llvm::DILineInfo>' {aka 'struct 
->>> llvm::DILineInfo'} has no member named 'StartAddress'
->>>      178 |   addr, res_or_err->StartAddress ? *res_or_err- 
->>> >StartAddress : 0);
->>>
->>> Fixes: c3f8644c21df ("perf report: Support LLVM for addr2line()")
->>> Signed-off-by: James Clark <james.clark@linaro.org>
->>> ---
->>>   tools/build/Makefile.feature           |  2 +-
->>>   tools/build/feature/Makefile           |  9 +++++++++
->>>   tools/build/feature/test-llvm-perf.cpp | 14 ++++++++++++++
->>>   tools/perf/Makefile.config             |  6 +++---
->>>   4 files changed, 27 insertions(+), 4 deletions(-)
->>>   create mode 100644 tools/build/feature/test-llvm-perf.cpp
->>>
->>> diff --git a/tools/build/Makefile.feature b/tools/build/Makefile.feature
->>> index 0717e96d6a0e..427a9389e26c 100644
->>> --- a/tools/build/Makefile.feature
->>> +++ b/tools/build/Makefile.feature
->>> @@ -136,7 +136,7 @@ FEATURE_DISPLAY ?=              \
->>>            libunwind              \
->>>            libdw-dwarf-unwind     \
->>>            libcapstone            \
->>> -         llvm                   \
->>> +         llvm-perf              \
->>
->> Hi! Just a quick question, why remove "llvm" from the list, here?
->>
->> Quentin
-> 
-> Just because with respect to the linked fixes: commit, it wasn't 
-> actually there before. It was added just for addr2line so it should 
-> probably be llvm-perf rather than the generic one.
-> 
-> But yes we can add llvm output if it's useful, but could probably be a 
-> separate commit.
-> 
+When building with clang and CONFIG_PM disabled (such as with s390), it
+warns:
 
+  drivers/iio/imu/bmi323/bmi323_core.c:121:27: warning: variable 'bmi323_reg_savestate' is not needed and will not be emitted [-Wunneeded-internal-declaration]
+    121 | static const unsigned int bmi323_reg_savestate[] = {
+        |                           ^~~~~~~~~~~~~~~~~~~~
+  drivers/iio/imu/bmi323/bmi323_core.c:133:27: warning: variable 'bmi323_ext_reg_savestate' is not needed and will not be emitted [-Wunneeded-internal-declaration]
+    133 | static const unsigned int bmi323_ext_reg_savestate[] = {
+        |                           ^~~~~~~~~~~~~~~~~~~~~~~~
 
-It wasn't there before, but you're not removing the rest of the "llvm" 
-feature, so I'd expect that part to stay as well? But I don't mind much. 
-We use the "llvm" feature in bpftool, but beyond that, I don't 
-personally need it to be displayed in tools/build/Makefile.feature, so 
-no need to respin for that :)
+These arrays have no references outside of sizeof(), which will be
+evaluated at compile time. To avoid these warnings, remove the CONFIG_PM
+ifdef guard and use the RUNTIME_PM_OPS macro to ensure these functions
+always appear used to the compiler, which allows the references to the
+arrays to be visible as well. This results in no difference in runtime
+behavior because bmi323_core_pm_ops is only used when CONFIG_PM is set
+with the pm_ptr() macro.
 
-Thanks,
-Quentin
+Fixes: b09999ee1e86 ("iio: bmi323: suspend and resume triggering on relevant pm operations")
+Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+---
+NOTE: The second warning will still be visible without this change as
+well:
+
+https://lore.kernel.org/20240909-iio-bmi323-fix-array-ref-v1-1-51c220f22229@kernel.org/
+
+Technically, the blamed change for that fix is somewhat responsible for
+this issue as well but I believe the one I assigned was the real culprit
+because this diff should have been in that change.
+---
+ drivers/iio/imu/bmi323/bmi323_core.c | 7 ++-----
+ 1 file changed, 2 insertions(+), 5 deletions(-)
+
+diff --git a/drivers/iio/imu/bmi323/bmi323_core.c b/drivers/iio/imu/bmi323/bmi323_core.c
+index 671401ce80dcf947b7b64ea3af112d2a42ca5501..1d1405d37c5adb2717fc27d6b22540da50dea6d4 100644
+--- a/drivers/iio/imu/bmi323/bmi323_core.c
++++ b/drivers/iio/imu/bmi323/bmi323_core.c
+@@ -2172,7 +2172,6 @@ int bmi323_core_probe(struct device *dev)
+ }
+ EXPORT_SYMBOL_NS_GPL(bmi323_core_probe, IIO_BMI323);
+ 
+-#if defined(CONFIG_PM)
+ static int bmi323_core_runtime_suspend(struct device *dev)
+ {
+ 	struct iio_dev *indio_dev = dev_get_drvdata(dev);
+@@ -2293,11 +2292,9 @@ static int bmi323_core_runtime_resume(struct device *dev)
+ 	return iio_device_resume_triggering(indio_dev);
+ }
+ 
+-#endif
+-
+ const struct dev_pm_ops bmi323_core_pm_ops = {
+-	SET_RUNTIME_PM_OPS(bmi323_core_runtime_suspend,
+-			   bmi323_core_runtime_resume, NULL)
++	RUNTIME_PM_OPS(bmi323_core_runtime_suspend,
++		       bmi323_core_runtime_resume, NULL)
+ };
+ EXPORT_SYMBOL_NS_GPL(bmi323_core_pm_ops, IIO_BMI323);
+ 
+
+---
+base-commit: 5ba0cb92584ba5e107c97001e09013c1da0772a8
+change-id: 20240910-iio-bmi323-remove-config_pm-guards-5707958e0ac1
+
+Best regards,
+-- 
+Nathan Chancellor <nathan@kernel.org>
+
