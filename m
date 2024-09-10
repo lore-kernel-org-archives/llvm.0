@@ -1,59 +1,59 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 26D2E6F307;
-	Tue, 10 Sep 2024 01:11:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B214E6F2EA;
+	Tue, 10 Sep 2024 01:21:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725930667; cv=none; b=sRHw4XXXzNCwiT3nBX+rGWXO+T3ok5GLTXZdZnJ0mXc7tN2l6zqCNFV2/MIXNgmHU4IKKGkgKKOFxKfa0qAXQBRpzVzSmN5SmeWF85BQ0k5E4i3E9g6+K5fa3vcnMYUlJ+oSEX6M+jzB8cOIjN990YsKj8vQZou+DHNPPOLsrqY=
+	t=1725931291; cv=none; b=nNhVYiXM/tjRqwFtYorNPlov+6aWAfNJb1Kx/gs30ffHeaTfOsFJkrmJpYR72PuHKCXH1zEoJn7x0jYVz9kiNrDPKtcm4CRU86th/6m+PESYZsVHTpM2iw27pOaEsanDy9MO13kIk4U1+MCNP5O5wec+BJgm5aS6139T/qqm240=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725930667; c=relaxed/simple;
-	bh=kAHqqv5AP9zR92QBsSLMPGjalJDBQXRg2hYxYvMc7lM=;
+	s=arc-20240116; t=1725931291; c=relaxed/simple;
+	bh=47BuXYbruCR0gw5tGLOtmVdd2LPD98sn1OpkYaPVnq4=;
 	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=YE60f3TmpLwDaE3yAZI6JwlVLz/qXM1Wv5KrU3yZNMd5B7ch1n7/khc6EytcdSu/H0cwsbdlFoYQX5qLgyPcydUle/OJ+iwMNLGdFfh/tN7wloHW1Rg6e9Fs4zR6yxV/lb+nT/Lj9kRYCriog4kfAVFXPfmDtub3qduDWt83g7E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Z4uRiIfq; arc=none smtp.client-ip=198.175.65.18
+	 Content-Disposition; b=hOzROpS9ZXDf/BANuzGDfjVbdDLEdMs1xLfywy5uKm6yBWH1Y6b4vCbqJwRxkJ+UCC8se+4jWD0HDSQT7ufrxv4tb30Ei5AOIv5gIYlL+7AVRB7wDlcThw1StY/G5Pr59BjVZ7mgaRGIEFLOXhy0AqdfdUqsUJxZTzbcnT4bNlg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=i/7nHf1p; arc=none smtp.client-ip=198.175.65.12
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Z4uRiIfq"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="i/7nHf1p"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1725930666; x=1757466666;
+  t=1725931289; x=1757467289;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=kAHqqv5AP9zR92QBsSLMPGjalJDBQXRg2hYxYvMc7lM=;
-  b=Z4uRiIfq0PC5NvB5HX658AZK84suQhGcMgajtsOLIE9BovEbZmO+P5gw
-   E4mNMUJZjBeTWq/P1oPgmtaKubuUKrOeyIm9atPDIF3M/pBjPYGLdSBOV
-   njjIo2jf9UJfvoFojmzd86NIJx7WfQHAV7BvzazP1mGTJN3uKRqztWdT3
-   j6IipOd/X5/MKlahlknp28qIN4MGsOWFlbHupLD894hc9fcKIqscYHFgC
-   3GnwP19uOtTmw1fx9yfcZ97fU57ENY9+M2z6fAW13Obhf6E9YC4sdeQ+2
-   Uek7gALQsiJdh8Cg20wHOqS+PpM0gN/NRDOE2NO7yDgmAS227WxuY8QFl
-   Q==;
-X-CSE-ConnectionGUID: bXjshB1QR2eBRbBjVvK6ww==
-X-CSE-MsgGUID: CTVBspWNSx2YLdFnmgGBCw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11190"; a="24800070"
+  bh=47BuXYbruCR0gw5tGLOtmVdd2LPD98sn1OpkYaPVnq4=;
+  b=i/7nHf1pPC28R7deqYplKvrZ3y1nxuP66fe5+DcgBQ5DeKVT+WYa4QoX
+   URmGqg9wnVRgge+/AGc0RFCgIgm/EiHHgoR3st1T0sTLCiF4nKU1gemel
+   Hyrdxr/ENTRe8hmcPEi3K6QB6EM5xCp/uuQvsrwP4rFtDu6hxEttLkTky
+   T29aJv/dEev2v1Grlm2Jnj6oCJ4awUfNlTHP2JoXOqU/mfsq59RitAuCJ
+   E8lLrwtnF0LvsFQP8CFLc0oPsrg1Prt9dyGg6fmSrAyCo4TrOCtVZxA0p
+   GHMg9d9Fu7nz37Fhexwiy0EsHKeaSwKpGEum4NWnmKRrjja3CUS5XqD8L
+   w==;
+X-CSE-ConnectionGUID: RyRIrPmjR+uhhsQNNegtyg==
+X-CSE-MsgGUID: jcUkiWHSRKyNPl1mcBrYaQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11190"; a="36003527"
 X-IronPort-AV: E=Sophos;i="6.10,215,1719903600"; 
-   d="scan'208";a="24800070"
-Received: from orviesa004.jf.intel.com ([10.64.159.144])
-  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Sep 2024 18:11:05 -0700
-X-CSE-ConnectionGUID: FSxXmzPqQ7mv9t0j85Obug==
-X-CSE-MsgGUID: HtkOPPTFR+Kxt7V58aVe0g==
+   d="scan'208";a="36003527"
+Received: from orviesa007.jf.intel.com ([10.64.159.147])
+  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Sep 2024 18:21:26 -0700
+X-CSE-ConnectionGUID: 0XfhrLygRgeHL8Kar55Z9g==
+X-CSE-MsgGUID: 5dEWjsIASUCPXNJcGJjkjQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.10,215,1719903600"; 
-   d="scan'208";a="71823828"
+   d="scan'208";a="67394951"
 Received: from lkp-server01.sh.intel.com (HELO 9c6b1c7d3b50) ([10.239.97.150])
-  by orviesa004.jf.intel.com with ESMTP; 09 Sep 2024 18:11:03 -0700
+  by orviesa007.jf.intel.com with ESMTP; 09 Sep 2024 18:21:24 -0700
 Received: from kbuild by 9c6b1c7d3b50 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1snpPI-000FRG-2w;
-	Tue, 10 Sep 2024 01:11:00 +0000
-Date: Tue, 10 Sep 2024 09:10:48 +0800
+	id 1snpZK-000FSA-25;
+	Tue, 10 Sep 2024 01:21:22 +0000
+Date: Tue, 10 Sep 2024 09:21:11 +0800
 From: kernel test robot <lkp@intel.com>
 To: Kent Overstreet <kent.overstreet@linux.dev>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
 Subject: [koverstreet-bcachefs:bcachefs-garbage 209/258]
- fs/bcachefs/thread_with_file.c:257:2: error: implicit declaration of
- function 'stdio_buf_init' is invalid in C99
-Message-ID: <202409100953.bIYHF0Ab-lkp@intel.com>
+ fs/bcachefs/thread_with_file.c:139:22: error: incompatible pointer types
+ passing 'struct kiocb *' to parameter of type 'struct pipe_inode_info *'
+Message-ID: <202409100927.ibrz6qEv-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -66,225 +66,369 @@ Content-Disposition: inline
 tree:   https://github.com/koverstreet/bcachefs bcachefs-garbage
 head:   c88c2220b6b527cec382f06a0ba3feab2a593b37
 commit: 79e9f469b262e253396d71d7af0945da30a61cd0 [209/258] bcachefs: convert thread_with_stdio to pipes WIP
-config: powerpc64-randconfig-003-20240909 (https://download.01.org/0day-ci/archive/20240910/202409100953.bIYHF0Ab-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240910/202409100953.bIYHF0Ab-lkp@intel.com/reproduce)
+config: i386-randconfig-003-20240909 (https://download.01.org/0day-ci/archive/20240910/202409100927.ibrz6qEv-lkp@intel.com/config)
+compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240910/202409100927.ibrz6qEv-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202409100953.bIYHF0Ab-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202409100927.ibrz6qEv-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
-   fs/bcachefs/thread_with_file.c:139:22: error: incompatible pointer types passing 'struct kiocb *' to parameter of type 'struct pipe_inode_info *' [-Werror,-Wincompatible-pointer-types]
-           return do_pipe_read(kiocb, iter, thr->in);
-                               ^~~~~
+   In file included from fs/bcachefs/thread_with_file.c:4:
+   In file included from fs/bcachefs/bcachefs.h:188:
+   In file included from include/linux/bio.h:10:
+   In file included from include/linux/blk_types.h:10:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:8:
+   In file included from include/linux/cacheflush.h:5:
+   In file included from arch/x86/include/asm/cacheflush.h:5:
+   include/linux/mm.h:1200:17: error: use of undeclared identifier 'VMALLOC_START'; did you mean 'KMALLOC_DMA'?
+    1200 |         return addr >= VMALLOC_START && addr < VMALLOC_END;
+         |                        ^~~~~~~~~~~~~
+         |                        KMALLOC_DMA
+   include/linux/slab.h:421:2: note: 'KMALLOC_DMA' declared here
+     421 |         KMALLOC_DMA,
+         |         ^
+   In file included from fs/bcachefs/thread_with_file.c:4:
+   In file included from fs/bcachefs/bcachefs.h:188:
+   In file included from include/linux/bio.h:10:
+   In file included from include/linux/blk_types.h:10:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:8:
+   In file included from include/linux/cacheflush.h:5:
+   In file included from arch/x86/include/asm/cacheflush.h:5:
+   include/linux/mm.h:1200:41: error: use of undeclared identifier 'VMALLOC_END'; did you mean 'KMALLOC_DMA'?
+    1200 |         return addr >= VMALLOC_START && addr < VMALLOC_END;
+         |                                                ^~~~~~~~~~~
+         |                                                KMALLOC_DMA
+   include/linux/slab.h:421:2: note: 'KMALLOC_DMA' declared here
+     421 |         KMALLOC_DMA,
+         |         ^
+>> fs/bcachefs/thread_with_file.c:139:22: error: incompatible pointer types passing 'struct kiocb *' to parameter of type 'struct pipe_inode_info *' [-Werror,-Wincompatible-pointer-types]
+     139 |         return do_pipe_read(kiocb, iter, thr->in);
+         |                             ^~~~~
    include/linux/pipe_fs_i.h:273:46: note: passing argument to parameter 'pipe' here
-   ssize_t do_pipe_read(struct pipe_inode_info *pipe,
-                                                ^
-   fs/bcachefs/thread_with_file.c:146:44: error: too few arguments to function call, expected 4, have 3
-           return do_pipe_write(kiocb, iter, thr->out);
-                  ~~~~~~~~~~~~~                      ^
+     273 | ssize_t do_pipe_read(struct pipe_inode_info *pipe,
+         |                                              ^
+>> fs/bcachefs/thread_with_file.c:146:44: error: too few arguments to function call, expected 4, have 3
+     146 |         return do_pipe_write(kiocb, iter, thr->out);
+         |                ~~~~~~~~~~~~~                      ^
    include/linux/pipe_fs_i.h:276:9: note: 'do_pipe_write' declared here
-   ssize_t do_pipe_write(struct pipe_inode_info *pipe,
-           ^
->> fs/bcachefs/thread_with_file.c:257:2: error: implicit declaration of function 'stdio_buf_init' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
-           stdio_buf_init(&thr->stdio.input);
-           ^
-   fs/bcachefs/thread_with_file.c:257:23: error: no member named 'stdio' in 'struct thread_with_stdio'
-           stdio_buf_init(&thr->stdio.input);
-                           ~~~  ^
+     276 | ssize_t do_pipe_write(struct pipe_inode_info *pipe,
+         |         ^             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     277 |                       struct iov_iter *to,
+         |                       ~~~~~~~~~~~~~~~~~~~~
+     278 |                       bool nonblock,
+         |                       ~~~~~~~~~~~~~~
+     279 |                       bool is_packetized);
+         |                       ~~~~~~~~~~~~~~~~~~
+>> fs/bcachefs/thread_with_file.c:257:2: error: call to undeclared function 'stdio_buf_init'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     257 |         stdio_buf_init(&thr->stdio.input);
+         |         ^
+>> fs/bcachefs/thread_with_file.c:257:23: error: no member named 'stdio' in 'struct thread_with_stdio'
+     257 |         stdio_buf_init(&thr->stdio.input);
+         |                         ~~~  ^
    fs/bcachefs/thread_with_file.c:258:23: error: no member named 'stdio' in 'struct thread_with_stdio'
-           stdio_buf_init(&thr->stdio.output);
-                           ~~~  ^
+     258 |         stdio_buf_init(&thr->stdio.output);
+         |                         ~~~  ^
    fs/bcachefs/thread_with_file.c:267:22: error: too few arguments to function call, expected 3, have 0
-           return do_pipe_read();
-                  ~~~~~~~~~~~~ ^
+     267 |         return do_pipe_read();
+         |                ~~~~~~~~~~~~ ^
    include/linux/pipe_fs_i.h:273:9: note: 'do_pipe_read' declared here
-   ssize_t do_pipe_read(struct pipe_inode_info *pipe,
-           ^
->> fs/bcachefs/thread_with_file.c:275:33: error: implicit declaration of function 'stdio_redirect_has_input' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
-                   wait_event_timeout(buf->wait, stdio_redirect_has_input(stdio),
-                                                 ^
->> fs/bcachefs/thread_with_file.c:275:33: error: implicit declaration of function 'stdio_redirect_has_input' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
-   fs/bcachefs/thread_with_file.c:277:12: error: implicit declaration of function 'stdio_redirect_has_input' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
-           } while (!stdio_redirect_has_input(stdio));
-                     ^
->> fs/bcachefs/thread_with_file.c:309:32: error: implicit declaration of function 'stdio_redirect_has_more_input' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
-           wait_event_timeout(buf->wait, stdio_redirect_has_more_input(stdio, seen), t);
-                                         ^
->> fs/bcachefs/thread_with_file.c:309:32: error: implicit declaration of function 'stdio_redirect_has_more_input' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
->> fs/bcachefs/thread_with_file.c:399:5: error: implicit declaration of function 'stdio_redirect_has_output_space' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
-                                   stdio_redirect_has_output_space(stdio));
-                                   ^
-   12 errors generated.
+     273 | ssize_t do_pipe_read(struct pipe_inode_info *pipe,
+         |         ^            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     274 |                      struct iov_iter *to,
+         |                      ~~~~~~~~~~~~~~~~~~~~
+     275 |                      bool nonblock);
+         |                      ~~~~~~~~~~~~~
+>> fs/bcachefs/thread_with_file.c:275:33: error: call to undeclared function 'stdio_redirect_has_input'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     275 |                 wait_event_timeout(buf->wait, stdio_redirect_has_input(stdio),
+         |                                               ^
+>> fs/bcachefs/thread_with_file.c:275:33: error: call to undeclared function 'stdio_redirect_has_input'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+   fs/bcachefs/thread_with_file.c:277:12: error: call to undeclared function 'stdio_redirect_has_input'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     277 |         } while (!stdio_redirect_has_input(stdio));
+         |                   ^
+>> fs/bcachefs/thread_with_file.c:309:32: error: call to undeclared function 'stdio_redirect_has_more_input'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     309 |         wait_event_timeout(buf->wait, stdio_redirect_has_more_input(stdio, seen), t);
+         |                                       ^
+>> fs/bcachefs/thread_with_file.c:309:32: error: call to undeclared function 'stdio_redirect_has_more_input'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+>> fs/bcachefs/thread_with_file.c:399:5: error: call to undeclared function 'stdio_redirect_has_output_space'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     399 |                                 stdio_redirect_has_output_space(stdio));
+         |                                 ^
+   14 errors generated.
+--
+   In file included from fs/bcachefs/chardev.c:4:
+   In file included from fs/bcachefs/bcachefs.h:188:
+   In file included from include/linux/bio.h:10:
+   In file included from include/linux/blk_types.h:10:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:8:
+   In file included from include/linux/cacheflush.h:5:
+   In file included from arch/x86/include/asm/cacheflush.h:5:
+   include/linux/mm.h:1200:17: error: use of undeclared identifier 'VMALLOC_START'; did you mean 'KMALLOC_DMA'?
+    1200 |         return addr >= VMALLOC_START && addr < VMALLOC_END;
+         |                        ^~~~~~~~~~~~~
+         |                        KMALLOC_DMA
+   include/linux/slab.h:421:2: note: 'KMALLOC_DMA' declared here
+     421 |         KMALLOC_DMA,
+         |         ^
+   In file included from fs/bcachefs/chardev.c:4:
+   In file included from fs/bcachefs/bcachefs.h:188:
+   In file included from include/linux/bio.h:10:
+   In file included from include/linux/blk_types.h:10:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:8:
+   In file included from include/linux/cacheflush.h:5:
+   In file included from arch/x86/include/asm/cacheflush.h:5:
+   include/linux/mm.h:1200:41: error: use of undeclared identifier 'VMALLOC_END'; did you mean 'KMALLOC_DMA'?
+    1200 |         return addr >= VMALLOC_START && addr < VMALLOC_END;
+         |                                                ^~~~~~~~~~~
+         |                                                KMALLOC_DMA
+   include/linux/slab.h:421:2: note: 'KMALLOC_DMA' declared here
+     421 |         KMALLOC_DMA,
+         |         ^
+>> fs/bcachefs/chardev.c:156:38: error: no member named 'stdio' in 'struct thread_with_stdio'
+     156 |                 bch2_stdio_redirect_printf(&stdio->stdio, false, "%s: errors fixed\n", c->name);
+         |                                             ~~~~~  ^
+   fs/bcachefs/chardev.c:160:38: error: no member named 'stdio' in 'struct thread_with_stdio'
+     160 |                 bch2_stdio_redirect_printf(&stdio->stdio, false, "%s: still has errors\n", c->name);
+         |                                             ~~~~~  ^
+   fs/bcachefs/chardev.c:226:58: error: no member named 'stdio' in 'struct thread_with_stdio'
+     226 |         opt_set(thr->opts, stdio, (u64)(unsigned long)&thr->thr.stdio);
+         |                                                        ~~~~~~~~ ^
+   fs/bcachefs/opts.h:548:18: note: expanded from macro 'opt_set'
+     548 |         (_opts)._name = _v;                                             \
+         |                         ^~
+   fs/bcachefs/chardev.c:783:23: error: no member named 'stdio' in 'struct thread_with_stdio'
+     783 |         c->stdio = &thr->thr.stdio;
+         |                     ~~~~~~~~ ^
+   6 errors generated.
 
 
-vim +/stdio_buf_init +257 fs/bcachefs/thread_with_file.c
+vim +139 fs/bcachefs/thread_with_file.c
 
-02bed83d59e37d Kent Overstreet 2024-04-16  253  
-fcb1620edd4d59 Darrick J. Wong 2024-02-07  254  int bch2_run_thread_with_stdout(struct thread_with_stdio *thr,
-ab6752e24ef1eb Darrick J. Wong 2024-02-10  255  				const struct thread_with_stdio_ops *ops)
-fcb1620edd4d59 Darrick J. Wong 2024-02-07  256  {
-fcb1620edd4d59 Darrick J. Wong 2024-02-07 @257  	stdio_buf_init(&thr->stdio.input);
-fcb1620edd4d59 Darrick J. Wong 2024-02-07  258  	stdio_buf_init(&thr->stdio.output);
-ab6752e24ef1eb Darrick J. Wong 2024-02-10  259  	thr->ops = ops;
-fcb1620edd4d59 Darrick J. Wong 2024-02-07  260  
-fcb1620edd4d59 Darrick J. Wong 2024-02-07  261  	return bch2_run_thread_with_file(&thr->thr, &thread_with_stdout_fops, thread_with_stdio_fn);
-fcb1620edd4d59 Darrick J. Wong 2024-02-07  262  }
-fcb1620edd4d59 Darrick J. Wong 2024-02-07  263  EXPORT_SYMBOL_GPL(bch2_run_thread_with_stdout);
-fcb1620edd4d59 Darrick J. Wong 2024-02-07  264  
-60e1baa872a155 Kent Overstreet 2024-02-04  265  int bch2_stdio_redirect_read(struct stdio_redirect *stdio, char *ubuf, size_t len)
-96f37eabe7a5cb Kent Overstreet 2023-12-31  266  {
-79e9f469b262e2 Kent Overstreet 2024-06-05  267  	return do_pipe_read();
-60e1baa872a155 Kent Overstreet 2024-02-04  268  	struct stdio_buf *buf = &stdio->input;
-96f37eabe7a5cb Kent Overstreet 2023-12-31  269  
-a5a650d6472f23 Kent Overstreet 2024-02-08  270  	/*
-a5a650d6472f23 Kent Overstreet 2024-02-08  271  	 * we're waiting on user input (or for the file descriptor to be
-a5a650d6472f23 Kent Overstreet 2024-02-08  272  	 * closed), don't want a hung task warning:
-a5a650d6472f23 Kent Overstreet 2024-02-08  273  	 */
-a5a650d6472f23 Kent Overstreet 2024-02-08  274  	do {
-a5a650d6472f23 Kent Overstreet 2024-02-08 @275  		wait_event_timeout(buf->wait, stdio_redirect_has_input(stdio),
-a5a650d6472f23 Kent Overstreet 2024-02-08  276  				   sysctl_hung_task_timeout_secs * HZ / 2);
-a5a650d6472f23 Kent Overstreet 2024-02-08  277  	} while (!stdio_redirect_has_input(stdio));
-a5a650d6472f23 Kent Overstreet 2024-02-08  278  
-96f37eabe7a5cb Kent Overstreet 2023-12-31  279  	if (stdio->done)
-96f37eabe7a5cb Kent Overstreet 2023-12-31  280  		return -1;
-96f37eabe7a5cb Kent Overstreet 2023-12-31  281  
-60e1baa872a155 Kent Overstreet 2024-02-04  282  	spin_lock(&buf->lock);
-60e1baa872a155 Kent Overstreet 2024-02-04  283  	int ret = min(len, buf->buf.nr);
-60e1baa872a155 Kent Overstreet 2024-02-04  284  	buf->buf.nr -= ret;
-60e1baa872a155 Kent Overstreet 2024-02-04  285  	memcpy(ubuf, buf->buf.data, ret);
-60e1baa872a155 Kent Overstreet 2024-02-04  286  	memmove(buf->buf.data,
-60e1baa872a155 Kent Overstreet 2024-02-04  287  		buf->buf.data + ret,
-60e1baa872a155 Kent Overstreet 2024-02-04  288  		buf->buf.nr);
-60e1baa872a155 Kent Overstreet 2024-02-04  289  	spin_unlock(&buf->lock);
-96f37eabe7a5cb Kent Overstreet 2023-12-31  290  
-60e1baa872a155 Kent Overstreet 2024-02-04  291  	wake_up(&buf->wait);
-96f37eabe7a5cb Kent Overstreet 2023-12-31  292  	return ret;
-96f37eabe7a5cb Kent Overstreet 2023-12-31  293  }
-96f37eabe7a5cb Kent Overstreet 2023-12-31  294  
-d37dd9b6048735 Kent Overstreet 2024-05-29  295  int bch2_stdio_redirect_readline_timeout(struct stdio_redirect *stdio,
-d37dd9b6048735 Kent Overstreet 2024-05-29  296  					 darray_char *line,
-d37dd9b6048735 Kent Overstreet 2024-05-29  297  					 unsigned long timeout)
-96f37eabe7a5cb Kent Overstreet 2023-12-31  298  {
-d37dd9b6048735 Kent Overstreet 2024-05-29  299  	unsigned long until = jiffies + timeout, t;
-60e1baa872a155 Kent Overstreet 2024-02-04  300  	struct stdio_buf *buf = &stdio->input;
-0c97c437e362fb Kent Overstreet 2024-05-29  301  	size_t seen = 0;
-f704f108af79c1 Kent Overstreet 2024-02-04  302  again:
-d37dd9b6048735 Kent Overstreet 2024-05-29  303  	t = timeout != MAX_SCHEDULE_TIMEOUT
-d37dd9b6048735 Kent Overstreet 2024-05-29  304  		? max_t(long, until - jiffies, 0)
-d37dd9b6048735 Kent Overstreet 2024-05-29  305  		: timeout;
-d37dd9b6048735 Kent Overstreet 2024-05-29  306  
-d37dd9b6048735 Kent Overstreet 2024-05-29  307  	t = min(t, sysctl_hung_task_timeout_secs * HZ / 2);
-d37dd9b6048735 Kent Overstreet 2024-05-29  308  
-d37dd9b6048735 Kent Overstreet 2024-05-29 @309  	wait_event_timeout(buf->wait, stdio_redirect_has_more_input(stdio, seen), t);
-a5a650d6472f23 Kent Overstreet 2024-02-08  310  
-0c97c437e362fb Kent Overstreet 2024-05-29  311  	if (stdio->done)
-0c97c437e362fb Kent Overstreet 2024-05-29  312  		return -1;
-96f37eabe7a5cb Kent Overstreet 2023-12-31  313  
-60e1baa872a155 Kent Overstreet 2024-02-04  314  	spin_lock(&buf->lock);
-0c97c437e362fb Kent Overstreet 2024-05-29  315  	seen = buf->buf.nr;
-0c97c437e362fb Kent Overstreet 2024-05-29  316  	char *n = memchr(buf->buf.data, '\n', seen);
-d37dd9b6048735 Kent Overstreet 2024-05-29  317  
-290ebc9d126c2d Chen Yufan      2024-08-22  318  	if (!n && timeout != MAX_SCHEDULE_TIMEOUT && time_after_eq(jiffies, until)) {
-d37dd9b6048735 Kent Overstreet 2024-05-29  319  		spin_unlock(&buf->lock);
-d37dd9b6048735 Kent Overstreet 2024-05-29  320  		return -ETIME;
-d37dd9b6048735 Kent Overstreet 2024-05-29  321  	}
-d37dd9b6048735 Kent Overstreet 2024-05-29  322  
-0c97c437e362fb Kent Overstreet 2024-05-29  323  	if (!n) {
-0c97c437e362fb Kent Overstreet 2024-05-29  324  		buf->waiting_for_line = true;
-0c97c437e362fb Kent Overstreet 2024-05-29  325  		spin_unlock(&buf->lock);
-0c97c437e362fb Kent Overstreet 2024-05-29  326  		goto again;
-0c97c437e362fb Kent Overstreet 2024-05-29  327  	}
-0c97c437e362fb Kent Overstreet 2024-05-29  328  
-0c97c437e362fb Kent Overstreet 2024-05-29  329  	size_t b = n + 1 - buf->buf.data;
-0c97c437e362fb Kent Overstreet 2024-05-29  330  	if (b > line->size) {
-0c97c437e362fb Kent Overstreet 2024-05-29  331  		spin_unlock(&buf->lock);
-0c97c437e362fb Kent Overstreet 2024-05-29  332  		int ret = darray_resize(line, b);
-0c97c437e362fb Kent Overstreet 2024-05-29  333  		if (ret)
-0c97c437e362fb Kent Overstreet 2024-05-29  334  			return ret;
-0c97c437e362fb Kent Overstreet 2024-05-29  335  		seen = 0;
-0c97c437e362fb Kent Overstreet 2024-05-29  336  		goto again;
-0c97c437e362fb Kent Overstreet 2024-05-29  337  	}
-0c97c437e362fb Kent Overstreet 2024-05-29  338  
-f704f108af79c1 Kent Overstreet 2024-02-04  339  	buf->buf.nr -= b;
-0c97c437e362fb Kent Overstreet 2024-05-29  340  	memcpy(line->data, buf->buf.data, b);
-60e1baa872a155 Kent Overstreet 2024-02-04  341  	memmove(buf->buf.data,
-f704f108af79c1 Kent Overstreet 2024-02-04  342  		buf->buf.data + b,
-60e1baa872a155 Kent Overstreet 2024-02-04  343  		buf->buf.nr);
-0c97c437e362fb Kent Overstreet 2024-05-29  344  	line->nr = b;
-0c97c437e362fb Kent Overstreet 2024-05-29  345  
-0c97c437e362fb Kent Overstreet 2024-05-29  346  	buf->waiting_for_line = false;
-60e1baa872a155 Kent Overstreet 2024-02-04  347  	spin_unlock(&buf->lock);
-60e1baa872a155 Kent Overstreet 2024-02-04  348  
-60e1baa872a155 Kent Overstreet 2024-02-04  349  	wake_up(&buf->wait);
-0c97c437e362fb Kent Overstreet 2024-05-29  350  	return 0;
-96f37eabe7a5cb Kent Overstreet 2023-12-31  351  }
-d641d4cae72a17 Kent Overstreet 2024-01-03  352  
-d37dd9b6048735 Kent Overstreet 2024-05-29  353  int bch2_stdio_redirect_readline(struct stdio_redirect *stdio, darray_char *line)
-d37dd9b6048735 Kent Overstreet 2024-05-29  354  {
-d37dd9b6048735 Kent Overstreet 2024-05-29  355  	return bch2_stdio_redirect_readline_timeout(stdio, line, MAX_SCHEDULE_TIMEOUT);
-d37dd9b6048735 Kent Overstreet 2024-05-29  356  }
-d37dd9b6048735 Kent Overstreet 2024-05-29  357  
-60e1baa872a155 Kent Overstreet 2024-02-04  358  __printf(3, 0)
-1cbae651e5c875 Darrick J. Wong 2024-02-07  359  static ssize_t bch2_darray_vprintf(darray_char *out, gfp_t gfp, const char *fmt, va_list args)
-60e1baa872a155 Kent Overstreet 2024-02-04  360  {
-1cbae651e5c875 Darrick J. Wong 2024-02-07  361  	ssize_t ret;
-60e1baa872a155 Kent Overstreet 2024-02-04  362  
-60e1baa872a155 Kent Overstreet 2024-02-04  363  	do {
-60e1baa872a155 Kent Overstreet 2024-02-04  364  		va_list args2;
-1cbae651e5c875 Darrick J. Wong 2024-02-07  365  		size_t len;
-60e1baa872a155 Kent Overstreet 2024-02-04  366  
-1cbae651e5c875 Darrick J. Wong 2024-02-07  367  		va_copy(args2, args);
-60e1baa872a155 Kent Overstreet 2024-02-04  368  		len = vsnprintf(out->data + out->nr, darray_room(*out), fmt, args2);
-6b33312925a77c Kent Overstreet 2024-02-13  369  		va_end(args2);
-6b33312925a77c Kent Overstreet 2024-02-13  370  
-1cbae651e5c875 Darrick J. Wong 2024-02-07  371  		if (len + 1 <= darray_room(*out)) {
-1cbae651e5c875 Darrick J. Wong 2024-02-07  372  			out->nr += len;
-1cbae651e5c875 Darrick J. Wong 2024-02-07  373  			return len;
-1cbae651e5c875 Darrick J. Wong 2024-02-07  374  		}
-1cbae651e5c875 Darrick J. Wong 2024-02-07  375  
-1cbae651e5c875 Darrick J. Wong 2024-02-07  376  		ret = darray_make_room_gfp(out, len + 1, gfp);
-1cbae651e5c875 Darrick J. Wong 2024-02-07  377  	} while (ret == 0);
-60e1baa872a155 Kent Overstreet 2024-02-04  378  
-1cbae651e5c875 Darrick J. Wong 2024-02-07  379  	return ret;
-60e1baa872a155 Kent Overstreet 2024-02-04  380  }
-60e1baa872a155 Kent Overstreet 2024-02-04  381  
-1cbae651e5c875 Darrick J. Wong 2024-02-07  382  ssize_t bch2_stdio_redirect_vprintf(struct stdio_redirect *stdio, bool nonblocking,
-60e1baa872a155 Kent Overstreet 2024-02-04  383  				    const char *fmt, va_list args)
-60e1baa872a155 Kent Overstreet 2024-02-04  384  {
-60e1baa872a155 Kent Overstreet 2024-02-04  385  	struct stdio_buf *buf = &stdio->output;
-60e1baa872a155 Kent Overstreet 2024-02-04  386  	unsigned long flags;
-1cbae651e5c875 Darrick J. Wong 2024-02-07  387  	ssize_t ret;
-60e1baa872a155 Kent Overstreet 2024-02-04  388  
-1cbae651e5c875 Darrick J. Wong 2024-02-07  389  again:
-60e1baa872a155 Kent Overstreet 2024-02-04  390  	spin_lock_irqsave(&buf->lock, flags);
-1cbae651e5c875 Darrick J. Wong 2024-02-07  391  	ret = bch2_darray_vprintf(&buf->buf, GFP_NOWAIT, fmt, args);
-60e1baa872a155 Kent Overstreet 2024-02-04  392  	spin_unlock_irqrestore(&buf->lock, flags);
-60e1baa872a155 Kent Overstreet 2024-02-04  393  
-1cbae651e5c875 Darrick J. Wong 2024-02-07  394  	if (ret < 0) {
-1cbae651e5c875 Darrick J. Wong 2024-02-07  395  		if (nonblocking)
-1cbae651e5c875 Darrick J. Wong 2024-02-07  396  			return -EAGAIN;
-1cbae651e5c875 Darrick J. Wong 2024-02-07  397  
-1cbae651e5c875 Darrick J. Wong 2024-02-07  398  		ret = wait_event_interruptible(buf->wait,
-1cbae651e5c875 Darrick J. Wong 2024-02-07 @399  				stdio_redirect_has_output_space(stdio));
-1cbae651e5c875 Darrick J. Wong 2024-02-07  400  		if (ret)
-1cbae651e5c875 Darrick J. Wong 2024-02-07  401  			return ret;
-1cbae651e5c875 Darrick J. Wong 2024-02-07  402  		goto again;
-1cbae651e5c875 Darrick J. Wong 2024-02-07  403  	}
-1cbae651e5c875 Darrick J. Wong 2024-02-07  404  
-60e1baa872a155 Kent Overstreet 2024-02-04  405  	wake_up(&buf->wait);
-1cbae651e5c875 Darrick J. Wong 2024-02-07  406  	return ret;
-60e1baa872a155 Kent Overstreet 2024-02-04  407  }
-60e1baa872a155 Kent Overstreet 2024-02-04  408  
-
-:::::: The code at line 257 was first introduced by commit
-:::::: fcb1620edd4d59eff4b3466be1d61263cea958a8 bcachefs: thread_with_file: allow creation of readonly files
-
-:::::: TO: Darrick J. Wong <djwong@kernel.org>
-:::::: CC: Kent Overstreet <kent.overstreet@linux.dev>
+   134	
+   135	static ssize_t thread_with_stdio_read(struct kiocb *kiocb, struct iov_iter *iter)
+   136	{
+   137		struct thread_with_stdio *thr =
+   138			container_of(kiocb->ki_filp->private_data, struct thread_with_stdio, thr);
+ > 139		return do_pipe_read(kiocb, iter, thr->in);
+   140	}
+   141	
+   142	static ssize_t thread_with_stdio_write(struct kiocb *kiocb, struct iov_iter *iter)
+   143	{
+   144		struct thread_with_stdio *thr =
+   145			container_of(kiocb->ki_filp->private_data, struct thread_with_stdio, thr);
+ > 146		return do_pipe_write(kiocb, iter, thr->out);
+   147	}
+   148	
+   149	static __poll_t thread_with_stdio_poll(struct file *file, struct poll_table_struct *wait)
+   150	{
+   151		struct thread_with_stdio *thr =
+   152			container_of(file->private_data, struct thread_with_stdio, thr);
+   153	
+   154		if (file->f_mode & FMODE_READ)
+   155			poll_wait(file, &thr->in->rd_wait, wait);
+   156		if (file->f_mode & FMODE_WRITE)
+   157			poll_wait(file, &thr->out->wr_wait, wait);
+   158	
+   159		__poll_t mask = 0;
+   160	#if 0
+   161		if (stdio_redirect_has_output(&thr->stdio))
+   162			mask |= EPOLLIN;
+   163		if (stdio_redirect_has_input_space(&thr->stdio))
+   164			mask |= EPOLLOUT;
+   165		if (thr->thr.done)
+   166			mask |= EPOLLHUP|EPOLLERR;
+   167	#endif
+   168		return mask;
+   169	}
+   170	
+   171	static int thread_with_stdio_flush(struct file *file, fl_owner_t id)
+   172	{
+   173		struct thread_with_stdio *thr =
+   174			container_of(file->private_data, struct thread_with_stdio, thr);
+   175	
+   176		return thr->thr.ret;
+   177	}
+   178	
+   179	static long thread_with_stdio_ioctl(struct file *file, unsigned int cmd, unsigned long p)
+   180	{
+   181		struct thread_with_stdio *thr =
+   182			container_of(file->private_data, struct thread_with_stdio, thr);
+   183	
+   184		if (thr->ops->unlocked_ioctl)
+   185			return thr->ops->unlocked_ioctl(thr, cmd, p);
+   186		return -ENOTTY;
+   187	}
+   188	
+   189	static const struct file_operations thread_with_stdio_fops = {
+   190		.llseek		= no_llseek,
+   191		.read_iter	= thread_with_stdio_read,
+   192		.write_iter	= thread_with_stdio_write,
+   193		.poll		= thread_with_stdio_poll,
+   194		.flush		= thread_with_stdio_flush,
+   195		.release	= thread_with_stdio_release,
+   196		.unlocked_ioctl	= thread_with_stdio_ioctl,
+   197	};
+   198	
+   199	static const struct file_operations thread_with_stdout_fops = {
+   200		.llseek		= no_llseek,
+   201		.read_iter	= thread_with_stdio_read,
+   202		.poll		= thread_with_stdio_poll,
+   203		.flush		= thread_with_stdio_flush,
+   204		.release	= thread_with_stdio_release,
+   205		.unlocked_ioctl	= thread_with_stdio_ioctl,
+   206	};
+   207	
+   208	static void thread_with_stdio_fn(void *arg)
+   209	{
+   210		struct thread_with_stdio *thr = arg;
+   211	
+   212		thr->thr.ret = thr->ops->fn(thr);
+   213		thread_with_stdio_done(thr);
+   214	}
+   215	
+   216	void bch2_thread_with_stdio_exit(struct thread_with_stdio *thr)
+   217	{
+   218		bch2_thread_with_file_exit(&thr->thr);
+   219		if (thr->in)
+   220			free_pipe_info(thr->in);
+   221		if (thr->out)
+   222			free_pipe_info(thr->out);
+   223		thr->in = thr->out = NULL;
+   224	}
+   225	
+   226	int bch2_thread_with_stdio_init(struct thread_with_stdio *thr,
+   227					const struct thread_with_stdio_ops *ops)
+   228	{
+   229		thr->ops = ops;
+   230		thr->in = alloc_pipe_info();
+   231		thr->out = alloc_pipe_info();
+   232		if (!thr->in || !thr->out) {
+   233			bch2_thread_with_stdio_exit(thr);
+   234			return -ENOMEM;
+   235		}
+   236	
+   237		thr->in->writers++;
+   238		thr->in->readers++;
+   239		return 0;
+   240	}
+   241	
+   242	int __bch2_run_thread_with_stdio(struct thread_with_stdio *thr)
+   243	{
+   244		return bch2_run_thread_with_file(&thr->thr, &thread_with_stdio_fops, thread_with_stdio_fn);
+   245	}
+   246	
+   247	int bch2_run_thread_with_stdio(struct thread_with_stdio *thr,
+   248				       const struct thread_with_stdio_ops *ops)
+   249	{
+   250		return bch2_thread_with_stdio_init(thr, ops) ?:
+   251			__bch2_run_thread_with_stdio(thr);
+   252	}
+   253	
+   254	int bch2_run_thread_with_stdout(struct thread_with_stdio *thr,
+   255					const struct thread_with_stdio_ops *ops)
+   256	{
+ > 257		stdio_buf_init(&thr->stdio.input);
+   258		stdio_buf_init(&thr->stdio.output);
+   259		thr->ops = ops;
+   260	
+   261		return bch2_run_thread_with_file(&thr->thr, &thread_with_stdout_fops, thread_with_stdio_fn);
+   262	}
+   263	EXPORT_SYMBOL_GPL(bch2_run_thread_with_stdout);
+   264	
+   265	int bch2_stdio_redirect_read(struct stdio_redirect *stdio, char *ubuf, size_t len)
+   266	{
+   267		return do_pipe_read();
+   268		struct stdio_buf *buf = &stdio->input;
+   269	
+   270		/*
+   271		 * we're waiting on user input (or for the file descriptor to be
+   272		 * closed), don't want a hung task warning:
+   273		 */
+   274		do {
+ > 275			wait_event_timeout(buf->wait, stdio_redirect_has_input(stdio),
+   276					   sysctl_hung_task_timeout_secs * HZ / 2);
+   277		} while (!stdio_redirect_has_input(stdio));
+   278	
+   279		if (stdio->done)
+   280			return -1;
+   281	
+   282		spin_lock(&buf->lock);
+   283		int ret = min(len, buf->buf.nr);
+   284		buf->buf.nr -= ret;
+   285		memcpy(ubuf, buf->buf.data, ret);
+   286		memmove(buf->buf.data,
+   287			buf->buf.data + ret,
+   288			buf->buf.nr);
+   289		spin_unlock(&buf->lock);
+   290	
+   291		wake_up(&buf->wait);
+   292		return ret;
+   293	}
+   294	
+   295	int bch2_stdio_redirect_readline_timeout(struct stdio_redirect *stdio,
+   296						 darray_char *line,
+   297						 unsigned long timeout)
+   298	{
+   299		unsigned long until = jiffies + timeout, t;
+   300		struct stdio_buf *buf = &stdio->input;
+   301		size_t seen = 0;
+   302	again:
+   303		t = timeout != MAX_SCHEDULE_TIMEOUT
+   304			? max_t(long, until - jiffies, 0)
+   305			: timeout;
+   306	
+   307		t = min(t, sysctl_hung_task_timeout_secs * HZ / 2);
+   308	
+ > 309		wait_event_timeout(buf->wait, stdio_redirect_has_more_input(stdio, seen), t);
+   310	
+   311		if (stdio->done)
+   312			return -1;
+   313	
+   314		spin_lock(&buf->lock);
+   315		seen = buf->buf.nr;
+   316		char *n = memchr(buf->buf.data, '\n', seen);
+   317	
+   318		if (!n && timeout != MAX_SCHEDULE_TIMEOUT && time_after_eq(jiffies, until)) {
+   319			spin_unlock(&buf->lock);
+   320			return -ETIME;
+   321		}
+   322	
+   323		if (!n) {
+   324			buf->waiting_for_line = true;
+   325			spin_unlock(&buf->lock);
+   326			goto again;
+   327		}
+   328	
+   329		size_t b = n + 1 - buf->buf.data;
+   330		if (b > line->size) {
+   331			spin_unlock(&buf->lock);
+   332			int ret = darray_resize(line, b);
+   333			if (ret)
+   334				return ret;
+   335			seen = 0;
+   336			goto again;
+   337		}
+   338	
+   339		buf->buf.nr -= b;
+   340		memcpy(line->data, buf->buf.data, b);
+   341		memmove(buf->buf.data,
+   342			buf->buf.data + b,
+   343			buf->buf.nr);
+   344		line->nr = b;
+   345	
+   346		buf->waiting_for_line = false;
+   347		spin_unlock(&buf->lock);
+   348	
+   349		wake_up(&buf->wait);
+   350		return 0;
+   351	}
+   352	
 
 -- 
 0-DAY CI Kernel Test Service
