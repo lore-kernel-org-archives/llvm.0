@@ -1,288 +1,111 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4DC1A190072;
-	Tue, 10 Sep 2024 10:33:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 429FA181B8D
+	for <llvm@lists.linux.dev>; Tue, 10 Sep 2024 10:57:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725964390; cv=none; b=D277ZNkbHF+pTxWVeg4NMqbr6R+k7eId7DhwagvvtnIjT6oOOTEf9h4MfElzA8nEe+bNr4uG0dbix600JoSVwVfZ7ZJmprDvq7PDyakW5AcdSumtKG0h4X/ds8z0vSCwnbMzn/ynkW58BBKQP8MdDrqQ9Mub7D87C+KsETUiVfI=
+	t=1725965877; cv=none; b=hSgYLdC9ba5LZJKsVQnwIKqLdkRqShfBoBKMIiPx4gj1VXUciashAGn4eQlX6h1NhzPdpVWWN0TC5qtiIplRHk29E+fVOdgNdoqane1vmfLqdOoAJuyWAZ+PKTbp7tywlYBxS65hFpj/8PO8KnyHefv3DkFmemtAPyxK0LIhBo0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725964390; c=relaxed/simple;
-	bh=m4rLZiBxy1v0tyc+rkItksP01I5QS7BSDV6XBZRddM4=;
+	s=arc-20240116; t=1725965877; c=relaxed/simple;
+	bh=tTecUmMwMV7vjPhIE1nH3KpDvjXUoOSU2QQBQRGtupE=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Cn0pzoEHEA96C18QphUCTmZ0vOuMGZYFN/RQOSBKqEqvNGPdI3TmagRdTTXwc8t58DnNpa/LfgZUvc5rtrGWJqBjinJOqjPaPNjpTKbG6fSKVKPZWmd/mLg76C1IFWNKMtRJ2eLXF+ZKamtBYUiVnM7kJdQCc5K/1V0fb25ryGo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=d7fYuK6j; arc=none smtp.client-ip=198.175.65.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="d7fYuK6j"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1725964388; x=1757500388;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=m4rLZiBxy1v0tyc+rkItksP01I5QS7BSDV6XBZRddM4=;
-  b=d7fYuK6jLI3eavJi0QtZ/ACy4etUJXHm7j2dYVFJ1boLATbjO5tl+ql0
-   Bpd/PoL4EJ/QE96f/Kumk3U/xiZDpOF0iLZhW3DnqvcCIJ9jQ0NJCJeBw
-   bQNqgF574c9uHlMZQA2b8VMszir+4tOeInvnHNzw0zwt3oVBrnruaGTns
-   2uieg1KzS6IsZ/3FTBFQSYMVZERt0mDizYKlb27znJZKBeUu8p2yUfRHz
-   3H6HIAU4oaYvUdsb0KYuphbnin4D29QW+buYPP/vZkUNKM1HLFzbUyoOM
-   cGcxl3vNp28gA/iOgXVUH1BsSk6LdTHJL3hfLGDOUOlbTJnvLPKi7S6Lp
-   w==;
-X-CSE-ConnectionGUID: VHWSEoTWSfe+0tLGs8X00g==
-X-CSE-MsgGUID: 3XfKpPTYSpmzFzFpVhWoOw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11190"; a="24846313"
-X-IronPort-AV: E=Sophos;i="6.10,216,1719903600"; 
-   d="scan'208";a="24846313"
-Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Sep 2024 03:32:57 -0700
-X-CSE-ConnectionGUID: gkCTnSf3SbK9cWkk6ZBOTw==
-X-CSE-MsgGUID: YoVJC/vlQDeMAQbmagT15g==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.10,216,1719903600"; 
-   d="scan'208";a="97683495"
-Received: from lkp-server01.sh.intel.com (HELO 53e96f405c61) ([10.239.97.150])
-  by orviesa002.jf.intel.com with ESMTP; 10 Sep 2024 03:32:53 -0700
-Received: from kbuild by 53e96f405c61 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1snyB1-0001WW-0R;
-	Tue, 10 Sep 2024 10:32:51 +0000
-Date: Tue, 10 Sep 2024 18:32:18 +0800
-From: kernel test robot <lkp@intel.com>
-To: Jerome Brunet <jbrunet@baylibre.com>, Jean Delvare <jdelvare@suse.com>,
-	Guenter Roeck <linux@roeck-us.net>, Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Delphine CC Chiu <Delphine_CC_Chiu@wiwynn.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-	linux-i2c@vger.kernel.org
-Subject: Re: [PATCH 3/3] hwmon: (pmbus/tps25990): add initial support
-Message-ID: <202409101807.GjHADcvQ-lkp@intel.com>
-References: <20240909-tps25990-v1-3-39b37e43e795@baylibre.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=By24L7CHeqhhyc4Kwn9DaH+PTSr2w+zmMCkrtVtG97sPa+tvruZTgeRo+3Z38OPMa40D3ylb+BoOk53Q14YD2bn3jEX7IVvOcPXQLRYLv2iSQS9bjOoHAhn2qKHRj7wAPoazfIG3JAdF/NybJFTrtm6KYTrGtM+6Sxgo6GFb+Uo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <mkl@pengutronix.de>)
+	id 1snyZ5-0001iF-C4; Tue, 10 Sep 2024 12:57:43 +0200
+Received: from [2a0a:edc0:0:b01:1d::7b] (helo=bjornoya.blackshift.org)
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.94.2)
+	(envelope-from <mkl@pengutronix.de>)
+	id 1snyZ3-006sM6-QY; Tue, 10 Sep 2024 12:57:41 +0200
+Received: from pengutronix.de (pd9e595f8.dip0.t-ipconnect.de [217.229.149.248])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	(Authenticated sender: mkl-all@blackshift.org)
+	by smtp.blackshift.org (Postfix) with ESMTPSA id 6B267337707;
+	Tue, 10 Sep 2024 10:57:41 +0000 (UTC)
+Date: Tue, 10 Sep 2024 12:57:41 +0200
+From: Marc Kleine-Budde <mkl@pengutronix.de>
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: kernel@pengutronix.de, Vincent Mailhol <mailhol.vincent@wanadoo.fr>, 
+	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+	Heiko Stuebner <heiko@sntech.de>, linux-can@vger.kernel.org, netdev@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, linux-rockchip@lists.infradead.org, llvm@lists.linux.dev, 
+	patches@lists.linux.dev
+Subject: Re: [PATCH net-next] can: rockchip_canfd: Use div_s64() in
+ rkcanfd_timestamp_init()
+Message-ID: <20240910-therapeutic-olive-turkey-73dc3c-mkl@pengutronix.de>
+References: <20240909-rockchip-canfd-clang-div-libcall-v1-1-c6037ea0bb2b@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="25ff24i24dga7xbo"
 Content-Disposition: inline
-In-Reply-To: <20240909-tps25990-v1-3-39b37e43e795@baylibre.com>
-
-Hi Jerome,
-
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on d22bd451d5606411895ef55cb105277e4f4f6e54]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Jerome-Brunet/dt-bindings-hwmon-pmbus-add-ti-tps25990-documentation/20240909-234152
-base:   d22bd451d5606411895ef55cb105277e4f4f6e54
-patch link:    https://lore.kernel.org/r/20240909-tps25990-v1-3-39b37e43e795%40baylibre.com
-patch subject: [PATCH 3/3] hwmon: (pmbus/tps25990): add initial support
-config: hexagon-allyesconfig (https://download.01.org/0day-ci/archive/20240910/202409101807.GjHADcvQ-lkp@intel.com/config)
-compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 05f5a91d00b02f4369f46d076411c700755ae041)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240910/202409101807.GjHADcvQ-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202409101807.GjHADcvQ-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
-   In file included from drivers/hwmon/pmbus/tps25990.c:9:
-   In file included from include/linux/i2c.h:19:
-   In file included from include/linux/regulator/consumer.h:35:
-   In file included from include/linux/suspend.h:5:
-   In file included from include/linux/swap.h:9:
-   In file included from include/linux/memcontrol.h:13:
-   In file included from include/linux/cgroup.h:25:
-   In file included from include/linux/kernel_stat.h:8:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:14:
-   In file included from arch/hexagon/include/asm/io.h:328:
-   include/asm-generic/io.h:548:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     548 |         val = __raw_readb(PCI_IOBASE + addr);
-         |                           ~~~~~~~~~~ ^
-   include/asm-generic/io.h:561:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     561 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
-      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-         |                                                   ^
-   In file included from drivers/hwmon/pmbus/tps25990.c:9:
-   In file included from include/linux/i2c.h:19:
-   In file included from include/linux/regulator/consumer.h:35:
-   In file included from include/linux/suspend.h:5:
-   In file included from include/linux/swap.h:9:
-   In file included from include/linux/memcontrol.h:13:
-   In file included from include/linux/cgroup.h:25:
-   In file included from include/linux/kernel_stat.h:8:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:14:
-   In file included from arch/hexagon/include/asm/io.h:328:
-   include/asm-generic/io.h:574:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     574 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
-      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
-         |                                                   ^
-   In file included from drivers/hwmon/pmbus/tps25990.c:9:
-   In file included from include/linux/i2c.h:19:
-   In file included from include/linux/regulator/consumer.h:35:
-   In file included from include/linux/suspend.h:5:
-   In file included from include/linux/swap.h:9:
-   In file included from include/linux/memcontrol.h:13:
-   In file included from include/linux/cgroup.h:25:
-   In file included from include/linux/kernel_stat.h:8:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:14:
-   In file included from arch/hexagon/include/asm/io.h:328:
-   include/asm-generic/io.h:585:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     585 |         __raw_writeb(value, PCI_IOBASE + addr);
-         |                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:595:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     595 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:605:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     605 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   In file included from drivers/hwmon/pmbus/tps25990.c:9:
-   In file included from include/linux/i2c.h:19:
-   In file included from include/linux/regulator/consumer.h:35:
-   In file included from include/linux/suspend.h:5:
-   In file included from include/linux/swap.h:9:
-   In file included from include/linux/memcontrol.h:21:
-   In file included from include/linux/mm.h:2228:
-   include/linux/vmstat.h:514:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     514 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
->> drivers/hwmon/pmbus/tps25990.c:267:9: error: call to undeclared function 'FIELD_GET'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     267 |                 ret = FIELD_GET(PK_MIN_AVG_AVG_CNT, ret);
-         |                       ^
->> drivers/hwmon/pmbus/tps25990.c:337:11: error: call to undeclared function 'FIELD_PREP'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     337 |                                              FIELD_PREP(PK_MIN_AVG_AVG_CNT, value));
-         |                                              ^
-   7 warnings and 2 errors generated.
+In-Reply-To: <20240909-rockchip-canfd-clang-div-libcall-v1-1-c6037ea0bb2b@kernel.org>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: llvm@lists.linux.dev
 
 
-vim +/FIELD_GET +267 drivers/hwmon/pmbus/tps25990.c
+--25ff24i24dga7xbo
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-   254	
-   255	static int tps25990_read_word(struct i2c_client *client,
-   256				      int page, int phase, int reg)
-   257	{
-   258		int ret, addr;
-   259	
-   260		addr = tps25990_get_addr(reg);
-   261		if (addr < 0)
-   262			return addr;
-   263	
-   264		switch (reg) {
-   265		case PMBUS_VIRT_SAMPLES:
-   266			ret = pmbus_read_byte_data(client, page, addr);
- > 267			ret = FIELD_GET(PK_MIN_AVG_AVG_CNT, ret);
-   268			break;
-   269	
-   270		case PMBUS_IIN_OC_FAULT_LIMIT:
-   271			ret = pmbus_read_byte_data(client, page, addr);
-   272			break;
-   273	
-   274		default:
-   275			ret = pmbus_read_word_data(client, page, -1, addr);
-   276			break;
-   277		}
-   278	
-   279		if (ret >= 0)
-   280			ret = tps25990_read_adapt_value(reg, ret);
-   281	
-   282		return ret;
-   283	}
-   284	
-   285	static int tps25990_write_adapt_value(int reg, int val)
-   286	{
-   287		switch (reg) {
-   288		case PMBUS_VIN_UV_WARN_LIMIT:
-   289		case PMBUS_VIN_UV_FAULT_LIMIT:
-   290		case PMBUS_VIN_OV_WARN_LIMIT:
-   291		case PMBUS_VOUT_UV_WARN_LIMIT:
-   292		case PMBUS_IIN_OC_WARN_LIMIT:
-   293		case PMBUS_OT_WARN_LIMIT:
-   294		case PMBUS_OT_FAULT_LIMIT:
-   295		case PMBUS_PIN_OP_WARN_LIMIT:
-   296		case PMBUS_POWER_GOOD_OFF:
-   297			val >>= TPS25990_8B_SHIFT;
-   298			val = clamp(val, 0, 0xff);
-   299			break;
-   300	
-   301		case PMBUS_VIN_OV_FAULT_LIMIT:
-   302			val -= TPS25990_VIN_OVF_OFF;
-   303			val = DIV_ROUND_CLOSEST(val * TPS25990_VIN_OVF_DIV, TPS25990_VIN_OVF_NUM);
-   304			val = clamp_val(val, 0, 0xf);
-   305			break;
-   306	
-   307		case PMBUS_IIN_OC_FAULT_LIMIT:
-   308			val -= TPS25990_IIN_OCF_OFF;
-   309			val = DIV_ROUND_CLOSEST(val * TPS25990_IIN_OCF_DIV, TPS25990_IIN_OCF_NUM);
-   310			val = clamp_val(val, 0, 0x3f);
-   311			break;
-   312	
-   313		case PMBUS_VIRT_SAMPLES:
-   314			val = clamp_val(val, 1, 1 << PK_MIN_AVG_AVG_CNT);
-   315			val = ilog2(val);
-   316			break;
-   317		}
-   318	
-   319		return val;
-   320	}
-   321	
-   322	static int tps25990_write_word(struct i2c_client *client,
-   323				       int page, int reg, u16 value)
-   324	{
-   325		int addr, ret;
-   326	
-   327		addr = tps25990_get_addr(reg);
-   328		if (addr < 0)
-   329			return addr;
-   330	
-   331		value = tps25990_write_adapt_value(reg, value);
-   332	
-   333		switch (reg) {
-   334		case PMBUS_VIRT_SAMPLES:
-   335			ret = pmbus_update_byte_data(client, page, addr,
-   336						     PK_MIN_AVG_AVG_CNT,
- > 337						     FIELD_PREP(PK_MIN_AVG_AVG_CNT, value));
-   338			break;
-   339	
-   340		case PMBUS_IIN_OC_FAULT_LIMIT:
-   341			ret = pmbus_write_byte_data(client, page, addr,
-   342						    value);
-   343			break;
-   344	
-   345		default:
-   346			ret = pmbus_write_word_data(client, page, addr, value);
-   347			break;
-   348		}
-   349	
-   350		return ret;
-   351	}
-   352	
+On 09.09.2024 09:24:25, Nathan Chancellor wrote:
+> When building with clang for a 32-bit target, such as arm, a libcall is
+> generated when dividing the result of clocksource_cyc2ns(), which
+> returns a signed 64-bit integer:
+>=20
+>   ERROR: modpost: "__aeabi_ldivmod" [drivers/net/can/rockchip/rockchip_ca=
+nfd.ko] undefined!
+>=20
+> Use div_s64() to avoid generating the libcall.
+>=20
+> Fixes: 4e1a18bab124 ("can: rockchip_canfd: add hardware timestamping supp=
+ort")
+> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+A similar patch by me is mainline:
+
+https://git.kernel.org/pub/scm/linux/kernel/git/netdev/net-next.git/commit/=
+?id=3D9c100bc3ec13914f9911a937ec5b38182a5c3d64
+
+regards,
+Marc
+
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde          |
+Embedded Linux                   | https://www.pengutronix.de |
+Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
+
+--25ff24i24dga7xbo
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEUEC6huC2BN0pvD5fKDiiPnotvG8FAmbgJiIACgkQKDiiPnot
+vG8g4AgAiBik9dV5HcawcjdwbwyUqH/9YsohijhBpU0b0WuBDp/79XH3o4yu3jIv
+C8JcMkL8C9D6bSCdcgcbV94/qzeiBpBAGwRPqn+M+VyILvV0rkO76Em4vmLiCK/G
+uSJLElidOCNkLWkGOtVPH3k1lc90du2ZJh3peQ6V9E0tbv0RJamKrnRgIFiQP1Uf
+K1Ji2W0yk0VArkepwqO/rdVysFLoLJVtbJB1mHd0sK/mQ/M1PrbP2KAgWmMfv/4b
+YYrbgYMMcIhoprVc1ISs3ChOVywIlV6EvQE8G8zn0tYWIWARgcI7HpmXkpzoaAIl
+JOWrOfTk6792XowID33b/+Fni2RXYA==
+=FMZt
+-----END PGP SIGNATURE-----
+
+--25ff24i24dga7xbo--
