@@ -1,143 +1,156 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 88FC01A08A6;
-	Tue, 10 Sep 2024 19:05:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F54417A922;
+	Tue, 10 Sep 2024 19:06:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725995128; cv=none; b=jMXKKhgsTsgZBXiJDtprOSXNvac6KgpF0TgFnZb3ReKbGAP0ywzakjNr1zDSk8HNsb8z0WH9KqM1RnxbIkyqFOJFyHBdsQq1mcO++NguKsHUnH9LHRaAbvAyMTG3ksLnHTLkmmSpEEw72X+IIPBmNyDTW7Jdlzwe54ui/CI8sPk=
+	t=1725995202; cv=none; b=pRGHvoc5Aa5kcsc4mdj2Y+MO+CpZ2P6zp+YdIBKHufG053GYr616ickOa04vh2VFTmY6TiAlj5UB0GC3o15n+FTION3HDUcesaaHlxeeJbA3Dx8eFstpKrAnkckvTR5LCtm1r4kqVaqVQ8nLvNoen1LsJiy4wBjWQcZKLSo7D7k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725995128; c=relaxed/simple;
-	bh=C3ZeDgPXAfSZWBVnm4n6Mx6Y3fiU3fMZS6UYTtOPrlg=;
+	s=arc-20240116; t=1725995202; c=relaxed/simple;
+	bh=Ul9jDHWGKcBdzpbOj4O7RU6PYDWlFr5RqCIVNG7UVOw=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=W0fGQ9i42hXsVhfhjdkcoJWXPc6H1pg76QihtTX+aQjATCWPQ1QuURzxCo0d8UunwMefAkKCXFlWljHHSZxCuM3xs5nqRfLaS5SRKYASe56fEydWUDf+K2rVBMarZws5zsCKFxQfQgom3Bh7ts8WCdsfTq6yVoK/wmDDigaEEj0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YjSugIze; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=uMPPd2zG5msn3Cr5Ck6ZVh0ZT5ok429LP/cNXQxtKgnYyuF8mD5Y0aCTz2JyCR2wFx7vMs4N+6KfckfrKbeHGXinJ3niMa1NSrPFN/lKzMfecGoZgr4tGY9a2CKo9CzAP1RNKRhWG99EvDaMS282oYVr9iET7AUfmCFyRMc3ihs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hVOSOZiC; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YjSugIze"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 37D09C4CEC3;
-	Tue, 10 Sep 2024 19:05:27 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hVOSOZiC"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 36EA9C4CEC4;
+	Tue, 10 Sep 2024 19:06:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1725995128;
-	bh=C3ZeDgPXAfSZWBVnm4n6Mx6Y3fiU3fMZS6UYTtOPrlg=;
+	s=k20201202; t=1725995201;
+	bh=Ul9jDHWGKcBdzpbOj4O7RU6PYDWlFr5RqCIVNG7UVOw=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=YjSugIzeeRXzHGAJbdqovwScWPHDefcg+9ae1ZDyTfsEdeU6f585fk10WsHZEjz2E
-	 EpHRZwbZ4+fWyVsdGg+QLZO6owVh0YfFdqbz3fh2rF7AwRH8VGzLOzNtY1b2zz+h7x
-	 tPugLSz2hmgZf+Ki46pc5Len5aMX06ccJcaIvd086t0Jl4fcn4cqqExpkmRBzUiEJQ
-	 ZE1s3hwjknbd8Imr/eJ/igayIH3DoVg1sk7AkWW+4y5gjuTpFWnybXmaK6VWpI1DTU
-	 bATKAfrlf/B4g8+D12kjDwuUEG/l1J8sJDPhGvn3UGcQgtV/7mzFHlSNar6Ib/aTPp
-	 begjABtc63sRg==
-Date: Tue, 10 Sep 2024 12:05:25 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Marc Kleine-Budde <mkl@pengutronix.de>
-Cc: Simon Horman <horms@kernel.org>, kernel@pengutronix.de,
-	Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Heiko Stuebner <heiko@sntech.de>, linux-can@vger.kernel.org,
-	netdev@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-rockchip@lists.infradead.org, llvm@lists.linux.dev,
-	patches@lists.linux.dev
-Subject: Re: [PATCH] can: rockchip_canfd: fix return type of
- rkcanfd_start_xmit()
-Message-ID: <20240910190525.GA1169362@thelio-3990X>
-References: <20240906-rockchip-canfd-wifpts-v1-1-b1398da865b7@kernel.org>
- <20240909084448.GU2097826@kernel.org>
- <20240909-arcane-practical-petrel-015d24-mkl@pengutronix.de>
- <20240909143546.GX2097826@kernel.org>
- <20240910-utopian-meticulous-dodo-4ec230-mkl@pengutronix.de>
+	b=hVOSOZiCswbfLcdQm9Bl76P0KObTxVAy6s1pWxVvLhPdFXFb4sHAFNDQpG8yYClyn
+	 Z6+7pdCscYqMFRX+kxRKxgMkU1NAl1m1kWeS1Ujak17v5ZKq4VbiaohjVFqgf2yxgk
+	 /qcp7Ep+pJsqC0KRWXxSL3Tqf8XCbOYHjLzmF+HRflEPn0yGWQatYEjC8cxkYnIEDm
+	 gmvx9Wm4ftR2E83qrG+xG0MogShoFZwxcMvzbulTPZMouUQEEBh0QfzLJu2k3QmrAe
+	 JrXLTM9yiFWpqP1RMV7PQmigkTif/TOwZeNl/UdNvzisQkKEcLcMAo3EZtB/XXhutq
+	 tQERftEB4pdvg==
+Date: Tue, 10 Sep 2024 16:06:38 -0300
+From: Arnaldo Carvalho de Melo <acme@kernel.org>
+To: Quentin Monnet <qmo@kernel.org>
+Cc: James Clark <james.clark@linaro.org>, linux-perf-users@vger.kernel.org,
+	sesse@google.com, Peter Zijlstra <peterz@infradead.org>,
+	Ingo Molnar <mingo@redhat.com>, Namhyung Kim <namhyung@kernel.org>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+	Jiri Olsa <jolsa@kernel.org>, Ian Rogers <irogers@google.com>,
+	Adrian Hunter <adrian.hunter@intel.com>,
+	"Liang, Kan" <kan.liang@linux.intel.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	"Masami Hiramatsu (Google)" <mhiramat@kernel.org>,
+	Changbin Du <changbin.du@huawei.com>,
+	Guilherme Amadio <amadio@gentoo.org>, Leo Yan <leo.yan@arm.com>,
+	Manu Bretelle <chantr4@gmail.com>, linux-kernel@vger.kernel.org,
+	bpf@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH 1/2] perf build: Autodetect minimum required llvm-dev
+ version
+Message-ID: <ZuCYvvjJZm3jSQux@x1>
+References: <20240910140405.568791-1-james.clark@linaro.org>
+ <b2e813c4-be89-457d-8c38-38849177ec93@kernel.org>
+ <307568b9-9b6b-4eaa-973c-8f88538b8545@linaro.org>
+ <b60928c6-19c5-473c-8f13-532ed3fd3b3a@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20240910-utopian-meticulous-dodo-4ec230-mkl@pengutronix.de>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <b60928c6-19c5-473c-8f13-532ed3fd3b3a@kernel.org>
 
-Hi Marc,
-
-On Tue, Sep 10, 2024 at 11:56:56AM +0200, Marc Kleine-Budde wrote:
-> On 09.09.2024 15:35:46, Simon Horman wrote:
-> > On Mon, Sep 09, 2024 at 10:57:06AM +0200, Marc Kleine-Budde wrote:
-> > > On 09.09.2024 09:44:48, Simon Horman wrote:
-> > > > On Fri, Sep 06, 2024 at 01:26:41PM -0700, Nathan Chancellor wrote:
-> > > > > With clang's kernel control flow integrity (kCFI, CONFIG_CFI_CLANG),
-> > > > > indirect call targets are validated against the expected function
-> > > > > pointer prototype to make sure the call target is valid to help mitigate
-> > > > > ROP attacks. If they are not identical, there is a failure at run time,
-> > > > > which manifests as either a kernel panic or thread getting killed. A
-> > > > > warning in clang aims to catch these at compile time, which reveals:
-> > > > > 
-> > > > >   drivers/net/can/rockchip/rockchip_canfd-core.c:770:20: error: incompatible function pointer types initializing 'netdev_tx_t (*)(struct sk_buff *, struct net_device *)' (aka 'enum netdev_tx (*)(struct sk_buff *, struct net_device *)') with an expression of type 'int (struct sk_buff *, struct net_device *)' [-Werror,-Wincompatible-function-pointer-types-strict]
-> > > > >     770 |         .ndo_start_xmit = rkcanfd_start_xmit,
-> > > > >         |                           ^~~~~~~~~~~~~~~~~~
-> > > > > 
-> > > > > ->ndo_start_xmit() in 'struct net_device_ops' expects a return type of
-> > > > > 'netdev_tx_t', not 'int' (although the types are ABI compatible). Adjust
-> > > > > the return type of rkcanfd_start_xmit() to match the prototype's to
-> > > > > resolve the warning.
-> > > > > 
-> > > > > Fixes: ff60bfbaf67f ("can: rockchip_canfd: add driver for Rockchip CAN-FD controller")
-> > > > > Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+On Tue, Sep 10, 2024 at 05:53:16PM +0100, Quentin Monnet wrote:
+> 2024-09-10 16:11 UTC+0100 ~ James Clark <james.clark@linaro.org>
+> > 
+> > 
+> > On 9/10/24 15:27, Quentin Monnet wrote:
+> > > 2024-09-10 15:04 UTC+0100 ~ James Clark <james.clark@linaro.org>
+> > > > The new LLVM addr2line feature requires a minimum version of 13 to
+> > > > compile. Add a feature check for the version so that NO_LLVM=1 doesn't
+> > > > need to be explicitly added. Leave the existing llvm feature check
+> > > > intact because it's used by tools other than Perf.
 > > > > 
-> > > > Thanks, I was able to reproduce this problem at build time
-> > > > and that your patch addresses it.
+> > > > This fixes the following compilation error when the llvm-dev version
+> > > > doesn't match:
+> > > > 
+> > > >    util/llvm-c-helpers.cpp: In function 'char*
+> > > > llvm_name_for_code(dso*, const char*, u64)':
+> > > >    util/llvm-c-helpers.cpp:178:21: error:
+> > > > 'std::remove_reference_t<llvm::DILineInfo>' {aka 'struct
+> > > > llvm::DILineInfo'} has no member named 'StartAddress'
+> > > >      178 |   addr, res_or_err->StartAddress ? *res_or_err-
+> > > > >StartAddress : 0);
+> > > > 
+> > > > Fixes: c3f8644c21df ("perf report: Support LLVM for addr2line()")
+> > > > Signed-off-by: James Clark <james.clark@linaro.org>
+> > > > ---
+> > > >   tools/build/Makefile.feature           |  2 +-
+> > > >   tools/build/feature/Makefile           |  9 +++++++++
+> > > >   tools/build/feature/test-llvm-perf.cpp | 14 ++++++++++++++
+> > > >   tools/perf/Makefile.config             |  6 +++---
+> > > >   4 files changed, 27 insertions(+), 4 deletions(-)
+> > > >   create mode 100644 tools/build/feature/test-llvm-perf.cpp
+> > > > 
+> > > > diff --git a/tools/build/Makefile.feature b/tools/build/Makefile.feature
+> > > > index 0717e96d6a0e..427a9389e26c 100644
+> > > > --- a/tools/build/Makefile.feature
+> > > > +++ b/tools/build/Makefile.feature
+> > > > @@ -136,7 +136,7 @@ FEATURE_DISPLAY ?=              \
+> > > >            libunwind              \
+> > > >            libdw-dwarf-unwind     \
+> > > >            libcapstone            \
+> > > > -         llvm                   \
+> > > > +         llvm-perf              \
 > > > 
-> > > FTR: the default clang in Debian unstable, clang-16.0.6 doesn't support
-> > > this. With clang-20 from experimental it works, haven't checked older
-> > > versions, though.
+> > > Hi! Just a quick question, why remove "llvm" from the list, here?
+> > > 
+> > > Quentin
 > > 
-> > FTR: I checked using 18.1.8 from here [1][2].
+> > Just because with respect to the linked fixes: commit, it wasn't
+> > actually there before. It was added just for addr2line so it should
+> > probably be llvm-perf rather than the generic one.
 > > 
-> > [1] https://mirrors.edge.kernel.org/pub/tools/llvm/
-> > [2] https://mirrors.edge.kernel.org/pub/tools/llvm/files/
-> 
-> I was a bit hasty yesterday, clang-20 and W=1 produces these errors:
-> 
-> | include/linux/vmstat.h:517:36: error: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Werror,-Wenum-enum-conversion]
-> |   517 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-> |       |                               ~~~~~~~~~~~ ^ ~~~
-> | 1 error generated.
+> > But yes we can add llvm output if it's useful, but could probably be a
+> > separate commit.
+ 
+> It wasn't there before, but you're not removing the rest of the "llvm"
+> feature, so I'd expect that part to stay as well? But I don't mind much. We
+> use the "llvm" feature in bpftool, but beyond that, I don't personally need
+> it to be displayed in tools/build/Makefile.feature, so no need to respin for
+> that :)
 
-Unfortunately, this is a completely tangential issue. You can see some
-backstory behind it in commit 75b5ab134bb5 ("kbuild: Move
--Wenum-{compare-conditional,enum-conversion} into W=1"). To be honest, I
-should consider moving that to W=2...
+My worry was that something were being removed because it wasn't being
+used in tools/perf/ only to realize later that that was being used
+somewhere else in tools/.
 
-> However I fail to reproduce the ndo_start_xmit problem. Even with 18.1.8
-> from kernel.org.
-> 
-> 
-> The following command (ARCH is unset, compiling x86 -> x86) produces the
-> above shown "vmstat.h" problems....
-> 
-> | $ make LLVM=1 LLVM_IAS=1 LLVM_SUFFIX=-20 drivers/net/can/rockchip/  W=1 CONFIG_WERROR=0
+That is not the case as you reported, so going back to what we had
+before the addr2line llvm code being introduced, i.e.:
 
-FYI, you could shorten this to just:
+commit c3f8644c21df9b7db97eb70e08e2826368aaafa0
+Author: Steinar H. Gunderson <sesse@google.com>
+Date:   Sat Aug 3 17:20:06 2024 +0200
 
-  $ make LLVM=-20 drivers/net/can/rockchip/ W=1 CONFIG_WERROR=0
+    perf report: Support LLVM for addr2line()
 
-As LLVM_SUFFIX will be set through LLVM and LLVM_IAS has defaulted to 1
-since 5.15.
+Just did:
 
-Does CONFIG_WERROR=0 work? It seems like it is still present above.
++++ b/tools/build/Makefile.feature
+@@ -136,6 +136,7 @@ FEATURE_DISPLAY ?=              \
+          libunwind              \
+          libdw-dwarf-unwind     \
+          libcapstone            \
++         llvm                   \
+          zlib                   \
+          lzma                   \
+          get_cpuid              \
 
-> ... but not the ndo_start_xmit problem.
-> 
-> 
-> Am I missing a vital .config option?
+So just displaying whatever was detected, and now we display the new
+llvm-perf, so that should be ok, probably even for bpftool, its just
+requires a newer version of llvm-dev, right?
 
-No, I might not have made it clear in this commit message but this
-warning is not on by default. I am looking to turn it on at some point
-so I keep up with the warnings that it produces but there is one
-subsystem that has several instances and I am unsure of how to solve
-them to the maintainer's satisfaction. You can test it by adding
-
-  KCFLAGS=-Wincompatible-function-pointer-types-strict
-
-to your make command above and it should reproduce.
-
-Cheers,
-Nathan
+- Arnaldo
