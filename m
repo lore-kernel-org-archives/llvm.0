@@ -1,102 +1,127 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net [217.70.183.199])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A3789178384
-	for <llvm@lists.linux.dev>; Tue, 10 Sep 2024 18:17:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 80F21A945
+	for <llvm@lists.linux.dev>; Tue, 10 Sep 2024 18:59:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.199
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725992234; cv=none; b=iT/8cmQaPf7bcPhqwxUpMK0AbD9z5/v18NCnpsuaFGdLBurV/jE2KPKGzg38AYjkmlHsJSaTUviYtXfLievtMZSeqssBhjokMG7OkG6tXZ+IlNABj1IMKv4G4vcL0ClLQIMnSNtOW2QohnEDi3Xmdy50wz75ZT1PXQUnAZwuAno=
+	t=1725994760; cv=none; b=dlsulBIoCCjrxNNPYzKTij8sLsROnwT5FYXphzyYq0uvuU5oFOVXOXiaknV26XlGp6vFuxcXi5BpkWpk6LtahQllZwpRmBcQcRLAqIeXXyP14+zE9wlqwLs5M6gny/+pTmMQGsmmDH4wh6VRpP9T9Yg3X8eVwx9pG0/c1u6tZhY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725992234; c=relaxed/simple;
-	bh=Av47JBqIMel8pnzyd1psadtkEZ7h2mHZiNrDkpnn9sA=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=VXVTd0+eh9kdUzK8ADi+IlrSvjRjX0ykRsNslRBlfht3VEGj8ClMVDr6CSX1EA8h9X4EYC1xNZhrAlnK94EjM87xyfYHwOYB/TYF1HZ4Dl688kaILYvSat8A8n92WmVCK4Bs5kcg2judK618xgkFpj8D8ngyYax1CKX4AWfXWy4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kt/PJ30/; arc=none smtp.client-ip=10.30.226.201
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kt/PJ30/"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5157DC4CEC3
-	for <llvm@lists.linux.dev>; Tue, 10 Sep 2024 18:17:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1725992234;
-	bh=Av47JBqIMel8pnzyd1psadtkEZ7h2mHZiNrDkpnn9sA=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=kt/PJ30/Cxb4wFw7QznVS74EjFfwbVUk2YHxS+GcO8oEaRYicdYZ9r5FP+bqW/lQL
-	 sCs9D8JpC3UEWkx/xDZz1V2mO7Cz/P9AZs0n1s7l9X4SV3Mqwx0LR2zgfgiXKJ3A5X
-	 yksgfPsE91I0l1ytuVk4W4mH4ANlo7CdVpMBbTjDWH7aj+/7inAAK/MAdv9u0RJ0CE
-	 yTlN771EaMWOklCnMguLsF5ppaDjczFRmBBbu8EcivVCa5coNNvF37E7tF1FpX/Zb9
-	 9pbRGV7Pgb2Bi6yRIpz1xutVNUl5CqpZyzZ7OCMHB1YTzzZMjklwjM+CylRapsomXQ
-	 cuIqs8LPdsRWQ==
-Received: by mail-oa1-f43.google.com with SMTP id 586e51a60fabf-27051f63018so3207888fac.3
-        for <llvm@lists.linux.dev>; Tue, 10 Sep 2024 11:17:14 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCUeFC4b+jmxTc53POG4PR2fryReyIn7r1YTVzIk+WTJ0inJb70Ibjd0BnB/QVB9c76EWwHX@lists.linux.dev
-X-Gm-Message-State: AOJu0YwpFSxNlpq4f4X/tM6lYoG8/CILVUtIL8lu5E42t+7aBwyVVpEj
-	6WFcikMZV8KbKaDVEnaJYJDAJ0mXxAidDUHy4d5VqRU3zKz2oiQd47hHnQ5PH6APxRYQcuNQ6nj
-	RCfWiZQuTsHRTyocz8UNtw+hJr3k=
-X-Google-Smtp-Source: AGHT+IEeYO5s/ZCYXb5YyAbzRWMGjfGy+I6cPKvTnJtvulEDvKApH3QfL4YtfaNvr/Apn/u013u2kVuzuBXTVe2H6bA=
-X-Received: by 2002:a05:6871:7512:b0:268:9d81:24b7 with SMTP id
- 586e51a60fabf-27b82fc714fmr15257645fac.29.1725992233687; Tue, 10 Sep 2024
- 11:17:13 -0700 (PDT)
+	s=arc-20240116; t=1725994760; c=relaxed/simple;
+	bh=lZdWc1QdGCBc0gphOiz83m01CLzb0fC3FjmmjOJIe9E=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=WVdpW4S88a8XyKQ/YXDyVZdr9248oomT8eLl1VVihBPGWROnM9/WwPkSprCroUMEXilWu+dnqQvRttSjWCzjfYww9t/2V5Ga+DLYs+3OG5MTVTDrzwRJp5zSPlxui11gMY4P8YVGT8jYhaxLh0sIGhex60nNlYFhuaZABeCO87Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ghiti.fr; spf=pass smtp.mailfrom=ghiti.fr; arc=none smtp.client-ip=217.70.183.199
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ghiti.fr
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ghiti.fr
+Received: by mail.gandi.net (Postfix) with ESMTPSA id BDCA3FF803;
+	Tue, 10 Sep 2024 18:59:09 +0000 (UTC)
+Message-ID: <77d0f59f-554b-4cd9-ae1c-4c89a76058ef@ghiti.fr>
+Date: Tue, 10 Sep 2024 20:59:08 +0200
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20240905184848.318978-1-andriy.shevchenko@linux.intel.com>
-In-Reply-To: <20240905184848.318978-1-andriy.shevchenko@linux.intel.com>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Tue, 10 Sep 2024 20:17:02 +0200
-X-Gmail-Original-Message-ID: <CAJZ5v0jkV4xcuKpLkGUzDc6PMfjBuS67hDr1MxMybus+d_cUrw@mail.gmail.com>
-Message-ID: <CAJZ5v0jkV4xcuKpLkGUzDc6PMfjBuS67hDr1MxMybus+d_cUrw@mail.gmail.com>
-Subject: Re: [PATCH v1 1/1] PM: hibernate: Remove unused stub for saveable_highmem_page()
-To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc: "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>, linux-pm@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
-	"Rafael J. Wysocki" <rafael@kernel.org>, Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>, 
-	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
-	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 6.6] membarrier: riscv: Add full memory barrier in
+ switch_mm()
+Content-Language: en-US
+To: Greg KH <gregkh@linuxfoundation.org>
+Cc: WangYuli <wangyuli@uniontech.com>, stable@vger.kernel.org,
+ sashal@kernel.org, parri.andrea@gmail.com, mathieu.desnoyers@efficios.com,
+ palmer@rivosinc.com, linux-kernel@vger.kernel.org, paul.walmsley@sifive.com,
+ palmer@dabbelt.com, aou@eecs.berkeley.edu, nathan@kernel.org,
+ ndesaulniers@google.com, trix@redhat.com, linux-riscv@lists.infradead.org,
+ llvm@lists.linux.dev, paulmck@kernel.org, mingo@redhat.com,
+ peterz@infradead.org, juri.lelli@redhat.com, vincent.guittot@linaro.org,
+ dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
+ mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
+ brauner@kernel.org, arnd@arndb.de
+References: <10F34E3A3BFBC534+20240909025701.1101397-1-wangyuli@uniontech.com>
+ <2024091002-caution-tinderbox-a847@gregkh>
+ <364e0e33-68ad-4f0c-86f1-f6a95def9a30@ghiti.fr>
+ <2024091037-errant-countdown-4928@gregkh>
+ <5d486ff8-2ab5-4ed5-a1da-c2817927b3a2@ghiti.fr>
+ <2024091056-bogus-whoops-4bde@gregkh>
+From: Alexandre Ghiti <alex@ghiti.fr>
+In-Reply-To: <2024091056-bogus-whoops-4bde@gregkh>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-GND-Sasl: alex@ghiti.fr
 
-On Thu, Sep 5, 2024 at 8:48=E2=80=AFPM Andy Shevchenko
-<andriy.shevchenko@linux.intel.com> wrote:
+On 10/09/2024 15:25, Greg KH wrote:
+> On Tue, Sep 10, 2024 at 02:35:06PM +0200, Alexandre Ghiti wrote:
+>> On 10/09/2024 13:58, Greg KH wrote:
+>>> On Tue, Sep 10, 2024 at 01:31:04PM +0200, Alexandre Ghiti wrote:
+>>>> Hi Greg,
+>>>>
+>>>> On 10/09/2024 09:32, Greg KH wrote:
+>>>>> On Mon, Sep 09, 2024 at 10:57:01AM +0800, WangYuli wrote:
+>>>>>> From: Andrea Parri <parri.andrea@gmail.com>
+>>>>>>
+>>>>>> [ Upstream commit d6cfd1770f20392d7009ae1fdb04733794514fa9 ]
+>>>>>>
+>>>>>> The membarrier system call requires a full memory barrier after storing
+>>>>>> to rq->curr, before going back to user-space.  The barrier is only
+>>>>>> needed when switching between processes: the barrier is implied by
+>>>>>> mmdrop() when switching from kernel to userspace, and it's not needed
+>>>>>> when switching from userspace to kernel.
+>>>>>>
+>>>>>> Rely on the feature/mechanism ARCH_HAS_MEMBARRIER_CALLBACKS and on the
+>>>>>> primitive membarrier_arch_switch_mm(), already adopted by the PowerPC
+>>>>>> architecture, to insert the required barrier.
+>>>>>>
+>>>>>> Fixes: fab957c11efe2f ("RISC-V: Atomic and Locking Code")
+>>>>>> Signed-off-by: Andrea Parri <parri.andrea@gmail.com>
+>>>>>> Reviewed-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+>>>>>> Link: https://lore.kernel.org/r/20240131144936.29190-2-parri.andrea@gmail.com
+>>>>>> Signed-off-by: Palmer Dabbelt <palmer@rivosinc.com>
+>>>>>> Signed-off-by: WangYuli <wangyuli@uniontech.com>
+>>>>>> ---
+>>>>>>     MAINTAINERS                         |  2 +-
+>>>>>>     arch/riscv/Kconfig                  |  1 +
+>>>>>>     arch/riscv/include/asm/membarrier.h | 31 +++++++++++++++++++++++++++++
+>>>>>>     arch/riscv/mm/context.c             |  2 ++
+>>>>>>     kernel/sched/core.c                 |  5 +++--
+>>>>>>     5 files changed, 38 insertions(+), 3 deletions(-)
+>>>>>>     create mode 100644 arch/riscv/include/asm/membarrier.h
+>>>>> Now queued up, thanks.
+>>>> The original patch was merged in 6.9 and the Fixes tag points to a commit
+>>>> introduced in v4.15. So IIUC, this patch should have been backported
+>>>> "automatically" to the releases < 6.9 right? As stated in the documentation
+>>>> (process/stable-kernel-rules.html):
+>>>>
+>>>> "Note, such tagging is unnecessary if the stable team can derive the
+>>>> appropriate versions from Fixes: tags."
+>>>>
+>>>> Or did we miss something?
+>>> Yes, you didn't tag cc: stable at all in this commit, which is why we
+>>> did not see it.  The documentation says that :)
+>>
+>> Ok, some patches seem to make it to stable without the cc: stable tag (like
+>> the one below for example), so I thought it was not necessary.
+> Yes, they do, because many maintainers and developers don't follow the
+> normal rules, so we sweep the tree when we have a chance and do a "best
+> effort" backport at times.
 >
-> When saveable_highmem_page() is unused, it prevents kernel builds
-> with clang, `make W=3D1` and CONFIG_WERROR=3Dy:
+> But again, it is NOT guaranteed that this will happen, and even if it
+> does, you will NOT get emails saying the attempt-at-backporting fails,
+> if it fails, as obviously the developers involved weren't explicitly
+> asking for it to be backported.
 >
-> kernel/power/snapshot.c:1369:21: error: unused function 'saveable_highmem=
-_page' [-Werror,-Wunused-function]
->  1369 | static inline void *saveable_highmem_page(struct zone *z, unsigne=
-d long p)
->       |                     ^~~~~~~~~~~~~~~~~~~~~
->
-> Fix this by removing unused stub.
->
-> See also commit 6863f5643dd7 ("kbuild: allow Clang to find unused static
-> inline functions for W=3D1 build").
->
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> ---
->  kernel/power/snapshot.c | 5 -----
->  1 file changed, 5 deletions(-)
->
-> diff --git a/kernel/power/snapshot.c b/kernel/power/snapshot.c
-> index 405eddbda4fc..30894d8f0a78 100644
-> --- a/kernel/power/snapshot.c
-> +++ b/kernel/power/snapshot.c
-> @@ -1365,11 +1365,6 @@ static unsigned int count_highmem_pages(void)
->         }
->         return n;
->  }
-> -#else
-> -static inline void *saveable_highmem_page(struct zone *z, unsigned long =
-p)
-> -{
-> -       return NULL;
-> -}
->  #endif /* CONFIG_HIGHMEM */
->
->  /**
-> --
+> So in short, just properly tag things for stable, and all will be fine.
 
-Applied as 6.12 material, thanks!
+
+Great, thank you, I'll make sure we tag the fixes to backport properly!
+
+Thanks again,
+
+Alex
+
+
+>
+> thanks,
+>
+> greg k-h
