@@ -1,111 +1,105 @@
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net [217.70.183.194])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 429FA181B8D
-	for <llvm@lists.linux.dev>; Tue, 10 Sep 2024 10:57:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 909A71684AE
+	for <llvm@lists.linux.dev>; Tue, 10 Sep 2024 11:31:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.194
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725965877; cv=none; b=hSgYLdC9ba5LZJKsVQnwIKqLdkRqShfBoBKMIiPx4gj1VXUciashAGn4eQlX6h1NhzPdpVWWN0TC5qtiIplRHk29E+fVOdgNdoqane1vmfLqdOoAJuyWAZ+PKTbp7tywlYBxS65hFpj/8PO8KnyHefv3DkFmemtAPyxK0LIhBo0=
+	t=1725967875; cv=none; b=ZeGdJJQxdZrbsTWw9Rz2CCMw15W0G9DR7q1WQRwjxAvxXLdA5T8gdVBsNT8VoEURXV1EnGOsYZxgCi8zfc1ncgwJOilRUmtpz1Li7XK/XsueIDSpBMkNrHp/9AS0I0ICX0eg3pxYms6IHZK/oXUA7zIttytcsFVY9vcAeMVWYfQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725965877; c=relaxed/simple;
-	bh=tTecUmMwMV7vjPhIE1nH3KpDvjXUoOSU2QQBQRGtupE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=By24L7CHeqhhyc4Kwn9DaH+PTSr2w+zmMCkrtVtG97sPa+tvruZTgeRo+3Z38OPMa40D3ylb+BoOk53Q14YD2bn3jEX7IVvOcPXQLRYLv2iSQS9bjOoHAhn2qKHRj7wAPoazfIG3JAdF/NybJFTrtm6KYTrGtM+6Sxgo6GFb+Uo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <mkl@pengutronix.de>)
-	id 1snyZ5-0001iF-C4; Tue, 10 Sep 2024 12:57:43 +0200
-Received: from [2a0a:edc0:0:b01:1d::7b] (helo=bjornoya.blackshift.org)
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.94.2)
-	(envelope-from <mkl@pengutronix.de>)
-	id 1snyZ3-006sM6-QY; Tue, 10 Sep 2024 12:57:41 +0200
-Received: from pengutronix.de (pd9e595f8.dip0.t-ipconnect.de [217.229.149.248])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	(Authenticated sender: mkl-all@blackshift.org)
-	by smtp.blackshift.org (Postfix) with ESMTPSA id 6B267337707;
-	Tue, 10 Sep 2024 10:57:41 +0000 (UTC)
-Date: Tue, 10 Sep 2024 12:57:41 +0200
-From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: kernel@pengutronix.de, Vincent Mailhol <mailhol.vincent@wanadoo.fr>, 
-	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
-	Heiko Stuebner <heiko@sntech.de>, linux-can@vger.kernel.org, netdev@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, linux-rockchip@lists.infradead.org, llvm@lists.linux.dev, 
-	patches@lists.linux.dev
-Subject: Re: [PATCH net-next] can: rockchip_canfd: Use div_s64() in
- rkcanfd_timestamp_init()
-Message-ID: <20240910-therapeutic-olive-turkey-73dc3c-mkl@pengutronix.de>
-References: <20240909-rockchip-canfd-clang-div-libcall-v1-1-c6037ea0bb2b@kernel.org>
+	s=arc-20240116; t=1725967875; c=relaxed/simple;
+	bh=umTf7L04+EULSCtHP+OsTzwZGys+FKvlYJE6T9XSSWU=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=ZTRL4e7epmnrTu7iSZVAQA+M/pneRG19KQ2qtXqC2Y2cvpUIeetm0VyUEhhFFx5guCePjISy3wiej06Sm5b/RxR0iZXB7NoiknB3wjKT29I8nVM0wh5etUMOXpRXglCFn2A8LIimXzphvD4R2VhA81aQ2KNdlc+H3ywBe0CvI44=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ghiti.fr; spf=pass smtp.mailfrom=ghiti.fr; arc=none smtp.client-ip=217.70.183.194
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ghiti.fr
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ghiti.fr
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 1FC604000B;
+	Tue, 10 Sep 2024 11:31:04 +0000 (UTC)
+Message-ID: <364e0e33-68ad-4f0c-86f1-f6a95def9a30@ghiti.fr>
+Date: Tue, 10 Sep 2024 13:31:04 +0200
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="25ff24i24dga7xbo"
-Content-Disposition: inline
-In-Reply-To: <20240909-rockchip-canfd-clang-div-libcall-v1-1-c6037ea0bb2b@kernel.org>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: llvm@lists.linux.dev
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 6.6] membarrier: riscv: Add full memory barrier in
+ switch_mm()
+Content-Language: en-US
+To: Greg KH <gregkh@linuxfoundation.org>, WangYuli <wangyuli@uniontech.com>
+Cc: stable@vger.kernel.org, sashal@kernel.org, parri.andrea@gmail.com,
+ mathieu.desnoyers@efficios.com, palmer@rivosinc.com,
+ linux-kernel@vger.kernel.org, paul.walmsley@sifive.com, palmer@dabbelt.com,
+ aou@eecs.berkeley.edu, nathan@kernel.org, ndesaulniers@google.com,
+ trix@redhat.com, linux-riscv@lists.infradead.org, llvm@lists.linux.dev,
+ paulmck@kernel.org, mingo@redhat.com, peterz@infradead.org,
+ juri.lelli@redhat.com, vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+ rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
+ bristot@redhat.com, vschneid@redhat.com, brauner@kernel.org, arnd@arndb.de
+References: <10F34E3A3BFBC534+20240909025701.1101397-1-wangyuli@uniontech.com>
+ <2024091002-caution-tinderbox-a847@gregkh>
+From: Alexandre Ghiti <alex@ghiti.fr>
+In-Reply-To: <2024091002-caution-tinderbox-a847@gregkh>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-GND-Sasl: alex@ghiti.fr
+
+Hi Greg,
+
+On 10/09/2024 09:32, Greg KH wrote:
+> On Mon, Sep 09, 2024 at 10:57:01AM +0800, WangYuli wrote:
+>> From: Andrea Parri <parri.andrea@gmail.com>
+>>
+>> [ Upstream commit d6cfd1770f20392d7009ae1fdb04733794514fa9 ]
+>>
+>> The membarrier system call requires a full memory barrier after storing
+>> to rq->curr, before going back to user-space.  The barrier is only
+>> needed when switching between processes: the barrier is implied by
+>> mmdrop() when switching from kernel to userspace, and it's not needed
+>> when switching from userspace to kernel.
+>>
+>> Rely on the feature/mechanism ARCH_HAS_MEMBARRIER_CALLBACKS and on the
+>> primitive membarrier_arch_switch_mm(), already adopted by the PowerPC
+>> architecture, to insert the required barrier.
+>>
+>> Fixes: fab957c11efe2f ("RISC-V: Atomic and Locking Code")
+>> Signed-off-by: Andrea Parri <parri.andrea@gmail.com>
+>> Reviewed-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+>> Link: https://lore.kernel.org/r/20240131144936.29190-2-parri.andrea@gmail.com
+>> Signed-off-by: Palmer Dabbelt <palmer@rivosinc.com>
+>> Signed-off-by: WangYuli <wangyuli@uniontech.com>
+>> ---
+>>   MAINTAINERS                         |  2 +-
+>>   arch/riscv/Kconfig                  |  1 +
+>>   arch/riscv/include/asm/membarrier.h | 31 +++++++++++++++++++++++++++++
+>>   arch/riscv/mm/context.c             |  2 ++
+>>   kernel/sched/core.c                 |  5 +++--
+>>   5 files changed, 38 insertions(+), 3 deletions(-)
+>>   create mode 100644 arch/riscv/include/asm/membarrier.h
+> Now queued up, thanks.
 
 
---25ff24i24dga7xbo
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+The original patch was merged in 6.9 and the Fixes tag points to a 
+commit introduced in v4.15. So IIUC, this patch should have been 
+backported "automatically" to the releases < 6.9 right? As stated in the 
+documentation (process/stable-kernel-rules.html):
 
-On 09.09.2024 09:24:25, Nathan Chancellor wrote:
-> When building with clang for a 32-bit target, such as arm, a libcall is
-> generated when dividing the result of clocksource_cyc2ns(), which
-> returns a signed 64-bit integer:
->=20
->   ERROR: modpost: "__aeabi_ldivmod" [drivers/net/can/rockchip/rockchip_ca=
-nfd.ko] undefined!
->=20
-> Use div_s64() to avoid generating the libcall.
->=20
-> Fixes: 4e1a18bab124 ("can: rockchip_canfd: add hardware timestamping supp=
-ort")
-> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+"Note, such tagging is unnecessary if the stable team can derive the 
+appropriate versions from Fixes: tags."
 
-A similar patch by me is mainline:
+Or did we miss something?
 
-https://git.kernel.org/pub/scm/linux/kernel/git/netdev/net-next.git/commit/=
-?id=3D9c100bc3ec13914f9911a937ec5b38182a5c3d64
+Thanks,
 
-regards,
-Marc
+Alex
 
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde          |
-Embedded Linux                   | https://www.pengutronix.de |
-Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
 
---25ff24i24dga7xbo
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEUEC6huC2BN0pvD5fKDiiPnotvG8FAmbgJiIACgkQKDiiPnot
-vG8g4AgAiBik9dV5HcawcjdwbwyUqH/9YsohijhBpU0b0WuBDp/79XH3o4yu3jIv
-C8JcMkL8C9D6bSCdcgcbV94/qzeiBpBAGwRPqn+M+VyILvV0rkO76Em4vmLiCK/G
-uSJLElidOCNkLWkGOtVPH3k1lc90du2ZJh3peQ6V9E0tbv0RJamKrnRgIFiQP1Uf
-K1Ji2W0yk0VArkepwqO/rdVysFLoLJVtbJB1mHd0sK/mQ/M1PrbP2KAgWmMfv/4b
-YYrbgYMMcIhoprVc1ISs3ChOVywIlV6EvQE8G8zn0tYWIWARgcI7HpmXkpzoaAIl
-JOWrOfTk6792XowID33b/+Fni2RXYA==
-=FMZt
------END PGP SIGNATURE-----
-
---25ff24i24dga7xbo--
+>
+> greg k-h
+>
+> _______________________________________________
+> linux-riscv mailing list
+> linux-riscv@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-riscv
