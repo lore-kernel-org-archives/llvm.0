@@ -1,98 +1,219 @@
-Received: from angie.orcam.me.uk (angie.orcam.me.uk [78.133.224.34])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B0F161AB508
-	for <llvm@lists.linux.dev>; Tue, 10 Sep 2024 22:28:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=78.133.224.34
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 113445680;
+	Wed, 11 Sep 2024 00:23:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726007308; cv=none; b=Uch7/nWFycpWVMVMqaJ8ip+W/pImMRHmbV1nO/90GV1fpt0gopDfRKR8FTfLREkl77B46XQ+yudgpRMVMLXKAl4MN3P2qxtlHGdSj5H0Z8hO3smJmmr3XOzOBcYkP77iZ9tBWzGlNOHBIb8643EfUfmfTrze2Oi/BhT0Hg67gZ8=
+	t=1726014200; cv=none; b=X5mEINX+yrMgFqHllre3USe1tTm68g0aPDO0ndFuI5YyGYAxeuyGewEfKHD+pW4NhVIt7hfYowE4zP0lFZeE6Xk/SeXW9LpUjhgNjJy3udXvNUAhG7vFGDVsT3QbQXX8yg+NrNqNTc2R+6u37x5ltoglVCMKKpzD5aHMqTPtbCM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726007308; c=relaxed/simple;
-	bh=m6bZTfRafhQeKF0FHn4HDoue1BzzxhJP3n0bqBSUuiY=;
-	h=Date:From:To:cc:Subject:In-Reply-To:Message-ID:References:
-	 MIME-Version:Content-Type; b=hUnQvMMADoHdedtl5lvRg8jWRdfmgUPTPNljPCPaQEypZO2U5sZJjjUPhoRSIBzHzB5bOt0EkBk0t0+KJQb0cVn14cCiu3UxquraNB8oeawsTRnkLszK+/Z0ZaH9EAwJgYOT1wmjLY5gZHZT354UNhjYeMBlEiRBV36TETzJzGs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=orcam.me.uk; spf=none smtp.mailfrom=orcam.me.uk; arc=none smtp.client-ip=78.133.224.34
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=orcam.me.uk
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=orcam.me.uk
-Received: by angie.orcam.me.uk (Postfix, from userid 500)
-	id 24E6892009C; Wed, 11 Sep 2024 00:28:18 +0200 (CEST)
-Received: from localhost (localhost [127.0.0.1])
-	by angie.orcam.me.uk (Postfix) with ESMTP id 1E05C92009B;
-	Tue, 10 Sep 2024 23:28:18 +0100 (BST)
-Date: Tue, 10 Sep 2024 23:28:18 +0100 (BST)
-From: "Maciej W. Rozycki" <macro@orcam.me.uk>
-To: Jiaxun Yang <jiaxun.yang@flygoat.com>
-cc: Masahiro Yamada <masahiroy@kernel.org>, 
-    Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nicolas@fjasle.eu>, 
-    Richard Weinberger <richard@nod.at>, 
-    Anton Ivanov <anton.ivanov@cambridgegreys.com>, 
-    Johannes Berg <johannes@sipsolutions.net>, 
-    Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, 
-    Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, 
-    x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>, 
-    Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, 
-    Wedson Almeida Filho <wedsonaf@gmail.com>, 
-    Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, 
-    =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
-    Benno Lossin <benno.lossin@proton.me>, 
-    Andreas Hindborg <a.hindborg@samsung.com>, 
-    Alice Ryhl <aliceryhl@google.com>, 
-    Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
-    Steven Rostedt <rostedt@goodmis.org>, 
-    Masami Hiramatsu <mhiramat@kernel.org>, 
-    Mark Rutland <mark.rutland@arm.com>, Jonathan Corbet <corbet@lwn.net>, 
-    Alex Shi <alexs@kernel.org>, Yanteng Si <siyanteng@loongson.cn>, 
-    Nick Desaulniers <ndesaulniers@google.com>, 
-    Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
-    linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, 
-    linux-um@lists.infradead.org, rust-for-linux@vger.kernel.org, 
-    "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>, 
-    linux-trace-kernel@vger.kernel.org, linux-doc@vger.kernel.org, 
-    llvm@lists.linux.dev
-Subject: Re: [PATCH v2 3/3] rust: Enable for MIPS
-In-Reply-To: <54ce7574-43fd-40ee-9ae9-dd72283d1040@app.fastmail.com>
-Message-ID: <alpine.DEB.2.21.2409102318270.60835@angie.orcam.me.uk>
-References: <20240905-mips-rust-v2-0-409d66819418@flygoat.com> <20240905-mips-rust-v2-3-409d66819418@flygoat.com> <alpine.DEB.2.21.2409082138160.60835@angie.orcam.me.uk> <035ccfe5-c368-4cd9-8e0d-34e0e355cb05@app.fastmail.com> <alpine.DEB.2.21.2409101643210.60835@angie.orcam.me.uk>
- <54ce7574-43fd-40ee-9ae9-dd72283d1040@app.fastmail.com>
-User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
+	s=arc-20240116; t=1726014200; c=relaxed/simple;
+	bh=r3QSKu+ksgtQ8scwAHaW6e889UqJTb38qTPgKM5i40M=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=dSL9impH1mHYU+CW9guUXbZ6pwAoh/LZYiPF6IrgqR2IHueJINHsKl2GTf718fBjs4DfumlbFaJsCoY1vPJESyBMaEPWv4qk5xLCA4wSA/PKWpbgWhm57aOp/lcF0SbxZ4FPmHvrR96ermp4Qw3TkTGaumblZo9w89jqxAy7qPg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=DI/M7MiU; arc=none smtp.client-ip=192.198.163.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="DI/M7MiU"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1726014199; x=1757550199;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=r3QSKu+ksgtQ8scwAHaW6e889UqJTb38qTPgKM5i40M=;
+  b=DI/M7MiU4QeZIBp1+zZK6Qvw7ji2B5YALllbyFsDgnjagDaGRYyQndLv
+   aBo4UDfGc/XBht/0T7dNNwyX0fu9fLnS8/jSH+LgjnEOd6U6/gPTRPwFi
+   /3po/N5YhlvXMgbhgok/7vDUARJAXkJKLwmdt5S+pgT2S+hQBY9Jo4hMg
+   6x7lJA8iqPeXtFaY3VppcIwfSn9qghkqzjzzOF/JwmSNA5qHiY/7pDhC2
+   mhcIfT20r/ICObrJz41/ZC0ZYrd57Tyz9zkTX3XzFBlqTH6dbadQ9wCgs
+   FlhaQ6iV4T6aCDCqGtreUKuQKnBFparLHIUPnaCyuM6dZRjy/1GzQ7iPc
+   w==;
+X-CSE-ConnectionGUID: 2pZ7L7CiR5yR2gPTK5J4Qg==
+X-CSE-MsgGUID: 0Li5+xxbQ1KajbfZPRA95w==
+X-IronPort-AV: E=McAfee;i="6700,10204,11191"; a="27712569"
+X-IronPort-AV: E=Sophos;i="6.10,218,1719903600"; 
+   d="scan'208";a="27712569"
+Received: from fmviesa005.fm.intel.com ([10.60.135.145])
+  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Sep 2024 17:23:18 -0700
+X-CSE-ConnectionGUID: CS4C+GEHTXKjhPOospC9GQ==
+X-CSE-MsgGUID: GrOvnGEtQ4e0LG4uDiPsAg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.10,218,1719903600"; 
+   d="scan'208";a="71570785"
+Received: from lkp-server01.sh.intel.com (HELO 53e96f405c61) ([10.239.97.150])
+  by fmviesa005.fm.intel.com with ESMTP; 10 Sep 2024 17:23:17 -0700
+Received: from kbuild by 53e96f405c61 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1soB8c-0002rg-2W;
+	Wed, 11 Sep 2024 00:23:14 +0000
+Date: Wed, 11 Sep 2024 08:22:58 +0800
+From: kernel test robot <lkp@intel.com>
+To: Atish Patra <atishp@rivosinc.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Atish Patra <Atish.Patra@wdc.com>
+Subject: [atishp04:gtmb_rfc_poc 2/2] drivers/irqchip/irq-acpi-gtmb.c:355:34:
+ warning: format specifies type 'int' but the argument has type 'u64' (aka
+ 'unsigned long long')
+Message-ID: <202409110802.wbMg86QB-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Tue, 10 Sep 2024, Jiaxun Yang wrote:
+tree:   https://github.com/atishp04/linux gtmb_rfc_poc
+head:   d975d1fc71375296874c62007464dd2a87b861af
+commit: d975d1fc71375296874c62007464dd2a87b861af [2/2] drivers/irqchip: Add GTMB driver for GSI based ACPI devices
+config: riscv-defconfig (https://download.01.org/0day-ci/archive/20240911/202409110802.wbMg86QB-lkp@intel.com/config)
+compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project bf684034844c660b778f0eba103582f582b710c9)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240911/202409110802.wbMg86QB-lkp@intel.com/reproduce)
 
-> >> We have no good way to tell ISA reversion prior to R1 just from Kconfig TARGET_ISA_REV,
-> >> valid numbers for TARGET_ISA_REV are only 1, 2, 5, 6 from Kconfig.
-> >
-> >  This approach doesn't work for some MIPS architecture processor configs 
-> > anyway, e.g. what ISA revision will CPU_P5600 imply here?
-> 
-> TARGET_ISA_REV will be set to 5 for CPU_P5600 (CPU_MIPSR5 will default to y
-> on CPU_P5600, and CPU_MIPSR5 sets TARGET_ISA_REV to 5). 
-> >
-> >  However if there's a need (and previously there wasn't), then I think it 
-> > can be sorted in a straightforward way.  We have just a bunch of CPU_* 
-> > settings and we can define corresponding ISA_* settings to select, e.g. 
-> > ISA_MIPS1, ISA_MIPS3, ISA_MIPS32_R1, ISA_MIPS64_R6, and so on, based on 
-> > information extracted from per-CPU_* `-march=' compilation flags from 
-> > arch/mips/Makefile (possibly combined with ISA data obtained from 
-> > GCC/binutils for said flags).
-> >
-> >  It could be a bit tedious to write, but not a big challenge really, just 
-> > mechanical work.
-> 
-> TARGET_ISA_REV is guaranteed to be aligned with CPU's supported ISA for now,
-> so I see no reason to invent another set of symbols....
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202409110802.wbMg86QB-lkp@intel.com/
 
- Ah, OK then, I missed these bits, thanks for pointing them out.
+All warnings (new ones prefixed by >>):
 
- So we only need to define CPU_MIPS1, CPU_MIPS3, and CPU_MIPS4 settings
-(we have no support for any MIPS II CPU; there was the R6000 only at that 
-ISA level, exeedingly rare and unreliable) analogously to and along with 
-the existing CPU_MIPSR1, CPU_MIPSR2, etc., which is even simpler.  They 
-can then be used accordingly for TARGET_ISA_REV == 0, either directly or 
-perhaps via an additional TARGET_LEGACY_ISA_REV setting.
+   In file included from drivers/irqchip/irq-acpi-gtmb.c:11:
+   In file included from include/linux/irq.h:23:
+   In file included from arch/riscv/include/asm/irq.h:10:
+   In file included from include/linux/interrupt.h:22:
+   In file included from arch/riscv/include/asm/sections.h:9:
+   In file included from include/linux/mm.h:2228:
+   include/linux/vmstat.h:517:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     517 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+>> drivers/irqchip/irq-acpi-gtmb.c:355:34: warning: format specifies type 'int' but the argument has type 'u64' (aka 'unsigned long long') [-Wformat]
+     355 |                 pr_info("Registered GSI %d\n", res->gsino);
+         |                                         ~~     ^~~~~~~~~~
+         |                                         %llu
+   include/linux/printk.h:538:34: note: expanded from macro 'pr_info'
+     538 |         printk(KERN_INFO pr_fmt(fmt), ##__VA_ARGS__)
+         |                                 ~~~     ^~~~~~~~~~~
+   include/linux/printk.h:465:60: note: expanded from macro 'printk'
+     465 | #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
+         |                                                     ~~~    ^~~~~~~~~~~
+   include/linux/printk.h:437:19: note: expanded from macro 'printk_index_wrap'
+     437 |                 _p_func(_fmt, ##__VA_ARGS__);                           \
+         |                         ~~~~    ^~~~~~~~~~~
+   2 warnings generated.
 
-  Maciej
+
+vim +355 drivers/irqchip/irq-acpi-gtmb.c
+
+   262	
+   263	static int gtmb_parse_package_resource(struct platform_device *pdev, struct gtmb_data *data)
+   264	{
+   265		struct device *dev = &pdev->dev;
+   266		int result = -EFAULT;
+   267		acpi_status status = AE_OK;
+   268		struct acpi_buffer buffer = {ACPI_ALLOCATE_BUFFER, NULL};
+   269		union acpi_object *gtmb_obj = NULL, *tmp_obj, *gsi_num_obj, *gtmb_reg_obj;
+   270		struct gtmb_dev_res *res;
+   271		struct gtmb_reg *gas_t;
+   272		int i,j;
+   273	
+   274		struct acpi_handle *handle = ACPI_HANDLE_FWNODE(dev->fwnode);
+   275		status = acpi_evaluate_object_typed(handle, "_GMA", NULL,
+   276						    &buffer, ACPI_TYPE_PACKAGE);
+   277		if (status == AE_NOT_FOUND)
+   278			return 0;
+   279		if (ACPI_FAILURE(status))
+   280			return -ENODEV;
+   281	
+   282		gtmb_obj = buffer.pointer;
+   283		if (!gtmb_obj) {
+   284			pr_err("Invalid GTMB data\n");
+   285			goto end;
+   286		}
+   287	
+   288		/* Validate the version */
+   289		if (gtmb_obj->package.elements[0].integer.value != ACPI_GTMB_VERSION){
+   290			pr_err("Invalid GTMB Version\n");
+   291			goto end;
+   292		}
+   293	
+   294		for (i = 1; i < gtmb_obj->package.count; i++) {
+   295			tmp_obj = &gtmb_obj->package.elements[i];
+   296			if (tmp_obj->type != ACPI_TYPE_PACKAGE) {
+   297				pr_err("Unsupported _GMA object found at %i index of type %d\n", i, tmp_obj->type);
+   298				goto end;
+   299			}
+   300			if(tmp_obj->package.count != (GTMB_MSI_INDEX_MAX + 1)) {
+   301				pr_err("Unsupported _GMA object found at %i with package elements %d\n",
+   302					i, tmp_obj->package.count);
+   303				goto end;
+   304			}
+   305	
+   306			res = devm_kzalloc(dev, sizeof(*res), GFP_KERNEL);
+   307			if (!res)
+   308				goto end_nomem;
+   309	
+   310			gsi_num_obj = &tmp_obj->package.elements[0];
+   311			if (gsi_num_obj->type != ACPI_TYPE_INTEGER) {
+   312				pr_err("Unsupported _GMA object found at %i with invalid first element type %d\n",
+   313					i, gsi_num_obj->type);
+   314				goto end;
+   315			}
+   316	
+   317			res->gsino = gsi_num_obj->integer.value;
+   318			for(j = 0; j < GTMB_MSI_INDEX_MAX; j++) {
+   319				gtmb_reg_obj = &tmp_obj->package.elements[j+1];
+   320				if (gtmb_reg_obj->type == ACPI_TYPE_INTEGER) {
+   321					if ((j == GTMB_MSI_RETRIGGER_REG_INDEX) ||
+   322					    (j >= GTMB_MSI_TRIG_TYPE_EDGE_RISING_INDEX &&
+   323					    j <= GTMB_MSI_TRIG_TYPE_LEVEL_LOW_INDEX)){
+   324					    	res->regs[j].type = ACPI_TYPE_INTEGER;
+   325						res->regs[j].int_val = gtmb_reg_obj->integer.value;
+   326					    } else {
+   327						pr_err("Invalid _GMA object at %i type %d\n",
+   328							j, gtmb_reg_obj->type);
+   329						goto free_list;
+   330					    }
+   331				}
+   332				else if (gtmb_reg_obj->type == ACPI_TYPE_BUFFER) {
+   333					gas_t = (struct gtmb_reg *)gtmb_reg_obj->buffer.pointer;
+   334					if (gas_t->space_id == ACPI_ADR_SPACE_SYSTEM_MEMORY) {
+   335						if (gas_t->address) {
+   336							void __iomem *addr;
+   337							size_t access_width;
+   338							access_width = GET_BIT_WIDTH(gas_t) / 8;
+   339							addr = ioremap(gas_t->address, access_width);
+   340							if (!addr)
+   341								goto free_list;
+   342							res->regs[j].type = ACPI_ADR_SPACE_SYSTEM_MEMORY;
+   343							res->regs[j].sysmem_va = addr;
+   344						}
+   345					} else {
+   346						pr_err("Unsupported register type(%d) in _SMC object at index(%d)\n", gas_t->space_id, j);
+   347						goto end;
+   348					}
+   349				} else {
+   350					pr_err("Unsupported _GMA object found at %i with invalid element type %d\n",
+   351						i, gtmb_reg_obj->type);
+   352					goto free_list;
+   353				}
+   354			}
+ > 355			pr_info("Registered GSI %d\n", res->gsino);
+   356			list_add(&res->list, &data->dev_res_list);
+   357		}
+   358		kfree(buffer.pointer);
+   359		return 0;
+   360	
+   361	end_nomem:
+   362		result = -ENOMEM;
+   363	free_list:
+   364		gtmb_free_devres_list(data);
+   365	end:
+   366		kfree(buffer.pointer);
+   367		return result;
+   368	}
+   369	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
