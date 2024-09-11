@@ -1,133 +1,223 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-il1-f197.google.com (mail-il1-f197.google.com [209.85.166.197])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 63F45BA20;
-	Wed, 11 Sep 2024 00:54:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 63B903FB3B
+	for <llvm@lists.linux.dev>; Wed, 11 Sep 2024 02:39:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.197
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726016062; cv=none; b=D4lO6sw2QgtHN9GfBgl0S3NBI7uDENLP9rHsfIEMGkMvsNfQ07M/JbdsMojQ8xSxuw3TsBwP15sa35vS/dZ8NnZBEp8EKF9jL5jVDrVVxgpKJQ1u8NP9mMdMQHB/u+inqZPKXdgB5aCEg5DPcqpwRMxGtp1sXgEUKJyUeVSlTNw=
+	t=1726022369; cv=none; b=BQoC4JfjhOiXEpSUvyr2CND9/vkR/mkRMp/VycA2NMCwIGmvHs/AgNYES+hBypdIR/pJV405n49kTyz2VKiGReIwgzZq4pEqpv7idn049KZMpf+3skTZE/PQX/J3xXjVZPYe+uNgvR7ymu9O0SyFh36Q/IpB6obng5aPEogUUV8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726016062; c=relaxed/simple;
-	bh=+rZ9RVMd9rJmPj3ZMZ+np0DxGyN8HzeqK2hMKMC1JBA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=upY5OY9wDJwXGec4VtFo37kTl2DS2wl33Wpa9PfnikaH6Txs2/OmXbsQjjNeFqEdoJkEWKLGW1cfidm7/AxoEhn3PINTLIJFIIbRr9XCo7kcvWtvOnN0kv9/nsV2MaM3GYcOueeeuXIkdXaOP8vydOSlGvjvrEBH5qHyFVzgpn8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ZywEcea8; arc=none smtp.client-ip=192.198.163.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ZywEcea8"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1726016062; x=1757552062;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=+rZ9RVMd9rJmPj3ZMZ+np0DxGyN8HzeqK2hMKMC1JBA=;
-  b=ZywEcea8IAIGG12bYl3jnfWmg/WG5883iDzWfF2WPF12guDI7sX7OoAi
-   E03prV5dJ5zCGftSga+ySbKoh1/998oI9VtYcbMLvRemGUKH5vjw6sxMR
-   1D78BS+bD8y9oD3fVDWtfeyQmoXkSR8az1XQ0PV+aRgiS2pSSy0q1RJVZ
-   i9o5JHkw5cYb+FwIGV1krhgbdDZ8RprVIrJmvq+zNOBHEYSSz+AD3s3N+
-   68ccdDqHBKZyaWHN8+6T/EHDq0a9g2Sh9GHwWI7elBsesHE2ClBEdTvWo
-   e4TgI6/R7Xf65nxAIA3VnYNHS1JmnUY3JKRUVLFSdxcyV8ryeghPHe4gk
-   w==;
-X-CSE-ConnectionGUID: zI+3SrAQSlWe2kAyGPV6pA==
-X-CSE-MsgGUID: 5xIliQ2CRlKWFrhxfo44Hg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11191"; a="27714905"
-X-IronPort-AV: E=Sophos;i="6.10,218,1719903600"; 
-   d="scan'208";a="27714905"
-Received: from orviesa006.jf.intel.com ([10.64.159.146])
-  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Sep 2024 17:54:21 -0700
-X-CSE-ConnectionGUID: uAaxVga6S3WvggkQTLI6AQ==
-X-CSE-MsgGUID: GKg2f3YrRd+Aoj2c35hRqA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.10,218,1719903600"; 
-   d="scan'208";a="67491946"
-Received: from lkp-server01.sh.intel.com (HELO 53e96f405c61) ([10.239.97.150])
-  by orviesa006.jf.intel.com with ESMTP; 10 Sep 2024 17:54:20 -0700
-Received: from kbuild by 53e96f405c61 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1soBce-0002tS-1z;
-	Wed, 11 Sep 2024 00:54:16 +0000
-Date: Wed, 11 Sep 2024 08:53:38 +0800
-From: kernel test robot <lkp@intel.com>
-To: "Kobayashi, Daisuke" <kobayashi.da-06@fujitsu.com>,
-	linux-pci@vger.kernel.org, kw@linux.com
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	"Kobayashi, Daisuke" <kobayashi.da-06@fujitsu.com>
-Subject: Re: [PATCH v3] Export PBEC Data register into sysfs
-Message-ID: <202409110845.zaUjhBmy-lkp@intel.com>
-References: <20240910090951.332773-1-kobayashi.da-06@fujitsu.com>
+	s=arc-20240116; t=1726022369; c=relaxed/simple;
+	bh=++ZRCoInTBLKm+pSs03/a8TFxw6wkp3kqIou5r+e0eQ=;
+	h=MIME-Version:Date:In-Reply-To:Message-ID:Subject:From:To:
+	 Content-Type; b=UOFEDPywFE3Nvj2QWYgcfv9oppNmCjP7okxx+TjwsdMFzNghm2uNIzvn6i23pV0YaqJHP95NXi/mQMSLQnI0hz66P6R3ylR6Tf9TChNET/VEKh0IzjaVtwmDt+H7zAS12l5ct+sVpsEpzlvp00oS86TgL+d2vzbd0BjPvxrKAQ0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.197
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
+Received: by mail-il1-f197.google.com with SMTP id e9e14a558f8ab-3a047cb2e7dso23947695ab.3
+        for <llvm@lists.linux.dev>; Tue, 10 Sep 2024 19:39:27 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1726022366; x=1726627166;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=wnw9XDtTGWHLyImo1mxGgXqbPU7vJqK/MVyOf9pYnHs=;
+        b=jO+Xx0zTv59nV3w0f7kveGDdgGY777wZK2OdRP0waX6rKkSZ5hjeWkYyLFK/PoKS5w
+         ROW7rgx2/9iN1zYzRNanIomiHWDs1TgsRUtFF8lgUUZDT4zT7uM6HceFYMy8PmB+XS5L
+         ZuqDYpBYW68X4vhamH42rW7ZxY0LdQOxl4k+hnug8CbIh3f/SrBvPgcsxSfrUe6giZrO
+         0SJvwA6rbGKBxodnaMc3njGxfen6DLiy25n7CMXJR5W8NYrmjRcMt5LCka19EGXnnZ2H
+         X9GLI+52LXetL0LyRIWHfkNEbiS0J3lBQvkaoaTl0e4VNhdSRo7dtEolyPQw7eKM3hJ9
+         obXg==
+X-Forwarded-Encrypted: i=1; AJvYcCWGIx5i2rHzdVFkjqvXn0sg8UASmXpLYAsBtQblm5ugV7Q90CFCXfJdxTNbS7kaKPaoP3U4@lists.linux.dev
+X-Gm-Message-State: AOJu0YyGfNxYcmail8+gvMcP9ch6Y9rVSNjKs/8EfmqlZk7naf62dBYE
+	A2CQyS34iNoGwpZDAk6VinJfH5YY3LZ9PE7ElEt5Nwn+xV7XhO+2dpFguz80zPYm/LRyqZzJZpI
+	UYFONHX2xuhoncACMbpfZdfy4vxNrCr+z643z86vNKtHlEOgTDV/AAwM=
+X-Google-Smtp-Source: AGHT+IFh1IzJDI+YnTZVnxAhYYEDxo7i34o3nXyJt65WBE8x3cY7wyYXQ1NIGcrHDXcx0EW6xBHE2c4f3v922mNc7ZuHWaigscs+
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240910090951.332773-1-kobayashi.da-06@fujitsu.com>
+X-Received: by 2002:a05:6e02:1846:b0:3a0:4d1f:519c with SMTP id
+ e9e14a558f8ab-3a0741f7ddbmr17002365ab.3.1726022366440; Tue, 10 Sep 2024
+ 19:39:26 -0700 (PDT)
+Date: Tue, 10 Sep 2024 19:39:26 -0700
+In-Reply-To: <000000000000cb121205ef615844@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000006c6260621cee6ed@google.com>
+Subject: Re: [syzbot] [ntfs3?] possible deadlock in ntfs_fallocate
+From: syzbot <syzbot+adacb2b0c896bc427962@syzkaller.appspotmail.com>
+To: almaz.alexandrovich@paragon-software.com, linux-kernel@vger.kernel.org, 
+	llvm@lists.linux.dev, nathan@kernel.org, ndesaulniers@google.com, 
+	ntfs3@lists.linux.dev, syzkaller-bugs@googlegroups.com, trix@redhat.com
+Content-Type: text/plain; charset="UTF-8"
 
-Hi Kobayashi,Daisuke,
+syzbot has found a reproducer for the following issue on:
 
-kernel test robot noticed the following build errors:
+HEAD commit:    8d8d276ba2fb Merge tag 'trace-v6.11-rc6' of git://git.kern..
+git tree:       upstream
+console+strace: https://syzkaller.appspot.com/x/log.txt?x=10a5e807980000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=1c9e296880039df9
+dashboard link: https://syzkaller.appspot.com/bug?extid=adacb2b0c896bc427962
+compiler:       Debian clang version 15.0.6, GNU ld (GNU Binutils for Debian) 2.40
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=13e9fbc7980000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1573a100580000
 
-[auto build test ERROR on pci/next]
-[also build test ERROR on pci/for-linus linus/master v6.11-rc7 next-20240910]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/29807f1973f6/disk-8d8d276b.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/172d57aa7f61/vmlinux-8d8d276b.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/021cabf6f499/bzImage-8d8d276b.xz
+mounted in repro #1: https://storage.googleapis.com/syzbot-assets/3ada4caf0079/mount_0.gz
+mounted in repro #2: https://storage.googleapis.com/syzbot-assets/7777f8d9c410/mount_7.gz
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Kobayashi-Daisuke/Export-PBEC-Data-register-into-sysfs/20240910-170834
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/pci/pci.git next
-patch link:    https://lore.kernel.org/r/20240910090951.332773-1-kobayashi.da-06%40fujitsu.com
-patch subject: [PATCH v3] Export PBEC Data register into sysfs
-config: arm-randconfig-002-20240911 (https://download.01.org/0day-ci/archive/20240911/202409110845.zaUjhBmy-lkp@intel.com/config)
-compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project bf684034844c660b778f0eba103582f582b710c9)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240911/202409110845.zaUjhBmy-lkp@intel.com/reproduce)
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+adacb2b0c896bc427962@syzkaller.appspotmail.com
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202409110845.zaUjhBmy-lkp@intel.com/
+======================================================
+WARNING: possible circular locking dependency detected
+6.11.0-rc7-syzkaller-00020-g8d8d276ba2fb #0 Not tainted
+------------------------------------------------------
+syz-executor399/5227 is trying to acquire lock:
+ffff8880758351c8 (&ni->ni_lock/4){+.+.}-{3:3}, at: ni_lock fs/ntfs3/ntfs_fs.h:1110 [inline]
+ffff8880758351c8 (&ni->ni_lock/4){+.+.}-{3:3}, at: ntfs_fallocate+0x5ca/0x1280 fs/ntfs3/file.c:564
 
-All errors (new ones prefixed by >>):
+but task is already holding lock:
+ffff888075835600 (mapping.invalidate_lock#3){++++}-{3:3}, at: filemap_invalidate_lock include/linux/fs.h:845 [inline]
+ffff888075835600 (mapping.invalidate_lock#3){++++}-{3:3}, at: ntfs_fallocate+0x3c7/0x1280 fs/ntfs3/file.c:549
 
-   In file included from drivers/pci/pci-sysfs.c:18:
-   In file included from include/linux/pci.h:1646:
-   In file included from include/linux/dmapool.h:14:
-   In file included from include/linux/scatterlist.h:8:
-   In file included from include/linux/mm.h:2228:
-   include/linux/vmstat.h:514:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     514 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
->> drivers/pci/pci-sysfs.c:663:3: error: use of undeclared identifier 'dev_attr_pbec'; did you mean 'dev_attr_irq'?
-     663 |         &dev_attr_pbec.attr,
-         |          ^~~~~~~~~~~~~
-         |          dev_attr_irq
-   drivers/pci/pci-sysfs.c:76:8: note: 'dev_attr_irq' declared here
-      76 | static DEVICE_ATTR_RO(irq);
-         |        ^
-   include/linux/device.h:199:26: note: expanded from macro 'DEVICE_ATTR_RO'
-     199 |         struct device_attribute dev_attr_##_name = __ATTR_RO(_name)
-         |                                 ^
-   <scratch space>:58:1: note: expanded from here
-      58 | dev_attr_irq
-         | ^
-   1 warning and 1 error generated.
+which lock already depends on the new lock.
 
 
-vim +663 drivers/pci/pci-sysfs.c
+the existing dependency chain (in reverse order) is:
 
-   657	
-   658	static struct attribute *pcie_dev_attrs[] = {
-   659		&dev_attr_current_link_speed.attr,
-   660		&dev_attr_current_link_width.attr,
-   661		&dev_attr_max_link_width.attr,
-   662		&dev_attr_max_link_speed.attr,
- > 663		&dev_attr_pbec.attr,
-   664		NULL,
-   665	};
-   666	
+-> #3 (mapping.invalidate_lock#3){++++}-{3:3}:
+       lock_acquire+0x1ed/0x550 kernel/locking/lockdep.c:5759
+       down_read+0xb1/0xa40 kernel/locking/rwsem.c:1526
+       filemap_invalidate_lock_shared include/linux/fs.h:855 [inline]
+       filemap_fault+0x658/0x1760 mm/filemap.c:3302
+       __do_fault+0x135/0x460 mm/memory.c:4655
+       do_shared_fault mm/memory.c:5121 [inline]
+       do_fault mm/memory.c:5195 [inline]
+       do_pte_missing mm/memory.c:3947 [inline]
+       handle_pte_fault+0x1176/0x6fc0 mm/memory.c:5521
+       __handle_mm_fault mm/memory.c:5664 [inline]
+       handle_mm_fault+0x1056/0x1ad0 mm/memory.c:5832
+       do_user_addr_fault arch/x86/mm/fault.c:1338 [inline]
+       handle_page_fault arch/x86/mm/fault.c:1481 [inline]
+       exc_page_fault+0x459/0x8c0 arch/x86/mm/fault.c:1539
+       asm_exc_page_fault+0x26/0x30 arch/x86/include/asm/idtentry.h:623
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+-> #2 (&vma->vm_lock->lock){++++}-{3:3}:
+       lock_acquire+0x1ed/0x550 kernel/locking/lockdep.c:5759
+       down_write+0x99/0x220 kernel/locking/rwsem.c:1579
+       vma_start_write include/linux/mm.h:747 [inline]
+       vma_link+0x270/0x4f0 mm/mmap.c:457
+       insert_vm_struct+0x2f7/0x410 mm/mmap.c:3484
+       __bprm_mm_init fs/exec.c:291 [inline]
+       bprm_mm_init fs/exec.c:395 [inline]
+       alloc_bprm+0x81f/0xda0 fs/exec.c:1623
+       kernel_execve+0x99/0xa50 fs/exec.c:2052
+       try_to_run_init_process init/main.c:1395 [inline]
+       kernel_init+0xed/0x2b0 init/main.c:1523
+       ret_from_fork+0x4b/0x80 arch/x86/kernel/process.c:147
+       ret_from_fork_asm+0x1a/0x30 arch/x86/entry/entry_64.S:244
+
+-> #1 (&mm->mmap_lock){++++}-{3:3}:
+       lock_acquire+0x1ed/0x550 kernel/locking/lockdep.c:5759
+       __might_fault+0xc6/0x120 mm/memory.c:6387
+       _inline_copy_to_user include/linux/uaccess.h:176 [inline]
+       _copy_to_user+0x2a/0xb0 lib/usercopy.c:26
+       copy_to_user include/linux/uaccess.h:209 [inline]
+       fiemap_fill_next_extent+0x235/0x410 fs/ioctl.c:145
+       ni_fiemap+0x4f5/0x1910 fs/ntfs3/frecord.c:1993
+       ntfs_fiemap+0x132/0x180 fs/ntfs3/file.c:1279
+       ioctl_fiemap fs/ioctl.c:220 [inline]
+       do_vfs_ioctl+0x1c07/0x2e50 fs/ioctl.c:841
+       __do_sys_ioctl fs/ioctl.c:905 [inline]
+       __se_sys_ioctl+0x81/0x170 fs/ioctl.c:893
+       do_syscall_x64 arch/x86/entry/common.c:52 [inline]
+       do_syscall_64+0xf3/0x230 arch/x86/entry/common.c:83
+       entry_SYSCALL_64_after_hwframe+0x77/0x7f
+
+-> #0 (&ni->ni_lock/4){+.+.}-{3:3}:
+       check_prev_add kernel/locking/lockdep.c:3133 [inline]
+       check_prevs_add kernel/locking/lockdep.c:3252 [inline]
+       validate_chain+0x18e0/0x5900 kernel/locking/lockdep.c:3868
+       __lock_acquire+0x137a/0x2040 kernel/locking/lockdep.c:5142
+       lock_acquire+0x1ed/0x550 kernel/locking/lockdep.c:5759
+       __mutex_lock_common kernel/locking/mutex.c:608 [inline]
+       __mutex_lock+0x136/0xd70 kernel/locking/mutex.c:752
+       ni_lock fs/ntfs3/ntfs_fs.h:1110 [inline]
+       ntfs_fallocate+0x5ca/0x1280 fs/ntfs3/file.c:564
+       vfs_fallocate+0x553/0x6c0 fs/open.c:334
+       do_vfs_ioctl+0x2592/0x2e50 fs/ioctl.c:886
+       __do_sys_ioctl fs/ioctl.c:905 [inline]
+       __se_sys_ioctl+0x81/0x170 fs/ioctl.c:893
+       do_syscall_x64 arch/x86/entry/common.c:52 [inline]
+       do_syscall_64+0xf3/0x230 arch/x86/entry/common.c:83
+       entry_SYSCALL_64_after_hwframe+0x77/0x7f
+
+other info that might help us debug this:
+
+Chain exists of:
+  &ni->ni_lock/4 --> &vma->vm_lock->lock --> mapping.invalidate_lock#3
+
+ Possible unsafe locking scenario:
+
+       CPU0                    CPU1
+       ----                    ----
+  lock(mapping.invalidate_lock#3);
+                               lock(&vma->vm_lock->lock);
+                               lock(mapping.invalidate_lock#3);
+  lock(&ni->ni_lock/4);
+
+ *** DEADLOCK ***
+
+3 locks held by syz-executor399/5227:
+ #0: ffff888031898420 (sb_writers#9){.+.+}-{0:0}, at: file_start_write include/linux/fs.h:2882 [inline]
+ #0: ffff888031898420 (sb_writers#9){.+.+}-{0:0}, at: vfs_fallocate+0x4ea/0x6c0 fs/open.c:333
+ #1: ffff888075835460 (&sb->s_type->i_mutex_key#14){+.+.}-{3:3}, at: inode_lock include/linux/fs.h:800 [inline]
+ #1: ffff888075835460 (&sb->s_type->i_mutex_key#14){+.+.}-{3:3}, at: ntfs_fallocate+0x2e0/0x1280 fs/ntfs3/file.c:535
+ #2: ffff888075835600 (mapping.invalidate_lock#3){++++}-{3:3}, at: filemap_invalidate_lock include/linux/fs.h:845 [inline]
+ #2: ffff888075835600 (mapping.invalidate_lock#3){++++}-{3:3}, at: ntfs_fallocate+0x3c7/0x1280 fs/ntfs3/file.c:549
+
+stack backtrace:
+CPU: 0 UID: 0 PID: 5227 Comm: syz-executor399 Not tainted 6.11.0-rc7-syzkaller-00020-g8d8d276ba2fb #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 08/06/2024
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:93 [inline]
+ dump_stack_lvl+0x241/0x360 lib/dump_stack.c:119
+ check_noncircular+0x36a/0x4a0 kernel/locking/lockdep.c:2186
+ check_prev_add kernel/locking/lockdep.c:3133 [inline]
+ check_prevs_add kernel/locking/lockdep.c:3252 [inline]
+ validate_chain+0x18e0/0x5900 kernel/locking/lockdep.c:3868
+ __lock_acquire+0x137a/0x2040 kernel/locking/lockdep.c:5142
+ lock_acquire+0x1ed/0x550 kernel/locking/lockdep.c:5759
+ __mutex_lock_common kernel/locking/mutex.c:608 [inline]
+ __mutex_lock+0x136/0xd70 kernel/locking/mutex.c:752
+ ni_lock fs/ntfs3/ntfs_fs.h:1110 [inline]
+ ntfs_fallocate+0x5ca/0x1280 fs/ntfs3/file.c:564
+ vfs_fallocate+0x553/0x6c0 fs/open.c:334
+ do_vfs_ioctl+0x2592/0x2e50 fs/ioctl.c:886
+ __do_sys_ioctl fs/ioctl.c:905 [inline]
+ __se_sys_ioctl+0x81/0x170 fs/ioctl.c:893
+ do_syscall_x64 arch/x86/entry/common.c:52 [inline]
+ do_syscall_64+0xf3/0x230 arch/x86/entry/common.c:83
+ entry_SYSCALL_64_after_hwframe+0x77/0x7f
+RIP: 0033:0x7f7cf99c7c99
+Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 f1 17 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007ffc8fd1f9c8 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
+RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007f7cf99c7c99
+RDX: 0000000020000000 RSI: 0000000040305829 RDI: 0000000000000006
+RBP: 0000000000000000 R08: 0000000000000000 R09: 00007ffc8fd1fa00
+R10: 00007ffc8fd1f9d0 R11: 0000000000000246 R12: 00007ffc8fd1fa00
+R13: 00007ffc8fd1fc88 R14: 431bde82d7b634db R15: 00007f7cf9a1003b
+ </TASK>
+
+
+---
+If you want syzbot to run the reproducer, reply with:
+#syz test: git://repo/address.git branch-or-commit-hash
+If you attach or paste a git patch, syzbot will apply it before testing.
