@@ -1,58 +1,60 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B6E718C3E;
-	Wed, 11 Sep 2024 07:05:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8530439FE5;
+	Wed, 11 Sep 2024 07:56:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726038341; cv=none; b=daTnMl2B14EyZiYOif88pWSC/kkr0yLJvy5C0fpTbOFgMAWAajAFv8qPAcklxe6QUcFP7V3OObWU/OzlS1L2vU+jap+g/tTE1VI/yWPExiMOgIqs9zZTKMfw/lWtOj84M8qHSMY1BA/Y0RNG7cPTd6ACk89w7uPsGqPc9Zlq5pI=
+	t=1726041401; cv=none; b=Cg6PixYMGLE2NoM4ggKbxywTzFIOiCi+Ek0aeEw1N0XpxYFrVAPSmvPq9rozZyZEj6P5m8ocoEpFsjLXfJXOOV7G7iLU9DNk4QsVtpfoFtbYUxEaDA1glFGxlYBB4+N/RPFinwmiO8+ghvTCQ8gtPJ/C6SraEyUlN1M/DzqeR/U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726038341; c=relaxed/simple;
-	bh=5bxEgmyrGZ0w781E9sA/P4Mmg/yu9h72frq99nLFJgI=;
-	h=Date:From:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=BAHOhnvWO+tqX70CQohtearHc85+k1Jzw6uPzKZfhqvQOhczXXk684CWrTMAUJVx4544p+xAsQ4vG9rQPidpQNeNW/xhwTU06YWIaEVADReWL3RRihBOg0VThs+dYQoM1KM2EanOsTE1ycFYTCOV47BDgLI3B3mbrv8eg1I6n+Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=IY0QFenQ; arc=none smtp.client-ip=192.198.163.7
+	s=arc-20240116; t=1726041401; c=relaxed/simple;
+	bh=2oz0F5oJtLf3lDzl1Y6YrOQ3N3Y7UGWXkPeLGHCuq6w=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=MTEWIMZpMdzimuqC9pWnmi+m99/tCwYEjPn1GNRadhdAsq0wKM750+FCLeZsgwASNMzhddoQfhWaGyOgL6V8xdMm5vmexdMXOXSXIkjOnZSji3IJsMYnDyz0zJv0015nDTQrLOXQF1rpGcmY7grt3BqekvBY2Ssp4JTimHb0oc8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=YmVMTik/; arc=none smtp.client-ip=192.198.163.17
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="IY0QFenQ"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="YmVMTik/"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1726038339; x=1757574339;
-  h=date:from:cc:subject:message-id:mime-version;
-  bh=5bxEgmyrGZ0w781E9sA/P4Mmg/yu9h72frq99nLFJgI=;
-  b=IY0QFenQYBcRobvxGrjOvptHJzIQ+IHtlTanCPPGCB44TBLZpP5AQNMf
-   T0dPaEd7mHFaOHXZh5AkFCYGT2y3lcEPvbssaZmRcKe0Zq/jpOk8zf96B
-   FmK2PPPcoRAu2kHsAgm1oZNbE6M0EVXn7Jl8DYQmCYF4cni9Btyqd11/u
-   4ofXtY4iEszL0FB5p8Dg91gPnO7KC8sa0ro6bPf9d8GiXETPGcRLSdHcx
-   dYHhDxDqM99HUNMUn1RW68dFupkiOnPQ4qSTJysCca8YvxSK9HegmUM/c
-   Zc2TZGpVgOSJzvS/vNe4H/HDzclDjIH7CUKhbKjfvgXsMTiQBekHn1BX6
-   A==;
-X-CSE-ConnectionGUID: pCa2CAqbTReGexfY5edElg==
-X-CSE-MsgGUID: hBpCDZ5eSx6NE0aw1nuRVg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11191"; a="50232480"
+  t=1726041400; x=1757577400;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=2oz0F5oJtLf3lDzl1Y6YrOQ3N3Y7UGWXkPeLGHCuq6w=;
+  b=YmVMTik/Qpm8C+A9LgIlH9jCO3xPu1HlpSpTo+nh58Lgol4fzhN5qEHY
+   3mY2PtY99Vfm4aMAWv3Ulfok6dREcuZYL+EpEmUuZVZfKJBxAB7CIROZV
+   EK3BVXth767haRfZPy5eJYhfJecj8cJ1v6N2hfSBfCBl9zlN9dcoWrOTW
+   4xyTT4Gg2xKLUZFrgd9uA4/amg3Hn5VrQvN+IjmIca9mQT8gSyd8jRUS3
+   yhM/lMXXDB8Py3PEYrKI8alwu+GstnLMq+strmiC/suUhPTWLOrOd7P+n
+   tVT1W55Gdzyg8Jzhdyw9GWvb02F3lzNK1BcyMt9IoS5eHIDHqAeDD1BLv
+   w==;
+X-CSE-ConnectionGUID: zlGpWHCmS/C86Ocj3YQ9ww==
+X-CSE-MsgGUID: pZqY1JOiTCauQfE9t5mBxQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11191"; a="24701965"
 X-IronPort-AV: E=Sophos;i="6.10,219,1719903600"; 
-   d="scan'208";a="50232480"
-Received: from fmviesa007.fm.intel.com ([10.60.135.147])
-  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Sep 2024 00:05:37 -0700
-X-CSE-ConnectionGUID: kxlg4RgrQx6FZvRyzUQ3RQ==
-X-CSE-MsgGUID: qaD1PJ1WSGGp8O7DPxgcWQ==
+   d="scan'208";a="24701965"
+Received: from fmviesa001.fm.intel.com ([10.60.135.141])
+  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Sep 2024 00:56:39 -0700
+X-CSE-ConnectionGUID: PbmpJdHzTOyCSpAe7s7LTQ==
+X-CSE-MsgGUID: UOasxn5ySSmCWZnsz4yM9w==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.10,219,1719903600"; 
-   d="scan'208";a="66981776"
+   d="scan'208";a="98118095"
 Received: from lkp-server01.sh.intel.com (HELO 53e96f405c61) ([10.239.97.150])
-  by fmviesa007.fm.intel.com with ESMTP; 11 Sep 2024 00:05:36 -0700
+  by fmviesa001.fm.intel.com with ESMTP; 11 Sep 2024 00:56:38 -0700
 Received: from kbuild by 53e96f405c61 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1soHPy-0003AK-0A;
-	Wed, 11 Sep 2024 07:05:34 +0000
-Date: Wed, 11 Sep 2024 15:04:47 +0800
+	id 1soIDL-0003Cy-2f;
+	Wed, 11 Sep 2024 07:56:35 +0000
+Date: Wed, 11 Sep 2024 15:55:56 +0800
 From: kernel test robot <lkp@intel.com>
-Cc: oe-kbuild-all@lists.linux.dev, llvm@lists.linux.dev
-Subject: [mst-vhost:vhost 5/37] drivers/virtio/virtio_balloon.c:372:37:
- warning: arithmetic between different enumeration types ('enum
- vm_event_item' and 'enum zone_type')
-Message-ID: <202409111508.O5YtdBhp-lkp@intel.com>
+To: Jarkko Sakkinen <jarkko@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	James Prestwood <prestwoj@gmail.com>
+Subject: [jarkko-tpmdd:tpm2key-v8 10/11]
+ crypto/asymmetric_keys/tpm2_key_rsa.c:636:10: warning: variable 'ret' is
+ uninitialized when used here
+Message-ID: <202409111527.uF380T7Y-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -62,102 +64,65 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-CC: kvm@vger.kernel.org
-CC: virtualization@lists.linux-foundation.org
-CC: netdev@vger.kernel.org
-TO: zhenwei pi <pizhenwei@bytedance.com>
-CC: "Michael S. Tsirkin" <mst@redhat.com>
-
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/mst/vhost.git vhost
-head:   025b6cabd88a35947637ffb7613e90c871c3381b
-commit: c5b70a26aac39f09a23fd72f44cfbb3d4d5a14d5 [5/37] virtio_balloon: introduce memory allocation stall counter
-config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20240911/202409111508.O5YtdBhp-lkp@intel.com/config)
-compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project bf684034844c660b778f0eba103582f582b710c9)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240911/202409111508.O5YtdBhp-lkp@intel.com/reproduce)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jarkko/linux-tpmdd.git tpm2key-v8
+head:   79e909153c0a5ac21c2c5c0d4eac9229b3408178
+commit: 7d90c72ea84705971e66e2023d388c2d9958220d [10/11] keys: asymmetric: Add tpm2_key_rsa
+config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20240911/202409111527.uF380T7Y-lkp@intel.com/config)
+compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240911/202409111527.uF380T7Y-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202409111508.O5YtdBhp-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202409111527.uF380T7Y-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
-   In file included from drivers/virtio/virtio_balloon.c:9:
-   In file included from include/linux/virtio.h:7:
-   In file included from include/linux/scatterlist.h:8:
-   In file included from include/linux/mm.h:2228:
-   include/linux/vmstat.h:517:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     517 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
-   In file included from drivers/virtio/virtio_balloon.c:9:
-   In file included from include/linux/virtio.h:7:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/hexagon/include/asm/io.h:328:
-   include/asm-generic/io.h:548:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     548 |         val = __raw_readb(PCI_IOBASE + addr);
-         |                           ~~~~~~~~~~ ^
-   include/asm-generic/io.h:561:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     561 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
-      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-         |                                                   ^
-   In file included from drivers/virtio/virtio_balloon.c:9:
-   In file included from include/linux/virtio.h:7:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/hexagon/include/asm/io.h:328:
-   include/asm-generic/io.h:574:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     574 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
-      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
-         |                                                   ^
-   In file included from drivers/virtio/virtio_balloon.c:9:
-   In file included from include/linux/virtio.h:7:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/hexagon/include/asm/io.h:328:
-   include/asm-generic/io.h:585:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     585 |         __raw_writeb(value, PCI_IOBASE + addr);
-         |                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:595:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     595 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:605:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     605 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
->> drivers/virtio/virtio_balloon.c:372:37: warning: arithmetic between different enumeration types ('enum vm_event_item' and 'enum zone_type') [-Wenum-enum-conversion]
-     372 |                 stall += events[ALLOCSTALL_NORMAL - ZONE_NORMAL + zid];
-         |                                 ~~~~~~~~~~~~~~~~~ ^ ~~~~~~~~~~~
-   8 warnings generated.
+>> crypto/asymmetric_keys/tpm2_key_rsa.c:636:10: warning: variable 'ret' is uninitialized when used here [-Wuninitialized]
+     636 |                 return ret;
+         |                        ^~~
+   crypto/asymmetric_keys/tpm2_key_rsa.c:632:9: note: initialize the variable 'ret' to silence this warning
+     632 |         int ret;
+         |                ^
+         |                 = 0
+   1 warning generated.
 
 
-vim +372 drivers/virtio/virtio_balloon.c
+vim +/ret +636 crypto/asymmetric_keys/tpm2_key_rsa.c
 
-   351	
-   352	#ifdef CONFIG_VM_EVENT_COUNTERS
-   353	/* Return the number of entries filled by vm events */
-   354	static inline unsigned int update_balloon_vm_stats(struct virtio_balloon *vb)
-   355	{
-   356		unsigned long events[NR_VM_EVENT_ITEMS];
-   357		unsigned int idx = 0;
-   358		unsigned int zid;
-   359		unsigned long stall = 0;
-   360	
-   361		all_vm_events(events);
-   362		update_stat(vb, idx++, VIRTIO_BALLOON_S_SWAP_IN,
-   363			    pages_to_bytes(events[PSWPIN]));
-   364		update_stat(vb, idx++, VIRTIO_BALLOON_S_SWAP_OUT,
-   365			    pages_to_bytes(events[PSWPOUT]));
-   366		update_stat(vb, idx++, VIRTIO_BALLOON_S_MAJFLT, events[PGMAJFAULT]);
-   367		update_stat(vb, idx++, VIRTIO_BALLOON_S_MINFLT, events[PGFAULT]);
-   368		update_stat(vb, idx++, VIRTIO_BALLOON_S_OOM_KILL, events[OOM_KILL]);
-   369	
-   370		/* sum all the stall events */
-   371		for (zid = 0; zid < MAX_NR_ZONES; zid++)
- > 372			stall += events[ALLOCSTALL_NORMAL - ZONE_NORMAL + zid];
-   373	
-   374		update_stat(vb, idx++, VIRTIO_BALLOON_S_ALLOC_STALL, stall);
-   375	
+   625	
+   626	/*
+   627	 * Attempt to parse a data blob for a key as a TPM private key blob.
+   628	 */
+   629	static int tpm2_key_rsa_preparse(struct key_preparsed_payload *prep)
+   630	{
+   631		struct tpm2_key *key;
+   632		int ret;
+   633	
+   634		key = tpm2_key_decode(prep->data, prep->datalen);
+   635		if (IS_ERR(key))
+ > 636			return ret;
+   637	
+   638		if (key->oid != OID_TPMLoadableKey) {
+   639			kfree(key);
+   640			return -EBADMSG;
+   641		}
+   642	
+   643		ret = __tpm2_key_rsa_preparse(key);
+   644		if (ret < 0) {
+   645			kfree(key);
+   646			return ret;
+   647		}
+   648	
+   649		prep->payload.data[asym_subtype] = &tpm2_key_rsa_subtype;
+   650		prep->payload.data[asym_key_ids] = NULL;
+   651		prep->payload.data[asym_crypto] = key;
+   652		prep->payload.data[asym_auth] = NULL;
+   653		prep->quotalen = 100;
+   654	
+   655		return 0;
+   656	}
+   657	
 
 -- 
 0-DAY CI Kernel Test Service
