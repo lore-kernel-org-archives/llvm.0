@@ -1,223 +1,152 @@
-Received: from mail-il1-f197.google.com (mail-il1-f197.google.com [209.85.166.197])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 63B903FB3B
-	for <llvm@lists.linux.dev>; Wed, 11 Sep 2024 02:39:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.197
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B8A0D748A;
+	Wed, 11 Sep 2024 03:39:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726022369; cv=none; b=BQoC4JfjhOiXEpSUvyr2CND9/vkR/mkRMp/VycA2NMCwIGmvHs/AgNYES+hBypdIR/pJV405n49kTyz2VKiGReIwgzZq4pEqpv7idn049KZMpf+3skTZE/PQX/J3xXjVZPYe+uNgvR7ymu9O0SyFh36Q/IpB6obng5aPEogUUV8=
+	t=1726025963; cv=none; b=kZI5Ir+CAR+XQonM6lmhumZyyh6jcIo5WShOOvhGDcnaHAHbQSwUVPaUM1lzpClAquXswXgmAlU0kYXE/trqHq24rieufSfJrprVOW5G3idh3UxROse1+KVKba1DOWg4wg8KKvkAkKXQWKgSvzOCvaG/pzp9wkhZBPPWCh0ttz4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726022369; c=relaxed/simple;
-	bh=++ZRCoInTBLKm+pSs03/a8TFxw6wkp3kqIou5r+e0eQ=;
-	h=MIME-Version:Date:In-Reply-To:Message-ID:Subject:From:To:
-	 Content-Type; b=UOFEDPywFE3Nvj2QWYgcfv9oppNmCjP7okxx+TjwsdMFzNghm2uNIzvn6i23pV0YaqJHP95NXi/mQMSLQnI0hz66P6R3ylR6Tf9TChNET/VEKh0IzjaVtwmDt+H7zAS12l5ct+sVpsEpzlvp00oS86TgL+d2vzbd0BjPvxrKAQ0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.197
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
-Received: by mail-il1-f197.google.com with SMTP id e9e14a558f8ab-3a047cb2e7dso23947695ab.3
-        for <llvm@lists.linux.dev>; Tue, 10 Sep 2024 19:39:27 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1726022366; x=1726627166;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=wnw9XDtTGWHLyImo1mxGgXqbPU7vJqK/MVyOf9pYnHs=;
-        b=jO+Xx0zTv59nV3w0f7kveGDdgGY777wZK2OdRP0waX6rKkSZ5hjeWkYyLFK/PoKS5w
-         ROW7rgx2/9iN1zYzRNanIomiHWDs1TgsRUtFF8lgUUZDT4zT7uM6HceFYMy8PmB+XS5L
-         ZuqDYpBYW68X4vhamH42rW7ZxY0LdQOxl4k+hnug8CbIh3f/SrBvPgcsxSfrUe6giZrO
-         0SJvwA6rbGKBxodnaMc3njGxfen6DLiy25n7CMXJR5W8NYrmjRcMt5LCka19EGXnnZ2H
-         X9GLI+52LXetL0LyRIWHfkNEbiS0J3lBQvkaoaTl0e4VNhdSRo7dtEolyPQw7eKM3hJ9
-         obXg==
-X-Forwarded-Encrypted: i=1; AJvYcCWGIx5i2rHzdVFkjqvXn0sg8UASmXpLYAsBtQblm5ugV7Q90CFCXfJdxTNbS7kaKPaoP3U4@lists.linux.dev
-X-Gm-Message-State: AOJu0YyGfNxYcmail8+gvMcP9ch6Y9rVSNjKs/8EfmqlZk7naf62dBYE
-	A2CQyS34iNoGwpZDAk6VinJfH5YY3LZ9PE7ElEt5Nwn+xV7XhO+2dpFguz80zPYm/LRyqZzJZpI
-	UYFONHX2xuhoncACMbpfZdfy4vxNrCr+z643z86vNKtHlEOgTDV/AAwM=
-X-Google-Smtp-Source: AGHT+IFh1IzJDI+YnTZVnxAhYYEDxo7i34o3nXyJt65WBE8x3cY7wyYXQ1NIGcrHDXcx0EW6xBHE2c4f3v922mNc7ZuHWaigscs+
+	s=arc-20240116; t=1726025963; c=relaxed/simple;
+	bh=L7h6NF/2DgBU0EtDVSJPLPCv+0ZhaDnRDR/m3EqRXFE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=HPWLd8TUb5Ggp2e9Lv3wh1qcn2+5bjkKDi+/NXyzVfgtPvcQNsi40455LpidESkrFJqOcIqkNJrlYGIGWsKHySVyHaTYQArWHjL9UoXak7n5ba0GvpRZp+hEELiMB9FC4NapLPGaMEeGq0dr1HCuXC9ilpDCr5z958v+mgP/dR4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Nr0Kk+u8; arc=none smtp.client-ip=198.175.65.21
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Nr0Kk+u8"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1726025962; x=1757561962;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=L7h6NF/2DgBU0EtDVSJPLPCv+0ZhaDnRDR/m3EqRXFE=;
+  b=Nr0Kk+u8ejz15vItrCzZBPwqP92E8k3HFnEffiLKb1QsAK1BFEVeT/Sv
+   Db1ftc6OQer94OfI00pxrQO0aL1GqgYWrIhXiM+kDUlDWqE4+HSOY30JY
+   PvuASUDN/b1k5mPVZz/pCnq2sWJlO9ubf8YetOBwE5VSf3LiAWkXDfOOE
+   42tHO0K0ap53SBEO1JJHW7DdxRCRqRNjonbZGpF4t2melRsTm0dS+o6PH
+   NZSfvCwaUnXzidcbzOM8P8HKl82T5PgbdCvOkjoRi4ZVCDQPS2ng0bJtZ
+   IeVCJdsIxvIK7T+gPmNotX9C8PhBf4pOErm2OYMWsNJ6xVxgyGi+Nua+l
+   Q==;
+X-CSE-ConnectionGUID: D3eXF3soRR+oGqiedbbJ4w==
+X-CSE-MsgGUID: iVThA4pESd2sh6hVd6LFoQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11191"; a="24743519"
+X-IronPort-AV: E=Sophos;i="6.10,218,1719903600"; 
+   d="scan'208";a="24743519"
+Received: from orviesa007.jf.intel.com ([10.64.159.147])
+  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Sep 2024 20:38:29 -0700
+X-CSE-ConnectionGUID: pOwEa6sOR2i6ndaarmOiZw==
+X-CSE-MsgGUID: k2j81DtjSG2kGaEoXMLYZQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.10,218,1719903600"; 
+   d="scan'208";a="67737788"
+Received: from lkp-server01.sh.intel.com (HELO 53e96f405c61) ([10.239.97.150])
+  by orviesa007.jf.intel.com with ESMTP; 10 Sep 2024 20:38:28 -0700
+Received: from kbuild by 53e96f405c61 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1soEBV-00030k-2A;
+	Wed, 11 Sep 2024 03:38:25 +0000
+Date: Wed, 11 Sep 2024 11:38:02 +0800
+From: kernel test robot <lkp@intel.com>
+To: Donglin Peng <dolinux.peng@gmail.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: Re: [RFC PATCH] function_graph: Support recording and printing the
+ function return address
+Message-ID: <202409111115.i1L43FTN-lkp@intel.com>
+References: <20240908142544.1409032-1-dolinux.peng@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:1846:b0:3a0:4d1f:519c with SMTP id
- e9e14a558f8ab-3a0741f7ddbmr17002365ab.3.1726022366440; Tue, 10 Sep 2024
- 19:39:26 -0700 (PDT)
-Date: Tue, 10 Sep 2024 19:39:26 -0700
-In-Reply-To: <000000000000cb121205ef615844@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000006c6260621cee6ed@google.com>
-Subject: Re: [syzbot] [ntfs3?] possible deadlock in ntfs_fallocate
-From: syzbot <syzbot+adacb2b0c896bc427962@syzkaller.appspotmail.com>
-To: almaz.alexandrovich@paragon-software.com, linux-kernel@vger.kernel.org, 
-	llvm@lists.linux.dev, nathan@kernel.org, ndesaulniers@google.com, 
-	ntfs3@lists.linux.dev, syzkaller-bugs@googlegroups.com, trix@redhat.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240908142544.1409032-1-dolinux.peng@gmail.com>
 
-syzbot has found a reproducer for the following issue on:
+Hi Donglin,
 
-HEAD commit:    8d8d276ba2fb Merge tag 'trace-v6.11-rc6' of git://git.kern..
-git tree:       upstream
-console+strace: https://syzkaller.appspot.com/x/log.txt?x=10a5e807980000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=1c9e296880039df9
-dashboard link: https://syzkaller.appspot.com/bug?extid=adacb2b0c896bc427962
-compiler:       Debian clang version 15.0.6, GNU ld (GNU Binutils for Debian) 2.40
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=13e9fbc7980000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1573a100580000
+[This is a private test report for your RFC patch.]
+kernel test robot noticed the following build errors:
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/29807f1973f6/disk-8d8d276b.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/172d57aa7f61/vmlinux-8d8d276b.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/021cabf6f499/bzImage-8d8d276b.xz
-mounted in repro #1: https://storage.googleapis.com/syzbot-assets/3ada4caf0079/mount_0.gz
-mounted in repro #2: https://storage.googleapis.com/syzbot-assets/7777f8d9c410/mount_7.gz
+[auto build test ERROR on linus/master]
+[also build test ERROR on v6.11-rc7]
+[cannot apply to next-20240910]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+adacb2b0c896bc427962@syzkaller.appspotmail.com
+url:    https://github.com/intel-lab-lkp/linux/commits/Donglin-Peng/function_graph-Support-recording-and-printing-the-function-return-address/20240908-222737
+base:   linus/master
+patch link:    https://lore.kernel.org/r/20240908142544.1409032-1-dolinux.peng%40gmail.com
+patch subject: [RFC PATCH] function_graph: Support recording and printing the function return address
+config: x86_64-rhel-8.3-rust (https://download.01.org/0day-ci/archive/20240911/202409111115.i1L43FTN-lkp@intel.com/config)
+compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240911/202409111115.i1L43FTN-lkp@intel.com/reproduce)
 
-======================================================
-WARNING: possible circular locking dependency detected
-6.11.0-rc7-syzkaller-00020-g8d8d276ba2fb #0 Not tainted
-------------------------------------------------------
-syz-executor399/5227 is trying to acquire lock:
-ffff8880758351c8 (&ni->ni_lock/4){+.+.}-{3:3}, at: ni_lock fs/ntfs3/ntfs_fs.h:1110 [inline]
-ffff8880758351c8 (&ni->ni_lock/4){+.+.}-{3:3}, at: ntfs_fallocate+0x5ca/0x1280 fs/ntfs3/file.c:564
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202409111115.i1L43FTN-lkp@intel.com/
 
-but task is already holding lock:
-ffff888075835600 (mapping.invalidate_lock#3){++++}-{3:3}, at: filemap_invalidate_lock include/linux/fs.h:845 [inline]
-ffff888075835600 (mapping.invalidate_lock#3){++++}-{3:3}, at: ntfs_fallocate+0x3c7/0x1280 fs/ntfs3/file.c:549
+All errors (new ones prefixed by >>):
 
-which lock already depends on the new lock.
+>> kernel/trace/trace_functions_graph.c:830:3: error: call to undeclared function 'print_graph_retaddr'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     830 |                 print_graph_retaddr(s, call, tr->trace_flags, true);
+         |                 ^
+   1 error generated.
 
 
-the existing dependency chain (in reverse order) is:
+vim +/print_graph_retaddr +830 kernel/trace/trace_functions_graph.c
 
--> #3 (mapping.invalidate_lock#3){++++}-{3:3}:
-       lock_acquire+0x1ed/0x550 kernel/locking/lockdep.c:5759
-       down_read+0xb1/0xa40 kernel/locking/rwsem.c:1526
-       filemap_invalidate_lock_shared include/linux/fs.h:855 [inline]
-       filemap_fault+0x658/0x1760 mm/filemap.c:3302
-       __do_fault+0x135/0x460 mm/memory.c:4655
-       do_shared_fault mm/memory.c:5121 [inline]
-       do_fault mm/memory.c:5195 [inline]
-       do_pte_missing mm/memory.c:3947 [inline]
-       handle_pte_fault+0x1176/0x6fc0 mm/memory.c:5521
-       __handle_mm_fault mm/memory.c:5664 [inline]
-       handle_mm_fault+0x1056/0x1ad0 mm/memory.c:5832
-       do_user_addr_fault arch/x86/mm/fault.c:1338 [inline]
-       handle_page_fault arch/x86/mm/fault.c:1481 [inline]
-       exc_page_fault+0x459/0x8c0 arch/x86/mm/fault.c:1539
-       asm_exc_page_fault+0x26/0x30 arch/x86/include/asm/idtentry.h:623
+   797	
+   798	static enum print_line_t
+   799	print_graph_entry_nested(struct trace_iterator *iter,
+   800				 struct ftrace_graph_ent_entry *entry,
+   801				 struct trace_seq *s, int cpu, u32 flags)
+   802	{
+   803		struct ftrace_graph_ent *call = &entry->graph_ent;
+   804		struct fgraph_data *data = iter->private;
+   805		struct trace_array *tr = iter->tr;
+   806		int i;
+   807	
+   808		if (data) {
+   809			struct fgraph_cpu_data *cpu_data;
+   810			int cpu = iter->cpu;
+   811	
+   812			cpu_data = per_cpu_ptr(data->cpu_data, cpu);
+   813			cpu_data->depth = call->depth;
+   814	
+   815			/* Save this function pointer to see if the exit matches */
+   816			if (call->depth < FTRACE_RETFUNC_DEPTH &&
+   817			    !WARN_ON_ONCE(call->depth < 0))
+   818				cpu_data->enter_funcs[call->depth] = call->func;
+   819		}
+   820	
+   821		/* No time */
+   822		print_graph_duration(tr, 0, s, flags | FLAGS_FILL_FULL);
+   823	
+   824		/* Function */
+   825		for (i = 0; i < call->depth * TRACE_GRAPH_INDENT; i++)
+   826			trace_seq_putc(s, ' ');
+   827	
+   828		trace_seq_printf(s, "%ps() {", (void *)call->func);
+   829		if (flags & __TRACE_GRAPH_PRINT_RETADDR)
+ > 830			print_graph_retaddr(s, call, tr->trace_flags, true);
+   831		trace_seq_putc(s, '\n');
+   832	
+   833		if (trace_seq_has_overflowed(s))
+   834			return TRACE_TYPE_PARTIAL_LINE;
+   835	
+   836		/*
+   837		 * we already consumed the current entry to check the next one
+   838		 * and see if this is a leaf.
+   839		 */
+   840		return TRACE_TYPE_NO_CONSUME;
+   841	}
+   842	
 
--> #2 (&vma->vm_lock->lock){++++}-{3:3}:
-       lock_acquire+0x1ed/0x550 kernel/locking/lockdep.c:5759
-       down_write+0x99/0x220 kernel/locking/rwsem.c:1579
-       vma_start_write include/linux/mm.h:747 [inline]
-       vma_link+0x270/0x4f0 mm/mmap.c:457
-       insert_vm_struct+0x2f7/0x410 mm/mmap.c:3484
-       __bprm_mm_init fs/exec.c:291 [inline]
-       bprm_mm_init fs/exec.c:395 [inline]
-       alloc_bprm+0x81f/0xda0 fs/exec.c:1623
-       kernel_execve+0x99/0xa50 fs/exec.c:2052
-       try_to_run_init_process init/main.c:1395 [inline]
-       kernel_init+0xed/0x2b0 init/main.c:1523
-       ret_from_fork+0x4b/0x80 arch/x86/kernel/process.c:147
-       ret_from_fork_asm+0x1a/0x30 arch/x86/entry/entry_64.S:244
-
--> #1 (&mm->mmap_lock){++++}-{3:3}:
-       lock_acquire+0x1ed/0x550 kernel/locking/lockdep.c:5759
-       __might_fault+0xc6/0x120 mm/memory.c:6387
-       _inline_copy_to_user include/linux/uaccess.h:176 [inline]
-       _copy_to_user+0x2a/0xb0 lib/usercopy.c:26
-       copy_to_user include/linux/uaccess.h:209 [inline]
-       fiemap_fill_next_extent+0x235/0x410 fs/ioctl.c:145
-       ni_fiemap+0x4f5/0x1910 fs/ntfs3/frecord.c:1993
-       ntfs_fiemap+0x132/0x180 fs/ntfs3/file.c:1279
-       ioctl_fiemap fs/ioctl.c:220 [inline]
-       do_vfs_ioctl+0x1c07/0x2e50 fs/ioctl.c:841
-       __do_sys_ioctl fs/ioctl.c:905 [inline]
-       __se_sys_ioctl+0x81/0x170 fs/ioctl.c:893
-       do_syscall_x64 arch/x86/entry/common.c:52 [inline]
-       do_syscall_64+0xf3/0x230 arch/x86/entry/common.c:83
-       entry_SYSCALL_64_after_hwframe+0x77/0x7f
-
--> #0 (&ni->ni_lock/4){+.+.}-{3:3}:
-       check_prev_add kernel/locking/lockdep.c:3133 [inline]
-       check_prevs_add kernel/locking/lockdep.c:3252 [inline]
-       validate_chain+0x18e0/0x5900 kernel/locking/lockdep.c:3868
-       __lock_acquire+0x137a/0x2040 kernel/locking/lockdep.c:5142
-       lock_acquire+0x1ed/0x550 kernel/locking/lockdep.c:5759
-       __mutex_lock_common kernel/locking/mutex.c:608 [inline]
-       __mutex_lock+0x136/0xd70 kernel/locking/mutex.c:752
-       ni_lock fs/ntfs3/ntfs_fs.h:1110 [inline]
-       ntfs_fallocate+0x5ca/0x1280 fs/ntfs3/file.c:564
-       vfs_fallocate+0x553/0x6c0 fs/open.c:334
-       do_vfs_ioctl+0x2592/0x2e50 fs/ioctl.c:886
-       __do_sys_ioctl fs/ioctl.c:905 [inline]
-       __se_sys_ioctl+0x81/0x170 fs/ioctl.c:893
-       do_syscall_x64 arch/x86/entry/common.c:52 [inline]
-       do_syscall_64+0xf3/0x230 arch/x86/entry/common.c:83
-       entry_SYSCALL_64_after_hwframe+0x77/0x7f
-
-other info that might help us debug this:
-
-Chain exists of:
-  &ni->ni_lock/4 --> &vma->vm_lock->lock --> mapping.invalidate_lock#3
-
- Possible unsafe locking scenario:
-
-       CPU0                    CPU1
-       ----                    ----
-  lock(mapping.invalidate_lock#3);
-                               lock(&vma->vm_lock->lock);
-                               lock(mapping.invalidate_lock#3);
-  lock(&ni->ni_lock/4);
-
- *** DEADLOCK ***
-
-3 locks held by syz-executor399/5227:
- #0: ffff888031898420 (sb_writers#9){.+.+}-{0:0}, at: file_start_write include/linux/fs.h:2882 [inline]
- #0: ffff888031898420 (sb_writers#9){.+.+}-{0:0}, at: vfs_fallocate+0x4ea/0x6c0 fs/open.c:333
- #1: ffff888075835460 (&sb->s_type->i_mutex_key#14){+.+.}-{3:3}, at: inode_lock include/linux/fs.h:800 [inline]
- #1: ffff888075835460 (&sb->s_type->i_mutex_key#14){+.+.}-{3:3}, at: ntfs_fallocate+0x2e0/0x1280 fs/ntfs3/file.c:535
- #2: ffff888075835600 (mapping.invalidate_lock#3){++++}-{3:3}, at: filemap_invalidate_lock include/linux/fs.h:845 [inline]
- #2: ffff888075835600 (mapping.invalidate_lock#3){++++}-{3:3}, at: ntfs_fallocate+0x3c7/0x1280 fs/ntfs3/file.c:549
-
-stack backtrace:
-CPU: 0 UID: 0 PID: 5227 Comm: syz-executor399 Not tainted 6.11.0-rc7-syzkaller-00020-g8d8d276ba2fb #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 08/06/2024
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:93 [inline]
- dump_stack_lvl+0x241/0x360 lib/dump_stack.c:119
- check_noncircular+0x36a/0x4a0 kernel/locking/lockdep.c:2186
- check_prev_add kernel/locking/lockdep.c:3133 [inline]
- check_prevs_add kernel/locking/lockdep.c:3252 [inline]
- validate_chain+0x18e0/0x5900 kernel/locking/lockdep.c:3868
- __lock_acquire+0x137a/0x2040 kernel/locking/lockdep.c:5142
- lock_acquire+0x1ed/0x550 kernel/locking/lockdep.c:5759
- __mutex_lock_common kernel/locking/mutex.c:608 [inline]
- __mutex_lock+0x136/0xd70 kernel/locking/mutex.c:752
- ni_lock fs/ntfs3/ntfs_fs.h:1110 [inline]
- ntfs_fallocate+0x5ca/0x1280 fs/ntfs3/file.c:564
- vfs_fallocate+0x553/0x6c0 fs/open.c:334
- do_vfs_ioctl+0x2592/0x2e50 fs/ioctl.c:886
- __do_sys_ioctl fs/ioctl.c:905 [inline]
- __se_sys_ioctl+0x81/0x170 fs/ioctl.c:893
- do_syscall_x64 arch/x86/entry/common.c:52 [inline]
- do_syscall_64+0xf3/0x230 arch/x86/entry/common.c:83
- entry_SYSCALL_64_after_hwframe+0x77/0x7f
-RIP: 0033:0x7f7cf99c7c99
-Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 f1 17 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007ffc8fd1f9c8 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
-RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007f7cf99c7c99
-RDX: 0000000020000000 RSI: 0000000040305829 RDI: 0000000000000006
-RBP: 0000000000000000 R08: 0000000000000000 R09: 00007ffc8fd1fa00
-R10: 00007ffc8fd1f9d0 R11: 0000000000000246 R12: 00007ffc8fd1fa00
-R13: 00007ffc8fd1fc88 R14: 431bde82d7b634db R15: 00007f7cf9a1003b
- </TASK>
-
-
----
-If you want syzbot to run the reproducer, reply with:
-#syz test: git://repo/address.git branch-or-commit-hash
-If you attach or paste a git patch, syzbot will apply it before testing.
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
