@@ -1,170 +1,256 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f170.google.com (mail-pf1-f170.google.com [209.85.210.170])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DABBA185B6F;
-	Wed, 11 Sep 2024 10:42:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 28DBB185949
+	for <llvm@lists.linux.dev>; Wed, 11 Sep 2024 10:58:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726051371; cv=none; b=Rn8ULV7XXAavN8U3mEChmKnDTMvBRgAYjS8pLKNeQcuAjS/+vohC0c0ZMDBEHPapgED1DDEmAOZd2Pr7xuVCXwnGe+6/FK4k5pyvNxi1pMAn0ne8UZsUHqg32is+beTNOWyiyjfLmyWtuzxsFNsVAWpvz9rYcWYOktkkxgHpRxs=
+	t=1726052328; cv=none; b=S9MAF97xFn9lzvaY/WSZj5D5V7lb5PQq2fbQG9CiKI5KTfVzatS0Z4EmviSI1t9Kembo/84veANhBDQtlJAKilopGaz6hMHc6TFt3krEeqSpfLm9hNpIQnzAdReAlgOct+L+lENxBCcvUV4PipBbeTwwiQpu5yN04ph3/l4NWkw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726051371; c=relaxed/simple;
-	bh=+ykjokv8sLQ+qsBU3JFek08gdSun4GA/pZVAQZXSuCc=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=l1U4ArShfUeCcIKCCDA71ubm1vSMYfQo0qxsUJ07xllakJQucRiz0tBl/K0iviwmayFSMe9VM1i90SOVK6Ub37ZcepObRJ295/o/EPDelfvATJO7LI0t3nUKb0b9XI7tRFqZfJgWlNHfRJ7ExJ/OserZuXCUemef7EsvjV2+zps=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=jBGjvXkH; arc=none smtp.client-ip=198.175.65.20
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1726052328; c=relaxed/simple;
+	bh=Pw98yjqyvgV0j0EI3KPYWSSdOG7a3DjJHciP2zL4naI=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=KjRNFL5be4auCtY1jxcMaT7DLEq3XdD3672bzZlm1uz5Jwae0jXxFc5C+lMbSzv7QxLOkZNpODQ8/SmEcVB+PJJq1MYobiYZALblS606FTAD1P6R9rcuzG+AhBEPQwVw1mr0Sp2OT/pFMj09bJ4HbS+kZFxKFL/03R7HfSQp+L0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=VIIBcWg7; arc=none smtp.client-ip=209.85.210.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="jBGjvXkH"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1726051369; x=1757587369;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=+ykjokv8sLQ+qsBU3JFek08gdSun4GA/pZVAQZXSuCc=;
-  b=jBGjvXkHE7cpHge2+yqE92BX8d7GW1D2Z6sNNlrpE3WLR+MxlMeN/et7
-   NeCx9t3SKipXRGmU+DaC7w8GCoJf0qPo5C5fOkyFW/VmKKdw+IlCdhY7c
-   OvKTo/YKzHnWB33RO6D3Ytti9eM1+W2R/pATlcdHrmI+3MEhXvKdMfdxZ
-   hgRTI0CFg1JPck12Pvq0cDjVSkJDSyAFWQOCxKPsoePrkKvBKvetDS7xv
-   2/CvBGuWTv5WJlyuIlyB9mNu1dYLyNzNXu0AhH6d2ll0iJY26w5HSPU5V
-   XW97UwFis3TfJCJCDpdadLABkYtP3eveNUrDvxh0usxAXWAc1LG1D0+DL
-   A==;
-X-CSE-ConnectionGUID: cGScU2BxQsOcNd1GRmvMhQ==
-X-CSE-MsgGUID: CQDNExI1QDmW1znnAo+Y0A==
-X-IronPort-AV: E=McAfee;i="6700,10204,11191"; a="24665920"
-X-IronPort-AV: E=Sophos;i="6.10,219,1719903600"; 
-   d="scan'208";a="24665920"
-Received: from fmviesa003.fm.intel.com ([10.60.135.143])
-  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Sep 2024 03:42:48 -0700
-X-CSE-ConnectionGUID: sKKY+3lfQ6ewjyyLHcl3Jg==
-X-CSE-MsgGUID: dVZb4uNqQGWByUuD9wwQ0w==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.10,219,1719903600"; 
-   d="scan'208";a="71464111"
-Received: from lkp-server01.sh.intel.com (HELO 53e96f405c61) ([10.239.97.150])
-  by fmviesa003.fm.intel.com with ESMTP; 11 Sep 2024 03:42:47 -0700
-Received: from kbuild by 53e96f405c61 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1soKo8-0003P6-2y;
-	Wed, 11 Sep 2024 10:42:44 +0000
-Date: Wed, 11 Sep 2024 18:42:40 +0800
-From: kernel test robot <lkp@intel.com>
-To: Josh Poimboeuf <jpoimboe@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [jpoimboe:klp-build-v1.5 6/33] arch/arm64/kernel/vdso32/note.c:14:1:
- error: a parameter list without types is only allowed in a function
- definition
-Message-ID: <202409111829.o0fYCii9-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VIIBcWg7"
+Received: by mail-pf1-f170.google.com with SMTP id d2e1a72fcca58-717911ef035so5091951b3a.3
+        for <llvm@lists.linux.dev>; Wed, 11 Sep 2024 03:58:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1726052326; x=1726657126; darn=lists.linux.dev;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Y7Wq0ojhg4OlKZWObqNyEMqFiHsGaFxKZnwTSD+aecE=;
+        b=VIIBcWg7fxutGCfV9J6RjNKAK7DtpNsKr4kjHVJhu324q0YFmhxA6K3eDLKLnYJH7J
+         54Dx4wvQ1cczFJTReaX0zOQCkBnx/FuhiuTWnTKzSDcAtFIrXiKlRQKb9iVx4tQ8zTD6
+         7w0OPTbPcNOo8fl4yUdSYtls8cxwtgB0+S7eajivPrMlCAHERc31sC2Zltwu1YCf4Y5+
+         qkLG/PRzoKzB5vGP3Y2BGGMsyUQCsFB9PfH3lbhUvGYRF5C0ttUjwxU7geIzaV7SescY
+         tr39ZXT7cNYJqr+w0LXhpxWCoeEJVr+4aXKzGktv1BOAF1NArGUw0+4RaDV/V3tSwCOI
+         kZ1A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1726052326; x=1726657126;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Y7Wq0ojhg4OlKZWObqNyEMqFiHsGaFxKZnwTSD+aecE=;
+        b=ctzJHBG18oS5v830ibLUnJ/7Aj2OKIFwCX2HyBETv6cDbjllAXnSkX7jK1+BbbesMV
+         Z4nPKgHs2PO6KwLMwEtzvG3du8EAEp2TxGUHCdbP6RP++qHiyvzwCCJVaTsqdf9zDO0m
+         xdG7dIlH9gvhqFXkxhwynIJFo7fvfAn0ZIj7dgk77BWo06ySBjOMIGHt71yQTez+bp4t
+         zOxdgEqSFkp5KX4j238W3l7s5sPL8x4tanrIgIsebcNhVkF9R79ailIxSlYqNR+Ym2Vx
+         EAc8XSF6/mfUfpeWOIiw/+MqeVMcRwVTH5IDu/N2Rw5AJk3pFn2rQh1Rm8G+CpSdQHCh
+         O2XQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXBwuDWUfGw6jjMVX8qVT/WSejivNQG1kvHNgVBHf57ZnF9rqYoXHXdVJFQWXdoNH2Zz35y@lists.linux.dev
+X-Gm-Message-State: AOJu0YyfRehr14fKFhhDCWhub27LLFvEHVahwWkKyLExJqA2GtNX4a2v
+	KKRCYYX+xiaHbb0JnmDmJXnW3c+Mf5p7QnhaUnPZtfyW7TtgIKBl
+X-Google-Smtp-Source: AGHT+IFXRIkDYXeweCuIJfGLn2HYm5191miDB4YjHLUhLcLcNRniPgRSA5iz617KUqpt/gEh00OviQ==
+X-Received: by 2002:a05:6a00:181e:b0:717:9154:b5d6 with SMTP id d2e1a72fcca58-718d5ee032emr20084562b3a.22.1726052326133;
+        Wed, 11 Sep 2024 03:58:46 -0700 (PDT)
+Received: from localhost.localdomain (1-171-31-75.dynamic-ip.hinet.net. [1.171.31.75])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-7d8242b3d13sm7158307a12.52.2024.09.11.03.58.42
+        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
+        Wed, 11 Sep 2024 03:58:45 -0700 (PDT)
+From: Andy Chiu <andybnac@gmail.com>
+To: bjorn@kernel.org
+Cc: alexghiti@rivosinc.com,
+	andy.chiu@sifive.com,
+	aou@eecs.berkeley.edu,
+	justinstitt@google.com,
+	linux-kernel@vger.kernel.org,
+	linux-riscv@lists.infradead.org,
+	linux-trace-kernel@vger.kernel.org,
+	llvm@lists.linux.dev,
+	mark.rutland@arm.com,
+	mhiramat@kernel.org,
+	morbo@google.com,
+	nathan@kernel.org,
+	ndesaulniers@google.com,
+	palmer@dabbelt.com,
+	palmer@rivosinc.com,
+	paul.walmsley@sifive.com,
+	puranjay@kernel.org,
+	rostedt@goodmis.org,
+	zong.li@sifive.com,
+	Andy Chiu <andybnac@gmail.com>,
+	yongxuan.wang@sifive.com
+Subject: Re: [PATCH v2 3/6] riscv: ftrace: prepare ftrace for atomic code patching
+Date: Wed, 11 Sep 2024 18:57:17 +0800
+Message-Id: <ZuFteQ3t8K4h2-kJ@Andys-MacBook-Air.local>
+X-Mailer: git-send-email 2.39.3 (Apple Git-145)
+In-Reply-To: <87sev78dnz.fsf@all.your.base.are.belong.to.us>
+References: <87sev78dnz.fsf@all.your.base.are.belong.to.us>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jpoimboe/linux.git klp-build-v1.5
-head:   2abe29f4f173c4090c0030c43c30053694b1658a
-commit: f1cb9326e751c8ea49d315b984a72384794707a0 [6/33] elfnote: Use __UNIQUE_ID() for note symbols
-config: arm64-allyesconfig (https://download.01.org/0day-ci/archive/20240911/202409111829.o0fYCii9-lkp@intel.com/config)
-compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project bf684034844c660b778f0eba103582f582b710c9)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240911/202409111829.o0fYCii9-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202409111829.o0fYCii9-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
-   In file included from arch/arm64/kernel/asm-offsets.c:10:
-   In file included from include/linux/arm_sdei.h:8:
-   In file included from include/acpi/ghes.h:5:
-   In file included from include/acpi/apei.h:9:
-   In file included from include/linux/acpi.h:39:
-   In file included from include/acpi/acpi_io.h:7:
-   In file included from arch/arm64/include/asm/acpi.h:14:
-   In file included from include/linux/memblock.h:12:
-   In file included from include/linux/mm.h:2232:
-   include/linux/vmstat.h:503:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     503 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     504 |                            item];
-         |                            ~~~~
-   include/linux/vmstat.h:510:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     510 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     511 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/vmstat.h:517:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     517 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
-   include/linux/vmstat.h:523:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     523 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     524 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   4 warnings generated.
->> arch/arm64/kernel/vdso32/note.c:14:1: error: a parameter list without types is only allowed in a function definition
-      14 | ELFNOTE32("Linux", 0, LINUX_VERSION_CODE);
-         | ^
-   include/linux/elfnote.h:90:37: note: expanded from macro 'ELFNOTE32'
-      90 | #define ELFNOTE32(name, type, desc) ELFNOTE(32, name, type, desc)
-         |                                     ^
-   include/linux/elfnote.h:76:16: note: expanded from macro 'ELFNOTE'
-      76 |         } __UNIQUE_ID(note)                                             \
-         |                       ^
->> arch/arm64/kernel/vdso32/note.c:14:1: error: illegal initializer (only variables can be initialized)
-   include/linux/elfnote.h:90:37: note: expanded from macro 'ELFNOTE32'
-      90 | #define ELFNOTE32(name, type, desc) ELFNOTE(32, name, type, desc)
-         |                                     ^
-   include/linux/elfnote.h:76:4: note: expanded from macro 'ELFNOTE'
-      76 |         } __UNIQUE_ID(note)                                             \
-         |           ^
-   arch/arm64/kernel/vdso32/note.c:15:1: error: a parameter list without types is only allowed in a function definition
-      15 | BUILD_SALT;
-         | ^
-   include/linux/build-salt.h:16:8: note: expanded from macro 'BUILD_SALT'
-      16 |        ELFNOTE32("Linux", LINUX_ELFNOTE_BUILD_SALT, CONFIG_BUILD_SALT)
-         |        ^
-   include/linux/elfnote.h:90:37: note: expanded from macro 'ELFNOTE32'
-      90 | #define ELFNOTE32(name, type, desc) ELFNOTE(32, name, type, desc)
-         |                                     ^
-   include/linux/elfnote.h:76:16: note: expanded from macro 'ELFNOTE'
-      76 |         } __UNIQUE_ID(note)                                             \
-         |                       ^
-   arch/arm64/kernel/vdso32/note.c:15:1: error: illegal initializer (only variables can be initialized)
-   include/linux/build-salt.h:16:8: note: expanded from macro 'BUILD_SALT'
-      16 |        ELFNOTE32("Linux", LINUX_ELFNOTE_BUILD_SALT, CONFIG_BUILD_SALT)
-         |        ^
-   include/linux/elfnote.h:90:37: note: expanded from macro 'ELFNOTE32'
-      90 | #define ELFNOTE32(name, type, desc) ELFNOTE(32, name, type, desc)
-         |                                     ^
-   include/linux/elfnote.h:76:4: note: expanded from macro 'ELFNOTE'
-      76 |         } __UNIQUE_ID(note)                                             \
-         |           ^
-   4 errors generated.
-   make[3]: *** [arch/arm64/kernel/vdso32/Makefile:144: arch/arm64/kernel/vdso32/note.o] Error 1
-   make[3]: Target 'arch/arm64/kernel/vdso32/vdso.so' not remade because of errors.
-   make[2]: *** [arch/arm64/Makefile:218: vdso_prepare] Error 2
-   make[2]: Target 'prepare' not remade because of errors.
-   make[1]: *** [Makefile:224: __sub-make] Error 2
-   make[1]: Target 'prepare' not remade because of errors.
-   make: *** [Makefile:224: __sub-make] Error 2
-   make: Target 'prepare' not remade because of errors.
+On Wed, Aug 14, 2024 at 02:57:52PM +0200, Björn Töpel wrote:
+> Björn Töpel <bjorn@kernel.org> writes:
+> 
+> > Andy Chiu <andy.chiu@sifive.com> writes:
+> >
+> >> We use an AUIPC+JALR pair to jump into a ftrace trampoline. Since
+> >> instruction fetch can break down to 4 byte at a time, it is impossible
+> >> to update two instructions without a race. In order to mitigate it, we
+> >> initialize the patchable entry to AUIPC + NOP4. Then, the run-time code
+> >> patching can change NOP4 to JALR to eable/disable ftrcae from a
+> >                                       enable        ftrace
+> >
+> >> function. This limits the reach of each ftrace entry to +-2KB displacing
+> >> from ftrace_caller.
+> >>
+> >> Starting from the trampoline, we add a level of indirection for it to
+> >> reach ftrace caller target. Now, it loads the target address from a
+> >> memory location, then perform the jump. This enable the kernel to update
+> >> the target atomically.
+> >
+> > The +-2K limit is for direct calls, right?
+> >
+> > ...and this I would say breaks DIRECT_CALLS (which should be implemented
+> > using call_ops later)?
+> 
+> Thinking a bit more, and re-reading the series.
+> 
+> This series is good work, and it's a big improvement for DYNAMIC_FTRACE,
+> but
+> 
+> +int ftrace_make_call(struct dyn_ftrace *rec, unsigned long addr)
+> +{
+> +	unsigned long distance, orig_addr;
+> +
+> +	orig_addr = (unsigned long)&ftrace_caller;
+> +	distance = addr > orig_addr ? addr - orig_addr : orig_addr - addr;
+> +	if (distance > JALR_RANGE)
+> +		return -EINVAL;
+> +
+> +	return __ftrace_modify_call(rec->ip, addr, false);
+> +}
+> +
+> 
+> breaks WITH_DIRECT_CALLS. The direct trampoline will *never* be within
+> the JALR_RANGE.
 
 
-vim +14 arch/arm64/kernel/vdso32/note.c
+Yes, it is hardly possible that a direct trampoline will be within the
+range.
 
-a7f71a2c8903f8 Vincenzo Frascino 2019-06-21  13  
-a7f71a2c8903f8 Vincenzo Frascino 2019-06-21 @14  ELFNOTE32("Linux", 0, LINUX_VERSION_CODE);
+Recently I have been thinking some solutions to address the issue. One
+solution is replaying AUIPC at function entries. The idea has two sides.
+First, if we are returning back to the second instruction at trap return,
+then do sepc -= 4 so it executes the up-to-date AUIPC. The other side is
+to fire synchronous IPI that does remote fence.i at right timings to
+prevent concurrent executing on a mix of old and new instructions.
+ 
+Consider replacing instructions at a function's patchable entry with the
+following sequence:
 
-:::::: The code at line 14 was first introduced by commit
-:::::: a7f71a2c8903f8599312f75233946287c558d9f6 arm64: compat: Add vDSO
+Initial state:
+--------------
+0: AUIPC
+4: JALR
 
-:::::: TO: Vincenzo Frascino <vincenzo.frascino@arm.com>
-:::::: CC: Thomas Gleixner <tglx@linutronix.de>
+Step1:
+write(0, "J +8")
+fence w,w
+send sync local+remote fence.i
+------------------------
+0: J +8
+4: JALR
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Step2:
+write(4, "JALR'")
+fence w,w
+send sync local+remote fence.i
+------------------------
+0: J +8
+4: JALR'
+
+Step3:
+write(0, "AUIPC'")
+fence w,w
+send sync local+remote fence.i (to activate the call)
+-----------------------
+0: AUIPC'
+4: JALR'
+
+The following execution sequences are acceptable:
+- AUIPC, JALR
+- J +8, (skipping {JALR | JALR'})
+- AUIPC', JALR'
+
+And here are sequences that we want to prevent:
+- AUIPC', JALR
+- AUIPC, JALR'
+
+The local core should never execute the forbidden sequence.
+
+By listing all possible combinations of executing sequence on a remote
+core, we can find that the dangerous seqence is impossible to happen:
+
+let f be the fence.i at step 1, 2, 3. And let numbers be the location of
+code being executed. Mathematically, here are all combinations at a site
+happening on a remote core:
+
+fff04 -- updated seq
+ff0f4 -- impossible, would be ff0f04, updated seq
+ff04f -- impossible, would be ff08f, safe seq
+f0ff4 -- impossible, would be f0ff04, updated seq
+f0f4f -- impossible, would be f0f08f (safe), or f0f0f04 (updated)
+f04ff -- impossible, would be f08ff, safe seq
+0fff4 -- impossible, would be 0fff04, updated seq
+0ff4f -- impossible, would be 0ff08f (safe), or 0ff0f04 (updated)
+0f4ff -- impossible, would be 0f08ff (safe), 0f0f08f (safe), 0f0f0f04 (updated)
+04fff -- old seq
+
+After the 1st 'fence.i', remote cores should observe (J +8, JALR) or (J +8, JALR')
+After the 2nd 'fence.i', remote cores should observe (J +8, JALR') or (AUIPC', JALR')
+After the 3rd 'fence.i', remote cores should observe (AUIPC', JALR')
+
+Remote cores should never execute (AUIPC',JALR) or (AUIPC,JALR')
+
+To correctly implement the solution, the trap return code must match JALR
+and adjust sepc only for patchable function entries. This is undocumently
+possible because we use t0 as source and destination registers for JALR
+at function entries. Compiler never generates JALR that uses the same
+register pattern.
+
+Another solution is inspired by zcmt, and perhaps we can optimize it if
+the hardware does support zcmt. First, we allocate a page and divide it
+into two halves. The first half of the page are 255 x 8B destination
+addresses. Then, starting from offset 2056, the second half of the page
+is composed by a series of 2 x 4 Byte instructions:
+
+0:	ftrace_tramp_1
+8:	ftrace_tramp_2
+...
+2040:	ftrace_tramp_255
+2048:	ftrace_tramp_256 (not used when configured with 255 tramps)
+2056:
+ld	t1, -2048(t1)
+jr	t1
+ld	t1, -2048(t1)
+jr	t1
+...
+4088:
+ld	t1, -2048(t1)
+jr	t1
+4096:
+
+It is possible to expand to 511 trampolines by adding a page
+below, and making a load+jr sequence from +2040 offset.
+
+When the kernel boots, we direct AUIPCs at patchable entries to the page,
+and disable the call by setting the second instruction to NOP4. Then, we
+can effectively enable/disable/modify a call by setting only the
+instruction at JALR. It is possible to utilize most of the current patch
+set to achieve atomic patching. A missing part is to allocate and manage
+trampolines for ftrace users.
+
+Thanks,
+Andy
