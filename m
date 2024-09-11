@@ -1,129 +1,202 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8530439FE5;
-	Wed, 11 Sep 2024 07:56:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2846413AD29
+	for <llvm@lists.linux.dev>; Wed, 11 Sep 2024 08:03:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726041401; cv=none; b=Cg6PixYMGLE2NoM4ggKbxywTzFIOiCi+Ek0aeEw1N0XpxYFrVAPSmvPq9rozZyZEj6P5m8ocoEpFsjLXfJXOOV7G7iLU9DNk4QsVtpfoFtbYUxEaDA1glFGxlYBB4+N/RPFinwmiO8+ghvTCQ8gtPJ/C6SraEyUlN1M/DzqeR/U=
+	t=1726041814; cv=none; b=ulbhSIieDpFTV9lrMM3W74YffwLNpjBhFg1VtY/QLwKKqM3qW2e/aPm68MPL+LBuIqBA7ombemw/7FqaxFawGonh+riqJR1G9+dWHtu+nkuT9mhBeL/3/WwkTGf7eXnpzOTq32Ib6hBx+Pf34F/xNuFzEHPB/e5Dx7OGxX+WdE0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726041401; c=relaxed/simple;
-	bh=2oz0F5oJtLf3lDzl1Y6YrOQ3N3Y7UGWXkPeLGHCuq6w=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=MTEWIMZpMdzimuqC9pWnmi+m99/tCwYEjPn1GNRadhdAsq0wKM750+FCLeZsgwASNMzhddoQfhWaGyOgL6V8xdMm5vmexdMXOXSXIkjOnZSji3IJsMYnDyz0zJv0015nDTQrLOXQF1rpGcmY7grt3BqekvBY2Ssp4JTimHb0oc8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=YmVMTik/; arc=none smtp.client-ip=192.198.163.17
+	s=arc-20240116; t=1726041814; c=relaxed/simple;
+	bh=x2N6ahkVP2f1wV4kYKI9LoSxAZjIok/l/sgL/e6mnwU=;
+	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:References:
+	 In-Reply-To:Content-Type; b=Y2tebIX5hhyrPtTSzcGhPYUcqxf9fnPEdlWYW4Tf95lfeTzxK15X8hMWuNZZ9qDdngo+RJ49KozjEJUPG4cJeIRD1DgcyxfR+9bvM0+c6UYs3dxhxAEJ20AYzalZCczScluZ47gO+K7rNPgZ2wGbPboQieRkf3tBOnRJ51vSx8U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=oEhHuqsJ; arc=none smtp.client-ip=192.198.163.18
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="YmVMTik/"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="oEhHuqsJ"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1726041400; x=1757577400;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=2oz0F5oJtLf3lDzl1Y6YrOQ3N3Y7UGWXkPeLGHCuq6w=;
-  b=YmVMTik/Qpm8C+A9LgIlH9jCO3xPu1HlpSpTo+nh58Lgol4fzhN5qEHY
-   3mY2PtY99Vfm4aMAWv3Ulfok6dREcuZYL+EpEmUuZVZfKJBxAB7CIROZV
-   EK3BVXth767haRfZPy5eJYhfJecj8cJ1v6N2hfSBfCBl9zlN9dcoWrOTW
-   4xyTT4Gg2xKLUZFrgd9uA4/amg3Hn5VrQvN+IjmIca9mQT8gSyd8jRUS3
-   yhM/lMXXDB8Py3PEYrKI8alwu+GstnLMq+strmiC/suUhPTWLOrOd7P+n
-   tVT1W55Gdzyg8Jzhdyw9GWvb02F3lzNK1BcyMt9IoS5eHIDHqAeDD1BLv
-   w==;
-X-CSE-ConnectionGUID: zlGpWHCmS/C86Ocj3YQ9ww==
-X-CSE-MsgGUID: pZqY1JOiTCauQfE9t5mBxQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11191"; a="24701965"
+  t=1726041813; x=1757577813;
+  h=message-id:date:mime-version:from:subject:to:cc:
+   references:in-reply-to:content-transfer-encoding;
+  bh=x2N6ahkVP2f1wV4kYKI9LoSxAZjIok/l/sgL/e6mnwU=;
+  b=oEhHuqsJeH07354aDOO1wjK9ibDd5/fq8Po8Wu2vZk23s8ULoQRMu49f
+   4624nBr1Wi8c1eXxPeE0yXidY8O562BKN4bqHsYSMJjhw1A/oBu9lqAOb
+   IPkw/7sRelPESZEIJmxY7bN5HquURH2oeSYIhmwjqCb07e6nmZn8cOmOj
+   QC0mGGoUI4lgw3TTXaw/LNJ/32d4FD2HGkoTgL47G+NuSd1pdZ4TAciWd
+   PCK3uyxCX+cbq2IfAwW+ONXxZVuplhaWANp6SSAMvJHh2tPFu9vcvDC1h
+   fvMSFE96n6DL3Rt7VGlI02IEeBmWSf5qSFDFV/Wd2idaUt6GZ1xAOObVY
+   Q==;
+X-CSE-ConnectionGUID: 7OXtbTYgT8WUiFYsA/ZDTA==
+X-CSE-MsgGUID: 1Q67eSfpQc2KI9dFm2wZOA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11191"; a="24321006"
 X-IronPort-AV: E=Sophos;i="6.10,219,1719903600"; 
-   d="scan'208";a="24701965"
-Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Sep 2024 00:56:39 -0700
-X-CSE-ConnectionGUID: PbmpJdHzTOyCSpAe7s7LTQ==
-X-CSE-MsgGUID: UOasxn5ySSmCWZnsz4yM9w==
+   d="scan'208";a="24321006"
+Received: from orviesa002.jf.intel.com ([10.64.159.142])
+  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Sep 2024 01:03:32 -0700
+X-CSE-ConnectionGUID: rTrbspWIRIKFiyPoDmfQNg==
+X-CSE-MsgGUID: LPJ0WJG/RKGAcLZcWsc0RQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.10,219,1719903600"; 
-   d="scan'208";a="98118095"
-Received: from lkp-server01.sh.intel.com (HELO 53e96f405c61) ([10.239.97.150])
-  by fmviesa001.fm.intel.com with ESMTP; 11 Sep 2024 00:56:38 -0700
-Received: from kbuild by 53e96f405c61 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1soIDL-0003Cy-2f;
-	Wed, 11 Sep 2024 07:56:35 +0000
-Date: Wed, 11 Sep 2024 15:55:56 +0800
-From: kernel test robot <lkp@intel.com>
-To: Jarkko Sakkinen <jarkko@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	James Prestwood <prestwoj@gmail.com>
-Subject: [jarkko-tpmdd:tpm2key-v8 10/11]
- crypto/asymmetric_keys/tpm2_key_rsa.c:636:10: warning: variable 'ret' is
- uninitialized when used here
-Message-ID: <202409111527.uF380T7Y-lkp@intel.com>
+   d="scan'208";a="97989653"
+Received: from ahunter6-mobl1.ger.corp.intel.com (HELO [10.0.2.15]) ([10.246.16.81])
+  by orviesa002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Sep 2024 01:03:27 -0700
+Message-ID: <b13bcf7c-4d03-4b7d-8509-cebb64297a86@intel.com>
+Date: Wed, 11 Sep 2024 11:03:21 +0300
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+User-Agent: Mozilla Thunderbird
+From: Adrian Hunter <adrian.hunter@intel.com>
+Subject: Re: [PATCH v6 1/8] perf: support specify vdso path in cmdline
+To: Changbin Du <changbin.du@huawei.com>,
+ Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>,
+ Arnaldo Carvalho de Melo <acme@kernel.org>,
+ Namhyung Kim <namhyung@kernel.org>, Nathan Chancellor <nathan@kernel.org>
+Cc: Mark Rutland <mark.rutland@arm.com>,
+ Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+ Jiri Olsa <jolsa@kernel.org>, Ian Rogers <irogers@google.com>,
+ "Liang, Kan" <kan.liang@linux.intel.com>,
+ Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling
+ <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
+ linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+ llvm@lists.linux.dev, Hui Wang <hw.huiwang@huawei.com>
+References: <20240725021549.880167-1-changbin.du@huawei.com>
+ <20240725021549.880167-2-changbin.du@huawei.com>
+Content-Language: en-US
+Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
+ Business Identity Code: 0357606 - 4, Domiciled in Helsinki
+In-Reply-To: <20240725021549.880167-2-changbin.du@huawei.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jarkko/linux-tpmdd.git tpm2key-v8
-head:   79e909153c0a5ac21c2c5c0d4eac9229b3408178
-commit: 7d90c72ea84705971e66e2023d388c2d9958220d [10/11] keys: asymmetric: Add tpm2_key_rsa
-config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20240911/202409111527.uF380T7Y-lkp@intel.com/config)
-compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240911/202409111527.uF380T7Y-lkp@intel.com/reproduce)
+On 25/07/24 05:15, Changbin Du wrote:
+> The vdso dumped from process memory (in buildid-cache) lacks debugging
+> info. To annotate vdso symbols with source lines we need specify a
+> debugging version.
+> 
+> For x86, we can find them from your local build as
+> arch/x86/entry/vdso/vdso{32,64}.so.dbg. Or they may reside in
+> /lib/modules/<version>/vdso/vdso{32,64}.so on Ubuntu. But notice that
+> the buildid has to match.
+> 
+> $ sudo perf record -a
+> $ sudo perf report --objdump=llvm-objdump \
+>   --vdso arch/x86/entry/vdso/vdso64.so.dbg,arch/x86/entry/vdso/vdso32.so.dbg
+> 
+> Samples: 17K of event 'cycles:P', 4000 Hz, Event count (approx.): 1760
+> __vdso_clock_gettime  /work/linux-host/arch/x86/entry/vdso/vdso64.so.d
+> Percent│       movq    -48(%rbp),%rsi
+>        │       testq   %rax,%rax
+>        │     ;               return vread_hvclock();
+>        │       movq    %rax,%rdx
+>        │     ;               if (unlikely(!vdso_cycles_ok(cycles)))
+>        │     ↑ js      eb
+>        │     ↑ jmp     74
+>        │     ;               ts->tv_sec = vdso_ts->sec;
+>   0.02 │147:   leaq    2(%rbx),%rax
+>        │       shlq    $4, %rax
+>        │       addq    %r10,%rax
+>        │     ;               while ((seq = READ_ONCE(vd->seq)) & 1) {
+>   9.38 │152:   movl    (%r10),%ecx
+> 
+> When doing cross platform analysis, we also need specify the vdso path if
+> we are interested in its symbols.
+> 
+> v2: update documentation.
+> 
+> Signed-off-by: Changbin Du <changbin.du@huawei.com>
+> ---
+>  tools/perf/Documentation/perf-annotate.txt |  3 +
+>  tools/perf/Documentation/perf-c2c.txt      |  3 +
+>  tools/perf/Documentation/perf-inject.txt   |  3 +
+>  tools/perf/Documentation/perf-report.txt   |  3 +
+>  tools/perf/Documentation/perf-script.txt   |  3 +
+>  tools/perf/Documentation/perf-top.txt      |  3 +
+>  tools/perf/builtin-annotate.c              |  2 +
+>  tools/perf/builtin-c2c.c                   |  2 +
+>  tools/perf/builtin-inject.c                |  2 +
+>  tools/perf/builtin-report.c                |  2 +
+>  tools/perf/builtin-script.c                |  2 +
+>  tools/perf/builtin-top.c                   |  2 +
+>  tools/perf/util/disasm.c                   |  7 +-
+>  tools/perf/util/symbol.c                   | 82 +++++++++++++++++++++-
+>  tools/perf/util/symbol_conf.h              |  5 ++
+>  15 files changed, 119 insertions(+), 5 deletions(-)
+> 
+> diff --git a/tools/perf/Documentation/perf-annotate.txt b/tools/perf/Documentation/perf-annotate.txt
+> index b95524bea021..4b6692f9a793 100644
+> --- a/tools/perf/Documentation/perf-annotate.txt
+> +++ b/tools/perf/Documentation/perf-annotate.txt
+> @@ -58,6 +58,9 @@ OPTIONS
+>  --ignore-vmlinux::
+>  	Ignore vmlinux files.
+>  
+> +--vdso=<vdso1[,vdso2]>::
+> +	Specify vdso pathnames. You can specify up to two for multiarch-support.
+> +
+>  --itrace::
+>  	Options for decoding instruction tracing data. The options are:
+>  
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202409111527.uF380T7Y-lkp@intel.com/
+<SNIP>
 
-All warnings (new ones prefixed by >>):
+> diff --git a/tools/perf/builtin-annotate.c b/tools/perf/builtin-annotate.c
+> index b10b7f005658..e0aa657e6ca0 100644
+> --- a/tools/perf/builtin-annotate.c
+> +++ b/tools/perf/builtin-annotate.c
+> @@ -742,6 +742,8 @@ int cmd_annotate(int argc, const char **argv)
+>  		   "file", "vmlinux pathname"),
+>  	OPT_BOOLEAN('m', "modules", &symbol_conf.use_modules,
+>  		    "load module symbols - WARNING: use only with -k and LIVE kernel"),
+> +	OPT_CALLBACK(0, "vdso", NULL, "vdso1[,vdso2]", "vdso pathnames",
+> +		     parse_vdso_pathnames),
+>  	OPT_BOOLEAN('l', "print-line", &annotate_opts.print_lines,
+>  		    "print matching source lines (may be slow)"),
+>  	OPT_BOOLEAN('P', "full-paths", &annotate_opts.full_path,
 
->> crypto/asymmetric_keys/tpm2_key_rsa.c:636:10: warning: variable 'ret' is uninitialized when used here [-Wuninitialized]
-     636 |                 return ret;
-         |                        ^~~
-   crypto/asymmetric_keys/tpm2_key_rsa.c:632:9: note: initialize the variable 'ret' to silence this warning
-     632 |         int ret;
-         |                ^
-         |                 = 0
-   1 warning generated.
+<SNIP>
 
+> diff --git a/tools/perf/util/disasm.c b/tools/perf/util/disasm.c
+> index e10558b79504..7e26d5215640 100644
+> --- a/tools/perf/util/disasm.c
+> +++ b/tools/perf/util/disasm.c
+> @@ -16,6 +16,7 @@
+>  #include "debug.h"
+>  #include "disasm.h"
+>  #include "dso.h"
+> +#include "vdso.h"
+>  #include "env.h"
+>  #include "evsel.h"
+>  #include "map.h"
+> @@ -1126,7 +1127,7 @@ static int dso__disassemble_filename(struct dso *dso, char *filename, size_t fil
+>  	if (pos && strlen(pos) < SBUILD_ID_SIZE - 2)
+>  		dirname(build_id_path);
+>  
+> -	if (dso__is_kcore(dso))
+> +	if (dso__is_kcore(dso) || dso__is_vdso(dso))
 
-vim +/ret +636 crypto/asymmetric_keys/tpm2_key_rsa.c
+Sorry for very long delay.
 
-   625	
-   626	/*
-   627	 * Attempt to parse a data blob for a key as a TPM private key blob.
-   628	 */
-   629	static int tpm2_key_rsa_preparse(struct key_preparsed_payload *prep)
-   630	{
-   631		struct tpm2_key *key;
-   632		int ret;
-   633	
-   634		key = tpm2_key_decode(prep->data, prep->datalen);
-   635		if (IS_ERR(key))
- > 636			return ret;
-   637	
-   638		if (key->oid != OID_TPMLoadableKey) {
-   639			kfree(key);
-   640			return -EBADMSG;
-   641		}
-   642	
-   643		ret = __tpm2_key_rsa_preparse(key);
-   644		if (ret < 0) {
-   645			kfree(key);
-   646			return ret;
-   647		}
-   648	
-   649		prep->payload.data[asym_subtype] = &tpm2_key_rsa_subtype;
-   650		prep->payload.data[asym_key_ids] = NULL;
-   651		prep->payload.data[asym_crypto] = key;
-   652		prep->payload.data[asym_auth] = NULL;
-   653		prep->quotalen = 100;
-   654	
-   655		return 0;
-   656	}
-   657	
+This patch (probably this bit here) breaks annotation of vdso.
+To allow for bisection, you need to arrange changes so that each
+patch leaves things in a working state.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+However, I disagree with adding --vdso option since with just
+patch 8 alone, it would be possible to do:
+
+  perf buildid-cache --remove /work/linux/arch/x86/entry/vdso/vdso64.so.dbg
+  perf buildid-cache --add /work/linux/arch/x86/entry/vdso/vdso64.so.dbg
+
+and same of vdso32.
+
+That would leave the buildid-cache containing only the debug versions,
+which would mean you will only get the debug versions, and it would only
+need to be done once per kernel instead of having to add --vdso to
+every perf command.
+
