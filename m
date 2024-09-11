@@ -1,154 +1,156 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 56CA8143898
-	for <llvm@lists.linux.dev>; Wed, 11 Sep 2024 08:05:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D209C1714B9
+	for <llvm@lists.linux.dev>; Wed, 11 Sep 2024 08:18:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726041933; cv=none; b=bWjxTwk9dYXGfvN2vAHcrcu3/17HG0lY2iGijqF14yrJCjsgaNhX9ladu7uMbsmaGmDr732FZxHFbdp/d3jFCnPZ+oALyF5kRgggx9dlsB1aAs4eDbE0uhroX5C7eK+r4lAg5uncYZnwHGstSJMTXOhUNvV2f/zSSYdonUyrocM=
+	t=1726042702; cv=none; b=jawKK3hyrLyvrk+eYqHMId5SOJfQ8lsOzvNQM33n07MyPq32ALgPVyvaZeikIWe/ZOheyXWdOZ83YaaMz0ru/au8PAic456tDsbyydigBSKFPlyYnqZjv7WZpADXApp/GzVEa1Tgm3DwfHTFQ1zdItiV27Wro7v//gr3gRB2NAc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726041933; c=relaxed/simple;
-	bh=/ETTyYJZAtrlhlGoUsbijw1LRkWz+eoO3Dx3PvHOT1k=;
-	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:References:
-	 In-Reply-To:Content-Type; b=bdVQf6FNhHO9rkEtii6KPdQxj5mIqSbQj5nfF5lUX7OPh1I1Pmzft296Xm5iB48di/A0JNKsqRFEZuwm1u7kDqnwC3sl1jy5NWb+apJUDrpc5kCTl8xQevy2z5TZYSXR+KrX/thXXHf+og+sJo97WvE+jSgN9Wr6pWsF3RyXxyw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=jMAQzrIm; arc=none smtp.client-ip=198.175.65.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="jMAQzrIm"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1726041932; x=1757577932;
-  h=message-id:date:mime-version:from:subject:to:cc:
-   references:in-reply-to:content-transfer-encoding;
-  bh=/ETTyYJZAtrlhlGoUsbijw1LRkWz+eoO3Dx3PvHOT1k=;
-  b=jMAQzrImp4KZuQ6+apCtgGeLGEjqxW+rC/5maY5Q1LmIJdSKjn5Qrcfc
-   FrBLpU3csqTJM8eNs9aXQZzaGr0CnPmZDUE+yq2O/wh48Oz0gHs0wy0Lk
-   mW7hjGC8u+cDqulEMtLXMsjgJetzp039Ut+BCvg9FMvZVNvo7+s2eFDu6
-   e+JM45Yr95fFV8kw6KVdqr2ci5VoHOkFle3VJYYWYv/b6S0hr5jzP33Ab
-   SI75dNRd0easnJHdeA1aBKFG9l7LlN+ni+V+GStonFYPfwrSYQ3FtS15J
-   SUPnUp4exUEEjsDABzgeR0W37p5GgdUPKmFXO4F14rU2V7vTYCF9KNiio
-   w==;
-X-CSE-ConnectionGUID: QgobKadhSv+noU8fvMkHLg==
-X-CSE-MsgGUID: L/5jc7BsTm6CqcrR+Bqvbw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11191"; a="28565973"
-X-IronPort-AV: E=Sophos;i="6.10,219,1719903600"; 
-   d="scan'208";a="28565973"
-Received: from orviesa007.jf.intel.com ([10.64.159.147])
-  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Sep 2024 01:05:30 -0700
-X-CSE-ConnectionGUID: zBTBcCDSS7mQlT+bFuzpTg==
-X-CSE-MsgGUID: f/tysCQgQjOPqLaYPiqLGA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.10,219,1719903600"; 
-   d="scan'208";a="67790972"
-Received: from ahunter6-mobl1.ger.corp.intel.com (HELO [10.0.2.15]) ([10.246.16.81])
-  by orviesa007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Sep 2024 01:05:26 -0700
-Message-ID: <68f29f30-f0f8-4cda-a99a-68f51838dcd7@intel.com>
-Date: Wed, 11 Sep 2024 11:05:20 +0300
+	s=arc-20240116; t=1726042702; c=relaxed/simple;
+	bh=S3pm95ToL3JHQkbqiOGpkw8FdP37yZ6JFOgmrb7/W8g=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=XO0U3KFazfBqyuvV9O4dJokZJhRuQ4bOvFjjQfW1txW3qDU1te0GYsz5CB0KmZXRZqSBjSTyG1l+qUXv7/Khj5T/o88jlJVFUNyZy6wpNwguIgFeOKhD0MXMWwfJemuPEpbhxouTlJuID2ocFzIdUsbWhXs0hiUWuep6NY2ub6c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <mkl@pengutronix.de>)
+	id 1soIYB-0006va-8T; Wed, 11 Sep 2024 10:18:07 +0200
+Received: from [2a0a:edc0:0:b01:1d::7b] (helo=bjornoya.blackshift.org)
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.94.2)
+	(envelope-from <mkl@pengutronix.de>)
+	id 1soIY9-0075kf-Kg; Wed, 11 Sep 2024 10:18:05 +0200
+Received: from pengutronix.de (pd9e595f8.dip0.t-ipconnect.de [217.229.149.248])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	(Authenticated sender: mkl-all@blackshift.org)
+	by smtp.blackshift.org (Postfix) with ESMTPSA id 49B393380B1;
+	Wed, 11 Sep 2024 08:18:05 +0000 (UTC)
+Date: Wed, 11 Sep 2024 10:18:04 +0200
+From: Marc Kleine-Budde <mkl@pengutronix.de>
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: Simon Horman <horms@kernel.org>, kernel@pengutronix.de, 
+	Vincent Mailhol <mailhol.vincent@wanadoo.fr>, "David S. Miller" <davem@davemloft.net>, 
+	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, 
+	Paolo Abeni <pabeni@redhat.com>, Heiko Stuebner <heiko@sntech.de>, linux-can@vger.kernel.org, 
+	netdev@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+	linux-rockchip@lists.infradead.org, llvm@lists.linux.dev, patches@lists.linux.dev
+Subject: Re: [PATCH] can: rockchip_canfd: fix return type of
+ rkcanfd_start_xmit()
+Message-ID: <20240911-quirky-wandering-mastodon-fea5b3-mkl@pengutronix.de>
+References: <20240906-rockchip-canfd-wifpts-v1-1-b1398da865b7@kernel.org>
+ <20240909084448.GU2097826@kernel.org>
+ <20240909-arcane-practical-petrel-015d24-mkl@pengutronix.de>
+ <20240909143546.GX2097826@kernel.org>
+ <20240910-utopian-meticulous-dodo-4ec230-mkl@pengutronix.de>
+ <20240910190525.GA1169362@thelio-3990X>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-From: Adrian Hunter <adrian.hunter@intel.com>
-Subject: Re: [PATCH v6 8/8] perf buildid-cache: recognize vdso when adding
- files
-To: Changbin Du <changbin.du@huawei.com>,
- Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>,
- Arnaldo Carvalho de Melo <acme@kernel.org>,
- Namhyung Kim <namhyung@kernel.org>, Nathan Chancellor <nathan@kernel.org>
-Cc: Mark Rutland <mark.rutland@arm.com>,
- Alexander Shishkin <alexander.shishkin@linux.intel.com>,
- Jiri Olsa <jolsa@kernel.org>, Ian Rogers <irogers@google.com>,
- "Liang, Kan" <kan.liang@linux.intel.com>,
- Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling
- <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
- linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
- llvm@lists.linux.dev, Hui Wang <hw.huiwang@huawei.com>
-References: <20240725021549.880167-1-changbin.du@huawei.com>
- <20240725021549.880167-9-changbin.du@huawei.com>
-Content-Language: en-US
-Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
- Business Identity Code: 0357606 - 4, Domiciled in Helsinki
-In-Reply-To: <20240725021549.880167-9-changbin.du@huawei.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="rzg4bxks4bvdsike"
+Content-Disposition: inline
+In-Reply-To: <20240910190525.GA1169362@thelio-3990X>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: llvm@lists.linux.dev
 
-On 25/07/24 05:15, Changbin Du wrote:
-> Identify vdso by file name matching. The vdso objects have name
-> as vdso[32,64].so[.dbg].
-> 
-> $ perf buildid-cache -a /work/linux/arch/x86/entry/vdso/vdso64.so.dbg
-> 
-> Without this change, adding vdso using above command actually will never
-> be used.
-> 
-> Signed-off-by: Changbin Du <changbin.du@huawei.com>
 
-A couple of comments, but address those then add:
+--rzg4bxks4bvdsike
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Reviewed-by: Adrian Hunter <adrian.hunter@intel.com>
+On 10.09.2024 12:05:25, Nathan Chancellor wrote:
+> > I was a bit hasty yesterday, clang-20 and W=3D1 produces these errors:
+> >=20
+> > | include/linux/vmstat.h:517:36: error: arithmetic between different en=
+umeration types ('enum node_stat_item' and 'enum lru_list') [-Werror,-Wenum=
+-enum-conversion]
+> > |   517 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip=
+ "nr_"
+> > |       |                               ~~~~~~~~~~~ ^ ~~~
+> > | 1 error generated.
+>=20
+> Unfortunately, this is a completely tangential issue. You can see some
+> backstory behind it in commit 75b5ab134bb5 ("kbuild: Move
+> -Wenum-{compare-conditional,enum-conversion} into W=3D1"). To be honest, I
+> should consider moving that to W=3D2...
 
-> ---
->  tools/perf/builtin-buildid-cache.c | 26 +++++++++++++++++++++++++-
->  1 file changed, 25 insertions(+), 1 deletion(-)
-> 
-> diff --git a/tools/perf/builtin-buildid-cache.c b/tools/perf/builtin-buildid-cache.c
-> index b0511d16aeb6..8edea9044a65 100644
-> --- a/tools/perf/builtin-buildid-cache.c
-> +++ b/tools/perf/builtin-buildid-cache.c
-> @@ -172,6 +172,30 @@ static int build_id_cache__add_kcore(const char *filename, bool force)
->  	return 0;
->  }
->  
-> +static bool filename_is_vdso(const char *filename)
-> +{
-> +	char *fname, *bname;
-> +	static const char * const vdso_names[] = {
-> +		"vdso.so", "vdso32.so", "vdso64.so", "vdsox32.so"
-> +	};
-> +
-> +	fname = strdup(filename);
-> +	if (!fname) {
-> +		pr_err("no mememory\n");
+Thanks for the background info. I wanted to point out that at least
+clang-20 with W=3D1 finds _something_, though not that what I wanted to
+reproduce :)
 
-mememory -> memory
+> > However I fail to reproduce the ndo_start_xmit problem. Even with 18.1.8
+> > from kernel.org.
+> >=20
+> >=20
+> > The following command (ARCH is unset, compiling x86 -> x86) produces the
+> > above shown "vmstat.h" problems....
+> >=20
+> > | $ make LLVM=3D1 LLVM_IAS=3D1 LLVM_SUFFIX=3D-20 drivers/net/can/rockch=
+ip/  W=3D1 CONFIG_WERROR=3D0
+>=20
+> FYI, you could shorten this to just:
+>=20
+>   $ make LLVM=3D-20 drivers/net/can/rockchip/ W=3D1 CONFIG_WERROR=3D0
+>=20
+> As LLVM_SUFFIX will be set through LLVM and LLVM_IAS has defaulted to 1
+> since 5.15.
 
-> +		return false;
-> +	}
+Thanks, scripts updated :)
 
-fname is never freed.
+> Does CONFIG_WERROR=3D0 work? It seems like it is still present above.
 
-> +
-> +	bname = basename(fname);
-> +	if (!bname)
-> +		return false;
-> +
-> +	for (unsigned int i = 0; i < ARRAY_SIZE(vdso_names); i++) {
+Yes, it works.
 
-'unsigned' is unnecessary
+> > ... but not the ndo_start_xmit problem.
+> >=20
+> > Am I missing a vital .config option?
+>=20
+> No, I might not have made it clear in this commit message but this
+> warning is not on by default. I am looking to turn it on at some point
+> so I keep up with the warnings that it produces but there is one
+> subsystem that has several instances and I am unsure of how to solve
+> them to the maintainer's satisfaction. You can test it by adding
+>=20
+>   KCFLAGS=3D-Wincompatible-function-pointer-types-strict
+>=20
+> to your make command above and it should reproduce.
 
-> +		if (!strncmp(bname, vdso_names[i], strlen(vdso_names[i])))
+That was the missing link. Can reproduce now, thanks!
 
-Use strstarts()
+regards,
+Marc
 
-> +			return true;
-> +	}
-> +	return false;
-> +}
-> +
->  static int build_id_cache__add_file(const char *filename, struct nsinfo *nsi)
->  {
->  	char sbuild_id[SBUILD_ID_SIZE];
-> @@ -189,7 +213,7 @@ static int build_id_cache__add_file(const char *filename, struct nsinfo *nsi)
->  
->  	build_id__sprintf(&bid, sbuild_id);
->  	err = build_id_cache__add_s(sbuild_id, filename, nsi,
-> -				    false, false);
-> +				    false, filename_is_vdso(filename));
->  	pr_debug("Adding %s %s: %s\n", sbuild_id, filename,
->  		 err ? "FAIL" : "Ok");
->  	return err;
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde          |
+Embedded Linux                   | https://www.pengutronix.de |
+Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
 
+--rzg4bxks4bvdsike
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEUEC6huC2BN0pvD5fKDiiPnotvG8FAmbhUjkACgkQKDiiPnot
+vG/tHQf+NTtvl9Ppp0bGbHnkqrViW25ecpIjPSkKou/0aP23Rr+N4EsbvqwAoDOK
+QTzEW6pIIPog26QQx66TpvOVFKnqECRugjegrzVlaozWMJn0RT9RO2jw8ezmi1qJ
+A+hF6ivY4IgKdIM21ojVnM0tgLQWC2YILXtmibZEgUcU6tCCSt0W1XiVLWn7tA8Z
+vJkNKxWoVnHMAn9a1N9A+miYLHrFGLKb5Wy0oxWUokGQ0eXWhhWWet1DmudjEgQz
+8rShcLAf7Ew0uB+ziNkrdJhcNviEU/PeFx54/Q28Rnp3fH+ZxReqke9nLH363wLA
+TVpVWiK1iygrjmRr+gWrZdlarnd2mQ==
+=O5L3
+-----END PGP SIGNATURE-----
+
+--rzg4bxks4bvdsike--
