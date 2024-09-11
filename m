@@ -1,78 +1,122 @@
-Received: from mail.nfschina.com (unknown [42.101.60.213])
-	by smtp.subspace.kernel.org (Postfix) with SMTP id A61AA185B7B
-	for <llvm@lists.linux.dev>; Wed, 11 Sep 2024 11:55:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=42.101.60.213
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0926819343B;
+	Wed, 11 Sep 2024 14:11:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726055710; cv=none; b=GcHIWtuZLKiksp11ujiE7dBkqk6JvoH/qMypkQ/J5OqW3Wa9vxgmTAJhtEhaBF/EWUQVcpLTB5n6SWToJj+ipDwFGKnIYKKHAD8iXtrbQolU5UCjQ+M7jyEMP3Qye8VZeX/7DQpShawhZC7+dELc8AINwH2sPA2lejw2e7Ypmek=
+	t=1726063864; cv=none; b=WbdubfKaMuyu66F9e2kRJFsriBy7xq34lmIyCIKULglcou41jQP81Azx3QWdC6jMaGCQxyVOpGcJ4q3TCdm4qrXkLAUxQ6e47IBXdDCX37n1ucabDTX0ZD4G6fpYDEv5lOuc4bKY9aK+jqC0w31d+xtx3XTY4W3oJ9+eYLfjzBU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726055710; c=relaxed/simple;
-	bh=LhFedJCR94M2rhZThQJpmVrhF9jDCYHsq2BK8/AdHs4=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=fVF7QEpwbLf70lB7QUIvKUqaBFXYLvxg/rR0vwBUV+gnyapdvBOtgVZEw71foXcOfCKKWyOmqkYU2jqQ7gBYR94Hv3G3SQj5WW8IZg6zPoIgcEcvlcJ2WgmfeV3Lvp2UCx9iocHq+AN/Rh/zJs6Sgz/hZ6CIVetAjUr9Tiq1GSs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=nfschina.com; spf=pass smtp.mailfrom=nfschina.com; arc=none smtp.client-ip=42.101.60.213
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=nfschina.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nfschina.com
-Received: from localhost.localdomain (unknown [180.167.10.98])
-	by mail.nfschina.com (MailData Gateway V2.8.8) with ESMTPSA id 7A6326096305A;
-	Wed, 11 Sep 2024 19:54:58 +0800 (CST)
-X-MD-Sfrom: suhui@nfschina.com
-X-MD-SrcIP: 180.167.10.98
-From: Su Hui <suhui@nfschina.com>
-To: herve.codina@bootlin.com,
-	lgirdwood@gmail.com,
-	broonie@kernel.org,
-	perex@perex.cz,
-	tiwai@suse.com,
-	nathan@kernel.org,
-	ndesaulniers@google.com,
-	morbo@google.com,
-	justinstitt@google.com
-Cc: Su Hui <suhui@nfschina.com>,
-	alsa-devel@alsa-project.org,
-	linux-sound@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev,
-	kernel-janitors@vger.kernel.org
-Subject: [PATCH] ASoC: codecs: avoid possible garbage value in peb2466_reg_read()
-Date: Wed, 11 Sep 2024 19:54:50 +0800
-Message-Id: <20240911115448.277828-1-suhui@nfschina.com>
-X-Mailer: git-send-email 2.30.2
+	s=arc-20240116; t=1726063864; c=relaxed/simple;
+	bh=9xwPbs+FW8xyLLdAL+II5yA/9QMzxzCjdfhm7LcTA7o=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=mNsWrW6q34GkZ2V9PJZV9Xs/RIyD8bMnYLHHw4EzV6YQRcVJmiO0rbw3TriDRi8H7UWd4uD7kNpuMFzgcuA78iqCMQUqqg+M5lZQNuW/4jAOXyUYO20oln4lCeYzfgHzJsyddhv3Ra0adFJGhLzRtEQMUS/F8ukPqzpezO09Jjo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=nZp5eFCM; arc=none smtp.client-ip=192.198.163.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="nZp5eFCM"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1726063863; x=1757599863;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=9xwPbs+FW8xyLLdAL+II5yA/9QMzxzCjdfhm7LcTA7o=;
+  b=nZp5eFCMIBAj7Ro5VlTnZ23XTbLQyxaTudtU4n26AdYg+xBNFx8/I2WW
+   omVqt4GdxhTcqZyGKR2c9g7QPzF/22PEDS0G1vQ0G/1tqAUvtK2wrmUeY
+   FGD2fztfIrqpxZQI4jJ639s3fQJtQpKeBQQTm2ZBkJcll4scM7rHnlRak
+   445hqK0u/KvNYMRX7vZX0bV8+DPB58JUlGKU/b5dBKaAzce+gvD7WdXVG
+   zpeP12ob5Vrg63NJwNazGvkIl6qeLKYvUkkrGN2SgnXdKTDI/YayJnS+r
+   vqpSj64gUPC+bJUt0+jVdGgx+1HTBNDr1GXQ3uwUMpWF60P0EIZHkEx/j
+   Q==;
+X-CSE-ConnectionGUID: OgmMKiXXRsGuDrA0qkBHYA==
+X-CSE-MsgGUID: 3iU/xMJSTBa9ay+cQbZ1WA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11192"; a="36253991"
+X-IronPort-AV: E=Sophos;i="6.10,220,1719903600"; 
+   d="scan'208";a="36253991"
+Received: from fmviesa006.fm.intel.com ([10.60.135.146])
+  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Sep 2024 07:11:00 -0700
+X-CSE-ConnectionGUID: 7DWbzs2sQ2Geo2poq3LZog==
+X-CSE-MsgGUID: 63S8/QGLReKP9PGIwC9Vhw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.10,220,1719903600"; 
+   d="scan'208";a="67001194"
+Received: from lkp-server01.sh.intel.com (HELO 53e96f405c61) ([10.239.97.150])
+  by fmviesa006.fm.intel.com with ESMTP; 11 Sep 2024 07:10:57 -0700
+Received: from kbuild by 53e96f405c61 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1soO3b-0003gi-03;
+	Wed, 11 Sep 2024 14:10:55 +0000
+Date: Wed, 11 Sep 2024 22:10:30 +0800
+From: kernel test robot <lkp@intel.com>
+To: Alice Ryhl <aliceryhl@google.com>, Miguel Ojeda <ojeda@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+	=?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
+	Benno Lossin <benno.lossin@proton.me>,
+	Andreas Hindborg <a.hindborg@samsung.com>,
+	rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Alice Ryhl <aliceryhl@google.com>
+Subject: Re: [PATCH v3] rust: add global lock support
+Message-ID: <202409112144.dcfxjqII-lkp@intel.com>
+References: <20240910-static-mutex-v3-1-5bebd11bdf3b@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240910-static-mutex-v3-1-5bebd11bdf3b@google.com>
 
-Clang static checker (scan-build) warning:
-sound/soc/codecs/peb2466.c:232:8:
-Assigned value is garbage or undefined [core.uninitialized.Assign]
-  232 |                 *val = tmp;
-      |                      ^ ~~~
+Hi Alice,
 
-When peb2466_read_byte() fails, 'tmp' will have a garbage value.
-Add a judgemnet to avoid this problem.
+kernel test robot noticed the following build errors:
 
-Fixes: 227f609c7c0e ("ASoC: codecs: Add support for the Infineon PEB2466 codec")
-Signed-off-by: Su Hui <suhui@nfschina.com>
----
- sound/soc/codecs/peb2466.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+[auto build test ERROR on 93dc3be19450447a3a7090bd1dfb9f3daac3e8d2]
 
-diff --git a/sound/soc/codecs/peb2466.c b/sound/soc/codecs/peb2466.c
-index 76ee7e3f4d9b..67ea70cef0c7 100644
---- a/sound/soc/codecs/peb2466.c
-+++ b/sound/soc/codecs/peb2466.c
-@@ -229,7 +229,8 @@ static int peb2466_reg_read(void *context, unsigned int reg, unsigned int *val)
- 	case PEB2466_CMD_XOP:
- 	case PEB2466_CMD_SOP:
- 		ret = peb2466_read_byte(peb2466, reg, &tmp);
--		*val = tmp;
-+		if (!ret)
-+			*val = tmp;
- 		break;
- 	default:
- 		dev_err(&peb2466->spi->dev, "Not a XOP or SOP command\n");
+url:    https://github.com/intel-lab-lkp/linux/commits/Alice-Ryhl/rust-add-global-lock-support/20240910-222519
+base:   93dc3be19450447a3a7090bd1dfb9f3daac3e8d2
+patch link:    https://lore.kernel.org/r/20240910-static-mutex-v3-1-5bebd11bdf3b%40google.com
+patch subject: [PATCH v3] rust: add global lock support
+config: x86_64-rhel-8.3-rust (https://download.01.org/0day-ci/archive/20240911/202409112144.dcfxjqII-lkp@intel.com/config)
+compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240911/202409112144.dcfxjqII-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202409112144.dcfxjqII-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> error[E0432]: unresolved import `super::__static_lock_ty_MY_COUNTER`
+   --> rust/doctests_kernel_generated.rs:4818:1
+   |
+   4818 | / kernel::sync::global_lock! {
+   4819 | |     // SAFETY: Initialized in module initializer before first use.
+   4820 | |     static MY_COUNTER: Mutex<u32> = unsafe { uninit };
+   4821 | |     value: 0;
+   4822 | | }
+   | |_^ no `__static_lock_ty_MY_COUNTER` in the root
+   |
+   = note: this error originates in the macro `$crate::global_lock` which comes from the expansion of the macro `kernel::sync::global_lock` (in Nightly builds, run with -Z macro-backtrace for more info)
+--
+>> error[E0432]: unresolved import `super::__static_lock_ty_MY_MUTEX`
+   --> rust/doctests_kernel_generated.rs:4886:1
+   |
+   4886 | / kernel::sync::global_lock! {
+   4887 | |     // SAFETY: Initialized in module initializer before first use.
+   4888 | |     static MY_MUTEX: Mutex<()> = unsafe { uninit };
+   4889 | |     value: ();
+   4890 | |     guard: MyGuard;
+   4891 | |     locked_by: LockedByMyMutex;
+   4892 | | }
+   | |_^ no `__static_lock_ty_MY_MUTEX` in the root
+   |
+   = note: this error originates in the macro `$crate::global_lock` which comes from the expansion of the macro `kernel::sync::global_lock` (in Nightly builds, run with -Z macro-backtrace for more info)
+
 -- 
-2.30.2
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
