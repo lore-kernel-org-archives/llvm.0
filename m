@@ -1,142 +1,142 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-vs1-f54.google.com (mail-vs1-f54.google.com [209.85.217.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E901186E3A;
-	Thu, 12 Sep 2024 21:03:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CEA0119259A
+	for <llvm@lists.linux.dev>; Thu, 12 Sep 2024 21:36:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.217.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726175005; cv=none; b=p+r/nAz0SzG0rJAK4H059SXa9sjf5v0eYKA+uVXlSoBOtv2c1qzy0bxjGoj7o+m2ARbgBg4Q8TraHOqLliSHbeYra5NOS/ZVyQaq1733Ap0l4oVQmA3YiBPDTqTDAYAFyZZFHoYXH8jBNNgwYjJn/MJ970FHhlS5Lg9g4QjbEBc=
+	t=1726177004; cv=none; b=KKwzwJ33psqOqfpdR0zI+8XZDFzaY8XWBg/38ZaDSwcq67+HwGB3seSfvtt2F3xSciCERzLYsD3gAKYLggIj1UoaAOCPOAP6VEpPjR1tqauN4pTPUIDPWhl4YT81h7Q0uKRTbufzM+3zy+AyPGU1Vfdv5NQd84CWXyRg3JFZTmo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726175005; c=relaxed/simple;
-	bh=l0M0BTQTdn4ZzXg3VfpaKLI6M9qF07AMt5X4kfEMAmk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=pMTo0ysoOuQ0oq1KhyFmGf0lsvfmtgyIvmym6aDXkx4rNpnsaU0yTsYaejgF+hxWZES9bcmafMSHA8fdycDMUAv77wxWblpV5lAGiTL9SkrPdVQrBuRB73xhvcImOaAgYViJjnfzQC2BwsqVFRA7tU3JgI3D16KShDbXQUJd2H8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=E+Tna/uv; arc=none smtp.client-ip=192.198.163.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1726177004; c=relaxed/simple;
+	bh=pDqhAgtaGUIk/5wz/QDpvGvuqyiDlqtUCUYvT654FxE=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=XB7v+x+qw40/2xSTw+LvtraQkPAMrxAjlTIw0JbuJN/PP/p/PcvXw5MuKesGybJyvumsuM4wrT53DE2cpV/2pCbOKda5zXyJ7rghEQhooQBl/kqHECGE9oGSxodF8nuU2BOlzNk1BTRcWvlvcTZRsWIdWDWAIwYy9BaXdomYP9o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=hnyOKZfX; arc=none smtp.client-ip=209.85.217.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="E+Tna/uv"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1726175004; x=1757711004;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=l0M0BTQTdn4ZzXg3VfpaKLI6M9qF07AMt5X4kfEMAmk=;
-  b=E+Tna/uvPGtZNNDUT6BC4J0oABxnD/UdRecBCvrowYO6gjqZgcHZ6cY4
-   GQ3lmOKUSOWHw7zNX3X3/K5yz4rG4NgzxDEpHCNrPPsR3Qi5Ui2k4h1hE
-   Dr//1WjET8WC3XYPwrRkLX7q6OksY+WKeNH/cjVdQVDVa38aU5cwaqtBL
-   Rbtu0b3PZk5ZB3E+shmDxhDZniV6BIKEAgB2ny3x2LIozu3TNGhWRu0wv
-   EY6iFuOWXbBWDSDbZbkc9ICuysPRZRjDwO1BGZNT4PO60hiFCA1MuZOFq
-   Mr2cSBkTQYQl3Sj8CPyUMMRxlC4VHA85vJ34i+1REVOlpmb53QYrVZNUJ
-   g==;
-X-CSE-ConnectionGUID: 8AZDWkLWSkSh8eMxqG9JIg==
-X-CSE-MsgGUID: rrlajGd1SYSIwacP4bHqNg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11193"; a="50474845"
-X-IronPort-AV: E=Sophos;i="6.10,224,1719903600"; 
-   d="scan'208";a="50474845"
-Received: from orviesa003.jf.intel.com ([10.64.159.143])
-  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Sep 2024 14:03:23 -0700
-X-CSE-ConnectionGUID: HE6EROGdStyoIENWrXdAEw==
-X-CSE-MsgGUID: gR2t+/evRNiAO0PTOBpCjw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.10,224,1719903600"; 
-   d="scan'208";a="72610679"
-Received: from lkp-server01.sh.intel.com (HELO 53e96f405c61) ([10.239.97.150])
-  by orviesa003.jf.intel.com with ESMTP; 12 Sep 2024 14:03:20 -0700
-Received: from kbuild by 53e96f405c61 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1soqyE-0005h8-0J;
-	Thu, 12 Sep 2024 21:03:18 +0000
-Date: Fri, 13 Sep 2024 05:02:48 +0800
-From: kernel test robot <lkp@intel.com>
-To: Levi Yun <yeoreum.yun@arm.com>, peterz@infradead.org,
-	mark.rutland@arm.com, james.clark@linaro.org, rostedt@goodmis.org,
-	mhiramat@kernel.org, mathieu.desnoyers@efficios.com, mingo@elte.hu
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
-	Levi Yun <yeoreum.yun@arm.com>
-Subject: Re: [PATCH] trace/trace_event_perf: remove duplicate samples on the
- first tracepoint event
-Message-ID: <202409130445.H7LIIGpd-lkp@intel.com>
-References: <20240911122747.4168556-1-yeoreum.yun@arm.com>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="hnyOKZfX"
+Received: by mail-vs1-f54.google.com with SMTP id ada2fe7eead31-49becc93d6aso398546137.1
+        for <llvm@lists.linux.dev>; Thu, 12 Sep 2024 14:36:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1726177001; x=1726781801; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=aV/uSQHel3G7NaBIuUYTK9WPHlxT4nG6GtUVNt1aiiw=;
+        b=hnyOKZfXhToYhIIiWBOoUi2HUsZX6LOyi7U14nmRA8UCRxr7w3nu4uDatIM6KVii+a
+         Sdgea5Hnbznyh1quumpuM5hIAzt8om46cfsQE4sc+PZ6mq8es0DmPuYvli5fg8MVRgmg
+         MK3t5gdCffqAv/m/GMwNUrmoDiNqU0n6zSVcdgAcuyF7WSy9dRXVbbJPxcyW8kvUub5H
+         g+o6YIQ/zKAmVfhJgeHXhjbO4FaJ7YUf3a+92OLRQEH+uKxo1dD1Y91nvcHDGjmnOs7n
+         6nK407aKJxcQlk19csKTJt2etHpSD3N8iY6OO/rhLzYMKu5Dk3EOe7pv+iMDQwnU4oq5
+         Fl+g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1726177001; x=1726781801;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=aV/uSQHel3G7NaBIuUYTK9WPHlxT4nG6GtUVNt1aiiw=;
+        b=kD5KxTdupfSxzkLCU80jnKtW9DJVaE+quZuKceAhVUKEteObr1WIAAXcRwJp37fLQe
+         zrQrzxDeuhelWWNMYww5fnxoHqllCj56zREmsQJqpbPLOCFvn1s4hDY4xvhsP0aFbAat
+         hwzL2F//Mbi2hTMOUqrdi8vCMHTHeHy52j76lokQEujlgi+c0+2ThwGuSxWKBEsnfzKi
+         Vb5zQ5Z8V5eQJ2e0Z6ZZoHKcdafXlfUffYJIk+yFy0wqR+fJtutEAyrOuU0e7kYf5eQY
+         1m4H3zbGHCySxdedSWPuWgjvo9T2Qhr8CTkfZdpE4dUuKaLcHDtNiZmwv6gXyXMdy3NY
+         Um9Q==
+X-Forwarded-Encrypted: i=1; AJvYcCXH4RxuqA4KCau0eJZWJgC8RtsXbJtwqxQq7p5x4Ucyk2qpF5EC/Ar67daa138c/zC9Hq4/@lists.linux.dev
+X-Gm-Message-State: AOJu0YzNZ+hvLYFcpKFwg7b0aVx5+XhQqte0xJREX/x8EM3upMAIidhF
+	bBe0f0PZuzPqhQNWxVHbtxZ4s3+RLudho2OcyHDAyQ1633U8qRKqyIXeRuPJlv0tItRHFc3gs7Q
+	PhkBT3g8hP7zrD8QAbQk4th+fa4eKbvbaoaa3
+X-Google-Smtp-Source: AGHT+IH05pjtSDhnhSat0T4TMcHpVIIy9ELPbIRaoAr2cIE1oDrkYRJOYxE3o0MeBcNuyMPFcCB85eDpRsk4NuzwEyU=
+X-Received: by 2002:a05:6102:511e:b0:49b:be3b:8812 with SMTP id
+ ada2fe7eead31-49d4157c4eemr4055765137.24.1726177000369; Thu, 12 Sep 2024
+ 14:36:40 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240911122747.4168556-1-yeoreum.yun@arm.com>
+References: <20240516-kunit-compile-commands-v1-1-05fc32b79312@google.com>
+In-Reply-To: <20240516-kunit-compile-commands-v1-1-05fc32b79312@google.com>
+From: Justin Stitt <justinstitt@google.com>
+Date: Thu, 12 Sep 2024 14:36:28 -0700
+Message-ID: <CAFhGd8pLAa7vkVUtcdhvdk+oq=dOSGQWCOf0oZK7pszaLdsKNA@mail.gmail.com>
+Subject: Re: [PATCH] kunit: tool: Build compile_commands.json
+To: Brendan Jackman <jackmanb@google.com>
+Cc: Brendan Higgins <brendan.higgins@linux.dev>, David Gow <davidgow@google.com>, 
+	Rae Moar <rmoar@google.com>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, 
+	linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com, 
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Levi,
+On Thu, May 16, 2024 at 12:38=E2=80=AFPM Brendan Jackman <jackmanb@google.c=
+om> wrote:
+>
+> compile_commands.json is used by clangd[1] to provide code navigation
+> and completion functionality to editors. See [2] for an example
+> configuration that includes this functionality for VSCode.
+>
+> It can currently be built manually when using kunit.py, by running:
+>
+>   ./scripts/clang-tools/gen_compile_commands.py -d .kunit
+>
+> With this change however, it's built automatically so you don't need to
+> manually keep it up to date.
 
-kernel test robot noticed the following build errors:
+This is great!
 
-[auto build test ERROR on linus/master]
-[also build test ERROR on v6.11-rc7 next-20240912]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+>
+> Unlike the manual approach, having make build the compile_commands.json
+> means that it appears in the build output tree instead of at the root of
+> the source tree, so you'll need to add --compile-commands-dir=3D to your
+> clangd args for it to be found.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Levi-Yun/trace-trace_event_perf-remove-duplicate-samples-on-the-first-tracepoint-event/20240911-202917
-base:   linus/master
-patch link:    https://lore.kernel.org/r/20240911122747.4168556-1-yeoreum.yun%40arm.com
-patch subject: [PATCH] trace/trace_event_perf: remove duplicate samples on the first tracepoint event
-config: x86_64-rhel-8.3-rust (https://download.01.org/0day-ci/archive/20240913/202409130445.H7LIIGpd-lkp@intel.com/config)
-compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240913/202409130445.H7LIIGpd-lkp@intel.com/reproduce)
+This is annoying for some. For my setup, the discovery of
+compile_commands.json depends on where I open my editor from. So this
+isn't really an issue as I can *choose* what compile_commands to use.
+I think some folks may wish the compile_commands.json was also dumped
+in the top-level directory so clangd can discover it easier.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202409130445.H7LIIGpd-lkp@intel.com/
+>
+> [1] https://clangd.llvm.org/
+> [2] https://github.com/FlorentRevest/linux-kernel-vscode
+>
+> Signed-off-by: Brendan Jackman <jackmanb@google.com>
+> ---
+>  tools/testing/kunit/kunit_kernel.py | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+>
+> diff --git a/tools/testing/kunit/kunit_kernel.py b/tools/testing/kunit/ku=
+nit_kernel.py
+> index 7254c110ff23..61931c4926fd 100644
+> --- a/tools/testing/kunit/kunit_kernel.py
+> +++ b/tools/testing/kunit/kunit_kernel.py
+> @@ -72,7 +72,8 @@ class LinuxSourceTreeOperations:
+>                         raise ConfigError(e.output.decode())
+>
+>         def make(self, jobs: int, build_dir: str, make_options: Optional[=
+List[str]]) -> None:
+> -               command =3D ['make', 'ARCH=3D' + self._linux_arch, 'O=3D'=
+ + build_dir, '--jobs=3D' + str(jobs)]
+> +               command =3D ['make', 'all', 'compile_commands.json', 'ARC=
+H=3D' + self._linux_arch,
+> +                          'O=3D' + build_dir, '--jobs=3D' + str(jobs)]
+>                 if make_options:
+>                         command.extend(make_options)
+>                 if self._cross_compile:
+>
+> ---
+> base-commit: 3c999d1ae3c75991902a1a7dad0cb62c2a3008b4
+> change-id: 20240516-kunit-compile-commands-d994074fc2be
+>
+> Best regards,
+> --
+> Brendan Jackman <jackmanb@google.com>
+>
 
-All errors (new ones prefixed by >>):
+Reviewed-by: Justin Stitt <justinstitt@google.com>
 
->> kernel/trace/trace_event_perf.c:360:24: error: use of undeclared identifier 'event'
-     360 |         if (is_sampling_event(event)) {
-         |                               ^
-   1 error generated.
-
-
-vim +/event +360 kernel/trace/trace_event_perf.c
-
-   351	
-   352	int perf_trace_add(struct perf_event *p_event, int flags)
-   353	{
-   354		struct trace_event_call *tp_event = p_event->tp_event;
-   355		struct hw_perf_event *hwc = &p_event->hw;
-   356	
-   357		if (!(flags & PERF_EF_START))
-   358			p_event->hw.state = PERF_HES_STOPPED;
-   359	
- > 360		if (is_sampling_event(event)) {
-   361			hwc->last_period = hwc->sample_period;
-   362			perf_swevent_set_period(p_event);
-   363		}
-   364	
-   365		/*
-   366		 * If TRACE_REG_PERF_ADD returns false; no custom action was performed
-   367		 * and we need to take the default action of enqueueing our event on
-   368		 * the right per-cpu hlist.
-   369		 */
-   370		if (!tp_event->class->reg(tp_event, TRACE_REG_PERF_ADD, p_event)) {
-   371			struct hlist_head __percpu *pcpu_list;
-   372			struct hlist_head *list;
-   373	
-   374			pcpu_list = tp_event->perf_events;
-   375			if (WARN_ON_ONCE(!pcpu_list))
-   376				return -EINVAL;
-   377	
-   378			list = this_cpu_ptr(pcpu_list);
-   379			hlist_add_head_rcu(&p_event->hlist_entry, list);
-   380		}
-   381	
-   382		return 0;
-   383	}
-   384	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Thanks
+Justin
