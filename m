@@ -1,93 +1,65 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B4A813D52A;
-	Wed, 11 Sep 2024 21:10:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B2EC36C;
+	Thu, 12 Sep 2024 00:06:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726089020; cv=none; b=Vfekkdesr8ZNNV3lCwfSk7R/2kxAQjBIm5M8JP8aLxs8pMTE4vijD4X539h5Dt4dQlSB/47T8y8n8zlRr0vXLcVqaOIKeGShRIR8846KN10t/J9Os0M4RgO45gUON4sIkEBHiEeA+Shu7kHjNVeZqUCFY8lYb5DjWqiFjA4V2os=
+	t=1726099605; cv=none; b=mO4+r5pTfNWycOPIeTanZwHRq2xLZ2Jinpgt/7imHX3NrE7SBzBuV6EyCRyRZp/q3C/gb94aba4PVvn2BMrkyHCY5UmosyUDEeFgACWJd8dCHhbN70QpVJ0pnzdZt4FpI/KPK9rZHZpx/KTJ4GaHXx3j2IFPWHT+NKINwvZKNyc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726089020; c=relaxed/simple;
-	bh=jxu1thKXJqrT04deZKVKAfMKLEIWcMCyBfEV7yX6IZs=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Qgh23d//0ss7V728XQ53NlwIbBeLopg9WLUZWSa+BpsKW6oM1JJ0ix6pguJDthF4tl/m1fLIWkEtoawDkRbxNu9elOTiB/43Kx1j4zCfAoeMiktaPZ8B8Gpw/CO/LtwH7sk/VHDyMmaNpk4Ai9eNKdnxVFVl3tHAFoG9ZW/EkrQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jG6/nCAA; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1726099605; c=relaxed/simple;
+	bh=XjWRtI+IRMDQdK2wQCaYxO/xEhfu7igFdrNudaY7Tx4=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=QclaK8YBV3XJNXrMTvUeYMguReplZSkiRmUOP+vN5xIjI3Ed145f8HhRtebCg3Kcq9UkWigNDHVMLu2MwMlwgpaWUAlnul12mZCvRu3h0uv9Bb81ugJQwkfyWqRhs9uP4QpjfxKWbYsa/j3gAzqLdZqUYzIS8hO243ROx/biQuU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=choyyDBE; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jG6/nCAA"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8816EC4CEC0;
-	Wed, 11 Sep 2024 21:10:19 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="choyyDBE"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1AA33C4CEC0;
+	Thu, 12 Sep 2024 00:06:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1726089020;
-	bh=jxu1thKXJqrT04deZKVKAfMKLEIWcMCyBfEV7yX6IZs=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=jG6/nCAAh0eaIzFJdJ3qfqR+/qWu6FBSKF2kR2/U5pNh/PrskMTIVJfxM79SIkimx
-	 oJNLfiM6Du4xHaEdKDHtBihY0cBqXfJk7N7sI+4Nscd+lsu3M9jtRJ5zRzBqU4Dsvw
-	 3zqQKt2NKyLBE8jXOFD2yMcI+1OqoaCHGjFquVp02TB2oHmZkluWWdhbfALpSlUC0v
-	 3Q3LFF4qHqbf0daUsIQbzZs6hcZPLShh/MSfn9sVkGzrW9MWoLkv81iUXzTgvTkjap
-	 rG5QpiWcrV2/DwmZ1YED5Qz0sgpq3rF0RLiiMO1F2AMQ17LmK8dzy0m6VGraAayT9C
-	 lgGDzx+SlF/0A==
-Date: Wed, 11 Sep 2024 14:10:17 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Masahiro Yamada <masahiroy@kernel.org>
-Cc: Martin KaFai Lau <martin.lau@linux.dev>, bpf@vger.kernel.org,
-	linux-arch@vger.kernel.org, Andrii Nakryiko <andrii@kernel.org>,
-	linux-kernel@vger.kernel.org,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Nick Desaulniers <ndesaulniers@google.com>, llvm@lists.linux.dev
-Subject: Re: [PATCH 3/3] btf: require pahole 1.21+ for DEBUG_INFO_BTF with
- default DWARF version
-Message-ID: <20240911211017.GB2659844@thelio-3990X>
-References: <20240911110401.598586-1-masahiroy@kernel.org>
- <20240911110401.598586-3-masahiroy@kernel.org>
+	s=k20201202; t=1726099604;
+	bh=XjWRtI+IRMDQdK2wQCaYxO/xEhfu7igFdrNudaY7Tx4=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=choyyDBEdArWZaLLOSFdPW33VF7rFeZsPQpU94U3PvGvdiW0r2G6jc7gLauiEF9J6
+	 ZZtfqXqAdcIrWAFJzMo7ivamEqon3y3oTbsvOwgfjwQquVF8cybE7m3aHxrqzLpcJ0
+	 uApWamhPnUSKBvvys1sOBjbVg9Tzn0dKP4qm7PUMfLBSO7hnCaMcWmrRxr1l1oxZZf
+	 B4vQs39HXMyCN7yInBuG0mKRTfMlfAgPWYehr4dhJMy2PZqD/gBFabwecQy2+5+Ozj
+	 PjSy0EFtifdRZdsqXviDnSJXlBf9nEF4JfE7svNXYe0nryIAqY3oIpqhwFlIcmf3lO
+	 PCUBB9ECcNoSQ==
+Date: Wed, 11 Sep 2024 17:06:43 -0700
+From: Jakub Kicinski <kuba@kernel.org>
+To: Simon Horman <horms@kernel.org>
+Cc: "David S. Miller" <davem@davemloft.net>, Eric Dumazet
+ <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>, Siddharth Vadapalli
+ <s-vadapalli@ti.com>, Roger Quadros <rogerq@kernel.org>, Nathan Chancellor
+ <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, Bill
+ Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
+ netdev@vger.kernel.org, linux-omap@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH net-next 1/3] net: ethernet: ti: am65-cpsw: Address
+ __percpu Sparse warnings
+Message-ID: <20240911170643.7ecb1bbb@kernel.org>
+In-Reply-To: <20240910-ti-warn-v1-1-afd1e404abbe@kernel.org>
+References: <20240910-ti-warn-v1-0-afd1e404abbe@kernel.org>
+	<20240910-ti-warn-v1-1-afd1e404abbe@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240911110401.598586-3-masahiroy@kernel.org>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-On Wed, Sep 11, 2024 at 08:03:58PM +0900, Masahiro Yamada wrote:
-> As described in commit 42d9b379e3e1 ("lib/Kconfig.debug: Allow BTF +
-> DWARF5 with pahole 1.21+"), the combination of CONFIG_DEBUG_INFO_BTF
-> and CONFIG_DEBUG_INFO_DWARF5 requires pahole 1.21+.
-> 
-> GCC 11+ and Clang 14+ default to DWARF 5 when the -g flag is passed.
-> For the same reason, the combination of CONFIG_DEBUG_INFO_BTF and
-> CONFIG_DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT is also likely to require
-> pahole 1.21+. (At least, it is uncertain whether the requirement is
-> pahole 1.16+ or 1.21+.)
-> 
-> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+On Tue, 10 Sep 2024 08:17:56 +0100 Simon Horman wrote:
+> An alternate, approach would be to create a variant of
+> devm_add_action_or_reset() which expects __percpu data.  This would
+> avoid discarding the __percpu annotation, and any value it may have
+> between the casts added by this patch.  However, doing so appears to
+> require a significant amount of plumbing.  And, as far as I can see, the
+> code updated by this patch would be the only user of it.  So this patch
+> takes a simpler approach.
 
-Indeed, I think this is a safer, longterm dependency, until we bump the
-minimum versions to the ones listed in the commit message, unless there
-is DWARF6 by that point :)
-
-Reviewed-by: Nathan Chancellor <nathan@kernel.org>
-
-> ---
-> 
->  lib/Kconfig.debug | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
-> index eff408a88dfd..011a7abc68a8 100644
-> --- a/lib/Kconfig.debug
-> +++ b/lib/Kconfig.debug
-> @@ -380,7 +380,7 @@ config DEBUG_INFO_BTF
->  	depends on !GCC_PLUGIN_RANDSTRUCT || COMPILE_TEST
->  	depends on BPF_SYSCALL
->  	depends on PAHOLE_VERSION >= 116
-> -	depends on !DEBUG_INFO_DWARF5 || PAHOLE_VERSION >= 121
-> +	depends on DEBUG_INFO_DWARF4 || PAHOLE_VERSION >= 121
->  	# pahole uses elfutils, which does not have support for Hexagon relocations
->  	depends on !HEXAGON
->  	help
-> -- 
-> 2.43.0
-> 
+Sorry if this was already discussed, but struct am65_cpsw_ndev_stats
+appears to be identical to struct pcpu_sw_netstats but for ordering.
+Can we let the core allocate the stats by setting
+netdev->pcpu_stat_type = NETDEV_PCPU_STAT_TSTATS?
