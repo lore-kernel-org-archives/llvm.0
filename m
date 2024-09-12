@@ -1,51 +1,63 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA4CB1A3A96;
-	Thu, 12 Sep 2024 11:27:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A8C6E1A3AAC;
+	Thu, 12 Sep 2024 11:52:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726140426; cv=none; b=nfQlXQ9gH5OFaBgo2+5ayqJIurBjzhyK4loHKzbE0fxIFeP+Q/IZB4c3uCYRJ0yzHEmQZnB+VAJRGE9puTRH/64ZQwgpVEauhwiUOUEXETYiMpdCB1iV8iPpp5CtISDw1m+Q6nNRJUjB0WE7iO2IS5dM+3ie9whNqKD9EI4TYB4=
+	t=1726141978; cv=none; b=YhGuM1hW5PkHRzwAb78OcssTnwOrhpjBPPOTg3NAc8q31619gZ7C5pu8MTUS+MRkbTEaFpN5MsSf/zpBNYPeFxKJ43h6Z5msnFQZ4CjPbiBDy7O+009S7nTzxAGS6QT5GPSWJuiQV1i68tRzz7cFVpXhUNi2gtdlppd4gIjl7DQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726140426; c=relaxed/simple;
-	bh=DxB0YhCPzaPYBjQ9+N/1u7xN+x8IRRQdqUxm0evMBYg=;
+	s=arc-20240116; t=1726141978; c=relaxed/simple;
+	bh=RYDm5Sxu5zrgBnEy4z/i2TH7rbJhd7Gc8K8TI0achpU=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=CUuMAdOxgWctHiOCGLFC3cG9QbxG0wImr1e/EW26RmInRjrk/vZnDiDBqOUzYOz5/RdmjO1bUUJ6XXXMoQTm14cEpuy7BWzAlclxWhtqbpt2FIHGnfwQjKe1fJvCQcAlRimbuJ5iez8iSHQryXU6c2FaqSDeSQFBq8PVZP+qgcM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Z/aOsJmn; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=Tia7MuyD/1cUCbm1W35jvfxwXAX+XW6FyTHOog22nUgntM8ixDS3Y6LAxNLQjcxdV8wK78rpwVZga5SP3fc6veLi4quIR7KVnwbLRtdmOClnnQ3mwyktO4DZS6xsKe/OJasmE70CmfSiGI6qqgEcIAbrGKoDOFtsGmRmd7siCZc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=U02Iawe7; arc=none smtp.client-ip=198.175.65.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Z/aOsJmn"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2D977C4CEC3;
-	Thu, 12 Sep 2024 11:27:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1726140425;
-	bh=DxB0YhCPzaPYBjQ9+N/1u7xN+x8IRRQdqUxm0evMBYg=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Z/aOsJmnj2Bx64Zta36HlSZAgYOHdmte+dVZz4gI8eTIJTpkCSL9xXCW1Z2WiBrB5
-	 u9hcjhYkJklF0KFaEQtG9lOFYF+mVUKS5d3uqOnaF9THczGdqmDcdLvaKpor/HNLT4
-	 WDi65//nt90DhqVNPDbmEVKiKxKBHLDC4Tw6HX5iXWP06pFSNZBa5erqiHl01tDNpA
-	 FTvi3scVb1g8S2wCX9scBMQJogrcWAJtuqlGijcCCqv4kz5FfXEt4PiHWXB63hTA/L
-	 orhbqyHYdjXn9Csn4Sb5raTmLFs+Kh/ncIkdnhf6t+dDHq+RN14UypM+b5rk7v0aY3
-	 ruexj/MPkBYpQ==
-Date: Thu, 12 Sep 2024 12:27:00 +0100
-From: Simon Horman <horms@kernel.org>
-To: Roger Quadros <rogerq@kernel.org>
-Cc: "David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Siddharth Vadapalli <s-vadapalli@ti.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>, netdev@vger.kernel.org,
-	linux-omap@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH net-next 3/3] net: ethernet: ti: cpsw_ale: Remove unused
- accessor functions
-Message-ID: <20240912112700.GK572255@kernel.org>
-References: <20240910-ti-warn-v1-0-afd1e404abbe@kernel.org>
- <20240910-ti-warn-v1-3-afd1e404abbe@kernel.org>
- <78b4ca2a-9448-4451-8e25-c57306af38e9@kernel.org>
- <20240912085929.GF572255@kernel.org>
- <97c7665c-d05f-4363-94c6-9ce89921096a@kernel.org>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="U02Iawe7"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1726141977; x=1757677977;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=RYDm5Sxu5zrgBnEy4z/i2TH7rbJhd7Gc8K8TI0achpU=;
+  b=U02Iawe7zR01roilk1f1SA/Bz2vDzdYnKhidnvc4Z3tWkFZRPsoDG6vn
+   ao3P81VeiqayZAx37do1YtNiiJ1usypZukr0MBvDIrY+5Dmq50bkAF+zd
+   VYIGub245ZsbBSL88lsBWxnRiu5FU9wCs7rj0kB15EZPdQ6gXZjb1bz8M
+   fvAVxOg2VvzYN05RRM+tSniI8tREEzFUOaQHozxarEuN6JOC3E8uBCIPo
+   d1DiP0jWQfNHxeJirTe0uftqxrKZlV+UJbzw47STmFKNehmAPQkVgpZcm
+   WMuHYjkvOr/rG7Ie3vPDWUfwhp2GByVrmrPCciL8awvLltjBjKdq3DIgd
+   Q==;
+X-CSE-ConnectionGUID: 7XVEtobaRTy5Ximhw9K2MQ==
+X-CSE-MsgGUID: LjaXpBlkSN6JYdAi9jBV4w==
+X-IronPort-AV: E=McAfee;i="6700,10204,11192"; a="25137412"
+X-IronPort-AV: E=Sophos;i="6.10,222,1719903600"; 
+   d="scan'208";a="25137412"
+Received: from fmviesa008.fm.intel.com ([10.60.135.148])
+  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Sep 2024 04:52:56 -0700
+X-CSE-ConnectionGUID: LM0uj5UlSAOM/vqLMa5gwA==
+X-CSE-MsgGUID: fCvNLip+TeO4cLZkcPnhTw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.10,222,1719903600"; 
+   d="scan'208";a="67751446"
+Received: from lkp-server01.sh.intel.com (HELO 53e96f405c61) ([10.239.97.150])
+  by fmviesa008.fm.intel.com with ESMTP; 12 Sep 2024 04:52:54 -0700
+Received: from kbuild by 53e96f405c61 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1soiNX-000564-1w;
+	Thu, 12 Sep 2024 11:52:51 +0000
+Date: Thu, 12 Sep 2024 19:52:08 +0800
+From: kernel test robot <lkp@intel.com>
+To: Jing Leng <3090101217@zju.edu.cn>, masahiroy@kernel.org,
+	nathan@kernel.org, nicolas@fjasle.eu, corbet@lwn.net
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-kbuild@vger.kernel.org, linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org, Jing Leng <3090101217@zju.edu.cn>
+Subject: Re: [PATCH] kbuild: Support separating source and output of the
+ external module
+Message-ID: <202409121947.7NkNsyuC-lkp@intel.com>
+References: <20240911112017.14427-1-3090101217@zju.edu.cn>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -54,58 +66,52 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <97c7665c-d05f-4363-94c6-9ce89921096a@kernel.org>
+In-Reply-To: <20240911112017.14427-1-3090101217@zju.edu.cn>
 
-On Thu, Sep 12, 2024 at 01:54:45PM +0300, Roger Quadros wrote:
-> 
-> 
-> On 12/09/2024 11:59, Simon Horman wrote:
-> > On Thu, Sep 12, 2024 at 10:07:27AM +0300, Roger Quadros wrote:
-> >> Hi Simon,
-> >>
-> >> On 10/09/2024 10:17, Simon Horman wrote:
+Hi Jing,
 
-...
+kernel test robot noticed the following build errors:
 
-> >>>  	ALE_ENT_VID_MEMBER_LIST = 0,
-> >>>  	ALE_ENT_VID_UNREG_MCAST_MSK,
-> >>> @@ -217,14 +229,14 @@ static const struct ale_entry_fld vlan_entry_k3_cpswxg[] = {
-> >>>  
-> >>>  DEFINE_ALE_FIELD(entry_type,		60,	2)
-> >>>  DEFINE_ALE_FIELD(vlan_id,		48,	12)
-> >>> -DEFINE_ALE_FIELD(mcast_state,		62,	2)
-> >>> +DEFINE_ALE_FIELD_SET(mcast_state,	62,	2)
-> >>
-> >> I don't understand why we need separate macros for GET and SET.
-> >> The original intent was to use one macro for both.
-> >>
-> >> Otherwise we will have to add DEFINE_ALE_FIELD/1_SET to all the fields.
-> > 
-> > Hi Roger,
-> > 
-> > Sorry for not being clearer.
-> > 
-> > My intent was to avoid declaring functions that are never used.
-> > Perhaps it is best explained by some examples.
-> > 
-> > In the case of mcast_state, the compiler flags that the get accessor is
-> > never used. The intent is of this patch addresses that by declaring the set
-> > accessor for mcast_state. Likewise for other similar cases.
-> > 
-> > OTOH, in the case of, f.e. vlan_id, the set and get accessor functions are
-> > both used, and DEFINE_ALE_FIELD continues to be used to define them both.
-> > DEFINE_ALE_FIELD is implemented as the combination of _SET and _GET.
-> > 
-> 
-> Thanks for the explanation Simon. I understand now.
-> 
-> Would using __maybe_unused__ be preferable to get rid of the warnings?
-> That way we don't need to care if both set/get helpers are used or not
-> and don't have to touch the below code ever again except to add new fields.
+[auto build test ERROR on masahiroy-kbuild/fixes]
+[also build test ERROR on linus/master v6.11-rc7]
+[cannot apply to masahiroy-kbuild/for-next next-20240912]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Thanks Roger,
+url:    https://github.com/intel-lab-lkp/linux/commits/Jing-Leng/kbuild-Support-separating-source-and-output-of-the-external-module/20240911-192242
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/masahiroy/linux-kbuild.git fixes
+patch link:    https://lore.kernel.org/r/20240911112017.14427-1-3090101217%40zju.edu.cn
+patch subject: [PATCH] kbuild: Support separating source and output of the external module
+config: x86_64-kexec (attached as .config)
+compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240912/202409121947.7NkNsyuC-lkp@intel.com/reproduce)
 
-IMHO, it is nicer to not declare them at all.  But I do get your point and
-I'm happy to try that approach if you prefer it.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202409121947.7NkNsyuC-lkp@intel.com/
 
-...
+All errors (new ones prefixed by >>):
+
+>> make[3]: *** No rule to make target 'scripts/kconfig/lexer.lex.c', needed by 'scripts/kconfig/lexer.lex.o'.
+>> make[3]: *** No rule to make target 'scripts/kconfig/parser.tab.c', needed by 'scripts/kconfig/parser.tab.o'.
+   make[3]: Target 'oldconfig' not remade because of errors.
+   make[2]: *** [Makefile:680: oldconfig] Error 2
+   make[1]: *** [Makefile:224: __sub-make] Error 2
+   make[1]: Target 'oldconfig' not remade because of errors.
+   make: *** [Makefile:224: __sub-make] Error 2
+   make: Target 'oldconfig' not remade because of errors.
+--
+>> make[3]: *** No rule to make target 'scripts/kconfig/lexer.lex.c', needed by 'scripts/kconfig/lexer.lex.o'.
+>> make[3]: *** No rule to make target 'scripts/kconfig/parser.tab.c', needed by 'scripts/kconfig/parser.tab.o'.
+   make[3]: Target 'olddefconfig' not remade because of errors.
+   make[2]: *** [Makefile:680: olddefconfig] Error 2
+   make[1]: *** [Makefile:224: __sub-make] Error 2
+   make[1]: Target 'olddefconfig' not remade because of errors.
+   make: *** [Makefile:224: __sub-make] Error 2
+   make: Target 'olddefconfig' not remade because of errors.
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
