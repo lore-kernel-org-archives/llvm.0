@@ -1,111 +1,162 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B03A12D760;
-	Thu, 12 Sep 2024 02:58:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 42BD11B815;
+	Thu, 12 Sep 2024 07:07:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726109913; cv=none; b=WIks7IT8RjVolpn8JFo54ZTU9Teho1KEehyTZFR1SANPuMn8J28iBmrmyNicI/C68ZeaKEVMZZt5npFiK3WZt1mBNEJ6953+j8gYDmx+js9VFc+MnKO//Jg2QWs27lvx+8/HVnNv/tIMpOcH0coKQYDN2Ght6bLWn5dWrakOXOk=
+	t=1726124854; cv=none; b=mtQ+00dYDf6GhCGf/f+QfWuIY8lIBTJBfcxqmSqrYgjEhWz45IGph71ZmTd7pNnvNwwPBfsXaSFCtZPi+Gg7yEzoaMDis5t9DDgAJzFObVvi7i9/NUn9b9JHfJmx5u+creJdZso2vyzai9VGAL/PSkrmbBnPUtM1whBY5FB+x84=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726109913; c=relaxed/simple;
-	bh=4pKmHcSPb4q0CgxjlBXTua6+JlNlQQEApnOkulyQNEQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=MhiGOsox7YrDve2Nky7qOD5M7pWRp0Xfri8K02vpeOFBPR4pLt5CY6ZtcM/iYRsDZrr6FpjVh21RBBqy5FENs/bQLbFTc3oV9z9lf3OtBukICNyNtbJdlwjzRBBrx07bsTi1BJxoeCNuIs+vzEjgEKgeuDyxclrdFNUznwg79Lw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=jSLmeCi0; arc=none smtp.client-ip=192.198.163.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1726124854; c=relaxed/simple;
+	bh=69y25PwAy51c7wIFJtcvKHnoF+GCBnoeurqhThhxInI=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Hvv8H2bqfbc6Qyf79Web0iuIZCuwgZXTOddzvDcvbL0/n2XqQY1iiTT/aMl0in0uOAyOXubKR+fcOawg5Un5LUb3J2ZjVYbQD8Hm8GIli3EbTh+J4DsXjJHq+KCAUMHCOwaa5fTX5cVKePfDCE5vLoiX5lUn6Mk0dBEKr45+NzU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qggXxvoF; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="jSLmeCi0"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1726109911; x=1757645911;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=4pKmHcSPb4q0CgxjlBXTua6+JlNlQQEApnOkulyQNEQ=;
-  b=jSLmeCi0PtuvqzKRP2dqd249M8Ou4H6RInj5777CShKRIi2RSVGbwgHb
-   mQywOF0zyAfNrnUULEKKtC2RnzkFIr3h8l+CHsq5gvkh6oppiosxmKmLJ
-   +NcFZPnv48PLj6UOy4P1zwILvWdWz56k85k3hKDmU5CYbGWeTk/VznvO4
-   kyDVMGjCCDe7i/a4Owr/PuKcwrqnbaZ4b0nuJWIDE9rhYzj8Ac9KmrbiP
-   wRApUgAZV16oJ1Rn1FXjg8iCjhmmEwuj2YXoPHaJvg1Mh2r/v+wTM4KLj
-   /lu4NOOXgCQzgzEweprVlupTfGTEqsrBDTEyfBmBFhXz5mLEHNW1Nn8Y3
-   Q==;
-X-CSE-ConnectionGUID: 4ux1YqGcTb2z+7O+srjS2w==
-X-CSE-MsgGUID: zePJNeGYRuuETWhkiegcjQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11192"; a="27860137"
-X-IronPort-AV: E=Sophos;i="6.10,221,1719903600"; 
-   d="scan'208";a="27860137"
-Received: from fmviesa009.fm.intel.com ([10.60.135.149])
-  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Sep 2024 19:58:28 -0700
-X-CSE-ConnectionGUID: t6CqJGmhQxO0E1RqdC+Dlg==
-X-CSE-MsgGUID: 80MknMOrR1CvdDD1np4JQg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.10,221,1719903600"; 
-   d="scan'208";a="67554007"
-Received: from lkp-server01.sh.intel.com (HELO 53e96f405c61) ([10.239.97.150])
-  by fmviesa009.fm.intel.com with ESMTP; 11 Sep 2024 19:58:27 -0700
-Received: from kbuild by 53e96f405c61 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1soa2L-0004QA-0m;
-	Thu, 12 Sep 2024 02:58:25 +0000
-Date: Thu, 12 Sep 2024 10:58:17 +0800
-From: kernel test robot <lkp@intel.com>
-To: Avri Altman <avri.altman@wdc.com>,
-	"Martin K . Petersen" <martin.petersen@oracle.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Bart Van Assche <bvanassche@acm.org>,
-	Avri Altman <avri.altman@wdc.com>
-Subject: Re: [PATCH] scsi: ufs: Zero utp_upiu_req at the beginning of each
- command
-Message-ID: <202409121041.ZoEfIT5S-lkp@intel.com>
-References: <20240911053951.4032533-1-avri.altman@wdc.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qggXxvoF"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DFC0EC4CEC3;
+	Thu, 12 Sep 2024 07:07:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1726124853;
+	bh=69y25PwAy51c7wIFJtcvKHnoF+GCBnoeurqhThhxInI=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=qggXxvoFp/XyOtIWam7cxt/EqVmJ4+epD2qJhrNRgyls5Z94czX7t2Njyx1u92Q3M
+	 wY9XZ0jFFG7SVCczrXytNuw9L6vqpqhJL4G48UZuHq/5PTh91XwpHtHopgZS58wXfV
+	 W9MVc2D+NWt0De6Ot2ae2efjMysTh6ujKb7zAQIavDRqWo44hcEBSHR/ZIYvUkHjm2
+	 Jy9lN79uaDXZmbZb/ngerVNO9Uajn5ccbqjqns1b9fodQakLZJ8yXm1OSWgXAEqUUV
+	 G4wZsAlMkQwhzxm9EHvLUlMbAtnFgbKBB6BCkgNlfAaOjOwcwb8d+dqatrnHAceHDG
+	 VN12qDClSkYZQ==
+Message-ID: <78b4ca2a-9448-4451-8e25-c57306af38e9@kernel.org>
+Date: Thu, 12 Sep 2024 10:07:27 +0300
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240911053951.4032533-1-avri.altman@wdc.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net-next 3/3] net: ethernet: ti: cpsw_ale: Remove unused
+ accessor functions
+To: Simon Horman <horms@kernel.org>, "David S. Miller" <davem@davemloft.net>,
+ Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
+ Paolo Abeni <pabeni@redhat.com>, Siddharth Vadapalli <s-vadapalli@ti.com>,
+ Nathan Chancellor <nathan@kernel.org>,
+ Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling
+ <morbo@google.com>, Justin Stitt <justinstitt@google.com>
+Cc: netdev@vger.kernel.org, linux-omap@vger.kernel.org, llvm@lists.linux.dev
+References: <20240910-ti-warn-v1-0-afd1e404abbe@kernel.org>
+ <20240910-ti-warn-v1-3-afd1e404abbe@kernel.org>
+Content-Language: en-US
+From: Roger Quadros <rogerq@kernel.org>
+In-Reply-To: <20240910-ti-warn-v1-3-afd1e404abbe@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Hi Avri,
+Hi Simon,
 
-kernel test robot noticed the following build errors:
+On 10/09/2024 10:17, Simon Horman wrote:
+> W=1 builds flag that some accessor functions for ALE fields are unused.
+> 
+> Address this by splitting up the macros used to define these
+> accessors to allow only those that are used to be declared.
+> 
+> The warnings are verbose, but for example, the mcast_state case is
+> flagged by clang-18 as:
+> 
+> .../cpsw_ale.c:220:1: warning: unused function 'cpsw_ale_get_mcast_state' [-Wunused-function]
+>   220 | DEFINE_ALE_FIELD(mcast_state,           62,     2)
+>       | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> .../cpsw_ale.c:145:19: note: expanded from macro 'DEFINE_ALE_FIELD'
+>   145 | static inline int cpsw_ale_get_##name(u32 *ale_entry)                   \
+>       |                   ^~~~~~~~~~~~~~~~~~~
+> <scratch space>:196:1: note: expanded from here
+>   196 | cpsw_ale_get_mcast_state
+>       | ^~~~~~~~~~~~~~~~~~~~~~~~
+> 
+> Compile tested only.
+> No functional change intended.
+> 
+> Signed-off-by: Simon Horman <horms@kernel.org>
+> ---
+>  drivers/net/ethernet/ti/cpsw_ale.c | 30 +++++++++++++++++++++---------
+>  1 file changed, 21 insertions(+), 9 deletions(-)
+> 
+> diff --git a/drivers/net/ethernet/ti/cpsw_ale.c b/drivers/net/ethernet/ti/cpsw_ale.c
+> index 64bf22cd860c..d37b4ddd6787 100644
+> --- a/drivers/net/ethernet/ti/cpsw_ale.c
+> +++ b/drivers/net/ethernet/ti/cpsw_ale.c
+> @@ -141,27 +141,39 @@ static inline void cpsw_ale_set_field(u32 *ale_entry, u32 start, u32 bits,
+>  	ale_entry[idx] |=  (value << start);
+>  }
+>  
+> -#define DEFINE_ALE_FIELD(name, start, bits)				\
+> +#define DEFINE_ALE_FIELD_GET(name, start, bits)				\
+>  static inline int cpsw_ale_get_##name(u32 *ale_entry)			\
+>  {									\
+>  	return cpsw_ale_get_field(ale_entry, start, bits);		\
+> -}									\
+> +}
+> +
+> +#define DEFINE_ALE_FIELD_SET(name, start, bits)				\
+>  static inline void cpsw_ale_set_##name(u32 *ale_entry, u32 value)	\
+>  {									\
+>  	cpsw_ale_set_field(ale_entry, start, bits, value);		\
+>  }
+>  
+> -#define DEFINE_ALE_FIELD1(name, start)					\
+> +#define DEFINE_ALE_FIELD(name, start, bits)				\
+> +DEFINE_ALE_FIELD_GET(name, start, bits)					\
+> +DEFINE_ALE_FIELD_SET(name, start, bits)
+> +
+> +#define DEFINE_ALE_FIELD1_GET(name, start)				\
+>  static inline int cpsw_ale_get_##name(u32 *ale_entry, u32 bits)		\
+>  {									\
+>  	return cpsw_ale_get_field(ale_entry, start, bits);		\
+> -}									\
+> +}
+> +
+> +#define DEFINE_ALE_FIELD1_SET(name, start)				\
+>  static inline void cpsw_ale_set_##name(u32 *ale_entry, u32 value,	\
+>  		u32 bits)						\
+>  {									\
+>  	cpsw_ale_set_field(ale_entry, start, bits, value);		\
+>  }
+>  
+> +#define DEFINE_ALE_FIELD1(name, start)					\
+> +DEFINE_ALE_FIELD1_GET(name, start)					\
+> +DEFINE_ALE_FIELD1_SET(name, start)
+> +
+>  enum {
+>  	ALE_ENT_VID_MEMBER_LIST = 0,
+>  	ALE_ENT_VID_UNREG_MCAST_MSK,
+> @@ -217,14 +229,14 @@ static const struct ale_entry_fld vlan_entry_k3_cpswxg[] = {
+>  
+>  DEFINE_ALE_FIELD(entry_type,		60,	2)
+>  DEFINE_ALE_FIELD(vlan_id,		48,	12)
+> -DEFINE_ALE_FIELD(mcast_state,		62,	2)
+> +DEFINE_ALE_FIELD_SET(mcast_state,	62,	2)
 
-[auto build test ERROR on mkp-scsi/for-next]
-[also build test ERROR on jejb-scsi/for-next linus/master v6.11-rc7 next-20240911]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+I don't understand why we need separate macros for GET and SET.
+The original intent was to use one macro for both.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Avri-Altman/scsi-ufs-Zero-utp_upiu_req-at-the-beginning-of-each-command/20240911-134349
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/mkp/scsi.git for-next
-patch link:    https://lore.kernel.org/r/20240911053951.4032533-1-avri.altman%40wdc.com
-patch subject: [PATCH] scsi: ufs: Zero utp_upiu_req at the beginning of each command
-config: x86_64-buildonly-randconfig-004-20240912 (https://download.01.org/0day-ci/archive/20240912/202409121041.ZoEfIT5S-lkp@intel.com/config)
-compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240912/202409121041.ZoEfIT5S-lkp@intel.com/reproduce)
+Otherwise we will have to add DEFINE_ALE_FIELD/1_SET to all the fields.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202409121041.ZoEfIT5S-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
-   In file included from <built-in>:1:
->> ./usr/include/scsi/scsi_bsg_ufs.h:165:2: error: type name requires a specifier or qualifier
-     165 |         struct_group(utp_upiu,
-         |         ^
->> ./usr/include/scsi/scsi_bsg_ufs.h:166:3: error: expected identifier
-     166 |                 union {
-         |                 ^
->> ./usr/include/scsi/scsi_bsg_ufs.h:170:4: error: unexpected ';' before ')'
-     170 |                 };
-         |                  ^
-   3 errors generated.
+>  DEFINE_ALE_FIELD1(port_mask,		66)
+>  DEFINE_ALE_FIELD(super,			65,	1)
+>  DEFINE_ALE_FIELD(ucast_type,		62,     2)
+> -DEFINE_ALE_FIELD1(port_num,		66)
+> -DEFINE_ALE_FIELD(blocked,		65,     1)
+> -DEFINE_ALE_FIELD(secure,		64,     1)
+> -DEFINE_ALE_FIELD(mcast,			40,	1)
+> +DEFINE_ALE_FIELD1_SET(port_num,		66)
+> +DEFINE_ALE_FIELD_SET(blocked,		65,     1)
+> +DEFINE_ALE_FIELD_SET(secure,		64,     1)
+> +DEFINE_ALE_FIELD_GET(mcast,		40,	1)
+>  
+>  #define NU_VLAN_UNREG_MCAST_IDX	1
+>  
+> 
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+cheers,
+-roger
