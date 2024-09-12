@@ -1,145 +1,247 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B5F8192D89;
-	Thu, 12 Sep 2024 22:04:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726178670; cv=none; b=qvg5w+NmterXl53X0rqPz2MXYLHZqEjzp1NIiLAsnydPdX2NPztf7uvnuvysi2Vy5GI2xr7te6hKeTGCxp69pXZoMx/C8KVAN9kEU9eb/L1mYsyaH7QLNFgPDmf6DZqs49m1RC94XGpq749G116Ew3zjm+Ri+3LHAF9X6afX51w=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726178670; c=relaxed/simple;
-	bh=fFGyqoL+rPxCekW4/SvaEA14xSlOVqoYnpwB66u9eqg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=OEzHWtjUYN0bXTbTNu+xbKfTuJHtnEdQVjoRZOJPXC1eldvhW083JmgbJ3PtdhYzdRJrz6K8wXJNrEbohruLnCsX7c/wpv7mZyMBJKvrPOhOqsadtRnXt1bSw6KZsRJdIlNbiAnvdgNOKeR5UOLXUILLLNrfONf1ZOoTEG1wXfw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=bozLiVtP; arc=none smtp.client-ip=198.175.65.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3EB5317DFF5;
+	Thu, 12 Sep 2024 22:33:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=192.198.163.13
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1726180400; cv=fail; b=I3/80FIf6o7qdWb5xuvzuzW0K/d1RD8a0cOfcGO9KNhJnKnGjH3PmKQkAAHfmcRBTZJsOQoVKKxfa0dZFVtbisrZ67YjvpIgtKI9wuW0wyn4DK2nxEz/trvVtDa3tAoMYUqNyxl+OMMLDlaFnhqkN1x+AJ3VzAGfHgxPVJjl8ug=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1726180400; c=relaxed/simple;
+	bh=WpYyCFMVrOilhQ//efExa8eBtMaSE0BfaJ1HASIgMVM=;
+	h=Message-ID:Date:Subject:To:CC:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=RqKZDHH9509Mp3wj94dVglrsRJ49l2LUXen3HPjRk5Qei/2TR3T+UsVemQDlT+nI41LJv3/V48U7n85T2OIcgefewLwu4+PMV1MSRX0SUppaOb81HvlyNhLfCtVhpcKkPdHqs9PKwI1hKYewZt1OKpOAaz7vYV20rDqRdKhTxQc=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Jsi7DTtT; arc=fail smtp.client-ip=192.198.163.13
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="bozLiVtP"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Jsi7DTtT"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1726178669; x=1757714669;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=fFGyqoL+rPxCekW4/SvaEA14xSlOVqoYnpwB66u9eqg=;
-  b=bozLiVtPgLqOydvaXXcf18jIliP6CCEIDKexACPkUS7Vr/2FLgYxY6q6
-   yd7xPABAuPVr7MZ0s6bPeyJLJdshPY5lbhjaIQdw5TZeG1IDTuZ+ZNpGc
-   LrDe+1sS/QBvWwd/ZrrtTPzb8XOrt9v6LdmM5UJRu4ahxqqwvPJJjuoLr
-   BukbHRq6KLb+FdKsCXGJUNPY5OJVVnscmIrwbRQ4fHj50Wn/DUGG+klAr
-   HTbNWUu4VMGntJYKBoXqx5Ty+tNS32ejM1OFgmhl988UoYH3AoMIaIUe9
-   hmGdkZFstu1b+WMUkUk1XXkYh35odXMP/rtDtnAFuLFFxrx6tXLayKYuP
-   Q==;
-X-CSE-ConnectionGUID: lnUvMNshTuegHnmcjzAPzw==
-X-CSE-MsgGUID: vXlrqXAkQAa3fnDlY+cSsg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11193"; a="24935467"
+  t=1726180398; x=1757716398;
+  h=message-id:date:subject:to:cc:references:from:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=WpYyCFMVrOilhQ//efExa8eBtMaSE0BfaJ1HASIgMVM=;
+  b=Jsi7DTtTKTdesQTBBTwYXI6icJus3XO2HpxY6u4kVAFW+PoILr2g8Cg8
+   2wxltxF4S7EiU5tKvLCWTR3JNuAJsUsM5Vb2+HXTJ2qimKf36eV1/02Oz
+   YQbw0azgNf9YCZNQq1CGFzdATs6tFpjmiJN2/9Vut8HpXA48DjkkzG8LJ
+   x7KB6e0e4NhoJybvbZ5CNvTUXcYj6tA5klGKFd3u1TQFe92Q48Z7jutQM
+   lerV/Hi9CDk7Kv8F7rhditXO8HXSXyHewwM0xuRPKu+ju/GmHGBOOjH0S
+   W16IZlQjbh4nYWhcMgGZj656P6BJdfucQi7eQBijrjtS+vWsAbUCN+jV5
+   g==;
+X-CSE-ConnectionGUID: ywAsCOI1S5+qYIZbtGKV1w==
+X-CSE-MsgGUID: S2qMp01JRw2SGjhISV2VIA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11193"; a="27980883"
 X-IronPort-AV: E=Sophos;i="6.10,224,1719903600"; 
-   d="scan'208";a="24935467"
-Received: from orviesa010.jf.intel.com ([10.64.159.150])
-  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Sep 2024 15:04:25 -0700
-X-CSE-ConnectionGUID: /P5/i26oSXu9cdc3VNbDaA==
-X-CSE-MsgGUID: 3KPHfaHyTOi0/E9faBSrJQ==
+   d="scan'208";a="27980883"
+Received: from orviesa005.jf.intel.com ([10.64.159.145])
+  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Sep 2024 15:33:17 -0700
+X-CSE-ConnectionGUID: NQkEBBsVTiaTqOQsijRujw==
+X-CSE-MsgGUID: kMVJE2rNT66YG4zCPKSIzw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.10,224,1719903600"; 
-   d="scan'208";a="67691430"
-Received: from lkp-server01.sh.intel.com (HELO 53e96f405c61) ([10.239.97.150])
-  by orviesa010.jf.intel.com with ESMTP; 12 Sep 2024 15:04:23 -0700
-Received: from kbuild by 53e96f405c61 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1sorvI-0005ks-0d;
-	Thu, 12 Sep 2024 22:04:20 +0000
-Date: Fri, 13 Sep 2024 06:04:00 +0800
-From: kernel test robot <lkp@intel.com>
-To: Pierre-Eric Pelloux-Prayer <pierre-eric.pelloux-prayer@amd.com>,
-	dri-devel@lists.freedesktop.org, christian.koenig@amd.com,
-	tursulin@igalia.com, simona.vetter@ffwll.ch, robdclark@gmail.com
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Pierre-Eric Pelloux-Prayer <pierre-eric.pelloux-prayer@amd.com>
-Subject: Re: [PATCH 3/3] drm/amdgpu: use drm_file name
-Message-ID: <202409130526.fve4aEMs-lkp@intel.com>
-References: <20240911145836.734080-3-pierre-eric.pelloux-prayer@amd.com>
+   d="scan'208";a="72651656"
+Received: from fmsmsx601.amr.corp.intel.com ([10.18.126.81])
+  by orviesa005.jf.intel.com with ESMTP/TLS/AES256-GCM-SHA384; 12 Sep 2024 15:33:16 -0700
+Received: from fmsmsx612.amr.corp.intel.com (10.18.126.92) by
+ fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.39; Thu, 12 Sep 2024 15:33:15 -0700
+Received: from FMSEDG603.ED.cps.intel.com (10.1.192.133) by
+ fmsmsx612.amr.corp.intel.com (10.18.126.92) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.39 via Frontend Transport; Thu, 12 Sep 2024 15:33:15 -0700
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (104.47.70.47) by
+ edgegateway.intel.com (192.55.55.68) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.39; Thu, 12 Sep 2024 15:33:15 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=Pq6cg8YI5F+w/uo2XXnyZ8lxC8MsGtJXcLKbU1XGV+Cgy/2temn1FOUmBPcOnfSkjciWk+AkwhQerbJfqLKC/GVF0o2fnOFOLexsnM1NFoW57Hckjj0EWD1mSU1BTJjPeS8lkn0CXcqsNIVWhwc5X46JWIyqd7uBbn+yhN+03QiKmVGQLA80lLbmy/TXtk53LN/hkGvBFswwwsSqTg089zw2tFd38pMZkalCZ9HXXrUGF7cJ+iqzJIZ93fEUULi/E9Ma8n3iC513Gi+++RPOYTQrebR8YyJswnz+rM1vcxfQEpB8S8vFGb93zb0kD9CM5rYULxoQyyG2idZ0UT1Ucw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=1h8/x5hd1kh+IReKCK1090W5lUqEpcCSeeW5KF2CO5Q=;
+ b=NoBvLh0sm3AlPeEy8CP3QYvDFoR6Sm1PoT/Zxc7Zmi+BZyn9otoGNvDBoVEE2nlbdElJQ26BZ6FglEsBmtjy2yM3W5Ziy84CJGW+DrxYKK7Vz+4wyWGxxYulOKIs0nVSYNnuFsyZASG/ic9SJGJaOxDcIQPwNVe9gCjxZuZQkmd3M5F6JcxtjOcLmWewXikHJDJE7X5X53i5YFoH0DVc+NEl6cPEj6z9ObHkad8v4tnEUBwAjs2ZRD/W/Xn4PXY4DYfbJIp4kwcT9GyHUJbUm/PJjfSQgfx4gelyUHafzdoVSo1s72MQvy6H+MHOI5AXiD//Era3/1Zina62lhR+fA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from SJ2PR11MB7573.namprd11.prod.outlook.com (2603:10b6:a03:4d2::10)
+ by SN7PR11MB6946.namprd11.prod.outlook.com (2603:10b6:806:2a9::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7939.25; Thu, 12 Sep
+ 2024 22:33:12 +0000
+Received: from SJ2PR11MB7573.namprd11.prod.outlook.com
+ ([fe80::61a:aa57:1d81:a9cf]) by SJ2PR11MB7573.namprd11.prod.outlook.com
+ ([fe80::61a:aa57:1d81:a9cf%3]) with mapi id 15.20.7939.022; Thu, 12 Sep 2024
+ 22:33:12 +0000
+Message-ID: <fc49e252-6283-4a37-b4e8-bd329f326e68@intel.com>
+Date: Thu, 12 Sep 2024 15:33:09 -0700
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] x86/resctrl: Annotate __get_mem_config_intel() as __init
+To: Nathan Chancellor <nathan@kernel.org>, Fenghua Yu <fenghua.yu@intel.com>,
+	<x86@kernel.org>, Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar
+	<mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, Dave Hansen
+	<dave.hansen@linux.intel.com>
+CC: <linux-kernel@vger.kernel.org>, <llvm@lists.linux.dev>,
+	<patches@lists.linux.dev>
+References: <20240822-x86-restctrl-get_mem_config_intel-init-v1-1-8b0a68a8731a@kernel.org>
+From: Reinette Chatre <reinette.chatre@intel.com>
+Content-Language: en-US
+In-Reply-To: <20240822-x86-restctrl-get_mem_config_intel-init-v1-1-8b0a68a8731a@kernel.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: MW4PR04CA0273.namprd04.prod.outlook.com
+ (2603:10b6:303:89::8) To SJ2PR11MB7573.namprd11.prod.outlook.com
+ (2603:10b6:a03:4d2::10)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240911145836.734080-3-pierre-eric.pelloux-prayer@amd.com>
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SJ2PR11MB7573:EE_|SN7PR11MB6946:EE_
+X-MS-Office365-Filtering-Correlation-Id: aa8e5236-d691-4bf4-8f3c-08dcd37ae276
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|376014|1800799024|366016;
+X-Microsoft-Antispam-Message-Info: =?utf-8?B?eUxXQzdlUmdOV3gxdUpweGtjY2l0UldYUFFQQkJEcEFjdkY0ZklZR0hZdWpi?=
+ =?utf-8?B?Q2dqWFdiWHJYV3JIcytQTEdybVVJYmpMV282QmdVZWF4S1ZjUVZZQzJPT3Vn?=
+ =?utf-8?B?eE1rZ2VKenVNajNQZDNsMFQzSmhSbkdxVnVYdDBBeW12R0NVcStmNDRsZjNM?=
+ =?utf-8?B?c0hwMFVuWEswa3duMWFWUkRVMEErZCt1ZHBhajJwRXY5TFlWYWxZU3lnYVVq?=
+ =?utf-8?B?MEs4UEp1RWk5S3JURFlWa1dORnh4TTY0bEljSlVSZTdOS0xSYktKQzZadVNs?=
+ =?utf-8?B?MnhjeGxLYWYvZ3NCZmJnSWI2Q0RCUjROTWF2OFRmWGkxckY0WlRabWFxaEpG?=
+ =?utf-8?B?VjBCR2ZUYjRFdXZSNjhyOGFGZDE4NDZySk8wRVZUNi9tME04QW9lZURMVmla?=
+ =?utf-8?B?OGhPUENiQ2cyR0pVSy83T2FIVmFPc2ZSZ0dsdDkzU0dzZ0RSSFFRYitjcTBw?=
+ =?utf-8?B?c2ZhYlVPNU12QTBIMU9aemxsQlUzQUROa2t6MWFhMHQrU2lvZklhZEs3UFlZ?=
+ =?utf-8?B?dUZ2Q1hwWmF1TGlDSWhzNDBoblQxMGF4ZTZpaU1TeDR5dUhtU2U3VmtZYlVx?=
+ =?utf-8?B?eHErak1yd003KzkyWmVqcHVsN0svcFFJMUppY2RoRm9uVWNTOUNtcERQczZB?=
+ =?utf-8?B?S3JkODkxQUtCTkRrQTdYbVJCTDZUV0NORHQ4L29ybHl2cUI5eXZSNHA1a3Ji?=
+ =?utf-8?B?UlBQbHhoWUUzNmY5alBFdm5MVTF3amlqSEJrb0pPTzBUMTVuUGx6b0NSUm9x?=
+ =?utf-8?B?Ny9LY3NLOTlhaGJ4c1k5dHU4VUVYSzhOdU4rRkVPMUQwVzNOU29PUW9SQjhq?=
+ =?utf-8?B?Sk83RkxmaFJsckpBOFRBM3ZJQTlPT0QwaDlWWmFtd0NRb3dScWVhT0Z2Z1Zk?=
+ =?utf-8?B?eXF3Z094cmZ5UVVCZUplVmxMVjkzOUg2Kyt1NXFsRlFHYTllMGdkMGRRSDVV?=
+ =?utf-8?B?OEd1cEVPM1c0TFNoV2F4dEpiVWl1VE9pLzRxd204cFRZRjVDMTh0RTFFaUZj?=
+ =?utf-8?B?akoxcVZkcHZXOWRjN1dJS2U4eW1WK0M5RVV3N0t6RTU3OGhwaXgyOWtFa1Bu?=
+ =?utf-8?B?enlycWxMY2MxdFd5eTU1bi9rSDgybGdDQkJPSlpjR3R4YWVicWFIb2cyMjJG?=
+ =?utf-8?B?L1AxYXdHeDlBUGdwNzJ2K2Z4UDhSeGhFOHBoWHpnTUhxcy9NZXhzeFgySURC?=
+ =?utf-8?B?QjFyMkpyTFVoQmN6S1ZSRG1CMGtOSUs4LytNZXUzWkxsdy9NZ1hjd29wQUFU?=
+ =?utf-8?B?QWNudVNYL0lYci9FbWhNdGt0aU9WRXhxVDd6MnpER29hS2FvWURsTVorL2hs?=
+ =?utf-8?B?VWRDYks1VVgrdkdGSmlaUmR6YkxydkVrZWlOeTFpYU45ZVRMWCtQcXAwV0VL?=
+ =?utf-8?B?enY4QzdWQ3F1TXJ2WVU2TUJRTm91eGNiYjJHR1FjaC9BSFlLWFY0c3poQStl?=
+ =?utf-8?B?UFVCTVg5SEhoWmpNU24veDMxVy8wQzVMMk43eGhFT1hKMVdTbUxaYmZVbTF2?=
+ =?utf-8?B?SFMzajRncGNoM2x5WEQ1VXpaRGt4N3p4R25jc1laV0dKQk5CZmFyTkFvbEpH?=
+ =?utf-8?B?SUI3Ymg2S0wxK3I1R256Qlg2WlhqbWFiOVNEbnpqdjRCbTlJY1BJbzBiNXJw?=
+ =?utf-8?B?c3Z3L2NneXJEQUI1SzJGTlh5aEwxUjVrSXVUalhQelU2K0tmZVZYUHdndVNm?=
+ =?utf-8?B?Nkw5VThLc3hIV1NJd2orVkxURjcxaVNucTUvYitBbTMxSnNMUW12S2w2Tk1h?=
+ =?utf-8?B?MmMvdEVtNy9LalNTMzcveDZqdEVTZ25CcDdZK0xYMERJbUVNWlRYUjlxNDAw?=
+ =?utf-8?Q?Jw6hKKjkoPiohn4+fcwW/sFUnCOm+5cttq8AA=3D?=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ2PR11MB7573.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(1800799024)(366016);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?V2RwQ3lXczUxYllCeFlVZXZzQXdzUHh6R0oxQ1RYQnhYQzJ2Qm43NkpFMGJk?=
+ =?utf-8?B?VGdpSnYwSXdUcVVLYzJxTEJoNlMxTy8xcjczakhERFdHT0s2VlhRNU9TdFhC?=
+ =?utf-8?B?VjkrN3lJWmlVWjNGQloyaUFLTWRYS051cUsyeTRiM0VsS3pXRC91ZGkvbjBW?=
+ =?utf-8?B?ZCtGYlhDb0IyNE5LOG1FVUVXUG9Ed0FQYytnUUxtZ0NtU1VuMXRoMStqTUdE?=
+ =?utf-8?B?QTVhMEJMeFFOUWtlUGsrVVpoZkpFRmV2aW02RXdqT3U1aVJueVQrSGp6cXFq?=
+ =?utf-8?B?L3I0bndQcHRSTEwzNm5FQnFJT0JHSnFRZnFsSlVWdlBxVFhYZ01MelpGeUp1?=
+ =?utf-8?B?N1ZqSDB5R0kyTnFqcVZkcVh6bkxFNG13Y0tiRUZ1K1ZZNE9mS1M5RXNlN1JD?=
+ =?utf-8?B?RkYva21xS25kWkFQQkoralVDMkx4UVdmRi9mNHNsOHI5THcrbEg1d2hsUjgv?=
+ =?utf-8?B?U21HQ0FqWHhOUEVrcFd5SWkyTklTSEJiRHduL1ZBVnIwZFJZczNTeDhldlVP?=
+ =?utf-8?B?cGQrbmRiS281ZFNpdFpUeS9GRTIvdW85YU1KQlNBQ2N2cHowUWYwTkc2K3Nr?=
+ =?utf-8?B?UFZENDRxcWliUkNHQ00rTjZlMk5jbDFqWExrVlhPWTAzUTZjVDZNYnhmZU5Y?=
+ =?utf-8?B?MDg1REdGejJ3WUIzLy9uSXpmOE5LZjNIa1BaVTVRY0s0UDF5bXJHU3p3SU9D?=
+ =?utf-8?B?YkRnckFkL255OFZGVm53SXlLbm1LY1lhcVVDbUpSUGE5eEJGYkVuMW5PaEda?=
+ =?utf-8?B?SVhCTTRBQXFQT2ZWWW5XeTFla0pLOVBzVG5XbHFHaUJhc3VwZnJkWmVkL2ZU?=
+ =?utf-8?B?M2xPRGJGTmxhRzRnckROVnpHZThUQytJeTg1ZnhJT3VLTk5WclY0UlBsMXFN?=
+ =?utf-8?B?alVtaDF0QXFkZ05zYUE4ZS83Qkp5WXpydVpUcEgxNFAybkhjdWtzeXlDcjRu?=
+ =?utf-8?B?WVBpVDU3RmE4Y3pGTTF6enJjZzRSZWVuVjV6S0dKVlRtVnJFRzRrTVdlNEtI?=
+ =?utf-8?B?alplNmdLbXNjcmJZbnFRVlhnSHR1ZXpJVUtud0krY3FNSW1SMWoxeXFUNU80?=
+ =?utf-8?B?OENWSTlEYlBuSVp5TStOYlkwWVZweXBlQ1YzTWNpNFhOMkd5R01WM2RLaHlu?=
+ =?utf-8?B?dm9Xb1FXSmZKZ0tETG01U25zY2x2RkhadWx6dzRzTXk0bVp4NnVDTVdrNkFP?=
+ =?utf-8?B?djVISzRqbmVHUlhIZTFKbERiMy95aGw1K1grSWtwMzM3VEQ1QmxRY3pIWTlv?=
+ =?utf-8?B?bktWd3k5MnM0eGwzWHdKdkt3eURQTkhyQXh0alZ5UUpmMll1bXVLNFZPN091?=
+ =?utf-8?B?d3Z3YjdFZzdJOUNiZ0thRkhVQ1Z1TUJIdWRtK0FwU3I0NnFmVURFeDZHcFg0?=
+ =?utf-8?B?RWtrOU1TaW50Vk9GbUJsa1JUWGpVTHZ0cFpwZWhBK2dONDcrbUZXSHBiSjc5?=
+ =?utf-8?B?RUdpSGlPME1mYzVqbG9vZTUrbzhCN3E3ajRYdmFNNkYvbHZRTlpEVDVyaFh1?=
+ =?utf-8?B?V3p0eDlTaG5NTGw5S0JRS3ZnVmw0R25VNVZ1VVZiU095SVpKVmFuVEJ2L08r?=
+ =?utf-8?B?QmZHSlpvUWpZQTQ5YnRJQ0FETHJ5SnA4WCtCdXhtd3BocUN6U3R4aVpqdWVE?=
+ =?utf-8?B?VTZtUlFvbTdGbi91RVdBTUdrZDd6SE1SVittRU9oSGlYeG04Uk1ueThCR0lp?=
+ =?utf-8?B?WUVrSVo0T1Q3RWdVeHdnczJLMEQxanVNdm45SkErMlQrY2NZdDM5bUdSZ2ZU?=
+ =?utf-8?B?M1phcGpUL2hzd25nNGhmNXYzY3JzT05YQ0J3NkdEVi96YkdjVHJTQ3NWeEF2?=
+ =?utf-8?B?emNtcXNGaCt5SWxIaTNqNVkxVUFwTUxSL3VUc1JQdFl3Wnpna25ldXNiUFRw?=
+ =?utf-8?B?SDRjWGVLYmt2ZjlBQXJTWWd2MXlITTMzd3hnNWhzRm5BVFVmRGlIUkRFNlNk?=
+ =?utf-8?B?TDUzZFdTYndJKzI1eEE1VkZNZjFoblNVK2hLVXBCQ2RYUkVmUHJxYXVCRzY2?=
+ =?utf-8?B?V213S0gwM3ZaZDlWM3BUcm5JYjNlaTJzSXo3bUxqajArY1FtV2pLL2t3MXBl?=
+ =?utf-8?B?RnVnbUdSNjBhdy9aOUJOOGhWZFNIenAwZGpBbXJvaXRRUU03YlR4ZGw4aXRN?=
+ =?utf-8?B?aEJCSDEyZ05vMVBkVmNJUUV3TGx5VElIVU9TeElhRmRMRmZzS213NjNpQ3Nh?=
+ =?utf-8?B?Vmc9PQ==?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: aa8e5236-d691-4bf4-8f3c-08dcd37ae276
+X-MS-Exchange-CrossTenant-AuthSource: SJ2PR11MB7573.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Sep 2024 22:33:11.9825
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: RnC1qBqj1nfb3gwII/PcP/5UE4Cge5C689k5DMnJrHXuYAuI0II7E5GIqhsD6holi5HQmesh4CBNLbck0COsEz5A0ZSq9/DMZbgIzHTnid8=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN7PR11MB6946
+X-OriginatorOrg: intel.com
 
-Hi Pierre-Eric,
+Hi Nathan,
 
-kernel test robot noticed the following build warnings:
+Apologies for the delay.
 
-[auto build test WARNING on drm-exynos/exynos-drm-next]
-[also build test WARNING on drm-intel/for-linux-next drm-intel/for-linux-next-fixes drm-misc/drm-misc-next drm-tip/drm-tip linus/master v6.11-rc7 next-20240912]
-[cannot apply to drm/drm-next]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+On 8/22/24 5:12 PM, Nathan Chancellor wrote:
+> After a recent LLVM change [1] that deduces __cold on functions that
+> only call cold code (such as __init functions), there is a section
+> mismatch warning from __get_mem_config_intel(), which got moved to
+> .text.unlikely. as a result of that optimization:
+> 
+>    WARNING: modpost: vmlinux: section mismatch in reference: __get_mem_config_intel+0x77 (section: .text.unlikely.) -> thread_throttle_mode_init (section: .init.text)
+> 
+> Mark __get_mem_config_intel() as __init as well since it is only called
+> from __init code, which clears up the warning.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Pierre-Eric-Pelloux-Prayer/drm-use-drm_file-name-in-fdinfo/20240911-230058
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/daeinki/drm-exynos.git exynos-drm-next
-patch link:    https://lore.kernel.org/r/20240911145836.734080-3-pierre-eric.pelloux-prayer%40amd.com
-patch subject: [PATCH 3/3] drm/amdgpu: use drm_file name
-config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20240913/202409130526.fve4aEMs-lkp@intel.com/config)
-compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240913/202409130526.fve4aEMs-lkp@intel.com/reproduce)
+It looks to me as though __rdt_get_mem_config_amd() may need the same __init
+treatment and it is not clear to me why __get_mem_config_intel() would trigger
+such warning, but not __rdt_get_mem_config_amd()?
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202409130526.fve4aEMs-lkp@intel.com/
+> 
+> Link: https://github.com/llvm/llvm-project/commit/6b11573b8c5e3d36beee099dbe7347c2a007bf53 [1]
+> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+> ---
+>   arch/x86/kernel/cpu/resctrl/core.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/arch/x86/kernel/cpu/resctrl/core.c b/arch/x86/kernel/cpu/resctrl/core.c
+> index 1930fce9dfe9..b28646f1d9d6 100644
+> --- a/arch/x86/kernel/cpu/resctrl/core.c
+> +++ b/arch/x86/kernel/cpu/resctrl/core.c
+> @@ -199,7 +199,7 @@ static inline bool rdt_get_mb_table(struct rdt_resource *r)
+>   	return false;
+>   }
+>   
+> -static bool __get_mem_config_intel(struct rdt_resource *r)
+> +static bool __init __get_mem_config_intel(struct rdt_resource *r)
 
-All warnings (new ones prefixed by >>):
+Surely resctrl is not consistent in this regard but I understand from the coding style
+doc that storage class should precede the return type, so perhaps:
+	static __init bool __get_mem_config_intel(struct rdt_resource *r)
 
->> drivers/gpu/drm/amd/amdgpu/amdgpu_vm.c:2374: warning: Function parameter or struct member 'file' not described in 'amdgpu_vm_set_task_info'
-   drivers/gpu/drm/amd/amdgpu/amdgpu_vm.c:2801: warning: Function parameter or struct member 'ts' not described in 'amdgpu_vm_handle_fault'
+We may need to follow this recommended style for this to be included.
 
+>   {
+>   	struct rdt_hw_resource *hw_res = resctrl_to_arch_res(r);
+>   	union cpuid_0x10_3_eax eax;
+> 
+> ---
+> base-commit: 7424fc6b86c8980a87169e005f5cd4438d18efe6
+> change-id: 20240822-x86-restctrl-get_mem_config_intel-init-3af02a5130ba
+> 
+> Best regards,
 
-vim +2374 drivers/gpu/drm/amd/amdgpu/amdgpu_vm.c
+Thank you very much.
 
-b8f67b9ddf4f8f Shashank Sharma            2024-01-18  2367  
-b8f67b9ddf4f8f Shashank Sharma            2024-01-18  2368  /**
-b8f67b9ddf4f8f Shashank Sharma            2024-01-18  2369   * amdgpu_vm_set_task_info - Sets VMs task info.
-b8f67b9ddf4f8f Shashank Sharma            2024-01-18  2370   *
-b8f67b9ddf4f8f Shashank Sharma            2024-01-18  2371   * @vm: vm for which to set the info
-b8f67b9ddf4f8f Shashank Sharma            2024-01-18  2372   */
-cd1125e8edc565 Pierre-Eric Pelloux-Prayer 2024-09-11  2373  void amdgpu_vm_set_task_info(struct amdgpu_vm *vm, struct drm_file *file)
-b8f67b9ddf4f8f Shashank Sharma            2024-01-18 @2374  {
-b8f67b9ddf4f8f Shashank Sharma            2024-01-18  2375  	if (!vm->task_info)
-b8f67b9ddf4f8f Shashank Sharma            2024-01-18  2376  		return;
-b8f67b9ddf4f8f Shashank Sharma            2024-01-18  2377  
-b8f67b9ddf4f8f Shashank Sharma            2024-01-18  2378  	if (vm->task_info->pid == current->pid)
-b8f67b9ddf4f8f Shashank Sharma            2024-01-18  2379  		return;
-b8f67b9ddf4f8f Shashank Sharma            2024-01-18  2380  
-b8f67b9ddf4f8f Shashank Sharma            2024-01-18  2381  	vm->task_info->pid = current->pid;
-b8f67b9ddf4f8f Shashank Sharma            2024-01-18  2382  	get_task_comm(vm->task_info->task_name, current);
-b8f67b9ddf4f8f Shashank Sharma            2024-01-18  2383  
-b8f67b9ddf4f8f Shashank Sharma            2024-01-18  2384  	if (current->group_leader->mm != current->mm)
-b8f67b9ddf4f8f Shashank Sharma            2024-01-18  2385  		return;
-b8f67b9ddf4f8f Shashank Sharma            2024-01-18  2386  
-b8f67b9ddf4f8f Shashank Sharma            2024-01-18  2387  	vm->task_info->tgid = current->group_leader->pid;
-cd1125e8edc565 Pierre-Eric Pelloux-Prayer 2024-09-11  2388  	__get_task_comm(vm->task_info->process_name, TASK_COMM_LEN,
-cd1125e8edc565 Pierre-Eric Pelloux-Prayer 2024-09-11  2389  			current->group_leader);
-cd1125e8edc565 Pierre-Eric Pelloux-Prayer 2024-09-11  2390  	/* Append drm_client_name if set. */
-cd1125e8edc565 Pierre-Eric Pelloux-Prayer 2024-09-11  2391  	if (file && file->name) {
-cd1125e8edc565 Pierre-Eric Pelloux-Prayer 2024-09-11  2392  		int n;
-cd1125e8edc565 Pierre-Eric Pelloux-Prayer 2024-09-11  2393  
-cd1125e8edc565 Pierre-Eric Pelloux-Prayer 2024-09-11  2394  		mutex_lock(&file->name_lock);
-cd1125e8edc565 Pierre-Eric Pelloux-Prayer 2024-09-11  2395  		n = strlen(vm->task_info->process_name);
-cd1125e8edc565 Pierre-Eric Pelloux-Prayer 2024-09-11  2396  		if (n < NAME_MAX) {
-cd1125e8edc565 Pierre-Eric Pelloux-Prayer 2024-09-11  2397  			if (file->name) {
-cd1125e8edc565 Pierre-Eric Pelloux-Prayer 2024-09-11  2398  				vm->task_info->process_name[n] = '/';
-cd1125e8edc565 Pierre-Eric Pelloux-Prayer 2024-09-11  2399  				strscpy_pad(&vm->task_info->process_name[n + 1],
-cd1125e8edc565 Pierre-Eric Pelloux-Prayer 2024-09-11  2400  					    file->name, NAME_MAX - (n + 1));
-cd1125e8edc565 Pierre-Eric Pelloux-Prayer 2024-09-11  2401  			}
-cd1125e8edc565 Pierre-Eric Pelloux-Prayer 2024-09-11  2402  		}
-cd1125e8edc565 Pierre-Eric Pelloux-Prayer 2024-09-11  2403  		mutex_unlock(&file->name_lock);
-cd1125e8edc565 Pierre-Eric Pelloux-Prayer 2024-09-11  2404  	}
-b8f67b9ddf4f8f Shashank Sharma            2024-01-18  2405  }
-b8f67b9ddf4f8f Shashank Sharma            2024-01-18  2406  
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Reinette
