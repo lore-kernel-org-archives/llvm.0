@@ -1,275 +1,639 @@
-Received: from mail-oi1-f176.google.com (mail-oi1-f176.google.com [209.85.167.176])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E02A19E96A;
-	Thu, 12 Sep 2024 12:02:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 30F9A1A725A;
+	Thu, 12 Sep 2024 12:45:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726142538; cv=none; b=ie+EdVi6nbWaPBd0za0nGVfU0/+Khe1tqNPt1Mf14JWqA9HE/bv2dMxAMwQ2gtxT0MvUzZaAGI4P2otzU9l2bfcBRA9piksJGKOkbwGOANqur5ejOGqF5Tp1QsTMlF+DEv4Y1DoJJakymSknHbn6ygVkvz7theqYje5tN6WalwY=
+	t=1726145110; cv=none; b=pU80NeTM8WUz/y/f/xyfh2ne/acLq0tf5o5iQI4HrhW1K2Yd+9P4Ep3URHoL2w8YaPFBfp4O13/mBeqHxeyBqFu2hcFkrvLZegHPlJUZnItleue+OXhFUGszVwtFM62i11lG+3HKwemwagjZQKa5qVeq4efJW5Va0gGFQf++6qc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726142538; c=relaxed/simple;
-	bh=NisE6b5jBkIYG8cahohTY3odH/OlkvvqfpDW2Y9e3CU=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=l4TXDKOrNQh7PEoyfSEcgc63gHt53I4BOQfgbQzrQEnf74hSKTKQgCmaEo8B+N3UxmeVWid/4uJi/NR68Z+JQYa773bTzJBX7AHtADw/KbNKouar1obEiBTozu7AsjMQcOD9+PQv+RBOGPluEYyh7t5xQWZQA1NwVRPTjqUpC6c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=iQjm0KOl; arc=none smtp.client-ip=209.85.167.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1726145110; c=relaxed/simple;
+	bh=Vt7jXiT5gjha+WuPdBIWpnCzY+4R2xZbrr+Uz478nDQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=A+gDrDa5krmPuGxgqL/np3B2YIekZPt6wOOTnqZwLRnDuUIn08zZ/oAIsugmPrpVcoJprjKn5mPjABFs/xpIL58te2H2qaR8QJ4emggrRxtRjlJYgpTKQH10acu5Dkr8YC0sPoS8+Fx3V1KPmsCmAsU1Blvb++5Vn/iwuaX+MlU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=cU9APH4Q; arc=none smtp.client-ip=192.198.163.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="iQjm0KOl"
-Received: by mail-oi1-f176.google.com with SMTP id 5614622812f47-3e04a6feef3so393556b6e.3;
-        Thu, 12 Sep 2024 05:02:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1726142535; x=1726747335; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=RhlE/sT3sXQgkwTWsPGrGAWEL/QnHXai566ohH4s0z0=;
-        b=iQjm0KOlG0bdcWtGOdEryGQjGnaJu6i+LrEN9aUJT8ocW6mFgua23YbxgDf/3pJanu
-         LJUZSu5REbEovD3Kg3y3iZs6dRsrLFvSmCWUCMdvVUgCj3GTc1sNACKI4COp24Hv60Bl
-         BMaq/117LdYVxRfF+EtCkljcQkPn1p+R5T8j7/1nQWZkzja+L61SKUC1sG6yqTVaSH4Z
-         JDxfDDsOVkAIE2f3fQZKhR+/oaMm2WJbA7XH7ADK3pa/iBkz2/NAcylFdrr1VDQhPCrE
-         WZnMbrvY1ZBjIZ3APjaAlmCsm2X4l3xEgVMWfJrGfygY41EoTpYfvlVqxv1OoTpHxOoK
-         FXfA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1726142535; x=1726747335;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=RhlE/sT3sXQgkwTWsPGrGAWEL/QnHXai566ohH4s0z0=;
-        b=FwTW8JkpDsj0cflBznH4FdAcb6wZl2LY2sNd1DdeyDe5MptQbSima3Md/uD6VIc/Zg
-         tKubYYgjyaqYhAcP45RCKkoRPazmwC2p4HvREufMxbrIahTS4GOrBetzZTqOlvAUvLnP
-         h4yQQbDfvq32ftbtTG5L9rM5pgkzGEFom+uZcwHb9egFBRlDFdPDs+kTxC2LlOzCRNID
-         ccYuJWaCCroexFayfxwQ2BR35NhUCyb0l+qQmUWZFBJmRfJYAGV98ein0NVzZaRLC5Lr
-         9yRUrRr2N0kBnFveAdc5SsyQ0F7+cJEvF5IuO7ZWXm5v4Wn2t3+T4vDmpCi8hXVzz9Gl
-         A53Q==
-X-Forwarded-Encrypted: i=1; AJvYcCUuHF3mZptN4dAuTyT+XbVRtbMvpki5dceLJGj48L7lX8KgTUhbkfInb6vQvrLINiR8CsvkQA==@lists.linux.dev, AJvYcCVNM7FpGVEiy+c61nq/znXWh1HxEg/xubs1hDuKXojt8DEbPdmc2TmxCws8cGXNqvkAVDInC/w=@lists.linux.dev
-X-Gm-Message-State: AOJu0Yzpjan7MaMg9/2lDqqpWOCMHgZdy40G7pWaCqmRHImlhjFukcZy
-	xTEaqi6v9DbL6o7zy4ggg9ZALBlwjFUmW69YSrAVwDu8hiJYI/q6kv96ASvNYPDS6O8H7fx9xZF
-	8NhfJfhi9wSwCi+wc5XZXnwKow4g=
-X-Google-Smtp-Source: AGHT+IFDEn0YDYeD/9jctAipL6iMdSyGrxKEkVhZltDVHssnsNZVCgDM2BbSFzNex8/uLR3y/m0Zd6KEYQB/81KqoJU=
-X-Received: by 2002:a05:6808:1897:b0:3e0:422e:f05b with SMTP id
- 5614622812f47-3e071ae3bdamr1684193b6e.29.1726142534514; Thu, 12 Sep 2024
- 05:02:14 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="cU9APH4Q"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1726145108; x=1757681108;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Vt7jXiT5gjha+WuPdBIWpnCzY+4R2xZbrr+Uz478nDQ=;
+  b=cU9APH4Qrji4DavBSPEumd03/2TPM5et8b+awEkNsBeqFqz3gPuT24oi
+   P+6nB8rafS5upEJNjFDUeAqDcgLrQsZbXw44af5KdLEClE14J5o1moN0V
+   hgIWVaaOixs4J5JsAttKxcGA7pE6G2fHshyfr3jnUEd4ngTm9dCUj7gQ+
+   n82g6FWFRDhOtOT0GmJgioz4OEp6Gi5OFwwWSL4dJKAOQCgCSCMpup1PD
+   pre58c3h83NruYyHnvoxN35vBa/s/8gGRZwQp0L2x8ZVqs/m/nPail44e
+   UerPKAOitJVm0kRMI3/cbh6tEs86cYWQoMDUUCAqaWxNOBvMXhUkVVecB
+   Q==;
+X-CSE-ConnectionGUID: QPxJW4suQO2UVjVblSIPog==
+X-CSE-MsgGUID: rbYlwTDNTvWZZPxou+EdQg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11192"; a="35658225"
+X-IronPort-AV: E=Sophos;i="6.10,223,1719903600"; 
+   d="scan'208";a="35658225"
+Received: from fmviesa005.fm.intel.com ([10.60.135.145])
+  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Sep 2024 05:45:05 -0700
+X-CSE-ConnectionGUID: GHbpGefhRduy8iPbwhzHvw==
+X-CSE-MsgGUID: U5N1ap7xR3eS+47RlfG6JA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.10,223,1719903600"; 
+   d="scan'208";a="72062365"
+Received: from lkp-server01.sh.intel.com (HELO 53e96f405c61) ([10.239.97.150])
+  by fmviesa005.fm.intel.com with ESMTP; 12 Sep 2024 05:44:57 -0700
+Received: from kbuild by 53e96f405c61 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1sojBv-0005A5-1d;
+	Thu, 12 Sep 2024 12:44:55 +0000
+Date: Thu, 12 Sep 2024 20:44:31 +0800
+From: kernel test robot <lkp@intel.com>
+To: Alistair Popple <apopple@nvidia.com>, dan.j.williams@intel.com,
+	linux-mm@kvack.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Alistair Popple <apopple@nvidia.com>, vishal.l.verma@intel.com,
+	dave.jiang@intel.com, logang@deltatee.com, bhelgaas@google.com,
+	jack@suse.cz, jgg@ziepe.ca, catalin.marinas@arm.com,
+	will@kernel.org, mpe@ellerman.id.au, npiggin@gmail.com,
+	dave.hansen@linux.intel.com, ira.weiny@intel.com,
+	willy@infradead.org, djwong@kernel.org, tytso@mit.edu,
+	linmiaohe@huawei.com, david@redhat.com, peterx@redhat.com,
+	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, linuxppc-dev@lists.ozlabs.org,
+	nvdimm@lists.linux.dev, linux-cxl@vger.kernel.org,
+	linux-fsdevel@vger.kernel.org, linux-ext4@vger.kernel.org,
+	linux-xfs@vger.kernel.org
+Subject: Re: [PATCH 04/12] mm: Allow compound zone device pages
+Message-ID: <202409122055.AMlMSljd-lkp@intel.com>
+References: <c7026449473790e2844bb82012216c57047c7639.1725941415.git-series.apopple@nvidia.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20240906-macos-build-support-v2-0-06beff418848@samsung.com>
-In-Reply-To: <20240906-macos-build-support-v2-0-06beff418848@samsung.com>
-From: Jeff Xie <xiehuan09@gmail.com>
-Date: Thu, 12 Sep 2024 20:02:03 +0800
-Message-ID: <CAEr6+EAcwq5n7R8BmsKg8B46TkrSvEL9hDmjZeD3ek_1rKg_hQ@mail.gmail.com>
-Subject: Re: [PATCH v2 0/8] Enable build system on macOS hosts
-To: da.gomez@samsung.com
-Cc: Masahiro Yamada <masahiroy@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
-	Nicolas Schier <nicolas@fjasle.eu>, Lucas De Marchi <lucas.demarchi@intel.com>, 
-	=?UTF-8?Q?Thomas_Hellstr=C3=B6m?= <thomas.hellstrom@linux.intel.com>, 
-	Rodrigo Vivi <rodrigo.vivi@intel.com>, 
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, Maxime Ripard <mripard@kernel.org>, 
-	Thomas Zimmermann <tzimmermann@suse.de>, David Airlie <airlied@gmail.com>, 
-	William Hubbs <w.d.hubbs@gmail.com>, Chris Brannon <chris@the-brannons.com>, 
-	Kirk Reiser <kirk@reisers.ca>, Samuel Thibault <samuel.thibault@ens-lyon.org>, 
-	Paul Moore <paul@paul-moore.com>, Stephen Smalley <stephen.smalley.work@gmail.com>, 
-	Ondrej Mosnacek <omosnace@redhat.com>, Catalin Marinas <catalin.marinas@arm.com>, 
-	Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>, Oliver Upton <oliver.upton@linux.dev>, 
-	James Morse <james.morse@arm.com>, Suzuki K Poulose <suzuki.poulose@arm.com>, 
-	Zenghui Yu <yuzenghui@huawei.com>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	Jiri Slaby <jirislaby@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
-	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
-	Simona Vetter <simona.vetter@ffwll.ch>, linux-kernel@vger.kernel.org, 
-	linux-kbuild@vger.kernel.org, intel-xe@lists.freedesktop.org, 
-	dri-devel@lists.freedesktop.org, speakup@linux-speakup.org, 
-	selinux@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	kvmarm@lists.linux.dev, linux-serial@vger.kernel.org, llvm@lists.linux.dev, 
-	Finn Behrens <me@kloenk.dev>, "Daniel Gomez (Samsung)" <d+samsung@kruces.com>, gost.dev@samsung.com, 
-	Nick Desaulniers <nick.desaulniers@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <c7026449473790e2844bb82012216c57047c7639.1725941415.git-series.apopple@nvidia.com>
 
-Thank you for submitting this patchset. This problem has troubled me
-for two years.
-I have always built the kernel in the docker container. I have tested
-this patchset and it is very good.
-Tested-by: Jeff Xie <xiehuan09@gmail.com>
+Hi Alistair,
 
-On Fri, Sep 6, 2024 at 7:04=E2=80=AFPM Daniel Gomez via B4 Relay
-<devnull+da.gomez.samsung.com@kernel.org> wrote:
->
-> This patch set allows for building the Linux kernel for arm64 in macOS
-> with LLVM.
->
-> Patches are based on previous Nick's work and suggestions [1][2][3] to
-> enable the Linux kernel build system on macOS hosts.
->
-> macOS does not provide certain headers that are available in a GNU/Linux
-> distribution with development headers installed, usually provided by
-> the GNU C Library (glibc) and/or other projects. These missing headers
-> are needed as build dependencies. To address this, the patches depend
-> on a new Bee Headers Homebrew Tap formula [6][7][8] that provides them
-> together with a pkg-config file to locate the include directory.
->
-> To locate them, Makefiles include something like:
->         $(shell $(HOSTPKG_CONFIG) --cflags bee-headers 2> /dev/null)
->
-> [6] Project:
-> https://github.com/bee-headers
-> [7] Headers repository:
-> https://github.com/bee-headers/headers.git
-> [8] Homebrew Tap formula:
-> https://github.com/bee-headers/homebrew-bee-headers.git
->
-> To set up the environment, documentation is provided via last patch in
-> this series.
->
-> More configurations and architectures as well as support for Rust
-> (from Finn Behrens [4] [5]) can be added in the future to extend build
-> support.
->
-> [1]: WIP: build Linux on MacOS
-> https://github.com/ClangBuiltLinux/linux/commit/f06333e29addbc3d714adb340=
-355f471c1dfe95a
->
-> [2] Subject: [PATCH] scripts: subarch.include: fix SUBARCH on MacOS hosts
-> https://lore.kernel.org/all/20221113233812.36784-1-nick.desaulniers@gmail=
-.com/
->
-> [3] Subject: Any interest in building the Linux kernel from a MacOS host?
-> https://lore.kernel.org/all/CAH7mPvj64Scp6_Nbaj8KOfkoV5f7_N5L=3DTv5Z9zGyn=
-5SS+gsUw@mail.gmail.com/
->
-> [4] https://github.com/kloenk/linux/commits/rust-project_macos-dylib/
->
-> [5] https://kloenk.eu/posts/build-linux-on-m1-macos/
->
-> To: Masahiro Yamada <masahiroy@kernel.org>
-> To: Nathan Chancellor <nathan@kernel.org>
-> To: Nicolas Schier <nicolas@fjasle.eu>
-> To: Lucas De Marchi <lucas.demarchi@intel.com>
-> To: Thomas Hellstr=C3=B6m <thomas.hellstrom@linux.intel.com>
-> To: Rodrigo Vivi <rodrigo.vivi@intel.com>
-> To: Maarten Lankhorst <maarten.lankhorst@linux.intel.com>
-> To: Maxime Ripard <mripard@kernel.org>
-> To: Thomas Zimmermann <tzimmermann@suse.de>
-> To: David Airlie <airlied@gmail.com>
-> To: Daniel Vetter <daniel@ffwll.ch>
-> To: William Hubbs <w.d.hubbs@gmail.com>
-> To: Chris Brannon <chris@the-brannons.com>
-> To: Kirk Reiser <kirk@reisers.ca>
-> To: Samuel Thibault <samuel.thibault@ens-lyon.org>
-> To: Paul Moore <paul@paul-moore.com>
-> To: Stephen Smalley <stephen.smalley.work@gmail.com>
-> To: Ondrej Mosnacek <omosnace@redhat.com>
-> To: Catalin Marinas <catalin.marinas@arm.com>
-> To: Will Deacon <will@kernel.org>
-> To: Marc Zyngier <maz@kernel.org>
-> To: Oliver Upton <oliver.upton@linux.dev>
-> To: James Morse <james.morse@arm.com>
-> To: Suzuki K Poulose <suzuki.poulose@arm.com>
-> To: Zenghui Yu <yuzenghui@huawei.com>
-> To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> To: Jiri Slaby <jirislaby@kernel.org>
-> To: Nick Desaulniers <ndesaulniers@google.com>
-> To: Bill Wendling <morbo@google.com>
-> To: Justin Stitt <justinstitt@google.com>
-> Cc: linux-kernel@vger.kernel.org
-> Cc: linux-kbuild@vger.kernel.org
-> Cc: intel-xe@lists.freedesktop.org
-> Cc: dri-devel@lists.freedesktop.org
-> Cc: speakup@linux-speakup.org
-> Cc: selinux@vger.kernel.org
-> Cc: linux-arm-kernel@lists.infradead.org
-> Cc: kvmarm@lists.linux.dev
-> Cc: linux-serial@vger.kernel.org
-> Cc: llvm@lists.linux.dev
-> Cc: Finn Behrens <me@kloenk.dev>
-> Cc: Daniel Gomez (Samsung) <d+samsung@kruces.com>
-> Cc: gost.dev@samsung.com
->
-> Signed-off-by: Daniel Gomez <da.gomez@samsung.com>
-> ---
-> Changes in v2:
-> - Add documentation and set this 'feature' as experimental.
-> - Update cover letter.
-> - Drop unnecessary changes. Patches removed:
->         - kbuild: add header_install dependency to scripts
->         - include: add endian.h support
->         - include: add elf.h support
-> - Update Makefiles to find Bee Headers with pkg-config.
-> - Update file2alias to solve uuid_t conflicts inside Makefile as
-> suggested by Nicolas Schier.
-> - Adapt xe_gen_wa_oob to solve getprogname()/
-> program_invocation_short_name in runtime. as suggested by Lucas De
-> Marchi.
-> - Remove linux/version.h in accessibility/speakup as suggested by
-> Masahiro Yamada.
-> - Replace selinux patches with new Masahiro Yamada's patches:
->         Message-id: 20240809122007.1220219-1-masahiroy@kernel.org
->         Link: https://lore.kernel.org/all/20240809122007.1220219-1-masahi=
-roy@kernel.org/
-> - Replace tty/vt with new Masahiro Yamada's patch:
->         Message-id: 20240809160853.1269466-1-masahiroy@kernel.org
->         Link: https://lore.kernel.org/all/20240809160853.1269466-1-masahi=
-roy@kernel.org/
->         (Already merged in the linux-next tag used)
-> - Replace scripts/kallsyms patch with Masahiro Yamada's patch:
->         Message-id: 20240807181148.660157-1-masahiroy@kernel.org
->         Link: https://lore.kernel.org/all/20240807181148.660157-1-masahir=
-oy@kernel.org/
->         (Already merged in the linux-next tag used)
-> - Link to v1: https://lore.kernel.org/r/20240807-macos-build-support-v1-0=
--4cd1ded85694@samsung.com
->
-> ---
-> Daniel Gomez (5):
->       file2alias: fix uuid_t definitions for macos
->       drm/xe: xe_gen_wa_oob: fix program_invocation_short_name for macos
->       arm64: nvhe: add bee-headers support
->       scripts: add bee-headers support
->       Documentation: add howto build in macos
->
-> Masahiro Yamada (2):
->       selinux: do not include <linux/*.h> headers from host programs
->       selinux: move genheaders to security/selinux/
->
-> Nick Desaulniers (1):
->       scripts: subarch.include: fix SUBARCH on macOS hosts
->
->  Documentation/kbuild/llvm.rst                      | 78 ++++++++++++++++=
-++++++
->  arch/arm64/kernel/pi/Makefile                      |  1 +
->  arch/arm64/kernel/vdso32/Makefile                  |  1 +
->  arch/arm64/kvm/hyp/nvhe/Makefile                   |  3 +-
->  drivers/gpu/drm/xe/xe_gen_wa_oob.c                 |  4 ++
->  scripts/Makefile                                   |  4 +-
->  scripts/mod/Makefile                               |  7 ++
->  scripts/mod/file2alias.c                           |  3 +
->  scripts/remove-stale-files                         |  3 +
->  scripts/selinux/Makefile                           |  2 +-
->  scripts/selinux/genheaders/.gitignore              |  2 -
->  scripts/selinux/genheaders/Makefile                |  5 --
->  scripts/selinux/mdp/Makefile                       |  2 +-
->  scripts/selinux/mdp/mdp.c                          |  4 --
->  scripts/subarch.include                            |  2 +-
->  security/selinux/.gitignore                        |  1 +
->  security/selinux/Makefile                          |  7 +-
->  .../genheaders =3D> security/selinux}/genheaders.c   |  3 -
->  security/selinux/include/classmap.h                | 19 ++++--
->  security/selinux/include/initial_sid_to_string.h   |  2 -
->  20 files changed, 123 insertions(+), 30 deletions(-)
-> ---
-> base-commit: ad40aff1edffeccc412cde93894196dca7bc739e
-> change-id: 20240807-macos-build-support-9ca0d77adb17
->
-> Best regards,
-> --
-> Daniel Gomez <da.gomez@samsung.com>
->
->
->
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on 6f1833b8208c3b9e59eff10792667b6639365146]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Alistair-Popple/mm-gup-c-Remove-redundant-check-for-PCI-P2PDMA-page/20240910-121806
+base:   6f1833b8208c3b9e59eff10792667b6639365146
+patch link:    https://lore.kernel.org/r/c7026449473790e2844bb82012216c57047c7639.1725941415.git-series.apopple%40nvidia.com
+patch subject: [PATCH 04/12] mm: Allow compound zone device pages
+config: um-allnoconfig (https://download.01.org/0day-ci/archive/20240912/202409122055.AMlMSljd-lkp@intel.com/config)
+compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240912/202409122055.AMlMSljd-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202409122055.AMlMSljd-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+         |         ^
+   In file included from mm/memory.c:44:
+   In file included from include/linux/mm.h:1106:
+   In file included from include/linux/huge_mm.h:8:
+   In file included from include/linux/fs.h:33:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:163:1: warning: array index 2 is past the end of the array (that has type 'unsigned long[2]') [-Warray-bounds]
+     163 | _SIG_SET_BINOP(sigandnsets, _sig_andn)
+         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/signal.h:141:3: note: expanded from macro '_SIG_SET_BINOP'
+     141 |                 r->sig[2] = op(a2, b2);                                 \
+         |                 ^      ~
+   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
+      24 |         unsigned long sig[_NSIG_WORDS];
+         |         ^
+   In file included from mm/memory.c:44:
+   In file included from include/linux/mm.h:1106:
+   In file included from include/linux/huge_mm.h:8:
+   In file included from include/linux/fs.h:33:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:187:1: warning: array index 3 is past the end of the array (that has type 'unsigned long[2]') [-Warray-bounds]
+     187 | _SIG_SET_OP(signotset, _sig_not)
+         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/signal.h:174:27: note: expanded from macro '_SIG_SET_OP'
+     174 |         case 4: set->sig[3] = op(set->sig[3]);                          \
+         |                                  ^        ~
+   include/linux/signal.h:186:24: note: expanded from macro '_sig_not'
+     186 | #define _sig_not(x)     (~(x))
+         |                            ^
+   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
+      24 |         unsigned long sig[_NSIG_WORDS];
+         |         ^
+   In file included from mm/memory.c:44:
+   In file included from include/linux/mm.h:1106:
+   In file included from include/linux/huge_mm.h:8:
+   In file included from include/linux/fs.h:33:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:187:1: warning: array index 3 is past the end of the array (that has type 'unsigned long[2]') [-Warray-bounds]
+     187 | _SIG_SET_OP(signotset, _sig_not)
+         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/signal.h:174:10: note: expanded from macro '_SIG_SET_OP'
+     174 |         case 4: set->sig[3] = op(set->sig[3]);                          \
+         |                 ^        ~
+   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
+      24 |         unsigned long sig[_NSIG_WORDS];
+         |         ^
+   In file included from mm/memory.c:44:
+   In file included from include/linux/mm.h:1106:
+   In file included from include/linux/huge_mm.h:8:
+   In file included from include/linux/fs.h:33:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:187:1: warning: array index 2 is past the end of the array (that has type 'unsigned long[2]') [-Warray-bounds]
+     187 | _SIG_SET_OP(signotset, _sig_not)
+         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/signal.h:175:20: note: expanded from macro '_SIG_SET_OP'
+     175 |                 set->sig[2] = op(set->sig[2]);                          \
+         |                                  ^        ~
+   include/linux/signal.h:186:24: note: expanded from macro '_sig_not'
+     186 | #define _sig_not(x)     (~(x))
+         |                            ^
+   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
+      24 |         unsigned long sig[_NSIG_WORDS];
+         |         ^
+   In file included from mm/memory.c:44:
+   In file included from include/linux/mm.h:1106:
+   In file included from include/linux/huge_mm.h:8:
+   In file included from include/linux/fs.h:33:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:187:1: warning: array index 2 is past the end of the array (that has type 'unsigned long[2]') [-Warray-bounds]
+     187 | _SIG_SET_OP(signotset, _sig_not)
+         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/signal.h:175:3: note: expanded from macro '_SIG_SET_OP'
+     175 |                 set->sig[2] = op(set->sig[2]);                          \
+         |                 ^        ~
+   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
+      24 |         unsigned long sig[_NSIG_WORDS];
+         |         ^
+   In file included from mm/memory.c:51:
+   include/linux/mman.h:158:9: warning: division by zero is undefined [-Wdivision-by-zero]
+     158 |                _calc_vm_trans(flags, MAP_SYNC,       VM_SYNC      ) |
+         |                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/mman.h:136:21: note: expanded from macro '_calc_vm_trans'
+     136 |    : ((x) & (bit1)) / ((bit1) / (bit2))))
+         |                     ^ ~~~~~~~~~~~~~~~~~
+   include/linux/mman.h:159:9: warning: division by zero is undefined [-Wdivision-by-zero]
+     159 |                _calc_vm_trans(flags, MAP_STACK,      VM_NOHUGEPAGE) |
+         |                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/mman.h:136:21: note: expanded from macro '_calc_vm_trans'
+     136 |    : ((x) & (bit1)) / ((bit1) / (bit2))))
+         |                     ^ ~~~~~~~~~~~~~~~~~
+>> mm/memory.c:4052:12: error: call to undeclared function 'page_dev_pagemap'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+    4052 |                         pgmap = page_dev_pagemap(vmf->page);
+         |                                 ^
+>> mm/memory.c:4052:10: error: incompatible integer to pointer conversion assigning to 'struct dev_pagemap *' from 'int' [-Wint-conversion]
+    4052 |                         pgmap = page_dev_pagemap(vmf->page);
+         |                               ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   42 warnings and 8 errors generated.
 
 
---=20
-Thanks,
-JeffXie
+vim +/page_dev_pagemap +4052 mm/memory.c
+
+  3988	
+  3989	/*
+  3990	 * We enter with non-exclusive mmap_lock (to exclude vma changes,
+  3991	 * but allow concurrent faults), and pte mapped but not yet locked.
+  3992	 * We return with pte unmapped and unlocked.
+  3993	 *
+  3994	 * We return with the mmap_lock locked or unlocked in the same cases
+  3995	 * as does filemap_fault().
+  3996	 */
+  3997	vm_fault_t do_swap_page(struct vm_fault *vmf)
+  3998	{
+  3999		struct vm_area_struct *vma = vmf->vma;
+  4000		struct folio *swapcache, *folio = NULL;
+  4001		struct page *page;
+  4002		struct swap_info_struct *si = NULL;
+  4003		rmap_t rmap_flags = RMAP_NONE;
+  4004		bool need_clear_cache = false;
+  4005		bool exclusive = false;
+  4006		swp_entry_t entry;
+  4007		pte_t pte;
+  4008		vm_fault_t ret = 0;
+  4009		void *shadow = NULL;
+  4010		int nr_pages;
+  4011		unsigned long page_idx;
+  4012		unsigned long address;
+  4013		pte_t *ptep;
+  4014	
+  4015		if (!pte_unmap_same(vmf))
+  4016			goto out;
+  4017	
+  4018		entry = pte_to_swp_entry(vmf->orig_pte);
+  4019		if (unlikely(non_swap_entry(entry))) {
+  4020			if (is_migration_entry(entry)) {
+  4021				migration_entry_wait(vma->vm_mm, vmf->pmd,
+  4022						     vmf->address);
+  4023			} else if (is_device_exclusive_entry(entry)) {
+  4024				vmf->page = pfn_swap_entry_to_page(entry);
+  4025				ret = remove_device_exclusive_entry(vmf);
+  4026			} else if (is_device_private_entry(entry)) {
+  4027				struct dev_pagemap *pgmap;
+  4028				if (vmf->flags & FAULT_FLAG_VMA_LOCK) {
+  4029					/*
+  4030					 * migrate_to_ram is not yet ready to operate
+  4031					 * under VMA lock.
+  4032					 */
+  4033					vma_end_read(vma);
+  4034					ret = VM_FAULT_RETRY;
+  4035					goto out;
+  4036				}
+  4037	
+  4038				vmf->page = pfn_swap_entry_to_page(entry);
+  4039				vmf->pte = pte_offset_map_lock(vma->vm_mm, vmf->pmd,
+  4040						vmf->address, &vmf->ptl);
+  4041				if (unlikely(!vmf->pte ||
+  4042					     !pte_same(ptep_get(vmf->pte),
+  4043								vmf->orig_pte)))
+  4044					goto unlock;
+  4045	
+  4046				/*
+  4047				 * Get a page reference while we know the page can't be
+  4048				 * freed.
+  4049				 */
+  4050				get_page(vmf->page);
+  4051				pte_unmap_unlock(vmf->pte, vmf->ptl);
+> 4052				pgmap = page_dev_pagemap(vmf->page);
+  4053				ret = pgmap->ops->migrate_to_ram(vmf);
+  4054				put_page(vmf->page);
+  4055			} else if (is_hwpoison_entry(entry)) {
+  4056				ret = VM_FAULT_HWPOISON;
+  4057			} else if (is_pte_marker_entry(entry)) {
+  4058				ret = handle_pte_marker(vmf);
+  4059			} else {
+  4060				print_bad_pte(vma, vmf->address, vmf->orig_pte, NULL);
+  4061				ret = VM_FAULT_SIGBUS;
+  4062			}
+  4063			goto out;
+  4064		}
+  4065	
+  4066		/* Prevent swapoff from happening to us. */
+  4067		si = get_swap_device(entry);
+  4068		if (unlikely(!si))
+  4069			goto out;
+  4070	
+  4071		folio = swap_cache_get_folio(entry, vma, vmf->address);
+  4072		if (folio)
+  4073			page = folio_file_page(folio, swp_offset(entry));
+  4074		swapcache = folio;
+  4075	
+  4076		if (!folio) {
+  4077			if (data_race(si->flags & SWP_SYNCHRONOUS_IO) &&
+  4078			    __swap_count(entry) == 1) {
+  4079				/*
+  4080				 * Prevent parallel swapin from proceeding with
+  4081				 * the cache flag. Otherwise, another thread may
+  4082				 * finish swapin first, free the entry, and swapout
+  4083				 * reusing the same entry. It's undetectable as
+  4084				 * pte_same() returns true due to entry reuse.
+  4085				 */
+  4086				if (swapcache_prepare(entry, 1)) {
+  4087					/* Relax a bit to prevent rapid repeated page faults */
+  4088					schedule_timeout_uninterruptible(1);
+  4089					goto out;
+  4090				}
+  4091				need_clear_cache = true;
+  4092	
+  4093				/* skip swapcache */
+  4094				folio = vma_alloc_folio(GFP_HIGHUSER_MOVABLE, 0,
+  4095							vma, vmf->address, false);
+  4096				if (folio) {
+  4097					__folio_set_locked(folio);
+  4098					__folio_set_swapbacked(folio);
+  4099	
+  4100					if (mem_cgroup_swapin_charge_folio(folio,
+  4101								vma->vm_mm, GFP_KERNEL,
+  4102								entry)) {
+  4103						ret = VM_FAULT_OOM;
+  4104						goto out_page;
+  4105					}
+  4106					mem_cgroup_swapin_uncharge_swap(entry);
+  4107	
+  4108					shadow = get_shadow_from_swap_cache(entry);
+  4109					if (shadow)
+  4110						workingset_refault(folio, shadow);
+  4111	
+  4112					folio_add_lru(folio);
+  4113	
+  4114					/* To provide entry to swap_read_folio() */
+  4115					folio->swap = entry;
+  4116					swap_read_folio(folio, NULL);
+  4117					folio->private = NULL;
+  4118				}
+  4119			} else {
+  4120				folio = swapin_readahead(entry, GFP_HIGHUSER_MOVABLE,
+  4121							vmf);
+  4122				swapcache = folio;
+  4123			}
+  4124	
+  4125			if (!folio) {
+  4126				/*
+  4127				 * Back out if somebody else faulted in this pte
+  4128				 * while we released the pte lock.
+  4129				 */
+  4130				vmf->pte = pte_offset_map_lock(vma->vm_mm, vmf->pmd,
+  4131						vmf->address, &vmf->ptl);
+  4132				if (likely(vmf->pte &&
+  4133					   pte_same(ptep_get(vmf->pte), vmf->orig_pte)))
+  4134					ret = VM_FAULT_OOM;
+  4135				goto unlock;
+  4136			}
+  4137	
+  4138			/* Had to read the page from swap area: Major fault */
+  4139			ret = VM_FAULT_MAJOR;
+  4140			count_vm_event(PGMAJFAULT);
+  4141			count_memcg_event_mm(vma->vm_mm, PGMAJFAULT);
+  4142			page = folio_file_page(folio, swp_offset(entry));
+  4143		} else if (PageHWPoison(page)) {
+  4144			/*
+  4145			 * hwpoisoned dirty swapcache pages are kept for killing
+  4146			 * owner processes (which may be unknown at hwpoison time)
+  4147			 */
+  4148			ret = VM_FAULT_HWPOISON;
+  4149			goto out_release;
+  4150		}
+  4151	
+  4152		ret |= folio_lock_or_retry(folio, vmf);
+  4153		if (ret & VM_FAULT_RETRY)
+  4154			goto out_release;
+  4155	
+  4156		if (swapcache) {
+  4157			/*
+  4158			 * Make sure folio_free_swap() or swapoff did not release the
+  4159			 * swapcache from under us.  The page pin, and pte_same test
+  4160			 * below, are not enough to exclude that.  Even if it is still
+  4161			 * swapcache, we need to check that the page's swap has not
+  4162			 * changed.
+  4163			 */
+  4164			if (unlikely(!folio_test_swapcache(folio) ||
+  4165				     page_swap_entry(page).val != entry.val))
+  4166				goto out_page;
+  4167	
+  4168			/*
+  4169			 * KSM sometimes has to copy on read faults, for example, if
+  4170			 * page->index of !PageKSM() pages would be nonlinear inside the
+  4171			 * anon VMA -- PageKSM() is lost on actual swapout.
+  4172			 */
+  4173			folio = ksm_might_need_to_copy(folio, vma, vmf->address);
+  4174			if (unlikely(!folio)) {
+  4175				ret = VM_FAULT_OOM;
+  4176				folio = swapcache;
+  4177				goto out_page;
+  4178			} else if (unlikely(folio == ERR_PTR(-EHWPOISON))) {
+  4179				ret = VM_FAULT_HWPOISON;
+  4180				folio = swapcache;
+  4181				goto out_page;
+  4182			}
+  4183			if (folio != swapcache)
+  4184				page = folio_page(folio, 0);
+  4185	
+  4186			/*
+  4187			 * If we want to map a page that's in the swapcache writable, we
+  4188			 * have to detect via the refcount if we're really the exclusive
+  4189			 * owner. Try removing the extra reference from the local LRU
+  4190			 * caches if required.
+  4191			 */
+  4192			if ((vmf->flags & FAULT_FLAG_WRITE) && folio == swapcache &&
+  4193			    !folio_test_ksm(folio) && !folio_test_lru(folio))
+  4194				lru_add_drain();
+  4195		}
+  4196	
+  4197		folio_throttle_swaprate(folio, GFP_KERNEL);
+  4198	
+  4199		/*
+  4200		 * Back out if somebody else already faulted in this pte.
+  4201		 */
+  4202		vmf->pte = pte_offset_map_lock(vma->vm_mm, vmf->pmd, vmf->address,
+  4203				&vmf->ptl);
+  4204		if (unlikely(!vmf->pte || !pte_same(ptep_get(vmf->pte), vmf->orig_pte)))
+  4205			goto out_nomap;
+  4206	
+  4207		if (unlikely(!folio_test_uptodate(folio))) {
+  4208			ret = VM_FAULT_SIGBUS;
+  4209			goto out_nomap;
+  4210		}
+  4211	
+  4212		nr_pages = 1;
+  4213		page_idx = 0;
+  4214		address = vmf->address;
+  4215		ptep = vmf->pte;
+  4216		if (folio_test_large(folio) && folio_test_swapcache(folio)) {
+  4217			int nr = folio_nr_pages(folio);
+  4218			unsigned long idx = folio_page_idx(folio, page);
+  4219			unsigned long folio_start = address - idx * PAGE_SIZE;
+  4220			unsigned long folio_end = folio_start + nr * PAGE_SIZE;
+  4221			pte_t *folio_ptep;
+  4222			pte_t folio_pte;
+  4223	
+  4224			if (unlikely(folio_start < max(address & PMD_MASK, vma->vm_start)))
+  4225				goto check_folio;
+  4226			if (unlikely(folio_end > pmd_addr_end(address, vma->vm_end)))
+  4227				goto check_folio;
+  4228	
+  4229			folio_ptep = vmf->pte - idx;
+  4230			folio_pte = ptep_get(folio_ptep);
+  4231			if (!pte_same(folio_pte, pte_move_swp_offset(vmf->orig_pte, -idx)) ||
+  4232			    swap_pte_batch(folio_ptep, nr, folio_pte) != nr)
+  4233				goto check_folio;
+  4234	
+  4235			page_idx = idx;
+  4236			address = folio_start;
+  4237			ptep = folio_ptep;
+  4238			nr_pages = nr;
+  4239			entry = folio->swap;
+  4240			page = &folio->page;
+  4241		}
+  4242	
+  4243	check_folio:
+  4244		/*
+  4245		 * PG_anon_exclusive reuses PG_mappedtodisk for anon pages. A swap pte
+  4246		 * must never point at an anonymous page in the swapcache that is
+  4247		 * PG_anon_exclusive. Sanity check that this holds and especially, that
+  4248		 * no filesystem set PG_mappedtodisk on a page in the swapcache. Sanity
+  4249		 * check after taking the PT lock and making sure that nobody
+  4250		 * concurrently faulted in this page and set PG_anon_exclusive.
+  4251		 */
+  4252		BUG_ON(!folio_test_anon(folio) && folio_test_mappedtodisk(folio));
+  4253		BUG_ON(folio_test_anon(folio) && PageAnonExclusive(page));
+  4254	
+  4255		/*
+  4256		 * Check under PT lock (to protect against concurrent fork() sharing
+  4257		 * the swap entry concurrently) for certainly exclusive pages.
+  4258		 */
+  4259		if (!folio_test_ksm(folio)) {
+  4260			exclusive = pte_swp_exclusive(vmf->orig_pte);
+  4261			if (folio != swapcache) {
+  4262				/*
+  4263				 * We have a fresh page that is not exposed to the
+  4264				 * swapcache -> certainly exclusive.
+  4265				 */
+  4266				exclusive = true;
+  4267			} else if (exclusive && folio_test_writeback(folio) &&
+  4268				  data_race(si->flags & SWP_STABLE_WRITES)) {
+  4269				/*
+  4270				 * This is tricky: not all swap backends support
+  4271				 * concurrent page modifications while under writeback.
+  4272				 *
+  4273				 * So if we stumble over such a page in the swapcache
+  4274				 * we must not set the page exclusive, otherwise we can
+  4275				 * map it writable without further checks and modify it
+  4276				 * while still under writeback.
+  4277				 *
+  4278				 * For these problematic swap backends, simply drop the
+  4279				 * exclusive marker: this is perfectly fine as we start
+  4280				 * writeback only if we fully unmapped the page and
+  4281				 * there are no unexpected references on the page after
+  4282				 * unmapping succeeded. After fully unmapped, no
+  4283				 * further GUP references (FOLL_GET and FOLL_PIN) can
+  4284				 * appear, so dropping the exclusive marker and mapping
+  4285				 * it only R/O is fine.
+  4286				 */
+  4287				exclusive = false;
+  4288			}
+  4289		}
+  4290	
+  4291		/*
+  4292		 * Some architectures may have to restore extra metadata to the page
+  4293		 * when reading from swap. This metadata may be indexed by swap entry
+  4294		 * so this must be called before swap_free().
+  4295		 */
+  4296		arch_swap_restore(folio_swap(entry, folio), folio);
+  4297	
+  4298		/*
+  4299		 * Remove the swap entry and conditionally try to free up the swapcache.
+  4300		 * We're already holding a reference on the page but haven't mapped it
+  4301		 * yet.
+  4302		 */
+  4303		swap_free_nr(entry, nr_pages);
+  4304		if (should_try_to_free_swap(folio, vma, vmf->flags))
+  4305			folio_free_swap(folio);
+  4306	
+  4307		add_mm_counter(vma->vm_mm, MM_ANONPAGES, nr_pages);
+  4308		add_mm_counter(vma->vm_mm, MM_SWAPENTS, -nr_pages);
+  4309		pte = mk_pte(page, vma->vm_page_prot);
+  4310		if (pte_swp_soft_dirty(vmf->orig_pte))
+  4311			pte = pte_mksoft_dirty(pte);
+  4312		if (pte_swp_uffd_wp(vmf->orig_pte))
+  4313			pte = pte_mkuffd_wp(pte);
+  4314	
+  4315		/*
+  4316		 * Same logic as in do_wp_page(); however, optimize for pages that are
+  4317		 * certainly not shared either because we just allocated them without
+  4318		 * exposing them to the swapcache or because the swap entry indicates
+  4319		 * exclusivity.
+  4320		 */
+  4321		if (!folio_test_ksm(folio) &&
+  4322		    (exclusive || folio_ref_count(folio) == 1)) {
+  4323			if ((vma->vm_flags & VM_WRITE) && !userfaultfd_pte_wp(vma, pte) &&
+  4324			    !pte_needs_soft_dirty_wp(vma, pte)) {
+  4325				pte = pte_mkwrite(pte, vma);
+  4326				if (vmf->flags & FAULT_FLAG_WRITE) {
+  4327					pte = pte_mkdirty(pte);
+  4328					vmf->flags &= ~FAULT_FLAG_WRITE;
+  4329				}
+  4330			}
+  4331			rmap_flags |= RMAP_EXCLUSIVE;
+  4332		}
+  4333		folio_ref_add(folio, nr_pages - 1);
+  4334		flush_icache_pages(vma, page, nr_pages);
+  4335		vmf->orig_pte = pte_advance_pfn(pte, page_idx);
+  4336	
+  4337		/* ksm created a completely new copy */
+  4338		if (unlikely(folio != swapcache && swapcache)) {
+  4339			folio_add_new_anon_rmap(folio, vma, address, RMAP_EXCLUSIVE);
+  4340			folio_add_lru_vma(folio, vma);
+  4341		} else if (!folio_test_anon(folio)) {
+  4342			/*
+  4343			 * We currently only expect small !anon folios, which are either
+  4344			 * fully exclusive or fully shared. If we ever get large folios
+  4345			 * here, we have to be careful.
+  4346			 */
+  4347			VM_WARN_ON_ONCE(folio_test_large(folio));
+  4348			VM_WARN_ON_FOLIO(!folio_test_locked(folio), folio);
+  4349			folio_add_new_anon_rmap(folio, vma, address, rmap_flags);
+  4350		} else {
+  4351			folio_add_anon_rmap_ptes(folio, page, nr_pages, vma, address,
+  4352						rmap_flags);
+  4353		}
+  4354	
+  4355		VM_BUG_ON(!folio_test_anon(folio) ||
+  4356				(pte_write(pte) && !PageAnonExclusive(page)));
+  4357		set_ptes(vma->vm_mm, address, ptep, pte, nr_pages);
+  4358		arch_do_swap_page_nr(vma->vm_mm, vma, address,
+  4359				pte, pte, nr_pages);
+  4360	
+  4361		folio_unlock(folio);
+  4362		if (folio != swapcache && swapcache) {
+  4363			/*
+  4364			 * Hold the lock to avoid the swap entry to be reused
+  4365			 * until we take the PT lock for the pte_same() check
+  4366			 * (to avoid false positives from pte_same). For
+  4367			 * further safety release the lock after the swap_free
+  4368			 * so that the swap count won't change under a
+  4369			 * parallel locked swapcache.
+  4370			 */
+  4371			folio_unlock(swapcache);
+  4372			folio_put(swapcache);
+  4373		}
+  4374	
+  4375		if (vmf->flags & FAULT_FLAG_WRITE) {
+  4376			ret |= do_wp_page(vmf);
+  4377			if (ret & VM_FAULT_ERROR)
+  4378				ret &= VM_FAULT_ERROR;
+  4379			goto out;
+  4380		}
+  4381	
+  4382		/* No need to invalidate - it was non-present before */
+  4383		update_mmu_cache_range(vmf, vma, address, ptep, nr_pages);
+  4384	unlock:
+  4385		if (vmf->pte)
+  4386			pte_unmap_unlock(vmf->pte, vmf->ptl);
+  4387	out:
+  4388		/* Clear the swap cache pin for direct swapin after PTL unlock */
+  4389		if (need_clear_cache)
+  4390			swapcache_clear(si, entry, 1);
+  4391		if (si)
+  4392			put_swap_device(si);
+  4393		return ret;
+  4394	out_nomap:
+  4395		if (vmf->pte)
+  4396			pte_unmap_unlock(vmf->pte, vmf->ptl);
+  4397	out_page:
+  4398		folio_unlock(folio);
+  4399	out_release:
+  4400		folio_put(folio);
+  4401		if (folio != swapcache && swapcache) {
+  4402			folio_unlock(swapcache);
+  4403			folio_put(swapcache);
+  4404		}
+  4405		if (need_clear_cache)
+  4406			swapcache_clear(si, entry, 1);
+  4407		if (si)
+  4408			put_swap_device(si);
+  4409		return ret;
+  4410	}
+  4411	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
