@@ -1,65 +1,111 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B2EC36C;
-	Thu, 12 Sep 2024 00:06:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B03A12D760;
+	Thu, 12 Sep 2024 02:58:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726099605; cv=none; b=mO4+r5pTfNWycOPIeTanZwHRq2xLZ2Jinpgt/7imHX3NrE7SBzBuV6EyCRyRZp/q3C/gb94aba4PVvn2BMrkyHCY5UmosyUDEeFgACWJd8dCHhbN70QpVJ0pnzdZt4FpI/KPK9rZHZpx/KTJ4GaHXx3j2IFPWHT+NKINwvZKNyc=
+	t=1726109913; cv=none; b=WIks7IT8RjVolpn8JFo54ZTU9Teho1KEehyTZFR1SANPuMn8J28iBmrmyNicI/C68ZeaKEVMZZt5npFiK3WZt1mBNEJ6953+j8gYDmx+js9VFc+MnKO//Jg2QWs27lvx+8/HVnNv/tIMpOcH0coKQYDN2Ght6bLWn5dWrakOXOk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726099605; c=relaxed/simple;
-	bh=XjWRtI+IRMDQdK2wQCaYxO/xEhfu7igFdrNudaY7Tx4=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=QclaK8YBV3XJNXrMTvUeYMguReplZSkiRmUOP+vN5xIjI3Ed145f8HhRtebCg3Kcq9UkWigNDHVMLu2MwMlwgpaWUAlnul12mZCvRu3h0uv9Bb81ugJQwkfyWqRhs9uP4QpjfxKWbYsa/j3gAzqLdZqUYzIS8hO243ROx/biQuU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=choyyDBE; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1726109913; c=relaxed/simple;
+	bh=4pKmHcSPb4q0CgxjlBXTua6+JlNlQQEApnOkulyQNEQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=MhiGOsox7YrDve2Nky7qOD5M7pWRp0Xfri8K02vpeOFBPR4pLt5CY6ZtcM/iYRsDZrr6FpjVh21RBBqy5FENs/bQLbFTc3oV9z9lf3OtBukICNyNtbJdlwjzRBBrx07bsTi1BJxoeCNuIs+vzEjgEKgeuDyxclrdFNUznwg79Lw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=jSLmeCi0; arc=none smtp.client-ip=192.198.163.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="choyyDBE"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1AA33C4CEC0;
-	Thu, 12 Sep 2024 00:06:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1726099604;
-	bh=XjWRtI+IRMDQdK2wQCaYxO/xEhfu7igFdrNudaY7Tx4=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=choyyDBEdArWZaLLOSFdPW33VF7rFeZsPQpU94U3PvGvdiW0r2G6jc7gLauiEF9J6
-	 ZZtfqXqAdcIrWAFJzMo7ivamEqon3y3oTbsvOwgfjwQquVF8cybE7m3aHxrqzLpcJ0
-	 uApWamhPnUSKBvvys1sOBjbVg9Tzn0dKP4qm7PUMfLBSO7hnCaMcWmrRxr1l1oxZZf
-	 B4vQs39HXMyCN7yInBuG0mKRTfMlfAgPWYehr4dhJMy2PZqD/gBFabwecQy2+5+Ozj
-	 PjSy0EFtifdRZdsqXviDnSJXlBf9nEF4JfE7svNXYe0nryIAqY3oIpqhwFlIcmf3lO
-	 PCUBB9ECcNoSQ==
-Date: Wed, 11 Sep 2024 17:06:43 -0700
-From: Jakub Kicinski <kuba@kernel.org>
-To: Simon Horman <horms@kernel.org>
-Cc: "David S. Miller" <davem@davemloft.net>, Eric Dumazet
- <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>, Siddharth Vadapalli
- <s-vadapalli@ti.com>, Roger Quadros <rogerq@kernel.org>, Nathan Chancellor
- <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, Bill
- Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
- netdev@vger.kernel.org, linux-omap@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH net-next 1/3] net: ethernet: ti: am65-cpsw: Address
- __percpu Sparse warnings
-Message-ID: <20240911170643.7ecb1bbb@kernel.org>
-In-Reply-To: <20240910-ti-warn-v1-1-afd1e404abbe@kernel.org>
-References: <20240910-ti-warn-v1-0-afd1e404abbe@kernel.org>
-	<20240910-ti-warn-v1-1-afd1e404abbe@kernel.org>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="jSLmeCi0"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1726109911; x=1757645911;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=4pKmHcSPb4q0CgxjlBXTua6+JlNlQQEApnOkulyQNEQ=;
+  b=jSLmeCi0PtuvqzKRP2dqd249M8Ou4H6RInj5777CShKRIi2RSVGbwgHb
+   mQywOF0zyAfNrnUULEKKtC2RnzkFIr3h8l+CHsq5gvkh6oppiosxmKmLJ
+   +NcFZPnv48PLj6UOy4P1zwILvWdWz56k85k3hKDmU5CYbGWeTk/VznvO4
+   kyDVMGjCCDe7i/a4Owr/PuKcwrqnbaZ4b0nuJWIDE9rhYzj8Ac9KmrbiP
+   wRApUgAZV16oJ1Rn1FXjg8iCjhmmEwuj2YXoPHaJvg1Mh2r/v+wTM4KLj
+   /lu4NOOXgCQzgzEweprVlupTfGTEqsrBDTEyfBmBFhXz5mLEHNW1Nn8Y3
+   Q==;
+X-CSE-ConnectionGUID: 4ux1YqGcTb2z+7O+srjS2w==
+X-CSE-MsgGUID: zePJNeGYRuuETWhkiegcjQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11192"; a="27860137"
+X-IronPort-AV: E=Sophos;i="6.10,221,1719903600"; 
+   d="scan'208";a="27860137"
+Received: from fmviesa009.fm.intel.com ([10.60.135.149])
+  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Sep 2024 19:58:28 -0700
+X-CSE-ConnectionGUID: t6CqJGmhQxO0E1RqdC+Dlg==
+X-CSE-MsgGUID: 80MknMOrR1CvdDD1np4JQg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.10,221,1719903600"; 
+   d="scan'208";a="67554007"
+Received: from lkp-server01.sh.intel.com (HELO 53e96f405c61) ([10.239.97.150])
+  by fmviesa009.fm.intel.com with ESMTP; 11 Sep 2024 19:58:27 -0700
+Received: from kbuild by 53e96f405c61 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1soa2L-0004QA-0m;
+	Thu, 12 Sep 2024 02:58:25 +0000
+Date: Thu, 12 Sep 2024 10:58:17 +0800
+From: kernel test robot <lkp@intel.com>
+To: Avri Altman <avri.altman@wdc.com>,
+	"Martin K . Petersen" <martin.petersen@oracle.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Bart Van Assche <bvanassche@acm.org>,
+	Avri Altman <avri.altman@wdc.com>
+Subject: Re: [PATCH] scsi: ufs: Zero utp_upiu_req at the beginning of each
+ command
+Message-ID: <202409121041.ZoEfIT5S-lkp@intel.com>
+References: <20240911053951.4032533-1-avri.altman@wdc.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240911053951.4032533-1-avri.altman@wdc.com>
 
-On Tue, 10 Sep 2024 08:17:56 +0100 Simon Horman wrote:
-> An alternate, approach would be to create a variant of
-> devm_add_action_or_reset() which expects __percpu data.  This would
-> avoid discarding the __percpu annotation, and any value it may have
-> between the casts added by this patch.  However, doing so appears to
-> require a significant amount of plumbing.  And, as far as I can see, the
-> code updated by this patch would be the only user of it.  So this patch
-> takes a simpler approach.
+Hi Avri,
 
-Sorry if this was already discussed, but struct am65_cpsw_ndev_stats
-appears to be identical to struct pcpu_sw_netstats but for ordering.
-Can we let the core allocate the stats by setting
-netdev->pcpu_stat_type = NETDEV_PCPU_STAT_TSTATS?
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on mkp-scsi/for-next]
+[also build test ERROR on jejb-scsi/for-next linus/master v6.11-rc7 next-20240911]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Avri-Altman/scsi-ufs-Zero-utp_upiu_req-at-the-beginning-of-each-command/20240911-134349
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/mkp/scsi.git for-next
+patch link:    https://lore.kernel.org/r/20240911053951.4032533-1-avri.altman%40wdc.com
+patch subject: [PATCH] scsi: ufs: Zero utp_upiu_req at the beginning of each command
+config: x86_64-buildonly-randconfig-004-20240912 (https://download.01.org/0day-ci/archive/20240912/202409121041.ZoEfIT5S-lkp@intel.com/config)
+compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240912/202409121041.ZoEfIT5S-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202409121041.ZoEfIT5S-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+   In file included from <built-in>:1:
+>> ./usr/include/scsi/scsi_bsg_ufs.h:165:2: error: type name requires a specifier or qualifier
+     165 |         struct_group(utp_upiu,
+         |         ^
+>> ./usr/include/scsi/scsi_bsg_ufs.h:166:3: error: expected identifier
+     166 |                 union {
+         |                 ^
+>> ./usr/include/scsi/scsi_bsg_ufs.h:170:4: error: unexpected ';' before ')'
+     170 |                 };
+         |                  ^
+   3 errors generated.
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
