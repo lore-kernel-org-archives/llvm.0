@@ -1,127 +1,179 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 452FA17DFF5;
-	Thu, 12 Sep 2024 22:35:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B267E19F425;
+	Thu, 12 Sep 2024 23:57:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726180528; cv=none; b=rEdPfDEBZaYkNhRZBakNv+VWbiEsZj7F9dO5CfGh+7EG9s8wW5nJfKqrI8YViQb5TNJQ6HEgbXEnfHE21csbJauiy2qI7ejcxUeBAlVTyjm8/FuNFnqs9QhnTgyEbSprsK3fRBR23tHl6ituZ5yzrlhMyd6Iz6Z0zQhJl9rRkR4=
+	t=1726185456; cv=none; b=RimlTERLvfEKnPIu2V5jkkwNAbTVnoe7dVfXTsbnz8Idy2ChWS51z7W3bivCZ+P+dtxyQgbElbAyu2uhuFW0HmvHx/SqYiHwd7t2rSsNq/kZ4HZc3wJQ8T73bmB+HAhWC5pJP9ahQmwNQ3TK+Q5Ry64yXTXZRBVwd0OS3J0ae1Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726180528; c=relaxed/simple;
-	bh=wuIELZcEof8EAfoBjEWh2KFq19kR4h+BfHve4ep/mrE=;
+	s=arc-20240116; t=1726185456; c=relaxed/simple;
+	bh=GkGYXDvAWdh6YyZkFKmQZSh37pG/jN3F2vOmSYubEbw=;
 	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=DtW3lm+N/dj3nMMSp0T9tkRbUWFPDh5XsfIfs1o27TdsAf7U5ZTnUCJivrQptuVaftGzlBrKUunSjBOkSK6tE2rs0AmEssV13ImZ2NR9FHnvbzglHawBRTQIE4UCU5gG26INW+o0JamdXXqd7TU8LOfMqv+6auzhhqHg4qbibEo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=SDPzrPRX; arc=none smtp.client-ip=192.198.163.11
+	 Content-Disposition; b=MvgiUYz0dbls6dbjctppl0Isz5oUW8WEoXyNKY/C5sYyM0GdTKb6MfOEu4UEi/P+0iaxe/RHbFFTBgtO6/h0N/bu/XvZyitJWhJuZhoJprH22GPWniicO4Vf90joQxy+e7IGnZ240fY8RW8kQqhhOxWCSxccwOZT4VLy4vg5bEo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=BWmOZ6eC; arc=none smtp.client-ip=198.175.65.12
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="SDPzrPRX"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="BWmOZ6eC"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1726180527; x=1757716527;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=wuIELZcEof8EAfoBjEWh2KFq19kR4h+BfHve4ep/mrE=;
-  b=SDPzrPRXJWFa2ypXOcVWuh7d88brok4kUTN7N9Cd1I3RXah21DB3Mw03
-   ODT886nxekxlGhb3bYXsp/fMcI9OsprRLSZtOQfxnOuBE0SZnD3UR8Lsy
-   c2Oy2UtjGBll3UpvquiqcUGhf1DzMIjA2YKT3h916wr56E11MFOYhPsVI
-   0FLo/g9Yr9+HP7z5fQhZYNHMDdF4iLDN1Q5KHzwvJoNsr4fw1dKODoKQs
-   Vu+UEEgThUZOoiA12IVGjG4slQ4X6RKFu0T0GaEWhvlc2xhAl4KsZ9jLS
-   sGL0lmxL6dGacarhYCd1LGDRFD1PTxXW0iaHBO4JkKVWzJv8DZLH7CmBy
-   A==;
-X-CSE-ConnectionGUID: EJife8ESSMeR4bfxBXl13w==
-X-CSE-MsgGUID: QlyrZmDtTn6tp7uhSacbMA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11193"; a="35655345"
+  t=1726185454; x=1757721454;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=GkGYXDvAWdh6YyZkFKmQZSh37pG/jN3F2vOmSYubEbw=;
+  b=BWmOZ6eCRlza9imf3VCs4w0YI85QG454y7w0Wfheen0g0cax64QKRaQ2
+   td1DA0m0Az/Z32/JHtPFf2CpulLFrUd7BtppyKpIFdwB7ZPw9bhuhLBlU
+   9eXdSFVjzbqpVbDOXvqb1lFwZlqZEbpTecze6EdqT88IEcwZWSm00ePme
+   WcL7i3EPs98Nu0aMGAQcaTiGj6LMbYNAVMKntUBck/Nvq/uM30K9uqAB5
+   xxk46S14+ZjB/SKCGAct+4ZCAluJQYh3RzrngqxJL9FGicabvRezgUpEr
+   5LGianZuoNwjutjUdb6WtBg92MczzTZIq1Np4aZYAMNeTeqJNyz73FhTE
+   g==;
+X-CSE-ConnectionGUID: 8S5PfnqqRBqJR9YtgbOESg==
+X-CSE-MsgGUID: 1Zlkqg7JTVqhjhqFIUNDBA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11193"; a="36421582"
 X-IronPort-AV: E=Sophos;i="6.10,224,1719903600"; 
-   d="scan'208";a="35655345"
-Received: from orviesa007.jf.intel.com ([10.64.159.147])
-  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Sep 2024 15:35:26 -0700
-X-CSE-ConnectionGUID: hiAirQFtSGS+mBZl7t9oeQ==
-X-CSE-MsgGUID: 4VAvA29oTw2t6Evp0EQ2Lg==
+   d="scan'208";a="36421582"
+Received: from orviesa001.jf.intel.com ([10.64.159.141])
+  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Sep 2024 16:57:28 -0700
+X-CSE-ConnectionGUID: BWoHmJeIRM6UufEwIYjAqg==
+X-CSE-MsgGUID: zCYzz7PxQbqKniCUXFI9pA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.10,224,1719903600"; 
-   d="scan'208";a="68374426"
+   d="scan'208";a="105348637"
 Received: from lkp-server01.sh.intel.com (HELO 53e96f405c61) ([10.239.97.150])
-  by orviesa007.jf.intel.com with ESMTP; 12 Sep 2024 15:35:24 -0700
+  by orviesa001.jf.intel.com with ESMTP; 12 Sep 2024 16:57:27 -0700
 Received: from kbuild by 53e96f405c61 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1sosPK-0005mQ-0V;
-	Thu, 12 Sep 2024 22:35:22 +0000
-Date: Fri, 13 Sep 2024 06:34:35 +0800
+	id 1sotgi-0005pW-0g;
+	Thu, 12 Sep 2024 23:57:24 +0000
+Date: Fri, 13 Sep 2024 07:56:41 +0800
 From: kernel test robot <lkp@intel.com>
-To: Janne Grunau <j@jannau.net>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [asahilinux:bits/010-soc 13/13]
- drivers/cpuidle/cpuidle-apple.c:153:13: warning: variable 'pdev' is
- uninitialized when used here
-Message-ID: <202409130612.wWkyxkkx-lkp@intel.com>
+To: Martin =?utf-8?Q?Povi=C5=A1er?= <povik+lin@cutebit.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Janne Grunau <j@jannau.net>
+Subject: [asahilinux:bits/070-audio 11/120] sound/soc/codecs/tas2764.c:811:1:
+ error: type specifier missing, defaults to 'int'; ISO C99 and later do not
+ support implicit int
+Message-ID: <202409130720.UbqysLMg-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
 
-tree:   https://github.com/AsahiLinux/linux bits/010-soc
-head:   0be532d0b8c8e4c9d35c7a7b2199e9296d8f68a8
-commit: 0be532d0b8c8e4c9d35c7a7b2199e9296d8f68a8 [13/13] cpuidle: apple: Do not load on unsupported Apple platforms
-config: arm64-randconfig-004-20240913 (https://download.01.org/0day-ci/archive/20240913/202409130612.wWkyxkkx-lkp@intel.com/config)
+tree:   https://github.com/AsahiLinux/linux bits/070-audio
+head:   8bb0ee8e8fd75aa60a4bb4efe074711f2c35ca5c
+commit: 4505843a945e1d46e759f01c0822a855eec41cea [11/120] ASoC: apple: Add macaudio machine driver
+config: arm64-randconfig-004-20240913 (https://download.01.org/0day-ci/archive/20240913/202409130720.UbqysLMg-lkp@intel.com/config)
 compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project bf684034844c660b778f0eba103582f582b710c9)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240913/202409130612.wWkyxkkx-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240913/202409130720.UbqysLMg-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202409130612.wWkyxkkx-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202409130720.UbqysLMg-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
-   In file included from drivers/cpuidle/cpuidle-apple.c:14:
-   In file included from arch/arm64/include/asm/cpuidle.h:8:
-   In file included from arch/arm64/include/asm/arch_gicv3.h:17:
-   In file included from arch/arm64/include/asm/cacheflush.h:11:
-   In file included from include/linux/kgdb.h:19:
-   In file included from include/linux/kprobes.h:28:
-   In file included from include/linux/ftrace.h:13:
-   In file included from include/linux/kallsyms.h:13:
+   In file included from sound/soc/codecs/tas2764.c:12:
+   In file included from include/linux/i2c.h:19:
+   In file included from include/linux/regulator/consumer.h:35:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:21:
    In file included from include/linux/mm.h:2258:
    include/linux/vmstat.h:514:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
      514 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
          |                               ~~~~~~~~~~~ ^ ~~~
->> drivers/cpuidle/cpuidle-apple.c:153:13: warning: variable 'pdev' is uninitialized when used here [-Wuninitialized]
-     153 |                 dev_info(&pdev->dev, "cpuidle unavailable CPU does not retain state in deep WFI\n");
-         |                           ^~~~
-   include/linux/dev_printk.h:160:46: note: expanded from macro 'dev_info'
-     160 |         dev_printk_index_wrap(_dev_info, KERN_INFO, dev, dev_fmt(fmt), ##__VA_ARGS__)
-         |                                                     ^~~
-   include/linux/dev_printk.h:110:11: note: expanded from macro 'dev_printk_index_wrap'
-     110 |                 _p_func(dev, fmt, ##__VA_ARGS__);                       \
-         |                         ^~~
-   drivers/cpuidle/cpuidle-apple.c:142:30: note: initialize the variable 'pdev' to silence this warning
-     142 |         struct platform_device *pdev;
-         |                                     ^
-         |                                      = NULL
-   2 warnings generated.
+   sound/soc/codecs/tas2764.c:758:20: warning: cast to smaller integer type 'enum tas2764_devid' from 'const void *' [-Wvoid-pointer-to-enum-cast]
+     758 |                 tas2764->devid = (enum tas2764_devid) of_id->data;
+         |                                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>> sound/soc/codecs/tas2764.c:811:1: error: type specifier missing, defaults to 'int'; ISO C99 and later do not support implicit int [-Wimplicit-int]
+     811 | module_i2c_driver(tas2764_i2c_driver);
+         | ^
+         | int
+>> sound/soc/codecs/tas2764.c:811:19: error: a parameter list without types is only allowed in a function definition
+     811 | module_i2c_driver(tas2764_i2c_driver);
+         |                   ^
+   2 warnings and 2 errors generated.
+--
+   In file included from sound/soc/codecs/cs42l83-i2c.c:9:
+   In file included from include/linux/i2c.h:19:
+   In file included from include/linux/regulator/consumer.h:35:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:21:
+   In file included from include/linux/mm.h:2258:
+   include/linux/vmstat.h:514:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     514 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+>> sound/soc/codecs/cs42l83-i2c.c:235:1: error: type specifier missing, defaults to 'int'; ISO C99 and later do not support implicit int [-Wimplicit-int]
+     235 | module_i2c_driver(cs42l83_i2c_driver);
+         | ^
+         | int
+>> sound/soc/codecs/cs42l83-i2c.c:235:19: error: a parameter list without types is only allowed in a function definition
+     235 | module_i2c_driver(cs42l83_i2c_driver);
+         |                   ^
+   1 warning and 2 errors generated.
+--
+   In file included from sound/soc/codecs/tas2770.c:16:
+   In file included from include/linux/i2c.h:19:
+   In file included from include/linux/regulator/consumer.h:35:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:21:
+   In file included from include/linux/mm.h:2258:
+   include/linux/vmstat.h:514:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     514 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+>> sound/soc/codecs/tas2770.c:726:1: error: type specifier missing, defaults to 'int'; ISO C99 and later do not support implicit int [-Wimplicit-int]
+     726 | module_i2c_driver(tas2770_i2c_driver);
+         | ^
+         | int
+>> sound/soc/codecs/tas2770.c:726:19: error: a parameter list without types is only allowed in a function definition
+     726 | module_i2c_driver(tas2770_i2c_driver);
+         |                   ^
+   1 warning and 2 errors generated.
+
+Kconfig warnings: (for reference only)
+   WARNING: unmet direct dependencies detected for SND_SOC_CS42L83
+   Depends on [n]: SOUND [=y] && SND [=y] && SND_SOC [=m] && I2C [=n]
+   Selected by [m]:
+   - SND_SOC_APPLE_MACAUDIO [=m] && SOUND [=y] && SND [=y] && SND_SOC [=m] && (ARCH_APPLE [=y] || COMPILE_TEST [=y])
+   WARNING: unmet direct dependencies detected for SND_SOC_TAS2764
+   Depends on [n]: SOUND [=y] && SND [=y] && SND_SOC [=m] && I2C [=n]
+   Selected by [m]:
+   - SND_SOC_APPLE_MACAUDIO [=m] && SOUND [=y] && SND [=y] && SND_SOC [=m] && (ARCH_APPLE [=y] || COMPILE_TEST [=y])
+   WARNING: unmet direct dependencies detected for SND_SOC_TAS2770
+   Depends on [n]: SOUND [=y] && SND [=y] && SND_SOC [=m] && I2C [=n]
+   Selected by [m]:
+   - SND_SOC_APPLE_MACAUDIO [=m] && SOUND [=y] && SND [=y] && SND_SOC [=m] && (ARCH_APPLE [=y] || COMPILE_TEST [=y])
 
 
-vim +/pdev +153 drivers/cpuidle/cpuidle-apple.c
+vim +/int +811 sound/soc/codecs/tas2764.c
 
-   139	
-   140	static int __init apple_cpuidle_init(void)
-   141	{
-   142		struct platform_device *pdev;
-   143		int ret;
-   144	
-   145		ret = platform_driver_register(&apple_cpuidle_driver);
-   146		if (ret)
-   147			return ret;
-   148	
-   149		if (!of_machine_is_compatible("apple,arm-platform"))
-   150			return 0;
-   151	
-   152		if (!FIELD_GET(DEEP_WFI_STATE_RETENTION, read_sysreg(aidr_el1))) {
- > 153			dev_info(&pdev->dev, "cpuidle unavailable CPU does not retain state in deep WFI\n");
+827ed8a0fa50bd Dan Murphy       2020-10-07  802  
+827ed8a0fa50bd Dan Murphy       2020-10-07  803  static struct i2c_driver tas2764_i2c_driver = {
+827ed8a0fa50bd Dan Murphy       2020-10-07  804  	.driver = {
+827ed8a0fa50bd Dan Murphy       2020-10-07  805  		.name   = "tas2764",
+827ed8a0fa50bd Dan Murphy       2020-10-07  806  		.of_match_table = of_match_ptr(tas2764_of_match),
+827ed8a0fa50bd Dan Murphy       2020-10-07  807  	},
+9abcd24002bf79 Uwe Kleine-König 2023-04-25  808  	.probe      = tas2764_i2c_probe,
+827ed8a0fa50bd Dan Murphy       2020-10-07  809  	.id_table   = tas2764_i2c_id,
+827ed8a0fa50bd Dan Murphy       2020-10-07  810  };
+827ed8a0fa50bd Dan Murphy       2020-10-07 @811  module_i2c_driver(tas2764_i2c_driver);
+827ed8a0fa50bd Dan Murphy       2020-10-07  812  
+
+:::::: The code at line 811 was first introduced by commit
+:::::: 827ed8a0fa50bdd365c9f4c9f6ef561ca7032e49 ASoC: tas2764: Add the driver for the TAS2764
+
+:::::: TO: Dan Murphy <dmurphy@ti.com>
+:::::: CC: Mark Brown <broonie@kernel.org>
 
 -- 
 0-DAY CI Kernel Test Service
