@@ -1,60 +1,60 @@
 Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 987062B9C6;
-	Fri, 13 Sep 2024 15:37:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D4A62B9C6;
+	Fri, 13 Sep 2024 15:37:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726241836; cv=none; b=E9/feucUjVhuQfZyoFVj73LS7ddl1GFkEboxGFYuPZj5/PpWNDnef4XK/K0UqzMgJ4lwIzF2LmSAX9GhxfSHPrZjb9zQDLgLg7nOwIfAUcVhWu2RlMC/X23iI2jgAoYBLAYgXZGjOL9IuSFk3gVC3wYsO4AgA/WntyKB4VF8GhE=
+	t=1726241838; cv=none; b=NjBSlQ9qPyXl9knBmYEByOQzNKglXObM6KGUT4tvpt9W1itz+zoMksWgi+OkxNW+WLND7Xeo17qSaTIvyV9WOnNAQkxLcvmu4MKEodcdCcwMXLS/SyCU0iybnpfMyoXjL7mOXLlNPDnJ7o49UDZ5VhDQr35CP+FZGD0rdXq0rSc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726241836; c=relaxed/simple;
-	bh=whItXbnjgKXPBFBAY5/abP2Y+pZahqYQgWM3dfr+lJo=;
+	s=arc-20240116; t=1726241838; c=relaxed/simple;
+	bh=k2jkR+mn4m9r4PJ8poWcvrYHk1WEmAREfg71LRRCOmw=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=kXXiOlc+t2QHAxL2NNRLdfzOv5UWVbSHIymMNY0OGRVf4V/ObkbEJuiWMxNereB1zzuxgbGYS1qZG9tBRaVyu3FBae+3StxsmLM9AnCXbi9/HPE9kDi7z3PVEJmKOQKt4B/d81EFHN6YrUuifqzdZdg3ZHT0qF+S+3FIEJVa+CM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=gybjdkCf; arc=none smtp.client-ip=192.198.163.14
+	 Content-Type:Content-Disposition:In-Reply-To; b=Z4biey56Y7w8rdG5cLmfMrhPtkr6K8u2y5ykVOILNXA6szD8GPCiEyZUSq1cx4pksc5HDecPyd8LPoCkMjsZtA1C9q7S31uVUGHE9YB1+YvY1mchDS4bER2HmEyD2pvm2LFqSj0fF7bUoxtuOo9SXK0PDrhPgCBoeqc1rB4S4EM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=k7ytgack; arc=none smtp.client-ip=192.198.163.14
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="gybjdkCf"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="k7ytgack"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1726241834; x=1757777834;
+  t=1726241836; x=1757777836;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=whItXbnjgKXPBFBAY5/abP2Y+pZahqYQgWM3dfr+lJo=;
-  b=gybjdkCfGcXrDVAK6OlAqcUFZVTExE2Vz8+sHw7Z6DY4dF8Ht7deNiXy
-   sD7Y7r0FzO4C4/yI0Xog0eznAmUnK8es9m0Os2KfQ7uWnBYDGx5jtYy11
-   oPHHdZ3Gba3GNKiYD22tlhU4e32su99JTan3tZLkq9DsnFoI/i2w6gxp2
-   WiiQOuBrgu+lDZgV1jrlGDavlBQjWP906zq7IoP/btrXhxXIKdf101EEN
-   +eBQ4IxdE/HWQ0p1OVg8qOC5AEO0kWgEZ7uj6O6Pyz+sBVOjhYVbvK1zf
-   i93yYtYek6b/0ThAoqTngeMTGJgF+vIVOkhgT7cBtkY+7HQd7Y6V9Gmrq
-   Q==;
-X-CSE-ConnectionGUID: C+dwXHz/ThuL/opX013IHw==
-X-CSE-MsgGUID: Wb1uIgdhR+SvybUSFEMsVQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11194"; a="25345504"
+  bh=k2jkR+mn4m9r4PJ8poWcvrYHk1WEmAREfg71LRRCOmw=;
+  b=k7ytgack/L72OxJpU5a0N+k5YHRXmOjdshXSpxgYjiyFuZyszOHivmiR
+   PfHmD9xz5FZx5jClahYgbKXOOrrBKV//ipeevcSbOanarYy7kYjcPn7fs
+   buO3Wq3kr7UxDkfo5x/TpY/wybk/vQujO3646JDjUm7dSvrEtte8DA9Q4
+   3RTiZJOgdbBWfXFQCZtCmoZjSeokZl7uJ51ylGTQYuAw5I4/1D4EZ5b3s
+   xMI4nBf38r9aL/EHnWrX86D8ma7DG4wgwdmBmwvg0FHrWx7HQzLwwEmbu
+   UBSzfXudwmAATW3+dj9NNnDzq7pMv/hntFb7TEodYAqeX+ZxV1nlCii/J
+   A==;
+X-CSE-ConnectionGUID: 4QYqJloVTrSf87rTZO845Q==
+X-CSE-MsgGUID: ZmCkdKYLR2mpyg6AS94lgA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11194"; a="25345510"
 X-IronPort-AV: E=Sophos;i="6.10,226,1719903600"; 
-   d="scan'208";a="25345504"
+   d="scan'208";a="25345510"
 Received: from fmviesa002.fm.intel.com ([10.60.135.142])
   by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Sep 2024 08:37:02 -0700
-X-CSE-ConnectionGUID: u6RwDCW8TTa4DiKZw9Q7GA==
-X-CSE-MsgGUID: S2IDiUcASkicQKuJ5iGDbg==
+X-CSE-ConnectionGUID: wVgnMCSBRi2AdvWqCZmYoA==
+X-CSE-MsgGUID: C5gKQhq5SASQxHMwhCc6Sw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.10,226,1719903600"; 
-   d="scan'208";a="91352231"
+   d="scan'208";a="91352229"
 Received: from lkp-server01.sh.intel.com (HELO 53e96f405c61) ([10.239.97.150])
   by fmviesa002.fm.intel.com with ESMTP; 13 Sep 2024 08:37:00 -0700
 Received: from kbuild by 53e96f405c61 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1sp8Ly-0006d9-0f;
+	id 1sp8Ly-0006dB-0j;
 	Fri, 13 Sep 2024 15:36:58 +0000
-Date: Fri, 13 Sep 2024 23:36:01 +0800
+Date: Fri, 13 Sep 2024 23:36:12 +0800
 From: kernel test robot <lkp@intel.com>
 To: Chen-Yu Tsai <wenst@chromium.org>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [PATCH v7 07/10] i2c: of-prober: Add simple helpers for
- regulator support
-Message-ID: <202409132350.owzYFq9z-lkp@intel.com>
-References: <20240911072751.365361-8-wenst@chromium.org>
+Subject: Re: [PATCH v7 09/10] platform/chrome: Introduce device tree hardware
+ prober
+Message-ID: <202409132343.1z91h4au-lkp@intel.com>
+References: <20240911072751.365361-10-wenst@chromium.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -63,7 +63,7 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240911072751.365361-8-wenst@chromium.org>
+In-Reply-To: <20240911072751.365361-10-wenst@chromium.org>
 
 Hi Chen-Yu,
 
@@ -78,63 +78,48 @@ https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
 url:    https://github.com/intel-lab-lkp/linux/commits/Chen-Yu-Tsai/of-dynamic-Add-of_changeset_update_prop_string/20240911-153237
 base:   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/regulator.git for-next
-patch link:    https://lore.kernel.org/r/20240911072751.365361-8-wenst%40chromium.org
-patch subject: [PATCH v7 07/10] i2c: of-prober: Add simple helpers for regulator support
-config: x86_64-buildonly-randconfig-004-20240913 (https://download.01.org/0day-ci/archive/20240913/202409132350.owzYFq9z-lkp@intel.com/config)
-compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240913/202409132350.owzYFq9z-lkp@intel.com/reproduce)
+patch link:    https://lore.kernel.org/r/20240911072751.365361-10-wenst%40chromium.org
+patch subject: [PATCH v7 09/10] platform/chrome: Introduce device tree hardware prober
+config: arm64-randconfig-002-20240913 (https://download.01.org/0day-ci/archive/20240913/202409132343.1z91h4au-lkp@intel.com/config)
+compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project bf684034844c660b778f0eba103582f582b710c9)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240913/202409132343.1z91h4au-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202409132350.owzYFq9z-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202409132343.1z91h4au-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> drivers/i2c/i2c-core-of-prober.c:214:11: error: call to undeclared function 'of_regulator_get_optional'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     214 |         supply = of_regulator_get_optional(dev, node, supply_name);
-         |                  ^
-   drivers/i2c/i2c-core-of-prober.c:214:11: note: did you mean 'regulator_get_optional'?
-   include/linux/regulator/consumer.h:345:1: note: 'regulator_get_optional' declared here
-     345 | regulator_get_optional(struct device *dev, const char *id)
-         | ^
->> drivers/i2c/i2c-core-of-prober.c:214:9: error: incompatible integer to pointer conversion assigning to 'struct regulator *' from 'int' [-Wint-conversion]
-     214 |         supply = of_regulator_get_optional(dev, node, supply_name);
-         |                ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>> drivers/platform/chrome/chromeos_of_hw_prober.c:66:8: error: call to undeclared function 'of_machine_is_compatible'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+      66 |                 if (!of_machine_is_compatible(hw_prober_platforms[i].compatible))
+         |                      ^
+   drivers/platform/chrome/chromeos_of_hw_prober.c:93:7: error: call to undeclared function 'of_machine_is_compatible'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+      93 |                 if (of_machine_is_compatible(hw_prober_platforms[i].compatible))
+         |                     ^
    2 errors generated.
 
 
-vim +/of_regulator_get_optional +214 drivers/i2c/i2c-core-of-prober.c
+vim +/of_machine_is_compatible +66 drivers/platform/chrome/chromeos_of_hw_prober.c
 
-   197	
-   198	static int i2c_of_probe_simple_get_supply(struct device *dev, struct device_node *node,
-   199						  struct i2c_of_probe_simple_ctx *ctx)
-   200	{
-   201		const char *supply_name;
-   202		struct regulator *supply;
-   203	
-   204		/*
-   205		 * It's entirely possible for the component's device node to not have regulator
-   206		 * supplies. While it does not make sense from a hardware perspective, the
-   207		 * supplies could be always on or otherwise not modeled in the device tree, but
-   208		 * the device would still work.
-   209		 */
-   210		supply_name = ctx->opts->supply_name;
-   211		if (!supply_name)
-   212			return 0;
-   213	
- > 214		supply = of_regulator_get_optional(dev, node, supply_name);
-   215		if (IS_ERR(supply)) {
-   216			return dev_err_probe(dev, PTR_ERR(supply),
-   217					     "Failed to get regulator supply \"%s\" from %pOF\n",
-   218					     supply_name, node);
-   219		}
-   220	
-   221		ctx->supply = supply;
-   222	
-   223		return 0;
-   224	}
-   225	
+    60	
+    61	static int chromeos_of_hw_prober_probe(struct platform_device *pdev)
+    62	{
+    63		for (size_t i = 0; i < ARRAY_SIZE(hw_prober_platforms); i++) {
+    64			int ret;
+    65	
+  > 66			if (!of_machine_is_compatible(hw_prober_platforms[i].compatible))
+    67				continue;
+    68	
+    69			ret = hw_prober_platforms[i].prober(&pdev->dev, hw_prober_platforms[i].data);
+    70			/* Ignore unrecoverable errors and keep going through other probers */
+    71			if (ret == -EPROBE_DEFER)
+    72				return ret;
+    73		}
+    74	
+    75		return 0;
+    76	}
+    77	
 
 -- 
 0-DAY CI Kernel Test Service
