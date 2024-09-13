@@ -1,61 +1,63 @@
 Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E045314C5AF;
-	Fri, 13 Sep 2024 20:11:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 15505146593;
+	Fri, 13 Sep 2024 20:11:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726258283; cv=none; b=At0tkn98Uvgr698i6S2QFu4uE8DaR3u/oODCq7MUNjOprnfVElL3VC6KTT5ZYQFLPPk5rlgCFPKTWQd7AeGjKfB+CJbC1bLWkqivvLho24a+GLcl5BN2Um9o/qMOG2JUFQ46GgRiI23i3fYnilIz2PygaTHmcCfog/sf8GlBMXY=
+	t=1726258285; cv=none; b=ruM07gbvt4hBR9P3Do1R5WAsQkDrj4mXKc8Oh23a+fjMSU2mdNrwKF2R68N8Xi3LSqDcuBB6kdpJz1q4+NN56wKzwJG7BHT5gSsTEzB7bcgeReEwTw1vDDyqXuUMz5JkHXguEUpJng/QlGtfNzUvrveRnYLVk6jBeRyPAWNInag=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726258283; c=relaxed/simple;
-	bh=37zmhLCtKqG7TKlG85pauOW2o2uGwgvWSTZ7n9jX1ts=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=eEZqkGJheEF8+PNkyiJFJCAvrpLtVYlZm37qxzHj9GoVzNeTkgb8ZICk+UabHn8CG2EsQX+pBWxNBBp0CYgzeEuBylv05H5Ap/CKCY9JKxKLm9AZqu4jWSitZBlJRJMZLc6wBQYUemv2zbIoEFlBvveg8hGoQSvWgsXxnShpK2A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=lwMJPFsk; arc=none smtp.client-ip=192.198.163.19
+	s=arc-20240116; t=1726258285; c=relaxed/simple;
+	bh=KrbMlRrWnddy/v2g9DYSFXsxpZtGqQACNSxfRkmK8MA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=a1+qLogqIGeyK9XdPodgpPhJYsep5XfruaTE3kKj8bBoNIEXfDVS+mesByzCrGPbXBVidywbLKK1oG/3mFRh0dj2WDgM23eGKqBAch9/2vd6tz62P84Y+UXOUQNaQX2wq+3qGxhyK62nikmHhb026xJnWhkHEEDLc1Ll4gtepTM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ikorU5mW; arc=none smtp.client-ip=192.198.163.19
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="lwMJPFsk"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ikorU5mW"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1726258282; x=1757794282;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=37zmhLCtKqG7TKlG85pauOW2o2uGwgvWSTZ7n9jX1ts=;
-  b=lwMJPFskL+7XmqhkpHWrWh1b6YNHe/Hv07X9jxmTuCu5UnAstWGXqnVu
-   qiqBatiaoRO1i/+hBJH6F/mZLL+gNuCFIZcq4aDHajNZ7IHRPD2yb9zJb
-   BPOtUUExYmrGz57dwWqdIWpJna6c7w3lklz4mW10f9IvCTr5U2YydnQXN
-   4o8w3WLj1nGtZn3DuoBiKhblqGhnKvHBxfnWlIJlHzF9B9u2kJ88xK040
-   OgQdEKHmSeyhH344+rBOFvjt2r3unsWkIxocqosxIUJ/U2F663PfofqVY
-   19uchoR3JVQDIiSoAiPiJH84fN86kcnqTvIaXVnrAnAWpnVuUINKbRm6N
-   w==;
-X-CSE-ConnectionGUID: 2C0xjwctS1CPPbR4baEB4Q==
-X-CSE-MsgGUID: no4HgFF5SyODUjoOt3iHVg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11194"; a="24712399"
+  t=1726258284; x=1757794284;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=KrbMlRrWnddy/v2g9DYSFXsxpZtGqQACNSxfRkmK8MA=;
+  b=ikorU5mWE80zrfEthi4LdbLQdFO52Zwthv9YiUCfk8thofBmobK95Xkt
+   xPxPvPGBW1yTiajQ8xQNBtu8oEuGRz6SWDqbqxDHh5wJOFj9hmeXC5OB5
+   eL0Fl2yRWBYatEQZXZH7RaXAQTUCF/0OYIZvoYWYtil1xjfs8thXqaTcC
+   Sy9eo1zNMFdxdljjJ6otdEEc6dKNhSFcoGWDxNDZnrMIQfZfZ8/fzzBvw
+   qFLiXCmgwxP7TejMG2CIJf0jn4JBrKW/kFhw8Zaaechkeotv7UyFUP9eR
+   9BHl4tcfLN6C7Dj3HM4SFGhSWv3xgmK/qh1ml1an58p0lupRarG7kK/+p
+   g==;
+X-CSE-ConnectionGUID: uxYYOxoeRV6jiJcpw041uA==
+X-CSE-MsgGUID: fN+E/SjvQbOM1zw1LaBzQw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11194"; a="24712406"
 X-IronPort-AV: E=Sophos;i="6.10,227,1719903600"; 
-   d="scan'208";a="24712399"
+   d="scan'208";a="24712406"
 Received: from fmviesa004.fm.intel.com ([10.60.135.144])
   by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Sep 2024 13:11:22 -0700
-X-CSE-ConnectionGUID: UfcwDyL0RaK2m3h3O9E6Pw==
-X-CSE-MsgGUID: k0e7l04BR6S8qn7/AQ97qA==
+X-CSE-ConnectionGUID: p0m3HkP0T625lIOSnYXlsw==
+X-CSE-MsgGUID: lCn4N0rjRkqcbFadFfXsKg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.10,227,1719903600"; 
-   d="scan'208";a="72774955"
+   d="scan'208";a="72774956"
 Received: from lkp-server01.sh.intel.com (HELO 53e96f405c61) ([10.239.97.150])
   by fmviesa004.fm.intel.com with ESMTP; 13 Sep 2024 13:11:20 -0700
 Received: from kbuild by 53e96f405c61 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1spCdR-0006wV-2P;
+	id 1spCdR-0006wT-2I;
 	Fri, 13 Sep 2024 20:11:17 +0000
-Date: Sat, 14 Sep 2024 04:10:18 +0800
+Date: Sat, 14 Sep 2024 04:10:19 +0800
 From: kernel test robot <lkp@intel.com>
-To: Benjamin Tissoires <bentiss@kernel.org>
+To: Liao Chang <liaochang1@huawei.com>, rostedt@goodmis.org,
+	mhiramat@kernel.org, mark.rutland@arm.com,
+	mathieu.desnoyers@efficios.com
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-input@vger.kernel.org,
-	Peter Hutterer <peter.hutterer@who-t.net>
-Subject: [hid:for-6.12/bpf 6/15] drivers/hid/hid-core.c:2689:52: error:
- passing 'const __u8 *' (aka 'const unsigned char *') to parameter of type
- 'u8 *' (aka 'unsigned char *') discards qualifiers
-Message-ID: <202409140413.DizXFslQ-lkp@intel.com>
+	linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org
+Subject: Re: [PATCH] function_graph: Simplify the initialization of fgraph
+ LRU data
+Message-ID: <202409140325.G1zsZ0jL-lkp@intel.com>
+References: <20240912111550.1752115-1-liaochang1@huawei.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -64,88 +66,35 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20240912111550.1752115-1-liaochang1@huawei.com>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/hid/hid.git for-6.12/bpf
-head:   d46a60c7a795ef0a115e27235b88dcecc78b8c26
-commit: f10a11b7b599467153f679d35ed4712bbbec918f [6/15] HID: bpf: move HID-BPF report descriptor fixup earlier
-config: arm-jornada720_defconfig (https://download.01.org/0day-ci/archive/20240914/202409140413.DizXFslQ-lkp@intel.com/config)
+Hi Liao,
+
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on linus/master]
+[also build test ERROR on v6.11-rc7 next-20240913]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Liao-Chang/function_graph-Simplify-the-initialization-of-fgraph-LRU-data/20240912-193159
+base:   linus/master
+patch link:    https://lore.kernel.org/r/20240912111550.1752115-1-liaochang1%40huawei.com
+patch subject: [PATCH] function_graph: Simplify the initialization of fgraph LRU data
+config: arm-randconfig-004-20240913 (https://download.01.org/0day-ci/archive/20240914/202409140325.G1zsZ0jL-lkp@intel.com/config)
 compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project bf684034844c660b778f0eba103582f582b710c9)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240914/202409140413.DizXFslQ-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240914/202409140325.G1zsZ0jL-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202409140413.DizXFslQ-lkp@intel.com/
-
-Note: the hid/for-6.12/bpf HEAD d46a60c7a795ef0a115e27235b88dcecc78b8c26 builds fine.
-      It only hurts bisectability.
+| Closes: https://lore.kernel.org/oe-kbuild-all/202409140325.G1zsZ0jL-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
-   In file included from drivers/hid/hid-core.c:21:
-   In file included from include/linux/mm.h:2228:
-   include/linux/vmstat.h:517:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     517 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
->> drivers/hid/hid-core.c:2689:52: error: passing 'const __u8 *' (aka 'const unsigned char *') to parameter of type 'u8 *' (aka 'unsigned char *') discards qualifiers [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
-    2689 |                 hdev->bpf_rdesc = call_hid_bpf_rdesc_fixup(hdev, hdev->dev_rdesc,
-         |                                                                  ^~~~~~~~~~~~~~~
-   include/linux/hid_bpf.h:231:73: note: passing argument to parameter 'rdesc' here
-     231 | static inline u8 *call_hid_bpf_rdesc_fixup(struct hid_device *hdev, u8 *rdesc,
-         |                                                                         ^
-   1 warning and 1 error generated.
-
-
-vim +2689 drivers/hid/hid-core.c
-
-  2681	
-  2682	static int __hid_device_probe(struct hid_device *hdev, struct hid_driver *hdrv)
-  2683	{
-  2684		const struct hid_device_id *id;
-  2685		int ret;
-  2686	
-  2687		if (!hdev->bpf_rsize) {
-  2688			hdev->bpf_rsize = hdev->dev_rsize;
-> 2689			hdev->bpf_rdesc = call_hid_bpf_rdesc_fixup(hdev, hdev->dev_rdesc,
-  2690								   &hdev->bpf_rsize);
-  2691		}
-  2692	
-  2693		if (!hid_check_device_match(hdev, hdrv, &id))
-  2694			return -ENODEV;
-  2695	
-  2696		hdev->devres_group_id = devres_open_group(&hdev->dev, NULL, GFP_KERNEL);
-  2697		if (!hdev->devres_group_id)
-  2698			return -ENOMEM;
-  2699	
-  2700		/* reset the quirks that has been previously set */
-  2701		hdev->quirks = hid_lookup_quirk(hdev);
-  2702		hdev->driver = hdrv;
-  2703	
-  2704		if (hdrv->probe) {
-  2705			ret = hdrv->probe(hdev, id);
-  2706		} else { /* default probe */
-  2707			ret = hid_open_report(hdev);
-  2708			if (!ret)
-  2709				ret = hid_hw_start(hdev, HID_CONNECT_DEFAULT);
-  2710		}
-  2711	
-  2712		/*
-  2713		 * Note that we are not closing the devres group opened above so
-  2714		 * even resources that were attached to the device after probe is
-  2715		 * run are released when hid_device_remove() is executed. This is
-  2716		 * needed as some drivers would allocate additional resources,
-  2717		 * for example when updating firmware.
-  2718		 */
-  2719	
-  2720		if (ret) {
-  2721			devres_release_group(&hdev->dev, hdev->devres_group_id);
-  2722			hid_close_report(hdev);
-  2723			hdev->driver = NULL;
-  2724		}
-  2725	
-  2726		return ret;
-  2727	}
-  2728	
+>> ld.lld: error: undefined symbol: ftrace_graph_entry_stub
+   >>> referenced by arch/arm/kernel/entry-ftrace.o:(.text+0xB8) in archive vmlinux.a
 
 -- 
 0-DAY CI Kernel Test Service
