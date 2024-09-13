@@ -1,139 +1,259 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 71C6818BB9C;
-	Fri, 13 Sep 2024 23:40:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B234A15B108;
+	Fri, 13 Sep 2024 23:49:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726270851; cv=none; b=FSpLIkGWwjOrmiorsR42UjkisbXW0UplCM/J/I90MMp/rzyU7mN55317F7Ljn6897BDl3loiJB4Zu1awO5nxsrxhxxi9fz8Itoqiy2obAr6mr63KYNUZh5sK9A/pgLCzxIfHH2VAb1RbxaBehgJus/6p7a8SObzaW1aJq5VRc5o=
+	t=1726271377; cv=none; b=dfYvxjppuqjxzGwfTSG1Z9PlDE5MCZniPgD6Vax9GiPewOuN4d/87oOiIqYh3GMLAEKIv++lz6MT6wURoJTaVWMgtgdEcs+W11JtHvh04INN0kDffF/2xKc4CxkDvTXVypPI5X+2vVOIje/J53Q/NLeTNWsnhzmacWStgJYxYCE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726270851; c=relaxed/simple;
-	bh=4wZaUaJ8H8Ng3OW6XVFKGqs5eZqlRcswTUZcQFdyhw8=;
+	s=arc-20240116; t=1726271377; c=relaxed/simple;
+	bh=NO2v2utJsQdzPh+GQrcc+a4HtuBy0op5OsmeF8R9gWI=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ehEN4pYdwz5/dITO1Oe7vXK8cqW9u6YTbxRRb1abkgALW807jiS7OUk2mMbjDd0lmZSm5sGQvnQGbUNhnUb2BhNTMyo9Pl2hJDkUCMD87+HaImwKkeB22J91f9KAw7pf+4uWNfhSW1KsFR7Otau1KKhSkebk5DilVYTY9PTiJcg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=P1mZg9YK; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=CACo66lKGRvnmh6WA3KgsT3ntarhbkjzRu7JaCN/FWMdcQOdxULAoryFS96OzkQ5kL2ZMYtzjDnFBZQFgeS57ed/E5u7E0O8qolJ0V8lAMTU3Mx6TJ19A4J0/pSMWtFAS39DnjqKJ/1UFNmdx/SIONzOtyrcfiGoQzqeoBopot4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=PTfV6vf+; arc=none smtp.client-ip=198.175.65.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="P1mZg9YK"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9F78BC4CEC5;
-	Fri, 13 Sep 2024 23:40:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1726270851;
-	bh=4wZaUaJ8H8Ng3OW6XVFKGqs5eZqlRcswTUZcQFdyhw8=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=P1mZg9YKr9yEnnBu66byf0lBOaD7hz2bsnQ826e+yymT1acxxNlRzkVb7M2wV47NQ
-	 Y9dM4mRUge97KCcAR+J0uLbQQy32YCZZr8n1kAEXCEhmn40/grylh5UoHF87buMxrs
-	 ZgAsciNM/8WECaAjFzyqi5avtRR2Yczzk9HJMs54X1SHXow+/tR0lzEcuIUdI3sGmS
-	 S6LcXWbJVdCVCjVztPNcAtDA5t+5wdTa3VfHQWtR42ciqlW7PRa5Hxlkmo4FNzwoLM
-	 Z8VD6Leen6Q4GBZgy+Do37Wm4GfiaCWFrmmQecVW2kYoo0whJR2mv1QQQigRUWDVkV
-	 SZcIv3/x2aqPQ==
-Date: Fri, 13 Sep 2024 16:40:49 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>
-Cc: Luis Chamberlain <mcgrof@kernel.org>, Kees Cook <kees@kernel.org>,
-	Joel Granados <j.granados@samsung.com>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>, linux-kernel@vger.kernel.org,
-	linux-fsdevel@vger.kernel.org, llvm@lists.linux.dev,
-	kernel test robot <oliver.sang@intel.com>, stable@vger.kernel.org
-Subject: Re: [PATCH] sysctl: avoid spurious permanent empty tables
-Message-ID: <20240913234049.GA1539142@thelio-3990X>
-References: <20240827-sysctl-const-shared-identity-v1-1-2714a798c4ff@weissschuh.net>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="PTfV6vf+"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1726271375; x=1757807375;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=NO2v2utJsQdzPh+GQrcc+a4HtuBy0op5OsmeF8R9gWI=;
+  b=PTfV6vf+w5qBs2eIb0t5qg4j/m5ixmDd3XRcuyTzVwnMwZm002iQiTLh
+   S0KE6WpVdt2lC24qhLU9Kebu+vCP0ynqZr6d/Qqg0ZHOsPacCiRvvAFS5
+   y3jqzfA8cHe5iKhXKfUvT6vBCESTTItWpybJc1bLU0msBI9rJcRjwRSTh
+   CI2yJMu+UT4F5DL94xwn7jWGR4lTnQx6Fp0Wrj0SFhNLUDTRBdwGuJBWU
+   XEjtQHpyL5AcyGBUxzjbMnnCpaFylextBaHPTcNXL8qOoZtw/CoqExv43
+   KjSlSe9Ibowt+nwEjhkI+QZBGLEd7bkQ/TxEC+pIKtp0N1x8AANXr2ZiF
+   A==;
+X-CSE-ConnectionGUID: /QMriqziRfeZLFyCkWVNfw==
+X-CSE-MsgGUID: 6I0tARvzQGuD6GOzwCZ82A==
+X-IronPort-AV: E=McAfee;i="6700,10204,11194"; a="25311623"
+X-IronPort-AV: E=Sophos;i="6.10,227,1719903600"; 
+   d="scan'208";a="25311623"
+Received: from orviesa001.jf.intel.com ([10.64.159.141])
+  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Sep 2024 16:49:34 -0700
+X-CSE-ConnectionGUID: tm56/a9ST0O+NtQ8axKrsg==
+X-CSE-MsgGUID: v2Wr+VnwS7uiDWleXfcRHg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.10,227,1719903600"; 
+   d="scan'208";a="105688913"
+Received: from lkp-server01.sh.intel.com (HELO 53e96f405c61) ([10.239.97.150])
+  by orviesa001.jf.intel.com with ESMTP; 13 Sep 2024 16:49:32 -0700
+Received: from kbuild by 53e96f405c61 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1spG2b-00079G-1s;
+	Fri, 13 Sep 2024 23:49:29 +0000
+Date: Sat, 14 Sep 2024 07:49:14 +0800
+From: kernel test robot <lkp@intel.com>
+To: Wenliang <wenliang202407@163.com>, linux@roeck-us.net
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, jdelvare@suse.com,
+	linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Wenliang <wenliang202407@163.com>
+Subject: Re: [PATCH linux dev 6.11] hwmon:add new hwmon driver sq52205
+Message-ID: <202409140727.4pErU6oc-lkp@intel.com>
+References: <20240822074426.7241-1-wenliang202407@163.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20240827-sysctl-const-shared-identity-v1-1-2714a798c4ff@weissschuh.net>
+In-Reply-To: <20240822074426.7241-1-wenliang202407@163.com>
 
-Hi Thomas,
+Hi Wenliang,
 
-Sorry for the delay in my response.
+kernel test robot noticed the following build errors:
 
-On Tue, Aug 27, 2024 at 11:54:43AM +0200, Thomas Weiﬂschuh wrote:
-> The test if a table is a permanently empty one, inspects the address of
-> the registered ctl_table argument.
-> However as sysctl_mount_point is an empty array and does not occupy and
-> space it can end up sharing an address with another object in memory.
-> If that other object itself is a "struct ctl_table" then registering
-> that table will fail as it's incorrectly recognized as permanently empty.
-> 
-> Avoid this issue by adding a dummy element to the array so that the
-> array is not empty anymore and the potential address sharing is avoided.
-> Explicitly register the table with zero elements as otherwise the dummy
-> element would be recognized as a sentinel element which would lead to a
-> runtime warning from the sysctl core.
-> 
-> While the issue seems unlikely to be encountered at this time, this
-> seems mostly be due to luck.
-> Also a future change, constifying sysctl_mount_point and root_table, can
-> reliably trigger this issue on clang 18.
-> 
-> Given that empty arrays are non-standard in the first place,
-> avoid them if possible.
-> 
-> Reported-by: kernel test robot <oliver.sang@intel.com>
-> Closes: https://lore.kernel.org/oe-lkp/202408051453.f638857e-lkp@intel.com
-> Fixes: 4a7b29f65094 ("sysctl: move sysctl type to ctl_table_header")
-> Fixes: a35dd3a786f5 ("sysctl: drop now unnecessary out-of-bounds check")
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Thomas Weiﬂschuh <linux@weissschuh.net>
-> ---
-> This was originally part of a feature series [0], but is resubmitted on
-> its own to make it into v6.11To.
+[auto build test ERROR on linux/master]
 
-It might be too late for 6.11 final since nobody seems to have picked it
-up at this point but maybe it could make 6.12-rc1 and be backported in
-one of the first couple of stable releases?
+url:    https://github.com/intel-lab-lkp/linux/commits/Wenliang/hwmon-add-new-hwmon-driver-sq52205/20240912-002906
+base:   linux/master
+patch link:    https://lore.kernel.org/r/20240822074426.7241-1-wenliang202407%40163.com
+patch subject: [PATCH linux dev 6.11] hwmon:add new hwmon driver sq52205
+config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20240914/202409140727.4pErU6oc-lkp@intel.com/config)
+compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project bf684034844c660b778f0eba103582f582b710c9)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240914/202409140727.4pErU6oc-lkp@intel.com/reproduce)
 
-Regardless, thanks for sending the patch.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202409140727.4pErU6oc-lkp@intel.com/
 
-Acked-by: Nathan Chancellor <nathan@kernel.org>
+All errors (new ones prefixed by >>):
 
-> [0] https://lore.kernel.org/lkml/20240805-sysctl-const-api-v2-0-52c85f02ee5e@weissschuh.net/
-> ---
->  fs/proc/proc_sysctl.c | 11 ++++++++---
->  1 file changed, 8 insertions(+), 3 deletions(-)
-> 
-> diff --git a/fs/proc/proc_sysctl.c b/fs/proc/proc_sysctl.c
-> index 9553e77c9d31..d11ebc055ce0 100644
-> --- a/fs/proc/proc_sysctl.c
-> +++ b/fs/proc/proc_sysctl.c
-> @@ -29,8 +29,13 @@ static const struct inode_operations proc_sys_inode_operations;
->  static const struct file_operations proc_sys_dir_file_operations;
->  static const struct inode_operations proc_sys_dir_operations;
->  
-> -/* Support for permanently empty directories */
-> -static struct ctl_table sysctl_mount_point[] = { };
-> +/*
-> + * Support for permanently empty directories.
-> + * Must be non-empty to avoid sharing an address with other tables.
-> + */
-> +static struct ctl_table sysctl_mount_point[] = {
-> +	{ }
-> +};
->  
->  /**
->   * register_sysctl_mount_point() - registers a sysctl mount point
-> @@ -42,7 +47,7 @@ static struct ctl_table sysctl_mount_point[] = { };
->   */
->  struct ctl_table_header *register_sysctl_mount_point(const char *path)
->  {
-> -	return register_sysctl(path, sysctl_mount_point);
-> +	return register_sysctl_sz(path, sysctl_mount_point, 0);
->  }
->  EXPORT_SYMBOL(register_sysctl_mount_point);
->  
-> 
-> ---
-> base-commit: 3e9bff3bbe1355805de919f688bef4baefbfd436
-> change-id: 20240827-sysctl-const-shared-identity-9ab816e5fdfb
-> 
-> Best regards,
-> -- 
-> Thomas Weiﬂschuh <linux@weissschuh.net>
-> 
+   In file included from drivers/hwmon/sq52205.c:12:
+   In file included from include/linux/i2c.h:19:
+   In file included from include/linux/regulator/consumer.h:35:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:13:
+   In file included from include/linux/cgroup.h:25:
+   In file included from include/linux/kernel_stat.h:8:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:14:
+   In file included from arch/hexagon/include/asm/io.h:328:
+   include/asm-generic/io.h:548:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     548 |         val = __raw_readb(PCI_IOBASE + addr);
+         |                           ~~~~~~~~~~ ^
+   include/asm-generic/io.h:561:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     561 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
+      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
+         |                                                   ^
+   In file included from drivers/hwmon/sq52205.c:12:
+   In file included from include/linux/i2c.h:19:
+   In file included from include/linux/regulator/consumer.h:35:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:13:
+   In file included from include/linux/cgroup.h:25:
+   In file included from include/linux/kernel_stat.h:8:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:14:
+   In file included from arch/hexagon/include/asm/io.h:328:
+   include/asm-generic/io.h:574:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     574 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
+      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
+         |                                                   ^
+   In file included from drivers/hwmon/sq52205.c:12:
+   In file included from include/linux/i2c.h:19:
+   In file included from include/linux/regulator/consumer.h:35:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:13:
+   In file included from include/linux/cgroup.h:25:
+   In file included from include/linux/kernel_stat.h:8:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:14:
+   In file included from arch/hexagon/include/asm/io.h:328:
+   include/asm-generic/io.h:585:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     585 |         __raw_writeb(value, PCI_IOBASE + addr);
+         |                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:595:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     595 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:605:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     605 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   In file included from drivers/hwmon/sq52205.c:12:
+   In file included from include/linux/i2c.h:19:
+   In file included from include/linux/regulator/consumer.h:35:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:21:
+   In file included from include/linux/mm.h:2232:
+   include/linux/vmstat.h:517:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     517 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+>> drivers/hwmon/sq52205.c:493:37: error: cannot assign to variable 'sq522xx_regmap_config' with const-qualified type 'const struct regmap_config'
+     493 |         sq522xx_regmap_config.max_register = data->config->registers;
+         |         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ^
+   drivers/hwmon/sq52205.c:67:35: note: variable 'sq522xx_regmap_config' declared const here
+      67 | static const struct regmap_config sq522xx_regmap_config = {
+         | ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~
+      68 |         .reg_bits = 8,
+         |         ~~~~~~~~~~~~~~
+      69 |         .val_bits = 16,
+         |         ~~~~~~~~~~~~~~~
+      70 | };
+         | ~
+   7 warnings and 1 error generated.
+
+
+vim +493 drivers/hwmon/sq52205.c
+
+   460	
+   461	static int sq522xx_probe(struct i2c_client *client)
+   462	{
+   463		struct device *dev = &client->dev;
+   464		struct sq522xx_data *data;
+   465		struct device *hwmon_dev;
+   466		u32 val;
+   467		int ret, group = 0;
+   468		enum sq522xx_ids chip;
+   469	
+   470		if (client->dev.of_node)
+   471			chip = (uintptr_t)of_device_get_match_data(&client->dev);
+   472		else
+   473			chip = i2c_match_id(sq522xx_id, client)->driver_data;
+   474	
+   475		data = devm_kzalloc(dev, sizeof(*data), GFP_KERNEL);
+   476		if (!data)
+   477			return -ENOMEM;
+   478	
+   479		/* set the device type */
+   480		data->client = client;
+   481		data->config = &sq522xx_config[chip];
+   482		mutex_init(&data->config_lock);
+   483	
+   484		if (of_property_read_u32(dev->of_node, "shunt-resistor", &val) < 0)
+   485			val = SQ522XX_RSHUNT_DEFAULT;
+   486	
+   487	
+   488		if (val <= 0 || val > data->config->calibration_factor)
+   489			return -ENODEV;
+   490	
+   491		data->rshunt = val;
+   492	
+ > 493		sq522xx_regmap_config.max_register = data->config->registers;
+   494	
+   495		data->regmap = devm_regmap_init_i2c(client, &sq522xx_regmap_config);
+   496		if (IS_ERR(data->regmap)) {
+   497			dev_err(dev, "failed to allocate register map\n");
+   498			return PTR_ERR(data->regmap);
+   499		}
+   500	
+   501	
+   502		ret = sq522xx_init(data);
+   503		if (ret < 0) {
+   504			dev_err(dev, "error configuring the device: %d\n", ret);
+   505			return -ENODEV;
+   506		}
+   507		if (chip == sq52205) {
+   508			ret = sq52205_init(data);
+   509			if (ret < 0) {
+   510				dev_err(dev, "error configuring the device cal: %d\n", ret);
+   511				return -ENODEV;
+   512			}
+   513		}
+   514	
+   515		data->groups[group++] = &sq522xx_group;
+   516		if (chip == sq52205)
+   517			data->groups[group++] = &sq52205_group;
+   518	
+   519		hwmon_dev = devm_hwmon_device_register_with_groups(dev, client->name,
+   520									data, data->groups);
+   521		if (IS_ERR(hwmon_dev))
+   522			return PTR_ERR(hwmon_dev);
+   523	
+   524		dev_info(dev, "power monitor %s (Rshunt = %li uOhm)\n",
+   525			 client->name, data->rshunt);
+   526	
+   527		return 0;
+   528	}
+   529	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
