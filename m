@@ -1,121 +1,139 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8EBA515575F;
-	Fri, 13 Sep 2024 23:27:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 71C6818BB9C;
+	Fri, 13 Sep 2024 23:40:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726270043; cv=none; b=JJaw11v/gBi34wxI3hr9q7iAkSaXrWC8l6YZ+jdGxL/KDoua3zz/ngHYtdbA91/+M1ZTYnxthSpyy7HXr3h0kWXItolIMziA4c945fAwNaeh/QkxI6TZ4uyWG0cfd6OtfXmvRChl0O9EMb2tGqCjHoT/l+MMJvCV4g3mcIntX5U=
+	t=1726270851; cv=none; b=FSpLIkGWwjOrmiorsR42UjkisbXW0UplCM/J/I90MMp/rzyU7mN55317F7Ljn6897BDl3loiJB4Zu1awO5nxsrxhxxi9fz8Itoqiy2obAr6mr63KYNUZh5sK9A/pgLCzxIfHH2VAb1RbxaBehgJus/6p7a8SObzaW1aJq5VRc5o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726270043; c=relaxed/simple;
-	bh=afGcFBINdDDu7aR6dn6Z/IY+fQ1ixrLHuQDmeNf89R4=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=L1BSNkGAyMbWZLyzva4cqatoZ/n3H8k0671AP8iZHSDeuVir0/5T10KxrjH6kFnc+mgA8GscTiUYQJsgQicO41eYfJadHaLSEMEnSeYpbRgB9lmAb0m/rRgwVdkrG5pDcv6VsFgGAN7maF97Vwra+xWN1jAJuK7iKG/F3/ky7OM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OD7+SdTH; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1726270851; c=relaxed/simple;
+	bh=4wZaUaJ8H8Ng3OW6XVFKGqs5eZqlRcswTUZcQFdyhw8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ehEN4pYdwz5/dITO1Oe7vXK8cqW9u6YTbxRRb1abkgALW807jiS7OUk2mMbjDd0lmZSm5sGQvnQGbUNhnUb2BhNTMyo9Pl2hJDkUCMD87+HaImwKkeB22J91f9KAw7pf+4uWNfhSW1KsFR7Otau1KKhSkebk5DilVYTY9PTiJcg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=P1mZg9YK; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OD7+SdTH"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 85CA1C4CEC0;
-	Fri, 13 Sep 2024 23:27:22 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="P1mZg9YK"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9F78BC4CEC5;
+	Fri, 13 Sep 2024 23:40:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1726270043;
-	bh=afGcFBINdDDu7aR6dn6Z/IY+fQ1ixrLHuQDmeNf89R4=;
-	h=From:Date:Subject:To:Cc:From;
-	b=OD7+SdTHbIVPrVUOS8ooB7KEv1KD3Agbn2iGe9LlEYXaf7s6CQA/jPst8P0zgrO7a
-	 Fjvbd6MkHNrjGXfgbuZcY3VnK5uDofSAKq3zFfeBhvyZ/BKXxNdut4ezuPofcfrirH
-	 sazT6sMnqR6YftBjrrpdABOvLdqNHkVjQfgQljgvTE6Y3q1VtZZpGSlnA0wRoiFt4F
-	 jDHSY8JGfpO7SDEVd4/Q4OpNDc4j1+7QpG2ivtZQplQSLpUaQ1ot+DslD2yoCjytoX
-	 MjvQBIDAX1C6gf42jzxlnkzm6aYMiAY8PIUkryXGFYbRC+wrm+vv5n9Mym3+kMMn4Y
-	 SXds8KX1zn3mA==
+	s=k20201202; t=1726270851;
+	bh=4wZaUaJ8H8Ng3OW6XVFKGqs5eZqlRcswTUZcQFdyhw8=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=P1mZg9YKr9yEnnBu66byf0lBOaD7hz2bsnQ826e+yymT1acxxNlRzkVb7M2wV47NQ
+	 Y9dM4mRUge97KCcAR+J0uLbQQy32YCZZr8n1kAEXCEhmn40/grylh5UoHF87buMxrs
+	 ZgAsciNM/8WECaAjFzyqi5avtRR2Yczzk9HJMs54X1SHXow+/tR0lzEcuIUdI3sGmS
+	 S6LcXWbJVdCVCjVztPNcAtDA5t+5wdTa3VfHQWtR42ciqlW7PRa5Hxlkmo4FNzwoLM
+	 Z8VD6Leen6Q4GBZgy+Do37Wm4GfiaCWFrmmQecVW2kYoo0whJR2mv1QQQigRUWDVkV
+	 SZcIv3/x2aqPQ==
+Date: Fri, 13 Sep 2024 16:40:49 -0700
 From: Nathan Chancellor <nathan@kernel.org>
-Date: Fri, 13 Sep 2024 16:27:13 -0700
-Subject: [PATCH v2] x86/resctrl: Annotate get_mem_config functions as
- __init
+To: Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>
+Cc: Luis Chamberlain <mcgrof@kernel.org>, Kees Cook <kees@kernel.org>,
+	Joel Granados <j.granados@samsung.com>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>, linux-kernel@vger.kernel.org,
+	linux-fsdevel@vger.kernel.org, llvm@lists.linux.dev,
+	kernel test robot <oliver.sang@intel.com>, stable@vger.kernel.org
+Subject: Re: [PATCH] sysctl: avoid spurious permanent empty tables
+Message-ID: <20240913234049.GA1539142@thelio-3990X>
+References: <20240827-sysctl-const-shared-identity-v1-1-2714a798c4ff@weissschuh.net>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20240913-x86-restctrl-get_mem_config_intel-init-v2-1-bf4b645f0246@kernel.org>
-X-B4-Tracking: v=1; b=H4sIAFDK5GYC/5XNQQ6CMBCF4auQrh3TFsXGFfcwhBQcykRozbQhG
- MLdrdzA5f8W79tERCaM4l5sgnGhSMHn0KdC9KP1DoGeuYWW+iKN1rCaChhj6hNP4DC1M85tH/x
- AriWfcALylKC0g9T2qkrZWZHP3owDrQf0aHKPFFPgz+Eu6rf+TSwKFJhO2spYcyuVrV/IHqdzY
- Ceafd+/1U+bC90AAAA=
-X-Change-ID: 20240822-x86-restctrl-get_mem_config_intel-init-3af02a5130ba
-To: Fenghua Yu <fenghua.yu@intel.com>, 
- Reinette Chatre <reinette.chatre@intel.com>, x86@kernel.org, 
- Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, 
- Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>
-Cc: linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
- patches@lists.linux.dev, Nathan Chancellor <nathan@kernel.org>
-X-Mailer: b4 0.15-dev
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2606; i=nathan@kernel.org;
- h=from:subject:message-id; bh=afGcFBINdDDu7aR6dn6Z/IY+fQ1ixrLHuQDmeNf89R4=;
- b=owGbwMvMwCUmm602sfCA1DTG02pJDGlPTkUdS9gQmy4iknqiIHyj+pQylxWOP06/DNYp4f/j6
- 8T8+n1pRykLgxgXg6yYIkv1Y9XjhoZzzjLeODUJZg4rE8gQBi5OAZjIujkM/2xuh8W/OP3A04Cr
- UvN/hucX/Yy5fZJbFd776hlPL1+YFcLwPzEv+t/x66vOm/XNP/OQ988XW8ETs5a9z3r4YdGFqQe
- n8DABAA==
-X-Developer-Key: i=nathan@kernel.org; a=openpgp;
- fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20240827-sysctl-const-shared-identity-v1-1-2714a798c4ff@weissschuh.net>
 
-After a recent LLVM change [1] that deduces __cold on functions that
-only call cold code (such as __init functions), there is a section
-mismatch warning from __get_mem_config_intel(), which got moved to
-.text.unlikely. as a result of that optimization:
+Hi Thomas,
 
-  WARNING: modpost: vmlinux: section mismatch in reference: __get_mem_config_intel+0x77 (section: .text.unlikely.) -> thread_throttle_mode_init (section: .init.text)
+Sorry for the delay in my response.
 
-Mark __get_mem_config_intel() as __init as well since it is only called
-from __init code, which clears up the warning.
+On Tue, Aug 27, 2024 at 11:54:43AM +0200, Thomas Weiﬂschuh wrote:
+> The test if a table is a permanently empty one, inspects the address of
+> the registered ctl_table argument.
+> However as sysctl_mount_point is an empty array and does not occupy and
+> space it can end up sharing an address with another object in memory.
+> If that other object itself is a "struct ctl_table" then registering
+> that table will fail as it's incorrectly recognized as permanently empty.
+> 
+> Avoid this issue by adding a dummy element to the array so that the
+> array is not empty anymore and the potential address sharing is avoided.
+> Explicitly register the table with zero elements as otherwise the dummy
+> element would be recognized as a sentinel element which would lead to a
+> runtime warning from the sysctl core.
+> 
+> While the issue seems unlikely to be encountered at this time, this
+> seems mostly be due to luck.
+> Also a future change, constifying sysctl_mount_point and root_table, can
+> reliably trigger this issue on clang 18.
+> 
+> Given that empty arrays are non-standard in the first place,
+> avoid them if possible.
+> 
+> Reported-by: kernel test robot <oliver.sang@intel.com>
+> Closes: https://lore.kernel.org/oe-lkp/202408051453.f638857e-lkp@intel.com
+> Fixes: 4a7b29f65094 ("sysctl: move sysctl type to ctl_table_header")
+> Fixes: a35dd3a786f5 ("sysctl: drop now unnecessary out-of-bounds check")
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Thomas Weiﬂschuh <linux@weissschuh.net>
+> ---
+> This was originally part of a feature series [0], but is resubmitted on
+> its own to make it into v6.11To.
 
-While __rdt_get_mem_config_amd() does not exhibit a warning because it
-does not call any __init code, it is a similar function that is only
-called from __init code like __get_mem_config_intel(), so mark it __init
-as well to keep the code symmetrical.
+It might be too late for 6.11 final since nobody seems to have picked it
+up at this point but maybe it could make 6.12-rc1 and be backported in
+one of the first couple of stable releases?
 
-Link: https://github.com/llvm/llvm-project/commit/6b11573b8c5e3d36beee099dbe7347c2a007bf53 [1]
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
----
-Changes in v2:
-- Move position of __init within definition of __get_mem_config_intel()
-  to better match coding style guidelines (Reinette).
-- Apply __init to __rdt_get_mem_config_amd(), as it has the same issue
-  by inspection (Reinette). Adjust commit message to reflect this
-  change.
-- Link to v1: https://lore.kernel.org/r/20240822-x86-restctrl-get_mem_config_intel-init-v1-1-8b0a68a8731a@kernel.org
----
- arch/x86/kernel/cpu/resctrl/core.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Regardless, thanks for sending the patch.
 
-diff --git a/arch/x86/kernel/cpu/resctrl/core.c b/arch/x86/kernel/cpu/resctrl/core.c
-index 1930fce9dfe96d5c323cb9000fb06149916a5a3c..59961618a02374a5b1639baa7034d05867884640 100644
---- a/arch/x86/kernel/cpu/resctrl/core.c
-+++ b/arch/x86/kernel/cpu/resctrl/core.c
-@@ -199,7 +199,7 @@ static inline bool rdt_get_mb_table(struct rdt_resource *r)
- 	return false;
- }
- 
--static bool __get_mem_config_intel(struct rdt_resource *r)
-+static __init bool __get_mem_config_intel(struct rdt_resource *r)
- {
- 	struct rdt_hw_resource *hw_res = resctrl_to_arch_res(r);
- 	union cpuid_0x10_3_eax eax;
-@@ -233,7 +233,7 @@ static bool __get_mem_config_intel(struct rdt_resource *r)
- 	return true;
- }
- 
--static bool __rdt_get_mem_config_amd(struct rdt_resource *r)
-+static __init bool __rdt_get_mem_config_amd(struct rdt_resource *r)
- {
- 	struct rdt_hw_resource *hw_res = resctrl_to_arch_res(r);
- 	u32 eax, ebx, ecx, edx, subleaf;
+Acked-by: Nathan Chancellor <nathan@kernel.org>
 
----
-base-commit: 7424fc6b86c8980a87169e005f5cd4438d18efe6
-change-id: 20240822-x86-restctrl-get_mem_config_intel-init-3af02a5130ba
-
-Best regards,
--- 
-Nathan Chancellor <nathan@kernel.org>
-
+> [0] https://lore.kernel.org/lkml/20240805-sysctl-const-api-v2-0-52c85f02ee5e@weissschuh.net/
+> ---
+>  fs/proc/proc_sysctl.c | 11 ++++++++---
+>  1 file changed, 8 insertions(+), 3 deletions(-)
+> 
+> diff --git a/fs/proc/proc_sysctl.c b/fs/proc/proc_sysctl.c
+> index 9553e77c9d31..d11ebc055ce0 100644
+> --- a/fs/proc/proc_sysctl.c
+> +++ b/fs/proc/proc_sysctl.c
+> @@ -29,8 +29,13 @@ static const struct inode_operations proc_sys_inode_operations;
+>  static const struct file_operations proc_sys_dir_file_operations;
+>  static const struct inode_operations proc_sys_dir_operations;
+>  
+> -/* Support for permanently empty directories */
+> -static struct ctl_table sysctl_mount_point[] = { };
+> +/*
+> + * Support for permanently empty directories.
+> + * Must be non-empty to avoid sharing an address with other tables.
+> + */
+> +static struct ctl_table sysctl_mount_point[] = {
+> +	{ }
+> +};
+>  
+>  /**
+>   * register_sysctl_mount_point() - registers a sysctl mount point
+> @@ -42,7 +47,7 @@ static struct ctl_table sysctl_mount_point[] = { };
+>   */
+>  struct ctl_table_header *register_sysctl_mount_point(const char *path)
+>  {
+> -	return register_sysctl(path, sysctl_mount_point);
+> +	return register_sysctl_sz(path, sysctl_mount_point, 0);
+>  }
+>  EXPORT_SYMBOL(register_sysctl_mount_point);
+>  
+> 
+> ---
+> base-commit: 3e9bff3bbe1355805de919f688bef4baefbfd436
+> change-id: 20240827-sysctl-const-shared-identity-9ab816e5fdfb
+> 
+> Best regards,
+> -- 
+> Thomas Weiﬂschuh <linux@weissschuh.net>
+> 
