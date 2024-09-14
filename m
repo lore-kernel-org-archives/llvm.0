@@ -1,61 +1,62 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B234A15B108;
-	Fri, 13 Sep 2024 23:49:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C85D97FD;
+	Sat, 14 Sep 2024 00:10:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726271377; cv=none; b=dfYvxjppuqjxzGwfTSG1Z9PlDE5MCZniPgD6Vax9GiPewOuN4d/87oOiIqYh3GMLAEKIv++lz6MT6wURoJTaVWMgtgdEcs+W11JtHvh04INN0kDffF/2xKc4CxkDvTXVypPI5X+2vVOIje/J53Q/NLeTNWsnhzmacWStgJYxYCE=
+	t=1726272644; cv=none; b=cWO2RIDoN1Z7KFla2rzFoTEEdfr4xRzDMSH7deW2SC4r0L+EwvLsP9ytRFKmnSnKcyg3AWdLTy5RH7w5BuxCj1cxoMX9uEJT06QNsvUN1jKCl/Ktn4lB5r/qvAbB+uaaJEjxY7SrmQFPTi4+q8aUD97YOhrMTeng1PUs87i1XgM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726271377; c=relaxed/simple;
-	bh=NO2v2utJsQdzPh+GQrcc+a4HtuBy0op5OsmeF8R9gWI=;
+	s=arc-20240116; t=1726272644; c=relaxed/simple;
+	bh=pBlXE22qTfUfu7R4b/GcgpMEmYdx7gX5i4yw66loTlg=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=CACo66lKGRvnmh6WA3KgsT3ntarhbkjzRu7JaCN/FWMdcQOdxULAoryFS96OzkQ5kL2ZMYtzjDnFBZQFgeS57ed/E5u7E0O8qolJ0V8lAMTU3Mx6TJ19A4J0/pSMWtFAS39DnjqKJ/1UFNmdx/SIONzOtyrcfiGoQzqeoBopot4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=PTfV6vf+; arc=none smtp.client-ip=198.175.65.18
+	 Content-Type:Content-Disposition:In-Reply-To; b=qED/Zh8THFvsnOExhk8BXgDlZvxIWVjqrRvJ0xuSM6j/KSRGmJ10gVkWeGQRDgeFFeCKUUVB/rz/OOtefzz0Crca9lAlOQTnKwSTF9aDLcJT2A0mnHPeZrLMJ3/MmZG7tT6p3kD2u6b6+Ovl7b1uA0KiTcg7999ZAXTTKPMqGLE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=JEZ9Jvna; arc=none smtp.client-ip=198.175.65.19
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="PTfV6vf+"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="JEZ9Jvna"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1726271375; x=1757807375;
+  t=1726272643; x=1757808643;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=NO2v2utJsQdzPh+GQrcc+a4HtuBy0op5OsmeF8R9gWI=;
-  b=PTfV6vf+w5qBs2eIb0t5qg4j/m5ixmDd3XRcuyTzVwnMwZm002iQiTLh
-   S0KE6WpVdt2lC24qhLU9Kebu+vCP0ynqZr6d/Qqg0ZHOsPacCiRvvAFS5
-   y3jqzfA8cHe5iKhXKfUvT6vBCESTTItWpybJc1bLU0msBI9rJcRjwRSTh
-   CI2yJMu+UT4F5DL94xwn7jWGR4lTnQx6Fp0Wrj0SFhNLUDTRBdwGuJBWU
-   XEjtQHpyL5AcyGBUxzjbMnnCpaFylextBaHPTcNXL8qOoZtw/CoqExv43
-   KjSlSe9Ibowt+nwEjhkI+QZBGLEd7bkQ/TxEC+pIKtp0N1x8AANXr2ZiF
-   A==;
-X-CSE-ConnectionGUID: /QMriqziRfeZLFyCkWVNfw==
-X-CSE-MsgGUID: 6I0tARvzQGuD6GOzwCZ82A==
-X-IronPort-AV: E=McAfee;i="6700,10204,11194"; a="25311623"
+  bh=pBlXE22qTfUfu7R4b/GcgpMEmYdx7gX5i4yw66loTlg=;
+  b=JEZ9JvnaQG5i2f+tlh5T8WbtJQLGDMgtdKWb6DEV/zU0I84r6HkcudfQ
+   LB2JQqIeXkirKzoe7A58J6B6uK+5dQ5qyOf/aW/deJ3EIkRGdliyKFyY/
+   hZvj+EFHovLsekuRhNlDqN2hPy+kLe/ane/1Bnq3Bdryz1XW/eLtZYp7y
+   vWJtx8SpSY7Uf0aAYqvtlVVTXLCSvC4esIs3KF+KOaP69mII6HX3SEMwX
+   segn/gzNWvKQRc2I7ix6ALw9EV81XPfRzQdc16+randWBlrVYArkYvQwk
+   IdOKx1JgCuNQ3xK+rxVMDNGALZ1wx4m9TI5dq9LqOhu7Lyj5sxjxF/SPC
+   g==;
+X-CSE-ConnectionGUID: L+a9AIoWQBaFWZnDJi8Lpg==
+X-CSE-MsgGUID: TdMu/WoqSRa68V+4sbRC1g==
+X-IronPort-AV: E=McAfee;i="6700,10204,11194"; a="25061967"
 X-IronPort-AV: E=Sophos;i="6.10,227,1719903600"; 
-   d="scan'208";a="25311623"
-Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Sep 2024 16:49:34 -0700
-X-CSE-ConnectionGUID: tm56/a9ST0O+NtQ8axKrsg==
-X-CSE-MsgGUID: v2Wr+VnwS7uiDWleXfcRHg==
+   d="scan'208";a="25061967"
+Received: from fmviesa005.fm.intel.com ([10.60.135.145])
+  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Sep 2024 17:10:36 -0700
+X-CSE-ConnectionGUID: ZQDgBaKzScWKseKdZctE8Q==
+X-CSE-MsgGUID: BUzx7VxoTSuGCSExL6LSKw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.10,227,1719903600"; 
-   d="scan'208";a="105688913"
+   d="scan'208";a="72616669"
 Received: from lkp-server01.sh.intel.com (HELO 53e96f405c61) ([10.239.97.150])
-  by orviesa001.jf.intel.com with ESMTP; 13 Sep 2024 16:49:32 -0700
+  by fmviesa005.fm.intel.com with ESMTP; 13 Sep 2024 17:10:32 -0700
 Received: from kbuild by 53e96f405c61 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1spG2b-00079G-1s;
-	Fri, 13 Sep 2024 23:49:29 +0000
-Date: Sat, 14 Sep 2024 07:49:14 +0800
+	id 1spGMw-0007AY-0j;
+	Sat, 14 Sep 2024 00:10:30 +0000
+Date: Sat, 14 Sep 2024 08:10:29 +0800
 From: kernel test robot <lkp@intel.com>
-To: Wenliang <wenliang202407@163.com>, linux@roeck-us.net
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, jdelvare@suse.com,
-	linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Wenliang <wenliang202407@163.com>
-Subject: Re: [PATCH linux dev 6.11] hwmon:add new hwmon driver sq52205
-Message-ID: <202409140727.4pErU6oc-lkp@intel.com>
-References: <20240822074426.7241-1-wenliang202407@163.com>
+To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+	linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Jean Delvare <jdelvare@suse.com>,
+	Andi Shyti <andi.shyti@kernel.org>
+Subject: Re: [PATCH v1 04/12] i2c: isch: Switch to memory mapped IO accessors
+Message-ID: <202409140743.kKVc8T3C-lkp@intel.com>
+References: <20240911154820.2846187-5-andriy.shevchenko@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -64,195 +65,72 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240822074426.7241-1-wenliang202407@163.com>
+In-Reply-To: <20240911154820.2846187-5-andriy.shevchenko@linux.intel.com>
 
-Hi Wenliang,
+Hi Andy,
 
-kernel test robot noticed the following build errors:
+kernel test robot noticed the following build warnings:
 
-[auto build test ERROR on linux/master]
+[auto build test WARNING on andi-shyti/i2c/i2c-host]
+[also build test WARNING on linus/master v6.11-rc7]
+[cannot apply to next-20240913]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Wenliang/hwmon-add-new-hwmon-driver-sq52205/20240912-002906
-base:   linux/master
-patch link:    https://lore.kernel.org/r/20240822074426.7241-1-wenliang202407%40163.com
-patch subject: [PATCH linux dev 6.11] hwmon:add new hwmon driver sq52205
-config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20240914/202409140727.4pErU6oc-lkp@intel.com/config)
-compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project bf684034844c660b778f0eba103582f582b710c9)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240914/202409140727.4pErU6oc-lkp@intel.com/reproduce)
+url:    https://github.com/intel-lab-lkp/linux/commits/Andy-Shevchenko/i2c-isch-Add-missed-else/20240912-002224
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/andi.shyti/linux.git i2c/i2c-host
+patch link:    https://lore.kernel.org/r/20240911154820.2846187-5-andriy.shevchenko%40linux.intel.com
+patch subject: [PATCH v1 04/12] i2c: isch: Switch to memory mapped IO accessors
+config: i386-buildonly-randconfig-001-20240913 (https://download.01.org/0day-ci/archive/20240914/202409140743.kKVc8T3C-lkp@intel.com/config)
+compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240914/202409140743.kKVc8T3C-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202409140727.4pErU6oc-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202409140743.kKVc8T3C-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
-   In file included from drivers/hwmon/sq52205.c:12:
-   In file included from include/linux/i2c.h:19:
-   In file included from include/linux/regulator/consumer.h:35:
-   In file included from include/linux/suspend.h:5:
-   In file included from include/linux/swap.h:9:
-   In file included from include/linux/memcontrol.h:13:
-   In file included from include/linux/cgroup.h:25:
-   In file included from include/linux/kernel_stat.h:8:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:14:
-   In file included from arch/hexagon/include/asm/io.h:328:
-   include/asm-generic/io.h:548:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     548 |         val = __raw_readb(PCI_IOBASE + addr);
-         |                           ~~~~~~~~~~ ^
-   include/asm-generic/io.h:561:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     561 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
-      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-         |                                                   ^
-   In file included from drivers/hwmon/sq52205.c:12:
-   In file included from include/linux/i2c.h:19:
-   In file included from include/linux/regulator/consumer.h:35:
-   In file included from include/linux/suspend.h:5:
-   In file included from include/linux/swap.h:9:
-   In file included from include/linux/memcontrol.h:13:
-   In file included from include/linux/cgroup.h:25:
-   In file included from include/linux/kernel_stat.h:8:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:14:
-   In file included from arch/hexagon/include/asm/io.h:328:
-   include/asm-generic/io.h:574:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     574 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
-      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
-         |                                                   ^
-   In file included from drivers/hwmon/sq52205.c:12:
-   In file included from include/linux/i2c.h:19:
-   In file included from include/linux/regulator/consumer.h:35:
-   In file included from include/linux/suspend.h:5:
-   In file included from include/linux/swap.h:9:
-   In file included from include/linux/memcontrol.h:13:
-   In file included from include/linux/cgroup.h:25:
-   In file included from include/linux/kernel_stat.h:8:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:14:
-   In file included from arch/hexagon/include/asm/io.h:328:
-   include/asm-generic/io.h:585:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     585 |         __raw_writeb(value, PCI_IOBASE + addr);
-         |                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:595:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     595 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:605:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     605 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   In file included from drivers/hwmon/sq52205.c:12:
-   In file included from include/linux/i2c.h:19:
-   In file included from include/linux/regulator/consumer.h:35:
-   In file included from include/linux/suspend.h:5:
-   In file included from include/linux/swap.h:9:
-   In file included from include/linux/memcontrol.h:21:
-   In file included from include/linux/mm.h:2232:
-   include/linux/vmstat.h:517:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     517 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
->> drivers/hwmon/sq52205.c:493:37: error: cannot assign to variable 'sq522xx_regmap_config' with const-qualified type 'const struct regmap_config'
-     493 |         sq522xx_regmap_config.max_register = data->config->registers;
-         |         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ^
-   drivers/hwmon/sq52205.c:67:35: note: variable 'sq522xx_regmap_config' declared const here
-      67 | static const struct regmap_config sq522xx_regmap_config = {
-         | ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~
-      68 |         .reg_bits = 8,
-         |         ~~~~~~~~~~~~~~
-      69 |         .val_bits = 16,
-         |         ~~~~~~~~~~~~~~~
-      70 | };
-         | ~
-   7 warnings and 1 error generated.
+>> drivers/i2c/busses/i2c-isch.c:296:32: warning: format specifies type 'unsigned int' but the argument has type 'resource_size_t' (aka 'unsigned long long') [-Wformat]
+     296 |                 "SMBus SCH adapter at %04x", res->start);
+         |                                       ~~~~   ^~~~~~~~~~
+         |                                       %04llx
+   1 warning generated.
 
 
-vim +493 drivers/hwmon/sq52205.c
+vim +296 drivers/i2c/busses/i2c-isch.c
 
-   460	
-   461	static int sq522xx_probe(struct i2c_client *client)
-   462	{
-   463		struct device *dev = &client->dev;
-   464		struct sq522xx_data *data;
-   465		struct device *hwmon_dev;
-   466		u32 val;
-   467		int ret, group = 0;
-   468		enum sq522xx_ids chip;
-   469	
-   470		if (client->dev.of_node)
-   471			chip = (uintptr_t)of_device_get_match_data(&client->dev);
-   472		else
-   473			chip = i2c_match_id(sq522xx_id, client)->driver_data;
-   474	
-   475		data = devm_kzalloc(dev, sizeof(*data), GFP_KERNEL);
-   476		if (!data)
-   477			return -ENOMEM;
-   478	
-   479		/* set the device type */
-   480		data->client = client;
-   481		data->config = &sq522xx_config[chip];
-   482		mutex_init(&data->config_lock);
-   483	
-   484		if (of_property_read_u32(dev->of_node, "shunt-resistor", &val) < 0)
-   485			val = SQ522XX_RSHUNT_DEFAULT;
-   486	
-   487	
-   488		if (val <= 0 || val > data->config->calibration_factor)
-   489			return -ENODEV;
-   490	
-   491		data->rshunt = val;
-   492	
- > 493		sq522xx_regmap_config.max_register = data->config->registers;
-   494	
-   495		data->regmap = devm_regmap_init_i2c(client, &sq522xx_regmap_config);
-   496		if (IS_ERR(data->regmap)) {
-   497			dev_err(dev, "failed to allocate register map\n");
-   498			return PTR_ERR(data->regmap);
-   499		}
-   500	
-   501	
-   502		ret = sq522xx_init(data);
-   503		if (ret < 0) {
-   504			dev_err(dev, "error configuring the device: %d\n", ret);
-   505			return -ENODEV;
-   506		}
-   507		if (chip == sq52205) {
-   508			ret = sq52205_init(data);
-   509			if (ret < 0) {
-   510				dev_err(dev, "error configuring the device cal: %d\n", ret);
-   511				return -ENODEV;
-   512			}
-   513		}
-   514	
-   515		data->groups[group++] = &sq522xx_group;
-   516		if (chip == sq52205)
-   517			data->groups[group++] = &sq52205_group;
-   518	
-   519		hwmon_dev = devm_hwmon_device_register_with_groups(dev, client->name,
-   520									data, data->groups);
-   521		if (IS_ERR(hwmon_dev))
-   522			return PTR_ERR(hwmon_dev);
-   523	
-   524		dev_info(dev, "power monitor %s (Rshunt = %li uOhm)\n",
-   525			 client->name, data->rshunt);
-   526	
-   527		return 0;
-   528	}
-   529	
+   276	
+   277	static int smbus_sch_probe(struct platform_device *dev)
+   278	{
+   279		struct resource *res;
+   280		int retval;
+   281	
+   282		res = platform_get_resource(dev, IORESOURCE_IO, 0);
+   283		if (!res)
+   284			return -EBUSY;
+   285	
+   286		sch_smba = devm_ioport_map(&dev->dev, res->start, resource_size(res));
+   287		if (!sch_smba) {
+   288			dev_err(&dev->dev, "SMBus region %pR already in use!\n", res);
+   289			return -EBUSY;
+   290		}
+   291	
+   292		/* set up the sysfs linkage to our parent device */
+   293		sch_adapter.dev.parent = &dev->dev;
+   294	
+   295		snprintf(sch_adapter.name, sizeof(sch_adapter.name),
+ > 296			"SMBus SCH adapter at %04x", res->start);
+   297	
+   298		retval = i2c_add_adapter(&sch_adapter);
+   299		if (retval)
+   300			sch_smba = NULL;
+   301	
+   302		return retval;
+   303	}
+   304	
 
 -- 
 0-DAY CI Kernel Test Service
