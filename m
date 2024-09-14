@@ -1,83 +1,71 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF9DF13FEE;
-	Sat, 14 Sep 2024 02:56:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0FEAF10A3E;
+	Sat, 14 Sep 2024 03:06:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726282604; cv=none; b=iUVe1YfpXh03usb1CySnPYzlhMXBo1JHMhU485oUzXwZpHvTynt79upeZkoW7NpowiyrhoNIAnkVDLDoKeBvvxHMZDiXIon8V0CWSgpxd0qKHA2JSYT3zw4ejPjkgQbDBSaViHqANW8TOiN3/Q3AAFzp6+xbZOFG+0D2ZwhDW+g=
+	t=1726283206; cv=none; b=bkyWxelouQ1k1PgS70g1NCEU5fW6K7VL6Pm3WvOl/RL/ivwE+TKSsOlt1yT4HPMCYRFgJh+U9PEoLsdbX6kXyPQsPrwp/tW6ZxL40lVTQYr5gQTvZoe5lXOA5C7lAp6PTI5QzOxUrsLbEhRS+hIOxAZ3gqtjUaxvQWbMkoXqn5o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726282604; c=relaxed/simple;
-	bh=TfRF/a3tZMACX33Nym0bwiApVNFyDJF2lXEejWZJEFc=;
+	s=arc-20240116; t=1726283206; c=relaxed/simple;
+	bh=VuTTj0+Hf6dafOpC2060LVcxOgfAYGN+KF2rIky5w6c=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=HLrHiaIOFtopKWT160N/4ZDp9+KN6JgMfVgWWBWHiJLeWTmCYya1smNuIe44gnW28/K4bmsp2+E5E/fT1c/AUBX6om1hayBVUbl16WVKizxtXw43V40Xwa0VAbum7wcB1BWBQOCc+LXrz4SxLNbzkcRPwjVI4N46jEpjXjeLi0w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ZJfS7Qy7; arc=none smtp.client-ip=198.175.65.11
+	 Content-Type:Content-Disposition:In-Reply-To; b=GrJGC8HL068ZJZibaHoWrcvHfgviQ1ndcT+Z+P/1GuUhpPk4O7e5hpEy5Lt/dMg0B2sSyZnSF7Yq8iZc2Nx9yBjcW/LOGyUmRjHhTegQ51HxvqdvHfgsObnHtKxwNBFP7Cjd+EvLj9DFAMJ2YtZPUcTMG3Xoy3Th81Y5yxtBPIo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=LuwrY/l8; arc=none smtp.client-ip=198.175.65.16
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ZJfS7Qy7"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="LuwrY/l8"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1726282603; x=1757818603;
+  t=1726283205; x=1757819205;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=TfRF/a3tZMACX33Nym0bwiApVNFyDJF2lXEejWZJEFc=;
-  b=ZJfS7Qy754xniqsiCMj9LKtr7E2hIXAlrmnqrGnT9jn3U1Ykvn3musq7
-   77Opryka0YoZ3qadBdl8SjZJWP6Qi7S38acaqruXbWdWH+eaeICxqdopI
-   j3+ttMeRkEdreF6wcyXBmUNIfb7ECL7DPXqTmPLiofqGTD52JZy5hEovX
-   /hbTfFx+tOZH3TOc62HGN7mD0SRO2iLGznMwZ5dH19f/mmfmkns5QDBJj
-   b6CWHwWvWeknBRp7VCM0+TWMqLXC4OqM5+wiGwYj9/WLuvwLVGxIzfvsD
-   o7Mj3zDKWf8Ncjk3QcmBZkkq4QvTmrAwWZlGuNLCkPn4bERcGsmiABfCL
-   w==;
-X-CSE-ConnectionGUID: eUQ1fSjkRmWnPr3wUn1d3Q==
-X-CSE-MsgGUID: DpB0f9yZS9quWck2yJ6WYw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11194"; a="35770254"
-X-IronPort-AV: E=Sophos;i="6.10,227,1719903600"; 
-   d="scan'208";a="35770254"
-Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Sep 2024 19:56:43 -0700
-X-CSE-ConnectionGUID: lEjkV/aDSI6kXppHOWZz9Q==
-X-CSE-MsgGUID: G84aYRYRSwaILiSOQmbkAw==
+  bh=VuTTj0+Hf6dafOpC2060LVcxOgfAYGN+KF2rIky5w6c=;
+  b=LuwrY/l86vF/r3MwZBOgb6HGG3bVpamGgdiBK4Of0Nx2jmQqYxT1hmXC
+   7vlmujWu7oAqzXgvJPlR5//mWLjeY24GIUPMLJZt2Q7c5R4suCc1auZzA
+   ESJ1csvgsKrujq8xgLc8nHxZ7GIVtuPaLgtA5OCZ0XLnMFJUodmBO3iJN
+   5tH86HVNP/zOkAyIVxu69d9DKM69kxDLOHO+vjEUo5bGCpzobigUQlij1
+   Z5AHIFOvbHhZusv/enwVSH+tU3aS9OGEElUnQN5pMP1JDTQpvInf5Dw5w
+   Cb7Q2qMsO1b09bomhuGlQRIq0Ziut8cwtj/TW2gn6jmi6801B/ugH3te7
+   g==;
+X-CSE-ConnectionGUID: Dqjz72soQdC9MjK0Xn/iig==
+X-CSE-MsgGUID: AAFiUUdPSZG+Ou1c54CoEw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11194"; a="25291133"
+X-IronPort-AV: E=Sophos;i="6.10,228,1719903600"; 
+   d="scan'208";a="25291133"
+Received: from orviesa002.jf.intel.com ([10.64.159.142])
+  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Sep 2024 20:06:44 -0700
+X-CSE-ConnectionGUID: dU7HVl+vSZK4EySvvPPaKA==
+X-CSE-MsgGUID: 6iQmQ58DSpe1AOImeKqRbg==
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.10,227,1719903600"; 
-   d="scan'208";a="91561390"
+X-IronPort-AV: E=Sophos;i="6.10,228,1719903600"; 
+   d="scan'208";a="98958003"
 Received: from lkp-server01.sh.intel.com (HELO 53e96f405c61) ([10.239.97.150])
-  by fmviesa002.fm.intel.com with ESMTP; 13 Sep 2024 19:56:36 -0700
+  by orviesa002.jf.intel.com with ESMTP; 13 Sep 2024 20:06:38 -0700
 Received: from kbuild by 53e96f405c61 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1spIxe-0007Hg-0m;
-	Sat, 14 Sep 2024 02:56:34 +0000
-Date: Sat, 14 Sep 2024 10:55:58 +0800
+	id 1spJ7K-0007Is-2t;
+	Sat, 14 Sep 2024 03:06:34 +0000
+Date: Sat, 14 Sep 2024 11:06:10 +0800
 From: kernel test robot <lkp@intel.com>
-To: Arturs Artamonovs via B4 Relay <devnull+arturs.artamonovs.analog.com@kernel.org>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>,
-	Greg Malysa <greg.malysa@timesys.com>,
-	Philipp Zabel <p.zabel@pengutronix.de>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Utsav Agarwal <Utsav.Agarwal@analog.com>,
-	Michael Turquette <mturquette@baylibre.com>,
-	Stephen Boyd <sboyd@kernel.org>,
-	Linus Walleij <linus.walleij@linaro.org>,
-	Bartosz Golaszewski <brgl@bgdev.pl>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Andi Shyti <andi.shyti@kernel.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Jiri Slaby <jirislaby@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-	Olof Johansson <olof@lixom.net>, soc@kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
-	linux-gpio@vger.kernel.org, linux-i2c@vger.kernel.org,
-	linux-serial@vger.kernel.org,
-	Arturs Artamonovs <arturs.artamonovs@analog.com>,
-	adsp-linux@analog.com,
-	Nathan Barrett-Morrison <nathan.morrison@timesys.com>
-Subject: Re: [PATCH 13/21] pinctrl: Add drivers for ADI ADSP-SC5xx platform
-Message-ID: <202409141049.53oom3zJ-lkp@intel.com>
-References: <20240912-test-v1-13-458fa57c8ccf@analog.com>
+To: Deepak Gupta <debug@rivosinc.com>, paul.walmsley@sifive.com,
+	palmer@sifive.com, conor@kernel.org, linux-doc@vger.kernel.org,
+	linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+	linux-mm@kvack.org, linux-arch@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, corbet@lwn.net,
+	palmer@dabbelt.com, aou@eecs.berkeley.edu, robh@kernel.org,
+	krzk+dt@kernel.org, oleg@redhat.com, tglx@linutronix.de,
+	mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
+	x86@kernel.org, hpa@zytor.com, akpm@linux-foundation.org,
+	arnd@arndb.de, ebiederm@xmission.com, kees@kernel.org,
+	Liam.Howlett@oracle.com, vbabka@suse.cz
+Subject: Re: [PATCH v4 16/30] riscv/shstk: If needed allocate a new shadow
+ stack on clone
+Message-ID: <202409141059.SDUgpQw4-lkp@intel.com>
+References: <20240912231650.3740732-17-debug@rivosinc.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -86,80 +74,87 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240912-test-v1-13-458fa57c8ccf@analog.com>
+In-Reply-To: <20240912231650.3740732-17-debug@rivosinc.com>
 
-Hi Arturs,
+Hi Deepak,
 
-kernel test robot noticed the following build warnings:
+kernel test robot noticed the following build errors:
 
-[auto build test WARNING on da3ea35007d0af457a0afc87e84fddaebc4e0b63]
+[auto build test ERROR on shuah-kselftest/next]
+[also build test ERROR on shuah-kselftest/fixes tip/x86/core robh/for-next arnd-asm-generic/master tip/smp/core kees/for-next/execve linus/master v6.11-rc7]
+[cannot apply to akpm-mm/mm-everything next-20240913]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Arturs-Artamonovs-via-B4-Relay/arm64-Add-ADI-ADSP-SC598-SoC/20240913-022308
-base:   da3ea35007d0af457a0afc87e84fddaebc4e0b63
-patch link:    https://lore.kernel.org/r/20240912-test-v1-13-458fa57c8ccf%40analog.com
-patch subject: [PATCH 13/21] pinctrl: Add drivers for ADI ADSP-SC5xx platform
-config: arm64-allmodconfig (https://download.01.org/0day-ci/archive/20240914/202409141049.53oom3zJ-lkp@intel.com/config)
-compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project bf684034844c660b778f0eba103582f582b710c9)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240914/202409141049.53oom3zJ-lkp@intel.com/reproduce)
+url:    https://github.com/intel-lab-lkp/linux/commits/Deepak-Gupta/mm-Introduce-ARCH_HAS_USER_SHADOW_STACK/20240913-072124
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest.git next
+patch link:    https://lore.kernel.org/r/20240912231650.3740732-17-debug%40rivosinc.com
+patch subject: [PATCH v4 16/30] riscv/shstk: If needed allocate a new shadow stack on clone
+config: riscv-randconfig-001-20240914 (https://download.01.org/0day-ci/archive/20240914/202409141059.SDUgpQw4-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240914/202409141059.SDUgpQw4-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202409141049.53oom3zJ-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202409141059.SDUgpQw4-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All error/warnings (new ones prefixed by >>):
 
->> drivers/pinctrl/pinctrl-adsp.c:291: warning: Function parameter or struct member 'pctldev' not described in 'adsp_pinctrl_dt_node_to_map'
->> drivers/pinctrl/pinctrl-adsp.c:291: warning: Function parameter or struct member 'np' not described in 'adsp_pinctrl_dt_node_to_map'
->> drivers/pinctrl/pinctrl-adsp.c:291: warning: Function parameter or struct member 'map' not described in 'adsp_pinctrl_dt_node_to_map'
->> drivers/pinctrl/pinctrl-adsp.c:291: warning: Function parameter or struct member 'num_maps' not described in 'adsp_pinctrl_dt_node_to_map'
->> drivers/pinctrl/pinctrl-adsp.c:291: warning: expecting prototype for Handle device tree structures like(). Prototype was for adsp_pinctrl_dt_node_to_map() instead
+>> clang diag: arch/riscv/include/asm/usercfi.h:44:15: warning: no previous prototype for function 'get_shstk_base' [-Wmissing-prototypes]
+--
+   In file included from drivers/gpu/drm/drm_plane.c:23:
+   In file included from include/linux/slab.h:16:
+   In file included from include/linux/gfp.h:7:
+   In file included from include/linux/mmzone.h:8:
+   In file included from include/linux/spinlock.h:56:
+   In file included from include/linux/preempt.h:79:
+   In file included from ./arch/riscv/include/generated/asm/preempt.h:1:
+   In file included from include/asm-generic/preempt.h:5:
+   In file included from include/linux/thread_info.h:60:
+   In file included from arch/riscv/include/asm/thread_info.h:37:
+   In file included from arch/riscv/include/asm/processor.h:17:
+>> arch/riscv/include/asm/usercfi.h:44:15: error: no previous prototype for function 'get_shstk_base' [-Werror,-Wmissing-prototypes]
+   unsigned long get_shstk_base(struct task_struct *task, unsigned long *size)
+                 ^
+   arch/riscv/include/asm/usercfi.h:44:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   unsigned long get_shstk_base(struct task_struct *task, unsigned long *size)
+   ^
+   static 
+   1 error generated.
+--
+   In file included from arch/riscv/kernel/asm-offsets.c:10:
+   In file included from include/linux/mm.h:7:
+   In file included from include/linux/gfp.h:7:
+   In file included from include/linux/mmzone.h:8:
+   In file included from include/linux/spinlock.h:56:
+   In file included from include/linux/preempt.h:79:
+   In file included from ./arch/riscv/include/generated/asm/preempt.h:1:
+   In file included from include/asm-generic/preempt.h:5:
+   In file included from include/linux/thread_info.h:60:
+   In file included from arch/riscv/include/asm/thread_info.h:37:
+   In file included from arch/riscv/include/asm/processor.h:17:
+   arch/riscv/include/asm/usercfi.h:44:15: warning: no previous prototype for function 'get_shstk_base' [-Wmissing-prototypes]
+   unsigned long get_shstk_base(struct task_struct *task, unsigned long *size)
+                 ^
+   arch/riscv/include/asm/usercfi.h:44:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   unsigned long get_shstk_base(struct task_struct *task, unsigned long *size)
+   ^
+   static 
+   1 warning generated.
+>> clang diag: arch/riscv/include/asm/usercfi.h:44:15: warning: no previous prototype for function 'get_shstk_base' [-Wmissing-prototypes]
+>> clang diag: arch/riscv/include/asm/usercfi.h:44:15: warning: no previous prototype for function 'get_shstk_base' [-Wmissing-prototypes]
 
 
-vim +291 drivers/pinctrl/pinctrl-adsp.c
+vim +/get_shstk_base +44 arch/riscv/include/asm/usercfi.h
 
-   271	
-   272	/**
-   273	 * Handle device tree structures like:
-   274	 *
-   275	 * pinctrl_uart0_hwflow: uart0_hwflow_pins {
-   276	 *   pins_rxtx_ {
-   277	 *     pinmux = <1>, <2>;
-   278	 *     some-padconf-flag;
-   279	 *   };
-   280	 *   pins_hwflow {
-   281	 *     pinmux = <3>, <4>;
-   282	 *     some-other-padconf-flag;
-   283	 *   };
-   284	 * };
-   285	 *
-   286	 * where &pinctrl_uart0_hwflow is passed as an entry in pinctrl-0 on uart driver and
-   287	 * enables all sub-pins at once
-   288	 */
-   289	static int adsp_pinctrl_dt_node_to_map(struct pinctrl_dev *pctldev,
-   290		struct device_node *np, struct pinctrl_map **map, unsigned int *num_maps)
- > 291	{
-   292		unsigned int reserved_maps;
-   293		struct device_node *child_np;
-   294		int ret;
-   295	
-   296		reserved_maps = 0;
-   297		*map = NULL;
-   298		*num_maps = 0;
-   299	
-   300		for_each_child_of_node(np, child_np) {
-   301			ret = adsp_pinctrl_dt_subnode_to_map(pctldev, child_np, map,
-   302						&reserved_maps, num_maps);
-   303			if (ret < 0)
-   304				goto exit;
-   305		}
-   306		return 0;
-   307	
-   308	exit:
-   309		pinctrl_utils_free_map(pctldev, *map, *num_maps);
-   310		return ret;
-   311	}
-   312	
+    43	
+  > 44	unsigned long get_shstk_base(struct task_struct *task, unsigned long *size)
+    45	{
+    46		return 0;
+    47	}
+    48	
 
 -- 
 0-DAY CI Kernel Test Service
