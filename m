@@ -1,59 +1,60 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A2BA238B;
-	Sat, 14 Sep 2024 08:12:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1FBDA12E5D;
+	Sat, 14 Sep 2024 08:44:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726301573; cv=none; b=iec+d3tQ843hB3038ny4iHtM5n6jtiqSafdZ/GDihwShp0++9NkMPFjY0q7GTaYEea4/sDPOd757q5z+A4YsEmHv2kVKgnmfq84rKXatJiWNLuuuymCniDAxTFWBTsJXw6HG5BC7PEo8hgxtb76k2pznIkNxupJlN/cOvKQ0t6c=
+	t=1726303494; cv=none; b=tLw46LAZ8mfGB1EI/+vMT2ORtYQxVCMIn5euWX1wN71jt3Kbr+lJLw2UY2lPR3QjzmC5EawdX+3oQC/kbhWWKEfi+I+oo9cihVnPe1a9o+tFozgI27ykZHrRVz9HF0P20ja5ykBE5jW2T/pPjh1bpsXozYbUZdBFjF0S8mYBKNU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726301573; c=relaxed/simple;
-	bh=r38S6sw4RXheW+otD1Y4ZlGL5AJbeYMbhsl4q4FoDu8=;
+	s=arc-20240116; t=1726303494; c=relaxed/simple;
+	bh=uqYiBYnch1mwTt2mJVwyJL+SwayFvOPF3ILi+J+qEk0=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=krIWJnJvIj13CQOVfH0OzS8+cQx4WiARF5cd/e5O6R6IcdoVc7KowX7oKnrmHwocUr76r9POKmewACChnQkng1EPXXrBeevGHdA9FW2YHqaZTzEleN5OIvdDRFu+vdwtrFfU4EX+SFz94AVndxWGe4UU6LTvvb9gMwJ89UZIQMM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=A5t4XdBi; arc=none smtp.client-ip=192.198.163.8
+	 Content-Type:Content-Disposition:In-Reply-To; b=LFQBbTyRZqg7jE6wN1T7HE6E1hHwEvcFKNgxz9woQ3sj3+VH1M7M2BLe+qlSA5BnPo7O/NZltHy0PKLlZRTkXTtbFAzLHKq+H5CCYmZnt88peUO10iHV3piIPwYEukY+8CHzy6zk4F1qCmBIJo+WjVuAEZP2dkSYn1RV8dfDZ2I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=SqYgzYWt; arc=none smtp.client-ip=192.198.163.17
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="A5t4XdBi"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="SqYgzYWt"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1726301572; x=1757837572;
+  t=1726303492; x=1757839492;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=r38S6sw4RXheW+otD1Y4ZlGL5AJbeYMbhsl4q4FoDu8=;
-  b=A5t4XdBil38IAe8LNpCP1j9ueCksbTP+otpL/A+GKU3Az2CbxJnEpvNZ
-   QL8KBj0OftGo/TrVDUxCrLgEtPzJGv9MdQrIAniBasAQ5Khs7qRNwHBVw
-   SpMNVEdVE10numFUGcDgeiKWaHGry7uinPIIfymooG7SnVFHaHa2hA9Ij
-   juk+8Um4iBKfCZmvyOezd87zEnDoc3NgG3p2BpcNYM1rbP8JAawLfsnAz
-   5L26IUkUuA4HySYjT0n7YMJMs6ELlFTGstMxrFxVZs3qvnRXlUJbmmez9
-   Iljjbqw1eI9zEnyo6A2ZuVORQwq7AcDH2MfPXbaWCvN0Z8A7tl1PrvA24
-   Q==;
-X-CSE-ConnectionGUID: zTjpX4LrSbSdg6j8GkU3rw==
-X-CSE-MsgGUID: MoDeCy78S2SqVaRHfDvIFQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11194"; a="42717147"
+  bh=uqYiBYnch1mwTt2mJVwyJL+SwayFvOPF3ILi+J+qEk0=;
+  b=SqYgzYWtaO0Zz5xGSLthz0P+9xLCkx2LqUbQrc0W4WuiJmcxwI0ZYscw
+   aDh42lj+Nx26osIpRhI13HPOkMs/LjXnRrXBuzNcM+noNwuqWgL0ikqZS
+   3M79YqsI2YihNbRVDXPd7mucUcrv9sen8TmhN+NKq47K4yyvpCu92TXZP
+   yxPT7v71NnOVSs1dyP4y+0m6uKvrzx6erKzWs6cfMz2uz46H1o/Doy0VB
+   f1K6zzQFqMEgCOWcUkDp6kY2Opi+HbuqpwXrKWhwGflxBlzoj5KYpt5kO
+   /vyJ7X/xgHW4rDq8OcHJGaRl9pJvEUCsXXII/s57dthvQxsrUcHI8pPeL
+   A==;
+X-CSE-ConnectionGUID: qMQsTsymRqO590dTMcsE5A==
+X-CSE-MsgGUID: 6h7nrPz2TCCJmPb1f8L9rw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11194"; a="25092062"
 X-IronPort-AV: E=Sophos;i="6.10,228,1719903600"; 
-   d="scan'208";a="42717147"
-Received: from orviesa009.jf.intel.com ([10.64.159.149])
-  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Sep 2024 01:12:51 -0700
-X-CSE-ConnectionGUID: bQ/xg6XmQ3GAXonkwzoNNw==
-X-CSE-MsgGUID: f5irCxNJTbGVzKz+pw1qGQ==
+   d="scan'208";a="25092062"
+Received: from orviesa001.jf.intel.com ([10.64.159.141])
+  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Sep 2024 01:44:51 -0700
+X-CSE-ConnectionGUID: EF2Ev/HJTteT1DeFCbUNcw==
+X-CSE-MsgGUID: rV6NSsHHSgmS1fHq5mw/3w==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.10,228,1719903600"; 
-   d="scan'208";a="68290648"
+   d="scan'208";a="105796451"
 Received: from lkp-server01.sh.intel.com (HELO 53e96f405c61) ([10.239.97.150])
-  by orviesa009.jf.intel.com with ESMTP; 14 Sep 2024 01:12:50 -0700
+  by orviesa001.jf.intel.com with ESMTP; 14 Sep 2024 01:44:50 -0700
 Received: from kbuild by 53e96f405c61 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1spNtf-0007Wa-0L;
-	Sat, 14 Sep 2024 08:12:47 +0000
-Date: Sat, 14 Sep 2024 16:12:26 +0800
+	id 1spOOe-0007Xz-0N;
+	Sat, 14 Sep 2024 08:44:48 +0000
+Date: Sat, 14 Sep 2024 16:44:01 +0800
 From: kernel test robot <lkp@intel.com>
-To: Josh Poimboeuf <jpoimboe@kernel.org>
+To: Usama Arif <usamaarif642@gmail.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [PATCH v2 03/11] unwind: Introduce SFrame user space unwinding
-Message-ID: <202409141653.JlQG6bQS-lkp@intel.com>
-References: <ca2e603ae3dcfa3e836162ed8c301fd4d9fd4058.1726268190.git.jpoimboe@kernel.org>
+Subject: Re: [RFC] efi/tpm: add efi.tpm_log as a reserved region in
+ 820_table_firmware
+Message-ID: <202409141653.Xws30k1b-lkp@intel.com>
+References: <20240911104109.1831501-1-usamaarif642@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -62,81 +63,55 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <ca2e603ae3dcfa3e836162ed8c301fd4d9fd4058.1726268190.git.jpoimboe@kernel.org>
+In-Reply-To: <20240911104109.1831501-1-usamaarif642@gmail.com>
 
-Hi Josh,
+Hi Usama,
 
+[This is a private test report for your RFC patch.]
 kernel test robot noticed the following build errors:
 
-[auto build test ERROR on perf-tools-next/perf-tools-next]
-[also build test ERROR on tip/perf/core perf-tools/perf-tools linus/master v6.11-rc7 next-20240913]
-[cannot apply to acme/perf/core]
+[auto build test ERROR on efi/next]
+[also build test ERROR on tip/x86/core linus/master v6.11-rc7 next-20240913]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Josh-Poimboeuf/unwind-Introduce-generic-user-space-unwinding-interface/20240914-070619
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/perf/perf-tools-next.git perf-tools-next
-patch link:    https://lore.kernel.org/r/ca2e603ae3dcfa3e836162ed8c301fd4d9fd4058.1726268190.git.jpoimboe%40kernel.org
-patch subject: [PATCH v2 03/11] unwind: Introduce SFrame user space unwinding
-config: arm-allnoconfig (https://download.01.org/0day-ci/archive/20240914/202409141653.JlQG6bQS-lkp@intel.com/config)
-compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project bf684034844c660b778f0eba103582f582b710c9)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240914/202409141653.JlQG6bQS-lkp@intel.com/reproduce)
+url:    https://github.com/intel-lab-lkp/linux/commits/Usama-Arif/efi-tpm-add-efi-tpm_log-as-a-reserved-region-in-820_table_firmware/20240911-184309
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/efi/efi.git next
+patch link:    https://lore.kernel.org/r/20240911104109.1831501-1-usamaarif642%40gmail.com
+patch subject: [RFC] efi/tpm: add efi.tpm_log as a reserved region in 820_table_firmware
+config: i386-defconfig (https://download.01.org/0day-ci/archive/20240914/202409141653.Xws30k1b-lkp@intel.com/config)
+compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240914/202409141653.Xws30k1b-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202409141653.JlQG6bQS-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202409141653.Xws30k1b-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
-   In file included from mm/init-mm.c:8:
-   In file included from include/linux/mman.h:5:
-   In file included from include/linux/mm.h:2232:
-   include/linux/vmstat.h:517:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     517 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
->> mm/init-mm.c:48:26: error: expected expression
-      48 |         INIT_MM_CONTEXT(init_mm),
-         |                                 ^
-   mm/init-mm.c:49:16: error: expected expression
-      49 |         INIT_MM_SFRAME,
-         |                       ^
-   1 warning and 2 errors generated.
+>> arch/x86/platform/efi/efi.c:175:6: error: redefinition of 'arch_update_firmware_area'
+     175 | void arch_update_firmware_area(u64 addr, u64 size)
+         |      ^
+   include/linux/efi.h:1375:27: note: previous definition is here
+    1375 | static inline void __init arch_update_firmware_area(u64 addr, u64 size)
+         |                           ^
+   1 error generated.
 
 
-vim +48 mm/init-mm.c
+vim +/arch_update_firmware_area +175 arch/x86/platform/efi/efi.c
 
-    22	
-    23	/*
-    24	 * For dynamically allocated mm_structs, there is a dynamically sized cpumask
-    25	 * at the end of the structure, the size of which depends on the maximum CPU
-    26	 * number the system can see. That way we allocate only as much memory for
-    27	 * mm_cpumask() as needed for the hundreds, or thousands of processes that
-    28	 * a system typically runs.
-    29	 *
-    30	 * Since there is only one init_mm in the entire system, keep it simple
-    31	 * and size this cpu_bitmask to NR_CPUS.
-    32	 */
-    33	struct mm_struct init_mm = {
-    34		.mm_mt		= MTREE_INIT_EXT(mm_mt, MM_MT_FLAGS, init_mm.mmap_lock),
-    35		.pgd		= swapper_pg_dir,
-    36		.mm_users	= ATOMIC_INIT(2),
-    37		.mm_count	= ATOMIC_INIT(1),
-    38		.write_protect_seq = SEQCNT_ZERO(init_mm.write_protect_seq),
-    39		MMAP_LOCK_INITIALIZER(init_mm)
-    40		.page_table_lock =  __SPIN_LOCK_UNLOCKED(init_mm.page_table_lock),
-    41		.arg_lock	=  __SPIN_LOCK_UNLOCKED(init_mm.arg_lock),
-    42		.mmlist		= LIST_HEAD_INIT(init_mm.mmlist),
-    43	#ifdef CONFIG_PER_VMA_LOCK
-    44		.mm_lock_seq	= 0,
-    45	#endif
-    46		.user_ns	= &init_user_ns,
-    47		.cpu_bitmap	= CPU_BITS_NONE,
-  > 48		INIT_MM_CONTEXT(init_mm),
-    49		INIT_MM_SFRAME,
-    50	};
-    51	
+   173	
+   174	/* Reserve firmware area if it was marked as RAM */
+ > 175	void arch_update_firmware_area(u64 addr, u64 size)
+   176	{
+   177		if (e820__get_entry_type(addr, addr + size) == E820_TYPE_RAM) {
+   178			e820__range_update_firmware(addr, size, E820_TYPE_RAM, E820_TYPE_RESERVED);
+   179			e820__update_table(e820_table_firmware);
+   180		}
+   181	}
+   182	
 
 -- 
 0-DAY CI Kernel Test Service
