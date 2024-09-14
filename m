@@ -1,131 +1,113 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CFA8E1CEE8B;
-	Sat, 14 Sep 2024 14:08:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C3614210E9;
+	Sat, 14 Sep 2024 14:11:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726322887; cv=none; b=YJLyIHt96B0e4Gz39c8Erq4TV2NANTlsjE+isM/Qa2hTGdo5YZWOVc3DKneGuLD7j933TDIVHXhJA9+dg4uMWnHe6KR8x4jDnYcqv5isuYlsRTGo/6rgG2iTVc3w4akQfCmJuffjOLg6ep9qVkepImBp1zgsuZXezRXU/7AV8nQ=
+	t=1726323068; cv=none; b=ms8Y42tdtiOukbXgSRWBCacpD63zmM3u66WG8qIRJJglu16g2/GUPc4AJvShH0XDz1rEDRqprg+K4LkzBUl5WMFLdPyLaN0itTIF+fADStv9Hu6Ibs+DGidrDTW6rrp+4mm2up0qnlEoA+yDa8CU4CJAWKthRQqh040hqOKOUfg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726322887; c=relaxed/simple;
-	bh=if8DTh8EU5bT2w+u+uOfO7v+N6zaMH73Nilq6miPoiA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=EnAiWJf4QPhkOp53MPzYHrD/YINuWtNusT72DsliftiLetbQcFyzHvIEGGx+hMG5Uudm4QxjYypg+tkzuz5dJEsoqLtk1hP6F5jRinS0C1lxtdGdabOkDIM9cNfkdd+Aj+D6ERFxFst2o3VtseQqPKeEjSrE1txkVfAunjA5ziI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=DDEFHr5z; arc=none smtp.client-ip=198.175.65.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1726323068; c=relaxed/simple;
+	bh=3nOXJXRyNZq2q0yoxkZo3eiyZlaYT59oNxT1os9EwV0=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=k7mY0So6djlUMe6l0veC/Z02rg6h2ReXS7QV0YlG8Fs7p8ombT2U7sQLx+4D8gj18e0MQLl+Psbzf70Lc2Uzgs9H3+texMEJv5rdKffY4UsQybMTDXPdtIncCnmCqHWiU++yun+VlwPAbP9YzdeKYkbcz43OqctFVmkfhSCe7FU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FmYPP3sU; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="DDEFHr5z"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1726322886; x=1757858886;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=if8DTh8EU5bT2w+u+uOfO7v+N6zaMH73Nilq6miPoiA=;
-  b=DDEFHr5zxius6oLG1ng45MhPepgy8yqYNwUR4LroQIsgOJ7HJiP0dgQW
-   Hc6RUc5gxt+4/VBl/shr/pLR552/VTZlDqjMMKbO/7QPIb9esObIT7SU4
-   RzuUQEcJRV3OnmpnPU7qRA5MX+V/n6OwNdkkepFzbdxKlzMYqpL2lfofj
-   OmbjV0hRM9nPzDsUr/2sn5mUw5bCBD7sX6F1kBwN4dH4gNrMA8B94LD9T
-   W1nVJFJEmAgmUpvXsZfCAtjRAti9oz3I+pNT7Tf1wAF+JYV0xSfIgs46D
-   Huxgvt+Oh3bkWQKcdgO+eYA446rKqh4lST7cILyo1Lah7Oaj4sZC1/rdb
-   g==;
-X-CSE-ConnectionGUID: X4sdp4n9S92p3ExkJ+EgRw==
-X-CSE-MsgGUID: MC8PS5yUTFW2cQ7NXRanYw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11195"; a="28962289"
-X-IronPort-AV: E=Sophos;i="6.10,229,1719903600"; 
-   d="scan'208";a="28962289"
-Received: from orviesa003.jf.intel.com ([10.64.159.143])
-  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Sep 2024 07:08:05 -0700
-X-CSE-ConnectionGUID: HK4+3lcQTEmrDJeDvGsYSA==
-X-CSE-MsgGUID: jnfhv6XsQMyLnY9gpiNn+Q==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.10,229,1719903600"; 
-   d="scan'208";a="73164848"
-Received: from lkp-server01.sh.intel.com (HELO 53e96f405c61) ([10.239.97.150])
-  by orviesa003.jf.intel.com with ESMTP; 14 Sep 2024 07:08:03 -0700
-Received: from kbuild by 53e96f405c61 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1spTRQ-0007p2-1r;
-	Sat, 14 Sep 2024 14:08:00 +0000
-Date: Sat, 14 Sep 2024 22:07:52 +0800
-From: kernel test robot <lkp@intel.com>
-To: Lizhi Hou <lizhi.hou@amd.com>, ogabbay@kernel.org,
-	dri-devel@lists.freedesktop.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Lizhi Hou <lizhi.hou@amd.com>, linux-kernel@vger.kernel.org,
-	min.ma@amd.com, max.zhen@amd.com, sonal.santan@amd.com,
-	king.tam@amd.com
-Subject: Re: [PATCH V3 06/11] accel/amdxdna: Add GEM buffer object management
-Message-ID: <202409142134.BxN16uQN-lkp@intel.com>
-References: <20240911180604.1834434-7-lizhi.hou@amd.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FmYPP3sU"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 76308C4CEC0;
+	Sat, 14 Sep 2024 14:11:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1726323068;
+	bh=3nOXJXRyNZq2q0yoxkZo3eiyZlaYT59oNxT1os9EwV0=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=FmYPP3sUacmEnrerDP8lpZ+05hF17xrftJhViMevKXCwZjMRnG0vsvPb5WOfdblxK
+	 81tFdnQClrggS+cWw2CFAs7Qf+KAztvaGpcViFxP4CkljSAu7DVUs5Pc3bLxIMvaY1
+	 s1eIeE6qdsIQQDLq8sohIAPT8r9OmKKqi+91KcEa004rrhE/kXwNcWvZHOo+P5m3/J
+	 evZnNzUJch1CXeQiqh4u7pK3fiMv8eUtsurNiHKXyCeYaGHxME3ljY4L6wUwsvFB+B
+	 Ro6c37Iv8O3gOAWQtB6IKplawiDemtUMPKwj9v6Pb2uZR6thgSrU97rotkguzj/fQa
+	 oGuCcFakZmDcQ==
+Date: Sat, 14 Sep 2024 15:10:59 +0100
+From: Jonathan Cameron <jic23@kernel.org>
+To: Denis Benato <benato.denis96@gmail.com>
+Cc: Nathan Chancellor <nathan@kernel.org>, Jagath Jog J
+ <jagathjog1996@gmail.com>, Lars-Peter Clausen <lars@metafoo.de>,
+ linux-iio@vger.kernel.org, llvm@lists.linux.dev, patches@lists.linux.dev
+Subject: Re: [PATCH] iio: bmi323: Fix array reference in
+ bmi323_core_runtime_suspend()
+Message-ID: <20240914151059.3c2ba321@jic23-huawei>
+In-Reply-To: <76068b7e-af53-4422-ad97-cf3070182ec4@gmail.com>
+References: <20240909-iio-bmi323-fix-array-ref-v1-1-51c220f22229@kernel.org>
+	<76068b7e-af53-4422-ad97-cf3070182ec4@gmail.com>
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240911180604.1834434-7-lizhi.hou@amd.com>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-Hi Lizhi,
+On Mon, 9 Sep 2024 21:10:35 +0200
+Denis Benato <benato.denis96@gmail.com> wrote:
 
-kernel test robot noticed the following build errors:
+> On 09/09/24 18:38, Nathan Chancellor wrote:
+> > Clang warns (or errors with CONFIG_WERROR):
+> > 
+> >   drivers/iio/imu/bmi323/bmi323_core.c:133:27: error: variable 'bmi323_ext_reg_savestate' is not needed and will not be emitted [-Werror,-Wunneeded-internal-declaration]
+> >     133 | static const unsigned int bmi323_ext_reg_savestate[] = {
+> >         |                           ^~~~~~~~~~~~~~~~~~~~~~~~
+> > 
+> > bmi323_ext_reg_savestate is only used within sizeof() through
+> > ARRAY_SIZE(), so it is not unused, but it will not be emitted in the
+> > final binary because sizeof() is evaluated only at compile time.
+> > bmi323_ext_reg_savestate should have been used in the second parameter
+> > in the call to bmi323_read_ext_reg() in the second for loop in
+> > bmi323_core_runtime_suspend().
+> > 
+> > Fixes: 16531118ba63 ("iio: bmi323: peripheral in lowest power state on suspend")
+> > Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+> > ---
+> >  drivers/iio/imu/bmi323/bmi323_core.c | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> > 
+> > diff --git a/drivers/iio/imu/bmi323/bmi323_core.c b/drivers/iio/imu/bmi323/bmi323_core.c
+> > index 671401ce80dcf947b7b64ea3af112d2a42ca5501..64dbce23ce17bcdd11c0d4c454dbeb9de17ef56c 100644
+> > --- a/drivers/iio/imu/bmi323/bmi323_core.c
+> > +++ b/drivers/iio/imu/bmi323/bmi323_core.c
+> > @@ -2199,7 +2199,7 @@ static int bmi323_core_runtime_suspend(struct device *dev)
+> >  	}
+> >  
+> >  	for (unsigned int i = 0; i < ARRAY_SIZE(bmi323_ext_reg_savestate); i++) {
+> > -		ret = bmi323_read_ext_reg(data, bmi323_reg_savestate[i],
+> > +		ret = bmi323_read_ext_reg(data, bmi323_ext_reg_savestate[i],
+> >  					  &savestate->reg_settings[i]);
+> >  		if (ret) {
+> >  			dev_err(data->dev,
+> > 
+> > ---
+> > base-commit: 5ba0cb92584ba5e107c97001e09013c1da0772a8
+> > change-id: 20240909-iio-bmi323-fix-array-ref-a0672a8213f0
+> > 
+> > Best regards,  
+> Hello Nathan,
+> 
+> Thank you kindly for spotting and fixing it.
+> 
+> Regrettably while integrating suggestions I received I also changed the patch semantic and due to my hardware not having the irq pin connected to the cpu this went unnoticed.
+> 
+Slight delay on these due to the likely opening of the merge window
+meaning I probably won't get another pull request in.  That's fine
+as these are fixes and can go in during rc1, but until rc1 is released
+I won't have the driver in my fixes tree upstream.
 
-[auto build test ERROR on drm-misc/drm-misc-next]
-[also build test ERROR on drm-tip/drm-tip linus/master v6.11-rc7 next-20240913]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Anyhow upshot is that I'll sit on this and the CONFIG_PM one until
+after RC1.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Lizhi-Hou/accel-amdxdna-Add-documentation-for-AMD-NPU-accelerator-driver/20240912-020807
-base:   git://anongit.freedesktop.org/drm/drm-misc drm-misc-next
-patch link:    https://lore.kernel.org/r/20240911180604.1834434-7-lizhi.hou%40amd.com
-patch subject: [PATCH V3 06/11] accel/amdxdna: Add GEM buffer object management
-config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20240914/202409142134.BxN16uQN-lkp@intel.com/config)
-compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240914/202409142134.BxN16uQN-lkp@intel.com/reproduce)
+Thanks,
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202409142134.BxN16uQN-lkp@intel.com/
+Jonathan
 
-All errors (new ones prefixed by >>):
+> Best regards,
+> Denis Benato
 
-   In file included from drivers/accel/amdxdna/aie2_ctx.c:13:
->> drivers/accel/amdxdna/amdxdna_ctx.h:16:26: error: use of undeclared identifier 'count'
-      16 |         u32 data[] __counted_by(count);
-         |                                 ^
-   1 error generated.
---
-   In file included from drivers/accel/amdxdna/aie2_pci.c:16:
->> drivers/accel/amdxdna/amdxdna_ctx.h:16:26: error: use of undeclared identifier 'count'
-      16 |         u32 data[] __counted_by(count);
-         |                                 ^
-   drivers/accel/amdxdna/aie2_pci.c:406:46: warning: shift count >= width of type [-Wshift-count-overflow]
-     406 |         ret = dma_set_mask_and_coherent(&pdev->dev, DMA_BIT_MASK(64));
-         |                                                     ^~~~~~~~~~~~~~~~
-   include/linux/dma-mapping.h:77:54: note: expanded from macro 'DMA_BIT_MASK'
-      77 | #define DMA_BIT_MASK(n) (((n) == 64) ? ~0ULL : ((1ULL<<(n))-1))
-         |                                                      ^ ~~~
-   1 warning and 1 error generated.
-
-
-vim +/count +16 drivers/accel/amdxdna/amdxdna_ctx.h
-
-     8	
-     9	/* Exec buffer command header format */
-    10	#define AMDXDNA_CMD_STATE		GENMASK(3, 0)
-    11	#define AMDXDNA_CMD_EXTRA_CU_MASK	GENMASK(11, 10)
-    12	#define AMDXDNA_CMD_COUNT		GENMASK(22, 12)
-    13	#define AMDXDNA_CMD_OPCODE		GENMASK(27, 23)
-    14	struct amdxdna_cmd {
-    15		u32 header;
-  > 16		u32 data[] __counted_by(count);
-    17	};
-    18	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
