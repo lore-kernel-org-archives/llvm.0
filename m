@@ -1,70 +1,60 @@
-Received: from mail-ej1-f46.google.com (mail-ej1-f46.google.com [209.85.218.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 35DFD146D5A
-	for <llvm@lists.linux.dev>; Sat, 14 Sep 2024 10:05:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A10B143723;
+	Sat, 14 Sep 2024 10:07:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726308338; cv=none; b=XVnac/Jwh9u/48bcIH16TwO353WQh+4LSh9fQsD1ypFdHvkJiwn0KcBViPCoVMvjKXHjNDlUAL7Ty7FzrJwgSaqsFkfbmgXuDVxTvvmrgMM6P6x6Q183UB43FRXlx9Log3RdZD5ZhjHtWNp/d5blCLcJ/IEvAP4Z78eDuO1WA1o=
+	t=1726308479; cv=none; b=NI0Tef4KpGcWw8uTq/cxcuhvs+p4Xs8OT8qj4RpGTk5IZLpTvT9NAWRHvX+lIGzX6lYK7Om1okr+rouxA2Kc8Y/5z2L04nV5XL7fUfR9wXVKr8PqqKGSn5M2Tzab01OovwXiNoRDcXxhHj/AUeAD7eFuvOKVVKbHq07cKOTGGOA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726308338; c=relaxed/simple;
-	bh=uyUo2fF7wfyuRfSxg2fJMYfWzcWgmdiUEo5RMmlO/3Y=;
+	s=arc-20240116; t=1726308479; c=relaxed/simple;
+	bh=D2K5mzwFbYYJ5gmg5Ev9xqQ6HGEqbVJKpdxN+0yysk0=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=NBIMkimWsV7Mj35bRm7UL9Ij5zAd7ljQiKjxk4MHuu3UDx8JeAZ0Mdb7MqD4UYOLxRyhb5wdIJVS/Z1NdUhkpETgcVlh7+Fyot4MZJJqNAGCfCYCyVKtYkKJKgdRhg7pGgPMTO59cej8hTTb5uHWnZXxORc/CVdAfYROH7Rko2E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=anANwye2; arc=none smtp.client-ip=209.85.218.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+	 Content-Type:Content-Disposition:In-Reply-To; b=qs9diYFv8B+cd2KthNXiftO3TxqXNqCeQZy5j+Oyb8FC6XGQazBfqUF6oSHi/jYMsYl7EMippOCgceSQ8LRSFkvJ61jgb0imzspdBAgz8HIfo/D5uZt6tre1y7svPPN50Wi+p/3C7XKyF3B7BO6L5dhbOyLfzsb05VEHpcB5i6Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=UcVpZw0d; arc=none smtp.client-ip=192.198.163.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="anANwye2"
-Received: by mail-ej1-f46.google.com with SMTP id a640c23a62f3a-a8a7b1c2f2bso468928666b.0
-        for <llvm@lists.linux.dev>; Sat, 14 Sep 2024 03:05:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1726308333; x=1726913133; darn=lists.linux.dev;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=VQaP07kUjh9Hh3Vx1aYpBskYDsvr/ETiwaom9aVLxSk=;
-        b=anANwye24gEOzmutkZyo3D6EYu+KIfEBae2AGHNGOTTDMfgZC62eWJ72hR5AJDQT19
-         XY73pZ5/icbdSxPU4sEFBSm1fxrheh/RqBytU1IJy/MZZHssTRX5/IDV0t45o38uYaXz
-         4RlzlpKzt5I9p1Ie+TsDRz8eqUchvB4YzKXl7EyUY5OyZamEmRsfs92mgyaYJlrEG3cF
-         Aqz0XSywJ8D9FIKUVvAPQJg4p8M6z8k3ySXWNPOUxPXllCQZy8/G25OMqxe2UeJNjvTZ
-         rO0l5Nj2q6jEBTT8E8ysZxE9QIEhOmNYVHlO/6e0ZM2vYDGBuZKdQPjrMx0wT1+EOpgX
-         EBAA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1726308333; x=1726913133;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=VQaP07kUjh9Hh3Vx1aYpBskYDsvr/ETiwaom9aVLxSk=;
-        b=jyeKl0pL0yr9kCAIFMEPYHJ2i4G4THPk2wwBKCDVepzXTQhHQZn/wz/8SCrN1RvptX
-         GJNa41ijT9ZdL/GMLzBqdUQrXG4JM5/uPhDrNgM20dNS3BlLoPEjGmFDHJdVXOcxhVO5
-         9ZrR3fIs7aJHbqbvrRnlPzS8iPXUhRgecBNeIx26Wt+V0+Jul1TH2NmoHROMWHcY+TS9
-         2NnAtSO8G8D/MTXZOPwJEb+ImAghGpdjS6eetdaSqYw3ZJDB4Ctji3D+pgy3Qrb4iwSH
-         zpe2eSvj5AHmN38gZtlx6DmEiUAsDn7XIHMkUFiISdI7HLQjfF5I0amp+O2ljrzramOh
-         A78w==
-X-Forwarded-Encrypted: i=1; AJvYcCXzsS/k5a5rae7pnfZ497+osjpGD7T8oCVdIscCSqozdj4Mkjxji7yEUx05Sg1jPbDv1q33@lists.linux.dev
-X-Gm-Message-State: AOJu0YynWoYXaFixXohStvKn7CU8qFB2QrY/yvjFFjCpHQ1Qq7xfQMLo
-	sX2RaX/LXjzcWIoJ+79I3aCGL/EAppB0q6R8W/4V5FOsJVe+YpZiW5AG8s0wlUs=
-X-Google-Smtp-Source: AGHT+IFUGe/YZnTvrPrKTN9LdMp4s56tVPxGhPOwQHgiH6EffJdxr/Zlk+uPLUhxjZOYMNerF5RjBA==
-X-Received: by 2002:a17:906:478a:b0:a8a:8c04:ce9f with SMTP id a640c23a62f3a-a90296eabbemr942716766b.52.1726308333391;
-        Sat, 14 Sep 2024 03:05:33 -0700 (PDT)
-Received: from localhost ([196.207.164.177])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a906109676esm61912566b.33.2024.09.14.03.05.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 14 Sep 2024 03:05:32 -0700 (PDT)
-Date: Sat, 14 Sep 2024 13:05:29 +0300
-From: Dan Carpenter <dan.carpenter@linaro.org>
-To: Simon Horman <horms@kernel.org>
-Cc: Su Hui <suhui@nfschina.com>, jmaloy@redhat.com, ying.xue@windriver.com,
-	davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-	pabeni@redhat.com, nathan@kernel.org, ndesaulniers@google.com,
-	morbo@google.com, justinstitt@google.com,
-	tuong.t.lien@dektech.com.au, netdev@vger.kernel.org,
-	tipc-discussion@lists.sourceforge.net, linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev, kernel-janitors@vger.kernel.org
-Subject: Re: [PATCH net-next] net: tipc: avoid possible garbage value
-Message-ID: <f1279370-a127-4946-8c46-cc89fd2a90a6@stanley.mountain>
-References: <20240912110119.2025503-1-suhui@nfschina.com>
- <20240914094244.GG12935@kernel.org>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="UcVpZw0d"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1726308478; x=1757844478;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=D2K5mzwFbYYJ5gmg5Ev9xqQ6HGEqbVJKpdxN+0yysk0=;
+  b=UcVpZw0dpxIlAKbLbXyZQfpaW/tcZhc4XsFFHNGlPw6ZhVHBxrhZTeU2
+   hZmkeAecA/Y5uLCcHZoI7cuKGayFzBdRjxkcjQ69+qPCEUSaFiJtopxq4
+   blKanlEY7O/AH1qWszGQAxaefSzy+9T+K64gULefrPR/QA9akCOjgpz+s
+   fLB/mU+fj33CRw9UiWqVsAD55/jjAC3BPiiixdohlljE7PDjaOuhucJit
+   TVmKrLcREIIFchCm9UjOLYyR40OgJKEGZ5pCoMJyJcwLwiyKeic7CWxXW
+   lm+CkFFVUjKyNFVDE6dREI44UXNcJLdqsurqMsgNzCWAzgpE2Jy4DXRi9
+   g==;
+X-CSE-ConnectionGUID: ekq/yah2QAiH+qL+k8mD0A==
+X-CSE-MsgGUID: 2eGqo/mqTz+eLr302oV/Yw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11194"; a="25364953"
+X-IronPort-AV: E=Sophos;i="6.10,228,1719903600"; 
+   d="scan'208";a="25364953"
+Received: from fmviesa001.fm.intel.com ([10.60.135.141])
+  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Sep 2024 03:07:55 -0700
+X-CSE-ConnectionGUID: uhGAQ8JTTFWo0m7rl6jQmg==
+X-CSE-MsgGUID: AliTTPSoRU+FxEzRvVcQVw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.10,228,1719903600"; 
+   d="scan'208";a="99219229"
+Received: from lkp-server01.sh.intel.com (HELO 53e96f405c61) ([10.239.97.150])
+  by fmviesa001.fm.intel.com with ESMTP; 14 Sep 2024 03:07:54 -0700
+Received: from kbuild by 53e96f405c61 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1spPh2-0007cU-08;
+	Sat, 14 Sep 2024 10:07:52 +0000
+Date: Sat, 14 Sep 2024 18:07:32 +0800
+From: kernel test robot <lkp@intel.com>
+To: Ackerley Tng <ackerleytng@google.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: Re: [RFC PATCH 39/39] KVM: guest_memfd: Dynamically
+ split/reconstruct HugeTLB page
+Message-ID: <202409141709.Edd1Sxg8-lkp@intel.com>
+References: <38723c5d5e9b530e52f28b9f9f4a6d862ed69bcd.1726009989.git.ackerleytng@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -73,39 +63,47 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240914094244.GG12935@kernel.org>
+In-Reply-To: <38723c5d5e9b530e52f28b9f9f4a6d862ed69bcd.1726009989.git.ackerleytng@google.com>
 
-On Sat, Sep 14, 2024 at 10:42:44AM +0100, Simon Horman wrote:
-> On Thu, Sep 12, 2024 at 07:01:20PM +0800, Su Hui wrote:
-> > Clang static checker (scan-build) warning:
-> > net/tipc/bcast.c:305:4:
-> > The expression is an uninitialized value. The computed value will also
-> > be garbage [core.uninitialized.Assign]
-> >   305 |                         (*cong_link_cnt)++;
-> >       |                         ^~~~~~~~~~~~~~~~~~
-> > 
-> > tipc_rcast_xmit() will increase cong_link_cnt's value, but cong_link_cnt
-> > is uninitialized. Although it won't really cause a problem, it's better
-> > to fix it.
-> > 
-> > Fixes: dca4a17d24ee ("tipc: fix potential hanging after b/rcast changing")
-> > Signed-off-by: Su Hui <suhui@nfschina.com>
-> 
-> Hi Su Hui,
-> 
-> This looks like a bug fix. If so it should be targeted at net rather than
-> net-next. If not, the Fixes tag should be dropped, and the commit can be
-> referenced in the patch description with some other text around:
-> 
+Hi Ackerley,
 
+[This is a private test report for your RFC patch.]
+kernel test robot noticed the following build errors:
 
-It's one of those borderline things.  As the commit message says it doesn't
-really cause a problem because cong_link_cnt is never used.  I guess if you had
-UBSan turned on it would generate a runtime warning.  Still it also doesn't seem
-intentional so I would probably count it as a bugfix and target net like you
-suggest.
+[auto build test ERROR on kvm/queue]
+[also build test ERROR on linus/master v6.11-rc7]
+[cannot apply to akpm-mm/mm-everything kvm/linux-next next-20240913]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-regards,
-dan carpenter
+url:    https://github.com/intel-lab-lkp/linux/commits/Ackerley-Tng/mm-hugetlb-Simplify-logic-in-dequeue_hugetlb_folio_vma/20240911-074716
+base:   https://git.kernel.org/pub/scm/virt/kvm/kvm.git queue
+patch link:    https://lore.kernel.org/r/38723c5d5e9b530e52f28b9f9f4a6d862ed69bcd.1726009989.git.ackerleytng%40google.com
+patch subject: [RFC PATCH 39/39] KVM: guest_memfd: Dynamically split/reconstruct HugeTLB page
+config: x86_64-rhel-8.3-rust (https://download.01.org/0day-ci/archive/20240914/202409141709.Edd1Sxg8-lkp@intel.com/config)
+compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240914/202409141709.Edd1Sxg8-lkp@intel.com/reproduce)
 
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202409141709.Edd1Sxg8-lkp@intel.com/
 
+All errors (new ones prefixed by >>, old ones prefixed by <<):
+
+ERROR: modpost: "default_hstate_idx" [arch/x86/kvm/kvm.ko] undefined!
+ERROR: modpost: "hstates" [arch/x86/kvm/kvm.ko] undefined!
+ERROR: modpost: "hugepage_new_subpool" [arch/x86/kvm/kvm.ko] undefined!
+ERROR: modpost: "folio_zero_user" [arch/x86/kvm/kvm.ko] undefined!
+ERROR: modpost: "hugetlb_fault_mutex_hash" [arch/x86/kvm/kvm.ko] undefined!
+ERROR: modpost: "hugetlb_fault_mutex_table" [arch/x86/kvm/kvm.ko] undefined!
+ERROR: modpost: "get_mem_cgroup_from_current" [arch/x86/kvm/kvm.ko] undefined!
+ERROR: modpost: "mem_cgroup_hugetlb_try_charge" [arch/x86/kvm/kvm.ko] undefined!
+ERROR: modpost: "hugepage_subpool_get_pages" [arch/x86/kvm/kvm.ko] undefined!
+>> ERROR: modpost: "mem_cgroup_cancel_charge" [arch/x86/kvm/kvm.ko] undefined!
+WARNING: modpost: suppressed 18 unresolved symbol warnings because there were too many)
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
