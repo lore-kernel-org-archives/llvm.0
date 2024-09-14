@@ -1,102 +1,112 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D1D21D0962;
-	Sat, 14 Sep 2024 16:48:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB2CE1482F5;
+	Sat, 14 Sep 2024 17:37:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726332505; cv=none; b=m32EiKiTehavhZ8ng22vdZe2sKjP+Kk61iz03NGJ36jzwdLKCi64HHdoLVil4MGMbBiMni0S74c/4p1/5ZAc80Owmjwze/VUmGAXULdh9qw/gTCK9/ARtYV66rWNPzcqFwbrJWFLrZW28kucH1VtMz81y9jk0xYLcIIfW2m5cW8=
+	t=1726335438; cv=none; b=CKY7Raxf9EghStAgB5NYw2xPA79rdI/BoI93EAOFLdBHCCOKry+PMR+PInaaFM78xsDo5oCktFPsa0BLDwe/xhsolpAau3cir/MRqHb+PVqvH0DyOQKdKmHC3lY7fpadrEnOCS5fBqYOcmHBNsxZotwtAAfOyXXSV9tKAO7wEaU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726332505; c=relaxed/simple;
-	bh=kcqNIGzqlci55KmlGNxY0BZAEpEt4QYRtYJ/vhuZBCY=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=X9/PC4naR/WkbcBUoEeNu438t/41UsDwA3/kVUfcd63+8EeQk2Al3GHyZauTq56IbCK7F1BQe2Xye05FIMggD4YiE1ZoKWwq+AB8zTnJJ+upWAG8jBtiXIxMYpJCFaNM8Dc+u5vjFHFdkU/R5l6tEu2MgKWOuJ8IjxHZshwlbvQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=A862qipD; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1726335438; c=relaxed/simple;
+	bh=bdeTaft8mZqRo5px+2z30ZmBbAywulCX2M/9l9QbDkA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=XqjHqkdU9TJEDo9y4yCe1HDl1neC2rFrl/6IWJSIHaoPsFMzVCSCaI9Y2Ax/Hfn035gJvV8jhLraGqt0FmAj8zQ1jcGj/B/LLikguA0Ux1i4ei+KIVNmz80AaJ/kqyxm6goqV65/9Bli7U8Gy3HEQ1VixzO6FutQFOsyffXLL9k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=C/2KZaFu; arc=none smtp.client-ip=192.198.163.19
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="A862qipD"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 57B8BC4CEC0;
-	Sat, 14 Sep 2024 16:48:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1726332505;
-	bh=kcqNIGzqlci55KmlGNxY0BZAEpEt4QYRtYJ/vhuZBCY=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=A862qipDEmDvKrWnNl75FwRifZQPV+/vkndi7EPJZjxAoY33HhcSVbqOjfHIzERnQ
-	 MtD4G9IzQnZXc6ZVBp1WeufAdBRKTz1GUCaZX3i9ZmeQmFCWa2Op89M76QwmQVJnRl
-	 2VcfrBtKe7ZAFPzSP7gshh9NGUeoGHEezOptR4yy+zEeXmAEqoG+dbNTvZ7WLI8SJ5
-	 8pZf0/WilObcGI/y81zpfVz6xS9p/akJjv6n1x6w7+CXr8Eer5XIAP29g48thPipsd
-	 oGmRve6Z/CINV3ovgb/DICscjZD3hT4eO6PnOOGu8gxWsjvszhDwdPSFruoOkmpuat
-	 8cVvl2BppzBsQ==
-Date: Sat, 14 Sep 2024 17:48:15 +0100
-From: Jonathan Cameron <jic23@kernel.org>
-To: kernel test robot <lkp@intel.com>
-Cc: Ramona Alexandra Nechita <ramona.nechita@analog.com>, Lars-Peter Clausen
- <lars@metafoo.de>, Cosmin Tanislav <cosmin.tanislav@analog.com>, Michael
- Hennerich <Michael.Hennerich@analog.com>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk@kernel.org>, Conor Dooley <conor+dt@kernel.org>,
- Nuno Sa <nuno.sa@analog.com>, Andy Shevchenko <andy@kernel.org>, David
- Lechner <dlechner@baylibre.com>, Marcelo Schmitt
- <marcelo.schmitt@analog.com>, Olivier Moysan <olivier.moysan@foss.st.com>,
- Dumitru Ceclan <mitrutzceclan@gmail.com>, Matteo Martelli
- <matteomartelli3@gmail.com>, AngeloGioacchino Del Regno
- <angelogioacchino.delregno@collabora.com>, Alisa-Dariana Roman
- <alisadariana@gmail.com>, Ivan Mikhaylov <fr0st61te@gmail.com>, Mike
- Looijmans <mike.looijmans@topic.nl>, linux-iio@vger.kernel.org,
- linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
- llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [PATCH v5 3/3] drivers: iio: adc: add support for ad777x family
-Message-ID: <20240914174815.4084f90f@jic23-huawei>
-In-Reply-To: <202409140955.bz1rH7Q6-lkp@intel.com>
-References: <20240912121609.13438-4-ramona.nechita@analog.com>
-	<202409140955.bz1rH7Q6-lkp@intel.com>
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-pc-linux-gnu)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="C/2KZaFu"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1726335437; x=1757871437;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=bdeTaft8mZqRo5px+2z30ZmBbAywulCX2M/9l9QbDkA=;
+  b=C/2KZaFu8unzLrcbXzujMjPHPzjrJjWmTZPxT0HNQAhPIsML8Drf6Qwt
+   phOpZPQGBG6RKl2FPp3P4g3Fws7yTMlU5aC9bAnIZfe5Q3LvtPqkxJETO
+   aryfOaeoCEbk0XzRwtIzudpO5ncCXDdQ02Men3PVblb64UF+EGjqZnr0L
+   0+I4sc4kGaBivf3k2NnTNbyZxgysbRey5Fz1j0nVAzyDe572AjCxmhRIP
+   VRehYeilHs8KfyQbvhJ1K6jE7wB3QOChZ30sbYl8eb+aMNgAyhs9wCIes
+   sXY1CK2UWql2X6x5H3Hk4f1ihRZZ1lQuFaL/nDt+A7VTzIPFYyucwFjBC
+   w==;
+X-CSE-ConnectionGUID: RJoJ2nbuRWey+q0KExf64w==
+X-CSE-MsgGUID: 7tulXwAiQ9axVDtZG+DvIA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11195"; a="24758381"
+X-IronPort-AV: E=Sophos;i="6.10,229,1719903600"; 
+   d="scan'208";a="24758381"
+Received: from fmviesa007.fm.intel.com ([10.60.135.147])
+  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Sep 2024 10:37:16 -0700
+X-CSE-ConnectionGUID: pZGSGrYJTAGuvs13gFzz1Q==
+X-CSE-MsgGUID: TUlD6Sg7SYOH5LMDPifvEw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.10,229,1719903600"; 
+   d="scan'208";a="68134716"
+Received: from lkp-server01.sh.intel.com (HELO 53e96f405c61) ([10.239.97.150])
+  by fmviesa007.fm.intel.com with ESMTP; 14 Sep 2024 10:37:12 -0700
+Received: from kbuild by 53e96f405c61 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1spWhq-000814-1w;
+	Sat, 14 Sep 2024 17:37:10 +0000
+Date: Sun, 15 Sep 2024 01:37:05 +0800
+From: kernel test robot <lkp@intel.com>
+To: Raju Lakkaraju <Raju.Lakkaraju@microchip.com>, netdev@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+	pabeni@redhat.com, bryan.whitehead@microchip.com,
+	UNGLinuxDriver@microchip.com, linux@armlinux.org.uk,
+	maxime.chevallier@bootlin.com, rdunlap@infradead.org,
+	andrew@lunn.ch, Steen.Hegelund@microchip.com,
+	Raju.Lakkaraju@microchip.com, daniel.machon@microchip.com,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net-next V2 2/5] net: lan743x: Add support to
+ software-nodes for sfp
+Message-ID: <202409150110.dSOZKgpK-lkp@intel.com>
+References: <20240911161054.4494-3-Raju.Lakkaraju@microchip.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240911161054.4494-3-Raju.Lakkaraju@microchip.com>
 
-skip "nr_"
->          |                               ~~~~~~~~~~~ ^ ~~~
-> >> drivers/iio/adc/ad7779.c:748:35: warning: variable 'ret' is uninitialized when used here [-Wuninitialized]  
->      748 |                 return dev_err_probe(&spi->dev, ret,
->          |                                                 ^~~
->    drivers/iio/adc/ad7779.c:735:9: note: initialize the variable 'ret' to silence this warning
->      735 |         int ret;
->          |                ^
->          |                 = 0
-Definitely don't do that!
+Hi Raju,
 
-just replace ret with -EINVAL
+kernel test robot noticed the following build errors:
 
-Jonathan
+[auto build test ERROR on net-next/main]
 
->    8 warnings generated.
-> 
-> 
-> vim +/ret +748 drivers/iio/adc/ad7779.c
-> 
->    729	
->    730	static int ad7779_probe(struct spi_device *spi)
->    731	{
->    732		struct iio_dev *indio_dev;
->    733		struct ad7779_state *st;
->    734		struct gpio_desc *reset_gpio, *start_gpio;
->    735		int ret;
->    736	
->    737		indio_dev = devm_iio_device_alloc(&spi->dev, sizeof(*st));
->    738		if (!indio_dev)
->    739			return -ENOMEM;
->    740	
->    741		st = iio_priv(indio_dev);
->    742	
->    743		st->mclk = devm_clk_get_enabled(&spi->dev, "mclk");
->    744		if (IS_ERR(st->mclk))
->    745			return PTR_ERR(st->mclk);
->    746	
->    747		if (!spi->irq)
->  > 748			return dev_err_probe(&spi->dev, ret,  
->    749					     "DRDY irq not present\n");
->    750	
+url:    https://github.com/intel-lab-lkp/linux/commits/Raju-Lakkaraju/net-lan743x-Add-SFP-support-check-flag/20240912-002444
+base:   net-next/main
+patch link:    https://lore.kernel.org/r/20240911161054.4494-3-Raju.Lakkaraju%40microchip.com
+patch subject: [PATCH net-next V2 2/5] net: lan743x: Add support to software-nodes for sfp
+config: x86_64-randconfig-003-20240914 (https://download.01.org/0day-ci/archive/20240915/202409150110.dSOZKgpK-lkp@intel.com/config)
+compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240915/202409150110.dSOZKgpK-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202409150110.dSOZKgpK-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> ld.lld: error: undefined symbol: devm_i2c_add_adapter
+   >>> referenced by i2c-mchp-pci1xxxx.c:1182 (drivers/i2c/busses/i2c-mchp-pci1xxxx.c:1182)
+   >>>               drivers/i2c/busses/i2c-mchp-pci1xxxx.o:(pci1xxxx_i2c_probe_pci) in archive vmlinux.a
+
+Kconfig warnings: (for reference only)
+   WARNING: unmet direct dependencies detected for GP_PCI1XXXX
+   Depends on [n]: PCI [=y] && GPIOLIB [=y] && NVMEM_SYSFS [=n]
+   Selected by [y]:
+   - LAN743X [=y] && NETDEVICES [=y] && ETHERNET [=y] && NET_VENDOR_MICROCHIP [=y] && PCI [=y] && PTP_1588_CLOCK_OPTIONAL [=y]
+   WARNING: unmet direct dependencies detected for I2C_PCI1XXXX
+   Depends on [m]: I2C [=m] && HAS_IOMEM [=y] && PCI [=y]
+   Selected by [y]:
+   - LAN743X [=y] && NETDEVICES [=y] && ETHERNET [=y] && NET_VENDOR_MICROCHIP [=y] && PCI [=y] && PTP_1588_CLOCK_OPTIONAL [=y]
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
