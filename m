@@ -1,71 +1,61 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0FEAF10A3E;
-	Sat, 14 Sep 2024 03:06:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C962117BA7;
+	Sat, 14 Sep 2024 05:02:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726283206; cv=none; b=bkyWxelouQ1k1PgS70g1NCEU5fW6K7VL6Pm3WvOl/RL/ivwE+TKSsOlt1yT4HPMCYRFgJh+U9PEoLsdbX6kXyPQsPrwp/tW6ZxL40lVTQYr5gQTvZoe5lXOA5C7lAp6PTI5QzOxUrsLbEhRS+hIOxAZ3gqtjUaxvQWbMkoXqn5o=
+	t=1726290164; cv=none; b=NNK0lINHNhzqIPXWG/L0ENhps//VQwHqeRoNPMLOZWUHtuxEcJ+pT5i1RyBteWcUrNvL+cMiSH8o781k++XoKrw8rt7xRanQvGwRWMrv/u+4K7mg32WIdCPxU/E03/0Tr7mqKXphMdFdTT5seNN8Ag7IP6unJPfbxxp3Uo2Kw3I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726283206; c=relaxed/simple;
-	bh=VuTTj0+Hf6dafOpC2060LVcxOgfAYGN+KF2rIky5w6c=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=GrJGC8HL068ZJZibaHoWrcvHfgviQ1ndcT+Z+P/1GuUhpPk4O7e5hpEy5Lt/dMg0B2sSyZnSF7Yq8iZc2Nx9yBjcW/LOGyUmRjHhTegQ51HxvqdvHfgsObnHtKxwNBFP7Cjd+EvLj9DFAMJ2YtZPUcTMG3Xoy3Th81Y5yxtBPIo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=LuwrY/l8; arc=none smtp.client-ip=198.175.65.16
+	s=arc-20240116; t=1726290164; c=relaxed/simple;
+	bh=PRHxpwqBWGpM+2d2QT8lyeuCwQ6nd5/elvNqX+lmXWY=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=afHeUaKzggE5xU5vzcDxnsaBRSXf2pI/XE/uz9UsRmOCGPG5QW6bVEiBUNTXq5J2eDL9MQsBXLZJnl1Fqq7xoaNzX5Gz3i29tmvEriA9DnveQNVSxN2MLXKhtDBBvCp/m8xYzOd41JDpX1LZYzctUGLdcL02h2Vcahe3NoJSSCY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=J3zAeJNK; arc=none smtp.client-ip=192.198.163.9
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="LuwrY/l8"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="J3zAeJNK"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1726283205; x=1757819205;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=VuTTj0+Hf6dafOpC2060LVcxOgfAYGN+KF2rIky5w6c=;
-  b=LuwrY/l86vF/r3MwZBOgb6HGG3bVpamGgdiBK4Of0Nx2jmQqYxT1hmXC
-   7vlmujWu7oAqzXgvJPlR5//mWLjeY24GIUPMLJZt2Q7c5R4suCc1auZzA
-   ESJ1csvgsKrujq8xgLc8nHxZ7GIVtuPaLgtA5OCZ0XLnMFJUodmBO3iJN
-   5tH86HVNP/zOkAyIVxu69d9DKM69kxDLOHO+vjEUo5bGCpzobigUQlij1
-   Z5AHIFOvbHhZusv/enwVSH+tU3aS9OGEElUnQN5pMP1JDTQpvInf5Dw5w
-   Cb7Q2qMsO1b09bomhuGlQRIq0Ziut8cwtj/TW2gn6jmi6801B/ugH3te7
+  t=1726290163; x=1757826163;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=PRHxpwqBWGpM+2d2QT8lyeuCwQ6nd5/elvNqX+lmXWY=;
+  b=J3zAeJNK5qO8noTli+hMKJy3AxFFQt/dh9qjM3TBLfL47e1ZGYO/Yo8T
+   oDlfNVJLKABy3yPt7cHLPw3VnMe56Qwed6sewffVq2BN5+zqQPMKRx8i2
+   4HqN5HNZ+pxzcL6DP5EC8roKHhmHOB1QaEaRtD6j9qeQlXdGQxDCwUst/
+   9q0pLdEgKPw4S9KWcVtVYLwhT0eVDnAkyhr17XUvPn/GuRUOj7wzAtSjB
+   EvJi12njkw+YbJXLBnVL+Qyq3LYcbujjRU4MR0WlOslQMplXJCSTGSCC/
+   tSllADfFA81mLcGcVJNGVRibLwW/ZCuGckfI0477rZUbXxoAbp/u6axRd
    g==;
-X-CSE-ConnectionGUID: Dqjz72soQdC9MjK0Xn/iig==
-X-CSE-MsgGUID: AAFiUUdPSZG+Ou1c54CoEw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11194"; a="25291133"
+X-CSE-ConnectionGUID: Qad8wdisRX6DCWICfBzb+w==
+X-CSE-MsgGUID: 3tsQrUV+RCOztw6U70kYyA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11194"; a="35874106"
 X-IronPort-AV: E=Sophos;i="6.10,228,1719903600"; 
-   d="scan'208";a="25291133"
-Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Sep 2024 20:06:44 -0700
-X-CSE-ConnectionGUID: dU7HVl+vSZK4EySvvPPaKA==
-X-CSE-MsgGUID: 6iQmQ58DSpe1AOImeKqRbg==
+   d="scan'208";a="35874106"
+Received: from orviesa004.jf.intel.com ([10.64.159.144])
+  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Sep 2024 22:02:42 -0700
+X-CSE-ConnectionGUID: ssI9cVoiSF+soSImCuzkgg==
+X-CSE-MsgGUID: F89ZKZi/QGaCBPbBI10qCw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.10,228,1719903600"; 
-   d="scan'208";a="98958003"
+   d="scan'208";a="73319859"
 Received: from lkp-server01.sh.intel.com (HELO 53e96f405c61) ([10.239.97.150])
-  by orviesa002.jf.intel.com with ESMTP; 13 Sep 2024 20:06:38 -0700
+  by orviesa004.jf.intel.com with ESMTP; 13 Sep 2024 22:02:41 -0700
 Received: from kbuild by 53e96f405c61 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1spJ7K-0007Is-2t;
-	Sat, 14 Sep 2024 03:06:34 +0000
-Date: Sat, 14 Sep 2024 11:06:10 +0800
+	id 1spKve-0007OK-1j;
+	Sat, 14 Sep 2024 05:02:38 +0000
+Date: Sat, 14 Sep 2024 13:01:57 +0800
 From: kernel test robot <lkp@intel.com>
-To: Deepak Gupta <debug@rivosinc.com>, paul.walmsley@sifive.com,
-	palmer@sifive.com, conor@kernel.org, linux-doc@vger.kernel.org,
-	linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-	linux-mm@kvack.org, linux-arch@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, corbet@lwn.net,
-	palmer@dabbelt.com, aou@eecs.berkeley.edu, robh@kernel.org,
-	krzk+dt@kernel.org, oleg@redhat.com, tglx@linutronix.de,
-	mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
-	x86@kernel.org, hpa@zytor.com, akpm@linux-foundation.org,
-	arnd@arndb.de, ebiederm@xmission.com, kees@kernel.org,
-	Liam.Howlett@oracle.com, vbabka@suse.cz
-Subject: Re: [PATCH v4 16/30] riscv/shstk: If needed allocate a new shadow
- stack on clone
-Message-ID: <202409141059.SDUgpQw4-lkp@intel.com>
-References: <20240912231650.3740732-17-debug@rivosinc.com>
+To: "Gustavo A. R. Silva" <gustavoars@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	"Gustavo A. R. Silva" <gustavo@embeddedor.com>,
+	LKML <linux-kernel@vger.kernel.org>
+Subject: [gustavoars:testing/wfamnae-next20240912 15/15]
+ kernel/bpf/core.c:2505:22: warning: comparison of distinct pointer types
+ ('struct bpf_prog_array *' and 'struct bpf_prog_array_hdr *')
+Message-ID: <202409141212.JISRQdpc-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -74,87 +64,43 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240912231650.3740732-17-debug@rivosinc.com>
 
-Hi Deepak,
-
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on shuah-kselftest/next]
-[also build test ERROR on shuah-kselftest/fixes tip/x86/core robh/for-next arnd-asm-generic/master tip/smp/core kees/for-next/execve linus/master v6.11-rc7]
-[cannot apply to akpm-mm/mm-everything next-20240913]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Deepak-Gupta/mm-Introduce-ARCH_HAS_USER_SHADOW_STACK/20240913-072124
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest.git next
-patch link:    https://lore.kernel.org/r/20240912231650.3740732-17-debug%40rivosinc.com
-patch subject: [PATCH v4 16/30] riscv/shstk: If needed allocate a new shadow stack on clone
-config: riscv-randconfig-001-20240914 (https://download.01.org/0day-ci/archive/20240914/202409141059.SDUgpQw4-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240914/202409141059.SDUgpQw4-lkp@intel.com/reproduce)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/gustavoars/linux.git testing/wfamnae-next20240912
+head:   f2ca068393cf1157c12ab08556b05824eec16511
+commit: f2ca068393cf1157c12ab08556b05824eec16511 [15/15] treewide_some: fix multiple -Wfamnae warnings that must be audited separately
+config: x86_64-rhel-8.3-rust (https://download.01.org/0day-ci/archive/20240914/202409141212.JISRQdpc-lkp@intel.com/config)
+compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240914/202409141212.JISRQdpc-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202409141059.SDUgpQw4-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202409141212.JISRQdpc-lkp@intel.com/
 
-All error/warnings (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> clang diag: arch/riscv/include/asm/usercfi.h:44:15: warning: no previous prototype for function 'get_shstk_base' [-Wmissing-prototypes]
---
-   In file included from drivers/gpu/drm/drm_plane.c:23:
-   In file included from include/linux/slab.h:16:
-   In file included from include/linux/gfp.h:7:
-   In file included from include/linux/mmzone.h:8:
-   In file included from include/linux/spinlock.h:56:
-   In file included from include/linux/preempt.h:79:
-   In file included from ./arch/riscv/include/generated/asm/preempt.h:1:
-   In file included from include/asm-generic/preempt.h:5:
-   In file included from include/linux/thread_info.h:60:
-   In file included from arch/riscv/include/asm/thread_info.h:37:
-   In file included from arch/riscv/include/asm/processor.h:17:
->> arch/riscv/include/asm/usercfi.h:44:15: error: no previous prototype for function 'get_shstk_base' [-Werror,-Wmissing-prototypes]
-   unsigned long get_shstk_base(struct task_struct *task, unsigned long *size)
-                 ^
-   arch/riscv/include/asm/usercfi.h:44:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   unsigned long get_shstk_base(struct task_struct *task, unsigned long *size)
-   ^
-   static 
-   1 error generated.
---
-   In file included from arch/riscv/kernel/asm-offsets.c:10:
-   In file included from include/linux/mm.h:7:
-   In file included from include/linux/gfp.h:7:
-   In file included from include/linux/mmzone.h:8:
-   In file included from include/linux/spinlock.h:56:
-   In file included from include/linux/preempt.h:79:
-   In file included from ./arch/riscv/include/generated/asm/preempt.h:1:
-   In file included from include/asm-generic/preempt.h:5:
-   In file included from include/linux/thread_info.h:60:
-   In file included from arch/riscv/include/asm/thread_info.h:37:
-   In file included from arch/riscv/include/asm/processor.h:17:
-   arch/riscv/include/asm/usercfi.h:44:15: warning: no previous prototype for function 'get_shstk_base' [-Wmissing-prototypes]
-   unsigned long get_shstk_base(struct task_struct *task, unsigned long *size)
-                 ^
-   arch/riscv/include/asm/usercfi.h:44:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   unsigned long get_shstk_base(struct task_struct *task, unsigned long *size)
-   ^
-   static 
+>> kernel/bpf/core.c:2505:22: warning: comparison of distinct pointer types ('struct bpf_prog_array *' and 'struct bpf_prog_array_hdr *') [-Wcompare-distinct-pointer-types]
+    2505 |         if (!progs || progs == &bpf_empty_prog_array.hdr)
+         |                       ~~~~~ ^  ~~~~~~~~~~~~~~~~~~~~~~~~~
    1 warning generated.
->> clang diag: arch/riscv/include/asm/usercfi.h:44:15: warning: no previous prototype for function 'get_shstk_base' [-Wmissing-prototypes]
->> clang diag: arch/riscv/include/asm/usercfi.h:44:15: warning: no previous prototype for function 'get_shstk_base' [-Wmissing-prototypes]
 
 
-vim +/get_shstk_base +44 arch/riscv/include/asm/usercfi.h
+vim +2505 kernel/bpf/core.c
 
-    43	
-  > 44	unsigned long get_shstk_base(struct task_struct *task, unsigned long *size)
-    45	{
-    46		return 0;
-    47	}
-    48	
+8c7dcb84e3b744 Delyan Kratunov 2022-06-14  2502  
+8c7dcb84e3b744 Delyan Kratunov 2022-06-14  2503  void bpf_prog_array_free_sleepable(struct bpf_prog_array *progs)
+8c7dcb84e3b744 Delyan Kratunov 2022-06-14  2504  {
+8c7dcb84e3b744 Delyan Kratunov 2022-06-14 @2505  	if (!progs || progs == &bpf_empty_prog_array.hdr)
+8c7dcb84e3b744 Delyan Kratunov 2022-06-14  2506  		return;
+8c7dcb84e3b744 Delyan Kratunov 2022-06-14  2507  	call_rcu_tasks_trace(&progs->rcu, __bpf_prog_array_free_sleepable_cb);
+8c7dcb84e3b744 Delyan Kratunov 2022-06-14  2508  }
+8c7dcb84e3b744 Delyan Kratunov 2022-06-14  2509  
+
+:::::: The code at line 2505 was first introduced by commit
+:::::: 8c7dcb84e3b744b2b70baa7a44a9b1881c33a9c9 bpf: implement sleepable uprobes by chaining gps
+
+:::::: TO: Delyan Kratunov <delyank@fb.com>
+:::::: CC: Alexei Starovoitov <ast@kernel.org>
 
 -- 
 0-DAY CI Kernel Test Service
