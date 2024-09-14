@@ -1,57 +1,59 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9211B18AE4;
-	Sat, 14 Sep 2024 05:12:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 56FFF219FF;
+	Sat, 14 Sep 2024 06:15:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726290764; cv=none; b=QtnMdtG+HTXcRCxGe/ORnjoNuDDLQk6Eg4kToU7ybaQYU0oOgsdymk4jevP+W6vey8UnnvdI+VAImGJtle6Vll05fsulH42IRaPilaejHiWlhFbvPT1Xp4wIjom/tN5R7a/Dd6XSoMbIDUppecK7Ro4N9bAVDX4E8PNGaz2Lpgg=
+	t=1726294550; cv=none; b=Alq7W8T4q4YjzSCmXeMr3GRTdGIsao9ff6xiqUjXNPKlS8V4ERsZrwETjZkSrzRkk4/ZIYK/t3SHVkppFFgCRE8juU+pMn4exN/QFT+v7dV+co6N9GH97IzXbrR2zAzNZ3A4ycVjzbHge6CkGOIOFGImRgBsILB1hRZJJMWaZxE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726290764; c=relaxed/simple;
-	bh=Gm7T30IdPKEj5DoxDU1p2d6UyGb9hLDnyn5Pd7UJujA=;
-	h=Date:From:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=tLGmWq/BirBLaVTsDzrwT+Ajeqik77R/c5FluKV9YH2++y6YQlknzHJAHFm/4youm6ibCqa+wv/QTRuqSY0GKtz4hcF53vmCsI7C/YNaV2tL3aKivQRV89wj0PQQuF10wSnJ0p+Awb7ZszCS4KlJQCLi31cCzMm7SrcbHq9XMVU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=f9B3dSH/; arc=none smtp.client-ip=192.198.163.9
+	s=arc-20240116; t=1726294550; c=relaxed/simple;
+	bh=Oe93Z2cy+cgy1Nzx71diGy/cUvsuf6JK1fjtJROCNCg=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=GYMLD4yRsZH+arTZT/quJu8YZfJ4nYCg5IlGbKSeY2BKFumHzbtdgFB5zGlhRrmolxtgQuCcX+tzuaoAnmeSgq3FUPnYQ+D+i3R84BpO9hLCYLj7e/9xtlis/2Fy0uQAJyPiZMCuJ7gzSTcS9rd81Yf4KzSXFSQc5D4LgTTSBtg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=WNwToMgk; arc=none smtp.client-ip=198.175.65.17
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="f9B3dSH/"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="WNwToMgk"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1726290763; x=1757826763;
-  h=date:from:cc:subject:message-id:mime-version;
-  bh=Gm7T30IdPKEj5DoxDU1p2d6UyGb9hLDnyn5Pd7UJujA=;
-  b=f9B3dSH/spJhVwrQeN4sYLJ65UGdL4BaL/uIm3zcHQ4oLonX+hnPCXRH
-   9f8iwULYzMvtENeH/Eyxb1+uJkrgZ2tXvBE8onSAmW8RKGtWTfbnYm2hP
-   3m7/2b1ychiu5+ANR/MMJyoS0Lp0E/3y1Xl1fXzNrulMgPLJhIo0IAudS
-   Oq/UWComeEKkeYcJir553PCzkhcTk7SN/xbmVldrc0deydsYQm+xQvbo9
-   7Hj97c14YsLNZI3OEBsIFUHThfrIZwarVk8gCnSVJE3xO1uPAHw9BukCX
-   KHvh6BImC+2z2YpbzvtnCzhSa0wqkrIrsTy49fTa0VI3N/qQqqKzhhe+p
-   Q==;
-X-CSE-ConnectionGUID: 8G05ceqvSzCoSzVRiiEbqQ==
-X-CSE-MsgGUID: cUC/GWN3SdmBVMQGvmL36A==
-X-IronPort-AV: E=McAfee;i="6700,10204,11194"; a="35874419"
+  t=1726294547; x=1757830547;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=Oe93Z2cy+cgy1Nzx71diGy/cUvsuf6JK1fjtJROCNCg=;
+  b=WNwToMgkdAYOGJ15xiJU2mesW32fpDqmKsD5gWVDlqzravoRJC0X/3z3
+   zXlnW9lTGUm1012Tk/lKX8gln6TOBvZ82iL5179I9GfrBxveVNsrkw1oB
+   Ownnr806dJ7zwgtBvY+ttp6CCpTZOQDOvJjpizrPVU/DrvilhZa8axvk3
+   CzDehvqVoo3W7WrWj1Krd9I1WeRM+F51XHPxTqeVPO/T+xcPuFDb9OR8R
+   bXrGQgONiE5Ezow+cZBJuNot6ktmh8jPKCx6S2bQL8ipMWI/v4gCnHlOZ
+   GMhpozr1bmwvBVv6HtB+BiU14jQCtdLit+TkIHWty8YVDKKZfCBRzXnGm
+   w==;
+X-CSE-ConnectionGUID: FnWr6m9HQ9uHSk9ocprYWQ==
+X-CSE-MsgGUID: T/7YMgjZTeup6VvzSP1smQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11194"; a="25353212"
 X-IronPort-AV: E=Sophos;i="6.10,228,1719903600"; 
-   d="scan'208";a="35874419"
-Received: from orviesa004.jf.intel.com ([10.64.159.144])
-  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Sep 2024 22:12:42 -0700
-X-CSE-ConnectionGUID: +yA8joF6SnG2rs5GNN2vZQ==
-X-CSE-MsgGUID: ymWZJHdjRLuLPiwzRxVhDQ==
+   d="scan'208";a="25353212"
+Received: from orviesa009.jf.intel.com ([10.64.159.149])
+  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Sep 2024 23:15:46 -0700
+X-CSE-ConnectionGUID: u9Lim47+Sw6VFHVXsktZ9g==
+X-CSE-MsgGUID: zBdZO+wlSM2Xsj5U+TcrXg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.10,228,1719903600"; 
-   d="scan'208";a="73322578"
+   d="scan'208";a="68268862"
 Received: from lkp-server01.sh.intel.com (HELO 53e96f405c61) ([10.239.97.150])
-  by orviesa004.jf.intel.com with ESMTP; 13 Sep 2024 22:12:41 -0700
+  by orviesa009.jf.intel.com with ESMTP; 13 Sep 2024 23:15:45 -0700
 Received: from kbuild by 53e96f405c61 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1spL5K-0007Ot-30;
-	Sat, 14 Sep 2024 05:12:38 +0000
-Date: Sat, 14 Sep 2024 13:12:18 +0800
+	id 1spM4M-0007Ry-1H;
+	Sat, 14 Sep 2024 06:15:42 +0000
+Date: Sat, 14 Sep 2024 14:14:42 +0800
 From: kernel test robot <lkp@intel.com>
-Cc: oe-kbuild-all@lists.linux.dev, llvm@lists.linux.dev
-Subject: [android-common:android12-5.4 130/30000] clang: error: unsupported
- option '-mhard-float' for target 'x86_64-linux'
-Message-ID: <202409141317.vNXD5lS1-lkp@intel.com>
+To: Chen-Yu Tsai <wenst@chromium.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [wens:mtk-wip 45/45]
+ drivers/platform/chrome/chromeos_of_hw_prober.c:197:38: warning: unused
+ variable 'chromeos_i2c_probe_simple_trackpad_cfg'
+Message-ID: <202409141404.gwkpFNUq-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -61,23 +63,57 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-TO: cros-kernel-buildreports@googlegroups.com
-
-tree:   https://android.googlesource.com/kernel/common android12-5.4
-head:   c8a568fb88e9a968e38609f91b0d3d1172551054
-commit: 6f0e552d0f4018b3731866fd18f32c1295175a91 [130/30000] ANDROID: x86, build: allow LTO_CLANG and THINLTO to be selected
-config: x86_64-buildonly-randconfig-003-20240914 (https://download.01.org/0day-ci/archive/20240914/202409141317.vNXD5lS1-lkp@intel.com/config)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/wens/linux.git mtk-wip
+head:   42c21929aeb3c7ca7b0ce9cacb1d0ff915d3c783
+commit: 42c21929aeb3c7ca7b0ce9cacb1d0ff915d3c783 [45/45] hana trackpad probe rework
+config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20240914/202409141404.gwkpFNUq-lkp@intel.com/config)
 compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240914/202409141317.vNXD5lS1-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240914/202409141404.gwkpFNUq-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202409141317.vNXD5lS1-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202409141404.gwkpFNUq-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> clang: error: unsupported option '-mhard-float' for target 'x86_64-linux'
+>> drivers/platform/chrome/chromeos_of_hw_prober.c:197:38: warning: unused variable 'chromeos_i2c_probe_simple_trackpad_cfg' [-Wunused-const-variable]
+     197 | static const struct i2c_of_probe_cfg chromeos_i2c_probe_simple_trackpad_cfg = {
+         |                                      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>> drivers/platform/chrome/chromeos_of_hw_prober.c:207:45: warning: unused variable 'chromeos_i2c_probe_hana_trackpad' [-Wunused-const-variable]
+     207 | static const struct chromeos_i2c_probe_data chromeos_i2c_probe_hana_trackpad = {
+         |                                             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   2 warnings generated.
+
+Kconfig warnings: (for reference only)
+   WARNING: unmet direct dependencies detected for OMAP2PLUS_MBOX
+   Depends on [n]: MAILBOX [=y] && (ARCH_OMAP2PLUS || ARCH_K3)
+   Selected by [y]:
+   - TI_K3_M4_REMOTEPROC [=y] && REMOTEPROC [=y] && (ARCH_K3 || COMPILE_TEST [=y])
+
+
+vim +/chromeos_i2c_probe_simple_trackpad_cfg +197 drivers/platform/chrome/chromeos_of_hw_prober.c
+
+   196	
+ > 197	static const struct i2c_of_probe_cfg chromeos_i2c_probe_simple_trackpad_cfg = {
+   198		.ops = &i2c_of_probe_simple_ops,
+   199		.type = "trackpad"
+   200	};
+   201	
+   202	static const struct i2c_of_probe_cfg chromeos_i2c_probe_simple_touchscreen_cfg = {
+   203		.ops = &i2c_of_probe_simple_ops,
+   204		.type = "touchscreen"
+   205	};
+   206	
+ > 207	static const struct chromeos_i2c_probe_data chromeos_i2c_probe_hana_trackpad = {
+   208		.cfg = &chromeos_i2c_probe_simple_touchscreen_cfg,
+   209		.opts = &(const struct i2c_of_probe_simple_opts) {
+   210			.res_node_compatible = "elan,ekth3000",
+   211			.supply_name = "vcc",
+   212			.post_power_on_delay_ms = 1,
+   213		}
+   214	};
+   215	
 
 -- 
 0-DAY CI Kernel Test Service
