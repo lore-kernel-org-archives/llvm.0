@@ -1,81 +1,106 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F212813A863;
-	Mon, 16 Sep 2024 09:53:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5BE7315B119;
+	Mon, 16 Sep 2024 11:09:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726480385; cv=none; b=G3Lybe8MEYiMjSJlm4Cq86vCi/Of9zljqRHAWSvq8doEcK+1ltQPh6nIovI4r/DApGxB1iGtG0/HQpYBNzE70vclHfGdj/3cd3atzEXlRTtb0nhXWFtVa0H9bkwPsS1s06QAzytyibB4bCUj0gGz8chVC/ivG3UUIPm6fZTZjLA=
+	t=1726484978; cv=none; b=m9OZFgnXIS6tklPmfn+vcqszrsB4/xfmzdzgjyC8bW5RDwswYXV6r1Vv/MUL6diweGpnQdOnEvSY8z/v5b6kHWkmzqdqL4Rw4QCDkyW2M+I1lvpJOMpmL6L97LFMCF2PPHs3TwmWwEYC5+uAPktLCe3bWFe1MeaS9PmfwExQ9ZQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726480385; c=relaxed/simple;
-	bh=Y0wEGA/CDTJ9bQYXykDNZV2VklFOjcmqGNqmmUYxrxE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=mA3rK9Rb9s8tI5bTekb3zGppE/QJYmA917yXXE4p0HeW5imv5UQiVdZpswT2CUblFAQ5CX6c2R9TGkFLkw5GPUOkL6cUxEtjjvvjvCLk1E3YJOJvccz66QkBoo4WxLY8o28LBclvo2G6w1j84vy4gAQoikk7HB6l1kZBvLCHy5o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FBVpgO24; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1726484978; c=relaxed/simple;
+	bh=ESu+Y3NLrw6nKtLSnksNQ2p6EDkLCi+HsWc7u+Z6WTs=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=djCGzwUolaej4h4JoGQm52mo/x/I9NyU/zCHUQrOEz89/5PUAY9GINtXqnwjfO6zV2CVTGIblSy4AQYLXEcrASIuFGhK7QXIB/heAG2JJwchbbN4LE5PcHXPcC3iRCzfwNy6KO7ftjq/0QDDqsq8oX4878vtY6tj3+Qzpu6kcNE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=l5bqhJlQ; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FBVpgO24"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 004D6C4CEC4;
-	Mon, 16 Sep 2024 09:53:00 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="l5bqhJlQ"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A7718C4CECF;
+	Mon, 16 Sep 2024 11:09:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1726480384;
-	bh=Y0wEGA/CDTJ9bQYXykDNZV2VklFOjcmqGNqmmUYxrxE=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=FBVpgO24Jw0W7UijYP9XiQi6LcBD8000hE6krlw6QC/jeC5oFhu8w+3pt0VmZeDzA
-	 9KrBwLFvegudgVk07Dzoc4SNOpKLwb2ZBrUNvFduvF1M0xBNS1d4keSxHUmIwr/kWS
-	 nyqfc2SA/iLmf3KoiER8jjb4z9oP2mmCmCKBWbKNDdhxrd7Y6+nB54NuxkAkB/vkBo
-	 GqpTckxLUTaPGfAbrNSiL7iLz6GuleVGxmSb0X1+TSPe/gAqY0dhTcyqB1cqmulEdG
-	 94u2OKZDTBM8R86C3q8jZUbX2NkDZ/yOaMnHl1IjoKl0ygGnDrUI0ZUYsrFIUYg3QT
-	 CTM5uaBjvKlMQ==
-Date: Mon, 16 Sep 2024 10:52:58 +0100
-From: Simon Horman <horms@kernel.org>
-To: Pablo Neira Ayuso <pablo@netfilter.org>
-Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-	Pavel Tikhomirov <ptikhomirov@virtuozzo.com>,
-	netfilter-devel@vger.kernel.org, coreteam@netfilter.org,
-	netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev, Jozsef Kadlecsik <kadlec@netfilter.org>,
-	"David S. Miller" <davem@davemloft.net>,
-	David Ahern <dsahern@kernel.org>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>
-Subject: Re: [PATCH net v1 1/1] netfilter: nf_reject: Fix build error when
- CONFIG_BRIDGE_NETFILTER=n
-Message-ID: <20240916095258.GG167971@kernel.org>
-References: <20240906145513.567781-1-andriy.shevchenko@linux.intel.com>
- <20240907134837.GP2097826@kernel.org>
- <ZudP-mkhquCJJPXv@calendula>
- <20240916073201.GF167971@kernel.org>
+	s=k20201202; t=1726484978;
+	bh=ESu+Y3NLrw6nKtLSnksNQ2p6EDkLCi+HsWc7u+Z6WTs=;
+	h=From:Date:Subject:To:Cc:From;
+	b=l5bqhJlQQGDTcvead/WTHbt1AguDOLjEIb1zPTeDP1V2TuiM+cO1ZpHqDNhcB2w2I
+	 XRLikS6azFs4aCk+Jfw4bqhRaxmTTTiYgPM8qYwre0pf1UXsvFEmoSzThC+dLtyNtE
+	 8NVnV0ptk/lJAqx+cbS+8fIHeakq2IWV3SgEDak1s4J5U6rGjKhovkDcTos9icKzyy
+	 uD4aZxg6RhAmnn1zEgeJrlYv9OWHaOM0GDH7OuvfHBAEYoFKjyu/yWcZAgX+OiBLYE
+	 +o3xtoux9IPvhlqMGIhn40tDYBXfaY3tGb1eIc3dL+P7WNkMKaioQM5hxQMlQpX7R5
+	 iUpgudL+mAo7w==
+From: Nathan Chancellor <nathan@kernel.org>
+Date: Mon, 16 Sep 2024 04:09:31 -0700
+Subject: [PATCH] LoongArch: KVM: Ensure ret is always initialized in
+ kvm_eiointc_{read,write}()
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240916073201.GF167971@kernel.org>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20240916-loongarch-kvm-eiointc-fix-sometimes-uninitialized-v1-1-85142dcb2274@kernel.org>
+X-B4-Tracking: v=1; b=H4sIAOoR6GYC/x2NQQrCMBQFr1Ky9kOSilqvIl3E5Ns+bH4kiUUsv
+ bvB5cAws6nCGVzUtdtU5hUFSRqYQ6f87GRiQmisrLZHPZgTLSnJ5LKf6blGYiRI9fTAh0qKXBG
+ 50FsgqHALvhyIzfmu+yHYi+lV674yN/3/vI37/gNDAhrSgwAAAA==
+X-Change-ID: 20240916-loongarch-kvm-eiointc-fix-sometimes-uninitialized-e17b039d2813
+To: Tianrui Zhao <zhaotianrui@loongson.cn>, Bibo Mao <maobibo@loongson.cn>, 
+ Huacai Chen <chenhuacai@kernel.org>, WANG Xuerui <kernel@xen0n.name>
+Cc: Xianglai Li <lixianglai@loongson.cn>, kvm@vger.kernel.org, 
+ loongarch@lists.linux.dev, llvm@lists.linux.dev, patches@lists.linux.dev, 
+ Nathan Chancellor <nathan@kernel.org>
+X-Mailer: b4 0.15-dev
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1823; i=nathan@kernel.org;
+ h=from:subject:message-id; bh=ESu+Y3NLrw6nKtLSnksNQ2p6EDkLCi+HsWc7u+Z6WTs=;
+ b=owGbwMvMwCUmm602sfCA1DTG02pJDGkvBD9+zKpiZPCZ9I318oWF/9dznjG8xRNy+UXEmtsXz
+ r0WE+3c1VHKwiDGxSArpshS/Vj1uKHhnLOMN05NgpnDygQyhIGLUwAm4tzDyHCF9b+/u9pko0j5
+ 3efdSo19y8SrfVMTP8+1WDyzTcnuxCWG/6kz3h9I9F/OYHPYKF7j05o9YUWz73/V/r4wQOpGiMF
+ UbX4A
+X-Developer-Key: i=nathan@kernel.org; a=openpgp;
+ fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
 
-On Mon, Sep 16, 2024 at 08:32:01AM +0100, Simon Horman wrote:
-> On Sun, Sep 15, 2024 at 11:22:02PM +0200, Pablo Neira Ayuso wrote:
-> > Hi Simon,
-> > 
-> > This proposed update to address this compile time warning LGTM.
-> > 
-> > Would you submit it?
-> 
-> Hi Pablo,
-> 
-> Yes, it is on my todo list for today.
-> Sorry for not getting to it sooner.
-> 
-> I plan to post a patch for this to nf-next.
-> But let me know if you prefer a patch for nf, net,
-> or some other course of action.
+Clang warns (or errors with CONFIG_WERROR=y):
 
-Patch posted here:
-- [PATCH nf-next] netfilter: nf_reject: Fix build warning when CONFIG_BRIDGE_NETFILTER=n
-  https://lore.kernel.org/netfilter-devel/20240916-nf-reject-v1-1-24b6dd651c83@kernel.org/
+  arch/loongarch/kvm/intc/eiointc.c:512:2: error: variable 'ret' is used uninitialized whenever switch default is taken [-Werror,-Wsometimes-uninitialized]
+    512 |         default:
+        |         ^~~~~~~
+  arch/loongarch/kvm/intc/eiointc.c:716:2: error: variable 'ret' is used uninitialized whenever switch default is taken [-Werror,-Wsometimes-uninitialized]
+    716 |         default:
+        |         ^~~~~~~
+
+Set ret to -EINVAL in the default case to resolve the warning, as len
+was not a valid value for the functions to handle.
+
+Fixes: f810ef038c66 ("LoongArch: KVM: Add EIOINTC read and write functions")
+Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+---
+ arch/loongarch/kvm/intc/eiointc.c | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/arch/loongarch/kvm/intc/eiointc.c b/arch/loongarch/kvm/intc/eiointc.c
+index 414e4ffd69173dc248ba0042bed3bebdc11700e3..e5d23f0da055c97c0e4ba6705f6b71d89846f42a 100644
+--- a/arch/loongarch/kvm/intc/eiointc.c
++++ b/arch/loongarch/kvm/intc/eiointc.c
+@@ -512,6 +512,7 @@ static int kvm_eiointc_write(struct kvm_vcpu *vcpu,
+ 	default:
+ 		WARN_ONCE(1, "%s: Abnormal address access:addr 0x%llx,size %d\n",
+ 						__func__, addr, len);
++		ret = -EINVAL;
+ 	}
+ 	loongarch_ext_irq_unlock(eiointc, flags);
+ 	return ret;
+@@ -716,6 +717,7 @@ static int kvm_eiointc_read(struct kvm_vcpu *vcpu,
+ 	default:
+ 		WARN_ONCE(1, "%s: Abnormal address access:addr 0x%llx,size %d\n",
+ 						__func__, addr, len);
++		ret = -EINVAL;
+ 	}
+ 	loongarch_ext_irq_unlock(eiointc, flags);
+ 	return ret;
+
+---
+base-commit: 357da696640e1db8fc8829a4dd1bb2d0402169b5
+change-id: 20240916-loongarch-kvm-eiointc-fix-sometimes-uninitialized-e17b039d2813
+
+Best regards,
+-- 
+Nathan Chancellor <nathan@kernel.org>
+
