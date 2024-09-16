@@ -1,102 +1,75 @@
-Received: from mail-pf1-f181.google.com (mail-pf1-f181.google.com [209.85.210.181])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1767725763
-	for <llvm@lists.linux.dev>; Mon, 16 Sep 2024 16:47:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 206A6157A59;
+	Mon, 16 Sep 2024 17:28:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726505226; cv=none; b=J39X2lsKtApOa1rKatPOk5AUgK326way9J7UCVditmyVFuHtboMnM+dh4sFagxItKzcomsqRpN4PLhtxJzatLZhrP8SNoueBrGEtyl5EiKJd2NaGbm8eoP0RAzj3TxUDL+SFVfnPFCgRVLbjKCBZElvi1eqVLgyzwSf3iq/533s=
+	t=1726507739; cv=none; b=fNQ1yRywO+QH8CaEhHKhY8vbkXUd0LZLp4f5cZg6JiAfHMyXwoPsXjLhjTEFJqv40zjyjAt6nC9mpp660pkk5WkHX8MzOz/tYqL2k1XSv0If4h1QYpFAwcVQjbq7067ppdKLrUkcZKQOKk3g0hB9yAVL15XoUWsZUHUrYYPdNTs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726505226; c=relaxed/simple;
-	bh=JTMsUH/Kl9aapsZQ8rDpX0KFdNRiW1382f+ZrUXpxq0=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=QXZNYatYWlQUe1kjmRmwonqxpqOl/5fCGznf11GZVOrr35VJizsbQ2aBH7sejbmOWiJG9sPHdHXquNmu/d6W6HI1hSaAlhM7IEfJteRf9OLGlE8+NrkNIPZAh8Qdt6CgNAH9PwyOH00B3kzfoycNBZmNPKMHNtbxYBHef+AWlUA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OKXsvMM+; arc=none smtp.client-ip=209.85.210.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1726507739; c=relaxed/simple;
+	bh=7ewgDKv3cUGK89J2yYCksoB1SygrxZKYrWplNWob5yc=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=dj/wqZvHdd5uX4RcOhWwzUUSaqryAvgjCrMp4/9U+bHPZt0fAcslADHzgVbZO4v++duko/6mR0bg4ryIjKe5QZrhA1rJK7cUzE01w97ymPOSIRuge4q1YlxgRd5Ghgz/nd400B/Wd90h3D3v3mmVOVy0ZrdM1zEfRdtmFi64rEM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UtNuGfBi; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OKXsvMM+"
-Received: by mail-pf1-f181.google.com with SMTP id d2e1a72fcca58-718e25d8b67so819151b3a.3
-        for <llvm@lists.linux.dev>; Mon, 16 Sep 2024 09:47:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1726505224; x=1727110024; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=OzAN0xAvRZHTYmrnU/A3fZSEHEklGK3Vjb/1gDLdIyc=;
-        b=OKXsvMM+2Dc0nWaTrVOAJU8ppTa6mLV82l2lK2iDANWEwPwBx/5qvaSmDj7WfdwBfJ
-         zHDoQ3DxbGCeMrqH7oeVbbK6VvsC6bQbVBR8xB5FGRrCl9IL9eneQAPKX7C7X2xO1MVs
-         GkKka1ueH/oIzJtOTGUIXM4TwGzV0pm8exmJaae+r0GIE/myxeKF/OTEtd7/VCgjzvas
-         hinZyMZLWesHYagl7KhfYANilk1lvdXWk1aE073hh+MdH24mDovdECuTOMoNmhZoGjTi
-         9w57WHfw5MRtlyMYxJffeGE/d7FkVFM3hMal/By+StfS1BCfZlZmZDAzuFv2YKz4OT2l
-         rZDQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1726505224; x=1727110024;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=OzAN0xAvRZHTYmrnU/A3fZSEHEklGK3Vjb/1gDLdIyc=;
-        b=rnB+JDTHT72CZRAvBr7wFXHBWgYDCHialOxFnFzQXIPibJv7uqsh23jT8DJJNjFtpU
-         OXp+wJTHfdGaDUyk9ldSWTNlSghgenYVBd9MIzVTAl4udB1d6Y49ZEjVATWmkifxnmW6
-         A8l8AZS8l4g9GSzEOYBTOtvJrY4nq3yoYOoZoBE9qHcfdbmqIODY8db20ccNxPX44slQ
-         P7dhIf5w/l0GEHW9sEIBRXzq1BMuKt0bbILPTSXmJrXEzqAfNbQzYliFHLipbka7+TUY
-         fAQlGLJXhe+BgikwuWR2EbpPquJE8ttTmmbqTDVN1hG38/vU/ZWdah/k0bLZH1DOf4KD
-         JM+A==
-X-Forwarded-Encrypted: i=1; AJvYcCVXIAnkq2vYb5EpkXyCTHGhut2jpHPt9y4BDIjvhId0nx1/y/zzton8jRmMu+qoRkaa9z8X@lists.linux.dev
-X-Gm-Message-State: AOJu0Yzc2dsuqRFzOQBYO9OYuns8+1h9TuVsK1vGz3c8c+1niMlpMzvv
-	RhGADYOGcwppyH49iTRtQiC/olqf6TxEo+lYsE1n7FdSmi7f5wr7BkhidIRSSqLYPph9/s4KQF4
-	s5KuQDtHXmJ+k5CHV0A7XUspnUK8=
-X-Google-Smtp-Source: AGHT+IGzwvwl4zOI2Siv79HgsewAOMw+JHEgLSjbi/II4ExH83X8+4dRk9iJZKlRCXDrLhPpknwmQEBcqu9MXQQxgVg=
-X-Received: by 2002:a05:6a00:9163:b0:710:5243:4161 with SMTP id
- d2e1a72fcca58-7192620609fmr9753938b3a.5.1726505224337; Mon, 16 Sep 2024
- 09:47:04 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UtNuGfBi"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 841B1C4CEC4;
+	Mon, 16 Sep 2024 17:28:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1726507739;
+	bh=7ewgDKv3cUGK89J2yYCksoB1SygrxZKYrWplNWob5yc=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+	b=UtNuGfBi0c7jGY7nd4a2YHZyAcML5BV6WF5U2zXGx4F+3Ig4//SnCkBv7wl3JiSDC
+	 /XLMm9UGmtVAFC15CL4LWOx8n4iY7Vob7TILFeJlfa/vRXsUnA+G+ycBrIaruSHvHZ
+	 d6UBMUMxftqCGVo1IOCo8BM8ib4h7Ykb9tqCr2g0UJYLWn6QXJvM53OvyiyhJXRH0F
+	 oKXGwbLV3B2xgclzl/gIEFdckxQMPMu63BeLFzlaWe9c22uE7wEXgYYFvcaanBRtk7
+	 K7/jL6c7c0AYxzTc9cVMKqeWQKNjGP+ipmIo2Xd3t3sDOI/yhZOWfwHs+xswYPDnRM
+	 DfFO5F5tYOHEQ==
+From: Leon Romanovsky <leon@kernel.org>
+To: Jason Gunthorpe <jgg@ziepe.ca>, Nathan Chancellor <nathan@kernel.org>
+Cc: Chiara Meiohas <cmeiohas@nvidia.com>, 
+ Michael Guralnik <michaelgur@nvidia.com>, linux-rdma@vger.kernel.org, 
+ llvm@lists.linux.dev, patches@lists.linux.dev
+In-Reply-To: <20240916-rdma-fix-clang-fallthrough-nl_notify_err_msg-v1-1-89de6a7423f1@kernel.org>
+References: <20240916-rdma-fix-clang-fallthrough-nl_notify_err_msg-v1-1-89de6a7423f1@kernel.org>
+Subject: Re: [PATCH] RDMA/nldev: Add missing break in
+ rdma_nl_notify_err_msg()
+Message-Id: <172650773549.4797.15102898598079197251.b4-ty@kernel.org>
+Date: Mon, 16 Sep 2024 20:28:55 +0300
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20240820194910.187826-1-mmaurer@google.com> <CANiq72mv5E0PvZRW5eAEvqvqj74PH01hcRhLWTouB4z32jTeSA@mail.gmail.com>
-In-Reply-To: <CANiq72mv5E0PvZRW5eAEvqvqj74PH01hcRhLWTouB4z32jTeSA@mail.gmail.com>
-From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date: Mon, 16 Sep 2024 18:46:51 +0200
-Message-ID: <CANiq72myZL4_poCMuNFevtpYYc0V0embjSuKb7y=C+m3vVA_8g@mail.gmail.com>
-Subject: Re: [PATCH v4 0/4] Rust KASAN Support
-To: Matthew Maurer <mmaurer@google.com>
-Cc: andreyknvl@gmail.com, ojeda@kernel.org, 
-	Alex Gaynor <alex.gaynor@gmail.com>, Wedson Almeida Filho <wedsonaf@gmail.com>, 
-	Nathan Chancellor <nathan@kernel.org>, dvyukov@google.com, aliceryhl@google.com, 
-	samitolvanen@google.com, kasan-dev@googlegroups.com, linux-mm@kvack.org, 
-	glider@google.com, ryabinin.a.a@gmail.com, Boqun Feng <boqun.feng@gmail.com>, 
-	Gary Guo <gary@garyguo.net>, =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
-	Benno Lossin <benno.lossin@proton.me>, Andreas Hindborg <a.hindborg@samsung.com>, 
-	Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, 
-	Justin Stitt <justinstitt@google.com>, rust-for-linux@vger.kernel.org, 
-	llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.15-dev-37811
 
-On Mon, Sep 16, 2024 at 6:15=E2=80=AFPM Miguel Ojeda
-<miguel.ojeda.sandonis@gmail.com> wrote:
->
-> Applied to `rust-next` -- thanks everyone!
 
-Also, for KASAN + RETHUNK builds, I noticed objtool detects this:
+On Mon, 16 Sep 2024 06:24:34 -0700, Nathan Chancellor wrote:
+> Clang warns (or errors with CONFIG_WERROR=y):
+> 
+>   drivers/infiniband/core/nldev.c:2795:2: error: unannotated fall-through between switch labels [-Werror,-Wimplicit-fallthrough]
+>    2795 |         default:
+>         |         ^
+> 
+> Clang is a little more pedantic than GCC, which does not warn when
+> falling through to a case that is just break or return. Clang's version
+> is more in line with the kernel's own stance in deprecated.rst, which
+> states that all switch/case blocks must end in either break,
+> fallthrough, continue, goto, or return. Add the missing break to silence
+> the warning.
+> 
+> [...]
 
-    samples/rust/rust_print.o: warning: objtool:
-asan.module_ctor+0x17: 'naked' return found in MITIGATION_RETHUNK
-build
-    samples/rust/rust_print.o: warning: objtool:
-asan.module_dtor+0x17: 'naked' return found in MITIGATION_RETHUNK
-build
+Applied, thanks!
 
-And indeed from a quick look the `ret` is there.
+[1/1] RDMA/nldev: Add missing break in rdma_nl_notify_err_msg()
+      https://git.kernel.org/rdma/rdma/c/7acad3c442df6d
 
-Since KASAN support is important, I decided to take it nevertheless,
-but please let's make sure this is fixed during the cycle (or add a
-"depends on").
+Best regards,
+-- 
+Leon Romanovsky <leon@kernel.org>
 
-Thanks!
-
-Cheers,
-Miguel
