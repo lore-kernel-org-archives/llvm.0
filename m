@@ -1,66 +1,66 @@
-Received: from mail-pj1-f45.google.com (mail-pj1-f45.google.com [209.85.216.45])
+Received: from mail-pf1-f181.google.com (mail-pf1-f181.google.com [209.85.210.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA8FE15A84A
-	for <llvm@lists.linux.dev>; Mon, 16 Sep 2024 16:15:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1767725763
+	for <llvm@lists.linux.dev>; Mon, 16 Sep 2024 16:47:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726503334; cv=none; b=ddXzdhHLUf57qAvyAPias0sBnb/skCy4yXz2eL906ad3O/HwJlcXRDhO2dRg4RxRRzF3visxgv3bcbI/o2K9JP7jPHOxh5+ETxZa7OdVfecvFLXf11tc3aw5AV1VmZzM19qc89/8s4xfJbeQHxIsDeeWFoP/rssOF6Bkeh6x/LQ=
+	t=1726505226; cv=none; b=J39X2lsKtApOa1rKatPOk5AUgK326way9J7UCVditmyVFuHtboMnM+dh4sFagxItKzcomsqRpN4PLhtxJzatLZhrP8SNoueBrGEtyl5EiKJd2NaGbm8eoP0RAzj3TxUDL+SFVfnPFCgRVLbjKCBZElvi1eqVLgyzwSf3iq/533s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726503334; c=relaxed/simple;
-	bh=CHfKWPhoLol18DWJjUtfaj5l1Pik2/9uMA+WDq8/wKM=;
+	s=arc-20240116; t=1726505226; c=relaxed/simple;
+	bh=JTMsUH/Kl9aapsZQ8rDpX0KFdNRiW1382f+ZrUXpxq0=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=YH0uO/1WjqwAuvxVKEovbtufryTx3FNbUVglaMXZxfJ/LMgizPpEFGuqNrObGmeeGBImEfpabHIrEqyDxg2FfjRGpuQP85zMjnqkgyFoAQo7vXELeid2+NXw6phOBCtqjmNF02zjdNs2OvMAafCTFfh6Zj32u9erE6DExEMyLWI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ICgQ6Ys+; arc=none smtp.client-ip=209.85.216.45
+	 To:Cc:Content-Type; b=QXZNYatYWlQUe1kjmRmwonqxpqOl/5fCGznf11GZVOrr35VJizsbQ2aBH7sejbmOWiJG9sPHdHXquNmu/d6W6HI1hSaAlhM7IEfJteRf9OLGlE8+NrkNIPZAh8Qdt6CgNAH9PwyOH00B3kzfoycNBZmNPKMHNtbxYBHef+AWlUA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OKXsvMM+; arc=none smtp.client-ip=209.85.210.181
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ICgQ6Ys+"
-Received: by mail-pj1-f45.google.com with SMTP id 98e67ed59e1d1-2d8741c85bdso860354a91.1
-        for <llvm@lists.linux.dev>; Mon, 16 Sep 2024 09:15:32 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OKXsvMM+"
+Received: by mail-pf1-f181.google.com with SMTP id d2e1a72fcca58-718e25d8b67so819151b3a.3
+        for <llvm@lists.linux.dev>; Mon, 16 Sep 2024 09:47:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1726503332; x=1727108132; darn=lists.linux.dev;
+        d=gmail.com; s=20230601; t=1726505224; x=1727110024; darn=lists.linux.dev;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=UdCaaZaGAuNxnOSLC5REDzZqrguiE6BbNpi1q+AVJDM=;
-        b=ICgQ6Ys+1wGKigLpPmar4wgdn9XSW6/bLlPXTlr8jcccN9+wJzEGSGBZMjUFDzaQ9+
-         trg/dyYzmAHo5Ckw2fHizaI0v/aDuN88eYZ4fS6sib9R92lu8fMd/AxYkbA1QuKE8VtF
-         juVhSkfiUo8vfCb2GFstuyXaExR4RaLmMLzhGp0UD2Sj6Z7dyeq1eaZ7p/NfSLAlLM4c
-         i9/qdRHHp8mZl8LrKDNagtzTYNHfyNbcrlkMVH56AfFSPuvrj5moICs/nLk/z3vphmKh
-         2eJ65bQW327ui90JwafJ1kGmJFscPFxtAg7CdJrlmdyM/EjBEIdv3s2+AZN2OpEzMD0h
-         9Lpw==
+        bh=OzAN0xAvRZHTYmrnU/A3fZSEHEklGK3Vjb/1gDLdIyc=;
+        b=OKXsvMM+2Dc0nWaTrVOAJU8ppTa6mLV82l2lK2iDANWEwPwBx/5qvaSmDj7WfdwBfJ
+         zHDoQ3DxbGCeMrqH7oeVbbK6VvsC6bQbVBR8xB5FGRrCl9IL9eneQAPKX7C7X2xO1MVs
+         GkKka1ueH/oIzJtOTGUIXM4TwGzV0pm8exmJaae+r0GIE/myxeKF/OTEtd7/VCgjzvas
+         hinZyMZLWesHYagl7KhfYANilk1lvdXWk1aE073hh+MdH24mDovdECuTOMoNmhZoGjTi
+         9w57WHfw5MRtlyMYxJffeGE/d7FkVFM3hMal/By+StfS1BCfZlZmZDAzuFv2YKz4OT2l
+         rZDQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1726503332; x=1727108132;
+        d=1e100.net; s=20230601; t=1726505224; x=1727110024;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=UdCaaZaGAuNxnOSLC5REDzZqrguiE6BbNpi1q+AVJDM=;
-        b=JflDOEWD3dghf19mA/9aev2MeLF4PtEEPcT1XTH2Prvu3pxzKfXnwZzgIrN/YZE630
-         meBlmA1w1P2GhFGoMw3KbCCW/2oOCZWC13BVCTr74Au8KD8ecppLn/fVqfKMQwaFERN1
-         lX4dOHEWlyCljMZu4arZmtraGdngXfVf6yH0xnrZGj7Bdbyl3iH8wo1+BClvJJQpuZ20
-         uvuZr/njcycJL1EVWqYFe1vCu3Pm2VsE7hyv9XP1fyVtYnGEutefTl1y+OtsMhQkO3nL
-         FJrCe1q7zbElVW+jct9XMsTvKc7nUNJo9coBFSUbrU7hgyVzq8okW9++z4FnCrckj+aZ
-         mHuw==
-X-Forwarded-Encrypted: i=1; AJvYcCUt78iH7dCnNzvS7ypb+SUOV6N1viS+L/cZPEaYZrqGgV4SpAvXMMGn3mDrMNATJPvvpSyf@lists.linux.dev
-X-Gm-Message-State: AOJu0YwSe7ptStEAX5ia1SKqPg0ndrUGos/NuFGCgK0UkyrTcfx7YHho
-	HTsPNRZeb9Ycf1LFp21eVJyFOi5qlQuNnaWUecyEnPDvbTjA3XrGYZs+jlkygWeARu17dgqRhj3
-	P2ux8rILKDxgSds6UllfXLTS4RzI=
-X-Google-Smtp-Source: AGHT+IFWqKrB/jwwfMGDT0N94zreaBigF9XO/ixKs8bzKIeBFXv7PUaej4KHwjCw+M371MDTiFimmNQTj/1U22Qe65g=
-X-Received: by 2002:a17:90a:f308:b0:2db:60b:9be4 with SMTP id
- 98e67ed59e1d1-2dba007b059mr7383255a91.7.1726503332118; Mon, 16 Sep 2024
- 09:15:32 -0700 (PDT)
+        bh=OzAN0xAvRZHTYmrnU/A3fZSEHEklGK3Vjb/1gDLdIyc=;
+        b=rnB+JDTHT72CZRAvBr7wFXHBWgYDCHialOxFnFzQXIPibJv7uqsh23jT8DJJNjFtpU
+         OXp+wJTHfdGaDUyk9ldSWTNlSghgenYVBd9MIzVTAl4udB1d6Y49ZEjVATWmkifxnmW6
+         A8l8AZS8l4g9GSzEOYBTOtvJrY4nq3yoYOoZoBE9qHcfdbmqIODY8db20ccNxPX44slQ
+         P7dhIf5w/l0GEHW9sEIBRXzq1BMuKt0bbILPTSXmJrXEzqAfNbQzYliFHLipbka7+TUY
+         fAQlGLJXhe+BgikwuWR2EbpPquJE8ttTmmbqTDVN1hG38/vU/ZWdah/k0bLZH1DOf4KD
+         JM+A==
+X-Forwarded-Encrypted: i=1; AJvYcCVXIAnkq2vYb5EpkXyCTHGhut2jpHPt9y4BDIjvhId0nx1/y/zzton8jRmMu+qoRkaa9z8X@lists.linux.dev
+X-Gm-Message-State: AOJu0Yzc2dsuqRFzOQBYO9OYuns8+1h9TuVsK1vGz3c8c+1niMlpMzvv
+	RhGADYOGcwppyH49iTRtQiC/olqf6TxEo+lYsE1n7FdSmi7f5wr7BkhidIRSSqLYPph9/s4KQF4
+	s5KuQDtHXmJ+k5CHV0A7XUspnUK8=
+X-Google-Smtp-Source: AGHT+IGzwvwl4zOI2Siv79HgsewAOMw+JHEgLSjbi/II4ExH83X8+4dRk9iJZKlRCXDrLhPpknwmQEBcqu9MXQQxgVg=
+X-Received: by 2002:a05:6a00:9163:b0:710:5243:4161 with SMTP id
+ d2e1a72fcca58-7192620609fmr9753938b3a.5.1726505224337; Mon, 16 Sep 2024
+ 09:47:04 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20240820194910.187826-1-mmaurer@google.com>
-In-Reply-To: <20240820194910.187826-1-mmaurer@google.com>
+References: <20240820194910.187826-1-mmaurer@google.com> <CANiq72mv5E0PvZRW5eAEvqvqj74PH01hcRhLWTouB4z32jTeSA@mail.gmail.com>
+In-Reply-To: <CANiq72mv5E0PvZRW5eAEvqvqj74PH01hcRhLWTouB4z32jTeSA@mail.gmail.com>
 From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date: Mon, 16 Sep 2024 18:15:19 +0200
-Message-ID: <CANiq72mv5E0PvZRW5eAEvqvqj74PH01hcRhLWTouB4z32jTeSA@mail.gmail.com>
+Date: Mon, 16 Sep 2024 18:46:51 +0200
+Message-ID: <CANiq72myZL4_poCMuNFevtpYYc0V0embjSuKb7y=C+m3vVA_8g@mail.gmail.com>
 Subject: Re: [PATCH v4 0/4] Rust KASAN Support
 To: Matthew Maurer <mmaurer@google.com>
 Cc: andreyknvl@gmail.com, ojeda@kernel.org, 
@@ -76,54 +76,27 @@ Cc: andreyknvl@gmail.com, ojeda@kernel.org,
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Aug 20, 2024 at 9:49=E2=80=AFPM Matthew Maurer <mmaurer@google.com>=
- wrote:
+On Mon, Sep 16, 2024 at 6:15=E2=80=AFPM Miguel Ojeda
+<miguel.ojeda.sandonis@gmail.com> wrote:
 >
-> Right now, if we turn on KASAN, Rust code will cause violations because
-> it's not enabled properly.
->
-> This series:
-> 1. Adds flag probe macros for Rust - now that we're setting a minimum rus=
-tc
->    version instead of an exact one, these could be useful in general. We =
-need
->    them in this patch because we don't set a restriction on which LLVM ru=
-stc
->    is using, which is what KASAN actually cares about.
-> 2. Makes `rustc` enable the relevant KASAN sanitizer flags when C does.
-> 3. Adds a smoke test to the `kasan_test` KUnit suite to check basic
->    integration.
->
-> This patch series requires the target.json array support patch [1] as
-> the x86_64 target.json file currently produced does not mark itself as KA=
-SAN
-> capable, and is rebased on top of the KASAN Makefile rewrite [2].
+> Applied to `rust-next` -- thanks everyone!
 
-Applied to `rust-next` -- thanks everyone!
+Also, for KASAN + RETHUNK builds, I noticed objtool detects this:
 
-    [ Applied empty line nit, removed double empty line,
-      applied `rustfmt` and formatted crate comment. - Miguel ]
+    samples/rust/rust_print.o: warning: objtool:
+asan.module_ctor+0x17: 'naked' return found in MITIGATION_RETHUNK
+build
+    samples/rust/rust_print.o: warning: objtool:
+asan.module_dtor+0x17: 'naked' return found in MITIGATION_RETHUNK
+build
 
-    [ Applied "SW_TAGS KASAN" nit. - Miguel ]
+And indeed from a quick look the `ret` is there.
 
-I think `TMPOUT` needs to be passed though, i.e. like I did in
-https://github.com/Rust-for-Linux/linux/pull/1087#issuecomment-2218445303:
+Since KASAN support is important, I decided to take it nevertheless,
+but please let's make sure this is fixed during the cycle (or add a
+"depends on").
 
-diff --git a/scripts/Makefile.compiler b/scripts/Makefile.compiler
-index 057305eae85c..0ac8679095f4 100644
---- a/scripts/Makefile.compiler
-+++ b/scripts/Makefile.compiler
-@@ -20,6 +20,7 @@ TMPOUT =3D $(if $(KBUILD_EXTMOD),$(firstword
-$(KBUILD_EXTMOD))/).tmp_$$$$
- # Exit code chooses option. "$$TMP" serves as a temporary file and is
- # automatically cleaned up.
- try-run =3D $(shell set -e;              \
-+       TMPOUT=3D$(TMPOUT);               \
-        TMP=3D$(TMPOUT)/tmp;              \
-        trap "rm -rf $(TMPOUT)" EXIT;   \
-        mkdir -p $(TMPOUT);             \
-
-Or is there something I am missing?
+Thanks!
 
 Cheers,
 Miguel
