@@ -1,135 +1,128 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 433C6183CB7;
-	Tue, 17 Sep 2024 15:26:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E1828183CB2;
+	Tue, 17 Sep 2024 16:03:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726586803; cv=none; b=R6hb07ptLckxaqnUBDR0nFpQxfyOe69I6IY7L4AiQLZD51wbZaJwQHqBneK4PfufGDDzdNIeWs6Aw/HHgDwmnWaCccMX0zMKkONJyYzAYww2gX4jWXOm1OZ6VRA4/B62OtvMCmvxb/atyRH6SpgSoqMxOLBC554KFUCgWx1Jywo=
+	t=1726588982; cv=none; b=Dc8NaboCoH5ESFAzm2+grlLyLGBad7U7K2uTgHww9n9m3yE34p8tfWzzdqTOK0aNidParmIeYTygb0OB2XXf9px0JcRs47q9c7SajKyPBX5tGQ31eG2IFbd2YjW8oOMu8Nj16vsdc57O6T6RRp/b8DSz0pUoYFpwPyDg7jkuXY0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726586803; c=relaxed/simple;
-	bh=1Y09J/5W6IHV5VTgs8vwAGfTMn4lqzG5/gPcakv1nfQ=;
-	h=Date:From:To:CC:Subject:In-Reply-To:References:Message-ID:
-	 MIME-Version:Content-Type; b=j8X0gf7EefsU/sxL0EF+Ym1btqr6pFMSQRXDzlXiqv2HHWqezeHTv0k9yAVQ/eiE2JMA4BQuaGtF8JxBxDwQagHub2itf+rs8YrPT4/SR1o/GqKUcGszGue8RumnHVKS9mn2I/XxP9g2Kgs+MiBB3jGAjdI5nr2+6j/Gz3f7+U0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=REkev21b; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1726588982; c=relaxed/simple;
+	bh=ut7+hKu9XXGBX1hORm85Odfx/e7qFN4ndLnDPCa+X3I=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=rpQvCOYQL4OZMjpl0CG/vHrVF3/27BupPzIof3hkugjB+5QO3ls05iiY14vIHWz2kdTq9Hsn9x4NxmTyKEX3nT6H4olDXDJ5aHbQCvbeVdPQJQ/3EEWe3ZqJsUTPLo1ONTakI+q6c45K9bDfdH/OokWw3o/a3f3PT4Pw/9KO7K8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eEkZCG2/; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="REkev21b"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3E70AC4CEC5;
-	Tue, 17 Sep 2024 15:26:41 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eEkZCG2/"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CD527C4CEC5;
+	Tue, 17 Sep 2024 16:03:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1726586803;
-	bh=1Y09J/5W6IHV5VTgs8vwAGfTMn4lqzG5/gPcakv1nfQ=;
-	h=Date:From:To:CC:Subject:In-Reply-To:References:From;
-	b=REkev21bgewL0wukX5RNcZfTF3QJT//wBxJvlGd5u0itFEboL9HIyJ/y+I+Sfa9bJ
-	 UghplBhcRX2nUwlwuffRQHIc+/3Azl/VJQxLmFgYaVAliK7+QYRJsw83YywwDavOxR
-	 /6dsnU/paby0LKCyImt3YZmAW9H6FGmWW9Cmt60AbbTU/Ryqj3pQMY5OQtGfnoVlAR
-	 EPEKos2FaqiinGWPJLq8th+h11fCsAdiEnUVq1ZNFsM2Yu1feGK6SahaPJ1Xzpx8h9
-	 VcnhGiUtwY0S86MLQ5u2nb/OTqjmB/1QSJi0FbELZaIeRptdConr/r45oB2gDPa1lz
-	 EZoaFmu8MTsdQ==
-Date: Tue, 17 Sep 2024 17:26:40 +0200
-From: Conor Dooley <conor@kernel.org>
-To: Gary Guo <gary@garyguo.net>
-CC: Jason Montleon <jmontleo@redhat.com>, ojeda@kernel.org, alex.gaynor@gmail.com,
- boqun.feng@gmail.com, bjorn3_gh@protonmail.com, benno.lossin@proton.me,
- a.hindborg@kernel.org, aliceryhl@google.com, paul.walmsley@sifive.com,
- palmer@dabbelt.com, aou@eecs.berkeley.edu, nathan@kernel.org,
- ndesaulniers@google.com, morbo@google.com, justinstitt@google.com,
- rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-riscv@lists.infradead.org, llvm@lists.linux.dev,
- stable@vger.kernel.org
-Subject: Re: [PATCH] RISC-V: Fix building rust when using GCC toolchain
-User-Agent: K-9 Mail for Android
-In-Reply-To: <20240917142950.48d800ac@eugeo>
-References: <20240917000848.720765-1-jmontleo@redhat.com> <20240917000848.720765-2-jmontleo@redhat.com> <334EBB3A-6ABF-4FBF-89D2-DF3A6DCCCEA2@kernel.org> <20240917142950.48d800ac@eugeo>
-Message-ID: <31885EDD-EF6D-4EF1-94CA-276BA7A340B7@kernel.org>
+	s=k20201202; t=1726588981;
+	bh=ut7+hKu9XXGBX1hORm85Odfx/e7qFN4ndLnDPCa+X3I=;
+	h=From:Date:Subject:To:Cc:From;
+	b=eEkZCG2/JXhLepF4DxvWOELqtyz8KKdBisdG/oIgyZjg3AorUdC2lyDZyovU9khrZ
+	 En59hN7RSvuBgIVFC++IXWyoaV4B41yF4/v8SueS9hmN5PJaAZrr5xGPxZ2IYYuSUX
+	 MphyS51iBk+7QCQSnwHLWtQqJgQe5iCsdgQ/E37p1IvSCrt4puhToAfVMkbklu+Hjb
+	 +UhbMlNlWXHgLEm34PGuVRxVKePu6G9S578iFHYy4qPJ+hTePXv8GzDqRaEQv7EN9D
+	 Kc18+ytt6NB+ZmAY7OCZbJ9oTjvcOTpgIhFSw6A50bXkqCmgPb71Hpu/Me/qsNQ7S6
+	 E5I74NzxuTkhw==
+From: Nathan Chancellor <nathan@kernel.org>
+Date: Tue, 17 Sep 2024 09:02:53 -0700
+Subject: [PATCH v3] x86/resctrl: Annotate get_mem_config() functions as
+ __init
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20240917-x86-restctrl-get_mem_config_intel-init-v3-1-10d521256284@kernel.org>
+X-B4-Tracking: v=1; b=H4sIACyo6WYC/5WPyw6CMBQFf8V0bU1f1OrK/zCGFLzAjVBM2zQYw
+ r9b2Bh3upyzmMmZSQCPEMh5NxMPCQOOLoPc70jdWdcCxXtmIphQzAhBJ6OphxDr6HvaQiwHGMp
+ 6dA22JboIPUWHkUrbMGELLlllSZY9PTQ4baHrLXOHIY7+tXUTX9e/E4lTTk3FrDbWHCW3lwd4B
+ /1h9C1ZG0l8vCcuf/aK7K0aVWlV5BNKf3mXZXkDa3ybMzUBAAA=
+X-Change-ID: 20240822-x86-restctrl-get_mem_config_intel-init-3af02a5130ba
+To: Fenghua Yu <fenghua.yu@intel.com>, 
+ Reinette Chatre <reinette.chatre@intel.com>, x86@kernel.org, 
+ Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, 
+ Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>
+Cc: linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
+ patches@lists.linux.dev, Nathan Chancellor <nathan@kernel.org>
+X-Mailer: b4 0.15-dev
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2944; i=nathan@kernel.org;
+ h=from:subject:message-id; bh=ut7+hKu9XXGBX1hORm85Odfx/e7qFN4ndLnDPCa+X3I=;
+ b=owGbwMvMwCUmm602sfCA1DTG02pJDGkvV5iEL/jct1WmlslIdFNntfkU+Qufn16e0lWzjI81R
+ azd2epqRykLgxgXg6yYIkv1Y9XjhoZzzjLeODUJZg4rE8gQBi5OAbjJDxkZNsR9j3tqxOrwktm6
+ 5DKb8GSpK98OfnZIu3GOT+15nsF+NkaGX4qvpletEHxaN93heuZd5QkTohLvKjkv4chZX3yH8Xw
+ vPwA=
+X-Developer-Key: i=nathan@kernel.org; a=openpgp;
+ fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
 
+After a recent LLVM change [1] that deduces __cold on functions that
+only call cold code (such as __init functions), there is a section
+mismatch warning from __get_mem_config_intel(), which got moved to
+.text.unlikely. as a result of that optimization:
 
+  WARNING: modpost: vmlinux: section mismatch in reference: __get_mem_config_intel+0x77 (section: .text.unlikely.) -> thread_throttle_mode_init (section: .init.text)
 
-On 17 September 2024 15:29:50 GMT+02:00, Gary Guo <gary@garyguo=2Enet> wro=
-te:
->On Tue, 17 Sep 2024 10:35:12 +0100
->Conor Dooley <conor@kernel=2Eorg> wrote:
->
->> On 17 September 2024 01:08:48 IST, Jason Montleon <jmontleo@redhat=2Eco=
-m> wrote:
->> >Clang does not support '-mno-riscv-attribute' resulting in the error
->> >error: unknown argument: '-mno-riscv-attribute' =20
->>=20
->> This appears to conflict with your subject, which cities gcc, but I sus=
-pect that's due to poor wording of the body of the commit message than a mi=
-stake in the subject=2E
->> I'd rather disable rust on riscv when building with gcc, I've never bee=
-n satisfied with the interaction between gcc and rustc's libclang w=2Er=2Et=
-=2E extensions=2E
->>=20
->> Cheers,
->> Conor=2E
->
->Hi Conor,
->
->What happens is that when building against GCC, Kbuild gathers flag
->assuming CC is GCC, but bindgen uses clang instead=2E In this case, the
->CC is GCC and all C code is built by GCC=2E We have a filtering mechanism
->to only give bindgen (libclang) flags that it can understand=2E
+Mark __get_mem_config_intel() as __init as well since it is only called
+from __init code, which clears up the warning.
 
-Yes, but unfortunately I already knew how it worked=2E It's not flags I am=
- worried about, it is extensions=2E
-Even using a libclang that doesn't match clang could be a problem, but we =
-can at least declare that unsupported=2E
-Not digging it out on an airport bus, but we discussed the lack of GCC sup=
-port on the original patch adding riscv, and decided against it=2E
+While __rdt_get_mem_config_amd() does not exhibit a warning because it
+does not call any __init code, it is a similar function that is only
+called from __init code like __get_mem_config_intel(), so mark it __init
+as well to keep the code symmetrical.
 
->
->While I do think this is a bit fragile, this is what I think all
->distros that enable Rust use=2E They still prefer to build C code with
->GCC=2E So I hope we can still keep that option around=2E
->
->Best,
->Gary
->
->
->>=20
->> >
->> >Not setting BINDGEN_TARGET_riscv results in the in the error
->> >error: unsupported argument 'medany' to option '-mcmodel=3D' for targe=
-t \
->> >'unknown'
->> >error: unknown target triple 'unknown'
->> >
->> >Signed-off-by: Jason Montleon <jmontleo@redhat=2Ecom>
->> >Cc: stable@vger=2Ekernel=2Eorg
->> >---
->> > rust/Makefile | 3 ++-
->> > 1 file changed, 2 insertions(+), 1 deletion(-)
->> >
->> >diff --git a/rust/Makefile b/rust/Makefile
->> >index f168d2c98a15=2E=2E73eceaaae61e 100644
->> >--- a/rust/Makefile
->> >+++ b/rust/Makefile
->> >@@ -228,11 +228,12 @@ bindgen_skip_c_flags :=3D -mno-fp-ret-in-387 -mp=
-referred-stack-boundary=3D% \
->> > 	-fzero-call-used-regs=3D% -fno-stack-clash-protection \
->> > 	-fno-inline-functions-called-once -fsanitize=3Dbounds-strict \
->> > 	-fstrict-flex-arrays=3D% -fmin-function-alignment=3D% \
->> >-	--param=3D% --param asan-%
->> >+	--param=3D% --param asan-% -mno-riscv-attribute
->> >=20
->> > # Derived from `scripts/Makefile=2Eclang`=2E
->> > BINDGEN_TARGET_x86	:=3D x86_64-linux-gnu
->> > BINDGEN_TARGET_arm64	:=3D aarch64-linux-gnu
->> >+BINDGEN_TARGET_riscv	:=3D riscv64-linux-gnu
->> > BINDGEN_TARGET		:=3D $(BINDGEN_TARGET_$(SRCARCH))
->> >=20
->> > # All warnings are inhibited since GCC builds are very experimental,
->> >
->> >base-commit: ad060dbbcfcfcba624ef1a75e1d71365a98b86d8 =20
->
+Link: https://github.com/llvm/llvm-project/commit/6b11573b8c5e3d36beee099dbe7347c2a007bf53 [1]
+Reviewed-by: Reinette Chatre <reinette.chatre@intel.com>
+Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+---
+Changes in v3:
+- Adjust subject to add () before get_mem_config to highlight it as part
+  of a function (Reinette).
+- Carry forward Reinette's Reviewed-by.
+- Link to v2: https://lore.kernel.org/r/20240913-x86-restctrl-get_mem_config_intel-init-v2-1-bf4b645f0246@kernel.org
+
+Changes in v2:
+- Move position of __init within definition of __get_mem_config_intel()
+  to better match coding style guidelines (Reinette).
+- Apply __init to __rdt_get_mem_config_amd(), as it has the same issue
+  by inspection (Reinette). Adjust commit message to reflect this
+  change.
+- Link to v1: https://lore.kernel.org/r/20240822-x86-restctrl-get_mem_config_intel-init-v1-1-8b0a68a8731a@kernel.org
+---
+ arch/x86/kernel/cpu/resctrl/core.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/arch/x86/kernel/cpu/resctrl/core.c b/arch/x86/kernel/cpu/resctrl/core.c
+index 1930fce9dfe96d5c323cb9000fb06149916a5a3c..59961618a02374a5b1639baa7034d05867884640 100644
+--- a/arch/x86/kernel/cpu/resctrl/core.c
++++ b/arch/x86/kernel/cpu/resctrl/core.c
+@@ -199,7 +199,7 @@ static inline bool rdt_get_mb_table(struct rdt_resource *r)
+ 	return false;
+ }
+ 
+-static bool __get_mem_config_intel(struct rdt_resource *r)
++static __init bool __get_mem_config_intel(struct rdt_resource *r)
+ {
+ 	struct rdt_hw_resource *hw_res = resctrl_to_arch_res(r);
+ 	union cpuid_0x10_3_eax eax;
+@@ -233,7 +233,7 @@ static bool __get_mem_config_intel(struct rdt_resource *r)
+ 	return true;
+ }
+ 
+-static bool __rdt_get_mem_config_amd(struct rdt_resource *r)
++static __init bool __rdt_get_mem_config_amd(struct rdt_resource *r)
+ {
+ 	struct rdt_hw_resource *hw_res = resctrl_to_arch_res(r);
+ 	u32 eax, ebx, ecx, edx, subleaf;
+
+---
+base-commit: 7424fc6b86c8980a87169e005f5cd4438d18efe6
+change-id: 20240822-x86-restctrl-get_mem_config_intel-init-3af02a5130ba
+
+Best regards,
+-- 
+Nathan Chancellor <nathan@kernel.org>
+
