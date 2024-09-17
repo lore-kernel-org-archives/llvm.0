@@ -1,136 +1,141 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B31254C7C
-	for <llvm@lists.linux.dev>; Tue, 17 Sep 2024 00:11:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F92318C22;
+	Tue, 17 Sep 2024 01:59:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726531873; cv=none; b=dUL6CGTaeSOHb4g4lvLrKUfxHsE1oV4SXtFyd+vhFHja8Xtt3uafOeebky/yJ7z4FQYQQNe2Rm/sJOTlxEhNVrWaUGG6mqhZtKqX1ml/WLx65r+IfG/YGVctQF/bwd1HQ/ja7XoCfY/9Ngc9vMz3R3OnYX4PGoMhaB4jaAW+Cis=
+	t=1726538387; cv=none; b=NGssIgL1UzCiIiFmEulADPuHdnO4bD+lIB58swXCmA/djRCSOcfzX8bTwoLXuUyYbC48wpxZ/DpUQY3ith1UwMZaoqiOTziWjYbvJc7MY6i2JxEWmN8lOCxI+jnvwMsWVlRrWER0CbvXjX7+xwbjzVQRwO7iSKjL3DNxFobKRcc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726531873; c=relaxed/simple;
-	bh=W56FUMR9QIT0LTtxeEn0yFfK/pN99UsZE7+uyX1M+rg=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=QPwdDHtUHyUXMoufH82TBtmbOS3+3Yx8JeVN7UtD3vyvjHnwEzSCgxgyrR0+0NmZl58DzuOPQ09bpAcSDT7mmD9fbtSWvkjRSbuVJMHHonuFB+/Nu/JsN6VFvzBUgY2vWOk1SfTOpMRFYLlvt7L546/Tl1QDoh5DH1ASa9DknxA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=ImqNL5Zg; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1726538387; c=relaxed/simple;
+	bh=PBNscUon1+CtI7ORXXoRyhPkUBWtu17V4/5DauJBbx0=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=mS8l2rDRdQjvea15zK9WiksuqJrbi3YadeAzSBVCxNje7bmwfcgy2yOy8PQqUFvwt7Z24/BKeT2eHyum0y1bQUtJ+H1NaeseBVyBnp0zNSRGDaPjTQkrpUIf6i8huxunBINMmticmtEqP7TIb0yl/OkhZNiMG61+b7igWE+JaEk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=S6ReypGu; arc=none smtp.client-ip=192.198.163.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="ImqNL5Zg"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1726531870;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=P3XRknCuZ+rddMbA9raqM8xFOQmhedysMspZNVnmtig=;
-	b=ImqNL5ZgCEhnBnFHfh3MiO5fm51a7J5u1xr2y1DfqsznYrszmK1hrs5IoC+gWPx6Hh7TIg
-	YtBSP7Epzs9egmrHA8WdIEYfez+exwkMv1t3b1yy1/ypRm8Y4Un6v6fPszcdGZNBdwtZqN
-	9zdIWXPrkxK0u9vtxDyugVZBcPqctxc=
-Received: from mail-qv1-f69.google.com (mail-qv1-f69.google.com
- [209.85.219.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-294-4EFfMOi6NQa-Dyhh6J-hYQ-1; Mon, 16 Sep 2024 20:11:09 -0400
-X-MC-Unique: 4EFfMOi6NQa-Dyhh6J-hYQ-1
-Received: by mail-qv1-f69.google.com with SMTP id 6a1803df08f44-6c353a05885so84532006d6.2
-        for <llvm@lists.linux.dev>; Mon, 16 Sep 2024 17:11:09 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1726531869; x=1727136669;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=P3XRknCuZ+rddMbA9raqM8xFOQmhedysMspZNVnmtig=;
-        b=snLBLpuHK8as9RXigkvqOr10TOyM83gKwfzgvfvViOEc671AV8fJ/h/3MKtO44NIlv
-         BL3WOfOIUTttIxqj5axY7BGdnWlCpfEKCHJ/Tf7VIO2tqX5Y6rWUYgfEyG11f8Uwse2V
-         2ovNlBhqg80VwX0AnozFALRy7dNUAKnflHi9BYUVnTmp2bnzPhXdlNQpmo/qAYv2oTDG
-         DU7+wRIFgS8J5SMABcSUcp//3u6z5fhy9aia90kMHhRrfP46sX79RpKtVv/RdKevTFFV
-         8stGIuyig4kyKw5sWFVX5cdSXklcl2oPGmgEUiJwRkE360DlC8Ksl2ZCLzk6qXC+gTML
-         Fs1A==
-X-Forwarded-Encrypted: i=1; AJvYcCUp0Jzom6AkFBVKi3a6kY8+4vvhu+79DvO203VzMx7ifMs+oNf84uRZiuYBQIzukmxTxsWh@lists.linux.dev
-X-Gm-Message-State: AOJu0Yzz4Uxvo/zJl7Xd6smhdhxkfIRjKDwNRs9D2ZEMsq9kJEYtqKk2
-	LZDsFmhcD095Cg6ScPvjKfJFBk/t7dqaySuNHTiPT/nPOCI20qdVFrUpENa3rcqOC13fZ+XUr6r
-	U095NIN21sjJGFVJilBFKNUq2KBvzckmsCSAXiA8E6iQudGuHuOw=
-X-Received: by 2002:a05:6214:311a:b0:6c3:5496:3e06 with SMTP id 6a1803df08f44-6c57350b986mr276808146d6.10.1726531868910;
-        Mon, 16 Sep 2024 17:11:08 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IEHnGglfemeo+Af3oezjiRWKnnZJZ0HiOz3D898c3WHVJObvGXlST1AzNl9ohW/gu5HlG6/gw==
-X-Received: by 2002:a05:6214:311a:b0:6c3:5496:3e06 with SMTP id 6a1803df08f44-6c57350b986mr276807636d6.10.1726531868420;
-        Mon, 16 Sep 2024 17:11:08 -0700 (PDT)
-Received: from towerofpower.montleon.net (syn-066-026-073-226.res.spectrum.com. [66.26.73.226])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-6c58c62633bsm29221956d6.25.2024.09.16.17.11.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 16 Sep 2024 17:11:07 -0700 (PDT)
-From: Jason Montleon <jmontleo@redhat.com>
-To: ojeda@kernel.org,
-	alex.gaynor@gmail.com,
-	boqun.feng@gmail.com,
-	gary@garyguo.net,
-	bjorn3_gh@protonmail.com,
-	benno.lossin@proton.me,
-	a.hindborg@kernel.org,
-	aliceryhl@google.com,
-	paul.walmsley@sifive.com,
-	palmer@dabbelt.com,
-	aou@eecs.berkeley.edu,
-	nathan@kernel.org,
-	ndesaulniers@google.com,
-	morbo@google.com,
-	justinstitt@google.com
-Cc: rust-for-linux@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-riscv@lists.infradead.org,
-	llvm@lists.linux.dev,
-	Jason Montleon <jmontleo@redhat.com>,
-	stable@vger.kernel.org
-Subject: [PATCH] RISC-V: Fix building rust when using GCC toolchain
-Date: Mon, 16 Sep 2024 20:08:48 -0400
-Message-ID: <20240917000848.720765-2-jmontleo@redhat.com>
-X-Mailer: git-send-email 2.46.0
-In-Reply-To: <20240917000848.720765-1-jmontleo@redhat.com>
-References: <20240917000848.720765-1-jmontleo@redhat.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="S6ReypGu"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1726538385; x=1758074385;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=PBNscUon1+CtI7ORXXoRyhPkUBWtu17V4/5DauJBbx0=;
+  b=S6ReypGuT+CODBy6FL/4mRNyWY5TjLHGsw7rW7O4wwEM2cbYc90O0C2n
+   XTmK831Ax6vYRNFgmIPBut3MAJaPQNKSy9bNYNLzojEywgPkodwgWqIwf
+   fnPRwVCh5tcBA2joXe+HURfqYK1wIKzy6YbApxlxIj82za8hrt9QLceMG
+   1bywDxPKDPLlXK9SjUH+q2o71qtO46xdFpf7ejolKHa91IBo7q6HI/E5x
+   laArfnTPVozNi4CMlCxMWdHZzhPXen8ha6foPaiQ0Qb5WGTkdkHNPytud
+   UAOvVI/M/2jQa0BFzOyLWQgMvIbOI/DLqbO/aJC1BOchIVcK3N8TJIQV6
+   A==;
+X-CSE-ConnectionGUID: PE/HQ9JtSWaf/m3WhjkktQ==
+X-CSE-MsgGUID: 3z/RYsZTShSj1PQd4B+H5w==
+X-IronPort-AV: E=McAfee;i="6700,10204,11197"; a="28295495"
+X-IronPort-AV: E=Sophos;i="6.10,234,1719903600"; 
+   d="scan'208";a="28295495"
+Received: from orviesa010.jf.intel.com ([10.64.159.150])
+  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Sep 2024 18:59:43 -0700
+X-CSE-ConnectionGUID: MwtTOmwjQBmbk10gQODHGQ==
+X-CSE-MsgGUID: ZdcU930bSAmZVAQDLmeCCg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.10,234,1719903600"; 
+   d="scan'208";a="68925188"
+Received: from lkp-server01.sh.intel.com (HELO 53e96f405c61) ([10.239.97.150])
+  by orviesa010.jf.intel.com with ESMTP; 16 Sep 2024 18:59:42 -0700
+Received: from kbuild by 53e96f405c61 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1sqNVD-000Ahe-1i;
+	Tue, 17 Sep 2024 01:59:39 +0000
+Date: Tue, 17 Sep 2024 09:59:19 +0800
+From: kernel test robot <lkp@intel.com>
+To: Puranjay Mohan <puranjay@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-kernel@vger.kernel.org, Palmer Dabbelt <palmer@rivosinc.com>,
+	=?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn@rivosinc.com>
+Subject: include/linux/ftrace.h:138:9: error: call to undeclared function
+ 'arch_ftrace_get_regs'; ISO C99 and later do not support implicit function
+ declarations
+Message-ID: <202409170931.PtyPpRfV-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain; charset="US-ASCII"; x-default=true
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Clang does not support '-mno-riscv-attribute' resulting in the error
-error: unknown argument: '-mno-riscv-attribute'
+Hi Puranjay,
 
-Not setting BINDGEN_TARGET_riscv results in the in the error
-error: unsupported argument 'medany' to option '-mcmodel=' for target \
-'unknown'
-error: unknown target triple 'unknown'
+FYI, the error/warning still remains.
 
-Signed-off-by: Jason Montleon <jmontleo@redhat.com>
-Cc: stable@vger.kernel.org
----
- rust/Makefile | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   a430d95c5efa2b545d26a094eb5f624e36732af0
+commit: 7caa9765465f60b6d88e22264892cee12d971888 ftrace: riscv: move from REGS to ARGS
+date:   4 months ago
+config: riscv-randconfig-002-20240917 (https://download.01.org/0day-ci/archive/20240917/202409170931.PtyPpRfV-lkp@intel.com/config)
+compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project bf684034844c660b778f0eba103582f582b710c9)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240917/202409170931.PtyPpRfV-lkp@intel.com/reproduce)
 
-diff --git a/rust/Makefile b/rust/Makefile
-index f168d2c98a15..73eceaaae61e 100644
---- a/rust/Makefile
-+++ b/rust/Makefile
-@@ -228,11 +228,12 @@ bindgen_skip_c_flags := -mno-fp-ret-in-387 -mpreferred-stack-boundary=% \
- 	-fzero-call-used-regs=% -fno-stack-clash-protection \
- 	-fno-inline-functions-called-once -fsanitize=bounds-strict \
- 	-fstrict-flex-arrays=% -fmin-function-alignment=% \
--	--param=% --param asan-%
-+	--param=% --param asan-% -mno-riscv-attribute
- 
- # Derived from `scripts/Makefile.clang`.
- BINDGEN_TARGET_x86	:= x86_64-linux-gnu
- BINDGEN_TARGET_arm64	:= aarch64-linux-gnu
-+BINDGEN_TARGET_riscv	:= riscv64-linux-gnu
- BINDGEN_TARGET		:= $(BINDGEN_TARGET_$(SRCARCH))
- 
- # All warnings are inhibited since GCC builds are very experimental,
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202409170931.PtyPpRfV-lkp@intel.com/
 
-base-commit: ad060dbbcfcfcba624ef1a75e1d71365a98b86d8
+All errors (new ones prefixed by >>):
+
+   In file included from arch/riscv/kernel/asm-offsets.c:10:
+   In file included from include/linux/mm.h:2253:
+   include/linux/vmstat.h:514:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     514 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+   In file included from arch/riscv/kernel/asm-offsets.c:12:
+>> include/linux/ftrace.h:138:9: error: call to undeclared function 'arch_ftrace_get_regs'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     138 |         return arch_ftrace_get_regs(fregs);
+         |                ^
+   include/linux/ftrace.h:138:9: note: did you mean 'ftrace_get_regs'?
+   include/linux/ftrace.h:133:40: note: 'ftrace_get_regs' declared here
+     133 | static __always_inline struct pt_regs *ftrace_get_regs(struct ftrace_regs *fregs)
+         |                                        ^
+     134 | {
+     135 |         if (!fregs)
+     136 |                 return NULL;
+     137 | 
+     138 |         return arch_ftrace_get_regs(fregs);
+         |                ~~~~~~~~~~~~~~~~~~~~
+         |                ftrace_get_regs
+>> include/linux/ftrace.h:138:9: error: incompatible integer to pointer conversion returning 'int' from a function with result type 'struct pt_regs *' [-Wint-conversion]
+     138 |         return arch_ftrace_get_regs(fregs);
+         |                ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+   1 warning and 2 errors generated.
+   make[3]: *** [scripts/Makefile.build:117: arch/riscv/kernel/asm-offsets.s] Error 1 shuffle=2879536417
+   make[3]: Target 'prepare' not remade because of errors.
+   make[2]: *** [Makefile:1203: prepare0] Error 2 shuffle=2879536417
+   make[2]: Target 'prepare' not remade because of errors.
+   make[1]: *** [Makefile:240: __sub-make] Error 2 shuffle=2879536417
+   make[1]: Target 'prepare' not remade because of errors.
+   make: *** [Makefile:240: __sub-make] Error 2 shuffle=2879536417
+   make: Target 'prepare' not remade because of errors.
+
+
+vim +/arch_ftrace_get_regs +138 include/linux/ftrace.h
+
+d19ad0775dcd64 Steven Rostedt (VMware  2020-10-28  132) 
+d19ad0775dcd64 Steven Rostedt (VMware  2020-10-28  133) static __always_inline struct pt_regs *ftrace_get_regs(struct ftrace_regs *fregs)
+d19ad0775dcd64 Steven Rostedt (VMware  2020-10-28  134) {
+d19ad0775dcd64 Steven Rostedt (VMware  2020-10-28  135) 	if (!fregs)
+d19ad0775dcd64 Steven Rostedt (VMware  2020-10-28  136) 		return NULL;
+d19ad0775dcd64 Steven Rostedt (VMware  2020-10-28  137) 
+02a474ca266a47 Steven Rostedt (VMware  2020-10-27 @138) 	return arch_ftrace_get_regs(fregs);
+d19ad0775dcd64 Steven Rostedt (VMware  2020-10-28  139) }
+d19ad0775dcd64 Steven Rostedt (VMware  2020-10-28  140) 
+
+:::::: The code at line 138 was first introduced by commit
+:::::: 02a474ca266a47ea8f4d5a11f4ffa120f83730ad ftrace/x86: Allow for arguments to be passed in to ftrace_regs by default
+
+:::::: TO: Steven Rostedt (VMware) <rostedt@goodmis.org>
+:::::: CC: Steven Rostedt (VMware) <rostedt@goodmis.org>
+
 -- 
-2.46.0
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
