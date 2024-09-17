@@ -1,145 +1,248 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B87EF183CCF;
-	Tue, 17 Sep 2024 16:04:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E6AEF2EAEA;
+	Tue, 17 Sep 2024 16:55:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726589065; cv=none; b=t+/p88J0XD8S0ZRgUckVIB//hGrdsk5RVco+A3e/Lp9eDLKpMG10Dw5NizdSENuX/TizHkcw/2MCtEpOXWuqWPxefba4qJB2ZPRi+3tHsjl5UgcQDSNdSpe9S4cqRe4rN9narhd6ykRCKqXrWveUx5k75Z4PhAGrLgOlqMqFXIk=
+	t=1726592132; cv=none; b=GXg5JnuLZOvy80pSoMmmiFDyOEk/6Lo4/xM2g5787mZw9iTZmLtTRDc9gEfWjFh//1+4UMOT05emj/lJYLdCKOZ/1joybTKEqzfG7p6+VStZ85bMeULUYSHRyq1w1M4p+C55Y4cvjGpBXmh1kZwZckBfitrMW4L9kBwvGvOTGF4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726589065; c=relaxed/simple;
-	bh=vHXL1y2VTsDag1h4Shtt9LA9YdhFaiBBoOfHKEBGdyo=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=sorZjpuE89MXZhDjDv3QmCEOMw3o5Gooi/TNSeHgtLuSTvTPZKbQ1+fwcIv1c7P5GwNi2PbuKux5CSsxYcS8+BJtQJAoby0AOeXrbSgI0Y6d3784C70UiIVNz0r997BpslI3vOp+sjuRTxmFBpdvclfuQ47U7nvGSlqcE7k5OWU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=BUQamcb/; arc=none smtp.client-ip=192.198.163.19
+	s=arc-20240116; t=1726592132; c=relaxed/simple;
+	bh=lP9S9e+EzwnDZQH6Bj/Kq/7vJZU9JrPQw578263Kois=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=KvRg1qZOQY8aDtq+V6cd8aloNMMtGrCrcRipx3FSLu0hM5ug8yF3I9AqP3vUH1JDg1tHITCY1mN+C5nE02ZLwQ5jXj+va2ULQ/GG0B7PBjWC2VMsP3h2WgwYov+gfGupt66BaCemP8too1IdtC58ymIkDEzQ4oIDMSnxeEk7Dxs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=WuQcFPCX; arc=none smtp.client-ip=198.175.65.13
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="BUQamcb/"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="WuQcFPCX"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1726589063; x=1758125063;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=vHXL1y2VTsDag1h4Shtt9LA9YdhFaiBBoOfHKEBGdyo=;
-  b=BUQamcb/26kuJwV8OINWGz4iTrkiSeDJwd0dhYfJiAURnaMT/AUrxEWY
-   X0dYIdLZooMStWMANyzUlu9+AMYhEVYDvssSaLRd3n4EV3DGIo5kfcT+w
-   JFOAzpifqRiybVhtIQu/Xsy5eyYhqxGXxE6T5CsW94EQmLN4BSLaavFE/
-   Gj1ymZYI+FE5qdQ0G21F8BotZLKtQy6VpLY4anqcrShPzILIg1fl2olxY
-   ayrmbdC9ymftG9v/dUuX+16CnX8J9kVllWMqtqUHPq2PJkONwYvdr0lCT
-   p4GfNKlG69NwOKkaFwuP8mAyB4JKDqxuWqzO4f+JuFwMnkcw6CXItscvv
+  t=1726592131; x=1758128131;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=lP9S9e+EzwnDZQH6Bj/Kq/7vJZU9JrPQw578263Kois=;
+  b=WuQcFPCX0psEOxlvNSecN75vP1279rFym5bMpwKaxXyiXOl33Sd2L1k6
+   VR5BzjWmKe7W0Yz1gq+5RYNFssFEmAj51/ntwpqNplUTcaWK7tDUooAgl
+   oqeEjfcSmDJsOr73APXpE0pF6gtNV8/usDMB9v7VU1t9IudMmZENCxoC2
+   WfYHQ8W44WduViqbkAyJe8gGXJQyV7t980ORJ6L8BCtnqM29ir2Ullzwh
+   1h+XPF8O0/8fgvLjw+otdDFbjgZZHP3D7S4h3PUBoZGpFZZaHNQrIKPnr
+   +lzCrkVJGvnnHX+F94bJFLQ86AO5i3JoHLrf3Axe/M1JPsNGjP4GAVuRi
    w==;
-X-CSE-ConnectionGUID: GQPzJ2G8RaqNVR/2sZDU3g==
-X-CSE-MsgGUID: qp8rYE9yT56pK9EogAxyMw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11198"; a="24988727"
+X-CSE-ConnectionGUID: q8Am9tXWQCWKl3ARweu+9Q==
+X-CSE-MsgGUID: d3p3zIM7REGQ0uFJ61g8SQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11198"; a="36598793"
 X-IronPort-AV: E=Sophos;i="6.10,235,1719903600"; 
-   d="scan'208";a="24988727"
-Received: from fmviesa004.fm.intel.com ([10.60.135.144])
-  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Sep 2024 09:04:22 -0700
-X-CSE-ConnectionGUID: baH523dnQD2envc0NyBy7w==
-X-CSE-MsgGUID: 7cfeQmCwQ3iXGa5YCfwhwQ==
+   d="scan'208";a="36598793"
+Received: from fmviesa010.fm.intel.com ([10.60.135.150])
+  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Sep 2024 09:55:29 -0700
+X-CSE-ConnectionGUID: GMrVelZQTHy0ufxFJv8/TA==
+X-CSE-MsgGUID: JWsbMOPAR1K+WwmzPQIFbg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.10,235,1719903600"; 
-   d="scan'208";a="73804957"
+   d="scan'208";a="69467773"
 Received: from lkp-server01.sh.intel.com (HELO 53e96f405c61) ([10.239.97.150])
-  by fmviesa004.fm.intel.com with ESMTP; 17 Sep 2024 09:04:21 -0700
+  by fmviesa010.fm.intel.com with ESMTP; 17 Sep 2024 09:55:26 -0700
 Received: from kbuild by 53e96f405c61 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1sqagd-000BHI-0J;
-	Tue, 17 Sep 2024 16:04:19 +0000
-Date: Wed, 18 Sep 2024 00:03:52 +0800
+	id 1sqbU3-000BLs-35;
+	Tue, 17 Sep 2024 16:55:23 +0000
+Date: Wed, 18 Sep 2024 00:55:16 +0800
 From: kernel test robot <lkp@intel.com>
-To: Jens Axboe <axboe@kernel.dk>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [axboe-block:rw_iter 440/447]
- drivers/platform/x86/intel/intel_plr_tpmi.c:255:1: error: use of undeclared
- identifier 'plr_status_write_iter'; did you mean 'plr_status_write'?
-Message-ID: <202409180017.Gzv254ce-lkp@intel.com>
+To: Mikhail Arkhipov <m.arhipov@rosa.ru>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Mikhail Arkhipov <m.arhipov@rosa.ru>,
+	Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <u.kleine-koenig@pengutronix.de>,
+	Felipe Balbi <balbi@ti.com>, Ben Dooks <ben.dooks@codethink.co.uk>,
+	Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+	lvc-project@linuxtesting.org
+Subject: Re: [PATCH] usb: gadget: r8a66597-udc: Fix double free in
+ r8a66597_probe
+Message-ID: <202409180041.GEhgD6dC-lkp@intel.com>
+References: <20240916222937.12878-1-m.arhipov@rosa.ru>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20240916222937.12878-1-m.arhipov@rosa.ru>
 
-Hi Jens,
+Hi Mikhail,
 
-FYI, the error/warning was bisected to this commit, please ignore it if it's irrelevant.
+kernel test robot noticed the following build warnings:
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/axboe/linux-block.git rw_iter
-head:   097956626f11860fdba8b8919604f57b4a69957d
-commit: f3422615616703b0056097588146982e90e412a1 [440/447] seq_file: switch to using ->read_iter()
-config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20240918/202409180017.Gzv254ce-lkp@intel.com/config)
+[auto build test WARNING on usb/usb-testing]
+[also build test WARNING on usb/usb-next usb/usb-linus linus/master v6.11 next-20240917]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Mikhail-Arkhipov/usb-gadget-r8a66597-udc-Fix-double-free-in-r8a66597_probe/20240917-063133
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+patch link:    https://lore.kernel.org/r/20240916222937.12878-1-m.arhipov%40rosa.ru
+patch subject: [PATCH] usb: gadget: r8a66597-udc: Fix double free in r8a66597_probe
+config: i386-buildonly-randconfig-001-20240917 (https://download.01.org/0day-ci/archive/20240918/202409180041.GEhgD6dC-lkp@intel.com/config)
 compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240918/202409180017.Gzv254ce-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240918/202409180041.GEhgD6dC-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202409180017.Gzv254ce-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202409180041.GEhgD6dC-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> drivers/platform/x86/intel/intel_plr_tpmi.c:255:1: error: use of undeclared identifier 'plr_status_write_iter'; did you mean 'plr_status_write'?
-     255 | DEFINE_SHOW_STORE_ATTRIBUTE(plr_status);
-         | ^
-   include/linux/seq_file.h:230:16: note: expanded from macro 'DEFINE_SHOW_STORE_ATTRIBUTE'
-     230 |         .write_iter     = __name ## _write_iter,                        \
-         |                           ^
-   <scratch space>:135:1: note: expanded from here
-     135 | plr_status_write_iter
-         | ^
-   drivers/platform/x86/intel/intel_plr_tpmi.c:224:16: note: 'plr_status_write' declared here
-     224 | static ssize_t plr_status_write(struct kiocb *iocb, struct iov_iter *from)
-         |                ^
-   1 error generated.
+>> drivers/usb/gadget/udc/r8a66597-udc.c:1962:3: warning: misleading indentation; statement is not part of the previous 'if' [-Wmisleading-indentation]
+    1962 |                 r8a66597->ep0_req = NULL;
+         |                 ^
+   drivers/usb/gadget/udc/r8a66597-udc.c:1960:2: note: previous statement is here
+    1960 |         if (r8a66597->ep0_req)
+         |         ^
+   1 warning generated.
 
 
-vim +255 drivers/platform/x86/intel/intel_plr_tpmi.c
+vim +/if +1962 drivers/usb/gadget/udc/r8a66597-udc.c
 
-811f67c51636d4 Tero Kristo 2024-05-27  223  
-d81c9b5f82e85b Jens Axboe  2024-04-04  224  static ssize_t plr_status_write(struct kiocb *iocb, struct iov_iter *from)
-811f67c51636d4 Tero Kristo 2024-05-27  225  {
-d81c9b5f82e85b Jens Axboe  2024-04-04  226  	struct seq_file *s = iocb->ki_filp->private_data;
-811f67c51636d4 Tero Kristo 2024-05-27  227  	struct tpmi_plr_die *plr_die = s->private;
-d81c9b5f82e85b Jens Axboe  2024-04-04  228  	size_t count = iov_iter_count(from);
-811f67c51636d4 Tero Kristo 2024-05-27  229  	bool val;
-811f67c51636d4 Tero Kristo 2024-05-27  230  	int ret;
-811f67c51636d4 Tero Kristo 2024-05-27  231  
-d81c9b5f82e85b Jens Axboe  2024-04-04  232  	ret = kstrtobool_from_iter(from, count, &val);
-811f67c51636d4 Tero Kristo 2024-05-27  233  	if (ret)
-811f67c51636d4 Tero Kristo 2024-05-27  234  		return ret;
-811f67c51636d4 Tero Kristo 2024-05-27  235  
-811f67c51636d4 Tero Kristo 2024-05-27  236  	if (val != 0)
-811f67c51636d4 Tero Kristo 2024-05-27  237  		return -EINVAL;
-811f67c51636d4 Tero Kristo 2024-05-27  238  
-811f67c51636d4 Tero Kristo 2024-05-27  239  	plr_write(0, plr_die, PLR_DIE_LEVEL);
-811f67c51636d4 Tero Kristo 2024-05-27  240  
-9e9397a41b7b1d Tero Kristo 2024-05-27  241  	guard(mutex)(&plr_die->lock);
-9e9397a41b7b1d Tero Kristo 2024-05-27  242  
-9e9397a41b7b1d Tero Kristo 2024-05-27  243  	for (int cpu = 0; cpu < nr_cpu_ids; cpu++) {
-9e9397a41b7b1d Tero Kristo 2024-05-27  244  		if (plr_die->die_id != tpmi_get_power_domain_id(cpu))
-9e9397a41b7b1d Tero Kristo 2024-05-27  245  			continue;
-9e9397a41b7b1d Tero Kristo 2024-05-27  246  
-9e9397a41b7b1d Tero Kristo 2024-05-27  247  		if (plr_die->package_id != topology_physical_package_id(cpu))
-9e9397a41b7b1d Tero Kristo 2024-05-27  248  			continue;
-9e9397a41b7b1d Tero Kristo 2024-05-27  249  
-9e9397a41b7b1d Tero Kristo 2024-05-27  250  		plr_clear_cpu_status(plr_die, cpu);
-9e9397a41b7b1d Tero Kristo 2024-05-27  251  	}
-9e9397a41b7b1d Tero Kristo 2024-05-27  252  
-811f67c51636d4 Tero Kristo 2024-05-27  253  	return count;
-811f67c51636d4 Tero Kristo 2024-05-27  254  }
-811f67c51636d4 Tero Kristo 2024-05-27 @255  DEFINE_SHOW_STORE_ATTRIBUTE(plr_status);
-811f67c51636d4 Tero Kristo 2024-05-27  256  
-
-:::::: The code at line 255 was first introduced by commit
-:::::: 811f67c51636d43791995bf483c5c1904900b531 platform/x86/intel/tpmi: Add new auxiliary driver for performance limits
-
-:::::: TO: Tero Kristo <tero.kristo@linux.intel.com>
-:::::: CC: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+  1832	
+  1833	static int r8a66597_probe(struct platform_device *pdev)
+  1834	{
+  1835		struct device *dev = &pdev->dev;
+  1836		char clk_name[8];
+  1837		struct resource *ires;
+  1838		int irq;
+  1839		void __iomem *reg = NULL;
+  1840		struct r8a66597 *r8a66597 = NULL;
+  1841		int ret = 0;
+  1842		int i;
+  1843		unsigned long irq_trigger;
+  1844	
+  1845		reg = devm_platform_ioremap_resource(pdev, 0);
+  1846		if (IS_ERR(reg))
+  1847			return PTR_ERR(reg);
+  1848	
+  1849		ires = platform_get_resource(pdev, IORESOURCE_IRQ, 0);
+  1850		if (!ires)
+  1851			return -EINVAL;
+  1852		irq = ires->start;
+  1853		irq_trigger = ires->flags & IRQF_TRIGGER_MASK;
+  1854	
+  1855		if (irq < 0) {
+  1856			dev_err(dev, "platform_get_irq error.\n");
+  1857			return -ENODEV;
+  1858		}
+  1859	
+  1860		/* initialize ucd */
+  1861		r8a66597 = devm_kzalloc(dev, sizeof(struct r8a66597), GFP_KERNEL);
+  1862		if (r8a66597 == NULL)
+  1863			return -ENOMEM;
+  1864	
+  1865		spin_lock_init(&r8a66597->lock);
+  1866		platform_set_drvdata(pdev, r8a66597);
+  1867		r8a66597->pdata = dev_get_platdata(dev);
+  1868		r8a66597->irq_sense_low = irq_trigger == IRQF_TRIGGER_LOW;
+  1869	
+  1870		r8a66597->gadget.ops = &r8a66597_gadget_ops;
+  1871		r8a66597->gadget.max_speed = USB_SPEED_HIGH;
+  1872		r8a66597->gadget.name = udc_name;
+  1873	
+  1874		timer_setup(&r8a66597->timer, r8a66597_timer, 0);
+  1875		r8a66597->reg = reg;
+  1876	
+  1877		if (r8a66597->pdata->on_chip) {
+  1878			snprintf(clk_name, sizeof(clk_name), "usb%d", pdev->id);
+  1879			r8a66597->clk = devm_clk_get(dev, clk_name);
+  1880			if (IS_ERR(r8a66597->clk)) {
+  1881				dev_err(dev, "cannot get clock \"%s\"\n", clk_name);
+  1882				return PTR_ERR(r8a66597->clk);
+  1883			}
+  1884			clk_prepare_enable(r8a66597->clk);
+  1885		}
+  1886	
+  1887		if (r8a66597->pdata->sudmac) {
+  1888			ret = r8a66597_sudmac_ioremap(r8a66597, pdev);
+  1889			if (ret < 0)
+  1890				goto clean_up2;
+  1891		}
+  1892	
+  1893		disable_controller(r8a66597); /* make sure controller is disabled */
+  1894	
+  1895		ret = devm_request_irq(dev, irq, r8a66597_irq, IRQF_SHARED,
+  1896				       udc_name, r8a66597);
+  1897		if (ret < 0) {
+  1898			dev_err(dev, "request_irq error (%d)\n", ret);
+  1899			goto clean_up2;
+  1900		}
+  1901	
+  1902		INIT_LIST_HEAD(&r8a66597->gadget.ep_list);
+  1903		r8a66597->gadget.ep0 = &r8a66597->ep[0].ep;
+  1904		INIT_LIST_HEAD(&r8a66597->gadget.ep0->ep_list);
+  1905		for (i = 0; i < R8A66597_MAX_NUM_PIPE; i++) {
+  1906			struct r8a66597_ep *ep = &r8a66597->ep[i];
+  1907	
+  1908			if (i != 0) {
+  1909				INIT_LIST_HEAD(&r8a66597->ep[i].ep.ep_list);
+  1910				list_add_tail(&r8a66597->ep[i].ep.ep_list,
+  1911						&r8a66597->gadget.ep_list);
+  1912			}
+  1913			ep->r8a66597 = r8a66597;
+  1914			INIT_LIST_HEAD(&ep->queue);
+  1915			ep->ep.name = r8a66597_ep_name[i];
+  1916			ep->ep.ops = &r8a66597_ep_ops;
+  1917			usb_ep_set_maxpacket_limit(&ep->ep, 512);
+  1918	
+  1919			if (i == 0) {
+  1920				ep->ep.caps.type_control = true;
+  1921			} else {
+  1922				ep->ep.caps.type_iso = true;
+  1923				ep->ep.caps.type_bulk = true;
+  1924				ep->ep.caps.type_int = true;
+  1925			}
+  1926			ep->ep.caps.dir_in = true;
+  1927			ep->ep.caps.dir_out = true;
+  1928		}
+  1929		usb_ep_set_maxpacket_limit(&r8a66597->ep[0].ep, 64);
+  1930		r8a66597->ep[0].pipenum = 0;
+  1931		r8a66597->ep[0].fifoaddr = CFIFO;
+  1932		r8a66597->ep[0].fifosel = CFIFOSEL;
+  1933		r8a66597->ep[0].fifoctr = CFIFOCTR;
+  1934		r8a66597->ep[0].pipectr = get_pipectr_addr(0);
+  1935		r8a66597->pipenum2ep[0] = &r8a66597->ep[0];
+  1936		r8a66597->epaddr2ep[0] = &r8a66597->ep[0];
+  1937	
+  1938		r8a66597->ep0_req = r8a66597_alloc_request(&r8a66597->ep[0].ep,
+  1939								GFP_KERNEL);
+  1940		if (r8a66597->ep0_req == NULL) {
+  1941			ret = -ENOMEM;
+  1942			goto clean_up2;
+  1943		}
+  1944		r8a66597->ep0_req->complete = nop_completion;
+  1945	
+  1946		ret = usb_add_gadget_udc(dev, &r8a66597->gadget);
+  1947		if (ret)
+  1948			goto err_add_udc;
+  1949	
+  1950		dev_info(dev, "version %s\n", DRIVER_VERSION);
+  1951		return 0;
+  1952	
+  1953	err_add_udc:
+  1954		r8a66597_free_request(&r8a66597->ep[0].ep, r8a66597->ep0_req);
+  1955		r8a66597->ep0_req = NULL;
+  1956	clean_up2:
+  1957		if (r8a66597->pdata->on_chip)
+  1958			clk_disable_unprepare(r8a66597->clk);
+  1959	
+  1960		if (r8a66597->ep0_req)
+  1961			r8a66597_free_request(&r8a66597->ep[0].ep, r8a66597->ep0_req);
+> 1962			r8a66597->ep0_req = NULL;
+  1963	
+  1964		return ret;
+  1965	}
+  1966	
 
 -- 
 0-DAY CI Kernel Test Service
