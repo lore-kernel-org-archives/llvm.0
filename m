@@ -1,70 +1,61 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E5E1A923;
-	Tue, 17 Sep 2024 06:38:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F0B7148833;
+	Tue, 17 Sep 2024 07:50:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726555138; cv=none; b=SGtVbTcCZjmPJ+VLrIxmdyGPY8ysdfo1WXbFryBGlIyXL3UoXnU0FCP02P3t3j2AJSzBRsaKDO9ovX8OEfFjCTwgiBpPrLva+L4Pp9SzbRVXPRyv1jpwaOYKMz3fcp1g5cBYioFllhdus25/SM59/wfdtVwSb1MPjs8k3UEr0qo=
+	t=1726559461; cv=none; b=pTN6vpxFUJ+Vk2RKJB8ss0R+xJVq0rB0tcjC9qKjw7eGZP1E+2L53np04AjS+WKzx6PC7G1y2CX3eh2O2sz2ANuhhNwNnZ2RNO1OedUm4zNkMT4m9aJ636bGqqoBJpOx2j+/dPSZdMCWEGL9AwsX3XebWbabFc80SFCpspCt9JY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726555138; c=relaxed/simple;
-	bh=XnDdcAYgUkXwdHYhr7LavMOrnmdRQitkG7WdHLSiYP4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=d5qeyr9dtmYMpHY3+XqxkgSK+JEFKeGkM0ConYirR3ChxeMVJ8msesOlqEcjbqjH8jDMLSLrZVfmVuJFDu3nz4iU9M/Zk5s0M8XQvir1SFkzj2kVaiOzSV0fGpiyTj8CbAGbSymtafq5dbgH1WY7axxxt2X2/9CfMeqnEiSJZxs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=cueBtm+8; arc=none smtp.client-ip=192.198.163.15
+	s=arc-20240116; t=1726559461; c=relaxed/simple;
+	bh=KaD7syLjE7teAAaOgbfUnfRDdhlrc5GwZcRPS/1Fnpw=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=ny6ROUC6iEhYmIqEZQK5lT4cVh/MRTdJDSCngpXzvyoSKoMl0/UjVDRUxKAqyQpDcUlQLoEoWrbyZe1H14IEY3psS24fsz9yyamQzrQTT8+YEP/Ey4j7KGFj/gBxn1TZ8kdVngmzzqRh4KNBMrcmcIoc0nYTsgkQ9/bjhSLPRU4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=dHcMNZaR; arc=none smtp.client-ip=192.198.163.9
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="cueBtm+8"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="dHcMNZaR"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1726555136; x=1758091136;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=XnDdcAYgUkXwdHYhr7LavMOrnmdRQitkG7WdHLSiYP4=;
-  b=cueBtm+8w5NSb6SKrpSH+ml+w8XmGq1tGP2K9ZDYK5cpIim8dcsBxo0C
-   grCqAh32HAqkZS6IA3uTJj4vc+3kJJmIldWM6v64xLij+cbt149ZjtgJh
-   VwCIAm3zh9tIloixffe6nGQPRduqK3kl7ctFXHWisCxwsgwYC0Txziymo
-   YJsM3QiNG2/ujoeiZ7n5VVcVYqHFsLBBYcwB31geKS1n+lkSynpo1B17v
-   d0R+yXH6ba9FTzybyu0BHsBxQRf+7Pv5toeu74XZ66wKYPi/p3/DmHFVm
-   To59bjvvX2fP4CeFPRlaeWaRMJU54VU0WRWMLFZH1D55DKUUaHgGfX78U
-   g==;
-X-CSE-ConnectionGUID: OhUN75o4RnKU9/yeQylkbw==
-X-CSE-MsgGUID: 4tUSPUzMSwe5bpyuA2aCKw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11197"; a="25555132"
-X-IronPort-AV: E=Sophos;i="6.10,234,1719903600"; 
-   d="scan'208";a="25555132"
-Received: from fmviesa010.fm.intel.com ([10.60.135.150])
-  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Sep 2024 23:38:55 -0700
-X-CSE-ConnectionGUID: BfL39eQ1SDKBh37aW8qZcw==
-X-CSE-MsgGUID: cKKZaTReQmm5HK/CUj8/Rg==
+  t=1726559459; x=1758095459;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=KaD7syLjE7teAAaOgbfUnfRDdhlrc5GwZcRPS/1Fnpw=;
+  b=dHcMNZaRH2G+2pcGM9IXOEMRXszzxJuoAghxoXwZaniyRBTa//7B6Crc
+   wTn1ZQhHgrJsGSWvxaSV11QjZBenSXp43psKh1JxnY4YM/WdNPNowmOhm
+   7+E55qwE1rHTXt5ImKAi5fe+J/HeLjfvuf5pcBfqqP/vEsxGVGcGLZ+pC
+   dqa+j1op1vrVQnHvdrZjCdCw8ua1oiw9UrZk8DVhtLDBUUfhM6/CpndPL
+   xAA9iHUsSElLbqMiHde8Ak4IcEwwA3XSK7zArGXYNeHirC0kRKr/ErERh
+   cinxjJlwqLeRDkU5hW48aE/NNnm2j5b2n62frS730pBfOunYoO4f1blRK
+   w==;
+X-CSE-ConnectionGUID: GValBBf8QQembWoJCJzp4Q==
+X-CSE-MsgGUID: /ciSsB/KQYquIiu1xI4rcQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11197"; a="36076029"
+X-IronPort-AV: E=Sophos;i="6.10,235,1719903600"; 
+   d="scan'208";a="36076029"
+Received: from orviesa006.jf.intel.com ([10.64.159.146])
+  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Sep 2024 00:50:59 -0700
+X-CSE-ConnectionGUID: Z2jXNcyZT2Ws50F1xNE4AQ==
+X-CSE-MsgGUID: kNbww6YrRGKBv8N3TtzGwQ==
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.10,234,1719903600"; 
-   d="scan'208";a="69321099"
+X-IronPort-AV: E=Sophos;i="6.10,235,1719903600"; 
+   d="scan'208";a="69433140"
 Received: from lkp-server01.sh.intel.com (HELO 53e96f405c61) ([10.239.97.150])
-  by fmviesa010.fm.intel.com with ESMTP; 16 Sep 2024 23:38:50 -0700
+  by orviesa006.jf.intel.com with ESMTP; 17 Sep 2024 00:50:58 -0700
 Received: from kbuild by 53e96f405c61 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1sqRrM-000ArC-0l;
-	Tue, 17 Sep 2024 06:38:48 +0000
-Date: Tue, 17 Sep 2024 14:38:30 +0800
+	id 1sqSz8-000Ax4-2f;
+	Tue, 17 Sep 2024 07:50:54 +0000
+Date: Tue, 17 Sep 2024 15:50:18 +0800
 From: kernel test robot <lkp@intel.com>
-To: Md Sadre Alam <quic_mdalam@quicinc.com>, axboe@kernel.dk,
-	song@kernel.org, yukuai3@huawei.com, agk@redhat.com,
-	snitzer@kernel.org, mpatocka@redhat.com, adrian.hunter@intel.com,
-	quic_asutoshd@quicinc.com, ritesh.list@gmail.com,
-	ulf.hansson@linaro.org, andersson@kernel.org,
-	konradybcio@kernel.org, kees@kernel.org, gustavoars@kernel.org,
-	linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-raid@vger.kernel.org, dm-devel@lists.linux.dev,
-	linux-mmc@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-	linux-hardening@vger.kernel.org
+To: Michael Haener <michael.haener@siemens.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	quic_srichara@quicinc.com, quic_varada@quicinc.com,
-	quic_mdalam@quicinc.com
-Subject: Re: [PATCH v2 1/3] dm-inlinecrypt: Add inline encryption support
-Message-ID: <202409171440.qx2iOkY3-lkp@intel.com>
-References: <20240916085741.1636554-2-quic_mdalam@quicinc.com>
+	linux-kernel@vger.kernel.org, Jarkko Sakkinen <jarkko@kernel.org>,
+	Alexander Sverdlin <alexander.sverdlin@siemens.com>,
+	Krzysztof Kozlowski <krzk@kernel.org>
+Subject: ld.lld: error: relocation R_PPC_ADDR16_HI cannot be used against
+ symbol 'init_task'; recompile with -fPIC
+Message-ID: <202409171519.1IhuuqTs-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -73,155 +64,42 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240916085741.1636554-2-quic_mdalam@quicinc.com>
 
-Hi Md,
-
-kernel test robot noticed the following build warnings:
-
-[auto build test WARNING on device-mapper-dm/for-next]
-[also build test WARNING on axboe-block/for-next linus/master song-md/md-next v6.11 next-20240916]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Md-Sadre-Alam/dm-inlinecrypt-Add-inline-encryption-support/20240916-170452
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/device-mapper/linux-dm.git for-next
-patch link:    https://lore.kernel.org/r/20240916085741.1636554-2-quic_mdalam%40quicinc.com
-patch subject: [PATCH v2 1/3] dm-inlinecrypt: Add inline encryption support
-config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20240917/202409171440.qx2iOkY3-lkp@intel.com/config)
-compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240917/202409171440.qx2iOkY3-lkp@intel.com/reproduce)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   a430d95c5efa2b545d26a094eb5f624e36732af0
+commit: 45121fcbe7d200c1269804b5e191ce788fdc8364 dt-bindings: tpm: Add st,st33ktpm2xi2c
+date:   4 months ago
+config: powerpc-randconfig-003-20240917 (https://download.01.org/0day-ci/archive/20240917/202409171519.1IhuuqTs-lkp@intel.com/config)
+compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project bf684034844c660b778f0eba103582f582b710c9)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240917/202409171519.1IhuuqTs-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202409171440.qx2iOkY3-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202409171519.1IhuuqTs-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> drivers/md/dm-inline-crypt.c:198:6: warning: variable 'ret' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
-     198 |         if ((sscanf(argv[2], "%llu%c", &tmpll, &dummy) != 1) ||
-         |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     199 |             (tmpll & ((cc->sector_size >> SECTOR_SHIFT) - 1))) {
-         |             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/md/dm-inline-crypt.c:250:9: note: uninitialized use occurs here
-     250 |         return ret;
-         |                ^~~
-   drivers/md/dm-inline-crypt.c:198:2: note: remove the 'if' if its condition is always false
-     198 |         if ((sscanf(argv[2], "%llu%c", &tmpll, &dummy) != 1) ||
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     199 |             (tmpll & ((cc->sector_size >> SECTOR_SHIFT) - 1))) {
-         |             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     200 |                 ti->error = "Invalid iv_offset sector";
-         |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     201 |                 goto bad;
-         |                 ~~~~~~~~~
-     202 |         }
-         |         ~
->> drivers/md/dm-inline-crypt.c:198:6: warning: variable 'ret' is used uninitialized whenever '||' condition is true [-Wsometimes-uninitialized]
-     198 |         if ((sscanf(argv[2], "%llu%c", &tmpll, &dummy) != 1) ||
-         |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/md/dm-inline-crypt.c:250:9: note: uninitialized use occurs here
-     250 |         return ret;
-         |                ^~~
-   drivers/md/dm-inline-crypt.c:198:6: note: remove the '||' if its condition is always false
-     198 |         if ((sscanf(argv[2], "%llu%c", &tmpll, &dummy) != 1) ||
-         |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/md/dm-inline-crypt.c:178:9: note: initialize the variable 'ret' to silence this warning
-     178 |         int ret;
-         |                ^
-         |                 = 0
-   2 warnings generated.
+>> ld.lld: error: relocation R_PPC_ADDR16_HI cannot be used against symbol 'init_task'; recompile with -fPIC
+   >>> defined in vmlinux.a(init/init_task.o)
+   >>> referenced by head_44x.S:100 (arch/powerpc/kernel/head_44x.S:100)
+   >>>               arch/powerpc/kernel/head_44x.o:(.head.text+0x3E) in archive vmlinux.a
+--
+>> ld.lld: error: relocation R_PPC_ADDR16_LO cannot be used against symbol 'init_task'; recompile with -fPIC
+   >>> defined in vmlinux.a(init/init_task.o)
+   >>> referenced by head_44x.S:101 (arch/powerpc/kernel/head_44x.S:101)
+   >>>               arch/powerpc/kernel/head_44x.o:(.head.text+0x42) in archive vmlinux.a
+--
+>> ld.lld: error: relocation R_PPC_ADDR16_HI cannot be used against symbol 'init_thread_union'; recompile with -fPIC
+   >>> defined in ./arch/powerpc/kernel/vmlinux.lds:135
+   >>> referenced by head_44x.S:108 (arch/powerpc/kernel/head_44x.S:108)
+   >>>               arch/powerpc/kernel/head_44x.o:(.head.text+0x4E) in archive vmlinux.a
 
-
-vim +198 drivers/md/dm-inline-crypt.c
-
-   168	
-   169	static int inlinecrypt_ctr(struct dm_target *ti, unsigned int argc, char **argv)
-   170	{
-   171		struct inlinecrypt_config *cc;
-   172		char *cipher_api = NULL;
-   173		char *cipher, *chainmode;
-   174		unsigned long long tmpll;
-   175		char *ivmode;
-   176		int key_size;
-   177		char dummy;
-   178		int ret;
-   179	
-   180		if (argc < 5) {
-   181			ti->error = "Not enough arguments";
-   182			return -EINVAL;
-   183		}
-   184	
-   185		key_size = strlen(argv[1]) >> 1;
-   186	
-   187		cc = kzalloc(struct_size(cc, key, key_size), GFP_KERNEL);
-   188		if (!cc) {
-   189			ti->error = "Cannot allocate encryption context";
-   190			return -ENOMEM;
-   191		}
-   192		cc->key_size = key_size;
-   193		cc->sector_size = (1 << SECTOR_SHIFT);
-   194		cc->sector_shift = 0;
-   195	
-   196		ti->private = cc;
-   197	
- > 198		if ((sscanf(argv[2], "%llu%c", &tmpll, &dummy) != 1) ||
-   199		    (tmpll & ((cc->sector_size >> SECTOR_SHIFT) - 1))) {
-   200			ti->error = "Invalid iv_offset sector";
-   201			goto bad;
-   202		}
-   203		cc->iv_offset = tmpll;
-   204	
-   205		ret = dm_get_device(ti, argv[3], dm_table_get_mode(ti->table),
-   206				    &cc->dev);
-   207		if (ret) {
-   208			ti->error = "Device lookup failed";
-   209			goto bad;
-   210		}
-   211	
-   212		ret = -EINVAL;
-   213		if (sscanf(argv[4], "%llu%c", &tmpll, &dummy) != 1 ||
-   214		    tmpll != (sector_t)tmpll) {
-   215			ti->error = "Invalid device sector";
-   216			goto bad;
-   217		}
-   218	
-   219		cc->start = tmpll;
-   220	
-   221		cipher = strsep(&argv[0], "-");
-   222		chainmode = strsep(&argv[0], "-");
-   223		ivmode = strsep(&argv[0], "-");
-   224	
-   225		cipher_api = kmalloc(CRYPTO_MAX_ALG_NAME, GFP_KERNEL);
-   226		if (!cipher_api)
-   227			goto bad;
-   228	
-   229		ret = snprintf(cipher_api, CRYPTO_MAX_ALG_NAME,
-   230			       "%s(%s)", chainmode, cipher);
-   231		if (ret < 0 || ret >= CRYPTO_MAX_ALG_NAME) {
-   232			kfree(cipher_api);
-   233			ret = -ENOMEM;
-   234			goto bad;
-   235		}
-   236	
-   237		ret = crypt_select_inline_crypt_mode(ti, cipher_api, ivmode);
-   238	
-   239		/* Initialize and set key */
-   240		ret = inlinecrypt_set_key(cc, argv[1]);
-   241		if (ret < 0) {
-   242			ti->error = "Error decoding and setting key";
-   243			return ret;
-   244		}
-   245	
-   246		return 0;
-   247	bad:
-   248		ti->error = "Error in inlinecrypt mapping";
-   249		inlinecrypt_dtr(ti);
-   250		return ret;
-   251	}
-   252	
+Kconfig warnings: (for reference only)
+   WARNING: unmet direct dependencies detected for HOTPLUG_CPU
+   Depends on [n]: SMP [=y] && (PPC_PSERIES [=n] || PPC_PMAC [=n] || PPC_POWERNV [=n] || FSL_SOC_BOOKE [=n])
+   Selected by [y]:
+   - PM_SLEEP_SMP [=y] && SMP [=y] && (ARCH_SUSPEND_POSSIBLE [=y] || ARCH_HIBERNATION_POSSIBLE [=y]) && PM_SLEEP [=y]
 
 -- 
 0-DAY CI Kernel Test Service
