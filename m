@@ -1,61 +1,60 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F0B7148833;
-	Tue, 17 Sep 2024 07:50:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 64956148833;
+	Tue, 17 Sep 2024 08:12:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726559461; cv=none; b=pTN6vpxFUJ+Vk2RKJB8ss0R+xJVq0rB0tcjC9qKjw7eGZP1E+2L53np04AjS+WKzx6PC7G1y2CX3eh2O2sz2ANuhhNwNnZ2RNO1OedUm4zNkMT4m9aJ636bGqqoBJpOx2j+/dPSZdMCWEGL9AwsX3XebWbabFc80SFCpspCt9JY=
+	t=1726560732; cv=none; b=WeKjDa4LjrIIsBK8nOK1D2GdbKzQTdLr8PV5CS49DAhuZxymbBa2YARt4A059cxG4lg392P4yvAGxjxcL75Gg0pvX/9SHVuD8CMW9NmoiOq0NcG89s5Z7vZhHyzsNJZtkwvXh8ggCC9vb6WfbRy0bZVSUR5h/dpfP1y9wEafI5s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726559461; c=relaxed/simple;
-	bh=KaD7syLjE7teAAaOgbfUnfRDdhlrc5GwZcRPS/1Fnpw=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=ny6ROUC6iEhYmIqEZQK5lT4cVh/MRTdJDSCngpXzvyoSKoMl0/UjVDRUxKAqyQpDcUlQLoEoWrbyZe1H14IEY3psS24fsz9yyamQzrQTT8+YEP/Ey4j7KGFj/gBxn1TZ8kdVngmzzqRh4KNBMrcmcIoc0nYTsgkQ9/bjhSLPRU4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=dHcMNZaR; arc=none smtp.client-ip=192.198.163.9
+	s=arc-20240116; t=1726560732; c=relaxed/simple;
+	bh=DY7O6jPd/XmTIT6iAPLLhbQxFfl5m3CBNyn8gcyxteY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Yg1f+tLo45aOu9YTpFeyVs/FKvpe7LEZzYVzll02crnuHKIKdf8x2QzE/2j6Jy23GL4DQ9VRbtj/VXUT4sI7sBt/BII5C/h/Vvz0qLCKNLngHqBR2GOg2B/HeW51gGOgmHF72jiFEU4y15gL0xXM3LhSu602kWZg3su5SZldOYs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=C6MBHOd5; arc=none smtp.client-ip=192.198.163.15
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="dHcMNZaR"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="C6MBHOd5"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1726559459; x=1758095459;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=KaD7syLjE7teAAaOgbfUnfRDdhlrc5GwZcRPS/1Fnpw=;
-  b=dHcMNZaRH2G+2pcGM9IXOEMRXszzxJuoAghxoXwZaniyRBTa//7B6Crc
-   wTn1ZQhHgrJsGSWvxaSV11QjZBenSXp43psKh1JxnY4YM/WdNPNowmOhm
-   7+E55qwE1rHTXt5ImKAi5fe+J/HeLjfvuf5pcBfqqP/vEsxGVGcGLZ+pC
-   dqa+j1op1vrVQnHvdrZjCdCw8ua1oiw9UrZk8DVhtLDBUUfhM6/CpndPL
-   xAA9iHUsSElLbqMiHde8Ak4IcEwwA3XSK7zArGXYNeHirC0kRKr/ErERh
-   cinxjJlwqLeRDkU5hW48aE/NNnm2j5b2n62frS730pBfOunYoO4f1blRK
-   w==;
-X-CSE-ConnectionGUID: GValBBf8QQembWoJCJzp4Q==
-X-CSE-MsgGUID: /ciSsB/KQYquIiu1xI4rcQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11197"; a="36076029"
+  t=1726560730; x=1758096730;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=DY7O6jPd/XmTIT6iAPLLhbQxFfl5m3CBNyn8gcyxteY=;
+  b=C6MBHOd5k5+NG9Kkg0kUV55A7pjkkF4/fP8eXi7hxY4J/0uGJOM7Q5UJ
+   fOtNaB/KWWgp1Hfk24+dX3aqNbPhvBDfTSBFNC0TcoxWV67HESO0tXiRQ
+   50yC+GyQ+rjW5sInYk6VKCgHRCc8CPROJEHTz12N4/7OkQjQOLn071l6e
+   yuInpnGz8fOYh/6qXFLLkCnXMLpBMMoCyh7Lg7wmnAzD4RjPFpMmQQH5f
+   l6YM4oSkQaSoSYnqgMstJj43tZ/tD9+A8yuTgT+uvxdolhdJaMGNWAcHc
+   vPdn50n08xJpGHolCy51opUNleKr0LpGqCMkNJHF8v+65+ceogzdkXVSf
+   Q==;
+X-CSE-ConnectionGUID: cPUbu6a8TF6HU16uXIm+jg==
+X-CSE-MsgGUID: ICfKdTTAQLKADhrs4xd54w==
+X-IronPort-AV: E=McAfee;i="6700,10204,11197"; a="25563528"
 X-IronPort-AV: E=Sophos;i="6.10,235,1719903600"; 
-   d="scan'208";a="36076029"
-Received: from orviesa006.jf.intel.com ([10.64.159.146])
-  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Sep 2024 00:50:59 -0700
-X-CSE-ConnectionGUID: Z2jXNcyZT2Ws50F1xNE4AQ==
-X-CSE-MsgGUID: kNbww6YrRGKBv8N3TtzGwQ==
+   d="scan'208";a="25563528"
+Received: from orviesa001.jf.intel.com ([10.64.159.141])
+  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Sep 2024 01:11:59 -0700
+X-CSE-ConnectionGUID: hy6Y1JmWREy5Ra9HScwPqA==
+X-CSE-MsgGUID: KIuJ8CpmQ8aS0bdWpvnSsQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.10,235,1719903600"; 
-   d="scan'208";a="69433140"
+   d="scan'208";a="106577931"
 Received: from lkp-server01.sh.intel.com (HELO 53e96f405c61) ([10.239.97.150])
-  by orviesa006.jf.intel.com with ESMTP; 17 Sep 2024 00:50:58 -0700
+  by orviesa001.jf.intel.com with ESMTP; 17 Sep 2024 01:11:58 -0700
 Received: from kbuild by 53e96f405c61 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1sqSz8-000Ax4-2f;
-	Tue, 17 Sep 2024 07:50:54 +0000
-Date: Tue, 17 Sep 2024 15:50:18 +0800
+	id 1sqTJT-000AxU-1U;
+	Tue, 17 Sep 2024 08:11:55 +0000
+Date: Tue, 17 Sep 2024 16:10:59 +0800
 From: kernel test robot <lkp@intel.com>
-To: Michael Haener <michael.haener@siemens.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org, Jarkko Sakkinen <jarkko@kernel.org>,
-	Alexander Sverdlin <alexander.sverdlin@siemens.com>,
-	Krzysztof Kozlowski <krzk@kernel.org>
-Subject: ld.lld: error: relocation R_PPC_ADDR16_HI cannot be used against
- symbol 'init_task'; recompile with -fPIC
-Message-ID: <202409171519.1IhuuqTs-lkp@intel.com>
+To: Jeff Layton <jlayton@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: Re: [PATCH v8 06/11] fs: add percpu counters for significant
+ multigrain timestamp events
+Message-ID: <202409171602.oeaTIYhc-lkp@intel.com>
+References: <20240914-mgtime-v8-6-5bd872330bed@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -64,42 +63,196 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20240914-mgtime-v8-6-5bd872330bed@kernel.org>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   a430d95c5efa2b545d26a094eb5f624e36732af0
-commit: 45121fcbe7d200c1269804b5e191ce788fdc8364 dt-bindings: tpm: Add st,st33ktpm2xi2c
-date:   4 months ago
-config: powerpc-randconfig-003-20240917 (https://download.01.org/0day-ci/archive/20240917/202409171519.1IhuuqTs-lkp@intel.com/config)
-compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project bf684034844c660b778f0eba103582f582b710c9)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240917/202409171519.1IhuuqTs-lkp@intel.com/reproduce)
+Hi Jeff,
+
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on da3ea35007d0af457a0afc87e84fddaebc4e0b63]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Jeff-Layton/timekeeping-move-multigrain-timestamp-floor-handling-into-timekeeper/20240915-010919
+base:   da3ea35007d0af457a0afc87e84fddaebc4e0b63
+patch link:    https://lore.kernel.org/r/20240914-mgtime-v8-6-5bd872330bed%40kernel.org
+patch subject: [PATCH v8 06/11] fs: add percpu counters for significant multigrain timestamp events
+config: x86_64-allnoconfig (https://download.01.org/0day-ci/archive/20240917/202409171602.oeaTIYhc-lkp@intel.com/config)
+compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240917/202409171602.oeaTIYhc-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202409171519.1IhuuqTs-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202409171602.oeaTIYhc-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All error/warnings (new ones prefixed by >>):
 
->> ld.lld: error: relocation R_PPC_ADDR16_HI cannot be used against symbol 'init_task'; recompile with -fPIC
-   >>> defined in vmlinux.a(init/init_task.o)
-   >>> referenced by head_44x.S:100 (arch/powerpc/kernel/head_44x.S:100)
-   >>>               arch/powerpc/kernel/head_44x.o:(.head.text+0x3E) in archive vmlinux.a
+>> fs/inode.c:2755:23: error: too many arguments provided to function-like macro invocation
+    2755 |                         mgtime_counter_inc(mg_fine_stamps);
+         |                                            ^
+   fs/inode.c:166:9: note: macro 'mgtime_counter_inc' defined here
+     166 | #define mgtime_counter_inc()    do { } while (0)
+         |         ^
+>> fs/inode.c:2755:4: error: use of undeclared identifier 'mgtime_counter_inc'; did you mean 'percpu_counter_inc'?
+    2755 |                         mgtime_counter_inc(mg_fine_stamps);
+         |                         ^~~~~~~~~~~~~~~~~~
+         |                         percpu_counter_inc
+   include/linux/percpu_counter.h:265:20: note: 'percpu_counter_inc' declared here
+     265 | static inline void percpu_counter_inc(struct percpu_counter *fbc)
+         |                    ^
+   fs/inode.c:2758:21: error: too many arguments provided to function-like macro invocation
+    2758 |         mgtime_counter_inc(mg_ctime_updates);
+         |                            ^
+   fs/inode.c:166:9: note: macro 'mgtime_counter_inc' defined here
+     166 | #define mgtime_counter_inc()    do { } while (0)
+         |         ^
+   fs/inode.c:2758:2: error: use of undeclared identifier 'mgtime_counter_inc'; did you mean 'percpu_counter_inc'?
+    2758 |         mgtime_counter_inc(mg_ctime_updates);
+         |         ^~~~~~~~~~~~~~~~~~
+         |         percpu_counter_inc
+   include/linux/percpu_counter.h:265:20: note: 'percpu_counter_inc' declared here
+     265 | static inline void percpu_counter_inc(struct percpu_counter *fbc)
+         |                    ^
+   fs/inode.c:2772:22: error: too many arguments provided to function-like macro invocation
+    2772 |                 mgtime_counter_inc(mg_ctime_swaps);
+         |                                    ^
+   fs/inode.c:166:9: note: macro 'mgtime_counter_inc' defined here
+     166 | #define mgtime_counter_inc()    do { } while (0)
+         |         ^
+   fs/inode.c:2772:3: error: use of undeclared identifier 'mgtime_counter_inc'; did you mean 'percpu_counter_inc'?
+    2772 |                 mgtime_counter_inc(mg_ctime_swaps);
+         |                 ^~~~~~~~~~~~~~~~~~
+         |                 percpu_counter_inc
+   include/linux/percpu_counter.h:265:20: note: 'percpu_counter_inc' declared here
+     265 | static inline void percpu_counter_inc(struct percpu_counter *fbc)
+         |                    ^
+>> fs/inode.c:2755:4: warning: expression result unused [-Wunused-value]
+    2755 |                         mgtime_counter_inc(mg_fine_stamps);
+         |                         ^~~~~~~~~~~~~~~~~~
+   fs/inode.c:2758:2: warning: expression result unused [-Wunused-value]
+    2758 |         mgtime_counter_inc(mg_ctime_updates);
+         |         ^~~~~~~~~~~~~~~~~~
+   fs/inode.c:2772:3: warning: expression result unused [-Wunused-value]
+    2772 |                 mgtime_counter_inc(mg_ctime_swaps);
+         |                 ^~~~~~~~~~~~~~~~~~
+   fs/inode.c:2845:22: error: too many arguments provided to function-like macro invocation
+    2845 |                 mgtime_counter_inc(mg_ctime_swaps);
+         |                                    ^
+   fs/inode.c:166:9: note: macro 'mgtime_counter_inc' defined here
+     166 | #define mgtime_counter_inc()    do { } while (0)
+         |         ^
+   fs/inode.c:2845:3: error: use of undeclared identifier 'mgtime_counter_inc'; did you mean 'percpu_counter_inc'?
+    2845 |                 mgtime_counter_inc(mg_ctime_swaps);
+         |                 ^~~~~~~~~~~~~~~~~~
+         |                 percpu_counter_inc
+   include/linux/percpu_counter.h:265:20: note: 'percpu_counter_inc' declared here
+     265 | static inline void percpu_counter_inc(struct percpu_counter *fbc)
+         |                    ^
+   fs/inode.c:2845:3: warning: expression result unused [-Wunused-value]
+    2845 |                 mgtime_counter_inc(mg_ctime_swaps);
+         |                 ^~~~~~~~~~~~~~~~~~
+   4 warnings and 8 errors generated.
 --
->> ld.lld: error: relocation R_PPC_ADDR16_LO cannot be used against symbol 'init_task'; recompile with -fPIC
-   >>> defined in vmlinux.a(init/init_task.o)
-   >>> referenced by head_44x.S:101 (arch/powerpc/kernel/head_44x.S:101)
-   >>>               arch/powerpc/kernel/head_44x.o:(.head.text+0x42) in archive vmlinux.a
---
->> ld.lld: error: relocation R_PPC_ADDR16_HI cannot be used against symbol 'init_thread_union'; recompile with -fPIC
-   >>> defined in ./arch/powerpc/kernel/vmlinux.lds:135
-   >>> referenced by head_44x.S:108 (arch/powerpc/kernel/head_44x.S:108)
-   >>>               arch/powerpc/kernel/head_44x.o:(.head.text+0x4E) in archive vmlinux.a
+>> kernel/time/timekeeping.c:2467:22: error: too many arguments provided to function-like macro invocation
+    2467 |                 mgtime_counter_inc(mg_floor_swaps);
+         |                                    ^
+   kernel/time/timekeeping_internal.h:18:9: note: macro 'mgtime_counter_inc' defined here
+      18 | #define mgtime_counter_inc()    do { } while (0)
+         |         ^
+>> kernel/time/timekeeping.c:2467:3: error: use of undeclared identifier 'mgtime_counter_inc'; did you mean 'percpu_counter_inc'?
+    2467 |                 mgtime_counter_inc(mg_floor_swaps);
+         |                 ^~~~~~~~~~~~~~~~~~
+         |                 percpu_counter_inc
+   include/linux/percpu_counter.h:265:20: note: 'percpu_counter_inc' declared here
+     265 | static inline void percpu_counter_inc(struct percpu_counter *fbc)
+         |                    ^
+>> kernel/time/timekeeping.c:2467:3: warning: expression result unused [-Wunused-value]
+    2467 |                 mgtime_counter_inc(mg_floor_swaps);
+         |                 ^~~~~~~~~~~~~~~~~~
+   1 warning and 2 errors generated.
 
-Kconfig warnings: (for reference only)
-   WARNING: unmet direct dependencies detected for HOTPLUG_CPU
-   Depends on [n]: SMP [=y] && (PPC_PSERIES [=n] || PPC_PMAC [=n] || PPC_POWERNV [=n] || FSL_SOC_BOOKE [=n])
-   Selected by [y]:
-   - PM_SLEEP_SMP [=y] && SMP [=y] && (ARCH_SUSPEND_POSSIBLE [=y] || ARCH_HIBERNATION_POSSIBLE [=y]) && PM_SLEEP [=y]
+
+vim +2755 fs/inode.c
+
+  2713	
+  2714	/**
+  2715	 * inode_set_ctime_current - set the ctime to current_time
+  2716	 * @inode: inode
+  2717	 *
+  2718	 * Set the inode's ctime to the current value for the inode. Returns the
+  2719	 * current value that was assigned. If this is not a multigrain inode, then we
+  2720	 * set it to the later of the coarse time and floor value.
+  2721	 *
+  2722	 * If it is multigrain, then we first see if the coarse-grained timestamp is
+  2723	 * distinct from what we have. If so, then we'll just use that. If we have to
+  2724	 * get a fine-grained timestamp, then do so. After that, we try to swap the new
+  2725	 * value into i_ctime_nsec. We take the resulting ctime, regardless of the
+  2726	 * outcome of the swap.
+  2727	 */
+  2728	struct timespec64 inode_set_ctime_current(struct inode *inode)
+  2729	{
+  2730		struct timespec64 now;
+  2731		u32 cns, cur;
+  2732	
+  2733		ktime_get_coarse_real_ts64_mg(&now);
+  2734		now = timestamp_truncate(now, inode);
+  2735	
+  2736		/* Just return that if this is not a multigrain fs */
+  2737		if (!is_mgtime(inode)) {
+  2738			inode_set_ctime_to_ts(inode, now);
+  2739			goto out;
+  2740		}
+  2741	
+  2742		/*
+  2743		 * We only need a fine-grained time if someone has queried it,
+  2744		 * and the current coarse grained time isn't later than what's
+  2745		 * already there.
+  2746		 */
+  2747		cns = smp_load_acquire(&inode->i_ctime_nsec);
+  2748		if (cns & I_CTIME_QUERIED) {
+  2749			struct timespec64 ctime = { .tv_sec = inode->i_ctime_sec,
+  2750						    .tv_nsec = cns & ~I_CTIME_QUERIED };
+  2751	
+  2752			if (timespec64_compare(&now, &ctime) <= 0) {
+  2753				ktime_get_real_ts64_mg(&now);
+  2754				now = timestamp_truncate(now, inode);
+> 2755				mgtime_counter_inc(mg_fine_stamps);
+  2756			}
+  2757		}
+  2758		mgtime_counter_inc(mg_ctime_updates);
+  2759	
+  2760		/* No need to cmpxchg if it's exactly the same */
+  2761		if (cns == now.tv_nsec && inode->i_ctime_sec == now.tv_sec) {
+  2762			trace_ctime_xchg_skip(inode, &now);
+  2763			goto out;
+  2764		}
+  2765		cur = cns;
+  2766	retry:
+  2767		/* Try to swap the nsec value into place. */
+  2768		if (try_cmpxchg(&inode->i_ctime_nsec, &cur, now.tv_nsec)) {
+  2769			/* If swap occurred, then we're (mostly) done */
+  2770			inode->i_ctime_sec = now.tv_sec;
+  2771			trace_ctime_ns_xchg(inode, cns, now.tv_nsec, cur);
+  2772			mgtime_counter_inc(mg_ctime_swaps);
+  2773		} else {
+  2774			/*
+  2775			 * Was the change due to someone marking the old ctime QUERIED?
+  2776			 * If so then retry the swap. This can only happen once since
+  2777			 * the only way to clear I_CTIME_QUERIED is to stamp the inode
+  2778			 * with a new ctime.
+  2779			 */
+  2780			if (!(cns & I_CTIME_QUERIED) && (cns | I_CTIME_QUERIED) == cur) {
+  2781				cns = cur;
+  2782				goto retry;
+  2783			}
+  2784			/* Otherwise, keep the existing ctime */
+  2785			now.tv_sec = inode->i_ctime_sec;
+  2786			now.tv_nsec = cur & ~I_CTIME_QUERIED;
+  2787		}
+  2788	out:
+  2789		return now;
+  2790	}
+  2791	EXPORT_SYMBOL(inode_set_ctime_current);
+  2792	
 
 -- 
 0-DAY CI Kernel Test Service
