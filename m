@@ -1,62 +1,73 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 670EE139D05;
-	Wed, 18 Sep 2024 16:24:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 519D579FD
+	for <llvm@lists.linux.dev>; Wed, 18 Sep 2024 17:01:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726676678; cv=none; b=BrRzyY6jOgCt6vmu+ZFJwvyfPhZSvNS5n+k/C7ZUTZL9y5zV8U2buK/3g68AmwXJ1pihRh6/lq4KIDoFu+mMo8Zk9u2ag/z92aO18Dm0Eo7x33eoeuzv/PAxbkgVxN36t/8lQ2wYQiNwSCJFEBSKFDkS13WcqUFqLMD9L4u8bFw=
+	t=1726678889; cv=none; b=Sa4l6nzUcrEK3zDglaNph3PtKCzyc8byPtZJmW69cCRwPqUiCSMhb3Ce/EnXzjN457dyBP1w+puGJWy29xQ/ofjn4mnoEn445bSY1CuHJ+qzVOuw6wuvqrR4iqsWYYUMU4sSIkv3oLRgTojzKcls3YqrDGSWem/jN9fKLEUQ9Wg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726676678; c=relaxed/simple;
-	bh=K2NeVQQAWqfyNcmYPxZfrFYz1dycWqfbQFVx4OS+hY8=;
+	s=arc-20240116; t=1726678889; c=relaxed/simple;
+	bh=lwww9BoASplazXZpyotmxjh2HPqKe07Rd0qofPTCWsQ=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=X9jXDiK6Djmz0xzC5nDS8Wq7Ozd9LEiVCqYhnIQM1WuIdEehLG344qi7vg39xiIFhJeVicZEI3NBcl7GjvA82TCRiaw6r+ggbXgvoppwCydnO29zDfJNZIAeuOJwwTyRH/TxPRezzBs64tmecONdFk69mUWJE6NrW/IrYE/FWUQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=h+dX4Yai; arc=none smtp.client-ip=198.175.65.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=cqjp2kXNYUnt7hLvuiomuWymEemhTzlaNmeBp+U+DNa+Zzst9kcZKsHZXjcn5/WjkA8l4/Kcp43KE30TK74EZCQ5ZAhlQWOSsHRFnXtDAusO+VkKTFUNIWhmO5kX4SQhS+vnAdyUzDR09Evw1XV+4A3zUaWuDtkya0ibKQUcKZc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=dw+Hh3U3; arc=none smtp.client-ip=198.175.65.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="h+dX4Yai"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="dw+Hh3U3"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1726676676; x=1758212676;
+  t=1726678889; x=1758214889;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=K2NeVQQAWqfyNcmYPxZfrFYz1dycWqfbQFVx4OS+hY8=;
-  b=h+dX4Yai3RqPIswrXiuCDzsrcy9p5nWpsa53V+/V3H2yc8SSbVlrjebV
-   VPjt/FHrJhH3dXLt9tepFBrAVwXjZTwvkhkDwApyXUqsk1eNT5xxkleMm
-   rDQTT0cQgElQNAZb8MxVYSQmnizTH3+8NSqOEoqkw6Qq0ef0cslOqlsVG
-   rzGtcq7I/amr7R7DVpxXWwvdcW4OJyuvwX6rTNqbvX3d12JaFAM9q1xW1
-   uRM6rl1vRJ6i17GT4d3RuaZgBQN1BeLE0Jc5BxZC9feCMXaYJmeiRwS8X
-   nm+6/GtO5hh+nB/p16b3kx9vqmXA2alSIlv2Os8t0LVOrJD2BFhduCgwv
-   A==;
-X-CSE-ConnectionGUID: SIHdLsZ7T/iwlm+i/jDorw==
-X-CSE-MsgGUID: cO6HhhdNTeiibnJ5JzDs+w==
-X-IronPort-AV: E=McAfee;i="6700,10204,11199"; a="36731321"
+  bh=lwww9BoASplazXZpyotmxjh2HPqKe07Rd0qofPTCWsQ=;
+  b=dw+Hh3U3rmBSIBLT5F2kEGLQ+mOrD9emwCIW0D6tmaOmQ04YdwF+E6BY
+   ZArriempWAwk/LDWaPC4aheEsQtHpDVxRXYg+wekXmsI2wOUReBfog65V
+   TlUpPTqjKsc5U9/aH2kmIGnDPhy1f3lOaSeFkLfosV3AT2etmCy5A/9kV
+   QD3qL9lmQbNZhkDj2+LKKZuFEEmTM+AKntF3zTtsQtYLY2NWAcP/aaQXU
+   i17AOLewtwFUmCy3wru3Jllin5SeQJ7gH9Y7gTSnoIAgoQfGDyQ+dyKYr
+   3NrvGIHBIl8NKbGkUt1dGlQvCt0EITHrHtdz9xmWSjoiPVhTNNjESdDvm
+   g==;
+X-CSE-ConnectionGUID: zpLh3pjQT2qUWMrAZZQ2+g==
+X-CSE-MsgGUID: 93yEFWU6QmC0yXyGWu7lvg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11199"; a="25764218"
 X-IronPort-AV: E=Sophos;i="6.10,239,1719903600"; 
-   d="scan'208";a="36731321"
-Received: from orviesa005.jf.intel.com ([10.64.159.145])
-  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Sep 2024 09:24:32 -0700
-X-CSE-ConnectionGUID: oFsw7g4vToKtv8Ri0crq5g==
-X-CSE-MsgGUID: OMJwmKdGRDWFrugbgXO1Mg==
+   d="scan'208";a="25764218"
+Received: from fmviesa008.fm.intel.com ([10.60.135.148])
+  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Sep 2024 10:01:28 -0700
+X-CSE-ConnectionGUID: fqEZfu0ITrSUNKfdFFQ+LA==
+X-CSE-MsgGUID: S+aFv47VTHaUKlaMYvdpug==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.10,239,1719903600"; 
-   d="scan'208";a="74429846"
-Received: from lkp-server01.sh.intel.com (HELO 53e96f405c61) ([10.239.97.150])
-  by orviesa005.jf.intel.com with ESMTP; 18 Sep 2024 09:24:29 -0700
-Received: from kbuild by 53e96f405c61 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1sqxTe-000CPA-1q;
-	Wed, 18 Sep 2024 16:24:26 +0000
-Date: Thu, 19 Sep 2024 00:23:56 +0800
-From: kernel test robot <lkp@intel.com>
-To: Jani Nikula <jani.nikula@intel.com>, intel-gfx@lists.freedesktop.org,
-	intel-xe@lists.freedesktop.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	jani.nikula@intel.com
-Subject: Re: [PATCH 5/5] drm/i915: switch intel_wakeref_t underlying type to
- struct ref_tracker *
-Message-ID: <202409190032.ZCHBxK9e-lkp@intel.com>
-References: <067332b1f8679f940f373618fd24b1d03370ba45.1726658138.git.jani.nikula@intel.com>
+   d="scan'208";a="69753322"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmviesa008.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Sep 2024 10:01:24 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.98)
+	(envelope-from <andriy.shevchenko@linux.intel.com>)
+	id 1sqy3N-0000000AFJ0-3HuA;
+	Wed, 18 Sep 2024 20:01:21 +0300
+Date: Wed, 18 Sep 2024 20:01:21 +0300
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To: Pablo Neira Ayuso <pablo@netfilter.org>
+Cc: Simon Horman <horms@kernel.org>,
+	Jozsef Kadlecsik <kadlec@netfilter.org>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	netfilter-devel@vger.kernel.org, coreteam@netfilter.org,
+	netdev@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH nf-next 0/2] netfilter: conntrack: label helpers
+ conditional compilation updates
+Message-ID: <ZusHYUGYPADO1SgY@smile.fi.intel.com>
+References: <20240916-ct-ifdef-v1-0-81ef1798143b@kernel.org>
+ <Zuq-7kULeAMPRmFg@calendula>
+ <Zurbw1-Fl0EfdC0l@smile.fi.intel.com>
+ <Zurjur431P7DqifB@calendula>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -65,87 +76,49 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <067332b1f8679f940f373618fd24b1d03370ba45.1726658138.git.jani.nikula@intel.com>
+In-Reply-To: <Zurjur431P7DqifB@calendula>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 
-Hi Jani,
+On Wed, Sep 18, 2024 at 04:29:14PM +0200, Pablo Neira Ayuso wrote:
+> On Wed, Sep 18, 2024 at 04:55:15PM +0300, Andy Shevchenko wrote:
+> > On Wed, Sep 18, 2024 at 01:52:14PM +0200, Pablo Neira Ayuso wrote:
+> > > On Mon, Sep 16, 2024 at 04:14:40PM +0100, Simon Horman wrote:
+> > > > Hi,
+> > > > 
+> > > > This short series updates conditional compilation of label helpers to:
+> > > > 
+> > > > 1) Compile them regardless of if CONFIG_NF_CONNTRACK_LABELS is enabled
+> > > >    or not. It is safe to do so as the functions will always return 0 if
+> > > >    CONFIG_NF_CONNTRACK_LABELS is not enabled.  And the compiler should
+> > > >    optimise waway the code.  Which is the desired behaviour.
+> > > > 
+> > > > 2) Only compile ctnetlink_label_size if CONFIG_NF_CONNTRACK_EVENTS is
+> > > >    enabled.  This addresses a warning about this function being unused
+> > > >    in this case.
+> > > 
+> > > Patch 1)
+> > > 
+> > > -#ifdef CONFIG_NF_CONNTRACK_LABELS
+> > >  static inline int ctnetlink_label_size(const struct nf_conn *ct)
+> > > 
+> > > Patch 2)
+> > > 
+> > > +#ifdef CONFIG_NF_CONNTRACK_EVENTS
+> > >  static inline int ctnetlink_label_size(const struct nf_conn *ct)
+> > > 
+> > > They both refer to ctnetlink_label_size(), #ifdef check is not
+> > > correct.
+> > 
+> > But the first one touches more, no?
+> 
+> Yes, it also remove a #define ctnetlink_label_size() macro in patch #1.
+> I am fine with this series as is.
 
-kernel test robot noticed the following build warnings:
-
-[auto build test WARNING on drm-xe/drm-xe-next]
-[also build test WARNING on next-20240918]
-[cannot apply to drm-intel/for-linux-next drm-intel/for-linux-next-fixes drm-tip/drm-tip linus/master v6.11]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Jani-Nikula/drm-i915-gem-fix-bitwise-and-logical-AND-mixup/20240918-191938
-base:   https://gitlab.freedesktop.org/drm/xe/kernel.git drm-xe-next
-patch link:    https://lore.kernel.org/r/067332b1f8679f940f373618fd24b1d03370ba45.1726658138.git.jani.nikula%40intel.com
-patch subject: [PATCH 5/5] drm/i915: switch intel_wakeref_t underlying type to struct ref_tracker *
-config: x86_64-rhel-8.3-rust (https://download.01.org/0day-ci/archive/20240919/202409190032.ZCHBxK9e-lkp@intel.com/config)
-compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240919/202409190032.ZCHBxK9e-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202409190032.ZCHBxK9e-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> drivers/gpu/drm/i915/display/intel_display_power.c:548:10: warning: expression which evaluates to zero treated as a null pointer constant of type 'intel_wakeref_t' (aka 'struct ref_tracker *') [-Wnon-literal-null-conversion]
-     548 |                 return false;
-         |                        ^~~~~
-   1 warning generated.
-
-
-vim +548 drivers/gpu/drm/i915/display/intel_display_power.c
-
-7645b19d9bdd13 drivers/gpu/drm/i915/intel_display_power.c         Daniele Ceraolo Spurio 2019-05-31  525  
-7645b19d9bdd13 drivers/gpu/drm/i915/intel_display_power.c         Daniele Ceraolo Spurio 2019-05-31  526  /**
-7645b19d9bdd13 drivers/gpu/drm/i915/intel_display_power.c         Daniele Ceraolo Spurio 2019-05-31  527   * intel_display_power_get_if_enabled - grab a reference for an enabled display power domain
-7645b19d9bdd13 drivers/gpu/drm/i915/intel_display_power.c         Daniele Ceraolo Spurio 2019-05-31  528   * @dev_priv: i915 device instance
-7645b19d9bdd13 drivers/gpu/drm/i915/intel_display_power.c         Daniele Ceraolo Spurio 2019-05-31  529   * @domain: power domain to reference
-7645b19d9bdd13 drivers/gpu/drm/i915/intel_display_power.c         Daniele Ceraolo Spurio 2019-05-31  530   *
-7645b19d9bdd13 drivers/gpu/drm/i915/intel_display_power.c         Daniele Ceraolo Spurio 2019-05-31  531   * This function grabs a power domain reference for @domain and ensures that the
-7645b19d9bdd13 drivers/gpu/drm/i915/intel_display_power.c         Daniele Ceraolo Spurio 2019-05-31  532   * power domain and all its parents are powered up. Therefore users should only
-7645b19d9bdd13 drivers/gpu/drm/i915/intel_display_power.c         Daniele Ceraolo Spurio 2019-05-31  533   * grab a reference to the innermost power domain they need.
-7645b19d9bdd13 drivers/gpu/drm/i915/intel_display_power.c         Daniele Ceraolo Spurio 2019-05-31  534   *
-7645b19d9bdd13 drivers/gpu/drm/i915/intel_display_power.c         Daniele Ceraolo Spurio 2019-05-31  535   * Any power domain reference obtained by this function must have a symmetric
-7645b19d9bdd13 drivers/gpu/drm/i915/intel_display_power.c         Daniele Ceraolo Spurio 2019-05-31  536   * call to intel_display_power_put() to release the reference again.
-7645b19d9bdd13 drivers/gpu/drm/i915/intel_display_power.c         Daniele Ceraolo Spurio 2019-05-31  537   */
-7645b19d9bdd13 drivers/gpu/drm/i915/intel_display_power.c         Daniele Ceraolo Spurio 2019-05-31  538  intel_wakeref_t
-7645b19d9bdd13 drivers/gpu/drm/i915/intel_display_power.c         Daniele Ceraolo Spurio 2019-05-31  539  intel_display_power_get_if_enabled(struct drm_i915_private *dev_priv,
-7645b19d9bdd13 drivers/gpu/drm/i915/intel_display_power.c         Daniele Ceraolo Spurio 2019-05-31  540  				   enum intel_display_power_domain domain)
-7645b19d9bdd13 drivers/gpu/drm/i915/intel_display_power.c         Daniele Ceraolo Spurio 2019-05-31  541  {
-e3e8148f43fb6d drivers/gpu/drm/i915/display/intel_display_power.c Jani Nikula            2022-08-29  542  	struct i915_power_domains *power_domains = &dev_priv->display.power.domains;
-7645b19d9bdd13 drivers/gpu/drm/i915/intel_display_power.c         Daniele Ceraolo Spurio 2019-05-31  543  	intel_wakeref_t wakeref;
-7645b19d9bdd13 drivers/gpu/drm/i915/intel_display_power.c         Daniele Ceraolo Spurio 2019-05-31  544  	bool is_enabled;
-7645b19d9bdd13 drivers/gpu/drm/i915/intel_display_power.c         Daniele Ceraolo Spurio 2019-05-31  545  
-d858d5695f3897 drivers/gpu/drm/i915/intel_display_power.c         Daniele Ceraolo Spurio 2019-06-13  546  	wakeref = intel_runtime_pm_get_if_in_use(&dev_priv->runtime_pm);
-7645b19d9bdd13 drivers/gpu/drm/i915/intel_display_power.c         Daniele Ceraolo Spurio 2019-05-31  547  	if (!wakeref)
-7645b19d9bdd13 drivers/gpu/drm/i915/intel_display_power.c         Daniele Ceraolo Spurio 2019-05-31 @548  		return false;
-7645b19d9bdd13 drivers/gpu/drm/i915/intel_display_power.c         Daniele Ceraolo Spurio 2019-05-31  549  
-7645b19d9bdd13 drivers/gpu/drm/i915/intel_display_power.c         Daniele Ceraolo Spurio 2019-05-31  550  	mutex_lock(&power_domains->lock);
-7645b19d9bdd13 drivers/gpu/drm/i915/intel_display_power.c         Daniele Ceraolo Spurio 2019-05-31  551  
-7645b19d9bdd13 drivers/gpu/drm/i915/intel_display_power.c         Daniele Ceraolo Spurio 2019-05-31  552  	if (__intel_display_power_is_enabled(dev_priv, domain)) {
-7645b19d9bdd13 drivers/gpu/drm/i915/intel_display_power.c         Daniele Ceraolo Spurio 2019-05-31  553  		__intel_display_power_get_domain(dev_priv, domain);
-7645b19d9bdd13 drivers/gpu/drm/i915/intel_display_power.c         Daniele Ceraolo Spurio 2019-05-31  554  		is_enabled = true;
-7645b19d9bdd13 drivers/gpu/drm/i915/intel_display_power.c         Daniele Ceraolo Spurio 2019-05-31  555  	} else {
-7645b19d9bdd13 drivers/gpu/drm/i915/intel_display_power.c         Daniele Ceraolo Spurio 2019-05-31  556  		is_enabled = false;
-7645b19d9bdd13 drivers/gpu/drm/i915/intel_display_power.c         Daniele Ceraolo Spurio 2019-05-31  557  	}
-7645b19d9bdd13 drivers/gpu/drm/i915/intel_display_power.c         Daniele Ceraolo Spurio 2019-05-31  558  
-7645b19d9bdd13 drivers/gpu/drm/i915/intel_display_power.c         Daniele Ceraolo Spurio 2019-05-31  559  	mutex_unlock(&power_domains->lock);
-7645b19d9bdd13 drivers/gpu/drm/i915/intel_display_power.c         Daniele Ceraolo Spurio 2019-05-31  560  
-7645b19d9bdd13 drivers/gpu/drm/i915/intel_display_power.c         Daniele Ceraolo Spurio 2019-05-31  561  	if (!is_enabled) {
-d858d5695f3897 drivers/gpu/drm/i915/intel_display_power.c         Daniele Ceraolo Spurio 2019-06-13  562  		intel_runtime_pm_put(&dev_priv->runtime_pm, wakeref);
-7645b19d9bdd13 drivers/gpu/drm/i915/intel_display_power.c         Daniele Ceraolo Spurio 2019-05-31  563  		wakeref = 0;
-7645b19d9bdd13 drivers/gpu/drm/i915/intel_display_power.c         Daniele Ceraolo Spurio 2019-05-31  564  	}
-7645b19d9bdd13 drivers/gpu/drm/i915/intel_display_power.c         Daniele Ceraolo Spurio 2019-05-31  565  
-7645b19d9bdd13 drivers/gpu/drm/i915/intel_display_power.c         Daniele Ceraolo Spurio 2019-05-31  566  	return wakeref;
-7645b19d9bdd13 drivers/gpu/drm/i915/intel_display_power.c         Daniele Ceraolo Spurio 2019-05-31  567  }
-7645b19d9bdd13 drivers/gpu/drm/i915/intel_display_power.c         Daniele Ceraolo Spurio 2019-05-31  568  
+What I meant is that the original patch 1 takes care about definitions of
+two functions. Not just a single one.
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+With Best Regards,
+Andy Shevchenko
+
+
