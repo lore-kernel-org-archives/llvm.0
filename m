@@ -1,78 +1,62 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7AD1517C98E;
-	Wed, 18 Sep 2024 20:30:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 53EB56FC5;
+	Wed, 18 Sep 2024 21:01:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726691457; cv=none; b=Nn7fOfrA83dNjA9nQRzy4/68tDcI1E1tTUjbIbSXVJo2wKAGT1ZeMADmMsKgT427koiDaGY6TIPQ6eWKdMB2ho7UHIJAoFieAP3Pr+usfHwtLugngcTx7OVs2dRxTOuVkWg+TcG+SgssNuBZa1cNFSjdC7dZCzP4RRGtuAgWgks=
+	t=1726693316; cv=none; b=XZr7YzTsE17D3rlXaMup6oMVPf6hEtyqWuhwbI/gURECGydOTMmWQ+i50AHZwN7Rvx9TcilqGG+7H5e9eeWcx4LiTSgTGZkNwkp7NCcPhrKp+5hTNCCVvvIFBaD2hJGpezIDsOJgM4iuvKyIzipfBfwA7vA2hFtpZ9aFvmhzdyA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726691457; c=relaxed/simple;
-	bh=v8crAcUcgAosNzF9JtGxdHujIVkHQ2sPvfBZI7YKIEI=;
+	s=arc-20240116; t=1726693316; c=relaxed/simple;
+	bh=mP0UQuMeE4aT8P8yDhPZX1+uNY2tnPXLkGTfwOMs9/E=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ShB6CuthqvtQ1TMviOhKAm0hTCtX3Hw07qY5OC+8JRKhH9Ac3yJnyghCIgbZrrx0hvTOarNWSkI0v7Ux1zsGv6nPHXgt35Hxike+7spS6ynbNiQg6JPpSF7tLqyDtwsjGsZ0KnxV+jfpwOXEYcHNtMaVAPZCwQphLweCzW0L0UU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=nOFxpgC/; arc=none smtp.client-ip=192.198.163.11
+	 Content-Type:Content-Disposition:In-Reply-To; b=Vaa4tFwNEJyLmmNBbQIotkY+j2aoOejNqQgeRkdjahmNfeQBn3OqMKJRqvXuyT9jrHPc3U9y/RSEb38DugBjvhxCBRcP05hcoXlO76Znj7rEB/q7W8zQeFqo3SCSACkpHUKby6ATlVvHEEnVbWASf6jlyJ6NDImRHpAkE2H3n+0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=VdElycyT; arc=none smtp.client-ip=198.175.65.15
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="nOFxpgC/"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="VdElycyT"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1726691456; x=1758227456;
+  t=1726693315; x=1758229315;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=v8crAcUcgAosNzF9JtGxdHujIVkHQ2sPvfBZI7YKIEI=;
-  b=nOFxpgC/jgbzYFsWzmRaZsAK9M/1PV5oKFUwY+0gmpNAM0JzNSy6jqoX
-   V5GBpdjrN6Q1t6x1xC1lG/cAzDBMU3KbhZlbzLhvQkZ7mkz7iDHGABWNW
-   BO88xqGZQbX0nexNRCecH7MBGyO9X0Gq7EEXOf4dXt44M/OUtMHs/uwfX
-   x6rad9t2LKFdKznSBFxvZuyb7QMfyCZwS0WP0KRC1JKnSV2p4K4b0aswk
-   8CHF2uZ4/Zs9J0ItSaifYevPhZT1xmbb91W2csYkMogXW4LqXnoVMh1F2
-   2VWZwLLfTNri0Rtrr1JEC8fq0zwox8Lo2EkQCO8LRDAO0o9su8Unw93zJ
-   A==;
-X-CSE-ConnectionGUID: /KwAeizXQrCXoSMmKLyJcA==
-X-CSE-MsgGUID: WCLBQfaETO6QIi6bXHBMdQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11199"; a="36211530"
+  bh=mP0UQuMeE4aT8P8yDhPZX1+uNY2tnPXLkGTfwOMs9/E=;
+  b=VdElycyTsT5rCXLTATQNkiYzDU3UZyY2XezIPeECj3iE5qi4QALCtNjA
+   gcUiq36f8cED7tt+vkkYbpCZoZMRCX0GwaplpuleBYPqz5lc8CKA0XXSD
+   YRxsOpncsKVRNiGQ9Fo0izBGv/azDlLMMgQFJx2rX0VXQP/k+DDvVNzpT
+   ngu4pOKWnXxvtta0qLPWKgyvCDvPzGGy2RERVED1aOND9m9sGzjiW7RPo
+   TpEl03QC44dTAAngms2Vej7lgf267SegFgGFLNG9d+XfMA5RbRuwHVNlC
+   Ut/ojVeZ3/kVk66y4fm3IzS80Mvm53clKdXl7RyfS3+/+qkPH2Oumie5w
+   w==;
+X-CSE-ConnectionGUID: 7amVRN8mTWqg4h4/fbDIjg==
+X-CSE-MsgGUID: vF0Ttb3iSAGXqWbRUSXHUQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11199"; a="29370645"
 X-IronPort-AV: E=Sophos;i="6.10,239,1719903600"; 
-   d="scan'208";a="36211530"
-Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Sep 2024 13:30:55 -0700
-X-CSE-ConnectionGUID: G03l2KzpRg6lUZ1ybq6Pkw==
-X-CSE-MsgGUID: KgXze0/ERmmsxsK33VvTNA==
+   d="scan'208";a="29370645"
+Received: from orviesa006.jf.intel.com ([10.64.159.146])
+  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Sep 2024 14:01:54 -0700
+X-CSE-ConnectionGUID: UzXge7D0T6G3o7i4y9EBiQ==
+X-CSE-MsgGUID: a02/E3R9RZO8fMfCrg/Qcg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.10,239,1719903600"; 
-   d="scan'208";a="107154632"
+   d="scan'208";a="70005166"
 Received: from lkp-server01.sh.intel.com (HELO 53e96f405c61) ([10.239.97.150])
-  by orviesa001.jf.intel.com with ESMTP; 18 Sep 2024 13:30:48 -0700
+  by orviesa006.jf.intel.com with ESMTP; 18 Sep 2024 14:01:51 -0700
 Received: from kbuild by 53e96f405c61 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1sr1K1-000Cc6-1d;
-	Wed, 18 Sep 2024 20:30:45 +0000
-Date: Thu, 19 Sep 2024 04:30:20 +0800
+	id 1sr1o5-000CdM-02;
+	Wed, 18 Sep 2024 21:01:49 +0000
+Date: Thu, 19 Sep 2024 05:01:27 +0800
 From: kernel test robot <lkp@intel.com>
-To: Anshuman Khandual <anshuman.khandual@arm.com>, linux-mm@kvack.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Anshuman Khandual <anshuman.khandual@arm.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Linux Memory Management List <linux-mm@kvack.org>,
-	David Hildenbrand <david@redhat.com>,
-	Ryan Roberts <ryan.roberts@arm.com>,
-	"Mike Rapoport (IBM)" <rppt@kernel.org>,
-	Arnd Bergmann <arnd@arndb.de>, x86@kernel.org,
-	linux-m68k@lists.linux-m68k.org, linux-fsdevel@vger.kernel.org,
-	kasan-dev@googlegroups.com, linux-kernel@vger.kernel.org,
-	linux-perf-users@vger.kernel.org,
-	Dimitri Sivanich <dimitri.sivanich@hpe.com>,
-	Alexander Viro <viro@zeniv.linux.org.uk>,
-	Muchun Song <muchun.song@linux.dev>,
-	Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-	Miaohe Lin <linmiaohe@huawei.com>, Dennis Zhou <dennis@kernel.org>,
-	Tejun Heo <tj@kernel.org>,
-	Christoph Lameter <cl@linux-foundation.org>,
-	Uladzislau Rezki <urezki@gmail.com>,
-	Christoph Hellwig <hch@infradead.org>
-Subject: Re: [PATCH V2 7/7] mm: Use pgdp_get() for accessing PGD entries
-Message-ID: <202409190310.ViHBRe12-lkp@intel.com>
-References: <20240917073117.1531207-8-anshuman.khandual@arm.com>
+To: David Wang <00107082@163.com>, surenb@google.com,
+	kent.overstreet@linux.dev, akpm@linux-foundation.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, linux-mm@kvack.org,
+	linux-kernel@vger.kernel.org, David Wang <00107082@163.com>
+Subject: Re: [PATCH v2] lib/alloc_tag: Add accumulative call counter for
+ memory allocation profiling
+Message-ID: <202409190453.pe1HrGL0-lkp@intel.com>
+References: <20240913055729.7208-1-00107082@163.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -81,424 +65,82 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240917073117.1531207-8-anshuman.khandual@arm.com>
+In-Reply-To: <20240913055729.7208-1-00107082@163.com>
 
-Hi Anshuman,
+Hi David,
 
-kernel test robot noticed the following build errors:
+kernel test robot noticed the following build warnings:
 
-[auto build test ERROR on char-misc/char-misc-testing]
-[also build test ERROR on char-misc/char-misc-next char-misc/char-misc-linus brauner-vfs/vfs.all dennis-percpu/for-next linus/master v6.11]
-[cannot apply to akpm-mm/mm-everything next-20240918]
+[auto build test WARNING on akpm-mm/mm-nonmm-unstable]
+[also build test WARNING on linus/master v6.11 next-20240918]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Anshuman-Khandual/m68k-mm-Change-pmd_val/20240917-153331
-base:   char-misc/char-misc-testing
-patch link:    https://lore.kernel.org/r/20240917073117.1531207-8-anshuman.khandual%40arm.com
-patch subject: [PATCH V2 7/7] mm: Use pgdp_get() for accessing PGD entries
-config: arm-footbridge_defconfig (https://download.01.org/0day-ci/archive/20240919/202409190310.ViHBRe12-lkp@intel.com/config)
+url:    https://github.com/intel-lab-lkp/linux/commits/David-Wang/lib-alloc_tag-Add-accumulative-call-counter-for-memory-allocation-profiling/20240913-140040
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-nonmm-unstable
+patch link:    https://lore.kernel.org/r/20240913055729.7208-1-00107082%40163.com
+patch subject: [PATCH v2] lib/alloc_tag: Add accumulative call counter for memory allocation profiling
+config: arm-randconfig-002-20240919 (https://download.01.org/0day-ci/archive/20240919/202409190453.pe1HrGL0-lkp@intel.com/config)
 compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 8663a75fa2f31299ab8d1d90288d9df92aadee88)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240919/202409190310.ViHBRe12-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240919/202409190453.pe1HrGL0-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202409190310.ViHBRe12-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202409190453.pe1HrGL0-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
-   In file included from arch/arm/kernel/asm-offsets.c:12:
-   In file included from include/linux/mm.h:30:
->> include/linux/pgtable.h:1245:18: error: use of undeclared identifier 'pgdp'; did you mean 'pgd'?
-    1245 |         pgd_t old_pgd = pgdp_get(pgd);
-         |                         ^
-   arch/arm/include/asm/pgtable.h:154:36: note: expanded from macro 'pgdp_get'
-     154 | #define pgdp_get(pgpd)          READ_ONCE(*pgdp)
-         |                                            ^
-   include/linux/pgtable.h:1243:48: note: 'pgd' declared here
-    1243 | static inline int pgd_none_or_clear_bad(pgd_t *pgd)
-         |                                                ^
->> include/linux/pgtable.h:1245:18: error: use of undeclared identifier 'pgdp'; did you mean 'pgd'?
-    1245 |         pgd_t old_pgd = pgdp_get(pgd);
-         |                         ^
-   arch/arm/include/asm/pgtable.h:154:36: note: expanded from macro 'pgdp_get'
-     154 | #define pgdp_get(pgpd)          READ_ONCE(*pgdp)
-         |                                            ^
-   include/linux/pgtable.h:1243:48: note: 'pgd' declared here
-    1243 | static inline int pgd_none_or_clear_bad(pgd_t *pgd)
-         |                                                ^
->> include/linux/pgtable.h:1245:18: error: use of undeclared identifier 'pgdp'; did you mean 'pgd'?
-    1245 |         pgd_t old_pgd = pgdp_get(pgd);
-         |                         ^
-   arch/arm/include/asm/pgtable.h:154:36: note: expanded from macro 'pgdp_get'
-     154 | #define pgdp_get(pgpd)          READ_ONCE(*pgdp)
-         |                                            ^
-   include/linux/pgtable.h:1243:48: note: 'pgd' declared here
-    1243 | static inline int pgd_none_or_clear_bad(pgd_t *pgd)
-         |                                                ^
->> include/linux/pgtable.h:1245:18: error: use of undeclared identifier 'pgdp'; did you mean 'pgd'?
-    1245 |         pgd_t old_pgd = pgdp_get(pgd);
-         |                         ^
-   arch/arm/include/asm/pgtable.h:154:36: note: expanded from macro 'pgdp_get'
-     154 | #define pgdp_get(pgpd)          READ_ONCE(*pgdp)
-         |                                            ^
-   include/linux/pgtable.h:1243:48: note: 'pgd' declared here
-    1243 | static inline int pgd_none_or_clear_bad(pgd_t *pgd)
-         |                                                ^
->> include/linux/pgtable.h:1245:18: error: use of undeclared identifier 'pgdp'; did you mean 'pgd'?
-    1245 |         pgd_t old_pgd = pgdp_get(pgd);
-         |                         ^
-   arch/arm/include/asm/pgtable.h:154:36: note: expanded from macro 'pgdp_get'
-     154 | #define pgdp_get(pgpd)          READ_ONCE(*pgdp)
-         |                                            ^
-   include/linux/pgtable.h:1243:48: note: 'pgd' declared here
-    1243 | static inline int pgd_none_or_clear_bad(pgd_t *pgd)
-         |                                                ^
->> include/linux/pgtable.h:1245:18: error: use of undeclared identifier 'pgdp'; did you mean 'pgd'?
-    1245 |         pgd_t old_pgd = pgdp_get(pgd);
-         |                         ^
-   arch/arm/include/asm/pgtable.h:154:36: note: expanded from macro 'pgdp_get'
-     154 | #define pgdp_get(pgpd)          READ_ONCE(*pgdp)
-         |                                            ^
-   include/linux/pgtable.h:1243:48: note: 'pgd' declared here
-    1243 | static inline int pgd_none_or_clear_bad(pgd_t *pgd)
-         |                                                ^
->> include/linux/pgtable.h:1245:18: error: use of undeclared identifier 'pgdp'; did you mean 'pgd'?
-    1245 |         pgd_t old_pgd = pgdp_get(pgd);
-         |                         ^
-   arch/arm/include/asm/pgtable.h:154:36: note: expanded from macro 'pgdp_get'
-     154 | #define pgdp_get(pgpd)          READ_ONCE(*pgdp)
-         |                                            ^
-   include/linux/pgtable.h:1243:48: note: 'pgd' declared here
-    1243 | static inline int pgd_none_or_clear_bad(pgd_t *pgd)
-         |                                                ^
->> include/linux/pgtable.h:1245:18: error: use of undeclared identifier 'pgdp'; did you mean 'pgd'?
-    1245 |         pgd_t old_pgd = pgdp_get(pgd);
-         |                         ^
-   arch/arm/include/asm/pgtable.h:154:36: note: expanded from macro 'pgdp_get'
-     154 | #define pgdp_get(pgpd)          READ_ONCE(*pgdp)
-         |                                            ^
-   include/linux/pgtable.h:1243:48: note: 'pgd' declared here
-    1243 | static inline int pgd_none_or_clear_bad(pgd_t *pgd)
-         |                                                ^
->> include/linux/pgtable.h:1245:8: error: array initializer must be an initializer list or wide string literal
-    1245 |         pgd_t old_pgd = pgdp_get(pgd);
-         |               ^
-   In file included from arch/arm/kernel/asm-offsets.c:12:
-   In file included from include/linux/mm.h:1131:
-   In file included from include/linux/huge_mm.h:8:
-   In file included from include/linux/fs.h:33:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:98:11: warning: array index 3 is past the end of the array (that has type 'unsigned long[2]') [-Warray-bounds]
-      98 |                 return (set->sig[3] | set->sig[2] |
-         |                         ^        ~
-   arch/arm/include/asm/signal.h:17:2: note: array 'sig' declared here
-      17 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   In file included from arch/arm/kernel/asm-offsets.c:12:
-   In file included from include/linux/mm.h:1131:
-   In file included from include/linux/huge_mm.h:8:
-   In file included from include/linux/fs.h:33:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:98:25: warning: array index 2 is past the end of the array (that has type 'unsigned long[2]') [-Warray-bounds]
-      98 |                 return (set->sig[3] | set->sig[2] |
-         |                                       ^        ~
-   arch/arm/include/asm/signal.h:17:2: note: array 'sig' declared here
-      17 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   In file included from arch/arm/kernel/asm-offsets.c:12:
-   In file included from include/linux/mm.h:1131:
-   In file included from include/linux/huge_mm.h:8:
-   In file included from include/linux/fs.h:33:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:114:11: warning: array index 3 is past the end of the array (that has type 'const unsigned long[2]') [-Warray-bounds]
-     114 |                 return  (set1->sig[3] == set2->sig[3]) &&
-         |                          ^         ~
-   arch/arm/include/asm/signal.h:17:2: note: array 'sig' declared here
-      17 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   In file included from arch/arm/kernel/asm-offsets.c:12:
-   In file included from include/linux/mm.h:1131:
-   In file included from include/linux/huge_mm.h:8:
-   In file included from include/linux/fs.h:33:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:114:27: warning: array index 3 is past the end of the array (that has type 'const unsigned long[2]') [-Warray-bounds]
-     114 |                 return  (set1->sig[3] == set2->sig[3]) &&
-         |                                          ^         ~
-   arch/arm/include/asm/signal.h:17:2: note: array 'sig' declared here
-      17 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   In file included from arch/arm/kernel/asm-offsets.c:12:
-   In file included from include/linux/mm.h:1131:
-   In file included from include/linux/huge_mm.h:8:
-   In file included from include/linux/fs.h:33:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:115:5: warning: array index 2 is past the end of the array (that has type 'const unsigned long[2]') [-Warray-bounds]
-     115 |                         (set1->sig[2] == set2->sig[2]) &&
-         |                          ^         ~
-   arch/arm/include/asm/signal.h:17:2: note: array 'sig' declared here
-      17 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   In file included from arch/arm/kernel/asm-offsets.c:12:
-   In file included from include/linux/mm.h:1131:
-   In file included from include/linux/huge_mm.h:8:
-   In file included from include/linux/fs.h:33:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:115:21: warning: array index 2 is past the end of the array (that has type 'const unsigned long[2]') [-Warray-bounds]
-     115 |                         (set1->sig[2] == set2->sig[2]) &&
-         |                                          ^         ~
-   arch/arm/include/asm/signal.h:17:2: note: array 'sig' declared here
-      17 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   In file included from arch/arm/kernel/asm-offsets.c:12:
-   In file included from include/linux/mm.h:1131:
-   In file included from include/linux/huge_mm.h:8:
-   In file included from include/linux/fs.h:33:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:157:1: warning: array index 3 is past the end of the array (that has type 'const unsigned long[2]') [-Warray-bounds]
-     157 | _SIG_SET_BINOP(sigorsets, _sig_or)
-         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/signal.h:138:8: note: expanded from macro '_SIG_SET_BINOP'
-     138 |                 a3 = a->sig[3]; a2 = a->sig[2];                         \
-         |                      ^      ~
-   arch/arm/include/asm/signal.h:17:2: note: array 'sig' declared here
-      17 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   In file included from arch/arm/kernel/asm-offsets.c:12:
-   In file included from include/linux/mm.h:1131:
-   In file included from include/linux/huge_mm.h:8:
-   In file included from include/linux/fs.h:33:
---
-     163 | _SIG_SET_BINOP(sigandnsets, _sig_andn)
-         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/signal.h:140:3: note: expanded from macro '_SIG_SET_BINOP'
-     140 |                 r->sig[3] = op(a3, b3);                                 \
-         |                 ^      ~
-   arch/arm/include/asm/signal.h:17:2: note: array 'sig' declared here
-      17 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   In file included from arch/arm/kernel/asm-offsets.c:12:
-   In file included from include/linux/mm.h:1131:
-   In file included from include/linux/huge_mm.h:8:
-   In file included from include/linux/fs.h:33:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:163:1: warning: array index 2 is past the end of the array (that has type 'unsigned long[2]') [-Warray-bounds]
-     163 | _SIG_SET_BINOP(sigandnsets, _sig_andn)
-         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/signal.h:141:3: note: expanded from macro '_SIG_SET_BINOP'
-     141 |                 r->sig[2] = op(a2, b2);                                 \
-         |                 ^      ~
-   arch/arm/include/asm/signal.h:17:2: note: array 'sig' declared here
-      17 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   In file included from arch/arm/kernel/asm-offsets.c:12:
-   In file included from include/linux/mm.h:1131:
-   In file included from include/linux/huge_mm.h:8:
-   In file included from include/linux/fs.h:33:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:187:1: warning: array index 3 is past the end of the array (that has type 'unsigned long[2]') [-Warray-bounds]
-     187 | _SIG_SET_OP(signotset, _sig_not)
-         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/signal.h:174:27: note: expanded from macro '_SIG_SET_OP'
-     174 |         case 4: set->sig[3] = op(set->sig[3]);                          \
-         |                                  ^        ~
-   include/linux/signal.h:186:24: note: expanded from macro '_sig_not'
-     186 | #define _sig_not(x)     (~(x))
-         |                            ^
-   arch/arm/include/asm/signal.h:17:2: note: array 'sig' declared here
-      17 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   In file included from arch/arm/kernel/asm-offsets.c:12:
-   In file included from include/linux/mm.h:1131:
-   In file included from include/linux/huge_mm.h:8:
-   In file included from include/linux/fs.h:33:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:187:1: warning: array index 3 is past the end of the array (that has type 'unsigned long[2]') [-Warray-bounds]
-     187 | _SIG_SET_OP(signotset, _sig_not)
-         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/signal.h:174:10: note: expanded from macro '_SIG_SET_OP'
-     174 |         case 4: set->sig[3] = op(set->sig[3]);                          \
-         |                 ^        ~
-   arch/arm/include/asm/signal.h:17:2: note: array 'sig' declared here
-      17 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   In file included from arch/arm/kernel/asm-offsets.c:12:
-   In file included from include/linux/mm.h:1131:
-   In file included from include/linux/huge_mm.h:8:
-   In file included from include/linux/fs.h:33:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:187:1: warning: array index 2 is past the end of the array (that has type 'unsigned long[2]') [-Warray-bounds]
-     187 | _SIG_SET_OP(signotset, _sig_not)
-         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/signal.h:175:20: note: expanded from macro '_SIG_SET_OP'
-     175 |                 set->sig[2] = op(set->sig[2]);                          \
-         |                                  ^        ~
-   include/linux/signal.h:186:24: note: expanded from macro '_sig_not'
-     186 | #define _sig_not(x)     (~(x))
-         |                            ^
-   arch/arm/include/asm/signal.h:17:2: note: array 'sig' declared here
-      17 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   In file included from arch/arm/kernel/asm-offsets.c:12:
-   In file included from include/linux/mm.h:1131:
-   In file included from include/linux/huge_mm.h:8:
-   In file included from include/linux/fs.h:33:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:187:1: warning: array index 2 is past the end of the array (that has type 'unsigned long[2]') [-Warray-bounds]
-     187 | _SIG_SET_OP(signotset, _sig_not)
-         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/signal.h:175:3: note: expanded from macro '_SIG_SET_OP'
-     175 |                 set->sig[2] = op(set->sig[2]);                          \
-         |                 ^        ~
-   arch/arm/include/asm/signal.h:17:2: note: array 'sig' declared here
-      17 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   In file included from arch/arm/kernel/asm-offsets.c:12:
-   In file included from include/linux/mm.h:2232:
+   In file included from drivers/hwtracing/coresight/coresight-tpiu.c:8:
+   In file included from include/linux/acpi.h:13:
+   In file included from include/linux/resource_ext.h:11:
+   In file included from include/linux/slab.h:16:
+   In file included from include/linux/gfp.h:7:
+   In file included from include/linux/mmzone.h:22:
+   In file included from include/linux/mm_types.h:21:
+   In file included from include/linux/percpu_counter.h:14:
+   In file included from include/linux/percpu.h:5:
+>> include/linux/alloc_tag.h:108:39: warning: missing field 'accu_calls' initializer [-Wmissing-field-initializers]
+     108 |         struct alloc_tag_counters v = { 0, 0 };
+         |                                              ^
+   In file included from drivers/hwtracing/coresight/coresight-tpiu.c:9:
+   In file included from include/linux/amba/bus.h:19:
+   In file included from include/linux/regulator/consumer.h:35:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:21:
+   In file included from include/linux/mm.h:2228:
    include/linux/vmstat.h:517:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
      517 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
          |                               ~~~~~~~~~~~ ^ ~~~
-   In file included from arch/arm/kernel/asm-offsets.c:12:
->> include/linux/mm.h:2822:28: error: use of undeclared identifier 'pgdp'; did you mean 'pgd'?
-    2822 |         return (unlikely(pgd_none(pgdp_get(pgd))) && __p4d_alloc(mm, pgd, address)) ?
-         |                                   ^
-   arch/arm/include/asm/pgtable.h:154:36: note: expanded from macro 'pgdp_get'
-     154 | #define pgdp_get(pgpd)          READ_ONCE(*pgdp)
-         |                                            ^
-   include/linux/mm.h:2819:61: note: 'pgd' declared here
-    2819 | static inline p4d_t *p4d_alloc(struct mm_struct *mm, pgd_t *pgd,
-         |                                                             ^
->> include/linux/mm.h:2822:28: error: use of undeclared identifier 'pgdp'; did you mean 'pgd'?
-    2822 |         return (unlikely(pgd_none(pgdp_get(pgd))) && __p4d_alloc(mm, pgd, address)) ?
-         |                                   ^
-   arch/arm/include/asm/pgtable.h:154:36: note: expanded from macro 'pgdp_get'
-     154 | #define pgdp_get(pgpd)          READ_ONCE(*pgdp)
-         |                                            ^
-   include/linux/mm.h:2819:61: note: 'pgd' declared here
-    2819 | static inline p4d_t *p4d_alloc(struct mm_struct *mm, pgd_t *pgd,
-         |                                                             ^
->> include/linux/mm.h:2822:28: error: use of undeclared identifier 'pgdp'; did you mean 'pgd'?
-    2822 |         return (unlikely(pgd_none(pgdp_get(pgd))) && __p4d_alloc(mm, pgd, address)) ?
-         |                                   ^
-   arch/arm/include/asm/pgtable.h:154:36: note: expanded from macro 'pgdp_get'
-     154 | #define pgdp_get(pgpd)          READ_ONCE(*pgdp)
-         |                                            ^
-   include/linux/mm.h:2819:61: note: 'pgd' declared here
-    2819 | static inline p4d_t *p4d_alloc(struct mm_struct *mm, pgd_t *pgd,
-         |                                                             ^
->> include/linux/mm.h:2822:28: error: use of undeclared identifier 'pgdp'; did you mean 'pgd'?
-    2822 |         return (unlikely(pgd_none(pgdp_get(pgd))) && __p4d_alloc(mm, pgd, address)) ?
-         |                                   ^
-   arch/arm/include/asm/pgtable.h:154:36: note: expanded from macro 'pgdp_get'
-     154 | #define pgdp_get(pgpd)          READ_ONCE(*pgdp)
-         |                                            ^
-   include/linux/mm.h:2819:61: note: 'pgd' declared here
-    2819 | static inline p4d_t *p4d_alloc(struct mm_struct *mm, pgd_t *pgd,
-         |                                                             ^
->> include/linux/mm.h:2822:28: error: use of undeclared identifier 'pgdp'; did you mean 'pgd'?
-    2822 |         return (unlikely(pgd_none(pgdp_get(pgd))) && __p4d_alloc(mm, pgd, address)) ?
-         |                                   ^
-   arch/arm/include/asm/pgtable.h:154:36: note: expanded from macro 'pgdp_get'
-     154 | #define pgdp_get(pgpd)          READ_ONCE(*pgdp)
-         |                                            ^
-   include/linux/mm.h:2819:61: note: 'pgd' declared here
-    2819 | static inline p4d_t *p4d_alloc(struct mm_struct *mm, pgd_t *pgd,
-         |                                                             ^
->> include/linux/mm.h:2822:28: error: use of undeclared identifier 'pgdp'; did you mean 'pgd'?
-    2822 |         return (unlikely(pgd_none(pgdp_get(pgd))) && __p4d_alloc(mm, pgd, address)) ?
-         |                                   ^
-   arch/arm/include/asm/pgtable.h:154:36: note: expanded from macro 'pgdp_get'
-     154 | #define pgdp_get(pgpd)          READ_ONCE(*pgdp)
-         |                                            ^
-   include/linux/mm.h:2819:61: note: 'pgd' declared here
-    2819 | static inline p4d_t *p4d_alloc(struct mm_struct *mm, pgd_t *pgd,
-         |                                                             ^
->> include/linux/mm.h:2822:28: error: use of undeclared identifier 'pgdp'; did you mean 'pgd'?
-    2822 |         return (unlikely(pgd_none(pgdp_get(pgd))) && __p4d_alloc(mm, pgd, address)) ?
-         |                                   ^
-   arch/arm/include/asm/pgtable.h:154:36: note: expanded from macro 'pgdp_get'
-     154 | #define pgdp_get(pgpd)          READ_ONCE(*pgdp)
-         |                                            ^
-   include/linux/mm.h:2819:61: note: 'pgd' declared here
-    2819 | static inline p4d_t *p4d_alloc(struct mm_struct *mm, pgd_t *pgd,
-         |                                                             ^
->> include/linux/mm.h:2822:28: error: use of undeclared identifier 'pgdp'; did you mean 'pgd'?
-    2822 |         return (unlikely(pgd_none(pgdp_get(pgd))) && __p4d_alloc(mm, pgd, address)) ?
-         |                                   ^
-   arch/arm/include/asm/pgtable.h:154:36: note: expanded from macro 'pgdp_get'
-     154 | #define pgdp_get(pgpd)          READ_ONCE(*pgdp)
-         |                                            ^
-   include/linux/mm.h:2819:61: note: 'pgd' declared here
-    2819 | static inline p4d_t *p4d_alloc(struct mm_struct *mm, pgd_t *pgd,
-         |                                                             ^
->> include/linux/mm.h:2822:28: error: passing 'const volatile pmdval_t *' (aka 'const volatile unsigned int *') to parameter of type 'pmdval_t *' (aka 'unsigned int *') discards qualifiers [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
-    2822 |         return (unlikely(pgd_none(pgdp_get(pgd))) && __p4d_alloc(mm, pgd, address)) ?
-         |                 ~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~
-   arch/arm/include/asm/pgtable.h:154:25: note: expanded from macro 'pgdp_get'
-     154 | #define pgdp_get(pgpd)          READ_ONCE(*pgdp)
-         |                                 ^
-   include/asm-generic/rwonce.h:47:28: note: expanded from macro 'READ_ONCE'
-      47 | #define READ_ONCE(x)                                                    \
-         |                                                                         ^
-   include/linux/compiler.h:77:42: note: expanded from macro 'unlikely'
-      77 | # define unlikely(x)    __builtin_expect(!!(x), 0)
-         |                                             ^
-   include/asm-generic/pgtable-nop4d.h:21:34: note: passing argument to parameter 'pgd' here
-      21 | static inline int pgd_none(pgd_t pgd)           { return 0; }
-         |                                  ^
-   29 warnings and 18 errors generated.
-   make[3]: *** [scripts/Makefile.build:117: arch/arm/kernel/asm-offsets.s] Error 1
-   make[3]: Target 'prepare' not remade because of errors.
-   make[2]: *** [Makefile:1194: prepare0] Error 2
-   make[2]: Target 'prepare' not remade because of errors.
-   make[1]: *** [Makefile:224: __sub-make] Error 2
-   make[1]: Target 'prepare' not remade because of errors.
-   make: *** [Makefile:224: __sub-make] Error 2
-   make: Target 'prepare' not remade because of errors.
+   2 warnings generated.
 
 
-vim +1245 include/linux/pgtable.h
+vim +/accu_calls +108 include/linux/alloc_tag.h
 
-  1242	
-  1243	static inline int pgd_none_or_clear_bad(pgd_t *pgd)
-  1244	{
-> 1245		pgd_t old_pgd = pgdp_get(pgd);
-  1246	
-  1247		if (pgd_none(old_pgd))
-  1248			return 1;
-  1249		if (unlikely(pgd_bad(old_pgd))) {
-  1250			pgd_clear_bad(pgd);
-  1251			return 1;
-  1252		}
-  1253		return 0;
-  1254	}
-  1255	
+22d407b164ff79 Suren Baghdasaryan 2024-03-21  105  
+22d407b164ff79 Suren Baghdasaryan 2024-03-21  106  static inline struct alloc_tag_counters alloc_tag_read(struct alloc_tag *tag)
+22d407b164ff79 Suren Baghdasaryan 2024-03-21  107  {
+22d407b164ff79 Suren Baghdasaryan 2024-03-21 @108  	struct alloc_tag_counters v = { 0, 0 };
+38770cdc292e9e David Wang         2024-09-13  109  #ifdef CONFIG_MEM_ALLOC_PROFILING_ACCUMULATIVE_CALL_COUNTER
+38770cdc292e9e David Wang         2024-09-13  110  	v.accu_calls = 0;
+38770cdc292e9e David Wang         2024-09-13  111  #endif
+22d407b164ff79 Suren Baghdasaryan 2024-03-21  112  	struct alloc_tag_counters *counter;
+22d407b164ff79 Suren Baghdasaryan 2024-03-21  113  	int cpu;
+22d407b164ff79 Suren Baghdasaryan 2024-03-21  114  
+22d407b164ff79 Suren Baghdasaryan 2024-03-21  115  	for_each_possible_cpu(cpu) {
+22d407b164ff79 Suren Baghdasaryan 2024-03-21  116  		counter		= per_cpu_ptr(tag->counters, cpu);
+22d407b164ff79 Suren Baghdasaryan 2024-03-21  117  		v.bytes		+= counter->bytes;
+22d407b164ff79 Suren Baghdasaryan 2024-03-21  118  		v.calls		+= counter->calls;
+38770cdc292e9e David Wang         2024-09-13  119  #ifdef CONFIG_MEM_ALLOC_PROFILING_ACCUMULATIVE_CALL_COUNTER
+38770cdc292e9e David Wang         2024-09-13  120  		v.accu_calls	+= counter->accu_calls;
+38770cdc292e9e David Wang         2024-09-13  121  #endif
+22d407b164ff79 Suren Baghdasaryan 2024-03-21  122  	}
+22d407b164ff79 Suren Baghdasaryan 2024-03-21  123  
+22d407b164ff79 Suren Baghdasaryan 2024-03-21  124  	return v;
+22d407b164ff79 Suren Baghdasaryan 2024-03-21  125  }
+22d407b164ff79 Suren Baghdasaryan 2024-03-21  126  
 
 -- 
 0-DAY CI Kernel Test Service
