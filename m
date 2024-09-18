@@ -1,124 +1,120 @@
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net [217.70.183.200])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B60D0481AB
-	for <llvm@lists.linux.dev>; Wed, 18 Sep 2024 07:33:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.200
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B9D42158203;
+	Wed, 18 Sep 2024 10:16:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726644819; cv=none; b=AXW0fwwdBcD9kpV8GKFLA8t44ZGxfbOp+6WSwwAQao5HRul30KqPZZiIVVgtG66aDeUDIA2tjyf86/IjE41hEGQJSSy8TnOaBsZ6KDmLYuEZ3MLHBilLDPfJyO/30BYX7OTBmcMeAH8AxakoNcEBebOUGLPnX9mWke/smNyW928=
+	t=1726654576; cv=none; b=thapvOOPfk49a5Nl0xDojgNXis8+loSNeL6JYhbk0Fym4r2iIcyHlDxKYfl5gfcrmotg95fxZfivFm6S6G01fiuZM8FmbN/OlnTkzgOb1FPEAxhzIkBl6CuwxdXyMMUUrhKlXYo2xVvaR3gRrN9CXI8EIxWiMAB8cslYBVa6L7c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726644819; c=relaxed/simple;
-	bh=KDWSO/DlRC22nIf1l+JdQKl0mmC4pDrhGOX9s3FmLtU=;
-	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
-	 In-Reply-To:Content-Type; b=juZ5o/3WGTX7C+JeWPpETWAJjnfMm0PClm6wftBntZMtG2Rucc+IuwINV0iqZp1rnscbiuADCBSyCslUmRtWvbf8A7T3A3QtRGycNCBkDvNGkl3TAzCAVootu3tN3O1hVSHuPYvrUawg1cJSWgRGXfRa1WtMdH+F6eZhnzgsEWg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=gtucker.io; spf=pass smtp.mailfrom=gtucker.io; dkim=pass (2048-bit key) header.d=gtucker.io header.i=@gtucker.io header.b=g3CMuhbs; arc=none smtp.client-ip=217.70.183.200
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=gtucker.io
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gtucker.io
+	s=arc-20240116; t=1726654576; c=relaxed/simple;
+	bh=Zzh21aWTkQrckWR0J3gbD8A+nATbw+RRsVmc4vLITN4=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=jS5Nw15ibV2RWOWgsDJiGLaoXbVdQjtCWrZAo/QDgMVXeLC8veLvik+9IKZibDqSXfYKuql9dmaPRKXyq+ljIPoCZAlR4rtATWEEAvWbKsL7f67cZb3ce0/Rhs3j+2l2v8NGDJLRKkZFZOVRrj8A42Af2QayO981TULW6YpgQQI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ed4ukG1V; arc=none smtp.client-ip=192.198.163.8
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gtucker.io header.i=@gtucker.io header.b="g3CMuhbs"
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 1DBD020009;
-	Wed, 18 Sep 2024 07:33:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gtucker.io; s=gm1;
-	t=1726644813;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=1BGtCYOQcOECE4KEQhNC5Aph6S84pDq76u98tDqbbS0=;
-	b=g3CMuhbsnZqxP5ZdE9M0GmBkodlm/f5cgZdPJbGcQbMI6zoGvjEzwCLC59BfFh8vVX5Ja3
-	iqpVlJuYbsbrHoThh0P81XEn1dRrY3HbU4WlDcTWZ3rtLbPFUPwE3RqwI91mKZo8+Fjbcb
-	oDvyLirXjsJilYWKSGvlQFhOOLHmaSozYmc6TTQpDp2PCiUmUkAbD9AcU+JqUvuS5Ck+YN
-	FkRjgOT0H2HEensyYWVrKpkg/1qu6SgeSvx3pK3vcw3krRAJtMokZFREKv65m8xyc+VSRd
-	oP2sMRZpMOdll0f/SoLBbYTJP9NpVu37XrHBeOTELLRSeuRaE7eBy0xOXtdg/A==
-Message-ID: <da705c5d-9263-46dc-993e-dffee25969a3@gtucker.io>
-Date: Wed, 18 Sep 2024 09:33:28 +0200
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ed4ukG1V"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1726654575; x=1758190575;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=Zzh21aWTkQrckWR0J3gbD8A+nATbw+RRsVmc4vLITN4=;
+  b=ed4ukG1VgkNlK7ymJEfVP+X5G8Ypb/z6CtsdsRFWsTiF4LJ7VbidG7hQ
+   JuWuYWOi2vlf/I0y6ZuHWNWVSW7ljbZuzTcb5iKK7sQX7dyagqaLNWt12
+   520yaxB5+g4a3SIblO9n6rFvHIQCwLPyhkZ/2F9d9QoOiBj4B9+/3bEfk
+   D3svdGnG5vc3xApmhy1/06UUfnVRvl2tqxDXHm2l8HdXHqPivXPcmHyJ7
+   CwsGmR5pgUNauOfwIE000r9/xCwd3vkYGAUtx9mt4948ElN/PdxNKKGuf
+   aFI9a8rWStw+T1DXAUGVdQX7irH5/M9c1awDeeTx7MX8Oe87lRTVH/Cgd
+   g==;
+X-CSE-ConnectionGUID: KrhBI5O5RmahjvdJk+JBTA==
+X-CSE-MsgGUID: 8FJz3wIzTa21/a/XRjNo0w==
+X-IronPort-AV: E=McAfee;i="6700,10204,11198"; a="43078999"
+X-IronPort-AV: E=Sophos;i="6.10,238,1719903600"; 
+   d="scan'208";a="43078999"
+Received: from fmviesa009.fm.intel.com ([10.60.135.149])
+  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Sep 2024 03:16:14 -0700
+X-CSE-ConnectionGUID: +4I79fuGR5iDvghu38OMaA==
+X-CSE-MsgGUID: UDWLp7YtSGyGTkzIPRbQmQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.10,238,1719903600"; 
+   d="scan'208";a="69487212"
+Received: from lkp-server01.sh.intel.com (HELO 53e96f405c61) ([10.239.97.150])
+  by fmviesa009.fm.intel.com with ESMTP; 18 Sep 2024 03:16:13 -0700
+Received: from kbuild by 53e96f405c61 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1sqrjG-000CAA-2o;
+	Wed, 18 Sep 2024 10:16:10 +0000
+Date: Wed, 18 Sep 2024 18:15:16 +0800
+From: kernel test robot <lkp@intel.com>
+To: Yunsheng Lin <linyunsheng@huawei.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [linyunsheng:net-next-pp-inflight-fix 2/2]
+ net/core/page_pool_priv.h:47:1: warning: non-void function does not return a
+ value
+Message-ID: <202409181807.vDJMIpsz-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: Plumbers Testing MC potential topic: specialised toolchains
-Content-Language: en-US
-From: Guillaume Tucker <gtucker@gtucker.io>
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: Nick Desaulniers <ndesaulniers@google.com>,
- Miguel Ojeda <ojeda@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
- Arnd Bergmann <arnd@arndb.de>, llvm@lists.linux.dev,
- rust-for-linux@vger.kernel.org, yurinnick@meta.com, bpf@vger.kernel.org,
- Sasha Levin <sashal@kernel.org>, Shuah Khan <skhan@linuxfoundation.org>,
- automated-testing@lists.yoctoproject.org
-References: <f80acb84-1d98-44d3-84b7-d976de77d8ce@gtucker.io>
- <20240709053031.GB2120498@thelio-3990X>
- <e0b6e4b6-549a-43dc-bc76-3f8488cf5dd2@gtucker.io>
-In-Reply-To: <e0b6e4b6-549a-43dc-bc76-3f8488cf5dd2@gtucker.io>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-GND-Sasl: gtucker@gtucker.io
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Hello,
+tree:   https://github.com/gestionlin/linux.git net-next-pp-inflight-fix
+head:   585c4413fc2f6385d74132e13b42cba3e4123eee
+commit: 585c4413fc2f6385d74132e13b42cba3e4123eee [2/2] page_pool: fix IOMMU crash when driver has already unbound
+config: i386-defconfig (https://download.01.org/0day-ci/archive/20240918/202409181807.vDJMIpsz-lkp@intel.com/config)
+compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240918/202409181807.vDJMIpsz-lkp@intel.com/reproduce)
 
-On 14/07/2024 1:03 am, Guillaume Tucker wrote:
->>> very interested to hear whether people feel it would be
->>> beneficial to work towards a more exhaustive solution supported
->>> upstream: kernel.org Docker images or something close such as
->>> Dockerfiles in Git or another type of images with all the
->>> dependencies included.  How does that sound?
->> A few thoughts around this:
->>
->> Having first party Dockerfiles could be useful but how would they be
->> used? Perhaps building a kernel in such a container could be plumbed
->> into Kbuild, such that the container manager could be invoked to build
->> the image if it does not exist then build the kernel in that image? This
->> might be a lofty idea but it would remove a lot of the friction of using
->> containers to build the kernel so that more people would adopt it?
-> That's a great idea, and I think it's why having a live
-> discussion at Plumbers would make sense as it's going to be
-> harder to reach answers in a thread like this.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202409181807.vDJMIpsz-lkp@intel.com/
 
-In fact I went ahead and made a small PoC for this as an experiment:
+All warnings (new ones prefixed by >>):
 
-     https://gitlab.com/gtucker/linux/-/commits/linux-6.7-make-container
+   In file included from net/core/netdev_rx_queue.c:7:
+>> net/core/page_pool_priv.h:47:1: warning: non-void function does not return a value [-Wreturn-type]
+      47 | }
+         | ^
+   1 warning generated.
 
->> Another aspect of this is discoverability. I think a big problem with a
->> project like TuxMake is that while it is developed for the kernel
->> community, it is not a first party project, so without word of mouth,
->> there is not a great way for other people to hear about it.
->>
->> I think it would be a good idea to try and solicit feedback from the
->> greater kernel community at large to ensure that whatever solution is
->> decided on will work for both testing systems and
->> developers/maintainers. I think that a first party solution for having a
->> consistent and easy to set up/work with build environment has been
->> needed for some time but unfortunately, I am not sure how much
->> discussion around this problem has happened directly with those folks.
-> Yes, that was my intention here with this thread to start
-> widening the audience with the upstream community.  My
-> understanding is that the issue hasn't been suitably framed to
-> enable constructive discussion yet.  I'll consider submitting a
-> proposal for the Toolchain track next.
-> 
->>> [1]https://lpc.events/event/18/contributions/1665/
->>> [2]https://hub.docker.com/u/tuxmake
->>> [3]https://www.linaro.org/blog/tuxmake-building-linux-with-kernel-org-toolchains/
->> As an aside, consider using me as a point of contact for anything
->> ClangBuiltLinux related instead of Nick going forward, he has stepped
->> away to focus on LLVM libc for the immediate future.
-> Noted, thank you.
-> 
->> Thanks a lot for bring up this topic. I think it is important to work on
->> and I look forward to talking through this at Plumbers.
-> That would be greatly appreciated.  Many thanks already for your
-> insightful feedback.
 
-The talk is happening today, slides are available:
+vim +47 net/core/page_pool_priv.h
 
-     https://lpc.events/event/18/contributions/1928/
+8ab79ed50cf10f Mina Almasry 2024-09-10  37  
+0f921404689398 Mina Almasry 2024-09-10  38  #if defined(CONFIG_PAGE_POOL)
+585c4413fc2f63 Yunsheng Lin 2024-09-12  39  bool page_pool_set_pp_info(struct page_pool *pool, netmem_ref netmem);
+585c4413fc2f63 Yunsheng Lin 2024-09-12  40  void page_pool_clear_pp_info(struct page_pool *pool, netmem_ref netmem);
+0f921404689398 Mina Almasry 2024-09-10  41  int page_pool_check_memory_provider(struct net_device *dev,
+0f921404689398 Mina Almasry 2024-09-10  42  				    struct netdev_rx_queue *rxq);
+0f921404689398 Mina Almasry 2024-09-10  43  #else
+585c4413fc2f63 Yunsheng Lin 2024-09-12  44  static inline bool page_pool_set_pp_info(struct page_pool *pool,
+0f921404689398 Mina Almasry 2024-09-10  45  					 netmem_ref netmem)
+0f921404689398 Mina Almasry 2024-09-10  46  {
+0f921404689398 Mina Almasry 2024-09-10 @47  }
+585c4413fc2f63 Yunsheng Lin 2024-09-12  48  static inline void page_pool_clear_pp_info(struct page_pool *pool,
+585c4413fc2f63 Yunsheng Lin 2024-09-12  49  					   netmem_ref netmem)
+0f921404689398 Mina Almasry 2024-09-10  50  {
+0f921404689398 Mina Almasry 2024-09-10  51  }
+0f921404689398 Mina Almasry 2024-09-10  52  static inline int page_pool_check_memory_provider(struct net_device *dev,
+0f921404689398 Mina Almasry 2024-09-10  53  						  struct netdev_rx_queue *rxq)
+0f921404689398 Mina Almasry 2024-09-10  54  {
+0f921404689398 Mina Almasry 2024-09-10  55  	return 0;
+0f921404689398 Mina Almasry 2024-09-10  56  }
+0f921404689398 Mina Almasry 2024-09-10  57  #endif
+0f921404689398 Mina Almasry 2024-09-10  58  
 
-I'll reply later this week with a follow-up from the live
-discussions at Plumbers and maybe this will lead to some RFCs or
-a few patches.
+:::::: The code at line 47 was first introduced by commit
+:::::: 0f921404689398943257793f7240db239a23b609 memory-provider: dmabuf devmem memory provider
 
-Thanks,
-Guillaume
+:::::: TO: Mina Almasry <almasrymina@google.com>
+:::::: CC: Jakub Kicinski <kuba@kernel.org>
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
