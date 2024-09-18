@@ -1,67 +1,64 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9034C1BAEE0;
-	Wed, 18 Sep 2024 14:42:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD6A01C3303;
+	Wed, 18 Sep 2024 15:43:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726670550; cv=none; b=VvI2LxV2N4lQHRPuhenu3i6EY3+k3KP25iIDkBwDRCb2qCJ5Q9CwtThFxQctbCbJ5JVjzhx8q3dhbY8RgkDFTV5yd1ZQixAGU9XCs47rXz5HBkGaJGZlU5IONwYj6MFDbymyTjDBi/PccwA0LQZ7I/UgVJF0HG2HA0dIz9zFfNY=
+	t=1726674211; cv=none; b=acMREImZXT2ygoVp5MNmQextXhcapSPCU5Rv4Jc/cq4myO7bFh1EivQSOukjCPXHFHj7yRhNvRJ4sFDYTMw2P/PcEgKGa+kH1KBFRAbbFNazvIPK76nZo74tKtnpG9oZeKNpZrnKWy79HarWE/WqUtFdA3bvGC5sUVyyL5OyCYE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726670550; c=relaxed/simple;
-	bh=f6DO9H9tbPadLV/AmMWoIvT7LPqXcop24V18dsnD8vo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=FQegAAWmHErJO70EtXZW6w/98bNEswbsYXfU/6vU0ELreebW+CRDcnqeOgpa5KMOerKxFEu0veKvzdb6HtPcsN0rWUMZvhtOA+7i2h4LzlxZ+6Lp51vh2B3xjpVufBegMSbPjwUi8BU3phtC6x3/CaKDyrOBF2Qi1HFnP9t+imY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Nb04d4PT; arc=none smtp.client-ip=192.198.163.9
+	s=arc-20240116; t=1726674211; c=relaxed/simple;
+	bh=JsYZxeqDG/j9PTSN8ABjMQde+hbWnWEbazUsZX2LCWM=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=HK0DbPPADAyhl/94WciZMxnmBrIbIj1dU6zhUDfRw00KzB5DatMkqu++Dc9aLKwE8HxW7WZS5897S+lalhC7V1QwFY3pM9JbhWCm3p25H0uq0kzEPFDvm1f2Da1lFu3MARrs8iomQ4QKibLU66kGt2zYy0k+a4Faxyb0Mm6nAzk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=doU9azK9; arc=none smtp.client-ip=198.175.65.17
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Nb04d4PT"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="doU9azK9"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1726670549; x=1758206549;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=f6DO9H9tbPadLV/AmMWoIvT7LPqXcop24V18dsnD8vo=;
-  b=Nb04d4PT/EFuRd22htC3110pJV12b0sP4okNNA/tU8M86F2UpCsJSNtd
-   V29Gnw1c2JR1AzXMTlUlQyeUm1az5JffCP07628uh/yoNr+NGshq6LthB
-   9W2ZEpDhAN96IIoCDhwVj3EG7i4P7K0fFpzy37+TslKpryx6k+WPPCm6K
-   lEFL4RUTT4XF6ZDhlfoRV1hRjKBlGfc9TahQ05u/QzNiW6SdFd0iE0cpg
-   oOiaPot+3R6vBl8SJbiyDfxA4jWRU/qa/4FQ6pWr33pxsVHmWLIMoyQcB
-   YSuCx1DIXuktVBviH6BZf6R6v9PLNj4QIrs5t83+aEl4JAbslYyBXz973
+  t=1726674210; x=1758210210;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=JsYZxeqDG/j9PTSN8ABjMQde+hbWnWEbazUsZX2LCWM=;
+  b=doU9azK93C1QiAb8raKb82MWPknFdGYeDq9pgKUGgJJcFHfPfLiFVfu/
+   fzw2qVJ4qog0yAvSkBNyxnXNNwBD4Sdu6dYD9dU110f30UYdI+AOg02KY
+   5IlisWP4+bjOsOthH2g6/KrxEfIy1PwYsD16H82V5P8myraY+DRcvYjHT
+   pW/jU6tJ64TEVB9rzdhQ3OBHPIAEJUb9IZ8nzlQoFZF1SXNKWtAQc0qq+
+   V3SBRf+OyEBOVdmaIy7YO+v7a31qvy+pr6+27hkm79MUjncrkXMpg68kV
+   OKTjwziLx6NPRvEIxAVYYfPhEI+hXrYTlidYmS+Wlc3gGIQoKKDr7/N0J
    Q==;
-X-CSE-ConnectionGUID: uNOXJSKRSBOwkKaBcziUGw==
-X-CSE-MsgGUID: iLVJ0/V1SfaV+GLTzgzFMA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11199"; a="36255023"
+X-CSE-ConnectionGUID: qeCTfUdxRWi8CnIQ+At9eg==
+X-CSE-MsgGUID: sm/fx34lRk6PYnebF03NNw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11199"; a="25754385"
 X-IronPort-AV: E=Sophos;i="6.10,239,1719903600"; 
-   d="scan'208";a="36255023"
-Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Sep 2024 07:42:27 -0700
-X-CSE-ConnectionGUID: 4A/Qk+DiRdul4OYr8AZigA==
-X-CSE-MsgGUID: 6d1nul30RZG2Lo5fGPjqjA==
+   d="scan'208";a="25754385"
+Received: from orviesa003.jf.intel.com ([10.64.159.143])
+  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Sep 2024 08:43:29 -0700
+X-CSE-ConnectionGUID: ZymnFBovT0OLnyiTppP0Qg==
+X-CSE-MsgGUID: 6lGcDi6TTzGcYL5pXenG3Q==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.10,239,1719903600"; 
-   d="scan'208";a="100312619"
+   d="scan'208";a="74417104"
 Received: from lkp-server01.sh.intel.com (HELO 53e96f405c61) ([10.239.97.150])
-  by orviesa002.jf.intel.com with ESMTP; 18 Sep 2024 07:42:22 -0700
+  by orviesa003.jf.intel.com with ESMTP; 18 Sep 2024 08:43:27 -0700
 Received: from kbuild by 53e96f405c61 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1sqvsp-000CJe-18;
-	Wed, 18 Sep 2024 14:42:19 +0000
-Date: Wed, 18 Sep 2024 22:41:43 +0800
+	id 1sqwpw-000CMI-22;
+	Wed, 18 Sep 2024 15:43:24 +0000
+Date: Wed, 18 Sep 2024 23:42:55 +0800
 From: kernel test robot <lkp@intel.com>
-To: Liao Chang <liaochang1@huawei.com>, mhiramat@kernel.org,
-	oleg@redhat.com, andrii@kernel.org, peterz@infradead.org,
-	mingo@redhat.com, acme@kernel.org, namhyung@kernel.org,
-	mark.rutland@arm.com, alexander.shishkin@linux.intel.com,
-	jolsa@kernel.org, irogers@google.com, adrian.hunter@intel.com,
-	kan.liang@linux.intel.com
+To: Jakob Koschel <jkl820.git@gmail.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
-	linux-perf-users@vger.kernel.org, bpf@vger.kernel.org
-Subject: Re: [PATCH] uprobes: Improve the usage of xol slots for better
- scalability
-Message-ID: <202409182246.UMkGsMXl-lkp@intel.com>
-References: <20240918012752.2045713-1-liaochang1@huawei.com>
+	linux-kernel@vger.kernel.org,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Linux Memory Management List <linux-mm@kvack.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>
+Subject: ld.lld: warning:
+ src/consumer/drivers/usb/gadget/udc/max3420_udc.c:842:0: stack frame size
+ (13496) exceeds limit (8192) in function 'max3420_thread'
+Message-ID: <202409182344.5DqYmhyx-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -70,74 +67,23 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240918012752.2045713-1-liaochang1@huawei.com>
 
-Hi Liao,
-
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on tip/perf/core]
-[cannot apply to perf-tools-next/perf-tools-next perf-tools/perf-tools linus/master acme/perf/core v6.11 next-20240918]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Liao-Chang/uprobes-Improve-the-usage-of-xol-slots-for-better-scalability/20240918-093915
-base:   tip/perf/core
-patch link:    https://lore.kernel.org/r/20240918012752.2045713-1-liaochang1%40huawei.com
-patch subject: [PATCH] uprobes: Improve the usage of xol slots for better scalability
-config: arm-defconfig (https://download.01.org/0day-ci/archive/20240918/202409182246.UMkGsMXl-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240918/202409182246.UMkGsMXl-lkp@intel.com/reproduce)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   9f39757957c11677ceb4600c81888db12b2fef5d
+commit: 349fde599db65d4827820ef6553e3f9ee75b8c7c arch: enable HAS_LTO_CLANG with KASAN and KCOV
+date:   1 year, 1 month ago
+config: x86_64-randconfig-102-20240917 (https://download.01.org/0day-ci/archive/20240918/202409182344.5DqYmhyx-lkp@intel.com/config)
+compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240918/202409182344.5DqYmhyx-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202409182246.UMkGsMXl-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202409182344.5DqYmhyx-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
-   In file included from arch/arm/probes/uprobes/actions-arm.c:10:
->> include/linux/uprobes.h:81:2: error: unknown type name 'refcount_t'
-           refcount_t                      slot_ref;
-           ^
-   1 error generated.
-
-
-vim +/refcount_t +81 include/linux/uprobes.h
-
-    58	
-    59	/*
-    60	 * uprobe_task: Metadata of a task while it singlesteps.
-    61	 */
-    62	struct uprobe_task {
-    63		enum uprobe_task_state		state;
-    64	
-    65		union {
-    66			struct {
-    67				struct arch_uprobe_task	autask;
-    68				unsigned long		vaddr;
-    69			};
-    70	
-    71			struct {
-    72				struct callback_head	dup_xol_work;
-    73				unsigned long		dup_xol_addr;
-    74			};
-    75		};
-    76	
-    77		struct uprobe			*active_uprobe;
-    78		unsigned long			xol_vaddr;
-    79	
-    80		struct list_head		gc;
-  > 81		refcount_t			slot_ref;
-    82		int				insn_slot;
-    83	
-    84		struct arch_uprobe              *auprobe;
-    85	
-    86		struct return_instance		*return_instances;
-    87		unsigned int			depth;
-    88	};
-    89	
+>> ld.lld: warning: src/consumer/drivers/usb/gadget/udc/max3420_udc.c:842:0: stack frame size (13496) exceeds limit (8192) in function 'max3420_thread'
 
 -- 
 0-DAY CI Kernel Test Service
