@@ -1,251 +1,116 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D19F749C;
-	Wed, 18 Sep 2024 01:12:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 442C419A;
+	Wed, 18 Sep 2024 02:05:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=114.242.206.163
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726621975; cv=none; b=SSyBy+o6Hv0LJoXfrtX25rLLQXGhVej2213q5R+cJ36vcStFEf6A3q79UF2vW/UC1lKgsr210SZp+Mdg4cPN2V6AwqzeOo78QdcPzGIZjQQVF+YhCovtGoOixqT30xS6GqdqFeHZX06pQSgEBye8uf+NuConB7LvlyuCZHb0kLg=
+	t=1726625146; cv=none; b=eDwgvXBTwcNkFmRRQcMqrgqF1g3I2URnB/N0IbzL9Xq9YDnk/99Rz4Yk7XtyAn0C/DdnHxb1Mos5uZLusuWQRT/AetzPA/2j4iWSiY4EWcbktaK+3WNb0eodDhTezxxxRZLpCEuJI644lrbgqw1swkmYbtpWoXFU5nF16WopPpk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726621975; c=relaxed/simple;
-	bh=K8IL2+rF4VhOzQODS5cajW5BaJZ9CPww3dZsyhLuzzI=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=ApHlobcsvhpriCtAHYQKa2Mg7TNUy98jysrIIpoxqD8Bl3Zhb8/UZzwXf2eQ2oaBbiFXuSZhXguw2a1i+zbcbPBkT8v5eTreJAmrZtpmfo9QyQS/i2NenlFpUFtKbDt7avCvwmuk/jg+/vvFnzO9trVlPlgJnhc/f63WS9e7diw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Q7W+GnzI; arc=none smtp.client-ip=192.198.163.17
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Q7W+GnzI"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1726621973; x=1758157973;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=K8IL2+rF4VhOzQODS5cajW5BaJZ9CPww3dZsyhLuzzI=;
-  b=Q7W+GnzIsgr4ugnIIO5NsLNLQ9dpacX3AqZaP1dlqkEsNKp46WDWi5m1
-   ZGvOVeWbBaqiTqlrXU4nlPd+usg+Pc7hO6XBiJvd1pRM4mQ2HesUCHija
-   WVnfDqpHUMO4wKaVVdyxIBFZBD23qd4B9VP9UoYEoWjeYqBnS1LtQi2pR
-   57rn8pphE8yAQ6ZuPqEabP/3P04udFG1g2QjqND0dxVDFGMU1kz4NP1nR
-   vsHV6ykcc2p+LOBSLKz1pbm3Srjk530slZofhF/NlP6Fx2LOYfNh4uBC5
-   6Dha3cBrQCLJRi2FR3GUO1f5edGvzO31OqQX78mT43YsldmekGSGvrn9s
-   Q==;
-X-CSE-ConnectionGUID: SjdYikSARZC1JjoM2R1fsg==
-X-CSE-MsgGUID: 28zk92TdQKe48REn9dLtfg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11198"; a="25395476"
-X-IronPort-AV: E=Sophos;i="6.10,235,1719903600"; 
-   d="scan'208";a="25395476"
-Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Sep 2024 18:12:51 -0700
-X-CSE-ConnectionGUID: RU822jBSR/e5jj5G9Dot9A==
-X-CSE-MsgGUID: 3klk/kRgRJKnK9S7FZ2AiQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.10,235,1719903600"; 
-   d="scan'208";a="100209839"
-Received: from lkp-server01.sh.intel.com (HELO 53e96f405c61) ([10.239.97.150])
-  by fmviesa001.fm.intel.com with ESMTP; 17 Sep 2024 18:12:49 -0700
-Received: from kbuild by 53e96f405c61 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1sqjFP-000Bky-14;
-	Wed, 18 Sep 2024 01:12:47 +0000
-Date: Wed, 18 Sep 2024 09:12:40 +0800
-From: kernel test robot <lkp@intel.com>
-To: Jeff Layton <jlayton@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Josef Bacik <josef@toxicpanda.com>,
-	"Darrick J. Wong" <djwong@kernel.org>, Jan Kara <jack@suse.cz>
-Subject: [jlayton:mgtime 7/12] fs/inode.c:2755:23: error: too many arguments
- provided to function-like macro invocation
-Message-ID: <202409180906.qvwVGmC3-lkp@intel.com>
+	s=arc-20240116; t=1726625146; c=relaxed/simple;
+	bh=ja0bMnkN4tal4/Qm2vECx9zbDlKn9vDet4Fh//EDTdM=;
+	h=Subject:To:Cc:References:From:Message-ID:Date:MIME-Version:
+	 In-Reply-To:Content-Type; b=PcC3yAgPeuHhoT+TAHAUDvs2WIw8qy9gqsYfV1Las8aE2ybr4US9v+qY6O7E75DajEABynoUXObso+n/ejJXRk7hINYEPWEzzCjF/WgdKcXuhEtpgCV7e79xUHE8pbv9O2r/t7rA1Pu+1TpzE1hXObHTFMUVhUJqlgaQxvsWZKA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn; spf=pass smtp.mailfrom=loongson.cn; arc=none smtp.client-ip=114.242.206.163
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
+Received: from loongson.cn (unknown [10.20.42.184])
+	by gateway (Coremail) with SMTP id _____8BxfeptNepmmmUKAA--.24559S3;
+	Wed, 18 Sep 2024 10:05:34 +0800 (CST)
+Received: from [10.20.42.184] (unknown [10.20.42.184])
+	by front1 (Coremail) with SMTP id qMiowMBxHeRpNepmN0EJAA--.53205S3;
+	Wed, 18 Sep 2024 10:05:32 +0800 (CST)
+Subject: Re: [PATCH] LoongArch: KVM: Ensure ret is always initialized in
+ kvm_eiointc_{read,write}()
+To: Nathan Chancellor <nathan@kernel.org>,
+ Tianrui Zhao <zhaotianrui@loongson.cn>, Bibo Mao <maobibo@loongson.cn>,
+ Huacai Chen <chenhuacai@kernel.org>, WANG Xuerui <kernel@xen0n.name>
+Cc: kvm@vger.kernel.org, loongarch@lists.linux.dev, llvm@lists.linux.dev,
+ patches@lists.linux.dev
+References: <20240916-loongarch-kvm-eiointc-fix-sometimes-uninitialized-v1-1-85142dcb2274@kernel.org>
+From: lixianglai <lixianglai@loongson.cn>
+Message-ID: <9c7e4360-3f77-035f-edb9-61dcfe239a29@loongson.cn>
+Date: Wed, 18 Sep 2024 10:05:10 +0800
+User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+In-Reply-To: <20240916-loongarch-kvm-eiointc-fix-sometimes-uninitialized-v1-1-85142dcb2274@kernel.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-CM-TRANSID:qMiowMBxHeRpNepmN0EJAA--.53205S3
+X-CM-SenderInfo: 5ol0xt5qjotxo6or00hjvr0hdfq/
+X-Coremail-Antispam: 1Uk129KBj93XoW7ZFW7KrykZw4xJFyxurW3urX_yoW8ZrW5pF
+	1UZw4kCrs5Xrykta4Dt3WrWF4jqa95Gr17uFyYqFW2kF4UZF9xZ340yrZIgFyYkws7Jr40
+	qF1F93WYvan0y3gCm3ZEXasCq-sJn29KB7ZKAUJUUUU5529EdanIXcx71UUUUU7KY7ZEXa
+	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
+	0xBIdaVrnRJUUUv0b4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
+	IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
+	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_JFI_Gr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
+	0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_
+	Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12xvs2x26I8E6xACxx1l5I
+	8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1Y6r17McIj6I8E87Iv67AK
+	xVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lc7I2V7IY0VAS07AlzV
+	AYIcxG8wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E
+	14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIx
+	kGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAF
+	wI0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r
+	4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Jr0_GrUvcSsGvfC2KfnxnUUI43ZEXa7IU1QVy3UU
+	UUU==
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jlayton/linux.git mgtime
-head:   70acbf7bd012d16994dccb4070cf18ac9b8c0923
-commit: 1cce6091bbab563762f4a4d6b662613d831b4388 [7/12] fs: add percpu counters for significant multigrain timestamp events
-config: x86_64-allnoconfig (https://download.01.org/0day-ci/archive/20240918/202409180906.qvwVGmC3-lkp@intel.com/config)
-compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240918/202409180906.qvwVGmC3-lkp@intel.com/reproduce)
+Hi Nathan Chancellor :
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202409180906.qvwVGmC3-lkp@intel.com/
+Thank you very much for pointing out the problem,
+I will integrate this patch in the next version.
 
-All errors (new ones prefixed by >>):
+Thanks!
+Xianglai.
 
->> fs/inode.c:2755:23: error: too many arguments provided to function-like macro invocation
-    2755 |                         mgtime_counter_inc(mg_fine_stamps);
-         |                                            ^
-   fs/inode.c:166:9: note: macro 'mgtime_counter_inc' defined here
-     166 | #define mgtime_counter_inc()    do { } while (0)
-         |         ^
->> fs/inode.c:2755:4: error: use of undeclared identifier 'mgtime_counter_inc'; did you mean 'percpu_counter_inc'?
-    2755 |                         mgtime_counter_inc(mg_fine_stamps);
-         |                         ^~~~~~~~~~~~~~~~~~
-         |                         percpu_counter_inc
-   include/linux/percpu_counter.h:265:20: note: 'percpu_counter_inc' declared here
-     265 | static inline void percpu_counter_inc(struct percpu_counter *fbc)
-         |                    ^
-   fs/inode.c:2758:21: error: too many arguments provided to function-like macro invocation
-    2758 |         mgtime_counter_inc(mg_ctime_updates);
-         |                            ^
-   fs/inode.c:166:9: note: macro 'mgtime_counter_inc' defined here
-     166 | #define mgtime_counter_inc()    do { } while (0)
-         |         ^
-   fs/inode.c:2758:2: error: use of undeclared identifier 'mgtime_counter_inc'; did you mean 'percpu_counter_inc'?
-    2758 |         mgtime_counter_inc(mg_ctime_updates);
-         |         ^~~~~~~~~~~~~~~~~~
-         |         percpu_counter_inc
-   include/linux/percpu_counter.h:265:20: note: 'percpu_counter_inc' declared here
-     265 | static inline void percpu_counter_inc(struct percpu_counter *fbc)
-         |                    ^
-   fs/inode.c:2772:22: error: too many arguments provided to function-like macro invocation
-    2772 |                 mgtime_counter_inc(mg_ctime_swaps);
-         |                                    ^
-   fs/inode.c:166:9: note: macro 'mgtime_counter_inc' defined here
-     166 | #define mgtime_counter_inc()    do { } while (0)
-         |         ^
-   fs/inode.c:2772:3: error: use of undeclared identifier 'mgtime_counter_inc'; did you mean 'percpu_counter_inc'?
-    2772 |                 mgtime_counter_inc(mg_ctime_swaps);
-         |                 ^~~~~~~~~~~~~~~~~~
-         |                 percpu_counter_inc
-   include/linux/percpu_counter.h:265:20: note: 'percpu_counter_inc' declared here
-     265 | static inline void percpu_counter_inc(struct percpu_counter *fbc)
-         |                    ^
-   fs/inode.c:2755:4: warning: expression result unused [-Wunused-value]
-    2755 |                         mgtime_counter_inc(mg_fine_stamps);
-         |                         ^~~~~~~~~~~~~~~~~~
-   fs/inode.c:2758:2: warning: expression result unused [-Wunused-value]
-    2758 |         mgtime_counter_inc(mg_ctime_updates);
-         |         ^~~~~~~~~~~~~~~~~~
-   fs/inode.c:2772:3: warning: expression result unused [-Wunused-value]
-    2772 |                 mgtime_counter_inc(mg_ctime_swaps);
-         |                 ^~~~~~~~~~~~~~~~~~
-   fs/inode.c:2845:22: error: too many arguments provided to function-like macro invocation
-    2845 |                 mgtime_counter_inc(mg_ctime_swaps);
-         |                                    ^
-   fs/inode.c:166:9: note: macro 'mgtime_counter_inc' defined here
-     166 | #define mgtime_counter_inc()    do { } while (0)
-         |         ^
-   fs/inode.c:2845:3: error: use of undeclared identifier 'mgtime_counter_inc'; did you mean 'percpu_counter_inc'?
-    2845 |                 mgtime_counter_inc(mg_ctime_swaps);
-         |                 ^~~~~~~~~~~~~~~~~~
-         |                 percpu_counter_inc
-   include/linux/percpu_counter.h:265:20: note: 'percpu_counter_inc' declared here
-     265 | static inline void percpu_counter_inc(struct percpu_counter *fbc)
-         |                    ^
-   fs/inode.c:2845:3: warning: expression result unused [-Wunused-value]
-    2845 |                 mgtime_counter_inc(mg_ctime_swaps);
-         |                 ^~~~~~~~~~~~~~~~~~
-   4 warnings and 8 errors generated.
---
->> kernel/time/timekeeping.c:2467:22: error: too many arguments provided to function-like macro invocation
-    2467 |                 mgtime_counter_inc(mg_floor_swaps);
-         |                                    ^
-   kernel/time/timekeeping_internal.h:18:9: note: macro 'mgtime_counter_inc' defined here
-      18 | #define mgtime_counter_inc()    do { } while (0)
-         |         ^
->> kernel/time/timekeeping.c:2467:3: error: use of undeclared identifier 'mgtime_counter_inc'; did you mean 'percpu_counter_inc'?
-    2467 |                 mgtime_counter_inc(mg_floor_swaps);
-         |                 ^~~~~~~~~~~~~~~~~~
-         |                 percpu_counter_inc
-   include/linux/percpu_counter.h:265:20: note: 'percpu_counter_inc' declared here
-     265 | static inline void percpu_counter_inc(struct percpu_counter *fbc)
-         |                    ^
-   kernel/time/timekeeping.c:2467:3: warning: expression result unused [-Wunused-value]
-    2467 |                 mgtime_counter_inc(mg_floor_swaps);
-         |                 ^~~~~~~~~~~~~~~~~~
-   1 warning and 2 errors generated.
+> Clang warns (or errors with CONFIG_WERROR=y):
+>
+>    arch/loongarch/kvm/intc/eiointc.c:512:2: error: variable 'ret' is used uninitialized whenever switch default is taken [-Werror,-Wsometimes-uninitialized]
+>      512 |         default:
+>          |         ^~~~~~~
+>    arch/loongarch/kvm/intc/eiointc.c:716:2: error: variable 'ret' is used uninitialized whenever switch default is taken [-Werror,-Wsometimes-uninitialized]
+>      716 |         default:
+>          |         ^~~~~~~
+>
+> Set ret to -EINVAL in the default case to resolve the warning, as len
+> was not a valid value for the functions to handle.
+>
+> Fixes: f810ef038c66 ("LoongArch: KVM: Add EIOINTC read and write functions")
+> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+> ---
+>   arch/loongarch/kvm/intc/eiointc.c | 2 ++
+>   1 file changed, 2 insertions(+)
+>
+> diff --git a/arch/loongarch/kvm/intc/eiointc.c b/arch/loongarch/kvm/intc/eiointc.c
+> index 414e4ffd69173dc248ba0042bed3bebdc11700e3..e5d23f0da055c97c0e4ba6705f6b71d89846f42a 100644
+> --- a/arch/loongarch/kvm/intc/eiointc.c
+> +++ b/arch/loongarch/kvm/intc/eiointc.c
+> @@ -512,6 +512,7 @@ static int kvm_eiointc_write(struct kvm_vcpu *vcpu,
+>   	default:
+>   		WARN_ONCE(1, "%s: Abnormal address access:addr 0x%llx,size %d\n",
+>   						__func__, addr, len);
+> +		ret = -EINVAL;
+>   	}
+>   	loongarch_ext_irq_unlock(eiointc, flags);
+>   	return ret;
+> @@ -716,6 +717,7 @@ static int kvm_eiointc_read(struct kvm_vcpu *vcpu,
+>   	default:
+>   		WARN_ONCE(1, "%s: Abnormal address access:addr 0x%llx,size %d\n",
+>   						__func__, addr, len);
+> +		ret = -EINVAL;
+>   	}
+>   	loongarch_ext_irq_unlock(eiointc, flags);
+>   	return ret;
+>
+> ---
+> base-commit: 357da696640e1db8fc8829a4dd1bb2d0402169b5
+> change-id: 20240916-loongarch-kvm-eiointc-fix-sometimes-uninitialized-e17b039d2813
+>
+> Best regards,
 
-
-vim +2755 fs/inode.c
-
-  2713	
-  2714	/**
-  2715	 * inode_set_ctime_current - set the ctime to current_time
-  2716	 * @inode: inode
-  2717	 *
-  2718	 * Set the inode's ctime to the current value for the inode. Returns the
-  2719	 * current value that was assigned. If this is not a multigrain inode, then we
-  2720	 * set it to the later of the coarse time and floor value.
-  2721	 *
-  2722	 * If it is multigrain, then we first see if the coarse-grained timestamp is
-  2723	 * distinct from what we have. If so, then we'll just use that. If we have to
-  2724	 * get a fine-grained timestamp, then do so. After that, we try to swap the new
-  2725	 * value into i_ctime_nsec. We take the resulting ctime, regardless of the
-  2726	 * outcome of the swap.
-  2727	 */
-  2728	struct timespec64 inode_set_ctime_current(struct inode *inode)
-  2729	{
-  2730		struct timespec64 now;
-  2731		u32 cns, cur;
-  2732	
-  2733		ktime_get_coarse_real_ts64_mg(&now);
-  2734		now = timestamp_truncate(now, inode);
-  2735	
-  2736		/* Just return that if this is not a multigrain fs */
-  2737		if (!is_mgtime(inode)) {
-  2738			inode_set_ctime_to_ts(inode, now);
-  2739			goto out;
-  2740		}
-  2741	
-  2742		/*
-  2743		 * We only need a fine-grained time if someone has queried it,
-  2744		 * and the current coarse grained time isn't later than what's
-  2745		 * already there.
-  2746		 */
-  2747		cns = smp_load_acquire(&inode->i_ctime_nsec);
-  2748		if (cns & I_CTIME_QUERIED) {
-  2749			struct timespec64 ctime = { .tv_sec = inode->i_ctime_sec,
-  2750						    .tv_nsec = cns & ~I_CTIME_QUERIED };
-  2751	
-  2752			if (timespec64_compare(&now, &ctime) <= 0) {
-  2753				ktime_get_real_ts64_mg(&now);
-  2754				now = timestamp_truncate(now, inode);
-> 2755				mgtime_counter_inc(mg_fine_stamps);
-  2756			}
-  2757		}
-  2758		mgtime_counter_inc(mg_ctime_updates);
-  2759	
-  2760		/* No need to cmpxchg if it's exactly the same */
-  2761		if (cns == now.tv_nsec && inode->i_ctime_sec == now.tv_sec) {
-  2762			trace_ctime_xchg_skip(inode, &now);
-  2763			goto out;
-  2764		}
-  2765		cur = cns;
-  2766	retry:
-  2767		/* Try to swap the nsec value into place. */
-  2768		if (try_cmpxchg(&inode->i_ctime_nsec, &cur, now.tv_nsec)) {
-  2769			/* If swap occurred, then we're (mostly) done */
-  2770			inode->i_ctime_sec = now.tv_sec;
-  2771			trace_ctime_ns_xchg(inode, cns, now.tv_nsec, cur);
-  2772			mgtime_counter_inc(mg_ctime_swaps);
-  2773		} else {
-  2774			/*
-  2775			 * Was the change due to someone marking the old ctime QUERIED?
-  2776			 * If so then retry the swap. This can only happen once since
-  2777			 * the only way to clear I_CTIME_QUERIED is to stamp the inode
-  2778			 * with a new ctime.
-  2779			 */
-  2780			if (!(cns & I_CTIME_QUERIED) && (cns | I_CTIME_QUERIED) == cur) {
-  2781				cns = cur;
-  2782				goto retry;
-  2783			}
-  2784			/* Otherwise, keep the existing ctime */
-  2785			now.tv_sec = inode->i_ctime_sec;
-  2786			now.tv_nsec = cur & ~I_CTIME_QUERIED;
-  2787		}
-  2788	out:
-  2789		return now;
-  2790	}
-  2791	EXPORT_SYMBOL(inode_set_ctime_current);
-  2792	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
