@@ -1,25 +1,60 @@
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 58FB51A0B08;
-	Thu, 19 Sep 2024 17:49:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from mailout1.w1.samsung.com (mailout1.w1.samsung.com [210.118.77.11])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5148A20B35;
+	Thu, 19 Sep 2024 19:12:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.118.77.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726768163; cv=none; b=AoHTwasalOxjfqy99Hd338/1hd0ttlM/tl98iGnp0BWuZvgYv2gN4ODDOfG529bFtF8rvekSw/8J8ZmGktnopj8Oa+lViNa7jKlnsaey/9DilaPA0tvXJePJX7WmMgdZ5oMQM17FK8odvoHx0xvRiesTRptNWseC/UgTyjly4HA=
+	t=1726773147; cv=none; b=cRmdLXv6yojPm7E5dA8G4lqqe6jp708TPvKncb4CgAfwGsckwe5XWcn9+kXjHUOlx45SOTB7JMagX1lzRmBZIjHhpiBt4KhxsFEw/jbkAiDVFEy/sNX2ITlZRupYvqCiRI/5RpNs5nV1p3pAZQHfWyVIVeePKyYMLDUDgWjb/uE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726768163; c=relaxed/simple;
-	bh=Xzcxh0emf1BR3pfAuhfeoZgf9JYWV+PUBPOkNS+SmKQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=YcGpU96KRSopHhXBuYBX52S+H0FKGeBolPp1tEA1GAskQPsXp1va7xPnVunAAGYQqynmJinV6SUuw9qBUCSx0SvKv3lYZIwzPLAXDnUeQZffB6Hf1VChHkLUkQMENpDoNOqNF6wAJ5+/wnxhoZIf5uBSZP8zKKtxgKim/O+5wPU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 10F3A1007;
-	Thu, 19 Sep 2024 10:49:50 -0700 (PDT)
-Received: from [10.57.82.79] (unknown [10.57.82.79])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 973013F64C;
-	Thu, 19 Sep 2024 10:49:12 -0700 (PDT)
-Message-ID: <5bd51798-cb47-4a7b-be40-554b5a821fe7@arm.com>
-Date: Thu, 19 Sep 2024 19:49:09 +0200
+	s=arc-20240116; t=1726773147; c=relaxed/simple;
+	bh=zGHRtNH0HtiNux6L2M1nTJQ42ddSQcZjRws0nmEhOqk=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:From:In-Reply-To:
+	 Content-Type:References; b=tEgxcgBpFIV07IqzeuJhyinP/7WyWJ79Gr3xe/7OshtQvfVwC8SKvbtpwkAWxUX5Qyhmi37kYM0SA88yBzBUWaubpVjKTqVFGQkpGJUMFmGEaFSnIy15nzIJ0NRtwCrefkmt8Qz2Wxc+PhKQkI9UY7pX0Zq9Cwmnigx8MED9Bzs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=fzvLBANY; arc=none smtp.client-ip=210.118.77.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="fzvLBANY"
+Received: from eucas1p2.samsung.com (unknown [182.198.249.207])
+	by mailout1.w1.samsung.com (KnoxPortal) with ESMTP id 20240919191221euoutp010ddd44cc9e7483f2de1362b72161a6e4~2uwYTi6ct2616526165euoutp01c;
+	Thu, 19 Sep 2024 19:12:21 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.w1.samsung.com 20240919191221euoutp010ddd44cc9e7483f2de1362b72161a6e4~2uwYTi6ct2616526165euoutp01c
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+	s=mail20170921; t=1726773141;
+	bh=5wMWZ+g85x3/VQ4fe0nCOsxCOPo6Ph9ygPWjlPbrfW0=;
+	h=Date:Subject:To:CC:From:In-Reply-To:References:From;
+	b=fzvLBANYeCN29tswLwUd47pXXc6AIHl4SdOotmBcpN7h4RgkQuES0RWvwTyB+1PqY
+	 l6fR+qZymcrJAUga1SRkwi8ZqVPiz8MlXoCeBIAsBlKEdUKM91n2A8+xvmdQxxaeiC
+	 HXq/LEs57wGuy/k0nXaH8BWMs//KbjyFOD+WNJ8w=
+Received: from eusmges1new.samsung.com (unknown [203.254.199.242]) by
+	eucas1p1.samsung.com (KnoxPortal) with ESMTP id
+	20240919191221eucas1p17631c52c12e9eac528029fc313e0de7c~2uwX8PxpR2404624046eucas1p1A;
+	Thu, 19 Sep 2024 19:12:21 +0000 (GMT)
+Received: from eucas1p2.samsung.com ( [182.198.249.207]) by
+	eusmges1new.samsung.com (EUCPMTA) with SMTP id 7C.44.09624.5977CE66; Thu, 19
+	Sep 2024 20:12:21 +0100 (BST)
+Received: from eusmtrp2.samsung.com (unknown [182.198.249.139]) by
+	eucas1p2.samsung.com (KnoxPortal) with ESMTPA id
+	20240919191220eucas1p23f207681d0268c632f46323fd5ac9107~2uwXFO6tm3227632276eucas1p2i;
+	Thu, 19 Sep 2024 19:12:20 +0000 (GMT)
+Received: from eusmgms1.samsung.com (unknown [182.198.249.179]) by
+	eusmtrp2.samsung.com (KnoxPortal) with ESMTP id
+	20240919191220eusmtrp2b6213760a633a6ab532f5875087dc3ab~2uwXCvxYJ2424224242eusmtrp2m;
+	Thu, 19 Sep 2024 19:12:20 +0000 (GMT)
+X-AuditID: cbfec7f2-c11ff70000002598-0c-66ec7795e51c
+Received: from eusmtip2.samsung.com ( [203.254.199.222]) by
+	eusmgms1.samsung.com (EUCPMTA) with SMTP id 13.E4.14621.4977CE66; Thu, 19
+	Sep 2024 20:12:20 +0100 (BST)
+Received: from CAMSVWEXC02.scsc.local (unknown [106.1.227.72]) by
+	eusmtip2.samsung.com (KnoxPortal) with ESMTPA id
+	20240919191220eusmtip26823cf362cdfc852c6290fd3d6148856~2uwWtZnoN2388723887eusmtip2S;
+	Thu, 19 Sep 2024 19:12:20 +0000 (GMT)
+Received: from [106.110.32.87] (106.110.32.87) by CAMSVWEXC02.scsc.local
+	(2002:6a01:e348::6a01:e348) with Microsoft SMTP Server (TLS) id 15.0.1497.2;
+	Thu, 19 Sep 2024 20:12:17 +0100
+Message-ID: <d2726a61-37fa-4c39-aad6-08bf99d8d14b@samsung.com>
+Date: Thu, 19 Sep 2024 21:12:15 +0200
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -27,133 +62,233 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH V2 7/7] mm: Use pgdp_get() for accessing PGD entries
+Subject: Re: [PATCH v2 3/8] drm/xe: xe_gen_wa_oob: fix
+ program_invocation_short_name for macos
 Content-Language: en-GB
-To: "Russell King (Oracle)" <linux@armlinux.org.uk>
-Cc: Anshuman Khandual <anshuman.khandual@arm.com>,
- kernel test robot <lkp@intel.com>, linux-mm@kvack.org, llvm@lists.linux.dev,
- oe-kbuild-all@lists.linux.dev, Andrew Morton <akpm@linux-foundation.org>,
- David Hildenbrand <david@redhat.com>, "Mike Rapoport (IBM)"
- <rppt@kernel.org>, Arnd Bergmann <arnd@arndb.de>, x86@kernel.org,
- linux-m68k@lists.linux-m68k.org, linux-fsdevel@vger.kernel.org,
- kasan-dev@googlegroups.com, linux-kernel@vger.kernel.org,
- linux-perf-users@vger.kernel.org, Dimitri Sivanich
- <dimitri.sivanich@hpe.com>, Alexander Viro <viro@zeniv.linux.org.uk>,
- Muchun Song <muchun.song@linux.dev>, Andrey Ryabinin
- <ryabinin.a.a@gmail.com>, Miaohe Lin <linmiaohe@huawei.com>,
- Dennis Zhou <dennis@kernel.org>, Tejun Heo <tj@kernel.org>,
- Christoph Lameter <cl@linux-foundation.org>,
- Uladzislau Rezki <urezki@gmail.com>, Christoph Hellwig <hch@infradead.org>
-References: <20240917073117.1531207-8-anshuman.khandual@arm.com>
- <202409190310.ViHBRe12-lkp@intel.com>
- <8f43251a-5418-4c54-a9b0-29a6e9edd879@arm.com>
- <ZuvqpvJ6ht4LCuB+@shell.armlinux.org.uk>
- <82fa108e-5b15-435a-8b61-6253766c7d88@arm.com>
- <ZuxZ/QeSdqTHtfmw@shell.armlinux.org.uk>
-From: Ryan Roberts <ryan.roberts@arm.com>
-In-Reply-To: <ZuxZ/QeSdqTHtfmw@shell.armlinux.org.uk>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+To: Masahiro Yamada <masahiroy@kernel.org>
+CC: Nathan Chancellor <nathan@kernel.org>, Nicolas Schier
+	<nicolas@fjasle.eu>, Lucas De Marchi <lucas.demarchi@intel.com>,
+	=?UTF-8?Q?Thomas_Hellstr=C3=B6m?= <thomas.hellstrom@linux.intel.com>,
+	Rodrigo Vivi <rodrigo.vivi@intel.com>, Maarten Lankhorst
+	<maarten.lankhorst@linux.intel.com>, Maxime Ripard <mripard@kernel.org>,
+	Thomas Zimmermann <tzimmermann@suse.de>, David Airlie <airlied@gmail.com>,
+	William Hubbs <w.d.hubbs@gmail.com>, Chris Brannon <chris@the-brannons.com>,
+	Kirk Reiser <kirk@reisers.ca>, Samuel Thibault
+	<samuel.thibault@ens-lyon.org>, Paul Moore <paul@paul-moore.com>, "Stephen
+ Smalley" <stephen.smalley.work@gmail.com>, Ondrej Mosnacek
+	<omosnace@redhat.com>, Catalin Marinas <catalin.marinas@arm.com>, Will
+	Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>, Oliver Upton
+	<oliver.upton@linux.dev>, James Morse <james.morse@arm.com>, Suzuki K
+	Poulose <suzuki.poulose@arm.com>, Zenghui Yu <yuzenghui@huawei.com>, "Greg
+ Kroah-Hartman" <gregkh@linuxfoundation.org>, Jiri Slaby
+	<jirislaby@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, "Bill
+ Wendling" <morbo@google.com>, Justin Stitt <justinstitt@google.com>, "Simona
+ Vetter" <simona.vetter@ffwll.ch>, <linux-kernel@vger.kernel.org>,
+	<linux-kbuild@vger.kernel.org>, <intel-xe@lists.freedesktop.org>,
+	<dri-devel@lists.freedesktop.org>, <speakup@linux-speakup.org>,
+	<selinux@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+	<kvmarm@lists.linux.dev>, <linux-serial@vger.kernel.org>,
+	<llvm@lists.linux.dev>, Finn Behrens <me@kloenk.dev>, "Daniel Gomez
+ (Samsung)" <d+samsung@kruces.com>, <gost.dev@samsung.com>
+From: Daniel Gomez <da.gomez@samsung.com>
+In-Reply-To: <CAK7LNAQDxVGOa5g3f_dqZ5nD_u8_a++T+ussL+AWuOXs-XOsow@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format="flowed"
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: CAMSVWEXC01.scsc.local (2002:6a01:e347::6a01:e347) To
+	CAMSVWEXC02.scsc.local (2002:6a01:e348::6a01:e348)
+X-Brightmail-Tracker: H4sIAAAAAAAAA02Ta0yTVxjHPe+1INWXStejEIldumUQmCboziZBt/DhXYKJlw8ys0y68YJM
+	bmkpbm5GRO7gxkUodNAhlFtlQysgV3HAWjpAQBCRy2CRu1ynjovMjlLM+PZ/nvP7P8/5n+Tw
+	cMFrag8vIDiMkwVLA8WUNVGpX+lwSb8w47d/6qUQtTzOw9B8YRJAeu0kjmpNQzjqeTlPoav5
+	ZRRavjOJoeF7RRiay3FAGTfzKaTuMhJouryJQLqnvSRaq6nCUHdNNoXa8q/RaPR6A4XGnhZS
+	6MZiBYH+GukjUXW2kUT1Zd0U0nU/J1FMfCGJYkvGKLSQbMLQeH0LidJXZig0m/w7jQZSlQRq
+	UPXSqHhZCVCHQU8jU8NeVFnVDtBERxpAWQMDAD2rWh9cPpNCoryYD1DU4EH0pOAWfdSJLVWX
+	ArZO306x9f/kEmxN4x2KrVYN0WyuTsFGNc+SbH7dFMbqtPEUq45XY6zp2gjJNpvyaPZGRDrO
+	qo0n2IacUpodTjRgx+EZa3dfLjAgnJO97+FjfS6mNpMOnd77TcTN7RFgUpQArHiQcYPKSTVI
+	ANY8AVMMYFNsBW0pXgAYvZyHmykB8xzAfzMlbxxZtRGUBSoCcHC2ebNYh14tpW0W1QDqO1oI
+	s4XPeEDdgyVg1gQjgbdq50hL3xYas0Y3GCHjCIf7M2mz3sX4wIIE5QaPMyIY+aJkg7djnOBg
+	QRxpXoAzUzZwIrVzw0wx78F7Rt2G2Yo5AdVRf65r3jr0EVS2fGqZ4wivVvyEWyLsg5kpJYRF
+	X4J/lPdj5pmQqd0OC283kpYDTzg3ZtyEdsFpQzlt0Q7QVP0zZtH+UPOrapMJhXUDKtK8FzKH
+	4Q9tgZb2x7BszYBZ2jtg36yt5To7YGqlEk8GEtWWl1BtSaz6P4BqS4BcQGiBiFPIg/w5+YFg
+	7oKrXBokVwT7u34VEqQD61+k9bXh7yqQM73o2ggwHmgEkIeL7fiihSk/Ad9X+u1FThZyVqYI
+	5OSNwJ5HiEV8ia8jJ2D8pWHceY4L5WRvTjGe1Z4IjBdx+rvVw5rVDLfOZ6aetyQtXp2/ZPu8
+	i+mzT43f9r4c03vSTubYcX/V9vShhVFh/nzSqZNj9p454R9OdOFKr6b6ZEnrl5ELS2ekI3e1
+	ogRx0aL7F9ijT74XeOAZLp2XNCkhjo8Mv7Xv65OIAxTuV8Z3DmmOK1wOKdWSh86Ul+agzcP4
+	aFrS/06c/2fO2kjC/ZV18f36Rd+gNJFwjZdUW9fNVwjHghyWcx7HSJOqekabvS+mGBShsZrG
+	bd47n5iOxF05u63ncrhNtN+K9q7n1yFt9keDAj8vSuZnHdv99phDz/Wu+dYmbX54lPD8j4nO
+	6snoBjc2/kHskd1FiWGD5ftnmsSE/Jz0gBMuk0v/A5xW+OaRBAAA
+X-Brightmail-Tracker: H4sIAAAAAAAAA02Te0yTVxjGPV+/S0GYHxXCgRHFJixCYqFA8WCAbQmZ3xYzZWK2wQAb+bhf
+	TEsFXYzNIHUUMSAqUKFiG1Aum65cLJTLYKzIGJLRwZgIuClyEUEGKjiwA8oS/vud8z7v87zn
+	5Bwuh3eXdObGp6SxkhRxEp+0xnvedo3uu5w+E+NlGnBA9/7QYGiu4gJAxqpJDjKYRzjo95dz
+	JMrU3ibRUu0khsZab2JottQFXa3Wkkj9WzeOput+wpHu8SCBVpr0GDI1lZDoV20uhZ5cbiPR
+	+OMKEt2Yr8fRX4+GCNRY0k2gltsmEulMCwRSZFcQ6HzlOIle5Jkx9LTlHoGuLM+Q6HnezxQa
+	vlSIozbVIIVuLRUC1NdlpJC5bRdq0PcCNNFXAFDx8DBAz/RrxnUz+QTSKPajrIci9Gf5HeoD
+	D6ZGXQOYZmMvybS8KsOZpo5akmlUjVBMmU7GZHU+Jxht8xTG6KqySUadrcYYc+4jguk0ayjm
+	hvwKh1F3hzBtpTUUM5bThR2BYYIASaosjXWNS5WmBfLDhchbIPRHAm9ff4HQZ3/EAW8R3zMo
+	IJpNij/FSjyDjgviFIYi6uT0rgx59XY5mHRUAisupH1hsUFOKoE1l0eXA9hfqsEsBRf4w+IA
+	YeGdcGVQuSmaB7BCn7O5aASwaDxzo8OWDoK6+6/BOuO0G7xjmCUs+3awu/gJvs4O9G449qCI
+	Wued9HFYrizc0HNoR/jNYuWG3p72gA/LvyXWAzj0hA08f0uHWdI0GOzXjm6kkbQ7bO3WbThZ
+	0SFQnTVKWZwQ1M60b/JumFl/jWM5wx5YlF+JW/gsXFh9CvKAg2rLgKotg6i2WKm2WJUBvArY
+	szJpcmyyVCiQipOlspRYwYnUZB1Ye8ENxuVaPVBPzws6AMYFHQByOXx7W8cXUzE822jx6TOs
+	JDVKIktipR1AtHZL+RxnhxOpa18gJS1K6OclEvr6+XuJ/P18+I62H5n6Ynh0rDiNTWTZk6zk
+	/z6Ma+Usx04lMZ9mlX14eDl0OXdHztRLyvcXm72dE831nzXyE2Nmffr1wW6ai1czMkcC4NeG
+	g4PtxRE20ZENipCDRVYXI123lZTWykP6icaZQNPNdCv3c70GP55LwqF/ek43/AgJuGB0c7Ie
+	0r/zSWhynsLp+6++e/8s7RmGuEcH4qvD/9W/MkGdKGT2820KLLp9X/r2yXEZqZrLiFsNi+ap
+	90TefYZlX3fvNKY05a944b0fc5WH/r7+4FigwT3qrS48tL4kaNU1ZuTI/OuFa+L77znWti6t
+	RPRgb84l2CgTqYL6gpwCWH3mSx/jgPldwZtFeztZwiWe3URZ3Y4+py8OD104EBx8lI9L48RC
+	D45EKv4P8XlwBEoEAAA=
+X-CMS-MailID: 20240919191220eucas1p23f207681d0268c632f46323fd5ac9107
+X-Msg-Generator: CA
+X-RootMTR: 20240906144003eucas1p1b8c2be4807e04ced52c4902bfbfb9783
+X-EPHeader: CA
+CMS-TYPE: 201P
+X-CMS-RootMailID: 20240906144003eucas1p1b8c2be4807e04ced52c4902bfbfb9783
+References: <20240906-macos-build-support-v2-0-06beff418848@samsung.com>
+	<20240906-macos-build-support-v2-3-06beff418848@samsung.com>
+	<CGME20240906144003eucas1p1b8c2be4807e04ced52c4902bfbfb9783@eucas1p1.samsung.com>
+	<CAK7LNAQDxVGOa5g3f_dqZ5nD_u8_a++T+ussL+AWuOXs-XOsow@mail.gmail.com>
 
-On 19/09/2024 18:06, Russell King (Oracle) wrote:
-> On Thu, Sep 19, 2024 at 05:48:58PM +0200, Ryan Roberts wrote:
->>> 32-bit arm uses, in some circumstances, an array because each level 1
->>> page table entry is actually two descriptors. It needs to be this way
->>> because each level 2 table pointed to by each level 1 entry has 256
->>> entries, meaning it only occupies 1024 bytes in a 4096 byte page.
->>>
->>> In order to cut down on the wastage, treat the level 1 page table as
->>> groups of two entries, which point to two consecutive 1024 byte tables
->>> in the level 2 page.
->>>
->>> The level 2 entry isn't suitable for the kernel's use cases (there are
->>> no bits to represent accessed/dirty and other important stuff that the
->>> Linux MM wants) so we maintain the hardware page tables and a separate
->>> set that Linux uses in the same page. Again, the software tables are
->>> consecutive, so from Linux's perspective, the level 2 page tables
->>> have 512 entries in them and occupy one full page.
->>>
->>> This is documented in arch/arm/include/asm/pgtable-2level.h
->>>
->>> However, what this means is that from the software perspective, the
->>> level 1 page table descriptors are an array of two entries, both of
->>> which need to be setup when creating a level 2 page table, but only
->>> the first one should ever be dereferenced when walking the tables,
->>> otherwise the code that walks the second level of page table entries
->>> will walk off the end of the software table into the actual hardware
->>> descriptors.
->>>
->>> I've no idea what the idea is behind introducing pgd_get() and what
->>> it's semantics are, so I can't comment further.
+On 9/6/2024 4:39 PM, Masahiro Yamada wrote:
+> On Fri, Sep 6, 2024 at 8:01 PM Daniel Gomez via B4 Relay
+> <devnull+da.gomez.samsung.com@kernel.org> wrote:
 >>
->> The helper is intended to read the value of the entry pointed to by the passed
->> in pointer. And it shoiuld be read in a "single copy atomic" manner, meaning no
->> tearing. Further, the PTL is expected to be held when calling the getter. If the
->> HW can write to the entry such that its racing with the lock holder (i.e. HW
->> update of access/dirty) then READ_ONCE() should be suitable for most
->> architectures. If there is no possibility of racing (because HW doesn't write to
->> the entry), then a simple dereference would be sufficient, I think (which is
->> what the core code was already doing in most cases).
+>> From: Daniel Gomez <da.gomez@samsung.com>
+>>
+>> Use getprogname() [1] instead of program_invocation_short_name() [2]
+>> for macOS hosts.
+>>
+>> [1]:
+>> https://www.gnu.org/software/gnulib/manual/html_node/
+>> program_005finvocation_005fshort_005fname.html
+>>
+>> [2]:
+>> https://developer.apple.com/library/archive/documentation/System/
+>> Conceptual/ManPages_iPhoneOS/man3/getprogname.3.html
+>>
+>> Fixes build error for macOS hosts:
+>>
+>> drivers/gpu/drm/xe/xe_gen_wa_oob.c:34:3: error: use of
+>> undeclared identifier 'program_invocation_short_name'    34 |
+>> program_invocation_short_name);       |                 ^ 1 error
+>> generated.
+>>
+>> Signed-off-by: Daniel Gomez <da.gomez@samsung.com>
+>> Reviewed-by: Lucas De Marchi <lucas.demarchi@intel.com>
+>> ---
+>>   drivers/gpu/drm/xe/xe_gen_wa_oob.c | 4 ++++
+>>   1 file changed, 4 insertions(+)
+>>
+>> diff --git a/drivers/gpu/drm/xe/xe_gen_wa_oob.c b/drivers/gpu/drm/xe/xe_gen_wa_oob.c
+>> index 904cf47925aa..0d933644d8a0 100644
+>> --- a/drivers/gpu/drm/xe/xe_gen_wa_oob.c
+>> +++ b/drivers/gpu/drm/xe/xe_gen_wa_oob.c
+>> @@ -8,6 +8,7 @@
+>>   #include <errno.h>
+>>   #include <stdbool.h>
+>>   #include <stdio.h>
+>> +#include <stdlib.h>
+>>   #include <string.h>
+>>
+>>   #define HEADER \
+>> @@ -30,6 +31,9 @@
+>>
+>>   static void print_usage(FILE *f)
+>>   {
+>> +#ifdef __APPLE__
+>> +       const char *program_invocation_short_name = getprogname();
+>> +#endif
+>>          fprintf(f, "usage: %s <input-rule-file> <generated-c-source-file> <generated-c-header-file>\n",
+>>                  program_invocation_short_name);
+>>   }
+>>
+>> --
+>> 2.46.0
+>>
+>>
 > 
-> The core code should be making no access to the PGD entries on 32-bit
-> ARM since the PGD level does not exist. Writes are done at PMD level
-> in arch code. Reads are done by core code at PMD level.
 > 
-> It feels to me like pgd_get() just doesn't fit the model to which 32-bit
-> ARM was designed to use decades ago, so I want full details about what
-> pgd_get() is going to be used for and how it is going to be used,
-> because I feel completely in the dark over this new development. I fear
-> that someone hasn't understood the Linux page table model if they're
-> wanting to access stuff at levels that effectively "aren't implemented"
-> in the architecture specific kernel model of the page tables.
+> 
+> Before adding such #ifdef, you should check how other programs do.
+> 
+> 
+> 
+> 
+> 
+> 
+> 
+> 
+> 
+> Solution 1 : hard-code the program name
+> 
+> 
+> diff --git a/drivers/gpu/drm/xe/xe_gen_wa_oob.c
+> b/drivers/gpu/drm/xe/xe_gen_wa_oob.c
+> index 106ee2b027f0..9e9a29e2cecf 100644
+> --- a/drivers/gpu/drm/xe/xe_gen_wa_oob.c
+> +++ b/drivers/gpu/drm/xe/xe_gen_wa_oob.c
+> @@ -30,8 +30,7 @@
+> 
+>   static void print_usage(FILE *f)
+>   {
+> -       fprintf(f, "usage: %s <input-rule-file>
+> <generated-c-source-file> <generated-c-header-file>\n",
+> -               program_invocation_short_name);
+> +       fprintf(f, "usage: xe_gen_wa_oob <input-rule-file>
+> <generated-c-source-file> <generated-c-header-file>\n");
+>   }
+> 
+>   static void print_parse_error(const char *err_msg, const char *line,
+> 
+> 
+> 
+> 
+> 
+> 
+> 
+> 
+> Solution 2: use argv[0]
+> 
+> 
+> diff --git a/drivers/gpu/drm/xe/xe_gen_wa_oob.c
+> b/drivers/gpu/drm/xe/xe_gen_wa_oob.c
+> index 106ee2b027f0..600c63e88e46 100644
+> --- a/drivers/gpu/drm/xe/xe_gen_wa_oob.c
+> +++ b/drivers/gpu/drm/xe/xe_gen_wa_oob.c
+> @@ -28,10 +28,10 @@
+>          "\n" \
+>          "#endif\n"
+> 
+> -static void print_usage(FILE *f)
+> +static void print_usage(FILE *f, const char *progname)
+>   {
+>          fprintf(f, "usage: %s <input-rule-file>
+> <generated-c-source-file> <generated-c-header-file>\n",
+> -               program_invocation_short_name);
+> +               progname);
+>   }
+> 
+>   static void print_parse_error(const char *err_msg, const char *line,
+> @@ -136,7 +136,7 @@ int main(int argc, const char *argv[])
+> 
+>          if (argc < 3) {
+>                  fprintf(stderr, "ERROR: wrong arguments\n");
+> -               print_usage(stderr);
+> +               print_usage(stderr, argv[0]);
+>                  return 1;
+>          }
 
-This change isn't as big and scary as I think you fear. The core-mm today
-dereferences pgd pointers (and p4d, pud, pmd pointers) directly in its code. See
-follow_pfnmap_start(), gup_fast_pgd_leaf(), and many other sites. These changes
-aim to abstract those dereferences into an inline function that the architecture
-can override and implement if it so wishes.
 
-The core-mm implements default versions of these helper functions which do
-READ_ONCE(), but does not currently use them consistently.
+This approach looks good to me. I will drop Lucas' tag in favor to this. 
+Please, Lucas let me know if you disagree any of the proposals here or 
+if you have any preference. Otherwise, I'll resend this with solution 2.
 
-From Anshuman's comments earlier in this thread, it looked to me like the arm
-pgd_t type is too big to read with READ_ONCE() - it can't be atomically read on
-that arch. So my proposal was to implement the override for arm to do exactly
-what the core-mm used to do, which is a pointer dereference. So that would
-result in exact same behaviour for the arm arch.
+
 
 > 
-> Essentially, on 32-bit 2-level ARM, the PGD is merely indexed by the
-> virtual address. As far as the kernel is concerned, each entry is
-> 64-bit, and the generic kernel code has no business accessing that
-> through the pgd pointer.
 > 
-> The pgd pointer is passed through the PUD and PMD levels, where it is
-> typecast down through the kernel layers to a pmd_t pointer, where it
-> becomes a 32-bit quantity. This results in only the _first_ level 1
-> pointer being dereferenced by kernel code to a 32-bit pmd_t quantity.
-> pmd_page_vaddr() converts this pmd_t quantity to a pte pointer (which
-> points at the software level 2 page tables, not the hardware page
-> tables.)
-
-As an aside, my understanding of Linux's pgtable model differs from what you
-describe. As I understand it, Linux's logical page table model has 5 levels
-(pgd, p4d, pud, pmd, pte). If an arch doesn't support all 5 levels, then the
-middle levels can be folded away (p4d first, then pud, then pmd). But the
-core-mm still logically walks all 5 levels. So if the HW supports 2 levels,
-those levels are (pgd, pte). But you are suggesting that arm exposes pmd and
-pte, which is not what Linux expects? (Perhaps you call it the pmd in the arch,
-but that is being folded and accessed through the pgd helpers in core code, I
-believe?
-
 > 
-> So, as I'm now being told that the kernel wants to dereference the
-> pgd level despite the model I describe above, alarm bells are ringing.
-> I want full information please.
 > 
-
-This is not new; the kernel already dereferences the pgd pointers.
-
-Thanks,
-Ryan
+> 
+> 
+> 
+> 
 
