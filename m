@@ -1,128 +1,219 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2AA94192593;
-	Thu, 19 Sep 2024 07:19:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9EF8F22098;
+	Thu, 19 Sep 2024 07:21:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726730383; cv=none; b=nuSkFZSdz19hrPbedooaXZtlnv9qDGB01f96ou6mmMoM9gX3zTLgZwPBGpaW5OucbAAE19fGGJOQZC79Q53sJ2KH6pY8UxycqNY7gYbRl6VFFPmKB7cT9xgcY3CaADiLyhILpUiDElRpiGjIjftL6H4TmGXqA4U2CNuwb5MxF48=
+	t=1726730509; cv=none; b=mt/mANLqtRyZcQ0Hz8eCQEbJg0+lRYFar7zRh3ivbaaJ1wEJ9OOEFK8+V3gyfROkQsZn/ABrRrbUIjc+BYcUYq8ZLBccz5QKf7V+gefyl2UhnkFVfqKJCiTsnKGSgsEioKajDN8/OdZqGoWDjF7WzQiu9jjt5nKCSm4L7+rsSkQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726730383; c=relaxed/simple;
-	bh=xgA8G3nc0J2EPhpNgAx9tM/joMRB8dT/O5HDpx8HPF0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=qsNdRW6dLOGW9I5mUgwuB3cYMui1+FpjCVy6ZSdSzIFl4oqH296U3vXQxUZ062UgDzzVb5eQeQC+iixXpBSJILIwFLulCNJHHxhVbV4rDU37HB9WTHLzIp9dmzZJOfW7LFJqfRKj40HD2ISr2R8xinsb4udKlJU5WkoHN+AHwWI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Dw7d2xBj; arc=none smtp.client-ip=10.30.226.201
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Dw7d2xBj"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F1A2FC4CEC4;
-	Thu, 19 Sep 2024 07:19:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1726730383;
-	bh=xgA8G3nc0J2EPhpNgAx9tM/joMRB8dT/O5HDpx8HPF0=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Dw7d2xBjuSX4iOelZBZQZmOM4JstPWpzT3oHmacEbGJDdVpncG3rVqW4PFstCQcyt
-	 mjisC4T6hhcD67cXSKEc2c3vQeUUykp2fcyEpG/nZXDzWIQ5PCIwYIR4akmHrXxNY9
-	 jOJmNLdCm5PWNla7dvswtFqjNSrMhYM/mItZpN86DyVW90JYepGkNVdpjGZyEGHnr7
-	 HNi8kBsiGIG0a5n25/Af0HhtpqhietiCu33U+347y47kfiYfb2eSJfPWsi0vuzq6uk
-	 n2xt9RTaFdjZ23zbIyx66u/VaBy5pTKBswaSuMSprYvCdH7vTG+40nF1W6119H8Mul
-	 e9z9UrZjVFInA==
-Date: Thu, 19 Sep 2024 08:19:37 +0100
-From: Simon Horman <horms@kernel.org>
-To: Pablo Neira Ayuso <pablo@netfilter.org>
-Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-	Jozsef Kadlecsik <kadlec@netfilter.org>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	netfilter-devel@vger.kernel.org, coreteam@netfilter.org,
-	netdev@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH nf-next 0/2] netfilter: conntrack: label helpers
- conditional compilation updates
-Message-ID: <20240919071801.GB1044577@kernel.org>
-References: <20240916-ct-ifdef-v1-0-81ef1798143b@kernel.org>
- <Zuq-7kULeAMPRmFg@calendula>
- <Zurbw1-Fl0EfdC0l@smile.fi.intel.com>
- <Zurjur431P7DqifB@calendula>
- <ZusHYUGYPADO1SgY@smile.fi.intel.com>
- <ZutMf_f0tQwQZFzH@calendula>
+	s=arc-20240116; t=1726730509; c=relaxed/simple;
+	bh=VAlXauhmpJIBCNb5x68k00aw24L/Vnm6Od+3QyvKnkI=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=O6hj9Fpc6zkG23hHnywgLzcIdMTOcqr4tPxkv6IVtce66Bg5NcIUcZoWPAN2taGavkcN9mHZyASNtJ55ri85kGulxfwPh9AKLyfTLChxqMXVi+XnYS0heLNHbcE/tzZerxwxKgiYSyzSv6hUqYv5Z4wOqtSxScZZyDq2G1E3pKk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 56B1A13D5;
+	Thu, 19 Sep 2024 00:22:15 -0700 (PDT)
+Received: from [10.163.34.169] (unknown [10.163.34.169])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 6A5A43F64C;
+	Thu, 19 Sep 2024 00:21:37 -0700 (PDT)
+Message-ID: <b0548a9f-6201-47e3-81cd-0d3b1de0a8e5@arm.com>
+Date: Thu, 19 Sep 2024 12:51:33 +0530
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZutMf_f0tQwQZFzH@calendula>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH V2 4/7] mm: Use pmdp_get() for accessing PMD entries
+To: kernel test robot <lkp@intel.com>, linux-mm@kvack.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+ Andrew Morton <akpm@linux-foundation.org>,
+ David Hildenbrand <david@redhat.com>, Ryan Roberts <ryan.roberts@arm.com>,
+ "Mike Rapoport (IBM)" <rppt@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+ x86@kernel.org, linux-m68k@lists.linux-m68k.org,
+ linux-fsdevel@vger.kernel.org, kasan-dev@googlegroups.com,
+ linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+ Dimitri Sivanich <dimitri.sivanich@hpe.com>,
+ Muchun Song <muchun.song@linux.dev>, Andrey Ryabinin
+ <ryabinin.a.a@gmail.com>, Miaohe Lin <linmiaohe@huawei.com>,
+ Naoya Horiguchi <nao.horiguchi@gmail.com>,
+ Pasha Tatashin <pasha.tatashin@soleen.com>, Dennis Zhou <dennis@kernel.org>,
+ Tejun Heo <tj@kernel.org>, Christoph Lameter <cl@linux-foundation.org>,
+ Uladzislau Rezki <urezki@gmail.com>, Christoph Hellwig <hch@infradead.org>
+References: <20240917073117.1531207-5-anshuman.khandual@arm.com>
+ <202409190205.YJ5gtx3T-lkp@intel.com>
+Content-Language: en-US
+From: Anshuman Khandual <anshuman.khandual@arm.com>
+In-Reply-To: <202409190205.YJ5gtx3T-lkp@intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Wed, Sep 18, 2024 at 11:56:24PM +0200, Pablo Neira Ayuso wrote:
-> On Wed, Sep 18, 2024 at 08:01:21PM +0300, Andy Shevchenko wrote:
-> > On Wed, Sep 18, 2024 at 04:29:14PM +0200, Pablo Neira Ayuso wrote:
-> > > On Wed, Sep 18, 2024 at 04:55:15PM +0300, Andy Shevchenko wrote:
-> > > > On Wed, Sep 18, 2024 at 01:52:14PM +0200, Pablo Neira Ayuso wrote:
-> > > > > On Mon, Sep 16, 2024 at 04:14:40PM +0100, Simon Horman wrote:
-> > > > > > Hi,
-> > > > > > 
-> > > > > > This short series updates conditional compilation of label helpers to:
-> > > > > > 
-> > > > > > 1) Compile them regardless of if CONFIG_NF_CONNTRACK_LABELS is enabled
-> > > > > >    or not. It is safe to do so as the functions will always return 0 if
-> > > > > >    CONFIG_NF_CONNTRACK_LABELS is not enabled.  And the compiler should
-> > > > > >    optimise waway the code.  Which is the desired behaviour.
-> > > > > > 
-> > > > > > 2) Only compile ctnetlink_label_size if CONFIG_NF_CONNTRACK_EVENTS is
-> > > > > >    enabled.  This addresses a warning about this function being unused
-> > > > > >    in this case.
-> > > > > 
-> > > > > Patch 1)
-> > > > > 
-> > > > > -#ifdef CONFIG_NF_CONNTRACK_LABELS
-> > > > >  static inline int ctnetlink_label_size(const struct nf_conn *ct)
-> > > > > 
-> > > > > Patch 2)
-> > > > > 
-> > > > > +#ifdef CONFIG_NF_CONNTRACK_EVENTS
-> > > > >  static inline int ctnetlink_label_size(const struct nf_conn *ct)
-> > > > > 
-> > > > > They both refer to ctnetlink_label_size(), #ifdef check is not
-> > > > > correct.
-> > > > 
-> > > > But the first one touches more, no?
-> > > 
-> > > Yes, it also remove a #define ctnetlink_label_size() macro in patch #1.
-> > > I am fine with this series as is.
-> > 
-> > What I meant is that the original patch 1 takes care about definitions of
-> > two functions. Not just a single one.
+
+
+On 9/19/24 00:27, kernel test robot wrote:
+> Hi Anshuman,
 > 
-> My understanding is that #ifdef CONFIG_NF_CONNTRACK_LABELS that wraps
-> ctnetlink_label_size() is not correct (patch 1), instead
-> CONFIG_NF_CONNTRACK_EVENTS should be used (patch 2).
+> kernel test robot noticed the following build errors:
 > 
-> Then, as a side effect this goes away (patch 1):
+> [auto build test ERROR on char-misc/char-misc-testing]
+> [also build test ERROR on char-misc/char-misc-next char-misc/char-misc-linus brauner-vfs/vfs.all dennis-percpu/for-next linus/master v6.11]
+> [cannot apply to akpm-mm/mm-everything next-20240918]
+> [If your patch is applied to the wrong git tree, kindly drop us a note.
+> And when submitting patch, we suggest to use '--base' as documented in
+> https://git-scm.com/docs/git-format-patch#_base_tree_information]
 > 
-> -#else
-> -#define ctnetlink_dump_labels(a, b) (0)
-> -#define ctnetlink_label_size(a)     (0)
-> -#endif
+> url:    https://github.com/intel-lab-lkp/linux/commits/Anshuman-Khandual/m68k-mm-Change-pmd_val/20240917-153331
+> base:   char-misc/char-misc-testing
+> patch link:    https://lore.kernel.org/r/20240917073117.1531207-5-anshuman.khandual%40arm.com
+> patch subject: [PATCH V2 4/7] mm: Use pmdp_get() for accessing PMD entries
+> config: um-allnoconfig (https://download.01.org/0day-ci/archive/20240919/202409190205.YJ5gtx3T-lkp@intel.com/config)
+> compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
+> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240919/202409190205.YJ5gtx3T-lkp@intel.com/reproduce)
 > 
-> that is why I am proposing to coaleasce these two patches in one.
+> If you fix the issue in a separate patch/commit (i.e. not just a new version of
+> the same patch/commit), kindly add following tags
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Closes: https://lore.kernel.org/oe-kbuild-all/202409190205.YJ5gtx3T-lkp@intel.com/
+> 
+> All errors (new ones prefixed by >>):
+> 
+>    In file included from mm/pgtable-generic.c:10:
+>    In file included from include/linux/pagemap.h:11:
+>    In file included from include/linux/highmem.h:12:
+>    In file included from include/linux/hardirq.h:11:
+>    In file included from arch/um/include/asm/hardirq.h:5:
+>    In file included from include/asm-generic/hardirq.h:17:
+>    In file included from include/linux/irq.h:20:
+>    In file included from include/linux/io.h:14:
+>    In file included from arch/um/include/asm/io.h:24:
+>    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+>      548 |         val = __raw_readb(PCI_IOBASE + addr);
+>          |                           ~~~~~~~~~~ ^
+>    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+>      561 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+>          |                                                         ~~~~~~~~~~ ^
+>    include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
+>       37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
+>          |                                                   ^
+>    In file included from mm/pgtable-generic.c:10:
+>    In file included from include/linux/pagemap.h:11:
+>    In file included from include/linux/highmem.h:12:
+>    In file included from include/linux/hardirq.h:11:
+>    In file included from arch/um/include/asm/hardirq.h:5:
+>    In file included from include/asm-generic/hardirq.h:17:
+>    In file included from include/linux/irq.h:20:
+>    In file included from include/linux/io.h:14:
+>    In file included from arch/um/include/asm/io.h:24:
+>    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+>      574 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+>          |                                                         ~~~~~~~~~~ ^
+>    include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
+>       35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
+>          |                                                   ^
+>    In file included from mm/pgtable-generic.c:10:
+>    In file included from include/linux/pagemap.h:11:
+>    In file included from include/linux/highmem.h:12:
+>    In file included from include/linux/hardirq.h:11:
+>    In file included from arch/um/include/asm/hardirq.h:5:
+>    In file included from include/asm-generic/hardirq.h:17:
+>    In file included from include/linux/irq.h:20:
+>    In file included from include/linux/io.h:14:
+>    In file included from arch/um/include/asm/io.h:24:
+>    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+>      585 |         __raw_writeb(value, PCI_IOBASE + addr);
+>          |                             ~~~~~~~~~~ ^
+>    include/asm-generic/io.h:595:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+>      595 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+>          |                                                       ~~~~~~~~~~ ^
+>    include/asm-generic/io.h:605:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+>      605 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+>          |                                                       ~~~~~~~~~~ ^
+>    include/asm-generic/io.h:693:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+>      693 |         readsb(PCI_IOBASE + addr, buffer, count);
+>          |                ~~~~~~~~~~ ^
+>    include/asm-generic/io.h:701:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+>      701 |         readsw(PCI_IOBASE + addr, buffer, count);
+>          |                ~~~~~~~~~~ ^
+>    include/asm-generic/io.h:709:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+>      709 |         readsl(PCI_IOBASE + addr, buffer, count);
+>          |                ~~~~~~~~~~ ^
+>    include/asm-generic/io.h:718:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+>      718 |         writesb(PCI_IOBASE + addr, buffer, count);
+>          |                 ~~~~~~~~~~ ^
+>    include/asm-generic/io.h:727:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+>      727 |         writesw(PCI_IOBASE + addr, buffer, count);
+>          |                 ~~~~~~~~~~ ^
+>    include/asm-generic/io.h:736:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+>      736 |         writesl(PCI_IOBASE + addr, buffer, count);
 
-Thanks,
+Not sure if the above warnings are actually caused by this patch.
 
-Just to clarify. I did think there is value in separating the two changes.
-But that was a subjective judgement on my part.
+>          |                 ~~~~~~~~~~ ^
+>>> mm/pgtable-generic.c:54:2: error: cannot take the address of an rvalue of type 'pgd_t'
+>       54 |         pmd_ERROR(pmdp_get(pmd));
+>          |         ^~~~~~~~~~~~~~~~~~~~~~~~
+>    include/asm-generic/pgtable-nopmd.h:36:28: note: expanded from macro 'pmd_ERROR'
+>       36 | #define pmd_ERROR(pmd)                          (pud_ERROR((pmd).pud))
+>          |                                                  ^~~~~~~~~~~~~~~~~~~~
+>    include/asm-generic/pgtable-nopud.h:32:28: note: expanded from macro 'pud_ERROR'
+>       32 | #define pud_ERROR(pud)                          (p4d_ERROR((pud).p4d))
+>          |                                                  ^~~~~~~~~~~~~~~~~~~~
+>    include/asm-generic/pgtable-nop4d.h:25:28: note: expanded from macro 'p4d_ERROR'
+>       25 | #define p4d_ERROR(p4d)                          (pgd_ERROR((p4d).pgd))
+>          |                                                  ^~~~~~~~~~~~~~~~~~~~
+>    arch/um/include/asm/pgtable-2level.h:31:67: note: expanded from macro 'pgd_ERROR'
+>       31 |         printk("%s:%d: bad pgd %p(%08lx).\n", __FILE__, __LINE__, &(e), \
+>          |         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~
+>       32 |                pgd_val(e))
+>          |                ~~~~~~~~~~~
+>    include/linux/printk.h:465:60: note: expanded from macro 'printk'
+>      465 | #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
+>          |                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~
+>    include/linux/printk.h:437:19: note: expanded from macro 'printk_index_wrap'
+>      437 |                 _p_func(_fmt, ##__VA_ARGS__);                           \
+>          |                                 ^~~~~~~~~~~
+>    12 warnings and 1 error generated.
+> 
+> 
+> vim +/pgd_t +54 mm/pgtable-generic.c
+> 
+>     46	
+>     47	/*
+>     48	 * Note that the pmd variant below can't be stub'ed out just as for p4d/pud
+>     49	 * above. pmd folding is special and typically pmd_* macros refer to upper
+>     50	 * level even when folded
+>     51	 */
+>     52	void pmd_clear_bad(pmd_t *pmd)
+>     53	{
+>   > 54		pmd_ERROR(pmdp_get(pmd));
+>     55		pmd_clear(pmd);
+>     56	}
+>     57	
+> 
 
-Your understanding of the overall change is correct.
-And if it is preferred to have a single patch - as seems to be the case -
-then that is fine by me.
+But the above build error can be fixed with the following change.
 
-Going forward, I'll try to remember not to split-up patches for netfilter
-so much.
-
-Kind regards,
-Simon
+diff --git a/arch/um/include/asm/pgtable-3level.h b/arch/um/include/asm/pgtable-3level.h
+index 8a5032ec231f..f442c1e3156a 100644
+--- a/arch/um/include/asm/pgtable-3level.h
++++ b/arch/um/include/asm/pgtable-3level.h
+@@ -43,13 +43,13 @@
+ #define USER_PTRS_PER_PGD ((TASK_SIZE + (PGDIR_SIZE - 1)) / PGDIR_SIZE)
+ 
+ #define pte_ERROR(e) \
+-        printk("%s:%d: bad pte %p(%016lx).\n", __FILE__, __LINE__, &(e), \
++        printk("%s:%d: bad pte (%016lx).\n", __FILE__, __LINE__, \
+               pte_val(e))
+ #define pmd_ERROR(e) \
+-        printk("%s:%d: bad pmd %p(%016lx).\n", __FILE__, __LINE__, &(e), \
++        printk("%s:%d: bad pmd (%016lx).\n", __FILE__, __LINE__, \
+               pmd_val(e))
+ #define pgd_ERROR(e) \
+-        printk("%s:%d: bad pgd %p(%016lx).\n", __FILE__, __LINE__, &(e), \
++        printk("%s:%d: bad pgd (%016lx).\n", __FILE__, __LINE__, \
+               pgd_val(e))
+ 
+ #define pud_none(x)    (!(pud_val(x) & ~_PAGE_NEWPAGE))
