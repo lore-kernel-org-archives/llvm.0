@@ -1,168 +1,231 @@
-Received: from mail-pf1-f202.google.com (mail-pf1-f202.google.com [209.85.210.202])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25D54176259
-	for <llvm@lists.linux.dev>; Wed, 18 Sep 2024 23:11:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.202
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 99117E574;
+	Thu, 19 Sep 2024 02:33:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726701068; cv=none; b=ZK51zgR31ElLDl7XVJS1kC1H8o7qV2kxQ/q5UrUvP8GbZTpPV9nr1kHYbGY/TJ44jQunP9d01HjA2vS+WlFX0LiIOYlgv7Us7/wS8g3dosOfX7LyZCRV+wG3l5BJuP3UB30Q23aJOgEYTtdbprQ8wdTeyS9DaE1tN+svakqrFaI=
+	t=1726713191; cv=none; b=uUHnQNoo+ufLirhSKaWtILr6Y9oWrnPoESQVfTZ48foetqt+17zFc+7yXSzbzGhQ4xHpcGOdnrW+ksQ3v5DUIWsWL2U9GdhVKO/diHI/ggGPNxKkwHDQHv3/PFKtP51xh0uGserNHQdTYXCNNdVOiZtET9nt4OODxMFUbwWEtNg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726701068; c=relaxed/simple;
-	bh=jEpaRqX8x9ZoV7NGwJBcnn25L7osKDYWpdYayHxA/LA=;
-	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=lfgLDEJVteosDDRy63C47EJFtGc3xwF1Oy2Xe9ZLAGBchZ1FCKPKFsJFt75jnKptoX6aFyBZZvo4Ac/VRpNkJI5Qr1ONtjtWqfgKLNYUEkgU+HU9/mmOarNghdvVXDaF3nLwLFsLKtOBpq4EgmGGPhgrpfWuokz/IxvOtTeJSAo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--edliaw.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=DpYwtDtz; arc=none smtp.client-ip=209.85.210.202
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--edliaw.bounces.google.com
+	s=arc-20240116; t=1726713191; c=relaxed/simple;
+	bh=LnVqCTl/DSIuzexp1Q7fc9Ja/psmiLqRekrpQqozjyY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=dmRQFEHZmNOC+YkFFEjvBcnmLbjFUYkk0Eq2HyU4LvacawonHO8hSXEIYoWCYxW0rD6XCUGpH1Wf01/cB/lzDbNPucUS8gSH6edzmKCBK6x8mQwNLoROuBTz0cbz4QN3OdMJFLxYUmQVwkryfS4oVBjLLDFXqe8CfZ+RAffJjPg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=SQQt22vj; arc=none smtp.client-ip=198.175.65.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="DpYwtDtz"
-Received: by mail-pf1-f202.google.com with SMTP id d2e1a72fcca58-7198667a879so282324b3a.2
-        for <llvm@lists.linux.dev>; Wed, 18 Sep 2024 16:11:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1726701066; x=1727305866; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:from:subject:message-id
-         :mime-version:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=YA0w8JE4YsZuKs1FGvLh6dGW1GjJTJ/xAnovafRZBSc=;
-        b=DpYwtDtzaHd8Iv+j6VPdS7E7VdBByqAX5IRSzF5/vRHsZrkwAu/m0Jw7GnSdWF8/Js
-         a01c7PuPempxZweE+oy0v2m/+3XGmrLF7RDfXQ8YXdZu2vp2Dy9L7zG0ZveNLdyO23/S
-         wcYzvWHHB/UUMOO1fS/DqH/LYOrAkND3kY8T8nKbSr3fhmdXR8XTcp9tyCkc/v/ZRZ0M
-         c8YLyoE1CKLTFTYHFPOI02pLh4/sY6gFu2tQKPG9Va36mhLAUOw1p/fRfW5gndEvtwVL
-         BmrjSgUGQ3kmtck+ihVhb5v+6wu0FVdomxS4zcLDfWmGNi2TBNQ2hUJr3Bjk5PCQN/LO
-         5D9A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1726701066; x=1727305866;
-        h=content-transfer-encoding:cc:to:from:subject:message-id
-         :mime-version:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=YA0w8JE4YsZuKs1FGvLh6dGW1GjJTJ/xAnovafRZBSc=;
-        b=kCoxOvLMQS8zVcvZhR/imKxJI2Ax51V6oRePZ7qhGNAdMsAZBTKLb0r+f/nqXcrwEQ
-         GRvrXED0e0KMA+2b8kAAVWXWwS0Jtm9dPJ10VRyV72hoaY0ntEN3ZSZjFcPVXaWWJ86i
-         ETXCmCJy99aV6nJTHpQsIwFCExnsCNKiLX6+2qcuN6MPUb9JYYdPxKTBv0UUJJHf+WOY
-         Upv1bYEb31gv6/ZOKjrBj7NEirNEJPBElSCvnh2HSeTZ4grxbrkLaBjy2jKKpjWEMe0j
-         m8zgnuLMxIQGggi29lBcAz24l2mGt4J+v4n/8b8MmKDjEevagbMon2V6zldWQ+WtqygC
-         CNMg==
-X-Forwarded-Encrypted: i=1; AJvYcCVDRbZXwSo8C6HVzrYdbFUmhkfeMalDaHSlVhA7s8PzxJPhRVJd4+cIqKR7i5z9IYtqU0N7@lists.linux.dev
-X-Gm-Message-State: AOJu0YzOTNL7vvGhboeEcdbQuSLVumAq2A2AUY52fmTJQXkiZC74fsHm
-	826OvethLP8aE7d8omFJvDkLpvRDZP2hAzBRHZMPkNygkSlemhrwYOs/0jh/Vjw25IQW5YLgxw7
-	Hvg==
-X-Google-Smtp-Source: AGHT+IFR5wvpsM8KmOcWHfEpfCZTMacE04uaSHilS6oprIqygqchRKXw74pEjG1MSWi2VY6unf7hnOt+cOo=
-X-Received: from edliaw.c.googlers.com ([fda3:e722:ac3:cc00:24:72f4:c0a8:305d])
- (user=edliaw job=sendgmr) by 2002:a62:e302:0:b0:718:d4f5:aa40 with SMTP id
- d2e1a72fcca58-71936b74189mr42304b3a.5.1726701065978; Wed, 18 Sep 2024
- 16:11:05 -0700 (PDT)
-Date: Wed, 18 Sep 2024 23:11:00 +0000
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="SQQt22vj"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1726713189; x=1758249189;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=LnVqCTl/DSIuzexp1Q7fc9Ja/psmiLqRekrpQqozjyY=;
+  b=SQQt22vj7gDvowMLI/SX7x6g0Qn8sRyvcKwP7oczZHa/8KxRnHoTjejI
+   i5Z2B6pl2idGXJ7lRnKIIcNKH8IJyn6oPeNbHV7BGZbI2Zfe3RXzJrBR+
+   kmc159gqWpfWPluZNVrJrVc3oUhbX3zgjkplrVePJvvi9EDQXIfPEDnhy
+   Tmzh/LhqDsnH1++C+BjNkWUuSgJ7mxrubBbcD0qyplGEpzOMi2vJ91rd+
+   eR/QX1TNDrVPPiOUZoC/zNy7Dd9BL3iOKCpfkcVAR7++45jCJlpGzMzUe
+   VnxGieDTtXrWgS/GlUwDvjgr+twHYzLBZYOOVuyWXDWL0h5KGy91t9wbk
+   Q==;
+X-CSE-ConnectionGUID: if/oK0oyRe26AS/HgPpxMg==
+X-CSE-MsgGUID: A7mLGpHIQ/KLNu/099te7Q==
+X-IronPort-AV: E=McAfee;i="6700,10204,11199"; a="36226626"
+X-IronPort-AV: E=Sophos;i="6.10,240,1719903600"; 
+   d="scan'208";a="36226626"
+Received: from fmviesa004.fm.intel.com ([10.60.135.144])
+  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Sep 2024 19:33:09 -0700
+X-CSE-ConnectionGUID: OpZ8ImQ4SV6f7eis63ZUEA==
+X-CSE-MsgGUID: g8GKn9P0RpWj2x1uW2tsFg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.10,240,1719903600"; 
+   d="scan'208";a="74315463"
+Received: from lkp-server01.sh.intel.com (HELO 53e96f405c61) ([10.239.97.150])
+  by fmviesa004.fm.intel.com with ESMTP; 18 Sep 2024 19:33:05 -0700
+Received: from kbuild by 53e96f405c61 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1sr6yd-000CpW-0g;
+	Thu, 19 Sep 2024 02:33:03 +0000
+Date: Thu, 19 Sep 2024 10:32:22 +0800
+From: kernel test robot <lkp@intel.com>
+To: Lilit Janpoladyan <lilitj@amazon.com>, kvm@vger.kernel.org,
+	maz@kernel.org, oliver.upton@linux.dev, james.morse@arm.com,
+	suzuki.poulose@arm.com, yuzenghui@huawei.com,
+	nh-open-source@amazon.com
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: Re: [PATCH 4/8] KVM: return value from kvm_arch_sync_dirty_log
+Message-ID: <202409191039.OFrXIvns-lkp@intel.com>
+References: <20240918152807.25135-5-lilitj@amazon.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.46.0.662.g92d0881bb0-goog
-Message-ID: <20240918231102.234253-1-edliaw@google.com>
-Subject: [PATCH RESEND v2] selftests/futex: Order calls in futex_requeue
-From: Edward Liaw <edliaw@google.com>
-To: linux-kselftest@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>, 
-	Ingo Molnar <mingo@redhat.com>, Peter Zijlstra <peterz@infradead.org>, 
-	Darren Hart <dvhart@infradead.org>, Davidlohr Bueso <dave@stgolabs.net>, 
-	"=?UTF-8?q?Andr=C3=A9=20Almeida?=" <andrealmeid@igalia.com>, Shuah Khan <shuah@kernel.org>, 
-	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
-	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
-	"H. Peter Anvin" <hpa@linux.intel.com>, Andy Lutomirski <luto@mit.edu>
-Cc: linux-kernel@vger.kernel.org, kernel-team@android.com, 
-	Edward Liaw <edliaw@google.com>, Muhammad Usama Anjum <usama.anjum@collabora.com>, 
-	Davidlohr Bueso <dbueso@suse.de>, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240918152807.25135-5-lilitj@amazon.com>
 
-Fixes a race between parent and child threads in futex_requeue.
+Hi Lilit,
 
-Similar to fbf4dec70277 ("selftests/futex: Order calls to
-futex_lock_pi"), which fixed a flake in futex_lock_pi due to racing
-between the parent and child threads.
+kernel test robot noticed the following build warnings:
 
-The same issue can occur in the futex_requeue test, because it expects
-waiterfn to make progress to futex_wait before the parent starts to
-requeue. This is mitigated by the parent sleeping for WAKE_WAIT_US, but
-it still fails occasionally. This can be reproduced by adding a sleep in
-the waiterfn before futex_wait:
+[auto build test WARNING on powerpc/topic/ppc-kvm]
+[also build test WARNING on v6.11]
+[cannot apply to kvmarm/next kvm/queue linus/master kvm/linux-next next-20240918]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-TAP version 13
-1..2
-not ok 1 futex_requeue simple returned: 0
-not ok 2 futex_requeue simple returned: 0
-not ok 3 futex_requeue many returned: 0
-not ok 4 futex_requeue many returned: 0
+url:    https://github.com/intel-lab-lkp/linux/commits/Lilit-Janpoladyan/arm64-add-an-interface-for-stage-2-page-tracking/20240918-233004
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/powerpc/linux.git topic/ppc-kvm
+patch link:    https://lore.kernel.org/r/20240918152807.25135-5-lilitj%40amazon.com
+patch subject: [PATCH 4/8] KVM: return value from kvm_arch_sync_dirty_log
+config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20240919/202409191039.OFrXIvns-lkp@intel.com/config)
+compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 8663a75fa2f31299ab8d1d90288d9df92aadee88)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240919/202409191039.OFrXIvns-lkp@intel.com/reproduce)
 
-Instead, replace the sleep with barriers to make the sequencing
-explicit.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202409191039.OFrXIvns-lkp@intel.com/
 
-Fixes: 7cb5dd8e2c8c ("selftests: futex: Add futex compare requeue test")
-Signed-off-by: Edward Liaw <edliaw@google.com>
-Reviewed-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
-Reviewed-by: Andr=C3=A9 Almeida <andrealmeid@igalia.com>
----
- .../selftests/futex/functional/futex_requeue.c       | 12 +++++++++---
- 1 file changed, 9 insertions(+), 3 deletions(-)
+All warnings (new ones prefixed by >>):
 
-diff --git a/tools/testing/selftests/futex/functional/futex_requeue.c b/too=
-ls/testing/selftests/futex/functional/futex_requeue.c
-index 51485be6eb2f..8f7d3e8bf32a 100644
---- a/tools/testing/selftests/futex/functional/futex_requeue.c
-+++ b/tools/testing/selftests/futex/functional/futex_requeue.c
-@@ -12,9 +12,9 @@
+   In file included from arch/s390/kvm/kvm-s390.c:22:
+   In file included from include/linux/kvm_host.h:16:
+   In file included from include/linux/mm.h:2228:
+   include/linux/vmstat.h:500:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     500 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     501 |                            item];
+         |                            ~~~~
+   include/linux/vmstat.h:507:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     507 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     508 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/vmstat.h:514:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     514 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+   include/linux/vmstat.h:519:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     519 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     520 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/vmstat.h:528:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     528 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     529 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+   In file included from arch/s390/kvm/kvm-s390.c:22:
+   In file included from include/linux/kvm_host.h:19:
+   In file included from include/linux/msi.h:24:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:14:
+   In file included from arch/s390/include/asm/io.h:93:
+   include/asm-generic/io.h:548:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     548 |         val = __raw_readb(PCI_IOBASE + addr);
+         |                           ~~~~~~~~~~ ^
+   include/asm-generic/io.h:561:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     561 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
+      37 | #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
+         |                                                           ^
+   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
+     102 | #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
+         |                                                      ^
+   In file included from arch/s390/kvm/kvm-s390.c:22:
+   In file included from include/linux/kvm_host.h:19:
+   In file included from include/linux/msi.h:24:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:14:
+   In file included from arch/s390/include/asm/io.h:93:
+   include/asm-generic/io.h:574:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     574 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
+      35 | #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
+         |                                                           ^
+   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
+     115 | #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
+         |                                                      ^
+   In file included from arch/s390/kvm/kvm-s390.c:22:
+   In file included from include/linux/kvm_host.h:19:
+   In file included from include/linux/msi.h:24:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:14:
+   In file included from arch/s390/include/asm/io.h:93:
+   include/asm-generic/io.h:585:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     585 |         __raw_writeb(value, PCI_IOBASE + addr);
+         |                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:595:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     595 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:605:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     605 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:693:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     693 |         readsb(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:701:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     701 |         readsw(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:709:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     709 |         readsl(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:718:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     718 |         writesb(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+   include/asm-generic/io.h:727:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     727 |         writesw(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+   include/asm-generic/io.h:736:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     736 |         writesl(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+>> arch/s390/kvm/kvm-s390.c:705:4: warning: non-void function 'kvm_arch_sync_dirty_log' should return a value [-Wreturn-mismatch]
+     705 |                         return;
+         |                         ^
+   18 warnings generated.
 
- #define TEST_NAME "futex-requeue"
- #define timeout_ns  30000000
--#define WAKE_WAIT_US 10000
 
- volatile futex_t *f1;
-+static pthread_barrier_t barrier;
+vim +/kvm_arch_sync_dirty_log +705 arch/s390/kvm/kvm-s390.c
 
- void usage(char *prog)
- {
-@@ -32,6 +32,8 @@ void *waiterfn(void *arg)
- 	to.tv_sec =3D 0;
- 	to.tv_nsec =3D timeout_ns;
+5b5865e81387b9 Lilit Janpoladyan     2024-09-18  679  
+522a3b6f0285f5 Lilit Janpoladyan     2024-09-18  680  int kvm_arch_sync_dirty_log(struct kvm *kvm, struct kvm_memory_slot *memslot)
+15f36ebd34b5b2 Jason J. Herne        2012-08-02  681  {
+0959e168678d2d Janosch Frank         2018-07-17  682  	int i;
+15f36ebd34b5b2 Jason J. Herne        2012-08-02  683  	gfn_t cur_gfn, last_gfn;
+0959e168678d2d Janosch Frank         2018-07-17  684  	unsigned long gaddr, vmaddr;
+15f36ebd34b5b2 Jason J. Herne        2012-08-02  685  	struct gmap *gmap = kvm->arch.gmap;
+0959e168678d2d Janosch Frank         2018-07-17  686  	DECLARE_BITMAP(bitmap, _PAGE_ENTRIES);
+15f36ebd34b5b2 Jason J. Herne        2012-08-02  687  
+0959e168678d2d Janosch Frank         2018-07-17  688  	/* Loop over all guest segments */
+0959e168678d2d Janosch Frank         2018-07-17  689  	cur_gfn = memslot->base_gfn;
+15f36ebd34b5b2 Jason J. Herne        2012-08-02  690  	last_gfn = memslot->base_gfn + memslot->npages;
+0959e168678d2d Janosch Frank         2018-07-17  691  	for (; cur_gfn <= last_gfn; cur_gfn += _PAGE_ENTRIES) {
+0959e168678d2d Janosch Frank         2018-07-17  692  		gaddr = gfn_to_gpa(cur_gfn);
+0959e168678d2d Janosch Frank         2018-07-17  693  		vmaddr = gfn_to_hva_memslot(memslot, cur_gfn);
+0959e168678d2d Janosch Frank         2018-07-17  694  		if (kvm_is_error_hva(vmaddr))
+0959e168678d2d Janosch Frank         2018-07-17  695  			continue;
+0959e168678d2d Janosch Frank         2018-07-17  696  
+0959e168678d2d Janosch Frank         2018-07-17  697  		bitmap_zero(bitmap, _PAGE_ENTRIES);
+0959e168678d2d Janosch Frank         2018-07-17  698  		gmap_sync_dirty_log_pmd(gmap, bitmap, gaddr, vmaddr);
+0959e168678d2d Janosch Frank         2018-07-17  699  		for (i = 0; i < _PAGE_ENTRIES; i++) {
+0959e168678d2d Janosch Frank         2018-07-17  700  			if (test_bit(i, bitmap))
+0959e168678d2d Janosch Frank         2018-07-17  701  				mark_page_dirty(kvm, cur_gfn + i);
+0959e168678d2d Janosch Frank         2018-07-17  702  		}
+15f36ebd34b5b2 Jason J. Herne        2012-08-02  703  
+1763f8d09d522b Christian Borntraeger 2016-02-03  704  		if (fatal_signal_pending(current))
+1763f8d09d522b Christian Borntraeger 2016-02-03 @705  			return;
+70c88a00fbf659 Christian Borntraeger 2016-02-02  706  		cond_resched();
+15f36ebd34b5b2 Jason J. Herne        2012-08-02  707  	}
+522a3b6f0285f5 Lilit Janpoladyan     2024-09-18  708  	return 0;
+15f36ebd34b5b2 Jason J. Herne        2012-08-02  709  }
+15f36ebd34b5b2 Jason J. Herne        2012-08-02  710  
 
-+	pthread_barrier_wait(&barrier);
-+
- 	if (futex_wait(f1, *f1, &to, 0))
- 		printf("waiter failed errno %d\n", errno);
-
-@@ -70,13 +72,15 @@ int main(int argc, char *argv[])
- 	ksft_print_msg("%s: Test futex_requeue\n",
- 		       basename(argv[0]));
-
-+	pthread_barrier_init(&barrier, NULL, 2);
- 	/*
- 	 * Requeue a waiter from f1 to f2, and wake f2.
- 	 */
- 	if (pthread_create(&waiter[0], NULL, waiterfn, NULL))
- 		error("pthread_create failed\n", errno);
-
--	usleep(WAKE_WAIT_US);
-+	pthread_barrier_wait(&barrier);
-+	pthread_barrier_destroy(&barrier);
-
- 	info("Requeuing 1 futex from f1 to f2\n");
- 	res =3D futex_cmp_requeue(f1, 0, &f2, 0, 1, 0);
-@@ -99,6 +103,7 @@ int main(int argc, char *argv[])
- 		ksft_test_result_pass("futex_requeue simple succeeds\n");
- 	}
-
-+	pthread_barrier_init(&barrier, NULL, 11);
-
- 	/*
- 	 * Create 10 waiters at f1. At futex_requeue, wake 3 and requeue 7.
-@@ -109,7 +114,8 @@ int main(int argc, char *argv[])
- 			error("pthread_create failed\n", errno);
- 	}
-
--	usleep(WAKE_WAIT_US);
-+	pthread_barrier_wait(&barrier);
-+	pthread_barrier_destroy(&barrier);
-
- 	info("Waking 3 futexes at f1 and requeuing 7 futexes from f1 to f2\n");
- 	res =3D futex_cmp_requeue(f1, 0, &f2, 3, 7, 0);
---
-2.46.0.662.g92d0881bb0-goog
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
