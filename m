@@ -1,45 +1,76 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [78.32.30.218])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F5311CD2C;
-	Fri, 20 Sep 2024 09:37:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2391213541B
+	for <llvm@lists.linux.dev>; Fri, 20 Sep 2024 09:48:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=78.32.30.218
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726825045; cv=none; b=joXmeBEkkLuUeZEXITDX6thqAV6wflDZe6dDt6TaWO9xK2NdIUzwH8qWQHxUWshrduCRLQCyUGxf9+JnXzAyjZHRwZYHYNWnfYEOaWxpaeRWYX6LzME4m0AIjvIoy8UY1ofzRFGnZvrJsmQsoGfewlqAePWjHMBRgA00QyDuyKc=
+	t=1726825707; cv=none; b=MZ5RMK5rxWqTxH9Vs6cb9K53qBRi/B8SsuSPmcnc/mOq7LgyNf326PtOqCAOY8mn86iw/M3Z9h3NE53XYakYM+foUgYihylPVwocClpB3oTkuh+BB9tBRkOz0XbgzuM4CCqTaT4PenDei2vHIlca7jP9qtugHC8t/e0yogiqcVo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726825045; c=relaxed/simple;
-	bh=ewaE6kFipSZ+IA8El0kFSPMtzyh1oiS8KVuWRKL8rIM=;
+	s=arc-20240116; t=1726825707; c=relaxed/simple;
+	bh=FyxXb8akrb6773SzHwSGzE+XY53OJaKmSY0ZkfUJSqU=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=WHaKAB4TaNuN++UR16AP/gx5ok604BnUkdSVSckoz74fRYi91ujlhmliIa1wJdCH0wnVxcJxzV9deW5RC6cS2JRpYSuixDE/nZpLO6PUoM1wlZnuDVF3/Nxe4TujbORJhD3RPxfpK0/JeM3fs7FOw080s8qSWDoVPM1CdFG4xyk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eehm+ZfO; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=p/6+BR35rP8uMRre62CG45k1aktjmzpWz19MD8/LtR2ZOViN3xxJxD94RFELtvKat9xosyXnEBR2MFiAVDNWZYd2w/ny8lLphbnixxg+Z48d5G05FxzgRVHqFpBL5qr46iFuad2sW9sV5WbLhSCdj2kxcWD26q444jj2SU72/80=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=armlinux.org.uk; spf=none smtp.mailfrom=armlinux.org.uk; dkim=pass (2048-bit key) header.d=armlinux.org.uk header.i=@armlinux.org.uk header.b=FCaBAyrk; arc=none smtp.client-ip=78.32.30.218
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=armlinux.org.uk
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=armlinux.org.uk
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eehm+ZfO"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F187FC4CEC3;
-	Fri, 20 Sep 2024 09:37:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1726825044;
-	bh=ewaE6kFipSZ+IA8El0kFSPMtzyh1oiS8KVuWRKL8rIM=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=eehm+ZfOpLGkoO7Al5j59uyiNdCGhe+x6BP+r7RnH4nQKp9l53LT1qp1jPOhdJGtc
-	 JxDj8tDU/65utgqep0Dq9LPwfcwRN1b35IoVq9uvx+sMudi/PgqfqG0QUe2xW2iXED
-	 Is00nCBHy1VyC74Awq7FcnbDvAvS0QnmWVW7jOIzS16EdVvkaGflHBw3aI5WPGTB5S
-	 Topq4q6cHJcwqVrbcsDGOh7DUpBD8xkzkLN/Hj4WgYHOBbmnj7UuxukH9AzcVdLpSo
-	 R2pRNTMN1vUsuD8hRAKXid57ch1owGFyxKqZpbmt+wmFApjH7EHfPCTzt9aUbyfans
-	 O7C+/BIQZZTQA==
-Date: Fri, 20 Sep 2024 02:37:22 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Reinette Chatre <reinette.chatre@intel.com>
-Cc: Fenghua Yu <fenghua.yu@intel.com>, x86@kernel.org,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-	patches@lists.linux.dev
-Subject: Re: [PATCH v3] x86/resctrl: Annotate get_mem_config() functions as
- __init
-Message-ID: <20240920093722.GA411564@thelio-3990X>
-References: <20240917-x86-restctrl-get_mem_config_intel-init-v3-1-10d521256284@kernel.org>
- <2deb3b0c-121c-4dfb-9179-e919582f5bb4@intel.com>
+	dkim=pass (2048-bit key) header.d=armlinux.org.uk header.i=@armlinux.org.uk header.b="FCaBAyrk"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
+	MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+	List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+	bh=lqLyI3VFGw/HAwz/TUdgSpSC7qmKkHxnZTuEYK+TROA=; b=FCaBAyrkr2GhMgqDOcDSm15x44
+	nBBZNKK4o9GTMPjz2ia1eI3kls0oviUY0lhgsfF078MVJ95hghGLUWqxjj7IQJmhvgpLIPV/yzCoi
+	UwCVkT0y2oAqMAnQ7V4iCoNNGeAaXGZoVmnKe+e4D8PVlQrF+WlpvAQT5N3EzL52CV2AbsyillS/E
+	G7kqNOAMyp5VI22eqWfpdik8O6y0z3/ezk72CoHzgDI7/QfbfayfpKTVZe42RhbO6Kyg63huHbJyD
+	lrcsuFtw8ntkZDjFpG/+BpKsPH4eBNbbt48coqkUgq60sBcdvKdIMvsGIaTRuXyBxkKozH6oFjq34
+	HASJesyQ==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:33476)
+	by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <linux@armlinux.org.uk>)
+	id 1sraF3-0001NG-1b;
+	Fri, 20 Sep 2024 10:47:57 +0100
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.96)
+	(envelope-from <linux@shell.armlinux.org.uk>)
+	id 1sraEr-0002Qp-2B;
+	Fri, 20 Sep 2024 10:47:45 +0100
+Date: Fri, 20 Sep 2024 10:47:45 +0100
+From: "Russell King (Oracle)" <linux@armlinux.org.uk>
+To: Ryan Roberts <ryan.roberts@arm.com>
+Cc: Anshuman Khandual <anshuman.khandual@arm.com>,
+	kernel test robot <lkp@intel.com>, linux-mm@kvack.org,
+	llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Andrew Morton <akpm@linux-foundation.org>,
+	David Hildenbrand <david@redhat.com>,
+	"Mike Rapoport (IBM)" <rppt@kernel.org>,
+	Arnd Bergmann <arnd@arndb.de>, x86@kernel.org,
+	linux-m68k@lists.linux-m68k.org, linux-fsdevel@vger.kernel.org,
+	kasan-dev@googlegroups.com, linux-kernel@vger.kernel.org,
+	linux-perf-users@vger.kernel.org,
+	Dimitri Sivanich <dimitri.sivanich@hpe.com>,
+	Alexander Viro <viro@zeniv.linux.org.uk>,
+	Muchun Song <muchun.song@linux.dev>,
+	Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+	Miaohe Lin <linmiaohe@huawei.com>, Dennis Zhou <dennis@kernel.org>,
+	Tejun Heo <tj@kernel.org>,
+	Christoph Lameter <cl@linux-foundation.org>,
+	Uladzislau Rezki <urezki@gmail.com>,
+	Christoph Hellwig <hch@infradead.org>
+Subject: Re: [PATCH V2 7/7] mm: Use pgdp_get() for accessing PGD entries
+Message-ID: <Zu1EwTItDrnkTVTB@shell.armlinux.org.uk>
+References: <20240917073117.1531207-8-anshuman.khandual@arm.com>
+ <202409190310.ViHBRe12-lkp@intel.com>
+ <8f43251a-5418-4c54-a9b0-29a6e9edd879@arm.com>
+ <ZuvqpvJ6ht4LCuB+@shell.armlinux.org.uk>
+ <82fa108e-5b15-435a-8b61-6253766c7d88@arm.com>
+ <ZuxZ/QeSdqTHtfmw@shell.armlinux.org.uk>
+ <5bd51798-cb47-4a7b-be40-554b5a821fe7@arm.com>
+ <ZuyIwdnbYcm3ZkkB@shell.armlinux.org.uk>
+ <9e68ffad-8a7e-40d7-a6f3-fa989a834068@arm.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -48,51 +79,150 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <2deb3b0c-121c-4dfb-9179-e919582f5bb4@intel.com>
+In-Reply-To: <9e68ffad-8a7e-40d7-a6f3-fa989a834068@arm.com>
+Sender: Russell King (Oracle) <linux@armlinux.org.uk>
 
-On Thu, Sep 19, 2024 at 02:15:34PM -0700, Reinette Chatre wrote:
-> 
-> 
-> On 9/17/24 9:02 AM, Nathan Chancellor wrote:
-> > After a recent LLVM change [1] that deduces __cold on functions that
-> > only call cold code (such as __init functions), there is a section
-> > mismatch warning from __get_mem_config_intel(), which got moved to
-> > .text.unlikely. as a result of that optimization:
+On Fri, Sep 20, 2024 at 08:57:23AM +0200, Ryan Roberts wrote:
+> On 19/09/2024 21:25, Russell King (Oracle) wrote:
+> > On Thu, Sep 19, 2024 at 07:49:09PM +0200, Ryan Roberts wrote:
+> >> On 19/09/2024 18:06, Russell King (Oracle) wrote:
+> >>> On Thu, Sep 19, 2024 at 05:48:58PM +0200, Ryan Roberts wrote:
+> >>>>> 32-bit arm uses, in some circumstances, an array because each level 1
+> >>>>> page table entry is actually two descriptors. It needs to be this way
+> >>>>> because each level 2 table pointed to by each level 1 entry has 256
+> >>>>> entries, meaning it only occupies 1024 bytes in a 4096 byte page.
+> >>>>>
+> >>>>> In order to cut down on the wastage, treat the level 1 page table as
+> >>>>> groups of two entries, which point to two consecutive 1024 byte tables
+> >>>>> in the level 2 page.
+> >>>>>
+> >>>>> The level 2 entry isn't suitable for the kernel's use cases (there are
+> >>>>> no bits to represent accessed/dirty and other important stuff that the
+> >>>>> Linux MM wants) so we maintain the hardware page tables and a separate
+> >>>>> set that Linux uses in the same page. Again, the software tables are
+> >>>>> consecutive, so from Linux's perspective, the level 2 page tables
+> >>>>> have 512 entries in them and occupy one full page.
+> >>>>>
+> >>>>> This is documented in arch/arm/include/asm/pgtable-2level.h
+> >>>>>
+> >>>>> However, what this means is that from the software perspective, the
+> >>>>> level 1 page table descriptors are an array of two entries, both of
+> >>>>> which need to be setup when creating a level 2 page table, but only
+> >>>>> the first one should ever be dereferenced when walking the tables,
+> >>>>> otherwise the code that walks the second level of page table entries
+> >>>>> will walk off the end of the software table into the actual hardware
+> >>>>> descriptors.
+> >>>>>
+> >>>>> I've no idea what the idea is behind introducing pgd_get() and what
+> >>>>> it's semantics are, so I can't comment further.
+> >>>>
+> >>>> The helper is intended to read the value of the entry pointed to by the passed
+> >>>> in pointer. And it shoiuld be read in a "single copy atomic" manner, meaning no
+> >>>> tearing. Further, the PTL is expected to be held when calling the getter. If the
+> >>>> HW can write to the entry such that its racing with the lock holder (i.e. HW
+> >>>> update of access/dirty) then READ_ONCE() should be suitable for most
+> >>>> architectures. If there is no possibility of racing (because HW doesn't write to
+> >>>> the entry), then a simple dereference would be sufficient, I think (which is
+> >>>> what the core code was already doing in most cases).
+> >>>
+> >>> The core code should be making no access to the PGD entries on 32-bit
+> >>> ARM since the PGD level does not exist. Writes are done at PMD level
+> >>> in arch code. Reads are done by core code at PMD level.
+> >>>
+> >>> It feels to me like pgd_get() just doesn't fit the model to which 32-bit
+> >>> ARM was designed to use decades ago, so I want full details about what
+> >>> pgd_get() is going to be used for and how it is going to be used,
+> >>> because I feel completely in the dark over this new development. I fear
+> >>> that someone hasn't understood the Linux page table model if they're
+> >>> wanting to access stuff at levels that effectively "aren't implemented"
+> >>> in the architecture specific kernel model of the page tables.
+> >>
+> >> This change isn't as big and scary as I think you fear.
 > > 
-> >   WARNING: modpost: vmlinux: section mismatch in reference: __get_mem_config_intel+0x77 (section: .text.unlikely.) -> thread_throttle_mode_init (section: .init.text)
-> > 
-> > Mark __get_mem_config_intel() as __init as well since it is only called
-> > from __init code, which clears up the warning.
-> > 
-> > While __rdt_get_mem_config_amd() does not exhibit a warning because it
-> > does not call any __init code, it is a similar function that is only
-> > called from __init code like __get_mem_config_intel(), so mark it __init
-> > as well to keep the code symmetrical.
-> > 
-> > Link: https://github.com/llvm/llvm-project/commit/6b11573b8c5e3d36beee099dbe7347c2a007bf53 [1]
-> > Reviewed-by: Reinette Chatre <reinette.chatre@intel.com>
-> > Signed-off-by: Nathan Chancellor <nathan@kernel.org>
-> > ---
+> > The situation is as I state above. Core code must _not_ dereference pgd
+> > pointers on 32-bit ARM.
 > 
-> If there is a re-spin I think appropriate Fixes tags can be added:
-> Fixes: 05b93417ce5b ("x86/intel_rdt/mba: Add primary support for Memory Bandwidth Allocation (MBA)")
-> Fixes: 4d05bf71f157 ("x86/resctrl: Introduce AMD QOS feature") 
+> Let's just rewind a bit. This thread exists because the kernel test robot failed
+> to compile pgd_none_or_clear_bad() (a core-mm function) for the arm architecture
+> after Anshuman changed the direct pgd dereference to pgdp_get(). The reason
+> compilation failed is because arm defines its own pgdp_get() override, but it is
+> broken (there is a typo).
+
+Let's not rewind, because had you fully read and digested my reply, you
+would have seen why this isn't a problem... but let me spell it out.
+
 > 
-> I am not familiar with stable rules related to compiler impact but
-> this may fall into the "it bothers people" category of fixes so
-> a Cc: stable@vger.kernel.org sounds appropriate also.
+> Code before Anshuman's change:
+> 
+> static inline int pgd_none_or_clear_bad(pgd_t *pgd)
+> {
+> 	if (pgd_none(*pgd))
+> 		return 1;
+> 	if (unlikely(pgd_bad(*pgd))) {
+> 		pgd_clear_bad(pgd);
+> 		return 1;
+> 	}
+> 	return 0;
+> }
 
-Yes, I think it would be reasonable to have Fixes and a Cc: stable since
-this can turn fatal with CONFIG_SECTION_MISMATCH_WARN_ONLY=n (even if
-there should be no real issue at run time because these functions are
-only called from __init code).
+This isn't a problem as the code stands. While there is a dereference
+in C, that dereference is a simple struct copy, something that we use
+everywhere in the kernel. However, that is as far as it goes, because
+neither pgd_none() and pgd_bad() make use of their argument, and thus
+the compiler will optimise it away, resulting in no actual access to
+the page tables - _as_ _intended_.
 
-I'll send a v4 upon request from whoever will apply this. Otherwise,
-here is a copy and pasteable block:
+If these are going to be converted to pgd_get(), then we need pgd_get()
+to _also_ be optimised away, and if e.g. this is the only place that
+pgd_get() is going to be used, the suggestion I made in my previous
+email is entirely reasonable, since we know that the result of pgd_get()
+will not actually be used.
 
-Cc: stable@vger.kernel.org
-Fixes: 05b93417ce5b ("x86/intel_rdt/mba: Add primary support for Memory Bandwidth Allocation (MBA)")
-Fixes: 4d05bf71f157 ("x86/resctrl: Introduce AMD QOS feature")
+> As an aside, the kernel also dereferences p4d, pud, pmd and pte pointers in
+> various circumstances.
 
-Cheers,
-Nathan
+I already covered these in my previous reply.
+
+> And other changes in this series are also replacing those
+> direct dereferences with calls to similar helpers. The fact that these are all
+> folded (by a custom arm implementation if I've understood the below correctly)
+> just means that each dereference is returning what you would call the pmd from
+> the HW perspective, I think?
+
+It'll "return" the first of each pair of level-1 page table entries,
+which is pgd[0] or *p4d, *pud, *pmd - but all of these except *pmd
+need to be optimised away, so throwing lots of READ_ONCE() around
+this code without considering this is certainly the wrong approach.
+
+> >> The core-mm today
+> >> dereferences pgd pointers (and p4d, pud, pmd pointers) directly in its code. See
+> >> follow_pfnmap_start(),
+> > 
+> > Doesn't seem to exist at least not in 6.11.
+> 
+> Appologies, I'm on mm-unstable and that isn't upstream yet. See follow_pte() in
+> v6.11 or __apply_to_page_range(), or pgd_none_or_clear_bad() as per above.
+
+Looking at follow_pte(), it's not a problem.
+
+I think we wouldn't be having this conversation before:
+
+commit a32618d28dbe6e9bf8ec508ccbc3561a7d7d32f0
+Author: Russell King <rmk+kernel@arm.linux.org.uk>
+Date:   Tue Nov 22 17:30:28 2011 +0000
+
+    ARM: pgtable: switch to use pgtable-nopud.h
+
+where:
+-#define pgd_none(pgd)          (0)
+-#define pgd_bad(pgd)           (0)
+
+existed before this commit - and thus the dereference in things like:
+
+	pgd_none(*pgd)
+
+wouldn't even be visible to beyond the preprocessor step.
+
+-- 
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 80Mbps down 10Mbps up. Decent connectivity at last!
