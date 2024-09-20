@@ -1,65 +1,85 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 789B01F95E;
-	Fri, 20 Sep 2024 05:51:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AAB2436AF5;
+	Fri, 20 Sep 2024 06:53:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726811486; cv=none; b=hNuwg7GFetys+U11HdOhnupc+FB+45D8CPdqsiSlzc0XLN7AltaVudpsGLXN/AK4oQSIJelarBdWq+97/fSZh2BYiIhL5vfHPYIkWikxi+t3ps3QaLc5n+XnIOBHxCc4PKPbm/TnsapnbZx8bKVzDExXNklexq1kqdkaqyfb9qw=
+	t=1726815216; cv=none; b=GXUxcsns7q1v2zT91QOYbtwTs/DmhFlEE14amnhba1Eek6lC/626onJm6z7EGS8DZ/ASpCVnm7KhUt5iedXr1C5h6XkJDY/T/aWluE1bKfQeeZubUaiGDHH8x9vH6ADnvAt1wlSqsjua/ER/YTI8lTDZwq3k5tmnk8kgZzEZ1qM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726811486; c=relaxed/simple;
-	bh=uUOcIExMFxtXedoB/vYFOxBLShlasbQQzV+QHdNjWNg=;
+	s=arc-20240116; t=1726815216; c=relaxed/simple;
+	bh=icPvWF9UpQYmVHAebPgQ6ihEQgy3tZZV6m+FJQSQwso=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=gfOnasimxjRWRo/5XNQlA7DGInn4iaav0XZiTEy2zulNUaPafUhBbhPV9wpmvsLwtrAh2D0gyUjLfD9kw76IyT8AnpB71UYxXJzEyM9Y9OogVBiCrSeHXMbWEshQNKi/VOmuIL26Fs3bJRejDx7zc/Kv9iq5R+lcteJG6ucXeNE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ACgzrnJo; arc=none smtp.client-ip=192.198.163.12
+	 Content-Type:Content-Disposition:In-Reply-To; b=pI75RDbCMh3ba3LIF51NP77+gmZZgIDlhTCBl3OC/1SEdUJiRRgTSSvwMRF+IhoSBFbFGNuYmqjhMf9BtelzCkswi3MCnGUMvyFMHDqpJndpFXdBMT47qJetKxqT97lPbOy8R7fft31fP/AzKNSGeGyWImT3nPFvPaZkAhXO/nI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=SAvF3NbH; arc=none smtp.client-ip=198.175.65.16
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ACgzrnJo"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="SAvF3NbH"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1726811484; x=1758347484;
+  t=1726815214; x=1758351214;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=uUOcIExMFxtXedoB/vYFOxBLShlasbQQzV+QHdNjWNg=;
-  b=ACgzrnJoUvLEBvQ0NzTqn91O11Ee9RyKjedgZc+c5YG1GmmVwep2b91t
-   yJB18jbyLIG3sQ0uhn7xdoZVorMKiGNfGUMTFbx9q9hKvTrd7HXFAfkjG
-   cckOHgFeS3qakQm3zSHWEHxF3a/XNifFmHzorTO+i5UkHdDx1E1+iCjHW
-   X/FAbRnYJX6oC8S9qpefkrcuJPzSeXjEGt0BRYraNbV6I5FR8bhXLZ3N+
-   U/1Qxde/cFV3G2TVXSMgTiBRAoiAE6dUksclrqNPlBIaAueFeXM6nGn+i
-   FRIHV4/SQbI7XjA8c1JrHch1YyaTlSFHFS6ofprQu/jU9Zx6G+6F8kuDB
+  bh=icPvWF9UpQYmVHAebPgQ6ihEQgy3tZZV6m+FJQSQwso=;
+  b=SAvF3NbHLBrQyj/62Wk61OOGHJ7ISrBXdo/hYwgUw7bFosUDYt1wDx2K
+   18s2p2JQyVQkgtBjhrQkq+iDBDf8KSsgy0c9SUHSCjouLWsOjsPbCawvG
+   K+8qve57JYhldJcaIgXGTkstncHxj+EL6ABAbT9no3R+hk8URWwhz2z5g
+   MbeqezMkINOWhpEGJ4Iy0MBjbikgepKMz9TQ0B+TS0hJZofTlzylqY1JX
+   EUZha/URf5wVOZyBk0zItEnFyWQXyj2Qd71VnA5inDCTqkGdELFNb+IN1
+   eztJNFdYEQm1cAkFM0i41qmTVrixUvLaoUVo/j+5R0Ht123dITWOlcqxu
    g==;
-X-CSE-ConnectionGUID: a08oTMdrR3uLOQT3l9MvrA==
-X-CSE-MsgGUID: B5IaeTLnTCWFXKc1Rary6Q==
-X-IronPort-AV: E=McAfee;i="6700,10204,11200"; a="29702004"
+X-CSE-ConnectionGUID: ZFtFQ8KPQQiY9jKXtqIBwg==
+X-CSE-MsgGUID: e41vtcsvSQak7bRqOCH1bQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11200"; a="25907300"
 X-IronPort-AV: E=Sophos;i="6.10,243,1719903600"; 
-   d="scan'208";a="29702004"
-Received: from orviesa006.jf.intel.com ([10.64.159.146])
-  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Sep 2024 22:51:23 -0700
-X-CSE-ConnectionGUID: vnU+PBf+RW+Ev7skvffaLA==
-X-CSE-MsgGUID: MltdL1EgRuiN9yC8sj+NAg==
+   d="scan'208";a="25907300"
+Received: from orviesa008.jf.intel.com ([10.64.159.148])
+  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Sep 2024 23:53:33 -0700
+X-CSE-ConnectionGUID: tCCWaVPJRN+dyCcdvCikeA==
+X-CSE-MsgGUID: DQDrCyQHR06fndhjR3RPNQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.10,243,1719903600"; 
-   d="scan'208";a="70485990"
+   d="scan'208";a="71028314"
 Received: from lkp-server01.sh.intel.com (HELO 53e96f405c61) ([10.239.97.150])
-  by orviesa006.jf.intel.com with ESMTP; 19 Sep 2024 22:51:20 -0700
+  by orviesa008.jf.intel.com with ESMTP; 19 Sep 2024 23:53:25 -0700
 Received: from kbuild by 53e96f405c61 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1srWY1-000E0Q-1G;
-	Fri, 20 Sep 2024 05:51:17 +0000
-Date: Fri, 20 Sep 2024 13:51:16 +0800
+	id 1srXW6-000E3o-1o;
+	Fri, 20 Sep 2024 06:53:22 +0000
+Date: Fri, 20 Sep 2024 14:52:36 +0800
 From: kernel test robot <lkp@intel.com>
-To: Shivasharan S <shivasharan.srikanteshwara@broadcom.com>,
-	linux-pci@vger.kernel.org, bhelgaas@google.com,
-	manivannan.sadhasivam@linaro.org, logang@deltatee.com
+To: Colton Lewis <coltonlewis@google.com>, kvm@vger.kernel.org
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org, sumanesh.samanta@broadcom.com,
-	sathya.prakash@broadcom.com, sjeaugey@nvidia.com,
-	Shivasharan S <shivasharan.srikanteshwara@broadcom.com>
-Subject: Re: [PATCH 2/2 v2] PCI/P2PDMA: Modify p2p_dma_distance to detect P2P
- links
-Message-ID: <202409201333.LCx5k41f-lkp@intel.com>
-References: <1726733624-2142-3-git-send-email-shivasharan.srikanteshwara@broadcom.com>
+	Oliver Upton <oliver.upton@linux.dev>,
+	Sean Christopherson <seanjc@google.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Ingo Molnar <mingo@redhat.com>,
+	Arnaldo Carvalho de Melo <acme@kernel.org>,
+	Namhyung Kim <namhyung@kernel.org>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+	Jiri Olsa <jolsa@kernel.org>, Ian Rogers <irogers@google.com>,
+	Adrian Hunter <adrian.hunter@intel.com>,
+	Kan Liang <kan.liang@linux.intel.com>,
+	Will Deacon <will@kernel.org>, Russell King <linux@armlinux.org.uk>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Michael Ellerman <mpe@ellerman.id.au>,
+	Nicholas Piggin <npiggin@gmail.com>,
+	Christophe Leroy <christophe.leroy@csgroup.eu>,
+	Naveen N Rao <naveen@kernel.org>,
+	Heiko Carstens <hca@linux.ibm.com>,
+	Vasily Gorbik <gor@linux.ibm.com>,
+	Alexander Gordeev <agordeev@linux.ibm.com>,
+	Christian Borntraeger <borntraeger@linux.ibm.com>,
+	Sven Schnelle <svens@linux.ibm.com>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+	"H . Peter Anvin" <hpa@zytor.com>
+Subject: Re: [PATCH v4 5/5] perf: Correct perf sampling with guest VMs
+Message-ID: <202409201447.iQ8kNjxo-lkp@intel.com>
+References: <20240919190750.4163977-6-coltonlewis@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -68,77 +88,138 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1726733624-2142-3-git-send-email-shivasharan.srikanteshwara@broadcom.com>
+In-Reply-To: <20240919190750.4163977-6-coltonlewis@google.com>
 
-Hi Shivasharan,
+Hi Colton,
 
-kernel test robot noticed the following build warnings:
+kernel test robot noticed the following build errors:
 
-[auto build test WARNING on pci/next]
-[also build test WARNING on next-20240919]
-[cannot apply to pci/for-linus linus/master v6.11]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+[auto build test ERROR on da3ea35007d0af457a0afc87e84fddaebc4e0b63]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Shivasharan-S/PCI-portdrv-Enable-reporting-inter-switch-P2P-links/20240919-162626
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/pci/pci.git next
-patch link:    https://lore.kernel.org/r/1726733624-2142-3-git-send-email-shivasharan.srikanteshwara%40broadcom.com
-patch subject: [PATCH 2/2 v2] PCI/P2PDMA: Modify p2p_dma_distance to detect P2P links
-config: x86_64-kexec (https://download.01.org/0day-ci/archive/20240920/202409201333.LCx5k41f-lkp@intel.com/config)
-compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240920/202409201333.LCx5k41f-lkp@intel.com/reproduce)
+url:    https://github.com/intel-lab-lkp/linux/commits/Colton-Lewis/arm-perf-Drop-unused-functions/20240920-031100
+base:   da3ea35007d0af457a0afc87e84fddaebc4e0b63
+patch link:    https://lore.kernel.org/r/20240919190750.4163977-6-coltonlewis%40google.com
+patch subject: [PATCH v4 5/5] perf: Correct perf sampling with guest VMs
+config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20240920/202409201447.iQ8kNjxo-lkp@intel.com/config)
+compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 8663a75fa2f31299ab8d1d90288d9df92aadee88)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240920/202409201447.iQ8kNjxo-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202409201333.LCx5k41f-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202409201447.iQ8kNjxo-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
-   drivers/pci/pcie/portdrv.c:86: warning: This comment starts with '/**', but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
-    * Determine if device supports Inter switch P2P links.
->> drivers/pci/pcie/portdrv.c:116: warning: Function parameter or struct member 'a' not described in 'pcie_port_is_p2p_link_available'
->> drivers/pci/pcie/portdrv.c:116: warning: Function parameter or struct member 'b' not described in 'pcie_port_is_p2p_link_available'
+   In file included from kernel/events/core.c:12:
+   In file included from include/linux/mm.h:2232:
+   include/linux/vmstat.h:503:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     503 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     504 |                            item];
+         |                            ~~~~
+   include/linux/vmstat.h:510:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     510 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     511 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/vmstat.h:517:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     517 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+   include/linux/vmstat.h:523:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
+     523 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
+     524 |                            NR_VM_NUMA_EVENT_ITEMS +
+         |                            ~~~~~~~~~~~~~~~~~~~~~~
+   In file included from kernel/events/core.c:20:
+   In file included from include/linux/tick.h:8:
+   In file included from include/linux/clockchips.h:14:
+   In file included from include/linux/clocksource.h:22:
+   In file included from arch/s390/include/asm/io.h:93:
+   include/asm-generic/io.h:548:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     548 |         val = __raw_readb(PCI_IOBASE + addr);
+         |                           ~~~~~~~~~~ ^
+   include/asm-generic/io.h:561:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     561 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
+      37 | #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
+         |                                                           ^
+   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
+     102 | #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
+         |                                                      ^
+   In file included from kernel/events/core.c:20:
+   In file included from include/linux/tick.h:8:
+   In file included from include/linux/clockchips.h:14:
+   In file included from include/linux/clocksource.h:22:
+   In file included from arch/s390/include/asm/io.h:93:
+   include/asm-generic/io.h:574:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     574 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
+      35 | #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
+         |                                                           ^
+   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
+     115 | #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
+         |                                                      ^
+   In file included from kernel/events/core.c:20:
+   In file included from include/linux/tick.h:8:
+   In file included from include/linux/clockchips.h:14:
+   In file included from include/linux/clocksource.h:22:
+   In file included from arch/s390/include/asm/io.h:93:
+   include/asm-generic/io.h:585:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     585 |         __raw_writeb(value, PCI_IOBASE + addr);
+         |                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:595:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     595 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:605:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     605 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:693:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     693 |         readsb(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:701:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     701 |         readsw(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:709:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     709 |         readsl(PCI_IOBASE + addr, buffer, count);
+         |                ~~~~~~~~~~ ^
+   include/asm-generic/io.h:718:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     718 |         writesb(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+   include/asm-generic/io.h:727:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     727 |         writesw(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+   include/asm-generic/io.h:736:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     736 |         writesl(PCI_IOBASE + addr, buffer, count);
+         |                 ~~~~~~~~~~ ^
+>> kernel/events/core.c:6935:9: error: too few arguments to function call, expected 2, have 1
+    6935 |         return perf_arch_misc_flags(regs);
+         |                ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/s390/include/asm/perf_event.h:42:56: note: expanded from macro 'perf_arch_misc_flags'
+      42 | #define perf_arch_misc_flags(regs) perf_misc_flags(regs)
+         |                                    ~~~~~~~~~~~~~~~     ^
+   kernel/events/core.c:6929:15: note: 'perf_misc_flags' declared here
+    6929 | unsigned long perf_misc_flags(struct perf_event *event,
+         |               ^               ~~~~~~~~~~~~~~~~~~~~~~~~~
+    6930 |                               struct pt_regs *regs)
+         |                               ~~~~~~~~~~~~~~~~~~~~
+   16 warnings and 1 error generated.
 
 
-vim +116 drivers/pci/pcie/portdrv.c
+vim +6935 kernel/events/core.c
 
-   106	
-   107	/**
-   108	 * pcie_port_is_p2p_link_available: Determine if a P2P link is available
-   109	 * between the two upstream bridges. The serial number of the two devices
-   110	 * will be compared and if they are same then it is considered that the P2P
-   111	 * link is available.
-   112	 *
-   113	 * Return value: true if inter switch P2P is available, return false otherwise.
-   114	 */
-   115	bool pcie_port_is_p2p_link_available(struct pci_dev *a, struct pci_dev *b)
- > 116	{
-   117		u64 dsn_a, dsn_b;
-   118	
-   119		/*
-   120		 * Check if the devices support Inter switch P2P.
-   121		 */
-   122		if (!pcie_port_is_p2p_supported(a) ||
-   123		    !pcie_port_is_p2p_supported(b))
-   124			return false;
-   125	
-   126		dsn_a = pci_get_dsn(a);
-   127		if (!dsn_a)
-   128			return false;
-   129	
-   130		dsn_b = pci_get_dsn(b);
-   131		if (!dsn_b)
-   132			return false;
-   133	
-   134		if (dsn_a == dsn_b)
-   135			return true;
-   136	
-   137		return false;
-   138	}
-   139	EXPORT_SYMBOL_GPL(pcie_port_is_p2p_link_available);
-   140	
+e01be2b9ba5700 Colton Lewis 2024-09-19  6928  
+e01be2b9ba5700 Colton Lewis 2024-09-19  6929  unsigned long perf_misc_flags(struct perf_event *event,
+e01be2b9ba5700 Colton Lewis 2024-09-19  6930  			      struct pt_regs *regs)
+e01be2b9ba5700 Colton Lewis 2024-09-19  6931  {
+e01be2b9ba5700 Colton Lewis 2024-09-19  6932  	if (should_sample_guest(event))
+e01be2b9ba5700 Colton Lewis 2024-09-19  6933  		return perf_arch_guest_misc_flags(regs);
+e01be2b9ba5700 Colton Lewis 2024-09-19  6934  
+ae90a5329c331d Colton Lewis 2024-09-19 @6935  	return perf_arch_misc_flags(regs);
+ae90a5329c331d Colton Lewis 2024-09-19  6936  }
+ae90a5329c331d Colton Lewis 2024-09-19  6937  
 
 -- 
 0-DAY CI Kernel Test Service
