@@ -1,157 +1,122 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 91E3213C3F6;
-	Fri, 20 Sep 2024 11:20:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BDDA017BB06;
+	Fri, 20 Sep 2024 14:25:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726831249; cv=none; b=iHqms/UFPdAw2l5dd8cGZ/kTNuYz1kae3CT8IocOMxUGEmc1nRzNUNz+YrS27+PhH1PHqBWoA3kQGx7f+oD5W/EUVouZ+djKT9S6Kd7fY6JQtrprJA3yrnUBT/kJXZ6oSogwTcoSrOCtMT8zStsIatBJR6+hz3FCTaS8tkVuqes=
+	t=1726842360; cv=none; b=Q8hMJDdBEX/Md4C3R9ffrfEVv8tsqbEUBJIbG3xa+T/RhhEYY3FoZWJ9r9aBIJkuam9wNKDG4Q6nEPxXNwUuMcMURWqcFloHuWrPF+daAGsvEj4CKaNwX7jXuCfEtW45/E7q37Wx9leBcB1CtsHja+J7KY2vSdRnsAZL/M1XZf8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726831249; c=relaxed/simple;
-	bh=cOkG5YrAfWWRLhi0lqdnxR0XhBJNfGEMHWKajqt7vE8=;
+	s=arc-20240116; t=1726842360; c=relaxed/simple;
+	bh=+9pRaSgM2TSiWBfyUh9smEH2QqQGRBBKZosdi4yEFq4=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=skgcycQKZq+qMJnScc2Lp7y2VD53UyItN528yqP/oUSa8cAcmBNdGUoVv0W1qFQ92UeZsb8aOJPWU5SXRjZQkojiGqxWqt8g0X9FrBxBEIu3dP7bjwfNIluUO/hIbYu0tYUMVPtGgOVxoYeprfEh96MaSgVpDCqp9ef5CRn4VXE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Rg7Y0YK7; arc=none smtp.client-ip=192.198.163.14
+	 Content-Type:Content-Disposition:In-Reply-To; b=hAvP1ZC02cnlZYwGfj4HsKJdB4t+K5Ri9tu+X+DY8QzujBpicIrkBWlHrhLe7y1OSv/lPSsyKMyPvPC4tZdCv+IgYU12SEnpAQ8PR/JqnJtNC9Ezzz8hAHB5K2bMdo5DYLYoSoSCk1q6rUAvWAsPpf2+wg8lI0QMRU2oSK2yCCk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Ys8hyTci; arc=none smtp.client-ip=192.198.163.13
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Rg7Y0YK7"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Ys8hyTci"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1726831247; x=1758367247;
+  t=1726842359; x=1758378359;
   h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=cOkG5YrAfWWRLhi0lqdnxR0XhBJNfGEMHWKajqt7vE8=;
-  b=Rg7Y0YK7TLjLipU6QzVdDcMdasTklPhEx0iCGpoK6XqHddJJixLuqnMA
-   JQUdv9nPcgiqeDe3TaT1RpMY73+qIUPGA2fEtih/w08X9855ZSl8fUVqb
-   3QEQCf+btCC9J1+HBt3rzzx04KyUnVYuhSlyxepLC8h3eUthSLvmtz0F7
-   Mghf8TwLujAM3egSVTQTGt+PniU92oDaSfruL+Jz5+kASTxwCe+NljqoG
-   I2kZluWT5fty55Un2NU4tvJzRXzYzLeiUBk5Jje6pxCxLGDaSj/yd7oUk
-   tOZKpBpnPpItsUqPtYqt4u7pvhHcoKCBiKqezJNfPchj5h6PlW1/mfJen
+   mime-version:in-reply-to;
+  bh=+9pRaSgM2TSiWBfyUh9smEH2QqQGRBBKZosdi4yEFq4=;
+  b=Ys8hyTciVuBuEzAcKnr12MVmsp5/tewehsRW85axyM5eHLt0M4H0kEOQ
+   SavJh1Fe2Xeuo0bS4Iyn9TjABDRKBUV41JLEUpLaG612GkGhL98Zf1xS5
+   shTAlRsFpok4h1x8SResBEpwqv58CYNQvsncHIhapC/rAlr3Ry80LmvEw
+   ow2pPItnVl9agXzqSDdFJACvLF/pkyBjhmRyKoWxYPj6gCqcrCc7fqcUW
+   vSxxq0+bGZwt+7qVN9WpDGbcaFT5OypFFF/8dhrLa3ciusCTcVyByKoF5
+   xWGK9aI4zyHake3K02uEjK4c07e+5Upn1i9EkmlTDkyPbcsYycnWf+IqY
    A==;
-X-CSE-ConnectionGUID: cn3QJM/MTdGhY8PttqV/TA==
-X-CSE-MsgGUID: QCnWyuWGQhKrTkxaQ8IKSA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11200"; a="26018570"
+X-CSE-ConnectionGUID: VCFoNRhxQBSBDu5wI912Bg==
+X-CSE-MsgGUID: GDVsb+k7RLWPatxWTlNc/Q==
+X-IronPort-AV: E=McAfee;i="6700,10204,11200"; a="28747478"
 X-IronPort-AV: E=Sophos;i="6.10,244,1719903600"; 
-   d="scan'208";a="26018570"
-Received: from fmviesa006.fm.intel.com ([10.60.135.146])
-  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Sep 2024 04:20:47 -0700
-X-CSE-ConnectionGUID: B3bubxXqRtyC80JACfA9Ig==
-X-CSE-MsgGUID: NmwJsoqIRU+K3lIEz7n1bA==
+   d="scan'208";a="28747478"
+Received: from fmviesa008.fm.intel.com ([10.60.135.148])
+  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Sep 2024 07:25:58 -0700
+X-CSE-ConnectionGUID: 5uot3sBDR6OXPe60tNX0Cw==
+X-CSE-MsgGUID: +U59R566SqKvf6rhEoeCGg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.10,244,1719903600"; 
-   d="scan'208";a="69868882"
+   d="scan'208";a="70448960"
 Received: from lkp-server01.sh.intel.com (HELO 53e96f405c61) ([10.239.97.150])
-  by fmviesa006.fm.intel.com with ESMTP; 20 Sep 2024 04:20:42 -0700
+  by fmviesa008.fm.intel.com with ESMTP; 20 Sep 2024 07:25:54 -0700
 Received: from kbuild by 53e96f405c61 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1srbgl-000EJd-2d;
-	Fri, 20 Sep 2024 11:20:39 +0000
-Date: Fri, 20 Sep 2024 19:19:39 +0800
+	id 1srea0-000EX3-1L;
+	Fri, 20 Sep 2024 14:25:52 +0000
+Date: Fri, 20 Sep 2024 22:25:32 +0800
 From: kernel test robot <lkp@intel.com>
-To: =?utf-8?Q?Micha=C5=82?= Winiarski <michal.winiarski@intel.com>,
-	linux-pci@vger.kernel.org, intel-xe@lists.freedesktop.org,
-	dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-	Bjorn Helgaas <helgaas@kernel.org>,
-	Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
-	Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>
+To: Andreas Hindborg <a.hindborg@kernel.org>,
+	Miguel Ojeda <ojeda@kernel.org>,
+	Alex Gaynor <alex.gaynor@gmail.com>,
+	Anna-Maria Behnsen <anna-maria@linutronix.de>,
+	Frederic Weisbecker <frederic@kernel.org>,
+	Thomas Gleixner <tglx@linutronix.de>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Rodrigo Vivi <rodrigo.vivi@intel.com>,
-	Michal Wajdeczko <michal.wajdeczko@intel.com>,
-	Lucas De Marchi <lucas.demarchi@intel.com>,
-	Thomas =?iso-8859-1?Q?Hellstr=F6m?= <thomas.hellstrom@linux.intel.com>,
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-	Maxime Ripard <mripard@kernel.org>,
-	Thomas Zimmermann <tzimmermann@suse.de>,
-	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
-	Matt Roper <matthew.d.roper@intel.com>,
-	=?utf-8?Q?Micha=C5=82?= Winiarski <michal.winiarski@intel.com>
-Subject: Re: [PATCH v2 2/3] PCI: Allow extending VF BAR within original
- resource boundary
-Message-ID: <202409201934.yM9hVUai-lkp@intel.com>
-References: <20240919223557.1897608-3-michal.winiarski@intel.com>
+	Andreas Hindborg <a.hindborg@kernel.org>,
+	Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+	=?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
+	Benno Lossin <benno.lossin@proton.me>,
+	Alice Ryhl <aliceryhl@google.com>, rust-for-linux@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 06/14] rust: hrtimer: allow timer restart from timer
+ handler
+Message-ID: <202409202251.Sfvd2aUn-lkp@intel.com>
+References: <20240917222739.1298275-7-a.hindborg@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20240919223557.1897608-3-michal.winiarski@intel.com>
+In-Reply-To: <20240917222739.1298275-7-a.hindborg@kernel.org>
 
-Hi Michał,
+Hi Andreas,
 
-kernel test robot noticed the following build warnings:
+kernel test robot noticed the following build errors:
 
-[auto build test WARNING on pci/for-linus]
-[also build test WARNING on drm-xe/drm-xe-next drm/drm-next drm-exynos/exynos-drm-next drm-intel/for-linux-next drm-intel/for-linux-next-fixes drm-misc/drm-misc-next drm-tip/drm-tip linus/master v6.11 next-20240920]
-[cannot apply to pci/next]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+[auto build test ERROR on 98f7e32f20d28ec452afb208f9cffc08448a2652]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Micha-Winiarski/PCI-Add-support-for-VF-Resizable-Bar-extended-cap/20240920-064112
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/pci/pci.git for-linus
-patch link:    https://lore.kernel.org/r/20240919223557.1897608-3-michal.winiarski%40intel.com
-patch subject: [PATCH v2 2/3] PCI: Allow extending VF BAR within original resource boundary
-config: arm-allnoconfig (https://download.01.org/0day-ci/archive/20240920/202409201934.yM9hVUai-lkp@intel.com/config)
+url:    https://github.com/intel-lab-lkp/linux/commits/Andreas-Hindborg/rust-time-Add-Ktime-from_ns/20240918-063405
+base:   98f7e32f20d28ec452afb208f9cffc08448a2652
+patch link:    https://lore.kernel.org/r/20240917222739.1298275-7-a.hindborg%40kernel.org
+patch subject: [PATCH v2 06/14] rust: hrtimer: allow timer restart from timer handler
+config: riscv-randconfig-002-20240920 (https://download.01.org/0day-ci/archive/20240920/202409202251.Sfvd2aUn-lkp@intel.com/config)
 compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 8663a75fa2f31299ab8d1d90288d9df92aadee88)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240920/202409201934.yM9hVUai-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240920/202409202251.Sfvd2aUn-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202409201934.yM9hVUai-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202409202251.Sfvd2aUn-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
-   In file included from arch/arm/mm/iomap.c:9:
->> include/linux/pci.h:2421:3: warning: void function 'pci_iov_resource_extend' should not return a value [-Wreturn-mismatch]
-    2421 | { return -ENODEV; }
-         |   ^      ~~~~~~~
-   In file included from arch/arm/mm/iomap.c:9:
-   In file included from include/linux/pci.h:2672:
-   In file included from include/linux/dma-mapping.h:11:
-   In file included from include/linux/scatterlist.h:8:
-   In file included from include/linux/mm.h:2228:
-   include/linux/vmstat.h:514:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     514 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
-   2 warnings generated.
-
-
-vim +/pci_iov_resource_extend +2421 include/linux/pci.h
-
-  2397	
-  2398	static inline int pci_iov_sysfs_link(struct pci_dev *dev,
-  2399					     struct pci_dev *virtfn, int id)
-  2400	{
-  2401		return -ENODEV;
-  2402	}
-  2403	static inline int pci_iov_add_virtfn(struct pci_dev *dev, int id)
-  2404	{
-  2405		return -ENOSYS;
-  2406	}
-  2407	static inline void pci_iov_remove_virtfn(struct pci_dev *dev,
-  2408						 int id) { }
-  2409	static inline void pci_disable_sriov(struct pci_dev *dev) { }
-  2410	static inline int pci_num_vf(struct pci_dev *dev) { return 0; }
-  2411	static inline int pci_vfs_assigned(struct pci_dev *dev)
-  2412	{ return 0; }
-  2413	static inline int pci_sriov_set_totalvfs(struct pci_dev *dev, u16 numvfs)
-  2414	{ return 0; }
-  2415	static inline int pci_sriov_get_totalvfs(struct pci_dev *dev)
-  2416	{ return 0; }
-  2417	#define pci_sriov_configure_simple	NULL
-  2418	static inline resource_size_t pci_iov_resource_size(struct pci_dev *dev, int resno)
-  2419	{ return 0; }
-  2420	static inline void pci_iov_resource_extend(struct pci_dev *dev, int resno, bool enable)
-> 2421	{ return -ENODEV; }
-  2422	static inline void pci_vf_drivers_autoprobe(struct pci_dev *dev, bool probe) { }
-  2423	#endif
-  2424	
+   In file included from arch/riscv/kernel/asm-offsets.c:10:
+   In file included from include/linux/mm.h:2232:
+   include/linux/vmstat.h:517:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+   517 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+   |                               ~~~~~~~~~~~ ^ ~~~
+   1 warning generated.
+   clang diag: include/linux/vmstat.h:517:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+   clang diag: include/linux/vmstat.h:517:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+   clang diag: include/linux/vmstat.h:517:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+>> error[E0053]: method `from` has an incompatible type for trait
+   --> rust/kernel/hrtimer.rs:316:20
+   |
+   316 |     fn from(value: bindings::hrtimer_restart) -> Self {
+   |                    ^^^^^^^^^^^^^^^^^^^^^^^^^
+   |                    |
+   |                    expected `u32`, found `i32`
+   |                    help: change the parameter type to match the trait: `u32`
+   |
+   = note: expected signature `fn(u32) -> TimerRestart`
+   found signature `fn(i32) -> TimerRestart`
 
 -- 
 0-DAY CI Kernel Test Service
