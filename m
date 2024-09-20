@@ -1,150 +1,98 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EFCF72209D;
-	Fri, 20 Sep 2024 08:37:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F5311CD2C;
+	Fri, 20 Sep 2024 09:37:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726821461; cv=none; b=YaN1GvUTJsSlDUQgUgyxBDzOg45C50wtYfovLaGq0AUZoyXeid1v6IKrAqtA5c/w3lmPj7d6FYtkx65J9EB7cdxAKmlAzYpFW+vKKUuaV9MISiy8YQJ/rcy/FFxMI0BH6grZTf0hP6yHWadhdJZA7pr/5lorBXZlKWyS+oB1OZE=
+	t=1726825045; cv=none; b=joXmeBEkkLuUeZEXITDX6thqAV6wflDZe6dDt6TaWO9xK2NdIUzwH8qWQHxUWshrduCRLQCyUGxf9+JnXzAyjZHRwZYHYNWnfYEOaWxpaeRWYX6LzME4m0AIjvIoy8UY1ofzRFGnZvrJsmQsoGfewlqAePWjHMBRgA00QyDuyKc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726821461; c=relaxed/simple;
-	bh=FjYT2BKjGT6OchrotM7LjHr6S6Ni/aoPuOPvVS5kbqU=;
+	s=arc-20240116; t=1726825045; c=relaxed/simple;
+	bh=ewaE6kFipSZ+IA8El0kFSPMtzyh1oiS8KVuWRKL8rIM=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=VeIWV2GK6U05IBWcI9W6iZ0NyzOFWMyltdeIbfrw4LNGEV/ZWcDvjcU4ErCT81/7on2y1lx8lgo0qMTxPgnuc1P+5Siaz/bRxPOqMz9u2IYF+1y2hfKuQrjDxyb/JwJegoD7x+iGSxPg4mZqGRbVKW6JoyCXQpPSSZP8GGYINR0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=eCemhpwo; arc=none smtp.client-ip=198.175.65.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=WHaKAB4TaNuN++UR16AP/gx5ok604BnUkdSVSckoz74fRYi91ujlhmliIa1wJdCH0wnVxcJxzV9deW5RC6cS2JRpYSuixDE/nZpLO6PUoM1wlZnuDVF3/Nxe4TujbORJhD3RPxfpK0/JeM3fs7FOw080s8qSWDoVPM1CdFG4xyk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eehm+ZfO; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="eCemhpwo"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1726821458; x=1758357458;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=FjYT2BKjGT6OchrotM7LjHr6S6Ni/aoPuOPvVS5kbqU=;
-  b=eCemhpwoplWgliqNxRtvRZJWspE9EeLvYFhGczQz4dePwLsEY4NZz7jp
-   gttH714tzax2oRISeAXKFEAiFSgC8pnfdwaKaBTEjdw9E9swwYK7unfXj
-   8kcUoP+JNbszLgXh9eofPbREYu8UyIuTpIXw/ibEyDTVGLhX+Z2U9dhfG
-   mFjm7Xg3Sjm+WxDUtMGkWycsQxcEEy8TLRtR7xQdDTorYGlMIQuybGbV/
-   wkzEtAn+zQLf6Nz+nlttOQjvf2rxeUFRmNspBdeYV4FEnPUmvVqV0DfXS
-   UtezTIS6X16SFua60w1FyB7OIKjXoJ3i6ozdEm/el/ffalg2NtWTEFUAf
-   Q==;
-X-CSE-ConnectionGUID: lIEUM8QWQ4GIBmRppZ7v6w==
-X-CSE-MsgGUID: AeSMch11QwqDWpe+1gaJMw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11200"; a="29605459"
-X-IronPort-AV: E=Sophos;i="6.10,243,1719903600"; 
-   d="scan'208";a="29605459"
-Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Sep 2024 01:37:38 -0700
-X-CSE-ConnectionGUID: Rm93kEgkS8SLlfUah43CXQ==
-X-CSE-MsgGUID: zz7eSZuWRdKWQL8YubJJjg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.10,243,1719903600"; 
-   d="scan'208";a="93540570"
-Received: from lkp-server01.sh.intel.com (HELO 53e96f405c61) ([10.239.97.150])
-  by fmviesa002.fm.intel.com with ESMTP; 20 Sep 2024 01:37:33 -0700
-Received: from kbuild by 53e96f405c61 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1srZ8s-000E8n-30;
-	Fri, 20 Sep 2024 08:37:30 +0000
-Date: Fri, 20 Sep 2024 16:36:58 +0800
-From: kernel test robot <lkp@intel.com>
-To: =?utf-8?Q?Micha=C5=82?= Winiarski <michal.winiarski@intel.com>,
-	linux-pci@vger.kernel.org, intel-xe@lists.freedesktop.org,
-	dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-	Bjorn Helgaas <helgaas@kernel.org>,
-	Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
-	Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Rodrigo Vivi <rodrigo.vivi@intel.com>,
-	Michal Wajdeczko <michal.wajdeczko@intel.com>,
-	Lucas De Marchi <lucas.demarchi@intel.com>,
-	Thomas =?iso-8859-1?Q?Hellstr=F6m?= <thomas.hellstrom@linux.intel.com>,
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-	Maxime Ripard <mripard@kernel.org>,
-	Thomas Zimmermann <tzimmermann@suse.de>,
-	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
-	Matt Roper <matthew.d.roper@intel.com>,
-	=?utf-8?Q?Micha=C5=82?= Winiarski <michal.winiarski@intel.com>
-Subject: Re: [PATCH v2 1/3] PCI: Add support for VF Resizable Bar extended cap
-Message-ID: <202409201629.QlC0MRbn-lkp@intel.com>
-References: <20240919223557.1897608-2-michal.winiarski@intel.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eehm+ZfO"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F187FC4CEC3;
+	Fri, 20 Sep 2024 09:37:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1726825044;
+	bh=ewaE6kFipSZ+IA8El0kFSPMtzyh1oiS8KVuWRKL8rIM=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=eehm+ZfOpLGkoO7Al5j59uyiNdCGhe+x6BP+r7RnH4nQKp9l53LT1qp1jPOhdJGtc
+	 JxDj8tDU/65utgqep0Dq9LPwfcwRN1b35IoVq9uvx+sMudi/PgqfqG0QUe2xW2iXED
+	 Is00nCBHy1VyC74Awq7FcnbDvAvS0QnmWVW7jOIzS16EdVvkaGflHBw3aI5WPGTB5S
+	 Topq4q6cHJcwqVrbcsDGOh7DUpBD8xkzkLN/Hj4WgYHOBbmnj7UuxukH9AzcVdLpSo
+	 R2pRNTMN1vUsuD8hRAKXid57ch1owGFyxKqZpbmt+wmFApjH7EHfPCTzt9aUbyfans
+	 O7C+/BIQZZTQA==
+Date: Fri, 20 Sep 2024 02:37:22 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Reinette Chatre <reinette.chatre@intel.com>
+Cc: Fenghua Yu <fenghua.yu@intel.com>, x86@kernel.org,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+	patches@lists.linux.dev
+Subject: Re: [PATCH v3] x86/resctrl: Annotate get_mem_config() functions as
+ __init
+Message-ID: <20240920093722.GA411564@thelio-3990X>
+References: <20240917-x86-restctrl-get_mem_config_intel-init-v3-1-10d521256284@kernel.org>
+ <2deb3b0c-121c-4dfb-9179-e919582f5bb4@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20240919223557.1897608-2-michal.winiarski@intel.com>
+In-Reply-To: <2deb3b0c-121c-4dfb-9179-e919582f5bb4@intel.com>
 
-Hi Michał,
+On Thu, Sep 19, 2024 at 02:15:34PM -0700, Reinette Chatre wrote:
+> 
+> 
+> On 9/17/24 9:02 AM, Nathan Chancellor wrote:
+> > After a recent LLVM change [1] that deduces __cold on functions that
+> > only call cold code (such as __init functions), there is a section
+> > mismatch warning from __get_mem_config_intel(), which got moved to
+> > .text.unlikely. as a result of that optimization:
+> > 
+> >   WARNING: modpost: vmlinux: section mismatch in reference: __get_mem_config_intel+0x77 (section: .text.unlikely.) -> thread_throttle_mode_init (section: .init.text)
+> > 
+> > Mark __get_mem_config_intel() as __init as well since it is only called
+> > from __init code, which clears up the warning.
+> > 
+> > While __rdt_get_mem_config_amd() does not exhibit a warning because it
+> > does not call any __init code, it is a similar function that is only
+> > called from __init code like __get_mem_config_intel(), so mark it __init
+> > as well to keep the code symmetrical.
+> > 
+> > Link: https://github.com/llvm/llvm-project/commit/6b11573b8c5e3d36beee099dbe7347c2a007bf53 [1]
+> > Reviewed-by: Reinette Chatre <reinette.chatre@intel.com>
+> > Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+> > ---
+> 
+> If there is a re-spin I think appropriate Fixes tags can be added:
+> Fixes: 05b93417ce5b ("x86/intel_rdt/mba: Add primary support for Memory Bandwidth Allocation (MBA)")
+> Fixes: 4d05bf71f157 ("x86/resctrl: Introduce AMD QOS feature") 
+> 
+> I am not familiar with stable rules related to compiler impact but
+> this may fall into the "it bothers people" category of fixes so
+> a Cc: stable@vger.kernel.org sounds appropriate also.
 
-kernel test robot noticed the following build warnings:
+Yes, I think it would be reasonable to have Fixes and a Cc: stable since
+this can turn fatal with CONFIG_SECTION_MISMATCH_WARN_ONLY=n (even if
+there should be no real issue at run time because these functions are
+only called from __init code).
 
-[auto build test WARNING on pci/for-linus]
-[also build test WARNING on drm-xe/drm-xe-next drm/drm-next drm-exynos/exynos-drm-next drm-intel/for-linux-next drm-intel/for-linux-next-fixes drm-misc/drm-misc-next drm-tip/drm-tip linus/master v6.11 next-20240919]
-[cannot apply to pci/next]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+I'll send a v4 upon request from whoever will apply this. Otherwise,
+here is a copy and pasteable block:
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Micha-Winiarski/PCI-Add-support-for-VF-Resizable-Bar-extended-cap/20240920-064112
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/pci/pci.git for-linus
-patch link:    https://lore.kernel.org/r/20240919223557.1897608-2-michal.winiarski%40intel.com
-patch subject: [PATCH v2 1/3] PCI: Add support for VF Resizable Bar extended cap
-config: x86_64-kexec (https://download.01.org/0day-ci/archive/20240920/202409201629.QlC0MRbn-lkp@intel.com/config)
-compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240920/202409201629.QlC0MRbn-lkp@intel.com/reproduce)
+Cc: stable@vger.kernel.org
+Fixes: 05b93417ce5b ("x86/intel_rdt/mba: Add primary support for Memory Bandwidth Allocation (MBA)")
+Fixes: 4d05bf71f157 ("x86/resctrl: Introduce AMD QOS feature")
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202409201629.QlC0MRbn-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> drivers/pci/pci.c:1920:20: warning: variable 'res' set but not used [-Wunused-but-set-variable]
-    1920 |                 struct resource *res;
-         |                                  ^
-   1 warning generated.
-
-
-vim +/res +1920 drivers/pci/pci.c
-
-  1903	
-  1904	static void pci_restore_vf_rebar_state(struct pci_dev *pdev)
-  1905	{
-  1906		unsigned int pos, nbars, i;
-  1907		u32 ctrl;
-  1908	
-  1909		if (!pdev->is_physfn)
-  1910			return;
-  1911	
-  1912		pos = pci_find_ext_capability(pdev, PCI_EXT_CAP_ID_VF_REBAR);
-  1913		if (!pos)
-  1914			return;
-  1915	
-  1916		pci_read_config_dword(pdev, pos + PCI_REBAR_CTRL, &ctrl);
-  1917		nbars = FIELD_GET(PCI_REBAR_CTRL_NBAR_MASK, ctrl);
-  1918	
-  1919		for (i = 0; i < nbars; i++, pos += 8) {
-> 1920			struct resource *res;
-  1921			int bar_idx, size;
-  1922	
-  1923			pci_read_config_dword(pdev, pos + PCI_REBAR_CTRL, &ctrl);
-  1924			bar_idx = ctrl & PCI_REBAR_CTRL_BAR_IDX;
-  1925			res = pdev->resource + bar_idx;
-  1926			size = pci_rebar_bytes_to_size(pdev->sriov->barsz[bar_idx]);
-  1927			ctrl &= ~PCI_REBAR_CTRL_BAR_SIZE;
-  1928			ctrl |= FIELD_PREP(PCI_REBAR_CTRL_BAR_SIZE, size);
-  1929			pci_write_config_dword(pdev, pos + PCI_REBAR_CTRL, ctrl);
-  1930		}
-  1931	}
-  1932	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Cheers,
+Nathan
