@@ -1,59 +1,62 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A703314E2E8;
-	Sat, 21 Sep 2024 09:45:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 99AA2173345;
+	Sat, 21 Sep 2024 15:13:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726911946; cv=none; b=G8wwJSdk3ek/ZsQEDq8jTKabPaE3/sZ2icdGOk/6g0rQeZ4SZMp0Og3wQHR3f9WAaS62jgSuyPO4ZArr7uBvlqtPcEP62ko4Xf2Q7dyWjWgT/xEPUXpPKz6/N7eLxVsXyJK/DSep4LbdCF6K+DCFu2YuknZoDLEB3pWRiVXynjA=
+	t=1726931639; cv=none; b=iVdBfEvqsHKnxR1KFzmzNRmVUXAuRZHjhj9UIdNPNmVyNxFHHkVqTis9+HjVFncEC3F39LjT21hj8Bge1dIxNTi1e+/w/cdSQUMvYBRWoI02igz10tXBe9x2bKxrKi62TAwR2flDVbBow9sVilJ9LirRSHue7p0ZxtO6lwrKw2U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726911946; c=relaxed/simple;
-	bh=0KuOncQeBEmYI8MKJ2kJyN4kleqgmZWyASmcQIMLubc=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=QVTEGuYVQFT3WHbpEaXO+xGDtThGhKYdjnCg9UoCL2IE8vvTZ/fA4qScx8atLNEFmfcsYPoP/PCngIXcozDRsUdM8BKRnM//IV2nHtzbezLqEzUdlLbwL82y7uurKQZVOd0f351WVu5AYuOM8GxItT5hyJY2CNOO1tqYH5NQAiU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=SnkcqICY; arc=none smtp.client-ip=192.198.163.17
+	s=arc-20240116; t=1726931639; c=relaxed/simple;
+	bh=2mvmAsDhjw94BxGK+je+AWFPlN5hex4sGj1XTE+7CsQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=gDI/odq/edWljkDJrdz3zhALVknSrJjWxERsu6rbYyzhD3B75mvfjcCZGOnB9EnXU3cA5oDyOdKTDHIyRzc1mgCvIZYzMVaM34k8jgxX7RCf+rqlPJdMM2xzdKfofXWAnBnpx0uGDIvADLDvDRwK/BrdpCQ1Y1XjOi6O6rIkFVQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=QEt39trY; arc=none smtp.client-ip=192.198.163.12
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="SnkcqICY"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="QEt39trY"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1726911945; x=1758447945;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=0KuOncQeBEmYI8MKJ2kJyN4kleqgmZWyASmcQIMLubc=;
-  b=SnkcqICYpzpykTgw9hG4NLZZ4p6eMXy2dZn60zzWq1+4aaoD6/V6S60s
-   h/KIS3JDLg3gGdFhmVCZQFSGSf+svYrEAabcZiBufZTjDvJvdmCuuVX0k
-   RAKxl/RfXqJ43rzjkDsTRuTPZ/63AnPccU9CdsQ+2Es8nkkPJ/C5JOKfm
-   F2GCEK2wsKvL4WfawT1ov2nFl1cvQVMnRUZKxABQRV8/1vYoeNjQxboUZ
-   N9PeGKqO9CBgoiVuXJAr1Yc6FvhRwYVFRB8ptIGR4Zo8jt5gTu2wOB/df
-   jpzctDoPmrtJz6yYzwZTHOo6MQncJaA3hEN3hNi9j+0OM7Plf2csNndF0
-   w==;
-X-CSE-ConnectionGUID: DazRjjLQSMmfaS4tueg5ug==
-X-CSE-MsgGUID: uZSfKXpiQSGxktq1u7wz2A==
-X-IronPort-AV: E=McAfee;i="6700,10204,11201"; a="25786434"
-X-IronPort-AV: E=Sophos;i="6.10,246,1719903600"; 
-   d="scan'208";a="25786434"
-Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Sep 2024 02:45:41 -0700
-X-CSE-ConnectionGUID: sizi2zJ1QsedTW/eDF1F2w==
-X-CSE-MsgGUID: /fifwVHyT7uHQSBMQ5DeeA==
+  t=1726931638; x=1758467638;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=2mvmAsDhjw94BxGK+je+AWFPlN5hex4sGj1XTE+7CsQ=;
+  b=QEt39trY2L7dQaPvE2xPkpK16DY8QeKL3eNn2PVSIh13squRK8j/bzk3
+   ZBLkusnD+PY9KH1b7Wb99Nf/L5d6JxO8moRVZvG5JKU/QOAllDfgetV2z
+   yUtvUFx5PD9LCZ3+c5OIoSh5ykEILzqEbOOEX2CuWqLJXppqdgjOmf45l
+   xdfXXUwfx45aL70JIcnWz+iFJq2DOgJCiaO3DldPhYnzkZ6cXPzugimkd
+   9+uY8azCH7gAULfNW44gjOtAgyKAnibsJXcGoV5YfXG/SkQBCzrXV6re2
+   ZrN21qkC+VHrQImcz8aOdBAgPIDUGhHESBHyY2Nz6whTfprL5K+iRzamf
+   Q==;
+X-CSE-ConnectionGUID: fumJHk6fRNmmlDHdPpAZHw==
+X-CSE-MsgGUID: U6jRrMciRi6ZDejf4CSpdg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11202"; a="29822886"
+X-IronPort-AV: E=Sophos;i="6.10,247,1719903600"; 
+   d="scan'208";a="29822886"
+Received: from fmviesa009.fm.intel.com ([10.60.135.149])
+  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Sep 2024 08:13:54 -0700
+X-CSE-ConnectionGUID: 10Di6NRpQ3a+epsLBRcunQ==
+X-CSE-MsgGUID: cI3tRGQGSNSEHQvglLd99A==
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.10,246,1719903600"; 
-   d="scan'208";a="101281037"
+X-IronPort-AV: E=Sophos;i="6.10,247,1719903600"; 
+   d="scan'208";a="70605739"
 Received: from lkp-server01.sh.intel.com (HELO 53e96f405c61) ([10.239.97.150])
-  by orviesa002.jf.intel.com with ESMTP; 21 Sep 2024 02:45:40 -0700
+  by fmviesa009.fm.intel.com with ESMTP; 21 Sep 2024 08:13:52 -0700
 Received: from kbuild by 53e96f405c61 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1srwgL-000FKN-2F;
-	Sat, 21 Sep 2024 09:45:37 +0000
-Date: Sat, 21 Sep 2024 17:45:32 +0800
+	id 1ss1nx-000FWf-3C;
+	Sat, 21 Sep 2024 15:13:49 +0000
+Date: Sat, 21 Sep 2024 23:13:11 +0800
 From: kernel test robot <lkp@intel.com>
-To: David Howells <dhowells@redhat.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [dhowells-fs:netfs-writeback 12/13] fs/afs/dir.c:296:9: warning:
- explicitly assigning value of variable of type 'ssize_t' (aka 'long') to
- itself
-Message-ID: <202409211745.cpcn0ckB-lkp@intel.com>
+To: Steven Davis <goldside000@outlook.com>, akpm@linux-foundation.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-kernel@vger.kernel.org,
+	Steven Davis <goldside000@outlook.com>
+Subject: Re: [PATCH] irq_work: Improve CPU Responsiveness in irq_work_sync
+ with cond_resched()
+Message-ID: <202409212247.nX8LW3Px-lkp@intel.com>
+References: <SJ2P223MB10263844181902531B671FB6F7622@SJ2P223MB1026.NAMP223.PROD.OUTLOOK.COM>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -62,84 +65,69 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <SJ2P223MB10263844181902531B671FB6F7622@SJ2P223MB1026.NAMP223.PROD.OUTLOOK.COM>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/dhowells/linux-fs.git netfs-writeback
-head:   1b8d06c4ea0b6eb74b52b9dadb866a92c0cc5b69
-commit: 0f34d30a14a72f72a214488bf16a9dcd3b21509e [12/13] afs: Use netfslib for directories
-config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20240921/202409211745.cpcn0ckB-lkp@intel.com/config)
-compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 8663a75fa2f31299ab8d1d90288d9df92aadee88)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240921/202409211745.cpcn0ckB-lkp@intel.com/reproduce)
+Hi Steven,
+
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on akpm-mm/mm-everything]
+[also build test ERROR on linus/master v6.11 next-20240920]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Steven-Davis/irq_work-Improve-CPU-Responsiveness-in-irq_work_sync-with-cond_resched/20240918-232606
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
+patch link:    https://lore.kernel.org/r/SJ2P223MB10263844181902531B671FB6F7622%40SJ2P223MB1026.NAMP223.PROD.OUTLOOK.COM
+patch subject: [PATCH] irq_work: Improve CPU Responsiveness in irq_work_sync with cond_resched()
+config: um-allnoconfig (https://download.01.org/0day-ci/archive/20240921/202409212247.nX8LW3Px-lkp@intel.com/config)
+compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240921/202409212247.nX8LW3Px-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202409211745.cpcn0ckB-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202409212247.nX8LW3Px-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
-   In file included from fs/afs/dir.c:11:
-   In file included from include/linux/pagemap.h:8:
-   In file included from include/linux/mm.h:2237:
-   include/linux/vmstat.h:503:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     503 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     504 |                            item];
-         |                            ~~~~
-   include/linux/vmstat.h:510:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     510 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     511 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/vmstat.h:517:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     517 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
-   include/linux/vmstat.h:523:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     523 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     524 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   In file included from fs/afs/dir.c:18:
-   In file included from fs/afs/internal.h:23:
-   In file included from include/net/net_namespace.h:43:
-   In file included from include/linux/skbuff.h:28:
-   In file included from include/linux/dma-mapping.h:11:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/s390/include/asm/io.h:93:
+   In file included from kernel/irq_work.c:14:
+   In file included from include/linux/hardirq.h:11:
+   In file included from arch/um/include/asm/hardirq.h:5:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:14:
+   In file included from arch/um/include/asm/io.h:24:
    include/asm-generic/io.h:548:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
      548 |         val = __raw_readb(PCI_IOBASE + addr);
          |                           ~~~~~~~~~~ ^
    include/asm-generic/io.h:561:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
      561 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
          |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
-      37 | #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
-         |                                                           ^
-   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
-     102 | #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
-         |                                                      ^
-   In file included from fs/afs/dir.c:18:
-   In file included from fs/afs/internal.h:23:
-   In file included from include/net/net_namespace.h:43:
-   In file included from include/linux/skbuff.h:28:
-   In file included from include/linux/dma-mapping.h:11:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/s390/include/asm/io.h:93:
+   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
+      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
+         |                                                   ^
+   In file included from kernel/irq_work.c:14:
+   In file included from include/linux/hardirq.h:11:
+   In file included from arch/um/include/asm/hardirq.h:5:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:14:
+   In file included from arch/um/include/asm/io.h:24:
    include/asm-generic/io.h:574:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
      574 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
          |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
-      35 | #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
-         |                                                           ^
-   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
-     115 | #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
-         |                                                      ^
-   In file included from fs/afs/dir.c:18:
-   In file included from fs/afs/internal.h:23:
-   In file included from include/net/net_namespace.h:43:
-   In file included from include/linux/skbuff.h:28:
-   In file included from include/linux/dma-mapping.h:11:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/s390/include/asm/io.h:93:
+   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
+      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
+         |                                                   ^
+   In file included from kernel/irq_work.c:14:
+   In file included from include/linux/hardirq.h:11:
+   In file included from arch/um/include/asm/hardirq.h:5:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:14:
+   In file included from arch/um/include/asm/io.h:24:
    include/asm-generic/io.h:585:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
      585 |         __raw_writeb(value, PCI_IOBASE + addr);
          |                             ~~~~~~~~~~ ^
@@ -167,71 +155,104 @@ All warnings (new ones prefixed by >>):
    include/asm-generic/io.h:736:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
      736 |         writesl(PCI_IOBASE + addr, buffer, count);
          |                 ~~~~~~~~~~ ^
->> fs/afs/dir.c:296:9: warning: explicitly assigning value of variable of type 'ssize_t' (aka 'long') to itself [-Wself-assign]
-     296 |                                 ret = ret;
-         |                                 ~~~ ^ ~~~
-   17 warnings generated.
+>> kernel/irq_work.c:312:1: error: function definition is not allowed here
+     312 | {
+         | ^
+   kernel/irq_work.c:317:1: error: function definition is not allowed here
+     317 | {
+         | ^
+>> kernel/irq_work.c:323:13: error: use of undeclared identifier 'irq_workd_setup'
+     323 |         .setup                  = irq_workd_setup,
+         |                                   ^
+>> kernel/irq_work.c:325:28: error: use of undeclared identifier 'run_irq_workd'
+     325 |         .thread_fn              = run_irq_workd,
+         |                                   ^
+   kernel/irq_work.c:330:1: error: function definition is not allowed here
+     330 | {
+         | ^
+>> kernel/irq_work.c:335:16: error: use of undeclared identifier 'irq_work_init_threads'; did you mean 'irqwork_threads'?
+     335 | early_initcall(irq_work_init_threads);
+         |                ^~~~~~~~~~~~~~~~~~~~~
+         |                irqwork_threads
+   include/linux/init.h:289:47: note: expanded from macro 'early_initcall'
+     289 | #define early_initcall(fn)              __define_initcall(fn, early)
+         |                                                           ^
+   include/linux/init.h:282:54: note: expanded from macro '__define_initcall'
+     282 | #define __define_initcall(fn, id) ___define_initcall(fn, id, .initcall##id)
+         |                                                      ^
+   include/linux/init.h:280:20: note: expanded from macro '___define_initcall'
+     280 |         __unique_initcall(fn, id, __sec, __initcall_id(fn))
+         |                           ^
+   include/linux/init.h:274:22: note: expanded from macro '__unique_initcall'
+     274 |         ____define_initcall(fn,                                 \
+         |                             ^
+   include/linux/init.h:270:41: note: expanded from macro '____define_initcall'
+     270 |                 __attribute__((__section__(__sec))) = fn;
+         |                                                       ^
+   kernel/irq_work.c:321:34: note: 'irqwork_threads' declared here
+     321 | static struct smp_hotplug_thread irqwork_threads = {
+         |                                  ^
+>> kernel/irq_work.c:335:1: error: initializing 'initcall_t' (aka 'int (*)(void)') with an expression of incompatible type 'struct smp_hotplug_thread'
+     335 | early_initcall(irq_work_init_threads);
+         | ^              ~~~~~~~~~~~~~~~~~~~~~
+   include/linux/init.h:289:29: note: expanded from macro 'early_initcall'
+     289 | #define early_initcall(fn)              __define_initcall(fn, early)
+         |                                         ^                 ~~
+   include/linux/init.h:282:35: note: expanded from macro '__define_initcall'
+     282 | #define __define_initcall(fn, id) ___define_initcall(fn, id, .initcall##id)
+         |                                   ^                  ~~
+   include/linux/init.h:280:2: note: expanded from macro '___define_initcall'
+     280 |         __unique_initcall(fn, id, __sec, __initcall_id(fn))
+         |         ^                 ~~
+   note: (skipping 3 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/linux/compiler_types.h:83:23: note: expanded from macro '___PASTE'
+      83 | #define ___PASTE(a,b) a##b
+         |                       ^
+   <scratch space>:69:1: note: expanded from here
+      69 | __initcall__kmod_irq_work__193_335_irq_work_init_threadsearly
+         | ^
+   include/linux/init.h:269:20: note: expanded from macro '____define_initcall'
+     269 |         static initcall_t __name __used                         \
+         |                           ^
+     270 |                 __attribute__((__section__(__sec))) = fn;
+         |                                                       ~~
+>> kernel/irq_work.c:335:39: error: expected '}'
+     335 | early_initcall(irq_work_init_threads);
+         |                                       ^
+   kernel/irq_work.c:287:1: note: to match this '{'
+     287 | {
+         | ^
+   12 warnings and 8 errors generated.
 
 
-vim +296 fs/afs/dir.c
+vim +312 kernel/irq_work.c
 
-   246	
-   247	/*
-   248	 * Perform a read of the directory.
-   249	 */
-   250	static ssize_t afs_do_read_dir(struct afs_vnode *dvnode, struct file *file)
-   251	{
-   252		struct iov_iter iter;
-   253		ssize_t ret;
-   254		loff_t i_size;
-   255	
-   256		i_size = i_size_read(&dvnode->netfs.inode);
-   257		if (i_size < 2048)
-   258			return afs_bad(dvnode, afs_file_error_dir_small);
-   259		if (i_size > 2048 * 1024) {
-   260			trace_afs_file_error(dvnode, -EFBIG, afs_file_error_dir_big);
-   261			return -EFBIG;
-   262		}
-   263	
-   264		/* Lock all the folios in the range we need, filling in any gaps.  We
-   265		 * drop the references we get from the VM here analogously with the VM
-   266		 * readahead code.
-   267		 */
-   268		if (dvnode->directory_size < i_size) {
-   269			size_t cur_size = dvnode->directory_size;
-   270	
-   271			ret = netfs_alloc_folioq_buffer(dvnode->netfs.inode.i_mapping,
-   272							&dvnode->directory, &cur_size, i_size,
-   273							GFP_KERNEL | __GFP_HIGHMEM);
-   274			dvnode->directory_size = cur_size;
-   275			if (ret < 0)
-   276				return ret;
-   277		}
-   278	
-   279		iov_iter_folio_queue(&iter, ITER_DEST, dvnode->directory, 0, 0, dvnode->directory_size);
-   280	
-   281		/* AFS requires us to perform the read of a directory synchronously as
-   282		 * a single unit to avoid issues with the directory contents being
-   283		 * changed between reads.
-   284		 */
-   285		ret = netfs_read_single(&dvnode->netfs.inode, file, &iter);
-   286		if (ret >= 0) {
-   287			i_size = i_size_read(&dvnode->netfs.inode);
-   288			if (i_size > ret) {
-   289				/* The content has grown, so we need to expand the
-   290				 * buffer.
-   291				 */
-   292				ret = -ESTALE;
-   293			} else {
-   294				int ret2 = afs_dir_check(dvnode);
-   295				if (ret2 < 0)
- > 296					ret = ret;
-   297			}
-   298		}
-   299	
-   300		return ret;
-   301	}
-   302	
+b4c6f86ec2f648 Sebastian Andrzej Siewior 2021-10-07  310  
+b4c6f86ec2f648 Sebastian Andrzej Siewior 2021-10-07  311  static void run_irq_workd(unsigned int cpu)
+b4c6f86ec2f648 Sebastian Andrzej Siewior 2021-10-07 @312  {
+b4c6f86ec2f648 Sebastian Andrzej Siewior 2021-10-07  313  	irq_work_run_list(this_cpu_ptr(&lazy_list));
+b4c6f86ec2f648 Sebastian Andrzej Siewior 2021-10-07  314  }
+b4c6f86ec2f648 Sebastian Andrzej Siewior 2021-10-07  315  
+b4c6f86ec2f648 Sebastian Andrzej Siewior 2021-10-07  316  static void irq_workd_setup(unsigned int cpu)
+b4c6f86ec2f648 Sebastian Andrzej Siewior 2021-10-07  317  {
+b4c6f86ec2f648 Sebastian Andrzej Siewior 2021-10-07  318  	sched_set_fifo_low(current);
+b4c6f86ec2f648 Sebastian Andrzej Siewior 2021-10-07  319  }
+b4c6f86ec2f648 Sebastian Andrzej Siewior 2021-10-07  320  
+b4c6f86ec2f648 Sebastian Andrzej Siewior 2021-10-07 @321  static struct smp_hotplug_thread irqwork_threads = {
+b4c6f86ec2f648 Sebastian Andrzej Siewior 2021-10-07  322  	.store                  = &irq_workd,
+b4c6f86ec2f648 Sebastian Andrzej Siewior 2021-10-07 @323  	.setup			= irq_workd_setup,
+b4c6f86ec2f648 Sebastian Andrzej Siewior 2021-10-07  324  	.thread_should_run      = irq_workd_should_run,
+b4c6f86ec2f648 Sebastian Andrzej Siewior 2021-10-07 @325  	.thread_fn              = run_irq_workd,
+b4c6f86ec2f648 Sebastian Andrzej Siewior 2021-10-07  326  	.thread_comm            = "irq_work/%u",
+b4c6f86ec2f648 Sebastian Andrzej Siewior 2021-10-07  327  };
+b4c6f86ec2f648 Sebastian Andrzej Siewior 2021-10-07  328  
+b4c6f86ec2f648 Sebastian Andrzej Siewior 2021-10-07  329  static __init int irq_work_init_threads(void)
+b4c6f86ec2f648 Sebastian Andrzej Siewior 2021-10-07  330  {
+b4c6f86ec2f648 Sebastian Andrzej Siewior 2021-10-07  331  	if (IS_ENABLED(CONFIG_PREEMPT_RT))
+b4c6f86ec2f648 Sebastian Andrzej Siewior 2021-10-07  332  		BUG_ON(smpboot_register_percpu_thread(&irqwork_threads));
+b4c6f86ec2f648 Sebastian Andrzej Siewior 2021-10-07  333  	return 0;
+b4c6f86ec2f648 Sebastian Andrzej Siewior 2021-10-07  334  }
+b4c6f86ec2f648 Sebastian Andrzej Siewior 2021-10-07 @335  early_initcall(irq_work_init_threads);
 
 -- 
 0-DAY CI Kernel Test Service
