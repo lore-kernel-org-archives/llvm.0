@@ -1,131 +1,269 @@
-Received: from mail-lf1-f45.google.com (mail-lf1-f45.google.com [209.85.167.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C02713C9B8
-	for <llvm@lists.linux.dev>; Sat, 21 Sep 2024 21:14:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3181428382;
+	Sat, 21 Sep 2024 21:35:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726953293; cv=none; b=X9Sj8mP+XCwz1JwlrvMRByxh4cn38OsNghPL/y40Ni7IQ42DvN3cm/TsxX6ABIFZChOrpR/05igoHF8QNqa4SqxoU26BQnPQkgb6v2IJ9Slew7tIFSq6MUHUm7YyRcf8Pru0MtuQmTqsc/A41kK/ABmrUSJs9PpB1IWgW5DZlug=
+	t=1726954514; cv=none; b=STROlFyerPrx2pq5rDiL10E9m0R6aIHumXbZRdY4bqCnVkMxigP4SagDrz72f186a25ZCoS36ck8wgoNhdZPQr43qgaibzE2RyGJT2ybIMgQgOpoVpzQQwnboAA5o+0OMQ483JB+xFWTv10T6CvBhUdfZa6OsDnhuLTitgr8whY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726953293; c=relaxed/simple;
-	bh=XCA9l6jIuwYih0fkmBs7/+esJ31azn4rphomjgMvutQ=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=Ho4tbO4o6RFjgOrBYPuSlJrXUIrO3kjPhc5xysUBxuxAoTdcswm+6ADoarPWzUu+v0qHannz5n/fLMrhlHtycvCNp6Ck5V/r7KL555F5i8TKRGGebSsb/kQBH40PUj3GS2BgHY/Gmxp69Yj6GkBVmcwstAK8+i5YsWBIKV3htrs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=pgaJhK3/; arc=none smtp.client-ip=209.85.167.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+	s=arc-20240116; t=1726954514; c=relaxed/simple;
+	bh=Cg399CoQ5yeAQV9SqcP1fOr6eTdktUGwpwjheEaBP2Y=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Upq8gfNkqIJVGrGAeZc2Y1Q95I5vArKVuQVm4WPb9ykn5lK0SXOrkmrC4pZ75rZRJfYhj3kw3bum6wvxbxuiOmfjH1HJh26ShkW/XMZ0rf4oLzSkIRcy+YfKozunvwv3FoJNY11j1EGl5zV8SCWT1yrtnM6LQsuuKsW1palpKR8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=lkYZfkVm; arc=none smtp.client-ip=198.175.65.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="pgaJhK3/"
-Received: by mail-lf1-f45.google.com with SMTP id 2adb3069b0e04-53653682246so3377069e87.1
-        for <llvm@lists.linux.dev>; Sat, 21 Sep 2024 14:14:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1726953289; x=1727558089; darn=lists.linux.dev;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=sv1Xt51+REJ6qseUldVGpJwkDcR1DsT84Q0fO/g01zY=;
-        b=pgaJhK3/RF71/IzXFUzRZxkctadeuOx8NKfKAvug9zqzzds72fm0KlqOCL1R2vP7HO
-         xBWmbQYhgB7amhWqdTFWR8vhr80L9flwVfzs83DD73f5K7taewGg3REMGvfVNfHsS8A5
-         e269nKyQeWc03vRkgl1fpMahDbyiYhsAlri23HqumWZc8NR7oiT9VQmr3XpsONwndaVk
-         KXxrIdpvb8P6AlM7Uvhho1orM69ExcZHk0PFGKCOCtU/mqhtq+1pqqzUJ+4fE3Z3aomT
-         O+0Hrp99sHlCHDjg0pAteKOPg7Aj8F7ltC5wAwSc6PDt4bSPSGzjw0mD3uHgeMK1xfzo
-         4QxQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1726953289; x=1727558089;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=sv1Xt51+REJ6qseUldVGpJwkDcR1DsT84Q0fO/g01zY=;
-        b=IBQHeuZACmdGELoS0wxwE0uqwuByL9fY5OCW7eEi4ix+9Eas+Kq5xftfJ0n+riPddX
-         KLacYYg4VYMOWa+Vg8Hj+zSKrZPUNdydqvf40fzrqYq39Db6tTmxgIJRNoGeKlJcXq0/
-         MB4ST5jIxK2I1NIBiomD5D4Q26xWkYUeFIVyGL1baO7Pby0SCfl4Jpg9NTBhpvNJAIBc
-         0h+MTrEicfDE2cO8aalxotB3SbInIYgP0GDOxsXWDUJaG6uBnDsSknHrGpdhUKzT+Dgk
-         gxgDUyyrOJxEhAdcdNuwfMp48whHz3TQP52bymPYBaz9TajqkDcvoYEoycNC1czFB9r1
-         RlfA==
-X-Forwarded-Encrypted: i=1; AJvYcCXJ8KJEjEngOjgGgPm0KMp71JhZzMjF3aFS/mWqfYyI7z5D5+85sKEyAKjhVqxt0wR8I6Kk@lists.linux.dev
-X-Gm-Message-State: AOJu0Yxnnq552QopoXfp23D6hUOFkyrv90L8QC1xeGKf+djh1P6qpSj+
-	5xPKdy62AsPxddUMDbARoE25toc8b/iZfZTVsWdDy50ostu/1a9fq7mzmznK9CQ=
-X-Google-Smtp-Source: AGHT+IHTsq5saqDVm+y4PSRF+njyLcIJFFfoV4sIth84Hce11asUbga8hoCpD/yJPHbn+yr2huGaew==
-X-Received: by 2002:a05:6512:2353:b0:52c:e326:f4cf with SMTP id 2adb3069b0e04-536ac2d64c1mr3971548e87.3.1726953289156;
-        Sat, 21 Sep 2024 14:14:49 -0700 (PDT)
-Received: from umbar.lan ([192.130.178.90])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-536870b4192sm2696645e87.253.2024.09.21.14.14.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 21 Sep 2024 14:14:48 -0700 (PDT)
-From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Date: Sun, 22 Sep 2024 00:14:48 +0300
-Subject: [PATCH] drm/msm/hdmi: drop pll_cmp_to_fdata from hdmi_phy_8998
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="lkYZfkVm"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1726954512; x=1758490512;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Cg399CoQ5yeAQV9SqcP1fOr6eTdktUGwpwjheEaBP2Y=;
+  b=lkYZfkVm0FbXDqv0IRW+1Jwky3dB9fJBeAk/Q5YQ/66e73zrs+ntCzF3
+   yJN59tVeUzZazHBbOtQJDj/Up/lpHdK+S7r98X3CJlJUqXPMw8nSEfLEB
+   EUMMEpzRNMsV1HOgm3MASmpRaZJPW6dbsar1eN08M+Pbkq3P4xq6ZZp7O
+   u2U+tzXJCUeLXftE67fL8bybHqwb3W6ho8OJCgfVBxJLipow/1OZb/lel
+   qbOlecDmUwIz7cLV5DjCCjeqnTC3aBa3gm+EHgYn8+ZfP0ZDJAFKj+NX2
+   xy3czD76AqKsRfvDhPqmTke/sbXi8IHZJ0GT1+T7LigwPE8Aaiq6HfybA
+   Q==;
+X-CSE-ConnectionGUID: 6QoQu5fLRdyxu7KbdnXUwg==
+X-CSE-MsgGUID: jfqveDeoRDm5EaQEosLLrg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11202"; a="26031915"
+X-IronPort-AV: E=Sophos;i="6.10,248,1719903600"; 
+   d="scan'208";a="26031915"
+Received: from fmviesa004.fm.intel.com ([10.60.135.144])
+  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Sep 2024 14:35:12 -0700
+X-CSE-ConnectionGUID: 64csHCMCSr2SIkWg3+jcbQ==
+X-CSE-MsgGUID: TD5cWy/xQc+ft4RTB7BXSQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.10,248,1719903600"; 
+   d="scan'208";a="75216263"
+Received: from lkp-server01.sh.intel.com (HELO 53e96f405c61) ([10.239.97.150])
+  by fmviesa004.fm.intel.com with ESMTP; 21 Sep 2024 14:35:07 -0700
+Received: from kbuild by 53e96f405c61 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1ss7ku-000FoQ-2G;
+	Sat, 21 Sep 2024 21:35:04 +0000
+Date: Sun, 22 Sep 2024 05:34:59 +0800
+From: kernel test robot <lkp@intel.com>
+To: Igor Prusov <ivprusov@salutedevices.com>,
+	Liam Girdwood <lgirdwood@gmail.com>,
+	Mark Brown <broonie@kernel.org>, Jaroslav Kysela <perex@perex.cz>,
+	Takashi Iwai <tiwai@suse.com>, Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-sound@vger.kernel.org, linux-kernel@vger.kernel.org,
+	devicetree@vger.kernel.org, kernel@salutedevices.com,
+	prusovigor@gmail.com, David Yang <yangxiaohua@everest-semi.com>,
+	Martin Kurbanov <mmkurbanov@salutedevices.com>
+Subject: Re: [PATCH v2 2/2] ASoC: codecs: add ES7243E ADC driver
+Message-ID: <202409220756.5MSHcbg7-lkp@intel.com>
+References: <20240920-es7243e-adc-v2-2-0be019735b81@salutedevices.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20240922-msm-drop-unused-func-v1-1-c5dc083415b8@linaro.org>
-X-B4-Tracking: v=1; b=H4sIAEc372YC/x3MQQqDMBBG4avIrDuQBmnVq5QuYvKnnYVRMkSE4
- N0NLr/Fe5UUWaA0dZUydlFZU8Pz0ZH/u/QDS2gma2xvRmt50YVDXjcuqSgCx5I8zyPeLxcGGDh
- q6ZYR5bi3n+95XrAJ32tmAAAA
-To: Rob Clark <robdclark@gmail.com>, 
- Abhinav Kumar <quic_abhinavk@quicinc.com>, Sean Paul <sean@poorly.run>, 
- Marijn Suijten <marijn.suijten@somainline.org>, 
- David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>, 
- Nathan Chancellor <nathan@kernel.org>, 
- Nick Desaulniers <ndesaulniers@google.com>, 
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>
-Cc: linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org, 
- freedreno@lists.freedesktop.org, linux-kernel@vger.kernel.org, 
- llvm@lists.linux.dev, Jani Nikula <jani.nikula@intel.com>, 
- Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-X-Mailer: b4 0.14.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1333;
- i=dmitry.baryshkov@linaro.org; h=from:subject:message-id;
- bh=XCA9l6jIuwYih0fkmBs7/+esJ31azn4rphomjgMvutQ=;
- b=owEBbQGS/pANAwAKAYs8ij4CKSjVAcsmYgBm7zdIInNhl3riGlKSk1rgC8g02RdnnV5F20Fey
- jMFqY4jSlOJATMEAAEKAB0WIQRMcISVXLJjVvC4lX+LPIo+Aiko1QUCZu83SAAKCRCLPIo+Aiko
- 1UxXCACSlqB+A6P1dzNuIExNPQMPdzpKyXpyMltim4fr71qV920qm+A/pRY94R64jtWm2Wa6r7L
- Hxgo1o6qu+xUMNI5x6OEKefajGLyCUxWkcDxxWsHzL9MV5hXmtK1yvDe1m+kQy0lQoVV42W+3/y
- RNxRSkvxHKSXW3eU39Y1WlPVoMtgIVynk8Tkdlx+ucG2WfTjGu8b3o8MAmRMJEC68KkYOmePU0s
- QZ0k9pV2PpfQrl7+qA/WpBrssyTJgfHzSxdRKlg2lXgTCFF99ayfWgVzewc39xrN5LWou6Z58qf
- xHwspIYPq/YsSXLuHOrl4ytByW1Z50WaBmI9Bfo5Hkum4oIt
-X-Developer-Key: i=dmitry.baryshkov@linaro.org; a=openpgp;
- fpr=8F88381DD5C873E4AE487DA5199BF1243632046A
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240920-es7243e-adc-v2-2-0be019735b81@salutedevices.com>
 
-The pll_cmp_to_fdata() was never used by the working code. Drop it to
-prevent warnings with W=1 and clang.
+Hi Igor,
 
-Reported-by: Jani Nikula <jani.nikula@intel.com>
-Closes: https://lore.kernel.org/dri-devel/3553b1db35665e6ff08592e35eb438a574d1ad65.1725962479.git.jani.nikula@intel.com
-Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
----
- drivers/gpu/drm/msm/hdmi/hdmi_phy_8998.c | 9 ---------
- 1 file changed, 9 deletions(-)
+kernel test robot noticed the following build errors:
 
-diff --git a/drivers/gpu/drm/msm/hdmi/hdmi_phy_8998.c b/drivers/gpu/drm/msm/hdmi/hdmi_phy_8998.c
-index 0e3a2b16a2ce..e6ffaf92d26d 100644
---- a/drivers/gpu/drm/msm/hdmi/hdmi_phy_8998.c
-+++ b/drivers/gpu/drm/msm/hdmi/hdmi_phy_8998.c
-@@ -153,15 +153,6 @@ static inline u32 pll_get_pll_cmp(u64 fdata, unsigned long ref_clk)
- 	return dividend - 1;
- }
- 
--static inline u64 pll_cmp_to_fdata(u32 pll_cmp, unsigned long ref_clk)
--{
--	u64 fdata = ((u64)pll_cmp) * ref_clk * 10;
--
--	do_div(fdata, HDMI_PLL_CMP_CNT);
--
--	return fdata;
--}
--
- #define HDMI_REF_CLOCK_HZ ((u64)19200000)
- #define HDMI_MHZ_TO_HZ ((u64)1000000)
- static int pll_get_post_div(struct hdmi_8998_post_divider *pd, u64 bclk)
+[auto build test ERROR on baeb9a7d8b60b021d907127509c44507539c15e5]
 
----
-base-commit: 32ffa5373540a8d1c06619f52d019c6cdc948bb4
-change-id: 20240922-msm-drop-unused-func-b9e76ad8e0ea
+url:    https://github.com/intel-lab-lkp/linux/commits/Igor-Prusov/ASoC-dt-bindings-Add-Everest-ES7243E/20240920-235246
+base:   baeb9a7d8b60b021d907127509c44507539c15e5
+patch link:    https://lore.kernel.org/r/20240920-es7243e-adc-v2-2-0be019735b81%40salutedevices.com
+patch subject: [PATCH v2 2/2] ASoC: codecs: add ES7243E ADC driver
+config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20240922/202409220756.5MSHcbg7-lkp@intel.com/config)
+compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 8663a75fa2f31299ab8d1d90288d9df92aadee88)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240922/202409220756.5MSHcbg7-lkp@intel.com/reproduce)
 
-Best regards,
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202409220756.5MSHcbg7-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+   In file included from sound/soc/codecs/es7243e.c:15:
+   In file included from include/linux/i2c.h:19:
+   In file included from include/linux/regulator/consumer.h:35:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:13:
+   In file included from include/linux/cgroup.h:25:
+   In file included from include/linux/kernel_stat.h:8:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:14:
+   In file included from arch/hexagon/include/asm/io.h:328:
+   include/asm-generic/io.h:548:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     548 |         val = __raw_readb(PCI_IOBASE + addr);
+         |                           ~~~~~~~~~~ ^
+   include/asm-generic/io.h:561:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     561 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
+      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
+         |                                                   ^
+   In file included from sound/soc/codecs/es7243e.c:15:
+   In file included from include/linux/i2c.h:19:
+   In file included from include/linux/regulator/consumer.h:35:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:13:
+   In file included from include/linux/cgroup.h:25:
+   In file included from include/linux/kernel_stat.h:8:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:14:
+   In file included from arch/hexagon/include/asm/io.h:328:
+   include/asm-generic/io.h:574:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     574 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
+      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
+         |                                                   ^
+   In file included from sound/soc/codecs/es7243e.c:15:
+   In file included from include/linux/i2c.h:19:
+   In file included from include/linux/regulator/consumer.h:35:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:13:
+   In file included from include/linux/cgroup.h:25:
+   In file included from include/linux/kernel_stat.h:8:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:14:
+   In file included from arch/hexagon/include/asm/io.h:328:
+   include/asm-generic/io.h:585:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     585 |         __raw_writeb(value, PCI_IOBASE + addr);
+         |                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:595:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     595 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:605:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     605 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   In file included from sound/soc/codecs/es7243e.c:15:
+   In file included from include/linux/i2c.h:19:
+   In file included from include/linux/regulator/consumer.h:35:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:21:
+   In file included from include/linux/mm.h:2239:
+   include/linux/vmstat.h:517:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     517 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+>> sound/soc/codecs/es7243e.c:252:13: error: call to undeclared function 'FIELD_PREP'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     252 |                 sdpfmt |= FIELD_PREP(ES7243E_SDP_FMT, 0);
+         |                           ^
+   sound/soc/codecs/es7243e.c:272:11: error: call to undeclared function 'FIELD_PREP'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     272 |                 clk2 |= FIELD_PREP(ES7243E_CLK2_BCLK_INV, 0);
+         |                         ^
+   sound/soc/codecs/es7243e.c:351:8: error: call to undeclared function 'FIELD_PREP'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     351 |         val = FIELD_PREP(ES7243E_ADCCTL1_SCALE, cd->scale);
+         |               ^
+   sound/soc/codecs/es7243e.c:405:18: error: call to undeclared function 'FIELD_PREP'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     405 |         const int val = FIELD_PREP(ES7243E_SDP_MUTE, 3 * !!mute);
+         |                         ^
+   sound/soc/codecs/es7243e.c:514:8: error: call to undeclared function 'FIELD_PREP'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     514 |         val = FIELD_PREP(ES7243E_SDP_MUTE, 0);
+         |               ^
+   sound/soc/codecs/es7243e.c:570:8: error: call to undeclared function 'FIELD_PREP'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     570 |         val = FIELD_PREP(ES7243E_PGA1_EN, 1);
+         |               ^
+   7 warnings and 6 errors generated.
+
+
+vim +/FIELD_PREP +252 sound/soc/codecs/es7243e.c
+
+   239	
+   240	static int es7243e_set_dai_fmt(struct snd_soc_dai *dai, unsigned int fmt)
+   241	{
+   242		struct snd_soc_component *component = dai->component;
+   243		unsigned int sdpfmt = 0;
+   244		unsigned int clk2 = 0;
+   245		bool is_dsp = false;
+   246		bool invert_lrck = false;
+   247		int ret;
+   248	
+   249		/* Set protocol of the serial data port */
+   250		switch (fmt & SND_SOC_DAIFMT_FORMAT_MASK) {
+   251		case SND_SOC_DAIFMT_I2S:
+ > 252			sdpfmt |= FIELD_PREP(ES7243E_SDP_FMT, 0);
+   253			break;
+   254		case SND_SOC_DAIFMT_LEFT_J:
+   255			sdpfmt |= FIELD_PREP(ES7243E_SDP_FMT, 1);
+   256			break;
+   257		case SND_SOC_DAIFMT_DSP_A:
+   258			sdpfmt |= FIELD_PREP(ES7243E_SDP_FMT, 3);
+   259			is_dsp = true;
+   260			break;
+   261		case SND_SOC_DAIFMT_DSP_B:
+   262			sdpfmt |= FIELD_PREP(ES7243E_SDP_FMT, 3);
+   263			is_dsp = true;
+   264			break;
+   265		default:
+   266			return -EINVAL;
+   267		}
+   268	
+   269		/* Set LR and BCLK polarity */
+   270		switch (fmt & SND_SOC_DAIFMT_INV_MASK) {
+   271		case SND_SOC_DAIFMT_NB_NF:
+   272			clk2 |= FIELD_PREP(ES7243E_CLK2_BCLK_INV, 0);
+   273			sdpfmt |= FIELD_PREP(ES7243E_SDP_LRP, 0);
+   274			break;
+   275		case SND_SOC_DAIFMT_IB_IF:
+   276			clk2 |= FIELD_PREP(ES7243E_CLK2_BCLK_INV, 1);
+   277			sdpfmt |= FIELD_PREP(ES7243E_SDP_LRP, 1);
+   278			invert_lrck = true;
+   279			break;
+   280		case SND_SOC_DAIFMT_IB_NF:
+   281			clk2 |= FIELD_PREP(ES7243E_CLK2_BCLK_INV, 1);
+   282			sdpfmt |= FIELD_PREP(ES7243E_SDP_LRP, 0);
+   283			break;
+   284		case SND_SOC_DAIFMT_NB_IF:
+   285			clk2 |= FIELD_PREP(ES7243E_CLK2_BCLK_INV, 0);
+   286			sdpfmt |= FIELD_PREP(ES7243E_SDP_LRP, 1);
+   287			invert_lrck = true;
+   288			break;
+   289		default:
+   290			return -EINVAL;
+   291		}
+   292	
+   293		/* Inverted LRCK is not available in DSP mode. */
+   294		if (is_dsp && invert_lrck)
+   295			return -EINVAL;
+   296	
+   297		ret = snd_soc_component_update_bits(component, ES7243E_CLK2,
+   298						    ES7243E_CLK2_BCLK_INV, clk2);
+   299		if (ret < 0)
+   300			return ret;
+   301	
+   302		return snd_soc_component_update_bits(component, ES7243E_SDP,
+   303						     ES7243E_SDP_LRP, sdpfmt);
+   304	}
+   305	
+
 -- 
-Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
