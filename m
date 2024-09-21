@@ -1,126 +1,245 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 85CED126C05;
-	Sat, 21 Sep 2024 05:37:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 19D0C5FEE4
+	for <llvm@lists.linux.dev>; Sat, 21 Sep 2024 05:58:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.198
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726897052; cv=none; b=sFItlrYYtzpS7SMuxozVEqIJ9drFK+Krt+FZzet/eYZVfT/4macU92sNr0spBGFveNcQCH/r9mZHpNN3hrJVxOE4Y/kZnpEAUErMf1S+ZWe7xMgNM6rfJx+FAoqz+LWcQfQoAUFGgz9tZ4lNpI2oniC9/kY6FY19GlZZPAvWLHQ=
+	t=1726898299; cv=none; b=YCYbw0ZyL0BW5ZW6DmeWI4tkyUatkU2keFX++ze/ZQWO+NcAxlIVHAE5J5okNE/HR8hd6nkWjofYFPaL8U4JqMPCVZgy0QnWVUr6lDY2ykzSLumwUyor9BVgmpeV3XxYhfaFQkP/tMCIoA0N7quFuj9L/xBhHTXPTY0oZd8+Ljg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726897052; c=relaxed/simple;
-	bh=OzPfrbHuv8bkhXdtJqj5aXZCbt68fD+trSyswf0TPzk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=FFYMZYQwqwJdz6GZ0sfRVzrWW/S3lV1S8MEeQZ7MXODij69Xjg6TS+YwxCoSlIEp4117kPIFsknrlewm83RFfP908ZOAJ3wptECFg7a5xy/JGappbGg9qALdiIwUBV9mpzDeDIxB5UZqHrTEVrnxvr2jmPNzr3RQ9hPtltCPMo0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=l9Y34+Nt; arc=none smtp.client-ip=192.198.163.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="l9Y34+Nt"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1726897051; x=1758433051;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=OzPfrbHuv8bkhXdtJqj5aXZCbt68fD+trSyswf0TPzk=;
-  b=l9Y34+NtgS6TnxgeySbW8hVgGoPBXhctXOeloIVVvExIdVkxypwGQAs4
-   qSbdxfJ/PVO6Cru3vzFLjo8bLRmFJF3k9kkqC9WVI9u3N18Tx7XX+FLDe
-   U/ZBxyEBtWisJPQiYuUfy5NMP0gnUuL8DB7/TVjkTm0BECTHlrVSHXI1c
-   SbsLPZRAer2j7adlahMer30gGLnJVvF8l/fcUepFnN/mKxn92azIjQu5J
-   KIiyY3+amVvisKAZvXBzoaSAX3EtjRhX65RN3kKl1m4No+O6/jtjK+E0a
-   0sfMNSPW0UPsBWXbxdlsG63CV173pwSXllPRGoUsTLEjF0YV5vbFg36w5
-   g==;
-X-CSE-ConnectionGUID: QjJfzdFIT4+g6G5G1rj3Lw==
-X-CSE-MsgGUID: Xy/FmrVKR2ibaV2xl/gJjw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11201"; a="36496109"
-X-IronPort-AV: E=Sophos;i="6.10,246,1719903600"; 
-   d="scan'208";a="36496109"
-Received: from fmviesa006.fm.intel.com ([10.60.135.146])
-  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Sep 2024 22:37:30 -0700
-X-CSE-ConnectionGUID: s/fZxp0RStiMB1sMLnVkTA==
-X-CSE-MsgGUID: C93V+uMwQB2yTbHPM0m1HQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.10,246,1719903600"; 
-   d="scan'208";a="70112950"
-Received: from lkp-server01.sh.intel.com (HELO 53e96f405c61) ([10.239.97.150])
-  by fmviesa006.fm.intel.com with ESMTP; 20 Sep 2024 22:37:29 -0700
-Received: from kbuild by 53e96f405c61 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1srsoA-000F95-21;
-	Sat, 21 Sep 2024 05:37:26 +0000
-Date: Sat, 21 Sep 2024 13:36:44 +0800
-From: kernel test robot <lkp@intel.com>
-To: Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [PATCH RFC 2/2] cpu/bugs: cgroup: Add a cgroup knob to bypass
- CPU mitigations
-Message-ID: <202409211355.QTGhbQvW-lkp@intel.com>
-References: <20240919-selective-mitigation-v1-2-1846cf41895e@linux.intel.com>
+	s=arc-20240116; t=1726898299; c=relaxed/simple;
+	bh=86qU5s11Le9z+vb06V7coZ8F5yhVflyiOUM1lsqn3vg=;
+	h=MIME-Version:Date:In-Reply-To:Message-ID:Subject:From:To:
+	 Content-Type; b=M/t/WVtJEndFTPs+oh+W9EW7tJb9OnXH9ondVNuJA+HK2h9UyGjkXLlWrHVSIpQCW91nL3uLOJ/6wyEFNCGmjDFv7PQ+HumccZgTkwQtGBBPXA69LcsLYmkUf8ugRksc7AWBatutPIz9zS/biSMZ4QoGO4R8XXmU6/km78GbdjI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.198
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
+Received: by mail-il1-f198.google.com with SMTP id e9e14a558f8ab-3a080ae776eso28504095ab.3
+        for <llvm@lists.linux.dev>; Fri, 20 Sep 2024 22:58:17 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1726898297; x=1727503097;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=6R2pDHrN+1kPPmnJ+AIa2cyQgyUQGogeqcdverPzUbU=;
+        b=GclEzlxpYjg9q/FrEFdEVvQrYVWrmCcqFZszju/j5n+PFUNJQuxygu4DK0rXPjO7+1
+         rqXE9wbb1OcJU60WqrVTFvk+LlBC+JWvVfJ2EiQEnCK8Kj+pP3+QxBKqUEYzz+hRM49A
+         vgwb2iTKv5df/ePxuCvjliqTW2wHRCnVJcTRfZ/+bXvaiVWQ0nVK7TMdXCl52UgA9ZQM
+         pwkDpz3zx3VKQfB1VmVF3k10AQhHAVRsLcaKCVY5TLb6WSXnb5EUSfi9sBhT1CMf5vaV
+         8Z9+rwWbMvbtSovL4Aioakm9W+icfFQUnZs8G1LBVVl67DVMm5kX0QItgF67XgT+s9i9
+         6uOA==
+X-Forwarded-Encrypted: i=1; AJvYcCUcBHdsWa+iKsVLedQyljapI33lA+zULeph4cp0tj+bFirMJstJBavxFriJuLFL37C6UnWq@lists.linux.dev
+X-Gm-Message-State: AOJu0YywOlreNDzB0UOKZREVgd4Y/s0uyVnDiBnRl09L8Xyo4rgA05ub
+	M+etjpVdK7+FMCubBKaAh3BKXFBs2pKso/fhQrDs7xY5jeK6pbsD3xVm9eE4K7/29o2ZojNW7Dt
+	DO29CLajGPZ2ttDI58weaViUDtg01AIBRVz+FmwEDkccF9F95c3a3qbQ=
+X-Google-Smtp-Source: AGHT+IE/elQLXw51P2cbk21wAPxxpU4wEdqccrA8oEZh3yefhxYCOghiJBN521eO6Hlx9wvlHQ+HK3iBB0dVnirPIK04mGWV0TWE
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240919-selective-mitigation-v1-2-1846cf41895e@linux.intel.com>
+X-Received: by 2002:a05:6e02:1e08:b0:39b:640e:c5e6 with SMTP id
+ e9e14a558f8ab-3a0c9d77cf6mr54200135ab.17.1726898297174; Fri, 20 Sep 2024
+ 22:58:17 -0700 (PDT)
+Date: Fri, 20 Sep 2024 22:58:17 -0700
+In-Reply-To: <000000000000e6432a06046c96a5@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <66ee6079.050a0220.3195df.0034.GAE@google.com>
+Subject: Re: [syzbot] [fs] INFO: task hung in __fdget_pos (4)
+From: syzbot <syzbot+e245f0516ee625aaa412@syzkaller.appspotmail.com>
+To: brauner@kernel.org, david@fromorbit.com, djwong@kernel.org, jack@suse.cz, 
+	linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-xfs@vger.kernel.org, llvm@lists.linux.dev, mjguzik@gmail.com, 
+	nathan@kernel.org, ndesaulniers@google.com, nogikh@google.com, 
+	syzkaller-bugs@googlegroups.com, trix@redhat.com, tytso@mit.edu, 
+	viro@zeniv.linux.org.uk
+Content-Type: text/plain; charset="UTF-8"
 
-Hi Pawan,
+syzbot has found a reproducer for the following issue on:
 
-[This is a private test report for your RFC patch.]
-kernel test robot noticed the following build errors:
+HEAD commit:    5f5673607153 Merge branch 'for-next/core' into for-kernelci
+git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-kernelci
+console output: https://syzkaller.appspot.com/x/log.txt?x=11c1ee9f980000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=dedbcb1ff4387972
+dashboard link: https://syzkaller.appspot.com/bug?extid=e245f0516ee625aaa412
+compiler:       Debian clang version 15.0.6, GNU ld (GNU Binutils for Debian) 2.40
+userspace arch: arm64
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=15f86427980000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1169ff00580000
 
-[auto build test ERROR on 98f7e32f20d28ec452afb208f9cffc08448a2652]
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/40172aed5414/disk-5f567360.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/58372f305e9d/vmlinux-5f567360.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/d2aae6fa798f/Image-5f567360.gz.xz
+mounted in repro: https://storage.googleapis.com/syzbot-assets/68d8cbbc10b8/mount_0.gz
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Pawan-Gupta/x86-entry_64-Add-a-separate-unmitigated-entry-exit-path/20240920-055414
-base:   98f7e32f20d28ec452afb208f9cffc08448a2652
-patch link:    https://lore.kernel.org/r/20240919-selective-mitigation-v1-2-1846cf41895e%40linux.intel.com
-patch subject: [PATCH RFC 2/2] cpu/bugs: cgroup: Add a cgroup knob to bypass CPU mitigations
-config: i386-defconfig (https://download.01.org/0day-ci/archive/20240921/202409211355.QTGhbQvW-lkp@intel.com/config)
-compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240921/202409211355.QTGhbQvW-lkp@intel.com/reproduce)
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+e245f0516ee625aaa412@syzkaller.appspotmail.com
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202409211355.QTGhbQvW-lkp@intel.com/
+INFO: task syz-executor273:6489 blocked for more than 143 seconds.
+      Not tainted 6.11.0-rc7-syzkaller-g5f5673607153 #0
+"echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
+task:syz-executor273 state:D stack:0     pid:6489  tgid:6484  ppid:6438   flags:0x00000005
+Call trace:
+ __switch_to+0x420/0x6dc arch/arm64/kernel/process.c:603
+ context_switch kernel/sched/core.c:5188 [inline]
+ __schedule+0x13d4/0x2418 kernel/sched/core.c:6529
+ __schedule_loop kernel/sched/core.c:6606 [inline]
+ schedule+0xbc/0x238 kernel/sched/core.c:6621
+ schedule_preempt_disabled+0x18/0x2c kernel/sched/core.c:6678
+ __mutex_lock_common+0xbd8/0x21a0 kernel/locking/mutex.c:684
+ __mutex_lock kernel/locking/mutex.c:752 [inline]
+ mutex_lock_nested+0x2c/0x38 kernel/locking/mutex.c:804
+ __fdget_pos+0x218/0x2a4 fs/file.c:1187
+ fdget_pos include/linux/file.h:76 [inline]
+ ksys_read+0x8c/0x26c fs/read_write.c:610
+ __do_sys_read fs/read_write.c:629 [inline]
+ __se_sys_read fs/read_write.c:627 [inline]
+ __arm64_sys_read+0x7c/0x90 fs/read_write.c:627
+ __invoke_syscall arch/arm64/kernel/syscall.c:35 [inline]
+ invoke_syscall+0x98/0x2b8 arch/arm64/kernel/syscall.c:49
+ el0_svc_common+0x130/0x23c arch/arm64/kernel/syscall.c:132
+ do_el0_svc+0x48/0x58 arch/arm64/kernel/syscall.c:151
+ el0_svc+0x54/0x168 arch/arm64/kernel/entry-common.c:712
+ el0t_64_sync_handler+0x84/0xfc arch/arm64/kernel/entry-common.c:730
+ el0t_64_sync+0x190/0x194 arch/arm64/kernel/entry.S:598
+INFO: task syz-executor273:6492 blocked for more than 143 seconds.
+      Not tainted 6.11.0-rc7-syzkaller-g5f5673607153 #0
+"echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
+task:syz-executor273 state:D stack:0     pid:6492  tgid:6490  ppid:6439   flags:0x0000000d
+Call trace:
+ __switch_to+0x420/0x6dc arch/arm64/kernel/process.c:603
+ context_switch kernel/sched/core.c:5188 [inline]
+ __schedule+0x13d4/0x2418 kernel/sched/core.c:6529
+ __schedule_loop kernel/sched/core.c:6606 [inline]
+ schedule+0xbc/0x238 kernel/sched/core.c:6621
+ schedule_preempt_disabled+0x18/0x2c kernel/sched/core.c:6678
+ __mutex_lock_common+0xbd8/0x21a0 kernel/locking/mutex.c:684
+ __mutex_lock kernel/locking/mutex.c:752 [inline]
+ mutex_lock_nested+0x2c/0x38 kernel/locking/mutex.c:804
+ __fdget_pos+0x218/0x2a4 fs/file.c:1187
+ fdget_pos include/linux/file.h:76 [inline]
+ ksys_read+0x8c/0x26c fs/read_write.c:610
+ __do_sys_read fs/read_write.c:629 [inline]
+ __se_sys_read fs/read_write.c:627 [inline]
+ __arm64_sys_read+0x7c/0x90 fs/read_write.c:627
+ __invoke_syscall arch/arm64/kernel/syscall.c:35 [inline]
+ invoke_syscall+0x98/0x2b8 arch/arm64/kernel/syscall.c:49
+ el0_svc_common+0x130/0x23c arch/arm64/kernel/syscall.c:132
+ do_el0_svc+0x48/0x58 arch/arm64/kernel/syscall.c:151
+ el0_svc+0x54/0x168 arch/arm64/kernel/entry-common.c:712
+ el0t_64_sync_handler+0x84/0xfc arch/arm64/kernel/entry-common.c:730
+ el0t_64_sync+0x190/0x194 arch/arm64/kernel/entry.S:598
+INFO: task syz-executor273:6495 blocked for more than 143 seconds.
+      Not tainted 6.11.0-rc7-syzkaller-g5f5673607153 #0
+"echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
+task:syz-executor273 state:D stack:0     pid:6495  tgid:6493  ppid:6440   flags:0x00000005
+Call trace:
+ __switch_to+0x420/0x6dc arch/arm64/kernel/process.c:603
+ context_switch kernel/sched/core.c:5188 [inline]
+ __schedule+0x13d4/0x2418 kernel/sched/core.c:6529
+ __schedule_loop kernel/sched/core.c:6606 [inline]
+ schedule+0xbc/0x238 kernel/sched/core.c:6621
+ schedule_preempt_disabled+0x18/0x2c kernel/sched/core.c:6678
+ __mutex_lock_common+0xbd8/0x21a0 kernel/locking/mutex.c:684
+ __mutex_lock kernel/locking/mutex.c:752 [inline]
+ mutex_lock_nested+0x2c/0x38 kernel/locking/mutex.c:804
+ __fdget_pos+0x218/0x2a4 fs/file.c:1187
+ fdget_pos include/linux/file.h:76 [inline]
+ ksys_read+0x8c/0x26c fs/read_write.c:610
+ __do_sys_read fs/read_write.c:629 [inline]
+ __se_sys_read fs/read_write.c:627 [inline]
+ __arm64_sys_read+0x7c/0x90 fs/read_write.c:627
+ __invoke_syscall arch/arm64/kernel/syscall.c:35 [inline]
+ invoke_syscall+0x98/0x2b8 arch/arm64/kernel/syscall.c:49
+ el0_svc_common+0x130/0x23c arch/arm64/kernel/syscall.c:132
+ do_el0_svc+0x48/0x58 arch/arm64/kernel/syscall.c:151
+ el0_svc+0x54/0x168 arch/arm64/kernel/entry-common.c:712
+ el0t_64_sync_handler+0x84/0xfc arch/arm64/kernel/entry-common.c:730
+ el0t_64_sync+0x190/0x194 arch/arm64/kernel/entry.S:598
+INFO: task syz-executor273:6498 blocked for more than 143 seconds.
+      Not tainted 6.11.0-rc7-syzkaller-g5f5673607153 #0
+"echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
+task:syz-executor273 state:D stack:0     pid:6498  tgid:6496  ppid:6443   flags:0x00000005
+Call trace:
+ __switch_to+0x420/0x6dc arch/arm64/kernel/process.c:603
+ context_switch kernel/sched/core.c:5188 [inline]
+ __schedule+0x13d4/0x2418 kernel/sched/core.c:6529
+ __schedule_loop kernel/sched/core.c:6606 [inline]
+ schedule+0xbc/0x238 kernel/sched/core.c:6621
+ schedule_preempt_disabled+0x18/0x2c kernel/sched/core.c:6678
+ __mutex_lock_common+0xbd8/0x21a0 kernel/locking/mutex.c:684
+ __mutex_lock kernel/locking/mutex.c:752 [inline]
+ mutex_lock_nested+0x2c/0x38 kernel/locking/mutex.c:804
+ __fdget_pos+0x218/0x2a4 fs/file.c:1187
+ fdget_pos include/linux/file.h:76 [inline]
+ ksys_read+0x8c/0x26c fs/read_write.c:610
+ __do_sys_read fs/read_write.c:629 [inline]
+ __se_sys_read fs/read_write.c:627 [inline]
+ __arm64_sys_read+0x7c/0x90 fs/read_write.c:627
+ __invoke_syscall arch/arm64/kernel/syscall.c:35 [inline]
+ invoke_syscall+0x98/0x2b8 arch/arm64/kernel/syscall.c:49
+ el0_svc_common+0x130/0x23c arch/arm64/kernel/syscall.c:132
+ do_el0_svc+0x48/0x58 arch/arm64/kernel/syscall.c:151
+ el0_svc+0x54/0x168 arch/arm64/kernel/entry-common.c:712
+ el0t_64_sync_handler+0x84/0xfc arch/arm64/kernel/entry-common.c:730
+ el0t_64_sync+0x190/0x194 arch/arm64/kernel/entry.S:598
+INFO: task syz-executor273:6502 blocked for more than 143 seconds.
+      Not tainted 6.11.0-rc7-syzkaller-g5f5673607153 #0
+"echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
+task:syz-executor273 state:D stack:0     pid:6502  tgid:6500  ppid:6444   flags:0x00000005
+Call trace:
+ __switch_to+0x420/0x6dc arch/arm64/kernel/process.c:603
+ context_switch kernel/sched/core.c:5188 [inline]
+ __schedule+0x13d4/0x2418 kernel/sched/core.c:6529
+ __schedule_loop kernel/sched/core.c:6606 [inline]
+ schedule+0xbc/0x238 kernel/sched/core.c:6621
+ schedule_preempt_disabled+0x18/0x2c kernel/sched/core.c:6678
+ __mutex_lock_common+0xbd8/0x21a0 kernel/locking/mutex.c:684
+ __mutex_lock kernel/locking/mutex.c:752 [inline]
+ mutex_lock_nested+0x2c/0x38 kernel/locking/mutex.c:804
+ __fdget_pos+0x218/0x2a4 fs/file.c:1187
+ fdget_pos include/linux/file.h:76 [inline]
+ ksys_read+0x8c/0x26c fs/read_write.c:610
+ __do_sys_read fs/read_write.c:629 [inline]
+ __se_sys_read fs/read_write.c:627 [inline]
+ __arm64_sys_read+0x7c/0x90 fs/read_write.c:627
+ __invoke_syscall arch/arm64/kernel/syscall.c:35 [inline]
+ invoke_syscall+0x98/0x2b8 arch/arm64/kernel/syscall.c:49
+ el0_svc_common+0x130/0x23c arch/arm64/kernel/syscall.c:132
+ do_el0_svc+0x48/0x58 arch/arm64/kernel/syscall.c:151
+ el0_svc+0x54/0x168 arch/arm64/kernel/entry-common.c:712
+ el0t_64_sync_handler+0x84/0xfc arch/arm64/kernel/entry-common.c:730
+ el0t_64_sync+0x190/0x194 arch/arm64/kernel/entry.S:598
 
-All errors (new ones prefixed by >>):
+Showing all locks held in the system:
+1 lock held by khungtaskd/31:
+ #0: ffff80008f74dfa0 (rcu_read_lock){....}-{1:2}, at: rcu_lock_acquire+0xc/0x44 include/linux/rcupdate.h:325
+2 locks held by getty/6174:
+ #0: ffff0000d24390a0 (&tty->ldisc_sem){++++}-{0:0}, at: ldsem_down_read+0x3c/0x4c drivers/tty/tty_ldsem.c:340
+ #1: ffff80009b50e2f0 (&ldata->atomic_read_lock){+.+.}-{3:3}, at: n_tty_read+0x41c/0x1228 drivers/tty/n_tty.c:2211
+2 locks held by syz-executor273/6485:
+1 lock held by syz-executor273/6489:
+ #0: ffff0000c8fd14c8 (&f->f_pos_lock){+.+.}-{3:3}, at: __fdget_pos+0x218/0x2a4 fs/file.c:1187
+2 locks held by syz-executor273/6491:
+1 lock held by syz-executor273/6492:
+ #0: ffff0000d6134d48 (&f->f_pos_lock){+.+.}-{3:3}, at: __fdget_pos+0x218/0x2a4 fs/file.c:1187
+2 locks held by syz-executor273/6494:
+1 lock held by syz-executor273/6495:
+ #0: ffff0000cd021c48 (&f->f_pos_lock){+.+.}-{3:3}, at: __fdget_pos+0x218/0x2a4 fs/file.c:1187
+3 locks held by syz-executor273/6497:
+1 lock held by syz-executor273/6498:
+ #0: ffff0000cebe9748 (&f->f_pos_lock){+.+.}-{3:3}, at: __fdget_pos+0x218/0x2a4 fs/file.c:1187
+2 locks held by syz-executor273/6501:
+1 lock held by syz-executor273/6502:
+ #0: ffff0000d01660c8 (&f->f_pos_lock){+.+.}-{3:3}, at: __fdget_pos+0x218/0x2a4 fs/file.c:1187
 
->> arch/x86/kernel/cpu/bugs.c:147:36: error: use of undeclared identifier 'entry_SYSCALL_64_unmitigated'
-     147 |                 wrmsrl(MSR_LSTAR, (unsigned long)entry_SYSCALL_64_unmitigated);
-         |                                                  ^
->> arch/x86/kernel/cpu/bugs.c:149:36: error: use of undeclared identifier 'entry_SYSCALL_64_mitigated'
-     149 |                 wrmsrl(MSR_LSTAR, (unsigned long)entry_SYSCALL_64_mitigated);
-         |                                                  ^
-   2 errors generated.
+=============================================
 
 
-vim +/entry_SYSCALL_64_unmitigated +147 arch/x86/kernel/cpu/bugs.c
 
-   130	
-   131	inline void cpu_mitigation_skip(struct task_struct *prev,
-   132					struct task_struct *next)
-   133	{
-   134		bool prev_skip = false, next_skip = false;
-   135	
-   136		if (prev->mm)
-   137			prev_skip = task_dfl_cgroup(prev)->cpu_skip_mitigation;
-   138		if (next->mm)
-   139			next_skip = task_dfl_cgroup(next)->cpu_skip_mitigation;
-   140	
-   141		if (!prev_skip && !next_skip)
-   142			return;
-   143		if (prev_skip == next_skip)
-   144			return;
-   145	
-   146		if (next_skip)
- > 147			wrmsrl(MSR_LSTAR, (unsigned long)entry_SYSCALL_64_unmitigated);
-   148		else
- > 149			wrmsrl(MSR_LSTAR, (unsigned long)entry_SYSCALL_64_mitigated);
-   150	}
-   151	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+---
+If you want syzbot to run the reproducer, reply with:
+#syz test: git://repo/address.git branch-or-commit-hash
+If you attach or paste a git patch, syzbot will apply it before testing.
