@@ -1,117 +1,143 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f43.google.com (mail-ed1-f43.google.com [209.85.208.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25D2813D51C;
-	Sat, 21 Sep 2024 07:11:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 24683155316
+	for <llvm@lists.linux.dev>; Sat, 21 Sep 2024 09:39:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726902697; cv=none; b=dKzBV8BjM53z8wXgJTJ+5U5v6nDnTEWlozF1scgR+8tLBFob4TEQapYnA0acs6ZK/bi8a16Bwa+6YndUHe1r9BGXyLWNGQX8UP6sCjsRCePB2Q79moV1/0+lxAXVrjyJp/E+1JwFsbeWiIRhMLXI46GyRTBaYwW+X+5fXS8/HPc=
+	t=1726911554; cv=none; b=J70bcW8deZARDD0dgbX4Jm0CDGdM7q2Buvd3WIVIr1kQL9vuJo17hoxBELjtG/O4xrEJoDFQOivBYwrNRQxYMFgQU4UYUtNIOTi3lLwtoGOHjGFqUi79lpF+4thZ36y9+ybXX5jw0H9LrV9AIszm9KSaLMOiVjLGVTs4QNYSdNI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726902697; c=relaxed/simple;
-	bh=hH41RHYKw4lqHr7XX6POAThxUbZ8bCohv68dNVoXk5I=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=bW4bLRfYcP+wEeHrt+krG833xvOR6H/9FpsucdLxEFCxy0jFq2P/cXCsjg52kwft14c7k0wHeG88lLmPaRe63GHX6ZeyrkWhwEkR7yDshQSuR0QTXCbVaQFO65M74vIKzLEpSUiXREIvpJQR/VPxTmk716rldG4ZgvpKxabi/Vc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=k2AEDzg7; arc=none smtp.client-ip=198.175.65.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1726911554; c=relaxed/simple;
+	bh=scqM8QIJ44rKxuDQym3Iy/3eVPPGXdofO9VidzGOuR4=;
+	h=From:Date:To:Message-ID:Subject:MIME-Version:Content-Type; b=qjEY7glBCbzlB+DgfKd1nIIwmNV0G9L2rUu/p61IQFVSn/OFjgipSTf0AbwsJ9RYiWjyppic/A1ZlaEjvrlP3eOyI3qIHtYrRgrKddNSI0MbRUsBBqZMzf9aanR+Pajk+XP08NIVAwVUxPxGxDyk6I0QTcJrR26/JxiEFGO8piY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=We5YG0TW; arc=none smtp.client-ip=209.85.208.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="k2AEDzg7"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1726902695; x=1758438695;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=hH41RHYKw4lqHr7XX6POAThxUbZ8bCohv68dNVoXk5I=;
-  b=k2AEDzg7Hm7JvZtAfqeFlNhVDMl2FKXbk889soEJfmA+HNoN6/uFPunV
-   0fjw3X98c2tkhGlt+Tk455nM7Y4xYAszZRo+u4LWEysDQkBeFG8n1/InE
-   2nmBjnqrvPTgB1pLcLKFSqg6qxrOU4JndwMjnwaVqYGNzV6t55bBzh9vH
-   RyyD8nRwMkHgc72/xMHwzZn7lYHaHDoYF5DPqJcuRP7FObwe+78vOWmko
-   Hi0SfIHkRlKZhXUllPKPZQbk6KVOJb6Jqqj6hI+FaYDeuQ+4cpgFeC6M2
-   UVm5WlSznm5+MCKGaKTzfPUG/GqCa/d6uNL+Ep2T6pDCXwcv2vth7leWP
-   w==;
-X-CSE-ConnectionGUID: GlDu/6CcS1OC59bqN08WgQ==
-X-CSE-MsgGUID: QrHplAV3Tq2Cc0Z/pQh4Hw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11201"; a="37048613"
-X-IronPort-AV: E=Sophos;i="6.10,246,1719903600"; 
-   d="scan'208";a="37048613"
-Received: from fmviesa008.fm.intel.com ([10.60.135.148])
-  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Sep 2024 00:11:34 -0700
-X-CSE-ConnectionGUID: LW2f+v8+QbK2TXDTZwLecw==
-X-CSE-MsgGUID: 0cus1x7xSPqo0v/a888WbA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.10,246,1719903600"; 
-   d="scan'208";a="70682292"
-Received: from lkp-server01.sh.intel.com (HELO 53e96f405c61) ([10.239.97.150])
-  by fmviesa008.fm.intel.com with ESMTP; 21 Sep 2024 00:11:31 -0700
-Received: from kbuild by 53e96f405c61 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1sruHA-000FBb-2d;
-	Sat, 21 Sep 2024 07:11:28 +0000
-Date: Sat, 21 Sep 2024 15:11:16 +0800
-From: kernel test robot <lkp@intel.com>
-To: =?utf-8?Q?=C5=81ukasz?= Bartosik <ukaszb@chromium.org>,
-	Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Lee Jones <lee@kernel.org>, Benson Leung <bleung@chromium.org>,
-	Guenter Roeck <groeck@chromium.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Abhishek Pandit-Subedi <abhishekpandit@chromium.org>,
-	Pavan Holla <pholla@chromium.org>,
-	Tzung-Bi Shih <tzungbi@kernel.org>, linux-usb@vger.kernel.org,
-	chrome-platform@lists.linux.dev
-Subject: Re: [PATCH v6 6/8] usb: typec: cros_ec_ucsi: Add netlink
-Message-ID: <202409211431.LpvxyX25-lkp@intel.com>
-References: <20240910101527.603452-7-ukaszb@chromium.org>
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="We5YG0TW"
+Received: by mail-ed1-f43.google.com with SMTP id 4fb4d7f45d1cf-5c4146c7d5dso3554540a12.3
+        for <llvm@lists.linux.dev>; Sat, 21 Sep 2024 02:39:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1726911550; x=1727516350; darn=lists.linux.dev;
+        h=list-id:mime-version:subject:message-id:to:reply-to:date:from:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=AO/GgjT2fMy2ZovubNfBkYeRkNmP0Ld0fYYLdh11WQI=;
+        b=We5YG0TW+1czwgWjh602J0QnURXyPsHwx9/x+fkEibTpwsDqePebf1bQ6GI5VVXKJU
+         1O1bjNmjGZkGc0OCzxOAUKzmOfhXfPDOAtOqnk+1k1VoTRHzHLXcLxyCWEJvEvDjesQ3
+         TVQ9vXK/web8dkRbGh8kExEz5VMu7WLUN7EAwsZ3WtWW8exRCoi9wqpvISObMNrW7BYC
+         C1EDGoq7riKzfnmJ5NTiW+ZoBC8R5J0+Hj/WnbFIuczRK9l0smNTfvN2eLruDBrIGySY
+         iEoLIm5SIyQX9DzRaMlPGxauqV1vAWe/XT1ZUq/M2M2h8EWVGF5c2CYfnvwjRQHPFCMu
+         zxdw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1726911550; x=1727516350;
+        h=list-id:mime-version:subject:message-id:to:reply-to:date:from
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=AO/GgjT2fMy2ZovubNfBkYeRkNmP0Ld0fYYLdh11WQI=;
+        b=Zn8uJ4ozKqmvQgISxXSbOuWUoL56JmfuKxsiUnYwzA8QrCs/C7DUqIRribyWZcmKtL
+         Zfv/ZhsSBEBUZTmdbhteJjfievteYmD9LfEChx+bTDbRAJQRoeiZHJuxo3daQ6KsBA4g
+         tVJXeNfKs9MSTOwmy8MCQdhQp4pSdJrUKlZ2GxegWGat+/I6mmK0Kb1Bd8RbP9VhQ+mI
+         crnI2jqYpI5QwpN4fda6IUY0xXJpm/u7fEHBBULioBQ1o7VC5eUbEceY1uQ5WSM6jZUP
+         JtnJ/yMWeHPFLc4NRoW+ZALiuFgLOZrgG0mlsAJXdkcXJQGJvv6fLVZeOSW4XHKdLUF0
+         wKig==
+X-Gm-Message-State: AOJu0YyQjXa9nafYu7tlCV5J78nNZduszSIZUjas4LjoBf3ijMvoM/yz
+	oVKF4Np6V12u1cKKQImBbMXsq2LGpJokE0Hb7hrWBk4W3SW5N83nz+QCQsiok2HD7X8Z/QT+vaE
+	E
+X-Google-Smtp-Source: AGHT+IGFV2/XKpNAAFP7Oj0ra8ritluY9P3sLlPssP4lM5xdH2gRW4HBfOAmttI8kZo3J07bMff5Bg==
+X-Received: by 2002:a17:907:efcb:b0:a89:f1b9:d391 with SMTP id a640c23a62f3a-a90d4ffd5e4mr496342366b.14.1726911550286;
+        Sat, 21 Sep 2024 02:39:10 -0700 (PDT)
+Received: from jenkins.jenkins (ci.linaro.org. [88.99.136.175])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a90610f3acbsm950804266b.64.2024.09.21.02.39.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 21 Sep 2024 02:39:09 -0700 (PDT)
+From: ci_notify@linaro.org
+X-Google-Original-From: linaro-infrastructure-errors@lists.linaro.org
+Date: Sat, 21 Sep 2024 09:39:09 +0000 (UTC)
+Reply-To: linaro-toolchain@lists.linaro.org
+To: llvm@lists.linux.dev
+Message-ID: <736663489.4818.1726911549829@jenkins.jenkins>
+Subject: [Linaro-TCWG-CI] llvmorg-20-init-6434-ga861ed411a35: Failure on
+ aarch64
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20240910101527.603452-7-ukaszb@chromium.org>
+Content-Type: multipart/mixed; 
+	boundary="----=_Part_4817_1340084015.1726911549185"
+X-Jenkins-Job: TCWG Build tcwg_kernel/llvm-master-aarch64-lts-defconfig
+X-Jenkins-Result: SUCCESS
 
-Hi Łukasz,
+------=_Part_4817_1340084015.1726911549185
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-kernel test robot noticed the following build errors:
+Dear contributor, our automatic CI has detected problems related to your patch(es).  Please find some details below.  If you have any questions, please follow up on linaro-toolchain@lists.linaro.org mailing list, Libera's #linaro-tcwg channel, or ping your favourite Linaro toolchain developer on the usual project channel.
 
-[auto build test ERROR on usb/usb-testing]
-[also build test ERROR on usb/usb-next usb/usb-linus lee-mfd/for-mfd-next driver-core/driver-core-testing driver-core/driver-core-next driver-core/driver-core-linus linus/master v6.11 next-20240920]
-[cannot apply to lee-mfd/for-mfd-fixes]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+We understand that it might be difficult to find the necessary logs or reproduce the issue locally. If you can't get what you need from our CI within minutes, let us know and we will be happy to help.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/ukasz-Bartosik/platform-chrome-Update-ChromeOS-EC-header-for-UCSI/20240910-182729
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-patch link:    https://lore.kernel.org/r/20240910101527.603452-7-ukaszb%40chromium.org
-patch subject: [PATCH v6 6/8] usb: typec: cros_ec_ucsi: Add netlink
-config: x86_64-buildonly-randconfig-005-20240921 (https://download.01.org/0day-ci/archive/20240921/202409211431.LpvxyX25-lkp@intel.com/config)
-compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240921/202409211431.LpvxyX25-lkp@intel.com/reproduce)
+We track this report status in https://linaro.atlassian.net/browse/LLVM-1362 , please let us know if you are looking at the problem and/or when you have a fix.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202409211431.LpvxyX25-lkp@intel.com/
+In CI config tcwg_kernel/llvm-master-aarch64-lts-defconfig after:
 
-All errors (new ones prefixed by >>, old ones prefixed by <<):
+  | commit llvmorg-20-init-6434-ga861ed411a35
+  | Author: Florian Hahn <flo@fhahn.com>
+  | Date:   Fri Sep 20 11:22:03 2024 +0100
+  | 
+  |     [VPlan] Add initial loop-invariant code motion transform. (#107894)
+  |     
+  |     Add initial transform to move out loop-invariant recipes.
+  |     
+  |     This also helps to fix a divergence between legacy and VPlan-based cost
+  |     model due to legacy using ScalarEvolution::isLoopInvariant in some
+  |     cases.
+  | ... 4 lines of the commit log omitted.
 
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/fpga/tests/fpga-mgr-test.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/fpga/tests/fpga-bridge-test.o
-WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/fpga/tests/fpga-region-test.o
->> ERROR: modpost: "genl_register_family" [drivers/usb/typec/ucsi/cros_ec_ucsi.ko] undefined!
->> ERROR: modpost: "genl_unregister_family" [drivers/usb/typec/ucsi/cros_ec_ucsi.ko] undefined!
->> ERROR: modpost: "__alloc_skb" [drivers/usb/typec/ucsi/cros_ec_ucsi.ko] undefined!
->> ERROR: modpost: "genlmsg_put" [drivers/usb/typec/ucsi/cros_ec_ucsi.ko] undefined!
->> ERROR: modpost: "nla_put" [drivers/usb/typec/ucsi/cros_ec_ucsi.ko] undefined!
->> ERROR: modpost: "skb_trim" [drivers/usb/typec/ucsi/cros_ec_ucsi.ko] undefined!
->> ERROR: modpost: "sk_skb_reason_drop" [drivers/usb/typec/ucsi/cros_ec_ucsi.ko] undefined!
->> ERROR: modpost: "init_net" [drivers/usb/typec/ucsi/cros_ec_ucsi.ko] undefined!
->> ERROR: modpost: "netlink_broadcast_filtered" [drivers/usb/typec/ucsi/cros_ec_ucsi.ko] undefined!
+Results changed to
+# reset_artifacts:
+-10
+# build_abe binutils:
+-9
+# build_kernel_llvm:
+-5
+# build_abe qemu:
+-2
+# linux_n_obj:
+8141
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+From
+# reset_artifacts:
+-10
+# build_abe binutils:
+-9
+# build_kernel_llvm:
+-5
+# build_abe qemu:
+-2
+# linux_n_obj:
+9333
+# linux build successful:
+all
+# linux boot successful:
+boot
+
+The configuration of this build is:
+CI config tcwg_kernel/llvm-master-aarch64-lts-defconfig
+
+-----------------8<--------------------------8<--------------------------8<--------------------------
+The information below can be used to reproduce a debug environment:
+
+Current build   : https://ci.linaro.org/job/tcwg_kernel--llvm-master-aarch64-lts-defconfig-build/177/artifact/artifacts
+Reference build : https://ci.linaro.org/job/tcwg_kernel--llvm-master-aarch64-lts-defconfig-build/176/artifact/artifacts
+
+Reproduce last good and first bad builds: https://git-us.linaro.org/toolchain/ci/interesting-commits.git/plain/llvm/sha1/a861ed411a359b7cb2b58d642e4a7f2fdcf92057/tcwg_kernel/llvm-master-aarch64-lts-defconfig/reproduction_instructions.txt
+
+Full commit : https://github.com/llvm/llvm-project/commit/a861ed411a359b7cb2b58d642e4a7f2fdcf92057
+
+List of configurations that regressed due to this commit :
+* tcwg_kernel
+** llvm-master-aarch64-lts-defconfig
+*** Failure
+*** https://git-us.linaro.org/toolchain/ci/interesting-commits.git/plain/llvm/sha1/a861ed411a359b7cb2b58d642e4a7f2fdcf92057/tcwg_kernel/llvm-master-aarch64-lts-defconfig/details.txt
+*** https://ci.linaro.org/job/tcwg_kernel--llvm-master-aarch64-lts-defconfig-build/177/artifact/artifacts
+------=_Part_4817_1340084015.1726911549185--
