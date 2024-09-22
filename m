@@ -1,65 +1,59 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5DA00155353;
-	Sun, 22 Sep 2024 06:16:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D6F113174B;
+	Sun, 22 Sep 2024 12:07:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726985783; cv=none; b=oQrAKQEf6GswknmI7qxER/4o9lcjSnUnRtEkCbLromCOxoyQc3ZarZmxu6QP3G89G47j/DehqvdHlq1hj+Hcdet+f0dtSn39oBnPSqaY3tI+c+nT+ididQXmfZDrx7iS4x/IENe2jf0Y/VPFHJ5u5UpRyFDIpVdkfgljeuoh+eE=
+	t=1727006877; cv=none; b=DUUkZuwotm6OWKZbyQze+6Fn6gnb4LkTDcAQC13gm0siV2G7nfVqIakInB0GYXtdMp3o+xxk0hFLyWDzpr+hoJdnfkHm5mQxNCgt7i8xUVFhgDNgxF1jxKM/6OSGyxySAF1BnaHiMsonTNH8lhIkbZAfQaDdkVwXCVdjS5pwDJQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726985783; c=relaxed/simple;
-	bh=jLQBBH7PkiFVYfQSNKJyJOqxcJmkYuHF6kgWcROQ/ug=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=FlG+ThUUS25kv+HMlSko/waCD3d8GMcekVbmGhHkiSq99AjOb2spPXFeKz8BPXoTOG8SVgYcz2YpRxra198ge4CwoA7WUqN7q2qvtUj4MI/d9+oZbs6w2NDIJRz1IaK4a2d4ySyqHUZrglNm94TFUzbdZGMl276PPmJ8nrXPX9c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=SS0c3Wda; arc=none smtp.client-ip=198.175.65.20
+	s=arc-20240116; t=1727006877; c=relaxed/simple;
+	bh=6Yn20Cb26XflRJmGempQTmukZeHYKOIL6db8imNJFxE=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=olAQNDfZth/DT3ANf4TNcLBuFuNJynEN5msjFhxzbY+CTa8FYL6h6bv/VtpJQ+N4WtiLkEJbnInhwyTzALYPLj13d+eSBRHcHF0ZnMfxp2AbgwS8bT+0BisAm+GlF6MegrGuDkBKkxmrmkB5nzoEw/ZYHUFr0nhnWw+VkzyfdqI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Scxol5WI; arc=none smtp.client-ip=192.198.163.9
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="SS0c3Wda"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Scxol5WI"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1726985782; x=1758521782;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=jLQBBH7PkiFVYfQSNKJyJOqxcJmkYuHF6kgWcROQ/ug=;
-  b=SS0c3WdaFj++3iu6Kvyk5dM01OLFpf8lu5FtggJqPf1rHW1ocOOkjCsI
-   8XL/Qe6Nbg6CoFo8V/n+nLUNjaZNGSwEvKwUORWpOmGFl/GkoblwTZCgX
-   IWQppUe50N7Az65+t7m3fOm+G4qHfIvCDju8hetU2b1YYWb+5+a71JWfQ
-   wIBqaUt2Nrh/Xk14khCnnqQ8NkpzyhtZL69Z9pK2c4eA6uQ+9bl71Bm+3
-   s5pWif0X+4KlvH1VR9F5F8zybHyP7mZGngqS9nyG5c7wu7MzJ6B4TDg8v
-   Vch5gu18ddbE5bxjd5Gu/NBVYIX4ymB444Jt9w8aUNgRAyACp+ElInnqO
-   g==;
-X-CSE-ConnectionGUID: lIIShd0zSieYYafAOxOqag==
-X-CSE-MsgGUID: CTR6hB3jQeiCnmx35AoRvA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11202"; a="25774846"
-X-IronPort-AV: E=Sophos;i="6.10,248,1719903600"; 
-   d="scan'208";a="25774846"
-Received: from orviesa006.jf.intel.com ([10.64.159.146])
-  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Sep 2024 23:16:21 -0700
-X-CSE-ConnectionGUID: bfyp8GGcT8qNJwbNe9Xe3Q==
-X-CSE-MsgGUID: j8L92sxcQNCqzwD8e3wgvA==
+  t=1727006875; x=1758542875;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=6Yn20Cb26XflRJmGempQTmukZeHYKOIL6db8imNJFxE=;
+  b=Scxol5WIhgwCdc44NfjoecmjUps+/sJm2MidaIFj1U8FF4WEq5MGlFw7
+   JD7tW8tqzRaLNwIidFqc1h4YCMS6Hto1JCJRXPg8ARRtzI5+M19UFU4og
+   EqONEQSeQLmYb02nxHPpSuOoHFR7ZJbCbQpsJh+ateoZUGTVeQ0DwVSbi
+   j9nhppDa5/T0DjvENLzkqcIHrLFxKpocR3m/1c5OrO1HLUzWqxPaMRqG5
+   bEwzODssxGmZAHtDZzjNVtAHGYkQQ55uaREliESfyX0WosYa7SNgul33+
+   XNRpNSE1FW6haqr7XwE+Y4b2HiDTU9RPbuQZyZCFZzZHrRmOXz6owCIi1
+   Q==;
+X-CSE-ConnectionGUID: A290L9zLS5eW8ciAD43cGA==
+X-CSE-MsgGUID: Naup2/fxQciSSpKXOLflkg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11202"; a="36624804"
+X-IronPort-AV: E=Sophos;i="6.10,249,1719903600"; 
+   d="scan'208";a="36624804"
+Received: from orviesa010.jf.intel.com ([10.64.159.150])
+  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Sep 2024 05:07:54 -0700
+X-CSE-ConnectionGUID: tSwRNaicS8GK2BpnVBXfqg==
+X-CSE-MsgGUID: INf2E4iQToS+dpIWvgkoPQ==
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.10,248,1719903600"; 
-   d="scan'208";a="71045957"
+X-IronPort-AV: E=Sophos;i="6.10,249,1719903600"; 
+   d="scan'208";a="70671955"
 Received: from lkp-server01.sh.intel.com (HELO 53e96f405c61) ([10.239.97.150])
-  by orviesa006.jf.intel.com with ESMTP; 21 Sep 2024 23:16:17 -0700
+  by orviesa010.jf.intel.com with ESMTP; 22 Sep 2024 05:07:54 -0700
 Received: from kbuild by 53e96f405c61 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1ssFtH-000G4s-0m;
-	Sun, 22 Sep 2024 06:16:15 +0000
-Date: Sun, 22 Sep 2024 14:16:00 +0800
+	id 1ssLNW-000GJ6-2Z;
+	Sun, 22 Sep 2024 12:07:50 +0000
+Date: Sun, 22 Sep 2024 20:07:13 +0800
 From: kernel test robot <lkp@intel.com>
-To: Christian Marangi <ansuelsmth@gmail.com>,
-	Wim Van Sebroeck <wim@linux-watchdog.org>,
-	Guenter Roeck <linux@roeck-us.net>, Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>, linux-watchdog@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Lorenzo Bianconi <lorenzo@kernel.org>, upstream@airoha.com
+To: Ard Biesheuvel <ardb@kernel.org>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [PATCH 2/2] watchdog: Add support for Airoha EN7851 watchdog
-Message-ID: <202409221503.OVlRRuM7-lkp@intel.com>
-References: <20240919122759.10456-2-ansuelsmth@gmail.com>
+Subject: [ardb:for-kernelci 5/13] arch/x86/kernel/cpu/common.c:763:22: error:
+ call to undeclared function 'per_cpu_offset'; ISO C99 and later do not
+ support implicit function declarations
+Message-ID: <202409222044.9qXlncXt-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -68,119 +62,71 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240919122759.10456-2-ansuelsmth@gmail.com>
 
-Hi Christian,
-
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on robh/for-next]
-[also build test ERROR on groeck-staging/hwmon-next linus/master v6.11 next-20240920]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Christian-Marangi/watchdog-Add-support-for-Airoha-EN7851-watchdog/20240919-203006
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
-patch link:    https://lore.kernel.org/r/20240919122759.10456-2-ansuelsmth%40gmail.com
-patch subject: [PATCH 2/2] watchdog: Add support for Airoha EN7851 watchdog
-config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20240922/202409221503.OVlRRuM7-lkp@intel.com/config)
-compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 8663a75fa2f31299ab8d1d90288d9df92aadee88)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240922/202409221503.OVlRRuM7-lkp@intel.com/reproduce)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/ardb/linux.git for-kernelci
+head:   14ae2a343392bbe36953a6a4088b44a50c4f9611
+commit: 4f9082c38c9d2268ddccecf03551c99ca49933bc [5/13] x86/percpu: Get rid of absolute per-CPU variable placement
+config: x86_64-allnoconfig (https://download.01.org/0day-ci/archive/20240922/202409222044.9qXlncXt-lkp@intel.com/config)
+compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240922/202409222044.9qXlncXt-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202409221503.OVlRRuM7-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202409222044.9qXlncXt-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
-   In file included from drivers/watchdog/airoha_wdt.c:17:
-   In file included from include/linux/io.h:14:
-   In file included from arch/hexagon/include/asm/io.h:328:
-   include/asm-generic/io.h:548:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     548 |         val = __raw_readb(PCI_IOBASE + addr);
-         |                           ~~~~~~~~~~ ^
-   include/asm-generic/io.h:561:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     561 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
-      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-         |                                                   ^
-   In file included from drivers/watchdog/airoha_wdt.c:17:
-   In file included from include/linux/io.h:14:
-   In file included from arch/hexagon/include/asm/io.h:328:
-   include/asm-generic/io.h:574:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     574 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
-      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
-         |                                                   ^
-   In file included from drivers/watchdog/airoha_wdt.c:17:
-   In file included from include/linux/io.h:14:
-   In file included from arch/hexagon/include/asm/io.h:328:
-   include/asm-generic/io.h:585:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     585 |         __raw_writeb(value, PCI_IOBASE + addr);
-         |                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:595:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     595 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:605:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     605 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
->> drivers/watchdog/airoha_wdt.c:155:26: error: call to undeclared function 'FIELD_MAX'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     155 |         wdog_dev->max_timeout = FIELD_MAX(WDT_TIMER_VAL) / airoha_wdt->wdt_freq;
-         |                                 ^
-   6 warnings and 1 error generated.
+>> arch/x86/kernel/cpu/common.c:763:22: error: call to undeclared function 'per_cpu_offset'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     763 |         wrmsrl(MSR_GS_BASE, per_cpu_offset(cpu));
+         |                             ^
+   1 error generated.
 
 
-vim +/FIELD_MAX +155 drivers/watchdog/airoha_wdt.c
+vim +/per_cpu_offset +763 arch/x86/kernel/cpu/common.c
 
-   125	
-   126	static int airoha_wdt_probe(struct platform_device *pdev)
-   127	{
-   128		struct device *dev = &pdev->dev;
-   129		struct watchdog_device *wdog_dev;
-   130		struct airoha_wdt_desc *airoha_wdt;
-   131		int ret;
-   132	
-   133		airoha_wdt = devm_kzalloc(dev, sizeof(*airoha_wdt), GFP_KERNEL);
-   134		if (!airoha_wdt)
-   135			return -ENOMEM;
-   136	
-   137		airoha_wdt->base = devm_platform_ioremap_resource(pdev, 0);
-   138		if (IS_ERR(airoha_wdt->base))
-   139			return PTR_ERR(airoha_wdt->base);
-   140	
-   141		ret = device_property_read_u32(dev, "clock-frequency",
-   142					       &airoha_wdt->wdt_freq);
-   143		if (ret)
-   144			return -EINVAL;
-   145	
-   146		/* Watchdog ticks at half the bus rate */
-   147		airoha_wdt->wdt_freq /= 2;
-   148	
-   149		/* Initialize struct watchdog device */
-   150		wdog_dev = &airoha_wdt->wdog_dev;
-   151		wdog_dev->timeout = heartbeat;
-   152		wdog_dev->info = &airoha_wdt_info;
-   153		wdog_dev->ops = &airoha_wdt_ops;
-   154		/* Bus 300MHz, watchdog 150MHz, 28 seconds */
- > 155		wdog_dev->max_timeout = FIELD_MAX(WDT_TIMER_VAL) / airoha_wdt->wdt_freq;
-   156		wdog_dev->parent = dev;
-   157	
-   158		watchdog_set_drvdata(wdog_dev, airoha_wdt);
-   159		watchdog_set_nowayout(wdog_dev, nowayout);
-   160		watchdog_stop_on_unregister(wdog_dev);
-   161	
-   162		ret = devm_watchdog_register_device(dev, wdog_dev);
-   163		if (ret)
-   164			return ret;
-   165	
-   166		platform_set_drvdata(pdev, airoha_wdt);
-   167		return 0;
-   168	}
-   169	
+   734	
+   735	/**
+   736	 * switch_gdt_and_percpu_base - Switch to direct GDT and runtime per CPU base
+   737	 * @cpu:	The CPU number for which this is invoked
+   738	 *
+   739	 * Invoked during early boot to switch from early GDT and early per CPU to
+   740	 * the direct GDT and the runtime per CPU area. On 32-bit the percpu base
+   741	 * switch is implicit by loading the direct GDT. On 64bit this requires
+   742	 * to update GSBASE.
+   743	 */
+   744	void __init switch_gdt_and_percpu_base(int cpu)
+   745	{
+   746		load_direct_gdt(cpu);
+   747	
+   748	#ifdef CONFIG_X86_64
+   749		/*
+   750		 * No need to load %gs. It is already correct.
+   751		 *
+   752		 * Writing %gs on 64bit would zero GSBASE which would make any per
+   753		 * CPU operation up to the point of the wrmsrl() fault.
+   754		 *
+   755		 * Set GSBASE to the new offset. Until the wrmsrl() happens the
+   756		 * early mapping is still valid. That means the GSBASE update will
+   757		 * lose any prior per CPU data which was not copied over in
+   758		 * setup_per_cpu_areas().
+   759		 *
+   760		 * This works even with stackprotector enabled because the
+   761		 * per CPU stack canary is 0 in both per CPU areas.
+   762		 */
+ > 763		wrmsrl(MSR_GS_BASE, per_cpu_offset(cpu));
+   764	#else
+   765		/*
+   766		 * %fs is already set to __KERNEL_PERCPU, but after switching GDT
+   767		 * it is required to load FS again so that the 'hidden' part is
+   768		 * updated from the new GDT. Up to this point the early per CPU
+   769		 * translation is active. Any content of the early per CPU data
+   770		 * which was not copied over in setup_per_cpu_areas() is lost.
+   771		 */
+   772		loadsegment(fs, __KERNEL_PERCPU);
+   773	#endif
+   774	}
+   775	
 
 -- 
 0-DAY CI Kernel Test Service
