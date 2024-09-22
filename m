@@ -1,59 +1,59 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA33D188A0B;
-	Sun, 22 Sep 2024 00:21:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 496F219306D;
+	Sun, 22 Sep 2024 01:34:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726964474; cv=none; b=EmR2lAnjpY7k17DnOLlJgILxRvp75zTxlp6iCYGL2GNEL++eWnYoCAELerVwjE+ZHostVNW2dqzsFQVxfGXmcaBt9lZb3aCQbnT/WatJx4np586Jmj5lbSvhFDMh6mGCSLWvSmTHZ5hERFH83hFYkeeS1YoijSOJatEx1oj35yo=
+	t=1726968858; cv=none; b=RCgzGG96XXU8vh+2eWSXE1u/XZqrCjJoYH7OTMJ9ysZZJcBzr5YzJeVx9jJm0ouFCarHs695cuHJM+ayGw3yYN0KDwC/1bbfKmICb7jmRroDA5kV3s4toOk4wezr3Wo//Bzsgl0oeiTDk5qv+DQWwU3dsfMcNpZu9s5Auq5U24E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726964474; c=relaxed/simple;
-	bh=GtpDK+uYMVpmXuWjmMvCl5rLi54XtEDLybE0Ub4psQI=;
+	s=arc-20240116; t=1726968858; c=relaxed/simple;
+	bh=zAFLtykeehVz6NlPD7k40sEepQa7MH97AX9LEEO51eg=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=iuRscKg/+lGRp7ZzxJ8C9VG+zpzMOfmGEPEHAKVghplymJ9Tk31bvzD+9Fl/6Lf9xR6DrTphSuNhEqDJvAOvtC0iHGL0WFOQABg82lPsGzO/1TqLU2vMdsOy8SmvGqDzQY2EupI0YCXHMm0V6ucn2IxXec8gBqsZ8GbDwIsNu6w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=C+6tTMp3; arc=none smtp.client-ip=192.198.163.18
+	 Content-Type:Content-Disposition:In-Reply-To; b=kTXcSolTfKtcNeA0UMd5c58DdWIq9ogIYGm5w9aVNmq02alnBjtzIjmKKxt3l2/Z5RyAcKhylcvWplHZuIgQbzztLTwGEgqyk8+v9VRlSp7Y+xORIo+YHozOVEIdaCktVYYCJGxAVBNpVD0YHad9FlQE8vTY0KDnO14RHpD7o/c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=NCItdcjZ; arc=none smtp.client-ip=198.175.65.13
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="C+6tTMp3"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="NCItdcjZ"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1726964472; x=1758500472;
+  t=1726968857; x=1758504857;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=GtpDK+uYMVpmXuWjmMvCl5rLi54XtEDLybE0Ub4psQI=;
-  b=C+6tTMp3g+cAGuTBJHqBR0oCdKvihwfHMj6TRq2rYD+mYq0RCQMm8D8t
-   AXRdU4aZyQIirM1Szq1mhmMvtZKuJg7gA6Qnzxr4oK6W+3aiBsdSqJ5mT
-   SJWAv1LSNuyrbrmw1g4/+ubqaOSxSBjLV3ioHMBMyhPFac9IAZNrVdG2c
-   fxtACrNFNpcl2OERnG7puCWRgicxIaVqh+Qq7xW8DNRX0TgReXEc3i2z+
-   qSegFkiYAYXSw0P4+aTq4MZK4F+FV8kCyJwNc5+ENfZUQxpV0Z2iC8ID+
-   vJhGMdk93+Q5mMDZIahzq+MIyL37YZVd5AEEukf44402QlFsZj07mbAEo
-   Q==;
-X-CSE-ConnectionGUID: cU98SqTAQ8GdNiF+QdHFPA==
-X-CSE-MsgGUID: SbjtvZR3Sb6sM825kiFZgw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11202"; a="25420893"
+  bh=zAFLtykeehVz6NlPD7k40sEepQa7MH97AX9LEEO51eg=;
+  b=NCItdcjZhnTg5InKT8plhEhVXNW1MgFp4QlxhRR4eCOF5k3UVWVQZsfw
+   9KIs2EZV2rWpzoRK+7kyaciMVGfZVIWB3lgeDF6h+qpjBKR0mm249jFIq
+   W9usFxwVDLuxEt6ZRYXDYpTtynTuJyCPca7PwKLVzc7elF/so2rOkjKtK
+   lmQllG23Ik/5Go7A3l2J9DH31cx2udwLhNAmBWtthoUKBUUyuAwrx4K7t
+   cLvw0cD3XIl52Q+iisiep2iw/XbIYkSJ2WyGCAcSdNlyqVxNjkSx1Rld2
+   7R6aBjubsKjoFw1HNBb4+00/JUMjP4xMrqLYevfrCicEC7DIDpXvvmj7z
+   g==;
+X-CSE-ConnectionGUID: TtqDK2TdRluDcXvLlJXK5w==
+X-CSE-MsgGUID: T7je9RFmQIGyGHEdbDvrOw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11202"; a="37077095"
 X-IronPort-AV: E=Sophos;i="6.10,248,1719903600"; 
-   d="scan'208";a="25420893"
-Received: from fmviesa007.fm.intel.com ([10.60.135.147])
-  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Sep 2024 17:21:11 -0700
-X-CSE-ConnectionGUID: 9O1ckiKtRluQrhbCoa+WjQ==
-X-CSE-MsgGUID: 0PxqkILTQGaUT40NNcMBXA==
+   d="scan'208";a="37077095"
+Received: from fmviesa003.fm.intel.com ([10.60.135.143])
+  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Sep 2024 18:34:13 -0700
+X-CSE-ConnectionGUID: mQRUdHG0SS22A/Mlj4Vs6A==
+X-CSE-MsgGUID: 5ntGIEzZSAG3BwZUjXeDwA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.10,248,1719903600"; 
-   d="scan'208";a="70269683"
+   d="scan'208";a="74809218"
 Received: from lkp-server01.sh.intel.com (HELO 53e96f405c61) ([10.239.97.150])
-  by fmviesa007.fm.intel.com with ESMTP; 21 Sep 2024 17:21:10 -0700
+  by fmviesa003.fm.intel.com with ESMTP; 21 Sep 2024 18:34:11 -0700
 Received: from kbuild by 53e96f405c61 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1ssALc-000Ftm-0C;
-	Sun, 22 Sep 2024 00:21:08 +0000
-Date: Sun, 22 Sep 2024 08:20:57 +0800
+	id 1ssBUH-000FwK-1O;
+	Sun, 22 Sep 2024 01:34:09 +0000
+Date: Sun, 22 Sep 2024 09:33:33 +0800
 From: kernel test robot <lkp@intel.com>
 To: "D. Wythe" <alibuda@linux.alibaba.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
 Subject: Re: [RFC PATCH net-next] net/smc: Introduce a hook to modify syn_smc
  at runtime
-Message-ID: <202409220838.lnpJlKYJ-lkp@intel.com>
+Message-ID: <202409220912.ueH73mHB-lkp@intel.com>
 References: <1726654204-61655-1-git-send-email-alibuda@linux.alibaba.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -76,66 +76,54 @@ url:    https://github.com/intel-lab-lkp/linux/commits/D-Wythe/net-smc-Introduce
 base:   net-next/main
 patch link:    https://lore.kernel.org/r/1726654204-61655-1-git-send-email-alibuda%40linux.alibaba.com
 patch subject: [RFC PATCH net-next] net/smc: Introduce a hook to modify syn_smc at runtime
-config: i386-buildonly-randconfig-003-20240922 (https://download.01.org/0day-ci/archive/20240922/202409220838.lnpJlKYJ-lkp@intel.com/config)
-compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240922/202409220838.lnpJlKYJ-lkp@intel.com/reproduce)
+config: arm-randconfig-002-20240922 (https://download.01.org/0day-ci/archive/20240922/202409220912.ueH73mHB-lkp@intel.com/config)
+compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 8663a75fa2f31299ab8d1d90288d9df92aadee88)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240922/202409220912.ueH73mHB-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202409220838.lnpJlKYJ-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202409220912.ueH73mHB-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> net/smc/af_smc.c:194:36: error: no member named 'skc_v6_daddr' in 'struct sock_common'
+   In file included from net/smc/af_smc.c:27:
+   In file included from include/linux/if_vlan.h:10:
+   In file included from include/linux/netdevice.h:38:
+   In file included from include/net/net_namespace.h:43:
+   In file included from include/linux/skbuff.h:17:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:8:
+   In file included from include/linux/cacheflush.h:5:
+   In file included from arch/arm/include/asm/cacheflush.h:10:
+   In file included from include/linux/mm.h:2232:
+   include/linux/vmstat.h:517:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
+     517 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
+         |                               ~~~~~~~~~~~ ^ ~~~
+   net/smc/af_smc.c:194:36: error: no member named 'skc_v6_daddr' in 'struct sock_common'
      194 |                 rmt6_sockaddr->sin6_addr = ireq->ir_v6_rmt_addr;
          |                                            ~~~~~~^~~~~~~~~~~~~~
    include/net/inet_sock.h:74:42: note: expanded from macro 'ir_v6_rmt_addr'
       74 | #define ir_v6_rmt_addr          req.__req_common.skc_v6_daddr
          |                                                  ^
-   1 error generated.
+>> net/smc/af_smc.c:3519:9: error: call to undeclared function 'register_btf_fmodret_id_set'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+    3519 |         return register_btf_fmodret_id_set(&bpf_smc_fmodret_set);
+         |                ^
+   net/smc/af_smc.c:3519:9: note: did you mean 'register_btf_kfunc_id_set'?
+   include/linux/btf.h:623:19: note: 'register_btf_kfunc_id_set' declared here
+     623 | static inline int register_btf_kfunc_id_set(enum bpf_prog_type prog_type,
+         |                   ^
+   1 warning and 2 errors generated.
 
 
-vim +194 net/smc/af_smc.c
+vim +/register_btf_fmodret_id_set +3519 net/smc/af_smc.c
 
-   167	
-   168	static void smc_openreq_init(struct request_sock *req,
-   169				     const struct tcp_options_received *rx_opt,
-   170				     struct sk_buff *skb, const struct sock *sk)
-   171	{
-   172		struct inet_request_sock *ireq = inet_rsk(req);
-   173		struct sockaddr_storage rmt_sockaddr = {0};
-   174		const struct smc_sock *smc;
-   175	
-   176		smc = smc_clcsock_user_data(sk);
-   177	
-   178		if (!smc)
-   179			return;
-   180	
-   181		if (smc->limit_smc_hs && workqueue_congested(WORK_CPU_UNBOUND, smc_hs_wq))
-   182			goto out_no_smc;
-   183	
-   184		rmt_sockaddr.ss_family = sk->sk_family;
-   185	
-   186		if (rmt_sockaddr.ss_family == AF_INET) {
-   187			struct sockaddr_in *rmt4_sockaddr =  (struct sockaddr_in *)&rmt_sockaddr;
-   188	
-   189			rmt4_sockaddr->sin_addr.s_addr = ireq->ir_rmt_addr;
-   190			rmt4_sockaddr->sin_port	= ireq->ir_rmt_port;
-   191		} else {
-   192			struct sockaddr_in6 *rmt6_sockaddr =  (struct sockaddr_in6 *)&rmt_sockaddr;
-   193	
- > 194			rmt6_sockaddr->sin6_addr = ireq->ir_v6_rmt_addr;
-   195			rmt6_sockaddr->sin6_port = ireq->ir_rmt_port;
-   196		}
-   197	
-   198		ireq->smc_ok = select_syn_smc(sk, (struct sockaddr *)&rmt_sockaddr);
-   199		return;
-   200	out_no_smc:
-   201		ireq->smc_ok = 0;
-   202		return;
-   203	}
-   204	
+  3516	
+  3517	static int __init bpf_smc_kfunc_init(void)
+  3518	{
+> 3519		return register_btf_fmodret_id_set(&bpf_smc_fmodret_set);
+  3520	}
+  3521	
 
 -- 
 0-DAY CI Kernel Test Service
